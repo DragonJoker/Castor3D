@@ -12,8 +12,9 @@ namespace castor3d::shader
 
 	//*********************************************************************************************
 
-	QualitativeOrenNayarBRDF::QualitativeOrenNayarBRDF( sdw::ShaderWriter & writer )
-		: DiffuseBRDF{ writer }
+	QualitativeOrenNayarBRDF::QualitativeOrenNayarBRDF( sdw::ShaderWriter & writer
+		, BRDFHelpers & brdfHelpers )
+		: DiffuseBRDF{ writer, brdfHelpers }
 	{
 	}
 
@@ -74,10 +75,17 @@ namespace castor3d::shader
 			, proughness );
 	}
 
+	DiffuseBRDFUPtr QualitativeOrenNayarBRDF::create( sdw::ShaderWriter & writer
+		, BRDFHelpers & brdfHelpers )
+	{
+		return castor::makeUniqueDerived< DiffuseBRDF, QualitativeOrenNayarBRDF >( writer, brdfHelpers );
+	}
+
 	//*********************************************************************************************
 
-	FujiiOrenNayarBRDF::FujiiOrenNayarBRDF( sdw::ShaderWriter & writer )
-		: DiffuseBRDF{ writer }
+	FujiiOrenNayarBRDF::FujiiOrenNayarBRDF( sdw::ShaderWriter & writer
+		, BRDFHelpers & brdfHelpers )
+		: DiffuseBRDF{ writer, brdfHelpers }
 	{
 	}
 
@@ -131,10 +139,17 @@ namespace castor3d::shader
 			, proughness );
 	}
 
+	DiffuseBRDFUPtr FujiiOrenNayarBRDF::create( sdw::ShaderWriter & writer
+		, BRDFHelpers & brdfHelpers )
+	{
+		return castor::makeUniqueDerived< DiffuseBRDF, FujiiOrenNayarBRDF >( writer, brdfHelpers );
+	}
+
 	//*********************************************************************************************
 
-	EnergyConservativeOrenNayarBRDF::EnergyConservativeOrenNayarBRDF( sdw::ShaderWriter & writer )
-		: DiffuseBRDF{ writer }
+	EnergyConservativeOrenNayarBRDF::EnergyConservativeOrenNayarBRDF( sdw::ShaderWriter & writer
+		, BRDFHelpers & brdfHelpers )
+		: DiffuseBRDF{ writer, brdfHelpers }
 	{
 	}
 
@@ -152,20 +167,18 @@ namespace castor3d::shader
 				, [this]( sdw::Float const & roughness
 					, sdw::Float const & mu )
 				{
-/*
-					// Exact
-					auto A = m_writer.declLocale( "A"
-						, 1.0f / ( 1.0f + roughness * sdw::Float{ fujii::constant1 } ) ); // FON A coeff.
-					auto B = m_writer.declLocale( "B"
-						, roughness * A ); // FON B coeff.
-					auto Si = m_writer.declLocale( "Si"
-						, sqrt( 1.0f - ( mu * mu ) ) );
-					auto G = m_writer.declLocale( "G"
-						, Si * ( acos( mu ) - Si * mu )
-							+ ( 2.0_f / 3.0_f ) * ( ( Si / mu ) * ( 1.0_f - ( Si * Si * Si ) ) - Si ) );
-					m_writer.returnStmt( A + ( B / castor::Pi< float > ) * G );
-/**/
-/**/
+					//// Exact
+					//auto A = m_writer.declLocale( "A"
+					//	, 1.0f / ( 1.0f + roughness * sdw::Float{ fujii::constant1 } ) ); // FON A coeff.
+					//auto B = m_writer.declLocale( "B"
+					//	, roughness * A ); // FON B coeff.
+					//auto Si = m_writer.declLocale( "Si"
+					//	, sqrt( 1.0f - ( mu * mu ) ) );
+					//auto G = m_writer.declLocale( "G"
+					//	, Si * ( acos( mu ) - Si * mu )
+					//		+ ( 2.0_f / 3.0_f ) * ( ( Si / mu ) * ( 1.0_f - ( Si * Si * Si ) ) - Si ) );
+					//m_writer.returnStmt( A + ( B / castor::Pi< float > ) * G );
+
 					// Approximate
 					auto Gcoeffs = m_writer.declConstant( "Gcoeffs"
 						, mat2( vec2( 0.0571085289_f, -0.332181442_f )
@@ -180,8 +193,7 @@ namespace castor3d::shader
 						, dot( Gcoeffs * vec2( mucomp, mucomp2 ), vec2( 1.0_f, mucomp2 ) ) );
 
 					m_writer.returnStmt( ( 1.0_f + roughness * Goverpi ) / ( 1.0_f + sdw::Float{ fujii::constant1 } * roughness ) );
-/**/
-					}
+				}
 				, sdw::InFloat{ m_writer, "roughness" }
 				, sdw::InFloat{ m_writer, "mu" } );
 
@@ -240,6 +252,12 @@ namespace castor3d::shader
 			, pLdotV
 			, pF
 			, proughness );
+	}
+
+	DiffuseBRDFUPtr EnergyConservativeOrenNayarBRDF::create( sdw::ShaderWriter & writer
+		, BRDFHelpers & brdfHelpers )
+	{
+		return castor::makeUniqueDerived< DiffuseBRDF, EnergyConservativeOrenNayarBRDF >( writer, brdfHelpers );
 	}
 
 	//*********************************************************************************************

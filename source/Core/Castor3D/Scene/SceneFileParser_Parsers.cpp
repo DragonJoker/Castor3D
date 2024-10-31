@@ -5901,7 +5901,9 @@ namespace castor3d
 			, { uint32_t( CSCNSection::eTextureRemap ), cuT( "texture_remap" ) }
 			, { uint32_t( CSCNSection::eClusters ), cuT( "clusters" ) }
 			, { uint32_t( CSCNSection::eTexture ), cuT( "texture" ) }
-			, { uint32_t( CSCNSection::eColourGrading ), cuT( "colour_grading" ) } };
+			, { uint32_t( CSCNSection::eColourGrading ), cuT( "colour_grading" ) }
+			, { uint32_t( CSCNSection::eLightingModel ), cuT( "lighting_model" ) }
+			, { uint32_t( CSCNSection::eDefaultLightingModel ), cuT( "default_lighting_model" ) } };
 	}
 
 	uint32_t getSceneFileRootSection()

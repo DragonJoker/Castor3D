@@ -15,7 +15,8 @@ namespace castor3d
 	/**@name Light */
 	//@{
 
-	using LightingModelID = uint8_t;
+	using LightingModelID = uint16_t;
+	using BrdfID = uint8_t;
 	/**
 	*\~english
 	*\brief

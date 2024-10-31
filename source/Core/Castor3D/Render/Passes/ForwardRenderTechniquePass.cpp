@@ -203,14 +203,14 @@ namespace castor3d
 		bool hasDiffuseGI = flags.hasDiffuseGI();
 
 		shader::Utils utils{ writer };
-		shader::BRDFHelpers brdf{ writer };
+		shader::BRDFHelpers brdfHelpers{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
 			, getComponentsMask()
 			, utils };
 		shader::SubmeshShaders submeshShaders{ getEngine()->getSubmeshComponentsRegister()
 			, flags };
-		shader::LambertianBRDF lambertian{ writer };
+		shader::LambertianBRDF lambertian{ writer, brdfHelpers };
 		auto index = uint32_t( castor3d::GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 
 		C3D_Camera( writer
@@ -254,7 +254,7 @@ namespace castor3d
 			, flags.lightingModelId
 			, flags.backgroundModelId
 			, materials
-			, brdf
+			, brdfHelpers
 			, utils
 			, shader::ShadowOptions{ flags.getShadowFlags(), true, false }
 			, nullptr

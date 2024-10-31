@@ -412,7 +412,11 @@ namespace castor3d
 		 *\param[in]	creator				La fonction de création du modèle.
 		 *\return		L'ID du modèle.
 		 */
-		C3D_API LightingModelID registerLightingModel( castor::String const & name
+		C3D_API castor::Vector< LightingModelID > registerLightingModel( castor::String const & name
+			, shader::DiffuseBrdfArray const & diffuseBrdfs
+			, shader::SpecularBrdfArray const & specularBrdfs
+			, shader::DiffuseBrdfDesc const & defaultDiffuseBrdf
+			, shader::SpecularBrdfDesc const & defaultSpecularBrdf
 			, shader::LightingModelCreator creator
 			, BackgroundModelID backgroundModelId )const;
 		/**

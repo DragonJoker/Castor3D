@@ -34,7 +34,18 @@ namespace castor
 		bool operator()( castor3d::LightingModelComponent const & object
 			, StringStream & file )override
 		{
-			return write( file, cuT( "lighting_model" ), object.getLightingModelName() );
+			bool result{};
+			auto baseName = object.getLightingModelName();
+
+			if ( auto block = beginBlock( file, cuT( "lighting_model" ), baseName ) )
+			{
+				castor3d::Engine const & engine = *object.getOwner()->getOwner()->getEngine();
+				auto & model = engine.getLightingModelFactory().getModel( baseName );
+				result = block->writeNameOpt( file, cuT( "diffuse_brdf" ), object.getDiffuseBrdfName(), model.defaultDiffuseBrdf.name )
+					&& block->writeNameOpt( file, cuT( "specular_brdf" ), object.getSpecularBrdfName(), model.defaultSpecularBrdf.name );
+			}
+
+			return result;
 		}
 	};
 }
@@ -45,7 +56,17 @@ namespace castor3d
 
 	namespace lgtmdl
 	{
-		static CU_ImplementAttributeParserBlock( parserRootMaterials, RootContext )
+		struct ModelContext
+		{
+			RootContext * root{};
+			PassContext * pass{};
+			castor::String lightingModel{};
+			castor::String diffuseBrdf{};
+			castor::String specularBrdf{};
+			bool defaultModel{};
+		};
+
+		static CU_ImplementAttributeParserNewBlock( parserRootDefaultLightingModel, RootContext, ModelContext )
 		{
 			if ( params.empty() )
 			{
@@ -53,14 +74,14 @@ namespace castor3d
 			}
 			else if ( !params.empty() )
 			{
-				auto name = LightingModelFactory::normaliseName( params[0]->get< castor::String >() );
-				auto & engine = *blockContext->engine;
-				engine.setDefaultLightingModel( engine.getLightingModelFactory().getNameId( name ) );
+				newBlockContext->root = blockContext;
+				newBlockContext->defaultModel = true;
+				newBlockContext->lightingModel = LightingModelFactory::normaliseName( params[0]->get< castor::String >() );
 			}
 		}
-		CU_EndAttribute()
+		CU_EndAttributePushNewBlock( CSCNSection::eDefaultLightingModel )
 
-		static CU_ImplementAttributeParserBlock( parserPassLightingModel, PassContext )
+		static CU_ImplementAttributeParserNewBlock( parserPassLightingModel, PassContext, ModelContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -72,13 +93,82 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = LightingModelFactory::normaliseName( params[0]->get< castor::String >() );
-				auto const & engine = *getEngine( *blockContext );
-				auto & component = getPassComponent< LightingModelComponent >( *blockContext );
-				component.setLightingModelId( engine.getLightingModelFactory().getNameId( name ) );
+				newBlockContext->pass = blockContext;
+				newBlockContext->lightingModel = LightingModelFactory::normaliseName( params[0]->get< castor::String >() );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eLightingModel )
+
+		static CU_ImplementAttributeParserBlock( parserPassDiffuseBRDF, ModelContext )
+		{
+			if ( !blockContext->pass && !blockContext->root )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->diffuseBrdf );
 			}
 		}
 		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserPassSpecularBRDF, ModelContext )
+		{
+			if ( !blockContext->pass && !blockContext->root )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->specularBrdf );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserPassDefaultLightingModelEnd, ModelContext )
+		{
+			auto & engine = *getEngine( *blockContext->root );
+			auto lightingModelId = engine.getLightingModelFactory().getNameId( blockContext->lightingModel
+				, blockContext->diffuseBrdf
+				, blockContext->specularBrdf );
+
+			if ( lightingModelId == 0 )
+			{
+				CU_ParsingError( cuT( "Lighting model is unregistered." ) );
+			}
+			else
+			{
+				engine.setDefaultLightingModel( lightingModelId );
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserPassLightingModelEnd, ModelContext )
+		{
+			auto const & engine = *getEngine( *blockContext->pass );
+			auto & component = getPassComponent< LightingModelComponent >( *blockContext->pass );
+			auto lightingModelId = engine.getLightingModelFactory().getNameId( blockContext->lightingModel
+				, blockContext->diffuseBrdf
+				, blockContext->specularBrdf );
+
+			if ( lightingModelId == 0 )
+			{
+				CU_ParsingError( cuT( "Lighting model is unregistered." ) );
+			}
+			else
+			{
+				component.setLightingModelId( lightingModelId );
+			}
+		}
+		CU_EndAttributePop()
 	}
 
 	//*********************************************************************************************
@@ -105,14 +195,53 @@ namespace castor3d
 	{
 		castor::addParserT( parsers
 			, uint32_t( CSCNSection::eRoot )
+			, uint32_t( CSCNSection::eDefaultLightingModel )
 			, cuT( "materials" )
-			, lgtmdl::parserRootMaterials
+			, lgtmdl::parserRootDefaultLightingModel
 			, { castor::makeParameter< castor::ParameterType::eText >() } );
 		castor::addParserT( parsers
+			, uint32_t( CSCNSection::eRoot )
+			, uint32_t( CSCNSection::eDefaultLightingModel )
+			, cuT( "default_lighting_model" )
+			, lgtmdl::parserRootDefaultLightingModel
+			, { castor::makeParameter< castor::ParameterType::eText >() } );
+		castor::addParserT( parsers
+			, uint32_t( CSCNSection::eDefaultLightingModel )
+			, cuT( "diffuse_brdf" )
+			, lgtmdl::parserPassDiffuseBRDF
+			, { castor::makeParameter< castor::ParameterType::eText >() } );
+		castor::addParserT( parsers
+			, uint32_t( CSCNSection::eDefaultLightingModel )
+			, cuT( "specular_brdf" )
+			, lgtmdl::parserPassSpecularBRDF
+			, { castor::makeParameter< castor::ParameterType::eText >() } );
+		castor::addParserT( parsers
+			, uint32_t( CSCNSection::eDefaultLightingModel )
+			, uint32_t( CSCNSection::eRoot )
+			, cuT( "}" )
+			, lgtmdl::parserPassDefaultLightingModelEnd );
+
+		castor::addParserT( parsers
 			, uint32_t( CSCNSection::ePass )
+			, uint32_t( CSCNSection::eLightingModel )
 			, cuT( "lighting_model" )
 			, lgtmdl::parserPassLightingModel
 			, { castor::makeParameter< castor::ParameterType::eText >() } );
+		castor::addParserT( parsers
+			, uint32_t( CSCNSection::eLightingModel )
+			, cuT( "diffuse_brdf" )
+			, lgtmdl::parserPassDiffuseBRDF
+			, { castor::makeParameter< castor::ParameterType::eText >() } );
+		castor::addParserT( parsers
+			, uint32_t( CSCNSection::eLightingModel )
+			, cuT( "specular_brdf" )
+			, lgtmdl::parserPassSpecularBRDF
+			, { castor::makeParameter< castor::ParameterType::eText >() } );
+		castor::addParserT( parsers
+			, uint32_t( CSCNSection::eLightingModel )
+			, uint32_t( CSCNSection::ePass )
+			, cuT( "}" )
+			, lgtmdl::parserPassLightingModelEnd );
 	}
 
 	void LightingModelComponent::Plugin::zeroBuffer( Pass const & pass
@@ -141,28 +270,32 @@ namespace castor3d
 
 	void LightingModelComponent::accept( ConfigurationVisitorBase & vis )
 	{
-		auto & types = getOwner()->getOwner()->getEngine()->getPassFactory().listRegisteredTypes();
-		castor::StringArray values;
-
-		for ( auto const & entry : types )
-		{
-			values.push_back( entry.name );
-		}
-
+		LightingModelFactory const & factory = getOwner()->getOwner()->getEngine()->getLightingModelFactory();
+		castor::StringArray values = factory.listRegisteredTypes();
 		vis.visit( cuT( "Lighting Model" )
 			, m_zeroBasedValue
 			, values
 			, [this]( uint32_t, uint32_t newV )
 			{
 				m_zeroBasedValue = newV;
-				m_value = newV + 1u;
+				setData( m_zeroBasedValue + 1u );
 			}
 			, ConfigurationVisitorBase::makeControlsList< bool >( nullptr ) );
 	}
 
 	castor::String LightingModelComponent::getLightingModelName()const
 	{
-		return getOwner()->getOwner()->getEngine()->getPassFactory().getIdName( getLightingModelId() );
+		return getOwner()->getOwner()->getEngine()->getLightingModelFactory().getBaseName( getLightingModelId() );
+	}
+
+	castor::String LightingModelComponent::getDiffuseBrdfName()const
+	{
+		return getOwner()->getOwner()->getEngine()->getLightingModelFactory().getDiffuseBrdfName( getLightingModelId() );
+	}
+
+	castor::String LightingModelComponent::getSpecularBrdfName()const
+	{
+		return getOwner()->getOwner()->getEngine()->getLightingModelFactory().getSpecularBrdfName( getLightingModelId() );
 	}
 
 	PassComponentUPtr LightingModelComponent::doClone( Pass & pass )const

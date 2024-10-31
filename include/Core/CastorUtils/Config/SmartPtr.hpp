@@ -37,10 +37,10 @@ namespace castor
 	template< typename TypeT >
 	using UniquePtr = RawUniquePtr< TypeT, Deleter< TypeT > >;
 
-	template< typename TypeT, typename TypeU, typename ... ParamsT >
-	UniquePtr< TypeT > makeUniqueDerived( ParamsT && ... params )
+	template< typename BaseT, typename DerivedT, typename ... ParamsT >
+	UniquePtr< BaseT > makeUniqueDerived( ParamsT && ... params )
 	{
-		return UniquePtr< TypeT >( new TypeU( castor::forward< ParamsT >( params )... ) );
+		return UniquePtr< BaseT >( new DerivedT( castor::forward< ParamsT >( params )... ) );
 	}
 
 	template< typename TypeT, typename ... ParamsT >

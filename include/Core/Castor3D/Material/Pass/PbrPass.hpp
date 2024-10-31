@@ -16,6 +16,10 @@ namespace castor3d
 
 		C3D_API static castor::StringView const Type;
 		C3D_API static castor::StringView const LightingModel;
+		C3D_API static shader::DiffuseBrdfDesc const DefaultDiffuseBrdf;
+		C3D_API static shader::SpecularBrdfDesc const DefaultSpecularBrdf;
+		C3D_API static shader::DiffuseBrdfArray const DiffuseBrdfs;
+		C3D_API static shader::SpecularBrdfArray const SpecularBrdfs;
 	};
 }
 

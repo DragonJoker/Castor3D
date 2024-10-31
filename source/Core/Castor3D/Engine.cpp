@@ -220,7 +220,9 @@ namespace castor3d
 				, &shader::PhongLightingModel::create } );
 		registerPassModels( { castor::String{ PbrPass::LightingModel }
 				, PbrPass::create
-				, &shader::PbrLightingModel::create } );
+				, &shader::PbrLightingModel::create
+				, PbrPass::DiffuseBrdfs, PbrPass::DefaultDiffuseBrdf
+				, PbrPass::SpecularBrdfs, PbrPass::DefaultSpecularBrdf } );
 		m_lightingModelId = getPassFactory().listRegisteredTypes().begin()->key;
 
 		registerParsers( ControlsManager::Name
@@ -601,7 +603,7 @@ namespace castor3d
 
 	castor::String Engine::getDefaultLightingModelName()const
 	{
-		return getPassFactory().getIdName( getDefaultLightingModel() );
+		return getLightingModelFactory().getBaseName( getDefaultLightingModel() );
 	}
 
 	ToneMappingFactory const & Engine::getToneMappingFactory()const
@@ -707,11 +709,21 @@ namespace castor3d
 		}
 	}
 
-	LightingModelID Engine::registerLightingModel( castor::String const & name
+	castor::Vector< LightingModelID > Engine::registerLightingModel( castor::String const & name
+		, shader::DiffuseBrdfArray const & diffuseBrdfs
+		, shader::SpecularBrdfArray const & specularBrdfs
+		, shader::DiffuseBrdfDesc const & defaultDiffuseBrdf
+		, shader::SpecularBrdfDesc const & defaultSpecularBrdf
 		, shader::LightingModelCreator creator
 		, BackgroundModelID backgroundModelId )const
 	{
-		return getLightingModelFactory().registerType( name, backgroundModelId, castor::move( creator ) );
+		return getLightingModelFactory().registerType( name
+			, diffuseBrdfs
+			, specularBrdfs
+			, defaultDiffuseBrdf
+			, defaultSpecularBrdf
+			, backgroundModelId
+			, castor::move( creator ) );
 	}
 
 	void Engine::unregisterLightingModel( castor::String const & name
@@ -758,11 +770,19 @@ namespace castor3d
 	void Engine::registerPassModel( BackgroundModelID backgroundModelId
 		, PassRegisterInfo const & info )const
 	{
-		auto lightingModelId = registerLightingModel( info.lightingModel
+		auto lightingModels = registerLightingModel( info.lightingModel
+			, info.diffuseBrdfs
+			, info.specularBrdfs
+			, info.defaultDiffuseBrdf
+			, info.defaultSpecularBrdf
 			, info.lightingModelCreator
 			, backgroundModelId );
-		getPassFactory().registerType( lightingModelId
-			, info );
+
+		for ( auto lightingModelId : lightingModels )
+		{
+			getPassFactory().registerType( lightingModelId
+				, info );
+		}
 	}
 
 	void Engine::registerPassModels( PassRegisterInfo const & info )const
@@ -771,9 +791,16 @@ namespace castor3d
 
 		for ( auto const & entry : getBackgroundModelFactory().listRegisteredTypes() )
 		{
-			lightingModels.emplace( registerLightingModel( info.lightingModel
+			for ( auto lightingModelId : registerLightingModel( info.lightingModel
+				, info.diffuseBrdfs
+				, info.specularBrdfs
+				, info.defaultDiffuseBrdf
+				, info.defaultSpecularBrdf
 				, info.lightingModelCreator
-				, entry.id ) );
+				, entry.id ) )
+			{
+				lightingModels.emplace( lightingModelId );
+			}
 		}
 
 		for ( auto lightingModelId : lightingModels )

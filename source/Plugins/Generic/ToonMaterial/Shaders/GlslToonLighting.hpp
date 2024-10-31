@@ -51,17 +51,19 @@ namespace toon::shader
 			, sdw::ShaderWriter & writer
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
-			, c3d::BRDFHelpers & brdf
+			, c3d::BRDFHelpers & brdfHelpers
 			, c3d::Shadow & shadowModel
 			, c3d::Lights & lights
 			, bool enableVolumetric );
 
 		C3D_ToonMaterial_API static const castor::String getName();
 		static c3d::LightingModelUPtr create( castor3d::LightingModelID lightingModelId
+			, c3d::DiffuseBrdfDesc const & diffuseBrdf
+			, c3d::SpecularBrdfDesc const & specularBrdf
 			, sdw::ShaderWriter & writer
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
-			, c3d::BRDFHelpers & brdf
+			, c3d::BRDFHelpers & brdfHelpers
 			, c3d::Shadow & shadowModel
 			, c3d::Lights & lights
 			, bool enableVolumetric );
@@ -84,17 +86,21 @@ namespace toon::shader
 			, sdw::ShaderWriter & writer
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
-			, c3d::BRDFHelpers & brdf
+			, c3d::BRDFHelpers & brdfHelpers
+			, c3d::DiffuseBRDFUPtr diffuseBrdf
+			, c3d::SpecularBRDFUPtr specularBrdf
 			, c3d::Shadow & shadowModel
 			, c3d::Lights & lights
 			, bool enableVolumetric );
 
 		C3D_ToonMaterial_API static const castor::String getName();
 		static c3d::LightingModelUPtr create( castor3d::LightingModelID lightingModelId
+			, c3d::DiffuseBrdfDesc const & diffuseBrdf
+			, c3d::SpecularBrdfDesc const & specularBrdf
 			, sdw::ShaderWriter & writer
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
-			, c3d::BRDFHelpers & brdf
+			, c3d::BRDFHelpers & brdfHelpers
 			, c3d::Shadow & shadowModel
 			, c3d::Lights & lights
 			, bool enableVolumetric );

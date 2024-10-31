@@ -1,8 +1,11 @@
 #include "ToonMaterial/Shaders/GlslToonLighting.hpp"
 
+#include <Castor3D/Material/Pass/PbrPass.hpp>
 #include <Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp>
+#include <Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp>
 #include <Castor3D/Shader/Shaders/GlslLightSurface.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
+#include <Castor3D/Shader/Shaders/GlslOrenNayarBRDF.hpp>
 #include <Castor3D/Shader/Shaders/GlslOutputComponents.hpp>
 #include <Castor3D/Shader/Shaders/GlslReflection.hpp>
 #include <Castor3D/Shader/Shaders/GlslShadow.hpp>
@@ -73,7 +76,7 @@ namespace toon::shader
 		, sdw::ShaderWriter & writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
-		, c3d::BRDFHelpers & brdf
+		, c3d::BRDFHelpers & brdfHelpers
 		, c3d::Shadow & shadowModel
 		, c3d::Lights & lights
 		, bool enableVolumetric )
@@ -81,7 +84,7 @@ namespace toon::shader
 			, writer
 			, materials
 			, utils
-			, brdf
+			, brdfHelpers
 			, shadowModel
 			, lights
 			, enableVolumetric }
@@ -95,10 +98,12 @@ namespace toon::shader
 	}
 
 	c3d::LightingModelUPtr ToonPhongLightingModel::create( castor3d::LightingModelID lightingModelId
+		, c3d::DiffuseBrdfDesc const & diffuseBrdf
+		, c3d::SpecularBrdfDesc const & specularBrdf
 		, sdw::ShaderWriter & writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
-		, c3d::BRDFHelpers & brdf
+		, c3d::BRDFHelpers & brdfHelpers
 		, c3d::Shadow & shadowModel
 		, c3d::Lights & lights
 		, bool enableVolumetric )
@@ -107,7 +112,7 @@ namespace toon::shader
 			, writer
 			, materials
 			, utils
-			, brdf
+			, brdfHelpers
 			, shadowModel
 			, lights
 			, enableVolumetric );
@@ -154,7 +159,9 @@ namespace toon::shader
 		, sdw::ShaderWriter & writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
-		, c3d::BRDFHelpers & brdf
+		, c3d::BRDFHelpers & brdfHelpers
+		, c3d::DiffuseBRDFUPtr diffuseBrdf
+		, c3d::SpecularBRDFUPtr specularBrdf
 		, c3d::Shadow & shadowModel
 		, c3d::Lights & lights
 		, bool enableVolumetric )
@@ -162,7 +169,9 @@ namespace toon::shader
 			, writer
 			, materials
 			, utils
-			, brdf
+			, brdfHelpers
+			, std::move( diffuseBrdf )
+			, std::move( specularBrdf )
 			, shadowModel
 			, lights
 			, enableVolumetric }
@@ -176,10 +185,12 @@ namespace toon::shader
 	}
 
 	c3d::LightingModelUPtr ToonPbrLightingModel::create( castor3d::LightingModelID lightingModelId
+		, c3d::DiffuseBrdfDesc const & diffuseBrdf
+		, c3d::SpecularBrdfDesc const & specularBrdf
 		, sdw::ShaderWriter & writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
-		, c3d::BRDFHelpers & brdf
+		, c3d::BRDFHelpers & brdfHelpers
 		, c3d::Shadow & shadowModel
 		, c3d::Lights & lights
 		, bool enableVolumetric )
@@ -188,7 +199,13 @@ namespace toon::shader
 			, writer
 			, materials
 			, utils
-			, brdf
+			, brdfHelpers
+			, ( diffuseBrdf.create
+				? diffuseBrdf.create( writer, brdfHelpers )
+				: castor3d::PbrPass::DefaultDiffuseBrdf.create( writer, brdfHelpers ) )
+			, ( specularBrdf.create
+				? specularBrdf.create( writer, brdfHelpers )
+				: castor3d::PbrPass::DefaultSpecularBrdf.create( writer, brdfHelpers ) )
 			, shadowModel
 			, lights
 			, enableVolumetric );

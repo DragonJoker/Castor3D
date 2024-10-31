@@ -11,7 +11,8 @@ namespace castor3d::shader
 	class SpecularBRDF
 	{
 	public:
-		C3D_API explicit SpecularBRDF( sdw::ShaderWriter & writer );
+		C3D_API explicit SpecularBRDF( sdw::ShaderWriter & writer
+			, BRDFHelpers & brdfHelpers );
 		C3D_API virtual ~SpecularBRDF() = default;
 
 		C3D_API virtual sdw::RetVec3 compute( sdw::Vec3 const & radiance
@@ -24,6 +25,7 @@ namespace castor3d::shader
 
 	protected:
 		sdw::ShaderWriter & m_writer;
+		BRDFHelpers & m_brdfHelpers;
 	};
 }
 

@@ -72,7 +72,9 @@ extern "C"
 			, &toon::shader::ToonPhongLightingModel::create } );
 		engine->registerPassModels( { toon::shader::ToonPbrLightingModel::getName()
 			, toon::ToonPbrPass::create
-			, &toon::shader::ToonPbrLightingModel::create } );
+			, &toon::shader::ToonPbrLightingModel::create
+			, castor3d::PbrPass::DiffuseBrdfs, castor3d::PbrPass::DefaultDiffuseBrdf
+			, castor3d::PbrPass::SpecularBrdfs, castor3d::PbrPass::DefaultSpecularBrdf } );
 		engine->registerSpecificsBuffer( castor::String{ toon::shader::ToonProfile::getName() }
 			, { &toon::shader::ToonProfiles::create
 				, &toon::shader::ToonProfiles::update

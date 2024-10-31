@@ -227,8 +227,25 @@ namespace castor3d::shader
 	CU_DeclareSmartPtr( castor3d::shader, SpecularBRDF, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, SssTransmittance, C3D_API );
 
+	using DiffuseBrdfCreator = castor::Function< DiffuseBRDFUPtr( sdw::ShaderWriter &, BRDFHelpers & ) >;
+	using SpecularBrdfCreator = castor::Function< SpecularBRDFUPtr( sdw::ShaderWriter &, BRDFHelpers & ) >;
+
+	struct DiffuseBrdfDesc
+	{
+		castor::String name;
+		DiffuseBrdfCreator create;
+	};
+
+	struct SpecularBrdfDesc
+	{
+		castor::String name;
+		SpecularBrdfCreator create;
+	};
+
 	using ReflectionModelPtr = castor::RawUniquePtr< ReflectionModel >;
 	using LightingModelCreator = castor::Function< LightingModelUPtr( LightingModelID lightingModelId
+		, DiffuseBrdfDesc const & diffuseBrdf
+		, SpecularBrdfDesc const & specularBrdf
 		, sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
@@ -236,10 +253,8 @@ namespace castor3d::shader
 		, Shadow & shadowModel
 		, Lights & lights
 		, bool enableVolumetric ) >;
-
-	struct BackgroundModelEntry
-	{
-	};
+	using DiffuseBrdfArray = castor::Vector< DiffuseBrdfDesc >;
+	using SpecularBrdfArray = castor::Vector< SpecularBrdfDesc >;
 
 	using BackgroundModelPtr = castor::RawUniquePtr< BackgroundModel >;
 	using BackgroundModelCreator = castor::Function< BackgroundModelPtr( Engine const & engine
