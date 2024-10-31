@@ -40,9 +40,12 @@ namespace castor3d
 			castor::String const name = nearest
 				? castor::String{ cuT( "RenderCube_Nearest" ) }
 				: castor::String{ cuT( "RenderCube_Linear" ) };
-			VkFilter const filter = nearest
+			VkFilter const minMagFilter = nearest
 				? VK_FILTER_NEAREST
 				: VK_FILTER_LINEAR;
+			VkSamplerMipmapMode const mipFilter = nearest
+				? VK_SAMPLER_MIPMAP_MODE_NEAREST
+				: VK_SAMPLER_MIPMAP_MODE_LINEAR;
 			auto & engine = *renderSystem.getEngine();
 			SamplerObs result{};
 
@@ -52,8 +55,9 @@ namespace castor3d
 			}
 			else if ( auto sampler = engine.addNewSampler( name, engine ) )
 			{	
-				sampler->setMinFilter( filter );
-				sampler->setMagFilter( filter );
+				sampler->setMinFilter( minMagFilter );
+				sampler->setMagFilter( minMagFilter );
+				sampler->setMipFilter( mipFilter );
 				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );

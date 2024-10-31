@@ -121,7 +121,7 @@ namespace castor3d
 				auto c3d_roughness = writer.declConstant< sdw::Float >( "c3d_roughness"
 					, writer.cast< sdw::Float >( float( mipLevel ) / float( MaxIblReflectionLod ) ) );
 				auto c3d_sampleCount = writer.declConstant( "sampleCount"
-					, 1024_u );
+					, 4096_u );
 
 				writer.implementEntryPointT< PosColT, PosColT >( [&]( sdw::VertexInT< PosColT > const & in
 					, sdw::VertexOutT< PosColT > out )
