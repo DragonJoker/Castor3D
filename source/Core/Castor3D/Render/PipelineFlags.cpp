@@ -22,23 +22,23 @@ namespace castor3d
 	{
 		namespace hi
 		{
-			static constexpr uint64_t maxSubmeshSize = castor::getBitSize( MaxSubmeshCombines );
+			static constexpr uint64_t maxSubmeshSize = castor::getBitSize( MaxSubmeshCombines - 1u );
 			static constexpr uint64_t maxSubmeshMask = ( 0x1ULL << uint64_t( maxSubmeshSize ) ) - 1u;
-			static constexpr uint64_t maxPassSize = castor::getBitSize( MaxPassCombines );
+			static constexpr uint64_t maxPassSize = castor::getBitSize( MaxPassCombines - 1u );
 			static constexpr uint64_t maxPassMask = ( 0x1ULL << uint64_t( maxPassSize ) ) - 1u;
-			static constexpr uint64_t maxTexturesSize = castor::getBitSize( MaxTextureCombines );
+			static constexpr uint64_t maxTexturesSize = castor::getBitSize( MaxTextureCombines - 1u );
 			static constexpr uint64_t maxTexturesMask = ( 0x1ULL << uint64_t( maxTexturesSize ) ) - 1u;
 			static constexpr uint64_t maxProgramSize = castor::getBitSize( uint32_t( ProgramFlag::eAllBase ) );
 			static constexpr uint64_t maxProgramMask = ( 0x1ULL << uint64_t( maxProgramSize ) ) - 1u;
-			static constexpr uint64_t maxLightingModelIDSize = castor::getBitSize( MaxLightingModels );
+			static constexpr uint64_t maxLightingModelIDSize = castor::getBitSize( MaxLightingModels - 1u );
 			static constexpr uint64_t maxLightingModelIDMask = ( 0x1ULL << uint64_t( maxLightingModelIDSize ) ) - 1u;
-			static constexpr uint64_t maxCompareOpSize = castor::getBitSize( uint32_t( VK_COMPARE_OP_ALWAYS + 1 ) );
+			static constexpr uint64_t maxCompareOpSize = castor::getBitSize( uint32_t( VK_COMPARE_OP_ALWAYS ) + 1u );
 			static constexpr uint64_t maxCompareOpMask = ( 0x1ULL << uint64_t( maxCompareOpSize ) ) - 1u;
-			static constexpr uint64_t maxSubmeshDataSize = castor::getBitSize( MaxSubmeshDataBindings );
+			static constexpr uint64_t maxSubmeshDataSize = castor::getBitSize( MaxSubmeshDataBindings - 1u );
 			static constexpr uint64_t maxSubmeshDataMask = ( 0x1ULL << uint64_t( maxSubmeshDataSize ) ) - 1u;
-			static constexpr uint64_t maxBackgroundModelIDSize = castor::getBitSize( MaxBackgroundModels );
+			static constexpr uint64_t maxBackgroundModelIDSize = castor::getBitSize( MaxBackgroundModels - 1u );
 			static constexpr uint64_t maxBackgroundModelIDMask = ( 0x1ULL << uint64_t( maxBackgroundModelIDSize ) ) - 1u;
-			static constexpr uint64_t maxPassLayerSize = castor::getBitSize( MaxPassLayers );
+			static constexpr uint64_t maxPassLayerSize = castor::getBitSize( MaxPassLayers - 1u );
 			static constexpr uint64_t maxPassLayerMask = ( 0x1ULL << uint64_t( maxPassLayerSize ) ) - 1u;
 			static constexpr uint64_t maxSize = maxSubmeshSize + maxProgramSize + maxLightingModelIDSize + maxPassSize + maxTexturesSize + maxCompareOpSize + maxSubmeshDataSize + maxBackgroundModelIDSize + maxPassLayerSize + 1u;
 			static_assert( 64 >= maxSize );

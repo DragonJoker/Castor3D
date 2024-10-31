@@ -23,47 +23,69 @@ namespace castor3d
 		struct Entry
 		{
 			Key name{};
+			Key baseName{};
+			shader::DiffuseBrdfDesc diffuseBrdf{};
+			shader::SpecularBrdfDesc specularBrdf{};
 			Creator create{};
-			LightingModelID lightingModelId{};
 			BackgroundModelID backgroundModelId{};
+			LightingModelID lightingModelId{};
+			BrdfID diffuseBrdfId{};
+			BrdfID specularBrdfId{};
 		};
 		using ObjCont = castor::Vector< Entry >;
+		struct LightingModel
+		{
+			castor::String name{};
+			shader::DiffuseBrdfDesc defaultDiffuseBrdf{};
+			shader::SpecularBrdfDesc defaultSpecularBrdf{};
+			shader::DiffuseBrdfArray diffuseBrdfs{};
+			shader::SpecularBrdfArray specularBrdfs{};
+		};
+		using LightingModelCont = castor::Vector< LightingModel >;
 
 	public:
 		/**
 		 *\~english
-		 *\brief		Registers an object type.
-		 *\param[in]	key					The object type.
+		 *\brief		Registers a lighting model.
+		 *\param[in]	key					The lighting model.
+		 *\param[in]	diffuseBrdfs		The diffuse BRDFs supported by the lighting model.
+		 *\param[in]	specularBrdfs		The specular BRDFs supported by the lighting model.
 		 *\param[in]	backgroundModelId	The background model ID.
 		 *\param[in]	create				The object creation function.
 		 *\~french
-		 *\brief		Enregistre un type d'objet.
-		 *\param[in]	key					Le type d'objet.
+		 *\brief		Enregistre un modèle d'éclairage.
+		 *\param[in]	key					Le modèle d'éclairage.
+		 *\param[in]	diffuseBrdfs		Les diffuse BRDFs supportés par le modèle d'éclairage.
+		 *\param[in]	specularBrdfs		Les specular BRDFs supportés par le modèle d'éclairage.
 		 *\param[in]	backgroundModelId	L'ID du modèle de fond.
 		 *\param[in]	create				La fonction de création d'objet.
 		 */
-		C3D_API LightingModelID registerType( Key const & key
+		C3D_API castor::Vector< LightingModelID > registerType( castor::String const & baseName
+			, shader::DiffuseBrdfArray diffuseBrdfs
+			, shader::SpecularBrdfArray specularBrdfs
+			, shader::DiffuseBrdfDesc const & defaultDiffuseBrdf
+			, shader::SpecularBrdfDesc const & defaultSpecularBrdf
 			, BackgroundModelID backgroundModelId
-			, Creator create );
+			, Creator const & create );
 		/**
 		 *\~english
-		 *\brief		Unregisters an object type.
-		 *\param[in]	key					The object type.
+		 *\brief		Unregisters a lighting model.
+		 *\param[in]	key					The lighting model.
 		 *\param[in]	backgroundModelId	The background model ID.
 		 *\~french
-		 *\brief		Désenregistre un type d'objet.
-		 *\param[in]	key					Le type d'objet.
+		 *\brief		Désenregistre un modèle d'éclairage.
+		 *\param[in]	key					Le modèle d'éclairage.
 		 *\param[in]	backgroundModelId	L'ID du modèle de fond.
 		 */
 		C3D_API void unregisterType( Key const & key
 			, BackgroundModelID backgroundModelId );
 		/**
 		 *\~english
-		 *\brief		Unregisters an object type.
+		 *\brief		Unregisters a lighting model.
 		 *\param[in]	lightingModelId		The lighting model ID.
 		 *\param[in]	backgroundModelId	The background model ID.
 		 *\~french
-		 *\brief		Désenregistre un type d'objet.
+		 *\brief		Désenregistre un modèle d'éclairage.
 		 *\param[in]	lightingModelId		L'ID du modèle d'éclairage.
 		 *\param[in]	backgroundModelId	L'ID du modèle de fond.
 		 */
@@ -71,22 +93,55 @@ namespace castor3d
 			, BackgroundModelID backgroundModelId );
 		/**
 		 *\~english
-		 *\param[in]	key	The object type.
-		 *\return		The object type ID.
+		 *\param[in]	key				The lighting model base name.
+		 *\param[in]	diffuseBrdf		The diffuse BRDF name.
+		 *\param[in]	specularBrdf	The specular BRDF name.
+		 *\return		The lighting model ID.
 		 *\~french
-		 *\param[in]	key	Le type d'objet.
-		 *\return		L'ID du type d'objet.
+		 *\param[in]	key				Le nom de base du modèle d'éclairage.
+		 *\param[in]	diffuseBrdf		Le nom de la diffuse BRDF.
+		 *\param[in]	specularBrdf	Le nom de la specular BRDF.
+		 *\return		L'ID du modèle d'éclairage.
 		 */
-		C3D_API Id getNameId( Key const & key )const;
+		C3D_API Id getNameId( castor::String const & key
+			, castor::String diffuseBrdf
+			, castor::String specularBrdf )const;
 		/**
 		 *\~english
-		 *\param[in]	id	The object type ID.
-		 *\return		The object type.
+		 *\param[in]	baseName	The lighting model base name.
+		 *\return		The lighting model description.
 		 *\~french
-		 *\param[in]	id	L'ID du type d'objet.
-		 *\return		Le type d'objet.
+		 *\param[in]	baseName	Le nom de base du modèle d'éclairage.
+		 *\return		La description du modèle d'éclairage.
 		 */
-		C3D_API Key getIdName( Id const & id )const;
+		C3D_API LightingModel const & getModel( castor::String const & baseName )const;
+		/**
+		 *\~english
+		 *\param[in]	id	The lighting model ID.
+		 *\return		The lighting model name.
+		 *\~french
+		 *\param[in]	id	L'ID du modèle d'éclairage.
+		 *\return		Le nom du modèle d'éclairage.
+		 */
+		C3D_API Key getBaseName( Id const & id )const;
+		/**
+		 *\~english
+		 *\param[in]	id	The lighting model ID.
+		 *\return		The diffuse BRDF name.
+		 *\~french
+		 *\param[in]	id	L'ID du modèle d'éclairage pour la diffuse BRDF.
+		 *\return		Le nom de la diffuse BRDF.
+		 */
+		C3D_API castor::String getDiffuseBrdfName( Id const & id )const;
+		/**
+		 *\~english
+		 *\param[in]	id	The lighting model ID.
+		 *\return		The specular BRDF name.
+		 *\~french
+		 *\param[in]	id	L'ID du modèle d'éclairage.
+		 *\return		Le nom de la specular BRDF.
+		 */
+		C3D_API castor::String getSpecularBrdfName( Id const & id )const;
 		/**
 		 *\~english
 		 *\return		The unique lighting models IDs.
@@ -94,6 +149,13 @@ namespace castor3d
 		 *\return		Les ID uniques des modèles d'éclairage.
 		 */
 		C3D_API castor::Vector< LightingModelID > getLightingModelsID()const;
+		/**
+		 *\~english
+		 *\return		The lighting models names.
+		 *\~french
+		 *\return		Les noms des modèles d'éclairage.
+		 */
+		C3D_API castor::StringArray listRegisteredTypes()const;
 		/**
 		 *\~english
 		 *\param[in]	backgroundModelId	The background model ID.
@@ -148,12 +210,24 @@ namespace castor3d
 			}
 
 			return it->create( lightingModelId
+				, it->diffuseBrdf
+				, it->specularBrdf
 				, castor::forward< Parameters >( params )... );
 		}
 
 	private:
+		LightingModelID registerType( castor::String baseName
+			, shader::DiffuseBrdfDesc diffuseBrdf
+			, BrdfID diffuseBrdfId
+			, shader::SpecularBrdfDesc specularBrdf
+			, BrdfID specularBrdfId
+			, BackgroundModelID backgroundModelId
+			, Creator create );
+
+	private:
 		LightingModelID m_currentId{};
 		ObjCont m_registered;
+		LightingModelCont m_models;
 	};
 }
 

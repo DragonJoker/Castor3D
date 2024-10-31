@@ -11,7 +11,8 @@ namespace castor3d::shader
 	class DiffuseBRDF
 	{
 	public:
-		C3D_API explicit DiffuseBRDF( sdw::ShaderWriter & writer );
+		C3D_API explicit DiffuseBRDF( sdw::ShaderWriter & writer
+			, BRDFHelpers & brdfHelpers );
 		C3D_API virtual ~DiffuseBRDF() = default;
 
 		C3D_API virtual sdw::RetVec3 compute( sdw::Vec3 const & radiance
@@ -24,6 +25,7 @@ namespace castor3d::shader
 
 	protected:
 		sdw::ShaderWriter & m_writer;
+		BRDFHelpers & m_brdfHelpers;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InFloat

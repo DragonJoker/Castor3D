@@ -5,9 +5,8 @@
 namespace castor3d::shader
 {
 	CookTorranceBRDF::CookTorranceBRDF( sdw::ShaderWriter & writer
-		, BRDFHelpers & brdf )
-		: SpecularBRDF{ writer }
-		, m_brdf{ brdf }
+		, BRDFHelpers & brdfHelpers )
+		: SpecularBRDF{ writer, brdfHelpers }
 	{
 	}
 
@@ -32,10 +31,10 @@ namespace castor3d::shader
 				{
 					// GGX Specular BRDF
 					auto D = m_writer.declLocale( "D"
-						, m_brdf.distributionGGX( NdotH
+						, m_brdfHelpers.distributionGGX( NdotH
 							, roughness * roughness ) );
 					auto V = m_writer.declLocale( "V"
-						, m_brdf.visibilitySmithGGXCorrelated( NdotV
+						, m_brdfHelpers.visibilitySmithGGXCorrelated( NdotV
 							, NdotL
 							, roughness ) );
 
@@ -66,5 +65,11 @@ namespace castor3d::shader
 			, pNdotV
 			, pF
 			, proughness );
+	}
+
+	SpecularBRDFUPtr CookTorranceBRDF::create( sdw::ShaderWriter & writer
+		, BRDFHelpers & brdfHelpers )
+	{
+		return castor::makeUniqueDerived< SpecularBRDF, CookTorranceBRDF >( writer, brdfHelpers );
 	}
 }

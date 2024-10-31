@@ -22,11 +22,15 @@ namespace castor3d::shader
 			, Materials const & materials
 			, Utils & utils
 			, BRDFHelpers & brdfHelpers
+			, DiffuseBRDFUPtr diffuse
+			, SpecularBRDFUPtr specular
 			, Shadow & shadowModel
 			, Lights & lights
 			, bool enableVolumetric );
 		C3D_API static castor::StringView getName();
 		C3D_API static LightingModelUPtr create( LightingModelID lightingModelId
+			, DiffuseBrdfDesc const & diffuseBrdf
+			, SpecularBrdfDesc const & specularBrdf
 			, sdw::ShaderWriter & writer
 			, Materials const & materials
 			, Utils & utils
@@ -77,8 +81,8 @@ namespace castor3d::shader
 			, sdw::Vec3 const & reflectedSpecular )override;
 
 	public:
-		SpecularBRDFUPtr m_specular;
 		DiffuseBRDFUPtr m_diffuse;
+		SpecularBRDFUPtr m_specular;
 		SheenBRDF m_sheen;
 	};
 }

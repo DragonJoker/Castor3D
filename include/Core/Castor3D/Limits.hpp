@@ -13,18 +13,24 @@ namespace castor3d
 	*	Materials.
 	*/
 	//@{
+	// Maximum different base lighting models.
+	static uint32_t constexpr MaxBaseLightingModels = 32u;
+	// Maximum different diffuse BRDF per base lighting model.
+	static uint32_t constexpr MaxDiffuseBrdfs = 8u;
+	// Maximum different specular BRDF per base lighting model.
+	static uint32_t constexpr MaxSpecularBrdfs = 4u;
 	// Maximum different lighting models.
-	static uint32_t constexpr MaxLightingModels = 63u;
+	static uint32_t constexpr MaxLightingModels = MaxBaseLightingModels * MaxDiffuseBrdfs * MaxSpecularBrdfs;
 	// Maximum different background models.
-	static uint32_t constexpr MaxBackgroundModels = 63u;
+	static uint32_t constexpr MaxBackgroundModels = 32u;
 	// Maximum possible active pass combinations.
-	static uint32_t constexpr MaxPassCombines = 1023u;
+	static uint32_t constexpr MaxPassCombines = 1024u;
 	// Maximum possible active texture combines.
-	static uint32_t constexpr MaxTextureCombines = 1023u;
+	static uint32_t constexpr MaxTextureCombines = 1024u;
 	// Maximum textures in a pass.
 	static uint32_t constexpr MaxPassTextures = 8u;
 	// Maximum passes in a material.
-	static uint32_t constexpr MaxPassLayers = 15u;
+	static uint32_t constexpr MaxPassLayers = 16u;
 	// Phong/Blinn-Phong
 	static float constexpr MaxPhongShininess = 256.0f;
 	// SSS transmittance factors count
@@ -193,7 +199,7 @@ namespace castor3d
 	// Max supported data bindings for submesh render data.
 	static uint32_t constexpr MaxSubmeshDataBindings = 16u;
 	// Maximum possible submesh components.
-	static uint32_t constexpr MaxSubmeshCombines = 1023u;
+	static uint32_t constexpr MaxSubmeshCombines = 1024u;
 	//@}
 	/**
 	*\name

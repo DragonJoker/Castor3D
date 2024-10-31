@@ -4,8 +4,10 @@ CU_ImplementSmartPtr( castor3d::shader, SpecularBRDF )
 
 namespace castor3d::shader
 {
-	SpecularBRDF::SpecularBRDF( sdw::ShaderWriter & writer )
+	SpecularBRDF::SpecularBRDF( sdw::ShaderWriter & writer
+		, BRDFHelpers & brdfHelpers )
 		: m_writer{ writer }
+		, m_brdfHelpers{ brdfHelpers }
 	{
 	}
 }

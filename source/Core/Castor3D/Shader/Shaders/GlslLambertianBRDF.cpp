@@ -2,8 +2,9 @@
 
 namespace castor3d::shader
 {
-	LambertianBRDF::LambertianBRDF( sdw::ShaderWriter & writer )
-		: DiffuseBRDF{ writer }
+	LambertianBRDF::LambertianBRDF( sdw::ShaderWriter & writer
+		, BRDFHelpers & brdfHelpers )
+		: DiffuseBRDF{ writer, brdfHelpers }
 	{
 	}
 
@@ -48,5 +49,11 @@ namespace castor3d::shader
 			, pLdotV
 			, pF
 			, proughness );
+	}
+
+	DiffuseBRDFUPtr LambertianBRDF::create( sdw::ShaderWriter & writer
+		, BRDFHelpers & brdfHelpers )
+	{
+		return castor::makeUniqueDerived< DiffuseBRDF, LambertianBRDF >( writer, brdfHelpers );
 	}
 }

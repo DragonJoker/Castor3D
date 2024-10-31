@@ -69,7 +69,9 @@ namespace c3d_gltf
 		static castor3d::LightingModelID getLightingModel( castor3d::Engine const & engine )
 		{
 			auto const & factory = engine.getLightingModelFactory();
-			return factory.getNameId( castor::String{ castor3d::PbrPass::LightingModel } );
+			return factory.getNameId( castor::String{ castor3d::PbrPass::LightingModel }
+				, castor3d::PbrPass::DefaultDiffuseBrdf.name
+				, castor3d::PbrPass::DefaultSpecularBrdf.name );
 		}
 
 		template< typename ComponentT >

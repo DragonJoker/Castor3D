@@ -12,7 +12,6 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderWriter/Source.hpp>
-#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 
 namespace castor3d::shader
 {
@@ -47,6 +46,8 @@ namespace castor3d::shader
 	}
 
 	LightingModelUPtr PhongLightingModel::create( LightingModelID lightingModelId
+		, DiffuseBrdfDesc const & diffuseBrdf
+		, SpecularBrdfDesc const & specularBrdf
 		, sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils

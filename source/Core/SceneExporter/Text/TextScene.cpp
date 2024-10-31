@@ -27,6 +27,7 @@
 #include <Castor3D/Cache/ObjectCache.hpp>
 #include <Castor3D/Cache/OverlayCache.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
+#include <Castor3D/Shader/LightingModelFactory.hpp>
 
 #include <CastorUtils/Data/Text/TextFont.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
@@ -348,6 +349,27 @@ namespace castor
 
 			return writeNodes( file, nodes, elemsName, scale, writer );
 		}
+
+		static bool writeDefaultLightingModel( StringStream & file
+			, castor3d::Engine const & engine
+			, castor3d::LightingModelID lightingModelId )
+		{
+			bool result{};
+			TextWriterBase writer{};
+			auto & factory = engine.getLightingModelFactory();
+			auto baseName = factory.getBaseName( lightingModelId );
+
+			if ( auto block = writer.beginBlock( file, cuT( "default_lighting_model" ), baseName ) )
+			{
+				auto diffuseBrdf = factory.getDiffuseBrdfName( lightingModelId );
+				auto specularBrdf = factory.getSpecularBrdfName( lightingModelId );
+				auto & model = factory.getModel( baseName );
+				result = block->writeNameOpt( file, cuT( "diffuse_brdf" ), diffuseBrdf, model.defaultDiffuseBrdf.name )
+					&& block->writeNameOpt( file, cuT( "specular_brdf" ), specularBrdf, model.defaultSpecularBrdf.name );
+			}
+
+			return result;
+		}
 	}
 
 	//*************************************************************************************************
@@ -366,7 +388,7 @@ namespace castor
 		bool result = writeComment( file, cuT( "Global configuration" ) )
 			&& writeOpt( file, cuT( "debug_overlays" ), scene.getEngine()->getRenderLoop().hasDebugOverlays() )
 			&& writeOpt( file, cuT( "lpv_grid_size" ), scene.getEngine()->getLpvGridSize(), 32u )
-			&& write( file, cuT( "materials" ), scene.getDefaultLightingModelName() )
+			&& txtscn::writeDefaultLightingModel( file, *scene.getEngine(), scene.getDefaultLightingModel() )
 			&& txtscn::writeInclude( file, m_options.globalFontsFile, *this )
 			&& txtscn::writeInclude( file, m_options.globalSamplersFile, *this )
 			&& txtscn::writeInclude( file, m_options.globalMaterialsFile, *this )

@@ -1101,7 +1101,7 @@ namespace castor3d
 			ShaderWriter< useCompute >::Type writer{ &engine.getShaderAllocator() };
 
 			shader::Utils utils{ writer };
-			shader::BRDFHelpers brdf{ writer };
+			shader::BRDFHelpers brdfHelpers{ writer };
 			shader::PassShaders passShaders{ engine.getPassComponentsRegister()
 				, flags
 				, ( ComponentModeFlag::eDerivTex
@@ -1109,7 +1109,7 @@ namespace castor3d
 				, utils };
 			shader::SubmeshShaders submeshShaders{ engine.getSubmeshComponentsRegister()
 				, flags };
-			shader::LambertianBRDF lambertian{ writer };
+			shader::LambertianBRDF lambertian{ writer, brdfHelpers };
 
 			auto index = uint32_t( InOutBindings::eCount );
 			C3D_CameraNamed( writer
@@ -1166,7 +1166,7 @@ namespace castor3d
 				, flags.lightingModelId
 				, flags.backgroundModelId
 				, materials
-				, brdf
+				, brdfHelpers
 				, utils
 				, shader::ShadowOptions{ flags.getShadowFlags(), true /* vsm */, false /* rsm */, technique.hasShadowBuffer() /* reserveIds */ }
 				, &sssProfiles

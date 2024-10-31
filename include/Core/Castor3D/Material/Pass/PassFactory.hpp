@@ -22,6 +22,10 @@ namespace castor3d
 		castor::String lightingModel;
 		PassFactoryBase::Creator passCreator;
 		shader::LightingModelCreator lightingModelCreator;
+		shader::DiffuseBrdfArray diffuseBrdfs{};
+		shader::DiffuseBrdfDesc defaultDiffuseBrdf{};
+		shader::SpecularBrdfArray specularBrdfs{};
+		shader::SpecularBrdfDesc defaultSpecularBrdf{};
 	};
 
 	class PassFactory

@@ -9,6 +9,8 @@ namespace castor3d
 {
 	castor::StringView const PhongPass::Type = cuT( "blinn_phong" );
 	castor::StringView const PhongPass::LightingModel = shader::PhongLightingModel::getName();
+	shader::DiffuseBrdfDesc const PhongPass::DefaultDiffuseBrdf = { cuT( "" ), {} };
+	shader::SpecularBrdfDesc const PhongPass::DefaultSpecularBrdf = { cuT( "" ), {} };
 
 	PassUPtr PhongPass::create( LightingModelID lightingModelId
 		, Material & parent )

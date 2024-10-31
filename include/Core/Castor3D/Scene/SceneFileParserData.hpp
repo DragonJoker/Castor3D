@@ -75,6 +75,8 @@ namespace castor3d
 		eTexture = CU_MakeSectionName( 'T', 'X', 'U', 'R' ),
 		eColourGrading = CU_MakeSectionName( 'C', 'L', 'G', 'D' ),
 		eSdfFont = CU_MakeSectionName( 'S', 'D', 'F', 'T' ),
+		eLightingModel = CU_MakeSectionName( 'L', 'G', 'M', 'L' ),
+		eDefaultLightingModel = CU_MakeSectionName( 'D', 'L', 'M', 'L' ),
 	};
 
 	struct SceneContext;

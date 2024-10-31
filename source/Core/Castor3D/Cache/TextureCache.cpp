@@ -632,7 +632,7 @@ namespace castor3d
 					}
 				} );
 		}
-		else
+		else if ( unitData.base->sourceInfo.isSerialisable() )
 		{
 			log::debug << "TextureCache: Reusing existing TextureUnitData for [" << unitData.base->sourceInfo.name() << "]" << std::endl;
 		}

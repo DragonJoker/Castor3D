@@ -1,11 +1,14 @@
 #include "Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp"
 
+#include "Castor3D/Material/Pass/PbrPass.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslLambertianBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslOrenNayarBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+
+#include <ShaderWriter/Source.hpp>
 
 namespace castor3d::shader
 {
@@ -14,6 +17,8 @@ namespace castor3d::shader
 		, Materials const & materials
 		, Utils & utils
 		, BRDFHelpers & brdfHelpers
+		, DiffuseBRDFUPtr diffuse
+		, SpecularBRDFUPtr specular
 		, Shadow & shadowModel
 		, Lights & lights
 		, bool enableVolumetric )
@@ -29,8 +34,8 @@ namespace castor3d::shader
 			, true
 			, enableVolumetric
 			, cuT( "c3d_pbr_" ) }
-		, m_specular{ castor::makeUniqueDerived< SpecularBRDF, CookTorranceBRDF >( writer, brdfHelpers ) }
-		, m_diffuse{ castor::makeUniqueDerived< DiffuseBRDF, EnergyConservativeOrenNayarBRDF >( writer ) }
+		, m_diffuse{ std::move( diffuse ) }
+		, m_specular{ std::move( specular ) }
 		, m_sheen{ writer, brdfHelpers }
 	{
 	}
@@ -41,6 +46,8 @@ namespace castor3d::shader
 	}
 
 	LightingModelUPtr PbrLightingModel::create( LightingModelID lightingModelId
+		, DiffuseBrdfDesc const & diffuseBrdf
+		, SpecularBrdfDesc const & specularBrdf
 		, sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
@@ -54,6 +61,12 @@ namespace castor3d::shader
 			, materials
 			, utils
 			, brdfHelpers
+			, ( diffuseBrdf.create
+				? diffuseBrdf.create( writer, brdfHelpers )
+				: PbrPass::DefaultDiffuseBrdf.create( writer, brdfHelpers ) )
+			, ( specularBrdf.create
+				? specularBrdf.create( writer, brdfHelpers )
+				: PbrPass::DefaultSpecularBrdf.create( writer, brdfHelpers ) )
 			, shadowModel
 			, lights
 			, enableVolumetric );
