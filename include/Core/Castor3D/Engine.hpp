@@ -429,19 +429,9 @@ namespace castor3d
 		 *\param[in]	lightingModelId		L'ID du modèle d'éclairage.
 		 *\param[in]	backgroundModelId	L'ID du modèle de fond.
 		 */
-		C3D_API void unregisterLightingModel( LightingModelID lightingModelId
-			, BackgroundModelID backgroundModelId )const;
-		/**
-		 *\~english
-		 *\brief		Unregisters a Lighting Model.
-		 *\param[in]	name				The model name.
-		 *\param[in]	backgroundModelId	The background model ID.
-		 *\~french
-		 *\brief		Désenregistre un Lighting Model.
-		 *\param[in]	name				Le nom du modèle.
-		 *\param[in]	backgroundModelId	L'ID du modèle de fond.
-		 */
-		C3D_API void unregisterLightingModel( castor::String const & name
+		C3D_API castor::Vector< LightingModelID > unregisterLightingModel( castor::String const & baseName
+			, castor::StringArray const & diffuseBrdfs
+			, castor::StringArray const & specularBrdfs
 			, BackgroundModelID backgroundModelId )const;
 		/**
 		 *\~english
@@ -509,14 +499,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Unregisters a combination of lighting model and background model.
 		 *\param[in]	backgroundModelId	The background model.
-		 *\param[in]	lightingModelId		The lighting model.
+		 *\param[in]	baseName			The lighting model base name.
 		 *\~french
 		 *\brief		Désenregistre une combinaison de modèle d'éclairage et de modèle de fond.
 		 *\param[in]	backgroundModelId	Le modèle de fond.
-		 *\param[in]	lightingModelId		Le modèle d'éclairage.
+		 *\param[in]	baseName			Le nom de base modèle d'éclairage.
 		 */
 		C3D_API void unregisterPassModel( BackgroundModelID backgroundModelId
-			, LightingModelID lightingModelId )const;
+			, castor::String const & baseName )const;
 		/**
 		 *\~english
 		 *\brief		Unregisters all combinations of given lighting model and background models.
@@ -525,7 +515,9 @@ namespace castor3d
 		 *\brief		Désenregistre toutes les combinaisons du modèle d'éclairage et des modèles de fond.
 		 *\param[in]	type	Le nom du modèle d'éclairage.
 		 */
-		C3D_API void unregisterPassModels( castor::String const & type )const;
+		C3D_API void unregisterPassModels( castor::String const & baseName
+			, castor::StringArray const & diffuseBrdfs
+			, castor::StringArray const & specularBrdfs )const;
 		/**
 		 *\~english
 		 *\brief			Registers a specific data shader buffer.

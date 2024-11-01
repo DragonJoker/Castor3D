@@ -709,7 +709,7 @@ namespace castor3d
 		}
 	}
 
-	castor::Vector< LightingModelID > Engine::registerLightingModel( castor::String const & name
+	castor::Vector< LightingModelID > Engine::registerLightingModel( castor::String const & baseName
 		, shader::DiffuseBrdfArray const & diffuseBrdfs
 		, shader::SpecularBrdfArray const & specularBrdfs
 		, shader::DiffuseBrdfDesc const & defaultDiffuseBrdf
@@ -717,7 +717,7 @@ namespace castor3d
 		, shader::LightingModelCreator creator
 		, BackgroundModelID backgroundModelId )const
 	{
-		return getLightingModelFactory().registerType( name
+		return getLightingModelFactory().registerType( baseName
 			, diffuseBrdfs
 			, specularBrdfs
 			, defaultDiffuseBrdf
@@ -726,16 +726,15 @@ namespace castor3d
 			, castor::move( creator ) );
 	}
 
-	void Engine::unregisterLightingModel( castor::String const & name
+	castor::Vector< LightingModelID > Engine::unregisterLightingModel( castor::String const & baseName
+		, castor::StringArray const & diffuseBrdfs
+		, castor::StringArray const & specularBrdfs
 		, BackgroundModelID backgroundModelId )const
 	{
-		getLightingModelFactory().unregisterType( name, backgroundModelId );
-	}
-
-	void Engine::unregisterLightingModel( LightingModelID lightingModelId
-		, BackgroundModelID backgroundModelId )const
-	{
-		getLightingModelFactory().unregisterType( lightingModelId, backgroundModelId );
+		return getLightingModelFactory().unregisterType( baseName
+			, diffuseBrdfs
+			, specularBrdfs
+			, backgroundModelId );
 	}
 
 	BackgroundModelID Engine::registerBackgroundModel( castor::String const & name
@@ -810,22 +809,34 @@ namespace castor3d
 	}
 
 	void Engine::unregisterPassModel( BackgroundModelID backgroundModelId
-		, LightingModelID lightingModelId )const
+		, castor::String const & baseName )const
 	{
-		getPassFactory().unregisterType( lightingModelId );
-		unregisterLightingModel( lightingModelId
-			, backgroundModelId );
+		for ( auto lightingModelId : unregisterLightingModel( baseName, {}, {}, backgroundModelId ) )
+		{
+			getPassFactory().unregisterType( lightingModelId );
+		}
 	}
 
-	void Engine::unregisterPassModels( castor::String const & type )const try
+	void Engine::unregisterPassModels( castor::String const & baseName
+		, castor::StringArray const & diffuseBrdfs
+		, castor::StringArray const & specularBrdfs )const try
 	{
-		auto lightingModelId = getPassFactory().getNameId( type );
-		getPassFactory().unregisterType( lightingModelId );
+		castor::Set< LightingModelID > lightingModels;
 
 		for ( auto const & entry : getBackgroundModelFactory().listRegisteredTypes() )
 		{
-			unregisterLightingModel( lightingModelId
-				, entry.id );
+			for ( auto lightingModelId : unregisterLightingModel( baseName
+				, diffuseBrdfs
+				, specularBrdfs
+				, entry.id ) )
+			{
+				lightingModels.emplace( lightingModelId );
+			}
+		}
+
+		for ( auto lightingModelId : lightingModels )
+		{
+			getPassFactory().unregisterType( lightingModelId );
 		}
 	}
 	catch ( std::exception & exc )

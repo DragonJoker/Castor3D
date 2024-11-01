@@ -75,8 +75,8 @@ extern "C"
 		auto backgroundModelId = engine->unregisterBackgroundModel( atmosphere_scattering::AtmosphereBackgroundModel::Name );
 		engine->unregisterParsers( atmosphere_scattering::AtmosphereBackgroundModel::PluginType );
 		engine->unregisterPassModel( backgroundModelId
-			, engine->getPassFactory().getNameId( castor::String{ atmosphere_scattering::AtmospherePhongLightingModel::getName() } ) );
+			, castor::String{ atmosphere_scattering::AtmospherePhongLightingModel::getName() } );
 		engine->unregisterPassModel( backgroundModelId
-			, engine->getPassFactory().getNameId( castor::String{ atmosphere_scattering::AtmospherePbrLightingModel::getName() } ) );
+			, castor::String{ atmosphere_scattering::AtmospherePbrLightingModel::getName() } );
 	}
 }
