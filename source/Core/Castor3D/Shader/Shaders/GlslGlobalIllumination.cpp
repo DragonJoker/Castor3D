@@ -20,22 +20,19 @@ namespace castor3d
 	namespace shader
 	{
 		GlobalIllumination::GlobalIllumination( sdw::ShaderWriter & writer
-			, DiffuseBRDF * diffuseBrdf
 			, Utils & utils )
 			: m_writer{ writer }
-			, m_diffuseBrdf{ diffuseBrdf }
 			, m_utils{ utils }
 		{
 		}
 
 		GlobalIllumination::GlobalIllumination( sdw::ShaderWriter & writer
-			, DiffuseBRDF * diffuseBrdf
 			, Utils & utils
 			, uint32_t & bindingIndex
 			, uint32_t setIndex
 			, SceneFlags sceneFlags
 			, IndirectLightingData const & indirectLighting )
-			: GlobalIllumination{ writer, diffuseBrdf, utils }
+			: GlobalIllumination{ writer, utils }
 		{
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
@@ -105,14 +102,8 @@ namespace castor3d
 			computeAmbient( sceneFlags
 				, indirectLighting
 				, debugOutput );
-			indirectLighting.diffuseColour() = ( ( hasDiffuseGI && m_diffuseBrdf )
-				? m_diffuseBrdf->compute( normalize( indirectLighting.diffuseColour() )
-					, length( indirectLighting.diffuseColour() )
-					, 1.0_f//lightSurface.NdotL().value()
-					, 1.0_f//lightSurface.NdotV().value()
-					, 1.0_f//lightSurface.LdotV().value()
-					, lightSurface.difF().value()
-					, roughness )
+			indirectLighting.diffuseColour() = ( hasDiffuseGI
+				? max( indirectLighting.diffuseColour() * ( vec3( 1.0_f ) - lightSurface.difF().value() ) / sdw::Float{ castor::Pi< float > }, vec3( 0.0_f ) )
 				: vec3( 0.0_f ) );
 			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Diffuse" ), indirectLighting.diffuseColour() );
 		}
