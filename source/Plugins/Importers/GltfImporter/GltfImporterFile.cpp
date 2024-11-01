@@ -48,7 +48,8 @@ namespace c3d_gltf
 				| fastgltf::Extensions::KHR_materials_clearcoat
 				| fastgltf::Extensions::KHR_materials_emissive_strength
 				| fastgltf::Extensions::KHR_materials_sheen
-				| fastgltf::Extensions::KHR_materials_unlit };
+				| fastgltf::Extensions::KHR_materials_unlit
+				| fastgltf::Extensions::KHR_materials_anisotropy };
 			auto path = castor::makePath( filePath );
 
 			constexpr auto gltfOptions = fastgltf::Options::DontRequireValidAssetMember
