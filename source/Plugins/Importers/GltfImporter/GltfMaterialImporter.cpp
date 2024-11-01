@@ -58,6 +58,10 @@
 
 // Materials
 #include <EdgesComponent.hpp>
+#include <AnisotropyComponent.hpp>
+#include <AnisotropyStrengthMapComponent.hpp>
+#include <AnisotropyDirectionMapComponent.hpp>
+#include <Shaders/GlslAnisotropicBRDF.hpp>
 #include <Shaders/GlslToonLighting.hpp>
 
 namespace c3d_gltf
@@ -66,12 +70,15 @@ namespace c3d_gltf
 
 	namespace materials
 	{
-		static castor3d::LightingModelID getLightingModel( castor3d::Engine const & engine )
+		static castor3d::LightingModelID getLightingModel( castor3d::Engine const & engine
+			, bool anisotropy )
 		{
 			auto const & factory = engine.getLightingModelFactory();
 			return factory.getNameId( castor::String{ castor3d::PbrPass::LightingModel }
 				, castor3d::PbrPass::DefaultDiffuseBrdf.name
-				, castor3d::PbrPass::DefaultSpecularBrdf.name );
+				, ( anisotropy
+					? castor::String{ anisotropy::shader::AnisotropicBRDF::Name }
+					: castor3d::PbrPass::DefaultSpecularBrdf.name ) );
 		}
 
 		template< typename ComponentT >
@@ -459,6 +466,25 @@ namespace c3d_gltf
 			}
 		}
 
+		static void parseAnisStrDirTexture( GltfImporterFile const & file
+			, castor3d::Pass & pass
+			, fastgltf::Asset const & impAsset
+			, fastgltf::Optional< fastgltf::TextureInfo > const & texInfo
+			, castor::ImageLoaderConfig const & loadConfig
+			, castor3d::MaterialImporter & importer )
+		{
+			if ( texInfo )
+			{
+				auto texConfig = pass.getComponentPlugin< anisotropy::AnisotropyDirectionMapComponent>().getBaseTextureConfiguration();
+				texConfig.components[1] = pass.getComponentPlugin< anisotropy::AnisotropyStrengthMapComponent >().getBaseTextureConfiguration().components[0];
+				texConfig.components[0].componentsMask = 0x00FFFF00;
+				texConfig.components[1].componentsMask = 0x000000FF;
+				parseTexture( file, pass
+					, std::move( texConfig )
+					, impAsset, *texInfo, loadConfig, importer );
+			}
+		}
+
 		template< typename ComponentT >
 		static void parseTexture( GltfImporterFile const & file
 			, castor3d::Pass & pass
@@ -563,7 +589,7 @@ namespace c3d_gltf
 		{
 			auto defaultMaterial = engine.createMaterial( DefaultMaterial
 				, engine
-				, materials::getLightingModel( engine ) );
+				, materials::getLightingModel( engine, false ) );
 			defaultMaterial->createPass();
 			defaultMaterial->setSerialisable( false );
 			engine.addMaterial( DefaultMaterial, defaultMaterial, true );
@@ -599,7 +625,8 @@ namespace c3d_gltf
 		}
 
 		fastgltf::Material const & impMaterial = *it;
-		auto pass = material.createPass( materials::getLightingModel( *getEngine() ) );
+		auto pass = material.createPass( materials::getLightingModel( *getEngine()
+			, impMaterial.anisotropy != nullptr ) );
 
 		if ( impMaterial.unlit )
 		{
@@ -618,6 +645,7 @@ namespace c3d_gltf
 		doImportEmissiveData( impMaterial, *pass );
 		doImportAlphaModeData( impMaterial, *pass );
 		doImportIorData( impMaterial, *pass );
+		doImportAnisotropyData( impMaterial, *pass );
 		pass->prepareTextures();
 		return true;
 	}
@@ -803,6 +831,21 @@ namespace c3d_gltf
 				, impMaterial.emissiveFactor[1]
 				, impMaterial.emissiveFactor[2] ) );
 			materials::parseTexture< castor3d::EmissiveMapComponent >( file, pass, impAsset, impMaterial.emissiveTexture, m_loadConfig, *this );
+		}
+	}
+
+	void GltfMaterialImporter::doImportAnisotropyData( fastgltf::Material const & impMaterial
+		, castor3d::Pass & pass )
+	{
+		if ( impMaterial.anisotropy )
+		{
+			auto anisotropy = pass.createComponent< anisotropy::AnisotropyComponent >();
+			anisotropy->setStrength( impMaterial.anisotropy->anisotropyStrength );
+			anisotropy->setRotation( castor::Angle::fromRadians( impMaterial.anisotropy->anisotropyRotation ) );
+
+			auto & file = static_cast< GltfImporterFile const & >( *m_file );
+			auto & impAsset = file.getAsset();
+			materials::parseAnisStrDirTexture( file, pass, impAsset, impMaterial.anisotropy->anisotropyTexture, m_loadConfig, *this );
 		}
 	}
 

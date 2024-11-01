@@ -1,4 +1,5 @@
 option( CASTOR_BUILD_GENERIC_TOONMATERIAL "Build Toon Material generic plugin" ON )
+option( CASTOR_BUILD_GENERIC_ANISOTROPICMATERIAL "Build Anisotropic Material plugin" ON )
 option( CASTOR_BUILD_GENERIC_FFTOCEANRENDERING "Build FFT ocean rendering plugin" ON )
 option( CASTOR_BUILD_GENERIC_ATMOSPHERESCATTERING "Build Atmosphere scattering plugin" ON )
 option( CASTOR_BUILD_GENERIC_WATERMATERIAL "Build Water Material plugin" ON )
@@ -10,6 +11,7 @@ function( GenericInit )
 	set( Toon "no (Not wanted)" PARENT_SCOPE )
 	set( WatM "no (Not wanted)" PARENT_SCOPE )
 	set( WatR "no (Not wanted)" PARENT_SCOPE )
+	set( Anis "no (Not wanted)" PARENT_SCOPE )
 
 	if( ${CASTOR_BUILD_GENERIC_TOONMATERIAL} )
 		set( Castor3D_MATERIAL_DIRS
@@ -30,6 +32,17 @@ function( GenericInit )
 		set( Castor3D_MATERIAL_DEPS
 			${Castor3D_MATERIAL_DEPS}
 			castor::WaterMaterial
+		)
+	endif()
+
+	if( ${CASTOR_BUILD_GENERIC_ANISOTROPICMATERIAL} )
+		set( Castor3D_MATERIAL_DIRS
+			${Castor3D_MATERIAL_DIRS}
+			${CASTOR_SOURCE_DIR}/source/Plugins/Generic/AnisotropicMaterial
+		)
+		set( Castor3D_MATERIAL_DEPS
+			${Castor3D_MATERIAL_DEPS}
+			castor::AnisotropicMaterial
 		)
 	endif()
 
@@ -82,6 +95,12 @@ function( GenericBuild )
 			set( WatR ${Build} PARENT_SCOPE )
 		endif()
 
+		if( ${CASTOR_BUILD_GENERIC_ANISOTROPICMATERIAL} )
+			set( Build ${Anis} )
+			add_subdirectory( Plugins/Generic/AnisotropicMaterial )
+			set( Anis ${Build} PARENT_SCOPE )
+		endif()
+
 		set( CastorMinLibraries
 			${CastorMinLibraries}
 			PARENT_SCOPE
@@ -123,6 +142,9 @@ function( GenericSummary msg )
 		if( ${CASTOR_BUILD_GENERIC_WAVESRENDERING} )
 			set( msg_tmp "${msg_tmp}\n    WavesRendering       ${WatR}" )
 		endif ()
+		if( ${CASTOR_BUILD_GENERIC_ANISOTROPICMATERIAL} )
+			set( msg_tmp "${msg_tmp}\n    AnisotropicMaterial  ${Anis}" )
+		endif ()
 		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 	endif ()
 endfunction( GenericSummary )
@@ -156,7 +178,7 @@ function( GenericSetup )
 		if( ${CASTOR_BUILD_GENERIC_WATERMATERIAL} )
 			cpack_add_component( WaterMaterial
 				DISPLAY_NAME "WaterMaterial"
-				DESCRIPTION "Defines & water material in Castor3D."
+				DESCRIPTION "Defines a water material in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
 			)
@@ -165,6 +187,14 @@ function( GenericSetup )
 			cpack_add_component( WavesRendering
 				DISPLAY_NAME "WavesRendering"
 				DESCRIPTION "Allows waves rendering in Castor3D."
+				GROUP Plugins
+				DEPENDS Castor3D
+			)
+		endif()
+		if( ${CASTOR_BUILD_GENERIC_ANISOTROPICMATERIAL} )
+			cpack_add_component( AnisotropicMaterial
+				DISPLAY_NAME "AnisotropicMaterial"
+				DESCRIPTION "Defines an anisotropic material in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
 			)
