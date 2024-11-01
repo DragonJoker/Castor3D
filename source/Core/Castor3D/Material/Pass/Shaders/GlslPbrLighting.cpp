@@ -104,13 +104,11 @@ namespace castor3d::shader
 		, sdw::Vec3 output )
 	{
 		auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
-			, m_diffuse->compute( radiance
+			, m_diffuse->compute( components
+				, lightSurface
+				, radiance
 				, intensity
-				, doGetNdotL( lightSurface, components ).value()
-				, lightSurface.NdotV().value()
-				, lightSurface.LdotV().value()
-				, lightSurface.difF().value()
-				, components.roughness ) );
+				, doGetNdotL( lightSurface, components ).value() ) );
 		output = doGetNdotL( lightSurface, components ).value() * rawDiffuse;
 		return rawDiffuse;
 	}
@@ -122,13 +120,13 @@ namespace castor3d::shader
 		, sdw::Float const & isLit
 		, sdw::Vec3 output )
 	{
-		output = m_specular->compute( radiance
+		output = m_specular->compute( components
+			, lightSurface
+			, radiance
 			, intensity
 			, doGetNdotL( lightSurface, components ).value()
 			, doGetNdotH( lightSurface, components ).value()
-			, lightSurface.NdotV().value()
-			, lightSurface.spcF().value()
-			, components.roughness * components.roughness );
+			, components.roughness );
 		output *= doGetNdotL( lightSurface, components ).value();
 	}
 
@@ -142,12 +140,12 @@ namespace castor3d::shader
 		IF( m_writer, components.clearcoatFactor != 0.0_f )
 		{
 			lightSurface.updateN( derivVec3( components.clearcoatNormal ) );
-			output = m_specular->compute( radiance
+			output = m_specular->compute( components
+				, lightSurface
+				, radiance
 				, intensity
 				, doGetNdotL( lightSurface, components ).value()
 				, doGetNdotH( lightSurface, components ).value()
-				, lightSurface.NdotV().value()
-				, lightSurface.F().value()
 				, components.clearcoatRoughness );
 			output *= doGetNdotL( lightSurface, components ).value();
 		}

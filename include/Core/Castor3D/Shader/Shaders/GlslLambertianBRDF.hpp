@@ -15,17 +15,13 @@ namespace castor3d::shader
 		C3D_API explicit LambertianBRDF( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
 
-		C3D_API sdw::RetVec3 compute( sdw::Vec3 const & radiance
-			, sdw::Float const & intensity
-			, sdw::Float const & NdotL
-			, sdw::Float const & NdotV
-			, sdw::Float const & LdotV
-			, sdw::Vec3 const & F
-			, sdw::Float const & roughness )override;
-
 		C3D_API static DiffuseBRDFUPtr create( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
 		C3D_API static castor::StringView constexpr Name{ cuT( "lambertian" ) };
+
+	private:
+		void doGenerate( BlendComponents const & components
+			, LightSurface const & lightSurface )override;
 	};
 }
 

@@ -33,7 +33,7 @@ namespace castor3d::shader
 		, sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
-		, BRDFHelpers & brdf
+		, BRDFHelpers & brdfHelpers
 		, Shadow & shadowModel
 		, Lights & lights
 		, bool hasIblSupport

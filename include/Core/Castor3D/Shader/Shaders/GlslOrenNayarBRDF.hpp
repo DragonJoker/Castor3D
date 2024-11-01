@@ -15,17 +15,13 @@ namespace castor3d::shader
 		C3D_API QualitativeOrenNayarBRDF( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
 
-		C3D_API sdw::RetVec3 compute( sdw::Vec3 const & radiance
-			, sdw::Float const & intensity
-			, sdw::Float const & NdotL
-			, sdw::Float const & NdotV
-			, sdw::Float const & LdotV
-			, sdw::Vec3 const & F
-			, sdw::Float const & roughness )override;
-
 		C3D_API static DiffuseBRDFUPtr create( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
 		C3D_API static castor::StringView constexpr Name{ cuT( "qualitative_oren_nayar" ) };
+
+	private:
+		void doGenerate( BlendComponents const & components
+			, LightSurface const & lightSurface )override;
 	};
 
 	class FujiiOrenNayarBRDF
@@ -35,17 +31,13 @@ namespace castor3d::shader
 		C3D_API FujiiOrenNayarBRDF( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
 
-		C3D_API sdw::RetVec3 compute( sdw::Vec3 const & radiance
-			, sdw::Float const & intensity
-			, sdw::Float const & NdotL
-			, sdw::Float const & NdotV
-			, sdw::Float const & LdotV
-			, sdw::Vec3 const & F
-			, sdw::Float const & roughness )override;
-
 		C3D_API static DiffuseBRDFUPtr create( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
 		C3D_API static castor::StringView constexpr Name{ cuT( "fujii_oren_nayar" ) };
+
+	private:
+		void doGenerate( BlendComponents const & components
+			, LightSurface const & lightSurface )override;
 	};
 
 	class EnergyConservativeOrenNayarBRDF
@@ -55,17 +47,13 @@ namespace castor3d::shader
 		C3D_API EnergyConservativeOrenNayarBRDF( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
 
-		C3D_API sdw::RetVec3 compute( sdw::Vec3 const & radiance
-			, sdw::Float const & intensity
-			, sdw::Float const & NdotL
-			, sdw::Float const & NdotV
-			, sdw::Float const & LdotV
-			, sdw::Vec3 const & F
-			, sdw::Float const & roughness )override;
-
 		C3D_API static DiffuseBRDFUPtr create( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
 		C3D_API static castor::StringView constexpr Name{ cuT( "energy_conservative_oren_nayar" ) };
+
+	private:
+		void doGenerate( BlendComponents const & components
+			, LightSurface const & lightSurface )override;
 
 	private:
 		sdw::Function< sdw::Float
