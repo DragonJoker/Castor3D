@@ -71,6 +71,8 @@ namespace castor3d::shader
 
 		C3D_API static sdw::Float getFloat( sdw::Vec4 const & sampled
 			, sdw::UInt const & mask );
+		C3D_API static sdw::Vec2 getVec2( sdw::Vec4 const & sampled
+			, sdw::UInt const & mask );
 		C3D_API static sdw::Vec3 getVec3( sdw::Vec4 const & sampled
 			, sdw::UInt const & mask );
 

@@ -23,6 +23,20 @@ namespace castor3d
 				case 1:
 					config.startIndex = castor::getComponentIndex( *components.begin(), format );
 					break;
+				case 2:
+					if ( config.componentsMask == 0x0000FFFF )
+					{
+						config.startIndex = 1;
+					}
+					else if ( config.componentsMask == 0xFF0000FF )
+					{
+						config.startIndex = 2;
+					}
+					else
+					{
+						config.startIndex = 0;
+					}
+					break;
 				case 3:
 					if ( config.componentsMask & 0xFF000000 )
 					{
