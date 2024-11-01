@@ -40,6 +40,7 @@ namespace castor3d
 			shader::SpecularBrdfDesc defaultSpecularBrdf{};
 			shader::DiffuseBrdfArray diffuseBrdfs{};
 			shader::SpecularBrdfArray specularBrdfs{};
+			castor::UnorderedSet< BackgroundModelID > backgroundModels{};
 		};
 		using LightingModelCont = castor::Vector< LightingModel >;
 
@@ -77,19 +78,9 @@ namespace castor3d
 		 *\param[in]	key					Le modèle d'éclairage.
 		 *\param[in]	backgroundModelId	L'ID du modèle de fond.
 		 */
-		C3D_API void unregisterType( Key const & key
-			, BackgroundModelID backgroundModelId );
-		/**
-		 *\~english
-		 *\brief		Unregisters a lighting model.
-		 *\param[in]	lightingModelId		The lighting model ID.
-		 *\param[in]	backgroundModelId	The background model ID.
-		 *\~french
-		 *\brief		Désenregistre un modèle d'éclairage.
-		 *\param[in]	lightingModelId		L'ID du modèle d'éclairage.
-		 *\param[in]	backgroundModelId	L'ID du modèle de fond.
-		 */
-		C3D_API void unregisterType( LightingModelID lightingModelId
+		C3D_API castor::Vector< LightingModelID > unregisterType( castor::String const & baseName
+			, castor::StringArray diffuseBrdfs
+			, castor::StringArray specularBrdfs
 			, BackgroundModelID backgroundModelId );
 		/**
 		 *\~english
@@ -223,6 +214,10 @@ namespace castor3d
 			, BrdfID specularBrdfId
 			, BackgroundModelID backgroundModelId
 			, Creator create );
+		LightingModelID unregisterType( castor::String const & baseName
+			, castor::String const & diffuseBrdf
+			, castor::String const & specularBrdf
+			, BackgroundModelID backgroundModelId );
 
 	private:
 		LightingModelID m_currentId{};

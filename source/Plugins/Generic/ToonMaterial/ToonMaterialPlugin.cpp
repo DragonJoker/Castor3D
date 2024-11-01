@@ -84,8 +84,8 @@ extern "C"
 	C3D_ToonMaterial_API void OnUnload( castor3d::Engine * engine )
 	{
 		engine->unregisterSpecificsBuffer( castor::String{ toon::shader::ToonProfile::getName() } );
-		engine->unregisterPassModels( toon::shader::ToonPbrLightingModel::getName() );
-		engine->unregisterPassModels( toon::shader::ToonPhongLightingModel::getName() );
+		engine->unregisterPassModels( toon::shader::ToonPbrLightingModel::getName(), {}, {} );
+		engine->unregisterPassModels( toon::shader::ToonPhongLightingModel::getName(), {}, {} );
 		engine->unregisterPassComponent( toon::EdgesComponent::TypeName );
 	}
 }
