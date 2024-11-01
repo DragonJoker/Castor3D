@@ -37,7 +37,7 @@ extern "C"
 
 	C3D_AnisotropicMaterial_API void getName( char const ** name )
 	{
-		*name = "Toon Material";
+		*name = "Anisotropic Material";
 	}
 
 	C3D_AnisotropicMaterial_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )

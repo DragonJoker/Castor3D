@@ -27,6 +27,7 @@ namespace castor3d::shader
 		, m_NdotH{ getMember< DerivFloat >( "NdotH", derivFloat( 0.0_f ) ) }
 		, m_HdotV{ getMember< DerivFloat >( "HdotV", derivFloat( 0.0_f ) ) }
 		, m_LdotV{ getMember< DerivFloat >( "LdotV", derivFloat( 0.0_f ) ) }
+		, m_HdotL{ getMember< DerivFloat >( "HdotL", derivFloat( 0.0_f ) ) }
 		, m_F{ getMember< DerivVec3 >( "F", derivVec3( 0.0_f ) ) }
 		, m_spcF{ getMember< DerivVec3 >( "spcF", m_F ) }
 		, m_difF{ getMember< DerivVec3 >( "difF", m_F ) }
@@ -84,6 +85,7 @@ namespace castor3d::shader
 			type->declMember( "NdotH", DerivFloat::makeType( cache ), ast::type::NotArray, enableDotProducts );
 			type->declMember( "HdotV", DerivFloat::makeType( cache ), ast::type::NotArray, enableDotProducts );
 			type->declMember( "LdotV", DerivFloat::makeType( cache ), ast::type::NotArray, enableDotProducts );
+			type->declMember( "HdotL", DerivFloat::makeType( cache ), ast::type::NotArray, enableDotProducts );
 			type->declMember( "F", DerivVec3::makeType( cache ), ast::type::NotArray, enableFresnel );
 			type->declMember( "spcF", DerivVec3::makeType( cache ), ast::type::NotArray, enableFresnel && enableIridescence );
 			type->declMember( "difF", DerivVec3::makeType( cache ), ast::type::NotArray, enableFresnel && enableIridescence );
@@ -169,6 +171,7 @@ namespace castor3d::shader
 		m_NdotH = max( derivFloat( 0.0_f ), dot( N(), H() ) );
 		m_HdotV = max( derivFloat( 0.0_f ), dot( H(), V() ) );
 		m_LdotV = max( derivFloat( 0.0_f ), dot( L(), V() ) );
+		m_HdotL = max( derivFloat( 0.0_f ), dot( H(), L() ) );
 	}
 
 	void LightSurface::updateN( Utils & utils
@@ -252,6 +255,7 @@ namespace castor3d::shader
 			inits.push_back( makeExpr( derivFloat( 0.0_f ) ) ); // NdotH
 			inits.push_back( makeExpr( derivFloat( 0.0_f ) ) ); // HdotV
 			inits.push_back( makeExpr( derivFloat( 0.0_f ) ) ); // LdotV
+			inits.push_back( makeExpr( derivFloat( 0.0_f ) ) ); // HdotL
 		}
 
 		if ( enableFresnel )

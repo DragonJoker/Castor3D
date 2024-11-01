@@ -96,6 +96,7 @@ namespace castor3d::shader
 		DerivFloat NdotL()const { return m_NdotL; }
 		DerivFloat NdotH()const { return m_NdotH; }
 		DerivFloat LdotV()const { return m_LdotV; }
+		DerivFloat HdotL()const { return m_HdotL; }
 		DerivVec3 F()const { return m_F; }
 		DerivVec3 spcF()const { return m_spcF; }
 		DerivVec3 difF()const { return m_difF; }
@@ -118,6 +119,7 @@ namespace castor3d::shader
 		mutable sdw::DefaultedT< DerivFloat > m_NdotH;
 		mutable sdw::DefaultedT< DerivFloat > m_HdotV;
 		mutable sdw::DefaultedT< DerivFloat > m_LdotV;
+		mutable sdw::DefaultedT< DerivFloat > m_HdotL;
 
 		mutable sdw::DefaultedT< DerivVec3 > m_F;
 		mutable sdw::DefaultedT< DerivVec3 > m_spcF;
