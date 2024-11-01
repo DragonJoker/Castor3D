@@ -18,7 +18,6 @@
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
-#include "Castor3D/Shader/Shaders/GlslLambertianBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
@@ -224,7 +223,6 @@ namespace castor3d
 			, utils };
 		shader::SubmeshShaders submeshShaders{ getEngine()->getSubmeshComponentsRegister()
 			, flags };
-		shader::LambertianBRDF lambertian{ writer, brdfHelpers };
 		auto index = uint32_t( castor3d::GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 
 		C3D_Camera( writer
@@ -292,7 +290,6 @@ namespace castor3d
 			, index
 			, RenderPipeline::eBuffers );
 		shader::GlobalIllumination indirect{ writer
-			, &lambertian
 			, utils
 			, index
 			, RenderPipeline::eBuffers
