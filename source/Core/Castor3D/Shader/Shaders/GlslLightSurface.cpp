@@ -92,6 +92,12 @@ namespace castor3d::shader
 		return type;
 	}
 
+	ast::type::BaseStructPtr LightSurface::makeType( ast::type::TypesCache & cache
+		, LightSurface const & rhs )
+	{
+		return std::static_pointer_cast< ast::type::BaseStruct >( rhs.getType() );
+	}
+
 	LightSurface LightSurface::create( sdw::ShaderWriter & writer
 		, castor::MbString const & name
 		, sdw::Vec3 const eye

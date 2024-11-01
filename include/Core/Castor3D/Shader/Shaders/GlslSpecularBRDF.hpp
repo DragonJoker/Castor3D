@@ -15,17 +15,29 @@ namespace castor3d::shader
 			, BRDFHelpers & brdfHelpers );
 		C3D_API virtual ~SpecularBRDF() = default;
 
-		C3D_API virtual sdw::RetVec3 compute( sdw::Vec3 const & radiance
+		C3D_API sdw::RetVec3 compute( BlendComponents const & components
+			, LightSurface const & lightSurface
+			, sdw::Vec3 const & radiance
 			, sdw::Float const & intensity
 			, sdw::Float const & NdotL
 			, sdw::Float const & NdotH
-			, sdw::Float const & NdotV
-			, sdw::Vec3 const & F
-			, sdw::Float const & roughness ) = 0;
+			, sdw::Float const & roughness );
+
+	private:
+		virtual void doGenerate( BlendComponents const & components
+			, LightSurface const & lightSurface ) = 0;
 
 	protected:
 		sdw::ShaderWriter & m_writer;
 		BRDFHelpers & m_brdfHelpers;
+		sdw::Function< sdw::Vec3
+			, InBlendComponents
+			, InLightSurface
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat > m_compute;
 	};
 }
 

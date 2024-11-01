@@ -34,6 +34,8 @@ namespace castor3d::shader
 			, bool enableDotProducts
 			, bool enableFresnel
 			, bool enableIridescence );
+		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
+			, LightSurface const & rhs );
 
 		C3D_API static LightSurface create( sdw::ShaderWriter & writer
 			, castor::MbString const & name
