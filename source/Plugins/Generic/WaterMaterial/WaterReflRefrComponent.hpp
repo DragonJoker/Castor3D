@@ -44,7 +44,7 @@ namespace water
 				, sdw::Vec3 & reflectedSpecular
 				, sdw::Vec3 & refracted
 				, sdw::Vec3 & coatReflected
-				, sdw::Vec3 & sheenReflected
+				, sdw::Vec4 & sheenReflected
 				, castor3d::shader::DebugOutput & debugOutput )const override;
 			void computeReflRefr( castor3d::shader::ReflectionModel & reflections
 				, castor3d::shader::BlendComponents & components
@@ -63,7 +63,7 @@ namespace water
 				, sdw::Vec3 & reflectedSpecular
 				, sdw::Vec3 & refracted
 				, sdw::Vec3 & coatReflected
-				, sdw::Vec3 & sheenReflected
+				, sdw::Vec4 & sheenReflected
 				, castor3d::shader::DebugOutput & debugOutput )const override;
 		};
 

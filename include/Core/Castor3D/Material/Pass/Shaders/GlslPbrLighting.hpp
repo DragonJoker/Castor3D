@@ -6,10 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
-
-#include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
-#include "Castor3D/Shader/Shaders/GlslSheenBRDF.hpp"
 
 namespace castor3d::shader
 {
@@ -24,6 +21,8 @@ namespace castor3d::shader
 			, BRDFHelpers & brdfHelpers
 			, DiffuseBRDFUPtr diffuse
 			, SpecularBRDFUPtr specular
+			, SheenBRDFUPtr sheen
+			, ClearcoatBRDFUPtr clearcoat
 			, Shadow & shadowModel
 			, Lights & lights
 			, bool enableVolumetric );
@@ -31,6 +30,8 @@ namespace castor3d::shader
 		C3D_API static LightingModelUPtr create( LightingModelID lightingModelId
 			, DiffuseBrdfDesc const & diffuseBrdf
 			, SpecularBrdfDesc const & specularBrdf
+			, SheenBrdfDesc const & sheenBrdf
+			, ClearcoatBrdfDesc const & clearcoatBrdf
 			, sdw::ShaderWriter & writer
 			, Materials const & materials
 			, Utils & utils
@@ -68,7 +69,7 @@ namespace castor3d::shader
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Float const & isLit
-			, sdw::Vec2 output )override;
+			, sdw::Vec4 output )override;
 		C3D_API sdw::Vec3 doGetDiffuseResult( BlendComponents const & components
 			, DirectLighting const & lighting
 			, IndirectLighting const & indirect
@@ -83,7 +84,8 @@ namespace castor3d::shader
 	public:
 		DiffuseBRDFUPtr m_diffuse;
 		SpecularBRDFUPtr m_specular;
-		SheenBRDF m_sheen;
+		SheenBRDFUPtr m_sheen;
+		ClearcoatBRDFUPtr m_clearcoat;
 	};
 }
 

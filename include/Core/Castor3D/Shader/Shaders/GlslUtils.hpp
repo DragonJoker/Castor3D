@@ -164,6 +164,8 @@ namespace castor3d::shader
 			, sdw::Vec3 const & baseF0 );
 		C3D_API sdw::RetVec3 evalSensitivity( sdw::Float const & OPD
 			, sdw::Vec3 const & shift );
+		C3D_API sdw::RetFloat directionalAlbedoSheen( sdw::Float const & cosTheta
+			, sdw::Float const & roughness );
 
 		C3D_API static sdw::Mat3 getTBN( sdw::Vec3 const & normal
 			, sdw::Vec3 const & tangent
@@ -277,6 +279,9 @@ namespace castor3d::shader
 			, sdw::InVec3 > m_fresnel0ToIor;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec2 > m_reconstructNormal;
+		sdw::Function< sdw::Float
+			, sdw::InFloat
+			, sdw::InFloat > m_directionalAlbedoSheen;
 	};
 }
 

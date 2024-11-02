@@ -373,7 +373,7 @@ namespace castor3d::shader
 					m_writer.returnStmt( a / ( 1.0_f + b * pow( x, c ) ) + d * x + e );
 				}
 				, sdw::InFloat{ m_writer, "x" }
-				, sdw::InFloat{ m_writer, "palphaG" } );
+				, sdw::InFloat{ m_writer, "alphaG" } );
 		}
 
 		return m_lambdaSheenNumericHelper( px, palphaG );

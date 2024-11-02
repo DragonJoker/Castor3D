@@ -21,7 +21,7 @@ namespace castor3d
 			: shader::PassMapMaterialShader
 		{
 			C3D_API MaterialShader()
-				: shader::PassMapMaterialShader{ cuT( "sheenFactor" ) }
+				: shader::PassMapMaterialShader{ cuT( "sheenColour" ) }
 			{
 			}
 		};

@@ -1,27 +1,49 @@
-#include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
+#include "Castor3D/Shader/Shaders/GlslClearcoatBRDF.hpp"
 
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 
+CU_ImplementSmartPtr( castor3d::shader, ClearcoatBRDF )
+
 namespace castor3d::shader
 {
-	CookTorranceBRDF::CookTorranceBRDF( sdw::ShaderWriter & writer
+	ClearcoatBRDF::ClearcoatBRDF( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdfHelpers )
-		: SpecularBRDF{ writer, brdfHelpers }
+		: m_writer{ writer }
+		, m_brdfHelpers{ brdfHelpers }
+	{}
+
+	sdw::RetVec3 ClearcoatBRDF::compute( BlendComponents const & components
+		, LightSurface const & lightSurface
+		, sdw::Vec3 const & radiance
+		, sdw::Float const & intensity
+		, sdw::Float const & NdotL
+		, sdw::Float const & NdotH )
 	{
+		if ( !m_compute )
+		{
+			doGenerate( components, lightSurface );
+		}
+
+		return m_compute( components
+			, lightSurface
+			, radiance
+			, intensity
+			, NdotL
+			, NdotH );
 	}
 
-	SpecularBRDFUPtr CookTorranceBRDF::create( sdw::ShaderWriter & writer
+	ClearcoatBRDFUPtr ClearcoatBRDF::create( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdfHelpers )
 	{
-		return castor::makeUniqueDerived< SpecularBRDF, CookTorranceBRDF >( writer, brdfHelpers );
+		return castor::makeUnique< ClearcoatBRDF >( writer, brdfHelpers );
 	}
 
-	void CookTorranceBRDF::doGenerate( BlendComponents const & pcomponents
+	void ClearcoatBRDF::doGenerate( BlendComponents const & pcomponents
 		, LightSurface const & plightSurface )
 	{
-		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeCookTorranceSpecular"
+		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeClearcoat"
 			, [this]( BlendComponents const & components
 				, LightSurface const & lightSurface
 				, sdw::Vec3 const & radiance
@@ -29,7 +51,7 @@ namespace castor3d::shader
 				, sdw::Float const & NdotL
 				, sdw::Float const & NdotH )
 			{
-				auto const & roughness = components.roughness;
+				auto roughness = components.clearcoatRoughness;
 				auto NdotV = m_writer.declLocale( "NdotV"
 					, lightSurface.NdotV().value() );
 				auto F = m_writer.declLocale( "F"
@@ -52,10 +74,10 @@ namespace castor3d::shader
 					, sdw::fma( 4.0_f
 						, NdotV * NdotL
 						, 0.001_f ) );
-				auto specReflectance = m_writer.declLocale( "specReflectance"
+				auto reflectance = m_writer.declLocale( "reflectance"
 					, numerator / denominator );
 
-				m_writer.returnStmt( max( specReflectance * radiance * intensity, vec3( 0.0_f ) ) );
+				m_writer.returnStmt( max( reflectance * radiance * intensity, vec3( 0.0_f ) ) );
 			}
 			, InBlendComponents{ m_writer, "components", pcomponents }
 			, InLightSurface{ m_writer, "lightSurface", plightSurface }

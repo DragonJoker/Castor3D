@@ -15,14 +15,14 @@ namespace castor3d
 	struct SheenData
 	{
 		explicit SheenData( std::atomic_bool & dirty
-			, castor::HdrRgbColour fac
+			, castor::HdrRgbColour col
 			, float rgh )
-			: factor{ dirty, std::move( fac ) }
+			: colour{ dirty, std::move( col ) }
 			, roughness{ dirty, rgh }
 		{
 		}
 
-		castor::AtomicGroupChangeTracked< castor::HdrRgbColour > factor;
+		castor::AtomicGroupChangeTracked< castor::HdrRgbColour > colour;
 		castor::AtomicGroupChangeTracked< float > roughness;
 	};
 
@@ -97,9 +97,9 @@ namespace castor3d
 
 		C3D_API void accept( ConfigurationVisitorBase & vis )override;
 
-		castor::HdrRgbColour const & getSheenFactor()const
+		castor::HdrRgbColour const & getSheenColour()const
 		{
-			return m_value.factor;
+			return m_value.colour;
 		}
 
 		float const & getRoughnessFactor()const
@@ -107,9 +107,9 @@ namespace castor3d
 			return m_value.roughness;
 		}
 
-		void setSheenFactor( castor::HdrRgbColour const & v )
+		void setSheenColour( castor::HdrRgbColour const & v )
 		{
-			m_value.factor = v;
+			m_value.colour = v;
 		}
 
 		void setRoughnessFactor( float v )

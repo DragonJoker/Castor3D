@@ -60,6 +60,8 @@ namespace toon::shader
 		static c3d::LightingModelUPtr create( castor3d::LightingModelID lightingModelId
 			, c3d::DiffuseBrdfDesc const & diffuseBrdf
 			, c3d::SpecularBrdfDesc const & specularBrdf
+			, c3d::SheenBrdfDesc const & sheenBrdf
+			, c3d::ClearcoatBrdfDesc const & clearcoatBrdf
 			, sdw::ShaderWriter & writer
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
@@ -89,6 +91,8 @@ namespace toon::shader
 			, c3d::BRDFHelpers & brdfHelpers
 			, c3d::DiffuseBRDFUPtr diffuseBrdf
 			, c3d::SpecularBRDFUPtr specularBrdf
+			, c3d::SheenBRDFUPtr sheenBrdf
+			, c3d::ClearcoatBRDFUPtr clearcoatBrdf
 			, c3d::Shadow & shadowModel
 			, c3d::Lights & lights
 			, bool enableVolumetric );
@@ -97,6 +101,8 @@ namespace toon::shader
 		static c3d::LightingModelUPtr create( castor3d::LightingModelID lightingModelId
 			, c3d::DiffuseBrdfDesc const & diffuseBrdf
 			, c3d::SpecularBrdfDesc const & specularBrdf
+			, c3d::SheenBrdfDesc const & sheenBrdf
+			, c3d::ClearcoatBrdfDesc const & clearcoatBrdf
 			, sdw::ShaderWriter & writer
 			, c3d::Materials const & materials
 			, c3d::Utils & utils

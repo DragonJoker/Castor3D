@@ -46,8 +46,10 @@ namespace castor3d::shader
 	}
 
 	LightingModelUPtr PhongLightingModel::create( LightingModelID lightingModelId
-		, DiffuseBrdfDesc const & diffuseBrdf
-		, SpecularBrdfDesc const & specularBrdf
+		, DiffuseBrdfDesc const & /*diffuseBrdf*/
+		, SpecularBrdfDesc const & /*specularBrdf*/
+		, SheenBrdfDesc const & /*sheenBrdf*/
+		, ClearcoatBrdfDesc const & /*clearcoatBrdf*/
 		, sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils

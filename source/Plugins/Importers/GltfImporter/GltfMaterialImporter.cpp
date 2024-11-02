@@ -78,7 +78,9 @@ namespace c3d_gltf
 				, castor3d::PbrPass::DefaultDiffuseBrdf.name
 				, ( anisotropy
 					? castor::String{ anisotropy::shader::AnisotropicBRDF::Name }
-					: castor3d::PbrPass::DefaultSpecularBrdf.name ) );
+					: castor3d::PbrPass::DefaultSpecularBrdf.name )
+				, castor3d::PbrPass::DefaultSheenBrdf.name
+				, castor3d::PbrPass::DefaultClearcoatBrdf.name );
 		}
 
 		template< typename ComponentT >
@@ -787,7 +789,7 @@ namespace c3d_gltf
 		if ( impMaterial.sheen )
 		{
 			auto component = pass.createComponent< castor3d::SheenComponent >();
-			component->setSheenFactor( castor::HdrRgbColour::fromComponents( impMaterial.sheen->sheenColorFactor[0]
+			component->setSheenColour( castor::HdrRgbColour::fromComponents( impMaterial.sheen->sheenColorFactor[0]
 				, impMaterial.sheen->sheenColorFactor[1]
 				, impMaterial.sheen->sheenColorFactor[2] ) );
 			component->setRoughnessFactor( impMaterial.sheen->sheenRoughnessFactor );

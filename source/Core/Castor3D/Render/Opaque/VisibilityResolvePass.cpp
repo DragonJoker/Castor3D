@@ -1395,7 +1395,7 @@ namespace castor3d
 									auto coatReflected = writer.declLocale( "coatReflected"
 										, vec3( 0.0_f ) );
 									auto sheenReflected = writer.declLocale( "sheenReflected"
-										, vec3( 0.0_f ) );
+										, vec4( 0.0_f ) );
 
 									if ( components.hasMember( "thicknessFactor" ) )
 									{

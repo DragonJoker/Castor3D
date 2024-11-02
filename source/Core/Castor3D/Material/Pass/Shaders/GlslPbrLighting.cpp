@@ -2,10 +2,12 @@
 
 #include "Castor3D/Material/Pass/PbrPass.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslLambertianBRDF.hpp"
+#include "Castor3D/Shader/Shaders/GlslClearcoatBRDF.hpp"
+#include "Castor3D/Shader/Shaders/GlslDiffuseBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
-#include "Castor3D/Shader/Shaders/GlslOrenNayarBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslSheenBRDF.hpp"
+#include "Castor3D/Shader/Shaders/GlslSpecularBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -19,6 +21,8 @@ namespace castor3d::shader
 		, BRDFHelpers & brdfHelpers
 		, DiffuseBRDFUPtr diffuse
 		, SpecularBRDFUPtr specular
+		, SheenBRDFUPtr sheen
+		, ClearcoatBRDFUPtr clearcoat
 		, Shadow & shadowModel
 		, Lights & lights
 		, bool enableVolumetric )
@@ -36,7 +40,8 @@ namespace castor3d::shader
 			, cuT( "c3d_pbr_" ) }
 		, m_diffuse{ std::move( diffuse ) }
 		, m_specular{ std::move( specular ) }
-		, m_sheen{ writer, brdfHelpers }
+		, m_sheen{ std::move( sheen ) }
+		, m_clearcoat{ std::move( clearcoat ) }
 	{
 	}
 
@@ -48,6 +53,8 @@ namespace castor3d::shader
 	LightingModelUPtr PbrLightingModel::create( LightingModelID lightingModelId
 		, DiffuseBrdfDesc const & diffuseBrdf
 		, SpecularBrdfDesc const & specularBrdf
+		, SheenBrdfDesc const & sheenBrdf
+		, ClearcoatBrdfDesc const & clearcoatBrdf
 		, sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
@@ -67,6 +74,12 @@ namespace castor3d::shader
 			, ( specularBrdf.create
 				? specularBrdf.create( writer, brdfHelpers )
 				: PbrPass::DefaultSpecularBrdf.create( writer, brdfHelpers ) )
+			, ( sheenBrdf.create
+				? sheenBrdf.create( writer, brdfHelpers )
+				: PbrPass::DefaultSheenBrdf.create( writer, brdfHelpers ) )
+			, ( clearcoatBrdf.create
+				? clearcoatBrdf.create( writer, brdfHelpers )
+				: PbrPass::DefaultClearcoatBrdf.create( writer, brdfHelpers ) )
 			, shadowModel
 			, lights
 			, enableVolumetric );
@@ -125,8 +138,7 @@ namespace castor3d::shader
 			, radiance
 			, intensity
 			, doGetNdotL( lightSurface, components ).value()
-			, doGetNdotH( lightSurface, components ).value()
-			, components.roughness );
+			, doGetNdotH( lightSurface, components ).value() );
 		output *= doGetNdotL( lightSurface, components ).value();
 	}
 
@@ -140,13 +152,12 @@ namespace castor3d::shader
 		IF( m_writer, components.clearcoatFactor != 0.0_f )
 		{
 			lightSurface.updateN( derivVec3( components.clearcoatNormal ) );
-			output = m_specular->compute( components
+			output = m_clearcoat->compute( components
 				, lightSurface
 				, radiance
 				, intensity
 				, doGetNdotL( lightSurface, components ).value()
-				, doGetNdotH( lightSurface, components ).value()
-				, components.clearcoatRoughness );
+				, doGetNdotH( lightSurface, components ).value() );
 			output *= doGetNdotL( lightSurface, components ).value();
 		}
 		FI;
@@ -157,14 +168,15 @@ namespace castor3d::shader
 		, BlendComponents const & components
 		, LightSurface const & lightSurface
 		, sdw::Float const & isLit
-		, sdw::Vec2 output )
+		, sdw::Vec4 output )
 	{
-		IF( m_writer, !all( components.sheenFactor == vec3( 0.0_f ) ) )
+		IF( m_writer, !all( components.sheenColour == vec3( 0.0_f ) ) )
 		{
-			output = m_sheen.compute( lightSurface
+			output = m_sheen->compute( m_utils
+				, components
+				, lightSurface
 				, doGetNdotL( lightSurface, components ).value()
-				, doGetNdotH( lightSurface, components ).value()
-				, components.sheenRoughness );
+				, doGetNdotH( lightSurface, components ).value() );
 		}
 		FI;
 	}

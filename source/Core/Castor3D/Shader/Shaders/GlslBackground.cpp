@@ -99,7 +99,7 @@ namespace castor3d::shader
 		return sdw::RetVec3{ vec3( 0.0_f ) };
 	}
 
-	sdw::RetVec3 BackgroundModel::computeSheenReflections( sdw::Vec3 const & wsNormal
+	sdw::RetVec4 BackgroundModel::computeSheenReflections( sdw::Vec3 const & wsNormal
 		, sdw::Vec3 const & wsPosition
 		, sdw::Vec3 const & V
 		, sdw::Float const & NdotV
@@ -107,7 +107,7 @@ namespace castor3d::shader
 		, sdw::CombinedImage2DRgba32 const & brdf
 		, DebugOutputCategory & debugOutput )
 	{
-		return sdw::RetVec3{ vec3( 0.0_f ) };
+		return sdw::RetVec4{ vec4( 0.0_f ) };
 	}
 
 	sdw::RetVec3 BackgroundModel::computeRefractions( sdw::Vec3 const & wsNormal

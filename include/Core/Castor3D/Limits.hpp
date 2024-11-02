@@ -14,13 +14,17 @@ namespace castor3d
 	*/
 	//@{
 	// Maximum different base lighting models.
-	static uint32_t constexpr MaxBaseLightingModels = 32u;
+	static uint32_t constexpr MaxBaseLightingModels = 8u;
 	// Maximum different diffuse BRDF per base lighting model.
 	static uint32_t constexpr MaxDiffuseBrdfs = 8u;
 	// Maximum different specular BRDF per base lighting model.
 	static uint32_t constexpr MaxSpecularBrdfs = 4u;
+	// Maximum different sheen BRDF per base lighting model.
+	static uint32_t constexpr MaxSheenBrdfs = 4u;
+	// Maximum different specular BRDF per base lighting model.
+	static uint32_t constexpr MaxClearcoatBrdfs = 4u;
 	// Maximum different lighting models.
-	static uint32_t constexpr MaxLightingModels = MaxBaseLightingModels * MaxDiffuseBrdfs * MaxSpecularBrdfs;
+	static uint32_t constexpr MaxLightingModels = MaxBaseLightingModels * MaxDiffuseBrdfs * MaxSpecularBrdfs * MaxSheenBrdfs * MaxClearcoatBrdfs;
 	// Maximum different background models.
 	static uint32_t constexpr MaxBackgroundModels = 32u;
 	// Maximum possible active pass combinations.

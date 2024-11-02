@@ -133,7 +133,7 @@ namespace castor3d::shader
 			, sdw::Vec3 & reflectedSpecular
 			, sdw::Vec3 & refracted
 			, sdw::Vec3 & coatReflected
-			, sdw::Vec3 & sheenReflected
+			, sdw::Vec4 & sheenReflected
 			, DebugOutput & debugOutput )const;
 		C3D_API void computeReflRefr( ReflectionModel & reflections
 			, BlendComponents & components
@@ -152,7 +152,7 @@ namespace castor3d::shader
 			, sdw::Vec3 & reflectedSpecular
 			, sdw::Vec3 & refracted
 			, sdw::Vec3 & coatReflected
-			, sdw::Vec3 & sheenReflected
+			, sdw::Vec4 & sheenReflected
 			, DebugOutput & debugOutput )const;
 
 		auto getFilter()const

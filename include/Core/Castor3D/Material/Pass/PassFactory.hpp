@@ -26,6 +26,10 @@ namespace castor3d
 		shader::DiffuseBrdfDesc defaultDiffuseBrdf{};
 		shader::SpecularBrdfArray specularBrdfs{};
 		shader::SpecularBrdfDesc defaultSpecularBrdf{};
+		shader::SheenBrdfArray sheenBrdfs{};
+		shader::SheenBrdfDesc defaultSheenBrdf{};
+		shader::ClearcoatBrdfArray clearcoatBrdfs{};
+		shader::ClearcoatBrdfDesc defaultClearcoatBrdf{};
 	};
 
 	class PassFactory

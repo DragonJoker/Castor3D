@@ -80,8 +80,21 @@ namespace castor3d::shader
 		, sdw::Vec3 reflectedSpecular
 		, sdw::Vec3 refracted
 		, sdw::Vec3 coatReflected
-		, sdw::Vec3 sheenReflected )
+		, sdw::Vec4 sheenReflected )
 	{
+		auto maxSheenColour = m_writer.declLocale( "maxSheenColour"
+			, max( max( components.sheenColour.r(), components.sheenColour.g() ), components.sheenColour.b() ) );
+
+		IF( m_writer, maxSheenColour != 0.0_f )
+		{
+			auto albedoSheenScaling = m_writer.declLocale( "albedoSheenScaling"
+				, 1.0_f - sheenReflected.w() * maxSheenColour );
+			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Albedo Sheen Scaling" ), albedoSheenScaling );
+			reflectedDiffuse *= albedoSheenScaling;
+			reflectedSpecular *= albedoSheenScaling;
+		}
+		FI
+
 		auto combineResult = combine( debugOutput
 			, components
 			, incident
@@ -93,11 +106,10 @@ namespace castor3d::shader
 			, castor::move( reflectedSpecular )
 			, castor::move( refracted ) );
 
-		IF( m_writer, !all( components.sheenFactor == vec3( 0.0_f ) ) )
+		IF( m_writer, !all( components.sheenColour == vec3( 0.0_f ) ) )
 		{
-			combineResult = ( sheenReflected * ambientOcclusion )
-				+ ( components.colour * directLighting.sheen().x() )
-				+ combineResult * directLighting.sheen().y() * max( max( components.colour.r(), components.colour.g() ), components.colour.b() );
+			combineResult += directLighting.sheen().xyz();
+			combineResult += ( sheenReflected.xyz() * ambientOcclusion );
 		}
 		FI
 
@@ -297,11 +309,12 @@ namespace castor3d::shader
 						, components
 						, lightSurface
 						, output.scattering() );
+					doSheenAlbedoScale( components, output );
 					parentOutput.diffuse() += max( vec3( 0.0_f ), output.diffuse() );
 					parentOutput.specular() += max( vec3( 0.0_f ), output.specular() );
 					parentOutput.scattering() += max( vec3( 0.0_f ), output.scattering() );
 					parentOutput.coatingSpecular() += max( vec3( 0.0_f ), output.coatingSpecular() );
-					parentOutput.sheen() += max( vec2( 0.0_f ), output.sheen() );
+					parentOutput.sheen() += max( vec4( 0.0_f ), output.sheen() );
 				}
 				, PDirectionalLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
@@ -385,11 +398,13 @@ namespace castor3d::shader
 					}
 
 					doAttenuate( attenuation, output );
+					doSheenAlbedoScale( components, output );
+
 					parentOutput.diffuse() += max( vec3( 0.0_f ), output.diffuse() );
 					parentOutput.specular() += max( vec3( 0.0_f ), output.specular() );
 					parentOutput.scattering() += max( vec3( 0.0_f ), output.scattering() );
 					parentOutput.coatingSpecular() += max( vec3( 0.0_f ), output.coatingSpecular() );
-					parentOutput.sheen() += max( vec2( 0.0_f ), output.sheen() );
+					parentOutput.sheen() += max( vec4( 0.0_f ), output.sheen() );
 				}
 				, PPointLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
@@ -484,11 +499,13 @@ namespace castor3d::shader
 						}
 
 						doAttenuate( attenuation, output );
+						doSheenAlbedoScale( components, output );
+
 						parentOutput.diffuse() += max( vec3( 0.0_f ), output.diffuse() );
 						parentOutput.specular() += max( vec3( 0.0_f ), output.specular() );
 						parentOutput.scattering() += max( vec3( 0.0_f ), output.scattering() );
 						parentOutput.coatingSpecular() += max( vec3( 0.0_f ), output.coatingSpecular() );
-						parentOutput.sheen() += max( vec2( 0.0_f ), output.sheen() );
+						parentOutput.sheen() += max( vec4( 0.0_f ), output.sheen() );
 					}
 					FI
 				}
@@ -812,10 +829,12 @@ namespace castor3d::shader
 						, components
 						, lightSurface
 						, output.scattering() );
+					doSheenAlbedoScale( components, output, false );
+
 					parentOutput.specular() += max( vec3( 0.0_f ), output.specular() );
 					parentOutput.scattering() += max( vec3( 0.0_f ), output.scattering() );
 					parentOutput.coatingSpecular() += max( vec3( 0.0_f ), output.coatingSpecular() );
-					parentOutput.sheen() += max( vec2( 0.0_f ), output.sheen() );
+					parentOutput.sheen() += max( vec4( 0.0_f ), output.sheen() );
 				}
 				, PDirectionalLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
@@ -900,10 +919,12 @@ namespace castor3d::shader
 					}
 
 					doAttenuate( attenuation, output, false );
+					doSheenAlbedoScale( components, output, false );
+
 					parentOutput.specular() += max( vec3( 0.0_f ), output.specular() );
 					parentOutput.scattering() += max( vec3( 0.0_f ), output.scattering() );
 					parentOutput.coatingSpecular() += max( vec3( 0.0_f ), output.coatingSpecular() );
-					parentOutput.sheen() += max( vec2( 0.0_f ), output.sheen() );
+					parentOutput.sheen() += max( vec4( 0.0_f ), output.sheen() );
 				}
 				, PPointLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
@@ -998,10 +1019,12 @@ namespace castor3d::shader
 						}
 
 						doAttenuate( attenuation, output, false );
+						doSheenAlbedoScale( components, output, false );
+
 						parentOutput.specular() += max( vec3( 0.0_f ), output.specular() );
 						parentOutput.scattering() += max( vec3( 0.0_f ), output.scattering() );
 						parentOutput.coatingSpecular() += max( vec3( 0.0_f ), output.coatingSpecular() );
-						parentOutput.sheen() += max( vec2( 0.0_f ), output.sheen() );
+						parentOutput.sheen() += max( vec4( 0.0_f ), output.sheen() );
 					}
 					FI
 				}
@@ -1032,6 +1055,23 @@ namespace castor3d::shader
 		output.scattering() = output.scattering() * attenuation;
 		output.coatingSpecular() = output.coatingSpecular() * attenuation;
 		output.sheen().x() = output.sheen().x() * attenuation;
+	}
+
+	void LightingModel::doSheenAlbedoScale( BlendComponents const & components
+		, DirectLighting & output
+		, bool withDiffuse )
+	{
+		auto maxSheenColour = m_writer.declLocale( "maxSheenColour"
+			, max( components.sheenColour.r(), max( components.sheenColour.g(), components.sheenColour.b() ) ) );
+
+		IF( m_writer, maxSheenColour != 0.0_f )
+		{
+			auto albedoSheenScaling = m_writer.declLocale( "albedoSheenScaling"
+				, ( 1.0_f - output.sheen().w() * maxSheenColour ) );
+			output.diffuse() *= albedoSheenScaling;
+			output.specular() *= albedoSheenScaling;
+		}
+		FI
 	}
 
 	void LightingModel::doApplyShadows( DirectionalShadowData const & shadows
@@ -1350,7 +1390,7 @@ namespace castor3d::shader
 		, BlendComponents const & components
 		, LightSurface const & lightSurface
 		, sdw::Float const & isLit
-		, sdw::Vec2 output )
+		, sdw::Vec4 output )
 	{
 	}
 

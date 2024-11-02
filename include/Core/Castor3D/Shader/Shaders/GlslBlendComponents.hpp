@@ -148,7 +148,7 @@ namespace castor3d::shader
 		sdw::DefaultedT< sdw::Float > clearcoatFactor;
 		sdw::DefaultedT< sdw::Vec3 > clearcoatNormal;
 		sdw::DefaultedT< sdw::Float > clearcoatRoughness;
-		sdw::DefaultedT< sdw::Vec3 > sheenFactor;
+		sdw::DefaultedT< sdw::Vec3 > sheenColour;
 		sdw::DefaultedT< sdw::Float > sheenRoughness;
 		sdw::DefaultedT< sdw::Float > iridescenceFactor;
 		sdw::DefaultedT< sdw::Float > iridescenceThickness;

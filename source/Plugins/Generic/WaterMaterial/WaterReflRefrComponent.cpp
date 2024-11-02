@@ -40,7 +40,7 @@ namespace water
 		, sdw::Vec3 & reflectedSpecular
 		, sdw::Vec3 & refracted
 		, sdw::Vec3 & coatReflected
-		, sdw::Vec3 & sheenReflected
+		, sdw::Vec4 & sheenReflected
 		, c3d::DebugOutput & debugOutput )const
 	{
 		computeReflRefr( reflections
@@ -81,7 +81,7 @@ namespace water
 		, sdw::Vec3 & reflectedSpecular
 		, sdw::Vec3 & refractionResult
 		, sdw::Vec3 & coatReflected
-		, sdw::Vec3 & sheenReflected
+		, sdw::Vec4 & sheenReflected
 		, c3d::DebugOutput & debugOutput )const
 	{
 		auto & writer = *components.getWriter();

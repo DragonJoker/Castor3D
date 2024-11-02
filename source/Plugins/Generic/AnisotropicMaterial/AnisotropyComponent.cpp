@@ -97,7 +97,7 @@ namespace anisotropy
 		, sdw::Vec3 & reflectedSpecular
 		, sdw::Vec3 & refracted
 		, sdw::Vec3 & coatReflected
-		, sdw::Vec3 & sheenReflected
+		, sdw::Vec4 & sheenReflected
 		, c3d::DebugOutput & debugOutput )const
 	{
 		if ( mippedScene.isEnabled() )
@@ -180,7 +180,7 @@ namespace anisotropy
 		, sdw::Vec3 & reflectedSpecular
 		, sdw::Vec3 & refractionResult
 		, sdw::Vec3 & coatReflected
-		, sdw::Vec3 & sheenReflected
+		, sdw::Vec4 & sheenReflected
 		, c3d::DebugOutput & debugOutput )const
 	{
 		auto & writer = *components.getWriter();

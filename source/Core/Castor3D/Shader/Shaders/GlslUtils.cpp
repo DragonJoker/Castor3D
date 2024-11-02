@@ -15,6 +15,13 @@ namespace castor3d::shader
 {
 	//*********************************************************************************************
 
+	inline sdw::Float operator "" _h( unsigned long long value )
+	{
+		return sdw::Float{ float( value ) };
+	}
+
+	//*********************************************************************************************
+
 	Utils::Utils( sdw::ShaderWriter & writer )
 		: m_writer{ writer }
 	{
@@ -1158,6 +1165,28 @@ namespace castor3d::shader
 
 		return m_evalSensitivity( pOPD
 			, pshift );
+	}
+
+	sdw::RetFloat Utils::directionalAlbedoSheen( sdw::Float const & cosTheta
+		, sdw::Float const & roughness )
+	{
+		if ( !m_directionalAlbedoSheen )
+		{
+			m_directionalAlbedoSheen = m_writer.implementFunction< sdw::Float >( "c3d_directionalAlbedoSheen"
+				, [this]( sdw::Float const & cosTheta
+					, sdw::Float const & roughness )
+				{
+					auto c = m_writer.declLocale( "c"
+						, 1.0_f - cosTheta );
+					auto c3 = m_writer.declLocale( "c3"
+						, c *c * c );
+					m_writer.returnStmt( 0.65584461_f * c3 + 1.0_f / ( 4.16526551_f + exp( -7.97291361_f * roughness + 6.33516894_f ) ) );
+				}
+				, sdw::InFloat{ m_writer, "cosTheta" }
+				, sdw::InFloat{ m_writer, "roughness" } );
+		}
+
+		return m_directionalAlbedoSheen( cosTheta, roughness );
 	}
 
 	sdw::Vec3 Utils::reconstructNormal( sdw::Vec2 const & normal )

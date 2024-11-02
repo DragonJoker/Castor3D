@@ -32,7 +32,7 @@ namespace castor
 		bool operator()( castor3d::SheenComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSubOpt( file, cuT( "sheen_colour" ), object.getSheenFactor(), castor3d::SheenComponent::DefaultFactor )
+			return writeNamedSubOpt( file, cuT( "sheen_colour" ), object.getSheenColour(), castor3d::SheenComponent::DefaultFactor )
 				&& writeOpt( file, cuT( "sheen_roughness" ), object.getRoughnessFactor(), castor3d::SheenComponent::DefaultRoughness );
 		}
 	};
@@ -57,7 +57,7 @@ namespace castor3d
 			else
 			{
 				auto & component = getPassComponent< SheenComponent >( *blockContext );
-				component.setSheenFactor( params[0]->get< castor::HdrRgbColour >() );
+				component.setSheenColour( params[0]->get< castor::HdrRgbColour >() );
 			}
 		}
 		CU_EndAttribute()
@@ -94,9 +94,9 @@ namespace castor3d
 			return;
 		}
 
-		if ( !components.hasMember( "sheenFactor" ) )
+		if ( !components.hasMember( "sheenColour" ) )
 		{
-			components.declMember( "sheenFactor", sdw::type::Kind::eVec3F );
+			components.declMember( "sheenColour", sdw::type::Kind::eVec3F );
 			components.declMember( "sheenRoughness", sdw::type::Kind::eFloat );
 		}
 	}
@@ -108,14 +108,14 @@ namespace castor3d
 		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )const
 	{
-		if ( !components.hasMember( "sheenFactor" ) )
+		if ( !components.hasMember( "sheenColour" ) )
 		{
 			return;
 		}
 
 		if ( material )
 		{
-			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Vec3 >( "sheenFactor" ) ) );
+			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Vec3 >( "sheenColour" ) ) );
 			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "sheenRoughness" ) ) );
 		}
 		else
@@ -130,12 +130,12 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		if ( !res.hasMember( "sheenFactor" ) )
+		if ( !res.hasMember( "sheenColour" ) )
 		{
 			return;
 		}
 
-		res.getMember< sdw::Vec3 >( "sheenFactor", true ) += src.getMember< sdw::Vec3 >( "sheenFactor", true ) * passMultiplier;
+		res.getMember< sdw::Vec3 >( "sheenColour", true ) += src.getMember< sdw::Vec3 >( "sheenColour", true ) * passMultiplier;
 		res.getMember< sdw::Float >( "sheenRoughness", true ) += src.getMember< sdw::Float >( "sheenRoughness", true ) * passMultiplier;
 	}
 
@@ -149,9 +149,9 @@ namespace castor3d
 	void SheenComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
 		, sdw::expr::ExprList & inits )const
 	{
-		if ( !type.hasMember( "sheenFactor" ) )
+		if ( !type.hasMember( "sheenColour" ) )
 		{
-			type.declMember( "sheenFactor", ast::type::Kind::eVec3F );
+			type.declMember( "sheenColour", ast::type::Kind::eVec3F );
 			type.declMember( "sheenRoughness", ast::type::Kind::eFloat );
 			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ SheenComponent::DefaultComponent } ) ) );
 			inits.emplace_back( sdw::makeExpr( sdw::Float{ SheenComponent::DefaultRoughness } ) );
@@ -204,7 +204,7 @@ namespace castor3d
 	void SheenComponent::accept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Sheen" ) );
-		vis.visit( cuT( "Colour" ), m_value.factor );
+		vis.visit( cuT( "Colour" ), m_value.colour );
 		vis.visit( cuT( "Roughness" ), m_value.roughness );
 	}
 
@@ -228,7 +228,7 @@ namespace castor3d
 		auto data = buffer.getData( getOwner()->getId() );
 		VkDeviceSize offset{};
 		offset += data.write( m_materialShader->getMaterialChunk()
-			, getSheenFactor()
+			, getSheenColour()
 			, offset );
 		offset += data.write( m_materialShader->getMaterialChunk()
 			, getRoughnessFactor()

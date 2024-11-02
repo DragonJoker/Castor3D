@@ -59,6 +59,8 @@ namespace castor3d
 		C3D_API castor::String getLightingModelName()const;
 		C3D_API castor::String getDiffuseBrdfName()const;
 		C3D_API castor::String getSpecularBrdfName()const;
+		C3D_API castor::String getSheenBrdfName()const;
+		C3D_API castor::String getClearcoatBrdfName()const;
 
 		LightingModelID getLightingModelId()const
 		{

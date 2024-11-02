@@ -2,6 +2,7 @@
 
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -17,7 +18,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & albedo
 			, sdw::Float const & roughness )
 		{
-			return prefiltered.lod( coord, roughness * float( MaxIblReflectionLod ) ).rgb() * albedo;
+			return albedo * prefiltered.lod( coord, roughness * float( MaxIblReflectionLod ) ).rgb();
 		}
 	}
 
@@ -154,7 +155,7 @@ namespace castor3d::shader
 			, pbrdfMap );
 	}
 
-	sdw::RetVec3 IblBackgroundModel::computeSheenReflections( sdw::Vec3 const & pwsNormal
+	sdw::RetVec4 IblBackgroundModel::computeSheenReflections( sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
 		, sdw::Float const & pNdotV
@@ -164,7 +165,7 @@ namespace castor3d::shader
 	{
 		if ( !m_computeSheenReflections )
 		{
-			m_computeSheenReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeSheenReflections"
+			m_computeSheenReflections = m_writer.implementFunction< sdw::Vec4 >( "c3d_iblbg_computeSheenReflections"
 				, [this]( sdw::Vec3 const & sheenColour
 					, sdw::Vec3 const & N
 					, sdw::Vec3 const & V
@@ -184,7 +185,8 @@ namespace castor3d::shader
 					auto brdf = m_writer.declLocale( "brdf"
 						, getBrdf( brdfMap, NdotV, sheenRoughness ) );
 
-					m_writer.returnStmt( prefilteredColor.rgb() * brdf.z() );
+					m_writer.returnStmt( vec4( prefilteredColor.rgb() * brdf.z()
+						, m_utils.directionalAlbedoSheen( NdotV, sheenRoughness ) ) );
 				}
 				, sdw::InVec3{ m_writer, "sheenColour" }
 				, sdw::InVec3{ m_writer, "N" }
@@ -196,7 +198,7 @@ namespace castor3d::shader
 		}
 
 		auto prefilteredEnvMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefilteredSheen" );
-		return m_computeSheenReflections( components.sheenFactor
+		return m_computeSheenReflections( components.sheenColour
 			, pwsNormal
 			, pV
 			, pNdotV

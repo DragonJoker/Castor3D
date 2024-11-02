@@ -64,7 +64,7 @@ namespace anisotropy
 				, sdw::Vec3 & reflectedSpecular
 				, sdw::Vec3 & refracted
 				, sdw::Vec3 & coatReflected
-				, sdw::Vec3 & sheenReflected
+				, sdw::Vec4 & sheenReflected
 				, c3d::DebugOutput & debugOutput )const override;
 			void computeReflRefr( c3d::ReflectionModel & reflections
 				, c3d::BlendComponents & components
@@ -83,7 +83,7 @@ namespace anisotropy
 				, sdw::Vec3 & reflectedSpecular
 				, sdw::Vec3 & refracted
 				, sdw::Vec3 & coatReflected
-				, sdw::Vec3 & sheenReflected
+				, sdw::Vec4 & sheenReflected
 				, c3d::DebugOutput & debugOutput )const override;
 		};
 

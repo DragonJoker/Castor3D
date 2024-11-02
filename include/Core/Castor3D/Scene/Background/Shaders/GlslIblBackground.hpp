@@ -43,7 +43,7 @@ namespace castor3d::shader
 			, BlendComponents & components
 			, sdw::CombinedImage2DRgba32 const & brdf
 			, DebugOutputCategory & debugOutput )override;
-		C3D_API sdw::RetVec3 computeSheenReflections( sdw::Vec3 const & wsNormal
+		C3D_API sdw::RetVec4 computeSheenReflections( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
@@ -103,7 +103,7 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InCombinedImageCubeRgba32
 			, sdw::InCombinedImage2DRgba32 > m_computeSpecularReflections;
-		sdw::Function< sdw::Vec3
+		sdw::Function< sdw::Vec4
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3
