@@ -34,11 +34,7 @@ namespace castor3d
 				, sdw::UInt const & hasReflection
 				, sdw::UInt const & hasRefraction
 				, sdw::Float const & refractionRatio
-				, sdw::Vec3 & reflectedDiffuse
-				, sdw::Vec3 & reflectedSpecular
-				, sdw::Vec3 & refracted
-				, sdw::Vec3 & coatReflected
-				, sdw::Vec4 & sheenReflected
+				, shader::ReflectionRefraction & output
 				, shader::DebugOutput & debugOutput )const override;
 			C3D_API void computeReflRefr( shader::ReflectionModel & reflections
 				, shader::BlendComponents & components
@@ -53,11 +49,7 @@ namespace castor3d
 				, sdw::UInt const & hasReflection
 				, sdw::UInt const & hasRefraction
 				, sdw::Float const & refractionRatio
-				, sdw::Vec3 & reflectedDiffuse
-				, sdw::Vec3 & reflectedSpecular
-				, sdw::Vec3 & refracted
-				, sdw::Vec3 & coatReflected
-				, sdw::Vec4 & sheenReflected
+				, shader::ReflectionRefraction & output
 				, shader::DebugOutput & debugOutput )const override;
 		};
 

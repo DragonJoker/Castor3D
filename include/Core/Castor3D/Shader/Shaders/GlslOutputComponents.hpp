@@ -30,7 +30,7 @@ namespace castor3d::shader
 
 		explicit DirectLighting( sdw::ShaderWriter & writer )
 			: DirectLighting{ writer
-				, sdw::makeAggrInit( DirectLighting::makeType( sdw::getTypesCache( writer ) ), makeZero() )
+				, sdw::makeAggrInit( DirectLighting::makeType( sdw::getTypesCache( writer ) ), makeInit() )
 				, true }
 		{
 		}
@@ -42,8 +42,11 @@ namespace castor3d::shader
 		auto coating()const { return getMember< "coating" >(); }
 		auto sheen()const { return getMember< "sheen" >(); }
 
+		void registerDebug( DebugOutput & debugOutput
+			, castor::String const & category )const;
+
 	private:
-		C3D_API static sdw::expr::ExprList makeZero();
+		C3D_API static sdw::expr::ExprList makeInit();
 	};
 
 	struct IndirectLighting
@@ -63,7 +66,7 @@ namespace castor3d::shader
 
 		explicit IndirectLighting( sdw::ShaderWriter & writer )
 			: IndirectLighting{ writer
-				, sdw::makeAggrInit( IndirectLighting::makeType( sdw::getTypesCache( writer ) ), makeZero() )
+				, sdw::makeAggrInit( IndirectLighting::makeType( sdw::getTypesCache( writer ) ), makeInit() )
 				, true }
 		{
 		}
@@ -75,8 +78,52 @@ namespace castor3d::shader
 		auto diffuseColour()const { return rawDiffuse().rgb(); }
 		auto diffuseBlend()const { return rawDiffuse().a(); }
 
+		void registerDebug( DebugOutput & debugOutput
+			, castor::String const & category )const;
+
 	private:
-		C3D_API static sdw::expr::ExprList makeZero();
+		C3D_API static sdw::expr::ExprList makeInit();
+	};
+
+	struct ReflectionRefraction
+		: public sdw::StructInstanceHelperT< "C3D_ReflectionRefraction"
+			, sdw::type::MemoryLayout::eC
+			, sdw::Vec3Field< "reflDiffuse" >
+			, sdw::Vec3Field< "reflSpecular" >
+			, sdw::Vec3Field< "reflCoating" >
+			, sdw::Vec4Field< "reflSheen" >
+			, sdw::Vec3Field< "refrColour" > >
+	{
+		ReflectionRefraction( sdw::ShaderWriter & writer
+			, sdw::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			, reflDiffuse { getMember< "reflDiffuse" >() }
+			, reflSpecular { getMember< "reflSpecular" >() }
+			, reflCoating { getMember< "reflCoating" >() }
+			, reflSheen { getMember< "reflSheen" >() }
+			, refrColour { getMember< "refrColour" >() }
+		{
+		}
+
+		explicit ReflectionRefraction( sdw::ShaderWriter & writer )
+			: ReflectionRefraction{ writer
+				, sdw::makeAggrInit( IndirectLighting::makeType( sdw::getTypesCache( writer ) ), makeInit() )
+				, true }
+		{
+		}
+
+		sdw::Vec3 reflDiffuse;
+		sdw::Vec3 reflSpecular;
+		sdw::Vec3 reflCoating;
+		sdw::Vec4 reflSheen;
+		sdw::Vec3 refrColour;
+
+		void registerDebug( DebugOutput & debugOutput
+			, castor::String const & category )const;
+
+	private:
+		C3D_API static sdw::expr::ExprList makeInit();
 	};
 }
 

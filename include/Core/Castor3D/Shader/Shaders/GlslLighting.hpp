@@ -67,11 +67,7 @@ namespace castor3d::shader
 			, IndirectLighting indirectLighting
 			, sdw::Float const & ambientOcclusion
 			, sdw::Vec3 const & emissive
-			, sdw::Vec3 reflectedDiffuse
-			, sdw::Vec3 reflectedSpecular
-			, sdw::Vec3 refracted
-			, sdw::Vec3 coatReflected
-			, sdw::Vec4 sheenReflected );
+			, ReflectionRefraction reflRefr );
 		C3D_API virtual sdw::Vec3 combine( DebugOutput & debugOutput
 			, BlendComponents const & components
 			, sdw::Vec3 const & incident

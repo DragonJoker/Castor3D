@@ -1386,16 +1386,8 @@ namespace castor3d
 										, output );
 
 									// Reflections/Refraction
-									auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
-										, vec3( 0.0_f ) );
-									auto reflectedSpecular = writer.declLocale( "reflectedSpecular"
-										, vec3( 0.0_f ) );
-									auto refracted = writer.declLocale( "refracted"
-										, vec3( 0.0_f ) );
-									auto coatReflected = writer.declLocale( "coatReflected"
-										, vec3( 0.0_f ) );
-									auto sheenReflected = writer.declLocale( "sheenReflected"
-										, vec4( 0.0_f ) );
+									auto reflRefrResult = writer.declLocale( "reflRefrResult"
+										, shader::ReflectionRefraction{ writer } );
 
 									if ( components.hasMember( "thicknessFactor" ) )
 									{
@@ -1419,11 +1411,7 @@ namespace castor3d
 										, components.hasReflection
 										, components.hasRefraction
 										, components.refractionRatio
-										, reflectedDiffuse
-										, reflectedSpecular
-										, refracted
-										, coatReflected
-										, sheenReflected
+										, reflRefrResult
 										, output );
 									output.registerOutput( cuT( "Reflections" ), cuT( "Incident" ), sdw::fma( shader::getRaw( incident ), vec3( 0.5_f ), vec3( 0.5_f ) ) );
 
@@ -1435,11 +1423,7 @@ namespace castor3d
 											, indirectLighting
 											, occlusion
 											, components.emissiveColour * components.emissiveFactor
-											, reflectedDiffuse
-											, reflectedSpecular
-											, refracted
-											, coatReflected
-											, sheenReflected )
+											, reflRefrResult )
 										, components.opacity );
 									outScattering = vec4( directLighting.scattering(), 1.0_f);
 								}

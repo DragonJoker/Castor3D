@@ -103,6 +103,11 @@ namespace castor3d::shader
 			return *this;
 		}
 
+		DebugOutput & operator*()noexcept
+		{
+			return *m_debugOutput;
+		}
+
 		DebugOutputCategory pushBlock( castor::String category )
 		{
 			return m_debugOutput->pushBlock( castor::move( category ) );

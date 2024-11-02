@@ -93,11 +93,7 @@ namespace anisotropy
 		, sdw::UInt const & hasReflection
 		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, sdw::Vec3 & refracted
-		, sdw::Vec3 & coatReflected
-		, sdw::Vec4 & sheenReflected
+		, c3d::ReflectionRefraction & output
 		, c3d::DebugOutput & debugOutput )const
 	{
 		if ( mippedScene.isEnabled() )
@@ -132,11 +128,7 @@ namespace anisotropy
 				, components.hasReflection
 				, components.hasRefraction
 				, components.refractionRatio
-				, reflectedDiffuse
-				, reflectedSpecular
-				, refracted
-				, coatReflected
-				, sheenReflected
+				, output
 				, debugOutputBlock );
 		}
 		else
@@ -154,11 +146,7 @@ namespace anisotropy
 				, components.hasReflection
 				, components.hasRefraction
 				, components.refractionRatio
-				, reflectedDiffuse
-				, reflectedSpecular
-				, refracted
-				, coatReflected
-				, sheenReflected
+				, output
 				, debugOutput );
 		}
 	}
@@ -176,11 +164,7 @@ namespace anisotropy
 		, sdw::UInt const & hasReflection
 		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, sdw::Vec3 & refractionResult
-		, sdw::Vec3 & coatReflected
-		, sdw::Vec4 & sheenReflected
+		, c3d::ReflectionRefraction & output
 		, c3d::DebugOutput & debugOutput )const
 	{
 		auto & writer = *components.getWriter();
@@ -209,11 +193,7 @@ namespace anisotropy
 			, components.hasReflection
 			, components.hasRefraction
 			, components.refractionRatio
-			, reflectedDiffuse
-			, reflectedSpecular
-			, refractionResult
-			, coatReflected
-			, sheenReflected
+			, output
 			, debugOutputBlock );
 	}
 

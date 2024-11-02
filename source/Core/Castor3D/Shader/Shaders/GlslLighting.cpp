@@ -76,11 +76,7 @@ namespace castor3d::shader
 		, IndirectLighting indirectLighting
 		, sdw::Float const & ambientOcclusion
 		, sdw::Vec3 const & emissive
-		, sdw::Vec3 reflectedDiffuse
-		, sdw::Vec3 reflectedSpecular
-		, sdw::Vec3 refracted
-		, sdw::Vec3 coatReflected
-		, sdw::Vec4 sheenReflected )
+		, ReflectionRefraction reflRefr )
 	{
 		auto maxSheenColour = m_writer.declLocale( "maxSheenColour"
 			, max( max( components.sheenColour.r(), components.sheenColour.g() ), components.sheenColour.b() ) );
@@ -88,10 +84,10 @@ namespace castor3d::shader
 		IF( m_writer, maxSheenColour != 0.0_f )
 		{
 			auto albedoSheenScaling = m_writer.declLocale( "albedoSheenScaling"
-				, 1.0_f - sheenReflected.w() * maxSheenColour );
+				, 1.0_f - reflRefr.reflSheen.w() * maxSheenColour );
 			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Albedo Sheen Scaling" ), albedoSheenScaling );
-			reflectedDiffuse *= albedoSheenScaling;
-			reflectedSpecular *= albedoSheenScaling;
+			reflRefr.reflDiffuse *= albedoSheenScaling;
+			reflRefr.reflSpecular *= albedoSheenScaling;
 		}
 		FI
 
@@ -102,14 +98,14 @@ namespace castor3d::shader
 			, indirectLighting
 			, ambientOcclusion
 			, emissive
-			, castor::move( reflectedDiffuse )
-			, castor::move( reflectedSpecular )
-			, castor::move( refracted ) );
+			, castor::move( reflRefr.reflDiffuse )
+			, castor::move( reflRefr.reflSpecular )
+			, castor::move( reflRefr.refrColour ) );
 
 		IF( m_writer, !all( components.sheenColour == vec3( 0.0_f ) ) )
 		{
 			combineResult += directLighting.sheen().xyz();
-			combineResult += ( sheenReflected.xyz() * ambientOcclusion );
+			combineResult += ( reflRefr.reflSheen.xyz() * ambientOcclusion );
 		}
 		FI
 
@@ -120,7 +116,7 @@ namespace castor3d::shader
 			auto clearcoatFresnel = m_writer.declLocale( "clearcoatFresnel"
 				, pow( 0.04_f + ( 1.0_f - 0.04_f ) * ( 1.0_f - clearcoatNdotV ), 5.0_f ) );
 			combineResult = combineResult * ( 1.0_f - vec3( components.clearcoatFactor * clearcoatFresnel ) )
-				+ ( coatReflected * ambientOcclusion ) + directLighting.coating();
+				+ ( reflRefr.reflCoating * ambientOcclusion ) + directLighting.coating();
 		}
 		FI
 

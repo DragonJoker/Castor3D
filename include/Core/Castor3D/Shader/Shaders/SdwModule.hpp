@@ -102,6 +102,7 @@ namespace castor3d::shader
 	struct PointLight;
 	struct PointShadowData;
 	struct Ray;
+	struct ReflectionRefraction;
 	struct ShadowData;
 	struct SpotLight;
 	struct SpotShadowData;
@@ -305,6 +306,7 @@ namespace castor3d::shader
 	Writer_Parameter( PointLight );
 	Writer_Parameter( PointShadowData );
 	Writer_Parameter( Ray );
+	Writer_Parameter( ReflectionRefraction );
 	Writer_Parameter( ShadowData );
 	Writer_Parameter( SpotLight );
 	Writer_Parameter( SpotShadowData );
