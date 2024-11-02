@@ -109,7 +109,7 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		applyVec3Component( cuT( "sheenFactor" )
+		applyVec3Component( cuT( "sheenColour" )
 			, passShaders
 			, textureConfigs
 			, textureAnims

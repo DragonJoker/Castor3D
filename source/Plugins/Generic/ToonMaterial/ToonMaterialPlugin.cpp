@@ -73,8 +73,10 @@ extern "C"
 		engine->registerPassModels( { toon::shader::ToonPbrLightingModel::getName()
 			, toon::ToonPbrPass::create
 			, &toon::shader::ToonPbrLightingModel::create
-			, castor3d::PbrPass::DiffuseBrdfs, castor3d::PbrPass::DefaultDiffuseBrdf
-			, castor3d::PbrPass::SpecularBrdfs, castor3d::PbrPass::DefaultSpecularBrdf } );
+			, {}, {}
+			, {}, {}
+			, {}, {}
+			, {}, {} } );
 		engine->registerSpecificsBuffer( castor::String{ toon::shader::ToonProfile::getName() }
 			, { &toon::shader::ToonProfiles::create
 				, &toon::shader::ToonProfiles::update
@@ -84,8 +86,8 @@ extern "C"
 	C3D_ToonMaterial_API void OnUnload( castor3d::Engine * engine )
 	{
 		engine->unregisterSpecificsBuffer( castor::String{ toon::shader::ToonProfile::getName() } );
-		engine->unregisterPassModels( toon::shader::ToonPbrLightingModel::getName(), {}, {} );
-		engine->unregisterPassModels( toon::shader::ToonPhongLightingModel::getName(), {}, {} );
+		engine->unregisterPassModels( toon::shader::ToonPbrLightingModel::getName(), {}, {}, {}, {} );
+		engine->unregisterPassModels( toon::shader::ToonPhongLightingModel::getName(), {}, {}, {}, {} );
 		engine->unregisterPassComponent( toon::EdgesComponent::TypeName );
 	}
 }

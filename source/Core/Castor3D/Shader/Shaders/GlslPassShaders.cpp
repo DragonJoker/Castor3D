@@ -350,7 +350,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & reflectedSpecular
 		, sdw::Vec3 & refracted
 		, sdw::Vec3 & coatReflected
-		, sdw::Vec3 & sheenReflected
+		, sdw::Vec4 & sheenReflected
 		, DebugOutput & debugOutput )const
 	{
 		if ( !m_reflRefr )
@@ -398,7 +398,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & reflectedSpecular
 		, sdw::Vec3 & refracted
 		, sdw::Vec3 & coatReflected
-		, sdw::Vec3 & sheenReflected
+		, sdw::Vec4 & sheenReflected
 		, DebugOutput & debugOutput )const
 	{
 		if ( !m_reflRefr )

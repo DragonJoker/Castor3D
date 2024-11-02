@@ -415,8 +415,12 @@ namespace castor3d
 		C3D_API castor::Vector< LightingModelID > registerLightingModel( castor::String const & name
 			, shader::DiffuseBrdfArray const & diffuseBrdfs
 			, shader::SpecularBrdfArray const & specularBrdfs
+			, shader::SheenBrdfArray const & sheenBrdfs
+			, shader::ClearcoatBrdfArray const & clearcoatBrdfs
 			, shader::DiffuseBrdfDesc const & defaultDiffuseBrdf
 			, shader::SpecularBrdfDesc const & defaultSpecularBrdf
+			, shader::SheenBrdfDesc const & defaultSheenBrdf
+			, shader::ClearcoatBrdfDesc const & defaultClearcoatBrdf
 			, shader::LightingModelCreator creator
 			, BackgroundModelID backgroundModelId )const;
 		/**
@@ -432,6 +436,8 @@ namespace castor3d
 		C3D_API castor::Vector< LightingModelID > unregisterLightingModel( castor::String const & baseName
 			, castor::StringArray const & diffuseBrdfs
 			, castor::StringArray const & specularBrdfs
+			, castor::StringArray const & sheenBrdfs
+			, castor::StringArray const & clearcoatBrdfs
 			, BackgroundModelID backgroundModelId )const;
 		/**
 		 *\~english
@@ -517,7 +523,9 @@ namespace castor3d
 		 */
 		C3D_API void unregisterPassModels( castor::String const & baseName
 			, castor::StringArray const & diffuseBrdfs
-			, castor::StringArray const & specularBrdfs )const;
+			, castor::StringArray const & specularBrdfs
+			, castor::StringArray const & sheenBrdfs
+			, castor::StringArray const & clearcoatBrdfs )const;
 		/**
 		 *\~english
 		 *\brief			Registers a specific data shader buffer.

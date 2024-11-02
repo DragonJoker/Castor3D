@@ -26,11 +26,15 @@ namespace castor3d
 			Key baseName{};
 			shader::DiffuseBrdfDesc diffuseBrdf{};
 			shader::SpecularBrdfDesc specularBrdf{};
+			shader::SheenBrdfDesc sheenBrdf{};
+			shader::ClearcoatBrdfDesc clearcoatBrdf{};
 			Creator create{};
 			BackgroundModelID backgroundModelId{};
 			LightingModelID lightingModelId{};
 			BrdfID diffuseBrdfId{};
 			BrdfID specularBrdfId{};
+			BrdfID sheenBrdfId{};
+			BrdfID clearcoatBrdfId{};
 		};
 		using ObjCont = castor::Vector< Entry >;
 		struct LightingModel
@@ -38,8 +42,12 @@ namespace castor3d
 			castor::String name{};
 			shader::DiffuseBrdfDesc defaultDiffuseBrdf{};
 			shader::SpecularBrdfDesc defaultSpecularBrdf{};
+			shader::SheenBrdfDesc defaultSheenBrdf{};
+			shader::ClearcoatBrdfDesc defaultClearcoatBrdf{};
 			shader::DiffuseBrdfArray diffuseBrdfs{};
 			shader::SpecularBrdfArray specularBrdfs{};
+			shader::SheenBrdfArray sheenBrdfs{};
+			shader::ClearcoatBrdfArray clearcoatBrdfs{};
 			castor::UnorderedSet< BackgroundModelID > backgroundModels{};
 		};
 		using LightingModelCont = castor::Vector< LightingModel >;
@@ -64,8 +72,12 @@ namespace castor3d
 		C3D_API castor::Vector< LightingModelID > registerType( castor::String const & baseName
 			, shader::DiffuseBrdfArray diffuseBrdfs
 			, shader::SpecularBrdfArray specularBrdfs
+			, shader::SheenBrdfArray sheenBrdfs
+			, shader::ClearcoatBrdfArray clearcoatBrdfs
 			, shader::DiffuseBrdfDesc const & defaultDiffuseBrdf
 			, shader::SpecularBrdfDesc const & defaultSpecularBrdf
+			, shader::SheenBrdfDesc const & defaultSheenBrdf
+			, shader::ClearcoatBrdfDesc const & defaultClearcoatBrdf
 			, BackgroundModelID backgroundModelId
 			, Creator const & create );
 		/**
@@ -81,6 +93,8 @@ namespace castor3d
 		C3D_API castor::Vector< LightingModelID > unregisterType( castor::String const & baseName
 			, castor::StringArray diffuseBrdfs
 			, castor::StringArray specularBrdfs
+			, castor::StringArray sheenBrdfs
+			, castor::StringArray clearcoatBrdfs
 			, BackgroundModelID backgroundModelId );
 		/**
 		 *\~english
@@ -96,7 +110,9 @@ namespace castor3d
 		 */
 		C3D_API Id getNameId( castor::String const & key
 			, castor::String diffuseBrdf
-			, castor::String specularBrdf )const;
+			, castor::String specularBrdf
+		, castor::String sheenBrdf
+		, castor::String clearcoatBrdf )const;
 		/**
 		 *\~english
 		 *\param[in]	baseName	The lighting model base name.
@@ -133,6 +149,24 @@ namespace castor3d
 		 *\return		Le nom de la specular BRDF.
 		 */
 		C3D_API castor::String getSpecularBrdfName( Id const & id )const;
+		/**
+		 *\~english
+		 *\param[in]	id	The lighting model ID.
+		 *\return		The sheen BRDF name.
+		 *\~french
+		 *\param[in]	id	L'ID du modèle d'éclairage.
+		 *\return		Le nom de la sheen BRDF.
+		 */
+		C3D_API castor::String getSheenBrdfName( Id const & id )const;
+		/**
+		 *\~english
+		 *\param[in]	id	The lighting model ID.
+		 *\return		The clearcoat BRDF name.
+		 *\~french
+		 *\param[in]	id	L'ID du modèle d'éclairage.
+		 *\return		Le nom de la clearcoat BRDF.
+		 */
+		C3D_API castor::String getClearcoatBrdfName( Id const & id )const;
 		/**
 		 *\~english
 		 *\return		The unique lighting models IDs.
@@ -203,6 +237,8 @@ namespace castor3d
 			return it->create( lightingModelId
 				, it->diffuseBrdf
 				, it->specularBrdf
+				, it->sheenBrdf
+				, it->clearcoatBrdf
 				, castor::forward< Parameters >( params )... );
 		}
 
@@ -212,11 +248,17 @@ namespace castor3d
 			, BrdfID diffuseBrdfId
 			, shader::SpecularBrdfDesc specularBrdf
 			, BrdfID specularBrdfId
+			, shader::SheenBrdfDesc sheenBrdf
+			, BrdfID sheenBrdfId
+			, shader::ClearcoatBrdfDesc clearcoatBrdf
+			, BrdfID clearcoatBrdfId
 			, BackgroundModelID backgroundModelId
 			, Creator create );
 		LightingModelID unregisterType( castor::String const & baseName
 			, castor::String const & diffuseBrdf
 			, castor::String const & specularBrdf
+			, castor::String const & sheenBrdf
+			, castor::String const & clearcoatBrdf
 			, BackgroundModelID backgroundModelId );
 
 	private:

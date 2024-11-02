@@ -27,6 +27,8 @@ namespace castor3d::shader
 		C3D_API static LightingModelUPtr create( LightingModelID lightingModelId
 			, DiffuseBrdfDesc const & diffuseBrdf
 			, SpecularBrdfDesc const & specularBrdf
+			, SheenBrdfDesc const & sheenBrdf
+			, ClearcoatBrdfDesc const & clearcoatBrdf
 			, sdw::ShaderWriter & writer
 			, Materials const & materials
 			, Utils & utils

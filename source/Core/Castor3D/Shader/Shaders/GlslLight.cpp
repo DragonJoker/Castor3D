@@ -364,7 +364,8 @@ namespace castor3d::shader
 			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "Specular" ), parentOutput.specular() );
 			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "Scattering" ), parentOutput.scattering() );
 			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "CoatingSpecular" ), parentOutput.coatingSpecular() );
-			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "Sheen" ), parentOutput.sheen() );
+			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "Sheen" ), parentOutput.sheen().xyz() );
+			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "SheenScale" ), parentOutput.sheen().w() );
 		}
 	}
 
@@ -433,7 +434,8 @@ namespace castor3d::shader
 			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "Specular" ), parentOutput.specular() );
 			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "Scattering" ), parentOutput.scattering() );
 			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "CoatingSpecular" ), parentOutput.coatingSpecular() );
-			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "Sheen" ), parentOutput.sheen() );
+			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "Sheen" ), parentOutput.sheen().xyz() );
+			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "SheenScale" ), parentOutput.sheen().w() );
 		}
 	}
 

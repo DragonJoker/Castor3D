@@ -14,7 +14,7 @@ namespace castor3d::shader
 		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
-		result.emplace_back( sdw::makeExpr( vec2( 0.0_f ) ) );
+		result.emplace_back( sdw::makeExpr( vec4( 0.0_f ) ) );
 		return result;
 	}
 

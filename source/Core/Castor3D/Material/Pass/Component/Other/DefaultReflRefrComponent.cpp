@@ -41,7 +41,7 @@ namespace castor3d
 		, sdw::Vec3 & reflectedSpecular
 		, sdw::Vec3 & refracted
 		, sdw::Vec3 & coatReflected
-		, sdw::Vec3 & sheenReflected
+		, sdw::Vec4 & sheenReflected
 		, shader::DebugOutput & debugOutput )const
 	{
 		if ( mippedScene.isEnabled() )
@@ -106,7 +106,7 @@ namespace castor3d
 		, sdw::Vec3 & reflectedSpecular
 		, sdw::Vec3 & refracted
 		, sdw::Vec3 & coatReflected
-		, sdw::Vec3 & sheenReflected
+		, sdw::Vec4 & sheenReflected
 		, shader::DebugOutput & debugOutput )const
 	{
 		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Reflections" ) );

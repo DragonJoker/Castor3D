@@ -76,9 +76,9 @@ namespace anisotropy::shader
 				, sdw::Vec3 const & radiance
 				, sdw::Float const & intensity
 				, sdw::Float const & NdotL
-				, sdw::Float const & NdotH
-				, sdw::Float const & roughness )
+				, sdw::Float const & NdotH )
 			{
+				auto const & roughness = components.roughness;
 				auto NdotV = m_writer.declLocale( "NdotV"
 					, lightSurface.NdotV().value() );
 				auto F = m_writer.declLocale( "F"
@@ -123,7 +123,6 @@ namespace anisotropy::shader
 			, sdw::InVec3{ m_writer, "radiance" }
 			, sdw::InFloat{ m_writer, "intensity" }
 			, sdw::InFloat{ m_writer, "NdotL" }
-			, sdw::InFloat{ m_writer, "NdotH" }
-			, sdw::InFloat{ m_writer, "roughness" } );
+			, sdw::InFloat{ m_writer, "NdotH" } );
 	}
 }

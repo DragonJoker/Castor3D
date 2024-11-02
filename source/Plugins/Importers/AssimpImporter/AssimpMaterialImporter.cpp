@@ -671,7 +671,7 @@ namespace c3d_assimp
 				if ( hasSheen || hasRoughness )
 				{
 					auto component = m_result.createComponent< castor3d::SheenComponent >();
-					component->setSheenFactor( castor::HdrRgbColour{ sheen.r
+					component->setSheenColour( castor::HdrRgbColour{ sheen.r
 						, sheen.g
 						, sheen.b } );
 					component->setRoughnessFactor( roughness );
@@ -1288,7 +1288,9 @@ namespace c3d_assimp
 
 			if ( engine.getDefaultLightingModel() != factory.getNameId( castor::String{ castor3d::PhongPass::LightingModel }
 					, castor3d::PhongPass::DefaultDiffuseBrdf.name
-					, castor3d::PhongPass::DefaultSpecularBrdf.name ) )
+					, castor3d::PhongPass::DefaultSpecularBrdf.name
+					, castor3d::PhongPass::DefaultSheenBrdf.name
+					, castor3d::PhongPass::DefaultClearcoatBrdf.name ) )
 			{
 				return engine.getDefaultLightingModel();
 			}
@@ -1301,11 +1303,15 @@ namespace c3d_assimp
 			case aiShadingMode_Blinn:
 				return factory.getNameId( castor::String{ castor3d::PhongPass::LightingModel }
 					, castor3d::PhongPass::DefaultDiffuseBrdf.name
-					, castor3d::PhongPass::DefaultSpecularBrdf.name );
+					, castor3d::PhongPass::DefaultSpecularBrdf.name
+					, castor3d::PhongPass::DefaultSheenBrdf.name
+					, castor3d::PhongPass::DefaultClearcoatBrdf.name );
 			case aiShadingMode_Toon:
 				return factory.getNameId( toon::shader::ToonPhongLightingModel::getName()
 					, castor3d::PhongPass::DefaultDiffuseBrdf.name
-					, castor3d::PhongPass::DefaultSpecularBrdf.name );
+					, castor3d::PhongPass::DefaultSpecularBrdf.name
+					, castor3d::PhongPass::DefaultSheenBrdf.name
+					, castor3d::PhongPass::DefaultClearcoatBrdf.name );
 			case aiShadingMode_OrenNayar:
 			case aiShadingMode_Minnaert:
 			case aiShadingMode_CookTorrance:
@@ -1315,16 +1321,22 @@ namespace c3d_assimp
 			case aiShadingMode_PBR_BRDF:
 				return factory.getNameId( castor::String{ castor3d::PbrPass::LightingModel }
 					, castor3d::PbrPass::DefaultDiffuseBrdf.name
-					, castor3d::PbrPass::DefaultSpecularBrdf.name );
+					, castor3d::PbrPass::DefaultSpecularBrdf.name
+					, castor3d::PbrPass::DefaultSheenBrdf.name
+					, castor3d::PbrPass::DefaultClearcoatBrdf.name );
 #pragma GCC diagnostic pop
 			case aiShadingMode_Unlit:
 				return factory.getNameId( castor::String{ castor3d::PbrPass::LightingModel }
 					, castor3d::PbrPass::DefaultDiffuseBrdf.name
-					, castor3d::PbrPass::DefaultSpecularBrdf.name );
+					, castor3d::PbrPass::DefaultSpecularBrdf.name
+					, castor3d::PbrPass::DefaultSheenBrdf.name
+					, castor3d::PbrPass::DefaultClearcoatBrdf.name );
 			default:
 				return factory.getNameId( castor::String{ castor3d::PhongPass::LightingModel }
 					, castor3d::PbrPass::DefaultDiffuseBrdf.name
-					, castor3d::PbrPass::DefaultSpecularBrdf.name );
+					, castor3d::PbrPass::DefaultSpecularBrdf.name
+					, castor3d::PbrPass::DefaultSheenBrdf.name
+					, castor3d::PbrPass::DefaultClearcoatBrdf.name );
 			}
 		}
 	}

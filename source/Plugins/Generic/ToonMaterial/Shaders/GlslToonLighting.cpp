@@ -100,6 +100,8 @@ namespace toon::shader
 	c3d::LightingModelUPtr ToonPhongLightingModel::create( castor3d::LightingModelID lightingModelId
 		, c3d::DiffuseBrdfDesc const & diffuseBrdf
 		, c3d::SpecularBrdfDesc const & specularBrdf
+		, c3d::SheenBrdfDesc const & sheenBrdf
+		, c3d::ClearcoatBrdfDesc const & clearcoatBrdf
 		, sdw::ShaderWriter & writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
@@ -162,6 +164,8 @@ namespace toon::shader
 		, c3d::BRDFHelpers & brdfHelpers
 		, c3d::DiffuseBRDFUPtr diffuseBrdf
 		, c3d::SpecularBRDFUPtr specularBrdf
+		, c3d::SheenBRDFUPtr sheenBrdf
+		, c3d::ClearcoatBRDFUPtr clearcoatBrdf
 		, c3d::Shadow & shadowModel
 		, c3d::Lights & lights
 		, bool enableVolumetric )
@@ -172,6 +176,8 @@ namespace toon::shader
 			, brdfHelpers
 			, std::move( diffuseBrdf )
 			, std::move( specularBrdf )
+			, std::move( sheenBrdf )
+			, std::move( clearcoatBrdf )
 			, shadowModel
 			, lights
 			, enableVolumetric }
@@ -187,6 +193,8 @@ namespace toon::shader
 	c3d::LightingModelUPtr ToonPbrLightingModel::create( castor3d::LightingModelID lightingModelId
 		, c3d::DiffuseBrdfDesc const & diffuseBrdf
 		, c3d::SpecularBrdfDesc const & specularBrdf
+		, c3d::SheenBrdfDesc const & sheenBrdf
+		, c3d::ClearcoatBrdfDesc const & clearcoatBrdf
 		, sdw::ShaderWriter & writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
@@ -206,6 +214,12 @@ namespace toon::shader
 			, ( specularBrdf.create
 				? specularBrdf.create( writer, brdfHelpers )
 				: castor3d::PbrPass::DefaultSpecularBrdf.create( writer, brdfHelpers ) )
+			, ( sheenBrdf.create
+				? sheenBrdf.create( writer, brdfHelpers )
+				: castor3d::PbrPass::DefaultSheenBrdf.create( writer, brdfHelpers ) )
+			, ( clearcoatBrdf.create
+				? clearcoatBrdf.create( writer, brdfHelpers )
+				: castor3d::PbrPass::DefaultClearcoatBrdf.create( writer, brdfHelpers ) )
 			, shadowModel
 			, lights
 			, enableVolumetric );

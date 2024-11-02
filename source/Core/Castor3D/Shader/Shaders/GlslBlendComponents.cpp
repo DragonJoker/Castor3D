@@ -42,7 +42,7 @@ namespace castor3d::shader
 		, clearcoatFactor{ getMember( "clearcoatFactor", 0.0_f ) }
 		, clearcoatNormal{ getMember( "clearcoatNormal", vec3( 0.0_f ) ) }
 		, clearcoatRoughness{ getMember( "clearcoatRoughness", 0.0_f ) }
-		, sheenFactor{ getMember( "sheenFactor", vec3( 0.0_f ) ) }
+		, sheenColour{ getMember( "sheenColour", vec3( 0.0_f ) ) }
 		, sheenRoughness{ getMember( "sheenRoughness", 0.0_f ) }
 		, iridescenceFactor{ getMember( "iridescenceFactor", 0.0_f ) }
 		, iridescenceThickness{ getMember( "iridescenceThickness", 0.0_f ) }

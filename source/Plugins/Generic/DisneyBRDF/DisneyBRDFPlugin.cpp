@@ -49,16 +49,60 @@ extern "C"
 		engine->registerPassModels( { castor::String{ castor3d::PbrPass::LightingModel }
 			, castor3d::PbrPass::create
 			, castor3d::shader::PbrLightingModel::create
+			, {}
+			, {}
+			, {}
+			, {}
+			, {}
+			, {}
+			, { { castor::String{ disney::shader::DisneyClearcoatBRDF::Name }, disney::shader::DisneyClearcoatBRDF::create } }
+			, castor3d::PbrPass::DefaultClearcoatBrdf } );
+		engine->registerPassModels( { castor::String{ castor3d::PbrPass::LightingModel }
+			, castor3d::PbrPass::create
+			, castor3d::shader::PbrLightingModel::create
+			, {}
+			, {}
+			, {}
+			, {}
+			, { { castor::String{ disney::shader::DisneySheenBRDF::Name }, disney::shader::DisneySheenBRDF::create } }
+			, castor3d::PbrPass::DefaultSheenBrdf
+			, {}
+			, {} } );
+		engine->registerPassModels( { castor::String{ castor3d::PbrPass::LightingModel }
+			, castor3d::PbrPass::create
+			, castor3d::shader::PbrLightingModel::create
+			, {}
+			, {}
+			, { { castor::String{ disney::shader::DisneySpecularBRDF::Name }, disney::shader::DisneySpecularBRDF::create } }
+			, castor3d::PbrPass::DefaultSpecularBrdf
+			, {}
+			, {}
+			, {}
+			, {} } );
+		engine->registerPassModels( { castor::String{ castor3d::PbrPass::LightingModel }
+			, castor3d::PbrPass::create
+			, castor3d::shader::PbrLightingModel::create
 			, { { castor::String{ disney::shader::DisneyDiffuseBRDF::Name }, disney::shader::DisneyDiffuseBRDF::create } }
 			, castor3d::PbrPass::DefaultDiffuseBrdf
-			, { { castor::String{ disney::shader::DisneySpecularBRDF::Name }, disney::shader::DisneySpecularBRDF::create } }
-			, castor3d::PbrPass::DefaultSpecularBrdf } );
+			, {}
+			, {}
+			, {}
+			, {}
+			, {}
+			, {} } );
 	}
 
 	C3D_DisneyBRDF_API void OnUnload( castor3d::Engine * engine )
 	{
 		engine->unregisterPassModels( castor::String{ castor3d::PbrPass::LightingModel }
+			, {}
+			, { castor::String{ disney::shader::DisneySpecularBRDF::Name } }
+			, {}
+			, {} );
+		engine->unregisterPassModels( castor::String{ castor3d::PbrPass::LightingModel }
 			, { castor::String{ disney::shader::DisneyDiffuseBRDF::Name } }
-			, { castor::String{ disney::shader::DisneySpecularBRDF::Name } } );
+			, {}
+			, {}
+			, {} );
 	}
 }

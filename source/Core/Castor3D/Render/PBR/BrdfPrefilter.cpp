@@ -201,6 +201,23 @@ namespace castor3d
 
 			shader::BRDFHelpers brdf{ writer };
 
+			auto visibilitySmithGGXCorrelated = writer.implementFunction< sdw::Float >( "visibilitySmithGGXCorrelated"
+				, [&writer]( sdw::Float const & NdotV
+					, sdw::Float const & NdotL
+					, sdw::Float const & roughness )
+				{
+					auto a2 = writer.declLocale( "a2"
+						, pow( roughness, 4.0_f ) );
+					auto ggxV = writer.declLocale( "ggxV"
+						, NdotL * sqrt( NdotV * NdotV * ( 1.0_f - a2 ) + a2 ) );
+					auto ggxL = writer.declLocale( "ggxL"
+						, NdotV * sqrt( NdotL * NdotL * ( 1.0_f - a2 ) + a2 ) );
+					writer.returnStmt( 0.5_f / ( ggxV + ggxL ) );
+				}
+				, sdw::InFloat( writer, "NdotV" )
+				, sdw::InFloat( writer, "NdotL" )
+				, sdw::InFloat( writer, "roughness" ) );
+
 			auto integrateBRDF = writer.implementFunction< sdw::Vec3 >( "c3d_integrateBRDF"
 				, [&]( sdw::Float const & NdotV
 					, sdw::Float const & roughness )
@@ -213,6 +230,11 @@ namespace castor3d
 					auto N = writer.declLocale( "N"
 						, vec3( 0.0_f, 0.0_f, 1.0_f ) );
 
+					// To make the LUT independant from the material's F0, which is part of the Fresnel term
+					// when substituted by Schlick's approximation, we factor it out of the integral,
+					// yielding to the form: F0 * I1 + I2
+					// I1 and I2 are slighlty different in the Fresnel term, but both only depend on
+					// NoL and roughness, so they are both numerically integrated and written into two channels.
 					auto A = writer.declLocale( "A"
 						, 0.0_f );
 					auto B = writer.declLocale( "B"
@@ -235,21 +257,21 @@ namespace castor3d
 							auto H = writer.declLocale( "H"
 								, importanceSample.xyz() );
 							auto L = writer.declLocale( "L"
-								, normalize( vec3( 2.0_f ) * dot( V, H ) * H - V ) );
+								, normalize( reflect( -V, H ) ) );
 
 							auto NdotL = writer.declLocale( "NdotL"
-								, max( L.z(), 0.0_f ) );
+								, clamp( L.z(), 0.0_f, 1.0_f ) );
 							auto NdotH = writer.declLocale( "NdotH"
-								, max( H.z(), 0.0_f ) );
+								, clamp( H.z(), 0.0_f, 1.0_f ) );
 							auto VdotH = writer.declLocale( "VdotH"
-								, max( dot( V, H ), 0.0_f ) );
+								, clamp( dot( V, H ), 0.0_f, 1.0_f ) );
 
 							IF( writer, NdotL > 0.0_f )
 							{
 								auto G = writer.declLocale( "G"
-									, brdf.visibilitySmithGGXCorrelated( NdotV, max( dot( N, L ), 0.0_f ), roughness ) );
+									, visibilitySmithGGXCorrelated( NdotV, NdotL, roughness ) );
 								auto vis = writer.declLocale( "G_Vis"
-									, ( G * VdotH ) / ( NdotH * NdotV ) );
+									, ( G * VdotH * NdotL ) / NdotH );
 								auto Fc = writer.declLocale( "Fc"
 									, pow( 1.0_f - VdotH, 5.0_f ) );
 
@@ -258,38 +280,38 @@ namespace castor3d
 							}
 							FI
 						}
-
 						// Charlie
-						auto importanceSample = writer.declLocale( "importanceSample"
-							, brdf.getImportanceSample( brdf.importanceSampleCharlie( xi, roughness ), N ) );
-						auto H = writer.declLocale( "H"
-							, importanceSample.xyz() );
-						auto L = writer.declLocale( "L"
-							, normalize( vec3( 2.0_f ) * dot( V, H ) * H - V ) );
-
-						auto NdotL = writer.declLocale( "NdotL"
-							, max( L.z(), 0.0_f ) );
-						auto NdotH = writer.declLocale( "NdotH"
-							, max( H.z(), 0.0_f ) );
-						auto VdotH = writer.declLocale( "VdotH"
-							, max( dot( V, H ), 0.0_f ) );
-
-						IF( writer, NdotL > 0.0_f )
 						{
-							auto sheenDistribution = writer.declLocale( "G"
-								, brdf.distributionCharlie( roughness, NdotH ) );
-							auto sheenVisibility = writer.declLocale( "G"
-								, brdf.visibilityAshikhmin( NdotL, NdotV ) );
-							C += sheenVisibility * sheenDistribution * NdotL * VdotH;
+							auto importanceSample = writer.declLocale( "importanceSample"
+								, brdf.getImportanceSample( brdf.importanceSampleCharlie( xi, roughness ), N ) );
+							auto H = writer.declLocale( "H"
+								, importanceSample.xyz() );
+							auto L = writer.declLocale( "L"
+								, normalize( reflect( -V, H ) ) );
+
+							auto NdotL = writer.declLocale( "NdotL"
+								, clamp( L.z(), 0.0_f, 1.0_f ) );
+							auto NdotH = writer.declLocale( "NdotH"
+								, clamp( H.z(), 0.0_f, 1.0_f ) );
+							auto VdotH = writer.declLocale( "VdotH"
+								, clamp( dot( V, H ), 0.0_f, 1.0_f ) );
+
+							IF( writer, NdotL > 0.0_f )
+							{
+								auto sheenDistribution = writer.declLocale( "G"
+									, brdf.distributionCharlie( roughness, NdotH ) );
+								auto sheenVisibility = writer.declLocale( "G"
+									, brdf.visibilityAshikhmin( NdotL, NdotV ) );
+								C += sheenVisibility * sheenDistribution * NdotL * VdotH;
+							}
+							FI
 						}
-						FI
 					}
 					ROF
 
-					A /= writer.cast< sdw::Float >( sampleCount );
-					B /= writer.cast< sdw::Float >( sampleCount );
-					C /= writer.cast< sdw::Float >( sampleCount );
-					writer.returnStmt( vec3( A, B, C ) );
+					writer.returnStmt( vec3( 4.0_f * A / writer.cast< sdw::Float >( sampleCount )
+						, 4.0_f * B / writer.cast< sdw::Float >( sampleCount )
+						, 4.0_f * 2.0_f * castor::Pi< float > * C / writer.cast< sdw::Float >( sampleCount ) ) );
 				}
 				, sdw::InFloat( writer, "NdotV" )
 				, sdw::InFloat( writer, "roughness" ) );

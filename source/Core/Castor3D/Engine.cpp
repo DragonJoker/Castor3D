@@ -62,7 +62,7 @@ namespace castor3d
 
 	namespace eng
 	{
-		static bool constexpr C3D_GenerateBRDFIntegration = false;
+		static bool constexpr C3D_GenerateBRDFIntegration = true;
 		static castor::StringView constexpr noRenderSystem{ cuT( "No RenderSystem loaded, call castor3d::Engine::loadRenderer before castor3d::Engine::Initialise" ) };
 		static castor::StringView constexpr defaultName{ cuT( "C3D_Default" ) };
 		static castor::StringView constexpr samplerName{ cuT( "C3D_Lights" ) };
@@ -100,17 +100,37 @@ namespace castor3d
 						| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 						| VK_IMAGE_USAGE_SAMPLED_BIT ) };
 				result.create();
-				auto image = result.image.get();
-				auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf.png" );
-				castor::ImageResPtr created;
-				auto img = engine.tryAddImage( cuT( "BRDF" )
-					, true
-					, created
-					, castor::ImageCreateParams{ imagePath, { false, false, false } } );
-				auto buffer = castor::PxBufferBase::create( img->getPixels()->getDimensions()
+				castor::PxBufferBaseRPtr bufferRG;
+				castor::PxBufferBaseRPtr bufferB;
+				{
+					auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf_ggx.png" );
+					castor::ImageResPtr created;
+					auto img = engine.tryAddImage( cuT( "BRDFLutGGX" )
+						, true
+						, created
+						, castor::ImageCreateParams{ imagePath, { false, false, false } } );
+					bufferRG = img->getPixels();
+				}
+				{
+					auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf_charlie.png" );
+					castor::ImageResPtr created;
+					auto img = engine.tryAddImage( cuT( "BRDFLutCharlie" )
+						, true
+						, created
+						, castor::ImageCreateParams{ imagePath, { false, false, false } } );
+					bufferB = img->getPixels();
+				}
+
+				auto buffer = castor::PxBufferBase::create( bufferRG->getDimensions()
 					, castor::PixelFormat::eR8G8B8A8_UNORM
-					, img->getPixels()->getConstPtr()
-					, img->getPixels()->getFormat() );
+					, bufferRG->getConstPtr()
+					, bufferRG->getFormat() );
+				copyBufferComponents( castor::PixelComponent::eBlue
+					, castor::PixelComponent::eBlue
+					, *bufferB
+					, *buffer );
+
+				auto image = result.image.get();
 				auto view = image->createView( VK_IMAGE_VIEW_TYPE_2D, result.getFormat() );
 				auto staging = device->createStagingTexture( VK_FORMAT_R8G8B8A8_UNORM
 					, makeExtent2D( buffer->getDimensions() ) );
@@ -126,7 +146,7 @@ namespace castor3d
 			{
 				Texture result{ device
 					, resources
-					, cuT( "BrdfLUT" )
+					, cuT( "GeneratedBrdfLUT" )
 					, 0u
 					, { size[0], size[1], 1u }
 					, 1u
@@ -217,12 +237,14 @@ namespace castor3d
 
 		registerPassModels( { castor::String{ PhongPass::LightingModel }
 				, PhongPass::create
-				, &shader::PhongLightingModel::create } );
+				, shader::PhongLightingModel::create } );
 		registerPassModels( { castor::String{ PbrPass::LightingModel }
 				, PbrPass::create
-				, &shader::PbrLightingModel::create
+				, shader::PbrLightingModel::create
 				, PbrPass::DiffuseBrdfs, PbrPass::DefaultDiffuseBrdf
-				, PbrPass::SpecularBrdfs, PbrPass::DefaultSpecularBrdf } );
+				, PbrPass::SpecularBrdfs, PbrPass::DefaultSpecularBrdf
+				, PbrPass::SheenBrdfs, PbrPass::DefaultSheenBrdf
+				, PbrPass::ClearcoatBrdfs, PbrPass::DefaultClearcoatBrdf } );
 		m_lightingModelId = getPassFactory().listRegisteredTypes().begin()->key;
 
 		registerParsers( ControlsManager::Name
@@ -712,16 +734,24 @@ namespace castor3d
 	castor::Vector< LightingModelID > Engine::registerLightingModel( castor::String const & baseName
 		, shader::DiffuseBrdfArray const & diffuseBrdfs
 		, shader::SpecularBrdfArray const & specularBrdfs
+		, shader::SheenBrdfArray const & sheenBrdfs
+		, shader::ClearcoatBrdfArray const & clearcoatBrdfs
 		, shader::DiffuseBrdfDesc const & defaultDiffuseBrdf
 		, shader::SpecularBrdfDesc const & defaultSpecularBrdf
+		, shader::SheenBrdfDesc const & defaultSheenBrdf
+		, shader::ClearcoatBrdfDesc const & defaultClearcoatBrdf
 		, shader::LightingModelCreator creator
 		, BackgroundModelID backgroundModelId )const
 	{
 		return getLightingModelFactory().registerType( baseName
 			, diffuseBrdfs
 			, specularBrdfs
+			, sheenBrdfs
+			, clearcoatBrdfs
 			, defaultDiffuseBrdf
 			, defaultSpecularBrdf
+			, defaultSheenBrdf
+			, defaultClearcoatBrdf
 			, backgroundModelId
 			, castor::move( creator ) );
 	}
@@ -729,11 +759,15 @@ namespace castor3d
 	castor::Vector< LightingModelID > Engine::unregisterLightingModel( castor::String const & baseName
 		, castor::StringArray const & diffuseBrdfs
 		, castor::StringArray const & specularBrdfs
+		, castor::StringArray const & sheenBrdfs
+		, castor::StringArray const & clearcoatBrdfs
 		, BackgroundModelID backgroundModelId )const
 	{
 		return getLightingModelFactory().unregisterType( baseName
 			, diffuseBrdfs
 			, specularBrdfs
+			, sheenBrdfs
+			, clearcoatBrdfs
 			, backgroundModelId );
 	}
 
@@ -772,8 +806,12 @@ namespace castor3d
 		auto lightingModels = registerLightingModel( info.lightingModel
 			, info.diffuseBrdfs
 			, info.specularBrdfs
+			, info.sheenBrdfs
+			, info.clearcoatBrdfs
 			, info.defaultDiffuseBrdf
 			, info.defaultSpecularBrdf
+			, info.defaultSheenBrdf
+			, info.defaultClearcoatBrdf
 			, info.lightingModelCreator
 			, backgroundModelId );
 
@@ -793,8 +831,12 @@ namespace castor3d
 			for ( auto lightingModelId : registerLightingModel( info.lightingModel
 				, info.diffuseBrdfs
 				, info.specularBrdfs
+				, info.sheenBrdfs
+				, info.clearcoatBrdfs
 				, info.defaultDiffuseBrdf
 				, info.defaultSpecularBrdf
+				, info.defaultSheenBrdf
+				, info.defaultClearcoatBrdf
 				, info.lightingModelCreator
 				, entry.id ) )
 			{
@@ -811,7 +853,7 @@ namespace castor3d
 	void Engine::unregisterPassModel( BackgroundModelID backgroundModelId
 		, castor::String const & baseName )const
 	{
-		for ( auto lightingModelId : unregisterLightingModel( baseName, {}, {}, backgroundModelId ) )
+		for ( auto lightingModelId : unregisterLightingModel( baseName, {}, {}, {}, {}, backgroundModelId ) )
 		{
 			getPassFactory().unregisterType( lightingModelId );
 		}
@@ -819,7 +861,9 @@ namespace castor3d
 
 	void Engine::unregisterPassModels( castor::String const & baseName
 		, castor::StringArray const & diffuseBrdfs
-		, castor::StringArray const & specularBrdfs )const try
+		, castor::StringArray const & specularBrdfs
+		, castor::StringArray const & sheenBrdfs
+		, castor::StringArray const & clearcoatBrdfs )const try
 	{
 		castor::Set< LightingModelID > lightingModels;
 
@@ -828,6 +872,8 @@ namespace castor3d
 			for ( auto lightingModelId : unregisterLightingModel( baseName
 				, diffuseBrdfs
 				, specularBrdfs
+				, sheenBrdfs
+				, clearcoatBrdfs
 				, entry.id ) )
 			{
 				lightingModels.emplace( lightingModelId );

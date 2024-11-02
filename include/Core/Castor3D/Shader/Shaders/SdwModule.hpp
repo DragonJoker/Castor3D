@@ -188,6 +188,7 @@ namespace castor3d::shader
 	class BufferBase;
 	class BRDFHelpers;
 	class CookTorranceBRDF;
+	class ClearcoatBRDF;
 	class ClusteredLights;
 	class DebugOutput;
 	class DebugOutputCategory;
@@ -201,6 +202,7 @@ namespace castor3d::shader
 	class ReflectionModel;
 	class Shadow;
 	class ShadowsBuffer;
+	class SheenBRDF;
 	class SpecularBRDF;
 	class SssProfiles;
 	class SssTransmittance;
@@ -218,34 +220,40 @@ namespace castor3d::shader
 	template< typename DataT >
 	class BufferT;
 
+	CU_DeclareSmartPtr( castor3d::shader, ClearcoatBRDF, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, DiffuseBRDF, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, LightsBuffer, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, LightingModel, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, Material, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, Shadow, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, ShadowsBuffer, C3D_API );
+	CU_DeclareSmartPtr( castor3d::shader, SheenBRDF, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, SpecularBRDF, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, SssTransmittance, C3D_API );
 
+	template< typename BrdfCreatorT >
+	struct BrdfDescT
+	{
+		castor::String name;
+		BrdfCreatorT create;
+	};
+
 	using DiffuseBrdfCreator = castor::Function< DiffuseBRDFUPtr( sdw::ShaderWriter &, BRDFHelpers & ) >;
 	using SpecularBrdfCreator = castor::Function< SpecularBRDFUPtr( sdw::ShaderWriter &, BRDFHelpers & ) >;
+	using SheenBrdfCreator = castor::Function< SheenBRDFUPtr( sdw::ShaderWriter &, BRDFHelpers & ) >;
+	using ClearcoatBrdfCreator = castor::Function< ClearcoatBRDFUPtr( sdw::ShaderWriter &, BRDFHelpers & ) >;
 
-	struct DiffuseBrdfDesc
-	{
-		castor::String name;
-		DiffuseBrdfCreator create;
-	};
-
-	struct SpecularBrdfDesc
-	{
-		castor::String name;
-		SpecularBrdfCreator create;
-	};
+	using DiffuseBrdfDesc = BrdfDescT< DiffuseBrdfCreator >;
+	using SpecularBrdfDesc = BrdfDescT< SpecularBrdfCreator >;
+	using SheenBrdfDesc = BrdfDescT< SheenBrdfCreator >;
+	using ClearcoatBrdfDesc = BrdfDescT< ClearcoatBrdfCreator >;
 
 	using ReflectionModelPtr = castor::RawUniquePtr< ReflectionModel >;
 	using LightingModelCreator = castor::Function< LightingModelUPtr( LightingModelID lightingModelId
 		, DiffuseBrdfDesc const & diffuseBrdf
 		, SpecularBrdfDesc const & specularBrdf
+		, SheenBrdfDesc const & sheenBrdf
+		, ClearcoatBrdfDesc const & clearcoatBrdf
 		, sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
@@ -255,6 +263,8 @@ namespace castor3d::shader
 		, bool enableVolumetric ) >;
 	using DiffuseBrdfArray = castor::Vector< DiffuseBrdfDesc >;
 	using SpecularBrdfArray = castor::Vector< SpecularBrdfDesc >;
+	using SheenBrdfArray = castor::Vector< SheenBrdfDesc >;
+	using ClearcoatBrdfArray = castor::Vector< ClearcoatBrdfDesc >;
 
 	using BackgroundModelPtr = castor::RawUniquePtr< BackgroundModel >;
 	using BackgroundModelCreator = castor::Function< BackgroundModelPtr( Engine const & engine

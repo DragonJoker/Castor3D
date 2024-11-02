@@ -38,7 +38,7 @@ namespace castor3d
 				, sdw::Vec3 & reflectedSpecular
 				, sdw::Vec3 & refracted
 				, sdw::Vec3 & coatReflected
-				, sdw::Vec3 & sheenReflected
+				, sdw::Vec4 & sheenReflected
 				, shader::DebugOutput & debugOutput )const override;
 			C3D_API void computeReflRefr( shader::ReflectionModel & reflections
 				, shader::BlendComponents & components
@@ -57,7 +57,7 @@ namespace castor3d
 				, sdw::Vec3 & reflectedSpecular
 				, sdw::Vec3 & refracted
 				, sdw::Vec3 & coatReflected
-				, sdw::Vec3 & sheenReflected
+				, sdw::Vec4 & sheenReflected
 				, shader::DebugOutput & debugOutput )const override;
 		};
 

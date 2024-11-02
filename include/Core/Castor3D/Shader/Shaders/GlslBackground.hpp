@@ -55,7 +55,7 @@ namespace castor3d::shader
 			, BlendComponents & components
 			, sdw::CombinedImage2DRgba32 const & brdf
 			, DebugOutputCategory & debugOutput );
-		C3D_API virtual sdw::RetVec3 computeSheenReflections( sdw::Vec3 const & wsNormal
+		C3D_API virtual sdw::RetVec4 computeSheenReflections( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV

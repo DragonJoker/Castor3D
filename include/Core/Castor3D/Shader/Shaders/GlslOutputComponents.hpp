@@ -19,7 +19,7 @@ namespace castor3d::shader
 			, sdw::Vec3Field< "specular" >
 			, sdw::Vec3Field< "scattering" >
 			, sdw::Vec3Field< "coatingSpecular" >
-			, sdw::Vec2Field< "sheen" > >
+			, sdw::Vec4Field< "sheen" > >
 	{
 		DirectLighting( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr

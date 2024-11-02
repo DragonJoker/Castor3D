@@ -19,8 +19,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & radiance
 		, sdw::Float const & intensity
 		, sdw::Float const & NdotL
-		, sdw::Float const & NdotH
-		, sdw::Float const & roughness )
+		, sdw::Float const & NdotH )
 	{
 		if ( !m_compute )
 		{
@@ -32,7 +31,6 @@ namespace castor3d::shader
 			, radiance
 			, intensity
 			, NdotL
-			, NdotH
-			, roughness );
+			, NdotH );
 	}
 }

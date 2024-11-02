@@ -71,7 +71,7 @@ namespace castor3d::shader
 			, sdw::Vec3 reflectedSpecular
 			, sdw::Vec3 refracted
 			, sdw::Vec3 coatReflected
-			, sdw::Vec3 sheenReflected );
+			, sdw::Vec4 sheenReflected );
 		C3D_API virtual sdw::Vec3 combine( DebugOutput & debugOutput
 			, BlendComponents const & components
 			, sdw::Vec3 const & incident
@@ -168,6 +168,9 @@ namespace castor3d::shader
 		C3D_API void doAttenuate( sdw::Float const attenuation
 			, DirectLighting & output
 			, bool withDiffuse = true );
+		C3D_API void doSheenAlbedoScale( BlendComponents const & components
+			, DirectLighting & output
+			, bool withDiffuse = true );
 		C3D_API void doApplyShadows( DirectionalShadowData const & light
 			, sdw::Int const shadowMapIndex
 			, sdw::Vec2 const & lightIntensity
@@ -227,7 +230,7 @@ namespace castor3d::shader
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Float const & isLit
-			, sdw::Vec2 output );
+			, sdw::Vec4 output );
 		C3D_API virtual void doComputeScatteringTerm( ShadowData const & shadows
 			, sdw::Int const shadowMapIndex
 			, sdw::Vec3 const & radiance

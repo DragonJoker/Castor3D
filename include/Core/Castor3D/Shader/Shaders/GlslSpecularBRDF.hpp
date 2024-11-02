@@ -20,8 +20,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & radiance
 			, sdw::Float const & intensity
 			, sdw::Float const & NdotL
-			, sdw::Float const & NdotH
-			, sdw::Float const & roughness );
+			, sdw::Float const & NdotH );
 
 	private:
 		virtual void doGenerate( BlendComponents const & components
@@ -34,7 +33,6 @@ namespace castor3d::shader
 			, InBlendComponents
 			, InLightSurface
 			, sdw::InVec3
-			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InFloat > m_compute;
