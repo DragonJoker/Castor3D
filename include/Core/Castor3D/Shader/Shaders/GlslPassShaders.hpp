@@ -129,11 +129,7 @@ namespace castor3d::shader
 			, sdw::UInt const & hasReflection
 			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 & reflectedDiffuse
-			, sdw::Vec3 & reflectedSpecular
-			, sdw::Vec3 & refracted
-			, sdw::Vec3 & coatReflected
-			, sdw::Vec4 & sheenReflected
+			, ReflectionRefraction & output
 			, DebugOutput & debugOutput )const;
 		C3D_API void computeReflRefr( ReflectionModel & reflections
 			, BlendComponents & components
@@ -148,11 +144,7 @@ namespace castor3d::shader
 			, sdw::UInt const & hasReflection
 			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 & reflectedDiffuse
-			, sdw::Vec3 & reflectedSpecular
-			, sdw::Vec3 & refracted
-			, sdw::Vec3 & coatReflected
-			, sdw::Vec4 & sheenReflected
+			, ReflectionRefraction & output
 			, DebugOutput & debugOutput )const;
 
 		auto getFilter()const

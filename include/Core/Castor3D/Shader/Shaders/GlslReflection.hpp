@@ -36,11 +36,7 @@ namespace castor3d::shader
 			, sdw::UInt const & hasReflection
 			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 & reflectedDiffuse
-			, sdw::Vec3 & reflectedSpecular
-			, sdw::Vec3 & refracted
-			, sdw::Vec3 & coatReflected
-			, sdw::Vec4 & sheenReflected
+			, ReflectionRefraction & output
 			, DebugOutputCategory & debugOutput );
 		C3D_API void computeCombined( BlendComponents & components
 			, sdw::Vec3 const & wsNormal
@@ -58,11 +54,7 @@ namespace castor3d::shader
 			, sdw::UInt const & hasReflection
 			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 & reflectedDiffuse
-			, sdw::Vec3 & reflectedSpecular
-			, sdw::Vec3 & refracted
-			, sdw::Vec3 & coatReflected
-			, sdw::Vec4 & sheenReflected
+			, ReflectionRefraction & output
 			, DebugOutputCategory & debugOutput );
 		C3D_API void computeCombined( BlendComponents & components
 			, LightSurface const & lightSurface
@@ -71,11 +63,7 @@ namespace castor3d::shader
 			, sdw::UInt const & hasReflection
 			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 & reflectedDiffuse
-			, sdw::Vec3 & reflectedSpecular
-			, sdw::Vec3 & refracted
-			, sdw::Vec3 & coatReflected
-			, sdw::Vec4 & sheenReflected
+			, ReflectionRefraction & output
 			, DebugOutputCategory & debugOutput );
 		C3D_API void computeCombined( BlendComponents & pcomponents
 			, sdw::Vec3 const & wsNormal
@@ -89,11 +77,7 @@ namespace castor3d::shader
 			, sdw::UInt const & hasReflection
 			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 & reflectedDiffuse
-			, sdw::Vec3 & reflectedSpecular
-			, sdw::Vec3 & refracted
-			, sdw::Vec3 & coatReflected
-			, sdw::Vec4 & sheenReflected
+			, ReflectionRefraction & output
 			, DebugOutputCategory & debugOutput );
 		C3D_API void computeReflections( BlendComponents & components
 			, LightSurface const & lightSurface
@@ -323,11 +307,7 @@ namespace castor3d::shader
 			, sdw::InUInt
 			, sdw::InUInt
 			, sdw::InFloat
-			, sdw::OutVec3
-			, sdw::OutVec3
-			, sdw::OutVec3
-			, sdw::OutVec3
-			, sdw::OutVec4 > m_computeSceneReflRefr;
+			, OutReflectionRefraction > m_computeSceneReflRefr;
 		sdw::Function< sdw::Void
 			, InOutBlendComponents
 			, sdw::InVec3
@@ -340,11 +320,7 @@ namespace castor3d::shader
 			, sdw::InUInt
 			, sdw::InUInt
 			, sdw::InFloat
-			, sdw::OutVec3
-			, sdw::OutVec3
-			, sdw::OutVec3
-			, sdw::OutVec3
-			, sdw::OutVec4 > m_computeEnvReflRefr;
+			, OutReflectionRefraction > m_computeEnvReflRefr;
 		sdw::Function< sdw::Boolean
 			, sdw::InVec3
 			, sdw::InVec3

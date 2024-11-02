@@ -36,11 +36,7 @@ namespace water
 		, sdw::UInt const & hasReflection
 		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, sdw::Vec3 & refracted
-		, sdw::Vec3 & coatReflected
-		, sdw::Vec4 & sheenReflected
+		, c3d::ReflectionRefraction & output
 		, c3d::DebugOutput & debugOutput )const
 	{
 		computeReflRefr( reflections
@@ -56,11 +52,7 @@ namespace water
 			, components.hasReflection
 			, components.hasRefraction
 			, components.refractionRatio
-			, reflectedDiffuse
-			, reflectedSpecular
-			, refracted
-			, coatReflected
-			, sheenReflected
+			, output
 			, debugOutput );
 	}
 
@@ -77,11 +69,7 @@ namespace water
 		, sdw::UInt const & hasReflection
 		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, sdw::Vec3 & refractionResult
-		, sdw::Vec3 & coatReflected
-		, sdw::Vec4 & sheenReflected
+		, c3d::ReflectionRefraction & output
 		, c3d::DebugOutput & debugOutput )const
 	{
 		auto & writer = *components.getWriter();
@@ -166,8 +154,8 @@ namespace water
 			, camera.curProjToWorld( utils, distortedTexCoord, distortedDepth ) );
 		auto refractionTexCoord = writer.declLocale( "refractionTexCoord"
 			, writer.ternary( distortedPosition.y() < lightSurface.worldPosition().value().y(), distortedTexCoord, hdrCoords ) );
-		refractionResult = mapColours.lod( refractionTexCoord, 0.0_f ).rgb();
-		debugOutputBlock.registerOutput( cuT( "Raw Refraction" ), refractionResult );
+		output.refrColour = mapColours.lod( refractionTexCoord, 0.0_f ).rgb();
+		debugOutputBlock.registerOutput( cuT( "Raw Refraction" ), output.refrColour );
 		auto waterTransmission = writer.declLocale( "waterTransmission"
 			, components.colour * ( indirect.ambient() + indirect.diffuseColour() ) );
 		debugOutputBlock.registerOutput( cuT( "Raw Transmission" ), waterTransmission );
@@ -178,19 +166,19 @@ namespace water
 			auto mdlPosition = components.getMember< sdw::Vec3 >( "mdlPosition" );
 			auto waterDensity = components.getMember< sdw::Float >( "waterDensity" );
 			auto lightAbsorbtion = writer.declLocale( "lightAbsorbtion"
-				, refractionResult * ( 1.0_f - utils.saturate( sdw::log( mdlPosition.y() - distortedPosition.y() ) * waterDensity ) ) );
+				, output.refrColour * ( 1.0_f - utils.saturate( sdw::log( mdlPosition.y() - distortedPosition.y() ) * waterDensity ) ) );
 			debugOutputBlock.registerOutput( cuT( "Light Absorbtion" ), lightAbsorbtion );
 			waterTransmission *= lightAbsorbtion;
 			debugOutputBlock.registerOutput( cuT( "Absorbed Transmission" ), waterTransmission );
-			refractionResult *= waterTransmission;
-			debugOutputBlock.registerOutput( cuT( "Transmitted Refraction" ), refractionResult );
+			output.refrColour *= waterTransmission;
+			debugOutputBlock.registerOutput( cuT( "Transmitted Refraction" ), output.refrColour );
 		}
 		else
 		{
 			waterTransmission *= lighting.diffuse();
 			debugOutputBlock.registerOutput( cuT( "Lit Transmission" ), waterTransmission );
-			refractionResult *= components.colour;
-			debugOutputBlock.registerOutput( cuT( "Coloured Refraction" ), refractionResult );
+			output.refrColour *= components.colour;
+			debugOutputBlock.registerOutput( cuT( "Coloured Refraction" ), output.refrColour );
 		}
 
 		// Depth softening, to fade the alpha of the water where it meets the scene geometry by some predetermined distance. 
@@ -199,14 +187,14 @@ namespace water
 		debugOutputBlock.registerOutput( cuT( "Depth Softened Alpha" ), depthSoftenedAlpha );
 		auto waterSurfacePosition = writer.declLocale( "waterSurfacePosition"
 			, writer.ternary( distortedPosition.y() < lightSurface.worldPosition().value().y(), distortedPosition, scenePosition ) );
-		refractionResult = mix( refractionResult
+		output.refrColour = mix( output.refrColour
 			, waterTransmission
 			, vec3( clamp( ( lightSurface.worldPosition().value().y() - waterSurfacePosition.y() ) / heightFactor, 0.0_f, 1.0_f ) ) );
-		debugOutputBlock.registerOutput( cuT( "Height Mixed Refraction" ), refractionResult );
-		refractionResult = mix( refractionResult
+		debugOutputBlock.registerOutput( cuT( "Height Mixed Refraction" ), output.refrColour );
+		output.refrColour = mix( output.refrColour
 			, waterTransmission
 			, utils.saturate( vec3( utils.saturate( length( lightSurface.viewPosition().value() ) / distanceFactor ) ) ) );
-		debugOutputBlock.registerOutput( cuT( "Distance Mixed Refraction" ), refractionResult );
+		debugOutputBlock.registerOutput( cuT( "Distance Mixed Refraction" ), output.refrColour );
 
 		if ( components.hasMember( "waterNoise" ) )
 		{
@@ -219,7 +207,7 @@ namespace water
 		{
 			auto waterColourMod = components.getMember< sdw::Float >( "waterColourMod" );
 			reflectionResult *= waterColourMod;
-			refractionResult *= waterColourMod;
+			output.refrColour *= waterColourMod;
 		}
 
 		if ( components.hasMember( "foamHeightStart" )
@@ -244,7 +232,7 @@ namespace water
 					, waterFoam * foamBrightness
 					, vec3( utils.saturate( foamAmount ) * depthSoftenedAlpha ) ) );
 			debugOutputBlock.registerOutput( cuT( "Foam Result" ), foamResult );
-			refractionResult += foamResult;
+			output.refrColour += foamResult;
 			reflectionResult += foamResult;
 		}
 		
@@ -255,11 +243,11 @@ namespace water
 		debugOutputBlock.registerOutput( cuT( "Fresnel Factor" ), fresnelFactor );
 		reflectionResult *= fresnelFactor;
 		debugOutputBlock.registerOutput( cuT( "Final Reflection" ), reflectionResult );
-		refractionResult *= vec3( 1.0_f ) - fresnelFactor;
-		debugOutputBlock.registerOutput( cuT( "Final Refraction" ), refractionResult );
+		output.refrColour *= vec3( 1.0_f ) - fresnelFactor;
+		debugOutputBlock.registerOutput( cuT( "Final Refraction" ), output.refrColour );
 
 		components.opacity = depthSoftenedAlpha;
-		reflectedSpecular = reflectionResult;
+		output.reflSpecular = reflectionResult;
 	}
 
 	//*********************************************************************************************

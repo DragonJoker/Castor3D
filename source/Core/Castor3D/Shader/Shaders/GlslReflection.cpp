@@ -5,6 +5,7 @@
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
+#include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
@@ -43,11 +44,7 @@ namespace castor3d::shader
 		, sdw::UInt const & hasReflection
 		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, sdw::Vec3 & refracted
-		, sdw::Vec3 & coatReflected
-		, sdw::Vec4 & sheenReflected
+		, ReflectionRefraction & output
 		, DebugOutputCategory & debugOutput )
 	{
 		computeCombined( components
@@ -66,11 +63,7 @@ namespace castor3d::shader
 			, hasReflection
 			, hasRefraction
 			, refractionRatio
-			, reflectedDiffuse
-			, reflectedSpecular
-			, refracted
-			, coatReflected
-			, sheenReflected
+			, output
 			, debugOutput );
 	}
 
@@ -90,11 +83,7 @@ namespace castor3d::shader
 		, sdw::UInt const & phasReflection
 		, sdw::UInt const & phasRefraction
 		, sdw::Float const & prefractionRatio
-		, sdw::Vec3 & preflectedDiffuse
-		, sdw::Vec3 & preflectedSpecular
-		, sdw::Vec3 & prefracted
-		, sdw::Vec3 & pcoatReflected
-		, sdw::Vec4 & psheenReflected
+		, ReflectionRefraction & poutput
 		, DebugOutputCategory & debugOutput )
 	{
 		if ( !m_computeSceneReflRefr )
@@ -114,11 +103,7 @@ namespace castor3d::shader
 					, sdw::UInt const & hasReflection
 					, sdw::UInt const & hasRefraction
 					, sdw::Float const & refractionRatio
-					, sdw::Vec3 reflectedDiffuse
-					, sdw::Vec3 reflectedSpecular
-					, sdw::Vec3 refracted
-					, sdw::Vec3 coatReflected
-					, sdw::Vec4 sheenReflected )
+					, ReflectionRefraction output )
 				{
 					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
 					auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
@@ -138,13 +123,13 @@ namespace castor3d::shader
 						, hasReflection
 						, components
 						, envMapIndex
-						, reflectedDiffuse
-						, reflectedSpecular
+						, output.reflDiffuse
+						, output.reflSpecular
 						, debugOutput );
 
 					IF( m_writer, components.hasTransmission )
 					{
-						refracted = computeRefrSceneMap( -V
+						output.refrColour = computeRefrSceneMap( -V
 							, position
 							, wsNormal
 							, mippedScene
@@ -165,7 +150,7 @@ namespace castor3d::shader
 							, refractionRatio
 							, envMapIndex
 							, components
-							, refracted
+							, output.refrColour
 							, debugOutput );
 					}
 					FI
@@ -181,7 +166,7 @@ namespace castor3d::shader
 						, NdotV
 						, components
 						, envMapIndex
-						, coatReflected
+						, output.reflCoating
 						, debugOutput );
 					doComputeSheenReflections( brdf
 						, envMap
@@ -194,7 +179,7 @@ namespace castor3d::shader
 						, hasReflection
 						, components
 						, envMapIndex
-						, sheenReflected
+						, output.reflSheen
 						, debugOutput );
 				}
 				, InOutBlendComponents{ m_writer, "components", pcomponents }
@@ -211,11 +196,7 @@ namespace castor3d::shader
 				, sdw::InUInt{ m_writer, "hasReflection" }
 				, sdw::InUInt{ m_writer, "hasRefraction" }
 				, sdw::InFloat{ m_writer, "refractionRatio" }
-				, sdw::OutVec3{ m_writer, "reflectedDiffuse" }
-				, sdw::OutVec3{ m_writer, "reflectedSpecular" }
-				, sdw::OutVec3{ m_writer, "refracted" }
-				, sdw::OutVec3{ m_writer, "coatReflected" }
-				, sdw::OutVec4{ m_writer, "sheenReflected" } );
+				, OutReflectionRefraction{ m_writer, "output" } );
 		}
 
 		m_computeSceneReflRefr( pcomponents
@@ -232,17 +213,8 @@ namespace castor3d::shader
 			, phasReflection
 			, phasRefraction
 			, prefractionRatio
-			, preflectedDiffuse
-			, preflectedSpecular
-			, prefracted
-			, pcoatReflected
-			, psheenReflected );
-		debugOutput.registerOutput( cuT( "Reflections" ), cuT( "Refl. Diffuse" ), preflectedDiffuse );
-		debugOutput.registerOutput( cuT( "Reflections" ), cuT( "Refl. Specular" ), preflectedSpecular );
-		debugOutput.registerOutput( cuT( "Reflections" ), cuT( "Refracted" ), prefracted );
-		debugOutput.registerOutput( cuT( "Reflections" ), cuT( "Coating" ), pcoatReflected );
-		debugOutput.registerOutput( cuT( "Reflections" ), cuT( "Sheen" ), psheenReflected.xyz() );
-		debugOutput.registerOutput( cuT( "Reflections" ), cuT( "SheenScale" ), psheenReflected.w() );
+			, poutput );
+		poutput.registerDebug( *debugOutput, cuT( "Reflections" ) );
 	}
 
 	void ReflectionModel::computeCombined( BlendComponents & pcomponents
@@ -252,11 +224,7 @@ namespace castor3d::shader
 		, sdw::UInt const & hasReflection
 		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, sdw::Vec3 & refracted
-		, sdw::Vec3 & coatReflected
-		, sdw::Vec4 & sheenReflected
+		, ReflectionRefraction & output
 		, DebugOutputCategory & debugOutput )
 	{
 		computeCombined( pcomponents
@@ -271,11 +239,7 @@ namespace castor3d::shader
 			, hasReflection
 			, hasRefraction
 			, refractionRatio
-			, reflectedDiffuse
-			, reflectedSpecular
-			, refracted
-			, coatReflected
-			, sheenReflected
+			, output
 			, debugOutput );
 	}
 
@@ -291,11 +255,7 @@ namespace castor3d::shader
 		, sdw::UInt const & phasReflection
 		, sdw::UInt const & phasRefraction
 		, sdw::Float const & prefractionRatio
-		, sdw::Vec3 & preflectedDiffuse
-		, sdw::Vec3 & preflectedSpecular
-		, sdw::Vec3 & prefracted
-		, sdw::Vec3 & pcoatReflected
-		, sdw::Vec4 & psheenReflected
+		, ReflectionRefraction & poutput
 		, DebugOutputCategory & debugOutput )
 	{
 		if ( !m_computeEnvReflRefr )
@@ -312,11 +272,7 @@ namespace castor3d::shader
 					, sdw::UInt const & hasReflection
 					, sdw::UInt const & hasRefraction
 					, sdw::Float const & refractionRatio
-					, sdw::Vec3 reflectedDiffuse
-					, sdw::Vec3 reflectedSpecular
-					, sdw::Vec3 refracted
-					, sdw::Vec3 coatReflected
-					, sdw::Vec4 sheenReflected )
+					, ReflectionRefraction output )
 				{
 					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
 					auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
@@ -336,8 +292,8 @@ namespace castor3d::shader
 						, hasReflection
 						, components
 						, envMapIndex
-						, reflectedDiffuse
-						, reflectedSpecular
+						, output.reflDiffuse
+						, output.reflSpecular
 						, debugOutput );
 
 					IF( m_writer, hasRefraction != 0_u )
@@ -351,7 +307,7 @@ namespace castor3d::shader
 							, refractionRatio
 							, envMapIndex
 							, components
-							, refracted
+							, output.refrColour
 							, debugOutput );
 					}
 					FI
@@ -367,7 +323,7 @@ namespace castor3d::shader
 						, NdotV
 						, components
 						, envMapIndex
-						, coatReflected
+						, output.reflCoating
 						, debugOutput );
 					doComputeSheenReflections( brdf
 						, envMap
@@ -380,7 +336,7 @@ namespace castor3d::shader
 						, hasReflection
 						, components
 						, envMapIndex
-						, sheenReflected
+						, output.reflSheen
 						, debugOutput );
 				}
 				, InOutBlendComponents{ m_writer, "components", pcomponents }
@@ -394,11 +350,7 @@ namespace castor3d::shader
 				, sdw::InUInt{ m_writer, "hasReflection" }
 				, sdw::InUInt{ m_writer, "hasRefraction" }
 				, sdw::InFloat{ m_writer, "refractionRatio" }
-				, sdw::OutVec3{ m_writer, "reflectedDiffuse" }
-				, sdw::OutVec3{ m_writer, "reflectedSpecular" }
-				, sdw::OutVec3{ m_writer, "refracted" }
-				, sdw::OutVec3{ m_writer, "coatReflected" }
-				, sdw::OutVec4{ m_writer, "sheenReflected" } );
+				, OutReflectionRefraction{ m_writer, "output" } );
 		}
 
 		m_computeEnvReflRefr( pcomponents
@@ -412,17 +364,8 @@ namespace castor3d::shader
 			, phasReflection
 			, phasRefraction
 			, prefractionRatio
-			, preflectedDiffuse
-			, preflectedSpecular
-			, prefracted
-			, pcoatReflected
-			, psheenReflected );
-		debugOutput.registerOutput( cuT( "Reflections" ), cuT( "Refl. Diffuse" ), preflectedDiffuse );
-		debugOutput.registerOutput( cuT( "Reflections" ), cuT( "Refl. Specular" ), preflectedSpecular );
-		debugOutput.registerOutput( cuT( "Reflections" ), cuT( "Refracted" ), prefracted );
-		debugOutput.registerOutput( cuT( "Reflections" ), cuT( "Coating" ), pcoatReflected );
-		debugOutput.registerOutput( cuT( "Reflections" ), cuT( "Sheen" ), psheenReflected.xyz() );
-		debugOutput.registerOutput( cuT( "Reflections" ), cuT( "SheenScale" ), psheenReflected.w() );
+			, poutput );
+		poutput.registerDebug( *debugOutput, cuT( "Reflections" ) );
 	}
 
 	void ReflectionModel::computeReflections( BlendComponents & components
@@ -532,7 +475,7 @@ namespace castor3d::shader
 			, components
 			, refracted
 			, debugOutput );
-		debugOutput.registerOutput( cuT( "Reflections" ), cuT( "Refracted" ), refracted );
+		debugOutput.registerOutput( cuT( "Reflections" ), cuT( "Refr. Colour" ), refracted );
 		return refracted;
 	}
 

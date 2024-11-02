@@ -37,11 +37,7 @@ namespace castor3d
 		, sdw::UInt const & hasReflection
 		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, sdw::Vec3 & refracted
-		, sdw::Vec3 & coatReflected
-		, sdw::Vec4 & sheenReflected
+		, shader::ReflectionRefraction & output
 		, shader::DebugOutput & debugOutput )const
 	{
 		if ( mippedScene.isEnabled() )
@@ -58,11 +54,7 @@ namespace castor3d
 				, components.hasReflection
 				, components.hasRefraction
 				, components.refractionRatio
-				, reflectedDiffuse
-				, reflectedSpecular
-				, refracted
-				, coatReflected
-				, sheenReflected
+				, output
 				, debugOutputBlock );
 		}
 		else
@@ -80,11 +72,7 @@ namespace castor3d
 				, components.hasReflection
 				, components.hasRefraction
 				, components.refractionRatio
-				, reflectedDiffuse
-				, reflectedSpecular
-				, refracted
-				, coatReflected
-				, sheenReflected
+				, output
 				, debugOutput );
 		}
 	}
@@ -102,11 +90,7 @@ namespace castor3d
 		, sdw::UInt const & hasReflection
 		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, sdw::Vec3 & refracted
-		, sdw::Vec3 & coatReflected
-		, sdw::Vec4 & sheenReflected
+		, shader::ReflectionRefraction & output
 		, shader::DebugOutput & debugOutput )const
 	{
 		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Reflections" ) );
@@ -117,11 +101,7 @@ namespace castor3d
 			, components.hasReflection
 			, components.hasRefraction
 			, components.refractionRatio
-			, reflectedDiffuse
-			, reflectedSpecular
-			, refracted
-			, coatReflected
-			, sheenReflected
+			, output
 			, debugOutputBlock );
 	}
 

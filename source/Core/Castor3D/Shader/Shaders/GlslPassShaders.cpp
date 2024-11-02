@@ -346,11 +346,7 @@ namespace castor3d::shader
 		, sdw::UInt const & hasReflection
 		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, sdw::Vec3 & refracted
-		, sdw::Vec3 & coatReflected
-		, sdw::Vec4 & sheenReflected
+		, shader::ReflectionRefraction & output
 		, DebugOutput & debugOutput )const
 	{
 		if ( !m_reflRefr )
@@ -373,11 +369,7 @@ namespace castor3d::shader
 			, hasReflection
 			, hasRefraction
 			, refractionRatio
-			, reflectedDiffuse
-			, reflectedSpecular
-			, refracted
-			, coatReflected
-			, sheenReflected
+			, output
 			, debugOutput );
 	}
 
@@ -394,11 +386,7 @@ namespace castor3d::shader
 		, sdw::UInt const & hasReflection
 		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, sdw::Vec3 & refracted
-		, sdw::Vec3 & coatReflected
-		, sdw::Vec4 & sheenReflected
+		, shader::ReflectionRefraction & output
 		, DebugOutput & debugOutput )const
 	{
 		if ( !m_reflRefr )
@@ -419,11 +407,7 @@ namespace castor3d::shader
 			, hasReflection
 			, hasRefraction
 			, refractionRatio
-			, reflectedDiffuse
-			, reflectedSpecular
-			, refracted
-			, coatReflected
-			, sheenReflected
+			, output
 			, debugOutput );
 	}
 }
