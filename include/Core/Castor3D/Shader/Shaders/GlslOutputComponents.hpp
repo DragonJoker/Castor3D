@@ -18,7 +18,7 @@ namespace castor3d::shader
 			, sdw::Vec3Field< "diffuse" >
 			, sdw::Vec3Field< "specular" >
 			, sdw::Vec3Field< "scattering" >
-			, sdw::Vec3Field< "coatingSpecular" >
+			, sdw::Vec3Field< "coating" >
 			, sdw::Vec4Field< "sheen" > >
 	{
 		DirectLighting( sdw::ShaderWriter & writer
@@ -39,7 +39,7 @@ namespace castor3d::shader
 		auto diffuse()const { return getMember< "diffuse" >(); }
 		auto specular()const { return getMember< "specular" >(); }
 		auto scattering()const { return getMember< "scattering" >(); }
-		auto coatingSpecular()const { return getMember< "coatingSpecular" >(); }
+		auto coating()const { return getMember< "coating" >(); }
 		auto sheen()const { return getMember< "sheen" >(); }
 
 	private:

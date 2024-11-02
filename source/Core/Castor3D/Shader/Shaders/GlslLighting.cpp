@@ -120,7 +120,7 @@ namespace castor3d::shader
 			auto clearcoatFresnel = m_writer.declLocale( "clearcoatFresnel"
 				, pow( 0.04_f + ( 1.0_f - 0.04_f ) * ( 1.0_f - clearcoatNdotV ), 5.0_f ) );
 			combineResult = combineResult * ( 1.0_f - vec3( components.clearcoatFactor * clearcoatFresnel ) )
-				+ ( coatReflected * ambientOcclusion ) + directLighting.coatingSpecular();
+				+ ( coatReflected * ambientOcclusion ) + directLighting.coating();
 		}
 		FI
 
@@ -313,7 +313,7 @@ namespace castor3d::shader
 					parentOutput.diffuse() += max( vec3( 0.0_f ), output.diffuse() );
 					parentOutput.specular() += max( vec3( 0.0_f ), output.specular() );
 					parentOutput.scattering() += max( vec3( 0.0_f ), output.scattering() );
-					parentOutput.coatingSpecular() += max( vec3( 0.0_f ), output.coatingSpecular() );
+					parentOutput.coating() += max( vec3( 0.0_f ), output.coating() );
 					parentOutput.sheen() += max( vec4( 0.0_f ), output.sheen() );
 				}
 				, PDirectionalLight( m_writer, "light" )
@@ -403,7 +403,7 @@ namespace castor3d::shader
 					parentOutput.diffuse() += max( vec3( 0.0_f ), output.diffuse() );
 					parentOutput.specular() += max( vec3( 0.0_f ), output.specular() );
 					parentOutput.scattering() += max( vec3( 0.0_f ), output.scattering() );
-					parentOutput.coatingSpecular() += max( vec3( 0.0_f ), output.coatingSpecular() );
+					parentOutput.coating() += max( vec3( 0.0_f ), output.coating() );
 					parentOutput.sheen() += max( vec4( 0.0_f ), output.sheen() );
 				}
 				, PPointLight( m_writer, "light" )
@@ -458,7 +458,7 @@ namespace castor3d::shader
 						output.diffuse() = spotFactor * output.diffuse();
 						output.specular() = spotFactor * output.specular();
 						output.scattering() = spotFactor * output.scattering();
-						output.coatingSpecular() = spotFactor * output.coatingSpecular();
+						output.coating() = spotFactor * output.coating();
 						output.sheen().x() = spotFactor * output.sheen().x();
 						auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
 						light.getAttenuationFactor( lightSurface.lengthL().value(), attenuation );
@@ -504,7 +504,7 @@ namespace castor3d::shader
 						parentOutput.diffuse() += max( vec3( 0.0_f ), output.diffuse() );
 						parentOutput.specular() += max( vec3( 0.0_f ), output.specular() );
 						parentOutput.scattering() += max( vec3( 0.0_f ), output.scattering() );
-						parentOutput.coatingSpecular() += max( vec3( 0.0_f ), output.coatingSpecular() );
+						parentOutput.coating() += max( vec3( 0.0_f ), output.coating() );
 						parentOutput.sheen() += max( vec4( 0.0_f ), output.sheen() );
 					}
 					FI
@@ -833,7 +833,7 @@ namespace castor3d::shader
 
 					parentOutput.specular() += max( vec3( 0.0_f ), output.specular() );
 					parentOutput.scattering() += max( vec3( 0.0_f ), output.scattering() );
-					parentOutput.coatingSpecular() += max( vec3( 0.0_f ), output.coatingSpecular() );
+					parentOutput.coating() += max( vec3( 0.0_f ), output.coating() );
 					parentOutput.sheen() += max( vec4( 0.0_f ), output.sheen() );
 				}
 				, PDirectionalLight( m_writer, "light" )
@@ -923,7 +923,7 @@ namespace castor3d::shader
 
 					parentOutput.specular() += max( vec3( 0.0_f ), output.specular() );
 					parentOutput.scattering() += max( vec3( 0.0_f ), output.scattering() );
-					parentOutput.coatingSpecular() += max( vec3( 0.0_f ), output.coatingSpecular() );
+					parentOutput.coating() += max( vec3( 0.0_f ), output.coating() );
 					parentOutput.sheen() += max( vec4( 0.0_f ), output.sheen() );
 				}
 				, PPointLight( m_writer, "light" )
@@ -977,7 +977,7 @@ namespace castor3d::shader
 						spotFactor = clamp( ( spotFactor - light.outerCutOffCos() ) / light.cutOffsCosDiff(), 0.0_f, 1.0_f );
 						output.specular() = spotFactor * output.specular();
 						output.scattering() = spotFactor * output.scattering();
-						output.coatingSpecular() = spotFactor * output.coatingSpecular();
+						output.coating() = spotFactor * output.coating();
 						output.sheen().x() = spotFactor * output.sheen().x();
 						auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
 						light.getAttenuationFactor( lightSurface.lengthL().value(), attenuation );
@@ -1023,7 +1023,7 @@ namespace castor3d::shader
 
 						parentOutput.specular() += max( vec3( 0.0_f ), output.specular() );
 						parentOutput.scattering() += max( vec3( 0.0_f ), output.scattering() );
-						parentOutput.coatingSpecular() += max( vec3( 0.0_f ), output.coatingSpecular() );
+						parentOutput.coating() += max( vec3( 0.0_f ), output.coating() );
 						parentOutput.sheen() += max( vec4( 0.0_f ), output.sheen() );
 					}
 					FI
@@ -1053,7 +1053,7 @@ namespace castor3d::shader
 
 		output.specular() = output.specular() * attenuation;
 		output.scattering() = output.scattering() * attenuation;
-		output.coatingSpecular() = output.coatingSpecular() * attenuation;
+		output.coating() = output.coating() * attenuation;
 		output.sheen().x() = output.sheen().x() * attenuation;
 	}
 
@@ -1146,7 +1146,7 @@ namespace castor3d::shader
 				}
 
 				output.specular() *= shadowFactor;
-				output.coatingSpecular() *= shadowFactor;
+				output.coating() *= shadowFactor;
 				output.sheen().x() *= shadowFactor;
 			}
 			FI
@@ -1171,7 +1171,7 @@ namespace castor3d::shader
 
 			output.diffuse().rgb() *= cascadeColour;
 			output.specular().rgb() *= cascadeColour;
-			output.coatingSpecular().rgb() *= cascadeColour;
+			output.coating().rgb() *= cascadeColour;
 
 #endif
 		}
@@ -1207,7 +1207,7 @@ namespace castor3d::shader
 			}
 
 			output.specular() *= shadowFactor;
-			output.coatingSpecular() *= shadowFactor;
+			output.coating() *= shadowFactor;
 			output.sheen().x() *= shadowFactor;
 		}
 		FI
@@ -1243,7 +1243,7 @@ namespace castor3d::shader
 			}
 
 			output.specular() *= shadowFactor;
-			output.coatingSpecular() *= shadowFactor;
+			output.coating() *= shadowFactor;
 			output.sheen().x() *= shadowFactor;
 		}
 		FI
@@ -1459,7 +1459,7 @@ namespace castor3d::shader
 			, components
 			, lightSurface
 			, isLit
-			, output.coatingSpecular() );
+			, output.coating() );
 		return rawDiffuse;
 	}
 	
@@ -1507,7 +1507,7 @@ namespace castor3d::shader
 			, components
 			, lightSurface
 			, isLit
-			, output.coatingSpecular() );
+			, output.coating() );
 	}
 
 	//*********************************************************************************************
