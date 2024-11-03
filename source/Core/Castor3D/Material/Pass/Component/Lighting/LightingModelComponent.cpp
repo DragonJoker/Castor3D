@@ -174,7 +174,7 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserPassDefaultLightingModelEnd, ModelContext )
 		{
 			auto & engine = *getEngine( *blockContext->root );
-			auto lightingModelId = engine.getLightingModelFactory().getNameId( blockContext->lightingModel
+			auto lightingModelId = engine.getLightingModelFactory().getLightingModelId( blockContext->lightingModel
 				, blockContext->diffuseBrdf
 				, blockContext->specularBrdf
 				, blockContext->sheenBrdf
@@ -195,7 +195,7 @@ namespace castor3d
 		{
 			auto const & engine = *getEngine( *blockContext->pass );
 			auto & component = getPassComponent< LightingModelComponent >( *blockContext->pass );
-			auto lightingModelId = engine.getLightingModelFactory().getNameId( blockContext->lightingModel
+			auto lightingModelId = engine.getLightingModelFactory().getLightingModelId( blockContext->lightingModel
 				, blockContext->diffuseBrdf
 				, blockContext->specularBrdf
 				, blockContext->sheenBrdf

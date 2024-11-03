@@ -67,16 +67,22 @@ extern "C"
 	C3D_ToonMaterial_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
 	{
 		engine->registerPassComponent< toon::EdgesComponent >();
-		engine->registerPassModels( { toon::shader::ToonPhongLightingModel::getName()
-			, toon::ToonPhongPass::create
-			, &toon::shader::ToonPhongLightingModel::create } );
-		engine->registerPassModels( { toon::shader::ToonPbrLightingModel::getName()
-			, toon::ToonPbrPass::create
-			, &toon::shader::ToonPbrLightingModel::create
-			, {}, {}
-			, {}, {}
-			, {}, {}
-			, {}, {} } );
+		engine->registerLightingModel( toon::shader::ToonPhongLightingModel::getName()
+			, castor3d::PhongPass::DefaultDiffuseBrdf
+			, castor3d::PhongPass::DefaultSpecularBrdf
+			, castor3d::PhongPass::DefaultSheenBrdf
+			, castor3d::PhongPass::DefaultClearcoatBrdf
+			, &toon::shader::ToonPhongLightingModel::create );
+		engine->registerLightingModel( toon::shader::ToonPbrLightingModel::getName()
+			, castor3d::PbrPass::DefaultDiffuseBrdf
+			, castor3d::PbrPass::DefaultSpecularBrdf
+			, castor3d::PbrPass::DefaultSheenBrdf
+			, castor3d::PbrPass::DefaultClearcoatBrdf
+			, &toon::shader::ToonPbrLightingModel::create );
+		engine->registerPassModel( { toon::shader::ToonPhongLightingModel::getName()
+			, toon::ToonPhongPass::create } );
+		engine->registerPassModel( { toon::shader::ToonPbrLightingModel::getName()
+			, toon::ToonPbrPass::create } );
 		engine->registerSpecificsBuffer( castor::String{ toon::shader::ToonProfile::getName() }
 			, { &toon::shader::ToonProfiles::create
 				, &toon::shader::ToonProfiles::update
@@ -86,8 +92,10 @@ extern "C"
 	C3D_ToonMaterial_API void OnUnload( castor3d::Engine * engine )
 	{
 		engine->unregisterSpecificsBuffer( castor::String{ toon::shader::ToonProfile::getName() } );
-		engine->unregisterPassModels( toon::shader::ToonPbrLightingModel::getName(), {}, {}, {}, {} );
-		engine->unregisterPassModels( toon::shader::ToonPhongLightingModel::getName(), {}, {}, {}, {} );
+		engine->unregisterPassModel( toon::shader::ToonPbrLightingModel::getName() );
+		engine->unregisterPassModel( toon::shader::ToonPhongLightingModel::getName() );
+		engine->unregisterLightingModel( toon::shader::ToonPbrLightingModel::getName() );
+		engine->unregisterLightingModel( toon::shader::ToonPhongLightingModel::getName() );
 		engine->unregisterPassComponent( toon::EdgesComponent::TypeName );
 	}
 }

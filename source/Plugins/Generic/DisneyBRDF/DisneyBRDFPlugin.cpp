@@ -46,63 +46,17 @@ extern "C"
 
 	C3D_DisneyBRDF_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
 	{
-		engine->registerPassModels( { castor::String{ castor3d::PbrPass::LightingModel }
-			, castor3d::PbrPass::create
-			, castor3d::shader::PbrLightingModel::create
-			, {}
-			, {}
-			, {}
-			, {}
-			, {}
-			, {}
-			, { { castor::String{ disney::shader::DisneyClearcoatBRDF::Name }, disney::shader::DisneyClearcoatBRDF::create } }
-			, castor3d::PbrPass::DefaultClearcoatBrdf } );
-		engine->registerPassModels( { castor::String{ castor3d::PbrPass::LightingModel }
-			, castor3d::PbrPass::create
-			, castor3d::shader::PbrLightingModel::create
-			, {}
-			, {}
-			, {}
-			, {}
-			, { { castor::String{ disney::shader::DisneySheenBRDF::Name }, disney::shader::DisneySheenBRDF::create } }
-			, castor3d::PbrPass::DefaultSheenBrdf
-			, {}
-			, {} } );
-		engine->registerPassModels( { castor::String{ castor3d::PbrPass::LightingModel }
-			, castor3d::PbrPass::create
-			, castor3d::shader::PbrLightingModel::create
-			, {}
-			, {}
-			, { { castor::String{ disney::shader::DisneySpecularBRDF::Name }, disney::shader::DisneySpecularBRDF::create } }
-			, castor3d::PbrPass::DefaultSpecularBrdf
-			, {}
-			, {}
-			, {}
-			, {} } );
-		engine->registerPassModels( { castor::String{ castor3d::PbrPass::LightingModel }
-			, castor3d::PbrPass::create
-			, castor3d::shader::PbrLightingModel::create
-			, { { castor::String{ disney::shader::DisneyDiffuseBRDF::Name }, disney::shader::DisneyDiffuseBRDF::create } }
-			, castor3d::PbrPass::DefaultDiffuseBrdf
-			, {}
-			, {}
-			, {}
-			, {}
-			, {}
-			, {} } );
+		engine->registerDiffuseBrdf( { castor::String{ disney::shader::DisneyDiffuseBRDF::Name }, disney::shader::DisneyDiffuseBRDF::create } );
+		engine->registerSpecularBrdf( { castor::String{ disney::shader::DisneySpecularBRDF::Name }, disney::shader::DisneySpecularBRDF::create } );
+		engine->registerSheenBrdf( { castor::String{ disney::shader::DisneySheenBRDF::Name }, disney::shader::DisneySheenBRDF::create } );
+		engine->registerClearcoatBrdf( { castor::String{ disney::shader::DisneyClearcoatBRDF::Name }, disney::shader::DisneyClearcoatBRDF::create } );
 	}
 
 	C3D_DisneyBRDF_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->unregisterPassModels( castor::String{ castor3d::PbrPass::LightingModel }
-			, {}
-			, { castor::String{ disney::shader::DisneySpecularBRDF::Name } }
-			, {}
-			, {} );
-		engine->unregisterPassModels( castor::String{ castor3d::PbrPass::LightingModel }
-			, { castor::String{ disney::shader::DisneyDiffuseBRDF::Name } }
-			, {}
-			, {}
-			, {} );
+		engine->unregisterClearcoatBrdf( castor::String{ disney::shader::DisneyClearcoatBRDF::Name } );
+		engine->unregisterSheenBrdf( castor::String{ disney::shader::DisneySheenBRDF::Name } );
+		engine->unregisterSpecularBrdf( castor::String{ disney::shader::DisneySpecularBRDF::Name } );
+		engine->unregisterDiffuseBrdf( castor::String{ disney::shader::DisneyDiffuseBRDF::Name } );
 	}
 }

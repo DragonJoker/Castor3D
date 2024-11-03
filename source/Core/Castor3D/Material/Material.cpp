@@ -151,7 +151,7 @@ namespace castor3d
 		}
 	}
 
-	PassRPtr Material::createPass( LightingModelID lightingModelId )
+	PassRPtr Material::createPass()
 	{
 		if ( m_passes.size() == MaxPassLayers )
 		{
@@ -161,24 +161,19 @@ namespace castor3d
 		}
 
 		auto result = getEngine()->getPassFactory().create( *this
-			, lightingModelId );
+			, m_lightingModelId );
 		CU_Require( result );
 		auto ret = result.get();
 		m_passListeners.try_emplace( ret
 			, result->onChanged.connect( [this]( Pass const & p
 				, CU_UnusedParam( PassComponentCombineID, oldCombineID )
 				, CU_UnusedParam( PassComponentCombineID, newCombineID ) )
-			{
-				onPassChanged( p );
-			} ) );
+				{
+					onPassChanged( p );
+				} ) );
 		m_passes.emplace_back( castor::move( result ) );
 		onChanged( *this );
 		return ret;
-	}
-
-	PassRPtr Material::createPass()
-	{
-		return createPass( m_lightingModelId );
 	}
 
 	void Material::addPass( Pass const & pass )

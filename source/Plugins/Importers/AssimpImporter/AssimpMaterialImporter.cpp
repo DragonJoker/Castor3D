@@ -1286,7 +1286,7 @@ namespace c3d_assimp
 		{
 			auto & factory = engine.getLightingModelFactory();
 
-			if ( engine.getDefaultLightingModel() != factory.getNameId( castor::String{ castor3d::PhongPass::LightingModel }
+			if ( engine.getDefaultLightingModel() != factory.getLightingModelId( castor::String{ castor3d::PhongPass::LightingModel }
 					, castor3d::PhongPass::DefaultDiffuseBrdf.name
 					, castor3d::PhongPass::DefaultSpecularBrdf.name
 					, castor3d::PhongPass::DefaultSheenBrdf.name
@@ -1301,13 +1301,13 @@ namespace c3d_assimp
 			case aiShadingMode_Gouraud:
 			case aiShadingMode_Phong:
 			case aiShadingMode_Blinn:
-				return factory.getNameId( castor::String{ castor3d::PhongPass::LightingModel }
+				return factory.getLightingModelId( castor::String{ castor3d::PhongPass::LightingModel }
 					, castor3d::PhongPass::DefaultDiffuseBrdf.name
 					, castor3d::PhongPass::DefaultSpecularBrdf.name
 					, castor3d::PhongPass::DefaultSheenBrdf.name
 					, castor3d::PhongPass::DefaultClearcoatBrdf.name );
 			case aiShadingMode_Toon:
-				return factory.getNameId( toon::shader::ToonPhongLightingModel::getName()
+				return factory.getLightingModelId( toon::shader::ToonPhongLightingModel::getName()
 					, castor3d::PhongPass::DefaultDiffuseBrdf.name
 					, castor3d::PhongPass::DefaultSpecularBrdf.name
 					, castor3d::PhongPass::DefaultSheenBrdf.name
@@ -1319,20 +1319,20 @@ namespace c3d_assimp
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wswitch"
 			case aiShadingMode_PBR_BRDF:
-				return factory.getNameId( castor::String{ castor3d::PbrPass::LightingModel }
+				return factory.getLightingModelId( castor::String{ castor3d::PbrPass::LightingModel }
 					, castor3d::PbrPass::DefaultDiffuseBrdf.name
 					, castor3d::PbrPass::DefaultSpecularBrdf.name
 					, castor3d::PbrPass::DefaultSheenBrdf.name
 					, castor3d::PbrPass::DefaultClearcoatBrdf.name );
 #pragma GCC diagnostic pop
 			case aiShadingMode_Unlit:
-				return factory.getNameId( castor::String{ castor3d::PbrPass::LightingModel }
+				return factory.getLightingModelId( castor::String{ castor3d::PbrPass::LightingModel }
 					, castor3d::PbrPass::DefaultDiffuseBrdf.name
 					, castor3d::PbrPass::DefaultSpecularBrdf.name
 					, castor3d::PbrPass::DefaultSheenBrdf.name
 					, castor3d::PbrPass::DefaultClearcoatBrdf.name );
 			default:
-				return factory.getNameId( castor::String{ castor3d::PhongPass::LightingModel }
+				return factory.getLightingModelId( castor::String{ castor3d::PhongPass::LightingModel }
 					, castor3d::PbrPass::DefaultDiffuseBrdf.name
 					, castor3d::PbrPass::DefaultSpecularBrdf.name
 					, castor3d::PbrPass::DefaultSheenBrdf.name
@@ -1373,7 +1373,8 @@ namespace c3d_assimp
 		int ishadingMode{};
 		it->second->Get( AI_MATKEY_SHADING_MODEL, ishadingMode );
 		auto shadingMode = aiShadingMode( ishadingMode );
-		auto pass = material.createPass( materials::getLightingModel( *getEngine(), shadingMode ) );
+		material.setLightingModelId( materials::getLightingModel( *getEngine(), shadingMode ) );
+		auto pass = material.createPass();
 		materials::MaterialParser::parse( *it->second 
 			, file.getAiScene()
 			, shadingMode

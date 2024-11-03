@@ -784,7 +784,6 @@ namespace castor3d::shader
 			CU_Require( m_lightingModelId != 0u );
 			CU_Require( m_backgroundModelId != 0u );
 			m_lightingModel = m_engine.getLightingModelFactory().create( m_lightingModelId
-				, m_backgroundModelId
 				, m_writer
 				, m_materials
 				, m_utils

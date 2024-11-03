@@ -45,22 +45,13 @@ extern "C"
 		engine->registerPassComponent< anisotropy::AnisotropyComponent >();
 		engine->registerPassComponent< anisotropy::AnisotropyDirectionMapComponent >();
 		engine->registerPassComponent< anisotropy::AnisotropyStrengthMapComponent >();
-		engine->registerPassModels( { castor::String{ castor3d::PbrPass::LightingModel }
-			, castor3d::PbrPass::create
-			, &castor3d::shader::PbrLightingModel::create
-			, {}, castor3d::PbrPass::DefaultDiffuseBrdf
-			, { { castor::String{ anisotropy::shader::AnisotropicBRDF::Name }, anisotropy::shader::AnisotropicBRDF::create } }, castor3d::PbrPass::DefaultSpecularBrdf
-			, {}, castor3d::PbrPass::DefaultSheenBrdf
-			, {}, castor3d::PbrPass::DefaultClearcoatBrdf } );
+		engine->registerSpecularBrdf( { castor::String{ anisotropy::shader::AnisotropicBRDF::Name }
+			, anisotropy::shader::AnisotropicBRDF::create } );
 	}
 
 	C3D_AnisotropicMaterial_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->unregisterPassModels( castor::String{ castor3d::PbrPass::LightingModel }
-			, {}
-			, { castor::String{ anisotropy::shader::AnisotropicBRDF::Name } }
-			, {}
-			, {} );
+		engine->unregisterSpecularBrdf( castor::String{ anisotropy::shader::AnisotropicBRDF::Name } );
 		engine->unregisterPassComponent( anisotropy::AnisotropyStrengthMapComponent::TypeName );
 		engine->unregisterPassComponent( anisotropy::AnisotropyDirectionMapComponent::TypeName );
 		engine->unregisterPassComponent( anisotropy::AnisotropyComponent::TypeName );
