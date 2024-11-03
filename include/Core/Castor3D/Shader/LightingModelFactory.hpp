@@ -55,10 +55,6 @@ namespace castor3d
 			shader::SpecularBrdfDesc specularBrdf{};
 			shader::SheenBrdfDesc sheenBrdf{};
 			shader::ClearcoatBrdfDesc clearcoatBrdf{};
-			BrdfID diffuseBrdfId{};
-			BrdfID specularBrdfId{};
-			BrdfID sheenBrdfId{};
-			BrdfID clearcoatBrdfId{};
 		};
 		using ObjCont = castor::Vector< Entry >;
 
@@ -309,10 +305,10 @@ namespace castor3d
 
 	private:
 		void registerType( LightingModel const & model
-			, shader::DiffuseBrdfDesc diffuseBrdf, BrdfID diffuseBrdfId
-			, shader::SpecularBrdfDesc specularBrdf, BrdfID specularBrdfId
-			, shader::SheenBrdfDesc sheenBrdf, BrdfID sheenBrdfId
-			, shader::ClearcoatBrdfDesc clearcoatBrdf, BrdfID clearcoatBrdfId );
+			, shader::DiffuseBrdfDesc diffuseBrdf
+			, shader::SpecularBrdfDesc specularBrdf
+			, shader::SheenBrdfDesc sheenBrdf
+			, shader::ClearcoatBrdfDesc clearcoatBrdf );
 		void unregisterType( castor::String const & baseName
 			, castor::String const & diffuseBrdf
 			, castor::String const & specularBrdf

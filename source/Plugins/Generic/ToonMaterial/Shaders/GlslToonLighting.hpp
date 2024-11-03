@@ -52,6 +52,10 @@ namespace toon::shader
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
 			, c3d::BRDFHelpers & brdfHelpers
+			, c3d::DiffuseBRDFUPtr diffuse
+			, c3d::SpecularBRDFUPtr specular
+			, c3d::SheenBRDFUPtr sheen
+			, c3d::ClearcoatBRDFUPtr clearcoat
 			, c3d::Shadow & shadowModel
 			, c3d::Lights & lights
 			, bool enableVolumetric );

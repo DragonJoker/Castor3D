@@ -120,12 +120,7 @@ namespace castor3d
 		C3D_API PassComponentPlugin const & getComponentPlugin( PassComponentID componentId )const;
 		C3D_API PassComponentCombineID getComponentCombineID()const;
 		C3D_API TextureCombineID getTextureCombineID()const;
-
-		uint32_t getHash()const noexcept
-		{
-			return ( uint32_t( getComponentCombineID() ) << 16u )
-				| uint32_t( getTextureCombineID() );
-		}
+		C3D_API uint32_t getHash()const noexcept;
 
 		PassComponentPlugin const & getComponentPlugin( castor::String const & componentType )const
 		{

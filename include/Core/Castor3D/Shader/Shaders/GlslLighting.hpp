@@ -25,7 +25,11 @@ namespace castor3d::shader
 			, sdw::ShaderWriter & writer
 			, Materials const & materials
 			, Utils & utils
-			, BRDFHelpers & brdf
+			, BRDFHelpers & brdfHelpers
+			, DiffuseBRDFUPtr diffuse
+			, SpecularBRDFUPtr specular
+			, SheenBRDFUPtr sheen
+			, ClearcoatBRDFUPtr clearcoat
 			, Shadow & shadowModel
 			, Lights & lights
 			, bool hasIblSupport
@@ -60,8 +64,9 @@ namespace castor3d::shader
 			, Utils & utils
 			, sdw::Vec3 const worldEye
 			, BlendComponents & components );
-		C3D_API sdw::Vec3 combine( DebugOutput & debugOutput
+		C3D_API virtual sdw::Vec3 combine( DebugOutput & debugOutput
 			, BlendComponents const & components
+			, LightSurface const & lightSurface
 			, sdw::Vec3 const & incident
 			, DirectLighting directLighting
 			, IndirectLighting indirectLighting
@@ -70,6 +75,7 @@ namespace castor3d::shader
 			, ReflectionRefraction reflRefr );
 		C3D_API virtual sdw::Vec3 combine( DebugOutput & debugOutput
 			, BlendComponents const & components
+			, LightSurface const & lightSurface
 			, sdw::Vec3 const & incident
 			, DirectLighting directLighting
 			, IndirectLighting indirectLighting
@@ -78,9 +84,6 @@ namespace castor3d::shader
 			, sdw::Vec3 reflectedDiffuse
 			, sdw::Vec3 reflectedSpecular
 			, sdw::Vec3 refracted );
-		
-		C3D_API virtual void adjustDirectLighting( BlendComponents const & components
-			, DirectLighting & lighting )const = 0;
 		/**
 		*\name
 		*	Clustered lighting
@@ -161,12 +164,6 @@ namespace castor3d::shader
 		//\}
 
 	protected:
-		C3D_API void doAttenuate( sdw::Float const attenuation
-			, DirectLighting & output
-			, bool withDiffuse = true );
-		C3D_API void doSheenAlbedoScale( BlendComponents const & components
-			, DirectLighting & output
-			, bool withDiffuse = true );
 		C3D_API void doApplyShadows( DirectionalShadowData const & light
 			, sdw::Int const shadowMapIndex
 			, sdw::Vec2 const & lightIntensity
@@ -221,12 +218,6 @@ namespace castor3d::shader
 		C3D_API virtual void doInitialiseBackground( BackgroundModel & background );
 		C3D_API virtual sdw::Vec3 doComputeRadiance( Light const & light
 			, sdw::Vec3 const & lightDirection )const;
-		C3D_API virtual void doComputeSheenTerm( sdw::Vec3 const & radiance
-			, sdw::Float const & intensity
-			, BlendComponents const & components
-			, LightSurface const & lightSurface
-			, sdw::Float const & isLit
-			, sdw::Vec4 output );
 		C3D_API virtual void doComputeScatteringTerm( ShadowData const & shadows
 			, sdw::Int const shadowMapIndex
 			, sdw::Vec3 const & radiance
@@ -243,24 +234,6 @@ namespace castor3d::shader
 
 		C3D_API virtual void doFinish( PassShaders const & passShaders
 			, BlendComponents & components ) = 0;
-		C3D_API virtual sdw::Vec3 doComputeDiffuseTerm( sdw::Vec3 const & radiance
-			, sdw::Float const & intensity
-			, BlendComponents const & components
-			, LightSurface const & lightSurface
-			, sdw::Float & isLit
-			, sdw::Vec3 output ) = 0;
-		C3D_API virtual void doComputeSpecularTerm( sdw::Vec3 const & radiance
-			, sdw::Float const & intensity
-			, BlendComponents const & components
-			, LightSurface const & lightSurface
-			, sdw::Float const & isLit
-			, sdw::Vec3 output ) = 0;
-		C3D_API virtual void doComputeCoatingTerm( sdw::Vec3 const & radiance
-			, sdw::Float const & intensity
-			, BlendComponents const & components
-			, LightSurface const & lightSurface
-			, sdw::Float const & isLit
-			, sdw::Vec3 output ) = 0;
 		C3D_API virtual sdw::Vec3 doGetDiffuseResult( BlendComponents const & components
 			, DirectLighting const & lighting
 			, IndirectLighting const & indirect
@@ -273,7 +246,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & reflectedSpecular ) = 0;
 
 	private:
-		C3D_API virtual sdw::Vec3 doComputeLight( Light light
+		C3D_API virtual void doComputeLight( Light light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Vec3 & radiance
@@ -295,6 +268,10 @@ namespace castor3d::shader
 		Utils & m_utils;
 		Shadow & m_shadowModel;
 		Lights & m_lights;
+		DiffuseBRDFUPtr m_diffuse;
+		SpecularBRDFUPtr m_specular;
+		SheenBRDFUPtr m_sheen;
+		ClearcoatBRDFUPtr m_clearcoat;
 		bool m_hasBackgroundReflectionsSupport;
 		bool m_hasBackgroundRefractionSupport;
 		bool m_hasIblSupport;

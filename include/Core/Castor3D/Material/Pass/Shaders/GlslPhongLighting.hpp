@@ -20,6 +20,10 @@ namespace castor3d::shader
 			, Materials const & materials
 			, Utils & utils
 			, BRDFHelpers & brdfHelpers
+			, DiffuseBRDFUPtr diffuse
+			, SpecularBRDFUPtr specular
+			, SheenBRDFUPtr sheen
+			, ClearcoatBRDFUPtr clearcoat
 			, Shadow & shadowModel
 			, Lights & lights
 			, bool enableVolumetric );
@@ -36,31 +40,10 @@ namespace castor3d::shader
 			, Shadow & shadowModel
 			, Lights & lights
 			, bool enableVolumetric );
-		
-		C3D_API void adjustDirectLighting( BlendComponents const & components
-			, DirectLighting & lighting )const override;
 
 	protected:
 		C3D_API void doFinish( PassShaders const & passShaders
 			, BlendComponents & components )override;
-		C3D_API sdw::Vec3 doComputeDiffuseTerm( sdw::Vec3 const & radiance
-			, sdw::Float const & intensity
-			, BlendComponents const & components
-			, LightSurface const & lightSurface
-			, sdw::Float & isLit
-			, sdw::Vec3 output )override;
-		C3D_API void doComputeSpecularTerm( sdw::Vec3 const & radiance
-			, sdw::Float const & intensity
-			, BlendComponents const & components
-			, LightSurface const & lightSurface
-			, sdw::Float const & isLit
-			, sdw::Vec3 output )override;
-		C3D_API void doComputeCoatingTerm( sdw::Vec3 const & radiance
-			, sdw::Float const & intensity
-			, BlendComponents const & components
-			, LightSurface const & lightSurface
-			, sdw::Float const & isLit
-			, sdw::Vec3 output )override;
 		C3D_API sdw::Vec3 doGetDiffuseResult( BlendComponents const & components
 			, DirectLighting const & lighting
 			, IndirectLighting const & indirect

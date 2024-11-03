@@ -1,5 +1,6 @@
 #include "Castor3D/Material/Pass/Shaders/GlslPhongLighting.hpp"
 
+#include "Castor3D/Material/Pass/PhongPass.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
@@ -22,6 +23,10 @@ namespace castor3d::shader
 		, Materials const & materials
 		, Utils & utils
 		, BRDFHelpers & brdfHelpers
+		, DiffuseBRDFUPtr diffuse
+		, SpecularBRDFUPtr specular
+		, SheenBRDFUPtr sheen
+		, ClearcoatBRDFUPtr clearcoat
 		, Shadow & shadowModel
 		, Lights & lights
 		, bool enableVolumetric )
@@ -30,6 +35,10 @@ namespace castor3d::shader
 			, materials
 			, utils
 			, brdfHelpers
+			, std::move( diffuse )
+			, std::move( specular )
+			, std::move( sheen )
+			, std::move( clearcoat )
 			, shadowModel
 			, lights
 			, false
@@ -46,10 +55,10 @@ namespace castor3d::shader
 	}
 
 	LightingModelUPtr PhongLightingModel::create( LightingModelID lightingModelId
-		, DiffuseBrdfDesc const & /*diffuseBrdf*/
-		, SpecularBrdfDesc const & /*specularBrdf*/
-		, SheenBrdfDesc const & /*sheenBrdf*/
-		, ClearcoatBrdfDesc const & /*clearcoatBrdf*/
+		, DiffuseBrdfDesc const & diffuseBrdf
+		, SpecularBrdfDesc const & specularBrdf
+		, SheenBrdfDesc const & sheenBrdf
+		, ClearcoatBrdfDesc const & clearcoatBrdf
 		, sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
@@ -63,16 +72,21 @@ namespace castor3d::shader
 			, materials
 			, utils
 			, brdfHelpers
+			, ( diffuseBrdf.create
+				? diffuseBrdf.create( writer, brdfHelpers )
+				: PhongPass::DefaultDiffuseBrdf.create( writer, brdfHelpers ) )
+			, ( specularBrdf.create
+				? specularBrdf.create( writer, brdfHelpers )
+				: PhongPass::DefaultSpecularBrdf.create( writer, brdfHelpers ) )
+			, ( sheenBrdf.create
+				? sheenBrdf.create( writer, brdfHelpers )
+				: PhongPass::DefaultSheenBrdf.create( writer, brdfHelpers ) )
+			, ( clearcoatBrdf.create
+				? clearcoatBrdf.create( writer, brdfHelpers )
+				: PhongPass::DefaultClearcoatBrdf.create( writer, brdfHelpers ) )
 			, shadowModel
 			, lights
 			, enableVolumetric );
-	}
-
-	void PhongLightingModel::adjustDirectLighting( BlendComponents const & components
-		, DirectLighting & lighting )const
-	{
-		lighting.ambient() *= components.colour;
-		lighting.specular() *= components.specular;
 	}
 
 	void PhongLightingModel::doFinish( PassShaders const & passShaders
@@ -81,63 +95,15 @@ namespace castor3d::shader
 		components.f0 = components.specular;
 	}
 
-	sdw::Vec3 PhongLightingModel::doComputeDiffuseTerm( sdw::Vec3 const & radiance
-		, sdw::Float const & intensity
-		, BlendComponents const & components
-		, LightSurface const & lightSurface
-		, sdw::Float & isLit
-		, sdw::Vec3 output )
-	{
-		isLit = 1.0_f - step( doGetNdotL( lightSurface, components ).value(), 0.0_f );
-		auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
-			, radiance * intensity );
-		output = isLit
-			* rawDiffuse
-			* doGetNdotL( lightSurface, components ).value();
-		return rawDiffuse;
-	}
-
-	void PhongLightingModel::doComputeSpecularTerm( sdw::Vec3 const & radiance
-		, sdw::Float const & intensity
-		, BlendComponents const & components
-		, LightSurface const & lightSurface
-		, sdw::Float const & isLit
-		, sdw::Vec3 output )
-	{
-		output = isLit
-			* radiance
-			* intensity
-			* pow( doGetNdotH( lightSurface, components ).value()
-				, clamp( components.shininess, 1.0_f, 256.0_f ) );
-	}
-
-	void PhongLightingModel::doComputeCoatingTerm( sdw::Vec3 const & radiance
-		, sdw::Float const & intensity
-		, BlendComponents const & components
-		, LightSurface const & lightSurface
-		, sdw::Float const & isLit
-		, sdw::Vec3 output )
-	{
-		IF( m_writer, components.clearcoatFactor != 0.0_f )
-		{
-			lightSurface.updateN( derivVec3( components.clearcoatNormal ) );
-			output = isLit
-				* radiance
-				* intensity
-				* pow( doGetNdotH( lightSurface, components ).value()
-					, clamp( components.shininess, 1.0_f, 256.0_f ) );
-		}
-		FI;
-	}
-
 	sdw::Vec3 PhongLightingModel::doGetDiffuseResult( BlendComponents const & components
 		, DirectLighting const & lighting
 		, IndirectLighting const & indirect
 		, sdw::Float const & ambientOcclusion
 		, sdw::Vec3 const & reflectedDiffuse )
 	{
-		return ( components.colour * ( lighting.diffuse + ( ( indirect.diffuseColour + reflectedDiffuse ) * ambientOcclusion ) )
-			+ lighting.ambient * indirect.ambient * ambientOcclusion );
+		return components.colour
+			* ( lighting.diffuse
+				+ ambientOcclusion * ( reflectedDiffuse + indirect.diffuseColour + ( lighting.ambient * indirect.ambient ) ) );
 	}
 
 	sdw::Vec3 PhongLightingModel::doGetSpecularResult( BlendComponents const & components
@@ -146,8 +112,8 @@ namespace castor3d::shader
 		, sdw::Float const & ambientOcclusion
 		, sdw::Vec3 const & reflectedSpecular )
 	{
-		return ( lighting.specular
-			+ ( ( reflectedSpecular + indirect.specular ) * ambientOcclusion ) );
+		return lighting.specular
+			+ ambientOcclusion * ( reflectedSpecular + indirect.specular );
 	}
 
 	//*********************************************************************************************

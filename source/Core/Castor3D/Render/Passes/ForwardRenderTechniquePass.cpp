@@ -504,6 +504,7 @@ namespace castor3d
 							// Combine
 							outColour = vec4( lightingModel->combine( output
 									, components
+									, lightSurface
 									, incident
 									, directLighting
 									, indirectLighting

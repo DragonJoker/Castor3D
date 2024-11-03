@@ -1418,6 +1418,7 @@ namespace castor3d
 									// Combine
 									outResult = vec4( lightingModel->combine( output
 											, components
+											, lightSurface
 											, shader::getRaw( incident )
 											, directLighting
 											, indirectLighting

@@ -471,6 +471,7 @@ namespace castor3d
 						// Combine
 						colour = lightingModel->combine( output
 							, components
+							, lightSurface
 							, incident
 							, directLighting
 							, indirectLighting

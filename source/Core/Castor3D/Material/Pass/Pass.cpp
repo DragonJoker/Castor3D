@@ -38,6 +38,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
+#include "Castor3D/Render/PipelineFlags.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
@@ -516,6 +517,11 @@ namespace castor3d
 	{
 		CU_Require( m_textureCombine.baseId != 0u );
 		return m_textureCombine.baseId;
+	}
+
+	uint32_t Pass::getHash()const noexcept
+	{
+		return getPassHash( *this );
 	}
 
 	TextureUnitRPtr Pass::getTextureUnit( uint32_t index )const

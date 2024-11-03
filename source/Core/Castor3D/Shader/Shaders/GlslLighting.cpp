@@ -4,11 +4,15 @@
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslClearcoatBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
+#include "Castor3D/Shader/Shaders/GlslDiffuseBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/GlslSheenBRDF.hpp"
+#include "Castor3D/Shader/Shaders/GlslSpecularBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -26,6 +30,10 @@ namespace castor3d::shader
 		, Materials const & materials
 		, Utils & utils
 		, BRDFHelpers & brdfHelpers
+		, DiffuseBRDFUPtr diffuse
+		, SpecularBRDFUPtr specular
+		, SheenBRDFUPtr sheen
+		, ClearcoatBRDFUPtr clearcoat
 		, Shadow & shadowModel
 		, Lights & lights
 		, bool hasIblSupport
@@ -39,6 +47,10 @@ namespace castor3d::shader
 		, m_utils{ utils }
 		, m_shadowModel{ shadowModel }
 		, m_lights{ lights }
+		, m_diffuse{ std::move( diffuse ) }
+		, m_specular{ std::move( specular ) }
+		, m_sheen{ std::move( sheen ) }
+		, m_clearcoat{ std::move( clearcoat ) }
 		, m_hasBackgroundReflectionsSupport{ hasBackgroundReflectionsSupport }
 		, m_hasBackgroundRefractionSupport{ hasBackgroundRefractionSupport }
 		, m_hasIblSupport{ hasIblSupport }
@@ -82,10 +94,15 @@ namespace castor3d::shader
 			reflRefr.reflDiffuse *= albedoSheenScaling;
 			reflRefr.reflSpecular *= albedoSheenScaling;
 		}
+		ELSE
+		{
+			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Albedo Sheen Scaling" ), 1.0_f );
+		}
 		FI
 
 		auto combineResult = combine( debugOutput
 			, components
+			, lightSurface
 			, incident
 			, directLighting
 			, std::move( indirectLighting )
@@ -118,6 +135,7 @@ namespace castor3d::shader
 
 	sdw::Vec3 LightingModel::combine( DebugOutput & debugOutput
 		, BlendComponents const & components
+		, LightSurface const & lightSurface
 		, sdw::Vec3 const & incident
 		, DirectLighting directLighting
 		, IndirectLighting indirectLighting
@@ -163,7 +181,6 @@ namespace castor3d::shader
 			FI
 		}
 
-		adjustDirectLighting( components, directLighting );
 		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Final Ambient" ), directLighting.ambient );
 		 // Fresnel already included in both diffuse and specular.
 		auto diffuseResult = m_writer.declLocale( "c3d_diffuseResult"
@@ -172,7 +189,6 @@ namespace castor3d::shader
 				, ambientOcclusion
 				, reflectedDiffuse ) );
 		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Diffuse Result" ), diffuseResult );
-		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Adjusted Specular" ), directLighting.specular );
 		auto specularResult = m_writer.declLocale( "c3d_specularResult"
 			, doGetSpecularResult( components
 				, directLighting, indirectLighting
@@ -429,7 +445,7 @@ namespace castor3d::shader
 							, DirectLighting{ m_writer } );
 						auto radiance = m_writer.declLocale( "radiance"
 							, vec3( 0.0_f ) );
-						auto rawDiffuse = doComputeLight( light.base()
+						doComputeLight( light.base()
 							, components
 							, lightSurface
 							, radiance
@@ -1286,15 +1302,6 @@ namespace castor3d::shader
 		return light.colour();
 	}
 
-	void LightingModel::doComputeSheenTerm( sdw::Vec3 const & radiance
-		, sdw::Float const & intensity
-		, BlendComponents const & components
-		, LightSurface const & lightSurface
-		, sdw::Float const & isLit
-		, sdw::Vec4 output )
-	{
-	}
-
 	void LightingModel::doComputeScatteringTerm( ShadowData const & shadows
 		, sdw::Int const shadowMapIndex
 		, sdw::Vec3 const & radiance
@@ -1328,40 +1335,55 @@ namespace castor3d::shader
 		return lightSurface.NdotH();
 	}
 
-	sdw::Vec3 LightingModel::doComputeLight( Light light
+	void LightingModel::doComputeLight( Light light
 		, BlendComponents const & components
 		, LightSurface const & lightSurface
 		, sdw::Vec3 & radiance
 		, DirectLighting & output )
 	{
 		radiance = doComputeRadiance( light, lightSurface.L().value() );
-		auto isLit = m_writer.declLocale( "isLit", 0.0_f );
 		doInitLightSpecifics( lightSurface, components );
-		auto rawDiffuse = doComputeDiffuseTerm( radiance
-			, light.intensity().x()
-			, components
-			, lightSurface
-			, isLit
-			, output.diffuse );
-		doComputeSpecularTerm( radiance
-			, light.intensity().y()
-			, components
-			, lightSurface
-			, isLit
-			, output.specular );
-		doComputeSheenTerm( radiance
-			, light.intensity().y()
-			, components
-			, lightSurface
-			, isLit
-			, output.sheen );
-		doComputeCoatingTerm( radiance
-			, light.intensity().y()
-			, components
-			, lightSurface
-			, isLit
-			, output.coating );
-		return rawDiffuse;
+		output.diffuse = doGetNdotL( lightSurface, components ).value()
+			* m_diffuse->compute( components
+				, lightSurface
+				, radiance
+				, light.intensity().x()
+				, doGetNdotL( lightSurface, components ).value() );
+		output.specular = doGetNdotL( lightSurface, components ).value()
+			* m_specular->compute( components
+				, lightSurface
+				, radiance
+				, light.intensity().y()
+				, doGetNdotL( lightSurface, components ).value()
+				, doGetNdotH( lightSurface, components ).value() );
+
+		if ( m_sheen )
+		{
+			IF( m_writer, !all( components.sheenColour == vec3( 0.0_f ) ) )
+			{
+				output.sheen = m_sheen->compute( m_utils
+					, components
+					, lightSurface
+					, doGetNdotL( lightSurface, components ).value()
+					, doGetNdotH( lightSurface, components ).value() );
+			}
+			FI
+		}
+
+		if ( m_clearcoat )
+		{
+			IF( m_writer, components.clearcoatFactor != 0.0_f )
+			{
+				lightSurface.updateN( derivVec3( components.clearcoatNormal ) );
+				output.coating = m_clearcoat->compute( components
+					, lightSurface
+					, radiance
+					, light.intensity().y()
+					, doGetNdotL( lightSurface, components ).value()
+					, doGetNdotH( lightSurface, components ).value() );
+			}
+			FI
+		}
 	}
 	
 	sdw::Vec3 LightingModel::doComputeLightDiffuse( Light light
@@ -1369,16 +1391,15 @@ namespace castor3d::shader
 		, LightSurface const & lightSurface
 		, sdw::Vec3 & radiance )
 	{
-		auto isLit = m_writer.declLocale( "isLit", 0.0_f );
 		auto result = m_writer.declLocale( "result", vec3( 0.0_f ) );
 		radiance = doComputeRadiance( light, lightSurface.L().value() );
 		doInitLightSpecifics( lightSurface, components );
-		doComputeDiffuseTerm( radiance
-			, light.intensity().x()
-			, components
-			, lightSurface
-			, isLit
-			, result );
+		result = doGetNdotL( lightSurface, components ).value()
+			* m_diffuse->compute( components
+				, lightSurface
+				, radiance
+				, light.intensity().x()
+				, doGetNdotL( lightSurface, components ).value() );
 		return result;
 	}
 
@@ -1391,24 +1412,41 @@ namespace castor3d::shader
 		radiance = doComputeRadiance( light, lightSurface.L().value() );
 		auto isLit = m_writer.declLocale( "isLit", 0.0_f );
 		doInitLightSpecifics( lightSurface, components );
-		doComputeSpecularTerm( radiance
-			, light.intensity().y()
-			, components
-			, lightSurface
-			, isLit
-			, output.specular );
-		doComputeSheenTerm( radiance
-			, light.intensity().y()
-			, components
-			, lightSurface
-			, isLit
-			, output.sheen );
-		doComputeCoatingTerm( radiance
-			, light.intensity().y()
-			, components
-			, lightSurface
-			, isLit
-			, output.coating );
+		output.specular = doGetNdotL( lightSurface, components ).value()
+			* m_specular->compute( components
+				, lightSurface
+				, radiance
+				, light.intensity().y()
+				, doGetNdotL( lightSurface, components ).value()
+				, doGetNdotH( lightSurface, components ).value() );
+		if ( m_sheen )
+		{
+			IF( m_writer, !all( components.sheenColour == vec3( 0.0_f ) ) )
+			{
+				output.sheen = doGetNdotL( lightSurface, components ).value()
+					* m_sheen->compute( m_utils
+						, components
+						, lightSurface
+						, doGetNdotL( lightSurface, components ).value()
+						, doGetNdotH( lightSurface, components ).value() );
+			}
+			FI
+		}
+		if ( m_clearcoat )
+		{
+			IF( m_writer, components.clearcoatFactor != 0.0_f )
+			{
+				lightSurface.updateN( derivVec3( components.clearcoatNormal ) );
+				output.coating = doGetNdotL( lightSurface, components ).value()
+					* m_clearcoat->compute( components
+						, lightSurface
+						, radiance
+						, light.intensity().y()
+						, doGetNdotL( lightSurface, components ).value()
+						, doGetNdotH( lightSurface, components ).value() );
+			}
+			FI
+		}
 	}
 
 	//*********************************************************************************************
