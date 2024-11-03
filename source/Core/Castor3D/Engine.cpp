@@ -235,6 +235,23 @@ namespace castor3d
 		registerBackgroundModel( shader::IblBackgroundModel::Name
 			, shader::IblBackgroundModel::create );
 
+		for ( auto & desc : PhongPass::DiffuseBrdfs )
+		{
+			registerDiffuseBrdf( desc );
+		}
+		for ( auto & desc : PhongPass::SpecularBrdfs )
+		{
+			registerSpecularBrdf( desc );
+		}
+		for ( auto & desc : PhongPass::SheenBrdfs )
+		{
+			registerSheenBrdf( desc );
+		}
+		for ( auto & desc : PhongPass::ClearcoatBrdfs )
+		{
+			registerClearcoatBrdf( desc );
+		}
+
 		for ( auto & desc : PbrPass::DiffuseBrdfs )
 		{
 			registerDiffuseBrdf( desc );

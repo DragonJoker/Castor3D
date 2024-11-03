@@ -73,8 +73,8 @@ namespace c3d_gltf
 		static castor3d::LightingModelID getLightingModel( castor3d::Engine const & engine
 			, bool anisotropy )
 		{
-			auto const & factory = engine.getLightingModelFactory();
-			return factory.getNameId( castor::String{ castor3d::PbrPass::LightingModel }
+			auto & factory = engine.getLightingModelFactory();
+			return factory.getLightingModelId( castor::String{ castor3d::PbrPass::LightingModel }
 				, castor3d::PbrPass::DefaultDiffuseBrdf.name
 				, ( anisotropy
 					? castor::String{ anisotropy::shader::AnisotropicBRDF::Name }
@@ -627,8 +627,9 @@ namespace c3d_gltf
 		}
 
 		fastgltf::Material const & impMaterial = *it;
-		auto pass = material.createPass( materials::getLightingModel( *getEngine()
+		material.setLightingModelId( materials::getLightingModel( *getEngine()
 			, impMaterial.anisotropy != nullptr ) );
+		auto pass = material.createPass(  );
 
 		if ( impMaterial.unlit )
 		{

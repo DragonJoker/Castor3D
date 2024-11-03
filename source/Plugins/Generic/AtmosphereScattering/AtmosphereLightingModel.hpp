@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_GlslToonLightingModel_H___
-#define ___C3D_GlslToonLightingModel_H___
+#ifndef ___C3D_GlslAtmosphereLightingModel_H___
+#define ___C3D_GlslAtmosphereLightingModel_H___
 
 #include "AtmosphereScatteringPrerequisites.hpp"
 
@@ -40,6 +40,10 @@ namespace atmosphere_scattering
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
 			, c3d::BRDFHelpers & brdfHelpers
+			, c3d::DiffuseBRDFUPtr diffuse
+			, c3d::SpecularBRDFUPtr specular
+			, c3d::SheenBRDFUPtr sheen
+			, c3d::ClearcoatBRDFUPtr clearcoat
 			, c3d::Shadow & shadowModel
 			, c3d::Lights & lights
 			, bool enableVolumetric );
@@ -56,6 +60,11 @@ namespace atmosphere_scattering
 			, c3d::Shadow & shadowModel
 			, c3d::Lights & lights
 			, bool enableVolumetric );
+
+		static castor::StringView getName()
+		{
+			return cuT( "atm.phong" );
+		}
 
 	protected:
 		void doInitialiseBackground( c3d::BackgroundModel & pbackground )override;
@@ -100,6 +109,11 @@ namespace atmosphere_scattering
 			, c3d::Shadow & shadowModel
 			, c3d::Lights & lights
 			, bool enableVolumetric );
+
+		static castor::StringView getName()
+		{
+			return cuT( "atm.pbr" );
+		}
 
 	protected:
 		void doInitialiseBackground( c3d::BackgroundModel & pbackground )override;

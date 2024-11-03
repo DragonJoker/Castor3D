@@ -61,7 +61,6 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InCombinedImageCubeRgba32
 			, sdw::InFloat
-			, sdw::InOutVec3
 			, sdw::InFloat > m_computeRefractions;
 	};
 }

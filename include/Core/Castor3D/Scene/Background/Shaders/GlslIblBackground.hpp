@@ -87,10 +87,8 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InVec3
 			, sdw::InFloat > m_computeRefractions;
 		sdw::Function< sdw::Vec3
-			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InFloat
@@ -115,7 +113,6 @@ namespace castor3d::shader
 			, sdw::InCombinedImageCubeRgba32
 			, sdw::InCombinedImage2DRgba32
 			, sdw::InFloat
-			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3

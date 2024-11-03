@@ -101,22 +101,16 @@ namespace castor3d::shader
 					, sdw::Vec3 const & wsNormal
 					, sdw::CombinedImageCubeRgba32 const & backgroundMap
 					, sdw::Float const & refractionRatio
-					, sdw::Vec3 albedo
 					, sdw::Float const & roughness )
 				{
-					auto alb = m_writer.declLocale( "alb"
-						, albedo );
 					auto refracted = m_writer.declLocale( "refracted"
 						, refract( wsIncident, wsNormal, refractionRatio ) );
-					albedo = vec3( 0.0_f );
-					m_writer.returnStmt( backgroundMap.lod( refracted, roughness * 8.0_f ).xyz()
-						* alb );
+					m_writer.returnStmt( backgroundMap.lod( refracted, roughness * 8.0_f ).xyz() );
 				}
 				, sdw::InVec3{ m_writer, "wsIncident" }
 				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "backgroundMap" }
 				, sdw::InFloat{ m_writer, "refractionRatio" }
-				, sdw::InOutVec3{ m_writer, "albedo" }
 				, sdw::InFloat{ m_writer, "roughness" } );
 		}
 
@@ -125,7 +119,6 @@ namespace castor3d::shader
 			, pwsNormal
 			, backgroundMap
 			, prefractionRatio
-			, components.colour
 			, components.roughness );
 	}
 }

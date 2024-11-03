@@ -31,6 +31,10 @@ namespace castor3d::shader
 			, materials
 			, utils
 			, brdfHelpers
+			, std::move( diffuse )
+			, std::move( specular )
+			, std::move( sheen )
+			, std::move( clearcoat )
 			, shadowModel
 			, lights
 			, true
@@ -38,10 +42,6 @@ namespace castor3d::shader
 			, true
 			, enableVolumetric
 			, cuT( "c3d_pbr_" ) }
-		, m_diffuse{ std::move( diffuse ) }
-		, m_specular{ std::move( specular ) }
-		, m_sheen{ std::move( sheen ) }
-		, m_clearcoat{ std::move( clearcoat ) }
 	{
 	}
 
@@ -85,11 +85,6 @@ namespace castor3d::shader
 			, enableVolumetric );
 	}
 
-	void PbrLightingModel::adjustDirectLighting( BlendComponents const & components
-		, DirectLighting & lighting )const
-	{
-	}
-
 	void PbrLightingModel::doFinish( PassShaders const & passShaders
 		, BlendComponents & components )
 	{
@@ -109,86 +104,15 @@ namespace castor3d::shader
 		}
 	}
 
-	sdw::Vec3 PbrLightingModel::doComputeDiffuseTerm( sdw::Vec3 const & radiance
-		, sdw::Float const & intensity
-		, BlendComponents const & components
-		, LightSurface const & lightSurface
-		, sdw::Float & isLit
-		, sdw::Vec3 output )
-	{
-		auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
-			, m_diffuse->compute( components
-				, lightSurface
-				, radiance
-				, intensity
-				, doGetNdotL( lightSurface, components ).value() ) );
-		output = doGetNdotL( lightSurface, components ).value() * rawDiffuse;
-		return rawDiffuse;
-	}
-
-	void PbrLightingModel::doComputeSpecularTerm( sdw::Vec3 const & radiance
-		, sdw::Float const & intensity
-		, BlendComponents const & components
-		, LightSurface const & lightSurface
-		, sdw::Float const & isLit
-		, sdw::Vec3 output )
-	{
-		output = m_specular->compute( components
-			, lightSurface
-			, radiance
-			, intensity
-			, doGetNdotL( lightSurface, components ).value()
-			, doGetNdotH( lightSurface, components ).value() );
-		output *= doGetNdotL( lightSurface, components ).value();
-	}
-
-	void PbrLightingModel::doComputeCoatingTerm( sdw::Vec3 const & radiance
-		, sdw::Float const & intensity
-		, BlendComponents const & components
-		, LightSurface const & lightSurface
-		, sdw::Float const & isLit
-		, sdw::Vec3 output )
-	{
-		IF( m_writer, components.clearcoatFactor != 0.0_f )
-		{
-			lightSurface.updateN( derivVec3( components.clearcoatNormal ) );
-			output = m_clearcoat->compute( components
-				, lightSurface
-				, radiance
-				, intensity
-				, doGetNdotL( lightSurface, components ).value()
-				, doGetNdotH( lightSurface, components ).value() );
-			output *= doGetNdotL( lightSurface, components ).value();
-		}
-		FI;
-	}
-
-	void PbrLightingModel::doComputeSheenTerm( sdw::Vec3 const & radiance
-		, sdw::Float const & intensity
-		, BlendComponents const & components
-		, LightSurface const & lightSurface
-		, sdw::Float const & isLit
-		, sdw::Vec4 output )
-	{
-		IF( m_writer, !all( components.sheenColour == vec3( 0.0_f ) ) )
-		{
-			output = m_sheen->compute( m_utils
-				, components
-				, lightSurface
-				, doGetNdotL( lightSurface, components ).value()
-				, doGetNdotH( lightSurface, components ).value() );
-		}
-		FI;
-	}
-
 	sdw::Vec3 PbrLightingModel::doGetDiffuseResult( BlendComponents const & components
 		, DirectLighting const & lighting
 		, IndirectLighting const & indirect
 		, sdw::Float const & ambientOcclusion
 		, sdw::Vec3 const & reflectedDiffuse )
 	{
-		return ( components.colour * ( lighting.diffuse + ( indirect.diffuseColour * ambientOcclusion ) )
-			+ ( reflectedDiffuse * ambientOcclusion * lighting.ambient ) );
+		return components.colour
+			* ( lighting.diffuse
+				+ ambientOcclusion * ( indirect.diffuseColour + ( reflectedDiffuse * lighting.ambient ) ) );
 	}
 
 	sdw::Vec3 PbrLightingModel::doGetSpecularResult( BlendComponents const & components
@@ -197,9 +121,8 @@ namespace castor3d::shader
 		, sdw::Float const & ambientOcclusion
 		, sdw::Vec3 const & reflectedSpecular )
 	{
-		return ( lighting.specular
-			+ ( reflectedSpecular * ambientOcclusion * lighting.ambient )
-			+ ( indirect.specular * ambientOcclusion ) );
+		return lighting.specular
+			+ ambientOcclusion * ( indirect.specular + ( reflectedSpecular * lighting.ambient ) );
 	}
 
 	//***********************************************************************************************

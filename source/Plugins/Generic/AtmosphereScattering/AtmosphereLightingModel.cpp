@@ -4,6 +4,7 @@
 #include "AtmosphereScattering/AtmosphereBackgroundModel.hpp"
 
 #include <Castor3D/Material/Pass/PbrPass.hpp>
+#include <Castor3D/Material/Pass/PhongPass.hpp>
 #include <Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp>
 #include <Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp>
 #include <Castor3D/Shader/Shaders/GlslLight.hpp>
@@ -63,6 +64,10 @@ namespace atmosphere_scattering
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
 		, c3d::BRDFHelpers & brdfHelpers
+		, c3d::DiffuseBRDFUPtr diffuse
+		, c3d::SpecularBRDFUPtr specular
+		, c3d::SheenBRDFUPtr sheen
+		, c3d::ClearcoatBRDFUPtr clearcoat
 		, c3d::Shadow & shadowModel
 		, c3d::Lights & lights
 		, bool enableVolumetric )
@@ -71,6 +76,10 @@ namespace atmosphere_scattering
 			, materials
 			, utils
 			, brdfHelpers
+			, std::move( diffuse )
+			, std::move( specular )
+			, std::move( sheen )
+			, std::move( clearcoat )
 			, shadowModel
 			, lights
 			, enableVolumetric }
@@ -96,6 +105,18 @@ namespace atmosphere_scattering
 			, materials
 			, utils
 			, brdfHelpers
+			, ( diffuseBrdf.create
+				? diffuseBrdf.create( writer, brdfHelpers )
+				: castor3d::PhongPass::DefaultDiffuseBrdf.create( writer, brdfHelpers ) )
+			, ( specularBrdf.create
+				? specularBrdf.create( writer, brdfHelpers )
+				: castor3d::PhongPass::DefaultSpecularBrdf.create( writer, brdfHelpers ) )
+			, ( sheenBrdf.create
+				? sheenBrdf.create( writer, brdfHelpers )
+				: castor3d::PhongPass::DefaultSheenBrdf.create( writer, brdfHelpers ) )
+			, ( clearcoatBrdf.create
+				? clearcoatBrdf.create( writer, brdfHelpers )
+				: castor3d::PhongPass::DefaultClearcoatBrdf.create( writer, brdfHelpers ) )
 			, shadowModel
 			, lights
 			, enableVolumetric );

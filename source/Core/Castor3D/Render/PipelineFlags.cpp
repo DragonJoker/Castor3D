@@ -524,5 +524,17 @@ namespace castor3d
 			, shaderFlags );
 	}
 
+	uint32_t getPassHash( Pass const & pass )noexcept
+	{
+		uint32_t result{};
+		uint32_t offset{};
+		result |= uint32_t( pass.getComponentCombineID() & pipflags::hi::maxPassMask ) << offset;
+		offset += pipflags::hi::maxPassSize;
+		result |= ( uint32_t( pass.getTextureCombineID() ) & pipflags::hi::maxSubmeshMask ) << offset;
+		offset += pipflags::hi::maxTexturesSize;
+		result |= ( uint32_t( pass.getLightingModelId() - 1u ) & pipflags::hi::maxLightingModelIDMask ) << offset;
+		return result;
+	}
+
 	//*********************************************************************************************
 }

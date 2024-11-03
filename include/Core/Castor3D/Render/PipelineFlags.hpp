@@ -384,6 +384,7 @@ namespace castor3d
 	C3D_API PipelineHiHashDetails getPipelineHiHashDetails( RenderTechniquePass const & renderPass
 		, PipelineBaseHash const & hash
 		, ShaderFlags shaderFlags )noexcept;
+	C3D_API uint32_t getPassHash( Pass const & pass )noexcept;
 }
 
 #endif

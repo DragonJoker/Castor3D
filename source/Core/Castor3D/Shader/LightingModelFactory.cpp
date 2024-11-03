@@ -35,15 +35,13 @@ namespace castor3d
 		, shader::ClearcoatBrdfDesc const & defaultClearcoatBrdf
 		, Creator const & create )
 	{
-		// Look for a model with same base name.
-		auto it = std::find_if( m_models.begin()
+		if ( auto it = std::find_if( m_models.begin()
 			, m_models.end()
 			, [&baseName]( LightingModelPtr const & lookup )
 			{
 				return baseName == lookup->name;
 			} );
-
-		if ( it == m_models.end() )
+			it == m_models.end() )
 		{
 			m_models.push_back( std::make_unique< LightingModel >( baseName
 				, create
@@ -51,7 +49,6 @@ namespace castor3d
 				, defaultSpecularBrdf
 				, defaultSheenBrdf
 				, defaultClearcoatBrdf ) );
-			it = std::next( m_models.begin(), ptrdiff_t( m_models.size() - 1u ) );
 		}
 	}
 
@@ -139,30 +136,22 @@ namespace castor3d
 					{
 						return lookup.name == diffuseBrdf;
 					} );
-				auto diffuse = BrdfID( std::distance( m_diffuseBrdfs.begin(), itDiff ) );
 				auto itSpec = std::find_if( m_specularBrdfs.begin(), m_specularBrdfs.end()
 					, [&specularBrdf]( shader::SpecularBrdfDesc const & lookup )
 					{
 						return lookup.name == specularBrdf;
 					} );
-				auto specular = BrdfID( std::distance( m_specularBrdfs.begin(), itSpec ) );
 				auto itSheen = std::find_if( m_sheenBrdfs.begin(), m_sheenBrdfs.end()
 					, [&sheenBrdf]( shader::SheenBrdfDesc const & lookup )
 					{
 						return lookup.name == sheenBrdf;
 					} );
-				auto sheen = BrdfID( std::distance( m_sheenBrdfs.begin(), itSheen ) );
 				auto itCoat = std::find_if( m_clearcoatBrdfs.begin(), m_clearcoatBrdfs.end()
 					, [&clearcoatBrdf]( shader::ClearcoatBrdfDesc const & lookup )
 					{
 						return lookup.name == clearcoatBrdf;
 					} );
-				auto clearcoat = BrdfID( std::distance( m_clearcoatBrdfs.begin(), itCoat ) );
-				registerType( **itModel
-					, *itDiff, diffuse
-					, *itSpec, specular
-					, *itSheen, sheen
-					, *itCoat, clearcoat );
+				registerType( **itModel, *itDiff, *itSpec, *itSheen, *itCoat );
 				it = std::next( m_registered.begin(), ptrdiff_t( m_registered.size() - 1u ) );
 			}
 		}
@@ -444,13 +433,9 @@ namespace castor3d
 
 	void LightingModelFactory::registerType( LightingModel const & model
 		, shader::DiffuseBrdfDesc diffuseBrdf
-		, BrdfID diffuseBrdfId
 		, shader::SpecularBrdfDesc specularBrdf
-		, BrdfID specularBrdfId
 		, shader::SheenBrdfDesc sheenBrdf
-		, BrdfID sheenBrdfId
-		, shader::ClearcoatBrdfDesc clearcoatBrdf
-		, BrdfID clearcoatBrdfId )
+		, shader::ClearcoatBrdfDesc clearcoatBrdf )
 	{
 		auto name = lgtmdlfct::getFullName( model.name, diffuseBrdf.name, specularBrdf.name, sheenBrdf.name, clearcoatBrdf.name );
 
@@ -478,10 +463,6 @@ namespace castor3d
 		entry.specularBrdf = castor::move( specularBrdf );
 		entry.sheenBrdf = castor::move( sheenBrdf );
 		entry.clearcoatBrdf = castor::move( clearcoatBrdf );
-		entry.diffuseBrdfId = diffuseBrdfId;
-		entry.specularBrdfId = specularBrdfId;
-		entry.sheenBrdfId = sheenBrdfId;
-		entry.clearcoatBrdfId = clearcoatBrdfId;
 	}
 
 	void LightingModelFactory::unregisterType( castor::String const & baseName

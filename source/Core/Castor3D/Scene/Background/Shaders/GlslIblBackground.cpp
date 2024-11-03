@@ -15,10 +15,9 @@ namespace castor3d::shader
 	{
 		static sdw::Vec3 getPrefiltered( sdw::CombinedImageCubeRgba32 const & prefiltered
 			, sdw::Vec3 const & coord
-			, sdw::Vec3 const & albedo
 			, sdw::Float const & roughness )
 		{
-			return albedo * prefiltered.lod( coord, roughness * float( MaxIblReflectionLod ) ).rgb();
+			return prefiltered.lod( coord, roughness * float( MaxIblReflectionLod ) ).rgb();
 		}
 	}
 
@@ -76,8 +75,7 @@ namespace castor3d::shader
 		if ( !m_computeDiffuseReflections )
 		{
 			m_computeDiffuseReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeDiffuseReflections"
-				, [this]( sdw::Vec3 const & albedo
-					, sdw::Vec3 const & wsNormal
+				, [this]( sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & fresnel
 					, sdw::Float const & metalness
 					, sdw::CombinedImageCubeRgba32 const & irradianceMap )
@@ -89,7 +87,6 @@ namespace castor3d::shader
 						, irradianceMap.lod( vec3( wsNormal.x(), -wsNormal.y(), wsNormal.z() ), 0.0_f ).rgb() );
 					m_writer.returnStmt( kD * irradiance );
 				}
-				, sdw::InVec3{ m_writer, "albedo" }
 				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InVec3{ m_writer, "fresnel" }
 				, sdw::InFloat{ m_writer, "metalness" }
@@ -97,8 +94,7 @@ namespace castor3d::shader
 		}
 
 		auto irradianceMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapIrradiance" );
-		return m_computeDiffuseReflections( components.colour
-			, pwsNormal
+		return m_computeDiffuseReflections( pwsNormal
 			, pfresnel
 			, pmetalness
 			, irradianceMap );
@@ -129,7 +125,7 @@ namespace castor3d::shader
 						, reflect( -V, N ) );
 					reflection.y() = -reflection.y();
 					auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
-						, iblbg::getPrefiltered( prefilteredEnvMap, reflection, vec3( 1.0_f ), roughness ) );
+						, iblbg::getPrefiltered( prefilteredEnvMap, reflection, roughness ) );
 					auto brdf = m_writer.declLocale( "brdf"
 						, getBrdf( brdfMap, NdotV, roughness ) );
 					m_writer.returnStmt( prefilteredColor * sdw::fma( F
@@ -178,9 +174,8 @@ namespace castor3d::shader
 						, normalize( reflect( -V, N ) ) );
 					reflection.y() = -reflection.y();
 					auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
-						, iblbg::getPrefiltered( prefilteredEnvMap
+						, sheenColour * iblbg::getPrefiltered( prefilteredEnvMap
 							, reflection
-							, sheenColour
 							, sheenRoughness ) );
 					auto brdf = m_writer.declLocale( "brdf"
 						, getBrdf( brdfMap, NdotV, sheenRoughness ) );
@@ -219,7 +214,6 @@ namespace castor3d::shader
 			m_computeRefractions = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeRefractions"
 				, [this]( sdw::CombinedImageCubeRgba32 const & prefiltered
 					, sdw::Float const & refractionRatio
-					, sdw::Vec3 const & albedo
 					, sdw::Vec3 const & N
 					, sdw::Vec3 const & V
 					, sdw::Float const & roughness )
@@ -229,12 +223,10 @@ namespace castor3d::shader
 					refracted.y() = -refracted.y();
 					m_writer.returnStmt( iblbg::getPrefiltered( prefiltered
 						, refracted
-						, albedo
 						, roughness ) );
 				}
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefiltered" }
 				, sdw::InFloat{ m_writer, "refractionRatio" }
-				, sdw::InVec3{ m_writer, "albedo" }
 				, sdw::InVec3{ m_writer, "N" }
 				, sdw::InVec3{ m_writer, "V" }
 				, sdw::InFloat{ m_writer, "roughness" } );
@@ -243,7 +235,6 @@ namespace castor3d::shader
 		auto prefiltered = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
 		return m_computeRefractions( prefiltered
 			, prefractionRatio
-			, components.colour
 			, pwsNormal
 			, pV
 			, components.roughness );
@@ -266,7 +257,6 @@ namespace castor3d::shader
 				, [this]( sdw::CombinedImageCubeRgba32 const & prefiltered
 					, sdw::CombinedImage2DRgba32 const & brdfMap
 					, sdw::Float const & refractionRatio
-					, sdw::Vec3 const & albedo
 					, sdw::Vec3 const & N
 					, sdw::Vec3 const & V
 					, sdw::Vec3 const & F
@@ -279,7 +269,6 @@ namespace castor3d::shader
 					auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
 						, iblbg::getPrefiltered( prefiltered
 							, refracted
-							, albedo
 							, roughness ) );
 					auto brdf = m_writer.declLocale( "brdf"
 						, getBrdf( brdfMap, NdotV, roughness ) );
@@ -290,7 +279,6 @@ namespace castor3d::shader
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefiltered" }
 				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" }
 				, sdw::InFloat{ m_writer, "refractionRatio" }
-				, sdw::InVec3{ m_writer, "albedo" }
 				, sdw::InVec3{ m_writer, "N" }
 				, sdw::InVec3{ m_writer, "V" }
 				, sdw::InVec3{ m_writer, "F" }
@@ -302,7 +290,6 @@ namespace castor3d::shader
 		return m_computeSpecularRefractions( prefiltered
 			, pbrdfMap
 			, prefractionRatio
-			, components.colour
 			, pwsNormal
 			, pV
 			, pfresnel
