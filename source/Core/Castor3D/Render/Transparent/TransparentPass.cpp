@@ -408,8 +408,8 @@ namespace castor3d
 							, lightSurface.viewPosition().value().z()
 							, output
 							, directLighting );
-						directLighting.ambient() = components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor;
-						output.registerOutput( cuT( "Lighting" ), cuT( "Ambient" ), directLighting.ambient() );
+						directLighting.ambient = components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor;
+						output.registerOutput( cuT( "Lighting" ), cuT( "Ambient" ), directLighting.ambient );
 						output.registerOutput( cuT( "Lighting" ), cuT( "Occlusion" ), occlusion );
 						output.registerOutput( cuT( "Lighting" ), cuT( "Emissive" ), components.emissiveColour * components.emissiveFactor );
 

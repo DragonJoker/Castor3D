@@ -187,8 +187,8 @@ namespace castor3d::shader
 		, sdw::Float const & ambientOcclusion
 		, sdw::Vec3 const & reflectedDiffuse )
 	{
-		return ( components.colour * ( lighting.diffuse() + ( indirect.diffuseColour() * ambientOcclusion ) )
-			+ ( reflectedDiffuse * ambientOcclusion * lighting.ambient() ) );
+		return ( components.colour * ( lighting.diffuse + ( indirect.diffuseColour * ambientOcclusion ) )
+			+ ( reflectedDiffuse * ambientOcclusion * lighting.ambient ) );
 	}
 
 	sdw::Vec3 PbrLightingModel::doGetSpecularResult( BlendComponents const & components
@@ -197,9 +197,9 @@ namespace castor3d::shader
 		, sdw::Float const & ambientOcclusion
 		, sdw::Vec3 const & reflectedSpecular )
 	{
-		return ( lighting.specular()
-			+ ( reflectedSpecular * ambientOcclusion * lighting.ambient() )
-			+ ( indirect.specular() * ambientOcclusion ) );
+		return ( lighting.specular
+			+ ( reflectedSpecular * ambientOcclusion * lighting.ambient )
+			+ ( indirect.specular * ambientOcclusion ) );
 	}
 
 	//***********************************************************************************************

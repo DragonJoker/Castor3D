@@ -1365,8 +1365,8 @@ namespace castor3d
 											, directLighting );
 									}
 
-									directLighting.ambient() = components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor;
-									output.registerOutput( cuT( "Lighting" ), cuT( "Ambient" ), directLighting.ambient() );
+									directLighting.ambient = components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor;
+									output.registerOutput( cuT( "Lighting" ), cuT( "Ambient" ), directLighting.ambient );
 									output.registerOutput( cuT( "Lighting" ), cuT( "Occlusion" ), occlusion );
 									output.registerOutput( cuT( "Lighting" ), cuT( "Emissive" ), components.emissiveColour * components.emissiveFactor );
 
@@ -1425,7 +1425,7 @@ namespace castor3d
 											, components.emissiveColour * components.emissiveFactor
 											, reflRefrResult )
 										, components.opacity );
-									outScattering = vec4( directLighting.scattering(), 1.0_f);
+									outScattering = vec4( directLighting.scattering, 1.0_f);
 								}
 							}
 							ELSE
