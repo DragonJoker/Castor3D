@@ -379,7 +379,7 @@ namespace castor3d::shader
 		{
 			if ( clusteredLights.isEnabled() )
 			{
-				parentOutput.diffuse() = diffuse;
+				parentOutput.diffuse = diffuse;
 				auto cur = m_writer.declLocale( "c3d_cur"
 					, 0_u );
 				auto end = m_writer.declLocale( "c3d_end"
@@ -575,7 +575,7 @@ namespace castor3d::shader
 	{
 		if ( auto lightingModel = getLightingModel() )
 		{
-			output.diffuse() = diffuse;
+			output.diffuse = diffuse;
 			auto cur = m_writer.declLocale( "c3d_cur"
 				, 0_u );
 			auto end = m_writer.declLocale( "c3d_end"

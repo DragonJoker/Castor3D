@@ -157,7 +157,7 @@ namespace water
 		output.refrColour = mapColours.lod( refractionTexCoord, 0.0_f ).rgb();
 		debugOutputBlock.registerOutput( cuT( "Raw Refraction" ), output.refrColour );
 		auto waterTransmission = writer.declLocale( "waterTransmission"
-			, components.colour * ( indirect.ambient() + indirect.diffuseColour() ) );
+			, components.colour * ( indirect.ambient + indirect.diffuseColour ) );
 		debugOutputBlock.registerOutput( cuT( "Raw Transmission" ), waterTransmission );
 
 		if ( components.hasMember( "mdlPosition" )
@@ -175,7 +175,7 @@ namespace water
 		}
 		else
 		{
-			waterTransmission *= lighting.diffuse();
+			waterTransmission *= lighting.diffuse;
 			debugOutputBlock.registerOutput( cuT( "Lit Transmission" ), waterTransmission );
 			output.refrColour *= components.colour;
 			debugOutputBlock.registerOutput( cuT( "Coloured Refraction" ), output.refrColour );
@@ -200,7 +200,7 @@ namespace water
 		{
 			auto waterNoise = components.getMember< sdw::Float >( "waterNoise" );
 			debugOutputBlock.registerOutput( cuT( "Specular Noise" ), waterNoise );
-			lighting.specular() *= waterNoise;
+			lighting.specular *= waterNoise;
 		}
 
 		if ( components.hasMember( "waterColourMod" ) )
@@ -228,7 +228,7 @@ namespace water
 			foamAmount += pow( ( 1.0_f - depthSoftenedAlpha ), 3.0_f );
 			debugOutputBlock.registerOutput( cuT( "Depth Softened Foam Amount" ), foamAmount );
 			auto foamResult = writer.declLocale( "foamResult"
-				, lighting.diffuse() * mix( vec3( 0.0_f )
+				, lighting.diffuse * mix( vec3( 0.0_f )
 					, waterFoam * foamBrightness
 					, vec3( utils.saturate( foamAmount ) * depthSoftenedAlpha ) ) );
 			debugOutputBlock.registerOutput( cuT( "Foam Result" ), foamResult );

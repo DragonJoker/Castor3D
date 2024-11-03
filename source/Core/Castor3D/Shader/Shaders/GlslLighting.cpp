@@ -4,21 +4,13 @@
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
-#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
-#include "Castor3D/Shader/Shaders/GlslReflection.hpp"
-#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
-#include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
-#include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
-#include <ShaderAST/Expr/ExprComma.hpp>
 #include <ShaderWriter/Source.hpp>
 
 CU_ImplementSmartPtr( castor3d::shader, LightingModel )
@@ -71,6 +63,7 @@ namespace castor3d::shader
 
 	sdw::Vec3 LightingModel::combine( DebugOutput & debugOutput
 		, BlendComponents const & components
+		, LightSurface const & lightSurface
 		, sdw::Vec3 const & incident
 		, DirectLighting directLighting
 		, IndirectLighting indirectLighting
@@ -95,7 +88,7 @@ namespace castor3d::shader
 			, components
 			, incident
 			, directLighting
-			, indirectLighting
+			, std::move( indirectLighting )
 			, ambientOcclusion
 			, emissive
 			, castor::move( reflRefr.reflDiffuse )
@@ -104,7 +97,7 @@ namespace castor3d::shader
 
 		IF( m_writer, !all( components.sheenColour == vec3( 0.0_f ) ) )
 		{
-			combineResult += directLighting.sheen().xyz();
+			combineResult += directLighting.sheen.xyz();
 			combineResult += ( reflRefr.reflSheen.xyz() * ambientOcclusion );
 		}
 		FI
@@ -116,11 +109,11 @@ namespace castor3d::shader
 			auto clearcoatFresnel = m_writer.declLocale( "clearcoatFresnel"
 				, pow( 0.04_f + ( 1.0_f - 0.04_f ) * ( 1.0_f - clearcoatNdotV ), 5.0_f ) );
 			combineResult = combineResult * ( 1.0_f - vec3( components.clearcoatFactor * clearcoatFresnel ) )
-				+ ( reflRefr.reflCoating * ambientOcclusion ) + directLighting.coating();
+				+ ( reflRefr.reflCoating * ambientOcclusion ) + directLighting.coating;
 		}
 		FI
 
-		return combineResult + directLighting.scattering();
+		return combineResult + directLighting.scattering;
 	}
 
 	sdw::Vec3 LightingModel::combine( DebugOutput & debugOutput
@@ -171,7 +164,7 @@ namespace castor3d::shader
 		}
 
 		adjustDirectLighting( components, directLighting );
-		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Final Ambient" ), directLighting.ambient() );
+		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Final Ambient" ), directLighting.ambient );
 		 // Fresnel already included in both diffuse and specular.
 		auto diffuseResult = m_writer.declLocale( "c3d_diffuseResult"
 			, doGetDiffuseResult( components
@@ -179,7 +172,7 @@ namespace castor3d::shader
 				, ambientOcclusion
 				, reflectedDiffuse ) );
 		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Diffuse Result" ), diffuseResult );
-		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Adjusted Specular" ), directLighting.specular() );
+		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Adjusted Specular" ), directLighting.specular );
 		auto specularResult = m_writer.declLocale( "c3d_specularResult"
 			, doGetSpecularResult( components
 				, directLighting, indirectLighting
@@ -248,7 +241,7 @@ namespace castor3d::shader
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows
-					, DirectLighting const & parentOutput )
+					, DirectLighting parentOutput )
 				{
 					auto output = m_writer.declLocale( "output"
 						, DirectLighting{ m_writer } );
@@ -279,7 +272,7 @@ namespace castor3d::shader
 								&& ( receivesShadows != 0_u )
 								&& ( sssProfileIndex != 0_u ) )
 							{
-								parentOutput.diffuse() += output.diffuse()
+								parentOutput.diffuse += output.diffuse
 									* m_lights.computeSssTransmittance( debugOutput
 										, components
 										, light
@@ -304,13 +297,9 @@ namespace castor3d::shader
 						, light.base().intensity()
 						, components
 						, lightSurface
-						, output.scattering() );
-					doSheenAlbedoScale( components, output );
-					parentOutput.diffuse() += max( vec3( 0.0_f ), output.diffuse() );
-					parentOutput.specular() += max( vec3( 0.0_f ), output.specular() );
-					parentOutput.scattering() += max( vec3( 0.0_f ), output.scattering() );
-					parentOutput.coating() += max( vec3( 0.0_f ), output.coating() );
-					parentOutput.sheen() += max( vec4( 0.0_f ), output.sheen() );
+						, output.scattering );
+					output.sheenAlbedoScale( components );
+					parentOutput += output;
 				}
 				, PDirectionalLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
@@ -340,7 +329,7 @@ namespace castor3d::shader
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows
-					, DirectLighting const & parentOutput )
+					, DirectLighting parentOutput )
 				{
 					auto output = m_writer.declLocale( "output"
 						, DirectLighting{ m_writer } );
@@ -374,7 +363,7 @@ namespace castor3d::shader
 								&& ( receivesShadows != 0_u )
 								&& ( sssProfileIndex != 0_u ) )
 							{
-								parentOutput.diffuse() += ( output.diffuse() * attenuation )
+								parentOutput.diffuse += ( output.diffuse * attenuation )
 									* m_lights.computeSssTransmittance( debugOutput
 										, components
 										, light
@@ -393,14 +382,9 @@ namespace castor3d::shader
 							, output );
 					}
 
-					doAttenuate( attenuation, output );
-					doSheenAlbedoScale( components, output );
-
-					parentOutput.diffuse() += max( vec3( 0.0_f ), output.diffuse() );
-					parentOutput.specular() += max( vec3( 0.0_f ), output.specular() );
-					parentOutput.scattering() += max( vec3( 0.0_f ), output.scattering() );
-					parentOutput.coating() += max( vec3( 0.0_f ), output.coating() );
-					parentOutput.sheen() += max( vec4( 0.0_f ), output.sheen() );
+					output.attenuate( attenuation, true );
+					output.sheenAlbedoScale( components );
+					parentOutput += output;
 				}
 				, PPointLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
@@ -430,7 +414,7 @@ namespace castor3d::shader
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows
-					, DirectLighting const & parentOutput )
+					, DirectLighting parentOutput )
 				{
 					lightSurface.updateL( m_utils
 						, derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() )
@@ -451,11 +435,7 @@ namespace castor3d::shader
 							, radiance
 							, output );
 						spotFactor = clamp( ( spotFactor - light.outerCutOffCos() ) / light.cutOffsCosDiff(), 0.0_f, 1.0_f );
-						output.diffuse() = spotFactor * output.diffuse();
-						output.specular() = spotFactor * output.specular();
-						output.scattering() = spotFactor * output.scattering();
-						output.coating() = spotFactor * output.coating();
-						output.sheen().x() = spotFactor * output.sheen().x();
+						output *= spotFactor;
 						auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
 						light.getAttenuationFactor( lightSurface.lengthL().value(), attenuation );
 
@@ -475,7 +455,7 @@ namespace castor3d::shader
 									&& ( receivesShadows != 0_u )
 									&& ( sssProfileIndex != 0_u ) )
 								{
-									parentOutput.diffuse() += ( output.diffuse() * attenuation )
+									parentOutput.diffuse += ( output.diffuse * attenuation )
 										* m_lights.computeSssTransmittance( debugOutput
 											, components
 											, light
@@ -494,14 +474,9 @@ namespace castor3d::shader
 								, output );
 						}
 
-						doAttenuate( attenuation, output );
-						doSheenAlbedoScale( components, output );
-
-						parentOutput.diffuse() += max( vec3( 0.0_f ), output.diffuse() );
-						parentOutput.specular() += max( vec3( 0.0_f ), output.specular() );
-						parentOutput.scattering() += max( vec3( 0.0_f ), output.scattering() );
-						parentOutput.coating() += max( vec3( 0.0_f ), output.coating() );
-						parentOutput.sheen() += max( vec4( 0.0_f ), output.sheen() );
+						output.attenuate( attenuation, true );
+						output.sheenAlbedoScale( components );
+						parentOutput += output;
 					}
 					FI
 				}
@@ -768,7 +743,7 @@ namespace castor3d::shader
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows
-					, DirectLighting const & parentOutput )
+					, DirectLighting parentOutput )
 				{
 					auto output = m_writer.declLocale< DirectLighting >( "output"
 						, DirectLighting{ m_writer } );
@@ -799,7 +774,7 @@ namespace castor3d::shader
 								&& ( receivesShadows != 0_u )
 								&& ( sssProfileIndex != 0_u ) )
 							{
-								parentOutput.diffuse() += m_lights.computeSssTransmittance(debugOutput
+								parentOutput.diffuse += m_lights.computeSssTransmittance(debugOutput
 									, components
 									, light
 									, shadows
@@ -824,13 +799,9 @@ namespace castor3d::shader
 						, light.base().intensity()
 						, components
 						, lightSurface
-						, output.scattering() );
-					doSheenAlbedoScale( components, output, false );
-
-					parentOutput.specular() += max( vec3( 0.0_f ), output.specular() );
-					parentOutput.scattering() += max( vec3( 0.0_f ), output.scattering() );
-					parentOutput.coating() += max( vec3( 0.0_f ), output.coating() );
-					parentOutput.sheen() += max( vec4( 0.0_f ), output.sheen() );
+						, output.scattering );
+					output.sheenAlbedoScale( components, false );
+					parentOutput += output;
 				}
 				, PDirectionalLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
@@ -860,7 +831,7 @@ namespace castor3d::shader
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows
-					, DirectLighting const & parentOutput )
+					, DirectLighting parentOutput )
 				{
 					auto output = m_writer.declLocale< DirectLighting >( "output"
 						, DirectLighting{ m_writer } );
@@ -894,7 +865,7 @@ namespace castor3d::shader
 								&& ( receivesShadows != 0_u )
 								&& ( sssProfileIndex != 0_u ) )
 							{
-								parentOutput.diffuse() += attenuation
+								parentOutput.diffuse += attenuation
 									* m_lights.computeSssTransmittance( debugOutput
 										, components
 										, light
@@ -914,13 +885,9 @@ namespace castor3d::shader
 							, false );
 					}
 
-					doAttenuate( attenuation, output, false );
-					doSheenAlbedoScale( components, output, false );
-
-					parentOutput.specular() += max( vec3( 0.0_f ), output.specular() );
-					parentOutput.scattering() += max( vec3( 0.0_f ), output.scattering() );
-					parentOutput.coating() += max( vec3( 0.0_f ), output.coating() );
-					parentOutput.sheen() += max( vec4( 0.0_f ), output.sheen() );
+					output.attenuate( attenuation, true, false );
+					output.sheenAlbedoScale( components, false );
+					parentOutput += output;
 				}
 				, PPointLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
@@ -950,7 +917,7 @@ namespace castor3d::shader
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows
-					, DirectLighting const & parentOutput )
+					, DirectLighting parentOutput )
 				{
 					lightSurface.updateL( m_utils
 						, derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() )
@@ -971,10 +938,7 @@ namespace castor3d::shader
 							, radiance
 							, output );
 						spotFactor = clamp( ( spotFactor - light.outerCutOffCos() ) / light.cutOffsCosDiff(), 0.0_f, 1.0_f );
-						output.specular() = spotFactor * output.specular();
-						output.scattering() = spotFactor * output.scattering();
-						output.coating() = spotFactor * output.coating();
-						output.sheen().x() = spotFactor * output.sheen().x();
+						output *= spotFactor;
 						auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
 						light.getAttenuationFactor( lightSurface.lengthL().value(), attenuation );
 
@@ -994,7 +958,7 @@ namespace castor3d::shader
 									&& ( receivesShadows != 0_u )
 									&& ( sssProfileIndex != 0_u ) )
 								{
-									parentOutput.diffuse() += attenuation
+									parentOutput.diffuse += attenuation
 										* m_lights.computeSssTransmittance( debugOutput
 											, components
 											, light
@@ -1014,13 +978,9 @@ namespace castor3d::shader
 								, false );
 						}
 
-						doAttenuate( attenuation, output, false );
-						doSheenAlbedoScale( components, output, false );
-
-						parentOutput.specular() += max( vec3( 0.0_f ), output.specular() );
-						parentOutput.scattering() += max( vec3( 0.0_f ), output.scattering() );
-						parentOutput.coating() += max( vec3( 0.0_f ), output.coating() );
-						parentOutput.sheen() += max( vec4( 0.0_f ), output.sheen() );
+						output.attenuate( attenuation, true, false );
+						output.sheenAlbedoScale( components, false );
+						parentOutput += output;
 					}
 					FI
 				}
@@ -1036,38 +996,6 @@ namespace castor3d::shader
 			, plightSurface
 			, preceivesShadows
 			, pparentOutput );
-	}
-
-	void LightingModel::doAttenuate( sdw::Float const attenuation
-		, DirectLighting & output
-		, bool withDiffuse )
-	{
-		if ( withDiffuse )
-		{
-			output.diffuse() = output.diffuse() * attenuation;
-		}
-
-		output.specular() = output.specular() * attenuation;
-		output.scattering() = output.scattering() * attenuation;
-		output.coating() = output.coating() * attenuation;
-		output.sheen().x() = output.sheen().x() * attenuation;
-	}
-
-	void LightingModel::doSheenAlbedoScale( BlendComponents const & components
-		, DirectLighting & output
-		, bool withDiffuse )
-	{
-		auto maxSheenColour = m_writer.declLocale( "maxSheenColour"
-			, max( components.sheenColour.r(), max( components.sheenColour.g(), components.sheenColour.b() ) ) );
-
-		IF( m_writer, maxSheenColour != 0.0_f )
-		{
-			auto albedoSheenScaling = m_writer.declLocale( "albedoSheenScaling"
-				, ( 1.0_f - output.sheen().w() * maxSheenColour ) );
-			output.diffuse() *= albedoSheenScaling;
-			output.specular() *= albedoSheenScaling;
-		}
-		FI
 	}
 
 	void LightingModel::doApplyShadows( DirectionalShadowData const & shadows
@@ -1136,14 +1064,7 @@ namespace castor3d::shader
 				}
 				FI
 
-				if ( withDiffuse )
-				{
-					output.diffuse() *= shadowFactor;
-				}
-
-				output.specular() *= shadowFactor;
-				output.coating() *= shadowFactor;
-				output.sheen().x() *= shadowFactor;
+				output.attenuate( shadowFactor, false, withDiffuse );
 			}
 			FI
 
@@ -1196,15 +1117,7 @@ namespace castor3d::shader
 					, shadowMapIndex
 					, lightSurface
 					, 1.0_f - ( lightSurface.lengthL().value() / lightRange ) ) );
-
-			if ( withDiffuse )
-			{
-				output.diffuse() *= shadowFactor;
-			}
-
-			output.specular() *= shadowFactor;
-			output.coating() *= shadowFactor;
-			output.sheen().x() *= shadowFactor;
+			output.attenuate( shadowFactor, false, withDiffuse );
 		}
 		FI
 	}
@@ -1232,15 +1145,7 @@ namespace castor3d::shader
 					, lightSurface
 					, shadows.transform()
 					, lightSurface.lengthL().value() / lightRange ) );
-
-			if ( withDiffuse )
-			{
-				output.diffuse() *= shadowFactor;
-			}
-
-			output.specular() *= shadowFactor;
-			output.coating() *= shadowFactor;
-			output.sheen().x() *= shadowFactor;
+			output.attenuate( shadowFactor, false, withDiffuse );
 		}
 		FI
 	}
@@ -1437,25 +1342,25 @@ namespace castor3d::shader
 			, components
 			, lightSurface
 			, isLit
-			, output.diffuse() );
+			, output.diffuse );
 		doComputeSpecularTerm( radiance
 			, light.intensity().y()
 			, components
 			, lightSurface
 			, isLit
-			, output.specular() );
+			, output.specular );
 		doComputeSheenTerm( radiance
 			, light.intensity().y()
 			, components
 			, lightSurface
 			, isLit
-			, output.sheen() );
+			, output.sheen );
 		doComputeCoatingTerm( radiance
 			, light.intensity().y()
 			, components
 			, lightSurface
 			, isLit
-			, output.coating() );
+			, output.coating );
 		return rawDiffuse;
 	}
 	
@@ -1491,19 +1396,19 @@ namespace castor3d::shader
 			, components
 			, lightSurface
 			, isLit
-			, output.specular() );
+			, output.specular );
 		doComputeSheenTerm( radiance
 			, light.intensity().y()
 			, components
 			, lightSurface
 			, isLit
-			, output.sheen() );
+			, output.sheen );
 		doComputeCoatingTerm( radiance
 			, light.intensity().y()
 			, components
 			, lightSurface
 			, isLit
-			, output.coating() );
+			, output.coating );
 	}
 
 	//*********************************************************************************************

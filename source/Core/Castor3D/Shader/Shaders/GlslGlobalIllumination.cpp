@@ -102,10 +102,10 @@ namespace castor3d
 			computeAmbient( sceneFlags
 				, indirectLighting
 				, debugOutput );
-			indirectLighting.diffuseColour() = ( hasDiffuseGI
-				? max( indirectLighting.diffuseColour() * ( vec3( 1.0_f ) - lightSurface.difF().value() ) / sdw::Float{ castor::Pi< float > }, vec3( 0.0_f ) )
+			indirectLighting.diffuseColour = ( hasDiffuseGI
+				? max( indirectLighting.diffuseColour * ( vec3( 1.0_f ) - lightSurface.difF().value() ) / sdw::Float{ castor::Pi< float > }, vec3( 0.0_f ) )
 				: vec3( 0.0_f ) );
-			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Diffuse" ), indirectLighting.diffuseColour() );
+			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Diffuse" ), indirectLighting.diffuseColour );
 		}
 
 		void GlobalIllumination::computeOcclusion( SceneFlags sceneFlags
@@ -123,13 +123,13 @@ namespace castor3d
 				{
 					IF( m_writer, voxelData.enableSecondaryBounce )
 					{
-						indirectLighting.occlusion() = traceConeOcclusion( mapVoxelsSecondaryBounce
+						indirectLighting.occlusion = traceConeOcclusion( mapVoxelsSecondaryBounce
 							, lightSurface
 							, voxelData );
 					}
 					ELSE
 					{
-						indirectLighting.occlusion() = traceConeOcclusion( mapVoxelsFirstBounce
+						indirectLighting.occlusion = traceConeOcclusion( mapVoxelsFirstBounce
 							, lightSurface
 							, voxelData );
 					}
@@ -138,7 +138,7 @@ namespace castor3d
 				FI
 			}
 
-			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Occlusion" ), indirectLighting.occlusion() );
+			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Occlusion" ), indirectLighting.occlusion );
 		}
 
 		void GlobalIllumination::computeDiffuse( SceneFlags sceneFlags
@@ -149,31 +149,31 @@ namespace castor3d
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
 				auto voxelData = m_writer.getVariable< VoxelData >( "c3d_voxelData" );
-				indirectLighting.rawDiffuse() += computeVCTRadiance( lightSurface, voxelData, indirectLighting.occlusion() );
+				indirectLighting.rawDiffuse += computeVCTRadiance( lightSurface, voxelData, indirectLighting.occlusion );
 			}
 			else
 			{
 				if ( checkFlag( sceneFlags, SceneFlag::eRsmGI ) )
 				{
-					indirectLighting.rawDiffuse() += computeRSMRadiance( lightSurface.clipPosition().xy() );
+					indirectLighting.rawDiffuse += computeRSMRadiance( lightSurface.clipPosition().xy() );
 				}
 
 				if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 				{
 					auto llpvGridData = m_writer.getVariable< LayeredLpvGridData >( "c3d_llpvGridData" );
-					indirectLighting.rawDiffuse() += ( computeLLPVRadiance( lightSurface, llpvGridData ) * llpvGridData.indirectAttenuation ) / sdw::Float{ castor::Pi< float > };
+					indirectLighting.rawDiffuse += ( computeLLPVRadiance( lightSurface, llpvGridData ) * llpvGridData.indirectAttenuation ) / sdw::Float{ castor::Pi< float > };
 				}
 
 				if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 				{
 					auto lpvGridData = m_writer.getVariable< LpvGridData >( "c3d_lpvGridData" );
-					indirectLighting.rawDiffuse() += ( computeLPVRadiance( lightSurface, lpvGridData ) * lpvGridData.indirectAttenuation() ) / sdw::Float{ castor::Pi< float > };
+					indirectLighting.rawDiffuse += ( computeLPVRadiance( lightSurface, lpvGridData ) * lpvGridData.indirectAttenuation() ) / sdw::Float{ castor::Pi< float > };
 				}
 			}
 
-			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Raw Diffuse" ), indirectLighting.rawDiffuse() );
-			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Diffuse Colour" ), indirectLighting.diffuseColour() );
-			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Diffuse Blend" ), indirectLighting.diffuseBlend() );
+			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Raw Diffuse" ), indirectLighting.rawDiffuse );
+			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Diffuse Colour" ), indirectLighting.diffuseColour );
+			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Diffuse Blend" ), indirectLighting.diffuseBlend );
 		}
 
 		void GlobalIllumination::computeAmbient( SceneFlags sceneFlags
@@ -182,25 +182,25 @@ namespace castor3d
 		{
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
-				indirectLighting.ambient() = indirectLighting.diffuseColour();
+				indirectLighting.ambient = indirectLighting.diffuseColour;
 			}
 			else if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
 				auto llpvGridData = m_writer.getVariable< LayeredLpvGridData >( "c3d_llpvGridData" );
-				indirectLighting.ambient() = indirectLighting.diffuseColour() / llpvGridData.indirectAttenuation;
+				indirectLighting.ambient = indirectLighting.diffuseColour / llpvGridData.indirectAttenuation;
 			}
 			else if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
 				auto lpvGridData = m_writer.getVariable< LpvGridData >( "c3d_lpvGridData" );
-				indirectLighting.ambient() = indirectLighting.diffuseColour() / lpvGridData.indirectAttenuation();
+				indirectLighting.ambient = indirectLighting.diffuseColour / lpvGridData.indirectAttenuation();
 			}
 
 			if ( checkFlag( sceneFlags, SceneFlag::eRsmGI ) )
 			{
-				indirectLighting.ambient() = indirectLighting.diffuseColour();
+				indirectLighting.ambient = indirectLighting.diffuseColour;
 			}
 
-			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Ambient" ), indirectLighting.ambient() );
+			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Ambient" ), indirectLighting.ambient );
 		}
 
 		void GlobalIllumination::computeSpecular( SceneFlags sceneFlags
@@ -213,19 +213,19 @@ namespace castor3d
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
 				auto voxelData = m_writer.getVariable< VoxelData >( "c3d_voxelData" );
-				indirectLighting.specular() = computeVCTSpecular( lightSurface
+				indirectLighting.specular = computeVCTSpecular( lightSurface
 					, roughness
-					, indirectLighting.occlusion()
-					, indirectLighting.diffuseBlend()
+					, indirectLighting.occlusion
+					, indirectLighting.diffuseBlend
 					, voxelData );
 				auto envBRDF = m_writer.declLocale( "envBRDF"
 					, brdfMap.lod( vec2( lightSurface.NdotV().value(), roughness ), 0.0_f ) );
-				indirectLighting.specular() *= sdw::fma( m_utils.conductorFresnel( lightSurface.NdotV().value(), indirectLighting.specular() )
+				indirectLighting.specular *= sdw::fma( m_utils.conductorFresnel( lightSurface.NdotV().value(), indirectLighting.specular )
 					, vec3( envBRDF.x() )
 					, vec3( envBRDF.y() ) );
 			}
 
-			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Specular" ), indirectLighting.specular() );
+			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Specular" ), indirectLighting.specular );
 		}
 
 		sdw::Vec4 GlobalIllumination::traceConeRadiance( sdw::CombinedImage3DRgba32 const & pvoxels
