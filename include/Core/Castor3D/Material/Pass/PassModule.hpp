@@ -152,14 +152,13 @@ namespace castor3d
 
 	struct PassFactoryEntry
 	{
-		LightingModelID key;
+		castor::String key;
 		PassCreator create;
 		PassTypeID id;
-		castor::String name;
 	};
 
 	using PassFactoryBase = castor::Factory< Pass
-		, LightingModelID
+		, castor::String
 		, PassUPtr
 		, PassCreator
 		, PassTypeID

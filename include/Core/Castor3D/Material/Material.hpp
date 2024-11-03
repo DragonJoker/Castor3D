@@ -39,17 +39,6 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates a pass.
-		 *\param[in]	lightingModelId	The pass' lighting model ID.
-		 *\return		The created pass.
-		 *\~french
-		 *\brief		Crée une passe.
-		 *\param[in]	lightingModelId	L'ID du modèle d'éclairage de la passe.
-		 *\return		La passe créée.
-		 */
-		C3D_API PassRPtr createPass( LightingModelID lightingModelId );
-		/**
-		 *\~english
-		 *\brief		Creates a pass.
 		 *\return		The created pass.
 		 *\~french
 		 *\brief		Crée une passe.
@@ -188,6 +177,11 @@ namespace castor3d
 		void setSerialisable( bool v )noexcept
 		{
 			m_serialisable = v;
+		}
+
+		void setLightingModelId( LightingModelID v )noexcept
+		{
+			m_lightingModelId = v;
 		}
 		/**@}*/
 

@@ -400,45 +400,111 @@ namespace castor3d
 			, FramePassTimer & timer )noexcept;
 		/**
 		 *\~english
-		 *\brief		Registers a Lighting Model.
-		 *\param[in]	name				The model name.
-		 *\param[in]	backgroundModelId	The background model ID.
-		 *\param[in]	creator				The model creation function.
+		 *\brief		Registers a lighting model.
+		 *\param[in]	baseName				The lighting model base name.
+		 *\param[in]	defaultDiffuseBrdf		The default diffuse BRDF.
+		 *\param[in]	defaultSpecularBrdf		The default specular BRDF.
+		 *\param[in]	defaultSheenBrdf		The default sheen BRDF.
+		 *\param[in]	defaultClearcoatBrdf	The default clearcoat BRDF.
+		 *\param[in]	creator					The model creation function.
 		 *\return		The model ID.
 		 *\~french
-		 *\brief		Enregistre un Lighting Model.
-		 *\param[in]	name				Le nom du model.
-		 *\param[in]	backgroundModelId	L'ID du modèle de fond.
-		 *\param[in]	creator				La fonction de création du modèle.
+		 *\brief		Enregistre un modèle d'éclairage.
+		 *\param[in]	baseName				Le nom de base du modèle d'éclairage.
+		 *\param[in]	defaultDiffuseBrdf		La BRDF de diffuse par défaut.
+		 *\param[in]	defaultSpecularBrdf		La BRDF de spéculaire par défaut.
+		 *\param[in]	defaultSheenBrdf		La BRDF de sheen par défaut.
+		 *\param[in]	defaultClearcoatBrdf	La BRDF de clearcoat par défaut.
+		 *\param[in]	creator					La fonction de création du modèle.
 		 *\return		L'ID du modèle.
 		 */
-		C3D_API castor::Vector< LightingModelID > registerLightingModel( castor::String const & name
-			, shader::DiffuseBrdfArray const & diffuseBrdfs
-			, shader::SpecularBrdfArray const & specularBrdfs
-			, shader::SheenBrdfArray const & sheenBrdfs
-			, shader::ClearcoatBrdfArray const & clearcoatBrdfs
+		C3D_API void registerLightingModel( castor::String const & baseName
 			, shader::DiffuseBrdfDesc const & defaultDiffuseBrdf
 			, shader::SpecularBrdfDesc const & defaultSpecularBrdf
 			, shader::SheenBrdfDesc const & defaultSheenBrdf
 			, shader::ClearcoatBrdfDesc const & defaultClearcoatBrdf
-			, shader::LightingModelCreator creator
-			, BackgroundModelID backgroundModelId )const;
+			, shader::LightingModelCreator creator )const;
 		/**
 		 *\~english
-		 *\brief		Unregisters a combination of Lighting Model and Background Model.
-		 *\param[in]	lightingModelId		The lighting model ID.
-		 *\param[in]	backgroundModelId	The bavkground model ID.
+		 *\brief		Unregisters a lighting model.
+		 *\param[in]	baseName		The lighting model base name.
 		 *\~french
-		 *\brief		Désenregistre une combinaison de Lighting Model et de Background Model.
-		 *\param[in]	lightingModelId		L'ID du modèle d'éclairage.
-		 *\param[in]	backgroundModelId	L'ID du modèle de fond.
+		 *\brief		Désenregistre un modèle d'éclairage.
+		 *\param[in]	baseName		Le nom de base du modèle d'éclairage.
 		 */
-		C3D_API castor::Vector< LightingModelID > unregisterLightingModel( castor::String const & baseName
-			, castor::StringArray const & diffuseBrdfs
-			, castor::StringArray const & specularBrdfs
-			, castor::StringArray const & sheenBrdfs
-			, castor::StringArray const & clearcoatBrdfs
-			, BackgroundModelID backgroundModelId )const;
+		C3D_API void unregisterLightingModel( castor::String const & baseName )const;
+		/**
+		 *\~english
+		 *\brief		Registers a diffuse BRDF.
+		 *\param[in]	desc	The BRDF description.
+		 *\~french
+		 *\brief		Enregistre une BRDF de diffuse.
+		 *\param[in]	desc	La description de la BRDF.
+		 */
+		C3D_API void registerDiffuseBrdf( shader::DiffuseBrdfDesc const & desc )const;
+		/**
+		 *\~english
+		 *\brief		Unegisters a diffuse BRDF.
+		 *\param[in]	desc	The BRDF description.
+		 *\~french
+		 *\brief		Désenregistre une BRDF de diffuse.
+		 *\param[in]	desc	La description de la BRDF.
+		 */
+		C3D_API void unregisterDiffuseBrdf( castor::String const & name )const;
+		/**
+		 *\~english
+		 *\brief		Registers a specular BRDF.
+		 *\param[in]	desc	The BRDF description.
+		 *\~french
+		 *\brief		Enregistre une BRDF de spéculaire.
+		 *\param[in]	desc	La description de la BRDF.
+		 */
+		C3D_API void registerSpecularBrdf( shader::SpecularBrdfDesc const & desc )const;
+		/**
+		 *\~english
+		 *\brief		Unegisters a specular BRDF.
+		 *\param[in]	desc	The BRDF description.
+		 *\~french
+		 *\brief		Désenregistre une BRDF de spéculaire.
+		 *\param[in]	desc	La description de la BRDF.
+		 */
+		C3D_API void unregisterSpecularBrdf( castor::String const & name )const;
+		/**
+		 *\~english
+		 *\brief		Registers a sheen BRDF.
+		 *\param[in]	desc	The BRDF description.
+		 *\~french
+		 *\brief		Enregistre une BRDF de sheen.
+		 *\param[in]	desc	La description de la BRDF.
+		 */
+		C3D_API void registerSheenBrdf( shader::SheenBrdfDesc const & desc )const;
+		/**
+		 *\~english
+		 *\brief		Unegisters a sheen BRDF.
+		 *\param[in]	desc	The BRDF description.
+		 *\~french
+		 *\brief		Désenregistre une BRDF de sheen.
+		 *\param[in]	desc	La description de la BRDF.
+		 */
+		C3D_API void unregisterSheenBrdf( castor::String const & name )const;
+		/**
+		 *\~english
+		 *\brief		Registers a clearcoat BRDF.
+		 *\param[in]	desc	The BRDF description.
+		 *\~french
+		 *\brief		Enregistre une BRDF de clearcoat.
+		 *\param[in]	desc	La description de la BRDF.
+		 */
+		C3D_API void registerClearcoatBrdf( shader::ClearcoatBrdfDesc const & desc )const;
+		/**
+		 *\~english
+		 *\brief		Unegisters a clearcoat BRDF.
+		 *\param[in]	desc	The BRDF description.
+		 *\~french
+		 *\brief		Désenregistre une BRDF de clearcoat.
+		 *\param[in]	desc	La description de la BRDF.
+		 */
+		C3D_API void unregisterClearcoatBrdf( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Registers a Background Model.
@@ -482,25 +548,13 @@ namespace castor3d
 		C3D_API void unregisterBuffer( ShaderBuffer const & buffer );
 		/**
 		 *\~english
-		 *\brief		Registers the pass info with given background model.
-		 *\param[in]	backgroundModelId	The background model.
-		 *\param[in]	info				The pass registering info.
-		 *\~french
-		 *\brief		Enregistre les informations de passe avec le modèle de fond donnés.
-		 *\param[in]	backgroundModelId	Le modèle de fond.
-		 *\param[in]	info				Les informations d'enregistrement de la passe.
-		 */
-		C3D_API void registerPassModel( BackgroundModelID backgroundModelId
-			, PassRegisterInfo const & info )const;
-		/**
-		 *\~english
 		 *\brief		Registers the given pass info with all background models.
 		 *\param[in]	info	The pass registering info.
 		 *\~french
 		 *\brief		Enregistre les informations de passe avec tous les modèles de fond.
 		 *\param[in]	info	Les informations d'enregistrement de la passe.
 		 */
-		C3D_API void registerPassModels( PassRegisterInfo const & info )const;
+		C3D_API void registerPassModel( PassRegisterInfo const & info )const;
 		/**
 		 *\~english
 		 *\brief		Unregisters a combination of lighting model and background model.
@@ -511,21 +565,7 @@ namespace castor3d
 		 *\param[in]	backgroundModelId	Le modèle de fond.
 		 *\param[in]	baseName			Le nom de base modèle d'éclairage.
 		 */
-		C3D_API void unregisterPassModel( BackgroundModelID backgroundModelId
-			, castor::String const & baseName )const;
-		/**
-		 *\~english
-		 *\brief		Unregisters all combinations of given lighting model and background models.
-		 *\param[in]	type	The lighting model name.
-		 *\~french
-		 *\brief		Désenregistre toutes les combinaisons du modèle d'éclairage et des modèles de fond.
-		 *\param[in]	type	Le nom du modèle d'éclairage.
-		 */
-		C3D_API void unregisterPassModels( castor::String const & baseName
-			, castor::StringArray const & diffuseBrdfs
-			, castor::StringArray const & specularBrdfs
-			, castor::StringArray const & sheenBrdfs
-			, castor::StringArray const & clearcoatBrdfs )const;
+		C3D_API void unregisterPassModel( castor::String const & baseName )const;
 		/**
 		 *\~english
 		 *\brief			Registers a specific data shader buffer.

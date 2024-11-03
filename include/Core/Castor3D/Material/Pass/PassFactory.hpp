@@ -21,15 +21,6 @@ namespace castor3d
 	{
 		castor::String lightingModel;
 		PassFactoryBase::Creator passCreator;
-		shader::LightingModelCreator lightingModelCreator;
-		shader::DiffuseBrdfArray diffuseBrdfs{};
-		shader::DiffuseBrdfDesc defaultDiffuseBrdf{};
-		shader::SpecularBrdfArray specularBrdfs{};
-		shader::SpecularBrdfDesc defaultSpecularBrdf{};
-		shader::SheenBrdfArray sheenBrdfs{};
-		shader::SheenBrdfDesc defaultSheenBrdf{};
-		shader::ClearcoatBrdfArray clearcoatBrdfs{};
-		shader::ClearcoatBrdfDesc defaultClearcoatBrdf{};
 	};
 
 	class PassFactory
@@ -45,15 +36,11 @@ namespace castor3d
 		 */
 		C3D_API explicit PassFactory( Engine & engine );
 
-		C3D_API void registerType( LightingModelID lightingModelId
-			, PassRegisterInfo const & info );
+		C3D_API void registerType( PassRegisterInfo const & info );
 		C3D_API PassUPtr create( Material & parent
 			, LightingModelID lightingModelId )const;
 		C3D_API PassUPtr create( Material & parent
 			, Pass const & rhs )const;
-
-		C3D_API LightingModelID getNameId( castor::String const & passType )const;
-		C3D_API castor::String getIdName( LightingModelID lightingModelId )const;
 
 		ObjCont const & listRegisteredTypes()const noexcept
 		{

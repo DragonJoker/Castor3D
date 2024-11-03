@@ -20,6 +20,7 @@
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneImporter.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
+#include <Castor3D/Shader/LightingModelFactory.hpp>
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/RgbColour.hpp>
@@ -416,7 +417,7 @@ int main( int argc, char * argv[] )
 					castor3d::Scene scene{ name, engine };
 					scene.setAmbientLight( castor::RgbColour::fromComponents( 1.0f, 1.0f, 1.0f ) );
 					scene.setBackgroundColour( castor::RgbColour::fromComponents( 0.5f, 0.5f, 0.5f ) );
-					scene.setDefaultLightingModel( scene.getEngine()->getPassFactory().getNameId( options.passType ) );
+					scene.setDefaultLightingModel( scene.getEngine()->getLightingModelFactory().getLightingModelId( options.passType ) );
 					castor3d::SceneImporter importer{ *scene.getEngine() };
 
 					if ( !importer.import( scene

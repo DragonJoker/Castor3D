@@ -2,7 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
+#include "Castor3D/Shader/LightingModelFactory.hpp"
 
 CU_ImplementSmartPtr( castor3d, PassFactory )
 
@@ -14,62 +14,28 @@ namespace castor3d
 	{
 	}
 
-	void PassFactory::registerType( LightingModelID lightingModelId
-		, PassRegisterInfo const & info )
+	void PassFactory::registerType( PassRegisterInfo const & info )
 	{
-		if ( !isTypeRegistered( lightingModelId ) )
+		if ( !isTypeRegistered( info.lightingModel ) )
 		{
 			auto & entry = m_registered.emplace_back();
-			entry.key = lightingModelId;
+			entry.key = info.lightingModel;
 			entry.create = info.passCreator;
 			entry.id = ++m_currentId;
-			entry.name = info.lightingModel;
 		}
 	}
 
 	PassUPtr PassFactory::create( Material & parent
 		, LightingModelID lightingModelId )const
 	{
-		return create( lightingModelId, lightingModelId, parent );
+		return create( getEngine()->getLightingModelFactory().getBaseName( lightingModelId )
+			, lightingModelId
+			, parent );
 	}
 
 	PassUPtr PassFactory::create( Material & parent
 		, Pass const & rhs )const
 	{
 		return castor::makeUnique< Pass >( parent, rhs );
-	}
-
-	LightingModelID PassFactory::getNameId( castor::String const & passType )const
-	{
-		auto it = std::find_if( m_registered.begin()
-			, m_registered.end()
-			, [&passType]( Entry const & lookup )
-			{
-				return lookup.name == passType;
-			} );
-
-		if ( it == m_registered.end() )
-		{
-			CU_Exception( "Unknown pass type." );
-		}
-
-		return it->key;
-	}
-
-	castor::String PassFactory::getIdName( LightingModelID lightingModelId )const
-	{
-		auto it = std::find_if( m_registered.begin()
-			, m_registered.end()
-			, [lightingModelId]( Entry const & lookup )
-			{
-				return lookup.key == lightingModelId;
-			} );
-
-		if ( it == m_registered.end() )
-		{
-			CU_Exception( "Unknown pass type ID." );
-		}
-
-		return it->name;
 	}
 }
