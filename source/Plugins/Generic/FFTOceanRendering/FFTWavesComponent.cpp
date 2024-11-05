@@ -278,6 +278,11 @@ namespace ocean_fft
 						, ast::type::NotArray
 						, ( flags.enableColours() ? index++ : 0 )
 						, flags.enableColours() );
+					result->declMember( "texture0"
+						, ast::type::Kind::eVec3F
+						, ast::type::NotArray
+						, ( flags.enableTexcoords() ? index++ : 0 )
+						, flags.enableTexcoords() );
 					result->declMember( "nodeId"
 						, ast::type::Kind::eInt
 						, ast::type::NotArray
@@ -305,6 +310,10 @@ namespace ocean_fft
 						, ast::type::Kind::eVec3F
 						, ast::type::NotArray
 						, flags.enableColours() );
+					result->declMember( "texture0"
+						, ast::type::Kind::eVec3F
+						, ast::type::NotArray
+						, flags.enableTexcoords() );
 					result->declMember( "nodeId"
 						, ast::type::Kind::eInt
 						, ast::type::NotArray );
@@ -317,6 +326,7 @@ namespace ocean_fft
 			auto patchLods()const { return getMember< sdw::Vec4 >( "patchLods" ); }
 			auto colour()const { return getMember< sdw::Vec3 >( "colour" ); }
 			auto nodeId()const { return getMember< sdw::Int >( "nodeId" ); }
+			auto texture0()const { return getMember< sdw::Vec3 >( "texture0" ); }
 
 		private:
 			using sdw::StructInstance::getMember;
@@ -644,6 +654,7 @@ namespace ocean_fft
 					auto worldPos = writer.declLocale( "worldPos"
 						, ( curBbcenter + scaledRight + scaledUp ) );
 
+					out.texture0() = vec3( in.texture0, 0.0_f );
 					out.vtx.position = modelData.worldToModel( vec4( worldPos, 1.0_f ) );
 					out.colour() = vec3( 1.0_f );
 					out.nodeId() = writer.cast< sdw::Int >( nodeId );
@@ -671,6 +682,7 @@ namespace ocean_fft
 					out.vtx.position = vec4( pos.x(), 0.0_f, pos.y(), 1.0_f );
 					out.patchWorldPosition() = out.vtx.position.xyz();
 					out.colour() = in.colour;
+					out.texture0() = in.texture0;
 					out.nodeId() = writer.cast< sdw::Int >( nodeId );
 				} );
 		}
@@ -720,6 +732,7 @@ namespace ocean_fft
 				patchOut.patchWorldPosition() = p0;
 				patchOut.patchLods() = lods;
 				patchOut.colour() = listIn[0u].colour();
+				patchOut.texture0() = listIn[0u].texture0();
 				patchOut.nodeId() = listIn[0u].nodeId();
 
 				auto outerLods = writer.declLocale( "outerLods"
@@ -823,6 +836,7 @@ namespace ocean_fft
 				mdlPosition = curPosition.xyz();
 				out.colour = patchIn.colour();
 				out.nodeId = patchIn.nodeId();
+				out.texture0 = patchIn.texture0();
 				out.curPosition = curPosition;
 				out.worldPosition = worldPos;
 				out.viewPosition = c3d_cameraData.worldToCurView( worldPos );
