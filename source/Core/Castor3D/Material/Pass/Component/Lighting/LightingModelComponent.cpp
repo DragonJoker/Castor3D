@@ -35,12 +35,23 @@ namespace castor
 			, StringStream & file )override
 		{
 			bool result{};
+			castor3d::Engine const & engine = *object.getOwner()->getOwner()->getEngine();
 			auto baseName = object.getLightingModelName();
+			auto diffuseBrdf = object.getDiffuseBrdfName();
+			auto specularBrdf = object.getSpecularBrdfName();
+			auto sheenBrdf = object.getSheenBrdfName();
+			auto clearcoatBrdf = object.getClearcoatBrdfName();
 
-			if ( auto block = beginBlock( file, cuT( "lighting_model" ), baseName ) )
+			if ( auto & model = engine.getLightingModelFactory().getModel( baseName );
+				diffuseBrdf == model.defaultDiffuseBrdf.name
+					&& specularBrdf == model.defaultSpecularBrdf.name
+					&& sheenBrdf == model.defaultSheenBrdf.name
+					&& clearcoatBrdf == model.defaultClearcoatBrdf.name )
 			{
-				castor3d::Engine const & engine = *object.getOwner()->getOwner()->getEngine();
-				auto & model = engine.getLightingModelFactory().getModel( baseName );
+				result = writeNameOpt( file, cuT( "lighting_model" ), baseName, engine.getDefaultLightingModelName() );
+			}
+			else if ( auto block = beginBlock( file, cuT( "lighting_model" ), baseName ) )
+			{
 				result = block->writeNameOpt( file, cuT( "diffuse_brdf" ), object.getDiffuseBrdfName(), model.defaultDiffuseBrdf.name )
 					&& block->writeNameOpt( file, cuT( "specular_brdf" ), object.getSpecularBrdfName(), model.defaultSpecularBrdf.name )
 					&& block->writeNameOpt( file, cuT( "sheen_brdf" ), object.getSheenBrdfName(), model.defaultSheenBrdf.name )
