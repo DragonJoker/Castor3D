@@ -802,11 +802,14 @@ namespace GuiCommon
 
 		for ( auto unit : pass )
 		{
-			++unitIndex;
-			doAddTexture( passId
-				, unitIndex
-				, pass
-				, *unit );
+			if ( unit->getData().base->sourceInfo.isSerialisable() )
+			{
+				++unitIndex;
+				doAddTexture( passId
+					, unitIndex
+					, pass
+					, *unit );
+			}
 		}
 	}
 
