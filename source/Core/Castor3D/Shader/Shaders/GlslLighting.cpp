@@ -1388,7 +1388,7 @@ namespace castor3d::shader
 
 			auto transmittedLight = m_writer.declLocale( "transmittedLight"
 				, light.intensity().x() * doComputeLightTransmission( components, lightSurface ) );
-			transmittedLight = ReflectionModel::applyVolumeAttenuation( transmittedLight, length( transmissionRay ), components.attenuationColour, components.attenuationDistance );
+			transmittedLight *= ReflectionModel::applyVolumeAttenuation( length( transmissionRay ), components.attenuationColour, components.attenuationDistance );
 
 			output.diffuse = mix( output.diffuse, transmittedLight, vec3( components.transmission ) );
 

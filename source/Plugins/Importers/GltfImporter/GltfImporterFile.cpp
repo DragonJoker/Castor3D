@@ -51,7 +51,6 @@ namespace c3d_gltf
 				| fastgltf::Extensions::KHR_materials_sheen
 				| fastgltf::Extensions::KHR_materials_unlit
 				| fastgltf::Extensions::KHR_materials_anisotropy
-				| fastgltf::Extensions::KHR_materials_dispersion
 				| fastgltf::Extensions::KHR_materials_diffuse_transmission };
 			auto path = castor::makePath( filePath );
 
@@ -553,13 +552,6 @@ namespace c3d_gltf
 	castor::Quaternion convert( fastgltf::math::fquat const & value )
 	{
 		return castor::Quaternion::fromComponents( value[0], value[1], value[2], value[3] );
-	}
-
-	castor3d::NodeTransform convert( fastgltf::TRS const & transform )
-	{
-		return { convert( transform.translation )
-			, convert( transform.scale )
-			, convert( transform.rotation ) };
 	}
 
 	castor3d::NodeTransform convert( std::variant< fastgltf::TRS, fastgltf::math::fmat4x4 > const & transform )
