@@ -12,6 +12,7 @@ find_package( gli CONFIG REQUIRED )
 find_package( tinyxml2 CONFIG REQUIRED )
 find_package( msdfgen CONFIG REQUIRED )
 find_package( PNG REQUIRED )
+find_package( WebP CONFIG REQUIRED )
 
 if ( VCPKG_TOOLCHAIN )
 	set( unofficial-minizip_DIR ${VCPKG_SHARE_DIR}/unofficial-minizip )
@@ -331,6 +332,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Size.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/StbImageLoader.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/StbImageWriter.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/WebPImageLoader.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/XpmImageLoader.cpp
 	)
 	set( ${PROJECT_NAME}_FOLDER_ENM_FILES
@@ -387,6 +389,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/StbImageLoader.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/StbImageWriter.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/UnsupportedFormatException.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/WebPImageLoader.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/XpmImageLoader.hpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/PxBufferCompression.hpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/stb_image.h
@@ -709,6 +712,9 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			msdfgen::msdfgen-ext
 			msdfgen::msdfgen-core
 			msdfgen::msdfgen-full
+			WebP::webp
+			WebP::webpdecoder
+			WebP::webpdemux
 	)
 	if ( WIN32 )
 		target_link_libraries( ${PROJECT_NAME}

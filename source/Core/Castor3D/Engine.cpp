@@ -47,6 +47,7 @@
 #include <CastorUtils/Graphics/GliImageWriter.hpp>
 #include <CastorUtils/Graphics/StbImageLoader.hpp>
 #include <CastorUtils/Graphics/StbImageWriter.hpp>
+#include <CastorUtils/Graphics/WebPImageLoader.hpp>
 #include <CastorUtils/Graphics/XpmImageLoader.hpp>
 #include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
@@ -199,6 +200,7 @@ namespace castor3d
 		castor::ExrImageLoader::registerLoader( m_imageLoader );
 		castor::XpmImageLoader::registerLoader( m_imageLoader );
 		castor::FreeImageLoader::registerLoader( m_imageLoader );
+		castor::WebPImageLoader::registerLoader( m_imageLoader );
 		castor::StbImageWriter::registerWriter( m_imageWriter );
 		castor::GliImageWriter::registerWriter( m_imageWriter );
 

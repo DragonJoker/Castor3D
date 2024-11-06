@@ -113,8 +113,13 @@ namespace c3d_gltf
 			component->setData( *data );
 		}
 
-		static castor::String getFormatName( fastgltf::MimeType mimeType )
+		static castor::String getFormatName( fastgltf::MimeType mimeType, bool isWebP )
 		{
+			if ( isWebP )
+			{
+				return cuT( "webp" );
+			}
+
 			switch ( mimeType )
 			{
 			case fastgltf::MimeType::JPEG:
@@ -255,6 +260,7 @@ namespace c3d_gltf
 			, fastgltf::DataSource const & impDataSource
 			, castor3d::TextureConfiguration const & texConfig
 			, castor::ImageLoaderConfig const & loadConfig
+			, bool isWebP
 			, castor3d::MaterialImporter & importer
 			, size_t offset = 0u
 			, size_t size = 0xFFFFFFFFFFFFFFFF )
@@ -263,7 +269,7 @@ namespace c3d_gltf
 			{
 				fastgltf::BufferView const & impBufferView = impAsset.bufferViews[std::get< 1 >( impDataSource ).bufferViewIndex];
 				fastgltf::Buffer const & impBuffer = impAsset.buffers[impBufferView.bufferIndex];
-				return loadTexture( impAsset, name, impTexture, impImage, impBuffer.data, texConfig, loadConfig, importer, offset + impBufferView.byteOffset, impBufferView.byteLength );
+				return loadTexture( impAsset, name, impTexture, impImage, impBuffer.data, texConfig, loadConfig, isWebP, importer, offset + impBufferView.byteOffset, impBufferView.byteLength );
 			}
 
 			fastgltf::MimeType mimeType{};
@@ -279,7 +285,7 @@ namespace c3d_gltf
 			if ( !data.empty() )
 			{
 				return castor::make_unique< castor3d::TextureSourceInfo >( importer.loadTexture( name
-					, getFormatName( mimeType )
+					, getFormatName( mimeType, isWebP )
 					, castor::move( data )
 					, texConfig
 					, loadConfig ) );
@@ -296,20 +302,38 @@ namespace c3d_gltf
 		{
 			castor::RawUniquePtr< castor3d::TextureSourceInfo > result;
 
-			if ( texInfo.textureIndex < impAsset.textures.size()
-				&& impAsset.textures[texInfo.textureIndex].imageIndex
-				&& *impAsset.textures[texInfo.textureIndex].imageIndex < impAsset.images.size() )
+			if ( texInfo.textureIndex < impAsset.textures.size() )
 			{
-				fastgltf::Texture const & impTexture = impAsset.textures[texInfo.textureIndex];
-				fastgltf::Image const & impImage = impAsset.images[*impTexture.imageIndex];
-				result = loadTexture( impAsset
-					, makeTextureName( texInfo.textureIndex, impTexture, *impTexture.imageIndex, impImage )
-					, impTexture
-					, impImage
-					, impImage.data
-					, texConfig
-					, loadConfig
-					, importer );
+				if ( impAsset.textures[texInfo.textureIndex].imageIndex
+					&& *impAsset.textures[texInfo.textureIndex].imageIndex < impAsset.images.size() )
+				{
+					fastgltf::Texture const & impTexture = impAsset.textures[texInfo.textureIndex];
+					fastgltf::Image const & impImage = impAsset.images[*impTexture.imageIndex];
+					result = loadTexture( impAsset
+						, makeTextureName( texInfo.textureIndex, impTexture, *impTexture.imageIndex, impImage )
+						, impTexture
+						, impImage
+						, impImage.data
+						, texConfig
+						, loadConfig
+						, false
+						, importer );
+				}
+				else if ( impAsset.textures[texInfo.textureIndex].webpImageIndex
+					&& *impAsset.textures[texInfo.textureIndex].webpImageIndex < impAsset.images.size() )
+				{
+					fastgltf::Texture const & impTexture = impAsset.textures[texInfo.textureIndex];
+					fastgltf::Image const & impImage = impAsset.images[*impTexture.webpImageIndex];
+					result = loadTexture( impAsset
+						, makeTextureName( texInfo.textureIndex, impTexture, *impTexture.webpImageIndex, impImage )
+						, impTexture
+						, impImage
+						, impImage.data
+						, texConfig
+						, loadConfig
+						, true
+						, importer );
+				}
 			}
 
 			return result;
