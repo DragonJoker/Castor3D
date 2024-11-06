@@ -13,6 +13,7 @@
 #include "Castor3D/Material/Pass/Component/Lighting/AmbientComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/ClearcoatComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/DispersionComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/IridescenceComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/LightingModelComponent.hpp"
@@ -160,6 +161,7 @@ namespace castor3d
 		registerComponent< OpacityComponent >();
 		registerComponent< ColourComponent >();
 		registerComponent< AmbientComponent >();
+		registerComponent< DispersionComponent >();
 		registerComponent< EmissiveComponent >();
 		registerComponent< TransmissionComponent >();
 		registerComponent< AttenuationComponent >();

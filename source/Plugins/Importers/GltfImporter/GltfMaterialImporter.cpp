@@ -13,6 +13,7 @@
 #include <Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/ClearcoatComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Lighting/DispersionComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/IridescenceComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/LightingModelComponent.hpp>
@@ -674,6 +675,7 @@ namespace c3d_gltf
 		doImportAlphaModeData( impMaterial, *pass );
 		doImportIorData( impMaterial, *pass );
 		doImportAnisotropyData( impMaterial, *pass );
+		doImportDispersionData( impMaterial, *pass );
 		pass->prepareTextures();
 		return true;
 	}
@@ -921,6 +923,16 @@ namespace c3d_gltf
 				transmission = pass.createComponent< castor3d::TransmissionComponent >();
 				transmission->setTransmission( 0.0f );
 			}
+		}
+	}
+
+	void GltfMaterialImporter::doImportDispersionData( fastgltf::Material const & impMaterial
+		, castor3d::Pass & pass )const
+	{
+		if ( impMaterial.dispersion != 0.0f )
+		{
+			auto dispersion = pass.createComponent< castor3d::DispersionComponent >();
+			dispersion->setDispersion( impMaterial.dispersion );
 		}
 	}
 

@@ -33,6 +33,42 @@ namespace castor3d::shader
 		++envMapBinding;
 	}
 
+	sdw::RetVec3 ReflectionModel::computeIncident( sdw::Vec3 const & wsPosition
+		, sdw::Vec3 const & wsCamera )
+	{
+		return normalize( wsPosition - wsCamera );
+	}
+
+	DerivVec3 ReflectionModel::computeIncident( DerivVec3 const & wsPosition
+		, sdw::Vec3 const & wsCamera )
+	{
+		return normalize( wsPosition - wsCamera );
+	}
+
+	sdw::Vec3 ReflectionModel::getVolumeTransmissionRay( sdw::Vec3 const & wsNormal
+		, sdw::Vec3 const & wsIncident
+		, sdw::Float const & thickness
+		, sdw::Float const & ior )
+	{
+		return normalize( refract( wsIncident, normalize( wsNormal ), 1.0_f / ior ) ) * thickness;
+	}
+
+	sdw::Vec3 ReflectionModel::applyVolumeAttenuation( sdw::Float const & transmissionDistance
+		, sdw::Vec3 const & attenuationColor
+		, sdw::Float const & attenuationDistance )
+	{
+		return transmissionDistance.getWriter()->ternary( attenuationDistance == 0.0_f
+			// Attenuation distance is +∞ (which we indicate by zero), i.e. the transmitted color is not attenuated at all.
+			, vec3( 1.0_f )
+			// Compute light attenuation using Beer's law.
+			, pow( attenuationColor, vec3( transmissionDistance / attenuationDistance ) ) );
+	}
+
+	sdw::Float ReflectionModel::applyIorToRoughness( sdw::Float const & roughness, sdw::Float const & ior )
+	{
+		return roughness * clamp( ior * 2.0_f, 0.0_f, 2.0_f );
+	}
+
 	void ReflectionModel::computeCombined( BlendComponents & components
 		, LightSurface const & lightSurface
 		, sdw::Vec3 const & position
@@ -477,18 +513,6 @@ namespace castor3d::shader
 			, debugOutput );
 		debugOutput.registerOutput( cuT( "Reflections" ), cuT( "Refr. Colour" ), refracted );
 		return refracted;
-	}
-
-	sdw::RetVec3 ReflectionModel::computeIncident( sdw::Vec3 const & wsPosition
-		, sdw::Vec3 const & wsCamera )const
-	{
-		return normalize( wsPosition - wsCamera );
-	}
-
-	DerivVec3 ReflectionModel::computeIncident( DerivVec3 const & wsPosition
-		, sdw::Vec3 const & wsCamera )const
-	{
-		return normalize( wsPosition - wsCamera );
 	}
 
 	sdw::Vec4 ReflectionModel::computeScreenSpace( CameraData const & cameraData
@@ -978,31 +1002,6 @@ namespace castor3d::shader
 			, pcsHitPoint );
 	}
 
-	sdw::Vec3 ReflectionModel::getVolumeTransmissionRay( sdw::Vec3 const & wsNormal
-		, sdw::Vec3 const & wsIncident
-		, sdw::Float const & thickness
-		, sdw::Float const & ior )
-	{
-		return normalize( refract( wsIncident, normalize( wsNormal ), 1.0_f / ior ) ) * thickness;
-	}
-
-	sdw::Vec3 ReflectionModel::applyVolumeAttenuation( sdw::Vec3 const & radiance
-			, sdw::Float const & transmissionDistance
-			, sdw::Vec3 const & attenuationColor
-			, sdw::Float const & attenuationDistance )
-	{
-		return radiance.getWriter()->ternary( attenuationDistance == 0.0_f
-			// Attenuation distance is +∞ (which we indicate by zero), i.e. the transmitted color is not attenuated at all.
-			, radiance
-			// Compute light attenuation using Beer's law.
-			, pow( attenuationColor, vec3( transmissionDistance / attenuationDistance ) ) * radiance );
-	}
-
-	sdw::Float ReflectionModel::applyIorToRoughness( sdw::Float const & roughness, sdw::Float const & ior )
-	{
-		return roughness * clamp( ior * 2.0_f, 0.0_f, 2.0_f );
-	}
-
 	sdw::RetVec3 ReflectionModel::computeSpecularReflEnvMaps( sdw::Vec3 const & pfresnel
 		, sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
@@ -1163,7 +1162,7 @@ namespace castor3d::shader
 		if ( !m_computeRefrSceneMap )
 		{
 			m_computeRefrSceneMap = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeRefrSceneMap"
-				, [this, &matrices]( sdw::Vec3 const & wsIncident
+				, [this, &components, &matrices]( sdw::Vec3 const & wsIncident
 					, sdw::Vec3 const & wsPosition
 					, sdw::Vec3 const & wsNormal
 					, sdw::CombinedImage2DRgba32 const & sceneMap
@@ -1174,30 +1173,66 @@ namespace castor3d::shader
 					, sdw::Float roughness
 					, sdw::Float thicknessFactor
 					, sdw::Vec3 attenuationColour
-					, sdw::Float attenuationDistance )
+					, sdw::Float attenuationDistance
+					, sdw::Float dispersion )
 				{
-					auto alb = m_writer.declLocale( "alb"
-						, albedo );
-					roughness *= clamp( refractionRatio * 2.0_f, 0.0_f, 2.0_f );
-
 					IF( m_writer, thicknessFactor != 0.0_f
 						&& refractionRatio != 0.0_f )
 					{
-						auto refractionVector = m_writer.declLocale( "refractionVector"
-							, refract( wsIncident, normalize( wsNormal ), 1.0_f / refractionRatio ) );
-						auto worldExit = m_writer.declLocale( "worldExit"
-							, wsPosition + normalize( refractionVector ) * thicknessFactor );
-						auto ndc = m_writer.declLocale( "ndc"
-							, matrices.worldToCurProj( vec4( worldExit, 1.0_f ) ) );
-						sceneUv = ( ndc.xy() / ndc.w() + vec2( 1.0_f ) ) * 0.5_f;
+						auto transmittedLight = m_writer.declLocale( "transmittedLight"
+							, vec3( 0.0_f ) );
+						auto transmissionRayLength = m_writer.declLocale( "transmissionRayLength"
+							, 0.0_f );
 
-						auto transmitted = m_writer.declLocale( "transmitted"
-							, sceneMap.lod( sceneUv, roughness * sdw::Float( float( EnvironmentMipLevels ) ) ).rgb() );
+						if ( components.hasMember( "dispersion" ) )
+						{
+							auto halfSpread = m_writer.declLocale( "halfSpread"
+								, ( refractionRatio - 1.0_f ) * 0.025_f * dispersion );
+							auto iors = m_writer.declLocale( "iors"
+								, vec3( refractionRatio - halfSpread, refractionRatio, refractionRatio + halfSpread ) );
+							auto transmissionRay = m_writer.declLocale( "transmissionRay"
+								, vec3( 0.0_f ) );
+							auto refractedRayExit = m_writer.declLocale( "refractedRayExit"
+								, vec3( 0.0_f ) );
+							auto ndcPos = m_writer.declLocale( "ndcPos"
+								, vec4( 0.0_f ) );
+							auto refractionCoords = m_writer.declLocale( "refractionCoords"
+								, vec2( 0.0_f ) );
 
-						auto attnCoefficient = m_writer.declLocale( "attnCoefficient"
-							, -sdw::log( attenuationColour ) / attenuationDistance );
+							for ( int i = 0; i < 3; ++i )
+							{
+								transmissionRay = getVolumeTransmissionRay( wsNormal, wsIncident, thicknessFactor, iors[i] );
+								transmissionRayLength = length( transmissionRay );
+								refractedRayExit = wsPosition + transmissionRay;
+								ndcPos = matrices.worldToCurProj( vec4( refractedRayExit, 1.0_f ) );
+								refractionCoords = ndcPos.xy() / ndcPos.w();
+								refractionCoords += 1.0_f;
+								refractionCoords /= 2.0_f;
+
+								if ( i == 1 )
+								{
+									sceneUv = refractionCoords;
+								}
+
+								transmittedLight[i] = sceneMap.lod( refractionCoords, applyIorToRoughness( roughness, iors[i] ) * sdw::Float( float( EnvironmentMipLevels ) ) )[i];
+							}
+						}
+						else
+						{
+							auto transmissionRay = m_writer.declLocale( "transmissionRay"
+								, getVolumeTransmissionRay( wsNormal, wsIncident, thicknessFactor, refractionRatio ) );
+							transmissionRayLength = length( transmissionRay );
+							auto refractedRayExit = m_writer.declLocale( "refractedRayExit"
+								, wsPosition + transmissionRay );
+							auto ndcPos = m_writer.declLocale( "ndcPos"
+								, matrices.worldToCurProj( vec4( refractedRayExit, 1.0_f ) ) );
+							sceneUv = ( ndcPos.xy() / ndcPos.w() + vec2( 1.0_f ) ) * 0.5_f;
+
+							transmittedLight = sceneMap.lod( sceneUv, applyIorToRoughness( roughness, refractionRatio ) * sdw::Float( float( EnvironmentMipLevels ) ) ).rgb();
+						}
+
 						auto attenuatedColor = m_writer.declLocale( "attenuatedColor"
-							, exp( -attnCoefficient * thicknessFactor ) );
+							, applyVolumeAttenuation(transmissionRayLength, attenuationColour, attenuationDistance ) );
 
 						if ( m_writer.hasGlobalVariable( "c3d_mapBrdf" ) )
 						{
@@ -1215,16 +1250,18 @@ namespace castor3d::shader
 							auto specularColor = m_writer.declLocale( "specularColor"
 								, sdw::fma( F, vec3( brdf.x() ), vec3( brdf.y() ) ) );
 
-							m_writer.returnStmt( ( 1.0_f - specularColor ) * transmitted * attenuatedColor * alb );
+							m_writer.returnStmt( ( 1.0_f - specularColor ) * transmittedLight * attenuatedColor * albedo );
 						}
 						else
 						{
-							m_writer.returnStmt( transmitted * attenuatedColor * alb );
+							m_writer.returnStmt( transmittedLight * attenuatedColor * albedo );
 						}
 					}
+					ELSE
+					{
+						m_writer.returnStmt( sceneMap.lod( sceneUv, applyIorToRoughness( roughness, refractionRatio ) * sdw::Float( float( EnvironmentMipLevels ) ) ).rgb() * albedo );
+					}
 					FI
-
-					m_writer.returnStmt( sceneMap.lod( sceneUv, roughness * sdw::Float( float( EnvironmentMipLevels ) ) ).rgb() * alb );
 				}
 				, sdw::InVec3{ m_writer, "wsIncident" }
 				, sdw::InVec3{ m_writer, "wsPosition" }
@@ -1237,7 +1274,8 @@ namespace castor3d::shader
 				, sdw::InFloat{ m_writer, "roughness" }
 				, sdw::InFloat{ m_writer, "thicknessFactor" }
 				, sdw::InVec3{ m_writer, "attenuationColour" }
-				, sdw::InFloat{ m_writer, "attenuationDistance" } );
+				, sdw::InFloat{ m_writer, "attenuationDistance" }
+				, sdw::InFloat{ m_writer, "dispersion" } );
 		}
 
 		return m_computeRefrSceneMap( pwsIncident
@@ -1251,7 +1289,8 @@ namespace castor3d::shader
 			, components.roughness
 			, components.thicknessFactor
 			, components.attenuationColour
-			, components.attenuationDistance );
+			, components.attenuationDistance
+			, components.getMember( "dispersion", 0.0_f ) );
 	}
 
 	void ReflectionModel::doComputeReflections( sdw::CombinedImage2DRgba32 const & brdf

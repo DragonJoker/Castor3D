@@ -21,10 +21,18 @@ namespace castor3d::shader
 			, bool allowIbl
 			, bool hasEnvMap = true );
 
-		C3D_API sdw::RetVec3 computeIncident( sdw::Vec3 const & wsPosition
-			, sdw::Vec3 const & wsCamera )const;
-		C3D_API DerivVec3 computeIncident( DerivVec3 const & wsPosition
-			, sdw::Vec3 const & wsCamera )const;
+		C3D_API static sdw::RetVec3 computeIncident( sdw::Vec3 const & wsPosition
+			, sdw::Vec3 const & wsCamera );
+		C3D_API static DerivVec3 computeIncident( DerivVec3 const & wsPosition
+			, sdw::Vec3 const & wsCamera );
+		C3D_API static sdw::Vec3 getVolumeTransmissionRay( sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsIncident
+			, sdw::Float const & thickness
+			, sdw::Float const & ior );
+		C3D_API static sdw::Vec3 applyVolumeAttenuation( sdw::Float const & transmissionDistance
+			, sdw::Vec3 const & attenuationColor
+			, sdw::Float const & attenuationDistance );
+		C3D_API static sdw::Float applyIorToRoughness( sdw::Float const & roughness, sdw::Float const & ior );
 		C3D_API void computeCombined( BlendComponents & components
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & position
@@ -183,16 +191,6 @@ namespace castor3d::shader
 			, sdw::Float maxRayTraceDistance
 			, sdw::Vec2 & hitPixel
 			, sdw::Vec3 & csHitPoint );
-
-		C3D_API static sdw::Vec3 getVolumeTransmissionRay( sdw::Vec3 const & wsNormal
-			, sdw::Vec3 const & wsIncident
-			, sdw::Float const & thickness
-			, sdw::Float const & ior );
-		C3D_API static sdw::Vec3 applyVolumeAttenuation( sdw::Vec3 const & radiance
-			, sdw::Float const & transmissionDistance
-			, sdw::Vec3 const & attenuationColor
-			, sdw::Float const & attenuationDistance );
-		C3D_API static sdw::Float applyIorToRoughness( sdw::Float const & roughness, sdw::Float const & ior );
 
 		Utils & getUtils()const
 		{
@@ -409,6 +407,7 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InVec3
+			, sdw::InFloat
 			, sdw::InFloat > m_computeRefrSceneMap;
 	};
 }
