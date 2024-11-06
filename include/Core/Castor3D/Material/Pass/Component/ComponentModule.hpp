@@ -202,6 +202,13 @@ namespace castor3d
 	struct ClearcoatComponent;
 	/**
 	\~english
+	\brief		Component holding dispersion data.
+	\~french
+	\brief		Composant détenant les données de dispersion.
+	*/
+	struct DispersionComponent;
+	/**
+	\~english
 	\brief		Component holding emissive data.
 	\~french
 	\brief		Composant détenant les données d'émission.
@@ -288,6 +295,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, AmbientComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, AttenuationComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, ClearcoatComponent, C3D_API );
+	CU_DeclareSmartPtr( castor3d, DispersionComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, EmissiveComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, IridescenceComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LightingModelComponent, C3D_API );

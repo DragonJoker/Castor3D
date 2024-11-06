@@ -1,0 +1,33 @@
+/*
+See LICENSE file in root folder
+*/
+#ifndef ___CU_WebPImageLoader_H___
+#define ___CU_WebPImageLoader_H___
+
+#include "CastorUtils/Graphics/ImageLoader.hpp"
+
+namespace castor
+{
+	/**
+	\~english
+	\brief		Image loader based on gli.
+	\~french
+	\brief		Loader d'image basé sur gli.
+	*/
+	class WebPImageLoader
+		: public ImageLoaderImpl
+	{
+	public:
+		CU_API static void registerLoader( ImageLoader & reg );
+		CU_API static void unregisterLoader( ImageLoader & reg );
+		/**
+		 *\copydoc castor::ImageLoaderImpl::load
+		 */
+		CU_API ImageLayout load( String const & imageFormat
+			, uint8_t const * data
+			, uint32_t size
+			, PxBufferBaseUPtr & buffer )const override;
+	};
+}
+
+#endif
