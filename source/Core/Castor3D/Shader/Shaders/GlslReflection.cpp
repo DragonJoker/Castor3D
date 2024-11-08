@@ -978,6 +978,31 @@ namespace castor3d::shader
 			, pcsHitPoint );
 	}
 
+	sdw::Vec3 ReflectionModel::getVolumeTransmissionRay( sdw::Vec3 const & wsNormal
+		, sdw::Vec3 const & wsIncident
+		, sdw::Float const & thickness
+		, sdw::Float const & ior )
+	{
+		return normalize( refract( wsIncident, normalize( wsNormal ), 1.0_f / ior ) ) * thickness;
+	}
+
+	sdw::Vec3 ReflectionModel::applyVolumeAttenuation( sdw::Vec3 const & radiance
+			, sdw::Float const & transmissionDistance
+			, sdw::Vec3 const & attenuationColor
+			, sdw::Float const & attenuationDistance )
+	{
+		return radiance.getWriter()->ternary( attenuationDistance == 0.0_f
+			// Attenuation distance is +∞ (which we indicate by zero), i.e. the transmitted color is not attenuated at all.
+			, radiance
+			// Compute light attenuation using Beer's law.
+			, pow( attenuationColor, vec3( transmissionDistance / attenuationDistance ) ) * radiance );
+	}
+
+	sdw::Float ReflectionModel::applyIorToRoughness( sdw::Float const & roughness, sdw::Float const & ior )
+	{
+		return roughness * clamp( ior * 2.0_f, 0.0_f, 2.0_f );
+	}
+
 	sdw::RetVec3 ReflectionModel::computeSpecularReflEnvMaps( sdw::Vec3 const & pfresnel
 		, sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
@@ -1129,16 +1154,16 @@ namespace castor3d::shader
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pwsNormal
 		, sdw::CombinedImage2DRgba32 const & psceneMap
-		, CameraData const & pmatrices
+		, CameraData const & matrices
 		, sdw::Vec2 psceneUv
 		, sdw::Float const & prefractionRatio
-		, BlendComponents & pcomponents
+		, BlendComponents & components
 		, DebugOutputCategory & debugOutput )
 	{
 		if ( !m_computeRefrSceneMap )
 		{
 			m_computeRefrSceneMap = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeRefrSceneMap"
-				, [this, &pmatrices]( sdw::Vec3 const & wsIncident
+				, [this, &matrices]( sdw::Vec3 const & wsIncident
 					, sdw::Vec3 const & wsPosition
 					, sdw::Vec3 const & wsNormal
 					, sdw::CombinedImage2DRgba32 const & sceneMap
@@ -1163,7 +1188,7 @@ namespace castor3d::shader
 						auto worldExit = m_writer.declLocale( "worldExit"
 							, wsPosition + normalize( refractionVector ) * thicknessFactor );
 						auto ndc = m_writer.declLocale( "ndc"
-							, pmatrices.worldToCurProj( vec4( worldExit, 1.0_f ) ) );
+							, matrices.worldToCurProj( vec4( worldExit, 1.0_f ) ) );
 						sceneUv = ( ndc.xy() / ndc.w() + vec2( 1.0_f ) ) * 0.5_f;
 
 						auto transmitted = m_writer.declLocale( "transmitted"
@@ -1221,12 +1246,12 @@ namespace castor3d::shader
 			, psceneMap
 			, psceneUv
 			, prefractionRatio
-			, pcomponents.colour
-			, pcomponents.f0
-			, pcomponents.roughness
-			, pcomponents.thicknessFactor
-			, pcomponents.attenuationColour
-			, pcomponents.attenuationDistance );
+			, components.colour
+			, components.f0
+			, components.roughness
+			, components.thicknessFactor
+			, components.attenuationColour
+			, components.attenuationDistance );
 	}
 
 	void ReflectionModel::doComputeReflections( sdw::CombinedImage2DRgba32 const & brdf

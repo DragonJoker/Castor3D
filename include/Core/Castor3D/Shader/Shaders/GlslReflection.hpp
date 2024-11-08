@@ -184,6 +184,16 @@ namespace castor3d::shader
 			, sdw::Vec2 & hitPixel
 			, sdw::Vec3 & csHitPoint );
 
+		C3D_API static sdw::Vec3 getVolumeTransmissionRay( sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsIncident
+			, sdw::Float const & thickness
+			, sdw::Float const & ior );
+		C3D_API static sdw::Vec3 applyVolumeAttenuation( sdw::Vec3 const & radiance
+			, sdw::Float const & transmissionDistance
+			, sdw::Vec3 const & attenuationColor
+			, sdw::Float const & attenuationDistance );
+		C3D_API static sdw::Float applyIorToRoughness( sdw::Float const & roughness, sdw::Float const & ior );
+
 		Utils & getUtils()const
 		{
 			return m_utils;
