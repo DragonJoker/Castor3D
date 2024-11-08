@@ -40,7 +40,9 @@ namespace castor3d
 			static constexpr uint64_t maxBackgroundModelIDMask = ( 0x1ULL << uint64_t( maxBackgroundModelIDSize ) ) - 1u;
 			static constexpr uint64_t maxPassLayerSize = castor::getBitSize( MaxPassLayers - 1u );
 			static constexpr uint64_t maxPassLayerMask = ( 0x1ULL << uint64_t( maxPassLayerSize ) ) - 1u;
-			static constexpr uint64_t maxSize = maxSubmeshSize + maxProgramSize + maxLightingModelIDSize + maxPassSize + maxTexturesSize + maxCompareOpSize + maxSubmeshDataSize + maxBackgroundModelIDSize + maxPassLayerSize + 1u;
+			static constexpr uint64_t maxTopologySize = castor::getBitSize( uint32_t( VK_PRIMITIVE_TOPOLOGY_PATCH_LIST ) + 1u );
+			static constexpr uint64_t maxTopologyMask = ( 0x1ULL << uint64_t( maxTopologySize ) ) - 1u;
+			static constexpr uint64_t maxSize = maxSubmeshSize + maxProgramSize + maxLightingModelIDSize + maxPassSize + maxTexturesSize + maxCompareOpSize + maxSubmeshDataSize + maxBackgroundModelIDSize + maxPassLayerSize + maxTopologySize + 1u;
 			static_assert( 64 >= maxSize );
 		}
 
@@ -101,6 +103,8 @@ namespace castor3d
 			offset += hi::maxPassLayerSize;
 			result.submeshDataBindings = uint32_t( ( hiHash >> offset ) & hi::maxSubmeshDataMask );
 			offset += hi::maxSubmeshDataSize;
+			result.topology = VkPrimitiveTopology( ( hiHash >> offset ) & hi::maxTopologyMask );
+			offset += hi::maxTopologySize;
 			result.isStatic = uint32_t( ( hiHash >> offset ) & 0x1u );
 
 			CU_Require( result.lightingModelId != 0 );
@@ -146,6 +150,8 @@ namespace castor3d
 			offset += hi::maxPassLayerSize;
 			result |= uint64_t( flags.submeshDataBindings & hi::maxSubmeshDataMask ) << offset;
 			offset += hi::maxSubmeshDataSize;
+			result |= uint64_t( flags.topology & hi::maxTopologyMask ) << offset;
+			offset += hi::maxTopologySize;
 			result |= ( flags.isStatic ? 1ULL : 0ULL ) << offset;
 
 #if !defined( NDEBUG )
@@ -240,6 +246,7 @@ namespace castor3d
 			&& lhs.alphaFunc == rhs.alphaFunc
 			&& lhs.passLayerIndex == rhs.passLayerIndex
 			&& lhs.submeshDataBindings == rhs.submeshDataBindings
+			&& lhs.topology == rhs.topology
 			&& lhs.isStatic == rhs.isStatic
 			&& lhs.m_programFlags == rhs.m_programFlags
 			&& lhs.m_shaderFlags == rhs.m_shaderFlags;
@@ -450,7 +457,6 @@ namespace castor3d
 			&& lhs.colourBlendMode == rhs.colourBlendMode
 			&& lhs.alphaBlendMode == rhs.alphaBlendMode
 			&& lhs.renderPassType == rhs.renderPassType
-			&& lhs.topology == rhs.topology
 			&& lhs.patchVertices == rhs.patchVertices;
 	}
 
