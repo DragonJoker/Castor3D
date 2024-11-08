@@ -4,12 +4,14 @@
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslClearcoatBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslDiffuseBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslSheenBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslSpecularBRDF.hpp"
@@ -45,6 +47,7 @@ namespace castor3d::shader
 		, m_writer{ writer }
 		, m_materials{ materials }
 		, m_utils{ utils }
+		, m_brdfHelpers{ brdfHelpers }
 		, m_shadowModel{ shadowModel }
 		, m_lights{ lights }
 		, m_diffuse{ std::move( diffuse ) }
@@ -263,7 +266,7 @@ namespace castor3d::shader
 						, DirectLighting{ m_writer } );
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
-					lightSurface.updateL( m_utils
+					lightSurface.updateLAndF( m_utils
 						, derivVec3( -light.direction() )
 						, components.f0
 						, components );
@@ -351,7 +354,7 @@ namespace castor3d::shader
 						, DirectLighting{ m_writer } );
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
-					lightSurface.updateL( m_utils
+					lightSurface.updateLAndF( m_utils
 						, derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() )
 						, components.f0
 						, components );
@@ -432,7 +435,7 @@ namespace castor3d::shader
 					, sdw::UInt const & receivesShadows
 					, DirectLighting parentOutput )
 				{
-					lightSurface.updateL( m_utils
+					lightSurface.updateLAndF( m_utils
 						, derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() )
 						, components.f0
 						, components );
@@ -765,7 +768,7 @@ namespace castor3d::shader
 						, DirectLighting{ m_writer } );
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
-					lightSurface.updateL( m_utils
+					lightSurface.updateLAndF( m_utils
 						, derivVec3( -light.direction() )
 						, components.f0
 						, components );
@@ -853,7 +856,7 @@ namespace castor3d::shader
 						, DirectLighting{ m_writer } );
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
-					lightSurface.updateL( m_utils
+					lightSurface.updateLAndF( m_utils
 						, derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() )
 						, components.f0
 						, components );
@@ -935,7 +938,7 @@ namespace castor3d::shader
 					, sdw::UInt const & receivesShadows
 					, DirectLighting parentOutput )
 				{
-					lightSurface.updateL( m_utils
+					lightSurface.updateLAndF( m_utils
 						, derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() )
 						, components.f0
 						, components );
@@ -1370,6 +1373,29 @@ namespace castor3d::shader
 			FI
 		}
 
+		IF( m_writer, components.hasTransmission != 0_u
+			&& components.thicknessFactor != 0.0_f
+			&& components.refractionRatio != 0.0_f )
+		{
+			// If the light ray travels through the geometry, use the point it exits the geometry again.
+			// That will change the angle to the light source, if the material refracts the light ray.
+			auto transmissionRay = m_writer.declLocale( "transmissionRay"
+				, ReflectionModel::getVolumeTransmissionRay( lightSurface.N().value()
+					, lightSurface.V().value()
+					, components.thicknessFactor
+					, components.refractionRatio ) );
+			lightSurface.updateL( lightSurface.vertexToLight() - transmissionRay );
+
+			auto transmittedLight = m_writer.declLocale( "transmittedLight"
+				, light.intensity().x() * doComputeLightTransmission( components, lightSurface ) );
+			transmittedLight = ReflectionModel::applyVolumeAttenuation( transmittedLight, length( transmissionRay ), components.attenuationColour, components.attenuationDistance );
+
+			output.diffuse = mix( output.diffuse, transmittedLight, vec3( components.transmission ) );
+
+			lightSurface.updateL( lightSurface.vertexToLight() + transmissionRay );
+		}
+		FI
+
 		if ( m_clearcoat )
 		{
 			IF( m_writer, components.clearcoatFactor != 0.0_f )
@@ -1384,6 +1410,35 @@ namespace castor3d::shader
 			}
 			FI
 		}
+	}
+	
+	sdw::Vec3 LightingModel::doComputeLightTransmission( BlendComponents const & components
+		, LightSurface const & lightSurface )
+	{
+		auto transmissionRougness = m_writer.declLocale( "transmissionRougness"
+			, ReflectionModel::applyIorToRoughness( components.roughness * components.roughness
+				, components.refractionRatio ) );
+		// Mirror light reflection vector on surface
+		auto mirrorL = m_writer.declLocale( "mirrorL"
+			, normalize( lightSurface.L().value() + 2.0_f * lightSurface.N().value() * dot( -lightSurface.L().value(), lightSurface.N().value() ) ) );
+		// Halfway vector between transmission light vector and v
+		auto mirrorH = m_writer.declLocale( "mirrorL"
+			, normalize( mirrorL + lightSurface.V().value() ) );
+
+		auto D = m_writer.declLocale( "D"
+			, m_brdfHelpers.distributionGGX( clamp( dot( lightSurface.N().value(), mirrorH ), 0.0_f, 1.0_f )
+				, transmissionRougness ) );
+		auto F = m_writer.declLocale( "F"
+			, m_utils.conductorFresnel( clamp( dot( lightSurface.V().value(), mirrorH ), 0.0_f, 1.0_f )
+				, components.f0
+				, components.f90 ) );
+		auto Vis = m_writer.declLocale( "Vis"
+			, m_brdfHelpers.visibilitySmithGGXCorrelated( clamp( dot( lightSurface.N().value(), lightSurface.V().value() ), 0.0_f, 1.0_f )
+				, clamp( dot( lightSurface.N().value(), mirrorL ), 0.0_f, 1.0_f )
+				, transmissionRougness ) );
+
+		// Transmission BTDF
+		return ( 1.0_f - F ) * components.colour * D * Vis;
 	}
 	
 	sdw::Vec3 LightingModel::doComputeLightDiffuse( Light light

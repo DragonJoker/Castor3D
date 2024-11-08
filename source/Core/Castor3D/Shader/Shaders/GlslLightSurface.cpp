@@ -174,7 +174,7 @@ namespace castor3d::shader
 		m_HdotL = max( derivFloat( 0.0_f ), dot( H(), L() ) );
 	}
 
-	void LightSurface::updateN( Utils & utils
+	void LightSurface::updateNAndF( Utils & utils
 		, DerivVec3 const n
 		, sdw::Vec3 const f0
 		, BlendComponents const & components )const
@@ -183,7 +183,7 @@ namespace castor3d::shader
 		doUpdateF( utils, f0, components, NdotV() );
 	}
 
-	void LightSurface::updateL( Utils & utils
+	void LightSurface::updateLAndF( Utils & utils
 		, DerivVec3 const VtoL
 		, sdw::Vec3 const f0
 		, BlendComponents const & components )const

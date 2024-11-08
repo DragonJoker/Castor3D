@@ -454,7 +454,7 @@ namespace castor3d
 							output.registerOutput( cuT( "Lighting" ), cuT( "Emissive" ), components.emissiveColour * components.emissiveFactor );
 
 							// Indirect Lighting
-							lightSurface.updateL( utils
+							lightSurface.updateLAndF( utils
 								, components.getDerivNormal()
 								, components.f0
 								, components );
@@ -477,7 +477,7 @@ namespace castor3d
 								components.thicknessFactor *= length( modelData.getScale() );
 							}
 
-							lightSurface.updateN( utils
+							lightSurface.updateNAndF( utils
 								, components.getDerivNormal()
 								, components.f0
 								, components );

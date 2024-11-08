@@ -251,6 +251,8 @@ namespace castor3d::shader
 			, LightSurface const & lightSurface
 			, sdw::Vec3 & radiance
 			, DirectLighting & output );
+		C3D_API virtual sdw::Vec3 doComputeLightTransmission( BlendComponents const & components
+			, LightSurface const & lightSurface );
 		C3D_API virtual sdw::Vec3 doComputeLightDiffuse( Light light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
@@ -266,6 +268,7 @@ namespace castor3d::shader
 		sdw::ShaderWriter & m_writer;
 		Materials const & m_materials;
 		Utils & m_utils;
+		BRDFHelpers & m_brdfHelpers;
 		Shadow & m_shadowModel;
 		Lights & m_lights;
 		DiffuseBRDFPtr m_diffuse;

@@ -72,11 +72,11 @@ namespace castor3d::shader
 		C3D_API void updateN( DerivVec3 const N )const;
 		C3D_API void updateL( DerivVec3 const VtoL )const;
 
-		C3D_API void updateN( Utils & utils
+		C3D_API void updateNAndF( Utils & utils
 			, DerivVec3 const N
 			, sdw::Vec3 const f0
 			, BlendComponents const & components )const;
-		C3D_API void updateL( Utils & utils
+		C3D_API void updateLAndF( Utils & utils
 			, DerivVec3 const VtoL
 			, sdw::Vec3 const f0
 			, BlendComponents const & components )const;

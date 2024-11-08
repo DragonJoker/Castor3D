@@ -414,7 +414,7 @@ namespace castor3d
 						output.registerOutput( cuT( "Lighting" ), cuT( "Emissive" ), components.emissiveColour * components.emissiveFactor );
 
 						// Indirect Lighting
-						lightSurface.updateL( utils
+						lightSurface.updateLAndF( utils
 							, components.getDerivNormal()
 							, components.f0
 							, components );
@@ -439,7 +439,7 @@ namespace castor3d
 
 						auto incident = writer.declLocale( "incident"
 							, reflections.computeIncident( lightSurface.worldPosition().value().xyz(), c3d_cameraData.position() ) );
-						lightSurface.updateN( utils
+						lightSurface.updateNAndF( utils
 							, components.getDerivNormal()
 							, components.f0
 							, components );
