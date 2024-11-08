@@ -43,6 +43,7 @@ namespace castor3d
 			, VkCompareOp palphaFunc = VkCompareOp::VK_COMPARE_OP_ALWAYS
 			, uint32_t ppassLayerIndex = 0u
 			, uint32_t psubmeshDataBindings = 0u
+			, VkPrimitiveTopology ptopology = VkPrimitiveTopology::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 			, bool pisStatic = false )noexcept
 			: pass{ castor::move( ppassComponents ) }
 			, submesh{ castor::move( psubmeshComponents ) }
@@ -52,6 +53,7 @@ namespace castor3d
 			, alphaFunc{ palphaFunc }
 			, submeshDataBindings{ psubmeshDataBindings }
 			, passLayerIndex{ ppassLayerIndex }
+			, topology{ ptopology }
 			, isStatic{ pisStatic }
 			, m_programFlags{ programFlags }
 			, m_shaderFlags{ shaderFlags }
@@ -66,6 +68,7 @@ namespace castor3d
 		VkCompareOp alphaFunc;
 		uint32_t submeshDataBindings{};
 		uint32_t passLayerIndex{};
+		VkPrimitiveTopology topology{};
 		bool isStatic{};
 		ProgramFlags m_programFlags{};
 		ShaderFlags m_shaderFlags{};
@@ -105,7 +108,6 @@ namespace castor3d
 			, BlendMode colourBlendMode = BlendMode::eNoBlend
 			, BlendMode alphaBlendMode = BlendMode::eNoBlend
 			, RenderPassTypeID renderPassType = 0u
-			, VkPrimitiveTopology ptopology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 			, uint32_t ppatchVertices = 3u )noexcept
 			: PipelineHiHashDetails{ castor::move( hiDetails ) }
 			, PipelineLoHashDetails{ castor::move( loDetails ) }
@@ -113,7 +115,6 @@ namespace castor3d
 			, colourBlendMode{ colourBlendMode }
 			, alphaBlendMode{ alphaBlendMode }
 			, renderPassType{ renderPassType }
-			, topology{ ptopology }
 			, patchVertices{ ppatchVertices }
 		{
 			CU_Require( lightingModelId != 0 );
@@ -146,13 +147,14 @@ namespace castor3d
 					, pshaderFlags
 					, palphaFunc
 					, ppassLayerIndex
+					, {}
+					, ptopology
 					, pisStatic }
 				, PipelineLoHashDetails{ pmorphTargetsOffset, psubmeshData }
 				, psceneFlags
 				, pcolourBlendMode
 				, palphaBlendMode
 				, prenderPassType
-				, ptopology
 				, ppatchVertices }
 		{
 			CU_Require( lightingModelId != 0 );
@@ -175,13 +177,14 @@ namespace castor3d
 					, castor::move( textures )
 					, shaderFlags
 					, alphaFunc
-					, passLayerIndex }
+					, passLayerIndex
+					, {}
+					, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST }
 				, PipelineLoHashDetails{ 0u, nullptr }
 				, SceneFlag::eNone
 				, BlendMode::eNoBlend
 				, BlendMode::eNoBlend
 				, 0u
-				, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 				, 3u }
 		{
 			CU_Require( lightingModelId != 0 );
@@ -357,7 +360,6 @@ namespace castor3d
 		BlendMode colourBlendMode;
 		BlendMode alphaBlendMode;
 		RenderPassTypeID renderPassType;
-		VkPrimitiveTopology topology;
 		uint32_t patchVertices;
 
 	private:
