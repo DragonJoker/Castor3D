@@ -30,7 +30,7 @@ See LICENSE file in root folder
 #include <vector>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-//! #define CU_UseWChar
+// #define CU_UseWChar
 
 /**@name Configuration */
 //@{

@@ -3,7 +3,7 @@
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 
-CU_ImplementSmartPtr( castor3d::shader, DiffuseBRDF )
+CU_ImplementDeleter( castor3d::shader, DiffuseBRDF )
 
 namespace castor3d::shader
 {

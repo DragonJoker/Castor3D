@@ -20,7 +20,7 @@ namespace castor3d::shader
 		PhongDiffuseBRDF( sdw::ShaderWriter & writer
 			, c3d::BRDFHelpers & brdfHelpers );
 
-		static c3d::DiffuseBRDFUPtr create( sdw::ShaderWriter & writer
+		static c3d::DiffuseBRDFPtr create( sdw::ShaderWriter & writer
 			, c3d::BRDFHelpers & brdfHelpers );
 		static castor::StringView constexpr Name{ cuT( "phong" ) };
 
@@ -36,7 +36,7 @@ namespace castor3d::shader
 		PhongSpecularBRDF( sdw::ShaderWriter & writer
 			, c3d::BRDFHelpers & brdfHelpers );
 
-		static c3d::SpecularBRDFUPtr create( sdw::ShaderWriter & writer
+		static c3d::SpecularBRDFPtr create( sdw::ShaderWriter & writer
 			, c3d::BRDFHelpers & brdfHelpers );
 		static castor::StringView constexpr Name{ cuT( "phong" ) };
 
@@ -65,7 +65,7 @@ namespace castor3d::shader
 		PhongClearcoatBRDF( sdw::ShaderWriter & writer
 			, c3d::BRDFHelpers & brdfHelpers );
 
-		static c3d::ClearcoatBRDFUPtr create( sdw::ShaderWriter & writer
+		static c3d::ClearcoatBRDFPtr create( sdw::ShaderWriter & writer
 			, c3d::BRDFHelpers & brdfHelpers );
 		static castor::StringView constexpr Name{ cuT( "phong" ) };
 

@@ -77,9 +77,11 @@ namespace castor3d
 	*/
 	class MeshletBoundsTransformPass;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, VertexTransforming, C3D_API );
 	CU_DeclareSmartPtr( castor3d, VertexTransformPass, C3D_API );
 	CU_DeclareSmartPtr( castor3d, MeshletBoundsTransformPass, C3D_API );
+	/** @endcond */
 
 	//@}
 	//@}

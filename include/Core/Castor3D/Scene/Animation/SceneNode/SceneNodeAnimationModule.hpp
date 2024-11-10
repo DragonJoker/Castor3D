@@ -25,7 +25,9 @@ namespace castor3d
 	*/
 	class SceneNodeAnimationInstance;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, SceneNodeAnimationInstance, C3D_API );
+	/** @endcond */
 
 	//@}
 	//@}

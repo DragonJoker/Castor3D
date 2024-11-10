@@ -15,7 +15,7 @@ namespace castor3d::shader
 		C3D_API CookTorranceBRDF( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
 
-		C3D_API static SpecularBRDFUPtr create( sdw::ShaderWriter & writer
+		C3D_API static SpecularBRDFPtr create( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
 		C3D_API static castor::StringView constexpr Name{ cuT( "cook_torrance" ) };
 

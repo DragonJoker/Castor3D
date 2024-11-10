@@ -16,7 +16,7 @@ namespace castor3d::shader
 	{
 	}
 
-	c3d::DiffuseBRDFUPtr PhongDiffuseBRDF::create( sdw::ShaderWriter & writer
+	c3d::DiffuseBRDFPtr PhongDiffuseBRDF::create( sdw::ShaderWriter & writer
 		, c3d::BRDFHelpers & brdfHelpers )
 	{
 		return castor::makeUniqueDerived< DiffuseBRDF, PhongDiffuseBRDF >( writer, brdfHelpers );
@@ -49,7 +49,7 @@ namespace castor3d::shader
 	{
 	}
 
-	c3d::SpecularBRDFUPtr PhongSpecularBRDF::create( sdw::ShaderWriter & writer
+	c3d::SpecularBRDFPtr PhongSpecularBRDF::create( sdw::ShaderWriter & writer
 		, c3d::BRDFHelpers & brdfHelpers )
 	{
 		return castor::makeUniqueDerived< SpecularBRDF, PhongSpecularBRDF >( writer, brdfHelpers );
@@ -87,7 +87,7 @@ namespace castor3d::shader
 	{
 	}
 
-	c3d::ClearcoatBRDFUPtr PhongClearcoatBRDF::create( sdw::ShaderWriter & writer
+	c3d::ClearcoatBRDFPtr PhongClearcoatBRDF::create( sdw::ShaderWriter & writer
 		, c3d::BRDFHelpers & brdfHelpers )
 	{
 		return castor::makeUniqueDerived< ClearcoatBRDF, PhongClearcoatBRDF >( writer, brdfHelpers );

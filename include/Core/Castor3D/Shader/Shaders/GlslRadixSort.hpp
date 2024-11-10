@@ -19,6 +19,7 @@ namespace castor3d::shader
 		static uint32_t constexpr bucketSize{ 1024u / ValueSizeT };
 		uint32_t threadsCount{ bucketSize };
 		/**
+		 *\param	writer		The shader writer.
 		 *\param	sortBits	The number of bits to consider sorting.
 		 */
 		RadixSortT( sdw::ComputeWriter & writer

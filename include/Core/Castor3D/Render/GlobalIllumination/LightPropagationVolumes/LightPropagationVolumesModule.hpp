@@ -124,6 +124,7 @@ namespace castor3d
 	using LightPropagationVolumes = LightPropagationVolumesT< false >;
 	using LightPropagationVolumesG = LightPropagationVolumesT< true >;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, GeometryInjectionPass, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LayeredLightPropagationVolumes, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LayeredLightPropagationVolumesG, C3D_API );
@@ -132,13 +133,14 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, LightPropagationVolumes, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LightPropagationVolumesG, C3D_API );
 
+	CU_DeclareVector( GeometryInjectionPass, GeometryInjectionPass );
+	CU_DeclareVector( LightInjectionPass, LightInjectionPass );
+	/** @endcond */
+
 	using LightPropagationVolumesLightType = castor::Array< LightPropagationVolumesUPtr, size_t( LightType::eCount ) >;
 	using LayeredLightPropagationVolumesLightType = castor::Array< LayeredLightPropagationVolumesUPtr, size_t( LightType::eCount ) >;
 	using LightPropagationVolumesGLightType = castor::Array< LightPropagationVolumesGUPtr, size_t( LightType::eCount ) >;
 	using LayeredLightPropagationVolumesGLightType = castor::Array< LayeredLightPropagationVolumesGUPtr, size_t( LightType::eCount ) >;
-
-	CU_DeclareVector( GeometryInjectionPass, GeometryInjectionPass );
-	CU_DeclareVector( LightInjectionPass, LightInjectionPass );
 
 	//@}
 	//@}

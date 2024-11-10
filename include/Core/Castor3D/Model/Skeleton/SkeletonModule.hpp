@@ -118,6 +118,7 @@ namespace castor3d
 	using SkeletonRes = SkeletonCacheTraits::ElementPtrT;
 	using SkeletonResPtr = SkeletonCacheTraits::ElementObsT;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, BoneNode, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SkeletonNode, C3D_API );
 	CU_DeclareSmartPtr( castor3d, Skeleton, C3D_API );
@@ -129,6 +130,7 @@ namespace castor3d
 	CU_DeclareVector( VertexBoneData, VertexBoneData );
 	//! Bone pointer array
 	CU_DeclareVector( SkeletonNodeUPtr, SkeletonNodePtr );
+	/** @endcond */
 
 	struct NodeTransform
 	{

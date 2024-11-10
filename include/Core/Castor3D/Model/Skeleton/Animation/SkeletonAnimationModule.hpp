@@ -68,11 +68,13 @@ namespace castor3d
 	};
 	using TransformArray = castor::Vector< ObjectTransform >;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, SkeletonAnimation, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SkeletonAnimationKeyFrame, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SkeletonAnimationObject, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SkeletonAnimationBone, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SkeletonAnimationNode, C3D_API );
+	/** @endcond */
 
 	using SkeletonAnimationObjectArray = castor::Vector< SkeletonAnimationObjectRPtr >;
 

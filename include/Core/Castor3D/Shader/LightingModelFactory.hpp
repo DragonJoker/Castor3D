@@ -17,7 +17,7 @@ namespace castor3d
 		using Obj = shader::LightingModel;
 		using Key = castor::String;
 		using Id = LightingModelID;
-		using PtrType = shader::LightingModelUPtr;
+		using PtrType = shader::LightingModelPtr;
 		using Creator = shader::LightingModelCreator;
 		using ObjPtr = PtrType;
 		struct LightingModel
@@ -86,10 +86,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Unregisters a lighting model.
-		 *\param[in]	key					The lighting model.
+		 *\param[in]	baseName	The lighting model base name.
 		 *\~french
 		 *\brief		Désenregistre un modèle d'éclairage.
-		 *\param[in]	key					Le modèle d'éclairage.
+		 *\param[in]	baseName	Le nom de base du modèle d'éclairage.
 		 */
 		C3D_API void unregisterType( castor::String const & baseName );
 		/**
@@ -264,13 +264,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Creates an object from an ID.
 		 *\param[in]	lightingModelId		The lighting model ID.
-		 *\param[in]	backgroundModelId	The background model ID.
 		 *\param[in]	params				The creation parameters.
 		 *\return		The created object.
 		 *\~french
 		 *\brief		Crée un objet à partir d'un ID.
 		 *\param[in]	lightingModelId		L'ID du modèle d'éclairage.
-		 *\param[in]	backgroundModelId	L'ID du modèle de fond.
 		 *\param[in]	params				Les paramètres de création.
 		 *\return		L'objet créé.
 		 */

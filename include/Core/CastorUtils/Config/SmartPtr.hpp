@@ -74,7 +74,7 @@ namespace castor
 	}
 }
 
-#define CU_DeclareSmartPtr( nmspc, class_name, expdecl )\
+#define CU_DeclareDeleter( nmspc, class_name, expdecl )\
 }\
 namespace castor\
 {\
@@ -85,11 +85,9 @@ namespace castor\
 	};\
 }\
 namespace nmspc\
-{\
-	using class_name##UPtr = castor::UniquePtr< class_name >;\
-	using class_name##RPtr = class_name *
+{
 
-#define CU_ImplementSmartPtr( nmspc, class_name )\
+#define CU_ImplementDeleter( nmspc, class_name )\
 namespace castor\
 {\
 	void Deleter< nmspc::class_name >::operator()( nmspc::class_name * pointer )noexcept\
@@ -97,6 +95,14 @@ namespace castor\
 		delete pointer;\
 	}\
 }
+
+#define CU_DeclareSmartPtr( nmspc, class_name, expdecl )\
+	CU_DeclareDeleter( nmspc, class_name, expdecl )\
+	using class_name##UPtr = castor::UniquePtr< class_name >;\
+	using class_name##RPtr = class_name *
+
+#define CU_ImplementSmartPtr( nmspc, class_name )\
+	CU_ImplementDeleter( nmspc, class_name )
 
 #define CU_DeclareTemplateSmartPtr( nmspc, class_name )\
 }\

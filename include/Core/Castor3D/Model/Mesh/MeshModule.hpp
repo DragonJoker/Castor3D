@@ -129,13 +129,6 @@ namespace castor3d
 		uint32_t drawOffset;
 		uint32_t meshletOffset;
 	};
-
-	CU_DeclareSmartPtr( castor3d, Mesh, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MeshFactory, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MeshGenerator, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MeshImporter, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MeshImporterFactory, C3D_API );
-
 	/**
 	*\~english
 	*	Helper structure to specialise a cache behaviour.
@@ -172,10 +165,17 @@ namespace castor3d
 	using MeshChangeSignal = castor::SignalT< MeshChangeFunc >;
 	using MeshChangeConnection = castor::ConnectionT< MeshChangeSignal >;
 
+	/** @cond !Doxygen */
+	CU_DeclareSmartPtr( castor3d, Mesh, C3D_API );
 	CU_DeclareSmartPtr( castor3d, MeshCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, MeshFactory, C3D_API );
+	CU_DeclareSmartPtr( castor3d, MeshGenerator, C3D_API );
+	CU_DeclareSmartPtr( castor3d, MeshImporter, C3D_API );
+	CU_DeclareSmartPtr( castor3d, MeshImporterFactory, C3D_API );
 
 	//! Mesh pointer array
 	CU_DeclareMap( castor::String, MeshResPtr, MeshPtrStr );
+	/** @endcond */
 
 	//@}
 	//@}

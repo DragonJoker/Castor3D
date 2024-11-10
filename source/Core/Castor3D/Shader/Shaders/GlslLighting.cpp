@@ -17,7 +17,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementSmartPtr( castor3d::shader, LightingModel )
+CU_ImplementDeleter( castor3d::shader, LightingModel )
 
 #define C3D_DebugCascades 0
 
@@ -30,10 +30,10 @@ namespace castor3d::shader
 		, Materials const & materials
 		, Utils & utils
 		, BRDFHelpers & brdfHelpers
-		, DiffuseBRDFUPtr diffuse
-		, SpecularBRDFUPtr specular
-		, SheenBRDFUPtr sheen
-		, ClearcoatBRDFUPtr clearcoat
+		, DiffuseBRDFPtr diffuse
+		, SpecularBRDFPtr specular
+		, SheenBRDFPtr sheen
+		, ClearcoatBRDFPtr clearcoat
 		, Shadow & shadowModel
 		, Lights & lights
 		, bool hasIblSupport

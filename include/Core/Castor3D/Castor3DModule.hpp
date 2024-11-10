@@ -121,10 +121,17 @@ namespace castor3d
 	template< typename ResT, typename KeyT >
 	struct ResourceCacheTraitsT;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, Engine, C3D_API );
 	CU_DeclareSmartPtr( castor3d, ImporterFile, C3D_API );
 	CU_DeclareSmartPtr( castor3d, FramePassTimer, C3D_API );
 	CU_DeclareSmartPtr( castor3d, ImporterFileFactory, C3D_API );
+
+	CU_DeclareVector( float, Float );
+	CU_DeclareMap( uint32_t, int, IntUInt );
+	CU_DeclareMap( castor::String, int, IntStr );
+	CU_DeclareMap( int, castor::String, StrInt );
+	/** @endcond */
 
 	C3D_API castor::LoggerInstance & getLogger( Engine const & engine );
 
@@ -132,11 +139,6 @@ namespace castor3d
 	C3D_API VkClearColorValue convert( castor::RgbaColour const & value );
 	C3D_API castor::RgbaColour convert( VkClearColorValue const & value );
 	C3D_API castor::Array< float, 4u > makeFloatArray( castor::RgbaColour const & value );
-
-	CU_DeclareVector( float, Float );
-	CU_DeclareMap( uint32_t, int, IntUInt );
-	CU_DeclareMap( castor::String, int, IntStr );
-	CU_DeclareMap( int, castor::String, StrInt );
 
 	inline VkDescriptorSetLayoutBinding makeDescriptorSetLayoutBinding( uint32_t binding
 		, VkDescriptorType descriptorType

@@ -179,6 +179,7 @@ namespace castor3d
 	*/
 	class StencilPass;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, BackgroundRenderer, C3D_API );
 	CU_DeclareSmartPtr( castor3d, CombinePass, C3D_API );
 	CU_DeclareSmartPtr( castor3d, DownscalePass, C3D_API );
@@ -190,6 +191,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, StencilPass, C3D_API );
 
 	CU_DeclareVector( CommandsSemaphore, CommandsSemaphore );
+	/** @endcond */
 
 	//@}
 	//@}

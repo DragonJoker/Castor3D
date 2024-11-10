@@ -80,10 +80,19 @@ namespace sdw
 
 namespace castor3d::shader
 {
+	/** @cond !Doxygen */
+	/**@name Shader */
+	//@{
+
+	/**@name Derivative value expression extraction */
+	//@{
 	C3D_API sdw::expr::ExprPtr makeRawExpr( DerivFloat const & value );
 	C3D_API sdw::expr::ExprPtr makeRawExpr( DerivVec2 const & value );
 	C3D_API sdw::expr::ExprPtr makeRawExpr( DerivVec3 const & value );
 	C3D_API sdw::expr::ExprPtr makeRawExpr( DerivVec4 const & value );
+	//@}
+	/**@name Common functions overloads to use with Derivative values */
+	//@{
 	C3D_API RetDerivFloat dot( DerivVec3 const lhs, DerivVec3 const rhs );
 	C3D_API RetDerivVec3 cross( DerivVec3 const lhs, DerivVec3 const rhs );
 	C3D_API RetDerivVec3 normalize( DerivVec3 const v );
@@ -105,9 +114,12 @@ namespace castor3d::shader
 	C3D_API DerivVec2 negate( DerivVec2 const a );
 	C3D_API DerivVec3 negate( DerivVec3 const a );
 	C3D_API DerivVec4 negate( DerivVec4 const a );
+	//@}
 	C3D_API sdw::Float computeMip( DerivVec2 const & uv
 		, sdw::Vec2 const & texSize );
-
+	//@}
+	/**@name Derivative value construction */
+	//@{
 	C3D_API DerivFloat derivFloat( sdw::Float const v );
 	C3D_API DerivFloat derivX( DerivVec2 const v );
 	C3D_API DerivFloat derivX( DerivVec3 const v );
@@ -133,6 +145,9 @@ namespace castor3d::shader
 	C3D_API DerivVec4 derivVec4( DerivFloat const v );
 	C3D_API DerivVec4 derivVec4( DerivVec3 const v, sdw::Float const a );
 	C3D_API DerivVec4 derivVec4( DerivVec3 const v, DerivFloat const a );
+	//@}
+	/**@name Functions to use seamlessly Derivative values or standard values */
+	//@{
 	C3D_API void negateXYZ( sdw::Vec4 in );
 	C3D_API void negateXYZ( DerivVec4 in );
 	C3D_API void mulXY( sdw::Vec4 in, sdw::Vec2 const mul );
@@ -154,7 +169,9 @@ namespace castor3d::shader
 	C3D_API DerivVec3 getXYW( DerivVec4 const in );
 	C3D_API sdw::Float getW( sdw::Vec4 const in );
 	C3D_API DerivFloat getW( DerivVec4 const in );
-
+	//@}
+	/**@name Operator overloads to use with Derivative values */
+	//@{
 	C3D_API DerivVec4 operator*( sdw::Mat4 const lhs, DerivVec4 const rhs );
 	C3D_API DerivVec3 operator*( sdw::Mat3 const lhs, DerivVec3 const rhs );
 
@@ -203,9 +220,10 @@ namespace castor3d::shader
 	C3D_API DerivVec4 operator*( DerivVec4 const lhs, sdw::Vec4 const rhs );
 	C3D_API DerivVec4 operator*( DerivVec4 const lhs, DerivFloat const rhs );
 	C3D_API DerivVec4 operator*( DerivVec4 const lhs, sdw::Float const rhs );
+	//@}
 
 	//@}
-	//@}
+	/** @endcond */
 }
 
 #include "GlslDerivativeValue.inl"

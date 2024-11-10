@@ -19,7 +19,9 @@ namespace sdw
 namespace castor3d::shader
 {
 	class BufferBase;
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d::shader, BufferBase, C3D_API );
+	/** @endcond */
 }
 
 namespace castor3d
@@ -113,18 +115,6 @@ namespace castor3d
 	*/
 	class SubsurfaceScattering;
 
-	CU_DeclareSmartPtr( castor3d, Pass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PassComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PassFactory, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SubsurfaceScattering, C3D_API );
-
-	//! Pass array
-	CU_DeclareVector( Pass, Pass );
-	//! Pass pointer array
-	CU_DeclareVector( PassUPtr, PassPtr );
-
-	CU_DeclareMap( PassComponentID, PassComponentUPtr, PassComponent );
-
 	using OnPassChangedFunction = castor::Function< void( Pass const & pass
 		, PassComponentCombineID oldComponents
 		, PassComponentCombineID newComponents ) >;
@@ -148,6 +138,20 @@ namespace castor3d
 		ShaderBufferDeclarator declare;
 	};
 
+	/** @cond !Doxygen */
+	CU_DeclareSmartPtr( castor3d, Pass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, PassComponent, C3D_API );
+	CU_DeclareSmartPtr( castor3d, PassFactory, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderPassRegisterInfo, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SubsurfaceScattering, C3D_API );
+
+	CU_DeclareMap( PassComponentID, PassComponentUPtr, PassComponent );
+	//! Pass array
+	CU_DeclareVector( Pass, Pass );
+	//! Pass pointer array
+	CU_DeclareVector( PassUPtr, PassPtr );
+	/** @endcond */
+
 	using PassCreator = castor::Function< PassUPtr( LightingModelID, Material & ) >;
 
 	struct PassFactoryEntry
@@ -164,8 +168,6 @@ namespace castor3d
 		, PassTypeID
 		, PassFactoryEntry >;
 	using SpecificsBuffers = castor::StringMap< castor::Pair< SpecificsBuffer, ShaderBufferUPtr > >;
-
-	CU_DeclareSmartPtr( castor3d, RenderPassRegisterInfo, C3D_API );
 
 	C3D_API PassRPtr getComponentPass( PassComponent const & component );
 	C3D_API castor::String const & getPassComponentType( PassComponent const & component );

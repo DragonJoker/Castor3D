@@ -52,8 +52,6 @@ namespace castor3d
 	\brief		Classe de base d'un visiteur d'effet post rendu.
 	*/
 	class ToneMappingVisitor;
-
-	CU_DeclareSmartPtr( castor3d, ToneMapping, C3D_API );
 	/**
 	*\~english
 	*\brief
@@ -66,6 +64,10 @@ namespace castor3d
 		, castor::String
 		, void
 		, castor::Function< void( ast::ShaderBuilder & ) > >;
+
+	/** @cond !Doxygen */
+	CU_DeclareSmartPtr( castor3d, ToneMapping, C3D_API );
+	/** @endcond */
 
 	//@}
 	//@}

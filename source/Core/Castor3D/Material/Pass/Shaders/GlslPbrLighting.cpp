@@ -19,10 +19,10 @@ namespace castor3d::shader
 		, Materials const & materials
 		, Utils & utils
 		, BRDFHelpers & brdfHelpers
-		, DiffuseBRDFUPtr diffuse
-		, SpecularBRDFUPtr specular
-		, SheenBRDFUPtr sheen
-		, ClearcoatBRDFUPtr clearcoat
+		, DiffuseBRDFPtr diffuse
+		, SpecularBRDFPtr specular
+		, SheenBRDFPtr sheen
+		, ClearcoatBRDFPtr clearcoat
 		, Shadow & shadowModel
 		, Lights & lights
 		, bool enableVolumetric )
@@ -50,7 +50,7 @@ namespace castor3d::shader
 		return cuT( "c3d.pbr" );
 	}
 
-	LightingModelUPtr PbrLightingModel::create( LightingModelID lightingModelId
+	LightingModelPtr PbrLightingModel::create( LightingModelID lightingModelId
 		, DiffuseBrdfDesc const & diffuseBrdf
 		, SpecularBrdfDesc const & specularBrdf
 		, SheenBrdfDesc const & sheenBrdf

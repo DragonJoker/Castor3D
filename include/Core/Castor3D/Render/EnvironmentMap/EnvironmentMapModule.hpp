@@ -32,8 +32,10 @@ namespace castor3d
 	*/
 	class EnvironmentMapPass;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, EnvironmentMap, C3D_API );
 	CU_DeclareSmartPtr( castor3d, EnvironmentMapPass, C3D_API );
+	/** @endcond */
 
 	//@}
 	//@}

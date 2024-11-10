@@ -20,7 +20,7 @@ namespace disney::shader
 		DisneyDiffuseBRDF( sdw::ShaderWriter & writer
 			, c3d::BRDFHelpers & brdfHelpers );
 
-		static c3d::DiffuseBRDFUPtr create( sdw::ShaderWriter & writer
+		static c3d::DiffuseBRDFPtr create( sdw::ShaderWriter & writer
 			, c3d::BRDFHelpers & brdfHelpers );
 		static castor::StringView constexpr Name{ cuT( "disney" ) };
 
@@ -36,7 +36,7 @@ namespace disney::shader
 		DisneySpecularBRDF( sdw::ShaderWriter & writer
 			, c3d::BRDFHelpers & brdfHelpers );
 
-		static c3d::SpecularBRDFUPtr create( sdw::ShaderWriter & writer
+		static c3d::SpecularBRDFPtr create( sdw::ShaderWriter & writer
 			, c3d::BRDFHelpers & brdfHelpers );
 		static castor::StringView constexpr Name{ cuT( "disney" ) };
 
@@ -65,7 +65,7 @@ namespace disney::shader
 		DisneyClearcoatBRDF( sdw::ShaderWriter & writer
 			, c3d::BRDFHelpers & brdfHelpers );
 
-		static c3d::ClearcoatBRDFUPtr create( sdw::ShaderWriter & writer
+		static c3d::ClearcoatBRDFPtr create( sdw::ShaderWriter & writer
 			, c3d::BRDFHelpers & brdfHelpers );
 		static castor::StringView constexpr Name{ cuT( "disney" ) };
 
@@ -88,7 +88,7 @@ namespace disney::shader
 		DisneySheenBRDF( sdw::ShaderWriter & writer
 			, c3d::BRDFHelpers & brdfHelpers );
 
-		static c3d::SheenBRDFUPtr create( sdw::ShaderWriter & writer
+		static c3d::SheenBRDFPtr create( sdw::ShaderWriter & writer
 			, c3d::BRDFHelpers & brdfHelpers );
 		static castor::StringView constexpr Name{ cuT( "disney" ) };
 

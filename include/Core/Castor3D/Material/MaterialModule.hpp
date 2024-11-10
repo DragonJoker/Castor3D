@@ -121,18 +121,12 @@ namespace castor3d
 	*/
 	class MaterialImporterFactory;
 
-	CU_DeclareSmartPtr( castor3d, Material, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MaterialImporter, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MaterialImporterFactory, C3D_API );
-
 	using PassTypeID = uint16_t;
 
 	using OnMaterialChangedFunction = castor::Function< void( Material const & ) >;
 	using OnMaterialChanged = castor::SignalT< OnMaterialChangedFunction >;
 	using OnMaterialChangedConnection = OnMaterialChanged::connection;
 
-	C3D_API VkFormat convert( castor::PixelFormat format );
-	C3D_API castor::PixelFormat convert( VkFormat format );
 	/**
 	*\~english
 	*	Helper structure to specialise a cache behaviour.
@@ -164,6 +158,11 @@ namespace castor3d
 	using MaterialPtr = MaterialCacheTraits::ElementPtrT;
 	using MaterialObs = MaterialCacheTraits::ElementObsT;
 
+	/** @cond !Doxygen */
+	CU_DeclareSmartPtr( castor3d, Material, C3D_API );
+	CU_DeclareSmartPtr( castor3d, MaterialImporter, C3D_API );
+	CU_DeclareSmartPtr( castor3d, MaterialImporterFactory, C3D_API );
+
 	CU_DeclareSmartPtr( castor3d, MaterialCache, C3D_API );
 
 	//! Material pointer array
@@ -172,6 +171,10 @@ namespace castor3d
 	CU_DeclareMap( castor::String, MaterialObs, MaterialPtrStr );
 	//! Material pointer map
 	CU_DeclareMap( uint32_t, MaterialObs, MaterialPtrUInt );
+	/** @endcond */
+
+	C3D_API VkFormat convert( castor::PixelFormat format );
+	C3D_API castor::PixelFormat convert( VkFormat format );
 
 	struct TextureCombine
 	{

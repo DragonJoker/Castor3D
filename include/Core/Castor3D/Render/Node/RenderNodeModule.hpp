@@ -51,13 +51,6 @@ namespace castor3d
 	*/
 	struct SceneRenderNodes;
 
-	CU_DeclareSmartPtr( castor3d, BillboardRenderNode, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SubmeshRenderNode, C3D_API );
-	CU_DeclareSmartPtr( castor3d, QueueRenderNodes, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SceneRenderNodes, C3D_API );
-
-	using PipelineBuffer = castor::Pair< PipelineBaseHash, ashes::BufferBase const * >;
-
 	/**@name Traits */
 	//@{
 
@@ -84,8 +77,6 @@ namespace castor3d
 	template< typename NodeT >
 	using NodeCommandT = typename RenderNodeTraitsT< NodeT >::Command;
 
-	using PipelineBufferArray = castor::Vector< PipelineBuffer >;
-
 	//@}
 	/**@name All nodes */
 	//@{
@@ -104,6 +95,17 @@ namespace castor3d
 
 	//@}
 	//@}
+
+	using PipelineBuffer = castor::Pair< PipelineBaseHash, ashes::BufferBase const * >;
+	using PipelineBufferArray = castor::Vector< PipelineBuffer >;
+
+	/** @cond !Doxygen */
+	CU_DeclareSmartPtr( castor3d, BillboardRenderNode, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SubmeshRenderNode, C3D_API );
+	CU_DeclareSmartPtr( castor3d, QueueRenderNodes, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SceneRenderNodes, C3D_API );
+	/** @endcond */
+
 	//@}
 	//@}
 }

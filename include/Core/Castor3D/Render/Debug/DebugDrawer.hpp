@@ -29,6 +29,7 @@ namespace castor3d
 		 *\param[in]	parent		The parent render target.
 		 *\param[in]	colour		The target colour image.
 		 *\param[in]	depth		The target depth image.
+		 *\param[in]	passIndex	The pass index, to select the appropriate shader.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	graph		Le graphe.
@@ -37,6 +38,7 @@ namespace castor3d
 		 *\param[in]	parent		La render target parente.
 		 *\param[in]	colour		L'image couleur cible.
 		 *\param[in]	depth		L'image profondeur cible.
+		 *\param[in]	passIndex	L'index de la passe, pour sélectionner le shader approprié.
 		 */
 		C3D_API DebugDrawer( crg::FramePassGroup & graph
 			, crg::FramePass const * previous
@@ -48,42 +50,54 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Adds a buffer containing AABBs to draw.
-		 *\param[in]	bindings		The shader data bindings.
-		 *\param[in]	writes			The shader data.
-		 *\param[in]	instanceCount	The number of AABB to draw.
-		 *\param[in]	shader			The shader used to draw the AABB.
+		 *\param[in]	descriptorBindings	The shader data bindings.
+		 *\param[in]	descriptorWrites	The shader data.
+		 *\param[in]	instanceCount		The number of instances to draw.
+		 *\param[in]	shader				The shader used to draw the AABB.
+		 *\param[in]	enableDepthTest		\p true to enable depth test.
 		 *\~french
 		 *\brief		Ajoute un buffer d'AABB à dessiner.
-		 *\param[in]	bindings		Les bindings des données à passer au shader.
-		 *\param[in]	writes			Les données à passer au shader.
-		 *\param[in]	instanceCount	Le nombre d'AABB à dessiner.
-		 *\param[in]	shader			Le shader utilisé pour dessiner les AABB.
+		 *\param[in]	descriptorBindings	Les bindings des données à passer au shader.
+		 *\param[in]	descriptorWrites	Les données à passer au shader.
+		 *\param[in]	instanceCount		Le nombre d'instances à dessiner.
+		 *\param[in]	shader				Le shader utilisé pour dessiner les AABB.
+		 *\param[in]	enableDepthTest		\p true pour activer le depth test.
 		 */
-		C3D_API void addAabbs( ashes::VkDescriptorSetLayoutBindingArray const & bindings
-			, ashes::WriteDescriptorSetArray const & writes
+		C3D_API void addAabbs( ashes::VkDescriptorSetLayoutBindingArray const & descriptorBindings
+			, ashes::WriteDescriptorSetArray const & descriptorWrites
 			, VkDeviceSize instanceCount
 			, ashes::PipelineShaderStageCreateInfoArray const & shader
 			, bool enableDepthTest );
 		/**
 		 *\~english
 		 *\brief		Adds a buffer containing AABBs to draw.
-		 *\param[in]	bindings		The shader data bindings.
-		 *\param[in]	writes			The shader data.
-		 *\param[in]	instanceCount	The number of instances to draw.
-		 *\param[in]	shader			The shader used to draw the AABB.
+		 *\param[in]	vertexBuffers		The geometry vertex buffers.
+		 *\param[in]	indexBuffer			The geometry index buffers.
+		 *\param[in]	vertexAttributes	The geometry vertex attributes.
+		 *\param[in]	vertexBindings		The geometry vertex bindings.
+		 *\param[in]	descriptorBindings	The shader data bindings.
+		 *\param[in]	descriptorWrites	The shader data.
+		 *\param[in]	instanceCount		The number of instances to draw.
+		 *\param[in]	shader				The shader used to draw the geometries.
+		 *\param[in]	enableDepthTest		\p true to enable depth test.
 		 *\~french
 		 *\brief		Ajoute un buffer d'AABB à dessiner.
-		 *\param[in]	bindings		Les bindings des données à passer au shader.
-		 *\param[in]	writes			Les données à passer au shader.
-		 *\param[in]	instanceCount	Le nombre d'instances à dessiner.
-		 *\param[in]	shader			Le shader utilisé pour dessiner les AABB.
+		 *\param[in]	vertexBuffers		Les vertex buffers de la géométrie.
+		 *\param[in]	indexBuffer			L'index buffer de la géométrie.
+		 *\param[in]	vertexAttributes	Les attributs de sommet de la géométrie.
+		 *\param[in]	vertexBindings		Les attaches de sommet de la géométrie.
+		 *\param[in]	descriptorBindings	Les bindings des données à passer au shader.
+		 *\param[in]	descriptorWrites	Les données à passer au shader.
+		 *\param[in]	instanceCount		Le nombre d'instances à dessiner.
+		 *\param[in]	shader				Le shader utilisé pour dessiner les géometries.
+		 *\param[in]	enableDepthTest		\p true pour activer le depth test.
 		 */
 		C3D_API void addDrawable( DebugVertexBuffers vertexBuffers
 			, DebugIndexBuffer indexBuffer
 			, ashes::VkVertexInputAttributeDescriptionArray const & vertexAttributes
 			, ashes::VkVertexInputBindingDescriptionArray const & vertexBindings
-			, ashes::VkDescriptorSetLayoutBindingArray const & bindings
-			, ashes::WriteDescriptorSetArray const & writes
+			, ashes::VkDescriptorSetLayoutBindingArray const & descriptorBindings
+			, ashes::WriteDescriptorSetArray const & descriptorWrites
 			, VkDeviceSize instanceCount
 			, ashes::PipelineShaderStageCreateInfoArray const & shader
 			, bool enableDepthTest );

@@ -656,7 +656,7 @@ namespace castor3d::shader
 		BRDFHelpers & m_brdf;
 		Utils & m_utils;
 		bool m_enableVolumetric;
-		LightingModelUPtr m_lightingModel;
+		LightingModelPtr m_lightingModel;
 		ShadowUPtr m_shadowModel;
 		SssTransmittanceUPtr m_sssTransmittance;
 		LightsBufferUPtr m_lightsBuffer;

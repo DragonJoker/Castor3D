@@ -22,7 +22,7 @@ namespace castor3d::shader
 			, sdw::Float const & NdotL
 			, sdw::Float const & NdotH );
 
-		C3D_API static ClearcoatBRDFUPtr create( sdw::ShaderWriter & writer
+		C3D_API static ClearcoatBRDFPtr create( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
 		C3D_API static castor::StringView constexpr Name{ cuT( "default" ) };
 

@@ -32,7 +32,10 @@ namespace castor3d
 	*/
 	class PostEffect;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, PostEffect, C3D_API );
+	/** @endcond */
+
 	/**
 	*\~english
 	*\brief

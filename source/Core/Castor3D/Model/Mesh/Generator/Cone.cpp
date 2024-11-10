@@ -5,8 +5,6 @@
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
-CU_ImplementSmartPtr( castor3d, Cone )
-
 namespace castor3d
 {
 	namespace cone

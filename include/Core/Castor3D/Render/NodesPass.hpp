@@ -86,18 +86,22 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	device		The GPU device.
-		 *\param[in]	fullName	The pass name.
-		 *\param[in]	targetImage	The image this pass renders to.
-		 *\param[in]	targetDepth	The depth image this pass renders to.
-		 *\param[in]	desc		The construction data.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	categoryName	The category name.
+		 *\param[in]	typeName		The type name.
+		 *\param[in]	fullName		The pass name.
+		 *\param[in]	targetImage		The image this pass renders to.
+		 *\param[in]	targetDepth		The depth image this pass renders to.
+		 *\param[in]	desc			The construction data.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	device		Le device GPU.
-		 *\param[in]	fullName	Le nom de la passe.
-		 *\param[in]	targetImage	L'image dans laquelle cette passe fait son rendu.
-		 *\param[in]	targetDepth	L'image de profondeur dans laquelle cette passe fait son rendu.
-		 *\param[in]	desc		Les données de construction.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	categoryName	Le nom de la catégorie de la passe.
+		 *\param[in]	typeName		Le nom du type de la passe.
+		 *\param[in]	fullName		Le nom de la passe.
+		 *\param[in]	targetImage		L'image dans laquelle cette passe fait son rendu.
+		 *\param[in]	targetDepth		L'image de profondeur dans laquelle cette passe fait son rendu.
+		 *\param[in]	desc			Les données de construction.
 		 */
 		C3D_API NodesPass( RenderDevice const & device
 			, castor::String const & categoryName
@@ -407,7 +411,10 @@ namespace castor3d
 
 		NodesPass const * m_pass;
 	};
+
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, IsNodesPassEnabled, C3D_API );
+	/** @endcond */
 }
 
 #endif

@@ -15,7 +15,7 @@ namespace castor3d::shader
 		C3D_API QualitativeOrenNayarBRDF( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
 
-		C3D_API static DiffuseBRDFUPtr create( sdw::ShaderWriter & writer
+		C3D_API static DiffuseBRDFPtr create( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
 		C3D_API static castor::StringView constexpr Name{ cuT( "qualitative_oren_nayar" ) };
 
@@ -31,7 +31,7 @@ namespace castor3d::shader
 		C3D_API FujiiOrenNayarBRDF( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
 
-		C3D_API static DiffuseBRDFUPtr create( sdw::ShaderWriter & writer
+		C3D_API static DiffuseBRDFPtr create( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
 		C3D_API static castor::StringView constexpr Name{ cuT( "fujii_oren_nayar" ) };
 
@@ -47,7 +47,7 @@ namespace castor3d::shader
 		C3D_API EnergyConservativeOrenNayarBRDF( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
 
-		C3D_API static DiffuseBRDFUPtr create( sdw::ShaderWriter & writer
+		C3D_API static DiffuseBRDFPtr create( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
 		C3D_API static castor::StringView constexpr Name{ cuT( "energy_conservative_oren_nayar" ) };
 

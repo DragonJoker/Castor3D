@@ -412,7 +412,7 @@ namespace castor3d
 		, RenderTarget & parent
 		, crg::ImageViewIdArray colour
 		, Texture const & depth
-			, uint32_t const * passIndex )
+		, uint32_t const * passIndex )
 		: castor::OwnedBy< RenderTarget >{ parent }
 	{
 		auto extent = makeExtent2D( depth.getExtent() );

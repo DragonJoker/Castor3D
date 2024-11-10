@@ -138,18 +138,6 @@ namespace castor3d
 	*/
 	class ToneMappingPlugin;
 
-	CU_DeclareSmartPtr( castor3d, Plugin, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ImporterPlugin, C3D_API );
-	CU_DeclareSmartPtr( castor3d, DividerPlugin, C3D_API );
-	CU_DeclareSmartPtr( castor3d, GeneratorPlugin, C3D_API );
-	CU_DeclareSmartPtr( castor3d, GenericPlugin, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PostFxPlugin, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ParticlePlugin, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ToneMappingPlugin, C3D_API );
-
-	CU_DeclareMap( castor::String, PluginUPtr, PluginStr );
-	CU_DeclareArray( PluginStrMap, PluginType::eCount, PluginStrMap );
-	CU_DeclareMap( castor::Path, PluginType, PluginTypePath );
 	/**
 	*\~english
 	*	Helper structure to specialise a cache behaviour.
@@ -181,7 +169,21 @@ namespace castor3d
 	using PluginRes = PluginCacheTraits::ElementPtrT;
 	using PluginResPtr = PluginCacheTraits::ElementObsT;
 
+	/** @cond !Doxygen */
+	CU_DeclareSmartPtr( castor3d, Plugin, C3D_API );
 	CU_DeclareSmartPtr( castor3d, PluginCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ImporterPlugin, C3D_API );
+	CU_DeclareSmartPtr( castor3d, DividerPlugin, C3D_API );
+	CU_DeclareSmartPtr( castor3d, GeneratorPlugin, C3D_API );
+	CU_DeclareSmartPtr( castor3d, GenericPlugin, C3D_API );
+	CU_DeclareSmartPtr( castor3d, PostFxPlugin, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ParticlePlugin, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ToneMappingPlugin, C3D_API );
+
+	CU_DeclareMap( castor::String, PluginUPtr, PluginStr );
+	CU_DeclareArray( PluginStrMap, PluginType::eCount, PluginStrMap );
+	CU_DeclareMap( castor::Path, PluginType, PluginTypePath );
+	/** @endcond */
 
 	//@}
 }

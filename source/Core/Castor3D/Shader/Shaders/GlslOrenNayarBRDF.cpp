@@ -67,7 +67,7 @@ namespace castor3d::shader
 			, sdw::InFloat{ m_writer, "NdotL" } );
 	}
 
-	DiffuseBRDFUPtr QualitativeOrenNayarBRDF::create( sdw::ShaderWriter & writer
+	DiffuseBRDFPtr QualitativeOrenNayarBRDF::create( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdfHelpers )
 	{
 		return castor::makeUniqueDerived< DiffuseBRDF, QualitativeOrenNayarBRDF >( writer, brdfHelpers );
@@ -120,7 +120,7 @@ namespace castor3d::shader
 			, sdw::InFloat{ m_writer, "NdotL" } );
 	}
 
-	DiffuseBRDFUPtr FujiiOrenNayarBRDF::create( sdw::ShaderWriter & writer
+	DiffuseBRDFPtr FujiiOrenNayarBRDF::create( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdfHelpers )
 	{
 		return castor::makeUniqueDerived< DiffuseBRDF, FujiiOrenNayarBRDF >( writer, brdfHelpers );
@@ -224,7 +224,7 @@ namespace castor3d::shader
 			, sdw::InFloat{ m_writer, "NdotL" } );
 	}
 
-	DiffuseBRDFUPtr EnergyConservativeOrenNayarBRDF::create( sdw::ShaderWriter & writer
+	DiffuseBRDFPtr EnergyConservativeOrenNayarBRDF::create( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdfHelpers )
 	{
 		return castor::makeUniqueDerived< DiffuseBRDF, EnergyConservativeOrenNayarBRDF >( writer, brdfHelpers );

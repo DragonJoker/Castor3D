@@ -121,21 +121,6 @@ namespace castor3d
 	*/
 	class SpotLight;
 
-	CU_DeclareSmartPtr( castor3d, Light, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LightFactory, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LightCategory, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LightImporter, C3D_API );
-	CU_DeclareSmartPtr( castor3d, DirectionalLight, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PointLight, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SpotLight, C3D_API );
-
-	//! Array of lights
-	CU_DeclareVector( LightRPtr, Lights );
-	//! Array to non owning light pointers
-	CU_DeclareVector( LightRPtr, LightsRef );
-	//! Array of lights per light type.
-	using LightsMap = castor::Array< LightsArray, size_t( LightType::eCount ) >;
-
 	using OnLightChangedFunction = castor::Function< void( Light & ) >;
 	using OnLightChanged = castor::SignalT< OnLightChangedFunction >;
 	using OnLightChangedConnection = OnLightChanged::connection;
@@ -170,8 +155,6 @@ namespace castor3d
 		, LightCacheTraits >;
 	using LightRes = CameraCacheTraits::ElementPtrT;
 	using LightResPtr = CameraCacheTraits::ElementObsT;
-
-	CU_DeclareSmartPtr( castor3d, LightCache, C3D_API );
 
 	struct BaseShadowData
 	{
@@ -214,6 +197,26 @@ namespace castor3d
 		castor::Array< PointShadowData, MaxPointShadowMapCount > point;
 		castor::Array< SpotShadowData, MaxSpotShadowMapCount > spot;
 	};
+
+	/** @cond !Doxygen */
+	CU_DeclareSmartPtr( castor3d, Light, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightFactory, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightCategory, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightImporter, C3D_API );
+	CU_DeclareSmartPtr( castor3d, DirectionalLight, C3D_API );
+	CU_DeclareSmartPtr( castor3d, PointLight, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SpotLight, C3D_API );
+
+	//! Array of lights
+	CU_DeclareVector( LightRPtr, Lights );
+	//! Array to non owning light pointers
+	CU_DeclareVector( LightRPtr, LightsRef );
+	//! Array of lights per light type.
+	/** @endcond */
+
+	using LightsMap = castor::Array< LightsArray, size_t( LightType::eCount ) >;
+
 	/**
 	*\~english
 	*\brief
