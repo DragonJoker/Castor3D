@@ -160,7 +160,7 @@ namespace castor3d
 			, materials
 			, brdf
 			, utils
-			, {}
+			, shader::ShadowOptions{}
 			, nullptr };
 
 		writer.implementMainT< shader::FragmentSurfaceT, shader::PrepassOutputT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }

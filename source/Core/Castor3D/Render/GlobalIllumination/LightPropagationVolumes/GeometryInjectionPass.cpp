@@ -164,7 +164,7 @@ namespace castor3d
 				, materials
 				, brdf
 				, utils
-				, shader::ShadowOptions{ SceneFlag::eNone, false, true }
+				, shader::ShadowOptions{}
 				, nullptr /* sssProfiles */
 				, LightType::eDirectional
 				, GeometryInjectionPass::LightsIdx /* lightBinding */
@@ -236,7 +236,7 @@ namespace castor3d
 				, materials
 				, brdf
 				, utils
-				, shader::ShadowOptions{ SceneFlag::eNone, false, true }
+				, shader::ShadowOptions{}
 				, nullptr /* sssProfiles */
 				, LightType::eSpot
 				, GeometryInjectionPass::LightsIdx /* lightBinding */
@@ -307,7 +307,7 @@ namespace castor3d
 				, materials
 				, brdf
 				, utils
-				, shader::ShadowOptions{ SceneFlag::eNone, false, true }
+				, shader::ShadowOptions{}
 				, nullptr /* sssProfiles */
 				, LightType::ePoint
 				, GeometryInjectionPass::LightsIdx /* lightBinding */

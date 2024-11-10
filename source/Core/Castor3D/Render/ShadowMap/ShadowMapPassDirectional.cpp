@@ -289,7 +289,7 @@ namespace castor3d
 			, materials
 			, brdf
 			, utils
-			, shader::ShadowOptions{ SceneFlag::eNone, needsVsm, false }
+			, shader::ShadowOptions{}
 			, nullptr
 			, LightType::eDirectional
 			, lightsIndex /* lightBinding */

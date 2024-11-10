@@ -254,7 +254,7 @@ namespace castor3d
 			, materials
 			, brdfHelpers
 			, utils
-			, shader::ShadowOptions{ flags.getShadowFlags(), true, false }
+			, shader::ShadowOptions{ flags.getShadowFlags() }
 			, nullptr
 			, lightsIndex /* lightBinding */
 			, RenderPipeline::eBuffers /* lightSet */

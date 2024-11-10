@@ -1166,7 +1166,7 @@ namespace castor3d
 				, materials
 				, brdfHelpers
 				, utils
-				, shader::ShadowOptions{ flags.getShadowFlags(), true /* vsm */, false /* rsm */, technique.hasShadowBuffer() /* reserveIds */ }
+				, shader::ShadowOptions{ flags.getShadowFlags(), technique.hasShadowBuffer() /* reserveIds */ }
 				, &sssProfiles
 				, lightsIndex /* lightBinding */
 				, Sets::eInOuts /* lightSet */

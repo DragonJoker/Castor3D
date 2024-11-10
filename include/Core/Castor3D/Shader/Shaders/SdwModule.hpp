@@ -34,48 +34,18 @@ namespace castor3d::shader
 	struct ShadowOptions
 	{
 		SceneFlags type = SceneFlags( 0 );
-		// Use VSM result
-		bool vsm{ false };
-		// Use RSM result
-		bool rsm{ false };
 		// Reserve binding IDs even if shadows are disabled
 		bool reserveIds{ false };
 
-		ShadowOptions()
-			: type{ SceneFlag::eNone }
-			, vsm{ false }
-			, rsm{ false }
-		{
-		}
-
-		explicit ShadowOptions( bool vsm
-			, bool rsm )
-			: type{ SceneFlag::eNone }
-			, vsm{ rsm }
-			, rsm{ rsm }
-		{
-		}
-
-		ShadowOptions( bool enabled
-			, LightType lightType
-			, bool vsm
-			, bool rsm )
-			: type{ ( enabled
-				? SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << int( lightType ) )
-				: SceneFlag::eNone ) }
-			, vsm{ vsm }
-			, rsm{ rsm }
-		{
-		}
-
-		ShadowOptions( SceneFlags sceneFlags
-			, bool vsm
-			, bool rsm
-			, bool reserveIds = false )
+		explicit ShadowOptions( SceneFlags sceneFlags
+			, bool reserveIds = false )noexcept
 			: type{ sceneFlags & SceneFlag::eShadowAny }
-			, vsm{ vsm }
-			, rsm{ rsm }
 			, reserveIds{ reserveIds }
+		{
+		}
+
+		explicit ShadowOptions()noexcept
+			: ShadowOptions{ SceneFlag::eNone, false }
 		{
 		}
 	};
