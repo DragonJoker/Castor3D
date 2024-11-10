@@ -1,0 +1,181 @@
+diff --git a/include/fastgltf/core.hpp b/include/fastgltf/core.hpp
+index 7cb3b08..e032b59 100644
+--- a/include/fastgltf/core.hpp
++++ b/include/fastgltf/core.hpp
+@@ -215,6 +215,9 @@ namespace fastgltf {
+ 
+ 		// See https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_draco_mesh_compression
+ 		KHR_draco_mesh_compression = 1 << 26,
++
++		// See https://github.com/DassaultSystemes-Technology/glTF/blob/KHR_materials_translucency/extensions/2.0/Khronos/KHR_materials_diffuse_transmission/README.md
++		KHR_materials_diffuse_transmission = 1 << 27,
+     };
+     // clang-format on
+ 
+@@ -322,6 +325,7 @@ namespace fastgltf {
+         constexpr std::string_view KHR_lights_punctual = "KHR_lights_punctual";
+ 		constexpr std::string_view KHR_materials_anisotropy = "KHR_materials_anisotropy";
+         constexpr std::string_view KHR_materials_clearcoat = "KHR_materials_clearcoat";
++		constexpr std::string_view KHR_materials_diffuse_transmission = "KHR_materials_diffuse_transmission";
+ 		constexpr std::string_view KHR_materials_dispersion = "KHR_materials_dispersion";
+         constexpr std::string_view KHR_materials_emissive_strength = "KHR_materials_emissive_strength";
+         constexpr std::string_view KHR_materials_ior = "KHR_materials_ior";
+@@ -349,9 +353,9 @@ namespace fastgltf {
+ 	// value used for enabling/disabling the loading of it. This also represents all extensions that
+ 	// fastgltf supports and understands.
+ #if FASTGLTF_ENABLE_DEPRECATED_EXT
+-	static constexpr std::size_t SUPPORTED_EXTENSION_COUNT = 25;
++	static constexpr std::size_t SUPPORTED_EXTENSION_COUNT = 26;
+ #else
+-	static constexpr std::size_t SUPPORTED_EXTENSION_COUNT = 24;
++	static constexpr std::size_t SUPPORTED_EXTENSION_COUNT = 25;
+ #endif
+ 	static constexpr std::array<std::pair<std::string_view, Extensions>, SUPPORTED_EXTENSION_COUNT> extensionStrings = {{
+ 		{ extensions::EXT_mesh_gpu_instancing,                  Extensions::EXT_mesh_gpu_instancing },
+@@ -362,6 +366,7 @@ namespace fastgltf {
+ 		{ extensions::KHR_lights_punctual,                      Extensions::KHR_lights_punctual },
+ 		{ extensions::KHR_materials_anisotropy,                 Extensions::KHR_materials_anisotropy },
+ 		{ extensions::KHR_materials_clearcoat,                  Extensions::KHR_materials_clearcoat },
++		{ extensions::KHR_materials_diffuse_transmission,       Extensions::KHR_materials_diffuse_transmission },
+ 		{ extensions::KHR_materials_dispersion,                 Extensions::KHR_materials_dispersion },
+ 		{ extensions::KHR_materials_emissive_strength,          Extensions::KHR_materials_emissive_strength },
+ 		{ extensions::KHR_materials_ior,                        Extensions::KHR_materials_ior },
+diff --git a/include/fastgltf/types.hpp b/include/fastgltf/types.hpp
+index 4c7e5dc..504d61a 100644
+--- a/include/fastgltf/types.hpp
++++ b/include/fastgltf/types.hpp
+@@ -1929,6 +1929,13 @@ namespace fastgltf {
+         Optional<TextureInfo> transmissionTexture;
+     };
+ 
++    FASTGLTF_EXPORT struct MaterialDiffuseTransmission {
++        num transmissionFactor = 0.0f;
++        Optional<TextureInfo> transmissionTexture;
++		math::nvec3 transmissionColorFactor = math::nvec3(1);
++        Optional<TextureInfo> transmissionColorTexture;
++    };
++
+     FASTGLTF_EXPORT struct MaterialClearcoat {
+         num clearcoatFactor = 0.0f;
+         Optional<TextureInfo> clearcoatTexture;
+@@ -2046,6 +2053,11 @@ namespace fastgltf {
+          */
+         std::unique_ptr<MaterialTransmission> transmission;
+ 
++        /**
++         * Specular information from KHR_materials_diffuse_transmission.
++         */
++        std::unique_ptr<MaterialDiffuseTransmission> diffuseTransmission;
++
+         /**
+          * Volume information from KHR_materials_volume
+          */
+diff --git a/src/fastgltf.cpp b/src/fastgltf.cpp
+index d28f9db..556fa65 100644
+--- a/src/fastgltf.cpp
++++ b/src/fastgltf.cpp
+@@ -1208,6 +1208,8 @@ fg::Error fg::validate(const fastgltf::Asset& asset) {
+ 			return Error::InvalidGltf;
+ 		if (material.packedOcclusionRoughnessMetallicTextures && !isExtensionUsed(extensions::MSFT_packing_occlusionRoughnessMetallic))
+ 			return Error::InvalidGltf;
++		if (material.diffuseTransmission && !isExtensionUsed(extensions::KHR_materials_diffuse_transmission))
++			return Error::InvalidGltf;
+ 	}
+ 
+ 	for (const auto& mesh : asset.meshes) {
+@@ -3027,6 +3029,62 @@ fg::Error fg::Parser::parseMaterialExtensions(simdjson::dom::object &object, fas
+ 				material.packedOcclusionRoughnessMetallicTextures = std::move(packedTextures);
+ 				break;
+ 			}
++			case force_consteval<crc32c(extensions::KHR_materials_diffuse_transmission)>: {
++				if (!hasBit(config.extensions, Extensions::KHR_materials_diffuse_transmission))
++					break;
++
++				dom::object diffuseTransmissionObject;
++				auto diffuseTransmissionError = extensionField.value.get_object().get( diffuseTransmissionObject );
++				if (diffuseTransmissionError != SUCCESS) FASTGLTF_UNLIKELY {
++					return Error::InvalidGltf;
++				}
++
++				auto diffuseTransmission = std::make_unique<MaterialDiffuseTransmission>();
++
++				double transmissionFactor;
++				if (auto error = diffuseTransmissionObject["diffuseTransmissionFactor"].get_double().get(transmissionFactor);
++						error == SUCCESS) FASTGLTF_LIKELY {
++					diffuseTransmission->transmissionFactor = static_cast<num>(transmissionFactor);
++				} else if (error != NO_SUCH_FIELD) FASTGLTF_UNLIKELY {
++					return Error::InvalidGltf;
++				}
++
++				TextureInfo transmissionTexture;
++				if (auto error = parseTextureInfo(diffuseTransmissionObject, "diffuseTransmissionTexture", &transmissionTexture,
++												  config.extensions); error == Error::None) FASTGLTF_LIKELY {
++					diffuseTransmission->transmissionTexture = std::move(transmissionTexture);
++				} else if (error != Error::MissingField) {
++					return error;
++				}
++
++				dom::array transmissionColorFactor;
++				if (auto error = diffuseTransmissionObject["diffuseTransmissionColorFactor"].get_array().get(transmissionColorFactor); error == SUCCESS) FASTGLTF_LIKELY {
++					std::size_t i = 0;
++					for (auto factor : transmissionColorFactor) {
++						if (i >= diffuseTransmission->transmissionColorFactor.size()) {
++							return Error::InvalidGltf;
++						}
++						double value;
++						if (factor.get_double().get(value) != SUCCESS) FASTGLTF_UNLIKELY {
++							return Error::InvalidGltf;
++						}
++						(diffuseTransmission->transmissionColorFactor)[i++] = static_cast<num>(value);
++					}
++				} else if (error != NO_SUCH_FIELD) FASTGLTF_UNLIKELY {
++					return Error::InvalidGltf;
++				}
++
++				TextureInfo transmissionColorTexture;
++				if (auto error = parseTextureInfo(diffuseTransmissionObject, "diffuseTransmissionColorTexture", &transmissionColorTexture,
++												  config.extensions); error == Error::None) FASTGLTF_LIKELY {
++					diffuseTransmission->transmissionColorTexture = std::move(transmissionColorTexture);
++				} else if (error != Error::MissingField) {
++					return error;
++				}
++
++				material.diffuseTransmission = std::move(diffuseTransmission);
++				break;
++			}
+ #if FASTGLTF_ENABLE_DEPRECATED_EXT
+ 			case force_consteval<crc32c(extensions::KHR_materials_pbrSpecularGlossiness)>: {
+ 				if (!hasBit(config.extensions, Extensions::KHR_materials_pbrSpecularGlossiness))
+@@ -4854,6 +4912,32 @@ void fg::Exporter::writeMaterials(const Asset& asset, std::string& json) {
+ 			json += '}';
+ 		}
+ 
++		if (it->diffuseTransmission ) {
++			if (json.back() == '}') json += ',';
++			json += R"("KHR_materials_diffuse_transmission":{)";
++			if (it->diffuseTransmission->transmissionFactor != 0.0f) {
++				json += R"("diffuseTransmissionFactor":)" + std::to_string(it->diffuseTransmission->transmissionFactor);
++			}
++			if (it->diffuseTransmission->transmissionTexture.has_value()) {
++				if (json.back() != '{') json += ',';
++				json += "\"diffuseTransmissionTexture\":";
++				writeTextureInfo(json, &it->diffuseTransmission->transmissionTexture.value());
++			}
++			if (it->diffuseTransmission->transmissionColorFactor != math::nvec3(1)) {
++				if (json.back() != '{') json += ',';
++				json += R"("diffuseTransmissionColorFactor":[)" +
++						std::to_string(it->diffuseTransmission->transmissionColorFactor[0]) + ',' +
++						std::to_string(it->diffuseTransmission->transmissionColorFactor[1]) + ',' +
++						std::to_string(it->diffuseTransmission->transmissionColorFactor[2]) + ']';
++			}
++			if (it->diffuseTransmission->transmissionColorTexture.has_value()) {
++				if (json.back() != '{') json += ',';
++				json += "\"diffuseTransmissionColorTexture\":";
++				writeTextureInfo(json, &it->diffuseTransmission->transmissionColorTexture.value());
++			}
++			json += '}';
++		}
++
+ 		if (it->unlit) {
+ 			if (json.back() == '}') json += ',';
+ 			json += R"("KHR_materials_unlit":{})";

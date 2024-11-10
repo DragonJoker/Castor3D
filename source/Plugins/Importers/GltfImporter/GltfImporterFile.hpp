@@ -12,6 +12,7 @@ See LICENSE file in root folder
 #endif
 #pragma warning( disable: 4715 )
 #include <fastgltf/core.hpp>
+#include <fastgltf/math.hpp>
 #include <fastgltf/tools.hpp>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
@@ -61,9 +62,9 @@ namespace c3d_gltf
 {
 	inline const castor::String DefaultMaterial = cuT( "GLTF_DefaultMaterial" );
 
-	castor3d::NodeTransform convert( std::variant< fastgltf::TRS, fastgltf::Node::TransformMatrix > const & transform );
-	castor::Point3f convert( castor::Array< float, 3u > const & value );
-	castor::Quaternion convert( castor::Array< float, 4u > const & value );
+	castor3d::NodeTransform convert( std::variant< fastgltf::TRS, fastgltf::math::fmat4x4> const & transform );
+	castor::Point3f convert( fastgltf::math::fvec3 const & value );
+	castor::Quaternion convert( fastgltf::math::fquat const & value );
 
 	using AnimationChannelSampler = castor::Pair< fastgltf::AnimationChannel, fastgltf::AnimationSampler >;
 	using NodeAnimationChannelSampler = castor::Vector< AnimationChannelSampler >;
