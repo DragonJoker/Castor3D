@@ -54,9 +54,11 @@ namespace castor3d
 	*/
 	class VisibilityResolvePass;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, OpaqueRendering, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SubsurfaceScatteringPass, C3D_API );
 	CU_DeclareSmartPtr( castor3d, VisibilityReorderPass, C3D_API );
+	/** @endcond */
 
 	//@}
 	//@}

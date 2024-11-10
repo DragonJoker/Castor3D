@@ -239,6 +239,7 @@ namespace castor3d
 	template< UploadDataT UploaderT >
 	class InstantUploadDataT;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, GpuBufferPool, C3D_API );
 	CU_DeclareSmartPtr( castor3d, ObjectBufferPool, C3D_API );
 	CU_DeclareSmartPtr( castor3d, PoolUniformBuffer, C3D_API );
@@ -254,6 +255,8 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, UploadData, C3D_API );
 
 	CU_DeclareTemplateSmartPtr( castor3d, UniformBuffer );
+	/** @endcond */
+
 	/**
 	*\~english
 	*\brief

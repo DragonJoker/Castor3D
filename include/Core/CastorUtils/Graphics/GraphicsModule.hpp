@@ -23,7 +23,7 @@ namespace castor
 		: uint32_t
 	{
 #define CUPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed ) e##name = value,
-#include "CastorUtils/Graphics/PixelFormat.enum"
+#include "PixelFormat.enum"
 
 		CU_ScopedEnumBounds( eUNDEFINED, eASTC_12x12_SRGB_BLOCK ),
 	};

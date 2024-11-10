@@ -3,8 +3,6 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 
-CU_ImplementSmartPtr( castor3d, Projection )
-
 namespace castor3d
 {
 	Projection::Projection()

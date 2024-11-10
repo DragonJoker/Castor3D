@@ -429,6 +429,7 @@ namespace castor3d
 	using OnControlChanged = castor::SignalT< OnControlChangedFunction >;
 	using OnControlChangedConnection = OnControlChanged::connection;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, Layout, C3D_API );
 	CU_DeclareSmartPtr( castor3d, Spacer, C3D_API );
 	CU_DeclareSmartPtr( castor3d, GuiContext, C3D_API );
@@ -463,6 +464,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, ScrollBarStyle, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SliderStyle, C3D_API );
 	CU_DeclareSmartPtr( castor3d, StaticStyle, C3D_API );
+	/** @endcond */
 
 	using ControlArray = castor::Vector< ControlRPtr >;
 

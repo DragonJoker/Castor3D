@@ -20,7 +20,7 @@ namespace anisotropy::shader
 		AnisotropicBRDF( sdw::ShaderWriter & writer
 			, c3d::BRDFHelpers & brdfHelpers );
 
-		static c3d::SpecularBRDFUPtr create( sdw::ShaderWriter & writer
+		static c3d::SpecularBRDFPtr create( sdw::ShaderWriter & writer
 			, c3d::BRDFHelpers & brdfHelpers );
 		static castor::StringView constexpr Name{ cuT( "anisotropic" ) };
 

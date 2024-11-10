@@ -25,7 +25,9 @@ namespace castor3d
 	*/
 	class TextureAnimationInstance;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, TextureAnimationInstance, C3D_API );
+	/** @endcond */
 
 	//@}
 	//@}

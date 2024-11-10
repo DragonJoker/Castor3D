@@ -40,15 +40,15 @@ namespace atmosphere_scattering
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
 			, c3d::BRDFHelpers & brdfHelpers
-			, c3d::DiffuseBRDFUPtr diffuse
-			, c3d::SpecularBRDFUPtr specular
-			, c3d::SheenBRDFUPtr sheen
-			, c3d::ClearcoatBRDFUPtr clearcoat
+			, c3d::DiffuseBRDFPtr diffuse
+			, c3d::SpecularBRDFPtr specular
+			, c3d::SheenBRDFPtr sheen
+			, c3d::ClearcoatBRDFPtr clearcoat
 			, c3d::Shadow & shadowModel
 			, c3d::Lights & lights
 			, bool enableVolumetric );
 
-		static c3d::LightingModelUPtr create( castor3d::LightingModelID lightingModelId
+		static c3d::LightingModelPtr create( castor3d::LightingModelID lightingModelId
 			, c3d::DiffuseBrdfDesc const & diffuseBrdf
 			, c3d::SpecularBrdfDesc const & specularBrdf
 			, c3d::SheenBrdfDesc const & sheenBrdf
@@ -89,15 +89,15 @@ namespace atmosphere_scattering
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
 			, c3d::BRDFHelpers & brdfHelpers
-			, c3d::DiffuseBRDFUPtr diffuseBrdf
-			, c3d::SpecularBRDFUPtr specularBrdf
-			, c3d::SheenBRDFUPtr sheenBrdf
-			, c3d::ClearcoatBRDFUPtr clearcoatBrdf
+			, c3d::DiffuseBRDFPtr diffuseBrdf
+			, c3d::SpecularBRDFPtr specularBrdf
+			, c3d::SheenBRDFPtr sheenBrdf
+			, c3d::ClearcoatBRDFPtr clearcoatBrdf
 			, c3d::Shadow & shadowModel
 			, c3d::Lights & lights
 			, bool enableVolumetric );
 
-		static c3d::LightingModelUPtr create( castor3d::LightingModelID lightingModelId
+		static c3d::LightingModelPtr create( castor3d::LightingModelID lightingModelId
 			, c3d::DiffuseBrdfDesc const & diffuseBrdf
 			, c3d::SpecularBrdfDesc const & specularBrdf
 			, c3d::SheenBrdfDesc const & sheenBrdf

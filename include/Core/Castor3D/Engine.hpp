@@ -407,7 +407,6 @@ namespace castor3d
 		 *\param[in]	defaultSheenBrdf		The default sheen BRDF.
 		 *\param[in]	defaultClearcoatBrdf	The default clearcoat BRDF.
 		 *\param[in]	creator					The model creation function.
-		 *\return		The model ID.
 		 *\~french
 		 *\brief		Enregistre un modèle d'éclairage.
 		 *\param[in]	baseName				Le nom de base du modèle d'éclairage.
@@ -416,7 +415,6 @@ namespace castor3d
 		 *\param[in]	defaultSheenBrdf		La BRDF de sheen par défaut.
 		 *\param[in]	defaultClearcoatBrdf	La BRDF de clearcoat par défaut.
 		 *\param[in]	creator					La fonction de création du modèle.
-		 *\return		L'ID du modèle.
 		 */
 		C3D_API void registerLightingModel( castor::String const & baseName
 			, shader::DiffuseBrdfDesc const & defaultDiffuseBrdf
@@ -427,10 +425,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Unregisters a lighting model.
-		 *\param[in]	baseName		The lighting model base name.
+		 *\param[in]	baseName	The lighting model base name.
 		 *\~french
 		 *\brief		Désenregistre un modèle d'éclairage.
-		 *\param[in]	baseName		Le nom de base du modèle d'éclairage.
+		 *\param[in]	baseName	Le nom de base du modèle d'éclairage.
 		 */
 		C3D_API void unregisterLightingModel( castor::String const & baseName )const;
 		/**
@@ -445,10 +443,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Unegisters a diffuse BRDF.
-		 *\param[in]	desc	The BRDF description.
+		 *\param[in]	name	The BRDF name.
 		 *\~french
 		 *\brief		Désenregistre une BRDF de diffuse.
-		 *\param[in]	desc	La description de la BRDF.
+		 *\param[in]	name	Le nom de la BRDF.
 		 */
 		C3D_API void unregisterDiffuseBrdf( castor::String const & name )const;
 		/**
@@ -463,10 +461,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Unegisters a specular BRDF.
-		 *\param[in]	desc	The BRDF description.
+		 *\param[in]	name	The BRDF name.
 		 *\~french
 		 *\brief		Désenregistre une BRDF de spéculaire.
-		 *\param[in]	desc	La description de la BRDF.
+		 *\param[in]	name	Le nom de la BRDF.
 		 */
 		C3D_API void unregisterSpecularBrdf( castor::String const & name )const;
 		/**
@@ -481,10 +479,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Unegisters a sheen BRDF.
-		 *\param[in]	desc	The BRDF description.
+		 *\param[in]	name	The BRDF name.
 		 *\~french
 		 *\brief		Désenregistre une BRDF de sheen.
-		 *\param[in]	desc	La description de la BRDF.
+		 *\param[in]	name	Le nom de la BRDF.
 		 */
 		C3D_API void unregisterSheenBrdf( castor::String const & name )const;
 		/**
@@ -499,10 +497,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Unegisters a clearcoat BRDF.
-		 *\param[in]	desc	The BRDF description.
+		 *\param[in]	name	The BRDF name.
 		 *\~french
 		 *\brief		Désenregistre une BRDF de clearcoat.
-		 *\param[in]	desc	La description de la BRDF.
+		 *\param[in]	name	Le nom de la BRDF.
 		 */
 		C3D_API void unregisterClearcoatBrdf( castor::String const & name )const;
 		/**
@@ -557,13 +555,11 @@ namespace castor3d
 		C3D_API void registerPassModel( PassRegisterInfo const & info )const;
 		/**
 		 *\~english
-		 *\brief		Unregisters a combination of lighting model and background model.
-		 *\param[in]	backgroundModelId	The background model.
-		 *\param[in]	baseName			The lighting model base name.
+		 *\brief		Unregisters a pass model.
+		 *\param[in]	baseName	The model base name.
 		 *\~french
-		 *\brief		Désenregistre une combinaison de modèle d'éclairage et de modèle de fond.
-		 *\param[in]	backgroundModelId	Le modèle de fond.
-		 *\param[in]	baseName			Le nom de base modèle d'éclairage.
+		 *\brief		Désenregistre un modèle de passe.
+		 *\param[in]	baseName	Le nom de base du modèle.
 		 */
 		C3D_API void unregisterPassModel( castor::String const & baseName )const;
 		/**

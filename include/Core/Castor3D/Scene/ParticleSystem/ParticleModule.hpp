@@ -170,34 +170,8 @@ namespace castor3d
 	*/
 	class ParticleUpdater;
 
-	CU_DeclareSmartPtr( castor3d, CpuParticleSystem, C3D_API );
-	/**
-	*\~english
-	*\brief
-	*	Particle system factory.
-	*\~french
-	*\brief
-	*	Fabrique de système de particules.
-	*/
-	using ParticleFactory = castor::Factory< CpuParticleSystem
-		, castor::String
-		, CpuParticleSystemUPtr
-		, castor::Function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
-
 	template< ParticleFormat Type >
 	struct ElementTyper;
-	
-	CU_DeclareSmartPtr( castor3d, ComputeParticleSystem, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ParticleElementDeclaration, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ParticleEmitter, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ParticleSystem, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ParticleSystemImpl, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ParticleUpdater, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ParticleFactory, C3D_API );
-
-	CU_DeclareVector( Particle, Particle );
-	CU_DeclareVector( ParticleEmitterUPtr, ParticleEmitter );
-	CU_DeclareVector( ParticleUpdaterUPtr, ParticleUpdater );
 
 	using ParticleValues = ParametersT< size_t >;
 	/**
@@ -229,7 +203,38 @@ namespace castor3d
 	using ParticleSystemRes = CameraCacheTraits::ElementPtrT;
 	using ParticleSystemResPtr = CameraCacheTraits::ElementObsT;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, ParticleSystemCache, C3D_API );
+
+	CU_DeclareSmartPtr( castor3d, ComputeParticleSystem, C3D_API );
+	CU_DeclareSmartPtr( castor3d, CpuParticleSystem, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ParticleElementDeclaration, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ParticleEmitter, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ParticleSystem, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ParticleSystemImpl, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ParticleUpdater, C3D_API );
+
+	CU_DeclareVector( Particle, Particle );
+	CU_DeclareVector( ParticleEmitterUPtr, ParticleEmitter );
+	CU_DeclareVector( ParticleUpdaterUPtr, ParticleUpdater );
+	/** @endcond */
+
+	/**
+	*\~english
+	*\brief
+	*	Particle system factory.
+	*\~french
+	*\brief
+	*	Fabrique de système de particules.
+	*/
+	using ParticleFactory = castor::Factory< CpuParticleSystem
+		, castor::String
+		, CpuParticleSystemUPtr
+		, castor::Function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
+
+	/** @cond !Doxygen */
+	CU_DeclareSmartPtr( castor3d, ParticleFactory, C3D_API );
+	/** @endcond */
 
 	//@}
 	//@}

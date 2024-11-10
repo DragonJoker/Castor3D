@@ -75,9 +75,11 @@ namespace castor3d
 	*/
 	class VoxelizerUbo;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, LightVolumePassResult, C3D_API );
 
 	CU_DeclareVector( LightVolumePassResultUPtr, LightVolumePassResult );
+	/** @endcond */
 
 	struct IndirectLightingData
 	{
@@ -90,6 +92,7 @@ namespace castor3d
 		Texture const * vctFirstBounce{};
 		Texture const * vctSecondaryBounce{};
 	};
+
 	//@}
 	//@}
 }

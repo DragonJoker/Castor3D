@@ -13,7 +13,7 @@ namespace anisotropy::shader
 	{
 	}
 
-	c3d::SpecularBRDFUPtr AnisotropicBRDF::create( sdw::ShaderWriter & writer
+	c3d::SpecularBRDFPtr AnisotropicBRDF::create( sdw::ShaderWriter & writer
 		, c3d::BRDFHelpers & brdfHelpers )
 	{
 		return castor::makeUniqueDerived< c3d::SpecularBRDF, AnisotropicBRDF >( writer, brdfHelpers );

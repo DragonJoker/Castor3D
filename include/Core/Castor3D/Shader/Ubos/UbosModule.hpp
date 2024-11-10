@@ -501,6 +501,7 @@ namespace castor3d
 	*/
 	struct VoxelizerUboConfiguration;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, FontUbo, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LayeredLpvGridConfigUbo, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LpvGridConfigUbo, C3D_API );
@@ -512,6 +513,8 @@ namespace castor3d
 
 	// Needs to be last, because of namespace changes...
 	CU_DeclareSmartPtr( castor3d::shader, ClustersData, C3D_API );
+	/** @endcond */
+
 	//@}
 	//@}
 }

@@ -73,6 +73,7 @@ namespace castor3d
 	*/
 	class SkeletonAnimationInstanceObject;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, SkeletonAnimationInstance, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SkeletonAnimationInstanceBone, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SkeletonAnimationInstanceNode, C3D_API );
@@ -80,6 +81,7 @@ namespace castor3d
 
 	//! SkeletonAnimationInstanceObject pointer array.
 	CU_DeclareVector( SkeletonAnimationInstanceObjectUPtr, SkeletonAnimationInstanceObjectPtr );
+	/** @endcond */
 
 	//@}
 	//@}

@@ -26,10 +26,10 @@ namespace castor3d::shader
 			, Materials const & materials
 			, Utils & utils
 			, BRDFHelpers & brdfHelpers
-			, DiffuseBRDFUPtr diffuse
-			, SpecularBRDFUPtr specular
-			, SheenBRDFUPtr sheen
-			, ClearcoatBRDFUPtr clearcoat
+			, DiffuseBRDFPtr diffuse
+			, SpecularBRDFPtr specular
+			, SheenBRDFPtr sheen
+			, ClearcoatBRDFPtr clearcoat
 			, Shadow & shadowModel
 			, Lights & lights
 			, bool hasIblSupport
@@ -268,10 +268,10 @@ namespace castor3d::shader
 		Utils & m_utils;
 		Shadow & m_shadowModel;
 		Lights & m_lights;
-		DiffuseBRDFUPtr m_diffuse;
-		SpecularBRDFUPtr m_specular;
-		SheenBRDFUPtr m_sheen;
-		ClearcoatBRDFUPtr m_clearcoat;
+		DiffuseBRDFPtr m_diffuse;
+		SpecularBRDFPtr m_specular;
+		SheenBRDFPtr m_sheen;
+		ClearcoatBRDFPtr m_clearcoat;
 		bool m_hasBackgroundReflectionsSupport;
 		bool m_hasBackgroundRefractionSupport;
 		bool m_hasIblSupport;

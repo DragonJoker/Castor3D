@@ -283,6 +283,21 @@ namespace castor3d
 	*/
 	using VelocityComponent = BaseDataComponentT< SubmeshData::eVelocity >;
 
+	using SubmeshComponentDataUPtr = castor::RawUniquePtr< SubmeshComponentData >;
+	using SubmeshComponentDataRPtr = SubmeshComponentData *;
+	using SubmeshRenderDataPtr = castor::RawUniquePtr< SubmeshRenderData >;
+	using SubmeshRenderShaderPtr = castor::RawUniquePtr< SubmeshRenderShader >;
+
+	namespace shader
+	{
+		struct SubmeshVertexSurfaceShader;
+		struct SubmeshRasterSurfaceShader;
+
+		using SubmeshVertexSurfaceShaderPtr = castor::RawUniquePtr< SubmeshVertexSurfaceShader >;
+		using SubmeshRasterSurfaceShaderPtr = castor::RawUniquePtr< SubmeshRasterSurfaceShader >;
+	}
+
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, DefaultRenderComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, IndexMapping, C3D_API );
 	CU_DeclareSmartPtr( castor3d, InstantiationComponent, C3D_API );
@@ -296,26 +311,12 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, SubmeshComponentRegister, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TriFaceMapping, C3D_API );
 
-	using SubmeshComponentDataUPtr = castor::RawUniquePtr< SubmeshComponentData >;
-	using SubmeshComponentDataRPtr = SubmeshComponentData *;
-	using SubmeshRenderDataPtr = castor::RawUniquePtr< SubmeshRenderData >;
-	using SubmeshRenderShaderPtr = castor::RawUniquePtr< SubmeshRenderShader >;
-
+	CU_DeclareMap( SubmeshComponentID, SubmeshComponentUPtr, SubmeshComponentID );
 	//! Face array
 	CU_DeclareVector( Face, Face );
-
-	CU_DeclareMap( SubmeshComponentID, SubmeshComponentUPtr, SubmeshComponentID );
+	/** @endcond */
 
 	using CreateSubmeshComponentPlugin = castor::Function< SubmeshComponentPluginUPtr( SubmeshComponentRegister const & ) >;
-
-	namespace shader
-	{
-		struct SubmeshVertexSurfaceShader;
-		struct SubmeshRasterSurfaceShader;
-
-		using SubmeshVertexSurfaceShaderPtr = castor::RawUniquePtr< SubmeshVertexSurfaceShader >;
-		using SubmeshRasterSurfaceShaderPtr = castor::RawUniquePtr< SubmeshRasterSurfaceShader >;
-	}
 
 	//@}
 	//@}

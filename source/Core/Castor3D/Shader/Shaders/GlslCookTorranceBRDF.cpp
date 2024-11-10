@@ -12,7 +12,7 @@ namespace castor3d::shader
 	{
 	}
 
-	SpecularBRDFUPtr CookTorranceBRDF::create( sdw::ShaderWriter & writer
+	SpecularBRDFPtr CookTorranceBRDF::create( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdfHelpers )
 	{
 		return castor::makeUniqueDerived< SpecularBRDF, CookTorranceBRDF >( writer, brdfHelpers );

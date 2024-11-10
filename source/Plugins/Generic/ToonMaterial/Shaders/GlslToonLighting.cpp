@@ -78,10 +78,10 @@ namespace toon::shader
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
 		, c3d::BRDFHelpers & brdfHelpers
-		, c3d::DiffuseBRDFUPtr diffuse
-		, c3d::SpecularBRDFUPtr specular
-		, c3d::SheenBRDFUPtr sheen
-		, c3d::ClearcoatBRDFUPtr clearcoat
+		, c3d::DiffuseBRDFPtr diffuse
+		, c3d::SpecularBRDFPtr specular
+		, c3d::SheenBRDFPtr sheen
+		, c3d::ClearcoatBRDFPtr clearcoat
 		, c3d::Shadow & shadowModel
 		, c3d::Lights & lights
 		, bool enableVolumetric )
@@ -106,7 +106,7 @@ namespace toon::shader
 		return cuT( "toon.phong" );
 	}
 
-	c3d::LightingModelUPtr ToonPhongLightingModel::create( castor3d::LightingModelID lightingModelId
+	c3d::LightingModelPtr ToonPhongLightingModel::create( castor3d::LightingModelID lightingModelId
 		, c3d::DiffuseBrdfDesc const & diffuseBrdf
 		, c3d::SpecularBrdfDesc const & specularBrdf
 		, c3d::SheenBrdfDesc const & sheenBrdf
@@ -183,10 +183,10 @@ namespace toon::shader
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
 		, c3d::BRDFHelpers & brdfHelpers
-		, c3d::DiffuseBRDFUPtr diffuse
-		, c3d::SpecularBRDFUPtr specular
-		, c3d::SheenBRDFUPtr sheen
-		, c3d::ClearcoatBRDFUPtr clearcoat
+		, c3d::DiffuseBRDFPtr diffuse
+		, c3d::SpecularBRDFPtr specular
+		, c3d::SheenBRDFPtr sheen
+		, c3d::ClearcoatBRDFPtr clearcoat
 		, c3d::Shadow & shadowModel
 		, c3d::Lights & lights
 		, bool enableVolumetric )
@@ -211,7 +211,7 @@ namespace toon::shader
 		return cuT( "toon.pbr" );
 	}
 
-	c3d::LightingModelUPtr ToonPbrLightingModel::create( castor3d::LightingModelID lightingModelId
+	c3d::LightingModelPtr ToonPbrLightingModel::create( castor3d::LightingModelID lightingModelId
 		, c3d::DiffuseBrdfDesc const & diffuseBrdf
 		, c3d::SpecularBrdfDesc const & specularBrdf
 		, c3d::SheenBrdfDesc const & sheenBrdf

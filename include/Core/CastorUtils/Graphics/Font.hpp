@@ -248,12 +248,10 @@ namespace castor
 		 *\brief		Retrieves the kerning between two characters.
 		 *\remarks		Uses the font height defined at construction.
 		 *\param[in]	lhs, rhs	The characters.
-		 *\param[in]	height		The font height considered for computing.
 		 *\~french
 		 *\brief		Récupère le kerning entre deux caractères.
 		 *\remarks		Utilise la hauteur définie lors de la construction de la police.
 		 *\param[in]	lhs, rhs	Les caractères.
-		 *\param[in]	height		La hauteur de police utilisée lors du calcul.
 		 */
 		CU_API float getKerning( char32_t lhs, char32_t rhs )const;
 		/**

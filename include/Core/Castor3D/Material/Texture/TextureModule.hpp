@@ -222,27 +222,12 @@ namespace castor3d
 	*/
 	class TextureView;
 
-	CU_DeclareSmartPtr( castor3d, Sampler, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureData, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureLayout, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureSource, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureSourceInfo, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureUnit, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureUnitData, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureView, C3D_API );
-
-	//! TextureUnit array
-	CU_DeclareVector( TextureUnit, TextureUnit );
-	// ARGB => 4 components => 4 channels per configuration.
-	using TextureFlagConfigurations = castor::Array< TextureFlagConfiguration, 4u >;
-
-	using TextureUnitDatas = castor::Vector< TextureUnitDataUPtr >;
-	using TextureUnitDataRefs = castor::Vector< TextureUnitDataRPtr >;
-	using TextureUnitDataSet = castor::Map< PassComponentTextureFlag, TextureUnitDataRPtr >;
-
 	using OnTextureUnitChangedFunction = castor::Function< void( TextureUnit const & ) >;
 	using OnTextureUnitChanged = castor::SignalT< OnTextureUnitChangedFunction >;
 	using OnTextureUnitChangedConnection = OnTextureUnitChanged::connection;
+
+	// ARGB => 4 components => 4 channels per configuration.
+	using TextureFlagConfigurations = castor::Array< TextureFlagConfiguration, 4u >;
 
 	castor::OutputStream & operator<<( castor::OutputStream & stream, castor::ImageLayout const & rhs );
 	castor::OutputStream & operator<<( castor::OutputStream & stream, castor::Image const & rhs );
@@ -278,7 +263,24 @@ namespace castor3d
 	using SamplerPtr = SamplerCacheTraits::ElementPtrT;
 	using SamplerObs = SamplerCacheTraits::ElementObsT;
 
+	/** @cond !Doxygen */
+	CU_DeclareSmartPtr( castor3d, Sampler, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SamplerCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureData, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureLayout, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureSource, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureSourceInfo, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureUnit, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureUnitData, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureView, C3D_API );
+
+	//! TextureUnit array
+	CU_DeclareVector( TextureUnit, TextureUnit );
+	/** @endcond */
+
+	using TextureUnitDatas = castor::Vector< TextureUnitDataUPtr >;
+	using TextureUnitDataRefs = castor::Vector< TextureUnitDataRPtr >;
+	using TextureUnitDataSet = castor::Map< PassComponentTextureFlag, TextureUnitDataRPtr >;
 
 	struct TextureSourceInfoHasher
 	{

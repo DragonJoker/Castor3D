@@ -477,7 +477,7 @@ namespace castor
 		case PixelFormat::e##name:\
 			result = alpha;\
 			break;
-#include "CastorUtils/Graphics/PixelFormat.enum"
+#include "PixelFormat.enum"
 		default:
 			result = false;
 			break;
@@ -523,7 +523,7 @@ namespace castor
 		case PixelFormat::e##name:\
 			result = singleComponentV< PixelFormat::e##name >;\
 			break;
-#include "CastorUtils/Graphics/PixelFormat.enum"
+#include "PixelFormat.enum"
 		default:
 			result = PixelFormat::eUNDEFINED;
 			break;

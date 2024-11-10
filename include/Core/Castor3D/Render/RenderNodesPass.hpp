@@ -129,9 +129,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\param[in]	value	The scene node to ignore during rendering.
+		 *\return		The base NodesPassDesc.
 		 *\~french
-		 *\param[in]	value	Le scene node à ignorer pendant le rendu.
+		 *\return		La NodesPassDesc de base.
 		 */
 		NodesPassDesc const & base()const noexcept
 		{

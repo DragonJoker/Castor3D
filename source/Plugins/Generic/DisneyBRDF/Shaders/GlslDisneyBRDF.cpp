@@ -16,7 +16,7 @@ namespace disney::shader
 	{
 	}
 
-	c3d::DiffuseBRDFUPtr DisneyDiffuseBRDF::create( sdw::ShaderWriter & writer
+	c3d::DiffuseBRDFPtr DisneyDiffuseBRDF::create( sdw::ShaderWriter & writer
 		, c3d::BRDFHelpers & brdfHelpers )
 	{
 		return castor::makeUniqueDerived< DiffuseBRDF, DisneyDiffuseBRDF >( writer, brdfHelpers );
@@ -62,7 +62,7 @@ namespace disney::shader
 	{
 	}
 
-	c3d::SpecularBRDFUPtr DisneySpecularBRDF::create( sdw::ShaderWriter & writer
+	c3d::SpecularBRDFPtr DisneySpecularBRDF::create( sdw::ShaderWriter & writer
 		, c3d::BRDFHelpers & brdfHelpers )
 	{
 		return castor::makeUniqueDerived< SpecularBRDF, DisneySpecularBRDF >( writer, brdfHelpers );
@@ -176,7 +176,7 @@ namespace disney::shader
 	{
 	}
 
-	c3d::ClearcoatBRDFUPtr DisneyClearcoatBRDF::create( sdw::ShaderWriter & writer
+	c3d::ClearcoatBRDFPtr DisneyClearcoatBRDF::create( sdw::ShaderWriter & writer
 		, c3d::BRDFHelpers & brdfHelpers )
 	{
 		return castor::makeUniqueDerived< ClearcoatBRDF, DisneyClearcoatBRDF >( writer, brdfHelpers );
@@ -256,7 +256,7 @@ namespace disney::shader
 	{
 	}
 
-	c3d::SheenBRDFUPtr DisneySheenBRDF::create( sdw::ShaderWriter & writer
+	c3d::SheenBRDFPtr DisneySheenBRDF::create( sdw::ShaderWriter & writer
 		, c3d::BRDFHelpers & brdfHelpers )
 	{
 		return castor::makeUniqueDerived< SheenBRDF, DisneySheenBRDF >( writer, brdfHelpers );

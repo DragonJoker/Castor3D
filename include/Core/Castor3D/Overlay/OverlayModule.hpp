@@ -436,16 +436,6 @@ namespace castor3d
 			return castor::makeArrayView( elems.begin(), count );
 		}
 	};
-
-	CU_DeclareSmartPtr( castor3d, BorderPanelOverlay, C3D_API );
-	CU_DeclareSmartPtr( castor3d, DebugOverlays, C3D_API );
-	CU_DeclareSmartPtr( castor3d, FontTexture, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Overlay, C3D_API );
-	CU_DeclareSmartPtr( castor3d, OverlayCategory, C3D_API );
-	CU_DeclareSmartPtr( castor3d, OverlayFactory, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PanelOverlay, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextOverlay, C3D_API );
-	CU_DeclareSmartPtr( castor3d, OverlayContext, C3D_API );
 	/**
 	*\~english
 	*	Helper structure to specialise a cache behaviour.
@@ -478,10 +468,22 @@ namespace castor3d
 	using OverlayRes = OverlayCacheTraits::ElementPtrT;
 	using OverlayResPtr = OverlayCacheTraits::ElementObsT;
 
+	/** @cond !Doxygen */
+	CU_DeclareSmartPtr( castor3d, BorderPanelOverlay, C3D_API );
+	CU_DeclareSmartPtr( castor3d, DebugOverlays, C3D_API );
+	CU_DeclareSmartPtr( castor3d, FontTexture, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Overlay, C3D_API );
 	CU_DeclareSmartPtr( castor3d, OverlayCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, OverlayCategory, C3D_API );
+	CU_DeclareSmartPtr( castor3d, OverlayFactory, C3D_API );
+	CU_DeclareSmartPtr( castor3d, PanelOverlay, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextOverlay, C3D_API );
+	CU_DeclareSmartPtr( castor3d, OverlayContext, C3D_API );
 
 	CU_DeclareVector( OverlayRPtr, OverlayPtr );
 	CU_DeclareMap( castor::String, OverlayResPtr, OverlayPtrStr );
+	/** @endcond */
+
 	//@}
 }
 

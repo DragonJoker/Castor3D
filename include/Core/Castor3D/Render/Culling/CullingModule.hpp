@@ -44,8 +44,6 @@ namespace castor3d
 	*/
 	class SceneCuller;
 
-	CU_DeclareSmartPtr( castor3d, SceneCuller, C3D_API );
-
 	using SceneCullerSignalFunction = castor::Function< void( SceneCuller const & ) >;
 	using SceneCullerSignal = castor::SignalT< SceneCullerSignalFunction >;
 	using SceneCullerSignalConnection = castor::ConnectionT< SceneCullerSignal >;
@@ -59,6 +57,10 @@ namespace castor3d
 	using SceneCullerBillboardSignalConnection = castor::ConnectionT< SceneCullerBillboardSignal >;
 
 	using PipelineNodes = castor::Array< uint32_t, MaxNodesPerPipeline >;
+
+	/** @cond !Doxygen */
+	CU_DeclareSmartPtr( castor3d, SceneCuller, C3D_API );
+	/** @endcond */
 
 	//@}
 	//@}

@@ -62,16 +62,18 @@ namespace castor3d
 	*/
 	struct VctConfig;
 
-	CU_DeclareSmartPtr( castor3d, VoxelBufferToTexture, C3D_API );
-	CU_DeclareSmartPtr( castor3d, VoxelizePass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, VoxelSecondaryBounce, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Voxelizer, C3D_API );
-
 	struct Voxel
 	{
 		uint32_t colorMask;
 		uint32_t normalMask;
 	};
+
+	/** @cond !Doxygen */
+	CU_DeclareSmartPtr( castor3d, VoxelBufferToTexture, C3D_API );
+	CU_DeclareSmartPtr( castor3d, VoxelizePass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, VoxelSecondaryBounce, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Voxelizer, C3D_API );
+	/** @endcond */
 
 	//@}
 	//@}

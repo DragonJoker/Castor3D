@@ -351,24 +351,6 @@ namespace castor3d
 	*/
 	struct ShadowConfig;
 
-	CU_DeclareSmartPtr( castor3d, BillboardBase, C3D_API );
-	CU_DeclareSmartPtr( castor3d, BillboardList, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Camera, C3D_API );
-	CU_DeclareSmartPtr( castor3d, CameraImporter, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Geometry, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MovableObject, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SceneFileParser, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SceneNode, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Scene, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SceneImporter, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SceneNodeImporter, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ShadowConfig, C3D_API );
-
-	//! SceneNode pointer array.
-	CU_DeclareVector( SceneNodeRPtr, SceneNodePtr );
-	//! Scene pointer map, sorted by name.
-	CU_DeclareMap( castor::String, SceneRPtr, ScenePtrStr );
-
 	using OnSceneChangedFunction = castor::Function< void( Scene const & ) >;
 	using OnSceneChanged = castor::SignalT< OnSceneChangedFunction >;
 	using OnSceneChangedConnection = OnSceneChanged::connection;
@@ -390,9 +372,6 @@ namespace castor3d
 	using OnSceneNodeReparentConnection = OnSceneNodeReparent::connection;
 
 	using SubmeshMaterialMap = castor::Map< Submesh const *, MaterialObs >;
-
-	C3D_API castor::LoggerInstance & getLogger( Scene const & scene );
-	C3D_API Engine & getEngine( Scene const & scene );
 	/**
 	*\~english
 	*	Helper structure to specialise a cache behaviour.
@@ -474,13 +453,13 @@ namespace castor3d
 		using ElementMergerT = castor::Function< void( ElementCacheT const &
 			, ElementContT &
 			, ElementPtrT
-			, SceneNodeRPtr
-			, SceneNodeRPtr ) >;
+			, SceneNode *
+			, SceneNode * ) >;
 		using ElementAttacherT = castor::Function< void( ElementT &
 			, SceneNode &
-			, SceneNodeRPtr
-			, SceneNodeRPtr
-			, SceneNodeRPtr ) >;
+			, SceneNode *
+			, SceneNode *
+			, SceneNode * ) >;
 		using ElementDetacherT = castor::Function< void( ElementT & ) >;
 
 		template< typename ... ParametersT >
@@ -652,6 +631,20 @@ namespace castor3d
 	using SamplerCacheView = CacheViewT< SamplerCache, EventType( GpuEventType::ePreUpload ) >;
 	using FontCacheView = CacheViewT< castor::FontCache, EventType( CpuEventType::ePreGpuStep ) >;
 
+	/** @cond !Doxygen */
+	CU_DeclareSmartPtr( castor3d, BillboardBase, C3D_API );
+	CU_DeclareSmartPtr( castor3d, BillboardList, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Camera, C3D_API );
+	CU_DeclareSmartPtr( castor3d, CameraImporter, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Geometry, C3D_API );
+	CU_DeclareSmartPtr( castor3d, MovableObject, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SceneFileParser, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SceneNode, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Scene, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SceneImporter, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SceneNodeImporter, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ShadowConfig, C3D_API );
+
 	CU_DeclareSmartPtr( castor3d, SceneCache, C3D_API );
 	CU_DeclareSmartPtr( castor3d, BillboardListCache, C3D_API );
 	CU_DeclareSmartPtr( castor3d, CameraCache, C3D_API );
@@ -660,6 +653,15 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, MaterialCacheView, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SamplerCacheView, C3D_API );
 	CU_DeclareSmartPtr( castor3d, FontCacheView, C3D_API );
+
+	//! SceneNode pointer array.
+	CU_DeclareVector( SceneNodeRPtr, SceneNodePtr );
+	//! Scene pointer map, sorted by name.
+	CU_DeclareMap( castor::String, SceneRPtr, ScenePtrStr );
+	/** @endcond */
+
+	C3D_API castor::LoggerInstance & getLogger( Scene const & scene );
+	C3D_API Engine & getEngine( Scene const & scene );
 
 	//@}
 }

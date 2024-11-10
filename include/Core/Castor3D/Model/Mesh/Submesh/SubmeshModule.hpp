@@ -329,6 +329,7 @@ namespace castor3d
 		castor::BoundingBox boundingBox{};
 	};
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, Submesh, C3D_API );
 
 	//! Submesh pointer array
@@ -336,6 +337,8 @@ namespace castor3d
 	CU_DeclareMap( Submesh const *, castor::BoundingBox, SubmeshBoundingBox );
 	CU_DeclareMap( Submesh const *, castor::BoundingSphere, SubmeshBoundingSphere );
 	CU_DeclareMap( uint32_t, castor::Vector< float >, SubmeshTargetWeight );
+	/** @endcond */
+
 	using SubmeshBoundingBoxList = castor::Vector< castor::Pair< Submesh const *, castor::BoundingBox > >;
 
 	C3D_API Submesh * getComponentSubmesh( SubmeshComponent const & component );

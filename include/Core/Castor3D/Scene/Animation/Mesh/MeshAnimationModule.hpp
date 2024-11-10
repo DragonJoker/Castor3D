@@ -38,10 +38,12 @@ namespace castor3d
 	*/
 	class MeshAnimationInstanceSubmesh;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, MeshAnimationInstance, C3D_API );
 
 	//! MeshAnimationInstanceSubmesh map, sorted by submesh ID.
 	CU_DeclareMap( uint32_t, MeshAnimationInstanceSubmesh, MeshAnimationInstanceSubmesh );
+	/** @endcond */
 
 	//@}
 	//@}

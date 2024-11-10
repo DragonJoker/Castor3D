@@ -393,8 +393,10 @@ namespace castor3d
 	*/
 	class UserInputListener;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, EventHandler, C3D_API );
 	CU_DeclareSmartPtr( castor3d, UserInputListener, C3D_API );
+	/** @endcond */
 
 	using UserInputEventSPtr = castor::SharedPtr< UserInputEvent >;
 	using KeyboardEventSPtr = castor::SharedPtr< KeyboardEvent >;

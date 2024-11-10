@@ -129,14 +129,6 @@ namespace castor3d
 	*/
 	class GpuFunctorEvent;
 
-	CU_DeclareSmartPtr( castor3d, CpuFrameEvent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, FrameListener, C3D_API );
-	CU_DeclareSmartPtr( castor3d, GpuFrameEvent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, CpuFunctorEvent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, GpuFunctorEvent, C3D_API );
-
-	CU_DeclareVector( CpuFrameEventUPtr, CpuFrameEventPtr );
-	CU_DeclareVector( GpuFrameEventUPtr, GpuFrameEventPtr );
 	/**
 	*\~english
 	*	Helper structure to specialise a cache behaviour.
@@ -168,7 +160,18 @@ namespace castor3d
 	using FrameListenerRes = FrameListenerCacheTraits::ElementPtrT;
 	using FrameListenerResPtr = FrameListenerCacheTraits::ElementObsT;
 
+	/** @cond !Doxygen */
+	CU_DeclareSmartPtr( castor3d, CpuFrameEvent, C3D_API );
+	CU_DeclareSmartPtr( castor3d, FrameListener, C3D_API );
+	CU_DeclareSmartPtr( castor3d, GpuFrameEvent, C3D_API );
+	CU_DeclareSmartPtr( castor3d, CpuFunctorEvent, C3D_API );
+	CU_DeclareSmartPtr( castor3d, GpuFunctorEvent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, FrameListenerCache, C3D_API );
+
+	CU_DeclareVector( CpuFrameEventUPtr, CpuFrameEventPtr );
+	CU_DeclareVector( GpuFrameEventUPtr, GpuFrameEventPtr );
+	/** @endcond */
+
 	/**
 	*\~english
 	*	Cached resource initialiser, through a CPU frame event.

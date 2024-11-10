@@ -7,8 +7,6 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
-CU_ImplementSmartPtr( castor3d, SphereSection )
-
 namespace castor3d
 {
 	SphereSection::SphereSection()

@@ -27,27 +27,30 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	pass			The parent frame pass.
-		 *\param[in]	context			The rendering context.
 		 *\param[in]	graph			The runnable graph.
+		 *\param[in]	previousPasses	The passes this one depends on.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	lightType		The light source type.
+		 *\param[in]	shadowBuffer	The buffer containing the shadowing data.
 		 *\param[in]	size			The render area dimensions.
-		 *\param[in]	gpInfo			The GBuffer configuration UBO.
-		 *\param[in]	gpResult		The GBuffer.
+		 *\param[in]	cameraUbo		The camera configuration UBO.
+		 *\param[in]	depthObj		The depth and objects ID image.
+		 *\param[in]	nmlOcc			The normals and occlusion image.
 		 *\param[in]	smResult		The shadow map.
-		 *\param[in]	downscaleResult	The downscaled result.
+		 *\param[in]	result			The result.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	pass			La frame pass parente.
-		 *\param[in]	context			Le contexte de rendu.
 		 *\param[in]	graph			Le runnable graph.
+		 *\param[in]	previousPasses	Les passes dont celle-ci dépend.
 		 *\param[in]	device			Le device GPU.
+		 *\param[in]	lightType		Le type de source lumineuse.
+		 *\param[in]	shadowBuffer	Le buffer contenant les données d'ombrage.
 		 *\param[in]	size			Les dimensions de la zone de rendu.
-		 *\param[in]	gpInfo			L'UBO de configuration du GBuffer.
-		 *\param[in]	gpResult		Le GBuffer.
+		 *\param[in]	cameraUbo		L'UBO de configuration de la caméra.
+		 *\param[in]	depthObj		L'image contenant les profondeurs et ID d'objets.
+		 *\param[in]	nmlOcc			L'image contenant les normales et occlusions.
 		 *\param[in]	smResult		La shadow map.
-		 *\param[in]	downscaleResult	Le résultat downscaled.
+		 *\param[in]	result			Le résultat.
 		 */
 		C3D_API RsmGIPass( crg::FrameGraph & graph
 			, crg::FramePassArray const & previousPasses

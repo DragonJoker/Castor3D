@@ -51,12 +51,14 @@ namespace castor3d
 	*/
 	class FrustumClusters;
 
-	CU_DeclareSmartPtr( castor3d, ClustersConfig, C3D_API );
-	CU_DeclareSmartPtr( castor3d, FrustumClusters, C3D_API );
-
 	using ClustersBuffersChangedFunction = castor::Function< void( FrustumClusters const & ) >;
 	using OnClustersBuffersChanged = castor::SignalT< ClustersBuffersChangedFunction >;
 	using OnClustersBuffersChangedConnection = castor::ConnectionT< ClustersBuffersChangedFunction >;
+
+	/** @cond !Doxygen */
+	CU_DeclareSmartPtr( castor3d, ClustersConfig, C3D_API );
+	CU_DeclareSmartPtr( castor3d, FrustumClusters, C3D_API );
+	/** @endcond */
 
 	C3D_API u32 getLightsMortonCodeChunkCount( u32 lightCount );
 

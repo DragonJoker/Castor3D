@@ -91,9 +91,11 @@ namespace castor3d
 	*/
 	class WeightedBlendRendering;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, WeightedBlendRendering, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TransparentPassResult, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TransparentRendering, C3D_API );
+	/** @endcond */
 
 	//@}
 	//@}

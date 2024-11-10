@@ -774,24 +774,6 @@ namespace castor3d
 	*/
 	struct SubmeshRenderNode;
 
-	CU_DeclareSmartPtr( castor3d, Frustum, C3D_API );
-	CU_DeclareSmartPtr( castor3d, NodesPass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Picking, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderDevice, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderLoop, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderNodesPass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderPipeline, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderQueue, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderSystem, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderTarget, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderTechnique, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderTechniquePass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderWindow, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Viewport, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Texture, C3D_API );
-
-	CU_DeclareVector( IntermediateView, IntermediateView );
-
 	using RenderQueueArray = castor::Vector< castor::ReferenceWrapper< RenderQueue > >;
 	using TextureArray = castor::Vector< Texture >;
 
@@ -870,15 +852,6 @@ namespace castor3d
 
 	using TechniquePassVector = castor::Vector< RenderTechniqueNodesPass * >;
 	using TechniquePasses = castor::Array< TechniquePassVector, size_t( TechniquePassEvent::eCount ) >;
-
-	struct RenderWindowDesc
-	{
-		castor::String name;
-		RenderTargetRPtr renderTarget{};
-		bool enableVSync{};
-		bool fullscreen{};
-		bool allowHdr{};
-	};
 
 	struct RenderPassRegisterInfo
 	{
@@ -1010,6 +983,35 @@ namespace castor3d
 		castor::StringArray m_intermediateImageNames;
 	};
 	//@}
+
+	/** @cond !Doxygen */
+	CU_DeclareSmartPtr( castor3d, Frustum, C3D_API );
+	CU_DeclareSmartPtr( castor3d, NodesPass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Picking, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderDevice, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderLoop, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderNodesPass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderPipeline, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderQueue, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderSystem, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderTarget, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderTechnique, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderTechniquePass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderWindow, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Viewport, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Texture, C3D_API );
+
+	CU_DeclareVector( IntermediateView, IntermediateView );
+	/** @endcond */
+
+	struct RenderWindowDesc
+	{
+		castor::String name;
+		RenderTargetRPtr renderTarget{};
+		bool enableVSync{};
+		bool fullscreen{};
+		bool allowHdr{};
+	};
 
 	C3D_API uint32_t getSafeBandsSize( castor::Size const & size );
 	C3D_API uint32_t getSafeBandSize( castor::Size const & size );

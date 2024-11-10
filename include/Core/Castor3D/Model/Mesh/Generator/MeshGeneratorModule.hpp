@@ -103,16 +103,6 @@ namespace castor3d
 	*/
 	class Torus;
 
-	CU_DeclareSmartPtr( castor3d, Cone, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Cube, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Cylinder, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Icosahedron, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Plane, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Projection, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Sphere, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SphereSection, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Torus, C3D_API );
-
 	//@}
 	//@}
 	//@}

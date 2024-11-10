@@ -5,8 +5,6 @@
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
-CU_ImplementSmartPtr( castor3d, Plane )
-
 namespace castor3d
 {
 	Plane::Plane()

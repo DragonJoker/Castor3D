@@ -34,7 +34,7 @@ namespace castor3d::shader
 			, sdw::InFloat{ m_writer, "NdotL" } );
 	}
 
-	DiffuseBRDFUPtr LambertianBRDF::create( sdw::ShaderWriter & writer
+	DiffuseBRDFPtr LambertianBRDF::create( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdfHelpers )
 	{
 		return castor::makeUniqueDerived< DiffuseBRDF, LambertianBRDF >( writer, brdfHelpers );

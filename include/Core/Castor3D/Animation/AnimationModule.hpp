@@ -170,6 +170,7 @@ namespace castor3d
 	template< typename DataT >
 	using InterpolatorPtr = castor::RawUniquePtr< Interpolator< DataT > >;
 
+	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, AnimationKeyFrame, C3D_API );
 	CU_DeclareSmartPtr( castor3d, AnimationImporter, C3D_API );
 	CU_DeclareSmartPtr( castor3d, AnimationImporterFactory, C3D_API );
@@ -178,6 +179,8 @@ namespace castor3d
 	CU_DeclareTemplateSmartPtr( castor3d, AnimationInstance );
 
 	CU_DeclareVector( AnimationKeyFrameUPtr, AnimationKeyFrame );
+	/** @endcond */
+
 	//@}
 }
 

@@ -21,9 +21,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine	The engine.
+		 *\param[in]	prefix	The prefix used for logging.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
+		 *\param[in]	prefix	Le préfixe utilisé pour le logging.
 		 */
 		C3D_API explicit LightImporter( Engine & engine
 			, castor::String const & prefix );
