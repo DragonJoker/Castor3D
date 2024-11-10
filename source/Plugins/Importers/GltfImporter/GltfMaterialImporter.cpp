@@ -527,6 +527,7 @@ namespace c3d_gltf
 			}
 		}
 
+		template< typename ComponentT >
 		static void parseNmlTexture( GltfImporterFile const & file
 			, castor3d::Pass & pass
 			, fastgltf::Asset const & impAsset
@@ -537,7 +538,7 @@ namespace c3d_gltf
 			if ( texInfo )
 			{
 				parseTexture( file, pass
-					, pass.getComponentPlugin< castor3d::NormalMapComponent >().getBaseTextureConfiguration()
+					, pass.getComponentPlugin< ComponentT >().getBaseTextureConfiguration()
 					, impAsset, *texInfo, loadConfig, importer );
 			}
 		}
@@ -661,7 +662,7 @@ namespace c3d_gltf
 		}
 
 		materials::parseComponentData< castor3d::TwoSidedComponent >( *pass, impMaterial.doubleSided );
-		materials::parseNmlTexture( file, *pass, impAsset, impMaterial.normalTexture, m_loadConfig, *this );
+		materials::parseNmlTexture< castor3d::NormalMapComponent >( file, *pass, impAsset, impMaterial.normalTexture, m_loadConfig, *this );
 		materials::parseOccTexture( file, *pass, impAsset, impMaterial.occlusionTexture, m_loadConfig, *this );
 		doImportSpecularData( impMaterial, *pass );
 		doImportIridescenceData( impMaterial, *pass );
@@ -800,7 +801,7 @@ namespace c3d_gltf
 			component->setClearcoatFactor( impMaterial.clearcoat->clearcoatFactor );
 			component->setRoughnessFactor( impMaterial.clearcoat->clearcoatRoughnessFactor );
 			materials::parseTexture< castor3d::ClearcoatMapComponent >( file, pass, impAsset, impMaterial.clearcoat->clearcoatTexture, m_loadConfig, *this );
-			materials::parseTexture< castor3d::ClearcoatNormalMapComponent >( file, pass, impAsset, impMaterial.clearcoat->clearcoatNormalTexture, m_loadConfig, *this );
+			materials::parseNmlTexture< castor3d::ClearcoatNormalMapComponent >( file, pass, impAsset, impMaterial.clearcoat->clearcoatNormalTexture, m_loadConfig, *this );
 			materials::parseTexture< castor3d::ClearcoatRoughnessMapComponent >( file, pass, impAsset, impMaterial.clearcoat->clearcoatRoughnessTexture, m_loadConfig, *this );
 		}
 	}
@@ -828,8 +829,8 @@ namespace c3d_gltf
 	{
 		if ( impMaterial.emissiveStrength != 1.0f
 			|| impMaterial.emissiveTexture
-			|| std::any_of( impMaterial.emissiveFactor.begin()
-				, impMaterial.emissiveFactor.end()
+			|| std::any_of( impMaterial.emissiveFactor.data()
+				, impMaterial.emissiveFactor.data() + 3u
 				, []( float const lookup )
 				{
 					return lookup != 0.0f;

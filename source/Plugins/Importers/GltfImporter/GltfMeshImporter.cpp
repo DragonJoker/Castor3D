@@ -190,7 +190,7 @@ namespace c3d_gltf
 				, attributes.end()
 				, [&name]( auto const & lookup )
 				{
-					return lookup.first == name;
+					return lookup.name == name;
 				} );
 		}
 
@@ -214,7 +214,7 @@ namespace c3d_gltf
 				return false;
 			}
 
-			auto & impAccessor = impAsset.accessors[it->second];
+			auto & impAccessor = impAsset.accessors[it->accessorIndex];
 			result.reserve( impAccessor.count );
 
 			iterateAccessor< castor::Point< SrcDataT, SrcCountT > >( impAsset

@@ -50,32 +50,35 @@ namespace c3d_gltf
 				| fastgltf::Extensions::KHR_materials_emissive_strength
 				| fastgltf::Extensions::KHR_materials_sheen
 				| fastgltf::Extensions::KHR_materials_unlit
-				| fastgltf::Extensions::KHR_materials_anisotropy };
+				| fastgltf::Extensions::KHR_materials_anisotropy
+				| fastgltf::Extensions::KHR_materials_dispersion
+				| fastgltf::Extensions::KHR_materials_diffuse_transmission };
 			auto path = castor::makePath( filePath );
 
 			constexpr auto gltfOptions = fastgltf::Options::DontRequireValidAssetMember
 				| fastgltf::Options::AllowDouble
-				| fastgltf::Options::LoadGLBBuffers
 				| fastgltf::Options::LoadExternalBuffers
 				| fastgltf::Options::DecomposeNodeMatrices
 				| fastgltf::Options::LoadExternalImages;
 
-			fastgltf::GltfDataBuffer data;
+			auto dataResult = fastgltf::GltfDataBuffer::FromPath( path );
 
-			if ( !data.loadFromFile( path ) )
+			if ( !dataResult )
 			{
-				castor3d::log::error << "Failed to to initialise glTF buffer" << std::endl;
-				return fastgltf::Expected< fastgltf::Asset >( fastgltf::Error::InvalidPath );
+				castor3d::log::error << "Failed to to load glTF buffer" << std::endl;
+				return fastgltf::Expected< fastgltf::Asset >( dataResult.error() );
 			}
 
-			if ( auto type = fastgltf::determineGltfFileType( &data );
+			auto & data = dataResult.get();
+
+			if ( auto type = fastgltf::determineGltfFileType( data );
 				type != fastgltf::GltfType::glTF && type != fastgltf::GltfType::GLB )
 			{
 				castor3d::log::error << "Failed to determine glTF container" << std::endl;
 				return fastgltf::Expected< fastgltf::Asset >( fastgltf::Error::InvalidPath );
 			}
 
-			auto result = parser.loadGltf( &data, path.parent_path(), gltfOptions );
+			auto result = parser.loadGltf( data, path.parent_path(), gltfOptions );
 
 			if ( result.error() != fastgltf::Error::None )
 			{
@@ -131,7 +134,7 @@ namespace c3d_gltf
 			if ( tit != impNode.instancingAttributes.end() )
 			{
 				iterateAccessor< castor::Point3f >( impAsset
-					, impAsset.accessors[tit->second]
+					, impAsset.accessors[tit->accessorIndex]
 					, [&translations]( castor::Point3f value )
 					{
 						translations.push_back( castor::move( value ) );
@@ -142,7 +145,7 @@ namespace c3d_gltf
 			if ( rit != impNode.instancingAttributes.end() )
 			{
 				iterateAccessor< castor::Point4f >( impAsset
-					, impAsset.accessors[rit->second]
+					, impAsset.accessors[rit->accessorIndex]
 					, [&rotations]( castor::Point4f const & value )
 					{
 						rotations.push_back( castor::Quaternion{ value } );
@@ -153,7 +156,7 @@ namespace c3d_gltf
 			if ( sit != impNode.instancingAttributes.end() )
 			{
 				iterateAccessor< castor::Point3f >( impAsset
-					, impAsset.accessors[sit->second]
+					, impAsset.accessors[sit->accessorIndex]
 					, [&scalings]( castor::Point3f value )
 					{
 						scalings.push_back( castor::move( value ) );
@@ -542,7 +545,24 @@ namespace c3d_gltf
 
 	//*********************************************************************************************
 
-	castor3d::NodeTransform convert( std::variant< fastgltf::TRS, fastgltf::Node::TransformMatrix > const & transform )
+	castor::Point3f convert( fastgltf::math::fvec3 const & value )
+	{
+		return castor::Point3f{ value[0], value[1], value[2] };;
+	}
+
+	castor::Quaternion convert( fastgltf::math::fquat const & value )
+	{
+		return castor::Quaternion::fromComponents( value[0], value[1], value[2], value[3] );
+	}
+
+	castor3d::NodeTransform convert( fastgltf::TRS const & transform )
+	{
+		return { convert( transform.translation )
+			, convert( transform.scale )
+			, convert( transform.rotation ) };
+	}
+
+	castor3d::NodeTransform convert( std::variant< fastgltf::TRS, fastgltf::math::fmat4x4 > const & transform )
 	{
 		if ( transform.index() == 0u )
 		{
@@ -552,23 +572,13 @@ namespace c3d_gltf
 				, convert( trs.rotation ) };
 		}
 
-		castor::Array< float, 3u > translation;
-		castor::Array< float, 3u > scale;
-		castor::Array< float, 4u > rotation;
-		fastgltf::decomposeTransformMatrix( std::get< 1 >( transform ), scale, rotation, translation );
+		fastgltf::math::fvec3 translation;
+		fastgltf::math::fvec3 scale;
+		fastgltf::math::fquat rotation;
+		fastgltf::math::decomposeTransformMatrix( std::get< 1 >( transform ), scale, rotation, translation );
 		return { convert( translation )
 			, convert( scale )
 			, convert( rotation ) };
-	}
-
-	castor::Point3f convert( castor::Array< float, 3u > const & value )
-	{
-		return castor::Point3f{ value[0], value[1], value[2] };;
-	}
-
-	castor::Quaternion convert( castor::Array< float, 4u > const & value )
-	{
-		return castor::Quaternion::fromComponents( value[0], value[1], value[2], value[3] );
 	}
 
 	//*********************************************************************************************
