@@ -15,8 +15,6 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-CU_ImplementSmartPtr( castor3d, ClearcoatComponent )
-
 namespace castor
 {
 	template<>
@@ -243,9 +241,9 @@ namespace castor3d
 
 	PassComponentUPtr ClearcoatComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::makeUnique< ClearcoatComponent >( pass );
+		auto result = castor::make_unique< ClearcoatComponent >( pass );
 		result->setData( getData() );
-		return castor::ptrRefCast< PassComponent >( result );
+		return PassComponentUPtr{ result.release() };
 	}
 
 	bool ClearcoatComponent::doWriteText( castor::String const & tabs

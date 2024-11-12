@@ -19,8 +19,6 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, HeightMapComponent )
-
 namespace castor
 {
 	template<>

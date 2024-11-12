@@ -11,8 +11,6 @@
 
 #include <ShaderWriter/Intrinsics/IntrinsicFunctions.hpp>
 
-CU_ImplementSmartPtr( castor3d, ReflectionComponent )
-
 namespace castor
 {
 	template<>
@@ -171,9 +169,9 @@ namespace castor3d
 
 	PassComponentUPtr ReflectionComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::makeUnique< ReflectionComponent >( pass );
+		auto result = castor::make_unique< ReflectionComponent >( pass );
 		result->setData( getData() );
-		return castor::ptrRefCast< PassComponent >( result );
+		return PassComponentUPtr{ result.release() };
 	}
 
 	bool ReflectionComponent::doWriteText( castor::String const & tabs

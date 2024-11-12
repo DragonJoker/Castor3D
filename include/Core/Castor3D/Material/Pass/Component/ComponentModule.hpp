@@ -167,18 +167,6 @@ namespace castor3d
 	\brief		Composant pour activer l'untiled mapping.
 	*/
 	struct UntileMappingComponent;
-
-	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, BlendComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, FractalMappingComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, NormalComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PassHeaderComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PickableComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TexturesComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TwoSidedComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, UntileMappingComponent, C3D_API );
-	/** @endcond */
-
 	//@}
 	/**@name Lighting Components */
 	//@{
@@ -294,26 +282,6 @@ namespace castor3d
 	\brief		Composant détenant le facteur de transmittance (pour le subsurface scattering).
 	*/
 	struct TransmittanceComponent;
-
-	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, AmbientComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, AttenuationComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ClearcoatComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, DispersionComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, EmissiveComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, IridescenceComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LightingModelComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MetalnessComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RoughnessComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SheenComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SpecularComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SpecularFactorComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SubsurfaceScatteringComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ThicknessComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TransmissionComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TransmittanceComponent, C3D_API );
-	/** @endcond */
-
 	//@}
 	/**@name Texture Components */
 	//@{
@@ -457,30 +425,6 @@ namespace castor3d
 	\brief		Composant détenant la texture de transmittance (pour le subsurface scattering).
 	*/
 	struct TransmittanceMapComponent;
-
-	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, ClearcoatMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ClearcoatNormalMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ClearcoatRoughnessMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ColourMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, EmissiveMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, HeightMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, IridescenceMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, IridescenceThicknessMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MetalnessMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, NormalMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, OcclusionMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, OpacityMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RoughnessMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SheenMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SheenRoughnessMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SpecularFactorMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SpecularMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ThicknessMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TransmissionMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TransmittanceMapComponent, C3D_API );
-	/** @endcond */
-
 	//@}
 	/**@name Other components */
 	//@{
@@ -533,17 +477,6 @@ namespace castor3d
 	\brief		Composant détenant les données de réfraction.
 	*/
 	struct RefractionComponent;
-
-	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, AlphaTestComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ColourComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, DefaultReflRefrComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, HeightComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, OpacityComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ReflectionComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RefractionComponent, C3D_API );
-	/** @endcond */
-
 	//@}
 	/**@name Shader */
 	//@{

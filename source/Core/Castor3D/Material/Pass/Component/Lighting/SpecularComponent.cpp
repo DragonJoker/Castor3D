@@ -20,8 +20,6 @@
 
 //*************************************************************************************************
 
-CU_ImplementSmartPtr( castor3d, SpecularComponent )
-
 namespace castor
 {
 	template<>
@@ -184,9 +182,9 @@ namespace castor3d
 
 	PassComponentUPtr SpecularComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::makeUnique< SpecularComponent >( pass );
+		auto result = castor::make_unique< SpecularComponent >( pass );
 		result->setData( getData() );
-		return castor::ptrRefCast< PassComponent >( result );
+		return PassComponentUPtr{ result.release() };
 	}
 
 	bool SpecularComponent::doWriteText( castor::String const & tabs

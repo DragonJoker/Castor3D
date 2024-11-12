@@ -7,8 +7,6 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, TwoSidedComponent )
-
 namespace castor
 {
 	template<>
@@ -80,9 +78,9 @@ namespace castor3d
 
 	PassComponentUPtr TwoSidedComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::makeUnique< TwoSidedComponent >( pass );
+		auto result = castor::make_unique< TwoSidedComponent >( pass );
 		result->setData( getData() );
-		return castor::ptrRefCast< PassComponent >( result );
+		return PassComponentUPtr{ result.release() };
 	}
 
 	bool TwoSidedComponent::doWriteText( castor::String const & tabs

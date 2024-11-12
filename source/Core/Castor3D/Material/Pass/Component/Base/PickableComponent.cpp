@@ -7,8 +7,6 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, PickableComponent )
-
 namespace castor
 {
 	template<>
@@ -81,9 +79,9 @@ namespace castor3d
 
 	PassComponentUPtr PickableComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::makeUnique< PickableComponent >( pass );
+		auto result = castor::make_unique< PickableComponent >( pass );
 		result->setData( getData() );
-		return castor::ptrRefCast< PassComponent >( result );
+		return PassComponentUPtr{ result.release() };
 	}
 
 	bool PickableComponent::doWriteText( castor::String const & tabs

@@ -16,8 +16,6 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, EmissiveMapComponent )
-
 namespace castor
 {
 	template<>
