@@ -18,7 +18,7 @@ namespace castor3d::shader
 			, uint32_t & binding
 			, uint32_t set );
 
-		C3D_API static BackgroundModelPtr create( Engine const & engine
+		static BackgroundModelPtr create( Engine const & engine
 			, sdw::ShaderWriter & writer
 			, Utils & utils
 			, VkExtent2D targetSize
@@ -26,7 +26,7 @@ namespace castor3d::shader
 			, uint32_t & binding
 			, uint32_t set );
 
-		C3D_API void computeReflections( sdw::Vec3 const & wsNormal
+		void computeReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & difF
 			, sdw::Vec3 const & spcF
@@ -37,10 +37,14 @@ namespace castor3d::shader
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular
 			, DebugOutputCategory & debugOutput )override;
-		C3D_API sdw::RetVec3 computeRefractions( sdw::Vec3 const & wsNormal
+		sdw::RetVec3 computeRefraction( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & refractionRatio
+			, BlendComponents & components
+			, DebugOutputCategory & debugOutput )override;
+
+		sdw::RetVec3 computeDiffuse( sdw::Vec3 const & wsDirection
 			, BlendComponents & components
 			, DebugOutputCategory & debugOutput )override;
 
@@ -55,13 +59,17 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InFloat
 			, sdw::OutVec3
-			, sdw::OutVec3 > m_computeReflections;
+			, sdw::OutVec3 > m_computeReflection;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InCombinedImageCubeRgba32
 			, sdw::InFloat
-			, sdw::InFloat > m_computeRefractions;
+			, sdw::InFloat > m_computeRefraction;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InCombinedImageCubeRgba32
+			, sdw::InFloat > m_computeDiffuse;
 	};
 }
 

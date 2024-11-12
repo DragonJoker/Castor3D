@@ -83,7 +83,8 @@ namespace castor3d::shader
 			, sdw::Vec3 const & emissive
 			, sdw::Vec3 reflectedDiffuse
 			, sdw::Vec3 reflectedSpecular
-			, sdw::Vec3 refracted );
+			, sdw::Vec3 refractedDiffuse
+			, sdw::Vec3 refractedSpecular );
 		/**
 		*\name
 		*	Clustered lighting

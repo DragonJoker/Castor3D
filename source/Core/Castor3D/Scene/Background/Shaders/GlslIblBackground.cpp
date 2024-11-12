@@ -63,7 +63,7 @@ namespace castor3d::shader
 			, set );
 	}
 
-	sdw::RetVec3 IblBackgroundModel::computeDiffuseReflections( sdw::Vec3 const & pwsNormal
+	sdw::RetVec3 IblBackgroundModel::computeDiffuseReflection( sdw::Vec3 const & pwsNormal
 			, sdw::Vec3 const & pwsPosition
 			, sdw::Vec3 const & pV
 			, sdw::Float const & pNdotV
@@ -72,9 +72,9 @@ namespace castor3d::shader
 			, BlendComponents & components
 			, DebugOutputCategory & debugOutput )
 	{
-		if ( !m_computeDiffuseReflections )
+		if ( !m_computeDiffuseReflection )
 		{
-			m_computeDiffuseReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeDiffuseReflections"
+			m_computeDiffuseReflection = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeDiffuseReflection"
 				, [this]( sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & fresnel
 					, sdw::Float const & metalness
@@ -94,13 +94,13 @@ namespace castor3d::shader
 		}
 
 		auto irradianceMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapIrradiance" );
-		return m_computeDiffuseReflections( pwsNormal
+		return m_computeDiffuseReflection( pwsNormal
 			, pfresnel
 			, pmetalness
 			, irradianceMap );
 	}
 
-	sdw::RetVec3 IblBackgroundModel::computeSpecularReflections( sdw::Vec3 const & pwsNormal
+	sdw::RetVec3 IblBackgroundModel::computeSpecularReflection( sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
 		, sdw::Float const & pNdotV
@@ -110,9 +110,9 @@ namespace castor3d::shader
 		, sdw::CombinedImage2DRgba32 const & pbrdfMap
 		, DebugOutputCategory & debugOutput )
 	{
-		if ( !m_computeSpecularReflections )
+		if ( !m_computeSpecularReflection )
 		{
-			m_computeSpecularReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeSpecularReflections"
+			m_computeSpecularReflection = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeSpecularReflection"
 				, [this]( sdw::Vec3 const & F
 					, sdw::Vec3 const & N
 					, sdw::Vec3 const & V
@@ -142,7 +142,7 @@ namespace castor3d::shader
 		}
 
 		auto prefilteredEnvMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
-		return m_computeSpecularReflections( pfresnel
+		return m_computeSpecularReflection( pfresnel
 			, pwsNormal
 			, pV
 			, pNdotV
@@ -151,7 +151,7 @@ namespace castor3d::shader
 			, pbrdfMap );
 	}
 
-	sdw::RetVec4 IblBackgroundModel::computeSheenReflections( sdw::Vec3 const & pwsNormal
+	sdw::RetVec4 IblBackgroundModel::computeSheenReflection( sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
 		, sdw::Float const & pNdotV
@@ -159,9 +159,9 @@ namespace castor3d::shader
 		, sdw::CombinedImage2DRgba32 const & pbrdfMap
 		, DebugOutputCategory & debugOutput )
 	{
-		if ( !m_computeSheenReflections )
+		if ( !m_computeSheenReflection )
 		{
-			m_computeSheenReflections = m_writer.implementFunction< sdw::Vec4 >( "c3d_iblbg_computeSheenReflections"
+			m_computeSheenReflection = m_writer.implementFunction< sdw::Vec4 >( "c3d_iblbg_computeSheenReflection"
 				, [this]( sdw::Vec3 const & sheenColour
 					, sdw::Vec3 const & N
 					, sdw::Vec3 const & V
@@ -193,7 +193,7 @@ namespace castor3d::shader
 		}
 
 		auto prefilteredEnvMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefilteredSheen" );
-		return m_computeSheenReflections( components.sheenColour
+		return m_computeSheenReflection( components.sheenColour
 			, pwsNormal
 			, pV
 			, pNdotV
@@ -202,16 +202,16 @@ namespace castor3d::shader
 			, pbrdfMap );
 	}
 
-	sdw::RetVec3 IblBackgroundModel::computeRefractions( sdw::Vec3 const & pwsNormal
+	sdw::RetVec3 IblBackgroundModel::computeRefraction( sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
 		, sdw::Float const & prefractionRatio
 		, BlendComponents & components
 		, DebugOutputCategory & debugOutput )
 	{
-		if ( !m_computeRefractions )
+		if ( !m_computeRefraction )
 		{
-			m_computeRefractions = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeRefractions"
+			m_computeRefraction = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeRefraction"
 				, [this]( sdw::CombinedImageCubeRgba32 const & prefiltered
 					, sdw::Float const & refractionRatio
 					, sdw::Vec3 const & N
@@ -233,14 +233,14 @@ namespace castor3d::shader
 		}
 
 		auto prefiltered = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
-		return m_computeRefractions( prefiltered
+		return m_computeRefraction( prefiltered
 			, prefractionRatio
 			, pwsNormal
 			, pV
 			, components.roughness );
 	}
 
-	sdw::RetVec3 IblBackgroundModel::computeSpecularRefractions( sdw::Vec3 const & pfresnel
+	sdw::RetVec3 IblBackgroundModel::computeSpecularRefraction( sdw::Vec3 const & pfresnel
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
@@ -251,9 +251,9 @@ namespace castor3d::shader
 		, sdw::CombinedImage2DRgba32 const & pbrdfMap
 		, DebugOutputCategory & debugOutput )
 	{
-		if ( !m_computeSpecularRefractions )
+		if ( !m_computeSpecularRefraction )
 		{
-			m_computeSpecularRefractions = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeSpecularRefractions"
+			m_computeSpecularRefraction = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeSpecularRefraction"
 				, [this]( sdw::CombinedImageCubeRgba32 const & prefiltered
 					, sdw::CombinedImage2DRgba32 const & brdfMap
 					, sdw::Float const & refractionRatio
@@ -287,7 +287,7 @@ namespace castor3d::shader
 		}
 
 		auto prefiltered = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
-		return m_computeSpecularRefractions( prefiltered
+		return m_computeSpecularRefraction( prefiltered
 			, pbrdfMap
 			, prefractionRatio
 			, pwsNormal
@@ -295,5 +295,26 @@ namespace castor3d::shader
 			, pfresnel
 			, pNdotV
 			, proughness );
+	}
+
+	sdw::RetVec3 IblBackgroundModel::computeDiffuse( sdw::Vec3 const & pwsDirection
+		, BlendComponents & components
+		, DebugOutputCategory & debugOutput )
+	{
+		if ( !m_computeDiffuse )
+		{
+			m_computeDiffuse = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeDiffuse"
+				, [this]( sdw::Vec3 const & wsDirection
+					, sdw::CombinedImageCubeRgba32 const & irradianceMap )
+				{
+					return m_writer.returnStmt( irradianceMap.lod( vec3( wsDirection.x(), -wsDirection.y(), wsDirection.z() ), 0.0_f ).rgb() );
+				}
+				, sdw::InVec3{ m_writer, "wsDirection" }
+				, sdw::InCombinedImageCubeRgba32{ m_writer, "irradianceMap" } );
+		}
+
+		auto irradianceMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapIrradiance" );
+		return m_computeDiffuse( pwsDirection
+			, irradianceMap );
 	}
 }

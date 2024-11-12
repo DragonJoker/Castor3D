@@ -106,7 +106,7 @@ namespace water
 			, vec3( 0.0_f ) );
 		auto bgSpecularReflection = writer.declLocale("bgSpecularReflection"
 			, vec3( 0.0_f ) );
-		reflections.computeReflections( components
+		reflections.computeReflection( components
 			, lightSurface
 			, backgroundModel
 			, envMapIndex
@@ -154,8 +154,8 @@ namespace water
 			, camera.curProjToWorld( utils, distortedTexCoord, distortedDepth ) );
 		auto refractionTexCoord = writer.declLocale( "refractionTexCoord"
 			, writer.ternary( distortedPosition.y() < lightSurface.worldPosition().value().y(), distortedTexCoord, hdrCoords ) );
-		output.refrColour = mapColours.lod( refractionTexCoord, 0.0_f ).rgb();
-		debugOutputBlock.registerOutput( cuT( "Raw Refraction" ), output.refrColour );
+		output.refrSpecular = mapColours.lod( refractionTexCoord, 0.0_f ).rgb();
+		debugOutputBlock.registerOutput( cuT( "Raw Refraction" ), output.refrSpecular );
 		auto waterTransmission = writer.declLocale( "waterTransmission"
 			, components.colour * ( indirect.ambient + indirect.diffuseColour ) );
 		debugOutputBlock.registerOutput( cuT( "Raw Transmission" ), waterTransmission );
@@ -166,19 +166,19 @@ namespace water
 			auto mdlPosition = components.getMember< sdw::Vec3 >( "mdlPosition" );
 			auto waterDensity = components.getMember< sdw::Float >( "waterDensity" );
 			auto lightAbsorbtion = writer.declLocale( "lightAbsorbtion"
-				, output.refrColour * ( 1.0_f - utils.saturate( sdw::log( mdlPosition.y() - distortedPosition.y() ) * waterDensity ) ) );
+				, output.refrSpecular * ( 1.0_f - utils.saturate( sdw::log( mdlPosition.y() - distortedPosition.y() ) * waterDensity ) ) );
 			debugOutputBlock.registerOutput( cuT( "Light Absorbtion" ), lightAbsorbtion );
 			waterTransmission *= lightAbsorbtion;
 			debugOutputBlock.registerOutput( cuT( "Absorbed Transmission" ), waterTransmission );
-			output.refrColour *= waterTransmission;
-			debugOutputBlock.registerOutput( cuT( "Transmitted Refraction" ), output.refrColour );
+			output.refrSpecular *= waterTransmission;
+			debugOutputBlock.registerOutput( cuT( "Transmitted Refraction" ), output.refrSpecular );
 		}
 		else
 		{
 			waterTransmission *= lighting.diffuse;
 			debugOutputBlock.registerOutput( cuT( "Lit Transmission" ), waterTransmission );
-			output.refrColour *= components.colour;
-			debugOutputBlock.registerOutput( cuT( "Coloured Refraction" ), output.refrColour );
+			output.refrSpecular *= components.colour;
+			debugOutputBlock.registerOutput( cuT( "Coloured Refraction" ), output.refrSpecular );
 		}
 
 		// Depth softening, to fade the alpha of the water where it meets the scene geometry by some predetermined distance. 
@@ -187,14 +187,14 @@ namespace water
 		debugOutputBlock.registerOutput( cuT( "Depth Softened Alpha" ), depthSoftenedAlpha );
 		auto waterSurfacePosition = writer.declLocale( "waterSurfacePosition"
 			, writer.ternary( distortedPosition.y() < lightSurface.worldPosition().value().y(), distortedPosition, scenePosition ) );
-		output.refrColour = mix( output.refrColour
+		output.refrSpecular = mix( output.refrSpecular
 			, waterTransmission
 			, vec3( clamp( ( lightSurface.worldPosition().value().y() - waterSurfacePosition.y() ) / heightFactor, 0.0_f, 1.0_f ) ) );
-		debugOutputBlock.registerOutput( cuT( "Height Mixed Refraction" ), output.refrColour );
-		output.refrColour = mix( output.refrColour
+		debugOutputBlock.registerOutput( cuT( "Height Mixed Refraction" ), output.refrSpecular );
+		output.refrSpecular = mix( output.refrSpecular
 			, waterTransmission
 			, utils.saturate( vec3( utils.saturate( length( lightSurface.viewPosition().value() ) / distanceFactor ) ) ) );
-		debugOutputBlock.registerOutput( cuT( "Distance Mixed Refraction" ), output.refrColour );
+		debugOutputBlock.registerOutput( cuT( "Distance Mixed Refraction" ), output.refrSpecular );
 
 		if ( components.hasMember( "waterNoise" ) )
 		{
@@ -207,7 +207,7 @@ namespace water
 		{
 			auto waterColourMod = components.getMember< sdw::Float >( "waterColourMod" );
 			reflectionResult *= waterColourMod;
-			output.refrColour *= waterColourMod;
+			output.refrSpecular *= waterColourMod;
 		}
 
 		if ( components.hasMember( "foamHeightStart" )
@@ -232,7 +232,7 @@ namespace water
 					, waterFoam * foamBrightness
 					, vec3( utils.saturate( foamAmount ) * depthSoftenedAlpha ) ) );
 			debugOutputBlock.registerOutput( cuT( "Foam Result" ), foamResult );
-			output.refrColour += foamResult;
+			output.refrSpecular += foamResult;
 			reflectionResult += foamResult;
 		}
 		
@@ -243,8 +243,8 @@ namespace water
 		debugOutputBlock.registerOutput( cuT( "Fresnel Factor" ), fresnelFactor );
 		reflectionResult *= fresnelFactor;
 		debugOutputBlock.registerOutput( cuT( "Final Reflection" ), reflectionResult );
-		output.refrColour *= vec3( 1.0_f ) - fresnelFactor;
-		debugOutputBlock.registerOutput( cuT( "Final Refraction" ), output.refrColour );
+		output.refrSpecular *= vec3( 1.0_f ) - fresnelFactor;
+		debugOutputBlock.registerOutput( cuT( "Final Refraction" ), output.refrSpecular );
 
 		components.opacity = depthSoftenedAlpha;
 		output.reflSpecular = reflectionResult;

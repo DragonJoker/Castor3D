@@ -40,7 +40,7 @@ namespace castor3d::shader
 			, set );
 	}
 
-	void NoIblBackgroundModel::computeReflections( sdw::Vec3 const & pwsNormal
+	void NoIblBackgroundModel::computeReflection( sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pdifF
 		, sdw::Vec3 const & pspcF
@@ -52,9 +52,9 @@ namespace castor3d::shader
 		, sdw::Vec3 & preflectedSpecular
 		, DebugOutputCategory & debugOutput )
 	{
-		if ( !m_computeReflections )
+		if ( !m_computeReflection )
 		{
-			m_computeReflections = m_writer.implementFunction< sdw::Void >( "c3d_noiblbg_computeReflections"
+			m_computeReflection = m_writer.implementFunction< sdw::Void >( "c3d_noiblbg_computeReflection"
 				, [this]( sdw::Vec3 const & wsIncident
 					, sdw::Vec3 const & wsNormal
 					, sdw::CombinedImageCubeRgba32 const & backgroundMap
@@ -78,7 +78,7 @@ namespace castor3d::shader
 		}
 
 		auto backgroundMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapBackground" );
-		m_computeReflections( -pV
+		m_computeReflection( -pV
 			, pwsNormal
 			, backgroundMap
 			, components.f0
@@ -87,16 +87,16 @@ namespace castor3d::shader
 			, preflectedSpecular );
 	}
 
-	sdw::RetVec3 NoIblBackgroundModel::computeRefractions( sdw::Vec3 const & pwsNormal
+	sdw::RetVec3 NoIblBackgroundModel::computeRefraction( sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
 		, sdw::Float const & prefractionRatio
 		, BlendComponents & components
 		, DebugOutputCategory & debugOutput )
 	{
-		if ( !m_computeRefractions )
+		if ( !m_computeRefraction )
 		{
-			m_computeRefractions = m_writer.implementFunction< sdw::Vec3 >( "c3d_noiblbg_computeRefractions"
+			m_computeRefraction = m_writer.implementFunction< sdw::Vec3 >( "c3d_noiblbg_computeRefraction"
 				, [this]( sdw::Vec3 const & wsIncident
 					, sdw::Vec3 const & wsNormal
 					, sdw::CombinedImageCubeRgba32 const & backgroundMap
@@ -115,10 +115,34 @@ namespace castor3d::shader
 		}
 
 		auto backgroundMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapBackground" );
-		return m_computeRefractions( -pV
+		return m_computeRefraction( -pV
 			, pwsNormal
 			, backgroundMap
 			, prefractionRatio
+			, components.roughness );
+	}
+
+	sdw::RetVec3 NoIblBackgroundModel::computeDiffuse( sdw::Vec3 const & wsDirection
+		, BlendComponents & components
+		, DebugOutputCategory & debugOutput )
+	{
+		if ( !m_computeDiffuse )
+		{
+			m_computeDiffuse = m_writer.implementFunction< sdw::Vec3 >( "c3d_noiblbg_computeDiffuse"
+				, [this]( sdw::Vec3 const & wsDirection
+					, sdw::CombinedImageCubeRgba32 const & backgroundMap
+					, sdw::Float const & roughness )
+				{
+					m_writer.returnStmt( backgroundMap.lod( wsDirection, roughness * 8.0_f ).xyz() );
+				}
+				, sdw::InVec3{ m_writer, "wsDirection" }
+				, sdw::InCombinedImageCubeRgba32{ m_writer, "backgroundMap" }
+				, sdw::InFloat{ m_writer, "roughness" } );
+		}
+
+		auto backgroundMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapBackground" );
+		return m_computeDiffuse( wsDirection
+			, backgroundMap
 			, components.roughness );
 	}
 }

@@ -163,7 +163,8 @@ namespace castor3d::shader
 		, reflSpecular { getMember< "reflSpecular" >() }
 		, reflCoating { getMember< "reflCoating" >() }
 		, reflSheen { getMember< "reflSheen" >() }
-		, refrColour { getMember< "refrColour" >() }
+		, refrDiffuse{ getMember< "refrDiffuse" >() }
+		, refrSpecular{ getMember< "refrSpecular" >() }
 	{
 	}
 
@@ -182,6 +183,8 @@ namespace castor3d::shader
 		debugOutput.registerOutput( category, cuT( "Refl. Coating" ), reflCoating );
 		debugOutput.registerOutput( category, cuT( "Refl. Sheen" ), reflSheen.xyz() );
 		debugOutput.registerOutput( category, cuT( "Refl. Sheen Scale" ), reflSheen.w() );
+		debugOutput.registerOutput( category, cuT( "Refr. Diffuse" ), refrDiffuse );
+		debugOutput.registerOutput( category, cuT( "Refr. Specular" ), refrSpecular );
 	}
 
 	sdw::expr::ExprList ReflectionRefraction::makeInit()
@@ -191,6 +194,7 @@ namespace castor3d::shader
 		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		result.emplace_back( sdw::makeExpr( vec4( 0.0_f ) ) );
+		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		return result;
 	}

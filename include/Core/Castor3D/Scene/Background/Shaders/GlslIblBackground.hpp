@@ -18,7 +18,7 @@ namespace castor3d::shader
 			, uint32_t & binding
 			, uint32_t set );
 
-		C3D_API static BackgroundModelPtr create( Engine const & engine
+		static BackgroundModelPtr create( Engine const & engine
 			, sdw::ShaderWriter & writer
 			, Utils & utils
 			, VkExtent2D targetSize
@@ -26,7 +26,7 @@ namespace castor3d::shader
 			, uint32_t & binding
 			, uint32_t set );
 
-		C3D_API sdw::RetVec3 computeDiffuseReflections( sdw::Vec3 const & wsNormal
+		sdw::RetVec3 computeDiffuseReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
@@ -34,7 +34,7 @@ namespace castor3d::shader
 			, sdw::Float const & metalness
 			, BlendComponents & components
 			, DebugOutputCategory & debugOutput )override;
-		C3D_API sdw::RetVec3 computeSpecularReflections( sdw::Vec3 const & wsNormal
+		sdw::RetVec3 computeSpecularReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
@@ -43,7 +43,7 @@ namespace castor3d::shader
 			, BlendComponents & components
 			, sdw::CombinedImage2DRgba32 const & brdf
 			, DebugOutputCategory & debugOutput )override;
-		C3D_API sdw::RetVec4 computeSheenReflections( sdw::Vec3 const & wsNormal
+		sdw::RetVec4 computeSheenReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
@@ -51,13 +51,13 @@ namespace castor3d::shader
 			, sdw::CombinedImage2DRgba32 const & brdf
 			, DebugOutputCategory & debugOutput )override;
 
-		C3D_API sdw::RetVec3 computeRefractions( sdw::Vec3 const & wsNormal
+		sdw::RetVec3 computeRefraction( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & refractionRatio
 			, BlendComponents & components
 			, DebugOutputCategory & debugOutput )override;
-		C3D_API sdw::RetVec3 computeSpecularRefractions( sdw::Vec3 const & fresnel
+		sdw::RetVec3 computeSpecularRefraction( sdw::Vec3 const & fresnel
 			, sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
@@ -66,6 +66,10 @@ namespace castor3d::shader
 			, sdw::Float const & refractionRatio
 			, BlendComponents & components
 			, sdw::CombinedImage2DRgba32 const & brdfMap
+			, DebugOutputCategory & debugOutput )override;
+
+		sdw::RetVec3 computeDiffuse( sdw::Vec3 const & wsDirection
+			, BlendComponents & components
 			, DebugOutputCategory & debugOutput )override;
 
 	public:
@@ -81,18 +85,18 @@ namespace castor3d::shader
 			, sdw::InCombinedImageCubeRgba32
 			, sdw::InCombinedImage2DRgba32
 			, sdw::OutVec3
-			, sdw::OutVec3 > m_computeReflections;
+			, sdw::OutVec3 > m_computeReflection;
 		sdw::Function< sdw::Vec3
 			, sdw::InCombinedImageCubeRgba32
 			, sdw::InFloat
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InFloat > m_computeRefractions;
+			, sdw::InFloat > m_computeRefraction;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InFloat
-			, sdw::InCombinedImageCubeRgba32 > m_computeDiffuseReflections;
+			, sdw::InCombinedImageCubeRgba32 > m_computeDiffuseReflection;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
@@ -100,7 +104,7 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InCombinedImageCubeRgba32
-			, sdw::InCombinedImage2DRgba32 > m_computeSpecularReflections;
+			, sdw::InCombinedImage2DRgba32 > m_computeSpecularReflection;
 		sdw::Function< sdw::Vec4
 			, sdw::InVec3
 			, sdw::InVec3
@@ -108,7 +112,7 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InCombinedImageCubeRgba32
-			, sdw::InCombinedImage2DRgba32 > m_computeSheenReflections;
+			, sdw::InCombinedImage2DRgba32 > m_computeSheenReflection;
 		sdw::Function< sdw::Vec3
 			, sdw::InCombinedImageCubeRgba32
 			, sdw::InCombinedImage2DRgba32
@@ -117,7 +121,10 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InFloat
-			, sdw::InFloat > m_computeSpecularRefractions;
+			, sdw::InFloat > m_computeSpecularRefraction;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InCombinedImageCubeRgba32 > m_computeDiffuse;
 	};
 }
 

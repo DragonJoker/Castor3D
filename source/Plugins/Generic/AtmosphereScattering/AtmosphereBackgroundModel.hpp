@@ -38,7 +38,7 @@ namespace atmosphere_scattering
 			, uint32_t & binding
 			, uint32_t set );
 
-		sdw::RetVec3 computeSpecularReflections( sdw::Vec3 const & wsNormal
+		sdw::RetVec3 computeSpecularReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
@@ -96,7 +96,7 @@ namespace atmosphere_scattering
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InVec3 > m_computeSpecularReflections;
+			, sdw::InVec3 > m_computeSpecularReflection;
 	};
 }
 

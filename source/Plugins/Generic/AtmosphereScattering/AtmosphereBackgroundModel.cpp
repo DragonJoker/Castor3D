@@ -88,7 +88,7 @@ namespace atmosphere_scattering
 			, set );
 	}
 
-	sdw::RetVec3 AtmosphereBackgroundModel::computeSpecularReflections( sdw::Vec3 const & pwsNormal
+	sdw::RetVec3 AtmosphereBackgroundModel::computeSpecularReflection( sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
 		, sdw::Float const & pNdotV
@@ -98,9 +98,9 @@ namespace atmosphere_scattering
 		, sdw::CombinedImage2DRgba32 const & brdf
 		, castor3d::shader::DebugOutputCategory & debugOutput )
 	{
-		if ( !m_computeSpecularReflections )
+		if ( !m_computeSpecularReflection )
 		{
-			m_computeSpecularReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_atmbg_computeSpecularReflections"
+			m_computeSpecularReflection = m_writer.implementFunction< sdw::Vec3 >( "c3d_atmbg_computeSpecularReflection"
 				, [this, &debugOutput]( sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & wsPosition
 					, sdw::Vec3 const & wsEyeDir
@@ -122,7 +122,7 @@ namespace atmosphere_scattering
 				, sdw::InVec3{ m_writer, "wsEyeDir" }
 				, sdw::InVec3{ m_writer, "fresnel" } );
 		}
-		return m_computeSpecularReflections( pwsNormal
+		return m_computeSpecularReflection( pwsNormal
 			, pwsPosition
 			, pV
 			, pfresnel );
