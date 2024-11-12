@@ -66,6 +66,10 @@ namespace c3d_gltf
 			{
 				point->setRange( *impLight.range );
 			}
+			else
+			{
+				point->setRange( 1.0f );
+			}
 		}
 		else if ( impLight.type == fastgltf::LightType::Spot )
 		{
@@ -74,6 +78,10 @@ namespace c3d_gltf
 			if ( impLight.range )
 			{
 				spot->setRange( *impLight.range );
+			}
+			else
+			{
+				spot->setRange( 1.0f );
 			}
 
 			if ( impLight.innerConeAngle )
