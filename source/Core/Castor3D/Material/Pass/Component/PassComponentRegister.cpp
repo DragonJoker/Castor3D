@@ -13,6 +13,7 @@
 #include "Castor3D/Material/Pass/Component/Lighting/AmbientComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/ClearcoatComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/DiffuseTransmissionComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/DispersionComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/IridescenceComponent.hpp"
@@ -30,6 +31,8 @@
 #include "Castor3D/Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/ClearcoatRoughnessMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/ColourMapComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/DiffuseTransmissionColourMapComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/DiffuseTransmissionFactorMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/EmissiveMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/IridescenceMapComponent.hpp"
@@ -161,6 +164,7 @@ namespace castor3d
 		registerComponent< OpacityComponent >();
 		registerComponent< ColourComponent >();
 		registerComponent< AmbientComponent >();
+		registerComponent< DiffuseTransmissionComponent >();
 		registerComponent< DispersionComponent >();
 		registerComponent< EmissiveComponent >();
 		registerComponent< TransmissionComponent >();
@@ -183,6 +187,8 @@ namespace castor3d
 		registerComponent< NormalMapComponent >();
 		registerComponent< OpacityMapComponent >();
 		registerComponent< ColourMapComponent >();
+		registerComponent< DiffuseTransmissionColourMapComponent >();
+		registerComponent< DiffuseTransmissionFactorMapComponent >();
 		registerComponent< EmissiveMapComponent >();
 		registerComponent< OcclusionMapComponent >();
 		registerComponent< SpecularMapComponent >();
