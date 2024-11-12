@@ -113,7 +113,8 @@ namespace castor3d::shader
 			, emissive
 			, castor::move( reflRefr.reflDiffuse )
 			, castor::move( reflRefr.reflSpecular )
-			, castor::move( reflRefr.refrColour ) );
+			, castor::move( reflRefr.refrDiffuse )
+			, castor::move( reflRefr.refrSpecular ) );
 
 		IF( m_writer, !all( components.sheenColour == vec3( 0.0_f ) ) )
 		{
@@ -146,7 +147,8 @@ namespace castor3d::shader
 		, sdw::Vec3 const & emissive
 		, sdw::Vec3 reflectedDiffuse
 		, sdw::Vec3 reflectedSpecular
-		, sdw::Vec3 refracted )
+		, sdw::Vec3 refractedDiffuse
+		, sdw::Vec3 refractedSpecular )
 	{
 		auto fresnelFactor = m_writer.hasVariable( "fresnelFactor", true )
 			? m_writer.getVariable< sdw::Float >( "fresnelFactor"
@@ -177,7 +179,10 @@ namespace castor3d::shader
 				reflectedSpecular = mix( vec3( 0.0_f )
 					, reflectedSpecular
 					, vec3( fresnelFactor ) );
-				refracted = mix( refracted
+				refractedSpecular = mix( refractedSpecular
+					, vec3( 0.0_f )
+					, vec3( fresnelFactor ) );
+				refractedDiffuse = mix( refractedDiffuse
 					, vec3( 0.0_f )
 					, vec3( fresnelFactor ) );
 			}
@@ -203,19 +208,20 @@ namespace castor3d::shader
 		{
 			if ( components.hasMember( "metalness" ) )
 			{
-				refracted *= 1.0_f - components.metalness;
+				refractedSpecular *= 1.0_f - components.metalness;
 			}
 
 			auto specularBtdf = m_writer.declLocale( "c3d_specularBtdf"
-				, refracted );
+				, refractedSpecular );
 			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Specular BTDF" ), specularBtdf );
+
 			diffuseResult = mix( diffuseResult, specularBtdf, vec3( components.transmission ) );
 			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Transmission" ), components.transmission );
 			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Transmission Result" ), diffuseResult );
 		}
 		ELSE
 		{
-			diffuseResult += refracted;
+			diffuseResult += refractedSpecular;
 			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Specular BTDF" ), 0.0_f );
 			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Transmission" ), 0.0_f );
 			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Transmission Result" ), 0.0_f );

@@ -27,7 +27,7 @@ namespace castor3d::shader
 			, uint32_t & binding
 			, uint32_t set );
 
-		C3D_API virtual void computeReflections( sdw::Vec3 const & wsNormal
+		C3D_API virtual void computeReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & difF
 			, sdw::Vec3 const & spcF
@@ -38,7 +38,7 @@ namespace castor3d::shader
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular
 			, DebugOutputCategory & debugOutput );
-		C3D_API virtual sdw::RetVec3 computeDiffuseReflections( sdw::Vec3 const & wsNormal
+		C3D_API virtual sdw::RetVec3 computeDiffuseReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
@@ -46,7 +46,7 @@ namespace castor3d::shader
 			, sdw::Float const & metalness
 			, BlendComponents & components
 			, DebugOutputCategory & debugOutput );
-		C3D_API virtual sdw::RetVec3 computeSpecularReflections( sdw::Vec3 const & wsNormal
+		C3D_API virtual sdw::RetVec3 computeSpecularReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
@@ -55,7 +55,7 @@ namespace castor3d::shader
 			, BlendComponents & components
 			, sdw::CombinedImage2DRgba32 const & brdf
 			, DebugOutputCategory & debugOutput );
-		C3D_API virtual sdw::RetVec4 computeSheenReflections( sdw::Vec3 const & wsNormal
+		C3D_API virtual sdw::RetVec4 computeSheenReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
@@ -63,13 +63,13 @@ namespace castor3d::shader
 			, sdw::CombinedImage2DRgba32 const & brdf
 			, DebugOutputCategory & debugOutput );
 
-		C3D_API virtual sdw::RetVec3 computeRefractions( sdw::Vec3 const & wsNormal
+		C3D_API virtual sdw::RetVec3 computeRefraction( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & refractionRatio
 			, BlendComponents & components
 			, DebugOutputCategory & debugOutput );
-		C3D_API virtual sdw::RetVec3 computeSpecularRefractions( sdw::Vec3 const & fresnel
+		C3D_API virtual sdw::RetVec3 computeSpecularRefraction( sdw::Vec3 const & fresnel
 			, sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
@@ -78,6 +78,10 @@ namespace castor3d::shader
 			, sdw::Float const & refractionRatio
 			, BlendComponents & components
 			, sdw::CombinedImage2DRgba32 const & brdf
+			, DebugOutputCategory & debugOutput );
+
+		C3D_API virtual sdw::RetVec3 computeDiffuse( sdw::Vec3 const & wsDirection
+			, BlendComponents & components
 			, DebugOutputCategory & debugOutput );
 
 		C3D_API virtual void applyVolume( sdw::Vec2 const fragCoord

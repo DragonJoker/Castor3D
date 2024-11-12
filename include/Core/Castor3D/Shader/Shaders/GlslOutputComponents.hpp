@@ -82,7 +82,8 @@ namespace castor3d::shader
 			, sdw::Vec3Field< "reflSpecular" >
 			, sdw::Vec3Field< "reflCoating" >
 			, sdw::Vec4Field< "reflSheen" >
-			, sdw::Vec3Field< "refrColour" > >
+			, sdw::Vec3Field< "refrDiffuse" >
+			, sdw::Vec3Field< "refrSpecular" > >
 	{
 		C3D_API ReflectionRefraction( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
@@ -96,7 +97,8 @@ namespace castor3d::shader
 		sdw::Vec3 reflSpecular;
 		sdw::Vec3 reflCoating;
 		sdw::Vec4 reflSheen;
-		sdw::Vec3 refrColour;
+		sdw::Vec3 refrDiffuse;
+		sdw::Vec3 refrSpecular;
 
 	private:
 		static sdw::expr::ExprList makeInit();
