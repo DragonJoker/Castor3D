@@ -204,6 +204,36 @@ namespace castor3d::shader
 				, reflectedSpecular ) );
 		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Specular Result" ), specularResult );
 
+		auto diffuseTransmission = m_writer.declLocale( "c3d_diffuseTransmission"
+			, components.getMember( "diffuseTransmissionFactor", 0.0_f ) );
+		auto diffuseTransmissionColour = m_writer.declLocale( "c3d_diffuseTransmissionColour"
+			, components.getMember( "diffuseTransmissionColour", vec3( 1.0_f ) ) );
+		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Diffuse Transmission Factor" ), diffuseTransmission );
+		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Diffuse Transmission Color" ), diffuseTransmissionColour );
+
+		IF( m_writer, diffuseTransmission != 0.0_f )
+		{
+			lightSurface.updateN( -lightSurface.N() );
+			auto diffuseBtdf = m_writer.declLocale( "c3d_diffuseBtdf"
+				, refractedDiffuse * diffuseTransmissionColour );
+			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Raw Diffuse BTDF" ), diffuseBtdf );
+
+			IF( m_writer, components.thicknessFactor != 0.0_f )
+			{
+				diffuseBtdf *= ReflectionModel::applyVolumeAttenuation( components.thicknessFactor, components.attenuationColour, components.attenuationDistance );
+			}
+			FI
+
+			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Attenuated Diffuse BTDF" ), diffuseBtdf );
+			diffuseResult = mix( diffuseResult, diffuseBtdf, vec3( diffuseTransmission ) );
+		}
+		ELSE
+		{
+			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Raw Diffuse BTDF" ), 0.0_f );
+			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Attenuated Diffuse BTDF" ), 0.0_f );
+		}
+		FI
+
 		IF( m_writer, components.hasTransmission )
 		{
 			if ( components.hasMember( "metalness" ) )
@@ -1378,6 +1408,31 @@ namespace castor3d::shader
 			}
 			FI
 		}
+
+		auto diffuseTransmissionFactor = m_writer.declLocale( "diffuseTransmissionFactor"
+			, components.getMember( "diffuseTransmissionFactor", 0.0_f ) );
+
+		IF( m_writer, diffuseTransmissionFactor != 0.0_f )
+		{
+			lightSurface.updateN( -lightSurface.N() );
+			auto diffuseBtdf = m_writer.declLocale( "diffuseBtdf"
+				, doGetNdotL( lightSurface, components ).value()
+					* m_diffuse->compute( components
+						, lightSurface
+						, components.getMember( "diffusionTransmissionColour", vec3( 1.0_f ) )
+						, light.intensity().x()
+						, doGetNdotL( lightSurface, components ).value() ) );
+
+			IF( m_writer, components.thicknessFactor != 0.0_f )
+			{
+				diffuseBtdf *= ReflectionModel::applyVolumeAttenuation( components.thicknessFactor, components.attenuationColour, components.attenuationDistance );
+			}
+			FI
+
+			output.diffuse = mix( output.diffuse, diffuseBtdf, vec3( diffuseTransmissionFactor ) );
+			lightSurface.updateN( -lightSurface.N() );
+		}
+		FI
 
 		IF( m_writer, components.hasTransmission != 0_u
 			&& components.thicknessFactor != 0.0_f

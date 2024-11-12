@@ -13,6 +13,7 @@
 #include <Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/ClearcoatComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Lighting/DiffuseTransmissionComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/DispersionComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/IridescenceComponent.hpp>
@@ -29,6 +30,8 @@
 #include <Castor3D/Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/ClearcoatRoughnessMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/ColourMapComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Map/DiffuseTransmissionColourMapComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Map/DiffuseTransmissionFactorMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/EmissiveMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/IridescenceMapComponent.hpp>
@@ -676,6 +679,7 @@ namespace c3d_gltf
 		doImportIorData( impMaterial, *pass );
 		doImportAnisotropyData( impMaterial, *pass );
 		doImportDispersionData( impMaterial, *pass );
+		doImportDiffuseTransmissionData( impMaterial, *pass );
 		pass->prepareTextures();
 		return true;
 	}
@@ -876,6 +880,23 @@ namespace c3d_gltf
 			auto & file = static_cast< GltfImporterFile const & >( *m_file );
 			auto & impAsset = file.getAsset();
 			materials::parseAnisStrDirTexture( file, pass, impAsset, impMaterial.anisotropy->anisotropyTexture, m_loadConfig, *this );
+		}
+	}
+
+	void GltfMaterialImporter::doImportDiffuseTransmissionData( fastgltf::Material const & impMaterial
+		, castor3d::Pass & pass )
+	{
+		auto & file = static_cast< GltfImporterFile const & >( *m_file );
+		auto & impAsset = file.getAsset();
+
+		if ( impMaterial.diffuseTransmission )
+		{
+			pass.createComponent< castor3d::DiffuseTransmissionComponent >()->setTransmissionFactor( impMaterial.diffuseTransmission->transmissionFactor );
+			pass.createComponent< castor3d::DiffuseTransmissionComponent >()->setTransmissionColour( castor::RgbColour::fromComponents( impMaterial.diffuseTransmission->transmissionColorFactor[0]
+				, impMaterial.diffuseTransmission->transmissionColorFactor[1]
+				, impMaterial.diffuseTransmission->transmissionColorFactor[2] ) );
+			materials::parseTexture< castor3d::DiffuseTransmissionFactorMapComponent >( file, pass, impAsset, impMaterial.diffuseTransmission->transmissionTexture, m_loadConfig, *this );
+			materials::parseTexture< castor3d::DiffuseTransmissionColourMapComponent >( file, pass, impAsset, impMaterial.diffuseTransmission->transmissionColorTexture, m_loadConfig, *this );
 		}
 	}
 
