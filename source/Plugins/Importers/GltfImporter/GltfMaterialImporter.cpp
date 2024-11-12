@@ -934,16 +934,9 @@ namespace c3d_gltf
 	void GltfMaterialImporter::doImportIorData( fastgltf::Material const & impMaterial
 		, castor3d::Pass & pass )const
 	{
-		if ( impMaterial.ior != 1.5f )
+		if ( impMaterial.ior )
 		{
-			pass.createComponent< castor3d::RefractionComponent >()->setRefractionRatio( impMaterial.ior );
-			auto transmission = pass.getComponent< castor3d::TransmissionComponent >();
-
-			if ( !transmission )
-			{
-				transmission = pass.createComponent< castor3d::TransmissionComponent >();
-				transmission->setTransmission( 0.0f );
-			}
+			pass.createComponent< castor3d::RefractionComponent >()->setRefractionRatio( *impMaterial.ior );
 		}
 	}
 

@@ -1,0 +1,38 @@
+diff --git a/include/fastgltf/types.hpp b/include/fastgltf/types.hpp
+index 504d61a..48505fd 100644
+--- a/include/fastgltf/types.hpp
++++ b/include/fastgltf/types.hpp
+@@ -2018,7 +2018,7 @@ namespace fastgltf {
+ 		/**
+ 		 * The index of refraction as specified through KHR_materials_ior.
+ 		 */
+-		num ior = 1.5f;
++		Optional<num> ior;
+ 
+ 		/**
+ 		 * The dispersion factor from KHR_materials_dispersion, specifies as 20/Abbe number (20/V).
+diff --git a/src/fastgltf.cpp b/src/fastgltf.cpp
+index 556fa65..dd262ad 100644
+--- a/src/fastgltf.cpp
++++ b/src/fastgltf.cpp
+@@ -1202,7 +1202,7 @@ fg::Error fg::validate(const fastgltf::Asset& asset) {
+ 			return Error::InvalidGltf;
+ 		if (material.emissiveStrength != 1.0f && !isExtensionUsed(extensions::KHR_materials_emissive_strength))
+ 			return Error::InvalidGltf;
+-		if (material.ior != 1.5f && !isExtensionUsed(extensions::KHR_materials_ior))
++		if (material.ior.has_value() && material.ior.value() != 1.5f && !isExtensionUsed(extensions::KHR_materials_ior))
+ 			return Error::InvalidGltf;
+ 		if (material.packedNormalMetallicRoughnessTexture && !isExtensionUsed(extensions::MSFT_packing_normalRoughnessMetallic))
+ 			return Error::InvalidGltf;
+@@ -4810,9 +4810,9 @@ void fg::Exporter::writeMaterials(const Asset& asset, std::string& json) {
+ 			json += R"("KHR_materials_emissive_strength":{"emissiveStrength":)" + std::to_string(it->emissiveStrength) + '}';
+ 		}
+ 
+-		if (it->ior != 1.5f) {
++		if ( it->ior.has_value() && it->ior.value() != 1.5f) {
+ 			if (json.back() == '}') json += ',';
+-			json += R"("KHR_materials_ior":{"ior":)" + std::to_string(it->ior) + '}';
++			json += R"("KHR_materials_ior":{"ior":)" + std::to_string(it->ior.value()) + '}';
+ 		}
+ 
+ 		if (it->iridescence) {

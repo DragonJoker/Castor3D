@@ -89,9 +89,9 @@ namespace castor3d::shader
 		, BlendComponents & components )
 	{
 		auto ior = m_writer.declLocale( "ior"
-			, m_writer.ternary( components.refractionRatio == 0.0_f
-				, 1.5_f
-				, sdw::Float{ components.refractionRatio } ) );
+			, m_writer.ternary( ( components.hasRefraction + components.hasTransmission ) != 0_u
+				, sdw::Float{ components.refractionRatio }
+				, 1.5_f ) );
 		components.f0 = vec3( Utils::computeF0( ior ) );
 		components.f0 = mix( components.f0, components.colour.rgb(), vec3( components.metalness ) );
 
