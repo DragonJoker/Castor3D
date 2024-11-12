@@ -5134,6 +5134,23 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
+		static CU_ImplementAttributeParserBlock( parserSkyboxIrradiance, SkyboxContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( !blockContext->skybox )
+			{
+				CU_ParsingError( cuT( "No skybox initialised." ) );
+			}
+			else
+			{
+				blockContext->skybox->showIrradiance( params[0]->get< bool >() );
+			}
+		}
+		CU_EndAttribute()
+
 		static CU_ImplementAttributeParserBlock( parserSkyboxEqui, SkyboxContext )
 		{
 			if ( params.size() <= 1 )
@@ -5784,6 +5801,7 @@ namespace castor3d
 		{
 			BlockParserContextT< SkyboxContext > context{ result, CSCNSection::eSkybox, CSCNSection::eScene };
 			context.addParser( cuT( "visible" ), parserSkyboxVisible, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+			context.addParser( cuT( "show_irradiance" ), parserSkyboxIrradiance, { makeDefaultedParameter< ParameterType::eBool >( false ) } );
 			context.addParser( cuT( "equirectangular" ), parserSkyboxEqui, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eUInt32 >() } );
 			context.addParser( cuT( "cross" ), parserSkyboxCross, { makeParameter< ParameterType::ePath >() } );
 			context.addParser( cuT( "left" ), parserSkyboxLeft, { makeParameter< ParameterType::ePath >() } );

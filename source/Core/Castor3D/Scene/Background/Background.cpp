@@ -48,6 +48,7 @@ namespace castor3d
 			eHdrConfig = 2u,
 			eScene = 3u,
 			eSkybox = 4u,
+			eIrradiance = 5u,
 		};
 
 		struct Shaders
@@ -56,7 +57,7 @@ namespace castor3d
 			ashes::PipelineShaderStageCreateInfoArray stages;
 		};
 
-		using Programs = castor::Array< Shaders, 2u >;
+		using Programs = castor::Array< Shaders, SceneBackground::PassCount >;
 
 		class BackgroundPass
 			: public castor::DataHolderT< ashes::VertexBufferPtr< castor::Point3f > >
@@ -84,7 +85,7 @@ namespace castor3d
 					.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
 					.getPassIndex( GetPassIndexCallback( [this, forceVisible]() { return m_background->getPassIndex( forceVisible ); } ) )
 					.renderSize( size )
-					.programCreator( { 2u
+					.programCreator( { SceneBackground::PassCount
 						, [this, &device]( uint32_t programIndex )
 						{
 							return crg::makeVkArray< VkPipelineShaderStageCreateInfo >( doInitialiseShader( device, programIndex ) );
@@ -108,7 +109,7 @@ namespace castor3d
 				, crg::RenderMesh{ pass
 					, context
 					, graph
-					, crg::ru::Config{ 2u, true }
+					, crg::ru::Config{ SceneBackground::PassCount, true }
 					, buildConfig( device, size, depth, forceVisible ) }
 			{
 			}
@@ -231,7 +232,8 @@ namespace castor3d
 						C3D_ModelData( writer, Bindings::eModel, 0u );
 						C3D_HdrConfig( writer, Bindings::eHdrConfig, 0u );
 						C3D_Scene( writer, Bindings::eScene, 0u );
-						auto c3d_mapSkybox = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapSkybox", uint32_t( Bindings::eSkybox ), 0u, programIndex == 0u );
+						auto c3d_mapSkybox = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapSkybox", uint32_t( Bindings::eSkybox ), 0u, programIndex == SceneBackground::VisiblePassIndex );
+						auto c3d_mapIrradiance = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapIrradiance", uint32_t( Bindings::eIrradiance ), 0u, programIndex == SceneBackground::IrradiancePassIndex );
 
 						writer.implementEntryPointT< shader::Position3FT, shader::Uv3FT >( [&c3d_cameraData, &c3d_modelData]( sdw::VertexInT< shader::Position3FT > const & in
 							, sdw::VertexOutT< shader::Uv3FT > out )
@@ -240,16 +242,18 @@ namespace castor3d
 								out.uv() = in.position();
 							} );
 
-						writer.implementEntryPointT< shader::Uv3FT, shader::Colour4FT >( [this, &writer, &c3d_sceneData, &c3d_hdrConfigData, &c3d_mapSkybox, programIndex]( sdw::FragmentInT< shader::Uv3FT > const & in
+						writer.implementEntryPointT< shader::Uv3FT, shader::Colour4FT >( [this, &writer, &c3d_sceneData, &c3d_hdrConfigData, &c3d_mapSkybox, &c3d_mapIrradiance, programIndex]( sdw::FragmentInT< shader::Uv3FT > const & in
 							, sdw::FragmentOutT< shader::Colour4FT > const & out )
 							{
-								if ( programIndex == SceneBackground::VisiblePassIndex )
+								if ( programIndex != SceneBackground::HiddenPassIndex )
 								{
-									IF( writer, sdw::UInt{ programIndex } == 0_u
+									IF( writer, sdw::UInt{ programIndex } != sdw::UInt{ SceneBackground::HiddenPassIndex }
 										&& c3d_sceneData.fogType() == sdw::UInt( uint32_t( FogType::eDisabled ) ) )
 									{
 										auto colour = writer.declLocale( "colour"
-											, c3d_mapSkybox.sample( in.uv() ) );
+											, ( programIndex == SceneBackground::IrradiancePassIndex
+												? c3d_mapIrradiance.sample( in.uv() )
+												: c3d_mapSkybox.sample( in.uv() ) ) );
 
 										if ( !m_background->isHdr() && !m_background->isSRGB() )
 										{
@@ -306,6 +310,11 @@ namespace castor3d
 	{
 		if ( !m_initialised )
 		{
+			m_passIndex = ( m_visible
+				? VisiblePassIndex
+				: ( isIrradianceShown()
+					? IrradiancePassIndex
+					: HiddenPassIndex ) );
 			m_initialised = doInitialise( device );
 			castor::String const name = cuT( "Skybox_" ) + castor::string::toString( m_texture->getMipLevels() );
 			{
@@ -474,6 +483,14 @@ namespace castor3d
 			, uint32_t( back::Bindings::eSkybox )
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR } );
+
+		if ( hasIbl() )
+		{
+			result.addSampledView( getIbl().getIrradianceTexture().sampledViewId
+				, uint32_t( back::Bindings::eIrradiance )
+				, crg::SamplerDesc{ VK_FILTER_LINEAR
+					, VK_FILTER_LINEAR } );
+		}
 
 		if ( !depth.empty() )
 		{

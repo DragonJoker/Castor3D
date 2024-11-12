@@ -20,7 +20,9 @@ namespace castor3d
 	{
 	public:
 		static uint32_t constexpr VisiblePassIndex = 0u;
-		static uint32_t constexpr HiddenPassIndex = 1u;
+		static uint32_t constexpr IrradiancePassIndex = 1u;
+		static uint32_t constexpr HiddenPassIndex = 2u;
+		static uint32_t constexpr PassCount = 3u;
 
 		OnBackgroundChanged onChanged;
 		/**
@@ -358,7 +360,28 @@ namespace castor3d
 			m_visible = v;
 			m_passIndex = ( m_visible
 				? VisiblePassIndex
-				: HiddenPassIndex );
+				: ( isIrradianceShown()
+					? IrradiancePassIndex
+					: HiddenPassIndex ) );
+		}
+		/**
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
+		void showIrradiance( bool v )noexcept
+		{
+			m_showIrradiance = v;
+			m_visible = false;
+			m_passIndex = ( m_visible
+				? VisiblePassIndex
+				: ( m_showIrradiance
+					? IrradiancePassIndex
+					: HiddenPassIndex ) );
 		}
 		/**@}*/
 		/**
@@ -427,6 +450,11 @@ namespace castor3d
 			return m_visible;
 		}
 
+		bool isIrradianceShown()const noexcept
+		{
+			return m_hasIBLSupport && m_showIrradiance;
+		}
+
 		IblTextures const & getIbl()const noexcept
 		{
 			CU_Require( m_ibl );
@@ -459,6 +487,7 @@ namespace castor3d
 		castor::RawUniquePtr< IblTextures > m_ibl;
 		bool m_hasIBLSupport;
 		bool m_visible{ true };
+		bool m_showIrradiance{ true };
 		uint32_t m_passIndex{ 0u };
 		bool m_needsUpload{};
 
