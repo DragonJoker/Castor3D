@@ -7,6 +7,7 @@ vcpkg_from_github(
     PATCHES
         fix_uri_escape_spaces.patch
         KHR_material_diffuse_transmission.patch
+        optional_ior.patch
 )
 
 vcpkg_cmake_configure(
