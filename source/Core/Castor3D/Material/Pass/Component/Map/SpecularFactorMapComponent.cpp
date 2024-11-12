@@ -21,8 +21,6 @@
 
 //*************************************************************************************************
 
-CU_ImplementSmartPtr( castor3d, SpecularFactorMapComponent )
-
 namespace castor
 {
 	template<>

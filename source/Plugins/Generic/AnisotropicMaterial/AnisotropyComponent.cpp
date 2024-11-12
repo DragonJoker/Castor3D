@@ -359,9 +359,9 @@ namespace anisotropy
 
 	castor3d::PassComponentUPtr AnisotropyComponent::doClone( castor3d::Pass & pass )const
 	{
-		auto result = castor::makeUnique< AnisotropyComponent >( pass );
+		auto result = castor::make_unique< AnisotropyComponent >( pass );
 		result->setData( getData() );
-		return castor::ptrRefCast< PassComponent >( result );
+		return castor3d::PassComponentUPtr{ result.release() };
 	}
 
 	bool AnisotropyComponent::doWriteText( castor::String const & tabs

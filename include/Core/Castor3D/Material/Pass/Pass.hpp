@@ -146,10 +146,8 @@ namespace castor3d
 
 			if ( !result )
 			{
-				auto component = castor::makeUnique< ComponentT >( *this
-					, castor::forward< ParamsT >( params )... );
-				result = component.get();
-				this->addComponent( castor::ptrRefCast< PassComponent >( component ) );
+				result = new ComponentT{ *this, castor::forward< ParamsT >( params )... };
+				this->addComponent( PassComponentUPtr{ result } );
 			}
 
 			return result;

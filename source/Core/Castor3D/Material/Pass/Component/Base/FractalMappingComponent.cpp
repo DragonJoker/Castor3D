@@ -11,8 +11,6 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementSmartPtr( castor3d, FractalMappingComponent )
-
 namespace castor
 {
 	template<>
@@ -250,9 +248,9 @@ namespace castor3d
 
 	PassComponentUPtr FractalMappingComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::makeUnique< FractalMappingComponent >( pass );
+		auto result = castor::make_unique< FractalMappingComponent >( pass );
 		result->setData( getData() );
-		return castor::ptrRefCast< PassComponent >( result );
+		return PassComponentUPtr{ result.get() };
 	}
 
 	bool FractalMappingComponent::doWriteText( castor::String const & tabs

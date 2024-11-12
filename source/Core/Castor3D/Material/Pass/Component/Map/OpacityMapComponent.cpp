@@ -18,8 +18,6 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-CU_ImplementSmartPtr( castor3d, OpacityMapComponent )
-
 namespace castor
 {
 	template<>

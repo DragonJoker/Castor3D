@@ -18,8 +18,6 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, MetalnessMapComponent )
-
 namespace castor
 {
 	template<>

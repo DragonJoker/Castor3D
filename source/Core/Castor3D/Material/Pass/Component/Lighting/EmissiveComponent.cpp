@@ -11,8 +11,6 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-CU_ImplementSmartPtr( castor3d, EmissiveComponent )
-
 namespace castor
 {
 	template<>
@@ -203,9 +201,9 @@ namespace castor3d
 
 	PassComponentUPtr EmissiveComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::makeUnique< EmissiveComponent >( pass );
+		auto result = castor::make_unique< EmissiveComponent >( pass );
 		result->setData( getData() );
-		return castor::ptrRefCast< PassComponent >( result );
+		return PassComponentUPtr{ result.release() };
 	}
 
 	bool EmissiveComponent::doWriteText( castor::String const & tabs

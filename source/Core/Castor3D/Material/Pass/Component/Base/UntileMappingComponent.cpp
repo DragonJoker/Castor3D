@@ -10,8 +10,6 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementSmartPtr( castor3d, UntileMappingComponent )
-
 namespace castor
 {
 	template<>
@@ -183,9 +181,9 @@ namespace castor3d
 
 	PassComponentUPtr UntileMappingComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::makeUnique< UntileMappingComponent >( pass );
+		auto result = castor::make_unique< UntileMappingComponent >( pass );
 		result->setData( getData() );
-		return castor::ptrRefCast< PassComponent >( result );
+		return PassComponentUPtr{ result.release() };
 	}
 
 	bool UntileMappingComponent::doWriteText( castor::String const & tabs

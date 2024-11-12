@@ -15,8 +15,6 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, OcclusionMapComponent )
-
 namespace castor
 {
 	template<>

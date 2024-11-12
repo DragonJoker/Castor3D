@@ -13,8 +13,6 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-CU_ImplementSmartPtr( castor3d, AttenuationComponent )
-
 namespace castor
 {
 	template<>
@@ -211,9 +209,9 @@ namespace castor3d
 
 	PassComponentUPtr AttenuationComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::makeUnique< AttenuationComponent >( pass );
+		auto result = castor::make_unique< AttenuationComponent >( pass );
 		result->setData( getData() );
-		return castor::ptrRefCast< PassComponent >( result );
+		return PassComponentUPtr{ result.release() };
 	}
 
 	bool AttenuationComponent::doWriteText( castor::String const & tabs

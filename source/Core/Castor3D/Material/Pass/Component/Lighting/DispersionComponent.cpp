@@ -12,8 +12,6 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, DispersionComponent )
-
 namespace castor
 {
 	template<>
@@ -177,9 +175,9 @@ namespace castor3d
 
 	PassComponentUPtr DispersionComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::makeUnique< DispersionComponent >( pass );
+		auto result = castor::make_unique< DispersionComponent >( pass );
 		result->setData( getData() );
-		return castor::ptrRefCast< PassComponent >( result );
+		return PassComponentUPtr{ result.release() };
 	}
 
 	bool DispersionComponent::doWriteText( castor::String const & tabs

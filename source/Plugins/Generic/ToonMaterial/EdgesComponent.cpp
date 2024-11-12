@@ -299,9 +299,9 @@ namespace toon
 
 	castor3d::PassComponentUPtr EdgesComponent::doClone( castor3d::Pass & pass )const
 	{
-		auto result = castor::makeUnique< EdgesComponent >( pass );
+		auto result = castor::make_unique< EdgesComponent >( pass );
 		result->setData( getData() );
-		return castor::ptrRefCast< PassComponent >( result );
+		return castor3d::PassComponentUPtr{ result.release() };
 	}
 
 	bool EdgesComponent::doWriteText( castor::String const & tabs

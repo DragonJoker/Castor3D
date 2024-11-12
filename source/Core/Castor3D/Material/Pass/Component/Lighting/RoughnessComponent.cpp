@@ -13,8 +13,6 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, RoughnessComponent )
-
 namespace castor
 {
 	template<>
@@ -241,9 +239,9 @@ namespace castor3d
 
 	PassComponentUPtr RoughnessComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::makeUnique< RoughnessComponent >( pass );
+		auto result = castor::make_unique< RoughnessComponent >( pass );
 		result->setData( getData() );
-		return castor::ptrRefCast< PassComponent >( result );
+		return PassComponentUPtr{ result.release() };
 	}
 
 	bool RoughnessComponent::doWriteText( castor::String const & tabs

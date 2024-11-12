@@ -16,8 +16,6 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-CU_ImplementSmartPtr( castor3d, DefaultReflRefrComponent )
-
 namespace castor3d
 {
 	//*********************************************************************************************
@@ -116,8 +114,7 @@ namespace castor3d
 
 	PassComponentUPtr DefaultReflRefrComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::makeUnique< DefaultReflRefrComponent >( pass );
-		return castor::ptrRefCast< PassComponent >( result );
+		return castor::makeUniqueDerived< PassComponent, DefaultReflRefrComponent >( pass );
 	}
 
 	//*********************************************************************************************

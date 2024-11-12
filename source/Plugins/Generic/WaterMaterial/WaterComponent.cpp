@@ -672,9 +672,9 @@ namespace water
 
 	castor3d::PassComponentUPtr WaterComponent::doClone( castor3d::Pass & pass )const
 	{
-		auto result = castor::makeUnique< WaterComponent >( pass );
+		auto result = castor::make_unique< WaterComponent >( pass );
 		result->setData( getData() );
-		return castor::ptrRefCast< PassComponent >( result );
+		return castor3d::PassComponentUPtr{ result.release() };
 	}
 
 	bool WaterComponent::doWriteText( castor::String const & tabs
