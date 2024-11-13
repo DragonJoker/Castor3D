@@ -69,6 +69,25 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	AmbientComponent::MaterialShader::MaterialShader()
+		: shader::PassMaterialShader{ 16u }
+	{
+	}
+
+	void AmbientComponent::MaterialShader::fillMaterialType( sdw::type::BaseStruct & type
+		, sdw::expr::ExprList & inits )const
+	{
+		if ( !type.hasMember( "ambientColour" ) )
+		{
+			type.declMember( "ambientColour", ast::type::Kind::eVec3F );
+			type.declMember( "ambientFactor", ast::type::Kind::eFloat );
+			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ AmbientComponent::DefaultComponent } ) ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ AmbientComponent::DefaultFactor } ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	void AmbientComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
@@ -116,31 +135,10 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		if ( !res.hasMember( "ambientColour" ) )
+		if ( res.hasMember( "ambientColour" ) )
 		{
-			return;
-		}
-
-		res.getMember< sdw::Vec3 >( "ambientColour", true ) += src.getMember< sdw::Vec3 >( "ambientColour", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "ambientFactor", true ) += src.getMember< sdw::Float >( "ambientFactor", true ) * passMultiplier;
-	}
-
-	//*********************************************************************************************
-
-	AmbientComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ 16u }
-	{
-	}
-
-	void AmbientComponent::MaterialShader::fillMaterialType( sdw::type::BaseStruct & type
-		, sdw::expr::ExprList & inits )const
-	{
-		if ( !type.hasMember( "ambientColour" ) )
-		{
-			type.declMember( "ambientColour", ast::type::Kind::eVec3F );
-			type.declMember( "ambientFactor", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ AmbientComponent::DefaultComponent } ) ) );
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ AmbientComponent::DefaultFactor } ) );
+			res.getMember< sdw::Vec3 >( "ambientColour" ) += src.getMember< sdw::Vec3 >( "ambientColour", true ) * passMultiplier;
+			res.getMember< sdw::Float >( "ambientFactor" ) += src.getMember< sdw::Float >( "ambientFactor", true ) * passMultiplier;
 		}
 	}
 

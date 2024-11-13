@@ -105,27 +105,9 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		if ( !res.hasMember( "metalness" ) )
+		if ( res.hasMember( "metalness" ) )
 		{
-			return;
-		}
-
-		res.getMember< sdw::Float >( "metalness", true ) += src.getMember< sdw::Float >( "metalness", true ) * passMultiplier;
-	}
-
-	void MetalnessComponent::ComponentsShader::updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, shader::Material const & material
-		, shader::BlendComponents & components
-		, bool isFrontCulled )const
-	{
-		if ( !components.hasMember( "metalness" ) )
-		{
-			return;
-		}
-
-		if ( components.hasMember( "transmission" ) )
-		{
-			components.transmission = mix( components.transmission, 0.0_f, components.metalness );
+			res.metalness += src.metalness * passMultiplier;
 		}
 	}
 

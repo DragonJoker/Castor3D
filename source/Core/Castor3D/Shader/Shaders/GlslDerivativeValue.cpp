@@ -400,6 +400,30 @@ namespace castor3d::shader
 		return deriv::applyMbr< DerivVec4, Func >( &sdw::Vec4::operator-, "derivNegate4", a );
 	}
 
+	DerivFloat abs( DerivFloat const a )
+	{
+		using Func = sdw::RetFloat( * )( sdw::Float const );
+		return deriv::apply< DerivFloat, Func >( sdw::abs, "derivAbs1", a );
+	}
+
+	DerivVec2 abs( DerivVec2 const a )
+	{
+		using Func = sdw::RetVec2( * )( sdw::Vec2 const );
+		return deriv::apply< DerivVec2, Func >( sdw::abs, "derivAbs2", a );
+	}
+
+	DerivVec3 abs( DerivVec3 const a )
+	{
+		using Func = sdw::RetVec3( * )( sdw::Vec3 const );
+		return deriv::apply< DerivVec3, Func >( sdw::abs, "derivAbs3", a );
+	}
+
+	DerivVec4 abs( DerivVec4 const a )
+	{
+		using Func = sdw::RetVec4( * )( sdw::Vec4 const );
+		return deriv::apply< DerivVec4, Func >( sdw::abs, "derivAbs4", a );
+	}
+
 	sdw::Float computeMip( DerivVec2 const & uv
 		, sdw::Vec2 const & texSize )
 	{

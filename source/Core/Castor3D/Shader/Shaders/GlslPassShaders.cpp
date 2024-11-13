@@ -237,13 +237,19 @@ namespace castor3d::shader
 	}
 
 	void PassShaders::finishComponents( DerivSurfaceBase const & surface
-		, sdw::Vec3 const worldEye
+		, CameraData const & camera
+		, ModelData const & model
 		, Utils & utils
 		, BlendComponents & components )const
 	{
+		for ( auto & shader : m_shaders )
+		{
+			shader->finishComponent( surface, camera, model, utils, components );
+		}
+
 		for ( auto & finish : m_finishComponents )
 		{
-			finish( surface, worldEye, utils, components );
+			finish( surface, camera, model, utils, components );
 		}
 	}
 
@@ -344,7 +350,6 @@ namespace castor3d::shader
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
 		, sdw::UInt const & hasReflection
-		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
 		, shader::ReflectionRefraction & output
 		, DebugOutput & debugOutput )const
@@ -367,7 +372,6 @@ namespace castor3d::shader
 			, envMapIndex
 			, incident
 			, hasReflection
-			, hasRefraction
 			, refractionRatio
 			, output
 			, debugOutput );
@@ -384,7 +388,6 @@ namespace castor3d::shader
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
 		, sdw::UInt const & hasReflection
-		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
 		, shader::ReflectionRefraction & output
 		, DebugOutput & debugOutput )const
@@ -405,7 +408,6 @@ namespace castor3d::shader
 			, envMapIndex
 			, incident
 			, hasReflection
-			, hasRefraction
 			, refractionRatio
 			, output
 			, debugOutput );

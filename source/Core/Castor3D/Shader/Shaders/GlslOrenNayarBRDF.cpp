@@ -27,18 +27,15 @@ namespace castor3d::shader
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeQualitativeOrenNayar"
 			, [this]( BlendComponents const & components
 				, LightSurface const & lightSurface
-				, sdw::Vec3 const & radiance
-				, sdw::Float const & intensity
+				, sdw::Vec3 const & lightIntensity
 				, sdw::Float const & NdotL )
 			{
 				auto NdotV = m_writer.declLocale( "NdotV"
 					, lightSurface.NdotV().value() );
 				auto LdotV = m_writer.declLocale( "LdotV"
 					, lightSurface.LdotV().value() );
-				auto F = m_writer.declLocale( "F"
-					, lightSurface.difF().value() );
 				auto roughness = m_writer.declLocale( "roughness"
-					, components.roughness );
+					, components.perceptualRoughness );
 
 				auto sigma = m_writer.declLocale( "sigma"
 					, roughness * castor::PiDiv2< float > );
@@ -55,15 +52,12 @@ namespace castor3d::shader
 					, 0.45_f * ( sqSigma / ( sqSigma + 0.09_f ) ) );
 
 				auto diffuseReflectance = m_writer.declLocale( "diffuseReflectance"
-					, ( A + B * s * oneOverT ) * radiance / sdw::Float{ castor::Pi< float > } );
-				auto diffuseFactor = m_writer.declLocale( "diffuseFactor"
-					, vec3( 1.0_f ) - F );
-				m_writer.returnStmt( max( diffuseReflectance * intensity * diffuseFactor, vec3( 0.0_f ) ) );
+					, ( A + B * s * oneOverT ) * lightIntensity / sdw::Float{ castor::Pi< float > } );
+				m_writer.returnStmt( max( diffuseReflectance, vec3( 0.0_f ) ) );
 			}
 			, InBlendComponents{ m_writer, "components", pcomponents }
 			, InLightSurface{ m_writer, "lightSurface", plightSurface }
-			, sdw::InVec3{ m_writer, "radiance" }
-			, sdw::InFloat{ m_writer, "intensity" }
+			, sdw::InVec3{ m_writer, "lightIntensity" }
 			, sdw::InFloat{ m_writer, "NdotL" } );
 	}
 
@@ -87,18 +81,15 @@ namespace castor3d::shader
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeFujiiOrenNayar"
 			, [this]( BlendComponents const & components
 				, LightSurface const & lightSurface
-				, sdw::Vec3 const & radiance
-				, sdw::Float const & intensity
+				, sdw::Vec3 const & lightIntensity
 				, sdw::Float const & NdotL )
 			{
 				auto NdotV = m_writer.declLocale( "NdotV"
 					, lightSurface.NdotV().value() );
 				auto LdotV = m_writer.declLocale( "LdotV"
 					, lightSurface.LdotV().value() );
-				auto F = m_writer.declLocale( "F"
-					, lightSurface.difF().value() );
 				auto roughness = m_writer.declLocale( "roughness"
-					, components.roughness );
+					, components.perceptualRoughness );
 
 				auto s = m_writer.declLocale( "s"
 					, LdotV - NdotL * NdotV );
@@ -108,15 +99,12 @@ namespace castor3d::shader
 					, 1.0_f / ( 1.0_f + roughness * sdw::Float{ fujii::constant1 } ) );
 
 				auto diffuseReflectance = m_writer.declLocale( "diffuseReflectance"
-					, A * ( 1.0_f + roughness * sOverT ) * radiance / sdw::Float{ castor::Pi< float > } );
-				auto diffuseFactor = m_writer.declLocale( "diffuseFactor"
-					, vec3( 1.0_f ) - F );
-				m_writer.returnStmt( max( diffuseReflectance * intensity * diffuseFactor, vec3( 0.0_f ) ) );
+					, A * ( 1.0_f + roughness * sOverT ) * lightIntensity / sdw::Float{ castor::Pi< float > } );
+				m_writer.returnStmt( max( diffuseReflectance, vec3( 0.0_f ) ) );
 			}
 			, InBlendComponents{ m_writer, "components", pcomponents }
 			, InLightSurface{ m_writer, "lightSurface", plightSurface }
-			, sdw::InVec3{ m_writer, "radiance" }
-			, sdw::InFloat{ m_writer, "intensity" }
+			, sdw::InVec3{ m_writer, "lightIntensity" }
 			, sdw::InFloat{ m_writer, "NdotL" } );
 	}
 
@@ -174,18 +162,15 @@ namespace castor3d::shader
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeEnergyConservativeOrenNayar"
 			, [this]( BlendComponents const & components
 				, LightSurface const & lightSurface
-				, sdw::Vec3 const & radiance
-				, sdw::Float const & intensity
+				, sdw::Vec3 const & lightIntensity
 				, sdw::Float const & NdotL )
 			{
 				auto NdotV = m_writer.declLocale( "NdotV"
 					, lightSurface.NdotV().value() );
 				auto LdotV = m_writer.declLocale( "LdotV"
 					, lightSurface.LdotV().value() );
-				auto F = m_writer.declLocale( "F"
-					, lightSurface.difF().value() );
 				auto roughness = m_writer.declLocale( "roughness"
-					, components.roughness );
+					, components.perceptualRoughness );
 
 				auto s = m_writer.declLocale( "s"
 					, LdotV - NdotL * NdotV );
@@ -195,7 +180,7 @@ namespace castor3d::shader
 					, 1.0_f / ( 1.0_f + roughness * sdw::Float{ fujii::constant1 } ) );
 
 				auto singleScatter = m_writer.declLocale( "singleScatter"
-					, A * ( 1.0_f + roughness * sOverT ) * radiance / sdw::Float{ castor::Pi< float > } );
+					, A * ( 1.0_f + roughness * sOverT ) * lightIntensity / sdw::Float{ castor::Pi< float > } );
 
 				auto Eo = m_writer.declLocale( "Eo"
 					, m_fujiiOrenNayarAlbedo( roughness, NdotV ) );
@@ -204,7 +189,7 @@ namespace castor3d::shader
 				auto avgE = m_writer.declLocale( "avgE"
 					, A * ( 1.0_f + roughness * sdw::Float{ fujii::constant2 } ) );
 				auto msRadiance = m_writer.declLocale( "msRadiance"
-					, ( radiance * radiance ) * avgE / ( vec3( 1.0_f ) - radiance * ( 1.0_f - avgE ) ) );
+					, ( lightIntensity * lightIntensity ) * avgE / ( vec3( 1.0_f ) - lightIntensity * ( 1.0_f - avgE ) ) );
 				const auto eps = 1.0e-7_f;
 				auto multiScatter = m_writer.declLocale( "multiScatter"
 					, ( msRadiance / sdw::Float{ castor::Pi< float > } )
@@ -213,14 +198,11 @@ namespace castor3d::shader
 						/ sdw::max( eps, 1.0_f - avgE ) );
 				auto diffuseReflectance = m_writer.declLocale( "diffuseReflectance"
 					, singleScatter + multiScatter );
-				auto diffuseFactor = m_writer.declLocale( "diffuseFactor"
-					, vec3( 1.0_f ) - F );
-				m_writer.returnStmt( max( diffuseReflectance * intensity * diffuseFactor, vec3( 0.0_f ) ) );
+				m_writer.returnStmt( max( diffuseReflectance, vec3( 0.0_f ) ) );
 			}
 			, InBlendComponents{ m_writer, "components", pcomponents }
 			, InLightSurface{ m_writer, "lightSurface", plightSurface }
-			, sdw::InVec3{ m_writer, "radiance" }
-			, sdw::InFloat{ m_writer, "intensity" }
+			, sdw::InVec3{ m_writer, "lightIntensity" }
 			, sdw::InFloat{ m_writer, "NdotL" } );
 	}
 

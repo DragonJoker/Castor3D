@@ -48,6 +48,254 @@ namespace castor3d
 				, Material const & material
 				, BlendComponents & components
 				, SampleTexture const & sampleTexture )const = 0;
+
+		protected:
+			C3D_API sdw::Float loadFloatComponent( castor::String const & mapName
+				, castor::String const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const;
+			C3D_API sdw::Vec2 loadVec2Component( castor::String const & mapName
+				, castor::String const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const;
+			C3D_API sdw::Vec3 loadVec3Component( castor::String const & mapName
+				, castor::String const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const;
+			C3D_API sdw::Vec4 loadVec4Component( castor::String const & mapName
+				, castor::String const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const;
+
+			sdw::Float loadFloatComponent( castor::String const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const
+			{
+				return loadFloatComponent( valueName
+					, valueName
+					, passShaders
+					, textureConfigs
+					, textureAnims
+					, material
+					, components
+					, sampleTexture );
+			}
+
+			sdw::Vec2 loadVec2Component( castor::String const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const
+			{
+				return loadVec2Component( valueName
+					, valueName
+					, passShaders
+					, textureConfigs
+					, textureAnims
+					, material
+					, components
+					, sampleTexture );
+			}
+
+			sdw::Vec3 loadVec3Component( castor::String const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const
+			{
+				return loadVec3Component( valueName
+					, valueName
+					, passShaders
+					, textureConfigs
+					, textureAnims
+					, material
+					, components
+					, sampleTexture );
+			}
+
+			sdw::Vec4 loadVec4Component( castor::String const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const
+			{
+				return loadVec4Component( valueName
+					, valueName
+					, passShaders
+					, textureConfigs
+					, textureAnims
+					, material
+					, components
+					, sampleTexture );
+			}
+
+			C3D_API void applyFloatComponent( castor::String const & mapName
+				, castor::String const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const;
+			C3D_API void applyVec2Component( castor::String const & mapName
+				, castor::String const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const;
+			C3D_API void applyVec3Component( castor::String const & mapName
+				, castor::String const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const;
+			C3D_API void applyVec4Component( castor::String const & mapName
+				, castor::String const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const;
+
+			void applyFloatComponent( castor::String const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const
+			{
+				applyFloatComponent( valueName
+					, valueName
+					, passShaders
+					, textureConfigs
+					, textureAnims
+					, material
+					, components
+					, sampleTexture );
+			}
+
+			void applyVec2Component( castor::String const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const
+			{
+				applyVec2Component( valueName
+					, valueName
+					, passShaders
+					, textureConfigs
+					, textureAnims
+					, material
+					, components
+					, sampleTexture );
+			}
+
+			void applyVec3Component( castor::String const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const
+			{
+				applyVec3Component( valueName
+					, valueName
+					, passShaders
+					, textureConfigs
+					, textureAnims
+					, material
+					, components
+					, sampleTexture );
+			}
+
+			void applyVec4Component( castor::String const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const
+			{
+				applyVec4Component( valueName
+					, valueName
+					, passShaders
+					, textureConfigs
+					, textureAnims
+					, material
+					, components
+					, sampleTexture );
+			}
+
+			sdw::Float doLoadFloatComponent( castor::MbString const & mbMapName
+				, castor::MbString const & mbValueName
+				, castor::MbString const & textureName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const;
+			sdw::Vec2 doLoadVec2Component( castor::MbString const & mbMapName
+				, castor::MbString const & mbValueName
+				, castor::MbString const & textureName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const;
+			sdw::Vec3 doLoadVec3Component( castor::MbString const & mbMapName
+				, castor::MbString const & mbValueName
+				, castor::MbString const & textureName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const;
+			sdw::Vec4 doLoadVec4Component( castor::MbString const & mbMapName
+				, castor::MbString const & mbValueName
+				, castor::MbString const & textureName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const;
 		};
 	}
 

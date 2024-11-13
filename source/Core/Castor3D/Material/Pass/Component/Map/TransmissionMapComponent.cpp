@@ -107,7 +107,7 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		applyFloatComponent( cuT( "transmission" )
+		applyFloatComponent( cuT( "transmissionFactor" )
 			, passShaders
 			, textureConfigs
 			, textureAnims

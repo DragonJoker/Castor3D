@@ -15,7 +15,8 @@ namespace castor3d::shader
 		: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		, ambient{ getMember< "ambient" >() }
 		, diffuse{ getMember< "diffuse" >() }
-		, specular{ getMember< "specular" >() }
+		, dielectric{ getMember< "dielectric" >() }
+		, metal{ getMember< "metal" >() }
 		, scattering{ getMember< "scattering" >() }
 		, coating{ getMember< "coating" >() }
 		, sheen{ getMember< "sheen" >() }
@@ -43,33 +44,19 @@ namespace castor3d::shader
 			scattering *= attenuation;
 		}
 
-		specular *= attenuation;
+		dielectric *= attenuation;
+		metal *= attenuation;
 		coating *= attenuation;
-		sheen.x() *= attenuation;
-	}
-
-	void DirectLighting::sheenAlbedoScale( BlendComponents const & components
-		, bool withDiffuse )
-	{
-		auto & writer = *getWriter();
-		auto maxSheenColour = writer.declLocale( "maxSheenColour"
-			, max( components.sheenColour.r(), max( components.sheenColour.g(), components.sheenColour.b() ) ) );
-
-		IF( writer, maxSheenColour != 0.0_f )
-		{
-			auto albedoSheenScaling = writer.declLocale( "albedoSheenScaling"
-				, ( 1.0_f - sheen.w() * maxSheenColour ) );
-			diffuse *= albedoSheenScaling;
-			specular *= albedoSheenScaling;
-		}
-		FI
+		sheen.rgb() *= attenuation;
 	}
 
 	void DirectLighting::registerDebug( DebugOutput & debugOutput
 		, castor::String const & category )const
 	{
+		debugOutput.registerOutput( category, cuT( "Ambient" ), ambient );
 		debugOutput.registerOutput( category, cuT( "Diffuse" ), diffuse );
-		debugOutput.registerOutput( category, cuT( "Specular" ), specular );
+		debugOutput.registerOutput( category, cuT( "Dielectric BRDF" ), dielectric );
+		debugOutput.registerOutput( category, cuT( "Metal BRDF" ), metal );
 		debugOutput.registerOutput( category, cuT( "Scattering" ), scattering );
 		debugOutput.registerOutput( category, cuT( "Coating" ), coating );
 		debugOutput.registerOutput( category, cuT( "Sheen" ), sheen.xyz() );
@@ -79,7 +66,8 @@ namespace castor3d::shader
 	DirectLighting & DirectLighting::operator+=( DirectLighting const & rhs )
 	{
 		diffuse += max( vec3( 0.0_f ), rhs.diffuse );
-		specular += max( vec3( 0.0_f ), rhs.specular );
+		dielectric += max( vec3( 0.0_f ), rhs.dielectric );
+		metal += max( vec3( 0.0_f ), rhs.metal );
 		scattering += max( vec3( 0.0_f ), rhs.scattering );
 		coating += max( vec3( 0.0_f ), rhs.coating );
 		sheen += max( vec4( 0.0_f ), rhs.sheen );
@@ -90,10 +78,11 @@ namespace castor3d::shader
 	DirectLighting & DirectLighting::operator*=( sdw::Float const & rhs )
 	{
 		diffuse *= rhs;
-		specular *= rhs;
+		dielectric *= rhs;
+		metal *= rhs;
 		scattering *= rhs;
 		coating *= rhs;
-		sheen.x() = rhs;
+		sheen.rgb() *= rhs;
 
 		return *this;
 	}
@@ -101,6 +90,7 @@ namespace castor3d::shader
 	sdw::expr::ExprList DirectLighting::makeInit()
 	{
 		sdw::expr::ExprList result;
+		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
@@ -159,12 +149,11 @@ namespace castor3d::shader
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
 		: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
-		, reflDiffuse { getMember< "reflDiffuse" >() }
-		, reflSpecular { getMember< "reflSpecular" >() }
-		, reflCoating { getMember< "reflCoating" >() }
-		, reflSheen { getMember< "reflSheen" >() }
-		, refrDiffuse{ getMember< "refrDiffuse" >() }
-		, refrSpecular{ getMember< "refrSpecular" >() }
+		, diffuse{ getMember< "diffuse" >() }
+		, dielectric{ getMember< "dielectric" >() }
+		, metal{ getMember< "metal" >() }
+		, coating{ getMember< "coating" >() }
+		, sheen{ getMember< "sheen" >() }
 	{
 	}
 
@@ -178,13 +167,12 @@ namespace castor3d::shader
 	void ReflectionRefraction::registerDebug( DebugOutput & debugOutput
 		, castor::String const & category )const
 	{
-		debugOutput.registerOutput( category, cuT( "Refl. Diffuse" ), reflDiffuse );
-		debugOutput.registerOutput( category, cuT( "Refl. Specular" ), reflSpecular );
-		debugOutput.registerOutput( category, cuT( "Refl. Coating" ), reflCoating );
-		debugOutput.registerOutput( category, cuT( "Refl. Sheen" ), reflSheen.xyz() );
-		debugOutput.registerOutput( category, cuT( "Refl. Sheen Scale" ), reflSheen.w() );
-		debugOutput.registerOutput( category, cuT( "Refr. Diffuse" ), refrDiffuse );
-		debugOutput.registerOutput( category, cuT( "Refr. Specular" ), refrSpecular );
+		debugOutput.registerOutput( category, cuT( "Diffuse" ), diffuse );
+		debugOutput.registerOutput( category, cuT( "Dielectric BRDF" ), dielectric );
+		debugOutput.registerOutput( category, cuT( "Metal BRDF" ), metal );
+		debugOutput.registerOutput( category, cuT( "Coating BRDF" ), coating );
+		debugOutput.registerOutput( category, cuT( "Refl. Sheen" ), sheen.xyz() );
+		debugOutput.registerOutput( category, cuT( "Refl. Sheen Scale" ), sheen.w() );
 	}
 
 	sdw::expr::ExprList ReflectionRefraction::makeInit()
@@ -193,9 +181,8 @@ namespace castor3d::shader
 		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
+		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		result.emplace_back( sdw::makeExpr( vec4( 0.0_f ) ) );
-		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
-		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		return result;
 	}
 

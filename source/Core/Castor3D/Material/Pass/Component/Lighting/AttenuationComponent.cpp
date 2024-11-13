@@ -79,6 +79,25 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	AttenuationComponent::MaterialShader::MaterialShader()
+		: shader::PassMaterialShader{ 16u }
+	{
+	}
+
+	void AttenuationComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
+		, sdw::expr::ExprList & inits )const
+	{
+		if ( !type.hasMember( "attenuationColour" ) )
+		{
+			type.declMember( "attenuationColour", ast::type::Kind::eVec3F );
+			type.declMember( "attenuationDistance", ast::type::Kind::eFloat );
+			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ AttenuationComponent::DefaultComponent } ) ) );
+			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	void AttenuationComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
@@ -128,31 +147,10 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		if ( !res.hasMember( "attenuationColour" ) )
+		if ( res.hasMember( "attenuationColour" ) )
 		{
-			return;
-		}
-
-		res.getMember< sdw::Vec3 >( "attenuationColour", true ) += src.getMember< sdw::Vec3 >( "attenuationColour", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "attenuationDistance", true ) += src.getMember< sdw::Float >( "attenuationDistance", true ) * passMultiplier;
-	}
-
-	//*********************************************************************************************
-
-	AttenuationComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ 16u }
-	{
-	}
-
-	void AttenuationComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
-		, sdw::expr::ExprList & inits )const
-	{
-		if ( !type.hasMember( "attenuationColour" ) )
-		{
-			type.declMember( "attenuationColour", ast::type::Kind::eVec3F );
-			type.declMember( "attenuationDistance", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ AttenuationComponent::DefaultComponent } ) ) );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			res.attenuationColour += src.attenuationColour * passMultiplier;
+			res.attenuationDistance += src.attenuationDistance * passMultiplier;
 		}
 	}
 
@@ -180,7 +178,7 @@ namespace castor3d
 		auto data = buffer.getData( pass.getId() );
 		VkDeviceSize offset{};
 		offset += data.write( materialShader.getMaterialChunk(), AttenuationComponent::DefaultColour, offset );
-		offset += data.write( materialShader.getMaterialChunk(), AttenuationComponent::DefaultDistance, offset );
+		data.write( materialShader.getMaterialChunk(), AttenuationComponent::DefaultDistance, offset );
 	}
 
 	bool AttenuationComponent::Plugin::isComponentNeeded( TextureCombine const & textures

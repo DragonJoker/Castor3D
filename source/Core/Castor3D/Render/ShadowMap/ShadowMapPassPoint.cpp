@@ -346,10 +346,10 @@ namespace castor3d
 						, light.position() - in.worldPosition.xyz() );
 					auto distance = writer.declLocale( "distance"
 						, length( lightToVertex ) );
-					auto attenuation = writer.declLocale( "attenuation", 1.0_f );
-					light.getAttenuationFactor( distance, attenuation );
-					components.colour *= in.colour;
-					out.flux.rgb() = ( components.colour
+					auto attenuation = writer.declLocale( "attenuation"
+						, light.getAttenuationFactor( distance ) );
+					components.baseColour *= in.colour;
+					out.flux.rgb() = ( components.baseColour
 							* light.base().colour()
 							* light.base().intensity().x()
 							* clamp( dot( lightToVertex / distance, components.getRawNormal() ), 0.0_f, 1.0_f ) )

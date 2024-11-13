@@ -108,7 +108,7 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		applyVec3Component( cuT( "colour" )
+		applyVec3Component( cuT( "baseColour" )
 			, passShaders
 			, textureConfigs
 			, textureAnims

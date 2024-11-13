@@ -123,7 +123,6 @@ namespace castor3d
 			, material.getMember< sdw::UInt >( textureName ) >> 16u );
 		auto mask = writer.declLocale( mbMapName + "Mask"
 			, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
-		auto value = components.getMember< sdw::Float >( mbValueName );
 		auto roughnessMode = components.getMember< sdw::UInt32 >( "roughnessMode" );
 
 		auto config = writer.declLocale( mbValueName + "Config"
@@ -139,12 +138,12 @@ namespace castor3d
 
 		IF( writer, roughnessMode != 0_u )
 		{
-			auto gloss = 1.0_f - value;
-			value = 1.0_f - ( gloss * shader::TextureConfigData::getFloat( sampled, mask ) );
+			auto gloss = 1.0_f - components.perceptualRoughness;
+			components.perceptualRoughness = 1.0_f - ( gloss * shader::TextureConfigData::getFloat( sampled, mask ) );
 		}
 		ELSE
 		{
-			value *= shader::TextureConfigData::getFloat( sampled, mask );
+			components.perceptualRoughness *= shader::TextureConfigData::getFloat( sampled, mask );
 		}
 		FI;
 	}

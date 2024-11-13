@@ -112,6 +112,11 @@ See LICENSE file in root folder
 #define CU_ParsingWarning( warning )\
 	context.preprocessed->parseWarning( warning )
 
+	//!\~english	Define to ease the call to FileParser::parseWarning.
+	//!\~french		Un define pour faciliter l'appel de FileParser::parseWarning.
+#define CU_ParsingDeprecated()\
+	context.preprocessed->parseWarning( "This directive is deprecated" )
+
 	//!\~english	Define to ease creation of a section name.
 	//!\~french		Un define pour faciliter la création d'un nom de section.
 #define CU_MakeSectionName( a, b, c, d )\

@@ -243,6 +243,7 @@ namespace CastorViewer
 		if ( m_currentNode )
 		{
 			m_currentState = &doAddNodeState( m_currentNode, cameraNode );
+			doUpdateSpeed();
 		}
 		else if ( m_camera )
 		{
@@ -794,6 +795,7 @@ namespace CastorViewer
 				{
 					m_currentNode = m_lightsNode;
 					m_currentState = &doAddNodeState( m_currentNode, false );
+					doUpdateSpeed();
 				}
 				break;
 
@@ -903,6 +905,8 @@ namespace CastorViewer
 						m_3dController->setCamera( camera );
 						m_3dController->setSpeedFactor( m_currentState->getMaxSpeed() );
 					}
+
+					doUpdateSpeed();
 				}
 				break;
 

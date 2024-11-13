@@ -64,219 +64,82 @@ namespace castor3d::shader
 
 	void LightingModel::finish( PassShaders const & passShaders
 		, DerivSurfaceBase const & surface
-		, Utils & utils
-		, sdw::Vec3 const worldEye
+		, CameraData const & camera
+		, ModelData const & model
 		, BlendComponents & components )
 	{
 		components.finish( passShaders
 			, surface
-			, utils
-			, worldEye );
+			, camera
+			, model
+			, m_utils );
 		doFinish( passShaders
 			, components );
 	}
 
 	sdw::Vec3 LightingModel::combine( DebugOutput & debugOutput
+		, ReflectionModel & reflections
+		, sdw::CombinedImage2DRgba32 const & brdf
 		, BlendComponents const & components
 		, LightSurface const & lightSurface
 		, sdw::Vec3 const & incident
-		, DirectLighting directLighting
-		, IndirectLighting indirectLighting
+		, DirectLighting const & directLighting
+		, IndirectLighting const & indirectLighting
 		, sdw::Float const & ambientOcclusion
-		, sdw::Vec3 const & emissive
-		, ReflectionRefraction reflRefr )
+		, ReflectionRefraction const & reflRefr )
 	{
-		auto maxSheenColour = m_writer.declLocale( "maxSheenColour"
-			, max( max( components.sheenColour.r(), components.sheenColour.g() ), components.sheenColour.b() ) );
+		auto backgroundResult = m_writer.declLocale( "backgroundResult"
+			, mix( reflRefr.dielectric, reflRefr.metal, vec3( components.metalness ) ) );
+		debugOutput.registerOutput( "Combine", "Background Result", backgroundResult );
 
-		IF( m_writer, maxSheenColour != 0.0_f )
+		auto lightingResult = m_writer.declLocale( "lightingResult"
+			, mix( directLighting.dielectric, directLighting.metal, vec3( components.metalness ) ) );
+		debugOutput.registerOutput( "Combine", "Lighting Result", lightingResult );
+
+		if ( components.sheenColour )
 		{
-			auto albedoSheenScaling = m_writer.declLocale( "albedoSheenScaling"
-				, 1.0_f - reflRefr.reflSheen.w() * maxSheenColour );
-			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Albedo Sheen Scaling" ), albedoSheenScaling );
-			reflRefr.reflDiffuse *= albedoSheenScaling;
-			reflRefr.reflSpecular *= albedoSheenScaling;
-		}
-		ELSE
-		{
-			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Albedo Sheen Scaling" ), 1.0_f );
-		}
-		FI
+			auto bgSheen = m_writer.declLocale( "bgSheen"
+				, reflRefr.sheen.rgb() );
+			debugOutput.registerOutput( "Combine", "Background Sheen", bgSheen );
+			auto bgAlbedoSheenScaling = m_writer.declLocale( "bgAlbedoSheenScaling"
+				, 1.0_f - reflRefr.sheen.w() * Utils::max3( components.sheenColour ) );
+			debugOutput.registerOutput( "Combine", "Background Albedo Sheen Scaling", bgAlbedoSheenScaling );
+			backgroundResult = bgSheen + backgroundResult * bgAlbedoSheenScaling;
+			debugOutput.registerOutput( "Combine", "Background With Sheen", backgroundResult );
 
-		auto combineResult = combine( debugOutput
-			, components
-			, lightSurface
-			, incident
-			, directLighting
-			, std::move( indirectLighting )
-			, ambientOcclusion
-			, emissive
-			, castor::move( reflRefr.reflDiffuse )
-			, castor::move( reflRefr.reflSpecular )
-			, castor::move( reflRefr.refrDiffuse )
-			, castor::move( reflRefr.refrSpecular ) );
-
-		IF( m_writer, !all( components.sheenColour == vec3( 0.0_f ) ) )
-		{
-			combineResult += directLighting.sheen.xyz();
-			combineResult += ( reflRefr.reflSheen.xyz() * ambientOcclusion );
-		}
-		FI
-
-		IF( m_writer, components.clearcoatFactor != 0.0_f )
-		{
-			auto clearcoatNdotV = m_writer.declLocale( "clearcoatNdotV"
-				, max( dot( components.clearcoatNormal, -incident ), 0.0_f ) );
-			auto clearcoatFresnel = m_writer.declLocale( "clearcoatFresnel"
-				, pow( 0.04_f + ( 1.0_f - 0.04_f ) * ( 1.0_f - clearcoatNdotV ), 5.0_f ) );
-			combineResult = combineResult * ( 1.0_f - vec3( components.clearcoatFactor * clearcoatFresnel ) )
-				+ ( reflRefr.reflCoating * ambientOcclusion ) + directLighting.coating;
-		}
-		FI
-
-		return combineResult + directLighting.scattering;
-	}
-
-	sdw::Vec3 LightingModel::combine( DebugOutput & debugOutput
-		, BlendComponents const & components
-		, LightSurface const & lightSurface
-		, sdw::Vec3 const & incident
-		, DirectLighting directLighting
-		, IndirectLighting indirectLighting
-		, sdw::Float const & ambientOcclusion
-		, sdw::Vec3 const & emissive
-		, sdw::Vec3 reflectedDiffuse
-		, sdw::Vec3 reflectedSpecular
-		, sdw::Vec3 refractedDiffuse
-		, sdw::Vec3 refractedSpecular )
-	{
-		auto fresnelFactor = m_writer.hasVariable( "fresnelFactor", true )
-			? m_writer.getVariable< sdw::Float >( "fresnelFactor"
-				, ( components.hasMember( "specularFactor" )
-					|| components.hasMember( "refractionRatio" )
-					|| components.hasMember( "hasRefraction" )
-					|| components.hasMember( "hasTransmission" ) ) )
-			: m_writer.declLocale( "fresnelFactor"
-				, m_utils.fresnelMix( incident
-					, components.getRawNormal()
-					, components.refractionRatio )
-				, ( components.hasMember( "specularFactor" )
-					|| components.hasMember( "refractionRatio" )
-					|| components.hasMember( "hasRefraction" )
-					|| components.hasMember( "hasTransmission" ) ) );
-
-		if ( fresnelFactor.isEnabled() )
-		{
-			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Fresnel Factor" ), fresnelFactor );
-
-			IF( m_writer, components.refractionRatio != 0.0_f
-				&& components.hasRefraction != 0_u
-				&& components.hasTransmission == 0_u )
-			{
-				reflectedDiffuse = mix( vec3( 0.0_f )
-					, reflectedDiffuse
-					, vec3( fresnelFactor ) );
-				reflectedSpecular = mix( vec3( 0.0_f )
-					, reflectedSpecular
-					, vec3( fresnelFactor ) );
-				refractedSpecular = mix( refractedSpecular
-					, vec3( 0.0_f )
-					, vec3( fresnelFactor ) );
-				refractedDiffuse = mix( refractedDiffuse
-					, vec3( 0.0_f )
-					, vec3( fresnelFactor ) );
-			}
-			FI
+			auto ltSheen = m_writer.declLocale( "ltSheen"
+				, directLighting.sheen.rgb() );
+			debugOutput.registerOutput( "Combine", "Lighting Sheen", ltSheen );
+			auto ltAlbedoSheenScaling = m_writer.declLocale( "ltAlbedoSheenScaling"
+				, 1.0_f - directLighting.sheen.w() * Utils::max3( components.sheenColour ) );
+			debugOutput.registerOutput( "Combine", "Lighting Albedo Sheen Scaling", ltAlbedoSheenScaling );
+			lightingResult = bgSheen + lightingResult * ltAlbedoSheenScaling;
+			debugOutput.registerOutput( "Combine", "Lighting With Sheen", lightingResult );
 		}
 
-		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Final Ambient" ), directLighting.ambient );
-		 // Fresnel already included in both diffuse and specular.
-		auto diffuseResult = m_writer.declLocale( "c3d_diffuseResult"
-			, doGetDiffuseResult( components
-				, directLighting, indirectLighting
-				, ambientOcclusion
-				, reflectedDiffuse ) );
-		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Diffuse Result" ), diffuseResult );
-		auto specularResult = m_writer.declLocale( "c3d_specularResult"
-			, doGetSpecularResult( components
-				, directLighting, indirectLighting
-				, ambientOcclusion
-				, reflectedSpecular ) );
-		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Specular Result" ), specularResult );
+		auto clearcoatFresnel = components.getMember( "clearcoatFresnel", vec3( 0.0_f ) );
 
-		auto diffuseTransmission = m_writer.declLocale( "c3d_diffuseTransmission"
-			, components.getMember( "diffuseTransmissionFactor", 0.0_f ) );
-		auto diffuseTransmissionColour = m_writer.declLocale( "c3d_diffuseTransmissionColour"
-			, components.getMember( "diffuseTransmissionColour", vec3( 1.0_f ) ) );
-		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Diffuse Transmission Factor" ), diffuseTransmission );
-		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Diffuse Transmission Color" ), diffuseTransmissionColour );
-
-		IF( m_writer, diffuseTransmission != 0.0_f )
+		if ( components.clearcoatFactor )
 		{
-			lightSurface.updateN( -lightSurface.N() );
-			auto diffuseBtdf = m_writer.declLocale( "c3d_diffuseBtdf"
-				, refractedDiffuse * diffuseTransmissionColour );
-			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Raw Diffuse BTDF" ), diffuseBtdf );
+			debugOutput.registerOutput( "Combine", "Clearcoat Fresnel", clearcoatFresnel );
 
-			IF( m_writer, components.thicknessFactor != 0.0_f )
-			{
-				diffuseBtdf *= ReflectionModel::applyVolumeAttenuation( components.thicknessFactor, components.attenuationColour, components.attenuationDistance );
-			}
-			FI
+			backgroundResult = mix( backgroundResult, reflRefr.coating, components.clearcoatFactor * clearcoatFresnel );
+			debugOutput.registerOutput( "Combine", "Background With Clearcoat", backgroundResult );
 
-			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Attenuated Diffuse BTDF" ), diffuseBtdf );
-			diffuseResult = mix( diffuseResult, diffuseBtdf, vec3( diffuseTransmission ) );
-		}
-		ELSE
-		{
-			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Raw Diffuse BTDF" ), 0.0_f );
-			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Attenuated Diffuse BTDF" ), 0.0_f );
-		}
-		FI
-
-		IF( m_writer, components.hasTransmission )
-		{
-			if ( components.hasMember( "metalness" ) )
-			{
-				refractedSpecular *= 1.0_f - components.metalness;
-			}
-
-			auto specularBtdf = m_writer.declLocale( "c3d_specularBtdf"
-				, refractedSpecular );
-			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Specular BTDF" ), specularBtdf );
-
-			diffuseResult = mix( diffuseResult, specularBtdf, vec3( components.transmission ) );
-			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Transmission" ), components.transmission );
-			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Transmission Result" ), diffuseResult );
-		}
-		ELSE
-		{
-			diffuseResult += refractedSpecular;
-			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Specular BTDF" ), 0.0_f );
-			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Transmission" ), 0.0_f );
-			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Transmission Result" ), 0.0_f );
-		}
-		FI
-
-		if ( components.hasMember( "specularFactor" ) )
-		{
-			auto specularFactor = m_writer.declLocale( "c3d_specularFactor"
-				, clamp( components.getMember< sdw::Float >( "specularFactor" ), 0.0_f, 1.0_f ) );
-			specularResult *= specularFactor * fresnelFactor;
-			diffuseResult *= 1.0_f - specularFactor * fresnelFactor;
-			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Specular Factor" ), specularFactor );
-		}
-		else
-		{
-			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Specular Factor" ), 0.0_f );
+			lightingResult = mix( lightingResult, directLighting.coating, components.clearcoatFactor * clearcoatFresnel );
+			debugOutput.registerOutput( "Combine", "Lighting With Clearcoat", lightingResult );
 		}
 
-		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Final Specular" ), specularResult );
-		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Final Diffuse" ), diffuseResult );
-		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Emissive" ), emissive );
-		auto combineResult = m_writer.declLocale( "c3d_combineResult"
-			, emissive + specularResult + diffuseResult );
-		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Combine Result" ), combineResult );
+		auto emissiveResult = m_writer.declLocale( "emissiveResult"
+			, ( components.emissiveColour
+				* components.emissiveFactor
+				* ( 1.0_f - components.clearcoatFactor * clearcoatFresnel ) ) );
+		debugOutput.registerOutput( "Combine", "Emissive Result", emissiveResult );
+
+		auto combineResult = m_writer.declLocale( "combineResult"
+			, backgroundResult * ambientOcclusion
+			+ lightingResult
+			+ emissiveResult );
 		return combineResult;
 	}
 
@@ -302,13 +165,11 @@ namespace castor3d::shader
 						, DirectLighting{ m_writer } );
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
-					lightSurface.updateLAndF( m_utils
-						, derivVec3( -light.direction() )
-						, components.f0
-						, components );
+					lightSurface.updateL( derivVec3( -light.direction() ) );
 					doComputeLight( light.base()
 						, components
 						, lightSurface
+						, 1.0_f
 						, radiance
 						, output );
 					auto shadows = m_writer.declLocale( "shadows"
@@ -353,7 +214,6 @@ namespace castor3d::shader
 						, components
 						, lightSurface
 						, output.scattering );
-					output.sheenAlbedoScale( components );
 					parentOutput += output;
 				}
 				, PDirectionalLight( m_writer, "light" )
@@ -390,17 +250,13 @@ namespace castor3d::shader
 						, DirectLighting{ m_writer } );
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
-					lightSurface.updateLAndF( m_utils
-						, derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() )
-						, components.f0
-						, components );
+					lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
 					doComputeLight( light.base()
 						, components
 						, lightSurface
+						, light.getAttenuationFactor( lightSurface.lengthL().value() )
 						, radiance
 						, output );
-					auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
-					light.getAttenuationFactor( lightSurface.lengthL().value(), attenuation );
 
 					if ( m_shadowModel.isEnabled() )
 					{
@@ -418,7 +274,7 @@ namespace castor3d::shader
 								&& ( receivesShadows != 0_u )
 								&& ( sssProfileIndex != 0_u ) )
 							{
-								parentOutput.diffuse += ( output.diffuse * attenuation )
+								output.diffuse += output.diffuse
 									* m_lights.computeSssTransmittance( debugOutput
 										, components
 										, light
@@ -437,8 +293,6 @@ namespace castor3d::shader
 							, output );
 					}
 
-					output.attenuate( attenuation, true );
-					output.sheenAlbedoScale( components );
 					parentOutput += output;
 				}
 				, PPointLight( m_writer, "light" )
@@ -471,10 +325,7 @@ namespace castor3d::shader
 					, sdw::UInt const & receivesShadows
 					, DirectLighting parentOutput )
 				{
-					lightSurface.updateLAndF( m_utils
-						, derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() )
-						, components.f0
-						, components );
+					lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
 						, dot( lightSurface.L().value(), light.direction() ) );
 
@@ -484,15 +335,13 @@ namespace castor3d::shader
 							, DirectLighting{ m_writer } );
 						auto radiance = m_writer.declLocale( "radiance"
 							, vec3( 0.0_f ) );
+						spotFactor = clamp( ( spotFactor - light.outerCutOffCos() ) / light.cutOffsCosDiff(), 0.0_f, 1.0_f );
 						doComputeLight( light.base()
 							, components
 							, lightSurface
+							, spotFactor * light.getAttenuationFactor( lightSurface.lengthL().value() )
 							, radiance
 							, output );
-						spotFactor = clamp( ( spotFactor - light.outerCutOffCos() ) / light.cutOffsCosDiff(), 0.0_f, 1.0_f );
-						output *= spotFactor;
-						auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
-						light.getAttenuationFactor( lightSurface.lengthL().value(), attenuation );
 
 						if ( m_shadowModel.isEnabled() )
 						{
@@ -510,7 +359,7 @@ namespace castor3d::shader
 									&& ( receivesShadows != 0_u )
 									&& ( sssProfileIndex != 0_u ) )
 								{
-									parentOutput.diffuse += ( output.diffuse * attenuation )
+									output.diffuse += output.diffuse
 										* m_lights.computeSssTransmittance( debugOutput
 											, components
 											, light
@@ -529,8 +378,6 @@ namespace castor3d::shader
 								, output );
 						}
 
-						output.attenuate( attenuation, true );
-						output.sheenAlbedoScale( components );
 						parentOutput += output;
 					}
 					FI
@@ -571,6 +418,7 @@ namespace castor3d::shader
 					auto diffuse = doComputeLightDiffuse( light.base()
 						, components
 						, lightSurface
+						, 1.0_f
 						, radiance );
 
 					if ( m_shadowModel.isEnabled() )
@@ -641,9 +489,8 @@ namespace castor3d::shader
 					auto diffuse = doComputeLightDiffuse( light.base()
 						, components
 						, lightSurface
-						, radiance );
-					auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
-					light.getAttenuationFactor( lightSurface.lengthL().value(), attenuation );
+						, light.getAttenuationFactor( lightSurface.lengthL().value() )
+						, radiance);
 
 					if ( m_shadowModel.isEnabled() )
 					{
@@ -661,7 +508,7 @@ namespace castor3d::shader
 								&& ( receivesShadows != 0_u )
 								&& ( sssProfileIndex != 0_u ) )
 							{
-								diffuse += ( diffuse * attenuation )
+								diffuse += diffuse
 									* m_lights.computeSssTransmittance( debugOutput
 										, components
 										, light
@@ -680,7 +527,6 @@ namespace castor3d::shader
 							, diffuse );
 					}
 
-					diffuse *= attenuation;
 					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
 				}
 				, InOutPointLight( m_writer, "light" )
@@ -719,14 +565,12 @@ namespace castor3d::shader
 					{
 						auto radiance = m_writer.declLocale( "radiance"
 							, vec3( 0.0_f ) );
+						spotFactor = clamp( ( spotFactor - light.outerCutOffCos() ) / light.cutOffsCosDiff(), 0.0_f, 1.0_f );
 						diffuse = doComputeLightDiffuse( light.base()
 							, components
 							, lightSurface
+							, spotFactor * light.getAttenuationFactor( lightSurface.lengthL().value() )
 							, radiance );
-						spotFactor = clamp( ( spotFactor - light.outerCutOffCos() ) / light.cutOffsCosDiff(), 0.0_f, 1.0_f );
-						diffuse = spotFactor * diffuse;
-						auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
-						light.getAttenuationFactor( lightSurface.lengthL().value(), attenuation );
 
 						if ( m_shadowModel.isEnabled() )
 						{
@@ -744,7 +588,7 @@ namespace castor3d::shader
 									&& ( receivesShadows != 0_u )
 									&& ( sssProfileIndex != 0_u ) )
 								{
-									diffuse += ( diffuse * attenuation )
+									diffuse += diffuse
 										* m_lights.computeSssTransmittance( debugOutput
 											, components
 											, light
@@ -763,7 +607,6 @@ namespace castor3d::shader
 								, diffuse );
 						}
 
-						diffuse *= attenuation;
 						diffuse = max( vec3( 0.0_f ), diffuse );
 					}
 					FI;
@@ -804,13 +647,11 @@ namespace castor3d::shader
 						, DirectLighting{ m_writer } );
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
-					lightSurface.updateLAndF( m_utils
-						, derivVec3( -light.direction() )
-						, components.f0
-						, components );
+					lightSurface.updateL( derivVec3( -light.direction() ) );
 					doComputeLightAllButDiffuse( light.base()
 						, components
 						, lightSurface
+						, 1.0_f
 						, radiance
 						, output );
 					auto shadows = m_writer.declLocale( "shadows"
@@ -829,11 +670,12 @@ namespace castor3d::shader
 								&& ( receivesShadows != 0_u )
 								&& ( sssProfileIndex != 0_u ) )
 							{
-								parentOutput.diffuse += m_lights.computeSssTransmittance(debugOutput
-									, components
-									, light
-									, shadows
-									, lightSurface );
+								output.diffuse += output.diffuse
+									* m_lights.computeSssTransmittance(debugOutput
+										, components
+										, light
+										, shadows
+										, lightSurface );
 							}
 							FI
 						}
@@ -855,7 +697,6 @@ namespace castor3d::shader
 						, components
 						, lightSurface
 						, output.scattering );
-					output.sheenAlbedoScale( components, false );
 					parentOutput += output;
 				}
 				, PDirectionalLight( m_writer, "light" )
@@ -892,17 +733,13 @@ namespace castor3d::shader
 						, DirectLighting{ m_writer } );
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
-					lightSurface.updateLAndF( m_utils
-						, derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() )
-						, components.f0
-						, components );
+					lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
 					doComputeLightAllButDiffuse( light.base()
 						, components
 						, lightSurface
+						, light.getAttenuationFactor( lightSurface.lengthL().value() )
 						, radiance
 						, output );
-					auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
-					light.getAttenuationFactor( lightSurface.lengthL().value(), attenuation );
 
 					if ( m_shadowModel.isEnabled() )
 					{
@@ -920,7 +757,7 @@ namespace castor3d::shader
 								&& ( receivesShadows != 0_u )
 								&& ( sssProfileIndex != 0_u ) )
 							{
-								parentOutput.diffuse += attenuation
+								output.diffuse += output.diffuse
 									* m_lights.computeSssTransmittance( debugOutput
 										, components
 										, light
@@ -940,8 +777,6 @@ namespace castor3d::shader
 							, false );
 					}
 
-					output.attenuate( attenuation, true, false );
-					output.sheenAlbedoScale( components, false );
 					parentOutput += output;
 				}
 				, PPointLight( m_writer, "light" )
@@ -974,10 +809,7 @@ namespace castor3d::shader
 					, sdw::UInt const & receivesShadows
 					, DirectLighting parentOutput )
 				{
-					lightSurface.updateLAndF( m_utils
-						, derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() )
-						, components.f0
-						, components );
+					lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
 						, dot( lightSurface.L().value(), light.direction() ) );
 
@@ -987,15 +819,13 @@ namespace castor3d::shader
 							, DirectLighting{ m_writer } );
 						auto radiance = m_writer.declLocale( "radiance"
 							, vec3( 0.0_f ) );
+						spotFactor = clamp( ( spotFactor - light.outerCutOffCos() ) / light.cutOffsCosDiff(), 0.0_f, 1.0_f );
 						doComputeLightAllButDiffuse( light.base()
 							, components
 							, lightSurface
+							, spotFactor * light.getAttenuationFactor( lightSurface.lengthL().value() )
 							, radiance
 							, output );
-						spotFactor = clamp( ( spotFactor - light.outerCutOffCos() ) / light.cutOffsCosDiff(), 0.0_f, 1.0_f );
-						output *= spotFactor;
-						auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
-						light.getAttenuationFactor( lightSurface.lengthL().value(), attenuation );
 
 						if ( m_shadowModel.isEnabled() )
 						{
@@ -1013,7 +843,7 @@ namespace castor3d::shader
 									&& ( receivesShadows != 0_u )
 									&& ( sssProfileIndex != 0_u ) )
 								{
-									parentOutput.diffuse += attenuation
+									output.diffuse += output.diffuse
 										* m_lights.computeSssTransmittance( debugOutput
 											, components
 											, light
@@ -1033,8 +863,6 @@ namespace castor3d::shader
 								, false );
 						}
 
-						output.attenuate( attenuation, true, false );
-						output.sheenAlbedoScale( components, false );
 						parentOutput += output;
 					}
 					FI
@@ -1377,66 +1205,45 @@ namespace castor3d::shader
 	void LightingModel::doComputeLight( Light light
 		, BlendComponents const & components
 		, LightSurface const & lightSurface
+		, sdw::Float const & attenuation
 		, sdw::Vec3 & radiance
 		, DirectLighting & output )
 	{
 		radiance = doComputeRadiance( light, lightSurface.L().value() );
 		doInitLightSpecifics( lightSurface, components );
+		auto lightIntensity = m_writer.declLocale( "lightIntensity"
+			, radiance * attenuation * light.intensity().x() );
 		output.diffuse = doGetNdotL( lightSurface, components ).value()
+			* attenuation
 			* m_diffuse->compute( components
 				, lightSurface
-				, radiance
-				, light.intensity().x()
+				, lightIntensity
 				, doGetNdotL( lightSurface, components ).value() );
-		output.specular = doGetNdotL( lightSurface, components ).value()
-			* m_specular->compute( components
-				, lightSurface
-				, radiance
-				, light.intensity().y()
-				, doGetNdotL( lightSurface, components ).value()
-				, doGetNdotH( lightSurface, components ).value() );
 
-		if ( m_sheen )
-		{
-			IF( m_writer, !all( components.sheenColour == vec3( 0.0_f ) ) )
-			{
-				output.sheen = m_sheen->compute( m_utils
-					, components
-					, lightSurface
-					, doGetNdotL( lightSurface, components ).value()
-					, doGetNdotH( lightSurface, components ).value() );
-			}
-			FI
-		}
-
-		auto diffuseTransmissionFactor = m_writer.declLocale( "diffuseTransmissionFactor"
-			, components.getMember( "diffuseTransmissionFactor", 0.0_f ) );
-
-		IF( m_writer, diffuseTransmissionFactor != 0.0_f )
+		if( components.hasMember( "diffuseTransmissionFactor" ) )
 		{
 			lightSurface.updateN( -lightSurface.N() );
 			auto diffuseBtdf = m_writer.declLocale( "diffuseBtdf"
 				, doGetNdotL( lightSurface, components ).value()
+					* lightIntensity
 					* m_diffuse->compute( components
 						, lightSurface
-						, components.getMember( "diffusionTransmissionColour", vec3( 1.0_f ) )
-						, light.intensity().x()
+						, components.diffuseTransmissionColour * light.intensity().x()
 						, doGetNdotL( lightSurface, components ).value() ) );
 
-			IF( m_writer, components.thicknessFactor != 0.0_f )
+			if( components.hasMember( "thicknessFactor" )
+				&& components.hasMember( "attenuationDistance" ) )
 			{
-				diffuseBtdf *= ReflectionModel::applyVolumeAttenuation( components.thicknessFactor, components.attenuationColour, components.attenuationDistance );
+				diffuseBtdf *= ReflectionModel::applyVolumeAttenuation( components.thicknessFactor
+					, components.attenuationColour
+					, components.attenuationDistance );
 			}
-			FI
 
-			output.diffuse = mix( output.diffuse, diffuseBtdf, vec3( diffuseTransmissionFactor ) );
+			output.diffuse = mix( output.diffuse, diffuseBtdf, vec3( components.diffuseTransmissionFactor ) );
 			lightSurface.updateN( -lightSurface.N() );
 		}
-		FI
 
-		IF( m_writer, components.hasTransmission != 0_u
-			&& components.thicknessFactor != 0.0_f
-			&& components.refractionRatio != 0.0_f )
+		if ( components.hasMember( "transmissionFactor" ) )
 		{
 			// If the light ray travels through the geometry, use the point it exits the geometry again.
 			// That will change the angle to the light source, if the material refracts the light ray.
@@ -1444,32 +1251,76 @@ namespace castor3d::shader
 				, ReflectionModel::getVolumeTransmissionRay( lightSurface.N().value()
 					, lightSurface.V().value()
 					, components.thicknessFactor
-					, components.refractionRatio ) );
+					, components.ior ) );
 			lightSurface.updateL( lightSurface.vertexToLight() - transmissionRay );
 
 			auto transmittedLight = m_writer.declLocale( "transmittedLight"
-				, light.intensity().x() * doComputeLightTransmission( components, lightSurface ) );
-			transmittedLight *= ReflectionModel::applyVolumeAttenuation( length( transmissionRay ), components.attenuationColour, components.attenuationDistance );
+				, lightIntensity * doComputeLightTransmission( components, lightSurface ) );
 
-			output.diffuse = mix( output.diffuse, transmittedLight, vec3( components.transmission ) );
+			if ( components.hasMember( "thicknessFactor" )
+				&& components.hasMember( "attenuationDistance" ) )
+			{
+				transmittedLight *= ReflectionModel::applyVolumeAttenuation( length( transmissionRay )
+					, components.attenuationColour
+					, components.attenuationDistance );
+			}
+
+			output.diffuse = mix( output.diffuse, transmittedLight, vec3( components.transmissionFactor ) );
 
 			lightSurface.updateL( lightSurface.vertexToLight() + transmissionRay );
 		}
-		FI
 
-		if ( m_clearcoat )
+		lightIntensity = radiance * attenuation * light.intensity().y();
+		auto specular = m_writer.declLocale( "specular"
+				, doGetNdotL( lightSurface, components ).value()
+					* lightIntensity
+					* m_specular->compute( components
+						, lightSurface.N().value()
+						, lightSurface.L().value()
+						, lightSurface.H().value()
+						, lightSurface.V().value()
+						, doGetNdotL( lightSurface, components ).value()
+						, doGetNdotH( lightSurface, components ).value() ) );
+		auto dielectricFresnel = m_writer.declLocale( "dielectricFresnel"
+			, m_utils.conductorFresnel( abs( lightSurface.HdotV().value() ), components.dielectricF90, components.dielectricF0 * components.specularWeight ) );
+		auto metalFresnel = m_writer.declLocale( "metalFresnel"
+			, m_utils.conductorFresnel( abs( lightSurface.HdotV().value() ), components.baseColour, vec3( 1.0_f ) ) );
+		output.metal = metalFresnel * specular;
+		output.dielectric = mix( output.diffuse, specular, dielectricFresnel );
+
+		if ( components.hasMember( "iridescenceFactor" ) )
 		{
-			IF( m_writer, components.clearcoatFactor != 0.0_f )
-			{
-				lightSurface.updateN( derivVec3( components.clearcoatNormal ) );
-				output.coating = m_clearcoat->compute( components
-					, lightSurface
-					, radiance
-					, light.intensity().y()
+			output.metal = mix( output.metal
+				, specular * components.getMember< sdw::Vec3 >( "iridescenceMetallicFresnel" )
+				, vec3( components.iridescenceFactor ) );
+			output.dielectric = mix( output.dielectric
+				, Utils::rgbMix( output.diffuse, specular, components.getMember< sdw::Vec3 >( "iridescenceDielectricFresnel" ) )
+				, vec3( components.iridescenceFactor ) );
+		}
+
+		if ( m_clearcoat
+			&& components.hasMember( "clearcoatFactor" ) )
+		{
+			lightSurface.updateN( derivVec3( components.clearcoatNormal ) );
+			output.coating = lightIntensity
+				* m_clearcoat->compute( components
+					, lightSurface.N().value()
+					, lightSurface.L().value()
+					, lightSurface.H().value()
+					, lightSurface.V().value()
 					, doGetNdotL( lightSurface, components ).value()
 					, doGetNdotH( lightSurface, components ).value() );
-			}
-			FI
+		}
+
+		if ( m_sheen
+			&& components.hasMember( "sheenColour" ) )
+		{
+			output.sheen = m_sheen->compute( m_utils
+				, components
+				, lightSurface
+				, doGetNdotL( lightSurface, components ).value()
+				, doGetNdotH( lightSurface, components ).value() );
+			output.sheen.xyz() *= doGetNdotL( lightSurface, components ).value() * lightIntensity;
 		}
 	}
 	
@@ -1477,8 +1328,7 @@ namespace castor3d::shader
 		, LightSurface const & lightSurface )
 	{
 		auto transmissionRougness = m_writer.declLocale( "transmissionRougness"
-			, ReflectionModel::applyIorToRoughness( components.roughness * components.roughness
-				, components.refractionRatio ) );
+			, ReflectionModel::applyIorToRoughness( components.alphaRoughness, components.ior ) );
 		// Mirror light reflection vector on surface
 		auto mirrorL = m_writer.declLocale( "mirrorL"
 			, normalize( lightSurface.L().value() + 2.0_f * lightSurface.N().value() * dot( -lightSurface.L().value(), lightSurface.N().value() ) ) );
@@ -1491,7 +1341,7 @@ namespace castor3d::shader
 				, transmissionRougness ) );
 		auto F = m_writer.declLocale( "F"
 			, m_utils.conductorFresnel( clamp( dot( lightSurface.V().value(), mirrorH ), 0.0_f, 1.0_f )
-				, components.f0
+				, components.dielectricF0
 				, components.f90 ) );
 		auto Vis = m_writer.declLocale( "Vis"
 			, m_brdfHelpers.visibilitySmithGGXCorrelated( clamp( dot( lightSurface.N().value(), lightSurface.V().value() ), 0.0_f, 1.0_f )
@@ -1499,12 +1349,13 @@ namespace castor3d::shader
 				, transmissionRougness ) );
 
 		// Transmission BTDF
-		return ( 1.0_f - F ) * components.colour * D * Vis;
+		return ( 1.0_f - F ) * components.baseColour * D * Vis;
 	}
 	
 	sdw::Vec3 LightingModel::doComputeLightDiffuse( Light light
 		, BlendComponents const & components
 		, LightSurface const & lightSurface
+		, sdw::Float const & attenuation
 		, sdw::Vec3 & radiance )
 	{
 		auto result = m_writer.declLocale( "result", vec3( 0.0_f ) );
@@ -1513,8 +1364,7 @@ namespace castor3d::shader
 		result = doGetNdotL( lightSurface, components ).value()
 			* m_diffuse->compute( components
 				, lightSurface
-				, radiance
-				, light.intensity().x()
+				, radiance * attenuation * light.intensity().x()
 				, doGetNdotL( lightSurface, components ).value() );
 		return result;
 	}
@@ -1522,46 +1372,54 @@ namespace castor3d::shader
 	void LightingModel::doComputeLightAllButDiffuse( Light light
 		, BlendComponents const & components
 		, LightSurface const & lightSurface
+		, sdw::Float const & attenuation
 		, sdw::Vec3 & radiance
 		, DirectLighting & output )
 	{
 		radiance = doComputeRadiance( light, lightSurface.L().value() );
-		auto isLit = m_writer.declLocale( "isLit", 0.0_f );
 		doInitLightSpecifics( lightSurface, components );
-		output.specular = doGetNdotL( lightSurface, components ).value()
-			* m_specular->compute( components
+		auto lightIntensity = m_writer.declLocale( "lightIntensity"
+			, radiance * attenuation * light.intensity().y() );
+		auto specular = m_writer.declLocale( "specular"
+				, doGetNdotL( lightSurface, components ).value()
+					* lightIntensity
+					* m_specular->compute( components
+						, lightSurface.N().value()
+						, lightSurface.L().value()
+						, lightSurface.H().value()
+						, lightSurface.V().value()
+						, doGetNdotL( lightSurface, components ).value()
+						, doGetNdotH( lightSurface, components ).value() ) );
+		auto dielectricFresnel = m_writer.declLocale( "dielectricFresnel"
+			, m_utils.conductorFresnel( abs( lightSurface.HdotV().value() ), components.dielectricF90, components.dielectricF0 * components.specularWeight ) );
+		auto metalFresnel = m_writer.declLocale( "metalFresnel"
+			, m_utils.conductorFresnel( abs( lightSurface.HdotV().value() ), components.baseColour, vec3( 1.0_f ) ) );
+		output.metal = metalFresnel * specular;
+		output.dielectric = mix( output.diffuse, specular, dielectricFresnel );
+
+		if ( m_clearcoat
+			&& components.hasMember( "clearcoatFactor" ) )
+		{
+			lightSurface.updateN( derivVec3( components.clearcoatNormal ) );
+			output.coating = lightIntensity
+				* m_clearcoat->compute( components
+					, lightSurface.N().value()
+					, lightSurface.L().value()
+					, lightSurface.H().value()
+					, lightSurface.V().value()
+					, doGetNdotL( lightSurface, components ).value()
+					, doGetNdotH( lightSurface, components ).value() );
+		}
+
+		if ( m_sheen
+			&& components.hasMember( "sheenColour" ) )
+		{
+			output.sheen = m_sheen->compute( m_utils
+				, components
 				, lightSurface
-				, radiance
-				, light.intensity().y()
 				, doGetNdotL( lightSurface, components ).value()
 				, doGetNdotH( lightSurface, components ).value() );
-		if ( m_sheen )
-		{
-			IF( m_writer, !all( components.sheenColour == vec3( 0.0_f ) ) )
-			{
-				output.sheen = doGetNdotL( lightSurface, components ).value()
-					* m_sheen->compute( m_utils
-						, components
-						, lightSurface
-						, doGetNdotL( lightSurface, components ).value()
-						, doGetNdotH( lightSurface, components ).value() );
-			}
-			FI
-		}
-		if ( m_clearcoat )
-		{
-			IF( m_writer, components.clearcoatFactor != 0.0_f )
-			{
-				lightSurface.updateN( derivVec3( components.clearcoatNormal ) );
-				output.coating = doGetNdotL( lightSurface, components ).value()
-					* m_clearcoat->compute( components
-						, lightSurface
-						, radiance
-						, light.intensity().y()
-						, doGetNdotL( lightSurface, components ).value()
-						, doGetNdotH( lightSurface, components ).value() );
-			}
-			FI
+			output.sheen.xyz() *= doGetNdotL( lightSurface, components ).value() * lightIntensity;
 		}
 	}
 

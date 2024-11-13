@@ -61,6 +61,23 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	TransmittanceComponent::MaterialShader::MaterialShader()
+		: shader::PassMaterialShader{ sizeof( float ) }
+	{
+	}
+
+	void TransmittanceComponent::MaterialShader::fillMaterialType( sdw::type::BaseStruct & type
+		, sdw::expr::ExprList & inits )const
+	{
+		if ( !type.hasMember( "transmittance" ) )
+		{
+			type.declMember( "transmittance", ast::type::Kind::eFloat );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ TransmittanceComponent::Default } ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	void TransmittanceComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
@@ -110,23 +127,6 @@ namespace castor3d
 		if ( res.hasMember( "transmittance" ) )
 		{
 			res.getMember< sdw::Float >( "transmittance" ) = src.getMember< sdw::Float >( "transmittance" ) * passMultiplier;
-		}
-	}
-
-	//*********************************************************************************************
-
-	TransmittanceComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ sizeof( float ) }
-	{
-	}
-
-	void TransmittanceComponent::MaterialShader::fillMaterialType( sdw::type::BaseStruct & type
-		, sdw::expr::ExprList & inits )const
-	{
-		if ( !type.hasMember( "transmittance" ) )
-		{
-			type.declMember( "transmittance", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ TransmittanceComponent::Default } ) );
 		}
 	}
 

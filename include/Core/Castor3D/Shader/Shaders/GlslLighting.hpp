@@ -61,30 +61,19 @@ namespace castor3d::shader
 
 		C3D_API void finish( PassShaders const & passShaders
 			, DerivSurfaceBase const & surface
-			, Utils & utils
-			, sdw::Vec3 const worldEye
+			, CameraData const & camera
+			, ModelData const & model
 			, BlendComponents & components );
 		C3D_API virtual sdw::Vec3 combine( DebugOutput & debugOutput
+			, ReflectionModel & reflections
+			, sdw::CombinedImage2DRgba32 const & brdf
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & incident
-			, DirectLighting directLighting
-			, IndirectLighting indirectLighting
+			, DirectLighting const & directLighting
+			, IndirectLighting const & indirectLighting
 			, sdw::Float const & ambientOcclusion
-			, sdw::Vec3 const & emissive
-			, ReflectionRefraction reflRefr );
-		C3D_API virtual sdw::Vec3 combine( DebugOutput & debugOutput
-			, BlendComponents const & components
-			, LightSurface const & lightSurface
-			, sdw::Vec3 const & incident
-			, DirectLighting directLighting
-			, IndirectLighting indirectLighting
-			, sdw::Float const & ambientOcclusion
-			, sdw::Vec3 const & emissive
-			, sdw::Vec3 reflectedDiffuse
-			, sdw::Vec3 reflectedSpecular
-			, sdw::Vec3 refractedDiffuse
-			, sdw::Vec3 refractedSpecular );
+			, ReflectionRefraction const & reflRefr );
 		/**
 		*\name
 		*	Clustered lighting
@@ -250,6 +239,7 @@ namespace castor3d::shader
 		C3D_API virtual void doComputeLight( Light light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
+			, sdw::Float const & attenuation
 			, sdw::Vec3 & radiance
 			, DirectLighting & output );
 		C3D_API virtual sdw::Vec3 doComputeLightTransmission( BlendComponents const & components
@@ -257,10 +247,12 @@ namespace castor3d::shader
 		C3D_API virtual sdw::Vec3 doComputeLightDiffuse( Light light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
+			, sdw::Float const & attenuation
 			, sdw::Vec3 & radiance );
 		C3D_API virtual void doComputeLightAllButDiffuse( Light light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
+			, sdw::Float const & attenuation
 			, sdw::Vec3 & radiance
 			, DirectLighting & output );
 

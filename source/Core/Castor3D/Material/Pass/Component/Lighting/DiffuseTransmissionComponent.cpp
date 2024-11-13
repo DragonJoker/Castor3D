@@ -9,6 +9,7 @@
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
+#include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
@@ -79,6 +80,25 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	DiffuseTransmissionComponent::MaterialShader::MaterialShader()
+		: shader::PassMaterialShader{ 16u }
+	{
+	}
+
+	void DiffuseTransmissionComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
+		, sdw::expr::ExprList & inits )const
+	{
+		if ( !type.hasMember( "diffuseTransmissionFactor" ) )
+		{
+			type.declMember( "diffuseTransmissionColour", ast::type::Kind::eVec3F );
+			type.declMember( "diffuseTransmissionFactor", ast::type::Kind::eFloat );
+			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ DiffuseTransmissionComponent::DefaultComponent } ) ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ DiffuseTransmissionComponent::DefaultFactor } ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	void DiffuseTransmissionComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
@@ -96,6 +116,7 @@ namespace castor3d
 		{
 			components.declMember( "diffuseTransmissionColour", sdw::type::Kind::eVec3F );
 			components.declMember( "diffuseTransmissionFactor", sdw::type::Kind::eFloat );
+			components.declMember( "diffuseTransmissionThickness", sdw::type::Kind::eFloat );
 		}
 	}
 
@@ -121,6 +142,8 @@ namespace castor3d
 			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ DiffuseTransmissionComponent::DefaultComponent } ) ) );
 			inits.emplace_back( sdw::makeExpr( sdw::Float{ DiffuseTransmissionComponent::DefaultFactor } ) );
 		}
+
+		inits.emplace_back( sdw::makeExpr( 1.0_f ) );
 	}
 
 	void DiffuseTransmissionComponent::ComponentsShader::blendComponents( shader::Materials const & materials
@@ -128,31 +151,25 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		if ( !res.hasMember( "diffuseTransmissionFactor" ) )
+		if ( res.hasMember( "diffuseTransmissionFactor" ) )
 		{
-			return;
+			res.diffuseTransmissionColour += src.diffuseTransmissionColour * passMultiplier;
+			res.diffuseTransmissionFactor += src.diffuseTransmissionFactor * passMultiplier;
 		}
-
-		res.getMember< sdw::Vec3 >( "diffuseTransmissionColour", true ) += src.getMember< sdw::Vec3 >( "diffuseTransmissionColour", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "diffuseTransmissionFactor", true ) += src.getMember< sdw::Float >( "diffuseTransmissionFactor", true ) * passMultiplier;
 	}
 
-	//*********************************************************************************************
-
-	DiffuseTransmissionComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ 16u }
+	void DiffuseTransmissionComponent::ComponentsShader::finishComponent( shader::DerivSurfaceBase const & surface
+		, shader::CameraData const & camera
+		, shader::ModelData const & model
+		, shader::Utils & utils
+		, shader::BlendComponents & components )const
 	{
-	}
-
-	void DiffuseTransmissionComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
-		, sdw::expr::ExprList & inits )const
-	{
-		if ( !type.hasMember( "diffuseTransmissionFactor" ) )
+		if ( components.hasMember( "diffuseTransmissionThickness" )
+			&& components.hasMember( "thicknessFactor" ) )
 		{
-			type.declMember( "diffuseTransmissionColour", ast::type::Kind::eVec3F );
-			type.declMember( "diffuseTransmissionFactor", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ DiffuseTransmissionComponent::DefaultComponent } ) ) );
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ DiffuseTransmissionComponent::DefaultFactor } ) );
+			components.getMember< sdw::Float >( "diffuseTransmissionThickness" ) = components.thicknessFactor
+				* ( length( model.getModelMtx()[0].xyz() ) + length( model.getModelMtx()[1].xyz() ) + length( model.getModelMtx()[2].xyz() ) )
+				/ 3.0_f;
 		}
 	}
 

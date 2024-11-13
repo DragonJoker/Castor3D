@@ -60,6 +60,23 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	TransmissionComponent::MaterialShader::MaterialShader()
+		: shader::PassMaterialShader{ 4u }
+	{
+	}
+
+	void TransmissionComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
+		, sdw::expr::ExprList & inits )const
+	{
+		if ( !type.hasMember( "transmissionFactor" ) )
+		{
+			type.declMember( "transmissionFactor", ast::type::Kind::eFloat );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ TransmissionComponent::Default } ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	void TransmissionComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
@@ -71,10 +88,9 @@ namespace castor3d
 			return;
 		}
 
-		if ( !components.hasMember( "transmission" ) )
+		if ( !components.hasMember( "transmissionFactor" ) )
 		{
-			components.declMember( "transmission", sdw::type::Kind::eFloat );
-			components.declMember( "hasTransmission", sdw::type::Kind::eUInt );
+			components.declMember( "transmissionFactor", sdw::type::Kind::eFloat );
 		}
 	}
 
@@ -85,20 +101,18 @@ namespace castor3d
 		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )const
 	{
-		if ( !components.hasMember( "transmission" ) )
+		if ( !components.hasMember( "transmissionFactor" ) )
 		{
 			return;
 		}
 
 		if ( material )
 		{
-			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "transmission" ) ) );
-			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::UInt >( "hasTransmission" ) ) );
+			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "transmissionFactor" ) ) );
 		}
 		else
 		{
 			inits.emplace_back( sdw::makeExpr( sdw::Float{ TransmissionComponent::Default } ) );
-			inits.emplace_back( sdw::makeExpr( 0_u ) );
 		}
 	}
 
@@ -107,32 +121,9 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		if ( !res.hasMember( "transmission" ) )
+		if ( res.hasMember( "transmissionFactor" ) )
 		{
-			return;
-		}
-
-		res.getMember< sdw::Float >( "transmission", true ) += src.getMember< sdw::Float >( "transmission", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "hasTransmission", true ) = max( res.getMember< sdw::Float >( "hasTransmission", true )
-			, src.getMember< sdw::Float >( "hasTransmission", true ) );
-	}
-
-	//*********************************************************************************************
-
-	TransmissionComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ 8u }
-	{
-	}
-
-	void TransmissionComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
-		, sdw::expr::ExprList & inits )const
-	{
-		if ( !type.hasMember( "transmission" ) )
-		{
-			type.declMember( "transmission", ast::type::Kind::eFloat );
-			type.declMember( "hasTransmission", ast::type::Kind::eUInt );
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ TransmissionComponent::Default } ) );
-			inits.emplace_back( sdw::makeExpr( 0_u ) );
+			res.getMember< sdw::Float >( "transmissionFactor" ) += src.getMember< sdw::Float >( "transmissionFactor", true ) * passMultiplier;
 		}
 	}
 
@@ -153,9 +144,7 @@ namespace castor3d
 		, PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( pass.getId() );
-		VkDeviceSize offset{};
-		offset += data.write( materialShader.getMaterialChunk(), TransmissionComponent::Default, offset );
-		data.write( materialShader.getMaterialChunk(), 0u, offset );
+		data.write( materialShader.getMaterialChunk(), TransmissionComponent::Default, 0u );
 	}
 
 	bool TransmissionComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -199,13 +188,7 @@ namespace castor3d
 	void TransmissionComponent::doFillBuffer( PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( getOwner()->getId() );
-		VkDeviceSize offset{};
-		offset += data.write( m_materialShader->getMaterialChunk()
-			, getTransmission()
-			, offset );
-		data.write( m_materialShader->getMaterialChunk()
-			, 1u
-			, offset );
+		data.write( m_materialShader->getMaterialChunk(), getTransmission(), 0u );
 	}
 
 	//*********************************************************************************************

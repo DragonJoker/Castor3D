@@ -27,21 +27,11 @@ namespace castor3d::shader
 			, uint32_t set );
 
 		sdw::RetVec3 computeDiffuseReflection( sdw::Vec3 const & wsNormal
-			, sdw::Vec3 const & wsPosition
-			, sdw::Vec3 const & V
-			, sdw::Float const & NdotV
-			, sdw::Vec3 const & fresnel
-			, sdw::Float const & metalness
-			, BlendComponents & components
 			, DebugOutputCategory & debugOutput )override;
 		sdw::RetVec3 computeSpecularReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
-			, sdw::Float const & NdotV
-			, sdw::Vec3 const & fresnel
 			, sdw::Float const & roughness
-			, BlendComponents & components
-			, sdw::CombinedImage2DRgba32 const & brdf
 			, DebugOutputCategory & debugOutput )override;
 		sdw::RetVec4 computeSheenReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
@@ -94,17 +84,12 @@ namespace castor3d::shader
 			, sdw::InFloat > m_computeRefraction;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InFloat
 			, sdw::InCombinedImageCubeRgba32 > m_computeDiffuseReflection;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InVec3
 			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InCombinedImageCubeRgba32
-			, sdw::InCombinedImage2DRgba32 > m_computeSpecularReflection;
+			, sdw::InCombinedImageCubeRgba32 > m_computeSpecularReflection;
 		sdw::Function< sdw::Vec4
 			, sdw::InVec3
 			, sdw::InVec3

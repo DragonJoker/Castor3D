@@ -2,7 +2,13 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
+#include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
+#include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 
 CU_ImplementSmartPtr( castor3d, PassMapComponent )
 
@@ -20,6 +26,285 @@ namespace castor3d
 				type.declMember( m_mapMemberName, ast::type::Kind::eUInt );
 				inits.emplace_back( makeExpr( 0_u ) );
 			}
+		}
+
+		//*********************************************************************************************
+
+		sdw::Float PassMapComponentsShader::loadFloatComponent( castor::String const & mapName
+			, castor::String const & valueName
+			, PassShaders const & passShaders
+			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
+			, Material const & material
+			, BlendComponents & components
+			, SampleTexture const & sampleTexture )const
+		{
+			auto mbMapName = castor::toUtf8( mapName );
+			auto mbValueName = castor::toUtf8( valueName );
+			auto textureName = mbMapName + "MapAndMask";
+
+			if ( !material.hasMember( textureName ) )
+			{
+				return 1.0_f;
+			}
+
+			return doLoadFloatComponent( mbMapName, mbValueName, textureName
+				, passShaders, textureConfigs, textureAnims
+				, material, components, sampleTexture );
+		}
+
+		sdw::Vec2 PassMapComponentsShader::loadVec2Component( castor::String const & mapName
+			, castor::String const & valueName
+			, PassShaders const & passShaders
+			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
+			, Material const & material
+			, BlendComponents & components
+			, SampleTexture const & sampleTexture )const
+		{
+			auto mbMapName = castor::toUtf8( mapName );
+			auto mbValueName = castor::toUtf8( valueName );
+			auto textureName = mbMapName + "MapAndMask";
+
+			if ( !material.hasMember( textureName ) )
+			{
+				return vec2( 1.0_f );
+			}
+
+			return doLoadVec2Component( mbMapName, mbValueName, textureName
+				, passShaders, textureConfigs, textureAnims
+				, material, components, sampleTexture );
+		}
+
+		sdw::Vec3 PassMapComponentsShader::loadVec3Component( castor::String const & mapName
+			, castor::String const & valueName
+			, PassShaders const & passShaders
+			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
+			, Material const & material
+			, BlendComponents & components
+			, SampleTexture const & sampleTexture )const
+		{
+			auto mbMapName = castor::toUtf8( mapName );
+			auto mbValueName = castor::toUtf8( valueName );
+			auto textureName = mbMapName + "MapAndMask";
+
+			if ( !material.hasMember( textureName ) )
+			{
+				return vec3( 1.0_f );
+			}
+
+			return doLoadVec3Component( mbMapName, mbValueName, textureName
+				, passShaders, textureConfigs, textureAnims
+				, material, components, sampleTexture );
+		}
+
+		sdw::Vec4 PassMapComponentsShader::loadVec4Component( castor::String const & mapName
+			, castor::String const & valueName
+			, PassShaders const & passShaders
+			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
+			, Material const & material
+			, BlendComponents & components
+			, SampleTexture const & sampleTexture )const
+		{
+			auto mbMapName = castor::toUtf8( mapName );
+			auto mbValueName = castor::toUtf8( valueName );
+			auto textureName = mbMapName + "MapAndMask";
+
+			if ( !material.hasMember( textureName ) )
+			{
+				return vec4( 1.0_f );
+			}
+
+			return doLoadVec4Component( mbMapName, mbValueName, textureName
+				, passShaders, textureConfigs, textureAnims
+				, material, components, sampleTexture );
+		}
+
+		void PassMapComponentsShader::applyFloatComponent( castor::String const & mapName
+			, castor::String const & valueName
+			, PassShaders const & passShaders
+			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
+			, Material const & material
+			, BlendComponents & components
+			, SampleTexture const & sampleTexture )const
+		{
+			auto mbMapName = castor::toUtf8( mapName );
+			auto mbValueName = castor::toUtf8( valueName );
+			auto textureName = castor::toUtf8( mapName ) + "MapAndMask";
+
+			if ( !material.hasMember( textureName )
+				|| !components.hasMember( mbValueName ) )
+			{
+				return;
+			}
+
+			auto value = components.getMember< sdw::Float >( mbValueName );
+			value *= doLoadFloatComponent( mbMapName, mbValueName, textureName
+				, passShaders, textureConfigs, textureAnims
+				, material, components, sampleTexture );
+		}
+
+		void PassMapComponentsShader::applyVec2Component( castor::String const & mapName
+			, castor::String const & valueName
+			, PassShaders const & passShaders
+			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
+			, Material const & material
+			, BlendComponents & components
+			, SampleTexture const & sampleTexture )const
+		{
+			auto mbMapName = castor::toUtf8( mapName );
+			auto mbValueName = castor::toUtf8( valueName );
+			auto textureName = castor::toUtf8( mapName ) + "MapAndMask";
+
+			if ( !material.hasMember( textureName )
+				|| !components.hasMember( mbValueName ) )
+			{
+				return;
+			}
+
+			auto value = components.getMember< sdw::Vec2 >( mbValueName );
+			value *= doLoadVec2Component( mbMapName, mbValueName, textureName
+				, passShaders, textureConfigs, textureAnims
+				, material, components, sampleTexture );
+		}
+
+		void PassMapComponentsShader::applyVec3Component( castor::String const & mapName
+			, castor::String const & valueName
+			, PassShaders const & passShaders
+			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
+			, Material const & material
+			, BlendComponents & components
+			, SampleTexture const & sampleTexture )const
+		{
+			auto mbMapName = castor::toUtf8( mapName );
+			auto mbValueName = castor::toUtf8( valueName );
+			auto textureName = castor::toUtf8( mapName ) + "MapAndMask";
+
+			if ( !material.hasMember( textureName )
+				|| !components.hasMember( mbValueName ) )
+			{
+				return;
+			}
+
+			auto value = components.getMember< sdw::Vec3 >( mbValueName );
+			value *= doLoadVec3Component( mbMapName, mbValueName, textureName
+				, passShaders, textureConfigs, textureAnims
+				, material, components, sampleTexture );
+		}
+
+		void PassMapComponentsShader::applyVec4Component( castor::String const & mapName
+			, castor::String const & valueName
+			, PassShaders const & passShaders
+			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
+			, Material const & material
+			, BlendComponents & components
+			, SampleTexture const & sampleTexture )const
+		{
+			auto mbMapName = castor::toUtf8( mapName );
+			auto mbValueName = castor::toUtf8( valueName );
+			auto textureName = castor::toUtf8( mapName ) + "MapAndMask";
+
+			if ( !material.hasMember( textureName )
+				|| !components.hasMember( mbValueName ) )
+			{
+				return;
+			}
+
+			auto value = components.getMember< sdw::Vec4 >( mbValueName );
+			value *= doLoadVec4Component( mbMapName, mbValueName, textureName
+				, passShaders, textureConfigs, textureAnims
+				, material, components, sampleTexture );
+		}
+
+		sdw::Float PassMapComponentsShader::doLoadFloatComponent( castor::MbString const & mbMapName
+			, castor::MbString const & mbValueName
+			, castor::MbString const & textureName
+			, PassShaders const & passShaders
+			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
+			, Material const & material
+			, BlendComponents & components
+			, SampleTexture const & sampleTexture )const
+		{
+			auto & writer{ *material.getWriter() };
+			auto mask = writer.declLocale( mbMapName + "Mask"
+				, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
+			return shader::TextureConfigData::getFloat( doLoadVec4Component( mbMapName, mbValueName, textureName
+					, passShaders, textureConfigs, textureAnims
+					, material, components, sampleTexture )
+				, mask );
+		}
+
+		sdw::Vec2 PassMapComponentsShader::doLoadVec2Component( castor::MbString const & mbMapName
+			, castor::MbString const & mbValueName
+			, castor::MbString const & textureName
+			, PassShaders const & passShaders
+			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
+			, Material const & material
+			, BlendComponents & components
+			, SampleTexture const & sampleTexture )const
+		{
+			auto & writer{ *material.getWriter() };
+			auto mask = writer.declLocale( mbMapName + "Mask"
+				, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
+			return shader::TextureConfigData::getVec2( doLoadVec4Component( mbMapName, mbValueName, textureName
+					, passShaders, textureConfigs, textureAnims
+					, material, components, sampleTexture )
+				, mask );
+		}
+
+		sdw::Vec3 PassMapComponentsShader::doLoadVec3Component( castor::MbString const & mbMapName
+			, castor::MbString const & mbValueName
+			, castor::MbString const & textureName
+			, PassShaders const & passShaders
+			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
+			, Material const & material
+			, BlendComponents & components
+			, SampleTexture const & sampleTexture )const
+		{
+			auto & writer{ *material.getWriter() };
+			auto mask = writer.declLocale( mbMapName + "Mask"
+				, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
+			return shader::TextureConfigData::getVec3( doLoadVec4Component( mbMapName, mbValueName, textureName
+					, passShaders, textureConfigs, textureAnims
+					, material, components, sampleTexture )
+				, mask );
+		}
+
+		sdw::Vec4 PassMapComponentsShader::doLoadVec4Component( castor::MbString const & mbMapName
+			, castor::MbString const & mbValueName
+			, castor::MbString const & textureName
+			, PassShaders const & passShaders
+			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
+			, Material const & material
+			, BlendComponents & components
+			, SampleTexture const & sampleTexture )const
+		{
+			auto & writer{ *material.getWriter() };
+			auto map = writer.declLocale( mbMapName + "Map"
+				, material.getMember< sdw::UInt >( textureName ) >> 16u );
+			auto value = components.getMember< sdw::Vec3 >( mbValueName );
+
+			auto config = writer.declLocale( mbValueName + "Config"
+				, textureConfigs.getTextureConfiguration( map ) );
+			auto anim = writer.declLocale( mbValueName + "Anim"
+				, textureAnims.getTextureAnimation( map ) );
+			passShaders.computeTexcoords( textureConfigs
+				, config
+				, anim
+				, components );
+			auto sampled = writer.declLocale( mbValueName + "Sampled"
+				, sampleTexture( map, config, components ) );
+			return sampled;
 		}
 	}
 

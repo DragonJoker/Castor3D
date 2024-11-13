@@ -174,6 +174,11 @@ namespace castor3d::shader
 		C3D_API static sdw::Vec3 reconstructNormal( sdw::Vec2 const & normal );
 		C3D_API static sdw::Vec3 reconstructNormal( sdw::Float const & normalX
 			, sdw::Float const & normalY );
+		C3D_API static sdw::Float max3( sdw::Vec3 const & v );
+		C3D_API static sdw::Vec3 rgbMix( sdw::Vec3 const & base
+			, sdw::Vec3 const & layer
+			, sdw::Vec3 const & alpha );
+
 
 	private:
 		sdw::ShaderWriter & m_writer;

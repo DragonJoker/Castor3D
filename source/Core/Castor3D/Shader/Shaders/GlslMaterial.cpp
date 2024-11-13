@@ -113,17 +113,19 @@ namespace castor3d::shader
 		, passCount{ getMember < sdw::UInt >( "passCount" ) }
 		, lighting{ getMember < sdw::UInt >( "lighting" ) }
 		, lightingModel{ getMember < sdw::UInt >( "lightingModel" ) }
+		, alphaRef{ getMember< sdw::Float >( "alphaRef" ) }
+		, opacity{ getMember< sdw::Float >( "opacity" ) }
+/*
 		, colour{ getMember< sdw::Vec3 >( "colour" ) }
 		, specular{ getMember< sdw::Vec3 >( "specular" ) }
 		, transmission{ getMember< sdw::Float >( "transmission" ) }
 		, hasTransmission{ getMember< sdw::UInt >( "hasTransmission" ) }
-		, opacity{ getMember< sdw::Float >( "opacity" ) }
-		, alphaRef{ getMember< sdw::Float >( "alphaRef" ) }
 		, hasReflection{ getMember< sdw::UInt >( "hasReflection" ) }
 		, refractionRatio{ getMember< sdw::Float >( "refractionRatio" ) }
 		, attenuationColour{ getMember< sdw::Vec3 >( "attenuationColour" ) }
 		, attenuationDistance{ getMember< sdw::Float >( "attenuationDistance" ) }
 		, thicknessFactor{ getMember< sdw::Float >( "thicknessFactor" ) }
+*/
 	{
 	}
 
@@ -350,7 +352,7 @@ namespace castor3d::shader
 			, textureConfigs, textureAnims, maps
 			, material, materialId, passMultipliers
 			, output );
-		doDisplayDebug( debugOutput, output );
+		output.registerDebug( debugOutput );
 	}
 
 	void Materials::blendMaterials( bool opaque
@@ -384,7 +386,7 @@ namespace castor3d::shader
 			, textureConfigs, textureAnims, maps
 			, material, materialId, passMultipliers
 			, output );
-		doDisplayDebug( debugOutput, output );
+		output.registerDebug( debugOutput );
 	}
 
 	void Materials::applyMaterialMaps( PipelineFlags const & flags
@@ -400,22 +402,6 @@ namespace castor3d::shader
 			, maps
 			, material
 			, components );
-	}
-
-	void Materials::doDisplayDebug( DebugOutput & debugOutput
-		, BlendComponents const & components )const
-	{
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Base Colour" ), components.colour.rgb() );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Opacity" ), components.opacity );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Metalness" ), components.metalness );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Roughness" ), components.roughness );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Specular Colour" ), components.specular );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Specular Factor" ), components.getMember< sdw::Float >( "specularFactor", 0.0_f ) );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Occlusion" ), components.occlusion );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Emissive Colour" ), components.emissiveColour );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Emissive Factor" ), components.emissiveFactor );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Ambient Colour" ), components.ambientColour );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Ambient Factor" ), components.ambientFactor );
 	}
 
 	//*********************************************************************************************

@@ -29,31 +29,17 @@ namespace castor3d::shader
 
 		C3D_API virtual void computeReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
-			, sdw::Vec3 const & difF
-			, sdw::Vec3 const & spcF
 			, sdw::Vec3 const & V
-			, sdw::Float const & NdotV
 			, BlendComponents & components
-			, sdw::CombinedImage2DRgba32 const & brdf
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular
 			, DebugOutputCategory & debugOutput );
 		C3D_API virtual sdw::RetVec3 computeDiffuseReflection( sdw::Vec3 const & wsNormal
-			, sdw::Vec3 const & wsPosition
-			, sdw::Vec3 const & V
-			, sdw::Float const & NdotV
-			, sdw::Vec3 const & fresnel
-			, sdw::Float const & metalness
-			, BlendComponents & components
 			, DebugOutputCategory & debugOutput );
 		C3D_API virtual sdw::RetVec3 computeSpecularReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
-			, sdw::Float const & NdotV
-			, sdw::Vec3 const & fresnel
 			, sdw::Float const & roughness
-			, BlendComponents & components
-			, sdw::CombinedImage2DRgba32 const & brdf
 			, DebugOutputCategory & debugOutput );
 		C3D_API virtual sdw::RetVec4 computeSheenReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
@@ -90,9 +76,9 @@ namespace castor3d::shader
 			, sdw::Vec2 const cameraPlanes
 			, sdw::Vec4 & output );
 
-		C3D_API sdw::Vec3 getBrdf( sdw::CombinedImage2DRgba32 const & brdfMap
+		C3D_API static sdw::Vec3 getBrdf( sdw::CombinedImage2DRgba32 const & brdfMap
 			, sdw::Float const & NdotV
-			, sdw::Float const & roughness )const;
+			, sdw::Float const & roughness );
 
 		VkExtent2D const & getTargetSize()const noexcept
 		{

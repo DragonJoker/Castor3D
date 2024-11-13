@@ -59,6 +59,23 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	DispersionComponent::MaterialShader::MaterialShader()
+		: shader::PassMaterialShader{ 4u }
+	{
+	}
+
+	void DispersionComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
+		, sdw::expr::ExprList & inits )const
+	{
+		if ( !type.hasMember( "dispersion" ) )
+		{
+			type.declMember( "dispersion", ast::type::Kind::eFloat );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ DispersionComponent::Default } ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	void DispersionComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
@@ -105,28 +122,9 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		if ( !res.hasMember( "dispersion" ) )
+		if ( res.hasMember( "dispersion" ) )
 		{
-			return;
-		}
-
-		res.getMember< sdw::Float >( "dispersion", true ) += src.getMember< sdw::Float >( "dispersion", true ) * passMultiplier;
-	}
-
-	//*********************************************************************************************
-
-	DispersionComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ 4u }
-	{
-	}
-
-	void DispersionComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
-		, sdw::expr::ExprList & inits )const
-	{
-		if ( !type.hasMember( "dispersion" ) )
-		{
-			type.declMember( "dispersion", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ DispersionComponent::Default } ) );
+			res.getMember< sdw::Float >( "dispersion" ) += src.getMember< sdw::Float >( "dispersion", true ) * passMultiplier;
 		}
 	}
 

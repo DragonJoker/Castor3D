@@ -45,42 +45,22 @@ namespace castor3d::shader
 
 	void BackgroundModel::computeReflection( sdw::Vec3 const & wsNormal
 		, sdw::Vec3 const & wsPosition
-		, sdw::Vec3 const & difF
-		, sdw::Vec3 const & spcF
 		, sdw::Vec3 const & V
-		, sdw::Float const & NdotV
 		, BlendComponents & components
-		, sdw::CombinedImage2DRgba32 const & brdf
 		, sdw::Vec3 & reflectedDiffuse
 		, sdw::Vec3 & reflectedSpecular
 		, DebugOutputCategory & debugOutput )
 	{
 		reflectedDiffuse = computeDiffuseReflection( wsNormal
-			, wsPosition
-			, V
-			, NdotV
-			, difF
-			, components.metalness
-			, components
 			, debugOutput );
 		reflectedSpecular = computeSpecularReflection( wsNormal
 			, wsPosition
 			, V
-			, NdotV
-			, spcF
-			, components.roughness
-			, components
-			, brdf
+			, components.perceptualRoughness
 			, debugOutput );
 	}
 
 	sdw::RetVec3 BackgroundModel::computeDiffuseReflection( sdw::Vec3 const & wsNormal
-		, sdw::Vec3 const & wsPosition
-		, sdw::Vec3 const & V
-		, sdw::Float const & NdotV
-		, sdw::Vec3 const & fresnel
-		, sdw::Float const & metalness
-		, BlendComponents & components
 		, DebugOutputCategory & debugOutput )
 	{
 		return sdw::RetVec3{ vec3( 0.0_f ) };
@@ -89,11 +69,7 @@ namespace castor3d::shader
 	sdw::RetVec3 BackgroundModel::computeSpecularReflection( sdw::Vec3 const & wsNormal
 		, sdw::Vec3 const & wsPosition
 		, sdw::Vec3 const & V
-		, sdw::Float const & NdotV
-		, sdw::Vec3 const & fresnel
 		, sdw::Float const & roughness
-		, BlendComponents & components
-		, sdw::CombinedImage2DRgba32 const & brdf
 		, DebugOutputCategory & debugOutput )
 	{
 		return sdw::RetVec3{ vec3( 0.0_f ) };
@@ -151,7 +127,7 @@ namespace castor3d::shader
 
 	sdw::Vec3 BackgroundModel::getBrdf( sdw::CombinedImage2DRgba32 const & brdfMap
 		, sdw::Float const & NdotV
-		, sdw::Float const & roughness )const
+		, sdw::Float const & roughness )
 	{
 		auto brdfSamplePoint = clamp( vec2( NdotV, roughness )
 			, vec2( 0.0_f, 0.0_f )

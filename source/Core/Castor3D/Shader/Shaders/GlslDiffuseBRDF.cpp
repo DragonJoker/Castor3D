@@ -16,8 +16,7 @@ namespace castor3d::shader
 
 	sdw::RetVec3 DiffuseBRDF::compute( BlendComponents const & components
 			, LightSurface const & lightSurface
-			, sdw::Vec3 const & radiance
-			, sdw::Float const & intensity
+			, sdw::Vec3 const & lightIntensity
 			, sdw::Float const & NdotL )
 	{
 		if ( !m_compute )
@@ -27,8 +26,7 @@ namespace castor3d::shader
 
 		return m_compute( components
 			, lightSurface
-			, radiance
-			, intensity
+			, lightIntensity
 			, NdotL );
 	}
 }

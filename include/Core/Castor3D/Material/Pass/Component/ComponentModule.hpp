@@ -487,6 +487,8 @@ namespace castor3d
 	namespace shader
 	{
 		struct BlendComponents;
+		struct CameraData;
+		struct ModelData;
 		class Utils;
 
 		template< typename ValueT, sdw::StringLiteralT StructNameT >
@@ -604,7 +606,8 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, bool isFrontCulled ) >;
 	using FinishComponent = castor::Function< void( shader::DerivSurfaceBase const & surface
-		, sdw::Vec3 const worldEye
+		, shader::CameraData const & camera
+		, shader::ModelData const & model
 		, shader::Utils & utils
 		, shader::BlendComponents & components ) >;
 

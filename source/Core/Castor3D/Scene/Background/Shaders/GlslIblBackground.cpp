@@ -64,91 +64,59 @@ namespace castor3d::shader
 	}
 
 	sdw::RetVec3 IblBackgroundModel::computeDiffuseReflection( sdw::Vec3 const & pwsNormal
-			, sdw::Vec3 const & pwsPosition
-			, sdw::Vec3 const & pV
-			, sdw::Float const & pNdotV
-			, sdw::Vec3 const & pfresnel
-			, sdw::Float const & pmetalness
-			, BlendComponents & components
 			, DebugOutputCategory & debugOutput )
 	{
 		if ( !m_computeDiffuseReflection )
 		{
 			m_computeDiffuseReflection = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeDiffuseReflection"
 				, [this]( sdw::Vec3 const & wsNormal
-					, sdw::Vec3 const & fresnel
-					, sdw::Float const & metalness
 					, sdw::CombinedImageCubeRgba32 const & irradianceMap )
 				{
-					auto kD = m_writer.declLocale( "kD"
-						, vec3( 1.0_f ) - fresnel );
-					kD *= 1.0_f - metalness;
 					auto irradiance = m_writer.declLocale( "irradiance"
 						, irradianceMap.lod( vec3( wsNormal.x(), -wsNormal.y(), wsNormal.z() ), 0.0_f ).rgb() );
-					m_writer.returnStmt( kD * irradiance );
+					m_writer.returnStmt( irradiance );
 				}
 				, sdw::InVec3{ m_writer, "wsNormal" }
-				, sdw::InVec3{ m_writer, "fresnel" }
-				, sdw::InFloat{ m_writer, "metalness" }
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "irradianceMap" } );
 		}
 
 		auto irradianceMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapIrradiance" );
 		return m_computeDiffuseReflection( pwsNormal
-			, pfresnel
-			, pmetalness
 			, irradianceMap );
 	}
 
 	sdw::RetVec3 IblBackgroundModel::computeSpecularReflection( sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
-		, sdw::Float const & pNdotV
-		, sdw::Vec3 const & pfresnel
 		, sdw::Float const & proughness
-		, BlendComponents & components
-		, sdw::CombinedImage2DRgba32 const & pbrdfMap
 		, DebugOutputCategory & debugOutput )
 	{
 		if ( !m_computeSpecularReflection )
 		{
 			m_computeSpecularReflection = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeSpecularReflection"
-				, [this]( sdw::Vec3 const & F
-					, sdw::Vec3 const & N
+				, [this]( sdw::Vec3 const & N
 					, sdw::Vec3 const & V
-					, sdw::Float const & NdotV
 					, sdw::Float const & roughness
-					, sdw::CombinedImageCubeRgba32 const & prefilteredEnvMap
-					, sdw::CombinedImage2DRgba32 const & brdfMap )
+					, sdw::CombinedImageCubeRgba32 const & prefilteredEnvMap )
 				{
 					auto reflection = m_writer.declLocale( "reflection"
 						, reflect( -V, N ) );
 					reflection.y() = -reflection.y();
 					auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
 						, iblbg::getPrefiltered( prefilteredEnvMap, reflection, roughness ) );
-					auto brdf = m_writer.declLocale( "brdf"
-						, getBrdf( brdfMap, NdotV, roughness ) );
-					m_writer.returnStmt( prefilteredColor * sdw::fma( F
-						, vec3( brdf.x() )
-						, vec3( brdf.y() ) ) );
+					m_writer.returnStmt( prefilteredColor );
 				}
-				, sdw::InVec3{ m_writer, "F" }
 				, sdw::InVec3{ m_writer, "N" }
 				, sdw::InVec3{ m_writer, "V" }
-				, sdw::InFloat{ m_writer, "NdotV" }
 				, sdw::InFloat{ m_writer, "roughness" }
-				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefilteredEnvMap" }
-				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" } );
+				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefilteredEnvMap" } );
 		}
 
 		auto prefilteredEnvMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
-		return m_computeSpecularReflection( pfresnel
-			, pwsNormal
+		return m_computeSpecularReflection( pwsNormal
 			, pV
-			, pNdotV
 			, proughness
-			, prefilteredEnvMap
-			, pbrdfMap );
+			, prefilteredEnvMap );
 	}
 
 	sdw::RetVec4 IblBackgroundModel::computeSheenReflection( sdw::Vec3 const & pwsNormal
@@ -174,13 +142,13 @@ namespace castor3d::shader
 						, normalize( reflect( -V, N ) ) );
 					reflection.y() = -reflection.y();
 					auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
-						, sheenColour * iblbg::getPrefiltered( prefilteredEnvMap
+						, iblbg::getPrefiltered( prefilteredEnvMap
 							, reflection
 							, sheenRoughness ) );
 					auto brdf = m_writer.declLocale( "brdf"
-						, getBrdf( brdfMap, NdotV, sheenRoughness ) );
+						, getBrdf( brdfMap, clamp( NdotV, 0.0_f, 1.0_f ), sheenRoughness ) );
 
-					m_writer.returnStmt( vec4( prefilteredColor.rgb() * brdf.z()
+					m_writer.returnStmt( vec4( sheenColour * prefilteredColor.rgb() * brdf.z()
 						, m_utils.directionalAlbedoSheen( NdotV, sheenRoughness ) ) );
 				}
 				, sdw::InVec3{ m_writer, "sheenColour" }
@@ -237,7 +205,7 @@ namespace castor3d::shader
 			, prefractionRatio
 			, pwsNormal
 			, pV
-			, components.roughness );
+			, components.perceptualRoughness );
 	}
 
 	sdw::RetVec3 IblBackgroundModel::computeSpecularRefraction( sdw::Vec3 const & pfresnel

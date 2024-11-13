@@ -19,8 +19,7 @@ namespace anisotropy::shader
 		return castor::makeUniqueDerived< c3d::SpecularBRDF, AnisotropicBRDF >( writer, brdfHelpers );
 	}
 
-	void AnisotropicBRDF::doGenerate( c3d::BlendComponents const & pcomponents
-		, c3d::LightSurface const & plightSurface )
+	void AnisotropicBRDF::doGenerate( c3d::BlendComponents const & pcomponents )
 	{
 		m_anisotropicGGXDistribution = m_writer.implementFunction< sdw::Float >( "c3dam_anisotropicGGXDistribution"
 			, [this]( sdw::Float const & NdotH
@@ -72,56 +71,53 @@ namespace anisotropy::shader
 
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3dam_computeAnisotropicSpecular"
 			, [this]( c3d::BlendComponents const & components
-				, c3d::LightSurface const & lightSurface
-				, sdw::Vec3 const & radiance
-				, sdw::Float const & intensity
+				, sdw::Vec3 const & N
+				, sdw::Vec3 const & L
+				, sdw::Vec3 const & H
+				, sdw::Vec3 const & V
 				, sdw::Float const & NdotL
 				, sdw::Float const & NdotH )
 			{
-				auto const & roughness = components.roughness;
 				auto NdotV = m_writer.declLocale( "NdotV"
-					, lightSurface.NdotV().value() );
-				auto F = m_writer.declLocale( "F"
-					, lightSurface.spcF().value() );
-				auto alphaRoughness = m_writer.declLocale( "alphaRoughness"
-					, roughness * roughness );
+					, max( 0.0_f, dot( N, V ) ) );
 
 				auto anisotropicT = components.getMember< sdw::Vec3 >( "anisotropicT" );
 				auto anisotropicB = components.getMember< sdw::Vec3 >( "anisotropicB" );
 				auto anisotropyStrength = components.getMember< sdw::Float >( "anisotropyStrength" );
 
 				auto TdotL = m_writer.declLocale( "TdotL"
-					, dot( anisotropicT, lightSurface.L().value() ) );
+					, dot( anisotropicT, L ) );
 				auto BdotL = m_writer.declLocale( "BdotL"
-					, dot( anisotropicB, lightSurface.L().value() ) );
+					, dot( anisotropicB, L ) );
 				auto TdotH = m_writer.declLocale( "TdotH"
-					, dot( anisotropicT, lightSurface.H().value() ) );
+					, dot( anisotropicT, H ) );
 				auto BdotH = m_writer.declLocale( "BdotH"
-					, dot( anisotropicB, lightSurface.H().value() ) );
+					, dot( anisotropicB, H ) );
 				auto TdotV = m_writer.declLocale( "TdotV"
-					, dot( anisotropicT, lightSurface.V().value() ) );
+					, dot( anisotropicT, V ) );
 				auto BdotV = m_writer.declLocale( "BdotV"
-					, dot( anisotropicB, lightSurface.V().value() ) );
+					, dot( anisotropicB, V ) );
 
 				auto at = m_writer.declLocale( "at"
-					, mix( alphaRoughness, 1.0_f, anisotropyStrength * anisotropyStrength ) );
+					, mix( components.alphaRoughness, 1.0_f, anisotropyStrength * anisotropyStrength ) );
 				auto ab = m_writer.declLocale( "ab"
-					, alphaRoughness );
+					, components.alphaRoughness );
 
-				auto V = m_writer.declLocale( "V"
+				auto Vis = m_writer.declLocale( "Vis"
 					, m_anisotropicGGXVisibility( NdotL, NdotV, BdotV, TdotV, TdotL, BdotL, at, ab ) );
 				auto D = m_writer.declLocale( "D"
 					, m_anisotropicGGXDistribution( NdotH, TdotH, BdotH, at, ab ) );
 
 				auto specReflectance = m_writer.declLocale( "specReflectance"
-					, F * V * D );
+					, Vis * D );
 
-				m_writer.returnStmt( max( specReflectance * radiance * intensity, vec3( 0.0_f ) ) );
+				m_writer.returnStmt( max( vec3( specReflectance ), vec3( 0.0_f ) ) );
 			}
 			, c3d::InBlendComponents{ m_writer, "components", pcomponents }
-			, c3d::InLightSurface{ m_writer, "lightSurface", plightSurface }
-			, sdw::InVec3{ m_writer, "radiance" }
-			, sdw::InFloat{ m_writer, "intensity" }
+			, sdw::InVec3{ m_writer, "N" }
+			, sdw::InVec3{ m_writer, "L" }
+			, sdw::InVec3{ m_writer, "H" }
+			, sdw::InVec3{ m_writer, "V" }
 			, sdw::InFloat{ m_writer, "NdotL" }
 			, sdw::InFloat{ m_writer, "NdotH" } );
 	}

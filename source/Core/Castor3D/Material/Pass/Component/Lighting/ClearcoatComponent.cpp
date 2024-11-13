@@ -81,6 +81,25 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	ClearcoatComponent::MaterialShader::MaterialShader()
+		: shader::PassMaterialShader{ 8u }
+	{
+	}
+
+	void ClearcoatComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
+		, sdw::expr::ExprList & inits )const
+	{
+		if ( !type.hasMember( "clearcoatFactor" ) )
+		{
+			type.declMember( "clearcoatFactor", ast::type::Kind::eFloat );
+			type.declMember( "clearcoatRoughness", ast::type::Kind::eFloat );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ ClearcoatComponent::DefaultFactor } ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ ClearcoatComponent::DefaultRoughness } ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	void ClearcoatComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
@@ -97,6 +116,9 @@ namespace castor3d
 			components.declMember( "clearcoatNormal", sdw::type::Kind::eVec3F );
 			components.declMember( "clearcoatFactor", sdw::type::Kind::eFloat );
 			components.declMember( "clearcoatRoughness", sdw::type::Kind::eFloat );
+			components.declMember( "clearcoatF0", sdw::type::Kind::eVec3F );
+			components.declMember( "clearcoatF90", sdw::type::Kind::eVec3F );
+			components.declMember( "clearcoatFresnel", sdw::type::Kind::eVec3F );
 		}
 	}
 
@@ -123,16 +145,16 @@ namespace castor3d
 			{
 				if ( checkFlag( materials.getFilter(), ComponentModeFlag::eDerivTex ) )
 				{
-					inits.emplace_back( shader::makeRawExpr( surface->getMember< shader::DerivVec3 >( "normal", shader::derivVec3( 0.0_f ) ) ) );
+					inits.emplace_back( shader::makeRawExpr( surface->getMember< shader::DerivVec3 >( "normal", shader::derivVec3( vec3( 0.0_f, 0.0_f, 1.0_f ) ) ) ) );
 				}
 				else
 				{
-					inits.emplace_back( sdw::makeExpr( surface->getMember< sdw::Vec3 >( "normal", vec3( 0.0_f ) ) ) );
+					inits.emplace_back( sdw::makeExpr( surface->getMember< sdw::Vec3 >( "normal", vec3( 0.0_f, 0.0_f, 1.0_f ) ) ) );
 				}
 			}
 			else
 			{
-				inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
+				inits.emplace_back( sdw::makeExpr( vec3( 0.0_f, 0.0_f, 1.0_f ) ) );
 			}
 
 			if ( material )
@@ -153,6 +175,10 @@ namespace castor3d
 		{
 			inits.emplace_back( sdw::makeExpr( sdw::Float{ ClearcoatComponent::DefaultRoughness } ) );
 		}
+
+		inits.emplace_back( sdw::makeExpr( vec3( 1.0_f ) ) ); // clearcoatF0
+		inits.emplace_back( sdw::makeExpr( vec3( 1.0_f ) ) ); // clearcoatF90
+		inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) ); // clearcoatFresnel
 	}
 
 	void ClearcoatComponent::ComponentsShader::blendComponents( shader::Materials const & materials
@@ -165,27 +191,35 @@ namespace castor3d
 			return;
 		}
 
-		res.getMember< sdw::Float >( "clearcoatFactor", true ) += src.getMember< sdw::Float >( "clearcoatFactor", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "clearcoatRoughness", true ) += src.getMember< sdw::Float >( "clearcoatRoughness", true ) * passMultiplier;
-		res.getMember< sdw::Vec3 >( "clearcoatNormal", true ) += src.getMember< sdw::Vec3 >( "clearcoatNormal", true ) * passMultiplier;
+		res.clearcoatFactor += src.clearcoatFactor * passMultiplier;
+		res.clearcoatRoughness += src.clearcoatRoughness * passMultiplier;
+		res.clearcoatNormal += src.clearcoatNormal * passMultiplier;
 	}
 
-	//*********************************************************************************************
-
-	ClearcoatComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ 8u }
+	void ClearcoatComponent::ComponentsShader::updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, shader::Material const & material
+		, shader::BlendComponents & components
+		, bool isFrontCulled )const
 	{
-	}
-
-	void ClearcoatComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
-		, sdw::expr::ExprList & inits )const
-	{
-		if ( !type.hasMember( "clearcoatFactor" ) )
+		if ( components.hasMember( "clearcoatFactor" ) )
 		{
-			type.declMember( "clearcoatFactor", ast::type::Kind::eFloat );
-			type.declMember( "clearcoatRoughness", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ ClearcoatComponent::DefaultFactor } ) );
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ ClearcoatComponent::DefaultRoughness } ) );
+			components.clearcoatF0 = vec3( pow( ( components.ior - 1.0_f ) / ( components.ior + 1.0_f ), 2.0_f ) );
+			components.clearcoatF90 = vec3( 1.0_f );
+			components.clearcoatRoughness = clamp( components.clearcoatRoughness, 0.0_f, 1.0_f );
+		}
+	}
+
+	void ClearcoatComponent::ComponentsShader::finishComponent( shader::DerivSurfaceBase const & surface
+		, shader::CameraData const & camera
+		, shader::ModelData const & model
+		, shader::Utils & utils
+		, shader::BlendComponents & components )const
+	{
+		if ( components.hasMember( "clearcoatFactor" ) )
+		{
+			components.getMember< sdw::Vec3 >( "clearcoatFresnel" ) = utils.conductorFresnel( max( dot( components.clearcoatNormal, normalize( camera.position() - surface.worldPosition.value().xyz() ) ), 0.0_f )
+				, components.clearcoatF0
+				, components.clearcoatF90 );
 		}
 	}
 

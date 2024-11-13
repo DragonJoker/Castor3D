@@ -60,6 +60,23 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	ThicknessComponent::MaterialShader::MaterialShader()
+		: shader::PassMaterialShader{ 4u }
+	{
+	}
+
+	void ThicknessComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
+		, sdw::expr::ExprList & inits )const
+	{
+		if ( !type.hasMember( "thicknessFactor" ) )
+		{
+			type.declMember( "thicknessFactor", ast::type::Kind::eFloat );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ ThicknessComponent::Default } ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	void ThicknessComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
@@ -106,28 +123,9 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		if ( !res.hasMember( "thicknessFactor" ) )
+		if ( res.hasMember( "thicknessFactor" ) )
 		{
-			return;
-		}
-
-		res.getMember< sdw::Float >( "thicknessFactor", true ) += src.getMember< sdw::Float >( "thicknessFactor", true ) * passMultiplier;
-	}
-
-	//*********************************************************************************************
-
-	ThicknessComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ 4u }
-	{
-	}
-
-	void ThicknessComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
-		, sdw::expr::ExprList & inits )const
-	{
-		if ( !type.hasMember( "thicknessFactor" ) )
-		{
-			type.declMember( "thicknessFactor", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ ThicknessComponent::Default } ) );
+			res.getMember< sdw::Float >( "thicknessFactor" ) += src.getMember< sdw::Float >( "thicknessFactor", true ) * passMultiplier;
 		}
 	}
 

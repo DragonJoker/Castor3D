@@ -28,8 +28,7 @@ namespace disney::shader
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeDisneyDiffuse"
 			, [this]( c3d::BlendComponents const & components
 				, c3d::LightSurface const & lightSurface
-				, sdw::Vec3 const & radiance
-				, sdw::Float const & intensity
+				, sdw::Vec3 const & lightIntensity
 				, sdw::Float const & NdotL )
 			{
 				auto fl = m_writer.declLocale< sdw::Float >( "fl"
@@ -37,20 +36,17 @@ namespace disney::shader
 				auto fv = m_writer.declLocale< sdw::Float >( "fv"
 					, pow( 1.0_f - lightSurface.NdotV().value(), 5.0_f ) );
 				auto rr = m_writer.declLocale< sdw::Float >( "rr"
-					, 2.0_f * components.roughness * lightSurface.HdotL().value() * lightSurface.HdotL().value() );
+					, 2.0_f * components.perceptualRoughness * lightSurface.HdotL().value() * lightSurface.HdotL().value() );
 				auto retro = m_writer.declLocale( "retro"
-					, radiance * rr * ( fl + fv + fl * fv * ( rr - 1.0_f ) ) );
+					, lightIntensity * rr * ( fl + fv + fl * fv * ( rr - 1.0_f ) ) );
 
-				auto diffuseFactor = m_writer.declLocale( "diffuseFactor"
-					, vec3( 1.0_f ) - lightSurface.difF().value() );
 				auto diffuseReflectance = m_writer.declLocale( "diffuseReflectance"
-					, ( radiance * ( 1.0_f - 0.5_f * fl ) * ( 1.0_f - 0.5_f * fv ) + retro ) / sdw::Float{ castor::Pi< float > } );
-				m_writer.returnStmt( max( diffuseReflectance * intensity * diffuseFactor, vec3( 0.0_f ) ) );
+					, ( lightIntensity * ( 1.0_f - 0.5_f * fl ) * ( 1.0_f - 0.5_f * fv ) + retro ) / sdw::Float{ castor::Pi< float > } );
+				m_writer.returnStmt( max( diffuseReflectance, vec3( 0.0_f ) ) );
 			}
 			, c3d::InBlendComponents{ m_writer, "components", pcomponents }
 			, c3d::InLightSurface{ m_writer, "lightSurface", plightSurface }
-			, sdw::InVec3{ m_writer, "radiance" }
-			, sdw::InFloat{ m_writer, "intensity" }
+			, sdw::InVec3{ m_writer, "lightIntensity" }
 			, sdw::InFloat{ m_writer, "NdotL" } );
 	}
 
@@ -68,8 +64,7 @@ namespace disney::shader
 		return castor::makeUniqueDerived< SpecularBRDF, DisneySpecularBRDF >( writer, brdfHelpers );
 	}
 
-	void DisneySpecularBRDF::doGenerate( c3d::BlendComponents const & pcomponents
-		, c3d::LightSurface const & plightSurface )
+	void DisneySpecularBRDF::doGenerate( c3d::BlendComponents const & pcomponents )
 	{
 		auto sqr = []( auto v )
 			{
@@ -110,14 +105,17 @@ namespace disney::shader
 			, sdw::InFloat{ m_writer, "ab" } );
 
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeDisneySpecular"
-			, [this, &sqr]( c3d::BlendComponents const & components
-				, c3d::LightSurface const & lightSurface
-				, sdw::Vec3 const & radiance
-				, sdw::Float const & intensity
+			, [this]( c3d::BlendComponents const & components
+				, sdw::Vec3 const & N
+				, sdw::Vec3 const & L
+				, sdw::Vec3 const & H
+				, sdw::Vec3 const & V
 				, sdw::Float const & NdotL
 				, sdw::Float const & NdotH )
 			{
-				auto const & roughness = components.roughness;
+				auto NdotV = m_writer.declLocale( "NdotV"
+					, max( 0.0_f, dot( N, V ) ) );
+
 				auto anisotropicT = components.getMember< sdw::Vec3 >( "anisotropicT"
 					, ( components.usesDerivativeValues()
 						? components.getMember< c3d::DerivVec4 >( "tangent" ).value()
@@ -131,39 +129,40 @@ namespace disney::shader
 				auto aspect = m_writer.declLocale( "aspect"
 					, sqrt( 1.0_f - 0.9_f * anisotropyStrength ) );
 				auto at = m_writer.declLocale( "at"
-					, max( 0.001_f, sqr( roughness ) / aspect ) );
+					, max( 0.001_f, components.alphaRoughness / aspect ) );
 				auto ab = m_writer.declLocale( "ab"
-					, max( 0.001_f, sqr( roughness ) * aspect ) );
+					, max( 0.001_f, components.alphaRoughness * aspect ) );
 
 				auto TdotL = m_writer.declLocale( "TdotL"
-					, dot( anisotropicT, lightSurface.L().value() ) );
+					, dot( anisotropicT, L ) );
 				auto BdotL = m_writer.declLocale( "BdotL"
-					, dot( anisotropicB, lightSurface.L().value() ) );
+					, dot( anisotropicB, L ) );
 				auto TdotH = m_writer.declLocale( "TdotH"
-					, dot( anisotropicT, lightSurface.H().value() ) );
+					, dot( anisotropicT, H ) );
 				auto BdotH = m_writer.declLocale( "BdotH"
-					, dot( anisotropicB, lightSurface.H().value() ) );
+					, dot( anisotropicB, H ) );
 				auto TdotV = m_writer.declLocale( "TdotV"
-					, dot( anisotropicT, lightSurface.V().value() ) );
+					, dot( anisotropicT, V ) );
 				auto BdotV = m_writer.declLocale( "BdotV"
-					, dot( anisotropicB, lightSurface.V().value() ) );
+					, dot( anisotropicB, V ) );
 
 				auto d = m_writer.declLocale( "d"
 					, m_distribution( NdotH, TdotH, BdotH, at, ab ) );
 
 				auto g = m_writer.declLocale( "g"
 					, m_smithGGX( NdotL, TdotL, BdotL, at, ab ) );
-				g *= m_smithGGX( lightSurface.NdotV().value(), TdotV, BdotV, at, ab );
+				g *= m_smithGGX( NdotV, TdotV, BdotV, at, ab );
 
 				auto reflectance = m_writer.declLocale( "reflectance"
-					, lightSurface.spcF().value() * d * g );
+					, d * g );
 
-				m_writer.returnStmt( max( reflectance * radiance * intensity, vec3( 0.0_f ) ) );
+				m_writer.returnStmt( max( vec3( reflectance ), vec3( 0.0_f ) ) );
 			}
 			, c3d::InBlendComponents{ m_writer, "components", pcomponents }
-			, c3d::InLightSurface{ m_writer, "lightSurface", plightSurface }
-			, sdw::InVec3{ m_writer, "radiance" }
-			, sdw::InFloat{ m_writer, "intensity" }
+			, sdw::InVec3{ m_writer, "N" }
+			, sdw::InVec3{ m_writer, "L" }
+			, sdw::InVec3{ m_writer, "H" }
+			, sdw::InVec3{ m_writer, "V" }
 			, sdw::InFloat{ m_writer, "NdotL" }
 			, sdw::InFloat{ m_writer, "NdotH" } );
 	}
@@ -182,8 +181,7 @@ namespace disney::shader
 		return castor::makeUniqueDerived< ClearcoatBRDF, DisneyClearcoatBRDF >( writer, brdfHelpers );
 	}
 
-	void DisneyClearcoatBRDF::doGenerate( c3d::BlendComponents const & pcomponents
-		, c3d::LightSurface const & plightSurface )
+	void DisneyClearcoatBRDF::doGenerate( c3d::BlendComponents const & pcomponents )
 	{
 		m_distribution = m_writer.implementFunction< sdw::Float >( "c3d_disneyDistribution"
 			, [this]( sdw::Float const & NdotH
@@ -217,33 +215,39 @@ namespace disney::shader
 
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeDisneyClearcoat"
 			, [this]( c3d::BlendComponents const & components
-				, c3d::LightSurface const & lightSurface
-				, sdw::Vec3 const & radiance
-				, sdw::Float const & intensity
+				, sdw::Vec3 const & N
+				, sdw::Vec3 const & L
+				, sdw::Vec3 const & H
+				, sdw::Vec3 const & V
 				, sdw::Float const & NdotL
 				, sdw::Float const & NdotH )
 			{
 				auto const & roughness = components.clearcoatRoughness;
+				auto HdotL = m_writer.declLocale( "HdotL"
+					, max( 0.0_f, dot( H, L ) ) );
+				auto NdotV = m_writer.declLocale( "NdotV"
+					, max( 0.0_f, dot( N, V ) ) );
 
 				// clearcoat (ior = 1.5 -> F0 = 0.04)
-				auto FH = m_writer.declLocale< sdw::Float >( "FH"
-					, pow( 1.0_f - lightSurface.HdotL().value(), 5.0_f ) );
+				auto FH = m_writer.declLocale( "FH"
+					, pow( 1.0_f - HdotL, 5.0_f ) );
 				auto Dr = m_writer.declLocale( "Dr"
 					, m_distribution( NdotH, mix( 0.1_f, 0.001_f, roughness ) ) );
 				auto Fr = m_writer.declLocale( "Fr"
 					, mix( 0.04_f, 1.0_f, FH ) );
 				auto Gr = m_writer.declLocale( "Gr"
-					, m_smithGGX( NdotL, 0.25_f ) * m_smithGGX( lightSurface.NdotV().value(), 0.25_f ) );
+					, m_smithGGX( NdotL, 0.25_f ) * m_smithGGX( NdotV, 0.25_f ) );
 
 				auto reflectance = m_writer.declLocale( "reflectance"
 					, 0.25_f * Gr * Fr * Dr );
 
-				m_writer.returnStmt( max( reflectance * radiance * intensity, vec3( 0.0_f ) ) );
+				m_writer.returnStmt( max( vec3( reflectance ), vec3( 0.0_f ) ) );
 			}
 			, c3d::InBlendComponents{ m_writer, "components", pcomponents }
-			, c3d::InLightSurface{ m_writer, "lightSurface", plightSurface }
-			, sdw::InVec3{ m_writer, "radiance" }
-			, sdw::InFloat{ m_writer, "intensity" }
+			, sdw::InVec3{ m_writer, "N" }
+			, sdw::InVec3{ m_writer, "L" }
+			, sdw::InVec3{ m_writer, "H" }
+			, sdw::InVec3{ m_writer, "V" }
 			, sdw::InFloat{ m_writer, "NdotL" }
 			, sdw::InFloat{ m_writer, "NdotH" } );
 	}
@@ -273,11 +277,11 @@ namespace disney::shader
 				, sdw::Float const & NdotH )
 			{
 				auto Cdlum = m_writer.declLocale( "Cdlum"
-					, 0.3_f * components.colour.x()
-					+ 0.6_f * components.colour.y()
-					+ 0.1_f * components.colour.z() ); // luminance approx
+					, 0.3_f * components.baseColour.x()
+					+ 0.6_f * components.baseColour.y()
+					+ 0.1_f * components.baseColour.z() ); // luminance approx
 				auto Ctint = m_writer.declLocale( "Ctint"
-					, m_writer.ternary( Cdlum > 0.0_f, components.colour / Cdlum, vec3( 1.0_f ) ) ); // normalize lum. to isolate hue+sat
+					, m_writer.ternary( Cdlum > 0.0_f, components.baseColour / Cdlum, vec3( 1.0_f ) ) ); // normalize lum. to isolate hue+sat
 				auto Csheen = m_writer.declLocale( "Csheen"
 					, mix( vec3( 1.0_f ), Ctint, components.sheenColour ) );
 				auto FH = m_writer.declLocale< sdw::Float >( "FH"

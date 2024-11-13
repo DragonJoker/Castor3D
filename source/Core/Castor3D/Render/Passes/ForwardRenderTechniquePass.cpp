@@ -361,14 +361,15 @@ namespace castor3d
 				output.registerOutput( cuT( "Surface" ), cuT( "Bitangent" ), fma( in.bitangent, vec3( 0.5_f ), vec3( 0.5_f ) ) );
 				output.registerOutput( cuT( "Surface" ), cuT( "World Position" ), in.worldPosition );
 				output.registerOutput( cuT( "Surface" ), cuT( "View Position" ), in.viewPosition );
+				output.registerOutput( cuT( "Surface" ), cuT( "Colour" ), in.colour );
 				auto incident = writer.declLocale( "incident"
 					, reflections.computeIncident( in.worldPosition.xyz(), c3d_cameraData.position() ) );
 
 				if ( !checkFlag( m_filters, RenderFilter::eOpaque ) )
 				{
-					if ( components.transmission )
+					if ( components.transmissionFactor )
 					{
-						IF( writer, components.transmission >= 0.1_f )
+						IF( writer, components.transmissionFactor >= 0.1_f )
 						{
 							writer.demote();
 						}
@@ -388,8 +389,8 @@ namespace castor3d
 								, normalize( components.getDerivNormal() ) } );
 						lightingModel->finish( passShaders
 							, surface
-							, utils
-							, c3d_cameraData.position()
+							, c3d_cameraData
+							, modelData
 							, components );
 						auto lightSurface = shader::LightSurface::create( writer
 							, "lightSurface"
@@ -448,22 +449,25 @@ namespace castor3d
 									, directLighting );
 							}
 
-							directLighting.ambient = components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor;
+							if ( components.hasMember( "ambientFactor" ) )
+							{
+								directLighting.ambient = components.getMember< sdw::Vec3 >( "ambientColour" )
+									* c3d_sceneData.ambientLight()
+									* components.getMember< sdw::Float >( "ambientFactor" );
+							}
+
 							output.registerOutput( cuT( "Lighting" ), cuT( "Ambient" ), directLighting.ambient );
 							output.registerOutput( cuT( "Lighting" ), cuT( "Occlusion" ), occlusion );
 							output.registerOutput( cuT( "Lighting" ), cuT( "Emissive" ), components.emissiveColour * components.emissiveFactor );
 
 							// Indirect Lighting
-							lightSurface.updateLAndF( utils
-								, components.getDerivNormal()
-								, components.f0
-								, components );
+							lightSurface.updateL( components.getDerivNormal() );
 							auto indirectLighting = writer.declLocale( "indirectLighting"
 								, shader::IndirectLighting{ writer } );
 							indirect.computeCombinedDifSpec( flags.getGlobalIlluminationFlags()
 								, hasDiffuseGI
 								, lightSurface
-								, components.roughness
+								, components.perceptualRoughness
 								, c3d_mapBrdf
 								, indirectLighting
 								, output );
@@ -477,10 +481,8 @@ namespace castor3d
 								components.thicknessFactor *= length( modelData.getScale() );
 							}
 
-							lightSurface.updateNAndF( utils
-								, components.getDerivNormal()
-								, components.f0
-								, components );
+							lightSurface.updateN( components.getDerivNormal() );
+							lightSurface.registerDebug( output );
 							passShaders.computeReflRefr( reflections
 								, components
 								, lightSurface
@@ -494,22 +496,22 @@ namespace castor3d
 								, modelData.getEnvMapIndex()
 								, incident
 								, components.hasReflection
-								, components.hasRefraction
-								, components.refractionRatio
+								, components.ior
 								, reflRefrResult
 								, output );
 
-							output.registerOutput( cuT( "Reflections" ), cuT( "Incident" ), sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+							output.registerOutput( cuT( "Reflection" ), cuT( "Incident" ), sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
 
 							// Combine
 							outColour = vec4( lightingModel->combine( output
+									, reflections
+									, c3d_mapBrdf
 									, components
 									, lightSurface
 									, incident
 									, directLighting
 									, indirectLighting
 									, occlusion
-									, components.emissiveColour * components.emissiveFactor
 									, reflRefrResult )
 								, components.opacity );
 							outScattering = vec4( directLighting.scattering, 1.0_f);
@@ -522,7 +524,7 @@ namespace castor3d
 					}
 					ELSE
 					{
-						outColour = vec4( components.colour, components.opacity );
+						outColour = vec4( components.baseColour, components.opacity );
 						outScattering = vec4( 0.0_f );
 
 						if ( m_deferredLightingFilter == DeferredLightingFilter::eDeferLighting )
@@ -534,7 +536,7 @@ namespace castor3d
 				}
 				else
 				{
-					outColour = vec4( components.colour, components.opacity );
+					outColour = vec4( components.baseColour, components.opacity );
 					outScattering = vec4( 0.0_f );
 
 					if ( m_deferredLightingFilter == DeferredLightingFilter::eDeferLighting )

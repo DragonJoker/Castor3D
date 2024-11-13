@@ -38,7 +38,6 @@ namespace water
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
 				, sdw::UInt const & hasReflection
-				, sdw::UInt const & hasRefraction
 				, sdw::Float const & refractionRatio
 				, castor3d::shader::ReflectionRefraction & output
 				, castor3d::shader::DebugOutput & debugOutput )const override;
@@ -53,7 +52,6 @@ namespace water
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
 				, sdw::UInt const & hasReflection
-				, sdw::UInt const & hasRefraction
 				, sdw::Float const & refractionRatio
 				, castor3d::shader::ReflectionRefraction & output
 				, castor3d::shader::DebugOutput & debugOutput )const override;

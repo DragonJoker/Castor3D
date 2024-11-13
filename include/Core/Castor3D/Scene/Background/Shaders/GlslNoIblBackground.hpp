@@ -28,12 +28,8 @@ namespace castor3d::shader
 
 		void computeReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
-			, sdw::Vec3 const & difF
-			, sdw::Vec3 const & spcF
 			, sdw::Vec3 const & V
-			, sdw::Float const & NdotV
 			, BlendComponents & components
-			, sdw::CombinedImage2DRgba32 const & brdf
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular
 			, DebugOutputCategory & debugOutput )override;
@@ -56,7 +52,6 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InCombinedImageCubeRgba32
-			, sdw::InVec3
 			, sdw::InFloat
 			, sdw::OutVec3
 			, sdw::OutVec3 > m_computeReflection;

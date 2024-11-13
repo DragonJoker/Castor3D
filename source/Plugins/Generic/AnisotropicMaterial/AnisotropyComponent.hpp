@@ -58,7 +58,6 @@ namespace anisotropy
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
 				, sdw::UInt const & hasReflection
-				, sdw::UInt const & hasRefraction
 				, sdw::Float const & refractionRatio
 				, c3d::ReflectionRefraction & output
 				, c3d::DebugOutput & debugOutput )const override;
@@ -73,10 +72,17 @@ namespace anisotropy
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
 				, sdw::UInt const & hasReflection
-				, sdw::UInt const & hasRefraction
 				, sdw::Float const & refractionRatio
 				, c3d::ReflectionRefraction & output
 				, c3d::DebugOutput & debugOutput )const override;
+		};
+
+		struct MaterialShader
+			: c3d::PassMaterialShader
+		{
+			MaterialShader();
+			void fillMaterialType( sdw::type::BaseStruct & type
+				, sdw::expr::ExprList & inits )const override;
 		};
 
 		struct ComponentsShader
@@ -105,14 +111,6 @@ namespace anisotropy
 				, c3d::Material const & material
 				, c3d::BlendComponents & components
 				, bool isFrontCulled )const override;
-		};
-
-		struct MaterialShader
-			: c3d::PassMaterialShader
-		{
-			MaterialShader();
-			void fillMaterialType( sdw::type::BaseStruct & type
-				, sdw::expr::ExprList & inits )const override;
 		};
 
 		class Plugin

@@ -59,8 +59,11 @@ namespace castor3d::shader
 
 		void finish( PassShaders const & passShaders
 			, DerivSurfaceBase const & surface
-			, Utils & utils
-			, sdw::Vec3 const worldEye );
+			, CameraData const & camera
+			, ModelData const & model
+			, Utils & utils );
+
+		void registerDebug( DebugOutput & debugOutput )const;
 
 		void setNormal( sdw::Vec3 const v );
 		void normalizeNormal();
@@ -123,41 +126,54 @@ namespace castor3d::shader
 		}
 
 	public:
-		sdw::DefaultedT< sdw::Vec3 > f0;
+		sdw::DefaultedT< sdw::Float > ior;
+		sdw::DefaultedT< sdw::Float > perceptualRoughness;
+		sdw::DefaultedT< sdw::Vec3 > dielectricF0;
+		sdw::DefaultedT< sdw::Float > alphaRoughness;
 		sdw::DefaultedT< sdw::Vec3 > f90;
-		sdw::DefaultedT< sdw::Vec3 > colour;
+		sdw::DefaultedT< sdw::Vec3 > dielectricF90;
+		sdw::DefaultedT< sdw::Float > metalness;
+		sdw::DefaultedT< sdw::Vec3 > baseColour;
+
+		sdw::DefaultedT< sdw::Vec3 > sheenColour;
+		sdw::DefaultedT< sdw::Float > sheenRoughness;
+
+		sdw::DefaultedT< sdw::Vec3 > clearcoatF0;
+		sdw::DefaultedT< sdw::Vec3 > clearcoatF90;
+		sdw::DefaultedT< sdw::Float > clearcoatFactor;
+		sdw::DefaultedT< sdw::Vec3 > clearcoatNormal;
+		sdw::DefaultedT< sdw::Float > clearcoatRoughness;
+
+		sdw::DefaultedT< sdw::Float > specularWeight;
+
+		sdw::DefaultedT< sdw::Float > transmissionFactor;
+
+		sdw::DefaultedT< sdw::Float > thicknessFactor;
+		sdw::DefaultedT< sdw::Vec3 > attenuationColour;
+		sdw::DefaultedT< sdw::Float > attenuationDistance;
+
+		sdw::DefaultedT< sdw::Float > iridescenceFactor;
+		sdw::DefaultedT< sdw::Float > iridescenceThickness;
+		sdw::DefaultedT< sdw::Float > iridescenceIor;
+
+		sdw::DefaultedT< sdw::Vec3 > diffuseTransmissionColour;
+		sdw::DefaultedT< sdw::Float > diffuseTransmissionFactor;
+
+		sdw::DefaultedT< sdw::Float > dispersion;
+
 		sdw::DefaultedT< sdw::Vec3 > emissiveColour;
 		sdw::DefaultedT< sdw::Float > emissiveFactor;
+/*
 		sdw::DefaultedT< sdw::Vec3 > ambientColour;
 		sdw::DefaultedT< sdw::Float > ambientFactor;
-		sdw::DefaultedT< sdw::Float > transmission;
 		sdw::DefaultedT< sdw::UInt > hasTransmission;
+*/
 		sdw::DefaultedT< sdw::Float > opacity;
 		sdw::DefaultedT< sdw::UInt > bwAccumulationOperator;
 		sdw::DefaultedT< sdw::Float > alphaRef;
 		sdw::DefaultedT< sdw::Float > occlusion;
 		sdw::DefaultedT< sdw::Float > transmittance;
-		sdw::DefaultedT< sdw::Float > refractionRatio;
-		sdw::DefaultedT< sdw::UInt > hasRefraction;
 		sdw::DefaultedT< sdw::UInt > hasReflection;
-		sdw::DefaultedT< sdw::Float > metalness;
-		sdw::DefaultedT< sdw::Float > roughness;
-		sdw::DefaultedT< sdw::Float > thicknessFactor;
-		sdw::DefaultedT< sdw::Float > attenuationDistance;
-		sdw::DefaultedT< sdw::Vec3 > attenuationColour;
-		sdw::DefaultedT< sdw::Float > clearcoatFactor;
-		sdw::DefaultedT< sdw::Vec3 > clearcoatNormal;
-		sdw::DefaultedT< sdw::Float > clearcoatRoughness;
-		sdw::DefaultedT< sdw::Vec3 > sheenColour;
-		sdw::DefaultedT< sdw::Float > sheenRoughness;
-		sdw::DefaultedT< sdw::Float > iridescenceFactor;
-		sdw::DefaultedT< sdw::Float > iridescenceThickness;
-		sdw::DefaultedT< sdw::Float > iridescenceIor;
-		sdw::DefaultedT< sdw::Vec3 > iridescenceFresnel;
-		sdw::DefaultedT< sdw::Vec3 > iridescenceF0;
-		sdw::Float const shininess;
-
-		sdw::DefaultedT< sdw::Vec3 > specular;
 
 	protected:
 		static void fillType( ast::type::BaseStruct & type

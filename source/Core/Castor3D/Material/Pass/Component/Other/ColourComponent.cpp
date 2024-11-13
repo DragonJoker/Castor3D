@@ -74,6 +74,24 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	ColourComponent::MaterialShader::MaterialShader()
+		: shader::PassMaterialShader{ 12u }
+	{
+
+	}
+
+	void ColourComponent::MaterialShader::fillMaterialType( sdw::type::BaseStruct & type
+		, sdw::expr::ExprList & inits )const
+	{
+		if ( !type.hasMember( "baseColour" ) )
+		{
+			type.declMember( "baseColour", ast::type::Kind::eVec3F );
+			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ ColourComponent::DefaultColour.red() } ) ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	void ColourComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
@@ -85,9 +103,9 @@ namespace castor3d
 			return;
 		}
 
-		if ( !components.hasMember( "colour" ) )
+		if ( !components.hasMember( "baseColour" ) )
 		{
-			components.declMember( "colour", sdw::type::Kind::eVec3F );
+			components.declMember( "baseColour", sdw::type::Kind::eVec3F );
 		}
 	}
 
@@ -98,7 +116,7 @@ namespace castor3d
 		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )const
 	{
-		if ( !components.hasMember( "colour" ) )
+		if ( !components.hasMember( "baseColour" ) )
 		{
 			return;
 		}
@@ -108,7 +126,7 @@ namespace castor3d
 		{
 			if ( material )
 			{
-				inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Vec3 >( "colour" )
+				inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Vec3 >( "baseColour" )
 					* surface->getMember< sdw::Vec3 >( "colour", vec3( sdw::Float{ ColourComponent::DefaultColour.red() } ) ) ) );
 			}
 			else
@@ -118,7 +136,7 @@ namespace castor3d
 		}
 		else if ( material )
 		{
-			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Vec3 >( "colour" ) ) );
+			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Vec3 >( "baseColour" ) ) );
 		}
 		else
 		{
@@ -131,29 +149,9 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		if ( !res.hasMember( "colour" ) )
+		if ( res.hasMember( "baseColour" ) )
 		{
-			return;
-		}
-
-		res.getMember< sdw::Vec3 >( "colour", true ) += src.getMember< sdw::Vec3 >( "colour", true ) * passMultiplier;
-	}
-
-	//*********************************************************************************************
-
-	ColourComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ 12u }
-	{
-
-	}
-
-	void ColourComponent::MaterialShader::fillMaterialType( sdw::type::BaseStruct & type
-		, sdw::expr::ExprList & inits )const
-	{
-		if ( !type.hasMember( "colour" ) )
-		{
-			type.declMember( "colour", ast::type::Kind::eVec3F );
-			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ ColourComponent::DefaultColour.red() } ) ) );
+			res.getMember< sdw::Vec3 >( "baseColour" ) += src.getMember< sdw::Vec3 >( "baseColour", true ) * passMultiplier;
 		}
 	}
 

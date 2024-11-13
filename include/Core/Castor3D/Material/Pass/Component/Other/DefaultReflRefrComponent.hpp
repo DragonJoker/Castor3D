@@ -32,7 +32,6 @@ namespace castor3d
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
 				, sdw::UInt const & hasReflection
-				, sdw::UInt const & hasRefraction
 				, sdw::Float const & refractionRatio
 				, shader::ReflectionRefraction & output
 				, shader::DebugOutput & debugOutput )const override;
@@ -47,7 +46,6 @@ namespace castor3d
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
 				, sdw::UInt const & hasReflection
-				, sdw::UInt const & hasRefraction
 				, sdw::Float const & refractionRatio
 				, shader::ReflectionRefraction & output
 				, shader::DebugOutput & debugOutput )const override;

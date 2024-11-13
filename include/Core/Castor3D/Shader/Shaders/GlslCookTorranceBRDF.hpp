@@ -20,8 +20,7 @@ namespace castor3d::shader
 		C3D_API static castor::StringView constexpr Name{ cuT( "cook_torrance" ) };
 
 	private:
-		void doGenerate( BlendComponents const & components
-			, LightSurface const & lightSurface )override;
+		void doGenerate( BlendComponents const & components )override;
 	};
 }
 

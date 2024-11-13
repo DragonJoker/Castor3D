@@ -2,6 +2,7 @@
 
 #include "Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp"
 
+#include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
@@ -13,44 +14,76 @@ namespace castor3d::shader
 {
 	//*********************************************************************************************
 
+	namespace blendcomp
+	{
+		void fillType( ast::type::BaseStruct & type )
+		{
+			type.declMember( "dielectricF0", sdw::type::Kind::eVec3F );
+			type.declMember( "alphaRoughness", sdw::type::Kind::eFloat );
+			type.declMember( "f90", sdw::type::Kind::eVec3F );
+			type.declMember( "dielectricF90", sdw::type::Kind::eVec3F );
+			type.declMember( "specularWeight", sdw::type::Kind::eFloat );
+		}
+
+		void fillInit( sdw::expr::ExprList & inits )
+		{
+			inits.emplace_back( sdw::makeExpr( vec3( 0.04_f ) ) );
+			inits.emplace_back( sdw::makeExpr( 1.0_f ) );
+			inits.emplace_back( sdw::makeExpr( vec3( 1.0_f ) ) );
+			inits.emplace_back( sdw::makeExpr( vec3( 1.0_f ) ) );
+			inits.emplace_back( sdw::makeExpr( 1.0_f ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	BlendComponents::BlendComponents( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
 		: sdw::StructInstance{ writer, castor::move( expr ), enabled }
-		, f0{ getMember( "f0", vec3( 0.04_f ) ) }
+		, ior{ getMember( "ior", sdw::Float{ RefractionComponent::Default } ) }
+		, perceptualRoughness{ getMember( "roughness", 1.0_f ) }
+		, dielectricF0{ getMember( "dielectricF0", vec3( 0.04_f ) ) }
+		, alphaRoughness{ getMember( "alphaRoughness", 1.0_f ) }
 		, f90{ getMember( "f90", vec3( 1.0_f ) ) }
-		, colour{ getMember( "colour", vec3( 0.0_f ) ) }
+		, dielectricF90{ getMember( "dielectricF90", vec3( 1.0_f ) ) }
+		, metalness{ getMember( "metalness", 0.0_f ) }
+		, baseColour{ getMember( "baseColour", vec3( 0.0_f ) ) }
+		, sheenColour{ getMember( "sheenColour", vec3( 0.0_f ) ) }
+		, sheenRoughness{ getMember( "sheenRoughness", 0.0_f ) }
+		, clearcoatF0{ getMember( "clearcoatF0", vec3( 0.0_f ) ) }
+		, clearcoatF90{ getMember( "clearcoatF90", vec3( 0.0_f ) ) }
+		, clearcoatFactor{ getMember( "clearcoatFactor", 0.0_f ) }
+		, clearcoatNormal{ getMember( "clearcoatNormal", vec3( 0.0_f ) ) }
+		, clearcoatRoughness{ getMember( "clearcoatRoughness", 0.0_f ) }
+		, specularWeight{ getMember( "specularWeight", 1.0_f ) }
+		, transmissionFactor{ getMember( "transmissionFactor", 0.0_f ) }
+		, thicknessFactor{ getMember( "thicknessFactor", 0.0_f ) }
+		, attenuationColour{ getMember( "attenuationColour", vec3( 0.0_f ) ) }
+		, attenuationDistance{ getMember( "attenuationDistance", 0.0_f ) }
+		, iridescenceFactor{ getMember( "iridescenceFactor", 0.0_f ) }
+		, iridescenceThickness{ getMember( "iridescenceThickness", 0.0_f ) }
+		, iridescenceIor{ getMember( "iridescenceIor", 0.0_f ) }
+		, diffuseTransmissionColour{ getMember( "diffuseTransmissionColour", vec3( 1.0_f ) ) }
+		, diffuseTransmissionFactor{ getMember( "diffuseTransmissionFactor", 0.0_f ) }
+		, dispersion{ getMember( "dispersion", 0.0_f ) }
 		, emissiveColour{ getMember( "emissiveColour", vec3( 0.0_f ) ) }
 		, emissiveFactor{ getMember( "emissiveFactor", 0.0_f ) }
-		, ambientColour{ getMember( "ambientColour", vec3( 1.0_f ) ) }
-		, ambientFactor{ getMember( "ambientFactor", 1.0_f ) }
-		, transmission{ getMember( "transmission", 0.0_f ) }
-		, hasTransmission{ getMember( "hasTransmission", 0_u ) }
+
+		//, ambientColour{ getMember( "ambientColour", vec3( 1.0_f ) ) }
+		//, ambientFactor{ getMember( "ambientFactor", 1.0_f ) }
+		//, hasTransmission{ getMember( "hasTransmission", 0_u ) }
+		//, iridescenceFresnel{ getMember( "iridescenceFresnel", vec3( 0.0_f ) ) }
+		//, iridescenceF0{ getMember( "iridescenceF0", vec3( 0.0_f ) ) }
+		//, shininess{ computeShininessFromRoughness( roughness ) }
+		//, specular{ getMember( "specular", vec3( 0.0_f ) ) }
+
 		, opacity{ getMember( "opacity", 1.0_f ) }
 		, bwAccumulationOperator{ getMember( "bwAccumulationOperator", 0_u ) }
 		, alphaRef{ getMember( "alphaRef", 0.95_f ) }
 		, occlusion{ getMember( "occlusion", 1.0_f ) }
 		, transmittance{ getMember( "transmittance", 1.0_f ) }
-		, refractionRatio{ getMember( "refractionRatio", sdw::Float{ RefractionComponent::Default } ) }
-		, hasRefraction{ getMember( "hasRefraction", 0_u ) }
 		, hasReflection{ getMember( "hasReflection", 0_u ) }
-		, metalness{ getMember( "metalness", 0.0_f ) }
-		, roughness{ getMember( "roughness", 1.0_f ) }
-		, thicknessFactor{ getMember( "thicknessFactor", 0.0_f ) }
-		, attenuationDistance{ getMember( "attenuationDistance", 0.0_f ) }
-		, attenuationColour{ getMember( "attenuationColour", vec3( 0.0_f ) ) }
-		, clearcoatFactor{ getMember( "clearcoatFactor", 0.0_f ) }
-		, clearcoatNormal{ getMember( "clearcoatNormal", vec3( 0.0_f ) ) }
-		, clearcoatRoughness{ getMember( "clearcoatRoughness", 0.0_f ) }
-		, sheenColour{ getMember( "sheenColour", vec3( 0.0_f ) ) }
-		, sheenRoughness{ getMember( "sheenRoughness", 0.0_f ) }
-		, iridescenceFactor{ getMember( "iridescenceFactor", 0.0_f ) }
-		, iridescenceThickness{ getMember( "iridescenceThickness", 0.0_f ) }
-		, iridescenceIor{ getMember( "iridescenceIor", 0.0_f ) }
-		, iridescenceFresnel{ getMember( "iridescenceFresnel", vec3( 0.0_f ) ) }
-		, iridescenceF0{ getMember( "iridescenceF0", vec3( 0.0_f ) ) }
-		, shininess{ computeShininessFromRoughness( roughness ) }
-		, specular{ getMember( "specular", vec3( 0.0_f ) ) }
 	{
 		auto & structType = static_cast< sdw::type::Struct const & >( *sdw::StructInstance::getType() );
 
@@ -108,10 +141,44 @@ namespace castor3d::shader
 
 	void BlendComponents::finish( PassShaders const & passShaders
 		, DerivSurfaceBase const & surface
-		, Utils & utils
-		, sdw::Vec3 const worldEye )
+		, CameraData const & camera
+		, ModelData const & model
+		, Utils & utils )
 	{
-		passShaders.finishComponents( surface, worldEye, utils, *this );
+		passShaders.finishComponents( surface, camera, model, utils, *this );
+	}
+
+	void BlendComponents::registerDebug( DebugOutput & debugOutput )const
+	{
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Base Colour" ), baseColour.rgb() );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Metalness" ), metalness );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Roughness" ), perceptualRoughness );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "IOR" ), ior );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Dielectric F0" ), dielectricF0 );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "F90" ), f90 );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Dielectric F90" ), dielectricF90 );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Sheen Colour" ), sheenColour );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Sheen Roughness" ), sheenRoughness );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Clearcoat F0" ), clearcoatF0 );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Clearcoat F90" ), clearcoatF90 );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Clearcoat Factor" ), clearcoatFactor );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Clearcoat Normal" ), clearcoatNormal );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Clearcoat Roughness" ), clearcoatRoughness );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Specular Weight" ), specularWeight );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Transmission Factor" ), transmissionFactor );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Thickness Factor" ), thicknessFactor );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Attenuation Colour" ), attenuationColour );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Attenuation Distance" ), attenuationDistance );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Iridescence Factor" ), iridescenceFactor );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Iridescence IOR" ), iridescenceIor );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Diffuse Transmission Colour" ), diffuseTransmissionColour );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Diffuse Transmission Factor" ), diffuseTransmissionFactor );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Dispersion" ), dispersion );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Emissive Colour" ), emissiveColour );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Emissive Factor" ), emissiveFactor );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Opacity" ), opacity );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Occlusion" ), occlusion );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Transmittance" ), transmittance );
 	}
 
 	void BlendComponents::setNormal( sdw::Vec3 const v )
@@ -248,10 +315,8 @@ namespace castor3d::shader
 		, Materials const & materials
 		, sdw::expr::ExprList & inits )
 	{
-		type.declMember( "f0", sdw::type::Kind::eVec3F );
-		type.declMember( "f90", sdw::type::Kind::eVec3F );
-		inits.emplace_back( sdw::makeExpr( sdw::vec3( 0.04_f ) ) );
-		inits.emplace_back( sdw::makeExpr( sdw::vec3( 1.0_f ) ) );
+		blendcomp::fillType( type );
+		blendcomp::fillInit( inits );
 		materials.getPassShaders().fillComponents( type, materials, inits );
 	}
 
@@ -262,10 +327,8 @@ namespace castor3d::shader
 		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )
 	{
-		type.declMember( "f0", sdw::type::Kind::eVec3F );
-		type.declMember( "f90", sdw::type::Kind::eVec3F );
-		inits.emplace_back( sdw::makeExpr( sdw::vec3( 0.04_f ) ) );
-		inits.emplace_back( sdw::makeExpr( sdw::vec3( 1.0_f ) ) );
+		blendcomp::fillType( type );
+		blendcomp::fillInit( inits );
 		materials.getPassShaders().fillComponents( type, materials, material, surface, clrCot, inits );
 	}
 
@@ -273,8 +336,7 @@ namespace castor3d::shader
 		, Materials const & materials
 		, sdw::expr::ExprList & inits )
 	{
-		inits.emplace_back( sdw::makeExpr( sdw::vec3( 0.04_f ) ) );
-		inits.emplace_back( sdw::makeExpr( sdw::vec3( 1.0_f ) ) );
+		blendcomp::fillInit( inits );
 		materials.getPassShaders().fillComponentsInits( components, materials, inits );
 	}
 
@@ -285,8 +347,7 @@ namespace castor3d::shader
 		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )
 	{
-		inits.emplace_back( sdw::makeExpr( sdw::vec3( 0.04_f ) ) );
-		inits.emplace_back( sdw::makeExpr( sdw::vec3( 1.0_f ) ) );
+		blendcomp::fillInit( inits );
 		materials.getPassShaders().fillComponentsInits( components, materials, material, surface, clrCot, inits );
 	}
 

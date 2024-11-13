@@ -185,12 +185,12 @@ namespace castor3d
 					, in.passMultipliers
 					, components );
 
-				if ( components.transmission )
+				if ( components.transmissionFactor )
 				{
 					auto incident = writer.declLocale( "incident"
 						, normalize( in.worldPosition.xyz() - c3d_cameraData.position() ) );
 
-					IF( writer, components.transmission >= 0.1_f )
+					IF( writer, components.transmissionFactor >= 0.1_f )
 					{
 						writer.demote();
 					}

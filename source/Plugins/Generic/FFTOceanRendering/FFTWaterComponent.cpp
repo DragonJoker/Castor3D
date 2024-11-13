@@ -81,6 +81,23 @@ namespace ocean_fft
 
 	//*********************************************************************************************
 
+	FFTWaterComponent::MaterialShader::MaterialShader()
+		: shader::PassMaterialShader{ sizeof( float ) }
+	{
+	}
+
+	void FFTWaterComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
+		, sdw::expr::ExprList & inits )const
+	{
+		if ( !type.hasMember( "waterDensity" ) )
+		{
+			type.declMember( "waterDensity", ast::type::Kind::eFloat );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ FFTWaterComponent::Default } ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	void FFTWaterComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
 		, c3d::Materials const & materials
@@ -146,12 +163,10 @@ namespace ocean_fft
 		, c3d::BlendComponents & res
 		, c3d::BlendComponents const & src )const
 	{
-		if ( !res.hasMember( "waterDensity" ) )
+		if ( res.hasMember( "waterDensity" ) )
 		{
-			return;
+			res.getMember< sdw::Float >( "waterDensity" ) += src.getMember< sdw::Float >( "waterDensity", true ) * passMultiplier;
 		}
-
-		res.getMember< sdw::Float >( "waterDensity", true ) += src.getMember< sdw::Float >( "waterDensity", true ) * passMultiplier;
 	}
 
 	void FFTWaterComponent::ComponentsShader::updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -204,23 +219,6 @@ namespace ocean_fft
 				// This is rather "arbitrary", but looks pretty good in practice.
 				waterColourMod = 1.0_f + 3.0_f * smoothStep( 1.2_f, 1.8_f, turbulence );
 			}
-		}
-	}
-
-	//*********************************************************************************************
-
-	FFTWaterComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ sizeof( float ) }
-	{
-	}
-
-	void FFTWaterComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
-		, sdw::expr::ExprList & inits )const
-	{
-		if ( !type.hasMember( "waterDensity" ) )
-		{
-			type.declMember( "waterDensity", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ FFTWaterComponent::Default } ) );
 		}
 	}
 

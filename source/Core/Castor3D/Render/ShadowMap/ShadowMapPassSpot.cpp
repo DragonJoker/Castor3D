@@ -349,8 +349,8 @@ namespace castor3d
 						, light.position() - in.worldPosition.xyz() );
 					auto distance = writer.declLocale( "distance"
 						, length( lightToVertex ) );
-					auto attenuation = writer.declLocale( "attenuation", 1.0_f );
-					light.getAttenuationFactor( distance, attenuation );
+					auto attenuation = writer.declLocale( "attenuation"
+						, light.getAttenuationFactor( distance ) );
 					auto L = writer.declLocale( "L"
 						, lightToVertex / distance );
 					auto spotFactor = writer.declLocale( "spotFactor"
@@ -360,8 +360,8 @@ namespace castor3d
 							, 1.0_f / ( 1.0_f - light.outerCutOffCos() )
 							, 1.0_f ) );
 					spotFactor = 1.0_f - step( spotFactor, 0.0_f );
-					components.colour *= in.colour;
-					out.flux.rgb() = ( components.colour
+					components.baseColour *= in.colour;
+					out.flux.rgb() = ( components.baseColour
 							* light.base().colour()
 							* light.base().intensity().x()
 							* clamp( dot( L, components.getRawNormal() ), 0.0_f, 1.0_f ) )

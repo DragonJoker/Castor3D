@@ -63,6 +63,8 @@ namespace castor3d::shader
 		{
 		}
 
+		C3D_API sdw::Float getAttenuationFactor( sdw::Float const & distance )const;
+
 	public:
 		auto base()const { return getMember< "base" >(); }
 
@@ -87,8 +89,7 @@ namespace castor3d::shader
 		{
 		}
 
-		C3D_API void getAttenuationFactor( sdw::Float const & distance
-			, sdw::Float & attenuation )const;
+		C3D_API sdw::Float getAttenuationFactor( sdw::Float const & distance )const;
 
 	public:
 		auto base()const { return getMember< "base" >(); }
@@ -123,8 +124,7 @@ namespace castor3d::shader
 		{
 		}
 
-		C3D_API void getAttenuationFactor( sdw::Float const & distance
-			, sdw::Float & attenuation )const;
+		C3D_API sdw::Float getAttenuationFactor( sdw::Float const & distance )const;
 
 	public:
 		auto base()const { return getMember< "base" >(); }

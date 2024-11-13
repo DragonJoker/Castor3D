@@ -33,10 +33,6 @@ namespace castor3d
 				, sdw::Float const & passMultiplier
 				, shader::BlendComponents & res
 				, shader::BlendComponents const & src )const override;
-			C3D_API void updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-				, shader::Material const & material
-				, shader::BlendComponents & components
-				, bool isFrontCulled )const override;
 		};
 
 		struct MaterialShader

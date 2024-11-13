@@ -69,6 +69,25 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	EmissiveComponent::MaterialShader::MaterialShader()
+		: shader::PassMaterialShader{ 16u }
+	{
+	}
+
+	void EmissiveComponent::MaterialShader::fillMaterialType( sdw::type::BaseStruct & type
+		, sdw::expr::ExprList & inits )const
+	{
+		if ( !type.hasMember( "emissiveColour" ) )
+		{
+			type.declMember( "emissiveColour", ast::type::Kind::eVec3F );
+			type.declMember( "emissiveFactor", ast::type::Kind::eFloat );
+			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ EmissiveComponent::DefaultComponent } ) ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ EmissiveComponent::DefaultFactor } ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	void EmissiveComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
@@ -116,31 +135,10 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		if ( !res.hasMember( "emissiveColour" ) )
+		if ( res.hasMember( "emissiveColour" ) )
 		{
-			return;
-		}
-
-		res.getMember< sdw::Vec3 >( "emissiveColour", true ) += src.getMember< sdw::Vec3 >( "emissiveColour", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "emissiveFactor", true ) += src.getMember< sdw::Float >( "emissiveFactor", true ) * passMultiplier;
-	}
-
-	//*********************************************************************************************
-
-	EmissiveComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ 16u }
-	{
-	}
-
-	void EmissiveComponent::MaterialShader::fillMaterialType( sdw::type::BaseStruct & type
-		, sdw::expr::ExprList & inits )const
-	{
-		if ( !type.hasMember( "emissiveColour" ) )
-		{
-			type.declMember( "emissiveColour", ast::type::Kind::eVec3F );
-			type.declMember( "emissiveFactor", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ EmissiveComponent::DefaultComponent } ) ) );
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ EmissiveComponent::DefaultFactor } ) );
+			res.emissiveColour += src.emissiveColour * passMultiplier;
+			res.emissiveFactor += src.emissiveFactor * passMultiplier;
 		}
 	}
 

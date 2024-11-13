@@ -21,7 +21,7 @@ namespace castor3d
 			: shader::PassMapMaterialShader
 		{
 			C3D_API MaterialShader()
-				: shader::PassMapMaterialShader{ cuT( "colour" ) }
+				: shader::PassMapMaterialShader{ cuT( "baseColour" ) }
 			{
 			}
 		};

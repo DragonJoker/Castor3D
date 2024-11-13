@@ -41,8 +41,7 @@ namespace disney::shader
 		static castor::StringView constexpr Name{ cuT( "disney" ) };
 
 	private:
-		void doGenerate( c3d::BlendComponents const & components
-			, c3d::LightSurface const & lightSurface )override;
+		void doGenerate( c3d::BlendComponents const & components )override;
 
 		sdw::Function< sdw::Float
 			, sdw::InFloat
@@ -70,8 +69,7 @@ namespace disney::shader
 		static castor::StringView constexpr Name{ cuT( "disney" ) };
 
 	private:
-		void doGenerate( c3d::BlendComponents const & components
-			, c3d::LightSurface const & lightSurface )override;
+		void doGenerate( c3d::BlendComponents const & components )override;
 
 		sdw::Function< sdw::Float
 			, sdw::InFloat

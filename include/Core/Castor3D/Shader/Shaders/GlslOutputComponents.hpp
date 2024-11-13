@@ -16,7 +16,8 @@ namespace castor3d::shader
 			, sdw::type::MemoryLayout::eC
 			, sdw::Vec3Field< "ambient" >
 			, sdw::Vec3Field< "diffuse" >
-			, sdw::Vec3Field< "specular" >
+			, sdw::Vec3Field< "dielectric" >
+			, sdw::Vec3Field< "metal" >
 			, sdw::Vec3Field< "scattering" >
 			, sdw::Vec3Field< "coating" >
 			, sdw::Vec4Field< "sheen" > >
@@ -28,9 +29,7 @@ namespace castor3d::shader
 
 		C3D_API void attenuate( sdw::Float const attenuation
 			, bool withScattering
-			, bool withDiffuse = true );
-		C3D_API void sheenAlbedoScale( BlendComponents const & components
-			, bool withDiffuse = true );
+			, bool withDiffuse );
 		C3D_API void registerDebug( DebugOutput & debugOutput
 			, castor::String const & category )const;
 
@@ -39,7 +38,8 @@ namespace castor3d::shader
 
 		sdw::Vec3 ambient;
 		sdw::Vec3 diffuse;
-		sdw::Vec3 specular;
+		sdw::Vec3 dielectric;
+		sdw::Vec3 metal;
 		sdw::Vec3 scattering;
 		sdw::Vec3 coating;
 		sdw::Vec4 sheen;
@@ -78,12 +78,11 @@ namespace castor3d::shader
 	struct ReflectionRefraction
 		: public sdw::StructInstanceHelperT< "C3D_ReflectionRefraction"
 			, sdw::type::MemoryLayout::eC
-			, sdw::Vec3Field< "reflDiffuse" >
-			, sdw::Vec3Field< "reflSpecular" >
-			, sdw::Vec3Field< "reflCoating" >
-			, sdw::Vec4Field< "reflSheen" >
-			, sdw::Vec3Field< "refrDiffuse" >
-			, sdw::Vec3Field< "refrSpecular" > >
+			, sdw::Vec3Field< "diffuse" >
+			, sdw::Vec3Field< "dielectric" >
+			, sdw::Vec3Field< "metal" >
+			, sdw::Vec3Field< "coating" >
+			, sdw::Vec4Field< "sheen" > >
 	{
 		C3D_API ReflectionRefraction( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
@@ -93,12 +92,11 @@ namespace castor3d::shader
 		C3D_API void registerDebug( DebugOutput & debugOutput
 			, castor::String const & category )const;
 
-		sdw::Vec3 reflDiffuse;
-		sdw::Vec3 reflSpecular;
-		sdw::Vec3 reflCoating;
-		sdw::Vec4 reflSheen;
-		sdw::Vec3 refrDiffuse;
-		sdw::Vec3 refrSpecular;
+		sdw::Vec3 diffuse;
+		sdw::Vec3 dielectric;
+		sdw::Vec3 metal;
+		sdw::Vec3 coating;
+		sdw::Vec4 sheen;
 
 	private:
 		static sdw::expr::ExprList makeInit();

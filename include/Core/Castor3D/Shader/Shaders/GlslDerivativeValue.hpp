@@ -114,6 +114,10 @@ namespace castor3d::shader
 	C3D_API DerivVec2 negate( DerivVec2 const a );
 	C3D_API DerivVec3 negate( DerivVec3 const a );
 	C3D_API DerivVec4 negate( DerivVec4 const a );
+	C3D_API DerivFloat abs( DerivFloat const a );
+	C3D_API DerivVec2 abs( DerivVec2 const a );
+	C3D_API DerivVec3 abs( DerivVec3 const a );
+	C3D_API DerivVec4 abs( DerivVec4 const a );
 	//@}
 	C3D_API sdw::Float computeMip( DerivVec2 const & uv
 		, sdw::Vec2 const & texSize );
