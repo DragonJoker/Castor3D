@@ -18,6 +18,14 @@ namespace ocean_fft
 	struct FFTWaterComponent
 		: public castor3d::BaseDataPassComponentT< castor::AtomicGroupChangeTracked< float > >
 	{
+		struct MaterialShader
+			: castor3d::shader::PassMaterialShader
+		{
+			MaterialShader();
+			void fillMaterialType( sdw::type::BaseStruct & type
+				, sdw::expr::ExprList & inits )const override;
+		};
+
 		struct ComponentsShader
 			: castor3d::shader::PassComponentsShader
 		{
@@ -44,14 +52,6 @@ namespace ocean_fft
 				, castor3d::shader::Material const & material
 				, castor3d::shader::BlendComponents & components
 				, bool isFrontCulled )const override;
-		};
-
-		struct MaterialShader
-			: castor3d::shader::PassMaterialShader
-		{
-			MaterialShader();
-			void fillMaterialType( sdw::type::BaseStruct & type
-				, sdw::expr::ExprList & inits )const override;
 		};
 
 		class Plugin

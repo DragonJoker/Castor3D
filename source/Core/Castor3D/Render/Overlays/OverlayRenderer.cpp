@@ -1054,10 +1054,10 @@ namespace castor3d
 
 					if ( m_isHdr )
 					{
-						outComponents.colour = c3d_hdrConfigData.removeGamma( outComponents.colour );
+						outComponents.baseColour = c3d_hdrConfigData.removeGamma( outComponents.baseColour );
 					}
 
-					outColour = vec4( outComponents.colour, outComponents.opacity );
+					outColour = vec4( outComponents.baseColour, outComponents.opacity );
 				} );
 
 			programModule.shader = castor::make_unique< sdw::Shader >( castor::move( writer.getShader() ) );

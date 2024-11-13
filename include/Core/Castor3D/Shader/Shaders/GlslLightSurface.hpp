@@ -24,16 +24,12 @@ namespace castor3d::shader
 			, DerivVec3 const view
 			, sdw::Vec3 const clip
 			, DerivVec3 const normal
-			, bool enableDotProducts
-			, bool enableFresnel
-			, bool enableIridescence );
+			, bool enableDotProducts );
 
 		C3D_API static sdw::type::BaseStructPtr makeType( ast::type::TypesCache & cache
 			, sdw::type::TypePtr type );
 		C3D_API static sdw::type::BaseStructPtr makeType( ast::type::TypesCache & cache
-			, bool enableDotProducts
-			, bool enableFresnel
-			, bool enableIridescence );
+			, bool enableDotProducts );
 		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
 			, LightSurface const & rhs );
 
@@ -44,17 +40,13 @@ namespace castor3d::shader
 			, DerivVec3 const view
 			, sdw::Vec3 const clip
 			, DerivVec3 const normal
-			, bool enableDotProducts = true
-			, bool enableFresnel = true
-			, bool enableIridescence = true );
+			, bool enableDotProducts = true );
 		C3D_API static LightSurface create( sdw::ShaderWriter & writer
 			, castor::MbString const & name
 			, DerivVec4 const world
 			, sdw::Vec3 const clip
 			, DerivVec3 const normal
-			, bool enableDotProducts = false
-			, bool enableFresnel = false
-			, bool enableIridescence = false );
+			, bool enableDotProducts = false );
 		C3D_API static LightSurface create( sdw::ShaderWriter & writer
 			, Utils & utils
 			, castor::MbString const & name
@@ -63,23 +55,12 @@ namespace castor3d::shader
 			, DerivVec3 const view
 			, sdw::Vec3 const clip
 			, DerivVec3 const normal
-			, sdw::Vec3 const f0
 			, BlendComponents const & components
-			, bool enableDotProducts = true
-			, bool enableFresnel = true
-			, bool enableIridescence = true );
+			, bool enableDotProducts = true );
 
 		C3D_API void updateN( DerivVec3 const N )const;
 		C3D_API void updateL( DerivVec3 const VtoL )const;
-
-		C3D_API void updateNAndF( Utils & utils
-			, DerivVec3 const N
-			, sdw::Vec3 const f0
-			, BlendComponents const & components )const;
-		C3D_API void updateLAndF( Utils & utils
-			, DerivVec3 const VtoL
-			, sdw::Vec3 const f0
-			, BlendComponents const & components )const;
+		C3D_API void registerDebug( DebugOutput & debugOutput )const;
 
 		auto eyePosition()const { return m_eyePosition; }
 		auto worldPosition()const { return m_worldPosition; }
@@ -97,9 +78,7 @@ namespace castor3d::shader
 		DerivFloat NdotH()const { return m_NdotH; }
 		DerivFloat LdotV()const { return m_LdotV; }
 		DerivFloat HdotL()const { return m_HdotL; }
-		DerivVec3 F()const { return m_F; }
-		DerivVec3 spcF()const { return m_spcF; }
-		DerivVec3 difF()const { return m_difF; }
+		DerivFloat HdotV()const { return m_HdotV; }
 
 	private:
 		sdw::Vec3 m_eyePosition;
@@ -121,26 +100,14 @@ namespace castor3d::shader
 		mutable sdw::DefaultedT< DerivFloat > m_LdotV;
 		mutable sdw::DefaultedT< DerivFloat > m_HdotL;
 
-		mutable sdw::DefaultedT< DerivVec3 > m_F;
-		mutable sdw::DefaultedT< DerivVec3 > m_spcF;
-		mutable sdw::DefaultedT< DerivVec3 > m_difF;
-
 	private:
-		auto HdotV()const { return m_HdotV; }
-
-		C3D_API void doUpdateF( Utils & utils
-			, sdw::Vec3 const f0
-			, BlendComponents const & components
-			, DerivFloat const & dotProduct )const;
 		C3D_API static sdw::expr::ExprPtr makeInit( sdw::type::BaseStructPtr type
 			, sdw::Vec3 const eye
 			, DerivVec4 const world
 			, DerivVec3 const view
 			, sdw::Vec3 const clip
 			, DerivVec3 const normal
-			, bool enableDotProducts
-			, bool enableFresnel
-			, bool enableIridescence );
+			, bool enableDotProducts );
 	};
 }
 

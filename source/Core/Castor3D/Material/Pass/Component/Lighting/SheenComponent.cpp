@@ -81,6 +81,25 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	SheenComponent::MaterialShader::MaterialShader()
+		: shader::PassMaterialShader{ 16u }
+	{
+	}
+
+	void SheenComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
+		, sdw::expr::ExprList & inits )const
+	{
+		if ( !type.hasMember( "sheenColour" ) )
+		{
+			type.declMember( "sheenColour", ast::type::Kind::eVec3F );
+			type.declMember( "sheenRoughness", ast::type::Kind::eFloat );
+			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ SheenComponent::DefaultComponent } ) ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ SheenComponent::DefaultRoughness } ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	void SheenComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
@@ -128,31 +147,10 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		if ( !res.hasMember( "sheenColour" ) )
+		if ( res.hasMember( "sheenColour" ) )
 		{
-			return;
-		}
-
-		res.getMember< sdw::Vec3 >( "sheenColour", true ) += src.getMember< sdw::Vec3 >( "sheenColour", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "sheenRoughness", true ) += src.getMember< sdw::Float >( "sheenRoughness", true ) * passMultiplier;
-	}
-
-	//*********************************************************************************************
-
-	SheenComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ 16u }
-	{
-	}
-
-	void SheenComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
-		, sdw::expr::ExprList & inits )const
-	{
-		if ( !type.hasMember( "sheenColour" ) )
-		{
-			type.declMember( "sheenColour", ast::type::Kind::eVec3F );
-			type.declMember( "sheenRoughness", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ SheenComponent::DefaultComponent } ) ) );
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ SheenComponent::DefaultRoughness } ) );
+			res.getMember< sdw::Vec3 >( "sheenColour" ) += src.getMember< sdw::Vec3 >( "sheenColour", true ) * passMultiplier;
+			res.getMember< sdw::Float >( "sheenRoughness" ) += src.getMember< sdw::Float >( "sheenRoughness", true ) * passMultiplier;
 		}
 	}
 

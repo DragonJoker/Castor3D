@@ -15,21 +15,23 @@ namespace castor3d::shader
 	}
 
 	sdw::RetVec3 SpecularBRDF::compute( BlendComponents const & components
-		, LightSurface const & lightSurface
-		, sdw::Vec3 const & radiance
-		, sdw::Float const & intensity
+		, sdw::Vec3 const & N
+		, sdw::Vec3 const & L
+		, sdw::Vec3 const & H
+		, sdw::Vec3 const & V
 		, sdw::Float const & NdotL
 		, sdw::Float const & NdotH )
 	{
 		if ( !m_compute )
 		{
-			doGenerate( components, lightSurface );
+			doGenerate( components );
 		}
 
 		return m_compute( components
-			, lightSurface
-			, radiance
-			, intensity
+			, N
+			, L
+			, H
+			, V
 			, NdotL
 			, NdotH );
 	}

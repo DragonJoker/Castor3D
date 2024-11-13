@@ -42,12 +42,8 @@ namespace castor3d::shader
 
 	void NoIblBackgroundModel::computeReflection( sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
-		, sdw::Vec3 const & pdifF
-		, sdw::Vec3 const & pspcF
 		, sdw::Vec3 const & pV
-		, sdw::Float const & pNdotV
 		, BlendComponents & components
-		, sdw::CombinedImage2DRgba32 const & pbrdf
 		, sdw::Vec3 & preflectedDiffuse
 		, sdw::Vec3 & preflectedSpecular
 		, DebugOutputCategory & debugOutput )
@@ -58,7 +54,6 @@ namespace castor3d::shader
 				, [this]( sdw::Vec3 const & wsIncident
 					, sdw::Vec3 const & wsNormal
 					, sdw::CombinedImageCubeRgba32 const & backgroundMap
-					, sdw::Vec3 const & specular
 					, sdw::Float const & roughness
 					, sdw::Vec3 reflectedDiffuse
 					, sdw::Vec3 reflectedSpecular )
@@ -66,12 +61,11 @@ namespace castor3d::shader
 					auto reflected = m_writer.declLocale( "reflected"
 						, reflect( wsIncident, wsNormal ) );
 					reflectedDiffuse = vec3( 0.0_f );
-					reflectedSpecular = backgroundMap.lod( reflected, roughness * 8.0_f ).xyz() * specular;
+					reflectedSpecular = backgroundMap.lod( reflected, roughness * 8.0_f ).xyz();
 				}
 				, sdw::InVec3{ m_writer, "wsIncident" }
 				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "brdfMap" }
-				, sdw::InVec3{ m_writer, "specular" }
 				, sdw::InFloat{ m_writer, "roughness" }
 				, sdw::OutVec3{ m_writer, "reflectedDiffuse" }
 				, sdw::OutVec3{ m_writer, "reflectedSpecular" } );
@@ -81,8 +75,7 @@ namespace castor3d::shader
 		m_computeReflection( -pV
 			, pwsNormal
 			, backgroundMap
-			, components.f0
-			, components.roughness
+			, components.perceptualRoughness
 			, preflectedDiffuse
 			, preflectedSpecular );
 	}
@@ -119,7 +112,7 @@ namespace castor3d::shader
 			, pwsNormal
 			, backgroundMap
 			, prefractionRatio
-			, components.roughness );
+			, components.perceptualRoughness );
 	}
 
 	sdw::RetVec3 NoIblBackgroundModel::computeDiffuse( sdw::Vec3 const & wsDirection
@@ -143,6 +136,6 @@ namespace castor3d::shader
 		auto backgroundMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapBackground" );
 		return m_computeDiffuse( wsDirection
 			, backgroundMap
-			, components.roughness );
+			, components.perceptualRoughness );
 	}
 }

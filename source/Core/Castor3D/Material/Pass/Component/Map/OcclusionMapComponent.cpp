@@ -137,7 +137,7 @@ namespace castor3d
 	{
 		if ( res.hasMember( "occlusion" ) )
 		{
-			res.getMember< sdw::Float >( "occlusion" ) += src.getMember< sdw::Float >( "occlusion" ) * passMultiplier;
+			res.occlusion += src.occlusion * passMultiplier;
 		}
 	}
 

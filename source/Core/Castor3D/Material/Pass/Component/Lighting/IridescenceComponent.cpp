@@ -117,86 +117,6 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void IridescenceComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
-		, sdw::type::BaseStruct & components
-		, shader::Materials const & materials
-		, sdw::StructInstance const * surface )const
-	{
-		if ( ( !checkFlag( componentsMask, ComponentModeFlag::eDiffuseLighting )
-				&& !checkFlag( componentsMask, ComponentModeFlag::eSpecularLighting ) )
-			|| ( !checkFlag( materials.getFilter(), ComponentModeFlag::eDiffuseLighting )
-				&& !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) ) )
-		{
-			return;
-		}
-
-		if ( !components.hasMember( "iridescenceFactor" ) )
-		{
-			components.declMember( "iridescenceFactor", sdw::type::Kind::eFloat );
-			components.declMember( "iridescenceIor", sdw::type::Kind::eFloat );
-			components.declMember( "iridescenceMinThickness", sdw::type::Kind::eFloat );
-			components.declMember( "iridescenceMaxThickness", sdw::type::Kind::eFloat );
-			components.declMember( "iridescenceThickness", sdw::type::Kind::eFloat );
-			components.declMember( "iridescenceFresnel", sdw::type::Kind::eVec3F );
-			components.declMember( "iridescenceF0", sdw::type::Kind::eVec3F );
-		}
-	}
-
-	void IridescenceComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
-		, shader::Materials const & materials
-		, shader::Material const * material
-		, sdw::StructInstance const * surface
-		, sdw::Vec4 const * clrCot
-		, sdw::expr::ExprList & inits )const
-	{
-		if ( !components.hasMember( "iridescenceFactor" ) )
-		{
-			return;
-		}
-
-		if ( material )
-		{
-			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "iridescenceFactor" ) ) );
-			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "iridescenceIor" ) ) );
-			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "iridescenceMinThickness" ) ) );
-			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "iridescenceMaxThickness" ) ) );
-			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "iridescenceMaxThickness" ) ) );
-			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Vec3 >( "specular" ) ) );
-			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Vec3 >( "specular" ) ) );
-		}
-		else
-		{
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultFactor } ) );
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultIor } ) );
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultMinThickness } ) );
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultMaxThickness } ) );
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultMaxThickness } ) );
-			inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
-			inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
-		}
-	}
-
-	void IridescenceComponent::ComponentsShader::blendComponents( shader::Materials const & materials
-		, sdw::Float const & passMultiplier
-		, shader::BlendComponents & res
-		, shader::BlendComponents const & src )const
-	{
-		if ( !res.hasMember( "iridescenceFactor" ) )
-		{
-			return;
-		}
-
-		res.getMember< sdw::Float >( "iridescenceFactor", true ) += src.getMember< sdw::Float >( "iridescenceFactor", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "iridescenceIor", true ) += src.getMember< sdw::Float >( "iridescenceIor", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "iridescenceMinThickness", true ) += src.getMember< sdw::Float >( "iridescenceMinThickness", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "iridescenceMaxThickness", true ) += src.getMember< sdw::Float >( "iridescenceMaxThickness", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "iridescenceThickness", true ) += src.getMember< sdw::Float >( "iridescenceThickness", true ) * passMultiplier;
-		res.getMember< sdw::Vec3 >( "iridescenceFresnel", true ) += src.getMember< sdw::Vec3 >( "iridescenceFresnel", true ) * passMultiplier;
-		res.getMember< sdw::Vec3 >( "iridescenceF0", true ) += src.getMember< sdw::Vec3 >( "iridescenceF0", true ) * passMultiplier;
-	}
-
-	//*********************************************************************************************
-
 	IridescenceComponent::MaterialShader::MaterialShader()
 		: shader::PassMaterialShader{ 16u }
 	{
@@ -216,6 +136,120 @@ namespace castor3d
 			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultMinThickness } ) );
 			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultMaxThickness } ) );
 		}
+	}
+
+	//*********************************************************************************************
+
+	void IridescenceComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
+		, shader::Materials const & materials
+		, sdw::StructInstance const * surface )const
+	{
+		if ( ( !checkFlag( componentsMask, ComponentModeFlag::eDiffuseLighting )
+				&& !checkFlag( componentsMask, ComponentModeFlag::eSpecularLighting ) )
+			|| ( !checkFlag( materials.getFilter(), ComponentModeFlag::eDiffuseLighting )
+				&& !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) ) )
+		{
+			return;
+		}
+
+		if ( !components.hasMember( "iridescenceFactor" ) )
+		{
+			components.declMember( "iridescenceFactor", sdw::type::Kind::eFloat );
+			components.declMember( "iridescenceIor", sdw::type::Kind::eFloat );
+			components.declMember( "iridescenceThickness", sdw::type::Kind::eFloat );
+			components.declMember( "iridescenceMinThickness", sdw::type::Kind::eFloat );
+			components.declMember( "iridescenceMaxThickness", sdw::type::Kind::eFloat );
+			components.declMember( "iridescenceDielectricFresnel", sdw::type::Kind::eVec3F );
+			components.declMember( "iridescenceMetallicFresnel", sdw::type::Kind::eVec3F );
+		}
+	}
+
+	void IridescenceComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
+		, shader::Materials const & materials
+		, shader::Material const * material
+		, sdw::StructInstance const * surface
+		, sdw::Vec4 const * clrCot
+		, sdw::expr::ExprList & inits )const
+	{
+		if ( !components.hasMember( "iridescenceFactor" ) )
+		{
+			return;
+		}
+
+		if ( material )
+		{
+			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "iridescenceFactor" ) ) );
+			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "iridescenceIor" ) ) );
+			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "iridescenceMaxThickness" ) ) );
+			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "iridescenceMinThickness" ) ) );
+			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "iridescenceMaxThickness" ) ) );
+		}
+		else
+		{
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultFactor } ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultIor } ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultMaxThickness } ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultMinThickness } ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultMaxThickness } ) );
+		}
+
+		inits.emplace_back( sdw::makeExpr( vec3( 1.0_f ) ) );
+		inits.emplace_back( sdw::makeExpr( vec3( 1.0_f ) ) );
+	}
+
+	void IridescenceComponent::ComponentsShader::blendComponents( shader::Materials const & materials
+		, sdw::Float const & passMultiplier
+		, shader::BlendComponents & res
+		, shader::BlendComponents const & src )const
+	{
+		if ( res.hasMember( "iridescenceFactor" ) )
+		{
+			res.iridescenceFactor += src.iridescenceFactor * passMultiplier;
+			res.iridescenceIor += src.iridescenceIor * passMultiplier;
+			res.iridescenceThickness += src.iridescenceThickness * passMultiplier;
+			res.getMember< sdw::Float >( "iridescenceMinThickness" ) += src.getMember< sdw::Float >( "iridescenceMinThickness", true ) * passMultiplier;
+			res.getMember< sdw::Float >( "iridescenceMaxThickness" ) += src.getMember< sdw::Float >( "iridescenceMaxThickness", true ) * passMultiplier;
+		}
+	}
+
+	void IridescenceComponent::ComponentsShader::finishComponent( shader::DerivSurfaceBase const & surface
+		, shader::CameraData const & camera
+		, shader::ModelData const & model
+		, shader::Utils & utils
+		, shader::BlendComponents & components )const
+	{
+		if ( !components.hasMember( "iridescenceFactor" ) )
+		{
+			return;
+		}
+
+		auto & writer = findWriterMandat( surface, camera.position(), components );
+
+		IF( writer, components.iridescenceThickness == 0.0_f )
+		{
+			components.iridescenceFactor = 0.0_f;
+		}
+		FI
+
+		IF( writer, components.iridescenceFactor != 0.0_f )
+		{
+			auto incident = writer.declLocale( "c3d_iridescenceIncident"
+				, normalize( surface.worldPosition.value().xyz() - camera.position() ) );
+			auto NdotV = writer.declLocale( "NdotV"
+				, dot( components.getRawNormal(), -incident ) );
+			components.getMember< sdw::Vec3 >( "iridescenceDielectricFresnel" ) = utils.evalIridescence( 1.0_f
+				, components.iridescenceIor
+				, NdotV
+				, components.iridescenceThickness
+				, components.dielectricF0 );
+			components.getMember< sdw::Vec3 >( "iridescenceMetallicFresnel" ) = utils.evalIridescence( 1.0_f
+				, components.iridescenceIor
+				, NdotV
+				, components.iridescenceThickness
+				, components.baseColour );
+		}
+		FI
 	}
 
 	//*********************************************************************************************
@@ -262,40 +296,6 @@ namespace castor3d
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting );
-	}
-
-	void IridescenceComponent::Plugin::finishComponent( shader::DerivSurfaceBase const & surface
-		, sdw::Vec3 const worldEye
-		, shader::Utils & utils
-		, shader::BlendComponents & components )
-	{
-		if ( !components.hasMember( "iridescenceFactor" ) )
-		{
-			return;
-		}
-
-		auto & writer = findWriterMandat( surface, worldEye, components );
-
-		IF( writer, components.iridescenceThickness == 0.0_f )
-		{
-			components.iridescenceFactor = 0.0_f;
-		}
-		FI
-
-		IF( writer, components.iridescenceFactor != 0.0_f )
-		{
-			auto incident = writer.declLocale( "c3d_iridescenceIncident"
-				, normalize( surface.worldPosition.value().xyz() - worldEye ) );
-			auto NdotV = writer.declLocale( "NdotV"
-				, dot( components.getRawNormal(), -incident ) );
-			components.iridescenceFresnel = utils.evalIridescence( 1.0_f
-				, components.iridescenceIor
-				, NdotV
-				, components.iridescenceThickness
-				, components.f0 );
-			components.iridescenceF0 = utils.fresnelToF0( components.iridescenceFresnel, NdotV );
-		}
-		FI
 	}
 
 	//*********************************************************************************************

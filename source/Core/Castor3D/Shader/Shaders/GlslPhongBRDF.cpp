@@ -28,16 +28,14 @@ namespace castor3d::shader
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computePhongDiffuse"
 			, [this]( c3d::BlendComponents const & /*components*/
 				, c3d::LightSurface const & /*lightSurface*/
-				, sdw::Vec3 const & radiance
-				, sdw::Float const & intensity
+				, sdw::Vec3 const & lightIntensity
 				, sdw::Float const & /*NdotL*/ )
 			{
-				m_writer.returnStmt( radiance * intensity );
+				m_writer.returnStmt( lightIntensity );
 			}
 			, c3d::InBlendComponents{ m_writer, "components", pcomponents }
 			, c3d::InLightSurface{ m_writer, "lightSurface", plightSurface }
-			, sdw::InVec3{ m_writer, "radiance" }
-			, sdw::InFloat{ m_writer, "intensity" }
+			, sdw::InVec3{ m_writer, "lightIntensity" }
 			, sdw::InFloat{ m_writer, "NdotL" } );
 	}
 
@@ -55,26 +53,24 @@ namespace castor3d::shader
 		return castor::makeUniqueDerived< SpecularBRDF, PhongSpecularBRDF >( writer, brdfHelpers );
 	}
 
-	void PhongSpecularBRDF::doGenerate( c3d::BlendComponents const & pcomponents
-		, c3d::LightSurface const & plightSurface )
+	void PhongSpecularBRDF::doGenerate( c3d::BlendComponents const & pcomponents )
 	{
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computePhongSpecular"
 			, [this]( c3d::BlendComponents const & components
-				, c3d::LightSurface const & /*lightSurface*/
-				, sdw::Vec3 const & radiance
-				, sdw::Float const & intensity
+				, sdw::Vec3 const & /*N*/
+				, sdw::Vec3 const & /*L*/
+				, sdw::Vec3 const & /*H*/
+				, sdw::Vec3 const & /*V*/
 				, sdw::Float const & /*NdotL*/
 				, sdw::Float const & NdotH )
 			{
-				m_writer.returnStmt( radiance
-					* intensity
-					* components.specular
-					* pow( NdotH , clamp( components.shininess, 1.0_f, 256.0_f ) ) );
+				m_writer.returnStmt( pow( NdotH , ( 1.0_f - components.perceptualRoughness ) * 256.0_f ) );
 			}
 			, c3d::InBlendComponents{ m_writer, "components", pcomponents }
-			, c3d::InLightSurface{ m_writer, "lightSurface", plightSurface }
-			, sdw::InVec3{ m_writer, "radiance" }
-			, sdw::InFloat{ m_writer, "intensity" }
+			, sdw::InVec3{ m_writer, "N" }
+			, sdw::InVec3{ m_writer, "L" }
+			, sdw::InVec3{ m_writer, "H" }
+			, sdw::InVec3{ m_writer, "V" }
 			, sdw::InFloat{ m_writer, "NdotL" }
 			, sdw::InFloat{ m_writer, "NdotH" } );
 	}
@@ -93,25 +89,24 @@ namespace castor3d::shader
 		return castor::makeUniqueDerived< ClearcoatBRDF, PhongClearcoatBRDF >( writer, brdfHelpers );
 	}
 
-	void PhongClearcoatBRDF::doGenerate( c3d::BlendComponents const & pcomponents
-		, c3d::LightSurface const & plightSurface )
+	void PhongClearcoatBRDF::doGenerate( c3d::BlendComponents const & pcomponents )
 	{
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computePhongClearcoat"
 			, [this]( c3d::BlendComponents const & components
-				, c3d::LightSurface const & /*lightSurface*/
-				, sdw::Vec3 const & radiance
-				, sdw::Float const & intensity
+				, sdw::Vec3 const & /*N*/
+				, sdw::Vec3 const & /*L*/
+				, sdw::Vec3 const & /*H*/
+				, sdw::Vec3 const & /*V*/
 				, sdw::Float const & /*NdotL*/
 				, sdw::Float const & NdotH )
 			{
-				m_writer.returnStmt( radiance
-					* intensity
-					* pow( NdotH , clamp( components.shininess, 1.0_f, 256.0_f ) ) );
+				m_writer.returnStmt( pow( NdotH, ( 1.0_f - components.perceptualRoughness ) * 256.0_f ) );
 			}
 			, c3d::InBlendComponents{ m_writer, "components", pcomponents }
-			, c3d::InLightSurface{ m_writer, "lightSurface", plightSurface }
-			, sdw::InVec3{ m_writer, "radiance" }
-			, sdw::InFloat{ m_writer, "intensity" }
+			, sdw::InVec3{ m_writer, "N" }
+			, sdw::InVec3{ m_writer, "L" }
+			, sdw::InVec3{ m_writer, "H" }
+			, sdw::InVec3{ m_writer, "V" }
 			, sdw::InFloat{ m_writer, "NdotL" }
 			, sdw::InFloat{ m_writer, "NdotH" } );
 	}

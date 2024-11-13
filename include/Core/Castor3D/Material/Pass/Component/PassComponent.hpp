@@ -26,6 +26,8 @@ namespace castor3d
 {
 	namespace shader
 	{
+		struct CameraData;
+
 		using SampleTexture = sdw::Function< sdw::Vec4
 			, sdw::InUInt
 			, shader::InTextureConfigData
@@ -222,6 +224,35 @@ namespace castor3d
 			}
 			/**
 			*\~english
+			*	Adjusts the component data from the surface.
+			*\param[in] surface
+			*	The surface.
+			*\param[in] camera
+			*	The camera data.
+			*\param[in] utils
+			*	The utility functions.
+			*\param[in,out] components
+			*	Contains the component members.
+			*\~french
+			*	Ajuste les données du composant après que les textures ont été traitées.
+			*\param[in] surface
+			*	La surface.
+			*\param[in] camera
+			*	Les données de la caméra.
+			*\param[in] utils
+			*	Les fonctions utilitaires.
+			*\param[in,out] components
+			*	Contient les membres du composant.
+			*/
+			C3D_API virtual void finishComponent( shader::DerivSurfaceBase const & surface
+				, shader::CameraData const & camera
+				, shader::ModelData const & model
+				, shader::Utils & utils
+				, shader::BlendComponents & components )const
+			{
+			}
+			/**
+			*\~english
 			*	Lets the component sample the map.
 			*\param[in] map
 			*	The texture.
@@ -287,60 +318,6 @@ namespace castor3d
 			}
 			/**@}*/
 
-		protected:
-			C3D_API void applyFloatComponent( castor::String const & mapName
-				, castor::String const & valueName
-				, PassShaders const & passShaders
-				, TextureConfigurations const & textureConfigs
-				, TextureAnimations const & textureAnims
-				, Material const & material
-				, BlendComponents & components
-				, SampleTexture const & sampleTexture )const;
-			C3D_API void applyVec3Component( castor::String const & mapName
-				, castor::String const & valueName
-				, PassShaders const & passShaders
-				, TextureConfigurations const & textureConfigs
-				, TextureAnimations const & textureAnims
-				, Material const & material
-				, BlendComponents & components
-				, SampleTexture const & sampleTexture )const;
-
-			void applyFloatComponent( castor::String const & valueName
-				, PassShaders const & passShaders
-				, TextureConfigurations const & textureConfigs
-				, TextureAnimations const & textureAnims
-				, Material const & material
-				, BlendComponents & components
-				, SampleTexture const & sampleTexture )const
-			{
-				applyFloatComponent( valueName
-					, valueName
-					, passShaders
-					, textureConfigs
-					, textureAnims
-					, material
-					, components
-					, sampleTexture );
-			}
-
-			void applyVec3Component( castor::String const & valueName
-				, PassShaders const & passShaders
-				, TextureConfigurations const & textureConfigs
-				, TextureAnimations const & textureAnims
-				, Material const & material
-				, BlendComponents & components
-				, SampleTexture const & sampleTexture )const
-			{
-				applyVec3Component( valueName
-					, valueName
-					, passShaders
-					, textureConfigs
-					, textureAnims
-					, material
-					, components
-					, sampleTexture );
-			}
-
 		private:
 			PassComponentPlugin const & m_plugin;
 		};
@@ -366,7 +343,6 @@ namespace castor3d
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
 				, sdw::UInt const & hasReflection
-				, sdw::UInt const & hasRefraction
 				, sdw::Float const & refractionRatio
 				, shader::ReflectionRefraction & output
 				, DebugOutput & debugOutput )const = 0;
@@ -381,7 +357,6 @@ namespace castor3d
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
 				, sdw::UInt const & hasReflection
-				, sdw::UInt const & hasRefraction
 				, sdw::Float const & refractionRatio
 				, shader::ReflectionRefraction & output
 				, DebugOutput & debugOutput )const = 0;

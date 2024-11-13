@@ -107,38 +107,19 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		castor::MbString valueName = "iridescenceThickness";
-		castor::MbString mapName = "iridescenceThickness";
-		auto textureName = mapName + "MapAndMask";
-
-		if ( !material.hasMember( textureName )
-			|| !components.hasMember( valueName ) )
+		if ( !material.hasMember( "iridescenceThickness" )
+			|| !components.hasMember( "iridescenceThickness" ) )
 		{
 			return;
 		}
 
-		auto & writer{ *material.getWriter() };
-		auto map = writer.declLocale( mapName + "Map"
-			, material.getMember< sdw::UInt >( textureName ) >> 16u );
-		auto mask = writer.declLocale( mapName + "Mask"
-			, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
 		auto iridescenceMinThickness = components.getMember< sdw::Float >( "iridescenceMinThickness" );
 		auto iridescenceMaxThickness = components.getMember< sdw::Float >( "iridescenceMaxThickness" );
-		auto iridescenceThickness = components.getMember< sdw::Float >( valueName );
-
-		auto config = writer.declLocale( valueName + "Config"
-			, textureConfigs.getTextureConfiguration( map ) );
-		auto anim = writer.declLocale( valueName + "Anim"
-			, textureAnims.getTextureAnimation( map ) );
-		passShaders.computeTexcoords( textureConfigs
-			, config
-			, anim
-			, components );
-		auto sampled = writer.declLocale( valueName + "Sampled"
-			, sampleTexture( map, config, components ) );
-		iridescenceThickness = mix( iridescenceMinThickness
+		components.iridescenceThickness = mix( iridescenceMinThickness
 			, iridescenceMaxThickness
-			, shader::TextureConfigData::getFloat( sampled, mask ) );
+			, loadFloatComponent( cuT( "iridescenceThickness" )
+				, passShaders, textureConfigs, textureAnims
+				, material, components, sampleTexture ) );
 	}
 
 	//*********************************************************************************************

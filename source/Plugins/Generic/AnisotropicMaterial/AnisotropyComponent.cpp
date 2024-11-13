@@ -91,7 +91,6 @@ namespace anisotropy
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
 		, sdw::UInt const & hasReflection
-		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
 		, c3d::ReflectionRefraction & output
 		, c3d::DebugOutput & debugOutput )const
@@ -108,15 +107,13 @@ namespace anisotropy
 			bentNormal = normalize( cross( bentNormal, anisotropicB ) );
 			// This heuristic can probably be improved upon
 			auto a = writer.declLocale( "a"
-				, pow( pow( 1.0_f - anisotropyStrength * ( 1.0_f - components.roughness ), 2.0_f ), 2.0_f ) );
+				, pow( pow( 1.0_f - anisotropyStrength * ( 1.0_f - components.perceptualRoughness ), 2.0_f ), 2.0_f ) );
 			bentNormal = normalize( mix( bentNormal, lightSurface.N().value(), vec3( a ) ) );
 
-			auto debugOutputBlock = debugOutput.pushBlock( cuT( "Reflections" ) );
+			auto debugOutputBlock = debugOutput.pushBlock( cuT( "Reflection" ) );
 			reflections.computeCombined( components
 				, bentNormal
 				, lightSurface.worldPosition().value().xyz()
-				, lightSurface.difF().value()
-				, lightSurface.spcF().value()
 				, lightSurface.V().value()
 				, dot( bentNormal, lightSurface.V().value() )
 				, lightSurface.worldPosition().value().xyz()
@@ -126,8 +123,7 @@ namespace anisotropy
 				, sceneUv
 				, envMapIndex
 				, components.hasReflection
-				, components.hasRefraction
-				, components.refractionRatio
+				, components.ior
 				, output
 				, debugOutputBlock );
 		}
@@ -144,8 +140,7 @@ namespace anisotropy
 				, envMapIndex
 				, incident
 				, components.hasReflection
-				, components.hasRefraction
-				, components.refractionRatio
+				, components.ior
 				, output
 				, debugOutput );
 		}
@@ -162,7 +157,6 @@ namespace anisotropy
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
 		, sdw::UInt const & hasReflection
-		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
 		, c3d::ReflectionRefraction & output
 		, c3d::DebugOutput & debugOutput )const
@@ -177,24 +171,40 @@ namespace anisotropy
 		bentNormal = normalize( cross( bentNormal, anisotropicB ) );
 		// This heuristic can probably be improved upon
 		auto a = writer.declLocale( "a"
-			, pow( pow( 1.0_f - anisotropyStrength * ( 1.0_f - components.roughness ), 2.0_f ), 2.0_f ) );
+			, pow( pow( 1.0_f - anisotropyStrength * ( 1.0_f - components.perceptualRoughness ), 2.0_f ), 2.0_f ) );
 		bentNormal = normalize( mix( bentNormal, lightSurface.N().value(), vec3( a ) ) );
 
-		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Reflections" ) );
+		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Reflection" ) );
 		reflections.computeCombined( components
 			, bentNormal
 			, lightSurface.worldPosition().value().xyz()
-			, lightSurface.difF().value()
-			, lightSurface.spcF().value()
 			, lightSurface.V().value()
 			, dot( bentNormal, lightSurface.V().value() )
 			, backgroundModel
 			, envMapIndex
 			, components.hasReflection
-			, components.hasRefraction
-			, components.refractionRatio
+			, components.ior
 			, output
 			, debugOutputBlock );
+	}
+
+	//*********************************************************************************************
+
+	AnisotropyComponent::MaterialShader::MaterialShader()
+		: c3d::PassMaterialShader{ 12u }
+	{
+	}
+
+	void AnisotropyComponent::MaterialShader::fillMaterialType( sdw::type::BaseStruct & type
+		, sdw::expr::ExprList & inits )const
+	{
+		if ( !type.hasMember( "anisotropyStrength" ) )
+		{
+			type.declMember( "anisotropyDirection", ast::type::Kind::eVec2F );
+			type.declMember( "anisotropyStrength", ast::type::Kind::eFloat );
+			inits.emplace_back( sdw::makeExpr( vec2( 1.0_f, 0.0_f ) ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ AnisotropyComponent::DefaultStrength } ) );
+		}
 	}
 
 	//*********************************************************************************************
@@ -285,25 +295,6 @@ namespace anisotropy
 		auto anisotropicB = components.getMember< sdw::Vec3 >( "anisotropicB" );
 		anisotropicT = normalize( tbn * vec3( components.getMember< sdw::Vec2 >( "anisotropyDirection" ), 0.0_f ) );
 		anisotropicB = normalize( cross( normal, anisotropicT ) );
-	}
-
-	//*********************************************************************************************
-
-	AnisotropyComponent::MaterialShader::MaterialShader()
-		: c3d::PassMaterialShader{ 12u }
-	{
-	}
-
-	void AnisotropyComponent::MaterialShader::fillMaterialType( sdw::type::BaseStruct & type
-		, sdw::expr::ExprList & inits )const
-	{
-		if ( !type.hasMember( "anisotropyStrength" ) )
-		{
-			type.declMember( "anisotropyDirection", ast::type::Kind::eVec2F );
-			type.declMember( "anisotropyStrength", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( vec2( 1.0_f, 0.0_f ) ) );
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ AnisotropyComponent::DefaultStrength } ) );
-		}
 	}
 
 	//*********************************************************************************************

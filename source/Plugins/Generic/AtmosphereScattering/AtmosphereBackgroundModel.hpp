@@ -41,11 +41,7 @@ namespace atmosphere_scattering
 		sdw::RetVec3 computeSpecularReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
-			, sdw::Float const & NdotV
-			, sdw::Vec3 const & fresnel
 			, sdw::Float const & roughness
-			, castor3d::shader::BlendComponents & components
-			, sdw::CombinedImage2DRgba32 const & brdf
 			, castor3d::shader::DebugOutputCategory & debugOutput )override;
 
 		void applyVolume( sdw::Vec2 const fragCoord
@@ -93,7 +89,6 @@ namespace atmosphere_scattering
 			, sdw::InVec2
 			, sdw::InOutVec4 > m_computeVolume;
 		sdw::Function< sdw::Vec3
-			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3 > m_computeSpecularReflection;

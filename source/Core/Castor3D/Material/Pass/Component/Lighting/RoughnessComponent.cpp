@@ -103,6 +103,25 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	RoughnessComponent::MaterialShader::MaterialShader()
+		: shader::PassMaterialShader{ 8u }
+	{
+	}
+
+	void RoughnessComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
+		, sdw::expr::ExprList & inits )const
+	{
+		if ( !type.hasMember( "roughness" ) )
+		{
+			type.declMember( "roughness", ast::type::Kind::eFloat );
+			type.declMember( "roughnessMode", ast::type::Kind::eUInt32 );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ RoughnessComponent::Default } ) );
+			inits.emplace_back( sdw::makeExpr( 0_u ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	void RoughnessComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
@@ -154,28 +173,20 @@ namespace castor3d
 	{
 		if ( res.hasMember( "roughness" ) )
 		{
-			res.getMember< sdw::Float >( "roughness" ) += src.getMember< sdw::Float >( "roughness" ) * passMultiplier;
+			res.perceptualRoughness += src.perceptualRoughness * passMultiplier;
 			res.getMember< sdw::UInt32 >( "roughnessMode" ) = sdw::max( res.getMember< sdw::UInt32 >( "roughnessMode" )
 				, src.getMember< sdw::UInt32 >( "roughnessMode" ) );
 		}
 	}
 
-	//*********************************************************************************************
-
-	RoughnessComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ 8u }
+	void RoughnessComponent::ComponentsShader::updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, shader::Material const & material
+		, shader::BlendComponents & components
+		, bool isFrontCulled )const
 	{
-	}
-
-	void RoughnessComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
-		, sdw::expr::ExprList & inits )const
-	{
-		if ( !type.hasMember( "roughness" ) )
+		if ( components.hasMember( "roughness" ) )
 		{
-			type.declMember( "roughness", ast::type::Kind::eFloat );
-			type.declMember( "roughnessMode", ast::type::Kind::eUInt32 );
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ RoughnessComponent::Default } ) );
-			inits.emplace_back( sdw::makeExpr( 0_u ) );
+			components.alphaRoughness = components.perceptualRoughness * components.perceptualRoughness;
 		}
 	}
 

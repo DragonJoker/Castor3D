@@ -351,8 +351,8 @@ namespace castor3d
 					out.flux = vec4( 0.0_f );
 					auto light = writer.declLocale( "light"
 						, c3d_shadowMapData.getDirectionalLight( lights ) );
-					components.colour *= in.colour;
-					out.flux.rgb() = components.colour
+					components.baseColour *= in.colour;
+					out.flux.rgb() = components.baseColour
 						* light.base().colour()
 						* light.base().intensity().x();
 					out.normal.xyz() = components.getRawNormal();

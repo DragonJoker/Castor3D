@@ -91,11 +91,7 @@ namespace atmosphere_scattering
 	sdw::RetVec3 AtmosphereBackgroundModel::computeSpecularReflection( sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
-		, sdw::Float const & pNdotV
-		, sdw::Vec3 const & pfresnel
 		, sdw::Float const & proughness
-		, castor3d::shader::BlendComponents & components
-		, sdw::CombinedImage2DRgba32 const & brdf
 		, castor3d::shader::DebugOutputCategory & debugOutput )
 	{
 		if ( !m_computeSpecularReflection )
@@ -103,8 +99,7 @@ namespace atmosphere_scattering
 			m_computeSpecularReflection = m_writer.implementFunction< sdw::Vec3 >( "c3d_atmbg_computeSpecularReflection"
 				, [this, &debugOutput]( sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & wsPosition
-					, sdw::Vec3 const & wsEyeDir
-					, sdw::Vec3 const & fresnel )
+					, sdw::Vec3 const & wsEyeDir )
 				{
 					auto fragSize = vec2( sdw::Float{ float( getTargetSize().width ) }
 						, float( getTargetSize().height ) );
@@ -115,17 +110,15 @@ namespace atmosphere_scattering
 								, wsEyeDir
 								, fragSize ) ) );
 					debugOutput.registerOutput( cuT( "Atmosphere Reflections" ), cuT( "Sky Contribution" ), skyContrib );
-					m_writer.returnStmt( fresnel * skyContrib );
+					m_writer.returnStmt( skyContrib );
 				}
 				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InVec3{ m_writer, "wsPosition" }
-				, sdw::InVec3{ m_writer, "wsEyeDir" }
-				, sdw::InVec3{ m_writer, "fresnel" } );
+				, sdw::InVec3{ m_writer, "wsEyeDir" } );
 		}
 		return m_computeSpecularReflection( pwsNormal
 			, pwsPosition
-			, pV
-			, pfresnel );
+			, pV );
 	}
 
 	void AtmosphereBackgroundModel::applyVolume( sdw::Vec2 const pfragCoord

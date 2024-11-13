@@ -87,7 +87,8 @@ namespace castor3d::shader
 			, BlendComponents & components
 			, bool isFrontCulled = false )const;
 		C3D_API void finishComponents( DerivSurfaceBase const & surface
-			, sdw::Vec3 const worldEye
+			, CameraData const & camera
+			, ModelData const & model
 			, Utils & utils
 			, BlendComponents & components )const;
 		C3D_API castor::Map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( PipelineFlags const & flags )const;
@@ -127,7 +128,6 @@ namespace castor3d::shader
 			, sdw::UInt const & envMapIndex
 			, sdw::Vec3 const & incident
 			, sdw::UInt const & hasReflection
-			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
 			, ReflectionRefraction & output
 			, DebugOutput & debugOutput )const;
@@ -142,7 +142,6 @@ namespace castor3d::shader
 			, sdw::UInt const & envMapIndex
 			, sdw::Vec3 const & incident
 			, sdw::UInt const & hasReflection
-			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
 			, ReflectionRefraction & output
 			, DebugOutput & debugOutput )const;

@@ -103,7 +103,7 @@ namespace castor3d
 				, indirectLighting
 				, debugOutput );
 			indirectLighting.diffuseColour = ( hasDiffuseGI
-				? max( indirectLighting.diffuseColour * ( vec3( 1.0_f ) - lightSurface.difF().value() ) / sdw::Float{ castor::Pi< float > }, vec3( 0.0_f ) )
+				? max( indirectLighting.diffuseColour / sdw::Float{ castor::Pi< float > }, vec3( 0.0_f ) )
 				: vec3( 0.0_f ) );
 			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Diffuse" ), indirectLighting.diffuseColour );
 		}

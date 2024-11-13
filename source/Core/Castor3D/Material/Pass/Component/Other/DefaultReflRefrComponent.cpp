@@ -33,14 +33,13 @@ namespace castor3d
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
 		, sdw::UInt const & hasReflection
-		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
 		, shader::ReflectionRefraction & output
 		, shader::DebugOutput & debugOutput )const
 	{
 		if ( mippedScene.isEnabled() )
 		{
-			auto debugOutputBlock = debugOutput.pushBlock( cuT( "Reflections" ) );
+			auto debugOutputBlock = debugOutput.pushBlock( cuT( "Reflection" ) );
 			reflections.computeCombined( components
 				, lightSurface
 				, lightSurface.worldPosition().value().xyz()
@@ -50,8 +49,7 @@ namespace castor3d
 				, sceneUv / vec2( camera.renderSize() )
 				, envMapIndex
 				, components.hasReflection
-				, components.hasRefraction
-				, components.refractionRatio
+				, components.ior
 				, output
 				, debugOutputBlock );
 		}
@@ -68,8 +66,7 @@ namespace castor3d
 				, envMapIndex
 				, incident
 				, components.hasReflection
-				, components.hasRefraction
-				, components.refractionRatio
+				, components.ior
 				, output
 				, debugOutput );
 		}
@@ -86,19 +83,17 @@ namespace castor3d
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
 		, sdw::UInt const & hasReflection
-		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
 		, shader::ReflectionRefraction & output
 		, shader::DebugOutput & debugOutput )const
 	{
-		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Reflections" ) );
+		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Reflection" ) );
 		reflections.computeCombined( components
 			, lightSurface
 			, backgroundModel
 			, envMapIndex
 			, components.hasReflection
-			, components.hasRefraction
-			, components.refractionRatio
+			, components.ior
 			, output
 			, debugOutputBlock );
 	}

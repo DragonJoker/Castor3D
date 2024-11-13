@@ -16,6 +16,7 @@
 #include "Castor3D/Material/Pass/Component/Base/TexturesComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/LightingModelComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp"
@@ -194,6 +195,8 @@ namespace castor3d
 		createComponent< ColourComponent >();
 		createComponent< NormalComponent >();
 		createComponent< RoughnessComponent >();
+		createComponent< RefractionComponent >();
+		createComponent< EmissiveComponent >();
 		createComponent< SpecularComponent >();
 
 		createDefaultTextureComponent< ColourMapComponent >( *this );

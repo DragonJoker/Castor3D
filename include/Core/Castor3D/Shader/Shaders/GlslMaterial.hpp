@@ -67,17 +67,19 @@ namespace castor3d::shader
 		sdw::UInt passCount;
 		sdw::UInt lighting;
 		sdw::UInt lightingModel;
+		sdw::Float alphaRef;
+		sdw::Float opacity;
+/*
 		sdw::Vec3 colour;
 		sdw::Vec3 specular;
 		sdw::Float transmission;
 		sdw::UInt hasTransmission;
-		sdw::Float opacity;
-		sdw::Float alphaRef;
 		sdw::UInt hasReflection;
 		sdw::Float refractionRatio;
 		sdw::Vec3 attenuationColour;
 		sdw::Float attenuationDistance;
 		sdw::Float thicknessFactor;
+*/
 
 	private:
 		static sdw::expr::ExprPtr makeInit( sdw::ShaderWriter const & writer
@@ -200,10 +202,6 @@ namespace castor3d::shader
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, Material const & material
 			, BlendComponents & components )const;
-
-	private:
-		void doDisplayDebug( DebugOutput & debugOutput
-			, BlendComponents const & components )const;
 
 	private:
 		PassShaders & m_passShaders;

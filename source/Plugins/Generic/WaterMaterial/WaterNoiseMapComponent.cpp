@@ -240,7 +240,7 @@ namespace water
 				, mask );
 		}
 
-		components.specular *= value;
+		components.dielectricF0 *= value;
 	}
 
 	//*********************************************************************************************

@@ -35,33 +35,38 @@ namespace castor3d
 	struct IridescenceComponent
 		: public BaseDataPassComponentT< IridescenceData >
 	{
+		struct MaterialShader
+			: shader::PassMaterialShader
+		{
+			MaterialShader();
+			void fillMaterialType( sdw::type::BaseStruct & type
+				, sdw::expr::ExprList & inits )const override;
+		};
+
 		struct ComponentsShader
 			: shader::PassComponentsShader
 		{
 			using shader::PassComponentsShader::PassComponentsShader;
 
-			C3D_API void fillComponents( ComponentModeFlags componentsMask
+			void fillComponents( ComponentModeFlags componentsMask
 				, sdw::type::BaseStruct & components
 				, shader::Materials const & materials
 				, sdw::StructInstance const * surface )const override;
-			C3D_API void fillComponentsInits( sdw::type::BaseStruct const & components
+			void fillComponentsInits( sdw::type::BaseStruct const & components
 				, shader::Materials const & materials
 				, shader::Material const * material
 				, sdw::StructInstance const * surface
 				, sdw::Vec4 const * clrCot
 				, sdw::expr::ExprList & inits )const override;
-			C3D_API void blendComponents( shader::Materials const & materials
+			void blendComponents( shader::Materials const & materials
 				, sdw::Float const & passMultiplier
 				, shader::BlendComponents & res
 				, shader::BlendComponents const & src )const override;
-		};
-
-		struct MaterialShader
-			: shader::PassMaterialShader
-		{
-			C3D_API MaterialShader();
-			C3D_API void fillMaterialType( sdw::type::BaseStruct & type
-				, sdw::expr::ExprList & inits )const override;
+			void finishComponent( shader::DerivSurfaceBase const & surface
+				, shader::CameraData const & camera
+				, shader::ModelData const & model
+				, shader::Utils & utils
+				, shader::BlendComponents & components )const override;
 		};
 
 		class Plugin
@@ -69,7 +74,7 @@ namespace castor3d
 		{
 		public:
 			explicit Plugin( PassComponentRegister const & passComponent )
-				: PassComponentPlugin{ passComponent, nullptr, finishComponent }
+				: PassComponentPlugin{ passComponent }
 			{
 			}
 
@@ -95,12 +100,6 @@ namespace castor3d
 			{
 				return castor::make_unique< MaterialShader >();
 			}
-
-		private:
-			static void finishComponent( shader::DerivSurfaceBase const & surface
-				, sdw::Vec3 const worldEye
-				, shader::Utils & utils
-				, shader::BlendComponents & components );
 		};
 
 		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )

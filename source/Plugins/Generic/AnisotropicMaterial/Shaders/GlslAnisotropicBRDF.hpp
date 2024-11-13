@@ -25,8 +25,7 @@ namespace anisotropy::shader
 		static castor::StringView constexpr Name{ cuT( "anisotropic" ) };
 
 	private:
-		void doGenerate( c3d::BlendComponents const & components
-			, c3d::LightSurface const & lightSurface )override;
+		void doGenerate( c3d::BlendComponents const & components )override;
 
 	private:
 		sdw::Function< sdw::Float

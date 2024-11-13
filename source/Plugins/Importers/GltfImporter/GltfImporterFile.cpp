@@ -51,6 +51,7 @@ namespace c3d_gltf
 				| fastgltf::Extensions::KHR_materials_sheen
 				| fastgltf::Extensions::KHR_materials_unlit
 				| fastgltf::Extensions::KHR_materials_anisotropy
+				| fastgltf::Extensions::KHR_materials_dispersion
 				| fastgltf::Extensions::KHR_materials_diffuse_transmission };
 			auto path = castor::makePath( filePath );
 

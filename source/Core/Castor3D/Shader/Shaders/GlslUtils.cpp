@@ -1214,5 +1214,17 @@ namespace castor3d::shader
 		return pow( ( ior - 1.0_f ) / ( ior + 1.0_f ), 2.0_f );
 	}
 
+	sdw::Float Utils::max3( sdw::Vec3 const & v )
+	{
+		return max( v.x(), max( v.y(), v.z() ) );
+	}
+
+	sdw::Vec3 Utils::rgbMix( sdw::Vec3 const & base
+		, sdw::Vec3 const & layer
+		, sdw::Vec3 const & alpha )
+	{
+		return ( 1.0_f - max3( alpha ) ) * base + alpha * layer;
+	}
+
 	//*********************************************************************************************
 }

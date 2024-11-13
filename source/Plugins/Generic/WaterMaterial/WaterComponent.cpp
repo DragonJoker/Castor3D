@@ -505,9 +505,9 @@ namespace water
 			components.setNormal( normalize( finalNormal ) );
 		}
 
-		if ( components.hasMember( "transmission" ) )
+		if ( components.hasMember( "transmissionFactor" ) )
 		{
-			components.transmission = 1.0_f;
+			components.transmissionFactor = 1.0_f;
 		}
 	}
 

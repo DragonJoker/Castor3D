@@ -61,22 +61,22 @@ namespace castor3d
 		{
 			if ( checkFlag( materials.getFilter(), ComponentModeFlag::eDerivTex ) )
 			{
-				inits.emplace_back( makeExpr( surface->getMember< shader::DerivVec3 >( "normal", shader::derivVec3( 0.0_f ) ) ) );
-				inits.emplace_back( makeExpr( surface->getMember< shader::DerivVec4 >( "tangent", shader::derivVec4( 0.0_f ) ) ) );
-				inits.emplace_back( makeExpr( surface->getMember< shader::DerivVec3 >( "bitangent", shader::derivVec3( 0.0_f ) ) ) );
+				inits.emplace_back( makeExpr( surface->getMember< shader::DerivVec3 >( "normal", shader::derivVec3( vec3( 0.0_f, 0.0_f, 1.0_f ) ) ) ) );
+				inits.emplace_back( makeExpr( surface->getMember< shader::DerivVec4 >( "tangent", shader::derivVec4( vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f ) ) ) ) );
+				inits.emplace_back( makeExpr( surface->getMember< shader::DerivVec3 >( "bitangent", shader::derivVec3( vec3( 0.0_f, 1.0_f, 0.0_f ) ) ) ) );
 			}
 			else
 			{
-				inits.emplace_back( makeExpr( surface->getMember< sdw::Vec3 >( "normal", vec3( 0.0_f ) ) ) );
-				inits.emplace_back( makeExpr( surface->getMember< sdw::Vec4 >( "tangent", vec4( 0.0_f ) ) ) );
-				inits.emplace_back( makeExpr( surface->getMember< sdw::Vec3 >( "bitangent", vec3( 0.0_f ) ) ) );
+				inits.emplace_back( makeExpr( surface->getMember< sdw::Vec3 >( "normal", vec3( 0.0_f, 0.0_f, 1.0_f ) ) ) );
+				inits.emplace_back( makeExpr( surface->getMember< sdw::Vec4 >( "tangent", vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f ) ) ) );
+				inits.emplace_back( makeExpr( surface->getMember< sdw::Vec3 >( "bitangent", vec3( 0.0_f, 1.0_f, 0.0_f ) ) ) );
 			}
 		}
 		else
 		{
-			inits.emplace_back( makeExpr( vec3( 0.0_f ) ) );
-			inits.emplace_back( makeExpr( vec4( 0.0_f ) ) );
-			inits.emplace_back( makeExpr( vec3( 0.0_f ) ) );
+			inits.emplace_back( makeExpr( vec3( 0.0_f, 0.0_f, 1.0_f ) ) );
+			inits.emplace_back( makeExpr( vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f ) ) );
+			inits.emplace_back( makeExpr( vec3( 0.0_f, 1.0_f, 0.0_f ) ) );
 		}
 	}
 

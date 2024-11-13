@@ -92,7 +92,7 @@ namespace castor3d::shader
 	void PhongLightingModel::doFinish( PassShaders const & passShaders
 		, BlendComponents & components )
 	{
-		components.f0 = components.specular;
+		//components.f0 = components.specular;
 	}
 
 	sdw::Vec3 PhongLightingModel::doGetDiffuseResult( BlendComponents const & components
@@ -101,7 +101,7 @@ namespace castor3d::shader
 		, sdw::Float const & ambientOcclusion
 		, sdw::Vec3 const & reflectedDiffuse )
 	{
-		return components.colour
+		return components.baseColour
 			* ( lighting.diffuse
 				+ ambientOcclusion * ( reflectedDiffuse + indirect.diffuseColour + ( lighting.ambient * indirect.ambient ) ) );
 	}
@@ -112,7 +112,7 @@ namespace castor3d::shader
 		, sdw::Float const & ambientOcclusion
 		, sdw::Vec3 const & reflectedSpecular )
 	{
-		return lighting.specular
+		return lighting.dielectric
 			+ ambientOcclusion * ( reflectedSpecular + indirect.specular );
 	}
 

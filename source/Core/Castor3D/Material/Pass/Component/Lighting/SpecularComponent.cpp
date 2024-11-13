@@ -63,6 +63,23 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	SpecularComponent::MaterialShader::MaterialShader()
+		: shader::PassMaterialShader{ 12u }
+	{
+	}
+
+	void SpecularComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
+		, sdw::expr::ExprList & inits )const
+	{
+		if ( !type.hasMember( "specular" ) )
+		{
+			type.declMember( "specular", ast::type::Kind::eVec3F );
+			inits.emplace_back( sdw::makeExpr( sdw::vec3( SpecularComponent::DefaultComponent ) ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	void SpecularComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
@@ -107,28 +124,9 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		if ( !res.hasMember( "specular" ) )
+		if ( res.hasMember( "specular" ) )
 		{
-			return;
-		}
-
-		res.getMember< sdw::Vec3 >( "specular", true ) += src.getMember< sdw::Vec3 >( "specular", true ) * passMultiplier;
-	}
-
-	//*********************************************************************************************
-
-	SpecularComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ 12u }
-	{
-	}
-
-	void SpecularComponent::MaterialShader::fillMaterialType( ast::type::BaseStruct & type
-		, sdw::expr::ExprList & inits )const
-	{
-		if ( !type.hasMember( "specular" ) )
-		{
-			type.declMember( "specular", ast::type::Kind::eVec3F );
-			inits.emplace_back( sdw::makeExpr( sdw::vec3( SpecularComponent::DefaultComponent ) ) );
+			res.getMember< sdw::Vec3 >( "specular" ) += src.getMember< sdw::Vec3 >( "specular", true ) * passMultiplier;
 		}
 	}
 

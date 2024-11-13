@@ -16,9 +16,10 @@ namespace castor3d::shader
 		C3D_API virtual ~ClearcoatBRDF() = default;
 
 		C3D_API sdw::RetVec3 compute( BlendComponents const & components
-			, LightSurface const & lightSurface
-			, sdw::Vec3 const & radiance
-			, sdw::Float const & intensity
+			, sdw::Vec3 const & N
+			, sdw::Vec3 const & L
+			, sdw::Vec3 const & H
+			, sdw::Vec3 const & V
 			, sdw::Float const & NdotL
 			, sdw::Float const & NdotH );
 
@@ -27,17 +28,17 @@ namespace castor3d::shader
 		C3D_API static castor::StringView constexpr Name{ cuT( "default" ) };
 
 	private:
-		virtual void doGenerate( BlendComponents const & components
-			, LightSurface const & lightSurface );
+		virtual void doGenerate( BlendComponents const & components );
 
 	protected:
 		sdw::ShaderWriter & m_writer;
 		BRDFHelpers & m_brdfHelpers;
 		sdw::Function< sdw::Vec3
 			, InBlendComponents
-			, InLightSurface
 			, sdw::InVec3
-			, sdw::InFloat
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InVec3
 			, sdw::InFloat
 			, sdw::InFloat > m_compute;
 	};

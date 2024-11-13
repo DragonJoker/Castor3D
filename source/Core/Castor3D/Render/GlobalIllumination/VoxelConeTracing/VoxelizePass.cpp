@@ -581,9 +581,8 @@ namespace castor3d
 							, { in.worldPosition.xyz(), dFdx( in.worldPosition.xyz() ), dFdy( in.worldPosition.xyz() ) }
 							, in.fragCoord.xyz()
 							, normalize( components.getDerivNormal() )
-							, components.f0
 							, components
-							, true, true, false );
+							, true );
 						lights.computeCombinedDif( components
 							, *backgroundModel
 							, lightSurface
@@ -591,7 +590,7 @@ namespace castor3d
 							, debugOutput
 							, combined );
 						color.xyz() += vec3( components.occlusion )
-							* components.colour
+							* components.baseColour
 							* combined;
 					}
 					FI

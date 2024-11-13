@@ -17,8 +17,7 @@ namespace castor3d::shader
 
 		C3D_API sdw::RetVec3 compute( BlendComponents const & components
 			, LightSurface const & lightSurface
-			, sdw::Vec3 const & radiance
-			, sdw::Float const & intensity
+			, sdw::Vec3 const & lightIntensity
 			, sdw::Float const & NdotL );
 
 	private:
@@ -32,7 +31,6 @@ namespace castor3d::shader
 			, InBlendComponents
 			, InLightSurface
 			, sdw::InVec3
-			, sdw::InFloat
 			, sdw::InFloat > m_compute;
 	};
 }

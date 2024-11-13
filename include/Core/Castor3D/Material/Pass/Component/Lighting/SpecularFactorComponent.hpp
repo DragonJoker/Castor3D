@@ -15,33 +15,33 @@ namespace castor3d
 	struct SpecularFactorComponent
 		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< float > >
 	{
+		struct MaterialShader
+			: shader::PassMaterialShader
+		{
+			MaterialShader();
+			void fillMaterialType( sdw::type::BaseStruct & type
+				, sdw::expr::ExprList & inits )const override;
+		};
+
 		struct ComponentsShader
 			: shader::PassComponentsShader
 		{
 			using shader::PassComponentsShader::PassComponentsShader;
 
-			C3D_API void fillComponents( ComponentModeFlags componentsMask
+			void fillComponents( ComponentModeFlags componentsMask
 				, sdw::type::BaseStruct & components
 				, shader::Materials const & materials
 				, sdw::StructInstance const * surface )const override;
-			C3D_API void fillComponentsInits( sdw::type::BaseStruct const & components
+			void fillComponentsInits( sdw::type::BaseStruct const & components
 				, shader::Materials const & materials
 				, shader::Material const * material
 				, sdw::StructInstance const * surface
 				, sdw::Vec4 const * clrCot
 				, sdw::expr::ExprList & inits )const override;
-			C3D_API void blendComponents( shader::Materials const & materials
+			void blendComponents( shader::Materials const & materials
 				, sdw::Float const & passMultiplier
 				, shader::BlendComponents & res
 				, shader::BlendComponents const & src )const override;
-		};
-
-		struct MaterialShader
-			: shader::PassMaterialShader
-		{
-			C3D_API MaterialShader();
-			C3D_API void fillMaterialType( sdw::type::BaseStruct & type
-				, sdw::expr::ExprList & inits )const override;
 		};
 
 		class Plugin

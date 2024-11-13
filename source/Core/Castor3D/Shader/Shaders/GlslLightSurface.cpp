@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -28,9 +29,6 @@ namespace castor3d::shader
 		, m_HdotV{ getMember< DerivFloat >( "HdotV", derivFloat( 0.0_f ) ) }
 		, m_LdotV{ getMember< DerivFloat >( "LdotV", derivFloat( 0.0_f ) ) }
 		, m_HdotL{ getMember< DerivFloat >( "HdotL", derivFloat( 0.0_f ) ) }
-		, m_F{ getMember< DerivVec3 >( "F", derivVec3( 0.0_f ) ) }
-		, m_spcF{ getMember< DerivVec3 >( "spcF", m_F ) }
-		, m_difF{ getMember< DerivVec3 >( "difF", m_F ) }
 	{
 	}
 
@@ -39,13 +37,11 @@ namespace castor3d::shader
 		, DerivVec3 const view
 		, sdw::Vec3 const clip
 		, DerivVec3 const normal
-		, bool enableDotProducts
-		, bool enableFresnel
-		, bool enableIridescence )
+		, bool enableDotProducts )
 		: LightSurface{ findWriterMandat( eye, world, view, clip, normal )
-			, makeInit( makeType( findTypesCache( eye, world, view, clip, normal ), enableDotProducts, enableFresnel, enableIridescence )
+			, makeInit( makeType( findTypesCache( eye, world, view, clip, normal ), enableDotProducts )
 				, eye, world, view, clip, normal
-				, enableDotProducts, enableFresnel, enableIridescence )
+				, enableDotProducts )
 			, true }
 	{
 	}
@@ -57,15 +53,11 @@ namespace castor3d::shader
 	}
 
 	sdw::type::BaseStructPtr LightSurface::makeType( ast::type::TypesCache & cache
-		, bool enableDotProducts
-		, bool enableFresnel
-		, bool enableIridescence )
+		, bool enableDotProducts )
 	{
 		auto type = cache.getStruct( ast::type::MemoryLayout::eC
 			, "C3D_LightSurface"
-				+ ( enableDotProducts ? castor::MbString{ "Prods" } : castor::MbString{} )
-				+ ( enableFresnel ? castor::MbString{ "F" } : castor::MbString{} )
-				+ ( enableIridescence ? castor::MbString{ "I" } : castor::MbString{} ) );
+				+ ( enableDotProducts ? castor::MbString{ "Prods" } : castor::MbString{} ) );
 
 		if ( type->empty() )
 		{
@@ -86,9 +78,6 @@ namespace castor3d::shader
 			type->declMember( "HdotV", DerivFloat::makeType( cache ), ast::type::NotArray, enableDotProducts );
 			type->declMember( "LdotV", DerivFloat::makeType( cache ), ast::type::NotArray, enableDotProducts );
 			type->declMember( "HdotL", DerivFloat::makeType( cache ), ast::type::NotArray, enableDotProducts );
-			type->declMember( "F", DerivVec3::makeType( cache ), ast::type::NotArray, enableFresnel );
-			type->declMember( "spcF", DerivVec3::makeType( cache ), ast::type::NotArray, enableFresnel && enableIridescence );
-			type->declMember( "difF", DerivVec3::makeType( cache ), ast::type::NotArray, enableFresnel && enableIridescence );
 		}
 
 		return type;
@@ -107,13 +96,10 @@ namespace castor3d::shader
 		, DerivVec3 const view
 		, sdw::Vec3 const clip
 		, DerivVec3 const normal
-		, bool enableDotProducts
-		, bool enableFresnel
-		, bool enableIridescence )
+		, bool enableDotProducts )
 	{
 		auto result = writer.declLocale< LightSurface >( name
-			, LightSurface{ eye, world, view, clip, normal
-				, enableDotProducts, enableFresnel, enableIridescence } );
+			, LightSurface{ eye, world, view, clip, normal, enableDotProducts } );
 		result.m_NdotV = max( derivFloat( 0.0_f ), dot( result.N(), result.V() ) );
 		return result;
 	}
@@ -123,12 +109,10 @@ namespace castor3d::shader
 		, DerivVec4 const world
 		, sdw::Vec3 const clip
 		, DerivVec3 const normal
-		, bool enableDotProducts
-		, bool enableFresnel
-		, bool enableIridescence )
+		, bool enableDotProducts )
 	{
 		return create( writer, name, vec3( 0.0_f ), world, derivVec3( 0.0_f ), clip, normal
-			, enableDotProducts, enableFresnel, enableIridescence );
+			, enableDotProducts );
 	}
 
 	LightSurface LightSurface::create( sdw::ShaderWriter & writer
@@ -139,15 +123,10 @@ namespace castor3d::shader
 		, DerivVec3 const view
 		, sdw::Vec3 const clip
 		, DerivVec3 const normal
-		, sdw::Vec3 const f0
 		, BlendComponents const & components
-		, bool enableDotProducts
-		, bool enableFresnel
-		, bool enableIridescence )
+		, bool enableDotProducts )
 	{
-		auto result = create( writer, name, eye, world, view, clip, normal
-			, enableDotProducts, enableFresnel, enableIridescence );
-		result.doUpdateF( utils, f0, components, result.NdotV() );
+		auto result = create( writer, name, eye, world, view, clip, normal, enableDotProducts );
 		return result;
 	}
 
@@ -174,54 +153,18 @@ namespace castor3d::shader
 		m_HdotL = max( derivFloat( 0.0_f ), dot( H(), L() ) );
 	}
 
-	void LightSurface::updateNAndF( Utils & utils
-		, DerivVec3 const n
-		, sdw::Vec3 const f0
-		, BlendComponents const & components )const
+	void LightSurface::registerDebug( DebugOutput & debugOutput )const
 	{
-		updateN( n );
-		doUpdateF( utils, f0, components, NdotV() );
-	}
-
-	void LightSurface::updateLAndF( Utils & utils
-		, DerivVec3 const VtoL
-		, sdw::Vec3 const f0
-		, BlendComponents const & components )const
-	{
-		updateL( VtoL );
-		doUpdateF( utils, f0, components, HdotV() );
-	}
-
-	void LightSurface::doUpdateF( Utils & utils
-		, sdw::Vec3 const f0
-		, BlendComponents const & components
-		, DerivFloat const & dotProduct )const
-	{
-		m_F = utils.conductorFresnel( dotProduct
-			, f0
-			, components.f90 );
-
-		if ( m_difF )
-		{
-			auto & writer = *getWriter();
-
-			IF( writer, components.iridescenceFactor != 0.0_f )
-			{
-				// Blend default specular Fresnel with iridescence Fresnel
-				m_spcF = mix( F(), derivVec3( components.iridescenceFresnel ), derivVec3( components.iridescenceFactor ) );
-				// Use the maximum component of the iridescence Fresnel color
-				// Maximum is used instead of the RGB value to not get inverse colors for the diffuse BRDF
-				m_difF = mix( F()
-					, derivVec3( max( max( components.iridescenceFresnel.r(), components.iridescenceFresnel.g() ), components.iridescenceFresnel.b() ) )
-					, derivVec3( components.iridescenceFactor ) );
-			}
-			ELSE
-			{
-				m_spcF = F();
-				m_difF = F();
-			}
-			FI;
-		}
+		debugOutput.registerOutput( "LightSurface", "V", m_V.value() );
+		debugOutput.registerOutput( "LightSurface", "N", m_N.value() );
+		debugOutput.registerOutput( "LightSurface", "L", m_L.value() );
+		debugOutput.registerOutput( "LightSurface", "H", m_H.value() );
+		debugOutput.registerOutput( "LightSurface", "NdotV", m_NdotV.value() );
+		debugOutput.registerOutput( "LightSurface", "NdotL", m_NdotL.getValue().value() );
+		debugOutput.registerOutput( "LightSurface", "NdotH", m_NdotH.getValue().value() );
+		debugOutput.registerOutput( "LightSurface", "HdotV", m_HdotV.getValue().value() );
+		debugOutput.registerOutput( "LightSurface", "LdotV", m_LdotV.getValue().value() );
+		debugOutput.registerOutput( "LightSurface", "HdotL", m_HdotL.getValue().value() );
 	}
 
 	sdw::expr::ExprPtr LightSurface::makeInit( sdw::type::BaseStructPtr type
@@ -230,9 +173,7 @@ namespace castor3d::shader
 		, DerivVec3 const view
 		, sdw::Vec3 const clip
 		, DerivVec3 const normal
-		, bool enableDotProducts
-		, bool enableFresnel
-		, bool enableIridescence )
+		, bool enableDotProducts )
 	{
 		using shader::operator-;
 		sdw::expr::ExprList inits;
@@ -256,17 +197,6 @@ namespace castor3d::shader
 			inits.push_back( makeExpr( derivFloat( 0.0_f ) ) ); // HdotV
 			inits.push_back( makeExpr( derivFloat( 0.0_f ) ) ); // LdotV
 			inits.push_back( makeExpr( derivFloat( 0.0_f ) ) ); // HdotL
-		}
-
-		if ( enableFresnel )
-		{
-			inits.push_back( makeExpr( derivVec3( 0.0_f ) ) ); // F
-
-			if ( enableIridescence )
-			{
-				inits.push_back( makeExpr( derivVec3( 0.0_f ) ) ); // spcF
-				inits.push_back( makeExpr( derivVec3( 0.0_f ) ) ); // difF
-			}
 		}
 
 		return sdw::makeAggrInit( type, castor::move( inits ) );

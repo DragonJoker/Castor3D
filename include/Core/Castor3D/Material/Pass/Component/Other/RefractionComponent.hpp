@@ -11,49 +11,40 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct RefractionData
-	{
-		explicit RefractionData( std::atomic_bool & dirty
-			, float fac )
-			: factor{ dirty, fac }
-			, enabled{ dirty, false }
-		{
-		}
-
-		castor::AtomicGroupChangeTracked< float > factor;
-		castor::AtomicGroupChangeTracked< bool > enabled;
-	};
-
 	struct RefractionComponent
-		: public BaseDataPassComponentT< RefractionData >
+		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< float > >
 	{
+		struct MaterialShader
+			: shader::PassMaterialShader
+		{
+			MaterialShader();
+			void fillMaterialType( sdw::type::BaseStruct & type
+				, sdw::expr::ExprList & inits )const override;
+		};
+
 		struct ComponentsShader
 			: shader::PassComponentsShader
 		{
 			using shader::PassComponentsShader::PassComponentsShader;
 
-			C3D_API void fillComponents( ComponentModeFlags componentsMask
+			void fillComponents( ComponentModeFlags componentsMask
 				, sdw::type::BaseStruct & components
 				, shader::Materials const & materials
 				, sdw::StructInstance const * surface )const override;
-			C3D_API void fillComponentsInits( sdw::type::BaseStruct const & components
+			void fillComponentsInits( sdw::type::BaseStruct const & components
 				, shader::Materials const & materials
 				, shader::Material const * material
 				, sdw::StructInstance const * surface
 				, sdw::Vec4 const * clrCot
 				, sdw::expr::ExprList & inits )const override;
-			C3D_API void blendComponents( shader::Materials const & materials
+			void blendComponents( shader::Materials const & materials
 				, sdw::Float const & passMultiplier
 				, shader::BlendComponents & res
 				, shader::BlendComponents const & src )const override;
-		};
-
-		struct MaterialShader
-			: shader::PassMaterialShader
-		{
-			C3D_API MaterialShader();
-			C3D_API void fillMaterialType( sdw::type::BaseStruct & type
-				, sdw::expr::ExprList & inits )const override;
+			void updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+				, shader::Material const & material
+				, shader::BlendComponents & components
+				, bool isFrontCulled )const override;
 		};
 
 		class Plugin
@@ -97,26 +88,16 @@ namespace castor3d
 
 		void setRefractionRatio( float value )
 		{
-			*m_value.factor = value;
-		}
-
-		void enableRefraction( bool value )
-		{
-			*m_value.enabled = value;
-		}
-
-		bool hasRefraction()const
-		{
-			return m_value.enabled;
+			*m_value = value;
 		}
 
 		float getRefractionRatio()const
 		{
-			return m_value.factor;
+			return m_value;
 		}
 
 		C3D_API static castor::String const TypeName;
-		C3D_API static float constexpr Default{ 0.0f };
+		C3D_API static float constexpr Default{ 1.5f };
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;
