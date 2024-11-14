@@ -30,8 +30,7 @@ namespace castor3d::shader
 		C3D_API void attenuate( sdw::Float const attenuation
 			, bool withScattering
 			, bool withDiffuse );
-		C3D_API void registerDebug( DebugOutput & debugOutput
-			, castor::String const & category )const;
+		C3D_API void registerDebug( DebugOutputCategory const & debugOutput )const;
 
 		C3D_API DirectLighting & operator+=( DirectLighting const & rhs );
 		C3D_API DirectLighting & operator*=( sdw::Float const & rhs );
@@ -61,8 +60,7 @@ namespace castor3d::shader
 			, bool enabled );
 		C3D_API explicit IndirectLighting( sdw::ShaderWriter & writer );
 
-		C3D_API void registerDebug( DebugOutput & debugOutput
-			, castor::String const & category )const;
+		C3D_API void registerDebug( DebugOutputCategory const & debugOutput )const;
 
 		sdw::Vec3 ambient;
 		sdw::Vec4 rawDiffuse;
@@ -89,8 +87,7 @@ namespace castor3d::shader
 			, bool enabled );
 		C3D_API explicit ReflectionRefraction( sdw::ShaderWriter & writer );
 
-		C3D_API void registerDebug( DebugOutput & debugOutput
-			, castor::String const & category )const;
+		C3D_API void registerDebug( DebugOutputCategory const & debugOutput )const;
 
 		sdw::Vec3 diffuse;
 		sdw::Vec3 dielectric;

@@ -1,6 +1,8 @@
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 
 #include "Castor3D/Render/RenderNodesPass.hpp"
+#include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
@@ -80,6 +82,29 @@ namespace castor3d::shader
 		, worldPosition{ this->template getMember< Position4T >( "worldPosition", true ) }
 		, normal{ this->template getMember< NormalT >( "normal", true ) }
 	{
+	}
+
+	template< typename Position3T, typename Position4T, typename NormalT >
+	void SurfaceBaseT< Position3T, Position4T, NormalT >::registerDebug( PipelineFlags const & flags
+		, DebugOutputCategory const & debugOutput )const
+	{
+		if ( flags.usesViewSpace() )
+		{
+			debugOutput.registerOutput< sdw::Vec3 >( cuT( "View Position" ), shader::getRawXYZ( this->viewPosition ) );
+		}
+		else
+		{
+			debugOutput.registerOutput( cuT( "View Position" ), 1.0_f );
+		}
+
+		if ( flags.usesWorldSpace() )
+		{
+			debugOutput.registerOutput< sdw::Vec3 >( cuT( "World Position" ), shader::getRawXYZ( this->worldPosition ) );
+		}
+		else
+		{
+			debugOutput.registerOutput( cuT( "World Position" ), 1.0_f );
+		}
 	}
 
 	template< typename Position3T, typename Position4T, typename NormalT >
@@ -492,6 +517,35 @@ namespace castor3d::shader
 	sdw::Vec2 RasterizerSurfaceBaseT< Position3T, Position4T, Normal3T, Normal4T >::getVelocity()const
 	{
 		return ( curPosition.xy() / curPosition.z() ) - ( prvPosition.xy() / prvPosition.z() );
+	}
+
+	template< typename Position3T, typename Position4T, typename Normal3T, typename Normal4T >
+	void RasterizerSurfaceBaseT< Position3T, Position4T, Normal3T, Normal4T >::registerDebug( PipelineFlags const & flags
+		, BlendComponents const & components
+		, DebugOutputCategory const & debugOutput )const
+	{
+		SurfaceBaseT< Position3T, Position4T, Normal3T >::registerDebug( flags, debugOutput );
+		debugOutput.registerOutput< sdw::Vec3 >( cuT( "Normal" ), fma( shader::getRawXYZ( components.getRawNormal() ), vec3( 0.5_f ), vec3( 0.5_f ) ) );
+
+		if ( flags.enableTangentSpace() )
+		{
+			debugOutput.registerOutput< sdw::Vec3 >( cuT( "Tangent" ), fma( shader::getRawXYZ( this->tangent ), vec3( 0.5_f ), vec3( 0.5_f ) ) );
+			debugOutput.registerOutput< sdw::Vec3 >( cuT( "Bitangent" ), fma( shader::getRawXYZ( this->bitangent ), vec3( 0.5_f ), vec3( 0.5_f ) ) );
+		}
+		else
+		{
+			debugOutput.registerOutput( cuT( "Tangent" ), 1.0_f );
+			debugOutput.registerOutput( cuT( "Bitangent" ), 1.0_f );
+		}
+
+		if ( flags.enableColours() )
+		{
+			debugOutput.registerOutput< sdw::Vec3 >( cuT( "Colour" ), shader::getRawXYZ( this->colour ) );
+		}
+		else
+		{
+			debugOutput.registerOutput( cuT( "Colour" ), 1.0_f );
+		}
 	}
 
 	template< typename Position3T, typename Position4T, typename Normal3T, typename Normal4T >

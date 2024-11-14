@@ -92,7 +92,7 @@ namespace atmosphere_scattering
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
 		, sdw::Float const & proughness
-		, castor3d::shader::DebugOutputCategory & debugOutput )
+		, castor3d::shader::DebugOutputCategory const & debugOutput )
 	{
 		if ( !m_computeSpecularReflection )
 		{

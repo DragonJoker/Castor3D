@@ -148,37 +148,37 @@ namespace castor3d::shader
 		passShaders.finishComponents( surface, camera, model, utils, *this );
 	}
 
-	void BlendComponents::registerDebug( DebugOutput & debugOutput )const
+	void BlendComponents::registerDebug( DebugOutputCategory const & debugOutput )const
 	{
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Base Colour" ), baseColour.rgb() );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Metalness" ), metalness );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Roughness" ), perceptualRoughness );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "IOR" ), ior );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Dielectric F0" ), dielectricF0 );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "F90" ), f90 );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Dielectric F90" ), dielectricF90 );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Sheen Colour" ), sheenColour );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Sheen Roughness" ), sheenRoughness );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Clearcoat F0" ), clearcoatF0 );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Clearcoat F90" ), clearcoatF90 );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Clearcoat Factor" ), clearcoatFactor );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Clearcoat Normal" ), clearcoatNormal );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Clearcoat Roughness" ), clearcoatRoughness );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Specular Weight" ), specularWeight );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Transmission Factor" ), transmissionFactor );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Thickness Factor" ), thicknessFactor );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Attenuation Colour" ), attenuationColour );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Attenuation Distance" ), attenuationDistance );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Iridescence Factor" ), iridescenceFactor );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Iridescence IOR" ), iridescenceIor );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Diffuse Transmission Colour" ), diffuseTransmissionColour );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Diffuse Transmission Factor" ), diffuseTransmissionFactor );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Dispersion" ), dispersion );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Emissive Colour" ), emissiveColour );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Emissive Factor" ), emissiveFactor );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Opacity" ), opacity );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Occlusion" ), occlusion );
-		debugOutput.registerOutput( cuT( "Material" ), cuT( "Transmittance" ), transmittance );
+		debugOutput.registerOutput( cuT( "Base Colour" ), baseColour.rgb() );
+		debugOutput.registerOutput( cuT( "Metalness" ), metalness );
+		debugOutput.registerOutput( cuT( "Roughness" ), perceptualRoughness );
+		debugOutput.registerOutput( cuT( "IOR" ), ior );
+		debugOutput.registerOutput( cuT( "Dielectric F0" ), dielectricF0 );
+		debugOutput.registerOutput( cuT( "F90" ), f90 );
+		debugOutput.registerOutput( cuT( "Dielectric F90" ), dielectricF90 );
+		debugOutput.registerOutput( cuT( "Sheen Colour" ), sheenColour );
+		debugOutput.registerOutput( cuT( "Sheen Roughness" ), sheenRoughness );
+		debugOutput.registerOutput( cuT( "Clearcoat F0" ), clearcoatF0 );
+		debugOutput.registerOutput( cuT( "Clearcoat F90" ), clearcoatF90 );
+		debugOutput.registerOutput( cuT( "Clearcoat Factor" ), clearcoatFactor );
+		debugOutput.registerOutput( cuT( "Clearcoat Normal" ), clearcoatNormal );
+		debugOutput.registerOutput( cuT( "Clearcoat Roughness" ), clearcoatRoughness );
+		debugOutput.registerOutput( cuT( "Specular Weight" ), specularWeight );
+		debugOutput.registerOutput( cuT( "Transmission Factor" ), transmissionFactor );
+		debugOutput.registerOutput( cuT( "Thickness Factor" ), thicknessFactor );
+		debugOutput.registerOutput( cuT( "Attenuation Colour" ), attenuationColour );
+		debugOutput.registerOutput( cuT( "Attenuation Distance" ), attenuationDistance );
+		debugOutput.registerOutput( cuT( "Iridescence Factor" ), iridescenceFactor );
+		debugOutput.registerOutput( cuT( "Iridescence IOR" ), iridescenceIor );
+		debugOutput.registerOutput( cuT( "Diffuse Transmission Colour" ), diffuseTransmissionColour );
+		debugOutput.registerOutput( cuT( "Diffuse Transmission Factor" ), diffuseTransmissionFactor );
+		debugOutput.registerOutput( cuT( "Dispersion" ), dispersion );
+		debugOutput.registerOutput( cuT( "Emissive Colour" ), emissiveColour );
+		debugOutput.registerOutput( cuT( "Emissive Factor" ), emissiveFactor );
+		debugOutput.registerOutput( cuT( "Opacity" ), opacity );
+		debugOutput.registerOutput( cuT( "Occlusion" ), occlusion );
+		debugOutput.registerOutput( cuT( "Transmittance" ), transmittance );
 	}
 
 	void BlendComponents::setNormal( sdw::Vec3 const v )

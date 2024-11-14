@@ -60,7 +60,7 @@ namespace castor3d::shader
 
 		C3D_API void updateN( DerivVec3 const N )const;
 		C3D_API void updateL( DerivVec3 const VtoL )const;
-		C3D_API void registerDebug( DebugOutput & debugOutput )const;
+		C3D_API void registerDebug( DebugOutputCategory const & debugOutput )const;
 
 		auto eyePosition()const { return m_eyePosition; }
 		auto worldPosition()const { return m_worldPosition; }

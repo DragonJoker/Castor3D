@@ -46,7 +46,7 @@ namespace castor3d::shader
 		, BlendComponents & components
 		, sdw::Vec3 & preflectedDiffuse
 		, sdw::Vec3 & preflectedSpecular
-		, DebugOutputCategory & debugOutput )
+		, DebugOutputCategory const & debugOutput )
 	{
 		if ( !m_computeReflection )
 		{
@@ -85,7 +85,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & pV
 		, sdw::Float const & prefractionRatio
 		, BlendComponents & components
-		, DebugOutputCategory & debugOutput )
+		, DebugOutputCategory const & debugOutput )
 	{
 		if ( !m_computeRefraction )
 		{
@@ -117,7 +117,7 @@ namespace castor3d::shader
 
 	sdw::RetVec3 NoIblBackgroundModel::computeDiffuse( sdw::Vec3 const & wsDirection
 		, BlendComponents & components
-		, DebugOutputCategory & debugOutput )
+		, DebugOutputCategory const & debugOutput )
 	{
 		if ( !m_computeDiffuse )
 		{

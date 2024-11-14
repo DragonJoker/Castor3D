@@ -42,7 +42,7 @@ namespace atmosphere_scattering
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & roughness
-			, castor3d::shader::DebugOutputCategory & debugOutput )override;
+			, castor3d::shader::DebugOutputCategory const & debugOutput )override;
 
 		void applyVolume( sdw::Vec2 const fragCoord
 			, sdw::Float const linearDepth

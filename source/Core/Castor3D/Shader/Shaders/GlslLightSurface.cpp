@@ -153,18 +153,18 @@ namespace castor3d::shader
 		m_HdotL = max( derivFloat( 0.0_f ), dot( H(), L() ) );
 	}
 
-	void LightSurface::registerDebug( DebugOutput & debugOutput )const
+	void LightSurface::registerDebug( DebugOutputCategory const & debugOutput )const
 	{
-		debugOutput.registerOutput( "LightSurface", "V", m_V.value() );
-		debugOutput.registerOutput( "LightSurface", "N", m_N.value() );
-		debugOutput.registerOutput( "LightSurface", "L", m_L.value() );
-		debugOutput.registerOutput( "LightSurface", "H", m_H.value() );
-		debugOutput.registerOutput( "LightSurface", "NdotV", m_NdotV.value() );
-		debugOutput.registerOutput( "LightSurface", "NdotL", m_NdotL.getValue().value() );
-		debugOutput.registerOutput( "LightSurface", "NdotH", m_NdotH.getValue().value() );
-		debugOutput.registerOutput( "LightSurface", "HdotV", m_HdotV.getValue().value() );
-		debugOutput.registerOutput( "LightSurface", "LdotV", m_LdotV.getValue().value() );
-		debugOutput.registerOutput( "LightSurface", "HdotL", m_HdotL.getValue().value() );
+		debugOutput.registerOutput( cuT( "V" ), m_V.value() );
+		debugOutput.registerOutput( cuT( "N" ), m_N.value() );
+		debugOutput.registerOutput( cuT( "L" ), m_L.value() );
+		debugOutput.registerOutput( cuT( "H" ), m_H.value() );
+		debugOutput.registerOutput( cuT( "NdotV" ), m_NdotV.value() );
+		debugOutput.registerOutput( cuT( "NdotL" ), m_NdotL.getValue().value() );
+		debugOutput.registerOutput( cuT( "NdotH" ), m_NdotH.getValue().value() );
+		debugOutput.registerOutput( cuT( "HdotV" ), m_HdotV.getValue().value() );
+		debugOutput.registerOutput( cuT( "LdotV" ), m_LdotV.getValue().value() );
+		debugOutput.registerOutput( cuT( "HdotL" ), m_HdotL.getValue().value() );
 	}
 
 	sdw::expr::ExprPtr LightSurface::makeInit( sdw::type::BaseStructPtr type

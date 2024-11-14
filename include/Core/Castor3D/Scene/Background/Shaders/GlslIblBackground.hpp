@@ -27,26 +27,26 @@ namespace castor3d::shader
 			, uint32_t set );
 
 		sdw::RetVec3 computeDiffuseReflection( sdw::Vec3 const & wsNormal
-			, DebugOutputCategory & debugOutput )override;
+			, DebugOutputCategory const & debugOutput )override;
 		sdw::RetVec3 computeSpecularReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & roughness
-			, DebugOutputCategory & debugOutput )override;
+			, DebugOutputCategory const & debugOutput )override;
 		sdw::RetVec4 computeSheenReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
 			, BlendComponents & components
 			, sdw::CombinedImage2DRgba32 const & brdf
-			, DebugOutputCategory & debugOutput )override;
+			, DebugOutputCategory const & debugOutput )override;
 
 		sdw::RetVec3 computeRefraction( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & refractionRatio
 			, BlendComponents & components
-			, DebugOutputCategory & debugOutput )override;
+			, DebugOutputCategory const & debugOutput )override;
 		sdw::RetVec3 computeSpecularRefraction( sdw::Vec3 const & fresnel
 			, sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
@@ -56,11 +56,11 @@ namespace castor3d::shader
 			, sdw::Float const & refractionRatio
 			, BlendComponents & components
 			, sdw::CombinedImage2DRgba32 const & brdfMap
-			, DebugOutputCategory & debugOutput )override;
+			, DebugOutputCategory const & debugOutput )override;
 
 		sdw::RetVec3 computeDiffuse( sdw::Vec3 const & wsDirection
 			, BlendComponents & components
-			, DebugOutputCategory & debugOutput )override;
+			, DebugOutputCategory const & debugOutput )override;
 
 	public:
 		static castor::String const Name;

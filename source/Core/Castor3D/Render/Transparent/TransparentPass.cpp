@@ -361,12 +361,7 @@ namespace castor3d
 					, modelData.getMaterialId()
 					, in.passMultipliers
 					, components );
-				output.registerOutput( cuT( "Surface" ), cuT( "Normal" ), fma( components.getRawNormal(), vec3( 0.5_f ), vec3( 0.5_f ) ) );
-				output.registerOutput( cuT( "Surface" ), cuT( "Tangent" ), fma( in.tangent.xyz(), vec3( 0.5_f ), vec3( 0.5_f ) ) );
-				output.registerOutput( cuT( "Surface" ), cuT( "Bitangent" ), fma( in.bitangent, vec3( 0.5_f ), vec3( 0.5_f ) ) );
-				output.registerOutput( cuT( "Surface" ), cuT( "World Position" ), in.worldPosition );
-				output.registerOutput( cuT( "Surface" ), cuT( "View Position" ), in.viewPosition );
-				output.registerOutput( cuT( "Surface" ), cuT( "Colour" ), in.colour );
+				in.registerDebug( flags, components, output.pushBlock( cuT( "Surface" ) ) );
 
 				if ( components.occlusion )
 				{
@@ -445,7 +440,7 @@ namespace castor3d
 						auto incident = writer.declLocale( "incident"
 							, reflections.computeIncident( lightSurface.worldPosition().value().xyz(), c3d_cameraData.position() ) );
 						lightSurface.updateN( components.getDerivNormal() );
-						lightSurface.registerDebug( output );
+						lightSurface.registerDebug( output.pushBlock( cuT( "LightSurface" ) ) );
 						passShaders.computeReflRefr( reflections
 							, components
 							, lightSurface
