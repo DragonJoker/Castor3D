@@ -56,7 +56,7 @@ namespace castor
 
 		ImageLayout result;
 		result.type = ImageLayout::Type::e2D;
-		result.format = PixelFormat::eR8G8B8A8_UNORM;
+		result.format = PixelFormat::eR8G8B8A8_SRGB;
 		result.extent = { config.input.width, config.input.height, 1u };
 		result.layers = 1u;
 		result.levels = 1u;
