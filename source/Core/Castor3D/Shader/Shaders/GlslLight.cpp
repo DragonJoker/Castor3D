@@ -307,7 +307,7 @@ namespace castor3d::shader
 		, sdw::UInt const receivesShadows
 		, sdw::Vec2 const screenPosition
 		, sdw::Float const viewDepth
-		, DebugOutput & debugOutput
+		, DebugOutputCategory const & debugOutput
 		, DirectLighting & parentOutput )
 	{
 		if ( auto lightingModel = getLightingModel() )
@@ -370,7 +370,7 @@ namespace castor3d::shader
 		, sdw::Vec2 const screenPosition
 		, sdw::Float const viewDepth
 		, sdw::Vec3 const diffuse
-		, DebugOutput & debugOutput
+		, DebugOutputCategory const & debugOutput
 		, DirectLighting & parentOutput )
 	{
 		if ( auto lightingModel = getLightingModel() )
@@ -434,7 +434,7 @@ namespace castor3d::shader
 		, sdw::UInt const receivesShadows
 		, sdw::Vec2 const screenPosition
 		, sdw::Float const viewDepth
-		, DebugOutput & debugOutput
+		, DebugOutputCategory const & debugOutput
 		, sdw::Vec3 & output )
 	{
 		if ( auto lightingModel = getLightingModel() )
@@ -492,7 +492,7 @@ namespace castor3d::shader
 			, BackgroundModel & backgroundModel
 			, LightSurface const & lightSurface
 			, sdw::UInt const receivesShadows
-			, DebugOutput & debugOutput
+			, DebugOutputCategory const & debugOutput
 			, DirectLighting & output )
 	{
 		if ( auto lightingModel = getLightingModel() )
@@ -568,7 +568,7 @@ namespace castor3d::shader
 		, LightSurface const & lightSurface
 		, sdw::UInt const receivesShadows
 		, sdw::Vec3 const diffuse
-		, DebugOutput & debugOutput
+		, DebugOutputCategory const & debugOutput
 		, DirectLighting & output )
 	{
 		if ( auto lightingModel = getLightingModel() )
@@ -644,7 +644,7 @@ namespace castor3d::shader
 		, BackgroundModel & backgroundModel
 		, LightSurface const & lightSurface
 		, sdw::UInt const & receivesShadows
-		, DebugOutput & debugOutput
+		, DebugOutputCategory const & debugOutput
 		, sdw::Vec3 & output )
 	{
 		if ( auto lightingModel = getLightingModel() )
@@ -712,7 +712,7 @@ namespace castor3d::shader
 		}
 	}
 
-	sdw::Vec3 Lights::computeSssTransmittance( DebugOutput & debugOutput
+	sdw::Vec3 Lights::computeSssTransmittance( DebugOutputCategory const & debugOutput
 		, BlendComponents const & components
 		, DirectionalLight const & directionalLight
 		, DirectionalShadowData const & directionalShadows
@@ -725,7 +725,7 @@ namespace castor3d::shader
 			, lightSurface );
 	}
 
-	sdw::Vec3 Lights::computeSssTransmittance( DebugOutput & debugOutput
+	sdw::Vec3 Lights::computeSssTransmittance( DebugOutputCategory const & debugOutput
 		, BlendComponents const & components
 		, PointLight const & pointLight
 		, PointShadowData const & pointShadows
@@ -738,7 +738,7 @@ namespace castor3d::shader
 			, lightSurface );
 	}
 
-	sdw::Vec3 Lights::computeSssTransmittance( DebugOutput & debugOutput
+	sdw::Vec3 Lights::computeSssTransmittance( DebugOutputCategory const & debugOutput
 		, BlendComponents const & components
 		, SpotLight const & spotLight
 		, SpotShadowData const & spotShadows

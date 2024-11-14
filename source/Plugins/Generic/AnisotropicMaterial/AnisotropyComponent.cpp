@@ -9,6 +9,7 @@
 #include <Castor3D/Shader/Shaders/GlslDebugOutput.hpp>
 #include <Castor3D/Shader/Shaders/GlslLightSurface.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
+#include <Castor3D/Shader/Shaders/GlslOutputComponents.hpp>
 #include <Castor3D/Shader/Shaders/GlslReflection.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 #include <Castor3D/Shader/Ubos/CameraUbo.hpp>
@@ -78,10 +79,9 @@ namespace anisotropy
 
 	//*********************************************************************************************
 
-	void AnisotropyComponent::ReflRefrShader::computeReflRefr( c3d::ReflectionModel & reflections
+	void AnisotropyComponent::ReflRefrShader::computeWithTransmission( c3d::ReflectionModel & reflections
 		, c3d::BlendComponents & components
 		, c3d::LightSurface const & lightSurface
-		, sdw::Vec4 const & position
 		, c3d::BackgroundModel & backgroundModel
 		, sdw::CombinedImage2DRgba32 const & mippedScene
 		, c3d::CameraData const & camera
@@ -90,10 +90,8 @@ namespace anisotropy
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
-		, sdw::UInt const & hasReflection
-		, sdw::Float const & refractionRatio
 		, c3d::ReflectionRefraction & output
-		, c3d::DebugOutput & debugOutput )const
+		, c3d::DebugOutputCategory const & debugOutput )const
 	{
 		if ( mippedScene.isEnabled() )
 		{
@@ -111,25 +109,22 @@ namespace anisotropy
 			bentNormal = normalize( mix( bentNormal, lightSurface.N().value(), vec3( a ) ) );
 
 			auto debugOutputBlock = debugOutput.pushBlock( cuT( "Reflection" ) );
-			reflections.computeCombined( components
+			reflections.computeWithTransmission( components
 				, bentNormal
 				, lightSurface.worldPosition().value().xyz()
 				, lightSurface.V().value()
 				, dot( bentNormal, lightSurface.V().value() )
-				, lightSurface.worldPosition().value().xyz()
 				, backgroundModel
 				, mippedScene
 				, camera
 				, sceneUv
 				, envMapIndex
-				, components.hasReflection
-				, components.ior
 				, output
 				, debugOutputBlock );
 		}
 		else
 		{
-			computeReflRefr( reflections
+			computeWithoutTransmission( reflections
 				, components
 				, lightSurface
 				, backgroundModel
@@ -139,14 +134,12 @@ namespace anisotropy
 				, sceneUv
 				, envMapIndex
 				, incident
-				, components.hasReflection
-				, components.ior
 				, output
 				, debugOutput );
 		}
 	}
 
-	void AnisotropyComponent::ReflRefrShader::computeReflRefr( c3d::ReflectionModel & reflections
+	void AnisotropyComponent::ReflRefrShader::computeWithoutTransmission( c3d::ReflectionModel & reflections
 		, c3d::BlendComponents & components
 		, c3d::LightSurface const & lightSurface
 		, c3d::BackgroundModel & backgroundModel
@@ -156,10 +149,8 @@ namespace anisotropy
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
-		, sdw::UInt const & hasReflection
-		, sdw::Float const & refractionRatio
 		, c3d::ReflectionRefraction & output
-		, c3d::DebugOutput & debugOutput )const
+		, c3d::DebugOutputCategory const & debugOutput )const
 	{
 		auto & writer = *components.getWriter();
 		auto anisotropicT = components.getMember< sdw::Vec3 >( "anisotropicT" );
@@ -174,18 +165,15 @@ namespace anisotropy
 			, pow( pow( 1.0_f - anisotropyStrength * ( 1.0_f - components.perceptualRoughness ), 2.0_f ), 2.0_f ) );
 		bentNormal = normalize( mix( bentNormal, lightSurface.N().value(), vec3( a ) ) );
 
-		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Reflection" ) );
-		reflections.computeCombined( components
+		reflections.computeWithoutTransmission( components
 			, bentNormal
 			, lightSurface.worldPosition().value().xyz()
 			, lightSurface.V().value()
-			, dot( bentNormal, lightSurface.V().value() )
+			, clamp( dot( bentNormal, lightSurface.V().value() ), 0.0_f, 1.0_f )
 			, backgroundModel
 			, envMapIndex
-			, components.hasReflection
-			, components.ior
 			, output
-			, debugOutputBlock );
+			, debugOutput );
 	}
 
 	//*********************************************************************************************

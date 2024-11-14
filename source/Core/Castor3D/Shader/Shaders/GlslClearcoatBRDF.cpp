@@ -54,27 +54,18 @@ namespace castor3d::shader
 				, sdw::Float const & NdotH )
 			{
 				auto NdotV = m_writer.declLocale( "NdotV"
-					, max( 0.0_f, dot( N, V ) ) );
+					, clamp( dot( N, V ), 0.0_f, 1.0_f ) );
 
 				// GGX Specular BRDF
 				auto D = m_writer.declLocale( "D"
 					, m_brdfHelpers.distributionGGX( NdotH
-						, components.alphaRoughness * components.alphaRoughness ) );
+						, components.alphaRoughness ) );
 				auto Vis = m_writer.declLocale( "Vis"
-					, m_brdfHelpers.visibilitySmithGGXCorrelated( NdotV
+					, m_brdfHelpers.visibilityGGX( NdotV
 						, NdotL
 						, components.alphaRoughness ) );
 
-				auto numerator = m_writer.declLocale( "numerator"
-					, D * Vis );
-				auto denominator = m_writer.declLocale( "denominator"
-					, sdw::fma( 4.0_f
-						, NdotV * NdotL
-						, 0.001_f ) );
-				auto reflectance = m_writer.declLocale( "reflectance"
-					, numerator / denominator );
-
-				m_writer.returnStmt( max( vec3( reflectance ), vec3( 0.0_f ) ) );
+				m_writer.returnStmt( vec3( D * Vis ) );
 			}
 			, InBlendComponents{ m_writer, "components", pcomponents }
 			, sdw::InVec3{ m_writer, "N" }

@@ -20,24 +20,24 @@ namespace castor3d::shader
 			, ShadowOptions shadowOptions
 			, SssProfiles const & sssProfiles );
 
-		C3D_API sdw::Vec3 compute( DebugOutput & debugOutput
+		C3D_API sdw::Vec3 compute( DebugOutputCategory const & debugOutput
 			, BlendComponents const & components
 			, shader::DirectionalLight const & light
 			, DirectionalShadowData const & shadow
 			, LightSurface const & lightSurface );
-		C3D_API sdw::Vec3 compute( DebugOutput & debugOutput
+		C3D_API sdw::Vec3 compute( DebugOutputCategory const & debugOutput
 			, BlendComponents const & components
 			, shader::PointLight const & light
 			, PointShadowData const & shadow
 			, LightSurface const & lightSurface );
-		C3D_API sdw::Vec3 compute( DebugOutput & debugOutput
+		C3D_API sdw::Vec3 compute( DebugOutputCategory const & debugOutput
 			, BlendComponents const & components
 			, shader::SpotLight const & light
 			, SpotShadowData const & shadow
 			, LightSurface const & lightSurface );
 
 	private:
-		sdw::Vec3 doCompute( DebugOutput & debugOutput
+		sdw::Vec3 doCompute( DebugOutputCategory const & debugOutput
 			, sdw::Float const & lightSpaceDepth
 			, sdw::Float const & shadowDepth
 			, sdw::UInt const & sssProfileIndex

@@ -237,7 +237,7 @@ namespace castor3d
 			auto incident = writer.declLocale( "c3d_iridescenceIncident"
 				, normalize( surface.worldPosition.value().xyz() - camera.position() ) );
 			auto NdotV = writer.declLocale( "NdotV"
-				, dot( components.getRawNormal(), -incident ) );
+				, clamp( dot( components.getRawNormal(), -incident ), 0.0_f, 1.0_f ) );
 			components.getMember< sdw::Vec3 >( "iridescenceDielectricFresnel" ) = utils.evalIridescence( 1.0_f
 				, components.iridescenceIor
 				, NdotV

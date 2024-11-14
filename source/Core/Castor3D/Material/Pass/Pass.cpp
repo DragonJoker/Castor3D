@@ -857,12 +857,6 @@ namespace castor3d
 			result = comp->hasEnvironmentMapping();
 		}
 
-		if ( !result )
-		{
-			result = hasComponent< RefractionComponent >()
-				&& !hasComponent< TransmissionComponent >();
-		}
-
 		return result;
 	}
 

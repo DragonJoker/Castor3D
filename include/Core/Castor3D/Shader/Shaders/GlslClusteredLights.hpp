@@ -37,7 +37,7 @@ namespace castor3d::shader
 			, sdw::UInt const receivesShadows
 			, sdw::Vec2 const screenPosition
 			, sdw::Float const viewDepth
-			, DebugOutput & debugOutput
+			, DebugOutputCategory const & debugOutput
 			, DirectLighting & output );
 		C3D_API void computeCombinedAllButDif( Lights & lights
 			, LightingModel & lightingModel
@@ -46,7 +46,7 @@ namespace castor3d::shader
 			, sdw::UInt const receivesShadows
 			, sdw::Vec2 const screenPosition
 			, sdw::Float const viewDepth
-			, DebugOutput & debugOutput
+			, DebugOutputCategory const & debugOutput
 			, DirectLighting & output );
 		C3D_API void computeCombinedDif( Lights & lights
 			, LightingModel & lightingModel
@@ -55,7 +55,7 @@ namespace castor3d::shader
 			, sdw::UInt const receivesShadows
 			, sdw::Vec2 const screenPosition
 			, sdw::Float const viewDepth
-			, DebugOutput & debugOutput
+			, DebugOutputCategory const & debugOutput
 			, sdw::Vec3 & output );
 
 		bool isEnabled()const noexcept

@@ -108,6 +108,11 @@ namespace castor3d::shader
 			return *m_debugOutput;
 		}
 
+		bool isEnabled()const
+		{
+			return m_debugOutput->isEnabled();
+		}
+
 		DebugOutputCategory pushBlock( castor::String category )const
 		{
 			return m_debugOutput->pushBlock( castor::move( category ) );

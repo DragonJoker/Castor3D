@@ -115,10 +115,9 @@ namespace castor3d::shader
 			, sdw::CombinedImage2DRgba32 const map
 			, DerivTex const texCoords
 			, shader::BlendComponents const & components )const;
-		C3D_API void computeReflRefr( ReflectionModel & reflections
+		C3D_API void backgroundBrdfWithTransmission( ReflectionModel & reflections
 			, BlendComponents & components
 			, LightSurface const & lightSurface
-			, sdw::Vec4 const & position
 			, BackgroundModel & background
 			, sdw::CombinedImage2DRgba32 const & mippedScene
 			, CameraData const & camera
@@ -127,11 +126,9 @@ namespace castor3d::shader
 			, sdw::Vec2 const & sceneUv
 			, sdw::UInt const & envMapIndex
 			, sdw::Vec3 const & incident
-			, sdw::UInt const & hasReflection
-			, sdw::Float const & refractionRatio
 			, ReflectionRefraction & output
 			, DebugOutput & debugOutput )const;
-		C3D_API void computeReflRefr( ReflectionModel & reflections
+		C3D_API void backgroundBrdfWithoutTransmission( ReflectionModel & reflections
 			, BlendComponents & components
 			, LightSurface const & lightSurface
 			, BackgroundModel & background
@@ -141,8 +138,6 @@ namespace castor3d::shader
 			, sdw::Vec2 const & sceneUv
 			, sdw::UInt const & envMapIndex
 			, sdw::Vec3 const & incident
-			, sdw::UInt const & hasReflection
-			, sdw::Float const & refractionRatio
 			, ReflectionRefraction & output
 			, DebugOutput & debugOutput )const;
 

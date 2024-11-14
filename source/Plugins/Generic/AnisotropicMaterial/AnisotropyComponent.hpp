@@ -40,15 +40,11 @@ namespace anisotropy
 		struct ReflRefrShader
 			: public c3d::PassReflRefrShader
 		{
-			explicit ReflRefrShader( castor3d::PassComponentPlugin const & plugin )
-				: PassReflRefrShader{ plugin }
-			{
-			}
+			using c3d::PassReflRefrShader::PassReflRefrShader;
 
-			void computeReflRefr( c3d::ReflectionModel & reflections
+			void computeWithTransmission( c3d::ReflectionModel & reflections
 				, c3d::BlendComponents & components
 				, c3d::LightSurface const & lightSurface
-				, sdw::Vec4 const & position
 				, c3d::BackgroundModel & background
 				, sdw::CombinedImage2DRgba32 const & mippedScene
 				, c3d::CameraData const & camera
@@ -57,11 +53,9 @@ namespace anisotropy
 				, sdw::Vec2 const & sceneUv
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
-				, sdw::UInt const & hasReflection
-				, sdw::Float const & refractionRatio
 				, c3d::ReflectionRefraction & output
-				, c3d::DebugOutput & debugOutput )const override;
-			void computeReflRefr( c3d::ReflectionModel & reflections
+				, c3d::DebugOutputCategory const & debugOutput )const override;
+			void computeWithoutTransmission( c3d::ReflectionModel & reflections
 				, c3d::BlendComponents & components
 				, c3d::LightSurface const & lightSurface
 				, c3d::BackgroundModel & background
@@ -71,10 +65,8 @@ namespace anisotropy
 				, sdw::Vec2 const & sceneUv
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
-				, sdw::UInt const & hasReflection
-				, sdw::Float const & refractionRatio
 				, c3d::ReflectionRefraction & output
-				, c3d::DebugOutput & debugOutput )const override;
+				, c3d::DebugOutputCategory const & debugOutput )const override;
 		};
 
 		struct MaterialShader

@@ -23,17 +23,17 @@ namespace castor3d::shader
 
 	sdw::RetFloat BRDFHelpers::visibilitySmithGGXCorrelated( sdw::Float const & pNdotV
 		, sdw::Float const & pNdotL
-		, sdw::Float const & proughness )
+		, sdw::Float const & palphaRoughness )
 	{
 		if ( !m_visibilitySmithGGXCorrelated )
 		{
 			m_visibilitySmithGGXCorrelated = m_writer.implementFunction< sdw::Float >( "c3d_visibilitySmithGGXCorrelated"
 				, [this]( sdw::Float const & NdotV
 					, sdw::Float const & NdotL
-					, sdw::Float const & roughness )
+					, sdw::Float const & alphaRoughness )
 				{
 					auto alpha = m_writer.declLocale( "alpha"
-						, ( roughness * roughness ) / 2.0_f );
+						, ( alphaRoughness * alphaRoughness ) / 2.0_f );
 					auto ggxV = m_writer.declLocale( "ggxV"
 						, NdotV / ( NdotV * ( 1.0_f - alpha ) + alpha ) );
 					auto ggxL = m_writer.declLocale( "ggxL"
@@ -42,10 +42,41 @@ namespace castor3d::shader
 				}
 				, sdw::InFloat( m_writer, "NdotV" )
 				, sdw::InFloat( m_writer, "NdotL" )
-				, sdw::InFloat( m_writer, "roughness" ) );
+				, sdw::InFloat( m_writer, "alphaRoughness" ) );
 		}
 
-		return m_visibilitySmithGGXCorrelated( pNdotV, pNdotL, proughness );
+		return m_visibilitySmithGGXCorrelated( pNdotV, pNdotL, palphaRoughness );
+	}
+
+	sdw::RetFloat BRDFHelpers::visibilityGGX( sdw::Float const & pNdotV
+		, sdw::Float const & pNdotL
+		, sdw::Float const & palphaRoughness )
+	{
+		if ( !m_visibilityGGX )
+		{
+			m_visibilityGGX = m_writer.implementFunction< sdw::Float >( "c3d_visibilityGGX"
+				, [this]( sdw::Float const & NdotV
+					, sdw::Float const & NdotL
+					, sdw::Float const & alphaRoughness )
+				{
+					auto sqAlphaRoughness = m_writer.declLocale( "sqAlphaRoughness"
+						, alphaRoughness * alphaRoughness );
+					auto ggxV = m_writer.declLocale( "ggxV"
+						, NdotL * sqrt( NdotV * NdotV * ( 1.0_f - sqAlphaRoughness ) + sqAlphaRoughness ) );
+					auto ggxL = m_writer.declLocale( "ggxL"
+						, NdotV * sqrt( NdotL * NdotL * ( 1.0_f - sqAlphaRoughness ) + sqAlphaRoughness ) );
+					auto ggx = m_writer.declLocale( "ggx"
+						, ggxV + ggxL );
+					m_writer.returnStmt( m_writer.ternary( ggx > 0.0_f
+						, 0.5_f / ggx
+						, 0.0_f ) );
+				}
+				, sdw::InFloat( m_writer, "NdotV" )
+				, sdw::InFloat( m_writer, "NdotL" )
+				, sdw::InFloat( m_writer, "alphaRoughness" ) );
+		}
+
+		return m_visibilityGGX( pNdotV, pNdotL, palphaRoughness );
 	}
 
 	sdw::RetFloat BRDFHelpers::visibilityBeckmann( sdw::Float const & pNdotL
@@ -96,28 +127,28 @@ namespace castor3d::shader
 
 	sdw::RetFloat BRDFHelpers::visibilitySheen( sdw::Float const & pNdotV
 		, sdw::Float const & pNdotL
-		, sdw::Float const & proughness )
+		, sdw::Float const & psheenRoughness )
 	{
 		if ( !m_visibilitySheen )
 		{
 			m_visibilitySheen = m_writer.implementFunction< sdw::Float >( "c3d_visibilitySheen"
 				, [this]( sdw::Float const & NdotV
 					, sdw::Float const & NdotL
-					, sdw::Float roughness )
+					, sdw::Float sheenRoughness )
 				{
-					roughness = max( roughness, 0.000001_f ); //clamp (0,1]
+					sheenRoughness = max( sheenRoughness, 0.000001_f ); //clamp (0,1]
 					auto alphaG = m_writer.declLocale( "alphaG"
-						, roughness * roughness );
+						, sheenRoughness * sheenRoughness );
 
 					m_writer.returnStmt( clamp( 1.0_f / ( ( 1.0_f + lambdaSheen( NdotV, alphaG ) + lambdaSheen( NdotL, alphaG ) )
 						* ( 4.0_f * NdotV * NdotL ) ), 0.0_f, 1.0_f ) );
 				}
 				, sdw::InFloat( m_writer, "NdotV" )
 				, sdw::InFloat( m_writer, "NdotL" )
-				, sdw::InFloat( m_writer, "roughness" ) );
+				, sdw::InFloat( m_writer, "sheenRoughness" ) );
 		}
 
-		return m_visibilitySheen( pNdotV, pNdotL, proughness );
+		return m_visibilitySheen( pNdotV, pNdotL, psheenRoughness );
 	}
 
 	sdw::RetFloat BRDFHelpers::distributionBeckmann( sdw::Float const & pNdotH
@@ -145,37 +176,41 @@ namespace castor3d::shader
 	}
 
 	sdw::RetFloat BRDFHelpers::distributionGGX( sdw::Float const & pNdotH
-		, sdw::Float const & palpha )
+		, sdw::Float const & palphaRoughness )
 	{
 		if ( !m_distributionGGX )
 		{
 			m_distributionGGX = m_writer.implementFunction< sdw::Float >( "c3d_distributionGGX"
 				, [this]( sdw::Float const & NdotH
-					, sdw::Float const & alpha )
+					, sdw::Float const & alphaRoughness )
 				{
+					auto sqAlphaRoughness = m_writer.declLocale( "sqAlphaRoughness"
+						, alphaRoughness * alphaRoughness );
 					auto f = m_writer.declLocale( "f"
-						, ( NdotH * NdotH ) * ( alpha - 1.0_f ) + 1.0_f );
-					m_writer.returnStmt( alpha / ( f * f * castor::Pi< float > ) );
+						, ( NdotH * NdotH ) * ( sqAlphaRoughness - 1.0_f ) + 1.0_f );
+					m_writer.returnStmt( sqAlphaRoughness / ( f * f * castor::Pi< float > ) );
 				}
 				, sdw::InFloat{ m_writer, "NdotH" }
 				, sdw::InFloat{ m_writer, "alpha" } );
 		}
 
-		return m_distributionGGX( pNdotH, palpha );
+		return m_distributionGGX( pNdotH, palphaRoughness );
 	}
 
 	sdw::RetFloat BRDFHelpers::distributionCharlie( sdw::Float const & pNdotH
-		, sdw::Float const & palpha )
+		, sdw::Float const & psheenRoughness )
 	{
 		if ( !m_distributionCharlie )
 		{
 			m_distributionCharlie = m_writer.implementFunction< sdw::Float >( "c3d_distributionCharlie"
 				, [this]( sdw::Float const & NdotH
-					, sdw::Float alpha )
+					, sdw::Float sheenRoughness )
 				{
-					alpha = max( alpha, 0.000001_f );
+					sheenRoughness = max( sheenRoughness, 0.000001_f );
+					auto alphaG = m_writer.declLocale( "alphaG"
+						, sheenRoughness * sheenRoughness );
 					auto invR = m_writer.declLocale( "invR"
-						, 1.0_f / alpha );
+						, 1.0_f / alphaG );
 					auto cos2h = m_writer.declLocale( "cos2h"
 						, NdotH * NdotH );
 					auto sin2h = m_writer.declLocale( "sin2h"
@@ -183,10 +218,10 @@ namespace castor3d::shader
 					m_writer.returnStmt( ( 2.0_f * invR ) * pow( sin2h, invR * 0.5_f ) / castor::Tau< float > );
 				}
 				, sdw::InFloat{ m_writer, "NdotH" }
-				, sdw::InFloat{ m_writer, "alpha" } );
+				, sdw::InFloat{ m_writer, "sheenRoughness" } );
 		}
 
-		return m_distributionCharlie( pNdotH, palpha );
+		return m_distributionCharlie( pNdotH, psheenRoughness );
 	}
 
 	RetMicrofacetDistributionSample BRDFHelpers::importanceSampleGGX( sdw::Vec2 const & pxi

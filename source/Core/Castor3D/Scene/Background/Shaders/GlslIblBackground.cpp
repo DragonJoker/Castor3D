@@ -173,7 +173,6 @@ namespace castor3d::shader
 	sdw::RetVec3 IblBackgroundModel::computeRefraction( sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
-		, sdw::Float const & prefractionRatio
 		, BlendComponents & components
 		, DebugOutputCategory const & debugOutput )
 	{
@@ -202,7 +201,7 @@ namespace castor3d::shader
 
 		auto prefiltered = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
 		return m_computeRefraction( prefiltered
-			, prefractionRatio
+			, components.ior
 			, pwsNormal
 			, pV
 			, components.perceptualRoughness );
@@ -214,7 +213,6 @@ namespace castor3d::shader
 		, sdw::Vec3 const & pV
 		, sdw::Float const & pNdotV
 		, sdw::Float const & proughness
-		, sdw::Float const & prefractionRatio
 		, BlendComponents & components
 		, sdw::CombinedImage2DRgba32 const & pbrdfMap
 		, DebugOutputCategory const & debugOutput )
@@ -257,7 +255,7 @@ namespace castor3d::shader
 		auto prefiltered = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
 		return m_computeSpecularRefraction( prefiltered
 			, pbrdfMap
-			, prefractionRatio
+			, components.ior
 			, pwsNormal
 			, pV
 			, pfresnel

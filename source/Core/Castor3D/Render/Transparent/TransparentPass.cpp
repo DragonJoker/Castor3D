@@ -402,7 +402,7 @@ namespace castor3d
 							, modelData.isShadowReceiver()
 							, lightSurface.clipPosition().xy()
 							, lightSurface.viewPosition().value().z()
-							, output
+							, output.pushBlock( cuT( "Lighting" ) )
 							, directLighting );
 
 						if ( components.hasMember( "ambientFactor" ) )
@@ -441,10 +441,9 @@ namespace castor3d
 							, reflections.computeIncident( lightSurface.worldPosition().value().xyz(), c3d_cameraData.position() ) );
 						lightSurface.updateN( components.getDerivNormal() );
 						lightSurface.registerDebug( output.pushBlock( cuT( "LightSurface" ) ) );
-						passShaders.computeReflRefr( reflections
+						passShaders.backgroundBrdfWithTransmission( reflections
 							, components
 							, lightSurface
-							, lightSurface.worldPosition().value()
 							, *backgroundModel
 							, c3d_mapScene
 							, c3d_cameraData
@@ -453,8 +452,6 @@ namespace castor3d
 							, in.fragCoord.xy()
 							, modelData.getEnvMapIndex()
 							, incident
-							, components.hasReflection
-							, components.ior
 							, reflRefrResult
 							, output );
 

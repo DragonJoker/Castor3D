@@ -27,7 +27,7 @@ namespace castor3d::shader
 	{
 	}
 		
-	sdw::Vec3 SssTransmittance::compute( DebugOutput & debugOutput
+	sdw::Vec3 SssTransmittance::compute( DebugOutputCategory const & debugOutput
 	, BlendComponents const & components
 		, DirectionalLight const & plight
 		, DirectionalShadowData const & pshadow
@@ -98,7 +98,7 @@ namespace castor3d::shader
 			, plightSurface.worldPosition().value().xyz() );
 	}
 
-	sdw::Vec3 SssTransmittance::compute( DebugOutput & debugOutput
+	sdw::Vec3 SssTransmittance::compute( DebugOutputCategory const & debugOutput
 		, BlendComponents const & components
 		, PointLight const & plight
 		, PointShadowData const & pshadow
@@ -162,7 +162,7 @@ namespace castor3d::shader
 			, plightSurface.worldPosition().value().xyz() );
 	}
 
-	sdw::Vec3 SssTransmittance::compute( DebugOutput & debugOutput
+	sdw::Vec3 SssTransmittance::compute( DebugOutputCategory const & debugOutput
 		, BlendComponents const & components
 		, SpotLight const & plight
 		, SpotShadowData const & pshadow
@@ -242,7 +242,7 @@ namespace castor3d::shader
 			, plightSurface.worldPosition().value().xyz() );
 	}
 
-	sdw::Vec3 SssTransmittance::doCompute( DebugOutput & debugOutput
+	sdw::Vec3 SssTransmittance::doCompute( DebugOutputCategory const & debugOutput
 		, sdw::Float const & lightSpaceDepth
 		, sdw::Float const & shadowDepth
 		, sdw::UInt const & sssProfileIndex

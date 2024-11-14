@@ -1283,7 +1283,7 @@ namespace castor3d
 
 						if ( components.transmissionFactor )
 						{
-							IF( writer, components.transmissionFactor >= 0.1_f )
+							IF( writer, components.transmissionFactor >= 0.05_f )
 							{
 								writer.returnStmt( 0_b );
 							}
@@ -1325,7 +1325,7 @@ namespace castor3d
 										, modelData.isShadowReceiver()
 										, lightSurface.clipPosition().xy()
 										, lightSurface.viewPosition().value().z()
-										, output
+										, output.pushBlock( cuT( "Lighting" ) )
 										, diffuse );
 									inoutDiffuse = vec4( diffuse, components.transmittance );
 									outScattering = vec4( 0.0_f );
@@ -1345,7 +1345,7 @@ namespace castor3d
 											, lightSurface.clipPosition().xy()
 											, lightSurface.viewPosition().value().z()
 											, inoutDiffuse.rgb()
-											, output
+											, output.pushBlock( cuT( "Lighting" ) )
 											, directLighting );
 									}
 									else
@@ -1357,7 +1357,7 @@ namespace castor3d
 											, modelData.isShadowReceiver()
 											, lightSurface.clipPosition().xy()
 											, lightSurface.viewPosition().value().z()
-											, output
+											, output.pushBlock( cuT( "Lighting" ) )
 											, directLighting );
 									}
 
@@ -1395,7 +1395,7 @@ namespace castor3d
 
 									lightSurface.updateN( components.getDerivNormal() );
 									lightSurface.registerDebug( output.pushBlock( cuT( "LightSurface" ) ) );
-									passShaders.computeReflRefr( reflections
+									passShaders.backgroundBrdfWithoutTransmission( reflections
 										, components
 										, lightSurface
 										, *backgroundModel
@@ -1405,8 +1405,6 @@ namespace castor3d
 										, vec2( ipixel )
 										, modelData.getEnvMapIndex()
 										, shader::getRaw( incident )
-										, components.hasReflection
-										, components.ior
 										, reflRefrResult
 										, output );
 									output.registerOutput( cuT( "Reflection" ), cuT( "Incident" ), sdw::fma( shader::getRaw( incident ), vec3( 0.5_f ), vec3( 0.5_f ) ) );

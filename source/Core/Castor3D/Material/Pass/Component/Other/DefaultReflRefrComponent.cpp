@@ -10,6 +10,7 @@
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslReflection.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
@@ -20,10 +21,9 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	void DefaultReflRefrComponent::ReflRefrShader::computeReflRefr( shader::ReflectionModel & reflections
+	void DefaultReflRefrComponent::ReflRefrShader::computeWithTransmission( shader::ReflectionModel & reflections
 		, shader::BlendComponents & components
 		, shader::LightSurface const & lightSurface
-		, sdw::Vec4 const & position
 		, shader::BackgroundModel & backgroundModel
 		, sdw::CombinedImage2DRgba32 const & mippedScene
 		, shader::CameraData const & camera
@@ -32,30 +32,24 @@ namespace castor3d
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
-		, sdw::UInt const & hasReflection
-		, sdw::Float const & refractionRatio
 		, shader::ReflectionRefraction & output
-		, shader::DebugOutput & debugOutput )const
+		, shader::DebugOutputCategory const & debugOutput )const
 	{
 		if ( mippedScene.isEnabled() )
 		{
-			auto debugOutputBlock = debugOutput.pushBlock( cuT( "Reflection" ) );
-			reflections.computeCombined( components
+			reflections.computeWithTransmission( components
 				, lightSurface
-				, lightSurface.worldPosition().value().xyz()
 				, backgroundModel
 				, mippedScene
 				, camera
 				, sceneUv / vec2( camera.renderSize() )
 				, envMapIndex
-				, components.hasReflection
-				, components.ior
 				, output
-				, debugOutputBlock );
+				, debugOutput );
 		}
 		else
 		{
-			computeReflRefr( reflections
+			computeWithoutTransmission( reflections
 				, components
 				, lightSurface
 				, backgroundModel
@@ -65,14 +59,12 @@ namespace castor3d
 				, sceneUv
 				, envMapIndex
 				, incident
-				, components.hasReflection
-				, components.ior
 				, output
 				, debugOutput );
 		}
 	}
 
-	void DefaultReflRefrComponent::ReflRefrShader::computeReflRefr( shader::ReflectionModel & reflections
+	void DefaultReflRefrComponent::ReflRefrShader::computeWithoutTransmission( shader::ReflectionModel & reflections
 		, shader::BlendComponents & components
 		, shader::LightSurface const & lightSurface
 		, shader::BackgroundModel & backgroundModel
@@ -82,20 +74,18 @@ namespace castor3d
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
-		, sdw::UInt const & hasReflection
-		, sdw::Float const & refractionRatio
 		, shader::ReflectionRefraction & output
-		, shader::DebugOutput & debugOutput )const
+		, shader::DebugOutputCategory const & debugOutput )const
 	{
-		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Reflection" ) );
-		reflections.computeCombined( components
-			, lightSurface
+		reflections.computeWithoutTransmission( components
+			, lightSurface.N().value()
+			, lightSurface.worldPosition().value().xyz()
+			, lightSurface.V().value()
+			, lightSurface.NdotV().value()
 			, backgroundModel
 			, envMapIndex
-			, components.hasReflection
-			, components.ior
 			, output
-			, debugOutputBlock );
+			, debugOutput );
 	}
 
 	//*********************************************************************************************

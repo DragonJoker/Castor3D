@@ -17,14 +17,12 @@ CU_ImplementSmartPtr( water, WaterReflRefrComponent )
 namespace water
 {
 	using namespace castor3d;
-	namespace c3d = castor3d::shader;
 
 	//*********************************************************************************************
 
-	void WaterReflRefrComponent::ReflRefrShader::computeReflRefr( c3d::ReflectionModel & reflections
+	void WaterReflRefrComponent::ReflRefrShader::computeWithTransmission( c3d::ReflectionModel & reflections
 		, c3d::BlendComponents & components
 		, c3d::LightSurface const & lightSurface
-		, sdw::Vec4 const & position
 		, c3d::BackgroundModel & backgroundModel
 		, sdw::CombinedImage2DRgba32 const & mippedScene
 		, c3d::CameraData const & camera
@@ -33,12 +31,10 @@ namespace water
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
-		, sdw::UInt const & hasReflection
-		, sdw::Float const & refractionRatio
 		, c3d::ReflectionRefraction & output
-		, c3d::DebugOutput & debugOutput )const
+		, c3d::DebugOutputCategory const & debugOutput )const
 	{
-		computeReflRefr( reflections
+		computeWithoutTransmission( reflections
 			, components
 			, lightSurface
 			, backgroundModel
@@ -48,13 +44,11 @@ namespace water
 			, sceneUv
 			, envMapIndex
 			, incident
-			, components.hasReflection
-			, components.ior
 			, output
 			, debugOutput );
 	}
 
-	void WaterReflRefrComponent::ReflRefrShader::computeReflRefr( c3d::ReflectionModel & reflections
+	void WaterReflRefrComponent::ReflRefrShader::computeWithoutTransmission( c3d::ReflectionModel & reflections
 		, c3d::BlendComponents & components
 		, c3d::LightSurface const & lightSurface
 		, c3d::BackgroundModel & backgroundModel
@@ -64,10 +58,8 @@ namespace water
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
-		, sdw::UInt const & hasReflection
-		, sdw::Float const & refractionRatio
 		, c3d::ReflectionRefraction & output
-		, c3d::DebugOutput & debugOutput )const
+		, c3d::DebugOutputCategory const & debugOutput )const
 	{
 		auto & writer = *components.getWriter();
 
@@ -103,11 +95,10 @@ namespace water
 			, vec3( 0.0_f ) );
 		auto bgSpecularReflection = writer.declLocale("bgSpecularReflection"
 			, vec3( 0.0_f ) );
-		reflections.computeReflection( components
+		reflections.computeWithoutTransmission( components
 			, lightSurface
 			, backgroundModel
 			, envMapIndex
-			, components.hasReflection
 			, bgDiffuseReflection
 			, bgSpecularReflection
 			, debugOutputBlock );
@@ -236,26 +227,12 @@ namespace water
 		}
 
 		components.opacity = depthSoftenedAlpha;
-
-		if ( components.hasMember( "transmissionFactor" ) )
-		{
-			output.diffuse = mix( output.diffuse, specularTransmission, vec3( components.transmissionFactor ) );
-		}
-
-		auto brdf = writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
-		output.metal = reflectionResult
-			* reflections.computeFresnel( brdf
-				, lightSurface.NdotV().value()
-				, components.perceptualRoughness
-				, components.baseColour
-				, 1.0_f );
-		output.dielectric = mix( output.diffuse
+		reflections.computeSpecularBrdfs( components
+			, lightSurface.NdotV().value()
+			, specularTransmission
 			, reflectionResult
-			, reflections.computeFresnel( brdf
-				, lightSurface.NdotV().value()
-				, components.perceptualRoughness
-				, components.dielectricF0
-				, components.specularWeight ) );
+			, output
+			, debugOutput );
 	}
 
 	//*********************************************************************************************

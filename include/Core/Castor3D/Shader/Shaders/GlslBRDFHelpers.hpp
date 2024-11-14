@@ -41,7 +41,10 @@ namespace castor3d::shader
 		// Visibility (Geometry) functions
 		C3D_API sdw::RetFloat visibilitySmithGGXCorrelated( sdw::Float const & NdotV
 			, sdw::Float const & NdotL
-			, sdw::Float const & roughness );
+			, sdw::Float const & alphaRoughness );
+		C3D_API sdw::RetFloat visibilityGGX( sdw::Float const & NdotV
+			, sdw::Float const & NdotL
+			, sdw::Float const & alphaRoughness );
 		C3D_API sdw::RetFloat visibilityBeckmann( sdw::Float const & NdotL
 			, sdw::Float const & NdotV
 			, sdw::Float const & NdotH
@@ -50,17 +53,17 @@ namespace castor3d::shader
 			, sdw::Float const & NdotV );
 		C3D_API sdw::RetFloat visibilitySheen( sdw::Float const & NdotV
 			, sdw::Float const & NdotL
-			, sdw::Float const & roughness );
+			, sdw::Float const & sheenRoughness );
 
 		// Distribution functions
 		C3D_API sdw::RetFloat distributionBlinn( sdw::Float const & NdotH
-			, sdw::Float const & alpha );
+			, sdw::Float const & alphaRoughness );
 		C3D_API sdw::RetFloat distributionBeckmann( sdw::Float const & NdotH
-			, sdw::Float const & alpha );
+			, sdw::Float const & alphaRoughness );
 		C3D_API sdw::RetFloat distributionGGX( sdw::Float const & NdotH
-			, sdw::Float const & alpha );
+			, sdw::Float const & alphaRoughness );
 		C3D_API sdw::RetFloat distributionCharlie( sdw::Float const & NdotH
-			, sdw::Float const & alpha );
+			, sdw::Float const & sheenRoughness );
 
 		// Importance sampling
 		C3D_API RetMicrofacetDistributionSample importanceSampleGGX( sdw::Vec2 const & xi
@@ -87,6 +90,10 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InFloat > m_visibilitySmithGGXCorrelated;
+		sdw::Function< sdw::Float
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat > m_visibilityGGX;
 		sdw::Function< sdw::Float
 			, sdw::InFloat
 			, sdw::InFloat

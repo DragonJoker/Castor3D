@@ -69,96 +69,79 @@ namespace castor3d::shader
 		return roughness * clamp( ior * 2.0_f, 0.0_f, 2.0_f );
 	}
 
-	void ReflectionModel::computeCombined( BlendComponents & components
+	void ReflectionModel::computeWithTransmission( BlendComponents & components
 		, LightSurface const & lightSurface
-		, sdw::Vec3 const & position
 		, BackgroundModel & background
 		, sdw::CombinedImage2DRgba32 const & mippedScene
 		, CameraData const & camera
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
-		, sdw::UInt const & hasReflection
-		, sdw::Float const & refractionRatio
 		, ReflectionRefraction & output
 		, DebugOutputCategory const & debugOutput )
 	{
-		computeCombined( components
+		computeWithTransmission( components
 			, lightSurface.N().value()
 			, lightSurface.worldPosition().value().xyz()
 			, lightSurface.V().value()
 			, lightSurface.NdotV().value()
-			, position
 			, background
 			, mippedScene
 			, camera
 			, sceneUv
 			, envMapIndex
-			, hasReflection
-			, refractionRatio
 			, output
 			, debugOutput );
 	}
 
-	void ReflectionModel::computeCombined( BlendComponents & pcomponents
+	void ReflectionModel::computeWithTransmission( BlendComponents & pcomponents
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
 		, sdw::Float const & pNdotV
-		, sdw::Vec3 const & pposition
 		, BackgroundModel & background
 		, sdw::CombinedImage2DRgba32 const & pmippedScene
 		, CameraData const & camera
 		, sdw::Vec2 const & psceneUv
 		, sdw::UInt const & penvMapIndex
-		, sdw::UInt const & phasReflection
-		, sdw::Float const & prefractionRatio
 		, ReflectionRefraction & poutput
 		, DebugOutputCategory const & debugOutput )
 	{
-		if ( !m_computeSceneReflRefr )
+		if ( !m_computeWithTransmission )
 		{
-			m_computeSceneReflRefr = m_writer.implementFunction< sdw::Void >( "c3d_computeReflRefr"
+			m_computeWithTransmission = m_writer.implementFunction< sdw::Void >( "c3d_backgroundBrdfWithTransmission"
 				, [&]( BlendComponents components
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & wsPosition
 					, sdw::Vec3 const & V
 					, sdw::Float const & NdotV
-					, sdw::Vec3 const & position
 					, sdw::CombinedImage2DRgba32 const & mippedScene
 					, sdw::Vec2 const & sceneUv
 					, sdw::UInt envMapIndex
-					, sdw::UInt const & hasReflection
-					, sdw::Float const & refractionRatio
 					, ReflectionRefraction output )
 				{
+					auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
 					auto hasEnvMap = m_writer.declLocale( "hasEnvMap"
 						, envMapIndex > 0_u );
 					--envMapIndex;
 					auto specular = m_writer.declLocale( "specular"
 						, vec3( 0.0_f ) );
-					doComputePreTransmission( background
-						, components
-						, wsPosition
-						, wsNormal
-						, V
-						, hasEnvMap
-						, envMapIndex
-						, hasReflection
-						, specular
-						, output
-						, debugOutput );
+					doComputeReflection( envMap, hasEnvMap, background
+						, wsNormal, wsPosition, V
+						, envMapIndex, components
+						, output.diffuse, specular, debugOutput );
+					debugOutput.registerOutput( "Specular Reflection", specular );
+					debugOutput.registerOutput( "Diffuse Reflection", output.diffuse );
+					computeDiffuseBrdf( components, background
+						, output.diffuse, wsNormal, hasEnvMap, envMapIndex
+						, output, debugOutput );
 
 					if( components.hasMember( "transmissionFactor" ) )
 					{
 						auto specularTransmission = m_writer.declLocale( "specularTransmission"
-							, computeSpecularTransmission( -V
-								, position
-								, wsNormal
-								, mippedScene
-								, camera
-								, sceneUv
-								, components
-								, debugOutput ) );
+							, doComputeSpecularTransmission( -V, wsPosition, wsNormal
+								, mippedScene, camera
+								, sceneUv, components, debugOutput ) );
 						debugOutput.registerOutput( "Specular Transmission", specularTransmission );
 						output.diffuse = mix( output.diffuse, specularTransmission, vec3( components.transmissionFactor ) );
 						debugOutput.registerOutput( "Diffuse Mixed With Specular Transmission", output.diffuse );
@@ -169,150 +152,134 @@ namespace castor3d::shader
 						debugOutput.registerOutput( "Diffuse Mixed With Specular Transmission", output.diffuse );
 					}
 
-					doComputePostTransmission( background
-						, components
-						, specular
-						, wsPosition
-						, wsNormal
-						, V
-						, NdotV
-						, hasEnvMap
-						, envMapIndex
-						, hasReflection
-						, output
-						, debugOutput );
+					computeSpecularBrdfs( components, NdotV
+						, output.diffuse, specular
+						, output, debugOutput );
+					doComputeClearcoat( envMap, hasEnvMap, background
+						, wsPosition, V, envMapIndex
+						, components, output.coating, debugOutput );
+					doComputeSheen( brdf, envMap, hasEnvMap, background
+						, wsNormal, wsPosition, V, NdotV
+						, envMapIndex, components
+						, output.sheen, debugOutput );
 				}
 				, InOutBlendComponents{ m_writer, "components", pcomponents }
 				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InVec3{ m_writer, "wsPosition" }
 				, sdw::InVec3{ m_writer, "V" }
 				, sdw::InFloat{ m_writer, "NdotV" }
-				, sdw::InVec3{ m_writer, "position" }
 				, sdw::InCombinedImage2DRgba32{ m_writer, "mippedScene" }
 				, sdw::InVec2{ m_writer, "sceneUv" }
 				, sdw::InUInt{ m_writer, "envMapIndex" }
-				, sdw::InUInt{ m_writer, "hasReflection" }
-				, sdw::InFloat{ m_writer, "refractionRatio" }
 				, OutReflectionRefraction{ m_writer, "output" } );
 		}
 
-		m_computeSceneReflRefr( pcomponents
+		m_computeWithTransmission( pcomponents
 			, pwsNormal
 			, pwsPosition
 			, pV
 			, pNdotV
-			, pposition
 			, pmippedScene
 			, psceneUv
 			, penvMapIndex
-			, phasReflection
-			, prefractionRatio
 			, poutput );
 		poutput.registerDebug( debugOutput );
 	}
 
-	void ReflectionModel::computeCombined( BlendComponents & pcomponents
+	void ReflectionModel::computeWithoutTransmission( BlendComponents & components
 		, LightSurface const & lightSurface
 		, BackgroundModel & background
 		, sdw::UInt const & envMapIndex
-		, sdw::UInt const & hasReflection
-		, sdw::Float const & refractionRatio
-		, ReflectionRefraction & output
+		, sdw::Vec3 & reflectedDiffuse
+		, sdw::Vec3 & reflectedSpecular
 		, DebugOutputCategory const & debugOutput )
 	{
-		computeCombined( pcomponents
+		computeWithoutTransmission( components
 			, lightSurface.N().value()
 			, lightSurface.worldPosition().value().xyz()
 			, lightSurface.V().value()
-			, lightSurface.NdotV().value()
-			, background
-			, envMapIndex
-			, hasReflection
-			, refractionRatio
-			, output
-			, debugOutput );
+			, background, envMapIndex
+			, reflectedDiffuse, reflectedSpecular, debugOutput );
 	}
 
-	void ReflectionModel::computeCombined( BlendComponents & pcomponents
+	sdw::Boolean ReflectionModel::computeWithoutTransmission( BlendComponents & components
+		, sdw::Vec3 const & wsNormal
+		, sdw::Vec3 const & wsPosition
+		, sdw::Vec3 const & V
+		, BackgroundModel & background
+		, sdw::UInt envMapIndex
+		, sdw::Vec3 & reflectedDiffuse
+		, sdw::Vec3 & reflectedSpecular
+		, DebugOutputCategory const & debugOutput )
+	{
+		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+		auto hasEnvMap = m_writer.declLocale( "hasEnvMap"
+			, envMapIndex > 0_u );
+		--envMapIndex;
+		doComputeReflection( envMap, hasEnvMap, background
+			, wsNormal, wsPosition, V
+			, envMapIndex, components
+			, reflectedDiffuse, reflectedSpecular, debugOutput );
+		reflectedDiffuse *= components.baseColour;
+		debugOutput.registerOutput( "Specular Reflection", reflectedSpecular );
+		debugOutput.registerOutput( "Diffuse Reflection", reflectedDiffuse );
+		debugOutput.registerOutput( "Specular Transmission", 0.0_f );
+		debugOutput.registerOutput( "Diffuse Mixed With Specular Transmission", reflectedDiffuse );
+		debugOutput.registerOutput( "Diffuse Transmission", 0.0_f );
+		debugOutput.registerOutput( "Volume Diffuse Transmission", 0.0_f );
+		debugOutput.registerOutput( "Diffuse Mixed With Diffuse Transmission", reflectedDiffuse );
+		return hasEnvMap;
+	}
+
+	void ReflectionModel::computeWithoutTransmission( BlendComponents & pcomponents
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
 		, sdw::Float const & pNdotV
 		, BackgroundModel & background
 		, sdw::UInt const & penvMapIndex
-		, sdw::UInt const & phasReflection
-		, sdw::Float const & prefractionRatio
 		, ReflectionRefraction & poutput
 		, DebugOutputCategory const & debugOutput )
 	{
-		if ( !m_computeEnvReflRefr )
+		if ( !m_computeWithoutTransmission )
 		{
-			m_computeEnvReflRefr = m_writer.implementFunction< sdw::Void >( "c3d_computeReflRefr"
+			m_computeWithoutTransmission = m_writer.implementFunction< sdw::Void >( "c3d_backgroundBrdfWithoutTransmission"
 				, [&]( BlendComponents components
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & wsPosition
 					, sdw::Vec3 const & V
 					, sdw::Float const & NdotV
 					, sdw::UInt envMapIndex
-					, sdw::UInt const & hasReflection
-					, sdw::Float const & refractionRatio
 					, ReflectionRefraction output )
 				{
+					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
+					auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
 					auto hasEnvMap = m_writer.declLocale( "hasEnvMap"
 						, envMapIndex > 0_u );
 					--envMapIndex;
-					auto specular = m_writer.declLocale( "specular"
+					auto reflectedSpecular = m_writer.declLocale( "reflectedSpecular"
 						, vec3( 0.0_f ) );
-					doComputePreTransmission( background
-						, components
-						, wsPosition
-						, wsNormal
-						, V
-						, hasEnvMap
-						, envMapIndex
-						, hasReflection
-						, specular
-						, output
-						, debugOutput );
-
-					if ( components.hasMember( "transmissionFactor" ) )
-					{
-						auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
-						auto specularTransmission = m_writer.declLocale( "specularTransmission"
-							   , vec3( 0.0_f ) );
-						doComputeRefraction( envMap
-							, hasEnvMap
-							, background
-							, wsNormal
-							, wsPosition
-							, V
-							, refractionRatio
-							, envMapIndex
-							, components
-							, specularTransmission
-							, debugOutput );
-						debugOutput.registerOutput( "Specular Transmission", specularTransmission );
-						output.diffuse = mix( output.diffuse, specularTransmission, vec3( components.transmissionFactor ) );
-						debugOutput.registerOutput( "Diffuse Mixed With Specular Transmission", output.diffuse );
-					}
-					else
-					{
-						debugOutput.registerOutput( "Specular Transmission", 0.0_f );
-						debugOutput.registerOutput( "Diffuse Mixed With Specular Transmission", output.diffuse );
-					}
-
-					doComputePostTransmission( background
-						, components
-						, specular
-						, wsPosition
-						, wsNormal
-						, V
-						, NdotV
-						, hasEnvMap
-						, envMapIndex
-						, hasReflection
-						, output
-						, debugOutput );
+					doComputeReflection( envMap, hasEnvMap, background
+						, wsNormal, wsPosition, V
+						, envMapIndex, components
+						, output.diffuse, reflectedSpecular, debugOutput );
+					debugOutput.registerOutput( "Specular Reflection", reflectedSpecular );
+					debugOutput.registerOutput( "Diffuse Reflection", output.diffuse );
+					computeDiffuseBrdf( components, background
+						, output.diffuse, wsNormal, hasEnvMap, envMapIndex
+						, output, debugOutput );
+					debugOutput.registerOutput( "Specular Transmission", 0.0_f );
+					debugOutput.registerOutput( "Diffuse Mixed With Specular Transmission", output.diffuse );
+					computeSpecularBrdfs( components
+						, NdotV, output.diffuse, reflectedSpecular
+						, output, debugOutput );
+					doComputeClearcoat( envMap, hasEnvMap, background
+						, wsPosition, V, envMapIndex
+						, components, output.coating, debugOutput );
+					doComputeSheen( brdf, envMap, hasEnvMap, background
+						, wsNormal, wsPosition, V, NdotV
+						, envMapIndex, components
+						, output.sheen, debugOutput );
 				}
 				, InOutBlendComponents{ m_writer, "components", pcomponents }
 				, sdw::InVec3{ m_writer, "wsNormal" }
@@ -320,146 +287,115 @@ namespace castor3d::shader
 				, sdw::InVec3{ m_writer, "V" }
 				, sdw::InFloat{ m_writer, "NdotV" }
 				, sdw::InUInt{ m_writer, "envMapIndex" }
-				, sdw::InUInt{ m_writer, "hasReflection" }
-				, sdw::InFloat{ m_writer, "refractionRatio" }
 				, OutReflectionRefraction{ m_writer, "output" } );
 		}
 
-		m_computeEnvReflRefr( pcomponents
+		m_computeWithoutTransmission( pcomponents
 			, pwsNormal
 			, pwsPosition
 			, pV
 			, pNdotV
 			, penvMapIndex
-			, phasReflection
-			, prefractionRatio
 			, poutput );
 		poutput.registerDebug( debugOutput );
 	}
 
-	void ReflectionModel::computeReflection( BlendComponents & components
-		, LightSurface const & lightSurface
+	void ReflectionModel::computeDiffuseBrdf( BlendComponents & components
 		, BackgroundModel & background
-		, sdw::UInt envMapIndex
-		, sdw::UInt const & reflection
-		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
+		, sdw::Vec3 const & reflectedDiffuse
+		, sdw::Vec3 const & wsNormal
+		, sdw::Boolean const & hasEnvMap
+		, sdw::UInt const & envMapIndex
+		, shader::ReflectionRefraction & output
 		, DebugOutputCategory const & debugOutput )
 	{
-		computeReflection( components
-			, lightSurface.N().value()
-			, lightSurface.worldPosition().value().xyz()
-			, lightSurface.V().value()
-			, background
-			, envMapIndex
-			, reflection
-			, reflectedDiffuse
-			, reflectedSpecular
-			, debugOutput );
+		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
+		output.diffuse = reflectedDiffuse * components.baseColour;
+
+		if ( components.hasMember( "diffuseTransmissionFactor" ) )
+		{
+			auto diffuseTransmission = m_writer.declLocale( "diffuseTransmission"
+				, vec3( 0.0_f ) );
+			doComputeDiffuse( envMap
+				, hasEnvMap
+				, background
+				, -wsNormal
+				, envMapIndex
+				, components
+				, diffuseTransmission
+				, debugOutput );
+			diffuseTransmission *= components.diffuseTransmissionColour;
+			debugOutput.registerOutput( "Diffuse Transmission", diffuseTransmission );
+
+			if ( components.hasMember( "thicknessFactor" ) )
+			{
+				diffuseTransmission *= applyVolumeAttenuation( components.getMember< sdw::Float >( "diffuseTransmissionThickness" )
+					, components.attenuationColour
+					, components.attenuationDistance );
+				debugOutput.registerOutput( "Volume Diffuse Transmission", diffuseTransmission );
+			}
+			else
+			{
+				debugOutput.registerOutput( "Volume Diffuse Transmission", diffuseTransmission );
+			}
+
+			output.diffuse = mix( output.diffuse
+				, diffuseTransmission
+				, vec3( components.diffuseTransmissionFactor ) );
+			debugOutput.registerOutput( "Diffuse Mixed With Diffuse Transmission", output.diffuse );
+		}
+		else
+		{
+			debugOutput.registerOutput( "Diffuse Transmission", 0.0_f );
+			debugOutput.registerOutput( "Volume Diffuse Transmission", 0.0_f );
+			debugOutput.registerOutput( "Diffuse Mixed With Diffuse Transmission", output.diffuse );
+		}
 	}
 
-	void ReflectionModel::computeReflection( BlendComponents & components
-		, sdw::Vec3 const & wsNormal
-		, sdw::Vec3 const & wsPosition
-		, sdw::Vec3 const & V
-		, BackgroundModel & background
-		, sdw::UInt envMapIndex
-		, sdw::UInt const & reflection
-		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, DebugOutputCategory const & debugOutput )
+	void ReflectionModel::computeSpecularBrdfs( BlendComponents & components
+			, sdw::Float const & NdotV
+			, sdw::Vec3 const & reflectedDiffuse
+			, sdw::Vec3 const & reflectedSpecular
+			, shader::ReflectionRefraction & output
+			, DebugOutputCategory const & debugOutput )
 	{
 		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
-		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
-		auto hasEnvMap = m_writer.declLocale( "hasEnvMap"
-			, envMapIndex > 0_u );
-		--envMapIndex;
-		doComputeReflection( envMap
-			, hasEnvMap
-			, background
-			, wsNormal
-			, wsPosition
-			, V
-			, reflection
-			, envMapIndex
-			, components
-			, reflectedDiffuse
-			, reflectedSpecular
-			, debugOutput );
-		debugOutput.registerOutput( cuT( "Reflection" ), cuT( "Refl. Diffuse" ), reflectedDiffuse );
-		debugOutput.registerOutput( cuT( "Reflection" ), cuT( "Refl. Specular" ), reflectedSpecular );
-	}
+		auto metalFresnel = m_writer.declLocale( "metalFresnel"
+			, computeFresnel( brdf
+				, NdotV
+				, components.perceptualRoughness
+				, components.baseColour
+				, 1.0_f ) );
+		debugOutput.registerOutput( "Metal Fresnel", metalFresnel );
+		output.metal = reflectedSpecular * metalFresnel;
+		debugOutput.registerOutput( "Raw Metal BRDF", output.metal );
+		auto dielectricFresnel = m_writer.declLocale( "dielectricFresnel"
+			, computeFresnel( brdf
+				, NdotV
+				, components.perceptualRoughness
+				, components.dielectricF0
+				, components.specularWeight ) );
+		debugOutput.registerOutput( "Dielectric Fresnel", dielectricFresnel );
+		output.dielectric = mix( reflectedDiffuse, reflectedSpecular, dielectricFresnel );
+		debugOutput.registerOutput( "Raw Dielectric BRDF", output.dielectric );
 
-	sdw::Vec3 ReflectionModel::computeRefraction( BlendComponents & components
-		, LightSurface const & lightSurface
-		, BackgroundModel & background
-		, sdw::UInt envMapIndex
-		, sdw::UInt const &
-		, sdw::Float const & refractionRatio
-		, DebugOutputCategory const & debugOutput )
-	{
-		return computeRefraction( components
-			, lightSurface.N().value()
-			, lightSurface.worldPosition().value().xyz()
-			, lightSurface.V().value()
-			, background
-			, envMapIndex
-			, refractionRatio
-			, debugOutput );
-	}
-
-	sdw::Vec3 ReflectionModel::computeRefraction( BlendComponents & components
-		, sdw::Vec3 const & wsNormal
-		, sdw::Vec3 const & wsPosition
-		, sdw::Vec3 const & V
-		, BackgroundModel & background
-		, sdw::UInt envMapIndex
-		, sdw::Float const & refractionRatio
-		, DebugOutputCategory const & debugOutput )
-	{
-		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
-		auto hasEnvMap = m_writer.declLocale( "hasEnvMap"
-			, envMapIndex > 0_u );
-		auto refracted = m_writer.declLocale( "refracted"
-			, vec3( 0.0_f ) );
-		--envMapIndex;
-		doComputeRefraction( envMap
-			, hasEnvMap
-			, background
-			, wsNormal
-			, wsPosition
-			, V
-			, refractionRatio
-			, envMapIndex
-			, components
-			, refracted
-			, debugOutput );
-		debugOutput.registerOutput( cuT( "Reflection" ), cuT( "Refr. Colour" ), refracted );
-		return refracted;
-	}
-
-	sdw::Vec3 ReflectionModel::computeDiffuse( BlendComponents & components
-		, sdw::Vec3 const & wsDirection
-		, BackgroundModel & background
-		, sdw::UInt envMapIndex
-		, DebugOutputCategory const & debugOutput )
-	{
-		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
-		auto hasEnvMap = m_writer.declLocale( "hasEnvMap"
-			, envMapIndex > 0_u );
-		auto refracted = m_writer.declLocale( "refracted"
-			, vec3( 0.0_f ) );
-		--envMapIndex;
-		doComputeDiffuse( envMap
-			, hasEnvMap
-			, background
-			, wsDirection
-			, envMapIndex
-			, components
-			, refracted
-			, debugOutput );
-		debugOutput.registerOutput( cuT( "Reflection" ), cuT( "Diffuse" ), refracted );
-		return refracted;
+		if ( components.hasMember( "iridescenceFactor" ) )
+		{
+			output.metal = mix( output.metal
+				, reflectedSpecular * components.getMember< sdw::Vec3 >( "iridescenceMetallicFresnel" )
+				, vec3( components.iridescenceFactor ) );
+			debugOutput.registerOutput( "Iridescent Metal BRDF", output.metal );
+			output.dielectric = mix( output.dielectric
+				, Utils::rgbMix( reflectedDiffuse, reflectedSpecular, components.getMember< sdw::Vec3 >( "iridescenceDielectricFresnel" ) )
+				, vec3( components.iridescenceFactor ) );
+			debugOutput.registerOutput( "Iridescent Dielectric BRDF", output.dielectric );
+		}
+		else
+		{
+			debugOutput.registerOutput( "Iridescent Metal BRDF", output.metal );
+			debugOutput.registerOutput( "Iridescent Dielectric BRDF", output.dielectric );
+		}
 	}
 
 	sdw::RetVec3 ReflectionModel::computeFresnel( sdw::CombinedImage2DRgba32 const & brdf
@@ -1083,7 +1019,6 @@ namespace castor3d::shader
 		, sdw::Vec3 const & pwsNormal
 		, sdw::CombinedImageCubeArrayRgba32 const & penvMap
 		, sdw::UInt const & penvMapIndex
-		, sdw::Float const & prefractionRatio
 		, BlendComponents & components
 		, DebugOutputCategory const & debugOutput )
 	{
@@ -1114,7 +1049,7 @@ namespace castor3d::shader
 			, pwsNormal
 			, penvMap
 			, penvMapIndex
-			, prefractionRatio
+			, components.ior
 			, components.perceptualRoughness );
 	}
 
@@ -1147,7 +1082,7 @@ namespace castor3d::shader
 			, components.perceptualRoughness );
 	}
 
-	sdw::RetVec3 ReflectionModel::computeSpecularTransmission( sdw::Vec3 const & pwsIncident
+	sdw::RetVec3 ReflectionModel::doComputeSpecularTransmission( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pwsNormal
 		, sdw::CombinedImage2DRgba32 const & psceneMap
@@ -1296,7 +1231,6 @@ namespace castor3d::shader
 		, sdw::Vec3 const & wsNormal
 		, sdw::Vec3 const & wsPosition
 		, sdw::Vec3 const & V
-		, sdw::UInt const & hasReflection
 		, sdw::UInt const & envMapIndex
 		, BlendComponents & components
 		, sdw::Vec3 & reflectedDiffuse
@@ -1305,7 +1239,7 @@ namespace castor3d::shader
 	{
 		auto & writer = *envMap.getWriter();
 
-		IF( writer, hasEnvMap && hasReflection != 0_u )
+		IF( writer, hasEnvMap && components.hasReflection != 0_u )
 		{
 			if ( m_allowReflections && background.hasReflectionSupport() )
 			{
@@ -1346,13 +1280,12 @@ namespace castor3d::shader
 		FI
 	}
 
-	void ReflectionModel::doComputeRefraction( sdw::CombinedImageCubeArrayRgba32 const & envMap
+	void ReflectionModel::doComputeSpecularTransmission( sdw::CombinedImageCubeArrayRgba32 const & envMap
 		, sdw::Boolean const & hasEnvMap
 		, BackgroundModel & background
 		, sdw::Vec3 const & wsNormal
 		, sdw::Vec3 const & wsPosition
 		, sdw::Vec3 const & V
-		, sdw::Float const & refractionRatio
 		, sdw::UInt const & envMapIndex
 		, BlendComponents & components
 		, sdw::Vec3 & refracted
@@ -1360,7 +1293,7 @@ namespace castor3d::shader
 	{
 		auto & writer = *envMap.getWriter();
 
-		IF( writer, refractionRatio != 0.0_f )
+		IF( writer, components.ior != 0.0_f )
 		{
 			if ( m_hasEnvMap )
 			{
@@ -1370,7 +1303,6 @@ namespace castor3d::shader
 						, wsNormal
 						, envMap
 						, envMapIndex
-						, refractionRatio
 						, components
 						, debugOutput );
 				}
@@ -1381,7 +1313,6 @@ namespace castor3d::shader
 						refracted = background.computeRefraction( wsNormal
 							, wsPosition
 							, V
-							, refractionRatio
 							, components
 							, debugOutput );
 					}
@@ -1393,7 +1324,6 @@ namespace castor3d::shader
 				refracted = background.computeRefraction( wsNormal
 					, wsPosition
 					, V
-					, refractionRatio
 					, components
 					, debugOutput );
 			}
@@ -1443,7 +1373,6 @@ namespace castor3d::shader
 		, BackgroundModel & background
 		, sdw::Vec3 const & wsPosition
 		, sdw::Vec3 const & V
-		, sdw::UInt const & hasReflection
 		, sdw::UInt const & envMapIndex
 		, BlendComponents & components
 		, sdw::Vec3 & coatReflected
@@ -1453,7 +1382,7 @@ namespace castor3d::shader
 		{
 			if ( m_hasEnvMap )
 			{
-				IF( m_writer, hasEnvMap && hasReflection != 0_u )
+				IF( m_writer, hasEnvMap && components.hasReflection != 0_u )
 				{
 					coatReflected = computeSpecularReflEnvMaps( -V
 						, components.clearcoatNormal
@@ -1494,7 +1423,6 @@ namespace castor3d::shader
 		, sdw::Vec3 const & wsPosition
 		, sdw::Vec3 const & V
 		, sdw::Float const & NdotV
-		, sdw::UInt const & hasReflection
 		, sdw::UInt const & envMapIndex
 		, BlendComponents & components
 		, sdw::Vec4 & sheenReflected
@@ -1504,7 +1432,7 @@ namespace castor3d::shader
 		{
 			if ( m_hasEnvMap )
 			{
-				IF( m_writer, hasEnvMap && hasReflection != 0_u )
+				IF( m_writer, hasEnvMap && components.hasReflection != 0_u )
 				{
 					sheenReflected = computeSheenReflEnvMaps( brdf
 						, -V
@@ -1541,150 +1469,5 @@ namespace castor3d::shader
 					, debugOutput );
 			}
 		}
-	}
-
-	void ReflectionModel::doComputePreTransmission( BackgroundModel & background
-		, BlendComponents & components
-		, sdw::Vec3 const & wsPosition
-		, sdw::Vec3 const & wsNormal
-		, sdw::Vec3 const & V
-		, sdw::Boolean const & hasEnvMap
-		, sdw::UInt const & envMapIndex
-		, sdw::UInt const & hasReflection
-		, sdw::Vec3 & specular
-		, ReflectionRefraction & output
-		, DebugOutputCategory const & debugOutput )
-	{
-		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
-		doComputeReflection( envMap
-			, hasEnvMap
-			, background
-			, wsNormal
-			, wsPosition
-			, V
-			, hasReflection
-			, envMapIndex
-			, components
-			, output.diffuse
-			, specular
-			, debugOutput );
-		output.diffuse *= components.baseColour;
-		debugOutput.registerOutput( "Specular Reflection", specular );
-		debugOutput.registerOutput( "Diffuse Reflection", output.diffuse );
-
-		if ( components.hasMember( "diffuseTransmissionFactor" ) )
-		{
-			auto diffuseTransmission = m_writer.declLocale( "diffuseTransmission"
-				, vec3( 0.0_f ) );
-			doComputeDiffuse( envMap
-				, hasEnvMap
-				, background
-				, -wsNormal
-				, envMapIndex
-				, components
-				, diffuseTransmission
-				, debugOutput );
-			diffuseTransmission *= components.diffuseTransmissionColour;
-			debugOutput.registerOutput( "Diffuse Transmission", diffuseTransmission );
-
-			if ( components.hasMember( "thicknessFactor" ) )
-			{
-				diffuseTransmission *= applyVolumeAttenuation( components.getMember< sdw::Float >( "diffuseTransmissionThickness" )
-					, components.attenuationColour
-					, components.attenuationDistance );
-				debugOutput.registerOutput( "Volume Diffuse Transmission", diffuseTransmission );
-			}
-			else
-			{
-				debugOutput.registerOutput( "Volume Diffuse Transmission", diffuseTransmission );
-			}
-
-			output.diffuse = mix( output.diffuse
-				, diffuseTransmission
-				, vec3( components.diffuseTransmissionFactor ) );
-			debugOutput.registerOutput( "Diffuse Mixed With Diffuse Transmission", output.diffuse );
-		}
-		else
-		{
-			debugOutput.registerOutput( "Diffuse Transmission", 0.0_f );
-			debugOutput.registerOutput( "Volume Diffuse Transmission", 0.0_f );
-			debugOutput.registerOutput( "Diffuse Mixed With Diffuse Transmission", output.diffuse );
-		}
-	}
-
-	void ReflectionModel::doComputePostTransmission( BackgroundModel & background
-		, BlendComponents & components
-		, sdw::Vec3 const & specular
-		, sdw::Vec3 const & wsPosition
-		, sdw::Vec3 const & wsNormal
-		, sdw::Vec3 const & V
-		, sdw::Float const & NdotV
-		, sdw::Boolean const & hasEnvMap
-		, sdw::UInt const & envMapIndex
-		, sdw::UInt const & hasReflection
-		, ReflectionRefraction & output
-		, DebugOutputCategory const & debugOutput )
-	{
-		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
-		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
-		auto metalFresnel = m_writer.declLocale( "metalFresnel"
-			, computeFresnel( brdf
-				, NdotV
-				, components.perceptualRoughness
-				, components.baseColour
-				, 1.0_f ) );
-		debugOutput.registerOutput( "Metal Fresnel", metalFresnel );
-		output.metal = specular * metalFresnel;
-		debugOutput.registerOutput( "Raw Metal BRDF", output.metal );
-		auto dielectricFresnel = m_writer.declLocale( "dielectricFresnel"
-			, computeFresnel( brdf
-				, NdotV
-				, components.perceptualRoughness
-				, components.dielectricF0
-				, components.specularWeight ) );
-		debugOutput.registerOutput( "Dielectric Fresnel", dielectricFresnel );
-		output.dielectric = mix( output.diffuse, specular, dielectricFresnel );
-		debugOutput.registerOutput( "Raw Dielectric BRDF", output.dielectric );
-
-		if ( components.hasMember( "iridescenceFactor" ) )
-		{
-			output.metal = mix( output.metal
-				, specular * components.getMember< sdw::Vec3 >( "iridescenceMetallicFresnel" )
-				, vec3( components.iridescenceFactor ) );
-			debugOutput.registerOutput( "Iridescent Metal BRDF", output.metal );
-			output.dielectric = mix( output.dielectric
-				, Utils::rgbMix( output.diffuse, specular, components.getMember< sdw::Vec3 >( "iridescenceDielectricFresnel" ) )
-				, vec3( components.iridescenceFactor ) );
-			debugOutput.registerOutput( "Iridescent Dielectric BRDF", output.dielectric );
-		}
-		else
-		{
-			debugOutput.registerOutput( "Iridescent Metal BRDF", output.metal );
-			debugOutput.registerOutput( "Iridescent Dielectric BRDF", output.dielectric );
-		}
-
-		doComputeClearcoat( envMap
-			, hasEnvMap
-			, background
-			, wsPosition
-			, V
-			, hasReflection
-			, envMapIndex
-			, components
-			, output.coating
-			, debugOutput );
-		doComputeSheen( brdf
-			, envMap
-			, hasEnvMap
-			, background
-			, wsNormal
-			, wsPosition
-			, V
-			, NdotV
-			, hasReflection
-			, envMapIndex
-			, components
-			, output.sheen
-			, debugOutput );
 	}
 }

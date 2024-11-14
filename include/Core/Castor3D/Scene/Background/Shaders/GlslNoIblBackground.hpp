@@ -36,7 +36,6 @@ namespace castor3d::shader
 		sdw::RetVec3 computeRefraction( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
-			, sdw::Float const & refractionRatio
 			, BlendComponents & components
 			, DebugOutputCategory const & debugOutput )override;
 

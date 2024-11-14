@@ -6,7 +6,6 @@
 #include <Castor3D/Material/Pass/PbrPass.hpp>
 #include <Castor3D/Material/Pass/PhongPass.hpp>
 #include <Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp>
-#include <Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp>
 #include <Castor3D/Shader/Shaders/GlslLight.hpp>
 #include <Castor3D/Shader/Shaders/GlslLightSurface.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>

@@ -114,7 +114,7 @@ namespace disney::shader
 				, sdw::Float const & NdotH )
 			{
 				auto NdotV = m_writer.declLocale( "NdotV"
-					, max( 0.0_f, dot( N, V ) ) );
+					, clamp( dot( N, V ), 0.0_f, 1.0_f ) );
 
 				auto anisotropicT = components.getMember< sdw::Vec3 >( "anisotropicT"
 					, ( components.usesDerivativeValues()
@@ -224,9 +224,9 @@ namespace disney::shader
 			{
 				auto const & roughness = components.clearcoatRoughness;
 				auto HdotL = m_writer.declLocale( "HdotL"
-					, max( 0.0_f, dot( H, L ) ) );
+					, clamp( dot( H, L ), 0.0_f, 1.0_f ) );
 				auto NdotV = m_writer.declLocale( "NdotV"
-					, max( 0.0_f, dot( N, V ) ) );
+					, clamp( dot( N, V ), 0.0_f, 1.0_f ) );
 
 				// clearcoat (ior = 1.5 -> F0 = 0.04)
 				auto FH = m_writer.declLocale( "FH"

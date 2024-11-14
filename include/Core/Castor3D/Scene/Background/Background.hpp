@@ -487,7 +487,7 @@ namespace castor3d
 		castor::RawUniquePtr< IblTextures > m_ibl;
 		bool m_hasIBLSupport;
 		bool m_visible{ true };
-		bool m_showIrradiance{ true };
+		bool m_showIrradiance{ false };
 		uint32_t m_passIndex{ 0u };
 		bool m_needsUpload{};
 
