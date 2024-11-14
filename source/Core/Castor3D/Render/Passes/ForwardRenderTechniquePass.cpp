@@ -364,7 +364,7 @@ namespace castor3d
 				{
 					if ( components.transmissionFactor )
 					{
-						IF( writer, components.transmissionFactor >= 0.1_f )
+						IF( writer, components.transmissionFactor >= 0.05_f )
 						{
 							writer.demote();
 						}
@@ -406,7 +406,7 @@ namespace castor3d
 								, modelData.isShadowReceiver()
 								, lightSurface.clipPosition().xy()
 								, lightSurface.viewPosition().value().z()
-								, output
+								, output.pushBlock( cuT( "Lighting" ) )
 								, diffuse );
 							outDiffuse = vec4( diffuse, components.transmittance );
 							outScattering = vec4( 0.0_f );
@@ -428,7 +428,7 @@ namespace castor3d
 									, lightSurface.clipPosition().xy()
 									, lightSurface.viewPosition().value().z()
 									, c3d_imgDiffuse.load( ivec2( in.fragCoord.xy() ) ).rgb()
-									, output
+									, output.pushBlock( cuT( "Lighting" ) )
 									, directLighting );
 							}
 							else
@@ -440,7 +440,7 @@ namespace castor3d
 									, modelData.isShadowReceiver()
 									, lightSurface.clipPosition().xy()
 									, lightSurface.viewPosition().value().z()
-									, output
+									, output.pushBlock( cuT( "Lighting" ) )
 									, directLighting );
 							}
 
@@ -478,10 +478,9 @@ namespace castor3d
 
 							lightSurface.updateN( components.getDerivNormal() );
 							lightSurface.registerDebug( output.pushBlock( cuT( "LightSurface" ) ) );
-							passShaders.computeReflRefr( reflections
+							passShaders.backgroundBrdfWithTransmission( reflections
 								, components
 								, lightSurface
-								, lightSurface.worldPosition().value()
 								, *backgroundModel
 								, c3d_mapScene
 								, c3d_cameraData
@@ -490,8 +489,6 @@ namespace castor3d
 								, in.fragCoord.xy()
 								, modelData.getEnvMapIndex()
 								, incident
-								, components.hasReflection
-								, components.ior
 								, reflRefrResult
 								, output );
 

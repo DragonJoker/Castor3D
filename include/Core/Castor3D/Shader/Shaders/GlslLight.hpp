@@ -491,7 +491,7 @@ namespace castor3d::shader
 			, sdw::UInt const receivesShadows
 			, sdw::Vec2 const screenPosition
 			, sdw::Float const viewDepth
-			, DebugOutput & debugOutput
+			, DebugOutputCategory const & debugOutput
 			, DirectLighting & output );
 		C3D_API void computeCombinedAllButDif( ClusteredLights & clusteredLights
 			, BlendComponents const & components
@@ -501,7 +501,7 @@ namespace castor3d::shader
 			, sdw::Vec2 const screenPosition
 			, sdw::Float const viewDepth
 			, sdw::Vec3 const diffuse
-			, DebugOutput & debugOutput
+			, DebugOutputCategory const & debugOutput
 			, DirectLighting & output );
 		C3D_API void computeCombinedDif( ClusteredLights & clusteredLights
 			, BlendComponents const & components
@@ -510,7 +510,7 @@ namespace castor3d::shader
 			, sdw::UInt const receivesShadows
 			, sdw::Vec2 const screenPosition
 			, sdw::Float const viewDepth
-			, DebugOutput & debugOutput
+			, DebugOutputCategory const & debugOutput
 			, sdw::Vec3 & output );
 		//\}
 		/**
@@ -522,20 +522,20 @@ namespace castor3d::shader
 			, BackgroundModel & backgroundModel
 			, LightSurface const & lightSurface
 			, sdw::UInt const receivesShadows
-			, DebugOutput & debugOutput
+			, DebugOutputCategory const & debugOutput
 			, DirectLighting & output );
 		C3D_API void computeCombinedAllButDif( BlendComponents const & components
 			, BackgroundModel & backgroundModel
 			, LightSurface const & lightSurface
 			, sdw::UInt const receivesShadows
 			, sdw::Vec3 const diffuse
-			, DebugOutput & debugOutput
+			, DebugOutputCategory const & debugOutput
 			, DirectLighting & output );
 		C3D_API void computeCombinedDif( BlendComponents const & components
 			, BackgroundModel & backgroundModel
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
-			, DebugOutput & debugOutput
+			, DebugOutputCategory const & debugOutput
 			, sdw::Vec3 & output );
 		//\}
 		/**
@@ -543,17 +543,17 @@ namespace castor3d::shader
 		*	Backlit transmittance.
 		*/
 		//\{
-		C3D_API sdw::Vec3 computeSssTransmittance( DebugOutput & debugOutput
+		C3D_API sdw::Vec3 computeSssTransmittance( DebugOutputCategory const & debugOutput
 			, BlendComponents const & components
 			, DirectionalLight const & directionalLight
 			, DirectionalShadowData const & directionalShadows
 			, LightSurface const & lightSurface );
-		C3D_API sdw::Vec3 computeSssTransmittance( DebugOutput & debugOutput
+		C3D_API sdw::Vec3 computeSssTransmittance( DebugOutputCategory const & debugOutput
 			, BlendComponents const & components
 			, PointLight const & pointLight
 			, PointShadowData const & pointShadows
 			, LightSurface const & lightSurface );
-		C3D_API sdw::Vec3 computeSssTransmittance( DebugOutput & debugOutput
+		C3D_API sdw::Vec3 computeSssTransmittance( DebugOutputCategory const & debugOutput
 			, BlendComponents const & components
 			, SpotLight const & spotLight
 			, SpotShadowData const & spotShadows

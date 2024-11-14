@@ -587,7 +587,7 @@ namespace castor3d
 							, *backgroundModel
 							, lightSurface
 							, modelData.isShadowReceiver()
-							, debugOutput
+							, debugOutput.pushBlock( cuT( "Lighting" ) )
 							, combined );
 						color.xyz() += vec3( components.occlusion )
 							* components.baseColour

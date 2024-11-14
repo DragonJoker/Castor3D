@@ -6,10 +6,10 @@
 #include "Castor3D/Material/Pass/Component/Map/MetalnessMapComponent.hpp"
 #include "Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslClearcoatBRDF.hpp"
-#include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslLambertianBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslOrenNayarBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslSheenBRDF.hpp"
+#include "Castor3D/Shader/Shaders/GlslSpecularBRDF.hpp"
 
 namespace castor3d
 {
@@ -22,8 +22,8 @@ namespace castor3d
 		, { castor::String{ shader::FujiiOrenNayarBRDF::Name }, shader::FujiiOrenNayarBRDF::create }
 	, { castor::String{ shader::EnergyConservativeOrenNayarBRDF::Name }, shader::EnergyConservativeOrenNayarBRDF::create } };
 
-	shader::SpecularBrdfDesc const PbrPass::DefaultSpecularBrdf = { castor::String{ shader::CookTorranceBRDF::Name }, shader::CookTorranceBRDF::create };
-	shader::SpecularBrdfArray const PbrPass::SpecularBrdfs{ { castor::String{ shader::CookTorranceBRDF::Name }, shader::CookTorranceBRDF::create } };
+	shader::SpecularBrdfDesc const PbrPass::DefaultSpecularBrdf = { castor::String{ shader::SpecularBRDF::Name }, shader::SpecularBRDF::create };
+	shader::SpecularBrdfArray const PbrPass::SpecularBrdfs{ { castor::String{ shader::SpecularBRDF::Name }, shader::SpecularBRDF::create } };
 
 	shader::SheenBrdfDesc const PbrPass::DefaultSheenBrdf = { castor::String{ shader::SheenBRDF::Name }, shader::SheenBRDF::create };
 	shader::SheenBrdfArray const PbrPass::SheenBrdfs{ { castor::String{ shader::SheenBRDF::Name }, shader::SheenBRDF::create } };

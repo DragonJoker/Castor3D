@@ -19,10 +19,9 @@ namespace castor3d
 		{
 			using shader::PassReflRefrShader::PassReflRefrShader;
 
-			C3D_API void computeReflRefr( shader::ReflectionModel & reflections
+			void computeWithTransmission( shader::ReflectionModel & reflections
 				, shader::BlendComponents & components
 				, shader::LightSurface const & lightSurface
-				, sdw::Vec4 const & position
 				, shader::BackgroundModel & background
 				, sdw::CombinedImage2DRgba32 const & mippedScene
 				, shader::CameraData const & camera
@@ -31,11 +30,9 @@ namespace castor3d
 				, sdw::Vec2 const & sceneUv
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
-				, sdw::UInt const & hasReflection
-				, sdw::Float const & refractionRatio
 				, shader::ReflectionRefraction & output
-				, shader::DebugOutput & debugOutput )const override;
-			C3D_API void computeReflRefr( shader::ReflectionModel & reflections
+				, shader::DebugOutputCategory const & debugOutput )const override;
+			void computeWithoutTransmission( shader::ReflectionModel & reflections
 				, shader::BlendComponents & components
 				, shader::LightSurface const & lightSurface
 				, shader::BackgroundModel & background
@@ -45,10 +42,8 @@ namespace castor3d
 				, sdw::Vec2 const & sceneUv
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
-				, sdw::UInt const & hasReflection
-				, sdw::Float const & refractionRatio
 				, shader::ReflectionRefraction & output
-				, shader::DebugOutput & debugOutput )const override;
+				, shader::DebugOutputCategory const & debugOutput )const override;
 		};
 
 		class Plugin

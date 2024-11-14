@@ -83,7 +83,6 @@ namespace castor3d::shader
 	sdw::RetVec3 NoIblBackgroundModel::computeRefraction( sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
-		, sdw::Float const & prefractionRatio
 		, BlendComponents & components
 		, DebugOutputCategory const & debugOutput )
 	{
@@ -111,7 +110,7 @@ namespace castor3d::shader
 		return m_computeRefraction( -pV
 			, pwsNormal
 			, backgroundMap
-			, prefractionRatio
+			, components.ior
 			, components.perceptualRoughness );
 	}
 

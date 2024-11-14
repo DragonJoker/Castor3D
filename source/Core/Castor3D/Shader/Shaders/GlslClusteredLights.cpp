@@ -24,7 +24,7 @@ namespace castor3d::shader
 
 		static void printDebug( sdw::ShaderWriter & writer
 			, ClustersData const & clusterData
-			, DebugOutput & debugOutput
+			, DebugOutputCategory const & debugOutput
 			, sdw::UVec3 const & clusterIndex3D
 			, sdw::UInt const & pointLightCount
 			, sdw::UInt const & spotLightCount )
@@ -76,7 +76,7 @@ namespace castor3d::shader
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::UInt const receivesShadows
-			, DebugOutput & debugOutput
+			, DebugOutputCategory const & debugOutput
 			, castor::Function< void( PointLight const & ) > computePointLight
 			, castor::Function< void( SpotLight const & ) > computeSpotLight )
 		{
@@ -126,7 +126,7 @@ namespace castor3d::shader
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::UInt const receivesShadows
-			, DebugOutput & debugOutput
+			, DebugOutputCategory const & debugOutput
 			, castor::Function< void( PointLight const & ) > computePointLight
 			, castor::Function< void( SpotLight const & ) > computeSpotLight )
 		{
@@ -208,7 +208,7 @@ namespace castor3d::shader
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::UInt const receivesShadows
-			, DebugOutput & debugOutput
+			, DebugOutputCategory const & debugOutput
 			, castor::Function< void( PointLight const & ) > computePointLight
 			, castor::Function< void( SpotLight const & ) > computeSpotLight )
 		{
@@ -357,7 +357,7 @@ namespace castor3d::shader
 		, sdw::UInt const receivesShadows
 		, sdw::Vec2 const screenPosition
 		, sdw::Float const viewDepth
-		, DebugOutput & debugOutput
+		, DebugOutputCategory const & debugOutput
 		, DirectLighting & output )
 	{
 		if ( !m_enabled )
@@ -414,7 +414,7 @@ namespace castor3d::shader
 		, sdw::UInt const receivesShadows
 		, sdw::Vec2 const screenPosition
 		, sdw::Float const viewDepth
-		, DebugOutput & debugOutput
+		, DebugOutputCategory const & debugOutput
 		, DirectLighting & output )
 	{
 		if ( !m_enabled )
@@ -471,7 +471,7 @@ namespace castor3d::shader
 		, sdw::UInt const receivesShadows
 		, sdw::Vec2 const screenPosition
 		, sdw::Float const viewDepth
-		, DebugOutput & debugOutput
+		, DebugOutputCategory const & debugOutput
 		, sdw::Vec3 & output )
 	{
 		if ( !m_enabled )

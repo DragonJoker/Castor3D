@@ -44,7 +44,6 @@ namespace castor3d::shader
 		sdw::RetVec3 computeRefraction( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
-			, sdw::Float const & refractionRatio
 			, BlendComponents & components
 			, DebugOutputCategory const & debugOutput )override;
 		sdw::RetVec3 computeSpecularRefraction( sdw::Vec3 const & fresnel
@@ -53,7 +52,6 @@ namespace castor3d::shader
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
 			, sdw::Float const & roughness
-			, sdw::Float const & refractionRatio
 			, BlendComponents & components
 			, sdw::CombinedImage2DRgba32 const & brdfMap
 			, DebugOutputCategory const & debugOutput )override;

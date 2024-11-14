@@ -23,8 +23,12 @@ namespace castor3d::shader
 			, sdw::Float const & NdotL
 			, sdw::Float const & NdotH );
 
+		C3D_API static SpecularBRDFPtr create( sdw::ShaderWriter & writer
+			, BRDFHelpers & brdfHelpers );
+		C3D_API static castor::StringView constexpr Name{ cuT( "default" ) };
+
 	private:
-		virtual void doGenerate( BlendComponents const & components ) = 0;
+		virtual void doGenerate( BlendComponents const & components );
 
 	protected:
 		sdw::ShaderWriter & m_writer;

@@ -4,7 +4,11 @@
 #include "Castor3D/Cache/TextureCache.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
+#include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
+#include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
+#include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslReflection.hpp"
 
 #include <ShaderWriter/BaseTypes/CombinedImage.hpp>
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>

@@ -54,13 +54,14 @@ namespace castor3d::shader
 				, sdw::Float const & NdotH )
 			{
 				auto NdotV = lightSurface.NdotV().value();
-				auto const & roughness = components.sheenRoughness;
+				auto const & sheenRoughness = components.sheenRoughness;
 				auto sheenDistribution = m_writer.declLocale( "sheenDistribution"
-					, m_brdfHelpers.distributionCharlie( roughness * roughness, NdotH ) );
+					, m_brdfHelpers.distributionCharlie( sheenRoughness, NdotH ) );
 				auto sheenVisibility = m_writer.declLocale( "sheenVisibility"
-					, m_brdfHelpers.visibilitySheen( NdotV, NdotL, roughness ) );
+					, m_brdfHelpers.visibilitySheen( NdotV, NdotL, sheenRoughness ) );
 				m_writer.returnStmt( vec4( components.sheenColour * sheenDistribution * sheenVisibility
-					, max( utils.directionalAlbedoSheen( NdotV, roughness ), utils.directionalAlbedoSheen( NdotL, roughness ) ) ) );
+					, max( utils.directionalAlbedoSheen( NdotV, sheenRoughness )
+						, utils.directionalAlbedoSheen( NdotL, sheenRoughness ) ) ) );
 			}
 			, InBlendComponents{ m_writer, "components", pcomponents }
 			, InLightSurface{ m_writer, "lightSurface", plightSurface }

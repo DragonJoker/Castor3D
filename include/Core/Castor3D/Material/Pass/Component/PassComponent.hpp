@@ -330,10 +330,9 @@ namespace castor3d
 			{
 			}
 
-			C3D_API virtual void computeReflRefr( ReflectionModel & reflections
+			virtual void computeWithTransmission( ReflectionModel & reflections
 				, BlendComponents & components
 				, LightSurface const & lightSurface
-				, sdw::Vec4 const & position
 				, BackgroundModel & background
 				, sdw::CombinedImage2DRgba32 const & mippedScene
 				, CameraData const & camera
@@ -342,11 +341,9 @@ namespace castor3d
 				, sdw::Vec2 const & sceneUv
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
-				, sdw::UInt const & hasReflection
-				, sdw::Float const & refractionRatio
 				, shader::ReflectionRefraction & output
-				, DebugOutput & debugOutput )const = 0;
-			C3D_API virtual void computeReflRefr( ReflectionModel & reflections
+				, DebugOutputCategory const & debugOutput )const = 0;
+			virtual void computeWithoutTransmission( ReflectionModel & reflections
 				, BlendComponents & components
 				, LightSurface const & lightSurface
 				, BackgroundModel & background
@@ -356,10 +353,8 @@ namespace castor3d
 				, sdw::Vec2 const & sceneUv
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
-				, sdw::UInt const & hasReflection
-				, sdw::Float const & refractionRatio
 				, shader::ReflectionRefraction & output
-				, DebugOutput & debugOutput )const = 0;
+				, DebugOutputCategory const & debugOutput )const = 0;
 			/**
 			*\name
 			*	Getters.

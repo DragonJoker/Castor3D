@@ -134,9 +134,9 @@ namespace castor3d::shader
 	{
 		N() = n;
 
-		m_NdotL = max( derivFloat( 0.0_f ), dot( N(), L() ) );
-		m_NdotH = max( derivFloat( 0.0_f ), dot( N(), H() ) );
-		m_NdotV = max( derivFloat( 0.0_f ), dot( N(), V() ) );
+		m_NdotL = clamp( dot( N(), L() ), 0.0_f, 1.0_f );
+		m_NdotH = clamp( dot( N(), H() ), 0.0_f, 1.0_f );
+		m_NdotV = clamp( dot( N(), V() ), 0.0_f, 1.0_f );
 	}
 
 	void LightSurface::updateL( DerivVec3 const VtoL )const
@@ -146,11 +146,11 @@ namespace castor3d::shader
 		lengthL() = length( vertexToLight() );
 		H() = normalize( L() + V() );
 
-		m_NdotL = max( derivFloat( 0.0_f ), dot( N(), L() ) );
-		m_NdotH = max( derivFloat( 0.0_f ), dot( N(), H() ) );
-		m_HdotV = max( derivFloat( 0.0_f ), dot( H(), V() ) );
-		m_LdotV = max( derivFloat( 0.0_f ), dot( L(), V() ) );
-		m_HdotL = max( derivFloat( 0.0_f ), dot( H(), L() ) );
+		m_NdotL = clamp( dot( N(), L() ), 0.0_f, 1.0_f );
+		m_NdotH = clamp( dot( N(), H() ), 0.0_f, 1.0_f );
+		m_HdotV = clamp( dot( H(), V() ), 0.0_f, 1.0_f );
+		m_LdotV = clamp( dot( L(), V() ), 0.0_f, 1.0_f );
+		m_HdotL = clamp( dot( H(), L() ), 0.0_f, 1.0_f );
 	}
 
 	void LightSurface::registerDebug( DebugOutputCategory const & debugOutput )const

@@ -187,10 +187,7 @@ namespace castor3d
 
 				if ( components.transmissionFactor )
 				{
-					auto incident = writer.declLocale( "incident"
-						, normalize( in.worldPosition.xyz() - c3d_cameraData.position() ) );
-
-					IF( writer, components.transmissionFactor >= 0.1_f )
+					IF( writer, components.transmissionFactor >= 0.05_f )
 					{
 						writer.demote();
 					}

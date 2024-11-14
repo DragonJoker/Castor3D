@@ -337,10 +337,9 @@ namespace castor3d::shader
 		return flags.enableParallaxOcclusionMappingOne( m_compRegister );
 	}
 
-	void PassShaders::computeReflRefr( ReflectionModel & reflections
+	void PassShaders::backgroundBrdfWithTransmission( ReflectionModel & reflections
 		, BlendComponents & components
 		, LightSurface const & lightSurface
-		, sdw::Vec4 const & position
 		, BackgroundModel & background
 		, sdw::CombinedImage2DRgba32 const & mippedScene
 		, CameraData const & camera
@@ -349,8 +348,6 @@ namespace castor3d::shader
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
-		, sdw::UInt const & hasReflection
-		, sdw::Float const & refractionRatio
 		, shader::ReflectionRefraction & output
 		, DebugOutput & debugOutput )const
 	{
@@ -359,10 +356,9 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_reflRefr->computeReflRefr( reflections
+		m_reflRefr->computeWithTransmission( reflections
 			, components
 			, lightSurface
-			, position
 			, background
 			, mippedScene
 			, camera
@@ -371,13 +367,11 @@ namespace castor3d::shader
 			, sceneUv
 			, envMapIndex
 			, incident
-			, hasReflection
-			, refractionRatio
 			, output
-			, debugOutput );
+			, debugOutput.pushBlock( cuT( "Reflection" ) ) );
 	}
 
-	void PassShaders::computeReflRefr( ReflectionModel & reflections
+	void PassShaders::backgroundBrdfWithoutTransmission( ReflectionModel & reflections
 		, BlendComponents & components
 		, LightSurface const & lightSurface
 		, BackgroundModel & background
@@ -387,8 +381,6 @@ namespace castor3d::shader
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
-		, sdw::UInt const & hasReflection
-		, sdw::Float const & refractionRatio
 		, shader::ReflectionRefraction & output
 		, DebugOutput & debugOutput )const
 	{
@@ -397,7 +389,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_reflRefr->computeReflRefr( reflections
+		m_reflRefr->computeWithoutTransmission( reflections
 			, components
 			, lightSurface
 			, background
@@ -407,9 +399,7 @@ namespace castor3d::shader
 			, sceneUv
 			, envMapIndex
 			, incident
-			, hasReflection
-			, refractionRatio
 			, output
-			, debugOutput );
+			, debugOutput.pushBlock( cuT( "Reflection" ) ) );
 	}
 }

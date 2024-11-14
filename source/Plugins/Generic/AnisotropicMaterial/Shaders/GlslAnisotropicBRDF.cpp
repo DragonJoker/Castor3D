@@ -79,7 +79,7 @@ namespace anisotropy::shader
 				, sdw::Float const & NdotH )
 			{
 				auto NdotV = m_writer.declLocale( "NdotV"
-					, max( 0.0_f, dot( N, V ) ) );
+					, clamp( dot( N, V ), 0.0_f, 1.0_f ) );
 
 				auto anisotropicT = components.getMember< sdw::Vec3 >( "anisotropicT" );
 				auto anisotropicB = components.getMember< sdw::Vec3 >( "anisotropicB" );
