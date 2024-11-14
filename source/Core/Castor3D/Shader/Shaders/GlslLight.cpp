@@ -358,7 +358,7 @@ namespace castor3d::shader
 					, parentOutput );
 			}
 
-			parentOutput.registerDebug( debugOutput, cuT( "Lighting" ) );
+			parentOutput.registerDebug( debugOutput.pushBlock( cuT( "Lighting" ) ) );
 		}
 	}
 
@@ -423,7 +423,7 @@ namespace castor3d::shader
 					, parentOutput );
 			}
 
-			parentOutput.registerDebug( debugOutput, cuT( "Lighting" ) );
+			parentOutput.registerDebug( debugOutput.pushBlock( cuT( "Lighting" ) ) );
 		}
 	}
 

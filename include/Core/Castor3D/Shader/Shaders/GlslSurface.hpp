@@ -25,6 +25,9 @@ namespace castor3d::shader
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
 
+		void registerDebug( PipelineFlags const & flags
+			, DebugOutputCategory const & debugOutput )const;
+
 		sdw::Vec3 clipPosition;
 		Position4T viewPosition;
 		Position4T worldPosition;
@@ -188,6 +191,10 @@ namespace castor3d::shader
 		RasterizerSurfaceBaseT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
+
+		void registerDebug( PipelineFlags const & flags
+			, BlendComponents const & components
+			, DebugOutputCategory const & debugOutput )const;
 
 		// Vertex shader side
 		void computeVelocity( CameraData const & cameraData

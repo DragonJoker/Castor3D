@@ -64,7 +64,7 @@ namespace castor3d::shader
 	}
 
 	sdw::RetVec3 IblBackgroundModel::computeDiffuseReflection( sdw::Vec3 const & pwsNormal
-			, DebugOutputCategory & debugOutput )
+			, DebugOutputCategory const & debugOutput )
 	{
 		if ( !m_computeDiffuseReflection )
 		{
@@ -89,7 +89,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
 		, sdw::Float const & proughness
-		, DebugOutputCategory & debugOutput )
+		, DebugOutputCategory const & debugOutput )
 	{
 		if ( !m_computeSpecularReflection )
 		{
@@ -125,7 +125,7 @@ namespace castor3d::shader
 		, sdw::Float const & pNdotV
 		, BlendComponents & components
 		, sdw::CombinedImage2DRgba32 const & pbrdfMap
-		, DebugOutputCategory & debugOutput )
+		, DebugOutputCategory const & debugOutput )
 	{
 		if ( !m_computeSheenReflection )
 		{
@@ -175,7 +175,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & pV
 		, sdw::Float const & prefractionRatio
 		, BlendComponents & components
-		, DebugOutputCategory & debugOutput )
+		, DebugOutputCategory const & debugOutput )
 	{
 		if ( !m_computeRefraction )
 		{
@@ -217,7 +217,7 @@ namespace castor3d::shader
 		, sdw::Float const & prefractionRatio
 		, BlendComponents & components
 		, sdw::CombinedImage2DRgba32 const & pbrdfMap
-		, DebugOutputCategory & debugOutput )
+		, DebugOutputCategory const & debugOutput )
 	{
 		if ( !m_computeSpecularRefraction )
 		{
@@ -267,7 +267,7 @@ namespace castor3d::shader
 
 	sdw::RetVec3 IblBackgroundModel::computeDiffuse( sdw::Vec3 const & pwsDirection
 		, BlendComponents & components
-		, DebugOutputCategory & debugOutput )
+		, DebugOutputCategory const & debugOutput )
 	{
 		if ( !m_computeDiffuse )
 		{

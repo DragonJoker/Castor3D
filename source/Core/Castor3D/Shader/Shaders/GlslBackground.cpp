@@ -49,7 +49,7 @@ namespace castor3d::shader
 		, BlendComponents & components
 		, sdw::Vec3 & reflectedDiffuse
 		, sdw::Vec3 & reflectedSpecular
-		, DebugOutputCategory & debugOutput )
+		, DebugOutputCategory const & debugOutput )
 	{
 		reflectedDiffuse = computeDiffuseReflection( wsNormal
 			, debugOutput );
@@ -61,7 +61,7 @@ namespace castor3d::shader
 	}
 
 	sdw::RetVec3 BackgroundModel::computeDiffuseReflection( sdw::Vec3 const & wsNormal
-		, DebugOutputCategory & debugOutput )
+		, DebugOutputCategory const & debugOutput )
 	{
 		return sdw::RetVec3{ vec3( 0.0_f ) };
 	}
@@ -70,7 +70,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & wsPosition
 		, sdw::Vec3 const & V
 		, sdw::Float const & roughness
-		, DebugOutputCategory & debugOutput )
+		, DebugOutputCategory const & debugOutput )
 	{
 		return sdw::RetVec3{ vec3( 0.0_f ) };
 	}
@@ -81,7 +81,7 @@ namespace castor3d::shader
 		, sdw::Float const & NdotV
 		, BlendComponents & components
 		, sdw::CombinedImage2DRgba32 const & brdf
-		, DebugOutputCategory & debugOutput )
+		, DebugOutputCategory const & debugOutput )
 	{
 		return sdw::RetVec4{ vec4( 0.0_f ) };
 	}
@@ -91,7 +91,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & V
 		, sdw::Float const & refractionRatio
 		, BlendComponents & components
-		, DebugOutputCategory & debugOutput )
+		, DebugOutputCategory const & debugOutput )
 	{
 		return sdw::RetVec3{ vec3( 0.0_f ) };
 	}
@@ -105,14 +105,14 @@ namespace castor3d::shader
 		, sdw::Float const & refractionRatio
 		, BlendComponents & components
 		, sdw::CombinedImage2DRgba32 const & brdf
-		, DebugOutputCategory & debugOutput )
+		, DebugOutputCategory const & debugOutput )
 	{
 		return sdw::RetVec3{ vec3( 0.0_f ) };
 	}
 
 	sdw::RetVec3 BackgroundModel::computeDiffuse( sdw::Vec3 const & wsDirection
 		, BlendComponents & components
-		, DebugOutputCategory & debugOutput )
+		, DebugOutputCategory const & debugOutput )
 	{
 		return sdw::RetVec3{ vec3( 0.0_f ) };
 	}

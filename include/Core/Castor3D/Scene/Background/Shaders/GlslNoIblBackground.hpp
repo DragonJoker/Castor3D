@@ -32,17 +32,17 @@ namespace castor3d::shader
 			, BlendComponents & components
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular
-			, DebugOutputCategory & debugOutput )override;
+			, DebugOutputCategory const & debugOutput )override;
 		sdw::RetVec3 computeRefraction( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & refractionRatio
 			, BlendComponents & components
-			, DebugOutputCategory & debugOutput )override;
+			, DebugOutputCategory const & debugOutput )override;
 
 		sdw::RetVec3 computeDiffuse( sdw::Vec3 const & wsDirection
 			, BlendComponents & components
-			, DebugOutputCategory & debugOutput )override;
+			, DebugOutputCategory const & debugOutput )override;
 
 	public:
 		static castor::String const Name;

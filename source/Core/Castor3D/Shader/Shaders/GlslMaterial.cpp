@@ -352,7 +352,7 @@ namespace castor3d::shader
 			, textureConfigs, textureAnims, maps
 			, material, materialId, passMultipliers
 			, output );
-		output.registerDebug( debugOutput );
+		output.registerDebug( debugOutput.pushBlock( cuT( "Material" ) ) );
 	}
 
 	void Materials::blendMaterials( bool opaque
@@ -386,7 +386,7 @@ namespace castor3d::shader
 			, textureConfigs, textureAnims, maps
 			, material, materialId, passMultipliers
 			, output );
-		output.registerDebug( debugOutput );
+		output.registerDebug( debugOutput.pushBlock( cuT( "Material" ) ) );
 	}
 
 	void Materials::applyMaterialMaps( PipelineFlags const & flags

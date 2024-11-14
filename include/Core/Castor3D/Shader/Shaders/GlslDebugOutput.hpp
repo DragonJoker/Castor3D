@@ -103,19 +103,19 @@ namespace castor3d::shader
 			return *this;
 		}
 
-		DebugOutput & operator*()noexcept
+		DebugOutput & operator*()const noexcept
 		{
 			return *m_debugOutput;
 		}
 
-		DebugOutputCategory pushBlock( castor::String category )
+		DebugOutputCategory pushBlock( castor::String category )const
 		{
 			return m_debugOutput->pushBlock( castor::move( category ) );
 		}
 
 		template< typename ValueT >
 		void registerOutput( castor::String name
-			, ValueT const value )
+			, ValueT const value )const
 		{
 			m_debugOutput->registerOutput( castor::move( name ), value );
 		}
@@ -123,7 +123,7 @@ namespace castor3d::shader
 		template< typename ValueT >
 		void registerOutput( castor::String category
 			, castor::String name
-			, ValueT const value )
+			, ValueT const value )const
 		{
 			m_debugOutput->registerOutput( castor::move( category ), castor::move( name ), value );
 		}

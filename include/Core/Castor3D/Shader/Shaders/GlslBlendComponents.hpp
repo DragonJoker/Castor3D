@@ -63,7 +63,7 @@ namespace castor3d::shader
 			, ModelData const & model
 			, Utils & utils );
 
-		void registerDebug( DebugOutput & debugOutput )const;
+		void registerDebug( DebugOutputCategory const & debugOutput )const;
 
 		void setNormal( sdw::Vec3 const v );
 		void normalizeNormal();

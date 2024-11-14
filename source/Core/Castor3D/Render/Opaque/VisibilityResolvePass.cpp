@@ -1271,12 +1271,7 @@ namespace castor3d
 							, modelData.getMaterialId()
 							, baseSurface.passMultipliers
 							, components );
-						output.registerOutput( cuT( "Surface" ), cuT( "Normal" ), fma( shader::getRawXYZ( components.getRawNormal() ), vec3( 0.5_f ), vec3( 0.5_f ) ) );
-						output.registerOutput( cuT( "Surface" ), cuT( "Tangent" ), fma( shader::getRawXYZ( baseSurface.tangent ), vec3( 0.5_f ), vec3( 0.5_f ) ) );
-						output.registerOutput( cuT( "Surface" ), cuT( "Bitangent" ), fma( shader::getRawXYZ( baseSurface.bitangent ), vec3( 0.5_f ), vec3( 0.5_f ) ) );
-						output.registerOutput( cuT( "Surface" ), cuT( "World Position" ), shader::getRaw( baseSurface.worldPosition ) );
-						output.registerOutput( cuT( "Surface" ), cuT( "View Position" ), shader::getRaw( baseSurface.viewPosition ) );
-						output.registerOutput( cuT( "Surface" ), cuT( "Colour" ), shader::getRaw( baseSurface.colour ) );
+						baseSurface.registerDebug( flags, components, output.pushBlock( cuT( "Surface" ) ) );
 
 						if ( components.occlusion )
 						{
@@ -1399,7 +1394,7 @@ namespace castor3d
 									}
 
 									lightSurface.updateN( components.getDerivNormal() );
-									lightSurface.registerDebug( output );
+									lightSurface.registerDebug( output.pushBlock( cuT( "LightSurface" ) ) );
 									passShaders.computeReflRefr( reflections
 										, components
 										, lightSurface

@@ -50,17 +50,16 @@ namespace castor3d::shader
 		sheen.rgb() *= attenuation;
 	}
 
-	void DirectLighting::registerDebug( DebugOutput & debugOutput
-		, castor::String const & category )const
+	void DirectLighting::registerDebug( DebugOutputCategory const & debugOutput )const
 	{
-		debugOutput.registerOutput( category, cuT( "Ambient" ), ambient );
-		debugOutput.registerOutput( category, cuT( "Diffuse" ), diffuse );
-		debugOutput.registerOutput( category, cuT( "Dielectric BRDF" ), dielectric );
-		debugOutput.registerOutput( category, cuT( "Metal BRDF" ), metal );
-		debugOutput.registerOutput( category, cuT( "Scattering" ), scattering );
-		debugOutput.registerOutput( category, cuT( "Coating" ), coating );
-		debugOutput.registerOutput( category, cuT( "Sheen" ), sheen.xyz() );
-		debugOutput.registerOutput( category, cuT( "Sheen Scale" ), sheen.w() );
+		debugOutput.registerOutput( cuT( "Ambient" ), ambient );
+		debugOutput.registerOutput( cuT( "Diffuse" ), diffuse );
+		debugOutput.registerOutput( cuT( "Dielectric BRDF" ), dielectric );
+		debugOutput.registerOutput( cuT( "Metal BRDF" ), metal );
+		debugOutput.registerOutput( cuT( "Scattering" ), scattering );
+		debugOutput.registerOutput( cuT( "Coating" ), coating );
+		debugOutput.registerOutput( cuT( "Sheen" ), sheen.xyz() );
+		debugOutput.registerOutput( cuT( "Sheen Scale" ), sheen.w() );
 	}
 
 	DirectLighting & DirectLighting::operator+=( DirectLighting const & rhs )
@@ -122,15 +121,14 @@ namespace castor3d::shader
 	{
 	}
 
-	void IndirectLighting::registerDebug( DebugOutput & debugOutput
-		, castor::String const & category )const
+	void IndirectLighting::registerDebug( DebugOutputCategory const & debugOutput )const
 	{
-		debugOutput.registerOutput( category, cuT( "Raw Diffuse" ), rawDiffuse );
-		debugOutput.registerOutput( category, cuT( "Diffuse Colour" ), diffuseColour );
-		debugOutput.registerOutput( category, cuT( "Diffuse Blend" ), diffuseBlend );
-		debugOutput.registerOutput( category, cuT( "Specular" ), specular );
-		debugOutput.registerOutput( category, cuT( "Occlusion" ), occlusion );
-		debugOutput.registerOutput( category, cuT( "Ambient" ), ambient );
+		debugOutput.registerOutput( cuT( "Raw Diffuse" ), rawDiffuse );
+		debugOutput.registerOutput( cuT( "Diffuse Colour" ), diffuseColour );
+		debugOutput.registerOutput( cuT( "Diffuse Blend" ), diffuseBlend );
+		debugOutput.registerOutput( cuT( "Specular" ), specular );
+		debugOutput.registerOutput( cuT( "Occlusion" ), occlusion );
+		debugOutput.registerOutput( cuT( "Ambient" ), ambient );
 	}
 
 	sdw::expr::ExprList IndirectLighting::makeInit()
@@ -164,15 +162,14 @@ namespace castor3d::shader
 	{
 	}
 
-	void ReflectionRefraction::registerDebug( DebugOutput & debugOutput
-		, castor::String const & category )const
+	void ReflectionRefraction::registerDebug( DebugOutputCategory const & debugOutput )const
 	{
-		debugOutput.registerOutput( category, cuT( "Diffuse" ), diffuse );
-		debugOutput.registerOutput( category, cuT( "Dielectric BRDF" ), dielectric );
-		debugOutput.registerOutput( category, cuT( "Metal BRDF" ), metal );
-		debugOutput.registerOutput( category, cuT( "Coating BRDF" ), coating );
-		debugOutput.registerOutput( category, cuT( "Refl. Sheen" ), sheen.xyz() );
-		debugOutput.registerOutput( category, cuT( "Refl. Sheen Scale" ), sheen.w() );
+		debugOutput.registerOutput( cuT( "Background Diffuse" ), diffuse );
+		debugOutput.registerOutput( cuT( "Background Dielectric BRDF" ), dielectric );
+		debugOutput.registerOutput( cuT( "Background Metal BRDF" ), metal );
+		debugOutput.registerOutput( cuT( "Background Coating BRDF" ), coating );
+		debugOutput.registerOutput( cuT( "Background Sheen" ), sheen.xyz() );
+		debugOutput.registerOutput( cuT( "Background Sheen Scale" ), sheen.w() );
 	}
 
 	sdw::expr::ExprList ReflectionRefraction::makeInit()
