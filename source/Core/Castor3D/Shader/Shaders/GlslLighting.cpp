@@ -62,21 +62,6 @@ namespace castor3d::shader
 	{
 	}
 
-	void LightingModel::finish( PassShaders const & passShaders
-		, DerivSurfaceBase const & surface
-		, CameraData const & camera
-		, ModelData const & model
-		, BlendComponents & components )
-	{
-		components.finish( passShaders
-			, surface
-			, camera
-			, model
-			, m_utils );
-		doFinish( passShaders
-			, components );
-	}
-
 	sdw::Vec3 LightingModel::combine( DebugOutput & debugOutput
 		, ReflectionModel & reflections
 		, sdw::CombinedImage2DRgba32 const & brdf

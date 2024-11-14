@@ -59,11 +59,6 @@ namespace castor3d::shader
 			return m_hasBackgroundRefractionSupport;
 		}
 
-		C3D_API void finish( PassShaders const & passShaders
-			, DerivSurfaceBase const & surface
-			, CameraData const & camera
-			, ModelData const & model
-			, BlendComponents & components );
 		C3D_API virtual sdw::Vec3 combine( DebugOutput & debugOutput
 			, ReflectionModel & reflections
 			, sdw::CombinedImage2DRgba32 const & brdf
@@ -222,8 +217,6 @@ namespace castor3d::shader
 		C3D_API virtual DerivFloat doGetNdotH( LightSurface const & lightSurface
 			, BlendComponents const & components );
 
-		C3D_API virtual void doFinish( PassShaders const & passShaders
-			, BlendComponents & components ) = 0;
 		C3D_API virtual sdw::Vec3 doGetDiffuseResult( BlendComponents const & components
 			, DirectLighting const & lighting
 			, IndirectLighting const & indirect

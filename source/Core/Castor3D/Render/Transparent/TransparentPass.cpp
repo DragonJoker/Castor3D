@@ -383,11 +383,11 @@ namespace castor3d
 								, { in.viewPosition, dFdx( in.viewPosition ), dFdy( in.viewPosition ) }
 								, { in.worldPosition, dFdx( in.worldPosition ), dFdy( in.worldPosition ) }
 								, normalize( components.getDerivNormal() ) } );
-						lightingModel->finish( passShaders
+						components.finish( passShaders
 							, surface
 							, c3d_cameraData
 							, modelData
-							, components );
+							, utils );
 						auto lightSurface = shader::LightSurface::create( writer
 							, "lightSurface"
 							, c3d_cameraData.position()
