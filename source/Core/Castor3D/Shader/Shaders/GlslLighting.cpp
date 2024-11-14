@@ -1211,16 +1211,71 @@ namespace castor3d::shader
 	{
 		radiance = doComputeRadiance( light, lightSurface.L().value() );
 		doInitLightSpecifics( lightSurface, components );
-		auto lightIntensity = m_writer.declLocale( "lightIntensity"
+		doInternalComputeLightDiffuse( light
+			, components
+			, lightSurface
+			, attenuation
+			, radiance
+			, output.diffuse );
+		doInternalComputeLightSpecular( light
+			, components
+			, lightSurface
+			, attenuation
+			, radiance
+			, output );
+	}
+
+	sdw::Vec3 LightingModel::doComputeLightDiffuse( Light const & light
+		, BlendComponents const & components
+		, LightSurface const & lightSurface
+		, sdw::Float const & attenuation
+		, sdw::Vec3 & radiance )
+	{
+		radiance = doComputeRadiance( light, lightSurface.L().value() );
+		doInitLightSpecifics( lightSurface, components );
+		auto result = m_writer.declLocale( "result", vec3( 0.0_f ) );
+		doInternalComputeLightDiffuse( light
+			, components
+			, lightSurface
+			, attenuation
+			, radiance
+			, result );
+		return result;
+	}
+
+	void LightingModel::doComputeLightAllButDiffuse( Light const & light
+		, BlendComponents const & components
+		, LightSurface const & lightSurface
+		, sdw::Float const & attenuation
+		, sdw::Vec3 & radiance
+		, DirectLighting & output )
+	{
+		radiance = doComputeRadiance( light, lightSurface.L().value() );
+		doInitLightSpecifics( lightSurface, components );
+		doInternalComputeLightSpecular( light
+			, components
+			, lightSurface
+			, attenuation
+			, radiance
+			, output );
+	}
+	
+	void LightingModel::doInternalComputeLightDiffuse( Light const & light
+		, BlendComponents const & components
+		, LightSurface const & lightSurface
+		, sdw::Float const & attenuation
+		, sdw::Vec3 const & radiance
+		, sdw::Vec3 & result )
+	{
+		auto lightIntensity = m_writer.declLocale( "diffuseLightIntensity"
 			, radiance * attenuation * light.intensity().x() );
-		output.diffuse = doGetNdotL( lightSurface, components ).value()
-			* attenuation
+		result = doGetNdotL( lightSurface, components ).value()
 			* m_diffuse->compute( components
 				, lightSurface
 				, lightIntensity
 				, doGetNdotL( lightSurface, components ).value() );
 
-		if( components.hasMember( "diffuseTransmissionFactor" ) )
+		if ( components.hasMember( "diffuseTransmissionFactor" ) )
 		{
 			lightSurface.updateN( -lightSurface.N() );
 			auto diffuseBtdf = m_writer.declLocale( "diffuseBtdf"
@@ -1231,7 +1286,7 @@ namespace castor3d::shader
 						, components.diffuseTransmissionColour * light.intensity().x()
 						, doGetNdotL( lightSurface, components ).value() ) );
 
-			if( components.hasMember( "thicknessFactor" )
+			if ( components.hasMember( "thicknessFactor" )
 				&& components.hasMember( "attenuationDistance" ) )
 			{
 				diffuseBtdf *= ReflectionModel::applyVolumeAttenuation( components.thicknessFactor
@@ -1239,7 +1294,7 @@ namespace castor3d::shader
 					, components.attenuationDistance );
 			}
 
-			output.diffuse = mix( output.diffuse, diffuseBtdf, vec3( components.diffuseTransmissionFactor ) );
+			result = mix( result, diffuseBtdf, vec3( components.diffuseTransmissionFactor ) );
 			lightSurface.updateN( -lightSurface.N() );
 		}
 
@@ -1254,8 +1309,30 @@ namespace castor3d::shader
 					, components.ior ) );
 			lightSurface.updateL( lightSurface.vertexToLight() - transmissionRay );
 
+			auto transmissionRougness = m_writer.declLocale( "transmissionRougness"
+				, ReflectionModel::applyIorToRoughness( components.alphaRoughness, components.ior ) );
+			// Mirror light reflection vector on surface
+			auto mirrorL = m_writer.declLocale( "mirrorL"
+				, normalize( lightSurface.L().value() + 2.0_f * lightSurface.N().value() * dot( -lightSurface.L().value(), lightSurface.N().value() ) ) );
+			// Halfway vector between transmission light vector and v
+			auto mirrorH = m_writer.declLocale( "mirrorL"
+				, normalize( mirrorL + lightSurface.V().value() ) );
+
+			auto D = m_writer.declLocale( "D"
+				, m_brdfHelpers.distributionGGX( clamp( dot( lightSurface.N().value(), mirrorH ), 0.0_f, 1.0_f )
+					, transmissionRougness ) );
+			auto F = m_writer.declLocale( "F"
+				, m_utils.conductorFresnel( clamp( dot( lightSurface.V().value(), mirrorH ), 0.0_f, 1.0_f )
+					, components.dielectricF0
+					, components.f90 ) );
+			auto Vis = m_writer.declLocale( "Vis"
+				, m_brdfHelpers.visibilitySmithGGXCorrelated( clamp( dot( lightSurface.N().value(), lightSurface.V().value() ), 0.0_f, 1.0_f )
+					, clamp( dot( lightSurface.N().value(), mirrorL ), 0.0_f, 1.0_f )
+					, transmissionRougness ) );
+
+			// Transmission BTDF
 			auto transmittedLight = m_writer.declLocale( "transmittedLight"
-				, lightIntensity * doComputeLightTransmission( components, lightSurface ) );
+				, lightIntensity * ( 1.0_f - F ) * components.baseColour * D * Vis );
 
 			if ( components.hasMember( "thicknessFactor" )
 				&& components.hasMember( "attenuationDistance" ) )
@@ -1265,120 +1342,20 @@ namespace castor3d::shader
 					, components.attenuationDistance );
 			}
 
-			output.diffuse = mix( output.diffuse, transmittedLight, vec3( components.transmissionFactor ) );
+			result = mix( result, transmittedLight, vec3( components.transmissionFactor ) );
 
 			lightSurface.updateL( lightSurface.vertexToLight() + transmissionRay );
 		}
-
-		lightIntensity = radiance * attenuation * light.intensity().y();
-		auto specular = m_writer.declLocale( "specular"
-				, doGetNdotL( lightSurface, components ).value()
-					* lightIntensity
-					* m_specular->compute( components
-						, lightSurface.N().value()
-						, lightSurface.L().value()
-						, lightSurface.H().value()
-						, lightSurface.V().value()
-						, doGetNdotL( lightSurface, components ).value()
-						, doGetNdotH( lightSurface, components ).value() ) );
-		auto dielectricFresnel = m_writer.declLocale( "dielectricFresnel"
-			, m_utils.conductorFresnel( abs( lightSurface.HdotV().value() ), components.dielectricF90, components.dielectricF0 * components.specularWeight ) );
-		auto metalFresnel = m_writer.declLocale( "metalFresnel"
-			, m_utils.conductorFresnel( abs( lightSurface.HdotV().value() ), components.baseColour, vec3( 1.0_f ) ) );
-		output.metal = metalFresnel * specular;
-		output.dielectric = mix( output.diffuse, specular, dielectricFresnel );
-
-		if ( components.hasMember( "iridescenceFactor" ) )
-		{
-			output.metal = mix( output.metal
-				, specular * components.getMember< sdw::Vec3 >( "iridescenceMetallicFresnel" )
-				, vec3( components.iridescenceFactor ) );
-			output.dielectric = mix( output.dielectric
-				, Utils::rgbMix( output.diffuse, specular, components.getMember< sdw::Vec3 >( "iridescenceDielectricFresnel" ) )
-				, vec3( components.iridescenceFactor ) );
-		}
-
-		if ( m_clearcoat
-			&& components.hasMember( "clearcoatFactor" ) )
-		{
-			lightSurface.updateN( derivVec3( components.clearcoatNormal ) );
-			output.coating = lightIntensity
-				* m_clearcoat->compute( components
-					, lightSurface.N().value()
-					, lightSurface.L().value()
-					, lightSurface.H().value()
-					, lightSurface.V().value()
-					, doGetNdotL( lightSurface, components ).value()
-					, doGetNdotH( lightSurface, components ).value() );
-		}
-
-		if ( m_sheen
-			&& components.hasMember( "sheenColour" ) )
-		{
-			output.sheen = m_sheen->compute( m_utils
-				, components
-				, lightSurface
-				, doGetNdotL( lightSurface, components ).value()
-				, doGetNdotH( lightSurface, components ).value() );
-			output.sheen.xyz() *= doGetNdotL( lightSurface, components ).value() * lightIntensity;
-		}
 	}
-	
-	sdw::Vec3 LightingModel::doComputeLightTransmission( BlendComponents const & components
-		, LightSurface const & lightSurface )
-	{
-		auto transmissionRougness = m_writer.declLocale( "transmissionRougness"
-			, ReflectionModel::applyIorToRoughness( components.alphaRoughness, components.ior ) );
-		// Mirror light reflection vector on surface
-		auto mirrorL = m_writer.declLocale( "mirrorL"
-			, normalize( lightSurface.L().value() + 2.0_f * lightSurface.N().value() * dot( -lightSurface.L().value(), lightSurface.N().value() ) ) );
-		// Halfway vector between transmission light vector and v
-		auto mirrorH = m_writer.declLocale( "mirrorL"
-			, normalize( mirrorL + lightSurface.V().value() ) );
 
-		auto D = m_writer.declLocale( "D"
-			, m_brdfHelpers.distributionGGX( clamp( dot( lightSurface.N().value(), mirrorH ), 0.0_f, 1.0_f )
-				, transmissionRougness ) );
-		auto F = m_writer.declLocale( "F"
-			, m_utils.conductorFresnel( clamp( dot( lightSurface.V().value(), mirrorH ), 0.0_f, 1.0_f )
-				, components.dielectricF0
-				, components.f90 ) );
-		auto Vis = m_writer.declLocale( "Vis"
-			, m_brdfHelpers.visibilitySmithGGXCorrelated( clamp( dot( lightSurface.N().value(), lightSurface.V().value() ), 0.0_f, 1.0_f )
-				, clamp( dot( lightSurface.N().value(), mirrorL ), 0.0_f, 1.0_f )
-				, transmissionRougness ) );
-
-		// Transmission BTDF
-		return ( 1.0_f - F ) * components.baseColour * D * Vis;
-	}
-	
-	sdw::Vec3 LightingModel::doComputeLightDiffuse( Light light
+	void LightingModel::doInternalComputeLightSpecular( Light const & light
 		, BlendComponents const & components
 		, LightSurface const & lightSurface
 		, sdw::Float const & attenuation
-		, sdw::Vec3 & radiance )
-	{
-		auto result = m_writer.declLocale( "result", vec3( 0.0_f ) );
-		radiance = doComputeRadiance( light, lightSurface.L().value() );
-		doInitLightSpecifics( lightSurface, components );
-		result = doGetNdotL( lightSurface, components ).value()
-			* m_diffuse->compute( components
-				, lightSurface
-				, radiance * attenuation * light.intensity().x()
-				, doGetNdotL( lightSurface, components ).value() );
-		return result;
-	}
-
-	void LightingModel::doComputeLightAllButDiffuse( Light light
-		, BlendComponents const & components
-		, LightSurface const & lightSurface
-		, sdw::Float const & attenuation
-		, sdw::Vec3 & radiance
+		, sdw::Vec3 const & radiance
 		, DirectLighting & output )
 	{
-		radiance = doComputeRadiance( light, lightSurface.L().value() );
-		doInitLightSpecifics( lightSurface, components );
-		auto lightIntensity = m_writer.declLocale( "lightIntensity"
+		auto lightIntensity = m_writer.declLocale( "specularLightIntensity"
 			, radiance * attenuation * light.intensity().y() );
 		auto specular = m_writer.declLocale( "specular"
 				, doGetNdotL( lightSurface, components ).value()

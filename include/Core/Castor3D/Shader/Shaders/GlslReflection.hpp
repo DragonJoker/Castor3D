@@ -269,18 +269,18 @@ namespace castor3d::shader
 			, sdw::UInt const & envMapIndex
 			, BlendComponents & components
 			, sdw::Vec3 & result
-		void doComputeClearcoatReflection( sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, DebugOutputCategory const & debugOutput );
+		void doComputeClearcoat( sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::Boolean const & hasEnvMap
 			, BackgroundModel & background
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::UInt const & hasReflection
+			, sdw::UInt const & envMapIndex
 			, BlendComponents & components
-			, sdw::UInt & envMapIndex
 			, sdw::Vec3 & coatReflected
-		void doComputeSheenReflection( sdw::CombinedImage2DRgba32 const & brdf
 			, DebugOutputCategory const & debugOutput );
+		void doComputeSheen( sdw::CombinedImage2DRgba32 const & brdf
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::Boolean const & hasEnvMap
 			, BackgroundModel & background
@@ -289,9 +289,32 @@ namespace castor3d::shader
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
 			, sdw::UInt const & hasReflection
+			, sdw::UInt const & envMapIndex
 			, BlendComponents & components
-			, sdw::UInt & envMapIndex
 			, sdw::Vec4 & sheenReflected
+			, DebugOutputCategory const & debugOutput );
+		void doComputePreTransmission( BackgroundModel & background
+			, BlendComponents & components
+			, sdw::Vec3 const & wsPosition
+			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & V
+			, sdw::Boolean const & hasEnvMap
+			, sdw::UInt const & envMapIndex
+			, sdw::UInt const & hasReflection
+			, sdw::Vec3 & specular
+			, ReflectionRefraction & output
+			, DebugOutputCategory const & debugOutput );
+		void doComputePostTransmission( BackgroundModel & background
+			, BlendComponents & components
+			, sdw::Vec3 const & specular
+			, sdw::Vec3 const & wsPosition
+			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & V
+			, sdw::Float const & NdotV
+			, sdw::Boolean const & hasEnvMap
+			, sdw::UInt const & envMapIndex
+			, sdw::UInt const & hasReflection
+			, ReflectionRefraction & output
 			, DebugOutputCategory const & debugOutput );
 
 	private:

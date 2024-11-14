@@ -131,57 +131,22 @@ namespace castor3d::shader
 					, sdw::Float const & refractionRatio
 					, ReflectionRefraction output )
 				{
-					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
-					auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
 					auto hasEnvMap = m_writer.declLocale( "hasEnvMap"
 						, envMapIndex > 0_u );
 					--envMapIndex;
 					auto specular = m_writer.declLocale( "specular"
 						, vec3( 0.0_f ) );
-					doComputeReflection( envMap
-						, hasEnvMap
-						, background
-						, wsNormal
-						, wsPosition
-						, V
-						, hasReflection
+					doComputePreTransmission( background
 						, components
+						, wsPosition
+						, wsNormal
+						, V
+						, hasEnvMap
 						, envMapIndex
-						, output.diffuse
+						, hasReflection
 						, specular
+						, output
 						, debugOutput );
-					output.diffuse *= components.baseColour;
-					debugOutput.registerOutput( "Specular Reflection", specular );
-					debugOutput.registerOutput( "Diffuse Reflection", output.diffuse );
-
-					if ( components.hasMember( "diffuseTransmissionFactor" ) )
-					{
-						auto diffuseTransmission = m_writer.declLocale( "diffuseTransmission"
-							, vec3( 0.0_f ) );
-						doComputeDiffuse( envMap
-							, hasEnvMap
-							, background
-							, -wsNormal
-							, envMapIndex
-							, components
-							, diffuseTransmission
-							, debugOutput );
-						diffuseTransmission *= components.diffuseTransmissionColour;
-						debugOutput.registerOutput( "Diffuse Transmission", diffuseTransmission );
-
-						if ( components.hasMember( "thicknessFactor" ) )
-						{
-							diffuseTransmission *= applyVolumeAttenuation( components.getMember< sdw::Float >( "diffuseTransmissionThickness" )
-								, components.attenuationColour
-								, components.attenuationDistance );
-							debugOutput.registerOutput( "Volume Diffuse Transmission", diffuseTransmission );
-						}
-
-						output.diffuse = mix( output.diffuse
-							, diffuseTransmission
-							, vec3( components.diffuseTransmissionFactor ) );
-						debugOutput.registerOutput( "Diffuse Mixed With Diffuse Transmission", output.diffuse );
-					}
 
 					if( components.hasMember( "transmissionFactor" ) )
 					{
@@ -198,60 +163,23 @@ namespace castor3d::shader
 						output.diffuse = mix( output.diffuse, specularTransmission, vec3( components.transmissionFactor ) );
 						debugOutput.registerOutput( "Diffuse Mixed With Specular Transmission", output.diffuse );
 					}
-
-					auto metalFresnel = m_writer.declLocale( "metalFresnel"
-						, computeFresnel( brdf
-							, NdotV
-							, components.perceptualRoughness
-							, components.baseColour
-							, 1.0_f ) );
-					debugOutput.registerOutput( "Metal Fresnel", metalFresnel );
-					output.metal = specular * metalFresnel;
-					debugOutput.registerOutput( "Raw Metal BRDF", output.metal );
-					auto dielectricFresnel = m_writer.declLocale( "dielectricFresnel"
-						, computeFresnel( brdf
-							, NdotV
-							, components.perceptualRoughness
-							, components.dielectricF0
-							, components.specularWeight ) );
-					debugOutput.registerOutput( "Dielectric Fresnel", dielectricFresnel );
-					output.dielectric = mix( output.diffuse, specular, dielectricFresnel );
-					debugOutput.registerOutput( "Raw Dielectric BRDF", output.dielectric );
-
-					if ( components.hasMember( "iridescenceFactor" ) )
+					else
 					{
-						output.metal = mix( output.metal
-							, specular * components.getMember< sdw::Vec3 >( "iridescenceMetallicFresnel" )
-							, vec3( components.iridescenceFactor ) );
-						debugOutput.registerOutput( "Iridescent Metal BRDF", output.metal );
-						output.dielectric = mix( output.dielectric
-							, Utils::rgbMix( output.diffuse, specular, components.getMember< sdw::Vec3 >( "iridescenceDielectricFresnel" ) )
-							, vec3( components.iridescenceFactor ) );
-						debugOutput.registerOutput( "Iridescent Dielectric BRDF", output.dielectric );
+						debugOutput.registerOutput( "Specular Transmission", 0.0_f );
+						debugOutput.registerOutput( "Diffuse Mixed With Specular Transmission", output.diffuse );
 					}
 
-					doComputeClearcoatReflection( envMap
-						, hasEnvMap
-						, background
-						, wsPosition
-						, V
-						, hasReflection
+					doComputePostTransmission( background
 						, components
-						, envMapIndex
-						, output.coating
-						, debugOutput );
-					doComputeSheenReflection( brdf
-						, envMap
-						, hasEnvMap
-						, background
-						, wsNormal
+						, specular
 						, wsPosition
+						, wsNormal
 						, V
 						, NdotV
-						, hasReflection
-						, components
+						, hasEnvMap
 						, envMapIndex
-						, output.sheen
+						, hasReflection
+						, output
 						, debugOutput );
 				}
 				, InOutBlendComponents{ m_writer, "components", pcomponents }
@@ -330,60 +258,26 @@ namespace castor3d::shader
 					, sdw::Float const & refractionRatio
 					, ReflectionRefraction output )
 				{
-					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
-					auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
 					auto hasEnvMap = m_writer.declLocale( "hasEnvMap"
 						, envMapIndex > 0_u );
 					--envMapIndex;
 					auto specular = m_writer.declLocale( "specular"
 						, vec3( 0.0_f ) );
-					doComputeReflection( envMap
-						, hasEnvMap
-						, background
-						, wsNormal
-						, wsPosition
-						, V
-						, hasReflection
+					doComputePreTransmission( background
 						, components
+						, wsPosition
+						, wsNormal
+						, V
+						, hasEnvMap
 						, envMapIndex
-						, output.diffuse
+						, hasReflection
 						, specular
+						, output
 						, debugOutput );
-					output.diffuse *= components.baseColour;
-					debugOutput.registerOutput( "Specular Reflection", specular );
-					debugOutput.registerOutput( "Diffuse Reflection", output.diffuse );
-
-					if ( components.hasMember( "diffuseTransmissionFactor" ) )
-					{
-						auto diffuseTransmission = m_writer.declLocale( "diffuseTransmission"
-							, vec3( 0.0_f ) );
-						doComputeDiffuse( envMap
-							, hasEnvMap
-							, background
-							, -wsNormal
-							, envMapIndex
-							, components
-							, diffuseTransmission
-							, debugOutput );
-						diffuseTransmission *= components.diffuseTransmissionColour;
-						debugOutput.registerOutput( "Diffuse Transmission", diffuseTransmission );
-
-						if ( components.hasMember( "thicknessFactor" ) )
-						{
-							diffuseTransmission *= applyVolumeAttenuation( components.getMember< sdw::Float >( "diffuseTransmissionThickness" )
-								, components.attenuationColour
-								, components.attenuationDistance );
-							debugOutput.registerOutput( "Volume Diffuse Transmission", diffuseTransmission );
-						}
-
-						output.diffuse = mix( output.diffuse
-							, diffuseTransmission
-							, vec3( components.diffuseTransmissionFactor ) );
-						debugOutput.registerOutput( "Diffuse Mixed With Diffuse Transmission", output.diffuse );
-					}
 
 					if ( components.hasMember( "transmissionFactor" ) )
 					{
+						auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
 						auto specularTransmission = m_writer.declLocale( "specularTransmission"
 							   , vec3( 0.0_f ) );
 						doComputeRefraction( envMap
@@ -401,60 +295,23 @@ namespace castor3d::shader
 						output.diffuse = mix( output.diffuse, specularTransmission, vec3( components.transmissionFactor ) );
 						debugOutput.registerOutput( "Diffuse Mixed With Specular Transmission", output.diffuse );
 					}
-
-					auto metalFresnel = m_writer.declLocale( "metalFresnel"
-						, computeFresnel( brdf
-							, NdotV
-							, components.perceptualRoughness
-							, components.baseColour
-							, 1.0_f ) );
-					debugOutput.registerOutput( "Metal Fresnel", metalFresnel );
-					output.metal = specular * metalFresnel;
-					debugOutput.registerOutput( "Raw Metal BRDF", output.metal );
-					auto dielectricFresnel = m_writer.declLocale( "dielectricFresnel"
-						, computeFresnel( brdf
-							, NdotV
-							, components.perceptualRoughness
-							, components.dielectricF0
-							, components.specularWeight ) );
-					debugOutput.registerOutput( "Dielectric Fresnel", dielectricFresnel );
-					output.dielectric = mix( output.diffuse, specular, dielectricFresnel );
-					debugOutput.registerOutput( "Raw Dielectric BRDF", output.dielectric );
-
-					if ( components.hasMember( "iridescenceFactor" ) )
+					else
 					{
-						output.metal = mix( output.metal
-							, specular * components.getMember< sdw::Vec3 >( "iridescenceMetallicFresnel" )
-							, vec3( components.iridescenceFactor ) );
-						debugOutput.registerOutput( "Iridescent Metal BRDF", output.metal );
-						output.dielectric = mix( output.dielectric
-							, Utils::rgbMix( output.diffuse, specular, components.getMember< sdw::Vec3 >( "iridescenceDielectricFresnel" ) )
-							, vec3( components.iridescenceFactor ) );
-						debugOutput.registerOutput( "Iridescent Dieletric BRDF", output.metal );
+						debugOutput.registerOutput( "Specular Transmission", 0.0_f );
+						debugOutput.registerOutput( "Diffuse Mixed With Specular Transmission", output.diffuse );
 					}
 
-					doComputeClearcoatReflection( envMap
-						, hasEnvMap
-						, background
-						, wsPosition
-						, V
-						, hasReflection
+					doComputePostTransmission( background
 						, components
-						, envMapIndex
-						, output.coating
-						, debugOutput );
-					doComputeSheenReflection( brdf
-						, envMap
-						, hasEnvMap
-						, background
-						, wsNormal
+						, specular
 						, wsPosition
+						, wsNormal
 						, V
 						, NdotV
-						, hasReflection
-						, components
+						, hasEnvMap
 						, envMapIndex
-						, output.sheen
+						, hasReflection
+						, output
 						, debugOutput );
 				}
 				, InOutBlendComponents{ m_writer, "components", pcomponents }
@@ -524,8 +381,8 @@ namespace castor3d::shader
 			, wsPosition
 			, V
 			, reflection
-			, components
 			, envMapIndex
+			, components
 			, reflectedDiffuse
 			, reflectedSpecular
 			, debugOutput );
@@ -1440,8 +1297,8 @@ namespace castor3d::shader
 		, sdw::Vec3 const & wsPosition
 		, sdw::Vec3 const & V
 		, sdw::UInt const & hasReflection
+		, sdw::UInt const & envMapIndex
 		, BlendComponents & components
-		, sdw::UInt & envMapIndex
 		, sdw::Vec3 & reflectedDiffuse
 		, sdw::Vec3 & reflectedSpecular
 		, DebugOutputCategory const & debugOutput )
@@ -1581,14 +1438,14 @@ namespace castor3d::shader
 		}
 	}
 
-	void ReflectionModel::doComputeClearcoatReflection( sdw::CombinedImageCubeArrayRgba32 const & envMap
+	void ReflectionModel::doComputeClearcoat( sdw::CombinedImageCubeArrayRgba32 const & envMap
 		, sdw::Boolean const & hasEnvMap
 		, BackgroundModel & background
 		, sdw::Vec3 const & wsPosition
 		, sdw::Vec3 const & V
 		, sdw::UInt const & hasReflection
+		, sdw::UInt const & envMapIndex
 		, BlendComponents & components
-		, sdw::UInt & envMapIndex
 		, sdw::Vec3 & coatReflected
 		, DebugOutputCategory const & debugOutput )
 	{
@@ -1629,7 +1486,7 @@ namespace castor3d::shader
 		}
 	}
 
-	void ReflectionModel::doComputeSheenReflection( sdw::CombinedImage2DRgba32 const & brdf
+	void ReflectionModel::doComputeSheen( sdw::CombinedImage2DRgba32 const & brdf
 		, sdw::CombinedImageCubeArrayRgba32 const & envMap
 		, sdw::Boolean const & hasEnvMap
 		, BackgroundModel & background
@@ -1638,8 +1495,8 @@ namespace castor3d::shader
 		, sdw::Vec3 const & V
 		, sdw::Float const & NdotV
 		, sdw::UInt const & hasReflection
+		, sdw::UInt const & envMapIndex
 		, BlendComponents & components
-		, sdw::UInt & envMapIndex
 		, sdw::Vec4 & sheenReflected
 		, DebugOutputCategory const & debugOutput )
 	{
@@ -1684,5 +1541,150 @@ namespace castor3d::shader
 					, debugOutput );
 			}
 		}
+	}
+
+	void ReflectionModel::doComputePreTransmission( BackgroundModel & background
+		, BlendComponents & components
+		, sdw::Vec3 const & wsPosition
+		, sdw::Vec3 const & wsNormal
+		, sdw::Vec3 const & V
+		, sdw::Boolean const & hasEnvMap
+		, sdw::UInt const & envMapIndex
+		, sdw::UInt const & hasReflection
+		, sdw::Vec3 & specular
+		, ReflectionRefraction & output
+		, DebugOutputCategory const & debugOutput )
+	{
+		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+		doComputeReflection( envMap
+			, hasEnvMap
+			, background
+			, wsNormal
+			, wsPosition
+			, V
+			, hasReflection
+			, envMapIndex
+			, components
+			, output.diffuse
+			, specular
+			, debugOutput );
+		output.diffuse *= components.baseColour;
+		debugOutput.registerOutput( "Specular Reflection", specular );
+		debugOutput.registerOutput( "Diffuse Reflection", output.diffuse );
+
+		if ( components.hasMember( "diffuseTransmissionFactor" ) )
+		{
+			auto diffuseTransmission = m_writer.declLocale( "diffuseTransmission"
+				, vec3( 0.0_f ) );
+			doComputeDiffuse( envMap
+				, hasEnvMap
+				, background
+				, -wsNormal
+				, envMapIndex
+				, components
+				, diffuseTransmission
+				, debugOutput );
+			diffuseTransmission *= components.diffuseTransmissionColour;
+			debugOutput.registerOutput( "Diffuse Transmission", diffuseTransmission );
+
+			if ( components.hasMember( "thicknessFactor" ) )
+			{
+				diffuseTransmission *= applyVolumeAttenuation( components.getMember< sdw::Float >( "diffuseTransmissionThickness" )
+					, components.attenuationColour
+					, components.attenuationDistance );
+				debugOutput.registerOutput( "Volume Diffuse Transmission", diffuseTransmission );
+			}
+			else
+			{
+				debugOutput.registerOutput( "Volume Diffuse Transmission", diffuseTransmission );
+			}
+
+			output.diffuse = mix( output.diffuse
+				, diffuseTransmission
+				, vec3( components.diffuseTransmissionFactor ) );
+			debugOutput.registerOutput( "Diffuse Mixed With Diffuse Transmission", output.diffuse );
+		}
+		else
+		{
+			debugOutput.registerOutput( "Diffuse Transmission", 0.0_f );
+			debugOutput.registerOutput( "Volume Diffuse Transmission", 0.0_f );
+			debugOutput.registerOutput( "Diffuse Mixed With Diffuse Transmission", output.diffuse );
+		}
+	}
+
+	void ReflectionModel::doComputePostTransmission( BackgroundModel & background
+		, BlendComponents & components
+		, sdw::Vec3 const & specular
+		, sdw::Vec3 const & wsPosition
+		, sdw::Vec3 const & wsNormal
+		, sdw::Vec3 const & V
+		, sdw::Float const & NdotV
+		, sdw::Boolean const & hasEnvMap
+		, sdw::UInt const & envMapIndex
+		, sdw::UInt const & hasReflection
+		, ReflectionRefraction & output
+		, DebugOutputCategory const & debugOutput )
+	{
+		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
+		auto metalFresnel = m_writer.declLocale( "metalFresnel"
+			, computeFresnel( brdf
+				, NdotV
+				, components.perceptualRoughness
+				, components.baseColour
+				, 1.0_f ) );
+		debugOutput.registerOutput( "Metal Fresnel", metalFresnel );
+		output.metal = specular * metalFresnel;
+		debugOutput.registerOutput( "Raw Metal BRDF", output.metal );
+		auto dielectricFresnel = m_writer.declLocale( "dielectricFresnel"
+			, computeFresnel( brdf
+				, NdotV
+				, components.perceptualRoughness
+				, components.dielectricF0
+				, components.specularWeight ) );
+		debugOutput.registerOutput( "Dielectric Fresnel", dielectricFresnel );
+		output.dielectric = mix( output.diffuse, specular, dielectricFresnel );
+		debugOutput.registerOutput( "Raw Dielectric BRDF", output.dielectric );
+
+		if ( components.hasMember( "iridescenceFactor" ) )
+		{
+			output.metal = mix( output.metal
+				, specular * components.getMember< sdw::Vec3 >( "iridescenceMetallicFresnel" )
+				, vec3( components.iridescenceFactor ) );
+			debugOutput.registerOutput( "Iridescent Metal BRDF", output.metal );
+			output.dielectric = mix( output.dielectric
+				, Utils::rgbMix( output.diffuse, specular, components.getMember< sdw::Vec3 >( "iridescenceDielectricFresnel" ) )
+				, vec3( components.iridescenceFactor ) );
+			debugOutput.registerOutput( "Iridescent Dielectric BRDF", output.dielectric );
+		}
+		else
+		{
+			debugOutput.registerOutput( "Iridescent Metal BRDF", output.metal );
+			debugOutput.registerOutput( "Iridescent Dielectric BRDF", output.dielectric );
+		}
+
+		doComputeClearcoat( envMap
+			, hasEnvMap
+			, background
+			, wsPosition
+			, V
+			, hasReflection
+			, envMapIndex
+			, components
+			, output.coating
+			, debugOutput );
+		doComputeSheen( brdf
+			, envMap
+			, hasEnvMap
+			, background
+			, wsNormal
+			, wsPosition
+			, V
+			, NdotV
+			, hasReflection
+			, envMapIndex
+			, components
+			, output.sheen
+			, debugOutput );
 	}
 }
