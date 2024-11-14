@@ -85,25 +85,6 @@ namespace castor3d::shader
 			, enableVolumetric );
 	}
 
-	void PbrLightingModel::doFinish( PassShaders const & passShaders
-		, BlendComponents & components )
-	{
-		//auto ior = m_writer.declLocale( "ior"
-		//	, m_writer.ternary( ( components.hasRefraction + components.hasTransmission ) != 0_u
-		//		, sdw::Float{ components.refractionRatio }
-		//		, 1.5_f ) );
-		//components.f0 = vec3( Utils::computeF0( ior ) );
-		//components.f0 = mix( components.f0, components.colour.rgb(), vec3( components.metalness ) );
-
-		//if ( components.hasMember( "specular" ) )
-		//{
-		//	auto dielectricSpecularF0 = m_writer.declLocale( "dielectricSpecularF0"
-		//		, min( components.f0 * components.specular.rgb(), vec3( 1.0_f ) ) );
-		//	components.f0 = mix( dielectricSpecularF0, components.colour.rgb(), vec3( components.metalness ) );
-		//	components.specular = components.f0;
-		//}
-	}
-
 	sdw::Vec3 PbrLightingModel::doGetDiffuseResult( BlendComponents const & components
 		, DirectLighting const & lighting
 		, IndirectLighting const & indirect

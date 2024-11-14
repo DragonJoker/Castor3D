@@ -41,8 +41,6 @@ namespace castor3d::shader
 			, bool enableVolumetric );
 
 	protected:
-		C3D_API void doFinish( PassShaders const & passShaders
-			, BlendComponents & components )override;
 		C3D_API sdw::Vec3 doGetDiffuseResult( BlendComponents const & components
 			, DirectLighting const & lighting
 			, IndirectLighting const & indirect

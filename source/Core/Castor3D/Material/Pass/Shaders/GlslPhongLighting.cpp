@@ -89,12 +89,6 @@ namespace castor3d::shader
 			, enableVolumetric );
 	}
 
-	void PhongLightingModel::doFinish( PassShaders const & passShaders
-		, BlendComponents & components )
-	{
-		//components.f0 = components.specular;
-	}
-
 	sdw::Vec3 PhongLightingModel::doGetDiffuseResult( BlendComponents const & components
 		, DirectLighting const & lighting
 		, IndirectLighting const & indirect

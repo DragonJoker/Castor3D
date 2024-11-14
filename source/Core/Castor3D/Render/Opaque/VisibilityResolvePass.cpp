@@ -1301,11 +1301,11 @@ namespace castor3d
 										, baseSurface.worldPosition
 										, components.getDerivNormal() } );
 
-								lightingModel->finish( passShaders
+								components.finish( passShaders
 									, surface
 									, c3d_cameraDataClusters
 									, modelData
-									, components );
+									, utils );
 								auto lightSurface = shader::LightSurface::create( writer
 									, "lightSurface"
 									, c3d_cameraDataClusters.position()
