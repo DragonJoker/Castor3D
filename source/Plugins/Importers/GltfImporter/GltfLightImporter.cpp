@@ -71,35 +71,40 @@ namespace c3d_gltf
 				point->setRange( 1.0f );
 			}
 		}
-		else if ( impLight.type == fastgltf::LightType::Spot )
+		else
 		{
-			auto spot = light.getSpotLight();
+			node->yaw( 180.0_degrees );
 
-			if ( impLight.range )
+			if ( impLight.type == fastgltf::LightType::Spot )
 			{
-				spot->setRange( *impLight.range );
-			}
-			else
-			{
-				spot->setRange( 1.0f );
-			}
+				auto spot = light.getSpotLight();
 
-			if ( impLight.innerConeAngle )
-			{
-				spot->setInnerCutOff( castor::Angle::fromRadians( *impLight.innerConeAngle ) );
-			}
-			else if ( impLight.outerConeAngle )
-			{
-				spot->setInnerCutOff( castor::Angle::fromRadians( *impLight.outerConeAngle ) );
-			}
+				if ( impLight.range )
+				{
+					spot->setRange( *impLight.range );
+				}
+				else
+				{
+					spot->setRange( 1.0f );
+				}
 
-			if ( impLight.outerConeAngle )
-			{
-				spot->setOuterCutOff( castor::Angle::fromRadians( *impLight.outerConeAngle ) );
-			}
-			else if ( impLight.innerConeAngle )
-			{
-				spot->setOuterCutOff( castor::Angle::fromRadians( *impLight.innerConeAngle ) );
+				if ( impLight.innerConeAngle )
+				{
+					spot->setInnerCutOff( castor::Angle::fromRadians( *impLight.innerConeAngle ) );
+				}
+				else if ( impLight.outerConeAngle )
+				{
+					spot->setInnerCutOff( castor::Angle::fromRadians( *impLight.outerConeAngle ) );
+				}
+
+				if ( impLight.outerConeAngle )
+				{
+					spot->setOuterCutOff( castor::Angle::fromRadians( *impLight.outerConeAngle ) );
+				}
+				else if ( impLight.innerConeAngle )
+				{
+					spot->setOuterCutOff( castor::Angle::fromRadians( *impLight.innerConeAngle ) );
+				}
 			}
 		}
 
