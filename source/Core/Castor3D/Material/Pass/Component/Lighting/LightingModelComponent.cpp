@@ -41,19 +41,21 @@ namespace castor
 			auto clearcoatBrdf = object.getClearcoatBrdfName();
 
 			if ( auto & model = engine.getLightingModelFactory().getModel( baseName );
-				diffuseBrdf == model.defaultDiffuseBrdf.name
-					&& specularBrdf == model.defaultSpecularBrdf.name
-					&& sheenBrdf == model.defaultSheenBrdf.name
-					&& clearcoatBrdf == model.defaultClearcoatBrdf.name )
+				diffuseBrdf == model.defaultDesc.diffuse.name
+					&& specularBrdf == model.defaultDesc.specular.name
+					&& sheenBrdf == model.defaultDesc.sheen.name
+					&& clearcoatBrdf == model.defaultDesc.clearcoat.name
+					&& clearcoatBrdf == model.defaultDesc.scattering.name )
 			{
 				result = writeNameOpt( file, cuT( "lighting_model" ), baseName, engine.getDefaultLightingModelName() );
 			}
 			else if ( auto block = beginBlock( file, cuT( "lighting_model" ), baseName ) )
 			{
-				result = block->writeNameOpt( file, cuT( "diffuse_brdf" ), object.getDiffuseBrdfName(), model.defaultDiffuseBrdf.name )
-					&& block->writeNameOpt( file, cuT( "specular_brdf" ), object.getSpecularBrdfName(), model.defaultSpecularBrdf.name )
-					&& block->writeNameOpt( file, cuT( "sheen_brdf" ), object.getSheenBrdfName(), model.defaultSheenBrdf.name )
-					&& block->writeNameOpt( file, cuT( "clearcoat_brdf" ), object.getClearcoatBrdfName(), model.defaultClearcoatBrdf.name );
+				result = block->writeNameOpt( file, cuT( "diffuse_brdf" ), object.getDiffuseBrdfName(), model.defaultDesc.diffuse.name )
+					&& block->writeNameOpt( file, cuT( "specular_brdf" ), object.getSpecularBrdfName(), model.defaultDesc.specular.name )
+					&& block->writeNameOpt( file, cuT( "sheen_brdf" ), object.getSheenBrdfName(), model.defaultDesc.sheen.name )
+					&& block->writeNameOpt( file, cuT( "clearcoat_brdf" ), object.getClearcoatBrdfName(), model.defaultDesc.clearcoat.name )
+					&& block->writeNameOpt( file, cuT( "scattering_model" ), object.getScatteringModelName(), model.defaultDesc.scattering.name );
 			}
 
 			return result;
@@ -72,10 +74,7 @@ namespace castor3d
 			RootContext * root{};
 			PassContext * pass{};
 			castor::String lightingModel{};
-			castor::String diffuseBrdf{};
-			castor::String specularBrdf{};
-			castor::String sheenBrdf{};
-			castor::String clearcoatBrdf{};
+			shader::LightingModelNames descNames;
 			bool defaultModel{};
 		};
 
@@ -124,7 +123,7 @@ namespace castor3d
 			}
 			else
 			{
-				params[0]->get( blockContext->diffuseBrdf );
+				params[0]->get( blockContext->descNames.diffuse );
 			}
 		}
 		CU_EndAttribute()
@@ -141,7 +140,7 @@ namespace castor3d
 			}
 			else
 			{
-				params[0]->get( blockContext->specularBrdf );
+				params[0]->get( blockContext->descNames.specular );
 			}
 		}
 		CU_EndAttribute()
@@ -158,7 +157,7 @@ namespace castor3d
 			}
 			else
 			{
-				params[0]->get( blockContext->sheenBrdf );
+				params[0]->get( blockContext->descNames.sheen );
 			}
 		}
 		CU_EndAttribute()
@@ -175,7 +174,24 @@ namespace castor3d
 			}
 			else
 			{
-				params[0]->get( blockContext->clearcoatBrdf );
+				params[0]->get( blockContext->descNames.clearcoat );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserPassScatteringModel, ModelContext )
+		{
+			if ( !blockContext->pass && !blockContext->root )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->descNames.scattering );
 			}
 		}
 		CU_EndAttribute()
@@ -184,10 +200,7 @@ namespace castor3d
 		{
 			auto & engine = *getEngine( *blockContext->root );
 			auto lightingModelId = engine.getLightingModelFactory().getLightingModelId( blockContext->lightingModel
-				, blockContext->diffuseBrdf
-				, blockContext->specularBrdf
-				, blockContext->sheenBrdf
-				, blockContext->clearcoatBrdf );
+				, blockContext->descNames );
 
 			if ( lightingModelId == 0 )
 			{
@@ -205,10 +218,7 @@ namespace castor3d
 			auto const & engine = *getEngine( *blockContext->pass );
 			auto & component = getPassComponent< LightingModelComponent >( *blockContext->pass );
 			auto lightingModelId = engine.getLightingModelFactory().getLightingModelId( blockContext->lightingModel
-				, blockContext->diffuseBrdf
-				, blockContext->specularBrdf
-				, blockContext->sheenBrdf
-				, blockContext->clearcoatBrdf );
+				, blockContext->descNames );
 
 			if ( lightingModelId == 0 )
 			{
@@ -278,6 +288,11 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eText >() } );
 		castor::addParserT( parsers
 			, uint32_t( CSCNSection::eDefaultLightingModel )
+			, cuT( "scattering_model" )
+			, lgtmdl::parserPassScatteringModel
+			, { castor::makeParameter< castor::ParameterType::eText >() } );
+		castor::addParserT( parsers
+			, uint32_t( CSCNSection::eDefaultLightingModel )
 			, uint32_t( CSCNSection::eRoot )
 			, cuT( "}" )
 			, lgtmdl::parserPassDefaultLightingModelEnd );
@@ -307,6 +322,11 @@ namespace castor3d
 			, uint32_t( CSCNSection::eLightingModel )
 			, cuT( "clearcoat_brdf" )
 			, lgtmdl::parserPassClearcoatBRDF
+			, { castor::makeParameter< castor::ParameterType::eText >() } );
+		castor::addParserT( parsers
+			, uint32_t( CSCNSection::eLightingModel )
+			, cuT( "scattering_model" )
+			, lgtmdl::parserPassScatteringModel
 			, { castor::makeParameter< castor::ParameterType::eText >() } );
 		castor::addParserT( parsers
 			, uint32_t( CSCNSection::eLightingModel )
@@ -377,6 +397,11 @@ namespace castor3d
 	castor::String LightingModelComponent::getClearcoatBrdfName()const
 	{
 		return getOwner()->getOwner()->getEngine()->getLightingModelFactory().getClearcoatBrdfName( getLightingModelId() );
+	}
+
+	castor::String LightingModelComponent::getScatteringModelName()const
+	{
+		return getOwner()->getOwner()->getEngine()->getLightingModelFactory().getScatteringModelName( getLightingModelId() );
 	}
 
 	PassComponentUPtr LightingModelComponent::doClone( Pass & pass )const

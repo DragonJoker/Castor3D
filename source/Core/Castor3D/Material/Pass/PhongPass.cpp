@@ -23,6 +23,9 @@ namespace castor3d
 	shader::ClearcoatBrdfDesc const PhongPass::DefaultClearcoatBrdf = { castor::String{ shader::PhongClearcoatBRDF::Name }, shader::PhongClearcoatBRDF::create };
 	shader::ClearcoatBrdfArray const PhongPass::ClearcoatBrdfs{ DefaultClearcoatBrdf };
 
+	shader::ScatteringModelDesc const PhongPass::DefaultScatteringModel = { castor::String{ shader::ScatteringModel::Name }, shader::ScatteringModel::create };
+	shader::ScatteringModelArray const PhongPass::ScatteringModels{ DefaultScatteringModel };
+
 	PassUPtr PhongPass::create( LightingModelID lightingModelId
 		, Material & parent )
 	{

@@ -19,19 +19,13 @@ namespace castor3d::shader
 			, Materials const & materials
 			, Utils & utils
 			, BRDFHelpers & brdfHelpers
-			, DiffuseBRDFPtr diffuse
-			, SpecularBRDFPtr specular
-			, SheenBRDFPtr sheen
-			, ClearcoatBRDFPtr clearcoat
+			, LightingModelSpec spec
 			, Shadow & shadowModel
 			, Lights & lights
 			, bool enableVolumetric );
 		C3D_API static castor::StringView getName();
 		C3D_API static LightingModelPtr create( LightingModelID lightingModelId
-			, DiffuseBrdfDesc const & diffuseBrdf
-			, SpecularBrdfDesc const & specularBrdf
-			, SheenBrdfDesc const & sheenBrdf
-			, ClearcoatBrdfDesc const & clearcoatBrdf
+			, LightingModelDesc const & desc
 			, sdw::ShaderWriter & writer
 			, Materials const & materials
 			, Utils & utils

@@ -1287,10 +1287,11 @@ namespace c3d_assimp
 			auto & factory = engine.getLightingModelFactory();
 
 			if ( engine.getDefaultLightingModel() != factory.getLightingModelId( castor::String{ castor3d::PhongPass::LightingModel }
-					, castor3d::PhongPass::DefaultDiffuseBrdf.name
+				, { castor3d::PhongPass::DefaultDiffuseBrdf.name
 					, castor3d::PhongPass::DefaultSpecularBrdf.name
 					, castor3d::PhongPass::DefaultSheenBrdf.name
-					, castor3d::PhongPass::DefaultClearcoatBrdf.name ) )
+					, castor3d::PhongPass::DefaultClearcoatBrdf.name
+					, castor3d::PhongPass::DefaultScatteringModel.name } ) )
 			{
 				return engine.getDefaultLightingModel();
 			}
@@ -1302,16 +1303,18 @@ namespace c3d_assimp
 			case aiShadingMode_Phong:
 			case aiShadingMode_Blinn:
 				return factory.getLightingModelId( castor::String{ castor3d::PhongPass::LightingModel }
-					, castor3d::PhongPass::DefaultDiffuseBrdf.name
-					, castor3d::PhongPass::DefaultSpecularBrdf.name
-					, castor3d::PhongPass::DefaultSheenBrdf.name
-					, castor3d::PhongPass::DefaultClearcoatBrdf.name );
+					, { castor3d::PhongPass::DefaultDiffuseBrdf.name
+						, castor3d::PhongPass::DefaultSpecularBrdf.name
+						, castor3d::PhongPass::DefaultSheenBrdf.name
+						, castor3d::PhongPass::DefaultClearcoatBrdf.name
+						, castor3d::PhongPass::DefaultScatteringModel.name } );
 			case aiShadingMode_Toon:
 				return factory.getLightingModelId( toon::shader::ToonPhongLightingModel::getName()
-					, castor3d::PhongPass::DefaultDiffuseBrdf.name
-					, castor3d::PhongPass::DefaultSpecularBrdf.name
-					, castor3d::PhongPass::DefaultSheenBrdf.name
-					, castor3d::PhongPass::DefaultClearcoatBrdf.name );
+					, { castor3d::PhongPass::DefaultDiffuseBrdf.name
+						, castor3d::PhongPass::DefaultSpecularBrdf.name
+						, castor3d::PhongPass::DefaultSheenBrdf.name
+						, castor3d::PhongPass::DefaultClearcoatBrdf.name
+						, castor3d::PhongPass::DefaultScatteringModel.name } );
 			case aiShadingMode_OrenNayar:
 			case aiShadingMode_Minnaert:
 			case aiShadingMode_CookTorrance:
@@ -1320,23 +1323,26 @@ namespace c3d_assimp
 #pragma GCC diagnostic ignored "-Wswitch"
 			case aiShadingMode_PBR_BRDF:
 				return factory.getLightingModelId( castor::String{ castor3d::PbrPass::LightingModel }
-					, castor3d::PbrPass::DefaultDiffuseBrdf.name
-					, castor3d::PbrPass::DefaultSpecularBrdf.name
-					, castor3d::PbrPass::DefaultSheenBrdf.name
-					, castor3d::PbrPass::DefaultClearcoatBrdf.name );
+					, { castor3d::PbrPass::DefaultDiffuseBrdf.name
+						, castor3d::PbrPass::DefaultSpecularBrdf.name
+						, castor3d::PbrPass::DefaultSheenBrdf.name
+						, castor3d::PbrPass::DefaultClearcoatBrdf.name
+						, castor3d::PbrPass::DefaultScatteringModel.name } );
 #pragma GCC diagnostic pop
 			case aiShadingMode_Unlit:
 				return factory.getLightingModelId( castor::String{ castor3d::PbrPass::LightingModel }
-					, castor3d::PbrPass::DefaultDiffuseBrdf.name
-					, castor3d::PbrPass::DefaultSpecularBrdf.name
-					, castor3d::PbrPass::DefaultSheenBrdf.name
-					, castor3d::PbrPass::DefaultClearcoatBrdf.name );
+					, { castor3d::PbrPass::DefaultDiffuseBrdf.name
+						, castor3d::PbrPass::DefaultSpecularBrdf.name
+						, castor3d::PbrPass::DefaultSheenBrdf.name
+						, castor3d::PbrPass::DefaultClearcoatBrdf.name
+						, castor3d::PbrPass::DefaultScatteringModel.name } );
 			default:
 				return factory.getLightingModelId( castor::String{ castor3d::PhongPass::LightingModel }
-					, castor3d::PbrPass::DefaultDiffuseBrdf.name
-					, castor3d::PbrPass::DefaultSpecularBrdf.name
-					, castor3d::PbrPass::DefaultSheenBrdf.name
-					, castor3d::PbrPass::DefaultClearcoatBrdf.name );
+					, { castor3d::PbrPass::DefaultDiffuseBrdf.name
+						, castor3d::PbrPass::DefaultSpecularBrdf.name
+						, castor3d::PbrPass::DefaultSheenBrdf.name
+						, castor3d::PbrPass::DefaultClearcoatBrdf.name
+						, castor3d::PbrPass::DefaultScatteringModel.name } );
 			}
 		}
 	}

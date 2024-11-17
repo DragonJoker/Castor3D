@@ -18,6 +18,32 @@ See LICENSE file in root folder
 
 namespace castor3d::shader
 {
+	class ScatteringModel
+	{
+	public:
+		C3D_API ScatteringModel( sdw::ShaderWriter & writer );
+		C3D_API virtual ~ScatteringModel() = default;
+
+		C3D_API virtual void initialiseBackground( BackgroundModel & background
+			, Shadow & shadowModel );
+		C3D_API virtual sdw::Vec3 computeRadiance( Light const & light
+			, sdw::Vec3 const & lightDirection )const;
+		C3D_API virtual void computeScattering( LightingModel & lighting
+			, ShadowData const & shadows
+			, sdw::Int const shadowMapIndex
+			, sdw::Vec3 const & radiance
+			, sdw::Vec2 const & lightIntensity
+			, BlendComponents const & components
+			, LightSurface const & lightSurface
+			, sdw::Vec3 output );
+
+		static castor::StringView constexpr Name{ cuT( "default" ) };
+		static ScatteringModelPtr create( sdw::ShaderWriter & writer );
+
+	protected:
+		sdw::ShaderWriter & m_writer;
+	};
+
 	class LightingModel
 	{
 	public:
@@ -26,10 +52,7 @@ namespace castor3d::shader
 			, Materials const & materials
 			, Utils & utils
 			, BRDFHelpers & brdfHelpers
-			, DiffuseBRDFPtr diffuse
-			, SpecularBRDFPtr specular
-			, SheenBRDFPtr sheen
-			, ClearcoatBRDFPtr clearcoat
+			, LightingModelSpec spec
 			, Shadow & shadowModel
 			, Lights & lights
 			, bool hasIblSupport
@@ -147,6 +170,12 @@ namespace castor3d::shader
 			, DirectLighting & output );
 		//\}
 		//\}
+		C3D_API void applyVolumetric( ShadowData const & shadows
+			, sdw::Int const shadowMapIndex
+			, sdw::Vec2 const & lightIntensity
+			, LightSurface const & lightSurface
+			, sdw::Vec3 output
+			, bool multiply );
 
 	protected:
 		C3D_API void doApplyShadows( DirectionalShadowData const & light
@@ -193,23 +222,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & radiance
 			, sdw::UInt const & receivesShadows
 			, sdw::Vec3 & output );
-		C3D_API void doApplyVolumetric( ShadowData const & shadows
-			, sdw::Int const shadowMapIndex
-			, sdw::Vec2 const & lightIntensity
-			, LightSurface const & lightSurface
-			, sdw::Vec3 output
-			, bool multiply );
 
-		C3D_API virtual void doInitialiseBackground( BackgroundModel & background );
-		C3D_API virtual sdw::Vec3 doComputeRadiance( Light const & light
-			, sdw::Vec3 const & lightDirection )const;
-		C3D_API virtual void doComputeScatteringTerm( ShadowData const & shadows
-			, sdw::Int const shadowMapIndex
-			, sdw::Vec3 const & radiance
-			, sdw::Vec2 const & lightIntensity
-			, BlendComponents const & components
-			, LightSurface const & lightSurface
-			, sdw::Vec3 output );
 		C3D_API virtual void doInitLightSpecifics( LightSurface const & lightSurface
 			, BlendComponents const & components );
 		C3D_API virtual DerivFloat doGetNdotL( LightSurface const & lightSurface
@@ -281,6 +294,7 @@ namespace castor3d::shader
 		SpecularBRDFPtr m_specular;
 		SheenBRDFPtr m_sheen;
 		ClearcoatBRDFPtr m_clearcoat;
+		ScatteringModelPtr m_scattering;
 		bool m_hasBackgroundReflectionsSupport;
 		bool m_hasBackgroundRefractionSupport;
 		bool m_hasIblSupport;

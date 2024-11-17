@@ -54,24 +54,10 @@ extern "C"
 
 	C3D_AtmosphereScattering_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
 	{
-		engine->registerLightingModel( castor::String{ atmosphere_scattering::AtmospherePhongLightingModel::getName() }
-			, castor3d::PhongPass::DefaultDiffuseBrdf
-			, castor3d::PhongPass::DefaultSpecularBrdf
-			, castor3d::PhongPass::DefaultSheenBrdf
-			, castor3d::PhongPass::DefaultClearcoatBrdf
-			, atmosphere_scattering::AtmospherePhongLightingModel::create );
-		engine->registerLightingModel( castor::String{ atmosphere_scattering::AtmospherePbrLightingModel::getName() }
-			, castor3d::PbrPass::DefaultDiffuseBrdf
-			, castor3d::PbrPass::DefaultSpecularBrdf
-			, castor3d::PbrPass::DefaultSheenBrdf
-			, castor3d::PbrPass::DefaultClearcoatBrdf
-			, atmosphere_scattering::AtmospherePbrLightingModel::create );
+		engine->registerScatteringModel( { castor::String{ atmosphere_scattering::AtmosphereScatteringModel::Name }
+			, atmosphere_scattering::AtmosphereScatteringModel::create } );
 		engine->registerBackgroundModel( atmosphere_scattering::AtmosphereBackgroundModel::Name
 			, atmosphere_scattering::AtmosphereBackgroundModel::create );
-		engine->registerPassModel( { castor::String{ atmosphere_scattering::AtmospherePhongLightingModel::getName() }
-			, castor3d::PbrPass::create } );
-		engine->registerPassModel( { castor::String{ atmosphere_scattering::AtmospherePbrLightingModel::getName() }
-			, castor3d::PbrPass::create } );
 		engine->registerParsers( atmosphere_scattering::AtmosphereBackgroundModel::PluginType
 			, atmosphere_scattering::createParsers()
 			, atmosphere_scattering::createSections()
@@ -80,11 +66,8 @@ extern "C"
 
 	C3D_AtmosphereScattering_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->unregisterBackgroundModel( atmosphere_scattering::AtmosphereBackgroundModel::Name );
 		engine->unregisterParsers( atmosphere_scattering::AtmosphereBackgroundModel::PluginType );
-		engine->unregisterPassModel( castor::String{ atmosphere_scattering::AtmospherePhongLightingModel::getName() } );
-		engine->unregisterPassModel( castor::String{ atmosphere_scattering::AtmospherePbrLightingModel::getName() } );
-		engine->unregisterLightingModel( castor::String{ atmosphere_scattering::AtmospherePhongLightingModel::getName() } );
-		engine->unregisterLightingModel( castor::String{ atmosphere_scattering::AtmospherePbrLightingModel::getName() } );
+		engine->unregisterBackgroundModel( atmosphere_scattering::AtmosphereBackgroundModel::Name );
+		engine->unregisterScatteringModel( castor::String{ atmosphere_scattering::AtmosphereScatteringModel::Name } );
 	}
 }

@@ -401,26 +401,17 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Registers a lighting model.
-		 *\param[in]	baseName				The lighting model base name.
-		 *\param[in]	defaultDiffuseBrdf		The default diffuse BRDF.
-		 *\param[in]	defaultSpecularBrdf		The default specular BRDF.
-		 *\param[in]	defaultSheenBrdf		The default sheen BRDF.
-		 *\param[in]	defaultClearcoatBrdf	The default clearcoat BRDF.
-		 *\param[in]	creator					The model creation function.
+		 *\param[in]	baseName	The lighting model base name.
+		 *\param[in]	defaultDesc	The default model description.
+		 *\param[in]	creator		The model creation function.
 		 *\~french
 		 *\brief		Enregistre un modèle d'éclairage.
-		 *\param[in]	baseName				Le nom de base du modèle d'éclairage.
-		 *\param[in]	defaultDiffuseBrdf		La BRDF de diffuse par défaut.
-		 *\param[in]	defaultSpecularBrdf		La BRDF de spéculaire par défaut.
-		 *\param[in]	defaultSheenBrdf		La BRDF de sheen par défaut.
-		 *\param[in]	defaultClearcoatBrdf	La BRDF de clearcoat par défaut.
-		 *\param[in]	creator					La fonction de création du modèle.
+		 *\param[in]	baseName	Le nom de base du modèle d'éclairage.
+		 *\param[in]	defaultDesc	La description du modèle par défaut.
+		 *\param[in]	creator		La fonction de création du modèle.
 		 */
 		C3D_API void registerLightingModel( castor::String const & baseName
-			, shader::DiffuseBrdfDesc const & defaultDiffuseBrdf
-			, shader::SpecularBrdfDesc const & defaultSpecularBrdf
-			, shader::SheenBrdfDesc const & defaultSheenBrdf
-			, shader::ClearcoatBrdfDesc const & defaultClearcoatBrdf
+			, shader::LightingModelDesc const & defaultDesc
 			, shader::LightingModelCreator creator )const;
 		/**
 		 *\~english
@@ -503,6 +494,24 @@ namespace castor3d
 		 *\param[in]	name	Le nom de la BRDF.
 		 */
 		C3D_API void unregisterClearcoatBrdf( castor::String const & name )const;
+		/**
+		 *\~english
+		 *\brief		Registers a scattering model.
+		 *\param[in]	desc	The model description.
+		 *\~french
+		 *\brief		Enregistre modèle de scattering.
+		 *\param[in]	desc	La description du modèle.
+		 */
+		C3D_API void registerScatteringModel( shader::ScatteringModelDesc const & desc )const;
+		/**
+		 *\~english
+		 *\brief		Unegisters a scattering model.
+		 *\param[in]	name	The model name.
+		 *\~french
+		 *\brief		Désenregistre un modèle de scattering.
+		 *\param[in]	name	Le nom du modèle.
+		 */
+		C3D_API void unregisterScatteringModel( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Registers a Background Model.

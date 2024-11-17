@@ -253,6 +253,10 @@ namespace castor3d
 		{
 			registerClearcoatBrdf( desc );
 		}
+		for ( auto & desc : PhongPass::ScatteringModels )
+		{
+			registerScatteringModel( desc );
+		}
 
 		for ( auto & desc : PbrPass::DiffuseBrdfs )
 		{
@@ -270,18 +274,24 @@ namespace castor3d
 		{
 			registerClearcoatBrdf( desc );
 		}
+		for ( auto & desc : PbrPass::ScatteringModels )
+		{
+			registerScatteringModel( desc );
+		}
 
 		registerLightingModel( castor::String{ PhongPass::LightingModel }
-			, PhongPass::DefaultDiffuseBrdf
-			, PhongPass::DefaultSpecularBrdf
-			, PhongPass::DefaultSheenBrdf
-			, PhongPass::DefaultClearcoatBrdf
+			, { PhongPass::DefaultDiffuseBrdf
+				, PhongPass::DefaultSpecularBrdf
+				, PhongPass::DefaultSheenBrdf
+				, PhongPass::DefaultClearcoatBrdf
+				, PhongPass::DefaultScatteringModel }
 			, shader::PhongLightingModel::create );
 		registerLightingModel( castor::String{ PbrPass::LightingModel }
-			, PbrPass::DefaultDiffuseBrdf
-			, PbrPass::DefaultSpecularBrdf
-			, PbrPass::DefaultSheenBrdf
-			, PbrPass::DefaultClearcoatBrdf
+			, { PbrPass::DefaultDiffuseBrdf
+				, PbrPass::DefaultSpecularBrdf
+				, PbrPass::DefaultSheenBrdf
+				, PbrPass::DefaultClearcoatBrdf
+				, PbrPass::DefaultScatteringModel }
 			, shader::PbrLightingModel::create );
 
 		registerPassModel( { castor::String{ PhongPass::LightingModel }
@@ -291,10 +301,11 @@ namespace castor3d
 
 		auto & model = getLightingModelFactory().getModel( castor::String{ PbrPass::LightingModel } );
 		m_lightingModelId = getLightingModelFactory().getLightingModelId( model.name
-			, model.defaultDiffuseBrdf.name
-			, model.defaultSpecularBrdf.name
-			, model.defaultSheenBrdf.name
-			, model.defaultClearcoatBrdf.name );
+			, { model.defaultDesc.diffuse.name
+				, model.defaultDesc.specular.name
+				, model.defaultDesc.sheen.name
+				, model.defaultDesc.clearcoat.name
+				, model.defaultDesc.scattering.name } );
 
 		registerParsers( ControlsManager::Name
 			, ControlsManager::createParsers()
@@ -781,17 +792,11 @@ namespace castor3d
 	}
 
 	void Engine::registerLightingModel( castor::String const & baseName
-		, shader::DiffuseBrdfDesc const & defaultDiffuseBrdf
-		, shader::SpecularBrdfDesc const & defaultSpecularBrdf
-		, shader::SheenBrdfDesc const & defaultSheenBrdf
-		, shader::ClearcoatBrdfDesc const & defaultClearcoatBrdf
+		, shader::LightingModelDesc const & defaultDesc
 		, shader::LightingModelCreator creator )const
 	{
 		getLightingModelFactory().registerType( baseName
-			, defaultDiffuseBrdf
-			, defaultSpecularBrdf
-			, defaultSheenBrdf
-			, defaultClearcoatBrdf
+			, defaultDesc
 			, castor::move( creator ) );
 	}
 
@@ -838,6 +843,16 @@ namespace castor3d
 	void Engine::unregisterClearcoatBrdf( castor::String const & name )const
 	{
 		getLightingModelFactory().unregisterClearcoatBrdf( name );
+	}
+
+	void Engine::registerScatteringModel( shader::ScatteringModelDesc const & desc )const
+	{
+		getLightingModelFactory().registerScatteringModel( desc );
+	}
+
+	void Engine::unregisterScatteringModel( castor::String const & name )const
+	{
+		getLightingModelFactory().unregisterScatteringModel( name );
 	}
 
 	BackgroundModelID Engine::registerBackgroundModel( castor::String const & name

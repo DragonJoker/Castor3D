@@ -77,10 +77,7 @@ namespace toon::shader
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
 		, c3d::BRDFHelpers & brdfHelpers
-		, c3d::DiffuseBRDFPtr diffuse
-		, c3d::SpecularBRDFPtr specular
-		, c3d::SheenBRDFPtr sheen
-		, c3d::ClearcoatBRDFPtr clearcoat
+		, c3d::LightingModelSpec spec
 		, c3d::Shadow & shadowModel
 		, c3d::Lights & lights
 		, bool enableVolumetric )
@@ -89,10 +86,7 @@ namespace toon::shader
 			, materials
 			, utils
 			, brdfHelpers
-			, std::move( diffuse )
-			, std::move( specular )
-			, std::move( sheen )
-			, std::move( clearcoat )
+			, std::move( spec )
 			, shadowModel
 			, lights
 			, enableVolumetric }
@@ -106,10 +100,7 @@ namespace toon::shader
 	}
 
 	c3d::LightingModelPtr ToonPhongLightingModel::create( castor3d::LightingModelID lightingModelId
-		, c3d::DiffuseBrdfDesc const & diffuseBrdf
-		, c3d::SpecularBrdfDesc const & specularBrdf
-		, c3d::SheenBrdfDesc const & sheenBrdf
-		, c3d::ClearcoatBrdfDesc const & clearcoatBrdf
+		, c3d::LightingModelDesc const & desc
 		, sdw::ShaderWriter & writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
@@ -123,18 +114,21 @@ namespace toon::shader
 			, materials
 			, utils
 			, brdfHelpers
-			, ( diffuseBrdf.create
-				? diffuseBrdf.create( writer, brdfHelpers )
-				: castor3d::PhongPass::DefaultDiffuseBrdf.create( writer, brdfHelpers ) )
-			, ( specularBrdf.create
-				? specularBrdf.create( writer, brdfHelpers )
-				: castor3d::PhongPass::DefaultSpecularBrdf.create( writer, brdfHelpers ) )
-			, ( sheenBrdf.create
-				? sheenBrdf.create( writer, brdfHelpers )
-				: castor3d::PhongPass::DefaultSheenBrdf.create( writer, brdfHelpers ) )
-			, ( clearcoatBrdf.create
-				? clearcoatBrdf.create( writer, brdfHelpers )
-				: castor3d::PhongPass::DefaultClearcoatBrdf.create( writer, brdfHelpers ) )
+			, c3d::LightingModelSpec{ ( desc.diffuse.create
+					? desc.diffuse.create( writer, brdfHelpers )
+					: castor3d::PhongPass::DefaultDiffuseBrdf.create( writer, brdfHelpers ) )
+				, ( desc.specular.create
+					? desc.specular.create( writer, brdfHelpers )
+					: castor3d::PhongPass::DefaultSpecularBrdf.create( writer, brdfHelpers ) )
+				, ( desc.sheen.create
+					? desc.sheen.create( writer, brdfHelpers )
+					: castor3d::PhongPass::DefaultSheenBrdf.create( writer, brdfHelpers ) )
+				, ( desc.clearcoat.create
+					? desc.clearcoat.create( writer, brdfHelpers )
+					: castor3d::PhongPass::DefaultClearcoatBrdf.create( writer, brdfHelpers ) )
+				, ( desc.scattering.create
+					? desc.scattering.create( writer )
+					: castor3d::PhongPass::DefaultScatteringModel.create( writer ) ) }
 			, shadowModel
 			, lights
 			, enableVolumetric );
@@ -182,10 +176,7 @@ namespace toon::shader
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
 		, c3d::BRDFHelpers & brdfHelpers
-		, c3d::DiffuseBRDFPtr diffuse
-		, c3d::SpecularBRDFPtr specular
-		, c3d::SheenBRDFPtr sheen
-		, c3d::ClearcoatBRDFPtr clearcoat
+		, c3d::LightingModelSpec spec
 		, c3d::Shadow & shadowModel
 		, c3d::Lights & lights
 		, bool enableVolumetric )
@@ -194,10 +185,7 @@ namespace toon::shader
 			, materials
 			, utils
 			, brdfHelpers
-			, std::move( diffuse )
-			, std::move( specular )
-			, std::move( sheen )
-			, std::move( clearcoat )
+			, std::move( spec )
 			, shadowModel
 			, lights
 			, enableVolumetric }
@@ -211,10 +199,7 @@ namespace toon::shader
 	}
 
 	c3d::LightingModelPtr ToonPbrLightingModel::create( castor3d::LightingModelID lightingModelId
-		, c3d::DiffuseBrdfDesc const & diffuseBrdf
-		, c3d::SpecularBrdfDesc const & specularBrdf
-		, c3d::SheenBrdfDesc const & sheenBrdf
-		, c3d::ClearcoatBrdfDesc const & clearcoatBrdf
+		, c3d::LightingModelDesc const & desc
 		, sdw::ShaderWriter & writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
@@ -228,18 +213,21 @@ namespace toon::shader
 			, materials
 			, utils
 			, brdfHelpers
-			, ( diffuseBrdf.create
-				? diffuseBrdf.create( writer, brdfHelpers )
-				: castor3d::PbrPass::DefaultDiffuseBrdf.create( writer, brdfHelpers ) )
-			, ( specularBrdf.create
-				? specularBrdf.create( writer, brdfHelpers )
-				: castor3d::PbrPass::DefaultSpecularBrdf.create( writer, brdfHelpers ) )
-			, ( sheenBrdf.create
-				? sheenBrdf.create( writer, brdfHelpers )
-				: castor3d::PbrPass::DefaultSheenBrdf.create( writer, brdfHelpers ) )
-			, ( clearcoatBrdf.create
-				? clearcoatBrdf.create( writer, brdfHelpers )
-				: castor3d::PbrPass::DefaultClearcoatBrdf.create( writer, brdfHelpers ) )
+			, c3d::LightingModelSpec{ ( desc.diffuse.create
+					? desc.diffuse.create( writer, brdfHelpers )
+					: castor3d::PbrPass::DefaultDiffuseBrdf.create( writer, brdfHelpers ) )
+				, ( desc.specular.create
+					? desc.specular.create( writer, brdfHelpers )
+					: castor3d::PbrPass::DefaultSpecularBrdf.create( writer, brdfHelpers ) )
+				, ( desc.sheen.create
+					? desc.sheen.create( writer, brdfHelpers )
+					: castor3d::PbrPass::DefaultSheenBrdf.create( writer, brdfHelpers ) )
+				, ( desc.clearcoat.create
+					? desc.clearcoat.create( writer, brdfHelpers )
+					: castor3d::PbrPass::DefaultClearcoatBrdf.create( writer, brdfHelpers ) )
+				, ( desc.scattering.create
+					? desc.scattering.create( writer )
+					: castor3d::PbrPass::DefaultScatteringModel.create( writer ) )}
 			, shadowModel
 			, lights
 			, enableVolumetric );

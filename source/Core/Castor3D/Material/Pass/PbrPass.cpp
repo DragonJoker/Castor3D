@@ -31,6 +31,9 @@ namespace castor3d
 	shader::ClearcoatBrdfDesc const PbrPass::DefaultClearcoatBrdf = { castor::String{ shader::ClearcoatBRDF::Name }, shader::ClearcoatBRDF::create };
 	shader::ClearcoatBrdfArray const PbrPass::ClearcoatBrdfs{ { castor::String{ shader::ClearcoatBRDF::Name }, shader::ClearcoatBRDF::create } };
 
+	shader::ScatteringModelDesc const PbrPass::DefaultScatteringModel = { castor::String{ shader::ScatteringModel::Name }, shader::ScatteringModel::create };
+	shader::ScatteringModelArray const PbrPass::ScatteringModels{ DefaultScatteringModel };
+
 	PassUPtr PbrPass::create( LightingModelID lightingModelId
 		, Material & parent )
 	{
