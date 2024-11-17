@@ -2,6 +2,7 @@
 
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
+#include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -28,14 +29,16 @@ namespace castor3d::shader
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computePhongDiffuse"
 			, [this]( c3d::BlendComponents const & /*components*/
 				, c3d::LightSurface const & /*lightSurface*/
-				, sdw::Vec3 const & lightIntensity
+				, sdw::Vec3 const & radiance
+				, sdw::Float const & intensity
 				, sdw::Float const & /*NdotL*/ )
 			{
-				m_writer.returnStmt( lightIntensity );
+				m_writer.returnStmt( radiance * intensity );
 			}
 			, c3d::InBlendComponents{ m_writer, "components", pcomponents }
 			, c3d::InLightSurface{ m_writer, "lightSurface", plightSurface }
-			, sdw::InVec3{ m_writer, "lightIntensity" }
+			, sdw::InVec3{ m_writer, "radiance" }
+			, sdw::InFloat{ m_writer, "intensity" }
 			, sdw::InFloat{ m_writer, "NdotL" } );
 	}
 

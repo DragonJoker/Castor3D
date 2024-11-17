@@ -28,7 +28,8 @@ namespace disney::shader
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeDisneyDiffuse"
 			, [this]( c3d::BlendComponents const & components
 				, c3d::LightSurface const & lightSurface
-				, sdw::Vec3 const & lightIntensity
+				, sdw::Vec3 const & radiance
+				, sdw::Float const & intensity
 				, sdw::Float const & NdotL )
 			{
 				auto fl = m_writer.declLocale< sdw::Float >( "fl"
@@ -38,15 +39,16 @@ namespace disney::shader
 				auto rr = m_writer.declLocale< sdw::Float >( "rr"
 					, 2.0_f * components.perceptualRoughness * lightSurface.HdotL().value() * lightSurface.HdotL().value() );
 				auto retro = m_writer.declLocale( "retro"
-					, lightIntensity * rr * ( fl + fv + fl * fv * ( rr - 1.0_f ) ) );
+					, radiance * rr * ( fl + fv + fl * fv * ( rr - 1.0_f ) ) );
 
 				auto diffuseReflectance = m_writer.declLocale( "diffuseReflectance"
-					, ( lightIntensity * ( 1.0_f - 0.5_f * fl ) * ( 1.0_f - 0.5_f * fv ) + retro ) / sdw::Float{ castor::Pi< float > } );
-				m_writer.returnStmt( max( diffuseReflectance, vec3( 0.0_f ) ) );
+					, ( radiance * ( 1.0_f - 0.5_f * fl ) * ( 1.0_f - 0.5_f * fv ) + retro ) / sdw::Float{ castor::Pi< float > } );
+				m_writer.returnStmt( max( diffuseReflectance * intensity, vec3( 0.0_f ) ) );
 			}
 			, c3d::InBlendComponents{ m_writer, "components", pcomponents }
 			, c3d::InLightSurface{ m_writer, "lightSurface", plightSurface }
-			, sdw::InVec3{ m_writer, "lightIntensity" }
+			, sdw::InVec3{ m_writer, "radiance" }
+			, sdw::InFloat{ m_writer, "intensity" }
 			, sdw::InFloat{ m_writer, "NdotL" } );
 	}
 

@@ -17,16 +17,18 @@ namespace castor3d::shader
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeLambertian"
 			, [this]( BlendComponents const & components
 				, LightSurface const & lightSurface
-				, sdw::Vec3 const & lightIntensity
+				, sdw::Vec3 const & radiance
+				, sdw::Float const & intensity
 				, sdw::Float const & NdotL )
 			{
 				auto diffuseReflectance = m_writer.declLocale( "diffuseReflectance"
-					, lightIntensity / sdw::Float{ castor::Pi< float > } );
-				m_writer.returnStmt( max( diffuseReflectance, vec3( 0.0_f ) ) );
+					, radiance / sdw::Float{ castor::Pi< float > } );
+				m_writer.returnStmt( max( diffuseReflectance * intensity, vec3( 0.0_f ) ) );
 			}
 			, InBlendComponents{ m_writer, "components", pcomponents }
 			, InLightSurface{ m_writer, "lightSurface", plightSurface }
-			, sdw::InVec3{ m_writer, "lightIntensity" }
+			, sdw::InVec3{ m_writer, "radiance" }
+			, sdw::InFloat{ m_writer, "intensity" }
 			, sdw::InFloat{ m_writer, "NdotL" } );
 	}
 
