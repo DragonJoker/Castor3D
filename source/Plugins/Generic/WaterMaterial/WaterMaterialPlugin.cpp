@@ -5,6 +5,7 @@
 #include "WaterMaterial/WaterNoiseMapComponent.hpp"
 #include "WaterMaterial/WaterReflRefrComponent.hpp"
 #include "WaterMaterial/Shaders/GlslWaterProfile.hpp"
+#include "WaterMaterial/Shaders/GlslWaterLighting.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
@@ -13,31 +14,6 @@
 #include <Castor3D/Material/Pass/PhongPass.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Shader/ShaderBuffers/PassBuffer.hpp>
-
-namespace water
-{
-	struct WaterPbrPass
-	{
-		static castor3d::PassUPtr create( castor3d::LightingModelID lightingModelId
-			, castor3d::Material & parent )
-		{
-			auto result = castor3d::PbrPass::create( lightingModelId, parent );
-			result->createComponent< WaterComponent >();
-			return result;
-		}
-	};
-
-	struct WaterPhongPass
-	{
-		static castor3d::PassUPtr create( castor3d::LightingModelID lightingModelId
-			, castor3d::Material & parent )
-		{
-			auto result = castor3d::PhongPass::create( lightingModelId, parent );
-			result->createComponent< WaterComponent >();
-			return result;
-		}
-	};
-}
 
 extern "C"
 {
@@ -76,6 +52,13 @@ extern "C"
 		engine->registerPassComponent< water::WaterFoamMapComponent >();
 		engine->registerPassComponent< water::WaterComponent >();
 		engine->registerPassComponent< water::WaterReflRefrComponent >();
+		engine->registerLightingModel( castor::String{ water::shader::WaterLightingModel::getName() }
+			, { castor3d::PbrPass::DefaultDiffuseBrdf
+				, castor3d::PbrPass::DefaultSpecularBrdf
+				, castor3d::PbrPass::DefaultSheenBrdf
+				, castor3d::PbrPass::DefaultClearcoatBrdf
+				, castor3d::PbrPass::DefaultScatteringModel }
+			, water::shader::WaterLightingModel::create );
 		engine->registerSpecificsBuffer( castor::String{ water::shader::WaterProfile::getName() }
 			, { &water::shader::WaterProfiles::create
 				, &water::shader::WaterProfiles::update
@@ -85,6 +68,7 @@ extern "C"
 	C3D_WaterMaterial_API void OnUnload( castor3d::Engine * engine )
 	{
 		engine->unregisterSpecificsBuffer( castor::String{ water::shader::WaterProfile::getName() } );
+		engine->unregisterLightingModel( castor::String{ water::shader::WaterLightingModel::getName() } );
 		engine->unregisterPassComponent( water::WaterReflRefrComponent::TypeName );
 		engine->unregisterPassComponent( water::WaterComponent::TypeName );
 		engine->unregisterPassComponent( water::WaterFoamMapComponent::TypeName );
