@@ -1,8 +1,11 @@
 #include "Castor3D/Shader/Shaders/GlslSpecularBRDF.hpp"
 
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
+#include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 CU_ImplementDeleter( castor3d::shader, SpecularBRDF )
 
@@ -35,6 +38,19 @@ namespace castor3d::shader
 			, V
 			, NdotL
 			, NdotH );
+	}
+
+	void SpecularBRDF::computeDerived( Utils & utils
+		, BlendComponents const & components
+		, sdw::Float const & HdotV
+		, DirectLighting & output )
+	{
+		auto dielectricFresnel = m_writer.declLocale( "dielectricFresnel"
+			, utils.conductorFresnel( abs( HdotV ), components.dielectricF0 * components.specularWeight, components.dielectricF90 ) );
+		auto metalFresnel = m_writer.declLocale( "metalFresnel"
+			, utils.conductorFresnel( abs( HdotV ), components.baseColour, vec3( 1.0_f ) ) );
+		output.metal = metalFresnel * output.specular;
+		output.dielectric = mix( output.diffuse, output.specular, dielectricFresnel );
 	}
 
 	SpecularBRDFPtr SpecularBRDF::create( sdw::ShaderWriter & writer

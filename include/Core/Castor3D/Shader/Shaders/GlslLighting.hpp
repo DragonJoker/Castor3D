@@ -82,7 +82,7 @@ namespace castor3d::shader
 			return m_hasBackgroundRefractionSupport;
 		}
 
-		C3D_API virtual sdw::Vec3 combine( DebugOutput & debugOutput
+		C3D_API sdw::Vec3 combine( DebugOutput & debugOutput
 			, ReflectionModel & reflections
 			, sdw::CombinedImage2DRgba32 const & brdf
 			, BlendComponents const & components
@@ -229,42 +229,36 @@ namespace castor3d::shader
 			, BlendComponents const & components );
 		C3D_API virtual DerivFloat doGetNdotH( LightSurface const & lightSurface
 			, BlendComponents const & components );
-
-		C3D_API virtual sdw::Vec3 doGetDiffuseResult( BlendComponents const & components
-			, DirectLighting const & lighting
-			, IndirectLighting const & indirect
-			, sdw::Float const & ambientOcclusion
-			, sdw::Vec3 const & reflectedDiffuse ) = 0;
-		C3D_API virtual sdw::Vec3 doGetSpecularResult( BlendComponents const & components
-			, DirectLighting const & lighting
-			, IndirectLighting const & indirect
-			, sdw::Float const & ambientOcclusion
-			, sdw::Vec3 const & reflectedSpecular ) = 0;
+		C3D_API virtual void doComputeBackgroundLayers( DebugOutputCategory const & debugOutput
+			, BlendComponents const & components
+			, ReflectionRefraction const & reflRefr
+			, sdw::Vec3 const & clearcoatFresnel
+			, sdw::Vec3 & backgroundResult );
 
 	private:
-		C3D_API virtual void doComputeLight( Light const & light
+		void doComputeLight( Light const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Float const & attenuation
 			, sdw::Vec3 & radiance
 			, DirectLighting & output );
-		C3D_API sdw::Vec3 doComputeLightDiffuse( Light const & light
+		sdw::Vec3 doComputeLightDiffuse( Light const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Float const & attenuation
 			, sdw::Vec3 & radiance );
+		void doComputeLightAllButDiffuse( Light const & light
+			, BlendComponents const & components
+			, LightSurface const & lightSurface
+			, sdw::Float const & attenuation
+			, sdw::Vec3 & radiance
+			, DirectLighting & output );
 		C3D_API virtual void doInternalComputeLightDiffuse( Light const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Float const & attenuation
 			, sdw::Vec3 const & radiance
 			, sdw::Vec3 & result );
-		C3D_API void doComputeLightAllButDiffuse( Light const & light
-			, BlendComponents const & components
-			, LightSurface const & lightSurface
-			, sdw::Float const & attenuation
-			, sdw::Vec3 & radiance
-			, DirectLighting & output );
 		C3D_API virtual sdw::Vec3 doInternalComputeLightSpecular( Light const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
@@ -275,6 +269,17 @@ namespace castor3d::shader
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & lightIntensity
 			, DirectLighting & output );
+		virtual void doCombine( DebugOutputCategory const & debugOutput
+			, ReflectionModel & reflections
+			, sdw::CombinedImage2DRgba32 const & brdf
+			, BlendComponents const & components
+			, LightSurface const & lightSurface
+			, sdw::Vec3 const & incident
+			, sdw::Float const & ambientOcclusion
+			, DirectLighting const & directLighting
+			, IndirectLighting const & indirectLighting
+			, ReflectionRefraction const & reflRefr
+			, sdw::Vec3 & combineResult ) = 0;
 
 	protected:
 		LightingModelID m_lightingModelId;

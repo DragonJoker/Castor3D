@@ -112,59 +112,18 @@ namespace castor3d::shader
 		, IndirectLighting const & indirectLighting
 		, ReflectionRefraction const & reflRefr )
 	{
-		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Combine" ) );
-		auto backgroundResult = m_writer.declLocale( "backgroundResult"
-			, mix( reflRefr.dielectric, reflRefr.metal, vec3( components.metalness ) ) );
-		debugOutputBlock.registerOutput( "Background Result", backgroundResult );
-
-		auto lightingResult = m_writer.declLocale( "lightingResult"
-			, mix( directLighting.dielectric, directLighting.metal, vec3( components.metalness ) ) );
-		debugOutputBlock.registerOutput( "Lighting Result", lightingResult );
-
-		if ( components.sheenColour )
-		{
-			auto bgSheen = m_writer.declLocale( "bgSheen"
-				, reflRefr.sheen.rgb() );
-			debugOutputBlock.registerOutput( "Background Sheen", bgSheen );
-			auto bgAlbedoSheenScaling = m_writer.declLocale( "bgAlbedoSheenScaling"
-				, 1.0_f - reflRefr.sheen.w() * Utils::max3( components.sheenColour ) );
-			debugOutputBlock.registerOutput( "Background Albedo Sheen Scaling", bgAlbedoSheenScaling );
-			backgroundResult = bgSheen + backgroundResult * bgAlbedoSheenScaling;
-			debugOutputBlock.registerOutput( "Background With Sheen", backgroundResult );
-
-			auto ltSheen = m_writer.declLocale( "ltSheen"
-				, directLighting.sheen.rgb() );
-			debugOutputBlock.registerOutput( "Lighting Sheen", ltSheen );
-			auto ltAlbedoSheenScaling = m_writer.declLocale( "ltAlbedoSheenScaling"
-				, 1.0_f - directLighting.sheen.w() * Utils::max3( components.sheenColour ) );
-			debugOutputBlock.registerOutput( "Lighting Albedo Sheen Scaling", ltAlbedoSheenScaling );
-			lightingResult = bgSheen + lightingResult * ltAlbedoSheenScaling;
-			debugOutputBlock.registerOutput( "Lighting With Sheen", lightingResult );
-		}
-
-		auto clearcoatFresnel = components.getMember( "clearcoatFresnel", vec3( 0.0_f ) );
-
-		if ( components.clearcoatFactor )
-		{
-			debugOutputBlock.registerOutput( "Clearcoat Fresnel", clearcoatFresnel );
-
-			backgroundResult = mix( backgroundResult, reflRefr.coating, components.clearcoatFactor * clearcoatFresnel );
-			debugOutputBlock.registerOutput( "Background With Clearcoat", backgroundResult );
-
-			lightingResult = mix( lightingResult, directLighting.coating, components.clearcoatFactor * clearcoatFresnel );
-			debugOutputBlock.registerOutput( "Lighting With Clearcoat", lightingResult );
-		}
-
-		auto emissiveResult = m_writer.declLocale( "emissiveResult"
-			, ( components.emissiveColour
-				* components.emissiveFactor
-				* ( 1.0_f - components.clearcoatFactor * clearcoatFresnel ) ) );
-		debugOutputBlock.registerOutput( "Emissive Result", emissiveResult );
-
 		auto combineResult = m_writer.declLocale( "combineResult"
-			, backgroundResult * ambientOcclusion
-			+ lightingResult
-			+ emissiveResult );
+			, directLighting.scattering );
+		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Combine" ) );
+		debugOutputBlock.registerOutput( cuT( "Incident" ), incident );
+		debugOutputBlock.registerOutput( cuT( "Occlusion" ), ambientOcclusion );
+		debugOutputBlock.registerOutput( cuT( "Emissive" ), components.emissiveColour * components.emissiveFactor );
+		doCombine( debugOutputBlock
+			, reflections, brdf
+			, components, lightSurface, incident, ambientOcclusion
+			, directLighting, indirectLighting, reflRefr
+			, combineResult );
+		debugOutput.registerOutput( "Result", combineResult );
 		return combineResult;
 	}
 
@@ -1188,6 +1147,41 @@ namespace castor3d::shader
 		return lightSurface.NdotH();
 	}
 
+	void LightingModel::doComputeBackgroundLayers( DebugOutputCategory const & debugOutput
+		, BlendComponents const & components
+		, ReflectionRefraction const & reflRefr
+		, sdw::Vec3 const & clearcoatFresnel
+		, sdw::Vec3 & backgroundResult )
+	{
+		if ( components.sheenColour )
+		{
+			auto bgSheen = m_writer.declLocale( "bgSheen"
+				, reflRefr.sheen.rgb() );
+			debugOutput.registerOutput( "Sheen", bgSheen );
+			auto bgAlbedoSheenScaling = m_writer.declLocale( "bgAlbedoSheenScaling"
+				, 1.0_f - reflRefr.sheen.w() * Utils::max3( components.sheenColour ) );
+			debugOutput.registerOutput( "Albedo Sheen Scaling", bgAlbedoSheenScaling );
+			backgroundResult = bgSheen + backgroundResult * bgAlbedoSheenScaling;
+			debugOutput.registerOutput( "With Sheen", backgroundResult );
+		}
+		else
+		{
+			debugOutput.registerOutput( "Sheen", 0.0_f );
+			debugOutput.registerOutput( "Albedo Sheen Scaling", 0.0_f );
+			debugOutput.registerOutput( "With Sheen", backgroundResult );
+		}
+
+		if ( components.clearcoatFactor )
+		{
+			backgroundResult = mix( backgroundResult, reflRefr.coating, components.clearcoatFactor * clearcoatFresnel );
+			debugOutput.registerOutput( "With Clearcoat", backgroundResult );
+		}
+		else
+		{
+			debugOutput.registerOutput( "With Clearcoat", backgroundResult );
+		}
+	}
+
 	void LightingModel::doComputeLight( Light const & light
 		, BlendComponents const & components
 		, LightSurface const & lightSurface
@@ -1335,22 +1329,17 @@ namespace castor3d::shader
 	{
 		auto lightIntensity = m_writer.declLocale( "specularLightIntensity"
 			, radiance * attenuation * light.intensity().y() );
-		auto specular = m_writer.declLocale( "specular"
-			, doGetNdotL( lightSurface, components ).value()
-				* lightIntensity
-				* m_specular->compute( components
-					, lightSurface.N().value()
-					, lightSurface.L().value()
-					, lightSurface.H().value()
-					, lightSurface.V().value()
-					, doGetNdotL( lightSurface, components ).value()
-					, doGetNdotH( lightSurface, components ).value() ) );
-		auto dielectricFresnel = m_writer.declLocale( "dielectricFresnel"
-			, m_utils.conductorFresnel( abs( lightSurface.HdotV().value() ), components.dielectricF0 * components.specularWeight, components.dielectricF90 ) );
-		auto metalFresnel = m_writer.declLocale( "metalFresnel"
-			, m_utils.conductorFresnel( abs( lightSurface.HdotV().value() ), components.baseColour, vec3( 1.0_f ) ) );
-		output.metal = metalFresnel * specular;
-		output.dielectric = mix( output.diffuse, specular, dielectricFresnel );
+		output.specular = m_specular->compute( components
+				, lightSurface.N().value()
+				, lightSurface.L().value()
+				, lightSurface.H().value()
+				, lightSurface.V().value()
+				, doGetNdotL( lightSurface, components ).value()
+				, doGetNdotH( lightSurface, components ).value() );
+		output.specular *= doGetNdotL( lightSurface, components ).value() * lightIntensity;
+		m_specular->computeDerived( m_utils
+			, components, lightSurface.HdotV().value()
+			, output );
 		return lightIntensity;
 	}
 

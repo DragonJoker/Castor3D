@@ -14,6 +14,7 @@ namespace castor3d::shader
 		, bool enabled )
 		: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		, diffuse{ getMember< "diffuse" >() }
+		, specular{ getMember< "specular" >() }
 		, dielectric{ getMember< "dielectric" >() }
 		, metal{ getMember< "metal" >() }
 		, scattering{ getMember< "scattering" >() }
@@ -43,6 +44,7 @@ namespace castor3d::shader
 			scattering *= attenuation;
 		}
 
+		specular *= specular;
 		dielectric *= attenuation;
 		metal *= attenuation;
 		coating *= attenuation;
@@ -52,6 +54,7 @@ namespace castor3d::shader
 	void DirectLighting::registerDebug( DebugOutputCategory const & debugOutput )const
 	{
 		debugOutput.registerOutput( cuT( "Diffuse" ), diffuse );
+		debugOutput.registerOutput( cuT( "Specular" ), specular );
 		debugOutput.registerOutput( cuT( "Dielectric BRDF" ), dielectric );
 		debugOutput.registerOutput( cuT( "Metal BRDF" ), metal );
 		debugOutput.registerOutput( cuT( "Scattering" ), scattering );
@@ -63,6 +66,7 @@ namespace castor3d::shader
 	DirectLighting & DirectLighting::operator+=( DirectLighting const & rhs )
 	{
 		diffuse += max( vec3( 0.0_f ), rhs.diffuse );
+		specular += max( vec3( 0.0_f ), rhs.specular );
 		dielectric += max( vec3( 0.0_f ), rhs.dielectric );
 		metal += max( vec3( 0.0_f ), rhs.metal );
 		scattering += max( vec3( 0.0_f ), rhs.scattering );
@@ -75,6 +79,7 @@ namespace castor3d::shader
 	DirectLighting & DirectLighting::operator*=( sdw::Float const & rhs )
 	{
 		diffuse *= rhs;
+		specular *= rhs;
 		dielectric *= rhs;
 		metal *= rhs;
 		scattering *= rhs;
@@ -145,9 +150,10 @@ namespace castor3d::shader
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
 		: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
-		, diffuse{ getMember< "diffuse" >() }
-		, dielectric{ getMember< "dielectric" >() }
-		, metal{ getMember< "metal" >() }
+		, diffuseReflection{ getMember< "diffuseReflection" >() }
+		, specularReflection{ getMember< "specularReflection" >() }
+		, diffuseTransmission{ getMember< "diffuseTransmission" >() }
+		, specularTransmission{ getMember< "specularTransmission" >() }
 		, coating{ getMember< "coating" >() }
 		, sheen{ getMember< "sheen" >() }
 	{
@@ -162,9 +168,10 @@ namespace castor3d::shader
 
 	void ReflectionRefraction::registerDebug( DebugOutputCategory const & debugOutput )const
 	{
-		debugOutput.registerOutput( cuT( "Background Diffuse" ), diffuse );
-		debugOutput.registerOutput( cuT( "Background Dielectric BRDF" ), dielectric );
-		debugOutput.registerOutput( cuT( "Background Metal BRDF" ), metal );
+		debugOutput.registerOutput( cuT( "Background Diffuse Reflection" ), diffuseReflection );
+		debugOutput.registerOutput( cuT( "Background Specular Reflection" ), specularReflection );
+		debugOutput.registerOutput( cuT( "Background Diffuse Transmission" ), diffuseTransmission );
+		debugOutput.registerOutput( cuT( "Background Specular Transmission" ), specularTransmission );
 		debugOutput.registerOutput( cuT( "Background Coating BRDF" ), coating );
 		debugOutput.registerOutput( cuT( "Background Sheen" ), sheen.xyz() );
 		debugOutput.registerOutput( cuT( "Background Sheen Scale" ), sheen.w() );
@@ -173,6 +180,7 @@ namespace castor3d::shader
 	sdw::expr::ExprList ReflectionRefraction::makeInit()
 	{
 		sdw::expr::ExprList result;
+		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );

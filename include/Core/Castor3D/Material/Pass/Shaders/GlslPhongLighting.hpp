@@ -35,17 +35,34 @@ namespace castor3d::shader
 			, Lights & lights
 			, bool enableVolumetric );
 
-	protected:
-		C3D_API sdw::Vec3 doGetDiffuseResult( BlendComponents const & components
-			, DirectLighting const & lighting
-			, IndirectLighting const & indirect
+	private:
+		C3D_API void doCombine( DebugOutputCategory const & debugOutput
+			, ReflectionModel & reflections
+			, sdw::CombinedImage2DRgba32 const & brdf
+			, BlendComponents const & components
+			, LightSurface const & lightSurface
+			, sdw::Vec3 const & incident
 			, sdw::Float const & ambientOcclusion
-			, sdw::Vec3 const & reflectedDiffuse )override;
-		C3D_API sdw::Vec3 doGetSpecularResult( BlendComponents const & components
-			, DirectLighting const & lighting
-			, IndirectLighting const & indirect
-			, sdw::Float const & ambientOcclusion
-			, sdw::Vec3 const & reflectedSpecular )override;
+			, DirectLighting const & directLighting
+			, IndirectLighting const & indirectLighting
+			, ReflectionRefraction const & reflRefr
+			, sdw::Vec3 & combineResult )override;
+		void processBackground( DebugOutputCategory const & debugOutput
+			, BlendComponents const & components
+			, ReflectionRefraction reflRefr
+			, sdw::Float const & fresnelFactor
+			, sdw::Vec3 const & clearcoatFresnel
+			, sdw::Vec3 & backgroundResult );
+		void processDirectLighting( DebugOutputCategory const & debugOutput
+			, BlendComponents const & components
+			, DirectLighting const & directLighting
+			, sdw::Float const & fresnelFactor
+			, sdw::Vec3 & directLightingResult );
+		void processIndirectLighting( DebugOutputCategory const & debugOutput
+			, BlendComponents const & components
+			, IndirectLighting const & indirectLighting
+			, sdw::Float const & fresnelFactor
+			, sdw::Vec3 & indirectLightingResult );
 	};
 }
 

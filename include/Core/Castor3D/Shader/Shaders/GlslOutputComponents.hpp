@@ -15,6 +15,7 @@ namespace castor3d::shader
 		: public sdw::StructInstanceHelperT< "C3D_DirectLighting"
 			, sdw::type::MemoryLayout::eC
 			, sdw::Vec3Field< "diffuse" >
+			, sdw::Vec3Field< "specular" >
 			, sdw::Vec3Field< "dielectric" >
 			, sdw::Vec3Field< "metal" >
 			, sdw::Vec3Field< "scattering" >
@@ -35,6 +36,7 @@ namespace castor3d::shader
 		C3D_API DirectLighting & operator*=( sdw::Float const & rhs );
 
 		sdw::Vec3 diffuse;
+		sdw::Vec3 specular;
 		sdw::Vec3 dielectric;
 		sdw::Vec3 metal;
 		sdw::Vec3 scattering;
@@ -74,9 +76,10 @@ namespace castor3d::shader
 	struct ReflectionRefraction
 		: public sdw::StructInstanceHelperT< "C3D_ReflectionRefraction"
 			, sdw::type::MemoryLayout::eC
-			, sdw::Vec3Field< "diffuse" >
-			, sdw::Vec3Field< "dielectric" >
-			, sdw::Vec3Field< "metal" >
+			, sdw::Vec3Field< "diffuseReflection" >
+			, sdw::Vec3Field< "specularReflection" >
+			, sdw::Vec3Field< "diffuseTransmission" >
+			, sdw::Vec3Field< "specularTransmission" >
 			, sdw::Vec3Field< "coating" >
 			, sdw::Vec4Field< "sheen" > >
 	{
@@ -87,9 +90,10 @@ namespace castor3d::shader
 
 		C3D_API void registerDebug( DebugOutputCategory const & debugOutput )const;
 
-		sdw::Vec3 diffuse;
-		sdw::Vec3 dielectric;
-		sdw::Vec3 metal;
+		sdw::Vec3 diffuseReflection;
+		sdw::Vec3 specularReflection;
+		sdw::Vec3 diffuseTransmission;
+		sdw::Vec3 specularTransmission;
 		sdw::Vec3 coating;
 		sdw::Vec4 sheen;
 

@@ -124,37 +124,28 @@ namespace castor3d::shader
 					auto hasEnvMap = m_writer.declLocale( "hasEnvMap"
 						, envMapIndex > 0_u );
 					--envMapIndex;
-					auto specular = m_writer.declLocale( "specular"
-						, vec3( 0.0_f ) );
 					doComputeReflection( envMap, hasEnvMap, background
 						, wsNormal, wsPosition, V
 						, envMapIndex, components
-						, output.diffuse, specular, debugOutput );
-					debugOutput.registerOutput( "Specular Reflection", specular );
-					debugOutput.registerOutput( "Diffuse Reflection", output.diffuse );
+						, output.diffuseReflection, output.specularReflection, debugOutput );
+					debugOutput.registerOutput( "Specular Reflection", output.specularReflection );
+					debugOutput.registerOutput( "Diffuse Reflection", output.diffuseReflection );
 					computeDiffuseBrdf( components, background
-						, output.diffuse, wsNormal, hasEnvMap, envMapIndex
+						, output.diffuseReflection, wsNormal, hasEnvMap, envMapIndex
 						, output, debugOutput );
 
 					if( components.hasMember( "transmissionFactor" ) )
 					{
-						auto specularTransmission = m_writer.declLocale( "specularTransmission"
-							, doComputeSpecularTransmission( -V, wsPosition, wsNormal
-								, mippedScene, camera
-								, sceneUv, components, debugOutput ) );
-						debugOutput.registerOutput( "Specular Transmission", specularTransmission );
-						output.diffuse = mix( output.diffuse, specularTransmission, vec3( components.transmissionFactor ) );
-						debugOutput.registerOutput( "Diffuse Mixed With Specular Transmission", output.diffuse );
+						output.specularTransmission = doComputeSpecularTransmission( -V, wsPosition, wsNormal
+							, mippedScene, camera
+							, sceneUv, components, debugOutput );
+						debugOutput.registerOutput( "Specular Transmission", output.specularTransmission );
 					}
 					else
 					{
 						debugOutput.registerOutput( "Specular Transmission", 0.0_f );
-						debugOutput.registerOutput( "Diffuse Mixed With Specular Transmission", output.diffuse );
 					}
 
-					computeSpecularBrdfs( components, NdotV
-						, output.diffuse, specular
-						, output, debugOutput );
 					doComputeClearcoat( envMap, hasEnvMap, background
 						, wsPosition, V, envMapIndex
 						, components, output.coating, debugOutput );
@@ -250,22 +241,16 @@ namespace castor3d::shader
 					auto hasEnvMap = m_writer.declLocale( "hasEnvMap"
 						, envMapIndex > 0_u );
 					--envMapIndex;
-					auto reflectedSpecular = m_writer.declLocale( "reflectedSpecular"
-						, vec3( 0.0_f ) );
 					doComputeReflection( envMap, hasEnvMap, background
 						, wsNormal, wsPosition, V
 						, envMapIndex, components
-						, output.diffuse, reflectedSpecular, debugOutput );
-					debugOutput.registerOutput( "Specular Reflection", reflectedSpecular );
-					debugOutput.registerOutput( "Diffuse Reflection", output.diffuse );
+						, output.diffuseReflection, output.specularReflection, debugOutput );
+					debugOutput.registerOutput( "Specular Reflection", output.specularReflection );
+					debugOutput.registerOutput( "Diffuse Reflection", output.diffuseReflection );
 					computeDiffuseBrdf( components, background
-						, output.diffuse, wsNormal, hasEnvMap, envMapIndex
+						, output.diffuseReflection, wsNormal, hasEnvMap, envMapIndex
 						, output, debugOutput );
 					debugOutput.registerOutput( "Specular Transmission", 0.0_f );
-					debugOutput.registerOutput( "Diffuse Mixed With Specular Transmission", output.diffuse );
-					computeSpecularBrdfs( components
-						, NdotV, output.diffuse, reflectedSpecular
-						, output, debugOutput );
 					doComputeClearcoat( envMap, hasEnvMap, background
 						, wsPosition, V, envMapIndex
 						, components, output.coating, debugOutput );
@@ -304,135 +289,38 @@ namespace castor3d::shader
 	{
 		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
 		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
-		output.diffuse = reflectedDiffuse * components.baseColour;
+		output.diffuseReflection = reflectedDiffuse * components.baseColour;
 
 		if ( components.hasMember( "diffuseTransmissionFactor" ) )
 		{
-			auto diffuseTransmission = m_writer.declLocale( "diffuseTransmission"
-				, vec3( 0.0_f ) );
 			doComputeDiffuse( envMap
 				, hasEnvMap
 				, background
 				, -wsNormal
 				, envMapIndex
 				, components
-				, diffuseTransmission
+				, output.diffuseTransmission
 				, debugOutput );
-			diffuseTransmission *= components.diffuseTransmissionColour;
-			debugOutput.registerOutput( "Diffuse Transmission", diffuseTransmission );
+			output.diffuseTransmission *= components.diffuseTransmissionColour;
+			debugOutput.registerOutput( "Diffuse Transmission", output.diffuseTransmission );
 
 			if ( components.hasMember( "thicknessFactor" ) )
 			{
-				diffuseTransmission *= applyVolumeAttenuation( components.getMember< sdw::Float >( "diffuseTransmissionThickness" )
+				output.diffuseTransmission *= applyVolumeAttenuation( components.getMember< sdw::Float >( "diffuseTransmissionThickness" )
 					, components.attenuationColour
 					, components.attenuationDistance );
-				debugOutput.registerOutput( "Volume Diffuse Transmission", diffuseTransmission );
+				debugOutput.registerOutput( "Volume Diffuse Transmission", output.diffuseTransmission );
 			}
 			else
 			{
-				debugOutput.registerOutput( "Volume Diffuse Transmission", diffuseTransmission );
+				debugOutput.registerOutput( "Volume Diffuse Transmission", output.diffuseTransmission );
 			}
-
-			output.diffuse = mix( output.diffuse
-				, diffuseTransmission
-				, vec3( components.diffuseTransmissionFactor ) );
-			debugOutput.registerOutput( "Diffuse Mixed With Diffuse Transmission", output.diffuse );
 		}
 		else
 		{
 			debugOutput.registerOutput( "Diffuse Transmission", 0.0_f );
 			debugOutput.registerOutput( "Volume Diffuse Transmission", 0.0_f );
-			debugOutput.registerOutput( "Diffuse Mixed With Diffuse Transmission", output.diffuse );
 		}
-	}
-
-	void ReflectionModel::computeSpecularBrdfs( BlendComponents & components
-			, sdw::Float const & NdotV
-			, sdw::Vec3 const & reflectedDiffuse
-			, sdw::Vec3 const & reflectedSpecular
-			, shader::ReflectionRefraction & output
-			, DebugOutputCategory const & debugOutput )
-	{
-		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
-		auto metalFresnel = m_writer.declLocale( "metalFresnel"
-			, computeFresnel( brdf
-				, NdotV
-				, components.perceptualRoughness
-				, components.baseColour
-				, 1.0_f ) );
-		debugOutput.registerOutput( "Metal Fresnel", metalFresnel );
-		output.metal = reflectedSpecular * metalFresnel;
-		debugOutput.registerOutput( "Raw Metal BRDF", output.metal );
-		auto dielectricFresnel = m_writer.declLocale( "dielectricFresnel"
-			, computeFresnel( brdf
-				, NdotV
-				, components.perceptualRoughness
-				, components.dielectricF0
-				, components.specularWeight ) );
-		debugOutput.registerOutput( "Dielectric Fresnel", dielectricFresnel );
-		output.dielectric = mix( reflectedDiffuse, reflectedSpecular, dielectricFresnel );
-		debugOutput.registerOutput( "Raw Dielectric BRDF", output.dielectric );
-
-		if ( components.hasMember( "iridescenceFactor" ) )
-		{
-			output.metal = mix( output.metal
-				, reflectedSpecular * components.getMember< sdw::Vec3 >( "iridescenceMetallicFresnel" )
-				, vec3( components.iridescenceFactor ) );
-			debugOutput.registerOutput( "Iridescent Metal BRDF", output.metal );
-			output.dielectric = mix( output.dielectric
-				, Utils::rgbMix( reflectedDiffuse, reflectedSpecular, components.getMember< sdw::Vec3 >( "iridescenceDielectricFresnel" ) )
-				, vec3( components.iridescenceFactor ) );
-			debugOutput.registerOutput( "Iridescent Dielectric BRDF", output.dielectric );
-		}
-		else
-		{
-			debugOutput.registerOutput( "Iridescent Metal BRDF", output.metal );
-			debugOutput.registerOutput( "Iridescent Dielectric BRDF", output.dielectric );
-		}
-	}
-
-	sdw::RetVec3 ReflectionModel::computeFresnel( sdw::CombinedImage2DRgba32 const & brdf
-		, sdw::Float const & pNdotV
-		, sdw::Float const & proughness
-		, sdw::Vec3 const & pF0
-		, sdw::Float const & pspecularWeight )
-	{
-		if ( !m_computeFresnel )
-		{
-			m_computeFresnel = m_writer.implementFunction< sdw::Vec3 >( "c3d_bgComputeFresnel"
-				, [this, &brdf]( sdw::Float const & NdotV
-					, sdw::Float const & roughness
-					, sdw::Vec3 const & F0
-					, sdw::Float const & specularWeight )
-				{
-					// see https://bruop.github.io/ibl/#single_scattering_results at Single Scattering Results
-					// Roughness dependent fresnel, from Fdez-Aguera
-					auto f_ab = m_writer.declLocale( "f_ab"
-						, BackgroundModel::getBrdf( brdf, NdotV, roughness ) );
-					auto Fr = m_writer.declLocale( "Fr"
-						, max( vec3( 1.0_f - roughness ), F0 ) - F0 );
-					auto k_S = m_writer.declLocale( "k_S"
-						, F0 + Fr * pow( 1.0_f - NdotV, 5.0_f ) );
-					auto FssEss = m_writer.declLocale( "FssEss"
-						, specularWeight * ( k_S * f_ab.x() + f_ab.y() ) );
-
-					// Multiple scattering, from Fdez-Aguera
-					auto Ems = m_writer.declLocale( "Ems"
-						, ( 1.0_f - ( f_ab.x() + f_ab.y() ) ) );
-					auto F_avg = m_writer.declLocale( "F_avg"
-						, specularWeight * ( F0 + ( 1.0_f - F0 ) / 21.0_f ) );
-					auto FmsEms = m_writer.declLocale( "FmsEms"
-						, Ems * FssEss * F_avg / ( 1.0_f - F_avg * Ems ) );
-
-					m_writer.returnStmt( FssEss + FmsEms );
-				}
-				, sdw::InFloat{ m_writer, "NdotV" }
-				, sdw::InFloat{ m_writer, "roughness" }
-				, sdw::InVec3{ m_writer, "F0" }
-				, sdw::InFloat{ m_writer, "specularWeight" } );
-		}
-
-		return m_computeFresnel( pNdotV, proughness, pF0, pspecularWeight );
 	}
 
 	sdw::Vec4 ReflectionModel::computeScreenSpace( CameraData const & cameraData
@@ -1095,11 +983,11 @@ namespace castor3d::shader
 					, sdw::Float const & ior
 					, sdw::Vec3 const & albedo
 					, sdw::Vec3 const & f0
-					, sdw::Float roughness
-					, sdw::Float thicknessFactor
-					, sdw::Vec3 attenuationColour
-					, sdw::Float attenuationDistance
-					, sdw::Float dispersion )
+					, sdw::Float const & roughness
+					, sdw::Float const & thicknessFactor
+					, sdw::Vec3 const & attenuationColour
+					, sdw::Float const & attenuationDistance
+					, sdw::Float const & dispersion )
 				{
 					IF( m_writer, thicknessFactor != 0.0_f
 						&& ior != 0.0_f )
