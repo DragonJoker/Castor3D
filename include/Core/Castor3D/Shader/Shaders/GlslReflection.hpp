@@ -87,12 +87,6 @@ namespace castor3d::shader
 			, sdw::UInt const & envMapIndex
 			, shader::ReflectionRefraction & output
 			, DebugOutputCategory const & debugOutput );
-		C3D_API void computeSpecularBrdfs( BlendComponents & components
-			, sdw::Float const & NdotV
-			, sdw::Vec3 const & reflectedDiffuse
-			, sdw::Vec3 const & reflectedSpecular
-			, shader::ReflectionRefraction & output
-			, DebugOutputCategory const & debugOutput );
 		C3D_API sdw::Vec4 computeScreenSpace( CameraData const & cameraData
 			, sdw::Vec3 const & viewPosition
 			, sdw::Vec3 const & worldNormal
@@ -111,11 +105,6 @@ namespace castor3d::shader
 			, sdw::CombinedImage2DRgba32 const & normalMap
 			, sdw::CombinedImage2DRgba32 const & colourMap
 			, DebugOutputCategory const & debugOutput );
-		C3D_API sdw::RetVec3 computeFresnel( sdw::CombinedImage2DRgba32 const & brdf
-			, sdw::Float const & NdotV
-			, sdw::Float const & roughness
-			, sdw::Vec3 const & F0
-			, sdw::Float const & specularWeight );
 		/**
 		*\param csOrigin
 		*	Camera-space ray origin, which must be within the view volume and must have z < -0.01 and project within the valid screen rectangle.
@@ -381,11 +370,6 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InFloat
 			, sdw::InFloat > m_computeSpecularTransmission;
-		sdw::Function< sdw::Vec3
-			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InVec3
-			, sdw::InFloat > m_computeFresnel;
 	};
 }
 

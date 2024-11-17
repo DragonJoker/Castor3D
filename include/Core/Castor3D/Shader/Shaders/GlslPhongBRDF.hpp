@@ -36,6 +36,11 @@ namespace castor3d::shader
 		PhongSpecularBRDF( sdw::ShaderWriter & writer
 			, c3d::BRDFHelpers & brdfHelpers );
 
+		void computeDerived( Utils & utils
+			, BlendComponents const & components
+			, sdw::Float const & HdotV
+			, DirectLighting & output )override;
+
 		static c3d::SpecularBRDFPtr create( sdw::ShaderWriter & writer
 			, c3d::BRDFHelpers & brdfHelpers );
 		static castor::StringView constexpr Name{ cuT( "phong" ) };

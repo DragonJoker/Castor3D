@@ -22,6 +22,10 @@ namespace castor3d::shader
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotL
 			, sdw::Float const & NdotH );
+		C3D_API virtual void computeDerived( Utils & utils
+			, BlendComponents const & components
+			, sdw::Float const & HdotV
+			, DirectLighting & output );
 
 		C3D_API static SpecularBRDFPtr create( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );

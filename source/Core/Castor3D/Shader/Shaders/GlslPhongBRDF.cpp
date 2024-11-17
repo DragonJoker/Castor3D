@@ -50,6 +50,16 @@ namespace castor3d::shader
 	{
 	}
 
+	void PhongSpecularBRDF::computeDerived( Utils & utils
+		, BlendComponents const & components
+		, sdw::Float const & HdotV
+		, DirectLighting & output )
+	{
+		output.specular *= components.getMember< sdw::Vec3 >( "specular", vec3( 1.0_f ) );
+		output.dielectric = vec3( 0.0_f );
+		output.metal = vec3( 0.0_f );
+	}
+
 	c3d::SpecularBRDFPtr PhongSpecularBRDF::create( sdw::ShaderWriter & writer
 		, c3d::BRDFHelpers & brdfHelpers )
 	{
