@@ -13,7 +13,6 @@ namespace castor3d::shader
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
 		: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
-		, ambient{ getMember< "ambient" >() }
 		, diffuse{ getMember< "diffuse" >() }
 		, dielectric{ getMember< "dielectric" >() }
 		, metal{ getMember< "metal" >() }
@@ -52,7 +51,6 @@ namespace castor3d::shader
 
 	void DirectLighting::registerDebug( DebugOutputCategory const & debugOutput )const
 	{
-		debugOutput.registerOutput( cuT( "Ambient" ), ambient );
 		debugOutput.registerOutput( cuT( "Diffuse" ), diffuse );
 		debugOutput.registerOutput( cuT( "Dielectric BRDF" ), dielectric );
 		debugOutput.registerOutput( cuT( "Metal BRDF" ), metal );
@@ -134,7 +132,7 @@ namespace castor3d::shader
 	sdw::expr::ExprList IndirectLighting::makeInit()
 	{
 		sdw::expr::ExprList result;
-		result.emplace_back( sdw::makeExpr( vec3( 1.0_f ) ) );
+		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		result.emplace_back( sdw::makeExpr( vec4( 0.0_f ) ) );
 		result.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		result.emplace_back( sdw::makeExpr( 1.0_f ) );

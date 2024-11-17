@@ -28,6 +28,8 @@ namespace castor3d::shader
 
 		C3D_API void computeCombinedDifSpec( SceneFlags sceneFlags
 			, bool hasDiffuseGI
+			, SceneData const & sceneData
+			, BlendComponents const & components
 			, LightSurface lightSurface
 			, sdw::Float roughness
 			, sdw::CombinedImage2DRgba32 brdfMap
@@ -42,6 +44,8 @@ namespace castor3d::shader
 			, IndirectLighting & indirectLighting
 			, DebugOutput & debugOutput );
 		C3D_API void computeAmbient( SceneFlags sceneFlags
+			, SceneData const & sceneData
+			, BlendComponents const & components
 			, IndirectLighting & indirectLighting
 			, DebugOutput & debugOutput );
 		C3D_API void computeSpecular( SceneFlags sceneFlags
