@@ -1292,7 +1292,6 @@ namespace castor3d
 
 						if ( auto lightingModel = lights.getLightingModel() )
 						{
-							// Direct Lighting
 							IF( writer, material.lighting )
 							{
 								auto surface = writer.declLocale( "surface"
@@ -1300,12 +1299,13 @@ namespace castor3d
 										, baseSurface.viewPosition
 										, baseSurface.worldPosition
 										, components.getDerivNormal() } );
-
 								components.finish( passShaders
 									, surface
 									, c3d_cameraDataClusters
 									, modelData
 									, utils );
+
+								// Direct Lighting
 								auto lightSurface = shader::LightSurface::create( writer
 									, "lightSurface"
 									, c3d_cameraDataClusters.position()
@@ -1368,10 +1368,6 @@ namespace castor3d
 											* components.getMember< sdw::Float >( "ambientFactor" );
 									}
 
-									output.registerOutput( cuT( "Lighting" ), cuT( "Ambient" ), directLighting.ambient );
-									output.registerOutput( cuT( "Lighting" ), cuT( "Occlusion" ), occlusion );
-									output.registerOutput( cuT( "Lighting" ), cuT( "Emissive" ), components.emissiveColour * components.emissiveFactor );
-
 									// Indirect Lighting
 									lightSurface.updateL( components.getDerivNormal() );
 									auto indirectLighting = writer.declLocale( "indirectLighting"
@@ -1394,7 +1390,6 @@ namespace castor3d
 									}
 
 									lightSurface.updateN( components.getDerivNormal() );
-									lightSurface.registerDebug( output.pushBlock( cuT( "LightSurface" ) ) );
 									passShaders.backgroundBrdfWithoutTransmission( reflections
 										, components
 										, lightSurface
@@ -1407,7 +1402,6 @@ namespace castor3d
 										, shader::getRaw( incident )
 										, reflRefrResult
 										, output );
-									output.registerOutput( cuT( "Reflection" ), cuT( "Incident" ), sdw::fma( shader::getRaw( incident ), vec3( 0.5_f ), vec3( 0.5_f ) ) );
 
 									// Combine
 									outResult = vec4( lightingModel->combine( output

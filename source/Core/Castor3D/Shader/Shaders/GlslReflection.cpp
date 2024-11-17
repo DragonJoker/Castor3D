@@ -221,13 +221,6 @@ namespace castor3d::shader
 			, envMapIndex, components
 			, reflectedDiffuse, reflectedSpecular, debugOutput );
 		reflectedDiffuse *= components.baseColour;
-		debugOutput.registerOutput( "Specular Reflection", reflectedSpecular );
-		debugOutput.registerOutput( "Diffuse Reflection", reflectedDiffuse );
-		debugOutput.registerOutput( "Specular Transmission", 0.0_f );
-		debugOutput.registerOutput( "Diffuse Mixed With Specular Transmission", reflectedDiffuse );
-		debugOutput.registerOutput( "Diffuse Transmission", 0.0_f );
-		debugOutput.registerOutput( "Volume Diffuse Transmission", 0.0_f );
-		debugOutput.registerOutput( "Diffuse Mixed With Diffuse Transmission", reflectedDiffuse );
 		return hasEnvMap;
 	}
 

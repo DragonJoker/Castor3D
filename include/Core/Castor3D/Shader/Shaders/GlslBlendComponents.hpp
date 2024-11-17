@@ -163,11 +163,7 @@ namespace castor3d::shader
 
 		sdw::DefaultedT< sdw::Vec3 > emissiveColour;
 		sdw::DefaultedT< sdw::Float > emissiveFactor;
-/*
-		sdw::DefaultedT< sdw::Vec3 > ambientColour;
-		sdw::DefaultedT< sdw::Float > ambientFactor;
-		sdw::DefaultedT< sdw::UInt > hasTransmission;
-*/
+
 		sdw::DefaultedT< sdw::Float > opacity;
 		sdw::DefaultedT< sdw::UInt > bwAccumulationOperator;
 		sdw::DefaultedT< sdw::Float > alphaRef;

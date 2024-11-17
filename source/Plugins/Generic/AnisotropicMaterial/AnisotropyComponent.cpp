@@ -108,7 +108,6 @@ namespace anisotropy
 				, pow( pow( 1.0_f - anisotropyStrength * ( 1.0_f - components.perceptualRoughness ), 2.0_f ), 2.0_f ) );
 			bentNormal = normalize( mix( bentNormal, lightSurface.N().value(), vec3( a ) ) );
 
-			auto debugOutputBlock = debugOutput.pushBlock( cuT( "Reflection" ) );
 			reflections.computeWithTransmission( components
 				, bentNormal
 				, lightSurface.worldPosition().value().xyz()
@@ -120,7 +119,7 @@ namespace anisotropy
 				, sceneUv
 				, envMapIndex
 				, output
-				, debugOutputBlock );
+				, debugOutput );
 		}
 		else
 		{

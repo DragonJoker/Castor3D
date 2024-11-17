@@ -69,15 +69,6 @@ namespace castor3d::shader
 		, dispersion{ getMember( "dispersion", 0.0_f ) }
 		, emissiveColour{ getMember( "emissiveColour", vec3( 0.0_f ) ) }
 		, emissiveFactor{ getMember( "emissiveFactor", 0.0_f ) }
-
-		//, ambientColour{ getMember( "ambientColour", vec3( 1.0_f ) ) }
-		//, ambientFactor{ getMember( "ambientFactor", 1.0_f ) }
-		//, hasTransmission{ getMember( "hasTransmission", 0_u ) }
-		//, iridescenceFresnel{ getMember( "iridescenceFresnel", vec3( 0.0_f ) ) }
-		//, iridescenceF0{ getMember( "iridescenceF0", vec3( 0.0_f ) ) }
-		//, shininess{ computeShininessFromRoughness( roughness ) }
-		//, specular{ getMember( "specular", vec3( 0.0_f ) ) }
-
 		, opacity{ getMember( "opacity", 1.0_f ) }
 		, bwAccumulationOperator{ getMember( "bwAccumulationOperator", 0_u ) }
 		, alphaRef{ getMember( "alphaRef", 0.95_f ) }

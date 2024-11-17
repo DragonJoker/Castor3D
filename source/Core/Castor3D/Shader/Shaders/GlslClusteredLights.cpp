@@ -29,14 +29,11 @@ namespace castor3d::shader
 			, sdw::UInt const & pointLightCount
 			, sdw::UInt const & spotLightCount )
 		{
-			debugOutput.registerOutput( cuT( "Clustered" )
-				, cuT( "PointErrors" )
+			debugOutput.registerOutput( cuT( "PointErrors" )
 				, vec3( writer.ternary( pointLightCount > MaxLightsPerCluster, 1.0_f, 0.0_f ), 0.0_f, 0.0_f ) );
-			debugOutput.registerOutput( cuT( "Clustered" )
-				, cuT( "SpotErrors" )
+			debugOutput.registerOutput( cuT( "SpotErrors" )
 				, vec3( writer.ternary( spotLightCount > MaxLightsPerCluster, 1.0_f, 0.0_f ), 0.0_f, 0.0_f ) );
-			debugOutput.registerOutput( cuT( "Clustered" )
-				, cuT( "ClusterIndex" )
+			debugOutput.registerOutput( cuT( "ClusterIndex" )
 				, vec3( writer.cast< sdw::Float >( clusterIndex3D.x() ) / writer.cast< sdw::Float >( clusterData.dimensions().x() - 1u )
 					, writer.cast< sdw::Float >( clusterIndex3D.y() ) / writer.cast< sdw::Float >( clusterData.dimensions().y() - 1u )
 					, writer.cast< sdw::Float >( clusterIndex3D.z() ) / writer.cast< sdw::Float >( clusterData.dimensions().z() - 1u ) ) );
@@ -50,13 +47,11 @@ namespace castor3d::shader
 					, 2.0_f * writer.cast< sdw::Float >( pointLightCount ) / sdw::Float( float( MaxLightsPerCluster ) ) );
 				auto spotFactor = writer.declLocale( "spotFactor"
 					, 2.0_f * writer.cast< sdw::Float >( spotLightCount ) / sdw::Float( float( MaxLightsPerCluster ) ) );
-				debugOutput.registerOutput( cuT( "Clustered" )
-					, cuT( "PointLightsCount" )
+				debugOutput.registerOutput( cuT( "PointLightsCount" )
 					, writer.ternary( pointLightCount > 0u
 						, writer.ternary( pointFactor > 1.0_f, mix( M, E, vec3( pointFactor - 1.0_f ) ), mix( I, M, vec3( pointFactor ) ) )
 						, vec3( 0.0_f ) ) );
-				debugOutput.registerOutput( cuT( "Clustered" )
-					, cuT( "SpotLightsCount" )
+				debugOutput.registerOutput( cuT( "SpotLightsCount" )
 					, writer.ternary( spotLightCount > 0u
 						, writer.ternary( spotFactor > 1.0_f, mix( M, E, vec3( spotFactor - 1.0_f ) ), mix( I, M, vec3( spotFactor ) ) )
 						, vec3( 0.0_f ) ) );
@@ -110,7 +105,8 @@ namespace castor3d::shader
 			}
 			ROF
 
-			printDebug( writer, clusterData, debugOutput, clusterIndex3D, pointLightCount, spotLightCount );
+			printDebug( writer, clusterData, debugOutput.pushBlock( cuT( "Clustered" ) )
+				, clusterIndex3D, pointLightCount, spotLightCount );
 		}
 
 		static void computeLightingMediumPath( sdw::ShaderWriter & writer
@@ -192,7 +188,8 @@ namespace castor3d::shader
 			}
 			FI
 
-			printDebug( writer, clusterData, debugOutput, clusterIndex3D, pointLightCount, spotLightCount );
+			printDebug( writer, clusterData, debugOutput.pushBlock( cuT( "Clustered" ) )
+				, clusterIndex3D, pointLightCount, spotLightCount );
 		}
 
 		static void computeLighting( sdw::ShaderWriter & writer

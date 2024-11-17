@@ -19,6 +19,21 @@ namespace castor3d::shader
 		, m_values{ sdw::findWriterMandat( m_index, m_output ).declGlobalArray< sdw::Vec3 >( "c3d_debugValue", 512u, m_enable ) }
 		, m_indices{ sdw::findWriterMandat( m_index, m_output ).declGlobalArray< sdw::UInt >( "c3d_debugIndices", 512u, m_enable ) }
 	{
+		auto & writer = sdw::findWriterMandat( m_index, m_output );
+		FOR( writer, sdw::UInt, i, 0_u, i < 512_u, ++i )
+		{
+			m_indices[i] = 0_u;
+		}
+		ROF
+		m_registerOutput = writer.implementFunction< sdw::Void >( "c3d_registerOutput"
+			, [this]( sdw::UInt const & index
+				, sdw::Vec3 const & value )
+			{
+				m_indices[index] = 1_u;
+				m_values[index] = value;
+			}
+			, sdw::InUInt{ writer, "index" }
+			, sdw::InVec3{ writer, "value" } );
 	}
 
 	DebugOutput::~DebugOutput()noexcept
@@ -28,7 +43,7 @@ namespace castor3d::shader
 			auto & writer = sdw::findWriterMandat( m_index, m_output );
 
 			IF( writer, m_index != 0_u
-					&& m_indices[m_index] != 0_u )
+				&& m_indices[m_index] != 0_u )
 			{
 				auto value = writer.declLocale( "debugValue", m_values[m_index] );
 				m_output.xyz() = value;
@@ -49,8 +64,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const value )
 	{
 		auto index = m_config.registerValue( category, name );
-		m_indices[index] = 1_u;
-		m_values[index] = value;
+		m_registerOutput( sdw::UInt{ index }, value );
 	}
 
 	void DebugOutput::registerOutput( castor::String category
@@ -71,5 +85,19 @@ namespace castor3d::shader
 	{
 		m_categories.push_back( castor::move( category ) );
 		return DebugOutputCategory{ *this };
+	}
+
+	castor::String DebugOutput::concatenateCategories()
+	{
+		castor::String result;
+		castor::String sep;
+
+		for ( auto const & category : m_categories )
+		{
+			result += sep + category;
+			sep = "/";
+		}
+
+		return result;
 	}
 }

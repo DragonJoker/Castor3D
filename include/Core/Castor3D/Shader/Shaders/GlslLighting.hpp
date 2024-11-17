@@ -242,42 +242,36 @@ namespace castor3d::shader
 			, sdw::Vec3 const & reflectedSpecular ) = 0;
 
 	private:
-		C3D_API virtual void doComputeLight( DebugOutputCategory const & debugOutput
-			, Light const & light
+		C3D_API virtual void doComputeLight( Light const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Float const & attenuation
 			, sdw::Vec3 & radiance
 			, DirectLighting & output );
-		C3D_API sdw::Vec3 doComputeLightDiffuse( DebugOutputCategory const & debugOutput
-			, Light const & light
+		C3D_API sdw::Vec3 doComputeLightDiffuse( Light const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Float const & attenuation
 			, sdw::Vec3 & radiance );
-		C3D_API virtual void doInternalComputeLightDiffuse( DebugOutputCategory const & debugOutput
-			, Light const & light
+		C3D_API virtual void doInternalComputeLightDiffuse( Light const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Float const & attenuation
 			, sdw::Vec3 const & radiance
 			, sdw::Vec3 & result );
-		C3D_API void doComputeLightAllButDiffuse( DebugOutputCategory const & debugOutput
-			, Light const & light
+		C3D_API void doComputeLightAllButDiffuse( Light const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Float const & attenuation
 			, sdw::Vec3 & radiance
 			, DirectLighting & output );
-		C3D_API virtual sdw::Vec3 doInternalComputeLightSpecular( DebugOutputCategory const & debugOutput
-			, Light const & light
+		C3D_API virtual sdw::Vec3 doInternalComputeLightSpecular( Light const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Float const & attenuation
 			, sdw::Vec3 const & radiance
 			, DirectLighting & output );
-		C3D_API virtual void doInternalComputeLayers( DebugOutputCategory const & debugOutput
-			, BlendComponents const & components
+		C3D_API virtual void doInternalComputeLayers( BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & lightIntensity
 			, DirectLighting & output );

@@ -335,7 +335,7 @@ namespace castor3d
 				, sdw::FragmentOut const & )
 			{
 				shader::DebugOutput output{ getDebugConfig()
-					, cuT( "Default" )
+					, cuT( "Transparent" )
 					, c3d_cameraData.debugIndex()
 					, outAccumulation
 					, areDebugTargetsEnabled() };
@@ -377,7 +377,6 @@ namespace castor3d
 					{
 						auto directLighting = writer.declLocale( "directLighting"
 							, shader::DirectLighting{ writer } );
-						// Direct Lighting
 						auto surface = writer.declLocale( "surface"
 							, shader::DerivSurface{ in.fragCoord.xyz()
 								, { in.viewPosition, dFdx( in.viewPosition ), dFdy( in.viewPosition ) }
@@ -388,6 +387,8 @@ namespace castor3d
 							, c3d_cameraData
 							, modelData
 							, utils );
+
+						// Direct Lighting
 						auto lightSurface = shader::LightSurface::create( writer
 							, "lightSurface"
 							, c3d_cameraData.position()
@@ -411,10 +412,6 @@ namespace castor3d
 								* c3d_sceneData.ambientLight()
 								* components.getMember< sdw::Float >( "ambientFactor" );
 						}
-
-						output.registerOutput( cuT( "Lighting" ), cuT( "Ambient" ), directLighting.ambient );
-						output.registerOutput( cuT( "Lighting" ), cuT( "Occlusion" ), occlusion );
-						output.registerOutput( cuT( "Lighting" ), cuT( "Emissive" ), components.emissiveColour * components.emissiveFactor );
 
 						// Indirect Lighting
 						lightSurface.updateL( components.getDerivNormal() );
@@ -440,7 +437,6 @@ namespace castor3d
 						auto incident = writer.declLocale( "incident"
 							, reflections.computeIncident( lightSurface.worldPosition().value().xyz(), c3d_cameraData.position() ) );
 						lightSurface.updateN( components.getDerivNormal() );
-						lightSurface.registerDebug( output.pushBlock( cuT( "LightSurface" ) ) );
 						passShaders.backgroundBrdfWithTransmission( reflections
 							, components
 							, lightSurface
@@ -459,8 +455,6 @@ namespace castor3d
 						{
 							components.emissiveFactor *= components.opacity;
 						}
-
-						output.registerOutput( cuT( "Reflection" ), cuT( "Incident" ), sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
 
 						// Combine
 						colour = lightingModel->combine( output

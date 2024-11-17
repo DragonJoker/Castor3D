@@ -41,9 +41,9 @@ namespace castor3d::shader
 
 		template< typename ValueT >
 		void registerOutput( castor::String name
-			, ValueT const value )
+			, ValueT const & value )
 		{
-			registerOutput( m_categories.back(), name, value);
+			registerOutput( concatenateCategories(), name, value );
 		}
 
 		bool isEnabled()const
@@ -53,6 +53,8 @@ namespace castor3d::shader
 
 	private:
 		friend class DebugOutputCategory;
+
+		C3D_API castor::String concatenateCategories();
 
 		void popBlock()
 		{
@@ -67,6 +69,9 @@ namespace castor3d::shader
 		bool m_enable;
 		sdw::Vec3Array m_values;
 		sdw::UIntArray m_indices;
+		sdw::Function< sdw::Void
+			, sdw::InUInt
+			, sdw::InVec3 > m_registerOutput;
 	};
 
 	class DebugOutputCategory
@@ -120,17 +125,9 @@ namespace castor3d::shader
 
 		template< typename ValueT >
 		void registerOutput( castor::String name
-			, ValueT const value )const
+			, ValueT const & value )const
 		{
 			m_debugOutput->registerOutput( castor::move( name ), value );
-		}
-
-		template< typename ValueT >
-		void registerOutput( castor::String category
-			, castor::String name
-			, ValueT const value )const
-		{
-			m_debugOutput->registerOutput( castor::move( category ), castor::move( name ), value );
 		}
 
 	private:
