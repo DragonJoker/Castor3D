@@ -1244,13 +1244,13 @@ namespace castor3d::shader
 		, sdw::Vec3 & result )
 	{
 		auto lightIntensity = m_writer.declLocale( "diffuseLightIntensity"
-			, radiance * attenuation * light.intensity().x() );
-		result = doGetNdotL( lightSurface, components ).value()
-			* components.baseColour
-			* m_diffuse->compute( components
-				, lightSurface
-				, lightIntensity
-				, doGetNdotL( lightSurface, components ).value() );
+			, attenuation * light.intensity().x() );
+		result = m_diffuse->compute( components
+			, lightSurface
+			, radiance
+			, lightIntensity
+			, doGetNdotL( lightSurface, components ).value() );
+		result *= doGetNdotL( lightSurface, components ).value() * components.baseColour;
 
 		if ( components.hasMember( "diffuseTransmissionFactor" ) )
 		{
@@ -1260,7 +1260,8 @@ namespace castor3d::shader
 					* lightIntensity
 					* m_diffuse->compute( components
 						, lightSurface
-						, components.diffuseTransmissionColour * light.intensity().x()
+						, components.diffuseTransmissionColour
+						, light.intensity().x()
 						, doGetNdotL( lightSurface, components ).value() ) );
 
 			if ( components.hasMember( "thicknessFactor" )
