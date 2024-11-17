@@ -79,12 +79,13 @@ namespace c3d_gltf
 		{
 			auto & factory = engine.getLightingModelFactory();
 			return factory.getLightingModelId( castor::String{ castor3d::PbrPass::LightingModel }
-				, castor3d::PbrPass::DefaultDiffuseBrdf.name
-				, ( anisotropy
-					? castor::String{ anisotropy::shader::AnisotropicBRDF::Name }
-					: castor3d::PbrPass::DefaultSpecularBrdf.name )
-				, castor3d::PbrPass::DefaultSheenBrdf.name
-				, castor3d::PbrPass::DefaultClearcoatBrdf.name );
+				, { castor3d::PbrPass::DefaultDiffuseBrdf.name
+					, ( anisotropy
+						? castor::String{ anisotropy::shader::AnisotropicBRDF::Name }
+						: castor3d::PbrPass::DefaultSpecularBrdf.name )
+					, castor3d::PbrPass::DefaultSheenBrdf.name
+					, castor3d::PbrPass::DefaultClearcoatBrdf.name
+					, castor3d::PbrPass::DefaultScatteringModel.name } );
 		}
 
 		template< typename ComponentT >

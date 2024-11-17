@@ -68,16 +68,18 @@ extern "C"
 	{
 		engine->registerPassComponent< toon::EdgesComponent >();
 		engine->registerLightingModel( toon::shader::ToonPhongLightingModel::getName()
-			, castor3d::PhongPass::DefaultDiffuseBrdf
-			, castor3d::PhongPass::DefaultSpecularBrdf
-			, castor3d::PhongPass::DefaultSheenBrdf
-			, castor3d::PhongPass::DefaultClearcoatBrdf
+			, { castor3d::PhongPass::DefaultDiffuseBrdf
+				, castor3d::PhongPass::DefaultSpecularBrdf
+				, castor3d::PhongPass::DefaultSheenBrdf
+				, castor3d::PhongPass::DefaultClearcoatBrdf
+				, castor3d::PhongPass::DefaultScatteringModel }
 			, &toon::shader::ToonPhongLightingModel::create );
 		engine->registerLightingModel( toon::shader::ToonPbrLightingModel::getName()
-			, castor3d::PbrPass::DefaultDiffuseBrdf
-			, castor3d::PbrPass::DefaultSpecularBrdf
-			, castor3d::PbrPass::DefaultSheenBrdf
-			, castor3d::PbrPass::DefaultClearcoatBrdf
+			, { castor3d::PbrPass::DefaultDiffuseBrdf
+				, castor3d::PbrPass::DefaultSpecularBrdf
+				, castor3d::PbrPass::DefaultSheenBrdf
+				, castor3d::PbrPass::DefaultClearcoatBrdf
+				, castor3d::PhongPass::DefaultScatteringModel }
 			, &toon::shader::ToonPbrLightingModel::create );
 		engine->registerPassModel( { toon::shader::ToonPhongLightingModel::getName()
 			, toon::ToonPhongPass::create } );

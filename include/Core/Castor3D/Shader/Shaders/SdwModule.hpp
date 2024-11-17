@@ -169,6 +169,7 @@ namespace castor3d::shader
 	class Materials;
 	class PassShaders;
 	class ReflectionModel;
+	class ScatteringModel;
 	class Shadow;
 	class ShadowsBuffer;
 	class SheenBRDF;
@@ -206,64 +207,25 @@ namespace castor3d::shader
 	using DiffuseBRDFPtr = castor::UniquePtr < DiffuseBRDF >;
 	using SheenBRDFPtr = castor::UniquePtr < SheenBRDF >;
 	using SpecularBRDFPtr = castor::UniquePtr < SpecularBRDF >;
+	using ScatteringModelPtr = castor::UniquePtr < ScatteringModel >;
 
 	using DiffuseBrdfCreator = castor::Function< DiffuseBRDFPtr( sdw::ShaderWriter &, BRDFHelpers & ) >;
 	using SpecularBrdfCreator = castor::Function< SpecularBRDFPtr( sdw::ShaderWriter &, BRDFHelpers & ) >;
 	using SheenBrdfCreator = castor::Function< SheenBRDFPtr( sdw::ShaderWriter &, BRDFHelpers & ) >;
 	using ClearcoatBrdfCreator = castor::Function< ClearcoatBRDFPtr( sdw::ShaderWriter &, BRDFHelpers & ) >;
+	using ScatteringModelCreator = castor::Function< ScatteringModelPtr( sdw::ShaderWriter & ) >;
 
 	using DiffuseBrdfDesc = BrdfDescT< DiffuseBrdfCreator >;
 	using SpecularBrdfDesc = BrdfDescT< SpecularBrdfCreator >;
 	using SheenBrdfDesc = BrdfDescT< SheenBrdfCreator >;
 	using ClearcoatBrdfDesc = BrdfDescT< ClearcoatBrdfCreator >;
+	using ScatteringModelDesc = BrdfDescT< ScatteringModelCreator >;
 
 	using DiffuseBrdfArray = BrdfArrayT< DiffuseBrdfCreator >;
 	using SpecularBrdfArray = BrdfArrayT< SpecularBrdfCreator >;
 	using SheenBrdfArray = BrdfArrayT< SheenBrdfCreator >;
 	using ClearcoatBrdfArray = BrdfArrayT< ClearcoatBrdfCreator >;
-
-	using LightingModelCreator = castor::Function< LightingModelPtr( LightingModelID lightingModelId
-		, DiffuseBrdfDesc const & diffuseBrdf
-		, SpecularBrdfDesc const & specularBrdf
-		, SheenBrdfDesc const & sheenBrdf
-		, ClearcoatBrdfDesc const & clearcoatBrdf
-		, sdw::ShaderWriter & writer
-		, Materials const & materials
-		, Utils & utils
-		, BRDFHelpers & brdf
-		, Shadow & shadowModel
-		, Lights & lights
-		, bool enableVolumetric ) >;
-
-	using BackgroundModelCreator = castor::Function< BackgroundModelPtr( Engine const & engine
-		, sdw::ShaderWriter & writer
-		, Utils & utils
-		, VkExtent2D targetSize
-		, bool needsForeground
-		, uint32_t & binding
-		, uint32_t set ) >;
-	using BackgroundModelFactory = castor::Factory< BackgroundModel
-		, castor::String
-		, BackgroundModelPtr
-		, BackgroundModelCreator
-		, BackgroundModelID >;
-
-	struct BufferData
-		: public sdw::StructInstanceHelperT < "C3D_BufferData"
-		, sdw::type::MemoryLayout::eStd430
-		, sdw::Vec4Field< "data" > >
-	{
-		BufferData( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
-		{
-		}
-
-		auto data()const {
-			return getMember< "data" >();
-		}
-	};
+	using ScatteringModelArray = BrdfArrayT< ScatteringModelCreator >;
 
 	/** @cond !Doxygen */
 	CU_DeclareDeleter( castor3d::shader, ClearcoatBRDF, C3D_API );
@@ -271,6 +233,7 @@ namespace castor3d::shader
 	CU_DeclareDeleter( castor3d::shader, LightingModel, C3D_API );
 	CU_DeclareDeleter( castor3d::shader, SheenBRDF, C3D_API );
 	CU_DeclareDeleter( castor3d::shader, SpecularBRDF, C3D_API );
+	CU_DeclareDeleter( castor3d::shader, ScatteringModel, C3D_API );
 
 	CU_DeclareSmartPtr( castor3d::shader, LightsBuffer, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, Material, C3D_API );
@@ -314,6 +277,73 @@ namespace castor3d::shader
 	Writer_Parameter( VoxelData );
 	Writer_Parameter( VoxelSurface );
 	/** @endcond */
+
+	struct LightingModelSpec
+	{
+		DiffuseBRDFPtr diffuse;
+		SpecularBRDFPtr specular;
+		SheenBRDFPtr sheen;
+		ClearcoatBRDFPtr clearcoat;
+		ScatteringModelPtr scattering;
+	};
+
+	struct LightingModelDesc
+	{
+		DiffuseBrdfDesc diffuse;
+		SpecularBrdfDesc specular;
+		SheenBrdfDesc sheen;
+		ClearcoatBrdfDesc clearcoat;
+		ScatteringModelDesc scattering;
+	};
+
+	struct LightingModelNames
+	{
+		castor::String diffuse;
+		castor::String specular;
+		castor::String sheen;
+		castor::String clearcoat;
+		castor::String scattering;
+	};
+
+	using LightingModelCreator = castor::Function< LightingModelPtr( LightingModelID lightingModelId
+		, LightingModelDesc const & desc
+		, sdw::ShaderWriter & writer
+		, Materials const & materials
+		, Utils & utils
+		, BRDFHelpers & brdf
+		, Shadow & shadowModel
+		, Lights & lights
+		, bool enableVolumetric ) >;
+
+	using BackgroundModelCreator = castor::Function< BackgroundModelPtr( Engine const & engine
+		, sdw::ShaderWriter & writer
+		, Utils & utils
+		, VkExtent2D targetSize
+		, bool needsForeground
+		, uint32_t & binding
+		, uint32_t set ) >;
+	using BackgroundModelFactory = castor::Factory< BackgroundModel
+		, castor::String
+		, BackgroundModelPtr
+		, BackgroundModelCreator
+		, BackgroundModelID >;
+
+	struct BufferData
+		: public sdw::StructInstanceHelperT < "C3D_BufferData"
+		, sdw::type::MemoryLayout::eStd430
+		, sdw::Vec4Field< "data" > >
+	{
+		BufferData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+		{}
+
+		auto data()const
+		{
+			return getMember< "data" >();
+		}
+	};
 
 	C3D_API uint32_t getSpotShadowMapCount();
 	C3D_API uint32_t getPointShadowMapCount();

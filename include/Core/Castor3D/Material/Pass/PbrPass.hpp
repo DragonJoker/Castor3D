@@ -28,6 +28,9 @@ namespace castor3d
 
 		C3D_API static shader::ClearcoatBrdfDesc const DefaultClearcoatBrdf;
 		C3D_API static shader::ClearcoatBrdfArray const ClearcoatBrdfs;
+
+		C3D_API static shader::ScatteringModelDesc const DefaultScatteringModel;
+		C3D_API static shader::ScatteringModelArray const ScatteringModels;
 	};
 }
 

@@ -23,10 +23,7 @@ namespace castor3d::shader
 		, Materials const & materials
 		, Utils & utils
 		, BRDFHelpers & brdfHelpers
-		, DiffuseBRDFPtr diffuse
-		, SpecularBRDFPtr specular
-		, SheenBRDFPtr sheen
-		, ClearcoatBRDFPtr clearcoat
+		, LightingModelSpec spec
 		, Shadow & shadowModel
 		, Lights & lights
 		, bool enableVolumetric )
@@ -35,10 +32,7 @@ namespace castor3d::shader
 			, materials
 			, utils
 			, brdfHelpers
-			, std::move( diffuse )
-			, std::move( specular )
-			, std::move( sheen )
-			, std::move( clearcoat )
+			, std::move( spec )
 			, shadowModel
 			, lights
 			, false
@@ -55,10 +49,7 @@ namespace castor3d::shader
 	}
 
 	LightingModelPtr PhongLightingModel::create( LightingModelID lightingModelId
-		, DiffuseBrdfDesc const & diffuseBrdf
-		, SpecularBrdfDesc const & specularBrdf
-		, SheenBrdfDesc const & sheenBrdf
-		, ClearcoatBrdfDesc const & clearcoatBrdf
+		, LightingModelDesc const & desc
 		, sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
@@ -72,18 +63,21 @@ namespace castor3d::shader
 			, materials
 			, utils
 			, brdfHelpers
-			, ( diffuseBrdf.create
-				? diffuseBrdf.create( writer, brdfHelpers )
-				: PhongPass::DefaultDiffuseBrdf.create( writer, brdfHelpers ) )
-			, ( specularBrdf.create
-				? specularBrdf.create( writer, brdfHelpers )
-				: PhongPass::DefaultSpecularBrdf.create( writer, brdfHelpers ) )
-			, ( sheenBrdf.create
-				? sheenBrdf.create( writer, brdfHelpers )
-				: PhongPass::DefaultSheenBrdf.create( writer, brdfHelpers ) )
-			, ( clearcoatBrdf.create
-				? clearcoatBrdf.create( writer, brdfHelpers )
-				: PhongPass::DefaultClearcoatBrdf.create( writer, brdfHelpers ) )
+			, LightingModelSpec{ ( desc.diffuse.create
+					? desc.diffuse.create( writer, brdfHelpers )
+					: PhongPass::DefaultDiffuseBrdf.create( writer, brdfHelpers ) )
+				, ( desc.specular.create
+					? desc.specular.create( writer, brdfHelpers )
+					: PhongPass::DefaultSpecularBrdf.create( writer, brdfHelpers ) )
+				, ( desc.sheen.create
+					? desc.sheen.create( writer, brdfHelpers )
+					: PhongPass::DefaultSheenBrdf.create( writer, brdfHelpers ) )
+				, ( desc.clearcoat.create
+					? desc.clearcoat.create( writer, brdfHelpers )
+					: PhongPass::DefaultClearcoatBrdf.create( writer, brdfHelpers ) )
+				, ( desc.scattering.create
+					? desc.scattering.create( writer )
+					: PhongPass::DefaultScatteringModel.create( writer ) ) }
 			, shadowModel
 			, lights
 			, enableVolumetric );

@@ -20,6 +20,7 @@
 #include <ShaderWriter/Source.hpp>
 
 CU_ImplementDeleter( castor3d::shader, LightingModel )
+CU_ImplementDeleter( castor3d::shader, ScatteringModel )
 
 #define C3D_DebugCascades 0
 
@@ -27,15 +28,52 @@ namespace castor3d::shader
 {
 	//*********************************************************************************************
 
+	ScatteringModel::ScatteringModel( sdw::ShaderWriter & writer )
+		: m_writer{ writer }
+	{
+	}
+
+	void ScatteringModel::initialiseBackground( BackgroundModel & pbackground
+		, Shadow & shadowModel )
+	{
+	}
+
+	sdw::Vec3 ScatteringModel::computeRadiance( Light const & light
+			, sdw::Vec3 const & lightDirection )const
+	{
+		return light.colour();
+	}
+
+	void ScatteringModel::computeScattering( LightingModel & lighting
+		, ShadowData const & shadows
+		, sdw::Int const shadowMapIndex
+		, sdw::Vec3 const & radiance
+		, sdw::Vec2 const & lightIntensity
+		, BlendComponents const & components
+		, LightSurface const & lightSurface
+		, sdw::Vec3 output )
+	{
+		lighting.applyVolumetric( shadows
+			, shadowMapIndex
+			, lightIntensity
+			, lightSurface
+			, output
+			, false /*multiply*/ );
+	}
+
+	ScatteringModelPtr ScatteringModel::create( sdw::ShaderWriter & writer )
+	{
+		return castor::makeUnique< ScatteringModel >( writer );
+	}
+
+	//*********************************************************************************************
+
 	LightingModel::LightingModel( LightingModelID lightingModelId
 		, sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
 		, BRDFHelpers & brdfHelpers
-		, DiffuseBRDFPtr diffuse
-		, SpecularBRDFPtr specular
-		, SheenBRDFPtr sheen
-		, ClearcoatBRDFPtr clearcoat
+		, LightingModelSpec spec
 		, Shadow & shadowModel
 		, Lights & lights
 		, bool hasIblSupport
@@ -50,10 +88,11 @@ namespace castor3d::shader
 		, m_brdfHelpers{ brdfHelpers }
 		, m_shadowModel{ shadowModel }
 		, m_lights{ lights }
-		, m_diffuse{ std::move( diffuse ) }
-		, m_specular{ std::move( specular ) }
-		, m_sheen{ std::move( sheen ) }
-		, m_clearcoat{ std::move( clearcoat ) }
+		, m_diffuse{ std::move( spec.diffuse ) }
+		, m_specular{ std::move( spec.specular ) }
+		, m_sheen{ std::move( spec.sheen ) }
+		, m_clearcoat{ std::move( spec.clearcoat ) }
+		, m_scattering{ std::move( spec.scattering ) }
 		, m_hasBackgroundReflectionsSupport{ hasBackgroundReflectionsSupport }
 		, m_hasBackgroundRefractionSupport{ hasBackgroundRefractionSupport }
 		, m_hasIblSupport{ hasIblSupport }
@@ -139,7 +178,7 @@ namespace castor3d::shader
 	{
 		if ( !m_computeDirectional )
 		{
-			doInitialiseBackground( background );
+			m_scattering->initialiseBackground( background, m_shadowModel );
 			m_computeDirectional = m_writer.implementFunction< sdw::Void >( castor::toUtf8( m_prefix ) + "computeDirectionalLight"
 				, [this, &debugOutput]( DirectionalLight const & light
 					, BlendComponents const & components
@@ -194,7 +233,8 @@ namespace castor3d::shader
 							, output );
 					}
 
-					doComputeScatteringTerm( shadows.base()
+					m_scattering->computeScattering( *this
+						, shadows.base()
 						, light.shadowMapIndex()
 						, radiance
 						, light.base().intensity()
@@ -394,7 +434,7 @@ namespace castor3d::shader
 	{
 		if ( !m_computeDirectionalDiffuse )
 		{
-			doInitialiseBackground( background );
+			m_scattering->initialiseBackground( background, m_shadowModel );
 			m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( castor::toUtf8( m_prefix ) + "computeDirectionalLightDiffuse"
 				, [this, &debugOutput]( DirectionalLight const & light
 					, BlendComponents const & components
@@ -618,7 +658,7 @@ namespace castor3d::shader
 	{
 		if ( !m_computeDirectionalAllButDiffuse )
 		{
-			doInitialiseBackground( background );
+			m_scattering->initialiseBackground( background, m_shadowModel );
 			m_computeDirectionalAllButDiffuse = m_writer.implementFunction< sdw::Void >( castor::toUtf8( m_prefix ) + "computeDirectionalLightAllButDiffuse"
 				, [this, &debugOutput]( DirectionalLight const & light
 					, BlendComponents const & components
@@ -671,7 +711,8 @@ namespace castor3d::shader
 							, false );
 					}
 
-					doComputeScatteringTerm( shadows.base()
+					m_scattering->computeScattering( *this
+						, shadows.base()
 						, light.shadowMapIndex()
 						, radiance
 						, light.base().intensity()
@@ -856,6 +897,41 @@ namespace castor3d::shader
 			, plightSurface
 			, preceivesShadows
 			, pparentOutput );
+	}
+
+	void LightingModel::applyVolumetric( ShadowData const & shadows
+		, sdw::Int const shadowMapIndex
+		, sdw::Vec2 const & lightIntensity
+		, LightSurface const & lightSurface
+		, sdw::Vec3 output
+		, bool multiply )
+	{
+		if ( m_enableVolumetric
+			&& m_directionalTransform
+			&& m_directionalCascadeIndex
+			&& m_directionalCascadeCount )
+		{
+			IF( m_writer, shadows.volumetricSteps() != 0_u
+				&& shadowMapIndex >= 0_i )
+			{
+				auto volumetric = m_writer.declLocale( "volumetric"
+					, m_shadowModel.computeVolumetric( shadows
+						, lightSurface
+						, *m_directionalTransform
+						, *m_directionalCascadeIndex
+						, *m_directionalCascadeCount ) );
+
+				if ( multiply )
+				{
+					output *= vec3( volumetric * lightIntensity.x() );
+				}
+				else
+				{
+					output = vec3( volumetric * lightIntensity.x() );
+				}
+			}
+			FI
+		}
 	}
 
 	void LightingModel::doApplyShadows( DirectionalShadowData const & shadows
@@ -1101,67 +1177,6 @@ namespace castor3d::shader
 		FI
 	}
 
-	void LightingModel::doApplyVolumetric( ShadowData const & shadows
-		, sdw::Int const shadowMapIndex
-		, sdw::Vec2 const & lightIntensity
-		, LightSurface const & lightSurface
-		, sdw::Vec3 output
-		, bool multiply )
-	{
-		if ( m_enableVolumetric
-			&& m_directionalTransform
-			&& m_directionalCascadeIndex
-			&& m_directionalCascadeCount )
-		{
-			IF( m_writer, shadows.volumetricSteps() != 0_u
-				&& shadowMapIndex >= 0_i )
-			{
-				auto volumetric = m_writer.declLocale( "volumetric"
-					, m_shadowModel.computeVolumetric( shadows
-						, lightSurface
-						, *m_directionalTransform
-						, *m_directionalCascadeIndex
-						, *m_directionalCascadeCount ) );
-
-				if ( multiply )
-				{
-					output *= vec3( volumetric * lightIntensity.x() );
-				}
-				else
-				{
-					output = vec3( volumetric * lightIntensity.x() );
-				}
-			}
-			FI
-		}
-	}
-
-	void LightingModel::doInitialiseBackground( BackgroundModel & pbackground )
-	{
-	}
-
-	sdw::Vec3 LightingModel::doComputeRadiance( Light const & light
-		, sdw::Vec3 const & lightDirection )const
-	{
-		return light.colour();
-	}
-
-	void LightingModel::doComputeScatteringTerm( ShadowData const & shadows
-		, sdw::Int const shadowMapIndex
-		, sdw::Vec3 const & radiance
-		, sdw::Vec2 const & lightIntensity
-		, BlendComponents const & components
-		, LightSurface const & lightSurface
-		, sdw::Vec3 output )
-	{
-		doApplyVolumetric( shadows
-			, shadowMapIndex
-			, lightIntensity
-			, lightSurface
-			, output
-			, false /*multiply*/ );
-	}
-
 	void LightingModel::doInitLightSpecifics( LightSurface const & lightSurface
 		, BlendComponents const & components )
 	{
@@ -1187,7 +1202,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & radiance
 		, DirectLighting & output )
 	{
-		radiance = doComputeRadiance( light, lightSurface.L().value() );
+		radiance = m_scattering->computeRadiance( light, lightSurface.L().value() );
 		doInitLightSpecifics( lightSurface, components );
 		doInternalComputeLightDiffuse( debugOutput, light, components, lightSurface
 			, attenuation, radiance
@@ -1205,7 +1220,7 @@ namespace castor3d::shader
 		, sdw::Float const & attenuation
 		, sdw::Vec3 & radiance )
 	{
-		radiance = doComputeRadiance( light, lightSurface.L().value() );
+		radiance = m_scattering->computeRadiance( light, lightSurface.L().value() );
 		doInitLightSpecifics( lightSurface, components );
 		auto result = m_writer.declLocale( "result", vec3( 0.0_f ) );
 		doInternalComputeLightDiffuse( debugOutput, light, components, lightSurface
@@ -1229,7 +1244,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & radiance
 		, DirectLighting & output )
 	{
-		radiance = doComputeRadiance( light, lightSurface.L().value() );
+		radiance = m_scattering->computeRadiance( light, lightSurface.L().value() );
 		doInitLightSpecifics( lightSurface, components );
 		debugOutput.registerOutput( "Diffuse Lighting", 0.0_f );
 		debugOutput.registerOutput( "Diffuse Transmission", 0.0_f );
