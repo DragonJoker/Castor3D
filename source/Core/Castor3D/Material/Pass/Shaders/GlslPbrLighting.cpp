@@ -87,7 +87,7 @@ namespace castor3d::shader
 	{
 		return components.baseColour
 			* ( lighting.diffuse
-				+ ambientOcclusion * ( indirect.diffuseColour + ( reflectedDiffuse * lighting.ambient ) ) );
+				+ ambientOcclusion * ( indirect.diffuseColour + ( reflectedDiffuse * indirect.ambient ) ) );
 	}
 
 	sdw::Vec3 PbrLightingModel::doGetSpecularResult( BlendComponents const & components
@@ -97,7 +97,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & reflectedSpecular )
 	{
 		return lighting.dielectric
-			+ ambientOcclusion * ( indirect.specular + ( reflectedSpecular * lighting.ambient ) );
+			+ ambientOcclusion * ( indirect.specular + ( reflectedSpecular * indirect.ambient ) );
 	}
 
 	//***********************************************************************************************

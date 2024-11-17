@@ -91,7 +91,7 @@ namespace castor3d::shader
 	{
 		return components.baseColour
 			* ( lighting.diffuse
-				+ ambientOcclusion * ( reflectedDiffuse + indirect.diffuseColour + ( lighting.ambient * indirect.ambient ) ) );
+				+ ambientOcclusion * ( reflectedDiffuse + indirect.diffuseColour + indirect.ambient ) );
 	}
 
 	sdw::Vec3 PhongLightingModel::doGetSpecularResult( BlendComponents const & components

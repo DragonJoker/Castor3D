@@ -14,7 +14,6 @@ namespace castor3d::shader
 	struct DirectLighting
 		: public sdw::StructInstanceHelperT< "C3D_DirectLighting"
 			, sdw::type::MemoryLayout::eC
-			, sdw::Vec3Field< "ambient" >
 			, sdw::Vec3Field< "diffuse" >
 			, sdw::Vec3Field< "dielectric" >
 			, sdw::Vec3Field< "metal" >
@@ -35,7 +34,6 @@ namespace castor3d::shader
 		C3D_API DirectLighting & operator+=( DirectLighting const & rhs );
 		C3D_API DirectLighting & operator*=( sdw::Float const & rhs );
 
-		sdw::Vec3 ambient;
 		sdw::Vec3 diffuse;
 		sdw::Vec3 dielectric;
 		sdw::Vec3 metal;

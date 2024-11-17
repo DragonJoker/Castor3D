@@ -406,19 +406,14 @@ namespace castor3d
 							, output.pushBlock( cuT( "Lighting" ) )
 							, directLighting );
 
-						if ( components.hasMember( "ambientFactor" ) )
-						{
-							directLighting.ambient = components.getMember< sdw::Vec3 >( "ambientColour" )
-								* c3d_sceneData.ambientLight()
-								* components.getMember< sdw::Float >( "ambientFactor" );
-						}
-
 						// Indirect Lighting
 						lightSurface.updateL( components.getDerivNormal() );
 						auto indirectLighting = writer.declLocale( "indirectLighting"
 							, shader::IndirectLighting{ writer } );
 						indirect.computeCombinedDifSpec( flags.getGlobalIlluminationFlags()
 							, hasDiffuseGI
+							, c3d_sceneData
+							, components
 							, lightSurface
 							, components.perceptualRoughness
 							, c3d_mapBrdf
@@ -463,9 +458,9 @@ namespace castor3d
 							, components
 							, lightSurface
 							, incident
+							, occlusion
 							, directLighting
 							, indirectLighting
-							, occlusion
 							, reflRefrResult );
 					}
 					ELSE

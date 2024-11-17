@@ -7,6 +7,7 @@
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <CastorUtils/Math/Angle.hpp>
@@ -79,6 +80,8 @@ namespace castor3d
 
 		void GlobalIllumination::computeCombinedDifSpec( SceneFlags sceneFlags
 			, bool hasDiffuseGI
+			, SceneData const & sceneData
+			, BlendComponents const & components
 			, LightSurface lightSurface
 			, sdw::Float roughness
 			, sdw::CombinedImage2DRgba32 brdfMap
@@ -100,6 +103,8 @@ namespace castor3d
 				, indirectLighting
 				, debugOutput );
 			computeAmbient( sceneFlags
+				, sceneData
+				, components
 				, indirectLighting
 				, debugOutput );
 			indirectLighting.diffuseColour = ( hasDiffuseGI
@@ -170,28 +175,18 @@ namespace castor3d
 		}
 
 		void GlobalIllumination::computeAmbient( SceneFlags sceneFlags
+			, SceneData const & sceneData
+			, BlendComponents const & components
 			, IndirectLighting & indirectLighting
 			, DebugOutput & debugOutput )
 		{
-			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
+			if ( components.hasMember( "ambientFactor" ) )
 			{
-				indirectLighting.ambient = indirectLighting.diffuseColour;
-			}
-			else if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
-			{
-				auto llpvGridData = m_writer.getVariable< LayeredLpvGridData >( "c3d_llpvGridData" );
-				indirectLighting.ambient = indirectLighting.diffuseColour / llpvGridData.indirectAttenuation;
-			}
-			else if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
-			{
-				auto lpvGridData = m_writer.getVariable< LpvGridData >( "c3d_lpvGridData" );
-				indirectLighting.ambient = indirectLighting.diffuseColour / lpvGridData.indirectAttenuation();
+				indirectLighting.ambient = components.getMember< sdw::Vec3 >( "ambientColour" )
+					* components.getMember< sdw::Float >( "ambientFactor" );
 			}
 
-			if ( checkFlag( sceneFlags, SceneFlag::eRsmGI ) )
-			{
-				indirectLighting.ambient = indirectLighting.diffuseColour;
-			}
+			indirectLighting.ambient += sceneData.ambientLight();
 		}
 
 		void GlobalIllumination::computeSpecular( SceneFlags sceneFlags

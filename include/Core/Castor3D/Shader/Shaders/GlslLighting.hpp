@@ -88,9 +88,9 @@ namespace castor3d::shader
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & incident
+			, sdw::Float const & ambientOcclusion
 			, DirectLighting const & directLighting
 			, IndirectLighting const & indirectLighting
-			, sdw::Float const & ambientOcclusion
 			, ReflectionRefraction const & reflRefr );
 		/**
 		*\name
