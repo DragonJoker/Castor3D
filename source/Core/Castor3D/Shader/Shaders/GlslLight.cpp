@@ -203,7 +203,7 @@ namespace castor3d::shader
 		, LightingModelID lightingModelId
 		, BackgroundModelID backgroundModelId
 		, Materials const & materials
-		, BRDFHelpers & brdf
+		, BRDFHelpers & brdfHelpers
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
@@ -213,7 +213,7 @@ namespace castor3d::shader
 		, m_writer{ *materials.getWriter() }
 		, m_engine{ engine }
 		, m_materials{ materials }
-		, m_brdf{ brdf }
+		, m_brdfHelpers{ brdfHelpers }
 		, m_utils{ utils }
 		, m_enableVolumetric{ enableVolumetric }
 		, m_shadowModel{ castor::makeUnique< Shadow >( shadowOptions, m_writer ) }
@@ -358,7 +358,7 @@ namespace castor3d::shader
 					, parentOutput );
 			}
 
-			parentOutput.registerDebug( debugOutput.pushBlock( cuT( "Lighting" ) ) );
+			parentOutput.registerDebug( debugOutput );
 		}
 	}
 
@@ -423,7 +423,7 @@ namespace castor3d::shader
 					, parentOutput );
 			}
 
-			parentOutput.registerDebug( debugOutput.pushBlock( cuT( "Lighting" ) ) );
+			parentOutput.registerDebug( debugOutput );
 		}
 	}
 
@@ -484,7 +484,7 @@ namespace castor3d::shader
 					, output );
 			}
 
-			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "Diffuse" ), output );
+			debugOutput.registerOutput( cuT( "Diffuse" ), output );
 		}
 	}
 
@@ -718,8 +718,8 @@ namespace castor3d::shader
 		, DirectionalShadowData const & directionalShadows
 		, LightSurface const & lightSurface )
 	{
-		return m_sssTransmittance->compute( debugOutput
-				, components
+		return m_sssTransmittance->compute( debugOutput.pushBlock( cuT( "SSSTransmittance" ) )
+			, components
 			, directionalLight
 			, directionalShadows
 			, lightSurface );
@@ -731,8 +731,8 @@ namespace castor3d::shader
 		, PointShadowData const & pointShadows
 		, LightSurface const & lightSurface )
 	{
-		return m_sssTransmittance->compute( debugOutput
-				, components
+		return m_sssTransmittance->compute( debugOutput.pushBlock( cuT( "SSSTransmittance" ) )
+			, components
 			, pointLight
 			, pointShadows
 			, lightSurface );
@@ -744,8 +744,8 @@ namespace castor3d::shader
 		, SpotShadowData const & spotShadows
 		, LightSurface const & lightSurface )
 	{
-		return m_sssTransmittance->compute( debugOutput
-				, components
+		return m_sssTransmittance->compute( debugOutput.pushBlock( cuT( "SSSTransmittance" ) )
+			, components
 			, spotLight
 			, spotShadows
 			, lightSurface );
@@ -785,7 +785,7 @@ namespace castor3d::shader
 				, m_writer
 				, m_materials
 				, m_utils
-				, m_brdf
+				, m_brdfHelpers
 				, *m_shadowModel
 				, *this
 				, m_enableVolumetric );

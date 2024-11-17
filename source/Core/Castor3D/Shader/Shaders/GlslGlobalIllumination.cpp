@@ -105,7 +105,6 @@ namespace castor3d
 			indirectLighting.diffuseColour = ( hasDiffuseGI
 				? max( indirectLighting.diffuseColour / sdw::Float{ castor::Pi< float > }, vec3( 0.0_f ) )
 				: vec3( 0.0_f ) );
-			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Diffuse" ), indirectLighting.diffuseColour );
 		}
 
 		void GlobalIllumination::computeOcclusion( SceneFlags sceneFlags
@@ -137,8 +136,6 @@ namespace castor3d
 				}
 				FI
 			}
-
-			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Occlusion" ), indirectLighting.occlusion );
 		}
 
 		void GlobalIllumination::computeDiffuse( SceneFlags sceneFlags
@@ -170,10 +167,6 @@ namespace castor3d
 					indirectLighting.rawDiffuse += ( computeLPVRadiance( lightSurface, lpvGridData ) * lpvGridData.indirectAttenuation() ) / sdw::Float{ castor::Pi< float > };
 				}
 			}
-
-			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Raw Diffuse" ), indirectLighting.rawDiffuse );
-			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Diffuse Colour" ), indirectLighting.diffuseColour );
-			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Diffuse Blend" ), indirectLighting.diffuseBlend );
 		}
 
 		void GlobalIllumination::computeAmbient( SceneFlags sceneFlags
@@ -199,8 +192,6 @@ namespace castor3d
 			{
 				indirectLighting.ambient = indirectLighting.diffuseColour;
 			}
-
-			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Ambient" ), indirectLighting.ambient );
 		}
 
 		void GlobalIllumination::computeSpecular( SceneFlags sceneFlags
@@ -224,8 +215,6 @@ namespace castor3d
 					, vec3( envBRDF.x() )
 					, vec3( envBRDF.y() ) );
 			}
-
-			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Specular" ), indirectLighting.specular );
 		}
 
 		sdw::Vec4 GlobalIllumination::traceConeRadiance( sdw::CombinedImage3DRgba32 const & pvoxels

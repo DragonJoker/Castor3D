@@ -564,7 +564,7 @@ namespace castor3d
 					auto color = writer.declLocale( "color"
 						, vec4( components.emissiveColour * components.emissiveFactor, 1.0f ) );
 					shader::DebugOutput debugOutput{ getScene().getDebugConfig()
-						, cuT( "Default" )
+						, cuT( "Voxelize" )
 						, c3d_cameraData.debugIndex()
 						, color
 						, false };

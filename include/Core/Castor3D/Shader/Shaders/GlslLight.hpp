@@ -217,7 +217,7 @@ namespace castor3d::shader
 			, LightingModelID lightingModelId
 			, BackgroundModelID backgroundModelId
 			, Materials const & materials
-			, BRDFHelpers & brdf
+			, BRDFHelpers & brdfHelpers
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
@@ -226,7 +226,7 @@ namespace castor3d::shader
 			, LightingModelID lightingModelId
 			, BackgroundModelID backgroundModelId
 			, Materials const & materials
-			, BRDFHelpers & brdf
+			, BRDFHelpers & brdfHelpers
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
@@ -239,7 +239,7 @@ namespace castor3d::shader
 			, LightingModelID lightingModelId
 			, BackgroundModelID backgroundModelId
 			, Materials const & materials
-			, BRDFHelpers & brdf
+			, BRDFHelpers & brdfHelpers
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
@@ -254,7 +254,7 @@ namespace castor3d::shader
 			, LightingModelID lightingModelId
 			, BackgroundModelID backgroundModelId
 			, Materials const & materials
-			, BRDFHelpers & brdf
+			, BRDFHelpers & brdfHelpers
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles )
@@ -262,7 +262,7 @@ namespace castor3d::shader
 				, lightingModelId
 				, backgroundModelId
 				, materials
-				, brdf
+				, brdfHelpers
 				, utils
 				, shadowOptions
 				, sssProfiles
@@ -274,7 +274,7 @@ namespace castor3d::shader
 			, LightingModelID lightingModelId
 			, BackgroundModelID backgroundModelId
 			, Materials const & materials
-			, BRDFHelpers & brdf
+			, BRDFHelpers & brdfHelpers
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
@@ -286,7 +286,7 @@ namespace castor3d::shader
 				, lightingModelId
 				, backgroundModelId
 				, materials
-				, brdf
+				, brdfHelpers
 				, utils
 				, shadowOptions
 				, sssProfiles
@@ -302,7 +302,7 @@ namespace castor3d::shader
 			, LightingModelID lightingModelId
 			, BackgroundModelID backgroundModelId
 			, Materials const & materials
-			, BRDFHelpers & brdf
+			, BRDFHelpers & brdfHelpers
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
@@ -315,7 +315,7 @@ namespace castor3d::shader
 				, lightingModelId
 				, backgroundModelId
 				, materials
-				, brdf
+				, brdfHelpers
 				, utils
 				, shadowOptions
 				, sssProfiles
@@ -330,7 +330,7 @@ namespace castor3d::shader
 
 		Lights( Engine const & engine
 			, Materials const & materials
-			, BRDFHelpers & brdf
+			, BRDFHelpers & brdfHelpers
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
@@ -339,7 +339,7 @@ namespace castor3d::shader
 				, 0u
 				, 0u
 				, materials
-				, brdf
+				, brdfHelpers
 				, utils
 				, shadowOptions
 				, sssProfiles
@@ -349,7 +349,7 @@ namespace castor3d::shader
 
 		Lights( Engine const & engine
 			, Materials const & materials
-			, BRDFHelpers & brdf
+			, BRDFHelpers & brdfHelpers
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
@@ -362,7 +362,7 @@ namespace castor3d::shader
 				, 0u
 				, 0u
 				, materials
-				, brdf
+				, brdfHelpers
 				, utils
 				, shadowOptions
 				, sssProfiles
@@ -376,7 +376,7 @@ namespace castor3d::shader
 
 		Lights( Engine const & engine
 			, Materials const & materials
-			, BRDFHelpers & brdf
+			, BRDFHelpers & brdfHelpers
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
@@ -390,7 +390,7 @@ namespace castor3d::shader
 				, 0u
 				, 0u
 				, materials
-				, brdf
+				, brdfHelpers
 				, utils
 				, shadowOptions
 				, sssProfiles
@@ -405,7 +405,7 @@ namespace castor3d::shader
 
 		Lights( Engine const & engine
 			, Materials const & materials
-			, BRDFHelpers & brdf
+			, BRDFHelpers & brdfHelpers
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles )
@@ -413,7 +413,7 @@ namespace castor3d::shader
 				, 0u
 				, 0u
 				, materials
-				, brdf
+				, brdfHelpers
 				, utils
 				, shadowOptions
 				, sssProfiles
@@ -423,7 +423,7 @@ namespace castor3d::shader
 
 		Lights( Engine const & engine
 			, Materials const & materials
-			, BRDFHelpers & brdf
+			, BRDFHelpers & brdfHelpers
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
@@ -435,7 +435,7 @@ namespace castor3d::shader
 				, 0u
 				, 0u
 				, materials
-				, brdf
+				, brdfHelpers
 				, utils
 				, shadowOptions
 				, sssProfiles
@@ -449,7 +449,7 @@ namespace castor3d::shader
 
 		Lights( Engine const & engine
 			, Materials const & materials
-			, BRDFHelpers & brdf
+			, BRDFHelpers & brdfHelpers
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
@@ -462,7 +462,7 @@ namespace castor3d::shader
 				, 0u
 				, 0u
 				, materials
-				, brdf
+				, brdfHelpers
 				, utils
 				, shadowOptions
 				, sssProfiles
@@ -653,7 +653,7 @@ namespace castor3d::shader
 		sdw::ShaderWriter & m_writer;
 		Engine const & m_engine;
 		Materials const & m_materials;
-		BRDFHelpers & m_brdf;
+		BRDFHelpers & m_brdfHelpers;
 		Utils & m_utils;
 		bool m_enableVolumetric;
 		LightingModelPtr m_lightingModel;

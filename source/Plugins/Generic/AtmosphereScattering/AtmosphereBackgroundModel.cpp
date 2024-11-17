@@ -109,7 +109,7 @@ namespace atmosphere_scattering
 								, wsPosition
 								, wsEyeDir
 								, fragSize ) ) );
-					debugOutput.registerOutput( cuT( "Atmosphere Reflections" ), cuT( "Sky Contribution" ), skyContrib );
+					debugOutput.registerOutput( cuT( "Sky Contribution" ), skyContrib );
 					m_writer.returnStmt( skyContrib );
 				}
 				, sdw::InVec3{ m_writer, "wsNormal" }
