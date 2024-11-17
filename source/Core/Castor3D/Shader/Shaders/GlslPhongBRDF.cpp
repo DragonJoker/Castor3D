@@ -67,7 +67,7 @@ namespace castor3d::shader
 				, sdw::Float const & /*NdotL*/
 				, sdw::Float const & NdotH )
 			{
-				m_writer.returnStmt( pow( NdotH , ( 1.0_f - components.perceptualRoughness ) * 256.0_f ) );
+				m_writer.returnStmt( vec3( pow( NdotH, ( 1.0_f - components.perceptualRoughness ) * 256.0_f ) ) );
 			}
 			, c3d::InBlendComponents{ m_writer, "components", pcomponents }
 			, sdw::InVec3{ m_writer, "N" }
