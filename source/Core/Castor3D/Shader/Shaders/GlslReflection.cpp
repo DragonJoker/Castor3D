@@ -306,7 +306,7 @@ namespace castor3d::shader
 
 			if ( components.hasMember( "thicknessFactor" ) )
 			{
-				output.diffuseTransmission *= applyVolumeAttenuation( components.getMember< sdw::Float >( "diffuseTransmissionThickness" )
+				output.diffuseTransmission *= applyVolumeAttenuation( components.thicknessFactor
 					, components.attenuationColour
 					, components.attenuationDistance );
 				debugOutput.registerOutput( "Volume Diffuse Transmission", output.diffuseTransmission );

@@ -56,11 +56,6 @@ namespace castor3d
 				, sdw::Float const & passMultiplier
 				, shader::BlendComponents & res
 				, shader::BlendComponents const & src )const override;
-			void finishComponent( shader::DerivSurfaceBase const & surface
-				, shader::CameraData const & camera
-				, shader::ModelData const & model
-				, shader::Utils & utils
-				, shader::BlendComponents & components )const;
 		};
 
 		class Plugin
