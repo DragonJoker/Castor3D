@@ -174,7 +174,6 @@ namespace castor3d::shader
 			, psceneUv
 			, penvMapIndex
 			, poutput );
-		poutput.registerDebug( debugOutput );
 	}
 
 	void ReflectionModel::computeWithoutTransmission( BlendComponents & components
@@ -275,7 +274,6 @@ namespace castor3d::shader
 			, pNdotV
 			, penvMapIndex
 			, poutput );
-		poutput.registerDebug( debugOutput );
 	}
 
 	void ReflectionModel::computeDiffuseBrdf( BlendComponents & components

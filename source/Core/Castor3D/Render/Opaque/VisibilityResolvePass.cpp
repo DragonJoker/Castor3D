@@ -1220,7 +1220,7 @@ namespace castor3d
 				{
 					{
 						shader::DebugOutput output{ debugConfig
-							, cuT( "Opaque" )
+							, cuT( "Default" )
 							, c3d_cameraDataMain.debugIndex()
 							, outResult
 							, areDebugTargetsEnabled };

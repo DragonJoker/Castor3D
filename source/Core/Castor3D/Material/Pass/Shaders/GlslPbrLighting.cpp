@@ -221,18 +221,18 @@ namespace castor3d::shader
 		, sdw::Vec3 & backgroundResult )
 	{
 		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Background" ) );
-		reflRefr.registerDebug( debugOutput );
+		reflRefr.registerDebug( debugOutputBlock );
 		auto bgDiffuse = m_writer.declLocale( "bgDiffuse", reflRefr.diffuseReflection );
 		auto bgSpecular = m_writer.declLocale( "bgSpecular", reflRefr.specularReflection );
 
 		if ( components.hasMember( "transmissionFactor" ) )
 		{
 			bgDiffuse = mix( bgDiffuse, reflRefr.specularTransmission, vec3( components.transmissionFactor ) );
-			debugOutput.registerOutput( "Diffuse Mixed With Specular Transmission", bgDiffuse );
+			debugOutputBlock.registerOutput( "Diffuse Mixed With Specular Transmission", bgDiffuse );
 		}
 		else
 		{
-			debugOutput.registerOutput( "Diffuse Mixed With Specular Transmission", bgDiffuse );
+			debugOutputBlock.registerOutput( "Diffuse Mixed With Specular Transmission", bgDiffuse );
 		}
 
 		if ( components.hasMember( "diffuseTransmissionFactor" ) )
@@ -240,11 +240,11 @@ namespace castor3d::shader
 			bgDiffuse = mix( bgDiffuse
 				, reflRefr.diffuseTransmission
 				, vec3( components.diffuseTransmissionFactor ) );
-			debugOutput.registerOutput( "Diffuse Mixed With Diffuse Transmission", bgDiffuse );
+			debugOutputBlock.registerOutput( "Diffuse Mixed With Diffuse Transmission", bgDiffuse );
 		}
 		else
 		{
-			debugOutput.registerOutput( "Diffuse Mixed With Diffuse Transmission", bgDiffuse );
+			debugOutputBlock.registerOutput( "Diffuse Mixed With Diffuse Transmission", bgDiffuse );
 		}
 
 		debugOutputBlock.registerOutput( "Diffuse", bgDiffuse );
@@ -269,7 +269,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & directLightingResult )
 	{
 		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Direct" ) );
-		directLighting.registerDebug( debugOutput );
+		directLighting.registerDebug( debugOutputBlock );
 		directLightingResult = mix( directLighting.dielectric, directLighting.metal, vec3( components.metalness ) );
 		debugOutputBlock.registerOutput( "Result", directLightingResult );
 

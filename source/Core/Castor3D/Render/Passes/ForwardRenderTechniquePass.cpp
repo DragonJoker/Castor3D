@@ -324,7 +324,7 @@ namespace castor3d
 				, sdw::FragmentOut const & out )
 			{
 				shader::DebugOutput output{ getDebugConfig()
-					, m_groupName
+					, cuT( "Default" )
 					, c3d_cameraData.debugIndex()
 					, outColour
 					, true };

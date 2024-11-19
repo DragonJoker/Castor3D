@@ -335,7 +335,7 @@ namespace castor3d
 				, sdw::FragmentOut const & )
 			{
 				shader::DebugOutput output{ getDebugConfig()
-					, cuT( "Transparent" )
+					, cuT( "Default" )
 					, c3d_cameraData.debugIndex()
 					, outAccumulation
 					, areDebugTargetsEnabled() };
