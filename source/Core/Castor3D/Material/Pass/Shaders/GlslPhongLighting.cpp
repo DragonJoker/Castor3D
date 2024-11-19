@@ -140,9 +140,12 @@ namespace castor3d::shader
 		, sdw::Vec3 const & clearcoatFresnel
 		, sdw::Vec3 & backgroundResult )
 	{
+		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Background" ) );
+		reflRefr.registerDebug( debugOutputBlock );
+
 		if ( fresnelFactor.isEnabled() )
 		{
-			debugOutput.registerOutput( cuT( "Fresnel Factor" ), fresnelFactor );
+			debugOutputBlock.registerOutput( cuT( "Fresnel Factor" ), fresnelFactor );
 
 			IF( m_writer, components.ior != 0.0_f )
 			{
@@ -167,11 +170,11 @@ namespace castor3d::shader
 		if ( components.hasMember( "transmissionFactor" ) )
 		{
 			bgDiffuse = mix( bgDiffuse, reflRefr.specularTransmission, vec3( components.transmissionFactor ) );
-			debugOutput.registerOutput( "Diffuse Mixed With Specular Transmission", bgDiffuse );
+			debugOutputBlock.registerOutput( "Diffuse Mixed With Specular Transmission", bgDiffuse );
 		}
 		else
 		{
-			debugOutput.registerOutput( "Diffuse Mixed With Specular Transmission", bgDiffuse );
+			debugOutputBlock.registerOutput( "Diffuse Mixed With Specular Transmission", bgDiffuse );
 		}
 
 		if ( components.hasMember( "diffuseTransmissionFactor" ) )
@@ -179,14 +182,13 @@ namespace castor3d::shader
 			bgDiffuse = mix( bgDiffuse
 				, reflRefr.diffuseTransmission
 				, vec3( components.diffuseTransmissionFactor ) );
-			debugOutput.registerOutput( "Diffuse Mixed With Diffuse Transmission", bgDiffuse );
+			debugOutputBlock.registerOutput( "Diffuse Mixed With Diffuse Transmission", bgDiffuse );
 		}
 		else
 		{
-			debugOutput.registerOutput( "Diffuse Mixed With Diffuse Transmission", bgDiffuse );
+			debugOutputBlock.registerOutput( "Diffuse Mixed With Diffuse Transmission", bgDiffuse );
 		}
 
-		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Background" ) );
 		backgroundResult = bgDiffuse + bgSpecular * components.getMember< sdw::Vec3 >( "specular", vec3( 1.0_f ) );
 		debugOutputBlock.registerOutput( "Result", backgroundResult );
 		doComputeBackgroundLayers( debugOutputBlock
@@ -201,6 +203,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & directLightingResult )
 	{
 		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Direct" ) );
+		directLighting.registerDebug( debugOutputBlock );
 		auto dlDiffuseResult = m_writer.declLocale( "dlDiffuseResult"
 			, directLighting.diffuse );
 		debugOutputBlock.registerOutput( "Diffuse Result", dlDiffuseResult );
@@ -215,14 +218,15 @@ namespace castor3d::shader
 				, clamp( components.getMember< sdw::Float >( "specularFactor" ), 0.0_f, 1.0_f ) );
 			dlSpecularResult *= specularFactor * fresnelFactor;
 			dlDiffuseResult *= 1.0_f - specularFactor * fresnelFactor;
-			debugOutput.registerOutput( cuT( "Specular Factor" ), specularFactor );
+			debugOutputBlock.registerOutput( cuT( "Specular Factor" ), specularFactor );
 		}
 		else
 		{
-			debugOutput.registerOutput( cuT( "Specular Factor" ), 0.0_f );
+			debugOutputBlock.registerOutput( cuT( "Specular Factor" ), 0.0_f );
 		}
 
-		directLightingResult = dlDiffuseResult + dlSpecularResult;
+		directLightingResult = dlDiffuseResult + dlSpecularResult * components.getMember< sdw::Vec3 >( "specular", vec3( 1.0_f ) );
+		debugOutputBlock.registerOutput( "Result", directLightingResult );
 	}
 
 	void PhongLightingModel::processIndirectLighting( DebugOutputCategory const & debugOutput
@@ -232,13 +236,14 @@ namespace castor3d::shader
 		, sdw::Vec3 & indirectLightingResult )
 	{
 		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Indirect" ) );
+		indirectLighting.registerDebug( debugOutputBlock );
 		auto ilDiffuseResult = m_writer.declLocale( "ilDiffuseResult"
 			, components.baseColour * ( indirectLighting.diffuseColour + indirectLighting.ambient ) );
-		debugOutput.registerOutput( "Diffuse Result", ilDiffuseResult );
+		debugOutputBlock.registerOutput( "Diffuse Result", ilDiffuseResult );
 
 		auto ilSpecularResult = m_writer.declLocale( "ilSpecularResult"
 			, indirectLighting.specular );
-		debugOutput.registerOutput( "Specular Result", ilSpecularResult );
+		debugOutputBlock.registerOutput( "Specular Result", ilSpecularResult );
 
 		if ( components.hasMember( "specularFactor" ) )
 		{
@@ -248,6 +253,7 @@ namespace castor3d::shader
 		}
 
 		indirectLightingResult = ilDiffuseResult + ilSpecularResult;
+		debugOutputBlock.registerOutput( "Result", indirectLightingResult );
 	}
 
 	//*********************************************************************************************

@@ -143,6 +143,7 @@ namespace water::shader
 		, sdw::Vec3 & backgroundResult )
 	{
 		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Background" ) );
+		reflRefr.registerDebug( debugOutputBlock );
 		auto bgDiffuse = m_writer.declLocale( "bgDiffuse", reflRefr.diffuseReflection );
 		auto bgSpecular = m_writer.declLocale( "bgSpecular", reflRefr.specularReflection );
 
@@ -182,6 +183,7 @@ namespace water::shader
 		, sdw::Vec3 & directLightingResult )
 	{
 		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Direct" ) );
+		directLighting.registerDebug( debugOutputBlock );
 
 		auto dlSpecularResult = m_writer.declLocale( "dlSpecularResult"
 			, directLighting.specular );
@@ -210,6 +212,7 @@ namespace water::shader
 		, sdw::Vec3 & indirectLightingResult )
 	{
 		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Indirect" ) );
+		indirectLighting.registerDebug( debugOutputBlock );
 
 		auto ilSpecularResult = m_writer.declLocale( "ilSpecularResult"
 			, indirectLighting.specular );

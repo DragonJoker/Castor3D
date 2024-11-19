@@ -357,8 +357,6 @@ namespace castor3d::shader
 					, debugOutput
 					, parentOutput );
 			}
-
-			parentOutput.registerDebug( debugOutput );
 		}
 	}
 
@@ -422,8 +420,6 @@ namespace castor3d::shader
 					, debugOutput
 					, parentOutput );
 			}
-
-			parentOutput.registerDebug( debugOutput );
 		}
 	}
 
