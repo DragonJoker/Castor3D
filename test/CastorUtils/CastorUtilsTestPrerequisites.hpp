@@ -8,6 +8,8 @@
 #include <CastorUtils/Design/ArrayView.hpp>
 #include <CastorUtils/Design/ChangeTracked.hpp>
 #include <CastorUtils/Math/Angle.hpp>
+#include <CastorUtils/Math/Illumination.hpp>
+#include <CastorUtils/Math/LuminousIntensity.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 #include <random>
@@ -197,6 +199,28 @@ namespace Testing
 		{
 			std::stringstream stream;
 			stream << value.degrees();
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor::LuminousIntensity >
+	{
+		static std::string get( castor::LuminousIntensity const & value )
+		{
+			std::stringstream stream;
+			stream << value.candela();
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor::Illumination >
+	{
+		static std::string get( castor::Illumination const & value )
+		{
+			std::stringstream stream;
+			stream << value.lux();
 			return stream.str();
 		}
 	};

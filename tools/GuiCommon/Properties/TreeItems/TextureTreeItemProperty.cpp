@@ -253,6 +253,20 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
+				, castor::LuminousIntensity & value
+				, ConfigurationVisitor::ControlsList controls )override
+			{
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+			}
+
+			void visit( castor::String const & name
+				, castor::Illumination & value
+				, ConfigurationVisitor::ControlsList controls )override
+			{
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+			}
+
+			void visit( castor::String const & name
 				, castor::RgbColour & value
 				, ConfigurationVisitor::ControlsList controls )override
 			{

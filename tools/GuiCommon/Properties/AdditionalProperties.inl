@@ -4,6 +4,8 @@
 #include <CastorUtils/Graphics/RgbColour.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 #include <CastorUtils/Math/Angle.hpp>
+#include <CastorUtils/Math/Illumination.hpp>
+#include <CastorUtils/Math/LuminousIntensity.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 #include <CastorUtils/Math/Speed.hpp>
 
@@ -353,6 +355,56 @@ namespace GuiCommon
 		static inline wxString getUnit()
 		{
 			return wxT( "°" );
+		}
+	};
+
+	//************************************************************************************************
+
+	template<>
+	struct ValueTraitsT< castor::Illumination >
+	{
+		using ValueT = castor::Illumination;
+		using ParamType = ValueT const &;
+		using RetType = ValueT;
+
+		static inline RetType convert( wxVariant const & var )
+		{
+			return castor::Illumination{ var.GetDouble() };
+		}
+
+		static inline wxVariant convert( ParamType value )
+		{
+			return WXVARIANT( value.lux() );
+		}
+
+		static inline wxString getUnit()
+		{
+			return wxT( "lx" );
+		}
+	};
+
+	//************************************************************************************************
+
+	template<>
+	struct ValueTraitsT< castor::LuminousIntensity >
+	{
+		using ValueT = castor::LuminousIntensity;
+		using ParamType = ValueT const &;
+		using RetType = ValueT;
+
+		static inline RetType convert( wxVariant const & var )
+		{
+			return castor::LuminousIntensity{ var.GetDouble() };
+		}
+
+		static inline wxVariant convert( ParamType value )
+		{
+			return WXVARIANT( value.candela() );
+		}
+
+		static inline wxString getUnit()
+		{
+			return wxT( "cd" );
 		}
 	};
 

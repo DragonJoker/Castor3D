@@ -92,6 +92,20 @@ namespace castor
 	class Line3D;
 	/**
 	\~english
+	\brief		Luminous intensity class.
+	\~french
+	\brief		Classe d'intensité lumineuse.
+	*/
+	class LuminousIntensity;
+	/**
+	\~english
+	\brief		Illumination class.
+	\~french
+	\brief		Classe d'illumination.
+	*/
+	class Illumination;
+	/**
+	\~english
 	\brief		Templated column major matrix representation.
 	\remark		Can hold any type which has a defined Policy.
 	\~french

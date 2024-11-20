@@ -1,5 +1,7 @@
 #include <cmath>
 
+#include "CastorUtils/Math/Point.hpp"
+
 namespace castor
 {
 	//*********************************************************************************************
