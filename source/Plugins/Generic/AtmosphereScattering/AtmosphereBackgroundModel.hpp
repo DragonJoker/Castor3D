@@ -41,8 +41,7 @@ namespace atmosphere_scattering
 		sdw::RetVec3 computeSpecularReflection( sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
-			, sdw::Float const & roughness
-			, castor3d::shader::DebugOutputCategory const & debugOutput )override;
+			, sdw::Float const & roughness )override;
 
 		void applyVolume( sdw::Vec2 const fragCoord
 			, sdw::Float const linearDepth

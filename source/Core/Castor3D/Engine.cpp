@@ -102,8 +102,8 @@ namespace castor3d
 						| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 						| VK_IMAGE_USAGE_SAMPLED_BIT ) };
 				result.create();
-				castor::PxBufferBaseRPtr bufferRG;
-				castor::PxBufferBaseRPtr bufferB;
+				castor::PxBufferBase const * bufferRG;
+				castor::PxBufferBase const * bufferB;
 				{
 					auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf_ggx.png" );
 					castor::ImageResPtr created;
@@ -795,11 +795,11 @@ namespace castor3d
 
 	void Engine::registerLightingModel( castor::String const & baseName
 		, shader::LightingModelDesc const & defaultDesc
-		, shader::LightingModelCreator creator )const
+		, shader::LightingModelCreator const & creator )const
 	{
 		getLightingModelFactory().registerType( baseName
 			, defaultDesc
-			, castor::move( creator ) );
+			, creator );
 	}
 
 	void Engine::unregisterLightingModel( castor::String const & baseName )const

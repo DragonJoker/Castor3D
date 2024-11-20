@@ -470,9 +470,9 @@ namespace c3d_gltf
 						pass.registerTexture( castor::move( *sourceInfo ), passTexConfig );
 					}
 				}
-				catch ( castor::Exception & )
+				catch ( castor::Exception & exc )
 				{
-					// Already handled.
+					castor3d::log::error << exc.what() << std::endl;
 				}
 			}
 		}
@@ -502,9 +502,9 @@ namespace c3d_gltf
 					pass.registerTexture( castor::move( *sourceInfo ), passTexConfig );
 				}
 			}
-			catch ( castor::Exception & )
+			catch ( castor::Exception & exc )
 			{
-				// Already handled.
+				castor3d::log::error << exc.what() << std::endl;
 			}
 		}
 

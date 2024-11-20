@@ -44,7 +44,7 @@ namespace castor3d::shader
 
 	//*********************************************************************************************
 
-	sdw::Float DirectionalLight::getAttenuationFactor( sdw::Float const & distance )const
+	sdw::Float DirectionalLight::getAttenuationFactor( sdw::Float const & )const
 	{
 		return 1.0_f;
 	}

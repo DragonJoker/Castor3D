@@ -48,20 +48,16 @@ namespace castor3d::shader
 		, sdw::Vec3 const & V
 		, BlendComponents & components
 		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, DebugOutputCategory const & debugOutput )
+		, sdw::Vec3 & reflectedSpecular )
 	{
-		reflectedDiffuse = computeDiffuseReflection( wsNormal
-			, debugOutput );
+		reflectedDiffuse = computeDiffuseReflection( wsNormal );
 		reflectedSpecular = computeSpecularReflection( wsNormal
 			, wsPosition
 			, V
-			, components.perceptualRoughness
-			, debugOutput );
+			, components.perceptualRoughness );
 	}
 
-	sdw::RetVec3 BackgroundModel::computeDiffuseReflection( sdw::Vec3 const & wsNormal
-		, DebugOutputCategory const & debugOutput )
+	sdw::RetVec3 BackgroundModel::computeDiffuseReflection( sdw::Vec3 const & wsNormal )
 	{
 		return sdw::RetVec3{ vec3( 0.0_f ) };
 	}
@@ -69,8 +65,7 @@ namespace castor3d::shader
 	sdw::RetVec3 BackgroundModel::computeSpecularReflection( sdw::Vec3 const & wsNormal
 		, sdw::Vec3 const & wsPosition
 		, sdw::Vec3 const & V
-		, sdw::Float const & roughness
-		, DebugOutputCategory const & debugOutput )
+		, sdw::Float const & roughness )
 	{
 		return sdw::RetVec3{ vec3( 0.0_f ) };
 	}
@@ -80,8 +75,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & V
 		, sdw::Float const & NdotV
 		, BlendComponents & components
-		, sdw::CombinedImage2DRgba32 const & brdf
-		, DebugOutputCategory const & debugOutput )
+		, sdw::CombinedImage2DRgba32 const & brdf )
 	{
 		return sdw::RetVec4{ vec4( 0.0_f ) };
 	}
@@ -89,8 +83,7 @@ namespace castor3d::shader
 	sdw::RetVec3 BackgroundModel::computeRefraction( sdw::Vec3 const & wsNormal
 		, sdw::Vec3 const & wsPosition
 		, sdw::Vec3 const & V
-		, BlendComponents & components
-		, DebugOutputCategory const & debugOutput )
+		, BlendComponents & components )
 	{
 		return sdw::RetVec3{ vec3( 0.0_f ) };
 	}
@@ -109,8 +102,7 @@ namespace castor3d::shader
 	}
 
 	sdw::RetVec3 BackgroundModel::computeDiffuse( sdw::Vec3 const & wsDirection
-		, BlendComponents & components
-		, DebugOutputCategory const & debugOutput )
+		, BlendComponents & components )
 	{
 		return sdw::RetVec3{ vec3( 0.0_f ) };
 	}

@@ -33,27 +33,22 @@ namespace castor3d::shader
 			, LightSurface lightSurface
 			, sdw::Float roughness
 			, sdw::CombinedImage2DRgba32 brdfMap
-			, IndirectLighting & indirectLighting
-			, DebugOutput & debugOutput );
+			, IndirectLighting & indirectLighting );
 		C3D_API void computeOcclusion( SceneFlags sceneFlags
 			, LightSurface lightSurface
-			, IndirectLighting & indirectLighting
-			, DebugOutput & debugOutput );
+			, IndirectLighting & indirectLighting );
 		C3D_API void computeDiffuse( SceneFlags sceneFlags
 			, LightSurface lightSurface
-			, IndirectLighting & indirectLighting
-			, DebugOutput & debugOutput );
+			, IndirectLighting & indirectLighting );
 		C3D_API void computeAmbient( SceneFlags sceneFlags
 			, SceneData const & sceneData
 			, BlendComponents const & components
-			, IndirectLighting & indirectLighting
-			, DebugOutput & debugOutput );
+			, IndirectLighting & indirectLighting );
 		C3D_API void computeSpecular( SceneFlags sceneFlags
 			, LightSurface lightSurface
 			, sdw::Float roughness
 			, sdw::CombinedImage2DRgba32 brdfMap
-			, IndirectLighting & indirectLighting
-			, DebugOutput & debugOutput );
+			, IndirectLighting & indirectLighting );
 		C3D_API sdw::Vec4 traceConeRadiance( sdw::CombinedImage3DRgba32 const & voxels
 			, LightSurface lightSurface
 			, VoxelData const & voxelData );

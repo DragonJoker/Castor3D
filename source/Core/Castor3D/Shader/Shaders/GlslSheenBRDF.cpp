@@ -56,7 +56,7 @@ namespace castor3d::shader
 				auto NdotV = lightSurface.NdotV().value();
 				auto const & sheenRoughness = components.sheenRoughness;
 				auto sheenDistribution = m_writer.declLocale( "sheenDistribution"
-					, m_brdfHelpers.distributionCharlie( sheenRoughness, NdotH ) );
+					, m_brdfHelpers.distributionCharlie( NdotH, sheenRoughness ) );
 				auto sheenVisibility = m_writer.declLocale( "sheenVisibility"
 					, m_brdfHelpers.visibilitySheen( NdotV, NdotL, sheenRoughness ) );
 				m_writer.returnStmt( vec4( components.sheenColour * sheenDistribution * sheenVisibility

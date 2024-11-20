@@ -150,7 +150,6 @@ namespace castor3d::shader
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
 					lightSurface.updateL( derivVec3( -light.direction() ) );
-					lightSurface.registerDebug( debugOutput );
 					doComputeLight( light.base(), components, lightSurface
 						, 1.0_f, radiance
 						, output );
@@ -234,7 +233,6 @@ namespace castor3d::shader
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
 					lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
-					lightSurface.registerDebug( debugOutput );
 					doComputeLight( light.base(), components, lightSurface
 						, light.getAttenuationFactor( lightSurface.lengthL().value() ), radiance
 						, output );
@@ -307,7 +305,6 @@ namespace castor3d::shader
 					, DirectLighting parentOutput )
 				{
 					lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
-					lightSurface.registerDebug( debugOutput );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
 						, dot( lightSurface.L().value(), light.direction() ) );
 
@@ -392,7 +389,6 @@ namespace castor3d::shader
 					, sdw::UInt const & receivesShadows )
 				{
 					lightSurface.updateL( derivVec3( -light.direction() ) );
-					lightSurface.registerDebug( debugOutput );
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
 					auto diffuse = doComputeLightDiffuse( light.base(), components, lightSurface
@@ -461,7 +457,6 @@ namespace castor3d::shader
 					, sdw::UInt const & receivesShadows )
 				{
 					lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
-					lightSurface.registerDebug( debugOutput );
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
 					auto diffuse = doComputeLightDiffuse( light.base(), components, lightSurface
@@ -531,7 +526,6 @@ namespace castor3d::shader
 					, sdw::UInt const & receivesShadows )
 				{
 					lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
-					lightSurface.registerDebug( debugOutput );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
 						, dot( lightSurface.L().value(), light.direction() ) );
 					auto diffuse = m_writer.declLocale( "diffuse"
@@ -622,7 +616,6 @@ namespace castor3d::shader
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
 					lightSurface.updateL( derivVec3( -light.direction() ) );
-					lightSurface.registerDebug( debugOutput );
 					doComputeLightAllButDiffuse( light.base(), components, lightSurface
 						, 1.0_f, radiance
 						, output );
@@ -708,7 +701,6 @@ namespace castor3d::shader
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
 					lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
-					lightSurface.registerDebug( debugOutput );
 					doComputeLightAllButDiffuse( light.base(), components, lightSurface
 						, light.getAttenuationFactor( lightSurface.lengthL().value() ), radiance
 						, output );
@@ -782,7 +774,6 @@ namespace castor3d::shader
 					, DirectLighting parentOutput )
 				{
 					lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
-					lightSurface.registerDebug( debugOutput );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
 						, dot( lightSurface.L().value(), light.direction() ) );
 

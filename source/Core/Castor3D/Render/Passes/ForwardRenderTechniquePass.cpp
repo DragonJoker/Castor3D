@@ -358,7 +358,7 @@ namespace castor3d
 
 				in.registerDebug( flags, components, output.pushBlock( cuT( "Surface" ) ) );
 				auto incident = writer.declLocale( "incident"
-					, reflections.computeIncident( in.worldPosition.xyz(), c3d_cameraData.position() ) );
+					, shader::ReflectionModel::computeIncident( in.worldPosition.xyz(), c3d_cameraData.position() ) );
 
 				if ( !checkFlag( m_filters, RenderFilter::eOpaque ) )
 				{
@@ -456,8 +456,7 @@ namespace castor3d
 								, lightSurface
 								, components.perceptualRoughness
 								, c3d_mapBrdf
-								, indirectLighting
-								, output );
+								, indirectLighting );
 
 							// Reflections/Refraction
 							auto reflRefrResult = writer.declLocale( "reflRefrResult"

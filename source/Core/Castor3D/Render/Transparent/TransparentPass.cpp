@@ -417,8 +417,7 @@ namespace castor3d
 							, lightSurface
 							, components.perceptualRoughness
 							, c3d_mapBrdf
-							, indirectLighting
-							, output );
+							, indirectLighting );
 
 						// Reflections/Refraction
 						auto reflRefrResult = writer.declLocale( "reflRefrResult"
@@ -430,7 +429,7 @@ namespace castor3d
 						}
 
 						auto incident = writer.declLocale( "incident"
-							, reflections.computeIncident( lightSurface.worldPosition().value().xyz(), c3d_cameraData.position() ) );
+							, shader::ReflectionModel::computeIncident( lightSurface.worldPosition().value().xyz(), c3d_cameraData.position() ) );
 						lightSurface.updateN( components.getDerivNormal() );
 						passShaders.backgroundBrdfWithTransmission( reflections
 							, components

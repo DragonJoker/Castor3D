@@ -87,7 +87,7 @@ namespace castor3d::shader
 		return DebugOutputCategory{ *this };
 	}
 
-	castor::String DebugOutput::concatenateCategories()
+	castor::String DebugOutput::concatenateCategories()const
 	{
 		castor::String result;
 		castor::String sep;
