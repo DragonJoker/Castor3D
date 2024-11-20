@@ -157,6 +157,20 @@ namespace GuiCommon
 		}
 
 		void visit( castor::String const & name
+			, castor::LuminousIntensity & value
+			, ControlsList controls )override
+		{
+			doVisit( name, value, castor::move( controls ) );
+		}
+
+		void visit( castor::String const & name
+			, castor::Illumination & value
+			, ControlsList controls )override
+		{
+			doVisit( name, value, castor::move( controls ) );
+		}
+
+		void visit( castor::String const & name
 			, castor3d::ColourWrapper value
 			, ControlsList controls )override
 		{
@@ -337,6 +351,20 @@ namespace GuiCommon
 
 		void visit( castor::String const & name
 			, castor::Angle & value
+			, AtomicControlsList controls )override
+		{
+			doVisit( name, value, castor::move( controls ) );
+		}
+
+		void visit( castor::String const & name
+			, castor::LuminousIntensity & value
+			, AtomicControlsList controls )override
+		{
+			doVisit( name, value, castor::move( controls ) );
+		}
+
+		void visit( castor::String const & name
+			, castor::Illumination & value
 			, AtomicControlsList controls )override
 		{
 			doVisit( name, value, castor::move( controls ) );

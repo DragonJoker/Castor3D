@@ -829,6 +829,28 @@ namespace Testing
 		}
 	};
 
+	template<>
+	struct Stringifier< castor::LuminousIntensity >
+	{
+		static std::string get( castor::LuminousIntensity const & value )
+		{
+			std::stringstream stream;
+			stream << value.candela();
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< castor::Illumination >
+	{
+		static std::string get( castor::Illumination const & value )
+		{
+			std::stringstream stream;
+			stream << value.lux();
+			return stream.str();
+		}
+	};
+
 	template< typename ValueT >
 	struct Stringifier< castor::QuaternionT< ValueT > >
 	{

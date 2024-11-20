@@ -438,6 +438,8 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	source_group( "Source Files\\Log" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Math/LuminousIntensity.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Math/Illumination.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Math/PlaneEquation.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Math/SphericalVertex.cpp
 	)
@@ -446,10 +448,12 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Angle.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Coords.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Coords.inl
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Illumination.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Length.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Length.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Line2D.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Line3D.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/LuminousIntensity.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Math.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/MathModule.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Matrix.hpp

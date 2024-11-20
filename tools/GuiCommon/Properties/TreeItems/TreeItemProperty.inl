@@ -2,6 +2,8 @@
 #include "GuiCommon/Properties/Math/SphereBoxProperties.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <CastorUtils/Math/Illumination.hpp>
+#include <CastorUtils/Math/LuminousIntensity.hpp>
 
 #pragma warning( push )
 #pragma warning( disable: 4371 )
@@ -274,6 +276,18 @@ namespace GuiCommon
 			prop->SetAttribute( wxPG_ATTR_UNITS, ValueTraitsT< ValueT >::getUnit() );
 			prop->SetAttribute( wxPG_ATTR_MIN, WXVARIANT( 0.0 ) );
 			prop->SetAttribute( wxPG_ATTR_MAX, WXVARIANT( 359.0 ) );
+			return prop;
+		}
+		else if constexpr ( std::is_same_v< ValueT, castor::LuminousIntensity > )
+		{
+			wxPGProperty * prop = createProperty( parent, name, value.candela(), handler, castor::move( controls ) );
+			prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( 0.1 ) );
+			return prop;
+		}
+		else if constexpr ( std::is_same_v< ValueT, castor::Illumination > )
+		{
+			wxPGProperty * prop = createProperty( parent, name, value.lux(), handler, castor::move( controls ) );
+			prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( 0.1 ) );
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Font > )

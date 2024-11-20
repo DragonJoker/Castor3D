@@ -287,6 +287,12 @@ namespace castor3d
 			, castor::Angle & value
 			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
+			, castor::LuminousIntensity & value
+			, ControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Illumination & value
+			, ControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
 			, castor::RgbColour & value
 			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
@@ -397,6 +403,12 @@ namespace castor3d
 			, AtomicControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, castor::Angle & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::LuminousIntensity & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Illumination & value
 			, AtomicControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, castor::RgbColour & value
@@ -674,6 +686,18 @@ namespace castor3d
 		}
 
 		void visit( castor::String const & name
+			, castor::LuminousIntensity & value
+			, ControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Illumination & value
+			, ControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
 			, castor::RgbColour & value
 			, ControlsList controls )override
 		{
@@ -882,6 +906,18 @@ namespace castor3d
 
 		void visit( castor::String const & name
 			, castor::Angle & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::LuminousIntensity & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Illumination & value
 			, AtomicControlsList controls )override
 		{
 		}
