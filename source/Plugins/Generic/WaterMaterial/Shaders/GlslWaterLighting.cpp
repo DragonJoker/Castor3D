@@ -107,11 +107,25 @@ namespace water::shader
 			debugOutput.registerOutput( cuT( "Fresnel Factor" ), fresnelFactor );
 		}
 
+		auto metalFresnel = m_writer.declLocale( "metalFresnel"
+			, m_brdfHelpers.computeFresnel( lightSurface.NdotV().value()
+				, components.perceptualRoughness
+				, components.baseColour
+				, 1.0_f ) );
+		debugOutput.registerOutput( "Metal Fresnel", metalFresnel );
+		auto dielectricFresnel = m_writer.declLocale( "dielectricFresnel"
+			, m_brdfHelpers.computeFresnel( lightSurface.NdotV().value()
+				, components.perceptualRoughness
+				, components.dielectricF0
+				, components.specularWeight ) );
+		debugOutput.registerOutput( "Dielectric Fresnel", dielectricFresnel );
+
 		auto clearcoatFresnel = components.getMember( "clearcoatFresnel", vec3( 0.0_f ) );
 
 		auto backgroundResult = m_writer.declLocale( "backgroundResult", vec3( 0.0_f ) );
 		processBackground( debugOutput
-			, components, reflRefr, fresnelFactor, clearcoatFresnel
+			, components, reflRefr
+			, metalFresnel, dielectricFresnel, clearcoatFresnel
 			, backgroundResult );
 
 		auto directLightingResult = m_writer.declLocale( "directLightingResult", vec3( 0.0_f ) );
@@ -121,7 +135,8 @@ namespace water::shader
 
 		auto indirectLightingResult = m_writer.declLocale( "indirectLightingResult", vec3( 0.0_f ) );
 		processIndirectLighting( debugOutput
-			, components, indirectLighting, fresnelFactor
+			, components, indirectLighting
+			, metalFresnel, dielectricFresnel
 			, indirectLightingResult );
 
 		auto emissiveResult = m_writer.declLocale( "emissiveResult"
@@ -138,7 +153,8 @@ namespace water::shader
 	void WaterLightingModel::processBackground( c3d::DebugOutputCategory const & debugOutput
 		, c3d::BlendComponents const & components
 		, c3d::ReflectionRefraction reflRefr
-		, sdw::Float const & fresnelFactor
+		, sdw::Vec3 const & metalFresnel
+		, sdw::Vec3 const & dielectricFresnel
 		, sdw::Vec3 const & clearcoatFresnel
 		, sdw::Vec3 & backgroundResult )
 	{
@@ -169,7 +185,15 @@ namespace water::shader
 			debugOutputBlock.registerOutput( "Diffuse Mixed With Diffuse Transmission", bgDiffuse );
 		}
 
-		backgroundResult = bgDiffuse + bgSpecular;
+		debugOutputBlock.registerOutput( "Diffuse", bgDiffuse );
+		debugOutputBlock.registerOutput( "Specular", bgSpecular );
+		auto bgDielectric = m_writer.declLocale( "bgDielectric", vec3( 0.0_f ) );
+		auto bgMetallic = m_writer.declLocale( "bgMetallic", vec3( 0.0_f ) );
+		m_brdfHelpers.computeSpecularBrdfs( debugOutputBlock, components
+			, bgDiffuse, bgSpecular
+			, metalFresnel, dielectricFresnel
+			, bgMetallic, bgDielectric );
+		backgroundResult = mix( bgDielectric, bgMetallic, vec3( components.metalness ) );
 		debugOutputBlock.registerOutput( "Result", backgroundResult );
 		doComputeBackgroundLayers( debugOutputBlock
 			, components, reflRefr, clearcoatFresnel
@@ -208,24 +232,23 @@ namespace water::shader
 	void WaterLightingModel::processIndirectLighting( c3d::DebugOutputCategory const & debugOutput
 		, c3d::BlendComponents const & components
 		, c3d::IndirectLighting const & indirectLighting
-		, sdw::Float const & fresnelFactor
+		, sdw::Vec3 const & metalFresnel
+		, sdw::Vec3 const & dielectricFresnel
 		, sdw::Vec3 & indirectLightingResult )
 	{
 		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Indirect" ) );
 		indirectLighting.registerDebug( debugOutputBlock );
-
-		auto ilSpecularResult = m_writer.declLocale( "ilSpecularResult"
-			, indirectLighting.specular );
-		debugOutputBlock.registerOutput( "Specular Result", ilSpecularResult );
-
-		if ( components.hasMember( "specularFactor" ) )
-		{
-			auto specularFactor = m_writer.getVariable< sdw::Float >( "c3d_specularFactor" );
-			ilSpecularResult *= specularFactor * fresnelFactor;
-		}
-
-		indirectLightingResult = ilSpecularResult;
-		debugOutputBlock.registerOutput( cuT( "Result" ), indirectLightingResult );
+		auto indirectMetal = m_writer.declLocale( "indirectMetal", vec3( 0.0_f ) );
+		auto indirectDielectric = m_writer.declLocale( "indirectDielectric", vec3( 0.0_f ) );
+		m_brdfHelpers.computeSpecularBrdfs( debugOutputBlock, components
+			, indirectLighting.diffuseColour, indirectLighting.specular
+			, metalFresnel, dielectricFresnel
+			, indirectMetal, indirectDielectric );
+		debugOutputBlock.registerOutput( "Raw Dielectric", indirectDielectric );
+		indirectDielectric *= components.baseColour;
+		debugOutputBlock.registerOutput( "Tinted Dielectric", indirectDielectric );
+		indirectLightingResult = mix( indirectDielectric, indirectMetal, vec3( components.metalness ) );
+		debugOutputBlock.registerOutput( "Result", indirectLightingResult );
 	}
 
 	//*********************************************************************************************
