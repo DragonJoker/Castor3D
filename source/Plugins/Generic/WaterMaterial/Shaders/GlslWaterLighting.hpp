@@ -49,7 +49,8 @@ namespace water::shader
 		void processBackground( c3d::DebugOutputCategory const & debugOutput
 			, c3d::BlendComponents const & components
 			, c3d::ReflectionRefraction reflRefr
-			, sdw::Float const & fresnelFactor
+			, sdw::Vec3 const & metalFresnel
+			, sdw::Vec3 const & dielectricFresnel
 			, sdw::Vec3 const & clearcoatFresnel
 			, sdw::Vec3 & backgroundResult );
 		void processDirectLighting( c3d::DebugOutputCategory const & debugOutput
@@ -60,7 +61,8 @@ namespace water::shader
 		void processIndirectLighting( c3d::DebugOutputCategory const & debugOutput
 			, c3d::BlendComponents const & components
 			, c3d::IndirectLighting const & indirectLighting
-			, sdw::Float const & fresnelFactor
+			, sdw::Vec3 const & metalFresnel
+			, sdw::Vec3 const & dielectricFresnel
 			, sdw::Vec3 & indirectLightingResult );
 	};
 }

@@ -46,18 +46,6 @@ namespace castor3d::shader
 			, IndirectLighting const & indirectLighting
 			, ReflectionRefraction const & reflRefr
 			, sdw::Vec3 & combineResult )override;
-		sdw::RetVec3 computeFresnel( sdw::Float const & NdotV
-			, sdw::Float const & roughness
-			, sdw::Vec3 const & F0
-			, sdw::Float const & specularWeight );
-		void computeSpecularBrdfs( DebugOutputCategory const & debugOutput
-			, BlendComponents const & components
-			, sdw::Vec3 const & reflectedDiffuse
-			, sdw::Vec3 const & reflectedSpecular
-			, sdw::Vec3 const & metalFresnel
-			, sdw::Vec3 const & dielectricFresnel
-			, sdw::Vec3 & metal
-			, sdw::Vec3 & dielectric );
 		void processBackground( DebugOutputCategory const & debugOutput
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
@@ -77,12 +65,6 @@ namespace castor3d::shader
 			, sdw::Vec3 const & metalFresnel
 			, sdw::Vec3 const & dielectricFresnel
 			, sdw::Vec3 & indirectLightingResult );
-
-		sdw::Function< sdw::Vec3
-			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InVec3
-			, sdw::InFloat > m_computeFresnel;
 	};
 }
 

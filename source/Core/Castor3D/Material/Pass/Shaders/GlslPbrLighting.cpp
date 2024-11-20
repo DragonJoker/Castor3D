@@ -3,6 +3,7 @@
 #include "Castor3D/Material/Pass/PbrPass.hpp"
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
@@ -94,13 +95,13 @@ namespace castor3d::shader
 		debugOutput.registerOutput( "Clearcoat Fresnel", clearcoatFresnel );
 
 		auto metalFresnel = m_writer.declLocale( "metalFresnel"
-			, computeFresnel( lightSurface.NdotV().value()
+			, m_brdfHelpers.computeFresnel( lightSurface.NdotV().value()
 				, components.perceptualRoughness
 				, components.baseColour
 				, 1.0_f ) );
 		debugOutput.registerOutput( "Metal Fresnel", metalFresnel );
 		auto dielectricFresnel = m_writer.declLocale( "dielectricFresnel"
-			, computeFresnel( lightSurface.NdotV().value()
+			, m_brdfHelpers.computeFresnel( lightSurface.NdotV().value()
 				, components.perceptualRoughness
 				, components.dielectricF0
 				, components.specularWeight ) );
@@ -133,82 +134,6 @@ namespace castor3d::shader
 			+ ( indirectLightingResult * ambientOcclusion )
 			+ directLightingResult
 			+ emissiveResult;
-	}
-
-	sdw::RetVec3 PbrLightingModel::computeFresnel( sdw::Float const & pNdotV
-		, sdw::Float const & proughness
-		, sdw::Vec3 const & pF0
-		, sdw::Float const & pspecularWeight )
-	{
-		if ( !m_computeFresnel )
-		{
-			m_computeFresnel = m_writer.implementFunction< sdw::Vec3 >( "c3d_bgComputeFresnel"
-				, [this]( sdw::Float const & NdotV
-					, sdw::Float const & roughness
-					, sdw::Vec3 const & F0
-					, sdw::Float const & specularWeight )
-				{
-					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
-					// see https://bruop.github.io/ibl/#single_scattering_results at Single Scattering Results
-					// Roughness dependent fresnel, from Fdez-Aguera
-					auto f_ab = m_writer.declLocale( "f_ab"
-						, BackgroundModel::getBrdf( brdf, NdotV, roughness ) );
-					auto Fr = m_writer.declLocale( "Fr"
-						, max( vec3( 1.0_f - roughness ), F0 ) - F0 );
-					auto k_S = m_writer.declLocale( "k_S"
-						, F0 + Fr * pow( 1.0_f - NdotV, 5.0_f ) );
-					auto FssEss = m_writer.declLocale( "FssEss"
-						, specularWeight * ( k_S * f_ab.x() + f_ab.y() ) );
-
-					// Multiple scattering, from Fdez-Aguera
-					auto Ems = m_writer.declLocale( "Ems"
-						, ( 1.0_f - ( f_ab.x() + f_ab.y() ) ) );
-					auto F_avg = m_writer.declLocale( "F_avg"
-						, specularWeight * ( F0 + ( 1.0_f - F0 ) / 21.0_f ) );
-					auto FmsEms = m_writer.declLocale( "FmsEms"
-						, Ems * FssEss * F_avg / ( 1.0_f - F_avg * Ems ) );
-
-					m_writer.returnStmt( FssEss + FmsEms );
-				}
-				, sdw::InFloat{ m_writer, "NdotV" }
-				, sdw::InFloat{ m_writer, "roughness" }
-				, sdw::InVec3{ m_writer, "F0" }
-				, sdw::InFloat{ m_writer, "specularWeight" } );
-		}
-
-		return m_computeFresnel( pNdotV, proughness, pF0, pspecularWeight );
-	}
-
-	void PbrLightingModel::computeSpecularBrdfs( DebugOutputCategory const & debugOutput
-		, BlendComponents const & components
-		, sdw::Vec3 const & reflectedDiffuse
-		, sdw::Vec3 const & reflectedSpecular
-		, sdw::Vec3 const & metalFresnel
-		, sdw::Vec3 const & dielectricFresnel
-		, sdw::Vec3 & metal
-		, sdw::Vec3 & dielectric )
-	{
-		metal = reflectedSpecular * metalFresnel;
-		debugOutput.registerOutput( "Raw Metal BRDF", metal );
-		dielectric = mix( reflectedDiffuse, reflectedSpecular, dielectricFresnel );
-		debugOutput.registerOutput( "Raw Dielectric BRDF", dielectric );
-
-		if ( components.hasMember( "iridescenceFactor" ) )
-		{
-			metal = mix( metal
-				, reflectedSpecular * components.getMember< sdw::Vec3 >( "iridescenceMetallicFresnel" )
-				, vec3( components.iridescenceFactor ) );
-			debugOutput.registerOutput( "Iridescent Metal BRDF", metal );
-			dielectric = mix( dielectric
-				, Utils::rgbMix( reflectedDiffuse, reflectedSpecular, components.getMember< sdw::Vec3 >( "iridescenceDielectricFresnel" ) )
-				, vec3( components.iridescenceFactor ) );
-			debugOutput.registerOutput( "Iridescent Dielectric BRDF", dielectric );
-		}
-		else
-		{
-			debugOutput.registerOutput( "Iridescent Metal BRDF", metal );
-			debugOutput.registerOutput( "Iridescent Dielectric BRDF", dielectric );
-		}
 	}
 
 	void PbrLightingModel::processBackground( DebugOutputCategory const & debugOutput
@@ -251,7 +176,7 @@ namespace castor3d::shader
 		debugOutputBlock.registerOutput( "Specular", bgSpecular );
 		auto bgDielectric = m_writer.declLocale( "bgDielectric", vec3( 0.0_f ) );
 		auto bgMetallic = m_writer.declLocale( "bgMetallic", vec3( 0.0_f ) );
-		computeSpecularBrdfs( debugOutputBlock, components
+		m_brdfHelpers.computeSpecularBrdfs( debugOutputBlock, components
 			, bgDiffuse, bgSpecular
 			, metalFresnel, dielectricFresnel
 			, bgMetallic, bgDielectric );
@@ -313,7 +238,7 @@ namespace castor3d::shader
 		indirectLighting.registerDebug( debugOutputBlock );
 		auto indirectMetal = m_writer.declLocale( "indirectMetal", vec3( 0.0_f ) );
 		auto indirectDielectric = m_writer.declLocale( "indirectDielectric", vec3( 0.0_f ) );
-		computeSpecularBrdfs( debugOutputBlock, components
+		m_brdfHelpers.computeSpecularBrdfs( debugOutputBlock, components
 			, indirectLighting.diffuseColour, indirectLighting.specular
 			, metalFresnel, dielectricFresnel
 			, indirectMetal, indirectDielectric );
