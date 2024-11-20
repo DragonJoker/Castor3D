@@ -21,9 +21,10 @@ namespace castor3d::shader
 			, sdw::type::MemoryLayout::eC
 			, sdw::Vec3Field< "colour" >
 			, sdw::FloatField< "range" >
-			, sdw::Vec2Field< "intensity" >
+			, sdw::FloatField< "intensity" >
 			, sdw::IntField< "shadowMapIndex" >
 			, sdw::UIntField< "cascadeCount" >
+			, sdw::FloatField< "pad0" >
 			, sdw::Vec3Field< "posDir" >
 			, sdw::UIntField< "enabled" > >
 	{

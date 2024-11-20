@@ -80,7 +80,7 @@ namespace castortd
 				, game.getScene().getLightsFactory()
 				, castor3d::LightType::ePoint );
 			light->setColour( castor::RgbColour::fromPredefined( castor::PredefinedRgbColour::eRed ) );
-			light->setIntensity( 0.8f, 1.0f );
+			light->getPointLight()->setIntensity( castor::LuminousIntensity{ 0.8f } );
 			light->getPointLight()->setAttenuation( castor::Point3f{ 1.0f, 0.1f, 0.0f } );
 			game.getScene().addLight( name, light );
 			result = castor::make_shared< Enemy >( *baseNode, game, path, m_category );

@@ -48,7 +48,7 @@ namespace castor3d::shader
 		, ShadowData const & shadows
 		, sdw::Int const shadowMapIndex
 		, sdw::Vec3 const & radiance
-		, sdw::Vec2 const & lightIntensity
+		, sdw::Float const & lightIntensity
 		, BlendComponents const & components
 		, LightSurface const & lightSurface
 		, sdw::Vec3 output )
@@ -854,7 +854,7 @@ namespace castor3d::shader
 
 	void LightingModel::applyVolumetric( ShadowData const & shadows
 		, sdw::Int const shadowMapIndex
-		, sdw::Vec2 const & lightIntensity
+		, sdw::Float const & lightIntensity
 		, LightSurface const & lightSurface
 		, sdw::Vec3 output
 		, bool multiply )
@@ -876,11 +876,11 @@ namespace castor3d::shader
 
 				if ( multiply )
 				{
-					output *= vec3( volumetric * lightIntensity.x() );
+					output *= vec3( volumetric * lightIntensity );
 				}
 				else
 				{
-					output = vec3( volumetric * lightIntensity.x() );
+					output = vec3( volumetric * lightIntensity );
 				}
 			}
 			FI
@@ -889,7 +889,7 @@ namespace castor3d::shader
 
 	void LightingModel::doApplyShadows( DirectionalShadowData const & shadows
 		, sdw::Int const shadowMapIndex
-		, sdw::Vec2 const & lightIntensity
+		, sdw::Float const & lightIntensity
 		, LightSurface const & lightSurface
 		, sdw::Vec3 const & radiance
 		, sdw::UInt const & receivesShadows
@@ -1238,7 +1238,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & result )
 	{
 		auto lightIntensity = m_writer.declLocale( "diffuseLightIntensity"
-			, attenuation * light.intensity().x() );
+			, attenuation * light.intensity() );
 		result = m_diffuse->compute( components
 			, lightSurface
 			, radiance
@@ -1255,7 +1255,7 @@ namespace castor3d::shader
 					* m_diffuse->compute( components
 						, lightSurface
 						, components.diffuseTransmissionColour
-						, light.intensity().x()
+						, light.intensity()
 						, doGetNdotL( lightSurface, components ).value() ) );
 
 			if ( components.hasMember( "thicknessFactor" )
@@ -1328,7 +1328,7 @@ namespace castor3d::shader
 		, DirectLighting & output )
 	{
 		auto lightIntensity = m_writer.declLocale( "specularLightIntensity"
-			, radiance * attenuation * light.intensity().y() );
+			, radiance * attenuation * light.intensity() );
 		output.specular = m_specular->compute( components
 				, lightSurface.N().value()
 				, lightSurface.L().value()

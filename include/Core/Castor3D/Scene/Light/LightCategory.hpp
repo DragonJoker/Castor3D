@@ -46,9 +46,10 @@ namespace castor3d
 		{
 			Float3 colour;
 			Float1 range;
-			Float2 intensity;
+			Float1 intensity;
 			Float1 shadowMapIndex;
 			Float1 cascadeCount;
+			Float1 pad;
 			Float3 posDir;
 			Float1 enabled;
 		};
@@ -136,21 +137,6 @@ namespace castor3d
 			return m_shadowComponentCount;
 		}
 
-		float getDiffuseIntensity()const
-		{
-			return m_intensity.value()[0];
-		}
-
-		float getSpecularIntensity()const
-		{
-			return m_intensity.value()[1];
-		}
-
-		castor::Point2f const & getIntensity()const
-		{
-			return m_intensity;
-		}
-
 		float getFarPlane()const
 		{
 			return m_farPlane;
@@ -191,9 +177,6 @@ namespace castor3d
 		C3D_API void setVsmMinVariance( float value );
 		C3D_API void setVsmLightBleedingReduction( float value );
 		C3D_API void setColour( castor::Point3f const & value );
-		C3D_API void setIntensity( castor::Point2f const & value );
-		C3D_API void setDiffuseIntensity( float value );
-		C3D_API void setSpecularIntensity( float value );
 
 		Light & getLight()
 		{
@@ -210,7 +193,6 @@ namespace castor3d
 		uint32_t m_lightComponentCount{};
 		uint32_t m_shadowComponentCount{};
 		castor::GroupChangeTracked< castor::Point3f > m_colour;
-		castor::GroupChangeTracked< castor::Point2f > m_intensity;
 		/**
 		 *\~english
 		 *\brief		Puts the light into the given buffer.

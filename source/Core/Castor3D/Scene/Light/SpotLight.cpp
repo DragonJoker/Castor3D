@@ -40,6 +40,7 @@ namespace castor3d
 		: LightCategory{ LightType::eSpot, light, LightDataComponents, ShadowDataComponents }
 		, m_range{ m_dirty, 10.0f, [this](){ getLight().markDirty(); } }
 		, m_exponent{ m_dirty, 1.0f, [this](){ getLight().markDirty(); } }
+		, m_intensity{ m_dirty, castor::LuminousIntensity{ 1.0f }, [this](){ getLight().markDirty(); } }
 		, m_innerCutOff{ m_dirty, 22.5_degrees, [this](){ getLight().markDirty(); } }
 		, m_outerCutOff{ m_dirty, 45.0_degrees, [this](){ getLight().markDirty(); } }
 		, m_lightView{ m_dirtyShadow }
@@ -209,12 +210,13 @@ namespace castor3d
 
 	void SpotLight::setAttenuation( castor::Point3f const & attenuation )
 	{
-		m_range = getMaxDistance( *this, attenuation );
+		setRange( getMaxDistance( getColour(), getIntensity(), attenuation) );
 	}
 
 	void SpotLight::setRange( float range )
 	{
 		m_range = range;
+		getLight().markDirty();
 	}
 
 	void SpotLight::setExponent( float exponent )
@@ -222,14 +224,22 @@ namespace castor3d
 		m_exponent = exponent;
 	}
 
+	void SpotLight::setIntensity( castor::LuminousIntensity const & value )
+	{
+		m_intensity = value;
+		getLight().markDirty();
+	}
+
 	void SpotLight::setInnerCutOff( castor::Angle const & cutOff )
 	{
 		m_innerCutOff = cutOff;
+		getLight().markDirty();
 	}
 
 	void SpotLight::setOuterCutOff( castor::Angle const & cutOff )
 	{
 		m_outerCutOff = cutOff;
+		getLight().markDirty();
 	}
 
 	void SpotLight::doFillLightBuffer( castor::Point4f * data )const
@@ -237,6 +247,7 @@ namespace castor3d
 		auto & spot = *reinterpret_cast< LightData * >( data->ptr() );
 		auto position = getLight().getParent()->getDerivedPosition();
 
+		spot.intensity = getIntensity().candela();
 		spot.posDir = position;
 		spot.range = m_range.value();
 		spot.exponent = m_exponent;
@@ -253,6 +264,7 @@ namespace castor3d
 	void SpotLight::doAccept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Range" ), m_range );
+		vis.visit( cuT( "Intensity" ), m_intensity );
 		vis.visit( cuT( "Inner cut off" ), m_innerCutOff );
 		vis.visit( cuT( "Outer cut off" ), m_outerCutOff );
 		vis.visit( cuT( "Exponent" ), m_exponent );

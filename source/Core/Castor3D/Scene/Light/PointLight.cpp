@@ -28,6 +28,7 @@ namespace castor3d
 	PointLight::PointLight( Light & light )
 		: LightCategory{ LightType::ePoint, light, LightDataComponents, ShadowDataComponents }
 		, m_range{ m_dirty, 10.0f, [this](){ getLight().markDirty(); } }
+		, m_intensity{ m_dirty, castor::LuminousIntensity{ 1.0f }, [this](){ getLight().markDirty(); } }
 		, m_position{ m_dirty, [this](){ getLight().markDirty(); } }
 	{
 	}
@@ -154,12 +155,19 @@ namespace castor3d
 
 	void PointLight::setAttenuation( castor::Point3f const & attenuation )
 	{
-		m_range = getMaxDistance( *this, attenuation );
+		setRange( getMaxDistance( getColour(), getIntensity(), attenuation));
 	}
 
 	void PointLight::setRange( float value )
 	{
 		m_range = value;
+		getLight().markDirty();
+	}
+
+	void PointLight::setIntensity( castor::LuminousIntensity const & value )
+	{
+		m_intensity = value;
+		getLight().markDirty();
 	}
 
 	void PointLight::doFillLightBuffer( castor::Point4f * data )const
@@ -167,6 +175,7 @@ namespace castor3d
 		auto & point = *reinterpret_cast< LightData * >( data->ptr() );
 		auto position = getLight().getParent()->getDerivedPosition();
 
+		point.intensity = getIntensity().candela();
 		point.posDir = position;
 		point.range = m_range.value();
 	}
@@ -174,5 +183,6 @@ namespace castor3d
 	void PointLight::doAccept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Range" ), m_range );
+		vis.visit( cuT( "Intensity" ), m_intensity );
 	}
 }

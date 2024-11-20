@@ -132,24 +132,9 @@ namespace castor3d
 			return m_category->getColour();
 		}
 
-		castor::Point2f const & getIntensity()const
-		{
-			return m_category->getIntensity();
-		}
-
 		float getFarPlane()const
 		{
 			return m_category->getFarPlane();
-		}
-
-		float getDiffuseIntensity()const
-		{
-			return m_category->getDiffuseIntensity();
-		}
-
-		float getSpecularIntensity()const
-		{
-			return m_category->getSpecularIntensity();
 		}
 
 		castor::BoundingBox const & getBoundingBox()const
@@ -304,31 +289,6 @@ namespace castor3d
 		void setColour( castor::RgbColour const & value )
 		{
 			m_category->setColour( toRGBFloat( value ) );
-		}
-
-		void setIntensity( float const * values )
-		{
-			m_category->setIntensity( castor::Point2f( values[0], values[1] ) );
-		}
-
-		void setIntensity( float d, float s )
-		{
-			m_category->setIntensity( castor::Point2f( d, s ) );
-		}
-
-		void setIntensity( castor::Point2f const & value )
-		{
-			m_category->setIntensity( value );
-		}
-
-		void setDiffuseIntensity( float value )
-		{
-			m_category->setDiffuseIntensity( value );
-		}
-
-		void setSpecularIntensity( float value )
-		{
-			m_category->setSpecularIntensity( value );
 		}
 
 		void setEnabled( bool value )

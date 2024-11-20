@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/ChangeTracked.hpp>
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
 #include <CastorUtils/Math/Angle.hpp>
+#include <CastorUtils/Math/LuminousIntensity.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d
@@ -106,6 +107,7 @@ namespace castor3d
 		C3D_API void setAttenuation( castor::Point3f const & value );
 		C3D_API void setRange( float value );
 		C3D_API void setExponent( float value );
+		C3D_API void setIntensity( castor::LuminousIntensity const & value );
 		C3D_API void setInnerCutOff( castor::Angle const & value );
 		C3D_API void setOuterCutOff( castor::Angle const & value );
 		/**@}*/
@@ -116,37 +118,37 @@ namespace castor3d
 		 *\name Accesseurs.
 		 **/
 		/**@{*/
-		castor::Point3f const & getDirection()const
+		castor::Point3f const & getDirection()const noexcept
 		{
 			return m_direction;
 		}
 
-		castor::Matrix4x4f const & getViewMatrix()const
+		castor::Matrix4x4f const & getViewMatrix()const noexcept
 		{
 			return m_lightView.value();
 		}
 
-		castor::Matrix4x4f const & getProjectionMatrix()const
+		castor::Matrix4x4f const & getProjectionMatrix()const noexcept
 		{
 			return m_lightProj.value();
 		}
 
-		castor::Matrix4x4f const & getLightSpaceTransform()const
+		castor::Matrix4x4f const & getLightSpaceTransform()const noexcept
 		{
 			return m_lightSpace;
 		}
 
-		float getExponent()const
+		float getExponent()const noexcept
 		{
 			return m_exponent.value();
 		}
 
-		castor::Angle const & getInnerCutOff()const
+		castor::Angle const & getInnerCutOff()const noexcept
 		{
 			return m_innerCutOff.value();
 		}
 
-		castor::Angle const & getOuterCutOff()const
+		castor::Angle const & getOuterCutOff()const noexcept
 		{
 			return m_outerCutOff.value();
 		}
@@ -154,6 +156,11 @@ namespace castor3d
 		float getRange()const noexcept
 		{
 			return m_range.value();
+		}
+
+		castor::LuminousIntensity const & getIntensity()const noexcept
+		{
+			return m_intensity;
 		}
 		/**@}*/
 
@@ -165,6 +172,7 @@ namespace castor3d
 		bool m_dirtyShadow{ true };
 		castor::GroupChangeTracked< float > m_range;
 		castor::GroupChangeTracked< float > m_exponent;
+		castor::GroupChangeTracked< castor::LuminousIntensity > m_intensity;
 		castor::GroupChangeTracked< castor::Angle > m_innerCutOff;
 		castor::GroupChangeTracked< castor::Angle > m_outerCutOff;
 		castor::GroupChangeTracked< castor::Matrix4x4f > m_lightView;

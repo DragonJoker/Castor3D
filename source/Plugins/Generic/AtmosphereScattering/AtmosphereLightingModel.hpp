@@ -30,7 +30,7 @@ namespace atmosphere_scattering
 			, c3d::ShadowData const & shadows
 			, sdw::Int const shadowMapIndex
 			, sdw::Vec3 const & radiance
-			, sdw::Vec2 const & lightIntensity
+			, sdw::Float const & lightIntensity
 			, c3d::BlendComponents const & components
 			, c3d::LightSurface const & lightSurface
 			, sdw::Vec3 output )override;

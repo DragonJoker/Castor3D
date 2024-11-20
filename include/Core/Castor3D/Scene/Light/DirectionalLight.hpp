@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 
+#include <CastorUtils/Math/Illumination.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d
@@ -92,6 +93,15 @@ namespace castor3d
 		 */
 		C3D_API void fillShadowBuffer( AllShadowData & data )const override;
 		/**
+		 *\~english
+		 *\name Mutators.
+		 *\~french
+		 *\name Mutateurs.
+		 **/
+		/**@{*/
+		C3D_API void setIllumination( castor::Illumination const & value );
+		/**@}*/
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -129,15 +139,19 @@ namespace castor3d
 		{
 			return m_cascades[cascadeIndex].viewProjMatrix;
 		}
+
+		castor::Illumination const & getIllumination()const noexcept
+		{
+			return m_illumination;
+		}
 		/**@}*/
 
 	private:
 		void doFillLightBuffer( castor::Point4f * data )const override;
-		void doAccept( ConfigurationVisitorBase & vis )override
-		{
-		}
+		void doAccept( ConfigurationVisitorBase & vis )override;
 
 	private:
+		castor::GroupChangeTracked< castor::Illumination > m_illumination;
 		castor::Point3f m_direction;
 		castor::Vector< Cascade > m_cascades;
 		castor::Vector< Cascade > m_prvCascades;

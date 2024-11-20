@@ -68,7 +68,7 @@ namespace castor3d::shader
 	sdw::Float computeRange( Light const & light )
 	{
 		return light.getWriter()->ternary( light.range() <= 0.0_f
-			, sqrt( max( light.intensity().x(), light.intensity().y() ) / 0.00001_f )
+			, sqrt( light.intensity() / 0.00001_f )
 			, light.range() );
 	}
 
@@ -188,9 +188,9 @@ namespace castor3d::shader
 		light.range() = lightData.w();
 
 		lightData = getLightData( offset );
-		light.intensity() = lightData.xy();
-		light.shadowMapIndex() = m_writer.cast< sdw::Int >( lightData.z() );
-		light.cascadeCount() = m_writer.cast< sdw::UInt >( lightData.w() );
+		light.intensity() = lightData.x();
+		light.shadowMapIndex() = m_writer.cast< sdw::Int >( lightData.y() );
+		light.cascadeCount() = m_writer.cast< sdw::UInt >( lightData.z() );
 
 		lightData = getLightData( offset );
 		light.posDir() = lightData.xyz();

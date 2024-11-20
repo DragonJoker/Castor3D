@@ -41,12 +41,25 @@ namespace c3d_assimp
 			node = scene.addSceneNode( name, ownNode );
 		}
 
+		castor::Point3f colour{ aiLight.mColorDiffuse.r, aiLight.mColorDiffuse.g, aiLight.mColorDiffuse.b };
+		auto max = std::max( { colour->x, colour->y, colour->z } );
+
+		if ( max != 0.0 )
+		{
+			colour /= max;
+		}
+
 		switch ( aiLight.mType )
 		{
 		case aiLightSource_POINT:
 			{
 				auto point = light.getPointLight();
 				point->setAttenuation( { aiLight.mAttenuationConstant, aiLight.mAttenuationLinear, aiLight.mAttenuationQuadratic } );
+
+				if ( max != 0.0 )
+				{
+					point->setIntensity( castor::LuminousIntensity{ max } );
+				}
 			}
 			break;
 		case aiLightSource_SPOT:
@@ -55,19 +68,22 @@ namespace c3d_assimp
 				spot->setAttenuation( { aiLight.mAttenuationConstant, aiLight.mAttenuationLinear, aiLight.mAttenuationQuadratic } );
 				spot->setInnerCutOff( castor::Angle::fromRadians( aiLight.mAngleInnerCone ) );
 				spot->setOuterCutOff( castor::Angle::fromRadians( aiLight.mAngleOuterCone ) );
+
+				if ( max != 0.0 )
+				{
+					spot->setIntensity( castor::LuminousIntensity{ max } );
+				}
+			}
+			break;
+		case aiLightSource_DIRECTIONAL:
+			if ( max != 0.0 )
+			{
+				auto directional = light.getDirectionalLight();
+				directional->setIllumination( castor::Illumination{ max } );
 			}
 			break;
 		default:
 			break;
-		}
-
-		castor::Point3f colour{ aiLight.mColorDiffuse.r, aiLight.mColorDiffuse.g, aiLight.mColorDiffuse.b };
-		auto max = std::max( { colour->x, colour->y, colour->z } );
-
-		if ( max != 0.0 )
-		{
-			colour /= max;
-			light.setIntensity( max, max );
 		}
 
 		light.setColour( castor::RgbColour::fromComponents( colour->x, colour->y, colour->z ) );

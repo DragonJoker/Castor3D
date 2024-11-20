@@ -61,6 +61,7 @@ namespace c3d_gltf
 		if ( impLight.type == fastgltf::LightType::Point )
 		{
 			auto point = light.getPointLight();
+			point->setIntensity( castor::LuminousIntensity{ impLight.intensity } );
 
 			if ( impLight.range )
 			{
@@ -78,6 +79,7 @@ namespace c3d_gltf
 			if ( impLight.type == fastgltf::LightType::Spot )
 			{
 				auto spot = light.getSpotLight();
+				spot->setIntensity( castor::LuminousIntensity{ impLight.intensity } );
 
 				if ( impLight.range )
 				{
@@ -106,11 +108,14 @@ namespace c3d_gltf
 					spot->setOuterCutOff( castor::Angle::fromRadians( *impLight.innerConeAngle ) );
 				}
 			}
+			else
+			{
+				auto directional = light.getDirectionalLight();
+				directional->setIllumination( castor::Illumination{ impLight.intensity } );
+			}
 		}
 
 		light.setColour( castor::RgbColour::fromComponents( impLight.color[0], impLight.color[1], impLight.color[2] ) );
-		light.setDiffuseIntensity( impLight.intensity );
-		light.setSpecularIntensity( impLight.intensity );
 		node->attachObject( light );
 
 		return true;

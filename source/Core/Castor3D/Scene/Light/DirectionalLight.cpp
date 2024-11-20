@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
@@ -164,6 +165,7 @@ namespace castor3d
 
 	DirectionalLight::DirectionalLight( Light & light )
 		: LightCategory{ LightType::eDirectional, light, LightDataComponents, ShadowDataComponents }
+		, m_illumination{ m_dirty, castor::Illumination{ 1.0f }, [this](){ getLight().markDirty(); } }
 		, m_cascades( light.getScene()->getDirectionalShadowCascades() )
 		, m_prvCascades( light.getScene()->getDirectionalShadowCascades() )
 	{
@@ -226,11 +228,23 @@ namespace castor3d
 		}
 	}
 
+	void DirectionalLight::setIllumination( castor::Illumination const & value )
+	{
+		m_illumination = value;
+		getLight().markDirty();
+	}
+
 	void DirectionalLight::doFillLightBuffer( castor::Point4f * data )const
 	{
 		auto & directional = *reinterpret_cast< LightData * >( data->ptr() );
+		directional.intensity = getIllumination().lux();
 		directional.cascadeCount = float( m_cascades.size() );
 		directional.posDir = m_direction;
 		directional.range = getFarPlane();
+	}
+
+	void DirectionalLight::doAccept( ConfigurationVisitorBase & vis )
+	{
+		vis.visit( cuT( "Illumination" ), m_illumination );
 	}
 }

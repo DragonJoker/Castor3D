@@ -16,6 +16,7 @@
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Scene/Camera.hpp>
+#include <Castor3D/Scene/Light/DirectionalLight.hpp>
 #include <Castor3D/Scene/Light/Light.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneImporter.hpp>
@@ -474,7 +475,7 @@ int main( int argc, char * argv[] )
 									, scene.getLightsFactory()
 									, castor3d::LightType::eDirectional );
 								light->setColour( castor::RgbColour::fromComponents( 1.0f, 1.0f, 1.0f ) );
-								light->setIntensity( { 8.0f, 10.0f } );
+								light->getDirectionalLight()->setIllumination( castor::Illumination{ 8.0f } );
 								light->attachTo( *lgtNode );
 								scene.addLight( cuT( "SunLight" ), light, false );
 							}
