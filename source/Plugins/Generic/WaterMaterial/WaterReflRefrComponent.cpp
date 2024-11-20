@@ -100,8 +100,7 @@ namespace water
 			, backgroundModel
 			, envMapIndex
 			, bgDiffuseReflection
-			, bgSpecularReflection
-			, debugOutputBlock );
+			, bgSpecularReflection );
 		auto backgroundReflection = writer.declLocale( "backgroundReflection"
 			, bgDiffuseReflection + bgSpecularReflection );
 		debugOutputBlock.registerOutput( cuT( "Background Reflection" ), backgroundReflection );

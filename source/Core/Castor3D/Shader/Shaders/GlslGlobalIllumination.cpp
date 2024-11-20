@@ -85,28 +85,23 @@ namespace castor3d
 			, LightSurface lightSurface
 			, sdw::Float roughness
 			, sdw::CombinedImage2DRgba32 brdfMap
-			, IndirectLighting & indirectLighting
-			, DebugOutput & debugOutput )
+			, IndirectLighting & indirectLighting )
 		{
 			computeOcclusion( sceneFlags
 				, lightSurface
-				, indirectLighting
-				, debugOutput );
+				, indirectLighting );
 			computeDiffuse( sceneFlags
 				, lightSurface
-				, indirectLighting
-				, debugOutput );
+				, indirectLighting );
 			computeSpecular( sceneFlags
 				, lightSurface
 				, roughness
 				, brdfMap
-				, indirectLighting
-				, debugOutput );
+				, indirectLighting );
 			computeAmbient( sceneFlags
 				, sceneData
 				, components
-				, indirectLighting
-				, debugOutput );
+				, indirectLighting );
 			indirectLighting.diffuseColour = ( hasDiffuseGI
 				? max( indirectLighting.diffuseColour / sdw::Float{ castor::Pi< float > }, vec3( 0.0_f ) )
 				: vec3( 0.0_f ) );
@@ -114,8 +109,7 @@ namespace castor3d
 
 		void GlobalIllumination::computeOcclusion( SceneFlags sceneFlags
 			, LightSurface lightSurface
-			, IndirectLighting & indirectLighting
-			, DebugOutput & debugOutput )
+			, IndirectLighting & indirectLighting )
 		{
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
@@ -145,8 +139,7 @@ namespace castor3d
 
 		void GlobalIllumination::computeDiffuse( SceneFlags sceneFlags
 			, LightSurface lightSurface
-			, IndirectLighting & indirectLighting
-			, DebugOutput & debugOutput )
+			, IndirectLighting & indirectLighting )
 		{
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
@@ -177,8 +170,7 @@ namespace castor3d
 		void GlobalIllumination::computeAmbient( SceneFlags sceneFlags
 			, SceneData const & sceneData
 			, BlendComponents const & components
-			, IndirectLighting & indirectLighting
-			, DebugOutput & debugOutput )
+			, IndirectLighting & indirectLighting )
 		{
 			if ( components.hasMember( "ambientFactor" ) )
 			{
@@ -193,8 +185,7 @@ namespace castor3d
 			, LightSurface lightSurface
 			, sdw::Float roughness
 			, sdw::CombinedImage2DRgba32 brdfMap
-			, IndirectLighting & indirectLighting
-			, DebugOutput & debugOutput )
+			, IndirectLighting & indirectLighting )
 		{
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{

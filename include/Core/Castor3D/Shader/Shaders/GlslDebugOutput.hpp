@@ -54,7 +54,7 @@ namespace castor3d::shader
 	private:
 		friend class DebugOutputCategory;
 
-		C3D_API castor::String concatenateCategories();
+		C3D_API castor::String concatenateCategories()const;
 
 		void popBlock()
 		{

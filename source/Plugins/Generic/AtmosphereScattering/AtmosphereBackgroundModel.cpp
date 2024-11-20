@@ -91,13 +91,12 @@ namespace atmosphere_scattering
 	sdw::RetVec3 AtmosphereBackgroundModel::computeSpecularReflection( sdw::Vec3 const & pwsNormal
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
-		, sdw::Float const & proughness
-		, castor3d::shader::DebugOutputCategory const & debugOutput )
+		, sdw::Float const & proughness )
 	{
 		if ( !m_computeSpecularReflection )
 		{
 			m_computeSpecularReflection = m_writer.implementFunction< sdw::Vec3 >( "c3d_atmbg_computeSpecularReflection"
-				, [this, &debugOutput]( sdw::Vec3 const & wsNormal
+				, [this]( sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & wsPosition
 					, sdw::Vec3 const & wsEyeDir )
 				{
@@ -109,7 +108,6 @@ namespace atmosphere_scattering
 								, wsPosition
 								, wsEyeDir
 								, fragSize ) ) );
-					debugOutput.registerOutput( cuT( "Sky Contribution" ), skyContrib );
 					m_writer.returnStmt( skyContrib );
 				}
 				, sdw::InVec3{ m_writer, "wsNormal" }

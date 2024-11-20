@@ -109,7 +109,7 @@ namespace castor3d::shader
 		if ( !m_computeWithTransmission )
 		{
 			m_computeWithTransmission = m_writer.implementFunction< sdw::Void >( "c3d_backgroundBrdfWithTransmission"
-				, [&]( BlendComponents components
+				, [this, &debugOutput, &background, &camera]( BlendComponents components
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & wsPosition
 					, sdw::Vec3 const & V
@@ -127,7 +127,7 @@ namespace castor3d::shader
 					doComputeReflection( envMap, hasEnvMap, background
 						, wsNormal, wsPosition, V
 						, envMapIndex, components
-						, output.diffuseReflection, output.specularReflection, debugOutput );
+						, output.diffuseReflection, output.specularReflection );
 					debugOutput.registerOutput( "Specular Reflection", output.specularReflection );
 					debugOutput.registerOutput( "Diffuse Reflection", output.diffuseReflection );
 					computeDiffuseBrdf( components, background
@@ -138,7 +138,7 @@ namespace castor3d::shader
 					{
 						output.specularTransmission = doComputeSpecularTransmission( -V, wsPosition, wsNormal
 							, mippedScene, camera
-							, sceneUv, components, debugOutput );
+							, sceneUv, components );
 						debugOutput.registerOutput( "Specular Transmission", output.specularTransmission );
 					}
 					else
@@ -148,11 +148,11 @@ namespace castor3d::shader
 
 					doComputeClearcoat( envMap, hasEnvMap, background
 						, wsPosition, V, envMapIndex
-						, components, output.coating, debugOutput );
+						, components, output.coating );
 					doComputeSheen( brdf, envMap, hasEnvMap, background
 						, wsNormal, wsPosition, V, NdotV
 						, envMapIndex, components
-						, output.sheen, debugOutput );
+						, output.sheen );
 				}
 				, InOutBlendComponents{ m_writer, "components", pcomponents }
 				, sdw::InVec3{ m_writer, "wsNormal" }
@@ -181,15 +181,14 @@ namespace castor3d::shader
 		, BackgroundModel & background
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, DebugOutputCategory const & debugOutput )
+		, sdw::Vec3 & reflectedSpecular )
 	{
 		computeWithoutTransmission( components
 			, lightSurface.N().value()
 			, lightSurface.worldPosition().value().xyz()
 			, lightSurface.V().value()
 			, background, envMapIndex
-			, reflectedDiffuse, reflectedSpecular, debugOutput );
+			, reflectedDiffuse, reflectedSpecular );
 	}
 
 	sdw::Boolean ReflectionModel::computeWithoutTransmission( BlendComponents & components
@@ -199,8 +198,7 @@ namespace castor3d::shader
 		, BackgroundModel & background
 		, sdw::UInt envMapIndex
 		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, DebugOutputCategory const & debugOutput )
+		, sdw::Vec3 & reflectedSpecular )
 	{
 		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
 		auto hasEnvMap = m_writer.declLocale( "hasEnvMap"
@@ -209,7 +207,7 @@ namespace castor3d::shader
 		doComputeReflection( envMap, hasEnvMap, background
 			, wsNormal, wsPosition, V
 			, envMapIndex, components
-			, reflectedDiffuse, reflectedSpecular, debugOutput );
+			, reflectedDiffuse, reflectedSpecular );
 		reflectedDiffuse *= components.baseColour;
 		return hasEnvMap;
 	}
@@ -227,7 +225,7 @@ namespace castor3d::shader
 		if ( !m_computeWithoutTransmission )
 		{
 			m_computeWithoutTransmission = m_writer.implementFunction< sdw::Void >( "c3d_backgroundBrdfWithoutTransmission"
-				, [&]( BlendComponents components
+				, [this, &debugOutput, &background]( BlendComponents components
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & wsPosition
 					, sdw::Vec3 const & V
@@ -243,7 +241,7 @@ namespace castor3d::shader
 					doComputeReflection( envMap, hasEnvMap, background
 						, wsNormal, wsPosition, V
 						, envMapIndex, components
-						, output.diffuseReflection, output.specularReflection, debugOutput );
+						, output.diffuseReflection, output.specularReflection );
 					debugOutput.registerOutput( "Specular Reflection", output.specularReflection );
 					debugOutput.registerOutput( "Diffuse Reflection", output.diffuseReflection );
 					computeDiffuseBrdf( components, background
@@ -252,11 +250,11 @@ namespace castor3d::shader
 					debugOutput.registerOutput( "Specular Transmission", 0.0_f );
 					doComputeClearcoat( envMap, hasEnvMap, background
 						, wsPosition, V, envMapIndex
-						, components, output.coating, debugOutput );
+						, components, output.coating );
 					doComputeSheen( brdf, envMap, hasEnvMap, background
 						, wsNormal, wsPosition, V, NdotV
 						, envMapIndex, components
-						, output.sheen, debugOutput );
+						, output.sheen );
 				}
 				, InOutBlendComponents{ m_writer, "components", pcomponents }
 				, sdw::InVec3{ m_writer, "wsNormal" }
@@ -297,8 +295,7 @@ namespace castor3d::shader
 				, -wsNormal
 				, envMapIndex
 				, components
-				, output.diffuseTransmission
-				, debugOutput );
+				, output.diffuseTransmission );
 			output.diffuseTransmission *= components.diffuseTransmissionColour;
 			debugOutput.registerOutput( "Diffuse Transmission", output.diffuseTransmission );
 
@@ -463,7 +460,7 @@ namespace castor3d::shader
 		if ( !m_computeScreenSpace2 )
 		{
 			m_computeScreenSpace2 = m_writer.implementFunction< sdw::Vec4 >( "c3d_computeScreenSpace2"
-				, [&]( sdw::Vec3 const & viewPosition
+				, [this, &cameraData]( sdw::Vec3 const & viewPosition
 					, sdw::Vec3 const & worldNormal
 					, sdw::Vec2 const & texcoord
 					, sdw::Vec4 const & ssrSettings
@@ -594,7 +591,7 @@ namespace castor3d::shader
 		if ( !m_traceScreenSpace )
 		{
 			m_traceScreenSpace = m_writer.implementFunction< sdw::Boolean >( "c3d_traceScreenSpace"
-				, [&]( sdw::Vec3 const & csOrigin
+				, [this]( sdw::Vec3 const & csOrigin
 					, sdw::Vec3 const & csDirection
 					, sdw::Mat4 const & projectToPixelMatrix
 					, sdw::CombinedImage2DR32 const & csZBuffer
@@ -812,13 +809,12 @@ namespace castor3d::shader
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Float const & proughness
 		, sdw::UInt const & penvMapIndex
-		, sdw::CombinedImageCubeArrayRgba32 const & penvMap
-		, DebugOutputCategory const & debugOutput )
+		, sdw::CombinedImageCubeArrayRgba32 const & penvMap )
 	{
 		if ( !m_computeSpecularReflEnvMaps )
 		{
 			m_computeSpecularReflEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeSpecularReflEnvMaps"
-				, [&]( sdw::Vec3 const & wsIncident
+				, [this]( sdw::Vec3 const & wsIncident
 					, sdw::Vec3 const & wsNormal
 					, sdw::UInt const & envMapIndex
 					, sdw::Float const & roughness
@@ -849,13 +845,12 @@ namespace castor3d::shader
 		, sdw::CombinedImageCubeArrayRgba32 const & penv
 		, sdw::UInt const & penvIndex
 		, sdw::Float const & pNdotV
-		, BlendComponents & pcomponents
-		, DebugOutputCategory const & debugOutput )
+		, BlendComponents & pcomponents )
 	{
 		if ( !m_computeSheenReflEnvMaps )
 		{
 			m_computeSheenReflEnvMaps = m_writer.implementFunction< sdw::Vec4 >( "c3d_computeSheenReflEnvMap"
-				, [&]( sdw::Vec3 const & wsIncident
+				, [this]( sdw::Vec3 const & wsIncident
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & sheenColour
 					, sdw::CombinedImageCubeArrayRgba32 const & envMap
@@ -898,13 +893,12 @@ namespace castor3d::shader
 		, sdw::Vec3 const & pwsNormal
 		, sdw::CombinedImageCubeArrayRgba32 const & penvMap
 		, sdw::UInt const & penvMapIndex
-		, BlendComponents & components
-		, DebugOutputCategory const & debugOutput )
+		, BlendComponents & components )
 	{
 		if ( !m_computeRefrEnvMaps )
 		{
 			m_computeRefrEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeRefrEnvMap"
-				, [&]( sdw::Vec3 const & wsIncident
+				, [this]( sdw::Vec3 const & wsIncident
 					, sdw::Vec3 const & wsNormal
 					, sdw::CombinedImageCubeArrayRgba32 const & envMap
 					, sdw::UInt const & envMapIndex
@@ -935,13 +929,12 @@ namespace castor3d::shader
 	sdw::RetVec3 ReflectionModel::computeDiffuseEnvMaps( sdw::Vec3 const & pwsDirection
 		, sdw::CombinedImageCubeArrayRgba32 const & penvMap
 		, sdw::UInt const & penvMapIndex
-		, BlendComponents & components
-		, DebugOutputCategory const & debugOutput )
+		, BlendComponents & components )
 	{
 		if ( !m_computeDiffuseEnvMaps )
 		{
 			m_computeDiffuseEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeDiffuseEnvMap"
-				, [&]( sdw::Vec3 const & wsDirection
+				, [this]( sdw::Vec3 const & wsDirection
 					, sdw::CombinedImageCubeArrayRgba32 const & envMap
 					, sdw::UInt const & envMapIndex
 					, sdw::Float const & roughness )
@@ -967,8 +960,7 @@ namespace castor3d::shader
 		, sdw::CombinedImage2DRgba32 const & psceneMap
 		, CameraData const & matrices
 		, sdw::Vec2 psceneUv
-		, BlendComponents & components
-		, DebugOutputCategory const & debugOutput )
+		, BlendComponents & components )
 	{
 		if ( !m_computeSpecularTransmission )
 		{
@@ -1113,8 +1105,7 @@ namespace castor3d::shader
 		, sdw::UInt const & envMapIndex
 		, BlendComponents & components
 		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, DebugOutputCategory const & debugOutput )
+		, sdw::Vec3 & reflectedSpecular )
 	{
 		auto & writer = *envMap.getWriter();
 
@@ -1123,8 +1114,7 @@ namespace castor3d::shader
 			if ( m_allowReflections && background.hasReflectionSupport() )
 			{
 				// Diffuse reflection from background skybox.
-				reflectedDiffuse = background.computeDiffuseReflection( wsNormal
-					, debugOutput );
+				reflectedDiffuse = background.computeDiffuseReflection( wsNormal );
 			}
 			else
 			{
@@ -1138,8 +1128,7 @@ namespace castor3d::shader
 					, wsNormal
 					, components.perceptualRoughness
 					, envMapIndex
-					, envMap
-					, debugOutput );
+					, envMap );
 			}
 		}
 		ELSE
@@ -1152,8 +1141,7 @@ namespace castor3d::shader
 					, V
 					, components
 					, reflectedDiffuse
-					, reflectedSpecular
-					, debugOutput );
+					, reflectedSpecular );
 			}
 		}
 		FI
@@ -1167,8 +1155,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & V
 		, sdw::UInt const & envMapIndex
 		, BlendComponents & components
-		, sdw::Vec3 & refracted
-		, DebugOutputCategory const & debugOutput )
+		, sdw::Vec3 & refracted )
 	{
 		auto & writer = *envMap.getWriter();
 
@@ -1182,8 +1169,7 @@ namespace castor3d::shader
 						, wsNormal
 						, envMap
 						, envMapIndex
-						, components
-						, debugOutput );
+						, components );
 				}
 				ELSE
 				{
@@ -1192,8 +1178,7 @@ namespace castor3d::shader
 						refracted = background.computeRefraction( wsNormal
 							, wsPosition
 							, V
-							, components
-							, debugOutput );
+							, components );
 					}
 				}
 				FI
@@ -1203,8 +1188,7 @@ namespace castor3d::shader
 				refracted = background.computeRefraction( wsNormal
 					, wsPosition
 					, V
-					, components
-					, debugOutput );
+					, components );
 			}
 		}
 		FI
@@ -1216,8 +1200,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & wsDirection
 		, sdw::UInt const & envMapIndex
 		, BlendComponents & components
-		, sdw::Vec3 & result
-		, DebugOutputCategory const & debugOutput )
+		, sdw::Vec3 & result )
 	{
 		if ( m_hasEnvMap )
 		{
@@ -1228,22 +1211,19 @@ namespace castor3d::shader
 				result = computeDiffuseEnvMaps( wsDirection
 					, envMap
 					, envMapIndex
-					, components
-					, debugOutput );
+					, components );
 			}
 			ELSE
 			{
 				result = background.computeDiffuse( wsDirection
-					, components
-					, debugOutput );
+					, components );
 			}
 			FI
 		}
 		else
 		{
 			result = background.computeDiffuse( wsDirection
-				, components
-				, debugOutput );
+				, components );
 		}
 	}
 
@@ -1254,8 +1234,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & V
 		, sdw::UInt const & envMapIndex
 		, BlendComponents & components
-		, sdw::Vec3 & coatReflected
-		, DebugOutputCategory const & debugOutput )
+		, sdw::Vec3 & coatReflected )
 	{
 		if ( components.hasMember( "clearcoatFactor" ) )
 		{
@@ -1267,8 +1246,7 @@ namespace castor3d::shader
 						, components.clearcoatNormal
 						, components.clearcoatRoughness
 						, envMapIndex
-						, envMap
-						, debugOutput );
+						, envMap );
 				}
 				ELSE
 				{
@@ -1277,8 +1255,7 @@ namespace castor3d::shader
 						coatReflected = background.computeSpecularReflection( components.clearcoatNormal
 							, wsPosition
 							, V
-							, components.clearcoatRoughness
-							, debugOutput );
+							, components.clearcoatRoughness );
 					}
 				}
 				FI
@@ -1288,8 +1265,7 @@ namespace castor3d::shader
 				coatReflected = background.computeSpecularReflection( components.clearcoatNormal
 					, wsPosition
 					, V
-					, components.clearcoatRoughness
-					, debugOutput );
+					, components.clearcoatRoughness );
 			}
 		}
 	}
@@ -1304,8 +1280,7 @@ namespace castor3d::shader
 		, sdw::Float const & NdotV
 		, sdw::UInt const & envMapIndex
 		, BlendComponents & components
-		, sdw::Vec4 & sheenReflected
-		, DebugOutputCategory const & debugOutput )
+		, sdw::Vec4 & sheenReflected )
 	{
 		if ( components.hasMember( "sheenColour" ) )
 		{
@@ -1319,8 +1294,7 @@ namespace castor3d::shader
 						, envMap
 						, envMapIndex
 						, NdotV
-						, components
-						, debugOutput );
+						, components );
 				}
 				ELSE
 				{
@@ -1331,8 +1305,7 @@ namespace castor3d::shader
 							, V
 							, NdotV
 							, components
-							, brdf
-							, debugOutput );
+							, brdf );
 					}
 				}
 				FI
@@ -1344,8 +1317,7 @@ namespace castor3d::shader
 					, V
 					, NdotV
 					, components
-					, brdf
-					, debugOutput );
+					, brdf );
 			}
 		}
 	}

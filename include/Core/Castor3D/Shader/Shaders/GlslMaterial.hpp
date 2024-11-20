@@ -69,17 +69,6 @@ namespace castor3d::shader
 		sdw::UInt lightingModel;
 		sdw::Float alphaRef;
 		sdw::Float opacity;
-/*
-		sdw::Vec3 colour;
-		sdw::Vec3 specular;
-		sdw::Float transmission;
-		sdw::UInt hasTransmission;
-		sdw::UInt hasReflection;
-		sdw::Float refractionRatio;
-		sdw::Vec3 attenuationColour;
-		sdw::Float attenuationDistance;
-		sdw::Float thicknessFactor;
-*/
 
 	private:
 		static sdw::expr::ExprPtr makeInit( sdw::ShaderWriter const & writer

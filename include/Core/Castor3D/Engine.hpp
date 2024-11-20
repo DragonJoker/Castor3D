@@ -412,7 +412,7 @@ namespace castor3d
 		 */
 		C3D_API void registerLightingModel( castor::String const & baseName
 			, shader::LightingModelDesc const & defaultDesc
-			, shader::LightingModelCreator creator )const;
+			, shader::LightingModelCreator const & creator )const;
 		/**
 		 *\~english
 		 *\brief		Unregisters a lighting model.

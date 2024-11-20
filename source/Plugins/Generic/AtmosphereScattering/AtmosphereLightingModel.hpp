@@ -21,7 +21,7 @@ namespace atmosphere_scattering
 		: public c3d::ScatteringModel
 	{
 	public:
-		AtmosphereScatteringModel( sdw::ShaderWriter & writer );
+		explicit AtmosphereScatteringModel( sdw::ShaderWriter & writer );
 		void initialiseBackground( c3d::BackgroundModel & background
 			, c3d::Shadow & shadowModel )override;
 		sdw::Vec3 computeRadiance( c3d::Light const & light
