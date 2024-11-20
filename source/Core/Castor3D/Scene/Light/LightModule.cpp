@@ -5,6 +5,8 @@
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 
+#include <CastorUtils/Math/LuminousIntensity.hpp>
+
 namespace castor3d
 {
 	castor::String getName( LightType value )
@@ -23,7 +25,8 @@ namespace castor3d
 		}
 	}
 
-	float getMaxDistance( LightCategory const & light
+	float getMaxDistance( castor::Point3f const & colour
+		, castor::LuminousIntensity const & intensity
 		, castor::Point3f const & attenuation )
 	{
 		constexpr float threshold = 0.000001f;
@@ -36,10 +39,10 @@ namespace castor3d
 			|| linear >= threshold
 			|| quadratic >= threshold )
 		{
-			float maxChannel = std::max( std::max( light.getColour()[0]
-				, light.getColour()[1] )
-				, light.getColour()[2] );
-			result = 256.0f * maxChannel * light.getDiffuseIntensity();
+			float maxChannel = std::max( std::max( colour[0]
+				, colour[1] )
+				, colour[2] );
+			result = 256.0f * maxChannel * intensity.candela();
 
 			if ( quadratic >= threshold )
 			{
@@ -72,18 +75,11 @@ namespace castor3d
 		return result;
 	}
 
-	float getMaxDistance( LightCategory const & light
-		, castor::Point3f const & attenuation
-		, float max )
-	{
-		return std::min( max, getMaxDistance( light, attenuation ) );
-	}
-
-	float computeRange( castor::Point2f const & intensity
+	float computeRange( castor::LuminousIntensity const & intensity
 		, float range )
 	{
 		return range <= 0.0f
-			? float( sqrt( std::max( intensity->x, intensity->y ) ) / 0.00001f )
+			? float( sqrt( intensity.candela() ) / 0.00001f )
 			: range;
 	}
 }

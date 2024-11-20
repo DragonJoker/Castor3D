@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
+#include <CastorUtils/Math/LuminousIntensity.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d
@@ -76,23 +77,18 @@ namespace castor3d
 		 */
 		C3D_API void fillShadowBuffer( AllShadowData & data )const override;
 		/**
-		 *\~english
-		 *\brief		Sets attenuation components.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit les composantes d'atténuation.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
 		C3D_API void setAttenuation( castor::Point3f const & value );
-		/**
-		 *\~english
-		 *\brief		Sets range value.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la valeur de ditance maximale.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
 		C3D_API void setRange( float value );
+		C3D_API void setIntensity( castor::LuminousIntensity const & value );
+		/**@}*/
 		/**
 		 *\~english
 		 *\name Getters.
@@ -109,6 +105,11 @@ namespace castor3d
 		{
 			return m_lightViews[size_t( face )];
 		}
+
+		castor::LuminousIntensity const & getIntensity()const noexcept
+		{
+			return m_intensity;
+		}
 		/**@}*/
 
 	private:
@@ -119,6 +120,7 @@ namespace castor3d
 		friend class Scene;
 
 		castor::GroupChangeTracked< float > m_range;
+		castor::GroupChangeTracked< castor::LuminousIntensity > m_intensity;
 		castor::GroupChangeTracked< castor::Point3f > m_position;
 		castor::Array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) > m_lightViews;
 	};

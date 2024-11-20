@@ -354,7 +354,7 @@ namespace castor3d
 					components.baseColour *= in.colour;
 					out.flux.rgb() = components.baseColour
 						* light.base().colour()
-						* light.base().intensity().x();
+						* light.base().intensity();
 					out.normal.xyz() = components.getRawNormal();
 					out.position.xyz() = in.worldPosition.xyz();
 				}

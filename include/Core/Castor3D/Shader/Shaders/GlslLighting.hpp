@@ -32,7 +32,7 @@ namespace castor3d::shader
 			, ShadowData const & shadows
 			, sdw::Int const shadowMapIndex
 			, sdw::Vec3 const & radiance
-			, sdw::Vec2 const & lightIntensity
+			, sdw::Float const & lightIntensity
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Vec3 output );
@@ -172,7 +172,7 @@ namespace castor3d::shader
 		//\}
 		C3D_API void applyVolumetric( ShadowData const & shadows
 			, sdw::Int const shadowMapIndex
-			, sdw::Vec2 const & lightIntensity
+			, sdw::Float const & lightIntensity
 			, LightSurface const & lightSurface
 			, sdw::Vec3 output
 			, bool multiply );
@@ -180,7 +180,7 @@ namespace castor3d::shader
 	protected:
 		C3D_API void doApplyShadows( DirectionalShadowData const & light
 			, sdw::Int const shadowMapIndex
-			, sdw::Vec2 const & lightIntensity
+			, sdw::Float const & lightIntensity
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & radiance
 			, sdw::UInt const & receivesShadows

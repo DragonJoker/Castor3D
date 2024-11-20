@@ -398,7 +398,7 @@ namespace castor
 
 	void PreprocessedFile::parseWarning( String const & text )
 	{
-		m_parser.parseError( doGetSectionsStack(), m_context->line, text );
+		m_parser.parseWarning( doGetSectionsStack(), m_context->line, text );
 	}
 
 	bool PreprocessedFile::doCheckParams( String params

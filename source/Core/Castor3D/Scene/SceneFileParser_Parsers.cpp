@@ -55,6 +55,7 @@
 #include "Castor3D/Scene/Background/Colour.hpp"
 #include "Castor3D/Scene/Background/Image.hpp"
 #include "Castor3D/Scene/Background/Skybox.hpp"
+#include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
@@ -2171,7 +2172,47 @@ namespace castor3d
 			}
 			else
 			{
-				blockContext->light->setIntensity( params[0]->get< castor::Point2f >() );
+				if ( blockContext->lightType == LightType::ePoint )
+				{
+					blockContext->light->getPointLight()->setIntensity( castor::LuminousIntensity{ params[0]->get< float >() } );
+				}
+				else if ( blockContext->lightType == LightType::eSpot )
+				{
+					blockContext->light->getSpotLight()->setIntensity( castor::LuminousIntensity{ params[0]->get< float >() } );
+				}
+				else if ( blockContext->lightType == LightType::eDirectional )
+				{
+					CU_ParsingDeprecated();
+					blockContext->light->getDirectionalLight()->setIllumination( castor::Illumination{ params[0]->get< float >() } );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Unsupported light type for intensity." ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserLightIllumination, LightContext )
+		{
+			if ( !blockContext->light )
+			{
+				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				if ( blockContext->lightType == LightType::eDirectional )
+				{
+					blockContext->light->getDirectionalLight()->setIllumination( castor::Illumination{ params[0]->get< float >() } );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Unsupported light type for illumination." ) );
+				}
 			}
 		}
 		CU_EndAttribute()
@@ -5542,7 +5583,8 @@ namespace castor3d
 			context.addParser( cuT( "parent" ), parserLightParent, { makeParameter< ParameterType::eName >() } );
 			context.addParser( cuT( "type" ), parserLightType, { makeParameter< ParameterType::eCheckedText, LightType >() } );
 			context.addParser( cuT( "colour" ), parserLightColour, { makeParameter< ParameterType::ePoint3F >() } );
-			context.addParser( cuT( "intensity" ), parserLightIntensity, { makeParameter< ParameterType::ePoint2F >() } );
+			context.addParser( cuT( "intensity" ), parserLightIntensity, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "illumination" ), parserLightIllumination, { makeParameter< ParameterType::eFloat >() } );
 			context.addParser( cuT( "attenuation" ), parserLightAttenuation, { makeParameter< ParameterType::ePoint3F >() } );
 			context.addParser( cuT( "range" ), parserLightRange, { makeParameter< ParameterType::eFloat >() } );
 			context.addParser( cuT( "cut_off" ), parserLightCutOff, { makeParameter< ParameterType::eFloat >() } );

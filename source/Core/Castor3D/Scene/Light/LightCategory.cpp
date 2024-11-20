@@ -22,7 +22,6 @@ namespace castor3d
 		, m_lightComponentCount{ lightComponentCount }
 		, m_shadowComponentCount{ shadowComponentCount }
 		, m_colour{ m_dirty, { 1.0, 1.0, 1.0 }, [this](){ getLight().markDirty(); } }
-		, m_intensity{ m_dirty, { 1.0, 1.0 }, [this](){ getLight().markDirty(); } }
 	{
 	}
 
@@ -31,7 +30,6 @@ namespace castor3d
 		auto & base = *reinterpret_cast< LightData * >( data->ptr() );
 		base.colour = getColour();
 
-		base.intensity = getIntensity();
 		base.shadowMapIndex = float( m_light.getShadowMapIndex() );
 
 		base.enabled = ( ( m_light.isEnabled() && m_light.getParent()->isVisible() )
@@ -43,7 +41,6 @@ namespace castor3d
 	void LightCategory::accept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Colour" ), m_colour );
-		vis.visit( cuT( "Intensity" ), m_intensity );
 		doAccept( vis );
 	}
 
@@ -150,24 +147,6 @@ namespace castor3d
 	void LightCategory::setColour( castor::Point3f const & value )
 	{
 		m_colour = value;
-		getLight().markDirty();
-	}
-
-	void LightCategory::setIntensity( castor::Point2f const & value )
-	{
-		m_intensity = value;
-		getLight().markDirty();
-	}
-
-	void LightCategory::setDiffuseIntensity( float value )
-	{
-		( *m_intensity )->x = value;
-		getLight().markDirty();
-	}
-
-	void LightCategory::setSpecularIntensity( float value )
-	{
-		( *m_intensity )->y = value;
 		getLight().markDirty();
 	}
 

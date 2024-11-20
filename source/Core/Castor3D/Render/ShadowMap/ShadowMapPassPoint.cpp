@@ -351,7 +351,7 @@ namespace castor3d
 					components.baseColour *= in.colour;
 					out.flux.rgb() = ( components.baseColour
 							* light.base().colour()
-							* light.base().intensity().x()
+							* light.base().intensity()
 							* clamp( dot( lightToVertex / distance, components.getRawNormal() ), 0.0_f, 1.0_f ) )
 						* attenuation;
 					out.normal.xyz() = components.getRawNormal();

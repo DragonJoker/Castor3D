@@ -296,8 +296,7 @@ namespace Testing
 	bool C3DTestCase::compare( castor3d::LightCategory const & lhs, castor3d::LightCategory const & rhs )
 	{
 		CT_REQUIRE( lhs.getLightType() == rhs.getLightType() );
-		bool result{ CT_EQUAL( lhs.getIntensity(), rhs.getIntensity() ) };
-		result = result && CT_EQUAL( lhs.getColour(), rhs.getColour() );
+		bool result{ CT_EQUAL( lhs.getColour(), rhs.getColour() ) };
 
 		switch ( lhs.getLightType() )
 		{
@@ -324,12 +323,14 @@ namespace Testing
 	bool C3DTestCase::compare( castor3d::DirectionalLight const & lhs, castor3d::DirectionalLight const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getDirection(), rhs.getDirection() ) };
+		result = result && CT_EQUAL( lhs.getIllumination(), rhs.getIllumination() );
 		return result;
 	}
 
 	bool C3DTestCase::compare( castor3d::PointLight const & lhs, castor3d::PointLight const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getRange(), rhs.getRange() ) };
+		result = result && CT_EQUAL( lhs.getIntensity(), rhs.getIntensity() );
 		return result;
 	}
 
@@ -339,6 +340,7 @@ namespace Testing
 		result = result && CT_EQUAL( lhs.getRange(), rhs.getRange() );
 		result = result && CT_EQUAL( lhs.getInnerCutOff(), rhs.getInnerCutOff() );
 		result = result && CT_EQUAL( lhs.getOuterCutOff(), rhs.getOuterCutOff() );
+		result = result && CT_EQUAL( lhs.getIntensity(), rhs.getIntensity() );
 		return result;
 	}
 
