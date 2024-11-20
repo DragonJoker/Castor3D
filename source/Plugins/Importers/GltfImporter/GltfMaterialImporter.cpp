@@ -118,13 +118,9 @@ namespace c3d_gltf
 			component->setData( *data );
 		}
 
-		static castor::String getFormatName( fastgltf::MimeType mimeType, bool isWebP )
+		static castor::String getFormatName( fastgltf::MimeType mimeType
+			, fastgltf::MimeType defaultMimeType )
 		{
-			if ( isWebP )
-			{
-				return cuT( "webp" );
-			}
-
 			switch ( mimeType )
 			{
 			case fastgltf::MimeType::JPEG:
@@ -134,11 +130,25 @@ namespace c3d_gltf
 			case fastgltf::MimeType::OctetStream:
 				return cuT( "png" );
 			case fastgltf::MimeType::KTX2:
-				return cuT( "ktx" );
+				return cuT( "ktx2" );
 			case fastgltf::MimeType::DDS:
 				return cuT( "dds" );
 			default:
-				return cuT( "png" );
+				switch ( defaultMimeType )
+				{
+				case fastgltf::MimeType::JPEG:
+					return cuT( "jpg" );
+				case fastgltf::MimeType::PNG:
+				case fastgltf::MimeType::GltfBuffer:
+				case fastgltf::MimeType::OctetStream:
+					return cuT( "png" );
+				case fastgltf::MimeType::KTX2:
+					return cuT( "ktx2" );
+				case fastgltf::MimeType::DDS:
+					return cuT( "dds" );
+				default:
+					return cuT( "png" );
+				}
 			}
 		}
 
@@ -265,7 +275,7 @@ namespace c3d_gltf
 			, fastgltf::DataSource const & impDataSource
 			, castor3d::TextureConfiguration const & texConfig
 			, castor::ImageLoaderConfig const & loadConfig
-			, bool isWebP
+			, fastgltf::MimeType defaultMimeType
 			, castor3d::MaterialImporter & importer
 			, size_t offset = 0u
 			, size_t size = 0xFFFFFFFFFFFFFFFF )
@@ -274,7 +284,7 @@ namespace c3d_gltf
 			{
 				fastgltf::BufferView const & impBufferView = impAsset.bufferViews[std::get< 1 >( impDataSource ).bufferViewIndex];
 				fastgltf::Buffer const & impBuffer = impAsset.buffers[impBufferView.bufferIndex];
-				return loadTexture( impAsset, name, impTexture, impImage, impBuffer.data, texConfig, loadConfig, isWebP, importer, offset + impBufferView.byteOffset, impBufferView.byteLength );
+				return loadTexture( impAsset, name, impTexture, impImage, impBuffer.data, texConfig, loadConfig, defaultMimeType, importer, offset + impBufferView.byteOffset, impBufferView.byteLength );
 			}
 
 			fastgltf::MimeType mimeType{};
@@ -290,7 +300,7 @@ namespace c3d_gltf
 			if ( !data.empty() )
 			{
 				return castor::make_unique< castor3d::TextureSourceInfo >( importer.loadTexture( name
-					, getFormatName( mimeType, isWebP )
+					, getFormatName( mimeType, defaultMimeType )
 					, castor::move( data )
 					, texConfig
 					, loadConfig ) );
@@ -321,7 +331,7 @@ namespace c3d_gltf
 						, impImage.data
 						, texConfig
 						, loadConfig
-						, false
+						, fastgltf::MimeType::None
 						, importer );
 				}
 				else if ( impAsset.textures[texInfo.textureIndex].webpImageIndex
@@ -336,7 +346,37 @@ namespace c3d_gltf
 						, impImage.data
 						, texConfig
 						, loadConfig
-						, true
+						, fastgltf::MimeType::WEBP
+						, importer );
+				}
+				else if ( impAsset.textures[texInfo.textureIndex].ddsImageIndex
+					&& *impAsset.textures[texInfo.textureIndex].ddsImageIndex < impAsset.images.size() )
+				{
+					fastgltf::Texture const & impTexture = impAsset.textures[texInfo.textureIndex];
+					fastgltf::Image const & impImage = impAsset.images[*impTexture.ddsImageIndex];
+					result = loadTexture( impAsset
+						, makeTextureName( texInfo.textureIndex, impTexture, *impTexture.ddsImageIndex, impImage )
+						, impTexture
+						, impImage
+						, impImage.data
+						, texConfig
+						, loadConfig
+						, fastgltf::MimeType::DDS
+						, importer );
+				}
+				else if ( impAsset.textures[texInfo.textureIndex].basisuImageIndex
+					&& *impAsset.textures[texInfo.textureIndex].basisuImageIndex < impAsset.images.size() )
+				{
+					fastgltf::Texture const & impTexture = impAsset.textures[texInfo.textureIndex];
+					fastgltf::Image const & impImage = impAsset.images[*impTexture.basisuImageIndex];
+					result = loadTexture( impAsset
+						, makeTextureName( texInfo.textureIndex, impTexture, *impTexture.basisuImageIndex, impImage )
+						, impTexture
+						, impImage
+						, impImage.data
+						, texConfig
+						, loadConfig
+						, fastgltf::MimeType::KTX2
 						, importer );
 				}
 			}
@@ -404,28 +444,35 @@ namespace c3d_gltf
 		{
 			if ( texInfo )
 			{
-				auto texConfig = pass.getComponentPlugin< castor3d::ColourMapComponent >().getBaseTextureConfiguration();
-
-				if ( auto sourceInfo = loadTexture( impAsset, *texInfo, texConfig, loadConfig, importer ) )
+				try
 				{
-					if ( auto & image = loadImage( *sourceInfo, importer );
-						hasAlphaChannel( image ) )
+					auto texConfig = pass.getComponentPlugin< castor3d::ColourMapComponent >().getBaseTextureConfiguration();
+
+					if ( auto sourceInfo = loadTexture( impAsset, *texInfo, texConfig, loadConfig, importer ) )
 					{
-						addFlagConfiguration( texConfig, { pass.getComponentPlugin< castor3d::OpacityMapComponent >().getTextureFlags(), 0xFF000000 } );
-						*sourceInfo = castor3d::TextureSourceInfo{ *sourceInfo, texConfig };
+						if ( auto & image = loadImage( *sourceInfo, importer );
+							hasAlphaChannel( image ) )
+						{
+							addFlagConfiguration( texConfig, { pass.getComponentPlugin< castor3d::OpacityMapComponent >().getTextureFlags(), 0xFF000000 } );
+							*sourceInfo = castor3d::TextureSourceInfo{ *sourceInfo, texConfig };
+						}
+
+						fastgltf::Texture const & impTexture = impAsset.textures[texInfo->textureIndex];
+						auto texCoordIndex = uint32_t( texInfo->texCoordIndex );
+
+						if ( texInfo->transform )
+						{
+							parseTransform( *texInfo->transform, texConfig.transform, texCoordIndex );
+							*sourceInfo = castor3d::TextureSourceInfo{ *sourceInfo, texConfig };
+						}
+
+						castor3d::PassTextureConfig passTexConfig{ loadSampler( file, impAsset, impTexture.samplerIndex ), texCoordIndex };
+						pass.registerTexture( castor::move( *sourceInfo ), passTexConfig );
 					}
-
-					fastgltf::Texture const & impTexture = impAsset.textures[texInfo->textureIndex];
-					auto texCoordIndex = uint32_t( texInfo->texCoordIndex );
-
-					if ( texInfo->transform )
-					{
-						parseTransform( *texInfo->transform, texConfig.transform, texCoordIndex );
-						*sourceInfo = castor3d::TextureSourceInfo{ *sourceInfo, texConfig };
-					}
-
-					castor3d::PassTextureConfig passTexConfig{ loadSampler( file, impAsset, impTexture.samplerIndex ), texCoordIndex };
-					pass.registerTexture( castor::move( *sourceInfo ), passTexConfig );
+				}
+				catch ( castor::Exception & )
+				{
+					// Already handled.
 				}
 			}
 		}
@@ -438,19 +485,26 @@ namespace c3d_gltf
 			, castor::ImageLoaderConfig const & loadConfig
 			, castor3d::MaterialImporter & importer )
 		{
-			if ( auto sourceInfo = loadTexture( impAsset, texInfo, texConfig, loadConfig, importer ) )
+			try
 			{
-				fastgltf::Texture const & impTexture = impAsset.textures[texInfo.textureIndex];
-				auto texCoordIndex = uint32_t( texInfo.texCoordIndex );
-
-				if ( texInfo.transform )
+				if ( auto sourceInfo = loadTexture( impAsset, texInfo, texConfig, loadConfig, importer ) )
 				{
-					parseTransform( *texInfo.transform, texConfig.transform, texCoordIndex );
-					*sourceInfo = castor3d::TextureSourceInfo{ *sourceInfo, texConfig };
-				}
+					fastgltf::Texture const & impTexture = impAsset.textures[texInfo.textureIndex];
+					auto texCoordIndex = uint32_t( texInfo.texCoordIndex );
 
-				castor3d::PassTextureConfig passTexConfig{ loadSampler( file, impAsset, impTexture.samplerIndex ), texCoordIndex };
-				pass.registerTexture( castor::move( *sourceInfo ), passTexConfig );
+					if ( texInfo.transform )
+					{
+						parseTransform( *texInfo.transform, texConfig.transform, texCoordIndex );
+						*sourceInfo = castor3d::TextureSourceInfo{ *sourceInfo, texConfig };
+					}
+
+					castor3d::PassTextureConfig passTexConfig{ loadSampler( file, impAsset, impTexture.samplerIndex ), texCoordIndex };
+					pass.registerTexture( castor::move( *sourceInfo ), passTexConfig );
+				}
+			}
+			catch ( castor::Exception & )
+			{
+				// Already handled.
 			}
 		}
 

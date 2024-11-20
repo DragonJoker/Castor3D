@@ -38,6 +38,7 @@ namespace c3d_gltf
 				| fastgltf::Extensions::KHR_mesh_quantization
 				| fastgltf::Extensions::EXT_mesh_gpu_instancing
 				| fastgltf::Extensions::EXT_meshopt_compression
+				| fastgltf::Extensions::KHR_texture_basisu
 				| fastgltf::Extensions::EXT_texture_webp
 				| fastgltf::Extensions::KHR_lights_punctual
 				| fastgltf::Extensions::KHR_materials_specular

@@ -6,6 +6,9 @@ set( gli_DIR ${VCPKG_SHARE_DIR}/gli )
 set( tinyxml2_DIR ${VCPKG_SHARE_DIR}/tinyxml2 )
 set( msdfgen_DIR ${VCPKG_SHARE_DIR}/msdfgen )
 set( PNG_DIR ${VCPKG_SHARE_DIR}/libpng )
+set( WebP_DIR ${VCPKG_SHARE_DIR}/WebP )
+set( Ktx_DIR ${VCPKG_SHARE_DIR}/ktx )
+set( zstd_DIR ${VCPKG_SHARE_DIR}/zstd )
 find_package( unofficial-convectionkernels CONFIG REQUIRED )
 find_package( unofficial-skia CONFIG REQUIRED )
 find_package( gli CONFIG REQUIRED )
@@ -13,6 +16,7 @@ find_package( tinyxml2 CONFIG REQUIRED )
 find_package( msdfgen CONFIG REQUIRED )
 find_package( PNG REQUIRED )
 find_package( WebP CONFIG REQUIRED )
+find_package( Ktx CONFIG REQUIRED )
 
 if ( VCPKG_TOOLCHAIN )
 	set( unofficial-minizip_DIR ${VCPKG_SHARE_DIR}/unofficial-minizip )
@@ -322,6 +326,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageLayout.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageLoader.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageWriter.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Ktx2ImageLoader.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/PixelBufferBase.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/PixelDefinitions.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/PixelFormat.cpp
@@ -364,6 +369,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageLayout.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageLoader.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageWriter.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Ktx2ImageLoader.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/LanczosFilterKernel.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/LanczosFilterKernel.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Pixel.hpp
@@ -719,6 +725,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			WebP::webp
 			WebP::webpdecoder
 			WebP::webpdemux
+			KTX::ktx
 	)
 	if ( WIN32 )
 		target_link_libraries( ${PROJECT_NAME}

@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CU_WebPImageLoader_H___
-#define ___CU_WebPImageLoader_H___
+#ifndef ___CU_Ktx2ImageLoader_H___
+#define ___CU_Ktx2ImageLoader_H___
 
 #include "CastorUtils/Graphics/ImageLoader.hpp"
 
@@ -10,11 +10,11 @@ namespace castor
 {
 	/**
 	\~english
-	\brief		Image loader based on libwebp.
+	\brief		Image loader based on libktx.
 	\~french
-	\brief		Loader d'image basé sur libwebp.
+	\brief		Loader d'image basé sur libktx.
 	*/
-	class WebPImageLoader
+	class Ktx2ImageLoader
 		: public ImageLoaderImpl
 	{
 	public:

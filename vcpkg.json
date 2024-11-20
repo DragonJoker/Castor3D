@@ -7,6 +7,7 @@
     "convectionkernels",
     "freetype",
     "gli",
+    "ktx",
     "libwebp",
     "meshoptimizer",
     "mikktspace",
