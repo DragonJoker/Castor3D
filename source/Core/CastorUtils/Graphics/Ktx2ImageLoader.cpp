@@ -2,6 +2,7 @@
 
 #include "CastorUtils/Data/LoaderException.hpp"
 #include "CastorUtils/Data/Path.hpp"
+#include "CastorUtils/Design/BlockGuard.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 
 #include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
@@ -44,12 +45,14 @@ namespace castor
 		, PxBufferBaseUPtr & buffer )const
 	{
 		ktxTexture * texture{};
+		ktx_error_code_e err = ktxTexture_CreateFromMemory( data, size, KTX_TEXTURE_CREATE_LOAD_IMAGE_DATA_BIT, &texture );
 
-		if ( ktx_error_code_e err = ktxTexture_CreateFromMemory( data, size, KTX_TEXTURE_CREATE_LOAD_IMAGE_DATA_BIT, &texture );
-			err != KTX_SUCCESS )
+		if ( err != KTX_SUCCESS || !texture )
 		{
 			CU_LoaderError( ktxErrorString( err ) );
 		}
+
+		auto guard = makeBlockGuard( [texture](){ ktxTexture_Destroy( texture ); } );
 
 		if ( texture->classId != ktxTexture2_c )
 		{
@@ -57,6 +60,17 @@ namespace castor
 		}
 
 		auto texture2 = reinterpret_cast< ktxTexture2 * >( texture );
+
+		if ( ktxTexture2_NeedsTranscoding( texture2 ) )
+		{
+			err = ktxTexture2_TranscodeBasis( texture2, KTX_TTF_RGBA32, 0 );
+
+			if ( err != KTX_SUCCESS )
+			{
+				CU_LoaderError( ktxErrorString( err ) );
+			}
+		}
+
 		auto format = PixelFormat( PixelFormat( texture2->vkFormat ) );
 
 		if ( format == PixelFormat::eUNDEFINED )
@@ -83,7 +97,21 @@ namespace castor
 			, result.format
 			, ktxTexture_GetData( texture )
 			, result.format );
-		ktxTexture_Destroy( texture );
+
+		if ( texture->orientation.x == KTX_ORIENT_X_LEFT )
+		{
+			buffer->invertX();
+		}
+
+		if ( texture->orientation.y == KTX_ORIENT_Y_DOWN )
+		{
+			buffer->invertY();
+		}
+
+		if ( texture->orientation.z == KTX_ORIENT_Z_IN )
+		{
+			buffer->invertZ();
+		}
 
 		return result;
 	}

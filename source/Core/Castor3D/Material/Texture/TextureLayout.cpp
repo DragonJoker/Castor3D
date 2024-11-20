@@ -456,7 +456,9 @@ namespace castor3d
 
 			if ( result->getFormat() != dstFormat )
 			{
-				auto flipped = result->isFlipped();
+				auto invertX = result->isXInverted();
+				auto invertY = result->isYInverted();
+				auto invertZ = result->isZInverted();
 				result = castor::PxBufferBase::create( result->getDimensions()
 					, result->getLayers()
 					, result->getLevels()
@@ -465,10 +467,12 @@ namespace castor3d
 					, result->getFormat()
 					, result->getAlign() );
 
-				if ( flipped )
-				{
-					result->flip();
-				}
+				if ( invertX )
+					result->invertX();
+				if ( invertY )
+					result->invertY();
+				if ( invertZ )
+					result->invertZ();
 			}
 
 			result->update( result->getLayers()
@@ -992,16 +996,40 @@ namespace castor3d
 		return m_image.getPath();
 	}
 
+	bool TextureLayout::needsXInversion()const
+	{
+		if ( getDefaultView().needsXInversion()
+			&& m_image.getPixels()->isXInverted() )
+		{
+			return false;
+		}
+
+		return getDefaultView().needsXInversion()
+			|| m_image.getPixels()->isXInverted();
+	}
+
 	bool TextureLayout::needsYInversion()const
 	{
 		if ( getDefaultView().needsYInversion()
-			&& m_image.getPixels()->isFlipped() )
+			&& m_image.getPixels()->isYInverted() )
 		{
 			return false;
 		}
 
 		return getDefaultView().needsYInversion()
-			|| m_image.getPixels()->isFlipped();
+			|| m_image.getPixels()->isYInverted();
+	}
+
+	bool TextureLayout::needsZInversion()const
+	{
+		if ( getDefaultView().needsZInversion()
+			&& m_image.getPixels()->isZInverted() )
+		{
+			return false;
+		}
+
+		return getDefaultView().needsZInversion()
+			|| m_image.getPixels()->isZInverted();
 	}
 
 	bool TextureLayout::hasBuffer()const

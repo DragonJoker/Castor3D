@@ -231,15 +231,10 @@ namespace castor
 			CU_CheckInvariants();
 			return * this;
 		}
-		/**
-		 *\~english
-		 *\brief		Swaps the image lines
-		 *\return		A reference to the image
-		 *\~french
-		 *\brief		Retourne verticalement l'image
-		 *\return		La référence de l'image
-		 */
-		CU_API Image & flip();
+
+		CU_API Image & invertX();
+		CU_API Image & invertY();
+		CU_API Image & invertZ();
 		/**
 		*\~english
 		*name

@@ -118,12 +118,16 @@ namespace castor3d
 			uint32_t isTileAnim{};
 			uint32_t needsYInv{};
 			uint32_t texcoordSet{};
+			uint32_t needsXInv{};
+			uint32_t needsZInv{};
+			uint32_t pad0{};
+			uint32_t pad1{};
 		};
 
 		using TextureConfigurationsData = castor::ArrayView< Data >;
 
 		static uint32_t constexpr DataSize = uint32_t( sizeof( Data ) );
-		static_assert( DataSize == 80u );
+		static_assert( DataSize == 96u );
 
 	private:
 		ShaderBuffer m_buffer;

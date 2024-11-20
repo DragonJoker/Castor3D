@@ -68,11 +68,15 @@ namespace castor3d
 
 		if ( getOwner()->isStatic() )
 		{
+			m_needsXInversion = false;
 			m_needsYInversion = false;
+			m_needsZInversion = false;
 
 			if ( m_source.hasBuffer() )
 			{
-				m_needsYInversion = m_needsYInversion || getOwner()->getImage().getPxBuffer().isFlipped();
+				m_needsXInversion = m_needsXInversion || getOwner()->getImage().getPxBuffer().isXInverted();
+				m_needsYInversion = m_needsYInversion || getOwner()->getImage().getPxBuffer().isYInverted();
+				m_needsZInversion = m_needsXInversion || getOwner()->getImage().getPxBuffer().isZInverted();
 			}
 		}
 		else

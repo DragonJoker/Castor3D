@@ -124,6 +124,8 @@ namespace castor3d
 					data.normal2Chan = config.normal2Channels ? 1u : 0u;
 					data.heightFactor = config.heightFactor;
 					data.needsYInv = config.needsYInversion ? 1u : 0u;
+					data.needsXInv = config.needsXInversion ? 1u : 0u;
+					data.needsZInv = config.needsZInversion ? 1u : 0u;
 					data.isTransformAnim = unit->isTransformAnimated() ? 1u : 0u;
 					data.isTileAnim = unit->isTileAnimated() ? 1u : 0u;
 					data.texcoordSet = unit->getTexcoordSet() ? 1u : 0u;

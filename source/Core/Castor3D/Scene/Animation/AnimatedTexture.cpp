@@ -53,6 +53,7 @@ namespace castor3d
 			result += write( cuT( "_ng" ), configuration.normalDirectX );
 			result += write( cuT( "_n2" ), configuration.normal2Channels );
 			result += write( cuT( "_yv" ), configuration.needsYInversion );
+			result += write( cuT( "_xv" ), configuration.needsXInversion );
 			return result;
 		}
 	}

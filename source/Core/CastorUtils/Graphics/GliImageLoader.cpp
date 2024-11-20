@@ -135,7 +135,7 @@ namespace castor
 
 		if ( flipped )
 		{
-			buffer->flip();
+			buffer->invertY();
 		}
 
 		return result;

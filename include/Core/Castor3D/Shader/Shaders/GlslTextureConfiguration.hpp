@@ -49,8 +49,12 @@ namespace castor3d::shader
 			, sdw::FloatField< "hgtFact" >
 			, sdw::UIntField< "isTrnfAnim" >
 			, sdw::UIntField< "isTileAnim" >
-			, sdw::UIntField< "needsYI" >
-			, sdw::UIntField< "texSet" > >
+			, sdw::UIntField< "needsYInv" >
+			, sdw::UIntField< "texSet" >
+			, sdw::UIntField< "needsXInv" >
+			, sdw::UIntField< "needsZInv" >
+			, sdw::UIntField< "pad0" >
+			, sdw::UIntField< "pad1" > >
 	{
 		friend class TextureConfigurations;
 
@@ -86,7 +90,9 @@ namespace castor3d::shader
 		auto nmlGMul()const { return getMember< "nmlGMul" >(); }
 		auto nml2Chan()const { return getMember< "nml2Chan" >(); }
 		auto hgtFact()const { return getMember< "hgtFact" >(); }
-		auto needsYI()const { return getMember< "needsYI" >(); }
+		auto needsYInv()const { return getMember< "needsYInv" >(); }
+		auto needsXInv()const { return getMember< "needsXInv" >(); }
+		auto needsZInv()const { return getMember< "needsZInv" >(); }
 		auto isTrnfAnim()const { return getMember< "isTrnfAnim" >() != 0_u; }
 		auto isTileAnim()const { return getMember< "isTileAnim" >() != 0_u; }
 		auto texSet()const { return getMember< "texSet" >(); }
@@ -111,8 +117,6 @@ namespace castor3d::shader
 		{
 			lhs.xy() = rhs;
 		}
-
-		sdw::Float fneedYI;
 	};
 
 	class TextureConfigurations

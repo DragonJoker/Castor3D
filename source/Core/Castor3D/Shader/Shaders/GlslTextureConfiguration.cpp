@@ -18,7 +18,6 @@ namespace castor3d::shader
 		, ast::expr::ExprPtr expr
 		, bool enabled )
 		: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
-		, fneedYI{ writer.cast< sdw::Float >( needsYI() ) }
 	{
 	}
 

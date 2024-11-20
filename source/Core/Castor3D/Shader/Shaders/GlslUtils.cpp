@@ -162,18 +162,16 @@ namespace castor3d::shader
 					, sdw::Vec2 uv )
 				{
 					uv = scaleUV( config.scale().xy()
-						, m_writer.ternary( config.needsYI() == 0_u
-							, uv
-							, vec2( uv.x(), 1.0_f - uv.y() ) ) );
+						, vec2( m_writer.ternary( config.needsXInv() == 0_u, uv.x(), 1.0_f - uv.x() )
+							, m_writer.ternary( config.needsYInv() == 0_u, uv.y(), 1.0_f - uv.y() ) ) );
 					uv = rotateUV( config.rotateU(), config.rotateV(), uv );
 					uv = translateUV( config.translate().xy(), uv );
 
 					IF( m_writer, config.isTrnfAnim() )
 					{
 						uv = scaleUV( anim.scale().xy()
-							, m_writer.ternary( config.needsYI() == 0_u
-								, uv
-								, vec2( uv.x(), 1.0_f - uv.y() ) ) );
+							, vec2( m_writer.ternary( config.needsXInv() == 0_u, uv.x(), 1.0_f - uv.x() )
+								, m_writer.ternary( config.needsYInv() == 0_u, uv.y(), 1.0_f - uv.y() ) ) );
 						uv = rotateUV( anim.rotateU(), anim.rotateV(), uv );
 						uv = translateUV( anim.translate().xy(), uv );
 					}
@@ -211,17 +209,17 @@ namespace castor3d::shader
 					, sdw::Vec3 uvw )
 				{
 					uvw = scaleUV( config.scale()
-						, m_writer.ternary( config.needsYI() == 0_u
-							, uvw
-							, vec3( uvw.x(), 1.0_f - uvw.y(), uvw.z() ) ) );
+						, vec3( m_writer.ternary( config.needsXInv() == 0_u, uvw.x(), 1.0_f - uvw.x() )
+							, m_writer.ternary( config.needsYInv() == 0_u, uvw.y(), 1.0_f - uvw.y() )
+							, m_writer.ternary( config.needsZInv() == 0_u, uvw.z(), 1.0_f - uvw.z() ) ) );
 					uvw = translateUV( config.translate(), uvw );
 
 					IF( m_writer, config.isTrnfAnim() )
 					{
 						uvw = scaleUV( anim.scale()
-							, m_writer.ternary( config.needsYI() == 0_u
-								, uvw
-								, vec3( uvw.x(), 1.0_f - uvw.y(), uvw.z() ) ) );
+						, vec3( m_writer.ternary( config.needsXInv() == 0_u, uvw.x(), 1.0_f - uvw.x() )
+							, m_writer.ternary( config.needsYInv() == 0_u, uvw.y(), 1.0_f - uvw.y() )
+							, m_writer.ternary( config.needsZInv() == 0_u, uvw.z(), 1.0_f - uvw.z() ) ) );
 						uvw = translateUV( anim.translate(), uvw );
 					}
 					FI

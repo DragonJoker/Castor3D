@@ -41,7 +41,7 @@ namespace castor
 				, PixelFormat::eR32G32B32A32_SFLOAT
 				, ByteCPtr( data )
 				, PixelFormat::eR32G32B32A32_SFLOAT );
-			result->flip();
+			result->invertY();
 			free( data );
 
 			return result;

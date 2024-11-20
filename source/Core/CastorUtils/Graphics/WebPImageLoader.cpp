@@ -65,7 +65,7 @@ namespace castor
 			, result.layers
 			, result.levels
 			, result.format );
-		buffer->flip();
+		buffer->invertY();
 		config.output.colorspace = MODE_RGBA;
 		config.output.u.RGBA.rgba = buffer->getPtr();
 		config.output.u.RGBA.stride = int( buffer->getAlign() * buffer->getWidth() );

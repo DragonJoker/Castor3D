@@ -123,6 +123,8 @@ namespace castor3d
 			&& lhs.heightFactor == rhs.heightFactor
 			&& lhs.normalDirectX == rhs.normalDirectX
 			&& lhs.needsYInversion == rhs.needsYInversion
+			&& lhs.needsXInversion == rhs.needsXInversion
+			&& lhs.needsZInversion == rhs.needsZInversion
 			&& lhs.normal2Channels == rhs.normal2Channels
 			&& lhs.transform.translate == rhs.transform.translate
 			&& lhs.transform.rotate == rhs.transform.rotate
@@ -153,6 +155,8 @@ namespace castor3d
 		castor::hashCombine( result, config.heightFactor );
 		castor::hashCombine( result, config.normalDirectX );
 		castor::hashCombine( result, config.needsYInversion );
+		castor::hashCombine( result, config.needsXInversion );
+		castor::hashCombine( result, config.needsZInversion );
 		castor::hashCombine( result, config.normal2Channels );
 		castor::hashCombine( result, config.transform.translate->x );
 		castor::hashCombine( result, config.transform.translate->y );
@@ -384,6 +388,8 @@ namespace castor3d
 		, TextureConfiguration & rhs )
 	{
 		texconf::merge( lhs.needsYInversion, rhs.needsYInversion );
+		texconf::merge( lhs.needsXInversion, rhs.needsXInversion );
+		texconf::merge( lhs.needsZInversion, rhs.needsZInversion );
 		texconf::merge( lhs.normalDirectX, rhs.normalDirectX );
 		texconf::merge( lhs.normal2Channels, rhs.normal2Channels );
 

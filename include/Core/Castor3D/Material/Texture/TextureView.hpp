@@ -142,6 +142,16 @@ namespace castor3d
 			return m_needsYInversion;
 		}
 
+		bool needsXInversion()const
+		{
+			return m_needsXInversion;
+		}
+
+		bool needsZInversion()const
+		{
+			return m_needsZInversion;
+		}
+
 		static VkImageViewCreateInfo convertToSampledView( VkImageViewCreateInfo createInfo );
 		static VkImageViewCreateInfo convertToTargetView( VkImageViewCreateInfo createInfo
 			, uint32_t depth );
@@ -159,6 +169,8 @@ namespace castor3d
 		mutable ashes::ImageView m_targetView;
 		bool m_needsMipmapsGeneration{ true };
 		bool m_needsYInversion{ false };
+		bool m_needsXInversion{ false };
+		bool m_needsZInversion{ false };
 	};
 }
 
