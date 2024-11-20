@@ -1165,8 +1165,8 @@ namespace castor3d::shader
 			, pshift );
 	}
 
-	sdw::RetFloat Utils::directionalAlbedoSheen( sdw::Float const & cosTheta
-		, sdw::Float const & roughness )
+	sdw::RetFloat Utils::directionalAlbedoSheen( sdw::Float const & pcosTheta
+		, sdw::Float const & proughness )
 	{
 		if ( !m_directionalAlbedoSheen )
 		{
@@ -1184,7 +1184,7 @@ namespace castor3d::shader
 				, sdw::InFloat{ m_writer, "roughness" } );
 		}
 
-		return m_directionalAlbedoSheen( cosTheta, roughness );
+		return m_directionalAlbedoSheen( pcosTheta, proughness );
 	}
 
 	sdw::Vec3 Utils::reconstructNormal( sdw::Vec2 const & normal )

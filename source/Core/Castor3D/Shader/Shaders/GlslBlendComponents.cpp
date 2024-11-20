@@ -16,7 +16,7 @@ namespace castor3d::shader
 
 	namespace blendcomp
 	{
-		void fillType( ast::type::BaseStruct & type )
+		static void fillType( ast::type::BaseStruct & type )
 		{
 			type.declMember( "dielectricF0", sdw::type::Kind::eVec3F );
 			type.declMember( "alphaRoughness", sdw::type::Kind::eFloat );
@@ -25,7 +25,7 @@ namespace castor3d::shader
 			type.declMember( "specularWeight", sdw::type::Kind::eFloat );
 		}
 
-		void fillInit( sdw::expr::ExprList & inits )
+		static void fillInit( sdw::expr::ExprList & inits )
 		{
 			inits.emplace_back( sdw::makeExpr( vec3( 0.04_f ) ) );
 			inits.emplace_back( sdw::makeExpr( 1.0_f ) );

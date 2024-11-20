@@ -50,7 +50,7 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace trscmp
+	namespace dftrftmk
 	{
 		static CU_ImplementAttributeParserBlock( parserUnitTransmissionMask, TextureContext )
 		{
@@ -133,25 +133,25 @@ namespace castor3d
 		castor::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "diffuse_transmission_factor_mask" )
-			, trscmp::parserUnitTransmissionMask
+			, dftrftmk::parserUnitTransmissionMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "diffuse_transmission_factor_mask" )
-			, trscmp::parserUnitTransmissionMask
+			, dftrftmk::parserUnitTransmissionMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "diffuse_transmission_factor" )
-			, trscmp::parserTexRemapTransmission );
+			, dftrftmk::parserTexRemapTransmission );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "diffuse_transmission_factor_mask" )
-			, trscmp::parserTexRemapTransmissionMask
+			, dftrftmk::parserTexRemapTransmissionMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 	}
 

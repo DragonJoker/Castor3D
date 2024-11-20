@@ -114,7 +114,7 @@ namespace castor3d::shader
 			, components.perceptualRoughness );
 	}
 
-	sdw::RetVec3 NoIblBackgroundModel::computeDiffuse( sdw::Vec3 const & wsDirection
+	sdw::RetVec3 NoIblBackgroundModel::computeDiffuse( sdw::Vec3 const & pwsDirection
 		, BlendComponents & components
 		, DebugOutputCategory const & debugOutput )
 	{
@@ -133,7 +133,7 @@ namespace castor3d::shader
 		}
 
 		auto backgroundMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapBackground" );
-		return m_computeDiffuse( wsDirection
+		return m_computeDiffuse( pwsDirection
 			, backgroundMap
 			, components.perceptualRoughness );
 	}

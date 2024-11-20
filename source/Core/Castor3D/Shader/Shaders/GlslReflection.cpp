@@ -1219,10 +1219,10 @@ namespace castor3d::shader
 		, sdw::Vec3 & result
 		, DebugOutputCategory const & debugOutput )
 	{
-		auto & writer = *envMap.getWriter();
-
 		if ( m_hasEnvMap )
 		{
+			auto & writer = *envMap.getWriter();
+
 			IF( writer, hasEnvMap )
 			{
 				result = computeDiffuseEnvMaps( wsDirection
