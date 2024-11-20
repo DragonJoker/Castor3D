@@ -3,6 +3,7 @@
 #include "TextClustersConfig.hpp"
 #include "TextSsaoConfig.hpp"
 
+#include <Castor3D/Material/MaterialModule.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Render/Clustered/FrustumClusters.hpp>
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
@@ -33,7 +34,7 @@ namespace castor
 		if ( auto block{ beginBlock( file, cuT( "render_target" ) ) } )
 		{
 			result = writeNamedSub( file, cuT( "size" ), target.getSize() )
-				&& write( file, cuT( "format" ), getFormatName( convert( target.getPixelFormat() ) ) )
+				&& write( file, cuT( "format" ), getFormatName( castor3d::convert( target.getPixelFormat() ) ) )
 				&& writeName( file, cuT( "tone_mapping" ), target.getToneMapping()->getName() );
 
 			if ( result && target.getScene() )

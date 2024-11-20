@@ -7,6 +7,8 @@
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
+#include <ShaderWriter/Writer.hpp>
+
 CU_ImplementDeleter( castor3d::shader, SpecularBRDF )
 
 namespace castor3d::shader

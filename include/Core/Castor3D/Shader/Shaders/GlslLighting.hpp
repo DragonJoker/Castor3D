@@ -21,7 +21,7 @@ namespace castor3d::shader
 	class ScatteringModel
 	{
 	public:
-		C3D_API ScatteringModel( sdw::ShaderWriter & writer );
+		C3D_API explicit ScatteringModel( sdw::ShaderWriter & writer );
 		C3D_API virtual ~ScatteringModel() = default;
 
 		C3D_API virtual void initialiseBackground( BackgroundModel & background

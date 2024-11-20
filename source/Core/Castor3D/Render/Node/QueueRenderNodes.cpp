@@ -37,6 +37,8 @@
 #include <RenderGraph/RecordContext.hpp>
 #include <RenderGraph/RunnablePass.hpp>
 
+#include <ashespp/Command/CommandBuffer.hpp>
+
 CU_ImplementSmartPtr( castor3d, QueueRenderNodes )
 
 using ashes::operator==;

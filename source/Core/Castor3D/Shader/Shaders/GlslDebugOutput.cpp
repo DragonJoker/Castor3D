@@ -26,11 +26,11 @@ namespace castor3d::shader
 		}
 		ROF
 		m_registerOutput = writer.implementFunction< sdw::Void >( "c3d_registerOutput"
-			, [this]( sdw::UInt const & index
-				, sdw::Vec3 const & value )
+			, [this]( sdw::UInt const & idx
+				, sdw::Vec3 const & val )
 			{
-				m_indices[index] = 1_u;
-				m_values[index] = value;
+				m_indices[idx] = 1_u;
+				m_values[idx] = val;
 			}
 			, sdw::InUInt{ writer, "index" }
 			, sdw::InVec3{ writer, "value" } );

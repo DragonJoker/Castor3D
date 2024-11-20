@@ -22,7 +22,7 @@ namespace castor3d
 		using ObjPtr = PtrType;
 		struct LightingModel
 		{
-			LightingModel( castor::String name = {}
+			explicit LightingModel( castor::String name = {}
 				, Creator create = {}
 				, shader::LightingModelDesc defaultDesc = {} )
 				: name{ std::move( name ) }
@@ -302,7 +302,6 @@ namespace castor3d
 			, shader::LightingModelNames const & descNames );
 
 	private:
-		LightingModelID m_currentId{};
 		ObjCont m_registered;
 		LightingModelCont m_models;
 		shader::DiffuseBrdfArray m_diffuseBrdfs;
