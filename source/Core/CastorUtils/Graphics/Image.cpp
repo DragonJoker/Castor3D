@@ -272,10 +272,26 @@ namespace castor
 		return * this;
 	}
 
-	Image & Image::flip()
+	Image & Image::invertX()
 	{
 		CU_CheckInvariants();
-		m_buffer->flip();
+		m_buffer->invertX();
+		CU_CheckInvariants();
+		return * this;
+	}
+
+	Image & Image::invertY()
+	{
+		CU_CheckInvariants();
+		m_buffer->invertY();
+		CU_CheckInvariants();
+		return * this;
+	}
+
+	Image & Image::invertZ()
+	{
+		CU_CheckInvariants();
+		m_buffer->invertZ();
 		CU_CheckInvariants();
 		return * this;
 	}

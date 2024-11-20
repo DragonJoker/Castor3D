@@ -215,11 +215,25 @@ namespace castor
 		CU_API void initialise( Size const & size );
 		/**
 		 *\~english
-		 *\brief		Makes a vertical swap of pixels
+		 *\brief		Makes a swap of pixels on X axis.
 		 *\~french
-		 *\brief		Effectue un échange vertical des pixels
+		 *\brief		Effectue un échange des pixels sur l'axe X.
 		 */
-		CU_API void flip();
+		CU_API void invertX();
+		/**
+		 *\~english
+		 *\brief		Makes a swap of pixels on Y axis.
+		 *\~french
+		 *\brief		Effectue un échange des pixels sur l'axe Y.
+		 */
+		CU_API void invertY();
+		/**
+		 *\~english
+		 *\brief		Makes a swap of pixels on Z axis.
+		 *\~french
+		 *\brief		Effectue un échange des pixels sur l'axe Z.
+		 */
+		CU_API void invertZ();
 		/**
 		 *\~english
 		 *\brief		Swaps this buffer's data with the given one's
@@ -322,9 +336,19 @@ namespace castor
 			return m_buffer.data();
 		}
 
-		bool isFlipped()const noexcept
+		bool isXInverted()const noexcept
 		{
-			return m_flipped;
+			return m_invertX;
+		}
+
+		bool isYInverted()const noexcept
+		{
+			return m_invertY;
+		}
+
+		bool isZInverted()const noexcept
+		{
+			return m_invertZ;
 		}
 		
 		PixelFormat getFormat()const noexcept
@@ -634,7 +658,9 @@ namespace castor
 
 	private:
 		PixelFormat m_format;
-		bool m_flipped{ false };
+		bool m_invertX{ false };
+		bool m_invertY{ false };
+		bool m_invertZ{ false };
 
 	protected:
 		Size m_size;

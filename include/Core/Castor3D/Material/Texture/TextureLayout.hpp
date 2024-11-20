@@ -249,6 +249,8 @@ namespace castor3d
 		C3D_API castor::String getName()const;
 		C3D_API castor::Path getPath()const;
 		C3D_API bool needsYInversion()const;
+		C3D_API bool needsXInversion()const;
+		C3D_API bool needsZInversion()const;
 		C3D_API bool hasBuffer()const;
 
 		uint32_t getLayersCount()const noexcept

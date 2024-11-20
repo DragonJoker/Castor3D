@@ -135,6 +135,8 @@ namespace castor3d
 		bool normalDirectX{};
 		bool normal2Channels{};
 		bool needsYInversion{};
+		bool needsXInversion{};
+		bool needsZInversion{};
 		TextureTransform transform{};
 		castor::Point4ui tileSet{};
 		uint32_t tiles{ 1u };

@@ -492,7 +492,9 @@ namespace castor
 
 	PxBufferBase::PxBufferBase( PxBufferBase const & rhs )
 		: m_format{ rhs.m_format }
-		, m_flipped{ rhs.m_flipped }
+		, m_invertX{ rhs.m_invertX }
+		, m_invertY{ rhs.m_invertY }
+		, m_invertZ{ rhs.m_invertZ }
 		, m_size{ rhs.m_size }
 		, m_layers{ rhs.m_layers }
 		, m_levels{ rhs.m_levels }
@@ -503,7 +505,9 @@ namespace castor
 
 	PxBufferBase::PxBufferBase( PxBufferBase && rhs )noexcept
 		: m_format{ rhs.m_format }
-		, m_flipped{ rhs.m_flipped }
+		, m_invertX{ rhs.m_invertX }
+		, m_invertY{ rhs.m_invertY }
+		, m_invertZ{ rhs.m_invertZ }
 		, m_size{ castor::move( rhs.m_size ) }
 		, m_layers{ rhs.m_layers }
 		, m_levels{ rhs.m_levels }
@@ -633,7 +637,9 @@ namespace castor
 	void PxBufferBase::swap( PxBufferBase & pixelBuffer )noexcept
 	{
 		castor::swap( m_format, pixelBuffer.m_format );
-		castor::swap( m_flipped, pixelBuffer.m_flipped );
+		castor::swap( m_invertX, pixelBuffer.m_invertX );
+		castor::swap( m_invertY, pixelBuffer.m_invertY );
+		castor::swap( m_invertZ, pixelBuffer.m_invertZ );
 		castor::swap( m_size, pixelBuffer.m_size );
 		castor::swap( m_layers, pixelBuffer.m_layers );
 		castor::swap( m_levels, pixelBuffer.m_levels );
@@ -773,9 +779,19 @@ namespace castor
 		}
 	}
 
-	void PxBufferBase::flip()
+	void PxBufferBase::invertX()
 	{
-		m_flipped = !m_flipped;
+		m_invertX = !m_invertX;
+	}
+
+	void PxBufferBase::invertY()
+	{
+		m_invertY = !m_invertY;
+	}
+
+	void PxBufferBase::invertZ()
+	{
+		m_invertZ = !m_invertZ;
 	}
 
 	PxBufferBase::PixelData PxBufferBase::getAt( uint32_t x

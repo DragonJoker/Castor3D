@@ -147,11 +147,13 @@ namespace castor3d
 				name += cuT( "/Compressed" );
 			}
 
-			// Apply original buffer flip
-			if ( imagePixels->isFlipped() )
-			{
-				buffer->flip();
-			}
+			// Apply original buffer inversions
+			if ( imagePixels->isXInverted() )
+				buffer->invertX();
+			if ( imagePixels->isYInverted() )
+				buffer->invertY();
+			if ( imagePixels->isZInverted() )
+				buffer->invertZ();
 
 			castor::ImageLayout layout{ ( ( buffer->getLayers() == 1u && image.getLayout().type == castor::ImageLayout::e2DArray )
 					? castor::ImageLayout::e2D

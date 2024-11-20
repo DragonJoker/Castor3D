@@ -42,10 +42,12 @@ namespace castor
 					, buffer->getConstPtr()
 					, buffer->getFormat() );
 
-				if ( image.getPxBuffer().isFlipped() )
-				{
-					buffer->flip();
-				}
+				if ( image.getPxBuffer().isXInverted() )
+					buffer->invertX();
+				if ( image.getPxBuffer().isYInverted() )
+					buffer->invertY();
+				if ( image.getPxBuffer().isZInverted() )
+					buffer->invertZ();
 			}
 			else if ( config.generateMips
 				&& !isCompressed( image.getPixelFormat() ) )

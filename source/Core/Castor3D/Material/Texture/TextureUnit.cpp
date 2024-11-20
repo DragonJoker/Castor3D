@@ -163,6 +163,21 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
+		static CU_ImplementAttributeParserBlock( parserInvertX, TextureContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				bool value;
+				params[0]->get( value );
+				blockContext->configuration.needsXInversion = value;
+			}
+		}
+		CU_EndAttribute()
+
 		static CU_ImplementAttributeParserBlock( parserTileSet, TextureContext )
 		{
 			if ( params.empty() )
@@ -668,6 +683,7 @@ namespace castor3d
 
 		textureContext.addParser( cuT( "image" ), texunit::parserImage, { makeParameter< ParameterType::ePath >() } );
 		textureContext.addParser( cuT( "invert_y" ), texunit::parserInvertY, { makeParameter< ParameterType::eBool >() } );
+		textureContext.addParser( cuT( "invert_x" ), texunit::parserInvertX, { makeParameter< ParameterType::eBool >() } );
 		textureContext.addParser( cuT( "tileset" ), texunit::parserTileSet, { makeParameter< ParameterType::ePoint2I >() } );
 		textureContext.addParser( cuT( "tiles" ), texunit::parserTiles, { makeParameter< ParameterType::eUInt32 >() } );
 		textureContext.addPushParser( cuT( "render_target" ), CSCNSection::eRenderTarget, texunit::parserRenderTarget );
@@ -811,14 +827,28 @@ namespace castor3d
 			format = convert( getTexturePixelFormat() );
 		}
 
+		auto needsXInversion = value.needsXInversion;
 		auto needsYInversion = value.needsYInversion;
-		auto flippedPixels = m_data.base->image
-			? m_data.base->image->getPixels()->isFlipped()
+		auto needsZInversion = value.needsZInversion;
+		auto invXPixels = m_data.base->image
+			? m_data.base->image->getPixels()->isXInverted()
+			: needsXInversion;
+		auto invYPixels = m_data.base->image
+			? m_data.base->image->getPixels()->isYInverted()
 			: needsYInversion;
+		auto invZPixels = m_data.base->image
+			? m_data.base->image->getPixels()->isZInverted()
+			: needsZInversion;
 		m_configuration = castor::move( value );
-		m_configuration.needsYInversion = ( ( flippedPixels && needsYInversion )
+		m_configuration.needsXInversion = ( ( invXPixels && needsXInversion )
 			? 0u
-			: ( ( flippedPixels || needsYInversion ) ? 1u : 0u ) );
+			: ( ( invXPixels || needsXInversion ) ? 1u : 0u ) );
+		m_configuration.needsYInversion = ( ( invYPixels && needsYInversion )
+			? 0u
+			: ( ( invYPixels || needsYInversion ) ? 1u : 0u ) );
+		m_configuration.needsZInversion = ( ( invZPixels && needsZInversion )
+			? 0u
+			: ( ( invZPixels || needsZInversion ) ? 1u : 0u ) );
 		updateIndices( format, m_configuration );
 		setTransform( m_configuration.transform );
 		onChanged( *this );
