@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/ToTexture/RenderCube.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
@@ -14,18 +15,19 @@
 #include <ashespp/Sync/Queue.hpp>
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Image/Image.hpp>
+#include <ashespp/Image/ImageView.hpp>
 #include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineInputAssemblyStateCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineMultisampleStateCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineViewportStateCreateInfo.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 #include <ashespp/Sync/Fence.hpp>
 
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
-
-CU_ImplementSmartPtr( castor3d, EquirectangularToCube )
 
 namespace castor3d
 {
@@ -33,7 +35,7 @@ namespace castor3d
 
 	namespace equitocube
 	{
-		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device )
+		static ashes::PipelineShaderStageCreateInfoArray createProgram( RenderDevice const & device )
 		{
 			auto & engine = *device.renderSystem.getEngine();
 			ProgramModule programModule{ cuT( "EquirectangularToCube" ) };
@@ -77,7 +79,7 @@ namespace castor3d
 			return makeProgramStates( device, programModule );
 		}
 
-		static ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
+		static ashes::RenderPassPtr createRenderPass( RenderDevice const & device
 			, VkFormat format )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
@@ -136,74 +138,96 @@ namespace castor3d
 			return device->createRenderPass( "EquirectangularToCube"
 				, castor::move( createInfo ) );
 		}
+
+		class EquirectangularToCube
+			: private RenderCube
+		{
+		public:
+			EquirectangularToCube( TextureLayout const & equiRectangular
+				, RenderDevice const & device
+				, TextureLayout const & target )
+				: RenderCube{ device, false }
+				, m_commandBuffer{ device.graphicsData()->commandPool->createCommandBuffer( "EquirectangularToCube" ) }
+				, m_view{ equiRectangular.getDefaultSampledView() }
+				, m_renderPass{ createRenderPass( m_device, target.getPixelFormat() ) }
+			{
+				auto size = VkExtent2D{ target.getWidth(), target.getHeight() };
+				auto program = createProgram( device );
+				uint32_t face = 0u;
+
+				for ( auto & facePipeline : m_frameBuffers )
+				{
+					ashes::ImageViewCRefArray attaches;
+					facePipeline.view = target.getTexture().createView( "EquirectangularToCube" + castor::string::toMbString( face )
+						, VK_IMAGE_VIEW_TYPE_2D
+						, target.getPixelFormat()
+						, 0u
+						, 1u
+						, face
+						, 1u );
+					attaches.emplace_back( facePipeline.view );
+					facePipeline.frameBuffer = m_renderPass->createFrameBuffer( "EquirectangularToCube" + castor::string::toMbString( face )
+						, size
+						, castor::move( attaches ) );
+					++face;
+				}
+
+				createPipelines( size
+					, program
+					, m_view
+					, *m_renderPass
+					, {} );
+			}
+
+			void render( QueueData const & queueData )
+			{
+				CU_Require( !m_frameBuffers.empty() );
+				uint32_t face = 0u;
+				m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+				m_commandBuffer->beginDebugBlock( { "Equirectangular to cube"
+					, makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ) } );
+
+				for ( auto const & frameBuffer : m_frameBuffers )
+				{
+					m_commandBuffer->beginRenderPass( *m_renderPass
+						, *frameBuffer.frameBuffer
+						, { transparentBlackClearColor }
+						, VK_SUBPASS_CONTENTS_INLINE );
+					registerFrame( *m_commandBuffer, face );
+					m_commandBuffer->endRenderPass();
+
+					++face;
+				}
+
+				m_commandBuffer->endDebugBlock();
+				m_commandBuffer->end();
+
+				queueData.queue->submit( *m_commandBuffer, nullptr );
+				queueData.queue->waitIdle();
+			}
+
+		private:
+			struct FrameBuffer
+			{
+				ashes::ImageView view;
+				ashes::FrameBufferPtr frameBuffer;
+			};
+			castor::Array< FrameBuffer, 6u > m_frameBuffers;
+			ashes::CommandBufferPtr m_commandBuffer;
+			ashes::ImageView const & m_view;
+			ashes::RenderPassPtr m_renderPass;
+		};
 	}
 
 	//*********************************************************************************************
 
-	EquirectangularToCube::EquirectangularToCube( TextureLayout const & equiRectangular
+	void transformEquirectangularToCube( TextureLayout const & equiRectangularSource
+		, TextureLayout const & cubeTarget
 		, RenderDevice const & device
-		, TextureLayout const & target )
-		: RenderCube{ device, false }
-		, m_commandBuffer{ device.graphicsData()->commandPool->createCommandBuffer( "EquirectangularToCube" ) }
-		, m_view{ equiRectangular.getDefaultSampledView() }
-		, m_renderPass{ equitocube::doCreateRenderPass( m_device, target.getPixelFormat() ) }
+		, QueueData const & queueData )
 	{
-		auto size = VkExtent2D{ target.getWidth(), target.getHeight() };
-		auto program = equitocube::doCreateProgram( device );
-		uint32_t face = 0u;
-
-		for ( auto & facePipeline : m_frameBuffers )
-		{
-			ashes::ImageViewCRefArray attaches;
-			facePipeline.view = target.getTexture().createView( "EquirectangularToCube" + castor::string::toMbString( face )
-				, VK_IMAGE_VIEW_TYPE_2D
-				, target.getPixelFormat()
-				, 0u
-				, 1u
-				, face
-				, 1u );
-			attaches.emplace_back( facePipeline.view );
-			facePipeline.frameBuffer = m_renderPass->createFrameBuffer( "EquirectangularToCube"
-				, size
-				, castor::move( attaches ) );
-			++face;
-		}
-
-		createPipelines( size
-			, program
-			, m_view
-			, *m_renderPass
-			, {} );
-	}
-
-	void EquirectangularToCube::render( QueueData const & queueData )
-	{
-		CU_Require( !m_frameBuffers.empty() );
-		uint32_t face = 0u;
-		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-		m_commandBuffer->beginDebugBlock(
-			{
-				"Equirectangular to cube",
-				makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ),
-			} );
-
-		for ( auto const & frameBuffer : m_frameBuffers )
-		{
-			m_commandBuffer->beginRenderPass( *m_renderPass
-				, *frameBuffer.frameBuffer
-				, { transparentBlackClearColor }
-			, VK_SUBPASS_CONTENTS_INLINE );
-			registerFrame( *m_commandBuffer, face );
-			m_commandBuffer->endRenderPass();
-
-			++face;
-		}
-
-		m_commandBuffer->endDebugBlock();
-		m_commandBuffer->end();
-
-		queueData.queue->submit( *m_commandBuffer, nullptr );
-		queueData.queue->waitIdle();
+		equitocube::EquirectangularToCube equiToCube{ equiRectangularSource, device, cubeTarget };
+		equiToCube.render( queueData );
 	}
 
 	//*********************************************************************************************

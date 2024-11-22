@@ -430,10 +430,7 @@ namespace castor3d
 				, m_textureId.wholeViewId );
 		}
 
-		EquirectangularToCube equiToCube{ *m_equiTexture
-			, device
-			, *m_texture };
-		equiToCube.render( queueData );
+		transformEquirectangularToCube( *m_equiTexture, *m_texture, device, queueData );
 		m_texture->generateMipmaps( queueData
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		m_equiTexture->cleanup();
