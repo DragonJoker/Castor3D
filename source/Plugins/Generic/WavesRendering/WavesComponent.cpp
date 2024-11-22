@@ -350,6 +350,11 @@ namespace waves
 			, index++
 			, RenderPipeline::eBuffers );
 		index++; // lights buffer
+		shader::InstantiatedMeshBuffers meshBuffers{ writer
+			, flags
+			, uint32_t( MeshBuffersIdx::ePosition )
+			, uint32_t( RenderPipeline::eMeshBuffers )
+			, flags.vertexStride };
 
 		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -421,11 +426,22 @@ namespace waves
 				, GlobalBuffersIdx::eBillboardsData
 				, RenderPipeline::eBuffers );
 			
-			writer.implementEntryPointT< shader::BillboardSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::BillboardSurfaceT >{ writer, flags }
+			writer.implementEntryPointT< sdw::VoidT, shader::FragmentSurfaceT >( sdw::VertexIn{ writer }
 				, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
-				, [&]( sdw::VertexInT< shader::BillboardSurfaceT > in
+				, [&]( sdw::VertexIn const & in
 					, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 				{
+					auto bbPositions = writer.declConstantArray( "bbPositions"
+						, castor::Vector< sdw::Vec3 >{ vec3( -0.5_f, -0.5_f, 1.0_f )
+						, vec3( -0.5_f, +0.5_f, 1.0_f )
+						, vec3( +0.5_f, -0.5_f, 1.0_f )
+						, vec3( +0.5_f, +0.5_f, 1.0_f ) } );
+					auto bbTexcoords = writer.declConstantArray( "bbTexcoords"
+						, castor::Vector< sdw::Vec2 >{ vec2( 0.0_f, 0.0_f )
+						, vec2( 0.0_f, 1.0_f )
+						, vec2( 1.0_f, 0.0_f )
+						, vec2( 1.0_f, 1.0_f ) } );
+
 					auto nodeId = writer.declLocale( "nodeId"
 						, shader::getNodeId( c3d_objectIdsData
 							, pipelineID
@@ -434,10 +450,12 @@ namespace waves
 						, c3d_modelsData[nodeId - 1u] );
 					out.nodeId = writer.cast< sdw::Int >( nodeId );
 
+					auto center = writer.declLocale( "center"
+						, meshBuffers.positions[writer.cast< sdw::UInt >( in.instanceIndex )].position );
 					auto curBbcenter = writer.declLocale( "curBbcenter"
-						, modelData.modelToCurWorld( vec4( in.center, 1.0_f ) ).xyz() );
+						, modelData.modelToCurWorld( vec4( center.xyz(), 1.0_f ) ).xyz() );
 					auto prvBbcenter = writer.declLocale( "prvBbcenter"
-						, modelData.modelToPrvWorld( vec4( in.center, 1.0_f ) ).xyz() );
+						, modelData.modelToPrvWorld( vec4( center.xyz(), 1.0_f ) ).xyz() );
 					auto curToCamera = writer.declLocale( "curToCamera"
 						, c3d_cameraData.getPosToCamera( curBbcenter ) );
 					curToCamera.y() = 0.0_f;
@@ -453,25 +471,22 @@ namespace waves
 						, billboardData.getWidth( c3d_cameraData ) );
 					auto height = writer.declLocale( "height"
 						, billboardData.getHeight( c3d_cameraData ) );
+
 					auto scaledRight = writer.declLocale( "scaledRight"
-						, right * in.position.x() * width );
+						, right * bbPositions[in.vertexIndex - in.baseVertex].x() * width );
 					auto scaledUp = writer.declLocale( "scaledUp"
-						, up * in.position.y() * height );
+						, up * bbPositions[in.vertexIndex - in.baseVertex].y() * height );
 					auto worldPos = writer.declLocale( "worldPos"
 						, ( curBbcenter + scaledRight + scaledUp ) );
-					out.texture0 = vec3( in.texture0, 1.0_f );
-					out.texture1 = vec3( in.texture0 * 50.0_f, 1.0_f );
+
+					out.texture0 = vec3( bbTexcoords[in.vertexIndex - in.baseVertex], 1.0_f );
+					out.texture1 = vec3( bbTexcoords[in.vertexIndex - in.baseVertex] * 50.0_f, 1.0_f );
 					out.colour = vec3( 1.0_f );
 					out.vtx.position = modelData.worldToModel( vec4( worldPos, 1.0_f ) );
 				} );
 		}
 		else
 		{
-			shader::InstantiatedMeshBuffers meshBuffers{ writer
-				, flags
-				, uint32_t( MeshBuffersIdx::ePosition )
-				, uint32_t( RenderPipeline::eMeshBuffers )
-				, flags.stride };
 			writer.implementEntryPointT< sdw::VoidT, shader::FragmentSurfaceT >( sdw::VertexIn{ writer }
 				, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
 				, [&]( sdw::VertexIn const & in

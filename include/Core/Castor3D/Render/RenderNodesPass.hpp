@@ -408,6 +408,7 @@ namespace castor3d
 		 *\param[in]	passLayerIndex		The material pass layer index.
 		 *\param[in]	morphTargets		The morph targets buffer.
 		 *\param[in]	submeshData			The submesh render data, if any.
+		 *\param[in]	vertexStride		The number of byytes between two position attributes inside the vertex buffer.
 		 *\~french
 		 *\brief		Crée les indicateurs de pipeline pour la configuration donnée.
 		 *\param[in]	passComponents		La combinaison de composants de passe.
@@ -427,6 +428,7 @@ namespace castor3d
 		 *\param[in]	passLayerIndex		L'indice de la couche de la passe de matériau.
 		 *\param[in]	morphTargets		Le buffer de morph targets.
 		 *\param[in]	submeshData			Les données de rendu du submesh, s'il en a.
+		 *\param[in]	vertexStride		Le nombre d'octets entre deux attributs position du vertex buffer.
 		 */
 		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine const & passComponents
 			, SubmeshComponentCombine const & submeshComponents
@@ -444,7 +446,8 @@ namespace castor3d
 			, bool isFrontCulled
 			, uint32_t passLayerIndex
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-			, SubmeshRenderData const * submeshData )const noexcept;
+			, SubmeshRenderData const * submeshData
+			, uint32_t vertexStride )const noexcept;
 		/**
 		 *\~english
 		 *\brief		Creates the pipeline flags for given configuration.
@@ -457,6 +460,7 @@ namespace castor3d
 		 *\param[in]	isFrontCulled		\p true for front face culling, \p false for back face culling.
 		 *\param[in]	morphTargets		The morph targets buffer.
 		 *\param[in]	submeshData			The submesh render data, if any.
+		 *\param[in]	vertexStride		The number of byytes between two position attributes inside the vertex buffer.
 		 *\~french
 		 *\brief		Crée les indicateurs de pipeline pour la configuration donnée.
 		 *\param[in]	pass				La passe pour laquelle le pipeline est créé.
@@ -468,6 +472,7 @@ namespace castor3d
 		 *\param[in]	isFrontCulled		\p true pour front face culling, \p false pour back face culling.
 		 *\param[in]	morphTargets		Le buffer de morph targets.
 		 *\param[in]	submeshData			Les données de rendu du submesh, s'il en a.
+		 *\param[in]	vertexStride		Le nombre d'octets entre deux attributs position du vertex buffer.
 		 */
 		C3D_API PipelineFlags createPipelineFlags( Pass const & pass
 			, TextureCombine const & textures
@@ -477,7 +482,8 @@ namespace castor3d
 			, VkPrimitiveTopology topology
 			, bool isFrontCulled
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-			, SubmeshRenderData const * submeshData )const noexcept;
+			, SubmeshRenderData const * submeshData
+			, uint32_t vertexStride )const noexcept;
 		/**
 		 *\~english
 		 *\brief			Prepares the pipeline matching the given flags, for back face culling nodes.

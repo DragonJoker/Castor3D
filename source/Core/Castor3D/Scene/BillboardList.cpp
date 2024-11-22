@@ -9,6 +9,7 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -145,6 +146,23 @@ namespace castor3d
 			m_geometryBuffers.buffers = buffers;
 			m_geometryBuffers.offsets = offsets;
 			m_geometryBuffers.layouts = layouts;
+
+			auto stages = VkShaderStageFlags( VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT );
+			ashes::VkDescriptorSetLayoutBindingArray bindings;
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::ePosition )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, stages ) );
+			m_descriptorLayout = device->createDescriptorSetLayout( "BillboardBaseVtx"
+				, castor::move( bindings ) );
+			m_descriptorPool = m_descriptorLayout->createPool( "BillboardBaseVtx"
+				, 1u );
+			m_descriptorSet = m_descriptorPool->createDescriptorSet( "BillboardBaseVtx"
+				, RenderPipeline::eMeshBuffers );
+			ashes::WriteDescriptorSetArray writes;
+			writes.push_back( m_vertexBuffer.getStorageBinding( uint32_t( MeshBuffersIdx::ePosition ) ) );
+			m_descriptorSet->setBindings( castor::move( writes ) );
+			m_descriptorSet->update();
+
 			m_initialised = true;
 		}
 
@@ -156,6 +174,9 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			m_initialised = false;
+			m_descriptorSet.reset();
+			m_descriptorPool.reset();
+			m_descriptorLayout.reset();
 			device.vertexPools->putBuffer< Quad >( m_bufferOffsets );
 			m_bufferOffsets.reset();
 			m_geometryBuffers.buffers.clear();

@@ -633,7 +633,7 @@ namespace castor3d
 				return m_calcFullBarycentric( ppt0, ppt1, ppt2, ppixelNdc, pwinSize );
 			}
 
-			void loadVertices( sdw::UInt const & pnodeId
+			void loadSubmeshVertices( sdw::UInt const & pnodeId
 				, sdw::UInt const & pprimitiveId
 				, sdw::UInt const & pmeshletId
 				, shader::ModelData const & pmodelData
@@ -714,7 +714,7 @@ namespace castor3d
 				m_loadVertices( pnodeId, pprimitiveId, pmeshletId, pmodelData, pv0, pv1, pv2 );
 			}
 
-			void loadVertices( sdw::UInt const & pnodeId
+			void loadBillboardVertices( sdw::UInt const & pnodeId
 				, sdw::UInt const & pprimitiveId
 				, shader::ModelData const & pmodelData
 				, shader::MeshVertex const & pv0
@@ -858,11 +858,11 @@ namespace castor3d
 
 							if ( m_stride == 0u )
 							{
-								loadVertices( nodeId, primitiveId, meshletId, modelData, v0, v1, v2 );
+								loadSubmeshVertices( nodeId, primitiveId, meshletId, modelData, v0, v1, v2 );
 							}
 							else
 							{
-								loadVertices( nodeId, primitiveId, modelData, v0, v1, v2
+								loadBillboardVertices( nodeId, primitiveId, modelData, v0, v1, v2
 									, c3d_cameraData
 									, c3d_billboardData );
 							}
@@ -2321,7 +2321,8 @@ namespace castor3d
 		, bool isFrontCulled
 		, uint32_t passLayerIndex
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-		, SubmeshRenderData * submeshData )const
+		, SubmeshRenderData * submeshData
+		, uint32_t vertexStride )const
 	{
 		auto result = m_nodesPass.createPipelineFlags( passComponents
 			, submeshComponents
@@ -2339,7 +2340,8 @@ namespace castor3d
 			, isFrontCulled
 			, passLayerIndex
 			, morphTargets
-			, submeshData );
+			, submeshData
+			, vertexStride );
 		result.m_shaderFlags = getShaderFlags();
 		return result;
 	}

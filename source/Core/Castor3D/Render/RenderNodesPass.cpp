@@ -230,7 +230,8 @@ namespace castor3d
 		, bool isFrontCulled
 		, uint32_t passLayerIndex
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-		, SubmeshRenderData const * submeshData )const noexcept
+		, SubmeshRenderData const * submeshData
+		, uint32_t vertexStride )const noexcept
 	{
 		auto result = PipelineFlags{ adjustFlags( components )
 			, adjustFlags( submeshComponents )
@@ -249,7 +250,8 @@ namespace castor3d
 			, submeshComponents.hasPassMaskFlag ? 0u : passLayerIndex
 			, morphTargets.getOffset()
 			, submeshData
-			, filtersNonStatic() };
+			, filtersNonStatic()
+			, vertexStride };
 
 		if ( isFrontCulled )
 		{
@@ -274,7 +276,8 @@ namespace castor3d
 		, VkPrimitiveTopology topology
 		, bool isFrontCulled
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-		, SubmeshRenderData const * submeshData )const noexcept
+		, SubmeshRenderData const * submeshData
+		, uint32_t vertexStride )const noexcept
 	{
 		return createPipelineFlags( pass.getPassFlags()
 			, submeshComponents
@@ -294,7 +297,8 @@ namespace castor3d
 			, isFrontCulled
 			, pass.getIndex()
 			, morphTargets
-			, submeshData );
+			, submeshData
+			, vertexStride );
 	}
 
 	PipelineAndID RenderNodesPass::prepareBackPipeline( PipelineFlags const & pipelineFlags

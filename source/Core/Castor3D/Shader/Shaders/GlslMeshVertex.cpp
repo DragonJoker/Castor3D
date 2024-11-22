@@ -73,7 +73,7 @@ namespace castor3d::shader
 			, set\
 			, ast::type::MemoryLayout::eStd430\
 			, ( Enable ) && Stride == 0u };\
-		auto result = Name##Buffer.declMemberArray< Type >( #Name, Enable );\
+		auto result = Name##Buffer.declMemberArray< Type >( #Name, Enable && Stride == 0u );\
 		Name##Buffer.end();\
 		return result;\
 	}()

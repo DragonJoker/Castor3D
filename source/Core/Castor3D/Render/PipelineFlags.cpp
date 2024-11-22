@@ -196,7 +196,7 @@ namespace castor3d
 			offset += lo::maxMorphTargetOffsetSize;
 			result.submeshData = submeshComponents.getRenderData( uint16_t( ( loHash >> offset ) & lo::maxSubmeshDataMask ) );
 			offset += lo::maxSubmeshDataSize;
-			result.stride = VkDeviceSize( ( loHash >> offset ) & lo::maxSubmeshStrideMask );
+			result.vertexStride = VkDeviceSize( ( loHash >> offset ) & lo::maxSubmeshStrideMask );
 
 			return result;
 		}
@@ -211,13 +211,13 @@ namespace castor3d
 			offset += lo::maxMorphTargetOffsetSize;
 			result |= uint64_t( uint64_t( submeshComponents.getRenderDataId( flags.submeshData ) ) & lo::maxSubmeshDataMask ) << offset;
 			offset += lo::maxSubmeshDataSize;
-			result |= uint64_t( flags.stride & lo::maxSubmeshStrideMask ) << offset;
+			result |= uint64_t( flags.vertexStride & lo::maxSubmeshStrideMask ) << offset;
 
 #if !defined( NDEBUG )
 			auto details = getLoHashDetails( submeshComponents, result );
 			CU_Require( flags.morphTargetsOffset == details.morphTargetsOffset );
 			CU_Require( flags.submeshData == details.submeshData );
-			CU_Require( flags.stride == details.stride );
+			CU_Require( flags.vertexStride == details.vertexStride );
 #endif
 			return result;
 		}
@@ -495,7 +495,8 @@ namespace castor3d
 				, data.getTopology()
 				, isFrontCulled
 				, {}
-				, data.hasRenderComponent() ? data.getRenderData() : nullptr ) );
+				, data.hasRenderComponent() ? data.getRenderData() : nullptr
+				, 0u ) );
 	}
 
 	PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
@@ -514,7 +515,8 @@ namespace castor3d
 				, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
 				, isFrontCulled
 				, {}
-				, nullptr ) );
+				, nullptr
+				, data.getVertexStride() ) );
 	}
 
 	PipelineHiHashDetails getPipelineHiHashDetails( RenderNodesPass const & renderPass

@@ -55,7 +55,8 @@ namespace GuiCommon
 						, false
 						, 0u
 						, {}
-						, nullptr )
+						, nullptr
+						, 0u )
 					, renderPass.getScene()
 					, grid
 					, prop };

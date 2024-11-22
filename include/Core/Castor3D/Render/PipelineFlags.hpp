@@ -80,16 +80,16 @@ namespace castor3d
 	{
 		explicit PipelineLoHashDetails( VkDeviceSize pmorphTargetsOffset = 0u
 			, SubmeshRenderData const * psubmeshData = nullptr
-			, uint32_t pstride = 0u )noexcept
+			, uint32_t pvertexStride = 0u )noexcept
 			: morphTargetsOffset{ pmorphTargetsOffset }
 			, submeshData{ psubmeshData }
-			, stride{ pstride }
+			, vertexStride{ pvertexStride }
 		{
 		}
 
 		VkDeviceSize morphTargetsOffset{};
 		SubmeshRenderData const * submeshData{};
-		uint32_t stride{};
+		uint32_t vertexStride{};
 	};
 
 	C3D_API bool operator==( PipelineLoHashDetails const & lhs, PipelineLoHashDetails const & rhs )noexcept;
@@ -140,7 +140,8 @@ namespace castor3d
 			, uint32_t ppassLayerIndex = {}
 			, VkDeviceSize pmorphTargetsOffset = {}
 			, SubmeshRenderData const * psubmeshData = {}
-			, bool pisStatic = false )noexcept
+			, bool pisStatic = false
+			, uint32_t pvertexStride = 0u )noexcept
 			: PipelineFlags{ PipelineHiHashDetails{ castor::move( ppassComponents )
 					, castor::move( psubmeshComponents )
 					, plightingModelId
@@ -153,7 +154,7 @@ namespace castor3d
 					, {}
 					, ptopology
 					, pisStatic }
-				, PipelineLoHashDetails{ pmorphTargetsOffset, psubmeshData }
+				, PipelineLoHashDetails{ pmorphTargetsOffset, psubmeshData, pvertexStride }
 				, psceneFlags
 				, pcolourBlendMode
 				, palphaBlendMode
