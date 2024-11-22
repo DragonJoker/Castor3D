@@ -123,40 +123,138 @@ namespace castor3d
 		void doAddBillboard( CulledNodeT< BillboardRenderNode > const & node );
 		void doRemoveSubmesh( CulledNodeT< SubmeshRenderNode > const & node );
 		void doRemoveBillboard( CulledNodeT< BillboardRenderNode > const & node );
-		uint32_t doPrepareMeshTraditionalNoDrawIDCommandBuffers( ashes::CommandBuffer const & commandBuffer
+		uint32_t doParseSimpleSubmeshesDirect( ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors
 			, PipelineNodes * nodesIdsBuffer
-			, VkDeviceSize maxNodesCount );
-		uint32_t doPrepareMeshTraditionalCommandBuffers( ashes::CommandBuffer const & commandBuffer
+			, VkDeviceSize maxNodesCount
+			, BuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
+			, RenderPipeline const & pipeline
+			, uint32_t & idxIndex
+			, uint32_t & nidxIndex );
+		uint32_t doParseInstantiatedSubmeshesDirect( ashes::CommandBuffer const & commandBuffer
+			, ashes::Optional< VkViewport > const & viewport
+			, ashes::Optional< VkRect2D > const & scissors
+			, InstantiatedBuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
+			, RenderPipeline const & pipeline
+			, uint32_t & idxIndex
+			, uint32_t & nidxIndex );
+		uint32_t doParseSimpleSubmeshesIndirect( ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors
 			, PipelineNodes * nodesIdsBuffer
-			, VkDeviceSize maxNodesCount );
+			, VkDeviceSize maxNodesCount
+			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
+			, VkDrawIndexedIndirectCommand * origIndirectIdxBuffer
+			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
+			, ashes::Buffer< VkDrawIndirectCommand > const & submeshNIdxCommands
+			, VkDrawIndirectCommand * origIndirectNIdxBuffer
+			, VkDrawIndirectCommand *& indirectNIdxBuffer
+			, BuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
+			, RenderPipeline const & pipeline
+			, uint32_t & idxIndex
+			, uint32_t & nidxIndex );
+		uint32_t doParseInstantiatedSubmeshesIndirect( ashes::CommandBuffer const & commandBuffer
+			, ashes::Optional< VkViewport > const & viewport
+			, ashes::Optional< VkRect2D > const & scissors
+			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
+			, VkDrawIndexedIndirectCommand * origIndirectIdxBuffer
+			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
+			, ashes::Buffer< VkDrawIndirectCommand > const & submeshNIdxCommands
+			, VkDrawIndirectCommand * origIndirectNIdxBuffer
+			, VkDrawIndirectCommand *& indirectNIdxBuffer
+			, InstantiatedBuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
+			, RenderPipeline const & pipeline
+			, uint32_t & idxIndex
+			, uint32_t & nidxIndex );
 #if VK_EXT_mesh_shader
-		uint32_t doPrepareMeshModernCommandBuffersEXT( ashes::CommandBuffer const & commandBuffer
+		uint32_t doParseSimpleSubmeshesMeshletsEXT( ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors
 			, PipelineNodes * nodesIdsBuffer
-			, VkDeviceSize maxNodesCount );
+			, VkDeviceSize maxNodesCount
+			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
+			, VkDrawIndexedIndirectCommand * origIndirectIdxBuffer
+			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
+			, ashes::Buffer< VkDrawIndirectCommand > const & submeshNIdxCommands
+			, VkDrawIndirectCommand * origIndirectNIdxBuffer
+			, VkDrawIndirectCommand *& indirectNIdxBuffer
+			, ashes::Buffer< VkDrawMeshTasksIndirectCommandEXT > const & submeshMshCommands
+			, VkDrawMeshTasksIndirectCommandEXT * origIndirectMshBuffer
+			, VkDrawMeshTasksIndirectCommandEXT *& indirectMshBuffer
+			, BuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
+			, RenderPipeline const & pipeline
+			, uint32_t & mshIndex );
+		uint32_t doParseInstantiatedSubmeshesMeshletsEXT( ashes::CommandBuffer const & commandBuffer
+			, ashes::Optional< VkViewport > const & viewport
+			, ashes::Optional< VkRect2D > const & scissors
+			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
+			, VkDrawIndexedIndirectCommand * origIndirectIdxBuffer
+			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
+			, ashes::Buffer< VkDrawIndirectCommand > const & submeshNIdxCommands
+			, VkDrawIndirectCommand * origIndirectNIdxBuffer
+			, VkDrawIndirectCommand *& indirectNIdxBuffer
+			, ashes::Buffer< VkDrawMeshTasksIndirectCommandEXT > const & submeshMshCommands
+			, VkDrawMeshTasksIndirectCommandEXT * origIndirectMshBuffer
+			, VkDrawMeshTasksIndirectCommandEXT *& indirectMshBuffer
+			, InstantiatedBuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
+			, RenderPipeline const & pipeline
+			, uint32_t & mshIndex );
 #endif
 #if VK_NV_mesh_shader
-		uint32_t doPrepareMeshModernCommandBuffersNV( ashes::CommandBuffer const & commandBuffer
+		uint32_t doParseSimpleSubmeshesMeshletsNV( ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors
 			, PipelineNodes * nodesIdsBuffer
-			, VkDeviceSize maxNodesCount );
+			, VkDeviceSize maxNodesCount
+			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
+			, VkDrawIndexedIndirectCommand * origIndirectIdxBuffer
+			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
+			, ashes::Buffer< VkDrawIndirectCommand > const & submeshNIdxCommands
+			, VkDrawIndirectCommand * origIndirectNIdxBuffer
+			, VkDrawIndirectCommand *& indirectNIdxBuffer
+			, ashes::Buffer< VkDrawMeshTasksIndirectCommandNV > const & submeshMshCommands
+			, VkDrawMeshTasksIndirectCommandNV * origIndirectMshBuffer
+			, VkDrawMeshTasksIndirectCommandNV *& indirectMshBuffer
+			, BuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
+			, RenderPipeline const & pipeline
+			, uint32_t & mshIndex );
+		uint32_t doParseInstantiatedSubmeshesMeshletsNV( ashes::CommandBuffer const & commandBuffer
+			, ashes::Optional< VkViewport > const & viewport
+			, ashes::Optional< VkRect2D > const & scissors
+			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
+			, VkDrawIndexedIndirectCommand * origIndirectIdxBuffer
+			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
+			, ashes::Buffer< VkDrawIndirectCommand > const & submeshNIdxCommands
+			, VkDrawIndirectCommand * origIndirectNIdxBuffer
+			, VkDrawIndirectCommand *& indirectNIdxBuffer
+			, ashes::Buffer< VkDrawMeshTasksIndirectCommandNV > const & submeshMshCommands
+			, VkDrawMeshTasksIndirectCommandNV * origIndirectMshBuffer
+			, VkDrawMeshTasksIndirectCommandNV *& indirectMshBuffer
+			, InstantiatedBuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
+			, RenderPipeline const & pipeline
+			, uint32_t & mshIndex );
 #endif
-		uint32_t doPrepareBillboardNoDrawIDCommandBuffers( ashes::CommandBuffer const & commandBuffer
+		uint32_t doParseBillboardsDirect( ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors
 			, PipelineNodes * nodesIdsBuffer
-			, VkDeviceSize maxNodesCount );
-		uint32_t doPrepareBillboardCommandBuffers( ashes::CommandBuffer const & commandBuffer
+			, VkDeviceSize maxNodesCount
+			, BuffersNodesViewT< BillboardRenderNode > const & buffersNodes
+			, RenderPipeline const & pipeline
+			, uint32_t & nidxIndex );
+		uint32_t doParseBillboardsIndirect( ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors
 			, PipelineNodes * nodesIdsBuffer
-			, VkDeviceSize maxNodesCount );
+			, VkDeviceSize maxNodesCount
+			, ashes::Buffer< VkDrawIndirectCommand > const & billboardCommands
+			, VkDrawIndirectCommand * origIndirectBuffer
+			, VkDrawIndirectCommand *& indirectBuffer
+			, BuffersNodesViewT< BillboardRenderNode > const & buffersNodes
+			, RenderPipeline const & pipeline
+			, uint32_t & idxIndex
+			, uint32_t & nidxIndex );
 
 	private:
 		PipelineBufferArray m_nodesIds;
