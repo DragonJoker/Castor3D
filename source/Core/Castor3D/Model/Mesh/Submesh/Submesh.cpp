@@ -15,6 +15,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
@@ -135,7 +136,13 @@ namespace castor3d
 				}
 			}
 		}
-	}
+
+		static castor::MbString getDescriptorName( Submesh const & submesh )
+		{
+			return castor::toUtf8( submesh.getOwner()->getName() )
+				+ castor::string::toMbString( submesh.getId() )
+				+ "Mesh";
+		}	}
 
 	//*********************************************************************************************
 
@@ -263,6 +270,7 @@ namespace castor3d
 				}
 			}
 
+			doCreateDescriptorLayout( device );
 			m_dirty = !m_initialised;
 		}
 	}
@@ -580,7 +588,6 @@ namespace castor3d
 	{
 		auto key = smsh::hash( *this, geometry, pass, flags );
 		auto [it, res] = m_geometryBuffers.try_emplace( key );
-		auto & bufferOffsets = getFinalBufferOffsets( geometry, pass );
 
 		if ( res )
 		{
@@ -589,6 +596,7 @@ namespace castor3d
 			ashes::PipelineVertexInputStateCreateInfoCRefArray layouts;
 			uint32_t currentBinding = 0u;
 			uint32_t currentLocation = 0u;
+			auto & bufferOffsets = getFinalBufferOffsets( geometry, pass );
 
 			for ( auto const & [_, component] : m_components )
 			{
@@ -615,6 +623,120 @@ namespace castor3d
 		}
 
 		return it->second;
+	}
+
+	void Submesh::createDescriptorSet( Geometry const & geometry
+		, Pass const & pass )
+	{
+		auto & baseBuffers = getFinalBufferOffsets( geometry, pass );
+		auto descSetIt = m_descriptorSets.emplace( geometry.getHash( pass, *this ), nullptr ).first;
+
+		if ( !descSetIt->second )
+		{
+			descSetIt->second = m_descriptorPool->createDescriptorSet( smsh::getDescriptorName( *this )
+				, RenderPipeline::eMeshBuffers );
+			ashes::WriteDescriptorSetArray writes;
+			auto combine = getComponentCombine();
+
+			auto getStorageBinding = [&baseBuffers]( SubmeshData data, MeshBuffersIdx index )
+				{
+					auto chunk = baseBuffers.getBufferChunk( data );
+					auto binding = ashes::WriteDescriptorSet{ uint32_t( index )
+						, 0u
+						, 1u
+						, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+					binding.bufferInfo.push_back( VkDescriptorBufferInfo{ chunk.buffer->getBuffer()
+						, 0u
+						, chunk.buffer->getBuffer().getSize() } );
+					return binding;
+				};
+
+			if ( combine.hasPositionFlag )
+			{
+				writes.push_back( getStorageBinding( SubmeshData::ePositions
+					, MeshBuffersIdx::ePosition ) );
+			}
+
+			if ( combine.hasNormalFlag )
+			{
+				writes.push_back( getStorageBinding( SubmeshData::eNormals
+					, MeshBuffersIdx::eNormal ) );
+			}
+
+			if ( combine.hasTangentFlag )
+			{
+				writes.push_back( getStorageBinding( SubmeshData::eTangents
+					, MeshBuffersIdx::eTangent ) );
+			}
+
+			if ( combine.hasBitangentFlag )
+			{
+				writes.push_back( getStorageBinding( SubmeshData::eBitangents
+					, MeshBuffersIdx::eBitangent ) );
+			}
+
+			if ( combine.hasTexcoord0Flag )
+			{
+				writes.push_back( getStorageBinding( SubmeshData::eTexcoords0
+					, MeshBuffersIdx::eTexcoord0 ) );
+			}
+
+			if ( combine.hasTexcoord1Flag )
+			{
+				writes.push_back( getStorageBinding( SubmeshData::eTexcoords1
+					, MeshBuffersIdx::eTexcoord1 ) );
+			}
+
+			if ( combine.hasTexcoord2Flag )
+			{
+				writes.push_back( getStorageBinding( SubmeshData::eTexcoords2
+					, MeshBuffersIdx::eTexcoord2 ) );
+			}
+
+			if ( combine.hasTexcoord3Flag )
+			{
+				writes.push_back( getStorageBinding( SubmeshData::eTexcoords3
+					, MeshBuffersIdx::eTexcoord3 ) );
+			}
+
+			if ( combine.hasColourFlag )
+			{
+				writes.push_back( getStorageBinding( SubmeshData::eColours
+					, MeshBuffersIdx::eColour ) );
+			}
+
+			if ( combine.hasPassMaskFlag )
+			{
+				writes.push_back( getStorageBinding( SubmeshData::ePassMasks
+					, MeshBuffersIdx::ePassMasks ) );
+			}
+
+			if ( combine.hasVelocityFlag )
+			{
+				writes.push_back( getStorageBinding( SubmeshData::eVelocity
+					, MeshBuffersIdx::eVelocity ) );
+			}
+
+			auto & data = getInstantiation().getData();
+			auto bufferIt = data.find( pass );
+			CU_Require( bufferIt != data.end() );
+
+			if ( bufferIt->second.buffer )
+			{
+				writes.push_back( bufferIt->second.buffer.getStorageBinding( uint32_t( MeshBuffersIdx::eInstances ) ) );
+			}
+
+			descSetIt->second->setBindings( castor::move( writes ) );
+			descSetIt->second->update();
+		}
+	}
+
+	ashes::DescriptorSet const & Submesh::getDescriptorSet( Geometry const & geometry
+		, Pass const & pass )const
+	{
+		auto it = m_descriptorSets.find( geometry.getHash( pass, *this ) );
+		CU_Require( it != m_descriptorSets.end() );
+		return *it->second;
 	}
 
 	void Submesh::enableSceneUpdate( bool )
@@ -1319,6 +1441,98 @@ namespace castor3d
 				}
 			}
 		}
+	}
+
+	void Submesh::doCreateDescriptorLayout( RenderDevice const & device )
+	{
+		ashes::VkDescriptorSetLayoutBindingArray bindings;
+		auto combine = getComponentCombine();
+
+		if ( combine.hasPositionFlag )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::ePosition )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
+		}
+
+		if ( combine.hasNormalFlag )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eNormal )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
+		}
+
+		if ( combine.hasTangentFlag )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTangent )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
+		}
+
+		if ( combine.hasBitangentFlag )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eBitangent )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
+		}
+
+		if ( combine.hasTexcoord0Flag )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTexcoord0 )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
+		}
+
+		if ( combine.hasTexcoord1Flag )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTexcoord1 )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
+		}
+
+		if ( combine.hasTexcoord2Flag )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTexcoord2 )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
+		}
+
+		if ( combine.hasTexcoord3Flag )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTexcoord3 )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
+		}
+
+		if ( combine.hasColourFlag )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eColour )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
+		}
+
+		if ( combine.hasPassMaskFlag )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::ePassMasks )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
+		}
+
+		if ( combine.hasVelocityFlag )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eVelocity )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
+		}
+
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eInstances )
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_SHADER_STAGE_VERTEX_BIT ) );
+
+		m_descriptorLayout = device->createDescriptorSetLayout( smsh::getDescriptorName( *this )
+			, castor::move( bindings ) );
+		m_descriptorPool = m_descriptorLayout->createPool( smsh::getDescriptorName( *this )
+			, MaxNodesPerPipeline );
 	}
 
 	Engine * getEngine( SubmeshContext const & context )

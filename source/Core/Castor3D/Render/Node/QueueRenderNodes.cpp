@@ -173,7 +173,8 @@ namespace castor3d
 					, buffer );
 
 				if ( hasDrawId
-					&& !pipeline.hasMeshletDescriptorSetLayout() )
+					&& !pipeline.hasMeshletDescriptorSetLayout()
+					&& !pipeline.hasVertexPullingDescriptorSetLayout() )
 				{
 					DrawConstants constants{ pipelineId, 0u };
 					commandBuffer.pushConstants( pipeline.getPipelineLayout()
@@ -201,9 +202,19 @@ namespace castor3d
 			, uint32_t & nidxIndex )
 		{
 			auto & geometryBuffers = node.node->getGeometryBuffers( pipeline.getFlags() );
-			commandBuffer.bindVertexBuffers( geometryBuffers.layouts[0].get().vertexBindingDescriptions[0].binding
-				, geometryBuffers.buffers
-				, geometryBuffers.offsets );
+
+			if ( auto descriptorSet = node.node->getVertexPullingDescriptorSet() )
+			{
+				commandBuffer.bindDescriptorSet( *descriptorSet
+					, pipeline.getPipelineLayout() );
+			}
+			else
+			{
+				commandBuffer.bindVertexBuffers( geometryBuffers.layouts[0].get().vertexBindingDescriptions[0].binding
+					, geometryBuffers.buffers
+					, geometryBuffers.offsets );
+			}
+
 			DrawConstants constants{ pipelineId, int32_t( drawId ) };
 			commandBuffer.pushConstants( pipeline.getPipelineLayout()
 				, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
@@ -242,16 +253,26 @@ namespace castor3d
 			, uint32_t & idxIndex
 			, uint32_t & nidxIndex )
 		{
+			auto & geometryBuffers = node.node->getGeometryBuffers( pipeline.getFlags() );
+
 			if ( pipelinesBuffer )
 			{
 				( *pipelinesBuffer ) = node.node->getId();
 				++pipelinesBuffer;
 			}
 
-			auto & geometryBuffers = node.node->getGeometryBuffers( pipeline.getFlags() );
-			commandBuffer.bindVertexBuffers( geometryBuffers.layouts[0].get().vertexBindingDescriptions[0].binding
-				, geometryBuffers.buffers
-				, geometryBuffers.offsets );
+			if ( auto descriptorSet = node.node->getVertexPullingDescriptorSet() )
+			{
+				commandBuffer.bindDescriptorSet( *descriptorSet
+					, pipeline.getPipelineLayout() );
+			}
+			else
+			{
+				commandBuffer.bindVertexBuffers( geometryBuffers.layouts[0].get().vertexBindingDescriptions[0].binding
+					, geometryBuffers.buffers
+					, geometryBuffers.offsets );
+			}
+
 			DrawConstants constants{ pipelineId, int32_t( drawId ) };
 			commandBuffer.pushConstants( pipeline.getPipelineLayout()
 				, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
@@ -1433,15 +1454,21 @@ namespace castor3d
 		{
 			node.createMeshletDescriptorSet();
 		}
+		else
+		{
+			node.createVertexPullingDescriptorSet();
+		}
 
 		if ( it == m_pipelines.end() )
 		{
 			auto result = frontCulled
 				? renderPass.prepareFrontPipeline( pipelineFlags
 					, node.getGeometryBuffers( pipelineFlags ).layouts
+					, node.getVertexPullingDescriptorLayout()
 					, node.getMeshletDescriptorLayout() )
 				: renderPass.prepareBackPipeline( pipelineFlags
 					, node.getGeometryBuffers( pipelineFlags ).layouts
+					, node.getVertexPullingDescriptorLayout()
 					, node.getMeshletDescriptorLayout() );
 			it = m_pipelines.try_emplace( hash, result ).first;
 			renderPass.initialiseAdditionalDescriptor( *result.pipeline
@@ -1466,6 +1493,7 @@ namespace castor3d
 		{
 			auto result = renderPass.prepareBackPipeline( pipelineFlags
 				, node.getGeometryBuffers( pipelineFlags ).layouts
+				, nullptr
 				, nullptr );
 			it = m_pipelines.try_emplace( hash, result ).first;
 			renderPass.initialiseAdditionalDescriptor( *result.pipeline
@@ -1840,7 +1868,6 @@ namespace castor3d
 				, viewport
 				, scissors
 				, true );
-			uint32_t drawOffset{};
 
 			for ( auto const & [submesh, node] : submeshes )
 			{

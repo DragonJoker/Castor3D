@@ -183,50 +183,62 @@ namespace castor3d
 			, passShaders
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
+		shader::InstantiatedMeshBuffers meshBuffers{ writer
+			, flags
+			, uint32_t( MeshBuffersIdx::ePosition )
+			, uint32_t( RenderPipeline::eMeshBuffers )
+			, flags.stride };
 
 		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		auto drawID = pcb.declMember< sdw::Int >( "drawID", !engine.getRenderDevice()->hasDrawId() );
 		pcb.end();
 
-		writer.implementMainT< shader::MeshVertexT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::MeshVertexT >{ writer, submeshShaders }
+		writer.implementMainT< sdw::VoidT, shader::FragmentSurfaceT >( sdw::VertexIn{ writer }
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
-			, [&engine, &writer, &materials, &c3d_cameraData, &c3d_modelsData, &c3d_objectIdsData, &drawID, &pipelineID, &flags]( sdw::VertexInT< shader::MeshVertexT > const & in
+			, [&writer, &engine, &meshBuffers, &materials, &c3d_cameraData, &c3d_modelsData, &c3d_objectIdsData, &drawID, &pipelineID, &flags]( sdw::VertexIn const & in
 				, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 			{
+				auto instanceId = writer.declLocale( "instanceId"
+					, writer.cast< sdw::UInt >( in.instanceIndex )
+						+ writer.cast< sdw::UInt >( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID ) );
 				auto nodeId = writer.declLocale( "nodeId"
 					, shader::getNodeId( c3d_objectIdsData
-						, in
+						, meshBuffers.instances
 						, pipelineID
-						, writer.cast< sdw::UInt >( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID )
+						, instanceId
 						, flags ) );
-				auto curPosition = writer.declLocale( "curPosition"
-					, in.position );
-				auto curNormal = writer.declLocale( "curNormal"
-					, in.normal );
-				auto curTangent = writer.declLocale( "curTangent"
-					, in.tangent );
-				auto curBitangent = writer.declLocale( "curBitangent"
-					, in.bitangent );
-				out.texture0 = in.texture0;
-				out.texture1 = in.texture1;
-				out.texture2 = in.texture2;
-				out.texture3 = in.texture3;
-				out.colour = in.colour;
-				out.nodeId = nodeId;
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
+				auto vertexIndex = writer.declLocale( "vertexIndex"
+					, writer.cast< sdw::UInt >( in.vertexIndex ) );
+
+				auto curPosition = writer.declLocale( "curPosition"
+					, meshBuffers.positions[vertexIndex].position );
+				auto curNormal = writer.declLocale( "curNormal"
+					, meshBuffers.normals[vertexIndex].xyz() );
+				auto curTangent = writer.declLocale( "curTangent"
+					, meshBuffers.tangents[vertexIndex] );
+				auto curBitangent = writer.declLocale( "curBitangent"
+					, meshBuffers.bitangents[vertexIndex].xyz() );
+				out.texture0 = meshBuffers.textures0[vertexIndex].xyz();
+				out.texture1 = meshBuffers.textures1[vertexIndex].xyz();
+				out.texture2 = meshBuffers.textures2[vertexIndex].xyz();
+				out.texture3 = meshBuffers.textures3[vertexIndex].xyz();
+				out.colour = meshBuffers.colours[vertexIndex].xyz();
+
+				out.nodeId = nodeId;
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() ) );
 				material.getPassMultipliers( flags
-					, in.passMasks
+					, meshBuffers.passMasks[vertexIndex]
 					, out.passMultipliers );
 
 				auto curMtxModel = writer.declLocale< sdw::Mat4 >( "curMtxModel"
 					, modelData.getModelMtx() );
 				auto prvPosition = writer.declLocale( "prvPosition"
 					, curPosition );
-				prvPosition.xyz() += in.velocity;
+				prvPosition.xyz() += meshBuffers.velocities[vertexIndex].xyz();
 
 				if ( flags.hasWorldPosInputs() )
 				{

@@ -663,26 +663,36 @@ namespace ocean_fft
 		}
 		else
 		{
-			writer.implementEntryPointT< castor3d::shader::MeshVertexT, shd::PatchT >( sdw::VertexInT< castor3d::shader::MeshVertexT >{ writer, submeshShaders }
+			shader::InstantiatedMeshBuffers meshBuffers{ writer
+				, flags
+				, uint32_t( MeshBuffersIdx::ePosition )
+				, uint32_t( RenderPipeline::eMeshBuffers )
+				, flags.stride };
+			writer.implementEntryPointT< sdw::VoidT, shd::PatchT >( sdw::VertexIn{ writer }
 				, sdw::VertexOutT< shd::PatchT >{ writer, flags }
-				, [&]( sdw::VertexInT< castor3d::shader::MeshVertexT > in
+				, [&]( sdw::VertexIn const & in
 					, sdw::VertexOutT< shd::PatchT > out )
 				{
+					auto instanceId = writer.declLocale( "instanceId"
+						, writer.cast< sdw::UInt >( in.instanceIndex )
+							+ writer.cast< sdw::UInt >( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID ) );
 					auto nodeId = writer.declLocale( "nodeId"
 						, shader::getNodeId( c3d_objectIdsData
-							, in
+							, meshBuffers.instances
 							, pipelineID
-							, writer.cast< sdw::UInt >( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID )
+							, instanceId
 							, flags ) );
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[nodeId - 1u] );
+					auto vertexIndex = writer.declLocale( "vertexIndex"
+						, writer.cast< sdw::UInt >( in.vertexIndex ) );
 					auto pos = writer.declLocale( "pos"
-						, ( ( in.position.xz() / c3d_oceanData.patchSize() ) + c3d_oceanData.blockOffset() ) * c3d_oceanData.patchSize() );
+						, ( ( meshBuffers.positions[vertexIndex].position.xz() / c3d_oceanData.patchSize() ) + c3d_oceanData.blockOffset() ) * c3d_oceanData.patchSize() );
 
 					out.vtx.position = vec4( pos.x(), 0.0_f, pos.y(), 1.0_f );
 					out.patchWorldPosition() = out.vtx.position.xyz();
-					out.colour() = in.colour;
-					out.texture0() = in.texture0;
+					out.colour() = meshBuffers.colours[vertexIndex].xyz();
+					out.texture0() = meshBuffers.textures0[vertexIndex].xyz();
 					out.nodeId() = writer.cast< sdw::Int >( nodeId );
 				} );
 		}

@@ -89,10 +89,8 @@ namespace castor3d
 	{
 		if ( flags.enableInstantiation() )
 		{
-			auto it = m_instances.find( pass.getHash() );
-
-			if ( it != m_instances.end()
-				&& it->second.buffer )
+			if ( auto it = m_instances.find( pass.getHash() );
+				it != m_instances.end() && it->second.buffer )
 			{
 				auto hash = std::hash< uint32_t >{}( currentBinding );
 				hash = castor::hashCombine( hash, currentLocation );

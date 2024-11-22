@@ -44,6 +44,20 @@ namespace castor3d
 		return data.getComponentCombineID();
 	}
 
+	void BillboardRenderNode::createVertexPullingDescriptorSet()const
+	{
+	}
+
+	ashes::DescriptorSetLayout const * BillboardRenderNode::getVertexPullingDescriptorLayout()const
+	{
+		return nullptr;
+	}
+
+	ashes::DescriptorSet const * BillboardRenderNode::getVertexPullingDescriptorSet()const
+	{
+		return nullptr;
+	}
+
 	MorphFlags BillboardRenderNode::getMorphFlags()const
 	{
 		return MorphFlags{};
