@@ -275,6 +275,11 @@ namespace castor3d
 			, index++
 			, RenderPipeline::eBuffers
 			, true );
+		shader::InstantiatedMeshBuffers meshBuffers{ writer
+			, flags
+			, uint32_t( MeshBuffersIdx::ePosition )
+			, uint32_t( RenderPipeline::eMeshBuffers )
+			, flags.vertexStride };
 
 		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -287,11 +292,22 @@ namespace castor3d
 				, GlobalBuffersIdx::eBillboardsData
 				, RenderPipeline::eBuffers );
 
-			writer.implementEntryPointT< shader::BillboardSurfaceT, shader::VoxelSurfaceT >( sdw::VertexInT< shader::BillboardSurfaceT >{ writer, flags }
+			writer.implementEntryPointT< sdw::VoidT, shader::VoxelSurfaceT >( sdw::VertexIn{ writer }
 				, sdw::VertexOutT< shader::VoxelSurfaceT >{ writer, flags }
-				,[&]( sdw::VertexInT< shader::BillboardSurfaceT > const & in
+				,[&]( sdw::VertexIn const & in
 				, sdw::VertexOutT< shader::VoxelSurfaceT > out )
 				{
+					auto bbPositions = writer.declConstantArray( "bbPositions"
+						, castor::Vector< sdw::Vec3 >{ vec3( -0.5_f, -0.5_f, 1.0_f )
+						, vec3( -0.5_f, +0.5_f, 1.0_f )
+						, vec3( +0.5_f, -0.5_f, 1.0_f )
+						, vec3( +0.5_f, +0.5_f, 1.0_f ) } );
+					auto bbTexcoords = writer.declConstantArray( "bbTexcoords"
+						, castor::Vector< sdw::Vec2 >{ vec2( 0.0_f, 0.0_f )
+						, vec2( 0.0_f, 1.0_f )
+						, vec2( 1.0_f, 0.0_f )
+						, vec2( 1.0_f, 1.0_f ) } );
+
 					auto nodeId = writer.declLocale( "nodeId"
 						, shader::getNodeId( c3d_objectIdsData
 							, pipelineID
@@ -300,8 +316,10 @@ namespace castor3d
 						, c3d_modelsData[nodeId - 1u] );
 					out.nodeId = writer.cast< sdw::Int >( nodeId );
 
+					auto center = writer.declLocale( "center"
+						, meshBuffers.positions[writer.cast< sdw::UInt >( in.instanceIndex )].position );
 					auto curBbcenter = writer.declLocale( "curBbcenter"
-						, modelData.modelToCurWorld( vec4( in.center, 1.0_f ) ).xyz() );
+						, modelData.modelToCurWorld( vec4( center.xyz(), 1.0_f ) ).xyz() );
 					auto curToCamera = writer.declLocale( "curToCamera"
 						, c3d_cameraData.getPosToCamera( curBbcenter ) );
 					curToCamera.y() = 0.0_f;
@@ -318,10 +336,15 @@ namespace castor3d
 					auto height = writer.declLocale( "height"
 						, billboardData.getHeight( c3d_cameraData ) );
 
-					out.texture0 = vec3( in.texture0, 0.0_f );
+					auto scaledRight = writer.declLocale( "scaledRight"
+						, right * bbPositions[in.vertexIndex - in.baseVertex].x() * width );
+					auto scaledUp = writer.declLocale( "scaledUp"
+						, up * bbPositions[in.vertexIndex - in.baseVertex].y() * height );
+
+					out.texture0 = vec3( bbTexcoords[in.vertexIndex - in.baseVertex], 1.0_f );
 					out.vtx.position = vec4( curBbcenter
-						+ right * in.position.x() * width
-						+ up * in.position.y() * height
+						+ scaledRight
+						+ scaledUp
 						, 1.0_f );
 					out.worldPosition = out.vtx.position;
 					auto viewPosition = writer.declLocale( "viewPosition"
@@ -340,11 +363,6 @@ namespace castor3d
 		}
 		else
 		{
-			shader::InstantiatedMeshBuffers meshBuffers{ writer
-				, flags
-				, uint32_t( MeshBuffersIdx::ePosition )
-				, uint32_t( RenderPipeline::eMeshBuffers )
-				, flags.stride };
 			writer.implementEntryPointT< sdw::VoidT, shader::VoxelSurfaceT >( sdw::VertexIn{ writer }
 				, sdw::VertexOutT< shader::VoxelSurfaceT >{ writer, flags }
 				, [&]( sdw::VertexIn const & in

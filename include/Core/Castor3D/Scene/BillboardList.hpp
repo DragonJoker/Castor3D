@@ -178,7 +178,7 @@ namespace castor3d
 			return m_vertexBuffer;
 		}
 
-		uint32_t getVertexStride()
+		uint32_t getVertexStride()const noexcept
 		{
 			return m_vertexStride;
 		}
@@ -221,6 +221,16 @@ namespace castor3d
 		castor::UnorderedMap< Pass const *, IdRenderNode > const & getIds()const
 		{
 			return m_ids;
+		}
+
+		ashes::DescriptorSetLayout const & getDescriptorLayout()const
+		{
+			return *m_descriptorLayout;
+		}
+
+		ashes::DescriptorSet const & getDescriptorSet()const
+		{
+			return *m_descriptorSet;
 		}
 		/**@}*/
 		/**
@@ -295,6 +305,9 @@ namespace castor3d
 		BillboardSize m_billboardSize{ BillboardSize::eDynamic };
 		castor::UnorderedMap< Pass const *, IdRenderNode > m_ids{};
 		SubmeshComponentCombine m_proxyCombine;
+		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
+		ashes::DescriptorSetPoolPtr m_descriptorPool;
+		ashes::DescriptorSetPtr m_descriptorSet;
 	};
 
 	class BillboardList

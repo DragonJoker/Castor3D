@@ -50,12 +50,12 @@ namespace castor3d
 
 	ashes::DescriptorSetLayout const * BillboardRenderNode::getVertexPullingDescriptorLayout()const
 	{
-		return nullptr;
+		return &data.getDescriptorLayout();
 	}
 
 	ashes::DescriptorSet const * BillboardRenderNode::getVertexPullingDescriptorSet()const
 	{
-		return nullptr;
+		return &data.getDescriptorSet();
 	}
 
 	MorphFlags BillboardRenderNode::getMorphFlags()const

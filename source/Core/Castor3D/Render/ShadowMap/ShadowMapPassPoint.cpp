@@ -164,7 +164,7 @@ namespace castor3d
 			, flags
 			, uint32_t( MeshBuffersIdx::ePosition )
 			, uint32_t( RenderPipeline::eMeshBuffers )
-			, flags.stride };
+			, flags.vertexStride };
 
 		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );

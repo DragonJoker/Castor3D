@@ -314,9 +314,19 @@ namespace castor3d
 			( *pipelinesBuffer ) = node.node->getId();
 			++pipelinesBuffer;
 			auto & geometryBuffers = node.node->getGeometryBuffers( pipeline.getFlags() );
-			commandBuffer.bindVertexBuffers( geometryBuffers.layouts[0].get().vertexBindingDescriptions[0].binding
-				, geometryBuffers.buffers
-				, geometryBuffers.offsets );
+
+			if ( auto descriptorSet = node.node->getVertexPullingDescriptorSet() )
+			{
+				commandBuffer.bindDescriptorSet( *descriptorSet
+					, pipeline.getPipelineLayout() );
+			}
+			else
+			{
+				commandBuffer.bindVertexBuffers( geometryBuffers.layouts[0].get().vertexBindingDescriptions[0].binding
+					, geometryBuffers.buffers
+					, geometryBuffers.offsets );
+			}
+
 			DrawConstants constants{ pipelineId, int32_t( drawId ) };
 			commandBuffer.pushConstants( pipeline.getPipelineLayout()
 				, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
@@ -606,7 +616,8 @@ namespace castor3d
 		std::tuple< size_t, QueueRenderNodes::PipelineMap::iterator, PipelineFlags > getPipeline( RenderNodesPass const & renderPass
 			, NodeT const & node
 			, bool frontCulled
-			, QueueRenderNodes::PipelineMap & pipelines )
+			, QueueRenderNodes::PipelineMap & pipelines
+			, uint32_t vertexStride )
 		{
 			auto const & engine = *renderPass.getEngine();
 			auto & components = engine.getSubmeshComponentsRegister();
@@ -623,7 +634,8 @@ namespace castor3d
 				, submeshData ? submeshData->getPrimitiveTopology() : node.getPrimitiveTopology()
 				, frontCulled
 				, node.getMorphTargets()
-				, node.getRenderData() );
+				, node.getRenderData()
+				, vertexStride );
 
 			if ( submeshData )
 			{
@@ -1448,7 +1460,8 @@ namespace castor3d
 		auto [hash, it, pipelineFlags] = queuerndnd::getPipeline( renderPass
 			, node
 			, frontCulled
-			, m_pipelines );
+			, m_pipelines
+			, 0u );
 
 		if ( pipelineFlags.usesMesh() )
 		{
@@ -1487,13 +1500,14 @@ namespace castor3d
 		auto [hash, it, pipelineFlags] = queuerndnd::getPipeline( renderPass
 			, node
 			, false
-			, m_pipelines );
+			, m_pipelines
+			, node.data.getVertexStride() );
 
 		if ( it == m_pipelines.end() )
 		{
 			auto result = renderPass.prepareBackPipeline( pipelineFlags
 				, node.getGeometryBuffers( pipelineFlags ).layouts
-				, nullptr
+				, node.getVertexPullingDescriptorLayout()
 				, nullptr );
 			it = m_pipelines.try_emplace( hash, result ).first;
 			renderPass.initialiseAdditionalDescriptor( *result.pipeline
@@ -1925,7 +1939,7 @@ namespace castor3d
 
 		for ( auto const & [buffer, nodes] : buffersNodes )
 		{
-			if ( auto firstVisibleNode = queuerndnd::hasVisibleNode( nodes ) )
+			if ( queuerndnd::hasVisibleNode( nodes ) )
 			{
 				auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
 					, *buffer
@@ -2066,7 +2080,7 @@ namespace castor3d
 
 		for ( auto const & [buffer, nodes] : buffersNodes )
 		{
-			if ( auto firstVisibleNode = queuerndnd::hasVisibleNode( nodes ) )
+			if ( queuerndnd::hasVisibleNode( nodes ) )
 			{
 				auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
 					, *buffer

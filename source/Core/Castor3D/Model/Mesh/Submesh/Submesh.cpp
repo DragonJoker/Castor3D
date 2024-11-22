@@ -279,6 +279,10 @@ namespace castor3d
 	{
 		m_initialised = false;
 
+		m_descriptorSets.clear();
+		m_descriptorPool.reset();
+		m_descriptorLayout.reset();
+
 		for ( auto const & [_, component] : m_components )
 		{
 			if ( auto data = component->getRenderData() )
@@ -628,11 +632,11 @@ namespace castor3d
 	void Submesh::createDescriptorSet( Geometry const & geometry
 		, Pass const & pass )
 	{
-		auto & baseBuffers = getFinalBufferOffsets( geometry, pass );
 		auto descSetIt = m_descriptorSets.emplace( geometry.getHash( pass, *this ), nullptr ).first;
 
 		if ( !descSetIt->second )
 		{
+			auto & baseBuffers = getFinalBufferOffsets( geometry, pass );
 			descSetIt->second = m_descriptorPool->createDescriptorSet( smsh::getDescriptorName( *this )
 				, RenderPipeline::eMeshBuffers );
 			ashes::WriteDescriptorSetArray writes;

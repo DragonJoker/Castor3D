@@ -233,7 +233,8 @@ namespace castor3d
 		, bool isFrontCulled
 		, uint32_t passLayerIndex
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-		, SubmeshRenderData * submeshData )const
+		, SubmeshRenderData * submeshData
+		, uint32_t vertexStride )const
 	{
 		return RenderNodesPass::createPipelineFlags( passComponents
 			, submeshComponents
@@ -251,7 +252,8 @@ namespace castor3d
 			, isFrontCulled
 			, passLayerIndex
 			, morphTargets
-			, submeshData );
+			, submeshData
+			, vertexStride );
 	}
 
 	void RenderTechniqueNodesPass::doAccept( RenderTechniqueVisitor & visitor )
