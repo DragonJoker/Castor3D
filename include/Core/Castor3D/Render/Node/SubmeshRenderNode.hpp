@@ -48,6 +48,9 @@ namespace castor3d
 		C3D_API ProgramFlags getProgramFlags()const;
 		C3D_API VkPrimitiveTopology getPrimitiveTopology()const;
 		C3D_API GeometryBuffers const & getGeometryBuffers( PipelineFlags const & flags )const;
+		C3D_API void createVertexPullingDescriptorSet()const;
+		C3D_API ashes::DescriptorSetLayout const * getVertexPullingDescriptorLayout()const;
+		C3D_API ashes::DescriptorSet const * getVertexPullingDescriptorSet()const;
 		C3D_API void createMeshletDescriptorSet()const;
 		C3D_API ashes::DescriptorSetLayout const * getMeshletDescriptorLayout()const;
 		C3D_API ashes::DescriptorSet const & getMeshletDescriptorSet()const;

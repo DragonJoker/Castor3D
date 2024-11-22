@@ -85,6 +85,10 @@ namespace castor3d
 		{
 			descriptorLayouts.emplace_back( *m_meshletDescriptorLayout );
 		}
+		else if ( m_vertexPullingDescriptorLayout )
+		{
+			descriptorLayouts.emplace_back( *m_vertexPullingDescriptorLayout );
+		}
 
 		ashes::VkDynamicStateArray dynamicStates;
 		ashes::VkViewportArray viewports;

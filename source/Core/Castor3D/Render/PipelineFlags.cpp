@@ -52,7 +52,9 @@ namespace castor3d
 			static constexpr uint64_t maxMorphTargetOffsetMask = ( 0x1ULL << uint64_t( maxMorphTargetOffsetSize ) ) - 1u;
 			static constexpr uint64_t maxSubmeshDataSize = 16u;
 			static constexpr uint64_t maxSubmeshDataMask = ( 0x1ULL << uint64_t( maxSubmeshDataSize ) ) - 1u;
-			static constexpr uint64_t maxSize = maxMorphTargetOffsetSize + maxSubmeshDataSize;
+			static constexpr uint64_t maxSubmeshStrideSize = 16u;
+			static constexpr uint64_t maxSubmeshStrideMask = ( 0x1ULL << uint64_t( maxSubmeshStrideSize ) ) - 1u;
+			static constexpr uint64_t maxSize = maxMorphTargetOffsetSize + maxSubmeshDataSize + maxSubmeshStrideSize;
 			static_assert( 64 >= maxSize );
 		}
 
@@ -193,6 +195,8 @@ namespace castor3d
 			result.morphTargetsOffset = VkDeviceSize( ( loHash >> offset ) & lo::maxMorphTargetOffsetMask );
 			offset += lo::maxMorphTargetOffsetSize;
 			result.submeshData = submeshComponents.getRenderData( uint16_t( ( loHash >> offset ) & lo::maxSubmeshDataMask ) );
+			offset += lo::maxSubmeshDataSize;
+			result.stride = VkDeviceSize( ( loHash >> offset ) & lo::maxSubmeshStrideMask );
 
 			return result;
 		}
@@ -206,11 +210,14 @@ namespace castor3d
 			result |= uint64_t( flags.morphTargetsOffset & lo::maxMorphTargetOffsetMask ) << offset;
 			offset += lo::maxMorphTargetOffsetSize;
 			result |= uint64_t( uint64_t( submeshComponents.getRenderDataId( flags.submeshData ) ) & lo::maxSubmeshDataMask ) << offset;
+			offset += lo::maxSubmeshDataSize;
+			result |= uint64_t( flags.stride & lo::maxSubmeshStrideMask ) << offset;
 
 #if !defined( NDEBUG )
 			auto details = getLoHashDetails( submeshComponents, result );
 			CU_Require( flags.morphTargetsOffset == details.morphTargetsOffset );
 			CU_Require( flags.submeshData == details.submeshData );
+			CU_Require( flags.stride == details.stride );
 #endif
 			return result;
 		}

@@ -72,7 +72,7 @@ namespace castor3d::shader
 			, firstBinding++\
 			, set\
 			, ast::type::MemoryLayout::eStd430\
-			, ( Enable ) && stride == 0u };\
+			, ( Enable ) && Stride == 0u };\
 		auto result = Name##Buffer.declMemberArray< Type >( #Name, Enable );\
 		Name##Buffer.end();\
 		return result;\
@@ -187,6 +187,25 @@ namespace castor3d::shader
 			, set
 			, stride
 			, meshlets }
+	{
+	}
+
+	//*********************************************************************************************
+
+	InstantiatedMeshBuffers::InstantiatedMeshBuffers( sdw::ShaderWriter & writer
+		, PipelineFlags const & flags
+		, uint32_t firstBinding
+		, uint32_t set
+		, uint32_t stride )
+		: MeshBuffersBase{ writer
+			, flags
+			, firstBinding
+			, set
+			, stride }
+		, instances{ DeclareSsbo( c3d_inInstances
+			, ObjectIds
+			, flags.enableInstantiation()
+			, stride ) }
 	{
 	}
 

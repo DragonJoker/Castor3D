@@ -299,9 +299,11 @@ namespace castor3d
 
 	PipelineAndID RenderNodesPass::prepareBackPipeline( PipelineFlags const & pipelineFlags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+		, ashes::DescriptorSetLayout const * vertexPullingLayouts
 		, ashes::DescriptorSetLayout const * meshletDescriptorLayout )
 	{
 		return doPreparePipeline( vertexLayouts
+			, vertexPullingLayouts
 			, meshletDescriptorLayout
 			, pipelineFlags
 			, VK_CULL_MODE_BACK_BIT );
@@ -309,9 +311,11 @@ namespace castor3d
 
 	PipelineAndID RenderNodesPass::prepareFrontPipeline( PipelineFlags const & pipelineFlags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+		, ashes::DescriptorSetLayout const * vertexPullingLayouts
 		, ashes::DescriptorSetLayout const * meshletDescriptorLayout )
 	{
 		return doPreparePipeline( vertexLayouts
+			, vertexPullingLayouts
 			, meshletDescriptorLayout
 			, pipelineFlags
 			, VK_CULL_MODE_FRONT_BIT );
@@ -907,6 +911,7 @@ namespace castor3d
 	}
 
 	PipelineAndID RenderNodesPass::doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+		, ashes::DescriptorSetLayout const * vertexPullingLayouts
 		, ashes::DescriptorSetLayout const * meshletDescriptorLayout
 		, PipelineFlags const & flags
 		, VkCullModeFlags cullMode )
@@ -965,7 +970,15 @@ namespace castor3d
 				}
 				else
 				{
-					pipeline->setVertexLayouts( vertexLayouts );
+					if ( vertexPullingLayouts )
+					{
+						pipeline->setVertexPullingLayouts( *vertexPullingLayouts );
+					}
+					else
+					{
+						pipeline->setVertexLayouts( vertexLayouts );
+					}
+
 					pipeline->setPushConstantRanges( { { VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
 						, 0u
 						, sizeof( DrawConstants ) } } );

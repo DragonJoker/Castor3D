@@ -31,8 +31,7 @@ namespace castor3d
 			eTextures = 0,
 			eBuffers = 1,
 			eMeshBuffers = 2,
-			eVertexBuffers = 3,
-			CU_EnumBounds( Descriptor, eTextures, eVertexBuffers )
+			CU_EnumBounds( Descriptor, eTextures, eMeshBuffers )
 #pragma clang pop
 		};
 
@@ -138,6 +137,12 @@ namespace castor3d
 			m_addDescriptorSet = &descriptorSet;
 		}
 
+		void setVertexPullingLayouts( ashes::DescriptorSetLayout const & layout )noexcept
+		{
+			CU_Require( !m_pipeline );
+			m_vertexPullingDescriptorLayout = &layout;
+		}
+
 		void setMeshletDescriptorSetLayout( ashes::DescriptorSetLayout const & layout )noexcept
 		{
 			CU_Require( !m_pipeline );
@@ -221,15 +226,14 @@ namespace castor3d
 			return m_addDescriptorLayout != nullptr;
 		}
 
-		ashes::DescriptorSetLayout const & getMeshletDescriptorSetLayout()const noexcept
-		{
-			CU_Require( m_meshletDescriptorLayout );
-			return *m_meshletDescriptorLayout;
-		}
-
 		bool hasMeshletDescriptorSetLayout()const noexcept
 		{
 			return m_meshletDescriptorLayout != nullptr;
+		}
+
+		bool hasVertexPullingDescriptorSetLayout()const noexcept
+		{
+			return m_vertexPullingDescriptorLayout != nullptr;
 		}
 
 		RenderSystem & getRenderSystem()const noexcept
@@ -255,6 +259,7 @@ namespace castor3d
 		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::DescriptorSetLayout const * m_addDescriptorLayout{};
 		ashes::DescriptorSet const * m_addDescriptorSet{};
+		ashes::DescriptorSetLayout const * m_vertexPullingDescriptorLayout{};
 		ashes::DescriptorSetLayout const * m_meshletDescriptorLayout{};
 	};
 }

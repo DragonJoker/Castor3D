@@ -79,14 +79,17 @@ namespace castor3d
 	struct PipelineLoHashDetails
 	{
 		explicit PipelineLoHashDetails( VkDeviceSize pmorphTargetsOffset = 0u
-			, SubmeshRenderData const * psubmeshData = nullptr )noexcept
+			, SubmeshRenderData const * psubmeshData = nullptr
+			, uint32_t pstride = 0u )noexcept
 			: morphTargetsOffset{ pmorphTargetsOffset }
 			, submeshData{ psubmeshData }
+			, stride{ pstride }
 		{
 		}
 
 		VkDeviceSize morphTargetsOffset{};
 		SubmeshRenderData const * submeshData{};
+		uint32_t stride{};
 	};
 
 	C3D_API bool operator==( PipelineLoHashDetails const & lhs, PipelineLoHashDetails const & rhs )noexcept;

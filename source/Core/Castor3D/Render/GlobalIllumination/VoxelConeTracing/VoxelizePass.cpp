@@ -340,32 +340,49 @@ namespace castor3d
 		}
 		else
 		{
-			writer.implementEntryPointT< shader::MeshVertexT, shader::VoxelSurfaceT >( sdw::VertexInT< shader::MeshVertexT >{ writer, submeshShaders }
+			shader::InstantiatedMeshBuffers meshBuffers{ writer
+				, flags
+				, uint32_t( MeshBuffersIdx::ePosition )
+				, uint32_t( RenderPipeline::eMeshBuffers )
+				, flags.stride };
+			writer.implementEntryPointT< sdw::VoidT, shader::VoxelSurfaceT >( sdw::VertexIn{ writer }
 				, sdw::VertexOutT< shader::VoxelSurfaceT >{ writer, flags }
-				, [&]( sdw::VertexInT< shader::MeshVertexT > const & in
+				, [&]( sdw::VertexIn const & in
 					, sdw::VertexOutT< shader::VoxelSurfaceT > out )
 				{
+					auto instanceId = writer.declLocale( "instanceId"
+						, writer.cast< sdw::UInt >( in.instanceIndex )
+							+ writer.cast< sdw::UInt >( getEngine()->getRenderDevice()->hasDrawId() ? in.drawID : drawID ) );
 					auto nodeId = writer.declLocale( "nodeId"
 						, shader::getNodeId( c3d_objectIdsData
-							, in
+							, meshBuffers.instances
 							, pipelineID
-							, writer.cast< sdw::UInt >( getEngine()->getRenderDevice()->hasDrawId() ? in.drawID : drawID )
+							, instanceId
 							, flags ) );
-					auto curPosition = writer.declLocale( "curPosition"
-						, in.position );
-					auto curNormal = writer.declLocale( "curNormal"
-						, in.normal );
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[nodeId - 1u] );
+					auto vertexIndex = writer.declLocale( "vertexIndex"
+						, writer.cast< sdw::UInt >( in.vertexIndex ) );
+
+					auto curPosition = writer.declLocale( "curPosition"
+						, meshBuffers.positions[vertexIndex].position );
+					auto curNormal = writer.declLocale( "curNormal"
+						, meshBuffers.normals[vertexIndex].xyz() );
+					auto curTangent = writer.declLocale( "curTangent"
+						, meshBuffers.tangents[vertexIndex] );
+					auto curBitangent = writer.declLocale( "curBitangent"
+						, meshBuffers.bitangents[vertexIndex].xyz() );
+					out.texture0 = meshBuffers.textures0[vertexIndex].xyz();
+					out.texture1 = meshBuffers.textures1[vertexIndex].xyz();
+					out.texture2 = meshBuffers.textures2[vertexIndex].xyz();
+					out.texture3 = meshBuffers.textures3[vertexIndex].xyz();
+					out.colour = meshBuffers.colours[vertexIndex].xyz();
+
+					out.nodeId = nodeId;
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( modelData.getMaterialId() ) );
-					out.nodeId = nodeId;
-					out.texture0 = in.texture0;
-					out.texture1 = in.texture1;
-					out.texture2 = in.texture2;
-					out.texture3 = in.texture3;
 					material.getPassMultipliers( flags
-						, in.passMasks
+					, meshBuffers.passMasks[vertexIndex]
 						, out.passMultipliers );
 					auto modelMtx = writer.declLocale< sdw::Mat4 >( "modelMtx"
 						, modelData.getModelMtx() );

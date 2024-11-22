@@ -35,6 +35,9 @@ namespace castor3d
 		C3D_API ObjectBufferOffset const & getSourceBufferOffsets()const;
 		C3D_API ObjectBufferOffset const & getFinalBufferOffsets()const;
 		C3D_API SubmeshComponentCombineID getComponentCombineID()const;
+		C3D_API void createVertexPullingDescriptorSet()const;
+		C3D_API ashes::DescriptorSetLayout const * getVertexPullingDescriptorLayout()const;
+		C3D_API ashes::DescriptorSet const * getVertexPullingDescriptorSet()const;
 		C3D_API MorphFlags getMorphFlags()const;
 		C3D_API ProgramFlags getProgramFlags()const;
 		C3D_API VkPrimitiveTopology getPrimitiveTopology()const;

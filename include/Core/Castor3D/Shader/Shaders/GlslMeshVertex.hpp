@@ -149,6 +149,19 @@ namespace castor3d::shader
 		sdw::UIntArray indices;
 	};
 
+	struct InstantiatedMeshBuffers
+		: public MeshBuffersBase
+	{
+	public:
+		C3D_API InstantiatedMeshBuffers( sdw::ShaderWriter & writer
+			, PipelineFlags const & flags
+			, uint32_t firstBinding
+			, uint32_t set
+			, uint32_t stride );
+
+		sdw::Array< ObjectIds > instances;
+	};
+
 	struct MeshletBuffers
 		: public MeshBuffersBase
 	{

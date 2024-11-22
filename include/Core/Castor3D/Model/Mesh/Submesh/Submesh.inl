@@ -191,4 +191,9 @@ namespace castor3d
 	{
 		return this->hasComponent( ComponentT::TypeName );
 	}
+
+	inline ashes::DescriptorSetLayout const & Submesh::getDescriptorLayout()const
+	{
+		return *m_descriptorLayout;
+	}
 }

@@ -258,20 +258,44 @@ namespace castor3d
 			doInstantiate( &geometry, oldMaterial, newMaterial, update );
 		}
 		/**
-		*\~english
-		*\return		The geometry buffers for given render node.
+		 *\~english
+		 *\return		The geometry buffers for given render node.
 		 *\param[in]	geometry	The geometry instancing this submesh.
 		 *\param[in]	pass		The pass used to render this submesh.
 		 *\param[in]	flags		The pipeline flags.
-		*\~french
-		*\return		Les tampons de géométrie associés au noeud de rendu donné.
+		 *\~french
+		 *\return		Les tampons de géométrie associés au noeud de rendu donné.
 		 *\param[in]	geometry	La géométrie instanciant ce sous-maillage.
 		 *\param[in]	pass		La passe utilisée dans le rendeu de ce sous-maillage.
 		 *\param[in]	flags		Les indicateurs de pipeline.
-		*/
+		 */
 		C3D_API GeometryBuffers const & getGeometryBuffers( Geometry const & geometry
 			, Pass const & pass
 			, PipelineFlags const & flags )const;
+		/**
+		 *\~english
+		 *\brief		Creates the descriptor set for given render node.
+		 *\param[in]	geometry	The geometry instancing this submesh.
+		 *\param[in]	pass		The pass used to render this submesh.
+		 *\~french
+		 *\brief		Crée le descriptor set pour le noeud de rendu donné.
+		 *\param[in]	geometry	La géométrie instanciant ce sous-maillage.
+		 *\param[in]	pass		La passe utilisée dans le rendeu de ce sous-maillage.
+		 */
+		C3D_API void createDescriptorSet( Geometry const & geometry
+			, Pass const & pass );
+		/**
+		 *\~english
+		 *\return		The descriptor set for given render node.
+		 *\param[in]	geometry	The geometry instancing this submesh.
+		 *\param[in]	pass		The pass used to render this submesh.
+		 *\~french
+		 *\return		Le descriptor set pour le noeud de rendu donné.
+		 *\param[in]	geometry	La géométrie instanciant ce sous-maillage.
+		 *\param[in]	pass		La passe utilisée dans le rendeu de ce sous-maillage.
+		 */
+		C3D_API ashes::DescriptorSet const & getDescriptorSet( Geometry const & geometry
+			, Pass const & pass )const;
 		/**
 		*\~english
 		*name
@@ -378,6 +402,7 @@ namespace castor3d
 		VkPrimitiveTopology getTopology()const noexcept;
 		SubmeshComponentCombine getComponentCombine()const noexcept;
 		SubmeshComponentPlugin const & getComponentPlugin( castor::String const & componentType )const;
+		ashes::DescriptorSetLayout const & getDescriptorLayout()const;
 
 		template< typename ComponentT >
 		ComponentT * getComponent()const noexcept;
@@ -392,6 +417,7 @@ namespace castor3d
 			, MaterialObs oldMaterial
 			, MaterialObs newMaterial
 			, bool update );
+		void doCreateDescriptorLayout( RenderDevice const & device );
 
 	private:
 		uint32_t m_id;
@@ -412,6 +438,9 @@ namespace castor3d
 		mutable castor::UnorderedMap< size_t, GeometryBuffers > m_geometryBuffers;
 		bool m_needsNormalsCompute{ false };
 		bool m_disableSceneUpdate{ false };
+		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
+		ashes::DescriptorSetPoolPtr m_descriptorPool;
+		castor::UnorderedMap< size_t, ashes::DescriptorSetPtr > m_descriptorSets;
 
 		friend class BinaryWriter< Submesh >;
 		friend class BinaryParser< Submesh >;

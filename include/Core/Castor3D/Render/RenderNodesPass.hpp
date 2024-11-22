@@ -483,30 +483,36 @@ namespace castor3d
 		 *\brief			Prepares the pipeline matching the given flags, for back face culling nodes.
 		 *\param[in]		pipelineFlags			The pipeline flags.
 		 *\param[in]		vertexLayouts			The vertex buffers layouts.
+		 *\param[in]		vertexPullingLayouts	The vertex buffers descriptor layouts.
 		 *\param[in]		meshletDescriptorLayout	The optional meshlets descriptor layout.
 		 *\~french
 		 *\brief			Prépare le pipeline qui correspond aux indicateurs donnés, pour les noeuds en back face culling.
 		 *\param[in]		pipelineFlags			Les indicateurs de pipeline.
 		 *\param[in]		vertexLayouts			Les layouts des tampons de sommets.
+		 *\param[in]		vertexPullingLayouts	Les layouts de descripteurs des tampons de sommets.
 		 *\param[in]		meshletDescriptorLayout	Les layouts optionnels de descripteurs de meshlets.
 		 */
 		C3D_API PipelineAndID prepareBackPipeline( PipelineFlags const & pipelineFlags
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+			, ashes::DescriptorSetLayout const * vertexPullingLayouts
 			, ashes::DescriptorSetLayout const * meshletDescriptorLayout );
 		/**
 		 *\~english
 		 *\brief			Prepares the pipeline matching the given flags, for front face culling nodes.
 		 *\param[in]		pipelineFlags			The pipeline flags.
 		 *\param[in]		vertexLayouts			The vertex buffers layouts.
+		 *\param[in]		vertexPullingLayouts	The vertex buffers descriptor layouts.
 		 *\param[in]		meshletDescriptorLayout	The optional meshlets descriptor layout.
 		 *\~french
 		 *\brief			Prépare le pipeline qui correspond aux indicateurs donnés, pour les noeuds en front face culling.
 		 *\param[in]		pipelineFlags			Les indicateurs de pipeline.
 		 *\param[in]		vertexLayouts			Les layouts des tampons de sommets.
+		 *\param[in]		vertexPullingLayouts	Les layouts de descripteurs des tampons de sommets.
 		 *\param[in]		meshletDescriptorLayout	Les layouts optionnels de descripteurs de meshlets.
 		 */
 		C3D_API PipelineAndID prepareFrontPipeline( PipelineFlags const & pipelineFlags
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+			, ashes::DescriptorSetLayout const * vertexPullingLayouts
 			, ashes::DescriptorSetLayout const * meshletDescriptorLayout );
 		/**
 		 *\~english
@@ -727,6 +733,7 @@ namespace castor3d
 		castor::Vector< RenderPipelineUPtr > const & doGetFrontPipelines()const;
 		castor::Vector< RenderPipelineUPtr > const & doGetBackPipelines()const;
 		PipelineAndID doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+			, ashes::DescriptorSetLayout const * vertexPullingLayouts
 			, ashes::DescriptorSetLayout const * meshletDescriptorLayout
 			, PipelineFlags const & flags
 			, VkCullModeFlags cullMode );

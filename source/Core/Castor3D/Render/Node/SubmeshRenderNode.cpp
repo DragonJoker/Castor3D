@@ -74,6 +74,21 @@ namespace castor3d
 		return data.getGeometryBuffers( instance, *pass, flags );
 	}
 
+	void SubmeshRenderNode::createVertexPullingDescriptorSet()const
+	{
+		data.createDescriptorSet( instance, *pass );
+	}
+
+	ashes::DescriptorSetLayout const * SubmeshRenderNode::getVertexPullingDescriptorLayout()const
+	{
+		return &data.getDescriptorLayout();
+	}
+
+	ashes::DescriptorSet const * SubmeshRenderNode::getVertexPullingDescriptorSet()const
+	{
+		return &data.getDescriptorSet( instance, *pass );
+	}
+
 	void SubmeshRenderNode::createMeshletDescriptorSet()const
 	{
 		if ( auto component = data.getComponent< MeshletComponent >() )
