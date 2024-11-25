@@ -19,6 +19,9 @@ See LICENSE file in root folder
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
 namespace castor3d

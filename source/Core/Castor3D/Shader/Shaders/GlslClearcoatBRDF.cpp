@@ -4,6 +4,8 @@
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 
+#include <ShaderWriter/Writer.hpp>
+
 CU_ImplementDeleter( castor3d::shader, ClearcoatBRDF )
 
 namespace castor3d::shader
@@ -12,7 +14,8 @@ namespace castor3d::shader
 		, BRDFHelpers & brdfHelpers )
 		: m_writer{ writer }
 		, m_brdfHelpers{ brdfHelpers }
-	{}
+	{
+	}
 
 	sdw::RetVec3 ClearcoatBRDF::compute( BlendComponents const & components
 		, sdw::Vec3 const & N

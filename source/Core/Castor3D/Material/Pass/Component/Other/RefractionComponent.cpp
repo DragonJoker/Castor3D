@@ -11,6 +11,7 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 
 #include <ShaderWriter/Intrinsics/IntrinsicFunctions.hpp>
+#include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
 namespace castor
 {

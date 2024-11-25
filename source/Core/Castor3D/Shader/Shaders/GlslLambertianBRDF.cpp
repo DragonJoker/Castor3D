@@ -3,6 +3,8 @@
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 
+#include <ShaderWriter/Writer.hpp>
+
 namespace castor3d::shader
 {
 	LambertianBRDF::LambertianBRDF( sdw::ShaderWriter & writer

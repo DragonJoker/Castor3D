@@ -1,5 +1,12 @@
 #include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
 
+#include <ShaderWriter/Writer.hpp>
+#include <ShaderWriter/Intrinsics/Intrinsics.hpp>
+#include <ShaderWriter/MatTypes/Mat4.hpp>
+#include <ShaderWriter/VecTypes/Vec2.hpp>
+#include <ShaderWriter/VecTypes/Vec3.hpp>
+#include <ShaderWriter/VecTypes/Vec4.hpp>
+
 namespace castor3d::shader
 {
 	namespace deriv
