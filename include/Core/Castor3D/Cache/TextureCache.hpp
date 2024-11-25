@@ -11,6 +11,9 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
+#include <ashespp/Descriptor/DescriptorPool.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 #include <atomic>
 #include <mutex>
 #include <unordered_set>

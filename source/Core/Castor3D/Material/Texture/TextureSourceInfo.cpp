@@ -2,6 +2,7 @@
 
 #include "Castor3D/Material/Texture/Sampler.hpp"
 
+#include <CastorUtils/Graphics/ImageCache.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
 CU_ImplementSmartPtr( castor3d, TextureSourceInfo )

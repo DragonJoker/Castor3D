@@ -8,6 +8,8 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Config/SmartPtr.hpp>
 
+#include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
+
 namespace castor3d
 {
 	/**@name Render */

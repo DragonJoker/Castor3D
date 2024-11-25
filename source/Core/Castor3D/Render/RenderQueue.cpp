@@ -13,6 +13,8 @@
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/Node/QueueRenderNodes.hpp"
 
+#include <ashespp/Command/CommandBuffer.hpp>
+
 using ashes::operator==;
 using ashes::operator!=;
 
