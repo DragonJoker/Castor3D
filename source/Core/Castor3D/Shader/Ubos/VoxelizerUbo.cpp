@@ -17,61 +17,6 @@ namespace castor3d
 
 	namespace shader
 	{
-		VoxelData::VoxelData( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled )
-			: StructInstance{ writer, castor::move( expr ), enabled }
-			, worldToGrid{ getMember< sdw::Float >( "worldToGrid" ) }
-			, gridToWorld{ getMember< sdw::Float >( "gridToWorld" ) }
-			, clipToGrid{ getMember< sdw::Float >( "clipToGrid" ) }
-			, gridToClip{ getMember< sdw::Float >( "gridToClip" ) }
-			, radianceMaxDistance{ getMember< sdw::Float >( "radianceMaxDistance" ) }
-			, radianceMips{ getMember< sdw::Float >( "radianceMips" ) }
-			, radianceNumCones{ getMember< sdw::UInt >( "radianceNumCones" ) }
-			, radianceNumConesInv{ getMember< sdw::Float >( "radianceNumConesInv" ) }
-			, rayStepSize{ getMember< sdw::Float >( "rayStepSize" ) }
-			, enabled{ getMember< sdw::UInt >( "enabled" ) }
-			, enableConservativeRasterization{ getMember< sdw::UInt >( "enableConservativeRasterization" ) }
-			, enableOcclusion{ getMember< sdw::UInt >( "enableOcclusion" ) }
-			, enableSecondaryBounce{ getMember< sdw::UInt >( "enableSecondaryBounce" ) }
-		{
-		}
-
-		ast::type::BaseStructPtr VoxelData::makeType( ast::type::TypesCache & cache )
-		{
-			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "C3D_VoxelData" );
-
-			if ( result->empty() )
-			{
-				result->declMember( "worldToGrid", ast::type::Kind::eFloat );
-				result->declMember( "gridToWorld", ast::type::Kind::eFloat );
-				result->declMember( "clipToGrid", ast::type::Kind::eFloat );
-				result->declMember( "gridToClip", ast::type::Kind::eFloat );
-
-				result->declMember( "radianceMaxDistance", ast::type::Kind::eFloat );
-				result->declMember( "radianceMips", ast::type::Kind::eFloat );
-				result->declMember( "radianceNumCones", ast::type::Kind::eUInt32 );
-				result->declMember( "radianceNumConesInv", ast::type::Kind::eFloat );
-
-				result->declMember( "pad", ast::type::Kind::eVec3F );
-				result->declMember( "rayStepSize", ast::type::Kind::eFloat );
-
-				result->declMember( "enabled", ast::type::Kind::eUInt32 );
-				result->declMember( "enableConservativeRasterization", ast::type::Kind::eUInt32 );
-				result->declMember( "enableOcclusion", ast::type::Kind::eUInt32 );
-				result->declMember( "enableSecondaryBounce", ast::type::Kind::eUInt32 );
-			}
-
-			return result;
-		}
-
-		castor::RawUniquePtr< sdw::Struct > VoxelData::declare( sdw::ShaderWriter & writer )
-		{
-			return castor::make_unique< sdw::Struct >( writer
-				, makeType( writer.getTypesCache() ) );
-		}
-
 		sdw::Vec3 VoxelData::worldToTex( sdw::Vec3 const & wsPosition )const
 		{
 			return worldToClip( wsPosition ) * vec3( 0.5_f, -0.5_f, 0.5_f ) + vec3( 0.5_f );

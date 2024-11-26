@@ -261,9 +261,9 @@ namespace castor3d
 					, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_POINT_LIST }
 					, ashes::nullopt
 					, ashes::PipelineViewportStateCreateInfo{ 0u, 1u, ashes::VkViewportArray{ viewport }, 1u, ashes::VkScissorArray{ scissor } }
-					, ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT }
+					, ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE }
 					, ashes::PipelineMultisampleStateCreateInfo{}
-					, ashes::PipelineDepthStencilStateCreateInfo{}
+					, ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_TRUE, VK_COMPARE_OP_GREATER }
 					, RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u )
 					, ashes::nullopt
 					, layout
@@ -289,7 +289,7 @@ namespace castor3d
 					, ashes::PipelineViewportStateCreateInfo{ 0u, 1u, ashes::VkViewportArray{ viewport }, 1u, ashes::VkScissorArray{ scissor } }
 					, ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE }
 					, ashes::PipelineMultisampleStateCreateInfo{}
-					, ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE }
+					, ashes::PipelineDepthStencilStateCreateInfo{}
 					, RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u )
 					, ashes::nullopt
 					, layout
@@ -482,13 +482,7 @@ namespace castor3d
 			writer.implementEntryPointT< SurfaceT, shader::Colour4FT >( [&]( sdw::FragmentInT< SurfaceT > const & in
 				, sdw::FragmentOutT< shader::Colour4FT > const & out )
 				{
-					IF( writer, in.voxelColour().a() > 0.0_f )
-					{
-						writer.demote();
-					}
-					FI
-
-					out.colour() = in.voxelColour();
+					out.colour() = vec4( in.voxelColour().rgb(), 1.0_f );
 				} );
 			return writer.getBuilder().releaseShader();
 		}

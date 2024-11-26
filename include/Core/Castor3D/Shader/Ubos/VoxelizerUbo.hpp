@@ -17,15 +17,42 @@ namespace castor3d
 	namespace shader
 	{
 		struct VoxelData
-			: public sdw::StructInstance
+			: public sdw::StructInstanceHelperT< "C3D_VoxelData"
+				, sdw::type::MemoryLayout::eStd140
+				, sdw::FloatField< "worldToGrid" >
+				, sdw::FloatField< "gridToWorld" >
+				, sdw::FloatField< "clipToGrid" >
+				, sdw::FloatField< "gridToClip" >
+				, sdw::FloatField< "radianceMaxDistance" >
+				, sdw::FloatField< "radianceMips" >
+				, sdw::UInt32Field< "radianceNumCones" >
+				, sdw::FloatField< "radianceNumConesInv" >
+				, sdw::Vec3Field< "pad" >
+				, sdw::FloatField< "rayStepSize" >
+				, sdw::UInt32Field< "enabled" >
+				, sdw::UInt32Field< "enableConservativeRasterization" >
+				, sdw::UInt32Field< "enableOcclusion" >
+				, sdw::UInt32Field< "enableSecondaryBounce" > >
 		{
-			C3D_API VoxelData( sdw::ShaderWriter & writer
+			VoxelData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
-				, bool enabled );
-			SDW_DeclStructInstance( C3D_API, VoxelData );
-
-			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static castor::RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+				, bool enabled )
+				: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+				, worldToGrid{ this->getMember< "worldToGrid" >() }
+				, gridToWorld{ this->getMember< "gridToWorld" >() }
+				, clipToGrid{ this->getMember< "clipToGrid" >() }
+				, gridToClip{ this->getMember< "gridToClip" >() }
+				, radianceMaxDistance{ this->getMember< "radianceMaxDistance" >() }
+				, radianceMips{ this->getMember< "radianceMips" >() }
+				, radianceNumCones{ this->getMember< "radianceNumCones" >() }
+				, radianceNumConesInv{ this->getMember< "radianceNumConesInv" >() }
+				, rayStepSize{ this->getMember< "rayStepSize" >() }
+				, enabled{ this->getMember< "enabled" >() }
+				, enableConservativeRasterization{ this->getMember< "enableConservativeRasterization" >() }
+				, enableOcclusion{ this->getMember< "enableOcclusion" >() }
+				, enableSecondaryBounce{ this->getMember< "enableSecondaryBounce" >() }
+			{
+			}
 
 			C3D_API sdw::Vec3 worldToTex( sdw::Vec3 const & wsPosition )const;
 			C3D_API sdw::IVec3 worldToImg( sdw::Vec3 const & wsPosition )const;
@@ -49,10 +76,6 @@ namespace castor3d
 			sdw::UInt enableConservativeRasterization;
 			sdw::UInt enableOcclusion;
 			sdw::UInt enableSecondaryBounce;
-
-		private:
-			using sdw::StructInstance::getMember;
-			using sdw::StructInstance::getMemberArray;
 		};
 	}
 
