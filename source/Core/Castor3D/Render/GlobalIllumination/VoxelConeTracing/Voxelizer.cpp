@@ -229,7 +229,7 @@ namespace castor3d
 	{
 		visitor.visit( cuT( "Voxelisation First Bounce" )
 			, m_firstBounce
-			, m_graph.getFinalLayoutState( m_firstBounce.wholeViewId ).layout
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors::tex3D( &m_grid ) );
 		visitor.visit( cuT( "Voxelisation Secondary Bounce" )
 			, m_secondaryBounce
