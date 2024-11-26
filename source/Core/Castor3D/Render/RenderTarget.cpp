@@ -426,7 +426,6 @@ namespace castor3d
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_cameraUbo{ m_device }
-		, m_sceneUbo{ m_device }
 		, m_overlayPassDesc{ doCreateOverlayPass( nullptr, m_device ) }
 	{
 		m_graph.addInput( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampledViewId
@@ -646,7 +645,6 @@ namespace castor3d
 			, updater.debugIndex
 			, true
 			, jitterProjSpace );
-		m_sceneUbo.cpuUpdate( scene );
 
 		m_overlayPass->update( updater );
 
@@ -910,6 +908,11 @@ namespace castor3d
 	bool RenderTarget::areDebugTargetsEnabled()const noexcept
 	{
 		return getEngine()->areDebugTargetsEnabled();
+	}
+
+	SceneUbo const & RenderTarget::getSceneUbo()const noexcept
+	{
+		return m_scene->getUbo();
 	}
 
 	void RenderTarget::resetSemaphore()

@@ -144,7 +144,6 @@ namespace castor3d
 		SceneCullerUPtr m_dynamicsCuller;
 		crg::FrameGraph m_graph;
 		CameraUbo m_cameraUbo;
-		SceneUbo m_sceneUbo;
 		Texture m_firstBounce;
 		Texture m_secondaryBounce;
 		ashes::BufferPtr< Voxel > m_staticsVoxels;

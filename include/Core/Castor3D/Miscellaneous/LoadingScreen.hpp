@@ -218,7 +218,7 @@ namespace castor3d
 		Texture m_depth;
 		CameraUbo m_cameraUbo;
 		HdrConfigUbo m_hdrConfigUbo;
-		SceneUbo m_sceneUbo;
+		SceneUbo const * m_sceneUbo{};
 		BackgroundRendererUPtr m_backgroundRenderer;
 		crg::FramePass * m_opaquePassDesc{};
 		RenderTechniquePass * m_opaquePass{};

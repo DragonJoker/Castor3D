@@ -127,7 +127,6 @@ namespace castor3d
 		, m_dynamicsCuller{ castor::makeUniqueDerived< SceneCuller, DummyCuller >( m_scene, nullptr, false ) }
 		, m_graph{ resources.getHandler(), castor::toUtf8( prefix ) + "/Voxelizer" }
 		, m_cameraUbo{ device }
-		, m_sceneUbo{ device }
 		, m_firstBounce{ vxlsr::createTexture( device, resources, cuT( "VoxelizedSceneFirstBounce" ), { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
 		, m_secondaryBounce{ vxlsr::createTexture( device, resources, cuT( "VoxelizedSceneSecondaryBounce" ), { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
 		, m_staticsVoxels{ vxlsr::createSsbo( device, cuT( "VoxelizedStaticSceneBuffer" ), m_voxelConfig.gridSize.value() ) }
@@ -215,7 +214,6 @@ namespace castor3d
 				, updater.debugIndex
 				, true
 				, jitterProjSpace );
-			m_sceneUbo.cpuUpdate( scene );
 			m_voxelizerUbo.cpuUpdate( m_voxelConfig
 				, voxelSize
 				, m_voxelConfig.gridSize.value() );
@@ -300,7 +298,7 @@ namespace castor3d
 					, runnableGraph
 					, m_device
 					, m_cameraUbo
-					, m_sceneUbo
+					, m_scene.getUbo()
 					, m_camera
 					, culler
 					, m_voxelizerUbo

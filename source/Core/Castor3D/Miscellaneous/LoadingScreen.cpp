@@ -117,11 +117,6 @@ namespace castor3d
 			return result;
 		}
 
-		static SceneUbo createSceneUbo( RenderDevice const & device )
-		{
-			return SceneUbo{ device };
-		}
-
 		static ShaderPtr getProgram( Engine & engine )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
@@ -266,14 +261,14 @@ namespace castor3d
 		, m_depth{ loadscreen::createDepth( m_device, resources, SceneName, m_initialRenderSize ) }
 		, m_cameraUbo{ m_device }
 		, m_hdrConfigUbo{ m_device }
-		, m_sceneUbo{ loadscreen::createSceneUbo( m_device ) }
+		, m_sceneUbo{ &scene->getUbo() }
 		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_graph->getDefaultGroup()
 			, nullptr
 			, m_device
 			, nullptr
 			, *m_scene->getBackground()
 			, m_hdrConfigUbo
-			, m_sceneUbo
+			, *m_sceneUbo
 			, m_colour.targetViewId
 			, true /*clearColour*/ ) }
 		, m_opaquePassDesc{ &doCreateOpaquePass( &m_backgroundRenderer->getPass() ) }
@@ -322,7 +317,6 @@ namespace castor3d
 			m_culler->update( updater );
 			m_cameraUbo.cpuUpdate( *m_camera, 0u, false );
 			m_hdrConfigUbo.cpuUpdate( m_camera->getHdrConfig() );
-			m_sceneUbo.cpuUpdate( *m_scene );
 
 			m_backgroundRenderer->update( updater );
 			m_opaquePass->update( updater );
@@ -407,7 +401,7 @@ namespace castor3d
 					, nullptr
 					, *m_scene->getBackground()
 					, m_hdrConfigUbo
-					, m_sceneUbo
+					, *m_sceneUbo
 					, m_colour.targetViewId
 					, true /*clearColour*/ );
 				m_opaquePassDesc = &doCreateOpaquePass( &m_backgroundRenderer->getPass() );
@@ -444,7 +438,7 @@ namespace castor3d
 					, cuT( "LoadingScreen" )
 					, crg::ImageViewIdArray{ m_colour.targetViewId }
 					, crg::ImageViewIdArray{ m_depth.targetViewId }
-					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_cameraUbo, m_sceneUbo, *m_culler }
+					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_cameraUbo, *m_sceneUbo, *m_culler }
 						.meshShading( true )
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
@@ -474,7 +468,7 @@ namespace castor3d
 					, cuT( "LoadingScreen" )
 					, crg::ImageViewIdArray{ m_colour.targetViewId }
 					, crg::ImageViewIdArray{ m_depth.targetViewId }
-					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_cameraUbo, m_sceneUbo, *m_culler, false }
+					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_cameraUbo, *m_sceneUbo, *m_culler, false }
 						.meshShading( true )
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );

@@ -65,7 +65,7 @@ namespace castor3d
 		, m_culler{ castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *m_camera ) }
 		, m_cameraUbo{ m_device }
 		, m_hdrConfigUbo{ m_device }
-		, m_sceneUbo{ m_device }
+		, m_sceneUbo{ &environmentMap.getScene().getUbo() }
 		, m_colourRenderView{ environmentMap.getTmpImage( m_index, m_face ) }
 		, m_colourResultView{ environmentMap.getColourViewId( m_index, m_face ) }
 		, m_depthView{ getOwner()->getDepthViewId( m_index, m_face ) }
@@ -75,7 +75,7 @@ namespace castor3d
 			, nullptr
 			, m_background
 			, m_hdrConfigUbo
-			, m_sceneUbo
+			, *m_sceneUbo
 			, m_colourRenderView
 			, true /*clearColour*/
 			, true /*clearDepth*/
@@ -133,7 +133,6 @@ namespace castor3d
 		m_transparentPass->update( updater );
 		m_cameraUbo.cpuUpdate( camera, updater.debugIndex, false );
 		m_hdrConfigUbo.cpuUpdate( camera.getHdrConfig() );
-		m_sceneUbo.cpuUpdate( *camera.getScene() );
 
 		updater.isSafeBanded = oldSafeBanded;
 		updater.camera = oldCamera;
@@ -196,7 +195,7 @@ namespace castor3d
 					, cuT( "Environment" )
 					, crg::ImageViewIdArray{ m_colourRenderView }
 					, crg::ImageViewIdArray{ m_depthView }
-					, RenderNodesPassDesc{ getOwner()->getSize(), m_cameraUbo, m_sceneUbo, *m_culler }
+					, RenderNodesPassDesc{ getOwner()->getSize(), m_cameraUbo, *m_sceneUbo, *m_culler }
 						.meshShading( true )
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} }
@@ -233,7 +232,7 @@ namespace castor3d
 					, cuT( "Environment" )
 					, crg::ImageViewIdArray{ m_colourRenderView }
 					, crg::ImageViewIdArray{ m_depthView }
-					, RenderNodesPassDesc{ getOwner()->getSize(), m_cameraUbo, m_sceneUbo, *m_culler, false }
+					, RenderNodesPassDesc{ getOwner()->getSize(), m_cameraUbo, *m_sceneUbo, *m_culler, false }
 						.meshShading( true )
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} }

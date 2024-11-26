@@ -232,15 +232,11 @@ namespace castor3d
 		C3D_API bool hasIndirect()const noexcept;
 		C3D_API bool hasSss()const noexcept;
 		C3D_API bool areDebugTargetsEnabled()const noexcept;
+		C3D_API SceneUbo const & getSceneUbo()const noexcept;
 
 		CameraUbo const & getCameraUbo()const noexcept
 		{
 			return m_cameraUbo;
-		}
-
-		SceneUbo const & getSceneUbo()const noexcept
-		{
-			return m_sceneUbo;
 		}
 
 		SsaoConfig const & getSsaoConfig()const noexcept
@@ -528,7 +524,7 @@ namespace castor3d
 		Texture m_overlays;
 		Texture m_combined;
 		CameraUbo m_cameraUbo;
-		SceneUbo m_sceneUbo;
+		SceneUbo const * m_sceneUbo{};
 		crg::FramePass & m_overlayPassDesc;
 		OverlayPass * m_overlayPass{};
 		uint32_t m_hdrCopyPassIndex{ 0u };

@@ -113,6 +113,7 @@ namespace castor3d
 		, m_lightFactory{ castor::makeUnique< LightFactory >() }
 		, m_listener{ engine.addNewFrameListener( cuT( "Scene_" ) + name + castor::string::toString( intptr_t( this ) ) ) }
 		, m_renderNodes{ castor::makeUnique< SceneRenderNodes >( *this ) }
+		, m_sceneUbo{ *engine.getRenderDevice() }
 	{
 		m_rootNode->setSerialisable( false );
 		m_rootCameraNode->setSerialisable( false );
@@ -449,6 +450,9 @@ namespace castor3d
 			m_renderNodes->update( updater );
 			doUpdateParticles( updater );
 			doUpdateLightsDependent();
+
+			m_sceneUbo.cpuUpdate( *this );
+
 			m_changed = false;
 		}
 	}

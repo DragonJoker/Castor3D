@@ -32,6 +32,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Scene/Fog.hpp"
 #include "Castor3D/Scene/Shadow.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/Named.hpp>
@@ -419,6 +420,11 @@ namespace castor3d
 		{
 			return m_debugConfig;
 		}
+
+		SceneUbo const & getUbo()const noexcept
+		{
+			return m_sceneUbo;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -528,6 +534,7 @@ namespace castor3d
 		FramePassTimerUPtr m_timerGpuUpdate;
 		FramePassTimerUPtr m_timerMovables;
 		CpuFrameEvent * m_cleanBackground{};
+		SceneUbo m_sceneUbo;
 		mutable DebugConfig m_debugConfig;
 
 	public:
