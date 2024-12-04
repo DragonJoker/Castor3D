@@ -132,6 +132,23 @@ namespace c3d_gltf
 		Animations anims;
 	};
 
+	struct GltfLightData
+		: castor3d::ImporterFile::LightData
+	{
+		GltfLightData( castor::String pname
+			, castor3d::LightType ptype
+			, uint32_t plightIndex
+			, castor::String pnodeName )
+			: LightData{ castor::move( pname ), ptype }
+			, lightIndex{ plightIndex }
+			, nodeName{ castor::move( pnodeName ) }
+		{
+		}
+
+		uint32_t lightIndex{};
+		castor::String nodeName{};
+	};
+
 	struct GlSkeletonData
 	{
 		Animations anims;
@@ -143,6 +160,7 @@ namespace c3d_gltf
 		castor::Vector< GltfNodeData > skeletonNodes;
 		castor::StringMap< GltfMeshData > meshes;
 		castor::StringMap< GlSkeletonData > skeletons;
+		castor::Vector< GltfLightData > lights;
 	};
 
 	/** Replacement buffer data adapter for fastgltf which supports decompressing with EXT_meshopt_compression */
@@ -227,6 +245,11 @@ namespace c3d_gltf
 		castor::Vector< GltfNodeData > const & getNodes()const noexcept
 		{
 			return m_sceneData.nodes;
+		}
+
+		castor::Vector< GltfLightData > const & getLights()const noexcept
+		{
+			return m_sceneData.lights;
 		}
 
 		fastgltf::Asset const & getAsset()const noexcept

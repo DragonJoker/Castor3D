@@ -18,32 +18,33 @@ namespace c3d_gltf
 	bool GltfLightImporter::doImportLight( castor3d::Light & light )
 	{
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto & impAsset = file.getAsset();
-		auto name = light.getName();
-		uint32_t lightIndex{};
-		auto lightIt = std::find_if( impAsset.lights.begin()
-			, impAsset.lights.end()
-			, [&name, &file, &lightIndex]( fastgltf::Light const & lookup )
+		auto lightName = light.getName();
+		auto lightIt = std::find_if( file.getLights().begin()
+			, file.getLights().end()
+			, [&lightName]( GltfLightData const & lookup )
 			{
-				return name == file.getLightName( lightIndex++ );
+				return lightName == lookup.name;
 			} );
 
-		if ( lightIt == impAsset.lights.end() )
+		if ( lightIt == file.getLights().end() )
 		{
 			return false;
 		}
 
-		fastgltf::Light const & impLight = *lightIt;
-		--lightIndex;
-		auto nodeIt = std::find_if( impAsset.nodes.begin()
-			, impAsset.nodes.end()
-			, [&lightIndex]( fastgltf::Node const & lookup )
+		auto nodeName = lightIt->nodeName;
+		auto nodeIt = std::find_if( file.getNodes().begin()
+			, file.getNodes().end()
+			, [&nodeName]( GltfNodeData const & lookup )
 			{
-				return lookup.lightIndex
-					&& *lookup.lightIndex == lightIndex;
+				return nodeName == lookup.name;
 			} );
-		auto nodeIndex = uint32_t( std::distance( impAsset.nodes.begin(), nodeIt ) );
-		auto nodeName = file.getNodeName( nodeIndex, 0u );
+
+		if ( nodeIt == file.getNodes().end() )
+		{
+			return false;
+		}
+
+		auto & impAsset = file.getAsset();
 		auto & scene = *light.getScene();
 		castor3d::SceneNodeRPtr node{};
 
@@ -58,10 +59,12 @@ namespace c3d_gltf
 			node = scene.addSceneNode( nodeName, ownNode );
 		}
 
+		fastgltf::Light const & impLight = impAsset.lights[lightIt->lightIndex];
+
 		if ( impLight.type == fastgltf::LightType::Point )
 		{
 			auto point = light.getPointLight();
-			point->setIntensity( castor::LuminousIntensity{ impLight.intensity } );
+			point->setIntensity( castor::LuminousIntensity{ impLight.intensity / 1000.0f } );
 
 			if ( impLight.range )
 			{
@@ -79,7 +82,7 @@ namespace c3d_gltf
 			if ( impLight.type == fastgltf::LightType::Spot )
 			{
 				auto spot = light.getSpotLight();
-				spot->setIntensity( castor::LuminousIntensity{ impLight.intensity } );
+				spot->setIntensity( castor::LuminousIntensity{ impLight.intensity / 1000.0f } );
 
 				if ( impLight.range )
 				{

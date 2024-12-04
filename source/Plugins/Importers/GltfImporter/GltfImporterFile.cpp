@@ -1026,19 +1026,9 @@ namespace c3d_gltf
 	{
 		castor::Vector< LightData > result;
 
-		if ( isValid() )
+		for ( auto & light : m_sceneData.lights )
 		{
-			size_t idx{};
-
-			for ( auto & light : m_asset->lights )
-			{
-				result.emplace_back( getLightName( idx++ )
-					, ( light.type == fastgltf::LightType::Directional
-						? castor3d::LightType::eDirectional
-						: ( light.type == fastgltf::LightType::Point
-							? castor3d::LightType::ePoint
-							: castor3d::LightType::eSpot ) ) );
-			}
+			result.emplace_back( light.name, light.type );
 		}
 
 		return result;
@@ -1324,6 +1314,25 @@ namespace c3d_gltf
 					{
 						file::listNodeMeshes( *this, cumulativeTransforms, m_sceneData.meshes, *node.meshIndex, matrix
 							, processedMeshes, nodeData );
+					}
+
+					if ( node.lightIndex )
+					{
+						if ( auto lightIndex = *node.lightIndex;
+							lightIndex < m_asset->lights.size() )
+						{
+							auto light = m_asset->lights[lightIndex];
+							auto lightName = getLightName( lightIndex );
+							lightName = lightName + cuT( "." ) + nodeData.name;
+							m_sceneData.lights.emplace_back( lightName
+								, ( light.type == fastgltf::LightType::Directional
+									? castor3d::LightType::eDirectional
+									: ( light.type == fastgltf::LightType::Point
+										? castor3d::LightType::ePoint
+										: castor3d::LightType::eSpot ) )
+								, uint32_t( lightIndex )
+								, nodeData.name );
+						}
 					}
 
 					bool result = isSkeletonNode

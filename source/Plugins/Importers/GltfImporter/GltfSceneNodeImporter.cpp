@@ -17,7 +17,7 @@ namespace c3d_gltf
 		auto name = node.getName();
 		auto it = std::find_if( file.getNodes().begin()
 			, file.getNodes().end()
-			, [&name]( castor3d::ImporterFile::NodeData const & lookup )
+			, [&name]( GltfNodeData const & lookup )
 			{
 				return name == lookup.name;
 			} );
