@@ -225,7 +225,7 @@ namespace castor3d
 		SubmeshComponentUPtr clone( Submesh & submesh )const override
 		{
 			auto result = castor::makeUnique< BaseDataComponentT >( submesh );
-			result->getData().copy( &getData() );
+			getData().copy( &result->getData() );
 			return castor::ptrRefCast< SubmeshComponent >( result );
 		}
 

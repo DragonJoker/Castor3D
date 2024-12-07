@@ -82,7 +82,7 @@ namespace castor3d
 	SubmeshComponentUPtr SkinComponent::clone( Submesh & submesh )const
 	{
 		auto result = castor::makeUnique< SkinComponent >( submesh );
-		result->getData().copy( &getData() );
+		getData().copy( &result->getData() );
 		return castor::ptrRefCast< SubmeshComponent >( result );
 	}
 
