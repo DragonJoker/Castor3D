@@ -984,7 +984,7 @@ namespace castor3d
 					{
 						geometry.fillEntry( rendered.first
 							, *pass
-							, *geometry.getParent()
+							, geometry
 							, submesh.getMeshletsCount()
 							, submesh.getIndexCount()
 							, submesh.getPointsCount()
@@ -1017,7 +1017,7 @@ namespace castor3d
 			{
 				object->fillEntry( billboard.first
 					, *pass
-					, *object->getNode()
+					, *object
 					, 0u
 					, 0u
 					, 0u

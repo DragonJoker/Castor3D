@@ -17,7 +17,14 @@ namespace castor3d
 	public:
 		C3D_API void fillEntry( uint32_t nodeId
 			, Pass const & pass
-			, SceneNode const & sceneNode
+			, Geometry const & object
+			, uint32_t meshletCount
+			, uint32_t indexCount
+			, uint32_t vertexCount
+			, ModelBufferConfiguration & modelData );
+		C3D_API void fillEntry( uint32_t nodeId
+			, Pass const & pass
+			, BillboardBase const & object
 			, uint32_t meshletCount
 			, uint32_t indexCount
 			, uint32_t vertexCount
@@ -76,6 +83,15 @@ namespace castor3d
 			VkDeviceSize indexOffset{};
 			VkDeviceSize meshletOffset{};
 		};
+
+		void doFillEntry( uint32_t nodeId
+			, Pass const & pass
+			, SceneNode const & sceneNode
+			, castor::Matrix4x4f modelMtx
+			, uint32_t meshletCount
+			, uint32_t indexCount
+			, uint32_t vertexCount
+			, ModelBufferConfiguration & modelData );
 
 	private:
 		bool m_visible{ true };

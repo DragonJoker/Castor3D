@@ -2,6 +2,8 @@
 
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 
@@ -9,13 +11,61 @@ namespace castor3d
 {
 	void RenderedObject::fillEntry( uint32_t nodeId
 		, Pass const & pass
-		, SceneNode const & sceneNode
+		, Geometry const & object
 		, uint32_t meshletCount
 		, uint32_t indexCount
 		, uint32_t vertexCount
 		, ModelBufferConfiguration & modelData )
 	{
-		auto modelMtx = sceneNode.getDerivedTransformationMatrix();
+		doFillEntry( nodeId, pass
+			, *object.getParent()
+			, object.getGlobalTransform()
+			, meshletCount, indexCount, vertexCount
+			, modelData );
+	}
+
+	void RenderedObject::fillEntry( uint32_t nodeId
+		, Pass const & pass
+		, BillboardBase const & object
+		, uint32_t meshletCount
+		, uint32_t indexCount
+		, uint32_t vertexCount
+		, ModelBufferConfiguration & modelData )
+	{
+		doFillEntry( nodeId, pass
+			, *object.getNode()
+			, object.getNode()->getDerivedTransformationMatrix()
+			, meshletCount, indexCount, vertexCount
+			, modelData );
+	}
+
+	void RenderedObject::fillEntryOffsets( uint32_t nodeId
+		, VkDeviceSize vertexOffset
+		, VkDeviceSize indexOffset
+		, VkDeviceSize meshletOffset )
+	{
+		auto & [data, offsets] = m_modelsDataOffsets.try_emplace( nodeId ).first->second;
+		offsets.indexOffset = indexOffset;
+		offsets.vertexOffset = vertexOffset;
+		offsets.meshletOffset = meshletOffset;
+
+		if ( data )
+		{
+			data->indexOffset = uint32_t( indexOffset );
+			data->vertexOffset = uint32_t( vertexOffset );
+			data->meshletOffset = uint32_t( meshletOffset );
+		}
+	}
+
+	void RenderedObject::doFillEntry( uint32_t nodeId
+		, Pass const & pass
+		, SceneNode const & sceneNode
+		, castor::Matrix4x4f modelMtx
+		, uint32_t meshletCount
+		, uint32_t indexCount
+		, uint32_t vertexCount
+		, ModelBufferConfiguration & modelData )
+	{
 		auto normalMtx = castor::Matrix3x3f{ modelMtx }.getInverse().getTransposed();
 
 		if ( !sceneNode.isVisible() )
@@ -52,24 +102,6 @@ namespace castor3d
 			modelData.indexOffset = uint32_t( offsets.indexOffset );
 			modelData.vertexOffset = uint32_t( offsets.vertexOffset );
 			modelData.meshletOffset = uint32_t( offsets.meshletOffset );
-		}
-	}
-
-	void RenderedObject::fillEntryOffsets( uint32_t nodeId
-		, VkDeviceSize vertexOffset
-		, VkDeviceSize indexOffset
-		, VkDeviceSize meshletOffset )
-	{
-		auto & [data, offsets] = m_modelsDataOffsets.try_emplace( nodeId ).first->second;
-		offsets.indexOffset = indexOffset;
-		offsets.vertexOffset = vertexOffset;
-		offsets.meshletOffset = meshletOffset;
-
-		if ( data )
-		{
-			data->indexOffset = uint32_t( indexOffset );
-			data->vertexOffset = uint32_t( vertexOffset );
-			data->meshletOffset = uint32_t( meshletOffset );
 		}
 	}
 }
