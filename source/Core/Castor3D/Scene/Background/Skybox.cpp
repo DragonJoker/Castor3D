@@ -55,7 +55,14 @@ namespace castor
 
 			if ( auto block{ beginBlock( file, cuT( "skybox" ) ) } )
 			{
-				result = writeOpt( file, cuT( "visible" ), background.isVisible(), true );
+				if ( background.isIrradianceShown() )
+				{
+					result = write( file, cuT( "show_irradiance" ), true );
+				}
+				else
+				{
+					result = writeOpt( file, cuT( "visible" ), background.isVisible(), true );
+				}
 
 				if ( !background.getEquiTexturePath().empty()
 					&& castor::File::fileExists( background.getEquiTexturePath() ) )
