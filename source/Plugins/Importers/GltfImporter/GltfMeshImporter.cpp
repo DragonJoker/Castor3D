@@ -208,15 +208,18 @@ namespace c3d_gltf
 			, CompressedBufferDataAdapter const & adapter )
 		{
 			auto it = findAttribute( impAttributes, attrName );
-
 			if ( it == impAttributes.end() )
 			{
 				return false;
 			}
 
 			auto & impAccessor = impAsset.accessors[it->accessorIndex];
-			result.reserve( impAccessor.count );
+			if ( impAccessor.type != fastgltf::ElementTraits< castor::Point< SrcDataT, SrcCountT > >::type )
+			{
+				return false;
+			}
 
+			result.reserve( impAccessor.count );
 			iterateAccessor< castor::Point< SrcDataT, SrcCountT > >( impAsset
 				, impAccessor
 				, [&result]( castor::Point< SrcDataT, SrcCountT > value )
