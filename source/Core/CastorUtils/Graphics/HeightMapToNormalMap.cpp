@@ -109,12 +109,12 @@ namespace castor
 			Size origDimensions{ image.getDimensions() };
 			Size dimensions{ origDimensions.getWidth() * 4u
 				, origDimensions.getHeight() * 4u };
-			image.resample( dimensions );
-			auto buffer = PxBufferBase::create( dimensions
-				, PixelFormat::eR8_UNORM
-				, image.getPxBuffer().getConstPtr()
-				, image.getPixelFormat()
-				, image.getPxBuffer().getAlign() );
+			auto buffer = Image::resample( dimensions
+				, PxBufferBase::create( origDimensions
+					, PixelFormat::eR8_UNORM
+					, image.getPxBuffer().getConstPtr()
+					, image.getPixelFormat()
+					, image.getPxBuffer().getAlign() ) );
 			auto normals = hgttonml::calculateNormals( strength
 				, makeArrayView( buffer->getConstPtr(), buffer->getSize() )
 				, dimensions );
