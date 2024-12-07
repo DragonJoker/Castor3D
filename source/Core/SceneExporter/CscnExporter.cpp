@@ -70,11 +70,6 @@ namespace castor3d::exporter
 			return carryOn( result, options.ignoreFailures );
 		}
 
-		castor::Path normalizePath( castor::Path path )
-		{
-			return castor::Path{ castor::string::replace( path, cuT( "|" ), cuT( "-" ) ) };
-		}
-
 		template< typename ObjType >
 		using FilterFuncT = bool ( * )( ObjType const & obj );
 
@@ -644,7 +639,7 @@ namespace castor3d::exporter
 					{
 						if ( carryOn( result, options ) )
 						{
-							castor::BinaryFile animFile{ normalizePath( options.path / ( options.name + cuT( "-" ) + animation.first + cuT( ".cska" ) ) )
+							castor::BinaryFile animFile{ options.path / castor::File::normaliseFileName( options.name + cuT( "-" ) + animation.first + cuT( ".cska" ) )
 								, castor::File::OpenMode::eWrite };
 							result = castor3d::BinaryWriter< SkeletonAnimation >{}.write( static_cast< SkeletonAnimation const & >( *animation.second ), animFile );
 						}
@@ -669,7 +664,7 @@ namespace castor3d::exporter
 					{
 						if ( carryOn( result, options ) )
 						{
-							castor::BinaryFile animFile{ normalizePath( options.path / ( options.name + cuT( "-" ) + animation.first + cuT( ".csna" ) ) )
+							castor::BinaryFile animFile{ options.path / castor::File::normaliseFileName( options.name + cuT( "-" ) + animation.first + cuT( ".csna" ) )
 								, castor::File::OpenMode::eWrite };
 							result = castor3d::BinaryWriter< SceneNodeAnimation >{}.write( static_cast< SceneNodeAnimation const & >( *animation.second ), animFile );
 						}
@@ -705,7 +700,7 @@ namespace castor3d::exporter
 							}
 
 							auto name = stream.str();
-							auto newPath = normalizePath( options.path / ( name + cuT( ".cmsh" ) ) );
+							auto newPath = options.path / castor::File::normaliseFileName( name + cuT( ".cmsh" ) );
 							auto mesh = castor::make_unique< castor3d::Mesh >( name, *options.object.getScene() );
 
 							if ( auto skeleton = options.object.getSkeleton() )
@@ -809,7 +804,7 @@ namespace castor3d::exporter
 				}
 				else
 				{
-					auto newPath = normalizePath( options.path / ( options.name + cuT( ".cmsh" ) ) );
+					auto newPath = options.path / castor::File::normaliseFileName( options.name + cuT( ".cmsh" ) );
 					{
 						castor::BinaryFile file{ newPath, castor::File::OpenMode::eWrite };
 						castor3d::BinaryWriter< castor3d::Mesh > writer;
@@ -820,7 +815,7 @@ namespace castor3d::exporter
 					{
 						if ( carryOn( result, options ) )
 						{
-							castor::BinaryFile animFile{ normalizePath( options.path / ( options.object.getName() + cuT( "-" ) + animation.first + cuT( ".cmsa" ) ) )
+							castor::BinaryFile animFile{ options.path / castor::File::normaliseFileName( options.object.getName() + cuT( "-" ) + animation.first + cuT( ".cmsa" ) )
 								, castor::File::OpenMode::eWrite };
 							result = castor3d::BinaryWriter< MeshAnimation >{}.write( static_cast< MeshAnimation const & >( *animation.second ), animFile );
 						}
@@ -842,7 +837,7 @@ namespace castor3d::exporter
 			bool operator()( SkeletonWriterOptions const & options
 				, SplitInfo const & split )
 			{
-				auto newPath = normalizePath( options.path / ( options.name + cuT( ".cskl" ) ) );
+				auto newPath = options.path / castor::File::normaliseFileName( options.name + cuT( ".cskl" ) );
 				castor::BinaryFile file{ newPath, castor::File::OpenMode::eWrite };
 				castor3d::BinaryWriter< castor3d::Skeleton > writer;
 				auto result = writer.write( options.object, file );
