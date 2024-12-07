@@ -82,12 +82,10 @@ namespace castor3d
 	{
 		auto it = m_animations.find( name );
 
-		if ( it == m_animations.end() )
+		if ( it != m_animations.end() )
 		{
-			CU_Exception( "No animation named [" + castor::toUtf8( name ) + "]" );
+			m_animations.erase( it );
 		}
-
-		m_animations.erase( it );
 	}
 
 	template< typename AnimableHandlerT >

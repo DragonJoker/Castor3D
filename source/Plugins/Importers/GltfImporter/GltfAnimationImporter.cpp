@@ -404,36 +404,39 @@ namespace c3d_gltf
 			, keyframes
 			, notAnimated );
 
-		for ( auto & object : notAnimated )
+		if ( !keyframes.empty() )
 		{
-			auto & objTransform = object->getNodeTransform();
+			for ( auto & object : notAnimated )
+			{
+				auto & objTransform = object->getNodeTransform();
+
+				for ( auto & keyFrame : keyframes )
+				{
+					auto kfit = keyFrame.second->find( *object );
+
+					if ( kfit == keyFrame.second->end() )
+					{
+						keyFrame.second->addAnimationObject( *object
+							, objTransform.translate
+							, objTransform.rotate
+							, objTransform.scale );
+					}
+					else
+					{
+						kfit->transform.translate = objTransform.translate;
+						kfit->transform.rotate = objTransform.rotate;
+						kfit->transform.scale = objTransform.scale;
+					}
+				}
+			}
 
 			for ( auto & keyFrame : keyframes )
 			{
-				auto kfit = keyFrame.second->find( *object );
-
-				if ( kfit == keyFrame.second->end() )
-				{
-					keyFrame.second->addAnimationObject( *object
-						, objTransform.translate
-						, objTransform.rotate
-						, objTransform.scale );
-				}
-				else
-				{
-					kfit->transform.translate = objTransform.translate;
-					kfit->transform.rotate = objTransform.rotate;
-					kfit->transform.scale = objTransform.scale;
-				}
+				animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame.second ) );
 			}
 		}
 
-		for ( auto & keyFrame : keyframes )
-		{
-			animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame.second ) );
-		}
-
-		return keyframes.size() > 1u;
+		return !keyframes.empty();
 	}
 
 	bool GltfAnimationImporter::doImportMesh( castor3d::MeshAnimation & animation )
@@ -450,9 +453,10 @@ namespace c3d_gltf
 			auto animations = file.getMeshAnimations( mesh, index );
 			auto animIt = animations.find( name );
 
-			if ( animIt != animations.end() )
+			if ( animIt != animations.end()
+				&& submesh->hasMorphComponent() )
 			{
-				castor3d::MeshAnimationSubmesh animSubmesh{ animation, * submesh };
+				castor3d::MeshAnimationSubmesh animSubmesh{ animation, *submesh };
 				auto & animChannels = animIt->second;
 				size_t nodeIndex = anims::getMeshNodeIndex( file, animChannels, mesh.getName(), index );
 				auto impNodeAnim = anims::findNodeAnim( animChannels, nodeIndex );
@@ -486,7 +490,8 @@ namespace c3d_gltf
 						? 1u
 						: 0u;
 
-					if ( !times.empty() && times.back() > 0 )
+					if ( !times.empty()
+						&& submesh->getMorphTargetsCount() >= numMorphs )
 					{
 						hasKeyframes = true;
 
@@ -510,7 +515,6 @@ namespace c3d_gltf
 							castor::Vector< float > res;
 							res.resize( submesh->getMorphTargetsCount() );
 							uint32_t k = weightStride * i + ii;
-							CU_Require( numMorphs <= submesh->getMorphTargetsCount() );
 
 							for ( uint32_t value = 0u; value < numMorphs; ++value, ++k )
 							{
@@ -566,11 +570,14 @@ namespace c3d_gltf
 			}
 			, file.getAdapter() );
 
-		for ( auto & keyFrame : keyFrames )
+		if ( !keyFrames.empty() )
 		{
-			animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame.second ) );
+			for ( auto & keyFrame : keyFrames )
+			{
+				animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame.second ) );
+			}
 		}
 
-		return keyFrames.size() > 1u;
+		return !keyFrames.empty();
 	}
 }

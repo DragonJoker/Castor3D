@@ -16,7 +16,7 @@ namespace castor3d
 		, m_animatedSceneNode{ object }
 		, m_sceneNodeAnimation{ animation }
 		, m_prev{ animation.isEmpty() ? animation.end() : animation.begin() }
-		, m_curr{ animation.isEmpty() ? animation.end() : animation.begin() + 1 }
+		, m_curr{ animation.isEmpty() ? animation.end() : ( animation.size() == 1 ? animation.begin() : animation.begin() + 1 ) }
 		, m_initialTranslate{ object.getSceneNode().getPosition() }
 		, m_initialRotate{ object.getSceneNode().getOrientation() }
 		, m_initialScale{ object.getSceneNode().getScale() }

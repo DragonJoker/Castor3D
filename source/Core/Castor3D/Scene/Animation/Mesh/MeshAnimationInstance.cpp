@@ -19,7 +19,7 @@ namespace castor3d
 		, m_animatedMesh{ object }
 		, m_meshAnimation{ animation }
 		, m_prev{ animation.isEmpty() ? animation.end() : animation.begin() }
-		, m_curr{ animation.isEmpty() ? animation.end() : animation.begin() + 1 }
+		, m_curr{ animation.isEmpty() ? animation.end() : ( animation.size() == 1 ? animation.begin() : animation.begin() + 1 ) }
 	{
 		for ( auto & submesh : animation.m_submeshes )
 		{
@@ -73,11 +73,14 @@ namespace castor3d
 					auto prvIt = prvKF.find( submesh.getSubmesh() );
 					auto curIt = curKF.find( submesh.getSubmesh() );
 					CU_Require( prvIt != prvKF.end() && curIt != curKF.end() );
-					submesh.update( ratio
-						, prvIt->second
-						, curIt->second
-						, prvKF.getBoundingBox()
-						, curKF.getBoundingBox() );
+					if ( prvIt != prvKF.end() && curIt != curKF.end() )
+					{
+						submesh.update( ratio
+							, prvIt->second
+							, curIt->second
+							, prvKF.getBoundingBox()
+							, curKF.getBoundingBox() );
+					}
 				}
 			}
 
