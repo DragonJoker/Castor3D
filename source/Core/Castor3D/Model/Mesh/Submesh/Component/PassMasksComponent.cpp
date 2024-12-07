@@ -175,7 +175,7 @@ namespace castor3d
 	SubmeshComponentUPtr PassMasksComponent::clone( Submesh & submesh )const
 	{
 		auto result = castor::makeUnique< PassMasksComponent >( submesh );
-		result->getData().copy( &getData() );
+		getData().copy( &result->getData() );
 		return castor::ptrRefCast< SubmeshComponent >( result );
 	}
 

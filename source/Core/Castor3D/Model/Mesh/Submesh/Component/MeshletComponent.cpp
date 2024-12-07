@@ -381,7 +381,7 @@ namespace castor3d
 	SubmeshComponentUPtr MeshletComponent::clone( Submesh & submesh )const
 	{
 		auto result = castor::makeUnique< MeshletComponent >( submesh );
-		result->getData().copy( &getData() );
+		getData().copy( &result->getData() );
 		return castor::ptrRefCast< SubmeshComponent >( result );
 	}
 
