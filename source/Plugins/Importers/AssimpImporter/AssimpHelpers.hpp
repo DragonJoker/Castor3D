@@ -403,7 +403,11 @@ namespace c3d_assimp
 				}
 			}
 
-			if ( aiAnimMesh->HasTangentsAndBitangents() )
+			if ( aiAnimMesh->HasTangentsAndBitangents()
+				&& ( aiAnimMesh->HasTextureCoords( 0u )
+					|| aiAnimMesh->HasTextureCoords( 1u )
+					|| aiAnimMesh->HasTextureCoords( 2u )
+					|| aiAnimMesh->HasTextureCoords( 3u ) ) )
 			{
 				auto tit = buffer.tangents.begin();
 
