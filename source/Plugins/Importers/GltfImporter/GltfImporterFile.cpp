@@ -450,6 +450,39 @@ namespace c3d_gltf
 			}
 		}
 
+		bool hasNonSkinnedData( fastgltf::Asset const & asset
+			, fastgltf::Node const & node
+			, castor::UnorderedSet< size_t > & visited );
+
+		bool hasNonSkinnedChild( fastgltf::Asset const & asset
+			, fastgltf::Node const & node
+			, castor::UnorderedSet< size_t > & visited )
+		{
+			bool result{};
+			auto it = node.children.begin();
+
+			while ( !result && it != node.children.end() )
+			{
+				if ( visited.emplace( *it ).second )
+				{
+					result = hasNonSkinnedData( asset, asset.nodes[*it], visited );
+				}
+				++it;
+			}
+
+			return result;
+		}
+
+		bool hasNonSkinnedData( fastgltf::Asset const & asset
+			, fastgltf::Node const & node
+			, castor::UnorderedSet< size_t > & visited )
+		{
+			return node.cameraIndex
+				|| node.lightIndex
+				|| node.meshIndex
+				|| hasNonSkinnedChild( asset, node, visited );
+		}
+
 		static void addNode( GltfImporterFile const & file
 			, GltfNodeData nodeData
 			, bool isSkeletonNode
@@ -462,9 +495,13 @@ namespace c3d_gltf
 			if ( isSkeletonNode )
 			{
 				parentInstanceCount = 1u;
-				skeletonNodes.push_back( castor::move( nodeData ) );
+				skeletonNodes.push_back( nodeData );
 			}
-			else
+
+			castor::UnorderedSet< size_t > visited;
+
+			if ( !isSkeletonNode
+				|| hasNonSkinnedData( file.getAsset(), *nodeData.node, visited ) )
 			{
 				auto & asset = file.getAsset();
 				auto transforms = file::listInstances( asset, *nodeData.node, adapter );

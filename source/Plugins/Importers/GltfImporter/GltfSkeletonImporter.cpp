@@ -142,6 +142,11 @@ namespace c3d_gltf
 		static size_t findSkinRootNode( GltfImporterFile const & file
 			, fastgltf::Skin const & impSkin )
 		{
+			if ( impSkin.skeleton )
+			{
+				return *impSkin.skeleton;
+			}
+
 			fastgltf::Asset const & impAsset = file.getAsset();
 
 			auto findParentNode = [&impAsset]( size_t nodeIndex )
@@ -177,11 +182,6 @@ namespace c3d_gltf
 			{
 				// Skeleton doesn't have a single common node within its bones.
 				// Recover common parent node to the remaining ones.
-				if ( impSkin.skeleton )
-				{
-					return *impSkin.skeleton;
-				}
-
 				findSkinRootNodeInOtherNodes( file, currentNodes, parentNodes, findParentNode );
 			}
 
