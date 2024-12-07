@@ -109,7 +109,11 @@ namespace castor3d
 
 	void SkeletonAnimationInstance::doUpdate()
 	{
-		if ( !m_keyFrames.empty() )
+		if ( m_keyFrames.size() == 1u )
+		{
+			m_keyFrames.begin()->apply();
+		}
+		else if ( !m_keyFrames.empty() )
 		{
 			auto limit = m_keyFrames.begin();
 

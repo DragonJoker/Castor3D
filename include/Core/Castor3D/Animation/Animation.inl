@@ -55,23 +55,26 @@ namespace castor3d
 		, AnimationKeyFrameArray::iterator & prv
 		, AnimationKeyFrameArray::iterator & cur )const
 	{
-		while ( prv != m_keyframes.begin() && ( *prv )->getTimeIndex() >= time )
+		if ( m_keyframes.size() > 1 )
 		{
-			// Time has gone too fast backward.
-			--prv;
-			--cur;
+			while ( prv != m_keyframes.begin() && ( *prv )->getTimeIndex() >= time )
+			{
+				// Time has gone too fast backward.
+				--prv;
+				--cur;
+			}
+
+			auto end = ( m_keyframes.end() - 1 );
+
+			while ( cur != end && ( *cur )->getTimeIndex() < time )
+			{
+				// Time has gone too fast forward.
+				++prv;
+				++cur;
+			}
+
+			CU_Ensure( prv != cur );
 		}
-
-		auto end = ( m_keyframes.end() - 1 );
-
-		while ( cur != end && ( *cur )->getTimeIndex() < time )
-		{
-			// Time has gone too fast forward.
-			++prv;
-			++cur;
-		}
-
-		CU_Ensure( prv != cur );
 	}
 
 	template< typename AnimableHandlerT >

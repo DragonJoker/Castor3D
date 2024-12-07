@@ -196,7 +196,7 @@ namespace castor3d
 		}
 		else
 		{
-			log::info << getPrefix() << cuT( "Couldn't load mesh skeleton animation [" ) << animation.getName() << cuT( "]" ) << std::endl;
+			log::info << getPrefix() << cuT( "Couldn't load mesh animation [" ) << animation.getName() << cuT( "]" ) << std::endl;
 		}
 
 		return result;

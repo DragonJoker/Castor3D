@@ -38,6 +38,9 @@ namespace castor3d
 		if ( m_first )
 		{
 			m_prev = m_textureAnimation.isEmpty() ? m_textureAnimation.end() : m_textureAnimation.begin();
+			m_curr = m_textureAnimation.isEmpty()
+				? m_textureAnimation.end()
+				: ( m_textureAnimation.size() == 1 ? m_textureAnimation.begin() : m_textureAnimation.begin() + 1 );
 			m_curr = m_textureAnimation.isEmpty() ? m_textureAnimation.end() : m_textureAnimation.begin() + 1;
 			setLooped( !m_textureAnimation.isEmpty() );
 			m_first = false;
