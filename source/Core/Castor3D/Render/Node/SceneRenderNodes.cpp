@@ -212,7 +212,7 @@ namespace castor3d
 				, m_nodeId );
 			instance.fillEntry( m_nodeId
 				, pass
-				, *instance.getParent()
+				, instance
 				, data.getMeshletsCount()
 				, data.getIndexCount()
 				, data.getPointsCount()
@@ -285,7 +285,7 @@ namespace castor3d
 				, m_nodeId );
 			instance.fillEntry( m_nodeId
 				, pass
-				, *instance.getNode()
+				, instance
 				, 0u
 				, 0u
 				, 0u

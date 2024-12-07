@@ -48,7 +48,7 @@ namespace castor3d
 
 				for ( auto bone : skeleton.getBones() )
 				{
-					buffer->bonesMatrix[bone->getId()] = skeleton.getGlobalInverseTransform();
+					buffer->bonesMatrix[bone->getId()] = castor::Matrix4x4f::getIdentity();
 				}
 			}
 		}
@@ -56,7 +56,7 @@ namespace castor3d
 		{
 			for ( auto bone : skeleton.getBones() )
 			{
-				castor::Matrix4x4f finalTransform{ skeleton.getGlobalInverseTransform() };
+				castor::Matrix4x4f finalTransform{ castor::Matrix4x4f::getIdentity() };
 
 				for ( auto animation : m_playingAnimations )
 				{
