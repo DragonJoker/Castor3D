@@ -84,9 +84,10 @@ namespace castor3d
 		{
 			if ( removeFlag( config, flag ) )
 			{
+				auto newIt = map.erase( it );
 				if ( config.components.end() == findFirstNonEmpty( config ) )
 				{
-					return map.erase( it );
+					return newIt;
 				}
 
 				auto passConfig = it->second;
