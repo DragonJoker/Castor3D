@@ -504,7 +504,7 @@ namespace castor3d
 					}
 					ELSE
 					{
-						outColour = vec4( components.baseColour, components.opacity );
+						outColour = vec4( components.baseColour + components.emissiveColour * components.emissiveFactor, components.opacity );
 						outScattering = vec4( 0.0_f );
 
 						if ( m_deferredLightingFilter == DeferredLightingFilter::eDeferLighting )
@@ -516,7 +516,7 @@ namespace castor3d
 				}
 				else
 				{
-					outColour = vec4( components.baseColour, components.opacity );
+					outColour = vec4( components.baseColour + components.emissiveColour * components.emissiveFactor, components.opacity );
 					outScattering = vec4( 0.0_f );
 
 					if ( m_deferredLightingFilter == DeferredLightingFilter::eDeferLighting )

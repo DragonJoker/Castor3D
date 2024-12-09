@@ -464,13 +464,13 @@ namespace castor3d
 					}
 					ELSE
 					{
-						colour = components.baseColour;
+						colour = components.baseColour + components.emissiveColour * components.emissiveFactor;
 					}
 					FI
 				}
 				else
 				{
-					colour = components.baseColour;
+					colour = components.baseColour + components.emissiveColour * components.emissiveFactor;
 				}
 
 				outAccumulation = c3d_sceneData.computeAccumulation( utils

@@ -67,7 +67,7 @@ namespace castor3d::shader
 		, diffuseTransmissionColour{ getMember( "diffuseTransmissionColour", vec3( 1.0_f ) ) }
 		, diffuseTransmissionFactor{ getMember( "diffuseTransmissionFactor", 0.0_f ) }
 		, dispersion{ getMember( "dispersion", 0.0_f ) }
-		, emissiveColour{ getMember( "emissiveColour", vec3( 0.0_f ) ) }
+		, emissiveColour{ getMember( "emissiveColour", vec3( 1.0_f ) ) }
 		, emissiveFactor{ getMember( "emissiveFactor", 0.0_f ) }
 		, opacity{ getMember( "opacity", 1.0_f ) }
 		, bwAccumulationOperator{ getMember( "bwAccumulationOperator", 0_u ) }

@@ -1414,7 +1414,7 @@ namespace castor3d
 							}
 							ELSE
 							{
-								outResult = vec4( components.baseColour, components.opacity );
+								outResult = vec4( components.baseColour + components.emissiveColour * components.emissiveFactor, components.opacity );
 								outScattering = vec4( 0.0_f );
 
 								if ( flags.pass.hasDeferredDiffuseLightingFlag
@@ -1427,7 +1427,7 @@ namespace castor3d
 						}
 						else
 						{
-							outResult = vec4( components.baseColour, components.opacity );
+							outResult = vec4( components.baseColour + components.emissiveColour * components.emissiveFactor, components.opacity );
 							outScattering = vec4( 0.0_f );
 
 							if ( flags.pass.hasDeferredDiffuseLightingFlag
