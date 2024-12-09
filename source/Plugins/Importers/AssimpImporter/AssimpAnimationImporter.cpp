@@ -26,16 +26,31 @@ namespace c3d_assimp
 			, const castor::String & nodeName )
 		{
 			aiNodeAnim const * result = nullptr;
-			auto it = std::find_if( animation.mChannels
+
+			if ( auto it = std::find_if( animation.mChannels
 				, animation.mChannels + animation.mNumChannels
 				, [&nodeName]( aiNodeAnim const * const nodeAnim )
 				{
 					return makeString( nodeAnim->mNodeName ) == nodeName;
 				} );
-
-			if ( it != animation.mChannels + animation.mNumChannels )
+				it != animation.mChannels + animation.mNumChannels )
 			{
 				result = *it;
+			}
+
+			if ( !result )
+			{
+				castor::String match;
+				for ( auto nodeAnim : castor::makeArrayView( animation.mChannels, animation.mNumChannels ) )
+				{
+					castor::String name = makeString( nodeAnim->mNodeName );
+					if ( nodeName.find( name ) != castor::String::npos
+						&& match.size() < name.size() )
+					{
+						result = nodeAnim;
+						match = name;
+					}
+				}
 			}
 
 			return result;
