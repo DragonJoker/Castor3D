@@ -139,57 +139,6 @@ namespace c3d_gltf
 			while ( parentNodes.size() > 1 && currentNodes != parentNodes );
 		}
 
-		static size_t findSkinRootNode( GltfImporterFile const & file
-			, fastgltf::Skin const & impSkin )
-		{
-			if ( impSkin.skeleton )
-			{
-				return *impSkin.skeleton;
-			}
-
-			fastgltf::Asset const & impAsset = file.getAsset();
-
-			auto findParentNode = [&impAsset]( size_t nodeIndex )
-			{
-				auto pit = std::find_if( impAsset.nodes.begin()
-					, impAsset.nodes.end()
-					, [&nodeIndex]( fastgltf::Node const & lookup )
-					{
-						auto cit = std::find( lookup.children.begin()
-							, lookup.children.end()
-							, nodeIndex );
-						return cit != lookup.children.end();
-					} );
-
-				if ( pit != impAsset.nodes.end() )
-				{
-					return size_t( std::distance( impAsset.nodes.begin(), pit ) );
-				}
-
-				return size_t{ ~0u };
-			};
-			castor::Set< size_t > currentNodes;
-
-			for ( auto nodeIndex : impSkin.joints )
-			{
-				currentNodes.insert( nodeIndex );
-			}
-
-			castor::Set< size_t > parentNodes;
-			findSkinRootNodeInSkeletonNodes( file, currentNodes, parentNodes, findParentNode );
-
-			if ( parentNodes.size() > 1 )
-			{
-				// Skeleton doesn't have a single common node within its bones.
-				// Recover common parent node to the remaining ones.
-				findSkinRootNodeInOtherNodes( file, currentNodes, parentNodes, findParentNode );
-			}
-
-			return parentNodes.size() == 1u
-				? *parentNodes.begin()
-				: *currentNodes.begin();
-		}
-
 		static castor::Matrix4x4f getTransformMatrix( auto const & nodeTransform )
 		{
 			auto transform = convert( nodeTransform );
@@ -242,23 +191,76 @@ namespace c3d_gltf
 				, castor::Matrix4x4f{ 1.0f } );
 		}
 
-		auto skinRootNode = skeletons::findSkinRootNode( file, impSkin );
-
 		skeleton.setGlobalInverseTransform( impSkin.skeleton
 			? skeletons::getTransformMatrix( impAsset.nodes[*impSkin.skeleton].transform )
 			: castor::Matrix4x4f{ 1.0f } );
-		skeletons::processSkeletonNodes( file
-			, impSkin.joints
-			, skinOffsetMatrices
-			, skeleton
-			, skinRootNode
-			, skeletons::processSkeletonNode( file
+
+		for ( size_t nodeIndex : findSkinRootNodes( file, impSkin ) )
+		{
+			skeletons::processSkeletonNodes( file
 				, impSkin.joints
 				, skinOffsetMatrices
 				, skeleton
-				, skinRootNode
-				, nullptr ) );
+				, nodeIndex
+				, skeletons::processSkeletonNode( file
+					, impSkin.joints
+					, skinOffsetMatrices
+					, skeleton
+					, nodeIndex
+					, nullptr ) );
+		}
 
 		return true;
+	}
+
+	castor::Vector< size_t > findSkinRootNodes( GltfImporterFile const & file
+		, fastgltf::Skin const & impSkin )
+	{
+		if ( impSkin.skeleton )
+		{
+			return { *impSkin.skeleton };
+		}
+
+		fastgltf::Asset const & impAsset = file.getAsset();
+
+		auto findParentNode = [&impAsset]( size_t nodeIndex )
+			{
+				auto pit = std::find_if( impAsset.nodes.begin()
+					, impAsset.nodes.end()
+					, [&nodeIndex]( fastgltf::Node const & lookup )
+					{
+						auto cit = std::find( lookup.children.begin()
+							, lookup.children.end()
+							, nodeIndex );
+						return cit != lookup.children.end();
+					} );
+
+				if ( pit != impAsset.nodes.end() )
+				{
+					return size_t( std::distance( impAsset.nodes.begin(), pit ) );
+				}
+
+				return size_t{ ~0u };
+			};
+		castor::Set< size_t > currentNodes;
+
+		for ( auto nodeIndex : impSkin.joints )
+		{
+			currentNodes.insert( nodeIndex );
+		}
+
+		castor::Set< size_t > parentNodes;
+		skeletons::findSkinRootNodeInSkeletonNodes( file, currentNodes, parentNodes, findParentNode );
+
+		if ( parentNodes.empty() && currentNodes.size() > 1 )
+		{
+			// Skeleton doesn't have a single common node within its bones.
+			// Recover common parent node to the remaining ones.
+			skeletons::findSkinRootNodeInOtherNodes( file, currentNodes, parentNodes, findParentNode );
+		}
+
+		return ( !parentNodes.empty() )
+			? castor::Vector< size_t >{ parentNodes.begin(), parentNodes.end() }
+		: castor::Vector< size_t >{ currentNodes.begin(), currentNodes.end() };
 	}
 }

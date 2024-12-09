@@ -218,20 +218,22 @@ namespace c3d_gltf
 
 		static bool isSkeletonNode( fastgltf::Asset const & impAsset
 			, auto const & skeletons
-			, size_t nodeIndex )
+			, size_t nodeIndex
+			, castor::Vector< size_t > const & skinsRootNodes )
 		{
-			return std::any_of( skeletons.begin()
-				, skeletons.end()
-				, [&impAsset, nodeIndex]( fastgltf::Skin const & lookup )
-				{
-					return lookup.joints.end() != std::find_if( lookup.joints.begin()
-						, lookup.joints.end()
-						, [&impAsset, nodeIndex]( size_t lookupIndex )
-						{
-							return lookupIndex == nodeIndex
-								|| hasChildNode( impAsset, lookupIndex, nodeIndex );
-						} );
-				} );
+			return skinsRootNodes.end() != std::find( skinsRootNodes.begin(), skinsRootNodes.end(), nodeIndex )
+				|| std::any_of( skeletons.begin()
+					, skeletons.end()
+					, [&impAsset, nodeIndex]( fastgltf::Skin const & lookup )
+					{
+						return lookup.joints.end() != std::find_if( lookup.joints.begin()
+							, lookup.joints.end()
+							, [&impAsset, nodeIndex]( size_t lookupIndex )
+							{
+								return lookupIndex == nodeIndex
+									|| hasChildNode( impAsset, lookupIndex, nodeIndex );
+							} );
+					} );
 		}
 
 		static auto findNodeMesh( size_t meshIndex
@@ -450,37 +452,20 @@ namespace c3d_gltf
 			}
 		}
 
-		bool hasNonSkinnedData( fastgltf::Asset const & asset
-			, fastgltf::Node const & node
-			, castor::UnorderedSet< size_t > & visited );
-
-		bool hasNonSkinnedChild( fastgltf::Asset const & asset
-			, fastgltf::Node const & node
-			, castor::UnorderedSet< size_t > & visited )
+		static bool hasNonSkinnedData( GltfImporterFile const & file
+			, fastgltf::Node const & node )
 		{
-			bool result{};
-			auto it = node.children.begin();
-
-			while ( !result && it != node.children.end() )
+			if ( node.cameraIndex || node.meshIndex || node.lightIndex || !node.instancingAttributes.empty() )
 			{
-				if ( visited.emplace( *it ).second )
-				{
-					result = hasNonSkinnedData( asset, asset.nodes[*it], visited );
-				}
-				++it;
+				return true;
 			}
 
-			return result;
-		}
-
-		bool hasNonSkinnedData( fastgltf::Asset const & asset
-			, fastgltf::Node const & node
-			, castor::UnorderedSet< size_t > & visited )
-		{
-			return node.cameraIndex
-				|| node.lightIndex
-				|| node.meshIndex
-				|| hasNonSkinnedChild( asset, node, visited );
+			return std::any_of( node.children.begin()
+				, node.children.end()
+				, [&file]( size_t lookup )
+				{
+					return hasNonSkinnedData( file, file.getAsset().nodes[lookup] );
+				} );
 		}
 
 		static void addNode( GltfImporterFile const & file
@@ -498,10 +483,8 @@ namespace c3d_gltf
 				skeletonNodes.push_back( nodeData );
 			}
 
-			castor::UnorderedSet< size_t > visited;
-
 			if ( !isSkeletonNode
-				|| hasNonSkinnedData( file.getAsset(), *nodeData.node, visited ) )
+				|| hasNonSkinnedData( file, *nodeData.node ) )
 			{
 				auto & asset = file.getAsset();
 				auto transforms = file::listInstances( asset, *nodeData.node, adapter );
@@ -1307,12 +1290,19 @@ namespace c3d_gltf
 	{
 		castor::Map< GltfMeshData const *, castor::Vector< size_t > > processedMeshes;
 		castor::Map< size_t, castor::Matrix4x4f > cumulativeTransforms;
+		castor::Vector< size_t > skinsRootNodes;
+
+		for ( auto & skin : m_asset->skins )
+		{
+			auto skinRootNodes = findSkinRootNodes( *this, skin );
+			skinsRootNodes.insert( skinsRootNodes.end(), skinRootNodes.begin(), skinRootNodes.end() );
+		}
 
 		for ( auto & sceneIndex : m_sceneIndices )
 		{
 			file::parseNodes( m_asset->scenes[sceneIndex].nodeIndices
 				, m_asset->nodes
-				, [this, &processedMeshes, &cumulativeTransforms]( fastgltf::Node const & node, size_t nodeIndex, size_t parentIndex, size_t parentInstanceCount, bool isParentSkeletonNode )
+				, [this, &processedMeshes, &cumulativeTransforms, &skinsRootNodes]( fastgltf::Node const & node, size_t nodeIndex, size_t parentIndex, size_t parentInstanceCount, bool isParentSkeletonNode )
 				{
 					auto transform = convert( node.transform );
 
@@ -1338,7 +1328,7 @@ namespace c3d_gltf
 
 					cumulativeTransforms.emplace( nodeIndex, matrix );
 					bool isSkeletonNode = isParentSkeletonNode
-						|| file::isSkeletonNode( *m_asset, m_asset->skins, nodeData.index );
+						|| file::isSkeletonNode( *m_asset, m_asset->skins, nodeData.index, skinsRootNodes );
 
 					// List scene node animations
 					if ( !isSkeletonNode )

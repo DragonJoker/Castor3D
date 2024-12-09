@@ -19,6 +19,9 @@ namespace c3d_gltf
 	private:
 		bool doImportSkeleton( castor3d::Skeleton & node )override;
 	};
+
+	castor::Vector< size_t > findSkinRootNodes( GltfImporterFile const & file
+		, fastgltf::Skin const & impSkin );
 }
 
 #endif
