@@ -323,6 +323,11 @@ namespace c3d_assimp
 				sep = cuT( "_" );
 			}
 
+			if ( result.empty() )
+			{
+				result = castor::string::toString( meshIndex );
+			}
+
 			return result;
 		}
 
