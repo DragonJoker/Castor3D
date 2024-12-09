@@ -470,6 +470,7 @@ namespace castor3d
 		SceneContext * scene{};
 		castor::String name{};
 		SceneNodeRPtr parentNode{};
+		SceneNodeRPtr currentNode{};
 		bool isCameraNode{};
 		bool isStatic{};
 		bool isVisible{ true };

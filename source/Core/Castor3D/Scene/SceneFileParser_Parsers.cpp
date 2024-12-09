@@ -1297,6 +1297,7 @@ namespace castor3d
 				newBlockContext->scene = blockContext;
 				newBlockContext->isCameraNode = true;
 				newBlockContext->parentNode = blockContext->scene->getCameraRootNode();
+				newBlockContext->currentNode = blockContext->scene->tryFindSceneNode( newBlockContext->name );
 			}
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eNode )
@@ -1317,6 +1318,7 @@ namespace castor3d
 				newBlockContext->scene = blockContext;
 				newBlockContext->isCameraNode = false;
 				newBlockContext->parentNode = blockContext->scene->getObjectRootNode();
+				newBlockContext->currentNode = blockContext->scene->tryFindSceneNode( newBlockContext->name );
 			}
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eNode )
@@ -2457,6 +2459,11 @@ namespace castor3d
 			else
 			{
 				params[0]->get( blockContext->isVisible );
+
+				if ( blockContext->currentNode )
+				{
+					blockContext->currentNode->setVisible( blockContext->isVisible );
+				}
 			}
 		}
 		CU_EndAttribute()
@@ -2470,6 +2477,11 @@ namespace castor3d
 			else
 			{
 				params[0]->get( blockContext->position );
+
+				if ( blockContext->currentNode )
+				{
+					blockContext->currentNode->setPosition( blockContext->position );
+				}
 			}
 		}
 		CU_EndAttribute()
@@ -2484,6 +2496,11 @@ namespace castor3d
 			{
 				blockContext->orientation = castor::Quaternion::fromAxisAngle( params[0]->get< castor::Point3f >()
 					, castor::Angle::fromDegrees( params[1]->get< float >() ) );
+
+				if ( blockContext->currentNode )
+				{
+					blockContext->currentNode->setOrientation( blockContext->orientation );
+				}
 			}
 		}
 		CU_EndAttribute()
@@ -2498,6 +2515,11 @@ namespace castor3d
 			{
 				blockContext->orientation *= castor::Quaternion::fromAxisAngle( params[0]->get< castor::Point3f >()
 					, castor::Angle::fromDegrees( params[1]->get< float >() ) );
+
+				if ( blockContext->currentNode )
+				{
+					blockContext->currentNode->setOrientation( blockContext->orientation );
+				}
 			}
 		}
 		CU_EndAttribute()
@@ -2515,6 +2537,11 @@ namespace castor3d
 				castor::Point3f up{ 0, 1, 0 };
 				castor::Point3f right{ castor::point::cross( direction, up ) };
 				blockContext->orientation = castor::Quaternion::fromAxes( right, up, direction );
+
+				if ( blockContext->currentNode )
+				{
+					blockContext->currentNode->setOrientation( blockContext->orientation );
+				}
 			}
 		}
 		CU_EndAttribute()
@@ -2528,46 +2555,54 @@ namespace castor3d
 			else
 			{
 				params[0]->get( blockContext->scale );
+
+				if ( blockContext->currentNode )
+				{
+					blockContext->currentNode->setScale( blockContext->scale );
+				}
 			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserNodeEnd, NodeContext )
 		{
-			SceneNodeUPtr sceneNode = blockContext->scene->scene->createSceneNode( blockContext->name
-				, *blockContext->scene->scene
-				, blockContext->parentNode
-				, blockContext->position
-				, blockContext->orientation
-				, blockContext->scale
-				, blockContext->isStatic );
-			sceneNode->setVisible( blockContext->isVisible );
-			auto name = sceneNode->getName();
-			auto node = blockContext->scene->scene->addSceneNode( name, sceneNode, true );
-			sceneNode.reset();
-
-			if ( !blockContext->isStatic )
+			if ( !blockContext->currentNode )
 			{
-				for ( auto const & fileName : blockContext->scene->root->csnaFiles )
-				{
-					auto fName = fileName.getFileName();
+				SceneNodeUPtr sceneNode = blockContext->scene->scene->createSceneNode( blockContext->name
+					, *blockContext->scene->scene
+					, blockContext->parentNode
+					, blockContext->position
+					, blockContext->orientation
+					, blockContext->scale
+					, blockContext->isStatic );
+				sceneNode->setVisible( blockContext->isVisible );
+				auto name = sceneNode->getName();
+				auto node = blockContext->scene->scene->addSceneNode( name, sceneNode, true );
+				sceneNode.reset();
 
-					if ( auto pos = fName.find( name );
-						pos == 0u && fName[name.size()] == '-' )
+				if ( !blockContext->isStatic )
+				{
+					for ( auto const & fileName : blockContext->scene->root->csnaFiles )
 					{
-						if ( auto animName = fName.substr( name.size() + 1u );
-							!animName.empty() )
+						auto fName = fileName.getFileName();
+
+						if ( auto pos = fName.find( name );
+							pos == 0u && fName[name.size()] == '-' )
 						{
-							auto & animation = node->createAnimation( animName );
-							BinaryParser< SceneNodeAnimation > parser;
-							castor::BinaryFile animFile{ fileName, castor::File::OpenMode::eRead };
-							parser.parse( animation, animFile );
+							if ( auto animName = fName.substr( name.size() + 1u );
+								!animName.empty() )
+							{
+								auto & animation = node->createAnimation( animName );
+								BinaryParser< SceneNodeAnimation > parser;
+								castor::BinaryFile animFile{ fileName, castor::File::OpenMode::eRead };
+								parser.parse( animation, animFile );
+							}
 						}
 					}
 				}
-			}
 
-			log::info << "Loaded scene node [" << name << "]" << std::endl;
+				log::info << "Loaded scene node [" << name << "]" << std::endl;
+			}
 		}
 		CU_EndAttributePop()
 
