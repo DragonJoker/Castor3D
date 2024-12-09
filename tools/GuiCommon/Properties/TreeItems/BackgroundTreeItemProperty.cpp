@@ -322,47 +322,52 @@ namespace GuiCommon
 	void BackgroundTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_BACKGROUND = _( "Background: " );
-		static wxString PROPERTY_BACKGROUND_VISIBLE = _( "Visible" );
-		static wxString PROPERTY_BACKGROUND_COLOUR = _( "Colour" );
-		static wxString PROPERTY_BACKGROUND_IMAGE = _( "Image" );
-		static wxString PROPERTY_BACKGROUND_SKYBOX = _( "Skybox" );
-		static wxString PROPERTY_BACKGROUND_ATMOSPHERE = _( "Atmosphere" );
+		static wxString PROPERTY_BACKGROUND_VISIBILITY = _( "Visibility" );
+		static wxString PROPERTY_BACKGROUND_NOTVISIBLE = _( "Not Visible" );
+		static wxString PROPERTY_BACKGROUND_IRRADIANCE = _( "Irradiance" );
+		static wxString PROPERTY_BACKGROUND_FULL = _( "Full" );
 
 		wxString selected;
-		wxPGChoices choices;
-		choices.Add( PROPERTY_BACKGROUND_COLOUR );
-		choices.Add( PROPERTY_BACKGROUND_IMAGE );
-		choices.Add( PROPERTY_BACKGROUND_SKYBOX );
-		choices.Add( PROPERTY_BACKGROUND_ATMOSPHERE );
+		wxArrayString choices;
+		choices.Add( PROPERTY_BACKGROUND_NOTVISIBLE );
+		choices.Add( PROPERTY_BACKGROUND_IRRADIANCE );
+		choices.Add( PROPERTY_BACKGROUND_FULL );
 
-		if ( m_background.getType() == cuT( "colour" ) )
+		if ( m_background.isIrradianceShown() )
 		{
-			selected = PROPERTY_BACKGROUND_COLOUR;
+			selected = PROPERTY_BACKGROUND_IRRADIANCE;
 		}
-		else if ( m_background.getType() == cuT( "image" ) )
+		else if ( m_background.isVisible() )
 		{
-			selected = PROPERTY_BACKGROUND_IMAGE;
+			selected = PROPERTY_BACKGROUND_FULL;
 		}
-		else if ( m_background.getType() == cuT( "skybox" ) )
+		else
 		{
-			selected = PROPERTY_BACKGROUND_SKYBOX;
-		}
-		else if ( m_background.getType() == cuT( "c3d.atmosphere" ) )
-		{
-			selected = PROPERTY_BACKGROUND_ATMOSPHERE;
+			selected = PROPERTY_BACKGROUND_NOTVISIBLE;
 		}
 
 		setPrefix( m_background.getName() );
 		addProperty( grid
-			, selected + wxT( " " ) + PROPERTY_CATEGORY_BACKGROUND );
-		addPropertyT( grid, PROPERTY_BACKGROUND_VISIBLE
-			, m_background.isVisible()
-			, &m_background
-			, &castor3d::SceneBackground::setVisible );
-		addPropertyT( grid, PROPERTY_BACKGROUND_COLOUR
-			, m_background.getScene().getBackgroundColour()
-			, &m_background.getScene()
-			, &castor3d::Scene::setBackgroundColour );
+			, PROPERTY_CATEGORY_BACKGROUND );
+		addProperty( grid, PROPERTY_BACKGROUND_VISIBILITY
+			, choices, selected
+			, PropertyChangeHandler( [this]( wxVariant const & value )
+			{
+				switch ( auto sel = value.GetLong() )
+				{
+				case 0:
+					m_background.showIrradiance( false );
+					m_background.setVisible( false );
+					break;
+				case 1:
+					m_background.showIrradiance( true );
+					break;
+				case 2:
+					m_background.showIrradiance( false );
+					m_background.setVisible( true );
+					break;
+				}
+			} ) );
 		BackgroundDisplayer::submit( m_background, *this, *grid );
 	}
 }
