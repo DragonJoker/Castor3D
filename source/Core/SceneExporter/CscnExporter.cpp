@@ -1251,6 +1251,71 @@ namespace castor3d::exporter
 			return result;
 		}
 
+		bool writeNode( castor::Path const & folder
+			, castor::Path const & filePath
+			, SceneNode & node
+			, castor::TextWriter< Scene >::Options & options
+			, ExportOptions const & exportOptions
+			, castor::StringStream & stream )
+		{
+			bool result = true;
+			castor::TextWriter< SceneNode > writer{ castor::cuEmptyString
+				, exportOptions.scale };
+
+			if ( node.hasAnimation() )
+			{
+				auto found = node.getScene()->getAnimatedObjectGroupCache().findObject( node.getName() + cuT( "_Node" ) );
+
+				if ( !found.empty() )
+				{
+					auto animNode = static_cast< AnimatedSceneNode * >( found.front() );
+
+					if ( animNode->isPlayingAnimation() )
+					{
+						auto & anim = animNode->getPlayingAnimation();
+						auto pos = node.getPosition();
+						auto rot = node.getOrientation();
+						auto scl = node.getScale();
+						node.setPosition( anim.getInitialPosition() );
+						node.setOrientation( anim.getInitialOrientation() );
+						node.setScale( anim.getInitialScale() );
+						result = result
+							&& writer( node, stream );
+						node.setPosition( pos );
+						node.setOrientation( rot );
+						node.setScale( scl );
+					}
+				}
+			}
+			else
+			{
+				result = carryOn( result, exportOptions )
+					&& writer( node, stream );
+			}
+
+			for ( auto const & it : node.getChildren() )
+			{
+				if ( result )
+				{
+					auto childNode = it.second;
+
+					if ( childNode )
+					{
+						result = writeNode( folder, filePath, *childNode, options, exportOptions, stream );
+					}
+				}
+			}
+
+			result = postWriteT< false >( SceneNodeWriterOptions{ exportOptions
+					, node
+					, options.rootFolder / options.nodesFile.getPath()
+					, node.getName()
+					, options.subfolder
+					, node.getName() }
+				, { nullptr, nullptr } );
+			return result;
+		}
+
 		bool writeNodes( castor::Path const & folder
 			, castor::Path const & filePath
 			, Scene const & scene
@@ -1262,51 +1327,9 @@ namespace castor3d::exporter
 			stream << "// Nodes\n";
 			bool result = true;
 			{
-				castor::TextWriter< SceneNode > writer{ castor::cuEmptyString
-					, exportOptions.scale };
-
-				for ( auto const & it : scene.getObjectRootNode()->getChildren() )
+				for ( auto const & [_, node] : scene.getObjectRootNode()->getChildren() )
 				{
-					auto node = it.second;
-
-					if ( node->hasAnimation() )
-					{
-						auto found = node->getScene()->getAnimatedObjectGroupCache().findObject( node->getName() + cuT( "_Node" ) );
-
-						if ( !found.empty() )
-						{
-							auto animNode = static_cast< AnimatedSceneNode * >( found.front() );
-
-							if ( animNode->isPlayingAnimation() )
-							{
-								auto & anim = animNode->getPlayingAnimation();
-								auto pos = node->getPosition();
-								auto rot = node->getOrientation();
-								auto scl = node->getScale();
-								node->setPosition( anim.getInitialPosition() );
-								node->setOrientation( anim.getInitialOrientation() );
-								node->setScale( anim.getInitialScale() );
-								result = result
-									&& writer( *node, stream );
-								node->setPosition( pos );
-								node->setOrientation( rot );
-								node->setScale( scl );
-							}
-						}
-					}
-					else
-					{
-						result = carryOn( result, exportOptions )
-							&& writer( *node, stream );
-					}
-
-					result = postWriteT< false >( SceneNodeWriterOptions{ exportOptions
-							, *node
-							, options.rootFolder / options.nodesFile.getPath()
-							, it.first
-							, options.subfolder
-							, it.first }
-						, { nullptr, nullptr } );
+					result = writeNode( folder, filePath, *node, options, exportOptions, stream );
 				}
 			}
 			return result;
