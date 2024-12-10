@@ -145,9 +145,8 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english	The transformations, per animation object.
-		//!\~french		Les transformations, par objet d'animation.
 		TransformArray m_transforms;
+		castor::Vector< castor::Matrix4x4f > m_boneTransforms;
 		mutable std::unordered_map< size_t, SubmeshBoundingBoxList > m_boxes;
 
 		friend class BinaryParser< SkeletonAnimationKeyFrame >;
