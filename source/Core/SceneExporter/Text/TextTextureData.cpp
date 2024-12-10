@@ -124,9 +124,13 @@ namespace castor
 						{
 							result = writeFile( file, cuT( "image" ), sourceInfo.relative(), m_folder, cuT( "Textures" ) );
 						}
-						else
+						else if ( sourceInfo.folder().empty() )
 						{
 							result = writeFile( file, cuT( "image" ), sourceInfo.relative(), m_folder, String{ cuT( "Textures" ) } + Path::GenericSeparator + m_subFolder );
+						}
+						else
+						{
+							result = writeFile( file, cuT( "image" ), sourceInfo.folder() / sourceInfo.relative(), m_folder, String{ cuT( "Textures" ) } + Path::GenericSeparator + m_subFolder );
 						}
 					}
 				}
