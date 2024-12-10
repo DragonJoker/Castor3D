@@ -547,9 +547,19 @@ namespace castor3d
 			for ( auto & [name, geometry] : scene.getGeometryCache() )
 			{
 				auto & mesh = *geometry->getMesh();
+				auto node = geometry->getParent();
 				auto nodeIt = std::find( animObjects.nodes.begin()
 					, animObjects.nodes.end()
-					, geometry->getParent() );
+					, node );
+
+				while ( node && nodeIt == animObjects.nodes.end() )
+				{
+					node = node->getParent();
+					nodeIt = std::find( animObjects.nodes.begin()
+						, animObjects.nodes.end()
+						, node );
+				}
+
 				auto meshIt = std::find( animObjects.meshes.begin()
 					, animObjects.meshes.end()
 					, &mesh );
