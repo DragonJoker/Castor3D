@@ -85,6 +85,19 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
+		static CU_ImplementAttributeParserBlock( parserVisible, MaterialContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameters" ) );
+			}
+			else
+			{
+				blockContext->material->setVisible( params[0]->get< bool >() );
+			}
+		}
+		CU_EndAttribute()
+
 		static CU_ImplementAttributeParserBlock( parserEnd, MaterialContext )
 		{
 			if ( !blockContext->ownMaterial
@@ -260,6 +273,20 @@ namespace castor3d
 			} );
 	}
 
+	void Material::setVisible( bool v )
+	{
+		if ( m_visible != v )
+		{
+			m_visible = v;
+			onChanged( *this );
+
+			for ( auto & pass : m_passes )
+			{
+				pass->onChanged( *pass, pass->getComponentCombineID(), pass->getComponentCombineID() );
+			}
+		}
+	}
+
 	void Material::onPassChanged( Pass const & )
 	{
 		onChanged( *this );
@@ -278,6 +305,7 @@ namespace castor3d
 		sceneContext.addPushParser( cuT( "material" ), CSCNSection::eMaterial, mat::parserSceneMaterial, { makeParameter< ParameterType::eName >() } );
 
 		materialContext.addParser( cuT( "render_pass" ), mat::parserRenderPass, { makeParameter< ParameterType::eText >() } );
+		materialContext.addParser( cuT( "visible" ), mat::parserVisible, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 		materialContext.addPopParser( cuT( "}" ), mat::parserEnd );
 
 		Pass::addParsers( result, textureChannels );

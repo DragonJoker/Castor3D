@@ -528,6 +528,11 @@ namespace castor3d
 		return getPassHash( *this );
 	}
 
+	bool Pass::isVisible()const noexcept
+	{
+		return getOwner()->isVisible();
+	}
+
 	TextureUnitRPtr Pass::getTextureUnit( uint32_t index )const
 	{
 		CU_Require( index < m_textureUnits.size() );

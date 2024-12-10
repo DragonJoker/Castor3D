@@ -1534,7 +1534,8 @@ namespace castor3d
 
 		if ( node.isInstanced() )
 		{
-			if ( node.instance.getParent()->isVisible() )
+			if ( node.instance.getParent()->isVisible()
+				&& node.pass->isVisible() )
 			{
 				doAddInstancedSubmesh( shadowMaps
 					, shadowBuffer

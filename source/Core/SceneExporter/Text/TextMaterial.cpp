@@ -26,7 +26,7 @@ namespace castor
 
 		if ( auto block{ beginBlock( file, cuT( "material" ), material.getName() ) } )
 		{
-			result = true;
+			result = writeOpt( file, cuT( "visible" ), material.isVisible(), true );
 
 			if ( material.getRenderPassInfo() )
 			{

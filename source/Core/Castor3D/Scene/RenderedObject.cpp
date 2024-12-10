@@ -68,7 +68,8 @@ namespace castor3d
 	{
 		auto normalMtx = castor::Matrix3x3f{ modelMtx }.getInverse().getTransposed();
 
-		if ( !sceneNode.isVisible() )
+		if ( !sceneNode.isVisible()
+			|| !pass.isVisible() )
 		{
 			modelMtx = {};
 			normalMtx = {};
