@@ -1,5 +1,6 @@
 #include "Castor3D/Render/Culling/DummyCuller.hpp"
 
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
@@ -17,11 +18,13 @@ namespace castor3d
 
 	bool DummyCuller::isSubmeshVisible( SubmeshRenderNode const & node )const
 	{
-		return node.instance.getParent()->isVisible();
+		return node.instance.getParent()->isVisible()
+			&& node.pass->isVisible();
 	}
 
 	bool DummyCuller::isBillboardVisible( BillboardRenderNode const & node )const
 	{
-		return node.instance.getNode()->isVisible();
+		return node.instance.getNode()->isVisible()
+			&& node.pass->isVisible();
 	}
 }

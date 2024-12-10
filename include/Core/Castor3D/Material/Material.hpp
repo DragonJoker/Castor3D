@@ -130,6 +130,11 @@ namespace castor3d
 		{
 			return m_initialised;
 		}
+
+		bool isVisible()const noexcept
+		{
+			return m_visible;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -169,6 +174,8 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
+		C3D_API void setVisible( bool v );
+
 		void setRenderPassInfo( RenderPassRegisterInfo * renderPassInfo )noexcept
 		{
 			m_renderPassInfo = renderPassInfo;
@@ -183,6 +190,7 @@ namespace castor3d
 		{
 			m_lightingModelId = v;
 		}
+
 		/**@}*/
 
 	private:
@@ -203,6 +211,7 @@ namespace castor3d
 		RenderPassRegisterInfo * m_renderPassInfo{};
 		bool m_serialisable{ true };
 		bool m_initialised{};
+		bool m_visible{ true };
 	};
 
 	struct RootContext;

@@ -545,7 +545,8 @@ namespace castor3d
 				: nullptr;
 
 			if ( instantiation.isInstanced()
-				&& node->instance.getParent()->isVisible() )
+				&& node->instance.getParent()->isVisible()
+				&& node->pass->isVisible() )
 			{
 				auto & passes = indices.try_emplace( &node->data ).first->second;
 				auto & index = passes.emplace( node->pass->getHash(), 0u ).first->second;
