@@ -22,6 +22,9 @@ namespace castor3d
 		: AnimationKeyFrame{ timeIndex }
 		, OwnedBy< SkeletonAnimation >{ skeletonAnimation }
 	{
+		castor::Matrix4x4f identity{ castor::Matrix4x4f::getIdentity() };
+		m_boneTransforms.resize( size_t( static_cast< Skeleton const & >( *skeletonAnimation.getAnimable() ).getBonesCount() )
+			, identity );
 	}
 
 	void SkeletonAnimationKeyFrame::addAnimationObject( SkeletonAnimationObject & object
@@ -126,6 +129,12 @@ namespace castor3d
 			{
 				transform.cumulative = transformMtx;
 			}
+
+			if ( transform.object->getType() == SkeletonNodeType::eBone )
+			{
+				auto bone = static_cast< SkeletonAnimationBone const & >( *transform.object ).getBone();
+				m_boneTransforms[bone->getId()] = transform.cumulative * bone->getInverseTransform();
+			}
 		}
 	}
 
@@ -154,8 +163,7 @@ namespace castor3d
 				else
 				{
 					auto component = submesh->getComponent< SkinComponent >();
-					auto & positions = submesh->getPositions();
-					uint32_t index = 0u;
+					auto vtxPosition = std::to_address( submesh->getPositions().begin() );
 
 					for ( auto & boneData : component->getData().getData() )
 					{
@@ -164,37 +172,21 @@ namespace castor3d
 						if ( boneData.m_weights[0] > 0 )
 						{
 							auto bone = *( skeleton.getBones().begin() + boneData.m_ids[0] );
-							auto it = find( *bone );
-
-							if ( it != end() )
-							{
-								transform = castor::Matrix4x4f{ it->cumulative * bone->getInverseTransform() * boneData.m_weights[0] };
-							}
-							else
-							{
-								transform = castor::Matrix4x4f{ bone->getInverseTransform() * boneData.m_weights[0] };
-							}
+							transform = m_boneTransforms[bone->getId()] * boneData.m_weights[0];
 						}
 
-						for ( uint32_t i = 1; i < boneData.m_ids.size(); ++i )
+						auto carryOn{ true };
+						for ( uint32_t i = 1; i < boneData.m_ids.size() && carryOn; ++i )
 						{
-							if ( boneData.m_weights[i] > 0 )
+							carryOn = ( boneData.m_weights[i] > 0 );
+							if ( carryOn )
 							{
 								auto bone = *( skeleton.getBones().begin() + boneData.m_ids[i] );
-								auto it = find( *bone );
-
-								if ( it != end() )
-								{
-									transform += castor::Matrix4x4f{ it->cumulative * bone->getInverseTransform() * boneData.m_weights[i] };
-								}
-								else
-								{
-									transform += castor::Matrix4x4f{ bone->getInverseTransform() * boneData.m_weights[0] };
-								}
+								transform += castor::Matrix4x4f{ m_boneTransforms[bone->getId()] * boneData.m_weights[i] };
 							}
 						}
 
-						auto & cposition = positions[index];
+						auto & cposition = *vtxPosition;
 						castor::Point4f position{ cposition[0], cposition[1], cposition[2], 1.0f };
 						position = transform * position;
 						min[0] = std::min( min[0], position[0] );
@@ -204,7 +196,7 @@ namespace castor3d
 						max[1] = std::max( max[1], position[1] );
 						max[2] = std::max( max[2], position[2] );
 
-						++index;
+						++vtxPosition;
 					}
 				}
 
