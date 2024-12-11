@@ -91,6 +91,17 @@ namespace castor3d
 		return result;
 	}
 
+	void Camera::cloneInto( Camera & output )const
+	{
+		output.m_frustum = m_frustum;
+		output.m_view = m_view;
+		output.m_hdrConfig = m_hdrConfig;
+		output.m_colourGradingConfig = m_colourGradingConfig;
+		output.m_ownProjection = m_ownProjection;
+		output.m_projection = m_projection;
+		m_viewport.cloneInto( output.m_viewport );
+	}
+
 	castor::Matrix4x4f Camera::getRescaledProjection( float scale
 		, bool safeBanded )const
 	{

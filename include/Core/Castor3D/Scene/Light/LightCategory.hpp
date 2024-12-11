@@ -103,6 +103,15 @@ namespace castor3d
 		*/
 		C3D_API void accept( ConfigurationVisitorBase & vis );
 		/**
+		 *\~english
+		 *\brief			Clones this object into the given one.
+		 *\param[in,out]	output	Receives this object's data.
+		 *\~french
+		 *\brief			Clone cet objet dans celui donné.
+		 *\param[in,out]	output	Reçoit les données de cet objet.
+		 */
+		C3D_API void cloneInto( LightCategory & output )const;
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -201,7 +210,7 @@ namespace castor3d
 		 *\brief		Met la lumière dans le buffer donné.
 		 *\param[out]	data	Reçoit les données de la source lumineuse.
 		 */
-		C3D_API virtual void doFillLightBuffer( castor::Point4f * data )const = 0;
+		virtual void doFillLightBuffer( castor::Point4f * data )const = 0;
 		/**
 		*\~english
 		*\brief
@@ -214,7 +223,16 @@ namespace castor3d
 		*\param vis
 		*	Le ... visiteur.
 		*/
-		C3D_API virtual void doAccept( ConfigurationVisitorBase & vis ) = 0;
+		virtual void doAccept( ConfigurationVisitorBase & vis ) = 0;
+		/**
+		 *\~english
+		 *\brief			Clones this object into the given one.
+		 *\param[in,out]	output	Receives this object's data.
+		 *\~french
+		 *\brief			Clone cet objet dans celui donné.
+		 *\param[in,out]	output	Reçoit les données de cet objet.
+		 */
+		virtual void doCloneInto( LightCategory & output )const = 0;
 
 	protected:
 		//!\~english	The cube box for the light volume of effect.

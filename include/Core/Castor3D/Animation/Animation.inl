@@ -85,4 +85,16 @@ namespace castor3d
 			m_length = std::max( m_length, keyFrame->getTimeIndex() );
 		}
 	}
+
+	template< typename AnimableHandlerT >
+	inline void AnimationT< AnimableHandlerT >::cloneInto( AnimationT & output )const
+	{
+		for ( auto const & keyFrame : m_keyframes )
+		{
+			output.m_keyframes.push_back( keyFrame->clone( output ) );
+		}
+
+		output.m_length = m_length;
+		doCloneInto( output );
+	}
 }

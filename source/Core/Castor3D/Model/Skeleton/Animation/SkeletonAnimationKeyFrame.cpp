@@ -214,5 +214,24 @@ namespace castor3d
 		return rit->second;
 	}
 
+	AnimationKeyFrameUPtr SkeletonAnimationKeyFrame::clone( AnimationT< Engine > & parent )const
+	{
+		auto & skelAnim = static_cast< SkeletonAnimation & >( parent );
+		auto result = castor::makeUnique< SkeletonAnimationKeyFrame >( skelAnim, getTimeIndex() );
+
+		for ( auto & transform : m_transforms )
+		{
+			auto & ins = result->m_transforms.emplace_back();
+			ins.object = skelAnim.getObject( transform.object->getType(), transform.object->getName() );
+			ins.transform.translate = transform.transform.translate;
+			ins.transform.rotate = transform.transform.rotate;
+			ins.transform.scale = transform.transform.scale;
+		}
+
+		result->m_boneTransforms = m_boneTransforms;
+		doCloneInto( *result );
+		return castor::ptrRefCast< AnimationKeyFrame >( result );
+	}
+
 	//*************************************************************************************************
 }

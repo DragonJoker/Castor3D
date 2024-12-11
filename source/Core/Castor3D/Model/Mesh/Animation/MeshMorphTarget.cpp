@@ -57,4 +57,13 @@ namespace castor3d
 		CU_Require( data.size() == submesh.getMorphTargetsCount() );
 		data[targetIndex] = targetWeight;
 	}
+
+	AnimationKeyFrameUPtr MeshMorphTarget::clone( AnimationT< Engine > & parent )const
+	{
+		auto result = castor::makeUnique< MeshMorphTarget >( static_cast< MeshAnimation & >( parent )
+			, getTimeIndex() );
+		result->m_submeshesTargets = m_submeshesTargets;
+		doCloneInto( *result );
+		return castor::ptrRefCast< AnimationKeyFrame >( result );
+	}
 }

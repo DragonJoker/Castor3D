@@ -84,4 +84,13 @@ namespace castor3d
 			|| ( m_scale.getValue() != castor::Point2f{ 0.0f, 0.0f }
 				&& m_scale.getValue() != castor::Point2f{ 1.0f, 1.0f } );
 	}
+
+	void TextureAnimation::doCloneInto( Animation & output )const
+	{
+		auto & texAnim = static_cast< TextureAnimation & >( output );
+		texAnim.m_translate = m_translate;
+		texAnim.m_rotate = m_rotate;
+		texAnim.m_scale = m_scale;
+		texAnim.m_tileAnim = m_tileAnim;
+	}
 }

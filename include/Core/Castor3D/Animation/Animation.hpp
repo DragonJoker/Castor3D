@@ -106,6 +106,15 @@ namespace castor3d
 		void updateLength();
 		/**
 		 *\~english
+		 *\brief			Clones this object into the given one.
+		 *\param[in,out]	output	Receives this object's data.
+		 *\~french
+		 *\brief			Clone cet objet dans celui donné.
+		 *\param[in,out]	output	Reçoit les données de cet objet.
+		 */
+		void cloneInto( AnimationT & output )const;
+		/**
+		 *\~english
 		 *\return		\p true if the key frames list is empty.
 		 *\~french
 		 *\return		\p true si la liste de key frames est vide.
@@ -204,6 +213,17 @@ namespace castor3d
 
 		friend class BinaryWriter< AnimationT >;
 		friend class BinaryParser< AnimationT >;
+
+	private:
+		/**
+		 *\~english
+		 *\brief			Clones this object into the given one.
+		 *\param[in,out]	output	Receives this object's data.
+		 *\~french
+		 *\brief			Clone cet objet dans celui donné.
+		 *\param[in,out]	output	Reçoit les données de cet objet.
+		 */
+		virtual void doCloneInto( AnimationT & output )const = 0;
 	};
 }
 

@@ -4,6 +4,7 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationNode.hpp"
 #include "Castor3D/Model/Skeleton/BoneNode.hpp"
+#include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Animation/Animable.hpp"
 
 CU_ImplementSmartPtr( castor3d, SkeletonAnimation )
@@ -104,6 +105,56 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	void SkeletonAnimation::doCloneInto( Animation & output )const
+	{
+		auto & skelOutput = static_cast< SkeletonAnimation & >( output );
+		castor::StringMap< SkeletonAnimationObject * > inserted;
+		auto & skeleton = static_cast< Skeleton const & >( *skelOutput.getAnimable() );
+
+		for ( auto object : m_rootObjects )
+		{
+			castor::String name = sklanm::getMovingTypeName( object->getType() ) + object->getName();
+
+			if ( object->getType() == SkeletonNodeType::eBone )
+			{
+				auto result = castor::makeUnique< SkeletonAnimationBone >( skelOutput );
+				auto node = skeleton.findNode( static_cast< SkeletonAnimationBone const & >( *object ).getBone()->getName() );
+				result->setBone( static_cast< BoneNode & >( *node ) );
+				skelOutput.m_rootObjects.push_back( result.get() );
+				skelOutput.m_toMove.try_emplace( name, castor::ptrRefCast< SkeletonAnimationObject >( result ) );
+			}
+			else
+			{
+				auto result = castor::makeUnique< SkeletonAnimationNode >( skelOutput );
+				auto node = skeleton.findNode( static_cast< SkeletonAnimationNode const & >( *object ).getNode()->getName() );
+				result->setNode( *node );
+				skelOutput.m_rootObjects.push_back( result.get() );
+				skelOutput.m_toMove.try_emplace( name, castor::ptrRefCast< SkeletonAnimationObject >( result ) );
+			}
+		}
+
+		for ( auto & [name, object] : m_toMove )
+		{
+			if ( skelOutput.m_toMove.find( name ) == skelOutput.m_toMove.end() )
+			{
+				if ( object->getType() == SkeletonNodeType::eBone )
+				{
+					auto result = castor::makeUnique< SkeletonAnimationBone >( skelOutput );
+					auto node = skeleton.findNode( static_cast< SkeletonAnimationBone const & >( *object ).getBone()->getName() );
+					result->setBone( static_cast< BoneNode & >( *node ) );
+					skelOutput.m_toMove.try_emplace( name, castor::ptrRefCast< SkeletonAnimationObject >( result ) );
+				}
+				else
+				{
+					auto result = castor::makeUnique< SkeletonAnimationNode >( skelOutput );
+					auto node = skeleton.findNode( static_cast< SkeletonAnimationNode const & >( *object ).getNode()->getName() );
+					result->setNode( *node );
+					skelOutput.m_toMove.try_emplace( name, castor::ptrRefCast< SkeletonAnimationObject >( result ) );
+				}
+			}
+		}
 	}
 
 	//*************************************************************************************************

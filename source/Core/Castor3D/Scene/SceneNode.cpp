@@ -77,6 +77,22 @@ namespace castor3d
 		doComputeMatrix();
 	}
 
+	void SceneNode::cloneInto( SceneNode & output )const
+	{
+		output.m_static = m_static;
+		output.m_displayable = m_displayable;
+		output.m_visible = m_visible;
+		output.m_serialisable = m_serialisable;
+		output.m_orientation = m_orientation;
+		output.m_position = m_position;
+		output.m_scale = m_scale;
+		output.m_mtxSet = m_mtxSet;
+		output.m_transform = m_transform;
+		output.m_mtxChanged = m_mtxChanged;
+		output.m_derivedTransform = m_derivedTransform;
+		output.m_derivedMtxChanged = m_derivedMtxChanged;
+	}
+
 	void SceneNode::attachObject( MovableObject & object )
 	{
 		object.detach();

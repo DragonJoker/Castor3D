@@ -743,6 +743,20 @@ namespace castor3d
 		return *it->second;
 	}
 
+	void Submesh::cloneInto( Submesh & output )const
+	{
+		output.m_defaultMaterial = m_defaultMaterial;
+		output.m_box = m_box;
+		output.m_sphere = m_sphere;
+		output.m_topology = m_topology;
+		output.m_needsNormalsCompute = m_needsNormalsCompute;
+
+		for ( auto & component : m_components )
+		{
+			output.addComponent( component.second->clone( output ) );
+		}
+	}
+
 	void Submesh::enableSceneUpdate( bool )
 	{
 		m_disableSceneUpdate = false;

@@ -12,4 +12,15 @@ namespace castor3d
 		, OwnedBy< SceneNodeAnimation >{ parent }
 	{
 	}
+
+	AnimationKeyFrameUPtr SceneNodeAnimationKeyFrame::clone( AnimationT< Engine > & parent )const
+	{
+		auto & skelAnim = static_cast< SceneNodeAnimation & >( parent );
+		auto result = castor::makeUnique< SceneNodeAnimationKeyFrame >( skelAnim, getTimeIndex() );
+		result->m_position = m_position;
+		result->m_rotation = m_rotation;
+		result->m_scale = m_scale;
+		doCloneInto( *result );
+		return castor::ptrRefCast< AnimationKeyFrame >( result );
+	}
 }

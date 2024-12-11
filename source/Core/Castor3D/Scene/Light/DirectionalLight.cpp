@@ -247,4 +247,13 @@ namespace castor3d
 	{
 		vis.visit( cuT( "Illumination" ), m_illumination );
 	}
+
+	void DirectionalLight::doCloneInto( LightCategory & output )const
+	{
+		auto & directional = static_cast< DirectionalLight & >( output );
+		directional.m_illumination = m_illumination;
+		directional.m_direction = m_direction;
+		directional.m_cascades = m_cascades;
+		directional.m_prvCascades = m_prvCascades;
+	}
 }

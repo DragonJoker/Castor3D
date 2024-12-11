@@ -185,4 +185,13 @@ namespace castor3d
 		vis.visit( cuT( "Range" ), m_range );
 		vis.visit( cuT( "Intensity" ), m_intensity );
 	}
+
+	void PointLight::doCloneInto( LightCategory & output )const
+	{
+		auto & point = static_cast< PointLight & >( output );
+		point.m_range = m_range;
+		point.m_intensity = m_intensity;
+		point.m_position = m_position;
+		point.m_lightViews = m_lightViews;
+	}
 }

@@ -150,6 +150,37 @@ namespace castor3d
 		}
 	}
 
+	void Skeleton::cloneInto( Skeleton & output )const
+	{
+		output.m_globalInverse = m_globalInverse;
+
+		// First clone the nodes
+		for ( auto & node : m_nodes )
+		{
+			auto & clone = *output.m_nodes.emplace_back( node->clone( output ) ).get();
+
+			if ( clone.getType() == SkeletonNodeType::eBone )
+			{
+				output.m_bones.push_back( &static_cast< BoneNode & >( clone ) );
+			}
+		}
+
+		// Then clone the hierarchy
+		for ( auto & child : m_nodes )
+		{
+			if ( auto parent = child->getParent() )
+			{
+				auto cloneChild = output.findNode( child->getName() );
+				auto cloneParent = output.findNode( parent->getName() );
+
+				if ( cloneChild && cloneParent )
+				{
+					output.setNodeParent( *cloneChild, *cloneParent );
+				}
+			}
+		}
+	}
+
 	Engine * getEngine( SkeletonContext const & context )
 	{
 		return getEngine( *context.scene );

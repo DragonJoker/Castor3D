@@ -59,6 +59,15 @@ namespace castor3d
 		C3D_API bool update();
 		/**
 		 *\~english
+		 *\brief			Clones this object into the given one.
+		 *\param[in,out]	output	Receives this object's data.
+		 *\~french
+		 *\brief			Clone cet objet dans celui donné.
+		 *\param[in,out]	output	Reçoit les données de cet objet.
+		 */
+		C3D_API void cloneInto( Viewport & output )const;
+		/**
+		 *\~english
 		 *\brief		Builds a centered perspective viewport.
 		 *\param[in]	fovy	Y Field of View.
 		 *\param[in]	aspect	Width / Height ratio.

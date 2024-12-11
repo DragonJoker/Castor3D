@@ -60,6 +60,13 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API virtual ~SkeletonNode()noexcept = default;
+		/**
+		 *\~english
+		 *\return		A clone of this object.
+		 *\~french
+		 *\return		Un clone de cet objet.
+		 */
+		C3D_API virtual SkeletonNodeUPtr clone( Skeleton & parent )const;
 
 		const Skeleton & getSkeleton()const noexcept
 		{
@@ -85,6 +92,17 @@ namespace castor3d
 		{
 			m_transform = castor::move( tranform );
 		}
+
+	protected:
+		/**
+		 *\~english
+		 *\brief			Clones this object into the given one.
+		 *\param[in,out]	output	Receives this object's data.
+		 *\~french
+		 *\brief			Clone cet objet dans celui donné.
+		 *\param[in,out]	output	Reçoit les données de cet objet.
+		 */
+		void doCloneInto( SkeletonNode & output )const;
 
 	private:
 		/**

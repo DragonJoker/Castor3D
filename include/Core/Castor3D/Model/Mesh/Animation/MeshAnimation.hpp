@@ -69,7 +69,9 @@ namespace castor3d
 			return m_submeshes[index];
 		}
 
-	protected:
+	private:
+		void doCloneInto( Animation & output )const override;
+
 		//!\~english	The animated submesh.
 		//!\~french		Les sous-maillages animés.
 		MeshAnimationSubmeshArray m_submeshes;

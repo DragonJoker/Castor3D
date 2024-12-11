@@ -29,6 +29,13 @@ namespace castor3d
 		 */
 		C3D_API SceneNodeAnimationKeyFrame( SceneNodeAnimation & parent
 			, castor::Milliseconds const & timeIndex );
+		/**
+		 *\~english
+		 *\return		A clone of this object.
+		 *\~french
+		 *\return		Un clone de cet objet.
+		 */
+		C3D_API AnimationKeyFrameUPtr clone( AnimationT< Engine > & parent )const override;
 
 		castor::Point3f const & getPosition()const
 		{

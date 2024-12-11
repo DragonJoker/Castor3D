@@ -1,6 +1,7 @@
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 
 #include "Castor3D/Model/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 
 CU_ImplementSmartPtr( castor3d, MeshAnimation )
 
@@ -31,5 +32,17 @@ namespace castor3d
 			{
 				return &lookup.getSubmesh() == &object;
 			} );
+	}
+
+	void MeshAnimation::doCloneInto( Animation & output )const
+	{
+		auto & meshOutput = static_cast< MeshAnimation & >( output );
+		auto & mesh = static_cast< Mesh const & >( *meshOutput.getAnimable() );
+
+		for ( auto & animSubmesh : m_submeshes )
+		{
+			meshOutput.addChild( MeshAnimationSubmesh{ meshOutput
+				, *mesh.getSubmesh( animSubmesh.getSubmesh().getId() ) } );
+		}
 	}
 }
