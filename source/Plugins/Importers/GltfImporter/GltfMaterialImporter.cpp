@@ -669,7 +669,6 @@ namespace c3d_gltf
 	GltfMaterialImporter::GltfMaterialImporter( castor3d::Engine & engine
 		, GltfImporterFile * file )
 		: castor3d::MaterialImporter{ engine, cuT( "Gltf" ), file }
-		, m_loadConfig{ false, false, false }
 	{
 		if ( !engine.hasMaterial( DefaultMaterial ) )
 		{
@@ -690,8 +689,6 @@ namespace c3d_gltf
 		{
 			return false;
 		}
-
-		m_loadConfig.allowCompression = !m_parameters.get< bool >( cuT( "disable_image_compression" ) );
 
 		auto & impAsset = file.getAsset();
 		auto name = material.getName();
@@ -904,16 +901,7 @@ namespace c3d_gltf
 
 			if ( impMaterial.emissiveStrength != 0.0f )
 			{
-				float emissiveMult = 1.0f;
-
-				if ( float value;
-					m_parameters.get( cuT( "emissive_mult" ), value )
-						&& std::abs( value - 1.0f ) > std::numeric_limits< float >::epsilon() )
-				{
-					emissiveMult = value;
-				}
-
-				component->setEmissiveFactor( impMaterial.emissiveStrength * emissiveMult );
+				component->setEmissiveFactor( impMaterial.emissiveStrength * m_emissiveMult );
 			}
 
 			component->setEmissive( castor::RgbColour::fromComponents( impMaterial.emissiveFactor[0]

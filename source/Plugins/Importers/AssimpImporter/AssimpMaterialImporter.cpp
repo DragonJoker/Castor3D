@@ -1365,17 +1365,6 @@ namespace c3d_assimp
 			return false;
 		}
 
-		float emissiveMult = 1.0f;
-		float fvalue;
-
-		if ( m_parameters.get( cuT( "emissive_mult" ), fvalue )
-			&& std::abs( fvalue - 1.0f ) > std::numeric_limits< float >::epsilon() )
-		{
-			emissiveMult = fvalue;
-		}
-
-		bool disableImageCompression = m_parameters.get< bool >( cuT( "disable_image_compression" ) );
-
 		int ishadingMode{};
 		it->second->Get( AI_MATKEY_SHADING_MODEL, ishadingMode );
 		auto shadingMode = aiShadingMode( ishadingMode );
@@ -1386,8 +1375,8 @@ namespace c3d_assimp
 			, shadingMode
 			, getEngine()->getDefaultSampler()
 			, *this
-			, emissiveMult
-			, disableImageCompression
+			, m_emissiveMult
+			, !m_loadConfig.allowCompression
 			, m_textureRemaps
 			, *pass );
 		return true;
