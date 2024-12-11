@@ -345,6 +345,7 @@ namespace castor3d
 		castor::Vector< OverlayPtr > parentOverlays{};
 	};
 
+	C3D_API castor::String getPrefix( OverlayContext const & context );
 	C3D_API Engine * getEngine( OverlayContext const & context );
 }
 

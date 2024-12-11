@@ -357,6 +357,11 @@ namespace castor3d
 		}
 	}
 
+	castor::String getPrefix( AnimGroupContext const & context )
+	{
+		return getPrefix( *context.scene );
+	}
+
 	Engine * getEngine( AnimGroupContext const & context )
 	{
 		return getEngine( *context.scene );

@@ -341,6 +341,7 @@ namespace castor3d
 		SubmeshComponent * submeshComponent{};
 	};
 
+	C3D_API castor::String getPrefix( MeshContext const & context );
 	C3D_API Engine * getEngine( MeshContext const & context );
 }
 

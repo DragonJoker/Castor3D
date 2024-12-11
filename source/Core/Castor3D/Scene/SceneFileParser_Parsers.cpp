@@ -246,8 +246,8 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
-				newBlockContext->sampler = getEngine( *blockContext )->tryFindSampler( params[0]->get( name ) );
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				newBlockContext->sampler = getEngine( *blockContext )->tryFindSampler( name );
 
 				if ( !newBlockContext->sampler )
 				{
@@ -267,9 +267,9 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				newBlockContext->root = blockContext;
-				newBlockContext->scene = newBlockContext->root->engine->tryFindScene( params[0]->get( name ) );
+				newBlockContext->scene = newBlockContext->root->engine->tryFindScene( name );
 
 				if ( !newBlockContext->scene )
 				{
@@ -334,10 +334,10 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
 				auto & parent = blockContext->overlays->parentOverlays.back();
-				blockContext->overlays->overlay.rptr = blockContext->engine->tryFindOverlay( params[0]->get( name ) );
+				blockContext->overlays->overlay.rptr = blockContext->engine->tryFindOverlay( name );
 
 				if ( !blockContext->overlays->overlay.rptr )
 				{
@@ -362,10 +362,10 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
 				auto & parent = blockContext->overlays->parentOverlays.back();
-				blockContext->overlays->overlay.rptr = blockContext->engine->tryFindOverlay( params[0]->get( name ) );
+				blockContext->overlays->overlay.rptr = blockContext->engine->tryFindOverlay( name );
 
 				if ( !blockContext->overlays->overlay.rptr )
 				{
@@ -390,10 +390,10 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
 				auto & parent = blockContext->overlays->parentOverlays.back();
-				blockContext->overlays->overlay.rptr = blockContext->engine->tryFindOverlay( params[0]->get( name ) );
+				blockContext->overlays->overlay.rptr = blockContext->engine->tryFindOverlay( name );
 
 				if ( !blockContext->overlays->overlay.rptr )
 				{
@@ -588,8 +588,8 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
-				ScenePtrStrMap::iterator it = getRootContext( *blockContext )->mapScenes.find( params[0]->get( name ) );
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				ScenePtrStrMap::iterator it = getRootContext( *blockContext )->mapScenes.find( name );
 
 				if ( it != getRootContext( *blockContext )->mapScenes.end() )
 				{
@@ -617,9 +617,9 @@ namespace castor3d
 			{
 				if ( blockContext->renderTarget->getScene() )
 				{
-					castor::String name;
+					auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 
-					if ( auto camera = blockContext->renderTarget->getScene()->findCamera( params[0]->get( name ) ) )
+					if ( auto camera = blockContext->renderTarget->getScene()->findCamera( name ) )
 					{
 						blockContext->renderTarget->setCamera( *camera );
 					}
@@ -800,8 +800,7 @@ namespace castor3d
 
 				if ( params.size() > 1 )
 				{
-					castor::String tmp;
-					parameters.parse( params[1]->get( tmp ) );
+					parameters.parse( params[1]->get< castor::String >() );
 				}
 
 				castor::String name;
@@ -1258,7 +1257,7 @@ namespace castor3d
 			else
 			{
 				newBlockContext->scene = blockContext;
-				params[0]->get( newBlockContext->name );
+				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 			}
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eCamera )
@@ -1276,7 +1275,7 @@ namespace castor3d
 			else
 			{
 				newBlockContext->scene = blockContext;
-				params[0]->get( newBlockContext->name );
+				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 			}
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eLight )
@@ -1293,7 +1292,7 @@ namespace castor3d
 			}
 			else
 			{
-				params[0]->get( newBlockContext->name );
+				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				newBlockContext->scene = blockContext;
 				newBlockContext->isCameraNode = true;
 				newBlockContext->parentNode = blockContext->scene->getCameraRootNode();
@@ -1314,7 +1313,7 @@ namespace castor3d
 			}
 			else
 			{
-				params[0]->get( newBlockContext->name );
+				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				newBlockContext->scene = blockContext;
 				newBlockContext->isCameraNode = false;
 				newBlockContext->parentNode = blockContext->scene->getObjectRootNode();
@@ -1335,8 +1334,9 @@ namespace castor3d
 			}
 			else
 			{
+				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				newBlockContext->scene = blockContext;
-				newBlockContext->ownGeometry = blockContext->scene->createGeometry( params[0]->get< castor::String >()
+				newBlockContext->ownGeometry = blockContext->scene->createGeometry( newBlockContext->name
 					, *blockContext->scene );
 				newBlockContext->geometry = newBlockContext->ownGeometry.get();
 			}
@@ -1378,8 +1378,9 @@ namespace castor3d
 			}
 			else
 			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				newBlockContext->scene = blockContext;
-				newBlockContext->ownBillboards = castor::makeUnique< BillboardList >( params[0]->get< castor::String >()
+				newBlockContext->ownBillboards = castor::makeUnique< BillboardList >( name
 					, *blockContext->scene );
 				newBlockContext->billboards = newBlockContext->ownBillboards.get();
 			}
@@ -1398,8 +1399,9 @@ namespace castor3d
 			}
 			else
 			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				newBlockContext->scene = blockContext;
-				newBlockContext->animGroup = blockContext->scene->addNewAnimatedObjectGroup( params[0]->get< castor::String >()
+				newBlockContext->animGroup = blockContext->scene->addNewAnimatedObjectGroup( name
 					, *blockContext->scene );
 			}
 		}
@@ -1417,10 +1419,10 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
 				auto & parent = blockContext->overlays->parentOverlays.back();
-				blockContext->overlays->overlay.rptr = blockContext->scene->tryFindOverlay( params[0]->get( name ) );
+				blockContext->overlays->overlay.rptr = blockContext->scene->tryFindOverlay( name );
 
 				if ( !blockContext->overlays->overlay.rptr )
 				{
@@ -1449,10 +1451,10 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
 				auto & parent = blockContext->overlays->parentOverlays.back();
-				blockContext->overlays->overlay.rptr = blockContext->scene->tryFindOverlay( params[0]->get( name ) );
+				blockContext->overlays->overlay.rptr = blockContext->scene->tryFindOverlay( name );
 
 				if ( !blockContext->overlays->overlay.rptr )
 				{
@@ -1481,10 +1483,10 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
 				auto & parent = blockContext->overlays->parentOverlays.back();
-				blockContext->overlays->overlay.rptr = blockContext->scene->tryFindOverlay( params[0]->get( name ) );
+				blockContext->overlays->overlay.rptr = blockContext->scene->tryFindOverlay( name );
 
 				if ( !blockContext->overlays->overlay.rptr )
 				{
@@ -1573,7 +1575,7 @@ namespace castor3d
 				{
 					getEngine( *blockContext )->setLoadingScene( castor::move( blockContext->ownScene ) );
 				}
-				else
+				else if ( blockContext->ownScene )
 				{
 					getEngine( *blockContext )->addScene( blockContext->scene->getName()
 						, blockContext->ownScene
@@ -1799,10 +1801,10 @@ namespace castor3d
 		{
 			if ( blockContext->scene )
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				newBlockContext->scene = blockContext;
 				newBlockContext->root = blockContext->root;
-				newBlockContext->mesh = blockContext->scene->tryFindMesh( params[0]->get( name ) );
+				newBlockContext->mesh = blockContext->scene->tryFindMesh( name );
 
 				if ( !newBlockContext->mesh )
 				{
@@ -1822,9 +1824,9 @@ namespace castor3d
 		{
 			if ( blockContext->scene )
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				newBlockContext->scene = blockContext;
-				newBlockContext->skeleton = blockContext->scene->tryFindSkeleton( params[0]->get( name ) );
+				newBlockContext->skeleton = blockContext->scene->tryFindSkeleton( name );
 
 				if ( !newBlockContext->skeleton )
 				{
@@ -1868,15 +1870,15 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String value;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 
-				if ( auto node = blockContext->scene->scene->tryFindSceneNode( params[0]->get( value ) ) )
+				if ( auto node = blockContext->scene->scene->tryFindSceneNode( name ) )
 				{
 					blockContext->parentNode = node;
 				}
 				else
 				{
-					CU_ParsingError( cuT( "No scene node named " ) + value );
+					CU_ParsingError( cuT( "No scene node named " ) + name );
 				}
 			}
 		}
@@ -1911,9 +1913,9 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 
-				if ( auto material = getEngine( *blockContext )->tryFindMaterial( params[0]->get( name ) ) )
+				if ( auto material = getEngine( *blockContext )->tryFindMaterial( name ) )
 				{
 					blockContext->material = material;
 				}
@@ -2088,9 +2090,9 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 
-				if ( auto parent = blockContext->scene->scene->findSceneNode( params[0]->get( name ) ) )
+				if ( auto parent = blockContext->scene->scene->findSceneNode( name ) )
 				{
 					blockContext->parentNode = parent;
 
@@ -2418,7 +2420,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				SceneNodeRPtr parent;
 
 				if ( name == Scene::ObjectRootNode )
@@ -2618,7 +2620,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				SceneNodeRPtr parent;
 
 				if ( name == Scene::ObjectRootNode )
@@ -2664,8 +2666,8 @@ namespace castor3d
 			{
 				if ( blockContext->geometry->getMesh() )
 				{
-					castor::String name;
-					auto material = getEngine( *blockContext )->tryFindMaterial( params[0]->get( name ) );
+					auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+					auto material = getEngine( *blockContext )->tryFindMaterial( name );
 
 					if ( material )
 					{
@@ -2691,12 +2693,12 @@ namespace castor3d
 		{
 			if ( blockContext->geometry )
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto scene = blockContext->geometry->getScene();
 				newBlockContext->geometry = blockContext;
 				newBlockContext->scene = blockContext->scene;
 				newBlockContext->root = blockContext->scene->root;
-				newBlockContext->mesh = scene->tryFindMesh( params[0]->get( name ) );
+				newBlockContext->mesh = scene->tryFindMesh( name );
 
 				if ( !newBlockContext->mesh )
 				{
@@ -2792,8 +2794,8 @@ namespace castor3d
 			}
 			else if ( blockContext->geometry->getMesh() )
 			{
-				if ( castor::String name;
-					auto material = getEngine( *blockContext )->tryFindMaterial( params[1]->get( name ) ) )
+				if ( auto name = getPrefixedName( params[1]->get< castor::String >(), *blockContext );
+					auto material = getEngine( *blockContext )->tryFindMaterial( name ) )
 				{
 					uint16_t index;
 
@@ -2843,9 +2845,8 @@ namespace castor3d
 
 				if ( params.size() > 1 )
 				{
-					castor::String meshParams;
-					params[1]->get( meshParams );
-					scnprs::fillMeshImportParameters( context, meshParams, parameters );
+					auto importParams = params[1]->get< castor::String >();
+					scnprs::fillMeshImportParameters( context, importParams, parameters );
 				}
 
 				if ( !SkeletonImporter::importData( *blockContext->skeleton
@@ -2877,9 +2878,8 @@ namespace castor3d
 
 				if ( params.size() > 1 )
 				{
-					castor::String meshParams;
-					params[1]->get( meshParams );
-					scnprs::fillMeshImportParameters( context, meshParams, parameters );
+					auto importParams = params[1]->get< castor::String >();
+					scnprs::fillMeshImportParameters( context, importParams, parameters );
 				}
 
 				auto const & engine = *getEngine( *blockContext );
@@ -2942,9 +2942,8 @@ namespace castor3d
 
 				if ( params.size() > 2 )
 				{
-					castor::String meshParams;
-					params[2]->get( meshParams );
-					scnprs::fillMeshImportParameters( context, meshParams, parameters );
+					auto importParams = params[2]->get< castor::String >();
+					scnprs::fillMeshImportParameters( context, importParams, parameters );
 				}
 
 				auto const & engine = *getEngine( *blockContext );
@@ -3029,8 +3028,7 @@ namespace castor3d
 
 				if ( params.size() > 1 )
 				{
-					castor::String tmp;
-					parameters.parse( params[1]->get( tmp ) );
+					parameters.parse( params[1]->get< castor::String >() );
 				}
 
 				auto const & factory = getEngine( *blockContext )->getMeshFactory();
@@ -3313,9 +3311,9 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 
-				if ( auto material = getEngine( *blockContext )->findMaterial( params[0]->get( name ) ) )
+				if ( auto material = getEngine( *blockContext )->findMaterial( name ) )
 				{
 					for ( auto const & submesh : *blockContext->mesh )
 					{
@@ -3344,9 +3342,9 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 
-				if ( auto skeleton = blockContext->mesh->getScene()->findSkeleton( params[0]->get( name ) ) )
+				if ( auto skeleton = blockContext->mesh->getScene()->findSkeleton( name ) )
 				{
 					blockContext->mesh->setSkeleton( skeleton );
 				}
@@ -3485,10 +3483,10 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[1]->get< castor::String >(), *blockContext );
 				uint16_t index;
 
-				if (  auto material = getEngine( *blockContext )->findMaterial( params[1]->get( name ) ))
+				if ( auto material = getEngine( *blockContext )->findMaterial( name ) )
 				{
 					if ( blockContext->mesh->getSubmeshCount() > params[0]->get( index ) )
 					{
@@ -3632,8 +3630,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String strParams;
-				params[0]->get( strParams );
+				auto strParams = params[0]->get< castor::String >();
 				castor::Point3i pt3Indices;
 				auto arrayValues = castor::string::split( strParams, cuT( " " ) );
 				blockContext->face1 = -1;
@@ -4136,7 +4133,8 @@ namespace castor3d
 		{
 			if ( blockContext->overlay.rptr )
 			{
-				blockContext->overlay.rptr->setMaterial( getEngine( *blockContext )->findMaterial( params[0]->get< castor::String >() ) );
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				blockContext->overlay.rptr->setMaterial( getEngine( *blockContext )->findMaterial( name ) );
 			}
 			else
 			{
@@ -4148,12 +4146,12 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserOverlayPanelOverlay, OverlayContext )
 		{
 			auto engine = getEngine( *blockContext );
-			castor::String name;
+			auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 			blockContext->parentOverlays.push_back( castor::move( blockContext->overlay ) );
 			auto & parent = blockContext->parentOverlays.back();
 			blockContext->overlay.rptr = blockContext->scene
-				? blockContext->scene->scene->tryFindOverlay( params[0]->get( name ) )
-				: engine->tryFindOverlay( params[0]->get( name ) );
+				? blockContext->scene->scene->tryFindOverlay( name )
+				: engine->tryFindOverlay( name );
 
 			if ( !blockContext->overlay.rptr )
 			{
@@ -4172,12 +4170,12 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserOverlayBorderPanelOverlay, OverlayContext )
 		{
 			auto engine = getEngine( *blockContext );
-			castor::String name;
+			auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 			blockContext->parentOverlays.push_back( castor::move( blockContext->overlay ) );
 			auto & parent = blockContext->parentOverlays.back();
 			blockContext->overlay.rptr = blockContext->scene
-				? blockContext->scene->scene->tryFindOverlay( params[0]->get( name ) )
-				: engine->tryFindOverlay( params[0]->get( name ) );
+				? blockContext->scene->scene->tryFindOverlay( name )
+				: engine->tryFindOverlay( name );
 
 			if ( !blockContext->overlay.rptr )
 			{
@@ -4196,12 +4194,12 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserOverlayTextOverlay, OverlayContext )
 		{
 			auto engine = getEngine( *blockContext );
-			castor::String name;
+			auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 			blockContext->parentOverlays.push_back( castor::move( blockContext->overlay ) );
 			auto & parent = blockContext->parentOverlays.back();
 			blockContext->overlay.rptr = blockContext->scene
-				? blockContext->scene->scene->tryFindOverlay( params[0]->get( name ) )
-				: engine->tryFindOverlay( params[0]->get( name ) );
+				? blockContext->scene->scene->tryFindOverlay( name )
+				: engine->tryFindOverlay( name );
 
 			if ( !blockContext->overlay.rptr )
 			{
@@ -4322,7 +4320,8 @@ namespace castor3d
 
 			if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 			{
-				overlay->getBorderPanelOverlay()->setBorderMaterial( getEngine( *blockContext )->findMaterial( params[0]->get< castor::String >() ) );
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				overlay->getBorderPanelOverlay()->setBorderMaterial( getEngine( *blockContext )->findMaterial( name ) );
 			}
 			else
 			{
@@ -4511,8 +4510,7 @@ namespace castor3d
 
 			if ( overlay && overlay->getType() == OverlayType::eText )
 			{
-				castor::String strParams;
-				params[0]->get( strParams );
+				auto strParams = params[0]->get< castor::String >();
 				castor::string::replace( strParams, cuT( "\\a" ), cuT( "\a" ) );
 				castor::string::replace( strParams, cuT( "\\b" ), cuT( "\b" ) );
 				castor::string::replace( strParams, cuT( "\\f" ), cuT( "\f" ) );
@@ -4531,8 +4529,8 @@ namespace castor3d
 
 		static CU_ImplementAttributeParserBlock( parserCameraParent, CameraContext )
 		{
-			castor::String name;
-			SceneNodeRPtr parent = blockContext->scene->scene->findSceneNode( params[0]->get( name ) );
+			auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+			SceneNodeRPtr parent = blockContext->scene->scene->findSceneNode( name );
 
 			if ( parent )
 			{
@@ -4734,9 +4732,9 @@ namespace castor3d
 		{
 			if ( blockContext->billboards )
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 
-				if ( auto parent = blockContext->scene->scene->findSceneNode( params[0]->get( name ) ) )
+				if ( auto parent = blockContext->scene->scene->findSceneNode( name ) )
 				{
 					parent->attachObject( *blockContext->billboards );
 				}
@@ -4804,9 +4802,9 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 
-				if ( auto material = getEngine( *blockContext )->tryFindMaterial( params[0]->get( name ) ) )
+				if ( auto material = getEngine( *blockContext )->tryFindMaterial( name ) )
 				{
 					blockContext->billboards->setMaterial( material );
 				}
@@ -4869,9 +4867,9 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 
-				if ( auto geometry = blockContext->scene->scene->findGeometry( params[0]->get( name ) ) )
+				if ( auto geometry = blockContext->scene->scene->findGeometry( name ) )
 				{
 					if ( auto node = geometry->getParent();
 						node && node->hasAnimation() )
@@ -4932,9 +4930,9 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 
-				if ( auto geometry = blockContext->scene->scene->findGeometry( params[0]->get( name ) ) )
+				if ( auto geometry = blockContext->scene->scene->findGeometry( name ) )
 				{
 					if ( auto mesh = geometry->getMesh() )
 					{
@@ -4970,9 +4968,9 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 
-				if ( auto geometry = blockContext->scene->scene->findGeometry( params[0]->get( name ) ) )
+				if ( auto geometry = blockContext->scene->scene->findGeometry( name ) )
 				{
 					if ( auto mesh = geometry->getMesh() )
 					{
@@ -5016,9 +5014,9 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 
-				if ( auto node = blockContext->scene->scene->findSceneNode( params[0]->get( name ) ) )
+				if ( auto node = blockContext->scene->scene->findSceneNode( name ) )
 				{
 					if ( node->hasAnimation() )
 					{

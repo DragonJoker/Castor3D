@@ -568,6 +568,7 @@ namespace castor3d
 		RenderTargetRPtr renderTarget{};
 	};
 
+	C3D_API castor::String getPrefix( TargetContext const & context );
 	C3D_API Engine * getEngine( TargetContext const & context );
 	C3D_API RootContext * getRootContext( TargetContext const & context );
 	/**

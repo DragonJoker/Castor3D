@@ -1094,6 +1094,11 @@ namespace castor3d
 		doUpdateTextureFlags();
 	}
 
+	castor::String getPrefix( PassContext const & context )
+	{
+		return getPrefix( *context.material );
+	}
+
 	Engine * getEngine( PassContext const & context )
 	{
 		return getEngine( *context.material );

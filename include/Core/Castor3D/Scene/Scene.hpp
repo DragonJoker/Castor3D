@@ -557,9 +557,11 @@ namespace castor3d
 		SceneRPtr scene{};
 		SceneUPtr ownScene{};
 		castor::String fontName{};
+		castor::String prefix{};
 		OverlayContextUPtr overlays{};
 	};
 
+	C3D_API castor::String getPrefix( SceneContext const & context );
 	C3D_API Engine * getEngine( SceneContext const & context );
 }
 

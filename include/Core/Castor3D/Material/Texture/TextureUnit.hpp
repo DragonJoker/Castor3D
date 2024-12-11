@@ -356,6 +356,7 @@ namespace castor3d
 		TextureTransform textureTransform{};
 	};
 
+	C3D_API castor::String getPrefix( TextureContext const & context );
 	C3D_API Engine * getEngine( TextureContext const & context );
 
 	template< typename ComponentT >

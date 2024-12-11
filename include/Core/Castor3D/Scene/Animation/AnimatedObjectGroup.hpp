@@ -300,6 +300,7 @@ namespace castor3d
 		castor::String animName{};
 	};
 
+	C3D_API castor::String getPrefix( AnimGroupContext const & context );
 	C3D_API Engine * getEngine( AnimGroupContext const & context );
 }
 

@@ -204,6 +204,7 @@ namespace castor3d
 		SkeletonRPtr skeleton{};
 	};
 
+	C3D_API castor::String getPrefix( SkeletonContext const & context );
 	C3D_API Engine * getEngine( SkeletonContext const & context );
 }
 

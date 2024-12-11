@@ -24,6 +24,8 @@
 #include "Castor3D/Gui/Theme/StyleSlider.hpp"
 #include "Castor3D/Gui/Theme/StyleStatic.hpp"
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/FontCache.hpp>
@@ -726,6 +728,13 @@ namespace castor3d
 					}
 				} ) );
 		}
+	}
+
+	castor::String getPrefix( GuiContext const & context )
+	{
+		return context.scene
+			? getPrefix( *context.scene )
+			: getPrefix( *context.root );
 	}
 
 	Engine * getEngine( GuiContext const & context )

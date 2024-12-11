@@ -515,6 +515,7 @@ namespace castor3d
 		castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
 	};
 
+	C3D_API castor::String getPrefix( NodeContext const & context );
 	C3D_API Engine * getEngine( NodeContext const & context );
 }
 

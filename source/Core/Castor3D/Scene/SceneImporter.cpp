@@ -688,6 +688,14 @@ namespace castor3d
 		}
 	}
 
+	castor::String getPrefix( SceneImportContext const & context )
+	{
+		auto parentPrefix = getPrefix( *context.scene );
+		return parentPrefix.empty()
+			? context.prefix
+			: parentPrefix + context.prefix;
+	}
+
 	Engine * getEngine( SceneImportContext const & context )
 	{
 		return getEngine( *context.scene );

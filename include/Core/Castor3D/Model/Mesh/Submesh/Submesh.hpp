@@ -474,6 +474,7 @@ namespace castor3d
 		UInt32Array faces{};
 	};
 
+	C3D_API castor::String getPrefix( SubmeshContext const & context );
 	C3D_API Engine * getEngine( SubmeshContext const & context );
 }
 

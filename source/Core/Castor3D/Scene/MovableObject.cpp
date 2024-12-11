@@ -77,6 +77,11 @@ namespace castor3d
 		return getScene()->getEngine();
 	}
 
+	castor::String getPrefix( MovableContext const & context )
+	{
+		return getPrefix( *context.scene );
+	}
+
 	Engine * getEngine( MovableContext const & context )
 	{
 		return getEngine( *context.scene );
