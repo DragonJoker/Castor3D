@@ -94,6 +94,15 @@ namespace castor3d
 
 		m_textureRemaps = textureRemaps;
 		m_parameters = parameters;
+		m_loadConfig.allowCompression = !m_parameters.get< bool >( cuT( "disable_image_compression" ) );
+		float fvalue;
+
+		if ( m_parameters.get( cuT( "emissive_mult" ), fvalue )
+			&& std::abs( fvalue - 1.0f ) > std::numeric_limits< float >::epsilon() )
+		{
+			m_emissiveMult = fvalue;
+		}
+
 		log::info << getPrefix() << cuT( "Loading Material [" ) << material.getName() << cuT( "]" ) << std::endl;
 		bool result = doImportMaterial( material );
 

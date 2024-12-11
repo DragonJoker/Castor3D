@@ -363,6 +363,8 @@ namespace castor3d
 		ImporterFile * m_file{};
 		Parameters m_parameters;
 		castor::Map< PassComponentTextureFlag, TextureConfiguration > m_textureRemaps;
+		castor::ImageLoaderConfig m_loadConfig{ false, false, false };
+		float m_emissiveMult{ 1.0f };
 	};
 }
 
