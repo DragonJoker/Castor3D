@@ -99,7 +99,7 @@ namespace castor3d
 		parameters.get( cuT( "preferred_importer" ), preferredImporter );
 		auto file = engine.getImporterFileFactory().create( extension
 			, preferredImporter
-			, engine
+			, scene
 			, path
 			, parameters
 			, progress );
