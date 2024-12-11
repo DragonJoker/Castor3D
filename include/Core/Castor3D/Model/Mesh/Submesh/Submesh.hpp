@@ -301,6 +301,15 @@ namespace castor3d
 		C3D_API ashes::DescriptorSet const & getDescriptorSet( Geometry const & geometry
 			, Pass const & pass )const;
 		/**
+		 *\~english
+		 *\brief			Clones this object into the given one.
+		 *\param[in,out]	output	Receives this object's data.
+		 *\~french
+		 *\brief			Clone cet objet dans celui donné.
+		 *\param[in,out]	output	Reçoit les données de cet objet.
+		 */
+		C3D_API void cloneInto( Submesh & output )const;
+		/**
 		*\~english
 		*name
 		*	Mutators.

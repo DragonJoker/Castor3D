@@ -223,6 +223,18 @@ namespace castor3d
 		}
 	}
 
+	void Mesh::cloneInto( Mesh & output )const
+	{
+		output.m_box = m_box;
+		output.m_sphere = m_sphere;
+		output.m_serialisable = m_serialisable;
+
+		for ( auto & submesh : m_submeshes )
+		{
+			submesh->cloneInto( *output.createSubmesh() );
+		}
+	}
+
 	Engine * getEngine( MeshContext const & context )
 	{
 		return context.scene->scene->getEngine();

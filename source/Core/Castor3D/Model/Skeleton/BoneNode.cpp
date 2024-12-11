@@ -56,4 +56,11 @@ namespace castor3d
 
 		return castor::BoundingBox{ min, max };
 	}
+
+	SkeletonNodeUPtr BoneNode::clone( Skeleton & parent )const
+	{
+		auto result = castor::makeUnique< BoneNode >( getName(), parent, getInverseTransform(), getId() );
+		doCloneInto( *result );
+		return castor::ptrRefCast< SkeletonNode >( result );
+	}
 }

@@ -128,6 +128,15 @@ namespace castor3d
 		 *\brief		Calcule les bounding box et sphere, pour chaque os, pour le maillage donné.
 		 */
 		C3D_API void computeContainers( Mesh & mesh );
+		/**
+		 *\~english
+		 *\brief			Clones this object into the given one.
+		 *\param[in,out]	output	Receives this object's data.
+		 *\~french
+		 *\brief			Clone cet objet dans celui donné.
+		 *\param[in,out]	output	Reçoit les données de cet objet.
+		 */
+		C3D_API void cloneInto( Skeleton & output )const;
 
 		castor::Matrix4x4f const & getGlobalInverseTransform()const
 		{

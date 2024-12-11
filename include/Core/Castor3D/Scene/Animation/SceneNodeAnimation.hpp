@@ -34,7 +34,12 @@ namespace castor3d
 		C3D_API explicit SceneNodeAnimation( SceneNode & node
 			, castor::String const & name = castor::cuEmptyString );
 
-	protected:
+	private:
+		void doCloneInto( Animation & output )const override
+		{
+		}
+
+	private:
 		friend class BinaryWriter< SceneNodeAnimation >;
 		friend class BinaryParser< SceneNodeAnimation >;
 		friend class SceneNodeAnimationInstance;

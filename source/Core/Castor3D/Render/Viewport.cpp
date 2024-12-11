@@ -187,6 +187,26 @@ namespace castor3d
 		return result;
 	}
 
+	void Viewport::cloneInto( Viewport & output )const
+	{
+		output.m_left = m_left;
+		output.m_right = m_right;
+		output.m_top = m_top;
+		output.m_bottom = m_bottom;
+		output.m_far = m_far;
+		output.m_near = m_near;
+		output.m_fovY = m_fovY;
+		output.m_ratio = m_ratio;
+		output.m_type = m_type;
+		output.m_size = m_size;
+		output.m_position = m_position;
+		output.m_viewport = m_viewport;
+		output.m_scissor = m_scissor;
+		output.m_projection = m_projection;
+		output.m_safeBandedProjection = m_safeBandedProjection;
+		output.m_modified = true;
+	}
+
 	void Viewport::setPerspective( castor::Angle const & fovY
 		, float aspect
 		, float nearZ

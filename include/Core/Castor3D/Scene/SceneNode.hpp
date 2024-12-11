@@ -82,6 +82,15 @@ namespace castor3d
 		 */
 		C3D_API void update();
 		/**
+		 *\~english
+		 *\brief			Clones this object into the given one.
+		 *\param[in,out]	output	Receives this object's data.
+		 *\~french
+		 *\brief			Clone cet objet dans celui donné.
+		 *\param[in,out]	output	Reçoit les données de cet objet.
+		 */
+		C3D_API void cloneInto( SceneNode & output )const;
+		/**
 		 *\name Attached objects management.
 		**/
 		/**@{*/

@@ -269,4 +269,18 @@ namespace castor3d
 		vis.visit( cuT( "Outer cut off" ), m_outerCutOff );
 		vis.visit( cuT( "Exponent" ), m_exponent );
 	}
+
+	void SpotLight::doCloneInto( LightCategory & output )const
+	{
+		auto & spot = static_cast< SpotLight & >( output );
+		spot.m_range = m_range;
+		spot.m_exponent = m_exponent;
+		spot.m_intensity = m_intensity;
+		spot.m_innerCutOff = m_innerCutOff;
+		spot.m_outerCutOff = m_outerCutOff;
+		spot.m_lightView = m_lightView;
+		spot.m_lightProj = m_lightProj;
+		spot.m_lightSpace = m_lightSpace;
+		spot.m_direction = m_direction;
+	}
 }

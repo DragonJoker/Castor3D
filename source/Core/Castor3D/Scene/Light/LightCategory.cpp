@@ -44,6 +44,14 @@ namespace castor3d
 		doAccept( vis );
 	}
 
+	void LightCategory::cloneInto( LightCategory & output )const
+	{
+		output.m_lightComponentCount = m_lightComponentCount;
+		output.m_shadowComponentCount = m_shadowComponentCount;
+		output.m_colour = m_colour;
+		doCloneInto( output );
+	}
+
 	uint32_t LightCategory::getVolumetricSteps()const
 	{
 		return m_light.getVolumetricSteps();

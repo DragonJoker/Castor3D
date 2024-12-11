@@ -43,6 +43,13 @@ namespace castor3d
 		 */
 		C3D_API castor::BoundingBox computeBoundingBox( Mesh const & mesh
 			, uint32_t boneIndex )const;
+		/**
+		 *\~english
+		 *\return		A clone of this object.
+		 *\~french
+		 *\return		Un clone de cet objet.
+		 */
+		C3D_API SkeletonNodeUPtr clone( Skeleton & parent )const override;
 
 		uint32_t getId()const noexcept
 		{

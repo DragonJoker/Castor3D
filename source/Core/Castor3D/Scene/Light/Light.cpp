@@ -53,6 +53,15 @@ namespace castor3d
 		m_shadows.accept( vis, getLightType() );
 	}
 
+	void Light::cloneInto( Light & output )const
+	{
+		output.m_enabled = m_enabled;
+		output.m_shadows = m_shadows;
+		output.m_currentShadowCaster = m_currentShadowCaster.load();
+		output.m_currentGlobalIllumination = m_currentGlobalIllumination.load();
+		m_category->cloneInto( *output.m_category );
+	}
+
 	DirectionalLightRPtr Light::getDirectionalLight()const
 	{
 		CU_Require( m_category->getLightType() == LightType::eDirectional );

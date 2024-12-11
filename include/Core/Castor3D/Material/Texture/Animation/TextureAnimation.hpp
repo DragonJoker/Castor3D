@@ -108,7 +108,10 @@ namespace castor3d
 			setScaleSpeed( castor::move( scale ) );
 		}
 
-	protected:
+	private:
+		void doCloneInto( Animation & output )const override;
+
+	private:
 		TextureTranslateSpeed m_translate{};
 		TextureRotateSpeed m_rotate{};
 		TextureScaleSpeed m_scale{};

@@ -33,4 +33,16 @@ namespace castor3d
 	{
 		m_parent = &node;
 	}
+
+	SkeletonNodeUPtr SkeletonNode::clone( Skeleton & parent )const
+	{
+		auto result = castor::makeUnique< SkeletonNode >( getName(), parent );
+		doCloneInto( *result );
+		return result;
+	}
+
+	void SkeletonNode::doCloneInto( SkeletonNode & output )const
+	{
+		output.m_transform = m_transform;
+	}
 }

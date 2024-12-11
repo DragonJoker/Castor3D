@@ -99,6 +99,13 @@ namespace castor3d
 		C3D_API void initialise()override;
 		/**
 		 *\~english
+		 *\return		A clone of this object.
+		 *\~french
+		 *\return		Un clone de cet objet.
+		 */
+		C3D_API AnimationKeyFrameUPtr clone( AnimationT< Engine > & parent )const override;
+		/**
+		 *\~english
 		 *\return		The beginning of the cumulative transforms map.
 		 *\~french
 		 *\return		Le début de la map des transformations cumulatives.

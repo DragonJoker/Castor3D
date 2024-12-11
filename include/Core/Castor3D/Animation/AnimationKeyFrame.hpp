@@ -43,6 +43,13 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\return		A clone of this object.
+		 *\~french
+		 *\return		Un clone de cet objet.
+		 */
+		C3D_API virtual AnimationKeyFrameUPtr clone( AnimationT< Engine > & parent )const = 0;
+		/**
+		 *\~english
 		 *\return		The start time index.
 		 *\~french
 		 *\return		Le temps de départ.
@@ -63,6 +70,11 @@ namespace castor3d
 		}
 
 	protected:
+		C3D_API void doCloneInto( AnimationKeyFrame & output )const
+		{
+			output.m_boundingBox = m_boundingBox;
+		}
+
 		//!\~english	The start time index.
 		//!\~french		L'index de temps de début.
 		castor::Milliseconds m_timeIndex;

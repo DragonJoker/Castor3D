@@ -157,10 +157,13 @@ namespace castor3d
 			return m_rootObjects;
 		}
 
-	protected:
+	private:
+		void doCloneInto( Animation & output )const override;
+
+	private:
 		using ObjectMap = castor::StringMap< SkeletonAnimationObjectUPtr >;
 
-	protected:
+	private:
 		//!\~english	The root moving objects.
 		//!\~french		Les objets mouvants racine.
 		SkeletonAnimationObjectArray m_rootObjects;

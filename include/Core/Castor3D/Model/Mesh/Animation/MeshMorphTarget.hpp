@@ -49,6 +49,13 @@ namespace castor3d
 			, float targetWeight );
 		/**
 		 *\~english
+		 *\return		A clone of this object.
+		 *\~french
+		 *\return		Un clone de cet objet.
+		 */
+		C3D_API AnimationKeyFrameUPtr clone( AnimationT< Engine > & parent )const override;
+		/**
+		 *\~english
 		 *\return		The submesh buffer matching given submesh.
 		 *\~french
 		 *\return		Le tampon de sous-maillage correspondant au sous-maillage donné.
