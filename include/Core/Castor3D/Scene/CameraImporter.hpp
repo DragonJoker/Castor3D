@@ -32,6 +32,26 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Camera import Function.
+		 *\param[out]	name		The Camera name.
+		 *\param[out]	createInfo	The camera creation informations.
+		 *\param[in]	file		The location of the file to import.
+		 *\param[in]	parameters	Import configuration parameters.
+		 *\return		The imported Camera, \p nullptr if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import de Camera.
+		 *\param[out]	name		Le nom du Camera.
+		 *\param[out]	createInfo	Les informations de création de la caméra.
+		 *\param[in]	file		Le chemin vers le fichier à importer.
+		 *\param[in]	parameters	Paramètres de configuration de l'import.
+		 *\return		La Camera importée, \p nullptr si un problème quelconque est survenu.
+		 */
+		C3D_API CameraRes importData( castor::String const & name
+			, CameraCreateInfo const & createInfo
+			, ImporterFile * file
+			, Parameters const & parameters );
+		/**
+		 *\~english
+		 *\brief		Camera import Function.
 		 *\param[out]	camera			Receives the imported data.
 		 *\param[in]	file			The location of the file to import.
 		 *\param[in]	parameters		Import configuration parameters.
@@ -43,7 +63,7 @@ namespace castor3d
 		 *\param[in]	parameters		Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API bool import( Camera & camera
+		C3D_API bool importData( Camera & camera
 			, ImporterFile * file
 			, Parameters const & parameters );
 		/**
@@ -60,7 +80,7 @@ namespace castor3d
 		 *\param[in]	parameters		Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API static bool import( Camera & camera
+		C3D_API static bool importData( Camera & camera
 			, castor::Path const & pathFile
 			, Parameters const & parameters );
 
@@ -70,16 +90,8 @@ namespace castor3d
 		}
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Camera import function.
-		 *\param[out]	camera	Receives the imported data.
-		 *\return		\p false if any problem occured.
-		 *\~french
-		 *\brief		Fonction d'import de Camera.
-		 *\param[out]	camera	Reçoit les données importées.
-		 *\return		\p false si un problème quelconque est survenu.
-		 */
+		C3D_API virtual CameraRes doCreateCamera( castor::String const & name
+			, CameraCreateInfo const & createInfo );
 		virtual bool doImportCamera( Camera & camera ) = 0;
 
 	protected:

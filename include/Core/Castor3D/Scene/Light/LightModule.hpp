@@ -121,6 +121,14 @@ namespace castor3d
 	*/
 	class SpotLight;
 
+	struct LightCreateInfo
+	{
+		castor::NotNullT< Scene > scene;
+		castor::NotNullT< SceneNode > parentNode;
+		castor::NotNullT< LightFactory > factory;
+		LightType lightType;
+	};
+
 	using OnLightChangedFunction = castor::Function< void( Light & ) >;
 	using OnLightChanged = castor::SignalT< OnLightChangedFunction >;
 	using OnLightChangedConnection = OnLightChanged::connection;

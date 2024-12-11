@@ -658,52 +658,55 @@ namespace c3d_assimp
 		return result;
 	}
 
-	castor::StringArray AssimpImporterFile::listAllMeshAnimations()
+	castor::Vector< uint32_t > AssimpImporterFile::listTextureAnimations( castor3d::Material const & material
+		, uint32_t pass )
 	{
-		castor::StringArray result;
+		castor::Vector< uint32_t > result;
+		return result;
+	}
+
+	uint32_t AssimpImporterFile::countAllMeshAnimations()const
+	{
+		uint32_t result{};
 
 		for ( auto & [_, mesh] : m_sceneData.meshes )
 		{
 			for ( auto & submesh : mesh.submeshes )
 			{
-				for ( auto & anim : submesh.anims )
-				{
-					result.emplace_back( anim.first );
-				}
+				result += uint32_t( submesh.anims.size() );
 			}
 		}
 
 		return result;
 	}
 
-	castor::StringArray AssimpImporterFile::listAllSkeletonAnimations()
+	uint32_t AssimpImporterFile::countAllSkeletonAnimations()const
 	{
-		castor::StringArray result;
+		uint32_t result{};
 
 		for ( auto & [_, skeleton] : m_sceneData.skeletons )
 		{
-			for ( auto & anim : skeleton.anims )
-			{
-				result.push_back( anim.first );
-			}
+			result += uint32_t( skeleton.anims.size() );
 		}
 
 		return result;
 	}
 
-	castor::StringArray AssimpImporterFile::listAllSceneNodeAnimations()
+	uint32_t AssimpImporterFile::countAllSceneNodeAnimations()const
 	{
-		castor::StringArray result;
+		uint32_t result{};
 
 		for ( auto & node : m_sceneData.nodes )
 		{
-			for ( auto & anim : node.anims )
-			{
-				result.push_back( anim.first );
-			}
+			result += uint32_t( node.anims.size() );
 		}
 
 		return result;
+	}
+
+	uint32_t AssimpImporterFile::countAllTextureAnimations()const
+	{
+		return 0u;
 	}
 
 	castor3d::MaterialImporterUPtr AssimpImporterFile::createMaterialImporter()

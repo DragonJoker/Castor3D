@@ -26,6 +26,9 @@ namespace castor
 	using std::ref;
 
 	template< class DataT >
+	using NotNullT = DataT *;
+
+	template< class DataT >
 	using ReferenceWrapper = std::reference_wrapper< DataT >;
 
 	template< class DataT >

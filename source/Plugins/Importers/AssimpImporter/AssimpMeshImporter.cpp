@@ -118,7 +118,7 @@ namespace c3d_assimp
 							, *getOwner()
 							, getOwner()->getDefaultLightingModel() );
 
-						if ( importer->import( *mat
+						if ( importer->importData( *mat
 								, &file
 								, castor3d::Parameters{}
 							, castor::Map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration >{} ) )

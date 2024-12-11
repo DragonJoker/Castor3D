@@ -32,6 +32,26 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		SceneNode import Function.
+		 *\param[out]	name		The SceneNode name.
+		 *\param[out]	createInfo	The scene node creation informations.
+		 *\param[in]	file		The location of the file to import.
+		 *\param[in]	parameters	Import configuration parameters.
+		 *\return		The imported SceneNode, \p nullptr if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import de SceneNode.
+		 *\param[out]	name		Le nom du SceneNode.
+		 *\param[out]	createInfo	Les informations de création du noeud de scène.
+		 *\param[in]	file		Le chemin vers le fichier à importer.
+		 *\param[in]	parameters	Paramètres de configuration de l'import.
+		 *\return		Le SceneNode importé, \p nullptr si un problème quelconque est survenu.
+		 */
+		C3D_API SceneNodeUPtr importData( castor::String const & name
+			, SceneNodeCreateInfo const & createInfo
+			, ImporterFile * file
+			, Parameters const & parameters );
+		/**
+		 *\~english
+		 *\brief		SceneNode import Function.
 		 *\param[out]	node			Receives the imported data.
 		 *\param[in]	file			The location of the file to import.
 		 *\param[in]	parameters		Import configuration parameters.
@@ -43,7 +63,7 @@ namespace castor3d
 		 *\param[in]	parameters		Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API bool import( SceneNode & node
+		C3D_API bool importData( SceneNode & node
 			, ImporterFile * file
 			, Parameters const & parameters );
 		/**
@@ -60,7 +80,7 @@ namespace castor3d
 		 *\param[in]	parameters		Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API static bool import( SceneNode & node
+		C3D_API static bool importData( SceneNode & node
 			, castor::Path const & pathFile
 			, Parameters const & parameters );
 
@@ -70,16 +90,8 @@ namespace castor3d
 		}
 
 	private:
-		/**
-		 *\~english
-		 *\brief		SceneNode import function.
-		 *\param[out]	node	Receives the imported data.
-		 *\return		\p false if any problem occured.
-		 *\~french
-		 *\brief		Fonction d'import de SceneNode.
-		 *\param[out]	node	Reçoit les données importées.
-		 *\return		\p false si un problème quelconque est survenu.
-		 */
+		C3D_API virtual SceneNodeUPtr doCreateSceneNode( castor::String const & name
+			, SceneNodeCreateInfo const & createInfo );
 		virtual bool doImportSceneNode( SceneNode & node ) = 0;
 
 	protected:

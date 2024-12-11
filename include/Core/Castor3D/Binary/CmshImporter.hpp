@@ -37,9 +37,12 @@ namespace castor3d
 		castor::StringArray listMeshAnimations( Mesh const & mesh )override;
 		castor::StringArray listSkeletonAnimations( Skeleton const & skeleton )override;
 		castor::StringArray listSceneNodeAnimations( SceneNode const & node )override;
-		castor::StringArray listAllMeshAnimations()override;
-		castor::StringArray listAllSkeletonAnimations()override;
-		castor::StringArray listAllSceneNodeAnimations()override;
+		castor::Vector< uint32_t > listTextureAnimations( Material const & material
+			, uint32_t pass )override;
+		uint32_t countAllMeshAnimations()const override;
+		uint32_t countAllSkeletonAnimations()const override;
+		uint32_t countAllSceneNodeAnimations()const override;
+		uint32_t countAllTextureAnimations()const override;
 
 		MaterialImporterUPtr createMaterialImporter()override;
 		AnimationImporterUPtr createAnimationImporter()override;
@@ -145,19 +148,23 @@ namespace castor3d
 		 */
 		static AnimationImporterUPtr create( Engine & engine );
 
-	protected:
+	private:
 		/**
 		 *\copydoc		castor3d::AnimationImporter::doImportSkeleton
 		 */
-		C3D_API bool doImportSkeleton( SkeletonAnimation & skeleton )override;
+		bool doImportSkeleton( SkeletonAnimation & skeleton )override;
 		/**
 		 *\copydoc		castor3d::AnimationImporter::doImportMesh
 		 */
-		C3D_API bool doImportMesh( MeshAnimation & mesh )override;
+		bool doImportMesh( MeshAnimation & mesh )override;
 		/**
 		 *\copydoc		castor3d::AnimationImporter::doImportNode
 		 */
-		C3D_API bool doImportNode( SceneNodeAnimation & node )override;
+		bool doImportNode( SceneNodeAnimation & node )override;
+		/**
+		 *\copydoc		castor3d::AnimationImporter::doImportTexture
+		 */
+		bool doImportTexture( TextureAnimation & animation )override;
 
 	public:
 		static castor::String const MeshAnimType;

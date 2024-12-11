@@ -307,4 +307,9 @@ namespace c3d_assimp
 			}
 		}
 	}
+
+	bool AssimpAnimationImporter::doImportTexture( castor3d::TextureAnimation & animation )
+	{
+		return true;
+	}
 }

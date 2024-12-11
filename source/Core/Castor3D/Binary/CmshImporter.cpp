@@ -158,40 +158,52 @@ namespace castor3d
 		return result;
 	}
 
-	castor::StringArray CmshImporterFile::listAllMeshAnimations()
+	castor::Vector< uint32_t > CmshImporterFile::listTextureAnimations( Material const & material
+		, uint32_t pass )
 	{
-		castor::StringArray result;
+		castor::Vector< uint32_t > result;
+		return result;
+	}
+
+	uint32_t CmshImporterFile::countAllMeshAnimations()const
+	{
+		uint32_t result{};
 
 		if ( getExtension() == CmshAnimationImporter::MeshAnimType )
 		{
-			result.emplace_back( getName() );
+			++result;
 		}
 
 		return result;
 	}
 
-	castor::StringArray CmshImporterFile::listAllSkeletonAnimations()
+	uint32_t CmshImporterFile::countAllSkeletonAnimations()const
 	{
-		castor::StringArray result;
+		uint32_t result{};
 
 		if ( getExtension() == CmshAnimationImporter::SkeletonAnimType )
 		{
-			result.emplace_back( getName() );
+			++result;
 		}
 
 		return result;
 	}
 
-	castor::StringArray CmshImporterFile::listAllSceneNodeAnimations()
+	uint32_t CmshImporterFile::countAllSceneNodeAnimations()const
 	{
-		castor::StringArray result;
+		uint32_t result{};
 
 		if ( getExtension() == CmshAnimationImporter::NodeAnimType )
 		{
-			result.emplace_back( getName() );
+			++result;
 		}
 
 		return result;
+	}
+
+	uint32_t CmshImporterFile::countAllTextureAnimations()const
+	{
+		return 0u;
 	}
 
 	MaterialImporterUPtr CmshImporterFile::createMaterialImporter()
@@ -310,6 +322,11 @@ namespace castor3d
 	{
 		castor::BinaryFile animFile{ m_file->getFileName(), castor::File::OpenMode::eRead };
 		return BinaryParser< SceneNodeAnimation >{}.parse( animation, animFile );
+	}
+
+	bool CmshAnimationImporter::doImportTexture( castor3d::TextureAnimation & animation )
+	{
+		return true;
 	}
 
 	//*********************************************************************************************

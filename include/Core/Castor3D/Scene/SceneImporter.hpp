@@ -43,7 +43,7 @@ namespace castor3d
 		 *\param[in]	textureRemaps	Les paramètres de reaffectation des textures importées.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API bool import( Scene & scene
+		C3D_API bool importData( Scene & scene
 			, ImporterFile * file
 			, Parameters const & parameters
 			, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
@@ -65,7 +65,7 @@ namespace castor3d
 		 *\param[in,out]	progress		Barre de progression optionnelle.
 		 *\return			\p false si un problème quelconque est survenu.
 		 */
-		C3D_API bool import( Scene & scene
+		C3D_API bool importData( Scene & scene
 			, castor::Path const & pathFile
 			, Parameters const & parameters
 			, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps
@@ -84,7 +84,7 @@ namespace castor3d
 		 *\param[in]	parameters	Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API bool importAnimations( Scene & scene
+		C3D_API bool importAnimationsData( Scene & scene
 			, ImporterFile * file
 			, Parameters const & parameters );
 		/**
@@ -103,7 +103,7 @@ namespace castor3d
 		 *\param[in,out]	progress		Barre de progression optionnelle.
 		 *\return			\p false si un problème quelconque est survenu.
 		 */
-		C3D_API bool importAnimations( Scene & scene
+		C3D_API bool importAnimationsData( Scene & scene
 			, castor::Path const & pathFile
 			, Parameters const & parameters
 			, ProgressBar * progress = nullptr );
@@ -137,6 +137,9 @@ namespace castor3d
 			, AnimationImporter & importer
 			, castor::StringMap< AnimObjects > & anims );
 		void doImportNodesAnims( Scene & scene
+			, AnimationImporter & importer
+			, castor::StringMap< AnimObjects > & anims );
+		void doImportTexturesAnims( Scene & scene
 			, AnimationImporter & importer
 			, castor::StringMap< AnimObjects > & anims );
 		void doCreateAnimationGroups( Scene & scene

@@ -1771,7 +1771,7 @@ namespace castor3d
 
 				for ( auto const & file : blockContext->files )
 				{
-					if ( !importer.import( *blockContext->scene->scene
+					if ( !importer.importData( *blockContext->scene->scene
 						, file
 						, parameters
 						, blockContext->textureRemaps
@@ -1783,7 +1783,7 @@ namespace castor3d
 
 				for ( auto const & file : blockContext->animFiles )
 				{
-					if ( !importer.importAnimations( *blockContext->scene->scene
+					if ( !importer.importAnimationsData( *blockContext->scene->scene
 						, file
 						, parameters
 						, blockContext->scene->root->progress ) )
@@ -2848,7 +2848,7 @@ namespace castor3d
 					scnprs::fillMeshImportParameters( context, meshParams, parameters );
 				}
 
-				if ( !SkeletonImporter::import( *blockContext->skeleton
+				if ( !SkeletonImporter::importData( *blockContext->skeleton
 					, pathFile
 					, parameters ) )
 				{
@@ -2906,7 +2906,7 @@ namespace castor3d
 							auto animation = castor::makeUnique< SkeletonAnimation >( *blockContext->skeleton
 								, animName );
 
-							if ( !importer->import( *animation
+							if ( !importer->importData( *animation
 								, file.get()
 								, parameters ) )
 							{
@@ -2981,7 +2981,7 @@ namespace castor3d
 							auto animation = castor::makeUnique< SkeletonAnimation >( *blockContext->skeleton
 								, *animations.begin() );
 
-							if ( !importer->import( *animation
+							if ( !importer->importData( *animation
 								, file.get()
 								, parameters ) )
 							{
@@ -3067,7 +3067,7 @@ namespace castor3d
 					scnprs::fillMeshImportParameters( context, params[1]->get< castor::String >(), parameters );
 				}
 
-				if ( !MeshImporter::import( *mesh
+				if ( !MeshImporter::importData( *mesh
 					, pathFile
 					, parameters
 					, true ) )
@@ -3103,7 +3103,7 @@ namespace castor3d
 				auto animation = castor::makeUnique< MeshAnimation >( *blockContext->mesh
 					, pathFile.getFileName() );
 
-				if ( !AnimationImporter::import( *animation
+				if ( !AnimationImporter::importData( *animation
 					, pathFile
 					, parameters ) )
 				{
@@ -3138,7 +3138,7 @@ namespace castor3d
 				auto animation = castor::makeUnique< MeshAnimation >( *blockContext->mesh
 					, animName );
 
-				if ( !AnimationImporter::import( *animation
+				if ( !AnimationImporter::importData( *animation
 					, pathFile
 					, parameters ) )
 				{
@@ -3171,7 +3171,7 @@ namespace castor3d
 
 				Mesh mesh{ cuT( "MorphImport" ), *blockContext->mesh->getScene() };
 
-				if ( !MeshImporter::import( mesh
+				if ( !MeshImporter::importData( mesh
 					, pathFile
 					, parameters
 					, false ) )

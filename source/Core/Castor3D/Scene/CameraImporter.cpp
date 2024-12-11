@@ -16,7 +16,28 @@ namespace castor3d
 	{
 	}
 
-	bool CameraImporter::import( Camera & camera
+	CameraRes CameraImporter::importData( castor::String const & name
+		, CameraCreateInfo const & createInfo
+		, ImporterFile * file
+		, Parameters const & parameters )
+	{
+		if ( !m_file )
+		{
+			m_file = file;
+		}
+
+		auto result = doCreateCamera( name, createInfo );
+
+		if ( !result
+			|| !importData( *result, file, parameters ) )
+		{
+			return nullptr;
+		}
+
+		return result;
+	}
+
+	bool CameraImporter::importData( Camera & camera
 		, ImporterFile * file
 		, Parameters const & parameters )
 	{
@@ -37,7 +58,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool CameraImporter::import( Camera & camera
+	bool CameraImporter::importData( Camera & camera
 		, castor::Path const & pathFile
 		, Parameters const & parameters )
 	{
@@ -49,9 +70,15 @@ namespace castor3d
 
 		if ( auto importer = file->createCameraImporter() )
 		{
-			return importer->import( camera, file.get(), parameters );
+			return importer->importData( camera, file.get(), parameters );
 		}
 
 		return false;
+	}
+
+	CameraRes CameraImporter::doCreateCamera( castor::String const & name
+		, CameraCreateInfo const & createInfo )
+	{
+		return createInfo.scene->createCamera( name, createInfo );
 	}
 }

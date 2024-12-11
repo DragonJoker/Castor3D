@@ -751,9 +751,9 @@ namespace castor3d
 		output.m_topology = m_topology;
 		output.m_needsNormalsCompute = m_needsNormalsCompute;
 
-		for ( auto & component : m_components )
+		for ( auto & [_, component] : m_components )
 		{
-			output.addComponent( component.second->clone( output ) );
+			output.addComponent( component->clone( output ) );
 		}
 	}
 

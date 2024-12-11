@@ -31,6 +31,18 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	name		The light name.
+		 *\param[in]	createInfo	The creation informations.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	name		Le nom de la lumière.
+		 *\param[in]	createInfo	Les informations de création.
+		 */
+		C3D_API Light( castor::String const & name
+			, LightCreateInfo const & createInfo );
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	name		The light name.
 		 *\param[in]	scene		Parent scene.
 		 *\param[in]	node		The parent scene node.
 		 *\param[in]	factory		Factory used to create the LightCategory.

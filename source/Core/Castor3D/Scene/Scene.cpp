@@ -34,6 +34,7 @@
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
+#include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Scene/Background/Colour.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
@@ -220,6 +221,17 @@ namespace castor3d
 
 	Scene::~Scene()noexcept
 	{
+		if ( auto animTextures = m_animatedObjectGroupCache->tryFind( cuT( "C3D_Textures" ) ) )
+		{
+			for ( auto & [_, object] : animTextures->getObjects() )
+			{
+				if ( object->getKind() == AnimationType::eTexture )
+				{
+					getOwner()->getMaterialCache().unregisterTexture( static_cast< AnimatedTexture const & >( *object ) );
+				}
+			}
+		}
+
 		if ( m_cleanBackground )
 		{
 			m_cleanBackground->skip();

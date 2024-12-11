@@ -52,6 +52,26 @@ namespace castor3d
 			, ImporterFile * file );
 		/**
 		 *\~english
+		 *\brief		Material import Function.
+		 *\param[out]	name			The Material name.
+		 *\param[in]	file			The file to import.
+		 *\param[in]	parameters		Import configuration parameters.
+		 *\param[in]	textureRemaps	The imported textures remapping parameters.
+		 *\return		The imported Material, \p nullptr if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import de Material.
+		 *\param[out]	name			Le nom du Material.
+		 *\param[in]	file			Le fichier à importer.
+		 *\param[in]	parameters		Paramètres de configuration de l'import.
+		 *\param[in]	textureRemaps	Les paramètres de reaffectation des textures importées.
+		 *\return		Le Material importé, \p nullptr si un problème quelconque est survenu.
+		 */
+		C3D_API MaterialPtr importData( castor::String const & name
+			, ImporterFile * file
+			, Parameters const & parameters
+			, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
+		/**
+		 *\~english
 		 *\brief		Scene import Function.
 		 *\param[out]	material		Receives the imported data.
 		 *\param[in]	file			The file to import.
@@ -66,7 +86,7 @@ namespace castor3d
 		 *\param[in]	textureRemaps	Les paramètres de reaffectation des textures importées.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API bool import( Material & material
+		C3D_API bool importData( Material & material
 			, ImporterFile * file
 			, Parameters const & parameters
 			, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
@@ -86,7 +106,7 @@ namespace castor3d
 		 *\param[in]	textureRemaps	Les paramètres de reaffectation des textures importées.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API static bool import( Material & material
+		C3D_API static bool importData( Material & material
 			, castor::Path const & pathFile
 			, Parameters const & parameters
 			, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
@@ -356,6 +376,7 @@ namespace castor3d
 		}
 
 	private:
+		C3D_API virtual MaterialPtr doCreateMaterial( castor::String const & name );
 		virtual bool doImportMaterial( Material & material ) = 0;
 
 	protected:

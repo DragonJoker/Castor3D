@@ -32,6 +32,26 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Light import function.
+		 *\param[in]	name		The light name.
+		 *\param[in]	createInfo	The light creation informations.
+		 *\param[in]	file		The location of the file to import.
+		 *\param[in]	parameters	Import configuration parameters.
+		 *\return		\p false if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import de Light.
+		 *\param[in]	name		Le nom de la lumière.
+		 *\param[in]	createInfo	Les informations de création de la lumière.
+		 *\param[in]	file		Le chemin vers le fichier à importer.
+		 *\param[in]	parameters	Paramètres de configuration de l'import.
+		 *\return		\p false si un problème quelconque est survenu.
+		 */
+		C3D_API LightUPtr importData( castor::String const & name
+			, LightCreateInfo const & createInfo
+			, ImporterFile * file
+			, Parameters const & parameters );
+		/**
+		 *\~english
+		 *\brief		Light import function.
 		 *\param[out]	light			Receives the imported data.
 		 *\param[in]	file			The location of the file to import.
 		 *\param[in]	parameters		Import configuration parameters.
@@ -43,7 +63,7 @@ namespace castor3d
 		 *\param[in]	parameters		Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API bool import( Light & light
+		C3D_API bool importData( Light & light
 			, ImporterFile * file
 			, Parameters const & parameters );
 		/**
@@ -60,7 +80,7 @@ namespace castor3d
 		 *\param[in]	parameters		Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API static bool import( Light & light
+		C3D_API static bool importData( Light & light
 			, castor::Path const & pathFile
 			, Parameters const & parameters );
 
@@ -70,16 +90,8 @@ namespace castor3d
 		}
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Light import Function.
-		 *\param[out]	light	Receives the imported data.
-		 *\return		\p false if any problem occured.
-		 *\~french
-		 *\brief		Fonction d'import de Light.
-		 *\param[out]	light	Reçoit les données importées.
-		 *\return		\p false si un problème quelconque est survenu.
-		 */
+		C3D_API virtual LightUPtr doCreateLight( castor::String const & name
+			, LightCreateInfo const & createInfo );
 		virtual bool doImportLight( Light & light ) = 0;
 
 	protected:

@@ -580,4 +580,9 @@ namespace c3d_gltf
 
 		return !keyFrames.empty();
 	}
+
+	bool GltfAnimationImporter::doImportTexture( castor3d::TextureAnimation & animation )
+	{
+		return true;
+	}
 }

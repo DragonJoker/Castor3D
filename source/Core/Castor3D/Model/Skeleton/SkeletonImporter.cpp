@@ -4,6 +4,7 @@
 
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Model/Skeleton/BoneNode.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneImporter.hpp"
 
 CU_ImplementSmartPtr( castor3d, SkeletonImporter )
@@ -32,7 +33,28 @@ namespace castor3d
 	{
 	}
 
-	bool SkeletonImporter::import( Skeleton & skeleton
+	SkeletonRes SkeletonImporter::importData( castor::String const & name
+		, Scene & scene
+		, ImporterFile * file
+		, Parameters const & parameters )
+	{
+		if ( !m_file )
+		{
+			m_file = file;
+		}
+
+		auto result = doCreateSkeleton( name, scene );
+
+		if ( !result
+			|| !importData( *result, file, parameters ) )
+		{
+			return nullptr;
+		}
+
+		return result;
+	}
+
+	bool SkeletonImporter::importData( Skeleton & skeleton
 		, ImporterFile * file
 		, Parameters const & parameters )
 	{
@@ -72,7 +94,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool SkeletonImporter::import( Skeleton & skeleton
+	bool SkeletonImporter::importData( Skeleton & skeleton
 		, castor::Path const & path
 		, Parameters const & parameters )
 	{
@@ -95,9 +117,15 @@ namespace castor3d
 
 		if ( auto importer = file->createSkeletonImporter() )
 		{
-			return importer->import( skeleton, file.get(), parameters );
+			return importer->importData( skeleton, file.get(), parameters );
 		}
 
 		return false;
+	}
+
+	SkeletonRes SkeletonImporter::doCreateSkeleton( castor::String const & name
+			, Scene & scene )
+	{
+		return scene.createSkeleton( name, scene );
 	}
 }

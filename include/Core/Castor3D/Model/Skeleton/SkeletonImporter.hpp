@@ -13,6 +13,8 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	class Scene;
+
 	class SkeletonImporter
 		: public castor::OwnedBy< Engine >
 	{
@@ -33,6 +35,26 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Skeleton import Function.
+		 *\param[out]	name		The Skeleton name.
+		 *\param[out]	scene		The parent scene.
+		 *\param[in]	file		The location of the file to import.
+		 *\param[in]	parameters	Import configuration parameters.
+		 *\return		The imported Skeleton, \p nullptr if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import de Skeleton.
+		 *\param[out]	name		Le nom du Skeleton.
+		 *\param[out]	scene		La scène parente.
+		 *\param[in]	file		Le chemin vers le fichier à importer.
+		 *\param[in]	parameters	Paramètres de configuration de l'import.
+		 *\return		Le Skeleton importé, \p nullptr si un problème quelconque est survenu.
+		 */
+		C3D_API SkeletonRes importData( castor::String const & name
+			, Scene & scene
+			, ImporterFile * file
+			, Parameters const & parameters );
+		/**
+		 *\~english
+		 *\brief		Skeleton import Function.
 		 *\param[out]	skeleton	Receives the imported data.
 		 *\param[in]	file		The location of the file to import.
 		 *\param[in]	parameters	Import configuration parameters.
@@ -44,7 +66,7 @@ namespace castor3d
 		 *\param[in]	parameters	Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API bool import( Skeleton & skeleton
+		C3D_API bool importData( Skeleton & skeleton
 			, ImporterFile * file
 			, Parameters const & parameters );
 		/**
@@ -61,7 +83,7 @@ namespace castor3d
 		 *\param[in]	parameters	Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API static bool import( Skeleton & skeleton
+		C3D_API static bool importData( Skeleton & skeleton
 			, castor::Path const & pathFile
 			, Parameters const & parameters );
 
@@ -70,18 +92,10 @@ namespace castor3d
 			return m_prefix;
 		}
 
-	protected:
-		/**
-		 *\~english
-		 *\brief		Skeleton import Function.
-		 *\param[out]	skeleton	Receives the imported data.
-		 *\return		\p false if any problem occured.
-		 *\~french
-		 *\brief		Fonction d'import de Skeleton.
-		 *\param[out]	skeleton	Reçoit les données importées.
-		 *\return		\p false si un problème quelconque est survenu.
-		 */
-		C3D_API virtual bool doImportSkeleton( Skeleton & skeleton ) = 0;
+	private:
+		C3D_API virtual SkeletonRes doCreateSkeleton( castor::String const & name
+			, Scene & scene );
+		virtual bool doImportSkeleton( Skeleton & skeleton ) = 0;
 
 	protected:
 		castor::String m_prefix;

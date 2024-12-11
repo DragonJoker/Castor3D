@@ -1179,27 +1179,31 @@ namespace c3d_gltf
 		return result;
 	}
 
-	castor::StringArray GltfImporterFile::listAllMeshAnimations()
+	castor::Vector< uint32_t > GltfImporterFile::listTextureAnimations( castor3d::Material const & material
+		, uint32_t pass )
 	{
-		castor::StringArray result;
+		castor::Vector< uint32_t > result;
+		return result;
+	}
+
+	uint32_t GltfImporterFile::countAllMeshAnimations()const
+	{
+		uint32_t result{};
 
 		for ( auto & [_, mesh] : m_sceneData.meshes )
 		{
 			for ( auto & submesh : mesh.submeshes )
 			{
-				for ( auto & anim : submesh.anims )
-				{
-					result.emplace_back( anim.first );
-				}
+				result += uint32_t( submesh.anims.size() );
 			}
 		}
 
 		return result;
 	}
 
-	castor::StringArray GltfImporterFile::listAllSkeletonAnimations()
+	uint32_t GltfImporterFile::countAllSkeletonAnimations()const
 	{
-		castor::Set< castor::String > result;
+		uint32_t result{};
 
 		if ( isValid() )
 		{
@@ -1215,7 +1219,7 @@ namespace c3d_gltf
 						&& channel.nodeIndex
 						&& isSkeletonNode( *channel.nodeIndex ) )
 					{
-						result.insert( getAnimationName( index ) );
+						++result;
 					}
 				}
 
@@ -1223,23 +1227,24 @@ namespace c3d_gltf
 			}
 		}
 
-		return castor::StringArray{ result.begin()
-			, result.end() };
+		return result;
 	}
 
-	castor::StringArray GltfImporterFile::listAllSceneNodeAnimations()
+	uint32_t GltfImporterFile::countAllSceneNodeAnimations()const
 	{
-		castor::StringArray result;
+		uint32_t result{};
 
 		for ( auto & node : m_sceneData.nodes )
 		{
-			for ( auto & anim : node.anims )
-			{
-				result.push_back( anim.first );
-			}
+			result += uint32_t( node.anims.size() );
 		}
 
 		return result;
+	}
+
+	uint32_t GltfImporterFile::countAllTextureAnimations()const
+	{
+		return 0u;
 	}
 
 	castor3d::MaterialImporterUPtr GltfImporterFile::createMaterialImporter()

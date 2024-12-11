@@ -23,6 +23,7 @@ namespace c3d_gltf
 		bool doImportSkeleton( castor3d::SkeletonAnimation & animation )override;
 		bool doImportMesh( castor3d::MeshAnimation & animation )override;
 		bool doImportNode( castor3d::SceneNodeAnimation & animation )override;
+		bool doImportTexture( castor3d::TextureAnimation & animation )override;
 	};
 }
 

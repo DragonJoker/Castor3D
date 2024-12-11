@@ -123,9 +123,12 @@ namespace castor3d
 		C3D_API virtual castor::Vector< castor::String > listMeshAnimations( Mesh const & mesh ) = 0;
 		C3D_API virtual castor::Vector< castor::String > listSkeletonAnimations( Skeleton const & skeleton ) = 0;
 		C3D_API virtual castor::Vector< castor::String > listSceneNodeAnimations( SceneNode const & node ) = 0;
-		C3D_API virtual castor::Vector< castor::String > listAllMeshAnimations() = 0;
-		C3D_API virtual castor::Vector< castor::String > listAllSkeletonAnimations() = 0;
-		C3D_API virtual castor::Vector< castor::String > listAllSceneNodeAnimations() = 0;
+		C3D_API virtual castor::Vector< uint32_t > listTextureAnimations( Material const & material
+			, uint32_t pass ) = 0;
+		C3D_API virtual uint32_t countAllMeshAnimations()const = 0;
+		C3D_API virtual uint32_t countAllSkeletonAnimations()const = 0;
+		C3D_API virtual uint32_t countAllSceneNodeAnimations()const = 0;
+		C3D_API virtual uint32_t countAllTextureAnimations()const = 0;
 
 		C3D_API virtual MaterialImporterUPtr createMaterialImporter() = 0;
 		C3D_API virtual AnimationImporterUPtr createAnimationImporter() = 0;

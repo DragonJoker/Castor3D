@@ -49,6 +49,28 @@ namespace castor3d
 		 *\param[in]	isStatic	\p true pour un noeud statique.
 		 */
 		C3D_API SceneNode( castor::String const & name
+			, SceneNodeCreateInfo const & createInfo );
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	name		The node's name.
+		 *\param[in]	scene		The parent scene.
+		 *\param[in]	parent		The parent node.
+		 *\param[in]	position	The initial position.
+		 *\param[in]	orientation	The initial orientation.
+		 *\param[in]	scale		The initial scale.
+		 *\param[in]	isStatic	\p true for a static node.
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	name		Le nom du noeud.
+		 *\param[in]	scene		La scène parente.
+		 *\param[in]	parent		Le noeud parent.
+		 *\param[in]	position	La position initiale.
+		 *\param[in]	orientation	L'orientation initiale.
+		 *\param[in]	scale		L'échelle initiale.
+		 *\param[in]	isStatic	\p true pour un noeud statique.
+		 */
+		C3D_API SceneNode( castor::String const & name
 			, Scene & scene
 			, SceneNode * parent
 			, castor::Point3f position
@@ -318,7 +340,7 @@ namespace castor3d
 
 		Scene * getScene()const noexcept
 		{
-			return &m_scene;
+			return m_scene;
 		}
 
 		bool isSerialisable()const noexcept
@@ -351,6 +373,11 @@ namespace castor3d
 		C3D_API void setTransformationMatrix( castor::Matrix4x4f const & transform );
 		C3D_API void setVisible( bool visible );
 
+		void setScene( Scene & scene )noexcept
+		{
+			m_scene = &scene;
+		}
+
 		void setSerialisable( bool value )noexcept
 		{
 			m_serialisable = value;
@@ -373,7 +400,7 @@ namespace castor3d
 
 	private:
 		static uint64_t CurrentId;
-		Scene & m_scene;
+		Scene * m_scene;
 		uint64_t m_id{ CurrentId };
 		bool m_static{ false };
 		bool m_displayable;
