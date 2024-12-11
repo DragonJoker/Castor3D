@@ -580,6 +580,7 @@ namespace castor3d
 		uint32_t unitIndex{};
 	};
 
+	C3D_API castor::String getPrefix( PassContext const & context );
 	C3D_API Engine * getEngine( PassContext const & context );
 
 	template< typename ComponentT, typename ... ParamsT >

@@ -1361,6 +1361,13 @@ namespace castor3d
 		rendtgt::IntermediatesLister::submit( *getScene(), *getScene()->getBackground(), result );
 	}
 
+	castor::String getPrefix( TargetContext const & context )
+	{
+		return context.texture
+			? getPrefix( *context.texture )
+			: getPrefix( *context.window );
+	}
+
 	Engine * getEngine( TargetContext const & context )
 	{
 		return getEngine( *getRootContext( context ) );

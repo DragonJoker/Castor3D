@@ -193,6 +193,11 @@ namespace castor3d
 			return m_progress;
 		}
 
+		castor::String const & getPrefix()const noexcept
+		{
+			return m_prefix;
+		}
+
 	private:
 		Scene * m_scene{};
 		//!\~english The file full path.

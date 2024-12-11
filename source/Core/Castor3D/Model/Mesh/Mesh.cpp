@@ -235,8 +235,13 @@ namespace castor3d
 		}
 	}
 
+	castor::String getPrefix( MeshContext const & context )
+	{
+		return getPrefix( *context.scene );
+	}
+
 	Engine * getEngine( MeshContext const & context )
 	{
-		return context.scene->scene->getEngine();
+		return getEngine( *context.scene );
 	}
 }

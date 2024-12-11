@@ -195,6 +195,7 @@ namespace castor3d
 		SceneNodeRPtr parentNode{};
 	};
 
+	C3D_API castor::String getPrefix( MovableContext const & context );
 	C3D_API Engine * getEngine( MovableContext const & context );
 }
 

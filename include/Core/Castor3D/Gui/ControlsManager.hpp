@@ -468,6 +468,7 @@ namespace castor3d
 		}
 	};
 
+	C3D_API castor::String getPrefix( GuiContext const & context );
 	C3D_API Engine * getEngine( GuiContext const & context );
 }
 

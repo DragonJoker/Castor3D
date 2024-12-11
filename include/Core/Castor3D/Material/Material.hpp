@@ -228,6 +228,7 @@ namespace castor3d
 		bool createMaterial{ true };
 	};
 
+	C3D_API castor::String getPrefix( MaterialContext const & context );
 	C3D_API Engine * getEngine( MaterialContext const & context );
 }
 

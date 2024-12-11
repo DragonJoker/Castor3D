@@ -1075,7 +1075,7 @@ namespace castor3d
 		{
 			if ( auto style = blockContext->buttonStyle )
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto material = blockContext->controls->getEngine()->findMaterial( name );
 
 				if ( material )
@@ -1098,7 +1098,7 @@ namespace castor3d
 		{
 			if ( auto style = blockContext->buttonStyle )
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto material = blockContext->controls->getEngine()->findMaterial( name );
 
 				if ( material )
@@ -1121,7 +1121,7 @@ namespace castor3d
 		{
 			if ( auto style = blockContext->buttonStyle )
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto material = blockContext->controls->getEngine()->findMaterial( name );
 
 				if ( material )
@@ -1144,7 +1144,7 @@ namespace castor3d
 		{
 			if ( auto style = blockContext->buttonStyle )
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto material = blockContext->controls->getEngine()->findMaterial( name );
 
 				if ( material )
@@ -1167,7 +1167,7 @@ namespace castor3d
 		{
 			if ( auto style = blockContext->buttonStyle )
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto material = blockContext->controls->getEngine()->findMaterial( name );
 
 				if ( material )
@@ -1190,7 +1190,7 @@ namespace castor3d
 		{
 			if ( auto style = blockContext->buttonStyle )
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto material = blockContext->controls->getEngine()->findMaterial( name );
 
 				if ( material )
@@ -1213,7 +1213,7 @@ namespace castor3d
 		{
 			if ( auto style = blockContext->buttonStyle )
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto material = blockContext->controls->getEngine()->findMaterial( name );
 
 				if ( material )
@@ -1236,7 +1236,7 @@ namespace castor3d
 		{
 			if ( auto style = blockContext->buttonStyle )
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto material = blockContext->controls->getEngine()->findMaterial( name );
 
 				if ( material )
@@ -1259,7 +1259,7 @@ namespace castor3d
 		{
 			if ( auto style = blockContext->buttonStyle )
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto material = blockContext->controls->getEngine()->findMaterial( name );
 
 				if ( material )
@@ -1282,7 +1282,7 @@ namespace castor3d
 		{
 			if ( auto style = blockContext->buttonStyle )
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto material = blockContext->controls->getEngine()->findMaterial( name );
 
 				if ( material )
@@ -1332,7 +1332,7 @@ namespace castor3d
 		{
 			if ( auto style = blockContext->editStyle )
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto material = blockContext->controls->getEngine()->findMaterial( name );
 
 				if ( material )
@@ -1355,7 +1355,7 @@ namespace castor3d
 		{
 			if ( auto style = blockContext->editStyle )
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto material = blockContext->controls->getEngine()->findMaterial( name );
 
 				if ( material )
@@ -1426,7 +1426,7 @@ namespace castor3d
 		{
 			if ( auto style = blockContext->staticStyle )
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto material = blockContext->controls->getEngine()->findMaterial( name );
 
 				if ( material )
@@ -1462,7 +1462,7 @@ namespace castor3d
 		{
 			if ( auto style = blockContext->progressStyle )
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto material = blockContext->controls->getEngine()->findMaterial( name );
 
 				if ( material )
@@ -1526,7 +1526,7 @@ namespace castor3d
 		{
 			if ( auto style = blockContext->progressStyle )
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto material = blockContext->controls->getEngine()->findMaterial( name );
 
 				if ( material )
@@ -1583,7 +1583,7 @@ namespace castor3d
 		{
 			if ( auto style = blockContext->frameStyle )
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto material = blockContext->controls->getEngine()->findMaterial( name );
 
 				if ( material )
@@ -1634,7 +1634,7 @@ namespace castor3d
 		{
 			if ( auto style = blockContext->getTopStyle() )
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto material = blockContext->controls->getEngine()->findMaterial( name );
 
 				if ( material )
@@ -1657,7 +1657,7 @@ namespace castor3d
 		{
 			if ( auto style = blockContext->getTopStyle() )
 			{
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto material = blockContext->controls->getEngine()->findMaterial( name );
 
 				if ( material )

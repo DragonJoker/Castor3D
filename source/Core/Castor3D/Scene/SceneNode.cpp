@@ -547,6 +547,11 @@ namespace castor3d
 		}
 	}
 
+	castor::String getPrefix( NodeContext const & context )
+	{
+		return getPrefix( *context.scene );
+	}
+
 	Engine * getEngine( NodeContext const & context )
 	{
 		return getEngine( *context.scene );

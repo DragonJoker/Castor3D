@@ -180,6 +180,7 @@ namespace castor3d
 		castor::String preferredImporter{ cuT( "any" ) };
 	};
 
+	C3D_API castor::String getPrefix( SceneImportContext const & context );
 	C3D_API Engine * getEngine( SceneImportContext const & context );
 }
 

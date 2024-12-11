@@ -2012,6 +2012,11 @@ namespace castor3d
 #endif
 	}
 
+	castor::String getPrefix( WindowContext const & context )
+	{
+		return getPrefix( *context.root );
+	}
+
 	Engine * getEngine( WindowContext const & context )
 	{
 		return getEngine( *context.root );

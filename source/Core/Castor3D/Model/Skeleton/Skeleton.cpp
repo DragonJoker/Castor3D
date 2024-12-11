@@ -181,6 +181,11 @@ namespace castor3d
 		}
 	}
 
+	castor::String getPrefix( SkeletonContext const & context )
+	{
+		return getPrefix( *context.scene );
+	}
+
 	Engine * getEngine( SkeletonContext const & context )
 	{
 		return getEngine( *context.scene );

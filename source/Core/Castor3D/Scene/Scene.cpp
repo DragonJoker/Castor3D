@@ -1215,6 +1215,11 @@ namespace castor3d
 		m_dirtyMaterials = true;
 	}
 
+	castor::String getPrefix( SceneContext const & context )
+	{
+		return context.prefix;
+	}
+
 	Engine * getEngine( SceneContext const & context )
 	{
 		return getEngine( *context.root );

@@ -1553,6 +1553,11 @@ namespace castor3d
 			, MaxNodesPerPipeline );
 	}
 
+	castor::String getPrefix( SubmeshContext const & context )
+	{
+		return getPrefix( *context.mesh );
+	}
+
 	Engine * getEngine( SubmeshContext const & context )
 	{
 		return getEngine( *context.mesh );

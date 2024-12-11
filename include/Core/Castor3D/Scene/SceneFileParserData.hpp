@@ -81,6 +81,16 @@ namespace castor3d
 
 	struct SceneContext;
 
+	template< typename ContextT >
+	static castor::String getPrefixedName( castor::String const & name
+		, ContextT const & blockContext )
+	{
+		auto prefix = getPrefix( blockContext );
+		return prefix.empty()
+			? name
+			: prefix + name;
+	}
+
 	struct RootContext
 	{
 		Engine * engine{};
@@ -95,6 +105,11 @@ namespace castor3d
 		castor::StringMap< TextureSourceInfoUPtr > sourceInfos{};
 		ProgressBar * progress{};
 	};
+
+	inline castor::String getPrefix( RootContext const & context )
+	{
+		return castor::String{};
+	}
 
 	inline Engine * getEngine( RootContext const & context )
 	{
@@ -114,9 +129,6 @@ namespace castor3d
 	{
 		return getEngine( *context.root );
 	}
-
-	template< typename BlockContextT >
-	using ParserFunctionT = bool( * )( castor::FileParserContext &, BlockContextT *, castor::ParserParameterArray const & );
 
 	C3D_API CU_DeclareAttributeParser( parserDefaultEnd )
 
@@ -142,39 +154,76 @@ namespace castor3d
 
 		template< typename BlockContextU >
 		void addParser( castor::String const & name
-			, ParserFunctionT< BlockContextU > function
+			, castor::ParserFunctionT< BlockContextU > function
 			, castor::ParserParameterArray params = castor::ParserParameterArray{} )
 		{
 			castor::addParser( parsers
 				, section
 				, name
-				, ParserFunctionT< void >( function )
+				, castor::ParserFunctionT< void >( function )
+				, castor::move( params ) );
+		}
+
+		template< typename BlockContextU >
+		void addParser( castor::String const & name
+			, castor::RawParserFunctionT< BlockContextU > function
+			, castor::ParserParameterArray params = castor::ParserParameterArray{} )
+		{
+			castor::addParser( parsers
+				, section
+				, name
+				, castor::RawParserFunctionT< void >( function )
 				, castor::move( params ) );
 		}
 
 		template< typename BlockContextU, typename SectionT >
 		void addPushParser( castor::String const & name
 			, SectionT newSection
-			, ParserFunctionT< BlockContextU > function
+			, castor::ParserFunctionT< BlockContextU > function
 			, castor::ParserParameterArray params = castor::ParserParameterArray{} )
 		{
 			castor::addParser( parsers
 				, section
 				, uint32_t( newSection )
 				, name
-				, ParserFunctionT< void >( function )
+				, castor::ParserFunctionT< void >( function )
+				, castor::move( params ) );
+		}
+
+		template< typename BlockContextU, typename SectionT >
+		void addPushParser( castor::String const & name
+			, SectionT newSection
+			, castor::RawParserFunctionT< BlockContextU > function
+			, castor::ParserParameterArray params = castor::ParserParameterArray{} )
+		{
+			castor::addParser( parsers
+				, section
+				, uint32_t( newSection )
+				, name
+				, castor::RawParserFunctionT< void >( function )
 				, castor::move( params ) );
 		}
 
 		template< typename BlockContextU >
 		void addPopParser( castor::String const & name
-			, ParserFunctionT< BlockContextU > function )
+			, castor::ParserFunctionT< BlockContextU > function )
 		{
 			castor::addParser( parsers
 				, section
 				, oldSection
 				, name
-				, ParserFunctionT< void >( function ) );
+				, castor::ParserFunctionT< void >( function ) );
+		}
+
+		template< typename BlockContextU >
+		void addPopParser( castor::String const & name
+			, castor::RawParserFunctionT< BlockContextU > function )
+		{
+			castor::addParser( parsers
+				, section
+				, oldSection
+				, name
+				, castor::RawParserFunctionT< void >( function ) );
 		}
 
 		void addDefaultPopParser()

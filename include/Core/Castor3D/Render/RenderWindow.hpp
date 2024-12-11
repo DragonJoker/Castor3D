@@ -575,6 +575,7 @@ namespace castor3d
 		RenderWindowDesc window{};
 	};
 
+	C3D_API castor::String getPrefix( WindowContext const & context );
 	C3D_API Engine * getEngine( WindowContext const & context );
 }
 

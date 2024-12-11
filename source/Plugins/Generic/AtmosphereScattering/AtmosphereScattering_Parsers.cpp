@@ -22,6 +22,7 @@ namespace atmosphere_scattering
 	{
 		struct AtmosphereContext
 		{
+			castor3d::SceneContext * sceneContext{};
 			castor3d::SceneRPtr scene{};
 			castor::Point2ui transmittanceDim{ 256u, 64u };
 			uint32_t multiScatterDim{ 32u };
@@ -38,6 +39,11 @@ namespace atmosphere_scattering
 			AtmosphereBackgroundUPtr background{};
 		};
 
+		castor::String getPrefix( AtmosphereContext const & context )
+		{
+			return getPrefix( *context.sceneContext );
+		}
+
 		enum class AtmosphereSection
 			: uint32_t
 		{
@@ -49,6 +55,7 @@ namespace atmosphere_scattering
 		
 		static CU_ImplementAttributeParserNewBlock( parserAtmosphereScattering, castor3d::SceneContext, AtmosphereContext )
 		{
+			newBlockContext->sceneContext = blockContext;
 			newBlockContext->scene = blockContext->scene;
 			newBlockContext->background = castor::makeUnique< AtmosphereBackground >( *blockContext->scene->getEngine()
 				, *blockContext->scene );
@@ -92,9 +99,9 @@ namespace atmosphere_scattering
 			}
 			else
 			{
-				castor::String name;
+				auto name = castor3d::getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 
-				if ( auto node = blockContext->scene->findSceneNode( params[0]->get( name ) ) )
+				if ( auto node = blockContext->scene->findSceneNode( name ) )
 				{
 					blockContext->background->setSunNode( *node );
 				}
@@ -114,9 +121,9 @@ namespace atmosphere_scattering
 			}
 			else
 			{
-				castor::String name;
+				auto name = castor3d::getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 
-				if ( auto node = blockContext->scene->findSceneNode( params[0]->get( name ) ) )
+				if ( auto node = blockContext->scene->findSceneNode( name ) )
 				{
 					blockContext->background->setPlanetNode( *node );
 				}

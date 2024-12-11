@@ -175,6 +175,13 @@ namespace castor3d
 		m_children.clear();
 	}
 
+	castor::String getPrefix( OverlayContext const & context )
+	{
+		return context.scene
+			? getPrefix( *context.scene )
+			: getPrefix( *context.root );
+	}
+
 	Engine * getEngine( OverlayContext const & context )
 	{
 		return getEngine( *context.root );

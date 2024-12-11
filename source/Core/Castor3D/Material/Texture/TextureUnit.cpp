@@ -79,7 +79,7 @@ namespace castor3d
 			}
 			else
 			{
-				params[0]->get( newBlockContext->name );
+				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				newBlockContext->root = blockContext;
 			}
 		}
@@ -93,7 +93,7 @@ namespace castor3d
 			}
 			else
 			{
-				params[0]->get( newBlockContext->name );
+				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				newBlockContext->root = blockContext->root;
 				newBlockContext->scene = blockContext;
 			}
@@ -302,8 +302,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
-				params[0]->get( name );
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				auto it = blockContext->root->sourceInfos.find( name );
 
 				if ( it != blockContext->root->sourceInfos.end() )
@@ -326,8 +325,8 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String name;
-				auto sampler = getEngine( *blockContext )->findSampler( params[0]->get( name ) );
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto sampler = getEngine( *blockContext )->findSampler( name );
 
 				if ( sampler )
 				{
@@ -912,6 +911,13 @@ namespace castor3d
 		m_configuration.transform.scale->z = scale->z;
 
 		onChanged( *this );
+	}
+
+	castor::String getPrefix( TextureContext const & context )
+	{
+		return context.scene
+			? getPrefix( *context.scene )
+			: getPrefix( *context.root );
 	}
 
 	Engine * getEngine( TextureContext const & context )

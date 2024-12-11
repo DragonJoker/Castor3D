@@ -26,9 +26,9 @@ namespace castor3d
 			else
 			{
 				auto & engine = *getEngine( *blockContext );
-				castor::String name;
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				newBlockContext->root = blockContext;
-				newBlockContext->material = engine.tryFindMaterial( params[0]->get( name ) );
+				newBlockContext->material = engine.tryFindMaterial( name );
 				newBlockContext->passIndex = 0u;
 				newBlockContext->createMaterial = newBlockContext->material == nullptr;
 
@@ -52,7 +52,7 @@ namespace castor3d
 			else
 			{
 				auto & engine = *getEngine( *blockContext );
-				auto name = params[0]->get< castor::String >();
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 				newBlockContext->root = blockContext->root;
 				newBlockContext->scene = blockContext;
 				newBlockContext->material = engine.tryFindMaterial( name );
@@ -309,6 +309,13 @@ namespace castor3d
 		materialContext.addPopParser( cuT( "}" ), mat::parserEnd );
 
 		Pass::addParsers( result, textureChannels );
+	}
+
+	castor::String getPrefix( MaterialContext const & context )
+	{
+		return context.scene
+			? getPrefix( *context.scene )
+			: getPrefix( *context.root );
 	}
 
 	Engine * getEngine( MaterialContext const & context )
