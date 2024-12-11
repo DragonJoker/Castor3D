@@ -16,7 +16,28 @@ namespace castor3d
 	{
 	}
 
-	bool SceneNodeImporter::import( SceneNode & node
+	SceneNodeUPtr SceneNodeImporter::importData( castor::String const & name
+		, SceneNodeCreateInfo const & createInfo
+		, ImporterFile * file
+		, Parameters const & parameters )
+	{
+		if ( !m_file )
+		{
+			m_file = file;
+		}
+
+		auto result = doCreateSceneNode( name, createInfo );
+
+		if ( !result
+			|| !importData( *result, file, parameters ) )
+		{
+			return nullptr;
+		}
+
+		return result;
+	}
+
+	bool SceneNodeImporter::importData( SceneNode & node
 		, ImporterFile * file
 		, Parameters const & parameters )
 	{
@@ -37,7 +58,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool SceneNodeImporter::import( SceneNode & node
+	bool SceneNodeImporter::importData( SceneNode & node
 		, castor::Path const & pathFile
 		, Parameters const & parameters )
 	{
@@ -49,9 +70,15 @@ namespace castor3d
 
 		if ( auto importer = file->createSceneNodeImporter() )
 		{
-			return importer->import( node, file.get(), parameters );
+			return importer->importData( node, file.get(), parameters );
 		}
 
 		return false;
+	}
+
+	SceneNodeUPtr SceneNodeImporter::doCreateSceneNode( castor::String const & name
+		, SceneNodeCreateInfo const & createInfo )
+	{
+		return createInfo.scene->createSceneNode( name, createInfo );
 	}
 }

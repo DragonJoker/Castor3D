@@ -61,7 +61,29 @@ namespace castor3d
 	{
 	}
 
-	bool MeshImporter::import( Mesh & mesh
+	MeshRes MeshImporter::importData( castor::String const & name
+		, Scene & scene
+		, ImporterFile * file
+		, Parameters const & parameters
+		, bool forceImport )
+	{
+		if ( !m_file )
+		{
+			m_file = file;
+		}
+
+		auto result = doCreateMesh( name, scene );
+
+		if ( !result
+			|| !importData( *result, file, parameters, forceImport ) )
+		{
+			return nullptr;
+		}
+
+		return result;
+	}
+
+	bool MeshImporter::importData( Mesh & mesh
 		, ImporterFile * file
 		, Parameters const & parameters
 		, bool forceImport )
@@ -131,7 +153,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool MeshImporter::import( Mesh & mesh
+	bool MeshImporter::importData( Mesh & mesh
 		, castor::Path const & path
 		, Parameters const & parameters
 		, bool forceImport )
@@ -155,12 +177,17 @@ namespace castor3d
 
 		if ( auto importer = file->createMeshImporter() )
 		{
-			return importer->import( mesh
+			return importer->importData( mesh
 				, file.get()
 				, parameters
 				, forceImport );
 		}
 
 		return false;
+	}
+
+	MeshRes MeshImporter::doCreateMesh( castor::String const & name, Scene & scene )
+	{
+		return scene.createMesh( name, scene );
 	}
 }

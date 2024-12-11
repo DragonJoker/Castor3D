@@ -16,7 +16,28 @@ namespace castor3d
 	{
 	}
 
-	bool LightImporter::import( Light & light
+	LightUPtr LightImporter::importData( castor::String const & name
+		, LightCreateInfo const & createInfo
+		, ImporterFile * file
+		, Parameters const & parameters )
+	{
+		if ( !m_file )
+		{
+			m_file = file;
+		}
+
+		auto result = doCreateLight( name, createInfo );
+
+		if ( !result
+			|| !importData( *result, file, parameters ) )
+		{
+			return nullptr;
+		}
+
+		return result;
+	}
+
+	bool LightImporter::importData( Light & light
 		, ImporterFile * file
 		, Parameters const & parameters )
 	{
@@ -37,7 +58,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool LightImporter::import( Light & light
+	bool LightImporter::importData( Light & light
 		, castor::Path const & path
 		, Parameters const & parameters )
 	{
@@ -57,9 +78,15 @@ namespace castor3d
 
 		if ( auto importer = file->createLightImporter() )
 		{
-			return importer->import( light, file.get(), parameters );
+			return importer->importData( light, file.get(), parameters );
 		}
 
 		return false;
+	}
+
+	LightUPtr LightImporter::doCreateLight( castor::String const & name
+			, LightCreateInfo const & createInfo )
+	{
+		return createInfo.scene->createLight( name, createInfo );
 	}
 }

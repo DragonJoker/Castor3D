@@ -372,6 +372,24 @@ namespace castor3d
 	using OnSceneNodeReparentConnection = OnSceneNodeReparent::connection;
 
 	using SubmeshMaterialMap = castor::Map< Submesh const *, MaterialObs >;
+
+	struct CameraCreateInfo
+	{
+		castor::NotNullT< Scene > scene;
+		castor::NotNullT< SceneNode > parentNode;
+		Viewport * viewport{ nullptr };
+		bool ownProjMtx{ false };
+	};
+
+	struct SceneNodeCreateInfo
+	{
+		castor::NotNullT< Scene > scene;
+		SceneNode * parentNode;
+		castor::Point3f position{};
+		castor::Quaternion orientation{ castor::Quaternion::identity() };
+		castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
+		bool isStatic{ true };
+	};
 	/**
 	*\~english
 	*	Helper structure to specialise a cache behaviour.

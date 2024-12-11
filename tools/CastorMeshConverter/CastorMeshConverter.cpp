@@ -421,7 +421,7 @@ int main( int argc, char * argv[] )
 					scene.setDefaultLightingModel( scene.getEngine()->getLightingModelFactory().getLightingModelId( options.passType ) );
 					castor3d::SceneImporter importer{ *scene.getEngine() };
 
-					if ( !importer.import( scene
+					if ( !importer.importData( scene
 						, path
 						, options.params
 						, {} ) )

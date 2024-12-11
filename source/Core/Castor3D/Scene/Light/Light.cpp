@@ -13,6 +13,16 @@ CU_ImplementSmartPtr( castor3d, Light )
 namespace castor3d
 {
 	Light::Light( castor::String const & name
+		, LightCreateInfo const & createInfo )
+		: Light{ name
+			, *createInfo.scene
+			, *createInfo.parentNode
+			, *createInfo.factory
+			, createInfo.lightType }
+	{
+	}
+
+	Light::Light( castor::String const & name
 		, Scene & scene
 		, SceneNode & node
 		, LightFactory & factory

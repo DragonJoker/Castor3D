@@ -33,6 +33,16 @@ namespace castor3d
 	{
 	}
 
+	Camera::Camera( castor::String const & name
+		, CameraCreateInfo const & createInfo )
+		: Camera{ name
+			, *createInfo.scene
+			, *createInfo.parentNode
+			, createInfo.viewport ? *createInfo.viewport : Viewport{ *createInfo.scene->getEngine() }
+			, createInfo.ownProjMtx }
+	{
+	}
+
 	void Camera::updateFrustum()
 	{
 		if ( !m_ownProjection )

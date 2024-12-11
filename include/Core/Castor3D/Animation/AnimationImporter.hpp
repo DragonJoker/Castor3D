@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Castor3DModule.hpp"
 #include "Castor3D/Animation/AnimationModule.hpp"
+#include "Castor3D/Material/Texture/Animation/TextureAnimationModule.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimationModule.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationModule.hpp"
@@ -46,7 +47,7 @@ namespace castor3d
 		 *\param[in]	parameters	Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API bool import( SkeletonAnimation & animation
+		C3D_API bool importData( SkeletonAnimation & animation
 			, ImporterFile * file
 			, Parameters const & parameters );
 		/**
@@ -63,7 +64,7 @@ namespace castor3d
 		 *\param[in]	parameters	Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API static bool import( SkeletonAnimation & animation
+		C3D_API static bool importData( SkeletonAnimation & animation
 			, castor::Path const & pathFile
 			, Parameters const & parameters );
 		/**
@@ -80,7 +81,7 @@ namespace castor3d
 		 *\param[in]	parameters	Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API bool import( MeshAnimation & animation
+		C3D_API bool importData( MeshAnimation & animation
 			, ImporterFile * file
 			, Parameters const & parameters );
 		/**
@@ -97,7 +98,7 @@ namespace castor3d
 		 *\param[in]	parameters	Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API static bool import( MeshAnimation & animation
+		C3D_API static bool importData( MeshAnimation & animation
 			, castor::Path const & pathFile
 			, Parameters const & parameters );
 		/**
@@ -114,7 +115,7 @@ namespace castor3d
 		 *\param[in]	parameters		Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API bool import( SceneNodeAnimation & animation
+		C3D_API bool importData( SceneNodeAnimation & animation
 			, ImporterFile * file
 			, Parameters const & parameters );
 		/**
@@ -131,7 +132,41 @@ namespace castor3d
 		 *\param[in]	parameters		Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API bool import( SceneNodeAnimation & animation
+		C3D_API bool importData( SceneNodeAnimation & animation
+			, castor::Path const & pathFile
+			, Parameters const & parameters );
+		/**
+		 *\~english
+		 *\brief		TextureAnimation import function.
+		 *\param[out]	animation		Receives the imported data.
+		 *\param[in]	file			The location of the file to import.
+		 *\param[in]	parameters		Import configuration parameters.
+		 *\return		\p false if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import de TextureAnimation.
+		 *\param[out]	animation		Reçoit les données importées.
+		 *\param[in]	file			Le chemin vers le fichier à importer.
+		 *\param[in]	parameters		Paramètres de configuration de l'import.
+		 *\return		\p false si un problème quelconque est survenu.
+		 */
+		C3D_API bool importData( TextureAnimation & animation
+			, ImporterFile * file
+			, Parameters const & parameters );
+		/**
+		 *\~english
+		 *\brief		TextureAnimation import function.
+		 *\param[out]	animation		Receives the imported data.
+		 *\param[in]	pathFile		The location of the file to import.
+		 *\param[in]	parameters		Import configuration parameters.
+		 *\return		\p false if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import de TextureAnimation.
+		 *\param[out]	animation		Reçoit les données importées.
+		 *\param[in]	pathFile		Le chemin vers le fichier à importer.
+		 *\param[in]	parameters		Paramètres de configuration de l'import.
+		 *\return		\p false si un problème quelconque est survenu.
+		 */
+		C3D_API bool importData( TextureAnimation & animation
 			, castor::Path const & pathFile
 			, Parameters const & parameters );
 
@@ -174,6 +209,17 @@ namespace castor3d
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API virtual bool doImportNode( SceneNodeAnimation & node ) = 0;
+		/**
+		 *\~english
+		 *\brief		TextureAnimation import Function.
+		 *\param[out]	node	Receives the imported data.
+		 *\return		\p false if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import de TextureAnimation.
+		 *\param[out]	node	Reçoit les données importées.
+		 *\return		\p false si un problème quelconque est survenu.
+		 */
+		C3D_API virtual bool doImportTexture( TextureAnimation & node ) = 0;
 
 	protected:
 		castor::String m_prefix;

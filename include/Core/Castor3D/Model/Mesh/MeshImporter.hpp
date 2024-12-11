@@ -38,6 +38,29 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Mesh import Function.
+		 *\param[out]	name		The Mesh name.
+		 *\param[out]	scene		The parent scene.
+		 *\param[in]	file		The location of the file to import.
+		 *\param[in]	parameters	Import configuration parameters.
+		 *\param[in]	forceImport	Tells if the mesh needs to be imported even if it's already filled.
+		 *\return		The imported Mesh, \p nullptr if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import de Mesh.
+		 *\param[out]	name		Le nom du Mesh.
+		 *\param[out]	scene		La scène parente.
+		 *\param[in]	file		Le chemin vers le fichier à importer.
+		 *\param[in]	parameters	Paramètres de configuration de l'import.
+		 *\param[in]	forceImport	Dit si le mesh importé doit être importé même s'il est déjà rempli.
+		 *\return		Le Mesh importé, \p nullptr si un problème quelconque est survenu.
+		 */
+		C3D_API MeshRes importData( castor::String const & name
+			, Scene & scene
+			, ImporterFile * file
+			, Parameters const & parameters
+			, bool forceImport );
+		/**
+		 *\~english
+		 *\brief		Mesh import Function.
 		 *\param[out]	mesh		Receives the imported data.
 		 *\param[in]	file		The location of the file to import.
 		 *\param[in]	parameters	Import configuration parameters.
@@ -51,7 +74,7 @@ namespace castor3d
 		 *\param[in]	forceImport	Dit si le mesh importé doit être importé même s'il est déjà rempli.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API bool import( Mesh & mesh
+		C3D_API bool importData( Mesh & mesh
 			, ImporterFile * file
 			, Parameters const & parameters
 			, bool forceImport );
@@ -71,7 +94,7 @@ namespace castor3d
 		 *\param[in]	forceImport	Dit si le mesh importé doit être importé même s'il est déjà rempli.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API static bool import( Mesh & mesh
+		C3D_API static bool importData( Mesh & mesh
 			, castor::Path const & pathFile
 			, Parameters const & parameters
 			, bool forceImport );
@@ -81,18 +104,9 @@ namespace castor3d
 			return m_prefix;
 		}
 
-	protected:
-		/**
-		 *\~english
-		 *\brief		Mesh import Function.
-		 *\param[out]	mesh	Receives the imported data.
-		 *\return		\p false if any problem occured.
-		 *\~french
-		 *\brief		Fonction d'import de Mesh.
-		 *\param[out]	mesh	Reçoit les données importées.
-		 *\return		\p false si un problème quelconque est survenu.
-		 */
-		C3D_API virtual bool doImportMesh( Mesh & mesh ) = 0;
+	private:
+		C3D_API virtual MeshRes doCreateMesh( castor::String const & name, Scene & scene );
+		virtual bool doImportMesh( Mesh & mesh ) = 0;
 
 	protected:
 		castor::String m_prefix;

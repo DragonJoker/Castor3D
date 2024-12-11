@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 
+#include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp"
@@ -107,7 +108,7 @@ namespace castor3d
 	{
 	}
 
-	bool AnimationImporter::import( SkeletonAnimation & animation
+	bool AnimationImporter::importData( SkeletonAnimation & animation
 		, ImporterFile * file
 		, Parameters const & parameters )
 	{
@@ -140,7 +141,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool AnimationImporter::import( SkeletonAnimation & animation
+	bool AnimationImporter::importData( SkeletonAnimation & animation
 		, castor::Path const & path
 		, Parameters const & parameters )
 	{
@@ -160,13 +161,13 @@ namespace castor3d
 
 		if ( auto importer = file->createAnimationImporter() )
 		{
-			return importer->import( animation, file.get(), parameters );
+			return importer->importData( animation, file.get(), parameters );
 		}
 
 		return false;
 	}
 
-	bool AnimationImporter::import( MeshAnimation & animation
+	bool AnimationImporter::importData( MeshAnimation & animation
 		, ImporterFile * file
 		, Parameters const & parameters )
 	{
@@ -202,7 +203,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool AnimationImporter::import( MeshAnimation & animation
+	bool AnimationImporter::importData( MeshAnimation & animation
 		, castor::Path const & path
 		, Parameters const & parameters )
 	{
@@ -225,13 +226,13 @@ namespace castor3d
 
 		if ( auto importer = file->createAnimationImporter() )
 		{
-			return importer->import( animation, file.get(), parameters );
+			return importer->importData( animation, file.get(), parameters );
 		}
 
 		return false;
 	}
 
-	bool AnimationImporter::import( SceneNodeAnimation & animation
+	bool AnimationImporter::importData( SceneNodeAnimation & animation
 		, ImporterFile * file
 		, Parameters const & parameters )
 	{
@@ -254,7 +255,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool AnimationImporter::import( SceneNodeAnimation & animation
+	bool AnimationImporter::importData( SceneNodeAnimation & animation
 		, castor::Path const & path
 		, Parameters const & parameters )
 	{
@@ -274,7 +275,56 @@ namespace castor3d
 
 		if ( auto importer = file->createAnimationImporter() )
 		{
-			return importer->import( animation, file.get(), parameters );
+			return importer->importData( animation, file.get(), parameters );
+		}
+
+		return false;
+	}
+
+	bool AnimationImporter::importData( TextureAnimation & animation
+		, ImporterFile * file
+		, Parameters const & parameters )
+	{
+		m_file = file;
+		m_parameters = parameters;
+		log::info << getPrefix() << cuT( "Loading texture animation [" ) << animation.getName() << cuT( "]" ) << std::endl;
+		bool result = doImportTexture( animation );
+
+		if ( result )
+		{
+			log::info << getPrefix() << cuT( "Loaded texture animation [" ) << animation.getName() << cuT( "] " )
+				<< animation.getLength().count() << cuT( " ms, " )
+				<< animation.size() << cuT( " Keyframes" ) << std::endl;
+		}
+		else
+		{
+			log::info << getPrefix() << cuT( "Couldn't load texture animation [" ) << animation.getName() << cuT( "]" ) << std::endl;
+		}
+
+		return result;
+	}
+
+	bool AnimationImporter::importData( TextureAnimation & animation
+		, castor::Path const & path
+		, Parameters const & parameters )
+	{
+		auto & engine = *animation.getEngine();
+		auto extension = castor::string::lowerCase( path.getExtension() );
+
+		if ( !engine.getImporterFileFactory().isTypeRegistered( extension ) )
+		{
+			log::error << cuT( "Importer for [" ) << extension << cuT( "] files is not registered, make sure you've got the matching plug-in installed." );
+			return false;
+		}
+
+		auto file = engine.getImporterFileFactory().create( extension
+			, engine
+			, path
+			, parameters );
+
+		if ( auto importer = file->createAnimationImporter() )
+		{
+			return importer->importData( animation, file.get(), parameters );
 		}
 
 		return false;

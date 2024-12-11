@@ -16,6 +16,18 @@ namespace castor3d
 	uint64_t SceneNode::CurrentId = 0;
 
 	SceneNode::SceneNode( castor::String const & name
+		, SceneNodeCreateInfo const & createInfo )
+		: SceneNode{ name
+			, *createInfo.scene
+			, createInfo.parentNode
+			, createInfo.position
+			, createInfo.orientation
+			, createInfo.scale
+			, createInfo.isStatic }
+	{
+	}
+
+	SceneNode::SceneNode( castor::String const & name
 		, Scene & scene
 		, SceneNode * parent
 		, castor::Point3f position
@@ -24,7 +36,7 @@ namespace castor3d
 		, bool isStatic )
 		: Animable{ *scene.getEngine() }
 		, castor::Named{ name }
-		, m_scene{ scene }
+		, m_scene{ &scene }
 		, m_static{ isStatic }
 		, m_displayable{ name == Scene::RootNode }
 		, m_orientation{ castor::move( orientation ) }
@@ -203,7 +215,7 @@ namespace castor3d
 
 	void SceneNode::markDirty()
 	{
-		m_scene.markDirty( *this );
+		m_scene->markDirty( *this );
 	}
 
 	void SceneNode::rotate( castor::Quaternion const & orientation )

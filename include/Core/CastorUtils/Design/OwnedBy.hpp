@@ -20,7 +20,7 @@ namespace castor
 		 *\brief		Constructeur
 		 *\param[in]	owner	L'objet propriétaire.
 		 */
-		explicit OwnedBy( Owner & owner )
+		explicit OwnedBy( Owner & owner )noexcept
 			: m_owner( &owner )
 		{
 		}
@@ -32,9 +32,19 @@ namespace castor
 		 *\~french
 		 *\brief		L'objet propriétaire.
 		 */
-		Owner * getOwner()const
+		Owner * getOwner()const noexcept
 		{
 			return m_owner;
+		}
+		/**
+		 *\~english
+		 *\param[in]	owner	The owner object.
+		 *\~french
+		 *\param[in]	owner	L'objet propriétaire.
+		 */
+		void setOwner( Owner & owner )noexcept
+		{
+			m_owner = &owner;
 		}
 
 	private:
@@ -60,6 +70,7 @@ namespace castor
 		public:\
 			Owner * get##Name()const noexcept;\
 			Owner * getOwner()const noexcept;\
+			void setOwner( Owner & owner )noexcept;\
 		private:\
 			Owner * m_owner;\
 		};\
@@ -87,6 +98,10 @@ namespace castor
 		Owner * OwnedBy< Owner >::getOwner()const noexcept\
 		{\
 			return m_owner;\
+		}\
+		void OwnedBy< Owner >::setOwner( Owner & owner )noexcept\
+		{\
+			m_owner = &owner;\
 		}\
 	}
 }

@@ -82,7 +82,28 @@ namespace castor3d
 	{
 	}
 
-	bool MaterialImporter::import( Material & material
+	MaterialPtr MaterialImporter::importData( castor::String const & name
+		, ImporterFile * file
+		, Parameters const & parameters
+		, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
+	{
+		if ( !m_file )
+		{
+			m_file = file;
+		}
+
+		auto result = doCreateMaterial( name );
+
+		if ( !result
+			|| !importData( *result, file, parameters, textureRemaps ) )
+		{
+			return nullptr;
+		}
+
+		return result;
+	}
+
+	bool MaterialImporter::importData( Material & material
 		, ImporterFile * file
 		, Parameters const & parameters
 		, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
@@ -118,7 +139,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool MaterialImporter::import( Material & material
+	bool MaterialImporter::importData( Material & material
 		, castor::Path const & path
 		, Parameters const & parameters
 		, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
@@ -139,7 +160,7 @@ namespace castor3d
 
 		if ( auto importer = file->createMaterialImporter() )
 		{
-			return importer->import( material
+			return importer->importData( material
 				, file.get()
 				, parameters
 				, textureRemaps );
@@ -382,5 +403,12 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	MaterialPtr MaterialImporter::doCreateMaterial( castor::String const & name )
+	{
+		return getOwner()->createMaterial( name
+			, *getOwner()
+			, getOwner()->getDefaultLightingModel() );
 	}
 }

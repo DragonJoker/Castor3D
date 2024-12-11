@@ -123,9 +123,12 @@ namespace c3d_assimp
 		castor::StringArray listMeshAnimations( castor3d::Mesh const & mesh )override;
 		castor::StringArray listSkeletonAnimations( castor3d::Skeleton const & skeleton )override;
 		castor::StringArray listSceneNodeAnimations( castor3d::SceneNode const & node )override;
-		castor::StringArray listAllMeshAnimations()override;
-		castor::StringArray listAllSkeletonAnimations()override;
-		castor::StringArray listAllSceneNodeAnimations()override;
+		castor::Vector< uint32_t > listTextureAnimations( castor3d::Material const & material
+			, uint32_t pass )override;
+		uint32_t countAllMeshAnimations()const override;
+		uint32_t countAllSkeletonAnimations()const override;
+		uint32_t countAllSceneNodeAnimations()const override;
+		uint32_t countAllTextureAnimations()const override;
 
 		castor3d::MaterialImporterUPtr createMaterialImporter()override;
 		castor3d::AnimationImporterUPtr createAnimationImporter()override;

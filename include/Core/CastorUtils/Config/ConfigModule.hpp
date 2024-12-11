@@ -156,7 +156,7 @@ namespace castor
 	template< typename DataT >
 	using UnorderedStringMap = std::unordered_map< String, DataT, StringHash, std::equal_to<> >;
 
-	using StringSet = std::set< String, StringHash, std::equal_to<> >;
+	using StringSet = std::set< String >;
 	using UnorderedStringSet = std::unordered_set< String, StringHash, std::equal_to<> >;
 
 	using Seconds = std::chrono::seconds;

@@ -65,6 +65,18 @@ namespace castor3d
 			, bool ownProjMtx = false );
 		/**
 		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	name		The camera name.
+		 *\param[in]	createInfo	The camera creation informations.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	name		Le nom de la caméra.
+		 *\param[in]	createInfo	Les informations de création de la caméra.
+		 */
+		C3D_API Camera( castor::String const & name
+			, CameraCreateInfo const & createInfo );
+		/**
+		 *\~english
 		 *\brief		Updates the frustum.
 		 *\~french
 		 *\brief		Met à jour le frustum.
