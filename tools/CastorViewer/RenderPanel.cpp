@@ -179,6 +179,7 @@ namespace CastorViewer
 	{
 		castor::Logger::logInfo( cuT( "Cleaning up RenderPanel." ) );
 		doStopMovement();
+		doUpdateSelectedGeometry( nullptr, nullptr, true );
 		m_selectedSubmesh = {};
 		m_selectedGeometry = {};
 

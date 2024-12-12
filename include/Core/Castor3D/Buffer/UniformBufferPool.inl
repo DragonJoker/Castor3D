@@ -38,14 +38,20 @@ namespace castor3d
 			auto key = uint32_t( bufferOffset.flags );
 			auto it = m_buffers.find( key );
 			CU_Require( it != m_buffers.end() );
-			auto itB = std::find_if( it->second.begin()
-				, it->second.end()
-				, [&bufferOffset]( Buffer const & lookup )
+			if ( it != m_buffers.end() )
+			{
+				auto itB = std::find_if( it->second.begin()
+					, it->second.end()
+					, [&bufferOffset]( Buffer const & lookup )
+					{
+							return &lookup.buffer->getBuffer() == &bufferOffset.getBuffer();
+					} );
+				CU_Require( itB != it->second.end() );
+				if ( itB != it->second.end() )
 				{
-					return &lookup.buffer->getBuffer() == &bufferOffset.getBuffer();
-				} );
-			CU_Require( itB != it->second.end() );
-			itB->buffer->deallocate( bufferOffset.offset );
+					itB->buffer->deallocate( bufferOffset.offset );
+				}
+			}
 		}
 	}
 }

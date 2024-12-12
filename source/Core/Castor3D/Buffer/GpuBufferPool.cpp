@@ -319,14 +319,20 @@ namespace castor3d
 		auto key = doMakeKey( target, memory );
 		auto it = m_buffers.find( key );
 		CU_Require( it != m_buffers.end() );
-		auto itB = std::find_if( it->second.begin()
-			, it->second.end()
-			, [&buffer]( castor::RawUniquePtr< GpuBuddyBuffer > const & lookup )
+		if ( it != m_buffers.end() )
+		{
+			auto itB = std::find_if( it->second.begin()
+				, it->second.end()
+				, [&buffer]( castor::RawUniquePtr< GpuBuddyBuffer > const & lookup )
+				{
+						return &lookup->getBuffer().getBuffer() == &buffer.getBuffer().getBuffer();
+				} );
+			CU_Require( itB != it->second.end() );
+			if ( itB != it->second.end() )
 			{
-				return &lookup->getBuffer().getBuffer() == &buffer.getBuffer().getBuffer();
-			} );
-		CU_Require( itB != it->second.end() );
-		( *itB )->deallocate( chunk );
+				( *itB )->deallocate( chunk );
+			}
+		}
 	}
 
 	GpuBufferPool::BufferArray::iterator GpuBufferPool::doFindBuffer( VkDeviceSize size
