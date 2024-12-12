@@ -12,6 +12,8 @@ See LICENSE file in root folder
 #include "Castor3D/Animation/Animation.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimationSubmesh.hpp"
 
+#include <CastorUtils/FileParser/FileParserModule.hpp>
+
 namespace castor3d
 {
 	class MeshAnimation
@@ -68,6 +70,8 @@ namespace castor3d
 			CU_Require( index < m_submeshes.size() );
 			return m_submeshes[index];
 		}
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
 
 	private:
 		void doCloneInto( Animation & output )const override;

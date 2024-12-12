@@ -16,6 +16,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/ArrayView.hpp>
 #include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 
 #include <RenderGraph/ResourceHandler.hpp>
@@ -367,6 +368,8 @@ namespace castor3d
 		 *\brief		Crée la loading scene.
 		 */
 		C3D_API void createLoadingScreen();
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
 		/**
 		*\~english
 		*name

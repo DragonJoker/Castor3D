@@ -11,6 +11,7 @@ See LICENSE file in root folder
 #include <ashespp/Image/Sampler.hpp>
 
 #include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Multithreading/SpinMutex.hpp>
 
 namespace castor3d
@@ -78,6 +79,8 @@ namespace castor3d
 		 *\brief		Nettoie le sampler
 		 */
 		C3D_API void cleanup();
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
 		/**
 		*\~english
 		*name

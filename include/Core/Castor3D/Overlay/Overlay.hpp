@@ -137,6 +137,8 @@ namespace castor3d
 		 *\return		Le niveau dans la hiérarchie de cet overlay.
 		 */
 		C3D_API uint32_t computeLevel()const;
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
 		/**
 		*\~english
 		*\name

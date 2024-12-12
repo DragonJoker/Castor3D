@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 
 namespace castor3d
 {

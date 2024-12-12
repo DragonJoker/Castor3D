@@ -8,11 +8,13 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Scene/ParticleSystem/ComputeParticleSystem.hpp"
 #include "Castor3D/Scene/ParticleSystem/CpuParticleSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
 #include <CastorUtils/Design/Factory.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 #include <ashespp/Core/Device.hpp>
 
@@ -105,6 +107,226 @@ namespace castor3d
 		{
 			return getSize( getComponent( format ) );
 		}
+
+		static CU_ImplementAttributeParserBlock( parserSystemParent, ParticleSystemContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+
+				if ( auto node = blockContext->scene->scene->tryFindSceneNode( name ) )
+				{
+					blockContext->parentNode = node;
+				}
+				else
+				{
+					CU_ParsingError( cuT( "No scene node named " ) + name );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSystemCount, ParticleSystemContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->particleCount );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSystemMaterial, ParticleSystemContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+
+				if ( auto material = getEngine( *blockContext )->tryFindMaterial( name ) )
+				{
+					blockContext->material = material;
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSystemDimensions, ParticleSystemContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->dimensions );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSystemParticle, ParticleSystemContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( blockContext->particleCount == 0 )
+			{
+				CU_ParsingError( cuT( "particles_count has not been specified." ) );
+			}
+			else if ( blockContext->dimensions[0] == 0 || blockContext->dimensions[1] == 0 )
+			{
+				CU_ParsingError( cuT( "one component of the particles dimensions is 0." ) );
+			}
+			else
+			{
+				if ( !blockContext->material )
+				{
+					blockContext->material = getEngine( *blockContext )->getMaterialCache().getDefaultMaterial();
+				}
+
+				blockContext->particleSystem = blockContext->scene->scene->tryFindParticleSystem( blockContext->name );
+
+				if ( !blockContext->particleSystem )
+				{
+					auto node = blockContext->parentNode;
+
+					if ( !node )
+					{
+						node = blockContext->scene->scene->getObjectRootNode();
+					}
+
+					blockContext->parentNode = nullptr;
+					blockContext->ownParticleSystem = blockContext->scene->scene->createParticleSystem( blockContext->name
+						, *blockContext->scene->scene
+						, *node
+						, blockContext->particleCount );
+					blockContext->particleSystem = blockContext->ownParticleSystem.get();
+				}
+
+				blockContext->particleSystem->setMaterial( blockContext->material );
+				blockContext->particleSystem->setDimensions( blockContext->dimensions );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eParticle, blockContext )
+
+		static CU_ImplementAttributeParserNewBlock( parserSystemCSShader, ParticleSystemContext, ProgramContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else
+			{
+				newBlockContext->shaderProgram = getEngine( *blockContext )->getShaderProgramCache().getNewProgram( blockContext->name, true );
+				newBlockContext->particleSystem = blockContext;
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eShaderProgram )
+
+		static CU_ImplementAttributeParserBlock( parserSystemEnd, ParticleSystemContext )
+		{
+			if ( !blockContext->particleSystem )
+			{
+				CU_ParsingError( cuT( "No particle system initialised." ) );
+			}
+			else
+			{
+				blockContext->parentNode = nullptr;
+				log::info << "Loaded sampler [" << blockContext->particleSystem->getName() << "]" << std::endl;
+
+				if ( blockContext->ownParticleSystem )
+				{
+					blockContext->scene->scene->addParticleSystem( blockContext->particleSystem->getName()
+						, blockContext->ownParticleSystem
+						, true );
+				}
+
+				blockContext->particleSystem = {};
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserType, ParticleSystemContext )
+		{
+			if ( !blockContext->particleSystem )
+			{
+				CU_ParsingError( cuT( "No particle system initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				castor::String type;
+
+				if ( Engine const * engine = getEngine( *blockContext );
+					engine && !engine->getParticleFactory().isTypeRegistered( castor::string::lowerCase( params[0]->get( type ) ) ) )
+				{
+					CU_ParsingError( cuT( "Particle type [" ) + type + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
+				}
+				else
+				{
+					blockContext->particleSystem->setParticleType( type );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserVariable, ParticleSystemContext )
+		{
+			if ( !blockContext->particleSystem )
+			{
+				CU_ParsingError( cuT( "No particle system initialised." ) );
+			}
+			else if ( params.size() < 2 )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				castor::String value;
+
+				if ( params.size() > 2 )
+				{
+					params[2]->get( value );
+				}
+
+				blockContext->particleSystem->addParticleVariable( params[0]->get< castor::String >(), ParticleFormat( params[1]->get< uint32_t >() ), value );
+			}
+		}
+		CU_EndAttribute()
 	}
 
 	//*************************************************************************************************
@@ -301,5 +523,24 @@ namespace castor3d
 	void ParticleSystem::setCSGroupSizes( castor::Point3i sizes )
 	{
 		m_csImpl->setGroupSizes( sizes );
+	}
+
+	void ParticleSystem::addParsers( castor::AttributeParsers & result )
+	{
+		using namespace castor;
+		BlockParserContextT< ParticleSystemContext > systemCtx{ result, CSCNSection::eParticleSystem, CSCNSection::eScene };
+		BlockParserContextT< ParticleSystemContext > particleCtx{ result, CSCNSection::eParticle, CSCNSection::eParticleSystem };
+
+		systemCtx.addParser( cuT( "parent" ), ptclsys::parserSystemParent, { makeParameter< ParameterType::eName >() } );
+		systemCtx.addParser( cuT( "particles_count" ), ptclsys::parserSystemCount, { makeParameter< ParameterType::eUInt32 >() } );
+		systemCtx.addParser( cuT( "material" ), ptclsys::parserSystemMaterial, { makeParameter< ParameterType::eName >() } );
+		systemCtx.addParser( cuT( "dimensions" ), ptclsys::parserSystemDimensions, { makeParameter< ParameterType::ePoint2F >() } );
+		systemCtx.addPushParser( cuT( "particle" ), CSCNSection::eParticle, ptclsys::parserSystemParticle );
+		systemCtx.addPushParser( cuT( "cs_shader_program" ), CSCNSection::eShaderProgram, ptclsys::parserSystemCSShader );
+		systemCtx.addPopParser( cuT( "}" ), ptclsys::parserSystemEnd );
+
+		particleCtx.addParser( cuT( "variable" ), ptclsys::parserVariable, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eCheckedText, ParticleFormat >(), makeParameter< ParameterType::eText >() } );
+		particleCtx.addParser( cuT( "type" ), ptclsys::parserType, { makeParameter< ParameterType::eName >() } );
+		particleCtx.addDefaultPopParser();
 	}
 }

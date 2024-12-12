@@ -1,17 +1,233 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 
+#include "Castor3D/Binary/BinarySceneNodeAnimation.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Scene/Animation/SceneNodeAnimation.hpp"
+
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 CU_ImplementSmartPtr( castor3d, SceneNode )
 
 namespace castor3d
 {
+	namespace node
+	{
+		static CU_ImplementAttributeParserBlock( parserStatic, NodeContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [static] parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->isStatic );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserParent, NodeContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [parent] parameter." ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				SceneNodeRPtr parent;
+
+				if ( name == Scene::ObjectRootNode )
+				{
+					parent = blockContext->scene->scene->getObjectRootNode();
+				}
+				else if ( name == Scene::CameraRootNode )
+				{
+					parent = blockContext->scene->scene->getCameraRootNode();
+				}
+				else if ( name == Scene::RootNode )
+				{
+					parent = blockContext->scene->scene->getRootNode();
+				}
+				else
+				{
+					parent = blockContext->scene->scene->findSceneNode( name );
+				}
+
+				if ( parent )
+				{
+					blockContext->parentNode = parent;
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserVisible, NodeContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [visible] parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->isVisible );
+
+				if ( blockContext->currentNode )
+				{
+					blockContext->currentNode->setVisible( blockContext->isVisible );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserPosition, NodeContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [position] parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->position );
+
+				if ( blockContext->currentNode )
+				{
+					blockContext->currentNode->setPosition( blockContext->position );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserOrientation, NodeContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [orientation] parameter." ) );
+			}
+			else
+			{
+				blockContext->orientation = castor::Quaternion::fromAxisAngle( params[0]->get< castor::Point3f >()
+					, castor::Angle::fromDegrees( params[1]->get< float >() ) );
+
+				if ( blockContext->currentNode )
+				{
+					blockContext->currentNode->setOrientation( blockContext->orientation );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserRotate, NodeContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [orientation] parameter." ) );
+			}
+			else
+			{
+				blockContext->orientation *= castor::Quaternion::fromAxisAngle( params[0]->get< castor::Point3f >()
+					, castor::Angle::fromDegrees( params[1]->get< float >() ) );
+
+				if ( blockContext->currentNode )
+				{
+					blockContext->currentNode->setOrientation( blockContext->orientation );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserDirection, NodeContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [direction] parameter." ) );
+			}
+			else
+			{
+				castor::Point3f direction;
+				params[0]->get( direction );
+				castor::Point3f up{ 0, 1, 0 };
+				castor::Point3f right{ castor::point::cross( direction, up ) };
+				blockContext->orientation = castor::Quaternion::fromAxes( right, up, direction );
+
+				if ( blockContext->currentNode )
+				{
+					blockContext->currentNode->setOrientation( blockContext->orientation );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserScale, NodeContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [direction] parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->scale );
+
+				if ( blockContext->currentNode )
+				{
+					blockContext->currentNode->setScale( blockContext->scale );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserEnd, NodeContext )
+		{
+			if ( !blockContext->currentNode )
+			{
+				SceneNodeUPtr sceneNode = blockContext->scene->scene->createSceneNode( blockContext->name
+					, *blockContext->scene->scene
+					, blockContext->parentNode
+					, blockContext->position
+					, blockContext->orientation
+					, blockContext->scale
+					, blockContext->isStatic );
+				sceneNode->setVisible( blockContext->isVisible );
+				auto name = sceneNode->getName();
+				auto node = blockContext->scene->scene->addSceneNode( name, sceneNode, true );
+				sceneNode.reset();
+
+				if ( !blockContext->isStatic )
+				{
+					for ( auto const & fileName : blockContext->scene->root->csnaFiles )
+					{
+						auto fName = fileName.getFileName();
+
+						if ( auto pos = fName.find( name );
+							pos == 0u && fName[name.size()] == '-' )
+						{
+							if ( auto animName = fName.substr( name.size() + 1u );
+								!animName.empty() )
+							{
+								auto & animation = node->createAnimation( animName );
+								BinaryParser< SceneNodeAnimation > parser;
+								castor::BinaryFile animFile{ fileName, castor::File::OpenMode::eRead };
+								parser.parse( animation, animFile );
+							}
+						}
+					}
+				}
+
+				log::info << "Loaded scene node [" << name << "]" << std::endl;
+			}
+		}
+		CU_EndAttributePop()
+	}
+
 	uint64_t SceneNode::Count = 0;
 	uint64_t SceneNode::CurrentId = 0;
 
@@ -125,6 +341,21 @@ namespace castor3d
 		{
 			m_objects.erase( it );
 		}
+	}
+
+	void SceneNode::addParsers( castor::AttributeParsers & result )
+	{
+		using namespace castor;
+		BlockParserContextT< NodeContext > context{ result, CSCNSection::eNode, CSCNSection::eScene };
+		context.addParser( cuT( "static" ), node::parserStatic, { makeParameter< ParameterType::eBool >() } );
+		context.addParser( cuT( "visible" ), node::parserVisible, { makeParameter< ParameterType::eBool >() } );
+		context.addParser( cuT( "parent" ), node::parserParent, { makeParameter< ParameterType::eName >() } );
+		context.addParser( cuT( "position" ), node::parserPosition, { makeParameter< ParameterType::ePoint3F >() } );
+		context.addParser( cuT( "orientation" ), node::parserOrientation, { makeParameter< ParameterType::ePoint3F >(), makeParameter< ParameterType::eFloat >() } );
+		context.addParser( cuT( "rotate" ), node::parserRotate, { makeParameter< ParameterType::ePoint3F >(), makeParameter< ParameterType::eFloat >() } );
+		context.addParser( cuT( "direction" ), node::parserDirection, { makeParameter< ParameterType::ePoint3F >() } );
+		context.addParser( cuT( "scale" ), node::parserScale, { makeParameter< ParameterType::ePoint3F >() } );
+		context.addPopParser( cuT( "}" ), node::parserEnd );
 	}
 
 	void SceneNode::attachTo( SceneNode & node )

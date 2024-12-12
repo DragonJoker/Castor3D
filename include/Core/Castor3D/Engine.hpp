@@ -798,6 +798,8 @@ namespace castor3d
 		 *\return		Le chemin des données
 		 */
 		C3D_API static std::locale const & getLocale();
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
 		/**
 		*\~english
 		*\name

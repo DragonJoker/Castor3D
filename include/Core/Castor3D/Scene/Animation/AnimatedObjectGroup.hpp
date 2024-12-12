@@ -271,6 +271,8 @@ namespace castor3d
 			return m_objects;
 		}
 
+		C3D_API static void addParsers( castor::AttributeParsers & result );
+
 	public:
 		OnAnimatedSkeletonChange onSkeletonAdded;
 		OnAnimatedSkeletonChange onSkeletonRemoved;

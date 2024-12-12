@@ -13,6 +13,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 
 namespace castor3d
 {
@@ -242,6 +243,8 @@ namespace castor3d
 		*/
 		C3D_API void setCrossTexture( castor::Path const & folder
 			, castor::Path const & relative );
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
 		/**
 		*\~english
 		*name

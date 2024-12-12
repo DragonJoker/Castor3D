@@ -14,6 +14,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationModule.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 
 namespace castor3d
 {
@@ -137,6 +138,8 @@ namespace castor3d
 		 *\param[in,out]	output	Reçoit les données de cet objet.
 		 */
 		C3D_API void cloneInto( Skeleton & output )const;
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
 
 		castor::Matrix4x4f const & getGlobalInverseTransform()const
 		{

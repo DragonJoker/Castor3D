@@ -11,6 +11,7 @@
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
+#include "Castor3D/Miscellaneous/LoadingScreen.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
@@ -28,10 +29,13 @@
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
+#include "Castor3D/Scene/Background/Image.hpp"
+#include "Castor3D/Scene/Background/Skybox.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
+#include "Castor3D/Scene/SceneImporter.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
@@ -44,6 +48,7 @@
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/FontCache.hpp>
 
@@ -51,6 +56,721 @@ CU_ImplementSmartPtr( castor3d, Scene )
 
 namespace castor3d
 {
+	//*************************************************************************************************
+
+	namespace scene
+	{
+		static CU_ImplementAttributeParserBlock( parserBkColour, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->scene->setBackgroundColour( params[0]->get< castor::RgbColour >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserBkImage, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto imgBackground = castor::makeUnique< ImageBackground >( *getEngine( *blockContext )
+					, *blockContext->scene );
+				imgBackground->setImage( context.file.getPath(), params[0]->get< castor::Path >() );
+				blockContext->scene->setBackground( castor::ptrRefCast< SceneBackground >( imgBackground ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserNewBlock( parserFont, SceneContext, FontContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				newBlockContext->scene = blockContext;
+				newBlockContext->root = blockContext->root;
+				params[0]->get( newBlockContext->name );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eFont )
+
+		static CU_ImplementAttributeParserNewBlock( parserSdfFont, SceneContext, FontContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				newBlockContext->scene = blockContext;
+				newBlockContext->root = blockContext->root;
+				params[0]->get( newBlockContext->name );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eSdfFont )
+
+		static CU_ImplementAttributeParserNewBlock( parserSamplerState, SceneContext, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				newBlockContext->sampler = getEngine( *blockContext )->tryFindSampler( name );
+
+				if ( !newBlockContext->sampler )
+				{
+					newBlockContext->ownSampler = getEngine( *blockContext )->createSampler( name
+						, *getEngine( *blockContext ) );
+					newBlockContext->sampler = newBlockContext->ownSampler.get();
+				}
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eSampler )
+
+		static CU_ImplementAttributeParserNewBlock( parserCamera, SceneContext, CameraContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				newBlockContext->scene = blockContext;
+				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eCamera )
+
+		static CU_ImplementAttributeParserNewBlock( parserLight, SceneContext, LightContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				newBlockContext->scene = blockContext;
+				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eLight )
+
+		static CU_ImplementAttributeParserNewBlock( parserCameraNode, SceneContext, NodeContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				newBlockContext->scene = blockContext;
+				newBlockContext->isCameraNode = true;
+				newBlockContext->parentNode = blockContext->scene->getCameraRootNode();
+				newBlockContext->currentNode = blockContext->scene->tryFindSceneNode( newBlockContext->name );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eNode )
+
+		static CU_ImplementAttributeParserNewBlock( parserNode, SceneContext, NodeContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				newBlockContext->scene = blockContext;
+				newBlockContext->isCameraNode = false;
+				newBlockContext->parentNode = blockContext->scene->getObjectRootNode();
+				newBlockContext->currentNode = blockContext->scene->tryFindSceneNode( newBlockContext->name );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eNode )
+
+		static CU_ImplementAttributeParserNewBlock( parserObject, SceneContext, ObjectContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				newBlockContext->scene = blockContext;
+				newBlockContext->ownGeometry = blockContext->scene->createGeometry( newBlockContext->name
+					, *blockContext->scene );
+				newBlockContext->geometry = newBlockContext->ownGeometry.get();
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eObject )
+
+		static CU_ImplementAttributeParserBlock( parserAmbientLight, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->scene->setAmbientLight( params[0]->get< castor::RgbColour >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserNewBlock( parserImport, SceneContext, SceneImportContext )
+		{
+			newBlockContext->scene = blockContext;
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eSceneImport )
+
+		static CU_ImplementAttributeParserNewBlock( parserBillboard, SceneContext, BillboardsContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				newBlockContext->scene = blockContext;
+				newBlockContext->ownBillboards = castor::makeUnique< BillboardList >( name
+					, *blockContext->scene );
+				newBlockContext->billboards = newBlockContext->ownBillboards.get();
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eBillboard )
+
+		static CU_ImplementAttributeParserNewBlock( parserAnimatedObjectGroup, SceneContext, AnimGroupContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				newBlockContext->scene = blockContext;
+				newBlockContext->animGroup = blockContext->scene->addNewAnimatedObjectGroup( name
+					, *blockContext->scene );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eAnimGroup )
+
+		static CU_ImplementAttributeParserBlock( parserPanelOverlay, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
+				auto & parent = blockContext->overlays->parentOverlays.back();
+				blockContext->overlays->overlay.rptr = blockContext->scene->tryFindOverlay( name );
+
+				if ( !blockContext->overlays->overlay.rptr )
+				{
+					blockContext->overlays->overlay.uptr = castor::makeUnique< Overlay >( *getEngine( *blockContext )
+						, OverlayType::ePanel
+						, blockContext->scene
+						, parent.rptr );
+					blockContext->overlays->overlay.rptr = blockContext->overlays->overlay.uptr.get();
+					blockContext->overlays->overlay.rptr->rename( name );
+				}
+
+				blockContext->overlays->overlay.rptr->setVisible( false );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::ePanelOverlay, blockContext->overlays.get() )
+
+		static CU_ImplementAttributeParserBlock( parserBorderPanelOverlay, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
+				auto & parent = blockContext->overlays->parentOverlays.back();
+				blockContext->overlays->overlay.rptr = blockContext->scene->tryFindOverlay( name );
+
+				if ( !blockContext->overlays->overlay.rptr )
+				{
+					blockContext->overlays->overlay.uptr = castor::makeUnique< Overlay >( *getEngine( *blockContext )
+						, OverlayType::eBorderPanel
+						, blockContext->scene
+						, parent.rptr );
+					blockContext->overlays->overlay.rptr = blockContext->overlays->overlay.uptr.get();
+					blockContext->overlays->overlay.rptr->rename( name );
+				}
+
+				blockContext->overlays->overlay.rptr->setVisible( false );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eBorderPanelOverlay, blockContext->overlays.get() )
+
+		static CU_ImplementAttributeParserBlock( parserTextOverlay, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
+				auto & parent = blockContext->overlays->parentOverlays.back();
+				blockContext->overlays->overlay.rptr = blockContext->scene->tryFindOverlay( name );
+
+				if ( !blockContext->overlays->overlay.rptr )
+				{
+					blockContext->overlays->overlay.uptr = castor::makeUnique< Overlay >( *getEngine( *blockContext )
+						, OverlayType::eText
+						, blockContext->scene
+						, parent.rptr );
+					blockContext->overlays->overlay.rptr = blockContext->overlays->overlay.uptr.get();
+					blockContext->overlays->overlay.rptr->rename( name );
+				}
+
+				blockContext->overlays->overlay.rptr->setVisible( false );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eTextOverlay, blockContext->overlays.get() )
+
+		static CU_ImplementAttributeParserNewBlock( parserSkybox, SceneContext, SkyboxContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else
+			{
+				newBlockContext->skybox = castor::makeUnique< SkyboxBackground >( *getEngine( *blockContext )
+					, *blockContext->scene );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eSkybox )
+
+		static CU_ImplementAttributeParserBlock( parserFogType, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else
+			{
+				blockContext->scene->getFog().setType( FogType( params[0]->get< uint32_t >() ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserFogDensity, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else
+			{
+				blockContext->scene->getFog().setDensity( params[0]->get< float >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserDirectionalShadowCascades, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->scene->setDirectionalShadowCascades( params[0]->get< uint32_t >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserNewBlock( parserParticleSystem, SceneContext, ParticleSystemContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				newBlockContext->scene = blockContext;
+				params[0]->get( newBlockContext->name );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eParticleSystem )
+
+		static CU_ImplementAttributeParserNewBlock( parserMesh, SceneContext, MeshContext )
+		{
+			if ( blockContext->scene )
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				newBlockContext->scene = blockContext;
+				newBlockContext->root = blockContext->root;
+				newBlockContext->mesh = blockContext->scene->tryFindMesh( name );
+
+				if ( !newBlockContext->mesh )
+				{
+					newBlockContext->ownMesh = blockContext->scene->createMesh( name
+						, *blockContext->scene );
+					newBlockContext->mesh = newBlockContext->ownMesh.get();
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No scene initialised" ) );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eMesh )
+
+		static CU_ImplementAttributeParserNewBlock( parserSkeleton, SceneContext, SkeletonContext )
+		{
+			if ( blockContext->scene )
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				newBlockContext->scene = blockContext;
+				newBlockContext->skeleton = blockContext->scene->tryFindSkeleton( name );
+
+				if ( !newBlockContext->skeleton )
+				{
+					newBlockContext->skeleton = blockContext->scene->addNewSkeleton( name
+						, *blockContext->scene );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No scene initialised" ) );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eSkeleton )
+
+		static CU_ImplementAttributeParserBlock( parserEnd, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else
+			{
+				log::info << "Loaded scene [" << blockContext->scene->getName() << "]" << std::endl;
+
+				if ( blockContext->scene->getName() == LoadingScreen::SceneName )
+				{
+					getEngine( *blockContext )->setLoadingScene( castor::move( blockContext->ownScene ) );
+				}
+				else if ( blockContext->ownScene )
+				{
+					getEngine( *blockContext )->addScene( blockContext->scene->getName()
+						, blockContext->ownScene
+						, true );
+				}
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserImportFile, SceneImportContext )
+		{
+			castor::Path path;
+			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+			blockContext->files.push_back( pathFile );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserImportAnimFile, SceneImportContext )
+		{
+			castor::Path path;
+			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+			blockContext->animFiles.push_back( pathFile );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserImportPrefix, SceneImportContext )
+		{
+			params[0]->get( blockContext->prefix );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserImportRescale, SceneImportContext )
+		{
+			params[0]->get( blockContext->rescale );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserImportPitch, SceneImportContext )
+		{
+			params[0]->get( blockContext->pitch );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserImportYaw, SceneImportContext )
+		{
+			params[0]->get( blockContext->yaw );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserImportRoll, SceneImportContext )
+		{
+			params[0]->get( blockContext->roll );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserImportNoOptimisations, SceneImportContext )
+		{
+			params[0]->get( blockContext->noOptimisations );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserImportEmissiveMult, SceneImportContext )
+		{
+			params[0]->get( blockContext->emissiveMult );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserImportTexRemap, SceneImportContext )
+		{
+			blockContext->textureRemaps.clear();
+			blockContext->textureRemapIt = blockContext->textureRemaps.end();
+		}
+		CU_EndAttributePushBlock( CSCNSection::eTextureRemap, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserImportCenterCamera, SceneImportContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing name parameter" ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->centerCamera );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserImportPreferredImporter, SceneImportContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing name parameter" ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->preferredImporter );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserImportIgnoreVertexColour, SceneImportContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing name parameter" ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->ignoreVertexColour );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserImportDisableImageCompression, SceneImportContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing name parameter" ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->disableImageCompression );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserImportEnd, SceneImportContext )
+		{
+			Engine * engine = getEngine( *blockContext );
+
+			if ( blockContext->files.empty() )
+			{
+				CU_ParsingError( cuT( "No file chosen to import" ) );
+			}
+			else
+			{
+				Parameters parameters;
+
+				if ( blockContext->rescale != 1.0f )
+				{
+					parameters.add( cuT( "rescale" ), blockContext->rescale );
+				}
+
+				if ( blockContext->pitch != 0.0f )
+				{
+					parameters.add( cuT( "pitch" ), blockContext->pitch );
+				}
+
+				if ( blockContext->yaw != 0.0f )
+				{
+					parameters.add( cuT( "yaw" ), blockContext->yaw );
+				}
+
+				if ( blockContext->roll != 0.0f )
+				{
+					parameters.add( cuT( "roll" ), blockContext->roll );
+				}
+
+				if ( !blockContext->prefix.empty() )
+				{
+					parameters.add( cuT( "prefix" ), blockContext->prefix );
+				}
+
+				if ( blockContext->noOptimisations )
+				{
+					parameters.add( cuT( "no_optimisations" ), blockContext->noOptimisations );
+				}
+
+				if ( blockContext->ignoreVertexColour )
+				{
+					parameters.add( cuT( "ignore_vertex_colour" ), blockContext->ignoreVertexColour );
+				}
+
+				if ( blockContext->emissiveMult != 1.0f )
+				{
+					parameters.add( cuT( "emissive_mult" ), blockContext->emissiveMult );
+				}
+
+				if ( !blockContext->centerCamera.empty() )
+				{
+					parameters.add( cuT( "center_camera" ), blockContext->centerCamera );
+				}
+
+				if ( !blockContext->preferredImporter.empty() )
+				{
+					parameters.add( cuT( "preferred_importer" ), blockContext->preferredImporter );
+				}
+
+				if ( blockContext->disableImageCompression )
+				{
+					parameters.add( cuT( "disable_image_compression" ), blockContext->disableImageCompression );
+				}
+
+				SceneImporter importer{ *engine };
+
+				for ( auto const & file : blockContext->files )
+				{
+					if ( !importer.importData( *blockContext->scene->scene
+						, file
+						, parameters
+						, blockContext->textureRemaps
+						, blockContext->scene->root->progress ) )
+					{
+						CU_ParsingError( cuT( "External scene Import failed" ) );
+					}
+				}
+
+				for ( auto const & file : blockContext->animFiles )
+				{
+					if ( !importer.importAnimationsData( *blockContext->scene->scene
+						, file
+						, parameters
+						, blockContext->scene->root->progress ) )
+					{
+						CU_ParsingError( cuT( "External scene Import failed" ) );
+					}
+				}
+			}
+		}
+		CU_EndAttributePop()
+	}
+
 	//*************************************************************************************************
 
 	castor::String print( castor::Point3f const & obj )
@@ -786,6 +1506,55 @@ namespace castor3d
 		{
 			m_dirtyObjects.emplace_back( &object );
 		}
+	}
+
+	void Scene::addParsers( castor::AttributeParsers & result )
+	{
+		using namespace castor;
+		BlockParserContextT< SceneContext > sceneCtx{ result, CSCNSection::eScene, CSCNSection::eRoot };
+		BlockParserContextT< SceneImportContext > importCtx{ result, CSCNSection::eSceneImport, CSCNSection::eScene };
+
+		sceneCtx.addParser( cuT( "background_colour" ), scene::parserBkColour, { makeParameter< ParameterType::eRgbColour >() } );
+		sceneCtx.addParser( cuT( "background_image" ), scene::parserBkImage, { makeParameter< ParameterType::ePath >() } );
+		sceneCtx.addParser( cuT( "ambient_light" ), scene::parserAmbientLight, { makeParameter< ParameterType::eRgbColour >() } );
+		sceneCtx.addParser( cuT( "fog_type" ), scene::parserFogType, { makeParameter< ParameterType::eCheckedText, FogType >() } );
+		sceneCtx.addParser( cuT( "fog_density" ), scene::parserFogDensity, { makeParameter< ParameterType::eFloat >() } );
+		sceneCtx.addParser( cuT( "directional_shadow_cascades" ), scene::parserDirectionalShadowCascades, { makeParameter< ParameterType::eUInt32 >( castor::makeRange( 0u, MaxDirectionalCascadesCount ) ) } );
+		sceneCtx.addPushParser( cuT( "font" ), CSCNSection::eFont, scene::parserFont, { makeParameter< ParameterType::eName >() } );
+		sceneCtx.addPushParser( cuT( "sdf_font" ), CSCNSection::eSdfFont, scene::parserSdfFont, { makeParameter< ParameterType::eName >() } );
+		sceneCtx.addPushParser( cuT( "sampler" ), CSCNSection::eSampler, scene::parserSamplerState, { makeParameter< ParameterType::eName >() } );
+		sceneCtx.addPushParser( cuT( "camera" ), CSCNSection::eCamera, scene::parserCamera, { makeParameter< ParameterType::eName >() } );
+		sceneCtx.addPushParser( cuT( "light" ), CSCNSection::eLight, scene::parserLight, { makeParameter< ParameterType::eName >() } );
+		sceneCtx.addPushParser( cuT( "camera_node" ), CSCNSection::eNode, scene::parserCameraNode, { makeParameter< ParameterType::eName >() } );
+		sceneCtx.addPushParser( cuT( "scene_node" ), CSCNSection::eNode, scene::parserNode, { makeParameter< ParameterType::eName >() } );
+		sceneCtx.addPushParser( cuT( "object" ), CSCNSection::eObject, scene::parserObject, { makeParameter< ParameterType::eName >() } );
+		sceneCtx.addPushParser( cuT( "import" ), CSCNSection::eSceneImport, scene::parserImport );
+		sceneCtx.addPushParser( cuT( "billboard" ), CSCNSection::eBillboard, scene::parserBillboard, { makeParameter< ParameterType::eName >() } );
+		sceneCtx.addPushParser( cuT( "animated_object_group" ), CSCNSection::eAnimGroup, scene::parserAnimatedObjectGroup, { makeParameter< ParameterType::eName >() } );
+		sceneCtx.addPushParser( cuT( "panel_overlay" ), CSCNSection::ePanelOverlay, scene::parserPanelOverlay, { makeParameter< ParameterType::eName >() } );
+		sceneCtx.addPushParser( cuT( "border_panel_overlay" ), CSCNSection::eBorderPanelOverlay, scene::parserBorderPanelOverlay, { makeParameter< ParameterType::eName >() } );
+		sceneCtx.addPushParser( cuT( "text_overlay" ), CSCNSection::eTextOverlay, scene::parserTextOverlay, { makeParameter< ParameterType::eName >() } );
+		sceneCtx.addPushParser( cuT( "skybox" ), CSCNSection::eSkybox, scene::parserSkybox );
+		sceneCtx.addPushParser( cuT( "particle_system" ), CSCNSection::eParticleSystem, scene::parserParticleSystem, { makeParameter< ParameterType::eName >() } );
+		sceneCtx.addPushParser( cuT( "skeleton" ), CSCNSection::eSkeleton, scene::parserSkeleton, { makeParameter< ParameterType::eName >() } );
+		sceneCtx.addPushParser( cuT( "mesh" ), CSCNSection::eMesh, scene::parserMesh, { makeParameter< ParameterType::eName >() } );
+		sceneCtx.addPopParser( cuT( "}" ), scene::parserEnd );
+
+		importCtx.addParser( cuT( "file" ), scene::parserImportFile, { makeParameter< ParameterType::ePath >() } );
+		importCtx.addParser( cuT( "file_anim" ), scene::parserImportAnimFile, { makeParameter< ParameterType::ePath >() } );
+		importCtx.addParser( cuT( "prefix" ), scene::parserImportPrefix, { makeParameter< ParameterType::eText >() } );
+		importCtx.addParser( cuT( "rescale" ), scene::parserImportRescale, { makeParameter< ParameterType::eFloat >() } );
+		importCtx.addParser( cuT( "pitch" ), scene::parserImportPitch, { makeParameter< ParameterType::eFloat >() } );
+		importCtx.addParser( cuT( "yaw" ), scene::parserImportYaw, { makeParameter< ParameterType::eFloat >() } );
+		importCtx.addParser( cuT( "roll" ), scene::parserImportRoll, { makeParameter< ParameterType::eFloat >() } );
+		importCtx.addParser( cuT( "no_optimisations" ), scene::parserImportNoOptimisations, { makeParameter< ParameterType::eBool >() } );
+		importCtx.addParser( cuT( "emissive_mult" ), scene::parserImportEmissiveMult, { makeParameter< ParameterType::eFloat >() } );
+		importCtx.addParser( cuT( "recenter_camera" ), scene::parserImportCenterCamera, { makeParameter< ParameterType::eName >() } );
+		importCtx.addParser( cuT( "preferred_importer" ), scene::parserImportPreferredImporter, { makeParameter< ParameterType::eName >() } );
+		importCtx.addParser( cuT( "ignore_vertex_colour" ), scene::parserImportIgnoreVertexColour, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		importCtx.addParser( cuT( "disable_image_compression" ), scene::parserImportDisableImageCompression, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		importCtx.addPushParser( cuT( "texture_remap_config" ), CSCNSection::eTextureRemap, scene::parserImportTexRemap );
+		importCtx.addPopParser( cuT( "}" ), scene::parserImportEnd );
 	}
 
 	BackgroundModelID Scene::getBackgroundModelId()const

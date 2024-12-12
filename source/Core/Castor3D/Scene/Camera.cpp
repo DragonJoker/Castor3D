@@ -3,12 +3,219 @@
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
+
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 CU_ImplementSmartPtr( castor3d, Camera )
 
 namespace castor3d
 {
+	namespace camera
+	{
+		static CU_ImplementAttributeParserBlock( parserCameraParent, CameraContext )
+		{
+			auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+			SceneNodeRPtr parent = blockContext->scene->scene->findSceneNode( name );
+
+			if ( parent )
+			{
+				while ( parent->getParent()
+					&& parent->getParent() != blockContext->scene->scene->getObjectRootNode()
+					&& parent->getParent() != blockContext->scene->scene->getCameraRootNode() )
+				{
+					parent = parent->getParent();
+				}
+
+				if ( !parent->getParent()
+					|| parent->getParent() == blockContext->scene->scene->getObjectRootNode() )
+				{
+					parent->attachTo( *blockContext->scene->scene->getCameraRootNode() );
+				}
+
+				blockContext->parentNode = parent;
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserCameraViewport, CameraContext )
+		{
+			blockContext->viewport = castor::makeUnique< Viewport >( *getEngine( *blockContext ) );
+			blockContext->viewport->setPerspective( 0.0_degrees, 1, 0, 1 );
+		}
+		CU_EndAttributePushBlock( CSCNSection::eViewport, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserCameraPrimitive, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->primitiveType = VkPrimitiveTopology( params[0]->get< uint32_t >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserCameraEnd, CameraContext )
+		{
+			if ( blockContext->viewport )
+			{
+				auto node = blockContext->parentNode;
+
+				if ( !node )
+				{
+					node = blockContext->scene->scene->getCameraRootNode();
+				}
+
+				auto camera = blockContext->scene->scene->addNewCamera( blockContext->name
+					, *blockContext->scene->scene
+					, *node
+					, castor::move( *blockContext->viewport.release() ) );
+				camera->setHdrConfig( castor::move( blockContext->hdrConfig ) );
+				camera->setColourGradingConfig( castor::move( blockContext->colourGradingConfig ) );
+				log::info << "Loaded camera [" << camera->getName() << "]" << std::endl;
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserViewportType, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->updateType( ViewportType( params[0]->get< uint32_t >() ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserViewportLeft, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->updateLeft( params[0]->get< float >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserViewportRight, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->updateRight( params[0]->get< float >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserViewportTop, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->updateTop( params[0]->get< float >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserViewportBottom, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->updateBottom( params[0]->get< float >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserViewportNear, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->updateNear( params[0]->get< float >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserViewportFar, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->updateFar( params[0]->get< float >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserViewportSize, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->resize( params[0]->get< castor::Size >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserViewportFovY, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->updateFovY( castor::Angle::fromDegrees( params[0]->get< float >() ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserViewportAspectRatio, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->updateRatio( params[0]->get< float >() );
+			}
+		}
+		CU_EndAttribute()
+	}
+
 	Camera::Camera( castor::String const & name
 		, Scene & scene
 		, SceneNode & node
@@ -110,6 +317,30 @@ namespace castor3d
 		output.m_ownProjection = m_ownProjection;
 		output.m_projection = m_projection;
 		m_viewport.cloneInto( output.m_viewport );
+	}
+
+	void Camera::addParsers( castor::AttributeParsers & result )
+	{
+		using namespace castor;
+		BlockParserContextT< CameraContext > cameraCtx{ result, CSCNSection::eCamera, CSCNSection::eScene };
+		BlockParserContextT< CameraContext > viewportCtx{ result, CSCNSection::eViewport, CSCNSection::eCamera };
+
+		cameraCtx.addParser( cuT( "parent" ), camera::parserCameraParent, { makeParameter< ParameterType::eName >() } );
+		cameraCtx.addParser( cuT( "primitive" ), camera::parserCameraPrimitive, { makeParameter< ParameterType::eCheckedText, VkPrimitiveTopology >() } );
+		cameraCtx.addPushParser( cuT( "viewport" ), CSCNSection::eViewport, camera::parserCameraViewport );
+		cameraCtx.addPopParser( cuT( "}" ), camera::parserCameraEnd );
+
+		viewportCtx.addParser( cuT( "type" ), camera::parserViewportType, { makeParameter< ParameterType::eCheckedText, ViewportType >() } );
+		viewportCtx.addParser( cuT( "left" ), camera::parserViewportLeft, { makeParameter< ParameterType::eFloat >() } );
+		viewportCtx.addParser( cuT( "right" ), camera::parserViewportRight, { makeParameter< ParameterType::eFloat >() } );
+		viewportCtx.addParser( cuT( "top" ), camera::parserViewportTop, { makeParameter< ParameterType::eFloat >() } );
+		viewportCtx.addParser( cuT( "bottom" ), camera::parserViewportBottom, { makeParameter< ParameterType::eFloat >() } );
+		viewportCtx.addParser( cuT( "near" ), camera::parserViewportNear, { makeParameter< ParameterType::eFloat >() } );
+		viewportCtx.addParser( cuT( "far" ), camera::parserViewportFar, { makeParameter< ParameterType::eFloat >() } );
+		viewportCtx.addParser( cuT( "size" ), camera::parserViewportSize, { makeParameter< ParameterType::eSize >() } );
+		viewportCtx.addParser( cuT( "fov_y" ), camera::parserViewportFovY, { makeParameter< ParameterType::eFloat >() } );
+		viewportCtx.addParser( cuT( "aspect_ratio" ), camera::parserViewportAspectRatio, { makeParameter< ParameterType::eFloat >() } );
+		viewportCtx.addDefaultPopParser();
 	}
 
 	castor::Matrix4x4f Camera::getRescaledProjection( float scale

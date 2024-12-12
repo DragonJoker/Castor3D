@@ -6,8 +6,10 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 CU_ImplementSmartPtr( castor3d, Sampler )
 
@@ -116,6 +118,301 @@ namespace castor3d
 				return cuT( "Unsupported VkBorderColor" );
 			}
 		}
+
+		static CU_ImplementAttributeParserBlock( parserMinFilter, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->setMinFilter( VkFilter( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserMagFilter, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->setMagFilter( VkFilter( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserMipFilter, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->setMipFilter( VkSamplerMipmapMode( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserMinLod, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				float rValue = -1000;
+				params[0]->get( rValue );
+
+				if ( rValue >= -1000 && rValue <= 1000 )
+				{
+					sampler->setMinLod( rValue );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + castor::string::toString( rValue ) );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserMaxLod, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				float rValue = 1000;
+				params[0]->get( rValue );
+
+				if ( rValue >= -1000 && rValue <= 1000 )
+				{
+					sampler->setMaxLod( rValue );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + castor::string::toString( rValue ) );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserLodBias, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				float rValue = 1000;
+				params[0]->get( rValue );
+
+				if ( rValue >= -1000 && rValue <= 1000 )
+				{
+					sampler->setLodBias( rValue );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + castor::string::toString( rValue ) );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserUWrapMode, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->setWrapS( VkSamplerAddressMode( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserVWrapMode, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->setWrapT( VkSamplerAddressMode( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserWWrapMode, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->setWrapR( VkSamplerAddressMode( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserBorderColour, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->setBorderColour( VkBorderColor( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnisotropicFiltering, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->enableAnisotropicFiltering( params[0]->get< bool >() );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserMaxAnisotropy, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				float rValue = 1000;
+				params[0]->get( rValue );
+				sampler->setMaxAnisotropy( rValue );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserComparisonMode, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->enableCompare( bool( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserComparisonFunc, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->setCompareOp( VkCompareOp( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserEnd, SamplerContext )
+		{
+			auto sampler = blockContext->sampler;
+
+			if ( !blockContext->ownSampler
+				&& !sampler )
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+			else
+			{
+				log::info << "Loaded sampler [" << blockContext->sampler->getName() << "]" << std::endl;
+
+				if ( blockContext->ownSampler )
+				{
+					getEngine( *blockContext )->addSampler( blockContext->ownSampler->getName()
+						, blockContext->ownSampler
+						, true );
+				}
+
+				blockContext->sampler = {};
+			}
+		}
+		CU_EndAttributePop()
 	}
 
 	SamplerObs createSampler( Engine & engine
@@ -229,5 +526,27 @@ namespace castor3d
 	{
 		m_initialised = false;
 		m_sampler.reset();
+	}
+
+	void Sampler::addParsers( castor::AttributeParsers & result )
+	{
+		using namespace castor;
+		BlockParserContextT< SamplerContext > context{ result, CSCNSection::eSampler };
+
+		context.addParser( cuT( "min_filter" ), sampler::parserMinFilter, { makeParameter< ParameterType::eCheckedText, VkFilter >() } );
+		context.addParser( cuT( "mag_filter" ), sampler::parserMagFilter, { makeParameter< ParameterType::eCheckedText, VkFilter >() } );
+		context.addParser( cuT( "mip_filter" ), sampler::parserMipFilter, { makeParameter< ParameterType::eCheckedText, VkSamplerMipmapMode >() } );
+		context.addParser( cuT( "min_lod" ), sampler::parserMinLod, { makeParameter< ParameterType::eFloat >() } );
+		context.addParser( cuT( "max_lod" ), sampler::parserMaxLod, { makeParameter< ParameterType::eFloat >() } );
+		context.addParser( cuT( "lod_bias" ), sampler::parserLodBias, { makeParameter< ParameterType::eFloat >() } );
+		context.addParser( cuT( "u_wrap_mode" ), sampler::parserUWrapMode, { makeParameter< ParameterType::eCheckedText, VkSamplerAddressMode >() } );
+		context.addParser( cuT( "v_wrap_mode" ), sampler::parserVWrapMode, { makeParameter< ParameterType::eCheckedText, VkSamplerAddressMode >() } );
+		context.addParser( cuT( "w_wrap_mode" ), sampler::parserWWrapMode, { makeParameter< ParameterType::eCheckedText, VkSamplerAddressMode >() } );
+		context.addParser( cuT( "border_colour" ), sampler::parserBorderColour, { makeParameter< ParameterType::eCheckedText, VkBorderColor >() } );
+		context.addParser( cuT( "anisotropic_filtering" ), sampler::parserAnisotropicFiltering, { makeParameter< ParameterType::eBool >() } );
+		context.addParser( cuT( "max_anisotropy" ), sampler::parserMaxAnisotropy, { makeParameter< ParameterType::eFloat >() } );
+		context.addParser( cuT( "comparison_mode" ), sampler::parserComparisonMode, { makeParameter< ParameterType::eCheckedText, LimitedType< VkCompareOp > >() } );
+		context.addParser( cuT( "comparison_func" ), sampler::parserComparisonFunc, { makeParameter< ParameterType::eCheckedText, VkCompareOp >() } );
+		context.addPopParser( cuT( "}" ), sampler::parserEnd );
 	}
 }

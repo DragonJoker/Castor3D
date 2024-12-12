@@ -121,6 +121,8 @@ namespace castor3d
 		 *\param[in,out]	output	Reçoit les données de cet objet.
 		 */
 		C3D_API void cloneInto( Camera & output )const;
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
 		/**
 		*\~english
 		*name

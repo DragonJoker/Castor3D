@@ -13,6 +13,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/RenderedObject.hpp"
 
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 #include <CastorUtils/Graphics/BoundingSphere.hpp>
 #include <CastorUtils/Multithreading/SpinMutex.hpp>
@@ -211,6 +212,8 @@ namespace castor3d
 		 *\return		La transformation glbale de l'objet, depuis son scene node et son squelette.
 		 */
 		C3D_API castor::Matrix4x4f getGlobalTransform()const;
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
 		/**
 		*\~english
 		*name
