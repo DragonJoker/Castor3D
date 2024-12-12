@@ -63,7 +63,7 @@ namespace castor3d
 
 		if ( getExtension() == CmshMeshImporter::Type )
 		{
-			result.emplace_back( getName(), castor::String{} );
+			result.emplace_back( getInternalName( getName() ), castor::String{} );
 		}
 
 		return result;
@@ -75,7 +75,7 @@ namespace castor3d
 
 		if ( getExtension() == CmshSkeletonImporter::Type )
 		{
-			result.push_back( getName() );
+			result.push_back( getInternalName( getName() ) );
 		}
 
 		return result;
@@ -108,9 +108,9 @@ namespace castor3d
 		if ( getExtension() == CmshAnimationImporter::MeshAnimType )
 		{
 			auto meshName = mesh.getName();
-			auto animName = getName();
+			auto animName = getInternalName( getName() );
 
-			if ( getName().find( meshName ) == 0u )
+			if ( animName.find( meshName ) == 0u )
 			{
 				animName = cmshimp::cleanName( animName.substr( meshName.size() ) );
 				result.emplace_back( animName );
@@ -127,9 +127,9 @@ namespace castor3d
 		if ( getExtension() == CmshAnimationImporter::SkeletonAnimType )
 		{
 			auto skeletonName = skeleton.getName();
-			auto animName = getName();
+			auto animName = getInternalName( getName() );
 
-			if ( getName().find( skeletonName ) == 0u )
+			if ( animName.find( skeletonName ) == 0u )
 			{
 				animName = cmshimp::cleanName( animName.substr( skeletonName.size() ) );
 				result.emplace_back( animName );
@@ -146,9 +146,9 @@ namespace castor3d
 		if ( getExtension() == CmshAnimationImporter::NodeAnimType )
 		{
 			auto nodeName = node.getName();
-			auto animName = getName();
+			auto animName = getInternalName( getName() );
 
-			if ( getName().find( nodeName ) == 0u )
+			if ( animName.find( nodeName ) == 0u )
 			{
 				animName = cmshimp::cleanName( animName.substr( nodeName.size() ) );
 				result.emplace_back( animName );
