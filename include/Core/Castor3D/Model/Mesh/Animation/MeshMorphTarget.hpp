@@ -53,7 +53,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Un clone de cet objet.
 		 */
-		C3D_API AnimationKeyFrameUPtr clone( AnimationT< Engine > & parent )const override;
+		C3D_API AnimationKeyFrameUPtr clone( Animation & parent )const override;
 		/**
 		 *\~english
 		 *\return		The submesh buffer matching given submesh.

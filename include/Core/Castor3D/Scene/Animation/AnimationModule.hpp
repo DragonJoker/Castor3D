@@ -133,9 +133,6 @@ namespace castor3d
 	};
 	using GroupAnimationMap = castor::StringMap< GroupAnimation >;
 
-	using Animable = AnimableT< Engine >;
-	using Animation = AnimationT< Engine >;
-
 	using OnAnimatedSkeletonChangeFunction = castor::Function< void( AnimatedObjectGroup const &, AnimatedSkeleton & ) >;
 	using OnAnimatedSkeletonChange = castor::SignalT< OnAnimatedSkeletonChangeFunction >;
 	using OnAnimatedSkeletonChangeConnection = OnAnimatedSkeletonChange::connection;
@@ -183,7 +180,6 @@ namespace castor3d
 	using AnimatedObjectGroupResPtr = AnimatedObjectGroupCacheTraits::ElementObsT;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, Animable, C3D_API );
 	CU_DeclareSmartPtr( castor3d, AnimatedObjectGroup, C3D_API );
 	CU_DeclareSmartPtr( castor3d, AnimatedObjectGroupCache, C3D_API );
 	CU_DeclareSmartPtr( castor3d, AnimatedMesh, C3D_API );
@@ -191,10 +187,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, AnimatedSceneNode, C3D_API );
 	CU_DeclareSmartPtr( castor3d, AnimatedSkeleton, C3D_API );
 	CU_DeclareSmartPtr( castor3d, AnimatedTexture, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Animation, C3D_API );
 	CU_DeclareSmartPtr( castor3d, AnimationInstance, C3D_API );
-
-	CU_DeclareTemplateSmartPtr( castor3d, Animable );
 	/** @endcond */
 
 	//@}

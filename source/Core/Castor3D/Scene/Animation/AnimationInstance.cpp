@@ -3,8 +3,6 @@
 #include "Castor3D/Animation/Animable.hpp"
 #include "Castor3D/Animation/Animation.hpp"
 
-CU_ImplementSmartPtr( castor3d, Animable )
-CU_ImplementSmartPtr( castor3d, Animation )
 CU_ImplementSmartPtr( castor3d, AnimationInstance )
 
 namespace castor3d

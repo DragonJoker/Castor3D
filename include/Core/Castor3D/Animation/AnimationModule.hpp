@@ -85,13 +85,12 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Animable public interface
+	*	Animable object public interface.
 	*\~french
 	*\brief
-	*	interface publique d'animable
+	*	Interface publique d'objet animable.
 	*/
-	template< typename OwnerT >
-	class AnimableT;
+	class Animable;
 	/**
 	*\~english
 	*\brief
@@ -124,18 +123,7 @@ namespace castor3d
 	*\remarks
 	*	Une animation est jouée au travers d'une AnimationInstance.
 	*/
-	template< typename OwnerT >
-	class AnimationT;
-	/**
-	*\~english
-	*\brief
-	*	Used to play an Animation on a specific object.
-	*\~french
-	*\brief
-	*	Utilisée pour jouer une animation sur un objet particulier.
-	*/
-	template< typename OwnerT >
-	class AnimationInstanceT;
+	class Animation;
 	/**
 	*\~english
 	*\brief
@@ -171,12 +159,11 @@ namespace castor3d
 	using InterpolatorPtr = castor::RawUniquePtr< Interpolator< DataT > >;
 
 	/** @cond !Doxygen */
+	CU_DeclareSmartPtr( castor3d, Animable, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Animation, C3D_API );
 	CU_DeclareSmartPtr( castor3d, AnimationKeyFrame, C3D_API );
 	CU_DeclareSmartPtr( castor3d, AnimationImporter, C3D_API );
 	CU_DeclareSmartPtr( castor3d, AnimationImporterFactory, C3D_API );
-
-	CU_DeclareTemplateSmartPtr( castor3d, Animation );
-	CU_DeclareTemplateSmartPtr( castor3d, AnimationInstance );
 
 	CU_DeclareVector( AnimationKeyFrameUPtr, AnimationKeyFrame );
 	/** @endcond */

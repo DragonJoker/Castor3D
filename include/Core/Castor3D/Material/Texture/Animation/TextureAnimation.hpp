@@ -17,7 +17,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class TextureAnimation
-		: public AnimationT< Engine >
+		: public Animation
 	{
 	public:
 		/**

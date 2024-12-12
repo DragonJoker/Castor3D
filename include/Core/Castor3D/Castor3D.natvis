@@ -16,14 +16,14 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::AnimableT&lt;*&gt;">
+	<Type Name="castor3d::Animable">
 		<Expand>
 			<Item Name="owner">m_owner</Item>
 			<Item Name="animations">m_animations</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::AnimationT&lt;*&gt;">
+	<Type Name="castor3d::Animation">
 		<DisplayString>{m_name} {m_length}</DisplayString>
 		<Expand>
 			<Item Name="name">m_name</Item>

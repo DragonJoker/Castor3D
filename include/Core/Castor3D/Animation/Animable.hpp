@@ -4,16 +4,14 @@ See LICENSE file in root folder
 #ifndef ___C3D_Animable_H___
 #define ___C3D_Animable_H___
 
-#include "Castor3D/Animation/Animation.hpp"
+#include "Castor3D/Animation/AnimationModule.hpp"
 
 namespace castor3d
 {
-	template< typename AnimableHandlerT >
-	class AnimableT
-		: public castor::OwnedBy< AnimableHandlerT >
+	class Animable
+		: public castor::OwnedBy< Engine >
 	{
 	protected:
-		using Animation = AnimationT< AnimableHandlerT >;
 		using AnimationPtr = castor::UniquePtr< Animation >;
 		using AnimationsMap = castor::StringMap< AnimationPtr >;
 		/**
@@ -23,29 +21,29 @@ namespace castor3d
 		 *\name Construction / Destruction.
 		 **/
 		/**@{*/
-		inline explicit AnimableT( AnimableHandlerT & owner );
-		C3D_API AnimableT( AnimableT && rhs )noexcept = default;
-		C3D_API AnimableT & operator=( AnimableT && rhs )noexcept = delete;
-		C3D_API AnimableT( AnimableT const & rhs ) = delete;
-		C3D_API AnimableT & operator=( AnimableT const & rhs ) = delete;
+		C3D_API explicit Animable( Engine & owner );
+		C3D_API Animable( Animable && rhs )noexcept = default;
+		C3D_API Animable & operator=( Animable && rhs )noexcept = delete;
+		C3D_API Animable( Animable const & rhs ) = delete;
+		C3D_API Animable & operator=( Animable const & rhs ) = delete;
 		/**@}*/
 
 	public:
-		C3D_API virtual ~AnimableT()noexcept = default;
+		C3D_API virtual ~Animable()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Empties the animations map.
 		 *\~french
 		 *\brief		Vid ela map d'animations.
 		 */
-		void cleanupAnimations();
+		C3D_API void cleanupAnimations();
 		/**
 		 *\~english
 		 *\return		\p true if the object has an animation.
 		 *\~french
 		 *\return		\p true si l'objet a une animation.
 		 */
-		bool hasAnimation()const;
+		C3D_API bool hasAnimation()const;
 		/**
 		 *\~english
 		 *\param[in]	name	The animation name
@@ -54,7 +52,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation
 		 *\return		\p true si l'objet a une animation ayant le nom donné.
 		 */
-		bool hasAnimation( castor::String const & name )const;
+		C3D_API bool hasAnimation( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
@@ -65,7 +63,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		Animation const & getAnimation( castor::String const & name )const;
+		C3D_API Animation const & getAnimation( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
@@ -76,7 +74,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		Animation & getAnimation( castor::String const & name );
+		C3D_API Animation & getAnimation( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Adds an animation.
@@ -85,7 +83,7 @@ namespace castor3d
 		 *\brief		Ajoute une animation.
 		 *\param[in]	animation	L'animation.
 		 */
-		void addAnimation( AnimationPtr animation );
+		C3D_API void addAnimation( AnimationPtr animation );
 		/**
 		 *\~english
 		 *\return		The animations.
@@ -106,7 +104,7 @@ namespace castor3d
 		 *\brief		Enlève une animation.
 		 *\param[in]	name	Le nom de l'animation
 		 */
-		void doRemoveAnimation( castor::String const & name );
+		C3D_API void doRemoveAnimation( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
@@ -118,7 +116,10 @@ namespace castor3d
 		 *\return		L'animation
 		 */
 		template< typename AnimationType >
-		AnimationType & doGetAnimation( castor::String const & name );
+		AnimationType & doGetAnimation( castor::String const & name )
+		{
+			return static_cast< AnimationType & >( getAnimation( name ) );
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
@@ -130,7 +131,10 @@ namespace castor3d
 		 *\return		L'animation
 		 */
 		template< typename AnimationType >
-		AnimationType const & doGetAnimation( castor::String const & name )const;
+		AnimationType const & doGetAnimation( castor::String const & name )const
+		{
+			return static_cast< AnimationType const & >( getAnimation( name ) );
+		}
 
 	protected:
 		//!\~english	All animations.
@@ -138,7 +142,5 @@ namespace castor3d
 		AnimationsMap m_animations;
 	};
 }
-
-#include "Animable.inl"
 
 #endif
