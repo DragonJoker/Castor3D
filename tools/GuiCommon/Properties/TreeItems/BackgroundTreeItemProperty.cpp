@@ -353,7 +353,7 @@ namespace GuiCommon
 			, choices, selected
 			, PropertyChangeHandler( [this]( wxVariant const & value )
 			{
-				switch ( auto sel = value.GetLong() )
+				switch ( value.GetLong() )
 				{
 				case 0:
 					m_background.showIrradiance( false );

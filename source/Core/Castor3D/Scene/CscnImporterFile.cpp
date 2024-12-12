@@ -316,7 +316,7 @@ namespace castor3d
 			}
 
 		private:
-			bool doFilterSectionOut( castor::SectionId section )const noexcept
+			bool doFilterSectionOut( castor::SectionId section )const noexcept override
 			{
 				return section == castor::SectionId( CSCNSection::eWindow )
 					|| section == castor::SectionId( CSCNSection::eFont )

@@ -524,7 +524,6 @@ namespace castor3d
 		Texture m_overlays;
 		Texture m_combined;
 		CameraUbo m_cameraUbo;
-		SceneUbo const * m_sceneUbo{};
 		crg::FramePass & m_overlayPassDesc;
 		OverlayPass * m_overlayPass{};
 		uint32_t m_hdrCopyPassIndex{ 0u };
