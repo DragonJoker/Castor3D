@@ -57,14 +57,17 @@ namespace castor3d
 		C3D_API void registerPipelineId( uint32_t pipelineId );
 		C3D_API PipelineBufferArray const & getPassPipelineNodes()const;
 		C3D_API uint32_t getPipelineNodesIndex( PipelineBaseHash const & hash
-			, ashes::BufferBase const & buffer )const;
+			, ashes::BufferBase const & posBuffer
+			, ashes::BufferBase const * idxBuffer )const;
 		C3D_API uint32_t getPipelineNodesIndex( Submesh const & submesh
 			, Pass const & pass
-			, ashes::BufferBase const & buffer
+			, ashes::BufferBase const & posBuffer
+			, ashes::BufferBase const * idxBuffer
 			, bool isFrontCulled )const;
 		C3D_API uint32_t getPipelineNodesIndex( BillboardBase const & billboard
 			, Pass const & pass
-			, ashes::BufferBase const & buffer
+			, ashes::BufferBase const & posBuffer
+			, ashes::BufferBase const * idxBuffer
 			, bool isFrontCulled )const;
 
 		auto & getNodesIds()const noexcept

@@ -2200,9 +2200,9 @@ namespace castor3d
 			m_activePipelines.clear();
 			m_activeBillboardPipelines.clear();
 
-			for ( auto const & [pipelineHash, buffer] : m_nodesPass.getPassPipelineNodes() )
+			for ( auto const & [pipelineHash, posBuffer, idxBuffer] : m_nodesPass.getPassPipelineNodes() )
 			{
-				auto pipelineId = m_nodesPass.getPipelineNodesIndex( pipelineHash, *buffer );
+				auto pipelineId = m_nodesPass.getPipelineNodesIndex( pipelineHash, *posBuffer, idxBuffer );
 				PipelineFlags pipelineFlags{ getPipelineHiHashDetails( *this
 					, pipelineHash
 					, getShaderFlags() ) };
@@ -2227,25 +2227,19 @@ namespace castor3d
 				auto & pipeline = doCreatePipeline( pipelineFlags );
 				auto it = m_activePipelines.try_emplace( &pipeline ).first;
 
-				auto hash = std::hash< ashes::BufferBase const * >{}( buffer );
+				auto hash = std::hash< ashes::BufferBase const * >{}( posBuffer );
+				hash = castor::hashCombine( hash, idxBuffer );
 				auto [pit, res] = pipeline.vtxDescriptorSets.try_emplace( hash );
 
 				if ( res )
 				{
-					auto & modelBuffers = m_device.geometryPools->getBuffers( *buffer );
-					ashes::BufferBase const * indexBuffer{};
-
-					if ( pipelineFlags.enableIndices() )
-					{
-						indexBuffer = &m_device.geometryPools->getIndexBuffer( *buffer );
-					}
-
+					auto & modelBuffers = m_device.geometryPools->getBuffers( *posBuffer );
 					pit->second = visres::createVtxDescriptorSet( getName()
 						, pipelineFlags
 						, m_nodesPass.isMeshShading()
 						, *pipeline.vtxDescriptorPool
 						, modelBuffers
-						, indexBuffer );
+						, idxBuffer );
 				}
 
 				auto & pipelines = it->second.try_emplace( pit->second.get() ).first->second;
@@ -2273,7 +2267,7 @@ namespace castor3d
 				auto pipelineHash = origPipeline.pipeline->getFlagsHash();
 				auto & buffers = pipelinesNodes.nodes;
 
-				for ( auto & [buffer, nodes] : buffers )
+				for ( auto & [posBuffer, idxBuffer, nodes] : buffers )
 				{
 					for ( auto & node : nodes )
 					{
@@ -2284,7 +2278,7 @@ namespace castor3d
 						auto hash = size_t( positionsBuffer.getOffset() );
 						hash = castor::hashCombinePtr( hash, positionsBuffer.getBuffer().getBuffer() );
 						auto [pit, res] = pipeline.vtxDescriptorSets.try_emplace( hash );
-						auto pipelineId = m_nodesPass.getPipelineNodesIndex( pipelineHash, *buffer );
+						auto pipelineId = m_nodesPass.getPipelineNodesIndex( pipelineHash, *posBuffer, idxBuffer );
 
 						if ( res )
 						{

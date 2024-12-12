@@ -600,7 +600,8 @@ namespace castor3d
 		C3D_API uint32_t getMaxPipelineId()const;
 		C3D_API PipelineBufferArray const & getPassPipelineNodes()const;
 		C3D_API uint32_t getPipelineNodesIndex( PipelineBaseHash const & hash
-			, ashes::BufferBase const & buffer )const;
+			, ashes::BufferBase const & posBuffer
+			, ashes::BufferBase const * idxBuffer )const;
 		C3D_API uint32_t getDrawCallsCount()const;
 		C3D_API RenderCounts const & getVisibleCounts()const;
 

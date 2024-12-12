@@ -501,9 +501,10 @@ namespace castor3d
 	}
 
 	uint32_t RenderNodesPass::getPipelineNodesIndex( PipelineBaseHash const & hash
-		, ashes::BufferBase const & buffer )const
+		, ashes::BufferBase const & posBuffer
+		, ashes::BufferBase const * idxBuffer )const
 	{
-		return getRenderQueue().getRenderNodes().getPipelineNodesIndex( hash, buffer );
+		return getRenderQueue().getRenderNodes().getPipelineNodesIndex( hash, posBuffer, idxBuffer );
 	}
 
 	uint32_t RenderNodesPass::getDrawCallsCount()const
