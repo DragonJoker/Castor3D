@@ -96,7 +96,21 @@ namespace castor3d
 	//@}
 	//@}
 
-	using PipelineBuffer = castor::Pair< PipelineBaseHash, ashes::BufferBase const * >;
+	struct PipelineBuffer
+	{
+		PipelineBuffer( PipelineBaseHash hash
+			, ashes::BufferBase const * posBuffer
+			, ashes::BufferBase const * idxBuffer )
+			: hash{ hash }
+			, posBuffer{ posBuffer }
+			, idxBuffer{ idxBuffer }
+		{
+		}
+
+		PipelineBaseHash hash;
+		ashes::BufferBase const * posBuffer;
+		ashes::BufferBase const * idxBuffer;
+	};
 	using PipelineBufferArray = castor::Vector< PipelineBuffer >;
 
 	/** @cond !Doxygen */

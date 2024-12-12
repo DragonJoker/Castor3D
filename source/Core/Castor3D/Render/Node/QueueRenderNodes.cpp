@@ -87,12 +87,17 @@ namespace castor3d
 			if ( auto & bufferChunk = node.getFinalBufferOffsets().getBufferChunk( SubmeshData::ePositions );
 				bufferChunk.buffer )
 			{
-				auto & buffer = bufferChunk.buffer->getBuffer();
+				auto & posBuffer = bufferChunk.buffer->getBuffer();
+				auto idxChunk = node.getSourceBufferOffsets().getBufferChunk( SubmeshData::eIndex );
+				auto idxBuffer = idxChunk.hasData()
+					? &idxChunk.getBuffer()
+					: nullptr;
 
 				if constexpr ( std::is_same_v< BillboardRenderNode, NodeT > )
 				{
 					nodes.emplace( pipeline
-						, buffer
+						, posBuffer
+						, idxBuffer
 						, culled
 						, getCommand( node.getSourceBufferOffsets(), bufferChunk, culled )
 						, isFrontCulled );
@@ -100,13 +105,14 @@ namespace castor3d
 				else
 				{
 					nodes.emplace( pipeline
-						, buffer
+						, posBuffer
+						, idxBuffer
 						, culled
 						, getCommand( node.getSourceBufferOffsets(), bufferChunk, culled )
 						, isFrontCulled );
 				}
 
-				registerPipelineNodes( pipeline.pipeline->getFlagsHash(), buffer, nodesIds );
+				registerPipelineNodes( pipeline.pipeline->getFlagsHash(), posBuffer, idxBuffer, nodesIds );
 				return true;
 			}
 
@@ -140,7 +146,8 @@ namespace castor3d
 		static uint32_t bindPipeline( ashes::CommandBuffer const & commandBuffer
 			, QueueRenderNodes & queueNodes
 			, RenderPipeline const & pipeline
-			, ashes::BufferBase const & buffer
+			, ashes::BufferBase const & posBuffer
+			, ashes::BufferBase const * idxBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
 			, bool hasDrawId )
@@ -169,8 +176,7 @@ namespace castor3d
 				commandBuffer.bindDescriptorSet( *pipeline.getOwner()->getCuller().getScene().getBindlessTexDescriptorSet()
 					, pipeline.getPipelineLayout() );
 
-				pipelineId = queueNodes.getPipelineNodesIndex( pipeline.getFlagsHash()
-					, buffer );
+				pipelineId = queueNodes.getPipelineNodesIndex( pipeline.getFlagsHash(), posBuffer, idxBuffer );
 
 				if ( hasDrawId
 					&& !pipeline.hasMeshletDescriptorSetLayout()
@@ -1424,31 +1430,37 @@ namespace castor3d
 	}
 
 	uint32_t QueueRenderNodes::getPipelineNodesIndex( PipelineBaseHash const & hash
-		, ashes::BufferBase const & buffer )const
+		, ashes::BufferBase const & posBuffer
+		, ashes::BufferBase const * idxBuffer )const
 	{
 		return getPipelineNodeIndex( hash
-			, buffer
+			, posBuffer
+			, idxBuffer
 			, getPassPipelineNodes() );
 	}
 
 	uint32_t QueueRenderNodes::getPipelineNodesIndex( Submesh const & submesh
 		, Pass const & pass
-		, ashes::BufferBase const & buffer
+		, ashes::BufferBase const & posBuffer
+		, ashes::BufferBase const * idxBuffer
 		, bool isFrontCulled )const
 	{
 		auto const & rp = *getOwner()->getOwner();
 		return getPipelineNodesIndex( getPipelineBaseHash( rp, submesh, pass, isFrontCulled )
-			, buffer );
+			, posBuffer
+			, idxBuffer );
 	}
 
 	uint32_t QueueRenderNodes::getPipelineNodesIndex( BillboardBase const & billboard
 		, Pass const & pass
-		, ashes::BufferBase const & buffer
+		, ashes::BufferBase const & posBuffer
+		, ashes::BufferBase const * idxBuffer
 		, bool isFrontCulled )const
 	{
 		auto const & rp = *getOwner()->getOwner();
 		return getPipelineNodesIndex( getPipelineBaseHash( rp, billboard, pass, isFrontCulled )
-			, buffer );
+			, posBuffer
+			, idxBuffer );
 	}
 
 	PipelineAndID QueueRenderNodes::doGetPipeline( ShadowMapLightTypeArray const & shadowMaps
@@ -1690,12 +1702,13 @@ namespace castor3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [buffer, nodes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, nodes] : buffersNodes )
 		{
 			if ( queuerndnd::hasVisibleNode( nodes ) )
 			{
 				auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
-					, *buffer
+					, *posBuffer
+					, idxBuffer
 					, m_nodesIds
 					, nodesIdsBuffer
 					, maxNodesCount );
@@ -1703,7 +1716,8 @@ namespace castor3d
 				auto pipelineId = queuerndnd::bindPipeline( commandBuffer
 					, *this
 					, pipeline
-					, *buffer
+					, *posBuffer
+					, idxBuffer
 					, viewport
 					, scissors
 					, false );
@@ -1749,12 +1763,13 @@ namespace castor3d
 		uint32_t result{};
 		uint32_t * pipelinesBuffer = nullptr;
 
-		for ( auto const & [buffer, submeshes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, submeshes] : buffersNodes )
 		{
 			auto pipelineId = queuerndnd::bindPipeline( commandBuffer
 				, *this
 				, pipeline
-				, *buffer
+				, *posBuffer
+				, idxBuffer
 				, viewport
 				, scissors
 				, false );
@@ -1802,12 +1817,13 @@ namespace castor3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [buffer, nodes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, nodes] : buffersNodes )
 		{
 			if ( auto firstVisibleNode = queuerndnd::hasVisibleNode( nodes ) )
 			{
 				auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
-					, *buffer
+					, *posBuffer
+					, idxBuffer
 					, m_nodesIds
 					, nodesIdsBuffer
 					, maxNodesCount );
@@ -1815,7 +1831,8 @@ namespace castor3d
 				auto pipelineId = queuerndnd::bindPipeline( commandBuffer
 					, *this
 					, pipeline
-					, *buffer
+					, *posBuffer
+					, idxBuffer
 					, viewport
 					, scissors
 					, true );
@@ -1874,12 +1891,13 @@ namespace castor3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [buffer, submeshes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, submeshes] : buffersNodes )
 		{
 			auto pipelineId = queuerndnd::bindPipeline( commandBuffer
 				, *this
 				, pipeline
-				, *buffer
+				, *posBuffer
+				, idxBuffer
 				, viewport
 				, scissors
 				, true );
@@ -1938,12 +1956,13 @@ namespace castor3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [buffer, nodes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, nodes] : buffersNodes )
 		{
 			if ( queuerndnd::hasVisibleNode( nodes ) )
 			{
 				auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
-					, *buffer
+					, *posBuffer
+					, idxBuffer
 					, m_nodesIds
 					, nodesIdsBuffer
 					, maxNodesCount );
@@ -1952,7 +1971,8 @@ namespace castor3d
 				auto pipelineId = queuerndnd::bindPipeline( commandBuffer
 					, *this
 					, pipeline
-					, *buffer
+					, *posBuffer
+					, idxBuffer
 					, viewport
 					, scissors
 					, true );
@@ -2013,12 +2033,13 @@ namespace castor3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [buffer, submeshes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, submeshes] : buffersNodes )
 		{
 			auto pipelineId = queuerndnd::bindPipeline( commandBuffer
 				, *this
 				, pipeline
-				, *buffer
+				, *posBuffer
+				, idxBuffer
 				, viewport
 				, scissors
 				, true );
@@ -2079,12 +2100,13 @@ namespace castor3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [buffer, nodes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, nodes] : buffersNodes )
 		{
 			if ( queuerndnd::hasVisibleNode( nodes ) )
 			{
 				auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
-					, *buffer
+					, *posBuffer
+					, idxBuffer
 					, m_nodesIds
 					, nodesIdsBuffer
 					, maxNodesCount );
@@ -2092,7 +2114,8 @@ namespace castor3d
 				auto pipelineId = queuerndnd::bindPipeline( commandBuffer
 					, *this
 					, pipeline
-					, *buffer
+					, *posBuffer
+					, idxBuffer
 					, viewport
 					, scissors
 					, true );
@@ -2153,12 +2176,13 @@ namespace castor3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [buffer, submeshes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, submeshes] : buffersNodes )
 		{
 			auto pipelineId = queuerndnd::bindPipeline( commandBuffer
 				, *this
 				, pipeline
-				, *buffer
+				, *posBuffer
+				, idxBuffer
 				, viewport
 				, scissors
 				, true );
@@ -2209,12 +2233,13 @@ namespace castor3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [buffer, nodes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, nodes] : buffersNodes )
 		{
 			if ( queuerndnd::hasVisibleNode( nodes ) )
 			{
 				auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
-					, *buffer
+					, *posBuffer
+					, idxBuffer
 					, m_nodesIds
 					, nodesIdsBuffer
 					, maxNodesCount );
@@ -2222,7 +2247,8 @@ namespace castor3d
 				auto pipelineId = queuerndnd::bindPipeline( commandBuffer
 					, *this
 					, pipeline
-					, *buffer
+					, *posBuffer
+					, idxBuffer
 					, viewport
 					, scissors
 					, true );
@@ -2269,12 +2295,13 @@ namespace castor3d
 	{
 		uint32_t result{};
 
-		for ( auto const & [buffer, nodes] : buffersNodes )
+		for ( auto const & [posBuffer, idxBuffer, nodes] : buffersNodes )
 		{
 			if ( auto firstVisibleNode = queuerndnd::hasVisibleNode( nodes ) )
 			{
 				auto & pipelineNodes = getPipelineNodes( pipeline.getFlagsHash()
-					, *buffer
+					, *posBuffer
+					, idxBuffer
 					, m_nodesIds
 					, nodesIdsBuffer
 					, maxNodesCount );
@@ -2282,7 +2309,8 @@ namespace castor3d
 				auto pipelineId = queuerndnd::bindPipeline( commandBuffer
 					, *this
 					, pipeline
-					, *buffer
+					, *posBuffer
+					, idxBuffer
 					, viewport
 					, scissors
 					, true );

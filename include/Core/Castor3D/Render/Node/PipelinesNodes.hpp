@@ -120,22 +120,27 @@ namespace castor3d
 
 		struct BufferNodes
 		{
-			explicit BufferNodes( ashes::BufferBase const * buffer = {} )
-				: buffer{ buffer }
+			explicit BufferNodes( ashes::BufferBase const * posBuffer = {}
+				, ashes::BufferBase const * idxBuffer = {} )
+				: posBuffer{ posBuffer }
+				, idxBuffer{ idxBuffer }
 			{
 			}
 
-			ashes::BufferBase const * buffer{};
+			ashes::BufferBase const * posBuffer{};
+			ashes::BufferBase const * idxBuffer{};
 			NodesView nodes{};
 		};
 
-		auto emplace( ashes::BufferBase const & buffer )
+		auto emplace( ashes::BufferBase const & posBuffer
+			, ashes::BufferBase const * idxBuffer )
 		{
 			auto it = std::find_if( begin()
 				, end()
-				, [&buffer]( BufferNodes const & lookup )
+				, [&posBuffer, idxBuffer]( BufferNodes const & lookup )
 				{
-					return lookup.buffer == &buffer;
+					return lookup.posBuffer == &posBuffer
+						&& lookup.idxBuffer == idxBuffer;
 				} );
 
 			if ( it == end() )
@@ -151,17 +156,18 @@ namespace castor3d
 					}
 				}
 
-				m_buffers.emplace_back( &buffer );
+				m_buffers.emplace_back( &posBuffer, idxBuffer );
 				it = std::next( m_buffers.begin(), ptrdiff_t( m_buffers.size() ) - 1 );
 			}
 
 			return it;
 		}
 
-		RenderedNode * emplace( ashes::BufferBase const & buffer
+		RenderedNode * emplace( ashes::BufferBase const & posBuffer
+			, ashes::BufferBase const * idxBuffer
 			, RenderedNode node )
 		{
-			auto it = emplace( buffer );
+			auto it = emplace( posBuffer, idxBuffer );
 			return it->nodes.emplace( castor::move( node ) );
 		}
 
@@ -257,7 +263,8 @@ namespace castor3d
 		}
 
 		void emplace( PipelineAndID const & pipeline
-			, ashes::BufferBase const & buffer
+			, ashes::BufferBase const & posBuffer
+			, ashes::BufferBase const * idxBuffer
 			, CulledNode const & culled
 			, NodeCommand command
 			, bool isFrontCulled )
@@ -277,7 +284,8 @@ namespace castor3d
 				}
 #endif
 				auto it = emplace( pipeline, isFrontCulled );
-				ires.first->second = it->nodes.emplace( buffer
+				ires.first->second = it->nodes.emplace( posBuffer
+					, idxBuffer
 					, RenderedNode{ culled.node
 						, culled.visible
 						, castor::move( command ) } );
