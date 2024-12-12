@@ -13,7 +13,7 @@ namespace castor3d
 	{
 	}
 
-	AnimationKeyFrameUPtr SceneNodeAnimationKeyFrame::clone( AnimationT< Engine > & parent )const
+	AnimationKeyFrameUPtr SceneNodeAnimationKeyFrame::clone( Animation & parent )const
 	{
 		auto & skelAnim = static_cast< SceneNodeAnimation & >( parent );
 		auto result = castor::makeUnique< SceneNodeAnimationKeyFrame >( skelAnim, getTimeIndex() );

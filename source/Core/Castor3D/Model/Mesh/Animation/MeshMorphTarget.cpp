@@ -58,7 +58,7 @@ namespace castor3d
 		data[targetIndex] = targetWeight;
 	}
 
-	AnimationKeyFrameUPtr MeshMorphTarget::clone( AnimationT< Engine > & parent )const
+	AnimationKeyFrameUPtr MeshMorphTarget::clone( Animation & parent )const
 	{
 		auto result = castor::makeUnique< MeshMorphTarget >( static_cast< MeshAnimation & >( parent )
 			, getTimeIndex() );

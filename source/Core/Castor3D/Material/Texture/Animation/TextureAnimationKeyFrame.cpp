@@ -12,7 +12,7 @@ namespace castor3d
 	{
 	}
 
-	AnimationKeyFrameUPtr TextureAnimationKeyFrame::clone( AnimationT< Engine > & parent )const
+	AnimationKeyFrameUPtr TextureAnimationKeyFrame::clone( Animation & parent )const
 	{
 		auto result = castor::makeUniqueDerived< AnimationKeyFrame, TextureAnimationKeyFrame >( static_cast< TextureAnimation & >( parent )
 			, getTimeIndex() );

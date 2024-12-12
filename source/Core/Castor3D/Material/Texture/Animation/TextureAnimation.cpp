@@ -11,7 +11,7 @@ namespace castor3d
 {
 	TextureAnimation::TextureAnimation( Engine & engine
 		, castor::String const & name )
-		: AnimationT< Engine >{ engine
+		: Animation{ engine
 			, AnimationType::eTexture
 			, name }
 	{

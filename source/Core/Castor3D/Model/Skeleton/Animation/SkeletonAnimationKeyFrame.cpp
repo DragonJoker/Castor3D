@@ -214,7 +214,7 @@ namespace castor3d
 		return rit->second;
 	}
 
-	AnimationKeyFrameUPtr SkeletonAnimationKeyFrame::clone( AnimationT< Engine > & parent )const
+	AnimationKeyFrameUPtr SkeletonAnimationKeyFrame::clone( Animation & parent )const
 	{
 		auto & skelAnim = static_cast< SkeletonAnimation & >( parent );
 		auto result = castor::makeUnique< SkeletonAnimationKeyFrame >( skelAnim, getTimeIndex() );

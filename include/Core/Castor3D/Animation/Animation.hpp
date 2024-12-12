@@ -12,10 +12,9 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	template< typename AnimableHandlerT >
-	class AnimationT
+	class Animation
 		: public castor::Named
-		, public castor::OwnedBy< AnimableHandlerT >
+		, public castor::OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -25,11 +24,11 @@ namespace castor3d
 		 *name Copie / Déplacement.
 		 **/
 		/**@{*/
-		C3D_API AnimationT( AnimationT && rhs )noexcept = default;
-		C3D_API AnimationT & operator=( AnimationT && rhs )noexcept = delete;
-		C3D_API AnimationT( AnimationT const & rhs ) = delete;
-		C3D_API AnimationT & operator=( AnimationT const & rhs ) = delete;
-		C3D_API virtual ~AnimationT()noexcept = default;
+		C3D_API Animation( Animation && rhs )noexcept = default;
+		C3D_API Animation & operator=( Animation && rhs )noexcept = delete;
+		C3D_API Animation( Animation const & rhs ) = delete;
+		C3D_API Animation & operator=( Animation const & rhs ) = delete;
+		C3D_API virtual ~Animation()noexcept = default;
 		/**@}*/
 		/**
 		 *\~english
@@ -45,9 +44,9 @@ namespace castor3d
 		 *\param[in]	animable	L'objet animable parent.
 		 *\param[in]	name		Le nom de l'animation.
 		 */
-		AnimationT( AnimableHandlerT & handler
+		C3D_API Animation( Engine & handler
 			, AnimationType type
-			, AnimableT< AnimableHandlerT > & animable
+			, Animable & animable
 			, castor::String const & name = castor::cuEmptyString );
 		/**
 		 *\~english
@@ -61,7 +60,7 @@ namespace castor3d
 		 *\param[in]	type		Le type d'animation.
 		 *\param[in]	name		Le nom de l'animation.
 		 */
-		AnimationT( AnimableHandlerT & handler
+		C3D_API Animation( Engine & handler
 			, AnimationType type
 			, castor::String const & name = castor::cuEmptyString );
 		/**
@@ -72,7 +71,7 @@ namespace castor3d
 		 *\brief		Ajoute une keyframe à l'animation.
 		 *\param[in]	keyFrame	La keyframe.
 		 */
-		void addKeyFrame( AnimationKeyFrameUPtr keyFrame );
+		C3D_API void addKeyFrame( AnimationKeyFrameUPtr keyFrame );
 		/**
 		 *\~english
 		 *\brief			Finds a keyframe given a time index.
@@ -81,7 +80,7 @@ namespace castor3d
 		 *\brief			Trouve une keyframe à l'index de temps donné.
 		 *\param[in]		time	L'index de temps.
 		 */
-		AnimationKeyFrameArray::iterator find( castor::Milliseconds const & time );
+		C3D_API AnimationKeyFrameArray::iterator find( castor::Milliseconds const & time );
 		/**
 		 *\~english
 		 *\brief			Finds a keyframe given a time index.
@@ -94,7 +93,7 @@ namespace castor3d
 		 *\param[in,out]	prv		La keyframe précédente, reçoit la nouvelle s'il y a eu un changement.
 		 *\param[in,out]	cur		La keyframe courante, reçoit la nouvelle s'il y a eu un changement.
 		 */
-		void findKeyFrame( castor::Milliseconds const & time
+		C3D_API void findKeyFrame( castor::Milliseconds const & time
 			, AnimationKeyFrameArray::iterator & prv
 			, AnimationKeyFrameArray::iterator & cur )const;
 		/**
@@ -103,7 +102,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise la longueur de l'animation.
 		 */
-		void updateLength();
+		C3D_API void updateLength();
 		/**
 		 *\~english
 		 *\brief			Clones this object into the given one.
@@ -112,7 +111,7 @@ namespace castor3d
 		 *\brief			Clone cet objet dans celui donné.
 		 *\param[in,out]	output	Reçoit les données de cet objet.
 		 */
-		void cloneInto( AnimationT & output )const;
+		C3D_API void cloneInto( Animation & output )const;
 		/**
 		 *\~english
 		 *\return		\p true if the key frames list is empty.
@@ -194,13 +193,13 @@ namespace castor3d
 			return m_length;
 		}
 
-		AnimableT< AnimableHandlerT > * getAnimable()const
+		Animable * getAnimable()const
 		{
 			return m_animable;
 		}
 
 	protected:
-		AnimableT< AnimableHandlerT > * m_animable{};
+		Animable * m_animable{};
 		//!\~english	The animation type.
 		//!\~french		Le type d'animation.
 		AnimationType m_type{ AnimationType::eCount };
@@ -211,8 +210,8 @@ namespace castor3d
 		//!\~french		Les keyframes.
 		AnimationKeyFrameArray m_keyframes;
 
-		friend class BinaryWriter< AnimationT >;
-		friend class BinaryParser< AnimationT >;
+		friend class BinaryWriter< Animation >;
+		friend class BinaryParser< Animation >;
 
 	private:
 		/**
@@ -223,10 +222,8 @@ namespace castor3d
 		 *\brief			Clone cet objet dans celui donné.
 		 *\param[in,out]	output	Reçoit les données de cet objet.
 		 */
-		virtual void doCloneInto( AnimationT & output )const = 0;
+		virtual void doCloneInto( Animation & output )const = 0;
 	};
 }
-
-#include "Animation.inl"
 
 #endif

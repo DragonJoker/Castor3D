@@ -528,7 +528,7 @@ namespace castor3d
 	}
 
 	TextureUnit::TextureUnit( TextureUnit && rhs )noexcept
-		: AnimableT< Engine >{ castor::move( rhs ) }
+		: Animable{ castor::move( rhs ) }
 		, m_data{ rhs.m_data }
 		, m_device{ castor::move( rhs.m_device ) }
 		, m_configuration{ castor::move( rhs.m_configuration ) }
@@ -556,7 +556,7 @@ namespace castor3d
 
 	TextureUnit::TextureUnit( Engine & engine
 		, TextureUnitData & data )
-		: AnimableT< Engine >{ engine }
+		: Animable{ engine }
 		, m_data{ data }
 	{
 		m_transformations.setIdentity();

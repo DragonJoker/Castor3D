@@ -15,6 +15,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureSourceInfo.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
@@ -55,7 +56,7 @@ namespace castor3d
 	};
 
 	class TextureUnit
-		: public AnimableT< Engine >
+		: public Animable
 	{
 	public:
 		TextureUnit( TextureUnit const & ) = delete;
@@ -303,8 +304,8 @@ namespace castor3d
 		OnTextureUnitChanged onIdChanged;
 
 	private:
-		using AnimableT< Engine >::hasAnimation;
-		using AnimableT< Engine >::getAnimation;
+		using Animable::hasAnimation;
+		using Animable::getAnimation;
 
 		void doUpdateTransform( castor::Point3f const & translate
 			, castor::Angle const & rotate

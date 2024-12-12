@@ -47,7 +47,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Un clone de cet objet.
 		 */
-		C3D_API virtual AnimationKeyFrameUPtr clone( AnimationT< Engine > & parent )const = 0;
+		C3D_API virtual AnimationKeyFrameUPtr clone( Animation & parent )const = 0;
 		/**
 		 *\~english
 		 *\return		The start time index.
