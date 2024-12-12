@@ -384,7 +384,7 @@ namespace castor3d
 	struct SceneNodeCreateInfo
 	{
 		castor::NotNullT< Scene > scene;
-		SceneNode * parentNode;
+		SceneNode * parentNode{};
 		castor::Point3f position{};
 		castor::Quaternion orientation{ castor::Quaternion::identity() };
 		castor::Point3f scale{ 1.0f, 1.0f, 1.0f };

@@ -1207,8 +1207,6 @@ namespace c3d_gltf
 
 		if ( isValid() )
 		{
-			size_t index{};
-
 			for ( auto & animation : m_asset->animations )
 			{
 				for ( auto & channel : animation.channels )
@@ -1222,8 +1220,6 @@ namespace c3d_gltf
 						++result;
 					}
 				}
-
-				++index;
 			}
 		}
 

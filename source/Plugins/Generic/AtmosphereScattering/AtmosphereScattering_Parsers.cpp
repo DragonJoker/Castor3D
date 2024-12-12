@@ -39,7 +39,7 @@ namespace atmosphere_scattering
 			AtmosphereBackgroundUPtr background{};
 		};
 
-		castor::String getPrefix( AtmosphereContext const & context )
+		static castor::String getPrefix( AtmosphereContext const & context )
 		{
 			return getPrefix( *context.sceneContext );
 		}
