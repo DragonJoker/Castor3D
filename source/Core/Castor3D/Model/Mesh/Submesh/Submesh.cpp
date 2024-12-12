@@ -1720,7 +1720,7 @@ namespace castor3d
 
 	bool Submesh::isDynamic()const
 	{
-		return hasComponent( SkinComponent::TypeName )
+		return ( hasComponent( SkinComponent::TypeName ) && getOwner()->getSkeleton() )
 			|| hasComponent( MorphComponent::TypeName );
 	}
 
