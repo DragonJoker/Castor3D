@@ -175,8 +175,8 @@ namespace castor3d
 			, skinTransforms ) }
 	{
 		m_objectIds.nodeId = node.instance.getId( *node.pass, node.data ) - 1u;
-		m_objectIds.morphingId = node.mesh ? node.mesh->getId( node.data ) - 1u : 0u;
-		m_objectIds.skinningId = node.skeleton ? node.skeleton->getId() - 1u : 0u;
+		m_objectIds.morphingId = node.mesh ? node.mesh->getId( node.data ) - 1u : ~0u;
+		m_objectIds.skinningId = node.skeleton ? node.skeleton->getId() - 1u : ~0u;
 	}
 
 	void VertexTransformPass::recordInto( crg::RecordContext & context

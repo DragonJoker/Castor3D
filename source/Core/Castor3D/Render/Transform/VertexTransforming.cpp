@@ -449,19 +449,37 @@ namespace castor3d
 
 				if ( pipeline.hasMorphingWeights )
 				{
-					auto morphingWeights = writer.declLocale( "morphingWeights"
-						, c3d_morphingWeights[c3d_objectIDs.morphingId()] );
-					morphingWeights.morph( c3d_morphTargets
-						, index
-						, position
-						, normal
-						, tangent
-						, bitangent
-						, texcoord0
-						, texcoord1
-						, texcoord2
-						, texcoord3
-						, colour );
+					IF( writer, c3d_objectIDs.morphingId() != ~0u )
+					{
+						auto morphingWeights = writer.declLocale( "morphingWeights"
+							, c3d_morphingWeights[c3d_objectIDs.morphingId()] );
+						morphingWeights.morph( c3d_morphTargets
+							, index
+							, position
+							, normal
+							, tangent
+							, bitangent
+							, texcoord0
+							, texcoord1
+							, texcoord2
+							, texcoord3
+							, colour );
+					}
+					ELSE
+					{
+						shader::MorphingWeightsData::morphNoAnim( c3d_morphTargets
+							, index
+							, position
+							, normal
+							, tangent
+							, bitangent
+							, texcoord0
+							, texcoord1
+							, texcoord2
+							, texcoord3
+							, colour );
+					}
+					FI;
 				}
 				else if ( pipeline.morphFlags != MorphFlag::eNone )
 				{
@@ -488,19 +506,39 @@ namespace castor3d
 					, c3d_inBones[index] );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[c3d_objectIDs.nodeId()] );
-				auto curMtxModel = writer.declLocale< sdw::Mat4 >( "curMtxModel"
-					, modelData.getCurModelMtx( skinningData
-						, c3d_objectIDs.skinningId()
-						, skin.boneIds0
-						, skin.boneIds1
-						, skin.boneWeights0
-						, skin.boneWeights1 ) );
-				position = curMtxModel * position;
+				auto curMtxModel = writer.declLocale< sdw::Mat4 >( "curMtxModel" );
+				auto curMtxNormal = writer.declLocale< sdw::Mat3 >( "curMtxNormal" );
+
+				if ( combine.hasSkinFlag )
+				{
+					IF( writer, c3d_objectIDs.skinningId() != ~0u )
+					{
+						curMtxModel = modelData.getCurModelMtx( skinningData
+							, c3d_objectIDs.skinningId()
+							, skin.boneIds0
+							, skin.boneIds1
+							, skin.boneWeights0
+							, skin.boneWeights1 );
+						position = curMtxModel * position;
+						curMtxNormal = modelData.getNormalMtx( combine.hasSkinFlag, curMtxModel );
+					}
+					ELSE
+					{
+						curMtxModel = modelData.getModelMtx();
+						position = curMtxModel * position;
+						curMtxNormal = modelData.getNormalMtx( false, curMtxModel );
+					}
+					FI;
+				}
+				else
+				{
+					curMtxModel = modelData.getModelMtx();
+					position = curMtxModel * position;
+					curMtxNormal = modelData.getNormalMtx( false, curMtxModel );
+				}
+
 				c3d_outPosition[index] = position;
 				c3d_outVelocity[index].xyz() = oldPosition.xyz() - position.xyz();
-
-				auto curMtxNormal = writer.declLocale< sdw::Mat3 >( "curMtxNormal"
-					, modelData.getNormalMtx( combine.hasSkinFlag, curMtxModel ) );
 				c3d_outNormal[index].xyz() = normalize( curMtxNormal * normal.xyz() );
 				c3d_outTangent[index] = vec4( normalize( curMtxNormal * tangent.xyz() ), tangent.w() );
 				c3d_outBitangent[index].xyz() = normalize( curMtxNormal * bitangent.xyz() );
