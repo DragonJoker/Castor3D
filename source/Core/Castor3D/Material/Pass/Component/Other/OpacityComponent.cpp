@@ -33,8 +33,8 @@ namespace castor
 
 			if ( object.getOpacity() < 1 )
 			{
-				result = write( file, cuT( "opacity" ), object.getOpacity(), castor3d::OpacityComponent::DefaultOpacity )
-					&& write( file, cuT( "bw_accumulation" ), object.getBWAccumulationOperator(), castor3d::OpacityComponent::DefaultBwAccumulationOperator );
+				result = writeOpt( file, cuT( "opacity" ), object.getOpacity(), castor3d::OpacityComponent::DefaultOpacity )
+					&& writeOpt( file, cuT( "bw_accumulation" ), object.getBWAccumulationOperator(), castor3d::OpacityComponent::DefaultBwAccumulationOperator );
 			}
 
 			return result;
