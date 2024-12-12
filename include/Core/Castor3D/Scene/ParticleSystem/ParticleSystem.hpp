@@ -220,6 +220,8 @@ namespace castor3d
 			return *m_csImpl;
 		}
 
+		C3D_API static void addParsers( castor::AttributeParsers & result );
+
 	protected:
 		//!\~english	The particles type name.
 		//!\~french		Le nom du type de particules.

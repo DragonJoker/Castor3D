@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderModule.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 
 namespace castor3d
 {

@@ -6,6 +6,7 @@
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObject.hpp"
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
@@ -13,6 +14,8 @@
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
+
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 CU_ImplementSmartPtr( castor3d, AnimatedObjectGroup )
 
@@ -49,6 +52,342 @@ namespace castor3d
 
 			return result;
 		}
+
+		static CU_ImplementAttributeParserBlock( parserAnimatedObjectGroupAnimatedObject, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( !blockContext->animGroup )
+			{
+				CU_ParsingError( cuT( "No animated object group not initialised" ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+
+				if ( auto geometry = blockContext->scene->scene->findGeometry( name ) )
+				{
+					if ( auto node = geometry->getParent();
+						node && node->hasAnimation() )
+					{
+						blockContext->animNode = blockContext->animGroup->addObject( *node
+							, node->getName() );
+					}
+
+					if ( auto mesh = geometry->getMesh() )
+					{
+						if ( mesh->hasAnimation() )
+						{
+							blockContext->animMesh = blockContext->animGroup->addObject( *mesh
+								, *geometry
+								, geometry->getName() );
+						}
+
+						if ( auto skeleton = mesh->getSkeleton() )
+						{
+							if ( skeleton->hasAnimation() )
+							{
+								blockContext->animSkeleton = blockContext->animGroup->addObject( *skeleton
+									, *mesh
+									, *geometry
+									, geometry->getName() );
+							}
+						}
+					}
+				}
+				else
+				{
+					if ( auto node = blockContext->scene->scene->findSceneNode( name ) )
+					{
+						if ( node->hasAnimation() )
+						{
+							blockContext->animNode = blockContext->animGroup->addObject( *node
+								, node->getName() );
+						}
+					}
+					else
+					{
+						CU_ParsingError( cuT( "No geometry or node with name " ) + name );
+					}
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimatedObjectGroupAnimatedMesh, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( !blockContext->animGroup )
+			{
+				CU_ParsingError( cuT( "No animated object group not initialised" ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+
+				if ( auto geometry = blockContext->scene->scene->findGeometry( name ) )
+				{
+					if ( auto mesh = geometry->getMesh() )
+					{
+						if ( mesh->hasAnimation() )
+						{
+							blockContext->animMesh = blockContext->animGroup->addObject( *mesh
+								, *geometry
+								, geometry->getName() );
+						}
+					}
+					else
+					{
+						CU_ParsingError( cuT( "Geometry [" ) + name + cuT( "] has no mesh" ) );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "No geometry with name [" ) + name + cuT( "]" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimatedObjectGroupAnimatedSkeleton, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( !blockContext->animGroup )
+			{
+				CU_ParsingError( cuT( "No animated object group not initialised" ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+
+				if ( auto geometry = blockContext->scene->scene->findGeometry( name ) )
+				{
+					if ( auto mesh = geometry->getMesh() )
+					{
+						if ( auto skeleton = mesh->getSkeleton() )
+						{
+							if ( skeleton->hasAnimation() )
+							{
+								blockContext->animSkeleton = blockContext->animGroup->addObject( *skeleton
+									, *mesh
+									, *geometry
+									, geometry->getName() );
+							}
+						}
+						else
+						{
+							CU_ParsingError( cuT( "Geometry [" ) + name + cuT( "]'s mesh has no skeleton" ) );
+						}
+					}
+					else
+					{
+						CU_ParsingError( cuT( "Geometry [" ) + name + cuT( "] has no mesh" ) );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "No geometry with name [" ) + name + cuT( "]" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimatedObjectGroupAnimatedNode, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( !blockContext->animGroup )
+			{
+				CU_ParsingError( cuT( "No animated object group not initialised" ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+
+				if ( auto node = blockContext->scene->scene->findSceneNode( name ) )
+				{
+					if ( node->hasAnimation() )
+					{
+						blockContext->animNode = blockContext->animGroup->addObject( *node
+							, node->getName() );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "No node with name [" ) + name + cuT( "]" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimatedObjectGroupAnimation, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( blockContext->animGroup )
+			{
+				params[0]->get( blockContext->animName );
+				blockContext->animGroup->addAnimation( blockContext->animName );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No animated object group initialised" ) );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eAnimation, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserAnimatedObjectGroupAnimationStart, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( blockContext->animGroup )
+			{
+				blockContext->animGroup->startAnimation( params[0]->get< castor::String >() );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No animated object group initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimatedObjectGroupAnimationPause, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( blockContext->animGroup )
+			{
+				blockContext->animGroup->pauseAnimation( params[0]->get< castor::String >() );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No animated object group initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimatedObjectGroupEnd, AnimGroupContext )
+		{
+			if ( !blockContext->animGroup )
+			{
+				CU_ParsingError( cuT( "No animated object group initialised" ) );
+			}
+			else
+			{
+				log::info << "Loaded animated object group [" << blockContext->animGroup->getName() << "]" << std::endl;
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserAnimationLooped, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( blockContext->animGroup )
+			{
+				blockContext->animGroup->setAnimationLooped( blockContext->animName, params[0]->get< bool >() );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No animated object group initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimationScale, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( blockContext->animGroup )
+			{
+				blockContext->animGroup->setAnimationScale( blockContext->animName, params[0]->get< float >() );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No animated object group initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimationStartAt, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( blockContext->animGroup )
+			{
+				blockContext->animGroup->setAnimationStartingPoint( blockContext->animName
+					, castor::Milliseconds{ uint64_t( params[0]->get< float >() * 1000.0f ) } );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No animated object group initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimationStopAt, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( blockContext->animGroup )
+			{
+				blockContext->animGroup->setAnimationStoppingPoint( blockContext->animName
+					, castor::Milliseconds{ uint64_t( params[0]->get< float >() * 1000.0f ) } );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No animated object group initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimationInterpolation, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( blockContext->animGroup )
+			{
+				blockContext->animGroup->setAnimationInterpolation( blockContext->animName
+					, InterpolatorType( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No animated object group initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimationEnd, AnimGroupContext )
+		{
+			// Only push the block
+		}
+		CU_EndAttributePop()
 	}
 
 	//*************************************************************************************************
@@ -355,6 +694,29 @@ namespace castor3d
 		{
 			group.state = AnimationState::ePaused;
 		}
+	}
+
+	void AnimatedObjectGroup::addParsers( castor::AttributeParsers & result )
+	{
+		using namespace castor;
+		BlockParserContextT< AnimGroupContext > groupCtx{ result, CSCNSection::eAnimGroup, CSCNSection::eScene };
+		BlockParserContextT< AnimGroupContext > animCtx{ result, CSCNSection::eAnimation, CSCNSection::eAnimGroup };
+
+		groupCtx.addParser( cuT( "animated_object" ), anmobjgrp::parserAnimatedObjectGroupAnimatedObject, { makeParameter< ParameterType::eName >() } );
+		groupCtx.addParser( cuT( "animated_mesh" ), anmobjgrp::parserAnimatedObjectGroupAnimatedMesh, { makeParameter< ParameterType::eName >() } );
+		groupCtx.addParser( cuT( "animated_skeleton" ), anmobjgrp::parserAnimatedObjectGroupAnimatedSkeleton, { makeParameter< ParameterType::eName >() } );
+		groupCtx.addParser( cuT( "animated_node" ), anmobjgrp::parserAnimatedObjectGroupAnimatedNode, { makeParameter< ParameterType::eName >() } );
+		groupCtx.addParser( cuT( "start_animation" ), anmobjgrp::parserAnimatedObjectGroupAnimationStart, { makeParameter< ParameterType::eName >() } );
+		groupCtx.addParser( cuT( "pause_animation" ), anmobjgrp::parserAnimatedObjectGroupAnimationPause, { makeParameter< ParameterType::eName >() } );
+		groupCtx.addPushParser( cuT( "animation" ), CSCNSection::eAnimation, anmobjgrp::parserAnimatedObjectGroupAnimation, { makeParameter< ParameterType::eName >() } );
+		groupCtx.addPopParser( cuT( "}" ), anmobjgrp::parserAnimatedObjectGroupEnd );
+
+		animCtx.addParser( cuT( "looped" ), anmobjgrp::parserAnimationLooped, { makeParameter< ParameterType::eBool >() } );
+		animCtx.addParser( cuT( "scale" ), anmobjgrp::parserAnimationScale, { makeParameter< ParameterType::eFloat >() } );
+		animCtx.addParser( cuT( "start_at" ), anmobjgrp::parserAnimationStartAt, { makeParameter< ParameterType::eFloat >() } );
+		animCtx.addParser( cuT( "stop_at" ), anmobjgrp::parserAnimationStopAt, { makeParameter< ParameterType::eFloat >() } );
+		animCtx.addParser( cuT( "interpolation" ), anmobjgrp::parserAnimationInterpolation, { makeParameter< ParameterType::eCheckedText, InterpolatorType >() } );
+		animCtx.addPopParser( cuT( "}" ), anmobjgrp::parserAnimationEnd );
 	}
 
 	castor::String getPrefix( AnimGroupContext const & context )

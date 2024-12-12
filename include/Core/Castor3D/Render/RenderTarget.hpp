@@ -34,6 +34,7 @@ See LICENSE file in root folder
 #include <ashespp/Sync/Semaphore.hpp>
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
@@ -213,6 +214,8 @@ namespace castor3d
 		C3D_API PostEffectRPtr getPostEffect( castor::String const & name )const;
 		C3D_API void resetSemaphore();
 		C3D_API crg::FramePass const & createVertexTransformPass( crg::FramePassGroup & graph );
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
 		/**
 		*\~english
 		*name

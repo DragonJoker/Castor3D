@@ -284,6 +284,8 @@ namespace castor3d
 		 *\param[in]	object	L'objet.
 		 */
 		C3D_API void markDirty( MovableObject & object );
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
 		/**
 		*\~english
 		*\name

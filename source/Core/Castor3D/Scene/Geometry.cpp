@@ -1,5 +1,6 @@
 #include "Castor3D/Scene/Geometry.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
@@ -8,11 +9,237 @@
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
+
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 CU_ImplementSmartPtr( castor3d, Geometry )
 
 namespace castor3d
 {
+	namespace object
+	{
+
+		static CU_ImplementAttributeParserBlock( parserParent, ObjectContext )
+		{
+			if ( !blockContext->geometry )
+			{
+				CU_ParsingError( cuT( "No Geometry initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				SceneNodeRPtr parent;
+
+				if ( name == Scene::ObjectRootNode )
+				{
+					parent = blockContext->scene->scene->getObjectRootNode();
+				}
+				else if ( name == Scene::CameraRootNode )
+				{
+					parent = blockContext->scene->scene->getCameraRootNode();
+				}
+				else if ( name == Scene::RootNode )
+				{
+					parent = blockContext->scene->scene->getRootNode();
+				}
+				else
+				{
+					parent = blockContext->scene->scene->findSceneNode( name );
+				}
+
+				if ( parent )
+				{
+					parent->attachObject( *blockContext->geometry );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserMaterial, ObjectContext )
+		{
+			if ( !blockContext->geometry )
+			{
+				CU_ParsingError( cuT( "No Geometry initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				if ( blockContext->geometry->getMesh() )
+				{
+					auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+					auto material = getEngine( *blockContext )->tryFindMaterial( name );
+
+					if ( material )
+					{
+						for ( auto const & submesh : *blockContext->geometry->getMesh() )
+						{
+							blockContext->geometry->setMaterial( *submesh, material );
+						}
+					}
+					else
+					{
+						CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Geometry's mesh not initialised" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserNewBlock( parserMesh, ObjectContext, MeshContext )
+		{
+			if ( blockContext->geometry )
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto scene = blockContext->geometry->getScene();
+				newBlockContext->geometry = blockContext;
+				newBlockContext->scene = blockContext->scene;
+				newBlockContext->root = blockContext->scene->root;
+				newBlockContext->mesh = scene->tryFindMesh( name );
+
+				if ( !newBlockContext->mesh )
+				{
+					newBlockContext->ownMesh = scene->createMesh( name, *scene );
+					newBlockContext->mesh = newBlockContext->ownMesh.get();
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No scene initialised" ) );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eMesh )
+
+		static CU_ImplementAttributeParserBlock( parserMaterials, ObjectContext )
+		{
+			// Only push the block
+		}
+		CU_EndAttributePushBlock( CSCNSection::eObjectMaterials, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserCastShadows, ObjectContext )
+		{
+			if ( !blockContext->geometry )
+			{
+				CU_ParsingError( cuT( "No Geometry initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->geometry->setShadowCaster( params[0]->get< bool >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserReceivesShadows, ObjectContext )
+		{
+			if ( !blockContext->geometry )
+			{
+				CU_ParsingError( cuT( "No Geometry initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->geometry->setShadowReceiver( params[0]->get< bool >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserCullable, ObjectContext )
+		{
+			if ( !blockContext->geometry )
+			{
+				CU_ParsingError( cuT( "No Geometry initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->geometry->setCullable( params[0]->get< bool >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserEnd, ObjectContext )
+		{
+			blockContext->parentNode = nullptr;
+			log::info << "Loaded geometry [" << blockContext->geometry->getName() << "]" << std::endl;
+
+			if ( blockContext->ownGeometry )
+			{
+				blockContext->scene->scene->addGeometry( castor::move( blockContext->ownGeometry ) );
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserMaterialsMaterial, ObjectContext )
+		{
+			if ( !blockContext->geometry )
+			{
+				CU_ParsingError( cuT( "No Geometry initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( blockContext->geometry->getMesh() )
+			{
+				if ( auto name = getPrefixedName( params[1]->get< castor::String >(), *blockContext );
+					auto material = getEngine( *blockContext )->tryFindMaterial( name ) )
+				{
+					uint16_t index;
+
+					if ( blockContext->geometry->getMesh()->getSubmeshCount() > params[0]->get( index ) )
+					{
+						auto submesh = blockContext->geometry->getMesh()->getSubmesh( index );
+						blockContext->geometry->setMaterial( *submesh, material );
+					}
+					else
+					{
+						CU_ParsingError( cuT( "Submesh index is too high" ) );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Geometry's mesh not initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserMaterialsEnd, ObjectContext )
+		{
+			// Only push the block
+		}
+		CU_EndAttributePop()
+	}
+
 	Geometry::Geometry( castor::String const & name
 		, Scene & scene
 		, SceneNode & node
@@ -304,6 +531,25 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	void Geometry::addParsers( castor::AttributeParsers & result )
+	{
+		using namespace castor;
+		BlockParserContextT< ObjectContext > objectCtx{ result, CSCNSection::eObject, CSCNSection::eScene };
+		BlockParserContextT< ObjectContext > materialsCtx{ result, CSCNSection::eObjectMaterials, CSCNSection::eObject };
+
+		objectCtx.addParser( cuT( "parent" ), object::parserParent, { makeParameter< ParameterType::eName >() } );
+		objectCtx.addParser( cuT( "material" ), object::parserMaterial, { makeParameter< ParameterType::eName >() } );
+		objectCtx.addParser( cuT( "cast_shadows" ), object::parserCastShadows, { makeParameter< ParameterType::eBool >() } );
+		objectCtx.addParser( cuT( "receive_shadows" ), object::parserReceivesShadows, { makeParameter< ParameterType::eBool >() } );
+		objectCtx.addParser( cuT( "cullable" ), object::parserCullable, { makeParameter< ParameterType::eBool >() } );
+		objectCtx.addPushParser( cuT( "mesh" ), CSCNSection::eMesh, object::parserMesh, { makeParameter< ParameterType::eName >() } );
+		objectCtx.addPushParser( cuT( "materials" ), CSCNSection::eObjectMaterials, object::parserMaterials );
+		objectCtx.addPopParser( cuT( "}" ), object::parserEnd );
+
+		materialsCtx.addParser( cuT( "material" ), object::parserMaterialsMaterial, { makeParameter< ParameterType::eUInt16 >(), makeParameter< ParameterType::eName >() } );
+		materialsCtx.addPopParser( cuT( "}" ), object::parserMaterialsEnd );
 	}
 
 	void Geometry::doUpdateMesh()

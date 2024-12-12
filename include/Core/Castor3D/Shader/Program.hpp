@@ -12,6 +12,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 
 #include <ShaderAST/Shader.hpp>
 #include <ShaderAST/Visitors/SelectEntryPoint.hpp>
@@ -92,6 +93,8 @@ namespace castor3d
 		 *\return		\p true si le shader a une source pour le shader stage donné.
 		 */
 		C3D_API bool hasSource( ast::ShaderStage stage )const;
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
 		/**
 		*\~english
 		*name

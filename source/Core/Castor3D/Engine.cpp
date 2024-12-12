@@ -15,6 +15,7 @@
 #include "Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp"
 #include "Castor3D/Material/Pass/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Miscellaneous/LoadingScreen.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/MeshFactory.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
@@ -168,6 +169,285 @@ namespace castor3d
 				return result;
 			}
 		}
+
+		static CU_ImplementAttributeParserNewBlock( parserScene, RootContext, SceneContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				newBlockContext->root = blockContext;
+				newBlockContext->scene = newBlockContext->root->engine->tryFindScene( name );
+
+				if ( !newBlockContext->scene )
+				{
+					newBlockContext->ownScene = castor::makeUnique< Scene >( name
+						, *newBlockContext->root->engine );
+					newBlockContext->scene = newBlockContext->ownScene.get();
+				}
+
+				newBlockContext->root->mapScenes.try_emplace( name, newBlockContext->scene );
+				newBlockContext->overlays = castor::makeUnique< OverlayContext >();
+				newBlockContext->overlays->root = blockContext;
+				newBlockContext->overlays->scene = newBlockContext;
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eScene )
+
+		static CU_ImplementAttributeParserNewBlock( parserLoadingScreen, RootContext, SceneContext )
+		{
+			newBlockContext->root = blockContext;
+			newBlockContext->ownScene = castor::makeUnique< Scene >( LoadingScreen::SceneName
+				, *newBlockContext->root->engine );
+			newBlockContext->scene = newBlockContext->ownScene.get();
+			newBlockContext->overlays = castor::makeUnique< OverlayContext >();
+			newBlockContext->overlays->root = blockContext;
+			newBlockContext->overlays->scene = newBlockContext;
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eScene )
+
+		static CU_ImplementAttributeParserNewBlock( parserFont, RootContext, FontContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( newBlockContext->name );
+				newBlockContext->root = blockContext;
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eFont )
+
+		static CU_ImplementAttributeParserNewBlock( parserSdfFont, RootContext, FontContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( newBlockContext->name );
+				newBlockContext->root = blockContext;
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eSdfFont )
+
+		static CU_ImplementAttributeParserBlock( parserPanelOverlay, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
+				auto & parent = blockContext->overlays->parentOverlays.back();
+				blockContext->overlays->overlay.rptr = blockContext->engine->tryFindOverlay( name );
+
+				if ( !blockContext->overlays->overlay.rptr )
+				{
+					blockContext->overlays->overlay.uptr = castor::makeUnique< Overlay >( *blockContext->engine
+						, OverlayType::ePanel
+						, nullptr
+						, parent.rptr );
+					blockContext->overlays->overlay.rptr = blockContext->overlays->overlay.uptr.get();
+					blockContext->overlays->overlay.rptr->rename( name );
+				}
+
+				blockContext->overlays->overlay.rptr->setVisible( false );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::ePanelOverlay, blockContext->overlays.get() )
+
+		static CU_ImplementAttributeParserBlock( parserBorderPanelOverlay, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
+				auto & parent = blockContext->overlays->parentOverlays.back();
+				blockContext->overlays->overlay.rptr = blockContext->engine->tryFindOverlay( name );
+
+				if ( !blockContext->overlays->overlay.rptr )
+				{
+					blockContext->overlays->overlay.uptr = castor::makeUnique< Overlay >( *blockContext->engine
+						, OverlayType::eBorderPanel
+						, nullptr
+						, parent.rptr );
+					blockContext->overlays->overlay.rptr = blockContext->overlays->overlay.uptr.get();
+					blockContext->overlays->overlay.rptr->rename( name );
+				}
+
+				blockContext->overlays->overlay.rptr->setVisible( false );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eBorderPanelOverlay, blockContext->overlays.get() )
+
+		static CU_ImplementAttributeParserBlock( parserTextOverlay, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
+				auto & parent = blockContext->overlays->parentOverlays.back();
+				blockContext->overlays->overlay.rptr = blockContext->engine->tryFindOverlay( name );
+
+				if ( !blockContext->overlays->overlay.rptr )
+				{
+					blockContext->overlays->overlay.uptr = castor::makeUnique< Overlay >( *blockContext->engine
+						, OverlayType::eText
+						, nullptr
+						, parent.rptr );
+					blockContext->overlays->overlay.rptr = blockContext->overlays->overlay.uptr.get();
+					blockContext->overlays->overlay.rptr->rename( name );
+				}
+
+				blockContext->overlays->overlay.rptr->setVisible( false );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eTextOverlay, blockContext->overlays.get() )
+
+		static CU_ImplementAttributeParserNewBlock( parserSamplerState, RootContext, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				newBlockContext->sampler = getEngine( *blockContext )->tryFindSampler( name );
+
+				if ( !newBlockContext->sampler )
+				{
+					newBlockContext->ownSampler = getEngine( *blockContext )->createSampler( name
+						, *getEngine( *blockContext ) );
+					newBlockContext->sampler = newBlockContext->ownSampler.get();
+				}
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eSampler )
+
+		static CU_ImplementAttributeParserBlock( parserDebugOverlays, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->engine->getRenderLoop().showDebugOverlays( params[0]->get< bool >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserDebugTargets, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->engine->enableDebugTargets( params[0]->get< bool >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserNewBlock( parserWindow, RootContext, WindowContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				newBlockContext->root = blockContext;
+				params[0]->get( newBlockContext->window.name );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eWindow )
+
+		static CU_ImplementAttributeParserBlock( parserMaxImageSize, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [count] parameter." ) );
+			}
+			else
+			{
+				blockContext->engine->setMaxImageSize( params[0]->get< uint32_t >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserDebugMaxImageSize, RootContext )
+		{
+	#if !defined( NDEBUG )
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [count] parameter." ) );
+			}
+			else
+			{
+				blockContext->engine->setMaxImageSize( params[0]->get< uint32_t >() );
+			}
+	#endif
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserLpvGridSize, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [count] parameter." ) );
+			}
+			else
+			{
+				blockContext->engine->setLpvGridSize( params[0]->get< uint32_t >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserDefaultUnit, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [unit] parameter." ) );
+			}
+			else
+			{
+				blockContext->engine->setLengthUnit( castor::LengthUnit( params[0]->get< uint32_t >() ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserFullLoading, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [enable] parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->enableFullLoading );
+			}
+		}
+		CU_EndAttribute()
 	}
 
 	//*********************************************************************************************
@@ -688,6 +968,29 @@ namespace castor3d
 	std::locale const & Engine::getLocale()
 	{
 		return eng::globalLocale;
+	}
+
+	void Engine::addParsers( castor::AttributeParsers & result )
+	{
+		using namespace castor;
+		BlockParserContextT< RootContext > context{ result, CSCNSection::eRoot };
+
+		context.addParser( cuT( "debug_overlays" ), eng::parserDebugOverlays, { makeParameter< ParameterType::eBool >() } );
+		context.addParser( cuT( "debug_targets" ), eng::parserDebugTargets, { makeParameter< ParameterType::eBool >() } );
+		context.addParser( cuT( "max_image_size" ), eng::parserMaxImageSize, { makeParameter< ParameterType::eUInt32 >() } );
+		context.addParser( cuT( "debug_max_image_size" ), eng::parserDebugMaxImageSize, { makeParameter< ParameterType::eUInt32 >() } );
+		context.addParser( cuT( "lpv_grid_size" ), eng::parserLpvGridSize, { makeParameter< ParameterType::eUInt32 >() } );
+		context.addParser( cuT( "default_unit" ), eng::parserDefaultUnit, { makeParameter< ParameterType::eCheckedText, castor::LengthUnit >() } );
+		context.addParser( cuT( "enable_full_loading" ), eng::parserFullLoading, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		context.addPushParser( cuT( "scene" ), CSCNSection::eScene, eng::parserScene, { makeParameter< ParameterType::eName >() } );
+		context.addPushParser( cuT( "loading_screen" ), CSCNSection::eScene, eng::parserLoadingScreen, {} );
+		context.addPushParser( cuT( "font" ), CSCNSection::eFont, eng::parserFont, { makeParameter< ParameterType::eName >() } );
+		context.addPushParser( cuT( "sdf_font" ), CSCNSection::eSdfFont, eng::parserSdfFont, { makeParameter< ParameterType::eName >() } );
+		context.addPushParser( cuT( "panel_overlay" ), CSCNSection::ePanelOverlay, eng::parserPanelOverlay, { makeParameter< ParameterType::eName >() } );
+		context.addPushParser( cuT( "border_panel_overlay" ), CSCNSection::eBorderPanelOverlay, eng::parserBorderPanelOverlay, { makeParameter< ParameterType::eName >() } );
+		context.addPushParser( cuT( "text_overlay" ), CSCNSection::eTextOverlay, eng::parserTextOverlay, { makeParameter< ParameterType::eName >() } );
+		context.addPushParser( cuT( "sampler" ), CSCNSection::eSampler, eng::parserSamplerState, { makeParameter< ParameterType::eName >() } );
+		context.addPushParser( cuT( "window" ), CSCNSection::eWindow, eng::parserWindow, { makeParameter< ParameterType::eName >() } );
 	}
 
 	castor::String Engine::getDefaultLightingModelName()const

@@ -31,7 +31,9 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 
+#include <CastorUtils/Design/BlockGuard.hpp>
 #include <CastorUtils/Design/ResourceCache.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -46,8 +48,6 @@
 
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
-
-#include <CastorUtils/Design/BlockGuard.hpp>
 
 CU_ImplementSmartPtr( castor3d, RenderWindow )
 
@@ -369,6 +369,65 @@ namespace castor3d
 				}
 			}
 		}
+
+		static CU_ImplementAttributeParserNewBlock( parserRenderTarget, WindowContext, TargetContext )
+		{
+			newBlockContext->window = blockContext;
+			newBlockContext->targetType = TargetType::eWindow;
+			newBlockContext->size = { 1u, 1u };
+			newBlockContext->srgbPixelFormat = castor::PixelFormat::eUNDEFINED;
+			newBlockContext->hdrPixelFormat = castor::PixelFormat::eUNDEFINED;
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eRenderTarget )
+
+		static CU_ImplementAttributeParserBlock( parserVSync, WindowContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->window.enableVSync );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserFullscreen, WindowContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->window.fullscreen );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAllowHdr, WindowContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->window.allowHdr );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserEnd, WindowContext )
+		{
+			log::info << "Loaded window [" << blockContext->window.name
+				<< ", HDR(" << blockContext->window.allowHdr << ")"
+				<< ", VSYNC(" << blockContext->window.enableVSync << ")"
+				<< ", FS(" << blockContext->window.fullscreen << ")]" << std::endl;
+			blockContext->root->window = castor::move( blockContext->window );
+		}
+		CU_EndAttributePop()
 	}
 
 	//*************************************************************************************************
@@ -949,6 +1008,18 @@ namespace castor3d
 		doCreateLoadingScreen();
 		m_loadingScreen->setRenderPass( *m_renderPass, m_size, m_swapchainFormat );
 		m_renderMutex.unlock();
+	}
+
+	void RenderWindow::addParsers( castor::AttributeParsers & result )
+	{
+		using namespace castor;
+		BlockParserContextT< WindowContext > context{ result, CSCNSection::eWindow, CSCNSection::eRoot };
+
+		context.addParser( cuT( "vsync" ), rendwndw::parserVSync, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		context.addParser( cuT( "fullscreen" ), rendwndw::parserFullscreen, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		context.addParser( cuT( "allow_hdr" ), rendwndw::parserAllowHdr, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		context.addPushParser( cuT( "render_target" ), CSCNSection::eRenderTarget, rendwndw::parserRenderTarget );
+		context.addPopParser( cuT( "}" ), rendwndw::parserEnd );
 	}
 
 	GeometryRPtr RenderWindow::getPickedGeometry()const

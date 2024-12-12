@@ -16,6 +16,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 #include <CastorUtils/Graphics/BoundingSphere.hpp>
 
@@ -225,6 +226,8 @@ namespace castor3d
 		 *\param[in,out]	output	Reçoit les données de cet objet.
 		 */
 		C3D_API void cloneInto( Mesh & output )const;
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the begin of the submeshes

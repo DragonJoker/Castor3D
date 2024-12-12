@@ -392,6 +392,8 @@ namespace castor3d
 		 *\param[in]	node	Le noeud de scène parent.
 		 */
 		C3D_API void attachTo( SceneNode & node )override;
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
 		/**
 		*\~english
 		*name

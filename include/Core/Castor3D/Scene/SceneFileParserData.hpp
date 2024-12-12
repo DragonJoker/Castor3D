@@ -130,6 +130,10 @@ namespace castor3d
 		return getEngine( *context.root );
 	}
 
+	C3D_API void fillMeshImportParameters( castor::FileParserContext & context
+		, castor::String const & meshParams
+		, Parameters & parameters );
+
 	C3D_API CU_DeclareAttributeParser( parserDefaultEnd )
 
 	template< typename BlockContextT >

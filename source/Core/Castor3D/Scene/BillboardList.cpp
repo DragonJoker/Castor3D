@@ -13,6 +13,9 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
+
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 CU_ImplementSmartPtr( castor3d, BillboardBase )
 CU_ImplementSmartPtr( castor3d, BillboardList )
@@ -86,6 +89,133 @@ namespace castor3d
 
 			return result;
 		}
+
+		static CU_ImplementAttributeParserBlock( parserParent, BillboardsContext )
+		{
+			if ( blockContext->billboards )
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+
+				if ( auto parent = blockContext->scene->scene->findSceneNode( name ) )
+				{
+					parent->attachObject( *blockContext->billboards );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Geometry not initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserType, BillboardsContext )
+		{
+			if ( !blockContext->billboards )
+			{
+				CU_ParsingError( cuT( "Billboard not initialised" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else
+			{
+				blockContext->billboards->setBillboardType( BillboardType( params[0]->get< uint32_t >() ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSize, BillboardsContext )
+		{
+			if ( !blockContext->billboards )
+			{
+				CU_ParsingError( cuT( "Billboard not initialised" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else
+			{
+				blockContext->billboards->setBillboardSize( BillboardSize( params[0]->get< uint32_t >() ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserPositions, BillboardsContext )
+		{
+			// Only push the block
+		}
+		CU_EndAttributePushBlock( CSCNSection::eBillboardList, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserMaterial, BillboardsContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( !blockContext->billboards )
+			{
+				CU_ParsingError( cuT( "Billboard not initialised" ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+
+				if ( auto material = getEngine( *blockContext )->tryFindMaterial( name ) )
+				{
+					blockContext->billboards->setMaterial( material );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserDimensions, BillboardsContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else
+			{
+				blockContext->billboards->setDimensions( params[0]->get< castor::Point2f >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserEnd, BillboardsContext )
+		{
+			log::info << "Loaded billboards [" << blockContext->billboards->getName() << "]" << std::endl;
+
+			if ( blockContext->ownBillboards )
+			{
+				blockContext->scene->scene->addBillboardList( blockContext->billboards->getName()
+					, blockContext->ownBillboards
+					, true );
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserPoint, BillboardsContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else
+			{
+				blockContext->billboards->addPoint( params[0]->get< castor::Point3f >() );
+			}
+		}
+		CU_EndAttribute()
 	}
 
 	//*************************************************************************************************
@@ -410,6 +540,24 @@ namespace castor3d
 	{
 		MovableObject::attachTo( node );
 		setNode( node );
+	}
+
+	void BillboardList::addParsers( castor::AttributeParsers & result )
+	{
+		using namespace castor;
+		BlockParserContextT< BillboardsContext > listCtx{ result, CSCNSection::eBillboard, CSCNSection::eScene };
+		BlockParserContextT< BillboardsContext > billboardCtx{ result, CSCNSection::eBillboardList, CSCNSection::eBillboard };
+
+		listCtx.addParser( cuT( "parent" ), billboard::parserParent, { makeParameter< ParameterType::eName >() } );
+		listCtx.addParser( cuT( "type" ), billboard::parserType, { makeParameter < ParameterType::eCheckedText, BillboardType >() } );
+		listCtx.addParser( cuT( "size" ), billboard::parserSize, { makeParameter < ParameterType::eCheckedText, BillboardSize >() } );
+		listCtx.addParser( cuT( "material" ), billboard::parserMaterial, { makeParameter< ParameterType::eName >() } );
+		listCtx.addParser( cuT( "dimensions" ), billboard::parserDimensions, { makeParameter< ParameterType::ePoint2F >() } );
+		listCtx.addPushParser( cuT( "positions" ), CSCNSection::eBillboardList, billboard::parserPositions );
+		listCtx.addPopParser( cuT( "}" ), billboard::parserEnd );
+
+		billboardCtx.addParser( cuT( "pos" ), billboard::parserPoint, { makeParameter< ParameterType::ePoint3F >() } );
+		billboardCtx.addDefaultPopParser();
 	}
 
 	//*************************************************************************************************

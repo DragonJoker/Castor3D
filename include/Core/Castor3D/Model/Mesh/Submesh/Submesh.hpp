@@ -4,22 +4,22 @@ See LICENSE file in root folder
 #ifndef ___C3D_Submesh_H___
 #define ___C3D_Submesh_H___
 
-#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
-#include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Render/Node/RenderNodeModule.hpp"
-#include "Castor3D/Scene/SceneModule.hpp"
-
 #include "Castor3D/Binary/BinaryModule.hpp"
 #include "Castor3D/Buffer/BufferModule.hpp"
 #include "Castor3D/Material/MaterialModule.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
 #include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Render/Node/RenderNodeModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
 #include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Buffer/ObjectBufferOffset.hpp"
 #include "Castor3D/Model/VertexGroup.hpp"
 
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 #include <CastorUtils/Graphics/BoundingSphere.hpp>
 
@@ -309,6 +309,8 @@ namespace castor3d
 		 *\param[in,out]	output	Reçoit les données de cet objet.
 		 */
 		C3D_API void cloneInto( Submesh & output )const;
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
 		/**
 		*\~english
 		*name

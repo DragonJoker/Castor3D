@@ -1,7 +1,10 @@
 #include "Castor3D/Shader/Program.hpp"
 
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 
+#include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Stream/StreamPrefixManipulators.hpp>
 
 CU_ImplementSmartPtr( castor3d, ShaderProgram )
@@ -83,6 +86,80 @@ namespace castor3d
 				states.erase( it );
 			}
 		}
+
+		static CU_ImplementAttributeParserBlock( parserComputeShader, ProgramContext )
+		{
+			blockContext->shaderStage = VK_SHADER_STAGE_COMPUTE_BIT;
+		}
+		CU_EndAttributePushBlock( CSCNSection::eShaderStage, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserShaderProgramEnd, ProgramContext )
+		{
+			if ( !blockContext->shaderProgram )
+			{
+				CU_ParsingError( cuT( "No ShaderProgram initialised." ) );
+			}
+			else
+			{
+				if ( blockContext->particleSystem )
+				{
+					blockContext->particleSystem->particleSystem->setCSUpdateProgram( blockContext->shaderProgram );
+				}
+
+				blockContext->shaderProgram = {};
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserShaderFile, ProgramContext )
+		{
+			if ( !blockContext->shaderProgram )
+			{
+				CU_ParsingError( cuT( "No ShaderProgram initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				if ( blockContext->shaderStage != VkShaderStageFlagBits( 0u ) )
+				{
+					blockContext->shaderProgram->setFile( blockContext->shaderStage
+						, context.file.getPath() / params[0]->get< castor::Path >() );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Shader not initialised" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserShaderGroupSizes, ProgramContext )
+		{
+			if ( !blockContext->shaderProgram )
+			{
+				CU_ParsingError( cuT( "No ShaderProgram initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				if ( blockContext->particleSystem
+					&& blockContext->shaderStage != VkShaderStageFlagBits( 0u ) )
+				{
+					blockContext->particleSystem->particleSystem->setCSGroupSizes( params[0]->get< castor::Point3i >() );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Shader not initialised" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
 	}
 
 	//*************************************************************************************************
@@ -142,6 +219,20 @@ namespace castor3d
 		auto it = m_module.compiled.find( stage );
 		return it != m_module.compiled.end()
 			&& !it->second.spirv.empty();
+	}
+
+	void ShaderProgram::addParsers( castor::AttributeParsers & result )
+	{
+		using namespace castor;
+		BlockParserContextT< ProgramContext > programCtx{ result, CSCNSection::eShaderProgram };
+		BlockParserContextT< ProgramContext > stageCtx{ result, CSCNSection::eShaderStage, CSCNSection::eShaderProgram };
+
+		programCtx.addPushParser( cuT( "compute_program" ), CSCNSection::eShaderStage, shdprog::parserComputeShader );
+		programCtx.addPopParser( cuT( "}" ), shdprog::parserShaderProgramEnd );
+
+		stageCtx.addParser( cuT( "file" ), shdprog::parserShaderFile, { makeParameter< ParameterType::ePath >() } );
+		stageCtx.addParser( cuT( "group_sizes" ), shdprog::parserShaderGroupSizes, { makeParameter< ParameterType::ePoint3I >() } );
+		stageCtx.addDefaultPopParser();
 	}
 
 	SpirVShader const & compileShader( RenderSystem & renderSystem

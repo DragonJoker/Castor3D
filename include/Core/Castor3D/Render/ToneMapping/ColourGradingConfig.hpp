@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "ToneMappingModule.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 
 #pragma warning( push )
 #pragma warning( disable: 4324 )

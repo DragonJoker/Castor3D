@@ -10,6 +10,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Math/Quaternion.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 #include <CastorUtils/Multithreading/SpinMutex.hpp>
@@ -134,6 +135,8 @@ namespace castor3d
 		 *\param[in]	object	L'objet à détacher
 		 */
 		C3D_API void detachObject( MovableObject const & object );
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
 		/**@}*/
 		/**
 		 *\name Children management.

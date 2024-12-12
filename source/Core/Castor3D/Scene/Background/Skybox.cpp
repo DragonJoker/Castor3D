@@ -12,10 +12,14 @@
 #include "Castor3D/Scene/Background/Visitor.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Scene/Background/Visitor.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+
+#include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
@@ -23,8 +27,6 @@
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 #include <ashespp/Shader/ShaderModule.hpp>
 #include <ashespp/Sync/Fence.hpp>
-
-#include <CastorUtils/Data/TextWriter.hpp>
 
 CU_ImplementSmartPtr( castor3d, SkyboxBackground )
 
@@ -138,6 +140,286 @@ namespace castor3d
 						? VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 						: VkImageUsageFlagBits( 0u ) ) ) };
 		}
+
+		static CU_ImplementAttributeParserBlock( parserVisible, SkyboxContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( !blockContext->skybox )
+			{
+				CU_ParsingError( cuT( "No skybox initialised." ) );
+			}
+			else
+			{
+				blockContext->skybox->setVisible( params[0]->get< bool >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserIrradiance, SkyboxContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( !blockContext->skybox )
+			{
+				CU_ParsingError( cuT( "No skybox initialised." ) );
+			}
+			else
+			{
+				blockContext->skybox->showIrradiance( params[0]->get< bool >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserEqui, SkyboxContext )
+		{
+			if ( params.size() <= 1 )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( !blockContext->skybox )
+			{
+				CU_ParsingError( cuT( "No skybox initialised." ) );
+			}
+			else
+			{
+				auto path = params[0]->get< castor::Path >();
+				auto filePath = context.file.getPath();
+
+				if ( castor::File::fileExists( filePath / path ) )
+				{
+					blockContext->skybox->setEquiTexture( filePath, path, params[1]->get< uint32_t >() );
+				}
+				else
+				{
+					blockContext->skybox.reset();
+					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					CU_ParsingError( err );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserCross, SkyboxContext )
+		{
+			if ( params.size() < 1 )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( !blockContext->skybox )
+			{
+				CU_ParsingError( cuT( "No skybox initialised." ) );
+			}
+			else
+			{
+				auto path = params[0]->get< castor::Path >();
+				auto filePath = context.file.getPath();
+
+				if ( castor::File::fileExists( filePath / path ) )
+				{
+					blockContext->skybox->setCrossTexture( filePath, path );
+				}
+				else
+				{
+					blockContext->skybox.reset();
+					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					CU_ParsingError( err );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserLeft, SkyboxContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( blockContext->skybox )
+			{
+				auto path = params[0]->get< castor::Path >();
+				auto filePath = context.file.getPath();
+
+				if ( castor::File::fileExists( filePath / path ) )
+				{
+					blockContext->skybox->setLeftImage( filePath, path );
+				}
+				else
+				{
+					blockContext->skybox.reset();
+					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					CU_ParsingError( err );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No skybox initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserRight, SkyboxContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( blockContext->skybox )
+			{
+				auto path = params[0]->get< castor::Path >();
+				auto filePath = context.file.getPath();
+
+				if ( castor::File::fileExists( filePath / path ) )
+				{
+					blockContext->skybox->setRightImage( filePath, path );
+				}
+				else
+				{
+					blockContext->skybox.reset();
+					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					CU_ParsingError( err );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No skybox initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserTop, SkyboxContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( blockContext->skybox )
+			{
+				auto path = params[0]->get< castor::Path >();
+				auto filePath = context.file.getPath();
+
+				if ( castor::File::fileExists( filePath / path ) )
+				{
+					blockContext->skybox->setTopImage( filePath, path );
+				}
+				else
+				{
+					blockContext->skybox.reset();
+					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					CU_ParsingError( err );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No skybox initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserBottom, SkyboxContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( blockContext->skybox )
+			{
+				auto path = params[0]->get< castor::Path >();
+				auto filePath = context.file.getPath();
+
+				if ( castor::File::fileExists( filePath / path ) )
+				{
+					blockContext->skybox->setBottomImage( filePath, path );
+				}
+				else
+				{
+					blockContext->skybox.reset();
+					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					CU_ParsingError( err );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No skybox initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserFront, SkyboxContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( blockContext->skybox )
+			{
+				auto path = params[0]->get< castor::Path >();
+				auto filePath = context.file.getPath();
+
+				if ( castor::File::fileExists( filePath / path ) )
+				{
+					blockContext->skybox->setFrontImage( filePath, path );
+				}
+				else
+				{
+					blockContext->skybox.reset();
+					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					CU_ParsingError( err );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No skybox initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserBack, SkyboxContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( blockContext->skybox )
+			{
+				auto path = params[0]->get< castor::Path >();
+				auto filePath = context.file.getPath();
+
+				if ( castor::File::fileExists( filePath / path ) )
+				{
+					blockContext->skybox->setBackImage( filePath, path );
+				}
+				else
+				{
+					blockContext->skybox.reset();
+					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					CU_ParsingError( err );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No skybox initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserEnd, SkyboxContext )
+		{
+			if ( blockContext->skybox )
+			{
+				log::info << "Loaded skybox" << std::endl;
+				blockContext->skybox->getScene().setBackground( castor::ptrRefCast< SceneBackground >( blockContext->skybox ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No skybox initialised" ) );
+			}
+		}
+		CU_EndAttributePop()
 	}
 
 	//************************************************************************************************
@@ -260,6 +542,24 @@ namespace castor3d
 				, folder
 				, relative ) );
 		notifyChanged();
+	}
+
+	void SkyboxBackground::addParsers( castor::AttributeParsers & result )
+	{
+		using namespace castor;
+		BlockParserContextT< SkyboxContext > context{ result, CSCNSection::eSkybox, CSCNSection::eScene };
+
+		context.addParser( cuT( "visible" ), skybox::parserVisible, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		context.addParser( cuT( "show_irradiance" ), skybox::parserIrradiance, { makeDefaultedParameter< ParameterType::eBool >( false ) } );
+		context.addParser( cuT( "equirectangular" ), skybox::parserEqui, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eUInt32 >() } );
+		context.addParser( cuT( "cross" ), skybox::parserCross, { makeParameter< ParameterType::ePath >() } );
+		context.addParser( cuT( "left" ), skybox::parserLeft, { makeParameter< ParameterType::ePath >() } );
+		context.addParser( cuT( "right" ), skybox::parserRight, { makeParameter< ParameterType::ePath >() } );
+		context.addParser( cuT( "top" ), skybox::parserTop, { makeParameter< ParameterType::ePath >() } );
+		context.addParser( cuT( "bottom" ), skybox::parserBottom, { makeParameter< ParameterType::ePath >() } );
+		context.addParser( cuT( "front" ), skybox::parserFront, { makeParameter< ParameterType::ePath >() } );
+		context.addParser( cuT( "back" ), skybox::parserBack, { makeParameter< ParameterType::ePath >() } );
+		context.addPopParser( cuT( "}" ), skybox::parserEnd );
 	}
 
 	bool SkyboxBackground::doInitialise( RenderDevice const & device )

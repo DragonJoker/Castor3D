@@ -40,6 +40,7 @@
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <CastorUtils/Design/ResourceCache.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
@@ -322,6 +323,304 @@ namespace castor3d
 			| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 			| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 			| VK_IMAGE_USAGE_STORAGE_BIT );
+
+		static CU_ImplementAttributeParserBlock( parserScene, TargetContext )
+		{
+			if ( !blockContext->renderTarget )
+			{
+				CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				ScenePtrStrMap::iterator it = getRootContext( *blockContext )->mapScenes.find( name );
+
+				if ( it != getRootContext( *blockContext )->mapScenes.end() )
+				{
+					blockContext->renderTarget->setScene( *it->second );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "No scene found with name : [" ) + name + cuT( "]." ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserCamera, TargetContext )
+		{
+			if ( !blockContext->renderTarget )
+			{
+				CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				if ( blockContext->renderTarget->getScene() )
+				{
+					auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+
+					if ( auto camera = blockContext->renderTarget->getScene()->findCamera( name ) )
+					{
+						blockContext->renderTarget->setCamera( *camera );
+					}
+					else
+					{
+						CU_ParsingError( cuT( "Camera [" ) + name + cuT( "] was not found." ) );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "No scene initialised for this window, set scene before camera." ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSize, TargetContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->size );
+
+				if ( blockContext->srgbPixelFormat != castor::PixelFormat::eUNDEFINED
+					&& blockContext->hdrPixelFormat != castor::PixelFormat::eUNDEFINED )
+				{
+					bool allowHdr = blockContext->window
+						? blockContext->window->window.allowHdr
+						: true;
+					blockContext->renderTarget = getEngine( *blockContext )->getRenderTargetCache().add( blockContext->targetType
+						, blockContext->size
+						, allowHdr ? blockContext->hdrPixelFormat : blockContext->srgbPixelFormat );
+					blockContext->renderTarget->enableFullLoading( getRootContext( *blockContext )->enableFullLoading );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserFormat, TargetContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->srgbPixelFormat );
+				blockContext->hdrPixelFormat = blockContext->srgbPixelFormat;
+
+				if ( blockContext->srgbPixelFormat < castor::PixelFormat::eD16_UNORM )
+				{
+					if ( blockContext->size != castor::Size{ 1u, 1u }
+						&& blockContext->size != castor::Size{} )
+					{
+						bool allowHdr = blockContext->window
+							? blockContext->window->window.allowHdr
+							: true;
+						blockContext->renderTarget = getEngine( *blockContext )->getRenderTargetCache().add( blockContext->targetType
+							, blockContext->size
+							, allowHdr ? blockContext->hdrPixelFormat : blockContext->srgbPixelFormat );
+						blockContext->renderTarget->enableFullLoading( getRootContext( *blockContext )->enableFullLoading );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Wrong format for colour" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSRGBFormat, TargetContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->srgbPixelFormat );
+
+				if ( blockContext->srgbPixelFormat < castor::PixelFormat::eD16_UNORM )
+				{
+					if ( blockContext->size != castor::Size{ 1u, 1u }
+						&& blockContext->size != castor::Size{}
+						&& blockContext->hdrPixelFormat != castor::PixelFormat::eUNDEFINED )
+					{
+						bool allowHdr = blockContext->window
+							? blockContext->window->window.allowHdr
+							: true;
+						blockContext->renderTarget = getEngine( *blockContext )->getRenderTargetCache().add( blockContext->targetType
+							, blockContext->size
+							, allowHdr ? blockContext->hdrPixelFormat : blockContext->srgbPixelFormat );
+						blockContext->renderTarget->enableFullLoading( getRootContext( *blockContext )->enableFullLoading );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Wrong format for colour" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserHDRFormat, TargetContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->hdrPixelFormat );
+
+				if ( blockContext->hdrPixelFormat < castor::PixelFormat::eD16_UNORM )
+				{
+					if ( blockContext->size != castor::Size{ 1u, 1u }
+						&& blockContext->size != castor::Size{}
+						&& blockContext->srgbPixelFormat != castor::PixelFormat::eUNDEFINED )
+					{
+						bool allowHdr = blockContext->window
+							? blockContext->window->window.allowHdr
+							: true;
+						blockContext->renderTarget = getEngine( *blockContext )->getRenderTargetCache().add( blockContext->targetType
+							, blockContext->size
+							, allowHdr ? blockContext->hdrPixelFormat : blockContext->srgbPixelFormat );
+						blockContext->renderTarget->enableFullLoading( getRootContext( *blockContext )->enableFullLoading );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Wrong format for colour" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserStereo, TargetContext )
+		{
+			if ( !blockContext->renderTarget )
+			{
+				CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				float rIntraOcularDistance;
+				params[0]->get( rIntraOcularDistance );
+
+				if ( rIntraOcularDistance > 0 )
+				{
+					//! blockContext->renderTarget->setStereo( true );
+					//! blockContext->renderTarget->setIntraOcularDistance( rIntraOcularDistance );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserPostEffect, TargetContext )
+		{
+			if ( !blockContext->renderTarget )
+			{
+				CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				Parameters parameters;
+
+				if ( params.size() > 1 )
+				{
+					parameters.parse( params[1]->get< castor::String >() );
+				}
+
+				castor::String name;
+				auto effect = blockContext->renderTarget->getPostEffect( params[0]->get( name ) );
+
+				if ( !effect )
+				{
+					CU_ParsingError( cuT( "PostEffect [" ) + name + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
+				}
+				else
+				{
+					effect->enable( true );
+					effect->setParameters( castor::move( parameters ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserToneMapping, TargetContext )
+		{
+			if ( !blockContext->renderTarget )
+			{
+				CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->renderTarget->setToneMappingType( params[0]->get< castor::String >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserFullLoading, TargetContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [enable] parameter." ) );
+			}
+			else
+			{
+				blockContext->renderTarget->enableFullLoading( params[0]->get< bool >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserEnd, TargetContext )
+		{
+			if ( !blockContext->renderTarget )
+			{
+				CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
+			}
+			else
+			{
+				auto target = blockContext->renderTarget;
+				log::info << "Loaded target [" << target->getName()
+					<< ", FMT(" << castor::makeString( ashes::getName( VkFormat( target->getPixelFormat() ) ) ) << ")"
+					<< ", DIM(" << target->getSize() << ")]" << std::endl;
+
+				if ( blockContext->window )
+				{
+					blockContext->window->window.renderTarget = castor::move( blockContext->renderTarget );
+				}
+				else
+				{
+					blockContext->texture->renderTarget = castor::move( blockContext->renderTarget );
+				}
+			}
+		}
+		CU_EndAttributePop()
 	}
 
 	//*********************************************************************************************
@@ -923,6 +1222,24 @@ namespace castor3d
 	crg::FramePass const & RenderTarget::createVertexTransformPass( crg::FramePassGroup & graph )
 	{
 		return getScene()->getRenderNodes().createVertexTransformPass( graph );
+	}
+
+	void RenderTarget::addParsers( castor::AttributeParsers & result )
+	{
+		using namespace castor;
+		BlockParserContextT< TargetContext > targetCtx{ result, CSCNSection::eRenderTarget };
+
+		targetCtx.addParser( cuT( "scene" ), rendtgt::parserScene, { makeParameter< ParameterType::eName >() } );
+		targetCtx.addParser( cuT( "camera" ), rendtgt::parserCamera, { makeParameter< ParameterType::eName >() } );
+		targetCtx.addParser( cuT( "size" ), rendtgt::parserSize, { makeParameter< ParameterType::eSize >() } );
+		targetCtx.addParser( cuT( "format" ), rendtgt::parserFormat, { makeParameter< ParameterType::ePixelFormat >() } );
+		targetCtx.addParser( cuT( "hdr_format" ), rendtgt::parserHDRFormat, { makeParameter< ParameterType::ePixelFormat >() } );
+		targetCtx.addParser( cuT( "srgb_format" ), rendtgt::parserSRGBFormat, { makeParameter< ParameterType::ePixelFormat >() } );
+		targetCtx.addParser( cuT( "stereo" ), rendtgt::parserStereo, { makeParameter< ParameterType::eFloat >() } );
+		targetCtx.addParser( cuT( "postfx" ), rendtgt::parserPostEffect, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
+		targetCtx.addParser( cuT( "tone_mapping" ), rendtgt::parserToneMapping, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
+		targetCtx.addParser( cuT( "enable_full_loading" ), rendtgt::parserFullLoading, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		targetCtx.addPopParser( cuT( "}" ), rendtgt::parserEnd );
 	}
 
 	void RenderTarget::doInitialise( RenderDevice const & device

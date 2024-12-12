@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Limits.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
 namespace castor3d
