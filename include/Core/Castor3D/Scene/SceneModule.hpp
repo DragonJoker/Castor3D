@@ -388,7 +388,7 @@ namespace castor3d
 		castor::Point3f position{};
 		castor::Quaternion orientation{ castor::Quaternion::identity() };
 		castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
-		bool isStatic{ true };
+		bool isStatic{ false };
 	};
 	/**
 	*\~english
