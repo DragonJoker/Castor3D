@@ -38,21 +38,6 @@ namespace c3d_assimp
 				result = *it;
 			}
 
-			if ( !result )
-			{
-				castor::String match;
-				for ( auto nodeAnim : castor::makeArrayView( animation.mChannels, animation.mNumChannels ) )
-				{
-					castor::String name = makeString( nodeAnim->mNodeName );
-					if ( nodeName.find( name ) != castor::String::npos
-						&& match.size() < name.size() )
-					{
-						result = nodeAnim;
-						match = name;
-					}
-				}
-			}
-
 			return result;
 		}
 
