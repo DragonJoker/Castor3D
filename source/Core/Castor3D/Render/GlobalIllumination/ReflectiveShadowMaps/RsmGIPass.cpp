@@ -373,8 +373,7 @@ namespace castor3d
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 	{
-		std::random_device rd;
-		std::mt19937 rng( rd() );
+		auto rng = device.renderSystem.getEngine()->createRandomEngine();
 		std::uniform_real_distribution< float > dist( 0.0f, 1.0f );
 
 		for ( auto & point : m_rsmSamplesSsbo.getData() )

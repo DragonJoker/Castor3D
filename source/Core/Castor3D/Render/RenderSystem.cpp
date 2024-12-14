@@ -535,17 +535,6 @@ namespace castor3d
 
 			return result;
 		}
-
-		static std::default_random_engine createRandomEngine( bool disableRandomSeed )
-		{
-			if ( disableRandomSeed )
-			{
-				return std::default_random_engine{};
-			}
-
-			std::random_device r;
-			return std::default_random_engine{ r() };
-		}
 	}
 
 	//*************************************************************************
@@ -1058,7 +1047,7 @@ namespace castor3d
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, cuT( "C3D_RandomStorage" ) );
-		auto rddevice = rendsys::createRandomEngine( !getEngine()->isRandomisationEnabled() );
+		auto rddevice = getEngine()->createRandomEngine();
 		std::uniform_real_distribution< float > distribution{ -1.0f, 1.0f };
 
 		if ( auto buffer = m_randomStorage->lock( 0u
