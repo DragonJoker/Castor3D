@@ -564,7 +564,7 @@ namespace castor3d
 			, total );
 		uint32_t index{};
 
-		for ( auto const & [animName, animObjects] : anims )
+		for ( auto & [animName, animObjects] : anims )
 		{
 			++index;
 			castor3d::stepProgressBarLocal( m_file->getProgressBar()
@@ -574,16 +574,22 @@ namespace castor3d
 			{
 				auto & mesh = *geometry->getMesh();
 				auto node = geometry->getParent();
-				auto nodeIt = std::find( animObjects.nodes.begin()
-					, animObjects.nodes.end()
-					, node );
+				castor::Vector< SceneNode * > nodes;
 
-				while ( node && nodeIt == animObjects.nodes.end() )
+				while ( node )
 				{
-					node = node->getParent();
-					nodeIt = std::find( animObjects.nodes.begin()
+					auto nodeIt = std::find( animObjects.nodes.begin()
 						, animObjects.nodes.end()
 						, node );
+
+					if ( nodeIt != animObjects.nodes.end() )
+					{
+						nodes.push_back( *nodeIt );
+						// Prevent processing this node twice
+						animObjects.nodes.erase( nodeIt );
+					}
+
+					node = node->getParent();
 				}
 
 				auto meshIt = std::find( animObjects.meshes.begin()
@@ -595,9 +601,43 @@ namespace castor3d
 						, mesh.getSkeleton() )
 					: animObjects.skeletons.end() );
 
-				if ( nodeIt != animObjects.nodes.end()
+				if ( !nodes.empty()
 					|| meshIt != animObjects.meshes.end()
 					|| skelIt != animObjects.skeletons.end() )
+				{
+					auto animGroup = ( scene.hasAnimatedObjectGroup( name )
+						? scene.findAnimatedObjectGroup( name )
+						: scene.addNewAnimatedObjectGroup( name, scene ) );
+
+					if ( animGroup->addAnimation( animName ) )
+					{
+						animGroup->setAnimationLooped( animName, true );
+					}
+
+					for ( auto animNode : nodes )
+					{
+						animGroup->addObject( *animNode, animNode->getName() );
+					}
+
+					if ( meshIt != animObjects.meshes.end() )
+					{
+						animGroup->addObject( **meshIt, *geometry, name );
+					}
+
+					if ( skelIt != animObjects.skeletons.end() )
+					{
+						animGroup->addObject( **skelIt, mesh, *geometry, name );
+					}
+				}
+			}
+
+			for ( auto & [name, node] : scene.getSceneNodeCache() )
+			{
+				auto nodeIt = std::find( animObjects.nodes.begin()
+					, animObjects.nodes.end()
+					, node.get() );
+
+				if ( nodeIt != animObjects.nodes.end() )
 				{
 					auto animGroup = ( scene.hasAnimatedObjectGroup( name )
 						? scene.findAnimatedObjectGroup( name )
@@ -611,16 +651,6 @@ namespace castor3d
 					if ( nodeIt != animObjects.nodes.end() )
 					{
 						animGroup->addObject( **nodeIt, ( *nodeIt )->getName() );
-					}
-
-					if ( meshIt != animObjects.meshes.end() )
-					{
-						animGroup->addObject( **meshIt, *geometry, name );
-					}
-
-					if ( skelIt != animObjects.skeletons.end() )
-					{
-						animGroup->addObject( **skelIt, mesh, *geometry, name );
 					}
 				}
 			}
