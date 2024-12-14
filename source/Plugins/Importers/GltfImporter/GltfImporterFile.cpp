@@ -550,17 +550,27 @@ namespace c3d_gltf
 		static bool nodeHasAttachment( GltfImporterFile const & file
 			, fastgltf::Node const & node )
 		{
-			if ( node.cameraIndex || node.meshIndex || node.lightIndex || node.skinIndex || !node.instancingAttributes.empty() )
-			{
-				return true;
-			}
+			return ( node.cameraIndex || node.meshIndex || node.lightIndex || node.skinIndex || !node.instancingAttributes.empty() )
+				|| std::any_of( node.children.begin()
+					, node.children.end()
+					, [&file]( size_t lookup )
+					{
+						return nodeHasAttachment( file, file.getAsset().nodes[lookup] );
+					} );
+		}
 
-			return std::any_of( node.children.begin()
-				, node.children.end()
-				, [&file]( size_t lookup )
-				{
-					return nodeHasAttachment( file, file.getAsset().nodes[lookup] );
-				} );
+		static bool nodeHasSkeleton( GltfImporterFile const & file
+			, size_t nodeIndex
+			, fastgltf::Node const & node
+			, castor::Vector< size_t > const & skinsRootNodes )
+		{
+			return skinsRootNodes.end() != std::find( skinsRootNodes.begin(), skinsRootNodes.end(), nodeIndex )
+				|| std::any_of( node.children.begin()
+					, node.children.end()
+					, [&file, &skinsRootNodes]( size_t lookup )
+					{
+						return nodeHasSkeleton( file, lookup, file.getAsset().nodes[lookup], skinsRootNodes );
+					} );
 		}
 	}
 
@@ -1374,6 +1384,7 @@ namespace c3d_gltf
 							, m_adapter );
 					}
 
+					result = result || file::nodeHasSkeleton( *this, nodeIndex, node, skinsRootNodes );
 					return std::make_tuple( parentInstanceCount, result, isSkeletonNode );
 				} );
 		}
