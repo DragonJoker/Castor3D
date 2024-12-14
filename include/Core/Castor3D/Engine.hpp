@@ -56,6 +56,7 @@ See LICENSE file in root folder
 
 #include <ShaderAST/ShaderAllocator.hpp>
 
+#include <random>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -762,6 +763,13 @@ namespace castor3d
 		 *\param[in]	renderPassType	Le nom du type de la passe.
 		 */
 		C3D_API void unregisterRenderPassType( castor::String const & renderPassType );
+		/**
+		 *\~english
+		 *\return		A random engine, with a random seed if enabled.
+		 *\~french
+		 *\return		Un random engine, avec graine aléatoir si activé.
+		 */
+		C3D_API std::default_random_engine createRandomEngine();
 		/**
 		 *\~english
 		 *\brief		Retrieves plug-ins path

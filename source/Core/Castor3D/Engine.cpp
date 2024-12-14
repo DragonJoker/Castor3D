@@ -1358,6 +1358,17 @@ namespace castor3d
 		}
 	}
 
+	std::default_random_engine Engine::createRandomEngine()
+	{
+		if ( !isRandomisationEnabled() )
+		{
+			return std::default_random_engine{};
+		}
+
+		std::random_device r;
+		return std::default_random_engine{ r() };
+	}
+
 	bool Engine::isCleaned()const noexcept
 	{
 		return m_cleaned;
