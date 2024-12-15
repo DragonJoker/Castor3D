@@ -7,27 +7,21 @@ CU_ImplementSmartPtr( castor3d, AnimationInstance )
 
 namespace castor3d
 {
-	AnimationInstance::AnimationInstance( AnimationInstance && rhs )noexcept
-		: castor::OwnedBy< AnimatedObject >{ *rhs.getOwner() }
-		, m_animation{ rhs.m_animation }
-		, m_looped{ rhs.m_looped.load() }
-	{
-	}
-
 	AnimationInstance::AnimationInstance( AnimatedObject & object
-		, Animation const & animation
+		, Animation & animation
 		, bool looped )
 		: castor::OwnedBy< AnimatedObject >{ object }
-		, m_animation{ animation }
+		, m_animation{ &animation }
 		, m_looped{ looped }
+		, m_totalTime{ m_animation->getLength() }
 	{
 	}
 
 	void AnimationInstance::update( castor::Milliseconds const & elapsed )
 	{
 		auto length = m_stoppingPoint == 0_ms
-			? m_animation.getLength()
-			: std::min( m_stoppingPoint, m_animation.getLength() );
+			? m_totalTime
+			: std::min( m_stoppingPoint, m_totalTime );
 		double scale = m_scale;
 
 		if ( m_state != AnimationState::eStopped && length > 0_ms )
@@ -96,6 +90,11 @@ namespace castor3d
 			m_state = AnimationState::eStopped;
 			m_currentTime = m_startingPoint;
 		}
+	}
+
+	void AnimationInstance::setTotalLength( castor::Milliseconds const & time )
+	{
+		m_totalTime = time;
 	}
 
 	//*************************************************************************************************

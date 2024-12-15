@@ -20,9 +20,9 @@ namespace castor3d
 		 **/
 		/**@{*/
 		C3D_API AnimationInstance & operator=( AnimationInstance && rhs )noexcept = delete;
-		C3D_API AnimationInstance( AnimationInstance const & rhs ) = delete;
+		C3D_API AnimationInstance( AnimationInstance const & rhs ) = default;
 		C3D_API AnimationInstance & operator=( AnimationInstance const & rhs ) = delete;
-		C3D_API AnimationInstance( AnimationInstance && rhs )noexcept;
+		C3D_API AnimationInstance( AnimationInstance && rhs )noexcept = default;
 		/**@}*/
 		/**
 		 *\~english
@@ -37,7 +37,7 @@ namespace castor3d
 		 *\param[in]	looped		L'animation tourne-t-elle en boucle ou pas.
 		 */
 		C3D_API AnimationInstance( AnimatedObject & object
-			, Animation const & animation
+			, Animation & animation
 			, bool looped = false );
 		/**
 		 *\~english
@@ -76,6 +76,13 @@ namespace castor3d
 		 *\brief		Stoppe l'animation.
 		 */
 		C3D_API void stop();
+		/**
+		 *\~english
+		 *\brief		Sets the animation effective length.
+		 *\~french
+		 *\brief		Définit le temps effectif de l'animation.
+		 */
+		C3D_API void setTotalLength( castor::Milliseconds const & time );
 		/**
 		 *\~english
 		 *\return		The animation state.
@@ -212,9 +219,9 @@ namespace castor3d
 		 *\~french
 		 *\return		L'animation.
 		 */
-		Animation const & getAnimation()const
+		Animation & getAnimation()const
 		{
-			return m_animation;
+			return *m_animation;
 		}
 
 	private:
@@ -229,7 +236,7 @@ namespace castor3d
 	protected:
 		//!\~english	The animation.
 		//!\~french		L'animation.
-		Animation const & m_animation;
+		Animation * m_animation;
 		//!\~english	The animation time scale.
 		//!\~french		Le multiplicateur de temps.
 		float m_scale{ 1.0f };
@@ -245,6 +252,9 @@ namespace castor3d
 		//!\~english	The current playing time.
 		//!\~french		L'index de temps courant.
 		castor::Milliseconds m_currentTime{ 0 };
+		//!\~english	The animation total time.
+		//!\~french		La durée totale de l'animation.
+		castor::Milliseconds m_totalTime{ 0 };
 		//!\~english	The current state of the animation.
 		//!\~french		L'état actuel de l'animation.
 		AnimationState m_state{ AnimationState::eStopped };

@@ -1,5 +1,6 @@
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 
+#include "Castor3D/Animation/Animation.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
@@ -495,7 +496,7 @@ namespace castor3d
 				}
 			}
 
-			for ( auto const & [nm, group] : m_animations )
+			for ( auto & [nm, group] : m_animations )
 			{
 				obj->addAnimation( nm );
 				auto & animation = obj->getAnimation( nm );
@@ -503,6 +504,16 @@ namespace castor3d
 				animation.setScale( group.scale );
 				animation.setStartingPoint( group.startingPoint );
 				animation.setStoppingPoint( group.stoppingPoint );
+
+				if ( group.totalTime < animation.getAnimation().getLength() )
+				{
+					group.totalTime = animation.getAnimation().getLength();
+
+					for ( auto & [_, groupObject] : m_objects )
+					{
+						groupObject->getAnimation( nm ).setTotalLength( group.totalTime );
+					}
+				}
 			}
 		}
 
