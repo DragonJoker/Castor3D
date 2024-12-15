@@ -60,6 +60,16 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\param[in]	timeIndex	The start time index.
+		 *\~french
+		 *\param[in]	timeIndex	Le temps de départ.
+		 */
+		void setTimeIndex( castor::Milliseconds const & timeIndex )
+		{
+			m_timeIndex = timeIndex;
+		}
+		/**
+		 *\~english
 		 *\return		The keyframe's bounding box.
 		 *\~french
 		 *\return		La bounding box de la keyframe.

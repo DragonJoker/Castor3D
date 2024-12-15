@@ -130,6 +130,7 @@ namespace castor3d
 		castor::Milliseconds startingPoint{};
 		castor::Milliseconds stoppingPoint{};
 		InterpolatorType interpolation{ InterpolatorType::eLinear };
+		castor::Milliseconds totalTime{};
 	};
 	using GroupAnimationMap = castor::StringMap< GroupAnimation >;
 

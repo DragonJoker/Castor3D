@@ -153,7 +153,7 @@ namespace c3d_gltf
 				auto translate = interpolate( time, pointInterpolator, translates, defaultTransform.translate );
 				auto rotate = interpolate( time, quatInterpolator, rotates, defaultTransform.rotate );
 				auto scale = interpolate( time, pointInterpolator, scales, defaultTransform.scale );
-				fillKeyFrame( getKeyFrame( time - minTime, animation, keyframes )
+				fillKeyFrame( getKeyFrame( time, animation, keyframes )
 					, translate
 					, rotate
 					, scale );
