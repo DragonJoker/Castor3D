@@ -122,9 +122,10 @@ namespace c3d_gltf
 		}
 
 		static castor::Vector< castor3d::NodeTransform > listInstances( fastgltf::Asset const & impAsset
-			, fastgltf::Node const & impNode
-			, CompressedBufferDataAdapter const & adapter )
+			, CompressedBufferDataAdapter const & adapter
+			, GltfNodeData const & nodeData )
 		{
+			auto const & impNode = *nodeData.node;
 			castor::Point3fArray translations;
 			castor::QuaternionArray rotations;
 			castor::Point3fArray scalings;
@@ -414,7 +415,7 @@ namespace c3d_gltf
 		}
 
 		static void listNodeMeshes( GltfImporterFile const & file
-			, castor::Map< size_t, castor::Matrix4x4f > const & cumulativeTransforms
+			, castor::Vector< castor::Matrix4x4f > const & cumulativeTransforms
 			, castor::StringMap< GltfMeshData > const & meshes
 			, size_t meshIndex
 			, castor::Matrix4x4f const & matrix
@@ -435,8 +436,7 @@ namespace c3d_gltf
 						, nodeArray.end()
 						, [&cumulativeTransforms, &matrix]( size_t lookup )
 						{
-							auto lookupIt = cumulativeTransforms.find( lookup );
-							return lookupIt->second == matrix;
+							return cumulativeTransforms[lookup] == matrix;
 						} );
 
 					if ( nodeIt == nodeArray.end() )
@@ -452,125 +452,20 @@ namespace c3d_gltf
 			}
 		}
 
-		static bool hasNonSkinnedData( GltfImporterFile const & file
-			, fastgltf::Node const & node )
+		static bool hasNonSkinnedData( GltfSceneData const & sceneData
+			, GltfNodeData const & nodeData )
 		{
-			if ( node.cameraIndex || node.meshIndex || node.lightIndex || !node.instancingAttributes.empty() )
+			if ( nodeData.isCamera || nodeData.node->lightIndex || !nodeData.meshes.empty() )
 			{
 				return true;
 			}
 
-			return std::any_of( node.children.begin()
-				, node.children.end()
-				, [&file]( size_t lookup )
+			return std::any_of( nodeData.node->children.begin()
+				, nodeData.node->children.end()
+				, [&sceneData]( size_t lookup )
 				{
-					return hasNonSkinnedData( file, file.getAsset().nodes[lookup] );
+					return hasNonSkinnedData( sceneData, sceneData.nodes[lookup] );
 				} );
-		}
-
-		static void addNode( GltfImporterFile const & file
-			, GltfNodeData nodeData
-			, bool isSkeletonNode
-			, size_t parentIndex
-			, size_t & parentInstanceCount
-			, castor::Vector< GltfNodeData > & nodes
-			, castor::Vector< GltfNodeData > & skeletonNodes
-			, CompressedBufferDataAdapter const & adapter )
-		{
-			if ( isSkeletonNode )
-			{
-				parentInstanceCount = 1u;
-				skeletonNodes.push_back( nodeData );
-			}
-
-			if ( !isSkeletonNode
-				|| hasNonSkinnedData( file, *nodeData.node ) )
-			{
-				auto & asset = file.getAsset();
-				auto transforms = file::listInstances( asset, *nodeData.node, adapter );
-
-				if ( !transforms.empty() )
-				{
-					auto instanceCount = transforms.size();
-
-					if ( parentInstanceCount > 1u )
-					{
-						size_t index{};
-
-						for ( size_t i = 0u; i < instanceCount; ++i )
-						{
-							for ( size_t j = 0u; j < parentInstanceCount; ++j )
-							{
-								nodeData.parent = parentIndex < asset.nodes.size() ? file.getNodeName( parentIndex, j + 1u ) : castor::String{};
-								nodeData.name = file.getNodeName( nodeData.index, index + 1u );
-								nodeData.instance = index + 1u;
-								nodeData.instanceCount = parentInstanceCount * instanceCount;
-								nodeData.transform = transforms[i];
-								nodes.push_back( nodeData );
-								++index;
-							}
-						}
-					}
-					else
-					{
-						for ( size_t i = 0u; i < instanceCount; ++i )
-						{
-							nodeData.parent = parentIndex < asset.nodes.size() ? file.getNodeName( parentIndex, 0u ) : castor::String{};
-							nodeData.name = file.getNodeName( nodeData.index, i + 1u );
-							nodeData.instance = i + 1u;
-							nodeData.instanceCount = instanceCount;
-							nodeData.transform = castor::move( transforms[i] );
-							nodes.push_back( nodeData );
-						}
-					}
-
-					parentInstanceCount *= instanceCount;
-				}
-				else
-				{
-					if ( parentInstanceCount > 1u )
-					{
-						for ( size_t i = 0u; i < parentInstanceCount; ++i )
-						{
-							nodeData.parent = parentIndex < asset.nodes.size() ? file.getNodeName( parentIndex, i + 1u ) : castor::String{};
-							nodeData.name = file.getNodeName( nodeData.index, i + 1u );
-							nodeData.instance = i + 1u;
-							nodeData.instanceCount = parentInstanceCount;
-							nodes.push_back( nodeData );
-						}
-					}
-					else
-					{
-						nodes.push_back( castor::move( nodeData ) );
-					}
-				}
-			}
-		}
-
-		static bool nodeHasAttachment( GltfImporterFile const & file
-			, fastgltf::Node const & node )
-		{
-			return ( node.cameraIndex || node.meshIndex || node.lightIndex || node.skinIndex || !node.instancingAttributes.empty() )
-				|| std::any_of( node.children.begin()
-					, node.children.end()
-					, [&file]( size_t lookup )
-					{
-						return nodeHasAttachment( file, file.getAsset().nodes[lookup] );
-					} );
-		}
-
-		static bool nodeHasSkeleton( GltfImporterFile const & file
-			, size_t nodeIndex
-			, fastgltf::Node const & node
-			, castor::Vector< size_t > const & skinsRootNodes )
-		{
-			return skinsRootNodes.end() != std::find( skinsRootNodes.begin(), skinsRootNodes.end(), nodeIndex )
-				|| std::any_of( node.children.begin()
-					, node.children.end()
-					, [&file, &skinsRootNodes]( size_t lookup )
-					{
-						return nodeHasSkeleton( file, lookup, file.getAsset().nodes[lookup], skinsRootNodes );
-					} );
 		}
 	}
 
@@ -896,7 +791,12 @@ namespace c3d_gltf
 			, m_sceneData.nodes.end()
 			, [&name]( GltfNodeData const & lookup )
 			{
-				return lookup.name == name;
+				return lookup.instances.end() != std::find_if( lookup.instances.begin()
+					, lookup.instances.end()
+					, [&name]( auto const & nodeAndTransform )
+					{
+						return nodeAndTransform.first.name == name;
+					} );
 			} );
 		CU_Require( it != m_sceneData.nodes.end() );
 		return it->index;
@@ -906,12 +806,17 @@ namespace c3d_gltf
 	{
 		auto it = std::find_if( m_sceneData.skeletonNodes.begin()
 			, m_sceneData.skeletonNodes.end()
-			, [&name]( GltfNodeData const & lookup )
+			, [&name]( GltfNodeData const * lookup )
 			{
-				return lookup.name == name;
+				return lookup->instances.end() != std::find_if( lookup->instances.begin()
+					, lookup->instances.end()
+					, [&name]( auto const & nodeAndTransform )
+					{
+						return nodeAndTransform.first.name == name;
+					} );
 			} );
 		CU_Require( it != m_sceneData.skeletonNodes.end() );
-		return it->index;
+		return ( *it )->index;
 	}
 
 	size_t GltfImporterFile::getMeshIndex( castor::String const & name, uint32_t submeshIndex )const
@@ -970,7 +875,12 @@ namespace c3d_gltf
 			, m_sceneData.nodes.end()
 			, [&node]( GltfNodeData const & lookup )
 			{
-				return node.getName() == lookup.name;
+				return lookup.instances.end() != std::find_if( lookup.instances.begin()
+					, lookup.instances.end()
+					, [&node]( auto const & nodeAndTransform )
+					{
+						return nodeAndTransform.first.name == node.getName();
+					} );
 			} );
 
 		if ( it != m_sceneData.nodes.end() )
@@ -986,9 +896,9 @@ namespace c3d_gltf
 	{
 		return std::any_of( m_sceneData.skeletonNodes.begin()
 			, m_sceneData.skeletonNodes.end()
-			, [nodeIndex]( GltfNodeData const & lookup )
+			, [nodeIndex]( GltfNodeData const * lookup )
 			{
-				return lookup.index == nodeIndex;
+				return lookup->index == nodeIndex;
 			} );
 	}
 
@@ -1045,7 +955,13 @@ namespace c3d_gltf
 		{
 			for ( auto & nodeData : m_sceneData.nodes )
 			{
-				result.push_back( nodeData );
+				if ( file::hasNonSkinnedData( m_sceneData, nodeData ) )
+				{
+					for ( auto const & [instance, _] : nodeData.instances )
+					{
+						result.emplace_back( instance );
+					}
+				}
 			}
 		}
 
@@ -1074,20 +990,21 @@ namespace c3d_gltf
 			{
 				for ( auto & meshData : nodeData.meshes )
 				{
-					if ( nodeData.instanceCount <= 1u || nodeData.instance != 0u )
+					auto it = std::find_if( m_sceneData.meshes.begin()
+						, m_sceneData.meshes.end()
+						, [meshData]( castor::StringMap< GltfMeshData >::value_type const & lookup )
+						{
+							return meshData == &lookup.second;
+						} );
+					CU_Require( it != m_sceneData.meshes.end() );
+					auto meshName = it->first;
+
+					for ( auto & [nodeInstance, transform] : nodeData.instances )
 					{
-						auto it = std::find_if( m_sceneData.meshes.begin()
-							, m_sceneData.meshes.end()
-							, [meshData]( castor::StringMap< GltfMeshData >::value_type const & lookup )
-							{
-								return meshData == &lookup.second;
-							} );
-						CU_Require( it != m_sceneData.meshes.end() );
-						auto meshName = it->first;
-						auto name = nodeData.name == meshName
-							? nodeData.name
-							: nodeData.name + cuT( "_" ) + meshName;
-						result.emplace_back( name, nodeData.name, it->first );
+						auto name = nodeInstance.name == meshName
+							? nodeInstance.name
+							: nodeInstance.name + cuT( "_" ) + meshName;
+						result.emplace_back( name, nodeInstance.name, it->first );
 					}
 				}
 			}
@@ -1175,7 +1092,12 @@ namespace c3d_gltf
 			, m_sceneData.nodes.end()
 			, [&node]( GltfNodeData const & lookup )
 			{
-				return node.getName() == lookup.name;
+				return lookup.instances.end() != std::find_if( lookup.instances.begin()
+					, lookup.instances.end()
+					, [&node]( auto const & nodeAndTransform )
+					{
+						return nodeAndTransform.first.name == node.getName();
+					} );
 			} );
 
 		if ( it != m_sceneData.nodes.end() )
@@ -1213,10 +1135,12 @@ namespace c3d_gltf
 
 	uint32_t GltfImporterFile::countAllSkeletonAnimations()const
 	{
-		uint32_t result{};
+		castor::Set< castor::String > result;
 
 		if ( isValid() )
 		{
+			size_t index{};
+
 			for ( auto & animation : m_asset->animations )
 			{
 				for ( auto & channel : animation.channels )
@@ -1227,13 +1151,15 @@ namespace c3d_gltf
 						&& channel.nodeIndex
 						&& isSkeletonNode( *channel.nodeIndex ) )
 					{
-						++result;
+						result.insert( getAnimationName( index ) );
 					}
 				}
+
+				++index;
 			}
 		}
 
-		return result;
+		return uint32_t( result.size() );
 	}
 
 	uint32_t GltfImporterFile::countAllSceneNodeAnimations()const
@@ -1299,8 +1225,7 @@ namespace c3d_gltf
 
 	void GltfImporterFile::doPrelistNodes()
 	{
-		castor::Map< GltfMeshData const *, castor::Vector< size_t > > processedMeshes;
-		castor::Map< size_t, castor::Matrix4x4f > cumulativeTransforms;
+		castor::Vector< castor::Matrix4x4f > cumulativeTransforms;
 		castor::Vector< size_t > skinsRootNodes;
 
 		for ( auto & skin : m_asset->skins )
@@ -1309,84 +1234,141 @@ namespace c3d_gltf
 			skinsRootNodes.insert( skinsRootNodes.end(), skinRootNodes.begin(), skinRootNodes.end() );
 		}
 
+		// First, list all nodes, with their own transforms and instances
+		m_sceneData.nodes.reserve( m_asset->nodes.size() );
+		cumulativeTransforms.resize( m_asset->nodes.size() );
+		size_t nodeIndex{};
+		for ( auto & node : m_asset->nodes )
+		{
+			auto transform = convert( node.transform );
+
+			if ( node.cameraIndex )
+			{
+				transform.rotate *= castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 1.0f, 0.0f }, castor::Angle::fromDegrees( 180.0f ) );
+			}
+
+			auto & nodeData = m_sceneData.nodes.emplace_back( node.cameraIndex.has_value()
+				, file::isSkeletonNode( *m_asset, m_asset->skins, nodeIndex, skinsRootNodes )
+				, nodeIndex
+				, &node );
+			castor::matrix::setTransform( cumulativeTransforms[nodeIndex]
+				, transform.translate, transform.scale, transform.rotate );
+			nodeData.instances.emplace_back( NodeData{ castor::String{}, getNodeName( nodeIndex, 0u ), nodeData.isCamera }, transform );
+			auto instances = file::listInstances( *m_asset, m_adapter, nodeData );
+
+			// List this node's instances.
+			size_t instanceIndex{ 1u };
+			for ( auto & instanceTransform : instances )
+			{
+				nodeData.instances.emplace_back( NodeData{ castor::String{}
+						, getNodeName( nodeIndex, instanceIndex )
+						, nodeData.isCamera }
+					, castor::move( instanceTransform ) );
+				++instanceIndex;
+			}
+
+			++nodeIndex;
+		}
+
+		// Then build the hierarchy, updating instances when needed
 		for ( auto & sceneIndex : m_sceneIndices )
 		{
-			file::parseNodes( m_asset->scenes[sceneIndex].nodeIndices
-				, m_asset->nodes
-				, [this, &processedMeshes, &cumulativeTransforms, &skinsRootNodes]( fastgltf::Node const & node, size_t nodeIndex, size_t parentIndex, size_t parentInstanceCount, bool isParentSkeletonNode )
+			castor::Vector< size_t > work;
+			for ( auto index : m_asset->scenes[sceneIndex].nodeIndices )
+				work.emplace_back( index );
+
+			while ( !work.empty() )
+			{
+				auto parentNodeIndex = work.back();
+				work.pop_back();
+				auto const & parentNodeData = m_sceneData.nodes[parentNodeIndex];
+
+				for ( auto childNodeIndex : m_asset->nodes[parentNodeIndex].children )
 				{
-					auto transform = convert( node.transform );
+					work.push_back( childNodeIndex );
+					auto & childNodeData = m_sceneData.nodes[childNodeIndex];
+					childNodeData.isSkeleton = childNodeData.isSkeleton || parentNodeData.isSkeleton;
+					cumulativeTransforms[childNodeIndex] = cumulativeTransforms[parentNodeIndex] * cumulativeTransforms[childNodeIndex];
 
-					if ( node.cameraIndex )
+					// Build child instances
+					size_t parentInstanceIndex{};
+					auto childInstances = childNodeData.instances;
+					childNodeData.instances.clear();
+					for ( size_t i = 0u; i < parentNodeData.instances.size(); ++i )
 					{
-						transform.rotate *= castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 1.0f, 0.0f }, castor::Angle::fromDegrees( 180.0f ) );
-					}
-
-					GltfNodeData nodeData{ parentIndex < m_asset->nodes.size() ? getNodeName( parentIndex, 0u ) : castor::String{}
-						, getNodeName( nodeIndex, 0u )
-						, node.cameraIndex.has_value()
-						, nodeIndex
-						, 0u
-						, 1u
-						, transform
-						, &node };
-					auto itTransform = cumulativeTransforms.find( parentIndex );
-					auto matrix = itTransform != cumulativeTransforms.end()
-						? itTransform->second
-						: castor::Matrix4x4f{ 1.0f };
-
-					castor::matrix::transform( matrix, transform.translate, transform.scale, transform.rotate );
-
-					cumulativeTransforms.emplace( nodeIndex, matrix );
-					bool isSkeletonNode = isParentSkeletonNode
-						|| file::isSkeletonNode( *m_asset, m_asset->skins, nodeData.index, skinsRootNodes );
-
-					// List scene node animations
-					if ( !isSkeletonNode )
-					{
-						file::listDataAnimations( *this, nodeData );
-					}
-
-					// List scene node meshes
-					if ( node.meshIndex )
-					{
-						file::listNodeMeshes( *this, cumulativeTransforms, m_sceneData.meshes, *node.meshIndex, matrix
-							, processedMeshes, nodeData );
-					}
-
-					if ( node.lightIndex )
-					{
-						if ( auto lightIndex = *node.lightIndex;
-							lightIndex < m_asset->lights.size() )
+						size_t childInstanceIndex{};
+						for ( auto & childInstance : childInstances )
 						{
-							auto light = m_asset->lights[lightIndex];
-							auto lightName = getLightName( lightIndex );
-							lightName = lightName + cuT( "." ) + nodeData.name;
-							m_sceneData.lights.emplace_back( lightName
-								, ( light.type == fastgltf::LightType::Directional
-									? castor3d::LightType::eDirectional
-									: ( light.type == fastgltf::LightType::Point
-										? castor3d::LightType::ePoint
-										: castor3d::LightType::eSpot ) )
-								, uint32_t( lightIndex )
-								, nodeData.name );
+							childNodeData.instances.emplace_back( NodeData{ getNodeName( parentNodeIndex, parentInstanceIndex )
+									, getNodeName( childNodeIndex, childInstanceIndex )
+									, childInstance.first.isCamera }
+								, childInstance.second );
+							++childInstanceIndex;
 						}
+						++parentInstanceIndex;
 					}
+				}
+			}
+		}
 
-					bool result = isSkeletonNode
-						|| file::nodeHasAttachment( *this, node );
+		// List their attached objects
+		castor::Map< GltfMeshData const *, castor::Vector< size_t > > processedMeshes;
+		nodeIndex = {};
+		for ( auto node : m_asset->nodes )
+		{
+			auto & nodeData = m_sceneData.nodes[nodeIndex];
 
-					if ( result )
+			//
+			if ( node.meshIndex )
+			{
+				file::listNodeMeshes( *this, cumulativeTransforms, m_sceneData.meshes, *node.meshIndex, cumulativeTransforms[nodeIndex]
+					, processedMeshes, nodeData );
+			}
+
+			// Check for light
+			if ( node.lightIndex )
+			{
+				if ( auto lightIndex = *node.lightIndex;
+					lightIndex < m_asset->lights.size() )
+				{
+					auto light = m_asset->lights[lightIndex];
+					auto lightName = getLightName( lightIndex );
+
+					for ( auto & nodeInstance : nodeData.instances )
 					{
-						file::addNode( *this, castor::move( nodeData ), isSkeletonNode, parentIndex
-							, parentInstanceCount
-							, m_sceneData.nodes, m_sceneData.skeletonNodes
-							, m_adapter );
+						auto nodeName = nodeInstance.first.name;
+						lightName = lightName + cuT( "." ) + nodeName;
+						m_sceneData.lights.emplace_back( lightName
+							, ( light.type == fastgltf::LightType::Directional
+								? castor3d::LightType::eDirectional
+								: ( light.type == fastgltf::LightType::Point
+									? castor3d::LightType::ePoint
+									: castor3d::LightType::eSpot ) )
+							, uint32_t( lightIndex )
+							, nodeName );
 					}
+				}
+			}
 
-					result = result || file::nodeHasSkeleton( *this, nodeIndex, node, skinsRootNodes );
-					return std::make_tuple( parentInstanceCount, result, isSkeletonNode );
-				} );
+			if ( nodeData.isSkeleton )
+			{
+				m_sceneData.skeletonNodes.emplace_back( &nodeData );
+			}
+			else
+			{
+				file::listDataAnimations( *this, nodeData );
+			}
+
+			++nodeIndex;
+		}
+
+		// Fill helper containers.
+		for ( auto & nodeData : m_sceneData.nodes )
+		{
+			for ( auto & [nodeInstance, transform]: nodeData.instances )
+			{
+				m_nodes.emplace( nodeInstance.name, &transform );
+			}
 		}
 	}
 

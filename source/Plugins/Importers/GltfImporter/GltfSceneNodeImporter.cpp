@@ -15,21 +15,16 @@ namespace c3d_gltf
 	{
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto name = node.getName();
-		auto it = std::find_if( file.getNodes().begin()
-			, file.getNodes().end()
-			, [&name]( GltfNodeData const & lookup )
-			{
-				return name == lookup.name;
-			} );
+		auto it = file.getNodes().find( name );
 
 		if ( it == file.getNodes().end() )
 		{
 			return false;
 		}
 
-		node.setPosition( it->transform.translate );
-		node.setScale( it->transform.scale );
-		node.setOrientation( it->transform.rotate );
+		node.setPosition( it->second->translate );
+		node.setScale( it->second->scale );
+		node.setOrientation( it->second->rotate );
 
 		return true;
 	}

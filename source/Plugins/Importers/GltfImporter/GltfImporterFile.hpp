@@ -102,34 +102,25 @@ namespace c3d_gltf
 	};
 
 	struct GltfNodeData
-		: castor3d::ImporterFile::NodeData
 	{
-		GltfNodeData( castor::String pparent
-			, castor::String pname
-			, bool pisCamera
-			, size_t pindex
-			, size_t pinstance
-			, size_t pinstanceCount
-			, castor3d::NodeTransform ptransform
-			, fastgltf::Node const * pnode )
-			: NodeData{ castor::move( pparent )
-				, castor::move( pname )
-				, pisCamera }
+		GltfNodeData( bool pisCamera = {}
+			, bool pisSkeleton = {}
+			, size_t pindex = {}
+			, fastgltf::Node const * pnode = {} )
+			: isCamera{ pisCamera }
+			, isSkeleton{ pisSkeleton }
 			, index{ pindex }
-			, instance{ pinstance }
-			, instanceCount{ pinstanceCount }
-			, transform{ castor::move( ptransform ) }
 			, node{ pnode }
 		{
 		}
 
+		bool isCamera;
+		bool isSkeleton;
 		size_t index;
-		size_t instance;
-		size_t instanceCount;
-		castor3d::NodeTransform transform{};
 		fastgltf::Node const * node;
 		castor::Vector< GltfMeshData const * > meshes{};
 		Animations anims;
+		castor::Vector< std::pair< castor3d::ImporterFile::NodeData, castor3d::NodeTransform > > instances{};
 	};
 
 	struct GltfLightData
@@ -154,10 +145,10 @@ namespace c3d_gltf
 		Animations anims;
 	};
 
-	struct GlSceneData
+	struct GltfSceneData
 	{
 		castor::Vector< GltfNodeData > nodes;
-		castor::Vector< GltfNodeData > skeletonNodes;
+		castor::Vector< GltfNodeData const * > skeletonNodes;
 		castor::StringMap< GltfMeshData > meshes;
 		castor::StringMap< GlSkeletonData > skeletons;
 		castor::Vector< GltfLightData > lights;
@@ -245,9 +236,9 @@ namespace c3d_gltf
 		castor3d::LightImporterUPtr createLightImporter()override;
 		castor3d::CameraImporterUPtr createCameraImporter()override;
 
-		castor::Vector< GltfNodeData > const & getNodes()const noexcept
+		castor::StringMap< castor3d::NodeTransform const * > const & getNodes()const noexcept
 		{
-			return m_sceneData.nodes;
+			return m_nodes;
 		}
 
 		castor::Vector< GltfLightData > const & getLights()const noexcept
@@ -290,8 +281,9 @@ namespace c3d_gltf
 		fastgltf::Expected< fastgltf::Asset > m_expAsset;
 		fastgltf::Asset const * m_asset{};
 		castor::Vector< size_t > m_sceneIndices{};
+		castor::StringMap< castor3d::NodeTransform const * > m_nodes{};
 		CompressedBufferDataAdapter m_adapter;
-		GlSceneData m_sceneData;
+		GltfSceneData m_sceneData;
 		mutable NameContainer m_materialNames;
 		mutable NameContainer m_meshNames;
 		mutable NameContainer m_nodeNames;
