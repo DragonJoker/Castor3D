@@ -503,6 +503,113 @@ namespace GuiCommon
 					wxMessageBox( _( "Failed to parse the scene file, with following error:" ) + wxString( wxT( "\n" ) ) + wxString( exc.what(), wxMBConvLibc() ) );
 				}
 			}
+			else
+			{
+				castor::String fileContent{ cuT( R"(// Global configuration
+default_lighting_model "c3d.pbr"
+
+scene "Imported"
+{
+	// Scene configuration
+	ambient_light 1.00000 1.00000 1.00000
+	background_colour 0.500000 0.500000 0.500000
+	lpv_indirect_attenuation 1.70000
+
+	//Cameras nodes
+
+	scene_node "MainCameraNode"
+	{
+	}
+
+	//Cameras
+
+	camera "MainCamera"
+	{
+		parent "MainCameraNode"
+
+		viewport
+		{
+			type perspective
+			near 0.1
+			far 2000.0
+			aspect_ratio 1.77780
+			fov_y 45.0000
+		}
+
+		hdr_config
+		{
+			exposure 1.00000
+			gamma 2.20000
+		}
+	}
+
+	import
+	{
+		file "<import_file>"
+		//preferred_importer "gltf"
+		recenter_camera "MainCamera"
+	}
+}
+
+//Windows
+
+window "MainWindow"
+{
+	vsync false
+	fullscreen false
+
+	render_target
+	{
+		size 1920 1080
+		format argb32
+		scene "Imported"
+		camera "MainCamera"
+		tone_mapping "aces"
+
+		ssao
+		{
+			enabled true
+			high_quality true
+			use_normals_buffer false
+			blur_high_quality false
+			intensity 1.00000
+			radius 0.100000
+			bias 0.0230000
+			num_samples 19
+			edge_sharpness 1.00000
+			blur_step_size 2
+			blur_radius 4
+			bend_step_count 4
+			bend_step_size 0.500000
+		}
+
+		smaa
+		{
+			mode T2X
+			preset ultra
+			edgeDetection colour
+			enablePredication true
+		}
+	}
+}
+)" ) };
+				castor::string::replace( fileContent, cuT( "<import_file>" ), fileName.getFileName( true ).c_str() );
+
+				if ( fileName.getExtension() == "glb" )
+				{
+					castor::string::replace( fileContent, cuT( "//preferred_importer" ), cuT( "preferred_importer" ) );
+				}
+
+				auto newFileName = fileName.getPath() / ( fileName.getFileName() + cuT( ".cscn" ) );
+
+				if ( castor::TextFile file{ newFileName, castor::File::OpenMode::eWrite };
+					file.isOk() )
+				{
+					file.writeText( fileContent );
+				}
+
+				result = loadScene( engine, appName, newFileName, progress );
+			}
 		}
 		else
 		{
