@@ -276,6 +276,7 @@ namespace c3d_gltf
 			, SkeletonAnimationObjectSet & notAnimated )
 		{
 			auto & impAsset = file.getAsset();
+			castor::UnorderedSet< size_t > parsedNodes;
 
 			for ( auto & skelNode : skeleton.getNodes() )
 			{
@@ -312,6 +313,7 @@ namespace c3d_gltf
 
 				if ( !impNodeAnim.empty() )
 				{
+					parsedNodes.emplace( nodeIndex );
 					processAnimationNodeKeys( impAsset
 						, impNodeAnim
 						, file.getEngine()->getWantedFps()
@@ -330,6 +332,17 @@ namespace c3d_gltf
 				else
 				{
 					notAnimated.insert( object );
+				}
+			}
+
+			for ( auto & [_1, channelSampler] : animChannels )
+			{
+				for ( auto & [channel, _2] : channelSampler )
+				{
+					if ( channel.nodeIndex && parsedNodes.find( *channel.nodeIndex ) == parsedNodes.end() )
+					{
+						castor3d::log::error << "Node " << ( *channel.nodeIndex ) << " was not found in the skeleton nodes" << std::endl;
+					}
 				}
 			}
 		}

@@ -32,18 +32,6 @@ namespace c3d_gltf
 		}
 
 		auto nodeName = lightIt->nodeName;
-		auto nodeIt = std::find_if( file.getNodes().begin()
-			, file.getNodes().end()
-			, [&nodeName]( GltfNodeData const & lookup )
-			{
-				return nodeName == lookup.name;
-			} );
-
-		if ( nodeIt == file.getNodes().end() )
-		{
-			return false;
-		}
-
 		auto & impAsset = file.getAsset();
 		auto & scene = *light.getScene();
 		castor3d::SceneNodeRPtr node{};
