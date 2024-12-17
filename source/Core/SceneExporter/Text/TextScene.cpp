@@ -362,13 +362,14 @@ namespace castor
 			auto specularBrdf = factory.getSpecularBrdfName( lightingModelId );
 			auto sheenBrdf = factory.getSheenBrdfName( lightingModelId );
 			auto clearcoatBrdf = factory.getClearcoatBrdfName( lightingModelId );
+			auto scatteringModel = factory.getScatteringModelName( lightingModelId );
 
 			if ( auto & model = factory.getModel( baseName );
 				diffuseBrdf == model.defaultDesc.diffuse.name
 					&& specularBrdf == model.defaultDesc.specular.name
 					&& sheenBrdf == model.defaultDesc.sheen.name
 					&& clearcoatBrdf == model.defaultDesc.clearcoat.name
-					&& clearcoatBrdf == model.defaultDesc.scattering.name )
+					&& scatteringModel == model.defaultDesc.scattering.name )
 			{
 				result = writer.writeName( file, cuT( "default_lighting_model" ), baseName );
 			}
@@ -378,7 +379,7 @@ namespace castor
 					&& block->writeNameOpt( file, cuT( "specular_brdf" ), specularBrdf, model.defaultDesc.specular.name )
 					&& block->writeNameOpt( file, cuT( "sheen_brdf" ), sheenBrdf, model.defaultDesc.sheen.name )
 					&& block->writeNameOpt( file, cuT( "clearcoat_brdf" ), clearcoatBrdf, model.defaultDesc.clearcoat.name )
-					&& block->writeNameOpt( file, cuT( "scattering_model" ), clearcoatBrdf, model.defaultDesc.scattering.name );
+					&& block->writeNameOpt( file, cuT( "scattering_model" ), scatteringModel, model.defaultDesc.scattering.name );
 			}
 
 			return result;
