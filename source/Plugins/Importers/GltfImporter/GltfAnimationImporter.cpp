@@ -161,11 +161,10 @@ namespace c3d_gltf
 		}
 
 		template< typename KeyT >
-		static std::pair< castor::Milliseconds, castor::Milliseconds> processKeys( fastgltf::Asset const & impAsset
+		static void processKeys( fastgltf::Asset const & impAsset
 			, NodeAnimationChannelSampler const & animChannels
 			, fastgltf::AnimationPath channel
 			, castor::Map< castor::Milliseconds, KeyT > & result
-			, castor::Set< castor::Milliseconds > & allTimes
 			, CompressedBufferDataAdapter const & adapter )
 		{
 			auto it = std::find_if( animChannels.begin()
@@ -174,8 +173,6 @@ namespace c3d_gltf
 				{
 					return lookup.first.path == channel;
 				} );
-			castor::Milliseconds minTime{ std::numeric_limits< int32_t >::max() };
-			castor::Milliseconds maxTime{};
 
 			if ( it != animChannels.end() )
 			{
@@ -205,16 +202,10 @@ namespace c3d_gltf
 				for ( uint32_t i = 0u; i < uint32_t( times.size() ); ++i )
 				{
 					auto timeIndex = castor::Milliseconds{ uint64_t( times[i] * 1000u ) };
-					maxTime = std::max( maxTime, timeIndex );
-					allTimes.insert( timeIndex );
 					uint32_t k = weightStride * i + ii;
 					result.emplace( timeIndex, values[k] );
 				}
-
-				minTime = result.begin()->first;
 			}
-
-			return { minTime, maxTime };
 		}
 
 		template< typename AnimationT
@@ -225,28 +216,52 @@ namespace c3d_gltf
 			, uint32_t wantedFps
 			, AnimationT & animation
 			, castor::Map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes
+			, castor::Milliseconds const & minTime
+			, castor::Milliseconds const & maxTime
+			, castor::Set< castor::Milliseconds > const & times
 			, castor3d::NodeTransform const & defaultTransform
 			, FuncT fillKeyFrame
 			, CompressedBufferDataAdapter const & adapter )
 		{
-			castor::Set< castor::Milliseconds > times;
 			castor::Map< castor::Milliseconds, castor::Point3f > translates;
 			castor::Map< castor::Milliseconds, castor::Quaternion > rotates;
 			castor::Map< castor::Milliseconds, castor::Point3f > scales;
-			auto [minTranslateTime, maxTranslateTime] = processKeys( impAsset, animChannels, fastgltf::AnimationPath::Translation, translates, times, adapter );
-			auto [minRotateTime, maxRotateTime] = processKeys( impAsset, animChannels, fastgltf::AnimationPath::Rotation, rotates, times, adapter );
-			auto [minScaleTime, maxScaleTime] = processKeys( impAsset, animChannels, fastgltf::AnimationPath::Scale, scales, times, adapter );
+			processKeys( impAsset, animChannels, fastgltf::AnimationPath::Translation, translates, adapter );
+			processKeys( impAsset, animChannels, fastgltf::AnimationPath::Rotation, rotates, adapter );
+			processKeys( impAsset, animChannels, fastgltf::AnimationPath::Scale, scales, adapter );
 			synchroniseKeys( translates
 				, rotates
 				, scales
 				, times
 				, wantedFps
-				, std::min( minTranslateTime, std::min( minRotateTime, minScaleTime ) )
-				, std::max( maxTranslateTime, std::max( maxRotateTime, maxScaleTime ) )
+				, minTime
+				, maxTime
 				, animation
 				, keyframes
 				, defaultTransform
 				, fillKeyFrame );
+		}
+
+		static void processAnimationNodeKeysTimes( fastgltf::Asset const & impAsset
+			, NodeAnimationChannelSampler const & animChannels
+			, castor::Milliseconds & minTime
+			, castor::Milliseconds & maxTime
+			, castor::Set< castor::Milliseconds > & allTimes
+			, CompressedBufferDataAdapter const & adapter )
+		{
+			for ( auto const & channelSampler : animChannels )
+			{
+				iterateAccessor< float >( impAsset
+					, impAsset.accessors[channelSampler.second.inputAccessor]
+					, [&minTime, &maxTime, &allTimes]( float value )
+					{
+						auto timeIndex = castor::Milliseconds{ uint64_t( value * 1000u ) };
+						maxTime = std::max( maxTime, timeIndex );
+						minTime = std::min( minTime, timeIndex );
+						allTimes.insert( timeIndex );
+					}
+					, adapter );
+			}
 		}
 
 		static NodeAnimationChannelSampler findNodeAnim( AnimationChannelSamplers const & animChannels
@@ -277,6 +292,23 @@ namespace c3d_gltf
 		{
 			auto & impAsset = file.getAsset();
 			castor::UnorderedSet< size_t > parsedNodes;
+
+			// In glTF files, nodes can have different keyframes for the same animation.
+			// In Castor3D this is not supported, hence we first parse the times to force
+			// keyframes synchronisation for the whole animation, and not only for a node
+			// (which is already done through processAnimationNodeKeys).
+			castor::Milliseconds minTime{ std::numeric_limits< int32_t >::max() };
+			castor::Milliseconds maxTime{};
+			castor::Set< castor::Milliseconds > allTimes;
+			for ( auto const & channelSampler : animChannels )
+			{
+				processAnimationNodeKeysTimes( impAsset
+					, channelSampler.second
+					, minTime
+					, maxTime
+					, allTimes
+					, file.getAdapter() );
+			}
 
 			for ( auto & skelNode : skeleton.getNodes() )
 			{
@@ -319,6 +351,9 @@ namespace c3d_gltf
 						, file.getEngine()->getWantedFps()
 						, animation
 						, keyFrames
+						, minTime
+						, maxTime
+						, allTimes
 						, object->getNodeTransform()
 						, [&object]( castor3d::SkeletonAnimationKeyFrame & keyframe
 							, castor::Point3f const & position
@@ -332,17 +367,6 @@ namespace c3d_gltf
 				else
 				{
 					notAnimated.insert( object );
-				}
-			}
-
-			for ( auto & [_1, channelSampler] : animChannels )
-			{
-				for ( auto & [channel, _2] : channelSampler )
-				{
-					if ( channel.nodeIndex && parsedNodes.find( *channel.nodeIndex ) == parsedNodes.end() )
-					{
-						castor3d::log::error << "Node " << ( *channel.nodeIndex ) << " was not found in the skeleton nodes" << std::endl;
-					}
 				}
 			}
 		}
@@ -423,13 +447,13 @@ namespace c3d_gltf
 			{
 				auto & objTransform = object->getNodeTransform();
 
-				for ( auto & keyFrame : keyframes )
+				for ( auto & [time, keyframe] : keyframes )
 				{
-					auto kfit = keyFrame.second->find( *object );
+					auto kfit = keyframe->find( *object );
 
-					if ( kfit == keyFrame.second->end() )
+					if ( kfit == keyframe->end() )
 					{
-						keyFrame.second->addAnimationObject( *object
+						keyframe->addAnimationObject( *object
 							, objTransform.translate
 							, objTransform.rotate
 							, objTransform.scale );
@@ -443,9 +467,9 @@ namespace c3d_gltf
 				}
 			}
 
-			for ( auto & keyFrame : keyframes )
+			for ( auto & [time, keyframe] : keyframes )
 			{
-				animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame.second ) );
+				animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyframe ) );
 			}
 		}
 
@@ -567,12 +591,24 @@ namespace c3d_gltf
 		auto nodeName = node.getName();
 		auto nodeIndex = file.getNodeIndex( nodeName );
 		auto impNodeAnim = anims::findNodeAnim( animIt->second, nodeIndex );
+		castor::Milliseconds minTime{ std::numeric_limits< int32_t >::max() };
+		castor::Milliseconds maxTime{};
+		castor::Set< castor::Milliseconds > allTimes;
+		anims::processAnimationNodeKeysTimes( impAsset
+			, impNodeAnim
+			, minTime
+			, maxTime
+			, allTimes
+			, file.getAdapter() );
 		SceneNodeAnimationKeyFrameMap keyFrames;
 		anims::processAnimationNodeKeys( impAsset
 			, impNodeAnim
 			, file.getEngine()->getWantedFps()
 			, animation
 			, keyFrames
+			, minTime
+			, maxTime
+			, allTimes
 			, { node.getPosition(), node.getScale(), node.getOrientation() }
 			, []( castor3d::SceneNodeAnimationKeyFrame & keyframe
 				, castor::Point3f const & position
