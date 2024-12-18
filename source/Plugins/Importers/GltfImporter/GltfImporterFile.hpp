@@ -71,8 +71,11 @@ namespace c3d_gltf
 	using AnimationChannelSamplers = castor::Map< fastgltf::AnimationPath, NodeAnimationChannelSampler >;
 	using Animations = castor::StringMap< AnimationChannelSamplers >;
 
-	using IndexName = castor::Pair< size_t, castor::String >;
-	using NameContainer = castor::Vector< IndexName >;
+	struct NameContainer
+	{
+		castor::UnorderedMap< size_t, castor::String > namesByIndex;
+		castor::UnorderedSet< castor::String > names;
+	};
 
 	struct GltfSubmeshData
 	{

@@ -273,36 +273,27 @@ namespace c3d_gltf
 			, castor::String const & baseName
 			, NameContainer & names )
 		{
-			auto it = std::find_if( names.begin(), names.end()
-				, [index]( IndexName const & lookup )
-				{
-					return lookup.first == index;
-				} );
-
-			if ( it != names.end() )
+			if ( auto it = names.namesByIndex.find( index );
+				it != names.namesByIndex.end() )
 			{
 				return it->second;
 			}
 
-			castor::String result = castor::makeString( elements[index].name );
+			auto result = castor::makeString( elements[index].name );
 
 			if ( result.empty() )
 			{
 				result = baseName;
 			}
 
-			it = std::find_if( names.begin(), names.end()
-				, [&result]( IndexName const & lookup )
-				{
-					return lookup.second == result;
-				} );
-
-			if ( it != names.end() )
+			if ( auto it = names.names.find( result );
+				it != names.names.end() )
 			{
 				result += cuT( "-" ) + castor::string::toString( index );
 			}
 
-			names.emplace_back( index, result );
+			names.namesByIndex.emplace( index, result );
+			names.names.emplace( result );
 			return result;
 		}
 
@@ -668,35 +659,42 @@ namespace c3d_gltf
 
 			engine.getMaterialCache().forEach( [this]( castor3d::Material const & element )
 				{
-					m_materialNames.emplace_back( ~0ull, element.getName() );
+					m_materialNames.namesByIndex.try_emplace( 0xFFFFFFFF00000000ull + m_materialNames.namesByIndex.size(), element.getName() );
+					m_materialNames.names.emplace( element.getName() );
 				} );
 			engine.getSamplerCache().forEach( [this]( castor3d::Sampler const & element )
 				{
-					m_samplerNames.emplace_back( ~0ull, element.getName() );
+					m_samplerNames.namesByIndex.try_emplace( 0xFFFFFFFF00000000ull + m_samplerNames.namesByIndex.size(), element.getName() );
+					m_samplerNames.names.emplace( element.getName() );
 				} );
 
 			if ( scene )
 			{
 				scene->getMeshCache().forEach( [this]( castor3d::Mesh const & element )
 					{
-						m_meshNames.emplace_back( ~0ull, element.getName() );
+						m_meshNames.namesByIndex.try_emplace( 0xFFFFFFFF00000000ull + m_meshNames.namesByIndex.size(), element.getName() );
+						m_meshNames.names.emplace( element.getName() );
 
 						if ( auto skeleton = element.getSkeleton() )
 						{
-							m_skinNames.emplace_back( ~0ull, skeleton->getName() );
+							m_skinNames.namesByIndex.try_emplace( 0xFFFFFFFF00000000ull + m_skinNames.namesByIndex.size(), skeleton->getName() );
+							m_skinNames.names.emplace( skeleton->getName() );
 						}
 					} );
 				scene->getSceneNodeCache().forEach( [this]( castor3d::SceneNode const & element )
 					{
-						m_nodeNames.emplace_back( ~0ull, element.getName() );
+						m_nodeNames.namesByIndex.try_emplace( 0xFFFFFFFF00000000ull + m_nodeNames.namesByIndex.size(), element.getName() );
+						m_nodeNames.names.emplace( element.getName() );
 					} );
 				scene->getLightCache().forEach( [this]( castor3d::Light const & element )
 					{
-						m_lightNames.emplace_back( ~0ull, element.getName() );
+						m_lightNames.namesByIndex.try_emplace( 0xFFFFFFFF00000000ull + m_lightNames.namesByIndex.size(), element.getName() );
+						m_lightNames.names.emplace( element.getName() );
 					} );
 				scene->getCameraCache().forEach( [this]( castor3d::Camera const & element )
 					{
-						m_cameraNames.emplace_back( ~0ull, element.getName() );
+						m_cameraNames.namesByIndex.try_emplace( 0xFFFFFFFF00000000ull + m_cameraNames.namesByIndex.size(), element.getName() );
+						m_cameraNames.names.emplace( element.getName() );
 					} );
 			}
 
