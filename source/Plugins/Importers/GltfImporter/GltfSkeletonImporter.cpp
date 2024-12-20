@@ -9,78 +9,77 @@ namespace c3d_gltf
 {
 	namespace skeletons
 	{
-		static castor3d::SkeletonNode * addNode( GltfImporterFile const & file
-			, castor3d::Skeleton & skeleton
-			, fastgltf::pmr::MaybeSmallVector<std::size_t> const & skinJoints
-			, castor::Vector< castor::Matrix4x4f > const & skinOffsetMatrices
-			, castor::String const & name
-			, size_t nodeIndex )
+		static void processSkeletonNodeTransform( GltfImporterFile const & file
+			, size_t nodeIndex
+			, castor3d::SkeletonNode & skelNode )
 		{
-			auto jit = std::find( skinJoints.begin(), skinJoints.end(), nodeIndex );
-
-			if ( jit == skinJoints.end() )
-			{
-				castor3d::log::debug << "    Skeleton Node [" << name << "]" << std::endl;
-				return skeleton.createNode( name );
-			}
-
-			castor3d::log::debug << "    Skeleton Bone [" << name << "]" << std::endl;
-			auto mit = skinOffsetMatrices.begin() + std::distance( skinJoints.begin(), jit );
-			return skeleton.createBone( name, *mit );
+			auto & node = file.getAsset().nodes[nodeIndex];
+			auto transform = convert( node.transform );
+			castor::Matrix4x4f matrix;
+			castor::matrix::setTransform( matrix, transform.translate, transform.scale, transform.rotate );
+			castor::matrix::decompose( matrix, transform.translate, transform.scale, transform.rotate );
+			skelNode.setTransform( { transform } );
+			castor3d::log::trace << "        Translation [" << skelNode.getTransform().translate << "]" << std::endl;
+			castor3d::log::trace << "        Rotation [" << skelNode.getTransform().rotate << "]" << std::endl;
+			castor3d::log::trace << "        Scale [" << skelNode.getTransform().scale << "]" << std::endl;
 		}
 
-		static castor3d::SkeletonNode * processSkeletonNode( GltfImporterFile const & file
-			, fastgltf::pmr::MaybeSmallVector<std::size_t> const & skinJoints
+		static castor3d::SkeletonNode * processSkeletonJoint( GltfImporterFile const & file
 			, castor::Vector< castor::Matrix4x4f > const & skinOffsetMatrices
 			, castor3d::Skeleton & skeleton
 			, size_t nodeIndex
-			, castor3d::SkeletonNode * parentSkelNode )
+			, uint32_t jointIndex )
 		{
 			auto name = file.getNodeName( nodeIndex, 0u );
 			auto skelNode = skeleton.findNode( name );
 
 			if ( !skelNode )
 			{
-				skelNode = addNode( file, skeleton, skinJoints, skinOffsetMatrices, name, nodeIndex );
-				auto & node = file.getAsset().nodes[nodeIndex];
-				auto transform = convert( node.transform );
-				castor::Matrix4x4f matrix;
-				castor::matrix::setTransform( matrix, transform.translate, transform.scale, transform.rotate );
-				castor::matrix::decompose( matrix, transform.translate, transform.scale, transform.rotate );
-				skelNode->setTransform( { transform } );
-				castor3d::log::trace << "        Translation [" << skelNode->getTransform().translate << "]" << std::endl;
-				castor3d::log::trace << "        Rotation [" << skelNode->getTransform().rotate << "]" << std::endl;
-				castor3d::log::trace << "        Scale [" << skelNode->getTransform().scale << "]" << std::endl;
+				castor3d::log::debug << "    Skeleton Bone [" << name << "]" << std::endl;
+				skelNode = skeleton.createBone( name, skinOffsetMatrices[jointIndex] );
+				processSkeletonNodeTransform( file, nodeIndex, *skelNode );
+			}
 
-				if ( parentSkelNode )
-				{
-					skeleton.setNodeParent( *skelNode, *parentSkelNode );
-				}
+			return skelNode;
+		}
+
+		static castor3d::SkeletonNode * processSkeletonNode( GltfImporterFile const & file
+			, castor3d::Skeleton & skeleton
+			, size_t nodeIndex )
+		{
+			auto name = file.getNodeName( nodeIndex, 0u );
+			auto skelNode = skeleton.findNode( name );
+
+			if ( !skelNode )
+			{
+				castor3d::log::debug << "    Skeleton Node [" << name << "]" << std::endl;
+				skelNode = skeleton.createNode( name );
+				processSkeletonNodeTransform( file, nodeIndex, *skelNode );
 			}
 
 			return skelNode;
 		}
 
 		static void processSkeletonNodes( GltfImporterFile const & file
-			, fastgltf::pmr::MaybeSmallVector<std::size_t> const & skinJoints
-			, castor::Vector< castor::Matrix4x4f > const & skinOffsetMatrices
 			, castor3d::Skeleton & skeleton
 			, size_t parentIndex
 			, castor3d::SkeletonNode * parentSkelNode )
 		{
 			for ( auto nodeIndex : file.getAsset().nodes[parentIndex].children )
 			{
+				auto skelNode = processSkeletonNode( file
+					, skeleton
+					, nodeIndex );
+
+				if ( parentSkelNode )
+				{
+					skeleton.setNodeParent( *skelNode, *parentSkelNode );
+				}
+
 				processSkeletonNodes( file
-					, skinJoints
-					, skinOffsetMatrices
 					, skeleton
 					, nodeIndex
-					, processSkeletonNode( file
-						, skinJoints
-						, skinOffsetMatrices
-						, skeleton
-						, nodeIndex
-						, parentSkelNode ) );
+					, skelNode );
 			}
 		}
 
@@ -155,15 +154,15 @@ namespace c3d_gltf
 
 	bool GltfSkeletonImporter::doImportSkeleton( castor3d::Skeleton & skeleton )
 	{
-		auto & file = static_cast< GltfImporterFile const & >( *m_file );
+		auto & file = static_cast< GltfImporterFile & >( *m_file );
 		auto & impAsset = file.getAsset();
 		auto name = skeleton.getName();
-		uint32_t index{};
+		uint32_t skinIndex{};
 		auto it = std::find_if( impAsset.skins.begin()
 			, impAsset.skins.end()
-			, [&file, &name, &index]( fastgltf::Skin const & lookup )
+			, [&file, &name, &skinIndex]( fastgltf::Skin const & lookup )
 			{
-				return name == file.getSkinName( index++ );
+				return name == file.getSkinName( skinIndex++ );
 			} );
 
 		if ( it == impAsset.skins.end() )
@@ -171,6 +170,7 @@ namespace c3d_gltf
 			return false;
 		}
 
+		--skinIndex;
 		auto & impSkin = *it;
 		castor::Vector< castor::Matrix4x4f > skinOffsetMatrices;
 
@@ -195,19 +195,29 @@ namespace c3d_gltf
 			? skeletons::getTransformMatrix( impAsset.nodes[*impSkin.skeleton].transform )
 			: castor::Matrix4x4f{ 1.0f } );
 
-		for ( size_t nodeIndex : findSkinRootNodes( file, impSkin ) )
+		// First handle the bones listed in the skin
+		// They must be processed in the same order as declared in the skin because
+		// the mesh accesssor JOINTS_n references them using their index in the skin.
+		uint32_t jointIndex{};
+		for ( size_t nodeIndex : impSkin.joints )
 		{
-			skeletons::processSkeletonNodes( file
-				, impSkin.joints
+			skeletons::processSkeletonJoint( file
 				, skinOffsetMatrices
 				, skeleton
 				, nodeIndex
+				, jointIndex );
+			++jointIndex;
+		}
+
+		// Then handle the hierarchy, filling the gaps with skeleton nodes.
+		for ( size_t nodeIndex : findSkinRootNodes( file, impSkin ) )
+		{
+			skeletons::processSkeletonNodes( file
+				, skeleton
+				, nodeIndex
 				, skeletons::processSkeletonNode( file
-					, impSkin.joints
-					, skinOffsetMatrices
 					, skeleton
-					, nodeIndex
-					, nullptr ) );
+					, nodeIndex ) );
 		}
 
 		return true;

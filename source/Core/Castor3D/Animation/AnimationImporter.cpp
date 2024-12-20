@@ -22,6 +22,8 @@ namespace castor3d
 {
 	namespace animimp
 	{
+		static bool constexpr displaySkeletonAnimationDetail = false;
+
 		static void transformMeshAnimation( castor::Matrix4x4f const & transform
 			, MeshAnimation & animation )
 		{
@@ -132,6 +134,26 @@ namespace castor3d
 			log::info << getPrefix() << cuT( "Loaded skeleton animation [" ) << animation.getName() << cuT( "] " )
 				<< animation.getLength().count() << cuT( " ms, " )
 				<< animation.size() << cuT( " Keyframes" ) << std::endl;
+
+			if constexpr ( animimp::displaySkeletonAnimationDetail )
+			{
+				log::debug << cuT( "Skeleton animation [" ) << animation.getName() << cuT( "] " )
+					<< animation.getLength().count() << cuT( " ms, " )
+					<< animation.size() << cuT( " Keyframes" ) << std::endl;
+
+				for ( auto const & keyframe : animation )
+				{
+					log::debug << "  " << keyframe->getTimeIndex();
+					for ( auto const & object : static_cast< SkeletonAnimationKeyFrame const & >( *keyframe ) )
+					{
+						log::debug << "    " << object.object->getName()
+							<< "    " << object.transform.translate
+							<< "    " << object.transform.rotate
+							<< "    " << object.transform.scale
+							<< std::endl;
+					}
+				}
+			}
 		}
 		else
 		{
