@@ -172,6 +172,7 @@ namespace castor3d
 		float yaw{ 0.0f };
 		float roll{ 0.0f };
 		bool noOptimisations{ false };
+		bool noValidation{ false };
 		bool ignoreVertexColour{ false };
 		bool disableImageCompression{ false };
 		float emissiveMult{ 1.0f };
