@@ -222,18 +222,33 @@ namespace c3d_gltf
 		{
 			auto texName = castor::makeString( impTexture.name );
 			auto imgName = castor::makeString( impImage.name );
+			castor::String uri;
 
-			if ( texName.empty() )
+			std::visit( OverloadedGetDataT{ []( auto const & ){}
+				, [&uri]( fastgltf::sources::URI const & source ){ uri = castor::string::toString( source.uri.fspath() ); }
+				, []( fastgltf::sources::Array const & source ){}
+				, []( fastgltf::sources::Vector const & source ){}
+				, []( fastgltf::sources::ByteView const & source ){} }
+				, impImage.data );
+
+			if ( uri.empty() )
 			{
-				texName = castor::string::toString( textureIndex );
+				if ( texName.empty() )
+				{
+					texName = castor::string::toString( textureIndex );
+				}
+
+				if ( imgName.empty() )
+				{
+					imgName = castor::string::toString( imageIndex );
+				}
+
+				return cuT( "Image_" ) + texName + cuT( "_" ) + imgName;
 			}
 
-			if ( imgName.empty() )
-			{
-				imgName = castor::string::toString( imageIndex );
-			}
-
-			return cuT( "Image_" ) + texName + cuT( "_" ) + imgName;
+			auto result = uri;
+			castor::string::replace( result, cuT( "\\" ), cuT( "/" ) );
+			return result;
 		}
 
 		static castor3d::SamplerRPtr loadSampler( GltfImporterFile const & file
