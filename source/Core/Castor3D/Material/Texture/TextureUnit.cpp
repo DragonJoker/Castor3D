@@ -584,6 +584,11 @@ namespace castor3d
 			return m_initialised;
 		}
 
+		if ( !m_sampler )
+		{
+			m_sampler = getOwner()->getDefaultSampler();
+		}
+
 		m_device = getEngine()->getRenderDevice();
 		m_name = m_data.base->sourceInfo.name();
 		m_gpuImage = m_texture->image.get();
