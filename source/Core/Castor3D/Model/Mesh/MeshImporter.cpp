@@ -7,6 +7,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneImporter.hpp"
 
@@ -16,6 +17,8 @@ namespace castor3d
 {
 	namespace meshimp
 	{
+		static bool constexpr displaySkinningDetail = false;
+
 		static void transformMesh( castor::Matrix4x4f const & transform
 			, Mesh & mesh )
 		{
@@ -136,6 +139,30 @@ namespace castor3d
 					<< cuT( ", " ) << mesh.getVertexCount() << cuT( " vertices" )
 					<< cuT( ", " ) << mesh.getFaceCount() << cuT( " faces" )
 					<< cuT( ", " ) << mesh.getSubmeshCount() << cuT( " submeshes" ) << std::endl;
+
+				if constexpr ( meshimp::displaySkinningDetail )
+				{
+					log::debug << cuT( "Mesh [" ) << mesh.getName() << cuT( "]" )
+						<< cuT( " AABB (" ) << print( mesh.getBoundingBox() ) << cuT( ")" )
+						<< cuT( ", " ) << mesh.getVertexCount() << cuT( " vertices" )
+						<< cuT( ", " ) << mesh.getFaceCount() << cuT( " faces" )
+						<< cuT( ", " ) << mesh.getSubmeshCount() << cuT( " submeshes" ) << std::endl;
+
+					for ( auto & submesh : mesh )
+					{
+						log::debug << "  Submesh " << submesh->getId() << std::endl;
+
+						if ( auto skin = submesh->getComponent< SkinComponent >() )
+						{
+							for ( auto & s : skin->getData().getData() )
+							{
+								log::debug << "    " << s.m_ids[0] << " " << s.m_ids[1] << " " << s.m_ids[2] << " " << s.m_ids[3]
+									<< "    " << s.m_weights[0] << " " << s.m_weights[1] << " " << s.m_weights[2] << " " << s.m_weights[3]
+									<< std::endl;
+							}
+						}
+					}
+				}
 			}
 			else
 			{
