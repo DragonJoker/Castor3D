@@ -610,6 +610,12 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
+		static CU_ImplementAttributeParserBlock( parserImportNoValidation, SceneImportContext )
+		{
+			params[0]->get( blockContext->noValidation );
+		}
+		CU_EndAttribute()
+
 		static CU_ImplementAttributeParserBlock( parserImportEmissiveMult, SceneImportContext )
 		{
 			params[0]->get( blockContext->emissiveMult );
@@ -715,6 +721,11 @@ namespace castor3d
 				if ( blockContext->noOptimisations )
 				{
 					parameters.add( cuT( "no_optimisations" ), blockContext->noOptimisations );
+				}
+
+				if ( blockContext->noValidation )
+				{
+					parameters.add( cuT( "no_validation" ), blockContext->noValidation );
 				}
 
 				if ( blockContext->ignoreVertexColour )
@@ -1548,6 +1559,7 @@ namespace castor3d
 		importCtx.addParser( cuT( "yaw" ), scene::parserImportYaw, { makeParameter< ParameterType::eFloat >() } );
 		importCtx.addParser( cuT( "roll" ), scene::parserImportRoll, { makeParameter< ParameterType::eFloat >() } );
 		importCtx.addParser( cuT( "no_optimisations" ), scene::parserImportNoOptimisations, { makeParameter< ParameterType::eBool >() } );
+		importCtx.addParser( cuT( "no_validation" ), scene::parserImportNoValidation, { makeParameter< ParameterType::eBool >() } );
 		importCtx.addParser( cuT( "emissive_mult" ), scene::parserImportEmissiveMult, { makeParameter< ParameterType::eFloat >() } );
 		importCtx.addParser( cuT( "recenter_camera" ), scene::parserImportCenterCamera, { makeParameter< ParameterType::eName >() } );
 		importCtx.addParser( cuT( "preferred_importer" ), scene::parserImportPreferredImporter, { makeParameter< ParameterType::eName >() } );

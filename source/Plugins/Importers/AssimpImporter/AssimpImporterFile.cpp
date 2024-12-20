@@ -32,11 +32,9 @@ namespace c3d_assimp
 			, castor::Path const & filePath
 			, castor3d::Parameters const & parameters )
 		{
-			bool noOptim = false;
-			auto found = parameters.get( cuT( "no_optimisations" ), noOptim );
-			uint32_t importFlags{ aiProcess_ValidateDataStructure
-				| aiProcess_FindInvalidData
-				| aiProcess_Triangulate
+			bool noOptimisation = parameters.get< bool >( cuT( "no_optimisations" ) );
+			bool noValidation = parameters.get< bool >( cuT( "no_validation" ) );
+			uint32_t importFlags{ aiProcess_Triangulate
 				| aiProcess_FixInfacingNormals
 				| aiProcess_LimitBoneWeights };
 			importer.SetPropertyInteger( AI_CONFIG_PP_LBW_MAX_WEIGHTS, 8 );
@@ -44,7 +42,13 @@ namespace c3d_assimp
 			importer.SetPropertyInteger( AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, 0 ); //< Get rid of $AssimpFbx$_PreRotation nodes
 			importer.SetPropertyInteger( AI_CONFIG_FBX_CONVERT_TO_M, 0 ); //< Convert FBX cm to m.
 
-			if ( !found || !noOptim )
+			if ( !noValidation )
+			{
+				importFlags |= aiProcess_ValidateDataStructure
+					| aiProcess_FindInvalidData;
+			}
+
+			if ( !noOptimisation )
 			{
 				importFlags |= aiProcess_JoinIdenticalVertices
 					| aiProcess_OptimizeMeshes
