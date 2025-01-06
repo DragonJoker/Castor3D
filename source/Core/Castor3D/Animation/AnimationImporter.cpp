@@ -143,7 +143,7 @@ namespace castor3d
 
 				for ( auto const & keyframe : animation )
 				{
-					log::debug << "  " << keyframe->getTimeIndex();
+					log::debug << "  " << keyframe->getTimeIndex().count() << " ms";
 					for ( auto const & object : static_cast< SkeletonAnimationKeyFrame const & >( *keyframe ) )
 					{
 						log::debug << "    " << object.object->getName()

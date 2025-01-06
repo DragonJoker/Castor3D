@@ -15,8 +15,8 @@ namespace castor3d
 		: public AnimationInstance
 	{
 	public:
-		C3D_API MeshAnimationInstance( MeshAnimationInstance && rhs ) = default;
-		C3D_API MeshAnimationInstance & operator=( MeshAnimationInstance && rhs ) = delete;
+		C3D_API MeshAnimationInstance( MeshAnimationInstance && rhs )noexcept = delete;
+		C3D_API MeshAnimationInstance & operator=( MeshAnimationInstance && rhs )noexcept = delete;
 		C3D_API MeshAnimationInstance( MeshAnimationInstance const & rhs ) = delete;
 		C3D_API MeshAnimationInstance & operator=( MeshAnimationInstance const & rhs ) = delete;
 		C3D_API ~MeshAnimationInstance()noexcept override = default;

@@ -20,9 +20,9 @@ namespace castor3d
 		 **/
 		/**@{*/
 		C3D_API AnimationInstance & operator=( AnimationInstance && rhs )noexcept = delete;
-		C3D_API AnimationInstance( AnimationInstance const & rhs ) = default;
+		C3D_API AnimationInstance( AnimationInstance const & rhs ) = delete;
 		C3D_API AnimationInstance & operator=( AnimationInstance const & rhs ) = delete;
-		C3D_API AnimationInstance( AnimationInstance && rhs )noexcept = default;
+		C3D_API AnimationInstance( AnimationInstance && rhs )noexcept = delete;
 		/**@}*/
 		/**
 		 *\~english
