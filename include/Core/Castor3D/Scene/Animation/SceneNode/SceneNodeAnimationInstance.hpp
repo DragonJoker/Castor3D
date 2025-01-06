@@ -17,8 +17,8 @@ namespace castor3d
 		: public AnimationInstance
 	{
 	public:
-		C3D_API SceneNodeAnimationInstance( SceneNodeAnimationInstance && rhs ) = default;
-		C3D_API SceneNodeAnimationInstance & operator=( SceneNodeAnimationInstance && rhs ) = delete;
+		C3D_API SceneNodeAnimationInstance( SceneNodeAnimationInstance && rhs )noexcept = delete;
+		C3D_API SceneNodeAnimationInstance & operator=( SceneNodeAnimationInstance && rhs )noexcept = delete;
 		C3D_API SceneNodeAnimationInstance( SceneNodeAnimationInstance const & rhs ) = delete;
 		C3D_API SceneNodeAnimationInstance & operator=( SceneNodeAnimationInstance const & rhs ) = delete;
 		C3D_API ~SceneNodeAnimationInstance()noexcept override = default;

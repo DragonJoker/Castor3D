@@ -18,7 +18,7 @@ namespace castor3d
 		: public AnimationInstance
 	{
 	public:
-		C3D_API TextureAnimationInstance( TextureAnimationInstance && rhs )noexcept = default;
+		C3D_API TextureAnimationInstance( TextureAnimationInstance && rhs )noexcept = delete;
 		C3D_API TextureAnimationInstance & operator=( TextureAnimationInstance && rhs )noexcept = delete;
 		C3D_API TextureAnimationInstance( TextureAnimationInstance const & rhs ) = delete;
 		C3D_API TextureAnimationInstance & operator=( TextureAnimationInstance const & rhs ) = delete;

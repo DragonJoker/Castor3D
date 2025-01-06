@@ -19,6 +19,11 @@ namespace castor3d
 
 	void AnimationInstance::update( castor::Milliseconds const & elapsed )
 	{
+		if ( m_totalTime == castor::Milliseconds{ std::numeric_limits< int64_t >::max() } )
+		{
+			m_totalTime = m_animation->getLength();
+		}
+
 		auto length = m_stoppingPoint == 0_ms
 			? m_totalTime
 			: std::min( m_stoppingPoint, m_totalTime );
