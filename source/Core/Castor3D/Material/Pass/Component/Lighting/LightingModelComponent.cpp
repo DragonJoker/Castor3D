@@ -39,23 +39,24 @@ namespace castor
 			auto specularBrdf = object.getSpecularBrdfName();
 			auto sheenBrdf = object.getSheenBrdfName();
 			auto clearcoatBrdf = object.getClearcoatBrdfName();
+			auto scatteringModel = object.getScatteringModelName();
 
 			if ( auto & model = engine.getLightingModelFactory().getModel( baseName );
 				diffuseBrdf == model.defaultDesc.diffuse.name
 					&& specularBrdf == model.defaultDesc.specular.name
 					&& sheenBrdf == model.defaultDesc.sheen.name
 					&& clearcoatBrdf == model.defaultDesc.clearcoat.name
-					&& clearcoatBrdf == model.defaultDesc.scattering.name )
+					&& scatteringModel == model.defaultDesc.scattering.name )
 			{
 				result = writeNameOpt( file, cuT( "lighting_model" ), baseName, engine.getDefaultLightingModelName() );
 			}
 			else if ( auto block = beginBlock( file, cuT( "lighting_model" ), baseName ) )
 			{
-				result = block->writeNameOpt( file, cuT( "diffuse_brdf" ), object.getDiffuseBrdfName(), model.defaultDesc.diffuse.name )
-					&& block->writeNameOpt( file, cuT( "specular_brdf" ), object.getSpecularBrdfName(), model.defaultDesc.specular.name )
-					&& block->writeNameOpt( file, cuT( "sheen_brdf" ), object.getSheenBrdfName(), model.defaultDesc.sheen.name )
-					&& block->writeNameOpt( file, cuT( "clearcoat_brdf" ), object.getClearcoatBrdfName(), model.defaultDesc.clearcoat.name )
-					&& block->writeNameOpt( file, cuT( "scattering_model" ), object.getScatteringModelName(), model.defaultDesc.scattering.name );
+				result = block->writeNameOpt( file, cuT( "diffuse_brdf" ), diffuseBrdf, model.defaultDesc.diffuse.name )
+					&& block->writeNameOpt( file, cuT( "specular_brdf" ), specularBrdf, model.defaultDesc.specular.name )
+					&& block->writeNameOpt( file, cuT( "sheen_brdf" ), sheenBrdf, model.defaultDesc.sheen.name )
+					&& block->writeNameOpt( file, cuT( "clearcoat_brdf" ), clearcoatBrdf, model.defaultDesc.clearcoat.name )
+					&& block->writeNameOpt( file, cuT( "scattering_model" ), scatteringModel, model.defaultDesc.scattering.name );
 			}
 
 			return result;
