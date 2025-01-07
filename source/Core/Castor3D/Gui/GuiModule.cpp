@@ -60,7 +60,7 @@ namespace castor3d
 	{
 		auto & cache = engine.getMaterialCache();
 		MaterialObs created{};
-		auto result = cache.tryAdd( name
+		auto result = cache.tryAddNew( name
 			, true
 			, created
 			, engine

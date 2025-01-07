@@ -14,7 +14,7 @@ namespace castor3d
 	{
 	}
 
-	RenderTargetRPtr RenderTargetCache::add( TargetType type
+	RenderTargetRPtr RenderTargetCache::addNew( TargetType type
 		, castor::Size const & size
 		, castor::PixelFormat pixelFormat )
 	{

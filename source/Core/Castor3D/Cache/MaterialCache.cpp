@@ -142,7 +142,7 @@ namespace castor
 		{
 			auto lock( makeUniqueLock( *this ) );
 			MaterialObs created{};
-			auto defaultMaterial = doTryAddNoLockT( Material::DefaultMaterialName
+			auto defaultMaterial = doTryAddNewNoLockT( Material::DefaultMaterialName
 				, false
 				, created
 				, m_engine

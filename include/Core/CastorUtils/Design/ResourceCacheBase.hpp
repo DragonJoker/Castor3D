@@ -210,13 +210,13 @@ namespace castor
 		 *\return		L'élément réel (ajouté, ou original du doublon).
 		 */
 		template< typename ... ParametersT >
-		ElementObsT tryAdd( ElementKeyT const & name
+		ElementObsT tryAddNew( ElementKeyT const & name
 			, bool initialise
 			, ElementObsT & created
 			, ParametersT && ... parameters)
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
-			return this->doTryAddNoLockT( name
+			return this->doTryAddNewNoLockT( name
 				, initialise
 				, created
 				, castor::forward< ParametersT >( parameters )... );
@@ -238,12 +238,12 @@ namespace castor
 		 *\return		L'élément réel (ajouté, ou original du doublon).
 		 */
 		template< typename ... ParametersT >
-		ElementObsT tryAddNoLock( ElementKeyT const & name
+		ElementObsT tryAddNewNoLock( ElementKeyT const & name
 			, bool initialise
 			, ElementObsT & created
 			, ParametersT && ... parameters)
 		{
-			return this->doTryAddNoLockT( name
+			return this->doTryAddNewNoLockT( name
 				, initialise
 				, created
 				, castor::forward< ParametersT >( parameters )... );
@@ -261,11 +261,11 @@ namespace castor
 		 *\return		L'élément réel (ajouté, ou original du doublon).
 		 */
 		template< typename ... ParametersT >
-		ElementObsT add( ElementKeyT const & name
+		ElementObsT addNew( ElementKeyT const & name
 			, ParametersT && ... parameters )
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
-			return this->doAddNoLockT( name
+			return this->doAddNewNoLockT( name
 				, castor::forward< ParametersT >( parameters )... );
 		}
 		/**
@@ -281,10 +281,10 @@ namespace castor
 		 *\return		L'élément réel (ajouté, ou original du doublon).
 		 */
 		template< typename ... ParametersT >
-		ElementObsT addNoLock( ElementKeyT const & name
+		ElementObsT addNewNoLock( ElementKeyT const & name
 			, ParametersT && ... parameters )
 		{
-			return this->doAddNoLockT( name
+			return this->doAddNewNoLockT( name
 				, castor::forward< ParametersT >( parameters )... );
 		}
 		/**
@@ -733,7 +733,7 @@ namespace castor
 		}
 
 		template< typename ... ParametersT >
-		ElementObsT doTryAddNoLockT( ElementKeyT const & name
+		ElementObsT doTryAddNewNoLockT( ElementKeyT const & name
 			, bool initialise
 			, ElementObsT & created
 			, ParametersT && ... parameters )
@@ -758,11 +758,11 @@ namespace castor
 		}
 
 		template< typename ... ParametersT >
-		ElementObsT doAddNoLockT( ElementKeyT const & name
+		ElementObsT doAddNewNoLockT( ElementKeyT const & name
 			, ParametersT && ... parameters )
 		{
 			ElementObsT created{};
-			auto result = doTryAddNoLockT( name
+			auto result = doTryAddNewNoLockT( name
 				, true
 				, created
 				, castor::forward< ParametersT >( parameters )... );

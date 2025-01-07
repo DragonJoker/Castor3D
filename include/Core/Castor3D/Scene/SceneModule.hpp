@@ -11,6 +11,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/Signal.hpp>
 #include <CastorUtils/Graphics/GraphicsModule.hpp>
+#include <CastorUtils/Graphics/ImageCache.hpp>
 
 namespace castor3d
 {
@@ -648,6 +649,7 @@ namespace castor3d
 	using MaterialCacheView = CacheViewT< MaterialCache, EventType( GpuEventType::ePreUpload ) >;
 	using SamplerCacheView = CacheViewT< SamplerCache, EventType( GpuEventType::ePreUpload ) >;
 	using FontCacheView = CacheViewT< castor::FontCache, EventType( CpuEventType::ePreGpuStep ) >;
+	using ImageCacheView = CacheViewT< castor::ImageCache, EventType( CpuEventType::ePreGpuStep ) >;
 
 	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, BillboardBase, C3D_API );
@@ -671,6 +673,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, MaterialCacheView, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SamplerCacheView, C3D_API );
 	CU_DeclareSmartPtr( castor3d, FontCacheView, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ImageCacheView, C3D_API );
 
 	//! SceneNode pointer array.
 	CU_DeclareVector( SceneNodeRPtr, SceneNodePtr );

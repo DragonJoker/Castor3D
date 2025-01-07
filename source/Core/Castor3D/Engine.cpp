@@ -109,7 +109,7 @@ namespace castor3d
 				{
 					auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf_ggx.png" );
 					castor::ImageResPtr created;
-					auto img = engine.tryAddImage( cuT( "BRDFLutGGX" )
+					auto img = engine.tryAddNewImage( cuT( "BRDFLutGGX" )
 						, true
 						, created
 						, castor::ImageCreateParams{ imagePath, { false, false, false } } );
@@ -118,7 +118,7 @@ namespace castor3d
 				{
 					auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf_charlie.png" );
 					castor::ImageResPtr created;
-					auto img = engine.tryAddImage( cuT( "BRDFLutCharlie" )
+					auto img = engine.tryAddNewImage( cuT( "BRDFLutCharlie" )
 						, true
 						, created
 						, castor::ImageCreateParams{ imagePath, { false, false, false } } );
@@ -491,7 +491,7 @@ namespace castor3d
 		m_listenerCache = castor::makeCache< FrameListener, castor::String, FrameListenerCacheTraits >( getLogger()
 			, castor::DummyFunctorT< FrameListenerCache >{}
 			, listenerClean );
-		m_defaultListener = m_listenerCache->add( castor::String{ eng::defaultName } );
+		m_defaultListener = addNewFrameListener( castor::String{ eng::defaultName } );
 
 		m_shaderCache = makeCache( *this );
 		m_samplerCache = castor::makeCache< Sampler, castor::String, SamplerCacheTraits >( getLogger()

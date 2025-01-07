@@ -47,7 +47,7 @@ namespace castor3d
 			{
 				if ( blockContext->scene )
 				{
-					blockContext->scene->scene->getFontView().add( blockContext->name
+					blockContext->scene->scene->addNewFont( blockContext->name
 						, uint32_t( blockContext->height )
 						, context.file.getPath() / blockContext->path );
 				}
@@ -75,7 +75,7 @@ namespace castor3d
 			{
 				if ( blockContext->scene )
 				{
-					blockContext->scene->scene->getFontView().add( blockContext->name
+					blockContext->scene->scene->addNewFont( blockContext->name
 						, context.file.getPath() / blockContext->path );
 				}
 				else

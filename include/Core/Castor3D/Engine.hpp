@@ -880,16 +880,6 @@ namespace castor3d
 		{
 			return m_config.enableDebugTargets;
 		}
-		
-		castor::ImageCache const & getImageCache()const noexcept
-		{
-			return m_imageCache;
-		}
-
-		castor::ImageCache & getImageCache()noexcept
-		{
-			return m_imageCache;
-		}
 
 		UserInputListenerRPtr getUserInputListener()noexcept
 		{
@@ -1130,7 +1120,7 @@ namespace castor3d
 			, uint32_t height
 			, castor::Path const & path )
 		{
-			return m_fontCache.add( name, height, path );
+			return m_fontCache.addNew( name, height, path );
 		}
 
 		template< typename ... ParametersT >
@@ -1144,7 +1134,7 @@ namespace castor3d
 		castor::FontCache::ElementObsT addNewSdfFont( castor::String const & name
 			, castor::Path const & path )
 		{
-			return m_fontCache.add( name, path );
+			return m_fontCache.addNew( name, path );
 		}
 
 		castor::FontCache::ElementObsT addFont( castor::FontCache::ElementKeyT const & key
@@ -1197,6 +1187,11 @@ namespace castor3d
 		{
 			return m_fontCache;
 		}
+
+		uint32_t getFontsCount()const
+		{
+			return m_fontCache.getObjectCount();
+		}
 		/**@}*/
 		/**
 		*\name
@@ -1207,7 +1202,7 @@ namespace castor3d
 		castor::ImageCache::ElementPtrT createImage( castor::ImageCache::ElementKeyT const & key
 			, ParametersT && ... parameters )const
 		{
-			return getImageCache().create( key
+			return m_imageCache.create( key
 				, castor::forward< ParametersT >( parameters )... );
 		}
 
@@ -1215,7 +1210,7 @@ namespace castor3d
 		castor::ImageCache::ElementObsT addNewImage( castor::ImageCache::ElementKeyT const & key
 			, ParametersT && ... parameters )
 		{
-			return getImageCache().add( key
+			return m_imageCache.addNew( key
 				, castor::forward< ParametersT >( parameters )... );
 		}
 
@@ -1223,40 +1218,45 @@ namespace castor3d
 			, castor::ImageCache::ElementPtrT & element
 			, bool initialise = false )
 		{
-			return getImageCache().add( key, element, initialise );
+			return m_imageCache.add( key, element, initialise );
 		}
 
 		void removeImage( castor::ImageCache::ElementKeyT const & key
 			, bool cleanup = false )noexcept
 		{
-			getImageCache().remove( key, cleanup );
+			m_imageCache.remove( key, cleanup );
 		}
 
 		castor::ImageCache::ElementObsT findImage( castor::ImageCache::ElementKeyT const & key )const
 		{
-			return getImageCache().find( key );
+			return m_imageCache.find( key );
 		}
 
 		bool hasImage( castor::ImageCache::ElementKeyT const & key )const
 		{
-			return getImageCache().has( key );
+			return m_imageCache.has( key );
 		}
 
 		castor::ImageCache::ElementObsT tryFindImage( castor::ImageCache::ElementKeyT const & key )const noexcept
 		{
-			return getImageCache().tryFind( key );
+			return m_imageCache.tryFind( key );
 		}
 
 		template< typename ... ParametersT >
-		castor::ImageCache::ElementObsT tryAddImage( castor::ImageCache::ElementKeyT const & name
+		castor::ImageCache::ElementObsT tryAddNewImage( castor::ImageCache::ElementKeyT const & name
 			, bool initialise
 			, castor::ImageCache::ElementObsT & created
 			, ParametersT && ... parameters )
 		{
-			return getImageCache().tryAdd( name
+			return m_imageCache.tryAddNew( name
 				, initialise
 				, created
 				, castor::forward< ParametersT >( parameters )... );
+		}
+
+		uint32_t getImagesCount()const
+		{
+			return m_imageCache.getObjectCount();
 		}
 		/**@}*/
 

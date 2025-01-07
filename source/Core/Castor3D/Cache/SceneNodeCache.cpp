@@ -49,10 +49,10 @@ namespace castor3d
 		return result;
 	}
 
-	SceneNodeCache::ElementObsT ObjectCacheT< SceneNode, castor::String, SceneNodeCacheTraits >::add( ElementKeyT const & name )
+	SceneNodeCache::ElementObsT ObjectCacheT< SceneNode, castor::String, SceneNodeCacheTraits >::addNew( ElementKeyT const & name )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
-		auto result = this->doAddNoLockT( name
+		auto result = this->doAddNewNoLockT( name
 			, *getScene() );
 		return result;
 	}
