@@ -41,6 +41,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/FontCache.hpp>
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/ImageCache.hpp>
+#include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Graphics/RgbColour.hpp>
 #include <CastorUtils/Log/Logger.hpp>
 #include <CastorUtils/Multithreading/ThreadPool.hpp>

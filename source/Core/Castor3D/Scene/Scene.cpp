@@ -814,6 +814,17 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template<>
+	inline void CacheViewT< castor::ImageCache, EventType( CpuEventType::ePreGpuStep ) >::clear()
+	{
+		for ( auto const & name : m_createdElements )
+		{
+			auto resource = m_cache.tryRemove( name );
+		}
+	}
+
+	//*************************************************************************************************
+
+	template<>
 	inline void CacheViewT< castor::FontCache, EventType( CpuEventType::ePreGpuStep ) >::clear()
 	{
 		for ( auto const & name : m_createdElements )
@@ -941,7 +952,7 @@ namespace castor3d
 			, castor::DummyFunctorT< castor::FontCache >{}
 			, castor::DummyFunctorT< castor::FontCache >{} );
 
-		m_animatedObjectGroupCache->add( cuT( "C3D_Textures" ), *this );
+		addNewAnimatedObjectGroup( cuT( "C3D_Textures" ), *this );
 		auto & device = engine.getRenderSystem()->getRenderDevice();
 		auto data = device.graphicsData();
 		m_reflectionMap = castor::makeUnique< EnvironmentMap >( m_resources

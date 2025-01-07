@@ -69,7 +69,7 @@ namespace castor3d
 		 *\return		L'élément créé.
 		 */
 		template< typename ... ParametersT >
-		ElementObsT add( ElementKeyT const & name
+		ElementObsT addNew( ElementKeyT const & name
 			, ParametersT && ... params );
 		/**
 		 *\~english
@@ -88,13 +88,13 @@ namespace castor3d
 		 *\return		L'élément créé ou existant.
 		 */
 		template< typename ... ParametersT >
-		ElementObsT tryAdd( ElementKeyT const & name
+		ElementObsT tryAddNew( ElementKeyT const & name
 			, bool initialise
 			, ElementObsT & created
 			, ParametersT && ... params );
 		/**
 		 *\~english
-		 *\brief		adds an already created an element.
+		 *\brief		Adds an already created an element.
 		 *\param[in]	name		The element name.
 		 *\param[in]	element		The element.
 		 *\param[in]	initialise	Tells if the element is to be initialised after creation.
@@ -109,7 +109,7 @@ namespace castor3d
 			, bool initialise = false );
 		/**
 		 *\~english
-		 *\brief		adds an already created an element.
+		 *\brief		Adds an already created an element.
 		 *\param[in]	name		The element name.
 		 *\param[in]	element		The element.
 		 *\param[in]	initialise	Tells if the element is to be initialised after creation.

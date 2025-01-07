@@ -12,6 +12,7 @@ CU_ImplementSmartPtr( castor3d, SceneCache )
 CU_ImplementSmartPtr( castor3d, MaterialCacheView )
 CU_ImplementSmartPtr( castor3d, SamplerCacheView )
 CU_ImplementSmartPtr( castor3d, FontCacheView )
+CU_ImplementSmartPtr( castor3d, ImageCacheView )
 
 
 namespace castor3d

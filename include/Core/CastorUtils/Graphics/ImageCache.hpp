@@ -141,6 +141,8 @@ namespace castor
 	using ImageCache = ResourceCacheT< Image, String, ImageCacheTraits >;
 	using ImageRes = ImageCacheTraits::ElementPtrT;
 	using ImageResPtr = ImageCacheTraits::ElementObsT;
+
+	CU_DeclareSmartPtr( castor, ImageCache, CU_API );
 }
 
 #endif

@@ -3,6 +3,8 @@
 #include "CastorUtils/Graphics/Image.hpp"
 #include "CastorUtils/Graphics/ImageLoader.hpp"
 
+CU_ImplementSmartPtr( castor, ImageCache )
+
 namespace castor
 {
 	//*********************************************************************************************

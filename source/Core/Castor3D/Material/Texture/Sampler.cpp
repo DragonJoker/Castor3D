@@ -457,7 +457,7 @@ namespace castor3d
 			auto resource = engine.createSampler( name
 				, engine
 				, castor::move( createInfo ) );
-			sampler = engine.addNewSampler( name
+			sampler = engine.addSampler( name
 				, resource
 				, false );
 		}

@@ -213,7 +213,7 @@ namespace castor3d
 		className##Cache::ElementObsT addNew##className( className##Cache::ElementKeyT const & key\
 			, ParametersT && ... parameters )\
 		{\
-			return m_##memberName##Cache->add( key\
+			return m_##memberName##Cache->addNew( key\
 				, castor::forward< ParametersT >( parameters )... );\
 		}\
 		className##Cache::ElementObsT add##className( className##Cache::ElementKeyT const & key\
@@ -238,6 +238,10 @@ namespace castor3d
 		className##Cache::ElementObsT tryFind##className( className##Cache::ElementKeyT const & key )const noexcept\
 		{\
 			return m_##memberName##Cache->tryFind( key );\
+		}\
+		uint32_t get##className##sCount()const noexcept\
+		{\
+			return m_##memberName##Cache->getObjectCount();\
 		}\
 		DECLARE_CACHE_MEMBER_MIN( memberName, className )
 
@@ -286,7 +290,7 @@ namespace castor3d
 		className##Cache::ElementObsT addNew##className( className##Cache::ElementKeyT const & key\
 			, ParametersT && ... parameters )\
 		{\
-			return m_##memberName##Cache->add( key\
+			return m_##memberName##Cache->addNew( key\
 				, castor::forward< ParametersT >( parameters )... );\
 		}\
 		className##Cache::ElementObsT add##className( className##Cache::ElementKeyT const & key\
@@ -315,7 +319,7 @@ namespace castor3d
 		className##Cache::ElementObsT addNew##className( className##Cache::ElementKeyT const & key\
 			, ParametersT && ... parameters )\
 		{\
-			return m_##memberName##CacheView->add( key\
+			return m_##memberName##CacheView->addNew( key\
 				, castor::forward< ParametersT >( parameters )... );\
 		}\
 		className##Cache::ElementObsT add##className( className##Cache::ElementKeyT const & key\
@@ -357,7 +361,7 @@ namespace castor3d
 		castor::className##Cache::ElementObsT addNew##className( castor::className##Cache::ElementKeyT const & key\
 			, ParametersT && ... parameters )\
 		{\
-			return m_##memberName##CacheView->add( key\
+			return m_##memberName##CacheView->addNew( key\
 				, castor::forward< ParametersT >( parameters )... );\
 		}\
 		castor::className##Cache::ElementObsT add##className( castor::className##Cache::ElementKeyT const & key\

@@ -400,7 +400,7 @@ namespace castor3d
 					bool allowHdr = blockContext->window
 						? blockContext->window->window.allowHdr
 						: true;
-					blockContext->renderTarget = getEngine( *blockContext )->getRenderTargetCache().add( blockContext->targetType
+					blockContext->renderTarget = getEngine( *blockContext )->getRenderTargetCache().addNew( blockContext->targetType
 						, blockContext->size
 						, allowHdr ? blockContext->hdrPixelFormat : blockContext->srgbPixelFormat );
 					blockContext->renderTarget->enableFullLoading( getRootContext( *blockContext )->enableFullLoading );
@@ -428,7 +428,7 @@ namespace castor3d
 						bool allowHdr = blockContext->window
 							? blockContext->window->window.allowHdr
 							: true;
-						blockContext->renderTarget = getEngine( *blockContext )->getRenderTargetCache().add( blockContext->targetType
+						blockContext->renderTarget = getEngine( *blockContext )->getRenderTargetCache().addNew( blockContext->targetType
 							, blockContext->size
 							, allowHdr ? blockContext->hdrPixelFormat : blockContext->srgbPixelFormat );
 						blockContext->renderTarget->enableFullLoading( getRootContext( *blockContext )->enableFullLoading );
@@ -461,7 +461,7 @@ namespace castor3d
 						bool allowHdr = blockContext->window
 							? blockContext->window->window.allowHdr
 							: true;
-						blockContext->renderTarget = getEngine( *blockContext )->getRenderTargetCache().add( blockContext->targetType
+						blockContext->renderTarget = getEngine( *blockContext )->getRenderTargetCache().addNew( blockContext->targetType
 							, blockContext->size
 							, allowHdr ? blockContext->hdrPixelFormat : blockContext->srgbPixelFormat );
 						blockContext->renderTarget->enableFullLoading( getRootContext( *blockContext )->enableFullLoading );
@@ -494,7 +494,7 @@ namespace castor3d
 						bool allowHdr = blockContext->window
 							? blockContext->window->window.allowHdr
 							: true;
-						blockContext->renderTarget = getEngine( *blockContext )->getRenderTargetCache().add( blockContext->targetType
+						blockContext->renderTarget = getEngine( *blockContext )->getRenderTargetCache().addNew( blockContext->targetType
 							, blockContext->size
 							, allowHdr ? blockContext->hdrPixelFormat : blockContext->srgbPixelFormat );
 						blockContext->renderTarget->enableFullLoading( getRootContext( *blockContext )->enableFullLoading );

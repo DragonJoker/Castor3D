@@ -82,7 +82,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom d'élément.
 		 *\return		L'élément réel (ajouté, ou original du doublon).
 		 */
-		C3D_API ElementObsT add( ElementKeyT const & name );
+		C3D_API ElementObsT addNew( ElementKeyT const & name );
 
 	private:
 		void doReparentNode( SceneNode & node );

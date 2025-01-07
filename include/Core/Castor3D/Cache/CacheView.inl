@@ -38,13 +38,13 @@ namespace castor3d
 
 	template< typename CacheT, EventType EventT >
 	template< typename ... ParametersT >
-	inline typename CacheViewT< CacheT, EventT >::ElementObsT CacheViewT< CacheT, EventT >::tryAdd( ElementKeyT const & name
+	inline typename CacheViewT< CacheT, EventT >::ElementObsT CacheViewT< CacheT, EventT >::tryAddNew( ElementKeyT const & name
 		, bool initialise
 		, ElementObsT & created
 		, ParametersT && ... params )
 	{
 		auto lock( castor::makeUniqueLock( m_cache ) );
-		auto result = m_cache.tryAddNoLock( name
+		auto result = m_cache.tryAddNewNoLock( name
 			, false
 			, created
 			, castor::forward< ParametersT >( params )... );
@@ -65,11 +65,11 @@ namespace castor3d
 
 	template< typename CacheT, EventType EventT >
 	template< typename ... ParametersT >
-	inline typename CacheViewT< CacheT, EventT >::ElementObsT CacheViewT< CacheT, EventT >::add( ElementKeyT const & name
+	inline typename CacheViewT< CacheT, EventT >::ElementObsT CacheViewT< CacheT, EventT >::addNew( ElementKeyT const & name
 		, ParametersT && ... params )
 	{
 		ElementObsT created{};
-		return this->tryAdd( name
+		return this->tryAddNew( name
 			, true
 			, created
 			, castor::forward< ParametersT >( params )... );

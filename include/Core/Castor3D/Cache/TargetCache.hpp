@@ -46,7 +46,7 @@ namespace castor3d
 		 *\param[in]	pixelFormat	Le format des pixels de la cible de rendu.
 		 *\return		La cible de rendu
 		 */
-		C3D_API RenderTargetRPtr add( TargetType type
+		C3D_API RenderTargetRPtr addNew( TargetType type
 			, castor::Size const & size
 			, castor::PixelFormat pixelFormat );
 		/**
