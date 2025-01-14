@@ -68,6 +68,20 @@ namespace castor3d
 		C3D_API void flush();
 		/**
 		 *\~english
+		 *\return		The remaining memory.
+		 *\~french
+		 *\return		La mémoire restante.
+		 */
+		C3D_API VkDeviceSize getAvailable()const noexcept;
+		/**
+		 *\english
+		 *\return		The allocation statistics.
+		 *\french
+		 *\return		Les statistiques d'allocation.
+		 */
+		C3D_API castor::Vector< castor::Pair< MemChunk, castor::String > > listAllocations()const;
+		/**
+		 *\~english
 		 *\param		size	The size wanted.
 		 *\return		\p true if there is enough remaining memory for a new element.
 		 *\~french
@@ -248,7 +262,7 @@ namespace castor3d
 		VkBufferUsageFlags m_usage;
 		VkMemoryPropertyFlags m_flags;
 		ashes::QueueShare m_sharingMode;
-		castor::Set< MemChunk > m_allocated;
+		castor::Map< MemChunk, castor::String > m_allocated;
 		ashes::UniformBufferPtr m_buffer;
 		castor::String m_debugName;
 		castor::ByteArrayView m_data;

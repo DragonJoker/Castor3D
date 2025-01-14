@@ -114,6 +114,13 @@ namespace castor
 			, uint32_t minBlockSize );
 		/**
 		 *\~english
+		 *\return		The remaining memory.
+		 *\~french
+		 *\return		La mémoire restante.
+		 */
+		size_t getAvailable()const noexcept;
+		/**
+		 *\~english
 		 *\param[in]	size	The requested memory size.
 		 *\return		\p true if there is enough remaining memory for given size.
 		 *\~french

@@ -267,6 +267,22 @@ namespace castor3d
 		}
 	}
 
+	AllocationStats GpuBufferPool::getAllocationStats()const noexcept
+	{
+		AllocationStats result{};
+
+		for ( auto const & [_, buffers] : m_buffers )
+		{
+			for ( auto const & buffer : buffers )
+			{
+				result.total += buffer->getBuffer().getCount();
+				result.available += buffer->getAvailable();
+			}
+		}
+
+		return result;
+	}
+
 	GpuBufferBase & GpuBufferPool::doGetBuffer( VkDeviceSize size
 		, VkBufferUsageFlags target
 		, VkMemoryPropertyFlags memory

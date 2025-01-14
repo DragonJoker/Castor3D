@@ -113,6 +113,25 @@ namespace castor3d
 		m_buffers.clear();
 	}
 
+	AllocationStats VertexBufferPool::getAllocationStats()const noexcept
+	{
+		AllocationStats result{};
+
+		for ( auto const & [_, buffers] : m_buffers )
+		{
+			for ( auto const & buffer : buffers )
+			{
+				if ( buffer.vertex )
+				{
+					result.total += buffer.vertex->getBuffer().getSize();
+					result.available += buffer.vertex->getAvailable();
+				}
+			}
+		}
+
+		return result;
+	}
+
 	castor::Vector< castor::Pair< size_t, VertexBufferPool::BufferArray > >::iterator VertexBufferPool::doInsertBuffers( size_t align )
 	{
 		align = std::lcm( align, m_device.properties.limits.minMemoryMapAlignment );
@@ -173,6 +192,22 @@ namespace castor3d
 		m_buffers.clear();
 	}
 
+	AllocationStats IndexBufferPool::getAllocationStats()const noexcept
+	{
+		AllocationStats result{};
+
+		for ( auto const & buffer : m_buffers )
+		{
+			if ( buffer.index )
+			{
+				result.total += buffer.index->getBuffer().getSize();
+				result.available += buffer.index->getAvailable();
+			}
+		}
+
+		return result;
+	}
+
 	void IndexBufferPool::putBuffer( ObjectBufferOffset const & bufferOffset )noexcept
 	{
 		auto it = std::find_if( m_buffers.begin()
@@ -213,6 +248,28 @@ namespace castor3d
 	void ObjectBufferPool::cleanup()
 	{
 		m_buffers.clear();
+	}
+
+	AllocationStats ObjectBufferPool::getAllocationStats()const noexcept
+	{
+		AllocationStats result{};
+
+		for ( auto const & [_, buffers] : m_buffers )
+		{
+			for ( auto const & modelBuffer : buffers )
+			{
+				for ( auto const & buffer : modelBuffer.buffers )
+				{
+					if ( buffer )
+					{
+						result.total += buffer->getBuffer().getSize();
+						result.available += buffer->getAvailable();
+					}
+				}
+			}
+		}
+
+		return result;
 	}
 
 	ObjectBufferOffset ObjectBufferPool::getBuffer( VkDeviceSize vertexCount

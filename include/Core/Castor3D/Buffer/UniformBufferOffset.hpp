@@ -23,9 +23,50 @@ namespace castor3d
 		uint32_t offset{ 0u };
 		uint32_t range{ 0u };
 
+		UniformBufferOffsetT()noexcept = default;
+		UniformBufferOffsetT( UniformBufferOffsetT const & ) = delete;
+		UniformBufferOffsetT & operator=( UniformBufferOffsetT const & ) = delete;
+
+		UniformBufferOffsetT( UniformBufferOffsetT && rhs )noexcept
+			: buffer{ rhs.buffer }
+			, flags{ rhs.flags }
+			, offset{ rhs.offset }
+			, range{ rhs.range }
+		{
+			rhs.buffer = {};
+			rhs.flags = {};
+			rhs.offset = {};
+			rhs.range = {};
+		}
+
+		UniformBufferOffsetT & operator=( UniformBufferOffsetT && rhs )noexcept
+		{
+			buffer = rhs.buffer;
+			flags = rhs.flags;
+			offset = rhs.offset;
+			range = rhs.range;
+
+			rhs.buffer = {};
+			rhs.flags = {};
+			rhs.offset = {};
+			rhs.range = {};
+
+			return *this;
+		}
+
+		~UniformBufferOffsetT()noexcept
+		{
+			CU_Require( buffer == nullptr );
+		}
+
 		void setPool( PoolUniformBuffer & pool )
 		{
 			buffer = &pool;
+		}
+
+		void unsetPool()
+		{
+			buffer = nullptr;
 		}
 
 		explicit operator bool()const

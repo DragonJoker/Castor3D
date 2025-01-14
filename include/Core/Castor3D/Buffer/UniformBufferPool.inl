@@ -30,7 +30,7 @@ namespace castor3d
 	}
 
 	template< typename DataT >
-	void UniformBufferPool::putBuffer( UniformBufferOffsetT< DataT > const & bufferOffset )noexcept
+	void UniformBufferPool::putBuffer( UniformBufferOffsetT< DataT > & bufferOffset )noexcept
 	{
 		if ( bufferOffset )
 		{
@@ -50,6 +50,7 @@ namespace castor3d
 				if ( itB != it->second.end() )
 				{
 					itB->buffer->deallocate( bufferOffset.offset );
+					bufferOffset.unsetPool();
 				}
 			}
 		}

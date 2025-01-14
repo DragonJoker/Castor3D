@@ -51,6 +51,40 @@ namespace castor3d
 		m_buffers.clear();
 	}
 
+	AllocationStats UniformBufferPool::getAllocationStats()const noexcept
+	{
+		AllocationStats result{};
+
+		for ( auto const & [_, buffers] : m_buffers )
+		{
+			for ( auto const & buffer : buffers )
+			{
+				if ( buffer.buffer->hasBuffer() )
+				{
+					result.total += buffer.buffer->getBuffer().getBuffer().getSize();
+					result.available += buffer.buffer->getAvailable();
+				}
+			}
+		}
+
+		return result;
+	}
+
+	castor::Vector< castor::Pair< MemChunk, castor::String > > UniformBufferPool::listAllocations()const
+	{
+		castor::Vector< castor::Pair< MemChunk, castor::String > > result;
+		for ( auto const & [_, buffers] : m_buffers )
+		{
+			for ( auto const & buffer : buffers )
+			{
+				auto bufferAllocs = buffer.buffer->listAllocations();
+				result.insert( result.end(), bufferAllocs.begin(), bufferAllocs.end() );
+			}
+		}
+
+		return result;
+	}
+
 	void UniformBufferPool::upload( UploadData const & uploader )const
 	{
 		auto & commandBuffer = uploader.getCommandBuffer();

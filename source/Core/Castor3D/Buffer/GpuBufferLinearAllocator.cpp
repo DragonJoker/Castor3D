@@ -12,13 +12,18 @@ namespace castor3d
 		, m_allocatedSize{ count * m_alignSize }
 	{
 		m_free.resize( count );
-		VkDeviceSize offset{ count * m_alignSize };
+		VkDeviceSize offset{ m_allocatedSize };
 
 		for ( auto & v : m_free )
 		{
 			offset -= m_alignSize;
 			v = offset;
 		}
+	}
+
+	VkDeviceSize GpuBufferLinearAllocator::getAvailable()const noexcept
+	{
+		return m_free.size() * m_alignSize;
 	}
 
 	VkDeviceSize GpuBufferLinearAllocator::allocate( size_t size )

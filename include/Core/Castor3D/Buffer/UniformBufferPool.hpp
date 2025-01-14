@@ -48,6 +48,20 @@ namespace castor3d
 		 */
 		C3D_API void cleanup();
 		/**
+		 *\english
+		 *\return		The allocation statistics.
+		 *\french
+		 *\return		Les statistiques d'allocation.
+		 */
+		C3D_API AllocationStats getAllocationStats()const noexcept;
+		/**
+		 *\english
+		 *\return		The allocation statistics.
+		 *\french
+		 *\return		Les statistiques d'allocation.
+		 */
+		C3D_API castor::Vector< castor::Pair< MemChunk, castor::String > > listAllocations()const;
+		/**
 		 *\~english
 		 *\brief		Uploads all GPU buffers to VRAM.
 		 *\param[in]	uploader	Receives the upload requests.
@@ -77,7 +91,7 @@ namespace castor3d
 		 *\param[in]	bufferOffset	Le tampon à libérer.
 		 */
 		template< typename DataT >
-		void putBuffer( UniformBufferOffsetT< DataT > const & bufferOffset )noexcept;
+		void putBuffer( UniformBufferOffsetT< DataT > & bufferOffset )noexcept;
 		/**
 		 *\~english
 		 *\return		The pool buffers count.

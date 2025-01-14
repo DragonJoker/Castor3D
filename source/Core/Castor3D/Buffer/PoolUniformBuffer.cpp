@@ -62,10 +62,22 @@ namespace castor3d
 		}
 	}
 
+	VkDeviceSize PoolUniformBuffer::getAvailable()const noexcept
+	{
+		return hasAllocated()
+			? m_buffer->getBuffer().getSize() - ( m_allocated.rbegin()->first.offset + m_allocated.rbegin()->first.size )
+			: m_buffer->getBuffer().getSize();
+	}
+
+	castor::Vector< castor::Pair< MemChunk, castor::String > > PoolUniformBuffer::listAllocations()const
+	{
+		return { m_allocated.begin(), m_allocated.end() };
+	}
+
 	bool PoolUniformBuffer::hasAvailable( VkDeviceSize size )const noexcept
 	{
 		return !hasAllocated()
-			|| m_buffer->getBuffer().getSize() > ( m_allocated.rbegin()->offset + m_allocated.rbegin()->size + getAlignedSize( uint32_t( size ) ) );
+			|| m_buffer->getBuffer().getSize() > ( m_allocated.rbegin()->first.offset + m_allocated.rbegin()->first.size + getAlignedSize( uint32_t( size ) ) );
 	}
 
 	bool PoolUniformBuffer::hasAllocated()const noexcept
@@ -79,9 +91,15 @@ namespace castor3d
 		auto elemSize = m_renderSystem.getValue( GpuMin::eUniformBufferOffsetAlignment );
 		auto offset = m_allocated.empty()
 			? 0u
-			: m_allocated.rbegin()->offset + m_allocated.rbegin()->size;
+			: m_allocated.rbegin()->first.offset + m_allocated.rbegin()->first.size;
 		auto realSize = getAlignedSize( uint32_t( size ) );
-		m_allocated.emplace( offset, realSize, size );
+		castor::String stackTrace;
+#if !defined( NDEBUG )
+		castor::StringStream stream = castor::makeStringStream();
+		stream << castor::debug::Backtrace{ 20, 4 };
+		stackTrace = stream.str();
+#endif
+		m_allocated.try_emplace( MemChunk{ offset, realSize, size }, stackTrace );
 		return { offset / elemSize, realSize / elemSize, size };
 	}
 
