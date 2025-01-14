@@ -951,11 +951,11 @@ namespace c3d_gltf
 
 		if ( isValid() )
 		{
-			for ( auto & nodeData : m_sceneData.nodes )
+			for ( auto * nodeData : m_sceneData.sortedNodes )
 			{
-				if ( file::hasNonSkinnedData( m_sceneData, nodeData ) )
+				if ( file::hasNonSkinnedData( m_sceneData, *nodeData ) )
 				{
-					for ( auto const & [instance, _] : nodeData.instances )
+					for ( auto const & [instance, _] : nodeData->instances )
 					{
 						result.emplace_back( instance );
 					}
@@ -1273,7 +1273,10 @@ namespace c3d_gltf
 		{
 			castor::Vector< size_t > work;
 			for ( auto index : m_asset->scenes[sceneIndex].nodeIndices )
+			{
 				work.emplace_back( index );
+				m_sceneData.sortedNodes.emplace_back( &m_sceneData.nodes[index] );
+			}
 
 			while ( !work.empty() )
 			{
@@ -1283,7 +1286,9 @@ namespace c3d_gltf
 
 				for ( auto childNodeIndex : m_asset->nodes[parentNodeIndex].children )
 				{
-					work.push_back( childNodeIndex );
+					work.emplace_back( childNodeIndex );
+					m_sceneData.sortedNodes.emplace_back( &m_sceneData.nodes[childNodeIndex] );
+
 					auto & childNodeData = m_sceneData.nodes[childNodeIndex];
 					childNodeData.isSkeleton = childNodeData.isSkeleton || parentNodeData.isSkeleton;
 					cumulativeTransforms[childNodeIndex] = cumulativeTransforms[parentNodeIndex] * cumulativeTransforms[childNodeIndex];
