@@ -46,6 +46,13 @@ namespace castor3d
 		 */
 		C3D_API void upload( UploadData & uploader )const;
 		/**
+		 *\english
+		 *\return		The allocation statistics.
+		 *\french
+		 *\return		Les statistiques d'allocation.
+		 */
+		C3D_API AllocationStats getAllocationStats()const noexcept;
+		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
 		 *\param[in]	target	The buffer type.

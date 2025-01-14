@@ -66,6 +66,16 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\return		The remaining memory.
+		 *\~french
+		 *\return		La mémoire restante.
+		 */
+		size_t getAvailable()const noexcept
+		{
+			return m_allocatedSize - m_currentAllocated;
+		}
+		/**
+		 *\~english
 		 *\return		\p true if there is enough remaining memory for given size.
 		 *\~french
 		 *\return		\p true s'il y a assez de mémoire restante pour la taille donnée.

@@ -26,6 +26,13 @@ namespace castor3d
 			, uint32_t alignment );
 		/**
 		 *\~english
+		 *\return		The remaining memory.
+		 *\~french
+		 *\return		La mémoire restante.
+		 */
+		C3D_API VkDeviceSize getAvailable()const noexcept;
+		/**
+		 *\~english
 		 *\brief		Allocates memory.
 		 *\param[in]	size	The requested memory size.
 		 *\return		The memory chunk.

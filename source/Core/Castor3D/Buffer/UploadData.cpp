@@ -64,6 +64,22 @@ namespace castor3d
 				return lhs.dstBuffer < rhs.dstBuffer
 					|| ( lhs.dstBuffer == rhs.dstBuffer && lhs.dstOffset < rhs.dstOffset );
 			} );
+
+		if ( upload.dstOffset >= upload.dstBuffer->getSize() )
+		{
+			log::error << "StagedUploadBuffer: Trying to copy at invalid offset for target [" << castor::makeString( upload.dstBuffer->getName() )
+				<< "] buffer: dstOffset = " << upload.dstOffset << std::endl;
+			CU_Failure( "Trying to copy at invalid offset for target buffer" );
+		}
+
+		if ( upload.dstOffset + upload.srcSize > upload.dstBuffer->getSize() )
+		{
+			log::error << "StagedUploadBuffer: Trying to copy more than there is in target [" << castor::makeString( upload.dstBuffer->getName() )
+				<< "] buffer: dstOffset = " << upload.dstOffset
+				<< ", size = " << upload.srcSize << std::endl;
+			CU_Failure( "Trying to copy more than there is in target buffer" );
+		}
+
 		m_pendingBuffers.emplace( it, castor::move( upload ) );
 	}
 
@@ -92,6 +108,45 @@ namespace castor3d
 							|| ( lhs.dstRange.baseArrayLayer == rhs.dstRange.baseArrayLayer
 								&& lhs.dstRange.baseMipLevel < rhs.dstRange.baseMipLevel ) ) );
 			} );
+
+		if ( auto imgSize = upload.dstImage->getMemoryRequirements().size;
+			upload.srcSize > imgSize )
+		{
+			log::warn << "StagedUploadImage: Trying to copy more than there can be in image [" << castor::makeString( upload.dstImage->getName() )
+				<< "] device memory: size = " << upload.srcSize << std::endl;
+			upload.srcSize = imgSize;
+		}
+
+		if ( upload.dstRange.baseArrayLayer >= upload.dstImage->getLayerCount() )
+		{
+			log::error << "StagedUploadImage: Trying to copy to invalid base array layer for image [" << castor::makeString( upload.dstImage->getName() )
+				<< "]: baseArrayLayer = " << upload.dstRange.baseArrayLayer << std::endl;
+			CU_Failure( "Trying to copy to invalid base array layer for image" );
+		}
+
+		if ( upload.dstRange.baseArrayLayer + upload.dstRange.layerCount > upload.dstImage->getLayerCount() )
+		{
+			log::error << "StagedUploadImage: Trying to copy to invalid array layers for image [" << castor::makeString( upload.dstImage->getName() )
+				<< "]: baseArrayLayer = " << upload.dstRange.baseArrayLayer
+				<< ", layerCount = " << upload.dstRange.layerCount << std::endl;
+			CU_Failure( "Trying to copy to invalid array layers for image" );
+		}
+
+		if ( upload.dstRange.baseMipLevel >= upload.dstImage->getMipmapLevels() )
+		{
+			log::error << "StagedUploadImage: Trying to copy to invalid base mip level for image [" << castor::makeString( upload.dstImage->getName() )
+				<< "]: baseMipLevel = " << upload.dstRange.baseArrayLayer << std::endl;
+			CU_Failure( "Trying to copy to invalid base mip level for image" );
+		}
+
+		if ( upload.dstRange.baseMipLevel + upload.dstRange.levelCount > upload.dstImage->getMipmapLevels() )
+		{
+			log::error << "StagedUploadImage: Trying to copy to invalid mip levels for image [" << castor::makeString( upload.dstImage->getName() )
+				<< "]: baseMipLevel = " << upload.dstRange.baseMipLevel
+				<< ", levelCount = " << upload.dstRange.levelCount << std::endl;
+			CU_Failure( "Trying to copy to invalid mip levels for image" );
+		}
+
 		m_pendingImages.emplace( it, castor::move( upload ) );
 	}
 

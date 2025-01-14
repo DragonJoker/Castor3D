@@ -27,6 +27,12 @@ namespace castor3d
 	}
 
 	template< typename AllocatorT >
+	VkDeviceSize GpuBufferT< AllocatorT >::getAvailable()const noexcept
+	{
+		return m_allocator.getAvailable();
+	}
+
+	template< typename AllocatorT >
 	MemChunk GpuBufferT< AllocatorT >::allocate( VkDeviceSize size )
 	{
 		auto realSize = ashes::getAlignedSize( size, m_allocator.getAlignSize() );
@@ -72,6 +78,12 @@ namespace castor3d
 			, m_sharingMode ) }
 		, m_allocator{ castor::move( allocator ) }
 	{
+	}
+
+	template< typename AllocatorT >
+	VkDeviceSize GpuBaseBufferT< AllocatorT >::getAvailable()const noexcept
+	{
+		return m_allocator.getAvailable();
 	}
 
 	template< typename AllocatorT >

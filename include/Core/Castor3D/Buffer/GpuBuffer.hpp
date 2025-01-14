@@ -263,6 +263,13 @@ namespace castor3d
 		bool hasAvailable( VkDeviceSize size )const noexcept;
 		/**
 		 *\~english
+		 *\return		The remaining memory.
+		 *\~french
+		 *\return		La mémoire restante.
+		 */
+		VkDeviceSize getAvailable()const noexcept;
+		/**
+		 *\~english
 		 *\brief		Allocates a memory chunk for a CPU buffer.
 		 *\param[in]	size	The requested memory size.
 		 *\return		The memory chunk offset.
@@ -321,6 +328,13 @@ namespace castor3d
 			, castor::String const & debugName
 			, ashes::QueueShare sharingMode
 			, AllocatorT allocator );
+		/**
+		 *\~english
+		 *\return		The remaining memory.
+		 *\~french
+		 *\return		La mémoire restante.
+		 */
+		VkDeviceSize getAvailable()const noexcept;
 		/**
 		 *\~english
 		 *\param[in]	size	The requested memory size.

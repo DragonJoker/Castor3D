@@ -214,21 +214,6 @@ namespace castor3d
 			CU_Failure( "Trying to copy more than there can be in staging buffer" );
 		}
 
-		if ( data.dstOffset >= data.dstBuffer->getSize() )
-		{
-			log::error << "StagedUploadBuffer: Trying to copy at invalid offset for target [" << castor::makeString( data.dstBuffer->getName() )
-				<< "] buffer: dstOffset = " << data.dstOffset << std::endl;
-			CU_Failure( "Trying to copy at invalid offset for target buffer" );
-		}
-
-		if ( data.dstOffset + data.srcSize > data.dstBuffer->getSize() )
-		{
-			log::error << "StagedUploadBuffer: Trying to copy more than there is in target [" << castor::makeString( data.dstBuffer->getName() )
-				<< "] buffer: dstOffset = " << data.dstOffset
-				<< ", size = " << data.srcSize << std::endl;
-			CU_Failure( "Trying to copy more than there is in target buffer" );
-		}
-
 		std::memcpy( bufferIt->second.mapped + offset.getOffset(), data.srcData, data.srcSize );
 		return data.srcSize;
 	}
@@ -253,44 +238,6 @@ namespace castor3d
 				<< "] buffer: offset = " << offset.getOffset()
 				<< ", size = " << data.srcSize << std::endl;
 			CU_Failure( "Trying to copy more than there can be in staging buffer" );
-		}
-
-		if ( auto imgSize = data.dstImage->getMemoryRequirements().size;
-			data.srcSize > imgSize )
-		{
-			log::error << "StagedUploadImage: Trying to copy more than there can be in image [" << castor::makeString( data.dstImage->getName() )
-				<< "] device memory: size = " << data.srcSize << std::endl;
-			CU_Failure( "Trying to copy more than there can be in image" );
-		}
-
-		if ( data.dstRange.baseArrayLayer >= data.dstImage->getLayerCount() )
-		{
-			log::error << "StagedUploadImage: Trying to copy to invalid base array layer for image [" << castor::makeString( data.dstImage->getName() )
-				<< "]: baseArrayLayer = " << data.dstRange.baseArrayLayer << std::endl;
-			CU_Failure( "Trying to copy to invalid base array layer for image" );
-		}
-
-		if ( data.dstRange.baseArrayLayer + data.dstRange.layerCount > data.dstImage->getLayerCount() )
-		{
-			log::error << "StagedUploadImage: Trying to copy to invalid array layers for image [" << castor::makeString( data.dstImage->getName() )
-				<< "]: baseArrayLayer = " << data.dstRange.baseArrayLayer
-				<< ", layerCount = " << data.dstRange.layerCount << std::endl;
-			CU_Failure( "Trying to copy to invalid array layers for image" );
-		}
-
-		if ( data.dstRange.baseMipLevel >= data.dstImage->getMipmapLevels() )
-		{
-			log::error << "StagedUploadImage: Trying to copy to invalid base mip level for image [" << castor::makeString( data.dstImage->getName() )
-				<< "]: baseMipLevel = " << data.dstRange.baseArrayLayer << std::endl;
-			CU_Failure( "Trying to copy to invalid base mip level for image" );
-		}
-
-		if ( data.dstRange.baseMipLevel + data.dstRange.levelCount > data.dstImage->getMipmapLevels() )
-		{
-			log::error << "StagedUploadImage: Trying to copy to invalid mip levels for image [" << castor::makeString( data.dstImage->getName() )
-				<< "]: baseMipLevel = " << data.dstRange.baseMipLevel
-				<< ", levelCount = " << data.dstRange.levelCount << std::endl;
-			CU_Failure( "Trying to copy to invalid mip levels for image" );
 		}
 
 		std::memcpy( bufferIt->second.mapped + offset.getOffset(), data.srcData, data.srcSize );

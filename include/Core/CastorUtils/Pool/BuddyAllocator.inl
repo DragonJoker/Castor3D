@@ -15,6 +15,19 @@ namespace castor
 	}
 
 	template< typename Traits >
+	size_t BuddyAllocatorT< Traits >::getAvailable()const noexcept
+	{
+		size_t result{};
+
+		for ( auto const & allocation : m_allocated )
+		{
+			result += doGetLevelSize( allocation.second );
+		}
+
+		return result;
+	}
+
+	template< typename Traits >
 	inline bool BuddyAllocatorT< Traits >::hasAvailable( size_t size )const
 	{
 		auto level = doGetLevel( size );

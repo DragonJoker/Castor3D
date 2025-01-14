@@ -50,6 +50,13 @@ namespace castor3d
 		 */
 		C3D_API void cleanup();
 		/**
+		 *\english
+		 *\return		The allocation statistics.
+		 *\french
+		 *\return		Les statistiques d'allocation.
+		 */
+		C3D_API AllocationStats getAllocationStats()const noexcept;
+		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
 		 *\param[in]	vertexCount	The wanted buffer element count.
@@ -120,6 +127,13 @@ namespace castor3d
 		 */
 		C3D_API void cleanup();
 		/**
+		 *\english
+		 *\return		The allocation statistics.
+		 *\french
+		 *\return		Les statistiques d'allocation.
+		 */
+		C3D_API AllocationStats getAllocationStats()const noexcept;
+		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
 		 *\param[in]	indexCount	The wanted buffer element count.
@@ -186,6 +200,13 @@ namespace castor3d
 		 *\brief		Nettoie tous les tampons GPU.
 		 */
 		C3D_API void cleanup();
+		/**
+		 *\english
+		 *\return		The allocation statistics.
+		 *\french
+		 *\return		Les statistiques d'allocation.
+		 */
+		C3D_API AllocationStats getAllocationStats()const noexcept;
 		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.

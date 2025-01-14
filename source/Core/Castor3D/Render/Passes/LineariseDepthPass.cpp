@@ -175,7 +175,7 @@ namespace castor3d
 
 	LineariseDepthPass::~LineariseDepthPass()noexcept
 	{
-		for ( auto const & level : m_previousLevel )
+		for ( auto & level : m_previousLevel )
 		{
 			m_device.uboPool->putBuffer( level );
 		}

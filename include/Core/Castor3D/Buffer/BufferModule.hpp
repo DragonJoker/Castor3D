@@ -15,6 +15,11 @@ namespace castor3d
 	/**@name Buffer */
 	//@{
 
+	struct AllocationStats
+	{
+		VkDeviceSize total{};
+		VkDeviceSize available{};
+	};
 	/**
 	*\~english
 	*\brief
