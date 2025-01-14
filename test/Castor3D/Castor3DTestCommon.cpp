@@ -991,5 +991,19 @@ namespace Testing
 		return result;
 	}
 
+	bool C3DTestCase::compare( castor3d::AllocationStats const & lhs, castor3d::AllocationStats const & rhs )
+	{
+		// They're both fully free (valid since buffers are not deallocated)
+		if ( lhs.total == lhs.available
+			&& rhs.total == rhs.available )
+		{
+			return true;
+		}
+
+		bool result = CT_EQUAL( lhs.total, rhs.total );
+		result = result && CT_EQUAL( lhs.available, rhs.available );
+		return result;
+	}
+
 	//*********************************************************************************************
 }
