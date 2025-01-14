@@ -84,14 +84,16 @@ namespace castor3d
 		{
 			if ( removeFlag( config, flag ) )
 			{
+				auto source = it->first;
+				auto passConfig = it->second;
 				auto newIt = map.erase( it );
+
 				if ( config.components.end() == findFirstNonEmpty( config ) )
 				{
 					return newIt;
 				}
 
-				auto passConfig = it->second;
-				map.emplace_back( TextureSourceInfo{ it->first, config }, passConfig );
+				map.emplace_back( TextureSourceInfo{ source, config }, passConfig );
 				return map.begin();
 			}
 
