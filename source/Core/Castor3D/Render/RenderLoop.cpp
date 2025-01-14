@@ -59,6 +59,23 @@ namespace castor3d
 		m_debugOverlays.reset();
 	}
 
+	void RenderLoop::initialise()
+	{
+		auto & device = m_renderSystem.getRenderDevice();
+		m_uploadData = castor::makeUniqueDerived< UploadData, StagedUploadData >( device
+			, cuT( "RenderLoop" )
+			, device.graphicsData()->commandPool->createCommandBuffer( "RenderLoopUpload" ) );
+		m_uploadFence = device->createFence( "RenderLoopUpload" );
+
+		registerTimer( cuT( "Events/CPU/PreRender" ), *m_timerCpuEvents[0] );
+		registerTimer( cuT( "Events/CPU/QueueRender" ), *m_timerCpuEvents[1] );
+		registerTimer( cuT( "Events/CPU/PostRender" ), *m_timerCpuEvents[2] );
+
+		registerTimer( cuT( "Events/GPU/PreRender" ), *m_timerGpuEvents[0] );
+		registerTimer( cuT( "Events/GPU/QueueRender" ), *m_timerGpuEvents[1] );
+		registerTimer( cuT( "Events/GPU/PostRender" ), *m_timerGpuEvents[2] );
+	}
+
 	void RenderLoop::cleanup()
 	{
 		unregisterTimer( cuT( "Events/CPU/PreRender" ), *m_timerCpuEvents[0] );
@@ -251,15 +268,6 @@ namespace castor3d
 			m_uploadData = castor::makeUniqueDerived< UploadData, StagedUploadData >( device
 				, cuT( "RenderLoop" )
 				, data->commandPool->createCommandBuffer( "RenderLoopUpload" ) );
-			m_uploadFence = device->createFence( "RenderLoopUpload" );
-
-			registerTimer( cuT( "Events/CPU/PreRender" ), *m_timerCpuEvents[0] );
-			registerTimer( cuT( "Events/CPU/QueueRender" ), *m_timerCpuEvents[1] );
-			registerTimer( cuT( "Events/CPU/PostRender" ), *m_timerCpuEvents[2] );
-
-			registerTimer( cuT( "Events/GPU/PreRender" ), *m_timerGpuEvents[0] );
-			registerTimer( cuT( "Events/GPU/QueueRender" ), *m_timerGpuEvents[1] );
-			registerTimer( cuT( "Events/GPU/PostRender" ), *m_timerGpuEvents[2] );
 		}
 
 		if ( !data )
