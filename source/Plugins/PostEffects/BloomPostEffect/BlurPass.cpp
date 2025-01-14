@@ -277,6 +277,14 @@ namespace Bloom
 	{
 	}
 
+	BlurPass::~BlurPass()noexcept
+	{
+		for ( auto & ubo : m_blurUbo )
+		{
+			m_device.uboPool->putBuffer( ubo );
+		}
+	}
+
 	void BlurPass::update( uint32_t kernelSize )
 	{
 		auto kernel = blur::doCreateKernel( kernelSize );

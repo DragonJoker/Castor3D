@@ -27,6 +27,7 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 	{
 	public:
+		C3D_API ~GaussianBlur()noexcept;
 		/**
 		 *\~english
 		 *\brief		Constructor.

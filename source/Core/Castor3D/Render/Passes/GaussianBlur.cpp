@@ -225,6 +225,11 @@ namespace castor3d
 	castor::MbString const GaussianBlur::CoefficientsCount = "c3d_coefficientsCount";
 	castor::MbString const GaussianBlur::TextureSize = "c3d_textureSize";
 
+	GaussianBlur::~GaussianBlur()noexcept
+	{
+		m_device.uboPool->putBuffer( m_blurUbo );
+	}
+
 	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
