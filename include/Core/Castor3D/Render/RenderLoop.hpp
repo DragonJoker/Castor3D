@@ -51,6 +51,13 @@ namespace castor3d
 		C3D_API virtual ~RenderLoop()noexcept;
 		/**
 		 *\~english
+		 *\brief		Initialises the render loop.
+		 *\~french
+		 *\brief		Initialise la boucle de rendu.
+		 */
+		C3D_API void initialise();
+		/**
+		 *\~english
 		 *\brief		Cleans up the render loop.
 		 *\~french
 		 *\brief		Nettoie la boucle de rendu.

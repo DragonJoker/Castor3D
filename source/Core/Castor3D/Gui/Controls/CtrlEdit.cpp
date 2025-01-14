@@ -1102,11 +1102,17 @@ namespace castor3d
 
 		while ( lineDiff >= m_selections.size() )
 		{
-			auto panel = getEngine().addNewOverlay( getName() + cuT( "/Selection" ) + castor::string::toString( m_selections.size() )
-				, getEngine()
-				, OverlayType::ePanel
-				, nullptr
-				, &text->getOverlay() )->getPanelOverlay();
+			auto panel = m_scene
+				? m_scene->addNewOverlay( getName() + cuT( "/Selection" ) + castor::string::toString( m_selections.size() )
+					, getEngine()
+					, OverlayType::ePanel
+					, nullptr
+					, &text->getOverlay() )->getPanelOverlay()
+				: getEngine().addNewOverlay( getName() + cuT( "/Selection" ) + castor::string::toString( m_selections.size() )
+					, getEngine()
+					, OverlayType::ePanel
+					, nullptr
+					, &text->getOverlay() )->getPanelOverlay();
 			panel->setPixelPosition( {} );
 			panel->setPixelSize( {} );
 			panel->setMaterial( style.getSelectionMaterial() );
