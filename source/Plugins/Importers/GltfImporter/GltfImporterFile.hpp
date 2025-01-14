@@ -151,6 +151,7 @@ namespace c3d_gltf
 	struct GltfSceneData
 	{
 		castor::Vector< GltfNodeData > nodes;
+		castor::Vector< GltfNodeData const * > sortedNodes;
 		castor::Vector< GltfNodeData const * > skeletonNodes;
 		castor::StringMap< GltfMeshData > meshes;
 		castor::StringMap< GlSkeletonData > skeletons;
