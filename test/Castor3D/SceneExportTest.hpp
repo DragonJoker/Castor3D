@@ -23,10 +23,12 @@ namespace Testing
 		void AlphaScene();
 		void AnimatedScene();
 		void LoadSceneThenAnother();
+		void LoadCleanReload();
 
 	private:
 		castor3d::SceneRPtr doParseScene( castor::Path const & path, bool initialise = false );
 		void doTestScene( castor::String const & name );
+		void doTestCleanReloadScene( castor::String const & name );
 	};
 }
 

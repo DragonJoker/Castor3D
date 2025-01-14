@@ -1,5 +1,5 @@
 debug_overlays true
-materials phong
+default_lighting_model "c3d.phong"
 
 scene "Scene"
 {
@@ -18,16 +18,16 @@ scene "Scene"
 		}
 	}
 
-	scene_node "SunLightNode1"
+	scene_node "SunLightNode"
 	{
 		orientation 1 0 0 45
 	}
 	light "SunLight1"
 	{
-		parent "SunLightNode1"
+		parent "SunLightNode"
 		type directional
 		colour 1.0 1.0 1.0
-		intensity 0.8 1.0
+		illumination 1.0
 	}
 
 	scene_node "FinalNode"

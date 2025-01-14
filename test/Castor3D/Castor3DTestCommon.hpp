@@ -432,7 +432,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::TriFaceMapping >
 	{
-		static std::string get( castor3d::TriFaceMapping const & value )
+		static std::string get( castor3d::TriFaceMapping const & )
 		{
 			return std::string{ "castor3d::TriFaceMapping" };
 		}
@@ -441,7 +441,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::LinesMapping >
 	{
-		static std::string get( castor3d::LinesMapping const & value )
+		static std::string get( castor3d::LinesMapping const & )
 		{
 			return std::string{ "castor3d::LinesMapping" };
 		}
@@ -484,9 +484,18 @@ namespace Testing
 	};
 
 	template<>
+	struct Stringifier< castor3d::AllocationStats >
+	{
+		static std::string get( castor3d::AllocationStats const & value )
+		{
+			return toString( value.available ) + cuT( "/" ) + toString( value.total );
+		}
+	};
+
+	template<>
 	struct Stringifier< castor3d::Animable >
 	{
-		static std::string get( castor3d::Animable const & value )
+		static std::string get( castor3d::Animable const & )
 		{
 			return std::string{ "castor3d::Animable" };
 		}
@@ -495,7 +504,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::LightCategory >
 	{
-		static std::string get( castor3d::LightCategory const & value )
+		static std::string get( castor3d::LightCategory const & )
 		{
 			return std::string{ "castor3d::LightCategory" };
 		}
@@ -504,7 +513,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::DirectionalLight >
 	{
-		static std::string get( castor3d::DirectionalLight const & value )
+		static std::string get( castor3d::DirectionalLight const & )
 		{
 			return std::string{ "castor3d::DirectionalLight" };
 		}
@@ -513,7 +522,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::PointLight >
 	{
-		static std::string get( castor3d::PointLight const & value )
+		static std::string get( castor3d::PointLight const & )
 		{
 			return std::string{ "castor3d::PointLight" };
 		}
@@ -522,7 +531,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::SpotLight >
 	{
-		static std::string get( castor3d::SpotLight const & value )
+		static std::string get( castor3d::SpotLight const & )
 		{
 			return std::string{ "castor3d::SpotLight" };
 		}
@@ -531,7 +540,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::Viewport >
 	{
-		static std::string get( castor3d::Viewport const & value )
+		static std::string get( castor3d::Viewport const & )
 		{
 			return std::string{ "castor3d::Viewport" };
 		}
@@ -540,7 +549,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::Pass >
 	{
-		static std::string get( castor3d::Pass const & value )
+		static std::string get( castor3d::Pass const & )
 		{
 			return std::string{ "castor3d::Pass" };
 		}
@@ -549,7 +558,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::Submesh >
 	{
-		static std::string get( castor3d::Submesh const & value )
+		static std::string get( castor3d::Submesh const & )
 		{
 			return std::string{ "castor3d::Submesh" };
 		}
@@ -558,7 +567,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::Skeleton >
 	{
-		static std::string get( castor3d::Skeleton const & value )
+		static std::string get( castor3d::Skeleton const & )
 		{
 			return std::string{ "castor3d::Skeleton" };
 		}
@@ -567,7 +576,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::AnimationKeyFrame >
 	{
-		static std::string get( castor3d::AnimationKeyFrame const & value )
+		static std::string get( castor3d::AnimationKeyFrame const & )
 		{
 			return std::string{ "castor3d::AnimationKeyFrame" };
 		}
@@ -576,7 +585,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::MeshMorphTarget >
 	{
-		static std::string get( castor3d::MeshMorphTarget const & value )
+		static std::string get( castor3d::MeshMorphTarget const & )
 		{
 			return std::string{ "castor3d::MeshMorphTarget" };
 		}
@@ -585,7 +594,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::SkeletonAnimationKeyFrame >
 	{
-		static std::string get( castor3d::SkeletonAnimationKeyFrame const & value )
+		static std::string get( castor3d::SkeletonAnimationKeyFrame const & )
 		{
 			return std::string{ "castor3d::SkeletonAnimationKeyFrame" };
 		}
@@ -594,7 +603,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::SkeletonAnimationInstance >
 	{
-		static std::string get( castor3d::SkeletonAnimationInstance const & value )
+		static std::string get( castor3d::SkeletonAnimationInstance const & )
 		{
 			return std::string{ "castor3d::SkeletonAnimationInstance" };
 		}
@@ -603,7 +612,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::SkeletonAnimationInstanceObject >
 	{
-		static std::string get( castor3d::SkeletonAnimationInstanceObject const & value )
+		static std::string get( castor3d::SkeletonAnimationInstanceObject const & )
 		{
 			return std::string{ "castor3d::SkeletonAnimationInstanceObject" };
 		}
@@ -612,7 +621,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::SkeletonAnimationInstanceKeyFrame >
 	{
-		static std::string get( castor3d::SkeletonAnimationInstanceKeyFrame const & value )
+		static std::string get( castor3d::SkeletonAnimationInstanceKeyFrame const & )
 		{
 			return std::string{ "castor3d::SkeletonAnimationInstanceKeyFrame" };
 		}
@@ -621,7 +630,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::PositionsComponent >
 	{
-		static std::string get( castor3d::PositionsComponent const & value )
+		static std::string get( castor3d::PositionsComponent const & )
 		{
 			return std::string{ "castor3d::PositionsComponent" };
 		}
@@ -630,7 +639,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::NormalsComponent >
 	{
-		static std::string get( castor3d::NormalsComponent const & value )
+		static std::string get( castor3d::NormalsComponent const & )
 		{
 			return std::string{ "castor3d::NormalsComponent" };
 		}
@@ -639,7 +648,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::TangentsComponent >
 	{
-		static std::string get( castor3d::TangentsComponent const & value )
+		static std::string get( castor3d::TangentsComponent const & )
 		{
 			return std::string{ "castor3d::TangentsComponent" };
 		}
@@ -648,7 +657,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::BitangentsComponent >
 	{
-		static std::string get( castor3d::BitangentsComponent const & value )
+		static std::string get( castor3d::BitangentsComponent const & )
 		{
 			return std::string{ "castor3d::BitangentsComponent" };
 		}
@@ -657,7 +666,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::Texcoords0Component >
 	{
-		static std::string get( castor3d::Texcoords0Component const & value )
+		static std::string get( castor3d::Texcoords0Component const & )
 		{
 			return std::string{ "castor3d::Texcoords0Component" };
 		}
@@ -666,7 +675,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::Texcoords1Component >
 	{
-		static std::string get( castor3d::Texcoords1Component const & value )
+		static std::string get( castor3d::Texcoords1Component const & )
 		{
 			return std::string{ "castor3d::Texcoords1Component" };
 		}
@@ -675,7 +684,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::Texcoords2Component >
 	{
-		static std::string get( castor3d::Texcoords2Component const & value )
+		static std::string get( castor3d::Texcoords2Component const & )
 		{
 			return std::string{ "castor3d::Texcoords2Component" };
 		}
@@ -684,7 +693,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::Texcoords3Component >
 	{
-		static std::string get( castor3d::Texcoords3Component const & value )
+		static std::string get( castor3d::Texcoords3Component const & )
 		{
 			return std::string{ "castor3d::Texcoords3Component" };
 		}
@@ -693,7 +702,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::ColoursComponent >
 	{
-		static std::string get( castor3d::ColoursComponent const & value )
+		static std::string get( castor3d::ColoursComponent const & )
 		{
 			return std::string{ "castor3d::ColoursComponent" };
 		}
@@ -702,7 +711,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::SkinComponent >
 	{
-		static std::string get( castor3d::SkinComponent const & value )
+		static std::string get( castor3d::SkinComponent const & )
 		{
 			return std::string{ "castor3d::SkinComponent" };
 		}
@@ -711,7 +720,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::VertexBoneData >
 	{
-		static std::string get( castor3d::VertexBoneData const & value )
+		static std::string get( castor3d::VertexBoneData const & )
 		{
 			return std::string{ "castor3d::VertexBoneData" };
 		}
@@ -720,7 +729,7 @@ namespace Testing
 	template<>
 	struct Stringifier< castor3d::InterleavedVertex >
 	{
-		static std::string get( castor3d::InterleavedVertex const & value )
+		static std::string get( castor3d::InterleavedVertex const & )
 		{
 			return std::string{ "castor3d::InterleavedVertex" };
 		}
@@ -737,9 +746,8 @@ namespace Testing
 
 			while ( i >= 0 )
 			{
-				auto value = FlagT( 0x0000000000000001 << i );
-
-				if ( castor::checkFlag( values, value ) )
+				if ( auto value = FlagT( 0x0000000000000001 << i );
+					castor::checkFlag( values, value ) )
 				{
 					result += sep + toString( value );
 					sep = " | ";
@@ -951,15 +959,19 @@ namespace Testing
 		bool compare( castor3d::VertexBoneData::Ids const & lhs, castor3d::VertexBoneData::Ids const & rhs );
 		bool compare( castor3d::VertexBoneData::Weights const & lhs, castor3d::VertexBoneData::Weights const & rhs );
 		bool compare( castor3d::InterleavedVertex const & lhs, castor3d::InterleavedVertex const & rhs );
+		bool compare( castor3d::AllocationStats const & lhs, castor3d::AllocationStats const & rhs );
 
 		template< typename Value >
 		inline bool compare( castor::ArrayView< Value > const & lhs, castor::ArrayView< Value > const & rhs )
 		{
 			bool result{ lhs.size() == rhs.size() };
 
-			for ( size_t i = 0u; result && i < lhs.size(); ++i )
+			if ( result )
 			{
-				result = this->compare( lhs[i], rhs[i] );
+				for ( size_t i = 0u; i < lhs.size(); ++i )
+				{
+					result = result && this->compare( lhs[i], rhs[i] );
+				}
 			}
 
 			return result;
@@ -970,9 +982,12 @@ namespace Testing
 		{
 			auto result = ( lhs.size() == rhs.size() );
 
-			for ( size_t i = 0u; result && i < lhs.size(); ++i )
+			if ( result )
 			{
-				result = this->compare( lhs[i], rhs[i] );
+				for ( size_t i = 0u; i < lhs.size(); ++i )
+				{
+					result = result && this->compare( lhs[i], rhs[i] );
+				}
 			}
 
 			return result;
@@ -983,9 +998,12 @@ namespace Testing
 		{
 			auto result = ( lhs.size() == rhs.size() );
 
-			for ( size_t i = 0u; result && i < lhs.size(); ++i )
+			if ( result )
 			{
-				result = this->compare( lhs[i], rhs[i] );
+				for ( size_t i = 0u; i < lhs.size(); ++i )
+				{
+					result = result && this->compare( lhs[i], rhs[i] );
+				}
 			}
 
 			return result;
