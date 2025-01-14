@@ -147,6 +147,7 @@ namespace PbrBloom
 		m_combinePass.reset();
 		m_upsamplePass.reset();
 		m_downsamplePass.reset();
+		device.uboPool->putBuffer( m_ubo );
 	}
 
 	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )

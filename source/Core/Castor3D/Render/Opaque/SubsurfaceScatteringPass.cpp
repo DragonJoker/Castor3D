@@ -538,6 +538,8 @@ namespace castor3d
 
 		m_intermediate.destroy();
 		m_result.destroy();
+		m_device.uboPool->putBuffer( m_blurCfgUbo );
+		m_device.uboPool->putBuffer( m_blurWgtUbo );
 	}
 
 	void SubsurfaceScatteringPass::update( CpuUpdater & /*updater*/ )

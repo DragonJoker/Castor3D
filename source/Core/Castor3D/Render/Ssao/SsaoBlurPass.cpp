@@ -501,6 +501,7 @@ namespace castor3d
 	{
 		m_bentResult.destroy();
 		m_result.destroy();
+		m_device.uboPool->putBuffer( m_configurationUbo );
 	}
 
 	void SsaoBlurPass::update( CpuUpdater & updater )

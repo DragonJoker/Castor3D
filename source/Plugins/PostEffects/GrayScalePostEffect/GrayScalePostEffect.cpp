@@ -156,7 +156,6 @@ namespace grayscale
 
 	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
-		device.uboPool->putBuffer( m_configUbo );
 	}
 
 	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
