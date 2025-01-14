@@ -22,7 +22,7 @@ namespace castor
 		, String subFolder )
 		: TextWriterT< TextureUnit >{ tabs, cuT( "TextureUnit" ) }
 		, m_folder{ folder }
-		, m_subFolder{ subFolder }
+		, m_subFolder{ castor::move( subFolder ) }
 	{
 	}
 
@@ -30,9 +30,8 @@ namespace castor
 		, StringStream & file )
 	{
 		bool result = true;
-		auto hasTexture = unit.isTextured();
 
-		if ( hasTexture )
+		if ( unit.isTextured() )
 		{
 			log::info << tabs() << cuT( "Writing TextureUnit" ) << std::endl;
 			auto image = unit.getTexturePath();
@@ -40,7 +39,7 @@ namespace castor
 			auto defaultSampler = &unit.getEngine()->getDefaultSampler()->getSampler();
 			if ( auto block{ beginBlock( file, cuT( "texture_unit" ) ) } )
 			{
-				if ( unit.getSampler() && defaultSampler != &unit.getSampler() )
+				if ( unit.getSampler().getSampler() && defaultSampler != &unit.getSampler().getSampler() )
 				{
 					result = writeName( file, cuT( "sampler" ), castor::makeString( unit.getSampler().getName() ) );
 				}
@@ -51,9 +50,9 @@ namespace castor
 				}
 
 				auto dimensions = unit.getTextureDimensions();
-				auto format = unit.getTexturePixelFormat();
 
-				if ( result
+				if ( auto format = unit.getTexturePixelFormat();
+					result
 					&& unit.getTextureMipmapCount() > 1
 					&& unit.getTextureMipmapCount() < castor::getMipLevels( dimensions, format ) )
 				{
@@ -67,7 +66,7 @@ namespace castor
 
 				if ( result )
 				{
-					auto & transform = config.transform;
+					auto const & transform = config.transform;
 					auto rotate = transform.rotate.degrees();
 					auto translate = castor::Point3f{ transform.translate };
 					auto scale = castor::Point3f{ transform.scale };

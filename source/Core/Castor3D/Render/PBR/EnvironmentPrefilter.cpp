@@ -74,6 +74,7 @@ namespace castor3d
 				created->setMinLod( 0.0f );
 				created->setMaxLod( float( maxLod ) );
 				result = engine.addSampler( name, created, false );
+				result->setSerialisable( false );
 			}
 
 			result->initialise( device );

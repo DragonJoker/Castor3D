@@ -338,6 +338,7 @@ namespace castor3d
 				created->setMinLod( 0.0f );
 				created->setMaxLod( float( m_texture->getMipLevels() - 1u ) );
 				sampler = getEngine()->addSampler( name, created, false );
+				sampler->setSerialisable( false );
 
 				if ( m_texture->getMipLevels() > 1u )
 				{
