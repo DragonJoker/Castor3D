@@ -596,7 +596,7 @@ namespace castor3d
 		m_descriptor = ashes::WriteDescriptorSet{ 0u
 			, 0u
 			, VkDescriptorType( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER )
-			, ashes::VkDescriptorImageInfoArray{ VkDescriptorImageInfo{ getSampler()
+			, ashes::VkDescriptorImageInfoArray{ VkDescriptorImageInfo{ getSampler().getSampler()
 			, m_texture->sampledView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } };
 
@@ -754,10 +754,10 @@ namespace castor3d
 			&& getAnimation().isTileAnimated();
 	}
 
-	ashes::Sampler const & TextureUnit::getSampler()const
+	Sampler const & TextureUnit::getSampler()const
 	{
 		CU_Require( isTextured() );
-		return m_sampler->getSampler();
+		return *m_sampler;
 	}
 
 	RenderTargetRPtr TextureUnit::getRenderTarget()const

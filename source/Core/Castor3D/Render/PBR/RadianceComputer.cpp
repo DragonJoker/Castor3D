@@ -59,6 +59,7 @@ namespace castor3d
 				created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				result = engine.addSampler( name, created, false );
+				result->setSerialisable( false );
 			}
 
 			result->initialise( engine.getRenderSystem()->getRenderDevice() );

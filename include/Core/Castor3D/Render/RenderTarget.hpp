@@ -486,10 +486,6 @@ namespace castor3d
 			, crg::SemaphoreWaitArray signalsToWait );
 		void doListIntermediateViews( IntermediateViewArray & result )const;
 
-	public:
-		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu
-		C3D_API static const castor::String DefaultSamplerName;
-
 	private:
 		static uint32_t sm_uiCount;
 		RenderDevice & m_device;

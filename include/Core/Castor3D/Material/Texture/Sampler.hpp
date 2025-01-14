@@ -170,6 +170,11 @@ namespace castor3d
 		{
 			return m_info.compareEnable == VK_TRUE;
 		}
+
+		bool isSerialisable()const
+		{
+			return m_serialisable;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -254,6 +259,11 @@ namespace castor3d
 		{
 			m_info.compareEnable = value;
 		}
+
+		void setSerialisable( bool value )
+		{
+			m_serialisable = value;
+		}
 		/**@}*/
 
 	private:
@@ -277,6 +287,7 @@ namespace castor3d
 			, VK_FALSE
 		};
 		bool m_mipmapIsSet{ false };
+		bool m_serialisable{ true };
 		ashes::SamplerPtr m_sampler;
 		std::atomic_bool m_initialised;
 		std::atomic_bool m_initialising;

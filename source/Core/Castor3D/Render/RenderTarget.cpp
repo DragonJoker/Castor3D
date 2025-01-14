@@ -626,7 +626,6 @@ namespace castor3d
 	//*********************************************************************************************
 
 	uint32_t RenderTarget::sm_uiCount = 0;
-	const castor::String RenderTarget::DefaultSamplerName = cuT( "DefaultRTSampler" );
 
 	RenderTarget::RenderTarget( Engine & engine
 		, TargetType type
@@ -731,14 +730,6 @@ namespace castor3d
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		m_graph.addOutput( m_combined.wholeViewId
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-
-		auto sampler = engine.addNewSampler( RenderTarget::DefaultSamplerName + getName() + cuT( "Linear" ), engine );
-		sampler->setMinFilter( VK_FILTER_LINEAR );
-		sampler->setMagFilter( VK_FILTER_LINEAR );
-
-		sampler = engine.addNewSampler( RenderTarget::DefaultSamplerName + getName() + cuT( "Nearest" ), engine );
-		sampler->setMinFilter( VK_FILTER_NEAREST );
-		sampler->setMagFilter( VK_FILTER_NEAREST );
 
 		for ( auto const & entry : engine.getPostEffectFactory().listRegisteredTypes() )
 		{

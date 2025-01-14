@@ -177,7 +177,7 @@ namespace castor3d
 		C3D_API bool isInitialised()const;
 		C3D_API bool isTransformAnimated()const;
 		C3D_API bool isTileAnimated()const;
-		C3D_API ashes::Sampler const & getSampler()const;
+		C3D_API Sampler const & getSampler()const;
 		C3D_API RenderTargetRPtr getRenderTarget()const;
 
 		C3D_API castor::String getTextureName()const;
