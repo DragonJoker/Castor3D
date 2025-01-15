@@ -493,6 +493,24 @@ namespace Testing
 	};
 
 	template<>
+	struct Stringifier< castor3d::DeviceCounts >
+	{
+		static std::string get( castor3d::DeviceCounts const & )
+		{
+			return std::string{ "castor3d::DeviceCounts" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::EngineCounts >
+	{
+		static std::string get( castor3d::EngineCounts const & )
+		{
+			return std::string{ "castor3d::EngineCounts" };
+		}
+	};
+
+	template<>
 	struct Stringifier< castor3d::Animable >
 	{
 		static std::string get( castor3d::Animable const & )
@@ -960,6 +978,8 @@ namespace Testing
 		bool compare( castor3d::VertexBoneData::Weights const & lhs, castor3d::VertexBoneData::Weights const & rhs );
 		bool compare( castor3d::InterleavedVertex const & lhs, castor3d::InterleavedVertex const & rhs );
 		bool compare( castor3d::AllocationStats const & lhs, castor3d::AllocationStats const & rhs );
+		bool compare( castor3d::DeviceCounts const & lhs, castor3d::DeviceCounts const & rhs );
+		bool compare( castor3d::EngineCounts const & lhs, castor3d::EngineCounts const & rhs );
 
 		template< typename Value >
 		inline bool compare( castor::ArrayView< Value > const & lhs, castor::ArrayView< Value > const & rhs )

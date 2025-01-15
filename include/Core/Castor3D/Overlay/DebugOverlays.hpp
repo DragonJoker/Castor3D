@@ -190,7 +190,7 @@ namespace castor3d
 		class MainDebugPanel
 		{
 		public:
-			explicit MainDebugPanel( Engine & engine );
+			explicit MainDebugPanel( Engine & engine, castor::String const & name );
 			~MainDebugPanel()noexcept;
 			void update();
 			void setVisible( bool visible );
@@ -200,6 +200,9 @@ namespace castor3d
 			void addCountPanel( castor::String const & name
 				, castor::String const & label
 				, uint32_t const & value );
+			void addStatsPanel( castor::String const & name
+				, castor::String const & label
+				, AllocationStats const & value );
 			void addFpsPanel( castor::String const & name
 				, castor::String const & label
 				, float const & value );
@@ -213,6 +216,7 @@ namespace castor3d
 			DebugPanelsPtr m_times;
 			DebugPanelsPtr m_fps;
 			DebugPanelsPtr m_counts;
+			DebugPanelsPtr m_stats;
 		};
 
 		class PassOverlays
@@ -402,6 +406,7 @@ namespace castor3d
 		castor::Nanoseconds m_averageTime{ 0 };
 		std::locale m_timesLocale{};
 		RenderInfo m_renderInfo;
+		DeviceCounts m_allocations;
 		bool m_dirty{ false };
 	};
 }

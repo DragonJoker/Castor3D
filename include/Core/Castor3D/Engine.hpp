@@ -24,6 +24,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Plugin/PluginModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 #include "Castor3D/Render/ToneMapping/ToneMappingModule.hpp"
 #include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
@@ -67,6 +68,17 @@ namespace castor3d
 	private:
 		friend class Scene;
 		PrivEngineToken()noexcept = default;
+	};
+
+	struct EngineCounts
+	{
+		DeviceCounts device;
+		uint32_t fontCount;
+		uint32_t materialCount;
+		uint32_t overlayCount;
+		uint32_t samplerCount;
+
+		C3D_API EngineCounts( castor3d::Engine const & engine );
 	};
 
 	struct EngineConfig

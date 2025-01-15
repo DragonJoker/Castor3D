@@ -72,6 +72,17 @@ namespace Testing
 
 			return result;
 		}
+
+		void printAllocs( castor::Vector< castor::Pair< castor3d::MemChunk, castor::String > > const & allocs
+			, castor::String const & step )
+		{
+			castor3d::log::debug << "Allocations - " << step << std::endl;
+
+			for ( auto const & [chunk, stack] : allocs )
+			{
+				castor3d::log::debug << stack << std::endl << std::endl;
+			}
+		}
 	}
 
 	C3DTestCase::C3DTestCase( std::string const & name
@@ -1002,6 +1013,34 @@ namespace Testing
 
 		bool result = CT_EQUAL( lhs.total, rhs.total );
 		result = result && CT_EQUAL( lhs.available, rhs.available );
+		return result;
+	}
+
+	bool C3DTestCase::compare( castor3d::DeviceCounts const & lhs, castor3d::DeviceCounts const & rhs )
+	{
+		bool result = CT_EQUAL( lhs.vertexAllocated, rhs.vertexAllocated );
+		result = result && CT_EQUAL( lhs.bufferAllocated, rhs.bufferAllocated );
+		result = result && CT_EQUAL( lhs.indexAllocated, rhs.indexAllocated );
+		result = result && CT_EQUAL( lhs.geometryAllocated, rhs.geometryAllocated );
+		result = result && CT_EQUAL( lhs.uboAllocated, rhs.uboAllocated );
+
+		if ( !compare( lhs.uboAllocated, rhs.uboAllocated ) )
+		{
+			details::printAllocs( lhs.uboAllocations, "Lhs" );
+			details::printAllocs( rhs.uboAllocations, "Rhs" );
+			result = false;
+		}
+
+		return result;
+	}
+
+	bool C3DTestCase::compare( castor3d::EngineCounts const & lhs, castor3d::EngineCounts const & rhs )
+	{
+		bool result = CT_EQUAL( lhs.fontCount, rhs.fontCount );
+		result = result && CT_EQUAL( lhs.materialCount, rhs.materialCount );
+		result = result && CT_EQUAL( lhs.overlayCount, rhs.overlayCount );
+		result = result && CT_EQUAL( lhs.samplerCount, rhs.samplerCount );
+		result = result && CT_EQUAL( lhs.device, rhs.device );
 		return result;
 	}
 

@@ -238,12 +238,12 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	DebugOverlays::MainDebugPanel::MainDebugPanel( Engine & engine )
+	DebugOverlays::MainDebugPanel::MainDebugPanel( Engine & engine, castor::String const & name )
 		: m_engine{ engine }
 	{
 		auto & manager = dbgovl::getControlsManager( m_engine );
 		m_panel = manager.registerControlT( castor::makeUnique< PanelCtrl >( nullptr
-			, cuT( "Debug/Main" )
+			, cuT( "Debug/" ) + name
 			, manager.getStyle< PanelStyle >( cuT( "Debug/Main" ) )
 			, nullptr
 			, castor::Position{}
@@ -255,10 +255,12 @@ namespace castor3d
 		m_times = castor::make_unique< DebugPanels >( cuT( "Times" ), m_engine, *m_panel );
 		m_fps = castor::make_unique< DebugPanels >( cuT( "FPS" ), m_engine, *m_panel );
 		m_counts = castor::make_unique< DebugPanels >( cuT( "Counts" ), m_engine, *m_panel );
+		m_stats = castor::make_unique< DebugPanels >( cuT( "Allocations" ), m_engine, *m_panel );
 	}
 
 	DebugOverlays::MainDebugPanel::~MainDebugPanel()noexcept
 	{
+		m_stats.reset();
 		m_counts.reset();
 		m_fps.reset();
 		m_times.reset();
@@ -276,6 +278,7 @@ namespace castor3d
 		m_times->update();
 		m_fps->update();
 		m_counts->update();
+		m_stats->update();
 	}
 
 	void DebugOverlays::MainDebugPanel::setVisible( bool visible )
@@ -305,6 +308,17 @@ namespace castor3d
 		doUpdatePosition();
 	}
 
+	void DebugOverlays::MainDebugPanel::addStatsPanel( castor::String const & name
+		, castor::String const & label
+		, AllocationStats const & value )
+	{
+		auto v = &value;
+		m_stats->add( name
+			, label
+			, [v]() { return castor::string::toString( v->total - v->available ); } );
+		doUpdatePosition();
+	}
+
 	void DebugOverlays::MainDebugPanel::addFpsPanel( castor::String const & name
 		, castor::String const & label
 		, float const & value )
@@ -321,6 +335,7 @@ namespace castor3d
 		uint32_t y = m_times->updatePosition( 0u );
 		y = m_fps->updatePosition( y );
 		y = m_counts->updatePosition( y );
+		y = m_stats->updatePosition( y );
 		m_panel->setSize( castor::Size{ DebugPanelWidth, y } );
 	}
 
@@ -1011,6 +1026,7 @@ namespace castor3d
 
 	DebugOverlays::DebugOverlays( Engine & engine )
 		: OwnedBy< Engine >( engine )
+		, m_allocations{ *engine.getRenderDevice() }
 	{
 		doCreateMainDebugPanel();
 		doCreateRenderPassesDebugPanel();
@@ -1038,6 +1054,7 @@ namespace castor3d
 		}
 
 		m_renderInfo = RenderInfo{};
+		m_allocations = { *getEngine()->getRenderDevice() };
 		m_externalTime = m_frameTimer.getElapsed();
 		return m_renderInfo;
 	}
@@ -1175,7 +1192,7 @@ namespace castor3d
 
 	void DebugOverlays::doCreateMainDebugPanel()
 	{
-		m_debugPanel = castor::make_unique< MainDebugPanel >( *getEngine() );
+		m_debugPanel = castor::make_unique< MainDebugPanel >( *getEngine(), cuT( "Main" ) );
 		m_debugPanel->addTimePanel( cuT( "CpuTime" )
 			, cuT( "CPU:" )
 			, m_cpuTime );
@@ -1230,6 +1247,21 @@ namespace castor3d
 		m_debugPanel->addCountPanel( cuT( "StagingBuffersCount" )
 			, cuT( "Upload Buffers:" )
 			, m_renderInfo.stagingBuffersCount );
+		m_debugPanel->addStatsPanel( cuT( "RawBuffers" )
+			, cuT( "Raw Buffers:" )
+			, m_allocations.bufferAllocated );
+		m_debugPanel->addStatsPanel( cuT( "VertexBuffers" )
+			, cuT( "Vertex Buffers:" )
+			, m_allocations.vertexAllocated );
+		m_debugPanel->addStatsPanel( cuT( "IndexBuffers" )
+			, cuT( "Index Buffers:" )
+			, m_allocations.indexAllocated );
+		m_debugPanel->addStatsPanel( cuT( "SubmeshBuffers" )
+			, cuT( "Submesh Buffers:" )
+			, m_allocations.geometryAllocated );
+		m_debugPanel->addStatsPanel( cuT( "UniformBuffers" )
+			, cuT( "Uniform Buffers:" )
+			, m_allocations.uboAllocated );
 		m_debugPanel->setVisible( m_visible );
 	}
 
