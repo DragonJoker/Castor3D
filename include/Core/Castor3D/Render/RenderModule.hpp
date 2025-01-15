@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderModule_H___
 #define ___C3D_RenderModule_H___
 
+#include "Castor3D/Buffer/BufferModule.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
@@ -773,6 +774,25 @@ namespace castor3d
 	*	Noeud utilisé pour le dessin un submesh.
 	*/
 	struct SubmeshRenderNode;
+	/**
+	*\~english
+	*\brief
+	*	Allocation counters for device buffers.
+	*\~french
+	*\brief
+	*	Compteurs d'allocation pour les buffers du device.
+	*/
+	struct DeviceCounts
+	{
+		AllocationStats bufferAllocated;
+		AllocationStats vertexAllocated;
+		AllocationStats indexAllocated;
+		AllocationStats geometryAllocated;
+		AllocationStats uboAllocated;
+		castor::Vector< castor::Pair< MemChunk, castor::String > > uboAllocations;
+
+		C3D_API DeviceCounts( RenderDevice const & device );
+	};
 
 	using RenderQueueArray = castor::Vector< castor::ReferenceWrapper< RenderQueue > >;
 	using TextureArray = castor::Vector< Texture >;

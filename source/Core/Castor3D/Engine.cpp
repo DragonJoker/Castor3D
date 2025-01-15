@@ -23,6 +23,7 @@
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Plugin/Plugin.hpp"
 #include "Castor3D/Render/PBR/BrdfPrefilter.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderLoopAsync.hpp"
 #include "Castor3D/Render/RenderLoopSync.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -448,6 +449,17 @@ namespace castor3d
 			}
 		}
 		CU_EndAttribute()
+	}
+
+	//*********************************************************************************************
+
+	EngineCounts::EngineCounts( Engine const & engine )
+		: device{ *engine.getRenderDevice() }
+		, fontCount{ engine.getFontsCount() }
+		, materialCount{ engine.getMaterialsCount() }
+		, overlayCount{ engine.getOverlaysCount() }
+		, samplerCount{ engine.getSamplersCount() }
+	{
 	}
 
 	//*********************************************************************************************

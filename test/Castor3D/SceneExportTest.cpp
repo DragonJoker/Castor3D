@@ -55,17 +55,6 @@ namespace Testing
 			engine.getRenderTargetCache().clear();
 			engine.removeScene( scene->getName() );
 		}
-
-		void printAllocs( castor::Vector< castor::Pair< castor3d::MemChunk, castor::String > > const & allocs
-			, castor::String const & step )
-		{
-			castor3d::log::debug << "Allocations - " << step << std::endl;
-
-			for ( auto const & [chunk, stack] : allocs )
-			{
-				castor3d::log::debug << stack << std::endl << std::endl;
-			}
-		}
 	}
 
 	SceneExportTest::SceneExportTest( castor3d::Engine & engine )
@@ -157,74 +146,16 @@ namespace Testing
 
 	void SceneExportTest::doTestCleanReloadScene( castor::String const & name )
 	{
-		struct EngineCounts
-		{
-			uint32_t fontCount;
-			uint32_t materialCount;
-			uint32_t overlayCount;
-			uint32_t samplerCount;
-			castor3d::AllocationStats bufferAllocated;
-			castor3d::AllocationStats vertexAllocated;
-			castor3d::AllocationStats indexAllocated;
-			castor3d::AllocationStats geometryAllocated;
-			castor3d::AllocationStats uboAllocated;
-			castor::Vector< castor::Pair< castor3d::MemChunk, castor::String > > uboAllocations;
-
-			EngineCounts( castor3d::Engine const & engine )
-			{
-				fontCount = engine.getFontsCount();
-				materialCount = engine.getMaterialsCount();
-				overlayCount = engine.getOverlaysCount();
-				samplerCount = engine.getSamplersCount();
-
-				auto const & device = *engine.getRenderDevice();
-				bufferAllocated = device.bufferPool->getAllocationStats();
-				vertexAllocated = device.vertexPools->getAllocationStats();
-				indexAllocated = device.indexPools->getAllocationStats();
-				geometryAllocated = device.geometryPools->getAllocationStats();
-				uboAllocated = device.uboPool->getAllocationStats();
-				uboAllocations = device.uboPool->listAllocations();
-			}
-		};
-
-		EngineCounts before{ m_engine };
+		castor3d::EngineCounts before{ m_engine };
 		{
 			cleanup( doParseScene( m_testDataFolder / name, true ) );
-			EngineCounts after{ m_engine };
-			CT_EQUAL( before.fontCount, after.fontCount );
-			CT_EQUAL( before.materialCount, after.materialCount );
-			CT_EQUAL( before.overlayCount, after.overlayCount );
-			CT_EQUAL( before.samplerCount, after.samplerCount );
-			CT_EQUAL( before.bufferAllocated, after.bufferAllocated );
-			CT_EQUAL( before.vertexAllocated, after.vertexAllocated );
-			CT_EQUAL( before.indexAllocated, after.indexAllocated );
-			CT_EQUAL( before.geometryAllocated, after.geometryAllocated );
-			CT_EQUAL( before.uboAllocated, after.uboAllocated );
-
-			if ( !compare( before.uboAllocated, after.uboAllocated ) )
-			{
-				printAllocs( before.uboAllocations, "Before" );
-				printAllocs( after.uboAllocations, "After1" );
-			}
+			castor3d::EngineCounts after{ m_engine };
+			CT_EQUAL( before, after );
 		}
 		{
 			cleanup( doParseScene( m_testDataFolder / name, true ) );
-			EngineCounts after{ m_engine };
-			CT_EQUAL( before.fontCount, after.fontCount );
-			CT_EQUAL( before.materialCount, after.materialCount );
-			CT_EQUAL( before.overlayCount, after.overlayCount );
-			CT_EQUAL( before.samplerCount, after.samplerCount );
-			CT_EQUAL( before.bufferAllocated, after.bufferAllocated );
-			CT_EQUAL( before.vertexAllocated, after.vertexAllocated );
-			CT_EQUAL( before.indexAllocated, after.indexAllocated );
-			CT_EQUAL( before.geometryAllocated, after.geometryAllocated );
-			CT_EQUAL( before.uboAllocated, after.uboAllocated );
-
-			if ( !compare( before.uboAllocated, after.uboAllocated ) )
-			{
-				printAllocs( before.uboAllocations, "Before" );
-				printAllocs( after.uboAllocations, "After2" );
-			}
+			castor3d::EngineCounts after{ m_engine };
+			CT_EQUAL( before, after );
 		}
 		m_engine.cleanup();
 		m_engine.initialise( 1, false );

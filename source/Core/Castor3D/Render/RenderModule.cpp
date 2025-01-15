@@ -2,6 +2,9 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBufferPool.hpp"
+#include "Castor3D/Buffer/ObjectBufferPool.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -22,6 +25,8 @@ CU_ImplementExportedOwnedBy( castor3d::RenderDevice, RenderDevice )
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
 	namespace rndmodl
 	{
 		static castor::String normalizeName( castor::String name )
@@ -32,6 +37,20 @@ namespace castor3d
 			return name;
 		}
 	}
+
+	//*********************************************************************************************
+
+	DeviceCounts::DeviceCounts( RenderDevice const & device )
+	{
+		bufferAllocated = device.bufferPool->getAllocationStats();
+		vertexAllocated = device.vertexPools->getAllocationStats();
+		indexAllocated = device.indexPools->getAllocationStats();
+		geometryAllocated = device.geometryPools->getAllocationStats();
+		uboAllocated = device.uboPool->getAllocationStats();
+		uboAllocations = device.uboPool->listAllocations();
+	}
+
+	//*********************************************************************************************
 
 	castor::String getName( Corner value )
 	{
