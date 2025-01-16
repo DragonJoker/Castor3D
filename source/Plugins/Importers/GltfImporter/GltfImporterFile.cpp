@@ -943,7 +943,7 @@ namespace c3d_gltf
 
 		if ( isValid() )
 		{
-			for ( auto * nodeData : m_sceneData.sortedNodes )
+			for ( auto const * nodeData : m_sceneData.sortedNodes )
 			{
 				if ( file::hasNonSkinnedData( m_sceneData, *nodeData ) )
 				{
@@ -1309,16 +1309,15 @@ namespace c3d_gltf
 
 		// List their attached objects
 		castor::Map< GltfMeshData const *, castor::Vector< size_t > > processedMeshes;
-		nodeIndex = {};
-		for ( auto node : m_asset->nodes )
+		for ( auto nodeData : m_sceneData.sortedNodes )
 		{
-			auto & nodeData = m_sceneData.nodes[nodeIndex];
+			auto & node = *nodeData->node;
 
 			//
 			if ( node.meshIndex )
 			{
 				file::listNodeMeshes( cumulativeTransforms, m_sceneData.meshes, *node.meshIndex, cumulativeTransforms[nodeIndex]
-					, processedMeshes, nodeData );
+					, processedMeshes, *nodeData );
 			}
 
 			// Check for light
@@ -1330,7 +1329,7 @@ namespace c3d_gltf
 					auto light = m_asset->lights[lightIndex];
 					auto lightName = getLightName( lightIndex );
 
-					for ( auto const & [nodeInstanceData, _] : nodeData.instances )
+					for ( auto const & [nodeInstanceData, _] : nodeData->instances )
 					{
 						auto nodeName = nodeInstanceData.name;
 						lightName = lightName + cuT( "." ) + nodeName;
@@ -1346,22 +1345,22 @@ namespace c3d_gltf
 				}
 			}
 
-			if ( nodeData.isSkeleton )
+			if ( nodeData->isSkeleton )
 			{
-				m_sceneData.skeletonNodes.emplace_back( &nodeData );
+				m_sceneData.skeletonNodes.emplace_back( nodeData );
 			}
 			else
 			{
-				file::listDataAnimations( *this, nodeData );
+				file::listDataAnimations( *this, *nodeData );
 			}
 
 			++nodeIndex;
 		}
 
 		// Fill helper containers.
-		for ( auto & nodeData : m_sceneData.nodes )
+		for ( auto nodeData : m_sceneData.sortedNodes )
 		{
-			for ( auto & [nodeInstance, transform]: nodeData.instances )
+			for ( auto & [nodeInstance, transform]: nodeData->instances )
 			{
 				m_nodes.try_emplace( nodeInstance.name, &transform );
 			}
