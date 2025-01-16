@@ -1,7 +1,44 @@
-﻿Suivi de versions	{#changelog}
+Suivi de versions	{#changelog}
 =================
 
 Cette page sert à informer des évolutions du moteur depuis les premières versions.
+
+## Version 0.17.0
+
+### Important Changes
+- Introduction des classes LuminousIntensity (exprimée en candela) et Illumination (exprimée en lux).
+- Remplacement des intensités spéculaire et diffuse des sources lumineuses spot/point par une valeur de LuminousIntensity.
+- Remplacement des intensités spéculaire et diffuse des sources lumineuses directionnelles par une valeur d'Illumination.
+- Les modèles d'éclairage specular, diffuse, sheen, clearcoat et scattering sont maintenant entièrement remplaçables.
+- Le modèle d'éclairage par défaut est maintenant celui issu de glTF.
+
+### New Features
+- Implémenté un debug drawer, ce qui a permis d'afficher les AABB et BCH du clustered lighting.
+- Implémentation de textures par défaut, pour éviter l'explosion du nombre de pipelines.
+- Ajout du support des fonts MSDF.
+- Ajout du support de la diffuse transmission.
+- Ajout du support de la dispersion (chromatic aberration).
+- Implémenté un BRDF d'anisotropic specular, en tant que plugin.
+- Implémenté les BRDF Disney, en tant que plugin.
+- Ajout du support des images webp.
+- Ajout du support des images basisu.
+- Ajout du support de l'inversion d'image le long des axes X et Z (l'axe Y était déjà supporté).
+- CastorViewer peut maintenant directement ouvrir les fichiers 3D externes.
+
+### General
+- Implémenté les réflections du ciel procéduraly
+- Implémenté le vertex pulling pour les passes de rastérisation.
+- castor::Angle, castor::Length, castor::Speed sont maintenant utilisables en constexpr.
+- Ajout de la possibilité de désactiver le blur du plan éloigné, dans le plugin de depth of field.
+- Ajout de la possibilité d'afficher l a texture d'irradiance au lieu de la skybox (pour les scènes de démonstration).
+- Amélioration de la fluidité des contrôles à la souris, dans CastorViewer.
+
+### Bug fixes
+- Correction des limites des tree views, dans CastorViewer.
+- Nombreuses corrections dans le plugin d'import glTF.
+- Correction des papillons dans la prefiltered environment map.
+- Ajout de la topologie d'affichage dans les flags de pipeline, pour éviter des soucis d'affichage quand diverses topologies sont utilisées.
+- Correction d'un crash lors de la fermeture de l'application CastorViewer, en ayant un objet sélectionné.
 
 ## Version 0.16.0
 

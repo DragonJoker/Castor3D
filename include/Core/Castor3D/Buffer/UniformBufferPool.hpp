@@ -48,16 +48,16 @@ namespace castor3d
 		 */
 		C3D_API void cleanup();
 		/**
-		 *\english
+		 *\~english
 		 *\return		The allocation statistics.
-		 *\french
+		 *\~french
 		 *\return		Les statistiques d'allocation.
 		 */
 		C3D_API AllocationStats getAllocationStats()const noexcept;
 		/**
-		 *\english
+		 *\~english
 		 *\return		The allocation statistics.
-		 *\french
+		 *\~french
 		 *\return		Les statistiques d'allocation.
 		 */
 		C3D_API castor::Vector< castor::Pair< MemChunk, castor::String > > listAllocations()const;

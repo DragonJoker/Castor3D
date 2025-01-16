@@ -1,7 +1,44 @@
-﻿Change log	{#changelog}
+Change log	{#changelog}
 ==========
 
 This page is here to inform about the changes since the earliest versions of the engine.
+
+## Version 0.17.0
+
+### Important Changes
+- Introduced LuminousIntensity (expressed in candela) and Illumination (expressed in lux) classes.
+- Replaced Spot/Point lights specular and diffuse intensities with a single LuminousIntensity value.
+- Replaced Directional lights specular and diffuse intensities with a single Illumination value.
+- The specular, diffuse, sheen, clearcoat, and scattering models are now fully replaceable.
+- The default lighting model is now glTF's.
+
+### New Features
+- Implemented a debug drawer, which allowed for displaying clustered lighting AABBs and BVH.
+- Implemented default textures, to prevent pipelines explosion.
+- Added support for MSDF fonts.
+- Added support for diffuse transmission.
+- Added support for dispersion (chromatic aberration).
+- Implemented anisotropic specular BRDF as a plugin.
+- Implemented Disney BRDF as a plugin.
+- Added support for webp images.
+- Added support for basisu images.
+- Added support for image inversion along X and Z axes (Y axis was already supported).
+- CastorViewer can now directly open files from an external 3D file format.
+
+### General
+- Implemented reflections from procedural sky
+- Implemented vertex pulling for rasteriser passes.
+- castor::Angle, castor::Length, castor::Speed are now constexpr friendly.
+- Added a way to disable far plane blur, in depth of field plugin.
+- Added a way to display the irradiance map instead of the skybox (for showcase purposes).
+- Improved smoothness for mouse nodes control, in CastorViewer.
+
+### Bug fixes
+- Fixed tree view limits.
+- Many fixes to glTF importer plugin.
+- Fixed dots issue in prefiltered environment map.
+- Added display topology to pipeline flags, to prevent some issues when multiple topologies are mixed.
+- Fixed a crash on CastorViewer application shutdown with an object selected.
 
 ## Version 0.16.0
 

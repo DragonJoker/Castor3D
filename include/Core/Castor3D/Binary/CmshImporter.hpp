@@ -164,7 +164,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::AnimationImporter::doImportTexture
 		 */
-		bool doImportTexture( TextureAnimation & animation )override;
+		bool doImportTexture( TextureAnimation & texture )override;
 
 	public:
 		static castor::String const MeshAnimType;

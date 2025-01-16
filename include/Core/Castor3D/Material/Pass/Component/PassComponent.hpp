@@ -229,6 +229,8 @@ namespace castor3d
 			*	The surface.
 			*\param[in] camera
 			*	The camera data.
+			*\param[in] model
+			*	The model data.
 			*\param[in] utils
 			*	The utility functions.
 			*\param[in,out] components
@@ -239,6 +241,8 @@ namespace castor3d
 			*	La surface.
 			*\param[in] camera
 			*	Les données de la caméra.
+			*\param[in] model
+			*	Les données du modèle.
 			*\param[in] utils
 			*	Les fonctions utilitaires.
 			*\param[in,out] components
