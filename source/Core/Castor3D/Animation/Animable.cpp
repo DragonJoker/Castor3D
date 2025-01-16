@@ -20,7 +20,7 @@ namespace castor3d
 		m_animations.clear();
 	}
 
-	bool Animable::hasAnimation()const
+	bool Animable::hasAnimation()const noexcept
 	{
 		return !m_animations.empty();
 	}

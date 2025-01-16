@@ -84,7 +84,7 @@ namespace castor3d
 			, castor::String const & prefix
 			, crg::ImageViewIdArray const & views
 			, uint32_t kernelSize
-			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( []() { return true; } ) );
+			, crg::RunnablePass::IsEnabledCallback const & isEnabled = crg::RunnablePass::IsEnabledCallback( []() { return true; } ) );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -111,7 +111,7 @@ namespace castor3d
 			, castor::String const & prefix
 			, crg::ImageViewId const & view
 			, uint32_t kernelSize
-			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( []() { return true; } ) );
+			, crg::RunnablePass::IsEnabledCallback const & isEnabled = crg::RunnablePass::IsEnabledCallback( []() { return true; } ) );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -141,11 +141,11 @@ namespace castor3d
 			, crg::ImageViewId const & view
 			, crg::ImageViewId const & intermediateView
 			, uint32_t kernelSize
-			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( []() { return true; } ) );
+			, crg::RunnablePass::IsEnabledCallback const & isEnabled = crg::RunnablePass::IsEnabledCallback( []() { return true; } ) );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
-		C3D_API void accept( ConfigurationVisitorBase & visitor );
+		C3D_API void accept( ConfigurationVisitorBase & visitor )const;
 		/**
 		*\~english
 		*name

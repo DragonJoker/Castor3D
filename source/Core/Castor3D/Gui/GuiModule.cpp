@@ -44,7 +44,8 @@ CU_ImplementSmartPtr( castor3d, StaticStyle )
 
 namespace castor3d
 {
-	void setMaterialColour( Pass & pass, castor::HdrRgbColour const & colour )
+	void setMaterialColour( Pass const & pass
+		, castor::HdrRgbColour const & colour )
 	{
 		pass.setColour( colour );
 	}

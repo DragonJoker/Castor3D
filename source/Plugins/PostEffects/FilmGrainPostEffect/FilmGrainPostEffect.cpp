@@ -70,7 +70,7 @@ namespace film_grain
 			auto c3d_srcTex = writer.declCombinedImg< FImg2DRgba32 >( SrcTex, SourceTexIdx, 0u );
 			
 			auto overlay = writer.implementFunction< sdw::Vec3 >( "overlay"
-				, [&]( sdw::Vec3 const & a
+				, [&writer]( sdw::Vec3 const & a
 					, sdw::Vec3 const & b )
 				{
 					auto comp = writer.declLocale( "comp"
@@ -80,7 +80,7 @@ namespace film_grain
 					{
 						writer.returnStmt( 2.0_f * a * b );
 					}
-					FI;
+					FI
 
 					writer.returnStmt( vec3( 1.0_f ) - 2.0_f * ( 1.0_f - a ) * ( 1.0_f - b ) );
 				}
@@ -88,7 +88,7 @@ namespace film_grain
 				, sdw::InVec3{ writer, "b" } );
 
 			auto addNoise = writer.implementFunction< sdw::Vec3 >( "addNoise"
-				, [&]( sdw::Vec3 const & color
+				, [&writer, &c3d_pixelSize, &c3d_time, &c3d_noiseTex, &c3d_exposure, &c3d_noiseIntensity, &overlay]( sdw::Vec3 const & color
 					, sdw::Vec2 const & texcoord )
 				{
 					auto coord = writer.declLocale( "coord"
@@ -163,7 +163,7 @@ namespace film_grain
 		m_config.noiseIntensity = 1.0f;
 		m_config.exposure = 1.0f;
 		m_config.time = 0.0f;
-		setParameters( params );
+		PostEffect::setParameters( params );
 
 		for ( auto & image : m_noiseImages )
 		{

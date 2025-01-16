@@ -46,8 +46,8 @@ namespace castor3d
 				created->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				created->setSerialisable( false );
 				result = engine.addSampler( name, created, false );
-				result->setSerialisable( false );
 			}
 
 			result->initialise( engine.getRenderSystem()->getRenderDevice() );
@@ -84,7 +84,7 @@ namespace castor3d
 	{
 	}
 
-	void IblTextures::update( QueueData const & queueData )
+	void IblTextures::update( QueueData const & queueData )const
 	{
 		m_radianceComputer.render( queueData );
 		m_environmentPrefilter.render( queueData );

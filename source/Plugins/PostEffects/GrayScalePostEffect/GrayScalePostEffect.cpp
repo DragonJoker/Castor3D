@@ -54,15 +54,15 @@ namespace grayscale
 			configUbo.end();
 			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", ColorTexIdx, 0u );
 
-			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( []( sdw::VertexInT< c3d::PosUv2FT > const & in
 				, sdw::VertexOutT< c3d::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&writer, &c3d_mapColor, &c3d_factors]( sdw::FragmentInT< c3d::Uv2FT > const & in
+				, sdw::FragmentOutT< c3d::Colour4FT > const & out )
 				{
 					auto colour = writer.declLocale( "colour"
 						, c3d_mapColor.sample( in.uv() ).xyz() );
@@ -90,7 +90,6 @@ namespace grayscale
 		, m_shader{ cuT( "GrayScale" ), postfx::getProgram( *renderTarget.getEngine() ) }
 		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 	{
-		setParameters( params );
 	}
 
 	PostEffect::~PostEffect()

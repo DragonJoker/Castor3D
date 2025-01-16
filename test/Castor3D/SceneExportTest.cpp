@@ -64,12 +64,12 @@ namespace Testing
 
 	void SceneExportTest::doRegisterTests()
 	{
-		doRegisterTest( "SceneExportTest::SimpleScene", std::bind( &SceneExportTest::SimpleScene, this ) );
-		doRegisterTest( "SceneExportTest::InstancedScene", std::bind( &SceneExportTest::InstancedScene, this ) );
-		doRegisterTest( "SceneExportTest::AlphaScene", std::bind( &SceneExportTest::AlphaScene, this ) );
-		doRegisterTest( "SceneExportTest::AnimatedScene", std::bind( &SceneExportTest::AnimatedScene, this ) );
-		doRegisterTest( "SceneExportTest::LoadSceneThenAnother", std::bind( &SceneExportTest::LoadSceneThenAnother, this ) );
-		doRegisterTest( "SceneExportTest::LoadCleanReload", std::bind( &SceneExportTest::LoadCleanReload, this ) );
+		doRegisterTest( "SceneExportTest::SimpleScene", [this]() { SimpleScene(); } );
+		doRegisterTest( "SceneExportTest::InstancedScene", [this]() { InstancedScene(); } );
+		doRegisterTest( "SceneExportTest::AlphaScene", [this]() { AlphaScene(); } );
+		doRegisterTest( "SceneExportTest::AnimatedScene", [this]() { AnimatedScene(); } );
+		doRegisterTest( "SceneExportTest::LoadSceneThenAnother", [this]() { LoadSceneThenAnother(); } );
+		doRegisterTest( "SceneExportTest::LoadCleanReload", [this]() { LoadCleanReload(); } );
 	}
 
 	void SceneExportTest::SimpleScene()

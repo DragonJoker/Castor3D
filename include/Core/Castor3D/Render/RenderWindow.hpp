@@ -208,17 +208,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Renders one frame.
-		 *\param[in,out]	info		Receives the render infos.
 		 *\param[in]		signalOnly	\p true to only signal the semaphores.
 		 *\param[in]		toWait		The semaphores to wait.
 		 *\~french
 		 *\brief			Renders one frame.
-		 *\param[in,out]	info		Reçoit les infos de rendu.
 		 *\param[in]		signalOnly	\p true pour ne faire que signaler les semaphores.
 		 *\param[in]		toWait		Les sémaphores à attendre.
 		 */
-		C3D_API void render( RenderInfo & info
-			, bool signalOnly
+		C3D_API void render( bool signalOnly
 			, crg::SemaphoreWaitArray & toWait );
 		/**
 		 *\~english

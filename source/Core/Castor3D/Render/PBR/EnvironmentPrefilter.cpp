@@ -73,8 +73,8 @@ namespace castor3d
 				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				created->setMinLod( 0.0f );
 				created->setMaxLod( float( maxLod ) );
+				created->setSerialisable( false );
 				result = engine.addSampler( name, created, false );
-				result->setSerialisable( false );
 			}
 
 			result->initialise( device );
@@ -124,14 +124,14 @@ namespace castor3d
 				auto c3d_sampleCount = writer.declConstant( "sampleCount"
 					, 4096_u );
 
-				writer.implementEntryPointT< PosColT, PosColT >( [&]( sdw::VertexInT< PosColT > const & in
+				writer.implementEntryPointT< PosColT, PosColT >( [&c3d_viewProjection]( sdw::VertexInT< PosColT > const & in
 					, sdw::VertexOutT< PosColT > out )
 					{
 						out.position() = in.position();
 						out.vtx.position = ( c3d_viewProjection * vec4( in.position().xyz(), 1.0_f ) ).xyww();
 					} );
 
-				writer.implementEntryPointT< PosColT, PosColT >( [&]( sdw::FragmentInT< PosColT > const & in
+				writer.implementEntryPointT< PosColT, PosColT >( [&writer, &c3d_sampleCount, &c3d_roughness, &c3d_mapEnvironment, &brdf, &size, isCharlie]( sdw::FragmentInT< PosColT > const & in
 					, sdw::FragmentOutT< PosColT > const & out )
 					{
 						// From https://learnopengl.com/#!PBR/Lighting

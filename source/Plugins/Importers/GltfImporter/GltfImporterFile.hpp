@@ -184,8 +184,7 @@ namespace c3d_gltf
 			, castor3d::Scene * scene
 			, castor::Path const & path
 			, castor3d::Parameters const & parameters
-			, castor3d::ProgressBar * progress
-			, fastgltf::Category category = fastgltf::Category::All );
+			, castor3d::ProgressBar * progress );
 
 		static castor3d::ImporterFileUPtr create( castor3d::Engine & engine
 			, castor3d::Scene * scene

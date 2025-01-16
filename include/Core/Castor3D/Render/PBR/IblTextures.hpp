@@ -47,7 +47,7 @@ namespace castor3d
 		 *\brief		Met à jour les textures d'environnement.
 		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 */
-		C3D_API void update( QueueData const & queueData );
+		C3D_API void update( QueueData const & queueData )const;
 		/**
 		 *\~english
 		 *\brief		Updates the environment maps.

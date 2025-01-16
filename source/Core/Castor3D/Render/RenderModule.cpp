@@ -27,19 +27,6 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace rndmodl
-	{
-		static castor::String normalizeName( castor::String name )
-		{
-			castor::string::replace( name, cuT( "/" ), cuT( "_" ) );
-			castor::string::replace( name, cuT( "\\" ), cuT( "_" ) );
-			castor::string::replace( name, cuT( ":" ), cuT( "_" ) );
-			return name;
-		}
-	}
-
-	//*********************************************************************************************
-
 	DeviceCounts::DeviceCounts( RenderDevice const & device )
 	{
 		bufferAllocated = device.bufferPool->getAllocationStats();
@@ -328,7 +315,7 @@ namespace castor3d
 
 	void printGraph( crg::RunnableGraph const & graph )
 	{
-		auto name = rndmodl::normalizeName( castor::makeString( graph.getGraph()->getName() ) );
+		auto name = castor::File::normaliseFileName( castor::makeString( graph.getGraph()->getName() ) );
 		auto graphsDir = Engine::getEngineDirectory() / cuT( "Graphs" );
 
 		if ( !castor::File::directoryExists( graphsDir ) )

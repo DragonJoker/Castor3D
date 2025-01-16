@@ -791,7 +791,7 @@ namespace castor3d
 		AllocationStats uboAllocated;
 		castor::Vector< castor::Pair< MemChunk, castor::String > > uboAllocations;
 
-		C3D_API DeviceCounts( RenderDevice const & device );
+		C3D_API explicit DeviceCounts( RenderDevice const & device );
 	};
 
 	using RenderQueueArray = castor::Vector< castor::ReferenceWrapper< RenderQueue > >;

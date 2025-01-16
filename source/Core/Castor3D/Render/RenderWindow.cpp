@@ -543,24 +543,23 @@ namespace castor3d
 				{
 					if ( m_renderTarget )
 					{
-						auto progress = m_progressBar.get();
 						m_renderTarget->initialise( [this]( RenderTarget const &, QueueData const & queue )
 							{
-								auto progress = m_progressBar.get();
-								stepProgressBarGlobalStartLocal( progress
+								auto prgrss = m_progressBar.get();
+								stepProgressBarGlobalStartLocal( prgrss
 									, cuT( "Initialising: Render Window" )
 									, 6u );
-								stepProgressBarLocal( progress, cuT( "Loading picking" ) );
+								stepProgressBarLocal( prgrss, cuT( "Loading picking" ) );
 								doCreatePickingPass( queue );
-								stepProgressBarLocal( progress, cuT( "Loading intermediate views" ) );
+								stepProgressBarLocal( prgrss, cuT( "Loading intermediate views" ) );
 								doCreateIntermediateViews( queue );
-								stepProgressBarLocal( progress, cuT( "Loading combine quad" ) );
+								stepProgressBarLocal( prgrss, cuT( "Loading combine quad" ) );
 								doCreateRenderQuad();
-								stepProgressBarLocal( progress, cuT( "Loading command buffers" ) );
+								stepProgressBarLocal( prgrss, cuT( "Loading command buffers" ) );
 								doCreateCommandBuffers();
-								stepProgressBarLocal( progress, cuT( "Loading save data" ) );
+								stepProgressBarLocal( prgrss, cuT( "Loading save data" ) );
 								doCreateSaveData();
-								stepProgressBarLocal( progress, cuT( "Finalising..." ) );
+								stepProgressBarLocal( prgrss, cuT( "Finalising..." ) );
 
 								getListener()->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
 									, [this]()
@@ -574,7 +573,7 @@ namespace castor3d
 										m_initialised = true;
 									} ) );
 							}
-							, progress );
+							, m_progressBar.get() );
 					}
 					else
 					{
@@ -595,7 +594,7 @@ namespace castor3d
 		else
 		{
 			auto queueData = m_device.graphicsData();
-			m_renderTarget->initialise( m_device, *queueData, nullptr );
+			m_renderTarget->initialise( m_device, nullptr );
 			doCreatePickingPass( *queueData );
 			doCreateIntermediateViews( *queueData );
 			doCreateRenderQuad();
@@ -754,8 +753,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderWindow::render( RenderInfo & info
-		, bool waitOnly
+	void RenderWindow::render( bool waitOnly
 		, crg::SemaphoreWaitArray & baseToWait )
 	{
 		if ( m_skip )

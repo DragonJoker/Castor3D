@@ -476,7 +476,7 @@ namespace castor3d
 	 *\param[in]	pass	The pass.
 	 *\param[in]	colour	The material colour.
 	 */
-	void setMaterialColour( Pass & pass, castor::HdrRgbColour const & colour );
+	void setMaterialColour( Pass const & pass, castor::HdrRgbColour const & colour );
 
 	/** Retrieves the pass colour.
 	 *\param[in]	pass	The pass.

@@ -60,38 +60,38 @@ namespace Testing
 		m_errorCount = &errCount;
 		m_testCount = &testCount;
 
-		for ( auto test : m_tests )
+		for ( auto const & [name, test] : m_tests )
 		{
 			std::stringstream begin;
 			begin << "**** ";
 			begin.width( TEST_TITLE_WIDTH - 10 );
-			begin << std::left << ( "Begin test case " + test.first ) << " ****";
+			begin << std::left << ( "Begin test case " + name ) << " ****";
 			std::cout << begin.str() << std::endl;
 
 			try
 			{
-				test.second();
+				test();
 			}
 			catch ( TestFailed & exc )
 			{
 				errCount++;
-				std::cerr << "*\tTest " << test.first << " failed (" << exc.what() << ")" << std::endl;
+				std::cerr << "*\tTest " << name << " failed (" << exc.what() << ")" << std::endl;
 			}
 			catch ( std::exception & exc )
 			{
 				errCount++;
-				std::cerr << "*\tTest " << test.first << " execution failed (" << exc.what() << ")" << std::endl;
+				std::cerr << "*\tTest " << name << " execution failed (" << exc.what() << ")" << std::endl;
 			}
 			catch ( ... )
 			{
 				errCount++;
-				std::cerr << "*\tTest " << test.first << " execution failed (Unknown reason)" << std::endl;
+				std::cerr << "*\tTest " << name << " execution failed (Unknown reason)" << std::endl;
 			}
 
 			std::stringstream end;
 			end << "**** ";
 			end.width( TEST_TITLE_WIDTH - 10 );
-			end << std::left << ( "End test case " + test.first ) << " ****";
+			end << std::left << ( "End test case " + name ) << " ****";
 			std::cout << end.str() << std::endl;
 		}
 	}

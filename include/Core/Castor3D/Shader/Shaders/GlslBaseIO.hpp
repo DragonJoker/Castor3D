@@ -28,6 +28,11 @@ namespace castor3d::shader
 	using UvStructT = sdw::IOStructInstanceHelperT< FlagT
 		, "C3D_Uv"
 		, sdw::IOStructFieldT< UvTypeT, "uv", 0u > >;
+	template< typename UvTypeT, sdw::var::Flag FlagT >
+	using TwoUvStructT = sdw::IOStructInstanceHelperT< FlagT
+		, "C3D_TwoUv"
+		, sdw::IOStructFieldT< UvTypeT, "uv0", 0u >
+		, sdw::IOStructFieldT< UvTypeT, "uv1", 1u > >;
 
 	template< typename ColTypeT, sdw::var::Flag FlagT >
 	struct ColourT
@@ -84,6 +89,21 @@ namespace castor3d::shader
 		}
 
 		auto uv()const { return this->template getMember< "uv" >(); }
+	};
+
+	template< typename UvTypeT, sdw::var::Flag FlagT >
+	struct TwoUvT
+		: public TwoUvStructT< UvTypeT, FlagT >
+	{
+		TwoUvT( sdw::ShaderWriter & writer
+			, sdw::expr::ExprPtr expr
+			, bool enabled )
+			: TwoUvStructT< UvTypeT, FlagT >{ writer, castor::move( expr ), enabled }
+		{
+		}
+
+		auto uv0()const { return this->template getMember< "uv0" >(); }
+		auto uv1()const { return this->template getMember< "uv1" >(); }
 	};
 }
 

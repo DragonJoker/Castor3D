@@ -78,7 +78,7 @@ namespace castor3d
 		uint32_t overlayCount;
 		uint32_t samplerCount;
 
-		C3D_API EngineCounts( castor3d::Engine const & engine );
+		C3D_API explicit EngineCounts( castor3d::Engine const & engine );
 	};
 
 	struct EngineConfig
@@ -781,7 +781,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Un random engine, avec graine aléatoir si activé.
 		 */
-		C3D_API std::default_random_engine createRandomEngine();
+		C3D_API std::default_random_engine createRandomEngine()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves plug-ins path

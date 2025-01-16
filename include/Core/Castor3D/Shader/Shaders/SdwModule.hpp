@@ -105,6 +105,8 @@ namespace castor3d::shader
 	struct PosUvT;
 	template< typename UvTypeT, sdw::var::Flag FlagT >
 	struct UvT;
+	template< typename UvTypeT, sdw::var::Flag FlagT >
+	struct TwoUvT;
 	template< typename ValueT, sdw::StringLiteralT StructNameT >
 	struct DerivativeValueT;
 
@@ -152,6 +154,10 @@ namespace castor3d::shader
 	using Uv2FT = UvT< sdw::Vec2, FlagT >;
 	template< sdw::var::Flag FlagT >
 	using Uv3FT = UvT< sdw::Vec3, FlagT >;
+	template< sdw::var::Flag FlagT >
+	using TwoUv2FT = TwoUvT< sdw::Vec2, FlagT >;
+	template< sdw::var::Flag FlagT >
+	using TwoUv3FT = TwoUvT< sdw::Vec3, FlagT >;
 
 	class BackgroundModel;
 	class BufferBase;

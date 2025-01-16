@@ -13,9 +13,9 @@ namespace Testing
 			castor::StringMap< castor3d::SceneNodeRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getSceneNodeCache() );
 
-			for ( auto & it : scene.getSceneNodeCache() )
+			for ( auto const & [name, value] : scene.getSceneNodeCache() )
 			{
-				result.emplace( it.first, it.second.get() );
+				result.try_emplace( name, value.get() );
 			}
 
 			return result;
@@ -26,9 +26,9 @@ namespace Testing
 			castor::StringMap< castor3d::GeometryRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getGeometryCache() );
 
-			for ( auto & it : scene.getGeometryCache() )
+			for ( auto const & [name, value] : scene.getGeometryCache() )
 			{
-				result.emplace( it.first, it.second.get() );
+				result.try_emplace( name, value.get() );
 			}
 
 			return result;
@@ -39,9 +39,9 @@ namespace Testing
 			castor::StringMap< castor3d::LightRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getLightCache() );
 
-			for ( auto & it : scene.getLightCache() )
+			for ( auto const & [name, value] : scene.getLightCache() )
 			{
-				result.emplace( it.first, it.second.get() );
+				result.try_emplace( name, value.get() );
 			}
 
 			return result;
@@ -52,9 +52,9 @@ namespace Testing
 			castor::StringMap< castor3d::CameraRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getCameraCache() );
 
-			for ( auto & it : scene.getCameraCache() )
+			for ( auto const & [name, value] : scene.getCameraCache() )
 			{
-				result.emplace( it.first, it.second.get() );
+				result.try_emplace( name, value.get() );
 			}
 
 			return result;
@@ -65,9 +65,9 @@ namespace Testing
 			castor::StringMap< castor3d::AnimatedObjectGroupRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getAnimatedObjectGroupCache() );
 
-			for ( auto & it : scene.getAnimatedObjectGroupCache() )
+			for ( auto const & [name, value] : scene.getAnimatedObjectGroupCache() )
 			{
-				result.emplace( it.first, it.second.get() );
+				result.try_emplace( name, value.get() );
 			}
 
 			return result;
@@ -97,7 +97,7 @@ namespace Testing
 		, TestFunction test )
 	{
 		TestCase::doRegisterTest( name
-			, [this, test]()
+			, [this, inTest = castor::move( test )]()
 			{
 				auto guard = castor::makeBlockGuard( [this]()
 					{
@@ -107,13 +107,13 @@ namespace Testing
 					{
 						m_engine.cleanup();
 					} );
-				test();
+				inTest();
 			} );
 	}
 
 	bool C3DTestCase::compare( castor::Angle const & lhs, castor::Angle const & rhs )
 	{
-		return lhs.radians() == rhs.radians();
+		return CT_EQUAL( lhs.radians(), rhs.radians() );
 	}
 
 	bool C3DTestCase::compare( castor::Quaternion const & lhs, castor::Quaternion const & rhs )
@@ -133,106 +133,106 @@ namespace Testing
 		bool result = true;
 		{
 			auto sortedLhs = details::sortNodes( lhs );
-			auto sortedRhs = details::sortNodes( lhs );
-			auto itA = sortedLhs.begin();
-			auto endItA = sortedLhs.end();
-			auto itB = sortedRhs.begin();
-			auto endItB = sortedRhs.end();
+			auto sortedRhs = details::sortNodes( rhs );
+			auto itLhs = sortedLhs.begin();
+			auto endItLhs = sortedLhs.end();
+			auto itRhs = sortedRhs.begin();
+			auto endItRhs = sortedRhs.end();
 
-			while ( result && itA != endItA && itB != endItB )
+			while ( result && itLhs != endItLhs && itRhs != endItRhs )
 			{
 				if ( result
-					&& itA->first.find( cuT( "_REye" ) ) == castor::String::npos
-					&& itA->first.find( cuT( "_LEye" ) ) == castor::String::npos )
+					&& itLhs->first.find( cuT( "_REye" ) ) == castor::String::npos
+					&& itLhs->first.find( cuT( "_LEye" ) ) == castor::String::npos )
 				{
-					result = CT_EQUAL( itA->first, itB->first );
-					result = result && CT_EQUAL( *itA->second, *itB->second );
+					result = CT_EQUAL( itLhs->first, itRhs->first );
+					result = result && CT_EQUAL( *itLhs->second, *itRhs->second );
 				}
 
-				++itA;
-				++itB;
+				++itLhs;
+				++itRhs;
 			}
 		}
 
 		if ( result )
 		{
 			auto sortedLhs = details::sortGeometries( lhs );
-			auto sortedRhs = details::sortGeometries( lhs );
-			auto itA = sortedLhs.begin();
-			auto endItA = sortedLhs.end();
-			auto itB = sortedRhs.begin();
-			auto endItB = sortedRhs.end();
+			auto sortedRhs = details::sortGeometries( rhs );
+			auto itLhs = sortedLhs.begin();
+			auto endItLhs = sortedLhs.end();
+			auto itRhs = sortedRhs.begin();
+			auto endItRhs = sortedRhs.end();
 
-			while ( result && itA != endItA && itB != endItB )
+			while ( result && itLhs != endItLhs && itRhs != endItRhs )
 			{
-				result = CT_EQUAL( itA->first, itB->first );
-				result = result && CT_EQUAL( *itA->second, *itB->second );
-				++itA;
-				++itB;
+				result = CT_EQUAL( itLhs->first, itRhs->first );
+				result = result && CT_EQUAL( *itLhs->second, *itRhs->second );
+				++itLhs;
+				++itRhs;
 			}
 		}
 
 		if ( result )
 		{
 			auto sortedLhs = details::sortLights( lhs );
-			auto sortedRhs = details::sortLights( lhs );
-			auto itA = sortedLhs.begin();
-			auto endItA = sortedLhs.end();
-			auto itB = sortedRhs.begin();
-			auto endItB = sortedRhs.end();
+			auto sortedRhs = details::sortLights( rhs );
+			auto itLhs = sortedLhs.begin();
+			auto endItLhs = sortedLhs.end();
+			auto itRhs = sortedRhs.begin();
+			auto endItRhs = sortedRhs.end();
 
-			while ( result && itA != endItA && itB != endItB )
+			while ( result && itLhs != endItLhs && itRhs != endItRhs )
 			{
-				result = CT_EQUAL( itA->first, itB->first );
-				result = result && CT_EQUAL( *itA->second, *itB->second );
-				++itA;
-				++itB;
+				result = CT_EQUAL( itLhs->first, itRhs->first );
+				result = result && CT_EQUAL( *itLhs->second, *itRhs->second );
+				++itLhs;
+				++itRhs;
 			}
 		}
 
 		if ( result )
 		{
 			auto sortedLhs = details::sortCameras( lhs );
-			auto sortedRhs = details::sortCameras( lhs );
-			auto itA = sortedLhs.begin();
-			auto endItA = sortedLhs.end();
-			auto itB = sortedRhs.begin();
-			auto endItB = sortedRhs.end();
+			auto sortedRhs = details::sortCameras( rhs );
+			auto itLhs = sortedLhs.begin();
+			auto endItLhs = sortedLhs.end();
+			auto itRhs = sortedRhs.begin();
+			auto endItRhs = sortedRhs.end();
 
-			while ( result && itA != endItA && itB != endItB )
+			while ( result && itLhs != endItLhs && itRhs != endItRhs )
 			{
 				if ( result
-					 && itA->first.find( cuT( "_REye" ) ) == castor::String::npos
-					 && itA->first.find( cuT( "_LEye" ) ) == castor::String::npos )
+					 && itLhs->first.find( cuT( "_REye" ) ) == castor::String::npos
+					 && itLhs->first.find( cuT( "_LEye" ) ) == castor::String::npos )
 				{
-					result = CT_EQUAL( itA->first, itB->first );
-					result = result && CT_EQUAL( *itA->second, *itB->second );
+					result = CT_EQUAL( itLhs->first, itRhs->first );
+					result = result && CT_EQUAL( *itLhs->second, *itRhs->second );
 				}
 
-				++itA;
-				++itB;
+				++itLhs;
+				++itRhs;
 			}
 		}
 
 		if ( result )
 		{
 			auto sortedLhs = details::sortAnimatedGroups( lhs );
-			auto sortedRhs = details::sortAnimatedGroups( lhs );
-			auto itA = sortedLhs.begin();
-			auto endItA = sortedLhs.end();
-			auto itB = sortedRhs.begin();
-			auto endItB = sortedRhs.end();
+			auto sortedRhs = details::sortAnimatedGroups( rhs );
+			auto itLhs = sortedLhs.begin();
+			auto endItLhs = sortedLhs.end();
+			auto itRhs = sortedRhs.begin();
+			auto endItRhs = sortedRhs.end();
 
-			while ( result && itA != endItA && itB != endItB )
+			while ( result && itLhs != endItLhs && itRhs != endItRhs )
 			{
 				if ( result )
 				{
-					result = CT_EQUAL( itA->first, itB->first );
-					result = result && CT_EQUAL( *itA->second, *itB->second );
+					result = CT_EQUAL( itLhs->first, itRhs->first );
+					result = result && CT_EQUAL( *itLhs->second, *itRhs->second );
 				}
 
-				++itA;
-				++itB;
+				++itLhs;
+				++itRhs;
 			}
 		}
 
@@ -258,17 +258,17 @@ namespace Testing
 	bool C3DTestCase::compare( castor3d::Animable const & lhs, castor3d::Animable const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getAnimations().size(), rhs.getAnimations().size() ) };
-		auto itA = lhs.getAnimations().begin();
-		auto const endItA = lhs.getAnimations().end();
-		auto itB = rhs.getAnimations().begin();
-		auto const endItB = rhs.getAnimations().end();
+		auto itLhs = lhs.getAnimations().begin();
+		auto const endItLhs = lhs.getAnimations().end();
+		auto itRhs = rhs.getAnimations().begin();
+		auto const endItRhs = rhs.getAnimations().end();
 
-		while ( result && itA != endItA && itB != endItB )
+		while ( result && itLhs != endItLhs && itRhs != endItRhs )
 		{
-			result = CT_EQUAL( itA->first, itB->first );
-			result = result && CT_EQUAL( *itA->second, *itB->second );
-			++itA;
-			++itB;
+			result = CT_EQUAL( itLhs->first, itRhs->first );
+			result = result && CT_EQUAL( *itLhs->second, *itRhs->second );
+			++itLhs;
+			++itRhs;
 		}
 
 		return result;
@@ -374,16 +374,16 @@ namespace Testing
 	bool C3DTestCase::compare( castor3d::Mesh const & lhs, castor3d::Mesh const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getSubmeshCount(), rhs.getSubmeshCount() ) };
-		auto itA = lhs.begin();
-		auto const endItA = lhs.end();
-		auto itB = rhs.begin();
-		auto const endItB = rhs.end();
+		auto itLhs = lhs.begin();
+		auto const endItLhs = lhs.end();
+		auto itRhs = rhs.begin();
+		auto const endItRhs = rhs.end();
 
-		while ( result && itA != endItA && itB != endItB )
+		while ( result && itLhs != endItLhs && itRhs != endItRhs )
 		{
-			result = CT_EQUAL( *( *( itA ) ), *( *( itB ) ) );
-			++itA;
-			++itB;
+			result = CT_EQUAL( *( *( itLhs ) ), *( *( itRhs ) ) );
+			++itLhs;
+			++itRhs;
 		}
 
 		result = result && CT_EQUAL( lhs.getSkeleton() != nullptr, rhs.getSkeleton() != nullptr );
@@ -587,13 +587,13 @@ namespace Testing
 		{
 			result = result && CT_EQUAL( lhs.getComponents().size(), rhs.getComponents().size() );
 
-			for ( auto & itA : lhs.getComponents() )
+			for ( auto const & [lhsName, lhsComp] : lhs.getComponents() )
 			{
 				if ( result )
 				{
-					auto itB = rhs.getComponents().find( itA.first );
-					result = CT_CHECK( itB != rhs.getComponents().end() );
-					result = result && CT_EQUAL( *itA.second, *itB->second );
+					auto itRhs = rhs.getComponents().find( lhsName );
+					result = CT_CHECK( itRhs != rhs.getComponents().end() );
+					result = result && CT_EQUAL( *lhsComp, *itRhs->second );
 				}
 			}
 		}
@@ -608,38 +608,38 @@ namespace Testing
 		if ( result )
 		{
 			result = CT_EQUAL( lhs.getNodesCount(), rhs.getNodesCount() );
-			auto itA = lhs.getNodes().begin();
-			auto const endItA = lhs.getNodes().end();
-			auto itB = rhs.getNodes().begin();
-			auto const endItB = rhs.getNodes().end();
+			auto itLhs = lhs.getNodes().begin();
+			auto const endItLhs = lhs.getNodes().end();
+			auto itRhs = rhs.getNodes().begin();
+			auto const endItRhs = rhs.getNodes().end();
 
-			while ( result && itA != endItA && itB != endItB )
+			while ( result && itLhs != endItLhs && itRhs != endItRhs )
 			{
-				auto & nodeA = *itA;
-				auto & nodeB = *itB;
+				auto & nodeA = *itLhs;
+				auto & nodeB = *itRhs;
 				CT_REQUIRE( nodeA != nullptr && nodeB != nullptr );
 				result = CT_EQUAL( *nodeA, *nodeB );
-				++itA;
-				++itB;
+				++itLhs;
+				++itRhs;
 			}
 		}
 
 		if ( result )
 		{
 			result = CT_EQUAL( lhs.getBonesCount(), rhs.getBonesCount() );
-			auto itA = lhs.getBones().begin();
-			auto const endItA = lhs.getBones().end();
-			auto itB = rhs.getBones().begin();
-			auto const endItB = rhs.getBones().end();
+			auto itLhs = lhs.getBones().begin();
+			auto const endItLhs = lhs.getBones().end();
+			auto itRhs = rhs.getBones().begin();
+			auto const endItRhs = rhs.getBones().end();
 
-			while ( result && itA != endItA && itB != endItB )
+			while ( result && itLhs != endItLhs && itRhs != endItRhs )
 			{
-				auto & boneA = *itA;
-				auto & boneB = *itB;
+				auto & boneA = *itLhs;
+				auto & boneB = *itRhs;
 				CT_REQUIRE( boneA != nullptr && boneB != nullptr );
 				result = CT_EQUAL( *boneA, *boneB );
-				++itA;
-				++itB;
+				++itLhs;
+				++itRhs;
 			}
 		}
 
@@ -692,17 +692,17 @@ namespace Testing
 
 		if ( result )
 		{
-			auto itA = lhs.getObjects().begin();
-			auto const endItA = lhs.getObjects().end();
-			auto itB = rhs.getObjects().begin();
-			auto const endItB = rhs.getObjects().end();
+			auto itLhs = lhs.getObjects().begin();
+			auto const endItLhs = lhs.getObjects().end();
+			auto itRhs = rhs.getObjects().begin();
+			auto const endItRhs = rhs.getObjects().end();
 
-			while ( result && itA != endItA && itB != endItB )
+			while ( result && itLhs != endItLhs && itRhs != endItRhs )
 			{
-				result = CT_EQUAL( itA->first, itB->first );
-				result = result && CT_EQUAL( *itA->second, *itB->second );
-				++itA;
-				++itB;
+				result = CT_EQUAL( itLhs->first, itRhs->first );
+				result = result && CT_EQUAL( *itLhs->second, *itRhs->second );
+				++itLhs;
+				++itRhs;
 			}
 		}
 
@@ -710,33 +710,33 @@ namespace Testing
 
 		if ( result )
 		{
-			auto itA = lhs.getRootObjects().begin();
-			auto const endItA = lhs.getRootObjects().end();
-			auto itB = rhs.getRootObjects().begin();
-			auto const endItB = rhs.getRootObjects().end();
+			auto itLhs = lhs.getRootObjects().begin();
+			auto const endItLhs = lhs.getRootObjects().end();
+			auto itRhs = rhs.getRootObjects().begin();
+			auto const endItRhs = rhs.getRootObjects().end();
 
-			while ( result && itA != endItA && itB != endItB )
+			while ( result && itLhs != endItLhs && itRhs != endItRhs )
 			{
-				result = CT_EQUAL( *( *itA ), *( *itB ) );
-				++itA;
-				++itB;
+				result = CT_EQUAL( *( *itLhs ), *( *itRhs ) );
+				++itLhs;
+				++itRhs;
 			}
 		}
 
 		if ( result )
 		{
-			auto itA = lhs.begin();
-			auto const endItA = lhs.end();
-			auto itB = rhs.begin();
-			auto const endItB = rhs.end();
-			result = CT_EQUAL( std::distance( itA, endItA ), std::distance( itB, endItB ) );
+			auto itLhs = lhs.begin();
+			auto const endItLhs = lhs.end();
+			auto itRhs = rhs.begin();
+			auto const endItRhs = rhs.end();
+			result = CT_EQUAL( std::distance( itLhs, endItLhs ), std::distance( itRhs, endItRhs ) );
 
-			while ( result && itA != endItA )
+			while ( result && itLhs != endItLhs )
 			{
-				result = CT_EQUAL( static_cast< castor3d::SkeletonAnimationKeyFrame const & >( **itA )
-					, static_cast< castor3d::SkeletonAnimationKeyFrame const & >( **itB ) );
-				++itA;
-				++itB;
+				result = CT_EQUAL( static_cast< castor3d::SkeletonAnimationKeyFrame const & >( **itLhs )
+					, static_cast< castor3d::SkeletonAnimationKeyFrame const & >( **itRhs ) );
+				++itLhs;
+				++itRhs;
 			}
 		}
 
@@ -758,19 +758,19 @@ namespace Testing
 		if ( result )
 		{
 			result = CT_EQUAL( lhs.getChildren().size(), rhs.getChildren().size() );
-			auto itA = lhs.getChildren().begin();
-			auto const endItA = lhs.getChildren().end();
-			auto itB = rhs.getChildren().begin();
-			auto const endItB = rhs.getChildren().end();
+			auto itLhs = lhs.getChildren().begin();
+			auto const endItLhs = lhs.getChildren().end();
+			auto itRhs = rhs.getChildren().begin();
+			auto const endItRhs = rhs.getChildren().end();
 
-			while ( result && itA != endItA && itB != endItB )
+			while ( result && itLhs != endItLhs && itRhs != endItRhs )
 			{
-				auto objectA = *itA;
-				auto objectB = *itB;
+				auto objectA = *itLhs;
+				auto objectB = *itRhs;
 				CT_REQUIRE( objectA->getType() == objectB->getType() );
 				result = CT_EQUAL( *objectA, *objectB );
-				++itA;
-				++itB;
+				++itLhs;
+				++itRhs;
 			}
 		}
 
@@ -789,18 +789,18 @@ namespace Testing
 
 		if ( result )
 		{
-			auto itA = lhs.begin();
-			auto const endItA = lhs.end();
-			auto itB = rhs.begin();
-			auto const endItB = rhs.end();
-			result = CT_EQUAL( std::distance( itA, endItA ), std::distance( itB, endItB ) );
+			auto itLhs = lhs.begin();
+			auto const endItLhs = lhs.end();
+			auto itRhs = rhs.begin();
+			auto const endItRhs = rhs.end();
+			result = CT_EQUAL( std::distance( itLhs, endItLhs ), std::distance( itRhs, endItRhs ) );
 
-			while ( result && itA != endItA && itB != endItB )
+			while ( result && itLhs != endItLhs && itRhs != endItRhs )
 			{
-				result = CT_EQUAL( itA->first, itB->first );
-				//result = result && CT_EQUAL( itA->second, itB->second );
-				++itA;
-				++itB;
+				result = CT_EQUAL( itLhs->first, itRhs->first );
+				//result = result && CT_EQUAL( itLhs->second, itRhs->second );
+				++itLhs;
+				++itRhs;
 			}
 		}
 
@@ -813,20 +813,20 @@ namespace Testing
 
 		if ( result )
 		{
-			auto itA = lhs.begin();
-			auto const endItA = lhs.end();
-			auto itB = rhs.begin();
-			auto const endItB = rhs.end();
-			result = CT_EQUAL( std::distance( itA, endItA ), std::distance( itB, endItB ) );
+			auto itLhs = lhs.begin();
+			auto const endItLhs = lhs.end();
+			auto itRhs = rhs.begin();
+			auto const endItRhs = rhs.end();
+			result = CT_EQUAL( std::distance( itLhs, endItLhs ), std::distance( itRhs, endItRhs ) );
 
-			while ( result && itA != endItA && itB != endItB )
+			while ( result && itLhs != endItLhs && itRhs != endItRhs )
 			{
-				result = CT_EQUAL( itA->object->getName(), itB->object->getName() );
-				result = result && CT_EQUAL( itA->transform.translate, itB->transform.translate );
-				result = result && CT_EQUAL( itA->transform.scale, itB->transform.scale );
-				result = result && CT_EQUAL( itA->transform.rotate, itB->transform.rotate );
-				++itA;
-				++itB;
+				result = CT_EQUAL( itLhs->object->getName(), itRhs->object->getName() );
+				result = result && CT_EQUAL( itLhs->transform.translate, itRhs->transform.translate );
+				result = result && CT_EQUAL( itLhs->transform.scale, itRhs->transform.scale );
+				result = result && CT_EQUAL( itLhs->transform.rotate, itRhs->transform.rotate );
+				++itLhs;
+				++itRhs;
 			}
 		}
 
@@ -840,38 +840,38 @@ namespace Testing
 		if ( result )
 		{
 			result = CT_EQUAL( lhs.getAnimations().size(), rhs.getAnimations().size() );
-			auto itA = lhs.getAnimations().begin();
-			auto const endItA = lhs.getAnimations().end();
-			auto itB = rhs.getAnimations().begin();
-			auto const endItB = rhs.getAnimations().end();
+			auto itLhs = lhs.getAnimations().begin();
+			auto const endItLhs = lhs.getAnimations().end();
+			auto itRhs = rhs.getAnimations().begin();
+			auto const endItRhs = rhs.getAnimations().end();
 
-			while ( result && itA != endItA && itB != endItB )
+			while ( result && itLhs != endItLhs && itRhs != endItRhs )
 			{
-				result = CT_EQUAL( itA->first, itB->first );
-				result = result && CT_EQUAL( itA->second.state, itB->second.state );
-				result = result && CT_EQUAL( itA->second.scale, itB->second.scale );
-				result = result && CT_EQUAL( itA->second.looped, itB->second.looped );
-				result = result && CT_EQUAL( itA->second.startingPoint, itB->second.startingPoint );
-				result = result && CT_EQUAL( itA->second.stoppingPoint, itB->second.stoppingPoint );
-				++itA;
-				++itB;
+				result = CT_EQUAL( itLhs->first, itRhs->first );
+				result = result && CT_EQUAL( itLhs->second.state, itRhs->second.state );
+				result = result && CT_EQUAL( itLhs->second.scale, itRhs->second.scale );
+				result = result && CT_EQUAL( itLhs->second.looped, itRhs->second.looped );
+				result = result && CT_EQUAL( itLhs->second.startingPoint, itRhs->second.startingPoint );
+				result = result && CT_EQUAL( itLhs->second.stoppingPoint, itRhs->second.stoppingPoint );
+				++itLhs;
+				++itRhs;
 			}
 		}
 
 		if ( result )
 		{
 			result = CT_EQUAL( lhs.getObjects().size(), rhs.getObjects().size() );
-			auto itA = lhs.getObjects().begin();
-			auto const endItA = lhs.getObjects().end();
-			auto itB = rhs.getObjects().begin();
-			auto const endItB = rhs.getObjects().end();
+			auto itLhs = lhs.getObjects().begin();
+			auto const endItLhs = lhs.getObjects().end();
+			auto itRhs = rhs.getObjects().begin();
+			auto const endItRhs = rhs.getObjects().end();
 
-			while ( result && itA != endItA && itB != endItB )
+			while ( result && itLhs != endItLhs && itRhs != endItRhs )
 			{
-				result = CT_EQUAL( itA->first, itB->first );
-				result = result && CT_EQUAL( *itA->second, *itB->second );
-				++itA;
-				++itB;
+				result = CT_EQUAL( itLhs->first, itRhs->first );
+				result = result && CT_EQUAL( *itLhs->second, *itRhs->second );
+				++itLhs;
+				++itRhs;
 			}
 		}
 
@@ -885,17 +885,17 @@ namespace Testing
 		if ( result )
 		{
 			result = CT_EQUAL( lhs.getAnimations().size(), rhs.getAnimations().size() );
-			auto itA = lhs.getAnimations().begin();
-			auto const endItA = lhs.getAnimations().end();
-			auto itB = rhs.getAnimations().begin();
-			auto const endItB = rhs.getAnimations().end();
+			auto itLhs = lhs.getAnimations().begin();
+			auto const endItLhs = lhs.getAnimations().end();
+			auto itRhs = rhs.getAnimations().begin();
+			auto const endItRhs = rhs.getAnimations().end();
 
-			while ( result && itA != endItA && itB != endItB )
+			while ( result && itLhs != endItLhs && itRhs != endItRhs )
 			{
-				result = CT_EQUAL( itA->first, itB->first );
-				result = result && CT_EQUAL( *itA->second, *itB->second );
-				++itA;
-				++itB;
+				result = CT_EQUAL( itLhs->first, itRhs->first );
+				result = result && CT_EQUAL( *itLhs->second, *itRhs->second );
+				++itLhs;
+				++itRhs;
 			}
 		}
 
@@ -910,15 +910,13 @@ namespace Testing
 		result = result && CT_EQUAL( lhs.isLooped(), rhs.isLooped() );
 		CT_REQUIRE( lhs.getAnimation().getType() == rhs.getAnimation().getType() );
 
-		switch ( lhs.getAnimation().getType() )
+		if ( lhs.getAnimation().getType() == castor3d::AnimationType::eSkeleton )
 		{
-		case castor3d::AnimationType::eSkeleton:
 			result = result && CT_EQUAL( static_cast< castor3d::SkeletonAnimationInstance const & >( lhs ), static_cast< castor3d::SkeletonAnimationInstance const & >( rhs ) );
-			break;
-
-		default:
+		}
+		else
+		{
 			CT_FAILURE( "Unsupported castor3d::AnimationType" );
-			break;
 		}
 
 		return result;
@@ -932,17 +930,17 @@ namespace Testing
 	bool C3DTestCase::compare( castor3d::SkeletonAnimationInstanceObject const & lhs, castor3d::SkeletonAnimationInstanceObject const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getFinalTransform(), rhs.getFinalTransform() ) };
-		auto & childrenA = lhs.getChildren();
-		auto & childrenB = rhs.getChildren();
-		result = result && ( childrenA.size() == childrenB.size() );
-		auto itA = childrenA.begin();
-		auto itB = childrenB.begin();
+		auto & childrenLhs = lhs.getChildren();
+		auto & childrenRhs = rhs.getChildren();
+		result = result && ( childrenLhs.size() == childrenRhs.size() );
+		auto itLhs = childrenLhs.begin();
+		auto itRhs = childrenRhs.begin();
 
-		while ( result && itA != childrenA.end() )
+		while ( result && itLhs != childrenLhs.end() )
 		{
-			result = CT_EQUAL( *itA, *itB );
-			++itA;
-			++itB;
+			result = CT_EQUAL( *itLhs, *itRhs );
+			++itLhs;
+			++itRhs;
 		}
 
 		return result;
@@ -964,14 +962,14 @@ namespace Testing
 	bool C3DTestCase::compare( castor3d::VertexBoneData::Ids const & lhs, castor3d::VertexBoneData::Ids const & rhs )
 	{
 		bool result = true;
-		auto itA = lhs.begin();
-		auto itB = rhs.begin();
+		auto itLhs = lhs.begin();
+		auto itRhs = rhs.begin();
 
-		while ( result && itA != lhs.end() )
+		while ( result && itLhs != lhs.end() )
 		{
-			result = CT_EQUAL( *itA, *itB );
-			++itA;
-			++itB;
+			result = CT_EQUAL( *itLhs, *itRhs );
+			++itLhs;
+			++itRhs;
 		}
 
 		return result;
@@ -980,14 +978,14 @@ namespace Testing
 	bool C3DTestCase::compare( castor3d::VertexBoneData::Weights const & lhs, castor3d::VertexBoneData::Weights const & rhs )
 	{
 		bool result = true;
-		auto itA = lhs.begin();
-		auto itB = rhs.begin();
+		auto itLhs = lhs.begin();
+		auto itRhs = rhs.begin();
 
-		while ( result && itA != lhs.end() )
+		while ( result && itLhs != lhs.end() )
 		{
-			result = CT_EQUAL( *itA, *itB );
-			++itA;
-			++itB;
+			result = CT_EQUAL( *itLhs, *itRhs );
+			++itLhs;
+			++itRhs;
 		}
 
 		return result;

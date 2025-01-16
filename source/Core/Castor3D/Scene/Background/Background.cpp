@@ -337,8 +337,8 @@ namespace castor3d
 				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				created->setMinLod( 0.0f );
 				created->setMaxLod( float( m_texture->getMipLevels() - 1u ) );
+				created->setSerialisable( false );
 				sampler = getEngine()->addSampler( name, created, false );
-				sampler->setSerialisable( false );
 
 				if ( m_texture->getMipLevels() > 1u )
 				{

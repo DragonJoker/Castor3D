@@ -30,17 +30,9 @@ namespace c3d_assimp
 		return castor::toUtf8( makeString( name ) );
 	}
 
-	inline castor::String normalizeName( castor::String name )
+	inline castor::String normalizeName( castor::String const & name )
 	{
-		castor::string::replace( name, cuT( "\\" ), cuT( "-" ) );
-		castor::string::replace( name, cuT( "|" ), cuT( "-" ) );
-		castor::string::replace( name, cuT( ":" ), cuT( "-" ) );
-		castor::string::replace( name, cuT( "*" ), cuT( "-" ) );
-		castor::string::replace( name, cuT( "?" ), cuT( "-" ) );
-		castor::string::replace( name, cuT( "<" ), cuT( "-" ) );
-		castor::string::replace( name, cuT( ">" ), cuT( "-" ) );
-		castor::string::replace( name, cuT( "\"" ), cuT( "-" ) );
-		return castor::string::replace( name, cuT( "/" ), cuT( "-" ) );
+		return castor::File::normaliseFileName( name, cuT( "-"_sv ) );
 	}
 
 	inline castor::Matrix4x4f fromAssimp( aiMatrix4x4 const & aiMatrix )
@@ -99,24 +91,24 @@ namespace c3d_assimp
 		}
 	}
 
-	enum GlFilter
+	enum class GlFilter
 		: uint32_t
 	{
-		GL_FILTER_NEAREST = 0x2600,
-		GL_FILTER_LINEAR = 0x2601,
-		GL_FILTER_NEAREST_MIPMAP_NEAREST = 0x2700,
-		GL_FILTER_LINEAR_MIPMAP_NEAREST = 0x2701,
-		GL_FILTER_NEAREST_MIPMAP_LINEAR = 0x2702,
-		GL_FILTER_LINEAR_MIPMAP_LINEAR = 0x2703,
+		NEAREST = 0x2600,
+		LINEAR = 0x2601,
+		NEAREST_MIPMAP_NEAREST = 0x2700,
+		LINEAR_MIPMAP_NEAREST = 0x2701,
+		NEAREST_MIPMAP_LINEAR = 0x2702,
+		LINEAR_MIPMAP_LINEAR = 0x2703,
 	};
 
 	inline VkFilter fromAssimp( GlFilter const & v )
 	{
 		switch ( v )
 		{
-		case GL_FILTER_NEAREST:
-		case GL_FILTER_NEAREST_MIPMAP_NEAREST:
-		case GL_FILTER_NEAREST_MIPMAP_LINEAR:
+		case GlFilter::NEAREST:
+		case GlFilter::NEAREST_MIPMAP_NEAREST:
+		case GlFilter::NEAREST_MIPMAP_LINEAR:
 			return VK_FILTER_NEAREST;
 		default:
 			return VK_FILTER_LINEAR;
@@ -127,9 +119,9 @@ namespace c3d_assimp
 	{
 		switch ( v )
 		{
-		case GL_FILTER_NEAREST:
-		case GL_FILTER_NEAREST_MIPMAP_NEAREST:
-		case GL_FILTER_LINEAR_MIPMAP_NEAREST:
+		case GlFilter::NEAREST:
+		case GlFilter::NEAREST_MIPMAP_NEAREST:
+		case GlFilter::LINEAR_MIPMAP_NEAREST:
 			return VK_SAMPLER_MIPMAP_MODE_NEAREST;
 		default:
 			return VK_SAMPLER_MIPMAP_MODE_LINEAR;
@@ -509,9 +501,9 @@ namespace c3d_assimp
 		, aiNode const & node )
 	{
 		auto meshes = castor::makeArrayView( node.mMeshes, node.mNumMeshes );
-		auto meshIt = std::find( meshes.begin(), meshes.end(), meshIndex );
 
-		if ( meshIt != meshes.end() )
+		if ( auto meshIt = std::find( meshes.begin(), meshes.end(), meshIndex );
+			meshIt != meshes.end() )
 		{
 			return &node;
 		}
@@ -598,9 +590,8 @@ namespace c3d_assimp
 				work.push_back( child );
 			}
 
-			auto nodeName = makeString( node->mName );
-
-			if ( bonesNodes.end() != bonesNodes.find( nodeName ) )
+			if ( auto nodeName = makeString( node->mName );
+				bonesNodes.end() != bonesNodes.find( nodeName ) )
 			{
 				name = getLongestCommonSubstring( name, nodeName );
 			}

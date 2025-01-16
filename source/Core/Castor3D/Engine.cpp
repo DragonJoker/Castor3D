@@ -693,8 +693,8 @@ namespace castor3d
 			created->setWrapS( VK_SAMPLER_ADDRESS_MODE_REPEAT );
 			created->setWrapT( VK_SAMPLER_ADDRESS_MODE_REPEAT );
 			created->setWrapR( VK_SAMPLER_ADDRESS_MODE_REPEAT );
+			created->setSerialisable( false );
 			m_defaultSampler = addSampler( created->getName(), created, true );
-			m_defaultSampler->setSerialisable( false );
 		}
 
 		if ( auto created = m_samplerCache->create( castor::String{ eng::samplerName }, *this ) )
@@ -704,8 +704,8 @@ namespace castor3d
 			created->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			created->setSerialisable( false );
 			m_lightsSampler = addSampler( created->getName(), created, true );
-			m_lightsSampler->setSerialisable( false );
 		}
 
 		if ( m_maxImageSize == 0xFFFFFFFF )
@@ -1373,7 +1373,7 @@ namespace castor3d
 		}
 	}
 
-	std::default_random_engine Engine::createRandomEngine()
+	std::default_random_engine Engine::createRandomEngine()const
 	{
 		if ( !isRandomisationEnabled() )
 		{

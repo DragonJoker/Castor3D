@@ -40,15 +40,16 @@ namespace Bloom
 			config.end();
 			auto c3d_mapSource = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapSource", DifImgIdx, 0u );
 
-			writer.implementEntryPointT< c3d::Position2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::Position2FT > in
+			writer.implementEntryPointT< c3d::Position2FT, c3d::Uv2FT >( []( sdw::VertexInT< c3d::Position2FT > const & in
 				, sdw::VertexOutT< c3d::Uv2FT > out )
 				{
 					out.uv() = ( in.position() + 1.0_f ) / 2.0_f;
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&writer, &c3d_mapSource, c3d_coefficients, &c3d_coefficientsCount, &c3d_pixelSize]
+				( sdw::FragmentInT< c3d::Uv2FT > const & in
+					, sdw::FragmentOutT< c3d::Colour4FT > const & out )
 				{
 					auto offset = writer.declLocale( "offset"
 						, vec2( 0.0_f, 0.0_f ) );
@@ -74,9 +75,8 @@ namespace Bloom
 
 			for ( uint32_t i = 0u; i <= max; ++i )
 			{
-				auto index = max - i;
-
-				if ( index < height )
+				if ( auto index = max - i;
+					index < height )
 				{
 					result[index] = x;
 				}
@@ -297,7 +297,7 @@ namespace Bloom
 		}
 	}
 
-	void BlurPass::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void BlurPass::accept( castor3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_shader );
 	}

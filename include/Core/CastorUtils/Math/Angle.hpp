@@ -560,17 +560,17 @@ namespace castor
 	using Angle = AngleT< float >;
 }
 
-inline constexpr castor::Angle operator "" _turns( long double value )
+constexpr castor::Angle operator "" _turns( long double value )
 {
 	return castor::Angle::fromTurns( value );
 }
 
-inline constexpr castor::Angle operator "" _degrees( long double value )
+constexpr castor::Angle operator "" _degrees( long double value )
 {
 	return castor::Angle::fromDegrees( value );
 }
 
-inline constexpr castor::Angle operator "" _radians( long double value )
+constexpr castor::Angle operator "" _radians( long double value )
 {
 	return castor::Angle::fromRadians( value );
 }
