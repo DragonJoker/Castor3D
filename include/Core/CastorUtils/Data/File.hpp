@@ -391,11 +391,11 @@ namespace castor
 			, bool allowReplace = false );
 		/**
 		 *\~english
-		 *\brief		Replaces the characters non valid for file name with '_'
+		 *\brief		Replaces the characters non valid for file name with given replacement character
 		 *\~french
-		 *\brief		Remplace les caractères non valides pour un nim de fichier par des '_'
+		 *\brief		Remplace les caractères non valides pour un nim de fichier par le caractère de remplacement donné
 		 */
-		CU_API static String normaliseFileName( String const & name );
+		CU_API static String normaliseFileName( String const & name, castor::StringView repl = cuT( "_" ) );
 		/**
 		 *\~english
 		 *\brief		Retrieves the file size

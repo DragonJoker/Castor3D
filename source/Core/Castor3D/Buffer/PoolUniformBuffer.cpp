@@ -93,13 +93,15 @@ namespace castor3d
 			? 0u
 			: m_allocated.rbegin()->first.offset + m_allocated.rbegin()->first.size;
 		auto realSize = getAlignedSize( uint32_t( size ) );
-		castor::String stackTrace;
 #if !defined( NDEBUG )
+		castor::String stackTrace;
 		castor::StringStream stream = castor::makeStringStream();
 		stream << castor::debug::Backtrace{ 20, 4 };
 		stackTrace = stream.str();
-#endif
 		m_allocated.try_emplace( MemChunk{ offset, realSize, size }, stackTrace );
+#else
+		m_allocated.try_emplace( MemChunk{ offset, realSize, size } );
+#endif
 		return { offset / elemSize, realSize / elemSize, size };
 	}
 

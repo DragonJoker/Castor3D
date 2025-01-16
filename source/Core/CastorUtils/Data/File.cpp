@@ -1,6 +1,7 @@
 #include "CastorUtils/Data/File.hpp"
 
 #include "CastorUtils/Miscellaneous/Utils.hpp"
+#include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 #include "CastorUtils/Log/Logger.hpp"
 
@@ -303,18 +304,18 @@ namespace castor
 		return result;
 	}
 
-	String File::normaliseFileName( String const & name )
+	String File::normaliseFileName( String const & name, castor::StringView repl )
 	{
 		auto result = name;
-		string::replace( result, cuT( "\\" ), cuT( "_" ) );
-		string::replace( result, cuT( "/" ), cuT( "_" ) );
-		string::replace( result, cuT( ":" ), cuT( "_" ) );
-		string::replace( result, cuT( "*" ), cuT( "_" ) );
-		string::replace( result, cuT( "?" ), cuT( "_" ) );
-		string::replace( result, cuT( "\"" ), cuT( "_" ) );
-		string::replace( result, cuT( "<" ), cuT( "_" ) );
-		string::replace( result, cuT( ">" ), cuT( "_" ) );
-		string::replace( result, cuT( "|" ), cuT( "_" ) );
+		string::replace( result, cuT( "\\"_sv ), repl );
+		string::replace( result, cuT( "/"_sv ), repl );
+		string::replace( result, cuT( ":"_sv ), repl );
+		string::replace( result, cuT( "*"_sv ), repl );
+		string::replace( result, cuT( "?"_sv ), repl );
+		string::replace( result, cuT( "\""_sv ), repl );
+		string::replace( result, cuT( "<"_sv ), repl );
+		string::replace( result, cuT( ">"_sv ), repl );
+		string::replace( result, cuT( "|"_sv ), repl );
 		return result;
 	}
 

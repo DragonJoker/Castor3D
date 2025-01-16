@@ -7,6 +7,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
@@ -69,38 +70,31 @@ namespace castor3d
 			config.end();
 			auto c3d_mapSource = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapSource", DifImgIdx, 0u );
 
-			// Shader inputs
-			auto position = writer.declInput< sdw::Vec2 >( "position", sdw::EntryPoint::eVertex, 0u );
-			auto uv = writer.declInput< sdw::Vec2 >( "uv", sdw::EntryPoint::eVertex, 1u );
-
-			// Shader outputs
-			auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", sdw::EntryPoint::eFragment, 0u );
-
-			writer.implementEntryPointT< sdw::VoidT, TexcoordT >( [&]( sdw::VertexIn const & in
+			writer.implementEntryPointT< shader::PosUv2FT, TexcoordT >( []( sdw::VertexInT< shader::PosUv2FT > const & in
 				, sdw::VertexOutT< TexcoordT > out )
 				{
-					out.texcoord() = uv;
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
+					out.texcoord() = in.uv();
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< TexcoordT, sdw::VoidT >( [&]( sdw::FragmentInT< TexcoordT > const & in
-				, sdw::FragmentOut out )
+			writer.implementEntryPointT< TexcoordT, shader::Colour4FT >( [&writer, &c3d_textureSize, &c3d_coefficients, &c3d_coefficientsCount, &c3d_mapSource, isVertical, isDepth]( sdw::FragmentInT< TexcoordT > const & in
+				, sdw::FragmentOutT< shader::Colour4FT > out )
 				{
 					auto base = writer.declLocale( "base", vec2( isVertical ? 0.0_f : 1.0_f, isVertical ? 1.0_f : 0.0_f ) / c3d_textureSize );
 					auto offset = writer.declLocale( "offset", vec2( 0.0_f, 0.0_f ) );
-					outColour = c3d_mapSource.sample( in.texcoord() ) * c3d_coefficients[0_u][0_u];
+					out.colour() = c3d_mapSource.sample( in.texcoord() ) * c3d_coefficients[0_u][0_u];
 
 					FOR( writer, sdw::UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
 					{
 						offset += base;
-						outColour += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( in.texcoord() - offset );
-						outColour += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( in.texcoord() + offset );
+						out.colour() += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( in.texcoord() - offset );
+						out.colour() += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( in.texcoord() + offset );
 					}
 					ROF
 
 					if ( isDepth )
 					{
-						out.fragDepth = outColour.r();
+						out.fragDepth = out.colour().r();
 					}
 				} );
 			return writer.getBuilder().releaseShader();
@@ -270,7 +264,7 @@ namespace castor3d
 				auto & passX = graph.createPass( name
 					, [this, &input, isEnabled]( crg::FramePass const & framePass
 						, crg::GraphContext & context
-						, crg::RunnableGraph & graph )
+						, crg::RunnableGraph & runnable )
 					{
 						auto extent = getExtent( input );
 						auto result = crg::RenderQuadBuilder{}
@@ -279,7 +273,7 @@ namespace castor3d
 							.texcoordConfig( {} )
 							.isEnabled( isEnabled )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesX ) )
-							.build( framePass, context, graph );
+							.build( framePass, context, runnable );
 						m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 							, result->getTimer() );
 						return result;
@@ -295,7 +289,7 @@ namespace castor3d
 				auto & passY = graph.createPass( name
 					, [this, &input, isEnabled]( crg::FramePass const & framePass
 						, crg::GraphContext & context
-						, crg::RunnableGraph & graph )
+						, crg::RunnableGraph & runnable )
 					{
 						auto extent = getExtent( input );
 						auto result = crg::RenderQuadBuilder{}
@@ -304,7 +298,7 @@ namespace castor3d
 							.texcoordConfig( {} )
 							.isEnabled( isEnabled )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesY ) )
-							.build( framePass, context, graph );
+							.build( framePass, context, runnable );
 						m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 							, result->getTimer() );
 						return result;
@@ -324,7 +318,7 @@ namespace castor3d
 		, castor::String const & prefix
 		, crg::ImageViewIdArray const & views
 		, uint32_t kernelSize
-		, crg::RunnablePass::IsEnabledCallback isEnabled )
+		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
 		: GaussianBlur{ graph
 			, previousPass
 			, device
@@ -342,7 +336,7 @@ namespace castor3d
 		, castor::String const & prefix
 		, crg::ImageViewId const & view
 		, uint32_t kernelSize
-		, crg::RunnablePass::IsEnabledCallback isEnabled )
+		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
 		: GaussianBlur{ graph
 			, previousPass
 			, device
@@ -361,7 +355,7 @@ namespace castor3d
 		, crg::ImageViewId const & view
 		, crg::ImageViewId const & intermediateView
 		, uint32_t kernelSize
-		, crg::RunnablePass::IsEnabledCallback isEnabled )
+		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
 		: GaussianBlur{ graph
 			, previousPass
 			, device
@@ -373,7 +367,7 @@ namespace castor3d
 	{
 	}
 
-	void GaussianBlur::accept( ConfigurationVisitorBase & visitor )
+	void GaussianBlur::accept( ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_prefix + cuT( " GaussianBlur Intermediate" )
 			, m_intermediateView

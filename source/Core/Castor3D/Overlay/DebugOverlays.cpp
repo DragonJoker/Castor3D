@@ -24,23 +24,19 @@
 
 CU_ImplementSmartPtr( castor3d, DebugOverlays )
 
-//*********************************************************************************************
-
-namespace std
-{
-	inline castor::OutputStream & operator<<( castor::OutputStream & stream, castor::Nanoseconds const & duration )
-	{
-		stream << std::setprecision( 3 ) << ( float( duration.count() ) / 1000000.0f ) << cuT( " ms" );
-		return stream;
-	}
-}
-
 namespace castor3d
 {
 	//*********************************************************************************************
 
 	namespace dbgovl
 	{
+		static castor::String toString( castor::Nanoseconds const & duration )
+		{
+			castor::StringStream stream;
+			stream << std::setprecision( 3 ) << ( float( duration.count() ) / 1000000.0f ) << cuT( " ms" );
+			return stream.str();
+		}
+
 		static ControlsManager & getControlsManager( Engine & engine )
 		{
 			return static_cast< ControlsManager & >( *engine.getUserInputListener() );
@@ -293,7 +289,7 @@ namespace castor3d
 		auto v = &value;
 		m_times->add( name
 			, label
-			, [v]() { return castor::string::toString( *v ); } );
+			, [v]() { return dbgovl::toString( *v ); } );
 		doUpdatePosition();
 	}
 
@@ -520,8 +516,8 @@ namespace castor3d
 			return false;
 		}
 
-		m_cpu.value->setCaption( castor::toUtf8U32String( castor::string::toString( m_cpu.time ) ) );
-		m_gpu.value->setCaption( castor::toUtf8U32String( castor::string::toString( m_gpu.time ) ) );
+		m_cpu.value->setCaption( castor::toUtf8U32String( dbgovl::toString( m_cpu.time ) ) );
+		m_gpu.value->setCaption( castor::toUtf8U32String( dbgovl::toString( m_gpu.time ) ) );
 		top += PanelHeight;
 
 		return m_visible;
@@ -945,8 +941,8 @@ namespace castor3d
 			return false;
 		}
 
-		m_cpu.value->setCaption( castor::toUtf8U32String( castor::string::toString( m_cpu.time ) ) );
-		m_gpu.value->setCaption( castor::toUtf8U32String( castor::string::toString( m_gpu.time ) ) );
+		m_cpu.value->setCaption( castor::toUtf8U32String( dbgovl::toString( m_cpu.time ) ) );
+		m_gpu.value->setCaption( castor::toUtf8U32String( dbgovl::toString( m_gpu.time ) ) );
 
 		return m_visible;
 	}
@@ -1054,7 +1050,7 @@ namespace castor3d
 		}
 
 		m_renderInfo = RenderInfo{};
-		m_allocations = { *getEngine()->getRenderDevice() };
+		m_allocations = DeviceCounts{ *getEngine()->getRenderDevice() };
 		m_externalTime = m_frameTimer.getElapsed();
 		return m_renderInfo;
 	}

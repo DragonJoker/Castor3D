@@ -8,6 +8,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
@@ -58,8 +59,8 @@ namespace castor3d
 				created->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				created->setSerialisable( false );
 				result = engine.addSampler( name, created, false );
-				result->setSerialisable( false );
 			}
 
 			result->initialise( engine.getRenderSystem()->getRenderDevice() );
@@ -87,28 +88,20 @@ namespace castor3d
 				matrix.end();
 				auto c3d_mapEnvironment = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapEnvironment", 1u, 0u );
 
-				// Inputs
-				auto inPosition = writer.declInput< sdw::Vec3 >( "inPosition", sdw::EntryPoint::eVertex, 0u );
-				auto inWorldPosition = writer.declInput< sdw::Vec3 >( "inWorldPosition", sdw::EntryPoint::eFragment, 0u );
-
-				// Outputs
-				auto outWorldPosition = writer.declOutput< sdw::Vec3 >( "outWorldPosition", sdw::EntryPoint::eVertex, 0u );
-				auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", sdw::EntryPoint::eFragment, 0u );
-
-				writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn const &
-					, sdw::VertexOut out )
+				writer.implementEntryPointT< shader::Position3FT, shader::Position3FT >( [&c3d_viewProjection]( sdw::VertexInT< shader::Position3FT > const & in
+					, sdw::VertexOutT< shader::Position3FT > out )
 					{
-						outWorldPosition = inPosition;
-						out.vtx.position = ( c3d_viewProjection * vec4( inPosition, 1.0_f ) ).xyww();
+						out.position() = in.position();
+						out.vtx.position = ( c3d_viewProjection * vec4( in.position(), 1.0_f ) ).xyww();
 					} );
 
-				writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn const &
-					, sdw::FragmentOut const & )
+				writer.implementEntryPointT< shader::Position3FT, shader::Colour4FT >( [&writer, &c3d_mapEnvironment]( sdw::FragmentInT< shader::Position3FT > const & in
+					, sdw::FragmentOutT< shader::Colour4FT > const & out )
 					{
 						// From https://learnopengl.com/#!PBR/Lighting
 						// the sample direction equals the hemisphere's orientation 
 						auto normal = writer.declLocale( "normal"
-							, normalize( inWorldPosition ) );
+							, normalize( in.position() ) );
 
 						auto irradiance = writer.declLocale( "irradiance"
 							, vec3( 0.0_f ) );
@@ -143,7 +136,7 @@ namespace castor3d
 						ROF
 
 						irradiance = irradiance * sdw::Float{ castor::Pi< float > } * ( 1.0_f / writer.cast< sdw::Float >( nrSamples ) );
-						outColour = vec4( irradiance, 1.0_f );
+						out.colour() = vec4( irradiance, 1.0_f );
 					} );
 
 				programModule.shader = writer.getBuilder().releaseShader();

@@ -31,8 +31,9 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
-#include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <RenderGraph/FramePassTimer.hpp>
@@ -53,11 +54,11 @@ namespace castor3d
 {
 	namespace rendtgt
 	{
-		enum CombineIdx
+		enum class CombineIdx
 		{
-			CombineIdxScene = 0u,
-			CombineIdxOverlays = 1u,
-			CombineIdxHdrConfig = 2u,
+			Scene = 0u,
+			Overlays = 1u,
+			HdrConfig = 2u,
 		};
 
 		class IntermediatesLister
@@ -803,13 +804,12 @@ namespace castor3d
 	}
 
 	void RenderTarget::initialise( RenderDevice const & device
-		, QueueData const & queueData
 		, ProgressBar * progress )
 	{
 		if ( !m_initialised
 			&& !m_initialising.exchange( true ) )
 		{
-			doInitialise( device, queueData, progress );
+			doInitialise( device, progress );
 		}
 
 		while ( m_initialising )
@@ -829,7 +829,7 @@ namespace castor3d
 					auto const & device = getEngine()->getRenderSystem()->getRenderDevice();
 					auto queueWrapper = device.graphicsData();
 					auto & queue = *queueWrapper;
-					doInitialise( device, queue, progress );
+					doInitialise( device, progress );
 					m_onInitialised( *this, queue );
 					m_onTargetInitialised.clear();
 				} );
@@ -1037,7 +1037,7 @@ namespace castor3d
 		return ( camera ? camera->getViewportType() : ViewportType::eCount );
 	}
 
-	void RenderTarget::setViewportType( ViewportType value )
+	void RenderTarget::setViewportType( ViewportType value )const
 	{
 		if ( auto camera = getCamera() )
 		{
@@ -1210,7 +1210,7 @@ namespace castor3d
 		m_signalFinished.clear();
 	}
 
-	crg::FramePass const & RenderTarget::createVertexTransformPass( crg::FramePassGroup & graph )
+	crg::FramePass const & RenderTarget::createVertexTransformPass( crg::FramePassGroup & graph )const
 	{
 		return getScene()->getRenderNodes().createVertexTransformPass( graph );
 	}
@@ -1234,7 +1234,6 @@ namespace castor3d
 	}
 
 	void RenderTarget::doInitialise( RenderDevice const & device
-		, QueueData const & queueData
 		, ProgressBar * progress )
 	{
 		setProgressBarGlobalTitle( progress
@@ -1264,7 +1263,7 @@ namespace castor3d
 				, passes );
 		}
 
-		auto result = doInitialiseTechnique( device, queueData, progress, castor::move( passes ) );
+		auto result = doInitialiseTechnique( device, progress, castor::move( passes ) );
 
 		if ( !result )
 		{
@@ -1281,7 +1280,7 @@ namespace castor3d
 			stepProgressBarGlobalStartLocal( progress
 				, cuT( "Creating: HDR Post effects" )
 				, uint32_t( m_hdrPostEffects.size() ) );
-			for ( auto & effect : m_hdrPostEffects )
+			for ( auto const & effect : m_hdrPostEffects )
 			{
 				if ( result
 					&& ( isFullLoadingEnabled() || effect->isEnabled() ) )
@@ -1324,7 +1323,7 @@ namespace castor3d
 			stepProgressBarGlobalStartLocal( progress
 				, cuT( "Creating: SRGB Post effects" )
 				, uint32_t( m_srgbPostEffects.size() ) );
-			for ( auto & effect : m_srgbPostEffects )
+			for ( auto const & effect : m_srgbPostEffects )
 			{
 				if ( result
 					&& ( isFullLoadingEnabled() || effect->isEnabled() ) )
@@ -1369,7 +1368,7 @@ namespace castor3d
 			doListIntermediateViews( m_intermediates );
 			m_debugConfig.resetImages();
 
-			for ( auto & intermediate : m_intermediates )
+			for ( auto const & intermediate : m_intermediates )
 			{
 				m_debugConfig.registerImage( intermediate.name );
 			}
@@ -1405,13 +1404,13 @@ namespace castor3d
 	{
 		stepProgressBarLocal( progress, cuT( "Creating overlays pass" ) );
 		auto & group = m_graph.createPassGroup( "Overlays" );
-		auto & result = group.createPass( "Overlays"
-			, [this, progress, &device]( crg::FramePass const & pass
+		auto & pass = group.createPass( "Overlays"
+			, [this, progress, &device]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				stepProgressBarLocal( progress, cuT( "Initialising overlays pass" ) );
-				auto result = castor::make_unique< OverlayPass >( pass
+				auto result = castor::make_unique< OverlayPass >( framePass
 					, context
 					, graph
 					, device
@@ -1421,21 +1420,21 @@ namespace castor3d
 					, *m_hdrConfigUbo
 					, true );
 				m_overlayPass = result.get();
-				getOwner()->registerTimer( castor::makeString( pass.getFullName() )
+				getOwner()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
-		result.addOutputColourView( m_overlays.targetViewId );
+		pass.addOutputColourView( m_overlays.targetViewId );
 		group.addGroupOutput( m_overlays.targetViewId );
-		return result;
+		return pass;
 	}
 
 	crg::FramePass & RenderTarget::doCreateCombinePass( ProgressBar * progress
 		, crg::ImageViewIdArray source )
 	{
 		stepProgressBarLocal( progress, cuT( "Creating combine pass" ) );
-		auto & result = m_graph.createPass( "Other/Combine"
-			, [this, progress]( crg::FramePass const & pass
+		auto & pass = m_graph.createPass( "Other/Combine"
+			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -1446,24 +1445,23 @@ namespace castor3d
 					.texcoordConfig( {} )
 					.passIndex( &m_combinePassIndex )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_combineStages ) )
-					.build( pass, context, graph, crg::ru::Config{ 2u } );
-				getOwner()->registerTimer( castor::makeString( pass.getFullName() )
+					.build( framePass, context, graph, crg::ru::Config{ 2u } );
+				getOwner()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
-		result.addDependency( m_overlayPassDesc );
-		result.addSampledView( castor::move( source )
-			, rendtgt::CombineIdxScene );
-		result.addSampledView( m_overlays.sampledViewId
-			, rendtgt::CombineIdxOverlays );
-		m_hdrConfigUbo->createPassBinding( result
-			, rendtgt::CombineIdxHdrConfig );
-		result.addOutputColourView( m_combined.targetViewId );
-		return result;
+		pass.addDependency( m_overlayPassDesc );
+		pass.addSampledView( castor::move( source )
+			, uint32_t( rendtgt::CombineIdx::Scene ) );
+		pass.addSampledView( m_overlays.sampledViewId
+			, uint32_t( rendtgt::CombineIdx::Overlays ) );
+		m_hdrConfigUbo->createPassBinding( pass
+			, uint32_t( rendtgt::CombineIdx::HdrConfig ) );
+		pass.addOutputColourView( m_combined.targetViewId );
+		return pass;
 	}
 
 	bool RenderTarget::doInitialiseTechnique( RenderDevice const & device
-		, QueueData const & queueData
 		, ProgressBar * progress
 		, crg::FramePassArray previousPasses )
 	{
@@ -1499,10 +1497,6 @@ namespace castor3d
 		m_renderTechnique.reset();
 	}
 
-	void RenderTarget::doCleanupCopyCommands()
-	{
-	}
-
 	void RenderTarget::doInitCombineProgram()
 	{
 		auto const & renderSystem = *getEngine()->getRenderSystem();
@@ -1519,55 +1513,44 @@ namespace castor3d
 		{
 			sdw::TraditionalGraphicsWriter writer{ &getEngine()->getShaderAllocator() };
 
-			auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapScene", rendtgt::CombineIdxScene, 0u );
-			auto c3d_mapOverlays = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapOverlays", rendtgt::CombineIdxOverlays, 0u );
-			C3D_HdrConfig( writer, rendtgt::CombineIdxHdrConfig, 0u );
-
-			// Shader inputs
-			auto inPosition = writer.declInput< sdw::Vec2 >( "inPosition", sdw::EntryPoint::eVertex, 0u );
-			auto inUv = writer.declInput< sdw::Vec2 >( "inUv", sdw::EntryPoint::eVertex, 1u );
-			auto inTextureScene = writer.declInput< sdw::Vec2 >( "inTextureScene", sdw::EntryPoint::eFragment, rendtgt::CombineIdxScene );
-			auto inTextureOverlays = writer.declInput< sdw::Vec2 >( "inTextureOverlays", sdw::EntryPoint::eFragment, rendtgt::CombineIdxOverlays );
-
-			// Shader outputs
-			auto outTextureScene = writer.declOutput< sdw::Vec2 >( "outTextureScene", sdw::EntryPoint::eVertex, rendtgt::CombineIdxScene );
-			auto outTextureOverlays = writer.declOutput< sdw::Vec2 >( "outTextureOverlays", sdw::EntryPoint::eVertex, rendtgt::CombineIdxOverlays );
-			auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", sdw::EntryPoint::eFragment, 0 );
+			auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapScene", uint32_t( rendtgt::CombineIdx::Scene ), 0u );
+			auto c3d_mapOverlays = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapOverlays", uint32_t( rendtgt::CombineIdx::Overlays ), 0u );
+			C3D_HdrConfig( writer, rendtgt::CombineIdx::HdrConfig, 0u );
 
 			shader::Utils utils{ writer };
 
-			auto getSafeBandedCoord = [&]( sdw::Vec2 const & texcoord )
+			auto getSafeBandedCoord = [&velocityMetrics]( sdw::Vec2 const & texcoord )
 			{
 				return vec2( texcoord.x() * velocityMetrics->z + velocityMetrics->x
 					, texcoord.y() * velocityMetrics->w + velocityMetrics->y );
 			};
 
-			writer.implementEntryPoint( [&]( sdw::VertexIn const &
-				, sdw::VertexOut out )
+			writer.implementEntryPointT< shader::PosUv2FT, shader::TwoUv2FT >( [this, &utils, &getSafeBandedCoord]( sdw::VertexInT< shader::PosUv2FT > const & in
+				, sdw::VertexOutT< shader::TwoUv2FT > out )
 				{
-					outTextureScene = utils.topDownToBottomUp( inUv );
-					outTextureOverlays = inUv;
+					out.uv0()= utils.topDownToBottomUp( in.uv() );
+					out.uv1()= in.uv();
 
 					if ( getTargetType() != TargetType::eWindow )
 					{
-						outTextureScene.y() = 1.0_f - outTextureScene.y();
-						outTextureOverlays.y() = 1.0_f - outTextureOverlays.y();
+						out.uv0().y() = 1.0_f - out.uv0().y();
+						out.uv1().y() = 1.0_f - out.uv1().y();
 					}
 
-					outTextureScene = getSafeBandedCoord( outTextureScene );
-					out.vtx.position = vec4( inPosition, 0.0_f, 1.0_f );
+					out.uv0() = getSafeBandedCoord( out.uv0() );
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPoint( [&]( sdw::FragmentIn const &
-				, sdw::FragmentOut const & )
+			writer.implementEntryPointT< shader::TwoUv2FT, shader::Colour4FT >( [&writer, &c3d_mapScene, &c3d_mapOverlays]( sdw::FragmentInT< shader::TwoUv2FT > const & in
+				, sdw::FragmentOutT< shader::Colour4FT > const & out )
 				{
 					auto sceneColor = writer.declLocale( "sceneColor"
-						, c3d_mapScene.lod( inTextureScene, 0.0_f ).rgb() );
+						, c3d_mapScene.lod( in.uv0(), 0.0_f ).rgb() );
 					auto overlaysColor = writer.declLocale( "overlaysColor"
-						, c3d_mapOverlays.lod( inTextureOverlays, 0.0_f ) );
+						, c3d_mapOverlays.lod( in.uv1(), 0.0_f ) );
 
 					sceneColor *= 1.0_f - overlaysColor.a();
-					outColour = vec4( sceneColor + overlaysColor.rgb(), 1.0_f );
+					out.colour() = vec4( sceneColor + overlaysColor.rgb(), 1.0_f );
 				} );
 			programModule.shader = writer.getBuilder().releaseShader();
 		}

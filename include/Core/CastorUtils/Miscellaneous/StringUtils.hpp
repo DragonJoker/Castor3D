@@ -1337,6 +1337,11 @@ namespace castor::string
 	}
 }
 
+constexpr castor::StringView operator "" _sv( castor::xchar const * const value, size_t length )noexcept
+{
+	return castor::StringView{ value, length };
+}
+
 #include "StringUtils.inl"
 
 #endif

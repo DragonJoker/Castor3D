@@ -118,6 +118,30 @@ namespace castor3d
 			return std::next( it );
 		}
 
+		static void addUnit( TextureUnitData & unitData
+			, TextureUnitRPtr unit
+			, Pass::UnitArray & result )
+		{
+			if ( unitData.animation && !unit->hasAnimation() )
+			{
+				auto anim = unitData.animation.get();
+				unit->addAnimation( castor::ptrRefCast< Animation >( unitData.animation ) );
+				static_cast< TextureAnimation & >( *anim ).setAnimable( *unit );
+			}
+
+			auto it = std::find_if( result.begin()
+				, result.end()
+				, [&unitData]( TextureUnit const * lookup )
+				{
+						return shallowEqual( unitData.base->sourceInfo.textureConfig(), lookup->getConfiguration() );
+				} );
+
+			if ( it == result.end() )
+			{
+				result.push_back( unit );
+			}
+		}
+
 		static CU_ImplementAttributeParserNewBlock( parserPass, MaterialContext, PassContext )
 		{
 			if ( blockContext->material )
@@ -665,14 +689,14 @@ namespace castor3d
 			for ( auto & prepared : m_prepared )
 			{
 				auto unit = textureCache.getTextureUnit( *prepared );
-				doAddUnit( *prepared, unit, m_textureUnits );
+				matpass::addUnit( *prepared, unit, m_textureUnits );
 			}
 
 			m_textureCombine = getOwner()->getOwner()->getTextureUnitCache().registerTextureCombine( *this );
 		}
 	}
 
-	void Pass::setColour( castor::HdrRgbColour const & value )
+	void Pass::setColour( castor::HdrRgbColour const & value )const
 	{
 		for ( auto const & [id, component] : m_components )
 		{
@@ -702,7 +726,7 @@ namespace castor3d
 		return m_componentCombine;
 	}
 
-	void Pass::accept( ConfigurationVisitorBase & vis )
+	void Pass::accept( ConfigurationVisitorBase & vis )const
 	{
 		for ( auto const & [id, component] : m_components )
 		{
@@ -737,7 +761,7 @@ namespace castor3d
 	}
 
 	void Pass::fillConfig( TextureConfiguration & configuration
-		, ConfigurationVisitorBase & vis )
+		, ConfigurationVisitorBase & vis )const
 	{
 		for ( auto const & [id, component] : m_components )
 		{
@@ -971,30 +995,6 @@ namespace castor3d
 			: nullptr );
 		auto flags = getFlags( sourceInfo.textureConfig() );
 		m_prepared.emplace_back( &textureCache.getSourceData( sourceInfo, passConfig, castor::move( anim ) ) );
-	}
-
-	void Pass::doAddUnit( TextureUnitData & unitData
-		, TextureUnitRPtr unit
-		, Pass::UnitArray & result )
-	{
-		if ( unitData.animation && !unit->hasAnimation() )
-		{
-			auto anim = unitData.animation.get();
-			unit->addAnimation( castor::ptrRefCast< Animation >( unitData.animation ) );
-			static_cast< TextureAnimation & >( *anim ).setAnimable( *unit );
-		}
-
-		auto it = std::find_if( result.begin()
-			, result.end()
-			, [&unitData]( TextureUnit const * lookup )
-			{
-				return shallowEqual( unitData.base->sourceInfo.textureConfig(), lookup->getConfiguration() );
-			} );
-
-		if ( it == result.end() )
-		{
-			result.push_back( unit );
-		}
 	}
 
 	void Pass::doUpdateTextureFlags()

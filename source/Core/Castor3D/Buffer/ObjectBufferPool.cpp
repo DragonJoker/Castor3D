@@ -398,7 +398,7 @@ namespace castor3d
 
 		if ( it == buffers.end() )
 		{
-			auto & submeshComponents = getOwner()->getEngine()->getSubmeshComponentsRegister();
+			auto const & submeshComponents = getOwner()->getEngine()->getSubmeshComponentsRegister();
 			auto name = objbuf::getName( components, isGpuComputed );
 			ModelBuffers modelBuffers;
 

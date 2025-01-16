@@ -315,9 +315,7 @@ namespace castor3d
 
 		for ( auto const & [_, window] : windows )
 		{
-			window->render( info
-				, m_ignored > 0
-				, toWait );
+			window->render( m_ignored > 0, toWait );
 		}
 
 		*used.used = toWait.empty();

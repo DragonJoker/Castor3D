@@ -123,7 +123,7 @@ namespace castor3d
 		m_caret.overlay = caret;
 
 		setStyle( style );
-		doUpdateFlags();
+		EditCtrl::doUpdateFlags();
 	}
 
 	EditCtrl::~EditCtrl()noexcept
@@ -502,7 +502,7 @@ namespace castor3d
 		}
 	}
 
-	void EditCtrl::onKeyUp( KeyboardEvent const & )
+	void EditCtrl::onKeyUp( KeyboardEvent const & )const
 	{
 	}
 
@@ -1231,7 +1231,7 @@ namespace castor3d
 		}
 	}
 
-	EditCtrl::Selection EditCtrl::doGetNormalisedSelection()
+	EditCtrl::Selection EditCtrl::doGetNormalisedSelection()const
 	{
 		auto selBegin = m_selection.begin;
 		auto selEnd = m_selection.end;

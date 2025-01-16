@@ -890,8 +890,8 @@ namespace c3d_assimp
 					auto & engine = *m_result.getOwner()->getEngine();
 					auto & cache = engine.getSamplerCache();
 
-					GlFilter minFilter{ GL_FILTER_LINEAR };
-					GlFilter magFilter{ GL_FILTER_LINEAR };
+					GlFilter minFilter{ GlFilter::LINEAR };
+					GlFilter magFilter{ GlFilter::LINEAR };
 					aiTextureMapMode addressModeU{ aiTextureMapMode_Wrap };
 					aiTextureMapMode addressModeV{ aiTextureMapMode_Wrap };
 					auto hasMinFilter = m_material.Get( AI_MATKEY_GLTF_MAPPINGFILTER_MIN( type, index ), minFilter ) == aiReturn_SUCCESS;

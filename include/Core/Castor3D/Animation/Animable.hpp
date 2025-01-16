@@ -43,7 +43,7 @@ namespace castor3d
 		 *\~french
 		 *\return		\p true si l'objet a une animation.
 		 */
-		C3D_API bool hasAnimation()const;
+		C3D_API virtual bool hasAnimation()const noexcept;
 		/**
 		 *\~english
 		 *\param[in]	name	The animation name

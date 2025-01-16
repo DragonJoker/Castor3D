@@ -36,7 +36,7 @@ namespace Bloom
 			, bool isVertical
 			, bool const * enabled );
 		~BlurPass()noexcept;
-		void accept( castor3d::ConfigurationVisitorBase & visitor );
+		void accept( castor3d::ConfigurationVisitorBase & visitor )const;
 
 		void update( uint32_t kernelSize );
 

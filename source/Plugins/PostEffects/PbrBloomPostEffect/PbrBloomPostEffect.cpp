@@ -32,7 +32,7 @@ namespace PbrBloom
 		, m_bloomStrength{ BaseBloomStrength }
 		, m_duPassesCount{ BaseFilterCount }
 	{
-		setParameters( params );
+		PostEffect::setParameters( params );
 	}
 
 	castor3d::PostEffectUPtr PostEffect::create( castor3d::RenderTarget & renderTarget

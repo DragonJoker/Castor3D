@@ -126,16 +126,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Initialisation function.
 		 *\param[in]	device		The GPU device.
-		 *\param[in]	queueData	The queue receiving the GPU commands.
 		 *\param[in]	progress	The optional progress bar.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
 		 *\param[in]	device		Le device GPU.
-		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 *\param[in]	progress	La barre de progression optionnelle.
 		 */
 		C3D_API void initialise( RenderDevice const & device
-			, QueueData const & queueData
 			, ProgressBar * progress = nullptr );
 		/**
 		 *\~english
@@ -173,7 +170,7 @@ namespace castor3d
 		 *\brief		Définit le ViewportType.
 		 *\param[in]	value	Le nouveau ViewportType.
 		 */
-		C3D_API void setViewportType( ViewportType value );
+		C3D_API void setViewportType( ViewportType value )const;
 		/**
 		 *\~english
 		 *\brief		Sets the camera.
@@ -213,7 +210,7 @@ namespace castor3d
 		 */
 		C3D_API PostEffectRPtr getPostEffect( castor::String const & name )const;
 		C3D_API void resetSemaphore();
-		C3D_API crg::FramePass const & createVertexTransformPass( crg::FramePassGroup & graph );
+		C3D_API crg::FramePass const & createVertexTransformPass( crg::FramePassGroup & graph )const;
 
 		C3D_API static void addParsers( castor::AttributeParsers & result );
 		/**
@@ -465,18 +462,15 @@ namespace castor3d
 
 	private:
 		void doInitialise( RenderDevice const & device
-			, QueueData const & queueData
 			, ProgressBar * progress = nullptr );
 		crg::FramePass & doCreateOverlayPass( ProgressBar * progress
 			, RenderDevice const & device );
 		crg::FramePass & doCreateCombinePass( ProgressBar * progress
 			, crg::ImageViewIdArray source );
 		bool doInitialiseTechnique( RenderDevice const & device
-			, QueueData const & queueData
 			, ProgressBar * progress
 			, crg::FramePassArray previousPasses );
 		void doCleanupTechnique();
-		void doCleanupCopyCommands();
 		void doInitCombineProgram();
 		void doCleanupCombineProgram();
 		Texture const & doUpdatePostEffects( CpuUpdater & updater

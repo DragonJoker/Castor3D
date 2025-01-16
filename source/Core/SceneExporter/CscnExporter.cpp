@@ -121,9 +121,9 @@ namespace castor3d::exporter
 			, Params && ... params )
 		{
 			bool result = true;
-			auto & cache = view.getCache();
 
-			if ( !cache.isEmpty() )
+			if ( auto & cache = view.getCache();
+				!cache.isEmpty() )
 			{
 				auto scount = 0u;
 				auto gcount = 0u;

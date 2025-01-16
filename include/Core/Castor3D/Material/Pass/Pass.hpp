@@ -259,7 +259,7 @@ namespace castor3d
 		 *\brief		Définit la couleur basique de la passe.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		C3D_API void setColour( castor::HdrRgbColour const & value );
+		C3D_API void setColour( castor::HdrRgbColour const & value )const;
 		/**
 		 *\~english
 		 *\return		The basic pass colour.
@@ -286,7 +286,7 @@ namespace castor3d
 		*\param vis
 		*	Le ... visiteur.
 		*/
-		C3D_API void accept( ConfigurationVisitorBase & vis );
+		C3D_API void accept( ConfigurationVisitorBase & vis )const;
 		/**
 		 *\~english
 		 *\brief			Fills the pass buffer with this pass data.
@@ -331,7 +331,7 @@ namespace castor3d
 		*	Le ... visiteur.
 		*/
 		C3D_API void fillConfig( TextureConfiguration & config
-			, ConfigurationVisitorBase & vis );
+			, ConfigurationVisitorBase & vis )const;
 
 		C3D_API static void addParsers( castor::AttributeParsers & result
 			, castor::UInt32StrMap const & textureChannels );
@@ -502,17 +502,17 @@ namespace castor3d
 		}
 
 		void setColour( castor::RgbColour const & v
-			, float gamma = 2.2f )
+			, float gamma = 2.2f )const
 		{
 			setColour( castor::HdrRgbColour{ v, gamma } );
 		}
 
-		void setColour( castor::Coords3f const & v )
+		void setColour( castor::Coords3f const & v )const
 		{
 			setColour( castor::HdrRgbColour{ v[0u], v[1u], v[2u] } );
 		}
 
-		void setColour( castor::Point3f const & v )
+		void setColour( castor::Point3f const & v )const
 		{
 			setColour( castor::HdrRgbColour{ v[0u], v[1u], v[2u] } );
 		}
@@ -536,9 +536,6 @@ namespace castor3d
 	private:
 		void onSssChanged( SubsurfaceScattering const & sss );
 		void doPrepareImage( PassTextureSource const & cfg );
-		void doAddUnit( TextureUnitData & unitData
-			, TextureUnitRPtr unit
-			, UnitArray & result );
 		void doUpdateTextureFlags();
 		castor::Vector< PassComponentUPtr > doRemoveDependencies( castor::String const & name );
 		void doRemoveConfiguration( PassComponentTextureFlag flag );

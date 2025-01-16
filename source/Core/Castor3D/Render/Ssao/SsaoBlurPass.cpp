@@ -9,6 +9,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/SsaoConfigUbo.hpp"
 
@@ -61,9 +62,6 @@ namespace castor3d
 			auto c3d_readMultiplyFirst = writer.declConstant( "c3d_readMultiplyFirst", vec3( 2.0_f ) );
 			auto c3d_readAddSecond = writer.declConstant( "c3d_readAddSecond", vec3( 1.0_f ) );
 
-			// Shader inputs
-			auto inPosition = writer.declInput< sdw::Vec2 >( "in¨Position", sdw::EntryPoint::eVertex, 0u );
-
 			// Shader outputs
 			auto outColour = writer.declOutput< sdw::Vec3 >( "outColour", sdw::EntryPoint::eFragment, 0u );
 			auto outBentNormal = writer.declOutput< sdw::Vec3 >( "outBentNormal", sdw::EntryPoint::eFragment, 1u );
@@ -73,7 +71,7 @@ namespace castor3d
 
 			/** Returns a number on (0, 1) */
 			auto unpackKey = writer.implementFunction< sdw::Float >( "unpackKey"
-				, [&]( sdw::Float const & p )
+				, [&writer]( sdw::Float const & p )
 				{
 					writer.returnStmt( p );
 				}
@@ -85,7 +83,7 @@ namespace castor3d
 			// was placed!]
 			// Costs 3 MADD.  Error is on the order of 10^3 at the far plane, partly due to z precision.
 			auto reconstructCSPosition = writer.implementFunction< sdw::Vec3 >( "reconstructCSPosition"
-				, [&]( sdw::Vec2 const & S
+				, [&writer]( sdw::Vec2 const & S
 					, sdw::Float const & z
 					, sdw::Vec4 const & projInfo )
 				{
@@ -96,7 +94,7 @@ namespace castor3d
 				, sdw::InVec4{ writer, "projInfo" } );
 
 			auto positionFromKey = writer.implementFunction< sdw::Vec3 >( "positionFromKey"
-				, [&]( sdw::Float const & key
+				, [&writer, c3d_ssaoConfigData, &reconstructCSPosition]( sdw::Float const & key
 					, sdw::IVec2 const & ssCenter
 					, sdw::Vec4 const & projInfo )
 				{
@@ -113,7 +111,7 @@ namespace castor3d
 				, sdw::InVec4{ writer, "projInfo" } );
 
 			auto getTapInformation = writer.implementFunction< sdw::Vec3 >( "getTapInformation"
-				, [&]( sdw::IVec2 const & tapLoc
+				, [&writer, &c3d_mapInput, c3d_mapNormal, c3d_readMultiplyFirst, c3d_readAddSecond, &unpackKey, useNormalsBuffer]( sdw::IVec2 const & tapLoc
 					, sdw::Float tapKey
 					, sdw::Float value
 					, sdw::Vec3 bent )
@@ -142,14 +140,14 @@ namespace castor3d
 				, sdw::OutVec3{ writer, "bent" } );
 
 			auto square = writer.implementFunction< sdw::Float >( "square"
-				, [&]( sdw::Float const & x )
+				, [&writer]( sdw::Float const & x )
 				{
 					writer.returnStmt( x * x );
 				}
 				, sdw::InFloat{ writer, "x" } );
 
 			auto calculateBilateralWeight = writer.implementFunction< sdw::Float >( "calculateBilateralWeight"
-				, [&]( sdw::Float const & key
+				, [&writer, &c3d_ssaoConfigData, &positionFromKey, &square, useNormalsBuffer]( sdw::Float const & key
 					, sdw::Float const & tapKey
 					, sdw::IVec2 const & tapLoc
 					, sdw::Vec3 const & normal
@@ -232,10 +230,10 @@ namespace castor3d
 				, sdw::InVec3{ writer, "tapNormal" }
 				, sdw::InVec3{ writer, "position" } );
 
-			writer.implementEntryPoint( [&]( sdw::VertexIn const &
+			writer.implementEntryPointT< shader::Position2FT, sdw::VoidT >( []( sdw::VertexInT< shader::Position2FT > const & in
 				, sdw::VertexOut out )
 				{
-					out.vtx.position = vec4( inPosition, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
 			writer.implementEntryPoint( [&]( sdw::FragmentIn const & in
@@ -462,14 +460,14 @@ namespace castor3d
 		auto & pass = m_graph.createPass( "Blur" + castor::toUtf8( prefix )
 			, [this, &passIndex, progress, prefix, config, axis]( crg::FramePass const & pass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runnable )
 			{
 				stepProgressBarLocal( progress, cuT( "Initialising SSAO " ) + prefix + cuT( " blur pass" ) );
 				auto bentResIt = pass.images.rbegin();
 				auto resIt = std::next( bentResIt );
 				auto result = castor::make_unique< RenderQuad >( pass
 					, context
-					, graph
+					, runnable
 					, ssaoblr::getConfig( m_size
 						, config
 						, passIndex
@@ -504,7 +502,7 @@ namespace castor3d
 		m_device.uboPool->putBuffer( m_configurationUbo );
 	}
 
-	void SsaoBlurPass::update( CpuUpdater & updater )
+	void SsaoBlurPass::update( CpuUpdater const & )
 	{
 		if ( m_config.blurRadius.isDirty() )
 		{

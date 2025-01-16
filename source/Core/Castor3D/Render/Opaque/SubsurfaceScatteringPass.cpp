@@ -114,15 +114,16 @@ namespace castor3d
 			auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj", BlurDepthObjImgId, 0u );
 			auto c3d_mapLightDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightDiffuse", BlurLgtDiffImgId, 0u );
 
-			writer.implementEntryPointT< VertexT, VertexT >( [&]( sdw::VertexInT< VertexT > const & in
+			writer.implementEntryPointT< VertexT, VertexT >( []( sdw::VertexInT< VertexT > const & in
 				, sdw::VertexOutT< VertexT > out )
 				{
 					out.texcoord() = in.texcoord();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< VertexT, shader::Colour4FT >( [&]( sdw::FragmentInT< VertexT > const & in
-				, sdw::FragmentOutT< shader::Colour4FT > const & out )
+			writer.implementEntryPointT< VertexT, shader::Colour4FT >( [&writer, &c3d_mapDepthObj, &c3d_modelsData, &c3d_mapLightDiffuse, &c3d_cameraData, &c3d_pixelSize, &c3d_correction, &utils, &materials, &sssProfiles, isVertic]
+				( sdw::FragmentInT< VertexT > const & in
+					, sdw::FragmentOutT< shader::Colour4FT > const & out )
 				{
 					auto depthObj = writer.declLocale( "depthObj"
 						, c3d_mapDepthObj.lod( in.texcoord(), 0.0_f ) );
@@ -240,15 +241,16 @@ namespace castor3d
 			auto c3d_mapBlur3 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBlur3", CombBlur3ImgId, 0u );
 			auto c3d_mapLightDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightDiffuse", CombLgtDiffImgId, 0u );
 
-			writer.implementEntryPointT< VertexT, VertexT >( [&]( sdw::VertexInT< VertexT > const & in
+			writer.implementEntryPointT< VertexT, VertexT >( []( sdw::VertexInT< VertexT > const & in
 				, sdw::VertexOutT< VertexT > out )
 				{
 					out.texcoord() = in.texcoord();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< VertexT, shader::Colour4FT >( [&]( sdw::FragmentInT< VertexT > const & in
-				, sdw::FragmentOutT< shader::Colour4FT > const & out )
+			writer.implementEntryPointT< VertexT, shader::Colour4FT >( [&writer, &c3d_mapDepthObj, &c3d_mapBlur1, &c3d_mapBlur2, &c3d_mapBlur3, &c3d_mapLightDiffuse, &c3d_modelsData, &materials]
+				( sdw::FragmentInT< VertexT > const & in
+					, sdw::FragmentOutT< shader::Colour4FT > const & out )
 				{
 					auto depthObj = writer.declLocale( "depthObj"
 						, c3d_mapDepthObj.lod( in.texcoord(), 0.0_f ) );
@@ -407,11 +409,11 @@ namespace castor3d
 			auto & blurX = m_group.createPass( "BlurX" + castor::string::toMbString( i )
 				, [this, &isEnabled]( crg::FramePass const & framePass
 					, crg::GraphContext & context
-					, crg::RunnableGraph & graph )
+					, crg::RunnableGraph & runnable )
 				{
 					auto result = castor::make_unique< crg::RenderQuad >( framePass
 						, context
-						, graph
+						, runnable
 						, crg::ru::Config{}
 						, sssss::createConfig( m_size, m_blurXShader, &m_enabled, isEnabled ) );
 					getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
@@ -442,11 +444,11 @@ namespace castor3d
 			auto & blurY = m_group.createPass( "BlurY" + castor::string::toMbString( i )
 				, [this, &isEnabled]( crg::FramePass const & framePass
 					, crg::GraphContext & context
-					, crg::RunnableGraph & graph )
+					, crg::RunnableGraph & runnable )
 				{
 					auto result = castor::make_unique< crg::RenderQuad >( framePass
 						, context
-						, graph
+						, runnable
 						, crg::ru::Config{}
 						, sssss::createConfig( m_size, m_blurYShader, &m_enabled, isEnabled ) );
 					getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
@@ -481,7 +483,7 @@ namespace castor3d
 		auto & pass = m_group.createPass("Combine"
 			, [this, progress, &isEnabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runnable )
 			{
 				stepProgressBarLocal( progress, cuT( "Initialising SSSSS combine pass" ) );
 				auto extent = m_result.getExtent();
@@ -493,7 +495,7 @@ namespace castor3d
 				auto rqConfig = sssss::createConfig( m_size, m_combineShader, &m_enabled, isEnabled );
 				auto result = castor::make_unique< crg::RenderQuad >( framePass
 					, context
-					, graph
+					, runnable
 					, ruConfig
 					, rqConfig );
 				getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
@@ -542,7 +544,7 @@ namespace castor3d
 		m_device.uboPool->putBuffer( m_blurWgtUbo );
 	}
 
-	void SubsurfaceScatteringPass::update( CpuUpdater & /*updater*/ )
+	void SubsurfaceScatteringPass::update( CpuUpdater const & )
 	{
 		m_enabled = m_scene.needsSubsurfaceScattering();
 	}

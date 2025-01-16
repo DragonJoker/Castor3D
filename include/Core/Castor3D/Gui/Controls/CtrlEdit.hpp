@@ -217,7 +217,7 @@ namespace castor3d
 		/** Event when a keyboard key is pressed
 		 *\param[in]	event		The mouse event
 		 */
-		void onKeyUp( KeyboardEvent const & event );
+		void onKeyUp( KeyboardEvent const & event )const;
 
 		/** adds a character at caret index
 		 */
@@ -300,7 +300,7 @@ namespace castor3d
 
 		/** Normalises selection.
 		 */
-		Selection doGetNormalisedSelection();
+		Selection doGetNormalisedSelection()const;
 
 		/** Deletes selected text.
 		 */

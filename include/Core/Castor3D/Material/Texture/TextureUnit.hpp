@@ -226,7 +226,7 @@ namespace castor3d
 			return *m_device;
 		}
 
-		bool hasAnimation()const noexcept
+		bool hasAnimation()const noexcept override
 		{
 			return m_animated || hasAnimation( cuT( "Default" ) );
 		}
