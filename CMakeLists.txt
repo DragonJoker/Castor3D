@@ -19,9 +19,9 @@ endif ()
 set( MAIN_PROJECT_NAME "Castor3D" )
 
 set( VERSION_MAJOR 0 )
-set( VERSION_MINOR 16 )
+set( VERSION_MINOR 17 )
 set( VERSION_BUILD 0 )
-set( VERSION_YEAR 2024 )
+set( VERSION_YEAR 2025 )
 
 if ( NOT CMAKE_MODULE_PATH )
 	# Setup lookup for external modules

@@ -212,14 +212,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		TextureAnimation import Function.
-		 *\param[out]	node	Receives the imported data.
+		 *\param[out]	texture	Receives the imported data.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de TextureAnimation.
-		 *\param[out]	node	Reçoit les données importées.
+		 *\param[out]	texture	Reçoit les données importées.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API virtual bool doImportTexture( TextureAnimation & node ) = 0;
+		C3D_API virtual bool doImportTexture( TextureAnimation & texture ) = 0;
 
 	protected:
 		castor::String m_prefix;

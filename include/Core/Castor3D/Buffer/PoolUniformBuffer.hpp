@@ -74,9 +74,9 @@ namespace castor3d
 		 */
 		C3D_API VkDeviceSize getAvailable()const noexcept;
 		/**
-		 *\english
+		 *\~english
 		 *\return		The allocation statistics.
-		 *\french
+		 *\~french
 		 *\return		Les statistiques d'allocation.
 		 */
 		C3D_API castor::Vector< castor::Pair< MemChunk, castor::String > > listAllocations()const;
