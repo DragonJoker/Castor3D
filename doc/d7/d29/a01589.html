@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D/Shader/ShaderModule.hpp File Reference</title>
+<title>Castor3D: Castor3D/Shader/Program.hpp File Reference</title>
 <link rel="icon" href="../../castor-small.png" type="image/x-icon" />
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
@@ -21,7 +21,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.16.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.17.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -55,58 +55,48 @@
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">ShaderModule.hpp File Reference</div></div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#func-members">Functions</a>  </div>
+  <div class="headertitle"><div class="title">Program.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d27/a07395.html">castor3d::SpirVShader</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A SPIR-V shader module, with SPIR-V binary and debug text source.  <a href="../../d1/d27/a07395.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/db0/a07513.html">castor3d::ShaderProgram</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d46/a07399.html">castor3d::ShaderModule</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A non compiled shader module, with its source.  <a href="../../db/d46/a07399.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d2a/a07403.html">castor3d::ProgramModule</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A non compiled shader module, with its source.  <a href="../../d8/d2a/a07403.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/dee/a07517.html">castor3d::ProgramContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d9/dba/a02278" id="r_d9/dba/a02278"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html">castor3d</a></td></tr>
+<tr class="memitem:d6/d71/a02344" id="r_d6/d71/a02344"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader">Shader</h2></td></tr>
-<tr class="memitem:a936ab837f9d458e7c234bb1ef4061cab" id="r_a936ab837f9d458e7c234bb1ef4061cab"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html#a936ab837f9d458e7c234bb1ef4061cab">castor3d::ProgramFlag</a> : uint16_t { <br />
-&#160;&#160;<a class="el" href="../../d9/dba/a02278.html#a936ab837f9d458e7c234bb1ef4061cababe988781e4e1de1c6a36fb698afbbe1f">castor3d::eNone</a> = 0x0000
-, <a class="el" href="../../d9/dba/a02278.html#a936ab837f9d458e7c234bb1ef4061caba925e615ac432b4dd6e17fe61359ad1c5">castor3d::eInstantiation</a> = 0x0001
-, <a class="el" href="../../d9/dba/a02278.html#a936ab837f9d458e7c234bb1ef4061cabaa7242bffc1057f5048a657a799909415">castor3d::eBillboards</a> = 0x0002
-, <a class="el" href="../../d9/dba/a02278.html#a936ab837f9d458e7c234bb1ef4061cabaaede87a391a845c500a213235b1ec1fe">castor3d::eFrontCulled</a> = 0x0004
-, <br />
-&#160;&#160;<a class="el" href="../../d9/dba/a02278.html#a936ab837f9d458e7c234bb1ef4061cabaec84e1d87320c8e306d51f02c81142b9">castor3d::eHasMesh</a> = 0x0008
-, <a class="el" href="../../d9/dba/a02278.html#a936ab837f9d458e7c234bb1ef4061cabab1e326630505ed5b8618a5bebdd47f7e">castor3d::eAllBase</a> = 0x000F
-, <a class="el" href="../../d9/dba/a02278.html#a936ab837f9d458e7c234bb1ef4061caba56f930c82b2339c938dbc8df25498dfc">castor3d::eHasTask</a> = 0x0010
-, <a class="el" href="../../d9/dba/a02278.html#a936ab837f9d458e7c234bb1ef4061cabab8514b6183a80ba9bd798a1ed2e27ca4">castor3d::eAllOptional</a> = 0x0010
-, <br />
-&#160;&#160;<a class="el" href="../../d9/dba/a02278.html#a936ab837f9d458e7c234bb1ef4061caba205a605c9a22391af5e09fa60fe30678">castor3d::eAll</a> = eAllBase | eAllOptional
-, <a class="el" href="../../d9/dba/a02278.html#a936ab837f9d458e7c234bb1ef4061caba2d8d528ca41e25bc13b7307cbdd30d17">castor3d::eAllVisibility</a> = eFrontCulled | eBillboards
-<br />
- }</td></tr>
-<tr class="memdesc:a936ab837f9d458e7c234bb1ef4061cab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flags to use when looking for an automatically generated program.  <a href="../../d9/dba/a02278.html#a936ab837f9d458e7c234bb1ef4061cab">More...</a><br /></td></tr>
-<tr class="separator:a936ab837f9d458e7c234bb1ef4061cab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2bec83e0026bb5e8a5f25a8a591652c" id="r_ac2bec83e0026bb5e8a5f25a8a591652c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html#ac2bec83e0026bb5e8a5f25a8a591652c">castor3d::ShaderPtr</a> = <a class="el" href="../../d2/dd2/a02279.html#a1703e7c907eb1f09166a4dfb4d39985b">castor::RawUniquePtr</a>&lt; ast::Shader &gt;</td></tr>
-<tr class="separator:ac2bec83e0026bb5e8a5f25a8a591652c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5a65b91a7a6659a75e289b1fdc8822e" id="r_af5a65b91a7a6659a75e289b1fdc8822e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html#af5a65b91a7a6659a75e289b1fdc8822e">castor3d::ProgramFlags</a> = <a class="el" href="../../dd/dbb/a08207.html">castor::FlagCombination</a>&lt; <a class="el" href="../../d9/dba/a02278.html#a936ab837f9d458e7c234bb1ef4061cab">ProgramFlag</a> &gt;</td></tr>
-<tr class="separator:af5a65b91a7a6659a75e289b1fdc8822e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb8cf5e5ed3bac13f20bb63a4c648ee0" id="r_abb8cf5e5ed3bac13f20bb63a4c648ee0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html#abb8cf5e5ed3bac13f20bb63a4c648ee0">castor3d::CU_DeclareSmartPtr</a> (castor3d, <a class="el" href="../../d4/dcf/a07311.html">ShaderAppendBuffer</a>, <a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
-<tr class="separator:abb8cf5e5ed3bac13f20bb63a4c648ee0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a946098254f688c6fa944b64a9aabc3ec" id="r_a946098254f688c6fa944b64a9aabc3ec"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html#a946098254f688c6fa944b64a9aabc3ec">castor3d::CU_DeclareSmartPtr</a> (castor3d, <a class="el" href="../../d3/de5/a07315.html">ShaderBuffer</a>, <a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
-<tr class="separator:a946098254f688c6fa944b64a9aabc3ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec4b4878db3156e5bcc1c381986e995a" id="r_aec4b4878db3156e5bcc1c381986e995a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html#aec4b4878db3156e5bcc1c381986e995a">castor3d::CU_DeclareSmartPtr</a> (castor3d, <a class="el" href="../../d3/dcd/a07303.html">ShaderProgram</a>, <a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
-<tr class="separator:aec4b4878db3156e5bcc1c381986e995a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a033462367d582a079c77e26234327f44" id="r_a033462367d582a079c77e26234327f44"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html#a033462367d582a079c77e26234327f44">castor3d::CU_DeclareSmartPtr</a> (castor3d, <a class="el" href="../../d2/dc6/a07295.html">LightingModelFactory</a>, <a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
-<tr class="separator:a033462367d582a079c77e26234327f44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ac29ed4d8bf7318b0d0b5632f059e6355" id="r_ac29ed4d8bf7318b0d0b5632f059e6355"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d8/d12/a07597.html">SpirVShader</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#ac29ed4d8bf7318b0d0b5632f059e6355">castor3d::compileShader</a> (<a class="el" href="../../dd/db0/a06609.html">RenderDevice</a> const &amp;device, <a class="el" href="../../d3/dda/a07601.html">ShaderModule</a> &amp;shaderModule)</td></tr>
+<tr class="separator:ac29ed4d8bf7318b0d0b5632f059e6355"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad78dca3ccea4255c1beac4657aaf96ae" id="r_ad78dca3ccea4255c1beac4657aaf96ae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d8/d12/a07597.html">SpirVShader</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#ad78dca3ccea4255c1beac4657aaf96ae">castor3d::compileShader</a> (<a class="el" href="../../db/d92/a06753.html">RenderSystem</a> &amp;renderSystem, <a class="el" href="../../d3/dda/a07601.html">ShaderModule</a> &amp;shaderModule)</td></tr>
+<tr class="separator:ad78dca3ccea4255c1beac4657aaf96ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1edee4edd36ab369677c490896eb066" id="r_ab1edee4edd36ab369677c490896eb066"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d8/d12/a07597.html">SpirVShader</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#ab1edee4edd36ab369677c490896eb066">castor3d::compileShader</a> (<a class="el" href="../../dd/db0/a06609.html">RenderDevice</a> const &amp;device, <a class="el" href="../../de/d01/a07605.html">ProgramModule</a> &amp;shaderModule, ast::EntryPointConfig const &amp;entryPoint)</td></tr>
+<tr class="separator:ab1edee4edd36ab369677c490896eb066"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2161f71410af80dc002f8b14d2ea85b6" id="r_a2161f71410af80dc002f8b14d2ea85b6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d8/d12/a07597.html">SpirVShader</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a2161f71410af80dc002f8b14d2ea85b6">castor3d::compileShader</a> (<a class="el" href="../../db/d92/a06753.html">RenderSystem</a> &amp;renderSystem, <a class="el" href="../../de/d01/a07605.html">ProgramModule</a> &amp;shaderModule, ast::EntryPointConfig const &amp;entryPoint)</td></tr>
+<tr class="separator:a2161f71410af80dc002f8b14d2ea85b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17a4e8492ea787faa844957901f3207b" id="r_a17a4e8492ea787faa844957901f3207b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ashes::PipelineShaderStageCreateInfoArray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a17a4e8492ea787faa844957901f3207b">castor3d::makeProgramStates</a> (<a class="el" href="../../dd/db0/a06609.html">RenderDevice</a> const &amp;device, <a class="el" href="../../de/d01/a07605.html">ProgramModule</a> &amp;programModule, ashes::Optional&lt; ashes::SpecializationInfo &gt; const &amp;specialization=ashes::nullopt)</td></tr>
+<tr class="separator:a17a4e8492ea787faa844957901f3207b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a97ab8149bb05e77555259134cc9348" id="r_a9a97ab8149bb05e77555259134cc9348"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ast::ShaderStage&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a9a97ab8149bb05e77555259134cc9348">castor3d::getShaderStage</a> (<a class="el" href="../../dd/db0/a06609.html">RenderDevice</a> const &amp;device, VkShaderStageFlagBits value)</td></tr>
+<tr class="separator:a9a97ab8149bb05e77555259134cc9348"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab09bbc9fb20bc8f8b3c7ceaf4467a500" id="r_ab09bbc9fb20bc8f8b3c7ceaf4467a500"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkShaderStageFlagBits&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#ab09bbc9fb20bc8f8b3c7ceaf4467a500">castor3d::getVkShaderStage</a> (ast::ShaderStage value)</td></tr>
+<tr class="separator:ab09bbc9fb20bc8f8b3c7ceaf4467a500"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17d3d64830abb5816b96e65d33371038" id="r_a17d3d64830abb5816b96e65d33371038"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkShaderStageFlagBits&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a17d3d64830abb5816b96e65d33371038">castor3d::getVkShaderStage</a> (ast::EntryPoint value)</td></tr>
+<tr class="separator:a17d3d64830abb5816b96e65d33371038"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74986ce3c9c294a539e5904274251b9a" id="r_a74986ce3c9c294a539e5904274251b9a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> ast::EntryPoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a74986ce3c9c294a539e5904274251b9a">castor3d::getEntryPointType</a> (<a class="el" href="../../dd/db0/a06609.html">RenderDevice</a> const &amp;device, VkShaderStageFlagBits value)</td></tr>
+<tr class="separator:a74986ce3c9c294a539e5904274251b9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57a721bc9f3bb5b1e7fae8e2dc683e02" id="r_a57a721bc9f3bb5b1e7fae8e2dc683e02"><td class="memItemLeft" align="right" valign="top">ashes::PipelineShaderStageCreateInfo&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a57a721bc9f3bb5b1e7fae8e2dc683e02">castor3d::makeShaderState</a> (ashes::Device const &amp;device, VkShaderStageFlagBits stage, <a class="el" href="../../d8/d12/a07597.html">SpirVShader</a> const &amp;code, <a class="el" href="../../dc/d0a/a02345.html#af78b89ba78c07da21e45ef90d4686c4c">castor::String</a> const &amp;name, <a class="el" href="../../dc/d0a/a02345.html#af78b89ba78c07da21e45ef90d4686c4c">castor::String</a> const &amp;mainFuncName=<a class="el" href="../../db/d6b/a01853.html#a3564792a496e57dd35e9121d9bb5fe98">cuT</a>(&quot;main&quot;), ashes::Optional&lt; ashes::SpecializationInfo &gt; specialization=ashes::nullopt)</td></tr>
+<tr class="separator:a57a721bc9f3bb5b1e7fae8e2dc683e02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbef8544d59b9a10625f57970ff7865c" id="r_abbef8544d59b9a10625f57970ff7865c"><td class="memItemLeft" align="right" valign="top">ashes::PipelineShaderStageCreateInfo&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#abbef8544d59b9a10625f57970ff7865c">castor3d::makeShaderState</a> (<a class="el" href="../../dd/db0/a06609.html">RenderDevice</a> const &amp;device, <a class="el" href="../../d3/dda/a07601.html">ShaderModule</a> &amp;shaderModule, <a class="el" href="../../dc/d0a/a02345.html#af78b89ba78c07da21e45ef90d4686c4c">castor::String</a> const &amp;mainFuncName=<a class="el" href="../../db/d6b/a01853.html#a3564792a496e57dd35e9121d9bb5fe98">cuT</a>(&quot;main&quot;), ashes::Optional&lt; ashes::SpecializationInfo &gt; specialization=ashes::nullopt)</td></tr>
+<tr class="separator:abbef8544d59b9a10625f57970ff7865c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

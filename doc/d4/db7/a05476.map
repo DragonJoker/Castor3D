@@ -1,0 +1,9 @@
+<map id="castor3d::MeshAnimationSubmesh" name="castor3d::MeshAnimationSubmesh">
+<area shape="rect" id="Node000001" title=" " alt="" coords="655,42,880,67"/>
+<area shape="rect" id="Node000002" href="$df/d45/a08513.html" title=" " alt="" coords="362,7,598,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="600,32,662,39,661,45,599,37"/>
+<area shape="rect" id="Node000003" href="$df/d45/a08513.html" title="Class used to have an object owned by another one." alt="" coords="5,7,188,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="202,17,362,17,362,23,202,23"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="355,57,605,97"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="619,64,654,61,655,66,619,69"/>
+</map>

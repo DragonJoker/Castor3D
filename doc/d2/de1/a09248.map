@@ -1,0 +1,21 @@
+<map id="castor::ImageLoaderImpl" name="castor::ImageLoaderImpl">
+<area shape="rect" id="Node000001" title=" " alt="" coords="189,179,353,204"/>
+<area shape="rect" id="Node000003" href="$d6/dc9/a09033.html" title="Raw data image loader." alt="" coords="406,5,573,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="285,165,331,102,363,69,400,40,423,28,426,33,403,44,367,73,335,106,289,168"/>
+<area shape="rect" id="Node000004" href="$d7/d26/a09037.html" title="Image loader based on stb_image." alt="" coords="409,55,569,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="294,167,340,127,400,89,429,78,431,82,403,94,344,132,297,171"/>
+<area shape="rect" id="Node000005" href="$dc/d04/a09061.html" title="Image loader based on stb_image." alt="" coords="406,104,573,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="314,171,400,138,438,127,439,132,402,143,316,176"/>
+<area shape="rect" id="Node000006" href="$d5/dc4/a09065.html" title="Image loader based on gli." alt="" coords="411,153,567,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="367,178,411,172,411,178,367,183"/>
+<area shape="rect" id="Node000007" href="$d5/dbc/a09265.html" title="Image loader based on libktx." alt="" coords="406,203,573,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="367,199,406,204,405,209,367,204"/>
+<area shape="rect" id="Node000008" href="$d9/dbf/a09325.html" title="Image loader based on stb_image." alt="" coords="409,252,569,277"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="317,207,402,238,439,249,438,254,400,243,315,212"/>
+<area shape="rect" id="Node000009" href="$da/d9d/a09337.html" title="Image loader based on libwebp." alt="" coords="401,301,577,327"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="297,211,344,250,403,288,431,299,429,304,400,292,341,255,294,216"/>
+<area shape="rect" id="Node000010" href="$d7/de3/a09341.html" title=" " alt="" coords="407,351,572,376"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="290,214,335,276,367,309,403,337,426,348,424,353,400,342,363,313,331,280,285,218"/>
+<area shape="rect" id="Node000002" href="$d5/d6f/a08605.html" title=" " alt="" coords="5,179,141,204"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="155,189,189,189,189,194,155,194"/>
+</map>

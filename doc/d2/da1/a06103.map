@@ -1,0 +1,9 @@
+<map id="castor3d::EnvironmentMapPass" name="castor3d::EnvironmentMapPass">
+<area shape="rect" id="Node000001" title=" " alt="" coords="139,183,346,208"/>
+<area shape="rect" id="Node000002" href="$df/d45/a08513.html" title=" " alt="" coords="5,93,211,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,138,224,180,222,185,151,143"/>
+<area shape="rect" id="Node000003" href="$df/d45/a08513.html" title="Class used to have an object owned by another one." alt="" coords="17,5,199,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="111,44,111,93,105,93,105,44"/>
+<area shape="rect" id="Node000004" href="$da/d10/a08509.html" title="Class for named elements." alt="" coords="235,101,341,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="277,139,251,184,247,181,272,136"/>
+</map>

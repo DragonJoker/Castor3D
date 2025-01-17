@@ -1,0 +1,35 @@
+<map id="castor::LoggerInstance::logWarning" name="castor::LoggerInstance::logWarning">
+<area shape="rect" id="Node000001" title="Logs a warning, from a std::basic_string&lt; CharT &gt;" alt="" coords="713,165,868,205"/>
+<area shape="rect" id="Node000002" href="$de/d4d/a09361.html#abe36677e4835298ee911d8cf059424a9" title="Logs a warning, from a std::basic_ostream&lt; CharT &gt;" alt="" coords="494,69,649,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="740,161,664,124,634,112,636,107,666,119,743,156"/>
+<area shape="rect" id="Node000003" href="$da/da0/a08541.html#aa24d9472022aa0f450529b07d9b7f743" title=" " alt="" coords="477,133,665,173"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="699,175,665,170,666,164,700,169"/>
+<area shape="rect" id="Node000011" href="$da/da0/a08541.html#a9c25c01ca8f76ad4a25088101572200d" title=" " alt="" coords="477,197,665,237"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="700,201,666,206,665,201,699,196"/>
+<area shape="rect" id="Node000012" href="$da/da0/a08541.html#a6537032eaeeadaffea633743e3218e53" title=" " alt="" coords="477,293,665,333"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="745,215,608,295,605,291,742,210"/>
+<area shape="rect" id="Node000004" href="$da/da0/a08541.html#aee8d1df08f426ba200de96ef84fd8eb8" title=" " alt="" coords="241,69,429,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="483,132,409,112,410,107,485,127"/>
+<area shape="rect" id="Node000007" href="$da/da0/a08541.html#a63b72a3a1c306679e47426f3a270ec97" title=" " alt="" coords="241,133,429,173"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="463,156,430,156,430,151,463,151"/>
+<area shape="rect" id="Node000010" href="$da/da0/a08541.html#a6318e3a64926730b389ee55727eacb3e" title="Renames a resource." alt="" coords="241,197,429,237"/>
+<area shape="poly" id="edge9_Node000003_Node000010" title=" " alt="" coords="485,180,410,200,409,195,483,174"/>
+<area shape="rect" id="Node000005" href="$da/da0/a08541.html#a85c66f21579cca9b9f325913e1a73e2b" title="Logging version of tryAdd." alt="" coords="5,5,193,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="247,68,173,48,174,43,249,63"/>
+<area shape="rect" id="Node000006" href="$da/da0/a08541.html#a35d0b614c078b3f48c5dff1957427dbd" title="Logging version of tryAdd." alt="" coords="5,69,193,109"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="227,92,194,92,194,87,227,87"/>
+<area shape="rect" id="Node000008" href="$da/da0/a08541.html#ae42bd6b7da6f50fdef84f04a84172313" title="Logging version of tryAdd." alt="" coords="5,133,193,173"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="227,156,194,156,194,151,227,151"/>
+<area shape="rect" id="Node000009" href="$da/da0/a08541.html#a1fc2571a5ea51ead9564b4cec6b31314" title="Logging version of tryAdd." alt="" coords="5,197,193,237"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="249,180,174,200,173,195,247,174"/>
+<area shape="poly" id="edge11_Node000011_Node000007" title=" " alt="" coords="483,196,409,176,410,171,485,191"/>
+<area shape="poly" id="edge17_Node000012_Node000010" title=" " alt="" coords="515,290,428,252,396,240,398,235,430,247,517,285"/>
+<area shape="rect" id="Node000013" href="$da/da0/a08541.html#ae2bc50ccc5e4f323a14a1a6f39d3ec14" title="Logging version of tryRemove." alt="" coords="241,325,429,365"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="464,331,430,335,429,330,463,325"/>
+<area shape="rect" id="Node000014" href="$da/da0/a08541.html#a4978d020ac192e539d60ce384b714753" title="Logging version of tryRemove." alt="" coords="241,389,429,429"/>
+<area shape="poly" id="edge14_Node000012_Node000014" title=" " alt="" coords="517,342,430,380,398,392,396,387,428,375,515,337"/>
+<area shape="rect" id="Node000015" href="$da/da0/a08541.html#a21d0ef274f434e61b1d0c336a8c7253a" title="Logging version of tryRemove." alt="" coords="241,453,429,493"/>
+<area shape="poly" id="edge15_Node000012_Node000015" title=" " alt="" coords="545,346,495,395,464,421,431,444,407,456,404,451,428,439,461,417,492,391,542,342"/>
+<area shape="rect" id="Node000016" href="$da/da0/a08541.html#a55752549d182d7d232c432746b6b5312" title="Logging version of tryRemove." alt="" coords="241,261,429,301"/>
+<area shape="poly" id="edge16_Node000012_Node000016" title=" " alt="" coords="463,301,429,297,430,291,464,296"/>
+</map>

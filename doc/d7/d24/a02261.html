@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: CastorUtils/Stream/StreamIndentManipulators.hpp File Reference</title>
+<title>Castor3D: CastorUtils/Miscellaneous/Debug.hpp File Reference</title>
 <link rel="icon" href="../../castor-small.png" type="image/x-icon" />
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
@@ -21,7 +21,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.16.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.17.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -49,54 +49,132 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_581a2c521a9f6c8a8206ef65b82e493b.html">CastorUtils</a></li><li class="navelem"><a class="el" href="../../dir_abc4c8c3198c34801214fa735dba0a7d.html">Stream</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_581a2c521a9f6c8a8206ef65b82e493b.html">CastorUtils</a></li><li class="navelem"><a class="el" href="../../dir_38921dac01801a9e91a60a0b691361ca.html">Miscellaneous</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a> &#124;
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">StreamIndentManipulators.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">Debug.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d2d/a09539.html">castor::format::Indent</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d61/a09685.html">castor::debug::Backtrace</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dce/a09689.html">castor::debug::Backtraced</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper class used to enable allocation backtrace retrieval.  <a href="../../d9/dce/a09689.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d2/dd2/a02279" id="r_d2/dd2/a02279"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html">castor</a></td></tr>
+<tr class="memitem:dc/d0a/a02345" id="r_dc/d0a/a02345"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html">castor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:dd/da4/a02295" id="r_dd/da4/a02295"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/da4/a02295.html">castor::format</a></td></tr>
+<tr class="memitem:d3/d12/a02354" id="r_d3/d12/a02354"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d12/a02354.html">castor::debug</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a198c22a3d47bd879a0f0aa7cadc6e56f" id="r_a198c22a3d47bd879a0f0aa7cadc6e56f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a198c22a3d47bd879a0f0aa7cadc6e56f">CU_DeclareDebugVar</a>(type,  var)&#160;&#160;&#160;	type var</td></tr>
+<tr class="separator:a198c22a3d47bd879a0f0aa7cadc6e56f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b3aa5da471828137cbea85c5488b425" id="r_a5b3aa5da471828137cbea85c5488b425"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5b3aa5da471828137cbea85c5488b425">CU_DefineDebugVar</a>(type,  var,  value)&#160;&#160;&#160;	type var{ value }</td></tr>
+<tr class="separator:a5b3aa5da471828137cbea85c5488b425"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3faac352ebb2db28d685c9a806ce39ac" id="r_a3faac352ebb2db28d685c9a806ce39ac"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3faac352ebb2db28d685c9a806ce39ac">CU_AssignDebugVar</a>(var,  value)&#160;&#160;&#160;	var = value</td></tr>
+<tr class="separator:a3faac352ebb2db28d685c9a806ce39ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a866895ab689f76857dc64ebec430872c" id="r_a866895ab689f76857dc64ebec430872c"><td class="memItemLeft" align="right" valign="top">long &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/da4/a02295.html#a866895ab689f76857dc64ebec430872c">castor::format::indentValue</a> (std::ios_base &amp;ios)</td></tr>
-<tr class="memdesc:a866895ab689f76857dc64ebec430872c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the indentation value for the given stream.  <br /></td></tr>
-<tr class="separator:a866895ab689f76857dc64ebec430872c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad11991b97148aca914bdcd8d7b77072b" id="r_ad11991b97148aca914bdcd8d7b77072b"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/da4/a02295.html#ad11991b97148aca914bdcd8d7b77072b">castor::format::getIndent</a> (std::ios_base &amp;ios)</td></tr>
-<tr class="memdesc:ad11991b97148aca914bdcd8d7b77072b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the indentation value for the given stream.  <br /></td></tr>
-<tr class="separator:ad11991b97148aca914bdcd8d7b77072b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64252245b850a1fd8c64f337aaa26c29" id="r_a64252245b850a1fd8c64f337aaa26c29"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/da4/a02295.html#a64252245b850a1fd8c64f337aaa26c29">castor::format::setIndent</a> (std::ios_base &amp;ios, unsigned int val)</td></tr>
-<tr class="memdesc:a64252245b850a1fd8c64f337aaa26c29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the indentation value for given stream.  <br /></td></tr>
-<tr class="separator:a64252245b850a1fd8c64f337aaa26c29"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cee44f81f0f44959e09376bc4bd5025" id="r_a4cee44f81f0f44959e09376bc4bd5025"><td class="memTemplParams" colspan="2">template&lt;typename CharType , typename BufferType  = BasicIndentBuffer&lt; CharType &gt;, typename BufferManagerType  = BasicIndentBufferManager&lt; CharType &gt;&gt; </td></tr>
-<tr class="memitem:a4cee44f81f0f44959e09376bc4bd5025"><td class="memTemplItemLeft" align="right" valign="top">BufferType *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dd/da4/a02295.html#a4cee44f81f0f44959e09376bc4bd5025">castor::format::installIndentBuffer</a> (std::basic_ostream&lt; CharType &gt; &amp;stream)</td></tr>
-<tr class="memdesc:a4cee44f81f0f44959e09376bc4bd5025"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the stream in order to indent it.  <br /></td></tr>
-<tr class="separator:a4cee44f81f0f44959e09376bc4bd5025"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adfece89cf0c7305fca2ad98e0537e9d8" id="r_adfece89cf0c7305fca2ad98e0537e9d8"><td class="memTemplParams" colspan="2">template&lt;typename CharType &gt; </td></tr>
-<tr class="memitem:adfece89cf0c7305fca2ad98e0537e9d8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dd/da4/a02295.html#adfece89cf0c7305fca2ad98e0537e9d8">castor::format::callback</a> (std::ios_base::event ev, std::ios_base &amp;ios, <a class="el" href="../../d7/d62/a01805.html#a13ec5452e4b085806a30126e07306693">CU_UnusedParam</a>(int, x))</td></tr>
-<tr class="memdesc:adfece89cf0c7305fca2ad98e0537e9d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The stream events callback.  <br /></td></tr>
-<tr class="separator:adfece89cf0c7305fca2ad98e0537e9d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af28c8fccf375fc3036de98ad1d52fe73" id="r_af28c8fccf375fc3036de98ad1d52fe73"><td class="memTemplParams" colspan="2">template&lt;typename CharType &gt; </td></tr>
-<tr class="memitem:af28c8fccf375fc3036de98ad1d52fe73"><td class="memTemplItemLeft" align="right" valign="top">std::basic_ostream&lt; CharType &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#af28c8fccf375fc3036de98ad1d52fe73">castor::operator&lt;&lt;</a> (std::basic_ostream&lt; CharType &gt; &amp;stream, <a class="el" href="../../d4/d2d/a09539.html">format::Indent</a> const &amp;ind)</td></tr>
-<tr class="memdesc:af28c8fccf375fc3036de98ad1d52fe73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stream operator.  <br /></td></tr>
-<tr class="separator:af28c8fccf375fc3036de98ad1d52fe73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a683ab560f58905b082eca9d662578b40" id="r_a683ab560f58905b082eca9d662578b40"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/da8/a01865.html#a85ca3bafa261a7f2ece738b559d8bbb7">CU_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d12/a02354.html#a683ab560f58905b082eca9d662578b40">castor::debug::initialise</a> ()</td></tr>
+<tr class="memdesc:a683ab560f58905b082eca9d662578b40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises debug data.  <br /></td></tr>
+<tr class="separator:a683ab560f58905b082eca9d662578b40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4110c5d7008ae900a1bb9b946706087" id="r_ab4110c5d7008ae900a1bb9b946706087"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/da8/a01865.html#a85ca3bafa261a7f2ece738b559d8bbb7">CU_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d12/a02354.html#ab4110c5d7008ae900a1bb9b946706087">castor::debug::loadModule</a> (<a class="el" href="../../df/dd8/a09693.html">DynamicLibrary</a> const &amp;library)</td></tr>
+<tr class="memdesc:ab4110c5d7008ae900a1bb9b946706087"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads debug data for given library.  <br /></td></tr>
+<tr class="separator:ab4110c5d7008ae900a1bb9b946706087"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd4ad13fe7cee22019c1331cc826da72" id="r_acd4ad13fe7cee22019c1331cc826da72"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/da8/a01865.html#a85ca3bafa261a7f2ece738b559d8bbb7">CU_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d12/a02354.html#acd4ad13fe7cee22019c1331cc826da72">castor::debug::unloadModule</a> (<a class="el" href="../../df/dd8/a09693.html">DynamicLibrary</a> const &amp;library)</td></tr>
+<tr class="memdesc:acd4ad13fe7cee22019c1331cc826da72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unloads debug data for given library.  <br /></td></tr>
+<tr class="separator:acd4ad13fe7cee22019c1331cc826da72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac69330596cf6494afab97012f2e55b55" id="r_ac69330596cf6494afab97012f2e55b55"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/da8/a01865.html#a85ca3bafa261a7f2ece738b559d8bbb7">CU_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d12/a02354.html#ac69330596cf6494afab97012f2e55b55">castor::debug::cleanup</a> ()</td></tr>
+<tr class="memdesc:ac69330596cf6494afab97012f2e55b55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleans up debug data.  <br /></td></tr>
+<tr class="separator:ac69330596cf6494afab97012f2e55b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27924dc1026fcbb2d1d3a2d7ea0ae08d" id="r_a27924dc1026fcbb2d1d3a2d7ea0ae08d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/da8/a01865.html#a85ca3bafa261a7f2ece738b559d8bbb7">CU_API</a> <a class="el" href="../../dc/d0a/a02345.html#ac8dca26c22640aed8eaed8fee3a45069">OutputStream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d12/a02354.html#a27924dc1026fcbb2d1d3a2d7ea0ae08d">castor::debug::operator&lt;&lt;</a> (<a class="el" href="../../dc/d0a/a02345.html#ac8dca26c22640aed8eaed8fee3a45069">OutputStream</a> &amp;stream, <a class="el" href="../../d4/d61/a09685.html">Backtrace</a> const &amp;)</td></tr>
+<tr class="memdesc:a27924dc1026fcbb2d1d3a2d7ea0ae08d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Puts the backtrace into a stream.  <br /></td></tr>
+<tr class="separator:a27924dc1026fcbb2d1d3a2d7ea0ae08d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6677037a66150846a255100e10d5c054" id="r_a6677037a66150846a255100e10d5c054"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/d0a/a02345.html#ac8dca26c22640aed8eaed8fee3a45069">OutputStream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d12/a02354.html#a6677037a66150846a255100e10d5c054">castor::debug::operator&lt;&lt;</a> (<a class="el" href="../../dc/d0a/a02345.html#ac8dca26c22640aed8eaed8fee3a45069">OutputStream</a> &amp;stream, <a class="el" href="../../d9/dce/a09689.html">Backtraced</a> const &amp;traced)</td></tr>
+<tr class="separator:a6677037a66150846a255100e10d5c054"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a3faac352ebb2db28d685c9a806ce39ac" name="a3faac352ebb2db28d685c9a806ce39ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3faac352ebb2db28d685c9a806ce39ac">&#9670;&#160;</a></span>CU_AssignDebugVar</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CU_AssignDebugVar</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">var, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">value</span>&#160;)&#160;&#160;&#160;	var = value</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a198c22a3d47bd879a0f0aa7cadc6e56f" name="a198c22a3d47bd879a0f0aa7cadc6e56f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a198c22a3d47bd879a0f0aa7cadc6e56f">&#9670;&#160;</a></span>CU_DeclareDebugVar</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CU_DeclareDebugVar</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">type, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">var</span>&#160;)&#160;&#160;&#160;	type var</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5b3aa5da471828137cbea85c5488b425" name="a5b3aa5da471828137cbea85c5488b425"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b3aa5da471828137cbea85c5488b425">&#9670;&#160;</a></span>CU_DefineDebugVar</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CU_DefineDebugVar</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">type, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">var, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">value</span>&#160;)&#160;&#160;&#160;	type var{ value }</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

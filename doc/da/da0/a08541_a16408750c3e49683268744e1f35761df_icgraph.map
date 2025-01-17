@@ -1,0 +1,49 @@
+<map id="castor::ResourceCacheBaseT::lock" name="castor::ResourceCacheBaseT::lock">
+<area shape="rect" id="Node000001" title=" " alt="" coords="713,636,901,676"/>
+<area shape="rect" id="Node000002" href="$da/da0/a08541.html#ae42bd6b7da6f50fdef84f04a84172313" title="Logging version of tryAdd." alt="" coords="477,5,665,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="800,623,784,499,755,330,737,244,715,167,690,103,663,59,650,48,653,43,667,56,695,100,720,165,742,243,761,329,789,498,805,622"/>
+<area shape="rect" id="Node000003" href="$da/da0/a08541.html#a85c66f21579cca9b9f325913e1a73e2b" title="Logging version of tryAdd." alt="" coords="477,69,665,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="804,622,800,528,794,465,782,397,764,326,740,256,706,189,663,130,640,112,643,107,667,126,711,187,745,254,770,325,787,396,799,464,806,527,809,622"/>
+<area shape="rect" id="Node000004" href="$da/da0/a08541.html#a7b9ac51df57e111ec2af31f89a97cbac" title="Sets all the elements to be cleaned up." alt="" coords="477,311,665,351"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="788,625,737,531,702,475,663,422,629,384,595,353,599,349,633,380,667,418,706,472,741,528,793,623"/>
+<area shape="rect" id="Node000006" href="$da/da0/a08541.html#a21d0ef274f434e61b1d0c336a8c7253a" title="Logging version of tryRemove." alt="" coords="5,177,193,217"/>
+<area shape="poly" id="edge20_Node000001_Node000006" title=" " alt="" coords="799,623,787,556,762,470,745,424,722,380,695,338,663,301,613,260,555,230,493,208,429,194,364,186,302,183,194,188,193,182,302,178,365,181,430,189,495,203,557,225,616,256,667,297,700,335,727,377,749,422,767,468,792,555,805,622"/>
+<area shape="rect" id="Node000008" href="$da/da0/a08541.html#a5d16d1a42b2ea9518a97d9d8e1408140" title="Removes an element, given a name." alt="" coords="5,393,193,433"/>
+<area shape="poly" id="edge26_Node000001_Node000008" title=" " alt="" coords="790,624,771,586,743,542,707,500,664,466,627,452,578,440,452,424,315,417,194,415,194,410,315,412,453,419,579,435,629,447,667,462,711,496,747,539,775,583,795,622"/>
+<area shape="rect" id="Node000010" href="$da/da0/a08541.html#a5400b3eabcf62af7df977a20e643418d" title="Flushes the collection." alt="" coords="477,476,665,516"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="778,628,728,578,697,553,664,530,640,519,643,514,667,526,700,548,731,574,781,624"/>
+<area shape="rect" id="Node000011" href="$da/da0/a08541.html#ae2bc50ccc5e4f323a14a1a6f39d3ec14" title="Logging version of tryRemove." alt="" coords="477,540,665,580"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="751,633,664,594,632,583,634,578,666,590,753,628"/>
+<area shape="rect" id="Node000012" href="$da/da0/a08541.html#ade25c114da6605836b4d9618c5236fb0" title=" " alt="" coords="477,604,665,644"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="699,644,665,639,666,634,700,639"/>
+<area shape="rect" id="Node000013" href="$da/da0/a08541.html#ae84da1b21345a418752dd78b0cf644ae" title=" " alt="" coords="477,668,665,708"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="700,673,666,678,665,673,699,668"/>
+<area shape="rect" id="Node000014" href="$da/da0/a08541.html#a3a6c437db53c29554a44635674119d3d" title=" " alt="" coords="477,732,665,772"/>
+<area shape="poly" id="edge17_Node000001_Node000014" title=" " alt="" coords="753,684,666,722,634,734,632,729,664,718,751,679"/>
+<area shape="rect" id="Node000015" href="$da/da0/a08541.html#a4603e9fde607cdf993adf47ba4dd307f" title=" " alt="" coords="477,796,665,836"/>
+<area shape="poly" id="edge18_Node000001_Node000015" title=" " alt="" coords="781,688,731,738,700,764,667,786,643,798,640,793,664,782,697,759,728,734,778,684"/>
+<area shape="rect" id="Node000016" href="$da/da0/a08541.html#a107169e0364711fced26e4d512819a13" title="Merges this cache&#39;s elements to the one given." alt="" coords="477,860,665,900"/>
+<area shape="poly" id="edge19_Node000001_Node000016" title=" " alt="" coords="792,690,772,727,743,770,708,813,667,850,647,862,644,858,664,846,704,809,739,767,767,724,788,687"/>
+<area shape="rect" id="Node000017" href="$da/da0/a08541.html#a6318e3a64926730b389ee55727eacb3e" title="Renames a resource." alt="" coords="477,924,665,964"/>
+<area shape="poly" id="edge21_Node000001_Node000017" title=" " alt="" coords="799,690,781,739,754,799,716,861,693,889,667,914,649,926,646,922,664,910,689,885,712,858,749,797,776,737,794,688"/>
+<area shape="rect" id="Node000018" href="$da/da0/a08541.html#adfe23feed932e13cb6d29207a1ccc51a" title="Adds an element." alt="" coords="477,988,665,1028"/>
+<area shape="poly" id="edge22_Node000001_Node000018" title=" " alt="" coords="803,690,789,751,763,828,745,868,723,908,698,945,667,978,650,990,647,986,664,974,693,942,719,905,740,866,758,826,784,749,798,689"/>
+<area shape="rect" id="Node000019" href="$da/da0/a08541.html#a60afa3d18144c9c5dffac5722ca17e51" title="Add an element, constructed in&#45;place." alt="" coords="477,1052,665,1092"/>
+<area shape="poly" id="edge23_Node000001_Node000019" title=" " alt="" coords="806,690,795,762,772,856,754,906,731,955,702,1001,667,1042,651,1054,648,1050,664,1038,698,998,726,953,749,904,767,855,790,761,801,689"/>
+<area shape="rect" id="Node000020" href="$da/da0/a08541.html#a1057aebd572ac71378ea519f7c0288ab" title="Looks for an element with given name." alt="" coords="477,1116,665,1156"/>
+<area shape="poly" id="edge24_Node000001_Node000020" title=" " alt="" coords="808,690,801,773,780,884,762,943,738,1002,707,1057,667,1106,652,1118,648,1114,663,1102,702,1054,733,1000,757,942,775,883,795,772,803,690"/>
+<area shape="rect" id="Node000005" href="$da/da0/a08541.html#a74a35e486aa159b89451ccfb86e2dbd9" title=" " alt="" coords="241,285,429,325"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="464,322,429,318,430,313,464,316"/>
+<area shape="poly" id="edge9_Node000004_Node000006" title=" " alt="" coords="531,305,483,276,428,250,369,233,307,220,193,205,194,200,308,214,370,228,430,246,486,271,533,301"/>
+<area shape="rect" id="Node000007" href="$da/da0/a08541.html#a55752549d182d7d232c432746b6b5312" title="Logging version of tryRemove." alt="" coords="5,324,193,364"/>
+<area shape="poly" id="edge10_Node000004_Node000007" title=" " alt="" coords="464,339,429,340,194,345,193,340,429,335,464,333"/>
+<area shape="poly" id="edge11_Node000004_Node000008" title=" " alt="" coords="464,352,194,400,193,394,464,347"/>
+<area shape="rect" id="Node000009" href="$da/da0/a08541.html#aa66962c4bd8bfec19c1d9df146349f9e" title="Removes an element, given a name." alt="" coords="5,248,193,288"/>
+<area shape="poly" id="edge12_Node000004_Node000009" title=" " alt="" coords="519,307,475,289,429,276,368,267,307,262,193,263,193,258,307,257,369,261,430,271,477,284,521,302"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="282,282,192,238,149,220,152,215,194,234,284,277"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="228,326,194,331,193,326,227,320"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="285,334,194,378,154,396,152,391,192,374,283,329"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="227,291,193,286,194,280,228,286"/>
+<area shape="rect" id="Node000021" href="$da/da0/a08541.html#a2c7514746fa02eb850a1a274cc227732" title=" " alt="" coords="241,1116,429,1156"/>
+<area shape="poly" id="edge25_Node000020_Node000021" title=" " alt="" coords="463,1139,430,1139,430,1133,463,1133"/>
+</map>

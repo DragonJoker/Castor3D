@@ -1,0 +1,18 @@
+<map id="castor3d::SceneNodeImporter" name="castor3d::SceneNodeImporter">
+<area shape="rect" id="Node000001" title=" " alt="" coords="937,63,1132,89"/>
+<area shape="rect" id="Node000002" href="$df/d45/a08513.html" title=" " alt="" coords="305,7,492,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="506,8,595,5,697,6,807,15,914,33,1001,61,999,66,913,39,806,20,697,12,595,11,506,14"/>
+<area shape="rect" id="Node000006" href="$d6/d73/a04025.html" title=" " alt="" coords="650,33,798,58"/>
+<area shape="poly" id="edge6_Node000006_Node000002" title=" " alt="" coords="506,26,650,37,650,42,506,31"/>
+<area shape="rect" id="Node000003" href="$df/d45/a08513.html" title="Class used to have an object owned by another one." alt="" coords="5,7,188,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="202,17,305,17,305,23,202,23"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="661,83,787,123"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="801,99,913,92,960,86,960,91,914,97,802,104"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="335,83,462,123"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="476,100,661,100,661,105,476,105"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="812,51,937,64,937,69,812,57"/>
+<area shape="rect" id="Node000007" href="$d5/d95/a05445.html" title=" " alt="" coords="647,147,801,187"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="814,144,913,117,1001,86,1002,91,914,123,816,149"/>
+<area shape="rect" id="Node000008" href="$d5/d95/a05445.html" title="Configuration parameters." alt="" coords="321,147,476,187"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="490,164,647,164,647,169,490,169"/>
+</map>

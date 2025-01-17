@@ -1,0 +1,15 @@
+<map id="castor3d::PhongPass" name="castor3d::PhongPass">
+<area shape="rect" id="Node000001" title=" " alt="" coords="836,125,983,150"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="489,13,638,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="652,30,731,38,773,47,813,60,839,74,862,90,898,122,894,126,859,94,836,78,811,65,772,52,731,43,651,35"/>
+<area shape="rect" id="Node000003" href="$d8/d52/a07981.html" title=" " alt="" coords="473,117,653,157"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="667,135,836,135,836,140,667,140"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="241,117,368,157"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="382,135,473,135,473,140,382,140"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,117,132,157"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="146,135,241,135,241,140,146,140"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="507,229,620,254"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="634,242,721,237,767,228,811,214,837,200,860,182,895,148,899,152,864,186,840,204,813,218,768,233,721,242,634,247"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="285,229,324,254"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="337,239,506,239,506,244,337,244"/>
+</map>

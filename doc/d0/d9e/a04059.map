@@ -1,0 +1,20 @@
+<map id="castor3d::MaterialImporter" name="castor3d::MaterialImporter">
+<area shape="rect" id="Node000001" title=" " alt="" coords="959,98,1132,123"/>
+<area shape="rect" id="Node000002" href="$df/d45/a08513.html" title=" " alt="" coords="305,7,492,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="506,7,599,4,709,7,824,22,881,35,936,52,984,74,1024,96,1022,100,982,78,934,57,879,40,823,27,708,13,599,9,506,12"/>
+<area shape="rect" id="Node000006" href="$d6/d73/a04025.html" title=" " alt="" coords="661,41,809,66"/>
+<area shape="poly" id="edge6_Node000006_Node000002" title=" " alt="" coords="506,28,661,43,660,49,505,33"/>
+<area shape="rect" id="Node000003" href="$df/d45/a08513.html" title="Class used to have an object owned by another one." alt="" coords="5,7,188,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="202,17,305,17,305,23,202,23"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="671,91,798,131"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="812,108,958,108,958,113,812,113"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="335,91,462,131"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="476,108,671,108,671,113,476,113"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="818,66,976,95,975,101,817,71"/>
+<area shape="rect" id="Node000007" href="$d5/d95/a05445.html" title=" " alt="" coords="657,155,812,195"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="825,153,982,121,983,126,826,159"/>
+<area shape="rect" id="Node000008" href="$d5/d95/a05445.html" title="Configuration parameters." alt="" coords="321,155,476,195"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="489,172,657,172,657,177,489,177"/>
+<area shape="rect" id="Node000009" href="$d5/d44/a09077.html" title="The image loading configuration." alt="" coords="647,219,823,245"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="793,213,822,204,879,187,934,167,1022,121,1024,126,936,172,880,192,823,209,794,218"/>
+</map>

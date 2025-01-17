@@ -1,0 +1,21 @@
+<map id="castor3d::SkeletonAnimationInstance" name="castor3d::SkeletonAnimationInstance">
+<area shape="rect" id="Node000001" title=" " alt="" coords="189,471,379,511"/>
+<area shape="rect" id="Node000002" href="$d7/d20/a07025.html" title=" " alt="" coords="43,383,229,408"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,413,255,468,252,473,164,418"/>
+<area shape="rect" id="Node000003" href="$df/d45/a08513.html" title=" " alt="" coords="5,143,195,183"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="108,196,137,382,132,383,102,197"/>
+<area shape="rect" id="Node000004" href="$df/d45/a08513.html" title="Class used to have an object owned by another one." alt="" coords="85,5,267,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="117,39,98,56,90,77,88,100,96,142,91,143,83,100,85,76,94,53,113,35"/>
+<area shape="rect" id="Node000007" href="$df/d45/a08513.html" title=" " alt="" coords="159,93,345,119"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="208,37,225,53,249,92,245,95,221,56,204,41"/>
+<area shape="rect" id="Node000005" href="$d1/d30/a03185.html" title=" " alt="" coords="192,295,331,320"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="235,330,155,385,152,380,232,326"/>
+<area shape="rect" id="Node000006" href="$da/d10/a08509.html" title="Class for named elements." alt="" coords="412,207,519,232"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="437,241,376,273,306,297,304,292,374,268,434,237"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="249,133,242,179,243,232,250,265,259,293,254,295,245,267,237,232,237,179,243,132"/>
+<area shape="rect" id="Node000008" href="$d7/daf/a03181.html" title=" " alt="" coords="253,207,387,232"/>
+<area shape="poly" id="edge9_Node000008_Node000007" title=" " alt="" coords="268,129,315,205,311,208,264,132"/>
+<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="307,245,272,296,267,293,302,242"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="254,383,415,408"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="324,421,297,472,292,469,320,419"/>
+</map>

@@ -1,0 +1,15 @@
+<map id="castor3d::Animable" name="castor3d::Animable">
+<area shape="rect" id="Node000001" title=" " alt="" coords="229,168,363,193"/>
+<area shape="rect" id="Node000004" href="$d5/d48/a05521.html" title=" " alt="" coords="5,243,117,268"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="247,200,99,245,98,240,245,195"/>
+<area shape="rect" id="Node000005" href="$df/dee/a07461.html" title=" " alt="" coords="141,243,288,268"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="274,205,230,244,226,240,271,201"/>
+<area shape="rect" id="Node000006" href="$de/d05/a05813.html" title=" " alt="" coords="312,243,443,268"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="321,201,366,240,362,244,318,205"/>
+<area shape="rect" id="Node000007" href="$d5/df0/a05129.html" title=" " alt="" coords="467,243,613,268"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="348,195,502,240,501,245,347,200"/>
+<area shape="rect" id="Node000002" href="$df/d45/a08513.html" title=" " alt="" coords="203,93,389,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="299,133,299,168,293,168,293,133"/>
+<area shape="rect" id="Node000003" href="$df/d45/a08513.html" title="Class used to have an object owned by another one." alt="" coords="205,5,387,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="299,45,299,93,293,93,293,45"/>
+</map>

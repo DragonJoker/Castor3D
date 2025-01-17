@@ -1,0 +1,11 @@
+<map id="castor::ResourceCacheBaseT::doTryRemoveNoLock" name="castor::ResourceCacheBaseT::doTryRemoveNoLock">
+<area shape="rect" id="Node000001" title=" " alt="" coords="241,101,429,141"/>
+<area shape="rect" id="Node000002" href="$da/da0/a08541.html#a21d0ef274f434e61b1d0c336a8c7253a" title="Logging version of tryRemove." alt="" coords="5,5,193,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="279,98,192,60,160,48,162,43,194,55,281,93"/>
+<area shape="rect" id="Node000003" href="$da/da0/a08541.html#a55752549d182d7d232c432746b6b5312" title="Logging version of tryRemove." alt="" coords="5,69,193,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="227,109,193,105,194,99,228,104"/>
+<area shape="rect" id="Node000004" href="$da/da0/a08541.html#a5d16d1a42b2ea9518a97d9d8e1408140" title="Removes an element, given a name." alt="" coords="5,133,193,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="228,139,194,143,193,138,227,133"/>
+<area shape="rect" id="Node000005" href="$da/da0/a08541.html#aa66962c4bd8bfec19c1d9df146349f9e" title="Removes an element, given a name." alt="" coords="5,197,193,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="281,150,194,188,162,200,160,195,192,183,279,145"/>
+</map>

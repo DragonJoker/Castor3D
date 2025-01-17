@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp File Reference</title>
+<title>Castor3D: Castor3D/Model/Mesh/MeshModule.hpp File Reference</title>
 <link rel="icon" href="../../castor-small.png" type="image/x-icon" />
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
@@ -21,7 +21,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.16.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.17.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -49,30 +49,53 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_d31b06848c74e058bfe0cc0eae81a8c8.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dir_48b9b82601b5e90070b208b7d796c277.html">Model</a></li><li class="navelem"><a class="el" href="../../dir_eb05c2e81f584c27ccf0b1e73c563a6d.html">Mesh</a></li><li class="navelem"><a class="el" href="../../dir_19beb1677fd60f69f1adee84ca7ad745.html">Submesh</a></li><li class="navelem"><a class="el" href="../../dir_517eb4e4681f670c5a2adec1eb9b993a.html">Component</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_d31b06848c74e058bfe0cc0eae81a8c8.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dir_48b9b82601b5e90070b208b7d796c277.html">Model</a></li><li class="navelem"><a class="el" href="../../dir_eb05c2e81f584c27ccf0b1e73c563a6d.html">Mesh</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">DefaultRenderComponent.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">MeshModule.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dd4/a05455.html">castor3d::DefaultRenderComponent</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/de0/a05541.html">castor3d::Meshlet</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data for one meshlet.  <a href="../../d5/de0/a05541.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d24/a05459.html">castor3d::DefaultRenderComponent::RenderShader</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d57/a05545.html">castor3d::MeshletCullData</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cull data for one meshlet.  <a href="../../d0/d57/a05545.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d34/a05463.html">castor3d::DefaultRenderComponent::Plugin</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/da9/a05549.html">castor3d::MeshletDrawConstants</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw constants for one meshlet.  <a href="../../d1/da9/a05549.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d3d/a05553.html">castor3d::ResourceCacheTraitsT&lt; Mesh, castor::String &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d9/dba/a02278" id="r_d9/dba/a02278"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html">castor3d</a></td></tr>
+<tr class="memitem:d6/d71/a02344" id="r_d6/d71/a02344"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr><td colspan="2"><div class="groupHeader">Mesh</div></td></tr>
+<tr class="memitem:ae234fcd60b2cdac21c6d693a14c44ed9" id="r_ae234fcd60b2cdac21c6d693a14c44ed9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#ae234fcd60b2cdac21c6d693a14c44ed9">castor3d::MeshCacheTraits</a> = <a class="el" href="../../d6/d44/a03757.html">ResourceCacheTraitsT</a>&lt; <a class="el" href="../../d5/d48/a05521.html">Mesh</a>, <a class="el" href="../../dc/d0a/a02345.html#af78b89ba78c07da21e45ef90d4686c4c">castor::String</a> &gt;</td></tr>
+<tr class="separator:ae234fcd60b2cdac21c6d693a14c44ed9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc18822d2b582d8ecf32d4cfd69aee81" id="r_abc18822d2b582d8ecf32d4cfd69aee81"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#abc18822d2b582d8ecf32d4cfd69aee81">castor3d::MeshCache</a></td></tr>
+<tr class="separator:abc18822d2b582d8ecf32d4cfd69aee81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ab9b9e260e178d2e13a9376ea56f5c3" id="r_a2ab9b9e260e178d2e13a9376ea56f5c3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a2ab9b9e260e178d2e13a9376ea56f5c3">castor3d::MeshRes</a> = <a class="el" href="../../dc/d3d/a05553.html#a8805c7fdcffab0cc1e7726f6a25ca0db">MeshCacheTraits::ElementPtrT</a></td></tr>
+<tr class="separator:a2ab9b9e260e178d2e13a9376ea56f5c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d8532306df73c4691abd21c2e2c623e" id="r_a7d8532306df73c4691abd21c2e2c623e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a7d8532306df73c4691abd21c2e2c623e">castor3d::MeshResPtr</a> = <a class="el" href="../../db/db6/a08549.html#ab778cd9b7ca70fc3d8db4a6e49465034">MeshCacheTraits::ElementObsT</a></td></tr>
+<tr class="separator:a7d8532306df73c4691abd21c2e2c623e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06977e49e46b790ff6499bfaf3db2e40" id="r_a06977e49e46b790ff6499bfaf3db2e40"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a06977e49e46b790ff6499bfaf3db2e40">castor3d::MeshChangeFunc</a> = std::function&lt; void( <a class="el" href="../../d5/d48/a05521.html">Mesh</a> const &amp; ) &gt;</td></tr>
+<tr class="separator:a06977e49e46b790ff6499bfaf3db2e40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d1bddfb219f28a776c84610e43d4a1e" id="r_a9d1bddfb219f28a776c84610e43d4a1e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a9d1bddfb219f28a776c84610e43d4a1e">castor3d::MeshChangeSignal</a> = <a class="el" href="../../d2/dad/a08553.html">castor::SignalT</a>&lt; <a class="el" href="../../d6/d71/a02344.html#a06977e49e46b790ff6499bfaf3db2e40">MeshChangeFunc</a> &gt;</td></tr>
+<tr class="separator:a9d1bddfb219f28a776c84610e43d4a1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f4bfb445eb90b9546bb9680cf8ddd7b" id="r_a8f4bfb445eb90b9546bb9680cf8ddd7b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a8f4bfb445eb90b9546bb9680cf8ddd7b">castor3d::MeshChangeConnection</a> = <a class="el" href="../../df/d9b/a08469.html">castor::ConnectionT</a>&lt; <a class="el" href="../../d6/d71/a02344.html#a9d1bddfb219f28a776c84610e43d4a1e">MeshChangeSignal</a> &gt;</td></tr>
+<tr class="separator:a8f4bfb445eb90b9546bb9680cf8ddd7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

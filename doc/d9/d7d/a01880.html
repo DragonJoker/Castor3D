@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: CastorUtils/Design/ArrayView.hpp File Reference</title>
+<title>Castor3D: CastorUtils/Data/Endianness.hpp File Reference</title>
 <link rel="icon" href="../../castor-small.png" type="image/x-icon" />
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
@@ -21,7 +21,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.16.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.17.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -49,64 +49,134 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_581a2c521a9f6c8a8206ef65b82e493b.html">CastorUtils</a></li><li class="navelem"><a class="el" href="../../dir_cf96459767b535d7e0925e87f83e3d09.html">Design</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_581a2c521a9f6c8a8206ef65b82e493b.html">CastorUtils</a></li><li class="navelem"><a class="el" href="../../dir_80126dbd3fbd88f95f62f3072c143307.html">Data</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">ArrayView.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">Endianness.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/dcc/a08151.html">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Templated class that provide std::array style buffer view.  <a href="../../d4/dcc/a08151.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d2/dd2/a02279" id="r_d2/dd2/a02279"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html">castor</a></td></tr>
+<tr class="memitem:dc/d0a/a02345" id="r_dc/d0a/a02345"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html">castor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a67a96e62a32cb4f2576c4f680bdcbc46" id="r_a67a96e62a32cb4f2576c4f680bdcbc46"><td class="memTemplParams" colspan="2">template&lt;typename IterT &gt; </td></tr>
-<tr class="memitem:a67a96e62a32cb4f2576c4f680bdcbc46"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#a67a96e62a32cb4f2576c4f680bdcbc46">castor::operator==</a> (<a class="el" href="../../d4/dcc/a08151.html">ArrayView</a>&lt; IterT &gt; const &amp;lhs, <a class="el" href="../../d4/dcc/a08151.html">ArrayView</a>&lt; IterT &gt; const &amp;rhs)</td></tr>
-<tr class="separator:a67a96e62a32cb4f2576c4f680bdcbc46"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeadc9f93fa6ced302c1475b5b09606e9" id="r_aeadc9f93fa6ced302c1475b5b09606e9"><td class="memTemplParams" colspan="2">template&lt;typename IterT &gt; </td></tr>
-<tr class="memitem:aeadc9f93fa6ced302c1475b5b09606e9"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#aeadc9f93fa6ced302c1475b5b09606e9">castor::operator!=</a> (<a class="el" href="../../d4/dcc/a08151.html">ArrayView</a>&lt; IterT &gt; const &amp;lhs, <a class="el" href="../../d4/dcc/a08151.html">ArrayView</a>&lt; IterT &gt; const &amp;rhs)</td></tr>
-<tr class="separator:aeadc9f93fa6ced302c1475b5b09606e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0a3e7eea924d39ca155a1fb041d37df" id="r_ae0a3e7eea924d39ca155a1fb041d37df"><td class="memTemplParams" colspan="2">template&lt;typename IterT , typename ValueT  = typename IteratorTraits&lt; IterT &gt;::value_type&gt; </td></tr>
-<tr class="memitem:ae0a3e7eea924d39ca155a1fb041d37df"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../d4/dcc/a08151.html">ArrayView</a>&lt; ValueT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#ae0a3e7eea924d39ca155a1fb041d37df">castor::makeArrayView</a> (IterT begin, IterT end)</td></tr>
-<tr class="separator:ae0a3e7eea924d39ca155a1fb041d37df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1043df0993f36dcd9c434eeb8a4ab26" id="r_af1043df0993f36dcd9c434eeb8a4ab26"><td class="memTemplParams" colspan="2">template&lt;typename ValueT &gt; </td></tr>
-<tr class="memitem:af1043df0993f36dcd9c434eeb8a4ab26"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../d4/dcc/a08151.html">ArrayView</a>&lt; ValueT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#af1043df0993f36dcd9c434eeb8a4ab26">castor::makeArrayView</a> (ValueT *begin, ValueT *end)</td></tr>
-<tr class="separator:af1043df0993f36dcd9c434eeb8a4ab26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad36a423cefa09e0aa175d1d49053dbef" id="r_ad36a423cefa09e0aa175d1d49053dbef"><td class="memTemplParams" colspan="2">template&lt;typename IterT &gt; </td></tr>
-<tr class="memitem:ad36a423cefa09e0aa175d1d49053dbef"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#ad36a423cefa09e0aa175d1d49053dbef">castor::makeArrayView</a> (IterT begin, uint32_t size)</td></tr>
-<tr class="separator:ad36a423cefa09e0aa175d1d49053dbef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a69d331088d1d8023f38947a5464f99" id="r_a7a69d331088d1d8023f38947a5464f99"><td class="memTemplParams" colspan="2">template&lt;typename IterT &gt; </td></tr>
-<tr class="memitem:a7a69d331088d1d8023f38947a5464f99"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#a7a69d331088d1d8023f38947a5464f99">castor::makeArrayView</a> (IterT begin, uint64_t size)</td></tr>
-<tr class="separator:a7a69d331088d1d8023f38947a5464f99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9badb789e8e0d23d2cf3e130b40b597" id="r_ae9badb789e8e0d23d2cf3e130b40b597"><td class="memTemplParams" colspan="2">template&lt;typename ValueT , size_t N&gt; </td></tr>
-<tr class="memitem:ae9badb789e8e0d23d2cf3e130b40b597"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#ae9badb789e8e0d23d2cf3e130b40b597">castor::makeArrayView</a> (ValueT(&amp;buffer)[N])</td></tr>
-<tr class="separator:ae9badb789e8e0d23d2cf3e130b40b597"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d94d68cb1f0c315b07085ae40f31878" id="r_a7d94d68cb1f0c315b07085ae40f31878"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#a7d94d68cb1f0c315b07085ae40f31878">castor::CU_DeclareArrayView</a> (<a class="el" href="../../d2/dd2/a02279.html#aca8563dfbb381d26a3914193c17100b2">byte</a>, Byte)</td></tr>
-<tr class="separator:a7d94d68cb1f0c315b07085ae40f31878"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ee2816faf211884e7d33161c6bc58fe" id="r_a1ee2816faf211884e7d33161c6bc58fe"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#a1ee2816faf211884e7d33161c6bc58fe">castor::CU_DeclareArrayView</a> (<a class="el" href="../../d2/dd2/a02279.html#a56b4fefdc51947c070b45d9ee02694f2">s32</a>, Int32)</td></tr>
-<tr class="separator:a1ee2816faf211884e7d33161c6bc58fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75d5d628fc2ab414e434b2404c943aed" id="r_a75d5d628fc2ab414e434b2404c943aed"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#a75d5d628fc2ab414e434b2404c943aed">castor::CU_DeclareArrayView</a> (<a class="el" href="../../d2/dd2/a02279.html#a03cc011a86d6f847862db4cb35f25c65">u32</a>, UInt32)</td></tr>
-<tr class="separator:a75d5d628fc2ab414e434b2404c943aed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cc3a18c1f05c7622b0eb4d01258dcfb" id="r_a4cc3a18c1f05c7622b0eb4d01258dcfb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#a4cc3a18c1f05c7622b0eb4d01258dcfb">castor::CU_DeclareArrayView</a> (<a class="el" href="../../d2/dd2/a02279.html#aca8563dfbb381d26a3914193c17100b2">byte</a> const, ConstByte)</td></tr>
-<tr class="separator:a4cc3a18c1f05c7622b0eb4d01258dcfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a51e28cdfb42c35448236223adf4f1c5b" id="r_a51e28cdfb42c35448236223adf4f1c5b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#a51e28cdfb42c35448236223adf4f1c5b">castor::CU_DeclareArrayView</a> (<a class="el" href="../../d2/dd2/a02279.html#a56b4fefdc51947c070b45d9ee02694f2">s32</a> const, ConstInt32)</td></tr>
-<tr class="separator:a51e28cdfb42c35448236223adf4f1c5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04b7ec116ae49634f7104adf08a468d6" id="r_a04b7ec116ae49634f7104adf08a468d6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#a04b7ec116ae49634f7104adf08a468d6">castor::CU_DeclareArrayView</a> (<a class="el" href="../../d2/dd2/a02279.html#a03cc011a86d6f847862db4cb35f25c65">u32</a> const, ConstUInt32)</td></tr>
-<tr class="separator:a04b7ec116ae49634f7104adf08a468d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a1140cb52b24dd091693b1c95146eea" id="r_a3a1140cb52b24dd091693b1c95146eea"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a3a1140cb52b24dd091693b1c95146eea">castor::isBigEndian</a> () noexcept</td></tr>
+<tr class="memdesc:a3a1140cb52b24dd091693b1c95146eea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detects if the current system is big endian.  <br /></td></tr>
+<tr class="separator:a3a1140cb52b24dd091693b1c95146eea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4e7623135b28fcbdeb6f2d423df6746" id="r_aa4e7623135b28fcbdeb6f2d423df6746"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#aa4e7623135b28fcbdeb6f2d423df6746">castor::isLittleEndian</a> () noexcept</td></tr>
+<tr class="memdesc:aa4e7623135b28fcbdeb6f2d423df6746"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detects if the current system is little endian.  <br /></td></tr>
+<tr class="separator:aa4e7623135b28fcbdeb6f2d423df6746"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90cf51f94dda321c89fc40fa450d0b91" id="r_a90cf51f94dda321c89fc40fa450d0b91"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a90cf51f94dda321c89fc40fa450d0b91"><td class="memTemplItemLeft" align="right" valign="top">constexpr T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a90cf51f94dda321c89fc40fa450d0b91">castor::switchEndianness</a> (T &amp;value) noexcept</td></tr>
+<tr class="memdesc:a90cf51f94dda321c89fc40fa450d0b91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert from little or big endian to the other.  <br /></td></tr>
+<tr class="separator:a90cf51f94dda321c89fc40fa450d0b91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19e109447afe72b8a1ad068cadba3627" id="r_a19e109447afe72b8a1ad068cadba3627"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a19e109447afe72b8a1ad068cadba3627"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a19e109447afe72b8a1ad068cadba3627">castor::switchEndianness</a> (T const &amp;value)</td></tr>
+<tr class="memdesc:a19e109447afe72b8a1ad068cadba3627"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert from little or big endian to the other.  <br /></td></tr>
+<tr class="separator:a19e109447afe72b8a1ad068cadba3627"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93e72f9c39ce923c9393d4f6df336175" id="r_a93e72f9c39ce923c9393d4f6df336175"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a93e72f9c39ce923c9393d4f6df336175"><td class="memTemplItemLeft" align="right" valign="top">constexpr T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a93e72f9c39ce923c9393d4f6df336175">castor::systemEndianToBigEndian</a> (T &amp;value) noexcept</td></tr>
+<tr class="memdesc:a93e72f9c39ce923c9393d4f6df336175"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to big endian if needed.  <br /></td></tr>
+<tr class="separator:a93e72f9c39ce923c9393d4f6df336175"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad58701f180fdf6d8fc87eb0948a6fa0b" id="r_ad58701f180fdf6d8fc87eb0948a6fa0b"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ad58701f180fdf6d8fc87eb0948a6fa0b"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#ad58701f180fdf6d8fc87eb0948a6fa0b">castor::systemEndianToBigEndian</a> (T const &amp;value)</td></tr>
+<tr class="memdesc:ad58701f180fdf6d8fc87eb0948a6fa0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to big endian if needed.  <br /></td></tr>
+<tr class="separator:ad58701f180fdf6d8fc87eb0948a6fa0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0cf5e2146e104e8894be5b10788327f" id="r_ac0cf5e2146e104e8894be5b10788327f"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N&gt; </td></tr>
+<tr class="memitem:ac0cf5e2146e104e8894be5b10788327f"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">Array</a>&lt; T, N &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#ac0cf5e2146e104e8894be5b10788327f">castor::systemEndianToBigEndian</a> (<a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">Array</a>&lt; T, N &gt; &amp;value) noexcept</td></tr>
+<tr class="memdesc:ac0cf5e2146e104e8894be5b10788327f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to big endian if needed.  <br /></td></tr>
+<tr class="separator:ac0cf5e2146e104e8894be5b10788327f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54e460b822ffcf0964269a724df7a7b6" id="r_a54e460b822ffcf0964269a724df7a7b6"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N&gt; </td></tr>
+<tr class="memitem:a54e460b822ffcf0964269a724df7a7b6"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">Array</a>&lt; T, N &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a54e460b822ffcf0964269a724df7a7b6">castor::systemEndianToBigEndian</a> (<a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">Array</a>&lt; T, N &gt; const &amp;value)</td></tr>
+<tr class="memdesc:a54e460b822ffcf0964269a724df7a7b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to big endian if needed.  <br /></td></tr>
+<tr class="separator:a54e460b822ffcf0964269a724df7a7b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4a7ba77cba814168c8a81b26370ff7e" id="r_ab4a7ba77cba814168c8a81b26370ff7e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ab4a7ba77cba814168c8a81b26370ff7e"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="../../dc/d0a/a02345.html#a57d18b0d40cd54921270bcf33d0aadc5">Vector</a>&lt; T &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#ab4a7ba77cba814168c8a81b26370ff7e">castor::systemEndianToBigEndian</a> (<a class="el" href="../../dc/d0a/a02345.html#a57d18b0d40cd54921270bcf33d0aadc5">Vector</a>&lt; T &gt; &amp;value) noexcept</td></tr>
+<tr class="memdesc:ab4a7ba77cba814168c8a81b26370ff7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to big endian if needed.  <br /></td></tr>
+<tr class="separator:ab4a7ba77cba814168c8a81b26370ff7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae57ba897bf67e8d944d1bac129d1482e" id="r_ae57ba897bf67e8d944d1bac129d1482e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ae57ba897bf67e8d944d1bac129d1482e"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="../../dc/d0a/a02345.html#a57d18b0d40cd54921270bcf33d0aadc5">Vector</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#ae57ba897bf67e8d944d1bac129d1482e">castor::systemEndianToBigEndian</a> (<a class="el" href="../../dc/d0a/a02345.html#a57d18b0d40cd54921270bcf33d0aadc5">Vector</a>&lt; T &gt; const &amp;value)</td></tr>
+<tr class="memdesc:ae57ba897bf67e8d944d1bac129d1482e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to big endian if needed.  <br /></td></tr>
+<tr class="separator:ae57ba897bf67e8d944d1bac129d1482e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a192cd4b3e742a0e1f059c9edb4f63f1f" id="r_a192cd4b3e742a0e1f059c9edb4f63f1f"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a192cd4b3e742a0e1f059c9edb4f63f1f"><td class="memTemplItemLeft" align="right" valign="top">constexpr T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a192cd4b3e742a0e1f059c9edb4f63f1f">castor::systemEndianToLittleEndian</a> (T &amp;value) noexcept</td></tr>
+<tr class="memdesc:a192cd4b3e742a0e1f059c9edb4f63f1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to little endian if needed.  <br /></td></tr>
+<tr class="separator:a192cd4b3e742a0e1f059c9edb4f63f1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50871386c7d4679ca8d126622cb2c6a7" id="r_a50871386c7d4679ca8d126622cb2c6a7"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a50871386c7d4679ca8d126622cb2c6a7"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a50871386c7d4679ca8d126622cb2c6a7">castor::systemEndianToLittleEndian</a> (T const &amp;value)</td></tr>
+<tr class="memdesc:a50871386c7d4679ca8d126622cb2c6a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to little endian if needed.  <br /></td></tr>
+<tr class="separator:a50871386c7d4679ca8d126622cb2c6a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adee39e32672cf37d66d46ed2f9f2ea88" id="r_adee39e32672cf37d66d46ed2f9f2ea88"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N&gt; </td></tr>
+<tr class="memitem:adee39e32672cf37d66d46ed2f9f2ea88"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">Array</a>&lt; T, N &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#adee39e32672cf37d66d46ed2f9f2ea88">castor::systemEndianToLittleEndian</a> (<a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">Array</a>&lt; T, N &gt; &amp;value) noexcept</td></tr>
+<tr class="memdesc:adee39e32672cf37d66d46ed2f9f2ea88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to little endian if needed.  <br /></td></tr>
+<tr class="separator:adee39e32672cf37d66d46ed2f9f2ea88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabc86afcfc7ad13fa8c773f03ef3ff87" id="r_aabc86afcfc7ad13fa8c773f03ef3ff87"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N&gt; </td></tr>
+<tr class="memitem:aabc86afcfc7ad13fa8c773f03ef3ff87"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">Array</a>&lt; T, N &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#aabc86afcfc7ad13fa8c773f03ef3ff87">castor::systemEndianToLittleEndian</a> (<a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">Array</a>&lt; T, N &gt; const &amp;value)</td></tr>
+<tr class="memdesc:aabc86afcfc7ad13fa8c773f03ef3ff87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to little endian if needed.  <br /></td></tr>
+<tr class="separator:aabc86afcfc7ad13fa8c773f03ef3ff87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a6ec649b211de12f8945624e1f29933" id="r_a6a6ec649b211de12f8945624e1f29933"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a6a6ec649b211de12f8945624e1f29933"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../dc/d0a/a02345.html#a57d18b0d40cd54921270bcf33d0aadc5">Vector</a>&lt; T &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a6a6ec649b211de12f8945624e1f29933">castor::systemEndianToLittleEndian</a> (<a class="el" href="../../dc/d0a/a02345.html#a57d18b0d40cd54921270bcf33d0aadc5">Vector</a>&lt; T &gt; &amp;value) noexcept</td></tr>
+<tr class="memdesc:a6a6ec649b211de12f8945624e1f29933"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to little endian if needed.  <br /></td></tr>
+<tr class="separator:a6a6ec649b211de12f8945624e1f29933"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3cacbf0e52675c7dfcf46aec7b8a083" id="r_ab3cacbf0e52675c7dfcf46aec7b8a083"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ab3cacbf0e52675c7dfcf46aec7b8a083"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../dc/d0a/a02345.html#a57d18b0d40cd54921270bcf33d0aadc5">Vector</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#ab3cacbf0e52675c7dfcf46aec7b8a083">castor::systemEndianToLittleEndian</a> (<a class="el" href="../../dc/d0a/a02345.html#a57d18b0d40cd54921270bcf33d0aadc5">Vector</a>&lt; T &gt; const &amp;value)</td></tr>
+<tr class="memdesc:ab3cacbf0e52675c7dfcf46aec7b8a083"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to little endian if needed.  <br /></td></tr>
+<tr class="separator:ab3cacbf0e52675c7dfcf46aec7b8a083"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add97d0a02fa4f84214d94adce553304e" id="r_add97d0a02fa4f84214d94adce553304e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:add97d0a02fa4f84214d94adce553304e"><td class="memTemplItemLeft" align="right" valign="top">constexpr T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#add97d0a02fa4f84214d94adce553304e">castor::bigEndianToSystemEndian</a> (T &amp;value) noexcept</td></tr>
+<tr class="memdesc:add97d0a02fa4f84214d94adce553304e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given big endian value to system endian if needed.  <br /></td></tr>
+<tr class="separator:add97d0a02fa4f84214d94adce553304e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49a3ae83045c03ad117623890299fb1c" id="r_a49a3ae83045c03ad117623890299fb1c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a49a3ae83045c03ad117623890299fb1c"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a49a3ae83045c03ad117623890299fb1c">castor::bigEndianToSystemEndian</a> (T const &amp;value)</td></tr>
+<tr class="memdesc:a49a3ae83045c03ad117623890299fb1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given big endian value to system endian if needed.  <br /></td></tr>
+<tr class="separator:a49a3ae83045c03ad117623890299fb1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d184ae41d5975c6c14fc8cc48df18fe" id="r_a0d184ae41d5975c6c14fc8cc48df18fe"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N&gt; </td></tr>
+<tr class="memitem:a0d184ae41d5975c6c14fc8cc48df18fe"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">Array</a>&lt; T, N &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a0d184ae41d5975c6c14fc8cc48df18fe">castor::bigEndianToSystemEndian</a> (<a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">Array</a>&lt; T, N &gt; &amp;value) noexcept</td></tr>
+<tr class="memdesc:a0d184ae41d5975c6c14fc8cc48df18fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to big endian if needed.  <br /></td></tr>
+<tr class="separator:a0d184ae41d5975c6c14fc8cc48df18fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a547f175c03da584bbcc49e7f6e4f4013" id="r_a547f175c03da584bbcc49e7f6e4f4013"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N&gt; </td></tr>
+<tr class="memitem:a547f175c03da584bbcc49e7f6e4f4013"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">Array</a>&lt; T, N &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a547f175c03da584bbcc49e7f6e4f4013">castor::bigEndianToSystemEndian</a> (<a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">Array</a>&lt; T, N &gt; const &amp;value)</td></tr>
+<tr class="memdesc:a547f175c03da584bbcc49e7f6e4f4013"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to big endian if needed.  <br /></td></tr>
+<tr class="separator:a547f175c03da584bbcc49e7f6e4f4013"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69cb2659d6729cb2651ef72d69cad6d8" id="r_a69cb2659d6729cb2651ef72d69cad6d8"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a69cb2659d6729cb2651ef72d69cad6d8"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../dc/d0a/a02345.html#a57d18b0d40cd54921270bcf33d0aadc5">Vector</a>&lt; T &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a69cb2659d6729cb2651ef72d69cad6d8">castor::bigEndianToSystemEndian</a> (<a class="el" href="../../dc/d0a/a02345.html#a57d18b0d40cd54921270bcf33d0aadc5">Vector</a>&lt; T &gt; &amp;value) noexcept</td></tr>
+<tr class="memdesc:a69cb2659d6729cb2651ef72d69cad6d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to big endian if needed.  <br /></td></tr>
+<tr class="separator:a69cb2659d6729cb2651ef72d69cad6d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e4596003b5027cb4faf7daf3febd1ab" id="r_a0e4596003b5027cb4faf7daf3febd1ab"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a0e4596003b5027cb4faf7daf3febd1ab"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../dc/d0a/a02345.html#a57d18b0d40cd54921270bcf33d0aadc5">Vector</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a0e4596003b5027cb4faf7daf3febd1ab">castor::bigEndianToSystemEndian</a> (<a class="el" href="../../dc/d0a/a02345.html#a57d18b0d40cd54921270bcf33d0aadc5">Vector</a>&lt; T &gt; const &amp;value)</td></tr>
+<tr class="memdesc:a0e4596003b5027cb4faf7daf3febd1ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to big endian if needed.  <br /></td></tr>
+<tr class="separator:a0e4596003b5027cb4faf7daf3febd1ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae21f89dfd2feafe41ec98e132f9b5d9f" id="r_ae21f89dfd2feafe41ec98e132f9b5d9f"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ae21f89dfd2feafe41ec98e132f9b5d9f"><td class="memTemplItemLeft" align="right" valign="top">constexpr T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#ae21f89dfd2feafe41ec98e132f9b5d9f">castor::littleEndianToSystemEndian</a> (T &amp;value) noexcept</td></tr>
+<tr class="memdesc:ae21f89dfd2feafe41ec98e132f9b5d9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given little endian value to system endian if needed.  <br /></td></tr>
+<tr class="separator:ae21f89dfd2feafe41ec98e132f9b5d9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2152b811d74de8f62369f62ed2995029" id="r_a2152b811d74de8f62369f62ed2995029"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a2152b811d74de8f62369f62ed2995029"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a2152b811d74de8f62369f62ed2995029">castor::littleEndianToSystemEndian</a> (T const &amp;value)</td></tr>
+<tr class="memdesc:a2152b811d74de8f62369f62ed2995029"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given little endian value to system endian if needed.  <br /></td></tr>
+<tr class="separator:a2152b811d74de8f62369f62ed2995029"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a423745cbe221958e708733caef7628ff" id="r_a423745cbe221958e708733caef7628ff"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N&gt; </td></tr>
+<tr class="memitem:a423745cbe221958e708733caef7628ff"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">Array</a>&lt; T, N &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a423745cbe221958e708733caef7628ff">castor::littleEndianToSystemEndian</a> (<a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">Array</a>&lt; T, N &gt; &amp;value) noexcept</td></tr>
+<tr class="memdesc:a423745cbe221958e708733caef7628ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to little endian if needed.  <br /></td></tr>
+<tr class="separator:a423745cbe221958e708733caef7628ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae43298a8041aeff0dda0e7e1001de0eb" id="r_ae43298a8041aeff0dda0e7e1001de0eb"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N&gt; </td></tr>
+<tr class="memitem:ae43298a8041aeff0dda0e7e1001de0eb"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">Array</a>&lt; T, N &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#ae43298a8041aeff0dda0e7e1001de0eb">castor::littleEndianToSystemEndian</a> (<a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">Array</a>&lt; T, N &gt; const &amp;value)</td></tr>
+<tr class="memdesc:ae43298a8041aeff0dda0e7e1001de0eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to little endian if needed.  <br /></td></tr>
+<tr class="separator:ae43298a8041aeff0dda0e7e1001de0eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90e916507e696bd93a200c94110958ea" id="r_a90e916507e696bd93a200c94110958ea"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a90e916507e696bd93a200c94110958ea"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../dc/d0a/a02345.html#a57d18b0d40cd54921270bcf33d0aadc5">Vector</a>&lt; T &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a90e916507e696bd93a200c94110958ea">castor::littleEndianToSystemEndian</a> (<a class="el" href="../../dc/d0a/a02345.html#a57d18b0d40cd54921270bcf33d0aadc5">Vector</a>&lt; T &gt; &amp;value) noexcept</td></tr>
+<tr class="memdesc:a90e916507e696bd93a200c94110958ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to little endian if needed.  <br /></td></tr>
+<tr class="separator:a90e916507e696bd93a200c94110958ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9e015a793e5ed70ecbd0f3b25591d5e" id="r_ae9e015a793e5ed70ecbd0f3b25591d5e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ae9e015a793e5ed70ecbd0f3b25591d5e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../dc/d0a/a02345.html#a57d18b0d40cd54921270bcf33d0aadc5">Vector</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#ae9e015a793e5ed70ecbd0f3b25591d5e">castor::littleEndianToSystemEndian</a> (<a class="el" href="../../dc/d0a/a02345.html#a57d18b0d40cd54921270bcf33d0aadc5">Vector</a>&lt; T &gt; const &amp;value)</td></tr>
+<tr class="memdesc:ae9e015a793e5ed70ecbd0f3b25591d5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given value to little endian if needed.  <br /></td></tr>
+<tr class="separator:ae9e015a793e5ed70ecbd0f3b25591d5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

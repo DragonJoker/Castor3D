@@ -1,5 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$dc/df8/a08263.html" title=" " alt="" coords="5,5,211,75"/>
-<area shape="rect" id="Node000001" href="$df/d5a/a05423.html" title=" " alt="" coords="259,20,463,60"/>
-<area shape="poly" id="edge863_Node000000_Node000001" title=" " alt="" coords="225,37,259,37,259,43,225,43"/>
+<area shape="rect" id="Node000000" href="$d8/d6a/a09513.html" title="A range class." alt="" coords="5,31,140,56"/>
+<area shape="rect" id="Node000001" href="$da/d9d/a09521.html" title="A range inside a sequence." alt="" coords="194,5,381,31"/>
+<area shape="poly" id="edge878_Node000000_Node000001" title=" " alt="" coords="154,31,193,26,194,32,154,36"/>
+<area shape="rect" id="Node000002" href="$d7/dfc/a09525.html" title="A contiguous ranges sequence." alt="" coords="188,55,387,80"/>
+<area shape="poly" id="edge879_Node000000_Node000002" title=" " alt="" coords="154,50,188,54,188,59,154,55"/>
 </map>

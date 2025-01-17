@@ -1,0 +1,17 @@
+<map id="castor::ResourceCacheBaseT::cleanup" name="castor::ResourceCacheBaseT::cleanup">
+<area shape="rect" id="Node000001" title="Sets all the elements to be cleaned up." alt="" coords="477,111,665,151"/>
+<area shape="rect" id="Node000002" href="$da/da0/a08541.html#a74a35e486aa159b89451ccfb86e2dbd9" title=" " alt="" coords="241,111,429,151"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="463,133,430,133,430,128,463,128"/>
+<area shape="rect" id="Node000003" href="$da/da0/a08541.html#a21d0ef274f434e61b1d0c336a8c7253a" title="Logging version of tryRemove." alt="" coords="5,5,193,45"/>
+<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="514,108,429,77,307,52,193,36,194,31,308,46,430,72,516,103"/>
+<area shape="rect" id="Node000004" href="$da/da0/a08541.html#a55752549d182d7d232c432746b6b5312" title="Logging version of tryRemove." alt="" coords="5,71,193,111"/>
+<area shape="poly" id="edge7_Node000001_Node000004" title=" " alt="" coords="481,110,429,101,306,92,193,91,194,85,307,87,430,96,482,105"/>
+<area shape="rect" id="Node000005" href="$da/da0/a08541.html#a5d16d1a42b2ea9518a97d9d8e1408140" title="Removes an element, given a name." alt="" coords="5,137,193,177"/>
+<area shape="poly" id="edge8_Node000001_Node000005" title=" " alt="" coords="483,156,430,165,306,171,193,168,193,162,306,166,429,160,482,151"/>
+<area shape="rect" id="Node000006" href="$da/da0/a08541.html#aa66962c4bd8bfec19c1d9df146349f9e" title="Removes an element, given a name." alt="" coords="5,207,193,247"/>
+<area shape="poly" id="edge9_Node000001_Node000006" title=" " alt="" coords="501,157,430,177,307,201,194,218,193,213,306,196,429,172,499,152"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="285,106,192,61,159,48,161,43,194,56,287,102"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="227,115,193,109,194,104,228,110"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="228,145,194,149,193,144,228,140"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="274,159,194,192,152,209,150,204,192,187,272,154"/>
+</map>

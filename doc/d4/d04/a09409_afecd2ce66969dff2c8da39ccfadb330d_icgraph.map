@@ -1,0 +1,19 @@
+<map id="castor::LengthT::value" name="castor::LengthT::value">
+<area shape="rect" id="Node000001" title=" " alt="" coords="268,179,417,204"/>
+<area shape="rect" id="Node000002" href="$d4/d04/a09409.html#a08ee51a11cea2a8f65ae98fd21d3ca66" title="Named constructor, from centimetres." alt="" coords="5,5,220,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="326,168,284,105,254,72,219,44,195,33,197,28,221,40,257,68,288,102,331,165"/>
+<area shape="rect" id="Node000003" href="$d4/d04/a09409.html#a5c1fd32919b2dbc3eda5f2053c23e5aa" title="Named constructor, from feet." alt="" coords="27,55,198,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="319,171,275,131,248,111,219,94,189,83,191,78,221,89,251,106,278,127,322,167"/>
+<area shape="rect" id="Node000004" href="$d4/d04/a09409.html#aa40495ea44bb2934b5c2517e2b7073cd" title="Named constructor, from inches." alt="" coords="21,104,204,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="301,175,219,143,178,132,179,127,221,138,303,170"/>
+<area shape="rect" id="Node000005" href="$d4/d04/a09409.html#a2b2178e4467fde76508c3cc7b4d64bc2" title="Named constructor, from kilometres." alt="" coords="9,153,216,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="254,184,216,180,217,175,255,179"/>
+<area shape="rect" id="Node000006" href="$d4/d04/a09409.html#a8ce888875cd0c2bd0dcc89b0b1b658b7" title="Named constructor, from metres." alt="" coords="20,203,205,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="254,203,206,208,205,203,254,198"/>
+<area shape="rect" id="Node000007" href="$d4/d04/a09409.html#a76f970083daa79ad433a0db950b443ca" title="Named constructor, from millimetres." alt="" coords="9,252,217,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="300,212,221,242,175,255,173,249,219,237,299,207"/>
+<area shape="rect" id="Node000008" href="$d4/d04/a09409.html#adf3a9ecbb3ea74922339f99f11ef2954" title="Named constructor, expressed in the specified unit." alt="" coords="29,301,197,327"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="321,216,277,255,221,291,187,304,185,299,219,286,274,251,317,212"/>
+<area shape="rect" id="Node000009" href="$d4/d04/a09409.html#ab2290a72dd8c1dcabf3d5df0324d9c36" title="Named constructor, from yards." alt="" coords="23,351,202,376"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="330,218,287,280,257,313,221,340,194,353,192,348,219,336,253,309,283,276,326,215"/>
+</map>

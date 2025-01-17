@@ -1,0 +1,25 @@
+<map id="castor::LoggerInstance::logTrace" name="castor::LoggerInstance::logTrace">
+<area shape="rect" id="Node000001" title="Logs a trace message, from a std::basic_string&lt; CharT &gt;" alt="" coords="731,73,885,113"/>
+<area shape="rect" id="Node000002" href="$de/d4d/a09361.html#ac2f50abd296cd51b45d5a7ccd2395498" title="Logs a trace message, from a std::basic_ostream&lt; CharT &gt;" alt="" coords="511,9,666,49"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="725,72,657,52,658,47,727,67"/>
+<area shape="rect" id="Node000003" href="$da/da0/a08541.html#a3f6cbb3c0ad8d6136141c4c089f7f479" title=" " alt="" coords="495,73,683,113"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="717,96,683,96,683,91,717,91"/>
+<area shape="rect" id="Node000007" href="$da/da0/a08541.html#aa1689ccd9a406fe8dfe9ff473d226b5e" title=" " alt="" coords="495,141,683,181"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="731,120,655,144,653,139,729,115"/>
+<area shape="rect" id="Node000004" href="$da/da0/a08541.html#a63b72a3a1c306679e47426f3a270ec97" title=" " alt="" coords="259,69,447,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="481,94,447,94,447,88,481,89"/>
+<area shape="rect" id="Node000005" href="$da/da0/a08541.html#ae42bd6b7da6f50fdef84f04a84172313" title="Logging version of tryAdd." alt="" coords="14,5,202,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="262,68,184,48,186,43,263,63"/>
+<area shape="rect" id="Node000006" href="$da/da0/a08541.html#a1fc2571a5ea51ead9564b4cec6b31314" title="Logging version of tryAdd." alt="" coords="14,69,202,109"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="245,92,202,92,202,87,245,87"/>
+<area shape="rect" id="Node000008" href="$da/da0/a08541.html#aae5b569e26955738733ba4de036629d7" title="Creates an element." alt="" coords="259,141,447,181"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="481,164,447,164,447,159,481,159"/>
+<area shape="rect" id="Node000010" href="$da/da0/a08541.html#aee8d1df08f426ba200de96ef84fd8eb8" title=" " alt="" coords="259,213,447,253"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="510,188,420,216,418,211,509,183"/>
+<area shape="rect" id="Node000009" href="$df/d36/a09057.html#a0f03d34ce051bfd45da137d8146a1fc4" title="Creates and adds an SDF font to the cache." alt="" coords="5,134,211,189"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="245,164,211,164,211,159,245,159"/>
+<area shape="rect" id="Node000011" href="$da/da0/a08541.html#a85c66f21579cca9b9f325913e1a73e2b" title="Logging version of tryAdd." alt="" coords="14,213,202,253"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="245,236,202,236,202,231,245,231"/>
+<area shape="rect" id="Node000012" href="$da/da0/a08541.html#a35d0b614c078b3f48c5dff1957427dbd" title="Logging version of tryAdd." alt="" coords="14,277,202,317"/>
+<area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="263,259,186,280,184,275,262,254"/>
+</map>

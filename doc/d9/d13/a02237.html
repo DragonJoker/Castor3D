@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: CastorUtils/Noise/PerlinNoise.hpp File Reference</title>
+<title>Castor3D: CastorUtils/Math/Speed.hpp File Reference</title>
 <link rel="icon" href="../../castor-small.png" type="image/x-icon" />
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
@@ -21,7 +21,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.16.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.17.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -49,27 +49,84 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_581a2c521a9f6c8a8206ef65b82e493b.html">CastorUtils</a></li><li class="navelem"><a class="el" href="../../dir_20961bbdb1a1523d4925c4b08c0a98bf.html">Noise</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_581a2c521a9f6c8a8206ef65b82e493b.html">CastorUtils</a></li><li class="navelem"><a class="el" href="../../dir_ccecb13bac77b6512676eb9b9783a479.html">Math</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">PerlinNoise.hpp File Reference</div></div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
+  <div class="headertitle"><div class="title">Speed.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d4c/a09471.html">castor::PerlinNoiseT&lt; T &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">3D Perlin noise generator.  <a href="../../d8/d4c/a09471.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d0c/a09629.html">castor::IsSpeedT&lt; ValueT &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d24/a09633.html">castor::IsSpeedT&lt; SpeedT&lt; ValueT, Seconds &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d38/a09637.html">castor::IsSpeedT&lt; SpeedT&lt; ValueT, Milliseconds &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d50/a09641.html">castor::IsSpeedT&lt; SpeedT&lt; ValueT, Microseconds &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/ddf/a09645.html">castor::IsSpeedT&lt; SpeedT&lt; ValueT, Nanoseconds &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d02/a09529.html">castor::SpeedTraitsT&lt; ValueT &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The traits for aspeed.  <a href="../../df/d02/a09529.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d1d/a09649.html">castor::SpeedTraitsT&lt; Point&lt; ValueT, 2 &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d17/a09653.html">castor::SpeedTraitsT&lt; Point&lt; ValueT, 3 &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d7f/a09657.html">castor::SpeedTraitsT&lt; Point&lt; ValueT, 4 &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dd6/a09661.html">castor::SpeedTraitsT&lt; AngleT&lt; ValueT &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d38/a09533.html">castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A speed.  <a href="../../da/d38/a09533.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d2/dd2/a02279" id="r_d2/dd2/a02279"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html">castor</a></td></tr>
+<tr class="memitem:dc/d0a/a02345" id="r_dc/d0a/a02345"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html">castor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a3759cdfedc651a22d0da6722b3189c31" id="r_a3759cdfedc651a22d0da6722b3189c31"><td class="memTemplParams" colspan="2">template&lt;typename DurationT , typename ValueT &gt; </td></tr>
+<tr class="memitem:a3759cdfedc651a22d0da6722b3189c31"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../da/d38/a09533.html">SpeedT</a>&lt; ValueT, DurationT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a3759cdfedc651a22d0da6722b3189c31">castor::makeSpeed</a> (ValueT const &amp;value)</td></tr>
+<tr class="separator:a3759cdfedc651a22d0da6722b3189c31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f14317fb209e9c7f0829766d6ea59fa" id="r_a8f14317fb209e9c7f0829766d6ea59fa"><td class="memTemplParams" colspan="2">template&lt;typename DurationT , typename ValueT &gt; </td></tr>
+<tr class="memitem:a8f14317fb209e9c7f0829766d6ea59fa"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../da/d38/a09533.html">SpeedT</a>&lt; ValueT, DurationT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a8f14317fb209e9c7f0829766d6ea59fa">castor::makeSpeed</a> (ValueT const &amp;value, DurationT const &amp;)</td></tr>
+<tr class="separator:a8f14317fb209e9c7f0829766d6ea59fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a468e6be96ad2286c2f69f490a005c3e7" id="r_a468e6be96ad2286c2f69f490a005c3e7"><td class="memTemplParams" colspan="2">template&lt;typename DurationT , typename ValueT , typename ValueU &gt; </td></tr>
+<tr class="memitem:a468e6be96ad2286c2f69f490a005c3e7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../da/d38/a09533.html">SpeedT</a>&lt; ValueT, DurationT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a468e6be96ad2286c2f69f490a005c3e7">castor::operator+</a> (<a class="el" href="../../da/d38/a09533.html">SpeedT</a>&lt; ValueT, DurationT &gt; const &amp;lhs, ValueU const &amp;rhs) noexcept</td></tr>
+<tr class="separator:a468e6be96ad2286c2f69f490a005c3e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e41befe251b564019048a3c648da6b8" id="r_a2e41befe251b564019048a3c648da6b8"><td class="memTemplParams" colspan="2">template&lt;typename DurationT , typename ValueT , typename ValueU &gt; </td></tr>
+<tr class="memitem:a2e41befe251b564019048a3c648da6b8"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../da/d38/a09533.html">SpeedT</a>&lt; ValueT, DurationT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a2e41befe251b564019048a3c648da6b8">castor::operator-</a> (<a class="el" href="../../da/d38/a09533.html">SpeedT</a>&lt; ValueT, DurationT &gt; const &amp;lhs, ValueU const &amp;rhs) noexcept</td></tr>
+<tr class="separator:a2e41befe251b564019048a3c648da6b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe80cd51425b53f940ae0c7782ae2d84" id="r_afe80cd51425b53f940ae0c7782ae2d84"><td class="memTemplParams" colspan="2">template&lt;typename DurationT , typename ValueT , typename ValueU &gt; </td></tr>
+<tr class="memitem:afe80cd51425b53f940ae0c7782ae2d84"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../da/d38/a09533.html">SpeedT</a>&lt; ValueT, DurationT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#afe80cd51425b53f940ae0c7782ae2d84">castor::operator*</a> (<a class="el" href="../../da/d38/a09533.html">SpeedT</a>&lt; ValueT, DurationT &gt; const &amp;lhs, ValueU const &amp;rhs) noexcept</td></tr>
+<tr class="separator:afe80cd51425b53f940ae0c7782ae2d84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48717ad5d5abfb74146618c986623093" id="r_a48717ad5d5abfb74146618c986623093"><td class="memTemplParams" colspan="2">template&lt;typename DurationT , typename ValueT , typename ValueU &gt; </td></tr>
+<tr class="memitem:a48717ad5d5abfb74146618c986623093"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../da/d38/a09533.html">SpeedT</a>&lt; ValueT, DurationT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a48717ad5d5abfb74146618c986623093">castor::operator/</a> (<a class="el" href="../../da/d38/a09533.html">SpeedT</a>&lt; ValueT, DurationT &gt; const &amp;lhs, ValueU const &amp;rhs) noexcept</td></tr>
+<tr class="separator:a48717ad5d5abfb74146618c986623093"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Comparaison.</div></td></tr>
+<tr class="memitem:aa622dbc431356f865fd8cc54e5ea1468" id="r_aa622dbc431356f865fd8cc54e5ea1468"><td class="memTemplParams" colspan="2">template&lt;typename ValueT , typename DurationT , typename TraitsT &gt; </td></tr>
+<tr class="memitem:aa622dbc431356f865fd8cc54e5ea1468"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#aa622dbc431356f865fd8cc54e5ea1468">castor::operator==</a> (<a class="el" href="../../da/d38/a09533.html">SpeedT</a>&lt; ValueT, DurationT, TraitsT &gt; const &amp;lhs, <a class="el" href="../../da/d38/a09533.html">SpeedT</a>&lt; ValueT, DurationT, TraitsT &gt; const &amp;rhs)</td></tr>
+<tr class="separator:aa622dbc431356f865fd8cc54e5ea1468"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10c6f2ed44cde6bae808124163eb6c56" id="r_a10c6f2ed44cde6bae808124163eb6c56"><td class="memTemplParams" colspan="2">template&lt;typename ValueT , typename DurationT , typename TraitsT &gt; </td></tr>
+<tr class="memitem:a10c6f2ed44cde6bae808124163eb6c56"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a10c6f2ed44cde6bae808124163eb6c56">castor::operator&lt;=&gt;</a> (<a class="el" href="../../da/d38/a09533.html">SpeedT</a>&lt; ValueT, DurationT, TraitsT &gt; const &amp;lhs, <a class="el" href="../../da/d38/a09533.html">SpeedT</a>&lt; ValueT, DurationT, TraitsT &gt; const &amp;rhs)</td></tr>
+<tr class="separator:a10c6f2ed44cde6bae808124163eb6c56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a228e1f50b365a5d282ae24add14ee946" id="r_a228e1f50b365a5d282ae24add14ee946"><td class="memTemplParams" colspan="2">template&lt;typename ValueT &gt; </td></tr>
+<tr class="memitem:a228e1f50b365a5d282ae24add14ee946"><td class="memTemplItemLeft" align="right" valign="top">static bool constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a228e1f50b365a5d282ae24add14ee946">castor::isSpeedT</a> = <a class="el" href="../../d3/d0c/a09629.html">IsSpeedT</a>&lt; ValueT &gt;::value</td></tr>
+<tr class="separator:a228e1f50b365a5d282ae24add14ee946"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

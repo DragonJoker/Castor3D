@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: CastorUtils/Miscellaneous/Hash.hpp File Reference</title>
+<title>Castor3D: CastorUtils/Math/Math.hpp File Reference</title>
 <link rel="icon" href="../../castor-small.png" type="image/x-icon" />
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
@@ -21,7 +21,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.16.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.17.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -49,56 +49,86 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_581a2c521a9f6c8a8206ef65b82e493b.html">CastorUtils</a></li><li class="navelem"><a class="el" href="../../dir_38921dac01801a9e91a60a0b691361ca.html">Miscellaneous</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_581a2c521a9f6c8a8206ef65b82e493b.html">CastorUtils</a></li><li class="navelem"><a class="el" href="../../dir_ccecb13bac77b6512676eb9b9783a479.html">Math</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">Hash.hpp File Reference</div></div>
+<a href="#concepts">Concepts</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
+  <div class="headertitle"><div class="title">Math.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d25/a09395.html">castor::hashcomb::HashCombinerT&lt; HashT, std::enable_if_t&lt; std::is_same_v&lt; HashT, uint32_t &gt; &gt; &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d63/a09425.html">castor::Fact&lt; T, N &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factorial recursive case.  <a href="../../d2/d63/a09425.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dff/a09399.html">castor::hashcomb::HashCombinerT&lt; HashT, std::enable_if_t&lt; !std::is_same_v&lt; HashT, uint32_t &gt; &amp;&amp;sizeof(HashT)==4u &gt; &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d4f/a09429.html">castor::Fact&lt; T, 0 &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factorial end case.  <a href="../../d3/d4f/a09429.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/de3/a09403.html">castor::hashcomb::HashCombinerT&lt; HashT, std::enable_if_t&lt; std::is_same_v&lt; HashT, uint64_t &gt; &gt; &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/dab/a09433.html">castor::Power&lt; T, N &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d8/dab/a09433.html" title="Power recursive case.">Power</a> recursive case.  <a href="../../d8/dab/a09433.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d2b/a09407.html">castor::hashcomb::HashCombinerT&lt; HashT, std::enable_if_t&lt; !std::is_same_v&lt; HashT, uint64_t &gt; &amp;&amp;sizeof(HashT)==8u &gt; &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d6a/a09437.html">castor::Power&lt; T, 1 &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d8/dab/a09433.html" title="Power recursive case.">Power</a> end case.  <a href="../../d9/d6a/a09437.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/db0/a09441.html">castor::Power&lt; T, 0 &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d8/dab/a09433.html" title="Power recursive case.">Power</a> end case.  <a href="../../d2/db0/a09441.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d4a/a09445.html">castor::LogN&lt; N, T &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Neperian Logarithm recursive case.  <a href="../../d3/d4a/a09445.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d03/a09449.html">castor::LogN&lt; 0, T &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Neperian Logarithm end case.  <a href="../../d4/d03/a09449.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d03/a09453.html">castor::Ln&lt; T &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Neperian Logarithm using template implementation.  <a href="../../d8/d03/a09453.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dbf/a09461.html">castor::details::MinRecT&lt; DataT, ValueT &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/df5/a09465.html">castor::details::MinRecT&lt; DataT, LhsT, RhsT &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d31/a09469.html">castor::details::MinRecT&lt; DataT, LhsT, RhsT, ValuesT... &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/ddd/a09477.html">castor::details::MaxRecT&lt; DataT, ValueT &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d67/a09481.html">castor::details::MaxRecT&lt; DataT, LhsT, RhsT &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d9d/a09485.html">castor::details::MaxRecT&lt; DataT, LhsT, RhsT, ValuesT... &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d2/dd2/a02279" id="r_d2/dd2/a02279"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html">castor</a></td></tr>
+<tr class="memitem:dc/d0a/a02345" id="r_dc/d0a/a02345"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html">castor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:de/d4e/a02289" id="r_de/d4e/a02289"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d4e/a02289.html">castor::hashcomb</a></td></tr>
+<tr class="memitem:da/d6b/a02352" id="r_da/d6b/a02352"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d6b/a02352.html">castor::details</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="concepts" name="concepts"></a>
+Concepts</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">concept &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d7e/a09868.html">castor::details::ValueTypeT</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a2263474f6ef8e9598e7a9921d132022f" id="r_a2263474f6ef8e9598e7a9921d132022f"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a2263474f6ef8e9598e7a9921d132022f"><td class="memTemplItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#a2263474f6ef8e9598e7a9921d132022f">castor::hashCombine32</a> (uint32_t &amp;hash, T const &amp;rhs)</td></tr>
-<tr class="separator:a2263474f6ef8e9598e7a9921d132022f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf5184006cf54bb4e195252c38b06439" id="r_aaf5184006cf54bb4e195252c38b06439"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:aaf5184006cf54bb4e195252c38b06439"><td class="memTemplItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#aaf5184006cf54bb4e195252c38b06439">castor::hashCombinePtr32</a> (uint32_t &amp;hash, T const &amp;rhs)</td></tr>
-<tr class="separator:aaf5184006cf54bb4e195252c38b06439"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a126d45fec9687f3742d40ae9f5e90c8a" id="r_a126d45fec9687f3742d40ae9f5e90c8a"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a126d45fec9687f3742d40ae9f5e90c8a"><td class="memTemplItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#a126d45fec9687f3742d40ae9f5e90c8a">castor::hashCombine64</a> (uint64_t &amp;hash, T const &amp;rhs)</td></tr>
-<tr class="separator:a126d45fec9687f3742d40ae9f5e90c8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aacbab472d52d569f46859fcb543deb10" id="r_aacbab472d52d569f46859fcb543deb10"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:aacbab472d52d569f46859fcb543deb10"><td class="memTemplItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#aacbab472d52d569f46859fcb543deb10">castor::hashCombinePtr64</a> (uint64_t &amp;hash, T const &amp;rhs)</td></tr>
-<tr class="separator:aacbab472d52d569f46859fcb543deb10"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59eb2590dc82741e57274e227ae97eed" id="r_a59eb2590dc82741e57274e227ae97eed"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a59eb2590dc82741e57274e227ae97eed"><td class="memTemplItemLeft" align="right" valign="top">size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#a59eb2590dc82741e57274e227ae97eed">castor::hashCombine</a> (size_t &amp;hash, T const &amp;rhs)</td></tr>
-<tr class="separator:a59eb2590dc82741e57274e227ae97eed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a187dd132c2074b1620d1c130795473fd" id="r_a187dd132c2074b1620d1c130795473fd"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a187dd132c2074b1620d1c130795473fd"><td class="memTemplItemLeft" align="right" valign="top">size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html#a187dd132c2074b1620d1c130795473fd">castor::hashCombinePtr</a> (size_t &amp;hash, T const &amp;rhs)</td></tr>
-<tr class="separator:a187dd132c2074b1620d1c130795473fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82aeef86b997bd808e68b90067cac1c4" id="r_a82aeef86b997bd808e68b90067cac1c4"><td class="memTemplParams" colspan="2">template&lt;std::integral TypeT&gt; </td></tr>
+<tr class="memitem:a82aeef86b997bd808e68b90067cac1c4"><td class="memTemplItemLeft" align="right" valign="top">constexpr TypeT&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a82aeef86b997bd808e68b90067cac1c4">castor::divRoundUp</a> (TypeT num, TypeT denom)</td></tr>
+<tr class="memdesc:a82aeef86b997bd808e68b90067cac1c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Division rounded up.  <br /></td></tr>
+<tr class="separator:a82aeef86b997bd808e68b90067cac1c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a85006f0e95c0954aaa69e377b9aa9972" id="r_a85006f0e95c0954aaa69e377b9aa9972"><td class="memTemplParams" colspan="2">template&lt;details::ValueTypeT DataT, DataT ... ValuesT&gt; </td></tr>
+<tr class="memitem:a85006f0e95c0954aaa69e377b9aa9972"><td class="memTemplItemLeft" align="right" valign="top">static DataT&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a85006f0e95c0954aaa69e377b9aa9972">castor::minValueT</a> = <a class="el" href="../../d4/d2c/a09457.html">details::MinRecT</a>&lt; DataT, ValuesT... &gt;::value</td></tr>
+<tr class="separator:a85006f0e95c0954aaa69e377b9aa9972"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af448f1575bd124bda88203cf5f2cf8d6" id="r_af448f1575bd124bda88203cf5f2cf8d6"><td class="memTemplParams" colspan="2">template&lt;details::ValueTypeT DataT, DataT ... ValuesT&gt; </td></tr>
+<tr class="memitem:af448f1575bd124bda88203cf5f2cf8d6"><td class="memTemplItemLeft" align="right" valign="top">static DataT constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#af448f1575bd124bda88203cf5f2cf8d6">castor::maxValueT</a> = <a class="el" href="../../d4/d7d/a09473.html">details::MaxRecT</a>&lt; DataT, ValuesT... &gt;::value</td></tr>
+<tr class="separator:af448f1575bd124bda88203cf5f2cf8d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

@@ -1,0 +1,10 @@
+<map id="castor3d::RsmConfig" name="castor3d::RsmConfig">
+<area shape="rect" id="Node000001" title=" " alt="" coords="645,49,788,74"/>
+<area shape="rect" id="Node000002" href="$df/d26/a08445.html" title=" " alt="" coords="353,5,516,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="530,35,646,50,645,55,529,40"/>
+<area shape="rect" id="Node000003" href="$df/d26/a08445.html" title="Templated class that provide std::array style buffer view." alt="" coords="5,41,168,81"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="181,49,353,31,353,36,182,54"/>
+<area shape="rect" id="Node000004" href="$df/d26/a08445.html" title=" " alt="" coords="353,70,516,125"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="182,80,192,81,275,90,353,93,353,99,275,95,192,87,181,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="529,83,645,68,646,73,530,88"/>
+</map>

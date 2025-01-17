@@ -1,0 +1,13 @@
+<map id="castor3d::TextureAnimationKeyFrame" name="castor3d::TextureAnimationKeyFrame">
+<area shape="rect" id="Node000001" title=" " alt="" coords="142,257,323,297"/>
+<area shape="rect" id="Node000002" href="$dd/d61/a03197.html" title=" " alt="" coords="5,175,204,201"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="135,207,206,255,203,259,132,211"/>
+<area shape="rect" id="Node000003" href="$de/d68/a09013.html" title=" " alt="" coords="33,80,176,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="107,119,107,175,102,175,102,119"/>
+<area shape="rect" id="Node000004" href="$d8/d99/a09017.html" title="Box container class." alt="" coords="31,5,178,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="107,45,107,80,102,80,102,45"/>
+<area shape="rect" id="Node000005" href="$df/d45/a08513.html" title=" " alt="" coords="228,168,405,208"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="291,220,253,259,249,255,287,216"/>
+<area shape="rect" id="Node000006" href="$df/d45/a08513.html" title="Class used to have an object owned by another one." alt="" coords="225,80,408,105"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="319,119,319,168,314,168,314,119"/>
+</map>

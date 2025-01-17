@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D/Render/Culling/SceneCuller.hpp File Reference</title>
+<title>Castor3D: Castor3D/Render/Culling/DummyCuller.hpp File Reference</title>
 <link rel="icon" href="../../castor-small.png" type="image/x-icon" />
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
@@ -21,7 +21,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.16.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.17.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -55,38 +55,20 @@
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">SceneCuller.hpp File Reference</div></div>
+<a href="#namespaces">Namespaces</a>  </div>
+  <div class="headertitle"><div class="title">DummyCuller.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d57/a05931.html">castor3d::SceneCuller</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/de5/a06057.html">castor3d::DummyCuller</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d9/dba/a02278" id="r_d9/dba/a02278"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html">castor3d</a></td></tr>
+<tr class="memitem:d6/d71/a02344" id="r_d6/d71/a02344"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:ae5deec8007a27baef3d028de8984ff20" id="r_ae5deec8007a27baef3d028de8984ff20"><td class="memItemLeft" align="right" valign="top">AnimatedObjectRPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html#ae5deec8007a27baef3d028de8984ff20">castor3d::findAnimatedObject</a> (<a class="el" href="../../dc/dc2/a07135.html">Scene</a> const &amp;scene, <a class="el" href="../../d2/dd2/a02279.html#af78b89ba78c07da21e45ef90d4686c4c">castor::String</a> const &amp;name)</td></tr>
-<tr class="separator:ae5deec8007a27baef3d028de8984ff20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ca86ac2c65acb0a9ea440a0ee30641d" id="r_a5ca86ac2c65acb0a9ea440a0ee30641d"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html#a5ca86ac2c65acb0a9ea440a0ee30641d">castor3d::hash</a> (<a class="el" href="../../d4/d17/a06123.html">SubmeshRenderNode</a> const &amp;culled)</td></tr>
-<tr class="separator:a5ca86ac2c65acb0a9ea440a0ee30641d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73c73a6928e02e00d7d748d11b2756b4" id="r_a73c73a6928e02e00d7d748d11b2756b4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html#a73c73a6928e02e00d7d748d11b2756b4">castor3d::isVisible</a> (<a class="el" href="../../d2/dc3/a06951.html">Camera</a> const &amp;camera, <a class="el" href="../../d4/d17/a06123.html">SubmeshRenderNode</a> const &amp;node)</td></tr>
-<tr class="separator:a73c73a6928e02e00d7d748d11b2756b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7afbf73c66f67acf3522ebb699e4e8e8" id="r_a7afbf73c66f67acf3522ebb699e4e8e8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html#a7afbf73c66f67acf3522ebb699e4e8e8">castor3d::isVisible</a> (<a class="el" href="../../d0/d5d/a05955.html">Frustum</a> const &amp;frustum, <a class="el" href="../../d4/d17/a06123.html">SubmeshRenderNode</a> const &amp;node)</td></tr>
-<tr class="separator:a7afbf73c66f67acf3522ebb699e4e8e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a616cb5e5a74e45e741f348c0a6fb7e3a" id="r_a616cb5e5a74e45e741f348c0a6fb7e3a"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html#a616cb5e5a74e45e741f348c0a6fb7e3a">castor3d::hash</a> (<a class="el" href="../../de/d62/a06055.html">BillboardRenderNode</a> const &amp;culled)</td></tr>
-<tr class="separator:a616cb5e5a74e45e741f348c0a6fb7e3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9a1d05b9a495785bbea03efcceaf121" id="r_ae9a1d05b9a495785bbea03efcceaf121"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html#ae9a1d05b9a495785bbea03efcceaf121">castor3d::isVisible</a> (<a class="el" href="../../d2/dc3/a06951.html">Camera</a> const &amp;camera, <a class="el" href="../../de/d62/a06055.html">BillboardRenderNode</a> const &amp;node)</td></tr>
-<tr class="separator:ae9a1d05b9a495785bbea03efcceaf121"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af342395f282df0e5571bfb5a06c8324d" id="r_af342395f282df0e5571bfb5a06c8324d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html#af342395f282df0e5571bfb5a06c8324d">castor3d::isVisible</a> (<a class="el" href="../../d0/d5d/a05955.html">Frustum</a> const &amp;frustum, <a class="el" href="../../de/d62/a06055.html">BillboardRenderNode</a> const &amp;node)</td></tr>
-<tr class="separator:af342395f282df0e5571bfb5a06c8324d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

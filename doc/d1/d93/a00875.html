@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D/Model/Vertex.hpp File Reference</title>
+<title>Castor3D: Castor3D/Model/Skeleton/SkeletonModule.hpp File Reference</title>
 <link rel="icon" href="../../castor-small.png" type="image/x-icon" />
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
@@ -21,7 +21,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.16.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.17.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -49,26 +49,49 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_d31b06848c74e058bfe0cc0eae81a8c8.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dir_48b9b82601b5e90070b208b7d796c277.html">Model</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_d31b06848c74e058bfe0cc0eae81a8c8.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dir_48b9b82601b5e90070b208b7d796c277.html">Model</a></li><li class="navelem"><a class="el" href="../../dir_a9ab8c7ca784123ca81fe7c7c1bfdee1.html">Skeleton</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">Vertex.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">SkeletonModule.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/da4/a05727.html">castor3d::SubmeshVertex</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d93/a05825.html">castor3d::PtrCacheTraitsT&lt; Skeleton, castor::String &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d5f/a05829.html">castor3d::NodeTransform</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d9/dba/a02278" id="r_d9/dba/a02278"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html">castor3d</a></td></tr>
+<tr class="memitem:d6/d71/a02344" id="r_d6/d71/a02344"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader">Skeleton</h2></td></tr>
+<tr class="memitem:a09c7d68a62b6c5ec4372e60c38fb8ef0" id="r_a09c7d68a62b6c5ec4372e60c38fb8ef0"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a09c7d68a62b6c5ec4372e60c38fb8ef0">castor3d::SkeletonNodeType</a> { <a class="el" href="../../d6/d71/a02344.html#a09c7d68a62b6c5ec4372e60c38fb8ef0a540edeff695f0af70e9bc41bb35297dd">castor3d::eNode</a> = 0
+, <a class="el" href="../../d6/d71/a02344.html#a09c7d68a62b6c5ec4372e60c38fb8ef0a45abae4a10e92b00b83715888de3ef15">castor3d::eBone</a> = 1
+, <a class="el" href="../../d6/d71/a02344.html#a09c7d68a62b6c5ec4372e60c38fb8ef0ae558bb69fadec037d9eae46601a4df8e">castor3d::eCount</a>
+, <a class="el" href="../../d6/d71/a02344.html#a09c7d68a62b6c5ec4372e60c38fb8ef0abd967862789968b1f8571ca888fffc77">castor3d::eMin</a> = eNode
+ }</td></tr>
+<tr class="memdesc:a09c7d68a62b6c5ec4372e60c38fb8ef0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Skeleton node types enumeration.  <a href="../../d6/d71/a02344.html#a09c7d68a62b6c5ec4372e60c38fb8ef0">More...</a><br /></td></tr>
+<tr class="separator:a09c7d68a62b6c5ec4372e60c38fb8ef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa09928e79cfa977e7c708e7a86144533" id="r_aa09928e79cfa977e7c708e7a86144533"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#aa09928e79cfa977e7c708e7a86144533">castor3d::SkeletonCacheTraits</a> = <a class="el" href="../../d1/ddb/a03753.html">PtrCacheTraitsT</a>&lt; <a class="el" href="../../de/d05/a05813.html">Skeleton</a>, <a class="el" href="../../dc/d0a/a02345.html#af78b89ba78c07da21e45ef90d4686c4c">castor::String</a> &gt;</td></tr>
+<tr class="separator:aa09928e79cfa977e7c708e7a86144533"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c1dece78d8ec39e951a99e0ba7f5789" id="r_a6c1dece78d8ec39e951a99e0ba7f5789"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a6c1dece78d8ec39e951a99e0ba7f5789">castor3d::SkeletonCache</a></td></tr>
+<tr class="separator:a6c1dece78d8ec39e951a99e0ba7f5789"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0deef07be6e75c81a36ed6808f8c622" id="r_ae0deef07be6e75c81a36ed6808f8c622"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#ae0deef07be6e75c81a36ed6808f8c622">castor3d::SkeletonRes</a> = <a class="el" href="../../d9/d93/a05825.html#aaa8497ab94b2c8cb617e885a7a124009">SkeletonCacheTraits::ElementPtrT</a></td></tr>
+<tr class="separator:ae0deef07be6e75c81a36ed6808f8c622"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afff2ba33379fab191972151031daf811" id="r_afff2ba33379fab191972151031daf811"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#afff2ba33379fab191972151031daf811">castor3d::SkeletonResPtr</a> = <a class="el" href="../../d7/d40/a03681.html#aa460951bb8baa7192b43a15001522da5">SkeletonCacheTraits::ElementObsT</a></td></tr>
+<tr class="separator:afff2ba33379fab191972151031daf811"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a119a9d69422265b07731ef190f4ede3d" id="r_a119a9d69422265b07731ef190f4ede3d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../dc/d0a/a02345.html#af78b89ba78c07da21e45ef90d4686c4c">castor::String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a119a9d69422265b07731ef190f4ede3d">castor3d::getName</a> (<a class="el" href="../../d6/d71/a02344.html#a09c7d68a62b6c5ec4372e60c38fb8ef0">SkeletonNodeType</a> value)</td></tr>
+<tr class="separator:a119a9d69422265b07731ef190f4ede3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad648cfc2ad88ab91df8f9185ab0ea351" id="r_ad648cfc2ad88ab91df8f9185ab0ea351"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#ad648cfc2ad88ab91df8f9185ab0ea351">castor3d::operator==</a> (<a class="el" href="../../dc/d5f/a05829.html">NodeTransform</a> const &amp;lhs, <a class="el" href="../../dc/d5f/a05829.html">NodeTransform</a> const &amp;rhs) noexcept</td></tr>
+<tr class="separator:ad648cfc2ad88ab91df8f9185ab0ea351"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

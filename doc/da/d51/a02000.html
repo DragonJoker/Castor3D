@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: CastorUtils/Graphics/FreeImageLoader.hpp File Reference</title>
+<title>Castor3D: CastorUtils/Exception/Exception.hpp File Reference</title>
 <link rel="icon" href="../../castor-small.png" type="image/x-icon" />
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
@@ -21,7 +21,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.16.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.17.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -49,28 +49,82 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_581a2c521a9f6c8a8206ef65b82e493b.html">CastorUtils</a></li><li class="navelem"><a class="el" href="../../dir_9e0c8cc4722a3ea2e524b82b09211b04.html">Graphics</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_581a2c521a9f6c8a8206ef65b82e493b.html">CastorUtils</a></li><li class="navelem"><a class="el" href="../../dir_da50365d3005a046df1afb863a866179.html">Exception</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">FreeImageLoader.hpp File Reference</div></div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a>  </div>
+  <div class="headertitle"><div class="title">Exception.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d20/a08771.html">castor::FreeImageLoader</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d6/d3e/a08939.html">Image</a> loader based on stb_image.  <a href="../../df/d20/a08771.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d43/a08641.html">castor::Exception</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d2/dd2/a02279" id="r_d2/dd2/a02279"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html">castor</a></td></tr>
+<tr class="memitem:dc/d0a/a02345" id="r_dc/d0a/a02345"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html">castor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:ab9410fa9a6a0a8fa4bce2bebc9d2edaf" id="r_ab9410fa9a6a0a8fa4bce2bebc9d2edaf"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab9410fa9a6a0a8fa4bce2bebc9d2edaf">CU_Exception</a>(text)&#160;&#160;&#160;	throw <a class="el" href="../../d2/d43/a08641.html">castor::Exception</a>{ text, __FILE__, <a class="el" href="../../d3/dce/a01859.html#a828bb1dfda1afd67ca795075903d227d">__FUNCTION__</a>, uint32_t( __LINE__ ) }</td></tr>
+<tr class="memdesc:ab9410fa9a6a0a8fa4bce2bebc9d2edaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Macro to ease the use of <a class="el" href="../../d2/d43/a08641.html">castor::Exception</a>.  <br /></td></tr>
+<tr class="separator:ab9410fa9a6a0a8fa4bce2bebc9d2edaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c796167a872465ba19d079876a25353" id="r_a2c796167a872465ba19d079876a25353"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c796167a872465ba19d079876a25353">CU_SrcException</a>(source,  text)&#160;&#160;&#160;	throw <a class="el" href="../../d2/d43/a08641.html">castor::Exception</a>{ source &quot;: &quot; text, __FILE__, <a class="el" href="../../d3/dce/a01859.html#a828bb1dfda1afd67ca795075903d227d">__FUNCTION__</a>, uint32_t( __LINE__ ) }</td></tr>
+<tr class="memdesc:a2c796167a872465ba19d079876a25353"><td class="mdescLeft">&#160;</td><td class="mdescRight">Macro to ease the use of <a class="el" href="../../d2/d43/a08641.html">castor::Exception</a>.  <br /></td></tr>
+<tr class="separator:a2c796167a872465ba19d079876a25353"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="ab9410fa9a6a0a8fa4bce2bebc9d2edaf" name="ab9410fa9a6a0a8fa4bce2bebc9d2edaf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9410fa9a6a0a8fa4bce2bebc9d2edaf">&#9670;&#160;</a></span>CU_Exception</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CU_Exception</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">text</span></td><td>)</td>
+          <td>&#160;&#160;&#160;	throw <a class="el" href="../../d2/d43/a08641.html">castor::Exception</a>{ text, __FILE__, <a class="el" href="../../d3/dce/a01859.html#a828bb1dfda1afd67ca795075903d227d">__FUNCTION__</a>, uint32_t( __LINE__ ) }</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Macro to ease the use of <a class="el" href="../../d2/d43/a08641.html">castor::Exception</a>. </p>
+
+<p class="reference">Referenced by <a class="el" href="../../d2/d55/a08481.html#a443ae4447b1ff6df0becc9b882158959">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::create()</a>, <a class="el" href="../../d7/d1e/a07501.html#ac5ab600b471e40703842038aa133daa0">castor3d::LightingModelFactory::create()</a>, <a class="el" href="../../df/d44/a03857.html#afcc4620692918ecabebe183a086df13e">castor3d::UserInputListener::doAddHandler()</a>, <a class="el" href="../../d5/d41/a06241.html#af8c3c753366a576d549357a2d997b819">castor3d::InstantiatedBuffersNodesViewT&lt; NodeT &gt;::emplace()</a>, <a class="el" href="../../d3/dfe/a06265.html#aa945c5fdf3d40599b3101ec2a13d9833">castor3d::BuffersNodesViewT&lt; NodeT &gt;::emplace()</a>, <a class="el" href="../../d3/d36/a06249.html#a165076080eb5e764ac31453a8e45f39e">castor3d::InstantiatedPipelinesNodesT&lt; NodeT &gt;::emplace()</a>, <a class="el" href="../../de/d6a/a06273.html#a780874b7039526e5866dbb32efa836ff">castor3d::PipelinesNodesT&lt; NodeT &gt;::emplace()</a>, <a class="el" href="../../d3/d36/a06249.html#ad81372d12b8df0cfb713217d9994e2b4">castor3d::InstantiatedPipelinesNodesT&lt; NodeT &gt;::emplace()</a>, <a class="el" href="../../de/d6a/a06273.html#ae57b18cb8665aa2c149fba1a3281b482">castor3d::PipelinesNodesT&lt; NodeT &gt;::emplace()</a>, <a class="el" href="../../d0/d93/a06237.html#a1285596cc36ef819bf28397bc9e8a090">castor3d::InstantiatedObjectsNodesViewT&lt; NodeT &gt;::emplace()</a>, <a class="el" href="../../de/d45/a06261.html#ac7606c4e831e538e655c40c871b22a91">castor3d::NodesViewT&lt; NodeT &gt;::emplace()</a>, and <a class="el" href="../../d0/db3/a07769.html#afb3500b3dd8748a6300fea1feda90fef">castor3d::shader::Materials::getSpecificsBuffer()</a>.</p>
+
+</div>
+</div>
+<a id="a2c796167a872465ba19d079876a25353" name="a2c796167a872465ba19d079876a25353"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c796167a872465ba19d079876a25353">&#9670;&#160;</a></span>CU_SrcException</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CU_SrcException</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">source, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">text</span>&#160;)&#160;&#160;&#160;	throw <a class="el" href="../../d2/d43/a08641.html">castor::Exception</a>{ source &quot;: &quot; text, __FILE__, <a class="el" href="../../d3/dce/a01859.html#a828bb1dfda1afd67ca795075903d227d">__FUNCTION__</a>, uint32_t( __LINE__ ) }</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Macro to ease the use of <a class="el" href="../../d2/d43/a08641.html">castor::Exception</a>. </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

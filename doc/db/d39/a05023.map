@@ -1,0 +1,15 @@
+<map id="castor3d::PbrPass" name="castor3d::PbrPass">
+<area shape="rect" id="Node000001" title=" " alt="" coords="836,126,967,151"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="489,15,638,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="652,30,732,38,773,48,813,62,837,75,859,91,891,124,887,127,855,96,834,79,811,66,772,53,731,44,652,35"/>
+<area shape="rect" id="Node000003" href="$d8/d52/a07981.html" title=" " alt="" coords="473,119,653,159"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="667,136,836,136,836,141,667,141"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="241,119,368,159"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="382,136,473,136,473,141,382,141"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,119,132,159"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="146,136,241,136,241,141,146,141"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="507,230,620,255"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="634,244,721,239,767,230,811,215,835,201,856,184,888,150,892,153,860,188,838,206,813,220,768,235,722,244,634,249"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="285,230,324,255"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="337,240,506,240,506,245,337,245"/>
+</map>

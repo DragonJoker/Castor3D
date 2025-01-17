@@ -1,0 +1,17 @@
+<map id="castor3d::TextureUnitCache::ThreadData" name="castor3d::TextureUnitCache::ThreadData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="109,432,291,472"/>
+<area shape="rect" id="Node000002" href="$dd/db3/a05121.html" title=" " alt="" coords="30,344,181,369"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,377,183,430,179,434,125,381"/>
+<area shape="rect" id="Node000003" href="$dd/d15/a05117.html" title=" " alt="" coords="5,256,189,281"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="102,295,107,343,102,344,97,295"/>
+<area shape="rect" id="Node000004" href="$d0/db5/a06897.html" title=" " alt="" coords="209,344,332,369"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="256,382,216,433,212,430,252,379"/>
+<area shape="rect" id="Node000005" href="$dd/db0/a06609.html" title=" " alt="" coords="214,256,373,281"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="289,295,276,344,271,343,284,294"/>
+<area shape="rect" id="Node000006" href="$db/d92/a06753.html" title=" " alt="" coords="210,168,377,193"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="296,207,296,255,291,255,291,207"/>
+<area shape="rect" id="Node000007" href="$df/d45/a08513.html" title=" " alt="" coords="200,93,387,119"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="296,133,296,168,291,168,291,133"/>
+<area shape="rect" id="Node000008" href="$df/d45/a08513.html" title="Class used to have an object owned by another one." alt="" coords="202,5,385,31"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="296,45,296,93,291,93,291,45"/>
+</map>

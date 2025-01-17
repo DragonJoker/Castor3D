@@ -1,0 +1,7 @@
+<map id="castor3d::ThicknessMapComponent::Plugin::getTextureFlags" name="castor3d::ThicknessMapComponent::Plugin::getTextureFlags">
+<area shape="rect" id="Node000001" title=" " alt="" coords="284,37,515,77"/>
+<area shape="rect" id="Node000002" href="$df/dc6/a04793.html#a1061ed9a3d49a5882ae332a4c400bd5e" title="Fills the texture configuration for use with this component." alt="" coords="5,5,236,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="270,45,236,41,236,36,271,40"/>
+<area shape="rect" id="Node000003" href="$df/dc6/a04793.html#adf0ef360136f3be48954c571c988ac66" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="5,69,236,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="271,75,236,79,236,73,270,69"/>
+</map>

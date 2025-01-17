@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: CastorUtils/Exception/Exception.hpp File Reference</title>
+<title>Castor3D: CastorUtils/Design/DesignModule.hpp File Reference</title>
 <link rel="icon" href="../../castor-small.png" type="image/x-icon" />
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
@@ -21,7 +21,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.16.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.17.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -49,7 +49,7 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_581a2c521a9f6c8a8206ef65b82e493b.html">CastorUtils</a></li><li class="navelem"><a class="el" href="../../dir_da50365d3005a046df1afb863a866179.html">Exception</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_581a2c521a9f6c8a8206ef65b82e493b.html">CastorUtils</a></li><li class="navelem"><a class="el" href="../../dir_cf96459767b535d7e0925e87f83e3d09.html">Design</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -57,72 +57,107 @@
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#define-members">Macros</a>  </div>
-  <div class="headertitle"><div class="title">Exception.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">DesignModule.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d96/a08355.html">castor::Exception</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d1d/a08457.html">castor::IteratorTraits&lt; IterT &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d5f/a08461.html">castor::IteratorTraits&lt; TypeT * &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/de9/a08485.html">castor::FlagIteratorTraitsT&lt; FlagTypeT &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Template iterator traits class on a binary combination of flags.  <a href="../../da/de9/a08485.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/db6/a08549.html">castor::ResourceCacheTraitsBaseT&lt; ResT, KeyT, TraitsT &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d17/a08573.html">castor::IsChangeTrackedT&lt; T &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d3b/a08577.html">castor::IsGroupChangeTrackedT&lt; T &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dda/a08581.html">castor::Deleter&lt; ResourceT&lt; ResT, KeyT &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d2/dd2/a02279" id="r_d2/dd2/a02279"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html">castor</a></td></tr>
+<tr class="memitem:dc/d0a/a02345" id="r_dc/d0a/a02345"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html">castor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:ab9410fa9a6a0a8fa4bce2bebc9d2edaf" id="r_ab9410fa9a6a0a8fa4bce2bebc9d2edaf"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab9410fa9a6a0a8fa4bce2bebc9d2edaf">CU_Exception</a>(text)&#160;&#160;&#160;	throw <a class="el" href="../../d2/d96/a08355.html">castor::Exception</a>{ text, __FILE__, <a class="el" href="../../d7/d62/a01805.html#a828bb1dfda1afd67ca795075903d227d">__FUNCTION__</a>, uint32_t( __LINE__ ) }</td></tr>
-<tr class="memdesc:ab9410fa9a6a0a8fa4bce2bebc9d2edaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Macro to ease the use of <a class="el" href="../../d2/d96/a08355.html">castor::Exception</a>.  <br /></td></tr>
-<tr class="separator:ab9410fa9a6a0a8fa4bce2bebc9d2edaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c796167a872465ba19d079876a25353" id="r_a2c796167a872465ba19d079876a25353"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c796167a872465ba19d079876a25353">CU_SrcException</a>(source,  text)&#160;&#160;&#160;	throw <a class="el" href="../../d2/d96/a08355.html">castor::Exception</a>{ source &quot;: &quot; text, __FILE__, <a class="el" href="../../d7/d62/a01805.html#a828bb1dfda1afd67ca795075903d227d">__FUNCTION__</a>, uint32_t( __LINE__ ) }</td></tr>
-<tr class="memdesc:a2c796167a872465ba19d079876a25353"><td class="mdescLeft">&#160;</td><td class="mdescRight">Macro to ease the use of <a class="el" href="../../d2/d96/a08355.html">castor::Exception</a>.  <br /></td></tr>
-<tr class="separator:a2c796167a872465ba19d079876a25353"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af23937e8f5aa7f41a6ce3c85cfbc5094" id="r_af23937e8f5aa7f41a6ce3c85cfbc5094"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af23937e8f5aa7f41a6ce3c85cfbc5094">CU_DeclareArrayView</a>(key,  name)</td></tr>
+<tr class="separator:af23937e8f5aa7f41a6ce3c85cfbc5094"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader">Design</h2></td></tr>
+<tr class="memitem:a6ceb342c6146442112aee702cfb1c14a" id="r_a6ceb342c6146442112aee702cfb1c14a"><td class="memTemplParams" colspan="2">template&lt;typename ResT , typename KeyT &gt; </td></tr>
+<tr class="memitem:a6ceb342c6146442112aee702cfb1c14a"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a6ceb342c6146442112aee702cfb1c14a">castor::ResourcePtrT</a> = <a class="el" href="../../dc/d0a/a02345.html#ac623881246e92c1d187a3a44b3e011f6">UniquePtr</a>&lt; <a class="el" href="../../d5/d81/a08517.html">ResourceT</a>&lt; ResT, KeyT &gt; &gt;</td></tr>
+<tr class="memdesc:a6ceb342c6146442112aee702cfb1c14a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to a resource view.  <br /></td></tr>
+<tr class="separator:a6ceb342c6146442112aee702cfb1c14a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9443dd732b9652caef94dcebd17df78b" id="r_a9443dd732b9652caef94dcebd17df78b"><td class="memTemplParams" colspan="2">template&lt;typename ResT , typename KeyT &gt; </td></tr>
+<tr class="memitem:a9443dd732b9652caef94dcebd17df78b"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a9443dd732b9652caef94dcebd17df78b">castor::ResourceObsT</a> = <a class="el" href="../../d5/d81/a08517.html">ResourceT</a>&lt; ResT, KeyT &gt; *</td></tr>
+<tr class="memdesc:a9443dd732b9652caef94dcebd17df78b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to a resource view.  <br /></td></tr>
+<tr class="separator:a9443dd732b9652caef94dcebd17df78b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac45fcd5773ba29795665d04ce89f900e" id="r_ac45fcd5773ba29795665d04ce89f900e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#ac45fcd5773ba29795665d04ce89f900e">castor::Named</a> = <a class="el" href="../../da/d10/a08509.html">NamedBaseT</a>&lt; <a class="el" href="../../dc/d0a/a02345.html#af78b89ba78c07da21e45ef90d4686c4c">String</a> &gt;</td></tr>
+<tr class="separator:ac45fcd5773ba29795665d04ce89f900e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84edfcb99cc211a68760f2b7b788867e" id="r_a84edfcb99cc211a68760f2b7b788867e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a84edfcb99cc211a68760f2b7b788867e">castor::DynamicBitset</a> = <a class="el" href="../../d1/d01/a08473.html">DynamicBitsetT</a>&lt; uint32_t &gt;</td></tr>
+<tr class="separator:a84edfcb99cc211a68760f2b7b788867e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9d3fa7fcdf1d831572a45f9c1f131a9" id="r_ae9d3fa7fcdf1d831572a45f9c1f131a9"><td class="memTemplParams" colspan="2">template&lt;typename ValueT &gt; </td></tr>
+<tr class="memitem:ae9d3fa7fcdf1d831572a45f9c1f131a9"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#ae9d3fa7fcdf1d831572a45f9c1f131a9">castor::ChangeTracked</a> = <a class="el" href="../../df/d26/a08445.html">ChangeTrackedT</a>&lt; ValueT, bool &gt;</td></tr>
+<tr class="separator:ae9d3fa7fcdf1d831572a45f9c1f131a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3d491d6af1d18086d4b7765a09779e3" id="r_af3d491d6af1d18086d4b7765a09779e3"><td class="memTemplParams" colspan="2">template&lt;typename ValueT &gt; </td></tr>
+<tr class="memitem:af3d491d6af1d18086d4b7765a09779e3"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#af3d491d6af1d18086d4b7765a09779e3">castor::AtomicChangeTracked</a> = <a class="el" href="../../df/d26/a08445.html">ChangeTrackedT</a>&lt; ValueT, std::atomic_bool &gt;</td></tr>
+<tr class="separator:af3d491d6af1d18086d4b7765a09779e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04236f6601235ad5003d429f544c5e0e" id="r_a04236f6601235ad5003d429f544c5e0e"><td class="memTemplParams" colspan="2">template&lt;typename ValueT &gt; </td></tr>
+<tr class="memitem:a04236f6601235ad5003d429f544c5e0e"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a04236f6601235ad5003d429f544c5e0e">castor::GroupChangeTracked</a> = <a class="el" href="../../dd/d3d/a08497.html">GroupChangeTrackedT</a>&lt; ValueT, bool &gt;</td></tr>
+<tr class="separator:a04236f6601235ad5003d429f544c5e0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3f6d2ca50f484925164c6f2a13c97e8" id="r_ac3f6d2ca50f484925164c6f2a13c97e8"><td class="memTemplParams" colspan="2">template&lt;typename ValueT &gt; </td></tr>
+<tr class="memitem:ac3f6d2ca50f484925164c6f2a13c97e8"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#ac3f6d2ca50f484925164c6f2a13c97e8">castor::AtomicGroupChangeTracked</a> = <a class="el" href="../../dd/d3d/a08497.html">GroupChangeTrackedT</a>&lt; ValueT, std::atomic_bool &gt;</td></tr>
+<tr class="separator:ac3f6d2ca50f484925164c6f2a13c97e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fefd3145115c45e47386fc7508bc563" id="r_a8fefd3145115c45e47386fc7508bc563"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a8fefd3145115c45e47386fc7508bc563">castor::OnCacheChangedFunction</a> = <a class="el" href="../../dc/d0a/a02345.html#a171f0ae06cbbe361277eaab9ed92ec74">castor::Function</a>&lt; void() &gt;</td></tr>
+<tr class="separator:a8fefd3145115c45e47386fc7508bc563"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9c68a167eb8e5e8c937637fc69b4f67" id="r_aa9c68a167eb8e5e8c937637fc69b4f67"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#aa9c68a167eb8e5e8c937637fc69b4f67">castor::OnCacheChanged</a> = <a class="el" href="../../d2/dad/a08553.html">SignalT</a>&lt; <a class="el" href="../../dc/d0a/a02345.html#a8fefd3145115c45e47386fc7508bc563">OnCacheChangedFunction</a> &gt;</td></tr>
+<tr class="separator:aa9c68a167eb8e5e8c937637fc69b4f67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02a8dde74f4a41880af594e1444caf71" id="r_a02a8dde74f4a41880af594e1444caf71"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a02a8dde74f4a41880af594e1444caf71">castor::OnCacheChangedConnection</a> = <a class="el" href="../../df/d9b/a08469.html">ConnectionT</a>&lt; <a class="el" href="../../dc/d0a/a02345.html#aa9c68a167eb8e5e8c937637fc69b4f67">OnCacheChanged</a> &gt;</td></tr>
+<tr class="separator:a02a8dde74f4a41880af594e1444caf71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf9c83aa8a2c9341a6d69295fe8a53dd" id="r_acf9c83aa8a2c9341a6d69295fe8a53dd"><td class="memTemplParams" colspan="2">template&lt;typename ResT , typename KeyT , typename TraitsT &gt; </td></tr>
+<tr class="memitem:acf9c83aa8a2c9341a6d69295fe8a53dd"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#acf9c83aa8a2c9341a6d69295fe8a53dd">castor::ResourceCachePtrT</a> = <a class="el" href="../../dc/d0a/a02345.html#ac623881246e92c1d187a3a44b3e011f6">UniquePtr</a>&lt; <a class="el" href="../../de/d2b/a08545.html">ResourceCacheT</a>&lt; ResT, KeyT, TraitsT &gt; &gt;</td></tr>
+<tr class="separator:acf9c83aa8a2c9341a6d69295fe8a53dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72aa8f455a1b23e0dc3e3be889cddb00" id="r_a72aa8f455a1b23e0dc3e3be889cddb00"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a72aa8f455a1b23e0dc3e3be889cddb00"><td class="memTemplItemLeft" align="right" valign="top">static bool constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a72aa8f455a1b23e0dc3e3be889cddb00">castor::isChangeTrackedT</a> = <a class="el" href="../../d9/d17/a08573.html">IsChangeTrackedT</a>&lt; T &gt;::value</td></tr>
+<tr class="separator:a72aa8f455a1b23e0dc3e3be889cddb00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98770ac589852c830df4a5ea13f6ebe3" id="r_a98770ac589852c830df4a5ea13f6ebe3"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a98770ac589852c830df4a5ea13f6ebe3"><td class="memTemplItemLeft" align="right" valign="top">static bool constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a98770ac589852c830df4a5ea13f6ebe3">castor::isGroupChangeTrackedT</a> = <a class="el" href="../../d7/d3b/a08577.html">IsGroupChangeTrackedT</a>&lt; T &gt;::value</td></tr>
+<tr class="separator:a98770ac589852c830df4a5ea13f6ebe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6355d2d8348ef2005213e49f5e858816" id="r_a6355d2d8348ef2005213e49f5e858816"><td class="memTemplParams" colspan="2">template&lt;typename ResT , typename KeyT , typename ... ParametersT&gt; </td></tr>
+<tr class="memitem:a6355d2d8348ef2005213e49f5e858816"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../dc/d0a/a02345.html#a6ceb342c6146442112aee702cfb1c14a">ResourcePtrT</a>&lt; ResT, KeyT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a6355d2d8348ef2005213e49f5e858816">castor::makeResource</a> (ParametersT &amp;&amp;... params)</td></tr>
+<tr class="separator:a6355d2d8348ef2005213e49f5e858816"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="ab9410fa9a6a0a8fa4bce2bebc9d2edaf" name="ab9410fa9a6a0a8fa4bce2bebc9d2edaf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab9410fa9a6a0a8fa4bce2bebc9d2edaf">&#9670;&#160;</a></span>CU_Exception</h2>
+<a id="af23937e8f5aa7f41a6ce3c85cfbc5094" name="af23937e8f5aa7f41a6ce3c85cfbc5094"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af23937e8f5aa7f41a6ce3c85cfbc5094">&#9670;&#160;</a></span>CU_DeclareArrayView</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define CU_Exception</td>
+          <td class="memname">#define CU_DeclareArrayView</td>
           <td>(</td>
-          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">text</span></td><td>)</td>
-          <td>&#160;&#160;&#160;	throw <a class="el" href="../../d2/d96/a08355.html">castor::Exception</a>{ text, __FILE__, <a class="el" href="../../d7/d62/a01805.html#a828bb1dfda1afd67ca795075903d227d">__FUNCTION__</a>, uint32_t( __LINE__ ) }</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Macro to ease the use of <a class="el" href="../../d2/d96/a08355.html">castor::Exception</a>. </p>
-
-<p class="reference">Referenced by <a class="el" href="../../d4/da7/a08195.html#a443ae4447b1ff6df0becc9b882158959">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::create()</a>, <a class="el" href="../../d2/dc6/a07295.html#a7d2bbf802ab6e3918d8e326a52407bde">castor3d::LightingModelFactory::create()</a>, <a class="el" href="../../dc/d17/a03783.html#afcc4620692918ecabebe183a086df13e">castor3d::UserInputListener::doAddHandler()</a>, <a class="el" href="../../d3/ddd/a06063.html#ae29b187bfad9bdda41d9ed2e2c139568">castor3d::InstantiatedBuffersNodesViewT&lt; NodeT &gt;::emplace()</a>, <a class="el" href="../../df/df6/a06087.html#af2931a7293f6474f2cb8bd60b282b733">castor3d::BuffersNodesViewT&lt; NodeT &gt;::emplace()</a>, <a class="el" href="../../df/d40/a06071.html#ab19355b89e6976afeb4619851db807fb">castor3d::InstantiatedPipelinesNodesT&lt; NodeT &gt;::emplace()</a>, <a class="el" href="../../db/d00/a06095.html#aa970e058bad35e2bd848af66e106d586">castor3d::PipelinesNodesT&lt; NodeT &gt;::emplace()</a>, <a class="el" href="../../df/d40/a06071.html#ad81372d12b8df0cfb713217d9994e2b4">castor3d::InstantiatedPipelinesNodesT&lt; NodeT &gt;::emplace()</a>, <a class="el" href="../../db/d00/a06095.html#ae57b18cb8665aa2c149fba1a3281b482">castor3d::PipelinesNodesT&lt; NodeT &gt;::emplace()</a>, <a class="el" href="../../d7/d22/a06059.html#a1285596cc36ef819bf28397bc9e8a090">castor3d::InstantiatedObjectsNodesViewT&lt; NodeT &gt;::emplace()</a>, <a class="el" href="../../d8/d7a/a06083.html#ac7606c4e831e538e655c40c871b22a91">castor3d::NodesViewT&lt; NodeT &gt;::emplace()</a>, and <a class="el" href="../../d3/da5/a07555.html#afb3500b3dd8748a6300fea1feda90fef">castor3d::shader::Materials::getSpecificsBuffer()</a>.</p>
-
-</div>
-</div>
-<a id="a2c796167a872465ba19d079876a25353" name="a2c796167a872465ba19d079876a25353"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2c796167a872465ba19d079876a25353">&#9670;&#160;</a></span>CU_SrcException</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define CU_SrcException</td>
-          <td>(</td>
-          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">source, </span></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">key, </span></td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">text</span>&#160;)&#160;&#160;&#160;	throw <a class="el" href="../../d2/d96/a08355.html">castor::Exception</a>{ source &quot;: &quot; text, __FILE__, <a class="el" href="../../d7/d62/a01805.html#a828bb1dfda1afd67ca795075903d227d">__FUNCTION__</a>, uint32_t( __LINE__ ) }</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">name</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Macro to ease the use of <a class="el" href="../../d2/d96/a08355.html">castor::Exception</a>. </p>
-
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keyword">using </span>name##ArrayView = castor::ArrayView&lt; key &gt;;\</div>
+<div class="line">    <span class="keyword">using </span>name##ArrayViewIt = name##ArrayView::iterator;\</div>
+<div class="line">    <span class="keyword">using </span>name##ArrayViewRIt = name##ArrayView::reverse_iterator;\</div>
+<div class="line">    <span class="keyword">using </span>name##ArrayViewConstIt = name##ArrayView::const_iterator;\</div>
+<div class="line">    <span class="keyword">using </span>name##ArrayViewConstRIt = name##ArrayView::const_reverse_iterator</div>
+</div><!-- fragment -->
 </div>
 </div>
 </div><!-- contents -->

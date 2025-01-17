@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D/Scene/ParticleSystem/ParticleSystem.hpp File Reference</title>
+<title>Castor3D: Castor3D/Scene/Light/LightModule.hpp File Reference</title>
 <link rel="icon" href="../../castor-small.png" type="image/x-icon" />
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
@@ -21,7 +21,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.16.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.17.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -49,32 +49,76 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_d31b06848c74e058bfe0cc0eae81a8c8.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dir_40533bd5f36be4afaf2f8adef25fbc6c.html">Scene</a></li><li class="navelem"><a class="el" href="../../dir_eddf2ff1f2f73ff4c7ae36625ceded65.html">ParticleSystem</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_d31b06848c74e058bfe0cc0eae81a8c8.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dir_40533bd5f36be4afaf2f8adef25fbc6c.html">Scene</a></li><li class="navelem"><a class="el" href="../../dir_515db96c9602d74ba27af13fbc4aff89.html">Light</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">ParticleSystem.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">LightModule.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dde/a07107.html">castor3d::ParticleSystem</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfb/a07205.html">castor3d::LightCreateInfo</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/ded/a07111.html">castor3d::ParticleSystemContext</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d78/a07209.html">castor3d::ObjectCacheTraitsT&lt; Light, castor::String &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d82/a07115.html">castor::ParserEnumTraits&lt; castor3d::ParticleFormat &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dae/a07213.html">castor3d::BaseShadowData</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d73/a07217.html">castor3d::DirectionalShadowData</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d7c/a07221.html">castor3d::PointShadowData</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d4a/a07225.html">castor3d::SpotShadowData</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d22/a07229.html">castor3d::AllShadowData</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d9/dba/a02278" id="r_d9/dba/a02278"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html">castor3d</a></td></tr>
+<tr class="memitem:d6/d71/a02344" id="r_d6/d71/a02344"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:d2/dd2/a02279" id="r_d2/dd2/a02279"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html">castor</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader">Light</h2></td></tr>
+<tr class="memitem:a381718aa9accc88c20afd97d76c30ed8" id="r_a381718aa9accc88c20afd97d76c30ed8"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a381718aa9accc88c20afd97d76c30ed8">castor3d::LightType</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="../../d6/d71/a02344.html#a381718aa9accc88c20afd97d76c30ed8a0ddd5baafa15f79528b19dd012e1dce3">castor3d::eDirectional</a> = 0
+, <a class="el" href="../../d6/d71/a02344.html#a381718aa9accc88c20afd97d76c30ed8a4ddd9f8296bf1271adcf1a2eea61bd57">castor3d::ePoint</a> = 1
+, <a class="el" href="../../d6/d71/a02344.html#a381718aa9accc88c20afd97d76c30ed8ad6edd06d4607dfe84cff29cdd4f67fed">castor3d::eSpot</a> = 2
+, <a class="el" href="../../d6/d71/a02344.html#a381718aa9accc88c20afd97d76c30ed8ae558bb69fadec037d9eae46601a4df8e">castor3d::eCount</a>
+, <br />
+&#160;&#160;<a class="el" href="../../d6/d71/a02344.html#a381718aa9accc88c20afd97d76c30ed8abd967862789968b1f8571ca888fffc77">castor3d::eMin</a> = eDirectional
+<br />
+ }</td></tr>
+<tr class="memdesc:a381718aa9accc88c20afd97d76c30ed8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Light types enumeration.  <a href="../../d6/d71/a02344.html#a381718aa9accc88c20afd97d76c30ed8">More...</a><br /></td></tr>
+<tr class="separator:a381718aa9accc88c20afd97d76c30ed8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c0ef1f3e9aa5bb2a7302e7a63a50068" id="r_a7c0ef1f3e9aa5bb2a7302e7a63a50068"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a7c0ef1f3e9aa5bb2a7302e7a63a50068">castor3d::LightingModelID</a> = uint16_t</td></tr>
+<tr class="separator:a7c0ef1f3e9aa5bb2a7302e7a63a50068"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3013b9c5dce961a9a8d6ba373c21cf62" id="r_a3013b9c5dce961a9a8d6ba373c21cf62"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a3013b9c5dce961a9a8d6ba373c21cf62">castor3d::BrdfID</a> = uint8_t</td></tr>
+<tr class="separator:a3013b9c5dce961a9a8d6ba373c21cf62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c4d13088e2c07a068ed861922af1a7f" id="r_a3c4d13088e2c07a068ed861922af1a7f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a3c4d13088e2c07a068ed861922af1a7f">castor3d::OnLightChangedFunction</a> = <a class="el" href="../../dc/d0a/a02345.html#a171f0ae06cbbe361277eaab9ed92ec74">castor::Function</a>&lt; void( <a class="el" href="../../d0/d02/a07177.html">Light</a> &amp; ) &gt;</td></tr>
+<tr class="separator:a3c4d13088e2c07a068ed861922af1a7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91a26d1ed650dbbc2c68eca574fb5094" id="r_a91a26d1ed650dbbc2c68eca574fb5094"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a91a26d1ed650dbbc2c68eca574fb5094">castor3d::OnLightChanged</a> = <a class="el" href="../../d2/dad/a08553.html">castor::SignalT</a>&lt; <a class="el" href="../../d6/d71/a02344.html#a3c4d13088e2c07a068ed861922af1a7f">OnLightChangedFunction</a> &gt;</td></tr>
+<tr class="separator:a91a26d1ed650dbbc2c68eca574fb5094"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49ce79acfc6422bf238dd525a9e57e28" id="r_a49ce79acfc6422bf238dd525a9e57e28"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a49ce79acfc6422bf238dd525a9e57e28">castor3d::OnLightChangedConnection</a> = <a class="el" href="../../d2/dad/a08553.html#aea6d41678f91c9fb0fb2334009626e4d">OnLightChanged::connection</a></td></tr>
+<tr class="separator:a49ce79acfc6422bf238dd525a9e57e28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab74ea68a588f1b08d63e1395d5810d43" id="r_ab74ea68a588f1b08d63e1395d5810d43"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#ab74ea68a588f1b08d63e1395d5810d43">castor3d::LightCache</a></td></tr>
+<tr class="separator:ab74ea68a588f1b08d63e1395d5810d43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee2914985fb263590afed26dbbac5710" id="r_aee2914985fb263590afed26dbbac5710"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#aee2914985fb263590afed26dbbac5710">castor3d::LightRes</a> = <a class="el" href="../../da/d0f/a07449.html#a76f09dc448aaf3be57d18fc4ed811acc">CameraCacheTraits::ElementPtrT</a></td></tr>
+<tr class="separator:aee2914985fb263590afed26dbbac5710"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6a6610eb709948600fe82342f3537d0" id="r_ae6a6610eb709948600fe82342f3537d0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#ae6a6610eb709948600fe82342f3537d0">castor3d::LightResPtr</a> = <a class="el" href="../../d8/d3b/a07441.html#a173bf17844e9b310f434d41f7ab2827f">CameraCacheTraits::ElementObsT</a></td></tr>
+<tr class="separator:ae6a6610eb709948600fe82342f3537d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f5f1eb37acb9360ff49b024b650144d" id="r_a1f5f1eb37acb9360ff49b024b650144d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a1f5f1eb37acb9360ff49b024b650144d">castor3d::LightsMap</a> = <a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">castor::Array</a>&lt; LightsArray, size_t( <a class="el" href="../../d6/d71/a02344.html#a381718aa9accc88c20afd97d76c30ed8ae558bb69fadec037d9eae46601a4df8e">LightType::eCount</a> ) &gt;</td></tr>
+<tr class="separator:a1f5f1eb37acb9360ff49b024b650144d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a7403053a5ecef828a4c775c1a9f43e" id="r_a9a7403053a5ecef828a4c775c1a9f43e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../dc/d0a/a02345.html#af78b89ba78c07da21e45ef90d4686c4c">castor::String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a9a7403053a5ecef828a4c775c1a9f43e">castor3d::getName</a> (<a class="el" href="../../d6/d71/a02344.html#a381718aa9accc88c20afd97d76c30ed8">LightType</a> value)</td></tr>
+<tr class="separator:a9a7403053a5ecef828a4c775c1a9f43e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe49c76ca7e76a5d30223f901a7afc71" id="r_afe49c76ca7e76a5d30223f901a7afc71"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#afe49c76ca7e76a5d30223f901a7afc71">castor3d::getMaxDistance</a> (castor::Point3f const &amp;colour, <a class="el" href="../../df/d2e/a09421.html">castor::LuminousIntensity</a> const &amp;intensity, castor::Point3f const &amp;attenuation)</td></tr>
+<tr class="memdesc:afe49c76ca7e76a5d30223f901a7afc71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the maximum lit distance for given light and attenuation.  <br /></td></tr>
+<tr class="separator:afe49c76ca7e76a5d30223f901a7afc71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68377405077ee794fbe85c2bb9443e9b" id="r_a68377405077ee794fbe85c2bb9443e9b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a68377405077ee794fbe85c2bb9443e9b">castor3d::computeRange</a> (<a class="el" href="../../df/d2e/a09421.html">castor::LuminousIntensity</a> const &amp;intensity, float range)</td></tr>
+<tr class="separator:a68377405077ee794fbe85c2bb9443e9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

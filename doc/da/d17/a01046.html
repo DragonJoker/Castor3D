@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp File Reference</title>
+<title>Castor3D: Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp File Reference</title>
 <link rel="icon" href="../../castor-small.png" type="image/x-icon" />
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
@@ -21,7 +21,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.16.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.17.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -49,32 +49,67 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_d31b06848c74e058bfe0cc0eae81a8c8.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dir_ee81606feaed1a7650f95054c2670416.html">Render</a></li><li class="navelem"><a class="el" href="../../dir_f6c92a291074146be370fc7e944c054f.html">GlobalIllumination</a></li><li class="navelem"><a class="el" href="../../dir_b70b22b959ecebdb1f17b0f917c94768.html">VoxelConeTracing</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_d31b06848c74e058bfe0cc0eae81a8c8.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dir_ee81606feaed1a7650f95054c2670416.html">Render</a></li><li class="navelem"><a class="el" href="../../dir_f6c92a291074146be370fc7e944c054f.html">GlobalIllumination</a></li><li class="navelem"><a class="el" href="../../dir_7108b733bb1fee5c7687037800af29fb.html">LightPropagationVolumes</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">VctConfig.hpp File Reference</div></div>
+<a href="#namespaces">Namespaces</a>  </div>
+  <div class="headertitle"><div class="title">LightPropagationVolumesModule.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/dc9/a06027.html">castor3d::VctConfig</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d9/dba/a02278" id="r_d9/dba/a02278"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html">castor3d</a></td></tr>
+<tr class="memitem:d6/d71/a02344" id="r_d6/d71/a02344"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:a22ce40f539ac9a0461fac0589beeb19f" id="r_a22ce40f539ac9a0461fac0589beeb19f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html#a22ce40f539ac9a0461fac0589beeb19f">castor3d::operator==</a> (<a class="el" href="../../db/dc9/a06027.html">VctConfig</a> const &amp;lhs, <a class="el" href="../../db/dc9/a06027.html">VctConfig</a> const &amp;rhs) noexcept</td></tr>
-<tr class="separator:a22ce40f539ac9a0461fac0589beeb19f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader">Light Propagation Volumes</h2></td></tr>
+<tr class="memitem:acdc63c63f270914c5061259e5645752b" id="r_acdc63c63f270914c5061259e5645752b"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#acdc63c63f270914c5061259e5645752b">castor3d::LpvTexture</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="../../d6/d71/a02344.html#acdc63c63f270914c5061259e5645752ba2c8d3af323e82d44b5f7dda62485623f">castor3d::eR</a> = 0
+, <a class="el" href="../../d6/d71/a02344.html#acdc63c63f270914c5061259e5645752bacd5532a9977c28cb4bcea23ba3b0dc48">castor3d::eG</a> = 1
+, <a class="el" href="../../d6/d71/a02344.html#acdc63c63f270914c5061259e5645752ba76f5a6e4de889068fb1b4c3e3c263666">castor3d::eB</a> = 2
+, <a class="el" href="../../d6/d71/a02344.html#acdc63c63f270914c5061259e5645752bae558bb69fadec037d9eae46601a4df8e">castor3d::eCount</a>
+, <br />
+&#160;&#160;<a class="el" href="../../d6/d71/a02344.html#acdc63c63f270914c5061259e5645752babd967862789968b1f8571ca888fffc77">castor3d::eMin</a> = eR
+<br />
+ }</td></tr>
+<tr class="memdesc:acdc63c63f270914c5061259e5645752b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumerator of textures used by the light volume GI passes.  <a href="../../d6/d71/a02344.html#acdc63c63f270914c5061259e5645752b">More...</a><br /></td></tr>
+<tr class="separator:acdc63c63f270914c5061259e5645752b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6dc833f625b873d3e63bdd15c9d3d89" id="r_ac6dc833f625b873d3e63bdd15c9d3d89"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#ac6dc833f625b873d3e63bdd15c9d3d89">castor3d::LayeredLightPropagationVolumes</a> = <a class="el" href="../../dd/d73/a06141.html">LayeredLightPropagationVolumesT</a>&lt; false &gt;</td></tr>
+<tr class="separator:ac6dc833f625b873d3e63bdd15c9d3d89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9b1a619308bda3379fb0034e4f7b7e1" id="r_ae9b1a619308bda3379fb0034e4f7b7e1"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#ae9b1a619308bda3379fb0034e4f7b7e1">castor3d::LayeredLightPropagationVolumesG</a> = <a class="el" href="../../dd/d73/a06141.html">LayeredLightPropagationVolumesT</a>&lt; true &gt;</td></tr>
+<tr class="separator:ae9b1a619308bda3379fb0034e4f7b7e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59d84770b37953673ec9bc5f8e1eebdd" id="r_a59d84770b37953673ec9bc5f8e1eebdd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a59d84770b37953673ec9bc5f8e1eebdd">castor3d::LightPropagationVolumes</a> = <a class="el" href="../../da/dba/a06169.html">LightPropagationVolumesT</a>&lt; false &gt;</td></tr>
+<tr class="separator:a59d84770b37953673ec9bc5f8e1eebdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24ae7d87ea39f12ea5a06a6159d1c7bc" id="r_a24ae7d87ea39f12ea5a06a6159d1c7bc"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a24ae7d87ea39f12ea5a06a6159d1c7bc">castor3d::LightPropagationVolumesG</a> = <a class="el" href="../../da/dba/a06169.html">LightPropagationVolumesT</a>&lt; true &gt;</td></tr>
+<tr class="separator:a24ae7d87ea39f12ea5a06a6159d1c7bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b649b32280247486d9cad6d2130287a" id="r_a3b649b32280247486d9cad6d2130287a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a3b649b32280247486d9cad6d2130287a">castor3d::LightPropagationVolumesLightType</a> = <a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">castor::Array</a>&lt; LightPropagationVolumesUPtr, size_t( <a class="el" href="../../d6/d71/a02344.html#a381718aa9accc88c20afd97d76c30ed8ae558bb69fadec037d9eae46601a4df8e">LightType::eCount</a> ) &gt;</td></tr>
+<tr class="separator:a3b649b32280247486d9cad6d2130287a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a55ca8f564cefe14b4b5a289b8f8e73" id="r_a6a55ca8f564cefe14b4b5a289b8f8e73"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a6a55ca8f564cefe14b4b5a289b8f8e73">castor3d::LayeredLightPropagationVolumesLightType</a> = <a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">castor::Array</a>&lt; LayeredLightPropagationVolumesUPtr, size_t( <a class="el" href="../../d6/d71/a02344.html#a381718aa9accc88c20afd97d76c30ed8ae558bb69fadec037d9eae46601a4df8e">LightType::eCount</a> ) &gt;</td></tr>
+<tr class="separator:a6a55ca8f564cefe14b4b5a289b8f8e73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41675ef279002d18f8e2e2565c2fe56f" id="r_a41675ef279002d18f8e2e2565c2fe56f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a41675ef279002d18f8e2e2565c2fe56f">castor3d::LightPropagationVolumesGLightType</a> = <a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">castor::Array</a>&lt; LightPropagationVolumesGUPtr, size_t( <a class="el" href="../../d6/d71/a02344.html#a381718aa9accc88c20afd97d76c30ed8ae558bb69fadec037d9eae46601a4df8e">LightType::eCount</a> ) &gt;</td></tr>
+<tr class="separator:a41675ef279002d18f8e2e2565c2fe56f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bbc9c00904e43f6c8f5abce9b064bd2" id="r_a4bbc9c00904e43f6c8f5abce9b064bd2"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a4bbc9c00904e43f6c8f5abce9b064bd2">castor3d::LayeredLightPropagationVolumesGLightType</a> = <a class="el" href="../../dc/d0a/a02345.html#aeece6f8801a7db118a091f586a413edf">castor::Array</a>&lt; LayeredLightPropagationVolumesGUPtr, size_t( <a class="el" href="../../d6/d71/a02344.html#a381718aa9accc88c20afd97d76c30ed8ae558bb69fadec037d9eae46601a4df8e">LightType::eCount</a> ) &gt;</td></tr>
+<tr class="separator:a4bbc9c00904e43f6c8f5abce9b064bd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97522c5f82447833be2bebbb1e2be6ce" id="r_a97522c5f82447833be2bebbb1e2be6ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../dc/d0a/a02345.html#af78b89ba78c07da21e45ef90d4686c4c">castor::String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a97522c5f82447833be2bebbb1e2be6ce">castor3d::getTextureName</a> (<a class="el" href="../../d6/d71/a02344.html#acdc63c63f270914c5061259e5645752b">LpvTexture</a> texture, <a class="el" href="../../dc/d0a/a02345.html#af78b89ba78c07da21e45ef90d4686c4c">castor::String</a> const &amp;infix)</td></tr>
+<tr class="separator:a97522c5f82447833be2bebbb1e2be6ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef790f01719106056410ba49318edb12" id="r_aef790f01719106056410ba49318edb12"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../dc/d0a/a02345.html#af78b89ba78c07da21e45ef90d4686c4c">castor::String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#aef790f01719106056410ba49318edb12">castor3d::getTexName</a> (<a class="el" href="../../d6/d71/a02344.html#acdc63c63f270914c5061259e5645752b">LpvTexture</a> texture)</td></tr>
+<tr class="separator:aef790f01719106056410ba49318edb12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acef9c3a303418acd66f6bda0ab1dd956" id="r_acef9c3a303418acd66f6bda0ab1dd956"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkFormat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#acef9c3a303418acd66f6bda0ab1dd956">castor3d::getFormat</a> (<a class="el" href="../../dd/db0/a06609.html">RenderDevice</a> const &amp;device, <a class="el" href="../../d6/d71/a02344.html#acdc63c63f270914c5061259e5645752b">LpvTexture</a> texture)</td></tr>
+<tr class="separator:acef9c3a303418acd66f6bda0ab1dd956"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5be0b6fe9de98a19a2a64b77b5be76ac" id="r_a5be0b6fe9de98a19a2a64b77b5be76ac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkClearValue&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a5be0b6fe9de98a19a2a64b77b5be76ac">castor3d::getClearValue</a> (<a class="el" href="../../d6/d71/a02344.html#acdc63c63f270914c5061259e5645752b">LpvTexture</a> texture)</td></tr>
+<tr class="separator:a5be0b6fe9de98a19a2a64b77b5be76ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af90ca5367065ae57592a43200b7c5549" id="r_af90ca5367065ae57592a43200b7c5549"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkImageUsageFlags&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#af90ca5367065ae57592a43200b7c5549">castor3d::getUsageFlags</a> (<a class="el" href="../../d6/d71/a02344.html#acdc63c63f270914c5061259e5645752b">LpvTexture</a> texture)</td></tr>
+<tr class="separator:af90ca5367065ae57592a43200b7c5549"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a310bbc9023bc8ec3b78d94ef23421445" id="r_a310bbc9023bc8ec3b78d94ef23421445"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkBorderColor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a310bbc9023bc8ec3b78d94ef23421445">castor3d::getBorderColor</a> (<a class="el" href="../../d6/d71/a02344.html#acdc63c63f270914c5061259e5645752b">LpvTexture</a> texture)</td></tr>
+<tr class="separator:a310bbc9023bc8ec3b78d94ef23421445"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8fb8ad078d26f775d22c63134c9cd4a" id="r_ad8fb8ad078d26f775d22c63134c9cd4a"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#ad8fb8ad078d26f775d22c63134c9cd4a">castor3d::getMipLevels</a> (<a class="el" href="../../dd/db0/a06609.html">RenderDevice</a> const &amp;, <a class="el" href="../../d6/d71/a02344.html#acdc63c63f270914c5061259e5645752b">LpvTexture</a>, <a class="el" href="../../d6/d9a/a09317.html">castor::Size</a> const &amp;)</td></tr>
+<tr class="separator:ad8fb8ad078d26f775d22c63134c9cd4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae1923d71eee167f9acaa2e0f617e9e3" id="r_aae1923d71eee167f9acaa2e0f617e9e3"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#aae1923d71eee167f9acaa2e0f617e9e3">castor3d::getMipLevels</a> (<a class="el" href="../../dd/db0/a06609.html">RenderDevice</a> const &amp;device, <a class="el" href="../../d6/d71/a02344.html#acdc63c63f270914c5061259e5645752b">LpvTexture</a> texture, VkExtent3D const &amp;size)</td></tr>
+<tr class="separator:aae1923d71eee167f9acaa2e0f617e9e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b08251b03563bf22eb6972067335274" id="r_a5b08251b03563bf22eb6972067335274"><td class="memItemLeft" align="right" valign="top">VkCompareOp&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a5b08251b03563bf22eb6972067335274">castor3d::getCompareOp</a> (<a class="el" href="../../d6/d71/a02344.html#acdc63c63f270914c5061259e5645752b">LpvTexture</a>)</td></tr>
+<tr class="separator:a5b08251b03563bf22eb6972067335274"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

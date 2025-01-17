@@ -1,0 +1,7 @@
+<map id="castor3d::BaseDataComponentT::clone" name="castor3d::BaseDataComponentT::clone">
+<area shape="rect" id="Node000001" title="Clones this component into given submesh." alt="" coords="5,37,208,77"/>
+<area shape="rect" id="Node000002" href="$d3/d72/a05569.html#acc71ebe3827ea0b26a37017ede6dcc0b" title="Copies given component&#39;s data into this one." alt="" coords="256,5,459,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="208,42,242,37,243,43,208,47"/>
+<area shape="rect" id="Node000003" href="$d8/d7e/a05561.html#ae606b9793863009a6482fc0cf46070e6" title=" " alt="" coords="256,69,459,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="208,68,243,72,242,77,208,73"/>
+</map>

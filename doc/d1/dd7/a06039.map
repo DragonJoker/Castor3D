@@ -1,0 +1,16 @@
+<map id="castor3d::ClustersConfig" name="castor3d::ClustersConfig">
+<area shape="rect" id="Node000001" title=" " alt="" coords="819,234,983,259"/>
+<area shape="rect" id="Node000002" href="$dd/d3d/a08497.html" title=" " alt="" coords="393,129,584,169"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="598,160,695,177,795,201,873,231,871,236,794,207,694,182,597,166"/>
+<area shape="rect" id="Node000003" href="$dd/d3d/a08497.html" title="Templated class that provide std::array style buffer view." alt="" coords="5,227,196,267"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="166,220,219,203,308,181,393,163,394,169,309,186,221,208,168,225"/>
+<area shape="rect" id="Node000004" href="$dd/d3d/a08497.html" title=" " alt="" coords="393,193,584,233"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="210,235,393,219,393,224,210,240"/>
+<area shape="rect" id="Node000005" href="$dd/d3d/a08497.html" title=" " alt="" coords="393,257,584,297"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="210,259,220,260,393,271,393,277,220,265,210,264"/>
+<area shape="rect" id="Node000006" href="$dd/d3d/a08497.html" title=" " alt="" coords="393,321,584,361"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="160,269,221,291,309,312,393,326,392,332,308,317,219,296,159,275"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="598,219,819,237,818,243,598,225"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="597,272,794,260,822,257,823,262,795,265,598,278"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="597,330,694,315,794,292,838,275,875,257,878,262,840,280,795,297,695,321,598,335"/>
+</map>

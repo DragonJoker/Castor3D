@@ -1,0 +1,27 @@
+<map id="castor3d::PassMapDefaultImageParams" name="castor3d::PassMapDefaultImageParams">
+<area shape="rect" id="Node000001" title=" " alt="" coords="31,388,205,428"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,197,132,237"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="72,251,76,287,83,325,96,358,110,387,105,389,91,360,78,326,70,287,67,251"/>
+<area shape="rect" id="Node000004" href="$db/d13/a09233.html" title=" " alt="" coords="130,300,314,325"/>
+<area shape="poly" id="edge8_Node000004_Node000002" title=" " alt="" coords="113,242,204,298,202,302,110,247"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="29,5,156,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="91,59,74,198,68,197,86,59"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="159,115,215,141"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="122,53,178,113,174,117,118,57"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="201,336,141,390,137,386,197,332"/>
+<area shape="rect" id="Node000005" href="$d3/da9/a08297.html" title=" " alt="" coords="157,205,250,230"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="211,243,222,299,217,300,206,244"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="195,154,204,204,199,205,189,155"/>
+<area shape="rect" id="Node000007" href="$d5/d44/a09077.html" title="The image loading configuration." alt="" coords="274,205,450,230"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="335,240,241,302,238,298,332,235"/>
+<area shape="rect" id="Node000008" href="$d6/d9a/a09317.html" title=" " alt="" coords="475,205,567,230"/>
+<area shape="poly" id="edge9_Node000004_Node000008" title=" " alt="" coords="481,238,368,279,276,303,275,297,367,273,480,233"/>
+<area shape="rect" id="Node000009" href="$d4/de3/a08453.html" title=" " alt="" coords="367,108,504,148"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="465,156,511,203,507,206,462,160"/>
+<area shape="rect" id="Node000010" href="$d4/de3/a08453.html" title="Some data holder." alt="" coords="367,5,504,45"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="438,59,438,108,433,108,433,59"/>
+<area shape="rect" id="Node000011" href="$d3/dd5/a09401.html" title=" " alt="" coords="529,108,683,148"/>
+<area shape="poly" id="edge12_Node000008_Node000011" title=" " alt="" coords="580,160,534,206,530,203,576,156"/>
+<area shape="rect" id="Node000012" href="$d3/dd5/a09401.html" title="Templated static dimensions point representation." alt="" coords="541,5,671,45"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="609,59,609,108,603,108,603,59"/>
+</map>

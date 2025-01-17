@@ -1,0 +1,19 @@
+<map id="castor3d::ShadowConfig" name="castor3d::ShadowConfig">
+<area shape="rect" id="Node000001" title=" " alt="" coords="976,71,1139,97"/>
+<area shape="rect" id="Node000002" href="$d6/de2/a09517.html" title=" " alt="" coords="689,5,832,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="846,39,993,69,992,74,845,45"/>
+<area shape="rect" id="Node000003" href="$d6/de2/a09517.html" title="A value inside a range." alt="" coords="353,11,528,37"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="542,22,689,22,689,28,542,27"/>
+<area shape="rect" id="Node000004" href="$db/d51/a06177.html" title=" " alt="" coords="693,71,828,97"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="842,81,976,81,976,87,842,87"/>
+<area shape="rect" id="Node000005" href="$df/d26/a08445.html" title=" " alt="" coords="359,97,522,137"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="535,105,693,88,693,94,536,110"/>
+<area shape="rect" id="Node000007" href="$df/d83/a06193.html" title=" " alt="" coords="689,131,832,157"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="533,137,552,140,623,145,689,145,689,150,622,150,552,145,532,142"/>
+<area shape="rect" id="Node000006" href="$df/d26/a08445.html" title="Templated class that provide std::array style buffer view." alt="" coords="5,135,168,175"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="181,142,359,123,359,129,182,147"/>
+<area shape="rect" id="Node000008" href="$df/d26/a08445.html" title=" " alt="" coords="359,162,522,217"/>
+<area shape="poly" id="edge9_Node000008_Node000006" title=" " alt="" coords="176,175,192,177,278,185,359,188,359,193,278,191,192,183,176,180"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="837,126,993,94,994,99,838,131"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="535,180,665,164,712,154,713,159,666,169,536,185"/>
+</map>

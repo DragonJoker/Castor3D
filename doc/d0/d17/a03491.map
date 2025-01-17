@@ -1,0 +1,21 @@
+<map id="castor3d::CmshMeshImporter" name="castor3d::CmshMeshImporter">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1145,199,1339,225"/>
+<area shape="rect" id="Node000002" href="$d0/d8e/a05537.html" title=" " alt="" coords="937,121,1096,146"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1068,148,1206,197,1204,202,1066,153"/>
+<area shape="rect" id="Node000003" href="$df/d45/a08513.html" title=" " alt="" coords="305,99,492,125"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="506,113,937,128,937,133,505,118"/>
+<area shape="rect" id="Node000007" href="$d6/d73/a04025.html" title=" " alt="" coords="650,70,798,95"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="506,100,650,87,650,92,506,105"/>
+<area shape="rect" id="Node000004" href="$df/d45/a08513.html" title="Class used to have an object owned by another one." alt="" coords="5,99,188,125"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="202,109,305,109,305,115,202,115"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="661,171,787,211"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="801,182,913,164,981,144,983,149,914,169,801,187"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="335,200,462,240"/>
+<area shape="poly" id="edge10_Node000001_Node000006" title=" " alt="" coords="476,218,647,220,801,220,1145,212,1145,218,801,225,647,225,476,224"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="475,210,660,194,661,199,476,216"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="812,95,943,118,942,123,811,100"/>
+<area shape="rect" id="Node000008" href="$d5/d95/a05445.html" title=" " alt="" coords="647,5,801,45"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="816,45,914,78,995,118,993,123,912,82,814,50"/>
+<area shape="rect" id="Node000009" href="$d5/d95/a05445.html" title="Configuration parameters." alt="" coords="321,5,476,45"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="490,23,647,23,647,28,490,28"/>
+</map>

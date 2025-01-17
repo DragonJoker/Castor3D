@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: CastorUtils/Graphics/StbImageLoader.hpp File Reference</title>
+<title>Castor3D: CastorUtils/Graphics/ImageCache.hpp File Reference</title>
 <link rel="icon" href="../../castor-small.png" type="image/x-icon" />
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
@@ -21,7 +21,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.16.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.17.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -55,21 +55,42 @@
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">StbImageLoader.hpp File Reference</div></div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a>  </div>
+  <div class="headertitle"><div class="title">ImageCache.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d85/a09031.html">castor::StbImageLoader</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d6/d3e/a08939.html">Image</a> loader based on stb_image.  <a href="../../d9/d85/a09031.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d13/a09233.html">castor::ImageCreateParams</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d34/a09237.html">castor::ResourceCacheTraitsT&lt; Image, String &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d7a/a09241.html">castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d2/dd2/a02279" id="r_d2/dd2/a02279"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html">castor</a></td></tr>
+<tr class="memitem:dc/d0a/a02345" id="r_dc/d0a/a02345"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html">castor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a91eacc350c18bc62d27b1a10f442c708" id="r_a91eacc350c18bc62d27b1a10f442c708"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a91eacc350c18bc62d27b1a10f442c708">castor::ImageCacheTraits</a> = <a class="el" href="../../d8/dec/a08521.html">ResourceCacheTraitsT</a>&lt; <a class="el" href="../../da/d3c/a09229.html">Image</a>, <a class="el" href="../../dc/d0a/a02345.html#af78b89ba78c07da21e45ef90d4686c4c">String</a> &gt;</td></tr>
+<tr class="separator:a91eacc350c18bc62d27b1a10f442c708"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa54986932aa7ed016fdb8e94c36b5f9d" id="r_aa54986932aa7ed016fdb8e94c36b5f9d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#aa54986932aa7ed016fdb8e94c36b5f9d">castor::ImageCache</a> = <a class="el" href="../../de/d2b/a08545.html">ResourceCacheT</a>&lt; <a class="el" href="../../da/d3c/a09229.html">Image</a>, <a class="el" href="../../dc/d0a/a02345.html#af78b89ba78c07da21e45ef90d4686c4c">String</a>, <a class="el" href="../../dc/d0a/a02345.html#a91eacc350c18bc62d27b1a10f442c708">ImageCacheTraits</a> &gt;</td></tr>
+<tr class="separator:aa54986932aa7ed016fdb8e94c36b5f9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac8d24087e1a0dd9a9d027c40b145d94" id="r_aac8d24087e1a0dd9a9d027c40b145d94"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#aac8d24087e1a0dd9a9d027c40b145d94">castor::ImageRes</a> = <a class="el" href="../../dc/d34/a09237.html#a94cd82717221167efab398eb2d024a90">ImageCacheTraits::ElementPtrT</a></td></tr>
+<tr class="separator:aac8d24087e1a0dd9a9d027c40b145d94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46b6c6550c04c84e401c4c521b8de6d1" id="r_a46b6c6550c04c84e401c4c521b8de6d1"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a46b6c6550c04c84e401c4c521b8de6d1">castor::ImageResPtr</a> = <a class="el" href="../../db/db6/a08549.html#ab778cd9b7ca70fc3d8db4a6e49465034">ImageCacheTraits::ElementObsT</a></td></tr>
+<tr class="separator:a46b6c6550c04c84e401c4c521b8de6d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a233ae674f292d7ade48eb86b67bcde9c" id="r_a233ae674f292d7ade48eb86b67bcde9c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html#a233ae674f292d7ade48eb86b67bcde9c">castor::CU_DeclareSmartPtr</a> (castor, <a class="el" href="../../dc/d0a/a02345.html#aa54986932aa7ed016fdb8e94c36b5f9d">ImageCache</a>, <a class="el" href="../../d5/da8/a01865.html#a85ca3bafa261a7f2ece738b559d8bbb7">CU_API</a>)</td></tr>
+<tr class="separator:a233ae674f292d7ade48eb86b67bcde9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

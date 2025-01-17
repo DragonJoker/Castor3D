@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D/Render/Debug/DebugModule.hpp File Reference</title>
+<title>Castor3D: Castor3D/Render/Culling/PipelineNodes.hpp File Reference</title>
 <link rel="icon" href="../../castor-small.png" type="image/x-icon" />
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
@@ -21,7 +21,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.16.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.17.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -49,26 +49,36 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_d31b06848c74e058bfe0cc0eae81a8c8.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dir_ee81606feaed1a7650f95054c2670416.html">Render</a></li><li class="navelem"><a class="el" href="../../dir_62db7674277421a905f12338c3157d52.html">Debug</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_d31b06848c74e058bfe0cc0eae81a8c8.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dir_ee81606feaed1a7650f95054c2670416.html">Render</a></li><li class="navelem"><a class="el" href="../../dir_60224d060cc31e4c570b52945980330e.html">Culling</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">DebugModule.hpp File Reference</div></div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
+  <div class="headertitle"><div class="title">PipelineNodes.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d9/dba/a02278" id="r_d9/dba/a02278"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html">castor3d</a></td></tr>
+<tr class="memitem:d6/d71/a02344" id="r_d6/d71/a02344"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr><td colspan="2"><div class="groupHeader">Debug</div></td></tr>
-<tr class="memitem:a7f8758e178b3d110558b853556fbb477" id="r_a7f8758e178b3d110558b853556fbb477"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html#a7f8758e178b3d110558b853556fbb477">castor3d::CU_DeclareSmartPtr</a> (castor3d, <a class="el" href="../../d3/d01/a05935.html">DebugDrawer</a>, <a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
-<tr class="separator:a7f8758e178b3d110558b853556fbb477"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a318da0bd17e5447c3df91ead9868562c" id="r_a318da0bd17e5447c3df91ead9868562c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a318da0bd17e5447c3df91ead9868562c">castor3d::registerPipelineNodes</a> (<a class="el" href="../../d1/dbd/a06541.html">PipelineBaseHash</a> <a class="el" href="../../d6/d71/a02344.html#a24b3d38a3fba25d9ebff0d4960667d5f">hash</a>, ashes::BufferBase const &amp;posBuffer, ashes::BufferBase const *idxBuffer, <a class="el" href="../../dc/d0a/a02345.html#a57d18b0d40cd54921270bcf33d0aadc5">castor::Vector</a>&lt; <a class="el" href="../../db/de0/a06293.html">PipelineBuffer</a> &gt; &amp;nodesIds)</td></tr>
+<tr class="separator:a318da0bd17e5447c3df91ead9868562c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9411474b5476a20a2401c0dc8f541ca" id="r_aa9411474b5476a20a2401c0dc8f541ca"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#aa9411474b5476a20a2401c0dc8f541ca">castor3d::getPipelineNodeIndex</a> (<a class="el" href="../../d1/dbd/a06541.html">PipelineBaseHash</a> <a class="el" href="../../d6/d71/a02344.html#a24b3d38a3fba25d9ebff0d4960667d5f">hash</a>, ashes::BufferBase const &amp;posBuffer, ashes::BufferBase const *idxBuffer, <a class="el" href="../../dc/d0a/a02345.html#a57d18b0d40cd54921270bcf33d0aadc5">castor::Vector</a>&lt; <a class="el" href="../../db/de0/a06293.html">PipelineBuffer</a> &gt; const &amp;cont)</td></tr>
+<tr class="separator:aa9411474b5476a20a2401c0dc8f541ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacf3e6349867e08ab0255c18c2040b24" id="r_aacf3e6349867e08ab0255c18c2040b24"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d71/a02344.html#a97f3a09ec2d52b8f9d2acbf20e8b72f3">PipelineNodes</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#aacf3e6349867e08ab0255c18c2040b24">castor3d::getPipelineNodes</a> (<a class="el" href="../../d1/dbd/a06541.html">PipelineBaseHash</a> <a class="el" href="../../d6/d71/a02344.html#a24b3d38a3fba25d9ebff0d4960667d5f">hash</a>, ashes::BufferBase const &amp;posBuffer, ashes::BufferBase const *idxBuffer, <a class="el" href="../../dc/d0a/a02345.html#a57d18b0d40cd54921270bcf33d0aadc5">castor::Vector</a>&lt; <a class="el" href="../../db/de0/a06293.html">PipelineBuffer</a> &gt; const &amp;cont, <a class="el" href="../../d6/d71/a02344.html#a97f3a09ec2d52b8f9d2acbf20e8b72f3">PipelineNodes</a> *nodes, VkDeviceSize maxNodesCount)</td></tr>
+<tr class="separator:aacf3e6349867e08ab0255c18c2040b24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a5663733282805226bf39ba1e95bfbef7" id="r_a5663733282805226bf39ba1e95bfbef7"><td class="memItemLeft" align="right" valign="top">static uint32_t constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a5663733282805226bf39ba1e95bfbef7">castor3d::InvalidPipelineIndex</a> = ~0u</td></tr>
+<tr class="separator:a5663733282805226bf39ba1e95bfbef7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

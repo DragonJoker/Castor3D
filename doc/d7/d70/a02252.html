@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: CastorUtils/Stream/StreamBaseManipulators.hpp File Reference</title>
+<title>Castor3D: CastorUtils/Miscellaneous/BlockTimer.hpp File Reference</title>
 <link rel="icon" href="../../castor-small.png" type="image/x-icon" />
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
@@ -21,7 +21,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.16.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.17.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -49,94 +49,89 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_581a2c521a9f6c8a8206ef65b82e493b.html">CastorUtils</a></li><li class="navelem"><a class="el" href="../../dir_abc4c8c3198c34801214fa735dba0a7d.html">Stream</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_581a2c521a9f6c8a8206ef65b82e493b.html">CastorUtils</a></li><li class="navelem"><a class="el" href="../../dir_38921dac01801a9e91a60a0b691361ca.html">Miscellaneous</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#typedef-members">Typedefs</a> &#124;
-<a href="#func-members">Functions</a> &#124;
-<a href="#var-members">Variables</a>  </div>
-  <div class="headertitle"><div class="title">StreamBaseManipulators.hpp File Reference</div></div>
+<a href="#define-members">Macros</a>  </div>
+  <div class="headertitle"><div class="title">BlockTimer.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d35/a09499.html">castor::manip::BasicBaseManip&lt; CharType &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines a base manipulator type, its what the built-in stream manipulators do when they take parameters, only they return an opaque type.  <a href="../../da/d35/a09499.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dec/a09507.html">castor::manip::DigitChars&lt; char &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d96/a09511.html">castor::manip::DigitChars&lt; wchar_t &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d61/a09515.html">castor::manip::DigitChars&lt; char8_t &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dcb/a09519.html">castor::manip::DigitChars&lt; char16_t &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d5d/a09523.html">castor::manip::DigitChars&lt; char32_t &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d8e/a09527.html">castor::manip::BaseNumPut&lt; CharType &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A custom number output facet.  <a href="../../da/d8e/a09527.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dd2/a09669.html">castor::BlockTimer</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d2/dd2/a02279" id="r_d2/dd2/a02279"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html">castor</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:dd/dae/a02294" id="r_dd/dae/a02294"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dae/a02294.html">castor::manip</a></td></tr>
+<tr class="memitem:dc/d0a/a02345" id="r_dc/d0a/a02345"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0a/a02345.html">castor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:a97b3f143ec1f25e3810a5c8cf784b9cd" id="r_a97b3f143ec1f25e3810a5c8cf784b9cd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dae/a02294.html#a97b3f143ec1f25e3810a5c8cf784b9cd">castor::manip::BaseManip</a> = <a class="el" href="../../da/d35/a09499.html">BasicBaseManip</a>&lt; char &gt;</td></tr>
-<tr class="separator:a97b3f143ec1f25e3810a5c8cf784b9cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ae9304b94271a7af324b4abc1394464" id="r_a0ae9304b94271a7af324b4abc1394464"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dae/a02294.html#a0ae9304b94271a7af324b4abc1394464">castor::manip::WBaseManip</a> = <a class="el" href="../../da/d35/a09499.html">BasicBaseManip</a>&lt; wchar_t &gt;</td></tr>
-<tr class="separator:a0ae9304b94271a7af324b4abc1394464"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93d351e1863d5ff5a2ca803bed384571" id="r_a93d351e1863d5ff5a2ca803bed384571"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dae/a02294.html#a93d351e1863d5ff5a2ca803bed384571">castor::manip::XBaseManip</a> = <a class="el" href="../../da/d35/a09499.html">BasicBaseManip</a>&lt; <a class="el" href="../../d2/dd2/a02279.html#a98169622bc976df3189194c2b35fbf60">xchar</a> &gt;</td></tr>
-<tr class="separator:a93d351e1863d5ff5a2ca803bed384571"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac881af72bac44b79c52b484832d70a06" id="r_ac881af72bac44b79c52b484832d70a06"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dae/a02294.html#ac881af72bac44b79c52b484832d70a06">castor::manip::U32BaseManip</a> = <a class="el" href="../../da/d35/a09499.html">BasicBaseManip</a>&lt; <a class="el" href="../../d2/dd2/a02279.html#a17d8877464f26e03b4bdec4ee0ba0518">u32char</a> &gt;</td></tr>
-<tr class="separator:ac881af72bac44b79c52b484832d70a06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:abfe0405df8bda3e1c8f73897f86715e6" id="r_abfe0405df8bda3e1c8f73897f86715e6"><td class="memTemplParams" colspan="2">template&lt;typename CharType &gt; </td></tr>
-<tr class="memitem:abfe0405df8bda3e1c8f73897f86715e6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../da/d35/a09499.html">BasicBaseManip</a>&lt; CharType &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dd/dae/a02294.html#abfe0405df8bda3e1c8f73897f86715e6">castor::manip::baseT</a> (int b)</td></tr>
-<tr class="memdesc:abfe0405df8bda3e1c8f73897f86715e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stream operator.  <br /></td></tr>
-<tr class="separator:abfe0405df8bda3e1c8f73897f86715e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a366f5a2b50ccb63d522ea341a4c8a8d9" id="r_a366f5a2b50ccb63d522ea341a4c8a8d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dae/a02294.html#a97b3f143ec1f25e3810a5c8cf784b9cd">BaseManip</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dae/a02294.html#a366f5a2b50ccb63d522ea341a4c8a8d9">castor::manip::base</a> (int b)</td></tr>
-<tr class="memdesc:a366f5a2b50ccb63d522ea341a4c8a8d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stream operator.  <br /></td></tr>
-<tr class="separator:a366f5a2b50ccb63d522ea341a4c8a8d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00878769f2dc1cb24c0e0ee3faa79ca9" id="r_a00878769f2dc1cb24c0e0ee3faa79ca9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dae/a02294.html#a0ae9304b94271a7af324b4abc1394464">WBaseManip</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dae/a02294.html#a00878769f2dc1cb24c0e0ee3faa79ca9">castor::manip::wbase</a> (int b)</td></tr>
-<tr class="memdesc:a00878769f2dc1cb24c0e0ee3faa79ca9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stream operator.  <br /></td></tr>
-<tr class="separator:a00878769f2dc1cb24c0e0ee3faa79ca9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a942709626fa20c1d6e3c941de63aa701" id="r_a942709626fa20c1d6e3c941de63aa701"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dae/a02294.html#a93d351e1863d5ff5a2ca803bed384571">XBaseManip</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dae/a02294.html#a942709626fa20c1d6e3c941de63aa701">castor::manip::xbase</a> (int b)</td></tr>
-<tr class="memdesc:a942709626fa20c1d6e3c941de63aa701"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stream operator.  <br /></td></tr>
-<tr class="separator:a942709626fa20c1d6e3c941de63aa701"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7671f8680e904d6c165b32c95c9106e" id="r_af7671f8680e904d6c165b32c95c9106e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dae/a02294.html#ac881af72bac44b79c52b484832d70a06">U32BaseManip</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dae/a02294.html#af7671f8680e904d6c165b32c95c9106e">castor::manip::u32base</a> (int b)</td></tr>
-<tr class="memdesc:af7671f8680e904d6c165b32c95c9106e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stream operator.  <br /></td></tr>
-<tr class="separator:af7671f8680e904d6c165b32c95c9106e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab27d24a15b1647975c4214348c0c8415" id="r_ab27d24a15b1647975c4214348c0c8415"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dae/a02294.html#ab27d24a15b1647975c4214348c0c8415">castor::manip::operator&lt;&lt;</a> (std::ostream &amp;stream, const <a class="el" href="../../dd/dae/a02294.html#a97b3f143ec1f25e3810a5c8cf784b9cd">manip::BaseManip</a> &amp;manip)</td></tr>
-<tr class="memdesc:ab27d24a15b1647975c4214348c0c8415"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stream operator.  <br /></td></tr>
-<tr class="separator:ab27d24a15b1647975c4214348c0c8415"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a919deee9611c3649d391f7c92bad4006" id="r_a919deee9611c3649d391f7c92bad4006"><td class="memItemLeft" align="right" valign="top">std::wostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dae/a02294.html#a919deee9611c3649d391f7c92bad4006">castor::manip::operator&lt;&lt;</a> (std::wostream &amp;stream, const <a class="el" href="../../dd/dae/a02294.html#a0ae9304b94271a7af324b4abc1394464">manip::WBaseManip</a> &amp;manip)</td></tr>
-<tr class="memdesc:a919deee9611c3649d391f7c92bad4006"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stream operator.  <br /></td></tr>
-<tr class="separator:a919deee9611c3649d391f7c92bad4006"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e4525ea113050c8efc6126b184b1f7b" id="r_a2e4525ea113050c8efc6126b184b1f7b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d2/dd2/a02279.html#a63025845dbd968e642c93265197b686e">U32OutputStream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/dae/a02294.html#a2e4525ea113050c8efc6126b184b1f7b">castor::manip::operator&lt;&lt;</a> (<a class="el" href="../../d2/dd2/a02279.html#a63025845dbd968e642c93265197b686e">U32OutputStream</a> &amp;stream, const <a class="el" href="../../dd/dae/a02294.html#ac881af72bac44b79c52b484832d70a06">manip::U32BaseManip</a> &amp;manip)</td></tr>
-<tr class="memdesc:a2e4525ea113050c8efc6126b184b1f7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stream operator.  <br /></td></tr>
-<tr class="separator:a2e4525ea113050c8efc6126b184b1f7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:a5b067aeedc6697dca446366dcc7c9fbe" id="r_a5b067aeedc6697dca446366dcc7c9fbe"><td class="memTemplParams" colspan="2">template&lt;typename CharType &gt; </td></tr>
-<tr class="memitem:a5b067aeedc6697dca446366dcc7c9fbe"><td class="memTemplItemLeft" align="right" valign="top">std::basic_string_view&lt; CharType &gt; constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dd/dae/a02294.html#a5b067aeedc6697dca446366dcc7c9fbe">castor::manip::digitCharLcT</a> = <a class="el" href="../../d5/dc5/a09503.html">DigitChars</a>&lt; CharType &gt;::digitCharLc</td></tr>
-<tr class="separator:a5b067aeedc6697dca446366dcc7c9fbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d53d6e6cd08690e33a2a1e949eac3b1" id="r_a7d53d6e6cd08690e33a2a1e949eac3b1"><td class="memTemplParams" colspan="2">template&lt;typename CharType &gt; </td></tr>
-<tr class="memitem:a7d53d6e6cd08690e33a2a1e949eac3b1"><td class="memTemplItemLeft" align="right" valign="top">std::basic_string_view&lt; CharType &gt; constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../dd/dae/a02294.html#a7d53d6e6cd08690e33a2a1e949eac3b1">castor::manip::digitCharUcT</a> = <a class="el" href="../../d5/dc5/a09503.html">DigitChars</a>&lt; CharType &gt;::digitCharUc</td></tr>
-<tr class="separator:a7d53d6e6cd08690e33a2a1e949eac3b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a0fc8e64fe6b8b2994a7b69be71744bef" id="r_a0fc8e64fe6b8b2994a7b69be71744bef"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0fc8e64fe6b8b2994a7b69be71744bef">CU_TimeNoFile</a>(Name)&#160;&#160;&#160;<a class="el" href="../../d9/dd2/a09669.html">castor::BlockTimer</a> <a class="el" href="../../d4/d42/a12104.html#af9414f56b7e5806e3c8b60b56a058e1b">CU_Join</a>( timer, __LINE__ ){ &quot;&quot;, <a class="el" href="../../d3/dce/a01859.html#a828bb1dfda1afd67ca795075903d227d">__FUNCTION__</a>, Name, uint32_t( __LINE__ ) }</td></tr>
+<tr class="separator:a0fc8e64fe6b8b2994a7b69be71744bef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7af2bcd850aca3aab1964ebc2b369546" id="r_a7af2bcd850aca3aab1964ebc2b369546"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7af2bcd850aca3aab1964ebc2b369546">CU_TimeEx</a>(Name)&#160;&#160;&#160;<a class="el" href="../../d9/dd2/a09669.html">castor::BlockTimer</a> <a class="el" href="../../d4/d42/a12104.html#af9414f56b7e5806e3c8b60b56a058e1b">CU_Join</a>( timer, __LINE__ ){ __FILE__, <a class="el" href="../../d3/dce/a01859.html#a828bb1dfda1afd67ca795075903d227d">__FUNCTION__</a>, Name, uint32_t( __LINE__ ) }</td></tr>
+<tr class="separator:a7af2bcd850aca3aab1964ebc2b369546"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac976777f13c3c3d818e522ed472fde29" id="r_ac976777f13c3c3d818e522ed472fde29"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac976777f13c3c3d818e522ed472fde29">CU_Time</a>()&#160;&#160;&#160;<a class="el" href="../../d9/dd2/a09669.html">castor::BlockTimer</a> <a class="el" href="../../d4/d42/a12104.html#af9414f56b7e5806e3c8b60b56a058e1b">CU_Join</a>( timer, __LINE__ ){ __FILE__, <a class="el" href="../../d3/dce/a01859.html#a828bb1dfda1afd67ca795075903d227d">__FUNCTION__</a>, &quot;&quot;, uint32_t( __LINE__ ) }</td></tr>
+<tr class="separator:ac976777f13c3c3d818e522ed472fde29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="ac976777f13c3c3d818e522ed472fde29" name="ac976777f13c3c3d818e522ed472fde29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac976777f13c3c3d818e522ed472fde29">&#9670;&#160;</a></span>CU_Time</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CU_Time</td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="../../d9/dd2/a09669.html">castor::BlockTimer</a> <a class="el" href="../../d4/d42/a12104.html#af9414f56b7e5806e3c8b60b56a058e1b">CU_Join</a>( timer, __LINE__ ){ __FILE__, <a class="el" href="../../d3/dce/a01859.html#a828bb1dfda1afd67ca795075903d227d">__FUNCTION__</a>, &quot;&quot;, uint32_t( __LINE__ ) }</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7af2bcd850aca3aab1964ebc2b369546" name="a7af2bcd850aca3aab1964ebc2b369546"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7af2bcd850aca3aab1964ebc2b369546">&#9670;&#160;</a></span>CU_TimeEx</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CU_TimeEx</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">Name</span></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="../../d9/dd2/a09669.html">castor::BlockTimer</a> <a class="el" href="../../d4/d42/a12104.html#af9414f56b7e5806e3c8b60b56a058e1b">CU_Join</a>( timer, __LINE__ ){ __FILE__, <a class="el" href="../../d3/dce/a01859.html#a828bb1dfda1afd67ca795075903d227d">__FUNCTION__</a>, Name, uint32_t( __LINE__ ) }</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0fc8e64fe6b8b2994a7b69be71744bef" name="a0fc8e64fe6b8b2994a7b69be71744bef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fc8e64fe6b8b2994a7b69be71744bef">&#9670;&#160;</a></span>CU_TimeNoFile</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CU_TimeNoFile</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">Name</span></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="../../d9/dd2/a09669.html">castor::BlockTimer</a> <a class="el" href="../../d4/d42/a12104.html#af9414f56b7e5806e3c8b60b56a058e1b">CU_Join</a>( timer, __LINE__ ){ &quot;&quot;, <a class="el" href="../../d3/dce/a01859.html#a828bb1dfda1afd67ca795075903d227d">__FUNCTION__</a>, Name, uint32_t( __LINE__ ) }</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

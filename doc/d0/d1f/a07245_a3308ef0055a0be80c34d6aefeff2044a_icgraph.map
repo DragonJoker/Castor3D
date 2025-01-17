@@ -1,0 +1,19 @@
+<map id="castor3d::MovableObject::markDirty" name="castor3d::MovableObject::markDirty">
+<area shape="rect" id="Node000001" title="Adds the object to dirty object list in the scene." alt="" coords="488,137,653,177"/>
+<area shape="rect" id="Node000002" href="$d3/df9/a07137.html#a38dae7d74ec72af0fa347c0eefb8872b" title=" " alt="" coords="241,5,409,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="542,128,497,84,469,62,439,44,409,33,410,28,441,40,472,58,500,80,546,124"/>
+<area shape="rect" id="Node000003" href="$d0/d02/a07177.html#a21ce69b7de756188ae6981c4e61043d7" title=" " alt="" coords="235,55,416,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="522,133,439,95,395,83,396,77,441,90,524,128"/>
+<area shape="rect" id="Node000006" href="$d0/d02/a07177.html#ac251086294c1586f164bf32242e3fd8f" title=" " alt="" coords="240,105,411,145"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="474,147,410,138,411,133,475,141"/>
+<area shape="rect" id="Node000007" href="$d0/d02/a07177.html#aff7b307ba1a84311d4002067130a1249" title=" " alt="" coords="235,169,415,209"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="475,172,416,180,415,174,474,167"/>
+<area shape="rect" id="Node000008" href="$d3/df9/a07137.html#ae8bb96f14872d17f9c01d458e5058ed5" title=" " alt="" coords="236,233,415,259"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="524,186,441,223,396,236,395,231,439,218,522,181"/>
+<area shape="rect" id="Node000009" href="$d3/df9/a07137.html#abfa6db9cee09d6cc4f1ca671b5968d5d" title=" " alt="" coords="211,283,440,308"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="545,189,499,232,471,254,441,272,408,285,406,280,439,268,468,250,496,228,541,185"/>
+<area shape="rect" id="Node000004" href="$d0/d02/a07177.html#a5eebf24c72db4dcd902b7459f73c2cb4" title=" " alt="" coords="5,31,163,56"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="221,60,163,54,163,48,221,54"/>
+<area shape="rect" id="Node000005" href="$d0/d02/a07177.html#a48860d01cbacbe601ef107fb2ae91ba4" title=" " alt="" coords="7,80,161,105"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="221,81,162,87,161,82,221,76"/>
+</map>

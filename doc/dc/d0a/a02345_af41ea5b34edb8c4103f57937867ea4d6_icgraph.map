@@ -1,0 +1,54 @@
+<map id="castor::makeStringStream" name="castor::makeStringStream">
+<area shape="rect" id="Node000001" title=" " alt="" coords="731,269,905,294"/>
+<area shape="rect" id="Node000002" href="$df/d9b/a08469.html#ac2c906e2a0bc035bfc901295e45fa52b" title="Constructor." alt="" coords="519,5,658,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="805,256,788,214,762,161,726,106,705,81,681,59,657,45,660,40,684,55,709,78,730,103,766,158,793,212,810,254"/>
+<area shape="rect" id="Node000003" href="$d2/d74/a03293.html#a8828d359b7a61ea2b657d5aada2dd87b" title="Writes the header chunk." alt="" coords="497,69,680,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="800,258,752,191,719,155,681,124,660,112,663,107,684,119,723,151,756,188,804,255"/>
+<area shape="rect" id="Node000005" href="$d2/d43/a08641.html#ada321c02ff8fd2e8084701084961b3f2" title="Specified constructor." alt="" coords="523,133,655,173"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="790,262,741,225,681,188,654,175,656,171,684,183,744,220,793,258"/>
+<area shape="rect" id="Node000006" href="$da/da0/a08541.html#a3f6cbb3c0ad8d6136141c4c089f7f479" title=" " alt="" coords="495,261,683,301"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="717,284,683,284,683,279,717,279"/>
+<area shape="rect" id="Node000010" href="$da/da0/a08541.html#aa1689ccd9a406fe8dfe9ff473d226b5e" title=" " alt="" coords="495,389,683,429"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="793,305,744,342,684,380,657,392,655,387,681,375,741,338,790,301"/>
+<area shape="rect" id="Node000016" href="$da/da0/a08541.html#aa24d9472022aa0f450529b07d9b7f743" title=" " alt="" coords="495,325,683,365"/>
+<area shape="poly" id="edge16_Node000001_Node000016" title=" " alt="" coords="759,300,662,328,660,323,758,295"/>
+<area shape="rect" id="Node000018" href="$da/da0/a08541.html#a9c25c01ca8f76ad4a25088101572200d" title=" " alt="" coords="495,197,683,237"/>
+<area shape="poly" id="edge20_Node000001_Node000018" title=" " alt="" coords="758,267,660,240,662,235,759,262"/>
+<area shape="rect" id="Node000019" href="$da/da0/a08541.html#a6537032eaeeadaffea633743e3218e53" title=" " alt="" coords="495,453,683,493"/>
+<area shape="poly" id="edge22_Node000001_Node000019" title=" " alt="" coords="804,308,756,375,723,411,684,444,663,456,660,451,681,439,719,408,752,371,800,304"/>
+<area shape="rect" id="Node000024" href="$d7/d47/a08561.html#a5136cd1e55e53e66d851b0db40dcdacd" title="Constructor." alt="" coords="511,517,666,557"/>
+<area shape="poly" id="edge28_Node000001_Node000024" title=" " alt="" coords="810,308,793,351,766,405,730,460,709,485,684,507,665,520,662,515,681,503,705,481,726,456,762,402,788,349,805,306"/>
+<area shape="rect" id="Node000004" href="$d2/d74/a03293.html#a21e7985d2f99ff20a6056d198aac07c5" title="Writes an object to a file." alt="" coords="261,69,444,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="484,92,444,92,444,87,484,87"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="393,58,379,51,353,48,330,50,316,55,311,61,314,68,309,70,306,60,313,50,329,45,353,43,380,46,395,53"/>
+<area shape="rect" id="Node000007" href="$da/da0/a08541.html#a63b72a3a1c306679e47426f3a270ec97" title=" " alt="" coords="259,197,447,237"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="500,260,426,240,428,235,502,255"/>
+<area shape="rect" id="Node000008" href="$da/da0/a08541.html#ae42bd6b7da6f50fdef84f04a84172313" title="Logging version of tryAdd." alt="" coords="14,197,202,237"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="245,220,202,220,202,215,245,215"/>
+<area shape="rect" id="Node000009" href="$da/da0/a08541.html#a1fc2571a5ea51ead9564b4cec6b31314" title="Logging version of tryAdd." alt="" coords="14,133,202,173"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="262,196,184,176,186,171,263,191"/>
+<area shape="rect" id="Node000011" href="$da/da0/a08541.html#aae5b569e26955738733ba4de036629d7" title="Creates an element." alt="" coords="259,389,447,429"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="481,412,447,412,447,407,481,407"/>
+<area shape="rect" id="Node000013" href="$da/da0/a08541.html#aee8d1df08f426ba200de96ef84fd8eb8" title=" " alt="" coords="259,261,447,301"/>
+<area shape="poly" id="edge13_Node000010_Node000013" title=" " alt="" coords="501,385,493,379,477,363,468,347,460,331,445,315,425,304,428,299,448,311,464,328,473,344,481,360,496,375,504,380"/>
+<area shape="rect" id="Node000012" href="$df/d36/a09057.html#a0f03d34ce051bfd45da137d8146a1fc4" title="Creates and adds an SDF font to the cache." alt="" coords="5,390,211,445"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="245,416,211,417,211,411,245,410"/>
+<area shape="rect" id="Node000014" href="$da/da0/a08541.html#a85c66f21579cca9b9f325913e1a73e2b" title="Logging version of tryAdd." alt="" coords="14,325,202,365"/>
+<area shape="poly" id="edge14_Node000013_Node000014" title=" " alt="" coords="263,307,186,328,184,323,262,302"/>
+<area shape="rect" id="Node000015" href="$da/da0/a08541.html#a35d0b614c078b3f48c5dff1957427dbd" title="Logging version of tryAdd." alt="" coords="14,261,202,301"/>
+<area shape="poly" id="edge15_Node000013_Node000015" title=" " alt="" coords="245,284,202,284,202,279,245,279"/>
+<area shape="poly" id="edge18_Node000016_Node000007" title=" " alt="" coords="501,321,493,315,477,299,468,283,460,267,445,251,425,240,428,235,448,247,464,264,473,280,481,296,496,311,504,316"/>
+<area shape="poly" id="edge17_Node000016_Node000013" title=" " alt="" coords="500,324,426,304,428,299,502,319"/>
+<area shape="rect" id="Node000017" href="$da/da0/a08541.html#a6318e3a64926730b389ee55727eacb3e" title="Renames a resource." alt="" coords="259,325,447,365"/>
+<area shape="poly" id="edge19_Node000016_Node000017" title=" " alt="" coords="481,348,447,348,447,343,481,343"/>
+<area shape="poly" id="edge21_Node000018_Node000007" title=" " alt="" coords="481,220,447,220,447,215,481,215"/>
+<area shape="poly" id="edge27_Node000019_Node000017" title=" " alt="" coords="501,449,493,443,477,427,468,411,460,395,445,379,425,368,428,363,448,375,464,392,473,408,481,424,496,439,504,444"/>
+<area shape="rect" id="Node000020" href="$da/da0/a08541.html#ae2bc50ccc5e4f323a14a1a6f39d3ec14" title="Logging version of tryRemove." alt="" coords="259,645,447,685"/>
+<area shape="poly" id="edge23_Node000019_Node000020" title=" " alt="" coords="501,503,497,507,484,523,477,538,473,570,469,602,462,619,449,635,432,647,429,643,445,631,457,616,464,601,468,569,472,537,480,520,493,503,498,499"/>
+<area shape="rect" id="Node000021" href="$da/da0/a08541.html#a4978d020ac192e539d60ce384b714753" title="Logging version of tryRemove." alt="" coords="259,453,447,493"/>
+<area shape="poly" id="edge24_Node000019_Node000021" title=" " alt="" coords="481,476,447,476,447,471,481,471"/>
+<area shape="rect" id="Node000022" href="$da/da0/a08541.html#a21d0ef274f434e61b1d0c336a8c7253a" title="Logging version of tryRemove." alt="" coords="259,517,447,557"/>
+<area shape="poly" id="edge25_Node000019_Node000022" title=" " alt="" coords="502,500,428,520,426,515,500,494"/>
+<area shape="rect" id="Node000023" href="$da/da0/a08541.html#a55752549d182d7d232c432746b6b5312" title="Logging version of tryRemove." alt="" coords="259,581,447,621"/>
+<area shape="poly" id="edge26_Node000019_Node000023" title=" " alt="" coords="504,502,496,507,481,523,473,539,464,555,448,571,428,583,425,579,445,567,460,552,468,536,477,520,493,503,501,498"/>
+</map>

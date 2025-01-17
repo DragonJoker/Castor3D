@@ -1,0 +1,30 @@
+<map id="castor3d::OverlayContext" name="castor3d::OverlayContext">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1495,184,1663,209"/>
+<area shape="rect" id="Node000002" href="$d9/da9/a07337.html" title=" " alt="" coords="1236,132,1399,157"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1396,157,1515,181,1514,187,1395,163"/>
+<area shape="rect" id="Node000003" href="$d8/dd9/a07349.html" title=" " alt="" coords="1007,171,1159,196"/>
+<area shape="poly" id="edge14_Node000001_Node000003" title=" " alt="" coords="1173,183,1494,192,1494,197,1173,188"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1172,166,1239,155,1240,160,1173,171"/>
+<area shape="rect" id="Node000004" href="$d3/d2f/a03777.html" title=" " alt="" coords="740,45,860,71"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="874,57,929,66,984,85,1013,104,1039,127,1074,169,1070,172,1035,130,1010,108,981,90,928,71,873,62"/>
+<area shape="rect" id="Node000005" href="$d8/d3d/a08569.html" title=" " alt="" coords="445,45,616,71"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="629,55,740,55,740,61,629,61"/>
+<area shape="rect" id="Node000006" href="$d5/d6f/a08605.html" title=" " alt="" coords="5,36,141,61"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="156,48,445,54,445,59,155,53"/>
+<area shape="rect" id="Node000007" href="$d8/d3d/a08569.html" title="Representation of a Unique instance class." alt="" coords="191,5,328,31"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="154,33,190,27,191,32,155,38"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="342,27,445,43,445,48,341,33"/>
+<area shape="rect" id="Node000008" href="$d0/d53/a06721.html" title=" " alt="" coords="701,156,899,181"/>
+<area shape="poly" id="edge8_Node000003_Node000008" title=" " alt="" coords="912,172,1007,177,1007,182,912,177"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="467,115,594,155"/>
+<area shape="poly" id="edge13_Node000002_Node000009" title=" " alt="" coords="608,133,677,134,1209,139,1236,140,1236,145,1209,145,677,139,608,139"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="608,144,640,149,702,156,701,161,640,154,607,150"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="196,115,323,155"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="337,133,467,133,467,138,337,138"/>
+<area shape="rect" id="Node000011" href="$de/d4d/a09361.html" title=" " alt="" coords="723,205,877,231"/>
+<area shape="poly" id="edge11_Node000003_Node000011" title=" " alt="" coords="891,205,982,194,1006,191,1007,196,983,199,892,210"/>
+<area shape="rect" id="Node000012" href="$d4/d04/a05453.html" title=" " alt="" coords="724,255,876,280"/>
+<area shape="poly" id="edge12_Node000003_Node000012" title=" " alt="" coords="876,249,982,221,1052,194,1054,198,983,226,878,254"/>
+<area shape="rect" id="Node000013" href="$d8/d07/a05921.html" title=" " alt="" coords="1233,245,1401,285"/>
+<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="1414,241,1470,227,1538,207,1540,212,1471,233,1415,247"/>
+</map>

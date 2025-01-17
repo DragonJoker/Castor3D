@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: CastorUtils/Align/NonAlignedMemoryAllocator.hpp File Reference</title>
+<title>Castor3D: Castor3D/Shader/Ubos/HdrConfigUbo.hpp File Reference</title>
 <link rel="icon" href="../../castor-small.png" type="image/x-icon" />
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
@@ -21,7 +21,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.16.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.17.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -49,27 +49,74 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_581a2c521a9f6c8a8206ef65b82e493b.html">CastorUtils</a></li><li class="navelem"><a class="el" href="../../dir_eb4b37955468fb741928c8c8a3179a24.html">Align</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_d31b06848c74e058bfe0cc0eae81a8c8.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dir_73b4ff1c0d48677e07219a6e5cbe5dfd.html">Shader</a></li><li class="navelem"><a class="el" href="../../dir_7cb5e4c64a1bf58db52aef2025a37836.html">Ubos</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">NonAlignedMemoryAllocator.hpp File Reference</div></div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a>  </div>
+  <div class="headertitle"><div class="title">HdrConfigUbo.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d5b/a07947.html">castor::NonAlignedMemoryAllocator</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d04/a08037.html">castor3d::shader::HdrConfigData</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d5e/a08041.html">castor3d::HdrConfigUbo</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d2/dd2/a02279" id="r_d2/dd2/a02279"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd2/a02279.html">castor</a></td></tr>
+<tr class="memitem:d6/d71/a02344" id="r_d6/d71/a02344"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:df/d1b/a02346" id="r_df/d1b/a02346"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d1b/a02346.html">castor3d::shader</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a50c0f31449529cb9a46b37ed7395175e" id="r_a50c0f31449529cb9a46b37ed7395175e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a50c0f31449529cb9a46b37ed7395175e">C3D_HdrConfig</a>(writer,  binding,  set)</td></tr>
+<tr class="separator:a50c0f31449529cb9a46b37ed7395175e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a50c0f31449529cb9a46b37ed7395175e" name="a50c0f31449529cb9a46b37ed7395175e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50c0f31449529cb9a46b37ed7395175e">&#9670;&#160;</a></span>C3D_HdrConfig</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define C3D_HdrConfig</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">writer, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">binding, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname">set</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    sdw::UniformBuffer hdrConfig{ writer\</div>
+<div class="line">        , <span class="stringliteral">&quot;C3D_HdrConfig&quot;</span>\</div>
+<div class="line">        , <span class="stringliteral">&quot;c3d_hdrConfig&quot;</span>\</div>
+<div class="line">        , uint32_t( binding )\</div>
+<div class="line">        , uint32_t( set )\</div>
+<div class="line">        , ast::type::MemoryLayout::eStd140\</div>
+<div class="line">        , <span class="keyword">true</span> };\</div>
+<div class="line">    <span class="keyword">auto</span> c3d_hdrConfigData = hdrConfig.declMember&lt; <a class="code hl_struct" href="../../d8/d04/a08037.html">castor3d::shader::HdrConfigData</a> &gt;( <span class="stringliteral">&quot;d&quot;</span> );\</div>
+<div class="line">    hdrConfig.end()</div>
+<div class="ttc" id="aa08037_html"><div class="ttname"><a href="../../d8/d04/a08037.html">castor3d::shader::HdrConfigData</a></div><div class="ttdef"><b>Definition</b> HdrConfigUbo.hpp:22</div></div>
+</div><!-- fragment -->
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

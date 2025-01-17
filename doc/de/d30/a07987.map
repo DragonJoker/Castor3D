@@ -1,0 +1,28 @@
+<map id="castor3d::shader::LightingModelDesc" name="castor3d::shader::LightingModelDesc">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1145,171,1317,211"/>
+<area shape="rect" id="Node000002" href="$d8/d52/a07981.html" title=" " alt="" coords="851,107,1031,147"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1046,147,1145,169,1144,174,1044,152"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="241,223,368,263"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="345,213,403,177,479,136,566,99,657,72,703,62,741,57,778,59,824,72,837,82,848,92,873,104,871,109,845,97,833,86,821,77,777,65,741,63,704,68,658,77,568,104,481,141,406,181,348,217"/>
+<area shape="rect" id="Node000005" href="$d8/d52/a07981.html" title=" " alt="" coords="453,172,633,212"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="381,224,452,209,453,214,382,229"/>
+<area shape="rect" id="Node000006" href="$d8/d52/a07981.html" title=" " alt="" coords="851,43,1031,83"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="319,209,341,172,370,130,407,90,452,59,504,38,559,24,616,17,672,15,779,24,867,40,866,45,778,29,672,21,616,22,560,29,506,43,455,64,411,94,374,134,345,175,324,211"/>
+<area shape="rect" id="Node000007" href="$d8/d52/a07981.html" title=" " alt="" coords="851,235,1031,275"/>
+<area shape="poly" id="edge10_Node000007_Node000003" title=" " alt="" coords="348,267,397,293,454,312,558,332,641,341,680,339,722,333,821,303,833,295,845,284,871,272,874,277,848,289,837,299,824,308,723,338,681,344,641,346,557,337,453,317,395,298,346,272"/>
+<area shape="rect" id="Node000008" href="$d8/d52/a07981.html" title=" " alt="" coords="851,299,1031,339"/>
+<area shape="poly" id="edge13_Node000008_Node000003" title=" " alt="" coords="333,271,385,320,418,343,454,360,511,375,570,383,630,383,689,379,798,360,883,336,884,341,799,365,690,384,630,389,570,388,510,381,452,365,416,348,382,324,330,275"/>
+<area shape="rect" id="Node000009" href="$d8/d52/a07981.html" title=" " alt="" coords="847,171,1036,211"/>
+<area shape="poly" id="edge16_Node000009_Node000003" title=" " alt="" coords="382,256,474,268,585,275,645,273,705,268,765,257,821,240,833,231,845,220,871,208,873,213,848,225,837,235,824,245,766,262,706,273,645,279,585,280,473,274,381,261"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,223,132,263"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="146,240,241,240,241,245,146,245"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="647,171,657,169,850,138,851,143,658,175,648,176"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="584,162,618,142,656,124,756,93,850,73,851,78,757,98,658,129,621,147,586,167"/>
+<area shape="poly" id="edge11_Node000007_Node000005" title=" " alt="" coords="648,208,658,209,851,239,850,244,657,215,647,213"/>
+<area shape="poly" id="edge14_Node000008_Node000005" title=" " alt="" coords="586,217,621,237,658,255,757,285,851,304,850,309,756,290,656,260,618,242,584,222"/>
+<area shape="poly" id="edge17_Node000009_Node000005" title=" " alt="" coords="647,189,846,188,846,194,647,194"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="1018,85,1037,92,1123,131,1195,168,1193,173,1121,136,1035,97,1016,90"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="1044,229,1144,207,1145,212,1046,234"/>
+<area shape="poly" id="edge12_Node000001_Node000008" title=" " alt="" coords="1015,292,1035,284,1120,247,1193,208,1196,213,1122,252,1037,289,1017,297"/>
+<area shape="poly" id="edge15_Node000001_Node000009" title=" " alt="" coords="1050,188,1145,188,1145,193,1050,193"/>
+</map>

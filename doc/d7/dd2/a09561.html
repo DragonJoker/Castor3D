@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::ControlFlagTypeT Concept Reference</title>
+<title>Castor3D: castor::PointComponentGetT&lt; Point&lt; TypeT, 3u &gt; &gt; Struct Template Reference</title>
 <link rel="icon" href="../../castor-small.png" type="image/x-icon" />
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
@@ -21,7 +21,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.16.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.17.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -37,28 +37,59 @@
       <li><a href="../../pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="../../namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="../../concepts.html"><span>Concepts</span></a></li>
-      <li><a href="../../annotated.html"><span>Classes</span></a></li>
+      <li class="current"><a href="../../annotated.html"><span>Classes</span></a></li>
       <li><a href="../../files.html"><span>Files</span></a></li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="../../annotated.html"><span>Class&#160;List</span></a></li>
+      <li><a href="../../classes.html"><span>Class&#160;Index</span></a></li>
+      <li><a href="../../inherits.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="../../functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d9/dba/a02278.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d7/dd2/a09561.html">ControlFlagTypeT</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dc/d0a/a02345.html">castor</a></li><li class="navelem"><a class="el" href="../../d7/dd2/a09561.html">PointComponentGetT&lt; Point&lt; TypeT, 3u &gt; &gt;</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="headertitle"><div class="title">castor3d::ControlFlagTypeT Concept Reference</div></div>
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="../../db/dba/a09558.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">castor::PointComponentGetT&lt; Point&lt; TypeT, 3u &gt; &gt; Struct Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;GuiModule.hpp&gt;</code></p>
-<h2 class="groupheader">Concept definition</h2>
-<div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> TypeT&gt;</div>
-<div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="../../d7/dd2/a09561.html">castor3d::ControlFlagTypeT</a> =  ( std::is_same_v&lt; TypeT, ControlFlagType &gt;</div>
-<div class="line">        || std::is_same_v&lt; std::underlying_type_t&lt; TypeT &gt;, <a class="code hl_typedef" href="../../d9/dba/a02278.html#a282ee02985799c2bb09d6e09dbe1b40b">ControlFlagType</a> &gt; )</div>
-<div class="ttc" id="aa02278_html_a282ee02985799c2bb09d6e09dbe1b40b"><div class="ttname"><a href="../../d9/dba/a02278.html#a282ee02985799c2bb09d6e09dbe1b40b">castor3d::ControlFlagType</a></div><div class="ttdeci">uint64_t ControlFlagType</div><div class="ttdef"><b>Definition</b> GuiModule.hpp:18</div></div>
-<div class="ttc" id="aa09561_html"><div class="ttname"><a href="../../d7/dd2/a09561.html">castor3d::ControlFlagTypeT</a></div><div class="ttdef"><b>Definition</b> GuiModule.hpp:470</div></div>
-</div><!-- fragment --></div><!-- contents -->
+<p><code>#include &lt;MathModule.hpp&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ad84e8a835fef210c14eb57dd545b12ee" id="r_ad84e8a835fef210c14eb57dd545b12ee"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad84e8a835fef210c14eb57dd545b12ee">Type</a> = TypeT</td></tr>
+<tr class="separator:ad84e8a835fef210c14eb57dd545b12ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="ad84e8a835fef210c14eb57dd545b12ee" name="ad84e8a835fef210c14eb57dd545b12ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad84e8a835fef210c14eb57dd545b12ee">&#9670;&#160;</a></span>Type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TypeT &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="../../df/d7a/a09553.html">castor::PointComponentGetT</a>&lt; <a class="el" href="../../d9/d28/a09493.html">Point</a>&lt; TypeT, 3u &gt; &gt;::Type = TypeT</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>CastorUtils/Math/<a class="el" href="../../df/d4a/a02204.html">MathModule.hpp</a></li>
+</ul>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0

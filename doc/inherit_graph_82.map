@@ -1,3 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$d7/df1/a04143.html" title=" " alt="" coords="5,5,168,31"/>
+<area shape="rect" id="Node000000" href="$d2/d50/a03473.html" title=" " alt="" coords="5,63,188,88"/>
+<area shape="rect" id="Node000001" href="$d9/d74/a03477.html" title="Chunk data writer." alt="" coords="236,5,419,31"/>
+<area shape="poly" id="edge438_Node000000_Node000001" title=" " alt="" coords="161,57,275,28,276,33,163,62"/>
+<area shape="rect" id="Node000002" href="$d0/dc1/a03485.html" title="ChunkWriter specialisation for castor::Path." alt="" coords="251,55,403,95"/>
+<area shape="poly" id="edge439_Node000000_Node000002" title=" " alt="" coords="201,73,251,73,251,78,201,78"/>
+<area shape="rect" id="Node000003" href="$de/d8a/a03481.html" title="ChunkWriter specialisation for castor::String." alt="" coords="251,119,403,159"/>
+<area shape="poly" id="edge440_Node000000_Node000003" title=" " alt="" coords="157,89,255,117,254,122,156,94"/>
 </map>

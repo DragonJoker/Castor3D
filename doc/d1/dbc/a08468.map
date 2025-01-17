@@ -1,0 +1,15 @@
+<map id="castor::ConnectionT&lt; MySignalT &gt;" name="castor::ConnectionT&lt; MySignalT &gt;">
+<area shape="rect" id="Node000001" title="Connection to a signal." alt="" coords="197,133,336,173"/>
+<area shape="rect" id="Node000003" href="$df/d9b/a08469.html" title=" " alt="" coords="597,5,756,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="298,122,326,101,359,83,419,61,482,45,597,28,598,33,483,50,421,66,361,88,329,106,301,127"/>
+<area shape="rect" id="Node000004" href="$df/d9b/a08469.html" title=" " alt="" coords="573,69,780,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="349,133,360,131,573,99,574,104,360,136,350,138"/>
+<area shape="rect" id="Node000005" href="$df/d9b/a08469.html" title=" " alt="" coords="575,133,778,173"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="350,151,575,151,575,156,350,156"/>
+<area shape="rect" id="Node000006" href="$df/d9b/a08469.html" title=" " alt="" coords="601,197,753,237"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="350,169,360,171,601,206,600,211,360,176,349,174"/>
+<area shape="rect" id="Node000007" href="$df/d9b/a08469.html" title=" " alt="" coords="580,261,773,301"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="301,180,329,201,361,219,416,239,473,254,580,272,580,277,472,259,414,244,359,224,326,206,298,184"/>
+<area shape="rect" id="Node000002" href="$d8/d16/a08601.html" title=" " alt="" coords="5,141,148,166"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="162,151,197,151,197,156,162,156"/>
+</map>

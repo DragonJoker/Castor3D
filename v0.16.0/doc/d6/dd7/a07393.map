@@ -1,0 +1,9 @@
+<map id="castor3d::SpirVShader" name="castor3d::SpirVShader">
+<area shape="rect" id="Node000001" title="A SPIR&#45;V shader module, with SPIR&#45;V binary and debug text source." alt="" coords="22,211,175,236"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,115,96,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="65,152,95,209,90,212,60,154"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="121,108,247,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="160,160,111,212,107,209,156,156"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="121,5,247,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="187,59,187,108,181,108,181,59"/>
+</map>

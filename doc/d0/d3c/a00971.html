@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D/Render/Clustered/MergeSortLights.hpp File Reference</title>
+<title>Castor3D: Castor3D/Render/Clustered/ComputeLightsAABB.hpp File Reference</title>
 <link rel="icon" href="../../castor-small.png" type="image/x-icon" />
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
@@ -21,7 +21,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.16.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.17.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -56,19 +56,21 @@
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">MergeSortLights.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">ComputeLightsAABB.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d9/dba/a02278" id="r_d9/dba/a02278"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html">castor3d</a></td></tr>
+<tr class="memitem:d6/d71/a02344" id="r_d6/d71/a02344"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a787a6e29b9217d1ac9b0341257e4fb53" id="r_a787a6e29b9217d1ac9b0341257e4fb53"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> crg::FramePassArray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dba/a02278.html#a787a6e29b9217d1ac9b0341257e4fb53">castor3d::createMergeSortLightsPass</a> (crg::FramePassGroup &amp;graph, crg::FramePassArray const &amp;previousPasses, <a class="el" href="../../dc/d32/a06415.html">RenderDevice</a> const &amp;device, <a class="el" href="../../d1/d77/a05915.html">FrustumClusters</a> &amp;clusters)</td></tr>
-<tr class="separator:a787a6e29b9217d1ac9b0341257e4fb53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2594310fbbf330b4fd86a3bb7d1c7eb9" id="r_a2594310fbbf330b4fd86a3bb7d1c7eb9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> crg::FramePass const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#a2594310fbbf330b4fd86a3bb7d1c7eb9">castor3d::createComputeLightsAABBPass</a> (crg::FramePassGroup &amp;graph, crg::FramePass const *previousPass, <a class="el" href="../../dd/db0/a06609.html">RenderDevice</a> const &amp;device, <a class="el" href="../../d1/d26/a08009.html">CameraUbo</a> const &amp;mainCameraUbo, <a class="el" href="../../d1/d26/a08009.html">CameraUbo</a> const &amp;clustersCameraUbo, <a class="el" href="../../dd/d27/a06045.html">FrustumClusters</a> const &amp;clusters)</td></tr>
+<tr class="separator:a2594310fbbf330b4fd86a3bb7d1c7eb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa608234cab459fb2d6c7f30148ca6c87" id="r_aa608234cab459fb2d6c7f30148ca6c87"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d5e/a00275.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d71/a02344.html#aa608234cab459fb2d6c7f30148ca6c87">castor3d::createDisplayLightsAABBProgram</a> (<a class="el" href="../../dd/db0/a06609.html">RenderDevice</a> const &amp;device, <a class="el" href="../../dd/d27/a06045.html">FrustumClusters</a> const &amp;clusters, <a class="el" href="../../d1/d26/a08009.html">CameraUbo</a> const &amp;mainCameraUbo, <a class="el" href="../../d1/d26/a08009.html">CameraUbo</a> const &amp;clustersCameraUbo, ashes::PipelineShaderStageCreateInfoArray &amp;program, ashes::VkDescriptorSetLayoutBindingArray &amp;bindings, ashes::WriteDescriptorSetArray &amp;writes)</td></tr>
+<tr class="separator:aa608234cab459fb2d6c7f30148ca6c87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

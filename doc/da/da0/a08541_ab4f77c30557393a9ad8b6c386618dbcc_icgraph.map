@@ -1,0 +1,13 @@
+<map id="castor::ResourceCacheBaseT::doTryAddNewNoLockT" name="castor::ResourceCacheBaseT::doTryAddNewNoLockT">
+<area shape="rect" id="Node000001" title=" " alt="" coords="477,101,665,141"/>
+<area shape="rect" id="Node000002" href="$da/da0/a08541.html#aee8d1df08f426ba200de96ef84fd8eb8" title=" " alt="" coords="241,37,429,77"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="483,100,409,80,410,75,485,95"/>
+<area shape="rect" id="Node000005" href="$da/da0/a08541.html#a60afa3d18144c9c5dffac5722ca17e51" title="Add an element, constructed in&#45;place." alt="" coords="241,101,429,141"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="463,124,430,124,430,119,463,119"/>
+<area shape="rect" id="Node000006" href="$da/da0/a08541.html#a7a9300dac48c07e1d4a3ec9e183cdd2a" title="Add an element, constructed in&#45;place." alt="" coords="241,165,429,205"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="485,148,410,168,409,163,483,142"/>
+<area shape="rect" id="Node000003" href="$da/da0/a08541.html#a85c66f21579cca9b9f325913e1a73e2b" title="Logging version of tryAdd." alt="" coords="5,5,193,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="227,45,193,41,194,35,228,40"/>
+<area shape="rect" id="Node000004" href="$da/da0/a08541.html#a35d0b614c078b3f48c5dff1957427dbd" title="Logging version of tryAdd." alt="" coords="5,69,193,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="228,75,194,79,193,74,227,69"/>
+</map>

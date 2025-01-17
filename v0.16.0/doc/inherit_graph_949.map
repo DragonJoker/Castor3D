@@ -1,0 +1,59 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,863,112,888"/>
+<area shape="rect" id="Node000001" href="$d9/d6f/a08847.html" title="Helper struct to tell if a pixel format is compressed." alt="" coords="160,5,383,31"/>
+<area shape="poly" id="edge950_Node000000_Node000001" title=" " alt="" coords="59,848,70,674,90,418,104,289,120,176,138,89,147,60,158,42,174,29,177,33,162,45,152,62,143,91,125,176,109,290,95,418,75,674,64,849"/>
+<area shape="rect" id="Node000002" href="$d6/db9/a08407.html" title="Structure used to tell if an ParameterType has a base parameter type." alt="" coords="182,55,361,95"/>
+<area shape="poly" id="edge951_Node000000_Node000002" title=" " alt="" coords="57,849,59,698,70,476,82,360,100,254,125,166,140,132,158,106,180,88,184,92,162,109,145,135,130,168,105,255,87,361,75,476,64,698,62,849"/>
+<area shape="rect" id="Node000003" href="$df/d9d/a08887.html" title="Helper struct to tell if a pixel format uses floating point 16 bits components." alt="" coords="186,119,357,159"/>
+<area shape="poly" id="edge952_Node000000_Node000003" title=" " alt="" coords="57,849,61,709,74,506,86,401,104,304,127,225,142,194,158,169,184,150,187,155,162,173,146,196,132,227,109,306,92,402,79,506,66,710,63,849"/>
+<area shape="rect" id="Node000004" href="$d3/d35/a08875.html" title="Helper struct to tell if a pixel format uses signed 16 bits components." alt="" coords="185,183,357,223"/>
+<area shape="poly" id="edge953_Node000000_Node000004" title=" " alt="" coords="58,849,63,720,78,536,90,441,107,355,130,283,143,255,158,233,184,215,187,219,162,237,148,258,135,285,113,356,96,442,83,537,68,720,63,849"/>
+<area shape="rect" id="Node000005" href="$d3/d9e/a08859.html" title="Helper struct to tell if a pixel format uses unsigned 16 bits components." alt="" coords="185,247,357,287"/>
+<area shape="poly" id="edge954_Node000000_Node000005" title=" " alt="" coords="58,849,65,732,82,567,95,482,111,405,132,342,144,317,158,297,183,279,186,283,162,301,149,319,137,344,116,407,100,483,87,567,70,732,64,849"/>
+<area shape="rect" id="Node000006" href="$d0/d7d/a08891.html" title="Helper struct to tell if a pixel format uses floating point 32 bits components." alt="" coords="186,311,357,351"/>
+<area shape="poly" id="edge955_Node000000_Node000006" title=" " alt="" coords="59,849,68,743,86,598,99,523,115,456,135,400,158,362,184,343,187,347,162,365,139,402,120,457,104,525,91,598,73,744,64,849"/>
+<area shape="rect" id="Node000007" href="$d1/d83/a08879.html" title="Helper struct to tell if a pixel format uses signed 32 bits components." alt="" coords="185,375,357,415"/>
+<area shape="poly" id="edge956_Node000000_Node000007" title=" " alt="" coords="60,849,70,755,90,629,103,565,119,507,137,459,158,425,184,407,187,412,162,429,142,461,124,508,108,566,95,630,76,756,65,849"/>
+<area shape="rect" id="Node000008" href="$d3/dcf/a08863.html" title="Helper struct to tell if a pixel format uses unsigned 32 bits components." alt="" coords="185,439,357,479"/>
+<area shape="poly" id="edge957_Node000000_Node000008" title=" " alt="" coords="61,849,73,767,94,660,122,557,139,517,158,489,183,472,186,476,162,493,144,520,128,559,99,661,79,768,66,850"/>
+<area shape="rect" id="Node000009" href="$d8/d0c/a08895.html" title="Helper struct to tell if a pixel format uses floating point 64 bits components." alt="" coords="186,503,357,543"/>
+<area shape="poly" id="edge958_Node000000_Node000009" title=" " alt="" coords="58,848,62,788,77,709,90,667,107,626,130,587,158,553,184,536,187,540,162,557,134,590,112,628,95,669,82,710,68,789,63,849"/>
+<area shape="rect" id="Node000010" href="$d4/d08/a08883.html" title="Helper struct to tell if a pixel format uses signed 64 bits components." alt="" coords="185,567,357,607"/>
+<area shape="poly" id="edge959_Node000000_Node000010" title=" " alt="" coords="60,849,68,800,86,737,114,673,134,643,158,617,184,601,187,605,162,621,138,647,119,676,91,739,74,801,65,850"/>
+<area shape="rect" id="Node000011" href="$de/d06/a08867.html" title="Helper struct to tell if a pixel format uses unsigned 64 bits components." alt="" coords="185,631,357,671"/>
+<area shape="poly" id="edge960_Node000000_Node000011" title=" " alt="" coords="64,848,76,811,95,766,122,720,158,681,184,666,187,670,162,685,127,724,100,768,81,813,69,850"/>
+<area shape="rect" id="Node000012" href="$d5/df5/a08871.html" title="Helper struct to tell if a pixel format uses signed 8 bits components." alt="" coords="189,695,354,735"/>
+<area shape="poly" id="edge961_Node000000_Node000012" title=" " alt="" coords="71,849,106,797,130,769,159,745,187,730,190,735,161,750,134,773,110,800,75,852"/>
+<area shape="rect" id="Node000013" href="$d5/d1d/a08851.html" title="Helper struct to tell if a pixel format uses unsigned 8 bits components." alt="" coords="175,759,368,799"/>
+<area shape="poly" id="edge962_Node000000_Node000013" title=" " alt="" coords="86,852,120,830,159,809,190,797,192,802,161,814,123,835,89,857"/>
+<area shape="rect" id="Node000014" href="$de/d22/a08855.html" title="Helper struct to tell if a pixel format uses unsigned 8 bits components." alt="" coords="189,823,354,863"/>
+<area shape="poly" id="edge963_Node000000_Node000014" title=" " alt="" coords="125,863,188,853,189,858,126,868"/>
+<area shape="rect" id="Node000015" href="$d5/d41/a08679.html" title="Structure used to tell if a ParameterType is an arithmetic type." alt="" coords="190,887,353,927"/>
+<area shape="poly" id="edge964_Node000000_Node000015" title=" " alt="" coords="126,883,190,892,189,898,126,888"/>
+<area shape="rect" id="Node000016" href="$da/dd1/a08287.html" title=" " alt="" coords="169,952,373,977"/>
+<area shape="poly" id="edge965_Node000000_Node000016" title=" " alt="" coords="88,894,122,917,161,937,199,949,198,954,159,942,119,921,85,898"/>
+<area shape="rect" id="Node000017" href="$d1/d76/a08843.html" title="Helper struct to tell if a pixel format is compressed." alt="" coords="197,1002,346,1042"/>
+<area shape="poly" id="edge966_Node000000_Node000017" title=" " alt="" coords="77,898,113,943,136,967,161,986,198,1004,195,1008,159,991,132,971,109,947,73,901"/>
+<area shape="rect" id="Node000018" href="$de/d05/a08899.html" title="Helper struct to tell if a pixel format uses unsigned 16 bits depth component." alt="" coords="184,1066,359,1106"/>
+<area shape="poly" id="edge967_Node000000_Node000018" title=" " alt="" coords="70,901,83,935,102,976,128,1017,162,1052,185,1066,182,1071,158,1056,124,1020,97,979,78,937,65,902"/>
+<area shape="rect" id="Node000019" href="$d0/d2b/a08903.html" title="Helper struct to tell if a pixel format uses unsigned 24 bits depth component." alt="" coords="184,1130,359,1170"/>
+<area shape="poly" id="edge968_Node000000_Node000019" title=" " alt="" coords="66,901,75,947,92,1005,121,1065,139,1092,162,1116,185,1131,182,1136,158,1120,135,1096,116,1068,87,1007,70,949,61,902"/>
+<area shape="rect" id="Node000020" href="$d1/db9/a08907.html" title="Helper struct to tell if a pixel format uses floating point 32 bits depth component." alt="" coords="185,1194,358,1234"/>
+<area shape="poly" id="edge969_Node000000_Node000020" title=" " alt="" coords="63,902,69,959,84,1034,97,1074,113,1113,135,1149,162,1180,186,1196,183,1201,158,1184,131,1152,109,1115,92,1076,79,1036,64,960,58,902"/>
+<area shape="rect" id="Node000021" href="$d1/d28/a08831.html" title="Helper struct to tell if a pixel format represents a depth pixel." alt="" coords="196,1258,347,1298"/>
+<area shape="poly" id="edge970_Node000000_Node000021" title=" " alt="" coords="62,902,63,970,76,1062,88,1111,106,1159,130,1204,162,1244,178,1256,197,1265,194,1270,175,1261,158,1248,126,1207,101,1162,83,1113,71,1063,58,971,56,902"/>
+<area shape="rect" id="Node000022" href="$d4/d6b/a08839.html" title="Helper struct to tell if a pixel format represents a depth or stencil pixel." alt="" coords="176,1322,367,1362"/>
+<area shape="poly" id="edge971_Node000000_Node000022" title=" " alt="" coords="65,902,76,993,96,1115,125,1232,142,1277,162,1308,177,1321,174,1325,158,1312,137,1280,120,1234,91,1116,71,994,60,902"/>
+<area shape="rect" id="Node000023" href="$db/dff/a08291.html" title=" " alt="" coords="171,1386,372,1426"/>
+<area shape="poly" id="edge972_Node000000_Node000023" title=" " alt="" coords="64,901,73,1004,92,1146,105,1217,121,1283,140,1336,162,1372,176,1384,172,1388,158,1376,135,1338,116,1284,100,1219,86,1147,68,1005,59,902"/>
+<area shape="rect" id="Node000024" href="$d1/d50/a09267.html" title=" " alt="" coords="206,1450,337,1490"/>
+<area shape="poly" id="edge973_Node000000_Node000024" title=" " alt="" coords="64,902,71,1016,88,1177,101,1259,117,1333,138,1395,149,1418,162,1436,182,1452,207,1461,205,1466,180,1456,158,1440,145,1421,133,1397,112,1335,95,1260,82,1178,66,1017,58,902"/>
+<area shape="rect" id="Node000025" href="$d3/dc3/a09307.html" title=" " alt="" coords="176,1515,367,1540"/>
+<area shape="poly" id="edge974_Node000000_Node000025" title=" " alt="" coords="63,902,68,1029,83,1209,95,1301,112,1385,134,1454,147,1480,162,1500,178,1512,174,1517,158,1504,143,1483,129,1456,107,1387,90,1302,77,1209,63,1029,58,902"/>
+<area shape="rect" id="Node000026" href="$dc/daf/a08911.html" title="Helper struct to tell if a pixel format uses only an unsigned 8 bits stencil component." alt="" coords="188,1565,355,1605"/>
+<area shape="poly" id="edge975_Node000000_Node000026" title=" " alt="" coords="63,902,67,1037,81,1231,94,1331,111,1423,134,1498,147,1527,162,1550,174,1561,189,1569,187,1574,171,1565,158,1553,142,1530,129,1500,106,1424,88,1332,76,1232,62,1037,58,902"/>
+<area shape="rect" id="Node000027" href="$d3/def/a09339.html" title=" " alt="" coords="179,1629,363,1655"/>
+<area shape="poly" id="edge976_Node000000_Node000027" title=" " alt="" coords="62,902,64,1049,75,1264,88,1374,105,1476,130,1559,145,1591,162,1615,181,1629,177,1633,158,1619,140,1594,125,1561,100,1477,82,1375,70,1264,59,1049,57,902"/>
+<area shape="rect" id="Node000028" href="$d2/d5d/a08835.html" title="Helper struct to tell if a pixel format represents a stencil pixel." alt="" coords="193,1679,350,1719"/>
+<area shape="poly" id="edge977_Node000000_Node000028" title=" " alt="" coords="62,902,63,1057,74,1286,86,1404,104,1513,129,1603,145,1638,162,1664,176,1677,193,1686,191,1690,173,1681,158,1668,140,1640,124,1605,99,1514,81,1405,69,1286,58,1057,57,902"/>
+</map>

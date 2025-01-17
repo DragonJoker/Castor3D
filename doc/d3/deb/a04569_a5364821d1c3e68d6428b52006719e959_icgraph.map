@@ -1,0 +1,7 @@
+<map id="castor3d::DiffuseTransmissionFactorMapComponent::Plugin::getTextureFlags" name="castor3d::DiffuseTransmissionFactorMapComponent::Plugin::getTextureFlags">
+<area shape="rect" id="Node000001" title=" " alt="" coords="249,45,445,100"/>
+<area shape="rect" id="Node000002" href="$d3/deb/a04569.html#a8b175ca67e407a7302abaa5406ab9fb5" title="Fills the texture configuration for use with this component." alt="" coords="5,5,201,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="235,57,201,51,202,46,236,52"/>
+<area shape="rect" id="Node000003" href="$d3/deb/a04569.html#a80435c26d6928e69e50fc62af3d7d8d5" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="5,84,201,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="236,93,202,98,201,93,235,88"/>
+</map>

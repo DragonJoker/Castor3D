@@ -1,0 +1,10 @@
+<map id="castor3d::BinaryWriter&lt; SceneNodeAnimationKeyFrame &gt;" name="castor3d::BinaryWriter&lt; SceneNodeAnimationKeyFrame &gt;">
+<area shape="rect" id="Node000001" title="SceneNodeAnimationKeyFrame binary loader." alt="" coords="5,285,236,325"/>
+<area shape="rect" id="Node000002" href="$d2/d74/a03293.html" title=" " alt="" coords="5,196,236,236"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,250,123,285,118,285,118,250"/>
+<area shape="rect" id="Node000003" href="$d2/daf/a03245.html" title=" " alt="" coords="75,5,230,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="139,44,125,67,115,94,111,121,112,149,119,195,113,196,106,149,106,121,110,93,120,65,134,41"/>
+<area shape="rect" id="Node000004" href="$d2/d74/a03293.html" title="Binary data chunk writer base class." alt="" coords="181,93,364,133"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="180,37,250,91,247,95,177,41"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="234,143,151,198,148,194,231,139"/>
+</map>

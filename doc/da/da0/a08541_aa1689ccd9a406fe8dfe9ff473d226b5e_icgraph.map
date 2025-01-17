@@ -1,0 +1,13 @@
+<map id="castor::ResourceCacheBaseT::reportCreation" name="castor::ResourceCacheBaseT::reportCreation">
+<area shape="rect" id="Node000001" title=" " alt="" coords="495,51,683,91"/>
+<area shape="rect" id="Node000002" href="$da/da0/a08541.html#aae5b569e26955738733ba4de036629d7" title="Creates an element." alt="" coords="259,17,447,57"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="481,58,447,53,447,48,482,53"/>
+<area shape="rect" id="Node000004" href="$da/da0/a08541.html#aee8d1df08f426ba200de96ef84fd8eb8" title=" " alt="" coords="259,85,447,125"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="482,89,447,94,447,89,481,84"/>
+<area shape="rect" id="Node000003" href="$df/d36/a09057.html#a0f03d34ce051bfd45da137d8146a1fc4" title="Creates and adds an SDF font to the cache." alt="" coords="5,5,211,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="245,38,211,37,211,32,245,32"/>
+<area shape="rect" id="Node000005" href="$da/da0/a08541.html#a85c66f21579cca9b9f325913e1a73e2b" title="Logging version of tryAdd." alt="" coords="14,85,202,125"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="245,107,202,107,202,102,245,102"/>
+<area shape="rect" id="Node000006" href="$da/da0/a08541.html#a35d0b614c078b3f48c5dff1957427dbd" title="Logging version of tryAdd." alt="" coords="14,149,202,189"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="263,131,186,151,184,146,262,126"/>
+</map>

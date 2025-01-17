@@ -1,0 +1,40 @@
+<map id="castor3d::ParticleSystem" name="castor3d::ParticleSystem">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1729,233,1899,259"/>
+<area shape="rect" id="Node000017" href="$dd/d44/a07317.html" title=" " alt="" coords="2005,233,2199,259"/>
+<area shape="poly" id="edge21_Node000017_Node000001" title=" " alt="" coords="1913,243,2005,243,2005,249,1913,249"/>
+<area shape="rect" id="Node000002" href="$d0/d1f/a07245.html" title=" " alt="" coords="1411,112,1576,137"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1542,140,1780,231,1778,236,1540,145"/>
+<area shape="rect" id="Node000003" href="$df/d45/a08513.html" title=" " alt="" coords="532,5,715,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="729,22,973,40,1263,65,1319,69,1375,78,1423,93,1465,109,1463,114,1421,98,1374,83,1319,74,1262,70,972,45,728,27"/>
+<area shape="rect" id="Node000004" href="$df/d45/a08513.html" title="Class used to have an object owned by another one." alt="" coords="5,36,188,61"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="202,40,532,21,532,26,202,45"/>
+<area shape="rect" id="Node000008" href="$df/d45/a08513.html" title=" " alt="" coords="305,63,492,88"/>
+<area shape="poly" id="edge8_Node000008_Node000004" title=" " alt="" coords="181,61,212,65,305,71,305,76,212,70,180,66"/>
+<area shape="rect" id="Node000005" href="$da/d10/a08509.html" title="Class for named elements." alt="" coords="789,53,895,79"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="909,66,1117,78,1375,102,1424,109,1424,115,1374,107,1117,84,909,71"/>
+<area shape="rect" id="Node000006" href="$df/dee/a07461.html" title=" " alt="" coords="1116,112,1263,137"/>
+<area shape="poly" id="edge9_Node000006_Node000005" title=" " alt="" coords="909,75,1116,110,1115,115,909,80"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="1276,122,1410,122,1410,127,1276,127"/>
+<area shape="rect" id="Node000007" href="$d7/daf/a03181.html" title=" " alt="" coords="775,103,909,128"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="923,115,1116,120,1116,125,923,120"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="506,82,775,107,774,112,506,88"/>
+<area shape="rect" id="Node000009" href="$d2/dad/a08553.html" title=" " alt="" coords="755,153,929,193"/>
+<area shape="poly" id="edge10_Node000006_Node000009" title=" " alt="" coords="943,158,1092,138,1115,134,1116,140,1092,143,944,163"/>
+<area shape="rect" id="Node000010" href="$d8/d16/a08601.html" title=" " alt="" coords="25,167,168,192"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="181,162,212,158,305,153,518,144,611,144,731,151,755,154,754,159,730,157,611,149,518,149,305,158,212,163,182,167"/>
+<area shape="rect" id="Node000011" href="$d2/dad/a08553.html" title="Basic signal class." alt="" coords="307,167,490,192"/>
+<area shape="poly" id="edge13_Node000011_Node000010" title=" " alt="" coords="182,177,307,177,307,182,182,182"/>
+<area shape="rect" id="Node000012" href="$df/d9b/a08469.html" title="Connection to a signal." alt="" coords="953,206,1092,246"/>
+<area shape="poly" id="edge15_Node000012_Node000010" title=" " alt="" coords="182,189,306,202,489,213,671,219,953,223,953,229,670,225,489,218,305,207,182,194"/>
+<area shape="poly" id="edge12_Node000009_Node000011" title=" " alt="" coords="504,175,754,171,754,177,504,180"/>
+<area shape="poly" id="edge14_Node000002_Node000012" title=" " alt="" coords="1105,206,1433,135,1434,140,1106,211"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="1430,194,1557,234"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="1571,219,1729,235,1729,240,1570,224"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="1126,225,1253,265"/>
+<area shape="poly" id="edge17_Node000013_Node000014" title=" " alt="" coords="1266,234,1429,218,1430,223,1267,240"/>
+<area shape="rect" id="Node000015" href="$d7/da1/a07285.html" title=" " alt="" coords="1399,259,1588,284"/>
+<area shape="poly" id="edge18_Node000001_Node000015" title=" " alt="" coords="1602,268,1705,262,1748,256,1749,261,1706,267,1602,274"/>
+<area shape="rect" id="Node000016" href="$d5/d29/a09725.html" title=" " alt="" coords="1422,308,1565,333"/>
+<area shape="poly" id="edge19_Node000001_Node000016" title=" " alt="" coords="1578,311,1641,301,1705,287,1748,273,1786,256,1788,261,1750,278,1706,293,1642,307,1579,316"/>
+<area shape="poly" id="edge20_Node000001_Node000017" title=" " alt="" coords="2033,264,1979,270,1922,270,1868,261,1869,256,1923,265,1979,265,2033,258"/>
+</map>

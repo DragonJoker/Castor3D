@@ -1,0 +1,12 @@
+<map id="castor3d::DebugVertexBuffers" name="castor3d::DebugVertexBuffers">
+<area shape="rect" id="Node000001" title=" " alt="" coords="97,269,292,295"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,181,160,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,213,181,267,178,271,107,217"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="101,93,214,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="140,131,95,183,91,179,136,127"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="184,181,371,207"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="186,124,210,140,263,179,260,183,206,145,183,129"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="138,5,177,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="160,45,160,93,155,93,155,45"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="259,219,208,271,204,267,255,215"/>
+</map>

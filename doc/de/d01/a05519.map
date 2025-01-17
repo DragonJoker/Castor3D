@@ -1,0 +1,18 @@
+<map id="castor3d::Mesh" name="castor3d::Mesh">
+<area shape="rect" id="Node000001" title=" " alt="" coords="148,284,260,309"/>
+<area shape="rect" id="Node000002" href="$da/d10/a08509.html" title="Class for named elements." alt="" coords="5,189,112,214"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,219,187,282,185,286,87,224"/>
+<area shape="rect" id="Node000003" href="$d7/daf/a03181.html" title=" " alt="" coords="137,189,271,214"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="207,228,207,284,201,284,201,228"/>
+<area shape="rect" id="Node000004" href="$df/d45/a08513.html" title=" " alt="" coords="111,93,297,119"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="207,132,207,189,201,189,201,132"/>
+<area shape="rect" id="Node000005" href="$df/d45/a08513.html" title="Class used to have an object owned by another one." alt="" coords="113,5,295,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="207,45,207,93,201,93,201,45"/>
+<area shape="rect" id="Node000006" href="$d2/dad/a08553.html" title=" " alt="" coords="296,181,493,221"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="345,230,229,286,226,282,343,225"/>
+<area shape="rect" id="Node000007" href="$d8/d16/a08601.html" title=" " alt="" coords="333,5,475,31"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="405,45,398,181,393,181,400,45"/>
+<area shape="rect" id="Node000008" href="$d2/dad/a08553.html" title="Basic signal class." alt="" coords="419,93,602,119"/>
+<area shape="poly" id="edge8_Node000008_Node000007" title=" " alt="" coords="431,37,498,91,495,95,427,41"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="487,129,420,183,417,179,484,125"/>
+</map>
