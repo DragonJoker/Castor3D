@@ -84,7 +84,7 @@ namespace castor
 
 	private:
 		castor3d::Scene & m_scene;
-		castor3d::LightBufferRPtr m_lightBuffer;
+		castor3d::LightBufferRPtr m_lightBuffer{};
 		castor::Vector< castor3d::LightGroup * > m_pendingLights;
 		castor::Array< castor::Vector< castor3d::LightGroup * >, size_t( castor3d::LightType::eCount ) > m_lightsPerType;
 		bool m_dirty{ true };
