@@ -358,39 +358,13 @@ namespace castor3d
 		, m_enabled{ m_dirty, true, [this](){ markDirty(); } }
 	{
 		m_category = factory.create( lightType, m_dirty, [this](){ markDirty(); } );
-		m_instance = m_category->instantiate( node, [this](){ onGPUChanged( *this ); } );
+		m_instance = m_category->instantiate( node, [this](){ return isEnabled(); } );
 	}
 
 	void Light::attachTo( SceneNode & node )
 	{
 		m_instance->setNode( node );
 		MovableObject::attachTo( node );
-	}
-
-	bool Light::updateShadow( Camera const & viewCamera
-		, Camera * lightCamera
-		, int32_t index )
-	{
-		auto result = m_instance->updateShadow( viewCamera, lightCamera, index );
-
-		if ( result )
-		{
-			onGPUChanged( *this );
-		}
-
-		return result;
-	}
-
-	void Light::fillLightBuffer( uint32_t index
-		, VkDeviceSize offset
-		, castor::Point4f * data )
-	{
-		m_instance->fillLightBuffer( isEnabled(), index, offset, data );
-	}
-
-	void Light::fillShadowBuffer( AllShadowData & data )const
-	{
-		m_instance->fillShadowBuffer( data );
 	}
 
 	void Light::accept( ConfigurationVisitorBase & vis )

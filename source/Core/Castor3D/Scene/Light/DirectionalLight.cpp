@@ -164,16 +164,16 @@ namespace castor3d
 	//*************************************************************************************************
 
 	DirectionalLight::DirectionalLight( bool & dirty
-		, castor::Function< void() > const & changedCallback )
-		: LightCategory{ LightType::eDirectional, dirty, changedCallback }
-		, m_illumination{ m_dirty, castor::Illumination{ 1.0f }, changedCallback }
+		, castor::Function< void() > const & markParentDirty )
+		: LightCategory{ LightType::eDirectional, dirty, markParentDirty }
+		, m_illumination{ m_dirty, castor::Illumination{ 1.0f }, markParentDirty }
 	{
 	}
 
 	LightInstanceUPtr DirectionalLight::instantiate( SceneNode & node
-		, castor::Function< void() > onGpuChanged )
+			, castor::Function< bool() > isParentEnabled )
 	{
-		return LightInstanceUPtr( new DirectionalLightInstance{ node, m_dirty, castor::move( onGpuChanged ), *this } );
+		return LightInstanceUPtr( new DirectionalLightInstance{ node, *this, castor::move( isParentEnabled ) } );
 	}
 
 	LightCategoryUPtr DirectionalLight::create( bool & dirty
@@ -200,37 +200,12 @@ namespace castor3d
 	//*************************************************************************************************
 
 	DirectionalLightInstance::DirectionalLightInstance( SceneNode & node
-		, bool & dirty
-		, castor::Function< void() > onGpuChanged
-		, DirectionalLight & category )
-		: LightInstance{ node, dirty, castor::move( onGpuChanged ), category }
+		, DirectionalLight & category
+		, castor::Function< bool() > isParentEnabled )
+		: LightInstance{ node, category, castor::move( isParentEnabled ) }
 		, m_cascades( node.getScene()->getDirectionalShadowCascades() )
 		, m_prvCascades( node.getScene()->getDirectionalShadowCascades() )
 	{
-	}
-
-	void DirectionalLightInstance::doUpdate()
-	{
-		m_direction = castor::Point3f{ 0, 0, 1 };
-		m_node->getDerivedOrientation().transform( m_direction, m_direction );
-		m_direction = castor::point::getNormalised( m_direction );
-	}
-
-	bool DirectionalLightInstance::doUpdateShadow( Camera const & viewCamera
-		, Camera * lightCamera
-		, int32_t index )
-	{
-		m_cascades = lgtdirectional::doComputeCascades( viewCamera
-			, *this
-			, uint32_t( m_cascades.size() ) );
-		bool result = m_cascades != m_prvCascades;
-
-		if ( result )
-		{
-			m_prvCascades = m_cascades;
-		}
-
-		return result;
 	}
 
 	void DirectionalLightInstance::fillShadowBuffer( AllShadowData & data )const
@@ -260,6 +235,30 @@ namespace castor3d
 		{
 			directional.transforms[i] = castor::Matrix4x4f{ 0.0f };
 		}
+	}
+
+	void DirectionalLightInstance::doUpdate()
+	{
+		m_direction = castor::Point3f{ 0, 0, 1 };
+		m_node->getDerivedOrientation().transform( m_direction, m_direction );
+		m_direction = castor::point::getNormalised( m_direction );
+	}
+
+	bool DirectionalLightInstance::doUpdateShadow( Camera const & viewCamera
+		, Camera * lightCamera
+		, int32_t index )
+	{
+		m_cascades = lgtdirectional::doComputeCascades( viewCamera
+			, *this
+			, uint32_t( m_cascades.size() ) );
+		bool result = m_cascades != m_prvCascades;
+
+		if ( result )
+		{
+			m_prvCascades = m_cascades;
+		}
+
+		return result;
 	}
 
 	void DirectionalLightInstance::doFillLightBuffer( castor::Point4f * data )const

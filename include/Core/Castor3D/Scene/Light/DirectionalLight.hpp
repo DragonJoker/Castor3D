@@ -36,33 +36,28 @@ namespace castor3d
 
 	private:
 		DirectionalLight( bool & dirty
-			, castor::Function< void() > const & changedCallback );
+			, castor::Function< void() > const & markParentDirty );
 
 	public:
 		/**
-		 *\~english
-		 *\brief		Creates an instance of this light category.
-		 *\param[in]	node	The parent node.
-		 *\~french
-		 *\brief		Crée une instance de cette catégorie de lumière.
-		 *\param[in]	node	Le scene node parent.
+		 *\copydoc		LightCategory::instantiate
 		 */
 		C3D_API LightInstanceUPtr instantiate( SceneNode & node
-			, castor::Function< void() > onGpuChanged )override;
+			, castor::Function< bool() > isParentEnabled )override;
 		/**
 		 *\~english
 		 *\brief		Creation function, used by Factory.
 		 *\param[in]	dirty			Used to tell the owner some changes have occured.
-		 *\param[in]	changedCallback	Callback to call when changes have occured.
+		 *\param[in]	markParentDirty	Callback to call when changes have occured.
 		 *\return		A light source.
 		 *\~french
 		 *\brief		Fonction de création utilisée par Factory.
 		 *\param[in]	dirty			Utilisé pour dire au parent que des changements ont eu lieu.
-		 *\param[in]	changedCallback	Callback à appeler lorsque des changements ont eu lieu.
+		 *\param[in]	markParentDirty	Callback à appeler lorsque des changements ont eu lieu.
 		 *\return		Une source lumineuse.
 		 */
 		C3D_API static LightCategoryUPtr create( bool & dirty
-			, castor::Function< void() > const & changedCallback );
+			, castor::Function< void() > const & markParentDirty );
 		/**
 		 *\~english
 		 *\name Mutators.
@@ -115,9 +110,8 @@ namespace castor3d
 
 	public:
 		C3D_API DirectionalLightInstance( SceneNode & node
-			, bool & dirty
-			, castor::Function< void() > onGpuChanged
-			, DirectionalLight & category );
+			, DirectionalLight & category
+			, castor::Function< bool() > isParentEnabled );
 		/**
 		 *\~english
 		 *\brief		Puts the shadow data into the given buffer.

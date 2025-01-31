@@ -40,7 +40,7 @@ namespace castor3d
 	{
 	}
 
-	void LightBuffer::addLight( Light & light )
+	void LightBuffer::addLight( LightInstance & light )
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		auto index = size_t( light.getLightType() );
@@ -54,7 +54,7 @@ namespace castor3d
 			lights.push_back( &light );
 			m_dirty.emplace_back( &light );
 			m_connections.try_emplace( &light
-				, light.onGPUChanged.connect( [this]( Light & plight )
+				, light.onGpuChanged.connect( [this]( LightInstance & plight )
 					{
 						m_dirty.emplace_back( &plight );
 					} ) );
@@ -64,7 +64,7 @@ namespace castor3d
 		}
 	}
 
-	void LightBuffer::removeLight( Light & light )
+	void LightBuffer::removeLight( LightInstance & light )
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		auto index = size_t( light.getLightType() );
@@ -90,7 +90,7 @@ namespace castor3d
 
 		if ( !m_dirty.empty() )
 		{
-			castor::Vector< Light * > dirty;
+			castor::Vector< LightInstance * > dirty;
 			castor::swap( m_dirty, dirty );
 
 			for ( auto light : castor::makeArrayView( dirty.begin(), std::unique( dirty.begin(), dirty.end() ) ) )
@@ -164,7 +164,7 @@ namespace castor3d
 			: ( MaxLightsCount - result ) );
 	}
 
-	castor::Pair< uint32_t, uint32_t > LightBuffer::doGetOffsetIndex( Light const & light )const
+	castor::Pair< uint32_t, uint32_t > LightBuffer::doGetOffsetIndex( LightInstance const & light )const
 	{
 		uint32_t index{};
 		uint32_t result{};

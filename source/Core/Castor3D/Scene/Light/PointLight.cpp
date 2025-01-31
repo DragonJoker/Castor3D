@@ -28,17 +28,17 @@ namespace castor3d
 	//*************************************************************************************************
 
 	PointLight::PointLight( bool & dirty
-		, castor::Function< void() > const & changedCallback )
-		: LightCategory{ LightType::ePoint, dirty, changedCallback }
-		, m_range{ m_dirty, 10.0f, changedCallback }
-		, m_intensity{ m_dirty, castor::LuminousIntensity{ 1.0f }, changedCallback }
+		, castor::Function< void() > const & markParentDirty )
+		: LightCategory{ LightType::ePoint, dirty, markParentDirty }
+		, m_range{ m_dirty, 10.0f, markParentDirty }
+		, m_intensity{ m_dirty, castor::LuminousIntensity{ 1.0f }, markParentDirty }
 	{
 	}
 
 	LightInstanceUPtr PointLight::instantiate( SceneNode & node
-		, castor::Function< void() > onGpuChanged )
+		, castor::Function< bool() > isParentEnabled )
 	{
-		return LightInstanceUPtr( new PointLightInstance{ node, m_dirty, m_changedCallback, castor::move( onGpuChanged ), *this } );
+		return LightInstanceUPtr( new PointLightInstance{ node, *this, castor::move( isParentEnabled ) } );
 	}
 
 	LightCategoryUPtr PointLight::create( bool & dirty
@@ -156,12 +156,9 @@ namespace castor3d
 	//*************************************************************************************************
 
 	PointLightInstance::PointLightInstance( SceneNode & node
-		, bool & dirty
-		, castor::Function< void() > const & changedCallback
-		, castor::Function< void() > onGpuChanged
-		, PointLight & category )
-		: LightInstance{ node, dirty, castor::move( onGpuChanged ), category }
-		, m_position{ changedCallback }
+		, PointLight & category
+		, castor::Function< bool() > isParentEnabled )
+		: LightInstance{ node, category, castor::move( isParentEnabled ) }
 	{
 	}
 
