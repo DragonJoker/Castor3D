@@ -59,12 +59,12 @@ namespace castor3d
 
 	namespace rendtech
 	{
-		static castor::Map< double, LightRPtr > doSortLights( LightCache const & cache
+		static castor::Map< double, LightInstanceRPtr > doSortLights( LightCache const & cache
 			, LightType type
 			, Camera const & camera )
 		{
 			auto lock( castor::makeUniqueLock( cache ) );
-			castor::Map< double, LightRPtr > lights;
+			castor::Map< double, LightInstanceRPtr > lights;
 
 			if ( cache.getLightsBufferCount( LightType::eDirectional ) <= 1u
 				&& cache.getLightsBufferCount( LightType::ePoint ) <= MaxPointShadowMapCount
@@ -74,11 +74,11 @@ namespace castor3d
 
 				for ( auto & light : cache.getLights( type ) )
 				{
-					light->setShadowMap( nullptr );
+					light->getInstance()->setShadowMap( nullptr );
 
 					if ( light->isShadowProducer() )
 					{
-						lights.emplace( index, light );
+						lights.emplace( index, light->getInstance() );
 					}
 
 					++index;
@@ -89,7 +89,7 @@ namespace castor3d
 
 			for ( auto & light : cache.getLights( type ) )
 			{
-				light->setShadowMap( nullptr );
+				light->getInstance()->setShadowMap( nullptr );
 
 				if ( light->isShadowProducer()
 					&& ( light->getLightType() == LightType::eDirectional
@@ -98,7 +98,7 @@ namespace castor3d
 				{
 					lights.emplace( castor::point::distanceSquared( camera.getParent()->getDerivedPosition()
 							, light->getParent()->getDerivedPosition() )
-						, light );
+						, light->getInstance() );
 				}
 			}
 

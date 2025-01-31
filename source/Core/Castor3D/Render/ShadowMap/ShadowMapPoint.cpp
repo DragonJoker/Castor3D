@@ -315,7 +315,7 @@ namespace castor3d
 			auto & pass = *passes.passes[face];
 			pass.pass->update( updater );
 
-			auto const & pointLight = *updater.light->getPointLight();
+			auto & pointLight = static_cast< PointLightInstance & >( *updater.light );
 			m_passes[m_passesIndex].cameraUbos[face]->cpuUpdate( *updater.camera
 				, pointLight.getViewMatrix( CubeMapFace( updater.index ) )
 				, static_cast< ShadowMapPassPoint const & >( *pass.pass ).getProjection()
@@ -330,8 +330,8 @@ namespace castor3d
 		, ShadowMapPoint::Passes & passes )
 	{
 		auto save = updater.index;
-		auto & pointLight = *updater.light->getPointLight();
-		pointLight.updateShadow( int32_t( updater.index ) );
+		auto & pointLight = static_cast< PointLightInstance & >( *updater.light );
+		updater.light->updateShadow( *updater.camera, nullptr, int32_t( updater.index ) );
 		uint32_t offset = updater.index * 6u;
 
 		for ( uint32_t face = offset; face < offset + 6u; ++face )

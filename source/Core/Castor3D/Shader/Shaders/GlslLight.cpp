@@ -334,7 +334,7 @@ namespace castor3d::shader
 							, parentOutput );
 					}
 					FI
-					cur += castor3d::DirectionalLight::LightDataComponents;
+					cur += DirectionalLightInstance::LightDataComponents;
 				}
 				ELIHW
 
@@ -396,7 +396,7 @@ namespace castor3d::shader
 							, parentOutput );
 					}
 					FI
-					cur += castor3d::DirectionalLight::LightDataComponents;
+					cur += DirectionalLightInstance::LightDataComponents;
 				}
 				ELIHW
 
@@ -456,7 +456,7 @@ namespace castor3d::shader
 							, receivesShadows );
 					}
 					FI
-					cur += castor3d::DirectionalLight::LightDataComponents;
+					cur += DirectionalLightInstance::LightDataComponents;
 				}
 				ELIHW
 
@@ -513,7 +513,7 @@ namespace castor3d::shader
 						, output );
 				}
 				FI
-				cur += castor3d::DirectionalLight::LightDataComponents;
+				cur += DirectionalLightInstance::LightDataComponents;
 			}
 			ELIHW
 
@@ -533,7 +533,7 @@ namespace castor3d::shader
 						, output );
 				}
 				FI
-				cur += castor3d::PointLight::LightDataComponents;
+				cur += PointLightInstance::LightDataComponents;
 			}
 			ELIHW
 
@@ -553,7 +553,7 @@ namespace castor3d::shader
 						, output );
 				}
 				FI
-				cur += castor3d::SpotLight::LightDataComponents;
+				cur += SpotLightInstance::LightDataComponents;
 			}
 			ELIHW
 		}
@@ -590,7 +590,7 @@ namespace castor3d::shader
 						, output );
 				}
 				FI
-				cur += castor3d::DirectionalLight::LightDataComponents;
+				cur += DirectionalLightInstance::LightDataComponents;
 			}
 			ELIHW
 
@@ -610,7 +610,7 @@ namespace castor3d::shader
 						, output );
 				}
 				FI
-				cur += castor3d::PointLight::LightDataComponents;
+				cur += PointLightInstance::LightDataComponents;
 			}
 			ELIHW
 
@@ -630,7 +630,7 @@ namespace castor3d::shader
 						, output );
 				}
 				FI
-				cur += castor3d::SpotLight::LightDataComponents;
+				cur += SpotLightInstance::LightDataComponents;
 			}
 			ELIHW
 		}
@@ -664,7 +664,7 @@ namespace castor3d::shader
 						, receivesShadows );
 				}
 				FI
-				cur += castor3d::DirectionalLight::LightDataComponents;
+				cur += DirectionalLightInstance::LightDataComponents;
 			}
 			ELIHW
 
@@ -683,7 +683,7 @@ namespace castor3d::shader
 						, receivesShadows );
 				}
 				FI
-				cur += castor3d::PointLight::LightDataComponents;
+				cur += PointLightInstance::LightDataComponents;
 			}
 			ELIHW
 
@@ -702,7 +702,7 @@ namespace castor3d::shader
 						, receivesShadows );
 				}
 				FI
-				cur += castor3d::SpotLight::LightDataComponents;
+				cur += SpotLightInstance::LightDataComponents;
 			}
 			ELIHW
 		}
@@ -792,17 +792,17 @@ namespace castor3d::shader
 
 	DirectionalLight Lights::retrieveDirectionalLight( sdw::UInt const & index )
 	{
-		return getDirectionalLight( index * castor3d::DirectionalLight::LightDataComponents );
+		return getDirectionalLight( index * DirectionalLightInstance::LightDataComponents );
 	}
 
 	PointLight Lights::retrievePointLight( sdw::UInt const & index )
 	{
-		return getPointLight( getDirectionalsEnd() + index * castor3d::PointLight::LightDataComponents );
+		return getPointLight( getDirectionalsEnd() + index * PointLightInstance::LightDataComponents );
 	}
 
 	SpotLight Lights::retrieveSpotLight( sdw::UInt const & index )
 	{
-		return getSpotLight( getPointsEnd() + index * castor3d::SpotLight::LightDataComponents );
+		return getSpotLight( getPointsEnd() + index * SpotLightInstance::LightDataComponents );
 	}
 
 	DirectionalLight Lights::getDirectionalLight( sdw::UInt const & offset )

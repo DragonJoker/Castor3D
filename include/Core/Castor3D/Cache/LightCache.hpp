@@ -178,7 +178,7 @@ namespace castor3d
 
 		bool isDirty()const noexcept
 		{
-			return m_dirty || !m_dirtyLights.empty();
+			return m_dirty;
 		}
 
 		bool hasClusteredLights()const noexcept
@@ -193,7 +193,6 @@ namespace castor3d
 		void doUnregisterLight( Light & light );
 
 	private:
-		LightsRefArray m_dirtyLights;
 		LightBufferUPtr m_lightBuffer;
 		castor::Vector< Light * > m_pendingLights;
 		bool m_dirty{ true };

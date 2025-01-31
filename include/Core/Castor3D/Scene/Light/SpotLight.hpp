@@ -17,54 +17,38 @@ namespace castor3d
 	class SpotLight
 		: public LightCategory
 	{
-	public:
-		using ShadowData = SpotShadowData;
-		static constexpr uint32_t ShadowDataSize = uint32_t( ashes::getAlignedSize( sizeof( ShadowData ), LightMbrAlign ) );
-		static constexpr uint32_t ShadowDataComponents = ShadowDataSize / LightMbrAlign;
-
-		struct LightData
-			: LightCategory::LightData
-		{
-			Float3 direction;
-			Float1 exponent;
-			Float1 outerCutoffCos;
-			Float1 innerCutoff;
-			Float1 outerCutoff;
-			Float1 innerCutoffSin;
-			Float1 outerCutoffSin;
-			Float1 innerCutoffCos;
-			Float1 outerCutOffTan;
-			Float1 pad0;
-		};
-		static constexpr uint32_t LightDataSize = uint32_t( ashes::getAlignedSize( sizeof( LightData ), LightMbrAlign ) );
-		static constexpr uint32_t LightDataComponents = LightDataSize / LightMbrAlign;
-
 	private:
 		friend class Scene;
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	light	The parent Light.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	light	La Light parente.
-		 */
-		C3D_API explicit SpotLight( Light & light );
+		explicit SpotLight( bool & dirty
+			, castor::Function< void() > const & changedCallback );
 
 	public:
 		/**
 		 *\~english
+		 *\brief		Creates an instance of this light category.
+		 *\param[in]	node	The parent node.
+		 *\~french
+		 *\brief		Crée une instance de cette catégorie de lumière.
+		 *\param[in]	node	Le scene node parent.
+		 */
+		C3D_API LightInstanceUPtr instantiate( SceneNode & node
+			, castor::Function< void() > onGpuChanged )override;
+		/**
+		 *\~english
 		 *\brief		Creation function, used by Factory.
-		 *\param[in]	light	The parent Light.
+		 *\param[in]	dirty			Used to tell the owner some changes have occured.
+		 *\param[in]	changedCallback	Callback to call when changes have occured.
 		 *\return		A light source.
 		 *\~french
 		 *\brief		Fonction de création utilisée par Factory.
-		 *\param[in]	light	La Light parente.
+		 *\param[in]	dirty			Utilisé pour dire au parent que des changements ont eu lieu.
+		 *\param[in]	changedCallback	Callback à appeler lorsque des changements ont eu lieu.
 		 *\return		Une source lumineuse.
 		 */
-		C3D_API static LightCategoryUPtr create( Light & light );
+		C3D_API static LightCategoryUPtr create( bool & dirty
+			, castor::Function< void() > const & changedCallback );
 		/**
 		 *\~english
 		 *\return		The vertices needed to draw the mesh materialising the ligh's volume of effect.
@@ -72,31 +56,6 @@ namespace castor3d
 		 *\return		Les sommets nécessaires au dessin du maillage représentant le volume d'effet de la lumière.
 		 */
 		C3D_API static castor::Point3fArray const & generateVertices( uint32_t angle );
-		/**
-		 *\copydoc		castor3d::LightCategory::update
-		 */
-		C3D_API void update()override;
-		/**
-		 *\~english
-		 *\brief			Updates the shadow informations.
-		 *\param[in,out]	lightCamera	The camera that receives the light spot data.
-		 *\param[in]		index		The shadow map index.
-		 *\~french
-		 *\brief			Met à jour les information d'ombre.
-		 *\param[in,out]	lightCamera	La caméra qui reçoit les données de spot de la lumière.
-		 *\param[in]		index		L'indice de la shadow map.
-		 */
-		C3D_API void updateShadow( Camera & lightCamera
-			, int32_t index );
-		/**
-		 *\~english
-		 *\brief		Puts the shadow data into the given buffer.
-		 *\param[out]	data	Receives the light's shadow data.
-		 *\~french
-		 *\brief		Met les données d'ombre dans le buffer donné.
-		 *\param[out]	data	Reçoit les données d'ombres de la source lumineuse.
-		 */
-		C3D_API void fillShadowBuffer( AllShadowData & data )const override;
 		/**
 		 *\~english
 		 *\name Mutators.
@@ -118,26 +77,6 @@ namespace castor3d
 		 *\name Accesseurs.
 		 **/
 		/**@{*/
-		castor::Point3f const & getDirection()const noexcept
-		{
-			return m_direction;
-		}
-
-		castor::Matrix4x4f const & getViewMatrix()const noexcept
-		{
-			return m_lightView.value();
-		}
-
-		castor::Matrix4x4f const & getProjectionMatrix()const noexcept
-		{
-			return m_lightProj.value();
-		}
-
-		castor::Matrix4x4f const & getLightSpaceTransform()const noexcept
-		{
-			return m_lightSpace;
-		}
-
 		float getExponent()const noexcept
 		{
 			return m_exponent.value();
@@ -165,22 +104,100 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doFillLightBuffer( castor::Point4f * data )const override;
+		void doUpdate()override;
 		void doAccept( ConfigurationVisitorBase & vis )override;
 		void doCloneInto( LightCategory & output )const override;
 
 	private:
-		bool m_dirtyShadow{ true };
 		castor::GroupChangeTracked< float > m_range;
 		castor::GroupChangeTracked< float > m_exponent;
 		castor::GroupChangeTracked< castor::LuminousIntensity > m_intensity;
 		castor::GroupChangeTracked< castor::Angle > m_innerCutOff;
 		castor::GroupChangeTracked< castor::Angle > m_outerCutOff;
-		castor::GroupChangeTracked< castor::Matrix4x4f > m_lightView;
-		castor::GroupChangeTracked< castor::Matrix4x4f > m_lightProj;
-		castor::Matrix4x4f m_lightSpace;
-		castor::Point3f m_direction;
 	};
+
+		class SpotLightInstance
+			: public LightInstance
+		{
+		public:
+			using ShadowData = SpotShadowData;
+			static constexpr uint32_t ShadowDataSize = uint32_t( ashes::getAlignedSize( sizeof( ShadowData ), LightMbrAlign ) );
+			static constexpr uint32_t ShadowDataComponents = ShadowDataSize / LightMbrAlign;
+
+			struct LightData
+				: LightInstance::LightData
+			{
+				Float3 direction;
+				Float1 exponent;
+				Float1 outerCutoffCos;
+				Float1 innerCutoff;
+				Float1 outerCutoff;
+				Float1 innerCutoffSin;
+				Float1 outerCutoffSin;
+				Float1 innerCutoffCos;
+				Float1 outerCutOffTan;
+				Float1 pad0;
+			};
+			static constexpr uint32_t LightDataSize = uint32_t( ashes::getAlignedSize( sizeof( LightData ), LightMbrAlign ) );
+			static constexpr uint32_t LightDataComponents = LightDataSize / LightMbrAlign;
+
+		public:
+			C3D_API SpotLightInstance( SceneNode & node
+				, bool & dirty
+				, castor::Function< void() > onGpuChanged
+				, SpotLight & category );
+			/**
+			 *\~english
+			 *\brief		Puts the shadow data into the given buffer.
+			 *\param[out]	data	Receives the light's shadow data.
+			 *\~french
+			 *\brief		Met les données d'ombre dans le buffer donné.
+			 *\param[out]	data	Reçoit les données d'ombres de la source lumineuse.
+			 */
+			C3D_API void fillShadowBuffer( AllShadowData & data )const override;
+			/**
+			 *\~english
+			 *\name Getters.
+			 *\~french
+			 *\name Accesseurs.
+			 **/
+			/**@{*/
+			castor::Point3f const & getDirection()const noexcept
+			{
+				return m_direction;
+			}
+
+			castor::Matrix4x4f const & getViewMatrix()const noexcept
+			{
+				return m_lightView.value();
+			}
+
+			castor::Matrix4x4f const & getProjectionMatrix()const noexcept
+			{
+				return m_lightProj.value();
+			}
+
+			castor::Matrix4x4f const & getLightSpaceTransform()const noexcept
+			{
+				return m_lightSpace;
+			}
+			/**@}*/
+
+		private:
+			void doUpdate()override;
+			bool doUpdateShadow( Camera const & viewCamera
+				, Camera * lightCamera
+				, int32_t index )override;
+			void doFillLightBuffer( castor::Point4f * data )const override;
+			void doCloneInto( LightInstance & output )const override;
+
+		private:
+			bool m_dirtyShadow{ true };
+			castor::GroupChangeTracked< castor::Matrix4x4f > m_lightView;
+			castor::GroupChangeTracked< castor::Matrix4x4f > m_lightProj;
+			castor::Matrix4x4f m_lightSpace;
+			castor::Point3f m_direction;
+		};
 }
 
 #endif

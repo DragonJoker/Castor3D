@@ -11,6 +11,8 @@
 
 namespace castor3d
 {
+	//*************************************************************************************************
+
 	namespace lgtspot
 	{
 		static uint32_t constexpr FaceCount = 40;
@@ -36,21 +38,27 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	SpotLight::SpotLight( Light & light )
-		: LightCategory{ LightType::eSpot, light, LightDataComponents, ShadowDataComponents }
-		, m_range{ m_dirty, 10.0f, [this](){ getLight().markDirty(); } }
-		, m_exponent{ m_dirty, 1.0f, [this](){ getLight().markDirty(); } }
-		, m_intensity{ m_dirty, castor::LuminousIntensity{ 1.0f }, [this](){ getLight().markDirty(); } }
-		, m_innerCutOff{ m_dirty, 22.5_degrees, [this](){ getLight().markDirty(); } }
-		, m_outerCutOff{ m_dirty, 45.0_degrees, [this](){ getLight().markDirty(); } }
-		, m_lightView{ m_dirtyShadow }
-		, m_lightProj{ m_dirtyShadow }
+	SpotLight::SpotLight( bool & dirty
+		, castor::Function< void() > const & changedCallback )
+		: LightCategory{ LightType::eSpot, dirty, changedCallback }
+		, m_range{ m_dirty, 10.0f, changedCallback }
+		, m_exponent{ m_dirty, 1.0f, changedCallback }
+		, m_intensity{ m_dirty, castor::LuminousIntensity{ 1.0f }, changedCallback }
+		, m_innerCutOff{ m_dirty, 22.5_degrees, changedCallback }
+		, m_outerCutOff{ m_dirty, 45.0_degrees, changedCallback }
 	{
 	}
 
-	LightCategoryUPtr SpotLight::create( Light & light )
+	LightInstanceUPtr SpotLight::instantiate( SceneNode & node
+		, castor::Function< void() > onGpuChanged )
 	{
-		return LightCategoryUPtr( new SpotLight{ light } );
+		return LightInstanceUPtr( new SpotLightInstance{ node, m_dirty, castor::move( onGpuChanged ), *this } );
+	}
+
+	LightCategoryUPtr SpotLight::create( bool & dirty
+		, castor::Function< void() > const & changedCallback )
+	{
+		return LightCategoryUPtr( new SpotLight{ dirty, changedCallback } );
 	}
 
 	castor::Point3fArray const & SpotLight::generateVertices( uint32_t angle )
@@ -163,51 +171,6 @@ namespace castor3d
 		return result;
 	}
 
-	void SpotLight::update()
-	{
-		auto & node = *getLight().getParent();
-		auto direction = castor::Point3f{ 0, 0, 1 };
-		node.getDerivedOrientation().transform( direction, direction );
-		m_direction = -direction;
-		auto range = computeRange( getIntensity(), m_range.value() );
-		auto aabb = lgtspot::computeAABB( SpotLight::generateVertices( uint32_t( std::ceil( getOuterCutOff().degrees() ) ) ) );
-		m_cubeBox.load( aabb.getMin() * range
-			, aabb.getMax() * range );
-		m_farPlane = range;
-	}
-
-	void SpotLight::updateShadow( Camera & lightCamera
-		, int32_t index )
-	{
-		getLight().setShadowMapIndex( index );
-		auto node = getLight().getParent();
-		node->update();
-		lightCamera.attachTo( *node );
-		lightCamera.getViewport().setPerspective( getOuterCutOff() * 2.0f
-			, lightCamera.getRatio()
-			, 0.1f
-			, m_farPlane );
-		lightCamera.update();
-		m_lightView = lightCamera.getView();
-		m_lightProj = lightCamera.getProjection( false );
-
-		if ( m_dirtyShadow )
-		{
-			m_lightSpace = ( *m_lightProj ) * ( *m_lightView );
-			getLight().onGPUChanged( getLight() );
-			m_dirtyShadow = false;
-			lightCamera.markDirty();
-		}
-	}
-
-	void SpotLight::fillShadowBuffer( AllShadowData & data )const
-	{
-		auto & spot = data.spot[size_t( getLight().getShadowMapIndex() )];
-		LightCategory::doFillBaseShadowData( spot );
-
-		spot.transform = m_lightSpace;
-	}
-
 	void SpotLight::setAttenuation( castor::Point3f const & attenuation )
 	{
 		setRange( getMaxDistance( getColour(), getIntensity(), attenuation) );
@@ -216,7 +179,6 @@ namespace castor3d
 	void SpotLight::setRange( float range )
 	{
 		m_range = range;
-		getLight().markDirty();
 	}
 
 	void SpotLight::setExponent( float exponent )
@@ -227,38 +189,25 @@ namespace castor3d
 	void SpotLight::setIntensity( castor::LuminousIntensity const & value )
 	{
 		m_intensity = value;
-		getLight().markDirty();
 	}
 
 	void SpotLight::setInnerCutOff( castor::Angle const & cutOff )
 	{
 		m_innerCutOff = cutOff;
-		getLight().markDirty();
 	}
 
 	void SpotLight::setOuterCutOff( castor::Angle const & cutOff )
 	{
 		m_outerCutOff = cutOff;
-		getLight().markDirty();
 	}
 
-	void SpotLight::doFillLightBuffer( castor::Point4f * data )const
+	void SpotLight::doUpdate()
 	{
-		auto & spot = *reinterpret_cast< LightData * >( data->ptr() );
-		auto position = getLight().getParent()->getDerivedPosition();
-
-		spot.intensity = getIntensity().candela();
-		spot.posDir = position;
-		spot.range = m_range.value();
-		spot.exponent = m_exponent;
-		spot.direction = m_direction;
-		spot.innerCutoffCos = m_innerCutOff.value().cos();
-		spot.outerCutoffCos = m_outerCutOff.value().cos();
-		spot.innerCutoff = m_innerCutOff.value().radians();
-		spot.outerCutoff = m_outerCutOff.value().radians();
-		spot.innerCutoffSin = m_innerCutOff.value().sin();
-		spot.outerCutoffSin = m_outerCutOff.value().sin();
-		spot.outerCutOffTan = m_outerCutOff.value().tan();
+		auto range = computeRange( getIntensity(), m_range.value() );
+		auto aabb = lgtspot::computeAABB( SpotLight::generateVertices( uint32_t( std::ceil( getOuterCutOff().degrees() ) ) ) );
+		m_cubeBox.load( aabb.getMin() * range
+			, aabb.getMax() * range );
+		m_farPlane = range;
 	}
 
 	void SpotLight::doAccept( ConfigurationVisitorBase & vis )
@@ -278,9 +227,88 @@ namespace castor3d
 		spot.m_intensity = m_intensity;
 		spot.m_innerCutOff = m_innerCutOff;
 		spot.m_outerCutOff = m_outerCutOff;
+	}
+
+	//*************************************************************************************************
+
+	SpotLightInstance::SpotLightInstance( SceneNode & node
+		, bool & dirty
+		, castor::Function< void() > onGpuChanged
+		, SpotLight & category )
+		: LightInstance{ node, dirty, castor::move( onGpuChanged ), category }
+		, m_lightView{ m_dirtyShadow }
+		, m_lightProj{ m_dirtyShadow }
+	{
+	}
+
+	void SpotLightInstance::fillShadowBuffer( AllShadowData & data )const
+	{
+		auto & spot = data.spot[size_t( getShadowMapIndex() )];
+		LightInstance::doFillBaseShadowData( spot );
+
+		spot.transform = m_lightSpace;
+	}
+
+	void SpotLightInstance::doUpdate()
+	{
+		auto direction = castor::Point3f{ 0, 0, 1 };
+		m_node->getDerivedOrientation().transform( direction, direction );
+		m_direction = -direction;
+	}
+
+	bool SpotLightInstance::doUpdateShadow( Camera const & viewCamera
+		, Camera * lightCamera
+		, int32_t index )
+	{
+		auto & spotLight = static_cast< SpotLight const & >( getCategory() );
+		lightCamera->attachTo( *m_node );
+		lightCamera->getViewport().setPerspective( spotLight.getOuterCutOff() * 2.0f
+			, lightCamera->getRatio()
+			, 0.1f
+			, spotLight.getFarPlane() );
+		lightCamera->update();
+		m_lightView = lightCamera->getView();
+		m_lightProj = lightCamera->getProjection( false );
+		auto result = m_dirtyShadow;
+
+		if ( m_dirtyShadow )
+		{
+			m_lightSpace = ( *m_lightProj ) * ( *m_lightView );
+			m_dirtyShadow = false;
+			lightCamera->markDirty();
+		}
+
+		return result;
+	}
+
+	void SpotLightInstance::doFillLightBuffer( castor::Point4f * data )const
+	{
+		auto & spotLight = static_cast< SpotLight const & >( getCategory() );
+		auto & spot = *reinterpret_cast< LightData * >( data->ptr() );
+		auto position = m_node->getDerivedPosition();
+
+		spot.intensity = spotLight.getIntensity().candela();
+		spot.posDir = position;
+		spot.range = spotLight.getRange();
+		spot.exponent = spotLight.getExponent();
+		spot.direction = m_direction;
+		spot.innerCutoffCos = spotLight.getInnerCutOff().cos();
+		spot.outerCutoffCos = spotLight.getOuterCutOff().cos();
+		spot.innerCutoff = spotLight.getInnerCutOff().radians();
+		spot.outerCutoff = spotLight.getOuterCutOff().radians();
+		spot.innerCutoffSin = spotLight.getInnerCutOff().sin();
+		spot.outerCutoffSin = spotLight.getOuterCutOff().sin();
+		spot.outerCutOffTan = spotLight.getOuterCutOff().tan();
+	}
+
+	void SpotLightInstance::doCloneInto( LightInstance & output )const
+	{
+		auto & spot = static_cast< SpotLightInstance & >( output );
 		spot.m_lightView = m_lightView;
 		spot.m_lightProj = m_lightProj;
 		spot.m_lightSpace = m_lightSpace;
 		spot.m_direction = m_direction;
 	}
+
+	//*************************************************************************************************
 }

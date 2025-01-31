@@ -19,9 +19,9 @@ namespace castor3d
 	namespace lgtbuf
 	{
 		static VkDeviceSize constexpr MaxLightComponentsCount = castor::maxValueT< uint32_t
-			, DirectionalLight::LightDataComponents
-			, PointLight::LightDataComponents
-			, SpotLight::LightDataComponents >;
+			, DirectionalLightInstance::LightDataComponents
+			, PointLightInstance::LightDataComponents
+			, SpotLightInstance::LightDataComponents >;
 	}
 
 	//*********************************************************************************************
@@ -32,9 +32,9 @@ namespace castor3d
 		: m_buffer{ device
 			, VkDeviceSize( count ) * lgtbuf::MaxLightComponentsCount * sizeof( castor::Point4f )
 			, cuT( "C3D_LightBuffer" ) }
-		, m_lightSizes{ DirectionalLight::LightDataComponents
-			, PointLight::LightDataComponents
-			, SpotLight::LightDataComponents }
+		, m_lightSizes{ DirectionalLightInstance::LightDataComponents
+			, PointLightInstance::LightDataComponents
+			, SpotLightInstance::LightDataComponents }
 		, m_data{ castor::makeArrayView( reinterpret_cast< castor::Point4f * >( m_buffer.getPtr() )
 			, VkDeviceSize( count ) * lgtbuf::MaxLightComponentsCount ) }
 	{

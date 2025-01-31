@@ -11,7 +11,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class LightFactory
-		: public castor::Factory< LightCategory, LightType, LightCategoryUPtr, castor::Function< LightCategoryUPtr( Light & ) > >
+		: public castor::Factory< LightCategory, LightType, LightCategoryUPtr, castor::Function< LightCategoryUPtr( bool &, castor::Function< void() > const & ) > >
 	{
 	public:
 		/**

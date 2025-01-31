@@ -318,7 +318,7 @@ namespace castor3d
 							if ( config.useSpotBoundingCone )
 							{
 								auto spot = writer.declLocale( "spot"
-									, lights.getSpotLight( lights.getPointsEnd() + lightIndex * castor3d::SpotLight::LightDataComponents ) );
+									, lights.getSpotLight( lights.getPointsEnd() + lightIndex * SpotLightInstance::LightDataComponents ) );
 								auto cone = writer.declLocale( "cone"
 									, shader::Cone{ c3d_cameraDataClusters.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz()
 										, c3d_cameraDataClusters.worldToCurView( -spot.direction() )

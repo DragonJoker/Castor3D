@@ -556,7 +556,7 @@ namespace castor3d
 		m_lightPropagationPasses = {};
 	}
 
-	void LightPropagationVolumesBase::registerLight( Light * light )
+	void LightPropagationVolumesBase::registerLight( LightInstance * light )
 	{
 		auto [it, res] = m_lightLpvs.try_emplace( light );
 

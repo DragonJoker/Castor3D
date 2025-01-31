@@ -90,8 +90,7 @@ namespace castor3d
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
 		auto & sceneObjs = updater.dirtyScenes[getScene()];
-		LightsRefArray dirty;
-		castor::swap( m_dirtyLights, dirty );
+		castor::Vector< LightInstance * > dirty;
 		dirty.insert( dirty.end()
 			, sceneObjs.dirtyLights.begin()
 			, sceneObjs.dirtyLights.end() );

@@ -9,169 +9,121 @@
 #include <ShaderWriter/Source.hpp>
 
 CU_ImplementSmartPtr( castor3d, LightCategory )
+CU_ImplementSmartPtr( castor3d, LightInstance )
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
 	LightCategory::LightCategory( LightType lightType
-		, Light & light
-		, uint32_t lightComponentCount
-		, uint32_t shadowComponentCount )
-		: m_dirty{ light.doGetDirty() }
+		, bool & dirty
+		, castor::Function< void() > changedCallback )
+		: m_dirty{ dirty }
+		, m_changedCallback{ castor::move( changedCallback ) }
 		, m_lightType{ lightType }
-		, m_light{ light }
-		, m_lightComponentCount{ lightComponentCount }
-		, m_shadowComponentCount{ shadowComponentCount }
-		, m_colour{ m_dirty, { 1.0, 1.0, 1.0 }, [this](){ getLight().markDirty(); } }
+		, m_colour{ m_dirty, { 1.0, 1.0, 1.0 }, m_changedCallback }
 	{
 	}
 
-	void LightCategory::fillLightBuffer( castor::Point4f * data )const
+	void LightCategory::update()
 	{
-		auto & base = *reinterpret_cast< LightData * >( data->ptr() );
-		base.colour = getColour();
-
-		base.shadowMapIndex = float( m_light.getShadowMapIndex() );
-
-		base.enabled = ( ( m_light.isEnabled() && m_light.getParent()->isVisible() )
-			? 1.0f : 0.0f );
-
-		doFillLightBuffer( data );
+		doUpdate();
+		m_currentGlobalIllumination = m_shadows.globalIllumination;
+		m_currentShadowCaster = m_shadows.enabled;
 	}
 
 	void LightCategory::accept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Colour" ), m_colour );
 		doAccept( vis );
+		m_shadows.accept( vis, getLightType() );
 	}
 
 	void LightCategory::cloneInto( LightCategory & output )const
 	{
-		output.m_lightComponentCount = m_lightComponentCount;
-		output.m_shadowComponentCount = m_shadowComponentCount;
+		output.m_shadows = m_shadows;
+		output.m_currentShadowCaster = m_currentShadowCaster.load();
+		output.m_currentGlobalIllumination = m_currentGlobalIllumination.load();
 		output.m_colour = m_colour;
 		doCloneInto( output );
 	}
 
-	uint32_t LightCategory::getVolumetricSteps()const
+	//*********************************************************************************************
+
+	LightInstance::LightInstance( SceneNode & node
+		, bool & dirty
+		, castor::Function< void() > onGpuChanged
+		, LightCategory & category )
+		: m_dirty{ dirty }
+		, m_node{ &node }
+		, m_category{ category }
+		, m_onGpuChanged{ castor::move( onGpuChanged ) }
 	{
-		return m_light.getVolumetricSteps();
 	}
 
-	float LightCategory::getVolumetricScatteringFactor()const
+	void LightInstance::update( CpuUpdater & /*updater*/ )
 	{
-		return m_light.getVolumetricScatteringFactor();
+		m_node->update();
+		m_category.update();
+		doUpdate();
+		m_onGpuChanged();
+		m_dirty = false;
 	}
 
-	castor::Point2f const & LightCategory::getShadowRawOffsets()const
+	bool LightInstance::updateShadow( Camera const & viewCamera
+		, Camera * lightCamera
+		, int32_t index )
 	{
-		return m_light.getShadowRawOffsets();
+		setShadowMapIndex( index );
+		return doUpdateShadow( viewCamera, lightCamera, index );
 	}
 
-	castor::Point2f const & LightCategory::getShadowPcfOffsets()const
+	void LightInstance::cloneInto( LightInstance & output )const
 	{
-		return m_light.getShadowPcfOffsets();
+		doCloneInto( output );
 	}
 
-	castor::RangedValue< uint32_t > LightCategory::getShadowPcfFilterSize()const
+	void LightInstance::fillLightBuffer( bool enabled
+		, uint32_t index
+		, VkDeviceSize offset
+		, castor::Point4f * data )
 	{
-		return m_light.getShadowPcfFilterSize();
+		m_bufferIndex = index;
+		m_bufferOffset = offset;
+
+		auto & base = *reinterpret_cast< LightData * >( data->ptr() );
+		base.colour = m_category.getColour();
+		base.shadowMapIndex = float( getShadowMapIndex() );
+		base.enabled = ( ( enabled && m_node->isVisible() ) ? 1.0f : 0.0f );
+		doFillLightBuffer( data );
 	}
 
-	castor::RangedValue< uint32_t > LightCategory::getShadowPcfSampleCount()const
+	castor::String const & LightInstance::getName()const noexcept
 	{
-		return m_light.getShadowPcfSampleCount();
+		return m_node->getName();
 	}
 
-	float LightCategory::getVsmMinVariance()const
+	Scene * LightInstance::getScene()const noexcept
 	{
-		return m_light.getVsmMinVariance();
+		return m_node->getScene();
 	}
 
-	float LightCategory::getVsmLightBleedingReduction()const
+	void LightInstance::doFillBaseShadowData( BaseShadowData & data )const
 	{
-		return m_light.getVsmLightBleedingReduction();
-	}
-
-	ShadowConfig const & LightCategory::getShadowConfig()const
-	{
-		return m_light.getShadowConfig();
-	}
-
-	LpvConfig const & LightCategory::getLpvConfig()const
-	{
-		return m_light.getLpvConfig();
-	}
-
-	void LightCategory::setVolumetricSteps( uint32_t value )
-	{
-		m_light.setVolumetricSteps( value );
-	}
-
-	void LightCategory::setVolumetricScatteringFactor( float value )
-	{
-		m_light.setVolumetricScatteringFactor( value );
-	}
-
-	void LightCategory::setRawMinOffset( float value )
-	{
-		m_light.setRawMinOffset( value );
-	}
-
-	void LightCategory::setRawMaxSlopeOffset( float value )
-	{
-		m_light.setRawMaxSlopeOffset( value );
-	}
-
-	void LightCategory::setPcfMinOffset( float value )
-	{
-		m_light.setPcfMinOffset( value );
-	}
-
-	void LightCategory::setPcfMaxSlopeOffset( float value )
-	{
-		m_light.setPcfMaxSlopeOffset( value );
-	}
-
-	void LightCategory::setPcfFilterSize( uint32_t value )
-	{
-		m_light.setPcfFilterSize( value );
-	}
-
-	void LightCategory::setPcfSampleCount( uint32_t value )
-	{
-		m_light.setPcfSampleCount( value );
-	}
-
-	void LightCategory::setVsmMinVariance( float value )
-	{
-		m_light.setVsmMinVariance( value );
-	}
-
-	void LightCategory::setVsmLightBleedingReduction( float value )
-	{
-		m_light.setVsmLightBleedingReduction( value );
-	}
-
-	void LightCategory::setColour( castor::Point3f const & value )
-	{
-		m_colour = value;
-		getLight().markDirty();
-	}
-
-	void LightCategory::doFillBaseShadowData( BaseShadowData & data )const
-	{
-		data.shadowType = uint32_t( getLight().isShadowProducer()
-			? getLight().getShadowType()
+		data.shadowType = uint32_t( m_category.isShadowProducer()
+			? m_category.getShadowType()
 			: ShadowType::eNone );
-		data.pcfFilterSize = float( getShadowPcfFilterSize().value() );
-		data.pcfSampleCount = getShadowPcfSampleCount().value();
+		data.pcfFilterSize = float( m_category.getShadowPcfFilterSize().value() );
+		data.pcfSampleCount = m_category.getShadowPcfSampleCount().value();
 
-		data.rawShadowsOffsets = getShadowRawOffsets();
-		data.pcfShadowsOffsets = getShadowPcfOffsets();
+		data.rawShadowsOffsets = m_category.getShadowRawOffsets();
+		data.pcfShadowsOffsets = m_category.getShadowPcfOffsets();
 
-		data.vsmMinVariance = getVsmMinVariance();
-		data.vsmLightBleedingReduction = getVsmLightBleedingReduction();
-		data.volumetricSteps = getVolumetricSteps();
-		data.volumetricScattering = getVolumetricScatteringFactor();
+		data.vsmMinVariance = m_category.getVsmMinVariance();
+		data.vsmLightBleedingReduction = m_category.getVsmLightBleedingReduction();
+		data.volumetricSteps = m_category.getVolumetricSteps();
+		data.volumetricScattering = m_category.getVolumetricScatteringFactor();
 	}
+
+	//*********************************************************************************************
 }

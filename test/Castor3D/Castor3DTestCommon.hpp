@@ -556,6 +556,33 @@ namespace Testing
 	};
 
 	template<>
+	struct Stringifier< castor3d::DirectionalLightInstance >
+	{
+		static std::string get( castor3d::DirectionalLightInstance const & )
+		{
+			return std::string{ "castor3d::DirectionalLightInstance" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::PointLightInstance >
+	{
+		static std::string get( castor3d::PointLightInstance const & )
+		{
+			return std::string{ "castor3d::PointLightInstance" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::SpotLightInstance >
+	{
+		static std::string get( castor3d::SpotLightInstance const & )
+		{
+			return std::string{ "castor3d::SpotLightInstance" };
+		}
+	};
+
+	template<>
 	struct Stringifier< castor3d::Viewport >
 	{
 		static std::string get( castor3d::Viewport const & )
@@ -940,6 +967,10 @@ namespace Testing
 		bool compare( castor3d::DirectionalLight const & lhs, castor3d::DirectionalLight const & rhs );
 		bool compare( castor3d::PointLight const & lhs, castor3d::PointLight const & rhs );
 		bool compare( castor3d::SpotLight const & lhs, castor3d::SpotLight const & rhs );
+		bool compare( castor3d::LightInstance const & lhs, castor3d::LightInstance const & rhs );
+		bool compare( castor3d::DirectionalLightInstance const & lhs, castor3d::DirectionalLightInstance const & rhs );
+		bool compare( castor3d::PointLightInstance const & lhs, castor3d::PointLightInstance const & rhs );
+		bool compare( castor3d::SpotLightInstance const & lhs, castor3d::SpotLightInstance const & rhs );
 		bool compare( castor3d::Viewport const & lhs, castor3d::Viewport const & rhs );
 		bool compare( castor3d::Mesh const & lhs, castor3d::Mesh const & rhs );
 		bool compare( castor3d::Submesh const & lhs, castor3d::Submesh const & rhs );

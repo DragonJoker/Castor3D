@@ -16,37 +16,35 @@ namespace castor3d
 	class PointLight
 		: public LightCategory
 	{
-	public:
-		using ShadowData = PointShadowData;
-		static constexpr uint32_t ShadowDataSize = uint32_t( ashes::getAlignedSize( sizeof( ShadowData ), LightMbrAlign ) );
-		static constexpr uint32_t ShadowDataComponents = ShadowDataSize / LightMbrAlign;
-
-		static constexpr uint32_t LightDataSize = uint32_t( ashes::getAlignedSize( sizeof( LightData ), LightMbrAlign ) );
-		static constexpr uint32_t LightDataComponents = LightDataSize / LightMbrAlign;
-
 	private:
+		PointLight( bool & dirty
+			, castor::Function< void() > const & changedCallback );
+
+	public:
 		/**
 		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	light	The parent Light.
+		 *\brief		Creates an instance of this light category.
+		 *\param[in]	node	The parent node.
 		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	light	La Light parente.
+		 *\brief		Crée une instance de cette catégorie de lumière.
+		 *\param[in]	node	Le scene node parent.
 		 */
-		C3D_API explicit PointLight( Light & light );
-
-	public:
+		C3D_API LightInstanceUPtr instantiate( SceneNode & node
+			, castor::Function< void() > onGpuChanged )override;
 		/**
 		 *\~english
 		 *\brief		Creation function, used by Factory.
-		 *\param[in]	light	The parent Light.
+		 *\param[in]	dirty			Used to tell the owner some changes have occured.
+		 *\param[in]	changedCallback	Callback to call when changes have occured.
 		 *\return		A light source.
 		 *\~french
 		 *\brief		Fonction de création utilisée par Factory.
-		 *\param[in]	light	La Light parente.
+		 *\param[in]	dirty			Utilisé pour dire au parent que des changements ont eu lieu.
+		 *\param[in]	changedCallback	Callback à appeler lorsque des changements ont eu lieu.
 		 *\return		Une source lumineuse.
 		 */
-		C3D_API static LightCategoryUPtr create( Light & light );
+		C3D_API static LightCategoryUPtr create( bool & dirty
+			, castor::Function< void() > const & changedCallback );
 		/**
 		 *\~english
 		 *\return		The vertices needed to draw the mesh materialising the ligh's volume of effect.
@@ -54,28 +52,6 @@ namespace castor3d
 		 *\return		Les sommets nécessaires au dessin du maillage représentant le volume d'effet de la lumière.
 		 */
 		C3D_API static castor::Point3fArray const & generateVertices();
-		/**
-		 *\copydoc		castor3d::LightCategory::update
-		 */
-		C3D_API void update()override;
-		/**
-		 *\~english
-		 *\brief			Updates the shadow informations.
-		 *\param[in]		index		The shadow map index.
-		 *\~french
-		 *\brief			Met à jour les information d'ombre.
-		 *\param[in]		index		L'indice de la shadow map.
-		 */
-		C3D_API void updateShadow( int32_t index );
-		/**
-		 *\~english
-		 *\brief		Puts the shadow data into the given buffer.
-		 *\param[out]	data	Receives the light's shadow data.
-		 *\~french
-		 *\brief		Met les données d'ombre dans le buffer donné.
-		 *\param[out]	data	Reçoit les données d'ombres de la source lumineuse.
-		 */
-		C3D_API void fillShadowBuffer( AllShadowData & data )const override;
 		/**
 		*\~english
 		*name
@@ -85,9 +61,20 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		C3D_API void setAttenuation( castor::Point3f const & value );
-		C3D_API void setRange( float value );
-		C3D_API void setIntensity( castor::LuminousIntensity const & value );
+		void setAttenuation( castor::Point3f const & value )
+		{
+			setRange( getMaxDistance( getColour(), getIntensity(), value ) );
+		}
+
+		void setRange( float value )
+		{
+			m_range = value;
+		}
+
+		void setIntensity( castor::LuminousIntensity const & value )
+		{
+			m_intensity = value;
+		}
 		/**@}*/
 		/**
 		 *\~english
@@ -101,11 +88,6 @@ namespace castor3d
 			return m_range.value();
 		}
 
-		castor::Matrix4x4f const & getViewMatrix( CubeMapFace face )const noexcept
-		{
-			return m_lightViews[size_t( face )];
-		}
-
 		castor::LuminousIntensity const & getIntensity()const noexcept
 		{
 			return m_intensity;
@@ -113,7 +95,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doFillLightBuffer( castor::Point4f * data )const override;
+		void doUpdate()override;
 		void doAccept( ConfigurationVisitorBase & vis )override;
 		void doCloneInto( LightCategory & output )const override;
 
@@ -122,7 +104,50 @@ namespace castor3d
 
 		castor::GroupChangeTracked< float > m_range;
 		castor::GroupChangeTracked< castor::LuminousIntensity > m_intensity;
-		castor::GroupChangeTracked< castor::Point3f > m_position;
+	};
+
+	class PointLightInstance
+		: public LightInstance
+	{
+	public:
+		using ShadowData = PointShadowData;
+		static constexpr uint32_t ShadowDataSize = uint32_t( ashes::getAlignedSize( sizeof( ShadowData ), LightMbrAlign ) );
+		static constexpr uint32_t ShadowDataComponents = ShadowDataSize / LightMbrAlign;
+
+		static constexpr uint32_t LightDataSize = uint32_t( ashes::getAlignedSize( sizeof( LightData ), LightMbrAlign ) );
+		static constexpr uint32_t LightDataComponents = LightDataSize / LightMbrAlign;
+
+	public:
+		C3D_API PointLightInstance( SceneNode & node
+			, bool & dirty
+			, castor::Function< void() > const & changedCallback
+			, castor::Function< void() > onGpuChanged
+			, PointLight & category );
+		/**
+		 *\~english
+		 *\brief		Puts the shadow data into the given buffer.
+		 *\param[out]	data	Receives the light's shadow data.
+		 *\~french
+		 *\brief		Met les données d'ombre dans le buffer donné.
+		 *\param[out]	data	Reçoit les données d'ombres de la source lumineuse.
+		 */
+		C3D_API void fillShadowBuffer( AllShadowData & data )const override;
+
+		castor::Matrix4x4f const & getViewMatrix( CubeMapFace face )const noexcept
+		{
+			return m_lightViews[size_t( face )];
+		}
+
+	private:
+		void doUpdate()override;
+		bool doUpdateShadow( Camera const & viewCamera
+			, Camera * lightCamera
+			, int32_t index )override;
+		void doFillLightBuffer( castor::Point4f * data )const override;
+		void doCloneInto( LightInstance & output )const override;
+
+	private:
+		castor::ChangeTracked< castor::Point3f > m_position;
 		castor::Array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) > m_lightViews;
 	};
 }

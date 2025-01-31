@@ -7,6 +7,8 @@
 
 namespace castor3d
 {
+	//*************************************************************************************************
+
 	namespace lgtpoint
 	{
 		uint32_t constexpr FaceCount = 20u;
@@ -25,17 +27,24 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	PointLight::PointLight( Light & light )
-		: LightCategory{ LightType::ePoint, light, LightDataComponents, ShadowDataComponents }
-		, m_range{ m_dirty, 10.0f, [this](){ getLight().markDirty(); } }
-		, m_intensity{ m_dirty, castor::LuminousIntensity{ 1.0f }, [this](){ getLight().markDirty(); } }
-		, m_position{ m_dirty, [this](){ getLight().markDirty(); } }
+	PointLight::PointLight( bool & dirty
+		, castor::Function< void() > const & changedCallback )
+		: LightCategory{ LightType::ePoint, dirty, changedCallback }
+		, m_range{ m_dirty, 10.0f, changedCallback }
+		, m_intensity{ m_dirty, castor::LuminousIntensity{ 1.0f }, changedCallback }
 	{
 	}
 
-	LightCategoryUPtr PointLight::create( Light & light )
+	LightInstanceUPtr PointLight::instantiate( SceneNode & node
+		, castor::Function< void() > onGpuChanged )
 	{
-		return LightCategoryUPtr( new PointLight{ light } );
+		return LightInstanceUPtr( new PointLightInstance{ node, m_dirty, m_changedCallback, castor::move( onGpuChanged ), *this } );
+	}
+
+	LightCategoryUPtr PointLight::create( bool & dirty
+		, castor::Function< void() > const & changedCallback )
+	{
+		return LightCategoryUPtr( new PointLight{ dirty, changedCallback } );
 	}
 
 	castor::Point3fArray const & PointLight::generateVertices()
@@ -123,61 +132,12 @@ namespace castor3d
 		return result;
 	}
 
-	void PointLight::update()
+	void PointLight::doUpdate()
 	{
 		auto range = computeRange( getIntensity(), m_range.value() );
 		m_cubeBox.load( castor::Point3f{ -range, -range, -range }
-			, castor::Point3f{ range, range, range } );
+		, castor::Point3f{ range, range, range } );
 		m_farPlane = m_range.value();
-	}
-
-	void PointLight::updateShadow( int32_t index )
-	{
-		getLight().setShadowMapIndex( index );
-		m_position = getLight().getParent()->getDerivedPosition();
-
-		if ( m_position.isDirty() )
-		{
-			lgtpoint::doUpdateShadowMatrices( m_position, m_lightViews );
-			getLight().markDirty();
-			m_position.reset();
-		}
-	}
-
-	void PointLight::fillShadowBuffer( AllShadowData & data )const
-	{
-		auto & point = data.point[size_t( getLight().getShadowMapIndex() )];
-		point.position->x = m_position.value()->x;
-		point.position->y = m_position.value()->y;
-		point.position->z = m_position.value()->z;
-		LightCategory::doFillBaseShadowData( point );
-	}
-
-	void PointLight::setAttenuation( castor::Point3f const & attenuation )
-	{
-		setRange( getMaxDistance( getColour(), getIntensity(), attenuation));
-	}
-
-	void PointLight::setRange( float value )
-	{
-		m_range = value;
-		getLight().markDirty();
-	}
-
-	void PointLight::setIntensity( castor::LuminousIntensity const & value )
-	{
-		m_intensity = value;
-		getLight().markDirty();
-	}
-
-	void PointLight::doFillLightBuffer( castor::Point4f * data )const
-	{
-		auto & point = *reinterpret_cast< LightData * >( data->ptr() );
-		auto position = getLight().getParent()->getDerivedPosition();
-
-		point.intensity = getIntensity().candela();
-		point.posDir = position;
-		point.range = m_range.value();
 	}
 
 	void PointLight::doAccept( ConfigurationVisitorBase & vis )
@@ -191,7 +151,66 @@ namespace castor3d
 		auto & point = static_cast< PointLight & >( output );
 		point.m_range = m_range;
 		point.m_intensity = m_intensity;
+	}
+
+	//*************************************************************************************************
+
+	PointLightInstance::PointLightInstance( SceneNode & node
+		, bool & dirty
+		, castor::Function< void() > const & changedCallback
+		, castor::Function< void() > onGpuChanged
+		, PointLight & category )
+		: LightInstance{ node, dirty, castor::move( onGpuChanged ), category }
+		, m_position{ changedCallback }
+	{
+	}
+
+	void PointLightInstance::fillShadowBuffer( AllShadowData & data )const
+	{
+		auto & point = data.point[size_t( getShadowMapIndex() )];
+		point.position->x = m_position.value()->x;
+		point.position->y = m_position.value()->y;
+		point.position->z = m_position.value()->z;
+		LightInstance::doFillBaseShadowData( point );
+	}
+
+	void PointLightInstance::doUpdate()
+	{
+	}
+
+	bool PointLightInstance::doUpdateShadow( Camera const & viewCamera
+		, Camera * lightCamera
+		, int32_t index )
+	{
+		m_position = m_node->getDerivedPosition();
+		auto result = m_position.isDirty();
+
+		if ( result )
+		{
+			lgtpoint::doUpdateShadowMatrices( m_position.value(), m_lightViews );
+		}
+
+		m_position.reset();
+		return result;
+	}
+
+	void PointLightInstance::doFillLightBuffer( castor::Point4f * data )const
+	{
+		auto & point = *reinterpret_cast< LightData * >( data->ptr() );
+		auto position = m_node->getDerivedPosition();
+
+		auto & pointLight = static_cast< PointLight const & >( getCategory() );
+		point.intensity = pointLight.getIntensity().candela();
+		point.posDir = position;
+		point.range = pointLight.getRange();
+	}
+
+	void PointLightInstance::doCloneInto( LightInstance & output )const
+	{
+		auto & point = static_cast< PointLightInstance & >( output );
 		point.m_position = m_position;
 		point.m_lightViews = m_lightViews;
 	}
+
+	//*************************************************************************************************
 }

@@ -231,7 +231,7 @@ namespace castor3d
 		m_lightRsms.clear();
 	}
 
-	void ReflectiveShadowMaps::registerLight( Light * light )
+	void ReflectiveShadowMaps::registerLight( LightInstance * light )
 	{
 		if ( auto lit = m_lightRsms.find( light );
 			lit == m_lightRsms.end() )

@@ -357,29 +357,40 @@ namespace castor3d
 		: MovableObject{ name, scene, MovableType::eLight, node }
 		, m_enabled{ m_dirty, true, [this](){ markDirty(); } }
 	{
-		m_category = factory.create( lightType, castor::ref( *this ) );
+		m_category = factory.create( lightType, m_dirty, [this](){ markDirty(); } );
+		m_instance = m_category->instantiate( node, [this](){ onGPUChanged( *this ); } );
 	}
 
-	void Light::update( CpuUpdater & /*updater*/ )
+	void Light::attachTo( SceneNode & node )
 	{
-		m_category->update();
-		onGPUChanged( *this );
-		m_currentGlobalIllumination = m_shadows.globalIllumination;
-		m_currentShadowCaster = m_shadows.enabled;
+		m_instance->setNode( node );
+		MovableObject::attachTo( node );
+	}
+
+	bool Light::updateShadow( Camera const & viewCamera
+		, Camera * lightCamera
+		, int32_t index )
+	{
+		auto result = m_instance->updateShadow( viewCamera, lightCamera, index );
+
+		if ( result )
+		{
+			onGPUChanged( *this );
+		}
+
+		return result;
 	}
 
 	void Light::fillLightBuffer( uint32_t index
 		, VkDeviceSize offset
 		, castor::Point4f * data )
 	{
-		m_bufferIndex = index;
-		m_bufferOffset = offset;
-		m_category->fillLightBuffer( data );
+		m_instance->fillLightBuffer( isEnabled(), index, offset, data );
 	}
 
-	void Light::fillShadowBuffer( AllShadowData & data )
+	void Light::fillShadowBuffer( AllShadowData & data )const
 	{
-		m_category->fillShadowBuffer( data );
+		m_instance->fillShadowBuffer( data );
 	}
 
 	void Light::accept( ConfigurationVisitorBase & vis )
@@ -387,15 +398,11 @@ namespace castor3d
 		vis.visit( cuT( "Light" ) );
 		vis.visit( cuT( "Enabled" ), m_enabled );
 		m_category->accept( vis );
-		m_shadows.accept( vis, getLightType() );
 	}
 
 	void Light::cloneInto( Light & output )const
 	{
 		output.m_enabled = m_enabled;
-		output.m_shadows = m_shadows;
-		output.m_currentShadowCaster = m_currentShadowCaster.load();
-		output.m_currentGlobalIllumination = m_currentGlobalIllumination.load();
 		m_category->cloneInto( *output.m_category );
 	}
 

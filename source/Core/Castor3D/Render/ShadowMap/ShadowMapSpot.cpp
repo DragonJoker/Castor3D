@@ -296,10 +296,10 @@ namespace castor3d
 	void ShadowMapSpot::doUpdate( GpuUpdater & updater
 		, ShadowMap::Passes & passes )
 	{
-		auto const & light = *updater.light;
 		auto const & pass = *passes.passes[updater.index]->pass;
 		auto & myCamera = pass.getCuller().getCamera();
-		light.getSpotLight()->updateShadow( myCamera
+		updater.light->updateShadow( *updater.camera
+			, &myCamera
 			, int32_t( updater.index ) );
 	}
 

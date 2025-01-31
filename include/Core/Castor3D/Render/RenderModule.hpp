@@ -800,7 +800,7 @@ namespace castor3d
 	using ShadowMapRefIds = castor::Pair< castor::ReferenceWrapper< ShadowMap >, UInt32Array >;
 	using ShadowMapRefArray = castor::Vector< ShadowMapRefIds >;
 	using ShadowMapLightTypeArray = castor::Array< ShadowMapRefArray, size_t( LightType::eCount ) >;
-	using LightIdArray = castor::Vector< castor::Pair< Light *, uint32_t > >;
+	using LightIdArray = castor::Vector< castor::Pair< LightInstance *, uint32_t > >;
 
 	template< typename NodeT >
 	struct CulledNodeT
@@ -906,7 +906,7 @@ namespace castor3d
 		Scene * scene{ nullptr };
 		Camera * camera{ nullptr };
 		SceneNode const * node{ nullptr };
-		Light * light{ nullptr };
+		LightInstance * light{ nullptr };
 		Viewport * viewport{ nullptr };
 		uint32_t index{ 0u };
 		uint32_t combineIndex{ 0u };
@@ -941,7 +941,7 @@ namespace castor3d
 			castor::Vector< SceneNode * > dirtyNodes{};
 			castor::Vector< Geometry * > dirtyGeometries{};
 			castor::Vector< BillboardBase * > dirtyBillboards{};
-			castor::Vector< Light * > dirtyLights{};
+			castor::Vector< LightInstance * > dirtyLights{};
 			castor::Vector< Camera * > dirtyCameras{};
 		};
 		castor::Map< Scene const *, DirtyObjects > dirtyScenes;
@@ -961,7 +961,7 @@ namespace castor3d
 		castor::Point2f jitter{};
 		Scene * scene{ nullptr };
 		Camera * camera{ nullptr };
-		Light * light{ nullptr };
+		LightInstance * light{ nullptr };
 		uint32_t index{ 0u };
 		bool voxelConeTracing{ false };
 		FramePassTimer * timer{ nullptr };
