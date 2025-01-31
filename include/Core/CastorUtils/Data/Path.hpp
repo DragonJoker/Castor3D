@@ -196,15 +196,6 @@ namespace castor
 		CU_API Path getFileName( bool withExtension = false )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the full path and leaf
-		 *\return		The full path and leaf
-		 *\~french
-		 *\brief		Récupère le chemin complet
-		 *\return		Le chemin complet
-		 */
-		CU_API Path getFullFileName()const;
-		/**
-		 *\~english
 		 *\brief		Retrieves the extension of the file name, if any
 		 *\return		The extension
 		 *\~french
@@ -221,7 +212,14 @@ namespace castor
 		CU_API String toGeneric()const;
 
 	private:
+		Path( String data, bool normalise );
 		void doNormalise();
+		void doUpdateInternal();
+
+	private:
+		StringView m_path;
+		StringView m_fileName;
+		StringView m_extension;
 	};
 	/**
 	 *\~english

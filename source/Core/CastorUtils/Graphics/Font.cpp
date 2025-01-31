@@ -422,7 +422,7 @@ namespace castor
 
 		if ( !pathFile.empty() )
 		{
-			String strFontName = pathFile.getFullFileName();
+			String strFontName = pathFile.getFileName( true );
 
 			try
 			{
