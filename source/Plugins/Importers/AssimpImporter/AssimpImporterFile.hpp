@@ -118,6 +118,7 @@ namespace c3d_assimp
 		castor::StringArray listSkeletons()override;
 		castor::Vector< NodeData > listSceneNodes()override;
 		castor::Vector< LightData > listLights()override;
+		castor::Vector< LightGroupData > listLightGroups()override;
 		castor::Vector< GeometryData > listGeometries()override;
 		castor::Vector< CameraData > listCameras()override;
 		castor::StringArray listMeshAnimations( castor3d::Mesh const & mesh )override;

@@ -970,6 +970,18 @@ namespace c3d_gltf
 		return result;
 	}
 
+	castor::Vector< castor3d::ImporterFile::LightGroupData > GltfImporterFile::listLightGroups()
+	{
+		castor::Vector< LightGroupData > result;
+
+		for ( auto & [_, light] : m_sceneData.lightGroups )
+		{
+			result.emplace_back( light.name, light.type );
+		}
+
+		return result;
+	}
+
 	castor::Vector< castor3d::ImporterFile::GeometryData > GltfImporterFile::listGeometries()
 	{
 		castor::Vector< GeometryData > result;
@@ -1328,19 +1340,19 @@ namespace c3d_gltf
 				{
 					auto light = m_asset->lights[lightIndex];
 					auto lightName = getLightName( lightIndex );
+					auto & lightGroup = m_sceneData.lightGroups.try_emplace( lightName
+						, lightName
+						, ( light.type == fastgltf::LightType::Directional
+							? castor3d::LightType::eDirectional
+							: ( light.type == fastgltf::LightType::Point
+								? castor3d::LightType::ePoint
+								: castor3d::LightType::eSpot ) )
+						, uint32_t( lightIndex ) ).first->second;
 
 					for ( auto const & [nodeInstanceData, _] : nodeData->instances )
 					{
 						auto nodeName = nodeInstanceData.name;
-						lightName = lightName + cuT( "." ) + nodeName;
-						m_sceneData.lights.emplace_back( lightName
-							, ( light.type == fastgltf::LightType::Directional
-								? castor3d::LightType::eDirectional
-								: ( light.type == fastgltf::LightType::Point
-									? castor3d::LightType::ePoint
-									: castor3d::LightType::eSpot ) )
-							, uint32_t( lightIndex )
-							, nodeName );
+						lightGroup.nodeNames.push_back( nodeName );
 					}
 				}
 			}
@@ -1363,6 +1375,26 @@ namespace c3d_gltf
 			for ( auto & [nodeInstance, transform]: nodeData->instances )
 			{
 				m_nodes.try_emplace( nodeInstance.name, &transform );
+			}
+		}
+
+		// Replace light groups with a single node by lights
+		auto it = m_sceneData.lightGroups.begin();
+		while ( it != m_sceneData.lightGroups.end() )
+		{
+			auto & lightGroup = it->second;
+
+			if ( lightGroup.nodeNames.size() == 1U )
+			{
+				m_sceneData.lights.emplace_back( lightGroup.name
+					, lightGroup.type
+					, lightGroup.lightIndex
+					, lightGroup.nodeNames.front() );
+				it = m_sceneData.lightGroups.erase( it );
+			}
+			else
+			{
+				++it;
 			}
 		}
 	}

@@ -62,6 +62,7 @@ namespace castor3d
 		auto meshes = doImportMeshes( scene, skeletons );
 		auto nodes = doImportNodes( scene );
 		doImportLights( scene );
+		doImportLightGroups( scene );
 		doImportCameras( scene );
 		doCreateGeometries( scene, meshes, nodes );
 		importAnimationsData( scene, file, parameters );
@@ -358,6 +359,39 @@ namespace castor3d
 						, emptyParams ) )
 					{
 						scene.addLight( data.name, light, true );
+					}
+				}
+			}
+		}
+	}
+
+	void SceneImporter::doImportLightGroups( Scene & scene )
+	{
+		Parameters emptyParams;
+
+		if ( auto lightImporter = m_file->createLightImporter() )
+		{
+			if ( auto toImport = m_file->listLightGroups();
+				!toImport.empty() )
+			{
+				auto total = uint32_t( toImport.size() );
+				castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()
+					, cuT( "Importing scene light groups" )
+					, total );
+				uint32_t index{};
+
+				for ( auto const & data : toImport )
+				{
+					++index;
+					castor3d::stepProgressBarLocal( m_file->getProgressBar()
+						, castor::string::toString( index ) + cuT( " / " ) + castor::string::toString( total ) );
+
+					if ( auto light = lightImporter->importData( data.name
+						, { &scene, &scene.getLightsFactory(), data.type }
+						, m_file
+						, emptyParams ) )
+					{
+						scene.addLightGroup( data.name, light, true );
 					}
 				}
 			}

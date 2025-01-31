@@ -90,6 +90,19 @@ namespace castor3d
 			LightType type;
 		};
 
+		struct LightGroupData
+		{
+			LightGroupData( castor::String pname
+				, LightType ptype )
+				: name{ castor::move( pname ) }
+				, type{ castor::move( ptype ) }
+			{
+			}
+
+			castor::String name;
+			LightType type;
+		};
+
 		struct CameraData
 		{
 			CameraData( castor::String pname
@@ -119,6 +132,7 @@ namespace castor3d
 		C3D_API virtual castor::Vector< NodeData > listSceneNodes() = 0;
 		C3D_API virtual castor::Vector< GeometryData > listGeometries() = 0;
 		C3D_API virtual castor::Vector< LightData > listLights() = 0;
+		C3D_API virtual castor::Vector< LightGroupData > listLightGroups() = 0;
 		C3D_API virtual castor::Vector< CameraData > listCameras() = 0;
 		C3D_API virtual castor::Vector< castor::String > listMeshAnimations( Mesh const & mesh ) = 0;
 		C3D_API virtual castor::Vector< castor::String > listSkeletonAnimations( Skeleton const & skeleton ) = 0;

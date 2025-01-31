@@ -91,6 +91,11 @@ namespace castor3d
 		return castor::Vector< LightData >{};
 	}
 
+	castor::Vector< ImporterFile::LightGroupData > CmshImporterFile::listLightGroups()
+	{
+		return castor::Vector< LightGroupData >{};
+	}
+
 	castor::Vector< CmshImporterFile::GeometryData > CmshImporterFile::listGeometries()
 	{
 		return castor::Vector< GeometryData >{};
