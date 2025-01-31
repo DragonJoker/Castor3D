@@ -15,39 +15,47 @@ namespace castor
 	const xchar Path::NativeSeparator = cuT( '/' );
 #endif
 
-	Path::Path( char const * rhs )
-		: String{ makeString( rhs ) }
+	Path::Path( String data, bool normalise )
+		: String{ castor::move( data ) }
 	{
-		doNormalise();
+		if ( normalise )
+		{
+			doNormalise();
+		}
+
+		doUpdateInternal();
+	}
+
+	Path::Path( char const * rhs )
+		: Path{ makeString( rhs ), true }
+	{
 	}
 
 	Path::Path( wchar_t const * rhs )
-		: String{ makeString( rhs ) }
+		: Path{ makeString( rhs ), true }
 	{
-		doNormalise();
 	}
 
 	Path::Path( String const & rhs )
-		: String{ rhs }
+		: Path{ rhs, true }
 	{
-		doNormalise();
 	}
 
 	Path::Path( StringView rhs )
-		: String{ rhs }
+		: Path{ String{ rhs }, true }
 	{
-		doNormalise();
 	}
 
 	Path::Path( Path const & rhs )
 		: String{ rhs }
 	{
-		doNormalise();
+		doUpdateInternal();
 	}
 
 	Path::Path( Path && rhs )noexcept
 		: String{ rhs }
 	{
+		doUpdateInternal();
 	}
 
 	Path & Path::operator=( Path const & rhs )
@@ -60,6 +68,7 @@ namespace castor
 	Path & Path::operator=( Path && rhs )noexcept
 	{
 		String::operator=( rhs );
+		doUpdateInternal();
 		return *this;
 	}
 
@@ -68,6 +77,7 @@ namespace castor
 		push_back( NativeSeparator );
 		append( rhs );
 		doNormalise();
+		doUpdateInternal();
 		return *this;
 	}
 
@@ -76,6 +86,7 @@ namespace castor
 		push_back( NativeSeparator );
 		append( rhs );
 		doNormalise();
+		doUpdateInternal();
 		return *this;
 	}
 
@@ -84,6 +95,7 @@ namespace castor
 		push_back( NativeSeparator );
 		String::operator+=( makeString( rhs ) );
 		doNormalise();
+		doUpdateInternal();
 		return *this;
 	}
 
@@ -92,6 +104,7 @@ namespace castor
 		push_back( NativeSeparator );
 		String::operator+=( makeString( rhs ) );
 		doNormalise();
+		doUpdateInternal();
 		return *this;
 	}
 
@@ -105,6 +118,7 @@ namespace castor
 	{
 		String::operator+=( rhs );
 		doNormalise();
+		doUpdateInternal();
 		return *this;
 	}
 
@@ -112,6 +126,7 @@ namespace castor
 	{
 		String::operator+=( makeString( rhs ) );
 		doNormalise();
+		doUpdateInternal();
 		return *this;
 	}
 
@@ -119,77 +134,28 @@ namespace castor
 	{
 		String::operator+=( makeString( rhs ) );
 		doNormalise();
+		doUpdateInternal();
 		return *this;
 	}
 
 	Path Path::getPath()const
 	{
-		Path result;
-
-		if ( std::size_t index = find_last_of( NativeSeparator );
-			index != String::npos )
-		{
-			result = Path{ substr( 0, index ) };
-		}
-
-		return result;
+		return Path{ String{ m_path }, false };
 	}
 
 	Path Path::getFileName( bool withExtension )const
 	{
-		Path result = *this;
-		std::size_t index = find_last_of( NativeSeparator );
-
-		if ( index != String::npos )
-		{
-			result = Path{ substr( index + 1, String::npos ) };
-		}
-
 		if ( !withExtension )
 		{
-			index = result.find_last_of( cuT( "." ) );
-
-			if ( index != String::npos )
-			{
-				result = Path{ result.substr( 0, index ) };
-			}
+			return Path{ String{ m_fileName }, false };
 		}
 
-		return result;
-	}
-
-	Path Path::getFullFileName()const
-	{
-		Path result = *this;
-
-		if ( std::size_t index = find_last_of( NativeSeparator );
-			index != String::npos )
-		{
-			result = Path{ substr( index + 1, String::npos ) };
-		}
-		else
-		{
-			result.clear();
-		}
-
-		return result;
+		return Path{ String{ m_fileName } + cuT( "." ) + getExtension(), false };
 	}
 
 	String Path::getExtension()const
 	{
-		String result = *this;
-
-		if ( std::size_t index = find_last_of( cuT( "." ) );
-			index != String::npos )
-		{
-			result = substr( index + 1, String::npos );
-		}
-		else
-		{
-			result.clear();
-		}
-
-		return result;
+		return String{ m_extension };
 	}
 
 	String Path::toGeneric()const
@@ -209,20 +175,20 @@ namespace castor
 			String begin;
 			String end;
 
-			if ( substr( 0, 2 ) == cuT( "\\\\" ) )
+			if ( StringView{ data(), 2U } == cuT( "\\\\"_sv ) )
 			{
 				begin = cuT( "\\\\" );
-				assign( substr( 2 ) );
+				assign( substr( 2U ) );
 			}
-			else if ( substr( 0, 2 ) == cuT( "//" ) )
+			else if ( StringView{ data(), 2U } == cuT( "//" ) )
 			{
 				begin = cuT( "/" );
-				assign( substr( 2 ) );
+				assign( substr( 2U ) );
 			}
-			else if ( substr( 0, 1 ) == cuT( "/" ) )
+			else if ( StringView{ data(), 2U } == cuT( "/" ) )
 			{
 				begin = cuT( "/" );
-				assign( substr( 1 ) );
+				assign( substr( 1U ) );
 			}
 
 			Array< xchar, 3 > sep{ NativeSeparator, 0, 0 };
@@ -235,7 +201,7 @@ namespace castor
 				end = NativeSeparator;
 			}
 
-			StringArray folders = string::split( tmp, sep.data(), 1000, false);
+			StringArray folders = string::split( tmp, sep.data(), 1000, false );
 			List< String > list( folders.begin(), folders.end() );
 			tmp.clear();
 			auto it = std::find( list.begin(), list.end(), cuT( ".." ) );
@@ -272,6 +238,27 @@ namespace castor
 			}
 
 			assign( tmp + end );
+		}
+	}
+
+	void Path::doUpdateInternal()
+	{
+		m_fileName = *this;
+		m_path = {};
+		m_extension = {};
+
+		if ( std::size_t index = find_last_of( NativeSeparator );
+			index != String::npos )
+		{
+			m_path = { data(), index };
+			m_fileName = { std::next( begin(), ptrdiff_t( index + 1 ) ), end() };
+		}
+
+		if ( std::size_t index = m_fileName.find_last_of( cuT( "." ) );
+			index != String::npos )
+		{
+			m_extension = { std::next( m_fileName.begin(), ptrdiff_t( index + 1 ) ), m_fileName.end() };
+			m_fileName = { m_fileName.data(), index };
 		}
 	}
 

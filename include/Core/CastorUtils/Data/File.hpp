@@ -457,7 +457,7 @@ namespace castor
 		*/
 		Path getFileName()const
 		{
-			return Path{ m_fileFullPath.getFullFileName() };
+			return Path{ m_fileFullPath.getFileName( true ) };
 		}
 
 	protected:
