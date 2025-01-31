@@ -1,20 +1,18 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_LIGHT_H___
-#define ___C3D_LIGHT_H___
+#ifndef ___C3D_LightGroup_H___
+#define ___C3D_LightGroup_H___
 
 #include "LightModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Shader/ShaderBuffers/LightBuffer.hpp"
 
-#include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
-#include <CastorUtils/Graphics/RgbColour.hpp>
 
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <atomic>
@@ -22,8 +20,9 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class Light
-		: public MovableObject
+	class LightGroup
+		: public castor::OwnedBy< Scene >
+		, public castor::Named
 	{
 	public:
 		/**
@@ -36,8 +35,8 @@ namespace castor3d
 		 *\param[in]	name		Le nom de la lumière.
 		 *\param[in]	createInfo	Les informations de création.
 		 */
-		C3D_API Light( castor::String const & name
-			, LightCreateInfo const & createInfo );
+		C3D_API LightGroup( castor::String const & name
+			, LightGroupCreateInfo const & createInfo );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -54,18 +53,24 @@ namespace castor3d
 		 *\param[in]	factory		La fabrique de LightCategory.
 		 *\param[in]	lightType	Le type de lumière.
 		 */
-		C3D_API Light( castor::String const & name
+		C3D_API LightGroup( castor::String const & name
 			, Scene & scene
-			, SceneNode & node
 			, LightFactory & factory
 			, LightType lightType );
 		/**
 		 *\~english
-		 *\brief		Attaches the movable object to a node
+		 *\brief		Creates an instance for given scene node.
 		 *\~french
-		 *\brief		Attache l'object à un noeud
+		 *\brief		Crée une instance pour le noeud de scène donné.
 		 */
-		C3D_API void attachTo( SceneNode & node )override;
+		C3D_API void addInstance( SceneNode & node );
+		/**
+		 *\~english
+		 *\brief		Adds the object to dirty object list in the scene.
+		 *\~french
+		 *\brief		Ajout l'objet à la liste des objets à mettre à jour de la scène.
+		 */
+		C3D_API void markDirty();
 		/**
 		*\~english
 		*\brief
@@ -87,7 +92,7 @@ namespace castor3d
 		 *\brief			Clone cet objet dans celui donné.
 		 *\param[in,out]	output	Reçoit les données de cet objet.
 		 */
-		C3D_API void cloneInto( Light & output )const;
+		C3D_API void cloneInto( LightGroup & output )const;
 
 		C3D_API static void addParsers( castor::AttributeParsers & result );
 		/**
@@ -102,11 +107,6 @@ namespace castor3d
 		C3D_API DirectionalLightRPtr getDirectionalLight()const;
 		C3D_API PointLightRPtr getPointLight()const;
 		C3D_API SpotLightRPtr getSpotLight()const;
-
-		LightInstanceRPtr getInstance()const
-		{
-			return m_instance.get();
-		}
 
 		bool isEnabled()const
 		{
@@ -348,41 +348,53 @@ namespace castor3d
 			setEnabled( false );
 		}
 		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Iteration on instances.
+		*\~french
+		*name
+		*	Itération sur les instances.
+		*/
+		/**@{*/
+		auto begin()const
+		{
+			return m_instances.begin();
+		}
+
+		auto end()const
+		{
+			return m_instances.end();
+		}
+		/**@}*/
 
 	private:
+		friend class LightCategory;
+
 		bool & doGetDirty()
 		{
 			return m_dirty;
 		}
 
+		bool m_dirty{ true };
 		castor::GroupChangeTracked< bool > m_enabled;
 		LightCategoryUPtr m_category;
-		LightInstanceUPtr m_instance;
+		castor::Vector< LightInstanceUPtr > m_instances;
 	};
 
-	struct LightContext
-		: public MovableContext
+	struct SceneContext;
+
+	struct LightGroupContext
 	{
-		LightUPtr ownLight{};
-		LightRPtr light{};
+		SceneContext * scene{};
+		castor::String name{};
+		LightGroupUPtr ownLight{};
+		LightGroupRPtr light{};
 		LightType lightType{ LightType::eCount };
 		ShadowConfigUPtr shadowConfig;
 	};
-}
 
-namespace castor
-{
-	template<>
-	struct ParserEnumTraits< castor3d::LightType >
-	{
-		static inline xchar const * const Name = cuT( "LightType" );
-		static inline UInt32StrMap const Values = []()
-			{
-				UInt32StrMap result;
-				result = castor3d::getEnumMapT< castor3d::LightType >();
-				return result;
-			}( );
-	};
+	C3D_API castor::String getPrefix( LightGroupContext const & context );
 }
 
 #endif

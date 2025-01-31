@@ -52,7 +52,7 @@ namespace castor3d
 	LightInstanceUPtr SpotLight::instantiate( SceneNode & node
 		, castor::Function< bool() > isParentEnabled )
 	{
-		return LightInstanceUPtr( new SpotLightInstance{ node, *this, castor::move( isParentEnabled ) } );
+		return LightInstanceUPtr( new SpotLightInstance{ node, *this, m_markParentDirty, castor::move( isParentEnabled ) } );
 	}
 
 	LightCategoryUPtr SpotLight::create( bool & dirty
@@ -233,10 +233,11 @@ namespace castor3d
 
 	SpotLightInstance::SpotLightInstance( SceneNode & node
 		, SpotLight & category
+		, castor::Function< void() > markParentDirty
 		, castor::Function< bool() > isParentEnabled )
-		: LightInstance{ node, category, castor::move( isParentEnabled ) }
-		, m_lightView{ m_dirtyShadow }
-		, m_lightProj{ m_dirtyShadow }
+		: LightInstance{ node, category, castor::move( markParentDirty ), castor::move( isParentEnabled ) }
+		, m_lightView{ m_dirtyShadows }
+		, m_lightProj{ m_dirtyShadows }
 	{
 	}
 
@@ -255,7 +256,7 @@ namespace castor3d
 		m_direction = -direction;
 	}
 
-	bool SpotLightInstance::doUpdateShadow( Camera const & viewCamera
+	void SpotLightInstance::doUpdateShadow( Camera const & viewCamera
 		, Camera * lightCamera
 		, int32_t index )
 	{
@@ -268,16 +269,12 @@ namespace castor3d
 		lightCamera->update();
 		m_lightView = lightCamera->getView();
 		m_lightProj = lightCamera->getProjection( false );
-		auto result = m_dirtyShadow;
 
-		if ( m_dirtyShadow )
+		if ( m_dirtyShadows )
 		{
 			m_lightSpace = ( *m_lightProj ) * ( *m_lightView );
-			m_dirtyShadow = false;
 			lightCamera->markDirty();
 		}
-
-		return result;
 	}
 
 	void SpotLightInstance::doFillLightBuffer( castor::Point4f * data )const

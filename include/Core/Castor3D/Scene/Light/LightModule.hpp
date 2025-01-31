@@ -53,6 +53,16 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Light sources group implementation.
+	*\~french
+	*\brief
+	*	Implémentation d'un groupe de sources lumineuses.
+	*\remark
+	*/
+	class LightGroup;
+	/**
+	*\~english
+	*\brief
 	*	Base class for external file import
 	*\~french
 	*\brief
@@ -207,6 +217,36 @@ namespace castor3d
 	using LightRes = CameraCacheTraits::ElementPtrT;
 	using LightResPtr = CameraCacheTraits::ElementObsT;
 
+	/**
+	*\~english
+	*	Helper structure to specialise a cache behaviour.
+	*\remarks
+	*	Specialisation for LightGroup.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks
+	*	Spécialisation pour LightGroup.
+	*/
+	template<>
+	struct PtrCacheTraitsT< LightGroup, castor::String >
+		: PtrCacheTraitsBaseT< LightGroup, castor::String >
+	{
+		using ResT = LightGroup;
+		using KeyT = castor::String;
+		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
+		using ElementT = typename Base::ElementT;
+		using ElementPtrT = typename Base::ElementPtrT;
+
+		C3D_API static const castor::String Name;
+	};
+
+	using LightGroupCacheTraits = PtrCacheTraitsT< LightGroup, castor::String >;
+	using LightGroupCache = castor::ResourceCacheT< LightGroup
+		, castor::String
+		, LightGroupCacheTraits >;
+	using LightGroupPtr = LightGroupCacheTraits::ElementPtrT;
+	using LightGroupObs = LightGroupCacheTraits::ElementObsT;
+
 	struct BaseShadowData
 	{
 		u32 shadowType;
@@ -252,10 +292,12 @@ namespace castor3d
 	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, Light, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LightCache, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LightFactory, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LightInstance, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LightCategory, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightFactory, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightGroup, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightGroupCache, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LightImporter, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightInstance, C3D_API );
 	CU_DeclareSmartPtr( castor3d, DirectionalLight, C3D_API );
 	CU_DeclareSmartPtr( castor3d, PointLight, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SpotLight, C3D_API );
@@ -268,8 +310,6 @@ namespace castor3d
 	CU_DeclareVector( LightRPtr, LightsRef );
 	//! Array of lights per light type.
 	/** @endcond */
-
-	using LightsMap = castor::Array< LightsArray, size_t( LightType::eCount ) >;
 
 	/**
 	*\~english

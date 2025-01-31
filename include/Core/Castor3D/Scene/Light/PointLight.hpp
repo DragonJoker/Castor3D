@@ -115,6 +115,7 @@ namespace castor3d
 	public:
 		C3D_API PointLightInstance( SceneNode & node
 			, PointLight & category
+			, castor::Function< void() > markParentDirty
 			, castor::Function< bool() > isParentEnabled );
 		/**
 		 *\~english
@@ -133,14 +134,14 @@ namespace castor3d
 
 	private:
 		void doUpdate()override;
-		bool doUpdateShadow( Camera const & viewCamera
+		void doUpdateShadow( Camera const & viewCamera
 			, Camera * lightCamera
 			, int32_t index )override;
 		void doFillLightBuffer( castor::Point4f * data )const override;
 		void doCloneInto( LightInstance & output )const override;
 
 	private:
-		castor::ChangeTracked< castor::Point3f > m_position;
+		castor::GroupChangeTracked< castor::Point3f > m_position;
 		castor::Array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) > m_lightViews;
 	};
 }

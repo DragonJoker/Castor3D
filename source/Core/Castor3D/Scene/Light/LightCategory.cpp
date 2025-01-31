@@ -17,11 +17,11 @@ namespace castor3d
 
 	LightCategory::LightCategory( LightType lightType
 		, bool & dirty
-		, castor::Function< void() > changedCallback )
+		, castor::Function< void() > markParentDirty )
 		: m_dirty{ dirty }
-		, m_changedCallback{ castor::move( changedCallback ) }
+		, m_markParentDirty{ castor::move( markParentDirty ) }
 		, m_lightType{ lightType }
-		, m_colour{ m_dirty, { 1.0, 1.0, 1.0 }, m_changedCallback }
+		, m_colour{ m_dirty, { 1.0, 1.0, 1.0 }, m_markParentDirty }
 	{
 	}
 
@@ -52,10 +52,12 @@ namespace castor3d
 
 	LightInstance::LightInstance( SceneNode & node
 		, LightCategory & category
+		, castor::Function< void() > markParentDirty
 		, castor::Function< bool() > isParentEnabled )
 		: m_node{ &node }
 		, m_category{ category }
-		, m_isParentEnabled{ isParentEnabled }
+		, m_markParentDirty{ castor::move( markParentDirty ) }
+		, m_isParentEnabled{ castor::move( isParentEnabled ) }
 	{
 	}
 
@@ -65,11 +67,9 @@ namespace castor3d
 		m_category.update();
 		doUpdate();
 
-		if ( m_dirty )
-		{
-			onGpuChanged( *this );
-		}
-
+		m_markParentDirty();
+		onGpuChanged( *this );
+		m_dirtyShadows = m_dirty;
 		m_dirty = false;
 	}
 
@@ -78,13 +78,9 @@ namespace castor3d
 		, int32_t index )
 	{
 		setShadowMapIndex( index );
-		auto result = doUpdateShadow( viewCamera, lightCamera, index );
-
-		if ( result )
-		{
-			onGpuChanged( *this );
-		}
-
+		doUpdateShadow( viewCamera, lightCamera, index );
+		auto result = m_dirtyShadows;
+		m_dirtyShadows = false;
 		return result;
 	}
 

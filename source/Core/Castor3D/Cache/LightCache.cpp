@@ -69,7 +69,6 @@ namespace castor3d
 			{
 				doRegisterLight( *light );
 			}
-
 		}
 	}
 

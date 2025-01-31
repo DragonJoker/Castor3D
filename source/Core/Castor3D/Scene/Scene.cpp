@@ -43,6 +43,7 @@
 #include "Castor3D/Scene/Background/Colour.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/LightFactory.hpp"
+#include "Castor3D/Scene/Light/LightGroup.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Shader/LightingModelFactory.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
@@ -173,24 +174,6 @@ namespace castor3d
 			}
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eCamera )
-
-		static CU_ImplementAttributeParserNewBlock( parserLight, SceneContext, LightContext )
-		{
-			if ( !blockContext->scene )
-			{
-				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
-			else if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else
-			{
-				newBlockContext->scene = blockContext;
-				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
-			}
-		}
-		CU_EndAttributePushNewBlock( CSCNSection::eLight )
 
 		static CU_ImplementAttributeParserNewBlock( parserCameraNode, SceneContext, NodeContext )
 		{
@@ -882,6 +865,7 @@ namespace castor3d
 			, m_rootNode
 			, m_rootCameraNode
 			, m_rootObjectNode );
+		m_lightGroupCache = castor::makeCache< LightGroup, castor::String, LightGroupCacheTraits >( *this );
 		m_particleSystemCache = makeObjectCache< ParticleSystem, castor::String, ParticleSystemCacheTraits >( *this
 			, m_rootNode
 			, m_rootCameraNode
@@ -997,6 +981,7 @@ namespace castor3d
 		m_particleSystemCache.reset();
 		m_cameraCache.reset();
 		m_geometryCache.reset();
+		m_lightGroupCache.reset();
 		m_lightCache.reset();
 
 		m_meshCache.reset();
@@ -1053,6 +1038,7 @@ namespace castor3d
 
 		m_animatedObjectGroupCache->initialise( device );
 		m_lightCache->initialise( device );
+		m_lightGroupCache->initialise( device );
 		m_background->initialise( device );
 		doUpdateLightsDependent();
 		updateBoundingBox();
@@ -1107,12 +1093,14 @@ namespace castor3d
 		m_dirtyNodes.clear();
 		m_dirtyBillboards.clear();
 		m_dirtyObjects.clear();
+		m_dirtyLightGroups.clear();
 
 		getEngine()->getControlsManager()->destroyControls( *this );
 
 		m_animatedObjectGroupCache->cleanup();
 		m_geometryCache->cleanup();
 		m_cameraCache->cleanup();
+		m_lightGroupCache->cleanup();
 		m_lightCache->cleanup();
 		m_billboardCache->cleanup();
 		m_particleSystemCache->cleanup();
@@ -1252,6 +1240,7 @@ namespace castor3d
 		scene.getParticleSystemCache().mergeInto( *m_particleSystemCache );
 		scene.getGeometryCache().mergeInto( *m_geometryCache );
 		scene.getLightCache().mergeInto( *m_lightCache );
+		scene.getLightGroupCache().mergeInto( *m_lightGroupCache );
 		scene.getSceneNodeCache().mergeInto( *m_sceneNodeCache );
 		m_ambientLight = scene.getAmbientLight();
 		scene.cleanup();
@@ -1530,6 +1519,18 @@ namespace castor3d
 		}
 	}
 
+	void Scene::markDirty( LightGroup & object )
+	{
+		auto it = std::find( m_dirtyLightGroups.begin()
+			, m_dirtyLightGroups.end()
+			, &object );
+
+		if ( it == m_dirtyLightGroups.end() )
+		{
+			m_dirtyLightGroups.emplace_back( &object );
+		}
+	}
+
 	void Scene::addParsers( castor::AttributeParsers & result )
 	{
 		using namespace castor;
@@ -1546,7 +1547,6 @@ namespace castor3d
 		sceneCtx.addPushParser( cuT( "sdf_font" ), CSCNSection::eSdfFont, scene::parserSdfFont, { makeParameter< ParameterType::eName >() } );
 		sceneCtx.addPushParser( cuT( "sampler" ), CSCNSection::eSampler, scene::parserSamplerState, { makeParameter< ParameterType::eName >() } );
 		sceneCtx.addPushParser( cuT( "camera" ), CSCNSection::eCamera, scene::parserCamera, { makeParameter< ParameterType::eName >() } );
-		sceneCtx.addPushParser( cuT( "light" ), CSCNSection::eLight, scene::parserLight, { makeParameter< ParameterType::eName >() } );
 		sceneCtx.addPushParser( cuT( "camera_node" ), CSCNSection::eNode, scene::parserCameraNode, { makeParameter< ParameterType::eName >() } );
 		sceneCtx.addPushParser( cuT( "scene_node" ), CSCNSection::eNode, scene::parserNode, { makeParameter< ParameterType::eName >() } );
 		sceneCtx.addPushParser( cuT( "object" ), CSCNSection::eObject, scene::parserObject, { makeParameter< ParameterType::eName >() } );
@@ -1730,6 +1730,14 @@ namespace castor3d
 			}
 		}
 
+		for ( auto group : m_dirtyLightGroups )
+		{
+			for ( auto & instance : *group )
+			{
+				sceneObjs.dirtyLights.emplace_back( instance.get() );
+			}
+		}
+
 		if ( !sceneObjs.dirtyCameras.empty() )
 		{
 			for ( auto const & [_, light] : getLightCache() )
@@ -1745,6 +1753,7 @@ namespace castor3d
 			, m_dirtyBillboards.begin()
 			, m_dirtyBillboards.end() );
 		m_dirtyBillboards.clear();
+		m_dirtyLightGroups.clear();
 		m_dirtyObjects.clear();
 		m_dirtyNodes.clear();
 	}
@@ -1958,6 +1967,21 @@ namespace castor3d
 		castor::Array< castor::Set< GlobalIlluminationType >, size_t( LightType::eCount ) > giTypes{};
 
 		m_lightCache->forEach( [&giTypes, &needsGI, &hasAnyShadows, &hasShadows]( Light const & light )
+			{
+				if ( light.getExpectedGlobalIlluminationType() != GlobalIlluminationType::eNone )
+				{
+					giTypes[uint32_t( light.getLightType() )].insert( light.getExpectedGlobalIlluminationType() );
+					needsGI = true;
+				}
+
+				if ( light.isExpectedShadowProducer() )
+				{
+					hasAnyShadows = true;
+					hasShadows[size_t( light.getLightType() )] = true;
+				}
+			} );
+
+		m_lightGroupCache->forEach( [&giTypes, &needsGI, &hasAnyShadows, &hasShadows]( LightGroup const & light )
 			{
 				if ( light.getExpectedGlobalIlluminationType() != GlobalIlluminationType::eNone )
 				{

@@ -38,7 +38,7 @@ namespace castor3d
 	LightInstanceUPtr PointLight::instantiate( SceneNode & node
 		, castor::Function< bool() > isParentEnabled )
 	{
-		return LightInstanceUPtr( new PointLightInstance{ node, *this, castor::move( isParentEnabled ) } );
+		return LightInstanceUPtr( new PointLightInstance{ node, *this, m_markParentDirty, castor::move( isParentEnabled ) } );
 	}
 
 	LightCategoryUPtr PointLight::create( bool & dirty
@@ -157,8 +157,10 @@ namespace castor3d
 
 	PointLightInstance::PointLightInstance( SceneNode & node
 		, PointLight & category
+		, castor::Function< void() > markParentDirty
 		, castor::Function< bool() > isParentEnabled )
-		: LightInstance{ node, category, castor::move( isParentEnabled ) }
+		: LightInstance{ node, category, castor::move( markParentDirty ), castor::move( isParentEnabled ) }
+		, m_position{ m_dirty, m_markParentDirty }
 	{
 	}
 
@@ -175,20 +177,16 @@ namespace castor3d
 	{
 	}
 
-	bool PointLightInstance::doUpdateShadow( Camera const & viewCamera
+	void PointLightInstance::doUpdateShadow( Camera const & viewCamera
 		, Camera * lightCamera
 		, int32_t index )
 	{
 		m_position = m_node->getDerivedPosition();
-		auto result = m_position.isDirty();
 
-		if ( result )
+		if ( m_dirtyShadows )
 		{
 			lgtpoint::doUpdateShadowMatrices( m_position.value(), m_lightViews );
 		}
-
-		m_position.reset();
-		return result;
 	}
 
 	void PointLightInstance::doFillLightBuffer( castor::Point4f * data )const

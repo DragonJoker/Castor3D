@@ -228,6 +228,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/CacheModule.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/GeometryCache.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/LightCache.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/LightGroupCache.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/MaterialCache.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/OverlayCache.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Cache/PluginCache.cpp
@@ -244,6 +245,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/CacheView.inl
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/GeometryCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/LightCache.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/LightGroupCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/MaterialCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/ObjectCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/ObjectCacheBase.hpp
@@ -1888,6 +1890,7 @@ source_group( "Source Files\\Scene\\Background\\Shaders" FILES ${${PROJECT_NAME}
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/DirectionalLight.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/Light.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/LightGroup.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/LightImporter.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/LightModule.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/LightCategory.cpp
@@ -1898,6 +1901,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Light/DirectionalLight.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Light/Light.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Light/LightGroup.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Light/LightCategory.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Light/LightFactory.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Light/LightImporter.hpp

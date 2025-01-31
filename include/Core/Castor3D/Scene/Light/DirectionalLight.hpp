@@ -111,6 +111,7 @@ namespace castor3d
 	public:
 		C3D_API DirectionalLightInstance( SceneNode & node
 			, DirectionalLight & category
+			, castor::Function< void() > markParentDirty
 			, castor::Function< bool() > isParentEnabled );
 		/**
 		 *\~english
@@ -163,7 +164,7 @@ namespace castor3d
 
 	private:
 		void doUpdate()override;
-		bool doUpdateShadow( Camera const & viewCamera
+		void doUpdateShadow( Camera const & viewCamera
 			, Camera * lightCamera
 			, int32_t index )override;
 		void doFillLightBuffer( castor::Point4f * data )const override;

@@ -187,6 +187,11 @@ namespace castor3d
 				|| !getLights( LightType::eSpot ).empty();
 		}
 
+		LightBuffer & getLightBuffer()const noexcept
+		{
+			return *m_lightBuffer;
+		}
+
 	private:
 		bool doCheckUniqueDirectionalLight( LightType toAdd )const noexcept;
 		bool doRegisterLight( Light & light );
