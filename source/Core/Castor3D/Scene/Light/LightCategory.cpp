@@ -51,13 +51,11 @@ namespace castor3d
 	//*********************************************************************************************
 
 	LightInstance::LightInstance( SceneNode & node
-		, bool & dirty
-		, castor::Function< void() > onGpuChanged
-		, LightCategory & category )
-		: m_dirty{ dirty }
-		, m_node{ &node }
+		, LightCategory & category
+		, castor::Function< bool() > isParentEnabled )
+		: m_node{ &node }
 		, m_category{ category }
-		, m_onGpuChanged{ castor::move( onGpuChanged ) }
+		, m_isParentEnabled{ isParentEnabled }
 	{
 	}
 
@@ -66,7 +64,12 @@ namespace castor3d
 		m_node->update();
 		m_category.update();
 		doUpdate();
-		m_onGpuChanged();
+
+		if ( m_dirty )
+		{
+			onGpuChanged( *this );
+		}
+
 		m_dirty = false;
 	}
 
@@ -75,7 +78,14 @@ namespace castor3d
 		, int32_t index )
 	{
 		setShadowMapIndex( index );
-		return doUpdateShadow( viewCamera, lightCamera, index );
+		auto result = doUpdateShadow( viewCamera, lightCamera, index );
+
+		if ( result )
+		{
+			onGpuChanged( *this );
+		}
+
+		return result;
 	}
 
 	void LightInstance::cloneInto( LightInstance & output )const
@@ -83,8 +93,7 @@ namespace castor3d
 		doCloneInto( output );
 	}
 
-	void LightInstance::fillLightBuffer( bool enabled
-		, uint32_t index
+	void LightInstance::fillLightBuffer( uint32_t index
 		, VkDeviceSize offset
 		, castor::Point4f * data )
 	{
@@ -94,7 +103,7 @@ namespace castor3d
 		auto & base = *reinterpret_cast< LightData * >( data->ptr() );
 		base.colour = m_category.getColour();
 		base.shadowMapIndex = float( getShadowMapIndex() );
-		base.enabled = ( ( enabled && m_node->isVisible() ) ? 1.0f : 0.0f );
+		base.enabled = ( ( m_isParentEnabled() && m_node->isVisible() ) ? 1.0f : 0.0f );
 		doFillLightBuffer( data );
 	}
 

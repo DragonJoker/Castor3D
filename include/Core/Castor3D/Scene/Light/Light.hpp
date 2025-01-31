@@ -67,43 +67,6 @@ namespace castor3d
 		 */
 		C3D_API void attachTo( SceneNode & node )override;
 		/**
-		 *\~english
-		 *\brief			Updates the shadow informations.
-		 *\param[in,out]	lightCamera	The camera that receives the light spot data.
-		 *\param[in]		index		The shadow map index.
-		 *\~french
-		 *\brief			Met à jour les information d'ombre.
-		 *\param[in,out]	lightCamera	La caméra qui reçoit les données de spot de la lumière.
-		 *\param[in]		index		L'indice de la shadow map.
-		 */
-		C3D_API bool updateShadow( Camera const & viewCamera
-			, Camera * lightCamera
-			, int32_t index );
-		/**
-		 *\~english
-		 *\brief		Records the light data into given buffer.
-		 *\param[in]	index	The light index in the buffer.
-		 *\param[in]	offset	The light data offset in the buffer.
-		 *\param[out]	data	Receives the informations.
-		 *\~french
-		 *\brief		Enregistre les données de la source lumineuse dans le tampon donné.
-		 *\param[in]	index	L'index de la source lumineuse dans le buffer.
-		 *\param[in]	offset	L'offset des données de la source lumineuse dans le buffer.
-		 *\param[out]	data	Reçoit les informations.
-		 */
-		C3D_API void fillLightBuffer( uint32_t index
-			, VkDeviceSize offset
-			, castor::Point4f * data );
-		/**
-		 *\~english
-		 *\brief		Records the light data into given buffer.
-		 *\param[out]	data	Receives the informations.
-		 *\~french
-		 *\brief		Enregistre les données de la source lumineuse dans le tampon donné.
-		 *\param[out]	data	Reçoit les informations.
-		 */
-		C3D_API void fillShadowBuffer( AllShadowData & data )const;
-		/**
 		*\~english
 		*\brief
 		*	ConfigurationVisitorBase acceptance function.
@@ -385,9 +348,6 @@ namespace castor3d
 			setEnabled( false );
 		}
 		/**@}*/
-
-	public:
-		OnLightChanged onGPUChanged;
 
 	private:
 		friend class LightCategory;

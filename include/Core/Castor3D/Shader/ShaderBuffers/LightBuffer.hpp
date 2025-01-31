@@ -49,7 +49,7 @@ namespace castor3d
 		 *\brief		Ajoute une source lumineuse au tampon.
 		 *\param[in]	light	La source lumineuse.
 		 */
-		C3D_API void addLight( Light & light );
+		C3D_API void addLight( LightInstance & light );
 		/**
 		 *\~english
 		 *\brief		Removes a light source from the buffer.
@@ -58,7 +58,7 @@ namespace castor3d
 		 *\brief		Supprime une source lumineuse du tampon.
 		 *\param[in]	light	La source lumineuse.
 		 */
-		C3D_API void removeLight( Light & light );
+		C3D_API void removeLight( LightInstance & light );
 		/**
 		 *\~english
 		 *\brief			Updates the buffer CPU wise.
@@ -136,22 +136,22 @@ namespace castor3d
 			return m_buffer.getPtr();
 		}
 
-		LightsArray getLights( LightType type )const
+		LightInstancesArray getLights( LightType type )const
 		{
 			return m_typeSortedLights[size_t( type )];
 		}
 
 	private:
-		castor::Pair< uint32_t, uint32_t > doGetOffsetIndex( Light const & light )const;
+		castor::Pair< uint32_t, uint32_t > doGetOffsetIndex( LightInstance const & light )const;
 		void doMarkNextDirty( LightType type
 			, uint32_t index );
 		uint32_t doGetBufferEnd( LightType type )const noexcept;
 
 	private:
 		ShaderBuffer m_buffer;
-		LightsMap m_typeSortedLights;
-		castor::Vector< Light * > m_dirty;
-		castor::Map< Light *, OnLightChangedConnection > m_connections;
+		castor::Array< LightInstancesArray, size_t( LightType::eCount ) > m_typeSortedLights;
+		castor::Vector< LightInstance * > m_dirty;
+		castor::Map< LightInstance *, OnLightChangedConnection > m_connections;
 		castor::Vector< uint32_t > m_lightSizes;
 		LightsData m_data;
 		mutable castor::Mutex m_mutex;

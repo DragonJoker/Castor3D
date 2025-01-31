@@ -46,13 +46,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates an instance of this light category.
-		 *\param[in]	node	The parent node.
+		 *\param[in]	node			The parent node.
+		 *\param[in]	isParentEnabled	Used to check if the parent is enabled.
 		 *\~french
 		 *\brief		Crée une instance de cette catégorie de lumière.
-		 *\param[in]	node	Le scene node parent.
+		 *\param[in]	node			Le scene node parent.
+		 *\param[in]	isParentEnabled	Utilisé pour déterminer si le parent est actif.
 		 */
 		C3D_API virtual LightInstanceUPtr instantiate( SceneNode & node
-			, castor::Function< void() > onGpuChanged ) = 0;
+			, castor::Function< bool() > isParentEnabled ) = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the light.
@@ -404,8 +406,7 @@ namespace castor3d
 		 *\param[in]	offset	L'offset des données de la source lumineuse dans le buffer.
 		 *\param[out]	data	Reçoit les données de la source lumineuse.
 		 */
-		C3D_API void fillLightBuffer( bool enabled
-			, uint32_t index
+		C3D_API void fillLightBuffer( uint32_t index
 			, VkDeviceSize offset
 			, castor::Point4f * data );
 		/**
@@ -437,6 +438,11 @@ namespace castor3d
 		LightCategory const & getCategory()const
 		{
 			return m_category;
+		}
+
+		castor::BoundingBox const & getBoundingBox()const
+		{
+			return m_category.getBoundingBox();
 		}
 
 		LpvConfig const & getLpvConfig()const
@@ -518,7 +524,7 @@ namespace castor3d
 			if ( m_shadowMapIndex != index )
 			{
 				m_shadowMapIndex = index;
-				m_onGpuChanged();
+				onGpuChanged( *this );
 			}
 		}
 
@@ -530,14 +536,14 @@ namespace castor3d
 			{
 				m_shadowMap = value;
 				m_shadowMapIndex = index;
-				m_onGpuChanged();
+				onGpuChanged( *this );
 			}
 		}
 
 		void setNode( SceneNode & node )
 		{
 			m_node = &node;
-			m_onGpuChanged();
+			onGpuChanged( *this );
 		}
 		/**@}*/
 
@@ -546,20 +552,17 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	node			The parent node.
-		 *\param[in]	dirty			Used to tell the owner some changes have occured.
-		 *\param[in]	onGpuChanged	Callback when GPU data has changed.
 		 *\param[in]	category		The light category.
+		 *\param[in]	isParentEnabled	Used to check if the parent is enabled.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	node			Le scene node parent.
-		 *\param[in]	dirty			Utilisé pour dire au parent que des changements ont eu lieu.
-		 *\param[in]	onGpuChanged	Callback appelé quand les données GPU ont changé.
 		 *\param[in]	category		La catégorie de lumière.
+		 *\param[in]	isParentEnabled	Utilisé pour déterminer si le parent est actif.
 		 */
 		C3D_API explicit LightInstance( SceneNode & node
-			, bool & dirty
-			, castor::Function< void() > onGpuChanged
-			, LightCategory & category );
+			, LightCategory & category
+			, castor::Function< bool() > isParentEnabled );
 		/**
 		 *\~english
 		 *\brief		Puts the shadow data into the given buffer.
@@ -610,11 +613,15 @@ namespace castor3d
 		 */
 		virtual void doCloneInto( LightInstance & output )const = 0;
 
+	public:
+		OnLightChanged onGpuChanged;
+
 	protected:
-		bool & m_dirty;
 		SceneNode * m_node;
 		LightCategory & m_category;
-		castor::Function< void() > m_onGpuChanged;
+		castor::Function< bool() > m_isParentEnabled;
+
+		bool m_dirty{ true };
 		ShadowMapRPtr m_shadowMap{};
 		int32_t m_shadowMapIndex{ -1 };
 		uint32_t m_bufferIndex{ InvalidIndex };

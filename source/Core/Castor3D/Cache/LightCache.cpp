@@ -122,11 +122,11 @@ namespace castor3d
 		}
 	}
 
-	LightsArray ObjectCacheT< Light, castor::String, LightCacheTraits >::getLights( LightType type )const
+	LightInstancesArray ObjectCacheT< Light, castor::String, LightCacheTraits >::getLights( LightType type )const
 	{
 		return ( m_lightBuffer
 			? m_lightBuffer->getLights( type )
-			: LightsArray{} );
+			: LightInstancesArray{} );
 	}
 
 	void ObjectCacheT< Light, castor::String, LightCacheTraits >::createPassBinding( crg::FramePass & pass
@@ -199,7 +199,7 @@ namespace castor3d
 	{
 		if ( m_lightBuffer )
 		{
-			m_lightBuffer->addLight( light );
+			m_lightBuffer->addLight( *light.getInstance() );
 			return true;
 		}
 
@@ -211,7 +211,7 @@ namespace castor3d
 	{
 		if ( m_lightBuffer )
 		{
-			m_lightBuffer->removeLight( light );
+			m_lightBuffer->removeLight( *light.getInstance() );
 		}
 	}
 }

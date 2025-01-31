@@ -74,11 +74,11 @@ namespace castor3d
 
 				for ( auto & light : cache.getLights( type ) )
 				{
-					light->getInstance()->setShadowMap( nullptr );
+					light->setShadowMap( nullptr );
 
 					if ( light->isShadowProducer() )
 					{
-						lights.emplace( index, light->getInstance() );
+						lights.emplace( index, light );
 					}
 
 					++index;
@@ -89,16 +89,16 @@ namespace castor3d
 
 			for ( auto & light : cache.getLights( type ) )
 			{
-				light->getInstance()->setShadowMap( nullptr );
+				light->setShadowMap( nullptr );
 
 				if ( light->isShadowProducer()
 					&& ( light->getLightType() == LightType::eDirectional
 						|| camera.isVisible( light->getBoundingBox()
-							, light->getParent()->getDerivedTransformationMatrix() ) ) )
+							, light->getNode().getDerivedTransformationMatrix() ) ) )
 				{
 					lights.emplace( castor::point::distanceSquared( camera.getParent()->getDerivedPosition()
-							, light->getParent()->getDerivedPosition() )
-						, light->getInstance() );
+							, light->getNode().getDerivedPosition() )
+						, light );
 				}
 			}
 

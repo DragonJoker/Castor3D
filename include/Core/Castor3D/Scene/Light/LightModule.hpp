@@ -172,7 +172,7 @@ namespace castor3d
 		LightType lightType;
 	};
 
-	using OnLightChangedFunction = castor::Function< void( Light & ) >;
+	using OnLightChangedFunction = castor::Function< void( LightInstance & ) >;
 	using OnLightChanged = castor::SignalT< OnLightChangedFunction >;
 	using OnLightChangedConnection = OnLightChanged::connection;
 	/**
@@ -260,6 +260,8 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, PointLight, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SpotLight, C3D_API );
 
+	//! Array of light instances
+	CU_DeclareVector( LightInstanceRPtr, LightInstances );
 	//! Array of lights
 	CU_DeclareVector( LightRPtr, Lights );
 	//! Array to non owning light pointers

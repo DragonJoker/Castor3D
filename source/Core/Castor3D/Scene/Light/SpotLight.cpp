@@ -39,26 +39,26 @@ namespace castor3d
 	//*************************************************************************************************
 
 	SpotLight::SpotLight( bool & dirty
-		, castor::Function< void() > const & changedCallback )
-		: LightCategory{ LightType::eSpot, dirty, changedCallback }
-		, m_range{ m_dirty, 10.0f, changedCallback }
-		, m_exponent{ m_dirty, 1.0f, changedCallback }
-		, m_intensity{ m_dirty, castor::LuminousIntensity{ 1.0f }, changedCallback }
-		, m_innerCutOff{ m_dirty, 22.5_degrees, changedCallback }
-		, m_outerCutOff{ m_dirty, 45.0_degrees, changedCallback }
+		, castor::Function< void() > const & markParentDirty )
+		: LightCategory{ LightType::eSpot, dirty, markParentDirty }
+		, m_range{ m_dirty, 10.0f, markParentDirty }
+		, m_exponent{ m_dirty, 1.0f, markParentDirty }
+		, m_intensity{ m_dirty, castor::LuminousIntensity{ 1.0f }, markParentDirty }
+		, m_innerCutOff{ m_dirty, 22.5_degrees, markParentDirty }
+		, m_outerCutOff{ m_dirty, 45.0_degrees, markParentDirty }
 	{
 	}
 
 	LightInstanceUPtr SpotLight::instantiate( SceneNode & node
-		, castor::Function< void() > onGpuChanged )
+		, castor::Function< bool() > isParentEnabled )
 	{
-		return LightInstanceUPtr( new SpotLightInstance{ node, m_dirty, castor::move( onGpuChanged ), *this } );
+		return LightInstanceUPtr( new SpotLightInstance{ node, *this, castor::move( isParentEnabled ) } );
 	}
 
 	LightCategoryUPtr SpotLight::create( bool & dirty
-		, castor::Function< void() > const & changedCallback )
+		, castor::Function< void() > const & markParentDirty )
 	{
-		return LightCategoryUPtr( new SpotLight{ dirty, changedCallback } );
+		return LightCategoryUPtr( new SpotLight{ dirty, markParentDirty } );
 	}
 
 	castor::Point3fArray const & SpotLight::generateVertices( uint32_t angle )
@@ -232,10 +232,9 @@ namespace castor3d
 	//*************************************************************************************************
 
 	SpotLightInstance::SpotLightInstance( SceneNode & node
-		, bool & dirty
-		, castor::Function< void() > onGpuChanged
-		, SpotLight & category )
-		: LightInstance{ node, dirty, castor::move( onGpuChanged ), category }
+		, SpotLight & category
+		, castor::Function< bool() > isParentEnabled )
+		: LightInstance{ node, category, castor::move( isParentEnabled ) }
 		, m_lightView{ m_dirtyShadow }
 		, m_lightProj{ m_dirtyShadow }
 	{

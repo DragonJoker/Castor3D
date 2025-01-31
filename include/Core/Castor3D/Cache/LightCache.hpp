@@ -100,7 +100,7 @@ namespace castor3d
 		 *\param[in]	type	Le type de lumière.
 		 *\return		Les lumières.
 		 */
-		C3D_API LightsArray getLights( LightType type )const;
+		C3D_API LightInstancesArray getLights( LightType type )const;
 		/**
 		 *\~english
 		 *\brief		Creates a frame pass binding.
