@@ -31,7 +31,7 @@ namespace GuiCommon
 	public:
 		explicit DebugMeshManager( castor3d::RenderTarget const & renderTarget );
 		~DebugMeshManager();
-		void select( castor3d::Light const & light );
+		void select( castor3d::LightInstance const & light );
 		void select( castor3d::Geometry const & object
 			, castor3d::Submesh const & submesh );
 		void unselect();
@@ -54,7 +54,7 @@ namespace GuiCommon
 		castor::Point4f m_obbBoneColour{};
 		castor3d::Geometry const * m_object{};
 		castor3d::Submesh const * m_submesh{};
-		castor3d::Light const * m_light{};
+		castor3d::LightInstance const * m_light{};
 		castor3d::OnSceneUpdateConnection m_sceneConnection;
 		castor3d::GpuBufferOffsetT< DebugMeshConfig > m_meshConfigBuffer;
 		castor3d::GpuBufferOffsetT< castor::Point4f > m_pointLightVertexBuffer;

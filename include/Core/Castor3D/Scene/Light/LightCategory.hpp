@@ -429,6 +429,9 @@ namespace castor3d
 		/**@{*/
 		C3D_API castor::String const & getName()const noexcept;
 		C3D_API Scene * getScene()const noexcept;
+		C3D_API DirectionalLightRPtr getDirectionalLight()const;
+		C3D_API PointLightRPtr getPointLight()const;
+		C3D_API SpotLightRPtr getSpotLight()const;
 
 		SceneNode & getNode()const
 		{

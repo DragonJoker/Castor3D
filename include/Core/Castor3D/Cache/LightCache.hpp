@@ -100,7 +100,18 @@ namespace castor3d
 		 *\param[in]	type	Le type de lumière.
 		 *\return		Les lumières.
 		 */
-		C3D_API LightInstancesArray getLights( LightType type )const;
+		C3D_API castor::Vector< Light * > const & getLights( LightType type )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the lights of given type.
+		 *\param[in]	type	The light type.
+		 *\return		The lights.
+		 *\~french
+		 *\brief		Récupère les lumières du type donné.
+		 *\param[in]	type	Le type de lumière.
+		 *\return		Les lumières.
+		 */
+		C3D_API LightInstancesArray getLightInstances( LightType type )const;
 		/**
 		 *\~english
 		 *\brief		Creates a frame pass binding.
@@ -173,7 +184,7 @@ namespace castor3d
 
 		uint32_t getLightsCount( LightType type )const
 		{
-			return uint32_t( getLights( type ).size() );
+			return uint32_t( getLightInstances( type ).size() );
 		}
 
 		bool isDirty()const noexcept
@@ -183,8 +194,8 @@ namespace castor3d
 
 		bool hasClusteredLights()const noexcept
 		{
-			return !getLights( LightType::ePoint ).empty()
-				|| !getLights( LightType::eSpot ).empty();
+			return !getLightInstances( LightType::ePoint ).empty()
+				|| !getLightInstances( LightType::eSpot ).empty();
 		}
 
 		LightBuffer & getLightBuffer()const noexcept
@@ -194,12 +205,13 @@ namespace castor3d
 
 	private:
 		bool doCheckUniqueDirectionalLight( LightType toAdd )const noexcept;
-		bool doRegisterLight( Light & light );
+		void doRegisterLight( Light & light );
 		void doUnregisterLight( Light & light );
 
 	private:
 		LightBufferUPtr m_lightBuffer;
 		castor::Vector< Light * > m_pendingLights;
+		castor::Array< castor::Vector< Light * >, size_t( LightType::eCount ) > m_lightsPerType;
 		bool m_dirty{ true };
 	};
 }

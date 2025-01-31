@@ -214,14 +214,14 @@ namespace CastorViewer
 		}
 	}
 
-	void RenderPanel::select( castor3d::Light * light )
+	void RenderPanel::select( castor3d::LightInstance * light )
 	{
 		if ( m_debugMeshManager )
 		{
 			if ( light )
 			{
 				m_debugMeshManager->select( *light );
-				select( light->getParent(), false );
+				select( &light->getNode(), false );
 			}
 			else
 			{
@@ -1017,7 +1017,7 @@ namespace CastorViewer
 					else
 					{
 						doUpdateSelectedGeometry( nullptr, nullptr, true );
-						select( castor3d::LightRPtr{} );
+						select( castor3d::LightInstanceRPtr{} );
 						select( castor3d::SceneNodeRPtr{} );
 					}
 				} ) );

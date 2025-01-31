@@ -2,7 +2,10 @@
 
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Scene/Light/PointLight.hpp"
+#include "Castor3D/Scene/Light/SpotLight.hpp"
 
 #include <CastorUtils/Graphics/PixelBuffer.hpp>
 
@@ -111,6 +114,24 @@ namespace castor3d
 	Scene * LightInstance::getScene()const noexcept
 	{
 		return m_node->getScene();
+	}
+
+	DirectionalLightRPtr LightInstance::getDirectionalLight()const
+	{
+		CU_Require( m_category.getLightType() == LightType::eDirectional );
+		return &static_cast< DirectionalLight & >( m_category );
+	}
+
+	PointLightRPtr LightInstance::getPointLight()const
+	{
+		CU_Require( m_category.getLightType() == LightType::ePoint );
+		return &static_cast< PointLight & >( m_category );
+	}
+
+	SpotLightRPtr LightInstance::getSpotLight()const
+	{
+		CU_Require( m_category.getLightType() == LightType::eSpot );
+		return &static_cast< SpotLight & >( m_category );
 	}
 
 	void LightInstance::doFillBaseShadowData( BaseShadowData & data )const

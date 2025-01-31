@@ -57,29 +57,57 @@ namespace castor
 		doCleanupNoLock();
 	}
 
-	bool ResourceCacheT< LightGroup, String, LightGroupCacheTraits >::doRegisterLightGroup( LightGroup & light )
+	castor::Vector< LightGroup * > const & ResourceCacheT< LightGroup, String, LightGroupCacheTraits >::getLightGroups( LightType type )const
+	{
+		return m_lightsPerType[size_t( type )];
+	}
+
+	void ResourceCacheT< LightGroup, String, LightGroupCacheTraits >::doRegisterLightGroup( LightGroup & light )
 	{
 		if ( m_lightBuffer )
 		{
-			for ( auto & instance : light )
+			auto & typeLights = m_lightsPerType[size_t( light.getLightType() )];
+			auto it = std::find_if( typeLights.begin(), typeLights.end()
+				, [&light]( LightGroup const * lookup )
+				{
+						return lookup->getName() == light.getName();
+				} );
+
+			if ( it == typeLights.end() )
 			{
-				m_lightBuffer->addLight( *instance );
+				typeLights.push_back( &light );
+
+				for ( auto & instance : light )
+				{
+					m_lightBuffer->addLight( *instance );
+				}
 			}
-
-			return true;
 		}
-
-		m_pendingLights.push_back( &light );
-		return false;
+		else
+		{
+			m_pendingLights.push_back( &light );
+		}
 	}
 
 	void ResourceCacheT< LightGroup, String, LightGroupCacheTraits >::doUnregisterLightGroup( LightGroup & light )
 	{
-		if ( m_lightBuffer )
-		{
-			for ( auto & instance : light )
+		auto & typeLights = m_lightsPerType[size_t( light.getLightType() )];
+		auto it = std::find_if( typeLights.begin(), typeLights.end()
+			, [&light]( LightGroup const * lookup )
 			{
-				m_lightBuffer->removeLight( *instance );
+				return lookup->getName() == light.getName();
+			} );
+
+		if ( it != typeLights.end() )
+		{
+			typeLights.erase( it );
+
+			if ( m_lightBuffer )
+			{
+				for ( auto & instance : light )
+				{
+					m_lightBuffer->removeLight( *instance );
+				}
 			}
 		}
 	}

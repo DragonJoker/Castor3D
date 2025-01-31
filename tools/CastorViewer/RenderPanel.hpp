@@ -50,7 +50,7 @@ namespace CastorViewer
 		void reset();
 		void updateWindow( castor3d::RenderWindowDesc const & window );
 		void select( castor3d::Geometry * geometry, castor3d::Submesh const * submesh );
-		void select( castor3d::Light * light );
+		void select( castor3d::LightInstance * light );
 		void select( castor3d::SceneNode * node
 			, bool cameraNode = false );
 		void select( castor3d::Camera * camera );

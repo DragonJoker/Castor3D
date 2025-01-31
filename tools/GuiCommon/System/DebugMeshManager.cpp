@@ -244,7 +244,7 @@ namespace GuiCommon
 		}
 	}
 
-	void DebugMeshManager::select( castor3d::Light const & light )
+	void DebugMeshManager::select( castor3d::LightInstance const & light )
 	{
 		if ( light.getLightType() == castor3d::LightType::eDirectional )
 		{
@@ -449,7 +449,7 @@ namespace GuiCommon
 			if ( buffer )
 			{
 				auto & debugMeshData = m_meshConfigBuffer.getData()[0u];
-				debugMeshData.world = m_light->getParent()->getDerivedTransformationMatrix();
+				debugMeshData.world = m_light->getNode().getDerivedTransformationMatrix();
 				debugMeshData.colour = m_aabbMeshColour;
 				castor::matrix::transform( debugMeshData.world
 					, castor::Point3f{}

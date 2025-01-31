@@ -139,6 +139,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	Properties/TreeItems/FrameVariableBufferTreeItemProperty.cpp
 	Properties/TreeItems/FrameVariableTreeItemProperty.cpp
 	Properties/TreeItems/GeometryTreeItemProperty.cpp
+	Properties/TreeItems/LightGroupTreeItemProperty.cpp
 	Properties/TreeItems/LightTreeItemProperty.cpp
 	Properties/TreeItems/MaterialTreeItemProperty.cpp
 	Properties/TreeItems/NodeTreeItemProperty.cpp
@@ -178,6 +179,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	Properties/TreeItems/FrameVariableBufferTreeItemProperty.hpp
 	Properties/TreeItems/FrameVariableTreeItemProperty.hpp
 	Properties/TreeItems/GeometryTreeItemProperty.hpp
+	Properties/TreeItems/LightGroupTreeItemProperty.hpp
 	Properties/TreeItems/LightTreeItemProperty.hpp
 	Properties/TreeItems/MaterialTreeItemProperty.hpp
 	Properties/TreeItems/NodeTreeItemProperty.hpp

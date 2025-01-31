@@ -136,7 +136,7 @@ namespace castor3d
 			return m_buffer.getPtr();
 		}
 
-		LightInstancesArray getLights( LightType type )const
+		LightInstancesArray getLightInstances( LightType type )const
 		{
 			return m_typeSortedLights[size_t( type )];
 		}
