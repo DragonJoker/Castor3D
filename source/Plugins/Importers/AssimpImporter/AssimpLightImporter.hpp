@@ -18,6 +18,11 @@ namespace c3d_assimp
 
 	private:
 		bool doImportLight( castor3d::Light & light )override;
+
+		bool doImportLightGroup( castor3d::LightGroup & )override
+		{
+			return false;
+		}
 	};
 }
 

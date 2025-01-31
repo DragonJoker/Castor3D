@@ -32,6 +32,7 @@ namespace castor3d
 		castor::StringArray listSkeletons()override;
 		castor::Vector< NodeData > listSceneNodes()override;
 		castor::Vector< LightData > listLights()override;
+		castor::Vector< LightGroupData > listLightGroups()override;
 		castor::Vector< GeometryData > listGeometries()override;
 		castor::Vector< CameraData > listCameras()override;
 		castor::StringArray listMeshAnimations( Mesh const & mesh )override;

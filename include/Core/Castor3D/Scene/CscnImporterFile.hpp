@@ -51,6 +51,11 @@ namespace castor3d
 			return {};
 		}
 
+		castor::Vector< LightGroupData > listLightGroups()override
+		{
+			return {};
+		}
+
 		castor::Vector< GeometryData > listGeometries()override
 		{
 			return {};

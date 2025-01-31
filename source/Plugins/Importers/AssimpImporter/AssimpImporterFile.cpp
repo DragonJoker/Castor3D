@@ -556,6 +556,11 @@ namespace c3d_assimp
 		return result;
 	}
 
+	castor::Vector< castor3d::ImporterFile::LightGroupData > AssimpImporterFile::listLightGroups()
+	{
+		return castor::Vector< castor3d::ImporterFile::LightGroupData >{};
+	}
+
 	castor::Vector< castor3d::ImporterFile::GeometryData > AssimpImporterFile::listGeometries()
 	{
 		castor::Vector< GeometryData > result;

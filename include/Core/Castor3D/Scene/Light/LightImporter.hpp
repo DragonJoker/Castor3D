@@ -68,6 +68,43 @@ namespace castor3d
 			, Parameters const & parameters );
 		/**
 		 *\~english
+		 *\brief		Light import function.
+		 *\param[in]	name		The light name.
+		 *\param[in]	createInfo	The light creation informations.
+		 *\param[in]	file		The location of the file to import.
+		 *\param[in]	parameters	Import configuration parameters.
+		 *\return		\p false if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import de Light.
+		 *\param[in]	name		Le nom de la lumière.
+		 *\param[in]	createInfo	Les informations de création de la lumière.
+		 *\param[in]	file		Le chemin vers le fichier à importer.
+		 *\param[in]	parameters	Paramètres de configuration de l'import.
+		 *\return		\p false si un problème quelconque est survenu.
+		 */
+		C3D_API LightGroupUPtr importData( castor::String const & name
+			, LightGroupCreateInfo const & createInfo
+			, ImporterFile * file
+			, Parameters const & parameters );
+		/**
+		 *\~english
+		 *\brief		Light import function.
+		 *\param[out]	light			Receives the imported data.
+		 *\param[in]	file			The location of the file to import.
+		 *\param[in]	parameters		Import configuration parameters.
+		 *\return		\p false if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import de Light.
+		 *\param[out]	light			Reçoit les données importées.
+		 *\param[in]	file			Le chemin vers le fichier à importer.
+		 *\param[in]	parameters		Paramètres de configuration de l'import.
+		 *\return		\p false si un problème quelconque est survenu.
+		 */
+		C3D_API bool importData( LightGroup & light
+			, ImporterFile * file
+			, Parameters const & parameters );
+		/**
+		 *\~english
 		 *\brief		Light import Function.
 		 *\param[out]	light			Receives the imported data.
 		 *\param[in]	pathFile		The location of the file to import.
@@ -83,6 +120,23 @@ namespace castor3d
 		C3D_API static bool importData( Light & light
 			, castor::Path const & pathFile
 			, Parameters const & parameters );
+		/**
+		 *\~english
+		 *\brief		Light import Function.
+		 *\param[out]	light			Receives the imported data.
+		 *\param[in]	pathFile		The location of the file to import.
+		 *\param[in]	parameters		Import configuration parameters.
+		 *\return		\p false if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import de Light.
+		 *\param[out]	light			Reçoit les données importées.
+		 *\param[in]	pathFile		Le chemin vers le fichier à importer.
+		 *\param[in]	parameters		Paramètres de configuration de l'import.
+		 *\return		\p false si un problème quelconque est survenu.
+		 */
+		C3D_API static bool importData( LightGroup & light
+			, castor::Path const & pathFile
+			, Parameters const & parameters );
 
 		castor::StringView getPrefix()const noexcept
 		{
@@ -92,7 +146,10 @@ namespace castor3d
 	private:
 		C3D_API virtual LightUPtr doCreateLight( castor::String const & name
 			, LightCreateInfo const & createInfo );
+		C3D_API virtual LightGroupUPtr doCreateLightGroup( castor::String const & name
+			, LightGroupCreateInfo const & createInfo );
 		virtual bool doImportLight( Light & light ) = 0;
+		virtual bool doImportLightGroup( LightGroup & light ) = 0;
 
 	protected:
 		castor::String m_prefix;
