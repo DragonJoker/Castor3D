@@ -61,6 +61,17 @@ namespace castor
 		 *\brief		Met tous les éléments à nettoyer.
 		 */
 		C3D_API void cleanup();
+		/**
+		 *\~english
+		 *\brief		Retrieves the lights of given type.
+		 *\param[in]	type	The light type.
+		 *\return		The lights.
+		 *\~french
+		 *\brief		Récupère les lumières du type donné.
+		 *\param[in]	type	Le type de lumière.
+		 *\return		Les lumières.
+		 */
+		C3D_API castor::Vector< castor3d::LightGroup * > const & getLightGroups( castor3d::LightType type )const;
 
 		bool isDirty()const noexcept
 		{
@@ -68,13 +79,14 @@ namespace castor
 		}
 
 	private:
-		bool doRegisterLightGroup( castor3d::LightGroup & light );
+		void doRegisterLightGroup( castor3d::LightGroup & light );
 		void doUnregisterLightGroup( castor3d::LightGroup & light );
 
 	private:
 		castor3d::Scene & m_scene;
 		castor3d::LightBufferRPtr m_lightBuffer;
 		castor::Vector< castor3d::LightGroup * > m_pendingLights;
+		castor::Array< castor::Vector< castor3d::LightGroup * >, size_t( castor3d::LightType::eCount ) > m_lightsPerType;
 		bool m_dirty{ true };
 	};
 }

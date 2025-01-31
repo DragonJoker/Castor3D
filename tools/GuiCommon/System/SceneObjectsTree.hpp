@@ -11,6 +11,7 @@ See LICENSE file in root folder
 #include "GuiCommon/Properties/TreeItems/ControlTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/GeometryTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/LightTreeItemProperty.hpp"
+#include "GuiCommon/Properties/TreeItems/LightGroupTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/MaterialTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/NodeTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/OverlayTreeItemProperty.hpp"
@@ -36,7 +37,7 @@ namespace GuiCommon
 		: public wxTreeCtrl
 	{
 	public:
-		using SelectLightFunc = std::function< void( castor3d::Light * ) >;
+		using SelectLightFunc = std::function< void( castor3d::LightInstance * ) >;
 		using SelectSubmeshFunc = std::function< void( castor3d::Geometry *, castor3d::Submesh const * ) >;
 		using SelectNodeFunc = std::function< void( castor3d::SceneNode * ) >;
 		using SelectLightSignal = castor::SignalT< SelectLightFunc >;
@@ -54,6 +55,8 @@ namespace GuiCommon
 			eTexture,
 			eSceneNode,
 			eLight,
+			eLightGroup,
+			eGroupLight,
 			eOverlay,
 			eStyle,
 			eControl,
@@ -247,6 +250,11 @@ namespace GuiCommon
 			, castor3d::LightType type
 			, int icon
 			, int iconSel );
+		void doLoadSceneLightGroups( wxTreeItemId id
+			, wxString const & name
+			, castor3d::LightType type
+			, int icon
+			, int iconSel );
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-override"
@@ -267,6 +275,7 @@ namespace GuiCommon
 		std::unique_ptr< TextureTreeItemProperty > m_textureProperties;
 		std::unique_ptr< NodeTreeItemProperty > m_nodeProperties;
 		std::unique_ptr< LightTreeItemProperty > m_lightProperties;
+		std::unique_ptr< LightGroupTreeItemProperty > m_lightGroupProperties;
 		std::unique_ptr< OverlayTreeItemProperty > m_overlayProperties;
 		std::unique_ptr< StyleTreeItemProperty > m_styleProperties;
 		std::unique_ptr< ControlTreeItemProperty > m_controlProperties;

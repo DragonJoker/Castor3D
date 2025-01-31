@@ -129,7 +129,7 @@ namespace castor3d
 						.groupCountX( clusters.getDimensions()->x )
 						.groupCountY( clusters.getDimensions()->y )
 						.groupCountZ( clusters.getDimensions()->z )
-						.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return clusters.getConfig().enablePostAssignSort && !clusters.getCamera().getScene()->getLightCache().getLights( LightType::ePoint ).empty(); } ) )
+						.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return clusters.getConfig().enablePostAssignSort && !clusters.getCamera().getScene()->getLightCache().getLightInstances( LightType::ePoint ).empty(); } ) )
 					, clusters
 					, LightType::ePoint );
 				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
@@ -155,7 +155,7 @@ namespace castor3d
 						.groupCountX( clusters.getDimensions()->x )
 						.groupCountY( clusters.getDimensions()->y )
 						.groupCountZ( clusters.getDimensions()->z )
-						.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return clusters.getConfig().enablePostAssignSort && !clusters.getCamera().getScene()->getLightCache().getLights( LightType::eSpot ).empty(); } ) )
+						.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return clusters.getConfig().enablePostAssignSort && !clusters.getCamera().getScene()->getLightCache().getLightInstances( LightType::eSpot ).empty(); } ) )
 					, clusters
 					, LightType::eSpot );
 				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )

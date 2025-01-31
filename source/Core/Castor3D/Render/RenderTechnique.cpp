@@ -72,7 +72,7 @@ namespace castor3d
 			{
 				double index{};
 
-				for ( auto & light : cache.getLights( type ) )
+				for ( auto & light : cache.getLightInstances( type ) )
 				{
 					light->setShadowMap( nullptr );
 
@@ -87,7 +87,7 @@ namespace castor3d
 				return lights;
 			}
 
-			for ( auto & light : cache.getLights( type ) )
+			for ( auto & light : cache.getLightInstances( type ) )
 			{
 				light->setShadowMap( nullptr );
 

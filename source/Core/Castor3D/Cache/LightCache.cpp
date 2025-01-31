@@ -121,10 +121,15 @@ namespace castor3d
 		}
 	}
 
-	LightInstancesArray ObjectCacheT< Light, castor::String, LightCacheTraits >::getLights( LightType type )const
+	castor::Vector< Light * > const & ObjectCacheT< Light, castor::String, LightCacheTraits >::getLights( LightType type )const
+	{
+		return m_lightsPerType[size_t( type )];
+	}
+
+	LightInstancesArray ObjectCacheT< Light, castor::String, LightCacheTraits >::getLightInstances( LightType type )const
 	{
 		return ( m_lightBuffer
-			? m_lightBuffer->getLights( type )
+			? m_lightBuffer->getLightInstances( type )
 			: LightInstancesArray{} );
 	}
 
@@ -194,23 +199,46 @@ namespace castor3d
 		return result;
 	}
 
-	bool ObjectCacheT< Light, castor::String, LightCacheTraits >::doRegisterLight( Light & light )
+	void ObjectCacheT< Light, castor::String, LightCacheTraits >::doRegisterLight( Light & light )
 	{
 		if ( m_lightBuffer )
 		{
-			m_lightBuffer->addLight( *light.getInstance() );
-			return true;
-		}
+			auto & typeLights = m_lightsPerType[size_t( light.getLightType() )];
+			auto it = std::find_if( typeLights.begin(), typeLights.end()
+				, [&light]( Light const * lookup )
+				{
+						return lookup->getName() == light.getName();
+				} );
 
-		m_pendingLights.push_back( &light );
-		return false;
+			if ( it == typeLights.end() )
+			{
+				typeLights.push_back( &light );
+				m_lightBuffer->addLight( *light.getInstance() );
+			}
+		}
+		else
+		{
+			m_pendingLights.push_back( &light );
+		}
 	}
 
 	void ObjectCacheT< Light, castor::String, LightCacheTraits >::doUnregisterLight( Light & light )
 	{
-		if ( m_lightBuffer )
+		auto & typeLights = m_lightsPerType[size_t( light.getLightType() )];
+		auto it = std::find_if( typeLights.begin(), typeLights.end()
+			, [&light]( Light const * lookup )
+			{
+				return lookup->getName() == light.getName();
+			} );
+
+		if ( it != typeLights.end() )
 		{
-			m_lightBuffer->removeLight( *light.getInstance() );
+			typeLights.erase( it );
+
+			if ( m_lightBuffer )
+			{
+				m_lightBuffer->removeLight( *light.getInstance() );
+			}
 		}
 	}
 }

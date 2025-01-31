@@ -20,6 +20,7 @@
 #include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/LightCache.hpp>
+#include <Castor3D/Cache/LightGroupCache.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/ObjectCache.hpp>
 #include <Castor3D/Cache/OverlayCache.hpp>
@@ -48,6 +49,7 @@
 #include <Castor3D/Scene/Animation/AnimatedObject.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
 #include <Castor3D/Scene/Light/Light.hpp>
+#include <Castor3D/Scene/Light/LightGroup.hpp>
 #include <Castor3D/Scene/ParticleSystem/ParticleSystem.hpp>
 
 #include <CastorUtils/Design/ResourceCache.hpp>
@@ -329,9 +331,11 @@ namespace GuiCommon
 
 		if ( scene )
 		{
+			m_nodeProperties = std::make_unique< NodeTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
 			m_lightProperties = std::make_unique< LightTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
+			m_lightGroupProperties = std::make_unique< LightGroupTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
 
-			auto rootId = AddRoot( _( "Lights" )
+			auto rootId = AddRoot( _( "Lights And Groups" )
 				, eBMP_DIRECTIONAL_LIGHT
 				, eBMP_DIRECTIONAL_LIGHT_SEL );
 			doLoadSceneLights( rootId
@@ -346,6 +350,21 @@ namespace GuiCommon
 				, eBMP_POINT_LIGHT_SEL );
 			doLoadSceneLights( rootId
 				, _( "Spot Lights" )
+				, castor3d::LightType::eSpot
+				, eBMP_SPOT_LIGHT
+				, eBMP_SPOT_LIGHT_SEL );
+			doLoadSceneLightGroups( rootId
+				, _( "Directional LightGroups" )
+				, castor3d::LightType::eDirectional
+				, eBMP_DIRECTIONAL_LIGHT
+				, eBMP_DIRECTIONAL_LIGHT_SEL );
+			doLoadSceneLightGroups( rootId
+				, _( "Point LightGroups" )
+				, castor3d::LightType::ePoint
+				, eBMP_POINT_LIGHT
+				, eBMP_POINT_LIGHT_SEL );
+			doLoadSceneLightGroups( rootId
+				, _( "Spot LightGroups" )
 				, castor3d::LightType::eSpot
 				, eBMP_SPOT_LIGHT
 				, eBMP_SPOT_LIGHT_SEL );
@@ -859,6 +878,40 @@ namespace GuiCommon
 		}
 	}
 
+	void SceneObjectsTree::doLoadSceneLightGroups( wxTreeItemId id
+		, wxString const & name
+		, castor3d::LightType type
+		, int icon
+		, int iconSel )
+	{
+		if ( auto & lightGroups = m_scene->getLightGroupCache().getLightGroups( type );
+			!lightGroups.empty() )
+		{
+			auto lightGroupsId = AppendItem( id
+				, name
+				, icon
+				, iconSel );
+
+			for ( auto lightGroup : lightGroups )
+			{
+				auto groupId = AppendItem( lightGroupsId
+					, lightGroup->getName()
+					, icon
+					, iconSel
+					, new DataType{ ObjectType::eLightGroup, lightGroup } );
+
+				for ( auto & instance : *lightGroup )
+				{
+					AppendItem( groupId
+						, instance->getNode().getName()
+						, eBMP_NODE
+						, eBMP_NODE_SEL
+						, new DataType{ ObjectType::eGroupLight, instance.get() } );
+				}
+			}
+		}
+	}
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( SceneObjectsTree, wxTreeCtrl )
@@ -902,7 +955,16 @@ namespace GuiCommon
 			case ObjectType::eLight:
 				m_lightProperties->setData( data->getObject< castor3d::Light >() );
 				m_propertiesHolder->setPropertyData( m_lightProperties.get() );
-				onSelectLight( &data->getObject< castor3d::Light >() );
+				onSelectLight( data->getObject< castor3d::Light >().getInstance() );
+				break;
+			case ObjectType::eLightGroup:
+				m_lightGroupProperties->setData( data->getObject< castor3d::LightGroup >() );
+				m_propertiesHolder->setPropertyData( m_lightGroupProperties.get() );
+				break;
+			case ObjectType::eGroupLight:
+				m_nodeProperties->setData( data->getObject< castor3d::LightInstance >().getNode() );
+				m_propertiesHolder->setPropertyData( m_nodeProperties.get() );
+				onSelectLight( &data->getObject< castor3d::LightInstance >() );
 				break;
 			case ObjectType::eOverlay:
 				m_overlayProperties->setData( data->getObject< castor3d::OverlayCategory >() );

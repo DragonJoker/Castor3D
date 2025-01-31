@@ -390,7 +390,7 @@ namespace CastorViewer
 		if ( m_lightsTree )
 		{
 			m_sceneTabsContainer->AddPage( m_lightsTree, _( "Lights" ), false );
-			m_selectLight = m_lightsTree->getList()->onSelectLight.connect( [this]( castor3d::Light * light )
+			m_selectLight = m_lightsTree->getList()->onSelectLight.connect( [this]( castor3d::LightInstance * light )
 				{
 					if ( m_renderPanel )
 					{
