@@ -46,24 +46,24 @@ namespace castor3d
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	void LpvLightConfigUbo::cpuUpdate( Light const & light
+	void LpvLightConfigUbo::cpuUpdate( LightInstance const & light
 		, float lpvCellSize
 		, uint32_t faceIndex )
 	{
 		CU_Require( m_ubo );
-		auto & lpvConfig = light.getLpvConfig();
+		auto & lpvConfig = light.getCategory().getLpvConfig();
 		auto & configuration = m_ubo.getData();
 
 		configuration.lightOffset = float( light.getBufferOffset() );
 		configuration.texelAreaModifier = lpvConfig.texelAreaModifier;
-		auto ltType = light.getLightType();
+		auto ltType = light.getCategory().getLightType();
 
 		switch ( ltType )
 		{
 		case LightType::eDirectional:
 			CU_Require( faceIndex == 0u );
 			configuration.lightView = lpvlubo::snapMatrix( lpvCellSize
-				, light.getDirectionalLight()->getViewMatrix( MaxDirectionalCascadesCount - 1u ) );
+				, static_cast< DirectionalLightInstance const & >( light ).getViewMatrix( MaxDirectionalCascadesCount - 1u ) );
 			configuration.tanFovXHalf = 1.0f;
 			configuration.tanFovYHalf = 1.0f;
 			break;
@@ -72,9 +72,8 @@ namespace castor3d
 			{
 				CU_Require( faceIndex < 6u );
 				auto lightFov = 90.0_degrees;
-				auto const & pointLight = *light.getPointLight();
 				configuration.lightView = lpvlubo::snapMatrix( lpvCellSize
-					, pointLight.getViewMatrix( CubeMapFace( faceIndex ) ) );
+					, static_cast< PointLightInstance const & >( light ).getViewMatrix( CubeMapFace( faceIndex ) ) );
 				configuration.tanFovXHalf = ( lightFov * 0.5 ).tan();
 				configuration.tanFovYHalf = ( lightFov * 0.5 ).tan();
 			}
@@ -83,10 +82,9 @@ namespace castor3d
 		case LightType::eSpot:
 			{
 				CU_Require( faceIndex == 0u );
-				auto const & spotLight = *light.getSpotLight();
 				configuration.lightView = lpvlubo::snapMatrix( lpvCellSize
-					, spotLight.getViewMatrix() );
-				auto lightFov = spotLight.getOuterCutOff();
+					, static_cast< SpotLightInstance const & >( light ).getViewMatrix() );
+				auto lightFov = static_cast< SpotLight const & >( light.getCategory() ).getOuterCutOff();
 				configuration.tanFovXHalf = ( lightFov * 0.5 ).tan();
 				configuration.tanFovYHalf = ( lightFov * 0.5 ).tan();
 			}
@@ -98,11 +96,11 @@ namespace castor3d
 		}
 	}
 
-	void LpvLightConfigUbo::cpuUpdate( DirectionalLight const & light
+	void LpvLightConfigUbo::cpuUpdate( DirectionalLightInstance const & light
 		, uint32_t cascadeIndex
 		, float lpvCellSize )
 	{
-		auto & lpvConfig = light.getLight().getLpvConfig();
+		auto & lpvConfig = light.getCategory().getLpvConfig();
 		auto & configuration = m_ubo.getData();
 
 		configuration.lightView = lpvlubo::snapMatrix( lpvCellSize
@@ -110,6 +108,6 @@ namespace castor3d
 		configuration.texelAreaModifier = lpvConfig.texelAreaModifier;
 		configuration.tanFovXHalf = 1.0f;
 		configuration.tanFovYHalf = 1.0f;
-		configuration.lightOffset = float( light.getLight().getBufferIndex() );
+		configuration.lightOffset = float( light.getBufferIndex() );
 	}
 }

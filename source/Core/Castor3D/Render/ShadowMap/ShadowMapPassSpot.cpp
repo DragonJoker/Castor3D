@@ -83,7 +83,7 @@ namespace castor3d
 		m_shadowType = light.getShadowType();
 		m_shadowMapUbo.update( light
 			, updater.index );
-		auto angle = light.getSpotLight()->getOuterCutOff().radians();
+		auto angle = static_cast< SpotLight const & >( light.getCategory() ).getOuterCutOff().radians();
 
 		if ( angle != m_angle )
 		{

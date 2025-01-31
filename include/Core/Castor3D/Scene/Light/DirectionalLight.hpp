@@ -31,6 +31,77 @@ namespace castor3d
 	class DirectionalLight
 		: public LightCategory
 	{
+	private:
+		friend class Scene;
+
+	private:
+		DirectionalLight( bool & dirty
+			, castor::Function< void() > const & changedCallback );
+
+	public:
+		/**
+		 *\~english
+		 *\brief		Creates an instance of this light category.
+		 *\param[in]	node	The parent node.
+		 *\~french
+		 *\brief		Crée une instance de cette catégorie de lumière.
+		 *\param[in]	node	Le scene node parent.
+		 */
+		C3D_API LightInstanceUPtr instantiate( SceneNode & node
+			, castor::Function< void() > onGpuChanged )override;
+		/**
+		 *\~english
+		 *\brief		Creation function, used by Factory.
+		 *\param[in]	dirty			Used to tell the owner some changes have occured.
+		 *\param[in]	changedCallback	Callback to call when changes have occured.
+		 *\return		A light source.
+		 *\~french
+		 *\brief		Fonction de création utilisée par Factory.
+		 *\param[in]	dirty			Utilisé pour dire au parent que des changements ont eu lieu.
+		 *\param[in]	changedCallback	Callback à appeler lorsque des changements ont eu lieu.
+		 *\return		Une source lumineuse.
+		 */
+		C3D_API static LightCategoryUPtr create( bool & dirty
+			, castor::Function< void() > const & changedCallback );
+		/**
+		 *\~english
+		 *\name Mutators.
+		 *\~french
+		 *\name Mutateurs.
+		 **/
+		/**@{*/
+		void setIllumination( castor::Illumination const & value )
+		{
+			m_illumination = value;
+		}
+		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		castor::Illumination const & getIllumination()const noexcept
+		{
+			return m_illumination;
+		}
+		/**@}*/
+
+	private:
+		void doUpdate()override;
+		void doAccept( ConfigurationVisitorBase & vis )override;
+		void doCloneInto( LightCategory & output )const override;
+
+	private:
+		castor::GroupChangeTracked< castor::Illumination > m_illumination;
+	};
+
+	class DirectionalLightInstance
+		: public LightInstance
+	{
 	public:
 		using Cascade = DirectionalLightCascade;
 
@@ -38,51 +109,15 @@ namespace castor3d
 		static constexpr uint32_t ShadowDataSize = uint32_t( ashes::getAlignedSize( sizeof( ShadowData ), LightMbrAlign ) );
 		static constexpr uint32_t ShadowDataComponents = ShadowDataSize / LightMbrAlign;
 
-		using LightData = LightCategory::LightData;
+		using LightData = LightInstance::LightData;
 		static constexpr uint32_t LightDataSize = uint32_t( ashes::getAlignedSize( sizeof( LightData ), LightMbrAlign ) );
 		static constexpr uint32_t LightDataComponents = LightDataSize / LightMbrAlign;
 
-	private:
-		friend class Scene;
-
-	private:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	light	The parent Light.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	light	La Light parente.
-		 */
-		C3D_API explicit DirectionalLight( Light & light );
-
 	public:
-		/**
-		 *\~english
-		 *\brief		Creation function, used by Factory.
-		 *\param[in]	light	The parent Light.
-		 *\return		A light source.
-		 *\~french
-		 *\brief		Fonction de création utilisée par Factory.
-		 *\param[in]	light	La Light parente.
-		 *\return		Une source lumineuse.
-		 */
-		C3D_API static LightCategoryUPtr create( Light & light );
-		/**
-		 *\copydoc		castor3d::LightCategory::update
-		 */
-		C3D_API void update()override;
-		/**
-		 *\~english
-		 *\brief		Updates the shadow cascades informations.
-		 *\param[in]	sceneCamera		The viewer camera.
-		 *\return		\p false if nothing changed.
-		 *\~french
-		 *\brief		Met à jour les information de shadow cascades.
-		 *\param[in]	sceneCamera		La caméra de la scène.
-		 *\return		\p false si rien n'a changé.
-		 */
-		C3D_API bool updateShadow( Camera const & sceneCamera );
+		C3D_API DirectionalLightInstance( SceneNode & node
+			, bool & dirty
+			, castor::Function< void() > onGpuChanged
+			, DirectionalLight & category );
 		/**
 		 *\~english
 		 *\brief		Puts the shadow data into the given buffer.
@@ -92,15 +127,6 @@ namespace castor3d
 		 *\param[out]	data	Reçoit les données d'ombres de la source lumineuse.
 		 */
 		C3D_API void fillShadowBuffer( AllShadowData & data )const override;
-		/**
-		 *\~english
-		 *\name Mutators.
-		 *\~french
-		 *\name Mutateurs.
-		 **/
-		/**@{*/
-		C3D_API void setIllumination( castor::Illumination const & value );
-		/**@}*/
 		/**
 		*\~english
 		*name
@@ -139,20 +165,17 @@ namespace castor3d
 		{
 			return m_cascades[cascadeIndex].viewProjMatrix;
 		}
-
-		castor::Illumination const & getIllumination()const noexcept
-		{
-			return m_illumination;
-		}
 		/**@}*/
 
 	private:
+		void doUpdate()override;
+		bool doUpdateShadow( Camera const & viewCamera
+			, Camera * lightCamera
+			, int32_t index )override;
 		void doFillLightBuffer( castor::Point4f * data )const override;
-		void doAccept( ConfigurationVisitorBase & vis )override;
-		void doCloneInto( LightCategory & output )const override;
+		void doCloneInto( LightInstance & output )const override;
 
 	private:
-		castor::GroupChangeTracked< castor::Illumination > m_illumination;
 		castor::Point3f m_direction;
 		castor::Vector< Cascade > m_cascades;
 		castor::Vector< Cascade > m_prvCascades;

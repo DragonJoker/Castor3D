@@ -45,7 +45,7 @@ namespace castor3d
 	public:
 		C3D_API void initialise();
 		C3D_API void cleanup()noexcept;
-		C3D_API void registerLight( Light * light );
+		C3D_API void registerLight( LightInstance * light );
 		C3D_API void update( CpuUpdater & updater );
 		C3D_API crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray const & toWait
 			, ashes::Queue const & queue );
@@ -125,7 +125,7 @@ namespace castor3d
 
 		crg::FramePass & m_clearInjectionPass;
 		crg::FramePass & m_downsamplePass;
-		castor::UnorderedMap< Light *, LightLpv > m_lightLpvs;
+		castor::UnorderedMap< LightInstance *, LightLpv > m_lightLpvs;
 		castor::Vector< crg::FramePass * > m_lightPropagationPassesDesc;
 		castor::Vector< LightPropagationPass * > m_lightPropagationPasses;
 

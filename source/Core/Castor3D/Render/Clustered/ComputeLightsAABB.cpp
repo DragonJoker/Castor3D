@@ -70,7 +70,7 @@ namespace castor3d
 				, [&]( sdw::UInt const & lightIndex )
 				{
 					auto lightOffset = writer.declLocale( "lightOffset"
-						, lights.getDirectionalsEnd() + lightIndex * PointLight::LightDataComponents );
+						, lights.getDirectionalsEnd() + lightIndex * PointLightInstance::LightDataComponents );
 					auto point = writer.declLocale( "point"
 						, lights.getPointLight( lightOffset ) );
 					auto result = writer.declLocale< shader::AABB >( "result" );
@@ -114,7 +114,7 @@ namespace castor3d
 				, [&]( sdw::UInt const & lightIndex )
 				{
 					auto lightOffset = writer.declLocale( "lightOffset"
-						, lights.getPointsEnd() + lightIndex * SpotLight::LightDataComponents );
+						, lights.getPointsEnd() + lightIndex * SpotLightInstance::LightDataComponents );
 					auto spot = writer.declLocale( "spot"
 						, lights.getSpotLight( lightOffset ) );
 					auto result = writer.declLocale< shader::AABB >( "result" );

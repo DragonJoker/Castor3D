@@ -67,7 +67,7 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( ConfigurationVisitorBase & visitor );
-		C3D_API void update( Light const & light );
+		C3D_API void update( LightInstance const & light );
 
 		RsmConfigUbo const & getConfigUbo()const
 		{

@@ -1720,7 +1720,7 @@ namespace castor3d
 				}
 				break;
 			case MovableType::eLight:
-				sceneObjs.dirtyLights.emplace_back( static_cast< Light * >( movable ) );
+				sceneObjs.dirtyLights.emplace_back( static_cast< Light * >( movable )->getInstance() );
 				break;
 			case MovableType::eCamera:
 				sceneObjs.dirtyCameras.emplace_back( static_cast< Camera * >( movable ) );
@@ -1736,7 +1736,7 @@ namespace castor3d
 			{
 				if ( light->getLightType() == LightType::eDirectional )
 				{
-					sceneObjs.dirtyLights.push_back( light.get() );
+					sceneObjs.dirtyLights.push_back( light->getInstance() );
 				}
 			}
 		}

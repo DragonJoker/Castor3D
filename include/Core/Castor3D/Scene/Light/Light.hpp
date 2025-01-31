@@ -10,7 +10,6 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/ShaderBuffers/LightBuffer.hpp"
 
 #include "Castor3D/Scene/MovableObject.hpp"
-#include "Castor3D/Scene/Shadow.hpp"
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
@@ -62,13 +61,24 @@ namespace castor3d
 			, LightType lightType );
 		/**
 		 *\~english
-		 *\brief			CPU Update.
-		 *\param[in, out]	updater	The update data.
+		 *\brief		Attaches the movable object to a node
 		 *\~french
-		 *\brief			Mise à jour CPU.
-		 *\param[in, out]	updater	Les données d'update.
+		 *\brief		Attache l'object à un noeud
 		 */
-		C3D_API void update( CpuUpdater & updater );
+		C3D_API void attachTo( SceneNode & node )override;
+		/**
+		 *\~english
+		 *\brief			Updates the shadow informations.
+		 *\param[in,out]	lightCamera	The camera that receives the light spot data.
+		 *\param[in]		index		The shadow map index.
+		 *\~french
+		 *\brief			Met à jour les information d'ombre.
+		 *\param[in,out]	lightCamera	La caméra qui reçoit les données de spot de la lumière.
+		 *\param[in]		index		L'indice de la shadow map.
+		 */
+		C3D_API bool updateShadow( Camera const & viewCamera
+			, Camera * lightCamera
+			, int32_t index );
 		/**
 		 *\~english
 		 *\brief		Records the light data into given buffer.
@@ -92,7 +102,7 @@ namespace castor3d
 		 *\brief		Enregistre les données de la source lumineuse dans le tampon donné.
 		 *\param[out]	data	Reçoit les informations.
 		 */
-		C3D_API void fillShadowBuffer( AllShadowData & data );
+		C3D_API void fillShadowBuffer( AllShadowData & data )const;
 		/**
 		*\~english
 		*\brief
@@ -130,24 +140,24 @@ namespace castor3d
 		C3D_API PointLightRPtr getPointLight()const;
 		C3D_API SpotLightRPtr getSpotLight()const;
 
-		LightType getLightType()const
+		LightInstanceRPtr getInstance()const
 		{
-			return m_category->getLightType();
-		}
-
-		uint32_t getLightComponentCount()const
-		{
-			return m_category->getLightComponentCount();
-		}
-
-		uint32_t getShadowComponentCount()const
-		{
-			return m_category->getShadowComponentCount();
+			return m_instance.get();
 		}
 
 		bool isEnabled()const
 		{
 			return m_enabled;
+		}
+
+		LightCategoryRPtr getCategory()const
+		{
+			return m_category.get();
+		}
+
+		LightType getLightType()const
+		{
+			return m_category->getLightType();
 		}
 
 		castor::Point3f const & getColour()const
@@ -165,124 +175,99 @@ namespace castor3d
 			return m_category->getBoundingBox();
 		}
 
-		LightCategoryRPtr getCategory()const
-		{
-			return m_category.get();
-		}
-
 		bool isShadowProducer()const
 		{
-			return m_currentShadowCaster;
+			return m_category->isShadowProducer();
 		}
 
 		bool isExpectedShadowProducer()const
 		{
-			return m_shadows.enabled;
+			return m_category->isExpectedShadowProducer();
 		}
 
 		ShadowType getShadowType()const
 		{
-			return m_shadows.filterType;
-		}
-
-		ShadowMapRPtr getShadowMap()const
-		{
-			return m_shadowMap;
-		}
-
-		int32_t getShadowMapIndex()const
-		{
-			return m_shadowMapIndex;
-		}
-
-		uint32_t getBufferIndex()const
-		{
-			return m_bufferIndex;
-		}
-
-		VkDeviceSize getBufferOffset()const
-		{
-			return m_bufferOffset;
+			return m_category->getShadowType();
 		}
 
 		bool needsRsmShadowMaps()const
 		{
-			return getGlobalIlluminationType() != GlobalIlluminationType::eNone;
+			return m_category->needsRsmShadowMaps();
 		}
 
 		GlobalIlluminationType getGlobalIlluminationType()const
 		{
-			return m_currentGlobalIllumination;
+			return m_category->getGlobalIlluminationType();
 		}
 
 		GlobalIlluminationType getExpectedGlobalIlluminationType()const
 		{
-			return m_shadows.globalIllumination;
+			return m_category->getExpectedGlobalIlluminationType();
 		}
 
 		RsmConfig const & getRsmConfig()const
 		{
-			return m_shadows.rsmConfig;
+			return m_category->getRsmConfig();
 		}
 
 		LpvConfig const & getLpvConfig()const
 		{
-			return m_shadows.lpvConfig;
+			return m_category->getLpvConfig();
 		}
 
 		LpvConfig & getLpvConfig()
 		{
-			return m_shadows.lpvConfig;
+			return m_category->getLpvConfig();
 		}
 
 		uint32_t getVolumetricSteps()const
 		{
-			return m_shadows.volumetricSteps;
+			return m_category->getVolumetricSteps();
 		}
 
 		float getVolumetricScatteringFactor()const
 		{
-			return m_shadows.volumetricScattering;
+			return m_category->getVolumetricScatteringFactor();
 		}
 
 		castor::Point2f const & getShadowRawOffsets()const
 		{
-			return m_shadows.rawOffsets;
+			return m_category->getShadowRawOffsets();
 		}
 
 		castor::Point2f const & getShadowPcfOffsets()const
 		{
-			return m_shadows.pcfOffsets;
+			return m_category->getShadowPcfOffsets();
 		}
 
 		float getVsmMinVariance()const
 		{
-			return m_shadows.vsmMinVariance;
+			return m_category->getVsmMinVariance();
 		}
 
 		float getVsmLightBleedingReduction()const
 		{
-			return m_shadows.vsmLightBleedingReduction;
+			return m_category->getVsmLightBleedingReduction();
 		}
 
 		castor::RangedValue< uint32_t > getShadowPcfFilterSize()const
 		{
-			return m_shadows.pcfFilterSize;
+			return m_category->getShadowPcfFilterSize();
 		}
 
 		castor::RangedValue< uint32_t > getShadowPcfSampleCount()const
 		{
-			return m_shadows.pcfSampleCount;
+			return m_category->getShadowPcfSampleCount();
 		}
 
 		ShadowConfig const & getShadowConfig()const
 		{
-			return m_shadows;
+			return m_category->getShadowConfig();
 		}
 
 		ShadowConfig & getShadowConfig()
 		{
-			return m_shadows;
+			return m_category->getShadowConfig();
 		}
 		/**@}*/
 		/**
@@ -297,21 +282,91 @@ namespace castor3d
 		void setColour( float const * values )
 		{
 			m_category->setColour( castor::Point3f( values[0], values[1], values[2] ) );
+			markDirty();
 		}
 
 		void setColour( float r, float g, float b )
 		{
 			m_category->setColour( castor::Point3f( r, g, b ) );
+			markDirty();
 		}
 
 		void setColour( castor::Point3f const & value )
 		{
 			m_category->setColour( value );
+			markDirty();
+		}
+
+		void setGlobalIlluminationType( GlobalIlluminationType value )
+		{
+			m_category->setGlobalIlluminationType( value );
+			markDirty();
+		}
+
+		void setShadowConfig( ShadowConfig config )
+		{
+			m_category->setShadowConfig( castor::move( config ) );
+			markDirty();
 		}
 
 		void setColour( castor::RgbColour const & value )
 		{
 			m_category->setColour( toRGBFloat( value ) );
+		}
+
+		void setVolumetricSteps( uint32_t value )
+		{
+			m_category->setVolumetricSteps( value );
+		}
+
+		void setVolumetricScatteringFactor( float value )
+		{
+			m_category->setVolumetricScatteringFactor( value );
+		}
+
+		void setRawMinOffset( float value )
+		{
+			m_category->setRawMinOffset( value );
+		}
+
+		void setRawMaxSlopeOffset( float value )
+		{
+			m_category->setRawMaxSlopeOffset( value );
+		}
+
+		void setPcfMinOffset( float value )
+		{
+			m_category->setPcfMinOffset( value );
+		}
+
+		void setPcfMaxSlopeOffset( float value )
+		{
+			m_category->setPcfMaxSlopeOffset( value );
+		}
+
+		void setPcfFilterSize( uint32_t value )
+		{
+			m_category->setPcfFilterSize( value );
+		}
+
+		void setPcfSampleCount( uint32_t value )
+		{
+			m_category->setPcfSampleCount( value );
+		}
+
+		void setVsmMinVariance( float value )
+		{
+			m_category->setVsmMinVariance( value );
+		}
+
+		void setVsmLightBleedingReduction( float value )
+		{
+			m_category->setVsmLightBleedingReduction( value );
+		}
+
+		void setShadowType( ShadowType value )
+		{
+			m_category->setShadowType( value );
 		}
 
 		void setEnabled( bool value )
@@ -329,94 +384,6 @@ namespace castor3d
 		{
 			setEnabled( false );
 		}
-
-		void setShadowConfig( ShadowConfig config )
-		{
-			m_shadows = castor::move( config );
-			markDirty();
-		}
-
-		void setShadowMapIndex( int32_t index )
-		{
-			if ( m_shadowMapIndex != index )
-			{
-				m_shadowMapIndex = index;
-				onGPUChanged( *this );
-			}
-		}
-
-		void setShadowMap( ShadowMapRPtr value
-			, int32_t index = -1 )
-		{
-			if ( m_shadowMap != value
-				|| m_shadowMapIndex != index )
-			{
-				m_shadowMap = value;
-				m_shadowMapIndex = index;
-				onGPUChanged( *this );
-			}
-		}
-
-		void setGlobalIlluminationType( GlobalIlluminationType value )
-		{
-			m_shadows.globalIllumination = value;
-			markDirty();
-		}
-
-		void setShadowType( ShadowType value )
-		{
-			m_shadows.filterType = value;
-		}
-
-		void setVolumetricSteps( uint32_t value )
-		{
-			m_shadows.volumetricSteps = value;
-		}
-
-		void setVolumetricScatteringFactor( float value )
-		{
-			m_shadows.volumetricScattering = value;
-		}
-
-		void setRawMinOffset( float value )
-		{
-			m_shadows.rawOffsets[0] = value;
-		}
-
-		void setRawMaxSlopeOffset( float value )
-		{
-			m_shadows.rawOffsets[1] = value;
-		}
-
-		void setPcfMinOffset( float value )
-		{
-			m_shadows.pcfOffsets[0] = value;
-		}
-
-		void setPcfMaxSlopeOffset( float value )
-		{
-			m_shadows.pcfOffsets[1] = value;
-		}
-
-		void setPcfFilterSize( uint32_t value )
-		{
-			m_shadows.pcfFilterSize = value;
-		}
-
-		void setPcfSampleCount( uint32_t value )
-		{
-			m_shadows.pcfSampleCount = value;
-		}
-
-		void setVsmMinVariance( float value )
-		{
-			m_shadows.vsmMinVariance = value;
-		}
-
-		void setVsmLightBleedingReduction( float value )
-		{
-			m_shadows.vsmLightBleedingReduction = value;
-		}
 		/**@}*/
 
 	public:
@@ -424,6 +391,7 @@ namespace castor3d
 
 	private:
 		friend class LightCategory;
+		friend class LightInstance;
 
 		bool & doGetDirty()
 		{
@@ -431,14 +399,8 @@ namespace castor3d
 		}
 
 		castor::GroupChangeTracked< bool > m_enabled;
-		std::atomic_bool m_currentShadowCaster{};
-		ShadowConfig m_shadows;
 		LightCategoryUPtr m_category;
-		ShadowMapRPtr m_shadowMap{};
-		int32_t m_shadowMapIndex{ -1 };
-		std::atomic< GlobalIlluminationType > m_currentGlobalIllumination{};
-		uint32_t m_bufferIndex{ InvalidIndex };
-		VkDeviceSize m_bufferOffset{};
+		LightInstanceUPtr m_instance;
 	};
 
 	struct LightContext

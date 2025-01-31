@@ -333,8 +333,7 @@ namespace Testing
 
 	bool C3DTestCase::compare( castor3d::DirectionalLight const & lhs, castor3d::DirectionalLight const & rhs )
 	{
-		bool result{ CT_EQUAL( lhs.getDirection(), rhs.getDirection() ) };
-		result = result && CT_EQUAL( lhs.getIllumination(), rhs.getIllumination() );
+		bool result{ CT_EQUAL( lhs.getIllumination(), rhs.getIllumination() ) };
 		return result;
 	}
 
@@ -353,6 +352,49 @@ namespace Testing
 		result = result && CT_EQUAL( lhs.getOuterCutOff(), rhs.getOuterCutOff() );
 		result = result && CT_EQUAL( lhs.getIntensity(), rhs.getIntensity() );
 		return result;
+	}
+
+	bool C3DTestCase::compare( castor3d::LightInstance const & lhs, castor3d::LightInstance const & rhs )
+	{
+		CT_REQUIRE( lhs.getLightType() == rhs.getLightType() );
+		bool result{ true };
+
+		switch ( lhs.getLightType() )
+		{
+		case castor3d::LightType::eDirectional:
+			result = result && CT_EQUAL( static_cast< castor3d::DirectionalLightInstance const & >( lhs ), static_cast< castor3d::DirectionalLightInstance const & >( rhs ) );
+			break;
+
+		case castor3d::LightType::ePoint:
+			result = result && CT_EQUAL( static_cast< castor3d::PointLightInstance const & >( lhs ), static_cast< castor3d::PointLightInstance const & >( rhs ) );
+			break;
+
+		case castor3d::LightType::eSpot:
+			result = result && CT_EQUAL( static_cast< castor3d::SpotLightInstance const & >( lhs ), static_cast< castor3d::SpotLightInstance const & >( rhs ) );
+			break;
+
+		default:
+			CT_FAILURE( "Unsupported LightType" );
+			break;
+		}
+
+		return result;
+	}
+
+	bool C3DTestCase::compare( castor3d::DirectionalLightInstance const & lhs, castor3d::DirectionalLightInstance const & rhs )
+	{
+		bool result{ CT_EQUAL( lhs.getDirection(), rhs.getDirection() ) };
+		return result;
+	}
+
+	bool C3DTestCase::compare( castor3d::PointLightInstance const & /*lhs*/, castor3d::PointLightInstance const & /*rhs*/ )
+	{
+		return true;
+	}
+
+	bool C3DTestCase::compare( castor3d::SpotLightInstance const & /*lhs*/, castor3d::SpotLightInstance const & /*rhs*/ )
+	{
+		return true;
 	}
 
 	bool C3DTestCase::compare( castor3d::Viewport const & lhs, castor3d::Viewport const & rhs )

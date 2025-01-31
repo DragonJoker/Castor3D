@@ -55,10 +55,10 @@ namespace castor3d
 		C3D_API explicit LpvLightConfigUbo( RenderDevice const & device );
 		C3D_API ~LpvLightConfigUbo()noexcept;
 
-		C3D_API void cpuUpdate( Light const & light
+		C3D_API void cpuUpdate( LightInstance const & light
 			, float lpvCellSize
 			, uint32_t faceIndex );
-		C3D_API void cpuUpdate( DirectionalLight const & light
+		C3D_API void cpuUpdate( DirectionalLightInstance const & light
 			, uint32_t cascadeIndex
 			, float lpvCellSize );
 

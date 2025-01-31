@@ -68,7 +68,7 @@ namespace castor3d
 		 *\param[in]	light	La source lumineuse depuis laquelle la shadow map est générée.
 		 *\param[in]	index	L'index de la passe d'ombres.
 		 */
-		C3D_API void update( Light const & light
+		C3D_API void update( LightInstance const & light
 			, uint32_t index );
 
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet

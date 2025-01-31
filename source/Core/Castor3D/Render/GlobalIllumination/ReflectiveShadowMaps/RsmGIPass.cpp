@@ -441,7 +441,7 @@ namespace castor3d
 		visitor.visit( m_pixelShader );
 	}
 
-	void RsmGIPass::update( Light const & light )
+	void RsmGIPass::update( LightInstance const & light )
 	{
 		m_rsmConfigUbo.cpuUpdate( light.getRsmConfig()
 			, uint32_t( light.getShadowMapIndex() ) );

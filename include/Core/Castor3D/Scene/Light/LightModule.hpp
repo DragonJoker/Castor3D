@@ -120,11 +120,54 @@ namespace castor3d
 	*	Une spot light est une source de lumière à un point donné qui illumine dans une direction donnée en suivant une forme cônique
 	*/
 	class SpotLight;
+	/**
+	*\~english
+	*\brief
+	*	Holds light components that derive from a LightCategory and a Light.
+	*\~french
+	*\brief
+	*	Contient les composantes d'une lumière dérivant d'une LightCategory et d'une Light.
+	*/
+	class LightInstance;
+	/**
+	*\~english
+	*\brief
+	*	Class which represents a Directional light instance.
+	*\~french
+	*\brief
+	*	Classe representant une instance de lumière directionnelle.
+	*/
+	class DirectionalLightInstance;
+	/**
+	*\~english
+	*\brief
+	*	Class which represents a Point light instance.
+	*\~french
+	*\brief
+	*	Classe de représentation d'une instance de lumière ponctuelle.
+	*/
+	class PointLightInstance;
+	/**
+	*\~english
+	*\brief
+	*	Class which represents a Spot light instance.
+	*\~french
+	*\brief
+	*	Classe de représentation d'une instance de lumière projecteur.
+	*/
+	class SpotLightInstance;
 
 	struct LightCreateInfo
 	{
 		castor::NotNullT< Scene > scene;
 		castor::NotNullT< SceneNode > parentNode;
+		castor::NotNullT< LightFactory > factory;
+		LightType lightType;
+	};
+
+	struct LightGroupCreateInfo
+	{
+		castor::NotNullT< Scene > scene;
 		castor::NotNullT< LightFactory > factory;
 		LightType lightType;
 	};
@@ -210,6 +253,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, Light, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LightCache, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LightFactory, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightInstance, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LightCategory, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LightImporter, C3D_API );
 	CU_DeclareSmartPtr( castor3d, DirectionalLight, C3D_API );

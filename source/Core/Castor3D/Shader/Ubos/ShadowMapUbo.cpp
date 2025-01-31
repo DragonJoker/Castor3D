@@ -61,26 +61,26 @@ namespace castor3d
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	void ShadowMapUbo::update( Light const & light
+	void ShadowMapUbo::update( LightInstance const & light
 		, uint32_t index )
 	{
 		CU_Require( m_ubo );
 		auto & data = m_ubo.getData();
 		data.lightOffset = light.getBufferIndex();
-		auto position = light.getParent()->getDerivedPosition();
+		auto position = light.getNode().getDerivedPosition();
 		data.lightPosFarPlane =
 		{
 			position[0],
 			position[1],
 			position[2],
-			light.getFarPlane(),
+			light.getCategory().getFarPlane(),
 		};
 
-		if ( light.getLightType() == LightType::eDirectional )
+		if ( light.getCategory().getLightType() == LightType::eDirectional )
 		{
-			auto directional = light.getDirectionalLight();
-			auto & projection = directional->getProjMatrix( index );
-			auto & view = directional->getViewMatrix( index );
+			auto & directional = static_cast< DirectionalLightInstance const & >( light );
+			auto & projection = directional.getProjMatrix( index );
+			auto & view = directional.getViewMatrix( index );
 			data.lightProjection = projection;
 			data.lightView = view;
 		}

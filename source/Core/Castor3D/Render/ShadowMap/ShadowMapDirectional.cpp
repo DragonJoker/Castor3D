@@ -534,12 +534,11 @@ namespace castor3d
 		auto save = updater.index;
 		auto & light = *updater.light;
 		auto & camera = *updater.camera;
-		auto & directional = *light.getDirectionalLight();
-		auto node = light.getParent();
-		node->update();
+		auto & directional = static_cast< DirectionalLightInstance & >( light );
+		auto node = &light.getNode();
 		m_shadowType = light.getShadowType();
 
-		auto shadowModified = directional.updateShadow( camera );
+		auto shadowModified = light.updateShadow( camera, nullptr, 0 );
 
 		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
 		{
