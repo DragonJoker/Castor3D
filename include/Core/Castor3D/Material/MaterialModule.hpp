@@ -154,7 +154,6 @@ namespace castor3d
 	using MaterialCache = castor::ResourceCacheT< Material
 		, castor::String
 		, MaterialCacheTraits >;
-
 	using MaterialPtr = MaterialCacheTraits::ElementPtrT;
 	using MaterialObs = MaterialCacheTraits::ElementObsT;
 

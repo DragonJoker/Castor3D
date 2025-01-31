@@ -1,4 +1,4 @@
-#include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Scene/Light/LightGroup.hpp"
 
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -11,13 +11,15 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, Light )
+CU_ImplementSmartPtr( castor3d, LightGroup )
 
 namespace castor3d
 {
-	namespace light
+	//*********************************************************************************************
+
+	namespace lgtgrp
 	{
-		static CU_ImplementAttributeParserNewBlock( parserLight, SceneContext, LightContext )
+		static CU_ImplementAttributeParserNewBlock( parserLightGroup, SceneContext, LightContext )
 		{
 			if ( !blockContext->scene )
 			{
@@ -33,42 +35,9 @@ namespace castor3d
 				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
 			}
 		}
-		CU_EndAttributePushNewBlock( CSCNSection::eLight )
+		CU_EndAttributePushNewBlock( CSCNSection::eLightGroup )
 
-		static CU_ImplementAttributeParserBlock( parserParent, LightContext )
-		{
-			if ( !blockContext->scene )
-			{
-				CU_ParsingError( cuT( "No scene initialised." ) );
-			}
-			else if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else
-			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
-
-				if ( auto parent = blockContext->scene->scene->findSceneNode( name ) )
-				{
-					blockContext->parentNode = parent;
-
-					if ( blockContext->light )
-					{
-						blockContext->light->detach();
-						blockContext->parentNode->attachObject( *blockContext->light );
-						blockContext->parentNode = nullptr;
-					}
-				}
-				else
-				{
-					CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
-				}
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserType, LightContext )
+		static CU_ImplementAttributeParserBlock( parserType, LightGroupContext )
 		{
 			if ( !blockContext->scene )
 			{
@@ -81,21 +50,12 @@ namespace castor3d
 			else
 			{
 				blockContext->lightType = LightType( params[0]->get< uint32_t >() );
-				blockContext->light = blockContext->scene->scene->tryFindLight( blockContext->name );
+				blockContext->light = blockContext->scene->scene->tryFindLightGroup( blockContext->name );
 
 				if ( !blockContext->light )
 				{
-					auto node = blockContext->parentNode;
-
-					if ( !node )
-					{
-						node = blockContext->scene->scene->getObjectRootNode();
-					}
-
-					blockContext->parentNode = nullptr;
-					blockContext->ownLight = blockContext->scene->scene->createLight( blockContext->name
+					blockContext->ownLight = blockContext->scene->scene->createLightGroup( blockContext->name
 						, *blockContext->scene->scene
-						, *node
 						, blockContext->scene->scene->getLightsFactory()
 						, blockContext->lightType );
 					blockContext->light = blockContext->ownLight.get();
@@ -104,11 +64,11 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserColour, LightContext )
+		static CU_ImplementAttributeParserBlock( parserColour, LightGroupContext )
 		{
 			if ( !blockContext->light )
 			{
-				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+				CU_ParsingError( cuT( "No LightGroup initialised. Have you set it's type?" ) );
 			}
 			else if ( params.empty() )
 			{
@@ -121,11 +81,11 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserIntensity, LightContext )
+		static CU_ImplementAttributeParserBlock( parserIntensity, LightGroupContext )
 		{
 			if ( !blockContext->light )
 			{
-				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+				CU_ParsingError( cuT( "No LightGroup initialised. Have you set it's type?" ) );
 			}
 			else if ( params.empty() )
 			{
@@ -154,11 +114,11 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserIllumination, LightContext )
+		static CU_ImplementAttributeParserBlock( parserIllumination, LightGroupContext )
 		{
 			if ( !blockContext->light )
 			{
-				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+				CU_ParsingError( cuT( "No LightGroup initialised. Have you set it's type?" ) );
 			}
 			else if ( params.empty() )
 			{
@@ -178,11 +138,11 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserAttenuation, LightContext )
+		static CU_ImplementAttributeParserBlock( parserAttenuation, LightGroupContext )
 		{
 			if ( !blockContext->light )
 			{
-				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+				CU_ParsingError( cuT( "No LightGroup initialised. Have you set it's type?" ) );
 			}
 			else if ( params.empty() )
 			{
@@ -206,11 +166,11 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserRange, LightContext )
+		static CU_ImplementAttributeParserBlock( parserRange, LightGroupContext )
 		{
 			if ( !blockContext->light )
 			{
-				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+				CU_ParsingError( cuT( "No LightGroup initialised. Have you set it's type?" ) );
 			}
 			else if ( params.empty() )
 			{
@@ -234,11 +194,11 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserCutOff, LightContext )
+		static CU_ImplementAttributeParserBlock( parserCutOff, LightGroupContext )
 		{
 			if ( !blockContext->light )
 			{
-				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+				CU_ParsingError( cuT( "No LightGroup initialised. Have you set it's type?" ) );
 			}
 			else if ( params.empty() )
 			{
@@ -261,11 +221,11 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserInnerCutOff, LightContext )
+		static CU_ImplementAttributeParserBlock( parserInnerCutOff, LightGroupContext )
 		{
 			if ( !blockContext->light )
 			{
-				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+				CU_ParsingError( cuT( "No LightGroup initialised. Have you set it's type?" ) );
 			}
 			else if ( params.empty() )
 			{
@@ -285,11 +245,11 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserOuterCutOff, LightContext )
+		static CU_ImplementAttributeParserBlock( parserOuterCutOff, LightGroupContext )
 		{
 			if ( !blockContext->light )
 			{
-				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+				CU_ParsingError( cuT( "No LightGroup initialised. Have you set it's type?" ) );
 			}
 			else if ( params.empty() )
 			{
@@ -309,11 +269,11 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserExponent, LightContext )
+		static CU_ImplementAttributeParserBlock( parserExponent, LightGroupContext )
 		{
 			if ( !blockContext->light )
 			{
-				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+				CU_ParsingError( cuT( "No LightGroup initialised. Have you set it's type?" ) );
 			}
 			else if ( params.empty() )
 			{
@@ -333,20 +293,19 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserEnd, LightContext )
+		static CU_ImplementAttributeParserBlock( parserEnd, LightGroupContext )
 		{
 			if ( !blockContext->light )
 			{
-				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+				CU_ParsingError( cuT( "No LightGroup initialised. Have you set it's type?" ) );
 			}
 			else
 			{
 				log::info << "Loaded light [" << blockContext->light->getName() << "]" << std::endl;
-				blockContext->parentNode = nullptr;
 
 				if ( blockContext->ownLight )
 				{
-					blockContext->scene->scene->addLight( blockContext->light->getName()
+					blockContext->scene->scene->addLightGroup( blockContext->light->getName()
 						, blockContext->ownLight
 						, true );
 				}
@@ -355,86 +314,141 @@ namespace castor3d
 			}
 		}
 		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserInstances, LightGroupContext )
+		{
+		}
+		CU_EndAttributePushBlock( CSCNSection::eLightGroupInstances, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserInstance, LightGroupContext )
+		{
+			if ( !blockContext->light )
+			{
+				CU_ParsingError( cuT( "No LightGroup initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+
+				if ( auto parent = blockContext->scene->scene->findSceneNode( name ) )
+				{
+					blockContext->light->addInstance( *parent );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserInstancesEnd, LightGroupContext )
+		{
+		}
+		CU_EndAttributePop()
 	}
 
-	Light::Light( castor::String const & name
-		, LightCreateInfo const & createInfo )
-		: Light{ name
+	//*********************************************************************************************
+
+	LightGroup::LightGroup( castor::String const & name
+		, LightGroupCreateInfo const & createInfo )
+		: LightGroup{ name
 			, *createInfo.scene
-			, *createInfo.parentNode
 			, *createInfo.factory
 			, createInfo.lightType }
 	{
 	}
 
-	Light::Light( castor::String const & name
+	LightGroup::LightGroup( castor::String const & name
 		, Scene & scene
-		, SceneNode & node
 		, LightFactory & factory
 		, LightType lightType )
-		: MovableObject{ name, scene, MovableType::eLight, node }
+		: castor::OwnedBy< Scene >{ scene }
+		, castor::Named{ name }
 		, m_enabled{ m_dirty, true, [this](){ markDirty(); } }
 	{
 		m_category = factory.create( lightType, m_dirty, [this](){ markDirty(); } );
-		m_instance = m_category->instantiate( node, [this](){ return isEnabled(); } );
 	}
 
-	void Light::attachTo( SceneNode & node )
+	void LightGroup::addInstance( SceneNode & node )
 	{
-		m_instance->setNode( node );
-		MovableObject::attachTo( node );
+		m_instances.emplace_back( m_category->instantiate( node, [this](){ return m_enabled.value(); } ) );
 	}
 
-	void Light::accept( ConfigurationVisitorBase & vis )
+	void LightGroup::markDirty()
 	{
-		vis.visit( cuT( "Light" ) );
+		getScene()->markDirty( *this );
+	}
+
+	void LightGroup::accept( ConfigurationVisitorBase & vis )
+	{
+		vis.visit( cuT( "LightGroup" ) );
 		vis.visit( cuT( "Enabled" ), m_enabled );
 		m_category->accept( vis );
 	}
 
-	void Light::cloneInto( Light & output )const
+	void LightGroup::cloneInto( LightGroup & output )const
 	{
 		output.m_enabled = m_enabled;
 		m_category->cloneInto( *output.m_category );
 	}
 
-	void Light::addParsers( castor::AttributeParsers & result )
+	void LightGroup::addParsers( castor::AttributeParsers & result )
 	{
 		using namespace castor;
 		BlockParserContextT< SceneContext > sceneCtx{ result, CSCNSection::eScene, CSCNSection::eRoot };
-		BlockParserContextT< LightContext > lightCtx{ result, CSCNSection::eLight, CSCNSection::eScene };
+		BlockParserContextT< LightGroupContext > groupCtx{ result, CSCNSection::eLightGroup, CSCNSection::eScene };
+		BlockParserContextT< LightGroupContext > instancesCtx{ result, CSCNSection::eLightGroupInstances, CSCNSection::eLightGroup };
 
-		sceneCtx.addPushParser( cuT( "light" ), CSCNSection::eLight, light::parserLight, { makeParameter< ParameterType::eName >() } );
+		sceneCtx.addPushParser( cuT( "light_group" ), CSCNSection::eLightGroup, lgtgrp::parserLightGroup, { makeParameter< ParameterType::eName >() } );
 
-		lightCtx.addParser( cuT( "parent" ), light::parserParent, { makeParameter< ParameterType::eName >() } );
-		lightCtx.addParser( cuT( "type" ), light::parserType, { makeParameter< ParameterType::eCheckedText, LightType >() } );
-		lightCtx.addParser( cuT( "colour" ), light::parserColour, { makeParameter< ParameterType::ePoint3F >() } );
-		lightCtx.addParser( cuT( "intensity" ), light::parserIntensity, { makeParameter< ParameterType::eFloat >() } );
-		lightCtx.addParser( cuT( "illumination" ), light::parserIllumination, { makeParameter< ParameterType::eFloat >() } );
-		lightCtx.addParser( cuT( "attenuation" ), light::parserAttenuation, { makeParameter< ParameterType::ePoint3F >() } );
-		lightCtx.addParser( cuT( "range" ), light::parserRange, { makeParameter< ParameterType::eFloat >() } );
-		lightCtx.addParser( cuT( "cut_off" ), light::parserCutOff, { makeParameter< ParameterType::eFloat >() } );
-		lightCtx.addParser( cuT( "inner_cut_off" ), light::parserInnerCutOff, { makeParameter< ParameterType::eFloat >() } );
-		lightCtx.addParser( cuT( "outer_cut_off" ), light::parserOuterCutOff, { makeParameter< ParameterType::eFloat >() } );
-		lightCtx.addParser( cuT( "exponent" ), light::parserExponent, { makeParameter< ParameterType::eFloat >() } );
-		lightCtx.addPopParser( cuT( "}" ), light::parserEnd );
+		groupCtx.addParser( cuT( "type" ), lgtgrp::parserType, { makeParameter< ParameterType::eCheckedText, LightType >() } );
+		groupCtx.addParser( cuT( "colour" ), lgtgrp::parserColour, { makeParameter< ParameterType::ePoint3F >() } );
+		groupCtx.addParser( cuT( "intensity" ), lgtgrp::parserIntensity, { makeParameter< ParameterType::eFloat >() } );
+		groupCtx.addParser( cuT( "illumination" ), lgtgrp::parserIllumination, { makeParameter< ParameterType::eFloat >() } );
+		groupCtx.addParser( cuT( "attenuation" ), lgtgrp::parserAttenuation, { makeParameter< ParameterType::ePoint3F >() } );
+		groupCtx.addParser( cuT( "range" ), lgtgrp::parserRange, { makeParameter< ParameterType::eFloat >() } );
+		groupCtx.addParser( cuT( "cut_off" ), lgtgrp::parserCutOff, { makeParameter< ParameterType::eFloat >() } );
+		groupCtx.addParser( cuT( "inner_cut_off" ), lgtgrp::parserInnerCutOff, { makeParameter< ParameterType::eFloat >() } );
+		groupCtx.addParser( cuT( "outer_cut_off" ), lgtgrp::parserOuterCutOff, { makeParameter< ParameterType::eFloat >() } );
+		groupCtx.addParser( cuT( "exponent" ), lgtgrp::parserExponent, { makeParameter< ParameterType::eFloat >() } );
+		groupCtx.addPushParser( cuT( "instances" ), CSCNSection::eLightGroupInstances, lgtgrp::parserInstances );
+		groupCtx.addPopParser( cuT( "}" ), lgtgrp::parserEnd );
+
+		instancesCtx.addParser( cuT( "instance" ), lgtgrp::parserInstance, { makeParameter< ParameterType::eName >() } );
+		instancesCtx.addPopParser( cuT( "}" ), lgtgrp::parserInstancesEnd );
 	}
 
-	DirectionalLightRPtr Light::getDirectionalLight()const
+	DirectionalLightRPtr LightGroup::getDirectionalLight()const
 	{
 		CU_Require( m_category->getLightType() == LightType::eDirectional );
 		return static_cast< DirectionalLight * >( m_category.get() );
 	}
 
-	PointLightRPtr Light::getPointLight()const
+	PointLightRPtr LightGroup::getPointLight()const
 	{
 		CU_Require( m_category->getLightType() == LightType::ePoint );
 		return static_cast< PointLight * >( m_category.get() );
 	}
 
-	SpotLightRPtr Light::getSpotLight()const
+	SpotLightRPtr LightGroup::getSpotLight()const
 	{
 		CU_Require( m_category->getLightType() == LightType::eSpot );
 		return static_cast< SpotLight * >( m_category.get() );
 	}
+
+	//*********************************************************************************************
+
+	castor::String getPrefix( LightGroupContext const & context )
+	{
+		return context.scene
+			? getPrefix( *context.scene )
+			: castor::String{};
+	}
+
+	//*********************************************************************************************
 }

@@ -171,15 +171,15 @@ namespace castor3d
 	}
 
 	LightInstanceUPtr DirectionalLight::instantiate( SceneNode & node
-			, castor::Function< bool() > isParentEnabled )
+		, castor::Function< bool() > isParentEnabled )
 	{
-		return LightInstanceUPtr( new DirectionalLightInstance{ node, *this, castor::move( isParentEnabled ) } );
+		return LightInstanceUPtr( new DirectionalLightInstance{ node, *this, m_markParentDirty, castor::move( isParentEnabled ) } );
 	}
 
 	LightCategoryUPtr DirectionalLight::create( bool & dirty
-		, castor::Function< void() > const & changedCallback )
+		, castor::Function< void() > const & markParentDirty )
 	{
-		return LightCategoryUPtr( new DirectionalLight{ dirty, changedCallback } );
+		return LightCategoryUPtr( new DirectionalLight{ dirty, markParentDirty } );
 	}
 
 	void DirectionalLight::doUpdate()
@@ -201,8 +201,9 @@ namespace castor3d
 
 	DirectionalLightInstance::DirectionalLightInstance( SceneNode & node
 		, DirectionalLight & category
+		, castor::Function< void() > markParentDirty
 		, castor::Function< bool() > isParentEnabled )
-		: LightInstance{ node, category, castor::move( isParentEnabled ) }
+		: LightInstance{ node, category, castor::move( markParentDirty ), castor::move( isParentEnabled ) }
 		, m_cascades( node.getScene()->getDirectionalShadowCascades() )
 		, m_prvCascades( node.getScene()->getDirectionalShadowCascades() )
 	{
@@ -244,21 +245,20 @@ namespace castor3d
 		m_direction = castor::point::getNormalised( m_direction );
 	}
 
-	bool DirectionalLightInstance::doUpdateShadow( Camera const & viewCamera
+	void DirectionalLightInstance::doUpdateShadow( Camera const & viewCamera
 		, Camera * lightCamera
 		, int32_t index )
 	{
 		m_cascades = lgtdirectional::doComputeCascades( viewCamera
 			, *this
 			, uint32_t( m_cascades.size() ) );
-		bool result = m_cascades != m_prvCascades;
+		m_dirtyShadows = m_dirtyShadows
+			|| m_cascades != m_prvCascades;
 
-		if ( result )
+		if ( m_dirtyShadows )
 		{
 			m_prvCascades = m_cascades;
 		}
-
-		return result;
 	}
 
 	void DirectionalLightInstance::doFillLightBuffer( castor::Point4f * data )const

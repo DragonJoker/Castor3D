@@ -23,6 +23,7 @@ See LICENSE file in root folder
 #include "Castor3D/Cache/CacheView.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
+#include "Castor3D/Cache/LightGroupCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
@@ -285,6 +286,15 @@ namespace castor3d
 		 *\param[in]	object	L'objet.
 		 */
 		C3D_API void markDirty( MovableObject & object );
+		/**
+		 *\~english
+		 *\brief		Adds given object to dirty object list.
+		 *\param[in]	object	The object.
+		 *\~french
+		 *\brief		Ajoute l'objet donné à la liste des objets à mettre à jour.
+		 *\param[in]	object	L'objet.
+		 */
+		C3D_API void markDirty( LightGroup & object );
 
 		C3D_API static void addParsers( castor::AttributeParsers & result );
 		/**
@@ -490,6 +500,7 @@ namespace castor3d
 		castor::Vector< SceneNode * > m_dirtyNodes;
 		castor::Vector< BillboardBase * > m_dirtyBillboards;
 		castor::Vector< MovableObject * > m_dirtyObjects;
+		castor::Vector< LightGroup * > m_dirtyLightGroups;
 		DECLARE_OBJECT_CACHE_MEMBER( sceneNode, SceneNode );
 		SceneNodeRPtr m_rootNode;
 		SceneNodeRPtr m_rootCameraNode;
@@ -497,6 +508,7 @@ namespace castor3d
 		DECLARE_OBJECT_CACHE_MEMBER_MIN( geometry, Geometry );
 		DECLARE_OBJECT_CACHE_MEMBER( camera, Camera );
 		DECLARE_OBJECT_CACHE_MEMBER( light, Light );
+		DECLARE_CACHE_MEMBER( lightGroup, LightGroup );
 		DECLARE_OBJECT_CACHE_MEMBER( billboard, BillboardList );
 		DECLARE_OBJECT_CACHE_MEMBER( particleSystem, ParticleSystem );
 		DECLARE_CACHE_MEMBER( mesh, Mesh );

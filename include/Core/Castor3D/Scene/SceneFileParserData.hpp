@@ -77,6 +77,8 @@ namespace castor3d
 		eSdfFont = CU_MakeSectionName( 'S', 'D', 'F', 'T' ),
 		eLightingModel = CU_MakeSectionName( 'L', 'G', 'M', 'L' ),
 		eDefaultLightingModel = CU_MakeSectionName( 'D', 'L', 'M', 'L' ),
+		eLightGroup = CU_MakeSectionName( 'L', 'T', 'G', 'P' ),
+		eLightGroupInstances = CU_MakeSectionName( 'L', 'T', 'G', 'I' ),
 	};
 
 	struct SceneContext;

@@ -17,6 +17,7 @@
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Background/Skybox.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Scene/Light/LightGroup.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
@@ -277,6 +278,7 @@ namespace castor3d
 		Sampler::addParsers( parsers );
 		Camera::addParsers( parsers );
 		Light::addParsers( parsers );
+		LightGroup::addParsers( parsers );
 		SceneNode::addParsers( parsers );
 		Geometry::addParsers( parsers );
 		Overlay::addParsers( parsers );

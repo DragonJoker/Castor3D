@@ -24,16 +24,16 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	lightType		The light category type.
 		 *\param[in]	dirty			Used to tell the owner some changes have occured.
-		 *\param[in]	changedCallback	Callback to call when changes have occured.
+		 *\param[in]	markParentDirty	Callback to call when changes have occured.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	lightType		Le type de catégorie de lumière.
 		 *\param[in]	dirty			Utilisé pour dire au parent que des changements ont eu lieu.
-		 *\param[in]	changedCallback	Callback à appeler lorsque des changements ont eu lieu.
+		 *\param[in]	markParentDirty	Callback à appeler lorsque des changements ont eu lieu.
 		 */
 		C3D_API explicit LightCategory( LightType lightType
 			, bool & dirty
-			, castor::Function< void() > changedCallback );
+			, castor::Function< void() > markParentDirty );
 
 	public:
 		/**
@@ -290,7 +290,7 @@ namespace castor3d
 
 	protected:
 		bool & m_dirty;
-		castor::Function< void() > m_changedCallback;
+		castor::Function< void() > m_markParentDirty;
 
 	private:
 		LightType m_lightType;
@@ -562,6 +562,7 @@ namespace castor3d
 		 */
 		C3D_API explicit LightInstance( SceneNode & node
 			, LightCategory & category
+			, castor::Function< void() > markParentDirty
 			, castor::Function< bool() > isParentEnabled );
 		/**
 		 *\~english
@@ -591,7 +592,7 @@ namespace castor3d
 		 *\param[in,out]	lightCamera	La caméra qui reçoit les données de spot de la lumière.
 		 *\param[in]		index		L'indice de la shadow map.
 		 */
-		virtual bool doUpdateShadow( Camera const & viewCamera
+		virtual void doUpdateShadow( Camera const & viewCamera
 			, Camera * lightCamera
 			, int32_t index ) = 0;
 		/**
@@ -619,9 +620,11 @@ namespace castor3d
 	protected:
 		SceneNode * m_node;
 		LightCategory & m_category;
+		castor::Function< void() > m_markParentDirty;
 		castor::Function< bool() > m_isParentEnabled;
 
 		bool m_dirty{ true };
+		bool m_dirtyShadows{ true };
 		ShadowMapRPtr m_shadowMap{};
 		int32_t m_shadowMapIndex{ -1 };
 		uint32_t m_bufferIndex{ InvalidIndex };
