@@ -79,6 +79,12 @@ namespace castor3d
 		eDefaultLightingModel = CU_MakeSectionName( 'D', 'L', 'M', 'L' ),
 		eLightGroup = CU_MakeSectionName( 'L', 'T', 'G', 'P' ),
 		eLightGroupInstances = CU_MakeSectionName( 'L', 'T', 'G', 'I' ),
+		eLightGroupShadows = CU_MakeSectionName( 'L', 'T', 'G', 'S' ),
+		eLightGroupShadowsLpv = CU_MakeSectionName( 'L', 'P', 'V', 'G' ),
+		eLightGroupShadowsRaw = CU_MakeSectionName( 'R', 'A', 'W', 'G' ),
+		eLightGroupShadowsPcf = CU_MakeSectionName( 'P', 'C', 'F', 'G' ),
+		eLightGroupShadowsVsm = CU_MakeSectionName( 'V', 'S', 'M', 'G' ),
+		eLightGroupShadowsRsm = CU_MakeSectionName( 'R', 'S', 'M', 'G' ),
 	};
 
 	struct SceneContext;

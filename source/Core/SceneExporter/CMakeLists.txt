@@ -47,6 +47,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextHdrConfig.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextLayoutBox.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextLight.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextLightGroup.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextLpvConfig.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextMaterial.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextMesh.cpp

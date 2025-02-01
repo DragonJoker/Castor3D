@@ -355,7 +355,16 @@ namespace castor3d
 			, { uint32_t( CSCNSection::eTexture ), cuT( "texture" ) }
 			, { uint32_t( CSCNSection::eColourGrading ), cuT( "colour_grading" ) }
 			, { uint32_t( CSCNSection::eLightingModel ), cuT( "lighting_model" ) }
-			, { uint32_t( CSCNSection::eDefaultLightingModel ), cuT( "default_lighting_model" ) } };
+			, { uint32_t( CSCNSection::eDefaultLightingModel ), cuT( "default_lighting_model" ) }
+			, { uint32_t( CSCNSection::eLightGroup ), cuT( "light_group" ) }
+			, { uint32_t( CSCNSection::eLightGroupInstances ), cuT( "instances" ) }
+			, { uint32_t( CSCNSection::eLightGroupShadows ), cuT( "group_shadows" ) }
+			, { uint32_t( CSCNSection::eLightGroupShadowsLpv ), cuT( "group_lpv_config" ) }
+			, { uint32_t( CSCNSection::eLightGroupShadowsRaw ), cuT( "group_raw_config" ) }
+			, { uint32_t( CSCNSection::eLightGroupShadowsPcf ), cuT( "group_pcf_config" ) }
+			, { uint32_t( CSCNSection::eLightGroupShadowsVsm ), cuT( "group_vsm_config" ) }
+			, { uint32_t( CSCNSection::eLightGroupShadowsRsm ), cuT( "group_rsm_config" ) }
+		};
 	}
 
 	uint32_t getSceneFileRootSection()

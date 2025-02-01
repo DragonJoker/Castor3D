@@ -186,6 +186,12 @@ namespace castor3d
 				case uint32_t( CSCNSection::eRaw ):
 				case uint32_t( CSCNSection::ePcf ):
 				case uint32_t( CSCNSection::eVsm ):
+				case uint32_t( CSCNSection::eLightGroup ):
+				case uint32_t( CSCNSection::eLightGroupShadows ):
+				case uint32_t( CSCNSection::eLightGroupShadowsLpv ):
+				case uint32_t( CSCNSection::eLightGroupShadowsRaw ):
+				case uint32_t( CSCNSection::eLightGroupShadowsPcf ):
+				case uint32_t( CSCNSection::eLightGroupShadowsVsm ):
 					result = uint32_t( Category::eLight );
 					break;
 				case uint32_t( CSCNSection::eNode ):
