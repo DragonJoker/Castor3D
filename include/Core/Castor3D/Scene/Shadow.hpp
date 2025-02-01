@@ -52,6 +52,15 @@ namespace castor3d
 			&& lhs.lpvConfig == rhs.lpvConfig
 			&& lhs.rsmConfig == rhs.rsmConfig;
 	}
+
+	struct LightContext;
+	struct LightGroupContext;
+	struct ShadowContext
+	{
+		LightContext * light{};
+		LightGroupContext * lightGroup{};
+		ShadowConfigRPtr shadowConfig{};
+	};
 }
 
 namespace castor

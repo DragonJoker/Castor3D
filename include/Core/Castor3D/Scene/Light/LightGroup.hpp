@@ -13,6 +13,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
+#include <CastorUtils/Graphics/RgbColour.hpp>
 
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <atomic>

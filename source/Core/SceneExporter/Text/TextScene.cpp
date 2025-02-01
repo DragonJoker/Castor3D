@@ -6,6 +6,7 @@
 #include "TextFog.hpp"
 #include "TextGeometry.hpp"
 #include "TextLight.hpp"
+#include "TextLightGroup.hpp"
 #include "TextMaterial.hpp"
 #include "TextMesh.hpp"
 #include "TextOverlay.hpp"
@@ -448,6 +449,7 @@ namespace castor
 						&& txtscn::writeCache( file, scene.getCameraCache(), cuT( "Cameras" ), *this, txtscn::writable< Camera > )
 						&& txtscn::writeIncludedNodes( file, scene.getObjectRootNode()->getChildren(), cuT( "Objects nodes" ), m_options.nodesFile, m_options.scale, *this )
 						&& txtscn::writeIncludedCache( file, scene.getLightCache(), cuT( "Lights" ), m_options.lightsFile, *this, txtscn::writable< Light > )
+						&& txtscn::writeIncludedCache( file, scene.getLightGroupCache(), cuT( "LightGroups" ), m_options.lightsFile, *this, txtscn::writable< LightGroup > )
 						&& txtscn::writeIncludedCache( file, scene.getGeometryCache(), cuT( "Geometries" ), m_options.objectsFile, *this, txtscn::writable< Geometry > )
 						&& txtscn::writeCache( file, scene.getParticleSystemCache(), cuT( "Particle systems" ), *this, txtscn::writable< ParticleSystem > )
 						&& txtscn::writeCache( file, scene.getAnimatedObjectGroupCache(), cuT( "Animated object groups" ), *this, txtscn::writable< AnimatedObjectGroup > );

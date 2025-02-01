@@ -19,7 +19,7 @@ namespace c3d_gltf
 	private:
 		bool doImportLight( castor3d::Light & light )override;
 		bool doImportLightGroup( castor3d::LightGroup & light )override;
-		bool doImportLightCategory( fastgltf::Light const & impLight
+		void doImportLightCategory( fastgltf::Light const & impLight
 			, castor3d::LightCategory & category );
 		castor3d::SceneNode * doLoadNode( castor3d::Scene & scene
 			, castor::String const & nodeName

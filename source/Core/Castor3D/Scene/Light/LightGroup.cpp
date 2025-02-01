@@ -19,7 +19,7 @@ namespace castor3d
 
 	namespace lgtgrp
 	{
-		static CU_ImplementAttributeParserNewBlock( parserLightGroup, SceneContext, LightContext )
+		static CU_ImplementAttributeParserNewBlock( parserLightGroup, SceneContext, LightGroupContext )
 		{
 			if ( !blockContext->scene )
 			{

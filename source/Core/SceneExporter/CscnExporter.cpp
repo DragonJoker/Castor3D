@@ -4,6 +4,7 @@
 #include "Text/TextCtrlPanel.hpp"
 #include "Text/TextGeometry.hpp"
 #include "Text/TextLight.hpp"
+#include "Text/TextLightGroup.hpp"
 #include "Text/TextMaterial.hpp"
 #include "Text/TextMesh.hpp"
 #include "Text/TextSampler.hpp"
@@ -1236,6 +1237,17 @@ namespace castor3d::exporter
 					, cuT( "Lights" )
 					, stream
 					, []( Light const & )
+					{
+						return true;
+					} );
+			}
+			if ( carryOn( result, ignoreFailures ) )
+			{
+				result = writeCache< LightGroup >( ignoreFailures
+					, scene.getLightGroupCache()
+					, cuT( "LightGroups" )
+					, stream
+					, []( LightGroup const & )
 					{
 						return true;
 					} );

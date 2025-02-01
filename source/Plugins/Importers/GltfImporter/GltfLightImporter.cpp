@@ -68,7 +68,7 @@ namespace c3d_gltf
 		return true;
 	}
 
-	bool GltfLightImporter::doImportLightCategory( fastgltf::Light const & impLight
+	void GltfLightImporter::doImportLightCategory( fastgltf::Light const & impLight
 		, castor3d::LightCategory & category )
 	{
 		if ( impLight.type == fastgltf::LightType::Point )
