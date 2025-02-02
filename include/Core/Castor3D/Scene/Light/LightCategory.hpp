@@ -371,7 +371,7 @@ namespace castor3d
 		 *\brief			Mise à jour CPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API void update( CpuUpdater & updater );
+		C3D_API void update( CpuUpdater const & updater );
 		/**
 		 *\~english
 		 *\brief			Updates the shadow informations.

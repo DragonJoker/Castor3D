@@ -455,6 +455,21 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
+		static CU_ImplementAttributeParserBlock( parserGlobalIndirectAttenuation, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No Scene initialised." ) );
+			}
+			else
+			{
+				float value{ 0u };
+				params[0]->get( value );
+				blockContext->scene->setLpvIndirectAttenuation( value );
+			}
+		}
+		CU_EndAttribute()
+
 		static CU_ImplementAttributeParserNewBlock( parserParticleSystem, SceneContext, ParticleSystemContext )
 		{
 			if ( !blockContext->scene )
@@ -1179,7 +1194,7 @@ namespace castor3d
 			doGatherDirty( sceneObjs );
 			doUpdateSceneNodes( sceneObjs );
 			m_animatedObjectGroupCache->update( updater );
-			doUpdateMovables( updater, sceneObjs );
+			doUpdateMovables( sceneObjs );
 
 			if ( !sceneObjs.dirtyGeometries.empty()
 				|| !sceneObjs.dirtyNodes.empty() )
@@ -1202,9 +1217,9 @@ namespace castor3d
 	void Scene::upload( UploadData & uploader )
 	{
 		getLightCache().upload( uploader );
-		m_meshCache->forEach( [&uploader]( Mesh & mesh )
+		m_meshCache->forEach( [&uploader]( Mesh const & mesh )
 			{
-				for ( auto & submesh : mesh )
+				for ( auto const & submesh : mesh )
 				{
 					submesh->upload( uploader );
 				}
@@ -1440,9 +1455,8 @@ namespace castor3d
 				m_dirtyNodes.erase( it );
 			}
 
-			auto parent = curNode.getParent();
-
-			if ( !parent )
+			if ( auto parent = curNode.getParent();
+				!parent )
 			{
 				it = m_dirtyNodes.begin();
 			}
@@ -1543,6 +1557,7 @@ namespace castor3d
 		sceneCtx.addParser( cuT( "fog_type" ), scene::parserFogType, { makeParameter< ParameterType::eCheckedText, FogType >() } );
 		sceneCtx.addParser( cuT( "fog_density" ), scene::parserFogDensity, { makeParameter< ParameterType::eFloat >() } );
 		sceneCtx.addParser( cuT( "directional_shadow_cascades" ), scene::parserDirectionalShadowCascades, { makeParameter< ParameterType::eUInt32 >( castor::makeRange( 0u, MaxDirectionalCascadesCount ) ) } );
+		sceneCtx.addParser( cuT( "lpv_indirect_attenuation" ), scene::parserGlobalIndirectAttenuation, { makeParameter< ParameterType::eFloat >() } );
 		sceneCtx.addPushParser( cuT( "font" ), CSCNSection::eFont, scene::parserFont, { makeParameter< ParameterType::eName >() } );
 		sceneCtx.addPushParser( cuT( "sdf_font" ), CSCNSection::eSdfFont, scene::parserSdfFont, { makeParameter< ParameterType::eName >() } );
 		sceneCtx.addPushParser( cuT( "sampler" ), CSCNSection::eSampler, scene::parserSamplerState, { makeParameter< ParameterType::eName >() } );
@@ -1618,7 +1633,7 @@ namespace castor3d
 		return m_giTypes[size_t( ltType )].end() != m_giTypes[size_t( ltType )].find( giType );
 	}
 
-	void Scene::setDefaultLightingModel( LightingModelID value )
+	void Scene::setDefaultLightingModel( LightingModelID value )const
 	{
 		getEngine()->setDefaultLightingModel( value );
 	}
@@ -1770,8 +1785,7 @@ namespace castor3d
 		}
 	}
 
-	void Scene::doUpdateMovables( CpuUpdater & updater
-		, CpuUpdater::DirtyObjects & sceneObjs )
+	void Scene::doUpdateMovables( CpuUpdater::DirtyObjects const & sceneObjs )
 	{
 #if C3D_DebugTimers
 		auto block( m_timerMovables->start() );

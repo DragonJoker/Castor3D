@@ -100,10 +100,10 @@ namespace castor3d
 		, bool isStatic
 		, Passes & passes )
 	{
-		auto & engine = *m_scene.getEngine();
+		Engine const & engine = *m_scene.getEngine();
 		Viewport viewport{ engine };
 		viewport.resize( castor::Size{ ShadowMapSpotTextureSize, ShadowMapSpotTextureSize } );
-		auto & smResult = getShadowPassResult( isStatic );
+		ShadowMapResult const & smResult = getShadowPassResult( isStatic );
 		auto & depth = smResult[SmTexture::eDepth];
 		auto & linear = smResult[SmTexture::eLinearDepth];
 		auto & variance = smResult[SmTexture::eVariance];
@@ -194,17 +194,17 @@ namespace castor3d
 			}
 		}
 
-		crg::FramePassArray result;
+		crg::FramePassArray resultPasses;
 
 		 if ( isStatic )
 		{
-			auto & nstSmResult = getShadowPassResult( false );
+			ShadowMapResult const & nstSmResult = getShadowPassResult( false );
 			auto & copyPass = group.createPass( debugName + "/CopyToNonStatic"
-				, [this, isStatic, index]( crg::FramePass const & pass
+				, [this, isStatic, index]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
 				{
-					auto result = castor::make_unique< crg::ImageCopy >( pass
+					auto result = castor::make_unique< crg::ImageCopy >( framePass
 						, context
 						, runnableGraph
 						, getShadowPassResult( isStatic )[SmTexture::eDepth].getExtent()
@@ -212,7 +212,7 @@ namespace castor3d
 						, crg::ru::Config{}
 						, crg::ImageCopy::GetPassIndexCallback( [](){ return 0u; } )
 						, crg::ImageCopy::IsEnabledCallback( [this, index](){ return doEnableCopyStatic( index ); } ) );
-					getOwner()->registerTimer( castor::makeString( pass.getFullName() )
+					getOwner()->registerTimer( castor::makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );
@@ -239,7 +239,7 @@ namespace castor3d
 			}
 
 			previousPass = &copyPass;
-			result.push_back( previousPass );
+			resultPasses.push_back( previousPass );
 		}
 		else if ( vsm )
 		{
@@ -251,14 +251,14 @@ namespace castor3d
 				, m_blurIntermediateView
 				, 5u
 				, crg::ImageCopy::IsEnabledCallback( [this, index]() { return doEnableBlur( index ); } ) ) );
-			result.push_back( &passes.blurs.back()->getLastPass() );
+			resultPasses.push_back( &passes.blurs.back()->getLastPass() );
 		}
 		else
 		{
-			result.push_back( &pass );
+			 resultPasses.push_back( &pass );
 		}
 
-		return result;
+		return resultPasses;
 	}
 
 	bool ShadowMapSpot::doIsUpToDate( uint32_t index

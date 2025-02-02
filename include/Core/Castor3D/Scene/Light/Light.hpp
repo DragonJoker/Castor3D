@@ -57,7 +57,7 @@ namespace castor3d
 		C3D_API Light( castor::String const & name
 			, Scene & scene
 			, SceneNode & node
-			, LightFactory & factory
+			, LightFactory const & factory
 			, LightType lightType );
 		/**
 		 *\~english

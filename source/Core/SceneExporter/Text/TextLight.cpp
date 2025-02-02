@@ -26,8 +26,8 @@ namespace castor
 
 		if ( auto block{ beginBlock( file, cuT( "light" ), light.getName() ) } )
 		{
-			result = writeName( file, cuT( "parent" ), light.getParent()->getName() )
-				&& write( file, cuT( "type" ), castor3d::getName( light.getLightType() ) )
+			result = write( file, cuT( "type" ), castor3d::getName( light.getLightType() ) )
+				&& writeName( file, cuT( "parent" ), light.getParent()->getName() )
 				&& writeNamedSub( file, cuT( "colour" ), light.getColour() );
 
 			if ( result )

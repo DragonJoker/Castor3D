@@ -87,7 +87,7 @@ namespace castor3d::shader
 	{
 	}
 
-	DirectionalLight LightsBuffer::getDirectionalLight( sdw::UInt const & offset )
+	DirectionalLight LightsBuffer::getDirectionalLight( sdw::UInt const & pbaseOffset )
 	{
 		if ( !m_getDirectionalLight )
 		{
@@ -109,10 +109,10 @@ namespace castor3d::shader
 				, sdw::InUInt{ m_writer, "baseOffset" } );
 		}
 
-		return m_getDirectionalLight( offset );
+		return m_getDirectionalLight( pbaseOffset );
 	}
 
-	PointLight LightsBuffer::getPointLight( sdw::UInt const & offset )
+	PointLight LightsBuffer::getPointLight( sdw::UInt const & pbaseOffset )
 	{
 		if ( !m_getPointLight )
 		{
@@ -132,10 +132,10 @@ namespace castor3d::shader
 				, sdw::InUInt{ m_writer, "baseOffset" } );
 		}
 
-		return m_getPointLight( offset );
+		return m_getPointLight( pbaseOffset );
 	}
 
-	SpotLight LightsBuffer::getSpotLight( sdw::UInt const & offset )
+	SpotLight LightsBuffer::getSpotLight( sdw::UInt const & pbaseOffset )
 	{
 		if ( !m_getSpotLight )
 		{
@@ -170,7 +170,7 @@ namespace castor3d::shader
 				, sdw::InUInt{ m_writer, "baseOffset" } );
 		}
 
-		return m_getSpotLight( offset );
+		return m_getSpotLight( pbaseOffset );
 	}
 
 

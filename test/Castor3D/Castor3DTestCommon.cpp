@@ -389,11 +389,13 @@ namespace Testing
 
 	bool C3DTestCase::compare( castor3d::PointLightInstance const & /*lhs*/, castor3d::PointLightInstance const & /*rhs*/ )
 	{
+		CT_SUCCESS();
 		return true;
 	}
 
 	bool C3DTestCase::compare( castor3d::SpotLightInstance const & /*lhs*/, castor3d::SpotLightInstance const & /*rhs*/ )
 	{
+		CT_SUCCESS();
 		return true;
 	}
 
@@ -552,7 +554,6 @@ namespace Testing
 	bool C3DTestCase::compare( castor3d::SubmeshComponent const & lhs, castor3d::SubmeshComponent const & rhs )
 	{
 		bool result = CT_EQUAL( lhs.getType(), rhs.getType() );
-		//result = result && CT_EQUAL( lhs.getProgramFlags(), rhs.getProgramFlags() );
 
 		if ( result )
 		{
@@ -840,7 +841,6 @@ namespace Testing
 			while ( result && itLhs != endItLhs && itRhs != endItRhs )
 			{
 				result = CT_EQUAL( itLhs->first, itRhs->first );
-				//result = result && CT_EQUAL( itLhs->second, itRhs->second );
 				++itLhs;
 				++itRhs;
 			}

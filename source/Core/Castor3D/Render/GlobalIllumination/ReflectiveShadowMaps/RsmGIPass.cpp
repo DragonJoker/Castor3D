@@ -81,7 +81,7 @@ namespace castor3d
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< sdw::Vec2 >( "vtx_texture", 0u );
 
-			writer.implementMain( [&]( sdw::VertexIn in
+			writer.implementMain( [&]( sdw::VertexIn const & in
 				, sdw::VertexOut out )
 				{
 					vtx_texture = uv;
@@ -90,9 +90,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getDirectionalPixelShaderSource( uint32_t width
-			, uint32_t height
-			, RenderSystem const & renderSystem )
+		static ShaderPtr getDirectionalPixelShaderSource()
 		{
 			sdw::FragmentWriter writer;
 
@@ -127,8 +125,8 @@ namespace castor3d
 			ReflectiveShadowMapping rsm{ writer
 				, c3d_rsmSamples };
 
-			writer.implementMain( [&]( sdw::FragmentIn in
-				, sdw::FragmentOut out )
+			writer.implementMain( [&]( sdw::FragmentIn const & in
+				, sdw::FragmentOut const & out )
 				{
 					auto texCoord = writer.declLocale( "texCoord"
 						, vtx_texture );
@@ -166,9 +164,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getSpotPixelShaderSource( uint32_t width
-			, uint32_t height
-			, RenderSystem const & renderSystem )
+		static ShaderPtr getSpotPixelShaderSource()
 		{
 			sdw::FragmentWriter writer;
 
@@ -203,8 +199,8 @@ namespace castor3d
 			ReflectiveShadowMapping rsm{ writer
 				, c3d_rsmSamples };
 
-			writer.implementMain( [&]( sdw::FragmentIn in
-				, sdw::FragmentOut out )
+			writer.implementMain( [&]( sdw::FragmentIn const & in
+				, sdw::FragmentOut const & out )
 				{
 					auto texCoord = writer.declLocale( "texCoord"
 						, vtx_texture );
@@ -246,9 +242,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getPointPixelShaderSource( uint32_t width
-			, uint32_t height
-			, RenderSystem const & renderSystem )
+		static ShaderPtr getPointPixelShaderSource()
 		{
 			sdw::FragmentWriter writer;
 
@@ -283,8 +277,8 @@ namespace castor3d
 			ReflectiveShadowMapping rsm{ writer
 				, c3d_rsmSamples };
 
-			writer.implementMain( [&]( sdw::FragmentIn in
-				, sdw::FragmentOut out )
+			writer.implementMain( [&]( sdw::FragmentIn const & in
+				, sdw::FragmentOut const & out )
 				{
 					auto texCoord = writer.declLocale( "texCoord"
 						, vtx_texture );
@@ -320,19 +314,16 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static std::unique_ptr< ast::Shader > getPixelProgram( LightType lightType
-			, uint32_t width
-			, uint32_t height
-			, RenderSystem const & renderSystem )
+		static std::unique_ptr< ast::Shader > getPixelProgram( LightType lightType )
 		{
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
-				return getDirectionalPixelShaderSource( width, height, renderSystem );
+				return getDirectionalPixelShaderSource();
 			case LightType::eSpot:
-				return getSpotPixelShaderSource( width, height, renderSystem );
+				return getSpotPixelShaderSource();
 			case LightType::ePoint:
-				return getPointPixelShaderSource( width, height, renderSystem );
+				return getPointPixelShaderSource();
 			default:
 				CU_Failure( "Unexpected LightType" );
 				return nullptr;
@@ -362,14 +353,14 @@ namespace castor3d
 		, crg::ImageViewId const & depthObj
 		, crg::ImageViewId const & nmlOcc
 		, ShadowMapResult const & smResult
-		, TextureArray const & result )
+		, TextureArray const & output )
 		: castor::Named{ castor3d::getName( lightType ) + "Rsm" }
 		, m_rsmConfigUbo{ device }
 		, m_rsmSamplesSsbo{ device.bufferPool->getBuffer< castor::Point4f >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, MaxRsmRange
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), rsmgi::getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), rsmgi::getPixelProgram( lightType, size.width, size.height, device.renderSystem ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), rsmgi::getPixelProgram( lightType ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 	{
@@ -428,14 +419,14 @@ namespace castor3d
 			, rsmgi::RsmPositionIdx );
 		pass.addSampledView( smResult[SmTexture::eFlux].sampledViewId
 			, rsmgi::RsmFluxIdx );
-		pass.addOutputColourView( result[0].targetViewId
+		pass.addOutputColourView( output[0].targetViewId
 			, transparentBlackClearColor );
-		pass.addOutputColourView( result[1].targetViewId
+		pass.addOutputColourView( output[1].targetViewId
 			, transparentBlackClearColor );
 		m_pass = &pass;
 	}
 
-	void RsmGIPass::accept( ConfigurationVisitorBase & visitor )
+	void RsmGIPass::accept( ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );

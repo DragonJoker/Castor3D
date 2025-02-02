@@ -215,7 +215,7 @@ namespace castor3d
 		, bool isStatic
 		, Passes & passes )
 	{
-		auto & engine = *m_scene.getEngine();
+		Engine const & engine = *m_scene.getEngine();
 		auto const width = ShadowMapDirectionalTextureSize;
 		auto const height = ShadowMapDirectionalTextureSize;
 		auto const w = float( width );
@@ -224,7 +224,7 @@ namespace castor3d
 		viewport.setOrtho( -w / 2, w / 2, -h / 2, h / 2, -5120.0, 5120.0 );
 		viewport.resize( { width, height } );
 		viewport.update();
-		auto & smResult = getShadowPassResult( isStatic );
+		ShadowMapResult const & smResult = getShadowPassResult( isStatic );
 		auto & depth = smResult[SmTexture::eDepth];
 		auto & linear = smResult[SmTexture::eLinearDepth];
 		auto & variance = smResult[SmTexture::eVariance];
@@ -332,7 +332,7 @@ namespace castor3d
 				}
 				if ( isStatic )
 				{
-					auto & nstSmResult = getShadowPassResult( false );
+					ShadowMapResult const & nstSmResult = getShadowPassResult( false );
 					auto & copyPass = graph.createPass( "CopyToNonStatic"
 						, [this, isStatic, cascade]( crg::FramePass const & framePass
 							, crg::GraphContext & context
@@ -428,7 +428,7 @@ namespace castor3d
 
 				if ( isStatic )
 				{
-					auto & nstSmResult = getShadowPassResult( false );
+					ShadowMapResult const & nstSmResult = getShadowPassResult( false );
 					auto & copyPass = group.createPass( "CopyToNonStatic"
 						, [this, isStatic, cascade]( crg::FramePass const & framePass
 							, crg::GraphContext & context
@@ -533,8 +533,8 @@ namespace castor3d
 	{
 		auto save = updater.index;
 		auto & light = *updater.light;
-		auto & camera = *updater.camera;
-		auto & directional = static_cast< DirectionalLightInstance & >( light );
+		Camera const & camera = *updater.camera;
+		DirectionalLightInstance const & directional = static_cast< DirectionalLightInstance & >( light );
 		auto node = &light.getNode();
 		m_shadowType = light.getShadowType();
 

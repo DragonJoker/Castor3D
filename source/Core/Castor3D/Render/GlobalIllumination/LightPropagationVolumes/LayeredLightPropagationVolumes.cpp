@@ -316,7 +316,7 @@ namespace castor3d
 		, m_clearInjectionPass{ doCreateClearInjectionPass() }
 		, m_downsamplePass{ doCreateDownsamplePass() }
 	{
-		for ( auto & value : m_injection )
+		for ( auto const & value : m_injection )
 		{
 			value.create();
 		}
@@ -326,9 +326,9 @@ namespace castor3d
 			value.create();
 		}
 
-		for ( auto & values : m_propagate )
+		for ( auto const & values : m_propagate )
 		{
-			for ( auto & value : values )
+			for ( auto const & value : values )
 			{
 				value.create();
 			}

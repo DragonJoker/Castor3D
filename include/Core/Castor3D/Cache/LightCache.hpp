@@ -206,7 +206,7 @@ namespace castor3d
 	private:
 		bool doCheckUniqueDirectionalLight( LightType toAdd )const noexcept;
 		void doRegisterLight( Light & light );
-		void doUnregisterLight( Light & light );
+		void doUnregisterLight( Light const & light );
 
 	private:
 		LightBufferUPtr m_lightBuffer;

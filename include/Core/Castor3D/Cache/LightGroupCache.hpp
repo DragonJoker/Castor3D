@@ -44,7 +44,7 @@ namespace castor
 		 *\brief		Constructeur.
 		 *\param[in]	scene			La scène.
 		 */
-		C3D_API ResourceCacheT( castor3d::Scene & scene );
+		C3D_API explicit ResourceCacheT( castor3d::Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Intialises GPU buffer.

@@ -56,14 +56,12 @@ namespace c3d_assimp
 			}
 
 			bool tangentSpace = false;
-			castor::String normals;
 
-			if ( parameters.get( cuT( "normals" ), normals ) )
+			if ( castor::String normals;
+				parameters.get( cuT( "normals" ), normals )
+					&& normals == cuT( "smooth" ) )
 			{
-				if ( normals == cuT( "smooth" ) )
-				{
-					importFlags |= aiProcess_GenSmoothNormals;
-				}
+				importFlags |= aiProcess_GenSmoothNormals;
 			}
 
 			if ( parameters.get( cuT( "tangent_space" ), tangentSpace ) && tangentSpace )
@@ -112,9 +110,9 @@ namespace c3d_assimp
 			, uint32_t materialIndex )
 		{
 			castor::String result = file.getExtension() + cuT( "-" );
-			aiString name;
 
-			if ( aiMaterial.Get( AI_MATKEY_NAME, name ) == aiReturn_SUCCESS )
+			if ( aiString name;
+				aiMaterial.Get( AI_MATKEY_NAME, name ) == aiReturn_SUCCESS )
 			{
 				result += makeString( name ) + cuT( "-" ) + castor::string::toString( materialIndex );
 			}
@@ -126,8 +124,7 @@ namespace c3d_assimp
 			return result;
 		}
 
-		static bool isSkeletonNode( aiNode const & node
-			, castor::String const & aiNodeName
+		static bool isSkeletonNode( castor::String const & aiNodeName
 			, castor::StringMap< castor::Matrix4x4f > const & bonesNodes
 			, castor::StringMap< AssimpSkeletonData > const & skeletons )
 		{
@@ -187,26 +184,25 @@ namespace c3d_assimp
 			, aiAnimation const & animation
 			, AssimpSceneData & sceneData )
 		{
-			for ( auto & skeleton : sceneData.skeletons )
+			for ( auto & [_, skeleton] : sceneData.skeletons )
 			{
-				if ( isAnimForSkeleton( animation, skeleton.second ) )
+				if ( isAnimForSkeleton( animation, skeleton ) )
 				{
-					return { &skeleton.second, nullptr };
+					return { &skeleton, nullptr };
 				}
 			}
 
 			if ( scene )
 			{
-				for ( auto & skeleton : scene->getSkeletonCache() )
+				for ( auto const & [name, skeleton] : scene->getSkeletonCache() )
 				{
-					if ( auto node = rootNode.FindNode( castor::toUtf8( skeleton.second->getRootNode()->getName() ).c_str() ) )
+					if ( auto node = rootNode.FindNode( castor::toUtf8( skeleton->getRootNode()->getName() ).c_str() ) )
 					{
-						auto & data = sceneData.skeletons.emplace( skeleton.first
-							, AssimpSkeletonData{ node } ).first->second;
+						auto & data = sceneData.skeletons.try_emplace( name, node ).first->second;
 
 						if ( isAnimForSkeleton( animation, data ) )
 						{
-							return { &data, skeleton.second.get() };
+							return { &data, skeleton.get() };
 						}
 					}
 				}
@@ -248,7 +244,7 @@ namespace c3d_assimp
 
 				if ( morphIt != morphChannels.end() )
 				{
-					result.emplace( makeString( anim->mName ), *morphIt );
+					result.try_emplace( makeString( anim->mName ), *morphIt );
 				}
 			}
 
@@ -276,8 +272,9 @@ namespace c3d_assimp
 		{
 			auto node = findMeshNode( meshIndex, *scene.mRootNode );
 			CU_Require( node );
-			return !findNodeAnims( *node
-				, castor::makeArrayView( scene.mAnimations, scene.mNumAnimations ) ).empty();
+			return node
+				&& !findNodeAnims( *node
+					, castor::makeArrayView( scene.mAnimations, scene.mNumAnimations ) ).empty();
 		}
 
 		static bool isValidMesh( aiScene const & scene
@@ -291,7 +288,7 @@ namespace c3d_assimp
 			, uint32_t meshIndex )
 		{
 			castor::StringView separators = cuT( " \t\r_$|/:\\*!?&#\"()[]{}@+." );
-			auto split = castor::string::split( name, separators, ~( 0u ), false );
+			auto split = castor::string::split( name, separators, ~0u, false );
 			castor::Set< int > numbers;
 			castor::Set< castor::String > names;
 
@@ -370,16 +367,14 @@ namespace c3d_assimp
 			, castor::Vector< AssimpNodeData > const & nodes
 			, castor::Matrix4x4f transform )
 		{
-			auto node = rootNode.FindNode( castor::toUtf8( file.getExternalName( name ) ).c_str() );
-
-			if ( node )
+			if ( auto node = rootNode.FindNode( castor::toUtf8( file.getExternalName( name ) ).c_str() ) )
 			{
 				castor::Vector< castor::Matrix4x4f > transforms;
 				accumulateTransformsRec( node->mParent, nodes, transforms );
 				std::reverse( transforms.begin(), transforms.end() );
 				castor::Matrix4x4f cumulative{ 1.0f };
 
-				for ( auto & t : transforms )
+				for ( auto const & t : transforms )
 				{
 					cumulative *= t;
 				}
@@ -409,7 +404,7 @@ namespace c3d_assimp
 			{
 				for ( auto aiBone : castor::makeArrayView( aiMesh->mBones, aiMesh->mNumBones ) )
 				{
-					m_bonesNodes.emplace( makeString( aiBone->mName )
+					m_bonesNodes.try_emplace( makeString( aiBone->mName )
 						, fromAssimp( aiBone->mOffsetMatrix ) );
 				}
 			}
@@ -433,14 +428,13 @@ namespace c3d_assimp
 
 	NodeAnimations const & AssimpImporterFile::getNodesAnimations( castor3d::SceneNode const & node )const
 	{
-		auto it = std::find_if( m_sceneData.nodes.begin()
+		if ( auto it = std::find_if( m_sceneData.nodes.begin()
 			, m_sceneData.nodes.end()
 			, [&node]( AssimpNodeData const & lookup )
 			{
 				return node.getName() == lookup.name;
 			} );
-
-		if ( it != m_sceneData.nodes.end() )
+			it != m_sceneData.nodes.end() )
 		{
 			return it->anims;
 		}
@@ -459,9 +453,8 @@ namespace c3d_assimp
 			name = getSkeletons().begin()->first;
 		}
 
-		auto it = m_sceneData.skeletons.find( name );
-
-		if ( it != m_sceneData.skeletons.end() )
+		if ( auto it = m_sceneData.skeletons.find( name );
+			it != m_sceneData.skeletons.end() )
 		{
 			return it->second.anims;
 		}
@@ -473,10 +466,9 @@ namespace c3d_assimp
 	MeshAnimations const & AssimpImporterFile::getMeshesAnimations( castor3d::Mesh const & mesh
 		, uint32_t submeshIndex )const
 	{
-		auto it = m_sceneData.meshes.find( mesh.getName() );
-
-		if ( it != m_sceneData.meshes.end()
-			&& submeshIndex < it->second.submeshes.size() )
+		if ( auto it = m_sceneData.meshes.find( mesh.getName() );
+			it != m_sceneData.meshes.end()
+				&& submeshIndex < it->second.submeshes.size() )
 		{
 			return it->second.submeshes[submeshIndex].anims;
 		}
@@ -489,9 +481,9 @@ namespace c3d_assimp
 	{
 		castor::StringArray result;
 
-		for ( auto materials : m_sceneData.materials )
+		for ( auto const & [name, _] : m_sceneData.materials )
 		{
-			result.emplace_back( materials.first );
+			result.emplace_back( name );
 		}
 
 		return result;
@@ -502,12 +494,12 @@ namespace c3d_assimp
 		m_listedMeshes.clear();
 		castor::Vector< MeshData > result;
 
-		for ( auto it : m_sceneData.meshes )
+		for ( auto const & [name, meshData] : m_sceneData.meshes )
 		{
-			m_listedMeshes.emplace_back( it.first );
-			result.emplace_back( it.first
-				, ( it.second.skelNode
-					? getInternalName( findSkeletonName( m_bonesNodes, *it.second.skelNode ) )
+			m_listedMeshes.emplace_back( name );
+			result.emplace_back( name
+				, ( meshData.skelNode
+					? getInternalName( findSkeletonName( m_bonesNodes, *meshData.skelNode ) )
 					: castor::String{} ) );
 		}
 
@@ -518,10 +510,10 @@ namespace c3d_assimp
 	{
 		castor::StringArray result;
 
-		for ( auto it : m_sceneData.skeletons )
+		for ( auto const & [name, _] : m_sceneData.skeletons )
 		{
-			m_listedSkeletons.emplace_back( it.first );
-			result.emplace_back( it.first );
+			m_listedSkeletons.emplace_back( name );
+			result.emplace_back( name );
 		}
 
 		return result;
@@ -531,7 +523,7 @@ namespace c3d_assimp
 	{
 		castor::Vector< NodeData > result;
 
-		for ( auto & node : m_sceneData.nodes )
+		for ( auto const & node : m_sceneData.nodes )
 		{
 			result.emplace_back( node.parent, node.name, node.isCamera );
 		}
@@ -543,12 +535,12 @@ namespace c3d_assimp
 	{
 		castor::Vector< LightData > result;
 
-		for ( auto & light : m_sceneData.lights )
+		for ( auto const & [name, lightData] : m_sceneData.lights )
 		{
-			result.emplace_back( light.first
-				, ( light.second->mType == aiLightSource_DIRECTIONAL
+			result.emplace_back( name
+				, ( lightData->mType == aiLightSource_DIRECTIONAL
 					? castor3d::LightType::eDirectional
-					: ( light.second->mType == aiLightSource_POINT
+					: ( lightData->mType == aiLightSource_POINT
 						? castor3d::LightType::ePoint
 						: castor3d::LightType::eSpot ) ) );
 		}
@@ -591,10 +583,10 @@ namespace c3d_assimp
 	{
 		castor::Vector< CameraData > result;
 
-		for ( auto & camera : m_sceneData.cameras )
+		for ( auto const & [name, cameraData] : m_sceneData.cameras )
 		{
-			result.emplace_back( camera.first
-				, ( camera.second->mOrthographicWidth != 0.0f
+			result.emplace_back( name
+				, ( cameraData->mOrthographicWidth != 0.0f
 					? castor3d::ViewportType::eOrtho
 					: castor3d::ViewportType::ePerspective ) );
 		}
@@ -605,15 +597,15 @@ namespace c3d_assimp
 	castor::StringArray AssimpImporterFile::listMeshAnimations( castor3d::Mesh const & mesh )
 	{
 		castor::Set< castor::String > result;
-		auto it = m_sceneData.meshes.find( mesh.getName() );
 
-		if ( it != m_sceneData.meshes.end() )
+		if ( auto it = m_sceneData.meshes.find( mesh.getName() );
+			it != m_sceneData.meshes.end() )
 		{
-			for ( auto & submesh : it->second.submeshes )
+			for ( auto const & submesh : it->second.submeshes )
 			{
-				for ( auto & anim : submesh.anims )
+				for ( auto & [name, _] : submesh.anims )
 				{
-					result.insert( anim.first );
+					result.insert( name );
 				}
 			}
 		}
@@ -633,13 +625,13 @@ namespace c3d_assimp
 		}
 
 		castor::StringArray result;
-		auto it = m_sceneData.skeletons.find( name );
 
-		if ( it != m_sceneData.skeletons.end() )
+		if ( auto it = m_sceneData.skeletons.find( name );
+			it != m_sceneData.skeletons.end() )
 		{
-			for ( auto & anim : it->second.anims )
+			for ( auto const & [animName, _] : it->second.anims )
 			{
-				result.push_back( anim.first );
+				result.push_back( animName );
 			}
 		}
 
@@ -649,18 +641,18 @@ namespace c3d_assimp
 	castor::StringArray AssimpImporterFile::listSceneNodeAnimations( castor3d::SceneNode const & node )
 	{
 		castor::StringArray result;
-		auto it = std::find_if( m_sceneData.nodes.begin()
+
+		if ( auto it = std::find_if( m_sceneData.nodes.begin()
 			, m_sceneData.nodes.end()
 			, [&node]( AssimpNodeData const & lookup )
 			{
 				return node.getName() == lookup.name;
 			} );
-
-		if ( it != m_sceneData.nodes.end() )
+			it != m_sceneData.nodes.end() )
 		{
-			for ( auto & anim : it->anims )
+			for ( auto const & [name, _] : it->anims )
 			{
-				result.push_back( anim.first );
+				result.push_back( name );
 			}
 		}
 
@@ -769,7 +761,7 @@ namespace c3d_assimp
 		for ( auto aiMaterial : castor::makeArrayView( m_aiScene->mMaterials, m_aiScene->mNumMaterials ) )
 		{
 			auto name = file::getMaterialName( *this, *aiMaterial, materialIndex );
-			m_sceneData.materials.emplace( name, aiMaterial );
+			m_sceneData.materials.try_emplace( name, aiMaterial );
 			++materialIndex;
 		}
 	}
@@ -796,7 +788,7 @@ namespace c3d_assimp
 						, meshNode );
 					auto skelName = getInternalName( findSkeletonName( m_bonesNodes
 						, *rootNode ) );
-					m_sceneData.skeletons.emplace( skelName, AssimpSkeletonData{ rootNode } );
+					m_sceneData.skeletons.try_emplace( skelName, rootNode );
 					result.emplace( aiMesh, rootNode );
 				}
 			}
@@ -825,7 +817,7 @@ namespace c3d_assimp
 						animName += cuT( "_" ) + getName();
 					}
 
-					skeletonData->anims.emplace( animName, aiAnimation );
+					skeletonData->anims.try_emplace( animName, aiAnimation );
 				}
 			}
 		}
@@ -886,8 +878,7 @@ namespace c3d_assimp
 
 				if ( regIt == m_sceneData.meshes.end() )
 				{
-					regIt = m_sceneData.meshes.emplace( meshName
-						, AssimpMeshData{ skelNode } ).first;
+					regIt = m_sceneData.meshes.try_emplace( meshName, skelNode ).first;
 				}
 
 				auto & submeshData = regIt->second.submeshes.emplace_back( aiMesh, meshIndex );
@@ -900,11 +891,10 @@ namespace c3d_assimp
 						, *m_aiScene->mRootNode
 						, castor::makeArrayView( m_aiScene->mAnimations, m_aiScene->mNumAnimations ) );
 
-					for ( auto anim : anims )
+					for ( auto const & [name, animData] : anims )
 					{
-						castor::String animName{ normalizeName( anim.first ) };
-						submeshData.anims.emplace( animName
-							, std::make_pair( aiMesh, anim.second ) );
+						castor::String animName{ normalizeName( name ) };
+						submeshData.anims.try_emplace( animName, aiMesh, animData );
 					}
 				}
 			}
@@ -931,8 +921,8 @@ namespace c3d_assimp
 		aiQuaternion rotate;
 		node.mTransformation.Decompose( scale, rotate, translate );
 		transform *= fromAssimp( node.mTransformation );
-		cumulativeTransforms.emplace( &node, transform );
-		bool isSkeletonNode = file::isSkeletonNode( node, aiNodeName, m_bonesNodes, m_sceneData.skeletons );
+		cumulativeTransforms.try_emplace( &node, transform );
+		bool isSkeletonNode = file::isSkeletonNode( aiNodeName, m_bonesNodes, m_sceneData.skeletons );
 		auto nodeName = getInternalName( aiNodeName );
 		AssimpNodeData nodeData{ parentName
 			, nodeName
@@ -960,7 +950,7 @@ namespace c3d_assimp
 						animName = normalizeName( aiNodeName );
 					}
 
-					nodeData.anims.emplace( animName, anim );
+					nodeData.anims.try_emplace( animName, anim );
 				}
 			}
 		}
@@ -981,7 +971,7 @@ namespace c3d_assimp
 					, &it->second ) )
 				{
 					// Don't add the mesh if it has already been added to a node with the same transform.
-					auto & nodeArray = processedMeshes.emplace( &it->second, aiNodeArray{} ).first->second;
+					auto & nodeArray = processedMeshes.try_emplace( &it->second ).first->second;
 					auto nodeIt = std::find_if( nodeArray.begin()
 						, nodeArray.end()
 						, [&cumulativeTransforms, &transform]( aiNode const * lookup )
@@ -1026,7 +1016,7 @@ namespace c3d_assimp
 				|| aiLight->mType == aiLightSource_SPOT )
 			{
 				castor::String name = getInternalName( aiLight->mName );
-				m_sceneData.lights.emplace( name, aiLight );
+				m_sceneData.lights.try_emplace( name, aiLight );
 
 				auto position = castor::Point3f{};
 				auto orientation = castor::Quaternion::identity();
@@ -1067,13 +1057,13 @@ namespace c3d_assimp
 					castor::Point3f scale;
 					castor::Quaternion rotate;
 					castor::matrix::decompose( transform, translate, scale, rotate );
-					m_sceneData.nodes.push_back( AssimpNodeData{ castor::String{}
+					m_sceneData.nodes.emplace_back( castor::String{}
 						, name
 						, false
 						, nullptr
 						, translate
 						, rotate
-						, scale } );
+						, scale );
 				}
 				else
 				{
@@ -1091,7 +1081,7 @@ namespace c3d_assimp
 		for ( auto aiCamera : castor::makeArrayView( m_aiScene->mCameras, m_aiScene->mNumCameras ) )
 		{
 			castor::String name = getInternalName( aiCamera->mName );
-			m_sceneData.cameras.emplace( name, aiCamera );
+			m_sceneData.cameras.try_emplace( name, aiCamera );
 
 			auto position = castor::Point3f{};
 			auto orientation = castor::Quaternion::identity();
@@ -1123,13 +1113,13 @@ namespace c3d_assimp
 				castor::Point3f scale;
 				castor::Quaternion rotate;
 				castor::matrix::decompose( transform, translate, scale, rotate );
-				m_sceneData.nodes.push_back( AssimpNodeData{ castor::String{}
+				m_sceneData.nodes.emplace_back( castor::String{}
 					, name
 					, false
 					, nullptr
 					, translate
 					, rotate
-					, scale } );
+					, scale );
 			}
 			else
 			{

@@ -450,7 +450,7 @@ namespace castor3d
 		/**@{*/
 		C3D_API void setDirectionalShadowCascades( uint32_t value );
 		C3D_API void setLpvIndirectAttenuation( float value );
-		C3D_API void setDefaultLightingModel( LightingModelID value );
+		C3D_API void setDefaultLightingModel( LightingModelID value )const;
 
 		void setBackgroundColour( castor::RgbColour const & value )noexcept
 		{
@@ -473,8 +473,7 @@ namespace castor3d
 	private:
 		void doGatherDirty( CpuUpdater::DirtyObjects & sceneObjs );
 		void doUpdateSceneNodes( CpuUpdater::DirtyObjects const & sceneObjs )const;
-		void doUpdateMovables( CpuUpdater & updater
-			, CpuUpdater::DirtyObjects & sceneObjs );
+		void doUpdateMovables( CpuUpdater::DirtyObjects const & sceneObjs );
 		void doUpdateLights( CpuUpdater & updater
 		, CpuUpdater::DirtyObjects const & sceneObjs );
 		void doUpdateParticles( CpuUpdater & updater );

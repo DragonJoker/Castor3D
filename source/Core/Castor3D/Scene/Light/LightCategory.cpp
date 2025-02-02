@@ -1,15 +1,10 @@
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
-#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
-
-#include <CastorUtils/Graphics/PixelBuffer.hpp>
-
-#include <ShaderWriter/Source.hpp>
 
 CU_ImplementSmartPtr( castor3d, LightCategory )
 CU_ImplementSmartPtr( castor3d, LightInstance )
@@ -64,7 +59,7 @@ namespace castor3d
 	{
 	}
 
-	void LightInstance::update( CpuUpdater & /*updater*/ )
+	void LightInstance::update( [[maybe_unused]] CpuUpdater const & updater )
 	{
 		m_node->update();
 		m_category.update();

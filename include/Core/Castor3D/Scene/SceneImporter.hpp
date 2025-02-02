@@ -141,21 +141,20 @@ namespace castor3d
 			, AnimationImporter & importer
 			, castor::StringMap< AnimObjects > & anims );
 		void doImportTexturesAnims( Scene & scene
-			, AnimationImporter & importer
-			, castor::StringMap< AnimObjects > & anims );
+			, AnimationImporter & importer );
 		void doCreateAnimationGroups( Scene & scene
-			, castor::StringMap< AnimObjects > & anims );
+			, castor::StringMap< AnimObjects > & anims )const;
 
 		void doTransformScene( Scene & scene
 			, Parameters const & parameters
-			, castor::StringMap< SceneNodeRPtr > const & nodes );
+			, castor::StringMap< SceneNodeRPtr > const & nodes )const;
 		void doAddAnimationGroup( Geometry & geometry );
 
 		void doCenterCamera( Scene & scene
-			, Parameters const & parameters );
+			, Parameters const & parameters )const;
 
 	private:
-		ImporterFile * m_file;
+		ImporterFile * m_file{};
 		SceneNodePtrArray m_nodes;
 	};
 

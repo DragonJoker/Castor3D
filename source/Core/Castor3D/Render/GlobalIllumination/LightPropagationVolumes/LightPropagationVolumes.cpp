@@ -504,7 +504,7 @@ namespace castor3d
 		m_injection.create();
 		m_geometry.create();
 
-		for ( auto & value : m_propagate )
+		for ( auto const & value : m_propagate )
 		{
 			value.create();
 		}

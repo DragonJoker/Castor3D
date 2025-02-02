@@ -12,6 +12,8 @@ See LICENSE file in root folder
 
 #include <ashespp/Pipeline/Pipeline.hpp>
 #include <ashespp/Pipeline/PipelineLayout.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
 
 #include <RenderGraph/RunnablePass.hpp>
 

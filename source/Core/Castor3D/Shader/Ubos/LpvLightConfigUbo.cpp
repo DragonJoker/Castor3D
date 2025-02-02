@@ -1,10 +1,8 @@
 #include "Castor3D/Shader/Ubos/LpvLightConfigUbo.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
@@ -71,7 +69,7 @@ namespace castor3d
 		case LightType::ePoint:
 			{
 				CU_Require( faceIndex < 6u );
-				auto lightFov = 90.0_degrees;
+				castor::Angle const lightFov = 90.0_degrees;
 				configuration.lightView = lpvlubo::snapMatrix( lpvCellSize
 					, static_cast< PointLightInstance const & >( light ).getViewMatrix( CubeMapFace( faceIndex ) ) );
 				configuration.tanFovXHalf = ( lightFov * 0.5 ).tan();
@@ -84,7 +82,7 @@ namespace castor3d
 				CU_Require( faceIndex == 0u );
 				configuration.lightView = lpvlubo::snapMatrix( lpvCellSize
 					, static_cast< SpotLightInstance const & >( light ).getViewMatrix() );
-				auto lightFov = static_cast< SpotLight const & >( light.getCategory() ).getOuterCutOff();
+				castor::Angle const & lightFov = static_cast< SpotLight const & >( light.getCategory() ).getOuterCutOff();
 				configuration.tanFovXHalf = ( lightFov * 0.5 ).tan();
 				configuration.tanFovYHalf = ( lightFov * 0.5 ).tan();
 			}

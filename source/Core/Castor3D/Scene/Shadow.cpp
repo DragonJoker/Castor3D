@@ -15,74 +15,6 @@ namespace castor3d
 {
 	namespace shdcfg
 	{
-		static CU_ImplementAttributeParserNewBlock( parserLightShadows, LightContext, ShadowContext )
-		{
-			if ( !blockContext->light )
-			{
-				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-			}
-			else
-			{
-				if ( !blockContext->shadowConfig )
-				{
-					blockContext->shadowConfig = castor::makeUnique< ShadowConfig >();
-				}
-
-				newBlockContext->light = blockContext;
-				newBlockContext->shadowConfig = blockContext->shadowConfig.get();
-			}
-		}
-		CU_EndAttributePushNewBlock( CSCNSection::eShadows )
-
-		static CU_ImplementAttributeParserBlock( parserLightShadowProducer, LightContext )
-		{
-			if ( !blockContext->light )
-			{
-				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-			}
-			else if ( !params.empty() )
-			{
-				blockContext->shadowConfig = castor::makeUnique< ShadowConfig >();
-				params[0]->get( blockContext->shadowConfig->enabled );
-				blockContext->light->setShadowConfig( *blockContext->shadowConfig );
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserNewBlock( parserLightGroupShadows, LightGroupContext, ShadowContext )
-		{
-			if ( !blockContext->light )
-			{
-				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-			}
-			else
-			{
-				if ( !blockContext->shadowConfig )
-				{
-					blockContext->shadowConfig = castor::makeUnique< ShadowConfig >();
-				}
-
-				newBlockContext->lightGroup = blockContext;
-				newBlockContext->shadowConfig = blockContext->shadowConfig.get();
-			}
-		}
-		CU_EndAttributePushNewBlock( CSCNSection::eLightGroupShadows )
-
-		static CU_ImplementAttributeParserBlock( parserLightGroupShadowProducer, LightGroupContext )
-		{
-			if ( !blockContext->light )
-			{
-				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-			}
-			else if ( !params.empty() )
-			{
-				blockContext->shadowConfig = castor::makeUnique< ShadowConfig >();
-				params[0]->get( blockContext->shadowConfig->enabled );
-				blockContext->light->setShadowConfig( *blockContext->shadowConfig );
-			}
-		}
-		CU_EndAttribute()
-
 		static CU_ImplementAttributeParserBlock( parserProducer, ShadowContext )
 		{
 			if ( !blockContext->shadowConfig )
@@ -151,60 +83,6 @@ namespace castor3d
 			}
 		}
 		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserRawConfig, ShadowContext )
-		{
-			if ( !blockContext->shadowConfig )
-			{
-				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
-			}
-		}
-		CU_EndAttributePushBlock( CSCNSection::eRaw, blockContext )
-
-		static CU_ImplementAttributeParserBlock( parserPcfConfig, ShadowContext )
-		{
-			if ( !blockContext->shadowConfig )
-			{
-				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
-			}
-		}
-		CU_EndAttributePushBlock( CSCNSection::ePcf, blockContext )
-
-		static CU_ImplementAttributeParserBlock( parserVsmConfig, ShadowContext )
-		{
-			if ( !blockContext->shadowConfig )
-			{
-				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
-			}
-		}
-		CU_EndAttributePushBlock( CSCNSection::eVsm, blockContext )
-
-		static CU_ImplementAttributeParserBlock( parserGroupRawConfig, ShadowContext )
-		{
-			if ( !blockContext->shadowConfig )
-			{
-				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
-			}
-		}
-		CU_EndAttributePushBlock( CSCNSection::eLightGroupShadowsRaw, blockContext )
-
-		static CU_ImplementAttributeParserBlock( parserGroupPcfConfig, ShadowContext )
-		{
-			if ( !blockContext->shadowConfig )
-			{
-				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
-			}
-		}
-		CU_EndAttributePushBlock( CSCNSection::eLightGroupShadowsPcf, blockContext )
-
-		static CU_ImplementAttributeParserBlock( parserGroupVsmConfig, ShadowContext )
-		{
-			if ( !blockContext->shadowConfig )
-			{
-				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
-			}
-		}
-		CU_EndAttributePushBlock( CSCNSection::eLightGroupShadowsVsm, blockContext )
 
 		static CU_ImplementAttributeParserBlock( parserEnd, ShadowContext )
 		{
@@ -422,79 +300,44 @@ namespace castor3d
 		lpvConfig.accept( *baseBlock );
 	}
 
-	void ShadowConfig::addParsers( castor::AttributeParsers & result )
+	void ShadowConfig::addParsers( castor::AttributeParsers & result
+		, CSCNSection light, CSCNSection shadows
+		, CSCNSection shadowsRaw, CSCNSection shadowsPcf, CSCNSection shadowsVsm
+		, castor::RawParserFunctionT< void > parserShadows, castor::RawParserFunctionT< void > parserShadowProducer
+		, castor::RawParserFunctionT< ShadowContext > parserRawConfig, castor::RawParserFunctionT< ShadowContext > parserPcfConfig, castor::RawParserFunctionT< ShadowContext > parserVsmConfig )
 	{
 		using namespace castor;
-		{
-			BlockParserContextT< LightContext > lightContext{ result, CSCNSection::eLight, CSCNSection::eScene };
-			BlockParserContextT< ShadowContext > shadowsContext{ result, CSCNSection::eShadows, CSCNSection::eLight };
-			BlockParserContextT< ShadowContext > rawContext{ result, CSCNSection::eRaw, CSCNSection::eShadows };
-			BlockParserContextT< ShadowContext > pcfContext{ result, CSCNSection::ePcf, CSCNSection::eShadows };
-			BlockParserContextT< ShadowContext > vsmContext{ result, CSCNSection::eVsm, CSCNSection::eShadows };
+		BlockParserContextT< LightContext > lightContext{ result, light, CSCNSection::eScene };
+		BlockParserContextT< ShadowContext > shadowsContext{ result, shadows, light };
+		BlockParserContextT< ShadowContext > rawContext{ result, shadowsRaw, shadows };
+		BlockParserContextT< ShadowContext > pcfContext{ result, shadowsPcf, shadows };
+		BlockParserContextT< ShadowContext > vsmContext{ result, shadowsVsm, shadows };
 
-			lightContext.addPushParser( cuT( "shadows" ), CSCNSection::eShadows, shdcfg::parserLightShadows );
-			lightContext.addParser( cuT( "shadow_producer" ), shdcfg::parserLightShadowProducer, { makeParameter< ParameterType::eBool >() } );
+		lightContext.addPushParser( cuT( "shadows" ), shadows, castor::move( parserShadows ) );
+		lightContext.addParser( cuT( "shadow_producer" ), castor::move( parserShadowProducer ), { makeParameter< ParameterType::eBool >() } );
 
-			shadowsContext.addParser( cuT( "producer" ), shdcfg::parserProducer, { makeParameter< ParameterType::eBool >() } );
-			shadowsContext.addParser( cuT( "filter" ), shdcfg::parserFilter, { makeParameter< ParameterType::eCheckedText, ShadowType >() } );
-			shadowsContext.addParser( cuT( "global_illumination" ), shdcfg::parserGlobalIllumination, { makeParameter< ParameterType::eCheckedText, GlobalIlluminationType >() } );
-			shadowsContext.addParser( cuT( "volumetric_steps" ), shdcfg::parserVolumetricSteps, { makeParameter< ParameterType::eUInt32 >() } );
-			shadowsContext.addParser( cuT( "volumetric_scattering" ), shdcfg::parserVolumetricScatteringFactor, { makeParameter< ParameterType::eFloat >() } );
-			shadowsContext.addPushParser( cuT( "raw_config" ), CSCNSection::eRaw, shdcfg::parserRawConfig );
-			shadowsContext.addPushParser( cuT( "pcf_config" ), CSCNSection::ePcf, shdcfg::parserPcfConfig );
-			shadowsContext.addPushParser( cuT( "vsm_config" ), CSCNSection::eVsm, shdcfg::parserVsmConfig );
-			shadowsContext.addPopParser( cuT( "}" ), shdcfg::parserEnd );
+		shadowsContext.addParser( cuT( "producer" ), shdcfg::parserProducer, { makeParameter< ParameterType::eBool >() } );
+		shadowsContext.addParser( cuT( "filter" ), shdcfg::parserFilter, { makeParameter< ParameterType::eCheckedText, ShadowType >() } );
+		shadowsContext.addParser( cuT( "global_illumination" ), shdcfg::parserGlobalIllumination, { makeParameter< ParameterType::eCheckedText, GlobalIlluminationType >() } );
+		shadowsContext.addParser( cuT( "volumetric_steps" ), shdcfg::parserVolumetricSteps, { makeParameter< ParameterType::eUInt32 >() } );
+		shadowsContext.addParser( cuT( "volumetric_scattering" ), shdcfg::parserVolumetricScatteringFactor, { makeParameter< ParameterType::eFloat >() } );
+		shadowsContext.addPushParser( cuT( "raw_config" ), shadowsRaw, parserRawConfig );
+		shadowsContext.addPushParser( cuT( "pcf_config" ), shadowsPcf, parserPcfConfig );
+		shadowsContext.addPushParser( cuT( "vsm_config" ), shadowsVsm, parserVsmConfig );
+		shadowsContext.addPopParser( cuT( "}" ), shdcfg::parserEnd );
 
-			rawContext.addParser( cuT( "min_offset" ), shdcfg::parserRawMinOffset, { makeParameter< ParameterType::eFloat >() } );
-			rawContext.addParser( cuT( "max_slope_offset" ), shdcfg::parserRawMaxSlopeOffset, { makeParameter< ParameterType::eFloat >() } );
-			rawContext.addDefaultPopParser();
+		rawContext.addParser( cuT( "min_offset" ), shdcfg::parserRawMinOffset, { makeParameter< ParameterType::eFloat >() } );
+		rawContext.addParser( cuT( "max_slope_offset" ), shdcfg::parserRawMaxSlopeOffset, { makeParameter< ParameterType::eFloat >() } );
+		rawContext.addDefaultPopParser();
 
-			pcfContext.addParser( cuT( "min_offset" ), shdcfg::parserPcfMinOffset, { makeParameter< ParameterType::eFloat >() } );
-			pcfContext.addParser( cuT( "max_slope_offset" ), shdcfg::parserPcfMaxSlopeOffset, { makeParameter< ParameterType::eFloat >() } );
-			pcfContext.addParser( cuT( "filter_size" ), shdcfg::parserPcfFilterSize, { makeParameter< ParameterType::eUInt32 >() } );
-			pcfContext.addParser( cuT( "sample_count" ), shdcfg::parserPcfSampleCount, { makeParameter< ParameterType::eUInt32 >() } );
-			pcfContext.addDefaultPopParser();
+		pcfContext.addParser( cuT( "min_offset" ), shdcfg::parserPcfMinOffset, { makeParameter< ParameterType::eFloat >() } );
+		pcfContext.addParser( cuT( "max_slope_offset" ), shdcfg::parserPcfMaxSlopeOffset, { makeParameter< ParameterType::eFloat >() } );
+		pcfContext.addParser( cuT( "filter_size" ), shdcfg::parserPcfFilterSize, { makeParameter< ParameterType::eUInt32 >() } );
+		pcfContext.addParser( cuT( "sample_count" ), shdcfg::parserPcfSampleCount, { makeParameter< ParameterType::eUInt32 >() } );
+		pcfContext.addDefaultPopParser();
 
-			vsmContext.addParser( cuT( "min_variance" ), shdcfg::parserVsmMinVariance, { makeParameter< ParameterType::eFloat >() } );
-			vsmContext.addParser( cuT( "light_bleeding_reduction" ), shdcfg::parserVsmLightBleedingReduction, { makeParameter< ParameterType::eFloat >() } );
-			vsmContext.addDefaultPopParser();
-		}
-		{
-			BlockParserContextT< LightGroupContext > lightGroupContext{ result, CSCNSection::eLightGroup, CSCNSection::eScene };
-			BlockParserContextT< ShadowContext > shadowsContext{ result, CSCNSection::eLightGroupShadows, CSCNSection::eLightGroup };
-			BlockParserContextT< ShadowContext > rawContext{ result, CSCNSection::eLightGroupShadowsRaw, CSCNSection::eLightGroupShadows };
-			BlockParserContextT< ShadowContext > pcfContext{ result, CSCNSection::eLightGroupShadowsPcf, CSCNSection::eLightGroupShadows };
-			BlockParserContextT< ShadowContext > vsmContext{ result, CSCNSection::eLightGroupShadowsVsm, CSCNSection::eLightGroupShadows };
-
-			lightGroupContext.addPushParser( cuT( "shadows" ), CSCNSection::eLightGroupShadows, shdcfg::parserLightGroupShadows );
-			lightGroupContext.addParser( cuT( "shadow_producer" ), shdcfg::parserLightGroupShadowProducer, { makeParameter< ParameterType::eBool >() } );
-
-			shadowsContext.addParser( cuT( "producer" ), shdcfg::parserProducer, { makeParameter< ParameterType::eBool >() } );
-			shadowsContext.addParser( cuT( "filter" ), shdcfg::parserFilter, { makeParameter< ParameterType::eCheckedText, ShadowType >() } );
-			shadowsContext.addParser( cuT( "global_illumination" ), shdcfg::parserGlobalIllumination, { makeParameter< ParameterType::eCheckedText, GlobalIlluminationType >() } );
-			shadowsContext.addParser( cuT( "volumetric_steps" ), shdcfg::parserVolumetricSteps, { makeParameter< ParameterType::eUInt32 >() } );
-			shadowsContext.addParser( cuT( "volumetric_scattering" ), shdcfg::parserVolumetricScatteringFactor, { makeParameter< ParameterType::eFloat >() } );
-			shadowsContext.addPushParser( cuT( "raw_config" ), CSCNSection::eLightGroupShadowsRaw, shdcfg::parserGroupRawConfig );
-			shadowsContext.addPushParser( cuT( "pcf_config" ), CSCNSection::eLightGroupShadowsPcf, shdcfg::parserGroupPcfConfig );
-			shadowsContext.addPushParser( cuT( "vsm_config" ), CSCNSection::eLightGroupShadowsVsm, shdcfg::parserGroupVsmConfig );
-			shadowsContext.addPopParser( cuT( "}" ), shdcfg::parserEnd );
-
-			rawContext.addParser( cuT( "min_offset" ), shdcfg::parserRawMinOffset, { makeParameter< ParameterType::eFloat >() } );
-			rawContext.addParser( cuT( "max_slope_offset" ), shdcfg::parserRawMaxSlopeOffset, { makeParameter< ParameterType::eFloat >() } );
-			rawContext.addDefaultPopParser();
-
-			pcfContext.addParser( cuT( "min_offset" ), shdcfg::parserPcfMinOffset, { makeParameter< ParameterType::eFloat >() } );
-			pcfContext.addParser( cuT( "max_slope_offset" ), shdcfg::parserPcfMaxSlopeOffset, { makeParameter< ParameterType::eFloat >() } );
-			pcfContext.addParser( cuT( "filter_size" ), shdcfg::parserPcfFilterSize, { makeParameter< ParameterType::eUInt32 >() } );
-			pcfContext.addParser( cuT( "sample_count" ), shdcfg::parserPcfSampleCount, { makeParameter< ParameterType::eUInt32 >() } );
-			pcfContext.addDefaultPopParser();
-
-			vsmContext.addParser( cuT( "min_variance" ), shdcfg::parserVsmMinVariance, { makeParameter< ParameterType::eFloat >() } );
-			vsmContext.addParser( cuT( "light_bleeding_reduction" ), shdcfg::parserVsmLightBleedingReduction, { makeParameter< ParameterType::eFloat >() } );
-			vsmContext.addDefaultPopParser();
-		}
-
-		LpvConfig::addParsers( result );
-		RsmConfig::addParsers( result );
+		vsmContext.addParser( cuT( "min_variance" ), shdcfg::parserVsmMinVariance, { makeParameter< ParameterType::eFloat >() } );
+		vsmContext.addParser( cuT( "light_bleeding_reduction" ), shdcfg::parserVsmLightBleedingReduction, { makeParameter< ParameterType::eFloat >() } );
+		vsmContext.addDefaultPopParser();
 	}
 }

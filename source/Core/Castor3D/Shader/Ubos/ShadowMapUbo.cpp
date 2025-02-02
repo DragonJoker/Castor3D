@@ -1,9 +1,7 @@
 #include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"

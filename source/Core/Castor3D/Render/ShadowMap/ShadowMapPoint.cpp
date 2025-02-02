@@ -104,8 +104,8 @@ namespace castor3d
 		, bool isStatic
 		, Passes & passes )
 	{
-		auto & engine = *m_scene.getEngine();
-		auto & smResult = getShadowPassResult( isStatic );
+		Engine const & engine = *m_scene.getEngine();
+		ShadowMapResult const & smResult = getShadowPassResult( isStatic );
 		auto & depth = smResult[SmTexture::eDepth];
 		auto & linear = smResult[SmTexture::eLinearDepth];
 		auto & variance = smResult[SmTexture::eVariance];
@@ -116,7 +116,7 @@ namespace castor3d
 		doRegisterGraphIO( graph, vsm, rsm, isStatic );
 
 		crg::FramePass const * previousPass{};
-		crg::FramePassArray result;
+		crg::FramePassArray resultPasses;
 
 		for ( uint32_t face = 0u; face < 6u; ++face )
 		{
@@ -209,13 +209,13 @@ namespace castor3d
 
 			if ( isStatic )
 			{
-				auto & nstSmResult = getShadowPassResult( false );
+				ShadowMapResult const & nstSmResult = getShadowPassResult( false );
 				auto & copyPass = group.createPass( "CopyToNonStatic"
-					, [this, isStatic, faceIndex]( crg::FramePass const & pass
+					, [this, isStatic, faceIndex]( crg::FramePass const & framePass
 						, crg::GraphContext & context
 						, crg::RunnableGraph & runnableGraph )
 					{
-						auto result = castor::make_unique< crg::ImageCopy >( pass
+						auto result = castor::make_unique< crg::ImageCopy >( framePass
 							, context
 							, runnableGraph
 							, getShadowPassResult( isStatic )[SmTexture::eDepth].getExtent()
@@ -223,7 +223,7 @@ namespace castor3d
 							, crg::ru::Config{}
 							, crg::ImageCopy::GetPassIndexCallback( [](){ return 0u; } )
 							, crg::ImageCopy::IsEnabledCallback( [this, faceIndex](){ return doEnableCopyStatic( faceIndex ); } ) );
-						getOwner()->registerTimer( castor::makeString( pass.getFullName() )
+						getOwner()->registerTimer( castor::makeString( framePass.getFullName() )
 							, result->getTimer() );
 						return result;
 					} );
@@ -250,7 +250,7 @@ namespace castor3d
 				}
 
 				previousPass = &copyPass;
-				result.push_back( previousPass );
+				resultPasses.push_back( previousPass );
 			}
 			else if ( vsm )
 			{
@@ -262,15 +262,15 @@ namespace castor3d
 					, m_blurIntermediateView
 					, 5u
 					, crg::ImageCopy::IsEnabledCallback( [this, faceIndex]() { return doEnableBlur( faceIndex ); } ) ) );
-				result.push_back( &passes.blurs.back()->getLastPass() );
+				resultPasses.push_back( &passes.blurs.back()->getLastPass() );
 			}
 			else
 			{
-				result.push_back( &pass );
+				resultPasses.push_back( &pass );
 			}
 		}
 
-		return result;
+		return resultPasses;
 	}
 
 	bool ShadowMapPoint::doIsUpToDate( uint32_t index
@@ -315,7 +315,7 @@ namespace castor3d
 			auto & pass = *passes.passes[face];
 			pass.pass->update( updater );
 
-			auto & pointLight = static_cast< PointLightInstance & >( *updater.light );
+			PointLightInstance const & pointLight = static_cast< PointLightInstance & >( *updater.light );
 			m_passes[m_passesIndex].cameraUbos[face]->cpuUpdate( *updater.camera
 				, pointLight.getViewMatrix( CubeMapFace( updater.index ) )
 				, static_cast< ShadowMapPassPoint const & >( *pass.pass ).getProjection()
@@ -330,13 +330,13 @@ namespace castor3d
 		, ShadowMapPoint::Passes & passes )
 	{
 		auto save = updater.index;
-		auto & pointLight = static_cast< PointLightInstance & >( *updater.light );
+		PointLightInstance const & pointLight = static_cast< PointLightInstance & >( *updater.light );
 		updater.light->updateShadow( *updater.camera, nullptr, int32_t( updater.index ) );
 		uint32_t offset = updater.index * 6u;
 
 		for ( uint32_t face = offset; face < offset + 6u; ++face )
 		{
-			auto & pass = static_cast< ShadowMapPassPoint & >( *passes.passes[face]->pass );
+			ShadowMapPassPoint const & pass = static_cast< ShadowMapPassPoint & >( *passes.passes[face]->pass );
 			updater.index = face - offset;
 			pass.updateFrustum( pointLight.getViewMatrix( CubeMapFace( updater.index ) ) );
 		}
