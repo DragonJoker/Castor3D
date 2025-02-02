@@ -189,7 +189,7 @@ namespace c3d_gltf
 
 			for ( size_t i = 0u; i < instanceCount; ++i )
 			{
-				result.push_back( { translations[i], scalings[i], rotations[i] } );
+				result.emplace_back( castor3d::NodeTransform{ translations[i], scalings[i], rotations[i] } );
 			}
 
 			return result;
@@ -202,7 +202,7 @@ namespace c3d_gltf
 			bool result{};
 			parseNodes( impAsset.nodes[rootIndex].children
 				, impAsset.nodes
-				, [&result, &lookupIndex]( fastgltf::Node const & node, size_t nodeIndex, size_t /*parentIndex*/, size_t /*parentInstanceCount*/, bool )
+				, [&result, &lookupIndex]( fastgltf::Node const & /*node*/, size_t nodeIndex, size_t /*parentIndex*/, size_t /*parentInstanceCount*/, bool )
 				{
 					if ( nodeIndex == lookupIndex )
 					{
@@ -216,7 +216,7 @@ namespace c3d_gltf
 		}
 
 		static bool isSkeletonNode( fastgltf::Asset const & impAsset
-			, auto const & skeletons
+			, std::vector< fastgltf::Skin > const & skeletons
 			, size_t nodeIndex
 			, castor::Vector< size_t > const & skinsRootNodes )
 		{
@@ -1351,8 +1351,7 @@ namespace c3d_gltf
 
 					for ( auto const & [nodeInstanceData, _] : nodeData->instances )
 					{
-						auto nodeName = nodeInstanceData.name;
-						lightGroup.nodeNames.push_back( nodeName );
+						lightGroup.nodeNames.push_back( nodeInstanceData.name );
 					}
 				}
 			}

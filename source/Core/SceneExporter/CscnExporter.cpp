@@ -73,16 +73,18 @@ namespace castor3d::exporter
 
 		template< typename ObjType >
 		using FilterFuncT = bool ( * )( ObjType const & obj );
+		template< typename ObjType >
+		inline FilterFuncT< ObjType > const defaultFilterT = []( ObjType const & )
+			{
+				return true;
+			};
 
 		template< typename ObjType, typename ViewType, typename ... Params >
 		bool writeView( bool ignoreFailures
 			, ViewType const & view
 			, castor::String const & elemsName
 			, castor::StringStream & file
-			, FilterFuncT< ObjType > filter = []( ObjType const & )
-			{
-				return true;
-			}
+			, FilterFuncT< ObjType > filter = defaultFilterT< ObjType >
 			, Params && ... params )
 		{
 			bool result = true;
@@ -115,10 +117,7 @@ namespace castor3d::exporter
 			, castor::String const & elemsName
 			, castor::StringStream & sceneFile
 			, castor::StringStream & globalFile
-			, FilterFuncT< ObjType > filter = []( ObjType const & )
-			{
-				return true;
-			}
+			, FilterFuncT< ObjType > filter = defaultFilterT< ObjType >
 			, Params && ... params )
 		{
 			bool result = true;
@@ -183,10 +182,7 @@ namespace castor3d::exporter
 			, CacheType const & cache
 			, castor::String const & elemsName
 			, castor::StringStream & file
-			, FilterFuncT< ObjType > filter = []( ObjType const & )
-			{
-				return true;
-			}
+			, FilterFuncT< ObjType > filter = defaultFilterT< ObjType >
 			, Params && ... params )
 		{
 			bool result = true;
@@ -220,10 +216,7 @@ namespace castor3d::exporter
 			, castor::String const & elemsName
 			, castor::String const & subfolder
 			, castor::StringStream & file
-			, FilterFuncT< ObjType > filter = []( ObjType const & )
-			{
-				return true;
-			} )
+			, FilterFuncT< ObjType > filter = defaultFilterT< ObjType > )
 		{
 			bool result = true;
 

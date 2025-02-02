@@ -114,7 +114,7 @@ namespace castor3d
 			, LightPropagationVolumesGLightType const & lightPropagationVolumesG
 			, LayeredLightPropagationVolumesLightType const & layeredLightPropagationVolumes
 			, LayeredLightPropagationVolumesGLightType const & layeredLightPropagationVolumesG
-			, ReflectiveShadowMapsUPtr const & reflectiveShadowMaps
+			, ReflectiveShadowMapsRPtr reflectiveShadowMaps
 			, CpuUpdater & updater )
 		{
 			auto lights = doSortLights( cache, type, *updater.camera );
@@ -1042,7 +1042,7 @@ namespace castor3d
 					, m_lightPropagationVolumesG
 					, m_layeredLightPropagationVolumes
 					, m_layeredLightPropagationVolumesG
-					, m_reflectiveShadowMaps
+					, m_reflectiveShadowMaps.get()
 					, updater );
 			}
 
@@ -1057,7 +1057,7 @@ namespace castor3d
 					, m_lightPropagationVolumesG
 					, m_layeredLightPropagationVolumes
 					, m_layeredLightPropagationVolumesG
-					, m_reflectiveShadowMaps
+					, m_reflectiveShadowMaps.get()
 					, updater );
 			}
 
@@ -1072,7 +1072,7 @@ namespace castor3d
 					, m_lightPropagationVolumesG
 					, m_layeredLightPropagationVolumes
 					, m_layeredLightPropagationVolumesG
-					, m_reflectiveShadowMaps
+					, m_reflectiveShadowMaps.get()
 					, updater );
 			}
 		}

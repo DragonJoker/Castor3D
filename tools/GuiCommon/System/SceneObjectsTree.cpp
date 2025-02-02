@@ -459,7 +459,7 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsTree::doAddSubmesh( wxTreeItemId id
-		, castor3d::GeometryRPtr geometry
+		, castor3d::Geometry const * geometry
 		, castor3d::Submesh const * submesh )
 	{
 		auto itg = m_objects.try_emplace( geometry ).first;
@@ -482,7 +482,8 @@ namespace GuiCommon
 			for ( auto const & submesh : *mesh )
 			{
 				wxString name = _( "Submesh " );
-				name << count++;
+				name << count;
+				++count;
 				auto idSubmesh = AppendItem( geometryId
 					, name
 					, eBMP_SUBMESH
@@ -529,13 +530,13 @@ namespace GuiCommon
 			}
 		}
 
-		for ( auto & anim : skeleton.getAnimations() )
+		for ( auto const & [name, anim] : skeleton.getAnimations() )
 		{
 			AppendItem( idSkeleton
-				, anim.first
+				, name
 				, eBMP_ANIMATION
 				, eBMP_ANIMATION_SEL
-				, new DataType{ ObjectType::eSkeletonAnimation, &static_cast< castor3d::SkeletonAnimation & >( *anim.second ) } );
+				, new DataType{ ObjectType::eSkeletonAnimation, &static_cast< castor3d::SkeletonAnimation & >( *anim ) } );
 		}
 	}
 
@@ -577,7 +578,7 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsTree::doAddNode( wxTreeItemId id
-		, castor3d::SceneNode & node )
+		, castor3d::SceneNode const & node )
 	{
 		for ( auto const & [name, child] : node.getChildren() )
 		{

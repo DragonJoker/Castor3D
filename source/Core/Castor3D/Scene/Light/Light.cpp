@@ -355,6 +355,85 @@ namespace castor3d
 			}
 		}
 		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserNewBlock( parserShadows, LightContext, ShadowContext )
+		{
+			if ( !blockContext->light )
+			{
+				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+			}
+			else
+			{
+				if ( !blockContext->shadowConfig )
+				{
+					blockContext->shadowConfig = castor::makeUnique< ShadowConfig >();
+				}
+
+				newBlockContext->light = blockContext;
+				newBlockContext->shadowConfig = blockContext->shadowConfig.get();
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eShadows )
+
+		static CU_ImplementAttributeParserBlock( parserShadowProducer, LightContext )
+		{
+			if ( !blockContext->light )
+			{
+				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+			}
+			else if ( !params.empty() )
+			{
+				blockContext->shadowConfig = castor::makeUnique< ShadowConfig >();
+				params[0]->get( blockContext->shadowConfig->enabled );
+				blockContext->light->setShadowConfig( *blockContext->shadowConfig );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserRawConfig, ShadowContext )
+		{
+			if ( !blockContext->shadowConfig )
+			{
+				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eRaw, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserPcfConfig, ShadowContext )
+		{
+			if ( !blockContext->shadowConfig )
+			{
+				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::ePcf, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserVsmConfig, ShadowContext )
+		{
+			if ( !blockContext->shadowConfig )
+			{
+				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eVsm, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserLpvConfig, ShadowContext )
+		{
+			if ( !blockContext->shadowConfig )
+			{
+				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eLpv, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserRsmConfig, ShadowContext )
+		{
+			if ( !blockContext->shadowConfig )
+			{
+				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eRsm, blockContext )
 	}
 
 	Light::Light( castor::String const & name
@@ -370,7 +449,7 @@ namespace castor3d
 	Light::Light( castor::String const & name
 		, Scene & scene
 		, SceneNode & node
-		, LightFactory & factory
+		, LightFactory const & factory
 		, LightType lightType )
 		: MovableObject{ name, scene, MovableType::eLight, node }
 		, m_enabled{ m_dirty, true, [this](){ markDirty(); } }
@@ -418,6 +497,18 @@ namespace castor3d
 		lightCtx.addParser( cuT( "outer_cut_off" ), light::parserOuterCutOff, { makeParameter< ParameterType::eFloat >() } );
 		lightCtx.addParser( cuT( "exponent" ), light::parserExponent, { makeParameter< ParameterType::eFloat >() } );
 		lightCtx.addPopParser( cuT( "}" ), light::parserEnd );
+
+		ShadowConfig::addParsers( result
+			, CSCNSection::eLight, CSCNSection::eShadows
+			, CSCNSection::eRaw, CSCNSection::ePcf, CSCNSection::eVsm
+			, RawParserFunctionT< void >( light::parserShadows ), RawParserFunctionT< void >( light::parserShadowProducer )
+			, light::parserRawConfig, light::parserPcfConfig, light::parserVsmConfig );
+		LpvConfig::addParsers( result
+			, CSCNSection::eShadows, CSCNSection::eLpv
+			, light::parserLpvConfig );
+		RsmConfig::addParsers( result
+			, CSCNSection::eShadows, CSCNSection::eRsm
+			, light::parserRsmConfig );
 	}
 
 	DirectionalLightRPtr Light::getDirectionalLight()const

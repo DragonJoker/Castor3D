@@ -208,7 +208,7 @@ namespace castor
 						lhsKerning.try_emplace( glyph.getCharacter(), float( result.x ) * f26dot6ToFloat );
 					}
 
-					table.emplace( c32, lhsKerning );
+					table.try_emplace( c32, lhsKerning );
 				}
 			}
 
@@ -382,7 +382,7 @@ namespace castor
 					lhsKerning.try_emplace( glyph.getCharacter(), float( result ) );
 				}
 
-				table.emplace( c32, lhsKerning );
+				table.try_emplace( c32, lhsKerning );
 			}
 
 			Font::SdfInfo const & getSdfInfo()const noexcept

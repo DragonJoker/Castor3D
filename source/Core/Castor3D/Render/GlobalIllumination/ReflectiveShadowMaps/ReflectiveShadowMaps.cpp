@@ -51,9 +51,9 @@ namespace castor3d
 			}
 
 		protected:
-			void doRecordInto( crg::RecordContext & context
+			void doRecordInto( [[maybe_unused]] crg::RecordContext const & context
 				, VkCommandBuffer commandBuffer
-				, uint32_t index )
+				, [[maybe_unused]] uint32_t index )
 			{
 				auto clearValue = transparentBlackClearColor.color;
 
@@ -263,8 +263,8 @@ namespace castor3d
 				m_runnable = m_graph.compile( m_device.makeContext() );
 				auto runnable = m_runnable.get();
 				m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreRender
-					, [runnable]( RenderDevice const & device
-						, QueueData const & queueData )
+					, [runnable]( RenderDevice const &
+						, QueueData const & )
 					{
 						runnable->record();
 					} ) );
@@ -280,7 +280,7 @@ namespace castor3d
 			return;
 		}
 
-		for ( auto & lightRsm : m_lightRsms )
+		for ( auto const & lightRsm : m_lightRsms )
 		{
 			updater.light = lightRsm.first;
 			lightRsm.second->update( updater );
@@ -304,7 +304,7 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
-			for ( auto & lightRsm : m_lightRsms )
+			for ( auto const & lightRsm : m_lightRsms )
 			{
 				lightRsm.second->giPass->accept( visitor );
 				lightRsm.second->interpolatePass->accept( visitor );

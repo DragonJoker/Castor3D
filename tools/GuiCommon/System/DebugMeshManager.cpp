@@ -237,7 +237,7 @@ namespace GuiCommon
 			m_device.bufferPool->putBuffer( m_meshConfigBuffer );
 			m_device.bufferPool->putBuffer( m_pointLightVertexBuffer );
 
-			for ( auto [angle, buffer] : m_spotLightVertexBuffers )
+			for ( auto const & [angle, buffer] : m_spotLightVertexBuffers )
 			{
 				m_device.bufferPool->putBuffer( buffer );
 			}
@@ -371,7 +371,7 @@ namespace GuiCommon
 				, castor::Quaternion::identity() );
 			++index;
 
-			for ( auto & submesh : *m_object->getMesh() )
+			for ( auto const & submesh : *m_object->getMesh() )
 			{
 				debugMeshData[index].colour = submesh.get() == m_submesh
 					? m_obbSelectedSubmeshColour

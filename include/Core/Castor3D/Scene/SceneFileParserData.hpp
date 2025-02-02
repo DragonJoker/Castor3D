@@ -138,6 +138,15 @@ namespace castor3d
 		return getEngine( *context.root );
 	}
 
+	struct LightContext;
+	struct LightGroupContext;
+	struct ShadowContext
+	{
+		LightContext * light{};
+		LightGroupContext * lightGroup{};
+		ShadowConfigRPtr shadowConfig{};
+	};
+
 	C3D_API void fillMeshImportParameters( castor::FileParserContext & context
 		, castor::String const & meshParams
 		, Parameters & parameters );

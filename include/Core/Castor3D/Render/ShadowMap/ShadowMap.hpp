@@ -120,7 +120,7 @@ namespace castor3d
 		*\param visitor
 		*	Le visiteur.
 		*/
-		C3D_API void accept( ConfigurationVisitorBase & visitor );
+		C3D_API void accept( ConfigurationVisitorBase & visitor )const;
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.

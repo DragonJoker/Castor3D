@@ -292,7 +292,6 @@ namespace castor3d
 		Skeleton::addParsers( parsers );
 		ClustersConfig::addParsers( parsers );
 		HdrConfig::addParsers( parsers );
-		ShadowConfig::addParsers( parsers );
 		SsaoConfig::addParsers( parsers );
 		VctConfig::addParsers( parsers );
 		Material::addParsers( parsers, engine.getPassComponentsRegister().getTextureChannels() );

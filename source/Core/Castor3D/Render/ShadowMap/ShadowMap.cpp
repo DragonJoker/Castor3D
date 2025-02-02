@@ -22,6 +22,21 @@ namespace castor3d
 {
 	namespace shdmap
 	{
+		inline ashes::VkClearValueArray const clearValues
+		{
+			[]()
+			{
+					ashes::VkClearValueArray tmp;
+
+					for ( uint32_t i = 0u; i < uint32_t( SmTexture::eCount ); ++i )
+					{
+						tmp.push_back( getClearValue( SmTexture( i ) ) );
+					}
+
+					return tmp;
+			}( )
+		};
+
 		static uint32_t getPassesIndex( bool needsVsm
 			, bool needsRsm )
 		{
@@ -209,7 +224,7 @@ namespace castor3d
 		doUpdate( updater, myPasses.otherNodes );
 	}
 
-	void ShadowMap::accept( ConfigurationVisitorBase & visitor )
+	void ShadowMap::accept( ConfigurationVisitorBase & visitor )const
 	{
 		for ( uint32_t i = 1u; i < uint32_t( SmTexture::eCount ); ++i )
 		{
@@ -265,21 +280,7 @@ namespace castor3d
 
 	ashes::VkClearValueArray const & ShadowMap::getClearValues()const
 	{
-		static ashes::VkClearValueArray const result
-		{
-			[]()
-			{
-				ashes::VkClearValueArray tmp;
-
-				for ( uint32_t i = 0u; i < uint32_t( SmTexture::eCount ); ++i )
-				{
-					tmp.push_back( getClearValue( SmTexture( i ) ) );
-				}
-
-				return tmp;
-			}( )
-		};
-		return result;
+		return shdmap::clearValues;
 	}
 
 	ashes::Sampler const & ShadowMap::getSampler( SmTexture texture

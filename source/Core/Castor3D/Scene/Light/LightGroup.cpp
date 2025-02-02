@@ -317,6 +317,7 @@ namespace castor3d
 
 		static CU_ImplementAttributeParserBlock( parserInstances, LightGroupContext )
 		{
+			// Only need to push the block
 		}
 		CU_EndAttributePushBlock( CSCNSection::eLightGroupInstances, blockContext )
 
@@ -348,8 +349,88 @@ namespace castor3d
 
 		static CU_ImplementAttributeParserBlock( parserInstancesEnd, LightGroupContext )
 		{
+			// Only need to pop the block
 		}
 		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserNewBlock( parserShadows, LightGroupContext, ShadowContext )
+		{
+			if ( !blockContext->light )
+			{
+				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+			}
+			else
+			{
+				if ( !blockContext->shadowConfig )
+				{
+					blockContext->shadowConfig = castor::makeUnique< ShadowConfig >();
+				}
+
+				newBlockContext->lightGroup = blockContext;
+				newBlockContext->shadowConfig = blockContext->shadowConfig.get();
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eLightGroupShadows )
+
+		static CU_ImplementAttributeParserBlock( parserShadowProducer, LightGroupContext )
+		{
+			if ( !blockContext->light )
+			{
+				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+			}
+			else if ( !params.empty() )
+			{
+				blockContext->shadowConfig = castor::makeUnique< ShadowConfig >();
+				params[0]->get( blockContext->shadowConfig->enabled );
+				blockContext->light->setShadowConfig( *blockContext->shadowConfig );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserRawConfig, ShadowContext )
+		{
+			if ( !blockContext->shadowConfig )
+			{
+				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eLightGroupShadowsRaw, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserPcfConfig, ShadowContext )
+		{
+			if ( !blockContext->shadowConfig )
+			{
+				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eLightGroupShadowsPcf, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserVsmConfig, ShadowContext )
+		{
+			if ( !blockContext->shadowConfig )
+			{
+				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eLightGroupShadowsVsm, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserLpvConfig, ShadowContext )
+		{
+			if ( !blockContext->shadowConfig )
+			{
+				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eLightGroupShadowsLpv, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserRsmConfig, ShadowContext )
+		{
+			if ( !blockContext->shadowConfig )
+			{
+				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eLightGroupShadowsRsm, blockContext )
 	}
 
 	//*********************************************************************************************
@@ -365,7 +446,7 @@ namespace castor3d
 
 	LightGroup::LightGroup( castor::String const & name
 		, Scene & scene
-		, LightFactory & factory
+		, LightFactory const& factory
 		, LightType lightType )
 		: castor::OwnedBy< Scene >{ scene }
 		, castor::Named{ name }
@@ -421,6 +502,18 @@ namespace castor3d
 
 		instancesCtx.addParser( cuT( "instance" ), lgtgrp::parserInstance, { makeParameter< ParameterType::eName >() } );
 		instancesCtx.addPopParser( cuT( "}" ), lgtgrp::parserInstancesEnd );
+
+		ShadowConfig::addParsers( result
+			, CSCNSection::eLightGroup, CSCNSection::eLightGroupShadows
+			, CSCNSection::eLightGroupShadowsRaw, CSCNSection::eLightGroupShadowsPcf, CSCNSection::eLightGroupShadowsVsm
+			, RawParserFunctionT< void >( lgtgrp::parserShadows ), RawParserFunctionT< void >( lgtgrp::parserShadowProducer )
+			, lgtgrp::parserRawConfig, lgtgrp::parserPcfConfig, lgtgrp::parserVsmConfig );
+		LpvConfig::addParsers( result
+			, CSCNSection::eLightGroupShadows, CSCNSection::eLightGroupShadowsLpv
+			, lgtgrp::parserLpvConfig );
+		RsmConfig::addParsers( result
+			, CSCNSection::eLightGroupShadows, CSCNSection::eLightGroupShadowsRsm
+			, lgtgrp::parserRsmConfig );
 	}
 
 	DirectionalLightRPtr LightGroup::getDirectionalLight()const

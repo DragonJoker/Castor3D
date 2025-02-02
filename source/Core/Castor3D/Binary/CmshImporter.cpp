@@ -112,7 +112,7 @@ namespace castor3d
 
 		if ( getExtension() == CmshAnimationImporter::MeshAnimType )
 		{
-			auto meshName = mesh.getName();
+			castor::String const & meshName = mesh.getName();
 			auto animName = getInternalName( getName() );
 
 			if ( animName.find( meshName ) == 0u )
@@ -131,7 +131,7 @@ namespace castor3d
 
 		if ( getExtension() == CmshAnimationImporter::SkeletonAnimType )
 		{
-			auto skeletonName = skeleton.getName();
+			castor::String const & skeletonName = skeleton.getName();
 			auto animName = getInternalName( getName() );
 
 			if ( animName.find( skeletonName ) == 0u )
@@ -150,7 +150,7 @@ namespace castor3d
 
 		if ( getExtension() == CmshAnimationImporter::NodeAnimType )
 		{
-			auto nodeName = node.getName();
+			castor::String const & nodeName = node.getName();
 			auto animName = getInternalName( getName() );
 
 			if ( animName.find( nodeName ) == 0u )

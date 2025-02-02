@@ -10,24 +10,6 @@ namespace castor3d
 {
 	namespace rsmcfg
 	{
-		static CU_ImplementAttributeParserBlock( parserConfig, ShadowContext )
-		{
-			if ( !blockContext->shadowConfig )
-			{
-				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
-			}
-		}
-		CU_EndAttributePushBlock( CSCNSection::eRsm, blockContext )
-
-		static CU_ImplementAttributeParserBlock( parserGroupConfig, ShadowContext )
-		{
-			if ( !blockContext->shadowConfig )
-			{
-				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
-			}
-		}
-		CU_EndAttributePushBlock( CSCNSection::eLightGroupShadowsRsm, blockContext )
-
 		static CU_ImplementAttributeParserBlock( parserIntensity, ShadowContext )
 		{
 			if ( !blockContext->shadowConfig )
@@ -76,28 +58,18 @@ namespace castor3d
 		block.visit( cuT( "RSM Sample Count" ), sampleCount );
 	}
 
-	void RsmConfig::addParsers( castor::AttributeParsers & result )
+	void RsmConfig::addParsers( castor::AttributeParsers & result
+		, CSCNSection shadows, CSCNSection lightRsm
+		, castor::RawParserFunctionT< ShadowContext > parserConfig )
 	{
 		using namespace castor;
-		{
-			BlockParserContextT< ShadowContext > shadowContext{ result, CSCNSection::eShadows };
-			BlockParserContextT< ShadowContext > rsmContext{ result, CSCNSection::eRsm, CSCNSection::eShadows };
+		BlockParserContextT< ShadowContext > shadowContext{ result, shadows };
+		BlockParserContextT< ShadowContext > rsmContext{ result, lightRsm, shadows };
 
-			shadowContext.addPushParser( cuT( "rsm_config" ), CSCNSection::eRsm, rsmcfg::parserConfig );
-			rsmContext.addParser( cuT( "intensity" ), rsmcfg::parserIntensity, { makeParameter< ParameterType::eFloat >() } );
-			rsmContext.addParser( cuT( "max_radius" ), rsmcfg::parserMaxRadius, { makeParameter< ParameterType::eFloat >() } );
-			rsmContext.addParser( cuT( "sample_count" ), rsmcfg::parserSampleCount, { makeParameter< ParameterType::eUInt32 >( castor::makeRange( 20u, MaxRsmRange ) ) } );
-			rsmContext.addDefaultPopParser();
-		}
-		{
-			BlockParserContextT< ShadowContext > shadowContext{ result, CSCNSection::eLightGroupShadows };
-			BlockParserContextT< ShadowContext > rsmContext{ result, CSCNSection::eLightGroupShadowsRsm, CSCNSection::eLightGroupShadows };
-
-			shadowContext.addPushParser( cuT( "rsm_config" ), CSCNSection::eLightGroupShadowsRsm, rsmcfg::parserGroupConfig );
-			rsmContext.addParser( cuT( "intensity" ), rsmcfg::parserIntensity, { makeParameter< ParameterType::eFloat >() } );
-			rsmContext.addParser( cuT( "max_radius" ), rsmcfg::parserMaxRadius, { makeParameter< ParameterType::eFloat >() } );
-			rsmContext.addParser( cuT( "sample_count" ), rsmcfg::parserSampleCount, { makeParameter< ParameterType::eUInt32 >( castor::makeRange( 20u, MaxRsmRange ) ) } );
-			rsmContext.addDefaultPopParser();
-		}
+		shadowContext.addPushParser( cuT( "rsm_config" ), lightRsm, castor::move( parserConfig ) );
+		rsmContext.addParser( cuT( "intensity" ), rsmcfg::parserIntensity, { makeParameter< ParameterType::eFloat >() } );
+		rsmContext.addParser( cuT( "max_radius" ), rsmcfg::parserMaxRadius, { makeParameter< ParameterType::eFloat >() } );
+		rsmContext.addParser( cuT( "sample_count" ), rsmcfg::parserSampleCount, { makeParameter< ParameterType::eUInt32 >( castor::makeRange( 20u, MaxRsmRange ) ) } );
+		rsmContext.addDefaultPopParser();
 	}
 }

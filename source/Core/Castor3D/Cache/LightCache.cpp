@@ -44,7 +44,7 @@ namespace castor3d
 			{
 				doRegisterLight( element );
 			}
-			, [this]( ElementT & element )
+			, [this]( ElementT const & element )
 			{
 				doUnregisterLight( element );
 			}
@@ -59,9 +59,7 @@ namespace castor3d
 		if ( !m_lightBuffer )
 		{
 			auto lock( makeUniqueLock( *this ) );
-			m_lightBuffer = castor::makeUnique< LightBuffer >( m_engine
-				, device
-				, MaxLightsCount );
+			m_lightBuffer = castor::makeUnique< LightBuffer >( device, MaxLightsCount );
 			castor::Vector< Light * > pending;
 			castor::swap( pending, m_pendingLights );
 
@@ -222,7 +220,7 @@ namespace castor3d
 		}
 	}
 
-	void ObjectCacheT< Light, castor::String, LightCacheTraits >::doUnregisterLight( Light & light )
+	void ObjectCacheT< Light, castor::String, LightCacheTraits >::doUnregisterLight( Light const & light )
 	{
 		auto & typeLights = m_lightsPerType[size_t( light.getLightType() )];
 		auto it = std::find_if( typeLights.begin(), typeLights.end()

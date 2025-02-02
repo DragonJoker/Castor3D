@@ -26,8 +26,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	LightBuffer::LightBuffer( Engine & engine
-		, RenderDevice const & device
+	LightBuffer::LightBuffer( RenderDevice const & device
 		, uint32_t count )
 		: m_buffer{ device
 			, VkDeviceSize( count ) * lgtbuf::MaxLightComponentsCount * sizeof( castor::Point4f )
@@ -84,7 +83,7 @@ namespace castor3d
 		}
 	}
 
-	void LightBuffer::update( CpuUpdater & updater )
+	void LightBuffer::update( [[maybe_unused]] CpuUpdater const & updater )
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 
@@ -177,7 +176,7 @@ namespace castor3d
 			result += count * m_lightSizes[i];
 		}
 
-		auto typeSortedLights = m_typeSortedLights[type];
+		auto const & typeSortedLights = m_typeSortedLights[type];
 		auto it = std::find( typeSortedLights.begin()
 			, typeSortedLights.end()
 			, &light );

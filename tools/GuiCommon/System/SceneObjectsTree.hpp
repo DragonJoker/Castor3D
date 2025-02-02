@@ -204,9 +204,9 @@ namespace GuiCommon
 		SelectSubmeshSignal onSelectSubmesh;
 		SelectNodeSignal onSelectNode;
 
-	protected:
+	private:
 		void doAddSubmesh( wxTreeItemId id
-			, castor3d::GeometryRPtr geometry
+			, castor3d::Geometry const * geometry
 			, castor3d::Submesh const * submesh );
 		void doAddSkeleton( wxTreeItemId id
 			, castor3d::Skeleton const & skeleton );
@@ -219,7 +219,7 @@ namespace GuiCommon
 		void doAddParticleSystem( wxTreeItemId id
 			, castor3d::ParticleSystem & particleSystem );
 		void doAddNode( wxTreeItemId id
-			, castor3d::SceneNode & node );
+			, castor3d::SceneNode const & node );
 		void doAddAnimatedObjectGroup( wxTreeItemId id
 			, castor3d::AnimatedObjectGroup & group );
 		void doAddOverlay( wxTreeItemId id

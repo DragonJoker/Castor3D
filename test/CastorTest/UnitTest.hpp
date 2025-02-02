@@ -618,6 +618,7 @@ namespace Testing
 		}
 
 		Lazy( Lazy const & ) = delete;
+		Lazy & operator=( Lazy const & ) = delete;
 
 		const Value & operator()()const
 		{
@@ -663,6 +664,7 @@ namespace Testing
 		}
 
 		Lazy( Lazy const & ) = delete;
+		Lazy & operator=( Lazy const & ) = delete;
 
 		void operator()()const
 		{
@@ -800,6 +802,7 @@ namespace Testing
 			, uint32_t const line
 			, char const * const conditionName )
 		{
+			addTest();
 			reportFailure();
 			std::stringstream err;
 			err << "Failure at " << file << " - " << function << ", line " << line << ": " << conditionName << std::endl;
@@ -1050,13 +1053,13 @@ namespace Testing
 		}
 
 		template< typename T, typename U >
-		bool compare( T const & lhs, U const & rhs )
+		bool compare( T const & lhs, U const & rhs )const
 		{
 			return lhs == rhs;
 		}
 
 		template< typename T >
-		bool compare( std::pair< T const *, uint32_t > const & lhs, std::pair< T const *, uint32_t > rhs )
+		bool compare( std::pair< T const *, uint32_t > const & lhs, std::pair< T const *, uint32_t > rhs )const
 		{
 			bool result = lhs.second == rhs.second;
 
@@ -1069,7 +1072,7 @@ namespace Testing
 		}
 
 		template< typename T >
-		bool compare( std::pair< T *, uint32_t > const & lhs, std::pair< T *, uint32_t > rhs )
+		bool compare( std::pair< T *, uint32_t > const & lhs, std::pair< T *, uint32_t > rhs )const
 		{
 			bool result = lhs.second == rhs.second;
 
@@ -1117,28 +1120,28 @@ namespace Testing
 			return result;
 		}
 
-		bool compare( float const & lhs, float const & rhs )
+		bool compare( float const & lhs, float const & rhs )const
 		{
 			float epsilon = 0.0001f;
 			return std::abs( lhs - rhs ) < epsilon
 				   || ( std::isnan( lhs ) && std::isnan( rhs ) );
 		}
 
-		bool compare( float const & lhs, double const & rhs )
+		bool compare( float const & lhs, double const & rhs )const
 		{
 			float epsilon = 0.0001f;
 			return std::abs( lhs - rhs ) < epsilon
 				   || ( std::isnan( lhs ) && std::isnan( rhs ) );
 		}
 
-		bool compare( double const & lhs, double const & rhs )
+		bool compare( double const & lhs, double const & rhs )const
 		{
 			double epsilon = 0.0001;
 			return std::abs( lhs - rhs ) < epsilon
 				   || ( std::isnan( lhs ) && std::isnan( rhs ) );
 		}
 
-		bool compare( double const & lhs, float const & rhs )
+		bool compare( double const & lhs, float const & rhs )const
 		{
 			double epsilon = 0.0001;
 			return std::abs( lhs - rhs ) < epsilon
@@ -1150,9 +1153,9 @@ namespace Testing
 		{
 			bool result{ C1 == C2 };
 
-			for ( size_t i = 0u; i < C1 && result; ++i )
+			for ( size_t i = 0u; i < C1; ++i )
 			{
-				result = this->compare( lhs[i], rhs[i] );
+				result = result && this->compare( lhs[i], rhs[i] );
 			}
 
 			return result;
@@ -1176,6 +1179,9 @@ namespace Testing
 
 #	define CT_FAILURE_EX( test, x )\
 	( test ).fail( __FILE__, __FUNCTION__, uint32_t( __LINE__ ), x )
+
+#	define CT_SUCCESS_EX( test )\
+	( test ).addTest()
 
 #	define CT_CHECK_EX( test, x )\
 	( test ).check( LAZY( ( x ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x )
@@ -1206,6 +1212,9 @@ namespace Testing
 
 #	define CT_FAILURE( x )\
 	CT_FAILURE_EX( *this, x )
+	
+#	define CT_SUCCESS()\
+	CT_SUCCESS_EX( *this )
 
 #	define CT_CHECK( x )\
 	CT_CHECK_EX( *this, x )

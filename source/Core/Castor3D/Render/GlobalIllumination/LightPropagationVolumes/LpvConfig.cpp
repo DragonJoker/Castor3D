@@ -12,39 +12,6 @@ namespace castor3d
 {
 	namespace lpvcfg
 	{
-		static CU_ImplementAttributeParserBlock( parserGlobalIndirectAttenuation, SceneContext )
-		{
-			if ( !blockContext->scene )
-			{
-				CU_ParsingError( cuT( "No Scene initialised." ) );
-			}
-			else
-			{
-				float value{ 0u };
-				params[0]->get( value );
-				blockContext->scene->setLpvIndirectAttenuation( value );
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserConfig, ShadowContext )
-		{
-			if ( !blockContext->shadowConfig )
-			{
-				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
-			}
-		}
-		CU_EndAttributePushBlock( CSCNSection::eLpv, blockContext )
-
-		static CU_ImplementAttributeParserBlock( parserGroupConfig, ShadowContext )
-		{
-			if ( !blockContext->shadowConfig )
-			{
-				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
-			}
-		}
-		CU_EndAttributePushBlock( CSCNSection::eLightGroupShadowsLpv, blockContext )
-
 		static CU_ImplementAttributeParserBlock( parserIndirectAttenuation, ShadowContext )
 		{
 			if ( !blockContext->shadowConfig )
@@ -79,30 +46,17 @@ namespace castor3d
 		block.visit( cuT( "Texel Area Modifier" ), texelAreaModifier );
 	}
 
-	void LpvConfig::addParsers( castor::AttributeParsers & result )
+	void LpvConfig::addParsers( castor::AttributeParsers & result
+		, CSCNSection shadows, CSCNSection lightLpv
+		, castor::RawParserFunctionT< ShadowContext > parserConfig )
 	{
 		using namespace castor;
-		BlockParserContextT< SceneContext > sceneContext{ result, CSCNSection::eScene };
+		BlockParserContextT< ShadowContext > shadowContext{ result, shadows };
+		BlockParserContextT< ShadowContext > lpvContext{ result, lightLpv, shadows };
 
-		sceneContext.addParser( cuT( "lpv_indirect_attenuation" ), lpvcfg::parserGlobalIndirectAttenuation, { makeParameter< ParameterType::eFloat >() } );
-
-		{
-			BlockParserContextT< ShadowContext > shadowContext{ result, CSCNSection::eShadows };
-			BlockParserContextT< ShadowContext > lpvContext{ result, CSCNSection::eLpv, CSCNSection::eShadows };
-
-			shadowContext.addPushParser( cuT( "lpv_config" ), CSCNSection::eLpv, lpvcfg::parserConfig );
-			lpvContext.addParser( cuT( "indirect_attenuation" ), lpvcfg::parserIndirectAttenuation, { makeParameter< ParameterType::eFloat >() } );
-			lpvContext.addParser( cuT( "texel_area_modifier" ), lpvcfg::parserTexelAreaModifier, { makeParameter< ParameterType::eFloat >() } );
-			lpvContext.addDefaultPopParser();
-		}
-		{
-			BlockParserContextT< ShadowContext > shadowContext{ result, CSCNSection::eLightGroupShadows };
-			BlockParserContextT< ShadowContext > lpvContext{ result, CSCNSection::eLightGroupShadowsLpv, CSCNSection::eLightGroupShadows };
-
-			shadowContext.addPushParser( cuT( "lpv_config" ), CSCNSection::eLightGroupShadowsLpv, lpvcfg::parserGroupConfig );
-			lpvContext.addParser( cuT( "indirect_attenuation" ), lpvcfg::parserIndirectAttenuation, { makeParameter< ParameterType::eFloat >() } );
-			lpvContext.addParser( cuT( "texel_area_modifier" ), lpvcfg::parserTexelAreaModifier, { makeParameter< ParameterType::eFloat >() } );
-			lpvContext.addDefaultPopParser();
-		}
+		shadowContext.addPushParser( cuT( "lpv_config" ), lightLpv, castor::move( parserConfig ) );
+		lpvContext.addParser( cuT( "indirect_attenuation" ), lpvcfg::parserIndirectAttenuation, { makeParameter< ParameterType::eFloat >() } );
+		lpvContext.addParser( cuT( "texel_area_modifier" ), lpvcfg::parserTexelAreaModifier, { makeParameter< ParameterType::eFloat >() } );
+		lpvContext.addDefaultPopParser();
 	}
 }

@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "LightPropagationVolumesModule.hpp"
 
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
@@ -17,7 +18,9 @@ namespace castor3d
 	{
 		C3D_API void accept( ConfigurationVisitorBase & visitor );
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( castor::AttributeParsers & result
+			, CSCNSection shadows, CSCNSection lightLpv
+			, castor::RawParserFunctionT< ShadowContext > parserConfig );
 
 		castor::ChangeTracked< float > indirectAttenuation;
 		castor::ChangeTracked< float > texelAreaModifier;

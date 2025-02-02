@@ -20,7 +20,11 @@ namespace castor3d
 		C3D_API void accept( ConfigurationVisitorBase & visitor
 			, LightType lightType );
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( castor::AttributeParsers & result
+			, CSCNSection light, CSCNSection shadows
+			, CSCNSection shadowsRaw, CSCNSection shadowsPcf, CSCNSection shadowsVsm
+			, castor::RawParserFunctionT< void > parserShadows, castor::RawParserFunctionT< void > parserShadowProducer
+			, castor::RawParserFunctionT< ShadowContext > parserRawConfig, castor::RawParserFunctionT< ShadowContext > parserPcfConfig, castor::RawParserFunctionT< ShadowContext > parserVsmConfig );
 
 		bool enabled{};
 		ShadowType filterType{ ShadowType::eNone };
@@ -52,15 +56,6 @@ namespace castor3d
 			&& lhs.lpvConfig == rhs.lpvConfig
 			&& lhs.rsmConfig == rhs.rsmConfig;
 	}
-
-	struct LightContext;
-	struct LightGroupContext;
-	struct ShadowContext
-	{
-		LightContext * light{};
-		LightGroupContext * lightGroup{};
-		ShadowConfigRPtr shadowConfig{};
-	};
 }
 
 namespace castor

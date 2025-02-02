@@ -83,7 +83,7 @@ namespace castor3d
 		, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps
 		, ProgressBar * progress )
 	{
-		auto & engine = *scene.getEngine();
+		Engine const & engine = *scene.getEngine();
 		auto extension = castor::string::lowerCase( path.getExtension() );
 
 		if ( !engine.getImporterFileFactory().isTypeRegistered( extension ) )
@@ -120,7 +120,7 @@ namespace castor3d
 			doImportSkeletonsAnims( scene, *importer, anims );
 			doImportMeshesAnims( scene, *importer, anims );
 			doImportNodesAnims( scene, *importer, anims );
-			doImportTexturesAnims( scene, *importer, anims );
+			doImportTexturesAnims( scene, *importer );
 			doCreateAnimationGroups( scene, anims );
 		}
 
@@ -554,8 +554,7 @@ namespace castor3d
 	}
 
 	void SceneImporter::doImportTexturesAnims( Scene & scene
-		, AnimationImporter & importer
-		, castor::StringMap< AnimObjects > & anims )
+		, AnimationImporter & importer )
 	{
 		Parameters emptyParams;
 		auto total = m_file->countAllTextureAnimations();
@@ -590,7 +589,7 @@ namespace castor3d
 	}
 
 	void SceneImporter::doCreateAnimationGroups( Scene & scene
-		, castor::StringMap< AnimObjects > & anims )
+		, castor::StringMap< AnimObjects > & anims )const
 	{
 		auto total = uint32_t( anims.size() );
 		castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()
@@ -604,7 +603,7 @@ namespace castor3d
 			castor3d::stepProgressBarLocal( m_file->getProgressBar()
 				, castor::string::toString( index ) + cuT( " / " ) + castor::string::toString( total ) );
 
-			for ( auto & [name, geometry] : scene.getGeometryCache() )
+			for ( auto const & [name, geometry] : scene.getGeometryCache() )
 			{
 				auto & mesh = *geometry->getMesh();
 				auto node = geometry->getParent();
@@ -612,11 +611,10 @@ namespace castor3d
 
 				while ( node )
 				{
-					auto nodeIt = std::find( animObjects.nodes.begin()
-						, animObjects.nodes.end()
-						, node );
-
-					if ( nodeIt != animObjects.nodes.end() )
+					if ( auto nodeIt = std::find( animObjects.nodes.begin()
+							, animObjects.nodes.end()
+							, node );
+						nodeIt != animObjects.nodes.end() )
 					{
 						nodes.push_back( *nodeIt );
 						// Prevent processing this node twice
@@ -665,7 +663,7 @@ namespace castor3d
 				}
 			}
 
-			for ( auto & [name, node] : scene.getSceneNodeCache() )
+			for ( auto const & [name, node] : scene.getSceneNodeCache() )
 			{
 				auto nodeIt = std::find( animObjects.nodes.begin()
 					, animObjects.nodes.end()
@@ -693,7 +691,7 @@ namespace castor3d
 
 	void SceneImporter::doTransformScene( Scene & scene
 		, Parameters const & parameters
-		, castor::StringMap< SceneNodeRPtr > const & nodes )
+		, castor::StringMap< SceneNodeRPtr > const & nodes )const
 	{
 		castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
 		castor::Quaternion orientation{ castor::Quaternion::identity() };
@@ -725,7 +723,7 @@ namespace castor3d
 	}
 
 	void SceneImporter::doCenterCamera( Scene & scene
-		, Parameters const & parameters )
+		, Parameters const & parameters )const
 	{
 		castor::String centerCamera;
 
@@ -743,7 +741,7 @@ namespace castor3d
 				float farPlane = 0.0f;
 				cameraNode->setPosition( scnimp::getCameraPosition( scene.getBoundingBox(), farPlane ) );
 				cameraNode->setOrientation( castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 1.0f, 0.0f }, 180.0_degrees ) );
-				auto & vp = camera->getViewport();
+				Viewport const & vp = camera->getViewport();
 				camera->getViewport().setPerspective( vp.getFovY()
 					, vp.getRatio()
 					, std::max( 0.01f, farPlane / 1000.0f )
