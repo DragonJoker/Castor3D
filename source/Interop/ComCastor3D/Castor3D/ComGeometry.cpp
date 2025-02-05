@@ -22,11 +22,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-				E_FAIL,						// This represents the error
-				IID_IGeometry,					// This is the GUID of PixelComponents throwing error
-				_T( "AttachTo" ),				// This is generally displayed as the title
-				object::ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
+				E_FAIL, // This represents the error
+				IID_IGeometry, // This is the GUID of the component throwing error
+				_T( "AttachTo" ), // This is generally displayed as the title
+				object::ERROR_UNINITIALISED.c_str(), // This is the description
+				0, // This is the context in the help file
 				nullptr );
 		}
 
@@ -45,11 +45,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-				E_FAIL,						// This represents the error
-				IID_IGeometry,					// This is the GUID of PixelComponents throwing error
-				_T( "Detach" ),				// This is generally displayed as the title
-				object::ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
+				E_FAIL, // This represents the error
+				IID_IGeometry, // This is the GUID of the component throwing error
+				_T( "Detach" ), // This is generally displayed as the title
+				object::ERROR_UNINITIALISED.c_str(), // This is the description
+				0, // This is the context in the help file
 				nullptr );
 		}
 
@@ -75,11 +75,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-				E_FAIL,						// This represents the error
-				IID_IGeometry,					// This is the GUID of PixelComponents throwing error
+				E_FAIL, // This represents the error
+				IID_IGeometry, // This is the GUID of the component throwing error
 				_T( "GetMaterial" ),			// This is generally displayed as the title
-				object::ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
+				object::ERROR_UNINITIALISED.c_str(), // This is the description
+				0, // This is the context in the help file
 				nullptr );
 		}
 
@@ -98,11 +98,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-				E_FAIL,						// This represents the error
-				IID_IGeometry,					// This is the GUID of PixelComponents throwing error
+				E_FAIL, // This represents the error
+				IID_IGeometry, // This is the GUID of the component throwing error
 				_T( "SetMaterial" ),			// This is generally displayed as the title
-				object::ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
+				object::ERROR_UNINITIALISED.c_str(), // This is the description
+				0, // This is the context in the help file
 				nullptr );
 		}
 

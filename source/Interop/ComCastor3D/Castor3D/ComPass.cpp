@@ -307,11 +307,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_IPass,						// This is the GUID of PixelComponents throwing error
+					 E_FAIL, // This represents the error
+					 IID_IPass,	 // This is the GUID of the component throwing error
 					 _T( "CreateTextureUnit" ),		// This is generally displayed as the title
-					pass::ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
+					pass::ERROR_UNINITIALISED.c_str(), // This is the description
+					 0, // This is the context in the help file
 					 nullptr );
 		}
 
@@ -328,11 +328,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_IPass,						// This is the GUID of PixelComponents throwing error
+					 E_FAIL, // This represents the error
+					 IID_IPass,	 // This is the GUID of the component throwing error
 					 _T( "DestroyTextureUnit" ),	// This is generally displayed as the title
-					 pass::ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
+					 pass::ERROR_UNINITIALISED.c_str(), // This is the description
+					 0, // This is the context in the help file
 					 nullptr );
 		}
 
@@ -349,11 +349,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_IPass,						// This is the GUID of PixelComponents throwing error
+					 E_FAIL, // This represents the error
+					 IID_IPass,	 // This is the GUID of the component throwing error
 					 _T( "GetTextureUnitByIndex" ),	// This is generally displayed as the title
-					 pass::ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
+					 pass::ERROR_UNINITIALISED.c_str(), // This is the description
+					 0, // This is the context in the help file
 					 nullptr );
 		}
 

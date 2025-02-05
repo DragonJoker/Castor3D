@@ -24,9 +24,9 @@ namespace CastorCom
 			{
 				hr = CComError::dispatchError(
 					E_FAIL,					// This represents the error
-					IID_ISampler,			// This is the GUID of PixelComponents throwing error
+					IID_ISampler,			// This is the GUID of the component throwing error
 					_T( "Initialise" ),		// This is generally displayed as the title
-					toBstr( exc.what() ),	// This is the description
+					toBstr( exc.what() ), // This is the description
 					0,						// This is the context in the help file
 					nullptr );
 			}
@@ -34,11 +34,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ISampler,					// This is the GUID of PixelComponents throwing error
+					 E_FAIL, // This represents the error
+					 IID_ISampler, // This is the GUID of the component throwing error
 					 _T( "Initialise" ),			// This is generally displayed as the title
-					 sampler::ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
+					 sampler::ERROR_UNINITIALISED.c_str(), // This is the description
+					 0, // This is the context in the help file
 					 nullptr );
 		}
 
@@ -57,11 +57,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ISampler,					// This is the GUID of PixelComponents throwing error
-					 _T( "Cleanup" ),				// This is generally displayed as the title
-					 sampler::ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
+					 E_FAIL, // This represents the error
+					 IID_ISampler, // This is the GUID of the component throwing error
+					 _T( "Cleanup" ), // This is generally displayed as the title
+					 sampler::ERROR_UNINITIALISED.c_str(), // This is the description
+					 0, // This is the context in the help file
 					 nullptr );
 		}
 

@@ -117,26 +117,4 @@ namespace CastorCom
 
 		return hr;
 	}
-
-	STDMETHODIMP CImage::Flip( /* [out, retval] */ IImage ** pVal )noexcept
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			hr = CImage::CreateInstance( pVal );
-
-			if ( hr == S_OK )
-			{
-				castor::Image l_img = m_internal->flip();
-				*static_cast< CImage * >( *pVal )->m_internal = l_img;
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IImage, _T( "Flip" ), image::ERROR_UNINITIALISED_IMAGE, 0, nullptr );
-		}
-
-		return hr;
-	}
 }

@@ -21,11 +21,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
+					 E_FAIL, // This represents the error
+					 IID_IMaterial, // This is the GUID of the component throwing error
 					 _T( "Initialise" ),			// This is generally displayed as the title
-					 material::ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
+					 material::ERROR_UNINITIALISED.c_str(), // This is the description
+					 0, // This is the context in the help file
 					 nullptr );
 		}
 
@@ -44,11 +44,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
-					 _T( "Cleanup" ),				// This is generally displayed as the title
-					 material::ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
+					 E_FAIL, // This represents the error
+					 IID_IMaterial, // This is the GUID of the component throwing error
+					 _T( "Cleanup" ), // This is generally displayed as the title
+					 material::ERROR_UNINITIALISED.c_str(), // This is the description
+					 0, // This is the context in the help file
 					 nullptr );
 		}
 
@@ -74,11 +74,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
+					 E_FAIL, // This represents the error
+					 IID_IMaterial, // This is the GUID of the component throwing error
 					 _T( "CreatePass" ),			// This is generally displayed as the title
-					 material::ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
+					 material::ERROR_UNINITIALISED.c_str(), // This is the description
+					 0, // This is the context in the help file
 					 nullptr );
 		}
 
@@ -104,11 +104,11 @@ namespace CastorCom
 					catch ( std::exception & )
 					{
 						hr = CComError::dispatchError(
-								 E_FAIL,							// This represents the error
-								 IID_IMaterial,						// This is the GUID of PixelComponents throwing error
-								 _T( "GetPass" ),					// This is generally displayed as the title
-								 material::ERROR_OUT_OF_BOUND_INDEX.c_str(),	// This is the description
-								 0,									// This is the context in the help file
+								 E_FAIL,	 // This represents the error
+								 IID_IMaterial,	 // This is the GUID of the component throwing error
+								 _T( "GetPass" ), // This is generally displayed as the title
+								 material::ERROR_OUT_OF_BOUND_INDEX.c_str(), // This is the description
+								 0,	 // This is the context in the help file
 								 nullptr );
 					}
 				}
@@ -117,11 +117,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
-					 _T( "GetPass" ),				// This is generally displayed as the title
-					 material::ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
+					 E_FAIL, // This represents the error
+					 IID_IMaterial, // This is the GUID of the component throwing error
+					 _T( "GetPass" ), // This is generally displayed as the title
+					 material::ERROR_UNINITIALISED.c_str(), // This is the description
+					 0, // This is the context in the help file
 					 nullptr );
 		}
 
@@ -142,22 +142,22 @@ namespace CastorCom
 			catch ( std::exception & )
 			{
 				hr = CComError::dispatchError(
-						 E_FAIL,							// This represents the error
-						 IID_IMaterial,						// This is the GUID of PixelComponents throwing error
-						 _T( "DestroyPass" ),				// This is generally displayed as the title
-						 material::ERROR_OUT_OF_BOUND_INDEX.c_str(),	// This is the description
-						 0,									// This is the context in the help file
+						 E_FAIL,	 // This represents the error
+						 IID_IMaterial,	 // This is the GUID of the component throwing error
+						 _T( "DestroyPass" ), // This is generally displayed as the title
+						 material::ERROR_OUT_OF_BOUND_INDEX.c_str(), // This is the description
+						 0,	 // This is the context in the help file
 						 nullptr );
 			}
 		}
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
+					 E_FAIL, // This represents the error
+					 IID_IMaterial, // This is the GUID of the component throwing error
 					 _T( "DestroyPass" ),			// This is generally displayed as the title
-					 material::ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
+					 material::ERROR_UNINITIALISED.c_str(), // This is the description
+					 0, // This is the context in the help file
 					 nullptr );
 		}
 

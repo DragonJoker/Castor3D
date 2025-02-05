@@ -47,8 +47,8 @@ namespace CastorCom
 	{
 	public:
 		COMEX_PROPERTY_GET( Height, UINT, m_internal, &castor::Font::getHeight );
-		COMEX_PROPERTY_GET( MaxHeight, UINT, m_internal, &castor::Font::getMaxHeight );
-		COMEX_PROPERTY_GET( MaxWidth, UINT, m_internal, &castor::Font::getMaxWidth );
+		COMEX_PROPERTY_GET( MaxHeight, UINT, m_internal, &castor::Font::getMaxGlyphHeight );
+		COMEX_PROPERTY_GET( MaxWidth, UINT, m_internal, &castor::Font::getMaxGlyphWidth );
 
 		STDMETHOD( LoadFromFile )( /* [in] */ IEngine * engine, /* [in] */ BSTR path, /* [in] */ BSTR name, /* [in] */ UINT height );
 		STDMETHOD( GetGlyph )( /* [in] */ WORD glyph, /* [out, retval] */ IGlyph ** pGlyph );

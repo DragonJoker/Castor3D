@@ -5,7 +5,7 @@
 #include "ComCastor3D/ComCastor3DPrerequisites.hpp"
 
 #include "ComCastor3D/CastorUtils/ComSize.hpp"
-#include "ComCastor3D/CastorUtils/ComPosition.hpp"
+#include "ComCastor3D/CastorUtils/ComVector2D.hpp"
 
 #include <CastorUtils/Graphics/Glyph.hpp>
 
@@ -22,9 +22,10 @@ namespace CastorCom
 		: public CComAtlObject< Glyph, castor::Glyph >
 	{
 	public:
-		COMEX_PROPERTY_GET( Size, ISize *, m_internal, &castor::Glyph::getSize );
-		COMEX_PROPERTY_GET( Bearing, IPosition *, m_internal, &castor::Glyph::getBearing );
-		COMEX_PROPERTY_GET( Advance, INT, m_internal, &castor::Glyph::getAdvance );
+		COMEX_PROPERTY_GET( Size, IVector2D *, m_internal, &castor::Glyph::getSize );
+		COMEX_PROPERTY_GET( Bearing, IVector2D *, m_internal, &castor::Glyph::getBearing );
+		COMEX_PROPERTY_GET( Advance, float, m_internal, &castor::Glyph::getAdvance );
+		COMEX_PROPERTY_GET( BitmapSize, ISize *, m_internal, &castor::Glyph::getBitmapSize );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object
 	//!\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet

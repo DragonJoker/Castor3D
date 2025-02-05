@@ -19,11 +19,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-				E_FAIL,							// This represents the error
-				IID_ISkyboxBackground,			// This is the GUID of PixelComponents throwing error
-				_T( "LeftImage" ),				// This is generally displayed as the title
-				skybox::ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
+				E_FAIL,	 // This represents the error
+				IID_ISkyboxBackground,			// This is the GUID of the component throwing error
+				_T( "LeftImage" ), // This is generally displayed as the title
+				skybox::ERROR_UNINITIALISED.c_str(), // This is the description
+				0, // This is the context in the help file
 				nullptr );
 		}
 
@@ -42,11 +42,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-				E_FAIL,							// This represents the error
-				IID_ISkyboxBackground,			// This is the GUID of PixelComponents throwing error
+				E_FAIL,	 // This represents the error
+				IID_ISkyboxBackground,			// This is the GUID of the component throwing error
 				_T( "RightImage" ),			// This is generally displayed as the title
-				skybox::ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
+				skybox::ERROR_UNINITIALISED.c_str(), // This is the description
+				0, // This is the context in the help file
 				nullptr );
 		}
 
@@ -65,11 +65,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-				E_FAIL,							// This represents the error
-				IID_ISkyboxBackground,			// This is the GUID of PixelComponents throwing error
-				_T( "TopImage" ),				// This is generally displayed as the title
-				skybox::ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
+				E_FAIL,	 // This represents the error
+				IID_ISkyboxBackground,			// This is the GUID of the component throwing error
+				_T( "TopImage" ), // This is generally displayed as the title
+				skybox::ERROR_UNINITIALISED.c_str(), // This is the description
+				0, // This is the context in the help file
 				nullptr );
 		}
 
@@ -88,11 +88,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-				E_FAIL,							// This represents the error
-				IID_ISkyboxBackground,			// This is the GUID of PixelComponents throwing error
+				E_FAIL,	 // This represents the error
+				IID_ISkyboxBackground,			// This is the GUID of the component throwing error
 				_T( "BottomImage" ),			// This is generally displayed as the title
-				skybox::ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
+				skybox::ERROR_UNINITIALISED.c_str(), // This is the description
+				0, // This is the context in the help file
 				nullptr );
 		}
 
@@ -111,11 +111,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-				E_FAIL,							// This represents the error
-				IID_ISkyboxBackground,			// This is the GUID of PixelComponents throwing error
+				E_FAIL,	 // This represents the error
+				IID_ISkyboxBackground,			// This is the GUID of the component throwing error
 				_T( "FrontImage" ),			// This is generally displayed as the title
-				skybox::ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
+				skybox::ERROR_UNINITIALISED.c_str(), // This is the description
+				0, // This is the context in the help file
 				nullptr );
 		}
 
@@ -134,11 +134,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-				E_FAIL,							// This represents the error
-				IID_ISkyboxBackground,			// This is the GUID of PixelComponents throwing error
-				_T( "BackImage" ),				// This is generally displayed as the title
-				skybox::ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
+				E_FAIL,	 // This represents the error
+				IID_ISkyboxBackground,			// This is the GUID of the component throwing error
+				_T( "BackImage" ), // This is generally displayed as the title
+				skybox::ERROR_UNINITIALISED.c_str(), // This is the description
+				0, // This is the context in the help file
 				nullptr );
 		}
 
@@ -157,11 +157,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-				E_FAIL,							// This represents the error
-				IID_ISkyboxBackground,			// This is the GUID of PixelComponents throwing error
+				E_FAIL,	 // This represents the error
+				IID_ISkyboxBackground,			// This is the GUID of the component throwing error
 				_T( "CrossImage" ),			// This is generally displayed as the title
-				skybox::ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
+				skybox::ERROR_UNINITIALISED.c_str(), // This is the description
+				0, // This is the context in the help file
 				nullptr );
 		}
 
@@ -180,11 +180,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-				E_FAIL,								// This represents the error
-				IID_ISkyboxBackground,				// This is the GUID of PixelComponents throwing error
+				E_FAIL,		 // This represents the error
+				IID_ISkyboxBackground, // This is the GUID of the component throwing error
 				_T( "LoadEquirectangularImage" ),	// This is generally displayed as the title
-				skybox::ERROR_UNINITIALISED.c_str(),		// This is the description
-				0,									// This is the context in the help file
+				skybox::ERROR_UNINITIALISED.c_str(),	 // This is the description
+				0,	 // This is the context in the help file
 				nullptr );
 		}
 

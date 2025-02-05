@@ -20,11 +20,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-				E_FAIL,							// This represents the error
-				IID_ISubmesh,					// This is the GUID of PixelComponents throwing error
-				_T( "addPoint" ),				// This is generally displayed as the title
-				submesh::ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
+				E_FAIL,	 // This represents the error
+				IID_ISubmesh, // This is the GUID of the component throwing error
+				_T( "addPoint" ), // This is generally displayed as the title
+				submesh::ERROR_UNINITIALISED.c_str(), // This is the description
+				0, // This is the context in the help file
 				nullptr );
 		}
 

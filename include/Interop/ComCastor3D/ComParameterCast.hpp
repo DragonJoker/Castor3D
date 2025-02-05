@@ -30,6 +30,7 @@ namespace CastorCom::details
 			|| areCompatibleV< SrcT, DstT, eVIEWPORT_TYPE, castor3d::ViewportType >
 			|| areCompatibleV< SrcT, DstT, eKEYBOARD_KEY, castor3d::KeyboardKey >
 			|| areCompatibleV< SrcT, DstT, eOVERLAY_TYPE, castor3d::OverlayType >
+			|| areCompatibleV< SrcT, DstT, eSHADOW_TYPE, castor3d::ShadowType >
 			|| areCompatibleV< SrcT, DstT, eBORDER_COLOUR, VkBorderColor >
 			|| areCompatibleV< SrcT, DstT, eFILTER_MODE, VkFilter >
 			|| areCompatibleV< SrcT, DstT, eIMAGE_TYPE, VkImageType >

@@ -268,6 +268,10 @@ namespace CastorCom
 #define COMEX_PROPERTY_IDX( Name, Index, Type, Instance, Getter, Putter )\
 	COM_PROPERTY_GET( Name, Type, makeGetter( Instance, Getter, Index ) )\
 	COM_PROPERTY_PUT( Name, Type, makePutter( Instance, Putter, Index ) )
+
+#define COMEX_PROPERTY_MBR( Name, Type, PtrValue )\
+	COM_PROPERTY_GET( Name, Type, makeValueGetter( PtrValue ) )\
+	COM_PROPERTY_PUT( Name, Type, makeValuePutter( PtrValue ) )
 }
 
 #endif

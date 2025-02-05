@@ -14,18 +14,17 @@ namespace CastorCom
 		if ( m_internal )
 		{
 			auto & device = *m_internal->getOwner()->getRenderDevice();
-			auto queueData = device.graphicsData();
-			m_internal->initialise( device, *queueData );
+			m_internal->initialise( device );
 			hr = S_OK;
 		}
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_IRenderTarget,				// This is the GUID of PixelComponents throwing error
-					 _T( "File" ),					// This is generally displayed as the title
-					target::ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
+					 E_FAIL, // This represents the error
+					 IID_IRenderTarget, // This is the GUID of the component throwing error
+					 _T( "File" ), // This is generally displayed as the title
+					target::ERROR_UNINITIALISED.c_str(), // This is the description
+					 0, // This is the context in the help file
 					 nullptr );
 		}
 
@@ -45,11 +44,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_IRenderTarget,				// This is the GUID of PixelComponents throwing error
-					 _T( "File" ),					// This is generally displayed as the title
-					 target::ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
+					 E_FAIL, // This represents the error
+					 IID_IRenderTarget, // This is the GUID of the component throwing error
+					 _T( "File" ), // This is generally displayed as the title
+					 target::ERROR_UNINITIALISED.c_str(), // This is the description
+					 0, // This is the context in the help file
 					 nullptr );
 		}
 

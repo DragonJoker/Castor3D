@@ -27,7 +27,6 @@ namespace CastorCom
 		COMEX_PROPERTY_GET( Height, UINT, m_internal, &castor::PxBufferBase::getHeight );
 		COMEX_PROPERTY_GET( Dimensions, ISize *, m_internal, &castor::PxBufferBase::getDimensions );
 
-		STDMETHOD( Flip )();
 		STDMETHOD( Initialise )( /* [in] */ ISize * size, /* [in] */ ePIXEL_FORMAT format );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object
