@@ -3,6 +3,7 @@
 #define __COMC3D_COM_LIGHT_CATEGORY_H__
 
 #include "ComCastor3D/CastorUtils/ComVector3D.hpp"
+#include "ComCastor3D/Castor3D/ComShadow.hpp"
 
 #include <Castor3D/Scene/Light/LightCategory.hpp>
 
@@ -20,8 +21,7 @@ namespace CastorCom
 	{
 	public:
 		COMEX_PROPERTY( Colour, IVector3D *, m_internal, &castor3d::LightCategory::getColour, &castor3d::LightCategory::setColour );
-		COMEX_PROPERTY( DiffuseIntensity, float, m_internal, &castor3d::LightCategory::getDiffuseIntensity, &castor3d::LightCategory::setDiffuseIntensity );
-		COMEX_PROPERTY( SpecularIntensity, float, m_internal, &castor3d::LightCategory::getSpecularIntensity, &castor3d::LightCategory::setSpecularIntensity );
+		COMEX_PROPERTY_GET( Shadows, IShadow *, m_internal, &castor3d::LightCategory::getShadowConfig );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object
 	//!\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet

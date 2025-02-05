@@ -27,11 +27,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_IMesh,						// This is the GUID of PixelComponents throwing error
+					 E_FAIL, // This represents the error
+					 IID_IMesh,	 // This is the GUID of the component throwing error
 					 _T( "GetSubmesh" ),			// This is generally displayed as the title
-					 mesh::ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
+					 mesh::ERROR_UNINITIALISED.c_str(), // This is the description
+					 0, // This is the context in the help file
 					 nullptr );
 		}
 
@@ -57,11 +57,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_IMesh,						// This is the GUID of PixelComponents throwing error
+					 E_FAIL, // This represents the error
+					 IID_IMesh,	 // This is the GUID of the component throwing error
 					 _T( "CreateSubmesh" ),		// This is generally displayed as the title
-					 mesh::ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
+					 mesh::ERROR_UNINITIALISED.c_str(), // This is the description
+					 0, // This is the context in the help file
 					 nullptr );
 		}
 
@@ -82,11 +82,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_IMesh,						// This is the GUID of PixelComponents throwing error
+					 E_FAIL, // This represents the error
+					 IID_IMesh,	 // This is the GUID of the component throwing error
 					 _T( "DeleteSubmesh" ),			// This is generally displayed as the title
-				mesh::ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
+				mesh::ERROR_UNINITIALISED.c_str(), // This is the description
+					 0, // This is the context in the help file
 					 nullptr );
 		}
 

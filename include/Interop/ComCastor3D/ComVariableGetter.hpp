@@ -101,6 +101,15 @@ namespace CastorCom
 				return ( *function )();
 			} );
 	}
+
+	template< typename ValueT >
+	auto makeValueGetter( ValueT * value )
+	{
+		return VariableGetterT< ComTypeGetInternalT< ValueT > >( [value]()
+			{
+				return *value;
+			} );
+	}
 }
 
 #endif

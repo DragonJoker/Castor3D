@@ -521,6 +521,20 @@ typedef enum
 	eBACKGROUND_TYPE_COUNT
 }	eBACKGROUND_TYPE;
 
+// eSHADOW_TYPE
+[
+	uuid( 6D586F56-1CF8-42E8-B7DB-E26EA56C8FB9 ),
+	helpstring( "Castor3D Shadow filter types enumeration." )
+]
+typedef enum
+{
+	eSHADOW_TYPE_NONE,
+	eSHADOW_TYPE_RAW,
+	eSHADOW_TYPE_PCF,
+	eSHADOW_TYPE_VSM,
+	eSHADOW_TYPE_COUNT
+}	eSHADOW_TYPE;
+
 // eKEYBOARD_KEY
 [
 	uuid( 765FFD8B-E309-4B69-868F-2A67321733AE ),
@@ -681,6 +695,7 @@ interface IImageBackground;
 interface IIndexMapping;
 interface ILight;
 interface ILightCategory;
+interface ILightGroup;
 interface ILineMapping;
 interface IMaterial;
 interface IMesh;
@@ -696,6 +711,7 @@ interface ISampler;
 interface IScene;
 interface ISceneBackground;
 interface ISceneNode;
+interface IShadow;
 interface ISkyboxBackground;
 interface ISpotLight;
 interface ISubmesh;
@@ -1052,9 +1068,10 @@ interface IRect
 interface IGlyph
 	: IDispatch
 {
-	[propget, id( 1 ), helpstring( "property Size" )] HRESULT Size( [out, retval] ISize ** pVal );
-	[propget, id( 2 ), helpstring( "property Bearing" )] HRESULT Bearing( [out, retval] IPosition ** pVal );
-	[propget, id( 3 ), helpstring( "property Advance" )] HRESULT Advance( [out, retval] int * pVal );
+	[propget, id( 1 ), helpstring( "property Size" )] HRESULT Size( [out, retval] IVector2D ** pVal );
+	[propget, id( 2 ), helpstring( "property Bearing" )] HRESULT Bearing( [out, retval] IVector2D ** pVal );
+	[propget, id( 3 ), helpstring( "property Advance" )] HRESULT Advance( [out, retval] float * pVal );
+	[propget, id( 4 ), helpstring( "property BitmapSize" )] HRESULT BitmapSize( [out, retval] ISize ** pVal );
 };
 
 // ICastorFont
@@ -1088,7 +1105,6 @@ interface IPixelBuffer
 	[propget, id( 2 ), helpstring( "property Width" )] HRESULT Width( [out, retval] unsigned int * pVal );
 	[propget, id( 3 ), helpstring( "property Height" )] HRESULT Height( [out, retval] unsigned int * pVal );
 	[propget, id( 4 ), helpstring( "property PixelFormat" )] HRESULT PixelFormat( [out, retval] ePIXEL_FORMAT * pVal );
-	[id( 5 ), helpstring( "method Flip" )] HRESULT Flip();
 	[id( 6 ), helpstring( "Initialises the buffer" )] HRESULT Initialise( ISize * size, ePIXEL_FORMAT pf );
 };
 
@@ -1479,6 +1495,38 @@ interface IMovableObject
 	[id( 6 ), helpstring( "Detaches the movable object from its parent node" )] HRESULT Detach();
 };
 
+// IShadow
+[
+	uuid( DF9B6F02-F0D5-4524-A597-9314D4A53862 ),
+	helpstring( "Castor3D ShadowConfig interface" ),
+	dual,
+	oleautomation
+]
+interface IShadow
+	: IDispatch
+{
+	[propget, id( 1 ), helpstring( "The shadow enabled status" )] HRESULT Enabled( [out, retval] boolean * pVal );
+	[propput, id( 1 ), helpstring( "The shadow enabled status" )] HRESULT Enabled( [in] boolean val );
+	[propget, id( 2 ), helpstring( "The shadow filter type" )] HRESULT Filter( [out, retval] eSHADOW_TYPE * pVal );
+	[propput, id( 2 ), helpstring( "The shadow filter type" )] HRESULT Filter( [in] eSHADOW_TYPE val );
+	[propget, id( 3 ), helpstring( "The raw filter min offset" )] HRESULT RawMinOffset( [out, retval] float * pVal );
+	[propput, id( 3 ), helpstring( "The raw filter min offset" )] HRESULT RawMinOffset( [in] float val );
+	[propget, id( 4 ), helpstring( "The raw filter max slope offset" )] HRESULT RawMaxSlopeOffset( [out, retval] float * pVal );
+	[propput, id( 4 ), helpstring( "The raw filter max slope offset" )] HRESULT RawMaxSlopeOffset( [in] float val );
+	[propget, id( 5 ), helpstring( "The PCF filter min offset" )] HRESULT PcfMinOffset( [out, retval] float * pVal );
+	[propput, id( 5 ), helpstring( "The PCF filter min offset" )] HRESULT PcfMinOffset( [in] float val );
+	[propget, id( 6 ), helpstring( "The PCF filter max slope offset" )] HRESULT PcfMaxSlopeOffset( [out, retval] float * pVal );
+	[propput, id( 6 ), helpstring( "The PCF filter max slope offset" )] HRESULT PcfMaxSlopeOffset( [in] float val );
+	[propget, id( 7 ), helpstring( "The PCF filter size" )] HRESULT PcfFilterSize( [out, retval] unsigned int * pVal );
+	[propput, id( 7 ), helpstring( "The PCF filter size" )] HRESULT PcfFilterSize( [in] unsigned int val );
+	[propget, id( 8 ), helpstring( "The PCF samples count" )] HRESULT PcfSampleCount( [out, retval] unsigned int * pVal );
+	[propput, id( 8 ), helpstring( "The PCF samples count" )] HRESULT PcfSampleCount( [in] unsigned int val );
+	[propget, id( 9 ), helpstring( "The VSM minimal variance" )] HRESULT VsmMinVariance( [out, retval] float * pVal );
+	[propput, id( 9 ), helpstring( "The VSM minimal variance" )] HRESULT VsmMinVariance( [in] float val );
+	[propget, id( 10 ), helpstring( "The VSM light bleeding reduction factor" )] HRESULT VsmLightBleedingReduction( [out, retval] float * pVal );
+	[propput, id( 10 ), helpstring( "The VSM light bleeding reduction factor" )] HRESULT VsmLightBleedingReduction( [in] float val );
+};
+
 // ILightCategory
 [
 	uuid( 65C7028B-1B92-4504-A5D8-909C28CC6C47 ),
@@ -1491,10 +1539,7 @@ interface ILightCategory
 {
 	[propget, id( 1 ), helpstring( "The light colour" )] HRESULT Colour( [out, retval] IVector3D ** pVal );
 	[propput, id( 1 ), helpstring( "The light colour" )] HRESULT Colour( [in] IVector3D * val );
-	[propget, id( 3 ), helpstring( "The light diffuse intensity" )] HRESULT DiffuseIntensity( [out, retval] float * pVal );
-	[propput, id( 3 ), helpstring( "The light diffuse intensity" )] HRESULT DiffuseIntensity( [in] float val );
-	[propget, id( 4 ), helpstring( "The light specular intensity" )] HRESULT SpecularIntensity( [out, retval] float * pVal );
-	[propput, id( 4 ), helpstring( "The light specular intensity" )] HRESULT SpecularIntensity( [in] float val );
+	[propget, id( 2 ), helpstring( "The shadows configuration for the light" )] HRESULT Shadows( [out, retval] IShadow ** pVal );
 };
 
 // IDirectionalLight
@@ -1507,6 +1552,8 @@ interface ILightCategory
 interface IDirectionalLight
 	: IDispatch
 {
+	[propget, id( 3 ), helpstring( "The light illumination" )] HRESULT Illumination( [out, retval] float * pVal );
+	[propput, id( 3 ), helpstring( "The light illumination" )] HRESULT Illumination( [in] float val );
 };
 
 // IPointLight
@@ -1519,8 +1566,10 @@ interface IDirectionalLight
 interface IPointLight
 	: IDispatch
 {
-	[propget, id( 2 ), helpstring( "The light attenuation range" )] HRESULT AttenuationRange( [out, retval] float * pVal );
-	[propput, id( 2 ), helpstring( "The light attenuation range" )] HRESULT AttenuationRange( [in] float val );
+	[propget, id( 3 ), helpstring( "The light attenuation range" )] HRESULT AttenuationRange( [out, retval] float * pVal );
+	[propput, id( 3 ), helpstring( "The light attenuation range" )] HRESULT AttenuationRange( [in] float val );
+	[propget, id( 4 ), helpstring( "The light intensity" )] HRESULT Intensity( [out, retval] float * pVal );
+	[propput, id( 4 ), helpstring( "The light intensity" )] HRESULT Intensity( [in] float val );
 };
 
 // ISpotLight
@@ -1533,14 +1582,16 @@ interface IPointLight
 interface ISpotLight
 	: IDispatch
 {
-	[propget, id( 2 ), helpstring( "The light attenuation range" )] HRESULT AttenuationRange( [out, retval] float * pVal );
-	[propput, id( 2 ), helpstring( "The light attenuation range" )] HRESULT AttenuationRange( [in] float val );
-	[propget, id( 3 ), helpstring( "The light exponent value" )] HRESULT Exponent( [out, retval] float * pVal );
-	[propput, id( 3 ), helpstring( "The light exponent value" )] HRESULT Exponent( [in] float val );
-	[propget, id( 4 ), helpstring( "The light inner cut off value" )] HRESULT InnerCutOff( [out, retval] IAngle ** pVal );
-	[propput, id( 4 ), helpstring( "The light inner cut off value" )] HRESULT InnerCutOff( [in] IAngle * val );
-	[propget, id( 5 ), helpstring( "The light outer cut off value" )] HRESULT OuterCutOff( [out, retval] IAngle ** pVal );
-	[propput, id( 5 ), helpstring( "The light outer cut off value" )] HRESULT OuterCutOff( [in] IAngle * val );
+	[propget, id( 3 ), helpstring( "The light attenuation range" )] HRESULT AttenuationRange( [out, retval] float * pVal );
+	[propput, id( 3 ), helpstring( "The light attenuation range" )] HRESULT AttenuationRange( [in] float val );
+	[propget, id( 4 ), helpstring( "The light intensity" )] HRESULT Intensity( [out, retval] float * pVal );
+	[propput, id( 4 ), helpstring( "The light intensity" )] HRESULT Intensity( [in] float val );
+	[propget, id( 5 ), helpstring( "The light exponent value" )] HRESULT Exponent( [out, retval] float * pVal );
+	[propput, id( 5 ), helpstring( "The light exponent value" )] HRESULT Exponent( [in] float val );
+	[propget, id( 6 ), helpstring( "The light inner cut off value" )] HRESULT InnerCutOff( [out, retval] IAngle ** pVal );
+	[propput, id( 6 ), helpstring( "The light inner cut off value" )] HRESULT InnerCutOff( [in] IAngle * val );
+	[propget, id( 7 ), helpstring( "The light outer cut off value" )] HRESULT OuterCutOff( [out, retval] IAngle ** pVal );
+	[propput, id( 7 ), helpstring( "The light outer cut off value" )] HRESULT OuterCutOff( [in] IAngle * val );
 };
 
 // ICamera
@@ -1574,6 +1625,26 @@ interface ILight
 	[propget, id( 12 ), helpstring( "The directional light category" )] HRESULT DirectionalLight( [out, retval] IDirectionalLight ** pVal );
 	[propget, id( 13 ), helpstring( "The point light category" )] HRESULT PointLight( [out, retval] IPointLight ** pVal );
 	[propget, id( 14 ), helpstring( "The spot light category" )] HRESULT SpotLight( [out, retval] ISpotLight ** pVal );
+};
+
+// ILightGroup
+[
+	uuid( 597547C2-C11D-42BF-8B49-9D734AB9B7C3 ),
+	helpstring( "Castor3D LightGroup interface" ),
+	dual,
+	oleautomation
+]
+interface ILightGroup
+	: IDispatch
+{
+	[propget, id( 1 ), helpstring( "The object name" )] HRESULT Name( [out, retval] BSTR * pVal );
+	[propget, id( 2 ), helpstring( "The object's parent scene" )] HRESULT Scene( [out, retval] IScene ** pVal );
+	[id( 3 ), helpstring( "Adds a light instance for given scene node" )] HRESULT AddLight( [in] ISceneNode * val );
+	[id( 4 ), helpstring( "Removes the light instance for given scene node" )] HRESULT RemoveLight( [in] ISceneNode * val );
+	[propget, id( 5 ), helpstring( "The light type" )] HRESULT LightType( [out, retval] eLIGHT_TYPE * pVal );
+	[propget, id( 6 ), helpstring( "The directional light category" )] HRESULT DirectionalLight( [out, retval] IDirectionalLight ** pVal );
+	[propget, id( 7 ), helpstring( "The point light category" )] HRESULT PointLight( [out, retval] IPointLight ** pVal );
+	[propget, id( 8 ), helpstring( "The spot light category" )] HRESULT SpotLight( [out, retval] ISpotLight ** pVal );
 };
 
 // IGeometry
@@ -2081,6 +2152,24 @@ library Castor3D
 	coclass Light
 	{
 		[default] interface ILight;
+	};
+
+	// LightGroup
+	[
+		uuid( 1555D370-C5AB-40B6-9BE6-664A70BBEBD1 )
+	]
+	coclass LightGroup
+	{
+		[default] interface ILightGroup;
+	};
+
+	// Shadow
+	[
+		uuid( 59E5AE14-AB64-46F8-AAAB-2165E64E0403 )
+	]
+	coclass Shadow
+	{
+		[default] interface IShadow;
 	};
 
 	// Geometry

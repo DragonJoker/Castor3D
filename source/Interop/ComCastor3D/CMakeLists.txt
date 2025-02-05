@@ -54,6 +54,7 @@ if ( MSVC )
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComIndexMapping.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComLight.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComLightCategory.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComLightGroup.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComLineMapping.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComMaterial.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComMesh.cpp
@@ -69,6 +70,7 @@ if ( MSVC )
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComScene.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSceneBackground.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSceneNode.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComShadow.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSkyboxBackground.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSpotLight.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSubmesh.cpp
@@ -87,6 +89,7 @@ if ( MSVC )
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComIndexMapping.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComLight.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComLightCategory.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComLightGroup.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComLineMapping.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComMaterial.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComMesh.hpp
@@ -102,6 +105,7 @@ if ( MSVC )
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComScene.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSceneBackground.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSceneNode.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComShadow.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSkyboxBackground.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSpotLight.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSubmesh.hpp
@@ -209,6 +213,7 @@ if ( MSVC )
 		add_interface( "829D988E-BE04-421D-BE4B-DCE72A6C1E4E" RESRC_LIST RESH_LIST RESOURCE_ID "ImageBackground" )
 		add_interface( "56FAEA93-D2BC-4845-9F7C-A225044C7626" RESRC_LIST RESH_LIST RESOURCE_ID "IndexMapping" )
 		add_interface( "7499D2D6-4275-4816-B25E-042CC75C566E" RESRC_LIST RESH_LIST RESOURCE_ID "Light" )
+		add_interface( "597547C2-C11D-42BF-8B49-9D734AB9B7C3" RESRC_LIST RESH_LIST RESOURCE_ID "LightGroup" )
 		add_interface( "9C77B39B-EAD2-4EDB-815E-1B74B1F8B5C3" RESRC_LIST RESH_LIST RESOURCE_ID "LightCategory" )
 		add_interface( "93151A09-8DC0-491F-BCDE-1B58954B97C2" RESRC_LIST RESH_LIST RESOURCE_ID "LinesMapping" )
 		add_interface( "A9F3E2A5-A54C-4E4A-8448-0A663BE88E40" RESRC_LIST RESH_LIST RESOURCE_ID "Material" )
@@ -225,6 +230,7 @@ if ( MSVC )
 		add_interface( "C2669704-BF96-4D28-9627-7E625EA2EC99" RESRC_LIST RESH_LIST RESOURCE_ID "Scene" )
 		add_interface( "5CA94585-1FBC-466A-8A59-90733AD8DF1D" RESRC_LIST RESH_LIST RESOURCE_ID "SceneBackground" )
 		add_interface( "665CE022-156D-4C04-B621-35CB66A6D6D4" RESRC_LIST RESH_LIST RESOURCE_ID "SceneNode" )
+		add_interface( "DF9B6F02-F0D5-4524-A597-9314D4A53862" RESRC_LIST RESH_LIST RESOURCE_ID "Shadow" )
 		add_interface( "391A6B49-95D3-4B92-ACFC-058083FC06D2" RESRC_LIST RESH_LIST RESOURCE_ID "SkyboxBackground" )
 		add_interface( "0819BA84-8671-454B-B9A3-84C8A3C5DB95" RESRC_LIST RESH_LIST RESOURCE_ID "SpotLight" )
 		add_interface( "E59360F1-2F5B-4011-A61F-32E1A77207C8" RESRC_LIST RESH_LIST RESOURCE_ID "Submesh" )

@@ -28,7 +28,6 @@ namespace CastorCom
 		STDMETHOD( LoadFromFormat )( /* [in] */ IEngine * engine, /* [in] */ BSTR name, /* [in] */ ePIXEL_FORMAT fmt, /* [in] */ ISize * size );
 		STDMETHOD( Resample )( /* [in] */ ISize * val );
 		STDMETHOD( Fill )( /* [in] */ IRgbaColour * val );
-		STDMETHOD( Flip )( /* [out, retval] */ IImage ** pVal );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object
 	//!\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet

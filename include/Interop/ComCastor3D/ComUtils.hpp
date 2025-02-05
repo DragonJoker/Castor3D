@@ -149,10 +149,10 @@ namespace CastorCom
 			else
 			{
 				hr = CComError::dispatchError( E_FAIL	// This represents the error
-					, LIBID_Castor3D					// This is the GUID of PixelComponents throwing error
+					, LIBID_Castor3D // This is the GUID of the component throwing error
 					, ERROR_WRONG_VARIANT_TYPE.c_str()	// This is generally displayed as the title
-					, ERROR_EXPECTED_STRING.c_str()		// This is the description
-					, 0									// This is the context in the help file
+					, ERROR_EXPECTED_STRING.c_str()	 // This is the description
+					, 0	 // This is the context in the help file
 					, nullptr );
 			}
 
@@ -243,10 +243,10 @@ namespace CastorCom
 			else
 			{
 				hr = CComError::dispatchError( E_FAIL	// This represents the error
-					, LIBID_Castor3D					// This is the GUID of PixelComponents throwing error
+					, LIBID_Castor3D // This is the GUID of the component throwing error
 					, ERROR_WRONG_VARIANT_TYPE.c_str()	// This is generally displayed as the title
-					, ERROR_EXPECTED_DISPATCH.c_str()	// This is the description
-					, 0									// This is the context in the help file
+					, ERROR_EXPECTED_DISPATCH.c_str() // This is the description
+					, 0	 // This is the context in the help file
 					, nullptr );
 			}
 
@@ -383,10 +383,10 @@ namespace CastorCom
 			else
 			{
 				hr = CComError::dispatchError( E_FAIL		// This represents the error
-					, LIBID_Castor3D						// This is the GUID of PixelComponents throwing error
+					, LIBID_Castor3D	 // This is the GUID of the component throwing error
 					, ERROR_WRONG_VARIANT_TYPE.c_str()		// This is generally displayed as the title
-					, ERROR_EXPECTED_VARIANT_ARRAY.c_str()	// This is the description
-					, 0										// This is the context in the help file
+					, ERROR_EXPECTED_VARIANT_ARRAY.c_str() // This is the description
+					, 0		 // This is the context in the help file
 					, nullptr );
 			}
 
@@ -446,10 +446,10 @@ namespace CastorCom
 			else
 			{
 				hr = CComError::dispatchError( E_FAIL		// This represents the error
-					, LIBID_Castor3D						// This is the GUID of PixelComponents throwing error
+					, LIBID_Castor3D	 // This is the GUID of the component throwing error
 					, ERROR_WRONG_VARIANT_TYPE.c_str()		// This is generally displayed as the title
-					, ERROR_EXPECTED_VARIANT_ARRAY.c_str()	// This is the description
-					, 0										// This is the context in the help file
+					, ERROR_EXPECTED_VARIANT_ARRAY.c_str() // This is the description
+					, 0		 // This is the context in the help file
 					, nullptr );
 			}
 

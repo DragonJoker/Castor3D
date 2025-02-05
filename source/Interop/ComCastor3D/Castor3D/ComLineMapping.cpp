@@ -45,11 +45,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ILinesMapping,				// This is the GUID of PixelComponents throwing error
-					 _T( "addFace" ),				// This is generally displayed as the title
-					 linmap::ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
+					 E_FAIL, // This represents the error
+					 IID_ILinesMapping, // This is the GUID of the component throwing error
+					 _T( "addFace" ), // This is generally displayed as the title
+					 linmap::ERROR_UNINITIALISED.c_str(), // This is the description
+					 0, // This is the context in the help file
 					 nullptr );
 		}
 

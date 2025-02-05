@@ -21,12 +21,13 @@ namespace CastorCom
 	{
 	public:
 		COMEX_PROPERTY( Colour, IVector3D *, m_internal, &castor3d::SpotLight::getColour, &castor3d::SpotLight::setColour );
-		COMEX_PROPERTY( DiffuseIntensity, float, m_internal, &castor3d::SpotLight::getDiffuseIntensity, &castor3d::SpotLight::setDiffuseIntensity );
-		COMEX_PROPERTY( SpecularIntensity, float, m_internal, &castor3d::SpotLight::getSpecularIntensity, &castor3d::SpotLight::setSpecularIntensity );
+		COMEX_PROPERTY_GET( Shadows, IShadow *, m_internal, &castor3d::LightCategory::getShadowConfig );
 		COMEX_PROPERTY( AttenuationRange, float, m_internal, &castor3d::SpotLight::getRange, &castor3d::SpotLight::setRange );
 		COMEX_PROPERTY( Exponent, float, m_internal, &castor3d::SpotLight::getExponent, &castor3d::SpotLight::setExponent );
 		COMEX_PROPERTY( InnerCutOff, IAngle *, m_internal, &castor3d::SpotLight::getInnerCutOff, &castor3d::SpotLight::setInnerCutOff );
 		COMEX_PROPERTY( OuterCutOff, IAngle *, m_internal, &castor3d::SpotLight::getOuterCutOff, &castor3d::SpotLight::setOuterCutOff );
+		STDMETHOD( get_Intensity )( /* [out, retval] */ float * pVal );
+		STDMETHOD( put_Intensity )( /* [in] */ float val );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object
 	//!\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet

@@ -19,11 +19,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-				E_FAIL,						// This represents the error
-				IID_IImageBackground,		// This is the GUID of PixelComponents throwing error
+				E_FAIL, // This represents the error
+				IID_IImageBackground,		// This is the GUID of the component throwing error
 				_T( "CreateTextureUnit" ),	// This is generally displayed as the title
-				imgbg::ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
+				imgbg::ERROR_UNINITIALISED.c_str(), // This is the description
+				0, // This is the context in the help file
 				nullptr );
 		}
 

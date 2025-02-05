@@ -20,11 +20,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-				E_FAIL,						// This represents the error
-				IID_ICamera,					// This is the GUID of PixelComponents throwing error
-				_T( "attachTo" ),				// This is generally displayed as the title
-				camera::ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
+				E_FAIL, // This represents the error
+				IID_ICamera, // This is the GUID of the component throwing error
+				_T( "attachTo" ), // This is generally displayed as the title
+				camera::ERROR_UNINITIALISED.c_str(), // This is the description
+				0, // This is the context in the help file
 				nullptr );
 		}
 
@@ -43,11 +43,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-				E_FAIL,						// This represents the error
-				IID_ICamera,					// This is the GUID of PixelComponents throwing error
-				_T( "Detach" ),					// This is generally displayed as the title
-				camera::ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
+				E_FAIL, // This represents the error
+				IID_ICamera, // This is the GUID of the component throwing error
+				_T( "Detach" ), // This is generally displayed as the title
+				camera::ERROR_UNINITIALISED.c_str(), // This is the description
+				0, // This is the context in the help file
 				nullptr );
 		}
 
@@ -66,11 +66,11 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-				E_FAIL,						// This represents the error
-				IID_ICamera,					// This is the GUID of PixelComponents throwing error
-				_T( "Resize" ),				// This is generally displayed as the title
-				camera::ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
+				E_FAIL, // This represents the error
+				IID_ICamera, // This is the GUID of the component throwing error
+				_T( "Resize" ), // This is generally displayed as the title
+				camera::ERROR_UNINITIALISED.c_str(), // This is the description
+				0, // This is the context in the help file
 				nullptr );
 		}
 

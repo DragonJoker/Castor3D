@@ -60,6 +60,16 @@ namespace CastorCom
 
 	template< typename ClassT, typename ValueT, typename InstanceT >
 	auto makePutter( InstanceT * instance
+		, void ( ClassT::* function )( ValueT )const )
+	{
+		return VariablePutterT< ValueT >( [function, instance]( ValueT value )
+			{
+				( static_cast< ClassT * >( instance )->*function )( value );
+			} );
+	}
+
+	template< typename ClassT, typename ValueT, typename InstanceT >
+	auto makePutter( InstanceT * instance
 		, void ( *function )( ClassT *, ValueT ) )
 	{
 		return VariablePutterT< ValueT >( [function, instance]( ValueT value )
@@ -97,6 +107,15 @@ namespace CastorCom
 		return VariablePutterT< ValueT >( [function, instance, index]( ValueT value )
 			{
 				( static_cast< ClassT * >( instance )->*function )( IndexT( index ), value );
+			} );
+	}
+
+	template< typename ValueT >
+	auto makeValuePutter( ValueT * val )
+	{
+		return VariablePutterT< ValueT >( [val]( ValueT value )
+			{
+				*val = value;
 			} );
 	}
 
