@@ -2,10 +2,12 @@ option( CASTOR_BUILDGRP_INTEROP "Build Castor3D binding plugins" FALSE )
 
 if ( CASTOR_BUILDGRP_INTEROP )
 	option( CASTOR_BUILD_INTEROP_COM "Build COM Castor3D binding" TRUE )
+	option( CASTOR_BUILD_INTEROP_C "Build Castor3D C interface" TRUE )
 	option( CASTOR_BUILD_TEST_INTEROP_COM "Build COM Castor3D binding test application" TRUE )
 endif ()
 
 function( InteropInit )
+	set( CC3D "no (Not wanted)" PARENT_SCOPE )
 	if ( MSVC )
 		set( ComC3D "no (Not wanted)" PARENT_SCOPE )
 		set( ComC3DT "no (Not wanted)" PARENT_SCOPE )
@@ -22,6 +24,12 @@ function( InteropBuild )
 			${CASTOR_BINARY_DIR}/include/Core
 			${CASTOR_SOURCE_DIR}/include/Core
 		)
+
+		if( ${CASTOR_BUILD_INTEROP_C} )
+			set( Build ${CC3D} )
+			add_subdirectory( Interop/CCastor3D )
+			set( CC3D ${Build} PARENT_SCOPE )
+		endif()
 
 		if( ${CASTOR_BUILD_INTEROP_COM} )
 			set( Build ${ComC3D} )
@@ -47,6 +55,9 @@ endfunction( InteropBuild )
 function( InteropSummary msg )
 	if ( ${CASTOR_BUILDGRP_INTEROP} )
 		set( msg_tmp "\n\n  Interoperability:" )
+		if ( ${CASTOR_BUILD_INTEROP_C} )
+			set( msg_tmp "${msg_tmp}\n    C                    ${CC3D}" )
+		endif ()
 		if ( ${CASTOR_BUILD_INTEROP_COM} )
 			set( msg_tmp "${msg_tmp}\n    COM                  ${ComC3D}" )
 			if( ${CASTOR_BUILDGRP_TEST} )
@@ -64,6 +75,15 @@ function( InteropSetup )
 		cpack_add_component_group( Interoperability
 			DESCRIPTION "Bindings to use Castor3D in other languages (C# and Python yet)"
 		)
+
+		if( ${CASTOR_BUILD_INTEROP_C} )
+			cpack_add_component( CCastor3D
+				DISPLAY_NAME "Castor3DC library"
+				DESCRIPTION "C interface for Castor3D"
+				GROUP Interoperability
+				INSTALL_TYPES Minimal Full
+			)
+		endif()
 
 		if( ${CASTOR_BUILD_INTEROP_COM} )
 			cpack_add_component( ComCastor3D
