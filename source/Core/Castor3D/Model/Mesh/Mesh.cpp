@@ -617,13 +617,13 @@ namespace castor3d
 		return result;
 	}
 
-	void Mesh::deleteSubmesh( Submesh const * submesh )
+	void Mesh::removeSubmesh( Submesh const & submesh )
 	{
 		auto it = std::find_if( m_submeshes.begin()
 			, m_submeshes.end()
 			, [&submesh]( SubmeshUPtr const & lookup )
 			{
-				return submesh == lookup.get();
+				return &submesh == lookup.get();
 			} );
 
 		if ( it != m_submeshes.end() )

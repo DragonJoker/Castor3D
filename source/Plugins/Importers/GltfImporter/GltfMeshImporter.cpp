@@ -429,7 +429,7 @@ namespace c3d_gltf
 		}
 		else
 		{
-			mesh.deleteSubmesh( submesh );
+			mesh.removeSubmesh( *submesh );
 		}
 	}
 
@@ -477,7 +477,7 @@ namespace c3d_gltf
 		}
 		else
 		{
-			mesh.deleteSubmesh( submesh );
+			mesh.removeSubmesh( *submesh );
 		}
 	}
 
@@ -527,7 +527,7 @@ namespace c3d_gltf
 		}
 		else
 		{
-			mesh.deleteSubmesh( submesh );
+			mesh.removeSubmesh( *submesh );
 		}
 	}
 
@@ -598,7 +598,7 @@ namespace c3d_gltf
 		}
 		else
 		{
-			mesh.deleteSubmesh( submesh );
+			mesh.removeSubmesh( *submesh );
 		}
 	}
 
@@ -672,7 +672,7 @@ namespace c3d_gltf
 		}
 		else
 		{
-			mesh.deleteSubmesh( submesh );
+			mesh.removeSubmesh( *submesh );
 		}
 	}
 
@@ -740,7 +740,7 @@ namespace c3d_gltf
 		}
 		else
 		{
-			mesh.deleteSubmesh( submesh );
+			mesh.removeSubmesh( *submesh );
 		}
 	}
 

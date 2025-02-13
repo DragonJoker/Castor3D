@@ -437,7 +437,7 @@ namespace castor3d
 		 *\param[in]	shift	Dit si la touche Shift est enfoncée.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API bool fireKeydown( KeyboardKey key
+		C3D_API bool fireKeyDown( KeyboardKey key
 			, bool ctrl
 			, bool alt
 			, bool shift );

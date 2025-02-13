@@ -76,7 +76,7 @@ namespace CastorCom
 		{
 			auto submesh = static_cast< CSubmesh * >( val )->getInternal();
 			static_cast< CSubmesh * >( val )->setInternal( nullptr );
-			m_internal->deleteSubmesh( submesh );
+			m_internal->removeSubmesh( *submesh );
 			hr = S_OK;
 		}
 		else

@@ -738,7 +738,7 @@ namespace CastorViewer
 	void RenderPanel::onKeyDown( wxKeyEvent & event )
 	{
 		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener();
-			!inputListener || !inputListener->fireKeydown( panel::doConvertKeyCode( event.GetKeyCode() )
+			!inputListener || !inputListener->fireKeyDown( panel::doConvertKeyCode( event.GetKeyCode() )
 				, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			switch ( event.GetKeyCode() )
