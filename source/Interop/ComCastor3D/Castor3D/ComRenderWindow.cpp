@@ -315,7 +315,7 @@ namespace CastorCom
 			{
 				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					*pVal = inputListener->fireKeydown( castor3d::KeyboardKey( key )
+					*pVal = inputListener->fireKeyDown( castor3d::KeyboardKey( key )
 						, isCtrlDown != FALSE
 						, isAltDown != FALSE
 						, isShiftDown != FALSE );

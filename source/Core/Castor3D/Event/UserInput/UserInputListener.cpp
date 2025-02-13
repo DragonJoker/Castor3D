@@ -423,7 +423,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool UserInputListener::fireKeydown( KeyboardKey key, bool ctrl, bool alt, bool shift )
+	bool UserInputListener::fireKeyDown( KeyboardKey key, bool ctrl, bool alt, bool shift )
 	{
 		bool result = false;
 		doUpdateCommandKeys( ctrl, alt, shift );
