@@ -1,4 +1,4 @@
-option( CASTOR_BUILDGRP_INTEROP "Build Castor3D binding plugins" FALSE )
+option( CASTOR_BUILDGRP_INTEROP "Build Castor3D binding plugins" ${C3D_BUILDGRP_INTEROP} )
 
 if ( CASTOR_BUILDGRP_INTEROP )
 	option( CASTOR_BUILD_INTEROP_COM "Build COM Castor3D binding" TRUE )
