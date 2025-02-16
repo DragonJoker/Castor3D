@@ -2,12 +2,14 @@ get_filename_component( CASTOR_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY 
 get_filename_component( CASTOR_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} DIRECTORY )
 
 option( CASTOR_BUILD_DEMO_CASTOR_TD "Build Castor Tower Defense (needs GuiCommon library)" TRUE )
+option( CASTOR_BUILD_DEMO_C_CASTOR_VIEWER "Build CCastorViewer (needs CCastor3D library)" TRUE )
 if ( MSVC )
 	option( CASTOR_BUILD_DEMO_CASTOR_VIEWER_SHARP "Build CastorViewerSharp (needs ComCastor3D library)" FALSE )
 endif ()
 
 function( DemosInit )
 	set( CTd "no (Not wanted)" PARENT_SCOPE )
+	set( CCView "no (Not wanted)" PARENT_SCOPE )
 	if ( MSVC )
 		set( CViewSh "no (Not wanted)" PARENT_SCOPE )
 	else ()
@@ -99,6 +101,15 @@ function( DemosBuild )
 				endif ()
 			endif ()
 		endif ()
+		if ( CASTOR_BUILD_DEMO_C_CASTOR_VIEWER )
+			if ( CASTOR_BUILDGRP_INTEROP AND CASTOR_BUILD_INTEROP_C )
+				set( Build ${CCView} )
+				add_subdirectory( CCastorViewer )
+				set( CCView ${Build} PARENT_SCOPE )
+			else ()
+				set( CCView "no (CCastor3D not built)" PARENT_SCOPE )
+			endif ()
+		endif ()
 
 		set( CastorMinLibraries
 			${CastorMinLibraries}
@@ -124,6 +135,9 @@ function( DemosSummary )
 		if( CASTOR_BUILD_DEMO_CASTOR_VIEWER_SHARP )
 			set( msg_tmp "${msg_tmp}\n    CastorViewerSharp    ${CViewSh}" )
 		endif ()
+		if( CASTOR_BUILD_DEMO_C_CASTOR_VIEWER )
+			set( msg_tmp "${msg_tmp}\n    CCastorViewer        ${CCView}" )
+		endif ()
 		set( msg "${msg}${msg_tmp}" )
 		message( STATUS "${msg}\n" )
 	endif ()
@@ -146,6 +160,16 @@ function( DemosSetup )
 				cpack_add_component( CastorViewerSharp
 					DISPLAY_NAME "CastorViewerSharp"
 					DESCRIPTION "A simple scene viewer, using Castor3D and developed in C#/WPF."
+					GROUP Demos
+					DEPENDS Castor3D
+				)
+			endif ()
+		endif ()
+		if( CASTOR_BUILD_DEMO_C_CASTOR_VIEWER )
+			if ( MSVC )
+				cpack_add_component( CCastorViewer
+					DISPLAY_NAME "CCastorViewer"
+					DESCRIPTION "A simple scene viewer, using Castor3D and developed in C."
 					GROUP Demos
 					DEPENDS Castor3D
 				)

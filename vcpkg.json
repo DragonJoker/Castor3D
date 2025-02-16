@@ -77,6 +77,8 @@
     "demos": {
       "description": "Build demo projects.",
       "dependencies": [
+        "glfw3",
+        "tinyfiledialogs",
         {
           "name": "wxwidgets",
           "platform": "!linux"

@@ -13,7 +13,7 @@
 			"cacheVariables": {
 				"CASTOR_BUILD_PLUGINS": true,
 				"CASTOR_BUILDGRP_DEMO": true,
-				"CASTOR_BUILDGRP_INTEROP": false,
+				"CASTOR_BUILDGRP_INTEROP": true,
 				"CASTOR_BUILDGRP_TEST": false,
 				"CASTOR_BUILDGRP_TOOL": true,
 				"CASTOR_DISABLE_DELAYED_INITIALISATION": true,
@@ -40,7 +40,7 @@
 				"rhs": "Windows"
 			},
 			"cacheVariables": {
-				"VCPKG_MANIFEST_FEATURES": "assimp;freeimage;glsl;gltf;vkfft;tools"
+				"VCPKG_MANIFEST_FEATURES": "assimp;demos;freeimage;glsl;gltf;tools;vkfft"
 			}
 		},
 		{
@@ -50,7 +50,7 @@
 			"inherits": "user-base",
 			"generator": "Ninja",
 			"cacheVariables": {
-				"VCPKG_MANIFEST_FEATURES": "freeimage;glsl;gltf;vkfft;tools",
+				"VCPKG_MANIFEST_FEATURES": "freeimage;demos;glsl;gltf;tools;vkfft",
 				"CASTOR_USE_SYSTEM_ASSIMP": true,
 				"CASTOR_USE_SYSTEM_WXWIDGETS": true,
 				"CMAKE_BUILD_TYPE": "Release"
@@ -63,7 +63,7 @@
 			"inherits": "user-base",
 			"generator": "Ninja",
 			"cacheVariables": {
-				"VCPKG_MANIFEST_FEATURES": "assimp;freeimage;glsl;gltf;vkfft;tools",
+				"VCPKG_MANIFEST_FEATURES": "assimp;demos;freeimage;glsl;gltf;tools;vkfft",
 				"CMAKE_BUILD_TYPE": "Release"
 			}
 		},
@@ -72,10 +72,10 @@
 			"hidden": true,
 			"installDir": "${sourceDir}/package/Castor3D",
 			"cacheVariables": {
-				"VCPKG_MANIFEST_FEATURES": "assimp;freeimage;glsl;gltf;vkfft;tools",
+				"VCPKG_MANIFEST_FEATURES": "assimp;demos;freeimage;glsl;gltf;tools;vkfft",
 				"CASTOR_BUILD_PLUGINS": true,
 				"CASTOR_BUILDGRP_DEMO": true,
-				"CASTOR_BUILDGRP_INTEROP": false,
+				"CASTOR_BUILDGRP_INTEROP": true,
 				"CASTOR_BUILDGRP_TEST": true,
 				"CASTOR_BUILDGRP_TOOL": true,
 				"CASTOR_DISABLE_DELAYED_INITIALISATION": true,
@@ -135,7 +135,6 @@
 			"description": "Build configuration using Visual Studio, for Castor3D developers, using vcpkg",
 			"cacheVariables": {
 				"PROJECTS_UNITY_BUILD": false,
-				"VCPKG_MANIFEST_FEATURES": "assimp;freeimage;glsl;gltf;vkfft;tools",
 				"CMAKE_TOOLCHAIN_FILE": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake"
 			}
 		},
@@ -145,7 +144,6 @@
 			"hidden": true,
 			"cacheVariables": {
 				"PROJECTS_UNITY_BUILD": false,
-				"VCPKG_MANIFEST_FEATURES": "assimp;freeimage;glsl;gltf;vkfft;tools",
 				"CMAKE_TOOLCHAIN_FILE": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake"
 			}
 		},
@@ -173,10 +171,10 @@
 			"generator": "Ninja",
 			"installDir": "${sourceDir}/package/Castor3D",
 			"cacheVariables": {
-				"VCPKG_MANIFEST_FEATURES": "assimp;freeimage;glsl;gltf;vkfft;tools",
+				"VCPKG_MANIFEST_FEATURES": "assimp;demos;freeimage;glsl;gltf;tools;vkfft",
 				"CASTOR_BUILD_PLUGINS": true,
 				"CASTOR_BUILDGRP_DEMO": true,
-				"CASTOR_BUILDGRP_INTEROP": false,
+				"CASTOR_BUILDGRP_INTEROP": true,
 				"CASTOR_BUILDGRP_TEST": false,
 				"CASTOR_BUILDGRP_TOOL": true,
 				"CASTOR_FORCE_VCPKG_SUBMODULES": false,
@@ -212,7 +210,6 @@
 			"hidden": true,
 			"cacheVariables": {
 				"PROJECTS_UNITY_BUILD": false,
-				"VCPKG_MANIFEST_FEATURES": "assimp;freeimage;glsl;gltf;vkfft;tools",
 				"CMAKE_TOOLCHAIN_FILE": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake"
 			}
 		},
