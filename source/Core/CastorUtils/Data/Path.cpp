@@ -185,7 +185,7 @@ namespace castor
 				begin = cuT( "/" );
 				assign( substr( 2U ) );
 			}
-			else if ( StringView{ data(), 2U } == cuT( "/" ) )
+			else if ( StringView{ data(), 1U } == cuT( "/" ) )
 			{
 				begin = cuT( "/" );
 				assign( substr( 1U ) );
