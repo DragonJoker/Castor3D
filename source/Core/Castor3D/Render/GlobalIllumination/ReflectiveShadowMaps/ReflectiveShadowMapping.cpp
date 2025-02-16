@@ -8,8 +8,6 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#define C3D_RSMGIUseCascasdes 1
-
 namespace castor3d
 {
 	namespace rsmvpl

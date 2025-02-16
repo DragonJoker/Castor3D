@@ -170,7 +170,7 @@ bool doLoadPlugins( C3DEngine * engine )
 			|| !stringEndsWith( ffd.cFileName, len, ".dll", 4U ) )
 			continue;
 
-		memset( fullPath, MAX_PATH_SIZE, 0 );
+		memset( fullPath, 0, MAX_PATH_SIZE );
 		remainingSize = MAX_PATH_SIZE;
 		strncpy_s( fullPath, MAX_PATH_SIZE * sizeof( C3DChar ), path, min( pathSize, remainingSize ) );
 		remainingSize -= pathSize;
