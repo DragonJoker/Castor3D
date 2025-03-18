@@ -19,8 +19,8 @@ extern "C"
 	C3D_OceanRendering_API void getType( castor3d::PluginType * type );
 	C3D_OceanRendering_API void isDebug( int * value );
 	C3D_OceanRendering_API void getName( char const ** name );
-	C3D_OceanRendering_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
-	C3D_OceanRendering_API void OnUnload( castor3d::Engine * engine );
+	C3D_OceanRendering_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
+	C3D_OceanRendering_API void onUnload( castor3d::Engine * engine );
 
 	C3D_OceanRendering_API void getRequiredVersion( castor3d::Version * version )
 	{
@@ -42,13 +42,13 @@ extern "C"
 		*name = ocean_fft::FFTWavesComponent::FullName.c_str();
 	}
 
-	C3D_OceanRendering_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
+	C3D_OceanRendering_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
 	{
 		engine->registerPassComponent< ocean_fft::FFTWaterComponent >();
 		engine->registerSubmeshComponent< ocean_fft::FFTWavesComponent >();
 	}
 
-	C3D_OceanRendering_API void OnUnload( castor3d::Engine * engine )
+	C3D_OceanRendering_API void onUnload( castor3d::Engine * engine )
 	{
 		engine->unregisterSubmeshComponent( ocean_fft::FFTWavesComponent::TypeName );
 		engine->unregisterPassComponent( ocean_fft::FFTWaterComponent::TypeName );

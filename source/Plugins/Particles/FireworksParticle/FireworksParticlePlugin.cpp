@@ -1,7 +1,6 @@
 #include "FireworksParticle/FireworksParticle.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Plugin/ParticlePlugin.hpp>
 #include <Castor3D/Scene/ParticleSystem/ParticleModule.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 
@@ -23,8 +22,8 @@ extern "C"
 	C3D_Fireworks_API void getType( castor3d::PluginType * type );
 	C3D_Fireworks_API void isDebug( int * value );
 	C3D_Fireworks_API void getName( char const ** name );
-	C3D_Fireworks_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
-	C3D_Fireworks_API void OnUnload( castor3d::Engine * engine );
+	C3D_Fireworks_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
+	C3D_Fireworks_API void onUnload( castor3d::Engine * engine );
 
 	C3D_Fireworks_API void getRequiredVersion( castor3d::Version * version )
 	{
@@ -46,13 +45,13 @@ extern "C"
 		*name = fireworks::ParticleSystem::Name.c_str();
 	}
 
-	C3D_Fireworks_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
+	C3D_Fireworks_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
 	{
 		engine->getParticleFactory().registerType( fireworks::ParticleSystem::Type
 			, &fireworks::ParticleSystem::create );
 	}
 
-	C3D_Fireworks_API void OnUnload( castor3d::Engine * engine )
+	C3D_Fireworks_API void onUnload( castor3d::Engine * engine )
 	{
 		engine->getParticleFactory().unregisterType( fireworks::ParticleSystem::Type );
 	}

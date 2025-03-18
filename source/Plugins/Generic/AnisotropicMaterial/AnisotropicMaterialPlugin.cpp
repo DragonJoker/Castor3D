@@ -17,8 +17,8 @@ extern "C"
 	C3D_AnisotropicMaterial_API void getType( castor3d::PluginType * type );
 	C3D_AnisotropicMaterial_API void isDebug( int * value );
 	C3D_AnisotropicMaterial_API void getName( char const ** name );
-	C3D_AnisotropicMaterial_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
-	C3D_AnisotropicMaterial_API void OnUnload( castor3d::Engine * engine );
+	C3D_AnisotropicMaterial_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
+	C3D_AnisotropicMaterial_API void onUnload( castor3d::Engine * engine );
 
 	C3D_AnisotropicMaterial_API void getRequiredVersion( castor3d::Version * version )
 	{
@@ -40,7 +40,7 @@ extern "C"
 		*name = "Anisotropic Material";
 	}
 
-	C3D_AnisotropicMaterial_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
+	C3D_AnisotropicMaterial_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
 	{
 		engine->registerPassComponent< anisotropy::AnisotropyComponent >();
 		engine->registerPassComponent< anisotropy::AnisotropyDirectionMapComponent >();
@@ -49,7 +49,7 @@ extern "C"
 			, anisotropy::shader::AnisotropicBRDF::create } );
 	}
 
-	C3D_AnisotropicMaterial_API void OnUnload( castor3d::Engine * engine )
+	C3D_AnisotropicMaterial_API void onUnload( castor3d::Engine * engine )
 	{
 		engine->unregisterSpecularBrdf( castor::String{ anisotropy::shader::AnisotropicBRDF::Name } );
 		engine->unregisterPassComponent( anisotropy::AnisotropyStrengthMapComponent::TypeName );

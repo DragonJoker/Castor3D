@@ -1039,27 +1039,13 @@ source_group( "Header Files\\Overlay" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} 
 source_group( "Source Files\\Overlay" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Plugin/DividerPlugin.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Plugin/GeneratorPlugin.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Plugin/GenericPlugin.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Plugin/ImporterPlugin.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Plugin/ParticlePlugin.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Plugin/Plugin.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Plugin/PluginException.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Plugin/PostFxPlugin.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Plugin/ToneMappingPlugin.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Plugin/DividerPlugin.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Plugin/GeneratorPlugin.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Plugin/GenericPlugin.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Plugin/ImporterPlugin.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Plugin/ParticlePlugin.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Plugin/Plugin.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Plugin/PluginException.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Plugin/PluginModule.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Plugin/PostFxPlugin.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Plugin/ToneMappingPlugin.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${${PROJECT_NAME}_SRC_FILES}

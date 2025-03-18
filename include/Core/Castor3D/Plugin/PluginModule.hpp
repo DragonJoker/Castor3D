@@ -47,56 +47,6 @@ namespace castor3d
 		eParticle = 6,
 		CU_ScopedEnumBounds( eImporter, eParticle )
 	};
-
-	/**
-	*\~english
-	*\brief
-	*	Divider Plugin class
-	*\~french
-	*\brief
-	*	Classe de plug-in de subdivision
-	*/
-	class DividerPlugin;
-	/**
-	*\~english
-	*\brief
-	*	Generator Plugin class
-	*\~french
-	*\brief
-	*	Classe de plug-in de générateur procédural
-	*/
-	class GeneratorPlugin;
-	/**
-	*\~english
-	*\brief
-	*	Generic Plugin class.
-	*\remarks
-	*	Allows general specialisations for Castor3D.
-	*\~french
-	*\brief
-	*	Classe de plug-in générique.
-	*\remarks
-	*	Permet des spécialisation générales pour Castor3D.
-	*/
-	class GenericPlugin;
-	/**
-	*\~english
-	*\brief
-	*	Importer Plugin class
-	*\~french
-	*\brief
-	*	Classe de plug-in d'import
-	*/
-	class ImporterPlugin;
-	/**
-	*\~english
-	*\brief
-	*	Particle plug-in class.
-	*\~french
-	*\brief
-	*	Classe de plug-in de particules.
-	*/
-	class ParticlePlugin;
 	/**
 	*\~english
 	*\brief
@@ -119,25 +69,6 @@ namespace castor3d
 	*	Exception de chargement de plug-in
 	*/
 	class PluginException;
-	/**
-	*\~english
-	*\brief
-	*	Post effect plug-in class
-	*\~french
-	*\brief
-	*	Classe de plug-in d'effets post rendu
-	*/
-	class PostFxPlugin;
-	/**
-	*\~english
-	*\brief
-	*	Tone mapping plug-in class.
-	*\~french
-	*\brief
-	*	Classe de plug-in de mappage de tons.
-	*/
-	class ToneMappingPlugin;
-
 	/**
 	*\~english
 	*	Helper structure to specialise a cache behaviour.
@@ -172,13 +103,6 @@ namespace castor3d
 	/** @cond !Doxygen */
 	CU_DeclareSmartPtr( castor3d, Plugin, C3D_API );
 	CU_DeclareSmartPtr( castor3d, PluginCache, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ImporterPlugin, C3D_API );
-	CU_DeclareSmartPtr( castor3d, DividerPlugin, C3D_API );
-	CU_DeclareSmartPtr( castor3d, GeneratorPlugin, C3D_API );
-	CU_DeclareSmartPtr( castor3d, GenericPlugin, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PostFxPlugin, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ParticlePlugin, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ToneMappingPlugin, C3D_API );
 
 	CU_DeclareMap( castor::String, PluginUPtr, PluginStr );
 	CU_DeclareArray( PluginStrMap, PluginType::eCount, PluginStrMap );

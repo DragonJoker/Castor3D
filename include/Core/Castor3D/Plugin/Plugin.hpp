@@ -26,7 +26,10 @@ namespace castor3d
 		//!< Signature for the plug-in's name retrieval function
 		using GetNameFunction = void ( * )( char const ** );
 
-	protected:
+		using Extension = castor::Pair< castor::String, castor::String >;
+		CU_DeclareVector( Extension, Extension );
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -39,17 +42,16 @@ namespace castor3d
 		 *\param[in]	library	La bibliothèque partagée contenant le plug-in
 		 *\param[in]	engine	Le moteur
 		 */
-		C3D_API Plugin( PluginType type, castor::DynamicLibraryUPtr library
+		C3D_API Plugin( PluginType type
+			, castor::DynamicLibraryUPtr library
 			, Engine & engine );
-
-	public:
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~Plugin()noexcept = default;
+		C3D_API ~Plugin()noexcept;
 		/**
 		 *\~english
 		 *\brief		Retrieves the required version for the plug-in to work correctly
@@ -97,24 +99,12 @@ namespace castor3d
 		 */
 		void unload()const noexcept;
 
-	protected:
-		//!\~english	The plug-in library.
-		//!\~french		La bibliothèque du plug-in.
+	private:
 		castor::DynamicLibraryUPtr m_library{};
-		//!\~english	The plug-in's version checking function.
-		//!\~french		La fonction de récupération de la version requise.
 		GetRequiredVersionFunction m_pfnGetRequiredVersion{};
-		//!\~english	The plug-in's name retrieval function.
-		//!\~french		La fonction de récupération du nom du plug-in.
 		GetNameFunction m_pfnGetName{};
-		//!\~english	The plug-in's loading function.
-		//!\~french		La fonction de chargement du plug-in.
 		OnLoadFunction m_pfnOnLoad{};
-		//!\~english	The plug-in's unloading function
-		//!\~french		La fonction de déchargement du plug-in.
 		OnUnloadFunction m_pfnOnUnload{};
-		//!\~english	The plug-in type.
-		//!\~french		Le type du plug-in.
 		PluginType m_type{};
 	};
 }

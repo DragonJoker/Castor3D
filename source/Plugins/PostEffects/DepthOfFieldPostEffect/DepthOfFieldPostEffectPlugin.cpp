@@ -3,7 +3,6 @@
 #include "DepthOfFieldPostEffect/DepthOfFieldUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Plugin/PostFxPlugin.hpp>
 
 #ifndef CU_PlatformWindows
 #	define C3D_DepthOfField_API
@@ -21,8 +20,8 @@ extern "C"
 	C3D_DepthOfField_API void isDebug( int * value );
 	C3D_DepthOfField_API void getType( castor3d::PluginType * type );
 	C3D_DepthOfField_API void getName( char const ** name );
-	C3D_DepthOfField_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
-	C3D_DepthOfField_API void OnUnload( castor3d::Engine * engine );
+	C3D_DepthOfField_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
+	C3D_DepthOfField_API void onUnload( castor3d::Engine * engine );
 
 	C3D_DepthOfField_API void getRequiredVersion( castor3d::Version * version )
 	{
@@ -44,7 +43,7 @@ extern "C"
 		*name = dof::PostEffect::Name.c_str();
 	}
 
-	C3D_DepthOfField_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
+	C3D_DepthOfField_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
 	{
 		engine->getPostEffectFactory().registerType( dof::PostEffect::Type
 			, &dof::PostEffect::create );
@@ -54,7 +53,7 @@ extern "C"
 			, nullptr );
 	}
 
-	C3D_DepthOfField_API void OnUnload( castor3d::Engine * engine )
+	C3D_DepthOfField_API void onUnload( castor3d::Engine * engine )
 	{
 		engine->unregisterParsers( dof::PostEffect::Type );
 		engine->getPostEffectFactory().unregisterType( dof::PostEffect::Type );

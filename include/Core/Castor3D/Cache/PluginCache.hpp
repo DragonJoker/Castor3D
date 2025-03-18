@@ -9,8 +9,6 @@ See LICENSE file in root folder
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Plugin/PluginModule.hpp"
 
-#include "Castor3D/Plugin/Plugin.hpp"
-
 namespace castor
 {
 	/**

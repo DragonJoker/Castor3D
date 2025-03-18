@@ -29,8 +29,8 @@ extern "C"
 	C3D_AtmosphereScattering_API void getType( castor3d::PluginType * type );
 	C3D_AtmosphereScattering_API void isDebug( int * value );
 	C3D_AtmosphereScattering_API void getName( char const ** name );
-	C3D_AtmosphereScattering_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
-	C3D_AtmosphereScattering_API void OnUnload( castor3d::Engine * engine );
+	C3D_AtmosphereScattering_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
+	C3D_AtmosphereScattering_API void onUnload( castor3d::Engine * engine );
 
 	C3D_AtmosphereScattering_API void getRequiredVersion( castor3d::Version * version )
 	{
@@ -52,7 +52,7 @@ extern "C"
 		*name = atmosphere_scattering::AtmosphereBackgroundModel::PluginName.c_str();
 	}
 
-	C3D_AtmosphereScattering_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
+	C3D_AtmosphereScattering_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
 	{
 		engine->registerScatteringModel( { castor::String{ atmosphere_scattering::AtmosphereScatteringModel::Name }
 			, atmosphere_scattering::AtmosphereScatteringModel::create } );
@@ -64,7 +64,7 @@ extern "C"
 			, nullptr );
 	}
 
-	C3D_AtmosphereScattering_API void OnUnload( castor3d::Engine * engine )
+	C3D_AtmosphereScattering_API void onUnload( castor3d::Engine * engine )
 	{
 		engine->unregisterParsers( atmosphere_scattering::AtmosphereBackgroundModel::PluginType );
 		engine->unregisterBackgroundModel( atmosphere_scattering::AtmosphereBackgroundModel::Name );
