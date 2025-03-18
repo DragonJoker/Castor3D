@@ -21,8 +21,8 @@ extern "C"
 	C3D_DisneyBRDF_API void getType( castor3d::PluginType * type );
 	C3D_DisneyBRDF_API void isDebug( int * value );
 	C3D_DisneyBRDF_API void getName( char const ** name );
-	C3D_DisneyBRDF_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
-	C3D_DisneyBRDF_API void OnUnload( castor3d::Engine * engine );
+	C3D_DisneyBRDF_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
+	C3D_DisneyBRDF_API void onUnload( castor3d::Engine * engine );
 
 	C3D_DisneyBRDF_API void getRequiredVersion( castor3d::Version * version )
 	{
@@ -44,7 +44,7 @@ extern "C"
 		*name = "Disney BRDF";
 	}
 
-	C3D_DisneyBRDF_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
+	C3D_DisneyBRDF_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
 	{
 		engine->registerDiffuseBrdf( { castor::String{ disney::shader::DisneyDiffuseBRDF::Name }, disney::shader::DisneyDiffuseBRDF::create } );
 		engine->registerSpecularBrdf( { castor::String{ disney::shader::DisneySpecularBRDF::Name }, disney::shader::DisneySpecularBRDF::create } );
@@ -52,7 +52,7 @@ extern "C"
 		engine->registerClearcoatBrdf( { castor::String{ disney::shader::DisneyClearcoatBRDF::Name }, disney::shader::DisneyClearcoatBRDF::create } );
 	}
 
-	C3D_DisneyBRDF_API void OnUnload( castor3d::Engine * engine )
+	C3D_DisneyBRDF_API void onUnload( castor3d::Engine * engine )
 	{
 		engine->unregisterClearcoatBrdf( castor::String{ disney::shader::DisneyClearcoatBRDF::Name } );
 		engine->unregisterSheenBrdf( castor::String{ disney::shader::DisneySheenBRDF::Name } );

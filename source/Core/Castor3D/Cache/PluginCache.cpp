@@ -2,14 +2,8 @@
 
 #include "Castor3D/Engine.hpp"
 
-#include "Castor3D/Plugin/DividerPlugin.hpp"
-#include "Castor3D/Plugin/GeneratorPlugin.hpp"
-#include "Castor3D/Plugin/GenericPlugin.hpp"
-#include "Castor3D/Plugin/ImporterPlugin.hpp"
-#include "Castor3D/Plugin/ParticlePlugin.hpp"
+#include "Castor3D/Plugin/Plugin.hpp"
 #include "Castor3D/Plugin/PluginException.hpp"
-#include "Castor3D/Plugin/PostFxPlugin.hpp"
-#include "Castor3D/Plugin/ToneMappingPlugin.hpp"
 #include "Castor3D/Miscellaneous/VersionException.hpp"
 
 #include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
@@ -61,6 +55,7 @@ namespace castor
 
 		try
 		{
+			auto lockTypes( makeUniqueLock( m_mutexLoadedPluginTypes ) );
 			result = doloadPlugin( strFilePath );
 		}
 		catch ( VersionException & exc )
@@ -96,6 +91,7 @@ namespace castor
 
 		try
 		{
+			auto lockTypes( makeUniqueLock( m_mutexLoadedPluginTypes ) );
 			result = doloadPlugin( fileFullPath );
 		}
 		catch ( VersionException & exc )
@@ -135,6 +131,7 @@ namespace castor
 	{
 		PathArray files;
 		File::listDirectoryFiles( folder, files );
+		auto lockTypes( makeUniqueLock( m_mutexLoadedPluginTypes ) );
 
 		if ( !files.empty() )
 		{
@@ -158,7 +155,6 @@ namespace castor
 	PluginRPtr ResourceCacheT< Plugin, String, PluginCacheTraits >::doloadPlugin( Path const & pathFile )
 	{
 		PluginRPtr result{};
-		auto lockTypes( makeUniqueLock( m_mutexLoadedPluginTypes ) );
 
 		if ( auto it = m_loadedPluginTypes.find( pathFile );
 			it == m_loadedPluginTypes.end() )
@@ -201,31 +197,13 @@ namespace castor
 			switch ( type )
 			{
 			case PluginType::eDivider:
-				plugin = castor::makeUniqueDerived< Plugin, DividerPlugin >( castor::move( library ), &m_engine );
-				break;
-
 			case PluginType::eImporter:
-				plugin = castor::makeUniqueDerived< Plugin, ImporterPlugin >( castor::move( library ), &m_engine );
-				break;
-
 			case PluginType::eGeneric:
-				plugin = castor::makeUniqueDerived< Plugin, GenericPlugin >( castor::move( library ), &m_engine );
-				break;
-
 			case PluginType::eToneMapping:
-				plugin = castor::makeUniqueDerived< Plugin, ToneMappingPlugin >( castor::move( library ), &m_engine );
-				break;
-
 			case PluginType::ePostEffect:
-				plugin = castor::makeUniqueDerived< Plugin, PostFxPlugin >( castor::move( library ), &m_engine );
-				break;
-
 			case PluginType::eParticle:
-				plugin = castor::makeUniqueDerived< Plugin, ParticlePlugin >( castor::move( library ), &m_engine );
-				break;
-
 			case PluginType::eGenerator:
-				plugin = castor::makeUniqueDerived< Plugin, GeneratorPlugin >( castor::move( library ), &m_engine );
+				plugin = castor::makeUnique< Plugin >( type, castor::move( library ), m_engine );
 				break;
 
 			default:

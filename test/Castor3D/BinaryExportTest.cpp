@@ -16,7 +16,6 @@
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationNode.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
-#include <Castor3D/Plugin/ImporterPlugin.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>

@@ -2,7 +2,6 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/TargetCache.hpp>
-#include <Castor3D/Plugin/PostFxPlugin.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
 
@@ -142,8 +141,8 @@ extern "C"
 	C3D_PbrBloom_API void isDebug( int * value );
 	C3D_PbrBloom_API void getType( castor3d::PluginType * type );
 	C3D_PbrBloom_API void getName( char const ** name );
-	C3D_PbrBloom_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
-	C3D_PbrBloom_API void OnUnload( castor3d::Engine * engine );
+	C3D_PbrBloom_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
+	C3D_PbrBloom_API void onUnload( castor3d::Engine * engine );
 
 	C3D_PbrBloom_API void getRequiredVersion( castor3d::Version * version )
 	{
@@ -165,7 +164,7 @@ extern "C"
 		*name = PbrBloom::PostEffect::Name.c_str();
 	}
 
-	C3D_PbrBloom_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
+	C3D_PbrBloom_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
 	{
 		engine->getPostEffectFactory().registerType( PbrBloom::PostEffect::Type
 			, &PbrBloom::PostEffect::create );
@@ -175,7 +174,7 @@ extern "C"
 			, nullptr );
 	}
 
-	C3D_PbrBloom_API void OnUnload( castor3d::Engine * engine )
+	C3D_PbrBloom_API void onUnload( castor3d::Engine * engine )
 	{
 		engine->unregisterParsers( PbrBloom::PostEffect::Type );
 		engine->getPostEffectFactory().unregisterType( PbrBloom::PostEffect::Type );

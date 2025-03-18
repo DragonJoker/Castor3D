@@ -41,8 +41,8 @@ extern "C"
 	C3D_ToonMaterial_API void getType( castor3d::PluginType * type );
 	C3D_ToonMaterial_API void isDebug( int * value );
 	C3D_ToonMaterial_API void getName( char const ** name );
-	C3D_ToonMaterial_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
-	C3D_ToonMaterial_API void OnUnload( castor3d::Engine * engine );
+	C3D_ToonMaterial_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
+	C3D_ToonMaterial_API void onUnload( castor3d::Engine * engine );
 
 	C3D_ToonMaterial_API void getRequiredVersion( castor3d::Version * version )
 	{
@@ -64,7 +64,7 @@ extern "C"
 		*name = "Toon Material";
 	}
 
-	C3D_ToonMaterial_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
+	C3D_ToonMaterial_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
 	{
 		engine->registerPassComponent< toon::EdgesComponent >();
 		engine->registerLightingModel( toon::shader::ToonPhongLightingModel::getName()
@@ -91,7 +91,7 @@ extern "C"
 				, &toon::shader::ToonProfiles::declare } );
 	}
 
-	C3D_ToonMaterial_API void OnUnload( castor3d::Engine * engine )
+	C3D_ToonMaterial_API void onUnload( castor3d::Engine * engine )
 	{
 		engine->unregisterSpecificsBuffer( castor::String{ toon::shader::ToonProfile::getName() } );
 		engine->unregisterPassModel( toon::shader::ToonPbrLightingModel::getName() );

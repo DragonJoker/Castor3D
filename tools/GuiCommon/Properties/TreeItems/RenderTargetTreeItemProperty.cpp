@@ -12,7 +12,6 @@
 #include "GuiCommon/System/SceneObjectsTree.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Plugin/ToneMappingPlugin.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
