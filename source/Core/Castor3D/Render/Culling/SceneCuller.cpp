@@ -337,8 +337,8 @@ namespace castor3d
 #if C3D_DebugTimers
 			auto blockCompute( m_timerCompute->start() );
 #endif
-			duUpdateCulledSubmeshes( dirtySubmeshes );
-			duUpdateCulledBillboards( dirtyBillboards );
+			doUpdateCulledSubmeshes( dirtySubmeshes );
+			doUpdateCulledBillboards( dirtyBillboards );
 			m_anyChanged = true;
 		}
 	}
@@ -361,7 +361,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneCuller::duUpdateCulledSubmeshes( castor::Vector< SubmeshRenderNode const * > const & dirtySubmeshes )
+	void SceneCuller::doUpdateCulledSubmeshes( castor::Vector< SubmeshRenderNode const * > const & dirtySubmeshes )
 	{
 		for ( auto dirty : dirtySubmeshes )
 		{
@@ -372,11 +372,11 @@ namespace castor3d
 					return lookup->node == dirty;
 				} );
 			auto visible = isSubmeshVisible( *dirty );
-			auto count = dirty->getInstanceCount();
 
 			if ( it != m_culledSubmeshes.end() )
 			{
 				auto const & culled = *it;
+				auto count = dirty->getInstanceCount();
 
 				if ( culled->visible != visible
 					|| culled->instanceCount != count
@@ -400,7 +400,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneCuller::duUpdateCulledBillboards( castor::Vector< BillboardRenderNode const * > const & dirtyBillboards )
+	void SceneCuller::doUpdateCulledBillboards( castor::Vector< BillboardRenderNode const * > const & dirtyBillboards )
 	{
 		for ( auto dirty : dirtyBillboards )
 		{
