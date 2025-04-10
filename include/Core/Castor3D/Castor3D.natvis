@@ -293,7 +293,6 @@
 		<Expand>
 			<Item Name="name">m_name</Item>
 			<Item Name="scene">m_scene</Item>
-			<Item Name="modified">m_modified</Item>
 			<Item Name="box">m_box</Item>
 			<Item Name="sphere">m_sphere</Item>
 			<Item Name="submeshes">m_submeshes</Item>
@@ -478,6 +477,7 @@
 	<Type Name="castor3d::SceneNode">
 		<DisplayString>[{m_id}]{m_name}</DisplayString>
 		<Expand>
+			<Item Name="[animable]">(castor3d::Animable *)this,nd</Item>
 			<Item Name="id">m_id</Item>
 			<Item Name="displayable">m_displayable</Item>
 			<Item Name="visible">m_visible</Item>
@@ -1112,7 +1112,7 @@
 			<Item Name="pass">m_owner</Item>
 			<Item Name="type">m_type</Item>
 			<Item Name="id">m_dependencies</Item>
-      <Item Name="textureFlags">m_textureFlags</Item>
+			<Item Name="textureFlags">m_textureFlags</Item>
 			<Item Name="dependencies">m_dependencies</Item>
 			<Item Name="plugin">m_plugin</Item>
 			<Item Name="dirty">m_dirty</Item>
@@ -1126,11 +1126,34 @@
 			<Item Name="pass">m_owner</Item>
 			<Item Name="type">m_type</Item>
 			<Item Name="id">m_dependencies</Item>
-      <Item Name="value">m_value</Item>
+			<Item Name="value">m_value</Item>
 			<Item Name="dependencies">m_dependencies</Item>
 			<Item Name="plugin">m_plugin</Item>
 			<Item Name="dirty">m_dirty</Item>
 			<Item Name="materialShader">m_materialShader</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::SubmeshRenderNode">
+		<DisplayString>{instance} {data}</DisplayString>
+		<Expand>
+			<Item Name="pass">pass</Item>
+			<Item Name="data">data</Item>
+			<Item Name="instance">instance</Item>
+			<Item Name="modelData">modelData</Item>
+			<Item Name="animMesh">mesh</Item>
+			<Item Name="animSkeleton">skeleton</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::BillboardRenderNode">
+		<DisplayString>{instance} {data}</DisplayString>
+		<Expand>
+			<Item Name="pass">pass</Item>
+			<Item Name="data">data</Item>
+			<Item Name="instance">instance</Item>
+			<Item Name="modelData">modelData</Item>
+			<Item Name="billboardData">billboardData</Item>
 		</Expand>
 	</Type>
 

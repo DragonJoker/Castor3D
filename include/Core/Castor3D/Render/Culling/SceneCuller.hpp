@@ -117,8 +117,8 @@ namespace castor3d
 		void doMarkDirty( CpuUpdater::DirtyObjects const & sceneObjs
 			, castor::Vector< SubmeshRenderNode const * > & dirtySubmeshes
 			, castor::Vector< BillboardRenderNode const * > & dirtyBillboards )const;
-		void duUpdateCulledSubmeshes( castor::Vector< SubmeshRenderNode const * > const & dirtySubmeshes );
-		void duUpdateCulledBillboards( castor::Vector< BillboardRenderNode const * > const & dirtyBillboards );
+		void doUpdateCulledSubmeshes( castor::Vector< SubmeshRenderNode const * > const & dirtySubmeshes );
+		void doUpdateCulledBillboards( castor::Vector< BillboardRenderNode const * > const & dirtyBillboards );
 		void doMakeDirty( Geometry const & object
 			, castor::Vector< SubmeshRenderNode const * > & dirtySubmeshes )const;
 		void doMakeDirty( BillboardBase const & object
