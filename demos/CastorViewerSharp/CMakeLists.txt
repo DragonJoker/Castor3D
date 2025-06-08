@@ -38,8 +38,10 @@ if ( MSVC AND ${CASTOR_BUILD_INTEROP_COM} )
 		PROPERTY
 			VS_XAML_TYPE "ApplicationDefinition"
 	)
+	target_link_libraries( ${PROJECT_NAME}
+		Castor3DInterop
+	)
 	set( ${PROJECT_NAME}_REFERENCES
-		"Castor3D"
 		"System"
 		"System.Core"
 		"System.Data"
@@ -58,9 +60,6 @@ if ( MSVC AND ${CASTOR_BUILD_INTEROP_COM} )
 			WIN32_EXECUTABLE TRUE
 			FOLDER "Demos"
 			VS_DOTNET_REFERENCES "${${PROJECT_NAME}_REFERENCES}"
-	)
-	add_dependencies( ${PROJECT_NAME}
-		ComCastor3D
 	)
 	set( Build "yes (version ${CVS_VERSION_MAJOR}.${CVS_VERSION_MINOR}.${CVS_VERSION_BUILD})" PARENT_SCOPE )
 endif ()

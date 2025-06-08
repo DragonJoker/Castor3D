@@ -26,7 +26,7 @@ int _tmain( int argc, TCHAR * argv[] )
 			try
 			{
 				logger->LogInfo( _T( "ComCastor3DTest - Start" ) );
-				if ( Castor3D::IEnginePtr engine = Castor3D::IEnginePtr( __uuidof( Castor3D::engine ) ) )
+				if ( Castor3D::IEnginePtr engine = Castor3D::IEnginePtr( __uuidof( Castor3D::Engine ) ) )
 					engine->Create( _T( "ComCastor3DTest" ), false );
 				logger->LogInfo( _T( "ComCastor3DTest - Finish" ) );
 			}

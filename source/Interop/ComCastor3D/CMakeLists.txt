@@ -263,6 +263,7 @@ if ( MSVC )
 			${PROJECT_NAME}
 			PARENT_SCOPE
 		)
+		add_com_interop( ${PROJECT_NAME} ${${PROJECT_NAME}_IDL_FILES} )
 		# Copy tlb files into binaries directory.
 		add_custom_command( TARGET ${PROJECT_NAME}
 			POST_BUILD

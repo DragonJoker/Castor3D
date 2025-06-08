@@ -22,7 +22,7 @@
 using System;
 using System.IO;
 using System.Windows.Interop;
-using Castor3D;
+using Castor3DInterop;
 using System.Windows.Threading;
 using System.Windows.Input;
 using System.Windows;
@@ -33,7 +33,7 @@ namespace CastorViewerSharp
 	/// Logique d'interaction pour MainWindow.xaml
 	public partial class MainWindow
 		: System.Windows.Window
-		, Castor3D.IGuiCallbacks
+		, Castor3DInterop.IGuiCallbacks
 	{
 		/// <summary>
 		/// Default constructor
@@ -113,9 +113,9 @@ namespace CastorViewerSharp
 				if (m_renderTarget != null)
 				{
 					m_renderWindow.Initialise(m_renderTarget);
-					m_scene = m_renderTarget.scene;
-					m_nodeState = new NodeState(m_renderTarget.camera.Node);
-					Castor3D.Size size = new Castor3D.Size();
+					m_scene = m_renderTarget.Scene;
+					m_nodeState = new NodeState(m_renderTarget.Camera.Node);
+					Castor3DInterop.Size size = new Castor3DInterop.Size();
 					size.Width = (uint)Width;
 					size.Height = (uint)Height;
 					m_renderWindow.Resize(size);
@@ -136,8 +136,8 @@ namespace CastorViewerSharp
 			var window = GetWindow(RenderPanel);
 			double ww = window.Width;
 			double wh = window.Height;
-			int cw = (int)m_renderTarget.camera.Width;
-			int ch = (int)m_renderTarget.camera.Height;
+			int cw = (int)m_renderTarget.Camera.Width;
+			int ch = (int)m_renderTarget.Camera.Height;
 			result.Set((float)((point.X * cw) / ww)
 				, (float)((point.Y * ch) / wh));
 			return result;
@@ -217,18 +217,17 @@ namespace CastorViewerSharp
 		{
 			base.OnInitialized(e);
 			base.Show();
-			m_engine = new engine();
+			m_engine = new Engine();
 			m_engine.Create("CastorViewerSharp", 1);
 
 			DoLoadPlugins();
 
 			var window = GetWindow(RenderPanel);
 			window.Show();
-			Castor3D.Size size = new Castor3D.Size();
+			Castor3DInterop.Size size = new Castor3DInterop.Size();
 			size.Set((uint)window.Width, (uint)window.Height);
 			var handle = new WindowInteropHelper(window).Handle;
-			m_renderWindow = new RenderWindow();
-			m_renderWindow.Create(m_engine, "MainWindow", size, handle);
+			m_renderWindow = m_engine.CreateRenderWindow("MainWindow", size, handle);
 			m_engine.RegisterGuiCallbacks(this);
 
 			m_motionTimer = new DispatcherTimer();
@@ -553,7 +552,7 @@ namespace CastorViewerSharp
 		{
 			if (m_renderTarget != null)
 			{
-				Castor3D.Size size = new Castor3D.Size();
+				Castor3DInterop.Size size = new Castor3DInterop.Size();
 				size.Width = (uint)e.NewSize.Width;
 				size.Height = (uint)e.NewSize.Height;
 				m_renderWindow.Resize(size);
@@ -580,7 +579,7 @@ namespace CastorViewerSharp
 		/// <summary>
 		/// The Castor3D engine
 		/// </summary>
-		private engine m_engine;
+		private Engine m_engine;
 		/// <summary>
 		/// The render window
 		/// </summary>
@@ -592,7 +591,7 @@ namespace CastorViewerSharp
 		/// <summary>
 		/// The main scene
 		/// </summary>
-		private scene m_scene;
+		private Scene m_scene;
 		/// <summary>
 		/// The scene node controlled by the mouse
 		/// </summary>
