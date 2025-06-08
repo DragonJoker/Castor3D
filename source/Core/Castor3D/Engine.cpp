@@ -109,7 +109,6 @@ namespace castor3d
 				castor::PxBufferBase const * bufferB;
 				{
 					auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf_ggx.png" );
-					castor::ImageResPtr created;
 					auto img = engine.addNewImage( cuT( "BRDFLutGGX" )
 						, castor::ImageCreateParams{ imagePath, { false, false, false } } );
 					bufferRG = img->getPixels();
