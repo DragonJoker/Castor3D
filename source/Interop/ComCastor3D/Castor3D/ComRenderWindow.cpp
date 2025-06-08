@@ -1,395 +1,183 @@
 #include "ComCastor3D/Castor3D/ComRenderWindow.hpp"
 
+#include "ComCastor3D/Castor3D/ComEngine.hpp"
 #include "ComCastor3D/Castor3D/ComRenderTarget.hpp"
+#include "ComCastor3D/CastorUtils/ComPosition.hpp"
+#include "ComCastor3D/CastorUtils/ComSize.hpp"
 
-#include <Castor3D/Event/UserInput/UserInputListener.hpp>
+#include <bit>
 
 namespace CastorCom
 {
-	namespace window
+	STDMETHODIMP CRenderWindow::Initialise( /*[in]*/ IRenderTarget * target )noexcept
 	{
-		static const tstring ERROR_UNINITIALISED = _T( "The render window must be initialised" );
-	}
+		if ( !target )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "Initialise" ) );
 
-	STDMETHODIMP CRenderWindow::Initialise( /* [in] */ IRenderTarget * target )noexcept
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			try
-			{
-				m_internal->initialise( castor3d::RenderWindowDesc{ castor::String{}
-					, static_cast< CRenderTarget * >( target )->getInternal() } );
-				hr = S_OK;
-			}
-			catch ( castor::Exception & exc )
-			{
-				castor::Logger::logError( exc.getFullDescription() );
-			}
-			catch ( std::exception & exc )
-			{
-				castor::Logger::logError( exc.what() );
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, _T( "Initialise" ), window::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dRenderWindow_initialise( m_internal
+			, static_cast< CRenderTarget * >( target )->getInternal() ) );
 	}
 
 	STDMETHODIMP CRenderWindow::Cleanup()noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "Initialise" ) );
 
-		if ( m_internal )
-		{
-			m_internal->cleanup();
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, _T( "Cleanup" ), window::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dRenderWindow_cleanup( m_internal ) );
 	}
 
-	STDMETHODIMP CRenderWindow::Resize( /* [in] */ ISize * size )noexcept
+	STDMETHODIMP CRenderWindow::Resize( /*[in]*/ ISize * size )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !size )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "Initialise" ) );
 
-		if ( m_internal )
-		{
-			m_internal->resize( static_cast< CSize * >( size )->getInternal() );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, _T( "Resize" ), window::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dRenderWindow_resize( m_internal
+			, &static_cast< CSize * >( size )->getInternal() ) );
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseMove( /* [in] */ IPosition * pos, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseMove( /*[in]*/ IPosition * pos, /*[in]*/ boolean isCtrlDown, /*[in]*/ boolean isAltDown, /*[in]*/ boolean isShiftDown, /*[out, retval]*/ boolean * pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet || !pos )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "OnMouseMove" ) );
 
-		if ( m_internal )
-		{
-			pos->get_X( &m_oldX );
-			pos->get_Y( &m_oldY );
-
-			try
-			{
-				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
-				{
-					*pVal = inputListener->fireMouseMove( castor::Position( int32_t( m_oldX ), int32_t( m_oldY ) )
-						, isCtrlDown != FALSE
-						, isAltDown != FALSE
-						, isShiftDown != FALSE );
-				}
-			}
-			catch ( castor::Exception & )
-			{
-			}
-
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, _T( "OnMouseMove" ), window::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dRenderWindow_onMouseMove( m_internal
+			, &static_cast< CPosition * >( pos )->getInternal()
+			, details::parameterCast< bool >( isCtrlDown )
+			, details::parameterCast< bool >( isAltDown )
+			, details::parameterCast< bool >( isShiftDown )
+			, std::bit_cast< bool * >( pRet ) ) );
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseLButtonDown( /* [in] */ IPosition * pos, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseLButtonDown( /*[in]*/ boolean isCtrlDown, /*[in]*/ boolean isAltDown, /*[in]*/ boolean isShiftDown, /*[out, retval]*/ boolean * pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "OnMouseLButtonDown" ) );
 
-		if ( m_internal )
-		{
-			pos->get_X( &m_oldX );
-			pos->get_Y( &m_oldY );
-
-			try
-			{
-				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
-				{
-					*pVal = inputListener->fireMouseButtonPushed( castor3d::MouseButton::eLeft
-						, isCtrlDown != FALSE
-						, isAltDown != FALSE
-						, isShiftDown != FALSE );
-				}
-			}
-			catch ( castor::Exception & )
-			{
-			}
-
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, _T( "OnMouseLButtondown" ), window::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dRenderWindow_onMouseLButtonDown( m_internal
+			, details::parameterCast< bool >( isCtrlDown )
+			, details::parameterCast< bool >( isAltDown )
+			, details::parameterCast< bool >( isShiftDown )
+			, std::bit_cast< bool * >( pRet ) ) );
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseLButtonUp( /* [in] */ IPosition * pos, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseLButtonUp( /*[in]*/ boolean isCtrlDown, /*[in]*/ boolean isAltDown, /*[in]*/ boolean isShiftDown, /*[out, retval]*/ boolean * pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "OnMouseLButtonUp" ) );
 
-		if ( m_internal )
-		{
-			pos->get_X( &m_oldX );
-			pos->get_Y( &m_oldY );
-
-			try
-			{
-				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
-				{
-					*pVal = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eLeft
-						, isCtrlDown != FALSE
-						, isAltDown != FALSE
-						, isShiftDown != FALSE );
-				}
-			}
-			catch ( castor::Exception & )
-			{
-			}
-
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, _T( "OnMouseLButtonUp" ), window::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dRenderWindow_onMouseLButtonUp( m_internal
+			, details::parameterCast< bool >( isCtrlDown )
+			, details::parameterCast< bool >( isAltDown )
+			, details::parameterCast< bool >( isShiftDown )
+			, std::bit_cast< bool * >( pRet ) ) );
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseMButtonDown( /* [in] */ IPosition * pos, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseMButtonDown( /*[in]*/ boolean isCtrlDown, /*[in]*/ boolean isAltDown, /*[in]*/ boolean isShiftDown, /*[out, retval]*/ boolean * pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "OnMouseMButtonDown" ) );
 
-		if ( m_internal )
-		{
-			pos->get_X( &m_oldX );
-			pos->get_Y( &m_oldY );
-
-			try
-			{
-				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
-				{
-					*pVal = inputListener->fireMouseButtonPushed( castor3d::MouseButton::eMiddle
-						, isCtrlDown != FALSE
-						, isAltDown != FALSE
-						, isShiftDown != FALSE );
-				}
-			}
-			catch ( castor::Exception & )
-			{
-			}
-
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, _T( "OnMouseMButtondown" ), window::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dRenderWindow_onMouseMButtonDown( m_internal
+			, details::parameterCast< bool >( isCtrlDown )
+			, details::parameterCast< bool >( isAltDown )
+			, details::parameterCast< bool >( isShiftDown )
+			, std::bit_cast< bool * >( pRet ) ) );
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseMButtonUp( /* [in] */ IPosition * pos, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseMButtonUp( /*[in]*/ boolean isCtrlDown, /*[in]*/ boolean isAltDown, /*[in]*/ boolean isShiftDown, /*[out, retval]*/ boolean * pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "OnMouseMButtonUp" ) );
 
-		if ( m_internal )
-		{
-			pos->get_X( &m_oldX );
-			pos->get_Y( &m_oldY );
-
-			try
-			{
-				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
-				{
-					*pVal = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eMiddle
-						, isCtrlDown != FALSE
-						, isAltDown != FALSE
-						, isShiftDown != FALSE );
-				}
-			}
-			catch ( castor::Exception & )
-			{
-			}
-
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, _T( "OnMouseMButtonUp" ), window::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dRenderWindow_onMouseMButtonUp( m_internal
+			, details::parameterCast< bool >( isCtrlDown )
+			, details::parameterCast< bool >( isAltDown )
+			, details::parameterCast< bool >( isShiftDown )
+			, std::bit_cast< bool * >( pRet ) ) );
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseRButtonDown( /* [in] */ IPosition * pos, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseRButtonDown( /*[in]*/ boolean isCtrlDown, /*[in]*/ boolean isAltDown, /*[in]*/ boolean isShiftDown, /*[out, retval]*/ boolean * pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "OnMouseRButtonDown" ) );
 
-		if ( m_internal )
-		{
-			pos->get_X( &m_oldX );
-			pos->get_Y( &m_oldY );
-
-			try
-			{
-				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
-				{
-					*pVal = inputListener->fireMouseButtonPushed( castor3d::MouseButton::eRight
-						, isCtrlDown != FALSE
-						, isAltDown != FALSE
-						, isShiftDown != FALSE );
-				}
-			}
-			catch ( castor::Exception & )
-			{
-			}
-
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, _T( "OnMouseRButtondown" ), window::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dRenderWindow_onMouseRButtonDown( m_internal
+			, details::parameterCast< bool >( isCtrlDown )
+			, details::parameterCast< bool >( isAltDown )
+			, details::parameterCast< bool >( isShiftDown )
+			, std::bit_cast< bool * >( pRet ) ) );
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseRButtonUp( /* [in] */ IPosition * pos, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseRButtonUp( /*[in]*/ boolean isCtrlDown, /*[in]*/ boolean isAltDown, /*[in]*/ boolean isShiftDown, /*[out, retval]*/ boolean * pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "OnMouseRButtonUp" ) );
 
-		if ( m_internal )
-		{
-			pos->get_X( &m_oldX );
-			pos->get_Y( &m_oldY );
-
-			try
-			{
-				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
-				{
-					*pVal = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eRight
-						, isCtrlDown != FALSE
-						, isAltDown != FALSE
-						, isShiftDown != FALSE );
-				}
-			}
-			catch ( castor::Exception & )
-			{
-			}
-
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, _T( "OnMouseRButtonUp" ), window::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dRenderWindow_onMouseRButtonUp( m_internal
+			, details::parameterCast< bool >( isCtrlDown )
+			, details::parameterCast< bool >( isAltDown )
+			, details::parameterCast< bool >( isShiftDown )
+			, std::bit_cast< bool * >( pRet ) ) );
 	}
 
-	STDMETHODIMP CRenderWindow::OnKeyboardKeyDown( /* [in] */ eKEYBOARD_KEY key, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal )noexcept
+	STDMETHODIMP CRenderWindow::OnKeyboardKeyDown( /*[in]*/ eKEYBOARD_KEY key, /*[in]*/ boolean isCtrlDown, /*[in]*/ boolean isAltDown, /*[in]*/ boolean isShiftDown, /*[out, retval]*/ boolean * pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "OnKeyboardKeyDown" ) );
 
-		if ( m_internal )
-		{
-			try
-			{
-				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
-				{
-					*pVal = inputListener->fireKeyDown( castor3d::KeyboardKey( key )
-						, isCtrlDown != FALSE
-						, isAltDown != FALSE
-						, isShiftDown != FALSE );
-				}
-			}
-			catch ( castor::Exception & )
-			{
-			}
-
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, _T( "OnKeyboardKeyDown" ), window::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dRenderWindow_onKeyboardKeyDown( m_internal
+			, details::parameterCast< C3D_KEYBOARD_KEY >( key )
+			, details::parameterCast< bool >( isCtrlDown )
+			, details::parameterCast< bool >( isAltDown )
+			, details::parameterCast< bool >( isShiftDown )
+			, std::bit_cast< bool * >( pRet ) ) );
 	}
 
-	STDMETHODIMP CRenderWindow::OnKeyboardKeyUp( /* [in] */ eKEYBOARD_KEY key, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal )noexcept
+	STDMETHODIMP CRenderWindow::OnKeyboardKeyUp( /*[in]*/ eKEYBOARD_KEY key, /*[in]*/ boolean isCtrlDown, /*[in]*/ boolean isAltDown, /*[in]*/ boolean isShiftDown, /*[out, retval]*/ boolean * pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "OnKeyboardKeyUp" ) );
 
-		if ( m_internal )
-		{
-			try
-			{
-				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
-				{
-					*pVal = inputListener->fireKeyUp( castor3d::KeyboardKey( key )
-						, isCtrlDown != FALSE
-						, isAltDown != FALSE
-						, isShiftDown != FALSE );
-				}
-			}
-			catch ( castor::Exception & )
-			{
-			}
-
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, _T( "OnKeyboardKeyUp" ), window::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dRenderWindow_onKeyboardKeyUp( m_internal
+			, details::parameterCast< C3D_KEYBOARD_KEY >( key )
+			, details::parameterCast< bool >( isCtrlDown )
+			, details::parameterCast< bool >( isAltDown )
+			, details::parameterCast< bool >( isShiftDown )
+			, std::bit_cast< bool * >( pRet ) ) );
 	}
 
-	STDMETHODIMP CRenderWindow::OnKeyboardChar( /* [in] */ eKEYBOARD_KEY key, /* [in] */ BSTR c, /* [out, retval] */ boolean * pVal )noexcept
+	STDMETHODIMP CRenderWindow::OnKeyboardChar( /*[in]*/ eKEYBOARD_KEY key, /*[in]*/ BSTR c, /*[out, retval]*/ boolean * pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "OnKeyboardChar" ) );
 
-		if ( m_internal )
-		{
-			try
-			{
-				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
-				{
-					*pVal = inputListener->fireChar( castor3d::KeyboardKey( key )
-						, fromBstr( c ) );
-				}
-			}
-			catch ( castor::Exception & )
-			{
-			}
-
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, _T( "OnKeyboardKeyUp" ), window::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dRenderWindow_onKeyboardChar( m_internal
+			, details::parameterCast< C3D_KEYBOARD_KEY >( key )
+			, bstrToString( c ).c_str()
+			, std::bit_cast< bool * >( pRet ) ) );
 	}
 }

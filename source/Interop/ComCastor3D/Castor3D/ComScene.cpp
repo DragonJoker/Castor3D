@@ -1,528 +1,268 @@
 #include "ComCastor3D/Castor3D/ComScene.hpp"
-#include "ComCastor3D/Castor3D/ComGeometry.hpp"
+
 #include "ComCastor3D/Castor3D/ComCamera.hpp"
+#include "ComCastor3D/Castor3D/ComEngine.hpp"
+#include "ComCastor3D/Castor3D/ComGeometry.hpp"
 #include "ComCastor3D/Castor3D/ComLight.hpp"
+#include "ComCastor3D/Castor3D/ComLightGroup.hpp"
 #include "ComCastor3D/Castor3D/ComMesh.hpp"
 #include "ComCastor3D/Castor3D/ComRenderWindow.hpp"
-
-#include <Castor3D/Cache/BillboardCache.hpp>
-#include <Castor3D/Cache/SceneNodeCache.hpp>
-#include <Castor3D/Miscellaneous/Parameter.hpp>
-#include <Castor3D/Model/Mesh/MeshFactory.hpp>
-#include <Castor3D/Model/Mesh/MeshGenerator.hpp>
-#include <Castor3D/Render/Viewport.hpp>
+#include "ComCastor3D/Castor3D/ComSceneNode.hpp"
 
 namespace CastorCom
 {
-	namespace scene
+	STDMETHODIMP CScene::get_RootNode( /*[out, retval]*/ ISceneNode ** pRet )noexcept
 	{
-		static const tstring ERROR_UNINITIALISED = _T( "The scene must be initialised" );
-		static const tstring ERROR_NULL_PARENT_NODE = _T( "The parent node must not be null." );
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "get_RootNode" ) );
+		if ( CSceneNode::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
+
+		return convert( c3dScene_getRootNode( m_internal
+			, &static_cast< CSceneNode * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CScene::CreateNode( /* [in] */ BSTR name, /* [in] */ ISceneNode * parent, /* [out, retval] */ ISceneNode ** pVal )noexcept
+	STDMETHODIMP CScene::get_ObjectRootNode( /*[out, retval]*/ ISceneNode ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "get_ObjectRootNode" ) );
+		if ( CSceneNode::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CSceneNode::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					if ( auto node = m_internal->createSceneNode( fromBstr( name ), *m_internal ) )
-					{
-						static_cast< CSceneNode * >( *pVal )->setInternal( node.get() );
-						node->attachTo( *static_cast< CSceneNode * >( parent )->getInternal() );
-						m_internal->addSceneNode( node->getName(), node );
-					}
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IScene, // This is the GUID of the component throwing error
-					 _T( "CreateSceneNode" ),		// This is generally displayed as the title
-					 scene::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dScene_getObjectRootNode( m_internal
+			, &static_cast< CSceneNode * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CScene::CreateGeometry( /* [in] */ BSTR name, /*[in] */ ISceneNode * node, /* [out, retval] */ IGeometry ** pVal )noexcept
+	STDMETHODIMP CScene::get_CameraRootNode( /*[out, retval]*/ ISceneNode ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "get_CameraRootNode" ) );
+		if ( CSceneNode::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( m_internal )
-		{
-			if ( !node )
-			{
-				hr = CComError::dispatchError(
-					E_POINTER, // This represents the error
-					IID_IScene,	 // This is the GUID of the component throwing error
-					_T( "CreateLight" ),			// This is generally displayed as the title
-					scene::ERROR_NULL_PARENT_NODE.c_str(), // This is the description
-					0, // This is the context in the help file
-					nullptr );
-				return hr;
-			}
-
-			if ( pVal )
-			{
-				hr = CGeometry::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					auto geom = m_internal->createGeometry( fromBstr( name )
-						, *m_internal
-						, *static_cast< CSceneNode * >( node )->getInternal()
-						, castor3d::MeshResPtr{} );
-					static_cast< CGeometry * >( *pVal )->setInternal( geom.get() );
-					m_internal->addGeometry( std::move( geom ) );
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IScene, // This is the GUID of the component throwing error
-					 _T( "CreateGeometry" ),		// This is generally displayed as the title
-					 scene::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dScene_getCameraRootNode( m_internal
+			, &static_cast< CSceneNode * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CScene::CreateCamera( /* [in] */ BSTR name, /* [in] */ int ww, /* [in] */ int wh, /* [in] */ ISceneNode * node, /* [out, retval] */ ICamera ** pVal )noexcept
+	STDMETHODIMP CScene::Create( /*[in]*/ IEngine * engine, /*[in]*/ BSTR name )noexcept
 	{
-		HRESULT hr = E_POINTER;
-
+		if ( !engine || !name )
+			return E_POINTER;
 		if ( m_internal )
-		{
-			if ( !node )
-			{
-				hr = CComError::dispatchError(
-					E_POINTER, // This represents the error
-					IID_IScene,	 // This is the GUID of the component throwing error
-					_T( "CreateLight" ),			// This is generally displayed as the title
-					scene::ERROR_NULL_PARENT_NODE.c_str(), // This is the description
-					0, // This is the context in the help file
-					nullptr );
-				return hr;
-			}
+			return dispatchInitialised( _T( "Create" ) );
 
-			if ( pVal )
-			{
-				hr = CCamera::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					castor3d::Viewport l_viewport{ *getInternal()->getEngine() };
-					l_viewport.setPerspective( castor::Angle::fromDegrees( 120.0f ), 4.0f / 3.0f, 0.1f, 1000.0f );
-					l_viewport.resize( castor::Size( uint32_t( std::abs( ww ) ), uint32_t( std::abs( wh ) ) ) );
-					auto camera = m_internal->createCamera( fromBstr( name )
-						, *m_internal
-						, *static_cast< CSceneNode * >( node )->getInternal()
-						, std::move( l_viewport ) );
-					static_cast< CCamera * >( *pVal )->setInternal( camera.get() );
-					m_internal->addCamera( camera->getName(), camera );
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IScene, // This is the GUID of the component throwing error
-					 _T( "CreateCamera" ),			// This is generally displayed as the title
-					 scene::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dScene_create( static_cast< CEngine * >( engine )->getInternal()
+			, bstrToString( name ).c_str()
+			, &m_internal ) );
 	}
 
-	STDMETHODIMP CScene::CreateLight( /* [in] */ BSTR name, /* [in] */ ISceneNode * node, /* [in] */ eLIGHT_TYPE type, /* [out, retval] */ ILight ** pVal )noexcept
+	STDMETHODIMP CScene::AddNode( /*[in]*/ ISceneNode * val )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "AddNode" ) );
 
-		if ( m_internal )
-		{
-			if ( !node )
-			{
-				hr = CComError::dispatchError(
-					E_POINTER, // This represents the error
-					IID_IScene,	 // This is the GUID of the component throwing error
-					_T( "CreateLight" ),			// This is generally displayed as the title
-					scene::ERROR_NULL_PARENT_NODE.c_str(), // This is the description
-					0, // This is the context in the help file
-					nullptr );
-				return hr;
-			}
-
-			if ( pVal )
-			{
-				hr = CLight::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					auto light = m_internal->createLight( fromBstr( name )
-						, *m_internal
-						, *static_cast< CSceneNode * >( node )->getInternal()
-						, m_internal->getLightsFactory()
-						, castor3d::LightType( type ) );
-					static_cast< CLight * >( *pVal )->setInternal( light.get() );
-					m_internal->addLight( light->getName(), light );
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IScene, // This is the GUID of the component throwing error
-					 _T( "CreateLight" ),			// This is generally displayed as the title
-					 scene::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dScene_addNode( m_internal, static_cast< CSceneNode * >( val )->getInternal() ) );
 	}
 
-	STDMETHODIMP CScene::CreateMesh( /* [in] */ BSTR type, /* [in] */ BSTR name, /* [out, retval] */ IMesh ** pVal )noexcept
+	STDMETHODIMP CScene::AddGeometry( /*[in]*/ IGeometry * val )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "AddGeometry" ) );
 
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CMesh::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					auto l_mesh = m_internal->addNewMesh( fromBstr( name ), *m_internal );
-					m_internal->getEngine()->getMeshFactory().create( fromBstr( name ) )->generate( *l_mesh, castor3d::Parameters{} );
-					static_cast< CMesh * >( *pVal )->setInternal( l_mesh );
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IEngine, _T( "CreateMesh" ), scene::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dScene_addGeometry( m_internal, static_cast< CGeometry * >( val )->getInternal() ) );
 	}
 
-	STDMETHODIMP CScene::GetNode( /* [in] */ BSTR name, /* [out, retval] */ ISceneNode ** pVal )noexcept
+	STDMETHODIMP CScene::AddCamera( /*[in]*/ ICamera * val )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "AddCamera" ) );
 
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CSceneNode::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					if ( auto found = m_internal->findSceneNode( fromBstr( name ) ) )
-					{
-						static_cast< CSceneNode * >( *pVal )->setInternal( found );
-					}
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IScene, // This is the GUID of the component throwing error
-					 _T( "GetNode" ), // This is generally displayed as the title
-					 scene::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dScene_addCamera( m_internal, static_cast< CCamera * >( val )->getInternal() ) );
 	}
 
-	STDMETHODIMP CScene::GetGeometry( /* [in] */ BSTR name, /* [out, retval] */ IGeometry ** pVal )noexcept
+	STDMETHODIMP CScene::AddLight( /*[in]*/ ILight * val )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "AddLight" ) );
 
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CGeometry::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					if ( auto found = m_internal->findGeometry( fromBstr( name ) ) )
-					{
-						static_cast< CGeometry * >( *pVal )->setInternal( found );
-					}
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IScene, // This is the GUID of the component throwing error
-					 _T( "GetGeometry" ),			// This is generally displayed as the title
-					 scene::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dScene_addLight( m_internal, static_cast< CLight * >( val )->getInternal() ) );
 	}
 
-	STDMETHODIMP CScene::GetLight( /* [in] */ BSTR name, /* [out, retval] */ ILight ** pVal )noexcept
+	STDMETHODIMP CScene::AddLightGroup( /*[in]*/ ILightGroup * val )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "AddLightGroup" ) );
 
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CLight::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					if ( auto found = m_internal->findLight( fromBstr( name ) ) )
-					{
-						static_cast< CLight * >( *pVal )->setInternal( found );
-					}
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IScene, // This is the GUID of the component throwing error
-					 _T( "GetLight" ), // This is generally displayed as the title
-					 scene::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dScene_addLightGroup( m_internal, static_cast< CLightGroup * >( val )->getInternal() ) );
 	}
 
-	STDMETHODIMP CScene::GetCamera( /* [in] */ BSTR name, /* [out, retval] */ ICamera ** pVal )noexcept
+	STDMETHODIMP CScene::AddMesh( /*[in]*/ IMesh * val )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "AddMesh" ) );
 
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CCamera::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					if ( auto found = m_internal->findCamera( fromBstr( name ) ) )
-					{
-						static_cast< CCamera * >( *pVal )->setInternal( found );
-					}
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IScene, // This is the GUID of the component throwing error
-					 _T( "GetCamera" ),			// This is generally displayed as the title
-					 scene::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dScene_addMesh( m_internal, static_cast< CMesh * >( val )->getInternal() ) );
 	}
 
-	STDMETHODIMP CScene::GetMesh( /* [in] */ BSTR name, /* [out, retval] */ IMesh ** pVal )noexcept
+	STDMETHODIMP CScene::GetNode( /*[in]*/ BSTR name, /*[out, retval]*/ ISceneNode ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "GetNode" ) );
+		if ( CSceneNode::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CMesh::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					if ( auto found = m_internal->findMesh( fromBstr( name ) ) )
-					{
-						static_cast< CMesh * >( *pVal )->setInternal( found );
-					}
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IScene, // This is the GUID of the component throwing error
-					 _T( "GetMesh" ), // This is generally displayed as the title
-					 scene::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dScene_getNode( m_internal
+			, bstrToString( name ).c_str()
+			, &static_cast< CSceneNode * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CScene::RemoveLight( /* [in] */ ILight * val )noexcept
+	STDMETHODIMP CScene::GetGeometry( /*[in]*/ BSTR name, /*[out, retval]*/ IGeometry ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "GetGeometry" ) );
+		if ( CGeometry::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( m_internal )
-		{
-			if ( val )
-			{
-				m_internal->getLightCache().remove( static_cast< CLight * >( val )->getInternal()->getName() );
-				static_cast< CLight * >( val )->setInternal( nullptr );
-				hr = S_OK;
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IScene, // This is the GUID of the component throwing error
-					 _T( "RemoveLight" ),			// This is generally displayed as the title
-					 scene::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dScene_getGeometry( m_internal
+			, bstrToString( name ).c_str()
+			, &static_cast< CGeometry * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CScene::RemoveNode( /* [in] */ ISceneNode * val )noexcept
+	STDMETHODIMP CScene::GetCamera( /*[in]*/ BSTR name, /*[out, retval]*/ ICamera ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "GetCamera" ) );
+		if ( CCamera::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( m_internal )
-		{
-			if ( val )
-			{
-				m_internal->getSceneNodeCache().remove( static_cast< CSceneNode * >( val )->getInternal()->getName() );
-				static_cast< CSceneNode * >( val )->setInternal( nullptr );
-				hr = S_OK;
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IScene, // This is the GUID of the component throwing error
-					 _T( "RemoveNode" ),			// This is generally displayed as the title
-					 scene::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dScene_getCamera( m_internal
+			, bstrToString( name ).c_str()
+			, &static_cast< CCamera * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CScene::RemoveGeometry( /* [in] */ IGeometry * val )noexcept
+	STDMETHODIMP CScene::GetLight( /*[in]*/ BSTR name, /*[out, retval]*/ ILight ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "GetLight" ) );
+		if ( CLight::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( m_internal )
-		{
-			if ( val )
-			{
-				m_internal->getGeometryCache().remove( static_cast< CGeometry * >( val )->getInternal()->getName() );
-				static_cast< CGeometry * >( val )->setInternal( nullptr );
-				hr = S_OK;
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IScene, // This is the GUID of the component throwing error
-					 _T( "RemoveGeometry" ),		// This is generally displayed as the title
-					 scene::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dScene_getLight( m_internal
+			, bstrToString( name ).c_str()
+			, &static_cast< CLight * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CScene::RemoveCamera( /* [in] */ ICamera * val )noexcept
+	STDMETHODIMP CScene::GetLightGroup( /*[in]*/ BSTR name, /*[out, retval]*/ ILightGroup ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "GetLightGroup" ) );
+		if ( CLightGroup::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( m_internal )
-		{
-			if ( val )
-			{
-				m_internal->getCameraCache().remove( static_cast< CCamera * >( val )->getInternal()->getName() );
-				static_cast< CCamera * >( val )->setInternal( nullptr );
-				hr = S_OK;
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IScene, // This is the GUID of the component throwing error
-					 _T( "RemoveCamera" ),			// This is generally displayed as the title
-					 scene::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dScene_getLightGroup( m_internal
+			, bstrToString( name ).c_str()
+			, &static_cast< CLightGroup * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CScene::RemoveMesh( /* [in] */ IMesh * val )noexcept
+	STDMETHODIMP CScene::GetMesh( /*[in]*/ BSTR name, /*[out, retval]*/ IMesh ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "GetMesh" ) );
+		if ( CMesh::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( m_internal )
-		{
-			if ( val )
-			{
-				m_internal->getMeshCache().remove( static_cast< CMesh * >( val )->getInternal()->getName() );
-				static_cast< CMesh * >( val )->setInternal( {} );
-				hr = S_OK;
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IScene, // This is the GUID of the component throwing error
-					 _T( "RemoveMesh" ),			// This is generally displayed as the title
-					 scene::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
+		return convert( c3dScene_getMesh( m_internal
+			, bstrToString( name ).c_str()
+			, &static_cast< CMesh * >( *pRet )->getInternal() ) );
+	}
 
-		return hr;
+	STDMETHODIMP CScene::RemoveNode( /*[in]*/ ISceneNode * val )noexcept
+	{
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "RemoveNode" ) );
+
+		return convert( c3dScene_removeNode( m_internal, static_cast< CSceneNode * >( val )->getInternal() ) );
+	}
+
+	STDMETHODIMP CScene::RemoveGeometry( /*[in]*/ IGeometry * val )noexcept
+	{
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "RemoveGeometry" ) );
+
+		return convert( c3dScene_removeGeometry( m_internal, static_cast< CGeometry * >( val )->getInternal() ) );
+	}
+
+	STDMETHODIMP CScene::RemoveCamera( /*[in]*/ ICamera * val )noexcept
+	{
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "RemoveCamera" ) );
+
+		return convert( c3dScene_removeCamera( m_internal, static_cast< CCamera * >( val )->getInternal() ) );
+	}
+
+	STDMETHODIMP CScene::RemoveLight( /*[in]*/ ILight * val )noexcept
+	{
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "RemoveLight" ) );
+
+		return convert( c3dScene_removeLight( m_internal, static_cast< CLight * >( val )->getInternal() ) );
+	}
+
+	STDMETHODIMP CScene::RemoveLightGroup( /*[in]*/ ILightGroup * val )noexcept
+	{
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "RemoveLightGroup" ) );
+
+		return convert( c3dScene_removeLightGroup( m_internal, static_cast< CLightGroup * >( val )->getInternal() ) );
+	}
+
+	STDMETHODIMP CScene::RemoveMesh( /*[in]*/ IMesh * val )noexcept
+	{
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "RemoveMesh" ) );
+
+		return convert( c3dScene_removeMesh( m_internal, static_cast< CMesh * >( val )->getInternal() ) );
 	}
 }

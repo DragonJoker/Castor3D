@@ -1,217 +1,95 @@
 #include "ComCastor3D/Castor3D/ComSceneNode.hpp"
 
-#include "ComCastor3D/Castor3D/ComMovableObject.hpp"
-#include "ComCastor3D/CastorUtils/ComAngle.hpp"
-#include "ComCastor3D/CastorUtils/ComQuaternion.hpp"
-#include "ComCastor3D/CastorUtils/ComVector3D.hpp"
-
-#include <Castor3D/Engine.hpp>
-#include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
+#include "ComCastor3D/Castor3D/ComScene.hpp"
 
 namespace CastorCom
 {
-	namespace node
+	STDMETHODIMP CSceneNode::Create( /*[in]*/ IScene * scene, /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent )noexcept
 	{
-		static const tstring ERROR_UNINITIALISED = _T( "The scene node must be initialised" );
+		if ( !scene || !name )
+			return E_POINTER;
+		if ( m_internal )
+			return dispatchInitialised( _T( "Create" ) );
+
+		return convert( c3dSceneNode_create( static_cast< CScene * >( scene )->getInternal()
+			, bstrToString( name ).c_str()
+			, parent ? static_cast< CSceneNode * >( parent )->getInternal() : nullptr
+			, &m_internal ) );
 	}
 
-	STDMETHODIMP CSceneNode::AttachObject( /* [in] */ IMovableObject * val )noexcept
+	STDMETHODIMP CSceneNode::AttachTo( /*[in]*/ ISceneNode * val )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "AttachTo" ) );
 
-		if ( m_internal )
-		{
-			m_internal->attachObject( *static_cast< CMovableObject * >( val )->getInternal() );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "attachObject" ), node::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CSceneNode::DetachObject( /* [in] */ IMovableObject * val )noexcept
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			m_internal->detachObject( *static_cast< CMovableObject * >( val )->getInternal() );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "detachObject" ), node::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CSceneNode::AttachTo( /* [in] */ ISceneNode * val )noexcept
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			m_internal->attachTo( *static_cast< CSceneNode * >( val )->getInternal() );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "attachTo" ), node::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dSceneNode_attachTo( m_internal
+			, static_cast< CSceneNode * >( val )->getInternal() ) );
 	}
 
 	STDMETHODIMP CSceneNode::Detach()noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "Detach" ) );
 
-		if ( m_internal )
-		{
-			m_internal->detach( false );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "Detach" ), node::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dSceneNode_detach( m_internal ) );
 	}
 
-	STDMETHODIMP CSceneNode::Yaw( /* [in] */ IAngle * val )noexcept
+	STDMETHODIMP CSceneNode::Yaw( /*[in]*/ FLOAT val )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "Yaw" ) );
 
-		if ( m_internal )
-		{
-			auto value = static_cast< CAngle * >( val )->getInternal();
-			m_internal->getScene()->getEngine()->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
-				, [this, value]()
-				{
-					m_internal->yaw( value );
-				} ) );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "Yaw" ), node::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dSceneNode_yaw( m_internal, val ) );
 	}
 
-	STDMETHODIMP CSceneNode::Pitch( /* [in] */ IAngle * val )noexcept
+	STDMETHODIMP CSceneNode::Pitch( /*[in]*/ FLOAT val )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "Yaw" ) );
 
-		if ( m_internal )
-		{
-			auto value = static_cast< CAngle * >( val )->getInternal();
-			m_internal->getScene()->getEngine()->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
-				, [this, value]()
-				{
-					m_internal->pitch( value );
-				} ) );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "Pitch" ), node::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dSceneNode_pitch( m_internal, val ) );
 	}
 
-	STDMETHODIMP CSceneNode::Roll( /* [in] */ IAngle * val )noexcept
+	STDMETHODIMP CSceneNode::Roll( /*[in]*/ FLOAT val )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "Yaw" ) );
 
-		if ( m_internal )
-		{
-			auto value = static_cast< CAngle * >( val )->getInternal();
-			m_internal->getScene()->getEngine()->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
-				, [this, value]()
-				{
-					m_internal->roll( value );
-				} ) );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "Roll" ), node::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dSceneNode_roll( m_internal, val ) );
 	}
 
-	STDMETHODIMP CSceneNode::Rotate( /* [in] */ IQuaternion * val )noexcept
+	STDMETHODIMP CSceneNode::Rotate( /*[in]*/ IQuaternion * val )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "Rotate" ) );
 
-		if ( m_internal )
-		{
-			auto value = static_cast< CQuaternion * >( val )->getInternal();
-			m_internal->getScene()->getEngine()->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
-				, [this, value]()
-				{
-					m_internal->rotate( value );
-				} ) );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "Rotate" ), node::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dSceneNode_rotate( m_internal
+			, &static_cast< CQuaternion * >( val )->getInternal() ) );
 	}
 
-	STDMETHODIMP CSceneNode::Translate( /* [in] */ IVector3D * val )noexcept
+	STDMETHODIMP CSceneNode::Translate( /*[in]*/ IVector3D * val )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "Translate" ) );
 
-		if ( m_internal )
-		{
-			auto value = static_cast< CVector3D * >( val )->getInternal();
-			m_internal->getScene()->getEngine()->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
-				, [this, value]()
-				{
-					m_internal->translate( value );
-				} ) );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "Translate" ), node::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dSceneNode_translate( m_internal
+			, &static_cast< CVector3D * >( val )->getInternal() ) );
 	}
 
-	STDMETHODIMP CSceneNode::Scale( /* [in] */ IVector3D * val )noexcept
+	STDMETHODIMP CSceneNode::Scale( /*[in]*/ IVector3D * val )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "Scale" ) );
 
-		if ( m_internal )
-		{
-			auto value = static_cast< CVector3D * >( val )->getInternal();
-			m_internal->getScene()->getEngine()->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
-				, [this, value]()
-				{
-					m_internal->scale( value );
-				} ) );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "Scale" ), node::ERROR_UNINITIALISED.c_str(), 0, nullptr );
-		}
-
-		return hr;
+		return convert( c3dSceneNode_scale( m_internal
+			, &static_cast< CVector3D * >( val )->getInternal() ) );
 	}
 }

@@ -36,16 +36,13 @@ extern "C"
 	typedef struct C3DEngine_ C3DEngine;
 	typedef struct C3DGeometry_ C3DGeometry;
 	typedef struct C3DGuiCallbacks_ C3DGuiCallbacks;
-	typedef struct C3DIndexMapping_ C3DIndexMapping;
 	typedef struct C3DLight_ C3DLight;
-	typedef struct C3DLightCategory_ C3DLightCategory;
 	typedef struct C3DLightGroup_ C3DLightGroup;
 	typedef struct C3DLineMapping_ C3DLineMapping;
 	typedef struct C3DMaterial_ C3DMaterial;
 	typedef struct C3DMesh_ C3DMesh;
 	typedef struct C3DMovableObject_ C3DMovableObject;
 	typedef struct C3DOverlay_ C3DOverlay;
-	typedef struct C3DOverlayCategory_ C3DOverlayCategory;
 	typedef struct C3DPanelOverlay_ C3DPanelOverlay;
 	typedef struct C3DPass_ C3DPass;
 	typedef struct C3DPointLight_ C3DPointLight;
@@ -59,9 +56,8 @@ extern "C"
 	typedef struct C3DSpotLight_ C3DSpotLight;
 	typedef struct C3DSubmesh_ C3DSubmesh;
 	typedef struct C3DTextOverlay_ C3DTextOverlay;
-	typedef struct C3DTextureUnit_ C3DTextureUnit;
 	typedef struct C3DTriFaceMapping_ C3DTriFaceMapping;
-	typedef struct C3DLinesMapping_ C3DLinesMapping;
+	typedef struct C3DEvent_ C3DEvent;
 	
 #if defined( _WIN32 )
 	typedef struct C3DWin32WindowHandle_ C3DWindowHandle;
@@ -169,9 +165,16 @@ extern "C"
 
 	struct C3DGuiCallbacks_
 	{
-		void ( * onGetClipBoardText )( C3DString * text );
-		void ( * onSetClipBoardText )( C3DString text );
-		void ( * onCursorChange )( C3D_MOUSE_CURSOR cursor );
+		void * userContext;
+		void ( * onGetClipBoardText )( C3DGuiCallbacks * callbacks, C3DString * text );
+		void ( * onSetClipBoardText )( C3DGuiCallbacks * callbacks, C3DString text );
+		void ( * onCursorChange )( C3DGuiCallbacks * callbacks, C3D_MOUSE_CURSOR cursor );
+	};
+
+	struct C3DEvent_
+	{
+		C3D_EVENT_TYPE type;
+		void ( *func )();
 	};
 
 #ifdef __cplusplus

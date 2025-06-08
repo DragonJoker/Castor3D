@@ -2,56 +2,19 @@
 
 namespace CastorCom
 {
-	namespace target
-	{
-		static const tstring ERROR_UNINITIALISED = _T( "The render target must be initialised" );
-	}
-
 	STDMETHODIMP CRenderTarget::Initialise()noexcept
 	{
-		HRESULT hr = E_POINTER;
-
 		if ( m_internal )
-		{
-			auto & device = *m_internal->getOwner()->getRenderDevice();
-			m_internal->initialise( device );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IRenderTarget, // This is the GUID of the component throwing error
-					 _T( "File" ), // This is generally displayed as the title
-					target::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
+			return dispatchUninitialised( _T( "Initialise" ) );
 
-		return hr;
+		return convert( c3dRenderTarget_initialise( m_internal ) );
 	}
 
 	STDMETHODIMP CRenderTarget::Cleanup()noexcept
 	{
-		HRESULT hr = E_POINTER;
-
 		if ( m_internal )
-		{
-			auto & device = *m_internal->getOwner()->getRenderDevice();
-			m_internal->cleanup( device );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IRenderTarget, // This is the GUID of the component throwing error
-					 _T( "File" ), // This is generally displayed as the title
-					 target::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
+			return dispatchUninitialised( _T( "Cleanup" ) );
 
-		return hr;
+		return convert( c3dRenderTarget_cleanup( m_internal ) );
 	}
 }

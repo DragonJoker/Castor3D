@@ -21,6 +21,16 @@ extern "C"
 	static const C3DString ERROR_UNINITIALISED_PASS = cuT( "The pass must be initialised" );
 	static const C3DString ERROR_COMPONENT_NOT_FOUND = cuT( "The required component was not found" );
 
+	C3D_CAPIMETHODIMP c3dPass_delete( C3DPass * object )
+	{
+		if ( !object )
+			return C3D_POINTER;
+
+		delete object;
+
+		return C3D_OK;
+	}
+
 	C3D_CAPIMETHODIMP c3dPass_getTwoSided( C3DPass const * object, bool * result )
 	{
 		if ( !object || !result )

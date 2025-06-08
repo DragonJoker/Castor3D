@@ -533,7 +533,7 @@ extern "C"
 		castor3d::ShadowConfig * internal;
 	};
 
-	struct C3DLinesMapping_
+	struct C3DLineMapping_
 	{
 		castor3d::LinesMapping * internal;
 	};

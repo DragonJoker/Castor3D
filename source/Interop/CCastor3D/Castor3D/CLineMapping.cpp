@@ -10,7 +10,7 @@ extern "C"
 
 	static const C3DString ERROR_UNINITIALISED_LINES = cuT( "The mapping must be initialised" );
 
-	C3D_CAPIMETHODIMP c3dLinesMapping_delete( C3DLinesMapping * object )
+	C3D_CAPIMETHODIMP c3dLineMapping_delete( C3DLineMapping * object )
 	{
 		if ( !object )
 			return C3D_POINTER;
@@ -22,7 +22,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dLinesMapping_getLinesCount( C3DLinesMapping const * object, uint32_t * result )
+	C3D_CAPIMETHODIMP c3dLineMapping_getLinesCount( C3DLineMapping const * object, uint32_t * result )
 	{
 		if ( !object || !result )
 			return C3D_POINTER;
@@ -34,7 +34,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dLinesMapping_addLine( C3DLinesMapping * object, uint32_t x, uint32_t y )
+	C3D_CAPIMETHODIMP c3dLineMapping_addLine( C3DLineMapping * object, uint32_t x, uint32_t y )
 	{
 		if ( !object )
 			return C3D_POINTER;

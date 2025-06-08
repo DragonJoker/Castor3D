@@ -81,7 +81,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dSubmesh_getLineMapping( C3DSubmesh const * object, C3DLinesMapping ** result )
+	C3D_CAPIMETHODIMP c3dSubmesh_getLineMapping( C3DSubmesh const * object, C3DLineMapping ** result )
 	{
 		if ( !object || !result )
 			return C3D_POINTER;
@@ -94,7 +94,7 @@ extern "C"
 			if ( object->internal->getIndexMapping()->getType() != castor3d::LinesMapping::TypeName )
 				return cc3d::reportError( C3D_FAILURE, ERROR_WRONG_MAPPING_TYPE );
 
-			C3D_SafeAlloc( *result, C3DLinesMapping );
+			C3D_SafeAlloc( *result, C3DLineMapping );
 			( *result )->internal = static_cast< castor3d::LinesMapping * >( res );
 		}
 		C3D_CatchCommonExceptions()

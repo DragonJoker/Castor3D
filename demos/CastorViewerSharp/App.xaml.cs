@@ -62,7 +62,7 @@ namespace CastorViewerSharp
 			string path = System.Reflection.Assembly.GetEntryAssembly().Location;
 			path = path.Replace(".exe",".log");
 
-			m_logger.Initialise(eLOG_TYPE.eLOG_TYPE_DEBUG);
+			m_logger.Create(eLOG_TYPE.eLOG_TYPE_DEBUG);
 			m_logger.SetFileName(path, eLOG_TYPE.eLOG_TYPE_COUNT);
 			m_logger.LogInfo("CastorViewerSharp - Start");
 
@@ -75,7 +75,6 @@ namespace CastorViewerSharp
 		protected override void OnExit(ExitEventArgs e)
 		{
 			m_logger.LogInfo("CastorViewerSharp - Exit");
-			m_logger.Cleanup();
 			m_logger = null;
 
 			base.OnExit(e);

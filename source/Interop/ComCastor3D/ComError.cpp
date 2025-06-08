@@ -1,32 +1,27 @@
 #include "ComCastor3D/ComError.hpp"
 
-#include <CastorUtils/Log/Logger.hpp>
-
 namespace CastorCom
 {
-	HRESULT CComError::dispatchWin32Error(
-		DWORD dwError,
-		REFCLSID clsid,
-		LPCTSTR szSource,
-		DWORD dwHelpContext,
-		LPCTSTR szHelpFileName )
+	HRESULT CComError::dispatchWin32Error( DWORD dwError
+		, REFCLSID clsid
+		, LPCTSTR szSource
+		, DWORD dwHelpContext
+		, LPCTSTR szHelpFileName )
 	{
 		// Dispatch the requested error message
 		return dispatchError(
-				   HRESULT_FROM_WIN32( dwError ),
-				   clsid, szSource, nullptr, dwHelpContext,
-				   szHelpFileName );
+			HRESULT_FROM_WIN32( dwError ),
+			clsid, szSource, nullptr, dwHelpContext,
+			szHelpFileName );
 	}
 
-	HRESULT CComError::dispatchError(
-		HRESULT hError,
-		REFCLSID clsid,
-		LPCTSTR szSource,
-		LPCTSTR szDescription,
-		DWORD dwHelpContext,
-		LPCTSTR szHelpFileName )
+	HRESULT CComError::dispatchError( HRESULT hError
+		, REFCLSID clsid
+		, LPCTSTR szSource
+		, LPCTSTR szDescription
+		, DWORD dwHelpContext
+		, LPCTSTR szHelpFileName )
 	{
-		castor::Logger::logError( tstring( szSource ) + _T( " - " ) + tstring( szDescription ) );
 		// This function uses ATL conversion macros
 		// (Hence we must use this MACRO provided by ATL)
 		USES_CONVERSION;

@@ -3,31 +3,13 @@
 
 namespace CastorCom
 {
-	namespace submesh
+	STDMETHODIMP CSubmesh::AddPoint( /*[in]*/ IVector3D * val )noexcept
 	{
-		static const tstring ERROR_UNINITIALISED = _T( "The submesh must be initialised" );
-	}
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "AddPoint" ) );
 
-	STDMETHODIMP CSubmesh::AddPoint( /* [in] */ IVector3D * val )noexcept
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			m_internal->addPoint( static_cast< CVector3D * >( val )->getInternal() );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-				E_FAIL,	 // This represents the error
-				IID_ISubmesh, // This is the GUID of the component throwing error
-				_T( "addPoint" ), // This is generally displayed as the title
-				submesh::ERROR_UNINITIALISED.c_str(), // This is the description
-				0, // This is the context in the help file
-				nullptr );
-		}
-
-		return hr;
+		return convert( c3dSubmesh_addPoint( m_internal, &static_cast< CVector3D * >( val )->getInternal() ) );
 	}
 }
