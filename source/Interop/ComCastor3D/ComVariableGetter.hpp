@@ -63,7 +63,7 @@ namespace CastorCom
 	}
 
 	template< typename InternalPtrT, ComITypeT ITypeT, typename FunctorT, ComInternalTypeT InternalT >
-	HRESULT getValueManagedPtr( LPCTSTR name, FunctorT func, ITypeT ** pRet, InternalT const & internal )
+	HRESULT getValueManagedPtr( LPCTSTR name, FunctorT func, ITypeT ** pRet, InternalT & internal )
 	{
 		//
 		if constexpr ( std::is_same_v< InternalPtrT, InternalT > )

@@ -1,12 +1,9 @@
 #include "CCastor3D/Castor3D.h"
 #include "CCastor3D/Castor3DCommon.h"
-#include "CCastor3D/Castor3DPlatformTypes.h"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Event/UserInput/UserInputListener.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
-
-#include <ashespp/Core/PlatformWindowHandle.hpp>
 
 #ifdef __cplusplus
 extern "C"
@@ -14,35 +11,7 @@ extern "C"
 #endif
 
 	static const C3DString ERROR_UNINITIALISED_WINDOW = cuT( "The render window must be initialised" );
-	static const C3DString ERROR_UNINITIALISED_WINENG = cuT( "The engine must be initialised" );
 	static const C3DString ERROR_UNINITIALISED_WINTGT = cuT( "The render target must be initialised" );
-
-	C3D_CAPIMETHODIMP c3dRenderWindow_create( C3DEngine * object, C3DString name, C3DSize const * size, C3DWindowHandle handle, C3DRenderWindow ** result )
-	{
-		if ( !object || !result || !size )
-			return C3D_POINTER;
-		if ( !object->internal )
-			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_WINENG );
-
-		try
-		{
-			auto window = castor::makeUnique< castor3d::RenderWindow >( castor::makeString( name )
-				, *object->internal
-				, castor::Size{ size->width, size->height }
-#if defined( _WIN32 )
-				, ashes::WindowHandle( castor::make_unique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr ), reinterpret_cast< HWND >( handle.hWnd ) ) ) );
-#elif defined( __linux__ )
-				, ashes::WindowHandle( castor::make_unique< ashes::IXWindowHandle >( handle.drawable, handle.display ) ) );
-#elif defined( __APPLE__ )
-				, ashes::WindowHandle( castor::make_unique< ashes::IMacOsWindowHandle >( handle.view ) ) );
-#endif
-			C3D_SafeAlloc( *result, C3DRenderWindow );
-			( *result )->internal = castor::move( window );
-		}
-		C3D_CatchCommonExceptions()
-
-		return C3D_OK;
-	}
 
 	C3D_CAPIMETHODIMP c3dRenderWindow_delete( C3DRenderWindow * object )
 	{

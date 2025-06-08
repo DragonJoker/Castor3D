@@ -7,61 +7,9 @@
 #include "ComCastor3D/Castor3D/ComLightGroup.hpp"
 #include "ComCastor3D/Castor3D/ComMesh.hpp"
 #include "ComCastor3D/Castor3D/ComRenderWindow.hpp"
-#include "ComCastor3D/Castor3D/ComSceneNode.hpp"
 
 namespace CastorCom
 {
-	STDMETHODIMP CScene::get_RootNode( /*[out, retval]*/ ISceneNode ** pRet )noexcept
-	{
-		if ( !pRet )
-			return E_POINTER;
-		if ( !m_internal )
-			return dispatchUninitialised( _T( "get_RootNode" ) );
-		if ( CSceneNode::CreateInstance( pRet ) != S_OK )
-			return E_FAIL;
-
-		return convert( c3dScene_getRootNode( m_internal
-			, &static_cast< CSceneNode * >( *pRet )->getInternal() ) );
-	}
-
-	STDMETHODIMP CScene::get_ObjectRootNode( /*[out, retval]*/ ISceneNode ** pRet )noexcept
-	{
-		if ( !pRet )
-			return E_POINTER;
-		if ( !m_internal )
-			return dispatchUninitialised( _T( "get_ObjectRootNode" ) );
-		if ( CSceneNode::CreateInstance( pRet ) != S_OK )
-			return E_FAIL;
-
-		return convert( c3dScene_getObjectRootNode( m_internal
-			, &static_cast< CSceneNode * >( *pRet )->getInternal() ) );
-	}
-
-	STDMETHODIMP CScene::get_CameraRootNode( /*[out, retval]*/ ISceneNode ** pRet )noexcept
-	{
-		if ( !pRet )
-			return E_POINTER;
-		if ( !m_internal )
-			return dispatchUninitialised( _T( "get_CameraRootNode" ) );
-		if ( CSceneNode::CreateInstance( pRet ) != S_OK )
-			return E_FAIL;
-
-		return convert( c3dScene_getCameraRootNode( m_internal
-			, &static_cast< CSceneNode * >( *pRet )->getInternal() ) );
-	}
-
-	STDMETHODIMP CScene::Create( /*[in]*/ IEngine * engine, /*[in]*/ BSTR name )noexcept
-	{
-		if ( !engine || !name )
-			return E_POINTER;
-		if ( m_internal )
-			return dispatchInitialised( _T( "Create" ) );
-
-		return convert( c3dScene_create( static_cast< CEngine * >( engine )->getInternal()
-			, bstrToString( name ).c_str()
-			, &m_internal ) );
-	}
-
 	STDMETHODIMP CScene::AddNode( /*[in]*/ ISceneNode * val )noexcept
 	{
 		if ( !val )
@@ -264,5 +212,98 @@ namespace CastorCom
 			return dispatchUninitialised( _T( "RemoveMesh" ) );
 
 		return convert( c3dScene_removeMesh( m_internal, static_cast< CMesh * >( val )->getInternal() ) );
+	}
+
+	STDMETHODIMP CScene::CreateNode( /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent, /*[out, retval]*/ ISceneNode ** pRet )noexcept
+	{
+		if ( !pRet || !name )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "CreateNode" ) );
+		if ( CSceneNode::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
+
+		return convert( c3dScene_createNode( m_internal
+			, bstrToString( name ).c_str()
+			, parent ? static_cast< CSceneNode * >( parent )->getInternal() : nullptr
+			, &static_cast< CSceneNode * >( *pRet )->getInternal() ) );
+	}
+
+	STDMETHODIMP CScene::CreateGeometry( /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent, /*[in]*/ IMesh * mesh, /*[out, retval]*/ IGeometry ** pRet )noexcept
+	{
+		if ( !pRet || !name || !parent )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "CreateGeometry" ) );
+		if ( CGeometry::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
+
+		return convert( c3dScene_createGeometry( m_internal
+			, bstrToString( name ).c_str()
+			, static_cast< CMesh * >( mesh )->getInternal()
+			, static_cast< CSceneNode * >( parent )->getInternal()
+			, &static_cast< CGeometry * >( *pRet )->getInternal() ) );
+	}
+
+	STDMETHODIMP CScene::CreateCamera( /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent, /*[in]*/ UINT width, /*[in]*/ UINT height, /*[out, retval]*/ ICamera ** pRet )noexcept
+	{
+		if ( !pRet || !name || !parent )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "CreateCamera" ) );
+		if ( CCamera::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
+
+		return convert( c3dScene_createCamera( m_internal
+			, bstrToString( name ).c_str()
+			, width, height
+			, static_cast< CSceneNode * >( parent )->getInternal()
+			, &static_cast< CCamera * >( *pRet )->getInternal() ) );
+	}
+
+	STDMETHODIMP CScene::CreateLight( /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent, /*[in]*/ eLIGHT_TYPE type, /*[out, retval]*/ ILight ** pRet )noexcept
+	{
+		if ( !pRet || !name || !parent )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "CreateLight" ) );
+		if ( CLight::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
+
+		return convert( c3dScene_createLight( m_internal
+			, bstrToString( name ).c_str()
+			, static_cast< CSceneNode * >( parent )->getInternal()
+			, details::parameterCast< C3D_LIGHT_TYPE >( type )
+			, &static_cast< CLight * >( *pRet )->getInternal() ) );
+	}
+
+	STDMETHODIMP CScene::CreateLightGroup( /*[in]*/ BSTR name, /*[in]*/ eLIGHT_TYPE type, /*[out, retval]*/ ILightGroup ** pRet )noexcept
+	{
+		if ( !pRet || !name )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "CreateLightGroup" ) );
+		if ( CLightGroup::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
+
+		return convert( c3dScene_createLightGroup( m_internal
+			, bstrToString( name ).c_str()
+			, details::parameterCast< C3D_LIGHT_TYPE >( type )
+			, &static_cast< CLightGroup * >( *pRet )->getInternal() ) );
+	}
+
+	STDMETHODIMP CScene::CreateMesh( /*[in]*/ BSTR name, /*[in]*/ BSTR type, /*[out, retval]*/ IMesh ** pRet )noexcept
+	{
+		if ( !pRet || !name )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "CreateMesh" ) );
+		if ( CMesh::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
+
+		return convert( c3dScene_createMesh( m_internal
+			, bstrToString( type ).c_str()
+			, bstrToString( name ).c_str()
+			, &static_cast< CMesh * >( *pRet )->getInternal() ) );
 	}
 }

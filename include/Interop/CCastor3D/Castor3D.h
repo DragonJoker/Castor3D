@@ -141,7 +141,6 @@ extern "C"
 	C3D_CAPIMETHOD( c3dRenderTarget_getSize )( C3DRenderTarget const * object, C3DSize * result );
 
 	// C3DSampler
-	C3D_CAPIMETHOD( c3dSampler_create )( C3DEngine * object, C3DString name, C3DSampler ** result );
 	C3D_CAPIMETHOD( c3dSampler_delete )( C3DSampler * object );
 	C3D_CAPIMETHOD( c3dSampler_getMinFilter )( C3DSampler const * object, C3D_FILTER_MODE * result );
 	C3D_CAPIMETHOD( c3dSampler_setMinFilter )( C3DSampler * object, C3D_FILTER_MODE val );
@@ -227,7 +226,6 @@ extern "C"
 	C3D_CAPIMETHOD( c3dSubmesh_addPoint )( C3DSubmesh * object, C3DVec3 const * val );
 
 	// C3DMesh
-	C3D_CAPIMETHOD( c3dMesh_create )( C3DScene * object, C3DString type, C3DString name, C3DMesh ** result );
 	C3D_CAPIMETHOD( c3dMesh_delete )( C3DMesh * object );
 	C3D_CAPIMETHOD( c3dMesh_getSubmeshCount )( C3DMesh const * object, uint32_t * result );
 	C3D_CAPIMETHOD( c3dMesh_getSubmesh )( C3DMesh const * object, uint32_t val, C3DSubmesh ** result );
@@ -303,7 +301,6 @@ extern "C"
 	C3D_CAPIMETHOD( c3dSpotLight_setOuterCutOff )( C3DSpotLight * object, float val );
 
 	// C3DCamera
-	C3D_CAPIMETHOD( c3dCamera_create )( C3DScene * object, C3DString name, uint32_t ww, uint32_t wh, C3DSceneNode const * node, C3DCamera ** result );
 	C3D_CAPIMETHOD( c3dCamera_delete )( C3DCamera * object );
 	C3D_CAPIMETHOD( c3dCamera_getName )( C3DCamera const * object, C3DString * result );
 	C3D_CAPIMETHOD( c3dCamera_getScene )( C3DCamera const * object, C3DScene ** result );
@@ -317,7 +314,6 @@ extern "C"
 	C3D_CAPIMETHOD( c3dCamera_resize )( C3DCamera * object, uint32_t width, uint32_t height );
 
 	// C3DLight
-	C3D_CAPIMETHOD( c3dLight_create )( C3DScene * object, C3DString name, C3DSceneNode const * node, C3D_LIGHT_TYPE type, C3DLight ** result );
 	C3D_CAPIMETHOD( c3dLight_delete )( C3DLight * object );
 	C3D_CAPIMETHOD( c3dLight_getName )( C3DLight const * object, C3DString * result );
 	C3D_CAPIMETHOD( c3dLight_getScene )( C3DLight const * object, C3DScene ** result );
@@ -330,7 +326,6 @@ extern "C"
 	C3D_CAPIMETHOD( c3dLight_getSpotLight )( C3DLight const * object, C3DSpotLight ** result );
 
 	// C3DLightGroup
-	C3D_CAPIMETHOD( c3dLightGroup_create )( C3DScene * object, C3DString name, C3D_LIGHT_TYPE type, C3DLightGroup ** result );
 	C3D_CAPIMETHOD( c3dLightGroup_delete )( C3DLightGroup * object );
 	C3D_CAPIMETHOD( c3dLightGroup_getName )( C3DLightGroup const * object, C3DString * result );
 	C3D_CAPIMETHOD( c3dLightGroup_getScene )( C3DLightGroup const * object, C3DScene ** result );
@@ -342,7 +337,6 @@ extern "C"
 	C3D_CAPIMETHOD( c3dLightGroup_getSpotLight )( C3DLightGroup const * object, C3DSpotLight ** result );
 
 	// C3DGeometry
-	C3D_CAPIMETHOD( c3dGeometry_create )( C3DScene * object, C3DString name, C3DMesh const * mesh, C3DSceneNode const * parent, C3DGeometry ** result );
 	C3D_CAPIMETHOD( c3dGeometry_delete )( C3DGeometry * object );
 	C3D_CAPIMETHOD( c3dGeometry_getName )( C3DGeometry const * object, C3DString * result );
 	C3D_CAPIMETHOD( c3dGeometry_getScene )( C3DGeometry const * object, C3DScene ** result );
@@ -355,7 +349,6 @@ extern "C"
 	C3D_CAPIMETHOD( c3dGeometry_setMaterial )( C3DGeometry * object, C3DSubmesh const * submesh, C3DMaterial const * val );
 
 	// C3DSceneNode
-	C3D_CAPIMETHOD( c3dSceneNode_create )( C3DScene * object, C3DString name, C3DSceneNode const * parent, C3DSceneNode ** result );
 	C3D_CAPIMETHOD( c3dSceneNode_delete )( C3DSceneNode * object );
 	C3D_CAPIMETHOD( c3dSceneNode_getPosition )( C3DSceneNode const * object, C3DVec3 * result );
 	C3D_CAPIMETHOD( c3dSceneNode_setPosition )( C3DSceneNode * object, C3DVec3 const * val );
@@ -421,7 +414,6 @@ extern "C"
 	C3D_CAPIMETHOD( c3dTextOverlay_setCaption )( C3DTextOverlay * object, C3DString val );
 
 	// C3DOverlay
-	C3D_CAPIMETHOD( c3dOverlay_create )( C3DEngine * object, C3D_OVERLAY_TYPE type, C3DString name, C3DOverlay * parent, C3DScene * scene, C3DOverlay ** result );
 	C3D_CAPIMETHOD( c3dOverlay_delete )( C3DOverlay * object );
 	C3D_CAPIMETHOD( c3dOverlay_getName )( C3DOverlay const * object, C3DString * result );
 	C3D_CAPIMETHOD( c3dOverlay_getOverlayType )( C3DOverlay const * object, C3D_OVERLAY_TYPE * result );
@@ -431,7 +423,6 @@ extern "C"
 	C3D_CAPIMETHOD( c3dOverlay_getChildrenCount )( C3DOverlay const * object, uint32_t level, uint32_t * result );
 
 	// C3DScene
-	C3D_CAPIMETHOD( c3dScene_create )( C3DEngine * object, C3DString name, C3DScene ** result );
 	C3D_CAPIMETHOD( c3dScene_delete )( C3DScene * object );
 	C3D_CAPIMETHOD( c3dScene_getBackgroundColour )( C3DScene const * object, C3DRgbColour * result );
 	C3D_CAPIMETHOD( c3dScene_setBackgroundColour )( C3DScene * object, C3DRgbColour const * val );
@@ -461,9 +452,14 @@ extern "C"
 	C3D_CAPIMETHOD( c3dScene_getLight )( C3DScene const * object, C3DString name, C3DLight ** result );
 	C3D_CAPIMETHOD( c3dScene_getLightGroup )( C3DScene const * object, C3DString name, C3DLightGroup ** result );
 	C3D_CAPIMETHOD( c3dScene_getMesh )( C3DScene const * object, C3DString name, C3DMesh ** result );
+	C3D_CAPIMETHOD( c3dScene_createNode )( C3DScene const * object, C3DString name, C3DSceneNode const * parent, C3DSceneNode ** result );
+	C3D_CAPIMETHOD( c3dScene_createGeometry )( C3DScene const * object, C3DString name, C3DMesh const * mesh, C3DSceneNode const * parent, C3DGeometry ** result );
+	C3D_CAPIMETHOD( c3dScene_createCamera )( C3DScene const * object, C3DString name, uint32_t ww, uint32_t wh, C3DSceneNode const * node, C3DCamera ** result );
+	C3D_CAPIMETHOD( c3dScene_createLight )( C3DScene const * object, C3DString name, C3DSceneNode const * node, C3D_LIGHT_TYPE type, C3DLight ** result );
+	C3D_CAPIMETHOD( c3dScene_createLightGroup )( C3DScene const * object, C3DString name, C3D_LIGHT_TYPE type, C3DLightGroup ** result );
+	C3D_CAPIMETHOD( c3dScene_createMesh )( C3DScene const * object, C3DString type, C3DString name, C3DMesh ** result );
 
 	// C3DRenderWindow
-	C3D_CAPIMETHOD( c3dRenderWindow_create )( C3DEngine * object, C3DString name, C3DSize const * size, C3DWindowHandle handle, C3DRenderWindow ** result );
 	C3D_CAPIMETHOD( c3dRenderWindow_delete )( C3DRenderWindow * val );
 	C3D_CAPIMETHOD( c3dRenderWindow_getName )( C3DRenderWindow const * object, C3DString * result );
 	C3D_CAPIMETHOD( c3dRenderWindow_initialise )( C3DRenderWindow * object, C3DRenderTarget const * target );
@@ -508,8 +504,12 @@ extern "C"
 	C3D_CAPIMETHOD( c3dEngine_endRendering )( C3DEngine * object );
 	C3D_CAPIMETHOD( c3dEngine_registerGuiCallbacks )( C3DEngine * object, C3DGuiCallbacks * callbacks );
 	C3D_CAPIMETHOD( c3dEngine_unregisterGuiCallbacks )( C3DEngine * object );
-	C3D_CAPIMETHOD( c3dEngine_createSkybox )( C3DEngine * object, C3DScene * scene, C3DSkybox ** result );
 	C3D_CAPIMETHOD( c3dEngine_postEvent )( C3DEngine * object, C3DEvent event );
+	C3D_CAPIMETHOD( c3dEngine_createOverlay )( C3DEngine const * object, C3D_OVERLAY_TYPE type, C3DString name, C3DOverlay * parent, C3DOverlay ** result );
+	C3D_CAPIMETHOD( c3dEngine_createRenderWindow )( C3DEngine const * object, C3DString name, C3DSize const * size, C3DWindowHandle handle, C3DRenderWindow ** result );
+	C3D_CAPIMETHOD( c3dEngine_createSampler )( C3DEngine const * object, C3DString name, C3DSampler ** result );
+	C3D_CAPIMETHOD( c3dEngine_createScene )( C3DEngine const * object, C3DString name, C3DScene ** result );
+	C3D_CAPIMETHOD( c3dEngine_createSkybox )( C3DEngine const * object, C3DScene * scene, C3DSkybox ** result );
 
 	// Castor3D
 	C3D_CAPIMETHOD( c3d_getPluginsDirectory )( C3DChar * result, size_t resultSize );

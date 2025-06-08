@@ -10,48 +10,7 @@ extern "C"
 #endif
 
 	static const C3DString ERROR_UNINITIALISED_OVERLAY = cuT( "The overlay must be initialised" );
-	static const C3DString ERROR_UNINITIALISED_OVERLAYENG = cuT( "The engine must be initialised" );
-	static const C3DString ERROR_UNINITIALISED_OVERLAYSCN = cuT( "The scene must be initialised" );
 	static const C3DString ERROR_WRONG_OVERLAY_TYPE = cuT( "The overlay is not of the wepected type" );
-
-	C3D_CAPIMETHODIMP c3dOverlay_create( C3DEngine * object, C3D_OVERLAY_TYPE type, C3DString name, C3DOverlay * parent, C3DScene * scene, C3DOverlay ** result )
-	{
-		if ( !object || !result )
-			return C3D_POINTER;
-		if ( !object->internal )
-			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_OVERLAYENG );
-
-		try
-		{
-			castor3d::OverlayUPtr res;
-
-			if ( scene )
-			{
-				if ( !scene->getInternal() )
-					return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_OVERLAYSCN );
-
-				res = object->internal->createOverlay( castor::makeString( name )
-					, *object->internal
-					, castor3d::OverlayType( type )
-					, scene->getInternal()
-					, parent ? parent->getInternal() : nullptr );
-			}
-			else
-			{
-				res = object->internal->createOverlay( castor::makeString( name )
-					, *object->internal
-					, castor3d::OverlayType( type )
-					, nullptr
-					, parent ? parent->getInternal() : nullptr );
-			}
-
-			C3D_SafeAlloc( *result, C3DOverlay );
-			( *result )->setInternal( castor::move( res ) );
-		}
-		C3D_CatchCommonExceptions()
-
-			return C3D_OK;
-	}
 
 	C3D_CAPIMETHODIMP c3dOverlay_delete( C3DOverlay * object )
 	{

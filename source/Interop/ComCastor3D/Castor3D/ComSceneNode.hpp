@@ -26,7 +26,6 @@ namespace CastorCom
 		COM_PROPERTY_GET_MPTR( Parent, ISceneNode, c3dSceneNode_getParent );
 
 		COM_DESTROY( CSceneNode, c3dSceneNode_delete );
-		STDMETHOD( Create )( /*[in]*/ IScene * scene, /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent )override;
 		STDMETHOD( AttachTo )( /*[in]*/ ISceneNode * val )override;
 		STDMETHOD( Detach )()override;
 		STDMETHOD( Yaw )( /*[in]*/ FLOAT val )override;

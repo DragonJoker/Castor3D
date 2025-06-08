@@ -174,7 +174,7 @@ extern "C"
 	struct C3DEvent_
 	{
 		C3D_EVENT_TYPE type;
-		void ( *func )();
+		void ( *func )( void );
 	};
 
 #ifdef __cplusplus

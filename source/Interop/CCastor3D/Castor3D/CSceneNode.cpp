@@ -12,36 +12,6 @@ extern "C"
 #endif
 
 	static const C3DString ERROR_UNINITIALISED_NODE = cuT( "The scene node must be initialised" );
-	static const C3DString ERROR_UNINITIALISED_NODESCENE = cuT( "The scene must be initialised" );
-
-	C3D_CAPIMETHODIMP c3dSceneNode_create( C3DScene * object, C3DString name, C3DSceneNode const * parent, C3DSceneNode ** result )
-	{
-		if ( !object || !name || !result )
-			return C3D_POINTER;
-		if ( !object->getInternal() )
-			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_NODESCENE );
-
-		try
-		{
-			if ( auto res = object->getInternal()->createSceneNode( castor::makeString( name ), *object->getInternal() ) )
-			{
-				if ( parent )
-				{
-					res->attachTo( *parent->getInternal() );
-				}
-				else
-				{
-					res->attachTo( *object->getInternal()->getObjectRootNode() );
-				}
-
-				C3D_SafeAlloc( *result, C3DSceneNode );
-				( *result )->setInternal( castor::move( res ) );
-			}
-		}
-		C3D_CatchCommonExceptions()
-
-			return C3D_OK;
-	}
 
 	C3D_CAPIMETHODIMP c3dSceneNode_delete( C3DSceneNode * object )
 	{

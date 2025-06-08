@@ -7,20 +7,6 @@ namespace CastorCom
 		static const tstring ERROR_UNINITIALISED = _T( "The camera must be initialised" );
 	}
 
-	STDMETHODIMP CCamera::Create( /*[in]*/ IScene * scene, /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent, /*[in]*/ UINT width, /*[in]*/ UINT height )noexcept
-	{
-		if ( !scene || !name || !parent )
-			return E_POINTER;
-		if ( m_internal )
-			return dispatchInitialised( _T( "Create" ) );
-
-		return convert( c3dCamera_create( static_cast< CScene * >( scene )->getInternal()
-			, bstrToString( name ).c_str()
-			, width, height
-			, static_cast< CSceneNode * >( parent )->getInternal()
-			, &m_internal ) );
-	}
-
 	STDMETHODIMP CCamera::AttachTo( /*[in]*/ ISceneNode * val )noexcept
 	{
 		if ( !val )

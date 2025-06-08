@@ -4,20 +4,6 @@
 
 namespace CastorCom
 {
-	STDMETHODIMP CGeometry::Create( /*[in]*/ IScene * scene, /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent, /*[in]*/ IMesh * mesh )noexcept
-	{
-		if ( !scene || !name || !parent )
-			return E_POINTER;
-		if ( m_internal )
-			return dispatchInitialised( _T( "Create" ) );
-
-		return convert( c3dGeometry_create( static_cast< CScene * >( scene )->getInternal()
-			, bstrToString( name ).c_str()
-			, static_cast< CMesh * >( mesh )->getInternal()
-			, static_cast< CSceneNode * >( parent )->getInternal()
-			, &m_internal ) );
-	}
-
 	STDMETHODIMP CGeometry::AttachTo( /*[in]*/ ISceneNode * val )noexcept
 	{
 		if ( !val )

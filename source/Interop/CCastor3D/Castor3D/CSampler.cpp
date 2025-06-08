@@ -10,25 +10,6 @@ extern "C"
 #endif
 
 	static const C3DString ERROR_UNINITIALISED_SAMPLER = cuT( "The sampler must be initialised" );
-	static const C3DString ERROR_UNINITIALISED_SAMPLERENG = cuT( "The engine must be initialised" );
-
-	C3D_CAPIMETHODIMP c3dSampler_create( C3DEngine * object, C3DString name, C3DSampler ** result )
-	{
-		if ( !object || !result )
-			return C3D_POINTER;
-		if ( !object->internal )
-			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SAMPLERENG );
-
-		try
-		{
-			auto res = object->internal->createSampler( castor::makeString( name ), *object->internal );
-			C3D_SafeAlloc( *result, C3DSampler );
-			( *result )->setInternal( castor::move( res ) );
-		}
-		C3D_CatchCommonExceptions()
-
-			return C3D_OK;
-	}
 
 	C3D_CAPIMETHODIMP c3dSampler_delete( C3DSampler * object )
 	{

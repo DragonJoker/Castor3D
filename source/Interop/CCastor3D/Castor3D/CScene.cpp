@@ -23,7 +23,6 @@ extern "C"
 #endif
 
 	static const C3DString ERROR_UNINITIALISED_SCENE = cuT( "The scene must be initialised" );
-	static const C3DString ERROR_UNINITIALISED_SCENEENG = cuT( "The engine must be initialised" );
 	static const C3DString ERROR_NULL_PARENT_NODE = cuT( "The node must not be null." );
 	static const C3DString ERROR_UNINITIALISED_SCENEGEOM = cuT( "The geometry must be initialised." );
 	static const C3DString ERROR_UNINITIALISED_SCENECAM = cuT( "The camera must be initialised." );
@@ -31,24 +30,6 @@ extern "C"
 	static const C3DString ERROR_UNINITIALISED_SCENELGTGRP = cuT( "The light group must be initialised." );
 	static const C3DString ERROR_UNINITIALISED_SCENEMSH = cuT( "The mesh must be initialised." );
 	static const C3DString ERROR_WRONG_SCENE_FILE_NAME = cuT( "The file doesn't exist." );
-
-	C3D_CAPIMETHODIMP c3dScene_create( C3DEngine * object, C3DString name, C3DScene ** result )
-	{
-		if ( !object || !result )
-			return C3D_POINTER;
-		if ( !object->internal )
-			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SCENEENG );
-
-		try
-		{
-			auto res = object->internal->createScene( castor::makeString( name ), *object->internal );
-			C3D_SafeAlloc( *result, C3DScene );
-			( *result )->setInternal( castor::move( res ) );
-		}
-		C3D_CatchCommonExceptions()
-
-			return C3D_OK;
-	}
 
 	C3D_CAPIMETHODIMP c3dScene_delete( C3DScene * object )
 	{
@@ -583,6 +564,142 @@ extern "C"
 		C3D_CatchCommonExceptions()
 
 		return C3D_OK;
+	}
+
+	C3D_CAPIMETHODIMP c3dScene_createNode( C3DScene const * object, C3DString name, C3DSceneNode const * parent, C3DSceneNode ** result )
+	{
+		if ( !object || !name || !result )
+			return C3D_POINTER;
+		if ( !object->getInternal() )
+			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SCENE );
+
+		try
+		{
+			if ( auto res = object->getInternal()->createSceneNode( castor::makeString( name ), *object->getInternal() ) )
+			{
+				if ( parent )
+				{
+					res->attachTo( *parent->getInternal() );
+				}
+				else
+				{
+					res->attachTo( *object->getInternal()->getObjectRootNode() );
+				}
+
+				C3D_SafeAlloc( *result, C3DSceneNode );
+				( *result )->setInternal( castor::move( res ) );
+			}
+		}
+		C3D_CatchCommonExceptions()
+
+			return C3D_OK;
+	}
+
+	C3D_CAPIMETHODIMP c3dScene_createGeometry( C3DScene const * object, C3DString name, C3DMesh const * mesh, C3DSceneNode const * parent, C3DGeometry ** result )
+	{
+		if ( !object || !name || !parent || !result || !mesh )
+			return C3D_POINTER;
+		if ( !object->getInternal() )
+			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SCENE );
+
+		try
+		{
+			auto res = object->getInternal()->createGeometry( castor::makeString( name )
+				, *object->getInternal()
+				, *parent->getInternal()
+				, mesh->getInternal() );
+			C3D_SafeAlloc( *result, C3DGeometry );
+			( *result )->setInternal( castor::move( res ) );
+		}
+		C3D_CatchCommonExceptions()
+
+			return C3D_OK;
+	}
+
+	C3D_CAPIMETHODIMP c3dScene_createCamera( C3DScene const * object, C3DString name, uint32_t ww, uint32_t wh, C3DSceneNode const * parent, C3DCamera ** result )
+	{
+		if ( !object || !name || !parent || !result )
+			return C3D_POINTER;
+		if ( !object->getInternal() )
+			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SCENE );
+
+		try
+		{
+			castor3d::Viewport viewport{ *object->getInternal()->getEngine() };
+			viewport.setPerspective( castor::Angle::fromDegrees( 120.0f ), 4.0f / 3.0f, 0.1f, 1000.0f );
+			viewport.resize( castor::Size{ ww, wh } );
+			auto res = object->getInternal()->createCamera( castor::makeString( name )
+				, *object->getInternal()
+				, *parent->getInternal()
+				, std::move( viewport ) );
+			C3D_SafeAlloc( *result, C3DCamera );
+			( *result )->setInternal( castor::move( res ) );
+		}
+		C3D_CatchCommonExceptions()
+
+			return C3D_OK;
+	}
+
+	C3D_CAPIMETHODIMP c3dScene_createLight( C3DScene const * object, C3DString name, C3DSceneNode const * parent, C3D_LIGHT_TYPE type, C3DLight ** result )
+	{
+		if ( !object || !name || !parent || !result )
+			return C3D_POINTER;
+		if ( !object->getInternal() )
+			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SCENE );
+
+		try
+		{
+			auto res = object->getInternal()->createLight( castor::makeString( name )
+				, *object->getInternal()
+				, *parent->getInternal()
+				, object->getInternal()->getLightsFactory()
+				, castor3d::LightType( type ) );
+			C3D_SafeAlloc( *result, C3DLight );
+			( *result )->setInternal( castor::move( res ) );
+		}
+		C3D_CatchCommonExceptions()
+
+			return C3D_OK;
+	}
+
+	C3D_CAPIMETHODIMP c3dScene_createLightGroup( C3DScene const * object, C3DString name, C3D_LIGHT_TYPE type, C3DLightGroup ** result )
+	{
+		if ( !object || !name || !result )
+			return C3D_POINTER;
+		if ( !object->getInternal() )
+			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SCENE );
+
+		try
+		{
+			auto res = object->getInternal()->createLightGroup( castor::makeString( name )
+				, *object->getInternal()
+				, object->getInternal()->getLightsFactory()
+				, castor3d::LightType( type ) );
+			C3D_SafeAlloc( *result, C3DLightGroup );
+			( *result )->setInternal( castor::move( res ) );
+		}
+		C3D_CatchCommonExceptions()
+
+			return C3D_OK;
+	}
+
+	C3D_CAPIMETHODIMP c3dScene_createMesh( C3DScene const * object, C3DString type, C3DString name, C3DMesh ** result )
+	{
+		if ( !object || !name || !type || !result )
+			return C3D_POINTER;
+		if ( !object->getInternal() )
+			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SCENE );
+
+		try
+		{
+			auto res = object->getInternal()->createMesh( name, *object->getInternal() );
+			object->getInternal()->getEngine()->getMeshFactory().create( castor::makeString( name ) )->generate( *res, castor3d::Parameters{} );
+			C3D_SafeAlloc( *result, C3DMesh );
+			( *result )->setInternal( castor::move( res ) );
+		}
+		C3D_CatchCommonExceptions()
+
+			return C3D_OK;
 	}
 
 #ifdef __cplusplus

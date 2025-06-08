@@ -27,7 +27,6 @@ namespace CastorCom
 		COM_PROPERTY_GET_MPTR( TextOverlay, ITextOverlay, c3dOverlay_getTextOverlay );
 
 		COM_DESTROY( COverlay, c3dOverlay_delete );
-		STDMETHOD( Create )( /*[in]*/ IEngine * engine, /*[in]*/ eOVERLAY_TYPE type, /*[in]*/ BSTR name, /*[in]*/ IOverlay * parent, /*[in]*/ IScene * scene )override;
 		STDMETHOD( GetChildrenCount )( /*[in]*/ UINT level, /*[out, retval]*/ UINT * pRet )override;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object

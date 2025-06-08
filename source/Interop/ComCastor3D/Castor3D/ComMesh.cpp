@@ -4,19 +4,6 @@
 
 namespace CastorCom
 {
-	STDMETHODIMP CMesh::Create( /*[in]*/ IScene * scene, /*[in]*/ BSTR type, /*[in]*/ BSTR name )noexcept
-	{
-		if ( !scene || !name )
-			return E_POINTER;
-		if ( m_internal )
-			return dispatchInitialised( _T( "Create" ) );
-
-		return convert( c3dMesh_create( static_cast< CScene * >( scene )->getInternal()
-			, bstrToString( type ).c_str()
-			, bstrToString( name ).c_str()
-			, &m_internal ) );
-	}
-
 	STDMETHODIMP CMesh::GetSubmesh( /*[in]*/ UINT val, /*[out, retval]*/ ISubmesh ** pRet )noexcept
 	{
 		if ( !pRet )

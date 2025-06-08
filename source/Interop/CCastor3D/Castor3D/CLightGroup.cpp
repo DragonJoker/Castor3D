@@ -10,30 +10,8 @@ extern "C"
 #endif
 
 	static const C3DString ERROR_UNINITIALISED_LIGHTGRP = cuT( "The light group must be initialised" );
-	static const C3DString ERROR_UNINITIALISED_LIGHTGRPSCENE = cuT( "The scene must be initialised" );
 	static const C3DString ERROR_UNINITIALISED_LIGHTGRPNODE = cuT( "The node must be initialised" );
 	static const C3DString ERROR_WRONG_LIGHTGRP_TYPE = cuT( "The light group is not of the expected type" );
-
-	C3D_CAPIMETHODIMP c3dLightGroup_create( C3DScene * object, C3DString name, C3D_LIGHT_TYPE type, C3DLightGroup ** result )
-	{
-		if ( !object || !name || !result )
-			return C3D_POINTER;
-		if ( !object->getInternal() )
-			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_LIGHTGRPSCENE );
-
-		try
-		{
-			auto res = object->getInternal()->createLightGroup( castor::makeString( name )
-				, *object->getInternal()
-				, object->getInternal()->getLightsFactory()
-				, castor3d::LightType( type ) );
-			C3D_SafeAlloc( *result, C3DLightGroup );
-			( *result )->setInternal( castor::move( res ) );
-		}
-		C3D_CatchCommonExceptions()
-
-			return C3D_OK;
-	}
 
 	C3D_CAPIMETHODIMP c3dLightGroup_delete( C3DLightGroup * object )
 	{

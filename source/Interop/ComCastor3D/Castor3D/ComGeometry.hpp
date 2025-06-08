@@ -26,7 +26,6 @@ namespace CastorCom
 		COM_PROPERTY_MPTR( Mesh, IMesh, c3dGeometry_getMesh, c3dGeometry_setMesh );
 
 		COM_DESTROY( CGeometry, c3dGeometry_delete );
-		STDMETHOD( Create )( /*[in]*/ IScene * scene, /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent, /*[in]*/ IMesh * mesh )override;
 		STDMETHOD( GetMaterial )( /*[in]*/ ISubmesh * submesh, /*[out, retval]*/ IMaterial ** pVal )override;
 		STDMETHOD( SetMaterial )( /*[in]*/ ISubmesh * submesh, /*[in]*/ IMaterial * val )override;
 		STDMETHOD( AttachTo )( /*[in]*/ ISceneNode * val )override;

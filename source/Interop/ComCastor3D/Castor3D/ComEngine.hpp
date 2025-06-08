@@ -48,9 +48,11 @@ namespace CastorCom
 		STDMETHOD( EndRendering )( )override;
 		STDMETHOD( RegisterGuiCallbacks )( /*[in]*/ IGuiCallbacks * callbacks )override;
 		STDMETHOD( UnregisterGuiCallbacks )()override;
-		STDMETHOD( CreateSkybox )( /*[in]*/ IScene * scene, /*[out, retval]*/ ISkybox ** pRet )override;
+		STDMETHOD( CreateOverlay )( /*[in]*/ eOVERLAY_TYPE type, /*[in]*/ BSTR name, /*[in]*/ IOverlay * parent, /*[out, retval]*/ IOverlay ** pRet )override;
 		STDMETHOD( CreateRenderWindow )( /*[in]*/ BSTR name, /*[in]*/ ISize * size, /*[in]*/ LPVOID hWnd, /*[out, retval]*/ IRenderWindow ** pRet )override;
 		STDMETHOD( CreateSampler )( /*[in]*/ BSTR name, /*[out, retval]*/ ISampler ** pRet )override;
+		STDMETHOD( CreateScene )( /*[in]*/ BSTR name, /*[out, retval]*/ IScene ** pRet )override;
+		STDMETHOD( CreateSkybox )( /*[in]*/ IScene * scene, /*[out, retval]*/ ISkybox ** pRet )override;
 
 	private:
 		void onGetClipBoardText( C3DString * text )noexcept;
