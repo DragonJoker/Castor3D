@@ -39,7 +39,7 @@ namespace castor
 	inline typename CacheViewT< CacheT >::ElementObsT CacheViewT< CacheT >::addNew( ElementKeyT const & name
 		, ParametersT && ... params )
 	{
-		CacheViewT< CacheT >::ElementObsT result{};
+		ElementObsT result{};
 		{
 			auto lock( castor::makeUniqueLock( m_cache ) );
 			result = m_cache.doTryFindNoLock( name );
@@ -64,11 +64,11 @@ namespace castor
 	}
 
 	template< typename CacheT >
-	inline bool CacheViewT< CacheT >::tryAdd( typename CacheViewT< CacheT >::ElementKeyT const & name
+	inline typename CacheViewT< CacheT >::ElementObsT CacheViewT< CacheT >::tryAdd( typename CacheViewT< CacheT >::ElementKeyT const & name
 		, ElementPtrT & element
 		, bool initialise )
 	{
-		bool result{};
+		ElementObsT result{};
 		{
 			auto lock( castor::makeUniqueLock( m_cache ) );
 			result = m_cache.doTryAddNoLock( name
@@ -92,7 +92,7 @@ namespace castor
 		, ElementPtrT & element
 		, bool initialise )
 	{
-		CacheViewT< CacheT >::ElementObsT result{};
+		ElementObsT result{};
 		{
 			auto lock( castor::makeUniqueLock( m_cache ) );
 			result = m_cache.doAddNoLock( name

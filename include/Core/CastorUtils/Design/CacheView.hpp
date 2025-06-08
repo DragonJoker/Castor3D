@@ -78,7 +78,7 @@ namespace castor
 		 *\param[in]	element		L'élément.
 		 *\param[in]	initialise	Dit si l'élément doit être initialisé après sa création.
 		 */
-		bool tryAdd( ElementKeyT const & name
+		ElementObsT tryAdd( ElementKeyT const & name
 			, ElementPtrT & element
 			, bool initialise = false );
 		/**
