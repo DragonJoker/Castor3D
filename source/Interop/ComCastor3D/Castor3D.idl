@@ -1060,8 +1060,6 @@ interface ISampler
 	[propput, id( 10 ), helpstring( "The sampler LOD bias" )] HRESULT LodBias( [in] float val );
 	[propget, id( 11 ), helpstring( "The sampler border colour" )] HRESULT BorderColour( [out, retval] eBORDER_COLOUR * pRet );
 	[propput, id( 11 ), helpstring( "The sampler border colour" )] HRESULT BorderColour( [in] eBORDER_COLOUR val );
-	// Methods
-	[id( 12 ), helpstring( "Creates the object" )] HRESULT Create( [in] IEngine * engine, [in] BSTR name );
 };
 
 // IPass
@@ -1191,10 +1189,9 @@ interface IMesh
 	// Properties
 	[propget, id( 1 ), helpstring( "The total mesh's submeshes count" )] HRESULT SubmeshCount( [out, retval] UINT * pRet );
 	// Methods
-	[id( 2 ), helpstring( "Creates the object" )] HRESULT Create( [in] IScene * scene, [in] BSTR type, [in] BSTR name );
-	[id( 3 ), helpstring( "Retrieves the submesh at the given index" )] HRESULT GetSubmesh( [in] UINT val, [out, retval] ISubmesh ** pRet );
-	[id( 4 ), helpstring( "Creates a new submesh for this mesh" )] HRESULT CreateSubmesh( [out, retval] ISubmesh ** pRet );
-	[id( 5 ), helpstring( "Removes the given submesh" )] HRESULT RemoveSubmesh( [in] ISubmesh * val );
+	[id( 2 ), helpstring( "Retrieves the submesh at the given index" )] HRESULT GetSubmesh( [in] UINT val, [out, retval] ISubmesh ** pRet );
+	[id( 3 ), helpstring( "Creates a new submesh for this mesh" )] HRESULT CreateSubmesh( [out, retval] ISubmesh ** pRet );
+	[id( 4 ), helpstring( "Removes the given submesh" )] HRESULT RemoveSubmesh( [in] ISubmesh * val );
 };
 
 // ISkybox
@@ -1335,10 +1332,9 @@ interface ICamera
 	[propget, id( 5 ), helpstring( "The camera horizontal resolution" )] HRESULT Width( [out, retval] UINT * pRet );
 	[propget, id( 6 ), helpstring( "The camera vertical resolution" )] HRESULT Height( [out, retval] UINT * pRet );
 	// Methods
-	[id( 7 ), helpstring( "Creates the object" )] HRESULT Create( [in] IScene * scene, [in] BSTR name, [in] ISceneNode * node, [in] UINT width, [in] UINT height );
-	[id( 8 ), helpstring( "Attaches the movable object to the given node" )] HRESULT AttachTo( [in] ISceneNode * val );
-	[id( 9 ), helpstring( "Detaches the movable object from its parent node" )] HRESULT Detach();
-	[id( 10 ), helpstring( "Changes the camera resolution" )] HRESULT Resize( [in] UINT width, [in] UINT height );
+	[id( 7 ), helpstring( "Attaches the movable object to the given node" )] HRESULT AttachTo( [in] ISceneNode * val );
+	[id( 8 ), helpstring( "Detaches the movable object from its parent node" )] HRESULT Detach();
+	[id( 9 ), helpstring( "Changes the camera resolution" )] HRESULT Resize( [in] UINT width, [in] UINT height );
 };
 
 // ILight
@@ -1360,9 +1356,8 @@ interface ILight
 	[propget, id( 6 ), helpstring( "The point light category" )] HRESULT PointLight( [out, retval] IPointLight ** pRet );
 	[propget, id( 7 ), helpstring( "The spot light category" )] HRESULT SpotLight( [out, retval] ISpotLight ** pRet );
 	// Methods
-	[id( 8 ), helpstring( "Creates the object" )] HRESULT Create( [in] IScene * scene, [in] BSTR name, [in] ISceneNode * node, [in] eLIGHT_TYPE type );
-	[id( 9 ), helpstring( "Attaches the movable object to the given node" )] HRESULT AttachTo( [in] ISceneNode * val );
-	[id( 10 ), helpstring( "Detaches the movable object from its parent node" )] HRESULT Detach();
+	[id( 8 ), helpstring( "Attaches the movable object to the given node" )] HRESULT AttachTo( [in] ISceneNode * val );
+	[id( 9 ), helpstring( "Detaches the movable object from its parent node" )] HRESULT Detach();
 };
 
 // ILightGroup
@@ -1383,9 +1378,8 @@ interface ILightGroup
 	[propget, id( 5 ), helpstring( "The point light category" )] HRESULT PointLight( [out, retval] IPointLight ** pRet );
 	[propget, id( 6 ), helpstring( "The spot light category" )] HRESULT SpotLight( [out, retval] ISpotLight ** pRet );
 	// Methods
-	[id( 7 ), helpstring( "Creates the object" )] HRESULT Create( [in] IScene * scene, [in] BSTR name, [in] eLIGHT_TYPE type );
-	[id( 8 ), helpstring( "Adds a light instance for given scene node" )] HRESULT AddLight( [in] ISceneNode * val );
-	[id( 9 ), helpstring( "Removes the light instance for given scene node" )] HRESULT RemoveLight( [in] ISceneNode * val );
+	[id( 7 ), helpstring( "Adds a light instance for given scene node" )] HRESULT AddLight( [in] ISceneNode * val );
+	[id( 8 ), helpstring( "Removes the light instance for given scene node" )] HRESULT RemoveLight( [in] ISceneNode * val );
 };
 
 // IGeometry
@@ -1405,11 +1399,10 @@ interface IGeometry
 	[propget, id( 4 ), helpstring( "The geometry's mesh" )] HRESULT Mesh( [out, retval] IMesh ** pRet );
 	[propput, id( 4 ), helpstring( "The geometry's mesh" )] HRESULT Mesh( [in] IMesh * val );
 	// Methods
-	[id( 5 ), helpstring( "Creates the object" )] HRESULT Create( [in] IScene * scene, [in] BSTR name, [in] ISceneNode * node, [in] IMesh * mesh );
-	[id( 6 ), helpstring( "Attaches the movable object to the given node" )] HRESULT AttachTo( [in] ISceneNode * val );
-	[id( 7 ), helpstring( "Detaches the movable object from its parent node" )] HRESULT Detach();
-	[id( 8 ), helpstring( "Retrieves the given submesh's material" )] HRESULT GetMaterial( [in] ISubmesh * submesh, [out, retval] IMaterial ** pRet );
-	[id( 9 ), helpstring( "Defines the given submesh's material" )] HRESULT SetMaterial( [in] ISubmesh * submesh, [in] IMaterial * val );
+	[id( 5 ), helpstring( "Attaches the movable object to the given node" )] HRESULT AttachTo( [in] ISceneNode * val );
+	[id( 6 ), helpstring( "Detaches the movable object from its parent node" )] HRESULT Detach();
+	[id( 7 ), helpstring( "Retrieves the given submesh's material" )] HRESULT GetMaterial( [in] ISubmesh * submesh, [out, retval] IMaterial ** pRet );
+	[id( 8 ), helpstring( "Defines the given submesh's material" )] HRESULT SetMaterial( [in] ISubmesh * submesh, [in] IMaterial * val );
 };
 
 // ISceneNode
@@ -1431,15 +1424,14 @@ interface ISceneNode
 	[propput, id( 3 ), helpstring( "The node scale" )] HRESULT Scaling( [in] IVector3D * val );
 	[propget, id( 4 ), helpstring( "The parent scene node" )] HRESULT Parent( [out, retval] ISceneNode ** pRet );
 	// Methods
-	[id( 5 ), helpstring( "Creates the object" )] HRESULT Create( [in] IScene * scene, [in] BSTR name, [in] ISceneNode * parent );
-	[id( 6 ), helpstring( "Attaches this node to another one" )] HRESULT AttachTo( [in] ISceneNode * val );
-	[id( 7 ), helpstring( "Detaches this node from its parent" )] HRESULT Detach();
-	[id( 8 ), helpstring( "Rotates this node around Y axis" )] HRESULT Yaw( [in] float val );
-	[id( 9 ), helpstring( "Rotates this node around X axis" )] HRESULT Pitch( [in] float val );
-	[id( 10 ), helpstring( "Rotates this node around Z axis" )] HRESULT Roll( [in] float val );
-	[id( 11 ), helpstring( "Rotates the node" )] HRESULT Rotate( [in] IQuaternion * val );
-	[id( 12 ), helpstring( "Translates the node" )] HRESULT Translate( [in] IVector3D * val );
-	[id( 13 ), helpstring( "Scales the node" )] HRESULT Scale( [in] IVector3D * val );
+	[id( 5 ), helpstring( "Attaches this node to another one" )] HRESULT AttachTo( [in] ISceneNode * val );
+	[id( 6 ), helpstring( "Detaches this node from its parent" )] HRESULT Detach();
+	[id( 7 ), helpstring( "Rotates this node around Y axis" )] HRESULT Yaw( [in] float val );
+	[id( 8 ), helpstring( "Rotates this node around X axis" )] HRESULT Pitch( [in] float val );
+	[id( 9 ), helpstring( "Rotates this node around Z axis" )] HRESULT Roll( [in] float val );
+	[id( 10 ), helpstring( "Rotates the node" )] HRESULT Rotate( [in] IQuaternion * val );
+	[id( 11 ), helpstring( "Translates the node" )] HRESULT Translate( [in] IVector3D * val );
+	[id( 12 ), helpstring( "Scales the node" )] HRESULT Scale( [in] IVector3D * val );
 };
 
 // IPanelOverlay
@@ -1536,8 +1528,7 @@ interface IOverlay
 	[propget, id( 4 ), helpstring( "The border panel overlay category" )] HRESULT BorderPanelOverlay( [out, retval] IBorderPanelOverlay ** pRet );
 	[propget, id( 5 ), helpstring( "The text overlay category" )] HRESULT TextOverlay( [out, retval] ITextOverlay ** pRet );
 	// Methods
-	[id( 6 ), helpstring( "Creates the object" )] HRESULT Create( [in] IEngine * engine, [in] eOVERLAY_TYPE type, [in] BSTR name, [in] IOverlay * parent, [in] IScene * scene );
-	[id( 7 ), helpstring( "Retrieves the children count" )] HRESULT GetChildrenCount( [in] UINT level, [out, retval] UINT * pRet );
+	[id( 6 ), helpstring( "Retrieves the children count" )] HRESULT GetChildrenCount( [in] UINT level, [out, retval] UINT * pRet );
 };
 
 // IScene
@@ -1562,7 +1553,6 @@ interface IScene
 	[propget, id( 7 ), helpstring( "The objects root scene node" )] HRESULT ObjectRootNode( [out, retval] ISceneNode ** pRet );
 	[propget, id( 8 ), helpstring( "The cameras root scene node" )] HRESULT CameraRootNode( [out, retval] ISceneNode ** pRet );
 	// Methods
-	[id( 9 ), helpstring( "Creates the object" )] HRESULT Create( [in] IEngine * engine, [in] BSTR name );
 	[id( 10 ), helpstring( "Adds given scene node" )] HRESULT AddNode( [in] ISceneNode * val );
 	[id( 11 ), helpstring( "Adds given geometry" )] HRESULT AddGeometry( [in] IGeometry * val );
 	[id( 12 ), helpstring( "Adds given camera" )] HRESULT AddCamera( [in] ICamera * val );
@@ -1581,6 +1571,12 @@ interface IScene
 	[id( 25 ), helpstring( "Removes the given light" )] HRESULT RemoveLight( [in] ILight * light );
 	[id( 26 ), helpstring( "Removes the given light group" )] HRESULT RemoveLightGroup( [in] ILightGroup * light );
 	[id( 27 ), helpstring( "Removes the given mesh" )] HRESULT RemoveMesh( [in] IMesh * mesh );
+	[id( 28 ), helpstring( "Creates a scene node object" )] HRESULT CreateNode( [in] BSTR name, [in] ISceneNode * parent, [out, retval] ISceneNode ** pRet );
+	[id( 29 ), helpstring( "Creates a geometry object" )] HRESULT CreateGeometry( [in] BSTR name, [in] ISceneNode * node, [in] IMesh * mesh, [out, retval] IGeometry ** pRet );
+	[id( 30 ), helpstring( "Creates a camera object" )] HRESULT CreateCamera( [in] BSTR name, [in] ISceneNode * node, [in] UINT width, [in] UINT height, [out, retval] ICamera ** pRet );
+	[id( 31 ), helpstring( "Creates a light object" )] HRESULT CreateLight( [in] BSTR name, [in] ISceneNode * node, [in] eLIGHT_TYPE type, [out, retval] ILight ** pRet );
+	[id( 32 ), helpstring( "Creates a light group object" )] HRESULT CreateLightGroup( [in] BSTR name, [in] eLIGHT_TYPE type, [out, retval] ILightGroup ** pRet );
+	[id( 33 ), helpstring( "Creates a mesh object" )] HRESULT CreateMesh( [in] BSTR name, [in] BSTR type, [out, retval] IMesh ** pRet );
 };
 
 // IRenderWindow
@@ -1665,8 +1661,11 @@ interface IEngine
 	[id( 27 ), helpstring( "Ends the render loop (threaded rendering only)" )] HRESULT EndRendering();
 	[id( 28 ), helpstring( "Sets callbacks for GUI global events" )] HRESULT RegisterGuiCallbacks( [in] IGuiCallbacks * callbacks );
 	[id( 29 ), helpstring( "Unsets callbacks for GUI global events" )] HRESULT UnregisterGuiCallbacks();
-	[id( 30 ), helpstring( "Creates a skybox object" )] HRESULT CreateSkybox( [in] IScene * scene, [out, retval] ISkybox ** pRet );
+	[id( 30 ), helpstring( "Creates an overlay object" )] HRESULT CreateOverlay( [in] eOVERLAY_TYPE type, [in] BSTR name, [in] IOverlay * parent, [out, retval] IOverlay ** pRet );
 	[id( 31 ), helpstring( "Creates a render window object" ), local] HRESULT CreateRenderWindow( [in] BSTR name, [in] ISize * size, [in] LPVOID hWnd, [out, retval] IRenderWindow ** pRet );
+	[id( 32 ), helpstring( "Creates a sampler object" )] HRESULT CreateSampler( [in] BSTR name, [out, retval] ISampler ** pRet );
+	[id( 33 ), helpstring( "Creates a scene object" )] HRESULT CreateScene( [in] BSTR name, [out, retval] IScene ** pRet );
+	[id( 34 ), helpstring( "Creates a skybox object" )] HRESULT CreateSkybox( [in] IScene * scene, [out, retval] ISkybox ** pRet );
 };
 
 // Castor3DLib

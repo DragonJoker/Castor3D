@@ -21,7 +21,7 @@
 
 using System.Linq;
 using System.Windows;
-using Castor3D;
+using Castor3DInterop;
 
 namespace CastorViewerSharp
 {

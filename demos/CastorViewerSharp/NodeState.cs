@@ -1,15 +1,10 @@
-using Castor3D;
+using Castor3DInterop;
 using System;
 
 namespace CastorViewerSharp
 {
 	public class NodeState
 	{
-		private float radToDeg(float radians)
-		{
-			return (float)(radians * 180.0f / Math.PI);
-		}
-
 		public NodeState(SceneNode node)
 		{
 			m_node = node;
@@ -36,8 +31,8 @@ namespace CastorViewerSharp
 		{
 			var xAngle = m_xAngle;
 			var yAngle = m_yAngle;
-			m_xAngle += radToDeg(m_xAngularVelocity);
-			m_yAngle += radToDeg(m_yAngularVelocity);
+			m_xAngle += m_xAngularVelocity / 30.0f;
+			m_yAngle += m_yAngularVelocity / 30.0f;
 			m_xAngularVelocity = doUpdateVelocity(m_xAngularVelocity, -MaxAngularSpeed, MaxAngularSpeed);
 			m_yAngularVelocity = doUpdateVelocity(m_yAngularVelocity, -MaxAngularSpeed, MaxAngularSpeed);
 
@@ -47,8 +42,8 @@ namespace CastorViewerSharp
 			m_yScalarVelocity = doUpdateVelocity(m_yScalarVelocity, -MaxScalarSpeed, MaxScalarSpeed);
 			m_zScalarVelocity = doUpdateVelocity(m_zScalarVelocity, -MaxScalarSpeed, MaxScalarSpeed);
 
-			bool result = xAngle != radToDeg(m_xAngle)
-				|| yAngle != radToDeg(m_yAngle);
+			bool result = xAngle != m_xAngle
+				|| yAngle != m_yAngle;
 
 			if (translate.X != 0.0f
 				|| translate.Y != 0.0f
