@@ -483,7 +483,8 @@ namespace castor3d
 		{
 			auto result = m_overlayCache->addNew( key
 				, castor::forward< ParametersT >( parameters )... );
-			result->setScene( this );
+			if ( result )
+				result->setScene( this );
 			return result;
 		}
 
@@ -492,7 +493,8 @@ namespace castor3d
 			, bool initialise = false )
 		{
 			auto result = m_overlayCache->add( key, element, initialise );
-			result->setScene( this );
+			if ( result )
+				result->setScene( this );
 			return result;
 		}
 
@@ -500,7 +502,8 @@ namespace castor3d
 			, bool cleanup = false )noexcept
 		{
 			auto result = m_overlayCache->remove( key, cleanup );
-			result->setScene( nullptr );
+			if ( result )
+				result->setScene( nullptr );
 			return result;
 		}
 

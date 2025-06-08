@@ -17,25 +17,6 @@ namespace castor3d
 {
 	namespace overlay
 	{
-		static SceneRPtr getScene( castor::FileParserContext const & context
-			, OverlayContext const * blockContext
-			, OverlayContext::OverlayPtr const & overlay )
-		{
-			if ( overlay.rptr )
-			{
-				return overlay.rptr->getScene();
-			}
-
-			if ( !blockContext || !blockContext->scene )
-			{
-				CU_ParsingError( cuT( "No scene context in overlay context" ) );
-				CU_Failure( "No scene context in overlay context" );
-				CU_Exception( "No scene context in overlay context" );
-			}
-
-			return blockContext->scene->scene;
-		}
-
 		static CU_ImplementAttributeParserBlock( parserPosition, OverlayContext )
 		{
 			if ( blockContext->overlay.rptr )
