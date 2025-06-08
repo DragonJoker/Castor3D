@@ -2,7 +2,6 @@
 #include <Castor3D/ImporterFile.hpp>
 #include <Castor3D/Binary/BinaryMesh.hpp>
 #include <Castor3D/Binary/BinarySkeleton.hpp>
-#include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Material/Material.hpp>
@@ -23,6 +22,7 @@
 #include <Castor3D/Scene/SceneFileParser.hpp>
 #include <Castor3D/Shader/LightingModelFactory.hpp>
 
+#include <CastorUtils/Design/CacheView.hpp>
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/RgbColour.hpp>
 

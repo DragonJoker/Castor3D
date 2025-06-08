@@ -8,7 +8,6 @@
 #include <Castor3D/Buffer/ObjectBufferPool.hpp>
 #include <Castor3D/Buffer/GpuBufferPool.hpp>
 #include <Castor3D/Buffer/UniformBufferPool.hpp>
-#include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
@@ -24,6 +23,7 @@
 #include <SceneExporter/CscnExporter.hpp>
 
 #include <CastorUtils/Data/BinaryFile.hpp>
+#include <CastorUtils/Design/CacheView.hpp>
 
 namespace Testing
 {

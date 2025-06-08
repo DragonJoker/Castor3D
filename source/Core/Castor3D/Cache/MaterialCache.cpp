@@ -141,16 +141,13 @@ namespace castor
 		if ( !m_passBuffer )
 		{
 			auto lock( makeUniqueLock( *this ) );
-			MaterialObs created{};
-			auto defaultMaterial = doTryAddNewNoLockT( Material::DefaultMaterialName
-				, false
-				, created
-				, m_engine
-				, m_engine.getDefaultLightingModel() );
-			auto material = defaultMaterial;
+			auto material = tryFind( Material::DefaultMaterialName );
 
-			if ( created == material )
+			if ( !material )
 			{
+				material = doAddNewNoLockT( Material::DefaultMaterialName
+					, m_engine
+					, m_engine.getDefaultLightingModel() );
 				material->createPass();
 				material->getPass( 0 )->createComponent< castor3d::TwoSidedComponent >()->setTwoSided( true );
 				material->setSerialisable( false );

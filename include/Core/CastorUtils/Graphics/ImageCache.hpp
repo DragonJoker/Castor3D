@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Graphics/GraphicsModule.hpp"
 #include "CastorUtils/Data/Path.hpp"
+#include "CastorUtils/Graphics/Image.hpp"
 #include "CastorUtils/Graphics/Size.hpp"
 
 #include "CastorUtils/Design/Resource.hpp"

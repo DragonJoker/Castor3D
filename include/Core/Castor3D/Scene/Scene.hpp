@@ -20,7 +20,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Cache/BillboardCache.hpp"
-#include "Castor3D/Cache/CacheView.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/LightGroupCache.hpp"
@@ -36,6 +35,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/Design/CacheView.hpp>
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Design/Signal.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
@@ -512,11 +512,11 @@ namespace castor3d
 		DECLARE_OBJECT_CACHE_MEMBER( particleSystem, ParticleSystem );
 		DECLARE_CACHE_MEMBER( mesh, Mesh );
 		DECLARE_CACHE_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
-		DECLARE_CACHE_MEMBER( overlay, Overlay );
+		DECLARE_CACHE_MEMBER_MIN( overlay, Overlay );
 		DECLARE_CACHE_MEMBER( skeleton, Skeleton );
-		DECLARE_CACHE_VIEW_MEMBER( material, Material, GpuEventType::ePreUpload );
-		DECLARE_CACHE_VIEW_MEMBER( sampler, Sampler, GpuEventType::ePreUpload );
-		DECLARE_CU_CACHE_VIEW_MEMBER( font, Font, CpuEventType::ePreGpuStep );
+		DECLARE_CACHE_VIEW_MEMBER( material, Material );
+		DECLARE_CACHE_VIEW_MEMBER( sampler, Sampler );
+		DECLARE_CU_CACHE_VIEW_MEMBER( font, Font );
 		bool m_changed{ false };
 		castor::RgbColour m_ambientLight{ 0.0f, 0.0f, 0.0f };
 		castor::RgbColour m_backgroundColour{ 0.0f, 0.0f, 0.0f };

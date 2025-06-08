@@ -88,9 +88,7 @@ namespace castor3d
 		void doReparentNode( SceneNode & node );
 
 		using ElementObjectCacheT::tryAdd;
-		using ElementObjectCacheT::tryAddNoLock;
 		using ElementObjectCacheT::add;
-		using ElementObjectCacheT::addNoLock;
 
 	private:
 		castor::Vector< SceneNode * > m_linearNodes;

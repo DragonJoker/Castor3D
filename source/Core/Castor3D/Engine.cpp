@@ -110,18 +110,13 @@ namespace castor3d
 				{
 					auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf_ggx.png" );
 					castor::ImageResPtr created;
-					auto img = engine.tryAddNewImage( cuT( "BRDFLutGGX" )
-						, true
-						, created
+					auto img = engine.addNewImage( cuT( "BRDFLutGGX" )
 						, castor::ImageCreateParams{ imagePath, { false, false, false } } );
 					bufferRG = img->getPixels();
 				}
 				{
 					auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf_charlie.png" );
-					castor::ImageResPtr created;
-					auto img = engine.tryAddNewImage( cuT( "BRDFLutCharlie" )
-						, true
-						, created
+					auto img = engine.addNewImage( cuT( "BRDFLutCharlie" )
 						, castor::ImageCreateParams{ imagePath, { false, false, false } } );
 					bufferB = img->getPixels();
 				}

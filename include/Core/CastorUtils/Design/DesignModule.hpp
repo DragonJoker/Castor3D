@@ -91,6 +91,18 @@ namespace castor
 	template< typename CleanFunc >
 	struct BlockGuard;
 	/**
+	*\~english
+	*	View on a resource cache.
+	*\remarks
+	*	Allows deletion of elements created through the view, and only those.
+	*\~french
+	*	Vue sur un cache de ressources.
+	*\remarks
+	*	Permet de supprimer tous les éléments créés via la vue et uniquement ceux là.
+	*/
+	template< typename CacheT >
+	class CacheViewT;
+	/**
 	\~english
 	\brief		Struct used to select best way to put type in parameter : 'value' or 'const reference'
 	\~french
@@ -562,6 +574,8 @@ namespace castor
 
 	template< typename ResT, typename KeyT, typename TraitsT >
 	using ResourceCachePtrT = UniquePtr< ResourceCacheT< ResT, KeyT, TraitsT > >;
+	template< typename CacheT >
+	using CacheViewPtrT = UniquePtr< CacheViewT< CacheT > >;
 
 	template< typename ResT, typename KeyT >
 	struct Deleter< ResourceT< ResT, KeyT > >
