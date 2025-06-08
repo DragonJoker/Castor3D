@@ -468,6 +468,61 @@ namespace castor3d
 			m_geometryCache->add( castor::move( element ) );
 			return result;
 		}
+
+		template< typename ... ParametersT >
+		OverlayCache::ElementPtrT createOverlay( OverlayCache::ElementKeyT const & key
+			, ParametersT && ... parameters )const
+		{
+			return m_overlayCache->create( key
+				, castor::forward< ParametersT >( parameters )... );
+		}
+
+		template< typename ... ParametersT >
+		OverlayCache::ElementObsT addNewOverlay( OverlayCache::ElementKeyT const & key
+			, ParametersT && ... parameters )
+		{
+			auto result = m_overlayCache->addNew( key
+				, castor::forward< ParametersT >( parameters )... );
+			result->setScene( this );
+			return result;
+		}
+
+		OverlayCache::ElementObsT addOverlay( OverlayCache::ElementKeyT const & key
+			, OverlayCache::ElementPtrT & element
+			, bool initialise = false )
+		{
+			auto result = m_overlayCache->add( key, element, initialise );
+			result->setScene( this );
+			return result;
+		}
+
+		OverlayCache::ElementPtrT removeOverlay( OverlayCache::ElementKeyT const & key
+			, bool cleanup = false )noexcept
+		{
+			auto result = m_overlayCache->remove( key, cleanup );
+			result->setScene( nullptr );
+			return result;
+		}
+
+		OverlayCache::ElementObsT findOverlay( OverlayCache::ElementKeyT const & key )const
+		{
+			return m_overlayCache->find( key );
+		}
+
+		bool hasOverlay( OverlayCache::ElementKeyT const & key )const noexcept
+		{
+			return m_overlayCache->has( key );
+		}
+
+		OverlayCache::ElementObsT tryFindOverlay( OverlayCache::ElementKeyT const & key )const noexcept
+		{
+			return m_overlayCache->tryFind( key );
+		}
+
+		uint32_t getOverlaysCount()const noexcept
+		{
+			return m_overlayCache->getObjectCount();
+		}
 		/**@}*/
 
 	private:

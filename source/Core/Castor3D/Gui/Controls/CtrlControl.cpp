@@ -90,12 +90,10 @@ namespace castor3d
 			? m_scene->addNewOverlay( getName()
 				, getEngine()
 				, OverlayType::eBorderPanel
-				, nullptr
 				, parentOv )
 			: getEngine().addNewOverlay( getName()
 				, getEngine()
 				, OverlayType::eBorderPanel
-				, nullptr
 				, parentOv );
 
 		if ( !overlay )

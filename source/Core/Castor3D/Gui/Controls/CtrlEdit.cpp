@@ -93,12 +93,10 @@ namespace castor3d
 			? m_scene->addNewOverlay( getName() + cuT( "/Text" )
 				, getEngine()
 				, OverlayType::eText
-				, nullptr
 				, &getBackgroundOverlay() )->getTextOverlay()
 			: getEngine().addNewOverlay( getName() + cuT( "/Text" )
 				, getEngine()
 				, OverlayType::eText
-				, nullptr
 				, &getBackgroundOverlay() )->getTextOverlay();
 		text->setPixelPosition( getClientOffset() );
 		text->setPixelSize( getClientSize() );
@@ -110,12 +108,10 @@ namespace castor3d
 			? m_scene->addNewOverlay( getName() + cuT( "/Caret" )
 				, getEngine()
 				, OverlayType::ePanel
-				, nullptr
 				, &text->getOverlay() )->getPanelOverlay()
 			: getEngine().addNewOverlay( getName() + cuT( "/Caret" )
 				, getEngine()
 				, OverlayType::ePanel
-				, nullptr
 				, &text->getOverlay() )->getPanelOverlay();
 		caret->setPixelPosition( getClientOffset() );
 		caret->setPixelSize( {} );
@@ -1106,12 +1102,10 @@ namespace castor3d
 				? m_scene->addNewOverlay( getName() + cuT( "/Selection" ) + castor::string::toString( m_selections.size() )
 					, getEngine()
 					, OverlayType::ePanel
-					, nullptr
 					, &text->getOverlay() )->getPanelOverlay()
 				: getEngine().addNewOverlay( getName() + cuT( "/Selection" ) + castor::string::toString( m_selections.size() )
 					, getEngine()
 					, OverlayType::ePanel
-					, nullptr
 					, &text->getOverlay() )->getPanelOverlay();
 			panel->setPixelPosition( {} );
 			panel->setPixelSize( {} );

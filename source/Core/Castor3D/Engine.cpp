@@ -250,7 +250,6 @@ namespace castor3d
 				{
 					blockContext->overlays->overlay.uptr = castor::makeUnique< Overlay >( *blockContext->engine
 						, OverlayType::ePanel
-						, nullptr
 						, parent.rptr );
 					blockContext->overlays->overlay.rptr = blockContext->overlays->overlay.uptr.get();
 					blockContext->overlays->overlay.rptr->rename( name );
@@ -278,7 +277,6 @@ namespace castor3d
 				{
 					blockContext->overlays->overlay.uptr = castor::makeUnique< Overlay >( *blockContext->engine
 						, OverlayType::eBorderPanel
-						, nullptr
 						, parent.rptr );
 					blockContext->overlays->overlay.rptr = blockContext->overlays->overlay.uptr.get();
 					blockContext->overlays->overlay.rptr->rename( name );
@@ -306,7 +304,6 @@ namespace castor3d
 				{
 					blockContext->overlays->overlay.uptr = castor::makeUnique< Overlay >( *blockContext->engine
 						, OverlayType::eText
-						, nullptr
 						, parent.rptr );
 					blockContext->overlays->overlay.rptr = blockContext->overlays->overlay.uptr.get();
 					blockContext->overlays->overlay.rptr->rename( name );
