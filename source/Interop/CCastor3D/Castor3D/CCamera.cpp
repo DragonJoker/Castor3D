@@ -11,31 +11,6 @@ extern "C"
 
 	static const C3DString ERROR_UNINITIALISED_CAMERA = cuT( "The camera must be initialised" );
 	static const C3DString ERROR_UNINITIALISED_CAMNODE = cuT( "The node must be initialised" );
-	static const C3DString ERROR_UNINITIALISED_CAMSCENE = cuT( "The scene must be initialised" );
-
-	C3D_CAPIMETHODIMP c3dCamera_create( C3DScene * object, C3DString name, uint32_t ww, uint32_t wh, C3DSceneNode const * parent, C3DCamera ** result )
-	{
-		if ( !object || !name || !parent || !result )
-			return C3D_POINTER;
-		if ( !object->getInternal() )
-			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_CAMSCENE );
-
-		try
-		{
-			castor3d::Viewport viewport{ *object->getInternal()->getEngine() };
-			viewport.setPerspective( castor::Angle::fromDegrees( 120.0f ), 4.0f / 3.0f, 0.1f, 1000.0f );
-			viewport.resize( castor::Size{ ww, wh } );
-			auto res = object->getInternal()->createCamera( castor::makeString( name )
-				, *object->getInternal()
-				, *parent->getInternal()
-				, std::move( viewport ) );
-			C3D_SafeAlloc( *result, C3DCamera );
-			( *result )->setInternal( castor::move( res ) );
-		}
-		C3D_CatchCommonExceptions()
-
-			return C3D_OK;
-	}
 
 	C3D_CAPIMETHODIMP c3dCamera_delete( C3DCamera * object )
 	{

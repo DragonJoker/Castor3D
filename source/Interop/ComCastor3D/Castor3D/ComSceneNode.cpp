@@ -4,19 +4,6 @@
 
 namespace CastorCom
 {
-	STDMETHODIMP CSceneNode::Create( /*[in]*/ IScene * scene, /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent )noexcept
-	{
-		if ( !scene || !name )
-			return E_POINTER;
-		if ( m_internal )
-			return dispatchInitialised( _T( "Create" ) );
-
-		return convert( c3dSceneNode_create( static_cast< CScene * >( scene )->getInternal()
-			, bstrToString( name ).c_str()
-			, parent ? static_cast< CSceneNode * >( parent )->getInternal() : nullptr
-			, &m_internal ) );
-	}
-
 	STDMETHODIMP CSceneNode::AttachTo( /*[in]*/ ISceneNode * val )noexcept
 	{
 		if ( !val )

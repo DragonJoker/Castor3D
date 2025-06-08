@@ -29,7 +29,6 @@ namespace CastorCom
 		COM_PROPERTY_GET_MPTR( SpotLight, ISpotLight, c3dLightGroup_getSpotLight );
 
 		COM_DESTROY( CLightGroup, c3dLightGroup_delete );
-		STDMETHOD( Create )( /*[in]*/ IScene * scene, /*[in]*/ BSTR name, /*[in]*/ eLIGHT_TYPE type )override;
 		STDMETHOD( AddLight )( /*[in]*/ ISceneNode * val )override;
 		STDMETHOD( RemoveLight )(/*[in]*/ ISceneNode * val )override;
 	};

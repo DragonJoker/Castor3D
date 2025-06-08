@@ -1,11 +1,14 @@
 #include "CCastor3D/Castor3D.h"
 #include "CCastor3D/Castor3DCommon.h"
+#include "CCastor3D/Castor3DPlatformTypes.h"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Event/UserInput/UserInputListener.hpp>
+#include <Castor3D/Material/Texture/Sampler.hpp>
+#include <Castor3D/Overlay/Overlay.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Scene/Scene.hpp>
@@ -13,6 +16,8 @@
 #include <Castor3D/Scene/Background/Skybox.hpp>
 
 #include <CastorUtils/Miscellaneous/StringUtils.hpp>
+
+#include <ashespp/Core/PlatformWindowHandle.hpp>
 
 namespace
 {
@@ -624,7 +629,92 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_createSkybox( C3DEngine * object, C3DScene * scene, C3DSkybox ** result )
+	C3D_CAPIMETHODIMP c3dEngine_createOverlay( C3DEngine const * object, C3D_OVERLAY_TYPE type, C3DString name, C3DOverlay * parent, C3DOverlay ** result )
+	{
+		if ( !object || !result )
+			return C3D_POINTER;
+		if ( !object->internal )
+			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_ENGINE );
+
+		try
+		{
+			castor3d::OverlayUPtr res;
+			res = object->internal->createOverlay( castor::makeString( name )
+				, *object->internal
+				, castor3d::OverlayType( type )
+				, parent ? parent->getInternal() : nullptr );
+			C3D_SafeAlloc( *result, C3DOverlay );
+			( *result )->setInternal( castor::move( res ) );
+		}
+		C3D_CatchCommonExceptions()
+
+			return C3D_OK;
+	}
+
+	C3D_CAPIMETHODIMP c3dEngine_createRenderWindow( C3DEngine const * object, C3DString name, C3DSize const * size, C3DWindowHandle handle, C3DRenderWindow ** result )
+	{
+		if ( !object || !result || !size )
+			return C3D_POINTER;
+		if ( !object->internal )
+			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_ENGINE );
+
+		try
+		{
+			auto window = castor::makeUnique< castor3d::RenderWindow >( castor::makeString( name )
+				, *object->internal
+				, castor::Size{ size->width, size->height }
+#if defined( _WIN32 )
+				, ashes::WindowHandle( castor::make_unique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr ), reinterpret_cast< HWND >( handle.hWnd ) ) ) );
+#elif defined( __linux__ )
+				, ashes::WindowHandle( castor::make_unique< ashes::IXWindowHandle >( handle.drawable, handle.display ) ) );
+#elif defined( __APPLE__ )
+				, ashes::WindowHandle( castor::make_unique< ashes::IMacOsWindowHandle >( handle.view ) ) );
+#endif
+			C3D_SafeAlloc( *result, C3DRenderWindow );
+			( *result )->internal = castor::move( window );
+		}
+		C3D_CatchCommonExceptions()
+
+			return C3D_OK;
+	}
+
+	C3D_CAPIMETHODIMP c3dEngine_createSampler( C3DEngine const * object, C3DString name, C3DSampler ** result )
+	{
+		if ( !object || !result )
+			return C3D_POINTER;
+		if ( !object->internal )
+			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_ENGINE );
+
+		try
+		{
+			auto res = object->internal->createSampler( castor::makeString( name ), *object->internal );
+			C3D_SafeAlloc( *result, C3DSampler );
+			( *result )->setInternal( castor::move( res ) );
+		}
+		C3D_CatchCommonExceptions()
+
+			return C3D_OK;
+	}
+
+	C3D_CAPIMETHODIMP c3dEngine_createScene( C3DEngine const * object, C3DString name, C3DScene ** result )
+	{
+		if ( !object || !result )
+			return C3D_POINTER;
+		if ( !object->internal )
+			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_ENGINE );
+
+		try
+		{
+			auto res = object->internal->createScene( castor::makeString( name ), *object->internal );
+			C3D_SafeAlloc( *result, C3DScene );
+			( *result )->setInternal( castor::move( res ) );
+		}
+		C3D_CatchCommonExceptions()
+
+			return C3D_OK;
+	}
+
+	C3D_CAPIMETHODIMP c3dEngine_createSkybox( C3DEngine const * object, C3DScene * scene, C3DSkybox ** result )
 	{
 		if ( !object || !scene || !result )
 			return C3D_POINTER;
@@ -641,7 +731,7 @@ extern "C"
 		}
 		C3D_CatchCommonExceptions()
 
-		return C3D_OK;
+			return C3D_OK;
 	}
 
 	C3D_CAPIMETHODIMP c3d_getPluginsDirectory( C3DChar * result, size_t resultSize )

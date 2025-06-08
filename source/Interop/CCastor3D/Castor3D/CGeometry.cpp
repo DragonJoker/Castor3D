@@ -10,32 +10,10 @@ extern "C"
 #endif
 
 	static const C3DString ERROR_UNINITIALISED_GEOMETRY = cuT( "The geometry must be initialised" );
-	static const C3DString ERROR_UNINITIALISED_GEOMSCENE = cuT( "The scene must be initialised" );
 	static const C3DString ERROR_UNINITIALISED_GEOMNODE = cuT( "The node must be initialised" );
 	static const C3DString ERROR_UNINITIALISED_GEOMMAT = cuT( "The material must be initialised" );
 	static const C3DString ERROR_UNINITIALISED_GEOMMESH = cuT( "The mesh must be initialised" );
 	static const C3DString ERROR_UNINITIALISED_GEOMSUBMESH = cuT( "The submesh must be initialised" );
-
-	C3D_CAPIMETHODIMP c3dGeometry_create( C3DScene * object, C3DString name, C3DMesh const * mesh, C3DSceneNode const * parent, C3DGeometry ** result )
-	{
-		if ( !object || !name || !parent || !result )
-			return C3D_POINTER;
-		if ( !object->getInternal() )
-			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_GEOMSCENE );
-
-		try
-		{
-			auto res = object->getInternal()->createGeometry( castor::makeString( name )
-				, *object->getInternal()
-				, *parent->getInternal()
-				, mesh->getInternal() );
-			C3D_SafeAlloc( *result, C3DGeometry );
-			( *result )->setInternal( castor::move( res ) );
-		}
-		C3D_CatchCommonExceptions()
-
-			return C3D_OK;
-	}
 
 	C3D_CAPIMETHODIMP c3dGeometry_delete( C3DGeometry * object )
 	{

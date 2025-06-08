@@ -4,19 +4,6 @@
 
 namespace CastorCom
 {
-	STDMETHODIMP CLightGroup::Create( /*[in]*/ IScene * scene, /*[in]*/ BSTR name, /*[in]*/ eLIGHT_TYPE type )noexcept
-	{
-		if ( !scene || !name )
-			return E_POINTER;
-		if ( m_internal )
-			return dispatchInitialised( _T( "Create" ) );
-
-		return convert( c3dLightGroup_create( static_cast< CScene * >( scene )->getInternal()
-			, bstrToString( name ).c_str()
-			, details::parameterCast< C3D_LIGHT_TYPE >( type )
-			, &m_internal ) );
-	}
-
 	STDMETHODIMP CLightGroup::AddLight( /*[in]*/ ISceneNode * val )noexcept
 	{
 		if ( !val )

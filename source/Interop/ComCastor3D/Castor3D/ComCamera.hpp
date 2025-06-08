@@ -26,7 +26,6 @@ namespace CastorCom
 		COM_PROPERTY_GET( Height, UINT, c3dCamera_getHeight );
 
 		COM_DESTROY( CCamera, c3dCamera_delete );
-		STDMETHOD( Create )( /*[in]*/ IScene * scene, /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent, /*[in]*/ UINT width, /*[in]*/ UINT height )override;
 		STDMETHOD( AttachTo )( /*[in]*/ ISceneNode * val )override;
 		STDMETHOD( Detach )()override;
 		STDMETHOD( Resize )( /*[in]*/ UINT width, /*[in]*/ UINT height )override;

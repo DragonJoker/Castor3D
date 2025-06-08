@@ -356,6 +356,66 @@ namespace CastorCom
 		return convert( c3dEngine_unregisterGuiCallbacks( m_internal ) );
 	}
 
+	STDMETHODIMP CEngine::CreateOverlay( /*[in]*/ eOVERLAY_TYPE type, /*[in]*/ BSTR name, /*[in]*/ IOverlay * parent, /*[out, retval]*/ IOverlay ** pRet )noexcept
+	{
+		if ( !pRet || !name )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "CreateOverlay" ) );
+		if ( COverlay::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
+
+		return convert( c3dEngine_createOverlay( m_internal
+			, details::parameterCast< C3D_OVERLAY_TYPE >( type )
+			, bstrToString( name ).c_str()
+			, parent ? static_cast< COverlay * >( parent )->getInternal() : nullptr
+			, &static_cast< COverlay * >( *pRet )->getInternal() ) );
+	}
+
+	STDMETHODIMP CEngine::CreateRenderWindow( /*[in]*/ BSTR name, /*[in]*/ ISize * size, /*[in]*/ LPVOID hWnd, /*[out, retval]*/ IRenderWindow ** pRet )noexcept
+	{
+		if ( !pRet || !name || !size )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "CreateRenderWindow" ) );
+		if ( CRenderWindow::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
+
+		return convert( c3dEngine_createRenderWindow( m_internal
+			, bstrToString( name ).c_str()
+			, &static_cast< CSize * >( size )->getInternal()
+			, C3DWindowHandle{ hWnd }
+			, &static_cast< CRenderWindow * >( *pRet )->getInternal() ) );
+	}
+
+	STDMETHODIMP CEngine::CreateSampler( /*[in]*/ BSTR name, /*[out, retval]*/ ISampler ** pRet )noexcept
+	{
+		if ( !pRet || !name )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "CreateSampler" ) );
+		if ( CSampler::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
+
+		return convert( c3dEngine_createSampler( m_internal
+			, bstrToString( name ).c_str()
+			, &static_cast< CSampler * >( *pRet )->getInternal() ) );
+	}
+
+	STDMETHODIMP CEngine::CreateScene( /*[in]*/ BSTR name, /*[out, retval]*/ IScene ** pRet )noexcept
+	{
+		if ( !pRet || !name )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "CreateScene" ) );
+		if ( CScene::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
+
+		return convert( c3dEngine_createScene( m_internal
+			, bstrToString( name ).c_str()
+			, &static_cast< CScene * >( *pRet )->getInternal() ) );
+	}
+
 	STDMETHODIMP CEngine::CreateSkybox( /*[in]*/ IScene * scene, /*[out, retval]*/ ISkybox ** pRet )noexcept
 	{
 		if ( !scene || !pRet )
@@ -368,20 +428,6 @@ namespace CastorCom
 		return convert( c3dEngine_createSkybox( m_internal
 			, static_cast< CScene * >( scene )->getInternal()
 			, &static_cast< CSkybox * >( *pRet )->getInternal() ) );
-	}
-
-	STDMETHODIMP CEngine::CreateRenderWindow( /*[in]*/ BSTR name, /*[in]*/ ISize * size, /*[in]*/ LPVOID hWnd, /*[out, retval]*/ IRenderWindow ** pRet )noexcept
-	{
-		if ( !pRet || !name || !size )
-			return E_POINTER;
-		if ( m_internal )
-			return dispatchInitialised( _T( "CreateRenderWindow" ) );
-
-		return convert( c3dRenderWindow_create( m_internal
-			, bstrToString( name ).c_str()
-			, &static_cast< CSize * >( size )->getInternal()
-			, C3DWindowHandle{ hWnd }
-			, &static_cast< CRenderWindow * >( *pRet )->getInternal() ) );
 	}
 
 	void CEngine::onGetClipBoardText( C3DString * text )noexcept

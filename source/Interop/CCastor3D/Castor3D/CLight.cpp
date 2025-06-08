@@ -11,30 +11,7 @@ extern "C"
 
 	static const C3DString ERROR_UNINITIALISED_LIGHT = cuT( "The light must be initialised" );
 	static const C3DString ERROR_UNINITIALISED_LIGHTNODE = cuT( "The node must be initialised" );
-	static const C3DString ERROR_UNINITIALISED_LIGHTSCENE = cuT( "The scene must be initialised" );
 	static const C3DString ERROR_WRONG_LIGHT_TYPE = cuT( "The light is not of the expected type" );
-
-	C3D_CAPIMETHODIMP c3dLight_create( C3DScene * object, C3DString name, C3DSceneNode const * parent, C3D_LIGHT_TYPE type, C3DLight ** result )
-	{
-		if ( !object || !name || !parent || !result )
-			return C3D_POINTER;
-		if ( !object->getInternal() )
-			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_LIGHTSCENE );
-
-		try
-		{
-			auto res = object->getInternal()->createLight( castor::makeString( name )
-				, *object->getInternal()
-				, *parent->getInternal()
-				, object->getInternal()->getLightsFactory()
-				, castor3d::LightType( type ) );
-			C3D_SafeAlloc( *result, C3DLight );
-			( *result )->setInternal( castor::move( res ) );
-		}
-		C3D_CatchCommonExceptions()
-
-			return C3D_OK;
-	}
 
 	C3D_CAPIMETHODIMP c3dLight_delete( C3DLight * object )
 	{

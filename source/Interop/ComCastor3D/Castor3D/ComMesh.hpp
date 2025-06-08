@@ -20,7 +20,6 @@ namespace CastorCom
 		COM_PROPERTY_GET( SubmeshCount, UINT, c3dMesh_getSubmeshCount );
 
 		COM_DESTROY( CMesh, c3dMesh_delete );
-		STDMETHOD( Create )( /*[in]*/ IScene * scene, /*[in]*/ BSTR type, /*[in]*/ BSTR name )override;
 		STDMETHOD( GetSubmesh )( /*[in]*/ UINT val, /*[out, retval]*/ ISubmesh ** pVal )override;
 		STDMETHOD( CreateSubmesh )( /*[out, retval]*/ ISubmesh ** pVal )override;
 		STDMETHOD( RemoveSubmesh )( /*[in]*/ ISubmesh * val )override;

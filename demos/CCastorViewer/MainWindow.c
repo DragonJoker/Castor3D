@@ -85,7 +85,7 @@ bool windowCreate( GLFWwindow * glfwWindow, C3DEngine * engine, MainWindow * win
 	glfwGetWindowSize( glfwWindow, &ww, &wh );
 	size.width = ( uint32_t )ww;
 	size.height = ( uint32_t )wh;
-	if ( c3dRenderWindow_create( engine, "MainWindow", &size, handle, &window->renderWindow ) != C3D_OK )
+	if ( c3dEngine_createRenderWindow( engine, "MainWindow", &size, handle, &window->renderWindow ) != C3D_OK )
 		goto cleanup;
 
 	if ( c3dRenderWindow_resize( window->renderWindow, &size ) != C3D_OK )

@@ -18,9 +18,9 @@ bool doSelectSceneFile( C3DChar * result, size_t resultSize );
 bool doLoadScene( C3DEngine * engine, MainWindow * window, C3DString fileName );
 void doUnloadScene( C3DEngine * engine, MainWindow * window );
 
-void onGetClipBoardText( C3DString * text );
-void onSetClipBoardText( C3DString text );
-void onCursorChange( C3D_MOUSE_CURSOR cursor );
+void onGetClipBoardText( C3DGuiCallbacks *, C3DString * text );
+void onSetClipBoardText( C3DGuiCallbacks *, C3DString text );
+void onCursorChange( C3DGuiCallbacks *, C3D_MOUSE_CURSOR cursor );
 
 static GLFWcursor * cursors[C3D_MOUSE_CURSOR_COUNT];
 static GLFWwindow * glfwMainWindow = NULL;
