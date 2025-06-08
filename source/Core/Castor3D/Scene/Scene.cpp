@@ -800,39 +800,6 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	template<>
-	inline void CacheViewT< OverlayCache, EventType( CpuEventType::ePreGpuStep ) >::clear()
-	{
-		for ( auto const & name : m_createdElements )
-		{
-			auto resource = m_cache.tryRemove( name );
-		}
-	}
-
-	//*************************************************************************************************
-
-	template<>
-	inline void CacheViewT< castor::ImageCache, EventType( CpuEventType::ePreGpuStep ) >::clear()
-	{
-		for ( auto const & name : m_createdElements )
-		{
-			auto resource = m_cache.tryRemove( name );
-		}
-	}
-
-	//*************************************************************************************************
-
-	template<>
-	inline void CacheViewT< castor::FontCache, EventType( CpuEventType::ePreGpuStep ) >::clear()
-	{
-		for ( auto const & name : m_createdElements )
-		{
-			auto resource = m_cache.tryRemove( name );
-		}
-	}
-
-	//*************************************************************************************************
-
 	castor::String Scene::RootNode = cuT( "C3D.RootNode" );
 	castor::String Scene::CameraRootNode = cuT( "C3D.CameraRootNode" );
 	castor::String Scene::ObjectRootNode = cuT( "C3D.ObjectRootNode" );
@@ -917,7 +884,7 @@ namespace castor3d
 			, castor::DummyFunctorT< SkeletonCache >{}
 			, castor::ResourceMergerT< SkeletonCache >{ getName() } );
 
-		m_materialCacheView = makeCacheView< EventType( GpuEventType::ePreUpload ) >( getName()
+		m_materialCacheView = makeCacheView( getName()
 			, getEngine()->getMaterialCache()
 			, [this]( MaterialCache::ElementT & element )
 			{
@@ -935,7 +902,7 @@ namespace castor3d
 				m_materialsListeners.erase( &element );
 				element.cleanup();
 			} );
-		m_samplerCacheView = makeCacheView< EventType( GpuEventType::ePreUpload ) >( getName()
+		m_samplerCacheView = makeCacheView( getName()
 			, getEngine()->getSamplerCache()
 			, [this]( SamplerCache::ElementT & element )
 			{
@@ -946,7 +913,7 @@ namespace castor3d
 				element.cleanup();
 			} );
 		m_overlayCache = castor::makeCache< Overlay, castor::String, OverlayCacheTraits >( *getEngine() );
-		m_fontCacheView = makeCacheView< EventType( CpuEventType::ePreGpuStep ) >( getName()
+		m_fontCacheView = makeCacheView( getName()
 			, getEngine()->getFontCache( {} )
 			, castor::DummyFunctorT< castor::FontCache >{}
 			, castor::DummyFunctorT< castor::FontCache >{} );

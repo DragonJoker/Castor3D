@@ -22,6 +22,9 @@ namespace castor
 	template< typename ResT, typename KeyT, typename TraitsT >
 	class ResourceCacheBaseT
 	{
+		template< typename CacheT >
+		friend class CacheViewT;
+
 	public:
 		using ElementT = ResT;
 		using ElementKeyT = KeyT;
@@ -128,28 +131,6 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief			Adds an element.
-		 *\param[in]		name		The element name.
-		 *\param[in,out]	element		The resource, will be emptied on add (the cache now owns it).
-		 *\param[in]		initialise	\p true to initialise the added element (no effect on duplicates).
-		 *\return			The real element (added or duplicate original ).
-		 *\~french
-		 *\brief			Ajoute un élément.
-		 *\param[in]		name		Le nom d'élément.
-		 *\param[in,out]	element		La ressource, vidée en cas d'ajout (le cache en prend la responsabilité).
-		 *\param[in]		initialise	\p true pour initialiser l'élément ajouté (aucun effect sur les doublons).
-		 *\return			L'élément réel (ajouté, ou original du doublon).
-		 */
-		ElementObsT tryAddNoLock( ElementKeyT const & name
-			, ElementPtrT & element
-			, bool initialise = false )
-		{
-			return this->doTryAddNoLock( name
-				, element
-				, initialise );
-		}
-		/**
-		 *\~english
 		 *\brief			Logging version of tryAdd.
 		 *\param[in]		name		The resource name.
 		 *\param[in,out]	element		The resource, will be emptied on add (the cache now owns it).
@@ -173,83 +154,6 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief			Logging version of tryAdd.
-		 *\param[in]		name		The resource name.
-		 *\param[in,out]	element		The resource, will be emptied on add (the cache now owns it).
-		 *\param[in]		initialise	\p true to initialise the added element (no effect on duplicates).
-		 *\return			The real element (added or duplicate original ).
-		 *\~french
-		 *\brief			Version journalisante de tryAdd.
-		 *\param[in]		name		Le nom de la ressource.
-		 *\param[in,out]	element		La ressource, vidée en cas d'ajout (le cache en prend la responsabilité).
-		 *\param[in]		initialise	\p true pour initialiser l'élément ajouté (aucun effect sur les doublons).
-		 *\return			L'élément réel (ajouté, ou original du doublon).
-		 */
-		ElementObsT addNoLock( ElementKeyT const & name
-			, ElementPtrT & element
-			, bool initialise = true )
-		{
-			return this->doAddNoLock( name
-				, element
-				, initialise );
-		}
-		/**
-		 *\~english
-		 *\brief		Add an element, constructed in-place.
-		 *\param[in]	name		The element name.
-		 *\param[in]	initialise	\p true to initialise the added element (no effect on duplicates).
-		 *\param[out]	created		The created element.
-		 *\param[in]	parameters	The other constructor parameters.
-		 *\return		The real element (added or duplicate original ).
-		 *\~french
-		 *\brief		Ajoute un élément, construict sur place.
-		 *\param[in]	name		Le nom d'élément.
-		 *\param[in]	initialise	\p true pour initialiser l'élément ajouté (aucun effect sur les doublons).
-		 *\param[out]	created		L'élément créé.
-		 *\param[in]	parameters	Les autres paramètres de construction.
-		 *\return		L'élément réel (ajouté, ou original du doublon).
-		 */
-		template< typename ... ParametersT >
-		ElementObsT tryAddNew( ElementKeyT const & name
-			, bool initialise
-			, ElementObsT & created
-			, ParametersT && ... parameters)
-		{
-			auto lock( castor::makeUniqueLock( *this ) );
-			return this->doTryAddNewNoLockT( name
-				, initialise
-				, created
-				, castor::forward< ParametersT >( parameters )... );
-		}
-		/**
-		 *\~english
-		 *\brief		Add an element, constructed in-place.
-		 *\param[in]	name		The element name.
-		 *\param[in]	initialise	\p true to initialise the added element (no effect on duplicates).
-		 *\param[out]	created		The created element.
-		 *\param[in]	parameters	The other constructor parameters.
-		 *\return		The real element (added or duplicate original ).
-		 *\~french
-		 *\brief		Ajoute un élément, construict sur place.
-		 *\param[in]	name		Le nom d'élément.
-		 *\param[in]	initialise	\p true pour initialiser l'élément ajouté (aucun effect sur les doublons).
-		 *\param[out]	created		L'élément créé.
-		 *\param[in]	parameters	Les autres paramètres de construction.
-		 *\return		L'élément réel (ajouté, ou original du doublon).
-		 */
-		template< typename ... ParametersT >
-		ElementObsT tryAddNewNoLock( ElementKeyT const & name
-			, bool initialise
-			, ElementObsT & created
-			, ParametersT && ... parameters)
-		{
-			return this->doTryAddNewNoLockT( name
-				, initialise
-				, created
-				, castor::forward< ParametersT >( parameters )... );
-		}
-		/**
-		 *\~english
 		 *\brief		Logging version of tryAdd.
 		 *\param[in]	name		The element name.
 		 *\param[in]	parameters	The other constructor parameters.
@@ -265,25 +169,6 @@ namespace castor
 			, ParametersT && ... parameters )
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
-			return this->doAddNewNoLockT( name
-				, castor::forward< ParametersT >( parameters )... );
-		}
-		/**
-		 *\~english
-		 *\brief		Logging version of tryAdd.
-		 *\param[in]	name		The element name.
-		 *\param[in]	parameters	The other constructor parameters.
-		 *\return		The real element (added or duplicate original ).
-		 *\~french
-		 *\brief		Version journalisante de tryAdd.
-		 *\param[in]	name		Le nom d'élément.
-		 *\param[in]	parameters	Les autres paramètres de construction.
-		 *\return		L'élément réel (ajouté, ou original du doublon).
-		 */
-		template< typename ... ParametersT >
-		ElementObsT addNewNoLock( ElementKeyT const & name
-			, ParametersT && ... parameters )
-		{
 			return this->doAddNewNoLockT( name
 				, castor::forward< ParametersT >( parameters )... );
 		}
@@ -305,21 +190,6 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Removes an element, given a name.
-		 *\param[in]	name	The element name.
-		 *\param[in]	cleanup	\p true if the element needs to be cleaned up.
-		 *\~french
-		 *\brief		Retire un élément à partir d'un nom.
-		 *\param[in]	name	Le nom d'élément.
-		 *\param[in]	cleanup	\p true si l'évènement doit être nettoyé.
-		 */
-		ElementPtrT tryRemoveNoLock( ElementKeyT const & name
-			, bool cleanup = false )noexcept
-		{
-			return this->doTryRemoveNoLock( name, cleanup );
-		}
-		/**
-		 *\~english
 		 *\brief		Logging version of tryRemove.
 		 *\param[in]	name	The element name.
 		 *\param[in]	cleanup	\p true if the element needs to be cleaned up.
@@ -332,28 +202,6 @@ namespace castor
 			, bool cleanup = false )noexcept
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
-			auto result = this->doTryRemoveNoLock( name, cleanup );
-
-			if ( !result )
-			{
-				this->reportUnknown( name );
-			}
-
-			return result;
-		}
-		/**
-		 *\~english
-		 *\brief		Logging version of tryRemove.
-		 *\param[in]	name	The element name.
-		 *\param[in]	cleanup	\p true if the element needs to be cleaned up.
-		 *\~french
-		 *\brief		Version journalisante de tryAdd.
-		 *\param[in]	name	Le nom d'élément.
-		 *\param[in]	cleanup	\p true si l'évènement doit être nettoyé.
-		 */
-		ElementPtrT removeNoLock( ElementKeyT const & name
-			, bool cleanup = false )noexcept
-		{
 			auto result = this->doTryRemoveNoLock( name, cleanup );
 
 			if ( !result )
@@ -411,20 +259,6 @@ namespace castor
 		ElementObsT tryFind( ElementKeyT const & name )const noexcept
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
-			return this->doTryFindNoLock( name );
-		}
-		/**
-		 *\~english
-		 *\brief		Looks for an element with given name.
-		 *\param[in]	name	The object name.
-		 *\return		The found element, nullptr if not found.
-		 *\~french
-		 *\brief		Cherche un élément par son nom.
-		 *\param[in]	name	Le nom d'élément.
-		 *\return		L'élément trouvé, nullptr si non trouvé.
-		 */
-		ElementObsT tryFindNoLock( ElementKeyT const & name )const noexcept
-		{
 			return this->doTryFindNoLock( name );
 		}
 		/**
@@ -533,11 +367,6 @@ namespace castor
 			return uint32_t( m_resources.size() );
 		}
 
-		uint32_t getObjectCountNoLock()const noexcept
-		{
-			return uint32_t( m_resources.size() );
-		}
-
 		String const & getObjectTypeName()const noexcept
 		{
 			return ElementCacheTraitsT::Name;
@@ -550,7 +379,7 @@ namespace castor
 
 		bool hasNoLock( ElementKeyT const & name )const noexcept
 		{
-			return !ElementCacheTraitsT::isElementObsNull( tryFindNoLock( name ) );
+			return !ElementCacheTraitsT::isElementObsNull( doTryFindNoLock( name ) );
 		}
 
 		bool isEmpty()const noexcept
@@ -682,7 +511,7 @@ namespace castor
 				, castor::forward< ParametersT >( parameters )... );
 		}
 
-		ElementObsT doTryAddNoLock( ElementKeyT const & name
+		virtual ElementObsT doTryAddNoLock( ElementKeyT const & name
 			, ElementPtrT & element
 			, bool initialise = true )
 		{
@@ -702,7 +531,7 @@ namespace castor
 			return ElementCacheTraitsT::makeElementObs( ires.first->second );
 		}
 
-		ElementObsT doAddNoLock( ElementKeyT const & name
+		virtual ElementObsT doAddNoLock( ElementKeyT const & name
 			, ElementPtrT & element
 			, bool initialise = true )
 		{
@@ -733,50 +562,27 @@ namespace castor
 		}
 
 		template< typename ... ParametersT >
-		ElementObsT doTryAddNewNoLockT( ElementKeyT const & name
-			, bool initialise
-			, ElementObsT & created
-			, ParametersT && ... parameters )
-		{
-			auto ires = m_resources.emplace( name, ElementPtrT{} );
-
-			if ( ires.second )
-			{
-				ires.first->second = doCreateT( name
-					, castor::forward< ParametersT >( parameters )... );
-				created = ElementCacheTraitsT::makeElementObs( ires.first->second );
-
-				if ( initialise
-					&& m_initialise
-					&& !ElementCacheTraitsT::isElementObsNull( created ) )
-				{
-					m_initialise( *ires.first->second );
-				}
-			}
-
-			return ElementCacheTraitsT::makeElementObs( ires.first->second );
-		}
-
-		template< typename ... ParametersT >
 		ElementObsT doAddNewNoLockT( ElementKeyT const & name
 			, ParametersT && ... parameters )
 		{
-			ElementObsT created{};
-			auto result = doTryAddNewNoLockT( name
-				, true
-				, created
-				, castor::forward< ParametersT >( parameters )... );
+			auto [it, inserted] = m_resources.emplace( name, ElementPtrT{} );
 
-			if ( !ElementCacheTraitsT::areElementsEqual( result, created ) )
+			if ( inserted )
 			{
-				reportDuplicate( name );
+				it->second = create( name
+					, castor::forward< ParametersT >( parameters )... );
+
+				if ( m_initialise )
+				{
+					m_initialise( *it->second );
+				}
 			}
 			else
 			{
-				reportCreation( name );
+				reportDuplicate( name );
 			}
 
-			return result;
+			return ElementCacheTraitsT::makeElementObs( it->second );
 		}
 
 		ElementPtrT doTryRemoveNoLock( ElementKeyT const & name

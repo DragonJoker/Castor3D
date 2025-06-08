@@ -59,16 +59,13 @@ namespace castor3d
 		, castor::String const & name
 		, castor::HdrRgbColour const & colour )
 	{
-		auto & cache = engine.getMaterialCache();
-		MaterialObs created{};
-		auto result = cache.tryAddNew( name
-			, true
-			, created
-			, engine
-			, engine.getDefaultLightingModel() );
+		auto result = engine.tryFindMaterial( name );
 
-		if ( created == result )
+		if ( !result )
 		{
+			result = engine.addNewMaterial( name
+				, engine
+				, engine.getDefaultLightingModel() );
 			result->createPass();
 		}
 

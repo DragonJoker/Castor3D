@@ -1,20 +1,15 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_CacheView_H___
-#define ___C3D_CacheView_H___
+#ifndef ___CU_CacheView_H___
+#define ___CU_CacheView_H___
 
-#include "CacheModule.hpp"
+#include "CastorUtils/Design/Named.hpp"
+#include "CastorUtils/Design/ResourceCache.hpp"
 
-#include "Castor3D/Event/Frame/FrameEventModule.hpp"
-
-#include <CastorUtils/Design/Named.hpp>
-#include <CastorUtils/Design/ResourceCache.hpp>
-
-namespace castor3d
+namespace castor
 {
-	template< typename CacheT
-		, EventType EventT >
+	template< typename CacheT >
 	class CacheViewT
 		: public castor::Named
 	{
@@ -70,27 +65,6 @@ namespace castor3d
 		 */
 		template< typename ... ParametersT >
 		ElementObsT addNew( ElementKeyT const & name
-			, ParametersT && ... params );
-		/**
-		 *\~english
-		 *\brief		Creates or retrieves an element with the given informations.
-		 *\param[in]	name		The element name.
-		 *\param[in]	initialise	Tells if the element is to be initialised after creation.
-		 *\param[out]	created		Receives the created element if ti was created.
-		 *\param[in]	params		The parameters forwarded to the viewed cache.
-		 *\return		The created or existing element.
-		 *\~french.=
-		 *\brief		Crée ou récupère un élément avec les informations données.
-		 *\param[in]	name		Le nom de l'élément.
-		 *\param[out]	created		Reçoit l'élement créé s'il l'a été.
-		 *\param[in]	initialise	Dit si l'élément doit être initialisé après sa création.
-		 *\param[in]	params		Les paramètres transmis au cache vu.
-		 *\return		L'élément créé ou existant.
-		 */
-		template< typename ... ParametersT >
-		ElementObsT tryAddNew( ElementKeyT const & name
-			, bool initialise
-			, ElementObsT & created
 			, ParametersT && ... params );
 		/**
 		 *\~english
@@ -223,20 +197,19 @@ namespace castor3d
 	template< typename CacheT >
 	using CacheViewTraitsT = typename CacheT::ElementCacheTraitsT;
 
-	template< EventType EventT
-		, typename CacheT >
-	CacheViewPtrT< CacheT, EventT > makeCacheView( castor::String const & name
+	template< typename CacheT >
+	CacheViewPtrT< CacheT > makeCacheView( castor::String const & name
 		, CacheT & cache
 		, typename CacheViewTraitsT< CacheT >::ElementInitialiserT initialiser = {}
 		, typename CacheViewTraitsT< CacheT >::ElementCleanerT cleaner = {} )
 	{
-		return castor::makeUnique< CacheViewT< CacheT, EventT > >( name
+		return castor::makeUnique< CacheViewT< CacheT > >( name
 			, cache
 			, castor::move( initialiser )
 			, castor::move( cleaner ) );
 	}
 }
 
-#include "Castor3D/Cache/CacheView.inl"
+#include "CastorUtils/Design/CacheView.inl"
 
 #endif

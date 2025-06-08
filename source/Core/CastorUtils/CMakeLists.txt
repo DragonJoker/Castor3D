@@ -236,6 +236,8 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/ArrayView.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/BlockGuard.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/CacheView.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/CacheView.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/ChangeTracked.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/DataHolder.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/DesignModule.hpp

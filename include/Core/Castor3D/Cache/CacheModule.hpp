@@ -14,8 +14,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	enum class EventType : uint8_t;
-
 	/**@name Cache */
 	//@{
 
@@ -78,18 +76,6 @@ namespace castor3d
 			return element == nullptr;
 		}
 	};
-	/**
-	*\~english
-	*	View on a resource cache.
-	*\remarks
-	*	Allows deletion of elements created through the view, and only those.
-	*\~french
-	*	Vue sur un cache de ressources.
-	*\remarks
-	*	Permet de supprimer tous les éléments créés via la vue et uniquement ceux là.
-	*/
-	template< typename CacheT, EventType EventT >
-	class CacheViewT;
 	/**
 	*\~english
 	*\brief
@@ -172,8 +158,6 @@ namespace castor3d
 
 	template< typename ObjT, typename KeyT, typename TraitsT >
 	using ObjectCachePtrT = castor::UniquePtr< ObjectCacheT< ObjT, KeyT, TraitsT > >;
-	template< typename CacheT, EventType EventT >
-	using CacheViewPtrT = castor::UniquePtr< CacheViewT< CacheT, EventT > >;
 
 	class RenderTargetCache;
 	class ShaderProgramCache;
@@ -301,13 +285,13 @@ namespace castor3d
 		}\
 		DECLARE_OBJECT_CACHE_MEMBER_MIN( memberName, className )
 
-#define DECLARE_CACHE_VIEW_MEMBER( memberName, className, eventType )\
+#define DECLARE_CACHE_VIEW_MEMBER( memberName, className )\
 	public:\
-		castor3d::CacheViewT< className##Cache, castor3d::EventType( eventType ) > & get##className##View()noexcept\
+		castor::CacheViewT< className##Cache > & get##className##View()noexcept\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
-		castor3d::CacheViewT< className##Cache, castor3d::EventType( eventType ) > const & get##className##View()const noexcept\
+		castor::CacheViewT< className##Cache > const & get##className##View()const noexcept\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
@@ -341,15 +325,15 @@ namespace castor3d
 			return m_##memberName##CacheView->tryFind( key );\
 		}\
 	private:\
-		castor3d::CacheViewPtrT< className##Cache, castor3d::EventType( eventType ) > m_##memberName##CacheView
+		castor::CacheViewPtrT< className##Cache > m_##memberName##CacheView
 
-#define DECLARE_CU_CACHE_VIEW_MEMBER( memberName, className, eventType )\
+#define DECLARE_CU_CACHE_VIEW_MEMBER( memberName, className )\
 	public:\
-		castor3d::CacheViewT< castor::className##Cache, castor3d::EventType( eventType ) > & get##className##View()noexcept\
+		castor::CacheViewT< castor::className##Cache > & get##className##View()noexcept\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
-		castor3d::CacheViewT< castor::className##Cache, castor3d::EventType( eventType ) > const & get##className##View()const noexcept\
+		castor::CacheViewT< castor::className##Cache > const & get##className##View()const noexcept\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
@@ -383,6 +367,6 @@ namespace castor3d
 			return m_##memberName##CacheView->tryFind( key );\
 		}\
 	private:\
-		castor3d::CacheViewPtrT< castor::className##Cache, castor3d::EventType( eventType ) > m_##memberName##CacheView
+		castor::CacheViewPtrT< castor::className##Cache > m_##memberName##CacheView
 
 #endif

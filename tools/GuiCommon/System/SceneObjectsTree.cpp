@@ -17,7 +17,6 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Animation/Animation.hpp>
 #include <Castor3D/Cache/AnimatedObjectGroupCache.hpp>
-#include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/LightCache.hpp>
 #include <Castor3D/Cache/LightGroupCache.hpp>
@@ -52,6 +51,7 @@
 #include <Castor3D/Scene/Light/LightGroup.hpp>
 #include <Castor3D/Scene/ParticleSystem/ParticleSystem.hpp>
 
+#include <CastorUtils/Design/CacheView.hpp>
 #include <CastorUtils/Design/ResourceCache.hpp>
 
 namespace GuiCommon

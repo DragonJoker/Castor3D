@@ -1254,18 +1254,6 @@ namespace castor3d
 			return m_imageCache.tryFind( key );
 		}
 
-		template< typename ... ParametersT >
-		castor::ImageCache::ElementObsT tryAddNewImage( castor::ImageCache::ElementKeyT const & name
-			, bool initialise
-			, castor::ImageCache::ElementObsT & created
-			, ParametersT && ... parameters )
-		{
-			return m_imageCache.tryAddNew( name
-				, initialise
-				, created
-				, castor::forward< ParametersT >( parameters )... );
-		}
-
 		uint32_t getImagesCount()const
 		{
 			return m_imageCache.getObjectCount();

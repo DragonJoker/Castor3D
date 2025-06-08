@@ -3,7 +3,6 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Animation/Animation.hpp>
 #include <Castor3D/Cache/AnimatedObjectGroupCache.hpp>
-#include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/ObjectCache.hpp>
@@ -21,6 +20,7 @@
 
 #include <RenderGraph/FramePassTimer.hpp>
 
+#include <CastorUtils/Design/CacheView.hpp>
 #include <CastorUtils/Design/ResourceCache.hpp>
 
 #define Cheat 0
@@ -76,7 +76,7 @@ namespace castortd
 
 		static void doUpdateMaterials( castor3d::Geometry & geometry
 			, Tower::Category::Kind kind
-			, castor3d::CacheViewT< castor3d::MaterialCache, castor3d::EventType( castor3d::GpuEventType::ePreUpload ) > const & materials )
+			, castor::CacheViewT< castor3d::MaterialCache > const & materials )
 		{
 			if ( auto mesh = geometry.getMesh() )
 			{

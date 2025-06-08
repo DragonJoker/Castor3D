@@ -5,7 +5,6 @@
 #include <Castor3D/Animation/AnimationKeyFrame.hpp>
 #include <Castor3D/Binary/BinaryMesh.hpp>
 #include <Castor3D/Binary/BinarySkeleton.hpp>
-#include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Model/Mesh/MeshFactory.hpp>
 #include <Castor3D/Model/Mesh/MeshGenerator.hpp>
@@ -21,6 +20,7 @@
 #include <Castor3D/Scene/SceneFileParser.hpp>
 
 #include <CastorUtils/Data/BinaryFile.hpp>
+#include <CastorUtils/Design/CacheView.hpp>
 
 namespace Testing
 {
