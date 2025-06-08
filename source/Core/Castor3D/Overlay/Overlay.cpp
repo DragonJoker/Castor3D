@@ -116,7 +116,6 @@ namespace castor3d
 			{
 				blockContext->overlay.uptr = castor::makeUnique< Overlay >( *engine
 					, OverlayType::ePanel
-					, getScene( context, blockContext, parent )
 					, parent.rptr );
 				blockContext->overlay.rptr = blockContext->overlay.uptr.get();
 				blockContext->overlay.rptr->rename( name );
@@ -140,7 +139,6 @@ namespace castor3d
 			{
 				blockContext->overlay.uptr = castor::makeUnique< Overlay >( *engine
 					, OverlayType::eBorderPanel
-					, getScene( context, blockContext, parent )
 					, parent.rptr );
 				blockContext->overlay.rptr = blockContext->overlay.uptr.get();
 				blockContext->overlay.rptr->rename( name );
@@ -164,7 +162,6 @@ namespace castor3d
 			{
 				blockContext->overlay.uptr = castor::makeUnique< Overlay >( *engine
 					, OverlayType::eText
-					, getScene( context, blockContext, parent )
 					, parent.rptr );
 				blockContext->overlay.rptr = blockContext->overlay.uptr.get();
 				blockContext->overlay.rptr->rename( name );
@@ -490,17 +487,12 @@ namespace castor3d
 	Overlay::Overlay( castor::String const & name
 		, Engine & engine
 		, OverlayType type
-		, SceneRPtr scene
 		, OverlayRPtr parent
 		, uint32_t level )
 		: OwnedBy< Engine >{ engine }
 		, m_name{ name }
 		, m_parent{ parent }
-		, m_category{ scene
-			? scene->getOverlayCache().getFactory().create( type )
-			: engine.getOverlayCache().getFactory().create( type ) }
-		, m_scene{ scene }
-		, m_renderSystem{ engine.getRenderSystem() }
+		, m_category{ engine.getOverlayCache().getFactory().create( type ) }
 	{
 		m_category->setOverlay( this );
 		m_category->setOrder( level, 0u );
@@ -508,13 +500,11 @@ namespace castor3d
 
 	Overlay::Overlay( Engine & engine
 		, OverlayType type
-		, SceneRPtr scene
 		, OverlayRPtr parent
 		, uint32_t level )
 		: Overlay{ castor::String{}
 			, engine
 			, type
-			, scene
 			, parent
 			, level }
 	{
@@ -525,7 +515,6 @@ namespace castor3d
 		, uint32_t level )
 		: Overlay{ engine
 			, type
-			, nullptr
 			, nullptr
 			, level }
 	{

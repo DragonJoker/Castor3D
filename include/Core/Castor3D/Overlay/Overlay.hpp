@@ -47,7 +47,6 @@ namespace castor3d
 		C3D_API Overlay( castor::String const & name
 			, Engine & engine
 			, OverlayType type
-			, Scene * scene
 			, OverlayRPtr parent
 			, uint32_t level = 0u );
 		/**
@@ -68,7 +67,6 @@ namespace castor3d
 		 */
 		C3D_API Overlay( Engine & engine
 			, OverlayType type
-			, Scene * scene
 			, OverlayRPtr parent
 			, uint32_t level = 0u );
 		/**
@@ -315,6 +313,11 @@ namespace castor3d
 		{
 			m_parent = parent;
 		}
+
+		void setScene( SceneRPtr scene )
+		{
+			m_scene = scene;
+		}
 		/**@}*/
 
 	private:
@@ -327,8 +330,7 @@ namespace castor3d
 		OverlayRPtr m_parent{};
 		OverlayPtrArray m_children;
 		OverlayCategoryUPtr m_category;
-		Scene * m_scene;
-		RenderSystem * m_renderSystem;
+		SceneRPtr m_scene{};
 	};
 
 	struct RootContext;

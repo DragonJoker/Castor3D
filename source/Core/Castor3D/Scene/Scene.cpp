@@ -321,9 +321,9 @@ namespace castor3d
 
 				if ( !blockContext->overlays->overlay.rptr )
 				{
-					blockContext->overlays->overlay.uptr = castor::makeUnique< Overlay >( *getEngine( *blockContext )
+					blockContext->overlays->overlay.uptr = getEngine( *blockContext )->createOverlay( name
+						, *getEngine( *blockContext )
 						, OverlayType::ePanel
-						, blockContext->scene
 						, parent.rptr );
 					blockContext->overlays->overlay.rptr = blockContext->overlays->overlay.uptr.get();
 					blockContext->overlays->overlay.rptr->rename( name );
@@ -353,9 +353,9 @@ namespace castor3d
 
 				if ( !blockContext->overlays->overlay.rptr )
 				{
-					blockContext->overlays->overlay.uptr = castor::makeUnique< Overlay >( *getEngine( *blockContext )
+					blockContext->overlays->overlay.uptr = getEngine( *blockContext )->createOverlay( name
+						, *getEngine( *blockContext )
 						, OverlayType::eBorderPanel
-						, blockContext->scene
 						, parent.rptr );
 					blockContext->overlays->overlay.rptr = blockContext->overlays->overlay.uptr.get();
 					blockContext->overlays->overlay.rptr->rename( name );
@@ -385,9 +385,9 @@ namespace castor3d
 
 				if ( !blockContext->overlays->overlay.rptr )
 				{
-					blockContext->overlays->overlay.uptr = castor::makeUnique< Overlay >( *getEngine( *blockContext )
+					blockContext->overlays->overlay.uptr = getEngine( *blockContext )->createOverlay( name
+						, *getEngine( *blockContext )
 						, OverlayType::eText
-						, blockContext->scene
 						, parent.rptr );
 					blockContext->overlays->overlay.rptr = blockContext->overlays->overlay.uptr.get();
 					blockContext->overlays->overlay.rptr->rename( name );

@@ -35,12 +35,10 @@ namespace castor3d
 			? m_scene->addNewOverlay( getName() + cuT( "/Title" )
 				, getEngine()
 				, OverlayType::eText
-				, nullptr
 				, &getBackgroundOverlay() )->getTextOverlay()
 			: getEngine().addNewOverlay( getName() + cuT( "/Title" )
 				, getEngine()
 				, OverlayType::eText
-				, nullptr
 				, &getBackgroundOverlay() )->getTextOverlay();
 		m_title = title;
 		title->setVAlign( VAlign::eTop );

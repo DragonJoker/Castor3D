@@ -91,12 +91,10 @@ namespace castor3d
 			? m_scene->addNewOverlay( getName() + cuT( "/Text" )
 				, getEngine()
 				, OverlayType::eText
-				, nullptr
 				, &getBackgroundOverlay() )->getTextOverlay()
 			: getEngine().addNewOverlay( getName() + cuT( "/Text" )
 				, getEngine()
 				, OverlayType::eText
-				, nullptr
 				, &getBackgroundOverlay() )->getTextOverlay();
 		text->setPixelPosition( getClientOffset() );
 		text->setPixelSize( { getSize()->x - clientSize->x, clientSize->y } );
