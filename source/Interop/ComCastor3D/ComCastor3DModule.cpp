@@ -1,6 +1,4 @@
 #include "ComCastor3D/ComCastor3DModule.hpp"
-#include "ComCastor3D/CastorUtils/ComPosition.hpp"
-#include "ComCastor3D/CastorUtils/ComSize.hpp"
 
 #include <objbase.h>
 
@@ -8,7 +6,8 @@
 
 namespace CastorCom
 {
-	TCHAR const * CComCastor3DModule::m_appId = _T( "{AE7400FF-58CB-40F5-9D8B-3373BCC45E54}" );
+	TCHAR const * CComCastor3DModule::m_tappId = _T( "{AE7400FF-58CB-40F5-9D8B-3373BCC45E54}" );
+	OLECHAR const * CComCastor3DModule::m_oleappId = L"{AE7400FF-58CB-40F5-9D8B-3373BCC45E54}";
 	CComCastor3DModule g_module;
 }
 

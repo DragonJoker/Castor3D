@@ -1,5 +1,4 @@
 #include "ComCastor3D/Castor3D/ComCamera.hpp"
-#include "ComCastor3D/Castor3D/ComSceneNode.hpp"
 
 namespace CastorCom
 {
@@ -8,72 +7,44 @@ namespace CastorCom
 		static const tstring ERROR_UNINITIALISED = _T( "The camera must be initialised" );
 	}
 
-	STDMETHODIMP CCamera::AttachTo( /* [in] */ ISceneNode * val )noexcept
+	STDMETHODIMP CCamera::Create( /*[in]*/ IScene * scene, /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent, /*[in]*/ UINT width, /*[in]*/ UINT height )noexcept
 	{
-		HRESULT hr = E_POINTER;
-
+		if ( !scene || !name || !parent )
+			return E_POINTER;
 		if ( m_internal )
-		{
-			m_internal->attachTo( *static_cast< CSceneNode * >( val )->getInternal() );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-				E_FAIL, // This represents the error
-				IID_ICamera, // This is the GUID of the component throwing error
-				_T( "attachTo" ), // This is generally displayed as the title
-				camera::ERROR_UNINITIALISED.c_str(), // This is the description
-				0, // This is the context in the help file
-				nullptr );
-		}
+			return dispatchInitialised( _T( "Create" ) );
 
-		return hr;
+		return convert( c3dCamera_create( static_cast< CScene * >( scene )->getInternal()
+			, bstrToString( name ).c_str()
+			, width, height
+			, static_cast< CSceneNode * >( parent )->getInternal()
+			, &m_internal ) );
+	}
+
+	STDMETHODIMP CCamera::AttachTo( /*[in]*/ ISceneNode * val )noexcept
+	{
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "AttachTo" ) );
+
+		return convert( c3dCamera_attachTo( m_internal
+			, static_cast< CSceneNode * >( val )->getInternal() ) );
 	}
 
 	STDMETHODIMP CCamera::Detach()noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "Detach" ) );
 
-		if ( m_internal )
-		{
-			m_internal->detach();
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-				E_FAIL, // This represents the error
-				IID_ICamera, // This is the GUID of the component throwing error
-				_T( "Detach" ), // This is generally displayed as the title
-				camera::ERROR_UNINITIALISED.c_str(), // This is the description
-				0, // This is the context in the help file
-				nullptr );
-		}
-
-		return hr;
+		return convert( c3dCamera_detach( m_internal ) );
 	}
 
-	STDMETHODIMP CCamera::Resize( /* [in] */ unsigned int width, /* [in] */ unsigned int height )noexcept
+	STDMETHODIMP CCamera::Resize( /*[in]*/ UINT width, /*[in]*/ UINT height )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "Resize" ) );
 
-		if ( m_internal )
-		{
-			m_internal->resize( width, height );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-				E_FAIL, // This represents the error
-				IID_ICamera, // This is the GUID of the component throwing error
-				_T( "Resize" ), // This is generally displayed as the title
-				camera::ERROR_UNINITIALISED.c_str(), // This is the description
-				0, // This is the context in the help file
-				nullptr );
-		}
-
-		return hr;
+		return convert( c3dCamera_resize( m_internal, width, height ) );
 	}
 }

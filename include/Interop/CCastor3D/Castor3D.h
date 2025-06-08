@@ -213,17 +213,17 @@ extern "C"
 	C3D_CAPIMETHOD( c3dTriFaceMapping_getFacesCount )( C3DTriFaceMapping const * object, uint32_t * result );
 	C3D_CAPIMETHOD( c3dTriFaceMapping_addFace )( C3DTriFaceMapping * object, uint32_t x, uint32_t y, uint32_t z );
 
-	// C3DLinesMapping
-	C3D_CAPIMETHOD( c3dLinesMapping_delete )( C3DLinesMapping * object );
-	C3D_CAPIMETHOD( c3dLinesMapping_getLinesCount )( C3DLinesMapping const * object, uint32_t * result );
-	C3D_CAPIMETHOD( c3dLinesMapping_addLine )( C3DLinesMapping * object, uint32_t x, uint32_t y );
+	// C3DLineMapping
+	C3D_CAPIMETHOD( c3dLineMapping_delete )( C3DLineMapping * object );
+	C3D_CAPIMETHOD( c3dLineMapping_getLinesCount )( C3DLineMapping const * object, uint32_t * result );
+	C3D_CAPIMETHOD( c3dLineMapping_addLine )( C3DLineMapping * object, uint32_t x, uint32_t y );
 
 	// C3DSubmesh
 	C3D_CAPIMETHOD( c3dSubmesh_delete )( C3DSubmesh * object );
 	C3D_CAPIMETHOD( c3dSubmesh_getPointsCount )( C3DSubmesh const * object, uint32_t * result );
 	C3D_CAPIMETHOD( c3dSubmesh_getIndexMappingType )( C3DSubmesh const * object, C3D_INDEX_MAPPING_TYPE * result );
 	C3D_CAPIMETHOD( c3dSubmesh_getTriFaceMapping )( C3DSubmesh const * object, C3DTriFaceMapping ** result );
-	C3D_CAPIMETHOD( c3dSubmesh_getLineMapping )( C3DSubmesh const * object, C3DLinesMapping ** result );
+	C3D_CAPIMETHOD( c3dSubmesh_getLineMapping )( C3DSubmesh const * object, C3DLineMapping ** result );
 	C3D_CAPIMETHOD( c3dSubmesh_addPoint )( C3DSubmesh * object, C3DVec3 const * val );
 
 	// C3DMesh
@@ -491,7 +491,7 @@ extern "C"
 	C3D_CAPIMETHOD( c3dEngine_loadScene )( C3DEngine * object, C3DString name, C3DRenderTarget ** pTarget );
 	C3D_CAPIMETHOD( c3dEngine_loadImageFromFile )( C3DEngine * object, C3DString name, C3DString path, C3DImage ** result );
 	C3D_CAPIMETHOD( c3dEngine_loadImageFromFormat )( C3DEngine * object, C3DString name, C3D_PIXEL_FORMAT fmt, C3DSize const * size, C3DImage ** result );
-	C3D_CAPIMETHOD( c3dEngine_loadFontFromFile )( C3DEngine * object, C3DString path, C3DString name, uint32_t height, C3DFont ** result );
+	C3D_CAPIMETHOD( c3dEngine_loadFontFromFile )( C3DEngine * object, C3DString name, C3DString path, uint32_t height, C3DFont ** result );
 	C3D_CAPIMETHOD( c3dEngine_addScene )( C3DEngine * object, C3DScene * val );
 	C3D_CAPIMETHOD( c3dEngine_addOverlay )( C3DEngine * object, C3DOverlay * val );
 	C3D_CAPIMETHOD( c3dEngine_addSampler )( C3DEngine * object, C3DSampler * val );
@@ -506,9 +506,10 @@ extern "C"
 	C3D_CAPIMETHOD( c3dEngine_pauseRendering )( C3DEngine * object );
 	C3D_CAPIMETHOD( c3dEngine_resumeRendering )( C3DEngine * object );
 	C3D_CAPIMETHOD( c3dEngine_endRendering )( C3DEngine * object );
-	C3D_CAPIMETHOD( c3dEngine_registerGuiCallbacks )( C3DEngine * object, C3DGuiCallbacks callbacks );
+	C3D_CAPIMETHOD( c3dEngine_registerGuiCallbacks )( C3DEngine * object, C3DGuiCallbacks * callbacks );
 	C3D_CAPIMETHOD( c3dEngine_unregisterGuiCallbacks )( C3DEngine * object );
 	C3D_CAPIMETHOD( c3dEngine_createSkybox )( C3DEngine * object, C3DScene * scene, C3DSkybox ** result );
+	C3D_CAPIMETHOD( c3dEngine_postEvent )( C3DEngine * object, C3DEvent event );
 
 	// Castor3D
 	C3D_CAPIMETHOD( c3d_getPluginsDirectory )( C3DChar * result, size_t resultSize );

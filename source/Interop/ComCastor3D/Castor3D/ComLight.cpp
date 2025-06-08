@@ -1,56 +1,37 @@
 #include "ComCastor3D/Castor3D/ComLight.hpp"
-#include "ComCastor3D/Castor3D/ComSceneNode.hpp"
 
 namespace CastorCom
 {
-	namespace light
+	STDMETHODIMP CLight::Create( /*[in]*/ IScene * scene, /*[in]*/ BSTR name, /*[in]*/ ISceneNode * parent, /*[in]*/ eLIGHT_TYPE type )noexcept
 	{
-		static const tstring ERROR_UNINITIALISED = _T( "The movable object must be initialised" );
+		if ( !scene || !name || !parent )
+			return E_POINTER;
+		if ( m_internal )
+			return dispatchInitialised( _T( "Create" ) );
+
+		return convert( c3dLight_create( static_cast< CScene * >( scene )->getInternal()
+			, bstrToString( name ).c_str()
+			, static_cast< CSceneNode * >( parent )->getInternal()
+			, details::parameterCast< C3D_LIGHT_TYPE >( type )
+			, &m_internal ) );
 	}
 
-	STDMETHODIMP CLight::AttachTo( /* [in] */ ISceneNode * val )noexcept
+	STDMETHODIMP CLight::AttachTo( /*[in]*/ ISceneNode * val )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "AttachTo" ) );
 
-		if ( m_internal )
-		{
-			m_internal->attachTo( *static_cast< CSceneNode * >( val )->getInternal() );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_ILight, // This is the GUID of the component throwing error
-					 _T( "AttachTo" ), // This is generally displayed as the title
-					 light::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dLight_attachTo( m_internal
+			, static_cast< CSceneNode * >( val )->getInternal() ) );
 	}
 
 	STDMETHODIMP CLight::Detach()noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "Detach" ) );
 
-		if ( m_internal )
-		{
-			m_internal->detach();
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_ILight, // This is the GUID of the component throwing error
-					 _T( "Detach" ), // This is generally displayed as the title
-					 light::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dLight_detach( m_internal ) );
 	}
 }

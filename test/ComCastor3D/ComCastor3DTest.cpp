@@ -20,15 +20,14 @@ int _tmain( int argc, TCHAR * argv[] )
 		try
 		{
 			Castor3D::ILoggerPtr logger = Castor3D::ILoggerPtr( __uuidof( Castor3D::Logger ) );
-			logger->Initialise( Castor3D::eLOG_TYPE_DEBUG );
+			logger->Create( Castor3D::eLOG_TYPE_DEBUG );
 			logger->SetFileName( _T( "ComCastor3DTest.log" ), Castor3D::eLOG_TYPE_COUNT );
 
 			try
 			{
 				logger->LogInfo( _T( "ComCastor3DTest - Start" ) );
-				Castor3D::IEnginePtr engine = Castor3D::IEnginePtr( __uuidof( Castor3D::engine ) );
-				engine->Create( _T( "ComCastor3DTest" ), false );
-				engine->Destroy();
+				if ( Castor3D::IEnginePtr engine = Castor3D::IEnginePtr( __uuidof( Castor3D::engine ) ) )
+					engine->Create( _T( "ComCastor3DTest" ), false );
 				logger->LogInfo( _T( "ComCastor3DTest - Finish" ) );
 			}
 			catch ( _com_error & exc )
@@ -36,8 +35,6 @@ int _tmain( int argc, TCHAR * argv[] )
 				logger->LogError( exc.ErrorMessage() );
 				iReturn = EXIT_FAILURE;
 			}
-
-			logger->Cleanup();
 		}
 		catch ( _com_error & exc )
 		{

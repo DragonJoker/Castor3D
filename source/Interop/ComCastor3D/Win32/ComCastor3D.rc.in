@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Français (France) resources
+// Franï¿½ais (France) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRA)
 
@@ -75,7 +75,7 @@ END
 IDR_Castor3D            REGISTRY	"${CMAKE_CURRENT_SOURCE_DIR}/Win32/ComCastor3D.rgs"
 ${RESRC_LIST}
 
-#endif    // Français (France) resources
+#endif    // Franï¿½ais (France) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

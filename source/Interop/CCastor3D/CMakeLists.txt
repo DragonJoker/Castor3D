@@ -74,6 +74,10 @@ add_library( castor::${PROJECT_NAME}
 	ALIAS
 	${PROJECT_NAME}
 )
+target_sources( ${PROJECT_NAME} 
+	PRIVATE
+		${CASTOR_EDITORCONFIG_FILE}
+)
 target_include_directories( ${PROJECT_NAME}
 	PRIVATE
 		${Castor3DIncludeDirs}

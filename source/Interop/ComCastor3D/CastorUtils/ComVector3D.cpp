@@ -5,202 +5,133 @@ namespace CastorCom
 {
 	STDMETHODIMP CVector3D::Negate()noexcept
 	{
-		castor::point::negate( m_internal );
-		return S_OK;
+		return convert( c3dVec3_negate( &m_internal ) );
 	}
 
 	STDMETHODIMP CVector3D::Normalise()noexcept
 	{
-		castor::point::normalise( m_internal );
+		return convert( c3dVec3_normalise( &m_internal ) );
+	}
+
+	STDMETHODIMP CVector3D::Dot( IVector3D * rhs, FLOAT * pRet )noexcept
+	{
+		if ( !rhs || !pRet )
+			return E_POINTER;
+
+		return convert( c3dVec3_dot( &m_internal
+			, &static_cast< CVector3D * >( rhs )->getInternal()
+			, pRet ) );
+	}
+
+	STDMETHODIMP CVector3D::Cross( IVector3D * rhs, IVector3D ** pRet )noexcept
+	{
+		if ( !rhs || !pRet )
+			return E_POINTER;
+		if ( CVector3D::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
+
+		return convert( c3dVec3_cross( &m_internal
+			, &static_cast< CVector3D * >( rhs )->getInternal()
+			, &static_cast< CVector3D * >( *pRet )->getInternal() ) );
+	}
+
+	STDMETHODIMP CVector3D::Length( FLOAT * pRet )noexcept
+	{
+		if ( !pRet )
+			return E_POINTER;
+
+		return convert( c3dVec3_length( &m_internal, pRet ) );
+	}
+
+	STDMETHODIMP CVector3D::Set( /*[in]*/ FLOAT x, /*[in]*/ FLOAT y, /*[in]*/ FLOAT z )noexcept
+	{
+		m_internal.x = x;
+		m_internal.y = y;
+		m_internal.z = z;
 		return S_OK;
 	}
 
-	STDMETHODIMP CVector3D::Dot( IVector3D * pVal, FLOAT * pRet )noexcept
+	STDMETHODIMP CVector3D::CompMul( IVector3D * rhs, IVector3D ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !rhs || !pRet )
+			return E_POINTER;
+		if ( CVector3D::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( pVal && pRet )
-		{
-			*pRet = castor::point::dot( m_internal
-				, static_cast< CVector3D * >( pVal )->getInternal() );
-			hr = S_OK;
-		}
-
-		return hr;
+		return convert( c3dVec3_compMul( &m_internal
+			, &static_cast< CVector3D * >( rhs )->getInternal()
+			, &static_cast< CVector3D * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CVector3D::Cross( IVector3D * pVal, IVector3D ** pRet )noexcept
+	STDMETHODIMP CVector3D::CompAdd( IVector3D * rhs, IVector3D ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !rhs || !pRet )
+			return E_POINTER;
+		if ( CVector3D::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( pVal && pRet )
-		{
-			hr = CVector3D::CreateInstance( pRet );
-
-			if ( hr == S_OK )
-			{
-				static_cast< CVector3D * >( *pRet )->setInternal( castor::point::cross( m_internal
-					, static_cast< CVector3D * >( pVal )->getInternal() ) );
-			}
-		}
-
-		return hr;
+		return convert( c3dVec3_compAdd( &m_internal
+			, &static_cast< CVector3D * >( rhs )->getInternal()
+			, &static_cast< CVector3D * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CVector3D::Length( FLOAT * pVal )noexcept
+	STDMETHODIMP CVector3D::CompSub( IVector3D * rhs, IVector3D ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !rhs || !pRet )
+			return E_POINTER;
+		if ( CVector3D::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( pVal && pVal )
-		{
-			*pVal = FLOAT( castor::point::length( m_internal ) );
-			hr = S_OK;
-		}
-
-		return hr;
+		return convert( c3dVec3_compSub( &m_internal
+			, &static_cast< CVector3D * >( rhs )->getInternal()
+			, &static_cast< CVector3D * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CVector3D::Set( /* [in] */ FLOAT x, /* [in] */ FLOAT y, /* [in] */ FLOAT z )noexcept
+	STDMETHODIMP CVector3D::Mul( float rhs, IVector3D ** pRet )noexcept
 	{
-		m_internal->x = x;
-		m_internal->y = y;
-		m_internal->z = z;
-		return S_OK;
+		if ( !pRet )
+			return E_POINTER;
+		if ( CVector3D::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
+
+		return convert( c3dVec3_mul( &m_internal
+			, rhs
+			, &static_cast< CVector3D * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CVector3D::CompMul( IVector3D * rhs, IVector3D ** pVal )noexcept
+	STDMETHODIMP CVector3D::Div( float rhs, IVector3D ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( CVector3D::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( rhs && pVal )
-		{
-			hr = CVector3D::CreateInstance( pVal );
-
-			if ( hr == S_OK )
-			{
-				auto rhsInternal = static_cast< CVector3D * >( rhs )->getInternal();
-				static_cast< CVector3D * >( *pVal )->setInternal( { m_internal->x * rhsInternal->x
-					, m_internal->y * rhsInternal->y
-					, m_internal->z * rhsInternal->z } );
-			}
-		}
-
-		return hr;
+		return convert( c3dVec3_div( &m_internal
+			, rhs
+			, &static_cast< CVector3D * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CVector3D::CompAdd( IVector3D * rhs, IVector3D ** pVal )noexcept
+	STDMETHODIMP CVector3D::Add( float rhs, IVector3D ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( CVector3D::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( rhs && pVal )
-		{
-			hr = CVector3D::CreateInstance( pVal );
-
-			if ( hr == S_OK )
-			{
-				auto rhsInternal = static_cast< CVector3D * >( rhs )->getInternal();
-				static_cast< CVector3D * >( *pVal )->setInternal( { m_internal->x + rhsInternal->x
-					, m_internal->y + rhsInternal->y
-					, m_internal->z + rhsInternal->z } );
-			}
-		}
-
-		return hr;
+		return convert( c3dVec3_add( &m_internal
+			, rhs
+			, &static_cast< CVector3D * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CVector3D::CompSub( IVector3D * rhs, IVector3D ** pVal )noexcept
+	STDMETHODIMP CVector3D::Sub( float rhs, IVector3D ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( CVector3D::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( rhs && pVal )
-		{
-			hr = CVector3D::CreateInstance( pVal );
-
-			if ( hr == S_OK )
-			{
-				auto rhsInternal = static_cast< CVector3D * >( rhs )->getInternal();
-				static_cast< CVector3D * >( *pVal )->setInternal( { m_internal->x - rhsInternal->x
-					, m_internal->y - rhsInternal->y
-					, m_internal->z - rhsInternal->z } );
-			}
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CVector3D::Mul( float rhs, IVector3D ** pVal )noexcept
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( pVal )
-		{
-			hr = CVector3D::CreateInstance( pVal );
-
-			if ( hr == S_OK )
-			{
-				static_cast< CVector3D * >( *pVal )->setInternal( { m_internal->x * rhs
-					, m_internal->y * rhs
-					, m_internal->z * rhs } );
-			}
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CVector3D::Div( float rhs, IVector3D ** pVal )noexcept
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( pVal )
-		{
-			hr = CVector3D::CreateInstance( pVal );
-
-			if ( hr == S_OK )
-			{
-				static_cast< CVector3D * >( *pVal )->setInternal( { m_internal->x / rhs
-					, m_internal->y / rhs
-					, m_internal->z / rhs } );
-			}
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CVector3D::Add( float rhs, IVector3D ** pVal )noexcept
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( pVal )
-		{
-			hr = CVector3D::CreateInstance( pVal );
-
-			if ( hr == S_OK )
-			{
-				static_cast< CVector3D * >( *pVal )->setInternal( { m_internal->x + rhs
-					, m_internal->y + rhs
-					, m_internal->z + rhs } );
-			}
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CVector3D::Sub( float rhs, IVector3D ** pVal )noexcept
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( pVal )
-		{
-			hr = CVector3D::CreateInstance( pVal );
-
-			if ( hr == S_OK )
-			{
-				static_cast< CVector3D * >( *pVal )->setInternal( { m_internal->x - rhs
-					, m_internal->y - rhs
-					, m_internal->z - rhs } );
-			}
-		}
-
-		return hr;
+		return convert( c3dVec3_sub( &m_internal
+			, rhs
+			, &static_cast< CVector3D * >( *pRet )->getInternal() ) );
 	}
 }

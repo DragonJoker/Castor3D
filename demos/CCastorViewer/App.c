@@ -48,7 +48,7 @@ int main( int argc, char const * const * argv )
 	callbacks.onCursorChange = onCursorChange;
 	callbacks.onGetClipBoardText = onGetClipBoardText;
 	callbacks.onSetClipBoardText = onSetClipBoardText;
-	if ( c3dEngine_registerGuiCallbacks( engine, callbacks ) != C3D_OK )
+	if ( c3dEngine_registerGuiCallbacks( engine, &callbacks ) != C3D_OK )
 		goto cleanup;
 
 	if ( !doSelectSceneFile( sceneFile, MAX_PATH_SIZE * sizeof( C3DChar ) ) )
@@ -319,17 +319,17 @@ void doUnloadScene( C3DEngine * engine, MainWindow * window )
 	}
 }
 
-void onGetClipBoardText( C3DString * text )
+void onGetClipBoardText( C3DGuiCallbacks * callbacks, C3DString * text )
 {
 	//return Clipboard.GetText();
 }
 
-void onSetClipBoardText( C3DString text )
+void onSetClipBoardText( C3DGuiCallbacks * callbacks, C3DString text )
 {
 	//Clipboard.SetText(text);
 }
 
-void onCursorChange( C3D_MOUSE_CURSOR cursor )
+void onCursorChange( C3DGuiCallbacks * callbacks, C3D_MOUSE_CURSOR cursor )
 {
 	if ( glfwMainWindow )
 		glfwSetCursor( glfwMainWindow, cursors[cursor] );

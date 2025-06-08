@@ -1,95 +1,56 @@
 #include "ComCastor3D/Castor3D/ComMesh.hpp"
+#include "ComCastor3D/Castor3D/ComScene.hpp"
 #include "ComCastor3D/Castor3D/ComSubmesh.hpp"
 
 namespace CastorCom
 {
-	namespace mesh
+	STDMETHODIMP CMesh::Create( /*[in]*/ IScene * scene, /*[in]*/ BSTR type, /*[in]*/ BSTR name )noexcept
 	{
-		static const tstring ERROR_UNINITIALISED = _T( "The mesh must be initialised" );
+		if ( !scene || !name )
+			return E_POINTER;
+		if ( m_internal )
+			return dispatchInitialised( _T( "Create" ) );
+
+		return convert( c3dMesh_create( static_cast< CScene * >( scene )->getInternal()
+			, bstrToString( type ).c_str()
+			, bstrToString( name ).c_str()
+			, &m_internal ) );
 	}
 
-	STDMETHODIMP CMesh::GetSubmesh( /* [in] */ unsigned int val, /* [out, retval] */ ISubmesh ** pVal )noexcept
+	STDMETHODIMP CMesh::GetSubmesh( /*[in]*/ UINT val, /*[out, retval]*/ ISubmesh ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "GetSubmesh" ) );
+		if ( CSubmesh::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( getMesh() )
-		{
-			if ( pVal )
-			{
-				hr = CSubmesh::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					static_cast< CSubmesh * >( *pVal )->setInternal( getMesh()->getSubmesh( val ) );
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IMesh,	 // This is the GUID of the component throwing error
-					 _T( "GetSubmesh" ),			// This is generally displayed as the title
-					 mesh::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dMesh_getSubmesh( m_internal
+			, val
+			, &static_cast< CSubmesh * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CMesh::CreateSubmesh( /* [out, retval] */ ISubmesh ** pVal )noexcept
+	STDMETHODIMP CMesh::CreateSubmesh( /*[out, retval]*/ ISubmesh ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "CreateSubmesh" ) );
+		if ( CSubmesh::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( getMesh() )
-		{
-			if ( pVal )
-			{
-				hr = CSubmesh::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					static_cast< CSubmesh * >( *pVal )->setInternal( getMesh()->createSubmesh() );
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IMesh,	 // This is the GUID of the component throwing error
-					 _T( "CreateSubmesh" ),		// This is generally displayed as the title
-					 mesh::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dMesh_createSubmesh( m_internal
+			, &static_cast< CSubmesh * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CMesh::DeleteSubmesh( /* [in] */ ISubmesh * val )noexcept
+	STDMETHODIMP CMesh::RemoveSubmesh( /*[in]*/ ISubmesh * val )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "RemoveSubmesh" ) );
 
-		if ( getMesh() )
-		{
-			auto submesh = static_cast< CSubmesh * >( val )->getInternal();
-			static_cast< CSubmesh * >( val )->setInternal( nullptr );
-			m_internal->removeSubmesh( *submesh );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IMesh,	 // This is the GUID of the component throwing error
-					 _T( "DeleteSubmesh" ),			// This is generally displayed as the title
-				mesh::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dMesh_removeSubmesh( m_internal, static_cast< CSubmesh * >( val )->getInternal() ) );
 	}
 }

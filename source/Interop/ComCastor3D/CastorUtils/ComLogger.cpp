@@ -3,52 +3,60 @@
 
 namespace CastorCom
 {
-	STDMETHODIMP CLogger::Initialise( /* [in] */ eLOG_TYPE level )noexcept
+	STDMETHODIMP CLogger::Create( /*[in]*/ eLOG_TYPE level )noexcept
 	{
-		castor::Logger::initialise( castor::LogType( level ) );
-		return S_OK;
+		if ( m_internal )
+			return dispatchInitialised( _T( "Create" ) );
+
+		return convert( c3dLogger_create( C3D_LOG_TYPE( level ), &m_internal ) );
 	}
 
-	STDMETHODIMP CLogger::SetFileName( /* [in] */ BSTR name, eLOG_TYPE target )noexcept
+	STDMETHODIMP CLogger::SetFileName( /*[in]*/ BSTR name, eLOG_TYPE target )noexcept
 	{
-		castor::Logger::setFileName( castor::Path{ fromBstr( name ) }, castor::LogType( target ) );
-		return S_OK;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "SetFileName" ) );
+
+		return convert( c3dLogger_setFileName( m_internal, bstrToString( name ).c_str(), C3D_LOG_TYPE( target ) ) );
 	}
 
-	STDMETHODIMP CLogger::Cleanup()noexcept
+	STDMETHODIMP CLogger::LogTrace( /*[in]*/ BSTR msg )noexcept
 	{
-		castor::Logger::cleanup();
-		return S_OK;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "LogTrace" ) );
+
+		return convert( c3dLogger_logTrace( m_internal, bstrToString( msg ).c_str() ) );
 	}
 
-	STDMETHODIMP CLogger::LogTrace( /* [in] */ BSTR msg )noexcept
+	STDMETHODIMP CLogger::LogDebug( /*[in]*/ BSTR msg )noexcept
 	{
-		castor::Logger::logTrace( fromBstr( msg ) );
-		return S_OK;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "LogDebug" ) );
+
+		return convert( c3dLogger_logDebug( m_internal, bstrToString( msg ).c_str() ) );
 	}
 
-	STDMETHODIMP CLogger::LogDebug( /* [in] */ BSTR msg )noexcept
+	STDMETHODIMP CLogger::LogInfo( /*[in]*/ BSTR msg )noexcept
 	{
-		castor::Logger::logDebug( fromBstr( msg ) );
-		return S_OK;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "LogInfo" ) );
+
+		return convert( c3dLogger_logInfo( m_internal, bstrToString( msg ).c_str() ) );
 	}
 
-	STDMETHODIMP CLogger::LogInfo( /* [in] */ BSTR msg )noexcept
+	STDMETHODIMP CLogger::LogWarning( /*[in]*/ BSTR msg )noexcept
 	{
-		castor::Logger::logInfo( fromBstr( msg ) );
-		return S_OK;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "LogWarning" ) );
+
+		return convert( c3dLogger_logWarning( m_internal, bstrToString( msg ).c_str() ) );
 	}
 
-	STDMETHODIMP CLogger::LogWarning( /* [in] */ BSTR msg )noexcept
+	STDMETHODIMP CLogger::LogError( /*[in]*/ BSTR msg )noexcept
 	{
-		castor::Logger::logWarning( fromBstr( msg ) );
-		return S_OK;
-	}
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "LogError" ) );
 
-	STDMETHODIMP CLogger::LogError( /* [in] */ BSTR msg )noexcept
-	{
-		castor::Logger::logError( fromBstr( msg ) );
-		return S_OK;
+		return convert( c3dLogger_logError( m_internal, bstrToString( msg ).c_str() ) );
 	}
 
 }

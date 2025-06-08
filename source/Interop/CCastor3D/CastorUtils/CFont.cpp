@@ -10,6 +10,16 @@ extern "C"
 
 	static const C3DString ERROR_UNINITIALISED_FONT = cuT( "The font must be initialised" );
 
+	C3D_CAPIMETHODIMP c3dFont_delete( C3DFont * object )
+	{
+		if ( !object )
+			return C3D_POINTER;
+
+		delete object;
+
+		return C3D_OK;
+	}
+
 	C3D_CAPIMETHODIMP c3dFont_getHeight( C3DFont const * object, uint32_t * result )
 	{
 		if ( !object )

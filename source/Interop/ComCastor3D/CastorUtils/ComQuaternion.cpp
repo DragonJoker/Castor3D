@@ -1,191 +1,119 @@
 #include "ComCastor3D/CastorUtils/ComQuaternion.hpp"
 
 #include "ComCastor3D/CastorUtils/ComVector3D.hpp"
-#include "ComCastor3D/CastorUtils/ComAngle.hpp"
 
 namespace CastorCom
 {
-	STDMETHODIMP CQuaternion::get_RotationMatrix( IMatrix4x4 ** /* [out, retval] */ pVal )noexcept
+	STDMETHODIMP CQuaternion::Transform( /*[in]*/ IVector3D * val, /*[out, retval]*/ IVector3D ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !val || !pRet )
+			return E_POINTER;
+		if ( CVector3D::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( pVal )
-		{
-			hr = CMatrix4x4::CreateInstance( pVal );
-
-			if ( hr == S_OK )
-			{
-				castor::Matrix4x4f mtx;
-				m_internal.toMatrix( mtx );
-				static_cast< CMatrix4x4 * >( *pVal )->setInternal( mtx );
-			}
-		}
-
-		return hr;
+		return convert( c3dQuat_transform( &m_internal
+			, &static_cast< CVector3D * >( val )->getInternal()
+			, &static_cast< CVector3D * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CQuaternion::Transform( /* [in] */ IVector3D * val, /* [out, retval] */ IVector3D ** pVal )noexcept
+	STDMETHODIMP CQuaternion::ToAxisAngle( /*[out]*/ IVector3D ** pAxis, /*[out]*/ FLOAT * pAngle )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pAxis || !pAngle )
+			return E_POINTER;
+		if ( CVector3D::CreateInstance( pAxis ) != S_OK )
+			return E_FAIL;
 
-		if ( val && pVal )
-		{
-			hr = CVector3D::CreateInstance( pVal );
-
-			if ( hr == S_OK )
-			{
-				castor::Point3f res;
-				m_internal.transform( static_cast< CVector3D * >( val )->getInternal()
-					, res );
-				static_cast< CVector3D * >( *pVal )->setInternal( res );
-			}
-		}
-
-		return hr;
+		return convert( c3dQuat_getAxisAngle( &m_internal
+			, &static_cast< CVector3D * >( *pAxis )->getInternal()
+			, pAngle ) );
 	}
 
-	STDMETHODIMP CQuaternion::ToAxisAngle( /* [out] */ IVector3D ** pAxis, /* [out] */ IAngle ** pAngle )noexcept
+	STDMETHODIMP CQuaternion::FromAxisAngle( /*[in]*/ IVector3D * axis, /*[in]*/ FLOAT angle )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !axis )
+			return E_POINTER;
 
-		if ( pAxis && pAngle )
-		{
-			hr = CVector3D::CreateInstance( pAxis );
-			hr = hr == S_OK ? CAngle::CreateInstance( pAngle ) : hr;
-
-			if ( hr == S_OK )
-			{
-				castor::Point3f axis;
-				castor::Angle angle;
-				m_internal.toAxisAngle( axis, angle );
-				static_cast< CVector3D * >( *pAxis )->setInternal( axis );
-				static_cast< CAngle * >( *pAngle )->setInternal( angle );
-			}
-		}
-
-		return hr;
+		return convert( c3dQuat_fromAxisAngle( &static_cast< CVector3D * >( axis )->getInternal()
+			, angle
+			, &m_internal ) );
 	}
 
-	STDMETHODIMP CQuaternion::FromAxisAngle( /* [in] */ IVector3D * axis, /* [in] */ IAngle * angle )noexcept
+	STDMETHODIMP CQuaternion::ToAxes( /*[out]*/ IVector3D ** pX, /*[out]*/ IVector3D ** pY, /*[out]*/ IVector3D ** pZ )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pX || !pY || !pZ )
+			return E_POINTER;
+		if ( CVector3D::CreateInstance( pX ) != S_OK )
+			return E_FAIL;
+		if ( CVector3D::CreateInstance( pY ) != S_OK )
+			return E_FAIL;
+		if ( CVector3D::CreateInstance( pZ ) != S_OK )
+			return E_FAIL;
 
-		if ( axis && angle )
-		{
-			m_internal = castor::Quaternion::fromAxisAngle( static_cast< CVector3D const * >( axis )->getInternal()
-				, static_cast< CAngle * >( angle )->getInternal() );
-			hr = S_OK;
-		}
-
-		return hr;
+		return convert( c3dQuat_getAxes( &m_internal
+			, &static_cast< CVector3D * >( *pX )->getInternal()
+			, &static_cast< CVector3D * >( *pY )->getInternal()
+			, &static_cast< CVector3D * >( *pZ )->getInternal() ) );
 	}
 
-	STDMETHODIMP CQuaternion::ToAxes( /* [out] */ IVector3D ** pX, /* [out] */ IVector3D ** pY, /* [out] */ IVector3D ** pZ )noexcept
+	STDMETHODIMP CQuaternion::FromAxes( /*[in]*/ IVector3D * x, /*[in]*/ IVector3D * y, /*[in]*/ IVector3D * z )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !x || !y || !z )
+			return E_POINTER;
 
-		if ( pX && pY && pZ )
-		{
-			hr = CVector3D::CreateInstance( pX );
-			hr = hr == S_OK ? CVector3D::CreateInstance( pY ) : hr;
-			hr = hr == S_OK ? CVector3D::CreateInstance( pZ ) : hr;
-
-			if ( hr == S_OK )
-			{
-				castor::Point3f x;
-				castor::Point3f y;
-				castor::Point3f z;
-				m_internal.toAxes( x, y, z );
-				static_cast< CVector3D * >( *pX )->setInternal( x );
-				static_cast< CVector3D * >( *pY )->setInternal( y );
-				static_cast< CVector3D * >( *pZ )->setInternal( z );
-			}
-		}
-
-		return hr;
+		return convert( c3dQuat_fromAxes( &static_cast< CVector3D * >( x )->getInternal()
+			, &static_cast< CVector3D * >( y )->getInternal()
+			, &static_cast< CVector3D * >( z )->getInternal()
+			, &m_internal ) );
 	}
 
-	STDMETHODIMP CQuaternion::FromAxes( /* [in] */ IVector3D * x, /* [in] */ IVector3D * y, /* [in] */ IVector3D * z )noexcept
+	STDMETHODIMP CQuaternion::GetMagnitude( /*[out, retval]*/ FLOAT * pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pRet )
+			return E_POINTER;
 
-		if ( x && y && z )
-		{
-			m_internal = castor::Quaternion::fromAxes( static_cast< CVector3D * >( x )->getInternal()
-				, static_cast< CVector3D * >( y )->getInternal()
-				, static_cast< CVector3D * >( z )->getInternal() );
-			hr = S_OK;
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CQuaternion::GetMagnitude( /* [out, retval] */ float * pVal )noexcept
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( pVal )
-		{
-			*pVal = float( m_internal.getMagnitude() );
-		}
-
-		return hr;
+		return convert( c3dQuat_getMagnitude( &m_internal, pRet ) );
 	}
 
 	STDMETHODIMP CQuaternion::Conjugate()noexcept
 	{
-		m_internal.conjugate();
-		return S_OK;
+		return convert( c3dQuat_conjugate( &m_internal ) );
 	}
 
-	STDMETHODIMP CQuaternion::Slerp( /* [in] */ IQuaternion * pquat, /* [in] */ float percent, /* [out, retval] */ IQuaternion ** pQuat )noexcept
+	STDMETHODIMP CQuaternion::Slerp( /*[in]*/ IQuaternion * dest, /*[in]*/ float percent, /*[out, retval]*/ IQuaternion ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !dest || !pRet )
+			return E_POINTER;
+		if ( CQuaternion::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( pquat && pQuat )
-		{
-			hr = CQuaternion::CreateInstance( pQuat );
-
-			if ( hr == S_OK )
-			{
-				static_cast< CQuaternion * >( *pQuat )->setInternal( m_internal.slerp( static_cast< CQuaternion const * >( pquat )->getInternal(), percent ) );
-			}
-		}
-
-		return hr;
+		return convert( c3dQuat_slerp( &m_internal
+			, &static_cast< CQuaternion * >( dest )->getInternal()
+			, percent
+			, &static_cast< CQuaternion * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CQuaternion::Mix( /* [in] */ IQuaternion * pquat, /* [in] */ float percent, /* [out, retval] */ IQuaternion ** pQuat )noexcept
+	STDMETHODIMP CQuaternion::Mix( /*[in]*/ IQuaternion * dest, /*[in]*/ float percent, /*[out, retval]*/ IQuaternion ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !dest || !pRet )
+			return E_POINTER;
+		if ( CQuaternion::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( pquat && pQuat )
-		{
-			hr = CQuaternion::CreateInstance( pQuat );
-
-			if ( hr == S_OK )
-			{
-				static_cast< CQuaternion * >( *pQuat )->setInternal( m_internal.mix( static_cast< CQuaternion const * >( pquat )->getInternal(), percent ) );
-			}
-		}
-
-		return hr;
+		return convert( c3dQuat_mix( &m_internal
+			, &static_cast< CQuaternion * >( dest )->getInternal()
+			, percent
+			, &static_cast< CQuaternion * >( *pRet )->getInternal() ) );
 	}
 
-	STDMETHODIMP CQuaternion::Mul( /* [in] */ IQuaternion * rhs, /* [out, retval] */ IQuaternion ** pQuat )noexcept
+	STDMETHODIMP CQuaternion::Mul( /*[in]*/ IQuaternion * rhs, /*[out, retval]*/ IQuaternion ** pRet )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !rhs || !pRet )
+			return E_POINTER;
+		if ( CQuaternion::CreateInstance( pRet ) != S_OK )
+			return E_FAIL;
 
-		if ( rhs && pQuat )
-		{
-			hr = CQuaternion::CreateInstance( pQuat );
-
-			if ( hr == S_OK )
-			{
-				static_cast< CQuaternion * >( *pQuat )->setInternal( m_internal * static_cast< CQuaternion const * >( rhs )->getInternal() );
-			}
-		}
-
-		return hr;
+		return convert( c3dQuat_mul( &m_internal
+			, &static_cast< CQuaternion * >( rhs )->getInternal()
+			, &static_cast< CQuaternion * >( *pRet )->getInternal() ) );
 	}
 }

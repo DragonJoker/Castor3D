@@ -24,18 +24,17 @@ SOFTWARE.
 #define ___C3DCOM_CASTOR_UTILS_H___
 
 #include <Windows.h>
-#include <CastorUtils/Data/Path.hpp>
 
 namespace CastorCom
 {
 	static const WORD MAJOR_VERSION = ${${PROJECT_NAME}_VERSION_MAJOR};
 	static const WORD MINOR_VERSION = ${${PROJECT_NAME}_VERSION_MINOR};
 #ifndef NDEBUG
-	static const castor::Path HELP_DIR{ cuT( "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}" ) };
-	static const castor::Path WIN_32{ cuT( "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}ComCastor3Dd.dll" ) };
+	static LPCSTR HELP_DIR{ "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}" };
+	static LPCSTR WIN_32{ "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}ComCastor3Dd.dll" };
 #else
-	static const castor::Path HELP_DIR{ cuT( "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}" ) };
-	static const castor::Path WIN_32{ cuT( "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}ComCastor3D.dll" ) };
+	static LPCSTR HELP_DIR{ "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}" };
+	static LPCSTR WIN_32{ "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}ComCastor3D.dll" };
 #endif
 }
 

@@ -3,164 +3,40 @@
 
 namespace CastorCom
 {
-	namespace material
+	STDMETHODIMP CMaterial::CreatePass( /*[out, retval]*/ IPass ** pVal )noexcept
 	{
-		static const tstring ERROR_UNINITIALISED = _T( "The material must be initialised" );
-		static const tstring ERROR_OUT_OF_BOUND_INDEX = _T( "The given index was out of bounds" );
+		if ( !pVal )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "AddLight" ) );
+		if ( CPass::CreateInstance( pVal ) != S_OK )
+			return E_FAIL;
+
+		return convert( c3dMaterial_createPass( m_internal
+			, &static_cast< CPass * >( *pVal )->getInternal() ) );
 	}
 
-	STDMETHODIMP CMaterial::Initialise()noexcept
+	STDMETHODIMP CMaterial::GetPass( /*[in]*/ UINT val, /*[out, retval]*/ IPass ** pVal )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !pVal )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "GetPass" ) );
+		if ( CPass::CreateInstance( pVal ) != S_OK )
+			return E_FAIL;
 
-		if ( m_internal )
-		{
-			hr = S_OK;
-			m_internal->initialise();
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IMaterial, // This is the GUID of the component throwing error
-					 _T( "Initialise" ),			// This is generally displayed as the title
-					 material::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dMaterial_getPass( m_internal
+			, val
+			, &static_cast< CPass * >( *pVal )->getInternal() ) );
 	}
 
-	STDMETHODIMP CMaterial::Cleanup()noexcept
+	STDMETHODIMP CMaterial::RemovePass( /*[in]*/ IPass * val )noexcept
 	{
-		HRESULT hr = E_POINTER;
+		if ( !val )
+			return E_POINTER;
+		if ( !m_internal )
+			return dispatchUninitialised( _T( "RemovePass" ) );
 
-		if ( m_internal )
-		{
-			m_internal->cleanup();
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IMaterial, // This is the GUID of the component throwing error
-					 _T( "Cleanup" ), // This is generally displayed as the title
-					 material::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CMaterial::CreatePass( /* [out, retval] */ IPass ** pVal )noexcept
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CPass::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					static_cast< CPass * >( *pVal )->setInternal( m_internal->createPass() );
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IMaterial, // This is the GUID of the component throwing error
-					 _T( "CreatePass" ),			// This is generally displayed as the title
-					 material::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CMaterial::GetPass( /* [in] */ unsigned int val, /* [out, retval] */ IPass ** pVal )noexcept
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CPass::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					try
-					{
-						static_cast< CPass * >( *pVal )->setInternal( m_internal->getPass( val ) );
-					}
-					catch ( std::exception & )
-					{
-						hr = CComError::dispatchError(
-								 E_FAIL,	 // This represents the error
-								 IID_IMaterial,	 // This is the GUID of the component throwing error
-								 _T( "GetPass" ), // This is generally displayed as the title
-								 material::ERROR_OUT_OF_BOUND_INDEX.c_str(), // This is the description
-								 0,	 // This is the context in the help file
-								 nullptr );
-					}
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IMaterial, // This is the GUID of the component throwing error
-					 _T( "GetPass" ), // This is generally displayed as the title
-					 material::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CMaterial::DestroyPass( /* [in] */ unsigned int val )noexcept
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			try
-			{
-				m_internal->destroyPass( val );
-				hr = S_OK;
-			}
-			catch ( std::exception & )
-			{
-				hr = CComError::dispatchError(
-						 E_FAIL,	 // This represents the error
-						 IID_IMaterial,	 // This is the GUID of the component throwing error
-						 _T( "DestroyPass" ), // This is generally displayed as the title
-						 material::ERROR_OUT_OF_BOUND_INDEX.c_str(), // This is the description
-						 0,	 // This is the context in the help file
-						 nullptr );
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL, // This represents the error
-					 IID_IMaterial, // This is the GUID of the component throwing error
-					 _T( "DestroyPass" ),			// This is generally displayed as the title
-					 material::ERROR_UNINITIALISED.c_str(), // This is the description
-					 0, // This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
+		return convert( c3dMaterial_removePass( m_internal, static_cast< CPass * >( val )->getInternal() ) );
 	}
 }

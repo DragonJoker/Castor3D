@@ -262,7 +262,7 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_loadFontFromFile( C3DEngine * object, C3DString path, C3DString name, uint32_t height, C3DFont ** result )
+	C3D_CAPIMETHODIMP c3dEngine_loadFontFromFile( C3DEngine * object, C3DString name, C3DString path, uint32_t height, C3DFont ** result )
 	{
 		if ( !object || !result || !path || !name )
 			return C3D_POINTER;
@@ -561,9 +561,9 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dEngine_registerGuiCallbacks( C3DEngine * object, C3DGuiCallbacks callbacks )
+	C3D_CAPIMETHODIMP c3dEngine_registerGuiCallbacks( C3DEngine * object, C3DGuiCallbacks * callbacks )
 	{
-		if ( !object )
+		if ( !object || !callbacks )
 			return C3D_POINTER;
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_ENGINE );
@@ -576,17 +576,17 @@ extern "C"
 				{
 					if ( set )
 					{
-						if ( callbacks.onSetClipBoardText )
+						if ( callbacks->onSetClipBoardText )
 						{
-							callbacks.onSetClipBoardText( castor::makeString( text ).c_str() );
+							callbacks->onSetClipBoardText( callbacks, castor::makeString( text ).c_str() );
 						}
 					}
 					else
 					{
-						if ( callbacks.onGetClipBoardText )
+						if ( callbacks->onGetClipBoardText )
 						{
 							C3DString result;
-							callbacks.onGetClipBoardText( &result );
+							callbacks->onGetClipBoardText( callbacks, &result );
 							text = castor::toUtf8U32String( castor::makeString( result ) );
 						}
 					}
@@ -595,9 +595,9 @@ extern "C"
 				} );
 			listener->registerCursorAction( [callbacks]( castor3d::MouseCursor cursor )
 				{
-					if ( callbacks.onCursorChange )
+					if ( callbacks->onCursorChange )
 					{
-						callbacks.onCursorChange( C3D_MOUSE_CURSOR( cursor ) );
+						callbacks->onCursorChange( callbacks, C3D_MOUSE_CURSOR( cursor ) );
 					}
 				} );
 		}
