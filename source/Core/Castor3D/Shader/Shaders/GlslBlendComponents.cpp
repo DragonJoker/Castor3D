@@ -279,7 +279,7 @@ namespace castor3d::shader
 	ast::type::BaseStructPtr BlendComponents::makeType( ast::type::TypesCache & cache
 		, BlendComponents const & rhs )
 	{
-		return std::static_pointer_cast< ast::type::BaseStruct >( rhs.getType() );
+		return static_cast< ast::type::BaseStruct * >( rhs.getType() );
 	}
 
 	sdw::Float BlendComponents::computeRoughnessFromGlossiness( sdw::Float const & glossiness )

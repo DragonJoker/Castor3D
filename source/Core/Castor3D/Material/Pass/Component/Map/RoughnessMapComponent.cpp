@@ -136,16 +136,16 @@ namespace castor3d
 		auto sampled = writer.declLocale( mbValueName + "Sampled"
 			, sampleTexture( map, config, components ) );
 
-		IF( writer, roughnessMode != 0_u )
+		sdwIF( writer, roughnessMode != 0_u )
 		{
 			auto gloss = 1.0_f - components.perceptualRoughness;
 			components.perceptualRoughness = 1.0_f - ( gloss * shader::TextureConfigData::getFloat( sampled, mask ) );
 		}
-		ELSE
+		sdwELSE
 		{
 			components.perceptualRoughness *= shader::TextureConfigData::getFloat( sampled, mask );
 		}
-		FI;
+		sdwFI;
 	}
 
 	//*********************************************************************************************

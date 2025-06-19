@@ -71,11 +71,11 @@ namespace smaa
 					auto edges = writer.declLocale( "edges"
 						, step( vec2( c3d_smaaData.depthThreshold ), delta ) );
 
-					IF( writer, dot( edges, vec2( 1.0_f, 1.0_f ) ) == 0.0_f )
+					sdwIF( writer, dot( edges, vec2( 1.0_f, 1.0_f ) ) == 0.0_f )
 					{
 						writer.demote();
 					}
-					FI;
+					sdwFI;
 
 					writer.returnStmt( edges );
 				}

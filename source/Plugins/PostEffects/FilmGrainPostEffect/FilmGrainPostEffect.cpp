@@ -76,11 +76,11 @@ namespace film_grain
 					auto comp = writer.declLocale( "comp"
 						, pow( abs( b ), vec3( 2.2_f ) ) );
 
-					IF( writer, comp.x() < 0.5_f && comp.y() < 0.5_f && comp.z() < 0.5_f )
+					sdwIF( writer, comp.x() < 0.5_f && comp.y() < 0.5_f && comp.z() < 0.5_f )
 					{
 						writer.returnStmt( 2.0_f * a * b );
 					}
-					FI
+					sdwFI;
 
 					writer.returnStmt( vec3( 1.0_f ) - 2.0_f * ( 1.0_f - a ) * ( 1.0_f - b ) );
 				}

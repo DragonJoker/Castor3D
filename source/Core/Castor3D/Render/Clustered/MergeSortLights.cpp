@@ -110,24 +110,24 @@ namespace castor3d
 					auto begin = writer.declLocale( "begin", max( 0_i, diag - bCount ) );
 					auto end = writer.declLocale( "end", min( diag, aCount ) );
 
-					WHILE( writer, begin < end )
+					sdwWHILE( writer, begin < end )
 					{
 						// Find the mid-point to start searching from.
 						auto mid = writer.declLocale( "mid", ( begin + end ) >> 1_i );
 						auto a = writer.declLocale( "a", writer.ternary( bUseSharedMem, gsKeys[a0 + mid], c3d_inputKeys[a0 + mid] ) );
 						auto b = writer.declLocale( "b", writer.ternary( bUseSharedMem, gsKeys[b0 + diag - 1 - mid], c3d_inputKeys[b0 + diag - 1 - mid] ) );
 
-						IF( writer, a < b )
+						sdwIF( writer, a < b )
 						{
 							begin = mid + 1_i;
 						}
-						ELSE
+						sdwELSE
 						{
 							end = mid;
 						}
-						FI
+						sdwFI;
 					}
-					ELIHW
+					sdwELIHW;
 
 					writer.returnStmt( begin );
 				}
@@ -152,9 +152,9 @@ namespace castor3d
 					auto aValue = writer.declLocale( "aValue", gsValues[a0] );
 					auto bValue = writer.declLocale( "bValue", gsValues[b0] );
 
-					FOR( writer, sdw::Int, i, 0_i, i < int( NumValuesPerThread ) && diag + i < numValues, ++i )
+					sdwFOR( writer, sdw::Int, i, 0_i, i < int( NumValuesPerThread ) && diag + i < numValues, ++i )
 					{
-						IF( writer, b0 >= b1 || ( a0 < a1 && aKey < bKey ) )
+						sdwIF( writer, b0 >= b1 || ( a0 < a1 && aKey < bKey ) )
 						{
 							c3d_outputKeys[out0 + diag + i] = aKey;
 							c3d_outputValues[out0 + diag + i] = aValue;
@@ -164,7 +164,7 @@ namespace castor3d
 							aKey = gsKeys[a0];
 							aValue = gsValues[a0];
 						}
-						ELSE
+						sdwELSE
 						{
 							c3d_outputKeys[out0 + diag + i] = bKey;
 							c3d_outputValues[out0 + diag + i] = bValue;
@@ -174,9 +174,9 @@ namespace castor3d
 							bKey = gsKeys[b0];
 							bValue = gsValues[b0];
 						}
-						FI
+						sdwFI;
 					}
-					ROF
+					sdwROF;
 				}
 				, sdw::InInt{ writer, "a0" }
 				, sdw::InInt{ writer, "a1" }
@@ -213,7 +213,7 @@ namespace castor3d
 						// Compute the maximum number of partitions to compute.
 						auto maxPartitions = writer.declLocale( "maxPartitions", numSortGroups * numPartitionsPerSortGroup );
 
-						IF( writer, globalPartition < maxPartitions )
+						sdwIF( writer, globalPartition < maxPartitions )
 						{
 							auto a0 = writer.declLocale( "a0", writer.cast< sdw::Int >( sortGroup * numValuesPerSortGroup ) );
 							auto a1 = writer.declLocale( "a1", min( a0 + writer.cast< sdw::Int >( chunkSize ), writer.cast< sdw::Int >( c3d_numElements ) ) );
@@ -232,7 +232,7 @@ namespace castor3d
 							// Write the merge path to global memory.
 							c3d_mergePathPartitions[globalPartition] = mergedPath;
 						}
-						FI
+						sdwFI;
 					}
 					else
 					{
@@ -294,17 +294,17 @@ namespace castor3d
 							a = a0 + diag + i;
 							b = b0 + ( a - a1 );
 
-							IF ( writer, a < a1 )
+							sdwIF( writer, a < a1 )
 							{
 								key = c3d_inputKeys[chunkOffsetA0 + a];
 								value = c3d_inputValues[chunkOffsetA0 + a];
 							}
-							ELSE
+							sdwELSE
 							{
 								key = c3d_inputKeys[chunkOffsetB0 + b];
 								value = c3d_inputValues[chunkOffsetB0 + b];
 							}
-							FI
+							sdwFI;
 
 							gsKeys[diag + i] = key;
 							gsValues[diag + i] = value;

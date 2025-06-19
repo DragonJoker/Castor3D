@@ -385,25 +385,25 @@ namespace castor3d::shader
 
 	DerivFloat negate( DerivFloat const a )
 	{
-		using Func = sdw::Float ( sdw::Float::* )()const;
+		using Func = sdw::RetFloat ( sdw::Float::* )()const;
 		return deriv::applyMbr< DerivFloat, Func >( &sdw::Float::operator-, "derivNegate1", a );
 	}
 
 	DerivVec2 negate( DerivVec2 const a )
 	{
-		using Func = sdw::Vec2( sdw::Vec2::* )( )const;
+		using Func = sdw::RetVec2( sdw::Vec2::* )( )const;
 		return deriv::applyMbr< DerivVec2, Func >( &sdw::Vec2::operator-, "derivNegate2", a );
 	}
 
 	DerivVec3 negate( DerivVec3 const a )
 	{
-		using Func = sdw::Vec3( sdw::Vec3::* )( )const;
+		using Func = sdw::RetVec3( sdw::Vec3::* )( )const;
 		return deriv::applyMbr< DerivVec3, Func >( &sdw::Vec3::operator-, "derivNegate3", a );
 	}
 
 	DerivVec4 negate( DerivVec4 const a )
 	{
-		using Func = sdw::Vec4( sdw::Vec4::* )( )const;
+		using Func = sdw::RetVec4( sdw::Vec4::* )( )const;
 		return deriv::applyMbr< DerivVec4, Func >( &sdw::Vec4::operator-, "derivNegate4", a );
 	}
 
@@ -454,55 +454,55 @@ namespace castor3d::shader
 
 	DerivFloat derivX( DerivVec2 const v )
 	{
-		using Func = sdw::Float( sdw::Vec2::* )( )const;
+		using Func = sdw::RetFloat( sdw::Vec2::* )( )const;
 		return deriv::applyMbrSel< DerivFloat, Func >( &sdw::Vec2::x, "derivDerivX2", v );
 	}
 
 	DerivFloat derivX( DerivVec3 const v )
 	{
-		using Func = sdw::Float( sdw::Vec3::* )( )const;
+		using Func = sdw::RetFloat( sdw::Vec3::* )( )const;
 		return deriv::applyMbrSel< DerivFloat, Func >( &sdw::Vec3::x, "derivDerivX3", v );
 	}
 
 	DerivFloat derivX( DerivVec4 const v )
 	{
-		using Func = sdw::Float( sdw::Vec4::* )( )const;
+		using Func = sdw::RetFloat( sdw::Vec4::* )( )const;
 		return deriv::applyMbrSel< DerivFloat, Func >( &sdw::Vec4::x, "derivDerivX4", v );
 	}
 
 	DerivFloat derivY( DerivVec2 const v )
 	{
-		using Func = sdw::Float( sdw::Vec2::* )( )const;
+		using Func = sdw::RetFloat( sdw::Vec2::* )( )const;
 		return deriv::applyMbrSel< DerivFloat, Func >( &sdw::Vec2::y, "derivDerivY2", v );
 	}
 
 	DerivFloat derivY( DerivVec3 const v )
 	{
-		using Func = sdw::Float( sdw::Vec3::* )( )const;
+		using Func = sdw::RetFloat( sdw::Vec3::* )( )const;
 		return deriv::applyMbrSel< DerivFloat, Func >( &sdw::Vec3::y, "derivDerivY3", v );
 	}
 
 	DerivFloat derivY( DerivVec4 const v )
 	{
-		using Func = sdw::Float( sdw::Vec4::* )( )const;
+		using Func = sdw::RetFloat( sdw::Vec4::* )( )const;
 		return deriv::applyMbrSel< DerivFloat, Func >( &sdw::Vec4::y, "derivDerivY4", v );
 	}
 
 	DerivFloat derivZ( DerivVec3 const v )
 	{
-		using Func = sdw::Float( sdw::Vec3::* )( )const;
+		using Func = sdw::RetFloat( sdw::Vec3::* )( )const;
 		return deriv::applyMbrSel< DerivFloat, Func >( &sdw::Vec3::z, "derivDerivZ3", v );
 	}
 
 	DerivFloat derivZ( DerivVec4 const v )
 	{
-		using Func = sdw::Float( sdw::Vec4::* )( )const;
+		using Func = sdw::RetFloat( sdw::Vec4::* )( )const;
 		return deriv::applyMbrSel< DerivFloat, Func >( &sdw::Vec4::z, "derivDerivZ4", v );
 	}
 
 	DerivFloat derivW( DerivVec4 const v )
 	{
-		using Func = sdw::Float( sdw::Vec4::* )( )const;
+		using Func = sdw::RetFloat( sdw::Vec4::* )( )const;
 		return deriv::applyMbrSel< DerivFloat, Func >( &sdw::Vec4::w, "derivDerivW4", v );
 	}
 
@@ -713,61 +713,61 @@ namespace castor3d::shader
 
 	DerivVec4 operator*( sdw::Mat4 const lhs, DerivVec4 const rhs )
 	{
-		using Func = sdw::Vec4( * )( sdw::Mat4 const &, sdw::Vec4 const & );
+		using Func = sdw::RetVec4( * )( sdw::Mat4 const &, sdw::Vec4 const & );
 		return deriv::applyOp< Func >( sdw::operator*, "derivMultiplayM4D4", lhs, rhs );
 	}
 
 	DerivVec3 operator*( sdw::Mat3 const lhs, DerivVec3 const rhs )
 	{
-		using Func = sdw::Vec3( * )( sdw::Mat3 const &, sdw::Vec3 const & );
+		using Func = sdw::RetVec3( * )( sdw::Mat3 const &, sdw::Vec3 const & );
 		return deriv::applyOp< Func >( sdw::operator*, "derivMultiplayM3D3", lhs, rhs );
 	}
 
 	DerivFloat operator+( DerivFloat const lhs, DerivFloat const rhs )
 	{
-		using Func = sdw::Float( * )( sdw::Float const &, sdw::Float const & );
+		using Func = sdw::RetFloat( * )( sdw::Float const &, sdw::Float const & );
 		return deriv::applyOp< Func >( sdw::operator+, "derivAdd1D1", lhs, rhs );
 	}
 
 	DerivFloat operator+( DerivFloat const lhs, sdw::Float const rhs )
 	{
-		using Func = sdw::Float( * )( sdw::Float const &, sdw::Float const & );
+		using Func = sdw::RetFloat( * )( sdw::Float const &, sdw::Float const & );
 		return deriv::applyOp< Func >( sdw::operator+, "derivAdd1N1", lhs, rhs );
 	}
 
 	DerivFloat operator-( DerivFloat const lhs, DerivFloat const rhs )
 	{
-		using Func = sdw::Float( * )( sdw::Float const &, sdw::Float const & );
+		using Func = sdw::RetFloat( * )( sdw::Float const &, sdw::Float const & );
 		return deriv::applyOp< Func >( sdw::operator-, "derivSubtract1D1", lhs, rhs );
 	}
 
 	DerivFloat operator-( DerivFloat const lhs, sdw::Float const rhs )
 	{
-		using Func = sdw::Float( * )( sdw::Float const &, sdw::Float const & );
+		using Func = sdw::RetFloat( * )( sdw::Float const &, sdw::Float const & );
 		return deriv::applyOp< Func >( sdw::operator-, "derivSubtract1N1", lhs, rhs );
 	}
 
 	DerivFloat operator*( DerivFloat const lhs, DerivFloat const rhs )
 	{
-		using Func = sdw::Float( * )( sdw::Float const &, sdw::Float const & );
+		using Func = sdw::RetFloat( * )( sdw::Float const &, sdw::Float const & );
 		return deriv::applyOp< Func >( sdw::operator*, "derivMultiply1D1", lhs, rhs );
 	}
 
 	DerivFloat operator*( DerivFloat const lhs, sdw::Float const rhs )
 	{
-		using Func = sdw::Float( * )( sdw::Float const &, sdw::Float const & );
+		using Func = sdw::RetFloat( * )( sdw::Float const &, sdw::Float const & );
 		return deriv::applyOp< Func >( sdw::operator*, "derivMultiply1N1", lhs, rhs );
 	}
 
 	DerivVec2 operator+( DerivVec2 const lhs, DerivVec2 const rhs )
 	{
-		using Func = sdw::Vec2( * )( sdw::Vec2 const &, sdw::Vec2 const & );
+		using Func = sdw::RetVec2( * )( sdw::Vec2 const &, sdw::Vec2 const & );
 		return deriv::applyOp< Func >( sdw::operator+, "derivAdd2D2", lhs, rhs );
 	}
 
 	DerivVec2 operator+( DerivVec2 const lhs, sdw::Vec2 const rhs )
 	{
-		using Func = sdw::Vec2( * )( sdw::Vec2 const &, sdw::Vec2 const & );
+		using Func = sdw::RetVec2( * )( sdw::Vec2 const &, sdw::Vec2 const & );
 		return deriv::applyOp< Func >( sdw::operator+, "derivAdd2N2", lhs, rhs );
 	}
 
@@ -783,13 +783,13 @@ namespace castor3d::shader
 
 	DerivVec2 operator-( DerivVec2 const lhs, DerivVec2 const rhs )
 	{
-		using Func = sdw::Vec2( * )( sdw::Vec2 const &, sdw::Vec2 const & );
+		using Func = sdw::RetVec2( * )( sdw::Vec2 const &, sdw::Vec2 const & );
 		return deriv::applyOp< Func >( sdw::operator-, "derivSubtract2D2", lhs, rhs );
 	}
 
 	DerivVec2 operator-( DerivVec2 const lhs, sdw::Vec2 const rhs )
 	{
-		using Func = sdw::Vec2( * )( sdw::Vec2 const &, sdw::Vec2 const & );
+		using Func = sdw::RetVec2( * )( sdw::Vec2 const &, sdw::Vec2 const & );
 		return deriv::applyOp< Func >( sdw::operator-, "derivSubtract2N2", lhs, rhs );
 	}
 
@@ -805,13 +805,13 @@ namespace castor3d::shader
 
 	DerivVec2 operator*( DerivVec2 const lhs, DerivVec2 const rhs )
 	{
-		using Func = sdw::Vec2( * )( sdw::Vec2 const &, sdw::Vec2 const & );
+		using Func = sdw::RetVec2( * )( sdw::Vec2 const &, sdw::Vec2 const & );
 		return deriv::applyOp< Func >( sdw::operator*, "derivMultiply2D2", lhs, rhs );
 	}
 
 	DerivVec2 operator*( DerivVec2 const lhs, sdw::Vec2 const rhs )
 	{
-		using Func = sdw::Vec2( * )( sdw::Vec2 const &, sdw::Vec2 const & );
+		using Func = sdw::RetVec2( * )( sdw::Vec2 const &, sdw::Vec2 const & );
 		return deriv::applyOp< Func >( sdw::operator*, "derivMultiply2N2", lhs, rhs );
 	}
 
@@ -827,13 +827,13 @@ namespace castor3d::shader
 
 	DerivVec3 operator+( DerivVec3 const lhs, DerivVec3 const rhs )
 	{
-		using Func = sdw::Vec3( * )( sdw::Vec3 const &, sdw::Vec3 const & );
+		using Func = sdw::RetVec3( * )( sdw::Vec3 const &, sdw::Vec3 const & );
 		return deriv::applyOp< Func >( sdw::operator+, "derivAdd3D3", lhs, rhs );
 	}
 
 	DerivVec3 operator+( DerivVec3 const lhs, sdw::Vec3 const rhs )
 	{
-		using Func = sdw::Vec3( * )( sdw::Vec3 const &, sdw::Vec3 const & );
+		using Func = sdw::RetVec3( * )( sdw::Vec3 const &, sdw::Vec3 const & );
 		return deriv::applyOp< Func >( sdw::operator+, "derivAdd3N3", lhs, rhs );
 	}
 
@@ -849,13 +849,13 @@ namespace castor3d::shader
 
 	DerivVec3 operator-( DerivVec3 const lhs, DerivVec3 const rhs )
 	{
-		using Func = sdw::Vec3( * )( sdw::Vec3 const &, sdw::Vec3 const & );
+		using Func = sdw::RetVec3( * )( sdw::Vec3 const &, sdw::Vec3 const & );
 		return deriv::applyOp< Func >( sdw::operator-, "derivSubtract3D3", lhs, rhs );
 	}
 
 	DerivVec3 operator-( DerivVec3 const lhs, sdw::Vec3 const rhs )
 	{
-		using Func = sdw::Vec3( * )( sdw::Vec3 const &, sdw::Vec3 const & );
+		using Func = sdw::RetVec3( * )( sdw::Vec3 const &, sdw::Vec3 const & );
 		return deriv::applyOp< Func >( sdw::operator-, "derivSubtract3N3", lhs, rhs );
 	}
 
@@ -871,13 +871,13 @@ namespace castor3d::shader
 
 	DerivVec3 operator*( DerivVec3 const lhs, DerivVec3 const rhs )
 	{
-		using Func = sdw::Vec3( * )( sdw::Vec3 const &, sdw::Vec3 const & );
+		using Func = sdw::RetVec3( * )( sdw::Vec3 const &, sdw::Vec3 const & );
 		return deriv::applyOp< Func >( sdw::operator*, "derivMultiply3D3", lhs, rhs );
 	}
 
 	DerivVec3 operator*( DerivVec3 const lhs, sdw::Vec3 const rhs )
 	{
-		using Func = sdw::Vec3( * )( sdw::Vec3 const &, sdw::Vec3 const & );
+		using Func = sdw::RetVec3( * )( sdw::Vec3 const &, sdw::Vec3 const & );
 		return deriv::applyOp< Func >( sdw::operator*, "derivMultiply3N3", lhs, rhs );
 	}
 
@@ -893,13 +893,13 @@ namespace castor3d::shader
 
 	DerivVec4 operator+( DerivVec4 const lhs, DerivVec4 const rhs )
 	{
-		using Func = sdw::Vec4( * )( sdw::Vec4 const &, sdw::Vec4 const & );
+		using Func = sdw::RetVec4( * )( sdw::Vec4 const &, sdw::Vec4 const & );
 		return deriv::applyOp< Func >( sdw::operator+, "derivAdd4D4", lhs, rhs );
 	}
 
 	DerivVec4 operator+( DerivVec4 const lhs, sdw::Vec4 const rhs )
 	{
-		using Func = sdw::Vec4( * )( sdw::Vec4 const &, sdw::Vec4 const & );
+		using Func = sdw::RetVec4( * )( sdw::Vec4 const &, sdw::Vec4 const & );
 		return deriv::applyOp< Func >( sdw::operator+, "derivAdd4N4", lhs, rhs );
 	}
 
@@ -915,13 +915,13 @@ namespace castor3d::shader
 
 	DerivVec4 operator-( DerivVec4 const lhs, DerivVec4 const rhs )
 	{
-		using Func = sdw::Vec4( * )( sdw::Vec4 const &, sdw::Vec4 const & );
+		using Func = sdw::RetVec4( * )( sdw::Vec4 const &, sdw::Vec4 const & );
 		return deriv::applyOp< Func >( sdw::operator-, "derivSubtract4D4", lhs, rhs );
 	}
 
 	DerivVec4 operator-( DerivVec4 const lhs, sdw::Vec4 const rhs )
 	{
-		using Func = sdw::Vec4( * )( sdw::Vec4 const &, sdw::Vec4 const & );
+		using Func = sdw::RetVec4( * )( sdw::Vec4 const &, sdw::Vec4 const & );
 		return deriv::applyOp< Func >( sdw::operator-, "derivSubtract4N4", lhs, rhs );
 	}
 
@@ -937,13 +937,13 @@ namespace castor3d::shader
 
 	DerivVec4 operator*( DerivVec4 const lhs, DerivVec4 const rhs )
 	{
-		using Func = sdw::Vec4( * )( sdw::Vec4 const &, sdw::Vec4 const & );
+		using Func = sdw::RetVec4( * )( sdw::Vec4 const &, sdw::Vec4 const & );
 		return deriv::applyOp< Func >( sdw::operator*, "derivMultiply4D4", lhs, rhs );
 	}
 
 	DerivVec4 operator*( DerivVec4 const lhs, sdw::Vec4 const rhs )
 	{
-		using Func = sdw::Vec4( * )( sdw::Vec4 const &, sdw::Vec4 const & );
+		using Func = sdw::RetVec4( * )( sdw::Vec4 const &, sdw::Vec4 const & );
 		return deriv::applyOp< Func >( sdw::operator*, "derivMultiply4N4", lhs, rhs );
 	}
 

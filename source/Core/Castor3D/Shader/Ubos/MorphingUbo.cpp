@@ -246,7 +246,7 @@ namespace castor3d
 			auto morphIndex = writer.declLocale( "morphIndex"
 				, 0_u );
 
-			FOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
+			sdwFOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
 			{
 				morphWeight = weight( mphIndex );
 				morphIndex = index( mphIndex );
@@ -260,7 +260,7 @@ namespace castor3d
 					, col
 					, morphWeight );
 			}
-			ROF;
+			sdwROF;
 		}
 
 		void MorphingWeightsData::morph( sdw::Array< shader::MorphTargetsData > const & targets
@@ -286,7 +286,7 @@ namespace castor3d
 			auto morphIndex = writer.declLocale( "morphIndex"
 				, 0_u );
 
-			FOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
+			sdwFOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
 			{
 				morphWeight = weight( mphIndex );
 				morphIndex = index( mphIndex );
@@ -301,7 +301,7 @@ namespace castor3d
 					, col
 					, morphWeight );
 			}
-			ROF;
+			sdwROF;
 		}
 
 		void MorphingWeightsData::morph( sdw::Array< shader::MorphTargetsData > const & targets
@@ -328,7 +328,7 @@ namespace castor3d
 			auto morphIndex = writer.declLocale( "morphIndex"
 				, 0_u );
 
-			FOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
+			sdwFOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
 			{
 				morphWeight = weight( mphIndex );
 				morphIndex = index( mphIndex );
@@ -344,7 +344,7 @@ namespace castor3d
 					, col
 					, morphWeight );
 			}
-			ROF;
+			sdwROF;
 		}
 
 		void MorphingWeightsData::morph( sdw::Array< shader::MorphTargetsData > const & targets
@@ -372,7 +372,7 @@ namespace castor3d
 			auto morphIndex = writer.declLocale( "morphIndex"
 				, 0_u );
 
-			FOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
+			sdwFOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
 			{
 				morphWeight = weight( mphIndex );
 				morphIndex = index( mphIndex );
@@ -389,7 +389,7 @@ namespace castor3d
 					, col
 					, morphWeight );
 			}
-			ROF;
+			sdwROF;
 		}
 
 		void MorphingWeightsData::morph( sdw::ArrayStorageBufferT< shader::MorphTargetsData > const & targets
@@ -416,7 +416,7 @@ namespace castor3d
 			auto morphIndex = writer.declLocale( "morphIndex"
 				, 0_u );
 
-			FOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
+			sdwFOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
 			{
 				morphWeight = weight( mphIndex );
 				morphIndex = index( mphIndex );
@@ -432,7 +432,7 @@ namespace castor3d
 					, col
 					, morphWeight );
 			}
-			ROF;
+			sdwROF;
 		}
 
 		void MorphingWeightsData::morph( sdw::ArrayStorageBufferT< shader::MorphTargetsData > const & targets
@@ -460,7 +460,7 @@ namespace castor3d
 			auto morphIndex = writer.declLocale( "morphIndex"
 				, 0_u );
 
-			FOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
+			sdwFOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
 			{
 				morphWeight = weight( mphIndex );
 				morphIndex = index( mphIndex );
@@ -477,7 +477,7 @@ namespace castor3d
 					, col
 					, morphWeight );
 			}
-			ROF;
+			sdwROF;
 		}
 
 		void MorphingWeightsData::morphNoAnim( sdw::ArrayStorageBufferT< shader::MorphTargetsData > const & targets

@@ -226,13 +226,13 @@ namespace castor3d
 
 		auto & writer = findWriterMandat( surface, camera.position(), components );
 
-		IF( writer, components.iridescenceThickness == 0.0_f )
+		sdwIF( writer, components.iridescenceThickness == 0.0_f )
 		{
 			components.iridescenceFactor = 0.0_f;
 		}
-		FI
+		sdwFI;
 
-		IF( writer, components.iridescenceFactor != 0.0_f )
+		sdwIF( writer, components.iridescenceFactor != 0.0_f )
 		{
 			auto incident = writer.declLocale( "c3d_iridescenceIncident"
 				, normalize( surface.worldPosition.value().xyz() - camera.position() ) );
@@ -249,7 +249,7 @@ namespace castor3d
 				, components.iridescenceThickness
 				, components.baseColour );
 		}
-		FI
+		sdwFI;
 	}
 
 	//*********************************************************************************************

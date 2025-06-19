@@ -114,19 +114,19 @@ namespace castor3d
 				{
 					auto const & groupIndex = in.localInvocationIndex;
 
-					IF( writer, groupIndex == 0_u )
+					sdwIF( writer, groupIndex == 0_u )
 					{
 						gsAABB = c3d_reducedLightsAABB[0_u];
 						gsAABBRange = c3d_lightsAABBRange.xyz();
 					}
-					FI
+					sdwFI;
 
 					shader::groupMemoryBarrierWithGroupSync( writer );
 					auto coordScale = vec3( sdw::Float{ coordinateScale } );
 
 					auto threadIndex = in.globalInvocationID.x();
 
-					IF( writer, threadIndex < c3d_clustersData.pointLightCount() )
+					sdwIF( writer, threadIndex < c3d_clustersData.pointLightCount() )
 					{
 						auto aabb = writer.declLocale( "threadIndex"
 							, c3d_allLightsAABB[threadIndex] );
@@ -139,9 +139,9 @@ namespace castor3d
 						c3d_pointLightMortonCodes[threadIndex] = getMortonCode( quantized );
 						c3d_pointLightIndices[threadIndex] = threadIndex;
 					}
-					FI
+					sdwFI;
 
-					IF( writer, threadIndex < c3d_clustersData.spotLightCount() )
+					sdwIF( writer, threadIndex < c3d_clustersData.spotLightCount() )
 					{
 						auto aabb = writer.declLocale( "threadIndex"
 							, c3d_allLightsAABB[c3d_clustersData.pointLightCount() + threadIndex] );
@@ -154,7 +154,7 @@ namespace castor3d
 						c3d_spotLightMortonCodes[threadIndex] = getMortonCode( quantized );
 						c3d_spotLightIndices[threadIndex] = threadIndex;
 					}
-					FI
+					sdwFI;
 				} );
 			return writer.getBuilder().releaseShader();
 		}

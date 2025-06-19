@@ -82,11 +82,11 @@ namespace dof
 
 					out.near() = step( signedDist, 0.0_f ) * CoC;
 
-					IF( writer, c3d_dofData.enableFarBlur() )
+					sdwIF( writer, c3d_dofData.enableFarBlur() )
 					{
 						out.far() = step( 0.0_f, signedDist ) * CoC;
 					}
-					FI
+					sdwFI;
 				} );
 
 			return writer.getBuilder().releaseShader();

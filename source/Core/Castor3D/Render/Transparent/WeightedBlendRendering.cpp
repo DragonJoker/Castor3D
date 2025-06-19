@@ -73,29 +73,29 @@ namespace castor3d
 					auto revealage = writer.declLocale( "revealage"
 						, c3d_mapRevealage.fetch( coord, 0_i ).r() );
 
-					IF( writer, revealage == 1.0_f )
+					sdwIF( writer, revealage == 1.0_f )
 					{
 						// Save the blending and color texture fetch cost
 						writer.demote();
 					}
-					FI
+					sdwFI;
 
 					auto accum = writer.declLocale( "accum"
 						, c3d_mapAccumulation.fetch( coord, 0_i ) );
 
 					// Suppress overflow
-					IF( writer, sdw::isinf( maxComponent( sdw::abs( accum.rgb() ) ) ) )
+					sdwIF( writer, sdw::isinf( maxComponent( sdw::abs( accum.rgb() ) ) ) )
 					{
 						accum.rgb() = vec3( accum.a() );
 					}
-					FI
+					sdwFI;
 
 					auto averageColor = writer.declLocale( "averageColor"
 						, accum.rgb() / max( accum.a(), 0.00001_f ) );
 
 					out.colour() = vec4( averageColor.rgb(), 1.0_f - revealage );
 
-					IF( writer, c3d_sceneData.fogType() != sdw::UInt( uint32_t( FogType::eDisabled ) ) )
+					sdwIF( writer, c3d_sceneData.fogType() != sdw::UInt( uint32_t( FogType::eDisabled ) ) )
 					{
 						auto texCoord = writer.declLocale( "texCoord"
 							, in.fragCoord.xy() );
@@ -109,7 +109,7 @@ namespace castor3d
 							, c3d_cameraData.position()
 							, c3d_sceneData );
 					}
-					FI
+					sdwFI;
 				} );
 			return writer.getBuilder().releaseShader();
 		}

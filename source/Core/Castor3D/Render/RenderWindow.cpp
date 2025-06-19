@@ -1167,17 +1167,17 @@ namespace castor3d
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 					out.colour() = vec4( vec3( sampled.xyz() ), 1.0_f );
 #else
-					IF( writer, c3d_data.x() == 1.0_f )
+					sdwIF( writer, c3d_data.x() == 1.0_f )
 					{
 						out.colour() = vec4( fma( sampled.xxx(), c3d_multiply.xyz(), c3d_add.xyz() )
 							, 1.0_f );
 					}
-					ELSE
+					sdwELSE
 					{
 						out.colour() = vec4( fma( sampled.xyz(), c3d_multiply.xyz(), c3d_add.xyz() )
 							, 1.0_f );
 					}
-					FI
+					sdwFI;
 #endif
 				} );
 			programModule.shader = writer.getBuilder().releaseShader();

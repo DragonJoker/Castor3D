@@ -208,14 +208,14 @@ namespace castor3d
 					// return float(vv < radius2) * max((vn - bias) / (epsilon + vv), 0.0) * radius2 * 0.6;
 
 					// B: Smoother transition to zero (lowers contrast, smoothing out corners). [Recommended]
-					IF( writer, c3d_ssaoConfigData.highQuality )
+					sdwIF( writer, c3d_ssaoConfigData.highQuality )
 					{
 						// Epsilon inside the sqrt for rsqrt operation
 						auto f = writer.declLocale( "f"
 							, max( 1.0_f - vv * c3d_ssaoConfigData.invRadius2, 0.0_f ) );
 						writer.returnStmt( f * max( ( vn - c3d_ssaoConfigData.bias ) * inverseSqrt( epsilon + vv ), 0.0_f ) );
 					}
-					ELSE
+					sdwELSE
 					{
 						// Avoid the square root from above.
 						//  Assumes the desired result is intensity/radius^6 in main()
@@ -223,7 +223,7 @@ namespace castor3d
 							, max( c3d_ssaoConfigData.radius2 - vv, 0.0_f ) );
 						writer.returnStmt( f * f * f * max( ( vn - c3d_ssaoConfigData.bias ) / ( epsilon + vv ), 0.0_f ) );
 					}
-					FI
+					sdwFI;
 
 					// C: Medium contrast (which looks better at high radii), no division.  Note that the 
 					// contribution still falls off with radius^2, but we've adjusted the rate in a way that is
@@ -328,13 +328,13 @@ namespace castor3d
 					auto stepIdx = writer.declLocale( "stepIdx"
 						, 0_u );
 
-					WHILE( writer, stepIdx < c3d_ssaoConfigData.bendStepCount && currentOcclusion == 0.0_f )
+					sdwWHILE( writer, stepIdx < c3d_ssaoConfigData.bendStepCount && currentOcclusion == 0.0_f )
 					{
 						currentOcclusion = isOccluded( csCenter, current );
 						stepIdx += 1u;
 						current += step;
 					}
-					ELIHW
+					sdwELIHW;
 
 					writer.returnStmt( current * ( 1.0_f - ( currentOcclusion / writer.cast< sdw::Float >( stepIdx ) ) ) );
 				}
@@ -383,22 +383,22 @@ namespace castor3d
 						// at adjacent pixels, its magnitude will be proportional to the square of distance from the camera
 						//
 						// if the threshold # is too big you will see black dots where we used a bad normal at edges, too small -> white
-						IF( writer, dot( normal, normal ) > ( square( csCenter.z() * csCenter.z() * 0.00006_f ) ) )
+						sdwIF( writer, dot( normal, normal ) > ( square( csCenter.z() * csCenter.z() * 0.00006_f ) ) )
 						{
 							// The normals from depth should be very small values before normalization,
 							// except at depth discontinuities, where they will be large and lead
 							// to 1-pixel false occlusions because they are not reliable
 							visibility = 1.0_f;
 							outBentNormal.rgb() = normalize( c3d_cameraData.writeNormal( normal ) );
-							outBentNormal.a() = 0.0f;
+							outBentNormal.a() = 0.0_f;
 							writer.returnStmt();
 						}
-						ELSE
+						sdwELSE
 						{
 							// Precision is pretty bad on 16-bit depth
 							normal = normalize( normal );
 						}
-						FI
+						sdwFI;
 					}
 
 					// Choose the screen-space sample radius
@@ -406,15 +406,15 @@ namespace castor3d
 					auto ssDiskRadius = writer.declLocale( "ssDiskRadius"
 						, c3d_ssaoConfigData.projScale * c3d_ssaoConfigData.radius / csCenter.z() );
 
-					IF( writer, ssDiskRadius <= c3d_ssaoConfigData.minRadius )
+					sdwIF( writer, ssDiskRadius <= c3d_ssaoConfigData.minRadius )
 					{
 						// There is no way to compute AO at this radius
 						visibility = 1.0_f;
 						outBentNormal.rgb() = c3d_cameraData.writeNormal( normal );
-						outBentNormal.a() = 0.0f;
+						outBentNormal.a() = 0.0_f;
 						writer.returnStmt();
 					}
-					FI
+					sdwFI;
 
 					// Hash function used in the HPG12 AlchemyAO paper
 					auto randomPatternRotationAngle = writer.declLocale( "randomPatternRotationAngle"
@@ -425,7 +425,7 @@ namespace castor3d
 					auto bentNormal = writer.declLocale( "bentNormal"
 						, vec3( 0.0_f ) );
 
-					FOR( writer, sdw::Int, i, 0, i < c3d_ssaoConfigData.numSamples, ++i )
+					sdwFOR( writer, sdw::Int, i, 0, i < c3d_ssaoConfigData.numSamples, ++i )
 					{
 						auto occluder = writer.declLocale( "occluder"
 							, vec3( 0.0_f ) );
@@ -446,20 +446,20 @@ namespace castor3d
 						sum += occlusion;
 						bentNormal += sampleRay( csCenter, csRay );
 					}
-					ROF
+					sdwROF;
 
 					bentNormal = normalize( bentNormal )/* * 0.5_f + 0.5_f*/;
 					outBentNormal.xyz() = c3d_cameraData.writeNormal( bentNormal );
 
 					auto A = writer.declLocale< sdw::Float >( "A" );
 
-					IF( writer, c3d_ssaoConfigData.highQuality )
+					sdwIF( writer, c3d_ssaoConfigData.highQuality )
 					{
 						A = pow( max( 0.0_f
 								, 1.0_f - sqrt( sum * ( 3.0_f / writer.cast< sdw::Float >( c3d_ssaoConfigData.numSamples ) ) ) )
 							, c3d_ssaoConfigData.intensity );
 					}
-					ELSE
+					sdwELSE
 					{
 						A = max( 0.0_f
 							, 1.0_f - sum * c3d_ssaoConfigData.intensityDivR6 * ( 5.0_f / writer.cast< sdw::Float >( c3d_ssaoConfigData.numSamples ) ) );
@@ -467,7 +467,7 @@ namespace castor3d
 						// (x^0.2 + 1.2 * x^4)/2.2
 						A = ( pow( A, 0.2_f ) + 1.2_f * A * A * A * A ) / 2.2_f;
 					}
-					FI
+					sdwFI;
 
 					// Visualize random spin distribution
 					//A = mod(randomPatternRotationAngle / (2 * 3.141592653589), 1.0);

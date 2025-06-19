@@ -55,13 +55,13 @@ namespace Bloom
 						, vec2( 0.0_f, 0.0_f ) );
 					out.colour() = c3d_mapSource.sample( in.uv() ) * c3d_coefficients[0_u][0_u];
 
-					FOR( writer, sdw::UInt, i, 1u, i < c3d_coefficientsCount, ++i )
+					sdwFOR( writer, sdw::UInt, i, 1u, i < c3d_coefficientsCount, ++i )
 					{
 						offset += c3d_pixelSize;
 						out.colour() += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( in.uv() - offset );
 						out.colour() += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( in.uv() + offset );
 					}
-					ROF;
+					sdwROF;
 				} );
 			return writer.getBuilder().releaseShader();
 		}

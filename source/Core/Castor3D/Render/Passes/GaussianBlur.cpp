@@ -84,13 +84,13 @@ namespace castor3d
 					auto offset = writer.declLocale( "offset", vec2( 0.0_f, 0.0_f ) );
 					out.colour() = c3d_mapSource.sample( in.texcoord() ) * c3d_coefficients[0_u][0_u];
 
-					FOR( writer, sdw::UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
+					sdwFOR( writer, sdw::UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
 					{
 						offset += base;
 						out.colour() += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( in.texcoord() - offset );
 						out.colour() += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( in.texcoord() + offset );
 					}
-					ROF
+					sdwROF;
 
 					if ( isDepth )
 					{

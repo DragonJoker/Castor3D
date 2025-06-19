@@ -62,7 +62,7 @@ namespace atmosphere_scattering
 						auto centerToEdge = m_writer.declLocale( "centerToEdge"
 							, cosTheta - sunCosTheta );
 
-						IF( m_writer, cosTheta < sunCosTheta )
+						sdwIF( m_writer, cosTheta < sunCosTheta )
 						{
 							auto gaussianBloom = m_writer.declLocale( "gaussianBloom"
 								, exp( centerToEdge * 50000.0_f ) * 0.5_f );
@@ -70,14 +70,14 @@ namespace atmosphere_scattering
 								, 1.0_f / ( 0.02_f - centerToEdge * 300.0_f ) * 0.01_f );
 							intensity = gaussianBloom + invBloom;
 						}
-						FI;
+						sdwFI;
 
 						// Use smoothstep to limit the effect, so it drops off to actual zero.
 						intensity = smoothStep( 0.002_f, 1.0_f, intensity );
 
-						IF( m_writer, intensity > 0.0_f )
+						sdwIF( m_writer, intensity > 0.0_f )
 						{
-							IF( m_writer, !m_atmosphere.raySphereIntersectNearest( ray
+							sdwIF( m_writer, !m_atmosphere.raySphereIntersectNearest( ray
 								, vec3( 0.0_f )
 								, m_atmosphere.getPlanetRadius() ).valid() )
 							{
@@ -93,9 +93,9 @@ namespace atmosphere_scattering
 
 								sunLuminance *= max( vec3( intensity ), factor );
 							}
-							FI;
+							sdwFI;
 						}
-						FI;
+						sdwFI;
 					}
 					else
 					{
@@ -110,9 +110,9 @@ namespace atmosphere_scattering
 						auto cosTheta = m_writer.declLocale( "cosTheta"
 							, dot( ray.direction, sunDir ) );
 
-						IF( m_writer, cosTheta > sunCosTheta )
+						sdwIF( m_writer, cosTheta > sunCosTheta )
 						{
-							IF( m_writer, !m_atmosphere.raySphereIntersectNearest( ray
+							sdwIF( m_writer, !m_atmosphere.raySphereIntersectNearest( ray
 								, vec3( 0.0_f )
 								, m_atmosphere.getPlanetRadius() ).valid() ) // no intersection
 							{
@@ -137,9 +137,9 @@ namespace atmosphere_scattering
 
 								sunLuminance *= factor;
 							}
-							FI;
+							sdwFI;
 						}
-						FI;
+						sdwFI;
 					}
 
 					m_writer.returnStmt( sunLuminance );
@@ -196,7 +196,7 @@ namespace atmosphere_scattering
 						, L
 						, luminance );
 
-					IF( m_writer, !doRenderFastAerial( fragPos
+					sdwIF( m_writer, !doRenderFastAerial( fragPos
 						, fragSize
 						, fragDepth
 						, ray.origin
@@ -206,7 +206,7 @@ namespace atmosphere_scattering
 					{
 						// Move to top atmosphere as the starting point for ray marching.
 						// This is critical to be after the above to not disrupt above atmosphere tests and voxel selection.
-						IF( m_writer, !m_atmosphere.moveToTopAtmosphere( ray ) )
+						sdwIF( m_writer, !m_atmosphere.moveToTopAtmosphere( ray ) )
 						{
 							// Ray is not intersecting the atmosphere
 							if ( m_settings.renderSunDisk )
@@ -216,7 +216,7 @@ namespace atmosphere_scattering
 
 							m_writer.returnStmt( ray );
 						}
-						FI;
+						sdwFI;
 
 						auto ss = m_writer.declLocale( "ss"
 							, m_atmosphere.integrateScatteredLuminance( fragPos
@@ -226,7 +226,7 @@ namespace atmosphere_scattering
 								, fragDepth ) );
 						doRegisterOutputs( ss, L, luminance, transmittance );
 					}
-					FI;
+					sdwFI;
 
 					m_writer.returnStmt( ray );
 				}
@@ -322,7 +322,7 @@ namespace atmosphere_scattering
 	{
 		if ( m_settings.fastSky )
 		{
-			IF( m_writer, viewHeight < m_atmosphere.getAtmosphereRadius() && fragDepth == 0.0_f )
+			sdwIF( m_writer, viewHeight < m_atmosphere.getAtmosphereRadius() && fragDepth == 0.0_f )
 			{
 				auto uv = m_writer.declLocale< sdw::Vec2 >( "uv" );
 				auto upVector = m_writer.declLocale( "upVector"
@@ -357,15 +357,15 @@ namespace atmosphere_scattering
 
 				m_writer.returnStmt( ray );
 			}
-			FI;
+			sdwFI;
 		}
 		else if ( m_settings.renderSunDisk )
 		{
-			IF( m_writer, fragDepth == 0.0_f )
+			sdwIF( m_writer, fragDepth == 0.0_f )
 			{
 				L += getSunLuminance( ray );
 			}
-			FI;
+			sdwFI;
 		}
 	}
 
@@ -391,7 +391,7 @@ namespace atmosphere_scattering
 		auto isAerial = m_writer.declLocale( "isAerial"
 			, viewHeight < m_atmosphere.getAtmosphereRadius() );
 
-		IF( m_writer, isAerial )
+		sdwIF( m_writer, isAerial )
 		{
 			auto apSliceCount = 32.0_f;
 			auto depthBufferWorldPos = m_writer.declLocale( "depthBufferWorldPos"
@@ -405,13 +405,13 @@ namespace atmosphere_scattering
 			auto weight = m_writer.declLocale( "weight"
 				, 1.0_f );
 
-			IF( m_writer, slice < 0.5_f )
+			sdwIF( m_writer, slice < 0.5_f )
 			{
 				// We multiply by weight to fade to 0 at depth 0. That works for luminance and opacity.
 				weight = clamp( slice * 2.0_f, 0.0_f, 1.0_f );
 				slice = 0.5_f;
 			}
-			FI;
+			sdwFI;
 
 			auto w = m_writer.declLocale( "w"
 				, sqrt( slice / apSliceCount ) );	// squared distribution
@@ -424,7 +424,7 @@ namespace atmosphere_scattering
 
 			luminance = vec4( L, opacity );
 		}
-		FI;
+		sdwFI;
 
 		return isAerial;
 	}

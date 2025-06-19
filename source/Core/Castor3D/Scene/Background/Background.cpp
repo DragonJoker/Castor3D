@@ -247,7 +247,7 @@ namespace castor3d
 							{
 								if ( programIndex != SceneBackground::HiddenPassIndex )
 								{
-									IF( writer, sdw::UInt{ programIndex } != sdw::UInt{ SceneBackground::HiddenPassIndex }
+									sdwIF( writer, sdw::UInt{ programIndex } != sdw::UInt{ SceneBackground::HiddenPassIndex }
 										&& c3d_sceneData.fogType() == sdw::UInt( uint32_t( FogType::eDisabled ) ) )
 									{
 										auto colour = writer.declLocale( "colour"
@@ -264,11 +264,11 @@ namespace castor3d
 											out.colour() = vec4( colour.xyz(), colour.w() );
 										}
 									}
-									ELSE
+									sdwELSE
 									{
 										out.colour() = vec4( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData ).xyz(), 1.0_f );
 									}
-									FI
+									sdwFI;
 								}
 								else
 								{

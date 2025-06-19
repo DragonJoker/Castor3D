@@ -18,7 +18,7 @@ namespace castor3d::shader
 				auto result = writer.declLocale( "result", colour );
 				auto density = writer.declLocale( "density", sceneData.fogDensity() );
 
-				IF( writer, sceneData.fogType() == sdw::UInt( uint32_t( FogType::eLinear ) ) )
+				sdwIF( writer, sceneData.fogType() == sdw::UInt( uint32_t( FogType::eLinear ) ) )
 				{
 					// Linear
 					auto dist = writer.declLocale( "dist", length( wsPosition - wsCamera ) );
@@ -28,7 +28,7 @@ namespace castor3d::shader
 					fogFactor = clamp( fogFactor, 0.0_f, 1.0_f );
 					result = vec4( mix( bgColour, colour, vec4( fogFactor ) ).rgb(), colour.a() );
 				}
-				ELSEIF( sceneData.fogType() == sdw::UInt( uint32_t( FogType::eExponential ) ) )
+				sdwELSEIF( sceneData.fogType() == sdw::UInt( uint32_t( FogType::eExponential ) ) )
 				{
 					// Exponential
 					auto dist = writer.declLocale( "dist", length( wsPosition - wsCamera ) );
@@ -38,7 +38,7 @@ namespace castor3d::shader
 					fogFactor = clamp( fogFactor, 0.0_f, 1.0_f );
 					result = vec4( mix( bgColour, colour, vec4( fogFactor ) ).rgb(), colour.a() );
 				}
-				ELSEIF( sceneData.fogType() == sdw::UInt( uint32_t( FogType::eSquaredExponential ) ) )
+				sdwELSEIF( sceneData.fogType() == sdw::UInt( uint32_t( FogType::eSquaredExponential ) ) )
 				{
 					//Squared exponential
 					auto dist = writer.declLocale( "dist", length( wsPosition - wsCamera ) );
@@ -48,7 +48,7 @@ namespace castor3d::shader
 					fogFactor = clamp( fogFactor, 0.0_f, 1.0_f );
 					result = vec4( mix( bgColour, colour, vec4( fogFactor ) ).rgb(), colour.a() );
 				}
-				ELSEIF( sceneData.fogType() == sdw::UInt( 4u ) )
+				sdwELSEIF( sceneData.fogType() == sdw::UInt( 4u ) )
 				{
 					// Ground
 					auto dist = writer.declLocale( "dist", length( wsPosition - wsCamera ) );
@@ -66,7 +66,7 @@ namespace castor3d::shader
 						, vec4( 1.0_f - inscattering )
 						, colour * extinction );
 				}
-				FI
+				sdwFI;
 
 				writer.returnStmt( result );
 			}

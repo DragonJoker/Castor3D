@@ -163,7 +163,7 @@ namespace castor3d::shader
 						{
 							auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex" );
 
-							IF( m_writer
+							sdwIF( m_writer
 								, ( light.shadowMapIndex() >= 0_i )
 								&& ( shadows.base().shadowType() != sdw::UInt( uint32_t( ShadowType::eNone ) ) )
 								&& ( receivesShadows != 0_u )
@@ -176,7 +176,7 @@ namespace castor3d::shader
 										, shadows
 										, lightSurface );
 							}
-							FI
+							sdwFI;
 						}
 
 						doApplyShadows( shadows
@@ -247,7 +247,7 @@ namespace castor3d::shader
 						{
 							auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex" );
 
-							IF( m_writer
+							sdwIF( m_writer
 								, ( light.shadowMapIndex() >= 0_i )
 								&& ( shadows.base().shadowType() != sdw::UInt( uint32_t( ShadowType::eNone ) ) )
 								&& ( receivesShadows != 0_u )
@@ -260,7 +260,7 @@ namespace castor3d::shader
 										, shadows
 										, lightSurface );
 							}
-							FI
+							sdwFI;
 						}
 
 						doApplyShadows( shadows
@@ -308,7 +308,7 @@ namespace castor3d::shader
 					auto spotFactor = m_writer.declLocale( "spotFactor"
 						, dot( lightSurface.L().value(), light.direction() ) );
 
-					IF( m_writer, spotFactor > light.outerCutOffCos() )
+					sdwIF( m_writer, spotFactor > light.outerCutOffCos() )
 					{
 						auto output = m_writer.declLocale( "output"
 							, DirectLighting{ m_writer } );
@@ -329,7 +329,7 @@ namespace castor3d::shader
 							{
 								auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex" );
 
-								IF( m_writer
+								sdwIF( m_writer
 									, ( light.shadowMapIndex() >= 0_i )
 									&& ( shadows.base().shadowType() != sdw::UInt( uint32_t( ShadowType::eNone ) ) )
 									&& ( receivesShadows != 0_u )
@@ -342,7 +342,7 @@ namespace castor3d::shader
 											, shadows
 											, lightSurface );
 								}
-								FI
+								sdwFI;
 							}
 
 							doApplyShadows( shadows
@@ -356,7 +356,7 @@ namespace castor3d::shader
 
 						parentOutput += output;
 					}
-					FI
+					sdwFI;
 				}
 				, PSpotLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
@@ -404,7 +404,7 @@ namespace castor3d::shader
 						{
 							auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex" );
 
-							IF( m_writer
+							sdwIF( m_writer
 								, ( light.shadowMapIndex() >= 0_i )
 								&& ( shadows.base().shadowType() != sdw::UInt( uint32_t( ShadowType::eNone ) ) )
 								&& ( receivesShadows != 0_u )
@@ -417,7 +417,7 @@ namespace castor3d::shader
 										, shadows
 										, lightSurface );
 							}
-							FI
+							sdwFI;
 						}
 
 						doApplyShadowsDiffuse( shadows
@@ -472,7 +472,7 @@ namespace castor3d::shader
 						{
 							auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex" );
 
-							IF( m_writer
+							sdwIF( m_writer
 								, ( light.shadowMapIndex() >= 0_i )
 								&& ( shadows.base().shadowType() != sdw::UInt( uint32_t( ShadowType::eNone ) ) )
 								&& ( receivesShadows != 0_u )
@@ -485,7 +485,7 @@ namespace castor3d::shader
 										, shadows
 										, lightSurface );
 							}
-							FI
+							sdwFI;
 						}
 
 						doApplyShadowsDiffuse( shadows
@@ -531,7 +531,7 @@ namespace castor3d::shader
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
 
-					IF( m_writer, spotFactor > light.outerCutOffCos() )
+					sdwIF( m_writer, spotFactor > light.outerCutOffCos() )
 					{
 						auto radiance = m_writer.declLocale( "radiance"
 							, vec3( 0.0_f ) );
@@ -549,7 +549,7 @@ namespace castor3d::shader
 							{
 								auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex" );
 
-								IF( m_writer
+								sdwIF( m_writer
 									, ( light.shadowMapIndex() >= 0_i )
 									&& ( shadows.base().shadowType() != sdw::UInt( uint32_t( ShadowType::eNone ) ) )
 									&& ( receivesShadows != 0_u )
@@ -562,7 +562,7 @@ namespace castor3d::shader
 											, shadows
 											, lightSurface );
 								}
-								FI
+								sdwFI;
 							}
 
 							doApplyShadowsDiffuse( shadows
@@ -576,7 +576,7 @@ namespace castor3d::shader
 
 						diffuse = max( vec3( 0.0_f ), diffuse );
 					}
-					FI;
+					sdwFI;
 
 					m_writer.returnStmt( diffuse );
 				}
@@ -629,7 +629,7 @@ namespace castor3d::shader
 						{
 							auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex" );
 
-							IF( m_writer
+							sdwIF( m_writer
 								, ( light.shadowMapIndex() >= 0_i )
 								&& ( shadows.base().shadowType() != sdw::UInt( uint32_t( ShadowType::eNone ) ) )
 								&& ( receivesShadows != 0_u )
@@ -642,7 +642,7 @@ namespace castor3d::shader
 										, shadows
 										, lightSurface );
 							}
-							FI
+							sdwFI;
 						}
 
 						doApplyShadows( shadows
@@ -715,7 +715,7 @@ namespace castor3d::shader
 						{
 							auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex" );
 
-							IF( m_writer
+							sdwIF( m_writer
 								, ( light.shadowMapIndex() >= 0_i )
 								&& ( shadows.base().shadowType() != sdw::UInt( uint32_t( ShadowType::eNone ) ) )
 								&& ( receivesShadows != 0_u )
@@ -728,7 +728,7 @@ namespace castor3d::shader
 										, shadows
 										, lightSurface );
 							}
-							FI
+							sdwFI;
 						}
 
 						doApplyShadows( shadows
@@ -777,7 +777,7 @@ namespace castor3d::shader
 					auto spotFactor = m_writer.declLocale( "spotFactor"
 						, dot( lightSurface.L().value(), light.direction() ) );
 
-					IF( m_writer, spotFactor > light.outerCutOffCos() )
+					sdwIF( m_writer, spotFactor > light.outerCutOffCos() )
 					{
 						auto output = m_writer.declLocale< DirectLighting >( "output"
 							, DirectLighting{ m_writer } );
@@ -799,7 +799,7 @@ namespace castor3d::shader
 							{
 								auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex" );
 
-								IF( m_writer
+								sdwIF( m_writer
 									, ( light.shadowMapIndex() >= 0_i )
 									&& ( shadows.base().shadowType() != sdw::UInt( uint32_t( ShadowType::eNone ) ) )
 									&& ( receivesShadows != 0_u )
@@ -812,7 +812,7 @@ namespace castor3d::shader
 											, shadows
 											, lightSurface );
 								}
-								FI
+								sdwFI;
 							}
 
 							doApplyShadows( shadows
@@ -827,7 +827,7 @@ namespace castor3d::shader
 
 						parentOutput += output;
 					}
-					FI
+					sdwFI;
 				}
 				, PSpotLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
@@ -855,7 +855,7 @@ namespace castor3d::shader
 			&& m_directionalCascadeIndex
 			&& m_directionalCascadeCount )
 		{
-			IF( m_writer, shadows.volumetricSteps() != 0_u
+			sdwIF( m_writer, shadows.volumetricSteps() != 0_u
 				&& shadowMapIndex >= 0_i )
 			{
 				auto volumetric = m_writer.declLocale( "volumetric"
@@ -874,7 +874,7 @@ namespace castor3d::shader
 					output = vec3( volumetric * lightIntensity );
 				}
 			}
-			FI
+			sdwFI;
 		}
 	}
 
@@ -894,7 +894,7 @@ namespace castor3d::shader
 		auto baseShadows = m_writer.declLocale( "baseShadows"
 			, shadows.base() );
 
-		IF( m_writer
+		sdwIF( m_writer
 			, ( baseShadows.shadowType() != sdw::UInt( int( ShadowType::eNone ) )
 				&& shadowMapIndex >= 0_i ) )
 		{
@@ -908,7 +908,7 @@ namespace castor3d::shader
 			m_directionalTransform = castor::make_unique< sdw::Mat4 >( m_writer.declLocale( "directionalTransform"
 				, shadows.transforms()[*m_directionalCascadeIndex] ) );
 
-			IF( m_writer, receivesShadows != 0_u )
+			sdwIF( m_writer, receivesShadows != 0_u )
 			{
 				auto firstScale = m_writer.declLocale( "firstScale"
 					, shadows.splitScales()[0][0] );
@@ -927,7 +927,7 @@ namespace castor3d::shader
 							, *m_directionalCascadeIndex
 							, shadows.cascadeCount() ) );
 
-				IF( m_writer, cascadeFactors.z() > 0.0_f )
+				sdwIF( m_writer, cascadeFactors.z() > 0.0_f )
 				{
 					auto filterIndex = m_writer.declLocale( "filterIndex"
 						, *m_directionalCascadeIndex + 1u );
@@ -942,11 +942,11 @@ namespace castor3d::shader
 							, filterIndex
 							, shadows.cascadeCount() );
 				}
-				FI
+				sdwFI;
 
 				output.attenuate( shadowFactor, false, withDiffuse );
 			}
-			FI
+			sdwFI;
 
 #if C3D_DebugCascades
 			auto cascadeColours = m_writer.declLocaleArray( "cascadeColours"
@@ -960,11 +960,11 @@ namespace castor3d::shader
 			auto cascadeColour = m_writer.declLocale( "cascadeColour"
 				, ( cascadeColours[*m_directionalCascadeIndex] * cascadeFactors.y() ) );
 
-			IF( m_writer, cascadeFactors.z() > 0.0_f )
+			sdwIF( m_writer, cascadeFactors.z() > 0.0_f )
 			{
 				cascadeColour += cascadeColours[*m_directionalCascadeIndex + 1_u] * cascadeFactors.z();
 			}
-			FI
+			sdwFI;
 
 			output.diffuse().rgb() *= cascadeColour;
 			output.specular().rgb() *= cascadeColour;
@@ -972,7 +972,7 @@ namespace castor3d::shader
 
 #endif
 		}
-		FI
+		sdwFI;
 	}
 
 	void LightingModel::doApplyShadows( PointShadowData const & shadows
@@ -987,7 +987,7 @@ namespace castor3d::shader
 		auto baseShadows = m_writer.declLocale( "baseShadows"
 			, shadows.base() );
 
-		IF( m_writer
+		sdwIF( m_writer
 			, ( baseShadows.shadowType() != sdw::UInt( int( ShadowType::eNone ) )
 				&& shadowMapIndex >= 0_i
 				&& receivesShadows != 0_u ) )
@@ -999,7 +999,7 @@ namespace castor3d::shader
 					, 1.0_f - ( lightSurface.lengthL().value() / lightRange ) ) );
 			output.attenuate( shadowFactor, false, withDiffuse );
 		}
-		FI
+		sdwFI;
 	}
 
 	void LightingModel::doApplyShadows( SpotShadowData const & shadows
@@ -1014,7 +1014,7 @@ namespace castor3d::shader
 		auto baseShadows = m_writer.declLocale( "baseShadows"
 			, shadows.base() );
 
-		IF( m_writer
+		sdwIF( m_writer
 			, ( baseShadows.shadowType() != sdw::UInt( int( ShadowType::eNone ) )
 				&& shadowMapIndex >= 0_i
 				&& receivesShadows != 0_u ) )
@@ -1027,7 +1027,7 @@ namespace castor3d::shader
 					, lightSurface.lengthL().value() / lightRange ) );
 			output.attenuate( shadowFactor, false, withDiffuse );
 		}
-		FI
+		sdwFI;
 	}
 
 	void LightingModel::doApplyShadowsDiffuse( DirectionalShadowData const & shadows
@@ -1044,7 +1044,7 @@ namespace castor3d::shader
 		m_directionalCascadeCount = castor::make_unique< sdw::UInt >( m_writer.declLocale( "cascadeCount"
 			, 0_u ) );
 
-		IF( m_writer
+		sdwIF( m_writer
 			, ( baseShadows.shadowType() != sdw::UInt( int( ShadowType::eNone ) )
 				&& shadowMapIndex >= 0_i ) )
 		{
@@ -1053,7 +1053,7 @@ namespace castor3d::shader
 			m_directionalTransform = castor::make_unique< sdw::Mat4 >( m_writer.declLocale( "directionalTransform"
 				, shadows.transforms()[*m_directionalCascadeIndex] ) );
 
-			IF( m_writer, receivesShadows != 0_u )
+			sdwIF( m_writer, receivesShadows != 0_u )
 			{
 				auto shadowFactor = m_writer.declLocale( "shadowFactor"
 					, m_shadowModel.computeDirectional( baseShadows
@@ -1063,9 +1063,9 @@ namespace castor3d::shader
 						, shadows.cascadeCount() ) );
 				output *= shadowFactor;
 			}
-			FI
+			sdwFI;
 		}
-		FI
+		sdwFI;
 	}
 
 	void LightingModel::doApplyShadowsDiffuse( PointShadowData const & shadows
@@ -1079,7 +1079,7 @@ namespace castor3d::shader
 		auto baseShadows = m_writer.declLocale( "baseShadows"
 			, shadows.base() );
 
-		IF( m_writer
+		sdwIF( m_writer
 			, ( baseShadows.shadowType() != sdw::UInt( int( ShadowType::eNone ) )
 				&& shadowMapIndex >= 0_i
 				&& receivesShadows != 0_u ) )
@@ -1091,7 +1091,7 @@ namespace castor3d::shader
 					, 1.0_f - ( lightSurface.lengthL().value() / lightRange ) ) );
 			output *= shadowFactor;
 		}
-		FI
+		sdwFI;
 	}
 
 	void LightingModel::doApplyShadowsDiffuse( SpotShadowData const & shadows
@@ -1105,7 +1105,7 @@ namespace castor3d::shader
 		auto baseShadows = m_writer.declLocale( "baseShadows"
 			, shadows.base() );
 
-		IF( m_writer
+		sdwIF( m_writer
 			, ( baseShadows.shadowType() != sdw::UInt( int( ShadowType::eNone ) )
 				&& shadowMapIndex >= 0_i
 				&& receivesShadows != 0_u ) )
@@ -1118,7 +1118,7 @@ namespace castor3d::shader
 					, lightSurface.lengthL().value() / lightRange ) );
 			output *= shadowFactor;
 		}
-		FI
+		sdwFI;
 	}
 
 	void LightingModel::doInitLightSpecifics( LightSurface const & lightSurface

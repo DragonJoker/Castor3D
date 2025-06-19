@@ -85,17 +85,17 @@ namespace smaa
 					, sdw::Vec2 variable
 					, sdw::Vec2 const & value )
 				{
-					IF( writer, cond.x() )
+					sdwIF( writer, cond.x() )
 					{
 						variable.x() = value.x();
 					}
-					FI;
+					sdwFI;
 
-					IF( writer, cond.y() )
+					sdwIF( writer, cond.y() )
 					{
 						variable.y() = value.y();
 					}
-					FI;
+					sdwFI;
 				}
 				, sdw::InBVec2{ writer, "cond" }
 				, sdw::InOutVec2{ writer, "variable" }
@@ -126,7 +126,7 @@ namespace smaa
 					a.wz() = blendTex.sample( texcoord ).xz(); // Bottom / Left
 
 					// Is there any blending weight with a value greater than 0.0?
-					IF ( writer, dot( a, vec4( 1.0_f, 1.0_f, 1.0_f, 1.0_f ) ) < 1e-5_f )
+					sdwIF( writer, dot( a, vec4( 1.0_f, 1.0_f, 1.0_f, 1.0_f ) ) < 1e-5_f )
 					{
 						auto color = writer.declLocale( "color"
 							, colorTex.lod( texcoord, 0.0_f ) );
@@ -142,7 +142,7 @@ namespace smaa
 
 						writer.returnStmt( color );
 					}
-					ELSE
+					sdwELSE
 					{
 						auto h = writer.declLocale( "h"
 							, max( a.x(), a.z() ) > max( a.y(), a.w() ) ); // max(horizontal) > max(vertical)
@@ -181,14 +181,14 @@ namespace smaa
 
 						writer.returnStmt( color );
 					}
-					FI;
+					sdwFI;
 				}
 				, sdw::InVec2{ writer, "texcoord" }
 				, sdw::InVec4{ writer, "offset" }
 				, sdw::InCombinedImage2DRgba32{ writer, "colourTex" }
 				, sdw::InCombinedImage2DRgba32{ writer, "blendTex" } );
 
-			writer.implementEntryPointT< c3d::PosUv2FT, VertexT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+			writer.implementEntryPointT< c3d::PosUv2FT, VertexT >( [&]( sdw::VertexInT< c3d::PosUv2FT > const & in
 				, sdw::VertexOutT< VertexT > out )
 				{
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
@@ -197,8 +197,8 @@ namespace smaa
 					SMAANeighborhoodBlendingVS( out.texcoord(), out.offset() );
 				} );
 
-			writer.implementEntryPointT< VertexT, c3d::Colour4FT >( [&]( sdw::FragmentInT< VertexT > in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< VertexT, c3d::Colour4FT >( [&]( sdw::FragmentInT< VertexT > const & in
+				, sdw::FragmentOutT< c3d::Colour4FT > const & out )
 				{
 					out.colour() = SMAANeighborhoodBlendingPS( in.texcoord(), in.offset(), c3d_colourTex, c3d_blendTex );
 				} );

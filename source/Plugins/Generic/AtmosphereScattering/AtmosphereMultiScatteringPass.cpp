@@ -147,67 +147,67 @@ namespace atmosphere_scattering
 					sdw::barrier( writer );
 
 					// 64 to 32
-					IF( writer, in.globalInvocationID.z() < 32u )
+					sdwIF( writer, in.globalInvocationID.z() < 32u )
 					{
 						multiScatAs1SharedMem[in.globalInvocationID.z()] += multiScatAs1SharedMem[in.globalInvocationID.z() + 32u];
 						lSharedMem[in.globalInvocationID.z()] += lSharedMem[in.globalInvocationID.z() + 32u];
 					}
-					FI;
+					sdwFI;
 
 					sdw::barrier( writer );
 
 					// 32 to 16
-					IF( writer, in.globalInvocationID.z() < 16u )
+					sdwIF( writer, in.globalInvocationID.z() < 16u )
 					{
 						multiScatAs1SharedMem[in.globalInvocationID.z()] += multiScatAs1SharedMem[in.globalInvocationID.z() + 16u];
 						lSharedMem[in.globalInvocationID.z()] += lSharedMem[in.globalInvocationID.z() + 16u];
 					}
-					FI;
+					sdwFI;
 
 					sdw::barrier( writer );
 
 					// 16 to 8 (16 is thread group min hardware size with intel, no sync required from there)
-					IF( writer, in.globalInvocationID.z() < 8u )
+					sdwIF( writer, in.globalInvocationID.z() < 8u )
 					{
 						multiScatAs1SharedMem[in.globalInvocationID.z()] += multiScatAs1SharedMem[in.globalInvocationID.z() + 8u];
 						lSharedMem[in.globalInvocationID.z()] += lSharedMem[in.globalInvocationID.z() + 8u];
 					}
-					FI;
+					sdwFI;
 
 					sdw::barrier( writer );
 
-					IF( writer, in.globalInvocationID.z() < 4u )
+					sdwIF( writer, in.globalInvocationID.z() < 4u )
 					{
 						multiScatAs1SharedMem[in.globalInvocationID.z()] += multiScatAs1SharedMem[in.globalInvocationID.z() + 4u];
 						lSharedMem[in.globalInvocationID.z()] += lSharedMem[in.globalInvocationID.z() + 4u];
 					}
-					FI;
+					sdwFI;
 
 					sdw::barrier( writer );
 
-					IF( writer, in.globalInvocationID.z() < 2u )
+					sdwIF( writer, in.globalInvocationID.z() < 2u )
 					{
 						multiScatAs1SharedMem[in.globalInvocationID.z()] += multiScatAs1SharedMem[in.globalInvocationID.z() + 2u];
 						lSharedMem[in.globalInvocationID.z()] += lSharedMem[in.globalInvocationID.z() + 2u];
 					}
-					FI;
+					sdwFI;
 
 					sdw::barrier( writer );
 
-					IF( writer, in.globalInvocationID.z() < 1u )
+					sdwIF( writer, in.globalInvocationID.z() < 1u )
 					{
 						multiScatAs1SharedMem[in.globalInvocationID.z()] += multiScatAs1SharedMem[in.globalInvocationID.z() + 1u];
 						lSharedMem[in.globalInvocationID.z()] += lSharedMem[in.globalInvocationID.z() + 1u];
 					}
-					FI;
+					sdwFI;
 
 					sdw::barrier( writer );
 
-					IF( writer, in.globalInvocationID.z() > 0u )
+					sdwIF( writer, in.globalInvocationID.z() > 0u )
 					{
 						writer.returnStmt();
 					}
-					FI;
+					sdwFI;
 
 					auto multiScatAs1 = writer.declLocale( "multiScatAs1"
 						, multiScatAs1SharedMem[0] * isotropicPhase );	// Equation 7 f_ms

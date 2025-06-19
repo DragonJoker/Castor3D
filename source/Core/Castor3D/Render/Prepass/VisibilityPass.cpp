@@ -183,11 +183,11 @@ namespace castor3d
 
 				if ( components.transmissionFactor )
 				{
-					IF( writer, components.transmissionFactor >= 0.05_f )
+					sdwIF( writer, components.transmissionFactor >= 0.05_f )
 					{
 						writer.demote();
 					}
-					FI
+					sdwFI;
 				}
 
 				out.depthObj = vec4( in.fragCoord.z()

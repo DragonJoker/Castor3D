@@ -75,19 +75,19 @@ namespace castor3d
 						, lights.getPointLight( lightOffset ) );
 					auto result = writer.declLocale< shader::AABB >( "result" );
 
-					IF( writer, point.enabled() )
+					sdwIF( writer, point.enabled() )
 					{
 						auto vsPosition = writer.declLocale( "vsPosition"
 							, c3d_cameraDataClusters.worldToCurView( vec4( point.position(), 1.0_f ) ).xyz() );
 
 						result = shader::AABB{ vsPosition, computeRange( point ) };
 					}
-					ELSE
+					sdwELSE
 					{
 						result = shader::AABB{ vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f )
 							, vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f ) };
 					}
-					FI
+					sdwFI;
 
 					writer.returnStmt( result );
 				}
@@ -119,7 +119,7 @@ namespace castor3d
 						, lights.getSpotLight( lightOffset ) );
 					auto result = writer.declLocale< shader::AABB >( "result" );
 
-					IF( writer, spot.enabled() )
+					sdwIF( writer, spot.enabled() )
 					{
 						if ( config.useSpotTightBoundingBox )
 						{
@@ -138,7 +138,7 @@ namespace castor3d
 							auto smallBase = writer.declLocale( "smallBase"
 								, vsApex + smallRange * vsDirection );
 
-							IF( writer, dot( vsDirection, vec3( 0.0_f, 0.0_f, -1.0_f ) ) > 0.999_f )
+							sdwIF( writer, dot( vsDirection, vec3( 0.0_f, 0.0_f, -1.0_f ) ) > 0.999_f )
 							{
 								// Light is looking the same direction as the camera.
 								// Weird bug here, resulting in both small and large AABB having min.z == max.z
@@ -150,7 +150,7 @@ namespace castor3d
 								result = shader::AABB{ vec4( min( vsApex, smallBase - e ), 1.0_f )
 									, vec4( max( vsApex, smallBase + e ), 1.0_f ) };
 							}
-							ELSE
+							sdwELSE
 							{
 								auto smallAABB = writer.declLocale( "smallAABB"
 									, getConeAABB( vsApex, smallBase, baseRadius ) );
@@ -163,7 +163,7 @@ namespace castor3d
 								result = shader::AABB{ min( smallAABB.min(), largeAABB.min() )
 									, max( smallAABB.max(), largeAABB.max() ) };
 							}
-							FI
+							sdwFI;
 						}
 						else
 						{
@@ -172,12 +172,12 @@ namespace castor3d
 							result = shader::AABB{ vsPosition, computeRange( spot ) };
 						}
 					}
-					ELSE
+					sdwELSE
 					{
 						result = shader::AABB{ vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f )
 							, vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f ) };
 					}
-					FI
+					sdwFI;
 
 					writer.returnStmt( result );
 				}
@@ -187,22 +187,22 @@ namespace castor3d
 				, [&]( sdw::ComputeIn const & in )
 				{
 					// First compute point lights AABB.
-					IF( writer, in.globalInvocationID.x() < c3d_clustersData.pointLightCount() )
+					sdwIF( writer, in.globalInvocationID.x() < c3d_clustersData.pointLightCount() )
 					{
 						auto aabb = writer.declLocale( "aabb"
 							, loadPointLightAABB( in.globalInvocationID.x() ) );
 						c3d_allLightsAABB[in.globalInvocationID.x()] = aabb;
 					}
-					FI
+					sdwFI;
 
 					// Next, compute AABB for spot lights.
-					IF( writer, in.globalInvocationID.x() < c3d_clustersData.spotLightCount() )
+					sdwIF( writer, in.globalInvocationID.x() < c3d_clustersData.spotLightCount() )
 					{
 						auto aabb = writer.declLocale( "aabb"
 							, loadSpotLightAABB( in.globalInvocationID.x() ) );
 						c3d_allLightsAABB[c3d_clustersData.pointLightCount() + in.globalInvocationID.x()] = aabb;
 					}
-					FI
+					sdwFI;
 				} );
 			return writer.getBuilder().releaseShader();
 		}

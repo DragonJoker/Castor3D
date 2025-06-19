@@ -662,9 +662,9 @@ namespace waves
 				auto numWaves = writer.declLocale( "numWaves"
 					, c3d_wavesData.numWaves() );
 
-				IF( writer, numWaves > 0_u )
+				sdwIF( writer, numWaves > 0_u )
 				{
-					FOR( writer, sdw::UInt, waveId, 0_u, waveId < numWaves, waveId++ )
+					sdwFOR( writer, sdw::UInt, waveId, 0_u, waveId < numWaves, waveId++ )
 					{
 						auto waveResult = writer.declLocale( "waveResult"
 							, calculateWave( c3d_wavesData.waves()[waveId]
@@ -677,21 +677,21 @@ namespace waves
 						finalWaveResult.tangent += waveResult.tangent;
 						finalWaveResult.bitangent += waveResult.bitangent;
 					}
-					ROF;
+					sdwROF;
 
 					finalWaveResult.position -= position.xyz() * ( writer.cast< sdw::Float >( c3d_wavesData.numWaves() - 1_u ) );
 					finalWaveResult.normal = normalize( finalWaveResult.normal );
 					finalWaveResult.tangent = normalize( finalWaveResult.tangent );
 					finalWaveResult.bitangent = normalize( finalWaveResult.bitangent );
 				}
-				ELSE
+				sdwELSE
 				{
 					finalWaveResult.position = position.xyz();
 					finalWaveResult.normal = vec3( 0.0_f, 1.0_f, 0.0_f );
 					finalWaveResult.tangent = vec3( 1.0_f, 0.0_f, 0.0_f );
 					finalWaveResult.bitangent = vec3( 0.0_f, 0.0_f, 1.0_f );
 				}
-				FI;
+				sdwFI;
 
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );

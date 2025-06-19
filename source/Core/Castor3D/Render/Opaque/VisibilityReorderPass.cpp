@@ -55,13 +55,13 @@ namespace castor3d
 					auto nodeId = writer.declLocale( "nodeId"
 						, nodePipelineId >> maxPipelinesSize );
 
-					IF( writer, nodeId > 0_u )
+					sdwIF( writer, nodeId > 0_u )
 					{
 						auto pipelineId = writer.declLocale( "pipelineId"
 							, nodePipelineId & maxPipelinesMask );
 						sdw::atomicAdd( materialsCounts[pipelineId], 1_u );
 					}
-					FI
+					sdwFI;
 				} );
 
 			return writer.getBuilder().releaseShader();
@@ -146,22 +146,22 @@ namespace castor3d
 					auto pipelineId = writer.declLocale( "pipelineId"
 						, in.globalInvocationID.x() );
 
-					IF( writer, materialsCounts[pipelineId] > 0_u )
+					sdwIF( writer, materialsCounts[pipelineId] > 0_u )
 					{
 						auto result = writer.declLocale( "result", 0_u );
 
-						FOR( writer, sdw::UInt, i, 0_u, i < pipelineId, ++i )
+						sdwFOR( writer, sdw::UInt, i, 0_u, i < pipelineId, ++i )
 						{
 							result += materialsCounts[i];
 						}
-						ROF
+						sdwROF;
 
 						indirectCounts[pipelineId * 3u + 0u] = writer.cast< sdw::UInt >( ceil( writer.cast< sdw::Float >( materialsCounts[pipelineId] ) / 64.0_f ) );
 						indirectCounts[pipelineId * 3u + 1u] = 4u;
 						indirectCounts[pipelineId * 3u + 2u] = 1u;
 						materialStarts[pipelineId] = result;
 					}
-					FI
+					sdwFI;
 				} );
 
 			return writer.getBuilder().releaseShader();
@@ -263,7 +263,7 @@ namespace castor3d
 					auto nodeId = writer.declLocale( "nodeId"
 						, nodePipelineId >> maxPipelinesSize );
 
-					IF( writer, nodeId > 0_u )
+					sdwIF( writer, nodeId > 0_u )
 					{
 						auto pipelineId = writer.declLocale( "pipelineId"
 							, nodePipelineId & maxPipelinesMask );
@@ -271,7 +271,7 @@ namespace castor3d
 							, materialsStarts[pipelineId] + sdw::atomicAdd( materialsCounts[pipelineId], 1_u ) );
 						pixelsXY[pixelIndex] = pixel;
 					}
-					FI
+					sdwFI;
 				} );
 
 			return writer.getBuilder().releaseShader();

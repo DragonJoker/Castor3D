@@ -71,26 +71,26 @@ namespace draw_edges
 					auto result = writer.declLocale( "result"
 						, tex.fetch( texCoord, 0_i ) );
 
-					FOR( writer, sdw::Int, x, 1_i, x < width, ++x )
+					sdwFOR( writer, sdw::Int, x, 1_i, x < width, ++x )
 					{
 						result += tex.fetch( texCoord + ivec2( +x, +0_i ), 0_i );
 						result += tex.fetch( texCoord + ivec2( -x, +0_i ), 0_i );
 
-						FOR( writer, sdw::Int, y, 1_i, y < width, ++y )
+						sdwFOR( writer, sdw::Int, y, 1_i, y < width, ++y )
 						{
 							result += tex.fetch( texCoord + ivec2( +x, +y ), 0_i );
 							result += tex.fetch( texCoord + ivec2( -x, -y ), 0_i );
 						}
-						ROF;
+						sdwROF;
 					}
-					ROF;
+					sdwROF;
 
-					FOR( writer, sdw::Int, y, 1_i, y < width, ++y )
+					sdwFOR( writer, sdw::Int, y, 1_i, y < width, ++y )
 					{
 						result += tex.fetch( texCoord + ivec2( +0_i, +y ), 0_i );
 						result += tex.fetch( texCoord + ivec2( +0_i, -y ), 0_i );
 					}
-					ROF;
+					sdwROF;
 
 					writer.returnStmt( clamp( result, 0.0_f, 1.0_f ) );
 				}
@@ -121,7 +121,7 @@ namespace draw_edges
 					auto nodeId = writer.declLocale( "nodeId"
 						, writer.cast< sdw::UInt >( depthObj.z() ) );
 
-					IF( writer, nodeId != 0_u )
+					sdwIF( writer, nodeId != 0_u )
 					{
 						auto modelData = writer.declLocale( "modelData"
 							, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
@@ -129,7 +129,7 @@ namespace draw_edges
 						auto toonProfile = writer.declLocale( "toonProfile"
 							, toonProfiles.getData( modelData.getMaterialId() - 1u ) );
 
-						IF( writer, toonProfile.edgeColour().a() != 0.0_f )
+						sdwIF( writer, toonProfile.edgeColour().a() != 0.0_f )
 						{
 							auto edgeDN = writer.declLocale( "edgeDN"
 								, writer.ternary( c3d_drawEdgesData.normalDepthWidth > 0_i
@@ -149,9 +149,9 @@ namespace draw_edges
 
 							colour.rgb() = mix( colour.rgb(), edge, vec3( toonProfile.edgeColour().a() ) );
 						}
-						FI;
+						sdwFI;
 					}
-					FI;
+					sdwFI;
 
 					out.colour() = colour;
 				} );

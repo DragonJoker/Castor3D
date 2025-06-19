@@ -449,7 +449,7 @@ namespace castor3d
 
 				if ( pipeline.hasMorphingWeights )
 				{
-					IF( writer, c3d_objectIDs.morphingId() != ~0u )
+					sdwIF( writer, c3d_objectIDs.morphingId() != ~0u )
 					{
 						auto morphingWeights = writer.declLocale( "morphingWeights"
 							, c3d_morphingWeights[c3d_objectIDs.morphingId()] );
@@ -465,7 +465,7 @@ namespace castor3d
 							, texcoord3
 							, colour );
 					}
-					ELSE
+					sdwELSE
 					{
 						shader::MorphingWeightsData::morphNoAnim( c3d_morphTargets
 							, index
@@ -479,7 +479,7 @@ namespace castor3d
 							, texcoord3
 							, colour );
 					}
-					FI;
+					sdwFI;
 				}
 				else if ( pipeline.morphFlags != MorphFlag::eNone )
 				{
@@ -511,7 +511,7 @@ namespace castor3d
 
 				if ( combine.hasSkinFlag )
 				{
-					IF( writer, c3d_objectIDs.skinningId() != ~0u )
+					sdwIF( writer, c3d_objectIDs.skinningId() != ~0u )
 					{
 						curMtxModel = modelData.getCurModelMtx( skinningData
 							, c3d_objectIDs.skinningId()
@@ -522,13 +522,13 @@ namespace castor3d
 						position = curMtxModel * position;
 						curMtxNormal = modelData.getNormalMtx( combine.hasSkinFlag, curMtxModel );
 					}
-					ELSE
+					sdwELSE
 					{
 						curMtxModel = modelData.getModelMtx();
 						position = curMtxModel * position;
 						curMtxNormal = modelData.getNormalMtx( false, curMtxModel );
 					}
-					FI;
+					sdwFI;
 				}
 				else
 				{
@@ -583,7 +583,7 @@ namespace castor3d
 					auto pmax = writer.declLocale( "pmax"
 						, uvec3( 0_u, 0u, 0u ) );
 
-					FOR( writer, sdw::UInt, i, 0u, i < count, ++i )
+					sdwFOR( writer, sdw::UInt, i, 0u, i < count, ++i )
 					{
 						auto p = writer.declLocale( "p"
 							, points[i] );
@@ -594,7 +594,7 @@ namespace castor3d
 							pmax[axis] = writer.ternary( p[axis] > points[pmax[axis]][axis], i, pmax[axis] );
 						}
 					}
-					ROF
+					sdwROF;
 
 					// find the pair of points with largest distance
 					auto paxisd2 = writer.declLocale( "paxisd2"
@@ -613,12 +613,12 @@ namespace castor3d
 							+ ( p2[1] - p1[1] ) * ( p2[1] - p1[1] )
 							+ ( p2[2] - p1[2] ) * ( p2[2] - p1[2] );
 
-						IF( writer, d2 > paxisd2 )
+						sdwIF( writer, d2 > paxisd2 )
 						{
 							paxisd2 = d2;
 							paxis = axis;
 						}
-						FI
+						sdwFI;
 					}
 
 					// use the longest segment as the initial sphere diameter
@@ -631,14 +631,14 @@ namespace castor3d
 						, sqrt( paxisd2 ) / 2.0f );
 
 					// iteratively adjust the sphere up until all points fit
-					FOR( writer, sdw::UInt, i, 0u, i < count, ++i )
+					sdwFOR( writer, sdw::UInt, i, 0u, i < count, ++i )
 					{
 						auto p = points[i];
 						d2 = ( p[0] - center[0] ) * ( p[0] - center[0] )
 							+ ( p[1] - center[1] ) * ( p[1] - center[1] )
 							+ ( p[2] - center[2] ) * ( p[2] - center[2] );
 
-						IF( writer, d2 > radius * radius )
+						sdwIF( writer, d2 > radius * radius )
 						{
 							auto d = writer.declLocale( "d"
 								, sqrt( d2 ) );
@@ -649,9 +649,9 @@ namespace castor3d
 							center = center * k + p * ( vec3( 1.0_f ) - k );
 							radius = ( radius + d ) / 2.0f;
 						}
-						FI
+						sdwFI;
 					}
-					ROF
+					sdwROF;
 
 					writer.returnStmt( vec4( center, radius ) );
 				}
@@ -675,7 +675,7 @@ namespace castor3d
 						, computeCones );
 					normals[0] = c3d_normals[meshlet.vertices()[0]].xyz();
 
-					FOR( writer, sdw::UInt, i, 1u, i < meshlet.vertexCount(), ++i )
+					sdwFOR( writer, sdw::UInt, i, 1u, i < meshlet.vertexCount(), ++i )
 					{
 						auto point = writer.declLocale( "point"
 							, c3d_positions[meshlet.vertices()[i]].xyz() );
@@ -683,7 +683,7 @@ namespace castor3d
 						maxPos = max( maxPos, point );
 						normals[i] = c3d_normals[meshlet.vertices()[i]].xyz();
 					}
-					ROF
+					sdwROF;
 
 					auto center = writer.declLocale( "center"
 						, minPos + ( ( maxPos - minPos ) / vec3( 2.0_f ) ) );
@@ -701,29 +701,29 @@ namespace castor3d
 						auto mindp = writer.declLocale( "mindp"
 							, 1.0_f );
 
-						FOR( writer, sdw::UInt, i, 0u, i < meshlet.vertexCount(), ++i )
+						sdwFOR( writer, sdw::UInt, i, 0u, i < meshlet.vertexCount(), ++i )
 						{
 							auto dp = writer.declLocale( "dp"
 								, dot( normals[i], axis ) );
 							mindp = min( dp, mindp );
 						}
-						ROF
+						sdwROF;
 
-						IF( writer, mindp <= 0.1_f )
+						sdwIF( writer, mindp <= 0.1_f )
 						{
 							// degenerate cluster, normal cone is larger than a hemisphere => trivial accept
 							// note that if mindp is positive but close to 0, the triangle intersection code below gets less stable
 							// we arbitrarily decide that if a normal cone is ~168 degrees wide or more, the cone isn't useful
 							c3d_outCullData[meshletId].cone = vec4( axis, 1.0_f );
 						}
-						ELSE
+						sdwELSE
 						{
 							// cos(a) for normal cone is mindp; we need to add 90 degrees on both sides and invert the cone
 							// which gives us -cos(a+90) = -(-sin(a)) = sin(a) = sqrt(1 - cos^2(a))
 							c3d_outCullData[meshletId].cone = vec4( axis
 								, sqrt( 1.0_f - mindp * mindp ) );
 						}
-						FI
+						sdwFI;
 					}
 				} );
 

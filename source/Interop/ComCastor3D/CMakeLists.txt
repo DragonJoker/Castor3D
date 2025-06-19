@@ -258,6 +258,10 @@ if ( MSVC )
 				${ATL_LIBRARIES}
 				castor::CCastor3D
 		)
+		set_target_properties( ${PROJECT_NAME}
+			PROPERTIES
+				FOLDER "Interop"
+		)
 		set( CASTOR_INSTEXP_LIST
 			${CASTOR_INSTEXP_LIST}
 			${PROJECT_NAME}
@@ -277,10 +281,7 @@ if ( MSVC )
 			DESTINATION bin
 			COMPONENT ${PROJECT_NAME}
 		)
-
 		# register_target( ${PROJECT_NAME} )
-
-		set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Interop" )
 		add_target_astyle( ${PROJECT_NAME} ".hpp;.inl;.cpp" )
 		set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 	else ()

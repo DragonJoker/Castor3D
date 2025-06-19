@@ -274,7 +274,7 @@ namespace castor3d
 				auto fontUv = writer.declLocale( "fontUv", vec4( 0.0_f ) );
 
 				// check for full underflow/overflow
-				IF( writer, ssAbsOvPosition.x() + ssRelBounds.x() < overlay.scissorRect().z()
+				sdwIF( writer, ssAbsOvPosition.x() + ssRelBounds.x() < overlay.scissorRect().z()
 					&& ssAbsOvPosition.y() + ssRelBounds.y() < overlay.scissorRect().w()
 					&& ssAbsOvPosition.x() + ssRelBounds.z() > overlay.scissorRect().x()
 					&& ssAbsOvPosition.y() + ssRelBounds.w() > overlay.scissorRect().y() )
@@ -303,12 +303,12 @@ namespace castor3d
 					overlay.cropMaxMaxValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), ssAbsCharSize.x(), overlay.scissorRect().xz(), srcUv.xz(), srcFontUv.xz(), ssRelBounds.z(), texUv.z(), fontUv.z() );
 					overlay.cropMaxMinValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), ssAbsCharSize.y(), overlay.scissorRect().yw(), srcUv.yw(), srcFontUv.wy(), ssRelBounds.w(), texUv.w(), fontUv.w() );
 				}
-				ELSE
+				sdwELSE
 				{
 					ssRelBounds.z() = ssRelBounds.x();
 					ssRelBounds.w() = ssRelBounds.y();
 				}
-				FI
+				sdwFI;
 				//
 				// Fill buffer
 				//
@@ -327,7 +327,7 @@ namespace castor3d
 					auto charIndex = writer.declLocale( "charIndex"
 						, c3d_batchOffset + in.globalInvocationID.x() * 16u + in.globalInvocationID.y() );
 
-					IF( writer, charIndex < MaxCharsPerBuffer
+					sdwIF( writer, charIndex < MaxCharsPerBuffer
 						&& charIndex < c3d_charCount )
 					{
 						auto character = writer.declLocale( "character"
@@ -337,7 +337,7 @@ namespace castor3d
 						auto texDim = writer.declLocale( "texDim"
 							, c3d_fontData.imgSize() );
 
-						IF( writer, overlay.textTexturingMode() == uint32_t( TextTexturingMode::eLetter ) )
+						sdwIF( writer, overlay.textTexturingMode() == uint32_t( TextTexturingMode::eLetter ) )
 						{
 							processChar( overlay
 								, character
@@ -348,7 +348,7 @@ namespace castor3d
 									return vec4( 0.0_f, 0.0_f, 1.0_f, 1.0_f );
 								} );
 						}
-						ELSE
+						sdwELSE
 						{
 							processChar( overlay
 								, character
@@ -359,9 +359,9 @@ namespace castor3d
 									return vec4( absolute ) / vec4( ratio, ratio );
 								} );
 						}
-						FI
+						sdwFI;
 					}
-					FI
+					sdwFI;
 				} );
 
 			comp.shader = writer.getBuilder().releaseShader();

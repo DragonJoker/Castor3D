@@ -71,15 +71,15 @@ namespace castor3d
 						, vec4( overlay.border().xy()
 							, -overlay.border().zw() ) );
 
-					IF( writer, overlay.borderPosition() == uint32_t( BorderPosition::eInternal ) )
+					sdwIF( writer, overlay.borderPosition() == uint32_t( BorderPosition::eInternal ) )
 					{
 						ssRelBounds += ssBorderExtent;
 					}
-					ELSEIF( overlay.borderPosition() == uint32_t( BorderPosition::eMiddle ) )
+					sdwELSEIF( overlay.borderPosition() == uint32_t( BorderPosition::eMiddle ) )
 					{
 						ssRelBounds += ssBorderExtent / 2.0_f;
 					}
-					FI
+					sdwFI;
 
 					auto ssRelOvPosition = writer.declLocale( "ssRelOvPosition"
 						, overlay.relativePosition() * ssAbsParentSize );

@@ -437,27 +437,27 @@ namespace castor3d
 				maxi = writer.ternary( facenormal[2] > facenormal[maxi], 2_u, maxi );
 				auto positions = writer.declLocaleArray< sdw::Vec3 >( "positions", 3u );
 
-				FOR( writer, sdw::UInt, i, 0_u, i < 3_u, ++i )
+				sdwFOR( writer, sdw::UInt, i, 0_u, i < 3_u, ++i )
 				{
 					positions[i] = list[i].worldPosition.xyz() * c3d_voxelData.worldToGrid;
 
 					// Project onto dominant axis:
-					IF( writer, maxi == 0_u )
+					sdwIF( writer, maxi == 0_u )
 					{
 						positions[i] = positions[i].zyx();
 					}
-					ELSEIF( maxi == 1_u )
+					sdwELSEIF( maxi == 1_u )
 					{
 						positions[i] = positions[i].xzy();
 					}
-					FI
+					sdwFI;
 
 					positions[i].xy() *= c3d_voxelData.gridToClip;
 					positions[i].z() = 1.0_f;
 				}
-				ROF
+				sdwROF;
 
-				IF( writer, c3d_voxelData.enableConservativeRasterization != 0_u )
+				sdwIF( writer, c3d_voxelData.enableConservativeRasterization != 0_u )
 				{
 					auto side0N = writer.declLocale( "side0N"
 						, normalize( positions[1].xy() - positions[0].xy() ) );
@@ -469,10 +469,10 @@ namespace castor3d
 					positions[1].xy() += normalize( side0N - side1N ) * c3d_voxelData.gridToClip;
 					positions[2].xy() += normalize( side1N - side2N ) * c3d_voxelData.gridToClip;
 				}
-				FI
+				sdwFI;
 
 				// Output
-				FOR( writer, sdw::UInt, i, 0_u, i < 3_u, ++i )
+				sdwFOR( writer, sdw::UInt, i, 0_u, i < 3_u, ++i )
 				{
 					out.worldPosition = list[i].vtx.position;
 					out.viewPosition = list[i].viewPosition;
@@ -487,7 +487,7 @@ namespace castor3d
 
 					out.append();
 				}
-				ROF
+				sdwROF;
 
 				out.restartStrip();
 			} );
@@ -575,7 +575,7 @@ namespace castor3d
 				auto uvw = writer.declLocale( "uvw"
 					, diff * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f );
 
-				IF( writer, utils.isSaturated( uvw ) )
+				sdwIF( writer, utils.isSaturated( uvw ) )
 				{
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[in.nodeId - 1u] );
@@ -604,7 +604,7 @@ namespace castor3d
 						, color
 						, false };
 
-					IF( writer, material.lighting != 0_u )
+					sdwIF( writer, material.lighting != 0_u )
 					{
 						auto combined = writer.declLocale( "combined"
 							, vec3( 0.0_f ) );
@@ -628,7 +628,7 @@ namespace castor3d
 							* components.baseColour
 							* combined;
 					}
-					FI
+					sdwFI;
 
 					auto encodedColor = writer.declLocale( "encodedColor"
 						, utils.encodeColor( vec4( color.xyz(), components.opacity ) ) );
@@ -641,7 +641,7 @@ namespace castor3d
 					atomicMax( output[id].colorMask(), encodedColor );
 					atomicMax( output[id].normalMask(), encodedNormal );
 				}
-				FI
+				sdwFI;
 			} );
 	}
 

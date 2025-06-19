@@ -146,7 +146,7 @@ namespace castor3d
 						auto prefilteredColor = writer.declLocale( "prefilteredColor"
 							, vec3( 0.0_f ) );
 
-						FOR( writer, sdw::UInt, i, 0_u, i < c3d_sampleCount, ++i )
+						sdwFOR( writer, sdw::UInt, i, 0_u, i < c3d_sampleCount, ++i )
 						{
 							auto xi = writer.declLocale( "xi"
 								, brdf.hammersley( i, c3d_sampleCount ) );
@@ -162,7 +162,7 @@ namespace castor3d
 							auto NdotL = writer.declLocale( "NdotL"
 								, dot( N, L ) );
 
-							IF( writer, NdotL > 0.0_f )
+							sdwIF( writer, NdotL > 0.0_f )
 							{
 								auto pdf = writer.declLocale( "pdf"
 									, importanceSample.w() );
@@ -179,19 +179,19 @@ namespace castor3d
 								prefilteredColor += c3d_mapEnvironment.lod( L, lod ).rgb() * NdotL;
 								totalWeight += NdotL;
 							}
-							FI
+							sdwFI;
 						}
-						ROF
+						sdwROF;
 
-						IF( writer, totalWeight != 0.0f )
+						sdwIF( writer, totalWeight != 0.0f )
 						{
 							prefilteredColor /= totalWeight;
 						}
-						ELSE
+						sdwELSE
 						{
 							prefilteredColor /= writer.cast< sdw::Float >( c3d_sampleCount );
 						}
-						FI
+						sdwFI;
 
 						out.colour() = vec4( prefilteredColor, 1.0_f );
 					} );

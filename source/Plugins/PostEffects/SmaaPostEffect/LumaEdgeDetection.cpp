@@ -111,11 +111,11 @@ namespace smaa
 						, step( vec2( threshold ), delta.xy() ) );
 
 					// Then discard if there is no edge:
-					IF( writer, dot( edges, vec2( 1.0_f, 1.0_f ) ) == 0.0_f )
+					sdwIF( writer, dot( edges, vec2( 1.0_f, 1.0_f ) ) == 0.0_f )
 					{
 						writer.demote();
 					}
-					FI;
+					sdwFI;
 
 					// Calculate right and bottom deltas:
 					auto Lright = writer.declLocale( "Lright"

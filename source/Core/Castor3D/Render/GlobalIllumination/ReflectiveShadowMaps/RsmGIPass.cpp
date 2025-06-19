@@ -135,11 +135,11 @@ namespace castor3d
 					auto nodeId = writer.declLocale( "nodeId"
 						, writer.cast< sdw::UInt >( depthObj.z() ) );
 
-					IF( writer, nodeId == 0u )
+					sdwIF( writer, nodeId == 0u )
 					{
 						writer.demote();
 					}
-					FI
+					sdwFI;
 
 					auto depth = writer.declLocale( "depth"
 						, depthObj.x() );
@@ -209,11 +209,11 @@ namespace castor3d
 					auto nodeId = writer.declLocale( "nodeId"
 						, writer.cast< sdw::UInt >( depthObj.z() ) );
 
-					IF( writer, nodeId == 0u )
+					sdwIF( writer, nodeId == 0u )
 					{
 						writer.demote();
 					}
-					FI
+					sdwFI;
 
 					auto depth = writer.declLocale( "depth"
 						, depthObj.x() );
@@ -224,11 +224,11 @@ namespace castor3d
 					auto wsNormal = writer.declLocale( "wsNormal"
 						, nmlOcc.xyz() );
 
-					IF( writer, dot( wsNormal, wsNormal ) == 0.0f )
+					sdwIF( writer, dot( wsNormal, wsNormal ) == 0.0f )
 					{
 						writer.demote();
 					}
-					FI;
+					sdwFI;
 
 					auto shadowData = writer.declLocale( "shadowData"
 						, shadows.getSpotShadows( c3d_rsmConfigData.index ) );
@@ -287,11 +287,11 @@ namespace castor3d
 					auto nodeId = writer.declLocale( "nodeId"
 						, writer.cast< sdw::UInt >( depthObj.z() ) );
 
-					IF( writer, nodeId == 0u )
+					sdwIF( writer, nodeId == 0u )
 					{
 						writer.demote();
 					}
-					FI
+					sdwFI;
 
 					auto depth = writer.declLocale( "depth"
 						, depthObj.x() );

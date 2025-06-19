@@ -178,19 +178,19 @@ namespace castor3d
 						auto normalCloseness = writer.declLocale( "normalCloseness"
 							, dot( tapNormal, normal ) );
 
-						IF( writer, c3d_ssaoConfigData.blurHighQuality == 0_i )
+						sdwIF( writer, c3d_ssaoConfigData.blurHighQuality == 0_i )
 						{
 							normalCloseness = normalCloseness * normalCloseness;
 							normalCloseness = normalCloseness * normalCloseness;
 							k_normal = 4.0_f;
 						}
-						FI
+						sdwFI;
 
 						auto normalError = writer.declLocale( "normalError"
 							, ( 1.0_f - normalCloseness ) * k_normal );
 						normalWeight = max( 1.0_f - c3d_ssaoConfigData.edgeSharpness * normalError, 0.0_f );
 
-						IF( writer, c3d_ssaoConfigData.blurHighQuality )
+						sdwIF( writer, c3d_ssaoConfigData.blurHighQuality )
 						{
 							auto lowDistanceThreshold2 = writer.declLocale( "lowDistanceThreshold2"
 								, 0.001_f );
@@ -218,7 +218,7 @@ namespace castor3d
 										, 1.0_f - c3d_ssaoConfigData.edgeSharpness * 2.0f * k_plane * planeError / sqrt( distance2 ) )
 									, 2.0_f ) } );
 						}
-						FI
+						sdwFI;
 					}
 
 					writer.returnStmt( depthWeight * normalWeight * planeWeight );
@@ -260,14 +260,14 @@ namespace castor3d
 						normal = normalize( c3d_cameraData.readNormal( c3d_mapNormal.fetch( ssCenter, 0_i ).xyz() ) );
 					}
 
-					IF( writer, key == 1.0_f )
+					sdwIF( writer, key == 1.0_f )
 					{
 						// Sky pixel (if you aren't using depth keying, disable this test)
 						result = sum;
 						outBentNormal = c3d_cameraData.writeNormal( bentNormal );
 						writer.returnStmt();
 					}
-					FI
+					sdwFI;
 
 					// Base weight for depth falloff.  Increase this for more blurriness,
 					// decrease it for better edge discrimination
@@ -283,11 +283,11 @@ namespace castor3d
 					auto blurRadius = writer.declLocale( "blurRadius"
 						, writer.cast< sdw::Int >( c3d_ssaoConfigData.blurRadius ) );
 
-					FOR( writer, sdw::Int, r, -blurRadius, r <= blurRadius, ++r )
+					sdwFOR( writer, sdw::Int, r, -blurRadius, r <= blurRadius, ++r )
 					{
 						// We already handled the zero case above.  This loop should be unrolled and the static branch optimized out,
 						// so the IF statement has no runtime cost
-						IF( writer, r != 0_i )
+						sdwIF( writer, r != 0_i )
 						{
 							auto tapLoc = writer.declLocale( "tapLoc"
 								, ssCenter + c3d_axis * ( r * writer.cast< sdw::Int >( c3d_ssaoConfigData.blurStepSize ) ) );
@@ -318,9 +318,9 @@ namespace castor3d
 							bentNormal += bent * weight;
 							totalWeight += weight;
 						}
-						FI
+						sdwFI;
 					}
-					ROF
+					sdwROF;
 
 					auto const epsilon = writer.declLocale( "epsilon"
 						, 0.0001_f );

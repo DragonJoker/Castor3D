@@ -364,17 +364,17 @@ namespace castor3d
 				{
 					if ( components.transmissionFactor )
 					{
-						IF( writer, components.transmissionFactor >= 0.05_f )
+						sdwIF( writer, components.transmissionFactor >= 0.05_f )
 						{
 							writer.demote();
 						}
-						FI
+						sdwFI;
 					}
 				}
 
 				if ( auto lightingModel = lights.getLightingModel() )
 				{
-					IF( writer, material.lighting )
+					sdwIF( writer, material.lighting )
 					{
 						auto surface = writer.declLocale( "surface"
 							, shader::DerivSurface{ in.fragCoord.xyz()
@@ -502,7 +502,7 @@ namespace castor3d
 							}
 						}
 					}
-					ELSE
+					sdwELSE
 					{
 						outColour = vec4( components.baseColour + components.emissiveColour * components.emissiveFactor, components.opacity );
 						outScattering = vec4( 0.0_f );
@@ -512,7 +512,7 @@ namespace castor3d
 							outDiffuse = vec4( 0.0_f );
 						}
 					}
-					FI
+					sdwFI;
 				}
 				else
 				{

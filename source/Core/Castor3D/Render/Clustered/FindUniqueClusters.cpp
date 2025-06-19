@@ -62,20 +62,20 @@ namespace castor3d
 					auto clusterID = writer.declLocale( "clusterID"
 						, in.globalInvocationID.x() );
 
-					IF( writer, clusterID == 0_u )
+					sdwIF( writer, clusterID == 0_u )
 					{
 						c3d_clustersCountY = 1_u;
 						c3d_clustersCountZ = 1_u;
 					}
-					FI
+					sdwFI;
 
-					IF( writer, c3d_clusterFlags[clusterID] != 0_u )
+					sdwIF( writer, c3d_clusterFlags[clusterID] != 0_u )
 					{
 						auto i = writer.declLocale ("i"
 							, atomicAdd( c3d_clustersCountX, 1_u ) );
 						c3d_uniqueClusters[i] = clusterID;
 					}
-					FI
+					sdwFI;
 				} );
 			return writer.getBuilder().releaseShader();
 		}

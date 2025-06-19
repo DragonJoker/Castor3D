@@ -117,9 +117,9 @@ namespace castor3d
 						auto nrSamples = writer.declLocale( "nrSamples"
 							, 0_i );
 
-						FOR( writer, sdw::Float, phi, 0.0_f, phi < sdw::Float{ castor::PiMult2< float > }, phi += sampleDelta )
+						sdwFOR( writer, sdw::Float, phi, 0.0_f, phi < sdw::Float{ castor::PiMult2< float > }, phi += sampleDelta )
 						{
-							FOR( writer, sdw::Float, theta, 0.0_f, theta < sdw::Float{ castor::PiDiv2< float > }, theta += sampleDelta )
+							sdwFOR( writer, sdw::Float, theta, 0.0_f, theta < sdw::Float{ castor::PiDiv2< float > }, theta += sampleDelta )
 							{
 								// spherical to cartesian (in tangent space)
 								auto tangentSample = writer.declLocale( "tangentSample"
@@ -131,9 +131,9 @@ namespace castor3d
 								irradiance += c3d_mapEnvironment.lod( sampleVec, 0.0_f ).rgb() * cos( theta ) * sin( theta );
 								nrSamples = nrSamples + 1;
 							}
-							ROF
+							sdwROF;
 						}
-						ROF
+						sdwROF;
 
 						irradiance = irradiance * sdw::Float{ castor::Pi< float > } * ( 1.0_f / writer.cast< sdw::Float >( nrSamples ) );
 						out.colour() = vec4( irradiance, 1.0_f );

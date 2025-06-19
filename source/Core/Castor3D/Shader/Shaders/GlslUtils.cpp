@@ -167,7 +167,7 @@ namespace castor3d::shader
 					uv = rotateUV( config.rotateU(), config.rotateV(), uv );
 					uv = translateUV( config.translate().xy(), uv );
 
-					IF( m_writer, config.isTrnfAnim() )
+					sdwIF( m_writer, config.isTrnfAnim() )
 					{
 						uv = scaleUV( anim.scale().xy()
 							, vec2( m_writer.ternary( config.needsXInv() == 0_u, uv.x(), 1.0_f - uv.x() )
@@ -175,17 +175,17 @@ namespace castor3d::shader
 						uv = rotateUV( anim.rotateU(), anim.rotateV(), uv );
 						uv = translateUV( anim.translate().xy(), uv );
 					}
-					FI
+					sdwFI;
 
 					uv.x() = ( uv.x() + config.tileSet().x() ) / config.tileSet().z();
 					uv.y() = ( uv.y() + config.tileSet().y() ) / config.tileSet().w();
 
-					IF( m_writer, config.isTileAnim() )
+					sdwIF( m_writer, config.isTileAnim() )
 					{
 						uv.x() += anim.tileSet().x() / anim.tileSet().z();
 						uv.y() += anim.tileSet().y() / anim.tileSet().w();
 					}
-					FI
+					sdwFI;
 
 					m_writer.returnStmt( uv );
 				}
@@ -214,7 +214,7 @@ namespace castor3d::shader
 							, m_writer.ternary( config.needsZInv() == 0_u, uvw.z(), 1.0_f - uvw.z() ) ) );
 					uvw = translateUV( config.translate(), uvw );
 
-					IF( m_writer, config.isTrnfAnim() )
+					sdwIF( m_writer, config.isTrnfAnim() )
 					{
 						uvw = scaleUV( anim.scale()
 						, vec3( m_writer.ternary( config.needsXInv() == 0_u, uvw.x(), 1.0_f - uvw.x() )
@@ -222,7 +222,7 @@ namespace castor3d::shader
 							, m_writer.ternary( config.needsZInv() == 0_u, uvw.z(), 1.0_f - uvw.z() ) ) );
 						uvw = translateUV( anim.translate(), uvw );
 					}
-					FI
+					sdwFI;
 
 					m_writer.returnStmt( uvw );
 				}
@@ -440,46 +440,37 @@ namespace castor3d::shader
 					auto weight = m_writer.declLocale< sdw::Float >( "weight"
 						, 1.0_f );
 
-					SWITCH( m_writer, accumulationOperator )
+					sdwSWITCH( m_writer, accumulationOperator )
 					{
-						CASE( 0u )
-						{
-							// Naive
-							weight = 1.0_f - rescaleDepth( depth
-								, nearPlane
-								, farPlane );
-							m_writer.caseBreakStmt();
-						}
-						ESAC;
-						CASE( 1u )
+						sdwCASE( 1u )
 						{
 							// (10)
 							weight = max( pow( clamp( 1.0_f - depth, 0.0_f, 1.0_f ), 3.0_f ) * 3000.0_f, 0.01_f );
 							m_writer.caseBreakStmt();
 						}
-						ESAC;
-						CASE( 2u )
+						sdwESAC;
+						sdwCASE( 2u )
 						{
 							// (9)
 							weight = max( min( 0.03_f / ( pow( abs( depth ) / 200.0_f, 4.0_f ) + 0.00001_f ), 3000.0_f ), 0.01_f );
 							m_writer.caseBreakStmt();
 						}
-						ESAC;
-						CASE( 3u )
+						sdwESAC;
+						sdwCASE( 3u )
 						{
 							// (8)
 							weight = max( min( 10.0_f / ( pow( abs( depth ) / 200.0_f, 6.0_f ) + pow( abs( depth ) / 10.0_f, 3.0_f ) + 0.00001_f ), 3000.0_f ), 0.01_f );
 							m_writer.caseBreakStmt();
 						}
-						ESAC;
-						CASE( 4u )
+						sdwESAC;
+						sdwCASE( 4u )
 						{
 							// (7)
 							weight = max( min( 10.0_f / ( pow( abs( depth ) / 200.0_f, 6.0_f ) + pow( abs( depth ) / 5.0_f, 2.0_f ) + 0.00001_f ), 3000.0_f ), 0.01_f );
 							m_writer.caseBreakStmt();
 						}
-						ESAC;
-						CASE( 5u )
+						sdwESAC;
+						sdwCASE( 5u )
 						{
 							// (other)
 							auto a = m_writer.declLocale( "a"
@@ -489,8 +480,8 @@ namespace castor3d::shader
 							weight = clamp( a * a * a * 100000000.0_f * b * b * b, 0.01_f, 300.0_f );
 							m_writer.caseBreakStmt();
 						}
-						ESAC;
-						CASE( 6u )
+						sdwESAC;
+						sdwCASE( 6u )
 						{
 							// (other)
 							auto a = m_writer.declLocale( "a"
@@ -503,16 +494,25 @@ namespace castor3d::shader
 							weight = clamp( a * a * a * 100000000.0_f * b * b * b, 0.01_f, 300.0_f );
 							m_writer.caseBreakStmt();
 						}
-						ESAC;
-						CASE( 7u )
+						sdwESAC;
+						sdwCASE( 7u )
 						{
 							// (yet another one)
 							weight = max( min( 1.0_f, max( max( colour.r(), colour.g() ), colour.b() ) * alpha ), alpha ) * clamp( 0.03_f / ( 0.00001_f + pow( depth / 200.0_f, 4.0_f ) ), 0.01_f, 3000.0_f );
 							m_writer.caseBreakStmt();
 						}
-						ESAC;
+						sdwESAC;
+						sdwDEFAULT
+						{
+							// Naive
+							weight = 1.0_f - rescaleDepth( depth
+								, nearPlane
+								, farPlane );
+							m_writer.caseBreakStmt();
+						}
+						sdwTLUAFED;
 					}
-					HCTIWS
+					sdwHCTIWS;
 
 					m_writer.returnStmt( vec4( colour * alpha, alpha ) * weight );
 				}
@@ -656,11 +656,11 @@ namespace castor3d::shader
 					auto epsilon = m_writer.declConstant( "epsilon", 0.00001_f );
 					auto result = m_writer.declLocale( "result", in );
 
-					IF( m_writer, abs( result.w() ) < epsilon )
+					sdwIF( m_writer, abs( result.w() ) < epsilon )
 					{
 						result.w() = epsilon;
 					}
-					FI;
+					sdwFI;
 
 					result.xyz() /= result.w();
 					result.xy() = fma( result.xy(), vec2( 0.5_f ), vec2( 0.5_f ) );
@@ -1024,11 +1024,11 @@ namespace castor3d::shader
 					auto cosTheta2Sq = m_writer.declLocale( "sinTheta2Sq"
 						, 1.0_f - sinTheta2Sq );
 
-					IF( m_writer, cosTheta2Sq < 0.0_f )
+					sdwIF( m_writer, cosTheta2Sq < 0.0_f )
 					{
 						m_writer.returnStmt( vec3( 1.0_f ) );
 					}
-					FI
+					sdwFI;
 
 					auto cosTheta2 = m_writer.declLocale( "cosTheta2"
 						, sqrt( cosTheta2Sq ) );
@@ -1045,11 +1045,11 @@ namespace castor3d::shader
 					auto phi12 = m_writer.declLocale( "phi12"
 						, 0.0_f );
 
-					IF( m_writer, iridescenceIor < outsideIOR )
+					sdwIF( m_writer, iridescenceIor < outsideIOR )
 					{
 						phi12 = castor::Pi< float >;
 					}
-					FI
+					sdwFI;
 
 					auto phi21 = m_writer.declLocale( "phi21"
 						, castor::Pi< float > - phi12 );
@@ -1064,21 +1064,21 @@ namespace castor3d::shader
 					auto phi23 = m_writer.declLocale( "phi23"
 						, vec3( 0.0_f ) );
 
-					IF( m_writer, baseIOR[0] < iridescenceIor )
+					sdwIF( m_writer, baseIOR[0] < iridescenceIor )
 					{
 						phi23[0] = castor::Pi< float >;
 					}
-					FI
-					IF( m_writer, baseIOR[1] < iridescenceIor )
+					sdwFI;
+					sdwIF( m_writer, baseIOR[1] < iridescenceIor )
 					{
 						phi23[1] = castor::Pi< float >;
 					}
-					FI
-					IF( m_writer, baseIOR[2] < iridescenceIor )
+					sdwFI;
+					sdwIF( m_writer, baseIOR[2] < iridescenceIor )
 					{
 						phi23[2] = castor::Pi< float >;
 					}
-					FI
+					sdwFI;
 
 					// Phase shift
 					auto OPD = m_writer.declLocale( "OPD"

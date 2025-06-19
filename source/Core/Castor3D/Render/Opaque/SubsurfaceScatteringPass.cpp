@@ -130,11 +130,11 @@ namespace castor3d
 					auto nodeId = writer.declLocale( "nodeId"
 						, writer.cast< sdw::UInt >( depthObj.z() ) );
 
-					IF( writer, nodeId == 0u )
+					sdwIF( writer, nodeId == 0u )
 					{
 						writer.demote();
 					}
-					FI
+					sdwFI;
 
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
@@ -143,11 +143,11 @@ namespace castor3d
 					auto material = materials.getMaterial( materialId );
 					auto sssProfileIndex = material.getMember< sdw::UInt >( "sssProfileIndex", true );
 
-					IF( writer, sssProfileIndex == 0_u )
+					sdwIF( writer, sssProfileIndex == 0_u )
 					{
 						writer.demote();
 					}
-					FI
+					sdwFI;
 
 					auto sssProfile = writer.declLocale( "sssProfile"
 						, sssProfiles.getProfile( sssProfileIndex ) );
@@ -201,7 +201,7 @@ namespace castor3d
 						, castor::Vector< sdw::Float >{ { -1.0_f, -0.666666667_f, -0.333333333_f, 0.333333333_f, 0.666666667_f, 1.0_f } } );
 
 					// Accumulate the other samples:
-					FOR( writer, sdw::Int, i, 0_i, i < 6_i, ++i )
+					sdwFOR( writer, sdw::Int, i, 0_i, i < 6_i, ++i )
 					{
 						// Fetch color and depth for current sample:
 						offset = sdw::fma( vec2( o[i] ), finalStep, in.texcoord() );
@@ -217,7 +217,7 @@ namespace castor3d
 						// Accumulate:
 						out.colour().rgb() += w[i] * color;
 					}
-					ROF
+					sdwROF;
 				} );
 			return castor::make_unique< sdw::Shader >( castor::move( writer.getShader() ) );
 		}
@@ -257,11 +257,11 @@ namespace castor3d
 					auto nodeId = writer.declLocale( "nodeId"
 						, writer.cast< sdw::UInt >( depthObj.z() ) );
 
-					IF( writer, nodeId == 0u )
+					sdwIF( writer, nodeId == 0u )
 					{
 						writer.demote();
 					}
-					FI
+					sdwFI;
 
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
@@ -272,11 +272,11 @@ namespace castor3d
 					auto material = materials.getMaterial( materialId );
 					auto sssProfileIndex = material.getMember< sdw::UInt >( "sssProfileIndex", true );
 
-					IF( writer, sssProfileIndex == 0_u )
+					sdwIF( writer, sssProfileIndex == 0_u )
 					{
 						out.colour() = vec4( original.rgb(), 1.0_f );
 					}
-					ELSE
+					sdwELSE
 					{
 						auto originalWeight = writer.declLocale< sdw::Vec4 >( "originalWeight"
 							, vec4( 0.2406_f, 0.4475_f, 0.6159_f, 0.25_f ) );
@@ -308,7 +308,7 @@ namespace castor3d
 							+ blur2 * blurWeights[1]
 							+ blur3 * blurWeights[2];
 					}
-					FI
+					sdwFI;
 				} );
 			return writer.getBuilder().releaseShader();
 		}

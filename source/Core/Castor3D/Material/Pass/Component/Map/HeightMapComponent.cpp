@@ -219,14 +219,14 @@ namespace castor3d
 
 			if ( hgtcmp::enableParallaxOcclusionMappingOne( getPlugin().getRegister(), pass ) )
 			{
-				IF( writer, texCoords.x() > 1.0_f
+				sdwIF( writer, texCoords.x() > 1.0_f
 					|| texCoords.y() > 1.0_f
 					|| texCoords.x() < 0.0_f
 					|| texCoords.y() < 0.0_f )
 				{
 					writer.demote();
 				}
-				FI
+				sdwFI;
 			}
 
 			auto texCoords0 = components.getMember< sdw::Vec2 >( "texture0" );
@@ -262,14 +262,14 @@ namespace castor3d
 
 			if ( hgtcmp::enableParallaxOcclusionMappingOne( getPlugin().getRegister(), pass ) )
 			{
-				IF( writer, config.getUv( texCoords ).x() > 1.0_f
+				sdwIF( writer, config.getUv( texCoords ).x() > 1.0_f
 					|| config.getUv( texCoords ).y() > 1.0_f
 					|| config.getUv( texCoords ).x() < 0.0_f
 					|| config.getUv( texCoords ).y() < 0.0_f )
 				{
 					writer.demote();
 				}
-				FI
+				sdwFI;
 			}
 
 			auto texCoords0 = components.getMember< sdw::Vec3 >( "texture0" );
@@ -305,14 +305,14 @@ namespace castor3d
 
 			if ( hgtcmp::enableParallaxOcclusionMappingOne( getPlugin().getRegister(), pass ) )
 			{
-				IF( writer, config.getUv( texCoords ).x() > 1.0_f
+				sdwIF( writer, config.getUv( texCoords ).x() > 1.0_f
 					|| config.getUv( texCoords ).y() > 1.0_f
 					|| config.getUv( texCoords ).x() < 0.0_f
 					|| config.getUv( texCoords ).y() < 0.0_f )
 				{
 					writer.demote();
 				}
-				FI
+				sdwFI;
 			}
 
 			auto texCoords0 = components.getMember< shader::DerivTex >( "texture0" );
@@ -429,7 +429,7 @@ namespace castor3d
 					auto currentDepthMapValue = writer.declLocale( "currentDepthMapValue"
 						, sampled[heightIndex] );
 
-					WHILE( writer, currentLayerDepth < currentDepthMapValue )
+					sdwWHILE( writer, currentLayerDepth < currentDepthMapValue )
 					{
 						// shift texture coordinates along direction of P
 						currentTexCoords -= deltaTexCoords;
@@ -439,7 +439,7 @@ namespace castor3d
 						// get depth of next layer
 						currentLayerDepth += layerDepth;
 					}
-					ELIHW
+					sdwELIHW;
 
 					// get texture coordinates before collision (reverse operations)
 					auto prevTexCoords = writer.declLocale( "prevTexCoords"
@@ -511,7 +511,7 @@ namespace castor3d
 						, 20.0_f );
 
 					// calculate lighting only for surface oriented to the light source
-					IF( writer, dot( vec3( 0.0_f, 0.0_f, 1.0_f ), lightDir ) > 0.0_f )
+					sdwIF( writer, dot( vec3( 0.0_f, 0.0_f, 1.0_f ), lightDir ) > 0.0_f )
 					{
 						// calculate initial parameters
 						auto numSamplesUnderSurface = writer.declLocale( "numSamplesUnderSurface"
@@ -541,10 +541,10 @@ namespace castor3d
 							, 1_i );
 
 						// while point is below depth 0.0 )
-						WHILE( writer, currentLayerHeight > 0.0_f )
+						sdwWHILE( writer, currentLayerHeight > 0.0_f )
 						{
 							// if point is under the surface
-							IF( writer, heightFromTexture < currentLayerHeight )
+							sdwIF( writer, heightFromTexture < currentLayerHeight )
 							{
 								// calculate partial shadowing factor
 								numSamplesUnderSurface += 1.0_f;
@@ -553,7 +553,7 @@ namespace castor3d
 									* ( 1.0_f - writer.cast< sdw::Float >( stepIndex ) / numLayers ) );
 								shadowMultiplier = max( shadowMultiplier, newShadowMultiplier );
 							}
-							FI
+							sdwFI;
 
 							// offset to the next layer
 							stepIndex += 1_i;
@@ -562,20 +562,20 @@ namespace castor3d
 							sampled = heightMap.sample( currentTextureCoords );
 							heightFromTexture = sampled[heightIndex];
 						}
-						ELIHW
+						sdwELIHW;
 
 						// Shadowing factor should be 1 if there were no points under the surface
-						IF( writer, numSamplesUnderSurface < 1.0_f )
+						sdwIF( writer, numSamplesUnderSurface < 1.0_f )
 						{
 							shadowMultiplier = 1.0_f;
 						}
-						ELSE
+						sdwELSE
 						{
 							shadowMultiplier = 1.0_f - shadowMultiplier;
 						}
-						FI
+						sdwFI;
 					}
-					FI
+					sdwFI;
 
 					writer.returnStmt( shadowMultiplier );
 				}

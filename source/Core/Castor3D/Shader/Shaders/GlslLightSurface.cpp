@@ -49,7 +49,7 @@ namespace castor3d::shader
 	sdw::type::BaseStructPtr LightSurface::makeType( ast::type::TypesCache & cache
 		, sdw::type::TypePtr type )
 	{
-		return std::static_pointer_cast< sdw::type::BaseStruct >( type );
+		return static_cast< sdw::type::BaseStruct * >( type );
 	}
 
 	sdw::type::BaseStructPtr LightSurface::makeType( ast::type::TypesCache & cache
@@ -86,7 +86,7 @@ namespace castor3d::shader
 	ast::type::BaseStructPtr LightSurface::makeType( ast::type::TypesCache & cache
 		, LightSurface const & rhs )
 	{
-		return std::static_pointer_cast< ast::type::BaseStruct >( rhs.getType() );
+		return static_cast< ast::type::BaseStruct * >( rhs.getType() );
 	}
 
 	LightSurface LightSurface::create( sdw::ShaderWriter & writer

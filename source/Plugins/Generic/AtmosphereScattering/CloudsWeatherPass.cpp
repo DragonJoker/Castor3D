@@ -144,14 +144,14 @@ namespace atmosphere_scattering
 					auto localFrequency = writer.declLocale( "localFrequency"
 						, frequency );
 
-					FOR( writer, sdw::UInt, index, 0_u, index < octaves, ++index )
+					sdwFOR( writer, sdw::UInt, index, 0_u, index < octaves, ++index )
 					{
 						noiseValue += noiseInterpolation( coord, scale * localFrequency ) * localAmplitude;
 
 						localAmplitude *= 0.25_f;
 						localFrequency *= 3.0_f;
 					}
-					ROF;
+					sdwROF;
 
 					writer.returnStmt( noiseValue * noiseValue );
 				}

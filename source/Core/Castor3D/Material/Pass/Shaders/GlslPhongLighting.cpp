@@ -147,7 +147,7 @@ namespace castor3d::shader
 		{
 			debugOutputBlock.registerOutput( cuT( "Fresnel Factor" ), fresnelFactor );
 
-			IF( m_writer, components.ior != 0.0_f )
+			sdwIF( m_writer, components.ior != 0.0_f )
 			{
 				reflRefr.diffuseTransmission = mix( reflRefr.diffuseTransmission
 					, vec3( 0.0_f )
@@ -162,7 +162,7 @@ namespace castor3d::shader
 					, reflRefr.specularReflection
 					, vec3( fresnelFactor ) );
 			}
-			FI
+			sdwFI;
 		}
 		auto bgDiffuse = m_writer.declLocale( "bgDiffuse", reflRefr.diffuseReflection );
 		auto bgSpecular = m_writer.declLocale( "bgSpecular", reflRefr.specularReflection );

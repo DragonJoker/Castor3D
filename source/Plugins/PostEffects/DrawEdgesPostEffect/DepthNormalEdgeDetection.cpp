@@ -152,11 +152,11 @@ namespace draw_edges
 					auto nodeId = writer.declLocale( "nodeId"
 						, writer.cast< sdw::UInt >( X.z() ) );
 
-					IF( writer, nodeId == 0_u )
+					sdwIF( writer, nodeId == 0_u )
 					{
 						writer.demote();
 					}
-					FI;
+					sdwFI;
 
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
@@ -164,11 +164,11 @@ namespace draw_edges
 					auto toonProfile = writer.declLocale( "toonProfile"
 						, toonProfiles.getData( modelData.getMaterialId() - 1u ) );
 
-					IF( writer, toonProfile.edgeColour().w() == 0.0_f )
+					sdwIF( writer, toonProfile.edgeColour().w() == 0.0_f )
 					{
 						writer.demote();
 					}
-					FI;
+					sdwFI;
 
 					auto Xn = writer.declLocale( "Xn"
 						, nmlOcc.fetch( texelCoord, 0_i ) );

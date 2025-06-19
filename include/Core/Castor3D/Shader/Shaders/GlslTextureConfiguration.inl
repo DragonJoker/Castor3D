@@ -131,51 +131,51 @@ namespace castor3d::shader
 
 		if ( texCoords3.isEnabled() )
 		{
-			IF( writer, data.texSet() >= 3u )
+			sdwIF( writer, data.texSet() >= 3u )
 			{
 				texCoords3 = value;
 			}
-			ELSEIF( data.texSet() >= 2u )
+			sdwELSEIF( data.texSet() >= 2u )
 			{
 				texCoords2 = value;
 			}
-			ELSEIF( data.texSet() >= 1u )
+			sdwELSEIF( data.texSet() >= 1u )
 			{
 				texCoords1 = value;
 			}
-			ELSE
+			sdwELSE
 			{
 				texCoords0 = value;
 			}
-			FI;
+			sdwFI;
 		}
 		else if ( texCoords2.isEnabled() )
 		{
-			IF( writer, data.texSet() >= 2u )
+			sdwIF( writer, data.texSet() >= 2u )
 			{
 				texCoords2 = value;
 			}
-			ELSEIF( data.texSet() >= 1u )
+			sdwELSEIF( data.texSet() >= 1u )
 			{
 				texCoords1 = value;
 			}
-			ELSE
+			sdwELSE
 			{
 				texCoords0 = value;
 			}
-			FI;
+			sdwFI;
 		}
 		else if ( texCoords1.isEnabled() )
 		{
-			IF( writer, data.texSet() >= 1u )
+			sdwIF( writer, data.texSet() >= 1u )
 			{
 				texCoords1 = value;
 			}
-			ELSE
+			sdwELSE
 			{
 				texCoords0 = value;
 			}
-			FI;
+			sdwFI;
 		}
 		else
 		{

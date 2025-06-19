@@ -117,23 +117,23 @@ namespace castor3d
 				auto mapVoxelsFirstBounce = m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
 				auto mapVoxelsSecondaryBounce = m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
 
-				IF( m_writer, voxelData.enableOcclusion )
+				sdwIF( m_writer, voxelData.enableOcclusion )
 				{
-					IF( m_writer, voxelData.enableSecondaryBounce )
+					sdwIF( m_writer, voxelData.enableSecondaryBounce )
 					{
 						indirectLighting.occlusion = traceConeOcclusion( mapVoxelsSecondaryBounce
 							, lightSurface
 							, voxelData );
 					}
-					ELSE
+					sdwELSE
 					{
 						indirectLighting.occlusion = traceConeOcclusion( mapVoxelsFirstBounce
 							, lightSurface
 							, voxelData );
 					}
-					FI
+					sdwFI;
 				}
-				FI
+				sdwFI;
 			}
 		}
 
@@ -237,7 +237,7 @@ namespace castor3d
 						auto radiance = m_writer.declLocale( "radiance"
 							, vec4( 0.0_f ) );
 
-						FOR( m_writer, sdw::UInt, cone, 0_u, cone < voxelData.radianceNumCones, ++cone ) // quality is between 1 and 16 cones
+						sdwFOR( m_writer, sdw::UInt, cone, 0_u, cone < voxelData.radianceNumCones, ++cone ) // quality is between 1 and 16 cones
 						{
 							// approximate a hemisphere from random points inside a sphere:
 							//  (and modulate cone with surface normal, no banding this way)
@@ -253,7 +253,7 @@ namespace castor3d
 								, sdw::Float{ castor::Angle::fromRadians( castor::PiDiv2< float > / 3 ).tan() }
 								, voxelData );
 						}
-						ROF
+						sdwROF;
 
 						// final radiance is average of all the cones radiances
 						radiance *= voxelData.radianceNumConesInv;
@@ -452,19 +452,19 @@ namespace castor3d
 
 			auto vxlRadiance( m_writer.declLocale< sdw::Vec4 >( "vxlRadiance" ) );
 
-			IF( m_writer, voxelData.enableSecondaryBounce )
+			sdwIF( m_writer, voxelData.enableSecondaryBounce )
 			{
 				vxlRadiance = traceConeRadiance( mapVoxelsSecondaryBounce
 					, lightSurface
 					, voxelData );
 			}
-			ELSE
+			sdwELSE
 			{
 				vxlRadiance = traceConeRadiance( mapVoxelsFirstBounce
 					, lightSurface
 					, voxelData );
 			}
-			FI
+			sdwFI;
 
 			auto vxlPosition = m_writer.declLocale( "vxlPosition"
 				, clamp( abs( voxelData.worldToClip( lightSurface.worldPosition().value().xyz() ) ), vec3( -1.0_f ), vec3( 1.0_f ) ) );
@@ -486,21 +486,21 @@ namespace castor3d
 			auto mapVoxelsSecondaryBounce = m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
 			auto vxlReflection( m_writer.declLocale< sdw::Vec4 >( "vxlReflection" ) );
 
-			IF( m_writer, voxelData.enableSecondaryBounce )
+			sdwIF( m_writer, voxelData.enableSecondaryBounce )
 			{
 				vxlReflection = traceConeReflection( mapVoxelsSecondaryBounce
 					, lightSurface
 					, roughness
 					, voxelData );
 			}
-			ELSE
+			sdwELSE
 			{
 				vxlReflection = traceConeReflection( mapVoxelsFirstBounce
 					, lightSurface
 					, roughness
 					, voxelData );
 			}
-			FI
+			sdwFI;
 
 			return mix( vec3( 0.0_f )
 					, vxlReflection.xyz()
@@ -561,7 +561,7 @@ namespace castor3d
 							, wsPosition + wsNormal * vec3( voxelData.gridToWorld * 2.0f * float( sqrt( 2.0f ) ) ) ); // sqrt2 is diagonal voxel half-extent
 
 						// We will break off the loop if the sampling distance is too far for performance reasons:
-						WHILE( m_writer, wsDist < voxelData.radianceMaxDistance && occlusion < 1.0_f )
+						sdwWHILE( m_writer, wsDist < voxelData.radianceMaxDistance && occlusion < 1.0_f )
 						{
 							auto wsDiameter = m_writer.declLocale( "wsDiameter"
 								, max( voxelData.gridToWorld, 2.0_f * coneAperture * wsDist ) );
@@ -572,11 +572,11 @@ namespace castor3d
 								, voxelData.worldToTex( wsStartPos + wsConeDirection * vec3( wsDist ) ) );
 
 							// break if the ray exits the voxel grid, or we sample from the last mip:
-							IF( m_writer, !m_utils.isSaturated( tsCoord ) || mip >= voxelData.radianceMips )
+							sdwIF( m_writer, !m_utils.isSaturated( tsCoord ) || mip >= voxelData.radianceMips )
 							{
 								m_writer.loopBreakStmt();
 							}
-							FI
+							sdwFI;
 
 							auto sam = m_writer.declLocale( "sam"
 								, voxels.lod( tsCoord, mip ) );
@@ -590,7 +590,7 @@ namespace castor3d
 							// step along ray:
 							wsDist += wsDiameter * voxelData.rayStepSize;
 						}
-						ELIHW
+						sdwELIHW;
 
 						m_writer.returnStmt( vec4( color, occlusion ) );
 					}
@@ -681,7 +681,7 @@ namespace castor3d
 							, wsPosition + wsNormal * vec3( voxelData.gridToWorld * 2.0f * float( sqrt( 2.0f ) ) ) ); // sqrt2 is diagonal voxel half-extent
 
 						// We will break off the loop if the sampling distance is too far for performance reasons:
-						WHILE( m_writer, wsDist < voxelData.radianceMaxDistance && occlusion < 1.0_f )
+						sdwWHILE( m_writer, wsDist < voxelData.radianceMaxDistance && occlusion < 1.0_f )
 						{
 							auto wsDiameter = m_writer.declLocale( "wsDiameter"
 								, max( voxelData.gridToWorld, 2.0_f * coneAperture * wsDist ) );
@@ -692,11 +692,11 @@ namespace castor3d
 								, voxelData.worldToTex( wsStartPos - L * vec3( wsDist ) ) );
 
 							// break if the ray exits the voxel grid, or we sample from the last mip:
-							IF( m_writer, !m_utils.isSaturated( tsCoord ) || mip >= voxelData.radianceMips )
+							sdwIF( m_writer, !m_utils.isSaturated( tsCoord ) || mip >= voxelData.radianceMips )
 							{
 								m_writer.loopBreakStmt();
 							}
-							FI
+							sdwFI;
 
 							auto sam = m_writer.declLocale( "sam"
 								, voxels.lod( tsCoord, mip ) );
@@ -709,7 +709,7 @@ namespace castor3d
 							// step along ray:
 							wsDist += wsDiameter * voxelData.rayStepSize;
 						}
-						ELIHW
+						sdwELIHW;
 
 						m_writer.returnStmt( occlusion );
 					}

@@ -360,7 +360,7 @@ namespace castor3d::shader
 					auto rayMarchTexPosition = m_writer.declLocale( "rayMarchTexPosition"
 						, vec2( 0.0_f ) );
 
-					WHILE( m_writer, stepCount < ssrForwardMaxStepCount )
+					sdwWHILE( m_writer, stepCount < ssrForwardMaxStepCount )
 					{
 						rayMarchPosition += reflectionVector.xyz() * ssrStepSize;
 						rayMarchTexPosition = cameraData.viewToScreenUV( m_utils, vec4( -rayMarchPosition, 1.0_f ) );
@@ -368,24 +368,24 @@ namespace castor3d::shader
 						sceneZ = depthMap.lod( rayMarchTexPosition, 0.0_f );
 						sceneZ = cameraData.projToView( m_utils, rayMarchTexPosition, sceneZ ).z();
 
-						IF( m_writer, -sceneZ <= -rayMarchPosition.z() )
+						sdwIF( m_writer, -sceneZ <= -rayMarchPosition.z() )
 						{
 							forwardStepCount = stepCount;
 							stepCount = ssrForwardMaxStepCount;
 						}
-						ELSE
+						sdwELSE
 						{
 							stepCount += 1.0_f;
 						}
-						FI
+						sdwFI;
 					}
-					ELIHW
+					sdwELIHW;
 
-					IF( m_writer, forwardStepCount < ssrForwardMaxStepCount )
+					sdwIF( m_writer, forwardStepCount < ssrForwardMaxStepCount )
 					{
 						stepCount = 0.0_f;
 
-						WHILE( m_writer, stepCount < ssrBackwardMaxStepCount )
+						sdwWHILE( m_writer, stepCount < ssrBackwardMaxStepCount )
 						{
 							rayMarchPosition -= reflectionVector.xyz() * ssrStepSize / ssrBackwardMaxStepCount;
 							rayMarchTexPosition = cameraData.viewToScreenUV( m_utils, vec4( -rayMarchPosition, 1.0_f ) );
@@ -393,19 +393,19 @@ namespace castor3d::shader
 							sceneZ = depthMap.lod( rayMarchTexPosition, 0.0_f );
 							sceneZ = cameraData.projToView( m_utils, rayMarchTexPosition, sceneZ ).z();
 
-							IF( m_writer, -sceneZ > -rayMarchPosition.z() )
+							sdwIF( m_writer, -sceneZ > -rayMarchPosition.z() )
 							{
 								stepCount = ssrBackwardMaxStepCount;
 							}
-							ELSE
+							sdwELSE
 							{
 								stepCount += 1.0_f;
 							}
-							FI
+							sdwFI;
 						}
-						ELIHW
+						sdwELIHW;
 					}
-					FI
+					sdwFI;
 
 					auto nDotV = m_writer.declLocale( "nDotV"
 						, abs( dot( worldNormal, viewDir ) ) + epsilon );
@@ -489,7 +489,7 @@ namespace castor3d::shader
 					auto rayMarchTexPosition = m_writer.declLocale( "rayMarchTexPosition"
 						, vec2( 0.0_f ) );
 
-					WHILE( m_writer, stepCount < ssrForwardMaxStepCount )
+					sdwWHILE( m_writer, stepCount < ssrForwardMaxStepCount )
 					{
 						rayMarchPosition += reflectionVector.xyz() * ssrStepSize;
 						rayMarchTexPosition = cameraData.viewToScreenUV( m_utils, vec4( -rayMarchPosition, 1.0_f ) );
@@ -497,24 +497,24 @@ namespace castor3d::shader
 						sceneZ = depthObjMap.lod( rayMarchTexPosition, 0.0_f ).r();
 						sceneZ = cameraData.projToView( m_utils, rayMarchTexPosition, sceneZ ).z();
 
-						IF( m_writer, -sceneZ <= -rayMarchPosition.z() )
+						sdwIF( m_writer, -sceneZ <= -rayMarchPosition.z() )
 						{
 							forwardStepCount = stepCount;
 							stepCount = ssrForwardMaxStepCount;
 						}
-						ELSE
+						sdwELSE
 						{
 							stepCount += 1.0_f;
 						}
-						FI
+						sdwFI;
 					}
-					ELIHW
+					sdwELIHW;
 
-					IF( m_writer, forwardStepCount < ssrForwardMaxStepCount )
+					sdwIF( m_writer, forwardStepCount < ssrForwardMaxStepCount )
 					{
 						stepCount = 0.0_f;
 
-						WHILE( m_writer, stepCount < ssrBackwardMaxStepCount )
+						sdwWHILE( m_writer, stepCount < ssrBackwardMaxStepCount )
 						{
 							rayMarchPosition -= reflectionVector.xyz() * ssrStepSize / ssrBackwardMaxStepCount;
 							rayMarchTexPosition = cameraData.viewToScreenUV( m_utils, vec4( -rayMarchPosition, 1.0_f ) );
@@ -522,19 +522,19 @@ namespace castor3d::shader
 							sceneZ = depthObjMap.lod( rayMarchTexPosition, 0.0_f ).r();
 							sceneZ = cameraData.projToView( m_utils, rayMarchTexPosition, sceneZ ).z();
 
-							IF( m_writer, -sceneZ > -rayMarchPosition.z() )
+							sdwIF( m_writer, -sceneZ > -rayMarchPosition.z() )
 							{
 								stepCount = ssrBackwardMaxStepCount;
 							}
-							ELSE
+							sdwELSE
 							{
 								stepCount += 1.0_f;
 							}
-							FI
+							sdwFI;
 						}
-						ELIHW
+						sdwELIHW;
 					}
-					FI
+					sdwFI;
 
 					auto nDotV = m_writer.declLocale( "nDotV"
 						, abs( dot( worldNormal, viewDir ) ) + epsilon );
@@ -662,7 +662,7 @@ namespace castor3d::shader
 				// Permute so that the primary iteration is in x to reduce
 				// large branches later
 				auto permute = m_writer.declLocale< sdw::Int >( "permute" , 0_i );
-				IF( m_writer, abs( delta.x() ) < abs( delta.y() ) )
+				sdwIF( m_writer, abs( delta.x() ) < abs( delta.y() ) )
 				{
 					// More-vertical line. Create a permutation that swaps x and y in the output
 					permute = 1_i;
@@ -672,7 +672,7 @@ namespace castor3d::shader
 					P1 = P1.yx();
 					P0 = P0.yx();
 				}
-				FI
+				sdwFI;
 
 				// From now on, "x" is the primary iteration direction and "y" is the secondary one
 
@@ -723,14 +723,12 @@ namespace castor3d::shader
 
 				// We only advance the z field of Q in the inner loop, since
 				// Q.xy is never used until after the loop terminates.
-
-				FOR( m_writer, sdw::Vec2, P, P0
-					, ( ( ( P.x() * stepDirection ) <= end ) &&
-						( stepCount < maxSteps ) &&
-						( ( rayZMax < sceneZMax - csZThickness ) ||
-							( rayZMin > sceneZMax ) ) &&
-						( sceneZMax != 0.0_f ) )
-					, ( Q.z() += dQ.z(), k += dk, stepCount += 1.0_f, P += dP ) )
+				auto P = m_writer.declLocale( "P", P0 );
+				sdwWHILE( m_writer
+					, ( ( ( P.x() * stepDirection ) <= end )
+						&& ( stepCount < maxSteps )
+						&& ( ( rayZMax < sceneZMax - csZThickness ) || ( rayZMin > sceneZMax ) )
+						&& ( sceneZMax != 0.0_f ) ) )
 				{
 					hitPixel = m_writer.ternary( permute != 0_i
 						, P.yx()
@@ -747,23 +745,29 @@ namespace castor3d::shader
 					rayZMax = ( dQ.z() * 0.5f + Q.z() ) / ( dk * 0.5f + k );
 					prevZMaxEstimate = rayZMax;
 
-					IF ( m_writer, rayZMin > rayZMax )
+					sdwIF( m_writer, rayZMin > rayZMax )
 					{
 						m_utils.swap( rayZMin, rayZMax );
 					}
-					FI
+					sdwFI;
 
 					// Camera-space z of the background
 					sceneZMax = csZBuffer.fetch( ivec2( hitPixel ), 0_i );
 
 					// This compiles away when csZBufferIsHyperbolic = false
-					IF( m_writer, csZBufferIsHyperbolic )
+					sdwIF( m_writer, csZBufferIsHyperbolic )
 					{
 						sceneZMax = m_utils.reconstructCSZ( sceneZMax, clipInfo );
 					}
-					FI
+					sdwFI;
+
+					// increment
+					Q.z() += dQ.z();
+					k += dk;
+					stepCount += 1.0_f;
+					P += dP;
 				} // pixel on ray
-				ROF
+				sdwELIHW;
 
 				Q.xy() += dQ.xy() * stepCount;
 				csHitPoint = Q * ( 1.0f / k );
@@ -979,7 +983,7 @@ namespace castor3d::shader
 					, sdw::Float const & attenuationDistance
 					, sdw::Float const & dispersion )
 				{
-					IF( m_writer, thicknessFactor != 0.0_f
+					sdwIF( m_writer, thicknessFactor != 0.0_f
 						&& ior != 0.0_f )
 					{
 						auto transmittedLight = m_writer.declLocale( "transmittedLight"
@@ -1060,11 +1064,11 @@ namespace castor3d::shader
 							m_writer.returnStmt( transmittedLight * attenuatedColor * albedo );
 						}
 					}
-					ELSE
+					sdwELSE
 					{
 						m_writer.returnStmt( sceneMap.lod( sceneUv, applyIorToRoughness( roughness, ior ) * sdw::Float( float( EnvironmentMipLevels ) ) ).rgb() * albedo );
 					}
-					FI
+					sdwFI;
 				}
 				, sdw::InVec3{ m_writer, "wsIncident" }
 				, sdw::InVec3{ m_writer, "wsPosition" }
@@ -1109,7 +1113,7 @@ namespace castor3d::shader
 	{
 		auto & writer = *envMap.getWriter();
 
-		IF( writer, hasEnvMap && components.hasReflection != 0_u )
+		sdwIF( writer, hasEnvMap && components.hasReflection != 0_u )
 		{
 			if ( m_allowReflections && background.hasReflectionSupport() )
 			{
@@ -1131,7 +1135,7 @@ namespace castor3d::shader
 					, envMap );
 			}
 		}
-		ELSE
+		sdwELSE
 		{
 			if ( m_allowReflections && background.hasReflectionSupport() )
 			{
@@ -1144,7 +1148,7 @@ namespace castor3d::shader
 					, reflectedSpecular );
 			}
 		}
-		FI
+		sdwFI;
 	}
 
 	void ReflectionModel::doComputeSpecularTransmission( sdw::CombinedImageCubeArrayRgba32 const & envMap
@@ -1159,11 +1163,11 @@ namespace castor3d::shader
 	{
 		auto & writer = *envMap.getWriter();
 
-		IF( writer, components.ior != 0.0_f )
+		sdwIF( writer, components.ior != 0.0_f )
 		{
 			if ( m_hasEnvMap )
 			{
-				IF( writer, hasEnvMap )
+				sdwIF( writer, hasEnvMap )
 				{
 					refracted = computeRefrEnvMaps( -V
 						, wsNormal
@@ -1171,7 +1175,7 @@ namespace castor3d::shader
 						, envMapIndex
 						, components );
 				}
-				ELSE
+				sdwELSE
 				{
 					if ( m_allowRefraction && background.hasRefractionSupport() )
 					{
@@ -1181,7 +1185,7 @@ namespace castor3d::shader
 							, components );
 					}
 				}
-				FI
+				sdwFI;
 			}
 			else if ( m_allowRefraction && background.hasRefractionSupport() )
 			{
@@ -1191,7 +1195,7 @@ namespace castor3d::shader
 					, components );
 			}
 		}
-		FI
+		sdwFI;
 	}
 
 	void ReflectionModel::doComputeDiffuse( sdw::CombinedImageCubeArrayRgba32 const & envMap
@@ -1206,19 +1210,19 @@ namespace castor3d::shader
 		{
 			auto & writer = *envMap.getWriter();
 
-			IF( writer, hasEnvMap )
+			sdwIF( writer, hasEnvMap )
 			{
 				result = computeDiffuseEnvMaps( wsDirection
 					, envMap
 					, envMapIndex
 					, components );
 			}
-			ELSE
+			sdwELSE
 			{
 				result = background.computeDiffuse( wsDirection
 					, components );
 			}
-			FI
+			sdwFI;
 		}
 		else
 		{
@@ -1240,7 +1244,7 @@ namespace castor3d::shader
 		{
 			if ( m_hasEnvMap )
 			{
-				IF( m_writer, hasEnvMap && components.hasReflection != 0_u )
+				sdwIF( m_writer, hasEnvMap && components.hasReflection != 0_u )
 				{
 					coatReflected = computeSpecularReflEnvMaps( -V
 						, components.clearcoatNormal
@@ -1248,7 +1252,7 @@ namespace castor3d::shader
 						, envMapIndex
 						, envMap );
 				}
-				ELSE
+				sdwELSE
 				{
 					if ( background.hasReflectionSupport() )
 					{
@@ -1258,7 +1262,7 @@ namespace castor3d::shader
 							, components.clearcoatRoughness );
 					}
 				}
-				FI
+				sdwFI;
 			}
 			else if ( background.hasReflectionSupport() )
 			{
@@ -1286,7 +1290,7 @@ namespace castor3d::shader
 		{
 			if ( m_hasEnvMap )
 			{
-				IF( m_writer, hasEnvMap && components.hasReflection != 0_u )
+				sdwIF( m_writer, hasEnvMap && components.hasReflection != 0_u )
 				{
 					sheenReflected = computeSheenReflEnvMaps( brdf
 						, -V
@@ -1296,7 +1300,7 @@ namespace castor3d::shader
 						, NdotV
 						, components );
 				}
-				ELSE
+				sdwELSE
 				{
 					if ( background.hasReflectionSupport() )
 					{
@@ -1308,7 +1312,7 @@ namespace castor3d::shader
 							, brdf );
 					}
 				}
-				FI
+				sdwFI;
 			}
 			else if ( background.hasReflectionSupport() )
 			{

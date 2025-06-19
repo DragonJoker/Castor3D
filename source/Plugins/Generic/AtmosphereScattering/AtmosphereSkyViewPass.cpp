@@ -109,12 +109,12 @@ namespace atmosphere_scattering
 						, -viewZenithSinAngle * lightViewSinAngle );
 
 					// Move to top atmospehre
-					IF( writer, !atmosphere.moveToTopAtmosphere( ray ) )
+					sdwIF( writer, !atmosphere.moveToTopAtmosphere( ray ) )
 					{
 						// Ray is not intersecting the atmosphere
 						out.colour() = vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f );
 					}
-					ELSE
+					sdwELSE
 					{
 						auto ss = writer.declLocale( "ss"
 							, atmosphere.integrateScatteredLuminance( pixPos
@@ -124,7 +124,7 @@ namespace atmosphere_scattering
 							, depthBufferValue ) );
 						out.colour() = vec4( ss.luminance(), 1.0_f );
 					}
-					FI;
+					sdwFI;
 				} );
 
 			return writer.getBuilder().releaseShader();

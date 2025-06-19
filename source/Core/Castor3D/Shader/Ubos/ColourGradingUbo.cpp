@@ -106,56 +106,56 @@ namespace castor3d
 				m_colourGrade = writer.implementFunction< sdw::Vec3 >( "colourGrade"
 					, [this, &writer]( sdw::Vec3 hdrColour )
 					{
-						IF( writer, enabled() )
+						sdwIF( writer, enabled() )
 						{
 							hdrColour *= postExposure();
-							IF( writer, enableWhiteBalance() )
+							sdwIF( writer, enableWhiteBalance() )
 							{
 								hdrColour = linearToLms( hdrColour );
 								hdrColour *= whiteBalance();
 								hdrColour = lmsToLinear( hdrColour );
 							}
-							FI
-							IF( writer, enableSplitToning() )
+							sdwFI;
+							sdwIF( writer, enableSplitToning() )
 							{
 								hdrColour = m_splitToning( hdrColour );
 							}
-							FI
-							IF( writer, enableChannelMix() )
+							sdwFI;
+							sdwIF( writer, enableChannelMix() )
 							{
 								hdrColour = vec3( dot( hdrColour, channelMixRed() )
 									, dot( hdrColour, channelMixGreen() )
 									, dot( hdrColour, channelMixBlue() ) );
 							}
-							FI
-							IF( writer, enableShadowMidToneHighlight() )
+							sdwFI;
+							sdwIF( writer, enableShadowMidToneHighlight() )
 							{
 								hdrColour = m_shadowsMidtoneHighlight( hdrColour );
 							}
-							FI
-							IF( writer, enableContrast() )
+							sdwFI;
+							sdwIF( writer, enableContrast() )
 							{
 								hdrColour = linearToLogC( hdrColour );
 								hdrColour = ( hdrColour - midGray() ) * contrast() + midGray();
 								hdrColour = logCToLinear( hdrColour );
 							}
-							FI
+							sdwFI;
 							hdrColour *= colourFilter();
-							IF( writer, enableHueShift() )
+							sdwIF( writer, enableHueShift() )
 							{
 								hdrColour = m_rgbToHsv( hdrColour );
 								auto hue = writer.declLocale( "hue", hdrColour.x() + hueShift() );
 								hdrColour.x() = rotateHue( hue, 0.0_f, 1.0_f );
 								hdrColour = m_hsvToRgb( hdrColour );
 							}
-							FI
+							sdwFI;
 							// Saturation
 							auto luminance = writer.declLocale( "luminance", getLuminance( hdrColour ) );
 							hdrColour = ( hdrColour - luminance ) * saturation() + luminance;
 							// Prevent negative colours
 							writer.returnStmt( max( vec3( 0.0_f ), hdrColour ) );
 						}
-						FI
+						sdwFI;
 
 						writer.returnStmt( hdrColour );
 					}

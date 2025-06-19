@@ -500,11 +500,11 @@ namespace castor3d::shader
 				, [this]( sdw::Float const & cosTheta
 					, sdw::Float const & alphaG )
 				{
-					IF( m_writer, abs( cosTheta ) < 0.5_f )
+					sdwIF( m_writer, abs( cosTheta ) < 0.5_f )
 					{
 						m_writer.returnStmt( exp( lambdaSheenNumericHelper( cosTheta, alphaG ) ) );
 					}
-					FI
+					sdwFI;
 
 					m_writer.returnStmt( exp( 2.0_f * lambdaSheenNumericHelper( 0.5_f, alphaG )
 						- lambdaSheenNumericHelper( 1.0_f - cosTheta, alphaG ) ) );
