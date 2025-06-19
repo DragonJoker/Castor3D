@@ -52,15 +52,15 @@ namespace light_streaks
 						, max( out.colour().r(), out.colour().g() ) );
 					maxComponent = max( maxComponent, out.colour().b() );
 
-					IF( writer, maxComponent > 1.0_f )
+					sdwIF( writer, maxComponent > 1.0_f )
 					{
 						out.colour().xyz() /= maxComponent;
 					}
-					ELSE
+					sdwELSE
 					{
 						out.colour().xyz() = vec3( 0.0_f, 0.0_f, 0.0_f );
 					}
-					FI;
+					sdwFI;
 				} );
 			return writer.getBuilder().releaseShader();
 		}

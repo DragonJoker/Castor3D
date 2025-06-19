@@ -52,7 +52,7 @@ namespace smaa
 					, sdw::CombinedImage2DRgba32 const & currentColorTex
 					, sdw::CombinedImage2DRgba32 const & previousColorTex )
 				{
-					IF( writer, c3d_smaaData.enableReprojection != 0 )
+					sdwIF( writer, c3d_smaaData.enableReprojection != 0 )
 					{
 						// Velocity is assumed to be calculated for motion blur, so we need to
 						// inverse it for reprojection:
@@ -76,7 +76,7 @@ namespace smaa
 						// Blend the pixels according to the calculated weight:
 						writer.returnStmt( mix( current, previous, vec4( weight ) ) );
 					}
-					ELSE
+					sdwELSE
 					{
 						// Just blend the pixels:
 						auto current = writer.declLocale( "current"
@@ -85,7 +85,7 @@ namespace smaa
 							, previousColorTex.sample( texcoord ) );
 						writer.returnStmt( mix( current, previous, vec4( 0.5_f ) ) );
 					}
-					FI;
+					sdwFI;
 				}
 				, sdw::InVec2{ writer, "texcoord" }
 				, sdw::InCombinedImage2DRgba32{ writer, "currentColorTex" }

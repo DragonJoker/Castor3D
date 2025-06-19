@@ -147,7 +147,7 @@ namespace atmosphere_scattering
 					auto sun = writer.declLocale( "sun"
 						, sunMap.sample( texCoords ) );
 
-					IF( writer, c3d_cloudsData.coverage() > 0.0_f )
+					sdwIF( writer, c3d_cloudsData.coverage() > 0.0_f )
 					{
 						auto ray = writer.declLocale( "ray"
 							, atmosphere.castRay( texCoords ) );
@@ -161,11 +161,11 @@ namespace atmosphere_scattering
 								, clouds.a() )
 							, clouds.a() );
 					}
-					ELSE
+					sdwELSE
 					{
 						out.colour() = sky + sun;
 					}
-					FI;
+					sdwFI;
 				} );
 
 			return writer.getBuilder().releaseShader();

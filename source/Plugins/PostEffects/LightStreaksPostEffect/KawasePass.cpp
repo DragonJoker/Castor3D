@@ -52,7 +52,7 @@ namespace light_streaks
 					auto texcoords = writer.declLocale( "texcoords"
 						, in.uv() );
 
-					FOR( writer, sdw::Int, s, 0, s < c3d_kawaseData.samples, ++s )
+					sdwFOR( writer, sdw::Int, s, 0, s < c3d_kawaseData.samples, ++s )
 					{
 						// Weight = a^(b*s)
 						auto weight = writer.declLocale( "weight"
@@ -63,7 +63,7 @@ namespace light_streaks
 						// Scale and accumulate
 						colour += c3d_mapHiPass.sample( sampleCoord ).rgb() * clamp( weight, 0.0_f, 1.0_f );
 					}
-					ROF;
+					sdwROF;
 
 					out.colour() = vec4( clamp( colour, vec3( 0.0_f ), vec3( 1.0_f ) ), 1.0_f );
 				} );

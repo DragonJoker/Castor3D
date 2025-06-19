@@ -59,15 +59,15 @@ namespace smaa
 					if ( config.data.mode == Mode::eT2X
 						&& C3D_DebugVelocity )
 					{
-						IF( writer, c3d_smaaData.enableReprojection != 0 )
+						sdwIF( writer, c3d_smaaData.enableReprojection != 0 )
 						{
 							out.colour() = vec4( c3d_map.sample( in.uv() ).xy(), 0.0_f, 1.0_f );
 						}
-						ELSE
+						sdwELSE
 						{
 							out.colour() = c3d_map.sample( in.uv() );
 						}
-						FI;
+						sdwFI;
 					}
 					else
 					{

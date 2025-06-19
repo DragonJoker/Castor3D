@@ -108,20 +108,20 @@ namespace castor3d
 						auto reduceIndex = writer.declLocale( "reduceIndex"
 							, 32_u >> 1_u );
 
-						WHILE( writer, mod32GroupIndex < reduceIndex )
+						sdwWHILE( writer, mod32GroupIndex < reduceIndex )
 						{
 							gsAABBMin[groupIndex] = min( gsAABBMin[groupIndex], gsAABBMin[groupIndex + reduceIndex] );
 							gsAABBMax[groupIndex] = max( gsAABBMax[groupIndex], gsAABBMax[groupIndex + reduceIndex] );
 
 							reduceIndex >>= 1_u;
 						}
-						ELIHW
+						sdwELIHW;
 					}
 					else
 					{
 						shader::groupMemoryBarrierWithGroupSync( writer );
 
-						IF( writer, mod32GroupIndex == 0_u )
+						sdwIF( writer, mod32GroupIndex == 0_u )
 						{
 							for ( uint32_t i = 1u; i < 32u; ++i )
 							{
@@ -129,7 +129,7 @@ namespace castor3d
 								gsAABBMax[groupIndex] = max( gsAABBMax[groupIndex], gsAABBMax[groupIndex + i] );
 							}
 						}
-						FI
+						sdwFI;
 
 						shader::groupMemoryBarrierWithGroupSync( writer );
 					}
@@ -146,16 +146,16 @@ namespace castor3d
 					auto aabbMax = writer.declLocale( "aabbMax"
 						, vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f ) );
 
-					IF( writer, groupIndex == 0_u )
+					sdwIF( writer, groupIndex == 0_u )
 					{
-						FOR( writer, sdw::UInt, n, 0_u, n < NumThreads, ++n )
+						sdwFOR( writer, sdw::UInt, n, 0_u, n < NumThreads, ++n )
 						{
 							gsAABBMin[n] = aabbMin;
 							gsAABBMax[n] = aabbMax;
 						}
-						ROF
+						sdwROF;
 					}
-					FI
+					sdwFI;
 
 					shader::groupMemoryBarrierWithGroupSync( writer );
 
@@ -169,21 +169,21 @@ namespace castor3d
 						, sdw::UInt const & currentLevel )
 					{
 						// The first thread of each warp will write the AABB to global memory.
-						IF( writer, threadIndex % 32_u == 0_u )
+						sdwIF( writer, threadIndex % 32_u == 0_u )
 						{
 							// Offset of the node in the BVH at the last level of child nodes.
 							auto nodeOffset = writer.declLocale( "nodeOffset"
 								, threadIndex / 32_u );
 
-							IF( writer, childLevel < numLevels && nodeOffset < c3d_numLevelNodes[currentLevel - 1_u] )
+							sdwIF( writer, childLevel < numLevels && nodeOffset < c3d_numLevelNodes[currentLevel - 1_u] )
 							{
 								auto nodeIndex = writer.declLocale( "nodeIndex"
 									, c3d_firstNodeIndex[currentLevel - 1_u] + nodeOffset );
 								c3d_lightBVH[nodeIndex] = shader::AABB{ gsAABBMin[groupIndex], gsAABBMax[groupIndex] };
 							}
-							FI
+							sdwFI;
 						}
-						FI
+						sdwFI;
 					};
 
 					if ( bottomLevel )
@@ -195,9 +195,9 @@ namespace castor3d
 							? c3d_clustersData.pointLightCount()
 							: c3d_clustersData.spotLightCount();
 
-						IF( writer, lightCount > 0_u )
+						sdwIF( writer, lightCount > 0_u )
 						{
-							IF( writer, leafIndex < lightCount )
+							sdwIF( writer, leafIndex < lightCount )
 							{
 								auto lightIndex = writer.declLocale( "lightIndex"
 									, ( lightType == LightType::ePoint
@@ -209,12 +209,12 @@ namespace castor3d
 								aabbMin = aabb.min();
 								aabbMax = aabb.max();
 							}
-							ELSE
+							sdwELSE
 							{
 								aabbMin = vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f );
 								aabbMax = vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f );
 							}
-							FI
+							sdwFI;
 
 							gsAABBMin[groupIndex] = aabbMin;
 							gsAABBMax[groupIndex] = aabbMax;
@@ -225,7 +225,7 @@ namespace castor3d
 
 							writeToGlobalMemory( 0_u, numLevels );
 						}
-						FI
+						sdwFI;
 					}
 					else
 					{
@@ -233,7 +233,7 @@ namespace castor3d
 						auto childOffset = writer.declLocale( "childOffset"
 							, threadIndex );
 
-						IF( writer, c3d_childLevel < numLevels && childOffset < c3d_numLevelNodes[c3d_childLevel] )
+						sdwIF( writer, c3d_childLevel < numLevels && childOffset < c3d_numLevelNodes[c3d_childLevel] )
 						{
 							auto childIndex = writer.declLocale( "childIndex"
 								, c3d_firstNodeIndex[c3d_childLevel] + childOffset );
@@ -241,21 +241,21 @@ namespace castor3d
 							aabbMin = c3d_lightBVH[childIndex].min();
 							aabbMax = c3d_lightBVH[childIndex].max();
 
-							IF( writer, aabbMin.x() == aabbMax.x()
+							sdwIF( writer, aabbMin.x() == aabbMax.x()
 								&& aabbMin.y() == aabbMax.y()
 								&& aabbMin.z() == aabbMax.z() )
 							{
 								aabbMin = vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f );
 								aabbMax = vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f );
 							}
-							FI
+							sdwFI;
 						}
-						ELSE
+						sdwELSE
 						{
 							aabbMin = vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f );
 							aabbMax = vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f );
 						}
-						FI
+						sdwFI;
 
 						gsAABBMin[groupIndex] = aabbMin;
 						gsAABBMax[groupIndex] = aabbMax;
@@ -538,11 +538,11 @@ namespace castor3d
 				{
 					auto i = writer.declLocale( "i", 0_u );
 
-					WHILE( writer, nodeIndex > numBVHNodes[i] && i < 5_u )
+					sdwWHILE( writer, nodeIndex > numBVHNodes[i] && i < 5_u )
 					{
 						++i;
 					}
-					ELIHW
+					sdwELIHW;
 
 					writer.returnStmt( i );
 				}
@@ -554,13 +554,13 @@ namespace castor3d
 					auto aabb = writer.declLocale( "aabb"
 						, c3d_lightBVH[in.instanceIndex] );
 
-					IF( writer, aabb.min().x() == aabb.max().x()
+					sdwIF( writer, aabb.min().x() == aabb.max().x()
 						&& aabb.min().y() == aabb.max().y()
 						&& aabb.min().z() == aabb.max().z() )
 					{
 						out.vtx.position = vec4( -100.0_f );
 					}
-					ELSE
+					sdwELSE
 					{
 						auto position = writer.declLocale( "position"
 							, in.position() );
@@ -575,7 +575,7 @@ namespace castor3d
 
 						out.colour() = colorPalette[getNodeLevel( writer.cast< sdw::UInt >( in.instanceIndex ) )];
 					}
-					FI
+					sdwFI;
 				} );
 
 			writer.implementEntryPointT< shader::Colour4FT, shader::Colour4FT >( []( sdw::FragmentInT< shader::Colour4FT > const & in

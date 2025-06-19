@@ -105,22 +105,22 @@ namespace castor3d
 					auto size = writer.declLocale( "size"
 						, uvec2( input.getSize() ) );
 
-					IF( writer, in.globalInvocationID.x() >= size.x()
+					sdwIF( writer, in.globalInvocationID.x() >= size.x()
 						|| in.globalInvocationID.y() >= size.y() )
 					{
 						writer.returnStmt();
 					}
-					FI
+					sdwFI;
 
 					auto fragColor = writer.declLocale( "fragColor"
 						, input.load( ivec2( in.globalInvocationID.xy() ) ).y() );
 
-					IF( writer, fragColor > 0.0_f )
+					sdwIF( writer, fragColor > 0.0_f )
 					{
 						atomicMin( minmax[0], floatBitsToInt( fragColor ) );
 						atomicMax( minmax[1], floatBitsToInt( fragColor ) );
 					}
-					FI
+					sdwFI;
 				} );
 			return writer.getBuilder().releaseShader();
 		}

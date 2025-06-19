@@ -175,32 +175,32 @@ namespace atmosphere_scattering
 					auto tTop = writer.declLocale( "tTop", raySphereIntersectNearest( ray, planetO, getAtmosphereRadius() ) );
 					auto tMax = writer.declLocale( "tMax", 0.0_f );
 
-					IF( writer, !tBottom.valid() )
+					sdwIF( writer, !tBottom.valid() )
 					{
-						IF( writer, !tTop.valid() )
+						sdwIF( writer, !tTop.valid() )
 						{
 							tMax = 0.0f; // No intersection with planet nor atmosphere: stop right away  
 							writer.returnStmt( result );
 						}
-						ELSE
+						sdwELSE
 						{
 							tMax = tTop.t();
 						}
-						FI;
+						sdwFI;
 					}
-					ELSE
+					sdwELSE
 					{
-						IF( writer, tTop.t() > 0.0_f )
+						sdwIF( writer, tTop.t() > 0.0_f )
 						{
 							tMax = min( tTop.t(), tBottom.t() );
 						}
-						FI;
+						sdwFI;
 					}
-					FI;
+					sdwFI;
 
 					if ( settings.cameraData )
 					{
-						IF( writer, depthBufferValue <= 1.0_f
+						sdwIF( writer, depthBufferValue <= 1.0_f
 							&& depthBufferValue > 0.0f )
 						{
 							auto transmittanceLutExtent = sdw::vec2( float( transmittanceExtent.width ), float( transmittanceExtent.height ) );
@@ -211,13 +211,13 @@ namespace atmosphere_scattering
 							auto tDepth = writer.declLocale( "tDepth"
 								, length( depthBufferWorldPos - ray.origin ) ); // apply planet offset to go back to origin as top of planet mode. 
 
-							IF( writer, tDepth < tMax )
+							sdwIF( writer, tDepth < tMax )
 							{
 								tMax = tDepth;
 							}
-							FI;
+							sdwFI;
 						}
-						FI;
+						sdwFI;
 					}
 
 					tMax = min( tMax, tMaxMax );
@@ -263,7 +263,7 @@ namespace atmosphere_scattering
 					auto sampleSegmentT = 0.3_f;
 					auto uniformPhase = 1.0_f / ( 4.0_f * sdw::Float{ castor::Pi< float > } );
 
-					FOR( writer, sdw::Float, s, 0.0_f, s < sampleCount, s += 1.0_f )
+					sdwFOR( writer, sdw::Float, s, 0.0_f, s < sampleCount, s += 1.0_f )
 					{
 						if ( settings.variableSampleCount )
 						{
@@ -276,16 +276,16 @@ namespace atmosphere_scattering
 							// Make t0 and t1 world space distances.
 							t0 = tMaxFloor * t0;
 
-							IF( writer, t1 > 1.0_f )
+							sdwIF( writer, t1 > 1.0_f )
 							{
 								dt = tMax - t0;
 								//	t1 = tMaxFloor;	// this reveal depth slices
 							}
-							ELSE
+							sdwELSE
 							{
 								dt = sdw::fma( tMaxFloor, t1, -t0 );
 							}
-							FI;
+							sdwFI;
 
 							//t = t0 + (t1 - t0) * (whangHashNoise(pixPos.x, pixPos.y, gFrameId * 1920 * 1080)); // With dithering required to hide some sampling artefact relying on TAA later? This may even allow volumetric shadow?
 							t = sdw::fma( dt, sampleSegmentT, t0 );
@@ -367,11 +367,11 @@ namespace atmosphere_scattering
 
 						tPrev = t;
 					}
-					ROF;
+					sdwROF;
 
 					if ( settings.useGround )
 					{
-						IF( writer, tMax == tBottom.t() && tBottom.t() > 0.0_f )
+						sdwIF( writer, tMax == tBottom.t() && tBottom.t() > 0.0_f )
 						{
 							// Account for bounced light off the planet
 							auto P = writer.declLocale( "P", tBottom.point() );
@@ -389,7 +389,7 @@ namespace atmosphere_scattering
 							auto NdotL = writer.declLocale( "NdotL", clamp( dot( normalize( upVector ), normalize( sunDir ) ), 0.0_f, 1.0_f ) );
 							L += globalL * transmittanceToSun * throughput * NdotL * atmosphereData.groundAlbedo() / castor::Pi< float >;
 						}
-						FI;
+						sdwFI;
 					}
 
 					result.luminance() = L;
@@ -423,14 +423,14 @@ namespace atmosphere_scattering
 					auto viewHeight = writer.declLocale( "viewHeight"
 						, length( ray.origin ) );
 
-					IF( writer, viewHeight > getAtmosphereRadius() )
+					sdwIF( writer, viewHeight > getAtmosphereRadius() )
 					{
 						auto tTop = writer.declLocale( "tTop"
 							, raySphereIntersectNearest( ray
 								, vec3( 0.0_f, 0.0_f, 0.0_f )
 								, getAtmosphereRadius() ) );
 
-						IF( writer, tTop.valid() )
+						sdwIF( writer, tTop.valid() )
 						{
 							auto upVector = writer.declLocale( "upVector"
 								, ray.origin / viewHeight );
@@ -438,14 +438,14 @@ namespace atmosphere_scattering
 								, upVector * -planetRadiusOffset );
 							ray.origin = tTop.point() + upOffset;
 						}
-						ELSE
+						sdwELSE
 						{
 							// Ray is not intersecting the atmosphere
 							writer.returnStmt( 0_b );
 						}
-						FI;
+						sdwFI;
 					}
-					FI;
+					sdwFI;
 
 					writer.returnStmt( 1_b ); // ok to start tracing
 				}
@@ -526,36 +526,36 @@ namespace atmosphere_scattering
 					auto delta = writer.declLocale( "delta"
 						, b * b - 4.0_f * a * c );
 
-					IF( writer, delta < 0.0_f || a == 0.0_f )
+					sdwIF( writer, delta < 0.0_f || a == 0.0_f )
 					{
 						writer.returnStmt( result );
 					}
-					FI;
+					sdwFI;
 
 					auto t0 = writer.declLocale( "t0"
 						, ( -b - sqrt( delta ) ) / ( 2.0_f * a ) );
 					auto t1 = writer.declLocale( "t1"
 						, ( -b + sqrt( delta ) ) / ( 2.0_f * a ) );
 
-					IF( writer, t0 < 0.0_f && t1 < 0.0_f )
+					sdwIF( writer, t0 < 0.0_f && t1 < 0.0_f )
 					{
 						writer.returnStmt( result );
 					}
-					FI;
+					sdwFI;
 
-					IF( writer, t0 < 0.0_f )
+					sdwIF( writer, t0 < 0.0_f )
 					{
 						result.t() = max( 0.0_f, t1 );
 					}
-					ELSEIF( t1 < 0.0_f )
+					sdwELSEIF( t1 < 0.0_f )
 					{
 						result.t() = max( 0.0_f, t0 );
 					}
-					ELSE
+					sdwELSE
 					{
 						result.t() = max( 0.0_f, min( t0, t1 ) );
 					}
-					FI;
+					sdwFI;
 
 					result.valid() = 1_b;
 					result.point() = ray.step( result.t() );
@@ -606,22 +606,22 @@ namespace atmosphere_scattering
 					auto delta = writer.declLocale( "delta"
 						, b * b - 4.0_f * a * c );
 
-					IF( writer, delta < 0.0_f || a == 0.0_f )
+					sdwIF( writer, delta < 0.0_f || a == 0.0_f )
 					{
 						writer.returnStmt( 0_i );
 					}
-					FI;
+					sdwFI;
 
 					auto t0 = writer.declLocale( "t0"
 						, ( -b - sqrt( delta ) ) / ( 2.0_f * a ) );
 					auto t1 = writer.declLocale( "t1"
 						, ( -b + sqrt( delta ) ) / ( 2.0_f * a ) );
 
-					IF( writer, t0 < 0.0_f && t1 < 0.0_f )
+					sdwIF( writer, t0 < 0.0_f && t1 < 0.0_f )
 					{
 						writer.returnStmt( 0_i );
 					}
-					FI;
+					sdwFI;
 
 					auto minSol = writer.declLocale( "minSol"
 						, writer.ternary( ground.valid() 
@@ -632,14 +632,14 @@ namespace atmosphere_scattering
 							, min( max( t0, t1 ), ground.t() )
 							, max( t0, t1 ) ) );
 
-					IF( writer, minSol < 0.0_f || minSol == maxSol )
+					sdwIF( writer, minSol < 0.0_f || minSol == maxSol )
 					{
 						nearest.t() = maxSol;
 						nearest.point() = ray.step( maxSol );
 						nearest.valid() = clampToGround || maxSol != ground.t();
 						writer.returnStmt( writer.ternary( nearest.valid(), 1_i, 0_i ) );
 					}
-					FI;
+					sdwFI;
 
 					nearest.t() = minSol;
 					nearest.point() = ray.step( minSol );
@@ -886,7 +886,7 @@ namespace atmosphere_scattering
 					auto zenithHorizonAngle = writer.declLocale( "zenithHorizonAngle"
 						, castor::Pi< float > - beta );
 
-					IF( writer, uv.y() < 0.5_f )
+					sdwIF( writer, uv.y() < 0.5_f )
 					{
 						auto coords = writer.declLocale( "coords"
 							, 2.0_f * uv.y() );
@@ -895,14 +895,14 @@ namespace atmosphere_scattering
 						coords = 1.0_f - coords;
 						viewZenithCosAngle = cos( zenithHorizonAngle * coords );
 					}
-					ELSE
+					sdwELSE
 					{
 						auto coords = writer.declLocale( "coords"
 							, uv.y() * 2.0_f - 1.0_f );
 						coords *= coords;
 						viewZenithCosAngle = cos( zenithHorizonAngle + beta * coords );
 					}
-					FI;
+					sdwFI;
 
 					auto coord = writer.declLocale( "coord"
 						, uv.x() );
@@ -945,7 +945,7 @@ namespace atmosphere_scattering
 					auto zenithHorizonAngle = writer.declLocale( "zenithHorizonAngle"
 						, sdw::Float{ castor::Pi< float > } - beta );
 
-					IF( writer, !intersectGround )
+					sdwIF( writer, !intersectGround )
 					{
 						auto coord = writer.declLocale( "coord"
 							, acos( viewZenithCosAngle ) / zenithHorizonAngle );
@@ -954,14 +954,14 @@ namespace atmosphere_scattering
 						coord = 1.0_f - coord;
 						uv.y() = coord * 0.5_f;
 					}
-					ELSE
+					sdwELSE
 					{
 						auto coord = writer.declLocale( "coord"
 						, ( acos( viewZenithCosAngle ) - zenithHorizonAngle ) / beta );
 						coord = sqrt( coord );
 						uv.y() = coord * 0.5_f + 0.5_f;
 					}
-					FI;
+					sdwFI;
 					{
 						auto coord = writer.declLocale( "coord"
 							, -lightViewCosAngle * 0.5_f + 0.5_f );

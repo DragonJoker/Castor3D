@@ -152,14 +152,14 @@ namespace atmosphere_scattering
 					auto wasHittingGround = m_writer.declLocale( "wasHittingGround"
 						, interGround.valid() );
 
-					IF( m_writer, ( ( !interGround.valid() ) || linearDepth < interGround.t() ) )
+					sdwIF( m_writer, ( ( !interGround.valid() ) || linearDepth < interGround.t() ) )
 					{
 						interGround.t() = linearDepth;
 						interGround.point() = ray.step( linearDepth );
 						interGround.valid() = 1_b;
 						clampOuter = 1_b;
 					}
-					FI;
+					sdwFI;
 
 					auto interInnerN = m_writer.declLocale( "interInnerN", Intersection{ m_writer } );
 					auto interInnerF = m_writer.declLocale( "interInnerF", Intersection{ m_writer } );
@@ -184,13 +184,13 @@ namespace atmosphere_scattering
 					auto crossesOuter = m_writer.declLocale( "crossesOuter"
 						, interOuterN.valid() && linearDepth >= interOuterN.t() );
 
-					IF( m_writer, crossesInner || crossesOuter )
+					sdwIF( m_writer, crossesInner || crossesOuter )
 					{
 						auto clouds = m_writer.declLocale( "clouds"
 							, cloudsResult.lod( uv, 0.0_f ) );
 						output = mix( output, clouds, vec4( clouds.a() ) );
 					}
-					FI;
+					sdwFI;
 				}
 				, sdw::InVec2{ m_writer, "fragCoord" }
 				, sdw::InFloat{ m_writer, "linearDepth" }
@@ -198,7 +198,7 @@ namespace atmosphere_scattering
 				, sdw::InOutVec4{ m_writer, "output" } );
 		}
 
-		IF( m_writer, cloudsData.coverage() > 0.0_f
+		sdwIF( m_writer, cloudsData.coverage() > 0.0_f
 			&& plinearDepth < pcameraPlanes.y() )
 		{
 			m_computeVolume( pfragCoord
@@ -206,7 +206,7 @@ namespace atmosphere_scattering
 				, ptargetSize
 				, poutput );
 		}
-		FI
+		sdwFI;
 	}
 
 	sdw::Vec3 AtmosphereBackgroundModel::getSunRadiance( sdw::Vec3 const & psunDir )

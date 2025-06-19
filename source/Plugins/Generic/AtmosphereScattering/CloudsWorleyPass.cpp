@@ -83,11 +83,11 @@ namespace atmosphere_scattering
 					auto d = writer.declLocale( "d"
 						, 1.0e10_f );
 
-					FOR( writer, sdw::Int, xo, -1_i, xo <= 1_i, xo++ )
+					sdwFOR( writer, sdw::Int, xo, -1_i, xo <= 1_i, xo++ )
 					{
-						FOR( writer, sdw::Int, yo, -1_i, yo <= 1_i, yo++ )
+						sdwFOR( writer, sdw::Int, yo, -1_i, yo <= 1_i, yo++ )
 						{
-							FOR( writer, sdw::Int, zo, -1_i, zo <= 1_i, zo++ )
+							sdwFOR( writer, sdw::Int, zo, -1_i, zo <= 1_i, zo++ )
 							{
 								auto tp = writer.declLocale( "tp"
 									, floor( pCell ) + sdw::vec3( writer.cast< sdw::Float >( xo ), writer.cast< sdw::Float >( yo ), writer.cast< sdw::Float >( zo ) ) );
@@ -96,11 +96,11 @@ namespace atmosphere_scattering
 
 								d = min( d, dot( tp, tp ) );
 							}
-							ROF;
+							sdwROF;
 						}
-						ROF;
+						sdwROF;
 					}
-					ROF;
+					sdwROF;
 
 					d = min( d, 1.0_f );
 					d = max( d, 0.0_f );
@@ -309,7 +309,7 @@ namespace atmosphere_scattering
 					auto weight = writer.declLocale( "weight"
 						, 0.5_f );
 
-					FOR( writer, sdw::UInt, oct, 0_u, oct < octaveCount, ++oct )
+					sdwFOR( writer, sdw::UInt, oct, 0_u, oct < octaveCount, ++oct )
 					{
 						// Perlin vec3 is bugged in GLM on the Z axis :(, black stripes are visible
 						// So instead we use 4d Perlin and only use xyz...
@@ -327,7 +327,7 @@ namespace atmosphere_scattering
 						weight *= weight;
 						frequency *= octaveFrenquencyFactor;
 					}
-					ROF;
+					sdwROF;
 
 					auto noise = writer.declLocale( "pCell"
 						, ( sum / weightSum ) * 0.5_f + 0.5_f );

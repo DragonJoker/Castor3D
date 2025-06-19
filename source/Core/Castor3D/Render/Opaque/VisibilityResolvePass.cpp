@@ -187,12 +187,12 @@ namespace castor3d
 								? c3d_imgDiffuse.load( pos )
 								: vec4( 0.0_f ) ) );
 
-						IF( writer, ( stride != 0u ? ( curNodeId != billboardNodeId ) : curNodeId == 0_u )
+						sdwIF( writer, ( stride != 0u ? ( curNodeId != billboardNodeId ) : curNodeId == 0_u )
 							|| !shade( pos, curNodeId, curPipelineId, primitiveId, meshletId, result, diffuse, scattering ) )
 						{
 							writer.demote();
 						}
-						FI
+						sdwFI;
 
 						c3d_imgOutResult = result;
 						c3d_imgOutScattering = scattering;
@@ -246,7 +246,7 @@ namespace castor3d
 						auto materialsStart = writer.declLocale( "materialsStart"
 							, materialsStarts[pipelineId] );
 
-						IF( writer, index < materialsCounts[pipelineId] )
+						sdwIF( writer, index < materialsCounts[pipelineId] )
 						{
 							auto pixelIndex = writer.declLocale( "pixelIndex"
 								, materialsStart + index );
@@ -271,7 +271,7 @@ namespace castor3d
 									? c3d_imgDiffuse.load( ipixel )
 									: vec4( 0.0_f ) ) );
 
-							IF( writer, ( stride != 0u ? ( nodeId == billboardNodeId ) : nodeId != 0_u )
+							sdwIF( writer, ( stride != 0u ? ( nodeId == billboardNodeId ) : nodeId != 0_u )
 								&& shade( ipixel, nodeId, pipelineId, primitiveId, meshletId, result, diffuse, scattering ) )
 							{
 								c3d_imgOutResult.store( ipixel, result );
@@ -283,9 +283,9 @@ namespace castor3d
 									c3d_imgDiffuse.store( ipixel, diffuse );
 								}
 							}
-							FI
+							sdwFI;
 						}
-						FI
+						sdwFI;
 					} );
 			}
 		};
@@ -567,7 +567,7 @@ namespace castor3d
 							auto w = m_writer.declLocale( "w"
 								, vec3( pt0.w(), pt1.w(), pt2.w() ) );
 
-							IF( m_writer, !any( w == vec3( 0.0_f ) ) )
+							sdwIF( m_writer, !any( w == vec3( 0.0_f ) ) )
 							{
 								auto invW = m_writer.declLocale( "invW"
 									, vec3( 1.0_f ) / w );
@@ -582,7 +582,7 @@ namespace castor3d
 								auto det = m_writer.declLocale( "det"
 									, determinant( mat2( ndc2 - ndc1, ndc0 - ndc1 ) ) );
 
-								IF( m_writer, det != 0.0_f )
+								sdwIF( m_writer, det != 0.0_f )
 								{
 									auto invDet = m_writer.declLocale( "invDet"
 										, 1.0_f / det );
@@ -617,9 +617,9 @@ namespace castor3d
 									result.dx() = interpW_ddx * ( result.lambda() * interpInvW + result.dx() ) - result.lambda();
 									result.dy() = interpW_ddy * ( result.lambda() * interpInvW + result.dy() ) - result.lambda();
 								}
-								FI
+								sdwFI;
 							}
-							FI
+							sdwFI;
 
 							m_writer.returnStmt( result );
 						}
@@ -971,13 +971,13 @@ namespace castor3d
 							auto curProjPosition = m_writer.declLocale( "curProjPosition"
 								, derivatives.computeGradient( p0, p1, p2 ) );
 
-							IF( m_writer, curProjPosition.value().w() == 0.0_f )
+							sdwIF( m_writer, curProjPosition.value().w() == 0.0_f )
 							{
 								curProjPosition.value().w() = 1.0_f;
 								curProjPosition.dPdx().w() = 0.0_f;
 								curProjPosition.dPdy().w() = 0.0_f;
 							}
-							FI
+							sdwFI;
 
 							depth = ( curProjPosition.value().z() / curProjPosition.value().w() );
 							auto curPosition = m_writer.declLocale( "curPosition"
@@ -1227,11 +1227,11 @@ namespace castor3d
 
 						if ( !VisibilityResolvePass::useCompute() )
 						{
-							IF( writer, pipelineId != curPipelineId )
+							sdwIF( writer, pipelineId != curPipelineId )
 							{
 								writer.returnStmt( 0_b );
 							}
-							FI
+							sdwFI;
 						}
 
 						auto modelData = writer.declLocale( "modelData"
@@ -1283,16 +1283,16 @@ namespace castor3d
 
 						if ( components.transmissionFactor )
 						{
-							IF( writer, components.transmissionFactor >= 0.05_f )
+							sdwIF( writer, components.transmissionFactor >= 0.05_f )
 							{
 								writer.returnStmt( 0_b );
 							}
-							FI
+							sdwFI;
 						}
 
 						if ( auto lightingModel = lights.getLightingModel() )
 						{
-							IF( writer, material.lighting )
+							sdwIF( writer, material.lighting )
 							{
 								auto surface = writer.declLocale( "surface"
 									, shader::DerivSurface{ vec3( vec2( ipixel ), depth )
@@ -1412,7 +1412,7 @@ namespace castor3d
 									outScattering = vec4( directLighting.scattering, 1.0_f);
 								}
 							}
-							ELSE
+							sdwELSE
 							{
 								outResult = vec4( components.baseColour + components.emissiveColour * components.emissiveFactor, components.opacity );
 								outScattering = vec4( 0.0_f );
@@ -1423,7 +1423,7 @@ namespace castor3d
 									inoutDiffuse = vec4( 0.0_f );
 								}
 							}
-							FI
+							sdwFI;
 						}
 						else
 						{

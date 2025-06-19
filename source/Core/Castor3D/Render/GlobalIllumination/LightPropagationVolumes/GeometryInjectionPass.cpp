@@ -432,11 +432,11 @@ namespace castor3d
 				, sdw::FragmentOut const & )
 				{
 					//Discard pixels with really small normal
-					IF( writer, length( in.rsmNormal ) < 0.01_f )
+					sdwIF( writer, length( in.rsmNormal ) < 0.01_f )
 					{
 						writer.demote();
 					}
-					FI
+					sdwFI;
 
 					auto lightDir = writer.declLocale( "lightDir"
 						, normalize( in.lightPosition - in.rsmPosition ) );

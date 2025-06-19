@@ -94,12 +94,12 @@ namespace castor3d
 				{
 					while ( reduceIndex > 32u )
 					{
-						IF( writer, groupIndex < reduceIndex )
+						sdwIF( writer, groupIndex < reduceIndex )
 						{
 							gsAABBMin[groupIndex] = min( gsAABBMin[groupIndex], gsAABBMin[groupIndex + reduceIndex] );
 							gsAABBMax[groupIndex] = max( gsAABBMax[groupIndex], gsAABBMax[groupIndex + reduceIndex] );
 						}
-						FI
+						sdwFI;
 
 						// Sync group shared memory writes.
 						shader::groupMemoryBarrierWithGroupSync( writer );
@@ -113,7 +113,7 @@ namespace castor3d
 					// the previous writes to groups shared memory have completed.
 					// Source: DirectCompute Optimizations and Best Practices (2010), Eric Young.
 					// Source: The CUDA Handbook (2013), Nicholas Wilt
-					IF( writer, groupIndex < 32_u )
+					sdwIF( writer, groupIndex < 32_u )
 					{
 						while ( reduceIndex > 0u )
 						{
@@ -130,24 +130,24 @@ namespace castor3d
 							reduceIndex >>= 1u;
 						}
 
-						IF( writer, groupIndex == 0_u )
+						sdwIF( writer, groupIndex == 0_u )
 						{
 							c3d_reducedLightsAABB[groupID] = shader::AABB{ gsAABBMin[groupIndex], gsAABBMax[groupIndex] };
 						}
-						FI
+						sdwFI;
 					}
-					FI
+					sdwFI;
 				}
 				else
 				{
 					while ( reduceIndex > 0u )
 					{
-						IF( writer, groupIndex < reduceIndex )
+						sdwIF( writer, groupIndex < reduceIndex )
 						{
 							gsAABBMin[groupIndex] = min( gsAABBMin[groupIndex], gsAABBMin[groupIndex + reduceIndex] );
 							gsAABBMax[groupIndex] = max( gsAABBMax[groupIndex], gsAABBMax[groupIndex + reduceIndex] );
 						}
-						FI
+						sdwFI;
 
 						// Sync group shared memory writes.
 						shader::groupMemoryBarrierWithGroupSync( writer );
@@ -156,11 +156,11 @@ namespace castor3d
 						reduceIndex >>= 1u;
 					}
 
-					IF( writer, groupIndex == 0_u )
+					sdwIF( writer, groupIndex == 0_u )
 					{
 						c3d_reducedLightsAABB[groupID] = shader::AABB{ gsAABBMin[groupIndex], gsAABBMax[groupIndex] };
 					}
-					FI
+					sdwFI;
 				}
 			};
 
@@ -176,16 +176,16 @@ namespace castor3d
 					auto aabbMax = writer.declLocale( "aabbMax"
 						, vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f ) );
 
-					IF( writer, groupIndex == 0_u )
+					sdwIF( writer, groupIndex == 0_u )
 					{
-						FOR( writer, sdw::UInt, n, 0_u, n < NumThreads, ++n )
+						sdwFOR( writer, sdw::UInt, n, 0_u, n < NumThreads, ++n )
 						{
 							gsAABBMin[n] = aabbMin;
 							gsAABBMax[n] = aabbMax;
 						}
-						ROF
+						sdwROF;
 					}
-					FI
+					sdwFI;
 
 					shader::groupMemoryBarrierWithGroupSync( writer );
 
@@ -193,24 +193,24 @@ namespace castor3d
 					{
 						// The 1st pass of the reduction operates on the light buffers.
 						// First compute point lights AABB.
-						IF( writer, threadIndex < c3d_clustersData.pointLightCount() )
+						sdwIF( writer, threadIndex < c3d_clustersData.pointLightCount() )
 						{
 							auto aabb = c3d_allLightsAABB[threadIndex];
 
 							aabbMin = min( aabbMin, aabb.min() );
 							aabbMax = max( aabbMax, aabb.max() );
 						}
-						FI
+						sdwFI;
 
 						// Next, expand AABB for spot lights.
-						IF( writer, threadIndex < c3d_clustersData.spotLightCount() )
+						sdwIF( writer, threadIndex < c3d_clustersData.spotLightCount() )
 						{
 							auto aabb = c3d_allLightsAABB[c3d_clustersData.pointLightCount() + threadIndex];
 
 							aabbMin = min( aabbMin, aabb.min() );
 							aabbMax = max( aabbMax, aabb.max() );
 						}
-						FI
+						sdwFI;
 
 						gsAABBMin[groupIndex] = aabbMin;
 						gsAABBMax[groupIndex] = aabbMax;
@@ -227,12 +227,12 @@ namespace castor3d
 						// The subsequent passes of the reduction operate on the global AABB computed 
 						// in previous pass.
 						// This step is repeated until we are reduced to a single thread group.
-						FOR( writer, sdw::UInt, i, groupIndex, i < c3d_reduceNumElements, i += NumThreads * c3d_numThreadGroups )
+						sdwFOR( writer, sdw::UInt, i, groupIndex, i < c3d_reduceNumElements, i += NumThreads * c3d_numThreadGroups )
 						{
 							aabbMin = min( aabbMin, c3d_reducedLightsAABB[i].min() );
 							aabbMax = max( aabbMax, c3d_reducedLightsAABB[i].max() );
 						}
-						ROF
+						sdwROF;
 
 						gsAABBMin[groupIndex] = aabbMin;
 						gsAABBMax[groupIndex] = aabbMax;
@@ -246,7 +246,7 @@ namespace castor3d
 						logStepReduction( groupIndex, groupID );
 					}
 
-					IF( writer, groupIndex == 0_u )
+					sdwIF( writer, groupIndex == 0_u )
 					{
 						auto lightsMin = writer.declLocale( "lightsMin"
 							, gsAABBMin[groupIndex] );
@@ -263,7 +263,7 @@ namespace castor3d
 						c3d_clustersLightsData = clustersLightsData;
 						c3d_lightsAABBRange = lightsAABBRange;
 					}
-					FI
+					sdwFI;
 				} );
 			return writer.getBuilder().releaseShader();
 		}

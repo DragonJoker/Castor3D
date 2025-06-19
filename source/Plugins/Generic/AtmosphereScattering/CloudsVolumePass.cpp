@@ -205,7 +205,7 @@ namespace atmosphere_scattering
 					auto skyBlendFactor = writer.declLocale( "skyBlendFactor"
 						, 0.0_f );
 
-					IF( writer, c3d_cloudsData.coverage() > 0.0_f )
+					sdwIF( writer, c3d_cloudsData.coverage() > 0.0_f )
 					{
 						auto sceneUv = writer.declLocale( "sceneUv"
 							, fragCoord / targetSize );
@@ -225,7 +225,7 @@ namespace atmosphere_scattering
 							, skyLuminance
 							, skyBlendFactor );
 					}
-					FI;
+					sdwFI;
 
 					skyColor = vec4( skyLuminance, skyBlendFactor );
 					sunColor = vec4( sunLuminance, 1.0_f );

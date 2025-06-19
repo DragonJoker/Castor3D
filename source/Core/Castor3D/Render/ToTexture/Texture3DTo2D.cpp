@@ -447,9 +447,9 @@ namespace castor3d
 				, sdw::PointListT< SurfaceT > const & list
 				, sdw::TriangleStreamT< SurfaceT > out )
 				{
-					IF( writer, list[0].voxelColour().a() > 0.0f )
+					sdwIF( writer, list[0].voxelColour().a() > 0.0f )
 					{
-						FOR( writer, sdw::UInt, i, 0_u, i < 14_u, ++i )
+						sdwFOR( writer, sdw::UInt, i, 0_u, i < 14_u, ++i )
 						{
 							// [0, 1] => [0, 2] (y => [-1, 1])
 							auto cubeVtxPos = writer.declLocale( "cubeVtxPos"
@@ -472,11 +472,11 @@ namespace castor3d
 
 							out.append();
 						}
-						ROF
+						sdwROF;
 
 						out.restartStrip();
 					}
-					FI
+					sdwFI;
 				} );
 
 			writer.implementEntryPointT< SurfaceT, shader::Colour4FT >( [&]( sdw::FragmentInT< SurfaceT > const & in

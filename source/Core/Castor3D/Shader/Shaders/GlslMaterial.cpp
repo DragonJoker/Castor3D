@@ -46,7 +46,7 @@ namespace castor3d::shader
 				auto passMultiplier = writer.declLocale( "passMultiplier"
 					, passMultipliers[0_u][0_u] );
 
-				IF( writer, passMultiplier != 0.0_f )
+				sdwIF( writer, passMultiplier != 0.0_f )
 				{
 					auto passComponents = writer.declLocale( "passComponents"
 						, output );
@@ -56,13 +56,13 @@ namespace castor3d::shader
 						, passComponents );
 					passShaders.blendComponents( materials, passMultiplier, result, passComponents );
 				}
-				FI
+				sdwFI;
 
-				FOR( writer, sdw::UInt, passIdx, 1_u, passIdx < material.passCount && passIdx < MaxPassLayers, ++passIdx )
+				sdwFOR( writer, sdw::UInt, passIdx, 1_u, passIdx < material.passCount && passIdx < MaxPassLayers, ++passIdx )
 				{
 					passMultiplier = passMultipliers[passIdx / 4_u][passIdx % 4_u];
 
-					IF( writer, passMultiplier != 0.0_f )
+					sdwIF( writer, passMultiplier != 0.0_f )
 					{
 						auto curMaterial = writer.declLocale( "passMaterial"
 							, materials.getMaterial( materialId + passIdx ) );
@@ -75,9 +75,9 @@ namespace castor3d::shader
 						material.lighting += curMaterial.lighting;
 						passShaders.blendComponents( materials, passMultiplier, result, passComponents );
 					}
-					FI
+					sdwFI;
 				}
-				ROF
+				sdwROF;
 
 				output = result;
 				output.normalizeNormal();
@@ -135,13 +135,13 @@ namespace castor3d::shader
 			&& passMasks.isEnabled()
 			&& flags.enablePassMasks() )
 		{
-			FOR( *m_writer, sdw::UInt, passIdx, 0_u, passIdx < passCount && passIdx < MaxPassLayers, ++passIdx )
+			sdwFOR( *m_writer, sdw::UInt, passIdx, 0_u, passIdx < passCount && passIdx < MaxPassLayers, ++passIdx )
 			{
 				auto mask32 = passMasks[passIdx / 4_u];
 				auto mask8 = ( mask32 >> ( ( passIdx % 4_u ) * 8_u ) ) & 0xFF_u;
 				passMultipliers[passIdx / 4_u][passIdx % 4_u] = m_writer->cast< sdw::Float >( mask8 ) / 255.0_f;
 			}
-			ROF
+			sdwROF;
 		}
 	}
 
@@ -161,66 +161,66 @@ namespace castor3d::shader
 				writer.demote();
 				break;
 			case VK_COMPARE_OP_LESS:
-				IF( writer, alpha >= ref )
+				sdwIF( writer, alpha >= ref )
 				{
 					writer.demote();
 				}
-				FI
+				sdwFI;
 				if ( opaque )
 				{
 					alpha = 1.0_f;
 				}
 				break;
 			case VK_COMPARE_OP_EQUAL:
-				IF( writer, alpha != ref )
+				sdwIF( writer, alpha != ref )
 				{
 					writer.demote();
 				}
-				FI
+				sdwFI;
 				if ( opaque )
 				{
 					alpha = 1.0_f;
 				}
 				break;
 			case VK_COMPARE_OP_LESS_OR_EQUAL:
-				IF( writer, alpha > ref )
+				sdwIF( writer, alpha > ref )
 				{
 					writer.demote();
 				}
-				FI
+				sdwFI;
 				if ( opaque )
 				{
 					alpha = 1.0_f;
 				}
 				break;
 			case VK_COMPARE_OP_GREATER:
-				IF( writer, alpha <= ref )
+				sdwIF( writer, alpha <= ref )
 				{
 					writer.demote();
 				}
-				FI
+				sdwFI;
 				if ( opaque )
 				{
 					alpha = 1.0_f;
 				}
 				break;
 			case VK_COMPARE_OP_NOT_EQUAL:
-				IF( writer, alpha == ref )
+				sdwIF( writer, alpha == ref )
 				{
 					writer.demote();
 				}
-				FI
+				sdwFI;
 				if ( opaque )
 				{
 					alpha = 1.0_f;
 				}
 				break;
 			case VK_COMPARE_OP_GREATER_OR_EQUAL:
-				IF( writer, alpha < ref )
+				sdwIF( writer, alpha < ref )
 				{
 					writer.demote();
 				}
-				FI
+				sdwFI;
 				if ( opaque )
 				{
 					alpha = 1.0_f;

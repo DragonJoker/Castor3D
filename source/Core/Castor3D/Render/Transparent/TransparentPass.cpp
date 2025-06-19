@@ -373,7 +373,7 @@ namespace castor3d
 
 				if ( auto lightingModel = lights.getLightingModel() )
 				{
-					IF( writer, material.lighting )
+					sdwIF( writer, material.lighting )
 					{
 						auto directLighting = writer.declLocale( "directLighting"
 							, shader::DirectLighting{ writer } );
@@ -462,11 +462,11 @@ namespace castor3d
 							, indirectLighting
 							, reflRefrResult );
 					}
-					ELSE
+					sdwELSE
 					{
 						colour = components.baseColour + components.emissiveColour * components.emissiveFactor;
 					}
-					FI
+					sdwFI;
 				}
 				else
 				{

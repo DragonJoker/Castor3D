@@ -126,20 +126,20 @@ namespace castor3d
 						, vec4( overlay.border().xy()
 							, -overlay.border().zw() ) );
 
-					IF( writer, overlay.borderPosition() == uint32_t( BorderPosition::eInternal ) )
+					sdwIF( writer, overlay.borderPosition() == uint32_t( BorderPosition::eInternal ) )
 					{
 						ssInner += ssBorderExtent;
 					}
-					ELSEIF( overlay.borderPosition() == uint32_t( BorderPosition::eMiddle ) )
+					sdwELSEIF( overlay.borderPosition() == uint32_t( BorderPosition::eMiddle ) )
 					{
 						ssInner += ssBorderExtent / 2.0_f;
 						ssOuter -= ssBorderExtent / 2.0_f;
 					}
-					ELSE
+					sdwELSE
 					{
 						ssOuter -= ssBorderExtent;
 					}
-					FI
+					sdwFI;
 
 					auto innerUv = writer.declLocale( "innerUv"
 						, overlay.borderInnerUV() );

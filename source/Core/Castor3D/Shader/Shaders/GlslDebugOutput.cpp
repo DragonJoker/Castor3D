@@ -20,11 +20,11 @@ namespace castor3d::shader
 		, m_indices{ sdw::findWriterMandat( m_index, m_output ).declGlobalArray< sdw::UInt >( "c3d_debugIndices", 512u, m_enable ) }
 	{
 		auto & writer = sdw::findWriterMandat( m_index, m_output );
-		FOR( writer, sdw::UInt, i, 0_u, i < 512_u, ++i )
+		sdwFOR( writer, sdw::UInt, i, 0_u, i < 512_u, ++i )
 		{
 			m_indices[i] = 0_u;
 		}
-		ROF
+		sdwROF;
 		m_registerOutput = writer.implementFunction< sdw::Void >( "c3d_registerOutput"
 			, [this]( sdw::UInt const & idx
 				, sdw::Vec3 const & val )
@@ -42,13 +42,13 @@ namespace castor3d::shader
 		{
 			auto & writer = sdw::findWriterMandat( m_index, m_output );
 
-			IF( writer, m_index != 0_u
+			sdwIF( writer, m_index != 0_u
 				&& m_indices[m_index] != 0_u )
 			{
 				auto value = writer.declLocale( "debugValue", m_values[m_index] );
 				m_output.xyz() = value;
 			}
-			FI
+			sdwFI;
 		}
 	}
 

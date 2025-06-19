@@ -126,11 +126,11 @@ namespace ocean_fft
 					auto kLen = writer.declLocale( "kLen"
 						, length( k ) );
 
-					IF( writer, kLen == 0.0_f )
+					sdwIF( writer, kLen == 0.0_f )
 					{
 						writer.returnStmt( vec2( 0.0_f ) );
 					}
-					FI;
+					sdwFI;
 
 					auto kL = writer.declLocale( "kL"
 						, kLen * L );

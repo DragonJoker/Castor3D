@@ -102,17 +102,17 @@ namespace smaa
 					, sdw::Vec2 variable
 					, sdw::Vec2 const & value )
 				{
-					IF( writer, cond.x() )
+					sdwIF( writer, cond.x() )
 					{
 						variable.x() = value.x();
 					}
-					FI;
+					sdwFI;
 
-					IF( writer, cond.y() )
+					sdwIF( writer, cond.y() )
 					{
 						variable.y() = value.y();
 					}
-					FI;
+					sdwFI;
 				}
 				, sdw::InBVec2{ writer, "cond" }
 				, sdw::InOutVec2{ writer, "variable" }
@@ -164,14 +164,14 @@ namespace smaa
 					auto t = writer.declLocale( "t"
 						, vec3( c3d_smaaData.rtMetrics.xy(), 1.0_f ) );
 
-					WHILE( writer, coord.z() < writer.cast< sdw::Float >( c3d_smaaData.maxSearchStepsDiag - 1 )
+					sdwWHILE( writer, coord.z() < writer.cast< sdw::Float >( c3d_smaaData.maxSearchStepsDiag - 1 )
 						&& coord.w() > 0.9_f )
 					{
 						coord.xyz() = fma( t, vec3( dir, 1.0_f ), coord.xyz() );
 						e = edgesTex.lod( coord.xy(), 0.0_f ).rg();
 						coord.w() = dot( e, vec2( 0.5_f, 0.5_f ) );
 					}
-					ELIHW;
+					sdwELIHW;
 
 					writer.returnStmt( coord.zw() );
 				}
@@ -192,7 +192,7 @@ namespace smaa
 					auto t = writer.declLocale( "t"
 						, vec3( c3d_smaaData.rtMetrics.xy(), 1.0_f ) );
 
-					WHILE( writer, coord.z() < writer.cast< sdw::Float >( c3d_smaaData.maxSearchStepsDiag - 1 )
+					sdwWHILE( writer, coord.z() < writer.cast< sdw::Float >( c3d_smaaData.maxSearchStepsDiag - 1 )
 						&& coord.w() > 0.9_f )
 					{
 						coord.xyz() = fma( t, vec3( dir, 1.0_f ), coord.xyz() );
@@ -208,7 +208,7 @@ namespace smaa
 
 						coord.w() = dot( e, vec2( 0.5_f, 0.5_f ) );
 					}
-					ELIHW;
+					sdwELIHW;
 
 					writer.returnStmt( coord.zw() );
 				}
@@ -266,21 +266,21 @@ namespace smaa
 					auto end = writer.declLocale( "end"
 						, vec2( 0.0_f ) );
 
-					IF( writer, e.r() > 0.0_f )
+					sdwIF( writer, e.r() > 0.0_f )
 					{
 						d.xz() = SMAASearchDiag1( edgesTex, texcoord, vec2( -1.0_f, 1.0_f ), end );
 						d.x() += 1.0_f - step( end.y(), 0.9_f );// end.y > 0.9 ? 1.0 : 0.0
 						// step => 0.9 < end.y ? 0.0 : 1.0
 					}
-					ELSE
+					sdwELSE
 					{
 						d.xz() = vec2( 0.0_f, 0.0_f );
 					}
-					FI;
+					sdwFI;
 
 					d.yw() = SMAASearchDiag1( edgesTex, texcoord, vec2( 1.0_f, -1.0_f ), end );
 
-					IF( writer, d.x() + d.y() > 2.0_f )
+					sdwIF( writer, d.x() + d.y() > 2.0_f )
 					{ // d.x + d.y + 1 > 3
 						// Fetch the crossing edges:
 						auto coords = writer.declLocale( "coords"
@@ -310,24 +310,24 @@ namespace smaa
 						// Fetch the areas for this line:
 						weights += SMAAAreaDiag( areaTex, d.xy(), cc, subsampleIndices.z() );
 					}
-					FI;
+					sdwFI;
 
 					// Search for the line ends:
 					d.xz() = SMAASearchDiag2( edgesTex, texcoord, vec2( -1.0_f, -1.0_f ), end );
 
-					IF( writer, edgesTex.lod( texcoord, 0.0_f, ivec2( 1_i, 0_i ) ).r() > 0.0_f )
+					sdwIF( writer, edgesTex.lod( texcoord, 0.0_f, ivec2( 1_i, 0_i ) ).r() > 0.0_f )
 					{
 						d.yw() = SMAASearchDiag2( edgesTex, texcoord, vec2( 1.0_f, 1.0_f ), end );
 						d.y() += 1.0_f - step( end.y(), 0.9_f );// end.y > 0.9 ? 1.0 : 0.0
 						// step => 0.9 < end.y ? 0.0 : 1.0
 					}
-					ELSE
+					sdwELSE
 					{
 						d.yw() = vec2( 0.0_f, 0.0_f );
 					}
-					FI;
+					sdwFI;
 
-					IF( writer, d.x() + d.y() > 2.0_f )
+					sdwIF( writer, d.x() + d.y() > 2.0_f )
 					{ // d.x + d.y + 1 > 3
 						// Fetch the crossing edges:
 						auto coords = writer.declLocale( "coords"
@@ -347,7 +347,7 @@ namespace smaa
 						// Fetch the areas for this line:
 						weights += SMAAAreaDiag( areaTex, d.xy(), cc, subsampleIndices.w() ).gr();
 					}
-					FI;
+					sdwFI;
 
 					writer.returnStmt( weights );
 				}
@@ -413,14 +413,14 @@ namespace smaa
 					auto e = writer.declLocale( "e"
 						, vec2( 0.0_f, 1.0_f ) );
 
-					WHILE( writer, texcoord.x() > end
+					sdwWHILE( writer, texcoord.x() > end
 						&& e.g() > 0.8281_f // Is there some edge not activated?
 						&& e.r() == 0.0_f )
 					{ // Or is there a crossing edge that breaks the line?
 						e = edgesTex.lod( texcoord, 0.0_f ).rg();
 						texcoord = fma( -vec2( 2.0_f, 0.0_f ), c3d_smaaData.rtMetrics.xy(), texcoord );
 					}
-					ELIHW;
+					sdwELIHW;
 
 					auto offset = writer.declLocale( "offset"
 						, fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e, 0.0_f ), 3.25_f ) );
@@ -451,14 +451,14 @@ namespace smaa
 				 {
 					 auto e = writer.declLocale( "e"
 						 , vec2( 0.0_f, 1.0_f ) );
-					 WHILE ( writer, texcoord.x() < end
+					 sdwWHILE( writer, texcoord.x() < end
 						 && e.g() > 0.8281_f // Is there some edge not activated?
 						 && e.r() == 0.0_f )
 					 { // Or is there a crossing edge that breaks the line?
 						 e = edgesTex.lod( texcoord, 0.0_f ).rg();
 						 texcoord = fma( vec2( 2.0_f, 0.0_f ), c3d_smaaData.rtMetrics.xy(), texcoord );
 					 }
-					 ELIHW;
+					 sdwELIHW;
 
 					 auto offset = writer.declLocale( "offset"
 						 , fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e, 0.5_f ), 3.25_f ) );
@@ -477,14 +477,14 @@ namespace smaa
 				{
 					auto e = writer.declLocale( "e"
 						 , vec2( 1.0_f, 0.0_f ) );
-					WHILE ( writer, texcoord.y() > end
+					sdwWHILE( writer, texcoord.y() > end
 						&& e.r() > 0.8281_f // Is there some edge not activated?
 						&& e.g() == 0.0_f )
 					{ // Or is there a crossing edge that breaks the line?
 						e = edgesTex.lod( texcoord, 0.0_f ).rg();
 						texcoord = fma( -vec2( 0.0_f, 2.0_f ), c3d_smaaData.rtMetrics.xy(), texcoord );
 					}
-					ELIHW;
+					sdwELIHW;
 
 					auto offset = writer.declLocale( "offset"
 						, fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e.gr(), 0.0_f ), 3.25_f ) );
@@ -503,14 +503,14 @@ namespace smaa
 				{
 					auto e = writer.declLocale( "e"
 						 , vec2( 1.0_f, 0.0_f ) );
-					WHILE ( writer, texcoord.y() < end
+					sdwWHILE( writer, texcoord.y() < end
 						&& e.r() > 0.8281_f // Is there some edge not activated?
 						&& e.g() == 0.0_f )
 					{ // Or is there a crossing edge that breaks the line?
 						e = edgesTex.lod( texcoord, 0.0_f ).rg();
 						texcoord = fma( vec2( 0.0_f, 2.0_f ), c3d_smaaData.rtMetrics.xy(), texcoord );
 					}
-					ELIHW;
+					sdwELIHW;
 
 					auto offset = writer.declLocale( "offset"
 						, fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e.gr(), 0.5_f ), 3.25_f ) );
@@ -560,7 +560,7 @@ namespace smaa
 					, sdw::Vec4 const & texcoord
 					, sdw::Vec2 const & d )
 				{
-					IF( writer, c3d_smaaData.disableCornerDetection == 0 )
+					sdwIF( writer, c3d_smaaData.disableCornerDetection == 0 )
 					{
 						auto leftRight = writer.declLocale( "leftRight"
 							, step( d.xy(), d.yx() ) );
@@ -578,7 +578,7 @@ namespace smaa
 
 						weights *= clamp( factor, vec2( 0.0_f ), vec2( 1.0_f ) );
 					}
-					FI;
+					sdwFI;
 				}
 				, sdw::InCombinedImage2DRgba32{ writer, "edgesTex" }
 				, sdw::InOutVec2{ writer, "weights" }
@@ -591,7 +591,7 @@ namespace smaa
 					, sdw::Vec4 const & texcoord
 					, sdw::Vec2 const & d )
 				{
-					IF( writer, c3d_smaaData.disableCornerDetection == 0 )
+					sdwIF( writer, c3d_smaaData.disableCornerDetection == 0 )
 					{
 						auto leftRight = writer.declLocale( "leftRight"
 							, step( d.xy(), d.yx() ) );
@@ -609,7 +609,7 @@ namespace smaa
 
 						weights *= clamp( factor, vec2( 0.0_f ), vec2( 1.0_f ) );
 					}
-					FI;
+					sdwFI;
 				}
 				, sdw::InCombinedImage2DRgba32{ writer, "edgesTex" }
 				, sdw::InOutVec2{ writer, "weights" }
@@ -631,16 +631,16 @@ namespace smaa
 					auto e = writer.declLocale( "e"
 						, edgesTex.sample( texcoord ).rg() );
 
-					IF( writer, e.g() > 0.0_f )
+					sdwIF( writer, e.g() > 0.0_f )
 					{ // Edge at north
-						IF( writer, c3d_smaaData.disableDiagonalDetection == 0 )
+						sdwIF( writer, c3d_smaaData.disableDiagonalDetection == 0 )
 						{
 							// Diagonals have both north and west edges, so searching for them in
 							// one of the boundaries is enough.
 							weights.rg() = SMAACalculateDiagWeights( edgesTex, areaTex, texcoord, e, subsampleIndices );
 							// We give priority to diagonals, so if we find a diagonal we skip 
 							// horizontal/vertical processing.
-							IF( writer, weights.r() == -weights.g() )
+							sdwIF( writer, weights.r() == -weights.g() )
 							{ // weights.r + weights.g == 0.0
 								auto d = writer.declLocale< sdw::Vec2 >( "d" );
 
@@ -681,13 +681,13 @@ namespace smaa
 								coords.y() = texcoord.y();
 								SMAADetectHorizontalCornerPattern( edgesTex, weights.rg(), vec4( coords.xy(), coords.zy() ), d );
 							}
-							ELSE
+							sdwELSE
 							{
 								e.r() = 0.0_f; // Skip vertical processing.
 							}
-							FI;
+							sdwFI;
 						}
-						ELSE
+						sdwELSE
 						{
 							auto d = writer.declLocale< sdw::Vec2 >( "d" );
 
@@ -728,11 +728,11 @@ namespace smaa
 							coords.y() = texcoord.y();
 							SMAADetectHorizontalCornerPattern( edgesTex, weights.rg(), vec4( coords.xy(), coords.zy() ), d );
 						}
-						FI;
+						sdwFI;
 					}
-					FI;
+					sdwFI;
 
-					IF( writer, e.r() > 0.0_f )
+					sdwIF( writer, e.r() > 0.0_f )
 					{ // Edge at west
 						auto d = writer.declLocale< sdw::Vec2 >( "d" );
 
@@ -769,7 +769,7 @@ namespace smaa
 						coords.x() = texcoord.x();
 						SMAADetectVerticalCornerPattern( edgesTex, weights.ba(), vec4( coords.xy(), coords.xz() ), d );
 					}
-					FI;
+					sdwFI;
 
 					writer.returnStmt( weights );
 				}

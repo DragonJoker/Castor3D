@@ -284,13 +284,13 @@ namespace castor3d::shader
 		auto profile = m_writer.declLocale( "profile"
 			, vec3( 0.0_f ) );
 
-		FOR( m_writer, sdw::UInt, i, 0u, i < sssProfile.transmittanceProfileSize(), ++i )
+		sdwFOR( m_writer, sdw::UInt, i, 0u, i < sssProfile.transmittanceProfileSize(), ++i )
 		{
 			auto profileFactors = m_writer.declLocale( "profileFactors"
 				, sssProfile.transmittanceProfile()[i] );
 			profile += profileFactors.rgb() * exp( dd / profileFactors.a() );
 		}
-		ROF
+		sdwROF;
 		debugOutput.registerOutput( cuT( "Profile" ), profile );
 		/**
 		* Using the profile, we finally approximate the transmitted lighting from

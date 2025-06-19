@@ -150,14 +150,14 @@ namespace atmosphere_scattering
 					// If the voxel is under the ground, make sure to offset it out on the ground.
 					viewHeight = length( newWorldPos );
 
-					IF( writer, viewHeight <= ( atmosphere.getPlanetRadius() + planetRadiusOffset ) )
+					sdwIF( writer, viewHeight <= ( atmosphere.getPlanetRadius() + planetRadiusOffset ) )
 					{
 						// Apply a position offset to make sure no artifacts are visible close to the planet boundaries for large voxel.
 						newWorldPos = normalize( newWorldPos ) * ( atmosphere.getPlanetRadius() + planetRadiusOffset + 0.001_f );
 						ray.direction = normalize( newWorldPos - ray.origin );
 						tMax = length( newWorldPos - ray.origin );
 					}
-					FI;
+					sdwFI;
 
 					auto tMaxMax = writer.declLocale( "tMaxMax"
 						, tMax );
@@ -165,32 +165,32 @@ namespace atmosphere_scattering
 					// Move ray marching start up to top atmosphere.
 					viewHeight = length( ray.origin );
 
-					IF( writer, viewHeight >= atmosphere.getAtmosphereRadius() )
+					sdwIF( writer, viewHeight >= atmosphere.getAtmosphereRadius() )
 					{
 						auto prevWorlPos = writer.declLocale( "prevWorlPos"
 							, ray.origin );
 
-						IF( writer, !atmosphere.moveToTopAtmosphere( ray ) )
+						sdwIF( writer, !atmosphere.moveToTopAtmosphere( ray ) )
 						{
 							// Ray is not intersecting the atmosphere
 							writer.returnStmt( vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f ) );
 						}
-						FI;
+						sdwFI;
 
 						auto lengthToAtmosphere = writer.declLocale( "lengthToAtmosphere"
 							, length( prevWorlPos - ray.origin ) );
 
-						IF( writer, tMaxMax < lengthToAtmosphere )
+						sdwIF( writer, tMaxMax < lengthToAtmosphere )
 						{
 							// tMaxMax for this voxel is not within planet atmosphere
 							writer.returnStmt( vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f ) );
 						}
-						FI;
+						sdwFI;
 
 						// Now world position has been moved to the atmosphere boundary: we need to reduce tMaxMax accordingly. 
 						tMaxMax = max( 0.0_f, tMaxMax - lengthToAtmosphere );
 					}
-					FI;
+					sdwFI;
 
 					SingleScatteringResult ss = writer.declLocale( "ss"
 						, atmosphere.integrateScatteredLuminance( pixPos
@@ -220,14 +220,14 @@ namespace atmosphere_scattering
 					, sdw::TriangleListT< SurfaceT > list
 					, sdw::TriangleStreamT< SurfaceT > out )
 			{
-				FOR( writer, sdw::UInt, i, 0_u, i < 3_u, ++i )
+				sdwFOR( writer, sdw::UInt, i, 0_u, i < 3_u, ++i )
 				{
 					out.sliceId = list[0].sliceId;
 					out.vtx.position = list[i].vtx.position;
 					out.layer = list[0].sliceId;
 					out.append();
 				}
-				ROF;
+				sdwROF;
 
 				out.restartStrip();
 			} );

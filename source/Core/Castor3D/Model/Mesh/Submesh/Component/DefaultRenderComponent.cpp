@@ -372,16 +372,16 @@ namespace castor3d
 			auto indexCount = writer.declLocale( "indexCount"
 				, triangleCount * 3u );
 
-			FOR( writer, sdw::UInt, i, laneId, i < indexCount, i += 32u )
+			sdwFOR( writer, sdw::UInt, i, laneId, i < indexCount, i += 32u )
 			{
 				primOut[i].primitiveID = i;
 				primOut[i].primitiveIndex = uvec3( meshlet.indices()[i * 3u + 0u]
 					, meshlet.indices()[i * 3u + 1u]
 					, meshlet.indices()[i * 3u + 2u] );
 			}
-			ROF
+			sdwROF;
 
-			FOR( writer, sdw::UInt, i, laneId, i < vertexCount, i += 32u )
+			sdwFOR( writer, sdw::UInt, i, laneId, i < vertexCount, i += 32u )
 			{
 				auto vertexIndex = writer.declLocale( "vertexIndex", meshlet.vertices()[i] );
 
@@ -465,7 +465,7 @@ namespace castor3d
 					, prvPosition );
 				vtxOut[i].position = curPosition;
 			}
-			ROF
+			sdwROF;
 		};
 
 		if ( flags.usesTask() )
@@ -481,11 +481,11 @@ namespace castor3d
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[nodeId - 1u] );
 
-					IF( writer, meshletId >= modelData.getMeshletCount() )
+					sdwIF( writer, meshletId >= modelData.getMeshletCount() )
 					{
 						writer.returnStmt( sdw::Boolean{ false } );
 					}
-					FI
+					sdwFI;
 
 					auto cullData = writer.declLocale( "cullData"
 						, c3d_cullData[meshletId] );
@@ -526,35 +526,35 @@ namespace castor3d
 					auto sphereCenter = writer.getVariable< sdw::Vec3 >( "sphereCenter" );
 					auto sphereRadius = writer.getVariable< sdw::Float >( "sphereRadius" );
 
-					FOR( writer, sdw::UInt, i, 0u, i < 6u, ++i )
+					sdwFOR( writer, sdw::UInt, i, 0u, i < 6u, ++i )
 					{
-						IF( writer, dot( c3d_cameraData.getFrustumPlane( i ).xyz(), sphereCenter ) + c3d_cameraData.getFrustumPlane( i ).w() <= -sphereRadius )
+						sdwIF( writer, dot( c3d_cameraData.getFrustumPlane( i ).xyz(), sphereCenter ) + c3d_cameraData.getFrustumPlane( i ).w() <= -sphereRadius )
 						{
 							writer.returnStmt( sdw::Boolean{ false } );
 						}
-						FI
+						sdwFI;
 					}
-					ROF
+					sdwROF;
 
 					if ( checkCones )
 					{
 						auto coneNormal = writer.getVariable< sdw::Vec3 >( "coneNormal" );
 						auto coneCutOff = writer.getVariable< sdw::Float >( "coneCutOff" );
 
-						IF( writer, coneCutOff == 1.0_f )
+						sdwIF( writer, coneCutOff == 1.0_f )
 						{
 							writer.returnStmt( sdw::Boolean{ true } );
 						}
-						FI
+						sdwFI;
 
 						auto posToCamera = writer.declLocale( "posToCamera"
 							, c3d_cameraData.position() - sphereCenter );
 
-						IF( writer, dot( posToCamera, coneNormal ) >= ( coneCutOff * length( posToCamera ) + sphereRadius ) )
+						sdwIF( writer, dot( posToCamera, coneNormal ) >= ( coneCutOff * length( posToCamera ) + sphereRadius ) )
 						{
 							writer.returnStmt( sdw::Boolean{ false } );
 						}
-						FI
+						sdwFI;
 					}
 
 					writer.returnStmt( sdw::Boolean{ true } );
@@ -584,21 +584,21 @@ namespace castor3d
 					auto vote = writer.declLocale( "vote"
 						, subgroupBallot( render ) );
 
-					IF( writer, render )
+					sdwIF( writer, render )
 					{
 						auto idxOffset = writer.declLocale( "idxOffset"
 							, subgroupBallotExclusiveBitCount( vote ) );
 						payload.meshletIndices()[idxOffset] = meshletId;
 					}
-					FI
+					sdwFI;
 
-					IF( writer, laneId == 0u )
+					sdwIF( writer, laneId == 0u )
 					{
 						auto tasks = writer.declLocale( "tasks"
 							, subgroupBallotBitCount( vote ) );
 						payload.dispatchMesh( tasks, 1_u, 1_u );
 					}
-					FI
+					sdwFI;
 				} );
 			writer.implementEntryPointT< shader::PayloadT, shader::FragmentSurfaceT, sdw::VoidT >( 32u, 1u, 1u
 				, sdw::TaskPayloadInEXTT< shader::PayloadT >{ writer }
@@ -704,16 +704,16 @@ namespace castor3d
 			auto indexCount = writer.declLocale( "indexCount"
 				, triangleCount * 3u );
 
-			FOR( writer, sdw::UInt, i, laneId, i < indexCount, i += 32u )
+			sdwFOR( writer, sdw::UInt, i, laneId, i < indexCount, i += 32u )
 			{
 				primOut[i].primitiveID = i;
 				primOut[i].primitiveIndex = uvec3( meshlet.indices()[i * 3u + 0u]
 					, meshlet.indices()[i * 3u + 1u]
 					, meshlet.indices()[i * 3u + 2u] );
 			}
-			ROF
+			sdwROF;
 
-			FOR( writer, sdw::UInt, i, laneId, i < vertexCount, i += 32u )
+			sdwFOR( writer, sdw::UInt, i, laneId, i < vertexCount, i += 32u )
 			{
 				auto vertexIndex = writer.declLocale( "vertexIndex", meshlet.vertices()[i] );
 
@@ -797,7 +797,7 @@ namespace castor3d
 					, prvPosition );
 				vtxOut[i].position = curPosition;
 			}
-			ROF
+			sdwROF;
 		};
 
 		if ( flags.usesTask() )
@@ -813,11 +813,11 @@ namespace castor3d
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[nodeId - 1u] );
 
-					IF( writer, meshletId >= modelData.getMeshletCount() )
+					sdwIF( writer, meshletId >= modelData.getMeshletCount() )
 					{
 						writer.returnStmt( sdw::Boolean{ false } );
 					}
-					FI
+					sdwFI;
 
 					auto cullData = writer.declLocale( "cullData"
 						, c3d_cullData[meshletId] );
@@ -858,35 +858,35 @@ namespace castor3d
 					auto sphereCenter = writer.getVariable< sdw::Vec3 >( "sphereCenter" );
 					auto sphereRadius = writer.getVariable< sdw::Float >( "sphereRadius" );
 
-					FOR( writer, sdw::UInt, i, 0u, i < 6u, ++i )
+					sdwFOR( writer, sdw::UInt, i, 0u, i < 6u, ++i )
 					{
-						IF( writer, dot( c3d_cameraData.getFrustumPlane( i ).xyz(), sphereCenter ) + c3d_cameraData.getFrustumPlane( i ).w() <= -sphereRadius )
+						sdwIF( writer, dot( c3d_cameraData.getFrustumPlane( i ).xyz(), sphereCenter ) + c3d_cameraData.getFrustumPlane( i ).w() <= -sphereRadius )
 						{
 							writer.returnStmt( sdw::Boolean{ false } );
 						}
-						FI
+						sdwFI;
 					}
-					ROF
+					sdwROF;
 
 					if ( checkCones )
 					{
 						auto coneNormal = writer.getVariable< sdw::Vec3 >( "coneNormal" );
 						auto coneCutOff = writer.getVariable< sdw::Float >( "coneCutOff" );
 
-						IF( writer, coneCutOff == 1.0_f )
+						sdwIF( writer, coneCutOff == 1.0_f )
 						{
 							writer.returnStmt( sdw::Boolean{ true } );
 						}
-						FI
+						sdwFI;
 
 						auto posToCamera = writer.declLocale( "posToCamera"
 							, c3d_cameraData.position() - sphereCenter );
 
-						IF( writer, dot( posToCamera, coneNormal ) >= ( coneCutOff * length( posToCamera ) + sphereRadius ) )
+						sdwIF( writer, dot( posToCamera, coneNormal ) >= ( coneCutOff * length( posToCamera ) + sphereRadius ) )
 						{
 							writer.returnStmt( sdw::Boolean{ false } );
 						}
-						FI
+						sdwFI;
 					}
 
 					writer.returnStmt( sdw::Boolean{ true } );
@@ -916,21 +916,21 @@ namespace castor3d
 					auto vote = writer.declLocale( "vote"
 						, subgroupBallot( render ) );
 
-					IF( writer, render )
+					sdwIF( writer, render )
 					{
 						auto idxOffset = writer.declLocale( "idxOffset"
 							, subgroupBallotExclusiveBitCount( vote ) );
 						payload.meshletIndices()[idxOffset] = meshletId;
 					}
-					FI
+					sdwFI;
 
-					IF( writer, laneId == 0u )
+					sdwIF( writer, laneId == 0u )
 					{
 						auto tasks = writer.declLocale( "tasks"
 							, subgroupBallotBitCount( vote ) );
 						payload.dispatchMesh( tasks );
 					}
-					FI
+					sdwFI;
 				} );
 			writer.implementEntryPointT< shader::PayloadT, shader::FragmentSurfaceT, sdw::VoidT >( 32u
 				, sdw::TaskPayloadInNVT< shader::PayloadT >{ writer }

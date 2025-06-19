@@ -161,11 +161,11 @@ namespace castor3d
 						auto stackPtr = writer.declLocale( "stackPtr"
 							, sdw::atomicAdd( gsStackPtr, 1_i ) );
 
-						IF( writer, stackPtr < MaxValues )
+						sdwIF( writer, stackPtr < MaxValues )
 						{
 							gsNodeStack[stackPtr] = nodeIndex;
 						}
-						FI
+						sdwFI;
 					}
 					, sdw::InUInt{ writer, "nodeIndex" } );
 
@@ -177,11 +177,11 @@ namespace castor3d
 						auto stackPtr = writer.declLocale( "stackPtr"
 							, sdw::atomicAdd( gsStackPtr, -1_i ) );
 
-						IF( writer, stackPtr > 0 && stackPtr < MaxValues )
+						sdwIF( writer, stackPtr > 0 && stackPtr < MaxValues )
 						{
 							nodeIndex = gsNodeStack[stackPtr - 1];
 						}
-						FI
+						sdwFI;
 
 						writer.returnStmt( nodeIndex );
 					} );
@@ -248,16 +248,16 @@ namespace castor3d
 					{
 						v = sphere[i];
 
-						IF( writer, v < aabb.min()[i] )
+						sdwIF( writer, v < aabb.min()[i] )
 						{
 							sqDistance += pow( aabb.min()[i] - v, 2.0_f );
 						}
-						FI
-						IF( writer, v > aabb.max()[i] )
+						sdwFI;
+						sdwIF( writer, v > aabb.max()[i] )
 						{
 							sqDistance += pow( v - aabb.max()[i], 2.0_f );
 						}
-						FI
+						sdwFI;
 					}
 
 					writer.returnStmt( sqDistance <= sphere.w() * sphere.w() );
@@ -300,11 +300,11 @@ namespace castor3d
 						auto center = writer.declLocale( "center"
 							, aabb.min().xyz() + ( aabb.max().xyz() - aabb.min().xyz() ) / 2.0_f );
 
-						IF( writer, sphereInsideAABB( vec4( center, aabb.min().w() ), gsClusterAABB ) )
+						sdwIF( writer, sphereInsideAABB( vec4( center, aabb.min().w() ), gsClusterAABB ) )
 						{
 							gsPointLights.appendData( lightIndex, MaxLightsPerCluster );
 						}
-						FI
+						sdwFI;
 					};
 
 					auto processSpotLightAABB = [&]( sdw::UInt const & leafIndex )
@@ -313,7 +313,7 @@ namespace castor3d
 						auto aabb = writer.declLocale( "aabb"
 							, c3d_allLightsAABB[c3d_clustersData.pointLightCount() + lightIndex] );
 
-						IF( writer, aabbIntersectAABB( aabb, gsClusterAABB ) )
+						sdwIF( writer, aabbIntersectAABB( aabb, gsClusterAABB ) )
 						{
 							if ( config.useSpotBoundingCone )
 							{
@@ -327,21 +327,21 @@ namespace castor3d
 										, spot.outerCutOffSin()
 										, spot.outerCutOffTan() } );
 
-								IF( writer, coneInsideSphere( cone, gsClusterSphere ) )
+								sdwIF( writer, coneInsideSphere( cone, gsClusterSphere ) )
 								{
 									gsSpotLights.appendData( lightIndex, MaxLightsPerCluster );
 								}
-								FI
+								sdwFI;
 							}
 							else
 							{
 								gsSpotLights.appendData( lightIndex, MaxLightsPerCluster );
 							}
 						}
-						FI
+						sdwFI;
 					};
 
-					IF( writer, groupIndex == 0_u )
+					sdwIF( writer, groupIndex == 0_u )
 					{
 						gsPointLights.resetCount();
 						gsSpotLights.resetCount();
@@ -361,7 +361,7 @@ namespace castor3d
 							pushNode( 0_u );
 						}
 					}
-					FI
+					sdwFI;
 
 					shader::groupMemoryBarrierWithGroupSync( writer );
 
@@ -370,44 +370,44 @@ namespace castor3d
 						auto childOffset = writer.declLocale( "childOffset", groupIndex );
 
 						// Check point light BVH
-						DOWHILE( writer, gsParentIndex > 0_u )
+						sdwDOWHILE( writer, gsParentIndex > 0_u )
 						{
 							auto childIndex = writer.declLocale( "childIndex"
 								, getFirstChild( gsParentIndex, c3d_clustersData.pointLightLevels() ) + childOffset );
 
-							IF( writer, isLeafNode( childIndex, c3d_clustersData.pointLightLevels() ) )
+							sdwIF( writer, isLeafNode( childIndex, c3d_clustersData.pointLightLevels() ) )
 							{
 								auto leafIndex = writer.declLocale( "leafIndex"
 									, getLeafIndex( childIndex, c3d_clustersData.pointLightLevels() ) );
 
-								IF( writer, leafIndex < c3d_clustersData.pointLightCount() )
+								sdwIF( writer, leafIndex < c3d_clustersData.pointLightCount() )
 								{
 									processPointLightAABB( leafIndex );
 								}
-								FI
+								sdwFI;
 							}
-							ELSEIF( aabbIntersectAABB( gsClusterAABB, c3d_pointLightBVH[childIndex] ) )
+							sdwELSEIF( aabbIntersectAABB( gsClusterAABB, c3d_pointLightBVH[childIndex] ) )
 							{
 								pushNode( childIndex );
 							}
-							FI
+							sdwFI;
 
 							shader::groupMemoryBarrierWithGroupSync( writer );
 
-							IF( writer, groupIndex == 0_u )
+							sdwIF( writer, groupIndex == 0_u )
 							{
 								gsParentIndex = popNode();
 							}
-							FI
+							sdwFI;
 
 							shader::groupMemoryBarrierWithGroupSync( writer );
 						}
-						ELIHWOD
+						sdwELIHWOD;
 
 						shader::groupMemoryBarrierWithGroupSync( writer );
 
 						// Reset the stack.
-						IF( writer, groupIndex == 0_u )
+						sdwIF( writer, groupIndex == 0_u )
 						{
 							gsStackPtr = 0_i;
 							gsParentIndex = 0_u;
@@ -415,101 +415,101 @@ namespace castor3d
 							// Push the root node (at index 0) on the node stack.
 							pushNode( 0_u );
 						}
-						FI
+						sdwFI;
 
 						shader::groupMemoryBarrierWithGroupSync( writer );
 
 						// Check spot light BVH
-						DOWHILE( writer, gsParentIndex > 0_u )
+						sdwDOWHILE( writer, gsParentIndex > 0_u )
 						{
 							auto childIndex = writer.declLocale( "childIndex"
 								, getFirstChild( gsParentIndex, c3d_clustersData.spotLightLevels() ) + childOffset );
 
-							IF( writer, isLeafNode( childIndex, c3d_clustersData.spotLightLevels() ) )
+							sdwIF( writer, isLeafNode( childIndex, c3d_clustersData.spotLightLevels() ) )
 							{
 								auto leafIndex = writer.declLocale( "leafIndex"
 									, getLeafIndex( childIndex, c3d_clustersData.spotLightLevels() ) );
 
-								IF( writer, leafIndex < c3d_clustersData.spotLightCount() )
+								sdwIF( writer, leafIndex < c3d_clustersData.spotLightCount() )
 								{
 									processSpotLightAABB( leafIndex );
 								}
-								FI
+								sdwFI;
 							}
-							ELSEIF( aabbIntersectAABB( gsClusterAABB, c3d_spotLightBVH[childIndex] ) )
+							sdwELSEIF( aabbIntersectAABB( gsClusterAABB, c3d_spotLightBVH[childIndex] ) )
 							{
 								pushNode( childIndex );
 							}
-							FI
+							sdwFI;
 
 							shader::groupMemoryBarrierWithGroupSync( writer );
 
-							IF( writer, groupIndex == 0_u )
+							sdwIF( writer, groupIndex == 0_u )
 							{
 								gsParentIndex = popNode();
 							}
-							FI
+							sdwFI;
 
 							shader::groupMemoryBarrierWithGroupSync( writer );
 						}
-						ELIHWOD
+						sdwELIHWOD;
 
 						shader::groupMemoryBarrierWithGroupSync( writer );
 					}
 					else
 					{
 						// Intersect point lights against AABB.
-						FOR( writer, sdw::UInt, i, groupIndex, i < c3d_clustersData.pointLightCount(), i += NumThreads )
+						sdwFOR( writer, sdw::UInt, i, groupIndex, i < c3d_clustersData.pointLightCount(), i += NumThreads )
 						{
 							processPointLightAABB( i );
 						}
-						ROF
+						sdwROF;
 
 						// Intersect spot lights against AABB.
-						FOR( writer, sdw::UInt, i, groupIndex, i < c3d_clustersData.spotLightCount(), i += NumThreads )
+						sdwFOR( writer, sdw::UInt, i, groupIndex, i < c3d_clustersData.spotLightCount(), i += NumThreads )
 						{
 							processSpotLightAABB( i );
 						}
-						ROF
+						sdwROF;
 
 						shader::groupMemoryBarrierWithGroupSync( writer );
 					}
 
 					// Now update the global light grids with the light lists and light counts.
-					IF( writer, groupIndex == 0u )
+					sdwIF( writer, groupIndex == 0u )
 					{
-						IF( writer, gsPointLights.getCount() > 0_u )
+						sdwIF( writer, gsPointLights.getCount() > 0_u )
 						{
 							gsPointLights.getCount() = min( sdw::UInt{ MaxLightsPerCluster }, gsPointLights.getCount() );
 							gsPointLightStartOffset = sdw::atomicAdd( c3d_pointLightClusterListCount, gsPointLights.getCount() );
 							c3d_pointLightClusterGrid[gsClusterIndex1D] = sdw::uvec2( gsPointLightStartOffset, gsPointLights.getCount() );
 						}
-						FI
+						sdwFI;
 
-						IF( writer, gsSpotLights.getCount() > 0_u )
+						sdwIF( writer, gsSpotLights.getCount() > 0_u )
 						{
 							gsSpotLights.getCount() = min( sdw::UInt{ MaxLightsPerCluster }, gsSpotLights.getCount() );
 							gsSpotLightStartOffset = sdw::atomicAdd( c3d_spotLightClusterListCount, gsSpotLights.getCount() );
 							c3d_spotLightClusterGrid[gsClusterIndex1D] = sdw::uvec2( gsSpotLightStartOffset, gsSpotLights.getCount() );
 						}
-						FI
+						sdwFI;
 					}
-					FI
+					sdwFI;
 
 					shader::groupMemoryBarrierWithGroupSync( writer );
 
 					// Now update the global light index lists with the group shared light lists.
-					FOR( writer, sdw::UInt, i, groupIndex, i < gsPointLights.getCount(), i += NumThreads )
+					sdwFOR( writer, sdw::UInt, i, groupIndex, i < gsPointLights.getCount(), i += NumThreads )
 					{
 						c3d_pointLightClusterIndex[gsPointLightStartOffset + i] = gsPointLights[i];
 					}
-					ROF
+					sdwROF;
 
-					FOR( writer, sdw::UInt, i, groupIndex, i < gsSpotLights.getCount(), i += NumThreads )
+					sdwFOR( writer, sdw::UInt, i, groupIndex, i < gsSpotLights.getCount(), i += NumThreads )
 					{
 						c3d_spotLightClusterIndex[gsSpotLightStartOffset + i] = gsSpotLights[i];
 					}
-					ROF
+					sdwROF;
 				} );
 			return writer.getBuilder().releaseShader();
 		}

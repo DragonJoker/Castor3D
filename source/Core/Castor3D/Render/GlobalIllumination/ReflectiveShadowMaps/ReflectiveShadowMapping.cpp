@@ -88,7 +88,7 @@ namespace castor3d
 					auto indirectIllumination = m_writer.declLocale( "indirectIllumination"
 						, vec3( 0.0_f ) );
 
-					FOR( m_writer, sdw::UInt, i, 0_u, i < rsmData.sampleCount, ++i )
+					sdwFOR( m_writer, sdw::UInt, i, 0_u, i < rsmData.sampleCount, ++i )
 					{
 						auto rnd = m_writer.declLocale( "rnd"
 							, m_rsmSamples[i] );
@@ -104,7 +104,7 @@ namespace castor3d
 							, worldNormal
 							, rnd.z() );
 					}
-					ROF
+					sdwROF;
 
 					m_writer.returnStmt( clamp( indirectIllumination * rsmData.intensity
 						, vec3( 0.0_f )
@@ -149,7 +149,7 @@ namespace castor3d
 					auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
 						, worldPosition - lightPosition );
 
-					FOR( m_writer, sdw::UInt, i, 0_u, i < rsmData.sampleCount, ++i )
+					sdwFOR( m_writer, sdw::UInt, i, 0_u, i < rsmData.sampleCount, ++i )
 					{
 						auto rnd = m_writer.declLocale( "rnd"
 							, m_rsmSamples[i] );
@@ -166,7 +166,7 @@ namespace castor3d
 							, worldNormal
 							, rnd.z() );
 					}
-					ROF
+					sdwROF;
 
 					m_writer.returnStmt( clamp( indirectIllumination * rsmData.intensity
 						, vec3( 0.0_f )
@@ -213,7 +213,7 @@ namespace castor3d
 					auto rMax = m_writer.declLocale( "rMax"
 						, vec2( rsmData.maxRadius ) / vec2( c3d_rsmFluxMap.getSize( 0_i ).xy() ) );
 
-					FOR( m_writer, sdw::UInt, i, 0_u, i < rsmData.sampleCount, ++i )
+					sdwFOR( m_writer, sdw::UInt, i, 0_u, i < rsmData.sampleCount, ++i )
 					{
 						auto rnd = m_writer.declLocale( "rnd"
 							, m_rsmSamples[i] );
@@ -229,7 +229,7 @@ namespace castor3d
 							, worldNormal
 							, rnd.z() );
 					}
-					ROF
+					sdwROF;
 
 					m_writer.returnStmt( clamp( indirectIllumination * rsmData.intensity
 						, vec3( 0.0_f )

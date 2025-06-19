@@ -81,25 +81,25 @@ namespace draw_edges
 					switch ( contourMethod )
 					{
 					case 0:  // smaller
-						IF( writer, X < A || X < B || X < C || X < D || X < E || X < F || X < G || X < H )
+						sdwIF( writer, X < A || X < B || X < C || X < D || X < E || X < F || X < G || X < H )
 						{
 							writer.returnStmt( 1.0_f );
 						}
-						FI;
+						sdwFI;
 						break;
 					case 1:  // bigger
-						IF( writer, X > A || X > B || X > C || X > D || X > E || X > F || X > G || X > H )
+						sdwIF( writer, X > A || X > B || X > C || X > D || X > E || X > F || X > G || X > H )
 						{
 							writer.returnStmt( 1.0_f );
 						}
-						FI;
+						sdwFI;
 						break;
 					case 2:  // thicker
-						IF( writer, X != A || X != B || X != C || X != D || X != E || X != F || X != G || X != H )
+						sdwIF( writer, X != A || X != B || X != C || X != D || X != E || X != F || X != G || X != H )
 						{
 							writer.returnStmt( 1.0_f );
 						}
-						FI;
+						sdwFI;
 						break;
 					case 3:  // different
 						writer.returnStmt( writer.cast< sdw::Float >( writer.cast< sdw::Int >( X != A )
@@ -139,11 +139,11 @@ namespace draw_edges
 					auto nodeId = writer.declLocale( "nodeId"
 						, writer.cast< sdw::UInt >( X.z() ) );
 
-					IF( writer, nodeId == 0_u )
+					sdwIF( writer, nodeId == 0_u )
 					{
 						writer.demote();
 					}
-					FI;
+					sdwFI;
 
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
@@ -151,11 +151,11 @@ namespace draw_edges
 					auto toonProfile = writer.declLocale( "toonProfile"
 						, toonProfiles.getData( modelData.getMaterialId() - 1u ) );
 
-					IF( writer, toonProfile.edgeColour().w() == 0.0_f )
+					sdwIF( writer, toonProfile.edgeColour().w() == 0.0_f )
 					{
 						writer.demote();
 					}
-					FI;
+					sdwFI;
 
 					outColour = toonProfile.objectFactor() * computeContour( texelCoord
 						, writer.cast< sdw::Int >( X.z() )

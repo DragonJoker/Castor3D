@@ -117,11 +117,11 @@ namespace castor3d
 					auto depth = writer.declLocale( "depth"
 						, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 
-					IF( writer, depth == 1.0_f )
+					sdwIF( writer, depth == 1.0_f )
 					{
 						writer.demote();
 					}
-					FI;
+					sdwFI;
 
 					auto data1 = writer.declLocale( "data1"
 						, c3d_mapNmlOcc.lod( texCoord, 0.0_f ) );
@@ -136,7 +136,7 @@ namespace castor3d
 					auto areEqual = writer.declLocale( "areEqual"
 						, giNormal == wsNormal );
 
-					IF( writer, areEqual.x() && areEqual.y() && areEqual.z() )
+					sdwIF( writer, areEqual.x() && areEqual.y() && areEqual.z() )
 					{
 						auto offset = writer.declLocale( "offset"
 							, vec2( 1.0_f / float( width ), 1.0_f / float( height ) ) );
@@ -147,7 +147,7 @@ namespace castor3d
 							+ c3d_mapGi.lod( texCoord + vec2( -offset.x(), -offset.y() ), 0.0_f ).xyz();
 						pxl_rsmGI /= 5.0_f;
 					}
-					ELSE
+					sdwELSE
 					{
 						auto shadowData = writer.declLocale( "shadowData"
 							, shadows.getDirectionalShadows() );
@@ -157,7 +157,7 @@ namespace castor3d
 							, wsNormal
 							, c3d_rsmConfigData );
 					}
-					FI;
+					sdwFI;
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -210,11 +210,11 @@ namespace castor3d
 					auto depth = writer.declLocale( "depth"
 						, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 
-					IF( writer, depth == 1.0_f )
+					sdwIF( writer, depth == 1.0_f )
 					{
 						writer.demote();
 					}
-					FI;
+					sdwFI;
 
 					auto data1 = writer.declLocale( "data1"
 						, c3d_mapNmlOcc.lod( texCoord, 0.0_f ) );
@@ -223,16 +223,16 @@ namespace castor3d
 					auto wsNormal = writer.declLocale( "wsNormal"
 						, data1.xyz() );
 
-					IF( writer, dot( wsNormal, wsNormal ) == 0.0f )
+					sdwIF( writer, dot( wsNormal, wsNormal ) == 0.0f )
 					{
 						writer.demote();
 					}
-					FI;
+					sdwFI;
 
 					auto giNormal = writer.declLocale( "giNormal"
 						, c3d_mapNml.lod( texCoord, 0.0_f ).xyz() );
 
-					IF( writer, all( giNormal == wsNormal ) )
+					sdwIF( writer, all( giNormal == wsNormal ) )
 					{
 						auto offset = writer.declLocale( "offset"
 							, vec2( 1.0_f / float( width ), 1.0_f / float( height ) ) );
@@ -243,7 +243,7 @@ namespace castor3d
 							+ c3d_mapGi.lod( texCoord + vec2( -offset.x(), -offset.y() ), 0.0_f ).xyz();
 						pxl_rsmGI /= 5.0_f;
 					}
-					ELSE
+					sdwELSE
 					{
 						auto shadowData = writer.declLocale( "shadowData"
 							, shadows.getSpotShadows( 0_i ) );
@@ -252,7 +252,7 @@ namespace castor3d
 							, wsNormal
 							, c3d_rsmConfigData );
 					}
-					FI;
+					sdwFI;
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -316,7 +316,7 @@ namespace castor3d
 					auto areEqual = writer.declLocale( "areEqual"
 						, giNormal == wsNormal );
 
-					IF( writer, areEqual.x() && areEqual.y() && areEqual.z() )
+					sdwIF( writer, areEqual.x() && areEqual.y() && areEqual.z() )
 					{
 						auto offset = writer.declLocale( "offset"
 							, vec2( 1.0_f / float( width ), 1.0_f / float( height ) ) );
@@ -327,7 +327,7 @@ namespace castor3d
 							+ c3d_mapGi.lod( texCoord + vec2( -offset.x(), -offset.y() ), 0.0_f ).xyz();
 						pxl_rsmGI /= 5.0_f;
 					}
-					ELSE
+					sdwELSE
 					{
 						auto shadowData = writer.declLocale( "shadowData"
 							, shadows.getPointShadows( 0_i ) );
@@ -337,7 +337,7 @@ namespace castor3d
 							, wsNormal
 							, c3d_rsmConfigData );
 					}
-					FI;
+					sdwFI;
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

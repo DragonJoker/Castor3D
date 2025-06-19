@@ -62,7 +62,7 @@ namespace castor3d::shader
 					auto batchCount = writer.declLocale( "batchCount", ( roundedElementCount + m_batchSize - 1u ) >> batchSizeLog );
 					// Load data into shared memory. Pad missing values with max ints.
 
-					FOR( writer, sdw::UInt, batch, 0_u, batch < batchCount, ++batch )
+					sdwFOR( writer, sdw::UInt, batch, 0_u, batch < batchCount, ++batch )
 					{
 						// each thread loads a pair of values per batch.
 						auto i1 = writer.declLocale( "i1", groupIndex + batch * m_batchSize );
@@ -72,20 +72,20 @@ namespace castor3d::shader
 						gsValues[i1] = writer.ternary( i1 < elementCount, inputValues[elementOffset + i1], invalidValue );
 						gsValues[i2] = writer.ternary( i2 < elementCount, inputValues[elementOffset + i2], invalidValue );
 					}
-					ROF
+					sdwROF;
 
 					shader::groupMemoryBarrierWithGroupSync( writer );
 	
 					// Each loop iteration produces blocks of size k that are monotonic (alternatively increasing and decreasing)
 					// thus, producing blocks of size 2*k that are bitonic.
 					// as a result, the last pass produces a single block sorted in ascending order
-					FOR( writer, sdw::UInt, pass, 0_u, pass < passCount, ++pass )
+					sdwFOR( writer, sdw::UInt, pass, 0_u, pass < passCount, ++pass )
 					{
 						auto k = writer.declLocale( "k", 1_u << ( pass + 1u ) );
 						// Each iteration compares and optionally swap elements in pairs exactly once for each element
-						FOR( writer, sdw::UInt, subPass, 0_u, subPass <= pass, ++subPass )
+						sdwFOR( writer, sdw::UInt, subPass, 0_u, subPass <= pass, ++subPass )
 						{
-							FOR( writer, sdw::UInt, batch, 0_u, batch < batchCount, ++batch )
+							sdwFOR( writer, sdw::UInt, batch, 0_u, batch < batchCount, ++batch )
 							{
 								auto indexBit = writer.declLocale( "indexBit", groupIndex + batch * m_numThreads );
 								auto relPass = writer.declLocale( "relPass", pass - subPass );
@@ -97,51 +97,51 @@ namespace castor3d::shader
 								auto valSecond = writer.declLocale( "valSecond", gsValues[indexSecond] );
 								shader::groupMemoryBarrierWithGroupSync( writer );
 
-								IF( writer, writer.ternary( ( indexFirst & k ) == 0_u, 1_u, 0_u ) ^ writer.ternary( keyFirst <= keySecond, 1_u, 0_u ) )
+								sdwIF( writer, writer.ternary( ( indexFirst & k ) == 0_u, 1_u, 0_u ) ^ writer.ternary( keyFirst <= keySecond, 1_u, 0_u ) )
 								{
 									gsKeys[indexFirst] = keySecond;
 									gsKeys[indexSecond] = keyFirst;
 									gsValues[indexFirst] = valSecond;
 									gsValues[indexSecond] = valFirst;
 								}
-								FI
+								sdwFI;
 
 								shader::groupMemoryBarrierWithGroupSync( writer );
 							}
-							ROF
+							sdwROF;
 						}
-						ROF
+						sdwROF;
 					}
-					ROF
+					sdwROF;
 
 					// Now commit the results to global memory.
-					FOR( writer, sdw::UInt, batch, 0_u, batch < batchCount, ++batch )
+					sdwFOR( writer, sdw::UInt, batch, 0_u, batch < batchCount, ++batch )
 					{
 						auto i1 = writer.declLocale( "i1", groupIndex + batch * m_batchSize );
 						auto i2 = writer.declLocale( "i2", i1 + ( m_batchSize >> 1u ) );
 
-						IF( writer, i1 < elementCount )
+						sdwIF( writer, i1 < elementCount )
 						{
 							outputKeys[elementOffset + i1] = gsKeys[i1];
 							outputValues[elementOffset + i1] = gsValues[i1];
 						}
-						FI
-						IF( writer, i2 < elementCount )
+						sdwFI;
+						sdwIF( writer, i2 < elementCount )
 						{
 							outputKeys[elementOffset + i2] = gsKeys[i2];
 							outputValues[elementOffset + i2] = gsValues[i2];
 						}
-						FI
+						sdwFI;
 					}
-					ROF
+					sdwROF;
 				};
 			elementCount = min( sdw::UInt{ bucketSize }, elementCount );
 
-			IF( writer, elementCount > 1_u )
+			sdwIF( writer, elementCount > 1_u )
 			{
 				bitonicSort();
 			}
-			FI
+			sdwFI;
 		}
 		/**
 		 *\arg	ValueT		The value type.

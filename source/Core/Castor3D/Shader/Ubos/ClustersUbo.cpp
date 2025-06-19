@@ -64,17 +64,17 @@ namespace castor3d
 
 						auto k = writer.declLocale( "k", 0.0_f );
 
-						IF( writer, splitScheme() == Exponential )
+						sdwIF( writer, splitScheme() == Exponential )
 						{
 							auto multiply = clustersLightsData.z();
 							auto add = clustersLightsData.w();
 							k = floor( sdw::log( -viewZ ) * multiply - add );
 						}
-						ELSEIF( splitScheme() == Linear )
+						sdwELSEIF( splitScheme() == Linear )
 						{
 							k = floor( writer.cast< sdw::Float >( dimensions().z() ) * ( -viewZ - nearZ ) / ( farZ - nearZ ) );
 						}
-						ELSE
+						sdwELSE
 						{
 							auto d = clustersLightsData.z();
 							auto limZ = writer.declLocale( "limZ"
@@ -83,7 +83,7 @@ namespace castor3d
 								, sdw::log( limZ / nearZ ) / sdw::log( farZ / limZ ) );
 							k = max( 0.0_f, floor( sdw::log( -viewZ / nearZ ) * d - writer.cast< sdw::Float >( dimensions().z() ) * depthBias ) );
 						}
-						FI
+						sdwFI;
 
 						writer.returnStmt( u32vec3( i, j, k ) );
 					}
@@ -122,7 +122,7 @@ namespace castor3d
 						sdw::UInt const Linear = 1_u;
 						sdw::UInt const Hybrid = 2_u;
 
-						IF( writer, splitScheme() == Exponential )
+						sdwIF( writer, splitScheme() == Exponential )
 						{
 							auto nearTile = writer.declLocale( "nearTile"
 								, -nearZ * pow( farZ / nearZ, writer.cast< sdw::Float >( clusterIndex3D.z() ) / clustersZ ) );
@@ -130,7 +130,7 @@ namespace castor3d
 								, -nearZ * pow( farZ / nearZ, writer.cast< sdw::Float >( clusterIndex3D.z() + 1_u ) / clustersZ ) );
 							writer.returnStmt( vec2( nearTile, farTile ) );
 						}
-						ELSEIF( splitScheme() == Linear )
+						sdwELSEIF( splitScheme() == Linear )
 						{
 							auto nearTile = writer.declLocale( "nearTile"
 								, -nearZ - writer.cast< sdw::Float >( clusterIndex3D.z() ) * ( farZ - nearZ ) / clustersZ );
@@ -138,7 +138,7 @@ namespace castor3d
 								, -nearZ - writer.cast< sdw::Float >( clusterIndex3D.z() + 1_u ) * ( farZ - nearZ ) / clustersZ );
 							writer.returnStmt( vec2( nearTile, farTile ) );
 						}
-						ELSE
+						sdwELSE
 						{
 							auto e = clustersLightsData.w();
 							auto limZ = writer.declLocale( "limZ"
@@ -157,7 +157,7 @@ namespace castor3d
 									, -e * pow( farZ / nearZ, writer.cast< sdw::Float >( nxtSlice ) / ( clustersZ * ( 1.0_f + depthBias ) ) ) ) );
 							writer.returnStmt( vec2( nearTile, farTile ) );
 						}
-						FI
+						sdwFI;
 					}
 					, sdw::InU32Vec3{ writer, "clusterIndex3D" }
 					, sdw::InVec4{ writer, "clustersLightsData" }
@@ -212,7 +212,7 @@ namespace castor3d
 						sdw::UInt const Linear = 1_u;
 						sdw::UInt const Hybrid = 2_u;
 
-						IF( writer, splitScheme() == Exponential )
+						sdwIF( writer, splitScheme() == Exponential )
 						{
 							auto multiply = writer.declLocale( "multiply"
 								, writer.cast< sdw::Float >( dimensions().z() ) / sdw::log( farZ / nearZ ) );
@@ -220,11 +220,11 @@ namespace castor3d
 								, multiply * sdw::log( nearZ ) );
 							clustersLightsData = vec4( nearZ, farZ, multiply, add );
 						}
-						ELSEIF( splitScheme() == Linear )
+						sdwELSEIF( splitScheme() == Linear )
 						{
 							clustersLightsData = vec4( nearZ, farZ, 0.0_f, 0.0_f );
 						}
-						ELSE
+						sdwELSE
 						{
 							auto limZ = writer.declLocale( "limZ"
 								, max( minDistance(), nearZ ) );
@@ -238,7 +238,7 @@ namespace castor3d
 								, nearZ * pow( farZ / nearZ, depthBias / ( 1.0f + depthBias ) ) );
 							clustersLightsData = vec4( nearZ, farZ, d, e );
 						}
-						FI
+						sdwFI;
 
 						lightsAABBRange = vec4( vec3( 1.0_f ) / ( lightsMax - lightsMin ).xyz(), 1.0_f );
 					}

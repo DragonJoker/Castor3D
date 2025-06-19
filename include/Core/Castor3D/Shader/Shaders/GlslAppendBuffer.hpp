@@ -97,11 +97,11 @@ namespace castor3d::shader
 			sdw::ShaderWriter & writer = *this->getWriter();
 			auto idx = writer.declLocale( "appendIndex", this->incrementCount() );
 
-			IF( *m_writer, idx < maxCount )
+			sdwIF( *m_writer, idx < maxCount )
 			{
 				m_data[idx] = data;
 			}
-			FI;
+			sdwFI;
 		}
 
 		void appendData( DataT const data
@@ -210,11 +210,11 @@ namespace castor3d::shader
 			{
 				auto idx = m_writer.declLocale( m_variableName + "_idx", this->incrementCount() );
 
-				IF( m_writer, idx < maxCount )
+				sdwIF( m_writer, idx < maxCount )
 				{
 					( *m_data )[idx] = data;
 				}
-				FI;
+				sdwFI;
 			}
 		}
 
@@ -225,11 +225,11 @@ namespace castor3d::shader
 			{
 				auto idx = m_writer.declLocale( m_variableName + "_idx", this->incrementCount() );
 
-				IF( m_writer, idx < maxCount )
+				sdwIF( m_writer, idx < maxCount )
 				{
 					( *m_data )[idx] = data;
 				}
-				FI;
+				sdwFI;
 			}
 		}
 

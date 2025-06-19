@@ -319,11 +319,11 @@ namespace castor3d::shader
 				auto end = m_writer.declLocale( "c3d_end"
 					, m_lightsBuffer->getDirectionalsEnd() );
 
-				WHILE( m_writer, cur < end )
+				sdwWHILE( m_writer, cur < end )
 				{
 					auto directionalLight = m_writer.declLocale( "directionalLight"
 						, getDirectionalLight( cur ) );
-					IF( m_writer, directionalLight.enabled() )
+					sdwIF( m_writer, directionalLight.enabled() )
 					{
 						lightingModel->compute( debugOutput
 							, directionalLight
@@ -333,10 +333,10 @@ namespace castor3d::shader
 							, receivesShadows
 							, parentOutput );
 					}
-					FI
+					sdwFI;
 					cur += DirectionalLightInstance::LightDataComponents;
 				}
-				ELIHW
+				sdwELIHW;
 
 				clusteredLights.computeCombinedDifSpec( *this
 					, *lightingModel
@@ -381,11 +381,11 @@ namespace castor3d::shader
 				auto end = m_writer.declLocale( "c3d_end"
 					, m_lightsBuffer->getDirectionalsEnd() );
 
-				WHILE( m_writer, cur < end )
+				sdwWHILE( m_writer, cur < end )
 				{
 					auto directionalLight = m_writer.declLocale( "directionalLight"
 						, getDirectionalLight( cur ) );
-					IF( m_writer, directionalLight.enabled() )
+					sdwIF( m_writer, directionalLight.enabled() )
 					{
 						lightingModel->computeAllButDiffuse( debugOutput
 							, directionalLight
@@ -395,10 +395,10 @@ namespace castor3d::shader
 							, receivesShadows
 							, parentOutput );
 					}
-					FI
+					sdwFI;
 					cur += DirectionalLightInstance::LightDataComponents;
 				}
-				ELIHW
+				sdwELIHW;
 
 				clusteredLights.computeCombinedAllButDif( *this
 					, *lightingModel
@@ -442,11 +442,11 @@ namespace castor3d::shader
 				auto end = m_writer.declLocale( "c3d_end"
 					, m_lightsBuffer->getDirectionalsEnd() );
 
-				WHILE( m_writer, cur < end )
+				sdwWHILE( m_writer, cur < end )
 				{
 					auto directionalLight = m_writer.declLocale( "directionalLight"
 						, getDirectionalLight( cur ) );
-					IF( m_writer, directionalLight.enabled() )
+					sdwIF( m_writer, directionalLight.enabled() )
 					{
 						output += lightingModel->computeDiffuse( debugOutput
 							, directionalLight
@@ -455,10 +455,10 @@ namespace castor3d::shader
 							, lightSurface
 							, receivesShadows );
 					}
-					FI
+					sdwFI;
 					cur += DirectionalLightInstance::LightDataComponents;
 				}
-				ELIHW
+				sdwELIHW;
 
 				clusteredLights.computeCombinedDif( *this
 					, *lightingModel
@@ -498,11 +498,11 @@ namespace castor3d::shader
 			auto end = m_writer.declLocale( "c3d_end"
 				, m_lightsBuffer->getDirectionalsEnd() );
 
-			WHILE( m_writer, cur < end )
+			sdwWHILE( m_writer, cur < end )
 			{
 				auto directionalLight = m_writer.declLocale( "directionalLight"
 					, getDirectionalLight( cur ) );
-				IF( m_writer, directionalLight.enabled() )
+				sdwIF( m_writer, directionalLight.enabled() )
 				{
 					lightingModel->compute( debugOutput
 						, directionalLight
@@ -512,18 +512,18 @@ namespace castor3d::shader
 						, receivesShadows
 						, output );
 				}
-				FI
+				sdwFI;
 				cur += DirectionalLightInstance::LightDataComponents;
 			}
-			ELIHW
+			sdwELIHW;
 
 			end = m_lightsBuffer->getPointsEnd();
 
-			WHILE( m_writer, cur < end )
+			sdwWHILE( m_writer, cur < end )
 			{
 				auto pointLight = m_writer.declLocale( "pointLight"
 					, getPointLight( cur ) );
-				IF( m_writer, pointLight.enabled() )
+				sdwIF( m_writer, pointLight.enabled() )
 				{
 					lightingModel->compute( debugOutput
 						, pointLight
@@ -532,18 +532,18 @@ namespace castor3d::shader
 						, receivesShadows
 						, output );
 				}
-				FI
+				sdwFI;
 				cur += PointLightInstance::LightDataComponents;
 			}
-			ELIHW
+			sdwELIHW;
 
 			end = m_lightsBuffer->getSpotsEnd();
 
-			WHILE( m_writer, cur < end )
+			sdwWHILE( m_writer, cur < end )
 			{
 				auto spotLight = m_writer.declLocale( "spotLight"
 					, getSpotLight( cur ) );
-				IF( m_writer, spotLight.enabled() )
+				sdwIF( m_writer, spotLight.enabled() )
 				{
 					lightingModel->compute( debugOutput
 						, spotLight
@@ -552,10 +552,10 @@ namespace castor3d::shader
 						, receivesShadows
 						, output );
 				}
-				FI
+				sdwFI;
 				cur += SpotLightInstance::LightDataComponents;
 			}
-			ELIHW
+			sdwELIHW;
 		}
 	}
 
@@ -575,11 +575,11 @@ namespace castor3d::shader
 			auto end = m_writer.declLocale( "c3d_end"
 				, m_lightsBuffer->getDirectionalsEnd() );
 
-			WHILE( m_writer, cur < end )
+			sdwWHILE( m_writer, cur < end )
 			{
 				auto directionalLight = m_writer.declLocale( "directionalLight"
 					, getDirectionalLight( cur ) );
-				IF( m_writer, directionalLight.enabled() )
+				sdwIF( m_writer, directionalLight.enabled() )
 				{
 					lightingModel->computeAllButDiffuse( debugOutput
 						, directionalLight
@@ -589,18 +589,18 @@ namespace castor3d::shader
 						, receivesShadows
 						, output );
 				}
-				FI
+				sdwFI;
 				cur += DirectionalLightInstance::LightDataComponents;
 			}
-			ELIHW
+			sdwELIHW;
 
 			end = m_lightsBuffer->getPointsEnd();
 
-			WHILE( m_writer, cur < end )
+			sdwWHILE( m_writer, cur < end )
 			{
 				auto pointLight = m_writer.declLocale( "pointLight"
 					, getPointLight( cur ) );
-				IF( m_writer, pointLight.enabled() )
+				sdwIF( m_writer, pointLight.enabled() )
 				{
 					lightingModel->computeAllButDiffuse( debugOutput
 						, pointLight
@@ -609,18 +609,18 @@ namespace castor3d::shader
 						, receivesShadows
 						, output );
 				}
-				FI
+				sdwFI;
 				cur += PointLightInstance::LightDataComponents;
 			}
-			ELIHW
+			sdwELIHW;
 
 			end = m_lightsBuffer->getSpotsEnd();
 
-			WHILE( m_writer, cur < end )
+			sdwWHILE( m_writer, cur < end )
 			{
 				auto spotLight = m_writer.declLocale( "spotLight"
 					, getSpotLight( cur ) );
-				IF( m_writer, spotLight.enabled() )
+				sdwIF( m_writer, spotLight.enabled() )
 				{
 					lightingModel->computeAllButDiffuse( debugOutput
 						, spotLight
@@ -629,10 +629,10 @@ namespace castor3d::shader
 						, receivesShadows
 						, output );
 				}
-				FI
+				sdwFI;
 				cur += SpotLightInstance::LightDataComponents;
 			}
-			ELIHW
+			sdwELIHW;
 		}
 	}
 
@@ -650,11 +650,11 @@ namespace castor3d::shader
 			auto end = m_writer.declLocale( "c3d_end"
 				, m_lightsBuffer->getDirectionalsEnd() );
 
-			WHILE( m_writer, cur < end )
+			sdwWHILE( m_writer, cur < end )
 			{
 				auto directionalLight = m_writer.declLocale( "directionalLight"
 					, getDirectionalLight( cur ) );
-				IF( m_writer, directionalLight.enabled() )
+				sdwIF( m_writer, directionalLight.enabled() )
 				{
 					output += lightingModel->computeDiffuse( debugOutput
 						, directionalLight
@@ -663,18 +663,18 @@ namespace castor3d::shader
 						, lightSurface
 						, receivesShadows );
 				}
-				FI
+				sdwFI;
 				cur += DirectionalLightInstance::LightDataComponents;
 			}
-			ELIHW
+			sdwELIHW;
 
 			end = m_lightsBuffer->getPointsEnd();
 
-			WHILE( m_writer, cur < end )
+			sdwWHILE( m_writer, cur < end )
 			{
 				auto pointLight = m_writer.declLocale( "pointLight"
 					, getPointLight( cur ) );
-				IF( m_writer, pointLight.enabled() )
+				sdwIF( m_writer, pointLight.enabled() )
 				{
 					output += lightingModel->computeDiffuse( debugOutput
 						, pointLight
@@ -682,18 +682,18 @@ namespace castor3d::shader
 						, lightSurface
 						, receivesShadows );
 				}
-				FI
+				sdwFI;
 				cur += PointLightInstance::LightDataComponents;
 			}
-			ELIHW
+			sdwELIHW;
 
 			end = m_lightsBuffer->getSpotsEnd();
 
-			WHILE( m_writer, cur < end )
+			sdwWHILE( m_writer, cur < end )
 			{
 				auto spotLight = m_writer.declLocale( "spotLight"
 					, getSpotLight( cur ) );
-				IF( m_writer, spotLight.enabled() )
+				sdwIF( m_writer, spotLight.enabled() )
 				{
 					output += lightingModel->computeDiffuse( debugOutput
 						, spotLight
@@ -701,10 +701,10 @@ namespace castor3d::shader
 						, lightSurface
 						, receivesShadows );
 				}
-				FI
+				sdwFI;
 				cur += SpotLightInstance::LightDataComponents;
 			}
-			ELIHW
+			sdwELIHW;
 		}
 	}
 
@@ -840,7 +840,7 @@ namespace castor3d::shader
 			, vec3( writer.cast< sdw::Float >( maxCount ), 1.0_f, 0.0_f ) );
 
 		// Start at maxCount - 1 because the conditions inside the loop will never be true for maxCount.
-		FOR( writer, sdw::Int, i, maxCount - 1, i >= 0, --i )
+		sdwFOR( writer, sdw::Int, i, maxCount - 1, i >= 0, --i )
 		{
 			auto index = writer.declLocale( "index"
 				, writer.cast< sdw::UInt >( i ) );
@@ -853,11 +853,11 @@ namespace castor3d::shader
 			auto splitMin = writer.declLocale( "splitMin"
 				, splitDepth - splitDiff );
 
-			IF( writer, viewVertex.z() > splitMin )
+			sdwIF( writer, viewVertex.z() > splitMin )
 			{
 				cascadeFactors.x() = writer.cast< sdw::Float >( i );
 			}
-			ELSEIF( viewVertex.z() > splitMax && viewVertex.z() <= splitMin )
+			sdwELSEIF( viewVertex.z() > splitMax && viewVertex.z() <= splitMin )
 			{
 				auto factor = writer.declLocale( "factor"
 					, ( viewVertex.z() - splitMin ) / splitDiff );
@@ -865,9 +865,9 @@ namespace castor3d::shader
 					, 1.0_f - factor
 					, factor );
 			}
-			FI
+			sdwFI;
 		}
-		ROF
+		sdwROF;
 
 		return cascadeFactors;
 	}

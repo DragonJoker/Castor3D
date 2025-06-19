@@ -49,7 +49,7 @@ namespace dof
 					auto sampleStep = writer.declLocale( "sampleStep"
 						, c3d_dofData.pixelStepFull() * vec2( c3d_dofData.bokehScale() * CoC ) );
 
-					FOR ( writer, sdw::Int, j, 0_i, j < 64_i, ++j )
+					sdwFOR( writer, sdw::Int, j, 0_i, j < 64_i, ++j )
 					{
 						auto sUV = writer.declLocale( "sUV"
 							, fma( sampleStep, c3d_dofData.points64()[j].xy(), in.uv() ) );
@@ -58,7 +58,7 @@ namespace dof
 
 						acc += tap.rgb();
 					}
-					ROF
+					sdwROF;
 
 					acc /= vec3( 64.0_f );
 					out.colour() = vec4( acc.rgb(), CoC );

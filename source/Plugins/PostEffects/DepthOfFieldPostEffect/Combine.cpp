@@ -63,15 +63,15 @@ namespace dof
 					auto result = writer.declLocale( "result"
 						, vec4( 0.0_f, 0.0f, 0.0f, 1.0f ) );
 
-					IF( writer, c3d_dofData.enableFarBlur() )
+					sdwIF( writer, c3d_dofData.enableFarBlur() )
 					{
 						result.rgb() = mix( fullResCol.rgb(), far.rgb(), vec3( blendFar ) );
 					}
-					ELSE
+					sdwELSE
 					{
 						result.rgb() = fullResCol.rgb();
 					}
-					FI
+					sdwFI;
 
 					result.rgb() = mix( result.rgb(), near.rgb(), vec3( blendNear ) );
 

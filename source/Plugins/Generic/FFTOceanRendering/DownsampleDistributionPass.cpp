@@ -129,16 +129,16 @@ namespace ocean_fft
 					auto aliased = writer.declLocale( "aliased"
 						, ivec2( alias( vec2( i ), vec2( outN ) ) ) );
 
-					IF( writer, aliased.x() < 0_i )
+					sdwIF( writer, aliased.x() < 0_i )
 					{
 						aliased.x() += writer.cast< sdw::Int >( inN.x() );
 					}
-					FI;
-					IF( writer, aliased.y() < 0_i )
+					sdwFI;
+					sdwIF( writer, aliased.y() < 0_i )
 					{
 						aliased.y() += writer.cast< sdw::Int >( inN.y() );
 					}
-					FI;
+					sdwFI;
 
 					downsampled[i.y() * outN.x() + i.x()] = distribution[writer.cast< sdw::UInt >( aliased.y() ) * inN.x() + writer.cast< sdw::UInt >( aliased.x() )];
 				} );

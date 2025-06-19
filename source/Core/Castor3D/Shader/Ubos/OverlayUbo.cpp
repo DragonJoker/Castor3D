@@ -29,19 +29,19 @@ namespace castor3d::shader
 						, vec2( ( ssAbsBound - ssCropRange.x() ) / ssAbsBoundSize
 							, ( ssAbsBound - ssCropRange.y() ) / ssAbsBoundSize ) );
 
-					IF( *m_writer, ssAbsBound > ssCropRange.y() )
+					sdwIF( *m_writer, ssAbsBound > ssCropRange.y() )
 					{
 						ssRelBound = ssCropRange.y() - ssAbsOvPosition;
 						uv += crop.y() * ( uvRange.y() - uvRange.x() );
 						uv = clamp( uv, uvRange.x(), uvRange.y() );
 					}
-					ELSEIF( ssAbsBound < ssCropRange.x() )
+					sdwELSEIF( ssAbsBound < ssCropRange.x() )
 					{
 						ssRelBound = ssCropRange.x() - ssAbsOvPosition;
 						uv -= crop.x() * ( uvRange.y() - uvRange.x() );
 						uv = clamp( uv, uvRange.x(), uvRange.y() );
 					}
-					FI;
+					sdwFI;
 				}
 				, sdw::InFloat{ *m_writer, "ssAbsOvPosition" }
 				, sdw::InFloat{ *m_writer, "ssAbsParentSize" }
@@ -86,19 +86,19 @@ namespace castor3d::shader
 						, vec2( ( ssAbsBound - ssCropRange.x() ) / ssAbsBoundSize
 							, ( ssAbsBound - ssCropRange.y() ) / ssAbsBoundSize ) );
 
-					IF( *m_writer, ssAbsBound > ssCropRange.y() )
+					sdwIF( *m_writer, ssAbsBound > ssCropRange.y() )
 					{
 						ssRelBound = ssCropRange.y() - ssAbsOvPosition;
 						uv -= crop.y() * ( uvRange.y() - uvRange.x() );
 						uv = clamp( uv, uvRange.x(), uvRange.y() );
 					}
-					ELSEIF( ssAbsBound < ssCropRange.x() )
+					sdwELSEIF( ssAbsBound < ssCropRange.x() )
 					{
 						ssRelBound = ssCropRange.x() - ssAbsOvPosition;
 						uv += crop.x() * ( uvRange.y() - uvRange.x() );
 						uv = clamp( uv, uvRange.x(), uvRange.y() );
 					}
-					FI;
+					sdwFI;
 				}
 				, sdw::InFloat{ *m_writer, "ssAbsOvPosition" }
 				, sdw::InFloat{ *m_writer, "ssAbsParentSize" }
@@ -149,7 +149,7 @@ namespace castor3d::shader
 						, vec2( ( ssAbsBound - ssCropRange.x() ) / ssAbsCharSize
 							, ( ssAbsBound - ssCropRange.y() ) / ssAbsCharSize ) );
 
-					IF( *m_writer, ssAbsBound > ssCropRange.y() )
+					sdwIF( *m_writer, ssAbsBound > ssCropRange.y() )
 					{
 						ssRelBound = ssCropRange.y() - ssAbsOvPosition;
 						texUv += crop.y() * ( texUvRange.y() - texUvRange.x() );
@@ -157,7 +157,7 @@ namespace castor3d::shader
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
 						fontUv = clamp( fontUv, fontUvRange.x(), fontUvRange.y() );
 					}
-					ELSEIF( ssAbsBound < ssCropRange.x() )
+					sdwELSEIF( ssAbsBound < ssCropRange.x() )
 					{
 						ssRelBound = ssCropRange.x() - ssAbsOvPosition;
 						texUv -= crop.x() * ( texUvRange.y() - texUvRange.x() );
@@ -165,7 +165,7 @@ namespace castor3d::shader
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
 						fontUv = clamp( fontUv, fontUvRange.x(), fontUvRange.y() );
 					}
-					FI;
+					sdwFI;
 				}
 				, sdw::InFloat{ *m_writer, "ssAbsOvPosition" }
 				, sdw::InFloat{ *m_writer, "ssAbsParentSize" }
@@ -222,7 +222,7 @@ namespace castor3d::shader
 						, vec2( ( ssAbsBound - ssCropRange.x() ) / ssAbsCharSize
 							, ( ssAbsBound - ssCropRange.y() ) / ssAbsCharSize ) );
 
-					IF( *m_writer, ssAbsBound > ssCropRange.y() )
+					sdwIF( *m_writer, ssAbsBound > ssCropRange.y() )
 					{
 						ssRelBound = ssCropRange.y() - ssAbsOvPosition;
 						texUv += crop.y() * ( texUvRange.y() - texUvRange.x() );
@@ -230,7 +230,7 @@ namespace castor3d::shader
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
 						fontUv = clamp( fontUv, fontUvRange.x(), fontUvRange.y() );
 					}
-					ELSEIF( ssAbsBound < ssCropRange.x() )
+					sdwELSEIF( ssAbsBound < ssCropRange.x() )
 					{
 						ssRelBound = ssCropRange.x() - ssAbsOvPosition;
 						texUv -= crop.x() * ( texUvRange.y() - texUvRange.x() );
@@ -238,7 +238,7 @@ namespace castor3d::shader
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
 						fontUv = clamp( fontUv, fontUvRange.x(), fontUvRange.y() );
 					}
-					FI;
+					sdwFI;
 				}
 				, sdw::InFloat{ *m_writer, "ssAbsOvPosition" }
 				, sdw::InFloat{ *m_writer, "ssAbsParentSize" }
@@ -295,7 +295,7 @@ namespace castor3d::shader
 						, vec2( ( ssAbsBound - ssCropRange.x() ) / ssAbsCharSize
 							, ( ssAbsBound - ssCropRange.y() ) / ssAbsCharSize ) );
 
-					IF( *m_writer, ssAbsBound > ssCropRange.y() )
+					sdwIF( *m_writer, ssAbsBound > ssCropRange.y() )
 					{
 						ssRelBound = ssCropRange.y() - ssAbsOvPosition;
 						texUv -= crop.y() * ( texUvRange.y() - texUvRange.x() );
@@ -303,7 +303,7 @@ namespace castor3d::shader
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
 						fontUv = clamp( fontUv, fontUvRange.x(), fontUvRange.y() );
 					}
-					ELSEIF( ssAbsBound < ssCropRange.x() )
+					sdwELSEIF( ssAbsBound < ssCropRange.x() )
 					{
 						ssRelBound = ssCropRange.x() - ssAbsOvPosition;
 						texUv += crop.x() * ( texUvRange.y() - texUvRange.x() );
@@ -311,7 +311,7 @@ namespace castor3d::shader
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
 						fontUv = clamp( fontUv, fontUvRange.x(), fontUvRange.y() );
 					}
-					FI;
+					sdwFI;
 				}
 				, sdw::InFloat{ *m_writer, "ssAbsOvPosition" }
 				, sdw::InFloat{ *m_writer, "ssAbsParentSize" }
@@ -368,7 +368,7 @@ namespace castor3d::shader
 						, vec2( ( ssAbsBound - ssCropRange.x() ) / ssAbsCharSize
 							, ( ssAbsBound - ssCropRange.y() ) / ssAbsCharSize ) );
 
-					IF( *m_writer, ssAbsBound > ssCropRange.y() )
+					sdwIF( *m_writer, ssAbsBound > ssCropRange.y() )
 					{
 						ssRelBound = ssCropRange.y() - ssAbsOvPosition;
 						texUv -= crop.y() * ( texUvRange.y() - texUvRange.x() );
@@ -376,7 +376,7 @@ namespace castor3d::shader
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
 						fontUv = clamp( fontUv, fontUvRange.x(), fontUvRange.y() );
 					}
-					ELSEIF( ssAbsBound < ssCropRange.x() )
+					sdwELSEIF( ssAbsBound < ssCropRange.x() )
 					{
 						ssRelBound = ssCropRange.x() - ssAbsOvPosition;
 						texUv += crop.x() * ( texUvRange.y() - texUvRange.x() );
@@ -384,7 +384,7 @@ namespace castor3d::shader
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
 						fontUv = clamp( fontUv, fontUvRange.x(), fontUvRange.y() );
 					}
-					FI;
+					sdwFI;
 				}
 				, sdw::InFloat{ *m_writer, "ssAbsOvPosition" }
 				, sdw::InFloat{ *m_writer, "ssAbsParentSize" }

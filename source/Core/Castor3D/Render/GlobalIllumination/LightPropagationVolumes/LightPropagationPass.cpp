@@ -208,7 +208,7 @@ namespace castor3d
 					, sdw::Vec4 shG
 					, sdw::Vec4 shB )
 				{
-					FOR( writer, sdw::Int, neighbour, 0, neighbour < 6, neighbour++ )
+					sdwFOR( writer, sdw::Int, neighbour, 0, neighbour < 6, neighbour++ )
 					{
 						auto RSHcoeffsNeighbour = writer.declLocale( "RSHcoeffsNeighbour"
 							, vec4( 0.0_f ) );
@@ -252,7 +252,7 @@ namespace castor3d
 
 						//Now we have contribution for the neighbour's cell in the main direction -> need to do reprojection 
 						//Reprojection will be made only onto 4 faces (acctually we need to take into account 5 faces but we already have the one in the main direction)
-						FOR( writer, sdw::Int, face, 0, face < 4, face++ )
+						sdwFOR( writer, sdw::Int, face, 0, face < 4, face++ )
 						{
 							//Get the direction to the face
 							auto evalDirection = writer.declLocale( "evalDirection"
@@ -283,9 +283,9 @@ namespace castor3d
 							shG += occludedSideFaceContribution * max( 0.0_f, dot( GSHcoeffsNeighbour, evalDirectionSH ) ) * reprojDirectionCosineLobeSH;
 							shB += occludedSideFaceContribution * max( 0.0_f, dot( BSHcoeffsNeighbour, evalDirectionSH ) ) * reprojDirectionCosineLobeSH;
 						}
-						ROF;
+						sdwROF;
 					}
-					ROF;
+					sdwROF;
 				}
 				, sdw::InIVec3{ writer, "cellIndex" }
 				, sdw::OutVec4{ writer, "shR" }

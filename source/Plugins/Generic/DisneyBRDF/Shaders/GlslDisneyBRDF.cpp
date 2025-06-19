@@ -189,11 +189,11 @@ namespace disney::shader
 			, [this]( sdw::Float const & NdotH
 				, sdw::Float const & a )
 			{
-				IF( m_writer, a >= 1.0_f )
+				sdwIF( m_writer, a >= 1.0_f )
 				{
 					m_writer.returnStmt( 1.0_f / castor::Pi< float > );
 				}
-				FI
+				sdwFI;
 
 				auto a2 = m_writer.declLocale( "a2"
 					, a * a );

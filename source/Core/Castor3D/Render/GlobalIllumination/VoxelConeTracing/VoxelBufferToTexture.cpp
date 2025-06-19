@@ -113,7 +113,7 @@ namespace castor3d
 					auto color = writer.declLocale( "color"
 						, utils.decodeColor( voxels[in.globalInvocationID.x()].colorMask() ) );
 
-					IF( writer, color.a() > 0.0_f )
+					sdwIF( writer, color.a() > 0.0_f )
 					{
 						auto coord = writer.declLocale( "coord"
 							, ivec3( utils.unflatten( in.globalInvocationID.x()
@@ -129,7 +129,7 @@ namespace castor3d
 							output.store( coord, vec4( color.rgb(), 1.0_f ) );
 						}
 					}
-					FI
+					sdwFI;
 
 					// delete emission data, but keep normals (no need to delete, we will only read normal values of filled voxels)
 					voxels[in.globalInvocationID.x()].colorMask() = 0_u;

@@ -55,7 +55,7 @@ namespace castor3d::shader
 			gsValues[groupIndex] = writer.ternary( threadIndex < elementCount, inputValues[elementOffset + threadIndex], invalidValue );
 
 			// Loop over the bits starting at the least-significant bit.
-			FOR( writer, sdw::UInt, b, 0_u, b < m_sortBits, ++b )
+			sdwFOR( writer, sdw::UInt, b, 0_u, b < m_sortBits, ++b )
 			{
 				// 1. In a temporary buffer in shared memory, we set a 1 for all false 
 				//    sort keys (b = 0) and a 0 for all true sort keys.
@@ -66,15 +66,15 @@ namespace castor3d::shader
 				// Sync group shared memory writes.
 				shader::groupMemoryBarrierWithGroupSync( writer );
 
-				IF( writer, groupIndex == 0_u )
+				sdwIF( writer, groupIndex == 0_u )
 				{
 					gsF[groupIndex] = 0_u;
 				}
-				ELSE
+				sdwELSE
 				{
 					gsF[groupIndex] = gsE[groupIndex - 1_u];
 				}
-				FI
+				sdwFI;
 
 				// Sync group shared memory writes.
 				shader::groupMemoryBarrierWithGroupSync( writer );
@@ -88,11 +88,11 @@ namespace castor3d::shader
 				{
 					temp = gsF[groupIndex];
 
-					IF( writer, groupIndex > i )
+					sdwIF( writer, groupIndex > i )
 					{
 						temp += gsF[groupIndex - i];
 					}
-					FI
+					sdwFI;
 
 					// Sync group shared memory reads before writes.
 					shader::groupMemoryBarrierWithGroupSync( writer );
@@ -106,11 +106,11 @@ namespace castor3d::shader
 				// 3. The last element in the scan's output now contains the total 
 				//    number of false sort keys. We write this value to a shared 
 				//    variable, gs_TotalFalses.
-				IF ( writer, groupIndex == 0_u )
+				sdwIF( writer, groupIndex == 0_u )
 				{
 					gsTotalFalses = gsE[bucketSize - 1u] + gsF[bucketSize - 1u];
 				}
-				FI
+				sdwFI;
 
 				// Sync group shared memory writes.
 				shader::groupMemoryBarrierWithGroupSync( writer );
@@ -138,7 +138,7 @@ namespace castor3d::shader
 				// Sync group shared memory writes.
 				shader::groupMemoryBarrierWithGroupSync( writer );
 			}
-			ROF
+			sdwROF;
 
 			// Now commit the results to global memory.
 			outputKeys[elementOffset + threadIndex] = gsKeys[groupIndex];

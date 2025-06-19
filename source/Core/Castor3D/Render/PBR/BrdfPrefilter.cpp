@@ -245,7 +245,7 @@ namespace castor3d
 					auto sampleCount = writer.declLocale( "sampleCount"
 						, 1024_u );
 
-					FOR( writer, sdw::UInt, i, 0_u, i < sampleCount, ++i )
+					sdwFOR( writer, sdw::UInt, i, 0_u, i < sampleCount, ++i )
 					{
 						auto xi = writer.declLocale( "xi"
 							, brdf.hammersley( i, sampleCount ) );
@@ -266,7 +266,7 @@ namespace castor3d
 							auto VdotH = writer.declLocale( "VdotH"
 								, clamp( dot( V, H ), 0.0_f, 1.0_f ) );
 
-							IF( writer, NdotL > 0.0_f )
+							sdwIF( writer, NdotL > 0.0_f )
 							{
 								auto G = writer.declLocale( "G"
 									, visibilitySmithGGXCorrelated( NdotV, NdotL, roughness ) );
@@ -278,7 +278,7 @@ namespace castor3d
 								A += ( 1.0_f - Fc ) * vis;
 								B += Fc * vis;
 							}
-							FI
+							sdwFI;
 						}
 						// Charlie
 						{
@@ -296,7 +296,7 @@ namespace castor3d
 							auto VdotH = writer.declLocale( "VdotH"
 								, clamp( dot( V, H ), 0.0_f, 1.0_f ) );
 
-							IF( writer, NdotL > 0.0_f )
+							sdwIF( writer, NdotL > 0.0_f )
 							{
 								auto sheenDistribution = writer.declLocale( "G"
 									, brdf.distributionCharlie( roughness, NdotH ) );
@@ -304,10 +304,10 @@ namespace castor3d
 									, brdf.visibilityAshikhmin( NdotL, NdotV ) );
 								C += sheenVisibility * sheenDistribution * NdotL * VdotH;
 							}
-							FI
+							sdwFI;
 						}
 					}
-					ROF
+					sdwROF;
 
 					writer.returnStmt( vec3( 4.0_f * A / writer.cast< sdw::Float >( sampleCount )
 						, 4.0_f * B / writer.cast< sdw::Float >( sampleCount )

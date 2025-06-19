@@ -149,7 +149,7 @@ namespace castor3d
 					auto color = writer.declLocale( "color"
 						, firstBounce.lod( clip, 0.0_f ) );
 
-					IF( writer, color.a() > 0.0_f )
+					sdwIF( writer, color.a() > 0.0_f )
 					{
 						auto normal = writer.declLocale( "normal"
 							, utils.decodeNormal( voxels[in.globalInvocationID.x()].normalMask() ) );
@@ -172,11 +172,11 @@ namespace castor3d
 								, c3d_voxelData ) );
 						output.store( coord, vec4( color.rgb() + radiance.rgb(), color.a() ) );
 					}
-					ELSE
+					sdwELSE
 					{
 						output.store( coord, vec4( 0.0_f ) );
 					}
-					FI;
+					sdwFI;
 
 					voxels[in.globalInvocationID.x()].normalMask() = 0_u;
 				} );

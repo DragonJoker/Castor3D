@@ -76,13 +76,13 @@ namespace motion_blur
 					blurVector.y() = -blurVector.y();
 					out.colour() = c3d_mapColor.sample( in.uv() );
 
-					FOR( writer, sdw::UInt, i, 0u, i < c3d_samplesCount, ++i )
+					sdwFOR( writer, sdw::UInt, i, 0u, i < c3d_samplesCount, ++i )
 					{
 						auto offset = writer.declLocale( "offset"
 							, blurVector * ( writer.cast< sdw::Float >( i ) / writer.cast< sdw::Float >( c3d_samplesCount - 1_u ) - 0.5f ) );
 						out.colour() += c3d_mapColor.sample( in.uv() + offset );
 					}
-					ROF;
+					sdwROF;
 
 					out.colour() /= writer.cast< sdw::Float >( c3d_samplesCount );
 				} );
