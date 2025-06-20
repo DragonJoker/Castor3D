@@ -141,7 +141,7 @@ namespace castor
 		if ( !m_passBuffer )
 		{
 			auto lock( makeUniqueLock( *this ) );
-			auto material = tryFind( Material::DefaultMaterialName );
+			auto material = doTryFindNoLock( Material::DefaultMaterialName );
 
 			if ( !material )
 			{
