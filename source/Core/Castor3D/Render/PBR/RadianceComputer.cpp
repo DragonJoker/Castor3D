@@ -77,6 +77,7 @@ namespace castor3d
 				, 6u );
 		}
 
+		template< typename SourceImageT >
 		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device )
 		{
 			ProgramModule programModule{ cuT( "RadianceCompute" ) };
@@ -86,7 +87,7 @@ namespace castor3d
 				auto matrix = writer.declUniformBuffer( "Matrix", 0u, 0u );
 				auto c3d_viewProjection = matrix.declMember< sdw::Mat4 >( "c3d_viewProjection" );
 				matrix.end();
-				auto c3d_mapEnvironment = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapEnvironment", 1u, 0u );
+				auto c3d_mapEnvironment = writer.declCombinedImg< SourceImageT >( "c3d_mapEnvironment", 1u, 0u );
 
 				writer.implementEntryPointT< shader::Position3FT, shader::Position3FT >( [&c3d_viewProjection]( sdw::VertexInT< shader::Position3FT > const & in
 					, sdw::VertexOutT< shader::Position3FT > out )
@@ -234,7 +235,9 @@ namespace castor3d
 				, castor::move( createInfo ) );
 		}
 
-		auto program = radcomp::doCreateProgram( m_device );
+		auto program = srcTexture.getFormat() == VK_FORMAT_B10G11R11_UFLOAT_PACK32
+			? radcomp::doCreateProgram< sdw::CombinedImageCubeR11fG11fB10f >( m_device )
+			: radcomp::doCreateProgram< sdw::CombinedImageCubeRgba32 >( m_device );
 		createPipelines( { size.getWidth(), size.getHeight() }
 			, program
 			, m_srcImageView

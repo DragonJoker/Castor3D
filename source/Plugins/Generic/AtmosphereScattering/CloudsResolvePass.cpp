@@ -73,8 +73,10 @@ namespace atmosphere_scattering
 
 			auto targetSize = writer.declConstant( "targetSize"
 				, vec2( sdw::Float{ float( renderSize.width ) }, float( renderSize.height ) ) );
-			auto offsetX = 1.0_f / targetSize.x();
-			auto offsetY = 1.0_f / targetSize.y();
+			auto offsetX = writer.declConstant( "offsetX"
+				, 1.0_f / targetSize.x() );
+			auto offsetY = writer.declConstant( "offsetY"
+				, 1.0_f / targetSize.y() );
 			auto kernel = castor::Vector< sdw::Float >{ 1.0_f / 16.0_f, 2.0_f / 16.0_f, 1.0_f / 16.0_f
 					, 2.0_f / 16.0_f, 4.0_f / 16.0_f, 2.0_f / 16.0_f
 					, 1.0_f / 16.0_f, 2.0_f / 16.0_f, 1.0_f / 16.0_f };

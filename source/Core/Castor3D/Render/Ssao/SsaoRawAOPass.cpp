@@ -62,7 +62,7 @@ namespace castor3d
 			C3D_SsaoConfig( writer, SsaoCfgUboIdx, 0u );
 			C3D_Camera( writer, CameraUboIdx, 0u );
 			// Negative, "linear" values in world-space units
-			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", DepthMapIdx, 0u );
+			auto c3d_mapDepth = writer.declCombinedImg< FImg2DR32 >( "c3d_mapDepth", DepthMapIdx, 0u );
 
 			/** Same size as result buffer, do not offset by guard band when reading from it */
 			auto c3d_mapNormal = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNormal", NormalMapIdx, 0u, useNormalsBuffer );
@@ -141,7 +141,7 @@ namespace castor3d
 				, [&]( sdw::IVec2 const & ssPosition )
 				{
 					auto position = writer.declLocale< sdw::Vec3 >( "position" );
-					position.z() = c3d_mapDepth.fetch( ssPosition, 0_i ).r();
+					position.z() = c3d_mapDepth.fetch( ssPosition, 0_i );
 
 					// Offset to pixel center
 					position = reconstructCSPosition( vec2( ssPosition ) + vec2( 0.5_f )
@@ -183,7 +183,7 @@ namespace castor3d
 						, clamp( ivec2( ssPosition.x() >> mipLevel, ssPosition.y() >> mipLevel )
 							, ivec2( 0_i )
 							, c3d_mapDepth.getSize( mipLevel ) - ivec2( 1_i ) ) );
-					position.z() = c3d_mapDepth.fetch( mipPosition, mipLevel ).r();
+					position.z() = c3d_mapDepth.fetch( mipPosition, mipLevel );
 
 					// Offset to pixel center
 					position = reconstructCSPosition( ( vec2( ssPosition ) + vec2( 0.5_f ) ) * invCszBufferScale

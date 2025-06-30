@@ -121,7 +121,7 @@ namespace castor3d
 		{
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
-			auto c3d_source = writer.declCombinedImg< FImg2DRgba32 >( "c3d_source", 0u, 0u );
+			auto c3d_source = writer.declCombinedImg< FImg2DRgba8Unorm >( "c3d_source", 0u, 0u );
 
 			auto position = writer.declInput< sdw::Vec2 >( "position", sdw::EntryPoint::eVertex, 0u );
 			auto fragColor = writer.declOutput< sdw::Vec4 >( "fragColor", sdw::EntryPoint::eFragment, 0 );
@@ -415,7 +415,7 @@ namespace castor3d
 			m_windowPass->setTarget( framebuffer
 				, { transparentBlackClearColor } );
 			m_windowPass->reRecordCurrent();
-			result = { m_runnable->run( result, queue ) };
+			result = m_runnable->run( result, queue );
 			fence = &m_windowPass->getFence();
 		}
 

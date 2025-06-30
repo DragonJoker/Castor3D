@@ -1513,8 +1513,8 @@ namespace castor3d
 		{
 			sdw::TraditionalGraphicsWriter writer{ &getEngine()->getShaderAllocator() };
 
-			auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapScene", uint32_t( rendtgt::CombineIdx::Scene ), 0u );
-			auto c3d_mapOverlays = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapOverlays", uint32_t( rendtgt::CombineIdx::Overlays ), 0u );
+			auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba8Unorm >( "c3d_mapScene", uint32_t( rendtgt::CombineIdx::Scene ), 0u );
+			auto c3d_mapOverlays = writer.declCombinedImg< FImg2DRgba8Unorm >( "c3d_mapOverlays", uint32_t( rendtgt::CombineIdx::Overlays ), 0u );
 			C3D_HdrConfig( writer, rendtgt::CombineIdx::HdrConfig, 0u );
 
 			shader::Utils utils{ writer };

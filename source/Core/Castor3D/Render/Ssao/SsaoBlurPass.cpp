@@ -56,7 +56,7 @@ namespace castor3d
 			configuration.end();
 			auto c3d_mapNormal = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNormal", uint32_t( Idx::NmlImgIdx ), 0u, useNormalsBuffer );
 			auto c3d_mapInput = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapInput", uint32_t( Idx::InpImgIdx ), 0u );
-			auto c3d_mapBentInput = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBentInput", uint32_t( Idx::BntImgIdx ), 0u );
+			auto c3d_mapBentInput = writer.declCombinedImg< FImg2DRgba16 >( "c3d_mapBentInput", uint32_t( Idx::BntImgIdx ), 0u );
 
 			/** Same size as result buffer, do not offset by guard band when reading from it */
 			auto c3d_readMultiplyFirst = writer.declConstant( "c3d_readMultiplyFirst", vec3( 2.0_f ) );
