@@ -101,6 +101,7 @@ namespace castor3d
 			auto colour()const { return this->template getMember< "value" >(); }
 		};
 
+		template< typename SourceImageT >
 		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device
 			, VkExtent2D const & size
 			, uint32_t mipLevel
@@ -117,7 +118,7 @@ namespace castor3d
 				auto c3d_viewProjection = matrix.declMember< sdw::Mat4 >( "c3d_viewProjection" );
 				matrix.end();
 
-				auto c3d_mapEnvironment = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapEnvironment", 1u, 0u );
+				auto c3d_mapEnvironment = writer.declCombinedImg< SourceImageT >( "c3d_mapEnvironment", 1u, 0u );
 
 				auto c3d_roughness = writer.declConstant< sdw::Float >( "c3d_roughness"
 					, writer.cast< sdw::Float >( float( mipLevel ) / float( MaxIblReflectionLod ) ) );
@@ -304,7 +305,9 @@ namespace castor3d
 		}
 
 		createPipelines( size
-			, envpref::doCreateProgram( m_device, originalSize, mipLevel, isCharlie )
+			, ( srcView.getFormat() == VK_FORMAT_B10G11R11_UFLOAT_PACK32
+				? envpref::doCreateProgram< sdw::CombinedImageCubeR11fG11fB10f >( m_device, originalSize, mipLevel, isCharlie )
+				: envpref::doCreateProgram< sdw::CombinedImageCubeRgba32 >( m_device, originalSize, mipLevel, isCharlie ) )
 			, srcView
 			, renderPass
 			, {} );

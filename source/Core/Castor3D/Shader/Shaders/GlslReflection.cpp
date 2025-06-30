@@ -29,7 +29,7 @@ namespace castor3d::shader
 		, m_allowIbl{ allowIbl }
 		, m_hasEnvMap{ hasEnvMap }
 	{
-		m_writer.declCombinedImg< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding, envMapSet, m_hasEnvMap );
+		m_writer.declCombinedImg< FImgCubeArrayR11fG11fB10f >( "c3d_mapEnvironment", envMapBinding, envMapSet, m_hasEnvMap );
 		++envMapBinding;
 	}
 
@@ -119,7 +119,7 @@ namespace castor3d::shader
 					, sdw::UInt envMapIndex
 					, ReflectionRefraction output )
 				{
-					auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+					auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayR11fG11fB10f >( "c3d_mapEnvironment" );
 					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
 					auto hasEnvMap = m_writer.declLocale( "hasEnvMap"
 						, envMapIndex > 0_u );
@@ -200,7 +200,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & reflectedDiffuse
 		, sdw::Vec3 & reflectedSpecular )
 	{
-		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayR11fG11fB10f >( "c3d_mapEnvironment" );
 		auto hasEnvMap = m_writer.declLocale( "hasEnvMap"
 			, envMapIndex > 0_u );
 		--envMapIndex;
@@ -234,7 +234,7 @@ namespace castor3d::shader
 					, ReflectionRefraction output )
 				{
 					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
-					auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+					auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayR11fG11fB10f >( "c3d_mapEnvironment" );
 					auto hasEnvMap = m_writer.declLocale( "hasEnvMap"
 						, envMapIndex > 0_u );
 					--envMapIndex;
@@ -283,7 +283,7 @@ namespace castor3d::shader
 		, shader::ReflectionRefraction & output
 		, DebugOutputCategory const & debugOutput )
 	{
-		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayR11fG11fB10f >( "c3d_mapEnvironment" );
 		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
 		output.diffuseReflection = reflectedDiffuse * components.baseColour;
 
@@ -469,10 +469,14 @@ namespace castor3d::shader
 					, sdw::CombinedImage2DRgba32 const & colourMap )
 				{
 					auto epsilon = m_writer.declConstant( "epsilon", 0.00001_f );
-					auto ssrStepSize = ssrSettings.x();
-					auto ssrForwardMaxStepCount = ssrSettings.y();
-					auto ssrBackwardMaxStepCount = ssrSettings.z();
-					auto ssrDepthMult = ssrSettings.w();
+					auto ssrStepSize = m_writer.declLocale( "ssrStepSize"
+						, ssrSettings.x() );
+					auto ssrForwardMaxStepCount = m_writer.declLocale( "ssrForwardMaxStepCount"
+						, ssrSettings.y() );
+					auto ssrBackwardMaxStepCount = m_writer.declLocale( "ssrBackwardMaxStepCount"
+						, ssrSettings.z() );
+					auto ssrDepthMult = m_writer.declLocale( "ssrDepthMult"
+						, ssrSettings.w() );
 
 					auto viewDir = m_writer.declLocale( "viewDir"
 						, normalize( viewPosition ) );
@@ -813,7 +817,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Float const & proughness
 		, sdw::UInt const & penvMapIndex
-		, sdw::CombinedImageCubeArrayRgba32 const & penvMap )
+		, sdw::CombinedImageCubeArrayR11fG11fB10f const & penvMap )
 	{
 		if ( !m_computeSpecularReflEnvMaps )
 		{
@@ -822,7 +826,7 @@ namespace castor3d::shader
 					, sdw::Vec3 const & wsNormal
 					, sdw::UInt const & envMapIndex
 					, sdw::Float const & roughness
-					, sdw::CombinedImageCubeArrayRgba32 const & envMap )
+					, sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap )
 				{
 					auto reflected = m_writer.declLocale( "reflected"
 						, reflect( wsIncident, wsNormal ) );
@@ -833,7 +837,7 @@ namespace castor3d::shader
 				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InUInt{ m_writer, "envMapIndex" }
 				, sdw::InFloat{ m_writer, "roughness" }
-				, sdw::InCombinedImageCubeArrayRgba32{ m_writer, "envMap" } );
+				, sdw::InCombinedImageCubeArrayR11fG11fB10f{ m_writer, "envMap" } );
 		}
 
 		return m_computeSpecularReflEnvMaps( pwsIncident
@@ -846,7 +850,7 @@ namespace castor3d::shader
 	sdw::RetVec4 ReflectionModel::computeSheenReflEnvMaps( sdw::CombinedImage2DRgba32 const & pbrdf
 		, sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
-		, sdw::CombinedImageCubeArrayRgba32 const & penv
+		, sdw::CombinedImageCubeArrayR11fG11fB10f const & penv
 		, sdw::UInt const & penvIndex
 		, sdw::Float const & pNdotV
 		, BlendComponents & pcomponents )
@@ -857,7 +861,7 @@ namespace castor3d::shader
 				, [this]( sdw::Vec3 const & wsIncident
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & sheenColour
-					, sdw::CombinedImageCubeArrayRgba32 const & envMap
+					, sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
 					, sdw::CombinedImage2DRgba32 const & brdfMap
 					, sdw::UInt const & envMapIndex
 					, sdw::Float const & roughness
@@ -876,7 +880,7 @@ namespace castor3d::shader
 				, sdw::InVec3{ m_writer, "wsIncident" }
 				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InVec3{ m_writer, "sheenColour" }
-				, sdw::InCombinedImageCubeArrayRgba32{ m_writer, "envMap" }
+				, sdw::InCombinedImageCubeArrayR11fG11fB10f{ m_writer, "envMap" }
 				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" }
 				, sdw::InUInt{ m_writer, "envMapIndex" }
 				, sdw::InFloat{ m_writer, "roughness" }
@@ -895,7 +899,7 @@ namespace castor3d::shader
 
 	sdw::RetVec3 ReflectionModel::computeRefrEnvMaps( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
-		, sdw::CombinedImageCubeArrayRgba32 const & penvMap
+		, sdw::CombinedImageCubeArrayR11fG11fB10f const & penvMap
 		, sdw::UInt const & penvMapIndex
 		, BlendComponents & components )
 	{
@@ -904,7 +908,7 @@ namespace castor3d::shader
 			m_computeRefrEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeRefrEnvMap"
 				, [this]( sdw::Vec3 const & wsIncident
 					, sdw::Vec3 const & wsNormal
-					, sdw::CombinedImageCubeArrayRgba32 const & envMap
+					, sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
 					, sdw::UInt const & envMapIndex
 					, sdw::Float const & refractionRatio
 					, sdw::Float const & roughness )
@@ -916,7 +920,7 @@ namespace castor3d::shader
 				}
 				, sdw::InVec3{ m_writer, "wsIncident" }
 				, sdw::InVec3{ m_writer, "wsNormal" }
-				, sdw::InCombinedImageCubeArrayRgba32{ m_writer, "envMap" }
+				, sdw::InCombinedImageCubeArrayR11fG11fB10f{ m_writer, "envMap" }
 				, sdw::InUInt{ m_writer, "envMapIndex" }
 				, sdw::InFloat{ m_writer, "refractionRatio" }
 				, sdw::InFloat{ m_writer, "roughness" } );
@@ -931,7 +935,7 @@ namespace castor3d::shader
 	}
 
 	sdw::RetVec3 ReflectionModel::computeDiffuseEnvMaps( sdw::Vec3 const & pwsDirection
-		, sdw::CombinedImageCubeArrayRgba32 const & penvMap
+		, sdw::CombinedImageCubeArrayR11fG11fB10f const & penvMap
 		, sdw::UInt const & penvMapIndex
 		, BlendComponents & components )
 	{
@@ -939,7 +943,7 @@ namespace castor3d::shader
 		{
 			m_computeDiffuseEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeDiffuseEnvMap"
 				, [this]( sdw::Vec3 const & wsDirection
-					, sdw::CombinedImageCubeArrayRgba32 const & envMap
+					, sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
 					, sdw::UInt const & envMapIndex
 					, sdw::Float const & roughness )
 				{
@@ -947,7 +951,7 @@ namespace castor3d::shader
 						, roughness * sdw::Float( float( EnvironmentMipLevels ) ) ).xyz() );
 				}
 				, sdw::InVec3{ m_writer, "wsDirection" }
-				, sdw::InCombinedImageCubeArrayRgba32{ m_writer, "envMap" }
+				, sdw::InCombinedImageCubeArrayR11fG11fB10f{ m_writer, "envMap" }
 				, sdw::InUInt{ m_writer, "envMapIndex" }
 				, sdw::InFloat{ m_writer, "roughness" } );
 		}
@@ -1100,7 +1104,7 @@ namespace castor3d::shader
 			, components.getMember( "dispersion", 0.0_f ) );
 	}
 
-	void ReflectionModel::doComputeReflection( sdw::CombinedImageCubeArrayRgba32 const & envMap
+	void ReflectionModel::doComputeReflection( sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
 		, sdw::Boolean const & hasEnvMap
 		, BackgroundModel & background
 		, sdw::Vec3 const & wsNormal
@@ -1151,7 +1155,7 @@ namespace castor3d::shader
 		sdwFI;
 	}
 
-	void ReflectionModel::doComputeSpecularTransmission( sdw::CombinedImageCubeArrayRgba32 const & envMap
+	void ReflectionModel::doComputeSpecularTransmission( sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
 		, sdw::Boolean const & hasEnvMap
 		, BackgroundModel & background
 		, sdw::Vec3 const & wsNormal
@@ -1198,7 +1202,7 @@ namespace castor3d::shader
 		sdwFI;
 	}
 
-	void ReflectionModel::doComputeDiffuse( sdw::CombinedImageCubeArrayRgba32 const & envMap
+	void ReflectionModel::doComputeDiffuse( sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
 		, sdw::Boolean const & hasEnvMap
 		, BackgroundModel & background
 		, sdw::Vec3 const & wsDirection
@@ -1231,7 +1235,7 @@ namespace castor3d::shader
 		}
 	}
 
-	void ReflectionModel::doComputeClearcoat( sdw::CombinedImageCubeArrayRgba32 const & envMap
+	void ReflectionModel::doComputeClearcoat( sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
 		, sdw::Boolean const & hasEnvMap
 		, BackgroundModel & background
 		, sdw::Vec3 const & wsPosition
@@ -1275,7 +1279,7 @@ namespace castor3d::shader
 	}
 
 	void ReflectionModel::doComputeSheen( sdw::CombinedImage2DRgba32 const & brdf
-		, sdw::CombinedImageCubeArrayRgba32 const & envMap
+		, sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
 		, sdw::Boolean const & hasEnvMap
 		, BackgroundModel & background
 		, sdw::Vec3 const & wsNormal

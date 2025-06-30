@@ -22,7 +22,7 @@ namespace Reinhard
 
 		C3D_HdrConfig( writer, 0u, 0u );
 		C3D_ColourGrading( writer, 1u, 0u );
-		auto c3d_mapHdr = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapHdr", 2u, 0u );
+		auto c3d_mapHdr = writer.declCombinedImg< FImg2DRgba16 >( "c3d_mapHdr", 2u, 0u );
 
 		writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
 			, sdw::FragmentOutT< c3d::Colour4FT > out )

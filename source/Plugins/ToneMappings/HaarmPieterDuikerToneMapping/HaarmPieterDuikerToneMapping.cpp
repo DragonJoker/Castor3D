@@ -22,7 +22,7 @@ namespace HaarmPieterDuiker
 
 		C3D_HdrConfig( writer, 0u, 0u );
 		C3D_ColourGrading( writer, 1u, 0u );
-		auto c3d_mapHdr = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapHdr", 2u, 0u );
+		auto c3d_mapHdr = writer.declCombinedImg< FImg2DRgba16 >( "c3d_mapHdr", 2u, 0u );
 
 		auto log10 = writer.implementFunction< sdw::Vec3 >( "log10"
 			, [&]( sdw::Vec3 const & v )

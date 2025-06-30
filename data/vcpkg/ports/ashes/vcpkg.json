@@ -6,8 +6,6 @@
   "license": "MIT",
   "supports": "!ios & !android & !x86 & !uwp & !arm32",
   "dependencies": [
-    "opengl",
-    "spirv-cross",
     {
       "name": "vcpkg-cmake",
       "host": true
@@ -19,15 +17,21 @@
     "vulkan-headers"
   ],
   "default-features": [
-    "opengl",
     "vulkan"
   ],
   "features": {
     "direct3d11": {
-      "description": "Compiles Direct3D11 renderer."
+      "description": "Compiles Direct3D11 renderer.",
+      "dependencies": [
+        "spirv-cross"
+      ]
     },
     "opengl": {
-      "description": "Compiles OpenGL renderer."
+      "description": "Compiles OpenGL renderer.",
+      "dependencies": [
+        "opengl",
+        "spirv-cross"
+      ]
     },
     "vulkan": {
       "description": "Compiles Vulkan renderer."

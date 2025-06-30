@@ -62,10 +62,14 @@ namespace castor3d
 		ashes::FrameBufferPtr m_frameBuffer;
 		SamplerUPtr m_sampler;
 
+		struct PipelineProgram
+		{
+			ProgramModule shader;
+			ashes::GraphicsPipelinePtr pipeline;
+		};
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayoutVolume;
 		ashes::PipelineLayoutPtr m_pipelineLayoutVolume;
-		ProgramModule m_shaderVolume;
-		ashes::GraphicsPipelinePtr m_pipelineVolume;
+		castor::Map< ast::type::ImageFormat, PipelineProgram > m_pipelineVolume;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPoolVolume;
 
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayoutSlice;

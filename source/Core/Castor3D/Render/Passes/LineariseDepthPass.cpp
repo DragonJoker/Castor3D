@@ -105,7 +105,7 @@ namespace castor3d
 			auto previousLevel = writer.declUniformBuffer( "PreviousLevel", PrevLvlUboIdx, 0u, ast::type::MemoryLayout::eStd140 );
 			auto c3d_textureSize = previousLevel.declMember< sdw::IVec2 >( "c3d_textureSize" );
 			previousLevel.end();
-			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", DepthImgIdx, 0u );
+			auto c3d_mapDepth = writer.declCombinedImg< FImg2DR32 >( "c3d_mapDepth", DepthImgIdx, 0u );
 
 			// Shader outputs
 			auto outColour = writer.declOutput< sdw::Float >( "outColour", sdw::EntryPoint::eFragment, 0u );
@@ -120,7 +120,7 @@ namespace castor3d
 					outColour = c3d_mapDepth.fetch( clamp( ssPosition * 2 + ivec2( ssPosition.y() & 1, ssPosition.x() & 1 )
 							, ivec2( 0_i, 0_i )
 							, c3d_textureSize - ivec2( 1_i, 1_i ) )
-						, 0_i ).r();
+						, 0_i );
 				} );
 			return writer.getBuilder().releaseShader();
 		}

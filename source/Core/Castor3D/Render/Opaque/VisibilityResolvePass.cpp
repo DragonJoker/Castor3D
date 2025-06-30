@@ -235,8 +235,8 @@ namespace castor3d
 				auto pixelsXY = PixelsXY.declMemberArray< sdw::UVec2 >( "pixelsXY" );
 				PixelsXY.end();
 
-				auto c3d_imgOutResult = writer.declStorageImg< sdw::WImage2DRgba32 >( "c3d_imgOutResult", uint32_t( InOutBindings::eOutResult ), Sets::eInOuts );
-				auto c3d_imgOutScattering = writer.declStorageImg< sdw::WImage2DRgba32 >( "c3d_imgOutScattering", uint32_t( InOutBindings::eOutScattering ), Sets::eInOuts, outputScattering );
+				auto c3d_imgOutResult = writer.declStorageImg< sdw::WImage2DRgba16 >( "c3d_imgOutResult", uint32_t( InOutBindings::eOutResult ), Sets::eInOuts );
+				auto c3d_imgOutScattering = writer.declStorageImg< sdw::WImage2DR11fG11fB10f >( "c3d_imgOutScattering", uint32_t( InOutBindings::eOutScattering ), Sets::eInOuts, outputScattering );
 
 				writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 4u, 4u, 1u }
 					, [&]( sdw::ComputeIn const & in )
@@ -275,7 +275,7 @@ namespace castor3d
 								&& shade( ipixel, nodeId, pipelineId, primitiveId, meshletId, result, diffuse, scattering ) )
 							{
 								c3d_imgOutResult.store( ipixel, result );
-								c3d_imgOutScattering.store( ipixel, scattering );
+								c3d_imgOutScattering.store( ipixel, scattering.xyz() );
 
 								if ( flags.pass.hasDeferredDiffuseLightingFlag
 									&& !isDeferredLighting )

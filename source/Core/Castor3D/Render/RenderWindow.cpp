@@ -1138,7 +1138,7 @@ namespace castor3d
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 			auto c3d_mapResult = writer.declCombinedImg< UImg2DRgba32 >( "c3d_mapResult", 0u, 0u );
 #else
-			auto c3d_mapResult = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapResult", 0u, 0u );
+			auto c3d_mapResult = writer.declCombinedImg< FImg2DRgba8Unorm >( "c3d_mapResult", 0u, 0u );
 #endif
 			auto c3d_config = writer.declUniformBuffer( "c3d_config", 1u, 0u );
 			auto c3d_multiply = c3d_config.declMember< sdw::Vec4 >( "c3d_multiply" );
@@ -1731,11 +1731,11 @@ namespace castor3d
 			ashes::VkSemaphoreArray semaphores;
 			rendwndw::convert( toWait, semaphores );
 
-			if ( fence )
-			{
-				auto res = fence->wait( ashes::MaxTimeout );
-				ashes::checkError( res, "Wait between swapchain images presentation." );
-			}
+			//if ( fence )
+			//{
+			//	auto res = fence->wait( ashes::MaxTimeout );
+			//	ashes::checkError( res, "Wait between swapchain images presentation." );
+			//}
 
 			queueData.queue->present( { *m_swapChain }
 				, { resources.imageIndex }
@@ -2051,29 +2051,27 @@ namespace castor3d
 	void RenderWindow::doProcessDeviceLost()
 	{
 #ifdef VK_EXT_device_fault
-		auto [faultCounts, faultInfo] = m_device->getDeviceFaultInfo();
+		auto faultInfo = m_device->getDeviceFaultInfo();
 		log::error << "Device lost error: " << faultInfo.description << "\n";
 
-		if ( faultInfo.pAddressInfos )
+		if ( !faultInfo.addressInfos.empty() )
 		{
 			log::error << "  Addresses: \n";
 
-			for ( uint32_t i = 0u; i < faultCounts.addressInfoCount; ++i )
+			for ( auto const & info : faultInfo.addressInfos )
 			{
-				auto const & info = faultInfo.pAddressInfos[i];
 				log::error << cuT( "    From 0x" ) << std::hex << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << ( info.reportedAddress & ~( info.addressPrecision - 1 ) )
 					<< cuT( " to 0x" ) << std::hex << std::setw( 8u ) << ( info.reportedAddress | ( info.addressPrecision - 1 ) )
 					<< cuT( ": " ) << rendwndw::getAddressTypeName( info.addressType ) << cuT( "\n" );
 			}
 		}
 
-		if ( faultInfo.pVendorInfos )
+		if ( !faultInfo.vendorInfos.empty() )
 		{
 			log::error << "  Vendor Infos: \n";
 
-			for ( uint32_t i = 0u; i < faultCounts.vendorInfoCount; ++i )
+			for ( auto const & info : faultInfo.vendorInfos )
 			{
-				auto const & info = faultInfo.pVendorInfos[i];
 				log::error << cuT( "    " ) << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << info.vendorFaultCode
 					<< cuT( ": " ) << info.description << "\n";
 			}

@@ -42,13 +42,8 @@ CU_ImplementSmartPtr( castor3d, Texture3DTo2D )
 
 #define UBO_GRID( Writer, Binding )\
 	auto ubo = Writer.declUniformBuffer<>( "ubo", Binding, 0u );\
-	auto gridCenterCellSize = ubo.declMember< sdw::Vec4 >( "gridCenter" );\
-	auto gridSize = ubo.declMember< sdw::UInt >( "gridSize" );\
+	auto grid = ubo.declMember< GridData >( "grid" );\
 	ubo.end();\
-	auto gridCenter = gridCenterCellSize.xyz();\
-	auto cellSize = gridCenterCellSize.w();\
-	auto sliceIndex = gridCenterCellSize.z();\
-	auto maxSlice = gridCenterCellSize.w()
 
 namespace castor3d
 {
@@ -56,6 +51,32 @@ namespace castor3d
 
 	namespace t3dto2d
 	{
+		struct GridData
+			: public sdw::StructInstanceHelperT< "C3D_GridData"
+			, sdw::type::MemoryLayout::eStd140
+			, sdw::Vec3Field< "gridCenter" >
+			, sdw::FloatField< "cellSize" >
+			, sdw::UIntField< "gridSize" > >
+		{
+			GridData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled )
+				: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+				, gridCenter{ this->getMember< "gridCenter" >() }
+				, cellSize{ this->getMember< "cellSize" >() }
+				, gridSize{ this->getMember< "gridSize" >() }
+				, sliceIndex{ gridCenter.z() }
+				, maxSlice{ cellSize }
+			{
+			}
+			
+			sdw::Vec3 gridCenter;
+			sdw::Float cellSize;
+			sdw::UInt gridSize;
+			sdw::Float sliceIndex;
+			sdw::Float maxSlice;
+		};
+
 		enum IDs : uint32_t
 		{
 			eGridUbo,
@@ -176,7 +197,8 @@ namespace castor3d
 		}
 
 		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device
-			, bool isSlice )
+			, bool isSlice
+			, std::string const & suffix )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings;
 
@@ -202,7 +224,7 @@ namespace castor3d
 					, VK_SHADER_STAGE_VERTEX_BIT ) );
 			}
 
-			return device->createDescriptorSetLayout( "Texture3DTo2D"
+			return device->createDescriptorSetLayout( "Texture3DTo2D" + suffix
 				, castor::move( bindings ) );
 		}
 
@@ -212,9 +234,10 @@ namespace castor3d
 			, ashes::DescriptorSetPool const & pool
 			, UniformBufferOffsetT< Texture3DTo2DData > const & uniformBuffer
 			, CameraUbo const & cameraUbo
-			, IntermediateView const & texture3D )
+			, IntermediateView const & texture3D
+			, std::string const & suffix )
 		{
-			auto descriptorSet = pool.createDescriptorSet( "Texture3DTo2D" );
+			auto descriptorSet = pool.createDescriptorSet( "Texture3DTo2D" + suffix );
 			uniformBuffer.createSizedBinding( *descriptorSet
 				, pool.getLayout().getBinding( eGridUbo ) );
 			auto & context = device.makeContext();
@@ -238,9 +261,10 @@ namespace castor3d
 		}
 
 		static ashes::PipelineLayoutPtr createPipelineLayout( RenderDevice const & device
-			, ashes::DescriptorSetLayout const & dslayout )
+			, ashes::DescriptorSetLayout const & dslayout
+			, std::string const & suffix )
 		{
-			return device->createPipelineLayout( "Texture3DTo2D"
+			return device->createPipelineLayout( "Texture3DTo2D" + suffix
 				, ashes::DescriptorSetLayoutCRefArray{ std::ref( dslayout ) } );
 		}
 
@@ -254,7 +278,7 @@ namespace castor3d
 			// Initialise the pipeline.
 			VkViewport viewport{ 0.0f, 0.0f, float( target.getExtent().width ), float( target.getExtent().height ), 0.0f, 1.0f };
 			VkRect2D scissor{ 0, 0, target.getExtent().width, target.getExtent().height };
-			return device->createPipeline( "Texture3DTo2D"
+			return device->createPipeline( "Texture3DTo2DVolume"
 				, ashes::GraphicsPipelineCreateInfo( 0u
 					, program
 					, ashes::PipelineVertexInputStateCreateInfo{ 0u, {}, {} }
@@ -280,7 +304,7 @@ namespace castor3d
 			// Initialise the pipeline.
 			VkViewport viewport{ 0.0f, 0.0f, float( target.getExtent().width ), float( target.getExtent().height ), 0.0f, 1.0f };
 			VkRect2D scissor{ 0, 0, target.getExtent().width, target.getExtent().height };
-			return device->createPipeline( "Texture3DTo2D"
+			return device->createPipeline( "Texture3DTo2DSlice"
 				, ashes::GraphicsPipelineCreateInfo( 0u
 					, program
 					, ashes::PipelineVertexInputStateCreateInfo{ 0u, {}, {} }
@@ -305,11 +329,12 @@ namespace castor3d
 			, ashes::GraphicsPipeline const & pipeline
 			, ashes::DescriptorSet const & descriptorSet
 			, IntermediateView const & view
-			, Sampler const * sampler )
+			, Sampler const * sampler
+			, std::string const & suffix )
 		{
 			auto & context = device.makeContext();
 			auto textureSize = getExtent( view.viewId ).width;
-			CommandsSemaphore result{ device, queueData, cuT( "Texture3DTo2D" ) };
+			CommandsSemaphore result{ device, queueData, cuT( "Texture3DTo2D" + suffix ) };
 			auto const & cmd = *result.commandBuffer;
 			cmd.begin();
 			cmd.beginDebugBlock( { "Texture3D To Texture2D"
@@ -410,6 +435,57 @@ namespace castor3d
 			auto voxelColour()const { return this->template getMember< "voxelColour" >(); }
 		};
 
+		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Int const in )
+		{
+			return vec4( writer.cast< sdw::Float >( in ) );
+		}
+
+		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::IVec2 const in )
+		{
+			return vec4( vec2( in ), 0.0_f, 1.0_f );
+		}
+
+		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::IVec4 const in )
+		{
+			return vec4( vec3( in.xyz() ), 1.0_f );
+		}
+
+		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::UInt const in )
+		{
+			return vec4( writer.cast< sdw::Float >( in ) );
+		}
+
+		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::UVec2 const in )
+		{
+			return vec4( vec2( in ), 0.0_f, 1.0_f );
+		}
+
+		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::UVec4 const in )
+		{
+			return vec4( vec3( in.xyz() ), 1.0_f );
+		}
+
+		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Float const in )
+		{
+			return vec4( in );
+		}
+
+		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Vec2 const in )
+		{
+			return vec4( in, 0.0_f, 1.0_f );
+		}
+
+		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Vec3 const in )
+		{
+			return vec4( in, 1.0_f );
+		}
+
+		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Vec4 const in )
+		{
+			return vec4( in );
+		}
+
+		template< ast::type::ImageFormat FormatT >
 		static ShaderPtr getProgramVolume( RenderSystem const & renderSystem )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
@@ -418,7 +494,7 @@ namespace castor3d
 
 			UBO_GRID( writer, eGridUbo );
 			C3D_Camera( writer, eCameraUbo, 0u );
-			auto inSource( writer.declStorageImg< RWFImg3DRgba32 >( "inSource", eSource, 0u ) );
+			auto inSource( writer.declStorageImg< FormatT, RImg3D >( "inSource", eSource, 0u ) );
 
 			// Creates a unit cube triangle strip from just vertex ID (14 vertices)
 			auto createCube = writer.implementFunction< sdw::Vec3 >( "createCube"
@@ -437,10 +513,10 @@ namespace castor3d
 				{
 					auto coord = writer.declLocale( "coord"
 						, utils.unflatten( writer.cast< sdw::UInt >( in.vertexIndex )
-							, uvec3( gridSize ) ) );
+							, uvec3( grid.gridSize ) ) );
 					out.vtx.position = vec4( vec3( coord ), 1.0f );
 
-					out.voxelColour() = inSource.load( ivec3( coord ) );
+					out.voxelColour() = makeVec4( writer, inSource.load( ivec3( coord ) ) );
 				} );
 
 			writer.implementEntryPointT< 14u, sdw::PointListT< SurfaceT >, sdw::TriangleStreamT< SurfaceT > >( [&]( sdw::GeometryIn const & in
@@ -459,13 +535,13 @@ namespace castor3d
 							auto pos = writer.declLocale( "pos"
 								, list[0].vtx.position.xyz() );
 							// [0, gridSize] => [0, 1] => [-1, 1]
-							pos = pos / writer.cast< sdw::Float >( gridSize ) * 2.0f - 1.0f;
+							pos = pos / writer.cast< sdw::Float >( grid.gridSize ) * 2.0f - 1.0f;
 							pos.y() = -pos.y();
 							// [-1, 1] => [-gridSize, gridSize]
-							pos *= writer.cast< sdw::Float >( gridSize );
+							pos *= writer.cast< sdw::Float >( grid.gridSize );
 							// Offset by cube position
 							pos += cubeVtxPos;
-							pos *= ( writer.cast< sdw::Float >( gridSize ) * ( 1.0_f / cellSize ) ) / writer.cast< sdw::Float >( gridSize );
+							pos *= ( writer.cast< sdw::Float >( grid.gridSize ) * ( 1.0_f / grid.cellSize ) ) / writer.cast< sdw::Float >( grid.gridSize );
 
 							out.voxelColour() = list[0].voxelColour();
 							out.vtx.position = c3d_cameraData.worldToCurProj( vec4( pos, 1.0f ) );
@@ -494,7 +570,7 @@ namespace castor3d
 			shader::Utils utils{ writer };
 
 			UBO_GRID( writer, eGridUbo );
-			auto inSource( writer.declCombinedImg< FImg3DRgba32 >( "inSource", eSource, 0u ) );
+			auto inSource( writer.declCombinedImg< Img3DRgba >( "inSource", eSource, 0u ) );
 
 			writer.implementEntryPointT< sdw::VoidT, shader::Uv2FT >( [&]( sdw::VertexIn const & in
 				, sdw::VertexOutT< shader::Uv2FT > out )
@@ -506,9 +582,208 @@ namespace castor3d
 			writer.implementEntryPointT< shader::Uv2FT, shader::Colour4FT >( [&]( sdw::FragmentInT< shader::Uv2FT > const & in
 				, sdw::FragmentOutT< shader::Colour4FT > const & out )
 				{
-					out.colour() = inSource.lod( vec3( in.uv(), sliceIndex / maxSlice ), 0.0_f );
+					out.colour() = inSource.lod( vec3( in.uv(), grid.sliceIndex / grid.maxSlice ), 0.0_f );
 				} );
 			return writer.getBuilder().releaseShader();
+		}
+
+		ast::type::ImageFormat getImageFormat( VkFormat format )
+		{
+			switch ( format )
+			{
+			case VK_FORMAT_R8_UNORM:
+			case VK_FORMAT_BC4_UNORM_BLOCK:
+				return ast::type::ImageFormat::eR8Unorm;
+			case VK_FORMAT_R8_SNORM:
+			case VK_FORMAT_BC4_SNORM_BLOCK:
+				return ast::type::ImageFormat::eR8Snorm;
+			case VK_FORMAT_R8_UINT:
+				return ast::type::ImageFormat::eR8u;
+			case VK_FORMAT_R8_SINT:
+			case VK_FORMAT_S8_UINT:
+				return ast::type::ImageFormat::eR8i;
+			case VK_FORMAT_R8_SRGB:
+				return ast::type::ImageFormat::eR8Unorm;
+			case VK_FORMAT_R8G8_UNORM:
+			case VK_FORMAT_R8G8_SRGB:
+			case VK_FORMAT_BC5_UNORM_BLOCK:
+				return ast::type::ImageFormat::eRg8Unorm;
+			case VK_FORMAT_R8G8_SNORM:
+			case VK_FORMAT_BC5_SNORM_BLOCK:
+				return ast::type::ImageFormat::eRg8Snorm;
+			case VK_FORMAT_R8G8_UINT:
+				return ast::type::ImageFormat::eRg8u;
+			case VK_FORMAT_R8G8_SINT:
+				return ast::type::ImageFormat::eRg8i;
+			case VK_FORMAT_R8G8B8_UNORM:
+			case VK_FORMAT_R8G8B8_SRGB:
+			case VK_FORMAT_B8G8R8_UNORM:
+			case VK_FORMAT_B8G8R8_SRGB:
+			case VK_FORMAT_R8G8B8A8_UNORM:
+			case VK_FORMAT_R8G8B8A8_SRGB:
+			case VK_FORMAT_B8G8R8A8_UNORM:
+			case VK_FORMAT_B8G8R8A8_SRGB:
+			case VK_FORMAT_A8B8G8R8_UNORM_PACK32:
+			case VK_FORMAT_A8B8G8R8_SRGB_PACK32:
+				return ast::type::ImageFormat::eRgba8Unorm;
+			case VK_FORMAT_R8G8B8_SNORM:
+			case VK_FORMAT_B8G8R8_SNORM:
+			case VK_FORMAT_R8G8B8A8_SNORM:
+			case VK_FORMAT_B8G8R8A8_SNORM:
+			case VK_FORMAT_A8B8G8R8_SNORM_PACK32:
+				return ast::type::ImageFormat::eRgba8Snorm;
+			case VK_FORMAT_R8G8B8_UINT:
+			case VK_FORMAT_B8G8R8_UINT:
+			case VK_FORMAT_R8G8B8A8_UINT:
+			case VK_FORMAT_B8G8R8A8_UINT:
+			case VK_FORMAT_A8B8G8R8_UINT_PACK32:
+				return ast::type::ImageFormat::eRgba8u;
+			case VK_FORMAT_R8G8B8_SINT:
+			case VK_FORMAT_B8G8R8_SINT:
+			case VK_FORMAT_R8G8B8A8_SINT:
+			case VK_FORMAT_B8G8R8A8_SINT:
+			case VK_FORMAT_A8B8G8R8_SINT_PACK32:
+				return ast::type::ImageFormat::eRgba8i;
+			case VK_FORMAT_A2R10G10B10_UNORM_PACK32:
+			case VK_FORMAT_A2B10G10R10_UNORM_PACK32:
+				return ast::type::ImageFormat::eRgb10A2Unorm;
+			case VK_FORMAT_A2R10G10B10_UINT_PACK32:
+			case VK_FORMAT_A2B10G10R10_UINT_PACK32:
+				return ast::type::ImageFormat::eRgb10A2Unorm;
+			case VK_FORMAT_R16_UNORM:
+			case VK_FORMAT_D16_UNORM:
+			case VK_FORMAT_EAC_R11_UNORM_BLOCK:
+				return ast::type::ImageFormat::eR16Unorm;
+			case VK_FORMAT_R16_SNORM:
+				return ast::type::ImageFormat::eR16Snorm;
+			case VK_FORMAT_R16_UINT:
+				return ast::type::ImageFormat::eR16u;
+			case VK_FORMAT_R16_SINT:
+				return ast::type::ImageFormat::eR16i;
+			case VK_FORMAT_R16_SFLOAT:
+				return ast::type::ImageFormat::eR16f;
+			case VK_FORMAT_R16G16_UNORM:
+			case VK_FORMAT_EAC_R11G11_UNORM_BLOCK:
+				return ast::type::ImageFormat::eRg16Unorm;
+			case VK_FORMAT_R16G16_SNORM:
+			case VK_FORMAT_EAC_R11G11_SNORM_BLOCK:
+			case VK_FORMAT_EAC_R11_SNORM_BLOCK:
+				return ast::type::ImageFormat::eRg16Snorm;
+			case VK_FORMAT_R16G16_UINT:
+				return ast::type::ImageFormat::eRg16u;
+			case VK_FORMAT_R16G16_SINT:
+				return ast::type::ImageFormat::eRg16i;
+			case VK_FORMAT_R16G16_SFLOAT:
+				return ast::type::ImageFormat::eRg16f;
+			case VK_FORMAT_R16G16B16_UNORM:
+			case VK_FORMAT_R16G16B16A16_UNORM:
+				return ast::type::ImageFormat::eRgba16Unorm;
+			case VK_FORMAT_R16G16B16_SNORM:
+			case VK_FORMAT_R16G16B16A16_SNORM:
+			case VK_FORMAT_A2R10G10B10_SNORM_PACK32:
+			case VK_FORMAT_A2B10G10R10_SNORM_PACK32:
+				return ast::type::ImageFormat::eRgba16Snorm;
+			case VK_FORMAT_R16G16B16_UINT:
+			case VK_FORMAT_R16G16B16A16_UINT:
+				return ast::type::ImageFormat::eRgba16u;
+			case VK_FORMAT_R16G16B16_SINT:
+			case VK_FORMAT_R16G16B16A16_SINT:
+			case VK_FORMAT_A2R10G10B10_SINT_PACK32:
+			case VK_FORMAT_A2B10G10R10_SINT_PACK32:
+				return ast::type::ImageFormat::eRgba16i;
+			case VK_FORMAT_R16G16B16_SFLOAT:
+			case VK_FORMAT_R16G16B16A16_SFLOAT:
+			case VK_FORMAT_E5B9G9R9_UFLOAT_PACK32:
+				return ast::type::ImageFormat::eRgba16f;
+			case VK_FORMAT_R32_UINT:
+			case VK_FORMAT_R64_UINT:
+				return ast::type::ImageFormat::eR32u;
+			case VK_FORMAT_R32_SINT:
+			case VK_FORMAT_R64_SINT:
+				return ast::type::ImageFormat::eR32i;
+			case VK_FORMAT_R32_SFLOAT:
+			case VK_FORMAT_R64_SFLOAT:
+			case VK_FORMAT_D32_SFLOAT:
+			case VK_FORMAT_X8_D24_UNORM_PACK32:
+				return ast::type::ImageFormat::eR32f;
+			case VK_FORMAT_R32G32_UINT:
+			case VK_FORMAT_R64G64_UINT:
+				return ast::type::ImageFormat::eRg32u;
+			case VK_FORMAT_R32G32_SINT:
+			case VK_FORMAT_R64G64_SINT:
+			case VK_FORMAT_D16_UNORM_S8_UINT:
+			case VK_FORMAT_D24_UNORM_S8_UINT:
+				return ast::type::ImageFormat::eRg32i;
+			case VK_FORMAT_R32G32_SFLOAT:
+			case VK_FORMAT_R64G64_SFLOAT:
+			case VK_FORMAT_D32_SFLOAT_S8_UINT:
+				return ast::type::ImageFormat::eRg32f;
+			case VK_FORMAT_R32G32B32_UINT:
+			case VK_FORMAT_R32G32B32A32_UINT:
+			case VK_FORMAT_R64G64B64_UINT:
+			case VK_FORMAT_R64G64B64A64_UINT:
+				return ast::type::ImageFormat::eRgba32u;
+			case VK_FORMAT_R32G32B32_SINT:
+			case VK_FORMAT_R32G32B32A32_SINT:
+			case VK_FORMAT_R64G64B64_SINT:
+			case VK_FORMAT_R64G64B64A64_SINT:
+				return ast::type::ImageFormat::eRgba32i;
+			case VK_FORMAT_R32G32B32_SFLOAT:
+			case VK_FORMAT_R32G32B32A32_SFLOAT:
+			case VK_FORMAT_R64G64B64_SFLOAT:
+			case VK_FORMAT_R64G64B64A64_SFLOAT:
+			case VK_FORMAT_BC6H_UFLOAT_BLOCK:
+			case VK_FORMAT_BC6H_SFLOAT_BLOCK:
+				return ast::type::ImageFormat::eRgba32f;
+			case VK_FORMAT_B10G11R11_UFLOAT_PACK32:
+				return ast::type::ImageFormat::eR11fG11fB10f;
+			case VK_FORMAT_BC1_RGB_UNORM_BLOCK:
+			case VK_FORMAT_BC1_RGB_SRGB_BLOCK:
+			case VK_FORMAT_BC1_RGBA_UNORM_BLOCK:
+			case VK_FORMAT_BC1_RGBA_SRGB_BLOCK:
+			case VK_FORMAT_BC2_UNORM_BLOCK:
+			case VK_FORMAT_BC2_SRGB_BLOCK:
+			case VK_FORMAT_BC3_UNORM_BLOCK:
+			case VK_FORMAT_BC3_SRGB_BLOCK:
+			case VK_FORMAT_BC7_UNORM_BLOCK:
+			case VK_FORMAT_BC7_SRGB_BLOCK:
+			case VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK:
+			case VK_FORMAT_ETC2_R8G8B8_SRGB_BLOCK:
+			case VK_FORMAT_ETC2_R8G8B8A1_UNORM_BLOCK:
+			case VK_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK:
+			case VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK:
+			case VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK:
+			case VK_FORMAT_ASTC_4x4_UNORM_BLOCK:
+			case VK_FORMAT_ASTC_4x4_SRGB_BLOCK:
+			case VK_FORMAT_ASTC_5x4_UNORM_BLOCK:
+			case VK_FORMAT_ASTC_5x4_SRGB_BLOCK:
+			case VK_FORMAT_ASTC_5x5_UNORM_BLOCK:
+			case VK_FORMAT_ASTC_5x5_SRGB_BLOCK:
+			case VK_FORMAT_ASTC_6x5_UNORM_BLOCK:
+			case VK_FORMAT_ASTC_6x5_SRGB_BLOCK:
+			case VK_FORMAT_ASTC_6x6_UNORM_BLOCK:
+			case VK_FORMAT_ASTC_6x6_SRGB_BLOCK:
+			case VK_FORMAT_ASTC_8x5_UNORM_BLOCK:
+			case VK_FORMAT_ASTC_8x5_SRGB_BLOCK:
+			case VK_FORMAT_ASTC_8x6_UNORM_BLOCK:
+			case VK_FORMAT_ASTC_8x6_SRGB_BLOCK:
+			case VK_FORMAT_ASTC_8x8_UNORM_BLOCK:
+			case VK_FORMAT_ASTC_8x8_SRGB_BLOCK:
+			case VK_FORMAT_ASTC_10x5_UNORM_BLOCK:
+			case VK_FORMAT_ASTC_10x5_SRGB_BLOCK:
+			case VK_FORMAT_ASTC_10x6_UNORM_BLOCK:
+			case VK_FORMAT_ASTC_10x6_SRGB_BLOCK:
+			case VK_FORMAT_ASTC_10x8_UNORM_BLOCK:
+			case VK_FORMAT_ASTC_10x8_SRGB_BLOCK:
+			case VK_FORMAT_ASTC_10x10_UNORM_BLOCK:
+			case VK_FORMAT_ASTC_10x10_SRGB_BLOCK:
+			case VK_FORMAT_ASTC_12x10_UNORM_BLOCK:
+			case VK_FORMAT_ASTC_12x10_SRGB_BLOCK:
+			case VK_FORMAT_ASTC_12x12_UNORM_BLOCK:
+			case VK_FORMAT_ASTC_12x12_SRGB_BLOCK:
+			default:
+				return ast::type::ImageFormat::eRgba8Unorm;
+			}
 		}
 	}
 
@@ -526,8 +801,8 @@ namespace castor3d
 		, ashes::PipelineLayout const & pipelineLayout
 		, ashes::GraphicsPipeline const & pipeline
 		, Sampler const * sampler )
-		: descriptorSet{ t3dto2d::createDescriptorSet( device, resources, sampler, descriptorSetPool, uniformBuffer, cameraUbo, texture3D ) }
-		, commands{ t3dto2d::createCommandBuffer( device, queueData, resources, renderPass, frameBuffer, pipelineLayout, pipeline, *descriptorSet, texture3D, sampler ) }
+		: descriptorSet{ t3dto2d::createDescriptorSet( device, resources, sampler, descriptorSetPool, uniformBuffer, cameraUbo, texture3D, "Screen" ) }
+		, commands{ t3dto2d::createCommandBuffer( device, queueData, resources, renderPass, frameBuffer, pipelineLayout, pipeline, *descriptorSet, texture3D, sampler, "Screen" ) }
 	{
 	}
 
@@ -562,15 +837,12 @@ namespace castor3d
 				, 0.0f
 				, 1.0f } ) }
 
-		, m_descriptorSetLayoutVolume{ t3dto2d::createDescriptorLayout( device, false ) }
-		, m_pipelineLayoutVolume{ t3dto2d::createPipelineLayout( device, *m_descriptorSetLayoutVolume ) }
-		, m_shaderVolume{ cuT( "Texture3DTo2D" ), t3dto2d::getProgramVolume( device.renderSystem ) }
-		, m_pipelineVolume{ t3dto2d::createPipelineVolume( device, *m_pipelineLayoutVolume, *m_renderPass, m_shaderVolume, m_target ) }
-
-		, m_descriptorSetLayoutSlice{ t3dto2d::createDescriptorLayout( device, true ) }
-		, m_pipelineLayoutSlice{ t3dto2d::createPipelineLayout( device, *m_descriptorSetLayoutSlice ) }
-		, m_shaderSlice{ cuT( "Texture3DTo2D" ), t3dto2d::getProgramSlice( device.renderSystem ) }
-		, m_pipelineSlice{ t3dto2d::createPipelineSlice( device, *m_pipelineLayoutSlice, *m_renderPass, m_shaderSlice, m_target ) }
+		, m_descriptorSetLayoutVolume{ t3dto2d::createDescriptorLayout( device, false, "Volume" ) }
+		, m_pipelineLayoutVolume{ t3dto2d::createPipelineLayout( device, *m_descriptorSetLayoutVolume, "Volume" ) }
+		, m_descriptorSetLayoutSlice{ t3dto2d::createDescriptorLayout( device, true, "Slice" ) }
+		, m_pipelineLayoutSlice{ t3dto2d::createPipelineLayout( device, *m_descriptorSetLayoutSlice, "Slice" ) }
+		, m_shaderSlice{ cuT( "Texture3DTo2D_Slice" ), t3dto2d::getProgramSlice( m_device.renderSystem ) }
+		, m_pipelineSlice{ t3dto2d::createPipelineSlice( m_device, *m_pipelineLayoutVolume, *m_renderPass, m_shaderSlice, m_target ) }
 	{
 		m_sampler->initialise( device );
 	}
@@ -616,6 +888,60 @@ namespace castor3d
 				}
 				else
 				{
+					ast::type::ImageFormat format = t3dto2d::getImageFormat( intermediate.viewId.data->info.format );
+					auto [it, inserted] = m_pipelineVolume.emplace( format, PipelineProgram{ {}, {} } );
+					if ( inserted )
+					{
+						switch ( format )
+						{
+						case ast::type::ImageFormat::eRgba32f: it->second.shader = { cuT( "Texture3DTo2D_Rgba32f" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRgba32f >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRgba16f: it->second.shader = { cuT( "Texture3DTo2D_Rgba16f" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRgba16f >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRg32f: it->second.shader = { cuT( "Texture3DTo2D_Rg32f" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRg32f >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRg16f: it->second.shader = { cuT( "Texture3DTo2D_Rg16f" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRg16f >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eR32f: it->second.shader = { cuT( "Texture3DTo2D_R32f" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eR32f >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eR16f: it->second.shader = { cuT( "Texture3DTo2D_R16f" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eR16f >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eR11fG11fB10f: it->second.shader = { cuT( "Texture3DTo2D_R11fG11fB10f" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eR11fG11fB10f >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRgba32i: it->second.shader = { cuT( "Texture3DTo2D_Rgba32i" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRgba32i >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRgba16i: it->second.shader = { cuT( "Texture3DTo2D_Rgba16i" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRgba16i >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRgba8i: it->second.shader = { cuT( "Texture3DTo2D_Rgba8i" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRgba8i >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRg32i: it->second.shader = { cuT( "Texture3DTo2D_Rg32i" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRg32i >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRg16i: it->second.shader = { cuT( "Texture3DTo2D_Rg16i" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRg16i >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRg8i: it->second.shader = { cuT( "Texture3DTo2D_Rg8i" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRg8i >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eR32i: it->second.shader = { cuT( "Texture3DTo2D_R32i" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eR32i >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eR16i: it->second.shader = { cuT( "Texture3DTo2D_R16i" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eR16i >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eR8i: it->second.shader = { cuT( "Texture3DTo2D_R8i" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eR8i >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRgba32u: it->second.shader = { cuT( "Texture3DTo2D_Rgba32u" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRgba32u >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRgba16u: it->second.shader = { cuT( "Texture3DTo2D_Rgba16u" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRgba16u >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRgba8u: it->second.shader = { cuT( "Texture3DTo2D_Rgba8u" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRgba8u >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRg32u: it->second.shader = { cuT( "Texture3DTo2D_Rg32u" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRg32u >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRg16u: it->second.shader = { cuT( "Texture3DTo2D_Rg16u" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRg16u >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRg8u: it->second.shader = { cuT( "Texture3DTo2D_Rg8u" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRg8u >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eR32u: it->second.shader = { cuT( "Texture3DTo2D_R32u" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eR32u >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eR16u: it->second.shader = { cuT( "Texture3DTo2D_R16u" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eR16u >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eR8u: it->second.shader = { cuT( "Texture3DTo2D_R8u" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eR8u >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRgb10A2u: it->second.shader = { cuT( "Texture3DTo2D_Rgb10A2u" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRgb10A2u >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRgba16Snorm: it->second.shader = { cuT( "Texture3DTo2D_Rgba16Snorm" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRgba16Snorm >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRgba8Snorm: it->second.shader = { cuT( "Texture3DTo2D_Rgba8Snorm" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRgba8Snorm >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRg16Snorm: it->second.shader = { cuT( "Texture3DTo2D_Rg16Snorm" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRg16Snorm >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRg8Snorm: it->second.shader = { cuT( "Texture3DTo2D_Rg8Snorm" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRg8Snorm >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eR16Snorm: it->second.shader = { cuT( "Texture3DTo2D_R16Snorm" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eR16Snorm >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eR8Snorm: it->second.shader = { cuT( "Texture3DTo2D_R8Snorm" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eR8Snorm >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRgba16Unorm: it->second.shader = { cuT( "Texture3DTo2D_Rgba16Unorm" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRgba16Unorm >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRgba8Unorm: it->second.shader = { cuT( "Texture3DTo2D_Rgba8Unorm" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRgba8Unorm >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRg16Unorm: it->second.shader = { cuT( "Texture3DTo2D_Rg16Unorm" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRg16Unorm >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRg8Unorm: it->second.shader = { cuT( "Texture3DTo2D_Rg8Unorm" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRg8Unorm >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eR16Unorm: it->second.shader = { cuT( "Texture3DTo2D_R16Unorm" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eR16Unorm >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eR8Unorm: it->second.shader = { cuT( "Texture3DTo2D_R8Unorm" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eR8Unorm >( m_device.renderSystem ) }; break;
+						case ast::type::ImageFormat::eRgb10A2Unorm: it->second.shader = { cuT( "Texture3DTo2D_Rgb10A2Unorm" ), t3dto2d::getProgramVolume< ast::type::ImageFormat::eRgb10A2Unorm >( m_device.renderSystem ) }; break;
+						default:
+							CU_Failure( "Unsupported ImageFormat" );
+							break;
+						}
+						if ( !it->second.shader.shader )
+							continue;
+						it->second.pipeline = t3dto2d::createPipelineVolume( m_device, *m_pipelineLayoutVolume, *m_renderPass, it->second.shader, m_target );
+					}
+
 					m_texture3DToScreen.emplace_back( m_device
 						, queueData
 						, m_resources
@@ -626,7 +952,7 @@ namespace castor3d
 						, *m_descriptorSetPoolVolume
 						, *m_frameBuffer
 						, *m_pipelineLayoutVolume
-						, *m_pipelineVolume
+						, *it->second.pipeline
 						, nullptr );
 				}
 			}

@@ -947,7 +947,7 @@ namespace castor3d
 			}
 			else
 			{
-				writer.declCombinedImg< FImg2DR32 >( "c3d_mapText"
+				writer.declCombinedImg< FImg2DR8Unorm >( "c3d_mapText"
 					, 0u
 					, 2u
 					, textOverlay );

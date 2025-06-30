@@ -442,35 +442,35 @@ namespace castor3d::shader
 
 					sdwSWITCH( m_writer, accumulationOperator )
 					{
-						sdwCASE( 1u )
+						sdwCASE( m_writer, 1u )
 						{
 							// (10)
 							weight = max( pow( clamp( 1.0_f - depth, 0.0_f, 1.0_f ), 3.0_f ) * 3000.0_f, 0.01_f );
 							m_writer.caseBreakStmt();
 						}
 						sdwESAC;
-						sdwCASE( 2u )
+						sdwCASE( m_writer, 2u )
 						{
 							// (9)
 							weight = max( min( 0.03_f / ( pow( abs( depth ) / 200.0_f, 4.0_f ) + 0.00001_f ), 3000.0_f ), 0.01_f );
 							m_writer.caseBreakStmt();
 						}
 						sdwESAC;
-						sdwCASE( 3u )
+						sdwCASE( m_writer, 3u )
 						{
 							// (8)
 							weight = max( min( 10.0_f / ( pow( abs( depth ) / 200.0_f, 6.0_f ) + pow( abs( depth ) / 10.0_f, 3.0_f ) + 0.00001_f ), 3000.0_f ), 0.01_f );
 							m_writer.caseBreakStmt();
 						}
 						sdwESAC;
-						sdwCASE( 4u )
+						sdwCASE( m_writer, 4u )
 						{
 							// (7)
 							weight = max( min( 10.0_f / ( pow( abs( depth ) / 200.0_f, 6.0_f ) + pow( abs( depth ) / 5.0_f, 2.0_f ) + 0.00001_f ), 3000.0_f ), 0.01_f );
 							m_writer.caseBreakStmt();
 						}
 						sdwESAC;
-						sdwCASE( 5u )
+						sdwCASE( m_writer, 5u )
 						{
 							// (other)
 							auto a = m_writer.declLocale( "a"
@@ -481,7 +481,7 @@ namespace castor3d::shader
 							m_writer.caseBreakStmt();
 						}
 						sdwESAC;
-						sdwCASE( 6u )
+						sdwCASE( m_writer, 6u )
 						{
 							// (other)
 							auto a = m_writer.declLocale( "a"
@@ -495,14 +495,14 @@ namespace castor3d::shader
 							m_writer.caseBreakStmt();
 						}
 						sdwESAC;
-						sdwCASE( 7u )
+						sdwCASE( m_writer, 7u )
 						{
 							// (yet another one)
 							weight = max( min( 1.0_f, max( max( colour.r(), colour.g() ), colour.b() ) * alpha ), alpha ) * clamp( 0.03_f / ( 0.00001_f + pow( depth / 200.0_f, 4.0_f ) ), 0.01_f, 3000.0_f );
 							m_writer.caseBreakStmt();
 						}
 						sdwESAC;
-						sdwDEFAULT
+						sdwDEFAULT( m_writer )
 						{
 							// Naive
 							weight = 1.0_f - rescaleDepth( depth
