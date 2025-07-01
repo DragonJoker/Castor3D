@@ -1023,6 +1023,11 @@ namespace castor3d
 			return m_resourceHandler;
 		}
 
+		crg::ResourcesCache & getGraphResourceCache()noexcept
+		{
+			return m_resources;
+		}
+
 		LightingModelFactory & getLightingModelFactory()const noexcept
 		{
 			return *m_lightingModelFactory;

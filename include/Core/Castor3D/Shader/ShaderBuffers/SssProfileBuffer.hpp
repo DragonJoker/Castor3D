@@ -145,9 +145,19 @@ namespace castor3d
 		 *\~french
 		 *\brief		Le pointeur sur le tampon.
 		 */
-		uint8_t * getPtr()
+		uint8_t * getPtr()noexcept
 		{
 			return m_buffer.getPtr();
+		}
+		/**
+		 *\~english
+		 *\return		The number of registered profiles.
+		 *\~french
+		 *\brief		Le nombre de profils enregistrés.
+		 */
+		uint32_t getCount()const noexcept
+		{
+			return uint32_t( m_components.size() );
 		}
 
 	private:

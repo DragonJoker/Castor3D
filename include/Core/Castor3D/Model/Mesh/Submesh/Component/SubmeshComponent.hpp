@@ -83,12 +83,14 @@ namespace castor3d
 		 *\param[in]	resources		The graph resources.
 		 *\param[in]	graph			The parent graph.
 		 *\param[in]	previousPasses	The passes this one depends on.
+		 *\return		The resulting passes to wait for.
 		 *\~french
 		 *\brief		Enregistre les passes dont le composant dépend.
 		 *\param[in]	device			Le périphérique de rendu.
 		 *\param[in]	resources		Les ressources du graphe.
 		 *\param[in]	graph			Le graphe parent.
 		 *\param[in]	previousPasses	Les passes dont celle-ci dépend.
+		 *\return		Les passes résultantes, qu'il faut attendre.
 		 */
 		C3D_API virtual crg::FramePassArray record( RenderDevice const & device
 			, crg::ResourcesCache & resources

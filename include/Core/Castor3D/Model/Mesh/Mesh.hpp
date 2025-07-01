@@ -91,8 +91,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Records the submeshes' dependent render passes.
+		 *\param[in]	resources		The graph resources.
+		 *\param[in]	graph			The parent graph.
+		 *\param[in]	previousPasses	The passes this one depends on.
+		 *\return		The resulting passes to wait for.
 		 *\~french
 		 *\brief		Enregistre les passes de rendu des dépendances des sous-maillages.
+		 *\param[in]	resources		Les ressources du graphe.
+		 *\param[in]	graph			Le graphe parent.
+		 *\param[in]	previousPasses	Les passes dont celle-ci dépend.
+		 *\return		Les passes résultantes, qu'il faut attendre.
 		 */
 		C3D_API crg::FramePassArray record( crg::ResourcesCache & resources
 			, crg::FramePassGroup & graph
