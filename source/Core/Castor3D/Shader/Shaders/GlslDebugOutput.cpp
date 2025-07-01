@@ -56,29 +56,35 @@ namespace castor3d::shader
 		, castor::String name
 		, sdw::Vec4 const value )
 	{
-		registerOutput( category, name, value.xyz() );
+		if ( m_enable )
+			registerOutput( category, name, value.xyz() );
 	}
 
 	void DebugOutput::registerOutput( castor::String category
 		, castor::String name
 		, sdw::Vec3 const value )
 	{
-		auto index = m_config.registerValue( category, name );
-		m_registerOutput( sdw::UInt{ index }, value );
+		if ( m_enable )
+		{
+			auto index = m_config.registerValue( category, name );
+			m_registerOutput( sdw::UInt{ index }, value );
+		}
 	}
 
 	void DebugOutput::registerOutput( castor::String category
 		, castor::String name
 		, sdw::Vec2 const value )
 	{
-		registerOutput( category, name, vec3( value, 0.0_f ) );
+		if ( m_enable )
+			registerOutput( category, name, vec3( value, 0.0_f ) );
 	}
 
 	void DebugOutput::registerOutput( castor::String category
 		, castor::String name
 		, sdw::Float const value )
 	{
-		registerOutput( category, name, vec3( value ) );
+		if ( m_enable )
+			registerOutput( category, name, vec3( value ) );
 	}
 
 	DebugOutputCategory DebugOutput::pushBlock( castor::String category )
