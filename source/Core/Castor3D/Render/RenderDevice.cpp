@@ -466,6 +466,9 @@ namespace castor3d
 #if VK_KHR_shader_float16_int8
 				doTryAddExtension( VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME, &m_f16i8bitFeatures );
 #endif
+#if VK_EXT_nested_command_buffer
+				doTryAddExtension( VK_EXT_NESTED_COMMAND_BUFFER_EXTENSION_NAME, &m_nestedCommandBufferFeatures, &m_nestedCommandBufferProperties );
+#endif
 			}
 
 #if VK_EXT_shader_subgroup_ballot
