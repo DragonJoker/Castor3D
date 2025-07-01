@@ -85,6 +85,12 @@ namespace castor3d
 
 			return &c3dSampler->getSampler();
 		}
+
+		bool isTexture1D( VkExtent3D const & extent )
+		{
+			return extent.height == 1
+				&& extent.width > 1;
+		}
 	}
 
 	//*********************************************************************************************
@@ -322,8 +328,10 @@ namespace castor3d
 	{
 		auto & handler = resources->getHandler();
 		mipLevels = std::max( 1u, mipLevels );
-		layerCount = ( size.depth > 1u ? 1u : layerCount );
+		if ( size.depth > 1u )
+			layerCount = 1u;
 		auto mbName = castor::toUtf8( name );
+		bool isTexture1D = texture::isTexture1D( size );
 		imageId = handler.createImageId( crg::ImageData{ mbName
 			, ( createFlags
 				| ( size.depth > 1u
@@ -331,7 +339,9 @@ namespace castor3d
 					: VkImageCreateFlagBits{} ) )
 			, ( size.depth > 1u
 				? VK_IMAGE_TYPE_3D
-				: VK_IMAGE_TYPE_2D )
+				: ( isTexture1D
+					? VK_IMAGE_TYPE_1D
+					: VK_IMAGE_TYPE_2D ) )
 			, texture::retrieveFormat( *device, format )
 			, size
 			, ( usageFlags
@@ -346,13 +356,17 @@ namespace castor3d
 			, 0u
 			, ( size.depth > 1u
 				? VK_IMAGE_VIEW_TYPE_3D
-				: ( layerCount > 1u
-					? ( ashes::checkFlag( createFlags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT )
-						? ( layerCount > 6u
-							? VK_IMAGE_VIEW_TYPE_CUBE_ARRAY
-							: VK_IMAGE_VIEW_TYPE_CUBE )
-						: VK_IMAGE_VIEW_TYPE_2D_ARRAY )
-					: VK_IMAGE_VIEW_TYPE_2D ) )
+				: ( isTexture1D
+					? ( layerCount > 1u
+						? VK_IMAGE_VIEW_TYPE_1D_ARRAY
+						: VK_IMAGE_VIEW_TYPE_1D )
+					: ( layerCount > 1u
+						? ( ashes::checkFlag( createFlags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT )
+							? ( layerCount > 6u
+								? VK_IMAGE_VIEW_TYPE_CUBE_ARRAY
+								: VK_IMAGE_VIEW_TYPE_CUBE )
+							: VK_IMAGE_VIEW_TYPE_2D_ARRAY )
+						: VK_IMAGE_VIEW_TYPE_2D ) ) )
 			, format
 			, { ashes::getAspectMask( format ), 0u, mipLevels, 0u, layerCount } } );
 
@@ -401,7 +415,7 @@ namespace castor3d
 				subViewsId.push_back( handler.createViewId( crg::ImageViewData{ mbName + "Sub" + castor::string::toMbString( index )
 					, imageId
 					, 0u
-					, VK_IMAGE_VIEW_TYPE_2D
+					, ( isTexture1D ? VK_IMAGE_VIEW_TYPE_1D : VK_IMAGE_VIEW_TYPE_2D )
 					, format
 					, { ashes::getAspectMask( format ), 0u, 1u, index, 1u } } ) );
 			}
