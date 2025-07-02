@@ -69,6 +69,7 @@ namespace castor3d
 		C3D_API SssProfileBuffer( Engine & engine
 			, RenderDevice const & device
 			, uint32_t count );
+		C3D_API ~SssProfileBuffer()noexcept;
 		/**
 		 *\~english
 		 *\brief		Adds a pass to the buffer.
@@ -159,9 +160,20 @@ namespace castor3d
 		{
 			return uint32_t( m_components.size() );
 		}
+		/**
+		 *\~english
+		 *\return		The image containing precomputed diffusion profiles.
+		 *\~french
+		 *\brief		L'image contenant les profils de diffusion précalculés.
+		 */
+		Texture const & getDiffusionProfilesImage()const noexcept
+		{
+			return m_diffusionProfiles;
+		}
 
 	private:
 		ShaderBuffer m_buffer;
+		Texture m_diffusionProfiles;
 		castor::Vector< SubsurfaceScatteringComponent * > m_components;
 		castor::Vector< SubsurfaceScatteringComponent const * > m_dirty;
 		castor::Vector< OnSssProfileChangedConnection > m_connections;

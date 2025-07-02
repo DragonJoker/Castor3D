@@ -207,6 +207,7 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
+		, sdw::CombinedImage1DArrayRgba16 const * sssDiffusionProfiles
 		, bool enableVolumetric )
 		: m_lightingModelId{ lightingModelId }
 		, m_backgroundModelId{ backgroundModelId }
@@ -217,11 +218,12 @@ namespace castor3d::shader
 		, m_utils{ utils }
 		, m_enableVolumetric{ enableVolumetric }
 		, m_shadowModel{ castor::makeUnique< Shadow >( shadowOptions, m_writer ) }
-		, m_sssTransmittance{ ( ( sssProfiles && sssProfiles->isEnabled() )
+		, m_sssTransmittance{ ( ( sssDiffusionProfiles && sssDiffusionProfiles->isEnabled() )
 			? castor::makeUnique< SssTransmittance >( m_writer
 				, *m_shadowModel
 				, castor::move( shadowOptions )
-				, *sssProfiles )
+				, *sssProfiles
+				, *sssDiffusionProfiles )
 			: nullptr ) }
 	{
 	}
@@ -234,6 +236,7 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
+		, sdw::CombinedImage1DArrayRgba16 const * sssDiffusionProfiles
 		, uint32_t lightsBufBinding
 		, uint32_t lightsBufSet
 		, uint32_t & shadowMapBinding
@@ -247,6 +250,7 @@ namespace castor3d::shader
 			, utils
 			, shadowOptions
 			, sssProfiles
+			, sssDiffusionProfiles
 			, enableVolumetric }
 	{
 		m_shadowModel->declare( shadowMapBinding, shadowMapSet );
@@ -263,6 +267,7 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
+		, sdw::CombinedImage1DArrayRgba16 const * sssDiffusionProfiles
 		, LightType lightType
 		, uint32_t lightsBufBinding
 		, uint32_t lightsBufSet
@@ -277,6 +282,7 @@ namespace castor3d::shader
 			, utils
 			, shadowOptions
 			, sssProfiles
+			, sssDiffusionProfiles
 			, enableVolumetric }
 	{
 		switch ( lightType )
@@ -712,39 +718,45 @@ namespace castor3d::shader
 		, BlendComponents const & components
 		, DirectionalLight const & directionalLight
 		, DirectionalShadowData const & directionalShadows
-		, LightSurface const & lightSurface )
+		, LightSurface const & lightSurface
+			, sdw::Vec3 const & lightRadiance )
 	{
 		return m_sssTransmittance->compute( debugOutput.pushBlock( cuT( "SSSTransmittance" ) )
 			, components
 			, directionalLight
 			, directionalShadows
-			, lightSurface );
+			, lightSurface
+			, lightRadiance );
 	}
 
 	sdw::Vec3 Lights::computeSssTransmittance( DebugOutputCategory const & debugOutput
 		, BlendComponents const & components
 		, PointLight const & pointLight
 		, PointShadowData const & pointShadows
-		, LightSurface const & lightSurface )
+		, LightSurface const & lightSurface
+			, sdw::Vec3 const & lightRadiance )
 	{
 		return m_sssTransmittance->compute( debugOutput.pushBlock( cuT( "SSSTransmittance" ) )
 			, components
 			, pointLight
 			, pointShadows
-			, lightSurface );
+			, lightSurface
+			, lightRadiance );
 	}
 
 	sdw::Vec3 Lights::computeSssTransmittance( DebugOutputCategory const & debugOutput
 		, BlendComponents const & components
 		, SpotLight const & spotLight
 		, SpotShadowData const & spotShadows
-		, LightSurface const & lightSurface )
+		, LightSurface const & lightSurface
+			, sdw::Vec3 const & lightRadiance )
 	{
 		return m_sssTransmittance->compute( debugOutput.pushBlock( cuT( "SSSTransmittance" ) )
 			, components
 			, spotLight
 			, spotShadows
-			, lightSurface );
+			, lightSurface
+			, lightRadiance );
 	}
 
 	bool Lights::hasIblSupport()

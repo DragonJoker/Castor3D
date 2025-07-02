@@ -294,7 +294,8 @@ namespace castor3d
 			, brdf
 			, utils
 			, shader::ShadowOptions{}
-			, nullptr
+			, nullptr /* sssProfiles */
+			, nullptr /* sssDiffusionProfiles */
 			, LightType::ePoint
 			, lightsIndex /* lightBinding */
 			, RenderPipeline::eBuffers /* lightSet */

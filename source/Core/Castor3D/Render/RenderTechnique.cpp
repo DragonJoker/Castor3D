@@ -24,6 +24,7 @@
 #include "Castor3D/Render/GlobalIllumination/ReflectiveShadowMaps/ReflectiveShadowMaps.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
+#include "Castor3D/Render/Opaque/ComputeDiffusionProfilesPass.hpp"
 #include "Castor3D/Render/Opaque/OpaqueRendering.hpp"
 #include "Castor3D/Render/Passes/BackgroundRenderer.hpp"
 #include "Castor3D/Render/Passes/ComputeDepthRange.hpp"
@@ -458,10 +459,14 @@ namespace castor3d
 				, m_clustersFlagsPass )
 			: nullptr ) }
 		, m_background{ doCreateBackgroundPass( progress ) }
+		, m_computeDiffusionProfiles{ &createComputeDiffusionProfilesPass( m_graph
+			, doCreateRenderPasses( TechniquePassEvent::eBeforeOpaque, &m_background->getPass() )
+			, m_device
+			, getEngine()->getMaterialCache().getSssProfileBuffer() ) }
 		, m_opaque{ *this
 			, m_device
 			, m_prepass
-			, doCreateRenderPasses(  TechniquePassEvent::eBeforeOpaque, &m_background->getPass() )
+			, { m_computeDiffusionProfiles }
 			, progress }
 		, m_lastOpaquePass{ &m_opaque.getLastPass() }
 		, m_transparent{ *this

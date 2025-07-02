@@ -162,6 +162,7 @@ namespace castor3d
 				, utils
 				, shader::ShadowOptions{}
 				, nullptr /* sssProfiles */
+				, nullptr /* sssDiffusionProfiles */
 				, LightType::eDirectional
 				, LightInjectionPass::LightsIdx /* lightBinding */
 				, 0u /* lightSet */
@@ -228,6 +229,7 @@ namespace castor3d
 				, utils
 				, shader::ShadowOptions{}
 				, nullptr /* sssProfiles */
+				, nullptr /* sssDiffusionProfiles */
 				, LightType::ePoint
 				, LightInjectionPass::LightsIdx /* lightBinding */
 				, 0u /* lightSet */
@@ -290,6 +292,7 @@ namespace castor3d
 				, utils
 				, shader::ShadowOptions{}
 				, nullptr /* sssProfiles */
+				, nullptr /* sssDiffusionProfiles */
 				, LightType::eSpot
 				, LightInjectionPass::LightsIdx /* lightBinding */
 				, 0u /* lightSet */

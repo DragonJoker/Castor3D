@@ -542,7 +542,8 @@ namespace castor3d
 			, brdf
 			, utils
 			, shader::ShadowOptions{ flags.getShadowFlags() }
-			, nullptr
+			, nullptr /* sssProfiles */
+			, nullptr /* sssDiffusionProfiles */
 			, lightsIndex /* lightBinding */
 			, RenderPipeline::eBuffers /* lightSet */
 			, addIndex /* shadowMapBinding */

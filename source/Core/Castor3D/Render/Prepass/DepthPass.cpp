@@ -161,7 +161,8 @@ namespace castor3d
 			, brdf
 			, utils
 			, shader::ShadowOptions{}
-			, nullptr };
+			, nullptr /* sssProfiles */
+			, nullptr /* sssDiffusionProfiles */ };
 
 		writer.implementMainT< shader::FragmentSurfaceT, shader::PrepassOutputT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
 			, sdw::FragmentOutT< shader::PrepassOutputT >{ writer, flags }

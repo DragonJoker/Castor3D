@@ -18,23 +18,27 @@ namespace castor3d::shader
 		C3D_API SssTransmittance( sdw::ShaderWriter & writer
 			, Shadow const & shadows
 			, ShadowOptions shadowOptions
-			, SssProfiles const & sssProfiles );
+			, SssProfiles const & sssProfiles
+			, sdw::CombinedImage1DArrayRgba16 const & sssDiffusionProfiles );
 
 		C3D_API sdw::Vec3 compute( DebugOutputCategory const & debugOutput
 			, BlendComponents const & components
 			, shader::DirectionalLight const & light
 			, DirectionalShadowData const & shadow
-			, LightSurface const & lightSurface );
+			, LightSurface const & lightSurface
+			, sdw::Vec3 const & lightRadiance );
 		C3D_API sdw::Vec3 compute( DebugOutputCategory const & debugOutput
 			, BlendComponents const & components
 			, shader::PointLight const & light
 			, PointShadowData const & shadow
-			, LightSurface const & lightSurface );
+			, LightSurface const & lightSurface
+			, sdw::Vec3 const & lightRadiance );
 		C3D_API sdw::Vec3 compute( DebugOutputCategory const & debugOutput
 			, BlendComponents const & components
 			, shader::SpotLight const & light
 			, SpotShadowData const & shadow
-			, LightSurface const & lightSurface );
+			, LightSurface const & lightSurface
+			, sdw::Vec3 const & lightRadiance );
 
 	private:
 		sdw::Vec3 doCompute( DebugOutputCategory const & debugOutput
@@ -42,12 +46,13 @@ namespace castor3d::shader
 			, sdw::Float const & shadowDepth
 			, sdw::UInt const & sssProfileIndex
 			, sdw::Vec3 const & worldNormal
-			, sdw::Float const & translucency
+			, sdw::Float const & transmittanceFactor
 			, sdw::Vec3 const & lightToVertex );
 
 		sdw::ShaderWriter & m_writer;
 		Shadow const & m_shadows;
 		SssProfiles const & m_sssProfiles;
+		sdw::CombinedImage1DArrayRgba16 const & m_sssDiffusionProfiles;
 
 		SceneFlags m_shadowsType;
 
@@ -65,12 +70,14 @@ namespace castor3d::shader
 			, InDirectionalLight
 			, sdw::InMat4
 			, sdw::InVec3
+			, sdw::InVec3
 			, sdw::InVec3 > m_computeDirectional;
 		sdw::Function < sdw::Vec3
 			, sdw::InUInt
 			, sdw::InFloat
 			, InPointLight
 			, sdw::InInt
+			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3 > m_computePoint;
 		sdw::Function < sdw::Vec3
@@ -79,6 +86,7 @@ namespace castor3d::shader
 			, InSpotLight
 			, sdw::InMat4
 			, sdw::InInt
+			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3 > m_computeSpot;
 	};
