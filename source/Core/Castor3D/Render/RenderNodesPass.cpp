@@ -560,6 +560,9 @@ namespace castor3d
 			auto const & matCache = getOwner()->getMaterialCache();
 			descriptorWrites.push_back( matCache.getPassBuffer().getBinding( uint32_t( GlobalBuffersIdx::eMaterials ) ) );
 			descriptorWrites.push_back( matCache.getSssProfileBuffer().getBinding( uint32_t( GlobalBuffersIdx::eSssProfiles ) ) );
+			descriptorWrites.push_back( makeImageViewDescriptorWrite( matCache.getSssProfileBuffer().getDiffusionProfilesImage().sampledView
+				, *matCache.getSssProfileBuffer().getDiffusionProfilesImage().sampler
+				, uint32_t( GlobalBuffersIdx::eSssDiffusionProfiles ) ) );
 			descriptorWrites.push_back( matCache.getTexConfigBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexConfigs ) ) );
 			descriptorWrites.push_back( matCache.getTexAnimBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexAnims ) ) );
 
@@ -871,6 +874,9 @@ namespace castor3d
 		addBindings.emplace_back( matCache.getPassBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eMaterials )
 			, stageFlags ) );
 		addBindings.emplace_back( matCache.getSssProfileBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eSssProfiles )
+			, stageFlags ) );
+		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eSssDiffusionProfiles )
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, stageFlags ) );
 		addBindings.emplace_back( matCache.getTexConfigBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, stageFlags ) );

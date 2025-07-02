@@ -473,6 +473,13 @@ namespace castor3d
 			return;
 		}
 
+		for ( auto subViewId : subViewsId )
+		{
+			resources->destroyImageView( subViewId );
+		}
+
+		subViewsId.clear();
+
 		if ( wholeViewId != sampledViewId )
 		{
 			resources->destroyImageView( sampledViewId );

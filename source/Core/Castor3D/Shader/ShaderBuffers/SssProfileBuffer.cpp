@@ -27,8 +27,26 @@ namespace castor3d
 		, RenderDevice const & device
 		, uint32_t count )
 		: m_buffer{ device, count * DataSize, cuT( "SssProfileBuffer" ) }
+		, m_diffusionProfiles{ device
+			, engine.getGraphResourceCache()
+			, cuT( "DiffusionProfiles" )
+			, 0u
+			, { 512u, 1u, 1u }
+			, uint32_t( ashes::getAlignedSize( count, 64u ) ) /*layerCount*/
+			, 1u /*mipLevels*/
+			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_LINEAR }
 		, m_data{ sssbuf::doBindData( m_buffer.getPtr(), count ) }
 	{
+		m_diffusionProfiles.create();
+	}
+
+	SssProfileBuffer::~SssProfileBuffer()noexcept
+	{
+		m_diffusionProfiles.destroy();
 	}
 
 	uint32_t SssProfileBuffer::addPass( SubsurfaceScatteringComponent & component )
@@ -82,11 +100,10 @@ namespace castor3d
 			castor::Vector< SubsurfaceScatteringComponent const * > dirty;
 			castor::swap( m_dirty, dirty );
 			auto end = std::unique( dirty.begin(), dirty.end() );
-			uint32_t index{};
 
 			for ( auto component : castor::makeArrayView( dirty.begin(), end ) )
 			{
-				if ( index * VkDeviceSize( DataSize ) > m_data.size() )
+				if ( component->getSssProfileId() > m_data.size() )
 				{
 					log::warn << "SssProfile [" << component->getSssProfileId() << "] is out of buffer boundaries, ignoring it." << std::endl;
 				}
@@ -94,11 +111,9 @@ namespace castor3d
 				{
 					component->fillProfileBuffer( *this );
 				}
-
-				++index;
 			}
 
-			m_buffer.setCount( uint32_t( std::min( m_data.size() * DataSize, m_components.size() ) ) );
+			m_buffer.setCount( uint32_t( std::min( m_data.size(), m_components.size() ) ) );
 			m_buffer.upload( uploader );
 		}
 	}

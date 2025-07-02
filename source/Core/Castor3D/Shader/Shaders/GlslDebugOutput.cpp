@@ -19,21 +19,24 @@ namespace castor3d::shader
 		, m_values{ sdw::findWriterMandat( m_index, m_output ).declGlobalArray< sdw::Vec3 >( "c3d_debugValue", 512u, m_enable ) }
 		, m_indices{ sdw::findWriterMandat( m_index, m_output ).declGlobalArray< sdw::UInt >( "c3d_debugIndices", 512u, m_enable ) }
 	{
-		auto & writer = sdw::findWriterMandat( m_index, m_output );
-		sdwFOR( writer, sdw::UInt, i, 0_u, i < 512_u, ++i )
+		if ( m_enable )
 		{
-			m_indices[i] = 0_u;
-		}
-		sdwROF;
-		m_registerOutput = writer.implementFunction< sdw::Void >( "c3d_registerOutput"
-			, [this]( sdw::UInt const & idx
-				, sdw::Vec3 const & val )
+			auto & writer = sdw::findWriterMandat( m_index, m_output );
+			sdwFOR( writer, sdw::UInt, i, 0_u, i < 512_u, ++i )
 			{
-				m_indices[idx] = 1_u;
-				m_values[idx] = val;
+				m_indices[i] = 0_u;
 			}
-			, sdw::InUInt{ writer, "index" }
-			, sdw::InVec3{ writer, "value" } );
+			sdwROF;
+			m_registerOutput = writer.implementFunction< sdw::Void >( "c3d_registerOutput"
+				, [this]( sdw::UInt const & idx
+					, sdw::Vec3 const & val )
+				{
+					m_indices[idx] = 1_u;
+					m_values[idx] = val;
+				}
+				, sdw::InUInt{ writer, "index" }
+				, sdw::InVec3{ writer, "value" } );
+		}
 	}
 
 	DebugOutput::~DebugOutput()noexcept

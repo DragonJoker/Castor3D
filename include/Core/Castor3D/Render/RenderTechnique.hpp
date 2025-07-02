@@ -405,6 +405,7 @@ namespace castor3d
 		RenderNodesPass * m_clustersFlagsPass{};
 		crg::FramePass const * m_clustersLastPass{};
 		BackgroundRendererUPtr m_background{};
+		crg::FramePass const * m_computeDiffusionProfiles{};
 		OpaqueRendering m_opaque;
 		crg::FramePass const * m_lastOpaquePass{};
 		TransparentRendering m_transparent;

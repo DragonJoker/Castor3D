@@ -222,6 +222,7 @@ namespace castor3d::shader
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
+			, sdw::CombinedImage1DArrayRgba16 const * sssDiffusionProfiles
 			, bool enableVolumetric );
 		C3D_API Lights( Engine const & engine
 			, LightingModelID lightingModelId
@@ -231,6 +232,7 @@ namespace castor3d::shader
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
+			, sdw::CombinedImage1DArrayRgba16 const * sssDiffusionProfiles
 			, uint32_t lightsBufBinding
 			, uint32_t lightsBufSet
 			, uint32_t & shadowMapBinding
@@ -244,6 +246,7 @@ namespace castor3d::shader
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
+			, sdw::CombinedImage1DArrayRgba16 const * sssDiffusionProfiles
 			, LightType lightType
 			, uint32_t lightsBufBinding
 			, uint32_t lightsBufSet
@@ -258,7 +261,8 @@ namespace castor3d::shader
 			, BRDFHelpers & brdfHelpers
 			, Utils & utils
 			, ShadowOptions shadowOptions
-			, SssProfiles const * sssProfiles )
+			, SssProfiles const * sssProfiles
+			, sdw::CombinedImage1DArrayRgba16 const * sssDiffusionProfiles )
 			: Lights{ engine
 				, lightingModelId
 				, backgroundModelId
@@ -267,6 +271,7 @@ namespace castor3d::shader
 				, utils
 				, shadowOptions
 				, sssProfiles
+				, sssDiffusionProfiles
 				, true }
 		{
 		}
@@ -279,6 +284,7 @@ namespace castor3d::shader
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
+			, sdw::CombinedImage1DArrayRgba16 const * sssDiffusionProfiles
 			, uint32_t lightsBufBinding
 			, uint32_t lightsBufSet
 			, uint32_t & shadowMapBinding
@@ -291,6 +297,7 @@ namespace castor3d::shader
 				, utils
 				, shadowOptions
 				, sssProfiles
+				, sssDiffusionProfiles
 				, lightsBufBinding
 				, lightsBufSet
 				, shadowMapBinding
@@ -307,6 +314,7 @@ namespace castor3d::shader
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
+			, sdw::CombinedImage1DArrayRgba16 const * sssDiffusionProfiles
 			, LightType lightType
 			, uint32_t lightsBufBinding
 			, uint32_t lightsBufSet
@@ -320,6 +328,7 @@ namespace castor3d::shader
 				, utils
 				, shadowOptions
 				, sssProfiles
+				, sssDiffusionProfiles
 				, lightType
 				, lightsBufBinding
 				, lightsBufSet
@@ -335,6 +344,7 @@ namespace castor3d::shader
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
+			, sdw::CombinedImage1DArrayRgba16 const * sssDiffusionProfiles
 			, bool enableVolumetric )
 			: Lights{ engine
 				, 0u
@@ -344,6 +354,7 @@ namespace castor3d::shader
 				, utils
 				, shadowOptions
 				, sssProfiles
+				, sssDiffusionProfiles
 				, enableVolumetric }
 		{
 		}
@@ -354,6 +365,7 @@ namespace castor3d::shader
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
+			, sdw::CombinedImage1DArrayRgba16 const * sssDiffusionProfiles
 			, uint32_t lightsBufBinding
 			, uint32_t lightsBufSet
 			, uint32_t & shadowMapBinding
@@ -367,6 +379,7 @@ namespace castor3d::shader
 				, utils
 				, shadowOptions
 				, sssProfiles
+				, sssDiffusionProfiles
 				, lightsBufBinding
 				, lightsBufSet
 				, shadowMapBinding
@@ -381,6 +394,7 @@ namespace castor3d::shader
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
+			, sdw::CombinedImage1DArrayRgba16 const * sssDiffusionProfiles
 			, LightType lightType
 			, uint32_t lightsBufBinding
 			, uint32_t lightsBufSet
@@ -395,6 +409,7 @@ namespace castor3d::shader
 				, utils
 				, shadowOptions
 				, sssProfiles
+				, sssDiffusionProfiles
 				, lightType
 				, lightsBufBinding
 				, lightsBufSet
@@ -409,7 +424,8 @@ namespace castor3d::shader
 			, BRDFHelpers & brdfHelpers
 			, Utils & utils
 			, ShadowOptions shadowOptions
-			, SssProfiles const * sssProfiles )
+			, SssProfiles const * sssProfiles
+			, sdw::CombinedImage1DArrayRgba16 const * sssDiffusionProfiles )
 			: Lights{ engine
 				, 0u
 				, 0u
@@ -418,6 +434,7 @@ namespace castor3d::shader
 				, utils
 				, shadowOptions
 				, sssProfiles
+				, sssDiffusionProfiles
 				, true }
 		{
 		}
@@ -428,6 +445,7 @@ namespace castor3d::shader
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
+			, sdw::CombinedImage1DArrayRgba16 const * sssDiffusionProfiles
 			, uint32_t lightsBufBinding
 			, uint32_t lightsBufSet
 			, uint32_t & shadowMapBinding
@@ -440,6 +458,7 @@ namespace castor3d::shader
 				, utils
 				, shadowOptions
 				, sssProfiles
+				, sssDiffusionProfiles
 				, lightsBufBinding
 				, lightsBufSet
 				, shadowMapBinding
@@ -454,6 +473,7 @@ namespace castor3d::shader
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
+			, sdw::CombinedImage1DArrayRgba16 const * sssDiffusionProfiles
 			, LightType lightType
 			, uint32_t lightsBufBinding
 			, uint32_t lightsBufSet
@@ -467,6 +487,7 @@ namespace castor3d::shader
 				, utils
 				, shadowOptions
 				, sssProfiles
+				, sssDiffusionProfiles
 				, lightType
 				, lightsBufBinding
 				, lightsBufSet
@@ -548,17 +569,20 @@ namespace castor3d::shader
 			, BlendComponents const & components
 			, DirectionalLight const & directionalLight
 			, DirectionalShadowData const & directionalShadows
-			, LightSurface const & lightSurface );
+			, LightSurface const & lightSurface
+			, sdw::Vec3 const & lightRadiance );
 		C3D_API sdw::Vec3 computeSssTransmittance( DebugOutputCategory const & debugOutput
 			, BlendComponents const & components
 			, PointLight const & pointLight
 			, PointShadowData const & pointShadows
-			, LightSurface const & lightSurface );
+			, LightSurface const & lightSurface
+			, sdw::Vec3 const & lightRadiance );
 		C3D_API sdw::Vec3 computeSssTransmittance( DebugOutputCategory const & debugOutput
 			, BlendComponents const & components
 			, SpotLight const & spotLight
 			, SpotShadowData const & spotShadows
-			, LightSurface const & lightSurface );
+			, LightSurface const & lightSurface
+			, sdw::Vec3 const & lightRadiance );
 		//\}
 		/**
 		*\name

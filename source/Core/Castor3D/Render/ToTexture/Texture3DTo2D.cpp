@@ -842,7 +842,7 @@ namespace castor3d
 		, m_descriptorSetLayoutSlice{ t3dto2d::createDescriptorLayout( device, true, "Slice" ) }
 		, m_pipelineLayoutSlice{ t3dto2d::createPipelineLayout( device, *m_descriptorSetLayoutSlice, "Slice" ) }
 		, m_shaderSlice{ cuT( "Texture3DTo2D_Slice" ), t3dto2d::getProgramSlice( m_device.renderSystem ) }
-		, m_pipelineSlice{ t3dto2d::createPipelineSlice( m_device, *m_pipelineLayoutVolume, *m_renderPass, m_shaderSlice, m_target ) }
+		, m_pipelineSlice{ t3dto2d::createPipelineSlice( m_device, *m_pipelineLayoutSlice, *m_renderPass, m_shaderSlice, m_target ) }
 	{
 		m_sampler->initialise( device );
 	}

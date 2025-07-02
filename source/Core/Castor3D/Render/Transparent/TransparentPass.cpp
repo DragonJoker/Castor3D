@@ -244,6 +244,10 @@ namespace castor3d
 			, uint32_t( GlobalBuffersIdx::eSssProfiles )
 			, RenderPipeline::eBuffers
 			, !C3D_DisableSSSTransmittance };
+		auto c3d_mapDiffusionProfiles = writer.declCombinedImg< FImg1DArrayRgba16 >( "c3d_mapDiffusionProfiles"
+			, uint32_t( GlobalBuffersIdx::eSssDiffusionProfiles )
+			, RenderPipeline::eBuffers
+			, !C3D_DisableSSSTransmittance );
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::eBuffers
@@ -270,6 +274,7 @@ namespace castor3d
 			, utils
 			, shader::ShadowOptions{ flags.getShadowFlags() }
 			, &sssProfiles
+			, &c3d_mapDiffusionProfiles
 			, lightsIndex /* lightBinding */
 			, RenderPipeline::eBuffers /* lightSet */
 			, index /* shadowMapBinding */

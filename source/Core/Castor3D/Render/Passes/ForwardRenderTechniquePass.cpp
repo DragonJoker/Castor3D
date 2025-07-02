@@ -226,10 +226,6 @@ namespace castor3d
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers
 			, index };
-		shader::SssProfiles sssProfiles{ writer
-			, uint32_t( GlobalBuffersIdx::eSssProfiles )
-			, RenderPipeline::eBuffers
-			, !C3D_DisableSSSTransmittance };
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::eBuffers
@@ -255,7 +251,8 @@ namespace castor3d
 			, brdfHelpers
 			, utils
 			, shader::ShadowOptions{ flags.getShadowFlags() }
-			, nullptr
+			, nullptr/* sssProfiles */
+			, nullptr /* sssDiffusionProfiles */
 			, lightsIndex /* lightBinding */
 			, RenderPipeline::eBuffers /* lightSet */
 			, index /* shadowMapBinding */

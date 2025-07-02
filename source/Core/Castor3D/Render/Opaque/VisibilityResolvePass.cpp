@@ -84,6 +84,7 @@ namespace castor3d
 			eBillboards,
 			eMaterials,
 			eSssProfiles,
+			eSssDiffusionProfiles,
 			eTexConfigs,
 			eTexAnims,
 			eInData,
@@ -1138,6 +1139,10 @@ namespace castor3d
 				, InOutBindings::eSssProfiles
 				, Sets::eInOuts
 				, !C3D_DisableSSSTransmittance };
+			auto c3d_mapDiffusionProfiles = writer.declCombinedImg< FImg1DArrayRgba16 >( "c3d_mapDiffusionProfiles"
+				, InOutBindings::eSssDiffusionProfiles
+				, Sets::eInOuts
+				, !C3D_DisableSSSTransmittance );
 			shader::TextureConfigurations textureConfigs{ writer
 				, InOutBindings::eTexConfigs
 				, Sets::eInOuts };
@@ -1168,6 +1173,7 @@ namespace castor3d
 				, utils
 				, shader::ShadowOptions{ flags.getShadowFlags(), technique.hasShadowBuffer() /* reserveIds */ }
 				, &sssProfiles
+				, &c3d_mapDiffusionProfiles
 				, lightsIndex /* lightBinding */
 				, Sets::eInOuts /* lightSet */
 				, index /* shadowMapBinding */
@@ -1536,6 +1542,9 @@ namespace castor3d
 				, stages ) );
 			bindings.emplace_back( matCache.getSssProfileBuffer().createLayoutBinding( InOutBindings::eSssProfiles
 				, stages ) );
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eSssDiffusionProfiles
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, stages ) );
 			bindings.emplace_back( matCache.getTexConfigBuffer().createLayoutBinding( InOutBindings::eTexConfigs
 				, stages ) );
 			bindings.emplace_back( matCache.getTexAnimBuffer().createLayoutBinding( InOutBindings::eTexAnims
@@ -1659,6 +1668,9 @@ namespace castor3d
 				, scene.getBillboardsBuffer().getCount() ) );
 			writes.push_back( matCache.getPassBuffer().getBinding( InOutBindings::eMaterials ) );
 			writes.push_back( matCache.getSssProfileBuffer().getBinding( InOutBindings::eSssProfiles ) );
+			writes.push_back( makeImageViewDescriptorWrite( matCache.getSssProfileBuffer().getDiffusionProfilesImage().sampledView
+				, *matCache.getSssProfileBuffer().getDiffusionProfilesImage().sampler
+				, InOutBindings::eSssDiffusionProfiles ) );
 			writes.push_back( matCache.getTexConfigBuffer().getBinding( InOutBindings::eTexConfigs ) );
 			writes.push_back( matCache.getTexAnimBuffer().getBinding( InOutBindings::eTexAnims ) );
 			auto & visibilityPassResult = technique.getVisibilityResult();

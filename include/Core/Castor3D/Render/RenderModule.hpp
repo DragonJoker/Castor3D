@@ -175,9 +175,10 @@ namespace castor3d
 		eModelsData = 3,
 		eMaterials = 4,
 		eSssProfiles = 5,
-		eTexConfigs = 6,
-		eTexAnims = 7,
-		eBillboardsData = 8,
+		eSssDiffusionProfiles = 6,
+		eTexConfigs = 7,
+		eTexAnims = 8,
+		eBillboardsData = 9,
 		CU_ScopedEnumBounds( eCamera, eBillboardsData ),
 	};
 	/**
