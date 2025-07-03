@@ -608,6 +608,22 @@ namespace GuiCommon
 		wxPropertyGrid * m_grid{};
 		castor::String m_prefix;
 	};
+
+	template< typename ConfigT >
+	class TreeItemPropertyT
+		: public TreeItemProperty
+	{
+	public:
+		TreeItemPropertyT( bool editable
+			, castor3d::Engine * engine
+			, ConfigT & config );
+
+	private:
+		void doCreateProperties( wxPropertyGrid * grid )override;
+
+	private:
+		ConfigT & m_config;
+	};
 }
 
 #include "TreeItemProperty.inl"
