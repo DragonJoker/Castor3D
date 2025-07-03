@@ -1,5 +1,6 @@
 #include "GuiCommon/Properties/Math/CubeBoxProperties.hpp"
 #include "GuiCommon/Properties/Math/SphereBoxProperties.hpp"
+#include "GuiCommon/Properties/TreeItems/TreeItemConfigurationBuilder.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <CastorUtils/Math/Illumination.hpp>
@@ -10,6 +11,8 @@
 
 namespace GuiCommon
 {
+	//*********************************************************************************************
+
 	inline wxPGProperty * appendProp( wxPropertyGrid * parent
 		, wxPGProperty * prop )
 	{
@@ -21,6 +24,8 @@ namespace GuiCommon
 	{
 		return parent->AppendChild( prop );
 	}
+
+	//*********************************************************************************************
 
 	template< typename ParentT, typename MyValueT, typename ControlT >
 	wxPGProperty * TreeItemProperty::createProperty( ParentT * parent
@@ -701,6 +706,26 @@ namespace GuiCommon
 			}
 			, castor::move( controls ) );
 	}
+
+	//*********************************************************************************************
+
+	template< typename ConfigT >
+	TreeItemPropertyT< ConfigT >::TreeItemPropertyT( bool editable
+		, castor3d::Engine * engine
+		, ConfigT & config )
+		: TreeItemProperty{ engine, editable }
+		, m_config{ config }
+	{
+		CreateTreeItemMenu();
+	}
+
+	template< typename ConfigT >
+	void TreeItemPropertyT< ConfigT >::doCreateProperties( wxPropertyGrid * grid )
+	{
+		TreeItemConfigurationBuilder::submit( grid, *this, m_config );
+	}
+
+	//*********************************************************************************************
 }
 
 #pragma warning( pop )

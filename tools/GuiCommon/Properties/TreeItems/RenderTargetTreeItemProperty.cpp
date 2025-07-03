@@ -13,10 +13,9 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
-#include <Castor3D/Render/PostEffect/PostEffect.hpp>
-#include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderTechnique.hpp>
 #include <Castor3D/Render/RenderTechniquePass.hpp>
+#include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 
 #include <wx/propgrid/advprops.h>
@@ -55,7 +54,7 @@ namespace GuiCommon
 			, eBMP_CLUSTERS_CONFIG_SEL
 			, new SceneObjectsTree::DataType{ std::make_unique< ClustersConfigTreeItemProperty >( editable
 				, target.getEngine()
-				, target ) } );
+				, target.getClustersConfig() ) } );
 
 		if ( target.isFullLoadingEnabled()
 			|| target.getScene()->getVoxelConeTracingConfig().enabled )
