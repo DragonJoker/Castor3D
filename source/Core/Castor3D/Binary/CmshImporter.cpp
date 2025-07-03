@@ -269,10 +269,10 @@ namespace castor3d
 		return castor::makeUniqueDerived< MeshImporter, CmshMeshImporter >( engine );
 	}
 
-	bool CmshMeshImporter::doImportMesh( Mesh & mesh )
+	bool CmshMeshImporter::doImportMesh( Mesh & mesh, uint32_t submeshIndex )
 	{
 		castor::BinaryFile meshFile{ m_file->getFileName(), castor::File::OpenMode::eRead };
-		return BinaryParser< Mesh >{}.parse( mesh, meshFile );
+		return BinaryParser< Mesh >{ submeshIndex }.parse( mesh, meshFile );
 	}
 
 	//*********************************************************************************************

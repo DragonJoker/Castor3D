@@ -264,6 +264,20 @@ namespace castor3d
 					CU_ParsingError( cuT( "Malformed parameter -preferred_importer=\"name\"." ) );
 				}
 			}
+			else if ( param.find( cuT( "submesh" ) ) == 0 )
+			{
+				if ( auto eqIndex = param.find( cuT( '=' ) );
+					eqIndex != castor::String::npos )
+				{
+					uint32_t value;
+					castor::string::parse< uint32_t >( param.substr( eqIndex + 1 ), value );
+					parameters.add( cuT( "submesh" ), value );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Malformed parameter -submesh=<uint>." ) );
+				}
+				}
 		}
 	}
 

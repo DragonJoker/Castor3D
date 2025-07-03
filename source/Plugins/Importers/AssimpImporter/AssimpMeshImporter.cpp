@@ -83,20 +83,20 @@ namespace c3d_assimp
 	{
 	}
 
-	bool AssimpMeshImporter::doImportMesh( castor3d::Mesh & mesh )
+	bool AssimpMeshImporter::doImportMesh( castor3d::Mesh & mesh, uint32_t submeshIndex )
 	{
 		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
 
 		if ( file.getListedMeshes().empty() )
 		{
-			doImportSingleMesh( mesh );
+			doImportSingleMesh( mesh, submeshIndex );
 			return true;
 		}
 
-		return doImportSceneMesh( mesh );
+		return doImportSceneMesh( mesh, submeshIndex );
 	}
 
-	void AssimpMeshImporter::doImportSingleMesh( castor3d::Mesh & mesh )
+	void AssimpMeshImporter::doImportSingleMesh( castor3d::Mesh & mesh, uint32_t submeshIndex )
 	{
 		auto & file = static_cast< AssimpImporterFile & >( *m_file );
 		auto & aiScene = file.getAiScene();
@@ -105,7 +105,8 @@ namespace c3d_assimp
 
 		for ( auto aiMesh : castor::makeArrayView( aiScene.mMeshes, aiScene.mNumMeshes ) )
 		{
-			if ( isValidMesh( *aiMesh ) )
+			if ( isValidMesh( *aiMesh )
+				&& ( submeshIndex == meshIndex || submeshIndex == 0xFFFFFFFFu ) )
 			{
 				auto matName = file.getMaterialName( aiMesh->mMaterialIndex );
 				auto materialRes = scene.tryFindMaterial( matName );
@@ -142,7 +143,7 @@ namespace c3d_assimp
 			, mesh );
 	}
 
-	bool AssimpMeshImporter::doImportSceneMesh( castor3d::Mesh & mesh )
+	bool AssimpMeshImporter::doImportSceneMesh( castor3d::Mesh & mesh, uint32_t submeshIndex )
 	{
 		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
 		auto name = mesh.getName();
@@ -157,11 +158,14 @@ namespace c3d_assimp
 
 		for ( auto submesh : it->second.submeshes )
 		{
-			doProcessMesh( aiScene
-				, *submesh.mesh
-				, submesh.meshIndex
-				, mesh
-				, *mesh.createSubmesh() );
+			if ( submeshIndex == submesh.meshIndex || submeshIndex == 0xFFFFFFFFu )
+			{
+				doProcessMesh( aiScene
+					, *submesh.mesh
+					, submesh.meshIndex
+					, mesh
+					, *mesh.createSubmesh() );
+			}
 		}
 
 		return true;

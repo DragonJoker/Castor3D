@@ -87,7 +87,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::MeshImporter::doImportMesh
 		 */
-		C3D_API bool doImportMesh( Mesh & mesh )override;
+		C3D_API bool doImportMesh( Mesh & mesh, uint32_t submeshIndex )override;
 
 	public:
 		static castor::String const Type;

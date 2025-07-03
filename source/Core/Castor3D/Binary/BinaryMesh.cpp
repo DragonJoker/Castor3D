@@ -34,27 +34,38 @@ namespace castor3d
 	template<>
 	castor::String BinaryParserBase< Mesh >::Name = cuT( "Mesh" );
 
+	BinaryParser< Mesh >::BinaryParser( uint32_t submeshIndex )
+		: m_submeshIndex{ submeshIndex }
+	{
+	}
+
 	bool BinaryParser< Mesh >::doParse( Mesh & obj )
 	{
 		bool result = true;
 		SubmeshUPtr submesh{};
 		BinaryChunk chunk{ doIsLittleEndian() };
+		uint32_t submeshIndex{};
 
 		while ( result && doGetSubChunk( chunk ) )
 		{
 			if ( chunk.getChunkType() == ChunkType::eSubmesh )
 			{
-				submesh = castor::makeUnique< Submesh >( obj, obj.getSubmeshCount() );
-				result = createBinaryParser< Submesh >().parse( *submesh, chunk );
-				checkError( result, cuT( "Couldn't parse submesh." ) );
-
-				if ( result
-					&& submesh->getPointsCount() > 0
-					&& ( !submesh->getIndexMapping()
-						|| submesh->getIndexMapping()->getCount() > 0 ) )
+				if ( m_submeshIndex == 0xFFFFFFFFu || m_submeshIndex == submeshIndex )
 				{
-					obj.m_submeshes.push_back( castor::move( submesh ) );
+					submesh = castor::makeUnique< Submesh >( obj, obj.getSubmeshCount() );
+					result = createBinaryParser< Submesh >().parse( *submesh, chunk );
+					checkError( result, cuT( "Couldn't parse submesh." ) );
+
+					if ( result
+						&& submesh->getPointsCount() > 0
+						&& ( !submesh->getIndexMapping()
+							|| submesh->getIndexMapping()->getCount() > 0 ) )
+					{
+						obj.m_submeshes.push_back( castor::move( submesh ) );
+					}
 				}
+
+				++submeshIndex;
 			}
 		}
 

@@ -55,6 +55,26 @@ namespace castor3d
 					, static_cast< TriFaceMapping const & >( *submesh->getIndexMapping() ).getData().getFaces() );
 			}
 		}
+
+		static bool parseMeshImportParameters( Parameters const & parameters
+			, castor::Point3f & scale
+			, castor::Quaternion & orientation
+			, uint32_t & submesh )
+		{
+			bool needsTransform = parseImportParameters( parameters, scale, orientation );
+
+			if ( uint32_t index = 0;
+				parameters.get( cuT( "submesh" ), index ) )
+			{
+				submesh = index;
+			}
+			else
+			{
+				submesh = 0xFFFFFFFFu;
+			}
+
+			return needsTransform;
+		}
 	}
 
 	MeshImporter::MeshImporter( Engine & engine
@@ -97,15 +117,17 @@ namespace castor3d
 
 		if ( !mesh.getSubmeshCount() || forceImport )
 		{
+			castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
+			castor::Quaternion orientation{ castor::Quaternion::identity() };
+			uint32_t submeshIndex{};
+			auto needsTransform = meshimp::parseMeshImportParameters( m_parameters, scale, orientation, submeshIndex );
+
 			log::info << getPrefix() << cuT( "Loading Mesh [" ) << mesh.getName() << cuT( "]" ) << std::endl;
-			result = doImportMesh( mesh );
+			result = doImportMesh( mesh, submeshIndex );
 
 			if ( result )
 			{
-				castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
-				castor::Quaternion orientation{ castor::Quaternion::identity() };
-
-				if ( parseImportParameters( m_parameters, scale, orientation ) )
+				if ( needsTransform )
 				{
 					castor::Matrix4x4f transform;
 					castor::matrix::setRotate( transform, orientation );

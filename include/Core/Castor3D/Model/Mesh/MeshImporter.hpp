@@ -106,7 +106,7 @@ namespace castor3d
 
 	private:
 		C3D_API virtual MeshRes doCreateMesh( castor::String const & name, Scene & scene );
-		virtual bool doImportMesh( Mesh & mesh ) = 0;
+		virtual bool doImportMesh( Mesh & mesh, uint32_t submeshIndex ) = 0;
 
 	protected:
 		castor::String m_prefix;
