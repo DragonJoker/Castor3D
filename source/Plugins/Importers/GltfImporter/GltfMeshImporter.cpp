@@ -315,7 +315,7 @@ namespace c3d_gltf
 	{
 	}
 
-	bool GltfMeshImporter::doImportMesh( castor3d::Mesh & mesh )
+	bool GltfMeshImporter::doImportMesh( castor3d::Mesh & mesh, uint32_t submeshIndex )
 	{
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto name = mesh.getName();
@@ -330,41 +330,47 @@ namespace c3d_gltf
 		using MaterialPrimitiveMap = castor::Map< castor3d::Material *, PrimitiveMap >;
 		castor::Map< fastgltf::Mesh const *, MaterialPrimitiveMap > submeshes;
 		auto & engine = *file.getOwner();
+		uint32_t meshIndex{};
 
 		for ( auto & submesh : it->second.submeshes )
 		{
-			fastgltf::Mesh const & impMesh = *submesh.mesh;
-
-			for ( auto & primitive : impMesh.primitives )
+			if ( submeshIndex == 0xFFFFFFFFu || submeshIndex == meshIndex )
 			{
-				castor3d::MaterialRPtr material;
+				fastgltf::Mesh const & impMesh = *submesh.mesh;
 
-				if ( primitive.materialIndex )
+				for ( auto & primitive : impMesh.primitives )
 				{
-					material = engine.tryFindMaterial( file.getMaterialName( uint32_t( *primitive.materialIndex ) ) );
+					castor3d::MaterialRPtr material;
 
-					if ( !material )
+					if ( primitive.materialIndex )
 					{
-						CU_LoaderError( "glTF Material not found." );
-					}
-				}
-				else
-				{
-					material = engine.tryFindMaterial( DefaultMaterial );
+						material = engine.tryFindMaterial( file.getMaterialName( uint32_t( *primitive.materialIndex ) ) );
 
-					if ( !material )
+						if ( !material )
+						{
+							CU_LoaderError( "glTF Material not found." );
+						}
+					}
+					else
 					{
-						CU_LoaderError( "Default glTF material not found." );
+						material = engine.tryFindMaterial( DefaultMaterial );
+
+						if ( !material )
+						{
+							CU_LoaderError( "Default glTF material not found." );
+						}
+
+						material->setSerialisable( true );
 					}
 
-					material->setSerialisable( true );
+					auto pit = submeshes.emplace( &impMesh, MaterialPrimitiveMap{} ).first;
+					auto mit = pit->second.emplace( material, PrimitiveMap{} ).first;
+					auto sit = mit->second.emplace( primitive.type, PrimitiveArray{} ).first;
+					sit->second.push_back( &primitive );
 				}
-
-				auto pit = submeshes.emplace( &impMesh, MaterialPrimitiveMap{} ).first;
-				auto mit = pit->second.emplace( material, PrimitiveMap{} ).first;
-				auto sit = mit->second.emplace( primitive.type, PrimitiveArray{} ).first;
-				sit->second.push_back( &primitive );
 			}
+
+			++meshIndex;
 		}
 
 		for ( auto & meshesIt : submeshes )

@@ -20,7 +20,7 @@ namespace c3d_gltf
 	private:
 		using PrimitiveArray = castor::Vector< fastgltf::Primitive const * >;
 
-		bool doImportMesh( castor3d::Mesh & mesh )override;
+		bool doImportMesh( castor3d::Mesh & mesh, uint32_t submeshIndex )override;
 		void doProcessPointsSubmesh( castor3d::Mesh & mesh
 			, castor3d::Material * material
 			, fastgltf::Mesh const & impMesh

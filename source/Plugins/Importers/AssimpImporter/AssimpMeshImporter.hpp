@@ -17,9 +17,9 @@ namespace c3d_assimp
 		explicit AssimpMeshImporter( castor3d::Engine & engine );
 
 	private:
-		bool doImportMesh( castor3d::Mesh & mesh )override;
-		void doImportSingleMesh( castor3d::Mesh & mesh );
-		bool doImportSceneMesh( castor3d::Mesh & mesh );
+		bool doImportMesh( castor3d::Mesh & mesh, uint32_t submesh )override;
+		void doImportSingleMesh( castor3d::Mesh & mesh, uint32_t submesh );
+		bool doImportSceneMesh( castor3d::Mesh & mesh, uint32_t submesh );
 		void doProcessMesh( aiScene const & aiScene
 			, aiMesh const & aiMesh
 			, uint32_t aiMeshIndex

@@ -57,6 +57,9 @@ namespace castor3d
 	class BinaryParser< Mesh >
 		: public BinaryParserBase< Mesh >
 	{
+	public:
+		C3D_API BinaryParser( uint32_t submeshIndex = 0xFFFFFFFFu );
+
 	private:
 		/**
 		 *\~english
@@ -91,6 +94,9 @@ namespace castor3d
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		C3D_API bool doParse_v1_4( Mesh & obj )override;
+
+	private:
+		uint32_t m_submeshIndex;
 	};
 }
 
