@@ -81,16 +81,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Accepts a visitor.
 		 *\param[in]	horizontal	Tells if the blur is horizontal.
-		 *\param[in]	config		The SSAO config.
 		 *\param[in]	visitor		The visitor.
 		 *\~french
 		 *\brief		Accepte un visiteur.
 		 *\param[in]	horizontal	Dit si le flou est horizontal.
-		 *\param[in]	config		La configuration du SSAO.
 		 *\param[in]	visitor		Le visiteur.
 		 */
 		C3D_API void accept( bool horizontal
-			, SsaoConfig & config
 			, ConfigurationVisitorBase & visitor );
 		/**
 		*\~english

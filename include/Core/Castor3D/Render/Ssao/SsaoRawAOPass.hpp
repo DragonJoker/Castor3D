@@ -71,8 +71,7 @@ namespace castor3d
 		 *\param[in]	config		La configuration du SSAO.
 		 *\param[in]	visitor		Le visiteur.
 		 */
-		C3D_API void accept( SsaoConfig & config
-			, ConfigurationVisitorBase & visitor );
+		C3D_API void accept( ConfigurationVisitorBase & visitor );
 		/**
 		*\~english
 		*name
@@ -107,7 +106,8 @@ namespace castor3d
 			RenderQuad( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
-				, crg::rq::Config config
+				, crg::ru::Config ruConfig
+				, crg::rq::Config rqConfig
 				, SsaoConfig const & ssaoConfig );
 
 		protected:

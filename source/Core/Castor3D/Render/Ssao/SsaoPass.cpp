@@ -101,23 +101,18 @@ namespace castor3d
 
 	void SsaoPass::accept( ConfigurationVisitorBase & visitor )
 	{
-		if ( !m_ssaoConfig.enabled )
-		{
-			return;
-		}
-
 		m_linearisePass->accept( visitor );
-		m_rawAoPass->accept( m_ssaoConfig, visitor );
+		m_rawAoPass->accept( visitor );
 
 #if !C3D_DebugRawPass
 		if ( m_horizontalBlur )
 		{
-			m_horizontalBlur->accept( true, m_ssaoConfig, visitor );
+			m_horizontalBlur->accept( true, visitor );
 		}
 
 		if ( m_verticalBlur )
 		{
-			m_verticalBlur->accept( false, m_ssaoConfig, visitor );
+			m_verticalBlur->accept( false, visitor );
 		}
 #endif
 	}

@@ -522,13 +522,14 @@ namespace castor3d
 	SsaoRawAOPass::RenderQuad::RenderQuad( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
-		, crg::rq::Config config
+		, crg::ru::Config ruConfig
+		, crg::rq::Config rqConfig
 		, SsaoConfig const & ssaoConfig )
 		: crg::RenderQuad{ pass
 			, context
 			, graph
-			, { 2u, false }
-			, castor::move( config ) }
+			, castor::move( ruConfig )
+			, castor::move( rqConfig ) }
 		, ssaoConfig{ ssaoConfig }
 	{
 	}
@@ -587,21 +588,29 @@ namespace castor3d
 	{
 		stepProgressBarLocal( progress, cuT( "Creating SSAO raw AO pass" ) );
 		auto & pass = m_graph.createPass( "RawAO"
-			, [this, &passIndex, progress]( crg::FramePass const & pass
+			, [this, &passIndex, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
+				auto depthIt = framePass.images.begin();
+				auto normalIt = std::next( depthIt );
+				auto resultIt = std::next( normalIt );
+				auto bentIt = std::next( resultIt );
+				crg::ru::Config ruConfig{ 2u, false };
+				ruConfig.implicitAction( resultIt->view(), crg::RecordContext::clearAttachment( *resultIt ) );
+				ruConfig.implicitAction( bentIt->view(), crg::RecordContext::clearAttachment( *bentIt ) );
 				stepProgressBarLocal( progress, cuT( "Initialising SSAO raw AO pass" ) );
-				auto result = castor::make_unique< RenderQuad >( pass
+				auto result = castor::make_unique< RenderQuad >( framePass
 					, context
 					, graph
+					, ruConfig
 					, ssaoraw::getConfig( m_size
 						, m_ssaoConfig
 						, passIndex
 						, m_programs[0].stages
 						, m_programs[1].stages )
 					, m_ssaoConfig );
-				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( pass.getFullName() )
+				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -623,8 +632,7 @@ namespace castor3d
 		m_bentNormals.destroy();
 	}
 
-	void SsaoRawAOPass::accept( SsaoConfig & config
-		, ConfigurationVisitorBase & visitor )
+	void SsaoRawAOPass::accept( ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "SSAO Raw AO" )
 			, getResult()
@@ -639,7 +647,6 @@ namespace castor3d
 			? 1u
 			: 0u;
 		visitor.visit( m_programs[index].shader );
-		config.accept( visitor );
 	}
 
 	uint32_t SsaoRawAOPass::countInitialisationSteps()noexcept
