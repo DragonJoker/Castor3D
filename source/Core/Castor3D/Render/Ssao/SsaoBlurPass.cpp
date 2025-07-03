@@ -360,7 +360,7 @@ namespace castor3d
 			return cuT( "SsaoBlur" ) + ( useNormalsBuffer ? castor::String{ cuT( "Nml" ) } : castor::String{} );
 		}
 
-		static crg::rq::Config getConfig( VkExtent2D const & renderSize
+		static crg::rq::Config getRqConfig( VkExtent2D const & renderSize
 			, SsaoConfig const & ssaoConfig
 			, uint32_t const & passIndex
 			, ashes::PipelineShaderStageCreateInfoArray const & stages0
@@ -375,7 +375,7 @@ namespace castor3d
 			return result;
 		}
 
-		static crg::ru::Config makeConfig( bool isVertical
+		static crg::ru::Config getRuConfig( bool isVertical
 			, crg::Attachment const & attach
 			, crg::Attachment const & bentAttach )
 		{
@@ -468,12 +468,12 @@ namespace castor3d
 				auto result = castor::make_unique< RenderQuad >( pass
 					, context
 					, runnable
-					, ssaoblr::getConfig( m_size
+					, ssaoblr::getRqConfig( m_size
 						, config
 						, passIndex
 						, m_programs[0].stages
 						, m_programs[1].stages )
-					, ssaoblr::makeConfig( axis->y != 0
+					, ssaoblr::getRuConfig( axis->y != 0
 						, *resIt
 						, *bentResIt )
 					, m_config );
@@ -554,7 +554,6 @@ namespace castor3d
 	}
 
 	void SsaoBlurPass::accept( bool horizontal
-		, SsaoConfig & config
 		, ConfigurationVisitorBase & visitor )
 	{
 		if ( horizontal )
@@ -595,8 +594,6 @@ namespace castor3d
 		{
 			visitor.visit( m_programs[0].shader );
 		}
-
-		config.accept( visitor );
 	}
 
 	uint32_t SsaoBlurPass::countInitialisationSteps()noexcept
