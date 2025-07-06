@@ -70,7 +70,7 @@ namespace atmosphere_scattering
 								, 1.0_f / ( 0.02_f - centerToEdge * 300.0_f ) * 0.01_f );
 							intensity = gaussianBloom + invBloom;
 						}
-						sdwFI;
+						sdwFI
 
 						// Use smoothstep to limit the effect, so it drops off to actual zero.
 						intensity = smoothStep( 0.002_f, 1.0_f, intensity );
@@ -93,9 +93,9 @@ namespace atmosphere_scattering
 
 								sunLuminance *= max( vec3( intensity ), factor );
 							}
-							sdwFI;
+							sdwFI
 						}
-						sdwFI;
+						sdwFI
 					}
 					else
 					{
@@ -137,9 +137,9 @@ namespace atmosphere_scattering
 
 								sunLuminance *= factor;
 							}
-							sdwFI;
+							sdwFI
 						}
-						sdwFI;
+						sdwFI
 					}
 
 					m_writer.returnStmt( sunLuminance );
@@ -216,7 +216,7 @@ namespace atmosphere_scattering
 
 							m_writer.returnStmt( ray );
 						}
-						sdwFI;
+						sdwFI
 
 						auto ss = m_writer.declLocale( "ss"
 							, m_atmosphere.integrateScatteredLuminance( fragPos
@@ -226,7 +226,7 @@ namespace atmosphere_scattering
 								, fragDepth ) );
 						doRegisterOutputs( ss, L, luminance, transmittance );
 					}
-					sdwFI;
+					sdwFI
 
 					m_writer.returnStmt( ray );
 				}
@@ -357,7 +357,7 @@ namespace atmosphere_scattering
 
 				m_writer.returnStmt( ray );
 			}
-			sdwFI;
+			sdwFI
 		}
 		else if ( m_settings.renderSunDisk )
 		{
@@ -365,7 +365,7 @@ namespace atmosphere_scattering
 			{
 				L += getSunLuminance( ray );
 			}
-			sdwFI;
+			sdwFI
 		}
 	}
 
@@ -411,7 +411,7 @@ namespace atmosphere_scattering
 				weight = clamp( slice * 2.0_f, 0.0_f, 1.0_f );
 				slice = 0.5_f;
 			}
-			sdwFI;
+			sdwFI
 
 			auto w = m_writer.declLocale( "w"
 				, sqrt( slice / apSliceCount ) );	// squared distribution
@@ -424,7 +424,7 @@ namespace atmosphere_scattering
 
 			luminance = vec4( L, opacity );
 		}
-		sdwFI;
+		sdwFI
 
 		return isAerial;
 	}

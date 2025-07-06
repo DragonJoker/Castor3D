@@ -180,9 +180,9 @@ namespace castor3d
 								prefilteredColor += c3d_mapEnvironment.lod( L, lod ).rgb() * NdotL;
 								totalWeight += NdotL;
 							}
-							sdwFI;
+							sdwFI
 						}
-						sdwROF;
+						sdwROF
 
 						sdwIF( writer, totalWeight != 0.0f )
 						{
@@ -192,7 +192,7 @@ namespace castor3d
 						{
 							prefilteredColor /= writer.cast< sdw::Float >( c3d_sampleCount );
 						}
-						sdwFI;
+						sdwFI
 
 						out.colour() = vec4( prefilteredColor, 1.0_f );
 					} );

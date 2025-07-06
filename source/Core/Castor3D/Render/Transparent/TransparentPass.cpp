@@ -471,7 +471,7 @@ namespace castor3d
 					{
 						colour = components.baseColour + components.emissiveColour * components.emissiveFactor;
 					}
-					sdwFI;
+					sdwFI
 				}
 				else
 				{

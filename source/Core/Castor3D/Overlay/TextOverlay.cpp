@@ -308,7 +308,7 @@ namespace castor3d
 					ssRelBounds.z() = ssRelBounds.x();
 					ssRelBounds.w() = ssRelBounds.y();
 				}
-				sdwFI;
+				sdwFI
 				//
 				// Fill buffer
 				//
@@ -359,9 +359,9 @@ namespace castor3d
 									return vec4( absolute ) / vec4( ratio, ratio );
 								} );
 						}
-						sdwFI;
+						sdwFI
 					}
-					sdwFI;
+					sdwFI
 				} );
 
 			comp.shader = writer.getBuilder().releaseShader();

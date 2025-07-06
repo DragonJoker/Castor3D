@@ -99,7 +99,7 @@ namespace castor3d
 							gsAABBMin[groupIndex] = min( gsAABBMin[groupIndex], gsAABBMin[groupIndex + reduceIndex] );
 							gsAABBMax[groupIndex] = max( gsAABBMax[groupIndex], gsAABBMax[groupIndex + reduceIndex] );
 						}
-						sdwFI;
+						sdwFI
 
 						// Sync group shared memory writes.
 						shader::groupMemoryBarrierWithGroupSync( writer );
@@ -134,9 +134,9 @@ namespace castor3d
 						{
 							c3d_reducedLightsAABB[groupID] = shader::AABB{ gsAABBMin[groupIndex], gsAABBMax[groupIndex] };
 						}
-						sdwFI;
+						sdwFI
 					}
-					sdwFI;
+					sdwFI
 				}
 				else
 				{
@@ -147,7 +147,7 @@ namespace castor3d
 							gsAABBMin[groupIndex] = min( gsAABBMin[groupIndex], gsAABBMin[groupIndex + reduceIndex] );
 							gsAABBMax[groupIndex] = max( gsAABBMax[groupIndex], gsAABBMax[groupIndex + reduceIndex] );
 						}
-						sdwFI;
+						sdwFI
 
 						// Sync group shared memory writes.
 						shader::groupMemoryBarrierWithGroupSync( writer );
@@ -160,7 +160,7 @@ namespace castor3d
 					{
 						c3d_reducedLightsAABB[groupID] = shader::AABB{ gsAABBMin[groupIndex], gsAABBMax[groupIndex] };
 					}
-					sdwFI;
+					sdwFI
 				}
 			};
 
@@ -183,9 +183,9 @@ namespace castor3d
 							gsAABBMin[n] = aabbMin;
 							gsAABBMax[n] = aabbMax;
 						}
-						sdwROF;
+						sdwROF
 					}
-					sdwFI;
+					sdwFI
 
 					shader::groupMemoryBarrierWithGroupSync( writer );
 
@@ -200,7 +200,7 @@ namespace castor3d
 							aabbMin = min( aabbMin, aabb.min() );
 							aabbMax = max( aabbMax, aabb.max() );
 						}
-						sdwFI;
+						sdwFI
 
 						// Next, expand AABB for spot lights.
 						sdwIF( writer, threadIndex < c3d_clustersData.spotLightCount() )
@@ -210,7 +210,7 @@ namespace castor3d
 							aabbMin = min( aabbMin, aabb.min() );
 							aabbMax = max( aabbMax, aabb.max() );
 						}
-						sdwFI;
+						sdwFI
 
 						gsAABBMin[groupIndex] = aabbMin;
 						gsAABBMax[groupIndex] = aabbMax;
@@ -232,7 +232,7 @@ namespace castor3d
 							aabbMin = min( aabbMin, c3d_reducedLightsAABB[i].min() );
 							aabbMax = max( aabbMax, c3d_reducedLightsAABB[i].max() );
 						}
-						sdwROF;
+						sdwROF
 
 						gsAABBMin[groupIndex] = aabbMin;
 						gsAABBMax[groupIndex] = aabbMax;
@@ -263,7 +263,7 @@ namespace castor3d
 						c3d_clustersLightsData = clustersLightsData;
 						c3d_lightsAABBRange = lightsAABBRange;
 					}
-					sdwFI;
+					sdwFI
 				} );
 			return writer.getBuilder().releaseShader();
 		}

@@ -66,7 +66,7 @@ namespace castor3d::shader
 						, vec4( 1.0_f - inscattering )
 						, colour * extinction );
 				}
-				sdwFI;
+				sdwFI
 
 				writer.returnStmt( result );
 			}

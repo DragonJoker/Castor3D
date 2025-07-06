@@ -223,7 +223,7 @@ namespace castor3d
 							, max( c3d_ssaoConfigData.radius2 - vv, 0.0_f ) );
 						writer.returnStmt( f * f * f * max( ( vn - c3d_ssaoConfigData.bias ) / ( epsilon + vv ), 0.0_f ) );
 					}
-					sdwFI;
+					sdwFI
 
 					// C: Medium contrast (which looks better at high radii), no division.  Note that the 
 					// contribution still falls off with radius^2, but we've adjusted the rate in a way that is
@@ -334,7 +334,7 @@ namespace castor3d
 						stepIdx += 1u;
 						current += step;
 					}
-					sdwELIHW;
+					sdwELIHW
 
 					writer.returnStmt( current * ( 1.0_f - ( currentOcclusion / writer.cast< sdw::Float >( stepIdx ) ) ) );
 				}
@@ -398,7 +398,7 @@ namespace castor3d
 							// Precision is pretty bad on 16-bit depth
 							normal = normalize( normal );
 						}
-						sdwFI;
+						sdwFI
 					}
 
 					// Choose the screen-space sample radius
@@ -414,7 +414,7 @@ namespace castor3d
 						outBentNormal.a() = 0.0_f;
 						writer.returnStmt();
 					}
-					sdwFI;
+					sdwFI
 
 					// Hash function used in the HPG12 AlchemyAO paper
 					auto randomPatternRotationAngle = writer.declLocale( "randomPatternRotationAngle"
@@ -446,7 +446,7 @@ namespace castor3d
 						sum += occlusion;
 						bentNormal += sampleRay( csCenter, csRay );
 					}
-					sdwROF;
+					sdwROF
 
 					bentNormal = normalize( bentNormal )/* * 0.5_f + 0.5_f*/;
 					outBentNormal.xyz() = c3d_cameraData.writeNormal( bentNormal );
@@ -467,7 +467,7 @@ namespace castor3d
 						// (x^0.2 + 1.2 * x^4)/2.2
 						A = ( pow( A, 0.2_f ) + 1.2_f * A * A * A * A ) / 2.2_f;
 					}
-					sdwFI;
+					sdwFI
 
 					// Visualize random spin distribution
 					//A = mod(randomPatternRotationAngle / (2 * 3.141592653589), 1.0);

@@ -86,7 +86,7 @@ namespace castor3d
 			return &c3dSampler->getSampler();
 		}
 
-		bool isTexture1D( VkExtent3D const & extent )
+		static bool isTexture1D( VkExtent3D const & extent )
 		{
 			return extent.height == 1
 				&& extent.width > 1;

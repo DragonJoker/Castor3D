@@ -193,7 +193,7 @@ namespace disney::shader
 				{
 					m_writer.returnStmt( 1.0_f / castor::Pi< float > );
 				}
-				sdwFI;
+				sdwFI
 
 				auto a2 = m_writer.declLocale( "a2"
 					, a * a );

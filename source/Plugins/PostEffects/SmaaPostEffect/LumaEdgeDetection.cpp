@@ -115,7 +115,7 @@ namespace smaa
 					{
 						writer.demote();
 					}
-					sdwFI;
+					sdwFI
 
 					// Calculate right and bottom deltas:
 					auto Lright = writer.declLocale( "Lright"

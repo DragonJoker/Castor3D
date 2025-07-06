@@ -175,7 +175,7 @@ namespace castor3d::shader
 						uv = rotateUV( anim.rotateU(), anim.rotateV(), uv );
 						uv = translateUV( anim.translate().xy(), uv );
 					}
-					sdwFI;
+					sdwFI
 
 					uv.x() = ( uv.x() + config.tileSet().x() ) / config.tileSet().z();
 					uv.y() = ( uv.y() + config.tileSet().y() ) / config.tileSet().w();
@@ -185,7 +185,7 @@ namespace castor3d::shader
 						uv.x() += anim.tileSet().x() / anim.tileSet().z();
 						uv.y() += anim.tileSet().y() / anim.tileSet().w();
 					}
-					sdwFI;
+					sdwFI
 
 					m_writer.returnStmt( uv );
 				}
@@ -222,7 +222,7 @@ namespace castor3d::shader
 							, m_writer.ternary( config.needsZInv() == 0_u, uvw.z(), 1.0_f - uvw.z() ) ) );
 						uvw = translateUV( anim.translate(), uvw );
 					}
-					sdwFI;
+					sdwFI
 
 					m_writer.returnStmt( uvw );
 				}
@@ -448,28 +448,28 @@ namespace castor3d::shader
 							weight = max( pow( clamp( 1.0_f - depth, 0.0_f, 1.0_f ), 3.0_f ) * 3000.0_f, 0.01_f );
 							m_writer.caseBreakStmt();
 						}
-						sdwESAC;
+						sdwESAC
 						sdwCASE( m_writer, 2u )
 						{
 							// (9)
 							weight = max( min( 0.03_f / ( pow( abs( depth ) / 200.0_f, 4.0_f ) + 0.00001_f ), 3000.0_f ), 0.01_f );
 							m_writer.caseBreakStmt();
 						}
-						sdwESAC;
+						sdwESAC
 						sdwCASE( m_writer, 3u )
 						{
 							// (8)
 							weight = max( min( 10.0_f / ( pow( abs( depth ) / 200.0_f, 6.0_f ) + pow( abs( depth ) / 10.0_f, 3.0_f ) + 0.00001_f ), 3000.0_f ), 0.01_f );
 							m_writer.caseBreakStmt();
 						}
-						sdwESAC;
+						sdwESAC
 						sdwCASE( m_writer, 4u )
 						{
 							// (7)
 							weight = max( min( 10.0_f / ( pow( abs( depth ) / 200.0_f, 6.0_f ) + pow( abs( depth ) / 5.0_f, 2.0_f ) + 0.00001_f ), 3000.0_f ), 0.01_f );
 							m_writer.caseBreakStmt();
 						}
-						sdwESAC;
+						sdwESAC
 						sdwCASE( m_writer, 5u )
 						{
 							// (other)
@@ -480,7 +480,7 @@ namespace castor3d::shader
 							weight = clamp( a * a * a * 100000000.0_f * b * b * b, 0.01_f, 300.0_f );
 							m_writer.caseBreakStmt();
 						}
-						sdwESAC;
+						sdwESAC
 						sdwCASE( m_writer, 6u )
 						{
 							// (other)
@@ -494,14 +494,14 @@ namespace castor3d::shader
 							weight = clamp( a * a * a * 100000000.0_f * b * b * b, 0.01_f, 300.0_f );
 							m_writer.caseBreakStmt();
 						}
-						sdwESAC;
+						sdwESAC
 						sdwCASE( m_writer, 7u )
 						{
 							// (yet another one)
 							weight = max( min( 1.0_f, max( max( colour.r(), colour.g() ), colour.b() ) * alpha ), alpha ) * clamp( 0.03_f / ( 0.00001_f + pow( depth / 200.0_f, 4.0_f ) ), 0.01_f, 3000.0_f );
 							m_writer.caseBreakStmt();
 						}
-						sdwESAC;
+						sdwESAC
 						sdwDEFAULT( m_writer )
 						{
 							// Naive
@@ -510,9 +510,9 @@ namespace castor3d::shader
 								, farPlane );
 							m_writer.caseBreakStmt();
 						}
-						sdwTLUAFED;
+						sdwTLUAFED
 					}
-					sdwHCTIWS;
+					sdwHCTIWS
 
 					m_writer.returnStmt( vec4( colour * alpha, alpha ) * weight );
 				}
@@ -660,7 +660,7 @@ namespace castor3d::shader
 					{
 						result.w() = epsilon;
 					}
-					sdwFI;
+					sdwFI
 
 					result.xyz() /= result.w();
 					result.xy() = fma( result.xy(), vec2( 0.5_f ), vec2( 0.5_f ) );
@@ -1028,7 +1028,7 @@ namespace castor3d::shader
 					{
 						m_writer.returnStmt( vec3( 1.0_f ) );
 					}
-					sdwFI;
+					sdwFI
 
 					auto cosTheta2 = m_writer.declLocale( "cosTheta2"
 						, sqrt( cosTheta2Sq ) );
@@ -1049,7 +1049,7 @@ namespace castor3d::shader
 					{
 						phi12 = castor::Pi< float >;
 					}
-					sdwFI;
+					sdwFI
 
 					auto phi21 = m_writer.declLocale( "phi21"
 						, castor::Pi< float > - phi12 );
@@ -1068,17 +1068,17 @@ namespace castor3d::shader
 					{
 						phi23[0] = castor::Pi< float >;
 					}
-					sdwFI;
+					sdwFI
 					sdwIF( m_writer, baseIOR[1] < iridescenceIor )
 					{
 						phi23[1] = castor::Pi< float >;
 					}
-					sdwFI;
+					sdwFI
 					sdwIF( m_writer, baseIOR[2] < iridescenceIor )
 					{
 						phi23[2] = castor::Pi< float >;
 					}
-					sdwFI;
+					sdwFI
 
 					// Phase shift
 					auto OPD = m_writer.declLocale( "OPD"

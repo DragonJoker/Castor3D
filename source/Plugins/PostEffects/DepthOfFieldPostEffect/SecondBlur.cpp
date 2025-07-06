@@ -59,7 +59,7 @@ namespace dof
 
 						maxVal = max( tap.rgb(), maxVal );
 					}
-					sdwROF;
+					sdwROF
 
 					out.colour() = vec4( maxVal.rgb(), CoC );
 				} );

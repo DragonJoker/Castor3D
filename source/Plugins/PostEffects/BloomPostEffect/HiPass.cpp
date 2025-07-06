@@ -219,7 +219,7 @@ namespace Bloom
 					{
 						out.colour().xyz() = vec3( 0.0_f, 0.0_f, 0.0_f );
 					}
-					sdwFI;
+					sdwFI
 				} );
 			return writer.getBuilder().releaseShader();
 		}

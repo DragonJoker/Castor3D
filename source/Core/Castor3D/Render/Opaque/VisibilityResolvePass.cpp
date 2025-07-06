@@ -193,7 +193,7 @@ namespace castor3d
 						{
 							writer.demote();
 						}
-						sdwFI;
+						sdwFI
 
 						c3d_imgOutResult = result;
 						c3d_imgOutScattering = scattering;
@@ -284,9 +284,9 @@ namespace castor3d
 									c3d_imgDiffuse.store( ipixel, diffuse );
 								}
 							}
-							sdwFI;
+							sdwFI
 						}
-						sdwFI;
+						sdwFI
 					} );
 			}
 		};
@@ -618,9 +618,9 @@ namespace castor3d
 									result.dx() = interpW_ddx * ( result.lambda() * interpInvW + result.dx() ) - result.lambda();
 									result.dy() = interpW_ddy * ( result.lambda() * interpInvW + result.dy() ) - result.lambda();
 								}
-								sdwFI;
+								sdwFI
 							}
-							sdwFI;
+							sdwFI
 
 							m_writer.returnStmt( result );
 						}
@@ -978,7 +978,7 @@ namespace castor3d
 								curProjPosition.dPdx().w() = 0.0_f;
 								curProjPosition.dPdy().w() = 0.0_f;
 							}
-							sdwFI;
+							sdwFI
 
 							depth = ( curProjPosition.value().z() / curProjPosition.value().w() );
 							auto curPosition = m_writer.declLocale( "curPosition"
@@ -1237,7 +1237,7 @@ namespace castor3d
 							{
 								writer.returnStmt( 0_b );
 							}
-							sdwFI;
+							sdwFI
 						}
 
 						auto modelData = writer.declLocale( "modelData"
@@ -1293,7 +1293,7 @@ namespace castor3d
 							{
 								writer.returnStmt( 0_b );
 							}
-							sdwFI;
+							sdwFI
 						}
 
 						if ( auto lightingModel = lights.getLightingModel() )
@@ -1429,7 +1429,7 @@ namespace castor3d
 									inoutDiffuse = vec4( 0.0_f );
 								}
 							}
-							sdwFI;
+							sdwFI
 						}
 						else
 						{

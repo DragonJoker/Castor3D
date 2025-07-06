@@ -147,7 +147,7 @@ namespace castor3d::shader
 			{
 				texCoords0 = value;
 			}
-			sdwFI;
+			sdwFI
 		}
 		else if ( texCoords2.isEnabled() )
 		{
@@ -163,7 +163,7 @@ namespace castor3d::shader
 			{
 				texCoords0 = value;
 			}
-			sdwFI;
+			sdwFI
 		}
 		else if ( texCoords1.isEnabled() )
 		{
@@ -175,7 +175,7 @@ namespace castor3d::shader
 			{
 				texCoords0 = value;
 			}
-			sdwFI;
+			sdwFI
 		}
 		else
 		{

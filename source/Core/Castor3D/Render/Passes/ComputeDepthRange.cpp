@@ -110,7 +110,7 @@ namespace castor3d
 					{
 						writer.returnStmt();
 					}
-					sdwFI;
+					sdwFI
 
 					auto fragColor = writer.declLocale( "fragColor"
 						, input.load( ivec2( in.globalInvocationID.xy() ) ).y() );
@@ -120,7 +120,7 @@ namespace castor3d
 						atomicMin( minmax[0], floatBitsToInt( fragColor ) );
 						atomicMax( minmax[1], floatBitsToInt( fragColor ) );
 					}
-					sdwFI;
+					sdwFI
 				} );
 			return writer.getBuilder().releaseShader();
 		}

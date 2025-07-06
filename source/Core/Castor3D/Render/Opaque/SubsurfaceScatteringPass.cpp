@@ -134,7 +134,7 @@ namespace castor3d
 					{
 						writer.demote();
 					}
-					sdwFI;
+					sdwFI
 
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
@@ -147,7 +147,7 @@ namespace castor3d
 					{
 						writer.demote();
 					}
-					sdwFI;
+					sdwFI
 
 					auto sssProfile = writer.declLocale( "sssProfile"
 						, sssProfiles.getProfile( sssProfileIndex ) );
@@ -217,7 +217,7 @@ namespace castor3d
 						// Accumulate:
 						out.colour().rgb() += w[i] * color;
 					}
-					sdwROF;
+					sdwROF
 				} );
 			return castor::make_unique< sdw::Shader >( castor::move( writer.getShader() ) );
 		}
@@ -261,7 +261,7 @@ namespace castor3d
 					{
 						writer.demote();
 					}
-					sdwFI;
+					sdwFI
 
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
@@ -308,7 +308,7 @@ namespace castor3d
 							+ blur2 * blurWeights[1]
 							+ blur3 * blurWeights[2];
 					}
-					sdwFI;
+					sdwFI
 				} );
 			return writer.getBuilder().releaseShader();
 		}

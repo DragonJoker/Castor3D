@@ -485,7 +485,7 @@ namespace castor3d::shader
 								, c3d_mapNormalDepthDirectional.lod( vec3( lightSpacePosition.xy(), m_writer.cast< sdw::Float >( cascadeIndex ) ), 0.0_f ) );
 							result = step( 1.0_f - ( lightSpacePosition.z() - depthBias ), 1.0_f - shadowMapDepth );
 						}
-						sdwFI;
+						sdwFI
 
 						m_writer.returnStmt( result );
 					}
@@ -595,9 +595,9 @@ namespace castor3d::shader
 									, c3d_mapNormalDepthSpot.lod( vec3( lightSpacePosition.xy(), shadowMapIndex ), 0.0_f ) );
 								result = step( 1.0_f - ( lightSpacePosition.z() - depthBias ), 1.0_f - shadowMapDepth );
 							}
-							sdwFI;
+							sdwFI
 						}
-						sdwFI;
+						sdwFI
 
 						m_writer.returnStmt( result );
 					}
@@ -689,9 +689,9 @@ namespace castor3d::shader
 									, c3d_mapDepthPoint.lod( vec4( lightToVertex, shadowMapIndex ), 0.0_f ) );
 								result = step( 1.0_f - ( depth - depthBias ), 1.0_f - shadowMapDepth );
 							}
-							sdwFI;
+							sdwFI
 						}
-						sdwFI;
+						sdwFI
 
 						m_writer.returnStmt( result );
 					}
@@ -847,11 +847,11 @@ namespace castor3d::shader
 							{
 								volumetric += scattering;
 							}
-							sdwFI;
+							sdwFI
 
 							t += stepLength;
 						}
-						sdwROF;
+						sdwROF
 
 						volumetric /= m_writer.cast< sdw::Float >( shadows.volumetricSteps() );
 						m_writer.returnStmt( volumetric );
@@ -983,7 +983,7 @@ namespace castor3d::shader
 						shadowMapDepth = shadowMap.lod( vec3( lightSpacePosition.xy() + sampleOffset, m_writer.cast< sdw::Float >( arrayIndex ) ), 0.0_f );
 						shadowFactor += step( 1.0_f - ( lightSpacePosition.z() - depthBias ), 1.0_f - shadowMapDepth );
 					}
-					sdwROF;
+					sdwROF
 
 					m_writer.returnStmt( shadowFactor / m_writer.cast< sdw::Float >( sampleCount ) );
 				}
@@ -1134,7 +1134,7 @@ namespace castor3d::shader
 							, lightSpacePosition.z() - depthBias
 							, 0.0_f );
 					}
-					sdwROF;
+					sdwROF
 
 					m_writer.returnStmt( shadowFactor / m_writer.cast< sdw::Float >( sampleCount ) );
 				}

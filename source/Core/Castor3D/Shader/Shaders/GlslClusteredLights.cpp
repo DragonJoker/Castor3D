@@ -88,7 +88,7 @@ namespace castor3d::shader
 					, pointLightIndices[pointStartOffset + i] );
 				computePointLight( lights.retrievePointLight( lightIndex ) );
 			}
-			sdwROF;
+			sdwROF
 
 			auto spotClusterLights = writer.declLocale( "spotClusterLights"
 				, spotLightClusters[clusterIndex1D] );
@@ -103,7 +103,7 @@ namespace castor3d::shader
 					, spotLightIndices[spotStartOffset + i] );
 				computeSpotLight( lights.retrieveSpotLight( lightIndex ) );
 			}
-			sdwROF;
+			sdwROF
 
 			printDebug( writer, clusterData, debugOutput.pushBlock( cuT( "Clustered" ) )
 				, clusterIndex3D, pointLightCount, spotLightCount );
@@ -151,11 +151,11 @@ namespace castor3d::shader
 						computePointLight( lights.retrievePointLight( minLightIndex ) );
 						lightIndex = pointLightIndices[pointStartOffset + lightOffset];
 					}
-					sdwFI;
+					sdwFI
 				}
-				sdwELIHW;
+				sdwELIHW
 			}
-			sdwFI;
+			sdwFI
 
 			auto spotClusterLights = writer.declLocale( "spotClusterLights"
 				, spotLightClusters[clusterIndex1D] );
@@ -182,11 +182,11 @@ namespace castor3d::shader
 						computeSpotLight( lights.retrieveSpotLight( minLightIndex ) );
 						lightIndex = spotLightIndices[spotStartOffset + lightOffset];
 					}
-					sdwFI;
+					sdwFI
 				}
-				sdwELIHW;
+				sdwELIHW
 			}
-			sdwFI;
+			sdwFI
 
 			printDebug( writer, clusterData, debugOutput.pushBlock( cuT( "Clustered" ) )
 				, clusterIndex3D, pointLightCount, spotLightCount );
@@ -258,7 +258,7 @@ namespace castor3d::shader
 							, computePointLight
 							, computeSpotLight );
 					}
-					sdwFI;
+					sdwFI
 				}
 				sdwELSE
 				{
@@ -279,7 +279,7 @@ namespace castor3d::shader
 						, computePointLight
 						, computeSpotLight );
 				}
-				sdwFI;
+				sdwFI
 			}
 			else
 			{

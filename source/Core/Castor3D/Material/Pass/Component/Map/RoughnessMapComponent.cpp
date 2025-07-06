@@ -145,7 +145,7 @@ namespace castor3d
 		{
 			components.perceptualRoughness *= shader::TextureConfigData::getFloat( sampled, mask );
 		}
-		sdwFI;
+		sdwFI
 	}
 
 	//*********************************************************************************************

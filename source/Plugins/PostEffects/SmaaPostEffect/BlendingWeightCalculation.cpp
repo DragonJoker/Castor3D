@@ -106,13 +106,13 @@ namespace smaa
 					{
 						variable.x() = value.x();
 					}
-					sdwFI;
+					sdwFI
 
 					sdwIF( writer, cond.y() )
 					{
 						variable.y() = value.y();
 					}
-					sdwFI;
+					sdwFI
 				}
 				, sdw::InBVec2{ writer, "cond" }
 				, sdw::InOutVec2{ writer, "variable" }
@@ -171,7 +171,7 @@ namespace smaa
 						e = edgesTex.lod( coord.xy(), 0.0_f ).rg();
 						coord.w() = dot( e, vec2( 0.5_f, 0.5_f ) );
 					}
-					sdwELIHW;
+					sdwELIHW
 
 					writer.returnStmt( coord.zw() );
 				}
@@ -208,7 +208,7 @@ namespace smaa
 
 						coord.w() = dot( e, vec2( 0.5_f, 0.5_f ) );
 					}
-					sdwELIHW;
+					sdwELIHW
 
 					writer.returnStmt( coord.zw() );
 				}
@@ -276,7 +276,7 @@ namespace smaa
 					{
 						d.xz() = vec2( 0.0_f, 0.0_f );
 					}
-					sdwFI;
+					sdwFI
 
 					d.yw() = SMAASearchDiag1( edgesTex, texcoord, vec2( 1.0_f, -1.0_f ), end );
 
@@ -310,7 +310,7 @@ namespace smaa
 						// Fetch the areas for this line:
 						weights += SMAAAreaDiag( areaTex, d.xy(), cc, subsampleIndices.z() );
 					}
-					sdwFI;
+					sdwFI
 
 					// Search for the line ends:
 					d.xz() = SMAASearchDiag2( edgesTex, texcoord, vec2( -1.0_f, -1.0_f ), end );
@@ -325,7 +325,7 @@ namespace smaa
 					{
 						d.yw() = vec2( 0.0_f, 0.0_f );
 					}
-					sdwFI;
+					sdwFI
 
 					sdwIF( writer, d.x() + d.y() > 2.0_f )
 					{ // d.x + d.y + 1 > 3
@@ -347,7 +347,7 @@ namespace smaa
 						// Fetch the areas for this line:
 						weights += SMAAAreaDiag( areaTex, d.xy(), cc, subsampleIndices.w() ).gr();
 					}
-					sdwFI;
+					sdwFI
 
 					writer.returnStmt( weights );
 				}
@@ -420,7 +420,7 @@ namespace smaa
 						e = edgesTex.lod( texcoord, 0.0_f ).rg();
 						texcoord = fma( -vec2( 2.0_f, 0.0_f ), c3d_smaaData.rtMetrics.xy(), texcoord );
 					}
-					sdwELIHW;
+					sdwELIHW
 
 					auto offset = writer.declLocale( "offset"
 						, fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e, 0.0_f ), 3.25_f ) );
@@ -458,7 +458,7 @@ namespace smaa
 						 e = edgesTex.lod( texcoord, 0.0_f ).rg();
 						 texcoord = fma( vec2( 2.0_f, 0.0_f ), c3d_smaaData.rtMetrics.xy(), texcoord );
 					 }
-					 sdwELIHW;
+					 sdwELIHW
 
 					 auto offset = writer.declLocale( "offset"
 						 , fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e, 0.5_f ), 3.25_f ) );
@@ -484,7 +484,7 @@ namespace smaa
 						e = edgesTex.lod( texcoord, 0.0_f ).rg();
 						texcoord = fma( -vec2( 0.0_f, 2.0_f ), c3d_smaaData.rtMetrics.xy(), texcoord );
 					}
-					sdwELIHW;
+					sdwELIHW
 
 					auto offset = writer.declLocale( "offset"
 						, fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e.gr(), 0.0_f ), 3.25_f ) );
@@ -510,7 +510,7 @@ namespace smaa
 						e = edgesTex.lod( texcoord, 0.0_f ).rg();
 						texcoord = fma( vec2( 0.0_f, 2.0_f ), c3d_smaaData.rtMetrics.xy(), texcoord );
 					}
-					sdwELIHW;
+					sdwELIHW
 
 					auto offset = writer.declLocale( "offset"
 						, fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e.gr(), 0.5_f ), 3.25_f ) );
@@ -578,7 +578,7 @@ namespace smaa
 
 						weights *= clamp( factor, vec2( 0.0_f ), vec2( 1.0_f ) );
 					}
-					sdwFI;
+					sdwFI
 				}
 				, sdw::InCombinedImage2DRgba32{ writer, "edgesTex" }
 				, sdw::InOutVec2{ writer, "weights" }
@@ -609,7 +609,7 @@ namespace smaa
 
 						weights *= clamp( factor, vec2( 0.0_f ), vec2( 1.0_f ) );
 					}
-					sdwFI;
+					sdwFI
 				}
 				, sdw::InCombinedImage2DRgba32{ writer, "edgesTex" }
 				, sdw::InOutVec2{ writer, "weights" }
@@ -685,7 +685,7 @@ namespace smaa
 							{
 								e.r() = 0.0_f; // Skip vertical processing.
 							}
-							sdwFI;
+							sdwFI
 						}
 						sdwELSE
 						{
@@ -728,9 +728,9 @@ namespace smaa
 							coords.y() = texcoord.y();
 							SMAADetectHorizontalCornerPattern( edgesTex, weights.rg(), vec4( coords.xy(), coords.zy() ), d );
 						}
-						sdwFI;
+						sdwFI
 					}
-					sdwFI;
+					sdwFI
 
 					sdwIF( writer, e.r() > 0.0_f )
 					{ // Edge at west
@@ -769,7 +769,7 @@ namespace smaa
 						coords.x() = texcoord.x();
 						SMAADetectVerticalCornerPattern( edgesTex, weights.ba(), vec4( coords.xy(), coords.xz() ), d );
 					}
-					sdwFI;
+					sdwFI
 
 					writer.returnStmt( weights );
 				}

@@ -10,6 +10,8 @@
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
 
+#include <ShaderWriter/ComputeWriter.hpp>
+
 namespace castor3d
 {
 	namespace difpfl
@@ -114,7 +116,6 @@ namespace castor3d
 			{
 				for ( auto const & attach : m_pass.images )
 				{
-					auto currentState = context.getLayoutState( attach.view( index ) );
 					context.memoryBarrier( commandBuffer
 						, attach.view( index )
 						, { VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } } );

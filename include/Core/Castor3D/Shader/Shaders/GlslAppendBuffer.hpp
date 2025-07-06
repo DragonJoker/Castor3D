@@ -101,7 +101,7 @@ namespace castor3d::shader
 			{
 				m_data[idx] = data;
 			}
-			sdwFI;
+			sdwFI
 		}
 
 		void appendData( DataT const data
@@ -214,7 +214,7 @@ namespace castor3d::shader
 				{
 					( *m_data )[idx] = data;
 				}
-				sdwFI;
+				sdwFI
 			}
 		}
 
@@ -229,7 +229,7 @@ namespace castor3d::shader
 				{
 					( *m_data )[idx] = data;
 				}
-				sdwFI;
+				sdwFI
 			}
 		}
 

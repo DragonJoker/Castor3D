@@ -72,7 +72,7 @@ namespace castor3d::shader
 						gsValues[i1] = writer.ternary( i1 < elementCount, inputValues[elementOffset + i1], invalidValue );
 						gsValues[i2] = writer.ternary( i2 < elementCount, inputValues[elementOffset + i2], invalidValue );
 					}
-					sdwROF;
+					sdwROF
 
 					shader::groupMemoryBarrierWithGroupSync( writer );
 	
@@ -104,15 +104,15 @@ namespace castor3d::shader
 									gsValues[indexFirst] = valSecond;
 									gsValues[indexSecond] = valFirst;
 								}
-								sdwFI;
+								sdwFI
 
 								shader::groupMemoryBarrierWithGroupSync( writer );
 							}
-							sdwROF;
+							sdwROF
 						}
-						sdwROF;
+						sdwROF
 					}
-					sdwROF;
+					sdwROF
 
 					// Now commit the results to global memory.
 					sdwFOR( writer, sdw::UInt, batch, 0_u, batch < batchCount, ++batch )
@@ -125,15 +125,15 @@ namespace castor3d::shader
 							outputKeys[elementOffset + i1] = gsKeys[i1];
 							outputValues[elementOffset + i1] = gsValues[i1];
 						}
-						sdwFI;
+						sdwFI
 						sdwIF( writer, i2 < elementCount )
 						{
 							outputKeys[elementOffset + i2] = gsKeys[i2];
 							outputValues[elementOffset + i2] = gsValues[i2];
 						}
-						sdwFI;
+						sdwFI
 					}
-					sdwROF;
+					sdwROF
 				};
 			elementCount = min( sdw::UInt{ bucketSize }, elementCount );
 
@@ -141,7 +141,7 @@ namespace castor3d::shader
 			{
 				bitonicSort();
 			}
-			sdwFI;
+			sdwFI
 		}
 		/**
 		 *\arg	ValueT		The value type.

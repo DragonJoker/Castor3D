@@ -129,7 +129,7 @@ namespace castor3d
 							output.store( coord, vec4( color.rgb(), 1.0_f ) );
 						}
 					}
-					sdwFI;
+					sdwFI
 
 					// delete emission data, but keep normals (no need to delete, we will only read normal values of filled voxels)
 					voxels[in.globalInvocationID.x()].colorMask() = 0_u;

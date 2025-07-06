@@ -93,7 +93,7 @@ namespace atmosphere_scattering
 						interGround.valid() = 1_b;
 						clampOuter = 1_b;
 					}
-					sdwFI;
+					sdwFI
 
 					auto interInnerN = writer.declLocale( "interInnerN", Intersection{ writer } );
 					auto interInnerF = writer.declLocale( "interInnerF", Intersection{ writer } );
@@ -113,7 +113,7 @@ namespace atmosphere_scattering
 						// Ray doesn't intersect clouds layer.
 						writer.returnStmt( vec4( 0.0_f ) );
 					}
-					sdwFI;
+					sdwFI
 
 					// Compute raymarching starting and ending point
 					sdwIF( writer, viewHeight <= cloudsInnerRadius )
@@ -126,7 +126,7 @@ namespace atmosphere_scattering
 							// Just to be safe, since it should be handled with prior check for counts.
 							writer.returnStmt( vec4( 0.0_f ) );
 						}
-						sdwFI;
+						sdwFI
 
 						// - Ray goes through atmosphere, hence crosses clouds layer
 						//   2 intersections: near inner, near outer.
@@ -171,7 +171,7 @@ namespace atmosphere_scattering
 							endPos0 = interOuterN.point();
 							fogRay0 = startPos0;
 						}
-						sdwFI;
+						sdwFI
 					}
 					sdwELSE
 					{
@@ -204,17 +204,17 @@ namespace atmosphere_scattering
 							startPos0 = interOuterN.point();
 							endPos0 = interOuterF.point();
 						}
-						sdwFI;
+						sdwFI
 
 						fogRay0 = ray.origin; // disable fog for ray.
 					}
-					sdwFI;
+					sdwFI
 
 					sdwIF( writer, clampOuter )
 					{
 						fogRay0 = ray.origin; // disable fog when hitting objects.
 					}
-					sdwFI;
+					sdwFI
 
 					auto sunRadiance = writer.declLocale( "sunRadiance"
 						, 3.0_f * scattering.getSunRadiance( atmosphere.getSunDirection() ) );
@@ -276,9 +276,9 @@ namespace atmosphere_scattering
 							result = vec4( mix( lightingResult.rgb(), result.rgb(), vec3( result.a() ) )
 								, result.a() + lightingResult.a() );
 						}
-						sdwFI;
+						sdwFI
 					}
-					sdwFI;
+					sdwFI
 
 					skyLuminance = skyLuminance0;
 					skyBlendFactor = planetShadow0 * fogAmount0;
@@ -566,7 +566,7 @@ namespace atmosphere_scattering
 							, heightFraction
 							, lod );
 					}
-					sdwFI;
+					sdwFI
 
 					writer.returnStmt( clamp( baseDensity, 0.0_f, 1.0_f ) );
 				}
@@ -639,14 +639,14 @@ namespace atmosphere_scattering
 									, 1.0_f - ( density * invDepth * clouds.absorption() ) );
 								coneDensity += ( cloudDensity * transmittance );
 							}
-							sdwFI;
+							sdwFI
 						}
-						sdwFI;
+						sdwFI
 
 						startPos += rayStep;
 						coneRadius += coneStep;
 					}
-					sdwROF;
+					sdwROF
 
 					// 1 far sample for shadowing
 					pos += rayStep * 8.0_f;
@@ -665,7 +665,7 @@ namespace atmosphere_scattering
 							, 1.0_f - ( density * invDepth * clouds.absorption() ) );
 						coneDensity += ( cloudDensity * transmittance );
 					}
-					sdwFI;
+					sdwFI
 
 					writer.returnStmt( getLightEnergy( dot( lightDir, viewDir )
 						, coneDensity ) );
@@ -773,14 +773,14 @@ namespace atmosphere_scattering
 								src.rgb() *= cloudDensity;
 								result = ( 1.0_f - result.a() ) * src + result;
 							}
-							sdwFI;
+							sdwFI
 						}
-						sdwFI;
+						sdwFI
 
 						pos += stepVector;
 						++i;
 					}
-					sdwELIHW;
+					sdwELIHW
 
 					planetShadow /= writer.cast< sdw::Float >( max( 1_i, i ) );
 					planetShadow = min( 1.0_f, planetShadow );

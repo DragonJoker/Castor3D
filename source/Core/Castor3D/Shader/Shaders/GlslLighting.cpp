@@ -179,7 +179,7 @@ namespace castor3d::shader
 								, lightSurface
 								, rawDiffuse );
 						}
-						sdwFI;
+						sdwFI
 					}
 
 					auto specularLightIntensity = doInternalComputeLightSpecular( light.base(), components, lightSurface
@@ -274,7 +274,7 @@ namespace castor3d::shader
 								, lightSurface
 								, rawDiffuse );
 						}
-						sdwFI;
+						sdwFI
 					}
 
 					auto specularLightIntensity = doInternalComputeLightSpecular( light.base(), components, lightSurface
@@ -367,7 +367,7 @@ namespace castor3d::shader
 									, lightSurface
 									, rawDiffuse );
 							}
-							sdwFI;
+							sdwFI
 						}
 
 						auto specularLightIntensity = doInternalComputeLightSpecular( light.base(), components, lightSurface
@@ -388,7 +388,7 @@ namespace castor3d::shader
 
 						parentOutput += output;
 					}
-					sdwFI;
+					sdwFI
 				}
 				, PSpotLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
@@ -455,7 +455,7 @@ namespace castor3d::shader
 									, lightSurface
 									, rawDiffuse );
 							}
-							sdwFI;
+							sdwFI
 						}
 
 						doApplyShadowsDiffuse( shadows
@@ -531,7 +531,7 @@ namespace castor3d::shader
 									, lightSurface
 									, rawDiffuse );
 							}
-							sdwFI;
+							sdwFI
 						}
 
 						doApplyShadowsDiffuse( shadows
@@ -614,7 +614,7 @@ namespace castor3d::shader
 										, lightSurface
 										, rawDiffuse );
 								}
-								sdwFI;
+								sdwFI
 							}
 
 							doApplyShadowsDiffuse( shadows
@@ -628,7 +628,7 @@ namespace castor3d::shader
 
 						diffuse = max( vec3( 0.0_f ), diffuse );
 					}
-					sdwFI;
+					sdwFI
 
 					m_writer.returnStmt( diffuse );
 				}
@@ -834,7 +834,7 @@ namespace castor3d::shader
 
 						parentOutput += output;
 					}
-					sdwFI;
+					sdwFI
 				}
 				, PSpotLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
@@ -881,7 +881,7 @@ namespace castor3d::shader
 					output = vec3( volumetric * lightIntensity );
 				}
 			}
-			sdwFI;
+			sdwFI
 		}
 	}
 
@@ -949,11 +949,11 @@ namespace castor3d::shader
 							, filterIndex
 							, shadows.cascadeCount() );
 				}
-				sdwFI;
+				sdwFI
 
 				output.attenuate( shadowFactor, false, withDiffuse );
 			}
-			sdwFI;
+			sdwFI
 
 #if C3D_DebugCascades
 			auto cascadeColours = m_writer.declLocaleArray( "cascadeColours"
@@ -971,7 +971,7 @@ namespace castor3d::shader
 			{
 				cascadeColour += cascadeColours[*m_directionalCascadeIndex + 1_u] * cascadeFactors.z();
 			}
-			sdwFI;
+			sdwFI
 
 			output.diffuse().rgb() *= cascadeColour;
 			output.specular().rgb() *= cascadeColour;
@@ -979,7 +979,7 @@ namespace castor3d::shader
 
 #endif
 		}
-		sdwFI;
+		sdwFI
 	}
 
 	void LightingModel::doApplyShadows( PointShadowData const & shadows
@@ -1006,7 +1006,7 @@ namespace castor3d::shader
 					, 1.0_f - ( lightSurface.lengthL().value() / lightRange ) ) );
 			output.attenuate( shadowFactor, false, withDiffuse );
 		}
-		sdwFI;
+		sdwFI
 	}
 
 	void LightingModel::doApplyShadows( SpotShadowData const & shadows
@@ -1034,7 +1034,7 @@ namespace castor3d::shader
 					, lightSurface.lengthL().value() / lightRange ) );
 			output.attenuate( shadowFactor, false, withDiffuse );
 		}
-		sdwFI;
+		sdwFI
 	}
 
 	void LightingModel::doApplyShadowsDiffuse( DirectionalShadowData const & shadows
@@ -1070,9 +1070,9 @@ namespace castor3d::shader
 						, shadows.cascadeCount() ) );
 				output *= shadowFactor;
 			}
-			sdwFI;
+			sdwFI
 		}
-		sdwFI;
+		sdwFI
 	}
 
 	void LightingModel::doApplyShadowsDiffuse( PointShadowData const & shadows
@@ -1098,7 +1098,7 @@ namespace castor3d::shader
 					, 1.0_f - ( lightSurface.lengthL().value() / lightRange ) ) );
 			output *= shadowFactor;
 		}
-		sdwFI;
+		sdwFI
 	}
 
 	void LightingModel::doApplyShadowsDiffuse( SpotShadowData const & shadows
@@ -1125,7 +1125,7 @@ namespace castor3d::shader
 					, lightSurface.lengthL().value() / lightRange ) );
 			output *= shadowFactor;
 		}
-		sdwFI;
+		sdwFI
 	}
 
 	void LightingModel::doInitLightSpecifics( LightSurface const & lightSurface

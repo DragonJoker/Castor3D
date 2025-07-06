@@ -450,12 +450,12 @@ namespace castor3d
 					{
 						positions[i] = positions[i].xzy();
 					}
-					sdwFI;
+					sdwFI
 
 					positions[i].xy() *= c3d_voxelData.gridToClip;
 					positions[i].z() = 1.0_f;
 				}
-				sdwROF;
+				sdwROF
 
 				sdwIF( writer, c3d_voxelData.enableConservativeRasterization != 0_u )
 				{
@@ -469,7 +469,7 @@ namespace castor3d
 					positions[1].xy() += normalize( side0N - side1N ) * c3d_voxelData.gridToClip;
 					positions[2].xy() += normalize( side1N - side2N ) * c3d_voxelData.gridToClip;
 				}
-				sdwFI;
+				sdwFI
 
 				// Output
 				sdwFOR( writer, sdw::UInt, i, 0_u, i < 3_u, ++i )
@@ -487,7 +487,7 @@ namespace castor3d
 
 					out.append();
 				}
-				sdwROF;
+				sdwROF
 
 				out.restartStrip();
 			} );
@@ -629,7 +629,7 @@ namespace castor3d
 							* components.baseColour
 							* combined;
 					}
-					sdwFI;
+					sdwFI
 
 					auto encodedColor = writer.declLocale( "encodedColor"
 						, utils.encodeColor( vec4( color.xyz(), components.opacity ) ) );
@@ -642,7 +642,7 @@ namespace castor3d
 					atomicMax( output[id].colorMask(), encodedColor );
 					atomicMax( output[id].normalMask(), encodedNormal );
 				}
-				sdwFI;
+				sdwFI
 			} );
 	}
 

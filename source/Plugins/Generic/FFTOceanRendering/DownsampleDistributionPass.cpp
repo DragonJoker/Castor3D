@@ -133,12 +133,12 @@ namespace ocean_fft
 					{
 						aliased.x() += writer.cast< sdw::Int >( inN.x() );
 					}
-					sdwFI;
+					sdwFI
 					sdwIF( writer, aliased.y() < 0_i )
 					{
 						aliased.y() += writer.cast< sdw::Int >( inN.y() );
 					}
-					sdwFI;
+					sdwFI
 
 					downsampled[i.y() * outN.x() + i.x()] = distribution[writer.cast< sdw::UInt >( aliased.y() ) * inN.x() + writer.cast< sdw::UInt >( aliased.x() )];
 				} );

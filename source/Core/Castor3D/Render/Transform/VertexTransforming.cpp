@@ -479,7 +479,7 @@ namespace castor3d
 							, texcoord3
 							, colour );
 					}
-					sdwFI;
+					sdwFI
 				}
 				else if ( pipeline.morphFlags != MorphFlag::eNone )
 				{
@@ -528,7 +528,7 @@ namespace castor3d
 						position = curMtxModel * position;
 						curMtxNormal = modelData.getNormalMtx( false, curMtxModel );
 					}
-					sdwFI;
+					sdwFI
 				}
 				else
 				{
@@ -594,7 +594,7 @@ namespace castor3d
 							pmax[axis] = writer.ternary( p[axis] > points[pmax[axis]][axis], i, pmax[axis] );
 						}
 					}
-					sdwROF;
+					sdwROF
 
 					// find the pair of points with largest distance
 					auto paxisd2 = writer.declLocale( "paxisd2"
@@ -618,7 +618,7 @@ namespace castor3d
 							paxisd2 = d2;
 							paxis = axis;
 						}
-						sdwFI;
+						sdwFI
 					}
 
 					// use the longest segment as the initial sphere diameter
@@ -649,9 +649,9 @@ namespace castor3d
 							center = center * k + p * ( vec3( 1.0_f ) - k );
 							radius = ( radius + d ) / 2.0f;
 						}
-						sdwFI;
+						sdwFI
 					}
-					sdwROF;
+					sdwROF
 
 					writer.returnStmt( vec4( center, radius ) );
 				}
@@ -683,7 +683,7 @@ namespace castor3d
 						maxPos = max( maxPos, point );
 						normals[i] = c3d_normals[meshlet.vertices()[i]].xyz();
 					}
-					sdwROF;
+					sdwROF
 
 					auto center = writer.declLocale( "center"
 						, minPos + ( ( maxPos - minPos ) / vec3( 2.0_f ) ) );
@@ -707,7 +707,7 @@ namespace castor3d
 								, dot( normals[i], axis ) );
 							mindp = min( dp, mindp );
 						}
-						sdwROF;
+						sdwROF
 
 						sdwIF( writer, mindp <= 0.1_f )
 						{
@@ -723,7 +723,7 @@ namespace castor3d
 							c3d_outCullData[meshletId].cone = vec4( axis
 								, sqrt( 1.0_f - mindp * mindp ) );
 						}
-						sdwFI;
+						sdwFI
 					}
 				} );
 

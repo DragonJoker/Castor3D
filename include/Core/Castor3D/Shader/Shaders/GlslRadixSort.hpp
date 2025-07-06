@@ -74,7 +74,7 @@ namespace castor3d::shader
 				{
 					gsF[groupIndex] = gsE[groupIndex - 1_u];
 				}
-				sdwFI;
+				sdwFI
 
 				// Sync group shared memory writes.
 				shader::groupMemoryBarrierWithGroupSync( writer );
@@ -92,7 +92,7 @@ namespace castor3d::shader
 					{
 						temp += gsF[groupIndex - i];
 					}
-					sdwFI;
+					sdwFI
 
 					// Sync group shared memory reads before writes.
 					shader::groupMemoryBarrierWithGroupSync( writer );
@@ -110,7 +110,7 @@ namespace castor3d::shader
 				{
 					gsTotalFalses = gsE[bucketSize - 1u] + gsF[bucketSize - 1u];
 				}
-				sdwFI;
+				sdwFI
 
 				// Sync group shared memory writes.
 				shader::groupMemoryBarrierWithGroupSync( writer );
@@ -138,7 +138,7 @@ namespace castor3d::shader
 				// Sync group shared memory writes.
 				shader::groupMemoryBarrierWithGroupSync( writer );
 			}
-			sdwROF;
+			sdwROF
 
 			// Now commit the results to global memory.
 			outputKeys[elementOffset + threadIndex] = gsKeys[groupIndex];

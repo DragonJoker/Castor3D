@@ -165,7 +165,7 @@ namespace castor3d
 						{
 							gsNodeStack[stackPtr] = nodeIndex;
 						}
-						sdwFI;
+						sdwFI
 					}
 					, sdw::InUInt{ writer, "nodeIndex" } );
 
@@ -181,7 +181,7 @@ namespace castor3d
 						{
 							nodeIndex = gsNodeStack[stackPtr - 1];
 						}
-						sdwFI;
+						sdwFI
 
 						writer.returnStmt( nodeIndex );
 					} );
@@ -252,12 +252,12 @@ namespace castor3d
 						{
 							sqDistance += pow( aabb.min()[i] - v, 2.0_f );
 						}
-						sdwFI;
+						sdwFI
 						sdwIF( writer, v > aabb.max()[i] )
 						{
 							sqDistance += pow( v - aabb.max()[i], 2.0_f );
 						}
-						sdwFI;
+						sdwFI
 					}
 
 					writer.returnStmt( sqDistance <= sphere.w() * sphere.w() );
@@ -304,7 +304,7 @@ namespace castor3d
 						{
 							gsPointLights.appendData( lightIndex, MaxLightsPerCluster );
 						}
-						sdwFI;
+						sdwFI
 					};
 
 					auto processSpotLightAABB = [&]( sdw::UInt const & leafIndex )
@@ -331,14 +331,14 @@ namespace castor3d
 								{
 									gsSpotLights.appendData( lightIndex, MaxLightsPerCluster );
 								}
-								sdwFI;
+								sdwFI
 							}
 							else
 							{
 								gsSpotLights.appendData( lightIndex, MaxLightsPerCluster );
 							}
 						}
-						sdwFI;
+						sdwFI
 					};
 
 					sdwIF( writer, groupIndex == 0_u )
@@ -361,7 +361,7 @@ namespace castor3d
 							pushNode( 0_u );
 						}
 					}
-					sdwFI;
+					sdwFI
 
 					shader::groupMemoryBarrierWithGroupSync( writer );
 
@@ -384,13 +384,13 @@ namespace castor3d
 								{
 									processPointLightAABB( leafIndex );
 								}
-								sdwFI;
+								sdwFI
 							}
 							sdwELSEIF( aabbIntersectAABB( gsClusterAABB, c3d_pointLightBVH[childIndex] ) )
 							{
 								pushNode( childIndex );
 							}
-							sdwFI;
+							sdwFI
 
 							shader::groupMemoryBarrierWithGroupSync( writer );
 
@@ -398,11 +398,11 @@ namespace castor3d
 							{
 								gsParentIndex = popNode();
 							}
-							sdwFI;
+							sdwFI
 
 							shader::groupMemoryBarrierWithGroupSync( writer );
 						}
-						sdwELIHWOD;
+						sdwELIHWOD
 
 						shader::groupMemoryBarrierWithGroupSync( writer );
 
@@ -415,7 +415,7 @@ namespace castor3d
 							// Push the root node (at index 0) on the node stack.
 							pushNode( 0_u );
 						}
-						sdwFI;
+						sdwFI
 
 						shader::groupMemoryBarrierWithGroupSync( writer );
 
@@ -434,13 +434,13 @@ namespace castor3d
 								{
 									processSpotLightAABB( leafIndex );
 								}
-								sdwFI;
+								sdwFI
 							}
 							sdwELSEIF( aabbIntersectAABB( gsClusterAABB, c3d_spotLightBVH[childIndex] ) )
 							{
 								pushNode( childIndex );
 							}
-							sdwFI;
+							sdwFI
 
 							shader::groupMemoryBarrierWithGroupSync( writer );
 
@@ -448,11 +448,11 @@ namespace castor3d
 							{
 								gsParentIndex = popNode();
 							}
-							sdwFI;
+							sdwFI
 
 							shader::groupMemoryBarrierWithGroupSync( writer );
 						}
-						sdwELIHWOD;
+						sdwELIHWOD
 
 						shader::groupMemoryBarrierWithGroupSync( writer );
 					}
@@ -463,14 +463,14 @@ namespace castor3d
 						{
 							processPointLightAABB( i );
 						}
-						sdwROF;
+						sdwROF
 
 						// Intersect spot lights against AABB.
 						sdwFOR( writer, sdw::UInt, i, groupIndex, i < c3d_clustersData.spotLightCount(), i += NumThreads )
 						{
 							processSpotLightAABB( i );
 						}
-						sdwROF;
+						sdwROF
 
 						shader::groupMemoryBarrierWithGroupSync( writer );
 					}
@@ -484,7 +484,7 @@ namespace castor3d
 							gsPointLightStartOffset = sdw::atomicAdd( c3d_pointLightClusterListCount, gsPointLights.getCount() );
 							c3d_pointLightClusterGrid[gsClusterIndex1D] = sdw::uvec2( gsPointLightStartOffset, gsPointLights.getCount() );
 						}
-						sdwFI;
+						sdwFI
 
 						sdwIF( writer, gsSpotLights.getCount() > 0_u )
 						{
@@ -492,9 +492,9 @@ namespace castor3d
 							gsSpotLightStartOffset = sdw::atomicAdd( c3d_spotLightClusterListCount, gsSpotLights.getCount() );
 							c3d_spotLightClusterGrid[gsClusterIndex1D] = sdw::uvec2( gsSpotLightStartOffset, gsSpotLights.getCount() );
 						}
-						sdwFI;
+						sdwFI
 					}
-					sdwFI;
+					sdwFI
 
 					shader::groupMemoryBarrierWithGroupSync( writer );
 
@@ -503,13 +503,13 @@ namespace castor3d
 					{
 						c3d_pointLightClusterIndex[gsPointLightStartOffset + i] = gsPointLights[i];
 					}
-					sdwROF;
+					sdwROF
 
 					sdwFOR( writer, sdw::UInt, i, groupIndex, i < gsSpotLights.getCount(), i += NumThreads )
 					{
 						c3d_spotLightClusterIndex[gsSpotLightStartOffset + i] = gsSpotLights[i];
 					}
-					sdwROF;
+					sdwROF
 				} );
 			return writer.getBuilder().releaseShader();
 		}

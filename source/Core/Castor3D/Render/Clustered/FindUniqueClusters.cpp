@@ -67,7 +67,7 @@ namespace castor3d
 						c3d_clustersCountY = 1_u;
 						c3d_clustersCountZ = 1_u;
 					}
-					sdwFI;
+					sdwFI
 
 					sdwIF( writer, c3d_clusterFlags[clusterID] != 0_u )
 					{
@@ -75,7 +75,7 @@ namespace castor3d
 							, atomicAdd( c3d_clustersCountX, 1_u ) );
 						c3d_uniqueClusters[i] = clusterID;
 					}
-					sdwFI;
+					sdwFI
 				} );
 			return writer.getBuilder().releaseShader();
 		}

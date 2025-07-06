@@ -192,7 +192,7 @@ namespace castor3d
 					{
 						writer.demote();
 					}
-					sdwFI;
+					sdwFI
 				}
 
 				out.depthObj = vec4( in.fragCoord.z()

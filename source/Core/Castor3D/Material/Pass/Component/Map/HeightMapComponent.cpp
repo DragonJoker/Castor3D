@@ -226,7 +226,7 @@ namespace castor3d
 				{
 					writer.demote();
 				}
-				sdwFI;
+				sdwFI
 			}
 
 			auto texCoords0 = components.getMember< sdw::Vec2 >( "texture0" );
@@ -269,7 +269,7 @@ namespace castor3d
 				{
 					writer.demote();
 				}
-				sdwFI;
+				sdwFI
 			}
 
 			auto texCoords0 = components.getMember< sdw::Vec3 >( "texture0" );
@@ -312,7 +312,7 @@ namespace castor3d
 				{
 					writer.demote();
 				}
-				sdwFI;
+				sdwFI
 			}
 
 			auto texCoords0 = components.getMember< shader::DerivTex >( "texture0" );
@@ -439,7 +439,7 @@ namespace castor3d
 						// get depth of next layer
 						currentLayerDepth += layerDepth;
 					}
-					sdwELIHW;
+					sdwELIHW
 
 					// get texture coordinates before collision (reverse operations)
 					auto prevTexCoords = writer.declLocale( "prevTexCoords"
@@ -553,7 +553,7 @@ namespace castor3d
 									* ( 1.0_f - writer.cast< sdw::Float >( stepIndex ) / numLayers ) );
 								shadowMultiplier = max( shadowMultiplier, newShadowMultiplier );
 							}
-							sdwFI;
+							sdwFI
 
 							// offset to the next layer
 							stepIndex += 1_i;
@@ -562,7 +562,7 @@ namespace castor3d
 							sampled = heightMap.sample( currentTextureCoords );
 							heightFromTexture = sampled[heightIndex];
 						}
-						sdwELIHW;
+						sdwELIHW
 
 						// Shadowing factor should be 1 if there were no points under the surface
 						sdwIF( writer, numSamplesUnderSurface < 1.0_f )
@@ -573,9 +573,9 @@ namespace castor3d
 						{
 							shadowMultiplier = 1.0_f - shadowMultiplier;
 						}
-						sdwFI;
+						sdwFI
 					}
-					sdwFI;
+					sdwFI
 
 					writer.returnStmt( shadowMultiplier );
 				}

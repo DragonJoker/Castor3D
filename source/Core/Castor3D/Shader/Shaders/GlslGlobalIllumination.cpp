@@ -131,9 +131,9 @@ namespace castor3d
 							, lightSurface
 							, voxelData );
 					}
-					sdwFI;
+					sdwFI
 				}
-				sdwFI;
+				sdwFI
 			}
 		}
 
@@ -253,7 +253,7 @@ namespace castor3d
 								, sdw::Float{ castor::Angle::fromRadians( castor::PiDiv2< float > / 3 ).tan() }
 								, voxelData );
 						}
-						sdwROF;
+						sdwROF
 
 						// final radiance is average of all the cones radiances
 						radiance *= voxelData.radianceNumConesInv;
@@ -464,7 +464,7 @@ namespace castor3d
 					, lightSurface
 					, voxelData );
 			}
-			sdwFI;
+			sdwFI
 
 			auto vxlPosition = m_writer.declLocale( "vxlPosition"
 				, clamp( abs( voxelData.worldToClip( lightSurface.worldPosition().value().xyz() ) ), vec3( -1.0_f ), vec3( 1.0_f ) ) );
@@ -500,7 +500,7 @@ namespace castor3d
 					, roughness
 					, voxelData );
 			}
-			sdwFI;
+			sdwFI
 
 			return mix( vec3( 0.0_f )
 					, vxlReflection.xyz()
@@ -576,7 +576,7 @@ namespace castor3d
 							{
 								m_writer.loopBreakStmt();
 							}
-							sdwFI;
+							sdwFI
 
 							auto sam = m_writer.declLocale( "sam"
 								, voxels.lod( tsCoord, mip ) );
@@ -590,7 +590,7 @@ namespace castor3d
 							// step along ray:
 							wsDist += wsDiameter * voxelData.rayStepSize;
 						}
-						sdwELIHW;
+						sdwELIHW
 
 						m_writer.returnStmt( vec4( color, occlusion ) );
 					}
@@ -696,7 +696,7 @@ namespace castor3d
 							{
 								m_writer.loopBreakStmt();
 							}
-							sdwFI;
+							sdwFI
 
 							auto sam = m_writer.declLocale( "sam"
 								, voxels.lod( tsCoord, mip ) );
@@ -709,7 +709,7 @@ namespace castor3d
 							// step along ray:
 							wsDist += wsDiameter * voxelData.rayStepSize;
 						}
-						sdwELIHW;
+						sdwELIHW
 
 						m_writer.returnStmt( occlusion );
 					}

@@ -225,7 +225,7 @@ namespace atmosphere_scattering
 							, skyLuminance
 							, skyBlendFactor );
 					}
-					sdwFI;
+					sdwFI
 
 					skyColor = vec4( skyLuminance, skyBlendFactor );
 					sunColor = vec4( sunLuminance, 1.0_f );

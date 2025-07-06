@@ -115,7 +115,7 @@ namespace castor3d
 
 							reduceIndex >>= 1_u;
 						}
-						sdwELIHW;
+						sdwELIHW
 					}
 					else
 					{
@@ -129,7 +129,7 @@ namespace castor3d
 								gsAABBMax[groupIndex] = max( gsAABBMax[groupIndex], gsAABBMax[groupIndex + i] );
 							}
 						}
-						sdwFI;
+						sdwFI
 
 						shader::groupMemoryBarrierWithGroupSync( writer );
 					}
@@ -153,9 +153,9 @@ namespace castor3d
 							gsAABBMin[n] = aabbMin;
 							gsAABBMax[n] = aabbMax;
 						}
-						sdwROF;
+						sdwROF
 					}
-					sdwFI;
+					sdwFI
 
 					shader::groupMemoryBarrierWithGroupSync( writer );
 
@@ -181,9 +181,9 @@ namespace castor3d
 									, c3d_firstNodeIndex[currentLevel - 1_u] + nodeOffset );
 								c3d_lightBVH[nodeIndex] = shader::AABB{ gsAABBMin[groupIndex], gsAABBMax[groupIndex] };
 							}
-							sdwFI;
+							sdwFI
 						}
-						sdwFI;
+						sdwFI
 					};
 
 					if ( bottomLevel )
@@ -214,7 +214,7 @@ namespace castor3d
 								aabbMin = vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f );
 								aabbMax = vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f );
 							}
-							sdwFI;
+							sdwFI
 
 							gsAABBMin[groupIndex] = aabbMin;
 							gsAABBMax[groupIndex] = aabbMax;
@@ -225,7 +225,7 @@ namespace castor3d
 
 							writeToGlobalMemory( 0_u, numLevels );
 						}
-						sdwFI;
+						sdwFI
 					}
 					else
 					{
@@ -248,14 +248,14 @@ namespace castor3d
 								aabbMin = vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f );
 								aabbMax = vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f );
 							}
-							sdwFI;
+							sdwFI
 						}
 						sdwELSE
 						{
 							aabbMin = vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f );
 							aabbMax = vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f );
 						}
-						sdwFI;
+						sdwFI
 
 						gsAABBMin[groupIndex] = aabbMin;
 						gsAABBMax[groupIndex] = aabbMax;
@@ -542,7 +542,7 @@ namespace castor3d
 					{
 						++i;
 					}
-					sdwELIHW;
+					sdwELIHW
 
 					writer.returnStmt( i );
 				}
@@ -575,7 +575,7 @@ namespace castor3d
 
 						out.colour() = colorPalette[getNodeLevel( writer.cast< sdw::UInt >( in.instanceIndex ) )];
 					}
-					sdwFI;
+					sdwFI
 				} );
 
 			writer.implementEntryPointT< shader::Colour4FT, shader::Colour4FT >( []( sdw::FragmentInT< shader::Colour4FT > const & in

@@ -230,7 +230,7 @@ namespace castor3d
 		{
 			components.iridescenceFactor = 0.0_f;
 		}
-		sdwFI;
+		sdwFI
 
 		sdwIF( writer, components.iridescenceFactor != 0.0_f )
 		{
@@ -249,7 +249,7 @@ namespace castor3d
 				, components.iridescenceThickness
 				, components.baseColour );
 		}
-		sdwFI;
+		sdwFI
 	}
 
 	//*********************************************************************************************

@@ -63,7 +63,7 @@ namespace light_streaks
 						// Scale and accumulate
 						colour += c3d_mapHiPass.sample( sampleCoord ).rgb() * clamp( weight, 0.0_f, 1.0_f );
 					}
-					sdwROF;
+					sdwROF
 
 					out.colour() = vec4( clamp( colour, vec3( 0.0_f ), vec3( 1.0_f ) ), 1.0_f );
 				} );

@@ -87,7 +87,7 @@ namespace castor3d
 						result = shader::AABB{ vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f )
 							, vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f ) };
 					}
-					sdwFI;
+					sdwFI
 
 					writer.returnStmt( result );
 				}
@@ -163,7 +163,7 @@ namespace castor3d
 								result = shader::AABB{ min( smallAABB.min(), largeAABB.min() )
 									, max( smallAABB.max(), largeAABB.max() ) };
 							}
-							sdwFI;
+							sdwFI
 						}
 						else
 						{
@@ -177,7 +177,7 @@ namespace castor3d
 						result = shader::AABB{ vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f )
 							, vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f ) };
 					}
-					sdwFI;
+					sdwFI
 
 					writer.returnStmt( result );
 				}
@@ -193,7 +193,7 @@ namespace castor3d
 							, loadPointLightAABB( in.globalInvocationID.x() ) );
 						c3d_allLightsAABB[in.globalInvocationID.x()] = aabb;
 					}
-					sdwFI;
+					sdwFI
 
 					// Next, compute AABB for spot lights.
 					sdwIF( writer, in.globalInvocationID.x() < c3d_clustersData.spotLightCount() )
@@ -202,7 +202,7 @@ namespace castor3d
 							, loadSpotLightAABB( in.globalInvocationID.x() ) );
 						c3d_allLightsAABB[c3d_clustersData.pointLightCount() + in.globalInvocationID.x()] = aabb;
 					}
-					sdwFI;
+					sdwFI
 				} );
 			return writer.getBuilder().releaseShader();
 		}

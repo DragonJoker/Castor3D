@@ -130,7 +130,7 @@ namespace ocean_fft
 					{
 						writer.returnStmt( vec2( 0.0_f ) );
 					}
-					sdwFI;
+					sdwFI
 
 					auto kL = writer.declLocale( "kL"
 						, kLen * L );

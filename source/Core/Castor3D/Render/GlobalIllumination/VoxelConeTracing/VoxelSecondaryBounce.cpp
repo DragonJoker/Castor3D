@@ -176,7 +176,7 @@ namespace castor3d
 					{
 						output.store( coord, vec4( 0.0_f ) );
 					}
-					sdwFI;
+					sdwFI
 
 					voxels[in.globalInvocationID.x()].normalMask() = 0_u;
 				} );

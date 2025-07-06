@@ -1177,7 +1177,7 @@ namespace castor3d
 						out.colour() = vec4( fma( sampled.xyz(), c3d_multiply.xyz(), c3d_add.xyz() )
 							, 1.0_f );
 					}
-					sdwFI;
+					sdwFI
 #endif
 				} );
 			programModule.shader = writer.getBuilder().releaseShader();

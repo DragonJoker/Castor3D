@@ -167,7 +167,7 @@ namespace atmosphere_scattering
 					{
 						out.colour() = sky + sun;
 					}
-					sdwFI;
+					sdwFI
 				} );
 
 			return writer.getBuilder().releaseShader();

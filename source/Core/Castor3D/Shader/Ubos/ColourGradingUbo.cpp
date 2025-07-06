@@ -115,31 +115,31 @@ namespace castor3d
 								hdrColour *= whiteBalance();
 								hdrColour = lmsToLinear( hdrColour );
 							}
-							sdwFI;
+							sdwFI
 							sdwIF( writer, enableSplitToning() )
 							{
 								hdrColour = m_splitToning( hdrColour );
 							}
-							sdwFI;
+							sdwFI
 							sdwIF( writer, enableChannelMix() )
 							{
 								hdrColour = vec3( dot( hdrColour, channelMixRed() )
 									, dot( hdrColour, channelMixGreen() )
 									, dot( hdrColour, channelMixBlue() ) );
 							}
-							sdwFI;
+							sdwFI
 							sdwIF( writer, enableShadowMidToneHighlight() )
 							{
 								hdrColour = m_shadowsMidtoneHighlight( hdrColour );
 							}
-							sdwFI;
+							sdwFI
 							sdwIF( writer, enableContrast() )
 							{
 								hdrColour = linearToLogC( hdrColour );
 								hdrColour = ( hdrColour - midGray() ) * contrast() + midGray();
 								hdrColour = logCToLinear( hdrColour );
 							}
-							sdwFI;
+							sdwFI
 							hdrColour *= colourFilter();
 							sdwIF( writer, enableHueShift() )
 							{
@@ -148,14 +148,14 @@ namespace castor3d
 								hdrColour.x() = rotateHue( hue, 0.0_f, 1.0_f );
 								hdrColour = m_hsvToRgb( hdrColour );
 							}
-							sdwFI;
+							sdwFI
 							// Saturation
 							auto luminance = writer.declLocale( "luminance", getLuminance( hdrColour ) );
 							hdrColour = ( hdrColour - luminance ) * saturation() + luminance;
 							// Prevent negative colours
 							writer.returnStmt( max( vec3( 0.0_f ), hdrColour ) );
 						}
-						sdwFI;
+						sdwFI
 
 						writer.returnStmt( hdrColour );
 					}

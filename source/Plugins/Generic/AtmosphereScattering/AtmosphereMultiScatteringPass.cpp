@@ -152,7 +152,7 @@ namespace atmosphere_scattering
 						multiScatAs1SharedMem[in.globalInvocationID.z()] += multiScatAs1SharedMem[in.globalInvocationID.z() + 32u];
 						lSharedMem[in.globalInvocationID.z()] += lSharedMem[in.globalInvocationID.z() + 32u];
 					}
-					sdwFI;
+					sdwFI
 
 					sdw::barrier( writer );
 
@@ -162,7 +162,7 @@ namespace atmosphere_scattering
 						multiScatAs1SharedMem[in.globalInvocationID.z()] += multiScatAs1SharedMem[in.globalInvocationID.z() + 16u];
 						lSharedMem[in.globalInvocationID.z()] += lSharedMem[in.globalInvocationID.z() + 16u];
 					}
-					sdwFI;
+					sdwFI
 
 					sdw::barrier( writer );
 
@@ -172,7 +172,7 @@ namespace atmosphere_scattering
 						multiScatAs1SharedMem[in.globalInvocationID.z()] += multiScatAs1SharedMem[in.globalInvocationID.z() + 8u];
 						lSharedMem[in.globalInvocationID.z()] += lSharedMem[in.globalInvocationID.z() + 8u];
 					}
-					sdwFI;
+					sdwFI
 
 					sdw::barrier( writer );
 
@@ -181,7 +181,7 @@ namespace atmosphere_scattering
 						multiScatAs1SharedMem[in.globalInvocationID.z()] += multiScatAs1SharedMem[in.globalInvocationID.z() + 4u];
 						lSharedMem[in.globalInvocationID.z()] += lSharedMem[in.globalInvocationID.z() + 4u];
 					}
-					sdwFI;
+					sdwFI
 
 					sdw::barrier( writer );
 
@@ -190,7 +190,7 @@ namespace atmosphere_scattering
 						multiScatAs1SharedMem[in.globalInvocationID.z()] += multiScatAs1SharedMem[in.globalInvocationID.z() + 2u];
 						lSharedMem[in.globalInvocationID.z()] += lSharedMem[in.globalInvocationID.z() + 2u];
 					}
-					sdwFI;
+					sdwFI
 
 					sdw::barrier( writer );
 
@@ -199,7 +199,7 @@ namespace atmosphere_scattering
 						multiScatAs1SharedMem[in.globalInvocationID.z()] += multiScatAs1SharedMem[in.globalInvocationID.z() + 1u];
 						lSharedMem[in.globalInvocationID.z()] += lSharedMem[in.globalInvocationID.z() + 1u];
 					}
-					sdwFI;
+					sdwFI
 
 					sdw::barrier( writer );
 
@@ -207,7 +207,7 @@ namespace atmosphere_scattering
 					{
 						writer.returnStmt();
 					}
-					sdwFI;
+					sdwFI
 
 					auto multiScatAs1 = writer.declLocale( "multiScatAs1"
 						, multiScatAs1SharedMem[0] * isotropicPhase );	// Equation 7 f_ms

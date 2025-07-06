@@ -80,7 +80,7 @@ namespace film_grain
 					{
 						writer.returnStmt( 2.0_f * a * b );
 					}
-					sdwFI;
+					sdwFI
 
 					writer.returnStmt( vec3( 1.0_f ) - 2.0_f * ( 1.0_f - a ) * ( 1.0_f - b ) );
 				}

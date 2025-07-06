@@ -339,10 +339,10 @@ namespace castor3d::shader
 							, receivesShadows
 							, parentOutput );
 					}
-					sdwFI;
+					sdwFI
 					cur += DirectionalLightInstance::LightDataComponents;
 				}
-				sdwELIHW;
+				sdwELIHW
 
 				clusteredLights.computeCombinedDifSpec( *this
 					, *lightingModel
@@ -401,10 +401,10 @@ namespace castor3d::shader
 							, receivesShadows
 							, parentOutput );
 					}
-					sdwFI;
+					sdwFI
 					cur += DirectionalLightInstance::LightDataComponents;
 				}
-				sdwELIHW;
+				sdwELIHW
 
 				clusteredLights.computeCombinedAllButDif( *this
 					, *lightingModel
@@ -461,10 +461,10 @@ namespace castor3d::shader
 							, lightSurface
 							, receivesShadows );
 					}
-					sdwFI;
+					sdwFI
 					cur += DirectionalLightInstance::LightDataComponents;
 				}
-				sdwELIHW;
+				sdwELIHW
 
 				clusteredLights.computeCombinedDif( *this
 					, *lightingModel
@@ -518,10 +518,10 @@ namespace castor3d::shader
 						, receivesShadows
 						, output );
 				}
-				sdwFI;
+				sdwFI
 				cur += DirectionalLightInstance::LightDataComponents;
 			}
-			sdwELIHW;
+			sdwELIHW
 
 			end = m_lightsBuffer->getPointsEnd();
 
@@ -538,10 +538,10 @@ namespace castor3d::shader
 						, receivesShadows
 						, output );
 				}
-				sdwFI;
+				sdwFI
 				cur += PointLightInstance::LightDataComponents;
 			}
-			sdwELIHW;
+			sdwELIHW
 
 			end = m_lightsBuffer->getSpotsEnd();
 
@@ -558,10 +558,10 @@ namespace castor3d::shader
 						, receivesShadows
 						, output );
 				}
-				sdwFI;
+				sdwFI
 				cur += SpotLightInstance::LightDataComponents;
 			}
-			sdwELIHW;
+			sdwELIHW
 		}
 	}
 
@@ -595,10 +595,10 @@ namespace castor3d::shader
 						, receivesShadows
 						, output );
 				}
-				sdwFI;
+				sdwFI
 				cur += DirectionalLightInstance::LightDataComponents;
 			}
-			sdwELIHW;
+			sdwELIHW
 
 			end = m_lightsBuffer->getPointsEnd();
 
@@ -615,10 +615,10 @@ namespace castor3d::shader
 						, receivesShadows
 						, output );
 				}
-				sdwFI;
+				sdwFI
 				cur += PointLightInstance::LightDataComponents;
 			}
-			sdwELIHW;
+			sdwELIHW
 
 			end = m_lightsBuffer->getSpotsEnd();
 
@@ -635,10 +635,10 @@ namespace castor3d::shader
 						, receivesShadows
 						, output );
 				}
-				sdwFI;
+				sdwFI
 				cur += SpotLightInstance::LightDataComponents;
 			}
-			sdwELIHW;
+			sdwELIHW
 		}
 	}
 
@@ -669,10 +669,10 @@ namespace castor3d::shader
 						, lightSurface
 						, receivesShadows );
 				}
-				sdwFI;
+				sdwFI
 				cur += DirectionalLightInstance::LightDataComponents;
 			}
-			sdwELIHW;
+			sdwELIHW
 
 			end = m_lightsBuffer->getPointsEnd();
 
@@ -688,10 +688,10 @@ namespace castor3d::shader
 						, lightSurface
 						, receivesShadows );
 				}
-				sdwFI;
+				sdwFI
 				cur += PointLightInstance::LightDataComponents;
 			}
-			sdwELIHW;
+			sdwELIHW
 
 			end = m_lightsBuffer->getSpotsEnd();
 
@@ -707,10 +707,10 @@ namespace castor3d::shader
 						, lightSurface
 						, receivesShadows );
 				}
-				sdwFI;
+				sdwFI
 				cur += SpotLightInstance::LightDataComponents;
 			}
-			sdwELIHW;
+			sdwELIHW
 		}
 	}
 
@@ -877,9 +877,9 @@ namespace castor3d::shader
 					, 1.0_f - factor
 					, factor );
 			}
-			sdwFI;
+			sdwFI
 		}
-		sdwROF;
+		sdwROF
 
 		return cascadeFactors;
 	}

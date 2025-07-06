@@ -26,7 +26,7 @@ namespace castor3d::shader
 			{
 				m_indices[i] = 0_u;
 			}
-			sdwROF;
+			sdwROF
 			m_registerOutput = writer.implementFunction< sdw::Void >( "c3d_registerOutput"
 				, [this]( sdw::UInt const & idx
 					, sdw::Vec3 const & val )
@@ -51,7 +51,7 @@ namespace castor3d::shader
 				auto value = writer.declLocale( "debugValue", m_values[m_index] );
 				m_output.xyz() = value;
 			}
-			sdwFI;
+			sdwFI
 		}
 	}
 

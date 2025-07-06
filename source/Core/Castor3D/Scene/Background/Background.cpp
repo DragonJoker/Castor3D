@@ -268,7 +268,7 @@ namespace castor3d
 									{
 										out.colour() = vec4( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData ).xyz(), 1.0_f );
 									}
-									sdwFI;
+									sdwFI
 								}
 								else
 								{

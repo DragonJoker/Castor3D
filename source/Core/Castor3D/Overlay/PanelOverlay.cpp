@@ -79,7 +79,7 @@ namespace castor3d
 					{
 						ssRelBounds += ssBorderExtent / 2.0_f;
 					}
-					sdwFI;
+					sdwFI
 
 					auto ssRelOvPosition = writer.declLocale( "ssRelOvPosition"
 						, overlay.relativePosition() * ssAbsParentSize );

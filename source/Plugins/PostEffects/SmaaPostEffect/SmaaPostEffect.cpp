@@ -67,7 +67,7 @@ namespace smaa
 						{
 							out.colour() = c3d_map.sample( in.uv() );
 						}
-						sdwFI;
+						sdwFI
 					}
 					else
 					{

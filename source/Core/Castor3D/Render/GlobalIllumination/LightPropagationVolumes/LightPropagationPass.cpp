@@ -283,9 +283,9 @@ namespace castor3d
 							shG += occludedSideFaceContribution * max( 0.0_f, dot( GSHcoeffsNeighbour, evalDirectionSH ) ) * reprojDirectionCosineLobeSH;
 							shB += occludedSideFaceContribution * max( 0.0_f, dot( BSHcoeffsNeighbour, evalDirectionSH ) ) * reprojDirectionCosineLobeSH;
 						}
-						sdwROF;
+						sdwROF
 					}
-					sdwROF;
+					sdwROF
 				}
 				, sdw::InIVec3{ writer, "cellIndex" }
 				, sdw::OutVec4{ writer, "shR" }

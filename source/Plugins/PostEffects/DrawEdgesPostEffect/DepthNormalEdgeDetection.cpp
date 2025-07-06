@@ -156,7 +156,7 @@ namespace draw_edges
 					{
 						writer.demote();
 					}
-					sdwFI;
+					sdwFI
 
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
@@ -168,7 +168,7 @@ namespace draw_edges
 					{
 						writer.demote();
 					}
-					sdwFI;
+					sdwFI
 
 					auto Xn = writer.declLocale( "Xn"
 						, nmlOcc.fetch( texelCoord, 0_i ) );

@@ -377,9 +377,9 @@ namespace castor3d::shader
 						{
 							stepCount += 1.0_f;
 						}
-						sdwFI;
+						sdwFI
 					}
-					sdwELIHW;
+					sdwELIHW
 
 					sdwIF( m_writer, forwardStepCount < ssrForwardMaxStepCount )
 					{
@@ -401,11 +401,11 @@ namespace castor3d::shader
 							{
 								stepCount += 1.0_f;
 							}
-							sdwFI;
+							sdwFI
 						}
-						sdwELIHW;
+						sdwELIHW
 					}
-					sdwFI;
+					sdwFI
 
 					auto nDotV = m_writer.declLocale( "nDotV"
 						, abs( dot( worldNormal, viewDir ) ) + epsilon );
@@ -510,9 +510,9 @@ namespace castor3d::shader
 						{
 							stepCount += 1.0_f;
 						}
-						sdwFI;
+						sdwFI
 					}
-					sdwELIHW;
+					sdwELIHW
 
 					sdwIF( m_writer, forwardStepCount < ssrForwardMaxStepCount )
 					{
@@ -534,11 +534,11 @@ namespace castor3d::shader
 							{
 								stepCount += 1.0_f;
 							}
-							sdwFI;
+							sdwFI
 						}
-						sdwELIHW;
+						sdwELIHW
 					}
-					sdwFI;
+					sdwFI
 
 					auto nDotV = m_writer.declLocale( "nDotV"
 						, abs( dot( worldNormal, viewDir ) ) + epsilon );
@@ -676,7 +676,7 @@ namespace castor3d::shader
 					P1 = P1.yx();
 					P0 = P0.yx();
 				}
-				sdwFI;
+				sdwFI
 
 				// From now on, "x" is the primary iteration direction and "y" is the secondary one
 
@@ -753,7 +753,7 @@ namespace castor3d::shader
 					{
 						m_utils.swap( rayZMin, rayZMax );
 					}
-					sdwFI;
+					sdwFI
 
 					// Camera-space z of the background
 					sceneZMax = csZBuffer.fetch( ivec2( hitPixel ), 0_i );
@@ -763,7 +763,7 @@ namespace castor3d::shader
 					{
 						sceneZMax = m_utils.reconstructCSZ( sceneZMax, clipInfo );
 					}
-					sdwFI;
+					sdwFI
 
 					// increment
 					Q.z() += dQ.z();
@@ -771,7 +771,7 @@ namespace castor3d::shader
 					stepCount += 1.0_f;
 					P += dP;
 				} // pixel on ray
-				sdwELIHW;
+				sdwELIHW
 
 				Q.xy() += dQ.xy() * stepCount;
 				csHitPoint = Q * ( 1.0f / k );
@@ -1072,7 +1072,7 @@ namespace castor3d::shader
 					{
 						m_writer.returnStmt( sceneMap.lod( sceneUv, applyIorToRoughness( roughness, ior ) * sdw::Float( float( EnvironmentMipLevels ) ) ).rgb() * albedo );
 					}
-					sdwFI;
+					sdwFI
 				}
 				, sdw::InVec3{ m_writer, "wsIncident" }
 				, sdw::InVec3{ m_writer, "wsPosition" }
@@ -1152,7 +1152,7 @@ namespace castor3d::shader
 					, reflectedSpecular );
 			}
 		}
-		sdwFI;
+		sdwFI
 	}
 
 	void ReflectionModel::doComputeSpecularTransmission( sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
@@ -1189,7 +1189,7 @@ namespace castor3d::shader
 							, components );
 					}
 				}
-				sdwFI;
+				sdwFI
 			}
 			else if ( m_allowRefraction && background.hasRefractionSupport() )
 			{
@@ -1199,7 +1199,7 @@ namespace castor3d::shader
 					, components );
 			}
 		}
-		sdwFI;
+		sdwFI
 	}
 
 	void ReflectionModel::doComputeDiffuse( sdw::CombinedImageCubeArrayR11fG11fB10f const & envMap
@@ -1226,7 +1226,7 @@ namespace castor3d::shader
 				result = background.computeDiffuse( wsDirection
 					, components );
 			}
-			sdwFI;
+			sdwFI
 		}
 		else
 		{
@@ -1266,7 +1266,7 @@ namespace castor3d::shader
 							, components.clearcoatRoughness );
 					}
 				}
-				sdwFI;
+				sdwFI
 			}
 			else if ( background.hasReflectionSupport() )
 			{
@@ -1316,7 +1316,7 @@ namespace castor3d::shader
 							, brdf );
 					}
 				}
-				sdwFI;
+				sdwFI
 			}
 			else if ( background.hasReflectionSupport() )
 			{
