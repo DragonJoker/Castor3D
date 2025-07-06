@@ -61,7 +61,7 @@ namespace Bloom
 						out.colour() += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( in.uv() - offset );
 						out.colour() += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( in.uv() + offset );
 					}
-					sdwROF;
+					sdwROF
 				} );
 			return writer.getBuilder().releaseShader();
 		}

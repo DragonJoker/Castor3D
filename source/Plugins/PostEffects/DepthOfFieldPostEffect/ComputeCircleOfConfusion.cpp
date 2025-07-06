@@ -86,7 +86,7 @@ namespace dof
 					{
 						out.far() = step( 0.0_f, signedDist ) * CoC;
 					}
-					sdwFI;
+					sdwFI
 				} );
 
 			return writer.getBuilder().releaseShader();

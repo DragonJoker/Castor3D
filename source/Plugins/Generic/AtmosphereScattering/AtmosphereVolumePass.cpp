@@ -157,7 +157,7 @@ namespace atmosphere_scattering
 						ray.direction = normalize( newWorldPos - ray.origin );
 						tMax = length( newWorldPos - ray.origin );
 					}
-					sdwFI;
+					sdwFI
 
 					auto tMaxMax = writer.declLocale( "tMaxMax"
 						, tMax );
@@ -175,7 +175,7 @@ namespace atmosphere_scattering
 							// Ray is not intersecting the atmosphere
 							writer.returnStmt( vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f ) );
 						}
-						sdwFI;
+						sdwFI
 
 						auto lengthToAtmosphere = writer.declLocale( "lengthToAtmosphere"
 							, length( prevWorlPos - ray.origin ) );
@@ -185,12 +185,12 @@ namespace atmosphere_scattering
 							// tMaxMax for this voxel is not within planet atmosphere
 							writer.returnStmt( vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f ) );
 						}
-						sdwFI;
+						sdwFI
 
 						// Now world position has been moved to the atmosphere boundary: we need to reduce tMaxMax accordingly. 
 						tMaxMax = max( 0.0_f, tMaxMax - lengthToAtmosphere );
 					}
-					sdwFI;
+					sdwFI
 
 					SingleScatteringResult ss = writer.declLocale( "ss"
 						, atmosphere.integrateScatteredLuminance( pixPos
@@ -227,7 +227,7 @@ namespace atmosphere_scattering
 					out.layer = list[0].sliceId;
 					out.append();
 				}
-				sdwROF;
+				sdwROF
 
 				out.restartStrip();
 			} );

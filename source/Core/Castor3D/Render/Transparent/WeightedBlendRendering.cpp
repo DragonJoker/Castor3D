@@ -78,7 +78,7 @@ namespace castor3d
 						// Save the blending and color texture fetch cost
 						writer.demote();
 					}
-					sdwFI;
+					sdwFI
 
 					auto accum = writer.declLocale( "accum"
 						, c3d_mapAccumulation.fetch( coord, 0_i ) );
@@ -88,7 +88,7 @@ namespace castor3d
 					{
 						accum.rgb() = vec3( accum.a() );
 					}
-					sdwFI;
+					sdwFI
 
 					auto averageColor = writer.declLocale( "averageColor"
 						, accum.rgb() / max( accum.a(), 0.00001_f ) );
@@ -109,7 +109,7 @@ namespace castor3d
 							, c3d_cameraData.position()
 							, c3d_sceneData );
 					}
-					sdwFI;
+					sdwFI
 				} );
 			return writer.getBuilder().releaseShader();
 		}

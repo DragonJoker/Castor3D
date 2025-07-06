@@ -548,11 +548,11 @@ namespace castor3d
 
 							out.append();
 						}
-						sdwROF;
+						sdwROF
 
 						out.restartStrip();
 					}
-					sdwFI;
+					sdwFI
 				} );
 
 			writer.implementEntryPointT< SurfaceT, shader::Colour4FT >( [&]( sdw::FragmentInT< SurfaceT > const & in
@@ -587,7 +587,7 @@ namespace castor3d
 			return writer.getBuilder().releaseShader();
 		}
 
-		ast::type::ImageFormat getImageFormat( VkFormat format )
+		static ast::type::ImageFormat getImageFormat( VkFormat format )
 		{
 			switch ( format )
 			{

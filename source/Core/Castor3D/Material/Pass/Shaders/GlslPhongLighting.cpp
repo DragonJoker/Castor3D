@@ -162,7 +162,7 @@ namespace castor3d::shader
 					, reflRefr.specularReflection
 					, vec3( fresnelFactor ) );
 			}
-			sdwFI;
+			sdwFI
 		}
 		auto bgDiffuse = m_writer.declLocale( "bgDiffuse", reflRefr.diffuseReflection );
 		auto bgSpecular = m_writer.declLocale( "bgSpecular", reflRefr.specularReflection );

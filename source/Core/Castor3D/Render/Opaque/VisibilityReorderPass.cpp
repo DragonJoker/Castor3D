@@ -61,7 +61,7 @@ namespace castor3d
 							, nodePipelineId & maxPipelinesMask );
 						sdw::atomicAdd( materialsCounts[pipelineId], 1_u );
 					}
-					sdwFI;
+					sdwFI
 				} );
 
 			return writer.getBuilder().releaseShader();
@@ -154,14 +154,14 @@ namespace castor3d
 						{
 							result += materialsCounts[i];
 						}
-						sdwROF;
+						sdwROF
 
 						indirectCounts[pipelineId * 3u + 0u] = writer.cast< sdw::UInt >( ceil( writer.cast< sdw::Float >( materialsCounts[pipelineId] ) / 64.0_f ) );
 						indirectCounts[pipelineId * 3u + 1u] = 4u;
 						indirectCounts[pipelineId * 3u + 2u] = 1u;
 						materialStarts[pipelineId] = result;
 					}
-					sdwFI;
+					sdwFI
 				} );
 
 			return writer.getBuilder().releaseShader();
@@ -271,7 +271,7 @@ namespace castor3d
 							, materialsStarts[pipelineId] + sdw::atomicAdd( materialsCounts[pipelineId], 1_u ) );
 						pixelsXY[pixelIndex] = pixel;
 					}
-					sdwFI;
+					sdwFI
 				} );
 
 			return writer.getBuilder().releaseShader();

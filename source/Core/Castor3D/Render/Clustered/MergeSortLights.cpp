@@ -125,9 +125,9 @@ namespace castor3d
 						{
 							end = mid;
 						}
-						sdwFI;
+						sdwFI
 					}
-					sdwELIHW;
+					sdwELIHW
 
 					writer.returnStmt( begin );
 				}
@@ -174,9 +174,9 @@ namespace castor3d
 							bKey = gsKeys[b0];
 							bValue = gsValues[b0];
 						}
-						sdwFI;
+						sdwFI
 					}
-					sdwROF;
+					sdwROF
 				}
 				, sdw::InInt{ writer, "a0" }
 				, sdw::InInt{ writer, "a1" }
@@ -232,7 +232,7 @@ namespace castor3d
 							// Write the merge path to global memory.
 							c3d_mergePathPartitions[globalPartition] = mergedPath;
 						}
-						sdwFI;
+						sdwFI
 					}
 					else
 					{
@@ -304,7 +304,7 @@ namespace castor3d
 								key = c3d_inputKeys[chunkOffsetB0 + b];
 								value = c3d_inputValues[chunkOffsetB0 + b];
 							}
-							sdwFI;
+							sdwFI
 
 							gsKeys[diag + i] = key;
 							gsValues[diag + i] = value;

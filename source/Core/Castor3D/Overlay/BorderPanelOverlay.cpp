@@ -139,7 +139,7 @@ namespace castor3d
 					{
 						ssOuter -= ssBorderExtent;
 					}
-					sdwFI;
+					sdwFI
 
 					auto innerUv = writer.declLocale( "innerUv"
 						, overlay.borderInnerUV() );

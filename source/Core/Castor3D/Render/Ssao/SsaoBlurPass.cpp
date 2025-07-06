@@ -184,7 +184,7 @@ namespace castor3d
 							normalCloseness = normalCloseness * normalCloseness;
 							k_normal = 4.0_f;
 						}
-						sdwFI;
+						sdwFI
 
 						auto normalError = writer.declLocale( "normalError"
 							, ( 1.0_f - normalCloseness ) * k_normal );
@@ -218,7 +218,7 @@ namespace castor3d
 										, 1.0_f - c3d_ssaoConfigData.edgeSharpness * 2.0f * k_plane * planeError / sqrt( distance2 ) )
 									, 2.0_f ) } );
 						}
-						sdwFI;
+						sdwFI
 					}
 
 					writer.returnStmt( depthWeight * normalWeight * planeWeight );
@@ -267,7 +267,7 @@ namespace castor3d
 						outBentNormal = c3d_cameraData.writeNormal( bentNormal );
 						writer.returnStmt();
 					}
-					sdwFI;
+					sdwFI
 
 					// Base weight for depth falloff.  Increase this for more blurriness,
 					// decrease it for better edge discrimination
@@ -318,9 +318,9 @@ namespace castor3d
 							bentNormal += bent * weight;
 							totalWeight += weight;
 						}
-						sdwFI;
+						sdwFI
 					}
-					sdwROF;
+					sdwROF
 
 					auto const epsilon = writer.declLocale( "epsilon"
 						, 0.0001_f );

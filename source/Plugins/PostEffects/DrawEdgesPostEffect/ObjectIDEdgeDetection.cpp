@@ -85,21 +85,21 @@ namespace draw_edges
 						{
 							writer.returnStmt( 1.0_f );
 						}
-						sdwFI;
+						sdwFI
 						break;
 					case 1:  // bigger
 						sdwIF( writer, X > A || X > B || X > C || X > D || X > E || X > F || X > G || X > H )
 						{
 							writer.returnStmt( 1.0_f );
 						}
-						sdwFI;
+						sdwFI
 						break;
 					case 2:  // thicker
 						sdwIF( writer, X != A || X != B || X != C || X != D || X != E || X != F || X != G || X != H )
 						{
 							writer.returnStmt( 1.0_f );
 						}
-						sdwFI;
+						sdwFI
 						break;
 					case 3:  // different
 						writer.returnStmt( writer.cast< sdw::Float >( writer.cast< sdw::Int >( X != A )
@@ -143,7 +143,7 @@ namespace draw_edges
 					{
 						writer.demote();
 					}
-					sdwFI;
+					sdwFI
 
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
@@ -155,7 +155,7 @@ namespace draw_edges
 					{
 						writer.demote();
 					}
-					sdwFI;
+					sdwFI
 
 					outColour = toonProfile.objectFactor() * computeContour( texelCoord
 						, writer.cast< sdw::Int >( X.z() )

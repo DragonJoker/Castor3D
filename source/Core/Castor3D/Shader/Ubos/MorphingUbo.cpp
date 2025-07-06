@@ -260,7 +260,7 @@ namespace castor3d
 					, col
 					, morphWeight );
 			}
-			sdwROF;
+			sdwROF
 		}
 
 		void MorphingWeightsData::morph( sdw::Array< shader::MorphTargetsData > const & targets
@@ -301,7 +301,7 @@ namespace castor3d
 					, col
 					, morphWeight );
 			}
-			sdwROF;
+			sdwROF
 		}
 
 		void MorphingWeightsData::morph( sdw::Array< shader::MorphTargetsData > const & targets
@@ -344,7 +344,7 @@ namespace castor3d
 					, col
 					, morphWeight );
 			}
-			sdwROF;
+			sdwROF
 		}
 
 		void MorphingWeightsData::morph( sdw::Array< shader::MorphTargetsData > const & targets
@@ -389,7 +389,7 @@ namespace castor3d
 					, col
 					, morphWeight );
 			}
-			sdwROF;
+			sdwROF
 		}
 
 		void MorphingWeightsData::morph( sdw::ArrayStorageBufferT< shader::MorphTargetsData > const & targets
@@ -432,7 +432,7 @@ namespace castor3d
 					, col
 					, morphWeight );
 			}
-			sdwROF;
+			sdwROF
 		}
 
 		void MorphingWeightsData::morph( sdw::ArrayStorageBufferT< shader::MorphTargetsData > const & targets
@@ -477,7 +477,7 @@ namespace castor3d
 					, col
 					, morphWeight );
 			}
-			sdwROF;
+			sdwROF
 		}
 
 		void MorphingWeightsData::morphNoAnim( sdw::ArrayStorageBufferT< shader::MorphTargetsData > const & targets

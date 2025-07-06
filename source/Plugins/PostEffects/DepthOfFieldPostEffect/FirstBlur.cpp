@@ -58,7 +58,7 @@ namespace dof
 
 						acc += tap.rgb();
 					}
-					sdwROF;
+					sdwROF
 
 					acc /= vec3( 64.0_f );
 					out.colour() = vec4( acc.rgb(), CoC );

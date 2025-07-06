@@ -677,7 +677,7 @@ namespace waves
 						finalWaveResult.tangent += waveResult.tangent;
 						finalWaveResult.bitangent += waveResult.bitangent;
 					}
-					sdwROF;
+					sdwROF
 
 					finalWaveResult.position -= position.xyz() * ( writer.cast< sdw::Float >( c3d_wavesData.numWaves() - 1_u ) );
 					finalWaveResult.normal = normalize( finalWaveResult.normal );
@@ -691,7 +691,7 @@ namespace waves
 					finalWaveResult.tangent = vec3( 1.0_f, 0.0_f, 0.0_f );
 					finalWaveResult.bitangent = vec3( 0.0_f, 0.0_f, 1.0_f );
 				}
-				sdwFI;
+				sdwFI
 
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );

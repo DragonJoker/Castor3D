@@ -119,7 +119,7 @@ namespace castor3d
 						gsAABB = c3d_reducedLightsAABB[0_u];
 						gsAABBRange = c3d_lightsAABBRange.xyz();
 					}
-					sdwFI;
+					sdwFI
 
 					shader::groupMemoryBarrierWithGroupSync( writer );
 					auto coordScale = vec3( sdw::Float{ coordinateScale } );
@@ -139,7 +139,7 @@ namespace castor3d
 						c3d_pointLightMortonCodes[threadIndex] = getMortonCode( quantized );
 						c3d_pointLightIndices[threadIndex] = threadIndex;
 					}
-					sdwFI;
+					sdwFI
 
 					sdwIF( writer, threadIndex < c3d_clustersData.spotLightCount() )
 					{
@@ -154,7 +154,7 @@ namespace castor3d
 						c3d_spotLightMortonCodes[threadIndex] = getMortonCode( quantized );
 						c3d_spotLightIndices[threadIndex] = threadIndex;
 					}
-					sdwFI;
+					sdwFI
 				} );
 			return writer.getBuilder().releaseShader();
 		}

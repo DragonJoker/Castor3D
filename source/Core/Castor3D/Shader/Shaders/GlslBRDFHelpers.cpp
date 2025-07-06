@@ -504,7 +504,7 @@ namespace castor3d::shader
 					{
 						m_writer.returnStmt( exp( lambdaSheenNumericHelper( cosTheta, alphaG ) ) );
 					}
-					sdwFI;
+					sdwFI
 
 					m_writer.returnStmt( exp( 2.0_f * lambdaSheenNumericHelper( 0.5_f, alphaG )
 						- lambdaSheenNumericHelper( 1.0_f - cosTheta, alphaG ) ) );

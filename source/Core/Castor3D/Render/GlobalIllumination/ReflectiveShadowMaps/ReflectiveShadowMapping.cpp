@@ -104,7 +104,7 @@ namespace castor3d
 							, worldNormal
 							, rnd.z() );
 					}
-					sdwROF;
+					sdwROF
 
 					m_writer.returnStmt( clamp( indirectIllumination * rsmData.intensity
 						, vec3( 0.0_f )
@@ -166,7 +166,7 @@ namespace castor3d
 							, worldNormal
 							, rnd.z() );
 					}
-					sdwROF;
+					sdwROF
 
 					m_writer.returnStmt( clamp( indirectIllumination * rsmData.intensity
 						, vec3( 0.0_f )
@@ -229,7 +229,7 @@ namespace castor3d
 							, worldNormal
 							, rnd.z() );
 					}
-					sdwROF;
+					sdwROF
 
 					m_writer.returnStmt( clamp( indirectIllumination * rsmData.intensity
 						, vec3( 0.0_f )

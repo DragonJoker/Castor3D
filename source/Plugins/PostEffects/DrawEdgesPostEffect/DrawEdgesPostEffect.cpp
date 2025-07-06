@@ -81,16 +81,16 @@ namespace draw_edges
 							result += tex.fetch( texCoord + ivec2( +x, +y ), 0_i );
 							result += tex.fetch( texCoord + ivec2( -x, -y ), 0_i );
 						}
-						sdwROF;
+						sdwROF
 					}
-					sdwROF;
+					sdwROF
 
 					sdwFOR( writer, sdw::Int, y, 1_i, y < width, ++y )
 					{
 						result += tex.fetch( texCoord + ivec2( +0_i, +y ), 0_i );
 						result += tex.fetch( texCoord + ivec2( +0_i, -y ), 0_i );
 					}
-					sdwROF;
+					sdwROF
 
 					writer.returnStmt( clamp( result, 0.0_f, 1.0_f ) );
 				}
@@ -149,9 +149,9 @@ namespace draw_edges
 
 							colour.rgb() = mix( colour.rgb(), edge, vec3( toonProfile.edgeColour().a() ) );
 						}
-						sdwFI;
+						sdwFI
 					}
-					sdwFI;
+					sdwFI
 
 					out.colour() = colour;
 				} );

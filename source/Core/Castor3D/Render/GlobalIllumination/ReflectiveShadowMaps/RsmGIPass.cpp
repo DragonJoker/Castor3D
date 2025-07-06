@@ -139,7 +139,7 @@ namespace castor3d
 					{
 						writer.demote();
 					}
-					sdwFI;
+					sdwFI
 
 					auto depth = writer.declLocale( "depth"
 						, depthObj.x() );
@@ -213,7 +213,7 @@ namespace castor3d
 					{
 						writer.demote();
 					}
-					sdwFI;
+					sdwFI
 
 					auto depth = writer.declLocale( "depth"
 						, depthObj.x() );
@@ -228,7 +228,7 @@ namespace castor3d
 					{
 						writer.demote();
 					}
-					sdwFI;
+					sdwFI
 
 					auto shadowData = writer.declLocale( "shadowData"
 						, shadows.getSpotShadows( c3d_rsmConfigData.index ) );
@@ -291,7 +291,7 @@ namespace castor3d
 					{
 						writer.demote();
 					}
-					sdwFI;
+					sdwFI
 
 					auto depth = writer.declLocale( "depth"
 						, depthObj.x() );

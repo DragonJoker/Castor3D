@@ -85,7 +85,7 @@ namespace smaa
 							, previousColorTex.sample( texcoord ) );
 						writer.returnStmt( mix( current, previous, vec4( 0.5_f ) ) );
 					}
-					sdwFI;
+					sdwFI
 				}
 				, sdw::InVec2{ writer, "texcoord" }
 				, sdw::InCombinedImage2DRgba32{ writer, "currentColorTex" }

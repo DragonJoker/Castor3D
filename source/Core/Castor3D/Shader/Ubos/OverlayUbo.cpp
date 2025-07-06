@@ -41,7 +41,7 @@ namespace castor3d::shader
 						uv -= crop.x() * ( uvRange.y() - uvRange.x() );
 						uv = clamp( uv, uvRange.x(), uvRange.y() );
 					}
-					sdwFI;
+					sdwFI
 				}
 				, sdw::InFloat{ *m_writer, "ssAbsOvPosition" }
 				, sdw::InFloat{ *m_writer, "ssAbsParentSize" }
@@ -98,7 +98,7 @@ namespace castor3d::shader
 						uv += crop.x() * ( uvRange.y() - uvRange.x() );
 						uv = clamp( uv, uvRange.x(), uvRange.y() );
 					}
-					sdwFI;
+					sdwFI
 				}
 				, sdw::InFloat{ *m_writer, "ssAbsOvPosition" }
 				, sdw::InFloat{ *m_writer, "ssAbsParentSize" }
@@ -165,7 +165,7 @@ namespace castor3d::shader
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
 						fontUv = clamp( fontUv, fontUvRange.x(), fontUvRange.y() );
 					}
-					sdwFI;
+					sdwFI
 				}
 				, sdw::InFloat{ *m_writer, "ssAbsOvPosition" }
 				, sdw::InFloat{ *m_writer, "ssAbsParentSize" }
@@ -238,7 +238,7 @@ namespace castor3d::shader
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
 						fontUv = clamp( fontUv, fontUvRange.x(), fontUvRange.y() );
 					}
-					sdwFI;
+					sdwFI
 				}
 				, sdw::InFloat{ *m_writer, "ssAbsOvPosition" }
 				, sdw::InFloat{ *m_writer, "ssAbsParentSize" }
@@ -311,7 +311,7 @@ namespace castor3d::shader
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
 						fontUv = clamp( fontUv, fontUvRange.x(), fontUvRange.y() );
 					}
-					sdwFI;
+					sdwFI
 				}
 				, sdw::InFloat{ *m_writer, "ssAbsOvPosition" }
 				, sdw::InFloat{ *m_writer, "ssAbsParentSize" }
@@ -384,7 +384,7 @@ namespace castor3d::shader
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
 						fontUv = clamp( fontUv, fontUvRange.x(), fontUvRange.y() );
 					}
-					sdwFI;
+					sdwFI
 				}
 				, sdw::InFloat{ *m_writer, "ssAbsOvPosition" }
 				, sdw::InFloat{ *m_writer, "ssAbsParentSize" }

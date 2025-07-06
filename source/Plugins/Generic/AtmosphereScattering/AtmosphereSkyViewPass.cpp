@@ -124,7 +124,7 @@ namespace atmosphere_scattering
 							, depthBufferValue ) );
 						out.colour() = vec4( ss.luminance(), 1.0_f );
 					}
-					sdwFI;
+					sdwFI
 				} );
 
 			return writer.getBuilder().releaseShader();

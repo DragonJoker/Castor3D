@@ -71,7 +71,7 @@ namespace dof
 					{
 						result.rgb() = fullResCol.rgb();
 					}
-					sdwFI;
+					sdwFI
 
 					result.rgb() = mix( result.rgb(), near.rgb(), vec3( blendNear ) );
 

@@ -83,7 +83,7 @@ namespace castor3d
 								, sdw::log( limZ / nearZ ) / sdw::log( farZ / limZ ) );
 							k = max( 0.0_f, floor( sdw::log( -viewZ / nearZ ) * d - writer.cast< sdw::Float >( dimensions().z() ) * depthBias ) );
 						}
-						sdwFI;
+						sdwFI
 
 						writer.returnStmt( u32vec3( i, j, k ) );
 					}
@@ -157,7 +157,7 @@ namespace castor3d
 									, -e * pow( farZ / nearZ, writer.cast< sdw::Float >( nxtSlice ) / ( clustersZ * ( 1.0_f + depthBias ) ) ) ) );
 							writer.returnStmt( vec2( nearTile, farTile ) );
 						}
-						sdwFI;
+						sdwFI
 					}
 					, sdw::InU32Vec3{ writer, "clusterIndex3D" }
 					, sdw::InVec4{ writer, "clustersLightsData" }
@@ -238,7 +238,7 @@ namespace castor3d
 								, nearZ * pow( farZ / nearZ, depthBias / ( 1.0f + depthBias ) ) );
 							clustersLightsData = vec4( nearZ, farZ, d, e );
 						}
-						sdwFI;
+						sdwFI
 
 						lightsAABBRange = vec4( vec3( 1.0_f ) / ( lightsMax - lightsMin ).xyz(), 1.0_f );
 					}

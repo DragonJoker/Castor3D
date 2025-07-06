@@ -379,7 +379,7 @@ namespace castor3d
 					, meshlet.indices()[i * 3u + 1u]
 					, meshlet.indices()[i * 3u + 2u] );
 			}
-			sdwROF;
+			sdwROF
 
 			sdwFOR( writer, sdw::UInt, i, laneId, i < vertexCount, i += 32u )
 			{
@@ -465,7 +465,7 @@ namespace castor3d
 					, prvPosition );
 				vtxOut[i].position = curPosition;
 			}
-			sdwROF;
+			sdwROF
 		};
 
 		if ( flags.usesTask() )
@@ -485,7 +485,7 @@ namespace castor3d
 					{
 						writer.returnStmt( sdw::Boolean{ false } );
 					}
-					sdwFI;
+					sdwFI
 
 					auto cullData = writer.declLocale( "cullData"
 						, c3d_cullData[meshletId] );
@@ -532,9 +532,9 @@ namespace castor3d
 						{
 							writer.returnStmt( sdw::Boolean{ false } );
 						}
-						sdwFI;
+						sdwFI
 					}
-					sdwROF;
+					sdwROF
 
 					if ( checkCones )
 					{
@@ -545,7 +545,7 @@ namespace castor3d
 						{
 							writer.returnStmt( sdw::Boolean{ true } );
 						}
-						sdwFI;
+						sdwFI
 
 						auto posToCamera = writer.declLocale( "posToCamera"
 							, c3d_cameraData.position() - sphereCenter );
@@ -554,7 +554,7 @@ namespace castor3d
 						{
 							writer.returnStmt( sdw::Boolean{ false } );
 						}
-						sdwFI;
+						sdwFI
 					}
 
 					writer.returnStmt( sdw::Boolean{ true } );
@@ -590,7 +590,7 @@ namespace castor3d
 							, subgroupBallotExclusiveBitCount( vote ) );
 						payload.meshletIndices()[idxOffset] = meshletId;
 					}
-					sdwFI;
+					sdwFI
 
 					sdwIF( writer, laneId == 0u )
 					{
@@ -598,7 +598,7 @@ namespace castor3d
 							, subgroupBallotBitCount( vote ) );
 						payload.dispatchMesh( tasks, 1_u, 1_u );
 					}
-					sdwFI;
+					sdwFI
 				} );
 			writer.implementEntryPointT< shader::PayloadT, shader::FragmentSurfaceT, sdw::VoidT >( 32u, 1u, 1u
 				, sdw::TaskPayloadInEXTT< shader::PayloadT >{ writer }
@@ -711,7 +711,7 @@ namespace castor3d
 					, meshlet.indices()[i * 3u + 1u]
 					, meshlet.indices()[i * 3u + 2u] );
 			}
-			sdwROF;
+			sdwROF
 
 			sdwFOR( writer, sdw::UInt, i, laneId, i < vertexCount, i += 32u )
 			{
@@ -797,7 +797,7 @@ namespace castor3d
 					, prvPosition );
 				vtxOut[i].position = curPosition;
 			}
-			sdwROF;
+			sdwROF
 		};
 
 		if ( flags.usesTask() )
@@ -817,7 +817,7 @@ namespace castor3d
 					{
 						writer.returnStmt( sdw::Boolean{ false } );
 					}
-					sdwFI;
+					sdwFI
 
 					auto cullData = writer.declLocale( "cullData"
 						, c3d_cullData[meshletId] );
@@ -864,9 +864,9 @@ namespace castor3d
 						{
 							writer.returnStmt( sdw::Boolean{ false } );
 						}
-						sdwFI;
+						sdwFI
 					}
-					sdwROF;
+					sdwROF
 
 					if ( checkCones )
 					{
@@ -877,7 +877,7 @@ namespace castor3d
 						{
 							writer.returnStmt( sdw::Boolean{ true } );
 						}
-						sdwFI;
+						sdwFI
 
 						auto posToCamera = writer.declLocale( "posToCamera"
 							, c3d_cameraData.position() - sphereCenter );
@@ -886,7 +886,7 @@ namespace castor3d
 						{
 							writer.returnStmt( sdw::Boolean{ false } );
 						}
-						sdwFI;
+						sdwFI
 					}
 
 					writer.returnStmt( sdw::Boolean{ true } );
@@ -922,7 +922,7 @@ namespace castor3d
 							, subgroupBallotExclusiveBitCount( vote ) );
 						payload.meshletIndices()[idxOffset] = meshletId;
 					}
-					sdwFI;
+					sdwFI
 
 					sdwIF( writer, laneId == 0u )
 					{
@@ -930,7 +930,7 @@ namespace castor3d
 							, subgroupBallotBitCount( vote ) );
 						payload.dispatchMesh( tasks );
 					}
-					sdwFI;
+					sdwFI
 				} );
 			writer.implementEntryPointT< shader::PayloadT, shader::FragmentSurfaceT, sdw::VoidT >( 32u
 				, sdw::TaskPayloadInNVT< shader::PayloadT >{ writer }

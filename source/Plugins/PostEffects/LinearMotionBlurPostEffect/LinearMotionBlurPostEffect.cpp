@@ -82,7 +82,7 @@ namespace motion_blur
 							, blurVector * ( writer.cast< sdw::Float >( i ) / writer.cast< sdw::Float >( c3d_samplesCount - 1_u ) - 0.5f ) );
 						out.colour() += c3d_mapColor.sample( in.uv() + offset );
 					}
-					sdwROF;
+					sdwROF
 
 					out.colour() /= writer.cast< sdw::Float >( c3d_samplesCount );
 				} );

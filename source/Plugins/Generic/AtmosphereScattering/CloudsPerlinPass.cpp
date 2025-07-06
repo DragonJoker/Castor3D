@@ -96,11 +96,11 @@ namespace atmosphere_scattering
 
 								d = min( d, dot( tp, tp ) );
 							}
-							sdwROF;
+							sdwROF
 						}
-						sdwROF;
+						sdwROF
 					}
-					sdwROF;
+					sdwROF
 
 					d = min( d, 1.0_f );
 					d = max( d, 0.0_f );
@@ -342,7 +342,7 @@ namespace atmosphere_scattering
 						weight *= weight;
 						frequency *= octaveFrenquencyFactor;
 					}
-					sdwROF;
+					sdwROF
 
 					auto noise = writer.declLocale( "pCell"
 						, ( sum / weightSum ) );// *0.5 + 0.5;;

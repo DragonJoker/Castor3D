@@ -121,7 +121,7 @@ namespace castor3d
 					{
 						writer.demote();
 					}
-					sdwFI;
+					sdwFI
 
 					auto data1 = writer.declLocale( "data1"
 						, c3d_mapNmlOcc.lod( texCoord, 0.0_f ) );
@@ -157,7 +157,7 @@ namespace castor3d
 							, wsNormal
 							, c3d_rsmConfigData );
 					}
-					sdwFI;
+					sdwFI
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -214,7 +214,7 @@ namespace castor3d
 					{
 						writer.demote();
 					}
-					sdwFI;
+					sdwFI
 
 					auto data1 = writer.declLocale( "data1"
 						, c3d_mapNmlOcc.lod( texCoord, 0.0_f ) );
@@ -227,7 +227,7 @@ namespace castor3d
 					{
 						writer.demote();
 					}
-					sdwFI;
+					sdwFI
 
 					auto giNormal = writer.declLocale( "giNormal"
 						, c3d_mapNml.lod( texCoord, 0.0_f ).xyz() );
@@ -252,7 +252,7 @@ namespace castor3d
 							, wsNormal
 							, c3d_rsmConfigData );
 					}
-					sdwFI;
+					sdwFI
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -337,7 +337,7 @@ namespace castor3d
 							, wsNormal
 							, c3d_rsmConfigData );
 					}
-					sdwFI;
+					sdwFI
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

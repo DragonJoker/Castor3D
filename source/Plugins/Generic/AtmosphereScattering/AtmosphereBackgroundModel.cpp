@@ -159,7 +159,7 @@ namespace atmosphere_scattering
 						interGround.valid() = 1_b;
 						clampOuter = 1_b;
 					}
-					sdwFI;
+					sdwFI
 
 					auto interInnerN = m_writer.declLocale( "interInnerN", Intersection{ m_writer } );
 					auto interInnerF = m_writer.declLocale( "interInnerF", Intersection{ m_writer } );
@@ -190,7 +190,7 @@ namespace atmosphere_scattering
 							, cloudsResult.lod( uv, 0.0_f ) );
 						output = mix( output, clouds, vec4( clouds.a() ) );
 					}
-					sdwFI;
+					sdwFI
 				}
 				, sdw::InVec2{ m_writer, "fragCoord" }
 				, sdw::InFloat{ m_writer, "linearDepth" }
@@ -206,7 +206,7 @@ namespace atmosphere_scattering
 				, ptargetSize
 				, poutput );
 		}
-		sdwFI;
+		sdwFI
 	}
 
 	sdw::Vec3 AtmosphereBackgroundModel::getSunRadiance( sdw::Vec3 const & psunDir )

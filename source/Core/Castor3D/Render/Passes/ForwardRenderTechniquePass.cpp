@@ -365,7 +365,7 @@ namespace castor3d
 						{
 							writer.demote();
 						}
-						sdwFI;
+						sdwFI
 					}
 				}
 
@@ -509,7 +509,7 @@ namespace castor3d
 							outDiffuse = vec4( 0.0_f );
 						}
 					}
-					sdwFI;
+					sdwFI
 				}
 				else
 				{

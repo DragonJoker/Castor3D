@@ -56,7 +56,7 @@ namespace castor3d::shader
 						, passComponents );
 					passShaders.blendComponents( materials, passMultiplier, result, passComponents );
 				}
-				sdwFI;
+				sdwFI
 
 				sdwFOR( writer, sdw::UInt, passIdx, 1_u, passIdx < material.passCount && passIdx < MaxPassLayers, ++passIdx )
 				{
@@ -75,9 +75,9 @@ namespace castor3d::shader
 						material.lighting += curMaterial.lighting;
 						passShaders.blendComponents( materials, passMultiplier, result, passComponents );
 					}
-					sdwFI;
+					sdwFI
 				}
-				sdwROF;
+				sdwROF
 
 				output = result;
 				output.normalizeNormal();
@@ -141,7 +141,7 @@ namespace castor3d::shader
 				auto mask8 = ( mask32 >> ( ( passIdx % 4_u ) * 8_u ) ) & 0xFF_u;
 				passMultipliers[passIdx / 4_u][passIdx % 4_u] = m_writer->cast< sdw::Float >( mask8 ) / 255.0_f;
 			}
-			sdwROF;
+			sdwROF
 		}
 	}
 
@@ -165,7 +165,7 @@ namespace castor3d::shader
 				{
 					writer.demote();
 				}
-				sdwFI;
+				sdwFI
 				if ( opaque )
 				{
 					alpha = 1.0_f;
@@ -176,7 +176,7 @@ namespace castor3d::shader
 				{
 					writer.demote();
 				}
-				sdwFI;
+				sdwFI
 				if ( opaque )
 				{
 					alpha = 1.0_f;
@@ -187,7 +187,7 @@ namespace castor3d::shader
 				{
 					writer.demote();
 				}
-				sdwFI;
+				sdwFI
 				if ( opaque )
 				{
 					alpha = 1.0_f;
@@ -198,7 +198,7 @@ namespace castor3d::shader
 				{
 					writer.demote();
 				}
-				sdwFI;
+				sdwFI
 				if ( opaque )
 				{
 					alpha = 1.0_f;
@@ -209,7 +209,7 @@ namespace castor3d::shader
 				{
 					writer.demote();
 				}
-				sdwFI;
+				sdwFI
 				if ( opaque )
 				{
 					alpha = 1.0_f;
@@ -220,7 +220,7 @@ namespace castor3d::shader
 				{
 					writer.demote();
 				}
-				sdwFI;
+				sdwFI
 				if ( opaque )
 				{
 					alpha = 1.0_f;

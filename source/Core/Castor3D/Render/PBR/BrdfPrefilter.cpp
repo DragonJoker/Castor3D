@@ -278,7 +278,7 @@ namespace castor3d
 								A += ( 1.0_f - Fc ) * vis;
 								B += Fc * vis;
 							}
-							sdwFI;
+							sdwFI
 						}
 						// Charlie
 						{
@@ -304,10 +304,10 @@ namespace castor3d
 									, brdf.visibilityAshikhmin( NdotL, NdotV ) );
 								C += sheenVisibility * sheenDistribution * NdotL * VdotH;
 							}
-							sdwFI;
+							sdwFI
 						}
 					}
-					sdwROF;
+					sdwROF
 
 					writer.returnStmt( vec3( 4.0_f * A / writer.cast< sdw::Float >( sampleCount )
 						, 4.0_f * B / writer.cast< sdw::Float >( sampleCount )

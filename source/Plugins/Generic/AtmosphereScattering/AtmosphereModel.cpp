@@ -186,7 +186,7 @@ namespace atmosphere_scattering
 						{
 							tMax = tTop.t();
 						}
-						sdwFI;
+						sdwFI
 					}
 					sdwELSE
 					{
@@ -194,9 +194,9 @@ namespace atmosphere_scattering
 						{
 							tMax = min( tTop.t(), tBottom.t() );
 						}
-						sdwFI;
+						sdwFI
 					}
-					sdwFI;
+					sdwFI
 
 					if ( settings.cameraData )
 					{
@@ -215,9 +215,9 @@ namespace atmosphere_scattering
 							{
 								tMax = tDepth;
 							}
-							sdwFI;
+							sdwFI
 						}
-						sdwFI;
+						sdwFI
 					}
 
 					tMax = min( tMax, tMaxMax );
@@ -285,7 +285,7 @@ namespace atmosphere_scattering
 							{
 								dt = sdw::fma( tMaxFloor, t1, -t0 );
 							}
-							sdwFI;
+							sdwFI
 
 							//t = t0 + (t1 - t0) * (whangHashNoise(pixPos.x, pixPos.y, gFrameId * 1920 * 1080)); // With dithering required to hide some sampling artefact relying on TAA later? This may even allow volumetric shadow?
 							t = sdw::fma( dt, sampleSegmentT, t0 );
@@ -367,7 +367,7 @@ namespace atmosphere_scattering
 
 						tPrev = t;
 					}
-					sdwROF;
+					sdwROF
 
 					if ( settings.useGround )
 					{
@@ -389,7 +389,7 @@ namespace atmosphere_scattering
 							auto NdotL = writer.declLocale( "NdotL", clamp( dot( normalize( upVector ), normalize( sunDir ) ), 0.0_f, 1.0_f ) );
 							L += globalL * transmittanceToSun * throughput * NdotL * atmosphereData.groundAlbedo() / castor::Pi< float >;
 						}
-						sdwFI;
+						sdwFI
 					}
 
 					result.luminance() = L;
@@ -443,9 +443,9 @@ namespace atmosphere_scattering
 							// Ray is not intersecting the atmosphere
 							writer.returnStmt( 0_b );
 						}
-						sdwFI;
+						sdwFI
 					}
-					sdwFI;
+					sdwFI
 
 					writer.returnStmt( 1_b ); // ok to start tracing
 				}
@@ -530,7 +530,7 @@ namespace atmosphere_scattering
 					{
 						writer.returnStmt( result );
 					}
-					sdwFI;
+					sdwFI
 
 					auto t0 = writer.declLocale( "t0"
 						, ( -b - sqrt( delta ) ) / ( 2.0_f * a ) );
@@ -541,7 +541,7 @@ namespace atmosphere_scattering
 					{
 						writer.returnStmt( result );
 					}
-					sdwFI;
+					sdwFI
 
 					sdwIF( writer, t0 < 0.0_f )
 					{
@@ -555,7 +555,7 @@ namespace atmosphere_scattering
 					{
 						result.t() = max( 0.0_f, min( t0, t1 ) );
 					}
-					sdwFI;
+					sdwFI
 
 					result.valid() = 1_b;
 					result.point() = ray.step( result.t() );
@@ -610,7 +610,7 @@ namespace atmosphere_scattering
 					{
 						writer.returnStmt( 0_i );
 					}
-					sdwFI;
+					sdwFI
 
 					auto t0 = writer.declLocale( "t0"
 						, ( -b - sqrt( delta ) ) / ( 2.0_f * a ) );
@@ -621,7 +621,7 @@ namespace atmosphere_scattering
 					{
 						writer.returnStmt( 0_i );
 					}
-					sdwFI;
+					sdwFI
 
 					auto minSol = writer.declLocale( "minSol"
 						, writer.ternary( ground.valid() 
@@ -639,7 +639,7 @@ namespace atmosphere_scattering
 						nearest.valid() = clampToGround || maxSol != ground.t();
 						writer.returnStmt( writer.ternary( nearest.valid(), 1_i, 0_i ) );
 					}
-					sdwFI;
+					sdwFI
 
 					nearest.t() = minSol;
 					nearest.point() = ray.step( minSol );
@@ -902,7 +902,7 @@ namespace atmosphere_scattering
 						coords *= coords;
 						viewZenithCosAngle = cos( zenithHorizonAngle + beta * coords );
 					}
-					sdwFI;
+					sdwFI
 
 					auto coord = writer.declLocale( "coord"
 						, uv.x() );
@@ -961,7 +961,7 @@ namespace atmosphere_scattering
 						coord = sqrt( coord );
 						uv.y() = coord * 0.5_f + 0.5_f;
 					}
-					sdwFI;
+					sdwFI
 					{
 						auto coord = writer.declLocale( "coord"
 							, -lightViewCosAngle * 0.5_f + 0.5_f );

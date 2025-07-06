@@ -439,7 +439,7 @@ namespace castor3d
 					{
 						writer.demote();
 					}
-					sdwFI;
+					sdwFI
 
 					auto lightDir = writer.declLocale( "lightDir"
 						, normalize( in.lightPosition - in.rsmPosition ) );

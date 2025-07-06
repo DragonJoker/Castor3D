@@ -151,7 +151,7 @@ namespace atmosphere_scattering
 						localAmplitude *= 0.25_f;
 						localFrequency *= 3.0_f;
 					}
-					sdwROF;
+					sdwROF
 
 					writer.returnStmt( noiseValue * noiseValue );
 				}

@@ -132,9 +132,9 @@ namespace castor3d
 								irradiance += c3d_mapEnvironment.lod( sampleVec, 0.0_f ).rgb() * cos( theta ) * sin( theta );
 								nrSamples = nrSamples + 1;
 							}
-							sdwROF;
+							sdwROF
 						}
-						sdwROF;
+						sdwROF
 
 						irradiance = irradiance * sdw::Float{ castor::Pi< float > } * ( 1.0_f / writer.cast< sdw::Float >( nrSamples ) );
 						out.colour() = vec4( irradiance, 1.0_f );

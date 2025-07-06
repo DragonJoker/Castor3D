@@ -75,7 +75,7 @@ namespace smaa
 					{
 						writer.demote();
 					}
-					sdwFI;
+					sdwFI
 
 					writer.returnStmt( edges );
 				}

@@ -90,7 +90,7 @@ namespace castor3d
 						out.colour() += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( in.texcoord() - offset );
 						out.colour() += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( in.texcoord() + offset );
 					}
-					sdwROF;
+					sdwROF
 
 					if ( isDepth )
 					{

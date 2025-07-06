@@ -89,13 +89,13 @@ namespace smaa
 					{
 						variable.x() = value.x();
 					}
-					sdwFI;
+					sdwFI
 
 					sdwIF( writer, cond.y() )
 					{
 						variable.y() = value.y();
 					}
-					sdwFI;
+					sdwFI
 				}
 				, sdw::InBVec2{ writer, "cond" }
 				, sdw::InOutVec2{ writer, "variable" }
@@ -181,7 +181,7 @@ namespace smaa
 
 						writer.returnStmt( color );
 					}
-					sdwFI;
+					sdwFI
 				}
 				, sdw::InVec2{ writer, "texcoord" }
 				, sdw::InVec4{ writer, "offset" }
