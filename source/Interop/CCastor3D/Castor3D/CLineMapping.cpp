@@ -1,7 +1,7 @@
 #include "CCastor3D/Castor3D.h"
 #include "CCastor3D/Castor3DCommon.h"
 
-#include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/LineMapping.hpp>
 
 #ifdef __cplusplus
 extern "C"

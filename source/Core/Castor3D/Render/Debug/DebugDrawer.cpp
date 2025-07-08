@@ -5,7 +5,7 @@
 #include "Castor3D/Buffer/InstantUploadData.hpp"
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/LineMapping.hpp>
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"

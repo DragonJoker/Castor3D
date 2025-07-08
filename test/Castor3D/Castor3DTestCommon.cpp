@@ -543,7 +543,7 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( castor3d::LinesMapping const & lhs, castor3d::LinesMapping const & rhs )
+	bool C3DTestCase::compare( castor3d::LineMapping const & lhs, castor3d::LineMapping const & rhs )
 	{
 		auto lhsData = lhs.getData().getFaces();
 		auto rhsData = rhs.getData().getFaces();
@@ -612,10 +612,10 @@ namespace Testing
 				result = CT_EQUAL( static_cast< castor3d::TriFaceMapping const & >( lhs )
 					, static_cast< castor3d::TriFaceMapping const & >( rhs ) );
 			}
-			else if ( lhs.getType() == castor3d::LinesMapping::TypeName )
+			else if ( lhs.getType() == castor3d::LineMapping::TypeName )
 			{
-				result = CT_EQUAL( static_cast< castor3d::LinesMapping const & >( lhs )
-					, static_cast< castor3d::LinesMapping const & >( rhs ) );
+				result = CT_EQUAL( static_cast< castor3d::LineMapping const & >( lhs )
+					, static_cast< castor3d::LineMapping const & >( rhs ) );
 			}
 		}
 

@@ -228,7 +228,7 @@ namespace CastorCom
 }
 
 #include "ComCastor3D/ComCastorUtils.hpp"
-#include "ComCastor3D/Castor3D_h.h"
+#include "ComCastor3D/Castor3D_i.h"
 #include "ComCastor3D/Win32/resource.h"
 
 #endif

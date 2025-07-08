@@ -418,6 +418,8 @@ namespace castor3d
 							if ( flags.pass.hasDeferredDiffuseLightingFlag
 								&& m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly )
 							{
+								auto directDiffuse = writer.declLocale( "directDiffuse"
+									, c3d_imgDiffuse.load( ivec2( in.fragCoord.xy() ) ).rgb() );
 								lights.computeCombinedAllButDif( clusteredLights
 									, components
 									, *backgroundModel
@@ -425,8 +427,8 @@ namespace castor3d
 									, modelData.isShadowReceiver()
 									, lightSurface.clipPosition().xy()
 									, lightSurface.viewPosition().value().z()
-									, c3d_imgDiffuse.load( ivec2( in.fragCoord.xy() ) ).rgb()
 									, output.pushBlock( cuT( "Lighting" ) )
+									, directDiffuse
 									, directLighting );
 							}
 							else

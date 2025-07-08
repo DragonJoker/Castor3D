@@ -1,15 +1,15 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_LinesMapping_H___
-#define ___C3D_LinesMapping_H___
+#ifndef ___C3D_LineMapping_H___
+#define ___C3D_LineMapping_H___
 
 #include "Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/Line.hpp"
 
 namespace castor3d
 {
-	class LinesMapping
+	class LineMapping
 		: public IndexMapping
 	{
 	public:
@@ -159,7 +159,7 @@ namespace castor3d
 
 			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
 			{
-				return castor::makeUniqueDerived< SubmeshComponent, LinesMapping >( submesh );
+				return castor::makeUniqueDerived< SubmeshComponent, LineMapping >( submesh );
 			}
 
 			SubmeshComponentFlag getLineIndexFlag()const noexcept override
@@ -187,7 +187,7 @@ namespace castor3d
 		 *\param[in]	submesh				Le sous-maillage parent.
 		 *\param[in]	bufferUsageFlags	Les flags d'utilisation du buffer.
 		 */
-		C3D_API explicit LinesMapping( Submesh & submesh
+		C3D_API explicit LineMapping( Submesh & submesh
 			, VkBufferUsageFlags bufferUsageFlags = {} );
 		/**
 		 *\copydoc		castor3d::IndexMapping::getCount

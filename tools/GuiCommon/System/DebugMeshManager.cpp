@@ -20,7 +20,7 @@
 #include <Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/LineMapping.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Render/RenderDevice.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
