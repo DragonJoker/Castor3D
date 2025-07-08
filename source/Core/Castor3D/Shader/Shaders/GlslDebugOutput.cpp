@@ -1,5 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 
+#include "Castor3D/Miscellaneous/DebugConfig.hpp"
+
 #include <CastorUtils/Data/Path.hpp>
 
 #include <ShaderWriter/Source.hpp>
@@ -16,27 +18,9 @@ namespace castor3d::shader
 		, m_index{ index }
 		, m_output{ output }
 		, m_enable{ enable }
-		, m_values{ sdw::findWriterMandat( m_index, m_output ).declGlobalArray< sdw::Vec3 >( "c3d_debugValue", 512u, m_enable ) }
-		, m_indices{ sdw::findWriterMandat( m_index, m_output ).declGlobalArray< sdw::UInt >( "c3d_debugIndices", 512u, m_enable ) }
+		, m_value{ sdw::findWriterMandat( m_index, m_output ).declGlobal( "c3d_debugValue", sdw::vec3( 0.0_f ), m_enable ) }
+		, m_valueSet{ sdw::findWriterMandat( m_index, m_output ).declGlobal( "c3d_debugIndices", 0_u, m_enable ) }
 	{
-		if ( m_enable )
-		{
-			auto & writer = sdw::findWriterMandat( m_index, m_output );
-			sdwFOR( writer, sdw::UInt, i, 0_u, i < 512_u, ++i )
-			{
-				m_indices[i] = 0_u;
-			}
-			sdwROF
-			m_registerOutput = writer.implementFunction< sdw::Void >( "c3d_registerOutput"
-				, [this]( sdw::UInt const & idx
-					, sdw::Vec3 const & val )
-				{
-					m_indices[idx] = 1_u;
-					m_values[idx] = val;
-				}
-				, sdw::InUInt{ writer, "index" }
-				, sdw::InVec3{ writer, "value" } );
-		}
 	}
 
 	DebugOutput::~DebugOutput()noexcept
@@ -45,10 +29,9 @@ namespace castor3d::shader
 		{
 			auto & writer = sdw::findWriterMandat( m_index, m_output );
 
-			sdwIF( writer, m_index != 0_u
-				&& m_indices[m_index] != 0_u )
+			sdwIF( writer, m_valueSet )
 			{
-				auto value = writer.declLocale( "debugValue", m_values[m_index] );
+				auto value = writer.declLocale( "debugValue", m_value );
 				m_output.xyz() = value;
 			}
 			sdwFI
@@ -70,7 +53,14 @@ namespace castor3d::shader
 		if ( m_enable )
 		{
 			auto index = m_config.registerValue( category, name );
-			m_registerOutput( sdw::UInt{ index }, value );
+			auto & writer = sdw::findWriterMandat( m_index, m_output );
+
+			sdwIF( writer, m_index == index )
+			{
+				m_value = value;
+				m_valueSet = 1_u;
+			}
+			sdwFI
 		}
 	}
 

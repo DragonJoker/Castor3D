@@ -67,8 +67,8 @@ namespace castor3d::shader
 		sdw::UInt m_index;
 		sdw::Vec4 m_output;
 		bool m_enable;
-		sdw::Vec3Array m_values;
-		sdw::UIntArray m_indices;
+		sdw::Vec3 m_value;
+		sdw::UInt m_valueSet;
 		sdw::Function< sdw::Void
 			, sdw::InUInt
 			, sdw::InVec3 > m_registerOutput;

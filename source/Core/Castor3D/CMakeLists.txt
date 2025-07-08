@@ -753,6 +753,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/ConfigurationVisitor.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/DebugCallbacks.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/DebugConfig.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/DebugName.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/GpuInformations.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/GpuObjectTracker.hpp

@@ -29,6 +29,7 @@ See LICENSE file in root folder
 #include "Castor3D/Cache/SceneNodeCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Miscellaneous/DebugConfig.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Scene/Fog.hpp"
 #include "Castor3D/Scene/Shadow.hpp"
