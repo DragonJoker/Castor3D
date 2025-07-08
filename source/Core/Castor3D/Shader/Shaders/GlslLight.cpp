@@ -373,15 +373,14 @@ namespace castor3d::shader
 		, sdw::UInt const receivesShadows
 		, sdw::Vec2 const screenPosition
 		, sdw::Float const viewDepth
-		, sdw::Vec3 const diffuse
 		, DebugOutputCategory const & debugOutput
+		, sdw::Vec3 & diffuse
 		, DirectLighting & parentOutput )
 	{
 		if ( auto lightingModel = getLightingModel() )
 		{
 			if ( clusteredLights.isEnabled() )
 			{
-				parentOutput.diffuse = diffuse;
 				auto cur = m_writer.declLocale( "c3d_cur"
 					, 0_u );
 				auto end = m_writer.declLocale( "c3d_end"
@@ -399,7 +398,9 @@ namespace castor3d::shader
 							, backgroundModel
 							, lightSurface
 							, receivesShadows
+							, diffuse
 							, parentOutput );
+						diffuse = vec3( 0.0_f );
 					}
 					sdwFI
 					cur += DirectionalLightInstance::LightDataComponents;
@@ -414,6 +415,7 @@ namespace castor3d::shader
 					, screenPosition
 					, viewDepth
 					, debugOutput
+					, diffuse
 					, parentOutput );
 			}
 			else
@@ -422,8 +424,8 @@ namespace castor3d::shader
 					, backgroundModel
 					, lightSurface
 					, receivesShadows
-					, diffuse
 					, debugOutput
+					, diffuse
 					, parentOutput );
 			}
 		}
@@ -569,13 +571,12 @@ namespace castor3d::shader
 		, BackgroundModel & backgroundModel
 		, LightSurface const & lightSurface
 		, sdw::UInt const receivesShadows
-		, sdw::Vec3 const diffuse
 		, DebugOutputCategory const & debugOutput
+		, sdw::Vec3 & diffuse
 		, DirectLighting & output )
 	{
 		if ( auto lightingModel = getLightingModel() )
 		{
-			output.diffuse = diffuse;
 			auto cur = m_writer.declLocale( "c3d_cur"
 				, 0_u );
 			auto end = m_writer.declLocale( "c3d_end"
@@ -593,7 +594,9 @@ namespace castor3d::shader
 						, backgroundModel
 						, lightSurface
 						, receivesShadows
+						, diffuse
 						, output );
+					diffuse = vec3( 0.0_f );
 				}
 				sdwFI
 				cur += DirectionalLightInstance::LightDataComponents;
@@ -613,7 +616,9 @@ namespace castor3d::shader
 						, components
 						, lightSurface
 						, receivesShadows
+						, diffuse
 						, output );
+					diffuse = vec3( 0.0_f );
 				}
 				sdwFI
 				cur += PointLightInstance::LightDataComponents;
@@ -633,7 +638,9 @@ namespace castor3d::shader
 						, components
 						, lightSurface
 						, receivesShadows
+						, diffuse
 						, output );
+					diffuse = vec3( 0.0_f );
 				}
 				sdwFI
 				cur += SpotLightInstance::LightDataComponents;

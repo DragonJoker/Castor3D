@@ -155,18 +155,21 @@ namespace castor3d::shader
 			, BackgroundModel & background
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
+			, sdw::Vec3 const & diffuse
 			, DirectLighting & output );
 		C3D_API void computeAllButDiffuse( DebugOutputCategory const & debugOutput
 			, PointLight const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
+			, sdw::Vec3 const & diffuse
 			, DirectLighting & output );
 		C3D_API void computeAllButDiffuse( DebugOutputCategory const & debugOutput
 			, SpotLight const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
+			, sdw::Vec3 const & diffuse
 			, DirectLighting & output );
 		//\}
 		//\}
@@ -332,18 +335,21 @@ namespace castor3d::shader
 			, InBlendComponents
 			, InLightSurface
 			, sdw::InUInt
+			, sdw::InVec3
 			, InOutDirectLighting > m_computeDirectionalAllButDiffuse;
 		sdw::Function< sdw::Void
 			, PPointLight
 			, InBlendComponents
 			, InLightSurface
 			, sdw::InUInt
+			, sdw::InVec3
 			, InOutDirectLighting > m_computePointAllButDiffuse;
 		sdw::Function< sdw::Void
 			, PSpotLight
 			, InBlendComponents
 			, InLightSurface
 			, sdw::InUInt
+			, sdw::InVec3
 			, InOutDirectLighting > m_computeSpotAllButDiffuse;
 	};
 }

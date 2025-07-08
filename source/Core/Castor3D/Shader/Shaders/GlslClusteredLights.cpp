@@ -412,6 +412,7 @@ namespace castor3d::shader
 		, sdw::Vec2 const screenPosition
 		, sdw::Float const viewDepth
 		, DebugOutputCategory const & debugOutput
+		, sdw::Vec3 & diffuse
 		, DirectLighting & output )
 	{
 		if ( !m_enabled )
@@ -426,7 +427,9 @@ namespace castor3d::shader
 					, components
 					, lightSurface
 					, receivesShadows
+					, diffuse
 					, output );
+				diffuse = vec3( 0.0_f );
 			};
 		auto computeSpotLight = [&]( SpotLight const & spot )
 			{
@@ -435,7 +438,9 @@ namespace castor3d::shader
 					, components
 					, lightSurface
 					, receivesShadows
+					, diffuse
 					, output );
+				diffuse = vec3( 0.0_f );
 			};
 		auto clusterIndex3D = m_writer.declLocale( "clusterIndex3D"
 			, m_clusterData->computeClusterIndex3D( screenPosition

@@ -47,6 +47,7 @@ namespace castor3d::shader
 			, sdw::Vec2 const screenPosition
 			, sdw::Float const viewDepth
 			, DebugOutputCategory const & debugOutput
+			, sdw::Vec3 & diffuse
 			, DirectLighting & output );
 		C3D_API void computeCombinedDif( Lights & lights
 			, LightingModel & lightingModel
