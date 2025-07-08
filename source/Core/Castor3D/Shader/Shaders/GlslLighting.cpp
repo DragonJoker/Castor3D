@@ -211,7 +211,7 @@ namespace castor3d::shader
 				, PDirectionalLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
 				, InLightSurface{ m_writer, "lightSurface", plightSurface.getType() }
-				, sdw::InUInt( m_writer, "receivesShadows" )
+				, sdw::InUInt{ m_writer, "receivesShadows" }
 				, InOutDirectLighting{ m_writer, "parentOutput" } );
 		}
 
@@ -298,7 +298,7 @@ namespace castor3d::shader
 				, PPointLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
 				, InLightSurface{ m_writer, "lightSurface", plightSurface.getType() }
-				, sdw::InUInt( m_writer, "receivesShadows" )
+				, sdw::InUInt{ m_writer, "receivesShadows" }
 				, InOutDirectLighting{ m_writer, "parentOutput" } );
 		}
 
@@ -393,7 +393,7 @@ namespace castor3d::shader
 				, PSpotLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
 				, InLightSurface{ m_writer, "lightSurface", plightSurface.getType() }
-				, sdw::InUInt( m_writer, "receivesShadows" )
+				, sdw::InUInt{ m_writer, "receivesShadows" }
 				, InOutDirectLighting{ m_writer, "parentOutput" } );
 		}
 
@@ -471,7 +471,7 @@ namespace castor3d::shader
 				, InOutDirectionalLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
 				, InLightSurface{ m_writer, "lightSurface", plightSurface.getType() }
-				, sdw::InUInt( m_writer, "receivesShadows" ) );
+				, sdw::InUInt{ m_writer, "receivesShadows" } );
 		}
 
 		return m_computeDirectionalDiffuse( plight
@@ -548,7 +548,7 @@ namespace castor3d::shader
 				, InOutPointLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
 				, InLightSurface{ m_writer, "lightSurface", plightSurface.getType() }
-				, sdw::InUInt( m_writer, "receivesShadows" ) );
+				, sdw::InUInt{ m_writer, "receivesShadows" } );
 		}
 
 		return m_computePointDiffuse( plight
@@ -635,7 +635,7 @@ namespace castor3d::shader
 				, InOutSpotLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
 				, InLightSurface{ m_writer, "lightSurface", plightSurface.getType() }
-				, sdw::InUInt( m_writer, "receivesShadows" ) );
+				, sdw::InUInt{ m_writer, "receivesShadows" } );
 		}
 
 		return m_computeSpotDiffuse( plight
@@ -650,6 +650,7 @@ namespace castor3d::shader
 		, BackgroundModel & background
 		, LightSurface const & plightSurface
 		, sdw::UInt const & preceivesShadows
+		, sdw::Vec3 const & pdiffuse
 		, DirectLighting & pparentOutput )
 	{
 		if ( !m_computeDirectionalAllButDiffuse )
@@ -660,12 +661,12 @@ namespace castor3d::shader
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows
+					, sdw::Vec3 const & diffuse
 					, DirectLighting parentOutput )
 				{
 					auto output = m_writer.declLocale< DirectLighting >( "output"
 						, DirectLighting{ m_writer } );
-					output.diffuse = parentOutput.diffuse;
-					parentOutput.diffuse = vec3( 0.0_f );
+					output.diffuse = diffuse;
 					lightSurface.updateL( derivVec3( -light.direction() ) );
 					auto radiance = m_writer.declLocale( "radiance"
 						, m_scattering->computeRadiance( light.base(), lightSurface.L().value() ) );
@@ -704,7 +705,8 @@ namespace castor3d::shader
 				, PDirectionalLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
 				, InLightSurface{ m_writer, "lightSurface", plightSurface.getType() }
-				, sdw::InUInt( m_writer, "receivesShadows" )
+				, sdw::InUInt{ m_writer, "receivesShadows" }
+				, sdw::InVec3{ m_writer, "diffuse" }
 				, InOutDirectLighting{ m_writer, "parentOutput" } );
 		}
 
@@ -712,6 +714,7 @@ namespace castor3d::shader
 			, pcomponents
 			, plightSurface
 			, preceivesShadows
+			, pdiffuse
 			, pparentOutput );
 	}
 
@@ -720,6 +723,7 @@ namespace castor3d::shader
 		, BlendComponents const & pcomponents
 		, LightSurface const & plightSurface
 		, sdw::UInt const & preceivesShadows
+		, sdw::Vec3 const & pdiffuse
 		, DirectLighting & pparentOutput )
 	{
 		if ( !m_computePointAllButDiffuse )
@@ -729,12 +733,12 @@ namespace castor3d::shader
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows
+					, sdw::Vec3 const & diffuse
 					, DirectLighting parentOutput )
 				{
 					auto output = m_writer.declLocale< DirectLighting >( "output"
 						, DirectLighting{ m_writer } );
-					output.diffuse = parentOutput.diffuse;
-					parentOutput.diffuse = vec3( 0.0_f );
+					output.diffuse = diffuse;
 					lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
 					auto radiance = m_writer.declLocale( "radiance"
 						, m_scattering->computeRadiance( light.base(), lightSurface.L().value() ) );
@@ -767,7 +771,8 @@ namespace castor3d::shader
 				, PPointLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
 				, InLightSurface{ m_writer, "lightSurface", plightSurface.getType() }
-				, sdw::InUInt( m_writer, "receivesShadows" )
+				, sdw::InUInt{ m_writer, "receivesShadows" }
+				, sdw::InVec3{ m_writer, "diffuse" }
 				, InOutDirectLighting{ m_writer, "parentOutput" } );
 		}
 
@@ -775,6 +780,7 @@ namespace castor3d::shader
 			, pcomponents
 			, plightSurface
 			, preceivesShadows
+			, pdiffuse
 			, pparentOutput );
 	}
 
@@ -783,6 +789,7 @@ namespace castor3d::shader
 		, BlendComponents const & pcomponents
 		, LightSurface const & plightSurface
 		, sdw::UInt const & preceivesShadows
+		, sdw::Vec3 const & pdiffuse
 		, DirectLighting & pparentOutput )
 	{
 		if ( !m_computeSpotAllButDiffuse )
@@ -792,6 +799,7 @@ namespace castor3d::shader
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows
+					, sdw::Vec3 const & diffuse
 					, DirectLighting parentOutput )
 				{
 					lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
@@ -802,8 +810,7 @@ namespace castor3d::shader
 					{
 						auto output = m_writer.declLocale< DirectLighting >( "output"
 							, DirectLighting{ m_writer } );
-						output.diffuse = parentOutput.diffuse;
-						parentOutput.diffuse = vec3( 0.0_f );
+						output.diffuse = diffuse;
 						lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
 						auto radiance = m_writer.declLocale( "radiance"
 							, m_scattering->computeRadiance( light.base(), lightSurface.L().value() ) );
@@ -839,7 +846,8 @@ namespace castor3d::shader
 				, PSpotLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
 				, InLightSurface{ m_writer, "lightSurface", plightSurface.getType() }
-				, sdw::InUInt( m_writer, "receivesShadows" )
+				, sdw::InUInt{ m_writer, "receivesShadows" }
+				, sdw::InVec3{ m_writer, "diffuse" }
 				, InOutDirectLighting{ m_writer, "parentOutput" } );
 		}
 
@@ -847,6 +855,7 @@ namespace castor3d::shader
 			, pcomponents
 			, plightSurface
 			, preceivesShadows
+			, pdiffuse
 			, pparentOutput );
 	}
 
