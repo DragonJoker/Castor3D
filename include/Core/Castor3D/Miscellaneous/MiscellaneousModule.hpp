@@ -185,6 +185,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Registers debug output values from shaders.
+	*\~french
+	*\brief
+	*	Enregistre les valeurs de débogage depuis les shaders.
+	*/
+	struct DebugConfig;
+	/**
+	*\~english
+	*\brief
 	*	Holds GPU informations.
 	*\~french
 	*\brief
