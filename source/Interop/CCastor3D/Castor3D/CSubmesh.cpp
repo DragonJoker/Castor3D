@@ -2,7 +2,7 @@
 #include "CCastor3D/Castor3DCommon.h"
 
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/LineMapping.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp>
 
 #ifdef __cplusplus
@@ -48,7 +48,7 @@ extern "C"
 		auto const & type = object->internal->getIndexMapping()->getType();
 		*result = C3D_INDEX_MAPPING_TYPE_UNSUPPORTED;
 
-		if ( type == castor3d::LinesMapping::TypeName )
+		if ( type == castor3d::LineMapping::TypeName )
 		{
 			*result = C3D_INDEX_MAPPING_TYPE_LINES;
 		}
@@ -91,11 +91,11 @@ extern "C"
 		try
 		{
 			auto res = object->internal->getIndexMapping();
-			if ( object->internal->getIndexMapping()->getType() != castor3d::LinesMapping::TypeName )
+			if ( object->internal->getIndexMapping()->getType() != castor3d::LineMapping::TypeName )
 				return cc3d::reportError( C3D_FAILURE, ERROR_WRONG_MAPPING_TYPE );
 
 			C3D_SafeAlloc( *result, C3DLineMapping );
-			( *result )->internal = static_cast< castor3d::LinesMapping * >( res );
+			( *result )->internal = static_cast< castor3d::LineMapping * >( res );
 		}
 		C3D_CatchCommonExceptions()
 

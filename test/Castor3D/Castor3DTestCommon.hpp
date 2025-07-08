@@ -12,7 +12,7 @@
 #include <Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/LineMapping.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
@@ -439,11 +439,11 @@ namespace Testing
 	};
 
 	template<>
-	struct Stringifier< castor3d::LinesMapping >
+	struct Stringifier< castor3d::LineMapping >
 	{
-		static std::string get( castor3d::LinesMapping const & )
+		static std::string get( castor3d::LineMapping const & )
 		{
-			return std::string{ "castor3d::LinesMapping" };
+			return std::string{ "castor3d::LineMapping" };
 		}
 	};
 
@@ -988,7 +988,7 @@ namespace Testing
 		bool compare( castor3d::Face const & lhs, castor3d::Face const & rhs );
 		bool compare( castor3d::TriFaceMapping const & lhs, castor3d::TriFaceMapping const & rhs );
 		bool compare( castor3d::Line const & lhs, castor3d::Line const & rhs );
-		bool compare( castor3d::LinesMapping const & lhs, castor3d::LinesMapping const & rhs );
+		bool compare( castor3d::LineMapping const & lhs, castor3d::LineMapping const & rhs );
 		bool compare( castor3d::Skeleton const & lhs, castor3d::Skeleton const & rhs );
 		bool compare( castor3d::SkeletonNode const & lhs, castor3d::SkeletonNode const & rhs );
 		bool compare( castor3d::BoneNode const & lhs, castor3d::BoneNode const & rhs );

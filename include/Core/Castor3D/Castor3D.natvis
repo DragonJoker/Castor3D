@@ -260,7 +260,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::LinesMapping::ComponentData">
+	<Type Name="castor3d::LineMapping::ComponentData">
 		<DisplayString>lines={m_lines}</DisplayString>
 		<Expand>
 			<Item Name="initialised">m_initialised</Item>
@@ -270,7 +270,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::LinesMapping">
+	<Type Name="castor3d::LineMapping">
 		<DisplayString>{m_id} {m_type} {*m_data}</DisplayString>
 		<Expand>
 			<Item Name="id">m_id</Item>

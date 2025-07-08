@@ -535,7 +535,7 @@ extern "C"
 
 	struct C3DLineMapping_
 	{
-		castor3d::LinesMapping * internal;
+		castor3d::LineMapping * internal;
 	};
 
 	struct C3DTriFaceMapping_

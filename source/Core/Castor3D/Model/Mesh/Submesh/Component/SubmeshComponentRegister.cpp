@@ -5,7 +5,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/LineMapping.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp"
@@ -35,7 +35,7 @@ namespace castor3d
 	{
 		m_renderDatas.push_back( nullptr );
 
-		registerComponent< LinesMapping >();
+		registerComponent< LineMapping >();
 		registerComponent< TriFaceMapping >();
 		registerComponent< PositionsComponent >();
 		registerComponent< NormalsComponent >();

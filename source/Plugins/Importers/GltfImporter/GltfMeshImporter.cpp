@@ -23,7 +23,7 @@ namespace c3d_gltf
 		template< typename IndexT >
 		static void parseLineList( fastgltf::Asset const & impAsset
 			, fastgltf::Accessor const & impAccessor
-			, castor3d::LinesMapping & mapping
+			, castor3d::LineMapping & mapping
 			, CompressedBufferDataAdapter const & adapter )
 		{
 			auto count = impAccessor.count;
@@ -54,7 +54,7 @@ namespace c3d_gltf
 		static void parseLineStrip( fastgltf::Asset const & impAsset
 			, fastgltf::Accessor const & impAccessor
 			, uint32_t lineCount
-			, castor3d::LinesMapping & mapping
+			, castor3d::LineMapping & mapping
 			, bool loop
 			, CompressedBufferDataAdapter const & adapter )
 		{
@@ -456,7 +456,7 @@ namespace c3d_gltf
 			if ( impPrimitive.indicesAccessor )
 			{
 				auto & impAccessor = impAsset.accessors[*impPrimitive.indicesAccessor];
-				auto mapping = castor::makeUnique< castor3d::LinesMapping >( *submesh );
+				auto mapping = castor::makeUnique< castor3d::LineMapping >( *submesh );
 
 				switch ( impAccessor.componentType )
 				{
@@ -506,7 +506,7 @@ namespace c3d_gltf
 			{
 				auto & impAccessor = impAsset.accessors[*impPrimitive.indicesAccessor];
 				auto count = uint32_t( impAccessor.count );
-				auto mapping = castor::makeUnique< castor3d::LinesMapping >( *submesh );
+				auto mapping = castor::makeUnique< castor3d::LineMapping >( *submesh );
 
 				switch ( impAccessor.componentType )
 				{

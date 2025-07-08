@@ -155,7 +155,7 @@ namespace castor3d
 	\~french
 	\brief		Composant de sous-maillage pour les lignes.
 	*/
-	class LinesMapping;
+	class LineMapping;
 	/**
 	\~english
 	\brief		The submesh component used for meshlets.
@@ -301,7 +301,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, DefaultRenderComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, IndexMapping, C3D_API );
 	CU_DeclareSmartPtr( castor3d, InstantiationComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LinesMapping, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LineMapping, C3D_API );
 	CU_DeclareSmartPtr( castor3d, MeshletComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, MorphComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, PassMasksComponent, C3D_API );

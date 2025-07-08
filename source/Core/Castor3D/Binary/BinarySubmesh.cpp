@@ -7,7 +7,7 @@
 #include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/LineMapping.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
@@ -205,7 +205,7 @@ namespace castor3d
 					result = doWriteChunk( data, count, ChunkType::eSubmeshIndices, m_chunk );
 				}
 			}
-			else if ( obj.hasComponent( LinesMapping::TypeName ) )
+			else if ( obj.hasComponent( LineMapping::TypeName ) )
 			{
 				result = doWriteChunk( 2u, ChunkType::eSubmeshIndexComponentCount, m_chunk );
 				count = obj.getFaceCount();
@@ -217,7 +217,7 @@ namespace castor3d
 
 				if ( result )
 				{
-					auto const * data = reinterpret_cast< LineIndices const * >( obj.getComponent< LinesMapping >()->getData().getFaces().data() );
+					auto const * data = reinterpret_cast< LineIndices const * >( obj.getComponent< LineMapping >()->getData().getFaces().data() );
 					result = doWriteChunk( data, count, ChunkType::eSubmeshIndices, m_chunk );
 				}
 			}
@@ -460,7 +460,7 @@ namespace castor3d
 
 						if ( result )
 						{
-							auto indexMapping = obj.createComponent< LinesMapping >();
+							auto indexMapping = obj.createComponent< LineMapping >();
 							indexMapping->getData().addLineGroup( lines );
 						}
 					}
