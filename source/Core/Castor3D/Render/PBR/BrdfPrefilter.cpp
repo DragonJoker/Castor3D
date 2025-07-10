@@ -57,12 +57,9 @@ namespace castor3d
 				, m_device
 				, cuT( "BrdfPrefilter" )
 				, *queueData->commandPool };
-			uploader->pushUpload( &data
-				, sizeof( TexturedQuad )
-				, vb.getBuffer()
-				, vb.getOffset()
-				, AccessFlags::eVertexAttributeRead
-				, PipelineStageFlags::eVertexInput );
+			uploader->pushUpload( &data, sizeof( TexturedQuad )
+				, vb.getBuffer(), vb.getOffset()
+				, VertexAttributeInputState );
 		}
 
 		// Initialise the vertex layout.

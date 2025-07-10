@@ -118,7 +118,7 @@ namespace castor3d
 				{
 					context.memoryBarrier( commandBuffer
 						, attach.view( index )
-						, { ImageLayout::eShaderReadOnly, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } } );
+						, { ImageLayout::eShaderReadOnly, ComputeShaderReadState } );
 				}
 			}
 

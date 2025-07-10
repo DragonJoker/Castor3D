@@ -270,8 +270,7 @@ namespace GuiCommon
 					, vertices.size() * sizeof( castor::Point4f )
 					, m_pointLightVertexBuffer.getBuffer().getBuffer()
 					, m_pointLightVertexBuffer.getOffset()
-					, castor3d::AccessFlags::eVertexAttributeRead
-					, castor3d::PipelineStageFlags::eVertexInput );
+					, castor3d::VertexAttributeInputState );
 			}
 		}
 		else if ( light.getLightType() == castor3d::LightType::eSpot )
@@ -294,8 +293,7 @@ namespace GuiCommon
 					, vertices.size() * sizeof( castor::Point4f )
 					, it->second.getBuffer().getBuffer()
 					, it->second.getOffset()
-					, castor3d::AccessFlags::eVertexAttributeRead
-					, castor3d::PipelineStageFlags::eVertexInput );
+					, castor3d::VertexAttributeInputState );
 			}
 		}
 
@@ -385,8 +383,7 @@ namespace GuiCommon
 				++index;
 			}
 
-			m_meshConfigBuffer.markDirty( castor3d::AccessFlags::eShaderRead
-				, castor3d::PipelineStageFlags::eVertexShader );
+			m_meshConfigBuffer.markDirty( castor3d::VertexShaderReadState );
 
 			castor3d::addDebugDrawable( m_renderTarget
 				, castor3d::DebugVertexBuffers{ {}, {}, 24u }
@@ -436,8 +433,7 @@ namespace GuiCommon
 						, vertices.size() * sizeof( castor::Point4f )
 						, it->second.getBuffer().getBuffer()
 						, it->second.getOffset()
-						, castor3d::AccessFlags::eVertexAttributeRead
-						, castor3d::PipelineStageFlags::eVertexInput );
+						, castor3d::VertexAttributeInputState );
 				}
 
 				buffer = &it->second;
@@ -456,8 +452,7 @@ namespace GuiCommon
 					, scale
 					, castor::Quaternion::identity() );
 
-				m_meshConfigBuffer.markDirty( castor3d::AccessFlags::eShaderRead
-					, castor3d::PipelineStageFlags::eVertexShader );
+				m_meshConfigBuffer.markDirty( castor3d::VertexShaderReadState );
 
 				castor3d::addDebugDrawable( m_renderTarget
 					, castor3d::DebugVertexBuffers{ { VkBuffer( buffer->getBuffer().getBuffer() ) }

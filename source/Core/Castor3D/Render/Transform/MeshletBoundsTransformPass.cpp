@@ -78,8 +78,7 @@ namespace castor3d
 			context.memoryBarrier( commandBuffer
 				, m_output.buffer->getBuffer()
 				, { m_output.chunk.offset, m_output.chunk.size }
-				, AccessFlags::eHostWrite, PipelineStageFlags::eHost
-				, { AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader } );
+				, HostWriteState, ComputeShaderWriteState );
 		}
 
 		context.getContext().vkCmdBindPipeline( commandBuffer
@@ -111,16 +110,14 @@ namespace castor3d
 			context.memoryBarrier( commandBuffer
 				, m_output.buffer->getBuffer()
 				, { m_output.chunk.offset, m_output.chunk.size }
-				, AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader
-				, { AccessFlags::eShaderRead, PipelineStageFlags::eMeshShader } );
+				, ComputeShaderWriteState, MeshShaderReadState );
 		}
 
 		auto & meshletsChunk = m_sourceOffsets.getBufferChunk( SubmeshData::eMeshlets );
 		context.memoryBarrier( commandBuffer
 			, meshletsChunk.buffer->getBuffer()
 			, { meshletsChunk.chunk.offset, meshletsChunk.chunk.size }
-			, AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader
-			, { AccessFlags::eShaderRead, PipelineStageFlags::eMeshShader } );
+			, ComputeShaderReadState, MeshShaderReadState );
 
 		for ( auto & buffer : m_finalOffsets.buffers )
 		{
@@ -129,8 +126,7 @@ namespace castor3d
 				context.memoryBarrier( commandBuffer
 					, buffer.buffer->getBuffer()
 					, { buffer.chunk.offset, buffer.chunk.size }
-					, AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader
-					, { AccessFlags::eVertexAttributeRead, PipelineStageFlags::eVertexInput } );
+					, ComputeShaderReadState, VertexAttributeInputState );
 			}
 		}
 	}

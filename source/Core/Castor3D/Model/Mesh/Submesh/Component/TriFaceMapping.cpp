@@ -133,10 +133,8 @@ namespace castor3d
 		{
 			uploader.pushUpload( m_faces.data()
 				, m_faces.size() * sizeof( Face )
-				, buffer.getBuffer()
-				, buffer.getOffset()
-				, AccessFlags::eIndexRead
-				, PipelineStageFlags::eVertexInput );
+				, buffer.getBuffer(), buffer.getOffset()
+				, VertexIndexInputState );
 		}
 	}
 

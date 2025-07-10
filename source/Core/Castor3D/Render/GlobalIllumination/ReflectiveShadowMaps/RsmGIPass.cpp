@@ -378,8 +378,7 @@ namespace castor3d
 			point[3] = float( xi2 );
 		}
 
-		m_rsmSamplesSsbo.markDirty( AccessFlags::eUniformRead
-			, PipelineStageFlags::eVertexShader );
+		m_rsmSamplesSsbo.markDirty( VertexUniformReadState );
 
 		auto & pass = graph.createPass( getName()
 			, [this, &device, size]( crg::FramePass const & framePass

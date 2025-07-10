@@ -328,18 +328,12 @@ namespace castor3d
 		{
 			crg::BufferSubresourceRange range{ 0u, VK_WHOLE_SIZE };
 			// Common buffers preparation
-			memoryBarrier( context
-				, commandBuffer
-				, m_commonData.textVertexBuffer->overlaysData->getBuffer()
-				, range
-				, { AccessFlags::eHostWrite, PipelineStageFlags::eHost }
-				, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
-			memoryBarrier( context
-				, commandBuffer
-				, m_commonData.textVertexBuffer->vertexBuffer.getBuffer().getBuffer()
-				, range
-				, { AccessFlags::eVertexAttributeRead, PipelineStageFlags::eVertexInput }
-				, { AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader } );
+			memoryBarrier( context, commandBuffer
+				, m_commonData.textVertexBuffer->overlaysData->getBuffer(), range
+				, HostWriteState, ComputeShaderReadState );
+			memoryBarrier( context, commandBuffer
+				, m_commonData.textVertexBuffer->vertexBuffer.getBuffer().getBuffer(), range
+				, VertexAttributeInputState, ComputeShaderWriteState );
 
 			for ( auto & [_, set] : textPipeline.sets )
 			{
@@ -353,18 +347,13 @@ namespace castor3d
 			}
 
 			// Common buffers restore
+			memoryBarrier( context, commandBuffer
+				, m_commonData.textVertexBuffer->vertexBuffer.getBuffer().getBuffer(), range
+				, ComputeShaderWriteState, VertexAttributeInputState );
 			memoryBarrier( context
 				, commandBuffer
-				, m_commonData.textVertexBuffer->vertexBuffer.getBuffer().getBuffer()
-				, range
-				, { AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader }
-				, { AccessFlags::eVertexAttributeRead, PipelineStageFlags::eVertexInput } );
-			memoryBarrier( context
-				, commandBuffer
-				, m_commonData.textVertexBuffer->overlaysData->getBuffer()
-				, range
-				, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader }
-				, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
+				, m_commonData.textVertexBuffer->overlaysData->getBuffer(), range
+				, ComputeShaderReadState, HostWriteState );
 		}
 	}
 
@@ -546,18 +535,12 @@ namespace castor3d
 		, ashes::BufferBase const & vertexBuffer )const
 	{
 		crg::BufferSubresourceRange range{ 0u, VK_WHOLE_SIZE };
-		memoryBarrier( context
-			, commandBuffer
-			, overlaysBuffer
-			, range
-			, crg::AccessState{ AccessFlags::eHostWrite, PipelineStageFlags::eHost }
-			, crg::AccessState{ AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
-		memoryBarrier( context
-			, commandBuffer
-			, vertexBuffer
-			, range
-			, crg::AccessState{ AccessFlags::eVertexAttributeRead, PipelineStageFlags::eVertexInput }
-			, crg::AccessState{ AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader } );
+		memoryBarrier( context, commandBuffer
+			, overlaysBuffer, range
+			, HostWriteState, ComputeShaderReadState );
+		memoryBarrier( context, commandBuffer
+			, vertexBuffer, range
+			, VertexAttributeInputState, ComputeShaderWriteState );
 		context.getContext().vkCmdBindPipeline( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE
 			, *pipeline.pipeline );
@@ -572,18 +555,12 @@ namespace castor3d
 			, nullptr );
 		context.getContext().vkCmdDispatch( commandBuffer
 			, pipeline.count, 1u, 1u );
-		memoryBarrier( context
-			, commandBuffer
-			, vertexBuffer
-			, range
-			, crg::AccessState{ AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader }
-			, crg::AccessState{ AccessFlags::eVertexAttributeRead, PipelineStageFlags::eVertexInput } );
-		memoryBarrier( context
-			, commandBuffer
-			, overlaysBuffer
-			, range
-			, crg::AccessState{ AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader }
-			, crg::AccessState{ AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
+		memoryBarrier( context, commandBuffer
+			, vertexBuffer, range
+			, ComputeShaderWriteState, VertexAttributeInputState );
+		memoryBarrier( context, commandBuffer
+			, overlaysBuffer, range
+			, ComputeShaderReadState, HostWriteState );
 	}
 
 	void OverlayRenderer::OverlaysComputeData::doRegisterComputeBufferCommands( crg::RecordContext & context
@@ -594,24 +571,15 @@ namespace castor3d
 		auto & textBuffer = set.textBuffer;
 		crg::BufferSubresourceRange range{ 0u, VK_WHOLE_SIZE };
 
-		memoryBarrier( context
-			, commandBuffer
-			, textBuffer->charsBuffer.buffer->getBuffer()
-			, range
-			, { AccessFlags::eHostWrite, PipelineStageFlags::eHost }
-			, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
-		memoryBarrier( context
-			, commandBuffer
-			, textBuffer->wordsBuffer.buffer->getBuffer()
-			, range
-			, { AccessFlags::eHostWrite, PipelineStageFlags::eHost }
-			, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
-		memoryBarrier( context
-			, commandBuffer
-			, textBuffer->linesBuffer.buffer->getBuffer()
-			, range
-			, { AccessFlags::eHostWrite, PipelineStageFlags::eHost }
-			, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
+		memoryBarrier( context, commandBuffer
+			, textBuffer->charsBuffer.buffer->getBuffer(), range
+			, HostWriteState, ComputeShaderReadState );
+		memoryBarrier( context, commandBuffer
+			, textBuffer->wordsBuffer.buffer->getBuffer(), range
+			, HostWriteState, ComputeShaderReadState );
+		memoryBarrier( context, commandBuffer
+			, textBuffer->linesBuffer.buffer->getBuffer(), range
+			, HostWriteState, ComputeShaderReadState );
 		context.getContext().vkCmdBindPipeline( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE
 			, *pipeline.pipeline );
@@ -642,24 +610,15 @@ namespace castor3d
 			data.batchOffset += batchCount;
 		}
 
-		memoryBarrier( context
-			, commandBuffer
-			, textBuffer->linesBuffer.buffer->getBuffer()
-			, range
-			, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader }
-			, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
-		memoryBarrier( context
-			, commandBuffer
-			, textBuffer->wordsBuffer.buffer->getBuffer()
-			, range
-			, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader }
-			, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
-		memoryBarrier( context
-			, commandBuffer
-			, textBuffer->charsBuffer.buffer->getBuffer()
-			, range
-			, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader }
-			, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
+		memoryBarrier( context, commandBuffer
+			, textBuffer->linesBuffer.buffer->getBuffer(), range
+			, ComputeShaderReadState, HostWriteState );
+		memoryBarrier( context, commandBuffer
+			, textBuffer->wordsBuffer.buffer->getBuffer(), range
+			, ComputeShaderReadState, HostWriteState );
+		memoryBarrier( context, commandBuffer
+			, textBuffer->charsBuffer.buffer->getBuffer(), range
+			, ComputeShaderReadState, HostWriteState );
 	}
 
 	//*********************************************************************************************

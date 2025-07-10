@@ -128,8 +128,7 @@ namespace castor3d
 					, result->getSize()
 					, result->getBuffer()
 					, 0u
-					, AccessFlags::eVertexAttributeRead
-					, PipelineStageFlags::eVertexInput );
+					, VertexAttributeInputState );
 			}
 			return result;
 		}

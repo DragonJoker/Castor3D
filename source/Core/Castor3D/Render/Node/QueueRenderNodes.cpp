@@ -944,31 +944,26 @@ namespace castor3d
 				context.memoryBarrier( commandBuffer
 					, m_pipelinesNodes->getBuffer()
 					, crg::BufferSubresourceRange{ 0u, m_pipelinesNodes->getBuffer().getSize() }
-					, AccessFlags::eHostWrite, PipelineStageFlags::eHost
-					, { AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect } );
+					, HostWriteState, DrawIndirectCommandState );
 				context.memoryBarrier( commandBuffer
 					, m_submeshIdxIndirectCommands->getBuffer()
 					, crg::BufferSubresourceRange{ 0u, m_submeshIdxIndirectCommands->getBuffer().getSize() }
-					, AccessFlags::eHostWrite, PipelineStageFlags::eHost
-					, { AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect } );
+					, HostWriteState, DrawIndirectCommandState );
 				context.memoryBarrier( commandBuffer
 					, m_submeshNIdxIndirectCommands->getBuffer()
 					, crg::BufferSubresourceRange{ 0u, m_submeshNIdxIndirectCommands->getBuffer().getSize() }
-					, AccessFlags::eHostWrite, PipelineStageFlags::eHost
-					, { AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect } );
+					, HostWriteState, DrawIndirectCommandState );
 				context.memoryBarrier( commandBuffer
 					, m_billboardIndirectCommands->getBuffer()
 					, crg::BufferSubresourceRange{ 0u, m_billboardIndirectCommands->getBuffer().getSize() }
-					, AccessFlags::eHostWrite, PipelineStageFlags::eHost
-					, { AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect } );
+					, HostWriteState, DrawIndirectCommandState );
 
 				if ( m_submeshMeshletIndirectCommandsEXT )
 				{
 					context.memoryBarrier( commandBuffer
 						, m_submeshMeshletIndirectCommandsEXT->getBuffer()
 						, crg::BufferSubresourceRange{ 0u, m_submeshMeshletIndirectCommandsEXT->getBuffer().getSize() }
-						, AccessFlags::eHostWrite, PipelineStageFlags::eHost
-						, { AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect } );
+						, HostWriteState, DrawIndirectCommandState );
 				}
 
 				if ( m_submeshMeshletIndirectCommandsNV )
@@ -976,8 +971,7 @@ namespace castor3d
 					context.memoryBarrier( commandBuffer
 						, m_submeshMeshletIndirectCommandsNV->getBuffer()
 						, crg::BufferSubresourceRange{ 0u, m_submeshMeshletIndirectCommandsNV->getBuffer().getSize() }
-						, AccessFlags::eHostWrite, PipelineStageFlags::eHost
-						, { AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect } );
+						, HostWriteState, DrawIndirectCommandState );
 				}
 			} );
 		config.postPassAction( [this]( crg::RecordContext & context
@@ -987,31 +981,26 @@ namespace castor3d
 				context.memoryBarrier( commandBuffer
 					, m_pipelinesNodes->getBuffer()
 					, crg::BufferSubresourceRange{ 0u, m_pipelinesNodes->getBuffer().getSize() }
-					, AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect
-					, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
+					, DrawIndirectCommandState, HostWriteState );
 				context.memoryBarrier( commandBuffer
 					, m_submeshIdxIndirectCommands->getBuffer()
 					, crg::BufferSubresourceRange{ 0u, m_submeshIdxIndirectCommands->getBuffer().getSize() }
-					, AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect
-					, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
+					, DrawIndirectCommandState, HostWriteState );
 				context.memoryBarrier( commandBuffer
 					, m_submeshNIdxIndirectCommands->getBuffer()
 					, crg::BufferSubresourceRange{ 0u, m_submeshNIdxIndirectCommands->getBuffer().getSize() }
-					, AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect
-					, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
+					, DrawIndirectCommandState, HostWriteState );
 				context.memoryBarrier( commandBuffer
 					, m_billboardIndirectCommands->getBuffer()
 					, crg::BufferSubresourceRange{ 0u, m_billboardIndirectCommands->getBuffer().getSize() }
-					, AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect
-					, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
+					, DrawIndirectCommandState, HostWriteState );
 
 				if ( m_submeshMeshletIndirectCommandsEXT )
 				{
 					context.memoryBarrier( commandBuffer
 						, m_submeshMeshletIndirectCommandsEXT->getBuffer()
 						, crg::BufferSubresourceRange{ 0u, m_submeshMeshletIndirectCommandsEXT->getBuffer().getSize() }
-						, AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect
-						, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
+						, DrawIndirectCommandState, HostWriteState );
 				}
 
 				if ( m_submeshMeshletIndirectCommandsNV )
@@ -1019,8 +1008,7 @@ namespace castor3d
 					context.memoryBarrier( commandBuffer
 						, m_submeshMeshletIndirectCommandsNV->getBuffer()
 						, crg::BufferSubresourceRange{ 0u, m_submeshMeshletIndirectCommandsNV->getBuffer().getSize() }
-						, AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect
-						, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
+						, DrawIndirectCommandState, HostWriteState );
 				}
 			} );
 	}

@@ -360,8 +360,7 @@ namespace castor3d
 				}
 			}
 
-			result.markDirty( AccessFlags::eVertexAttributeRead
-				, PipelineStageFlags::eVertexInput );
+			result.markDirty( VertexAttributeInputState );
 			return result;
 		}
 	}

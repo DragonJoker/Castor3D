@@ -54,6 +54,26 @@ namespace castor3d
 	using crg::ImageViewType;
 	using crg::PipelineStageFlags;
 
+	static constexpr crg::AccessState VertexAttributeInputState{ AccessFlags::eVertexAttributeRead, PipelineStageFlags::eVertexInput };
+	static constexpr crg::AccessState VertexIndexInputState{ AccessFlags::eIndexRead, PipelineStageFlags::eVertexInput };
+	static constexpr crg::AccessState FragmentShaderReadState{ AccessFlags::eShaderRead, PipelineStageFlags::eFragmentShader };
+	static constexpr crg::AccessState VertexShaderReadState{ AccessFlags::eShaderRead, PipelineStageFlags::eVertexShader };
+	static constexpr crg::AccessState ComputeShaderReadState{ AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader };
+	static constexpr crg::AccessState ComputeShaderReadWriteState{ AccessFlags::eShaderRead | AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader };
+	static constexpr crg::AccessState ComputeShaderWriteState{ AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader };
+	static constexpr crg::AccessState MeshShaderReadState{ AccessFlags::eShaderRead, PipelineStageFlags::eMeshShader };
+	static constexpr crg::AccessState TaskShaderReadState{ AccessFlags::eShaderRead, PipelineStageFlags::eTaskShader };
+	static constexpr crg::AccessState FragmentUniformReadState{ AccessFlags::eUniformRead, PipelineStageFlags::eFragmentShader };
+	static constexpr crg::AccessState VertexUniformReadState{ AccessFlags::eUniformRead, PipelineStageFlags::eVertexShader };
+	static constexpr crg::AccessState ComputeUniformReadState{ AccessFlags::eUniformRead, PipelineStageFlags::eComputeShader };
+	static constexpr crg::AccessState MeshUniformReadState{ AccessFlags::eUniformRead, PipelineStageFlags::eMeshShader };
+	static constexpr crg::AccessState TaskUniformReadState{ AccessFlags::eUniformRead, PipelineStageFlags::eTaskShader };
+	static constexpr crg::AccessState ComputeIndirectCommandReadState{ AccessFlags::eIndirectCommandRead, PipelineStageFlags::eComputeShader };
+	static constexpr crg::AccessState DrawIndirectCommandState{ AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect };
+	static constexpr crg::AccessState TransferReadState{ AccessFlags::eTransferRead, PipelineStageFlags::eTransfer };
+	static constexpr crg::AccessState TransferWriteState{ AccessFlags::eTransferWrite, PipelineStageFlags::eTransfer };
+	static constexpr crg::AccessState HostWriteState{ AccessFlags::eHostWrite, PipelineStageFlags::eHost };
+
 	using castor::StringHash;
 	using castor::xchar;
 

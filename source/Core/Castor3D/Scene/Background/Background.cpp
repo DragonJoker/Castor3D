@@ -153,10 +153,8 @@ namespace castor3d
 							, *data->commandPool };
 						uploader->pushUpload( indexData.data()
 							, VkDeviceSize( sizeof( uint16_t ) * indexData.size() )
-							, indexBuffer.getBuffer()
-							, 0u
-							, AccessFlags::eIndexRead
-							, PipelineStageFlags::eVertexInput );
+							, indexBuffer.getBuffer(), 0u
+							, VertexIndexInputState );
 					}
 				}
 
@@ -201,10 +199,8 @@ namespace castor3d
 							, *data->commandPool };
 						uploader->pushUpload( vertexData.data()
 							, vertexData.size() * sizeof( Point3f )
-							, vertexBuffer.getBuffer()
-							, 0u
-							, AccessFlags::eVertexAttributeRead
-							, PipelineStageFlags::eVertexInput );
+							, vertexBuffer.getBuffer(), 0u
+							, VertexAttributeInputState );
 					}
 				}
 

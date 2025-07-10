@@ -405,11 +405,11 @@ namespace ocean_fft
 				, *m_ubo
 				, m_component.getFftConfig() );
 			graph.addInput( m_oceanFFT->getHeightDisplacement().sampledViewId
-				, { ImageLayout::eShaderReadOnly, { AccessFlags::eShaderRead, PipelineStageFlags::eVertexShader } } );
+				, { ImageLayout::eShaderReadOnly, VertexShaderReadState } );
 			graph.addInput( m_oceanFFT->getGradientJacobian().sampledViewId
-				, { ImageLayout::eShaderReadOnly, { AccessFlags::eShaderRead, PipelineStageFlags::eVertexShader } } );
+				, { ImageLayout::eShaderReadOnly, VertexShaderReadState } );
 			graph.addInput( m_oceanFFT->getNormals().sampledViewId
-				, { ImageLayout::eShaderReadOnly, { AccessFlags::eShaderRead, PipelineStageFlags::eVertexShader } } );
+				, { ImageLayout::eShaderReadOnly, VertexShaderReadState } );
 		}
 
 		return m_oceanFFT->getLastPasses();

@@ -523,11 +523,8 @@ namespace castor3d
 				auto buffer = attach.buffer( passIndex );
 				auto currentState = context.getAccessState( buffer, attach.getBufferRange() );
 				context.memoryBarrier( commandBuffer
-					, buffer
-					, attach.getBufferRange()
-					, currentState.access
-					, currentState.pipelineStage
-					, crg::AccessState{ AccessFlags::eShaderRead | AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader }
+					, buffer, attach.getBufferRange()
+					, currentState, ComputeShaderReadWriteState
 					, true );
 			}
 
@@ -549,17 +546,17 @@ namespace castor3d
 						if ( bufferIndex < 2u )
 						{
 							// Input buffer
-							dstState = { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader };
+							dstState = ComputeShaderReadState;
 						}
 						else if ( bufferIndex < 4u )
 						{
 							// Output buffer
-							dstState = { AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader };
+							dstState = ComputeShaderWriteState;
 						}
 						else
 						{
 							// Merge Path Transition Buffer
-							dstState = { AccessFlags::eShaderRead | AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader };
+							dstState = ComputeShaderReadWriteState;
 						}
 
 						context.memoryBarrier( commandBuffer
