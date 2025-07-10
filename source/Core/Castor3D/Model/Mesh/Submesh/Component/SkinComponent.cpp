@@ -59,8 +59,8 @@ namespace castor3d
 				, m_bones.size() * sizeof( VertexBoneData )
 				, buffer.getBuffer()
 				, buffer.getOffset()
-				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+				, AccessFlags::eVertexAttributeRead
+				, PipelineStageFlags::eVertexInput );
 		}
 	}
 

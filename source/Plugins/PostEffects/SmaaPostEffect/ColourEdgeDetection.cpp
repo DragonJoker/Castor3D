@@ -175,8 +175,8 @@ namespace smaa
 			return crg::ImageViewData{ "SMCEDPred"
 				, pred.data->image
 				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, pred.data->info.format
+				, castor3d::ImageViewType::e2D
+				, getFormat( pred )
 				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } };
 		}
 	}
@@ -207,12 +207,12 @@ namespace smaa
 			? m_graph.createView( coled::doCreatePredicationView( *predication ) )
 			: crg::ImageViewId{} ) }
 	{
-		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_NEAREST
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
+		crg::SamplerDesc linearSampler{ castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear
+			, castor3d::MipmapMode::eNearest
+			, castor3d::WrapMode::eClampToEdge
+			, castor3d::WrapMode::eClampToEdge
+			, castor3d::WrapMode::eClampToEdge };
 		m_pass.addSampledView( colourView
 			, coled::ColorTexIdx
 			, linearSampler );

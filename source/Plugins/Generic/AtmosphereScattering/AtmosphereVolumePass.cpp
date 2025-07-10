@@ -278,8 +278,8 @@ namespace atmosphere_scattering
 			, volume::eCamera );
 		atmosphereUbo.createPassBinding( pass
 			, volume::eAtmosphere );
-		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR };
+		crg::SamplerDesc linearSampler{ castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear };
 		pass.addSampledView( transmittanceView
 			, volume::eTransmittance
 			, linearSampler );

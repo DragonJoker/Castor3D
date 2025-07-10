@@ -325,8 +325,8 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/HeightMapToNormalMap.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Image.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageCache.cpp
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageLayout.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageLoader.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageMemoryLayout.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageWriter.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Ktx2ImageLoader.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/PixelBufferBase.cpp
@@ -341,9 +341,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/StbImageWriter.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/WebPImageLoader.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/XpmImageLoader.cpp
-	)
-	set( ${PROJECT_NAME}_FOLDER_ENM_FILES
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/PixelFormat.enum
 	)
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/BoundingBox.hpp
@@ -368,8 +365,8 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/HeightMapToNormalMap.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Image.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageCache.hpp
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageLayout.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageLoader.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageMemoryLayout.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageWriter.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Ktx2ImageLoader.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/LanczosFilterKernel.hpp
@@ -713,6 +710,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	target_link_libraries( ${PROJECT_NAME}
 		PUBLIC
 			ashes::ashespp
+			crg::RenderGraph
 		PRIVATE
 			${PLATFORM_LIBRARIES}
 			${Freetype_LIBRARIES}

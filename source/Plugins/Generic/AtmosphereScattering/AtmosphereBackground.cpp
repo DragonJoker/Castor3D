@@ -185,11 +185,11 @@ namespace atmosphere_scattering
 			, { skyViewResolution->x, skyViewResolution->y, 1u }
 			, 1u
 			, 1u
-			, VK_FORMAT_B10G11R11_UFLOAT_PACK32
+			, castor::PixelFormat::eB10G11R11_UFLOAT
 			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_NEAREST }
+			, castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear
+			, castor3d::MipmapMode::eNearest }
 		, volume{ device
 			, background.getScene().getResources()
 			, cuT( "AtmosphereVolume" ) + castor::string::toString( index )
@@ -197,11 +197,11 @@ namespace atmosphere_scattering
 			, { volumeResolution, volumeResolution, volumeResolution }
 			, 1u
 			, 1u
-			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, castor::PixelFormat::eR16G16B16A16_SFLOAT
 			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_NEAREST }
+			, castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear
+			, castor3d::MipmapMode::eNearest }
 		, skyColour{ device
 			, background.getScene().getResources()
 			, cuT( "SkyColour" ) + castor::string::toString( index )
@@ -209,12 +209,12 @@ namespace atmosphere_scattering
 			, { size.width, size.height, 1u }
 			, 1u
 			, 1u
-			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, castor::PixelFormat::eR16G16B16A16_SFLOAT
 			, VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_NEAREST
-			, VK_SAMPLER_ADDRESS_MODE_REPEAT }
+			, castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear
+			, castor3d::MipmapMode::eNearest
+			, castor3d::WrapMode::eRepeat }
 		, sunColour{ device
 			, background.getScene().getResources()
 			, cuT( "SunColour" ) + castor::string::toString( index )
@@ -222,12 +222,12 @@ namespace atmosphere_scattering
 			, { size.width, size.height, 1u }
 			, 1u
 			, 1u
-			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, castor::PixelFormat::eR16G16B16A16_SFLOAT
 			, VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_NEAREST
-			, VK_SAMPLER_ADDRESS_MODE_REPEAT }
+			, castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear
+			, castor3d::MipmapMode::eNearest
+			, castor3d::WrapMode::eRepeat }
 		, cloudsColour{ device
 			, background.getScene().getResources()
 			, cuT( "CloudsColour" ) + castor::string::toString( index )
@@ -235,12 +235,12 @@ namespace atmosphere_scattering
 			, { size.width, size.height, 1u }
 			, 1u
 			, 1u
-			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, castor::PixelFormat::eR16G16B16A16_SFLOAT
 			, VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_NEAREST
-			, VK_SAMPLER_ADDRESS_MODE_REPEAT }
+			, castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear
+			, castor3d::MipmapMode::eNearest
+			, castor3d::WrapMode::eRepeat }
 		, cloudsResult{ device
 			, background.getScene().getResources()
 			, cuT( "CloudsResult" ) + castor::string::toString( index )
@@ -248,12 +248,12 @@ namespace atmosphere_scattering
 			, { size.width, size.height, 1u }
 			, 1u
 			, 1u
-			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, castor::PixelFormat::eR16G16B16A16_SFLOAT
 			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_NEAREST
-			, VK_SAMPLER_ADDRESS_MODE_REPEAT }
+			, castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear
+			, castor3d::MipmapMode::eNearest
+			, castor3d::WrapMode::eRepeat }
 		, cameraUbo{ device, camAtmoChanged }
 		, skyViewPass{ castor::make_unique< AtmosphereSkyViewPass >( graph
 			, crg::FramePassArray{ &transmittancePass }
@@ -329,8 +329,8 @@ namespace atmosphere_scattering
 				return res;
 			} );
 		pass.addDependency( cloudsResolvePass->getLastPass() );
-		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR };
+		crg::SamplerDesc linearSampler{ castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear };
 		hdrConfigUbo.createPassBinding( pass
 			, AtmosphereBackgroundPass::eHdrConfig );
 		sceneUbo.createPassBinding( pass
@@ -355,23 +355,23 @@ namespace atmosphere_scattering
 	{
 		visitor.visit( cuT( "Atmosphere SkyView" )
 			, skyView.sampledViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, castor3d::ImageLayout::eShaderReadOnly
 			, castor3d::TextureFactors{}.invert( true ) );
 		visitor.visit( cuT( "Sky Colour" )
 			, skyColour
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, castor3d::ImageLayout::eShaderReadOnly
 			, castor3d::TextureFactors{}.invert( true ) );
 		visitor.visit( cuT( "Sun Colour" )
 			, sunColour
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, castor3d::ImageLayout::eShaderReadOnly
 			, castor3d::TextureFactors{}.invert( true ) );
 		visitor.visit( cuT( "Clouds Colour" )
 			, cloudsColour
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, castor3d::ImageLayout::eShaderReadOnly
 			, castor3d::TextureFactors{}.invert( true ) );
 		visitor.visit( cuT( "Clouds Result" )
 			, cloudsResult
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, castor3d::ImageLayout::eShaderReadOnly
 			, castor3d::TextureFactors{}.invert( true ) );
 	}
 
@@ -530,11 +530,11 @@ namespace atmosphere_scattering
 
 		visitor.visit( cuT( "Atmosphere Transmittance" )
 			, m_transmittance
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, castor3d::ImageLayout::eShaderReadOnly
 			, castor3d::TextureFactors{}.invert( true ) );
 		visitor.visit( cuT( "Atmosphere Multiscatter" )
 			, m_multiScatter
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, castor3d::ImageLayout::eShaderReadOnly
 			, castor3d::TextureFactors{}.invert( true ) );
 
 		for ( auto & cameraPass : m_cameraPasses )
@@ -544,18 +544,18 @@ namespace atmosphere_scattering
 
 		visitor.visit( cuT( "Weather Result" )
 			, m_weather
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, castor3d::ImageLayout::eShaderReadOnly
 			, castor3d::TextureFactors{}.invert( true ) );
 		visitor.visit( cuT( "Curl Noise" )
 			, m_curl
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, castor3d::ImageLayout::eShaderReadOnly
 			, castor3d::TextureFactors{}.invert( true ) );
 
 		for ( uint32_t index = 0u; index < m_worley.subViewsId.size(); ++index )
 		{
 			visitor.visit( cuT( "Worley Noise Slice " ) + castor::string::toString( index )
 				, m_worley.sampledViewId
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, castor3d::ImageLayout::eShaderReadOnly
 				, castor3d::TextureFactors::tex3DSlice( index ).invert( true ) );
 		}
 
@@ -563,7 +563,7 @@ namespace atmosphere_scattering
 		{
 			visitor.visit( cuT( "Perlin Worley Noise Slice " )+ castor::string::toString( index )
 				, m_perlinWorley.sampledViewId
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, castor3d::ImageLayout::eShaderReadOnly
 				, castor3d::TextureFactors::tex3DSlice( index ).invert( true ) );
 		}
 	}
@@ -657,7 +657,7 @@ namespace atmosphere_scattering
 			pass.addDependency( m_multiScatteringPass->getLastPass() );
 			pass.addDependency( m_weatherPass->getLastPass() );
 			pass.addImplicitDepthStencilView( depth
-				, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL );
+				, castor3d::ImageLayout::eDepthStencilAttachment );
 
 			if ( !depth.empty() )
 			{
@@ -709,13 +709,13 @@ namespace atmosphere_scattering
 			, 0u
 			, { dimension, dimension, dimension }
 			, 1u
-			, castor3d::getMipLevels( VkExtent3D{ dimension, dimension, dimension }, VK_FORMAT_R8G8B8A8_UNORM )
-			, VK_FORMAT_R8G8B8A8_UNORM
+			, castor3d::getMipLevels( VkExtent3D{ dimension, dimension, dimension }, castor::PixelFormat::eR8G8B8A8_UNORM )
+			, castor::PixelFormat::eR8G8B8A8_UNORM
 			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_LINEAR
-			, VK_SAMPLER_ADDRESS_MODE_REPEAT };
+			, castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear
+			, castor3d::MipmapMode::eLinear
+			, castor3d::WrapMode::eRepeat };
 		notifyChanged();
 	}
 
@@ -730,13 +730,13 @@ namespace atmosphere_scattering
 			, 0u
 			, { dimension, dimension, dimension }
 			, 1u
-			, castor3d::getMipLevels( VkExtent3D{ dimension, dimension , dimension }, VK_FORMAT_R8G8B8A8_UNORM )
-			, VK_FORMAT_R8G8B8A8_UNORM
+			, castor3d::getMipLevels( VkExtent3D{ dimension, dimension , dimension }, castor::PixelFormat::eR8G8B8A8_UNORM )
+			, castor::PixelFormat::eR8G8B8A8_UNORM
 			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_LINEAR
-			, VK_SAMPLER_ADDRESS_MODE_REPEAT };
+			, castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear
+			, castor3d::MipmapMode::eLinear
+			, castor3d::WrapMode::eRepeat };
 		notifyChanged();
 	}
 
@@ -752,12 +752,12 @@ namespace atmosphere_scattering
 			, { dimension, dimension, 1u }
 			, 1u
 			, 1u
-			, VK_FORMAT_R8G8_UNORM
+			, castor::PixelFormat::eR8G8_UNORM
 			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_NEAREST
-			, VK_SAMPLER_ADDRESS_MODE_REPEAT };
+			, castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear
+			, castor3d::MipmapMode::eNearest
+			, castor3d::WrapMode::eRepeat };
 		notifyChanged();
 	}
 
@@ -773,12 +773,12 @@ namespace atmosphere_scattering
 			, { dimension, dimension, 1u }
 			, 1u
 			, 1u
-			, VK_FORMAT_R32G32_SFLOAT
+			, castor::PixelFormat::eR32G32_SFLOAT
 			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_NEAREST
-			, VK_SAMPLER_ADDRESS_MODE_REPEAT };
+			, castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear
+			, castor3d::MipmapMode::eNearest
+			, castor3d::WrapMode::eRepeat };
 		notifyChanged();
 	}
 
@@ -793,11 +793,11 @@ namespace atmosphere_scattering
 			, { dimensions->x, dimensions->y, 1u }
 			, 1u
 			, 1u
-			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, castor::PixelFormat::eR16G16B16A16_SFLOAT
 			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_NEAREST };
+			, castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear
+			, castor3d::MipmapMode::eNearest };
 		notifyChanged();
 	}
 
@@ -812,11 +812,11 @@ namespace atmosphere_scattering
 			, { dimension, dimension, 1u }
 			, 1u
 			, 1u
-			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, castor::PixelFormat::eR16G16B16A16_SFLOAT
 			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_NEAREST };
+			, castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear
+			, castor3d::MipmapMode::eNearest };
 		notifyChanged();
 	}
 
@@ -843,11 +843,11 @@ namespace atmosphere_scattering
 			, { SkyTexSize, SkyTexSize, 1u }
 			, 1u
 			, 1u
-			, VK_FORMAT_B10G11R11_UFLOAT_PACK32
+			, castor::PixelFormat::eB10G11R11_UFLOAT
 			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_NEAREST };
+			, castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear
+			, castor3d::MipmapMode::eNearest };
 		m_transmittance.create();
 		m_multiScatter.create();
 		m_textureId.create();
@@ -929,8 +929,8 @@ namespace atmosphere_scattering
 				, index++ );
 			m_cloudsUbo->createPassBinding( pass
 				, index++ );
-			crg::SamplerDesc linearClampSampler{ VK_FILTER_LINEAR
-				, VK_FILTER_LINEAR };
+			crg::SamplerDesc linearClampSampler{ castor3d::FilterMode::eLinear
+				, castor3d::FilterMode::eLinear };
 			pass.addSampledView( m_transmittance.wholeViewId
 				, index++
 				, linearClampSampler );

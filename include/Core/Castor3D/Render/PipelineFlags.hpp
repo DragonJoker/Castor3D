@@ -40,7 +40,7 @@ namespace castor3d
 			, ProgramFlags programFlags = ProgramFlag::eNone
 			, TextureCombine ptextures = TextureCombine{}
 			, ShaderFlags shaderFlags = ShaderFlag::eNone
-			, VkCompareOp palphaFunc = VkCompareOp::VK_COMPARE_OP_ALWAYS
+			, ComparisonFunc palphaFunc = ComparisonFunc::eAlways
 			, uint32_t ppassLayerIndex = 0u
 			, uint32_t psubmeshDataBindings = 0u
 			, VkPrimitiveTopology ptopology = VkPrimitiveTopology::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
@@ -65,7 +65,7 @@ namespace castor3d
 		TextureCombine textures{};
 		LightingModelID lightingModelId{};
 		BackgroundModelID backgroundModelId{};
-		VkCompareOp alphaFunc;
+		ComparisonFunc alphaFunc;
 		uint32_t submeshDataBindings{};
 		uint32_t passLayerIndex{};
 		VkPrimitiveTopology topology{};
@@ -135,7 +135,7 @@ namespace castor3d
 			, ShaderFlags pshaderFlags = ShaderFlag::eNone
 			, VkPrimitiveTopology ptopology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 			, uint32_t ppatchVertices = 3u
-			, VkCompareOp palphaFunc = VK_COMPARE_OP_ALWAYS
+			, ComparisonFunc palphaFunc = ComparisonFunc::eAlways
 			, TextureCombine textures = {}
 			, uint32_t ppassLayerIndex = {}
 			, VkDeviceSize pmorphTargetsOffset = {}
@@ -171,7 +171,7 @@ namespace castor3d
 			, ProgramFlags programFlags
 			, TextureCombine textures
 			, ShaderFlags shaderFlags
-			, VkCompareOp alphaFunc
+			, ComparisonFunc alphaFunc
 			, uint32_t passLayerIndex = 0u )
 			: PipelineFlags{ PipelineHiHashDetails{ castor::move( ppassComponents )
 					, castor::move( psubmeshComponents )

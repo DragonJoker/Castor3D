@@ -10,8 +10,8 @@ namespace Testing
 		castor::ByteArray createPixelDataT()
 		{
 			castor::ByteArray result;
-			result.resize( 16u * getBytesPerPixel( PfT ) );
-			auto count = getComponentsCount( PfT );
+			result.resize( 16u * castor::getBytesPerPixel( PfT ) );
+			auto count = castor::getComponentsCount( PfT );
 			auto data = result.data();
 
 			for ( auto i = 0u; i < 16u; ++i )
@@ -204,7 +204,7 @@ namespace Testing
 					++index;
 				}
 
-				dstData += getBytesPerPixel( buffer->getFormat() );
+				dstData += castor::getBytesPerPixel( buffer->getFormat() );
 				srcData += castor::PixelDefinitionsT< PfT >::Size;
 			}
 		}
@@ -214,7 +214,7 @@ namespace Testing
 		{
 			void operator()( Testing::TestCase & test )const
 			{
-				CT_ON_EX( test, "PfT == " + castor::toUtf8( getFormatName( PfT ) ) );
+				CT_ON_EX( test, "PfT == " + castor::toUtf8( castor::getFormatName( PfT ) ) );
 				checkPixelExtractCompT< PfT >( test, castor::PixelComponent::eRed );
 				checkPixelExtractCompT< PfT >( test, castor::PixelComponent::eGreen );
 				checkPixelExtractCompT< PfT >( test, castor::PixelComponent::eBlue );
@@ -227,7 +227,7 @@ namespace Testing
 		{
 			void operator()( Testing::TestCase & test )const
 			{
-				CT_ON_EX( test, "PfT == " + castor::toUtf8( getFormatName( PfT ) ) );
+				CT_ON_EX( test, "PfT == " + castor::toUtf8( castor::getFormatName( PfT ) ) );
 				checkPixelExtractCompT< PfT >( test, castor::PixelComponent::eRed | castor::PixelComponent::eGreen );
 				checkPixelExtractCompT< PfT >( test, castor::PixelComponent::eGreen | castor::PixelComponent::eBlue );
 				checkPixelExtractCompT< PfT >( test, castor::PixelComponent::eBlue | castor::PixelComponent::eAlpha );
@@ -239,7 +239,7 @@ namespace Testing
 		{
 			void operator()( Testing::TestCase & test )const
 			{
-				CT_ON_EX( test, "PfT == " + castor::toUtf8( getFormatName( PfT ) ) );
+				CT_ON_EX( test, "PfT == " + castor::toUtf8( castor::getFormatName( PfT ) ) );
 				checkPixelExtractCompT< PfT >( test, castor::PixelComponent::eRed | castor::PixelComponent::eGreen | castor::PixelComponent::eBlue );
 				checkPixelExtractCompT< PfT >( test, castor::PixelComponent::eGreen | castor::PixelComponent::eBlue | castor::PixelComponent::eAlpha );
 			}
@@ -250,7 +250,7 @@ namespace Testing
 		{
 			void operator()( Testing::TestCase & test )const
 			{
-				CT_ON_EX( test, "PfT == " + castor::toUtf8( getFormatName( PfT ) ) );
+				CT_ON_EX( test, "PfT == " + castor::toUtf8( castor::getFormatName( PfT ) ) );
 				checkPixelExtractCompT< PfT >( test, castor::PixelComponent::eRed | castor::PixelComponent::eBlue );
 				checkPixelExtractCompT< PfT >( test, castor::PixelComponent::eRed | castor::PixelComponent::eAlpha );
 				checkPixelExtractCompT< PfT >( test, castor::PixelComponent::eGreen | castor::PixelComponent::eAlpha );
@@ -262,7 +262,7 @@ namespace Testing
 		{
 			void operator()( Testing::TestCase & test )const
 			{
-				CT_ON_EX( test, "PfT == " + castor::toUtf8( getFormatName( PfT ) ) );
+				CT_ON_EX( test, "PfT == " + castor::toUtf8( castor::getFormatName( PfT ) ) );
 				checkPixelExtractCompT< PfT >( test, castor::PixelComponent::eRed | castor::PixelComponent::eGreen | castor::PixelComponent::eAlpha );
 				checkPixelExtractCompT< PfT >( test, castor::PixelComponent::eRed | castor::PixelComponent::eBlue | castor::PixelComponent::eAlpha );
 			}

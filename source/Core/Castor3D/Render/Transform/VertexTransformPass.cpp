@@ -187,10 +187,8 @@ namespace castor3d
 			context.memoryBarrier( commandBuffer
 				, m_morphTargets.buffer->getBuffer()
 				, { m_morphTargets.chunk.offset, m_morphTargets.chunk.size }
-				, VK_ACCESS_HOST_WRITE_BIT
-				, VK_PIPELINE_STAGE_HOST_BIT
-				, { VK_ACCESS_SHADER_READ_BIT
-					, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+				, AccessFlags::eHostWrite, PipelineStageFlags::eHost
+				, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
 		}
 
 		if ( m_morphingWeights )
@@ -198,10 +196,8 @@ namespace castor3d
 			context.memoryBarrier( commandBuffer
 				, m_morphingWeights.buffer->getBuffer()
 				, { m_morphingWeights.chunk.offset, m_morphingWeights.chunk.size }
-				, VK_ACCESS_HOST_WRITE_BIT
-				, VK_PIPELINE_STAGE_HOST_BIT
-				, { VK_ACCESS_SHADER_READ_BIT
-					, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+				, AccessFlags::eHostWrite, PipelineStageFlags::eHost
+				, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
 		}
 
 		if ( m_skinTransforms )
@@ -209,10 +205,8 @@ namespace castor3d
 			context.memoryBarrier( commandBuffer
 				, m_skinTransforms.buffer->getBuffer()
 				, { m_skinTransforms.chunk.offset, m_skinTransforms.chunk.size }
-				, VK_ACCESS_HOST_WRITE_BIT
-				, VK_PIPELINE_STAGE_HOST_BIT
-				, { VK_ACCESS_SHADER_READ_BIT
-					, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+				, AccessFlags::eHostWrite, PipelineStageFlags::eHost
+				, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
 		}
 
 		auto itInput = m_input.buffers.begin();
@@ -225,17 +219,13 @@ namespace castor3d
 				context.memoryBarrier( commandBuffer
 					, itInput->buffer->getBuffer()
 					, { itInput->chunk.offset, itInput->chunk.size }
-					, VK_ACCESS_HOST_WRITE_BIT
-					, VK_PIPELINE_STAGE_HOST_BIT
-					, { VK_ACCESS_SHADER_READ_BIT
-						, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+					, AccessFlags::eHostWrite, PipelineStageFlags::eHost
+					, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
 				context.memoryBarrier( commandBuffer
 					, itOutput->buffer->getBuffer()
 					, { itOutput->chunk.offset, itOutput->chunk.size }
-					, VK_ACCESS_HOST_WRITE_BIT
-					, VK_PIPELINE_STAGE_HOST_BIT
-					, { VK_ACCESS_SHADER_WRITE_BIT
-						, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+					, AccessFlags::eHostWrite, PipelineStageFlags::eHost
+					, { AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader } );
 			}
 
 			++itInput;
@@ -276,30 +266,24 @@ namespace castor3d
 				context.memoryBarrier( commandBuffer
 					, itOutput->buffer->getBuffer()
 					, { itOutput->chunk.offset, itOutput->chunk.size }
-					, VK_ACCESS_SHADER_READ_BIT
-					, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-					, { VK_ACCESS_HOST_WRITE_BIT
-						, VK_PIPELINE_STAGE_HOST_BIT } );
+					, AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader
+					, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
 
 				if ( m_pipeline.meshletsBounds )
 				{
 					context.memoryBarrier( commandBuffer
 						, itInput->buffer->getBuffer()
 						, { itInput->chunk.offset, itInput->chunk.size }
-						, VK_ACCESS_SHADER_WRITE_BIT
-						, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-						, { VK_ACCESS_SHADER_READ_BIT
-							, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+						, AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader
+						, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
 				}
 				else
 				{
 					context.memoryBarrier( commandBuffer
 						, itInput->buffer->getBuffer()
 						, { itInput->chunk.offset, itInput->chunk.size }
-						, VK_ACCESS_SHADER_WRITE_BIT
-						, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-						, { VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-							, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } );
+						, AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader
+						, { AccessFlags::eVertexAttributeRead, PipelineStageFlags::eVertexInput } );
 				}
 			}
 
@@ -314,10 +298,8 @@ namespace castor3d
 				context.memoryBarrier( commandBuffer
 					, m_skinTransforms.buffer->getBuffer()
 					, { m_skinTransforms.chunk.offset, m_skinTransforms.chunk.size }
-					, VK_ACCESS_SHADER_READ_BIT
-					, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-					, { VK_ACCESS_HOST_WRITE_BIT
-						, VK_PIPELINE_STAGE_HOST_BIT } );
+					, AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader
+					, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
 			}
 
 			if ( m_morphTargets )
@@ -325,10 +307,8 @@ namespace castor3d
 				context.memoryBarrier( commandBuffer
 					, m_morphTargets.buffer->getBuffer()
 					, { m_morphTargets.chunk.offset, m_morphTargets.chunk.size }
-					, VK_ACCESS_SHADER_READ_BIT
-					, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-					, { VK_ACCESS_HOST_WRITE_BIT
-						, VK_PIPELINE_STAGE_HOST_BIT } );
+					, AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader
+					, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
 			}
 
 			if ( m_morphingWeights )
@@ -336,10 +316,8 @@ namespace castor3d
 				context.memoryBarrier( commandBuffer
 					, m_morphingWeights.buffer->getBuffer()
 					, { m_morphingWeights.chunk.offset, m_morphingWeights.chunk.size }
-					, VK_ACCESS_SHADER_READ_BIT
-					, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-					, { VK_ACCESS_HOST_WRITE_BIT
-						, VK_PIPELINE_STAGE_HOST_BIT } );
+					, AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader
+					, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
 			}
 		}
 	}

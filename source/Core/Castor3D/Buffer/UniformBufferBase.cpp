@@ -23,7 +23,7 @@ namespace castor3d
 			, VkDeviceSize elemAlignedSize
 			, VkDeviceSize count
 			, VkDeviceSize offset
-			, VkPipelineStageFlags flags )
+			, PipelineStageFlags flags )
 		{
 			auto srcSrcStage = src.getCompatibleStageFlags();
 			commandBuffer.memoryBarrier( srcSrcStage
@@ -44,7 +44,7 @@ namespace castor3d
 			if ( ubo == &src )
 			{
 				commandBuffer.memoryBarrier( srcSrcStage
-					, flags
+					, convert( flags )
 					, src.makeUniformBufferInput() );
 			}
 			else
@@ -57,7 +57,7 @@ namespace castor3d
 			if ( ubo == &dst )
 			{
 				commandBuffer.memoryBarrier( dstSrcStage
-					, flags
+					, convert( flags )
 					, dst.makeUniformBufferInput() );
 			}
 			else
@@ -75,7 +75,7 @@ namespace castor3d
 			, VkDeviceSize elemAlignedSize
 			, VkDeviceSize count
 			, VkDeviceSize offset
-			, VkPipelineStageFlags flags
+			, PipelineStageFlags flags
 			, FramePassTimer & timer )
 		{
 			commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
@@ -99,7 +99,7 @@ namespace castor3d
 			, VkDeviceSize elemAlignedSize
 			, VkDeviceSize count
 			, VkDeviceSize offset
-			, VkPipelineStageFlags flags )
+			, PipelineStageFlags flags )
 		{
 			commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 			doCopyBuffer( src
@@ -186,7 +186,7 @@ namespace castor3d
 		, const void * data
 		, size_t size
 		, uint32_t offset
-		, VkPipelineStageFlags flags )const
+		, PipelineStageFlags flags )const
 	{
 		auto commandBuffer = commandPool.createCommandBuffer( "UniformBufferUpload"
 			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
@@ -207,7 +207,7 @@ namespace castor3d
 		, const void * data
 		, size_t size
 		, uint32_t offset
-		, VkPipelineStageFlags flags )const
+		, PipelineStageFlags flags )const
 	{
 		auto elemAlignedSize = getBuffer().getAlignedSize( m_elemSize );
 		auto src = reinterpret_cast< const uint8_t * >( data );
@@ -248,7 +248,7 @@ namespace castor3d
 		, const void * data
 		, size_t size
 		, uint32_t offset
-		, VkPipelineStageFlags flags
+		, PipelineStageFlags flags
 		, FramePassTimer & timer )const
 	{
 		auto commandBuffer = commandPool.createCommandBuffer( "UniformBufferUpload"
@@ -271,7 +271,7 @@ namespace castor3d
 		, const void * data
 		, size_t size
 		, uint32_t offset
-		, VkPipelineStageFlags flags
+		, PipelineStageFlags flags
 		, FramePassTimer & timer )const
 	{
 		auto elemAlignedSize = getBuffer().getAlignedSize( m_elemSize );
@@ -314,7 +314,7 @@ namespace castor3d
 		, void * data
 		, size_t size
 		, uint32_t offset
-		, VkPipelineStageFlags flags
+		, PipelineStageFlags flags
 		, FramePassTimer & timer )const
 	{
 		CU_Require( size >= size_t( m_elemCount ) * m_elemSize

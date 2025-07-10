@@ -270,8 +270,8 @@ namespace GuiCommon
 					, vertices.size() * sizeof( castor::Point4f )
 					, m_pointLightVertexBuffer.getBuffer().getBuffer()
 					, m_pointLightVertexBuffer.getOffset()
-					, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+					, castor3d::AccessFlags::eVertexAttributeRead
+					, castor3d::PipelineStageFlags::eVertexInput );
 			}
 		}
 		else if ( light.getLightType() == castor3d::LightType::eSpot )
@@ -294,8 +294,8 @@ namespace GuiCommon
 					, vertices.size() * sizeof( castor::Point4f )
 					, it->second.getBuffer().getBuffer()
 					, it->second.getOffset()
-					, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+					, castor3d::AccessFlags::eVertexAttributeRead
+					, castor3d::PipelineStageFlags::eVertexInput );
 			}
 		}
 
@@ -385,8 +385,8 @@ namespace GuiCommon
 				++index;
 			}
 
-			m_meshConfigBuffer.markDirty( VK_ACCESS_SHADER_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+			m_meshConfigBuffer.markDirty( castor3d::AccessFlags::eShaderRead
+				, castor3d::PipelineStageFlags::eVertexShader );
 
 			castor3d::addDebugDrawable( m_renderTarget
 				, castor3d::DebugVertexBuffers{ {}, {}, 24u }
@@ -436,8 +436,8 @@ namespace GuiCommon
 						, vertices.size() * sizeof( castor::Point4f )
 						, it->second.getBuffer().getBuffer()
 						, it->second.getOffset()
-						, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-						, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+						, castor3d::AccessFlags::eVertexAttributeRead
+						, castor3d::PipelineStageFlags::eVertexInput );
 				}
 
 				buffer = &it->second;
@@ -456,8 +456,8 @@ namespace GuiCommon
 					, scale
 					, castor::Quaternion::identity() );
 
-				m_meshConfigBuffer.markDirty( VK_ACCESS_SHADER_READ_BIT
-					, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+				m_meshConfigBuffer.markDirty( castor3d::AccessFlags::eShaderRead
+					, castor3d::PipelineStageFlags::eVertexShader );
 
 				castor3d::addDebugDrawable( m_renderTarget
 					, castor3d::DebugVertexBuffers{ { VkBuffer( buffer->getBuffer().getBuffer() ) }

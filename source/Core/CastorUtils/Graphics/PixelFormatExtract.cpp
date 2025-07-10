@@ -179,7 +179,7 @@ namespace castor
 		{
 			switch ( src.getFormat() )
 			{
-#define CUPF_ENUM_VALUE_COLOR( name, value, components, alpha )\
+#define RGPF_ENUM_VALUE_COLOR( name, value, components, alpha )\
 		case PixelFormat::e##name:\
 			copyComponentFmtT< PixelFormat::e##name >( src.getConstPtr()\
 				, PixelDefinitionsT< PixelFormat::e##name >::Size\
@@ -191,7 +191,7 @@ namespace castor
 				, uint32_t( getBytesPerPixel( singleComponentV< PixelFormat::e##name > ) )\
 				, dst.getCount() );\
 			break;
-#include "CastorUtils/Graphics/PixelFormat.enum"
+#include <RenderGraph/PixelFormat.enum>
 			default:
 				break;
 			}

@@ -10,9 +10,9 @@ namespace castor
 	{
 		static StringArray const DataExtensions
 		{
-#define CUPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed )\
+#define RGPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed )\
 				getFormatName( PixelFormat::e##name ),
-#include "CastorUtils/Graphics/PixelFormat.enum"
+#include <RenderGraph/PixelFormat.enum>
 		};
 
 		static StringArray const & listExtensions()
@@ -34,7 +34,7 @@ namespace castor
 		reg.unregisterLoader( datal::listExtensions() );
 	}
 
-	ImageLayout DataImageLoader::load( String const & imageFormat
+	ImageMemoryLayout DataImageLoader::load( String const & imageFormat
 		, uint8_t const * input
 		, uint32_t size
 		, PxBufferBaseUPtr & outbuffer )const
@@ -46,6 +46,6 @@ namespace castor
 			, format
 			, input
 			, format );
-		return ImageLayout{ ImageLayout::e2D, *outbuffer };
+		return ImageMemoryLayout{ ImageMemoryLayout::e2D, *outbuffer };
 	}
 }

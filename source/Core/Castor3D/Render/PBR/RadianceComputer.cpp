@@ -40,7 +40,7 @@ namespace castor3d
 				, { size[0], size[1], 1u }
 				, 6u
 				, 1u
-				, VK_FORMAT_R32G32B32A32_SFLOAT
+				, castor::PixelFormat::eR32G32B32A32_SFLOAT
 				, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT };
 			result.create();
 			return result;
@@ -54,11 +54,11 @@ namespace castor3d
 			if ( !result )
 			{
 				auto created = engine.createSampler( name, engine );
-				created->setMinFilter( VK_FILTER_LINEAR );
-				created->setMagFilter( VK_FILTER_LINEAR );
-				created->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				created->setMinFilter( FilterMode::eLinear );
+				created->setMagFilter( FilterMode::eLinear );
+				created->setWrapS( WrapMode::eClampToEdge );
+				created->setWrapT( WrapMode::eClampToEdge );
+				created->setWrapR( WrapMode::eClampToEdge );
 				created->setSerialisable( false );
 				result = engine.addSampler( name, created, false );
 			}
@@ -147,13 +147,13 @@ namespace castor3d
 		}
 
 		static ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
-			, VkFormat format )
+			, castor::PixelFormat format )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
 			{
 				{
 					0u,
-					format,
+					convert( format ),
 					VK_SAMPLE_COUNT_1_BIT,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_STORE,
@@ -235,7 +235,7 @@ namespace castor3d
 				, castor::move( createInfo ) );
 		}
 
-		auto program = srcTexture.getFormat() == VK_FORMAT_B10G11R11_UFLOAT_PACK32
+		auto program = srcTexture.getFormat() == castor::PixelFormat::eB10G11R11_UFLOAT
 			? radcomp::doCreateProgram< sdw::CombinedImageCubeR11fG11fB10f >( m_device )
 			: radcomp::doCreateProgram< sdw::CombinedImageCubeRgba32 >( m_device );
 		createPipelines( { size.getWidth(), size.getHeight() }
@@ -286,7 +286,7 @@ namespace castor3d
 		, ashes::Queue const & queue )const
 	{
 		return { 1u, { m_commands.submit( queue, signalsToWait )
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT } };
+			, PipelineStageFlags::eColorAttachmentOutput } };
 	}
 
 	ashes::Sampler const & RadianceComputer::getSampler()const noexcept

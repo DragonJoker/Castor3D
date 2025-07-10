@@ -13,10 +13,10 @@ namespace
 		{
 			stream << "BPP : ";
 			stream.width( 2 );
-			stream << uint32_t( getBytesPerPixel( pixel.getFormat() ) );
+			stream << uint32_t( castor::getBytesPerPixel( pixel.getFormat() ) );
 			stream << ", Format : ";
 			stream.width( 10 );
-			stream << getFormatName( pixel.getFormat() );
+			stream << castor::getFormatName( pixel.getFormat() );
 			stream << ", Value : (";
 			stream.width( 3 );
 			stream << int( getR8U( pixel ) );
@@ -57,10 +57,10 @@ namespace
 		{
 			stream << "BPP : ";
 			stream.width( 2 );
-			stream << uint32_t( getBytesPerPixel( pixel.getFormat() ) );
+			stream << uint32_t( castor::getBytesPerPixel( pixel.getFormat() ) );
 			stream << ", Format : ";
 			stream.width( 10 );
-			stream << getFormatName( pixel.getFormat() );
+			stream << castor::getFormatName( pixel.getFormat() );
 			stream << ", Value : (";
 			stream.precision( 3 );
 			stream.width( 10 );
@@ -149,10 +149,10 @@ namespace
 	{
 		stream << "BPP : ";
 		stream.width( 2 );
-		stream << uint32_t( getBytesPerPixel( buffer.getFormat() ) );
+		stream << uint32_t( castor::getBytesPerPixel( buffer.getFormat() ) );
 		stream << ", Format : ";
 		stream.width( 10 );
-		stream << getFormatName( buffer.getFormat() );
+		stream << castor::getFormatName( buffer.getFormat() );
 		return stream;
 	}
 

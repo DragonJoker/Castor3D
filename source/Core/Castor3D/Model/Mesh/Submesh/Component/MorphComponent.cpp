@@ -257,8 +257,8 @@ namespace castor3d
 			++index;
 		}
 
-		m_buffer.markDirty( VK_ACCESS_SHADER_READ_BIT
-			, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+		m_buffer.markDirty( AccessFlags::eShaderRead
+			, PipelineStageFlags::eVertexShader );
 	}
 
 	//*********************************************************************************************

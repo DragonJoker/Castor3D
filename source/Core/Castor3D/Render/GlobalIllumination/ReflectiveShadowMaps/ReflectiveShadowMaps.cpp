@@ -45,7 +45,7 @@ namespace castor3d
 					, context
 					, graph
 					, Callbacks{ []( uint32_t ){}
-						, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_TRANSFER_BIT ); } )
+						, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eTransfer ); } )
 						, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); } } }
 			{
 			}
@@ -75,7 +75,7 @@ namespace castor3d
 		static Texture createImage( RenderDevice const & device
 			, crg::ResourcesCache & resources
 			, castor::String const & name
-			, VkFormat format
+			, castor::PixelFormat format
 			, VkExtent3D const & size )
 		{
 			return Texture{ device
@@ -97,8 +97,8 @@ namespace castor3d
 			, VkExtent3D const & size )
 		{
 			TextureArray result;
-			result.emplace_back( createImage( device, resources, name + "GI", VK_FORMAT_R16G16B16A16_SFLOAT, size ) );
-			result.emplace_back( createImage( device, resources, name + "Normals", VK_FORMAT_R16G16B16A16_SFLOAT, size ) );
+			result.emplace_back( createImage( device, resources, name + "GI", castor::PixelFormat::eR16G16B16A16_SFLOAT, size ) );
+			result.emplace_back( createImage( device, resources, name + "Normals", castor::PixelFormat::eR16G16B16A16_SFLOAT, size ) );
 			return result;
 		}
 	}
@@ -255,7 +255,7 @@ namespace castor3d
 					, m_result ) );
 			m_lastPass = it->second->lastPass;
 			m_graph.addOutput( m_result.wholeViewId
-				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+				, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 
 			if ( m_runnable )
 			{
@@ -320,7 +320,7 @@ namespace castor3d
 				, TextureFactors{}.invert( true ) );
 			visitor.visit( getName() + " Result"
 				, m_result
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, ImageLayout::eShaderReadOnly
 				, TextureFactors{}.invert( true ) );
 		}
 	}

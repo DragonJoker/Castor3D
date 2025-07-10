@@ -473,11 +473,11 @@ namespace castor
 
 		switch ( format )
 		{
-#define CUPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed )\
+#define RGPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed )\
 		case PixelFormat::e##name:\
 			result = alpha;\
 			break;
-#include "PixelFormat.enum"
+#include <RenderGraph/PixelFormat.enum>
 		default:
 			result = false;
 			break;
@@ -519,11 +519,11 @@ namespace castor
 
 		switch ( format )
 		{
-#define CUPF_ENUM_VALUE_COLOR( name, value, components, alpha )\
+#define RGPF_ENUM_VALUE_COLOR( name, value, components, alpha )\
 		case PixelFormat::e##name:\
 			result = singleComponentV< PixelFormat::e##name >;\
 			break;
-#include "PixelFormat.enum"
+#include <RenderGraph/PixelFormat.enum>
 		default:
 			result = PixelFormat::eUNDEFINED;
 			break;
@@ -941,14 +941,9 @@ namespace castor
 		}
 	}
 
-	constexpr bool isDepthOrStencilFormat( PixelFormat format )
-	{
-		return ashes::isDepthOrStencilFormat( VkFormat( format ) );
-	}
-
 	constexpr PixelFormat getPFWithoutAlpha( PixelFormat format )
 	{
-		PixelFormat result = PixelFormat::eCount;
+		PixelFormat result = PixelFormat::eCOUNT;
 
 		switch ( format )
 		{
@@ -986,7 +981,7 @@ namespace castor
 
 	constexpr PixelFormat getPFWithAlpha( PixelFormat format )
 	{
-		PixelFormat result = PixelFormat::eCount;
+		PixelFormat result = PixelFormat::eCOUNT;
 
 		switch ( format )
 		{
@@ -1220,18 +1215,18 @@ namespace castor
 				| PixelComponent::eGreen );
 		}
 
-		if ( ashes::isDepthStencilFormat( VkFormat( format ) ) )
+		if ( isDepthStencilFormat( format ) )
 		{
 			return ( PixelComponent::eDepth
 				| PixelComponent::eStencil );
 		}
 
-		if ( ashes::isDepthFormat( VkFormat( format ) ) )
+		if ( isDepthFormat( format ) )
 		{
 			return PixelComponent::eDepth;
 		}
 
-		if ( ashes::isStencilFormat( VkFormat( format ) ) )
+		if ( isStencilFormat( format ) )
 		{
 			return PixelComponent::eStencil;
 		}

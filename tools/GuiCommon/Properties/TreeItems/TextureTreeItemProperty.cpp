@@ -362,41 +362,41 @@ namespace GuiCommon
 
 				if ( componentsCount == 1u )
 				{
-					if ( isABGRFormat( m_format ) )
+					if ( castor::isABGRFormat( m_format ) )
 					{
 						m_compProps->choices.Add( PROPERTY_COMPONENT_A );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
 					}
-					else if ( isBGRAFormat( m_format ) )
+					else if ( castor::isBGRAFormat( m_format ) )
 					{
 						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_A );
 					}
-					else if ( isRGBAFormat( m_format ) )
+					else if ( castor::isRGBAFormat( m_format ) )
 					{
 						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_A );
 					}
-					else if ( isARGBFormat( m_format ) )
+					else if ( castor::isARGBFormat( m_format ) )
 					{
 						m_compProps->choices.Add( PROPERTY_COMPONENT_A );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
 					}
-					else if ( isBGRFormat( m_format ) )
+					else if ( castor::isBGRFormat( m_format ) )
 					{
 						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
 					}
-					else if ( isRGFormat( m_format ) )
+					else if ( castor::isRGFormat( m_format ) )
 					{
 						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
@@ -410,36 +410,36 @@ namespace GuiCommon
 				}
 				else if ( componentsCount == 2u )
 				{
-					if ( isABGRFormat( m_format ) )
+					if ( castor::isABGRFormat( m_format ) )
 					{
 						m_compProps->choices.Add( PROPERTY_COMPONENT_A );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
 					}
-					else if ( isBGRAFormat( m_format ) )
+					else if ( castor::isBGRAFormat( m_format ) )
 					{
 						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
 					}
-					else if ( isRGBAFormat( m_format ) )
+					else if ( castor::isRGBAFormat( m_format ) )
 					{
 						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
 					}
-					else if ( isARGBFormat( m_format ) )
+					else if ( castor::isARGBFormat( m_format ) )
 					{
 						m_compProps->choices.Add( PROPERTY_COMPONENT_A );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
 					}
-					else if ( isBGRFormat( m_format ) )
+					else if ( castor::isBGRFormat( m_format ) )
 					{
 						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
 					}
-					else if ( isRGFormat( m_format ) )
+					else if ( castor::isRGFormat( m_format ) )
 					{
 						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
 					}
@@ -451,10 +451,10 @@ namespace GuiCommon
 				}
 				else
 				{
-					if ( isABGRFormat( m_format )
-						|| isBGRAFormat( m_format )
-						|| isARGBFormat( m_format )
-						|| isRGBAFormat( m_format ) )
+					if ( castor::isABGRFormat( m_format )
+						|| castor::isBGRAFormat( m_format )
+						|| castor::isARGBFormat( m_format )
+						|| castor::isRGBAFormat( m_format ) )
 					{
 						m_compProps->choices.Add( PROPERTY_COMPONENT_RGB );
 						m_compProps->choices.Add( PROPERTY_COMPONENT_GBA );

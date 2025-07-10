@@ -44,14 +44,14 @@ namespace castor3d
 				result.implicitAction( smResult[SmTexture::eLinearDepth].sampledViewId
 					, crg::RecordContext::clearAttachment( smResult[SmTexture::eLinearDepth].sampledViewId
 						, getClearValue( SmTexture::eLinearDepth )
-						, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+						, ImageLayout::eShaderReadOnly ) );
 
 				if ( needsVsm )
 				{
 					result.implicitAction( smResult[SmTexture::eVariance].sampledViewId
 						, crg::RecordContext::clearAttachment( smResult[SmTexture::eVariance].sampledViewId
 							, getClearValue( SmTexture::eVariance )
-							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+							, ImageLayout::eShaderReadOnly ) );
 				}
 
 				if ( needsRsm )
@@ -59,15 +59,15 @@ namespace castor3d
 					result.implicitAction( smResult[SmTexture::eNormal].sampledViewId
 						, crg::RecordContext::clearAttachment( smResult[SmTexture::eNormal].sampledViewId
 							, getClearValue( SmTexture::eNormal )
-							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+							, ImageLayout::eShaderReadOnly ) );
 					result.implicitAction( smResult[SmTexture::ePosition].sampledViewId
 						, crg::RecordContext::clearAttachment( smResult[SmTexture::ePosition].sampledViewId
 							, getClearValue( SmTexture::ePosition )
-							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+							, ImageLayout::eShaderReadOnly ) );
 					result.implicitAction( smResult[SmTexture::eFlux].sampledViewId
 						, crg::RecordContext::clearAttachment( smResult[SmTexture::eFlux].sampledViewId
 							, getClearValue( SmTexture::eFlux )
-							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+							, ImageLayout::eShaderReadOnly ) );
 				}
 			}
 

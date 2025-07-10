@@ -48,7 +48,7 @@ namespace castor3d
 		C3D_API void update( GpuUpdater & updater );
 		C3D_API void setRenderPass( VkRenderPass renderPass
 			, castor::Size const & renderSize
-			, VkFormat swapchainFormat );
+			, castor::PixelFormat swapchainFormat );
 		/**
 		 *\~english
 		 *\brief			Uploads overlays GPU buffers to VRAM.
@@ -213,7 +213,7 @@ namespace castor3d
 		castor::Size m_renderSize;
 		CameraRPtr m_camera;
 		SceneCullerUPtr m_culler;
-		VkFormat m_swapchainFormat{ VK_FORMAT_R8G8B8A8_UNORM };
+		castor::PixelFormat m_swapchainFormat{ castor::PixelFormat::eR8G8B8A8_UNORM };
 		Texture m_colour;
 		Texture m_depth;
 		CameraUbo m_cameraUbo;

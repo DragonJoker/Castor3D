@@ -180,13 +180,6 @@ namespace castor
 	constexpr PixelFormat getNonSRGBFormat( PixelFormat format );
 	/**
 	 *\~english
-	 *\return		\p true if format is a depth and/or stencil format.
-	 *\~french
-	 *\return		\p false si le format est un format depth et/ou stencil.
-	 */
-	constexpr bool isDepthOrStencilFormat( PixelFormat format );
-	/**
-	 *\~english
 	 *\brief		Retrieves the pixel format without alpha that is close to the one given
 	 *\param[in]	format	The pixel format
 	 *\return		The given pixel format if none found

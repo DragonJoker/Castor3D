@@ -153,7 +153,7 @@ namespace ocean_fft
 			, context
 			, graph
 			, { [this]( uint32_t index ){ doInitialise( index ); }
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
+				, GetPipelineStateCallback( [](){ return crg::getPipelineState( castor3d::PipelineStageFlags::eComputeShader ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i );}
 				, passIndex
 				, isEnabled
@@ -196,12 +196,12 @@ namespace ocean_fft
 		auto invSizeIt = m_invSizes.begin();
 		auto neededLayoutState = getLayoutState( viewId );
 		auto toLayoutState = context.getNextLayoutState( viewId );
-		crg::LayoutState shaderRead{ VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, VK_ACCESS_SHADER_READ_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT };
-		crg::LayoutState shaderWrite{ VK_IMAGE_LAYOUT_GENERAL
-			, VK_ACCESS_SHADER_WRITE_BIT
-			, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT };
+		crg::LayoutState shaderRead{ castor3d::ImageLayout::eShaderReadOnly
+			, castor3d::AccessFlags::eShaderRead
+			, castor3d::PipelineStageFlags::eFragmentShader };
+		crg::LayoutState shaderWrite{ castor3d::ImageLayout::eGeneral
+			, castor3d::AccessFlags::eShaderWrite
+			, castor3d::PipelineStageFlags::eComputeShader };
 		auto mipLevels = imageId.data->info.mipLevels;
 		auto srcImageLayout = neededLayoutState;
 		auto dstMipImageLayout = ( range.levelCount == mipLevels )
@@ -217,11 +217,11 @@ namespace ocean_fft
 		// Transition first mip level to shader source for read in next iteration
 		auto firstLayoutState = m_graph.getCurrentLayoutState( context
 			, imageId
-			, viewId.data->info.viewType
+			, getImageViewType( viewId )
 			, mipSubRange );
 		context.memoryBarrier( commandBuffer
 			, imageId
-			, viewId.data->info.viewType
+			, getImageViewType( viewId )
 			, mipSubRange
 			, firstLayoutState.layout
 			, shaderRead );
@@ -234,9 +234,9 @@ namespace ocean_fft
 			// Transition current mip level to shader write
 			context.memoryBarrier( commandBuffer
 				, imageId
-				, viewId.data->info.viewType
+				, getImageViewType( viewId )
 				, mipSubRange
-				, VK_IMAGE_LAYOUT_UNDEFINED
+				, castor3d::ImageLayout::eUndefined
 				, shaderWrite );
 
 			// Generate mip level
@@ -267,7 +267,7 @@ namespace ocean_fft
 			// Transition previous mip level to wanted output layout
 			context.memoryBarrier( commandBuffer
 				, imageId
-				, viewId.data->info.viewType
+				, getImageViewType( viewId )
 				, { mipSubRange.aspectMask
 					, mipSubRange.baseMipLevel - 1u
 					, 1u
@@ -281,7 +281,7 @@ namespace ocean_fft
 				// Transition final mip level to wanted output layout
 				context.memoryBarrier( commandBuffer
 					, imageId
-					, viewId.data->info.viewType
+					, getImageViewType( viewId )
 					, mipSubRange
 					, shaderWrite.layout
 					, dstMipImageLayout );
@@ -291,7 +291,7 @@ namespace ocean_fft
 				// Transition current mip level to shader source for read in next iteration
 				context.memoryBarrier( commandBuffer
 					, imageId
-					, viewId.data->info.viewType
+					, getImageViewType( viewId )
 					, mipSubRange
 					, shaderWrite.layout
 					, shaderRead );

@@ -196,7 +196,7 @@ namespace castor3d
 			, context
 			, graph
 			, { crg::defaultV< crg::RunnablePass::InitialiseCallback >
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
+				, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
 				, castor::move( isEnabled )
@@ -231,10 +231,8 @@ namespace castor3d
 		// Clear result
 		context.memoryBarrier( commandBuffer
 			, view
-			, VK_IMAGE_LAYOUT_UNDEFINED
-			, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-				, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
-				, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
+			, ImageLayout::eUndefined
+			, makeLayoutState( ImageLayout::eTransferDst ) );
 		m_context.vkCmdClearColorImage( commandBuffer
 			, image
 			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
@@ -243,7 +241,7 @@ namespace castor3d
 			, &view.data->info.subresourceRange );
 		context.memoryBarrier( commandBuffer
 			, view
-			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+			, ImageLayout::eTransferDst
 			, layoutState );
 
 		m_context.vkCmdBindPipeline( commandBuffer

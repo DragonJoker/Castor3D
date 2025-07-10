@@ -1044,23 +1044,23 @@ namespace castor3d
 		, castor::Size const & size );
 	C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImage image
 		, VkImageSubresourceRange const & range
-		, VkImageLayout sourceLayout
-		, VkImageLayout destinationLayout
+		, ImageLayout sourceLayout
+		, ImageLayout destinationLayout
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily );
 	C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImage image
 		, VkImageSubresourceRange const & range
-		, VkImageLayout srcLayout
-		, VkImageLayout dstLayout
-		, VkAccessFlags srcAccessFlags
+		, ImageLayout srcLayout
+		, ImageLayout dstLayout
+		, AccessFlags srcAccessFlags
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily );
 	C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImage image
 		, VkImageSubresourceRange const & range
-		, VkImageLayout srcLayout
-		, VkImageLayout dstLayout
-		, VkAccessFlags srcAccessFlags
-		, VkAccessFlags dstAccessMask
+		, ImageLayout srcLayout
+		, ImageLayout dstLayout
+		, AccessFlags srcAccessFlags
+		, AccessFlags dstAccessMask
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily );
 	C3D_API void memoryBarrier( crg::RecordContext & context

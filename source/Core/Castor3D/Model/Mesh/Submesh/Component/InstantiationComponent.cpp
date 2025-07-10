@@ -265,8 +265,8 @@ namespace castor3d
 				std::copy( data.data.begin()
 					, data.data.end()
 					, data.buffer.getData().begin() );
-				data.buffer.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+				data.buffer.markDirty( AccessFlags::eVertexAttributeRead
+					, PipelineStageFlags::eVertexInput );
 			}
 		}
 	}

@@ -226,7 +226,7 @@ namespace castor3d
 		float value = 1.0f;
 		std::memcpy( data.data(), &value, data.size() );
 		return { name
-			, castor::ImageCreateParams{ getFormatName( castor::PixelFormat::eR32_SFLOAT ), data } };
+			, castor::ImageCreateParams{ castor::getFormatName( castor::PixelFormat::eR32_SFLOAT ), data } };
 	}
 
 	//*********************************************************************************************

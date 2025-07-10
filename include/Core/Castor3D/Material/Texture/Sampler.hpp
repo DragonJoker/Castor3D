@@ -18,16 +18,16 @@ namespace castor3d
 {
 	C3D_API SamplerObs createSampler( Engine & engine
 		, castor::String const & baseName
-		, VkFilter filter
+		, FilterMode filter
 		, VkImageSubresourceRange const * range );
-	C3D_API castor::String getSamplerName( VkCompareOp compareOp
-		, VkFilter minFilter
-		, VkFilter magFilter
-		, VkSamplerMipmapMode mipFilter
-		, VkSamplerAddressMode U
-		, VkSamplerAddressMode V
-		, VkSamplerAddressMode W
-		, VkBorderColor borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK );
+	C3D_API castor::String getSamplerName( ComparisonFunc compareOp
+		, FilterMode minFilter
+		, FilterMode magFilter
+		, MipmapMode mipFilter
+		, WrapMode U
+		, WrapMode V
+		, WrapMode W
+		, BorderColour borderColor = BorderColour::eFloatTransparentBlack );
 
 	class Sampler
 		: public castor::Named
@@ -90,34 +90,34 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		VkSamplerAddressMode getWrapS()const
+		WrapMode getWrapS()const
 		{
-			return m_info.addressModeU;
+			return crg::convert( m_info.addressModeU );
 		}
 
-		VkSamplerAddressMode getWrapT()const
+		WrapMode getWrapT()const
 		{
-			return m_info.addressModeV;
+			return crg::convert( m_info.addressModeV );
 		}
 
-		VkSamplerAddressMode getWrapR()const
+		WrapMode getWrapR()const
 		{
-			return m_info.addressModeW;
+			return crg::convert( m_info.addressModeW );
 		}
 
-		VkFilter getMinFilter()const
+		FilterMode getMinFilter()const
 		{
-			return m_info.minFilter;
+			return crg::convert( m_info.minFilter );
 		}
 
-		VkFilter getMagFilter()const
+		FilterMode getMagFilter()const
 		{
-			return m_info.magFilter;
+			return crg::convert( m_info.magFilter );
 		}
 
-		VkSamplerMipmapMode getMipFilter()const
+		MipmapMode getMipFilter()const
 		{
-			return m_info.mipmapMode;
+			return crg::convert( m_info.mipmapMode );
 		}
 
 		float getMinLod()const
@@ -135,9 +135,9 @@ namespace castor3d
 			return m_info.mipLodBias;
 		}
 
-		VkBorderColor getBorderColour()const
+		BorderColour getBorderColour()const
 		{
-			return m_info.borderColor;
+			return convert( m_info.borderColor );
 		}
 
 		float getMaxAnisotropy()const
@@ -145,9 +145,9 @@ namespace castor3d
 			return m_info.maxAnisotropy;
 		}
 
-		VkCompareOp getCompareOp()const
+		ComparisonFunc getCompareOp()const
 		{
-			return m_info.compareOp;
+			return convert( m_info.compareOp );
 		}
 
 		ashes::Sampler const & getSampler()const
@@ -189,35 +189,35 @@ namespace castor3d
 		*	ils ont un effet jusqu'à ce que initialise() soit appelée.
 		**/
 		/**@{*/
-		void setWrapS( VkSamplerAddressMode value )
+		void setWrapS( WrapMode value )
 		{
-			m_info.addressModeU = value;
+			m_info.addressModeU = convert( value );
 		}
 
-		void setWrapT( VkSamplerAddressMode value )
+		void setWrapT( WrapMode value )
 		{
-			m_info.addressModeV = value;
+			m_info.addressModeV = convert( value );
 		}
 
-		void setWrapR( VkSamplerAddressMode value )
+		void setWrapR( WrapMode value )
 		{
-			m_info.addressModeW = value;
+			m_info.addressModeW = convert( value );
 		}
 
-		void setMinFilter( VkFilter value )
+		void setMinFilter( FilterMode value )
 		{
-			m_info.minFilter = value;
+			m_info.minFilter = convert( value );
 		}
 
-		void setMagFilter( VkFilter value )
+		void setMagFilter( FilterMode value )
 		{
-			m_info.magFilter = value;
+			m_info.magFilter = convert( value );
 		}
 
-		void setMipFilter( VkSamplerMipmapMode value )
+		void setMipFilter( MipmapMode value )
 		{
 			m_mipmapIsSet = true;
-			m_info.mipmapMode = value;
+			m_info.mipmapMode = convert( value );
 		}
 
 		void setMinLod( float value )
@@ -235,9 +235,9 @@ namespace castor3d
 			m_info.mipLodBias = value;
 		}
 
-		void setBorderColour( VkBorderColor value )
+		void setBorderColour( BorderColour value )
 		{
-			m_info.borderColor = value;
+			m_info.borderColor = convert( value );
 		}
 
 		void enableAnisotropicFiltering( bool value )
@@ -250,9 +250,9 @@ namespace castor3d
 			m_info.maxAnisotropy = value;
 		}
 
-		void setCompareOp( VkCompareOp value )
+		void setCompareOp( ComparisonFunc value )
 		{
-			m_info.compareOp = value;
+			m_info.compareOp = convert( value );
 		}
 
 		void enableCompare( bool value )

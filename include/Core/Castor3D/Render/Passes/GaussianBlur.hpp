@@ -183,7 +183,7 @@ namespace castor3d
 		crg::FramePass const * m_lastPass;
 		castor::String m_prefix;
 		VkExtent2D m_size;
-		VkFormat m_format;
+		castor::PixelFormat m_format;
 		crg::ImageViewId m_intermediateView;
 		UniformBufferOffsetT< Configuration > m_blurUbo;
 		castor::Vector< float > m_kernel;

@@ -246,7 +246,7 @@ namespace castor3d
 		castor::String name{ cuT( "DefaultOcclusion" ) };
 		castor::ByteArray data{ 255u };
 		return { name
-			, castor::ImageCreateParams{ getFormatName( castor::PixelFormat::eR8_UNORM ), data } };
+			, castor::ImageCreateParams{ castor::getFormatName( castor::PixelFormat::eR8_UNORM ), data } };
 	}
 
 	//*********************************************************************************************

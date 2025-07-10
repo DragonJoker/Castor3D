@@ -39,7 +39,7 @@ namespace castor3d
 			, crg::ResourcesCache & resources
 			, castor::String const & name
 			, castor::Size const & size
-			, VkFormat format
+			, castor::PixelFormat format
 			, VkImageUsageFlags usage )
 		{
 			auto result = Texture{ device
@@ -51,7 +51,7 @@ namespace castor3d
 				, 1u
 				, format
 				, usage
-				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK };
+				, BorderColour::eFloatOpaqueBlack };
 			result.create();
 			return result;
 		}
@@ -60,7 +60,7 @@ namespace castor3d
 			, crg::ResourcesCache & resources
 			, castor::String const & name
 			, castor::Size const & size
-			, VkFormat format )
+			, castor::PixelFormat format )
 		{
 			return createTexture( device
 				, resources
@@ -354,7 +354,7 @@ namespace castor3d
 
 	void LoadingScreen::setRenderPass( VkRenderPass renderPass
 		, castor::Size const & renderSize
-		, VkFormat swapchainFormat )
+		, castor::PixelFormat swapchainFormat )
 	{
 		m_renderPass = renderPass;
 		m_renderSize = renderSize;

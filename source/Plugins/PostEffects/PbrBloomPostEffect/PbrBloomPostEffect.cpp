@@ -103,7 +103,7 @@ namespace PbrBloom
 		auto mipCount = ashes::getMaxMipCount( extent );
 		m_intermediateImg = m_graph.createImage( crg::ImageData{ "PBLInt"
 			, 0u
-			, VK_IMAGE_TYPE_2D
+			, castor3d::ImageType::e2D
 			, target.getFormat()
 			, extent
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT

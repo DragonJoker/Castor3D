@@ -51,7 +51,7 @@ namespace castor3d
 			, { bgcolour::Dim, bgcolour::Dim, 1u }
 			, 6u
 			, 1u
-			, VK_FORMAT_R32G32B32A32_SFLOAT
+			, castor::PixelFormat::eR32G32B32A32_SFLOAT
 			, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT };
 		m_textureId.create();
 		m_texture = castor::makeUnique< TextureLayout >( *engine.getRenderSystem()
@@ -131,10 +131,10 @@ namespace castor3d
 			uploader.pushUpload( m_buffer->getPtr()
 				, m_buffer->getSize()
 				, m_texture->getTexture()
-				, castor::ImageLayout{ castor::ImageLayout::e2D, *m_buffer }
+				, castor::ImageMemoryLayout{ castor::ImageMemoryLayout::e2D, *m_buffer }
 				, dstSubresource
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT );
+				, ImageLayout::eShaderReadOnly
+				, PipelineStageFlags::eFragmentShader );
 			dstSubresource.baseArrayLayer++;
 		}
 	}
@@ -145,9 +145,9 @@ namespace castor3d
 	{
 		pass.addSampledView( m_textureId.wholeViewId
 			, index
-			, crg::SamplerDesc{ VK_FILTER_LINEAR
-				, VK_FILTER_LINEAR
-				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+			, crg::SamplerDesc{ FilterMode::eLinear
+				, FilterMode::eLinear
+				, MipmapMode::eLinear } );
 		++index;
 	}
 

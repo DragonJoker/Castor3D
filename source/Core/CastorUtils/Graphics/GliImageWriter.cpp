@@ -2,7 +2,7 @@
 
 #include "CastorUtils/Data/LoaderException.hpp"
 #include "CastorUtils/Data/Path.hpp"
-#include "CastorUtils/Graphics/ImageLayout.hpp"
+#include "CastorUtils/Graphics/ImageMemoryLayout.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 #include "CastorUtils/Graphics/Rectangle.hpp"
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"

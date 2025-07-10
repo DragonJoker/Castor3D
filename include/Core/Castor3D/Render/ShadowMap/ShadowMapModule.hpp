@@ -39,11 +39,11 @@ namespace castor3d
 	C3D_API castor::String getTextureName( LightType light
 		, SmTexture texture );
 	C3D_API castor::String getTexName( SmTexture texture );
-	C3D_API VkFormat getFormat( RenderDevice const & device, SmTexture texture );
+	C3D_API castor::PixelFormat getFormat( RenderDevice const & device, SmTexture texture );
 	C3D_API VkClearValue getClearValue( SmTexture texture );
 	C3D_API VkImageUsageFlags getUsageFlags( SmTexture texture );
-	C3D_API VkBorderColor getBorderColor( SmTexture texture );
-	C3D_API VkCompareOp getCompareOp( SmTexture texture );
+	C3D_API BorderColour getBorderColor( SmTexture texture );
+	C3D_API ComparisonFunc getCompareOp( SmTexture texture );
 	C3D_API uint32_t getMipLevels( RenderDevice const & device
 		, SmTexture texture
 		, castor::Size const & size );

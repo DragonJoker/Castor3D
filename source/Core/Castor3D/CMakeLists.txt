@@ -2261,7 +2261,6 @@ target_link_libraries( ${PROJECT_NAME}
 		castor::CastorUtils
 		sdw::ShaderAST
 		sdw::ShaderWriter
-		crg::RenderGraph
 	PRIVATE
 		sdw::CompilerSpirV
 		${glslang_LIBRARIES}

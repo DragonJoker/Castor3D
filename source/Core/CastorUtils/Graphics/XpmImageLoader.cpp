@@ -70,7 +70,7 @@ namespace castor
 		reg.unregisterLoader( xpml::listExtensions() );
 	}
 
-	ImageLayout XpmImageLoader::load( CU_UnusedParam( String const &, imageFormat )
+	ImageMemoryLayout XpmImageLoader::load( CU_UnusedParam( String const &, imageFormat )
 		, uint8_t const * input
 		, uint32_t size
 		, PxBufferBaseUPtr & outbuffer )const
@@ -126,6 +126,6 @@ namespace castor
 			, pixels.getFormat()
 			, pixels.getConstPtr()
 			, pixels.getFormat() );
-		return ImageLayout{ ImageLayout::e2D, *outbuffer };
+		return ImageMemoryLayout{ ImageMemoryLayout::e2D, *outbuffer };
 	}
 }

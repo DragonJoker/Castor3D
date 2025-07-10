@@ -1,4 +1,4 @@
-#include "CastorUtils/Graphics/ImageLayout.hpp"
+#include "CastorUtils/Graphics/ImageMemoryLayout.hpp"
 
 #include "CastorUtils/Data/LoaderException.hpp"
 #include "CastorUtils/Data/Path.hpp"
@@ -11,7 +11,7 @@
 
 namespace castor
 {
-	ImageLayout::SubresourceRange ImageLayout::range()const noexcept
+	ImageMemoryLayout::SubresourceRange ImageMemoryLayout::range()const noexcept
 	{
 		auto off = offset();
 		auto sze = size();
@@ -22,7 +22,7 @@ namespace castor
 		};
 	}
 	
-	ImageLayout::SubresourceRange ImageLayout::slice( uint32_t index )const noexcept
+	ImageMemoryLayout::SubresourceRange ImageMemoryLayout::slice( uint32_t index )const noexcept
 	{
 		auto offset = sliceOffset( index );
 		auto size = sliceSize();
@@ -33,7 +33,7 @@ namespace castor
 		};
 	}
 
-	ImageLayout::SubresourceRange ImageLayout::sliceMip( uint32_t index, uint32_t level )const noexcept
+	ImageMemoryLayout::SubresourceRange ImageMemoryLayout::sliceMip( uint32_t index, uint32_t level )const noexcept
 	{
 		auto offset = sliceMipOffset( index, level );
 		auto size = sliceMipSize( level );
@@ -44,12 +44,12 @@ namespace castor
 		};
 	}
 
-	ImageLayout::DeviceSize ImageLayout::size()const noexcept
+	ImageMemoryLayout::DeviceSize ImageMemoryLayout::size()const noexcept
 	{
 		return depthLayers() * sliceSize();
 	}
 
-	ImageLayout::DeviceSize ImageLayout::sliceSize()const noexcept
+	ImageMemoryLayout::DeviceSize ImageMemoryLayout::sliceSize()const noexcept
 	{
 		return ashes::getLevelsSize( VkExtent2D{ extent->x, extent->y }
 			, VkFormat( format )
@@ -58,19 +58,19 @@ namespace castor
 			, alignment );
 	}
 
-	ImageLayout::DeviceSize ImageLayout::sliceMipSize( uint32_t level )const noexcept
+	ImageMemoryLayout::DeviceSize ImageMemoryLayout::sliceMipSize( uint32_t level )const noexcept
 	{
 		return ashes::getSize( VkExtent2D{ extent->x, extent->y }
 			, VkFormat( format )
 			, level );
 	}
 
-	ImageLayout::DeviceSize ImageLayout::offset()const noexcept
+	ImageMemoryLayout::DeviceSize ImageMemoryLayout::offset()const noexcept
 	{
 		return sliceMipOffset( baseLayer, baseLevel );
 	}
 
-	ImageLayout::DeviceSize ImageLayout::sliceOffset( uint32_t index )const noexcept
+	ImageMemoryLayout::DeviceSize ImageMemoryLayout::sliceOffset( uint32_t index )const noexcept
 	{
 		return index * ashes::getLevelsSize( VkExtent2D{ extent->x, extent->y }
 			, VkFormat( format )
@@ -79,7 +79,7 @@ namespace castor
 			, alignment );
 	}
 	
-	ImageLayout::DeviceSize ImageLayout::sliceMipOffset( uint32_t index
+	ImageMemoryLayout::DeviceSize ImageMemoryLayout::sliceMipOffset( uint32_t index
 		, uint32_t level )const noexcept
 	{
 		return sliceOffset( index )
@@ -90,83 +90,83 @@ namespace castor
 				, alignment );
 	}
 
-	ImageLayout::Buffer ImageLayout::buffer( PxBufferBase & buffer )const noexcept
+	ImageMemoryLayout::Buffer ImageMemoryLayout::buffer( PxBufferBase & buffer )const noexcept
 	{
 		auto rng = range();
-		return ImageLayout::Buffer
+		return ImageMemoryLayout::Buffer
 		{
 			buffer.getPtr() + rng.getMin(),
 			buffer.getPtr() + rng.getMax(),
 		};
 	}
 
-	ImageLayout::Buffer ImageLayout::sliceBuffer( PxBufferBase & buffer
+	ImageMemoryLayout::Buffer ImageMemoryLayout::sliceBuffer( PxBufferBase & buffer
 		, uint32_t index )const noexcept
 	{
 		auto range = slice( index );
-		return ImageLayout::Buffer
+		return ImageMemoryLayout::Buffer
 		{
 			buffer.getPtr() + range.getMin(),
 			buffer.getPtr() + range.getMax(),
 		};
 	}
 
-	ImageLayout::Buffer ImageLayout::sliceMipBuffer( PxBufferBase & buffer
+	ImageMemoryLayout::Buffer ImageMemoryLayout::sliceMipBuffer( PxBufferBase & buffer
 		, uint32_t index
 		, uint32_t level )const noexcept
 	{
 		auto range = sliceMip( index, level );
-		return ImageLayout::Buffer
+		return ImageMemoryLayout::Buffer
 		{
 			buffer.getPtr() + range.getMin(),
 			buffer.getPtr() + range.getMax(),
 		};
 	}
 
-	ImageLayout::ConstBuffer ImageLayout::buffer( PxBufferBase const & buffer )const noexcept
+	ImageMemoryLayout::ConstBuffer ImageMemoryLayout::buffer( PxBufferBase const & buffer )const noexcept
 	{
 		auto rng = range();
-		return ImageLayout::ConstBuffer
+		return ImageMemoryLayout::ConstBuffer
 		{
 			buffer.getConstPtr() + rng.getMin(),
 			buffer.getConstPtr() + rng.getMax(),
 		};
 	}
 
-	ImageLayout::ConstBuffer ImageLayout::sliceBuffer( PxBufferBase const & buffer
+	ImageMemoryLayout::ConstBuffer ImageMemoryLayout::sliceBuffer( PxBufferBase const & buffer
 		, uint32_t index )const noexcept
 	{
 		auto range = slice( index );
-		return ImageLayout::ConstBuffer
+		return ImageMemoryLayout::ConstBuffer
 		{
 			buffer.getConstPtr() + range.getMin(),
 			buffer.getConstPtr() + range.getMax(),
 		};
 	}
 
-	ImageLayout::ConstBuffer ImageLayout::sliceMipBuffer( PxBufferBase const & buffer
+	ImageMemoryLayout::ConstBuffer ImageMemoryLayout::sliceMipBuffer( PxBufferBase const & buffer
 		, uint32_t index
 		, uint32_t level )const noexcept
 	{
 		auto range = sliceMip( index, level );
-		return ImageLayout::ConstBuffer
+		return ImageMemoryLayout::ConstBuffer
 		{
 			buffer.getConstPtr() + range.getMin(),
 			buffer.getConstPtr() + range.getMax(),
 		};
 	}
 
-	bool ImageLayout::hasBuffer( PxBufferBase const & buffer )const noexcept
+	bool ImageMemoryLayout::hasBuffer( PxBufferBase const & buffer )const noexcept
 	{
 		return buffer.getSize() >= range().getMax();
 	}
 
-	bool ImageLayout::hasSliceBuffer( PxBufferBase const & buffer, uint32_t index )const noexcept
+	bool ImageMemoryLayout::hasSliceBuffer( PxBufferBase const & buffer, uint32_t index )const noexcept
 	{
 		return buffer.getSize() >= slice( index ).getMax();
 	}
 
-	bool ImageLayout::hasSliceMipBuffer( PxBufferBase const & buffer, uint32_t index, uint32_t level )const noexcept
+	bool ImageMemoryLayout::hasSliceMipBuffer( PxBufferBase const & buffer, uint32_t index, uint32_t level )const noexcept
 	{
 		return buffer.getSize() >= sliceMip( index, level ).getMax();
 	}

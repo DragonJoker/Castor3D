@@ -17,105 +17,99 @@ namespace castor3d
 {
 	namespace sampler
 	{
-		static castor::String getName( VkCompareOp value )
+		static castor::String getName( ComparisonFunc value )
 		{
 			switch ( value )
 			{
-			case VK_COMPARE_OP_NEVER:
+			case ComparisonFunc::eNever:
 				return cuT( "Nev" );
-			case VK_COMPARE_OP_LESS:
+			case ComparisonFunc::eLess:
 				return cuT( "Lss" );
-			case VK_COMPARE_OP_EQUAL:
+			case ComparisonFunc::eEqual:
 				return cuT( "Eq" );
-			case VK_COMPARE_OP_LESS_OR_EQUAL:
+			case ComparisonFunc::eLessOrEqual:
 				return cuT( "LEq" );
-			case VK_COMPARE_OP_GREATER:
+			case ComparisonFunc::eGreater:
 				return cuT( "Gtr" );
-			case VK_COMPARE_OP_NOT_EQUAL:
+			case ComparisonFunc::eNotEqual:
 				return cuT( "NEq" );
-			case VK_COMPARE_OP_GREATER_OR_EQUAL:
+			case ComparisonFunc::eGreaterOrEqual:
 				return cuT( "GEq" );
-			case VK_COMPARE_OP_ALWAYS:
+			case ComparisonFunc::eAlways:
 				return cuT( "Alw" );
 			default:
-				assert( false && "Unsupported VkCompareOp." );
-				return cuT( "Unsupported VkCompareOp" );
+				assert( false && "Unsupported ComparisonFunc." );
+				return cuT( "Unsupported ComparisonFunc" );
 			}
 		}
 
-		static castor::String getName( VkFilter value )
+		static castor::String getName( FilterMode value )
 		{
 			switch ( value )
 			{
-			case VK_FILTER_NEAREST:
+			case FilterMode::eNearest:
 				return cuT( "Near" );
-			case VK_FILTER_LINEAR:
-				return cuT( "Lin" );
-			case VK_FILTER_CUBIC_IMG:
-				return cuT( "Cub" );
-			default:
-				assert( false && "Unsupported VkFilter." );
-				return cuT( "Unsupported VkFilter" );
-			}
-		}
-
-		static castor::String getName( VkSamplerMipmapMode value )
-		{
-			switch ( value )
-			{
-			case VK_SAMPLER_MIPMAP_MODE_NEAREST:
-				return cuT( "Near" );
-			case VK_SAMPLER_MIPMAP_MODE_LINEAR:
+			case FilterMode ::eLinear:
 				return cuT( "Lin" );
 			default:
-				assert( false && "Unsupported VkSamplerMipmapMode." );
-				return cuT( "Unsupported VkSamplerMipmapMode" );
+				assert( false && "Unsupported FilterMode." );
+				return cuT( "Unsupported FilterMode." );
 			}
 		}
 
-		static castor::String getName( VkSamplerAddressMode value )
+		static castor::String getName( MipmapMode value )
 		{
 			switch ( value )
 			{
-			case VK_SAMPLER_ADDRESS_MODE_REPEAT:
+			case MipmapMode::eNearest:
+				return cuT( "Near" );
+			case MipmapMode::eLinear:
+				return cuT( "Lin" );
+			default:
+				assert( false && "Unsupported MipmapMode." );
+				return cuT( "Unsupported MipmapMode" );
+			}
+		}
+
+		static castor::String getName( WrapMode value )
+		{
+			switch ( value )
+			{
+			case WrapMode::eRepeat:
 				return cuT( "Rep" );
-			case VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT:
+			case WrapMode::eMirroredRepeat:
 				return cuT( "MRep" );
-			case VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE:
+			case WrapMode::eClampToEdge:
 				return cuT( "CtE" );
-			case VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER:
+			case WrapMode::eClampToBorder:
 				return cuT( "CtB" );
-			case VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE:
+			case WrapMode::eMirrorClampToEdge:
 				return cuT( "MCtE" );
 			default:
-				assert( false && "Unsupported VkSamplerAddressMode." );
-				return cuT( "Unsupported VkSamplerAddressMode" );
+				assert( false && "Unsupported WrapMode." );
+				return cuT( "Unsupported WrapMode." );
 			}
 		}
 
-		static castor::String getName( VkBorderColor value )
+		static castor::String getName( BorderColour value )
 		{
 			switch ( value )
 			{
-			case VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK:
+			case BorderColour::eFloatTransparentBlack:
 				return cuT( "Ftb" );
-			case VK_BORDER_COLOR_INT_TRANSPARENT_BLACK:
+			case BorderColour::eIntTransparentBlack:
 				return cuT( "Itb" );
-			case VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK:
+			case BorderColour::eFloatOpaqueBlack:
 				return cuT( "Fob" );
-			case VK_BORDER_COLOR_INT_OPAQUE_BLACK:
+			case BorderColour::eIntOpaqueBlack:
 				return cuT( "Iob" );
-			case VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE:
+			case BorderColour::eFloatOpaqueWhite:
 				return cuT( "Fow" );
-			case VK_BORDER_COLOR_INT_OPAQUE_WHITE:
+			case BorderColour::eIntOpaqueWhite:
 				return cuT( "Iow" );
-			case VK_BORDER_COLOR_FLOAT_CUSTOM_EXT:
-				return cuT( "Fc" );
-			case VK_BORDER_COLOR_INT_CUSTOM_EXT:
-				return cuT( "Ic" );
 			default:
-				assert( false && "Unsupported VkBorderColor." );
-				return cuT( "Unsupported VkBorderColor" );
+				assert( false && "Unsupported BorderColour." );
+				return cuT( "Unsupported BorderColour." );
 			}
 		}
 
@@ -127,7 +121,7 @@ namespace castor3d
 			}
 			else if ( auto sampler = blockContext->sampler )
 			{
-				sampler->setMinFilter( VkFilter( params[0]->get< uint32_t >() ) );
+				sampler->setMinFilter( FilterMode( params[0]->get< uint32_t >() ) );
 			}
 			else
 			{
@@ -144,7 +138,7 @@ namespace castor3d
 			}
 			else if ( auto sampler = blockContext->sampler )
 			{
-				sampler->setMagFilter( VkFilter( params[0]->get< uint32_t >() ) );
+				sampler->setMagFilter( FilterMode( params[0]->get< uint32_t >() ) );
 			}
 			else
 			{
@@ -161,7 +155,7 @@ namespace castor3d
 			}
 			else if ( auto sampler = blockContext->sampler )
 			{
-				sampler->setMipFilter( VkSamplerMipmapMode( params[0]->get< uint32_t >() ) );
+				sampler->setMipFilter( MipmapMode( params[0]->get< uint32_t >() ) );
 			}
 			else
 			{
@@ -259,7 +253,7 @@ namespace castor3d
 			}
 			else if ( auto sampler = blockContext->sampler )
 			{
-				sampler->setWrapS( VkSamplerAddressMode( params[0]->get< uint32_t >() ) );
+				sampler->setWrapS( WrapMode( params[0]->get< uint32_t >() ) );
 			}
 			else
 			{
@@ -276,7 +270,7 @@ namespace castor3d
 			}
 			else if ( auto sampler = blockContext->sampler )
 			{
-				sampler->setWrapT( VkSamplerAddressMode( params[0]->get< uint32_t >() ) );
+				sampler->setWrapT( WrapMode( params[0]->get< uint32_t >() ) );
 			}
 			else
 			{
@@ -293,7 +287,7 @@ namespace castor3d
 			}
 			else if ( auto sampler = blockContext->sampler )
 			{
-				sampler->setWrapR( VkSamplerAddressMode( params[0]->get< uint32_t >() ) );
+				sampler->setWrapR( WrapMode( params[0]->get< uint32_t >() ) );
 			}
 			else
 			{
@@ -310,7 +304,7 @@ namespace castor3d
 			}
 			else if ( auto sampler = blockContext->sampler )
 			{
-				sampler->setBorderColour( VkBorderColor( params[0]->get< uint32_t >() ) );
+				sampler->setBorderColour( BorderColour( params[0]->get< uint32_t >() ) );
 			}
 			else
 			{
@@ -380,7 +374,7 @@ namespace castor3d
 			}
 			else if ( auto sampler = blockContext->sampler )
 			{
-				sampler->setCompareOp( VkCompareOp( params[0]->get< uint32_t >() ) );
+				sampler->setCompareOp( ComparisonFunc( params[0]->get< uint32_t >() ) );
 			}
 			else
 			{
@@ -417,11 +411,11 @@ namespace castor3d
 
 	SamplerObs createSampler( Engine & engine
 		, castor::String const & baseName
-		, VkFilter filter
+		, FilterMode filter
 		, VkImageSubresourceRange const * range )
 	{
 		castor::String const name = baseName
-			+ cuT( "_" ) + castor::makeString( ashes::getName( filter ) )
+			+ cuT( "_" ) + castor::makeString( getName( filter ) )
 			+ ( range
 				? cuT( "_" ) + castor::string::toString( range->baseMipLevel ) + cuT( "_" ) + castor::string::toString( range->levelCount )
 				: castor::String{} );
@@ -436,8 +430,8 @@ namespace castor3d
 			ashes::SamplerCreateInfo createInfo
 			{
 				0u,
-				filter,
-				filter,
+				convert( filter ),
+				convert( filter ),
 				VK_SAMPLER_MIPMAP_MODE_NEAREST,
 				VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
 				VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
@@ -466,14 +460,14 @@ namespace castor3d
 		return sampler;
 	}
 
-	castor::String getSamplerName( VkCompareOp compareOp
-		, VkFilter minFilter
-		, VkFilter magFilter
-		, VkSamplerMipmapMode mipFilter
-		, VkSamplerAddressMode U
-		, VkSamplerAddressMode V
-		, VkSamplerAddressMode W
-		, VkBorderColor borderColor )
+	castor::String getSamplerName( ComparisonFunc compareOp
+		, FilterMode minFilter
+		, FilterMode magFilter
+		, MipmapMode mipFilter
+		, WrapMode U
+		, WrapMode V
+		, WrapMode W
+		, BorderColour borderColor )
 	{
 		return sampler::getName( compareOp )
 			+ sampler::getName( minFilter )
@@ -533,20 +527,20 @@ namespace castor3d
 		using namespace castor;
 		BlockParserContextT< SamplerContext > context{ result, CSCNSection::eSampler };
 
-		context.addParser( cuT( "min_filter" ), sampler::parserMinFilter, { makeParameter< ParameterType::eCheckedText, VkFilter >() } );
-		context.addParser( cuT( "mag_filter" ), sampler::parserMagFilter, { makeParameter< ParameterType::eCheckedText, VkFilter >() } );
-		context.addParser( cuT( "mip_filter" ), sampler::parserMipFilter, { makeParameter< ParameterType::eCheckedText, VkSamplerMipmapMode >() } );
+		context.addParser( cuT( "min_filter" ), sampler::parserMinFilter, { makeParameter< ParameterType::eCheckedText, FilterMode >() } );
+		context.addParser( cuT( "mag_filter" ), sampler::parserMagFilter, { makeParameter< ParameterType::eCheckedText, FilterMode >() } );
+		context.addParser( cuT( "mip_filter" ), sampler::parserMipFilter, { makeParameter< ParameterType::eCheckedText, MipmapMode >() } );
 		context.addParser( cuT( "min_lod" ), sampler::parserMinLod, { makeParameter< ParameterType::eFloat >() } );
 		context.addParser( cuT( "max_lod" ), sampler::parserMaxLod, { makeParameter< ParameterType::eFloat >() } );
 		context.addParser( cuT( "lod_bias" ), sampler::parserLodBias, { makeParameter< ParameterType::eFloat >() } );
-		context.addParser( cuT( "u_wrap_mode" ), sampler::parserUWrapMode, { makeParameter< ParameterType::eCheckedText, VkSamplerAddressMode >() } );
-		context.addParser( cuT( "v_wrap_mode" ), sampler::parserVWrapMode, { makeParameter< ParameterType::eCheckedText, VkSamplerAddressMode >() } );
-		context.addParser( cuT( "w_wrap_mode" ), sampler::parserWWrapMode, { makeParameter< ParameterType::eCheckedText, VkSamplerAddressMode >() } );
-		context.addParser( cuT( "border_colour" ), sampler::parserBorderColour, { makeParameter< ParameterType::eCheckedText, VkBorderColor >() } );
+		context.addParser( cuT( "u_wrap_mode" ), sampler::parserUWrapMode, { makeParameter< ParameterType::eCheckedText, WrapMode >() } );
+		context.addParser( cuT( "v_wrap_mode" ), sampler::parserVWrapMode, { makeParameter< ParameterType::eCheckedText, WrapMode >() } );
+		context.addParser( cuT( "w_wrap_mode" ), sampler::parserWWrapMode, { makeParameter< ParameterType::eCheckedText, WrapMode >() } );
+		context.addParser( cuT( "border_colour" ), sampler::parserBorderColour, { makeParameter< ParameterType::eCheckedText, BorderColour >() } );
 		context.addParser( cuT( "anisotropic_filtering" ), sampler::parserAnisotropicFiltering, { makeParameter< ParameterType::eBool >() } );
 		context.addParser( cuT( "max_anisotropy" ), sampler::parserMaxAnisotropy, { makeParameter< ParameterType::eFloat >() } );
-		context.addParser( cuT( "comparison_mode" ), sampler::parserComparisonMode, { makeParameter< ParameterType::eCheckedText, LimitedType< VkCompareOp > >() } );
-		context.addParser( cuT( "comparison_func" ), sampler::parserComparisonFunc, { makeParameter< ParameterType::eCheckedText, VkCompareOp >() } );
+		context.addParser( cuT( "comparison_mode" ), sampler::parserComparisonMode, { makeParameter< ParameterType::eCheckedText, LimitedType< ComparisonFunc > >() } );
+		context.addParser( cuT( "comparison_func" ), sampler::parserComparisonFunc, { makeParameter< ParameterType::eCheckedText, ComparisonFunc >() } );
 		context.addPopParser( cuT( "}" ), sampler::parserEnd );
 	}
 }

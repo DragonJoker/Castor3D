@@ -61,8 +61,8 @@ namespace castor3d
 				, sizeof( TexturedQuad )
 				, vb.getBuffer()
 				, vb.getOffset()
-				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+				, AccessFlags::eVertexAttributeRead
+				, PipelineStageFlags::eVertexInput );
 		}
 
 		// Initialise the vertex layout.
@@ -82,7 +82,7 @@ namespace castor3d
 		{
 			{
 				0u,
-				dstTexture.getFormat(),
+				convert( dstTexture.getFormat() ),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
 				VK_ATTACHMENT_STORE_OP_STORE,

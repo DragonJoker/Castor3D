@@ -79,8 +79,8 @@ namespace castor3d
 				{
 					auto & alphaTest = getPassComponent< AlphaTestComponent >( *blockContext );
 					alphaTest.setAlphaRefValue( 0.95f );
-					alphaTest.setAlphaFunc( VK_COMPARE_OP_GREATER );
-					alphaTest.setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
+					alphaTest.setAlphaFunc( ComparisonFunc::eGreater );
+					alphaTest.setBlendAlphaFunc( ComparisonFunc::eLessOrEqual );
 
 					auto & blend = getPassComponent< BlendComponent >( *blockContext );
 					blend.setAlphaBlendMode( BlendMode::eInterpolative );

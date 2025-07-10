@@ -38,7 +38,7 @@ namespace castor3d
 			, context
 			, graph
 			, { crg::defaultV< crg::RunnablePass::InitialiseCallback >
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
+				, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
 				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t ){ doRecordInto( ctx, cb ); }
 				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
 				, crg::RunnablePass::IsEnabledCallback( [this](){ return !m_transformPasses.empty(); } )
@@ -94,10 +94,8 @@ namespace castor3d
 		context.memoryBarrier( commandBuffer
 			, m_modelsBuffer.getBuffer()
 			, { 0u, ashes::WholeSize }
-			, VK_ACCESS_HOST_WRITE_BIT
-			, VK_PIPELINE_STAGE_HOST_BIT
-			, { VK_ACCESS_SHADER_READ_BIT
-				, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+			, AccessFlags::eHostWrite, PipelineStageFlags::eHost
+			, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
 
 		for ( auto const & [_, pass] : m_transformPasses )
 		{
@@ -107,10 +105,8 @@ namespace castor3d
 		context.memoryBarrier( commandBuffer
 			, m_modelsBuffer.getBuffer()
 			, { 0u, ashes::WholeSize }
-			, VK_ACCESS_SHADER_READ_BIT
-			, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-			, { VK_ACCESS_UNIFORM_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT } );
+			, AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader
+			, { AccessFlags::eUniformRead, PipelineStageFlags::eVertexShader } );
 	}
 
 	bool VertexTransformingPass::doIsComputePass()const noexcept

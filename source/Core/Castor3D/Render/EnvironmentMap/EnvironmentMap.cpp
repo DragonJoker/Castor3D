@@ -45,7 +45,7 @@ namespace castor3d
 					| VK_IMAGE_USAGE_SAMPLED_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
-				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK };
+				, BorderColour::eFloatOpaqueBlack };
 		}
 
 		static Texture createDepthBuffer( RenderDevice const & device
@@ -64,14 +64,14 @@ namespace castor3d
 					| VK_FORMAT_FEATURE_TRANSFER_DST_BIT )
 				, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
-				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK };
+				, BorderColour::eFloatOpaqueBlack };
 		}
 
 		static Texture createTmpTexture( RenderDevice const & device
 			, crg::ResourcesCache & resources
 			, castor::String const & name
 			, castor::Size const & size
-			, VkFormat format )
+			, castor::PixelFormat format )
 		{
 			return Texture{ device
 				, resources
@@ -83,7 +83,7 @@ namespace castor3d
 				, format
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
-				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK };
+				, BorderColour::eFloatOpaqueBlack };
 		}
 
 		static EnvironmentMap::EnvironmentMapPasses createPass( RenderDevice const & device

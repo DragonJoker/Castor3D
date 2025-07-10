@@ -23,7 +23,7 @@ namespace castor
 		/**
 		 *\copydoc castor::ImageLoaderImpl::load
 		 */
-		CU_API ImageLayout load( String const & imageFormat
+		CU_API ImageMemoryLayout load( String const & imageFormat
 			, uint8_t const * data
 			, uint32_t size
 			, PxBufferBaseUPtr & buffer )const override;

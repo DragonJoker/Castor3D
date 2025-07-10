@@ -74,8 +74,8 @@ namespace castor3d
 		C3D_API void upload( UploadData & uploader
 			, VkDeviceSize offset
 			, VkDeviceSize size
-			, VkAccessFlags dstAccessFlags
-			, VkPipelineStageFlags dstPipelineFlags );
+			, AccessFlags dstAccessFlags
+			, PipelineStageFlags dstPipelineFlags );
 		/**
 		 *\~english
 		 *\brief		Marks a memory range to be ready for upload.
@@ -90,8 +90,8 @@ namespace castor3d
 		 */
 		C3D_API void markDirty( VkDeviceSize offset
 			, VkDeviceSize size
-			, VkAccessFlags dstAccessFlags
-			, VkPipelineStageFlags dstPipelineFlags );
+			, AccessFlags dstAccessFlags
+			, PipelineStageFlags dstPipelineFlags );
 		/**
 		*\~english
 		*\return
@@ -203,8 +203,8 @@ namespace castor3d
 			MemoryRange() = default;
 			MemoryRange( VkDeviceSize offset
 				, VkDeviceSize size
-				, VkAccessFlags dstAccessFlags
-				, VkPipelineStageFlags dstPipelineFlags )
+				, AccessFlags dstAccessFlags
+				, PipelineStageFlags dstPipelineFlags )
 				: offset{ offset }
 				, size{ size }
 				, dstAccessFlags{ dstAccessFlags }
@@ -214,8 +214,8 @@ namespace castor3d
 
 			VkDeviceSize offset{};
 			VkDeviceSize size{};
-			VkAccessFlags dstAccessFlags{};
-			VkPipelineStageFlags dstPipelineFlags{};
+			AccessFlags dstAccessFlags{};
+			PipelineStageFlags dstPipelineFlags{};
 		};
 		using MemoryRangeArray = castor::Vector< MemoryRange >;
 		castor::UnorderedMap< size_t, MemoryRangeArray > m_ranges;

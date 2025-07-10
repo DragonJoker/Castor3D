@@ -944,36 +944,31 @@ namespace castor3d
 				context.memoryBarrier( commandBuffer
 					, m_pipelinesNodes->getBuffer()
 					, crg::BufferSubresourceRange{ 0u, m_pipelinesNodes->getBuffer().getSize() }
-					, VK_ACCESS_HOST_WRITE_BIT
-					, VK_PIPELINE_STAGE_HOST_BIT
-					, { VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT } );
+					, AccessFlags::eHostWrite, PipelineStageFlags::eHost
+					, { AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect } );
 				context.memoryBarrier( commandBuffer
 					, m_submeshIdxIndirectCommands->getBuffer()
 					, crg::BufferSubresourceRange{ 0u, m_submeshIdxIndirectCommands->getBuffer().getSize() }
-					, VK_ACCESS_HOST_WRITE_BIT
-					, VK_PIPELINE_STAGE_HOST_BIT
-					, { VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT } );
+					, AccessFlags::eHostWrite, PipelineStageFlags::eHost
+					, { AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect } );
 				context.memoryBarrier( commandBuffer
 					, m_submeshNIdxIndirectCommands->getBuffer()
 					, crg::BufferSubresourceRange{ 0u, m_submeshNIdxIndirectCommands->getBuffer().getSize() }
-					, VK_ACCESS_HOST_WRITE_BIT
-					, VK_PIPELINE_STAGE_HOST_BIT
-					, { VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT } );
+					, AccessFlags::eHostWrite, PipelineStageFlags::eHost
+					, { AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect } );
 				context.memoryBarrier( commandBuffer
 					, m_billboardIndirectCommands->getBuffer()
 					, crg::BufferSubresourceRange{ 0u, m_billboardIndirectCommands->getBuffer().getSize() }
-					, VK_ACCESS_HOST_WRITE_BIT
-					, VK_PIPELINE_STAGE_HOST_BIT
-					, { VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT } );
+					, AccessFlags::eHostWrite, PipelineStageFlags::eHost
+					, { AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect } );
 
 				if ( m_submeshMeshletIndirectCommandsEXT )
 				{
 					context.memoryBarrier( commandBuffer
 						, m_submeshMeshletIndirectCommandsEXT->getBuffer()
 						, crg::BufferSubresourceRange{ 0u, m_submeshMeshletIndirectCommandsEXT->getBuffer().getSize() }
-						, VK_ACCESS_HOST_WRITE_BIT
-						, VK_PIPELINE_STAGE_HOST_BIT
-						, { VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT } );
+						, AccessFlags::eHostWrite, PipelineStageFlags::eHost
+						, { AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect } );
 				}
 
 				if ( m_submeshMeshletIndirectCommandsNV )
@@ -981,9 +976,8 @@ namespace castor3d
 					context.memoryBarrier( commandBuffer
 						, m_submeshMeshletIndirectCommandsNV->getBuffer()
 						, crg::BufferSubresourceRange{ 0u, m_submeshMeshletIndirectCommandsNV->getBuffer().getSize() }
-						, VK_ACCESS_HOST_WRITE_BIT
-						, VK_PIPELINE_STAGE_HOST_BIT
-						, { VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT } );
+						, AccessFlags::eHostWrite, PipelineStageFlags::eHost
+						, { AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect } );
 				}
 			} );
 		config.postPassAction( [this]( crg::RecordContext & context
@@ -993,31 +987,31 @@ namespace castor3d
 				context.memoryBarrier( commandBuffer
 					, m_pipelinesNodes->getBuffer()
 					, crg::BufferSubresourceRange{ 0u, m_pipelinesNodes->getBuffer().getSize() }
-					, VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT
-					, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+					, AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect
+					, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
 				context.memoryBarrier( commandBuffer
 					, m_submeshIdxIndirectCommands->getBuffer()
 					, crg::BufferSubresourceRange{ 0u, m_submeshIdxIndirectCommands->getBuffer().getSize() }
-					, VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT
-					, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+					, AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect
+					, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
 				context.memoryBarrier( commandBuffer
 					, m_submeshNIdxIndirectCommands->getBuffer()
 					, crg::BufferSubresourceRange{ 0u, m_submeshNIdxIndirectCommands->getBuffer().getSize() }
-					, VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT
-					, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+					, AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect
+					, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
 				context.memoryBarrier( commandBuffer
 					, m_billboardIndirectCommands->getBuffer()
 					, crg::BufferSubresourceRange{ 0u, m_billboardIndirectCommands->getBuffer().getSize() }
-					, VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT
-					, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+					, AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect
+					, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
 
 				if ( m_submeshMeshletIndirectCommandsEXT )
 				{
 					context.memoryBarrier( commandBuffer
 						, m_submeshMeshletIndirectCommandsEXT->getBuffer()
 						, crg::BufferSubresourceRange{ 0u, m_submeshMeshletIndirectCommandsEXT->getBuffer().getSize() }
-						, VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT
-						, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+						, AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect
+						, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
 				}
 
 				if ( m_submeshMeshletIndirectCommandsNV )
@@ -1025,8 +1019,8 @@ namespace castor3d
 					context.memoryBarrier( commandBuffer
 						, m_submeshMeshletIndirectCommandsNV->getBuffer()
 						, crg::BufferSubresourceRange{ 0u, m_submeshMeshletIndirectCommandsNV->getBuffer().getSize() }
-						, VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT
-						, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+						, AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect
+						, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
 				}
 			} );
 	}

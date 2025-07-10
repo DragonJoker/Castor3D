@@ -135,8 +135,8 @@ namespace castor3d
 				, m_faces.size() * sizeof( Face )
 				, buffer.getBuffer()
 				, buffer.getOffset()
-				, VK_ACCESS_INDEX_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+				, AccessFlags::eIndexRead
+				, PipelineStageFlags::eVertexInput );
 		}
 	}
 

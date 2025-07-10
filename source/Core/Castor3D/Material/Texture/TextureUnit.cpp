@@ -721,10 +721,10 @@ namespace castor3d
 		animContext.addDefaultPopParser();
 	}
 
-	VkImageType TextureUnit::getType()const
+	ImageType TextureUnit::getType()const
 	{
 		CU_Require( isTextured() );
-		return m_texture->imageId.data->info.imageType;
+		return getImageType( m_texture->imageId );
 	}
 
 	castor::String TextureUnit::toString()const
@@ -784,10 +784,10 @@ namespace castor3d
 			|| m_data.base->sourceInfo.isFileImage();
 	}
 
-	VkFormat TextureUnit::getTexturePixelFormat()const
+	castor::PixelFormat TextureUnit::getTexturePixelFormat()const
 	{
 		CU_Require( isTextured() );
-		return m_texture->imageId.data->info.format;
+		return getFormat( m_texture->imageId );
 	}
 
 	castor::Point3ui TextureUnit::getTextureImageTiles()const
@@ -828,7 +828,7 @@ namespace castor3d
 		}
 		else if ( m_texture )
 		{
-			format = convert( getTexturePixelFormat() );
+			format = getTexturePixelFormat();
 		}
 
 		auto needsXInversion = value.needsXInversion;

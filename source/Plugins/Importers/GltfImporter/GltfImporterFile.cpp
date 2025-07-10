@@ -738,7 +738,7 @@ namespace c3d_gltf
 	{
 		auto const & engine = *getOwner();
 		auto const & defaultSampler = *engine.getDefaultSampler();
-		return castor3d::getSamplerName( VK_COMPARE_OP_NEVER
+		return castor3d::getSamplerName( castor3d::ComparisonFunc::eNever
 			, impSampler.minFilter ? convert( *impSampler.minFilter ) : defaultSampler.getMinFilter()
 			, impSampler.magFilter ? convert( *impSampler.magFilter ) : defaultSampler.getMagFilter()
 			, impSampler.minFilter ? getMipFilter( *impSampler.minFilter ) : defaultSampler.getMipFilter()

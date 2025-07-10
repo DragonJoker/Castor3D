@@ -32,10 +32,10 @@ namespace castor3d
 	};
 	C3D_API castor::String getTextureName( WbTexture texture );
 	C3D_API castor::String getTexName( WbTexture texture );
-	C3D_API VkFormat getFormat( RenderDevice const & device, WbTexture texture );
+	C3D_API castor::PixelFormat getFormat( RenderDevice const & device, WbTexture texture );
 	C3D_API VkClearValue getClearValue( WbTexture texture );
 	C3D_API VkImageUsageFlags getUsageFlags( WbTexture texture );
-	C3D_API VkBorderColor getBorderColor( WbTexture texture );
+	C3D_API BorderColour getBorderColor( WbTexture texture );
 	inline uint32_t getMipLevels( RenderDevice const & /*device*/
 		, WbTexture /*texture*/
 		, castor::Size const & /*size*/ )
@@ -50,9 +50,9 @@ namespace castor3d
 			, texture
 			, castor::Size{ size.width, size.height } );
 	}
-	inline VkCompareOp getCompareOp( WbTexture /*texture*/ )
+	inline ComparisonFunc getCompareOp( WbTexture /*texture*/ )
 	{
-		return VK_COMPARE_OP_NEVER;
+		return ComparisonFunc::eNever;
 	}
 	/**
 	*\~english

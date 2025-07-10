@@ -59,7 +59,7 @@ namespace castor3d
 		struct BindingDescription
 		{
 			BindingDescription( VkDescriptorType descriptorType
-				, ashes::Optional< VkImageViewType > viewType
+				, ashes::Optional< ImageViewType > viewType
 				, VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT )
 				: descriptorType{ descriptorType }
 				, viewType{ viewType }
@@ -68,7 +68,7 @@ namespace castor3d
 			}
 
 			VkDescriptorType descriptorType;
-			ashes::Optional< VkImageViewType > viewType;
+			ashes::Optional< ImageViewType > viewType;
 			VkShaderStageFlags stageFlags;
 		};
 		using BindingDescriptionArray = castor::Vector< BindingDescription >;
@@ -129,7 +129,7 @@ namespace castor3d
 		*/
 		C3D_API RenderQuad( RenderDevice const & device
 			, castor::String const & name
-			, VkFilter samplerFilter
+			, FilterMode samplerFilter
 			, rq::Config config );
 
 	public:
@@ -454,7 +454,7 @@ namespace castor3d
 		*	Les flags de shader du descripteur.
 		*/
 		BuilderT & binding( VkDescriptorType descriptor
-			, VkImageViewType view
+			, ImageViewType view
 			, VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT )
 		{
 			return binding( rq::BindingDescription{ descriptor, view, stageFlags } );
@@ -498,7 +498,7 @@ namespace castor3d
 		*/
 		RenderQuadUPtr build( RenderDevice const & device
 			, castor::String const & name
-			, VkFilter samplerFilter )
+			, FilterMode samplerFilter )
 		{
 			return castor::UniquePtr< RenderQuad >( new RenderQuad{ device
 				, name

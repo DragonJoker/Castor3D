@@ -693,8 +693,8 @@ namespace c3d_assimp
 						{
 							auto alphaTest = m_result.createComponent< castor3d::AlphaTestComponent >();
 							alphaTest->setAlphaRefValue( ref );
-							alphaTest->setAlphaFunc( VK_COMPARE_OP_GREATER );
-							alphaTest->setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
+							alphaTest->setAlphaFunc( castor3d::ComparisonFunc::eGreater );
+							alphaTest->setBlendAlphaFunc( castor3d::ComparisonFunc::eLessOrEqual );
 						}
 					}
 				}
@@ -982,8 +982,8 @@ namespace c3d_assimp
 				{
 					auto alphaTest = m_result.createComponent< castor3d::AlphaTestComponent >();
 					alphaTest->setAlphaRefValue( 0.95f );
-					alphaTest->setAlphaFunc( VK_COMPARE_OP_GREATER );
-					alphaTest->setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
+					alphaTest->setAlphaFunc( castor3d::ComparisonFunc::eGreater );
+					alphaTest->setBlendAlphaFunc( castor3d::ComparisonFunc::eLessOrEqual );
 				}
 
 				if ( blending )
@@ -1184,7 +1184,7 @@ namespace c3d_assimp
 				}
 
 				if ( hasOpacityTex
-					&& m_result.getAlphaFunc() == VkCompareOp::VK_COMPARE_OP_ALWAYS )
+					&& m_result.getAlphaFunc() == castor3d::ComparisonFunc::eAlways )
 				{
 					mixedInterpolative( true );
 				}

@@ -72,7 +72,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		void setDepthFormat( VkFormat value )noexcept
+		void setDepthFormat( castor::PixelFormat value )noexcept
 		{
 			m_depthFormat = value;
 		}
@@ -94,7 +94,7 @@ namespace castor3d
 		C3D_API static castor::String const Type;
 
 	private:
-		VkFormat m_depthFormat{};
+		castor::PixelFormat m_depthFormat{};
 		Texture const & m_sceneImage;
 		Texture const & m_depthObjImage;
 		Texture const & m_normalsImage;

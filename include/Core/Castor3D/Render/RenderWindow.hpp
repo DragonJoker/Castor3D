@@ -339,7 +339,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le format des pixels de la fenêtre.
 		 */
-		C3D_API VkFormat getPixelFormat()const;
+		C3D_API castor::PixelFormat getPixelFormat()const;
 		/**
 		 *\~english
 		 *\brief		Picks a geometry at given mouse position.
@@ -530,7 +530,7 @@ namespace castor3d
 		ashes::CommandPoolPtr m_commandBufferPool;
 		ashes::SwapChainPtr m_swapChain;
 		castor::Vector< ashes::ImageViewArray > m_swapchainViews;
-		VkFormat m_swapchainFormat;
+		castor::PixelFormat m_swapchainFormat;
 		RenderingResourcesArray m_renderingResources;
 		size_t m_resourceIndex{ 0u };
 		crg::ResourcesCache m_resources;
@@ -548,7 +548,7 @@ namespace castor3d
 		bool m_fullscreen{ false };
 		castor::Size m_size;
 		bool m_toSave{ false };
-		VkFormat m_savedFormat{};
+		castor::PixelFormat m_savedFormat{};
 		mutable std::atomic_bool m_initialised{ false };
 		mutable std::atomic_bool m_skip{ false };
 		std::atomic_bool m_loading;

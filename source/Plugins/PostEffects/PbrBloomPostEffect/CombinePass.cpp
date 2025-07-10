@@ -93,13 +93,13 @@ namespace PbrBloom
 		auto intermediateView = graph.createView( crg::ImageViewData{ rhs.data->name + "0"
 			, rhs
 			, 0u
-			, VK_IMAGE_VIEW_TYPE_2D
-			, rhs.data->info.format
+			, castor3d::ImageViewType::e2D
+			, getFormat( rhs )
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
 		m_pass.addDependency( previousPass );
 		m_pass.addSampledView( intermediateView
 			, 0u
-			, crg::SamplerDesc{ VK_FILTER_LINEAR, VK_FILTER_LINEAR } );
+			, crg::SamplerDesc{ castor3d::FilterMode::eLinear, castor3d::FilterMode::eLinear } );
 		m_pass.addSampledView( lhs
 			, 1u );
 		ubo.createPassBinding( m_pass

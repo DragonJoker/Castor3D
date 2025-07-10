@@ -37,8 +37,8 @@ namespace castor3d
 		, ashes::BufferBase const & src
 		, ashes::BufferBase const & dst
 		, castor::Vector< VkBufferCopy > const & regions
-		, VkAccessFlags dstAccessFlags
-		, VkPipelineStageFlags dstPipelineFlags )
+		, AccessFlags dstAccessFlags
+		, PipelineStageFlags dstPipelineFlags )
 	{
 		auto dstSrcStage = dst.getCompatibleStageFlags();
 		commandBuffer.memoryBarrier( dstSrcStage
@@ -49,16 +49,16 @@ namespace castor3d
 			, dst );
 		auto dstDstStage = dst.getCompatibleStageFlags();
 		commandBuffer.memoryBarrier( dstDstStage
-			, dstPipelineFlags
-			, dst.makeMemoryTransitionBarrier( dstAccessFlags ) );
+			, convert( dstPipelineFlags )
+			, dst.makeMemoryTransitionBarrier( convert( dstAccessFlags ) ) );
 	}
 
 	void updateBuffer( ashes::CommandBuffer const & commandBuffer
 		, castor::ByteArray src
 		, ashes::BufferBase const & dst
 		, castor::Vector< VkBufferCopy > const & regions
-		, VkAccessFlags dstAccessFlags
-		, VkPipelineStageFlags dstPipelineFlags )
+		, AccessFlags dstAccessFlags
+		, PipelineStageFlags dstPipelineFlags )
 	{
 		auto dstSrcStage = dst.getCompatibleStageFlags();
 		commandBuffer.memoryBarrier( dstSrcStage
@@ -74,8 +74,8 @@ namespace castor3d
 
 		auto dstDstStage = dst.getCompatibleStageFlags();
 		commandBuffer.memoryBarrier( dstDstStage
-			, dstPipelineFlags
-			, dst.makeMemoryTransitionBarrier( dstAccessFlags ) );
+			, convert( dstPipelineFlags )
+			, dst.makeMemoryTransitionBarrier( convert( dstAccessFlags ) ) );
 	}
 
 	//*********************************************************************************************
@@ -124,8 +124,8 @@ namespace castor3d
 	void GpuBufferBase::upload( UploadData & staging
 		, VkDeviceSize offset
 		, VkDeviceSize size
-		, VkAccessFlags dstAccessFlags
-		, VkPipelineStageFlags dstPipelineFlags )
+		, AccessFlags dstAccessFlags
+		, PipelineStageFlags dstPipelineFlags )
 	{
 		auto [o, s] = adaptRange( offset
 			, size
@@ -140,8 +140,8 @@ namespace castor3d
 
 	void GpuBufferBase::markDirty( VkDeviceSize offset
 		, VkDeviceSize size
-		, VkAccessFlags dstAccessFlags
-		, VkPipelineStageFlags dstPipelineFlags )
+		, AccessFlags dstAccessFlags
+		, PipelineStageFlags dstPipelineFlags )
 	{
 		auto hash = std::hash< int32_t >{}( int32_t( dstAccessFlags ) );
 		hash = castor::hashCombine( hash, int32_t( dstPipelineFlags ) );

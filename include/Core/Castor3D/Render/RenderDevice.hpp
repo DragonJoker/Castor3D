@@ -295,14 +295,14 @@ namespace castor3d
 			, Extensions deviceExtensions );
 		C3D_API ~RenderDevice()noexcept;
 
-		C3D_API VkFormat selectSuitableDepthFormat( VkFormatFeatureFlags requiredFeatures )const;
-		C3D_API VkFormat selectSuitableStencilFormat( VkFormatFeatureFlags requiredFeatures )const;
-		C3D_API VkFormat selectSuitableDepthStencilFormat( VkFormatFeatureFlags requiredFeatures )const;
-		C3D_API VkFormat selectSmallestFormatRSFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
-		C3D_API VkFormat selectSmallestFormatRGSFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
-		C3D_API VkFormat selectSmallestFormatRGBUFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
-		C3D_API VkFormat selectSmallestFormatRGBSFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
-		C3D_API VkFormat selectSuitableFormat( castor::Vector< VkFormat > const & formats
+		C3D_API castor::PixelFormat selectSuitableDepthFormat( VkFormatFeatureFlags requiredFeatures )const;
+		C3D_API castor::PixelFormat selectSuitableStencilFormat( VkFormatFeatureFlags requiredFeatures )const;
+		C3D_API castor::PixelFormat selectSuitableDepthStencilFormat( VkFormatFeatureFlags requiredFeatures )const;
+		C3D_API castor::PixelFormat selectSmallestFormatRSFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
+		C3D_API castor::PixelFormat selectSmallestFormatRGSFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
+		C3D_API castor::PixelFormat selectSmallestFormatRGBUFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
+		C3D_API castor::PixelFormat selectSmallestFormatRGBSFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
+		C3D_API castor::PixelFormat selectSuitableFormat( castor::Vector< castor::PixelFormat > const & formats
 			, VkFormatFeatureFlags requiredFeatures )const;
 		C3D_API QueueDataWrapper graphicsData()const noexcept;
 		C3D_API size_t graphicsQueueSize()const noexcept;

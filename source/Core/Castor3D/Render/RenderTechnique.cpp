@@ -229,7 +229,7 @@ namespace castor3d
 						, context
 						, graph
 						, { crg::defaultV< InitialiseCallback >
-							, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_TRANSFER_BIT ); } )
+							, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eTransfer ); } )
 							, [this]( crg::RecordContext &, VkCommandBuffer cb, uint32_t ){ doRecordInto( cb ); } } }
 				{
 				}
@@ -342,7 +342,7 @@ namespace castor3d
 			, 1u
 			, m_device.selectSuitableDepthStencilFormat( getFeatureFlags( rendtech::depthUsageFlags ) )
 			, rendtech::depthUsageFlags
-			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+			, BorderColour::eFloatOpaqueBlack }
 		, m_normal{ m_device
 			, m_renderTarget.getResources()
 			, getName() + cuT( "/Normal" )
@@ -350,9 +350,9 @@ namespace castor3d
 			, m_colour->getExtent()
 			, 1u
 			, 1u
-			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, castor::PixelFormat::eR16G16B16A16_SFLOAT
 			, rendtech::normalUsageFlags
-			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+			, BorderColour::eFloatOpaqueBlack }
 		, m_scattering{ m_device
 			, m_renderTarget.getResources()
 			, getName() + cuT( "/Scattering" )
@@ -362,7 +362,7 @@ namespace castor3d
 			, 1u
 			, device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( rendtech::scatteringUsageFlags ) )
 			, rendtech::scatteringUsageFlags
-			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+			, BorderColour::eFloatOpaqueBlack }
 		, m_diffuse{ m_device
 			, m_renderTarget.getResources()
 			, getName() + cuT( "/Diffuse" )
@@ -370,9 +370,9 @@ namespace castor3d
 			, m_colour->getExtent()
 			, 1u
 			, 1u
-			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, castor::PixelFormat::eR16G16B16A16_SFLOAT
 			, rendtech::diffuseUsageFlags | ( C3D_UseVisibilityBuffer ? VkImageUsageFlagBits{} : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT )
-			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+			, BorderColour::eFloatOpaqueBlack }
 		, m_lpvConfigUbo{ m_device }
 		, m_llpvConfigUbo{ m_device }
 		, m_vctConfigUbo{ m_device }
@@ -419,7 +419,7 @@ namespace castor3d
 				, colour.getExtent()
 				, 1u
 				, 1u
-				, VK_FORMAT_R16G16B16A16_SFLOAT
+				, castor::PixelFormat::eR16G16B16A16_SFLOAT
 				, VkImageUsageFlags( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 					| VK_IMAGE_USAGE_SAMPLED_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) )

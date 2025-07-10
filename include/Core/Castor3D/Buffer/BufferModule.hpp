@@ -298,19 +298,19 @@ namespace castor3d
 		, ashes::BufferBase const & dst
 		, VkDeviceSize offset
 		, VkDeviceSize size
-		, VkPipelineStageFlags flags );
+		, PipelineStageFlags flags );
 	C3D_API void copyBuffer( ashes::CommandBuffer const & commandBuffer
 		, ashes::BufferBase const & src
 		, ashes::BufferBase const & dst
 		, castor::Vector< VkBufferCopy > const & regions
-		, VkAccessFlags dstAccessFlags
-		, VkPipelineStageFlags dstPipelineFlags );
+		, AccessFlags dstAccessFlags
+		, PipelineStageFlags dstPipelineFlags );
 	C3D_API void updateBuffer( ashes::CommandBuffer const & commandBuffer
 		, castor::ByteArray data
 		, ashes::BufferBase const & dst
 		, castor::Vector< VkBufferCopy > const & regions
-		, VkAccessFlags dstAccessFlags
-		, VkPipelineStageFlags dstPipelineFlags );
+		, AccessFlags dstAccessFlags
+		, PipelineStageFlags dstPipelineFlags );
 	//@}
 }
 

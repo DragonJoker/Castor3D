@@ -337,7 +337,7 @@ namespace castor3d
 					, context
 					, graph
 					, { [this]( uint32_t index ){ doInitialise( index ); }
-						, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
+						, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
 						, [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); }
 						, crg::getDefaultV< GetPassIndexCallback >()
 						, IsEnabledCallback( [this](){ return doIsEnabled(); } )
@@ -527,7 +527,7 @@ namespace castor3d
 					, attach.getBufferRange()
 					, currentState.access
 					, currentState.pipelineStage
-					, crg::AccessState{ VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
+					, crg::AccessState{ AccessFlags::eShaderRead | AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader }
 					, true );
 			}
 
@@ -549,17 +549,17 @@ namespace castor3d
 						if ( bufferIndex < 2u )
 						{
 							// Input buffer
-							dstState = { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT };
+							dstState = { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader };
 						}
 						else if ( bufferIndex < 4u )
 						{
 							// Output buffer
-							dstState = { VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT };
+							dstState = { AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader };
 						}
 						else
 						{
 							// Merge Path Transition Buffer
-							dstState = { VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT };
+							dstState = { AccessFlags::eShaderRead | AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader };
 						}
 
 						context.memoryBarrier( commandBuffer

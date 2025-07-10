@@ -33,10 +33,10 @@ namespace castor3d
 			, uint32_t layerCount
 			, VkSampleCountFlagBits sampleCount
 			, uint32_t mipLevels
-			, VkFormat format
+			, castor::PixelFormat format
 			, VkImageUsageFlags usageFlags
-			, VkBorderColor const & borderColor
-			, VkCompareOp compareOp )const;
+			, BorderColour borderColor
+			, ComparisonFunc compareOp )const;
 		/**
 		*\~english
 		*\brief

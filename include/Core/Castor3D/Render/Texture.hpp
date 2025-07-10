@@ -30,10 +30,10 @@ namespace castor3d
 			, VkExtent3D const & size
 			, uint32_t layerCount
 			, uint32_t mipLevels
-			, VkFormat format
+			, castor::PixelFormat format
 			, VkImageUsageFlags usageFlags
-			, VkBorderColor const & borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
-			, VkCompareOp compareOp = VK_COMPARE_OP_NEVER
+			, BorderColour borderColor = BorderColour::eFloatTransparentBlack
+			, ComparisonFunc compareOp = ComparisonFunc::eNever
 			, bool createSubviews = true );
 		C3D_API Texture( RenderDevice const & device
 			, crg::ResourcesCache & resources
@@ -42,14 +42,14 @@ namespace castor3d
 			, VkExtent3D const & size
 			, uint32_t layerCount
 			, uint32_t mipLevels
-			, VkFormat format
+			, castor::PixelFormat format
 			, VkImageUsageFlags usageFlags
-			, VkFilter minFilter
-			, VkFilter magFilter
-			, VkSamplerMipmapMode mipFilter
-			, VkSamplerAddressMode addressMode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VkBorderColor const & borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
-			, VkCompareOp compareOp = VK_COMPARE_OP_NEVER
+			, FilterMode minFilter
+			, FilterMode magFilter
+			, MipmapMode mipFilter
+			, WrapMode addressMode = WrapMode::eClampToEdge
+			, BorderColour borderColor = BorderColour::eFloatTransparentBlack
+			, ComparisonFunc compareOp = ComparisonFunc::eNever
 			, bool createSubviews = true );
 		C3D_API Texture( RenderDevice const & device
 			, crg::ResourcesCache & resources
@@ -58,7 +58,7 @@ namespace castor3d
 			, VkExtent3D const & size
 			, uint32_t layerCount
 			, uint32_t mipLevels
-			, VkFormat format
+			, castor::PixelFormat format
 			, VkImageUsageFlags usageFlags
 			, ashes::Sampler const * sampler
 			, bool createSubviews = true );
@@ -70,10 +70,10 @@ namespace castor3d
 			, uint32_t layerCount
 			, VkSampleCountFlagBits sampleCount
 			, uint32_t mipLevels
-			, VkFormat format
+			, castor::PixelFormat format
 			, VkImageUsageFlags usageFlags
-			, VkBorderColor const & borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
-			, VkCompareOp compareOp = VK_COMPARE_OP_NEVER
+			, BorderColour borderColor = BorderColour::eFloatTransparentBlack
+			, ComparisonFunc compareOp = ComparisonFunc::eNever
 			, bool createSubviews = true );
 		C3D_API Texture( RenderDevice const & device
 			, crg::ResourcesCache & resources
@@ -83,14 +83,14 @@ namespace castor3d
 			, uint32_t layerCount
 			, VkSampleCountFlagBits sampleCount
 			, uint32_t mipLevels
-			, VkFormat format
+			, castor::PixelFormat format
 			, VkImageUsageFlags usageFlags
-			, VkFilter minFilter
-			, VkFilter magFilter
-			, VkSamplerMipmapMode mipFilter
-			, VkSamplerAddressMode addressMode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VkBorderColor const & borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
-			, VkCompareOp compareOp = VK_COMPARE_OP_NEVER
+			, FilterMode minFilter
+			, FilterMode magFilter
+			, MipmapMode mipFilter
+			, WrapMode addressMode = WrapMode::eClampToBorder
+			, BorderColour borderColor = BorderColour::eFloatTransparentBlack
+			, ComparisonFunc compareOp = ComparisonFunc::eNever
 			, bool createSubviews = true );
 		C3D_API Texture( RenderDevice const & device
 			, crg::ResourcesCache & resources
@@ -100,7 +100,7 @@ namespace castor3d
 			, uint32_t layerCount
 			, VkSampleCountFlagBits sampleCount
 			, uint32_t mipLevels
-			, VkFormat format
+			, castor::PixelFormat format
 			, VkImageUsageFlags usageFlags
 			, ashes::Sampler const * sampler
 			, bool createSubviews = true );
@@ -115,71 +115,71 @@ namespace castor3d
 				&& device != nullptr;
 		}
 
-		C3D_API VkImageMemoryBarrier makeGeneralLayout( VkImageLayout srcLayout
-			, VkAccessFlags dstAccessFlags
+		C3D_API VkImageMemoryBarrier makeGeneralLayout( ImageLayout srcLayout
+			, AccessFlags dstAccessFlags
 			, uint32_t srcQueueFamily = VK_QUEUE_FAMILY_IGNORED
 			, uint32_t dstQueueFamily = VK_QUEUE_FAMILY_IGNORED
 			, bool target = false )const;
-		C3D_API VkImageMemoryBarrier makeTransferDestination( VkImageLayout srcLayout
+		C3D_API VkImageMemoryBarrier makeTransferDestination( ImageLayout srcLayout
 			, uint32_t srcQueueFamily = VK_QUEUE_FAMILY_IGNORED
 			, uint32_t dstQueueFamily = VK_QUEUE_FAMILY_IGNORED
 			, bool target = false )const;
-		C3D_API VkImageMemoryBarrier makeTransferSource( VkImageLayout srcLayout
+		C3D_API VkImageMemoryBarrier makeTransferSource( ImageLayout srcLayout
 			, uint32_t srcQueueFamily = VK_QUEUE_FAMILY_IGNORED
 			, uint32_t dstQueueFamily = VK_QUEUE_FAMILY_IGNORED
 			, bool target = false )const;
-		C3D_API VkImageMemoryBarrier makeShaderInputResource( VkImageLayout srcLayout
+		C3D_API VkImageMemoryBarrier makeShaderInputResource( ImageLayout srcLayout
 			, uint32_t srcQueueFamily = VK_QUEUE_FAMILY_IGNORED
 			, uint32_t dstQueueFamily = VK_QUEUE_FAMILY_IGNORED
 			, bool target = false )const;
-		C3D_API VkImageMemoryBarrier makeDepthStencilReadOnly( VkImageLayout srcLayout
+		C3D_API VkImageMemoryBarrier makeDepthStencilReadOnly( ImageLayout srcLayout
 			, uint32_t srcQueueFamily = VK_QUEUE_FAMILY_IGNORED
 			, uint32_t dstQueueFamily = VK_QUEUE_FAMILY_IGNORED
 			, bool target = false )const;
-		C3D_API VkImageMemoryBarrier makeColourAttachment( VkImageLayout srcLayout
+		C3D_API VkImageMemoryBarrier makeColourAttachment( ImageLayout srcLayout
 			, uint32_t srcQueueFamily = VK_QUEUE_FAMILY_IGNORED
 			, uint32_t dstQueueFamily = VK_QUEUE_FAMILY_IGNORED
 			, bool target = false )const;
-		C3D_API VkImageMemoryBarrier makeDepthStencilAttachment( VkImageLayout srcLayout
+		C3D_API VkImageMemoryBarrier makeDepthStencilAttachment( ImageLayout srcLayout
 			, uint32_t srcQueueFamily = VK_QUEUE_FAMILY_IGNORED
 			, uint32_t dstQueueFamily = VK_QUEUE_FAMILY_IGNORED
 			, bool target = false )const;
-		C3D_API VkImageMemoryBarrier makePresentSource( VkImageLayout srcLayout
+		C3D_API VkImageMemoryBarrier makePresentSource( ImageLayout srcLayout
 			, uint32_t srcQueueFamily = VK_QUEUE_FAMILY_IGNORED
 			, uint32_t dstQueueFamily = VK_QUEUE_FAMILY_IGNORED
 			, bool target = false )const;
-		C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImageLayout sourceLayout
-			, VkImageLayout destinationLayout
+		C3D_API VkImageMemoryBarrier makeLayoutTransition( ImageLayout sourceLayout
+			, ImageLayout destinationLayout
 			, uint32_t srcQueueFamily
 			, uint32_t dstQueueFamily
 			, bool target = false )const;
-		C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImageLayout srcLayout
-			, VkImageLayout dstLayout
-			, VkAccessFlags srcAccessFlags
+		C3D_API VkImageMemoryBarrier makeLayoutTransition( ImageLayout srcLayout
+			, ImageLayout dstLayout
+			, AccessFlags srcAccessFlags
 			, uint32_t srcQueueFamily
 			, uint32_t dstQueueFamily
 			, bool target = false )const;
-		C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImageLayout srcLayout
-			, VkImageLayout dstLayout
-			, VkAccessFlags srcAccessFlags
-			, VkAccessFlags dstAccessMask
+		C3D_API VkImageMemoryBarrier makeLayoutTransition( ImageLayout srcLayout
+			, ImageLayout dstLayout
+			, AccessFlags srcAccessFlags
+			, AccessFlags dstAccessMask
 			, uint32_t srcQueueFamily
 			, uint32_t dstQueueFamily
 			, bool target = false )const;
 
 		uint32_t getMipLevels()const noexcept
 		{
-			return imageId.data->info.mipLevels;
+			return crg::getMipLevels( imageId );
 		}
 
-		VkFormat getFormat()const noexcept
+		castor::PixelFormat getFormat()const noexcept
 		{
-			return imageId.data->info.format;
+			return crg::getFormat( imageId );
 		}
 
 		VkExtent3D const & getExtent()const noexcept
 		{
-			return imageId.data->info.extent;
+			return crg::getExtent( imageId );
 		}
 
 		crg::ResourcesCache * resources{};
@@ -203,7 +203,7 @@ namespace castor3d
 
 		IntermediateView( castor::String name
 			, crg::ImageViewId const & viewId
-			, VkImageLayout layout
+			, ImageLayout layout
 			, TextureFactors factors = {} )noexcept
 			: name{ castor::move( name ) }
 			, viewId{ viewId }
@@ -214,7 +214,7 @@ namespace castor3d
 
 		IntermediateView( castor::String name
 			, Texture const & texture
-			, VkImageLayout layout
+			, ImageLayout layout
 			, TextureFactors factors = {} )noexcept
 			: IntermediateView{ castor::move( name )
 				, texture.sampledViewId
@@ -225,7 +225,7 @@ namespace castor3d
 
 		castor::String name{};
 		crg::ImageViewId viewId{};
-		VkImageLayout layout{};
+		ImageLayout layout{};
 		TextureFactors factors{};
 	};
 }

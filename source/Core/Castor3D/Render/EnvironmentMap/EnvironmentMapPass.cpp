@@ -92,7 +92,7 @@ namespace castor3d
 			, 0u
 			, m_camera->getFrustum() );
 		m_graph.addOutput( m_colourResultView
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 		m_runnable = m_graph.compile( m_device.makeContext() );
 		environmentMap.getScene().getEngine()->registerTimer( getName(), m_runnable->getTimer() );
 		printGraph( *m_runnable );
@@ -275,7 +275,7 @@ namespace castor3d
 				auto result = castor::make_unique< crg::GenerateMipmaps >( framePass
 					, context
 					, graph
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+					, ImageLayout::eShaderReadOnly );
 				m_node->getScene()->getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;

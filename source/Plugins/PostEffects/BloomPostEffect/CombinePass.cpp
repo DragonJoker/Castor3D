@@ -92,15 +92,15 @@ namespace Bloom
 	{
 		m_pass.addDependencies( previousPasses );
 		m_pass.addImplicitColourView( blurViews.front()
-			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL );
+			, castor3d::ImageLayout::eColorAttachment );
 		m_pass.addSampledView( m_pass.mergeViews( blurViews )
 			, 0u
-			, crg::SamplerDesc{ VK_FILTER_LINEAR
-				, VK_FILTER_LINEAR
-				, VK_SAMPLER_MIPMAP_MODE_NEAREST
-				, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-				, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-				, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, crg::SamplerDesc{ castor3d::FilterMode::eLinear
+				, castor3d::FilterMode::eLinear
+				, castor3d::MipmapMode::eNearest
+				, castor3d::WrapMode::eClampToEdge
+				, castor3d::WrapMode::eClampToEdge
+				, castor3d::WrapMode::eClampToEdge
 				, 0.0f
 				, 0.0f
 				, float( blurPassesCount ) } );

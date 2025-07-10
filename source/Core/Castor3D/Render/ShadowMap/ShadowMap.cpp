@@ -61,7 +61,7 @@ namespace castor3d
 		static void doInitialiseImage( RenderDevice const & device
 			, ashes::CommandBuffer const & commandBuffer
 			, Texture const & texture
-			, VkImageLayout finalLayout
+			, ImageLayout finalLayout
 			, VkClearValue clearValue )
 		{
 			auto transferBarrier = makeVkStruct< VkImageMemoryBarrier >( 0u
@@ -103,16 +103,16 @@ namespace castor3d
 			}
 
 			auto shaderBarrier = makeVkStruct< VkImageMemoryBarrier >( VkAccessFlags( VK_ACCESS_TRANSFER_WRITE_BIT )
-				, crg::getAccessMask( finalLayout )
+				, convert( getAccessMask( finalLayout ) )
 				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-				, finalLayout
+				, convert( finalLayout )
 				, VK_QUEUE_FAMILY_IGNORED
 				, VK_QUEUE_FAMILY_IGNORED
 				, *texture.image
 				, texture.wholeViewId.data->info.subresourceRange );
 			device->vkCmdPipelineBarrier( commandBuffer
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, crg::getStageMask( finalLayout )
+				, convert( getStageMask( finalLayout ) )
 				, VK_DEPENDENCY_BY_REGION_BIT
 				, 0u
 				, nullptr
@@ -165,12 +165,12 @@ namespace castor3d
 			shdmap::doInitialiseImage( device
 				, *commandBuffer
 				, **sit
-				, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+				, ImageLayout::eTransferSrc
 				, getClearValue( SmTexture( index ) ) );
 			shdmap::doInitialiseImage( device
 				, *commandBuffer
 				, **it
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, ImageLayout::eShaderReadOnly
 				, getClearValue( SmTexture( index ) ) );
 			++it;
 			++sit;
@@ -237,8 +237,8 @@ namespace castor3d
 				visitor.visit( m_name + cuT( "/" ) + getTexName( smTexture ) + cuT( "L" ) + castor::string::toString( index )
 					, view
 					, ( ashes::isDepthOrStencilFormat( view.data->info.format )
-						? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
-						: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
+						? ImageLayout::eDepthStencilAttachment
+						: ImageLayout::eShaderReadOnly )
 					, TextureFactors::tex2D( { 25.0, 25.0, 25.0 }, { -24.0, -24.0, -24.0 } )
 						.invert( true )
 						.depth( smTexture == SmTexture::eLinearDepth ) );
@@ -350,45 +350,45 @@ namespace castor3d
 		{
 			auto & depth = smResult[SmTexture::eDepth];
 			graph.addInput( depth.wholeViewId
-				, crg::makeLayoutState( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+				, crg::makeLayoutState( ImageLayout::eTransferSrc ) );
 			graph.addInput( linear.wholeViewId
-				, crg::makeLayoutState( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+				, crg::makeLayoutState( ImageLayout::eTransferSrc ) );
 
 			if ( vsm )
 			{
 				graph.addInput( variance.wholeViewId
-					, crg::makeLayoutState( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+					, crg::makeLayoutState( ImageLayout::eTransferSrc ) );
 			}
 
 			if ( rsm )
 			{
 				graph.addInput( normal.wholeViewId
-					, crg::makeLayoutState( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+					, crg::makeLayoutState( ImageLayout::eTransferSrc ) );
 				graph.addInput( position.wholeViewId
-					, crg::makeLayoutState( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+					, crg::makeLayoutState( ImageLayout::eTransferSrc ) );
 				graph.addInput( flux.wholeViewId
-					, crg::makeLayoutState( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+					, crg::makeLayoutState( ImageLayout::eTransferSrc ) );
 			}
 		}
 		else
 		{
 			graph.addOutput( linear.wholeViewId
-				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+				, crg::makeLayoutState( ImageLayout::eShaderReadOnly ) );
 
 			if ( vsm )
 			{
 				graph.addOutput( variance.wholeViewId
-					, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+					, crg::makeLayoutState( ImageLayout::eShaderReadOnly ) );
 			}
 
 			if ( rsm )
 			{
 				graph.addOutput( normal.wholeViewId
-					, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+					, crg::makeLayoutState( ImageLayout::eShaderReadOnly ) );
 				graph.addOutput( position.wholeViewId
-					, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+					, crg::makeLayoutState( ImageLayout::eShaderReadOnly ) );
 				graph.addOutput( flux.wholeViewId
-					, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+					, crg::makeLayoutState( ImageLayout::eShaderReadOnly ) );
 			}
 		}
 	}

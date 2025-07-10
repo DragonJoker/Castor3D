@@ -34,7 +34,7 @@ namespace castor
 		if ( auto block{ beginBlock( file, cuT( "render_target" ) ) } )
 		{
 			result = writeNamedSub( file, cuT( "size" ), target.getSize() )
-				&& write( file, cuT( "format" ), getFormatName( castor3d::convert( target.getPixelFormat() ) ) )
+				&& write( file, cuT( "format" ), getFormatName( target.getPixelFormat() ) )
 				&& writeName( file, cuT( "tone_mapping" ), target.getToneMapping()->getName() );
 
 			if ( result && target.getScene() )

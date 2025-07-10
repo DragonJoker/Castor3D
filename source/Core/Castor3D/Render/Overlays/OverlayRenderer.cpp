@@ -332,14 +332,14 @@ namespace castor3d
 				, commandBuffer
 				, m_commonData.textVertexBuffer->overlaysData->getBuffer()
 				, range
-				, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
-				, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+				, { AccessFlags::eHostWrite, PipelineStageFlags::eHost }
+				, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
 			memoryBarrier( context
 				, commandBuffer
 				, m_commonData.textVertexBuffer->vertexBuffer.getBuffer().getBuffer()
 				, range
-				, { VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT }
-				, { VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+				, { AccessFlags::eVertexAttributeRead, PipelineStageFlags::eVertexInput }
+				, { AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader } );
 
 			for ( auto & [_, set] : textPipeline.sets )
 			{
@@ -357,14 +357,14 @@ namespace castor3d
 				, commandBuffer
 				, m_commonData.textVertexBuffer->vertexBuffer.getBuffer().getBuffer()
 				, range
-				, { VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
-				, { VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } );
+				, { AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader }
+				, { AccessFlags::eVertexAttributeRead, PipelineStageFlags::eVertexInput } );
 			memoryBarrier( context
 				, commandBuffer
 				, m_commonData.textVertexBuffer->overlaysData->getBuffer()
 				, range
-				, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
-				, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+				, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader }
+				, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
 		}
 	}
 
@@ -550,14 +550,14 @@ namespace castor3d
 			, commandBuffer
 			, overlaysBuffer
 			, range
-			, crg::AccessState{ VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
-			, crg::AccessState{ VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+			, crg::AccessState{ AccessFlags::eHostWrite, PipelineStageFlags::eHost }
+			, crg::AccessState{ AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
 		memoryBarrier( context
 			, commandBuffer
 			, vertexBuffer
 			, range
-			, crg::AccessState{ VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT }
-			, crg::AccessState{ VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+			, crg::AccessState{ AccessFlags::eVertexAttributeRead, PipelineStageFlags::eVertexInput }
+			, crg::AccessState{ AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader } );
 		context.getContext().vkCmdBindPipeline( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE
 			, *pipeline.pipeline );
@@ -576,14 +576,14 @@ namespace castor3d
 			, commandBuffer
 			, vertexBuffer
 			, range
-			, crg::AccessState{ VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
-			, crg::AccessState{ VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } );
+			, crg::AccessState{ AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader }
+			, crg::AccessState{ AccessFlags::eVertexAttributeRead, PipelineStageFlags::eVertexInput } );
 		memoryBarrier( context
 			, commandBuffer
 			, overlaysBuffer
 			, range
-			, crg::AccessState{ VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
-			, crg::AccessState{ VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+			, crg::AccessState{ AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader }
+			, crg::AccessState{ AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
 	}
 
 	void OverlayRenderer::OverlaysComputeData::doRegisterComputeBufferCommands( crg::RecordContext & context
@@ -598,20 +598,20 @@ namespace castor3d
 			, commandBuffer
 			, textBuffer->charsBuffer.buffer->getBuffer()
 			, range
-			, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
-			, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+			, { AccessFlags::eHostWrite, PipelineStageFlags::eHost }
+			, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
 		memoryBarrier( context
 			, commandBuffer
 			, textBuffer->wordsBuffer.buffer->getBuffer()
 			, range
-			, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
-			, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+			, { AccessFlags::eHostWrite, PipelineStageFlags::eHost }
+			, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
 		memoryBarrier( context
 			, commandBuffer
 			, textBuffer->linesBuffer.buffer->getBuffer()
 			, range
-			, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
-			, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+			, { AccessFlags::eHostWrite, PipelineStageFlags::eHost }
+			, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
 		context.getContext().vkCmdBindPipeline( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE
 			, *pipeline.pipeline );
@@ -646,20 +646,20 @@ namespace castor3d
 			, commandBuffer
 			, textBuffer->linesBuffer.buffer->getBuffer()
 			, range
-			, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
-			, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+			, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader }
+			, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
 		memoryBarrier( context
 			, commandBuffer
 			, textBuffer->wordsBuffer.buffer->getBuffer()
 			, range
-			, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
-			, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+			, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader }
+			, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
 		memoryBarrier( context
 			, commandBuffer
 			, textBuffer->charsBuffer.buffer->getBuffer()
 			, range
-			, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
-			, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+			, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader }
+			, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
 	}
 
 	//*********************************************************************************************

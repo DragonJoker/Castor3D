@@ -66,40 +66,40 @@ namespace castor3d
 			}
 		}
 
-		static VkFormat getVkFormat( ParticleFormat format )
+		static castor::PixelFormat getVkFormat( ParticleFormat format )
 		{
 			switch ( format )
 			{
 			case ParticleFormat::eInt:
-				return VK_FORMAT_R32_SINT;
+				return castor::PixelFormat::eR32_SINT;
 			case ParticleFormat::eVec2i:
-				return VK_FORMAT_R32G32_SINT;
+				return castor::PixelFormat::eR32G32_SINT;
 			case ParticleFormat::eVec3i:
-				return VK_FORMAT_R32G32B32_SINT;
+				return castor::PixelFormat::eR32G32B32_SINT;
 			case ParticleFormat::eVec4i:
-				return VK_FORMAT_R32G32B32A32_SINT;
+				return castor::PixelFormat::eR32G32B32A32_SINT;
 			case ParticleFormat::eUInt:
-				return VK_FORMAT_R32_UINT;
+				return castor::PixelFormat::eR32_UINT;
 			case ParticleFormat::eVec2ui:
-				return VK_FORMAT_R32G32_UINT;
+				return castor::PixelFormat::eR32G32_UINT;
 			case ParticleFormat::eVec3ui:
-				return VK_FORMAT_R32G32B32_UINT;
+				return castor::PixelFormat::eR32G32B32_UINT;
 			case ParticleFormat::eVec4ui:
-				return VK_FORMAT_R32G32B32A32_UINT;
+				return castor::PixelFormat::eR32G32B32A32_UINT;
 			case ParticleFormat::eFloat:
-				return VK_FORMAT_R32_SFLOAT;
+				return castor::PixelFormat::eR32_SFLOAT;
 			case ParticleFormat::eVec2f:
 			case ParticleFormat::eMat2f:
-				return VK_FORMAT_R32G32_SFLOAT;
+				return castor::PixelFormat::eR32G32_SFLOAT;
 			case ParticleFormat::eVec3f:
 			case ParticleFormat::eMat3f:
-				return VK_FORMAT_R32G32B32_SFLOAT;
+				return castor::PixelFormat::eR32G32B32_SFLOAT;
 			case ParticleFormat::eVec4f:
 			case ParticleFormat::eMat4f:
-				return VK_FORMAT_R32G32B32A32_SFLOAT;
+				return castor::PixelFormat::eR32G32B32A32_SFLOAT;
 			default:
 				assert( false );
-				return VK_FORMAT_R32G32B32A32_SFLOAT;
+				return castor::PixelFormat::eR32G32B32A32_SFLOAT;
 			}
 		}
 
@@ -353,7 +353,7 @@ namespace castor3d
 
 		for ( auto const & attribute : m_inputs )
 		{
-			auto fmt = ptclsys::getVkFormat( attribute.m_dataType );
+			auto fmt = convert( ptclsys::getVkFormat( attribute.m_dataType ) );
 			auto compSize = uint32_t( ptclsys::getComponentSize( attribute.m_dataType ) );
 			uint32_t offset = 0u;
 

@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/ArrayView.hpp>
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
-#include <CastorUtils/Graphics/ImageLayout.hpp>
+#include <CastorUtils/Graphics/ImageMemoryLayout.hpp>
 
 namespace castor3d
 {
@@ -31,7 +31,7 @@ namespace castor3d
 		 */
 		explicit TextureSource( castor::Image & image
 			, castor::String name
-			, castor::ImageLayout layout )
+			, castor::ImageMemoryLayout layout )
 			: castor::Named{ castor::move( name ) }
 			, m_image{ &image }
 			, m_layout{ castor::move( layout ) }
@@ -39,7 +39,7 @@ namespace castor3d
 		}
 
 		void update( VkExtent3D const & extent
-			, VkFormat format
+			, castor::PixelFormat format
 			, uint32_t mipLevels
 			, uint32_t arrayLayers )
 		{
@@ -92,12 +92,12 @@ namespace castor3d
 			return m_layout.hasBuffer( m_image->getPxBuffer() );
 		}
 
-		castor::ImageLayout::ConstBuffer getBuffer()const noexcept
+		castor::ImageMemoryLayout::ConstBuffer getBuffer()const noexcept
 		{
 			return m_layout.buffer( const_cast< castor::Image const & >( *m_image ).getPxBuffer() );
 		}
 
-		castor::ImageLayout::Buffer getBuffer()noexcept
+		castor::ImageMemoryLayout::Buffer getBuffer()noexcept
 		{
 			return m_layout.buffer( m_image->getPxBuffer() );
 		}
@@ -105,7 +105,7 @@ namespace castor3d
 
 	private:
 		castor::Image * m_image;
-		castor::ImageLayout m_layout;
+		castor::ImageMemoryLayout m_layout;
 	};
 }
 

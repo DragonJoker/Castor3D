@@ -61,7 +61,7 @@ namespace castor3d
 			, ashes::Queue const & queue
 			, ashes::CommandPool const & commandPool
 			, uint32_t offset
-			, VkPipelineStageFlags flags )const;
+			, PipelineStageFlags flags )const;
 		/**
 		 *\~english
 		 *\brief		Transfers data to the GPU buffer from RAM.
@@ -81,7 +81,7 @@ namespace castor3d
 		void upload( ashes::BufferBase const & stagingBuffer
 			, ashes::CommandBuffer const & commandBuffer
 			, uint32_t offset
-			, VkPipelineStageFlags flags )const;
+			, PipelineStageFlags flags )const;
 		/**
 		 *\~english
 		 *\brief		Transfers data to the GPU buffer from RAM.
@@ -108,7 +108,7 @@ namespace castor3d
 			, ashes::Queue const & queue
 			, ashes::CommandPool const & commandPool
 			, uint32_t offset
-			, VkPipelineStageFlags flags
+			, PipelineStageFlags flags
 			, FramePassTimer const & timer
 			, uint32_t index )const;
 		/**
@@ -134,7 +134,7 @@ namespace castor3d
 		void upload( ashes::BufferBase const & stagingBuffer
 			, ashes::CommandBuffer const & commandBuffer
 			, uint32_t offset
-			, VkPipelineStageFlags flags
+			, PipelineStageFlags flags
 			, FramePassTimer const & timer
 			, uint32_t index )const;
 		/**
@@ -181,7 +181,7 @@ namespace castor3d
 			, ashes::Queue const & queue
 			, ashes::CommandPool const & commandPool
 			, uint32_t offset
-			, VkPipelineStageFlags flags
+			, PipelineStageFlags flags
 			, FramePassTimer const & timer
 			, uint32_t index );
 		/**

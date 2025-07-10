@@ -30,14 +30,14 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	VkFormat getFormat( RenderDevice const &, LpvTexture texture )
+	castor::PixelFormat getFormat( RenderDevice const &, LpvTexture texture )
 	{
-		static castor::Array< VkFormat, size_t( LpvTexture::eCount ) > Values
+		static castor::Array< castor::PixelFormat, size_t( LpvTexture::eCount ) > Values
 		{
 			{
-				VK_FORMAT_R16G16B16A16_SFLOAT,
-				VK_FORMAT_R16G16B16A16_SFLOAT,
-				VK_FORMAT_R16G16B16A16_SFLOAT,
+				castor::PixelFormat::eR16G16B16A16_SFLOAT,
+				castor::PixelFormat::eR16G16B16A16_SFLOAT,
+				castor::PixelFormat::eR16G16B16A16_SFLOAT,
 			}
 		};
 		return Values[size_t( texture )];
@@ -69,14 +69,14 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	VkBorderColor getBorderColor( LpvTexture texture )
+	BorderColour getBorderColor( LpvTexture texture )
 	{
-		static castor::Array< VkBorderColor, size_t( LpvTexture::eCount ) > Values
+		static castor::Array< BorderColour, size_t( LpvTexture::eCount ) > Values
 		{
 			{
-				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
-				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
-				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
+				BorderColour::eFloatOpaqueBlack,
+				BorderColour::eFloatOpaqueBlack,
+				BorderColour::eFloatOpaqueBlack,
 			}
 		};
 		return Values[size_t( texture )];

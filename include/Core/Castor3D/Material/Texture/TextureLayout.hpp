@@ -181,7 +181,7 @@ namespace castor3d
 		 *\param[in]	srcLayout	Le layout actuel de l'image.
 		 */
 		C3D_API void generateMipmaps( RenderDevice const & device
-			, VkImageLayout srcLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )const;
+			, ImageLayout srcLayout = ImageLayout::eShaderReadOnly )const;
 		/**
 		 *\~english
 		 *\brief		Generate texture mipmaps
@@ -193,7 +193,7 @@ namespace castor3d
 		 *\param[in]	srcLayout	Le layout actuel de l'image.
 		 */
 		C3D_API void generateMipmaps( QueueData const & queueData
-			, VkImageLayout srcLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )const;
+			, ImageLayout srcLayout = ImageLayout::eShaderReadOnly )const;
 		/**
 		 *\~english
 		 *\brief		Generate texture mipmaps
@@ -205,7 +205,7 @@ namespace castor3d
 		 *\param[in]	srcLayout	Le layout actuel de l'image.
 		 */
 		C3D_API void generateMipmaps( ashes::CommandBuffer const & cmd
-			, VkImageLayout srcLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )const;
+			, ImageLayout srcLayout = ImageLayout::eShaderReadOnly )const;
 		/**
 		 *\name Texture source setup.
 		 **/
@@ -224,10 +224,10 @@ namespace castor3d
 		C3D_API void setSource( castor::Path const & folder
 			, castor::Path const & relative );
 		C3D_API void setSource( VkExtent3D const & extent
-			, VkFormat format );
+			, castor::PixelFormat format );
 
 		void setSource( VkExtent2D const & extent
-			, VkFormat format )
+			, castor::PixelFormat format )
 		{
 			return setSource( { extent.width, extent.height, 1u }
 				, format );
@@ -275,9 +275,9 @@ namespace castor3d
 			return m_static;
 		}
 
-		VkImageType getType()const noexcept
+		ImageType getType()const noexcept
 		{
-			return m_info->imageType;
+			return castor::convert( m_info->imageType );
 		}
 
 		castor::Image const & getImage()const noexcept
@@ -326,15 +326,15 @@ namespace castor3d
 			return m_info->extent;
 		}
 
-		VkFormat getPixelFormat()const noexcept
+		castor::PixelFormat getPixelFormat()const noexcept
 		{
-			return m_info->format;
+			return crg::convert( m_info->format );
 		}
 		/**@}*/
 
 	private:
 		uint32_t doUpdateViews();
-		void doUpdateCreateInfo( castor::ImageLayout const & layout );
+		void doUpdateCreateInfo( castor::ImageMemoryLayout const & layout );
 		void doUpdateMips( bool genNeeded, uint32_t mipLevels );
 
 		TextureView & getDefaultView()const noexcept

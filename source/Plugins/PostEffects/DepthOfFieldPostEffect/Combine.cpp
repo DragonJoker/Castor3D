@@ -156,9 +156,9 @@ namespace dof
 			} );
 		pass.addDependencies( previousPasses );
 
-		pass.addSampledView( colour, 0u, crg::SamplerDesc{ VK_FILTER_LINEAR, VK_FILTER_LINEAR } );
-		pass.addSampledView( nearBlur.sampledViewId, 1u, crg::SamplerDesc{ VK_FILTER_LINEAR, VK_FILTER_LINEAR } );
-		pass.addSampledView( farBlur.sampledViewId, 2u, crg::SamplerDesc{ VK_FILTER_LINEAR, VK_FILTER_LINEAR } );
+		pass.addSampledView( colour, 0u, crg::SamplerDesc{ castor3d::FilterMode::eLinear, castor3d::FilterMode::eLinear } );
+		pass.addSampledView( nearBlur.sampledViewId, 1u, crg::SamplerDesc{ castor3d::FilterMode::eLinear, castor3d::FilterMode::eLinear } );
+		pass.addSampledView( farBlur.sampledViewId, 2u, crg::SamplerDesc{ castor3d::FilterMode::eLinear, castor3d::FilterMode::eLinear } );
 		configurationUbo.createPassBinding( pass, 3u );
 
 		pass.addOutputColourView( target );

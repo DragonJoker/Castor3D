@@ -211,7 +211,7 @@ extern "C"
 
 		if ( auto component = object->internal->createComponent< castor3d::AlphaTestComponent >() )
 		{
-			component->setAlphaFunc( VkCompareOp( val ) );
+			component->setAlphaFunc( castor3d::ComparisonFunc( val ) );
 		}
 
 		return C3D_OK;
@@ -242,7 +242,7 @@ extern "C"
 
 		if ( auto component = object->internal->createComponent< castor3d::AlphaTestComponent >() )
 		{
-			component->setBlendAlphaFunc( VkCompareOp( val ) );
+			component->setBlendAlphaFunc( castor3d::ComparisonFunc( val ) );
 		}
 
 		return C3D_OK;

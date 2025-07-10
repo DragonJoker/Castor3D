@@ -17,6 +17,53 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Compares a reference and a test value.
+	*\~french
+	*\brief
+	*	Compare une valeur de référence et une valeur de test.
+	*/
+	enum class ComparisonFunc
+	{
+		//!\~english	Comparison always evaluates to false.
+		//\~french		La comparaison est toujours évaluée à faux.
+		eNever = 0,
+		//!\~english	Comparison evaluates reference < test.
+		//\~french		La comparaison évalue reference < test.
+		eLess = 1,
+		//!\~english	Comparison evaluates reference == test.
+		//\~french		La comparaison évalue reference == test.
+		eEqual = 2,
+		//!\~english	Comparison evaluates reference <= test.
+		//\~french		La comparaison évalue reference <= test.
+		eLessOrEqual = 3,
+		//!\~english	Comparison evaluates reference > test.
+		//\~french		La comparaison évalue reference > test.
+		eGreater = 4,
+		//!\~english	Comparison evaluates reference != test.
+		//\~french		La comparaison évalue reference != test.
+		eNotEqual = 5,
+		//!\~english	Comparison evaluates reference >= test.
+		//\~french		La comparaison évalue reference >= test.
+		eGreaterOrEqual = 6,
+		//!\~english	Comparison always evaluates to true.
+		//\~french		La comparaison est toujours évaluée à vrai.
+		eAlways = 7,
+		CU_ScopedEnumBounds( eNever, eAlways )
+	};
+	C3D_API castor::String getName( ComparisonFunc value );
+
+	constexpr VkCompareOp convert( ComparisonFunc v )
+	{
+		return VkCompareOp( v );
+	}
+
+	constexpr ComparisonFunc convert( VkCompareOp v )
+	{
+		return ComparisonFunc( v );
+	}
+	/**
+	*\~english
+	*\brief
 	*	Texture flags.
 	*\~french
 	*\brief
@@ -171,9 +218,6 @@ namespace castor3d
 	//! Material pointer map
 	CU_DeclareMap( uint32_t, MaterialObs, MaterialPtrUInt );
 	/** @endcond */
-
-	C3D_API VkFormat convert( castor::PixelFormat format );
-	C3D_API castor::PixelFormat convert( VkFormat format );
 
 	struct TextureCombine
 	{

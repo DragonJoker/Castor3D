@@ -441,7 +441,7 @@ namespace castor3d
 	bool PassComponentRegister::hasOpacity( PipelineFlags const & flags )const
 	{
 		return ( hasAny( flags.pass, getAlphaBlendingFlag() )
-			|| ( hasAny( flags.pass, getAlphaTestFlag() ) && ( flags.alphaFunc != VK_COMPARE_OP_ALWAYS ) ) );
+			|| ( hasAny( flags.pass, getAlphaTestFlag() ) && ( flags.alphaFunc != ComparisonFunc::eAlways ) ) );
 	}
 
 	bool PassComponentRegister::needsEnvironmentMapping( PassComponentCombineID combineID )const

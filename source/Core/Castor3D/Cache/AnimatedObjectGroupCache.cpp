@@ -40,8 +40,8 @@ namespace castor
 					, castor::Matrix4x4f::getIdentity() );
 			}
 
-			transforms.markDirty( VK_ACCESS_SHADER_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+			transforms.markDirty( AccessFlags::eShaderRead
+				, PipelineStageFlags::eVertexShader );
 		}
 
 		static size_t makeHash( castor3d::AnimatedMesh const & mesh
@@ -152,8 +152,8 @@ namespace castor
 				{
 					m_skinningTransformsData.buffer->markDirty( m_skinningTransformsData.getOffset() + ( id - 1u ) * sizeof( SkinningTransformsConfiguration )
 						, sizeof( castor::Matrix4x4f ) * max
-						, VK_ACCESS_UNIFORM_READ_BIT
-						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+						, AccessFlags::eUniformRead
+						, PipelineStageFlags::eVertexShader );
 				}
 			}
 		}
@@ -170,20 +170,20 @@ namespace castor
 					auto offset = m_morphingWeights.getOffset() + ( id - 1u ) * sizeof( MorphingWeightsConfiguration );
 					m_morphingWeights.buffer->markDirty( offset
 						, sizeof( castor::Point4ui ) + sizeof( float ) * max
-						, VK_ACCESS_UNIFORM_READ_BIT
-						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+						, AccessFlags::eUniformRead
+						, PipelineStageFlags::eVertexShader );
 					offset += sizeof( float ) * MaxMorphTargets * 4u;
 					m_morphingWeights.buffer->markDirty( offset
 						, sizeof( uint32_t ) * max
-						, VK_ACCESS_UNIFORM_READ_BIT
-						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+						, AccessFlags::eUniformRead
+						, PipelineStageFlags::eVertexShader );
 				}
 				else
 				{
 					m_morphingWeights.buffer->markDirty( m_morphingWeights.getOffset() + ( id - 1u ) * sizeof( MorphingWeightsConfiguration )
 						, sizeof( castor::Point4ui )
-						, VK_ACCESS_UNIFORM_READ_BIT
-						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+						, AccessFlags::eUniformRead
+						, PipelineStageFlags::eVertexShader );
 				}
 			}
 		}

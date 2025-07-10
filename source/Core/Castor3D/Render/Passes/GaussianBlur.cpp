@@ -166,14 +166,14 @@ namespace castor3d
 
 		static crg::ImageViewId createIntermediate( crg::FramePassGroup const & graph
 			, castor::String const & prefix
-			, VkFormat format
+			, castor::PixelFormat format
 			, VkExtent3D const & size
 			, uint32_t mipLevels )
 		{
 			auto mbPrefix = castor::toUtf8( prefix );
 			auto intermediate = graph.createImage( crg::ImageData{ mbPrefix + "GB"
 				, 0u
-				, VK_IMAGE_TYPE_2D
+				, ImageType::e2D
 				, format
 				, { size.width, size.height, 1u }
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
@@ -185,9 +185,9 @@ namespace castor3d
 			return graph.createView( crg::ImageViewData{ mbPrefix + "GB"
 				, intermediate
 				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
+				, ImageViewType::e2D
 				, format
-				, { ashes::getAspectMask( format ), 0u, mipLevels, 0u, 1u } } );
+				, { ashes::getAspectMask( convert( format ) ), 0u, mipLevels, 0u, 1u } } );
 		}
 
 		static crg::ImageViewIdArray createViews( crg::FramePassGroup const & graph
@@ -242,8 +242,8 @@ namespace castor3d
 		, m_intermediateView{ intermediateView }
 		, m_blurUbo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
 		, m_kernel{ passgauss::getHalfPascal( kernelSize ) }
-		, m_shaderX{ m_prefix + cuT( "GBX" ), passgauss::getProgram( *device.renderSystem.getEngine(), ashes::isDepthFormat( m_format ), false ) }
-		, m_shaderY{ m_prefix + cuT( "GBY" ), passgauss::getProgram( *device.renderSystem.getEngine(), ashes::isDepthFormat( m_format ), true ) }
+		, m_shaderX{ m_prefix + cuT( "GBX" ), passgauss::getProgram( *device.renderSystem.getEngine(), isDepthFormat( m_format ), false ) }
+		, m_shaderY{ m_prefix + cuT( "GBY" ), passgauss::getProgram( *device.renderSystem.getEngine(), isDepthFormat( m_format ), true ) }
 		, m_stagesX{ makeProgramStates( device, m_shaderX ) }
 		, m_stagesY{ makeProgramStates( device, m_shaderY ) }
 	{
@@ -371,7 +371,7 @@ namespace castor3d
 	{
 		visitor.visit( m_prefix + cuT( " GaussianBlur Intermediate" )
 			, m_intermediateView
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, ImageLayout::eShaderReadOnly
 			, TextureFactors{}.invert( true ) );
 
 		visitor.visit( m_shaderX );

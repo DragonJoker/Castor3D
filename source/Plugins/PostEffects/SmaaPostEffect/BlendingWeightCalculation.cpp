@@ -810,7 +810,7 @@ namespace smaa
 			, crg::ResourcesCache & resources
 			, castor3d::RenderDevice const & device
 			, castor::String const & name
-			, VkFormat format
+			, castor::PixelFormat format
 			, VkExtent3D const & dimensions
 			, castor::ArrayView< const unsigned char > const & bytes )
 		{
@@ -818,7 +818,7 @@ namespace smaa
 			auto mbName = castor::toUtf8( name );
 			auto imageId = graph.createImage( crg::ImageData{ mbName
 				, 0u
-				, VK_IMAGE_TYPE_2D
+				, castor3d::ImageType::e2D
 				, format
 				, dimensions
 				, ( VK_IMAGE_USAGE_SAMPLED_BIT
@@ -826,10 +826,10 @@ namespace smaa
 			auto result = graph.createView( crg::ImageViewData{ mbName
 				, imageId
 				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, imageId.data->info.format
+				, castor3d::ImageViewType::e2D
+				, getFormat( imageId )
 				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
-			auto staging = device->createStagingTexture( format, dimensions );
+			auto staging = device->createStagingTexture( convert( format ), dimensions );
 			auto image = castor::make_unique< ashes::Image >( *device
 				, resources.createImage( context, imageId )
 				, ashes::ImageCreateInfo{ imageId.data->info } );
@@ -843,7 +843,7 @@ namespace smaa
 					, result.data->info.subresourceRange.baseMipLevel
 					, result.data->info.subresourceRange.baseArrayLayer
 					, result.data->info.subresourceRange.layerCount }
-				, format
+				, convert( format )
 				, { 0, 0, 0 }
 				, dimensions
 				, bytes.data()
@@ -871,14 +871,14 @@ namespace smaa
 			, m_resources
 			, m_device
 			, cuT( "SMBWArea" )
-			, VK_FORMAT_R8G8_UNORM
+			, castor::PixelFormat::eR8G8_UNORM
 			, { AREATEX_WIDTH, AREATEX_HEIGHT, 1u }
 			, castor::makeArrayView( std::begin( areaTexBytes ), std::end( areaTexBytes ) ) ) }
 		, m_searchView{ bwcalc::createImage( m_graph
 			, m_resources
 			, m_device
 			, cuT( "SMBWSearch" )
-			, VK_FORMAT_R8_UNORM
+			, castor::PixelFormat::eR8_UNORM
 			, { SEARCHTEX_WIDTH, SEARCHTEX_HEIGHT, 1u }
 			, castor::makeArrayView( std::begin( searchTexBytes ), std::end( searchTexBytes ) ) ) }
 		, m_result{ m_device
@@ -888,7 +888,7 @@ namespace smaa
 			, m_extent
 			, 1u
 			, 1u
-			, VK_FORMAT_R8G8B8A8_UNORM
+			, castor::PixelFormat::eR8G8B8A8_UNORM
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
@@ -918,15 +918,15 @@ namespace smaa
 			} ) }
 	{
 		m_graph.addInput( m_areaView
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			, crg::makeLayoutState( castor3d::ImageLayout::eShaderReadOnly ) );
 		m_graph.addInput( m_searchView
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_NEAREST
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
+			, crg::makeLayoutState( castor3d::ImageLayout::eShaderReadOnly ) );
+		crg::SamplerDesc linearSampler{ castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear
+			, castor3d::MipmapMode::eNearest
+			, castor3d::WrapMode::eClampToEdge
+			, castor3d::WrapMode::eClampToEdge
+			, castor3d::WrapMode::eClampToEdge };
 		m_pass.addDependency( previousPass );
 		ubo.createPassBinding( m_pass
 			, SmaaUboIdx );

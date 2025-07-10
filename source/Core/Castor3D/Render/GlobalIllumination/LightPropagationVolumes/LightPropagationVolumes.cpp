@@ -46,7 +46,7 @@ namespace castor3d
 					, context
 					, graph
 					, { crg::defaultV< InitialiseCallback >
-						, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_TRANSFER_BIT ); } )
+						, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eTransfer ); } )
 						, RecordCallback( [this]( crg::RecordContext const &, VkCommandBuffer cb, uint32_t ){ doRecordInto( cb ); } ) } }
 			{
 			}
@@ -510,18 +510,18 @@ namespace castor3d
 		}
 
 		m_graph.addInput( m_sourceSmResult[SmTexture::eNormal].targetViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 		m_graph.addInput( m_sourceSmResult[SmTexture::ePosition].targetViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 		m_graph.addInput( m_sourceSmResult[SmTexture::eFlux].targetViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 
 		m_graph.addOutput( lpvResult[LpvTexture::eR].targetViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 		m_graph.addOutput( lpvResult[LpvTexture::eG].targetViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 		m_graph.addOutput( lpvResult[LpvTexture::eB].targetViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 	}
 
 	void LightPropagationVolumesBase::initialise()
@@ -786,7 +786,7 @@ namespace castor3d
 						, extent
 						, VkOffset3D{}
 						, VkExtent3D{ 512u, 512u, 1u }
-						, VK_FILTER_LINEAR );
+						, FilterMode::eLinear );
 				} );
 			pass.addDependency( *lastPass );
 			pass.addTransferInputView( m_sourceSmResult[smTexture].wholeViewId );
@@ -827,27 +827,27 @@ namespace castor3d
 			, LightPropagationPass::LpvGridUboIdx );
 		result.addSampledView( injection[LpvTexture::eR].sampledViewId
 			, LightPropagationPass::RLpvGridIdx
-			, crg::SamplerDesc{ VK_FILTER_LINEAR
-				, VK_FILTER_LINEAR
-				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+			, crg::SamplerDesc{ FilterMode::eLinear
+				, FilterMode::eLinear
+				, MipmapMode::eLinear } );
 		result.addSampledView( injection[LpvTexture::eG].sampledViewId
 			, LightPropagationPass::GLpvGridIdx
-			, crg::SamplerDesc{ VK_FILTER_LINEAR
-				, VK_FILTER_LINEAR
-				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+			, crg::SamplerDesc{ FilterMode::eLinear
+				, FilterMode::eLinear
+				, MipmapMode::eLinear } );
 		result.addSampledView( injection[LpvTexture::eB].sampledViewId
 			, LightPropagationPass::BLpvGridIdx
-			, crg::SamplerDesc{ VK_FILTER_LINEAR
-				, VK_FILTER_LINEAR
-				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+			, crg::SamplerDesc{ FilterMode::eLinear
+				, FilterMode::eLinear
+				, MipmapMode::eLinear } );
 
 		if ( index > 0u && m_geometryVolumes )
 		{
 			result.addSampledView( m_geometry.sampledViewId
 				, LightPropagationPass::GpGridIdx
-				, crg::SamplerDesc{ VK_FILTER_LINEAR
-					, VK_FILTER_LINEAR
-					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+				, crg::SamplerDesc{ FilterMode::eLinear
+					, FilterMode::eLinear
+					, MipmapMode::eLinear } );
 		}
 
 		if ( index == 0u )

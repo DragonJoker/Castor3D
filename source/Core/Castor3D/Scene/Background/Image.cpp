@@ -53,7 +53,7 @@ namespace castor3d
 
 	namespace bgimage
 	{
-		static ashes::ImageCreateInfo doGetImageCreate( VkFormat format
+		static ashes::ImageCreateInfo doGetImageCreate( castor::PixelFormat format
 			, castor::Size const & dimensions
 			, bool attachment
 			, uint32_t mipLevel = 1u )
@@ -62,7 +62,7 @@ namespace castor3d
 			{
 				VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
 				VK_IMAGE_TYPE_2D,
-				format,
+				convert( format ),
 				{ dimensions.getWidth(), dimensions.getHeight(), 1u },
 				mipLevel,
 				6u,
@@ -85,7 +85,7 @@ namespace castor3d
 		: SceneBackground{ engine, scene, name + cuT( "Image" ), cuT( "image" ), false }
 	{
 		m_texture = castor::makeUnique< TextureLayout >( *engine.getRenderSystem()
-			, bgimage::doGetImageCreate( VK_FORMAT_R8G8B8A8_UNORM, { 16u, 16u }, false )
+			, bgimage::doGetImageCreate( castor::PixelFormat::eR8G8B8A8_UNORM, { 16u, 16u }, false )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "ImageBackground_Dummy" ) );
 	}
@@ -148,15 +148,15 @@ namespace castor3d
 	bool ImageBackground::doInitialise( RenderDevice const & device )
 	{
 		doInitialise2DTexture( device );
-		m_hdr = m_texture->getPixelFormat() == VK_FORMAT_R32_SFLOAT
-			|| m_texture->getPixelFormat() == VK_FORMAT_R32G32_SFLOAT
-			|| m_texture->getPixelFormat() == VK_FORMAT_R32G32B32_SFLOAT
-			|| m_texture->getPixelFormat() == VK_FORMAT_R32G32B32A32_SFLOAT
-			|| m_texture->getPixelFormat() == VK_FORMAT_R16_SFLOAT
-			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16_SFLOAT
-			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16B16_SFLOAT
-			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16B16A16_SFLOAT;
-		m_srgb = isSRGBFormat( convert( m_texture->getPixelFormat() ) );
+		m_hdr = m_texture->getPixelFormat() == castor::PixelFormat::eR32_SFLOAT
+			|| m_texture->getPixelFormat() == castor::PixelFormat::eR32G32_SFLOAT
+			|| m_texture->getPixelFormat() == castor::PixelFormat::eR32G32B32_SFLOAT
+			|| m_texture->getPixelFormat() == castor::PixelFormat::eR32G32B32A32_SFLOAT
+			|| m_texture->getPixelFormat() == castor::PixelFormat::eR16_SFLOAT
+			|| m_texture->getPixelFormat() == castor::PixelFormat::eR16G16_SFLOAT
+			|| m_texture->getPixelFormat() == castor::PixelFormat::eR16G16B16_SFLOAT
+			|| m_texture->getPixelFormat() == castor::PixelFormat::eR16G16B16A16_SFLOAT;
+		m_srgb = castor::isSRGBFormat( m_texture->getPixelFormat() );
 		return m_texture->initialise( device );
 	}
 
@@ -201,9 +201,9 @@ namespace castor3d
 	{
 		pass.addSampledView( m_textureId.wholeViewId
 			, index
-			, crg::SamplerDesc{ VK_FILTER_LINEAR
-				, VK_FILTER_LINEAR
-				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+			, crg::SamplerDesc{ FilterMode::eLinear
+				, FilterMode::eLinear
+				, MipmapMode::eLinear } );
 		++index;
 	}
 
@@ -244,8 +244,8 @@ namespace castor3d
 				, texture
 				, image.getLayout()
 				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, image.getLayout().depthLayers() }
-				, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-				, VK_PIPELINE_STAGE_TRANSFER_BIT );
+				, ImageLayout::eTransferSrc
+				, PipelineStageFlags::eTransfer );
 		}
 
 		VkExtent3D extent{ m_2dTexture->getWidth(), m_2dTexture->getHeight(), 1u };

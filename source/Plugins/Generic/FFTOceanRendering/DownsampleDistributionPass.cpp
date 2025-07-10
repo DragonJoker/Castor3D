@@ -161,7 +161,7 @@ namespace ocean_fft
 			, context
 			, graph
 			, { []( uint32_t index ){}
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
+				, GetPipelineStateCallback( [](){ return crg::getPipelineState( castor3d::PipelineStageFlags::eComputeShader ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
 				, isEnabled

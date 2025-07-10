@@ -137,7 +137,7 @@ namespace castor3d
 				, { size.width, size.height, 1u }
 				, 1u
 				, MaxLinearizedDepthMipLevel + 1u
-				, VK_FORMAT_R32_SFLOAT
+				, castor::PixelFormat::eR32_SFLOAT
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 					| VK_IMAGE_USAGE_SAMPLED_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
@@ -270,13 +270,13 @@ namespace castor3d
 			auto source = m_graph.createView( crg::ImageViewData{ m_result.imageId.data->name + castor::string::toMbString( index )
 				, m_result.imageId
 				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
+				, ImageViewType::e2D
 				, m_result.getFormat()
 				, VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, index, 1u, 0u, 1u } } );
 			auto destination = m_graph.createView( crg::ImageViewData{ m_result.imageId.data->name + castor::string::toMbString( index + 1u )
 				, m_result.imageId
 				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
+				, ImageViewType::e2D
 				, m_result.getFormat()
 				, VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, index + 1u, 1u, 0u, 1u } } );
 			auto & pass = m_graph.createPass( "MinimiseDepth" + castor::string::toMbString( index )

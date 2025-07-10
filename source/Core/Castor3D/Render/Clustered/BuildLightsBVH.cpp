@@ -284,7 +284,7 @@ namespace castor3d
 					, context
 					, graph
 					, { [this]( uint32_t index ){ doInitialise( index ); }
-						, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
+						, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
 						, [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); }
 						, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
 						, IsEnabledCallback( [this](){ return doIsEnabled(); } )
@@ -469,8 +469,8 @@ namespace castor3d
 							, currentState.access
 							, currentState.pipelineStage
 							, ( ( idx == 2 )
-								? crg::AccessState{ VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
-								: crg::AccessState{ VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } )
+								? crg::AccessState{ AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader }
+								: crg::AccessState{ AccessFlags::eShaderRead | AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader } )
 							, true );
 					}
 				}

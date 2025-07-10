@@ -592,95 +592,95 @@ namespace castor3d
 		device.reset();
 	}
 
-	VkFormat RenderDevice::selectSuitableDepthFormat( VkFormatFeatureFlags requiredFeatures )const
+	castor::PixelFormat RenderDevice::selectSuitableDepthFormat( VkFormatFeatureFlags requiredFeatures )const
 	{
-		castor::Vector< VkFormat > depthFormats
+		castor::Vector< castor::PixelFormat > depthFormats
 		{
-			VK_FORMAT_D32_SFLOAT,
-			VK_FORMAT_X8_D24_UNORM_PACK32,
-			VK_FORMAT_D16_UNORM,
+			castor::PixelFormat::eD32_SFLOAT,
+			castor::PixelFormat::eX8_D24_UNORM,
+			castor::PixelFormat::eD16_UNORM,
 		};
 		return selectSuitableFormat( depthFormats, requiredFeatures );
 	}
 
-	VkFormat RenderDevice::selectSuitableStencilFormat( VkFormatFeatureFlags requiredFeatures )const
+	castor::PixelFormat RenderDevice::selectSuitableStencilFormat( VkFormatFeatureFlags requiredFeatures )const
 	{
-		castor::Vector< VkFormat > depthFormats
+		castor::Vector< castor::PixelFormat > depthFormats
 		{
-			VK_FORMAT_S8_UINT,
-			VK_FORMAT_D16_UNORM_S8_UINT,
-			VK_FORMAT_D24_UNORM_S8_UINT,
-			VK_FORMAT_D32_SFLOAT_S8_UINT,
+			castor::PixelFormat::eS8_UINT,
+			castor::PixelFormat::eD16_UNORM_S8_UINT,
+			castor::PixelFormat::eD24_UNORM_S8_UINT,
+			castor::PixelFormat::eD32_SFLOAT_S8_UINT,
 		};
 		return selectSuitableFormat( depthFormats, requiredFeatures );
 	}
 
-	VkFormat RenderDevice::selectSuitableDepthStencilFormat( VkFormatFeatureFlags requiredFeatures )const
+	castor::PixelFormat RenderDevice::selectSuitableDepthStencilFormat( VkFormatFeatureFlags requiredFeatures )const
 	{
-		castor::Vector< VkFormat > depthFormats
+		castor::Vector< castor::PixelFormat > depthFormats
 		{
-			VK_FORMAT_D32_SFLOAT_S8_UINT,
-			VK_FORMAT_D24_UNORM_S8_UINT,
-			VK_FORMAT_D16_UNORM_S8_UINT,
+			castor::PixelFormat::eD32_SFLOAT_S8_UINT,
+			castor::PixelFormat::eD24_UNORM_S8_UINT,
+			castor::PixelFormat::eD16_UNORM_S8_UINT,
 		};
 		return selectSuitableFormat( depthFormats, requiredFeatures );
 	}
 
-	VkFormat RenderDevice::selectSmallestFormatRSFloatFormat( VkFormatFeatureFlags requiredFeatures )const
+	castor::PixelFormat RenderDevice::selectSmallestFormatRSFloatFormat( VkFormatFeatureFlags requiredFeatures )const
 	{
-		castor::Vector< VkFormat > formats
+		castor::Vector< castor::PixelFormat > formats
 		{
-			VK_FORMAT_R16_SFLOAT,
-			VK_FORMAT_R32_SFLOAT,
+			castor::PixelFormat::eR16_SFLOAT,
+			castor::PixelFormat::eR32_SFLOAT,
 		};
 		return selectSuitableFormat( formats, requiredFeatures );
 	}
 
-	VkFormat RenderDevice::selectSmallestFormatRGSFloatFormat( VkFormatFeatureFlags requiredFeatures )const
+	castor::PixelFormat RenderDevice::selectSmallestFormatRGSFloatFormat( VkFormatFeatureFlags requiredFeatures )const
 	{
-		castor::Vector< VkFormat > formats
+		castor::Vector< castor::PixelFormat > formats
 		{
-			VK_FORMAT_R16G16_SFLOAT,
-			VK_FORMAT_R32G32_SFLOAT,
-			VK_FORMAT_R16G16B16A16_SFLOAT,
-			VK_FORMAT_R32G32B32A32_SFLOAT,
+			castor::PixelFormat::eR16G16_SFLOAT,
+			castor::PixelFormat::eR32G32_SFLOAT,
+			castor::PixelFormat::eR16G16B16A16_SFLOAT,
+			castor::PixelFormat::eR32G32B32A32_SFLOAT,
 		};
 		return selectSuitableFormat( formats, requiredFeatures );
 	}
 
-	VkFormat RenderDevice::selectSmallestFormatRGBUFloatFormat( VkFormatFeatureFlags requiredFeatures )const
+	castor::PixelFormat RenderDevice::selectSmallestFormatRGBUFloatFormat( VkFormatFeatureFlags requiredFeatures )const
 	{
-		castor::Vector< VkFormat > formats
+		castor::Vector< castor::PixelFormat > formats
 		{
-			VK_FORMAT_B10G11R11_UFLOAT_PACK32,
-			VK_FORMAT_R16G16B16_SFLOAT,
-			VK_FORMAT_R32G32B32_SFLOAT,
-			VK_FORMAT_R16G16B16A16_SFLOAT,
-			VK_FORMAT_R32G32B32A32_SFLOAT,
+			castor::PixelFormat::eB10G11R11_UFLOAT,
+			castor::PixelFormat::eR16G16B16_SFLOAT,
+			castor::PixelFormat::eR32G32B32_SFLOAT,
+			castor::PixelFormat::eR16G16B16A16_SFLOAT,
+			castor::PixelFormat::eR32G32B32A32_SFLOAT,
 		};
 		return selectSuitableFormat( formats, requiredFeatures );
 	}
 
-	VkFormat RenderDevice::selectSmallestFormatRGBSFloatFormat( VkFormatFeatureFlags requiredFeatures )const
+	castor::PixelFormat RenderDevice::selectSmallestFormatRGBSFloatFormat( VkFormatFeatureFlags requiredFeatures )const
 	{
-		castor::Vector< VkFormat > formats
+		castor::Vector< castor::PixelFormat > formats
 		{
-			VK_FORMAT_R16G16B16_SFLOAT,
-			VK_FORMAT_R32G32B32_SFLOAT,
-			VK_FORMAT_R16G16B16A16_SFLOAT,
-			VK_FORMAT_R32G32B32A32_SFLOAT,
+			castor::PixelFormat::eR16G16B16_SFLOAT,
+			castor::PixelFormat::eR32G32B32_SFLOAT,
+			castor::PixelFormat::eR16G16B16A16_SFLOAT,
+			castor::PixelFormat::eR32G32B32A32_SFLOAT,
 		};
 		return selectSuitableFormat( formats, requiredFeatures );
 	}
 
-	VkFormat RenderDevice::selectSuitableFormat( castor::Vector< VkFormat > const & formats
+	castor::PixelFormat RenderDevice::selectSuitableFormat( castor::Vector< castor::PixelFormat > const & formats
 		, VkFormatFeatureFlags requiredFeatures )const
 	{
 		auto it = std::find_if( formats.begin()
 			, formats.end()
-			, [this, &requiredFeatures]( VkFormat lookup )
+			, [this, &requiredFeatures]( castor::PixelFormat lookup )
 			{
-				auto props = device->getPhysicalDevice().getFormatProperties( lookup );
+				auto props = device->getPhysicalDevice().getFormatProperties( convert( lookup ) );
 				return castor::checkFlag( props.optimalTilingFeatures, requiredFeatures );
 			} );
 
@@ -691,8 +691,8 @@ namespace castor3d
 
 		if ( it != formats.begin() )
 		{
-			log::warn << "The first format (" << castor::makeString( ashes::getName( *formats.begin() ) )
-				<< ") did not support the wanted properties, using a secondary choice (" << castor::makeString( ashes::getName( *it ) )
+			log::warn << "The first format (" << castor::getFormatName( *formats.begin() )
+				<< ") did not support the wanted properties, using a secondary choice (" << castor::getFormatName( *it )
 				<< ").\n";
 		}
 

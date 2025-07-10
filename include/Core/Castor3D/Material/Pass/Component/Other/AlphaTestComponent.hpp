@@ -15,14 +15,14 @@ namespace castor3d
 	{
 		explicit AlphaTestData( std::atomic_bool & dirty )
 			: alphaRefValue{ dirty, 0.0f }
-			, alphaFunc{ dirty, VK_COMPARE_OP_ALWAYS }
-			, blendAlphaFunc{ dirty, VK_COMPARE_OP_ALWAYS }
+			, alphaFunc{ dirty, ComparisonFunc::eAlways }
+			, blendAlphaFunc{ dirty, ComparisonFunc::eAlways }
 		{
 		}
 
 		castor::AtomicGroupChangeTracked< float > alphaRefValue;
-		castor::AtomicGroupChangeTracked< VkCompareOp > alphaFunc;
-		castor::AtomicGroupChangeTracked< VkCompareOp > blendAlphaFunc;
+		castor::AtomicGroupChangeTracked< ComparisonFunc > alphaFunc;
+		castor::AtomicGroupChangeTracked< ComparisonFunc > blendAlphaFunc;
 	};
 
 	struct AlphaTestComponent
@@ -127,20 +127,20 @@ namespace castor3d
 
 		bool hasAlphaTest()const
 		{
-			return getAlphaFunc() != VK_COMPARE_OP_ALWAYS;
+			return getAlphaFunc() != ComparisonFunc::eAlways;
 		}
 
 		bool hasBlendAlphaTest()const
 		{
-			return getBlendAlphaFunc() != VK_COMPARE_OP_ALWAYS;
+			return getBlendAlphaFunc() != ComparisonFunc::eAlways;
 		}
 
-		VkCompareOp getAlphaFunc()const
+		ComparisonFunc getAlphaFunc()const
 		{
 			return m_value.alphaFunc;
 		}
 
-		VkCompareOp getBlendAlphaFunc()const
+		ComparisonFunc getBlendAlphaFunc()const
 		{
 			return m_value.blendAlphaFunc;
 		}
@@ -150,12 +150,12 @@ namespace castor3d
 			return m_value.alphaRefValue;
 		}
 
-		void setAlphaFunc( VkCompareOp value )
+		void setAlphaFunc( ComparisonFunc value )
 		{
 			m_value.alphaFunc = value;
 		}
 
-		void setBlendAlphaFunc( VkCompareOp value )
+		void setBlendAlphaFunc( ComparisonFunc value )
 		{
 			m_value.blendAlphaFunc = value;
 		}

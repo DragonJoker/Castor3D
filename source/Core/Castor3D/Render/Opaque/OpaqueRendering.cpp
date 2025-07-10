@@ -343,7 +343,7 @@ namespace castor3d
 		{
 			result.addDependency( m_ssao->getLastPass() );
 			result.addImplicitColourView( m_ssao->getResult().sampledViewId
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+				, ImageLayout::eShaderReadOnly );
 		}
 
 		if ( VisibilityResolvePass::useCompute() )
@@ -443,7 +443,7 @@ namespace castor3d
 		{
 			result.addDependency( m_ssao->getLastPass() );
 			result.addImplicitColourView( m_ssao->getResult().sampledViewId
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+				, ImageLayout::eShaderReadOnly );
 		}
 
 		result.addInOutDepthStencilView( targetDepth );
@@ -536,7 +536,7 @@ namespace castor3d
 		{
 			result.addDependency( m_ssao->getLastPass() );
 			result.addImplicitColourView( m_ssao->getResult().sampledViewId
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+				, ImageLayout::eShaderReadOnly );
 		}
 
 		if ( isDeferredLighting )

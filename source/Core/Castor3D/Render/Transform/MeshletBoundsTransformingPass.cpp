@@ -30,7 +30,7 @@ namespace castor3d
 			, context
 			, graph
 			, { crg::defaultV< crg::RunnablePass::InitialiseCallback >
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
+				, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
 				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t ){ doRecordInto( ctx, cb ); }
 				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
 				, crg::RunnablePass::IsEnabledCallback( [this](){ return !m_transformPasses.empty(); } )

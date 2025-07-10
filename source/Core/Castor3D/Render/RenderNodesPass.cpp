@@ -221,8 +221,8 @@ namespace castor3d
 		, RenderPassTypeID renderPassTypeId
 		, LightingModelID lightingModelId
 		, BackgroundModelID backgroundModelId
-		, VkCompareOp alphaFunc
-		, VkCompareOp blendAlphaFunc
+		, ComparisonFunc alphaFunc
+		, ComparisonFunc blendAlphaFunc
 		, TextureCombine const & textures
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -791,7 +791,7 @@ namespace castor3d
 
 		if ( checkFlag( m_filters, RenderFilter::eAlphaTest ) )
 		{
-			flags.alphaFunc = VK_COMPARE_OP_ALWAYS;
+			flags.alphaFunc = ComparisonFunc::eAlways;
 		}
 
 		if ( checkFlag( m_filters, RenderFilter::eAlphaBlend )
@@ -826,7 +826,7 @@ namespace castor3d
 
 		if ( flags.submesh.hasPassMaskFlag )
 		{
-			flags.alphaFunc = VK_COMPARE_OP_GREATER;
+			flags.alphaFunc = ComparisonFunc::eGreater;
 		}
 
 		if ( !flags.submesh.hasColourFlag )

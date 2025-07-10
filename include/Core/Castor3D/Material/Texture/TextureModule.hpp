@@ -15,6 +15,23 @@ namespace castor3d
 	/**@name Texture */
 	//@{
 
+	using crg::FilterMode;
+	using crg::MipmapMode;
+	using crg::WrapMode;
+
+	enum class BorderColour
+	{
+		eFloatTransparentBlack,
+		eIntTransparentBlack,
+		eFloatOpaqueBlack,
+		eIntOpaqueBlack,
+		eFloatOpaqueWhite,
+		eIntOpaqueWhite,
+		CU_ScopedEnumBounds( eFloatTransparentBlack, eIntOpaqueWhite )
+	};
+	C3D_API castor::String getName( BorderColour v );
+	C3D_API VkBorderColor convert( BorderColour v );
+	C3D_API BorderColour convert( VkBorderColor v );
 	/**
 	*\~english
 	*\brief
@@ -229,7 +246,7 @@ namespace castor3d
 	// ARGB => 4 components => 4 channels per configuration.
 	using TextureFlagConfigurations = castor::Array< TextureFlagConfiguration, 4u >;
 
-	castor::OutputStream & operator<<( castor::OutputStream & stream, castor::ImageLayout const & rhs );
+	castor::OutputStream & operator<<( castor::OutputStream & stream, castor::ImageMemoryLayout const & rhs );
 	castor::OutputStream & operator<<( castor::OutputStream & stream, castor::Image const & rhs );
 	castor::OutputStream & operator<<( castor::OutputStream & stream, TextureLayout const & layout );
 	/**
@@ -324,7 +341,7 @@ namespace castor3d
 		, castor::PxBufferBaseUPtr buffer
 		, bool isStatic = false );
 	C3D_API uint32_t getMipLevels( VkExtent3D const & extent
-		, VkFormat format );
+		, castor::PixelFormat format );
 
 	//@}
 	//@}

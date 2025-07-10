@@ -178,8 +178,8 @@ namespace castor3d
 			, RenderPassTypeID renderPassTypeId
 			, LightingModelID lightingModelId
 			, BackgroundModelID backgroundModelId
-			, VkCompareOp alphaFunc
-			, VkCompareOp blendAlphaFunc
+			, ComparisonFunc alphaFunc
+			, ComparisonFunc blendAlphaFunc
 			, TextureCombine const & textures
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -311,8 +311,8 @@ namespace castor3d
 			, RenderPassTypeID renderPassTypeId
 			, LightingModelID lightingModelId
 			, BackgroundModelID backgroundModelId
-			, VkCompareOp alphaFunc
-			, VkCompareOp blendAlphaFunc
+			, ComparisonFunc alphaFunc
+			, ComparisonFunc blendAlphaFunc
 			, TextureCombine const & textures
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags

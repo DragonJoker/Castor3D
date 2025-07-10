@@ -253,7 +253,7 @@ namespace castor
 		reg.unregisterLoader( stbil::listExtensions() );
 	}
 
-	ImageLayout StbImageLoader::load( String const & imageFormat
+	ImageMemoryLayout StbImageLoader::load( String const & imageFormat
 		, uint8_t const * data
 		, uint32_t size
 		, PxBufferBaseUPtr & buffer )const
@@ -267,6 +267,6 @@ namespace castor
 			buffer = stbil::load8BitsPerChannel( data, size );
 		}
 
-		return ImageLayout{ ImageLayout::e2D, *buffer };
+		return ImageMemoryLayout{ ImageMemoryLayout::e2D, *buffer };
 	}
 }

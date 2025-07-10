@@ -121,14 +121,14 @@ namespace castor3d
 
 	namespace skybox
 	{
-		static ashes::ImageCreateInfo doGetImageCreate( VkFormat format
+		static ashes::ImageCreateInfo doGetImageCreate( castor::PixelFormat format
 			, castor::Size const & dimensions
 			, bool attachment
 			, uint32_t mipLevel = 1u )
 		{
 			return ashes::ImageCreateInfo{ VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 				, VK_IMAGE_TYPE_2D
-				, format
+				, convert( format )
 				, { dimensions.getWidth(), dimensions.getHeight(), 1u }
 				, mipLevel
 				, 6u
@@ -430,7 +430,7 @@ namespace castor3d
 		: SceneBackground{ engine, scene, name + cuT( "Skybox" ), cuT( "skybox" ), true }
 	{
 		m_texture = castor::makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
-			, skybox::doGetImageCreate( VK_FORMAT_R8G8B8A8_UNORM, { 16u, 16u }, false )
+			, skybox::doGetImageCreate( castor::PixelFormat::eR8G8B8A8_UNORM, { 16u, 16u }, false )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackground_Colour" )
 			, true /* isStatic */ );
@@ -603,8 +603,8 @@ namespace castor3d
 				, m_texture->getTexture()
 				, layer->getLayout()
 				, dstSubresource
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT );
+				, ImageLayout::eShaderReadOnly
+				, PipelineStageFlags::eFragmentShader );
 			dstSubresource.baseArrayLayer++;
 		}
 	}
@@ -615,9 +615,9 @@ namespace castor3d
 	{
 		pass.addSampledView( m_textureId.wholeViewId
 			, index
-			, crg::SamplerDesc{ VK_FILTER_LINEAR
-				, VK_FILTER_LINEAR
-				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+			, crg::SamplerDesc{ FilterMode::eLinear
+				, FilterMode::eLinear
+				, MipmapMode::eLinear } );
 		++index;
 	}
 
@@ -652,15 +652,15 @@ namespace castor3d
 			doInitialiseLayerTexture( device );
 		}
 
-		m_hdr = m_texture->getPixelFormat() == VK_FORMAT_R32_SFLOAT
-			|| m_texture->getPixelFormat() == VK_FORMAT_R32G32_SFLOAT
-			|| m_texture->getPixelFormat() == VK_FORMAT_R32G32B32_SFLOAT
-			|| m_texture->getPixelFormat() == VK_FORMAT_R32G32B32A32_SFLOAT
-			|| m_texture->getPixelFormat() == VK_FORMAT_R16_SFLOAT
-			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16_SFLOAT
-			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16B16_SFLOAT
-			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16B16A16_SFLOAT;
-		m_srgb = isSRGBFormat( convert( m_texture->getPixelFormat() ) );
+		m_hdr = m_texture->getPixelFormat() == castor::PixelFormat::eR32_SFLOAT
+			|| m_texture->getPixelFormat() == castor::PixelFormat::eR32G32_SFLOAT
+			|| m_texture->getPixelFormat() == castor::PixelFormat::eR32G32B32_SFLOAT
+			|| m_texture->getPixelFormat() == castor::PixelFormat::eR32G32B32A32_SFLOAT
+			|| m_texture->getPixelFormat() == castor::PixelFormat::eR16_SFLOAT
+			|| m_texture->getPixelFormat() == castor::PixelFormat::eR16G16_SFLOAT
+			|| m_texture->getPixelFormat() == castor::PixelFormat::eR16G16B16_SFLOAT
+			|| m_texture->getPixelFormat() == castor::PixelFormat::eR16G16B16A16_SFLOAT;
+		m_srgb = castor::isSRGBFormat( m_texture->getPixelFormat() );
 		return m_texture->initialise( device );
 	}
 
@@ -683,7 +683,7 @@ namespace castor3d
 			, { maxDim, maxDim, 1u }
 			, 6u
 			, ashes::getMaxMipCount( { maxDim, maxDim, maxDim } )
-			, convert( m_layerTexture[0]->getPxBuffer().getFormat() )
+			, m_layerTexture[0]->getPxBuffer().getFormat()
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
 		m_textureId.create();
@@ -711,8 +711,8 @@ namespace castor3d
 				, texture
 				, image.getLayout()
 				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, image.getLayout().depthLayers() }
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT );
+				, ImageLayout::eShaderReadOnly
+				, PipelineStageFlags::eFragmentShader );
 		}
 
 		// create the cube texture if needed.
@@ -739,7 +739,7 @@ namespace castor3d
 
 		transformEquirectangularToCube( *m_equiTexture, *m_texture, device, queueData );
 		m_texture->generateMipmaps( queueData
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, ImageLayout::eShaderReadOnly );
 		m_equiTexture->cleanup();
 	}
 
@@ -771,7 +771,7 @@ namespace castor3d
 		buffer = adaptBuffer( *buffer
 			, name
 			, true );
-		castor::ImageLayout layout{ lines.getLayout().type, *buffer };
+		castor::ImageMemoryLayout layout{ lines.getLayout().type, *buffer };
 		log::info << "Loaded skybox image [" << name << "] (" << layout << ")" << std::endl;
 		return castor::makeUnique< castor::Image >( lines.getName()
 			, lines.getPath()

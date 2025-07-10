@@ -27,16 +27,16 @@ namespace castor
 		bool operator()( castor3d::AlphaTestComponent const & object
 			, StringStream & file )override
 		{
-			static castor::Map< VkCompareOp, String > alphaFuncs
+			static castor::Map< castor3d::ComparisonFunc, String > alphaFuncs
 			{
-				{ VK_COMPARE_OP_ALWAYS, cuT( "always" ) },
-				{ VK_COMPARE_OP_LESS, cuT( "less" ) },
-				{ VK_COMPARE_OP_LESS_OR_EQUAL, cuT( "less_equal" ) },
-				{ VK_COMPARE_OP_EQUAL, cuT( "equal" ) },
-				{ VK_COMPARE_OP_NOT_EQUAL, cuT( "not_equal" ) },
-				{ VK_COMPARE_OP_GREATER_OR_EQUAL, cuT( "greater_equal" ) },
-				{ VK_COMPARE_OP_GREATER, cuT( "greater" ) },
-				{ VK_COMPARE_OP_NEVER, cuT( "never" ) },
+				{ castor3d::ComparisonFunc ::eAlways, cuT( "always" ) },
+				{ castor3d::ComparisonFunc ::eLess, cuT( "less" ) },
+				{ castor3d::ComparisonFunc ::eLessOrEqual, cuT( "less_equal" ) },
+				{ castor3d::ComparisonFunc ::eEqual, cuT( "equal" ) },
+				{ castor3d::ComparisonFunc ::eNotEqual, cuT( "not_equal" ) },
+				{ castor3d::ComparisonFunc ::eGreaterOrEqual, cuT( "greater_equal" ) },
+				{ castor3d::ComparisonFunc ::eGreater, cuT( "greater" ) },
+				{ castor3d::ComparisonFunc ::eNever, cuT( "never" ) },
 			};
 			bool result = true;
 
@@ -74,7 +74,7 @@ namespace castor3d
 				params[0]->get( uiFunc );
 				params[1]->get( fFloat );
 				auto & component = getPassComponent< AlphaTestComponent >( *blockContext );
-				component.setAlphaFunc( VkCompareOp( uiFunc ) );
+				component.setAlphaFunc( ComparisonFunc( uiFunc ) );
 				component.setAlphaRefValue( fFloat );
 			}
 		}
@@ -93,7 +93,7 @@ namespace castor3d
 				params[0]->get( uiFunc );
 				params[1]->get( fFloat );
 				auto & component = getPassComponent< AlphaTestComponent >( *blockContext );
-				component.setBlendAlphaFunc( VkCompareOp( uiFunc ) );
+				component.setBlendAlphaFunc( ComparisonFunc( uiFunc ) );
 				component.setAlphaRefValue( fFloat );
 			}
 		}
@@ -178,12 +178,12 @@ namespace castor3d
 			, CSCNSection::ePass
 			, cuT( "alpha_func" )
 			, alptst::parserPassAlphaFunc
-			, { castor::makeParameter< castor::ParameterType::eCheckedText, VkCompareOp >(), castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { castor::makeParameter< castor::ParameterType::eCheckedText, ComparisonFunc >(), castor::makeParameter< castor::ParameterType::eFloat >() } );
 		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "blend_alpha_func" )
 			, alptst::parserPassBlendAlphaFunc
-			, { castor::makeParameter< castor::ParameterType::eCheckedText, VkCompareOp >(), castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { castor::makeParameter< castor::ParameterType::eCheckedText, ComparisonFunc >(), castor::makeParameter< castor::ParameterType::eFloat >() } );
 	}
 
 	void AlphaTestComponent::Plugin::zeroBuffer( Pass const & pass
@@ -223,14 +223,14 @@ namespace castor3d
 		vis.visit( cuT( "Alpha func" )
 			, m_value.alphaFunc
 			, names
-			, ConfigurationVisitorBase::OnEnumValueChangeT< VkCompareOp >( [this]( VkCompareOp, VkCompareOp newV )
+			, ConfigurationVisitorBase::OnEnumValueChangeT< ComparisonFunc >( [this]( ComparisonFunc, ComparisonFunc newV )
 			{
 				m_value.alphaFunc = newV;
 			} ) );
 		vis.visit( cuT( "Blend alpha func" )
 			, m_value.blendAlphaFunc
 			, names
-			, ConfigurationVisitorBase::OnEnumValueChangeT< VkCompareOp >( [this]( VkCompareOp, VkCompareOp newV )
+			, ConfigurationVisitorBase::OnEnumValueChangeT< ComparisonFunc >( [this]( ComparisonFunc, ComparisonFunc newV )
 			{
 				m_value.blendAlphaFunc = newV;
 			} ) );

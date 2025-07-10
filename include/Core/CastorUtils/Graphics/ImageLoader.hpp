@@ -34,7 +34,7 @@ namespace castor
 		 *\param[out]	buffer		Reçoit le buffer.
 		 *\return		Le layout de l'image.
 		 */
-		CU_API virtual ImageLayout load( String const & imageFormat
+		CU_API virtual ImageMemoryLayout load( String const & imageFormat
 			, uint8_t const * data
 			, uint32_t size
 			, PxBufferBaseUPtr & buffer )const = 0;

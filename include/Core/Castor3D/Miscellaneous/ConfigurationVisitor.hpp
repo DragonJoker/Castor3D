@@ -230,7 +230,7 @@ namespace castor3d
 		/**@{*/
 		void visit( castor::String const & name
 			, crg::ImageViewId const & viewId
-			, VkImageLayout layout
+			, ImageLayout layout
 			, TextureFactors const & factors = {} )
 		{
 			if ( doFilter( viewId, factors ) )
@@ -241,7 +241,7 @@ namespace castor3d
 
 		void visit( castor::String const & name
 			, Texture const & texture
-			, VkImageLayout layout
+			, ImageLayout layout
 			, TextureFactors const & factors = {} )
 		{
 			visit( name, texture.sampledViewId, layout, factors );
@@ -575,7 +575,7 @@ namespace castor3d
 	private:
 		C3D_API virtual void doVisit( castor::String const & name
 			, crg::ImageViewId viewId
-			, VkImageLayout layout
+			, ImageLayout layout
 			, TextureFactors const & factors ) = 0;
 
 	public:
@@ -1089,7 +1089,7 @@ namespace castor3d
 	private:
 		void doVisit( castor::String const & name
 			, crg::ImageViewId viewId
-			, VkImageLayout layout
+			, ImageLayout layout
 			, TextureFactors const & factors = TextureFactors{} )override
 		{
 		}

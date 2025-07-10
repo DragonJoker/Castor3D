@@ -48,7 +48,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/HeightMapToNormalMap.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Graphics/ImageCache.hpp>
-#include <CastorUtils/Graphics/ImageLayout.hpp>
+#include <CastorUtils/Graphics/ImageMemoryLayout.hpp>
 #include <CastorUtils/Graphics/ImageLoader.hpp>
 #include <CastorUtils/Graphics/ImageWriter.hpp>
 #include <CastorUtils/Graphics/PixelBuffer.hpp>

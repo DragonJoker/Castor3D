@@ -1268,7 +1268,7 @@ namespace castor3d
 								, material
 								, baseSurface } );
 						materials.blendMaterials( output
-							, VK_COMPARE_OP_ALWAYS
+							, ComparisonFunc::eAlways
 							, flags
 							, textureConfigs
 							, textureAnims
@@ -2034,7 +2034,7 @@ namespace castor3d
 			if ( scattering )
 			{
 				attaches.emplace_back( VkAttachmentDescription{ 0u
-					, scattering->getFormat()
+					, convert( scattering->getFormat() )
 					, VK_SAMPLE_COUNT_1_BIT
 					, ( first ? VK_ATTACHMENT_LOAD_OP_CLEAR : VK_ATTACHMENT_LOAD_OP_LOAD )
 					, VK_ATTACHMENT_STORE_OP_STORE
@@ -2172,7 +2172,7 @@ namespace castor3d
 			, context
 			, graph
 			, { []( uint32_t ){}
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( useCompute() ? VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT : VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT ); } )
+				, GetPipelineStateCallback( [](){ return crg::getPipelineState( useCompute() ? PipelineStageFlags::eComputeShader : PipelineStageFlags::eColorAttachmentOutput ); } )
 				, [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); }
 				, GetPassIndexCallback( [](){ return 0u; } )
 				, IsEnabledCallback( [this](){ return doIsEnabled(); } )
@@ -2320,8 +2320,8 @@ namespace castor3d
 		, RenderPassTypeID renderPassTypeId
 		, LightingModelID lightingModelId
 		, BackgroundModelID backgroundModelId
-		, VkCompareOp alphaFunc
-		, VkCompareOp blendAlphaFunc
+		, ComparisonFunc alphaFunc
+		, ComparisonFunc blendAlphaFunc
 		, TextureCombine const & textures
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -2628,7 +2628,7 @@ namespace castor3d
 
 		context.getContext().vkCmdEndRenderPass( commandBuffer );
 		context.setLayoutState( m_targetImage.front()
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
+			, makeLayoutState( ImageLayout::eColorAttachment ) );
 	}
 
 	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PipelineFlags const & flags

@@ -30,19 +30,19 @@ namespace castor3d
 	};
 	C3D_API castor::String getTextureName( PpTexture texture );
 	C3D_API castor::String getTexName( PpTexture texture );
-	C3D_API VkFormat getFormat( RenderDevice const & device, PpTexture texture );
+	C3D_API castor::PixelFormat getFormat( RenderDevice const & device, PpTexture texture );
 	C3D_API VkClearValue getClearValue( PpTexture texture );
 	C3D_API VkImageUsageFlags getUsageFlags( PpTexture texture );
-	C3D_API VkBorderColor getBorderColor( PpTexture texture );
+	C3D_API BorderColour getBorderColor( PpTexture texture );
 	inline uint32_t getMipLevels( RenderDevice const & /*device*/
 		, PpTexture /*texture*/
 		, castor::Size const & /*size*/ )
 	{
 		return 1u;
 	}
-	inline VkCompareOp getCompareOp( PpTexture /*texture*/ )
+	inline ComparisonFunc getCompareOp( PpTexture /*texture*/ )
 	{
-		return VK_COMPARE_OP_NEVER;
+		return ComparisonFunc::eNever;
 	}
 	/**
 	*\~english
