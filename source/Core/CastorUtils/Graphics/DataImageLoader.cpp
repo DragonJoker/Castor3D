@@ -46,6 +46,6 @@ namespace castor
 			, format
 			, input
 			, format );
-		return ImageMemoryLayout{ ImageMemoryLayout::e2D, *outbuffer };
+		return ImageMemoryLayout{ ImageViewType::e2D, *outbuffer };
 	}
 }

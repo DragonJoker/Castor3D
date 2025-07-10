@@ -81,6 +81,6 @@ namespace castor
 			buffer = exrl::doLoad32BitsPerChannel( data, size );
 		}
 
-		return ImageMemoryLayout{ ImageMemoryLayout::e2D, *buffer };
+		return ImageMemoryLayout{ ImageViewType::e2D, *buffer };
 	}
 }

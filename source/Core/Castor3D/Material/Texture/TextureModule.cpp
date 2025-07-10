@@ -46,6 +46,29 @@ namespace castor3d
 
 			return *image;
 		}
+
+		static castor::StringView getImageViewTypeName( ImageViewType t )
+		{
+			switch ( t )
+			{
+			case ImageViewType::e1D:
+				return cuT( "1D" );
+			case ImageViewType::e2D:
+				return cuT( "2D" );
+			case ImageViewType::e3D:
+				return cuT( "3D" );
+			case ImageViewType::eCube:
+				return cuT( "Cube" );
+			case ImageViewType::e1DArray:
+				return cuT( "1DArray" );
+			case ImageViewType::e2DArray:
+				return cuT( "2DArray" );
+			case ImageViewType::eCubeArray:
+				return cuT( "CubeArray" );
+			default:
+				return cuT( "UnknownImageType" );
+			}
+		}
 	}
 
 	//*********************************************************************************************
@@ -143,7 +166,7 @@ namespace castor3d
 
 	castor::OutputStream & operator<<( castor::OutputStream & stream, castor::ImageMemoryLayout const & rhs )
 	{
-		stream << castor::ImageMemoryLayout::getName( rhs.type )
+		stream << texmod::getImageViewTypeName( rhs.type )
 			<< cuT( ", " ) << castor::makeString( ashes::getName( convert( rhs.format ) ) )
 			<< cuT( ", " ) << rhs.extent->x
 			<< cuT( "x" ) << rhs.extent->y;

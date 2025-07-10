@@ -198,11 +198,11 @@ namespace castor
 			, sourceFmt );
 		FreeImage_Unload( fiImage );
 		FreeImage_CloseMemory( fiMemory );
-		return ImageMemoryLayout{ ImageMemoryLayout::e2D, *buffer };
+		return ImageMemoryLayout{ ImageViewType::e2D, *buffer };
 
 #else
 
-		return ImageMemoryLayout{ ImageMemoryLayout::e2D };
+		return ImageMemoryLayout{ ImageViewType::e2D };
 
 #endif
 	}

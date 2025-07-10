@@ -131,7 +131,7 @@ namespace castor3d
 			uploader.pushUpload( m_buffer->getPtr()
 				, m_buffer->getSize()
 				, m_texture->getTexture()
-				, castor::ImageMemoryLayout{ castor::ImageMemoryLayout::e2D, *m_buffer }
+				, castor::ImageMemoryLayout{ castor3d::ImageViewType::e2D, *m_buffer }
 				, dstSubresource
 				, ImageLayout::eShaderReadOnly
 				, PipelineStageFlags::eFragmentShader );

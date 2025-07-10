@@ -80,12 +80,12 @@ namespace castor
 
 		ImageMemoryLayout result;
 		result.type = texture->baseDepth > 1u
-			? ImageMemoryLayout::Type::e3D
+			? ImageViewType::e3D
 			: ( texture->isCubemap
-				? ImageMemoryLayout::Type::eCube
+				? ImageViewType::eCube
 				: ( texture->isArray
-					? ImageMemoryLayout::Type::e2DArray
-					: ImageMemoryLayout::Type::e2D ) );
+					? ImageViewType::e2DArray
+					: ImageViewType::e2D ) );
 		result.format = format;
 		result.extent = { texture->baseWidth, texture->baseHeight, texture->baseDepth };
 		result.layers = texture->numLayers;

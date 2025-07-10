@@ -267,6 +267,6 @@ namespace castor
 			buffer = stbil::load8BitsPerChannel( data, size );
 		}
 
-		return ImageMemoryLayout{ ImageMemoryLayout::e2D, *buffer };
+		return ImageMemoryLayout{ ImageViewType::e2D, *buffer };
 	}
 }

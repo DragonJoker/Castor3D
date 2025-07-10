@@ -361,7 +361,7 @@ namespace castor3d
 			<< cuT( ")], Offset: " ) << srcOffset
 			<< cuT( ", Upload Size: " ) << data.srcSize
 			<< std::endl );
-		bool is3D = data.dstLayout.type == castor::ImageMemoryLayout::e3D;
+		bool is3D = data.dstLayout.type == ImageViewType::e3D;
 		auto & dstImage = *data.dstImage;
 
 		ashes::VkBufferImageCopyArray copies;

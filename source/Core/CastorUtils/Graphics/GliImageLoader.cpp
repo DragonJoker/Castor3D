@@ -40,27 +40,27 @@ namespace castor
 			}
 		}
 
-		static ImageMemoryLayout::Type convert( gli::target target )
+		static ImageViewType convert( gli::target target )
 		{
 			switch ( target )
 			{
 			case gli::TARGET_1D:
-				return ImageMemoryLayout::e1D;
+				return ImageViewType::e1D;
 			case gli::TARGET_1D_ARRAY:
-				return ImageMemoryLayout::e1DArray;
+				return ImageViewType::e1DArray;
 			case gli::TARGET_2D:
-				return ImageMemoryLayout::e2D;
+				return ImageViewType::e2D;
 			case gli::TARGET_2D_ARRAY:
-				return ImageMemoryLayout::e2DArray;
+				return ImageViewType::e2DArray;
 			case gli::TARGET_3D:
-				return ImageMemoryLayout::e3D;
+				return ImageViewType::e3D;
 			case gli::TARGET_CUBE:
-				return ImageMemoryLayout::eCube;
+				return ImageViewType::eCube;
 			case gli::TARGET_CUBE_ARRAY:
-				return ImageMemoryLayout::eCubeArray;
+				return ImageViewType::eCubeArray;
 			default:
 				CU_Failure( "Unsupported target type" );
-				return ImageMemoryLayout::e2D;
+				return ImageViewType::e2D;
 			}
 		}
 

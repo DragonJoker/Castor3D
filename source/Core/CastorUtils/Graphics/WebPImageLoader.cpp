@@ -55,7 +55,7 @@ namespace castor
 		}
 
 		ImageMemoryLayout result;
-		result.type = ImageMemoryLayout::Type::e2D;
+		result.type = ImageViewType::e2D;
 		result.format = PixelFormat::eR8G8B8A8_SRGB;
 		result.extent = { config.input.width, config.input.height, 1u };
 		result.layers = 1u;
