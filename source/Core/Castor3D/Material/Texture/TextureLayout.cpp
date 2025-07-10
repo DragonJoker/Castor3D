@@ -522,13 +522,13 @@ namespace castor3d
 			}
 		}
 
-		static castor::ImageMemoryLayout::Type convert( VkImageCreateFlags flags
+		static ImageViewType convert( VkImageCreateFlags flags
 			, VkExtent3D const & extent
 			, uint32_t arrayLayers )
 		{
 			if ( extent.depth > 1u )
 			{
-				return castor::ImageMemoryLayout::e3D;
+				return ImageViewType::e3D;
 			}
 
 			if ( extent.height > 1u || extent.width <= 1u )
@@ -537,29 +537,29 @@ namespace castor3d
 				{
 					if ( arrayLayers == 6u )
 					{
-						return castor::ImageMemoryLayout::eCube;
+						return ImageViewType::eCube;
 					}
 
 					if ( arrayLayers > 6u && ( arrayLayers % 6u == 0u ) )
 					{
-						return castor::ImageMemoryLayout::eCubeArray;
+						return ImageViewType::eCubeArray;
 					}
 				}
 
 				if ( arrayLayers > 1u )
 				{
-					return castor::ImageMemoryLayout::e2DArray;
+					return ImageViewType::e2DArray;
 				}
 
-				return castor::ImageMemoryLayout::e2D;
+				return ImageViewType::e2D;
 			}
 
 			if ( arrayLayers > 1u )
 			{
-				return castor::ImageMemoryLayout::e1DArray;
+				return ImageViewType::e1DArray;
 			}
 
-			return castor::ImageMemoryLayout::e1D;
+			return ImageViewType::e1D;
 		}
 
 		static castor::ImageMemoryLayout convert( ashes::ImageCreateInfo const & value )
@@ -576,22 +576,22 @@ namespace castor3d
 			};
 		}
 
-		static VkImageType convert( castor::ImageMemoryLayout::Type type )
+		static VkImageType convert( ImageViewType type )
 		{
 			switch ( type )
 			{
-			case castor::ImageMemoryLayout::e1D:
-			case castor::ImageMemoryLayout::e1DArray:
+			case ImageViewType::e1D:
+			case ImageViewType::e1DArray:
 				return VK_IMAGE_TYPE_1D;
-			case castor::ImageMemoryLayout::e2D:
-			case castor::ImageMemoryLayout::eCube:
-			case castor::ImageMemoryLayout::e2DArray:
-			case castor::ImageMemoryLayout::eCubeArray:
+			case ImageViewType::e2D:
+			case ImageViewType::eCube:
+			case ImageViewType::e2DArray:
+			case ImageViewType::eCubeArray:
 				return VK_IMAGE_TYPE_2D;
-			case castor::ImageMemoryLayout::e3D:
+			case ImageViewType::e3D:
 				return VK_IMAGE_TYPE_3D;
 			default:
-				CU_Failure( "Unexpected castor::ImageMemoryLayout::Type" );
+				CU_Failure( "Unexpected ImageViewType" );
 				return VK_IMAGE_TYPE_2D;
 			}
 		}
@@ -1062,11 +1062,11 @@ namespace castor3d
 	{
 		auto layersDepth = std::max( layout.extent->z, layout.layers );
 		auto layoutType = ( m_info->imageType == VK_IMAGE_TYPE_3D && layersDepth > 1u )
-			? castor::ImageMemoryLayout::e3D
+			? ImageViewType::e3D
 			: layout.type;
 		m_image.getLayout().type = layoutType;
-		m_image.getLayout().extent->z = ( layoutType == castor::ImageMemoryLayout::e3D ? layersDepth : 1u );
-		m_image.getLayout().layers = ( layoutType == castor::ImageMemoryLayout::e3D ? 1u : layersDepth );
+		m_image.getLayout().extent->z = ( layoutType == ImageViewType::e3D ? layersDepth : 1u );
+		m_image.getLayout().layers = ( layoutType == ImageViewType::e3D ? 1u : layersDepth );
 
 		m_info->imageType = texlayt::convert( layoutType );
 		m_info->extent.width = layout.extent->x;

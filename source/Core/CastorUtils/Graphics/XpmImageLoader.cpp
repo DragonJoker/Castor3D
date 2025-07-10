@@ -126,6 +126,6 @@ namespace castor
 			, pixels.getFormat()
 			, pixels.getConstPtr()
 			, pixels.getFormat() );
-		return ImageMemoryLayout{ ImageMemoryLayout::e2D, *outbuffer };
+		return ImageMemoryLayout{ ImageViewType::e2D, *outbuffer };
 	}
 }

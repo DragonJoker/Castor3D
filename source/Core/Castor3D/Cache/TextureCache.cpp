@@ -155,8 +155,8 @@ namespace castor3d
 			if ( imagePixels->isZInverted() )
 				buffer->invertZ();
 
-			castor::ImageMemoryLayout layout{ ( ( buffer->getLayers() == 1u && image.getLayout().type == castor::ImageMemoryLayout::e2DArray )
-					? castor::ImageMemoryLayout::e2D
+			castor::ImageMemoryLayout layout{ ( ( buffer->getLayers() == 1u && image.getLayout().type == ImageViewType::e2DArray )
+					? ImageViewType::e2D
 					: image.getLayout().type )
 				, *buffer };
 			return engine.createImage( name

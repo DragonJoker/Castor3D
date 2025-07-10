@@ -33,7 +33,7 @@ namespace castor3d
 		static castor::ImageMemoryLayout getLayout( ashes::ImageViewCreateInfo const & value
 			, castor::Point3ui const & extent )
 		{
-			return castor::ImageMemoryLayout{ castor::ImageMemoryLayout::Type( value->viewType )
+			return castor::ImageMemoryLayout{ ImageViewType( value->viewType )
 				, castor::PixelFormat( value->format )
 				, extent
 				, value->subresourceRange.baseArrayLayer

@@ -17,14 +17,12 @@ See LICENSE file in root folder
 #include <list>
 #include <locale>
 #include <map>
-#include <map>
 #include <memory>
 #include <regex>
 #include <set>
 #include <sstream>
 #include <string>
 #include <deque>
-#include <sstream>
 #include <vector>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 

@@ -11,52 +11,16 @@ See LICENSE file in root folder
 
 namespace castor
 {
+	using crg::ImageViewType;
+
 	struct ImageMemoryLayout
 	{
-		enum Type
-			: uint8_t
-		{
-#pragma clang push
-#pragma clang diagnostic ignored "-Wduplicate-enum"
-			e1D = 0,
-			e2D = 1,
-			e3D = 2,
-			eCube = 3,
-			e1DArray = 4,
-			e2DArray = 5,
-			eCubeArray = 6,
-			CU_EnumBounds( Type, e1D, eCubeArray ),
-#pragma clang pop
-		};
-		static StringView getName( Type t )
-		{
-			switch ( t )
-			{
-			case Type::e1D:
-				return cuT( "1D" );
-			case Type::e2D:
-				return cuT( "2D" );
-			case Type::e3D:
-				return cuT( "3D" );
-			case Type::eCube:
-				return cuT( "Cube" );
-			case Type::e1DArray:
-				return cuT( "1DArray" );
-			case Type::e2DArray:
-				return cuT( "2DArray" );
-			case Type::eCubeArray:
-				return cuT( "CubeArray" );
-			default:
-				return cuT( "UnknowImageType" );
-			}
-		}
-
 		using Buffer = ByteArrayView;
 		using ConstBuffer = ConstByteArrayView;
 		using DeviceSize = uint64_t;
 		using SubresourceRange = Range< DeviceSize >;
 
-		explicit ImageMemoryLayout( Type type = e2D
+		explicit ImageMemoryLayout( ImageViewType type = ImageViewType::e2D
 			, PixelFormat format = PixelFormat::eR8G8B8A8_UNORM
 			, Point3ui extent = { 1u, 1u, 1u }
 			, uint32_t baseLayer = 0u
@@ -80,7 +44,7 @@ namespace castor
 		{
 		}
 
-		explicit ImageMemoryLayout( Type type
+		explicit ImageMemoryLayout( ImageViewType type
 			, PxBufferBase const & buffer )
 			: ImageMemoryLayout{ type
 				, buffer.getFormat()
@@ -93,11 +57,11 @@ namespace castor
 		{
 		}
 
-		static Type getType( PxBufferBase const & buffer )
+		static ImageViewType getType( PxBufferBase const & buffer )
 		{
 			return ( buffer.getLayers() > 1
-				? ( buffer.getHeight() <= 1 && buffer.getWidth() > 1 ? e1DArray : e2DArray )
-				: ( buffer.getHeight() <= 1 && buffer.getWidth() > 1 ? e1D : e2D ) );
+				? ( buffer.getHeight() <= 1 && buffer.getWidth() > 1 ? ImageViewType::e1DArray : ImageViewType::e2DArray )
+				: ( buffer.getHeight() <= 1 && buffer.getWidth() > 1 ? ImageViewType::e1D : ImageViewType::e2D ) );
 		}
 
 		Size dimensions()const noexcept
@@ -210,7 +174,7 @@ namespace castor
 			return hasSliceMipBuffer( buffer, index, level );
 		}
 
-		Type type;
+		ImageViewType type;
 		PixelFormat format;
 		Point3ui extent;
 		uint32_t baseLayer;
