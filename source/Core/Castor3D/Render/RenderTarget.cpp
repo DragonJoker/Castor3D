@@ -116,13 +116,13 @@ namespace castor3d
 					, ProgramFlag::eNone
 					, TextureCombine{}
 					, ShaderFlag::eNone
-					, VK_COMPARE_OP_ALWAYS };
+					, ComparisonFunc::eAlways };
 				IntermediatesLister visOpaque{ flags, scene, cache, intermediates };
 				technique.accept( visOpaque );
 
 				flags.m_shaderFlags |= ShaderFlag::eOpacity;
 				addFlags( flags.pass, scene.getEngine()->getPassComponentsRegister().getAlphaBlendingFlag() );
-				flags.alphaFunc = VK_COMPARE_OP_LESS;
+				flags.alphaFunc = ComparisonFunc::eLess;
 				IntermediatesLister visTransparent{ flags, scene, cache, intermediates };
 				technique.accept( visTransparent );
 			}
@@ -141,7 +141,7 @@ namespace castor3d
 					, ProgramFlag::eNone
 					, TextureCombine{}
 					, ShaderFlag::eNone
-					, VK_COMPARE_OP_ALWAYS };
+					, ComparisonFunc::eAlways };
 				IntermediatesLister vis{ flags, scene, cache, intermediates };
 				value.accept( vis );
 			}
@@ -166,7 +166,7 @@ namespace castor3d
 
 			void doVisit3D( castor::String const & name
 				, crg::ImageViewId viewId
-				, VkImageLayout layout
+				, ImageLayout layout
 				, TextureFactors const & factors )
 			{
 				auto info = viewId.data->info;
@@ -192,7 +192,7 @@ namespace castor3d
 
 			void doVisit2DArray( castor::String const & name
 				, crg::ImageViewId viewId
-				, VkImageLayout layout
+				, ImageLayout layout
 				, TextureFactors const & factors )
 			{
 				auto info = viewId.data->info;
@@ -213,8 +213,8 @@ namespace castor3d
 						if ( auto layerViewId = m_handler.createViewId( crg::ImageViewData{ viewId.data->name + castor::string::toMbString( layer )
 								, viewId.data->image
 								, layerInfo.flags
-								, layerInfo.viewType
-								, layerInfo.format
+								, castor::convert( layerInfo.viewType )
+								, castor::convert( layerInfo.format )
 								, layerInfo.subresourceRange } );
 							doFilter( layerViewId, {} ) )
 						{
@@ -231,7 +231,7 @@ namespace castor3d
 
 			void doVisit( castor::String const & name
 				, crg::ImageViewId viewId
-				, VkImageLayout layout
+				, ImageLayout layout
 				, TextureFactors const & factors )override
 			{
 				auto info = viewId.data->info;
@@ -276,8 +276,8 @@ namespace castor3d
 						result = doFilter( m_handler.createViewId( crg::ImageViewData{ viewId.data->name + castor::string::toMbString( layer )
 								, viewId.data->image
 								, layerInfo.flags
-								, layerInfo.viewType
-								, layerInfo.format
+								, castor::convert( layerInfo.viewType )
+								, castor::convert( layerInfo.format )
 								, layerInfo.subresourceRange } )
 							, factors ) && result;
 						layerInfo.subresourceRange.baseArrayLayer++;
@@ -608,7 +608,7 @@ namespace castor3d
 			{
 				auto target = blockContext->renderTarget;
 				log::info << "Loaded target [" << target->getName()
-					<< ", FMT(" << castor::makeString( ashes::getName( VkFormat( target->getPixelFormat() ) ) ) << ")"
+					<< ", FMT(" << castor::getFormatName( target->getPixelFormat() ) << ")"
 					<< ", DIM(" << target->getSize() << ")]" << std::endl;
 
 				if ( blockContext->window )
@@ -637,7 +637,7 @@ namespace castor3d
 		, m_type{ type }
 		, m_size{ size }
 		, m_safeBandedSize{ getSafeBandedSize( size ) }
-		, m_pixelFormat{ VkFormat( pixelFormat ) }
+		, m_pixelFormat{ pixelFormat }
 		, m_initialised{ false }
 		, m_resources{ getOwner()->getGraphResourceHandler() }
 		, m_index{ ++sm_uiCount }
@@ -653,13 +653,13 @@ namespace castor3d
 			, makeExtent3D( m_safeBandedSize )
 			, 1u
 			, 1u
-			, VK_FORMAT_R16G16_SFLOAT
+			, castor::PixelFormat::eR16G16_SFLOAT
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 				| VK_IMAGE_USAGE_STORAGE_BIT )
-			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+			, BorderColour::eFloatOpaqueBlack }
 		, m_srgbObjects{ Texture{ m_device
 				, m_resources
 				, cuT( "SRGBResult0" )
@@ -669,7 +669,7 @@ namespace castor3d
 				, 1u
 				, getPixelFormat()
 				, rendtgt::objectsUsageFlags
-				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+				, BorderColour::eFloatOpaqueBlack }
 			, Texture{ m_device
 				, m_resources
 				, cuT( "SRGBResult1" )
@@ -679,7 +679,7 @@ namespace castor3d
 				, 1u
 				, getPixelFormat()
 				, rendtgt::objectsUsageFlags
-				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK } }
+				, BorderColour::eFloatOpaqueBlack } }
 		, m_hdrObjects{ Texture{ m_device
 				, m_resources
 				, cuT( "HDRResult0" )
@@ -687,9 +687,9 @@ namespace castor3d
 				, makeExtent3D( m_safeBandedSize )
 				, 1u
 				, 1u
-				, VK_FORMAT_R16G16B16A16_SFLOAT
+				, castor::PixelFormat::eR16G16B16A16_SFLOAT
 				, rendtgt::objectsUsageFlags
-				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+				, BorderColour::eFloatOpaqueBlack }
 			, Texture{ m_device
 				, m_resources
 				, cuT( "HDRResult1" )
@@ -697,9 +697,9 @@ namespace castor3d
 				, makeExtent3D( m_safeBandedSize )
 				, 1u
 				, 1u
-				, VK_FORMAT_R16G16B16A16_SFLOAT
+				, castor::PixelFormat::eR16G16B16A16_SFLOAT
 				, rendtgt::objectsUsageFlags
-				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK } }
+				, BorderColour::eFloatOpaqueBlack } }
 		, m_overlays{ m_device
 			, m_resources
 			, cuT( "Overlays" )
@@ -707,11 +707,11 @@ namespace castor3d
 			, makeExtent3D( m_size )
 			, 1u
 			, 1u
-			, VK_FORMAT_R8G8B8A8_UNORM
+			, castor::PixelFormat::eR8G8B8A8_UNORM
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
-			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+			, BorderColour::eFloatOpaqueBlack }
 		, m_combined{ m_device
 			, m_resources
 			, cuT( "Target" )
@@ -723,14 +723,14 @@ namespace castor3d
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
-			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+			, BorderColour::eFloatOpaqueBlack }
 		, m_cameraUbo{ m_device }
 		, m_overlayPassDesc{ doCreateOverlayPass( nullptr, m_device ) }
 	{
 		m_graph.addInput( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampledViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			, crg::makeLayoutState( ImageLayout::eShaderReadOnly ) );
 		m_graph.addOutput( m_combined.wholeViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			, crg::makeLayoutState( ImageLayout::eShaderReadOnly ) );
 
 		for ( auto const & entry : engine.getPostEffectFactory().listRegisteredTypes() )
 		{
@@ -761,7 +761,7 @@ namespace castor3d
 				texture.create();
 				commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
 					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, texture.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+					, texture.makeShaderInputResource( ImageLayout::eUndefined ) );
 			}
 
 			for ( auto & texture : m_srgbObjects )
@@ -769,7 +769,7 @@ namespace castor3d
 				texture.create();
 				commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
 					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, texture.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+					, texture.makeShaderInputResource( ImageLayout::eUndefined ) );
 			}
 
 			commandBuffer->end();
@@ -1073,7 +1073,7 @@ namespace castor3d
 		{
 			m_scene = &scene;
 			m_graph.addInput( m_scene->getEnvironmentMap().getColourId().wholeViewId
-				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+				, crg::makeLayoutState( ImageLayout::eShaderReadOnly ) );
 			m_culler.reset();
 		}
 	}
@@ -1610,22 +1610,22 @@ namespace castor3d
 	{
 		result.emplace_back( cuT( "Target Result" )
 			, m_combined
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, ImageLayout::eShaderReadOnly );
 		result.emplace_back( cuT( "Target SRGB Colour" )
 			, m_srgbObjects.front()
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, ImageLayout::eShaderReadOnly
 			, TextureFactors{}.invert( true ) );
 		result.emplace_back( cuT( "Target HDR Colour" )
 			, m_hdrObjects.front()
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, ImageLayout::eShaderReadOnly
 			, TextureFactors{}.invert( true ) );
 		result.emplace_back( cuT( "Target Overlays" )
 			, m_overlays
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, ImageLayout::eShaderReadOnly
 			, TextureFactors{ { 0.5f, 0.5f, 0.5f }, { 0.5f, 0.5f, 0.5f } }.invert( true ) );
 		result.emplace_back( cuT( "Target Velocity" )
 			, m_velocity
-			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+			, ImageLayout::eColorAttachment
 			, TextureFactors{}.invert( true ) );
 
 		for ( auto & postEffect : m_hdrPostEffects )

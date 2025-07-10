@@ -251,8 +251,8 @@ namespace castor3d
 				, m_meshlets.size() * sizeof( Meshlet )
 				, buffer.getBuffer()
 				, buffer.getOffset()
-				, VK_ACCESS_SHADER_READ_BIT
-				, VK_PIPELINE_STAGE_MESH_SHADER_BIT_EXT );
+				, AccessFlags::eShaderRead
+				, PipelineStageFlags::eMeshShader );
 
 			count = uint32_t( m_cull.size() );
 
@@ -261,8 +261,8 @@ namespace castor3d
 				std::copy( m_cull.begin()
 					, m_cull.end()
 					, m_sourceCullBuffer.getData().begin() );
-				m_sourceCullBuffer.markDirty( VK_ACCESS_SHADER_READ_BIT
-					, VK_PIPELINE_STAGE_TASK_SHADER_BIT_NV );
+				m_sourceCullBuffer.markDirty( AccessFlags::eShaderRead
+					, PipelineStageFlags::eTaskShader );
 			}
 		}
 #endif

@@ -23,10 +23,10 @@ namespace castor3d
 			, VkCommandBufferLevel level = VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 
 		C3D_API void submit( ashes::Queue const & queue
-			, VkPipelineStageFlags stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT )const;
+			, PipelineStageFlags stage = PipelineStageFlags::eColorAttachmentOutput )const;
 		C3D_API ashes::Semaphore const & submit( ashes::Queue const & queue
 			, ashes::Semaphore const & toWait
-			, VkPipelineStageFlags stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT )const;
+			, PipelineStageFlags stage = PipelineStageFlags::eColorAttachmentOutput )const;
 		C3D_API ashes::Semaphore const & submit( ashes::Queue const & queue
 			, crg::SemaphoreWait const & toWait )const;
 		C3D_API ashes::Semaphore const & submit( ashes::Queue const & queue

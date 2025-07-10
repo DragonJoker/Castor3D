@@ -137,7 +137,7 @@ namespace castor3d
 			, context
 			, graph
 			, { crg::defaultV< InitialiseCallback >
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
+				, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
 				, [this]( crg::RecordContext &, VkCommandBuffer cb, uint32_t ){ doRecordInto( cb ); }
 				, crg::defaultV< GetPassIndexCallback >
 				, IsEnabledCallback( [&enabled](){ return enabled; } )

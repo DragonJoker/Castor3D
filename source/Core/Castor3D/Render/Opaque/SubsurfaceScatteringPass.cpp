@@ -316,7 +316,7 @@ namespace castor3d
 		static Texture doCreateImage( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, castor::Size const & size
-			, VkFormat format
+			, castor::PixelFormat format
 			, castor::String const & name )
 		{
 			return { device
@@ -331,7 +331,7 @@ namespace castor3d
 					| VK_IMAGE_USAGE_SAMPLED_BIT
 					| VK_IMAGE_USAGE_STORAGE_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
-				, VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK };
+				, BorderColour::eFloatTransparentBlack };
 		}
 
 		static crg::rq::Config createConfig( castor::Size const & size
@@ -555,13 +555,13 @@ namespace castor3d
 		{
 			visitor.visit( cuT( "SSSSS Blur " ) + castor::string::toString( i )
 				, m_blurImages[i]
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, ImageLayout::eShaderReadOnly
 				, TextureFactors{}.invert( true ) );
 		}
 
 		visitor.visit( cuT( "SSSSS Result" )
 			, m_result
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, ImageLayout::eShaderReadOnly
 			, TextureFactors{}.invert( true ) );
 
 		visitor.visit( m_blurHorizProgram, ast::EntryPoint::eVertex );

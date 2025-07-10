@@ -42,7 +42,7 @@ namespace ocean_fft
 						auto res = castor::make_unique< crg::GenerateMipmaps >( framePass
 							, context
 							, graph
-							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+							, castor3d::ImageLayout::eShaderReadOnly
 							, crg::ru::Config{}
 							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 							, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
@@ -125,7 +125,7 @@ namespace ocean_fft
 						auto res = castor::make_unique< crg::GenerateMipmaps >( framePass
 							, context
 							, graph
-							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+							, castor3d::ImageLayout::eShaderReadOnly
 							, crg::ru::Config{}
 							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 							, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
@@ -142,8 +142,8 @@ namespace ocean_fft
 			, crg::ResourcesCache & resources
 			, VkExtent2D heightMapSamples
 			, castor::String const & name
-			, VkFormat format
-			, VkSamplerMipmapMode mipMode )
+			, castor::PixelFormat format
+			, castor3d::MipmapMode mipMode )
 		{
 			VkExtent3D dimensions{ heightMapSamples.width, heightMapSamples.height, 1u };
 			castor3d::Texture result{ device
@@ -157,11 +157,11 @@ namespace ocean_fft
 				, ( VK_IMAGE_USAGE_SAMPLED_BIT
 					| VK_IMAGE_USAGE_STORAGE_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
-				, VK_FILTER_LINEAR
-				, VK_FILTER_LINEAR
+				, castor3d::FilterMode::eLinear
+				, castor3d::FilterMode::eLinear
 				, mipMode
-				, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-				, VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK };
+				, castor3d::WrapMode::eClampToEdge
+				, castor3d::BorderColour::eFloatTransparentBlack };
 			result.create();
 			return result;
 		}
@@ -252,26 +252,26 @@ namespace ocean_fft
 				, resources
 				, m_heightMapSamples
 				, cuT( "OceanFFTHeightDisplacement0" )
-				, VK_FORMAT_R16G16B16A16_SFLOAT
-				, VK_SAMPLER_MIPMAP_MODE_NEAREST )
+				, castor::PixelFormat::eR16G16B16A16_SFLOAT
+				, castor3d::MipmapMode::eNearest )
 			, createTexture( device
 				, resources
 				, m_heightMapSamples
 				, cuT( "OceanFFTHeightDisplacement1" )
-				, VK_FORMAT_R16G16B16A16_SFLOAT
-				, VK_SAMPLER_MIPMAP_MODE_NEAREST ) }
+				, castor::PixelFormat::eR16G16B16A16_SFLOAT
+				, castor3d::MipmapMode::eNearest ) }
 		, m_gradientJacobian{ createTexture( device
 				, resources
 				, m_heightMapSamples
 				, cuT( "OceanFFTGradientJacobian0" )
-				, VK_FORMAT_R16G16B16A16_SFLOAT
-				, VK_SAMPLER_MIPMAP_MODE_LINEAR )
+				, castor::PixelFormat::eR16G16B16A16_SFLOAT
+				, castor3d::MipmapMode::eLinear )
 			, createTexture( device
 				, resources
 				, m_heightMapSamples
 				, cuT( "OceanFFTGradientJacobian1" )
-				, VK_FORMAT_R16G16B16A16_SFLOAT
-				, VK_SAMPLER_MIPMAP_MODE_LINEAR ) }
+				, castor::PixelFormat::eR16G16B16A16_SFLOAT
+				, castor3d::MipmapMode::eLinear ) }
 		, m_bakeHeightGradient{ &createBakeHeightGradientPass( m_fftConfig.device
 			, m_group
 			, { &m_height.getLastPass(), &m_displacement.getLastPass() }
@@ -326,8 +326,8 @@ namespace ocean_fft
 			, resources
 			, m_heightMapSamples
 			, cuT( "OceanFFTNormals" )
-			, VK_FORMAT_R32G32_SFLOAT
-			, VK_SAMPLER_MIPMAP_MODE_LINEAR ) }
+			, castor::PixelFormat::eR32G32_SFLOAT
+			, castor3d::MipmapMode::eLinear ) }
 		, m_generateNormalsMips{ &createCopyAndGenerateMipmapsPass( cuT( "Normals" )
 			, device
 			, m_group
@@ -401,8 +401,8 @@ namespace ocean_fft
 				, distribution.size() * sizeof( cfloat )
 				, distribBuffer.getBuffer()
 				, 0u
-				, VK_ACCESS_SHADER_READ_BIT
-				, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT );
+				, castor3d::AccessFlags::eShaderRead
+				, castor3d::PipelineStageFlags::eComputeShader );
 		}
 	}
 

@@ -492,8 +492,8 @@ namespace castor3d
 				++buffer;
 			}
 
-			result.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+			result.markDirty( AccessFlags::eVertexAttributeRead
+				, PipelineStageFlags::eVertexInput );
 			return result;
 		}
 	}
@@ -690,13 +690,13 @@ namespace castor3d
 			, VkExtent3D{ gridSize, gridSize, gridSize }
 			, 1u
 			, 1u
-			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, castor::PixelFormat::eR16G16B16A16_SFLOAT
 			, ( VK_IMAGE_USAGE_TRANSFER_DST_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_STORAGE_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT )
-			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK
-			, VK_COMPARE_OP_NEVER
+			, BorderColour::eFloatOpaqueBlack
+			, ComparisonFunc::eNever
 			, false };
 	}
 }

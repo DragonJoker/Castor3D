@@ -41,11 +41,11 @@ namespace castor3d
 			if ( !result )
 			{
 				auto created = engine.createSampler( name, engine );
-				created->setMinFilter( VK_FILTER_LINEAR );
-				created->setMagFilter( VK_FILTER_LINEAR );
-				created->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				created->setMinFilter( FilterMode::eLinear );
+				created->setMagFilter( FilterMode::eLinear );
+				created->setWrapS( WrapMode::eClampToEdge );
+				created->setWrapT( WrapMode::eClampToEdge );
+				created->setWrapR( WrapMode::eClampToEdge );
 				created->setSerialisable( false );
 				result = engine.addSampler( name, created, false );
 			}

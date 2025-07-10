@@ -157,12 +157,12 @@ namespace light_streaks
 				return result;
 			} ) }
 	{
-		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_NEAREST
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
+		crg::SamplerDesc linearSampler{ castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear
+			, castor3d::MipmapMode::eNearest
+			, castor3d::WrapMode::eClampToEdge
+			, castor3d::WrapMode::eClampToEdge
+			, castor3d::WrapMode::eClampToEdge };
 		pass.addDependency( previousPass );
 		kawaseUbo.createPassBinding( pass
 			, kawase::KawaseUboIdx

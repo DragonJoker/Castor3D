@@ -216,8 +216,8 @@ namespace castor3d
 			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ castor::toUtf8( view.name ) + "Barrier"
 				, imageId
 				, info.flags
-				, info.viewType
-				, info.format
+				, castor::convert( info.viewType )
+				, castor::convert( info.format )
 				, { VkImageAspectFlags( ashes::isDepthStencilFormat( info.format )
 						? VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT
 						: ( ashes::isDepthFormat( info.format )
@@ -273,8 +273,8 @@ namespace castor3d
 			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ castor::toUtf8( view.name ) + "Sampled"
 				, imageId
 				, info.flags
-				, info.viewType
-				, info.format
+				, castor::convert( info.viewType )
+				, castor::convert( info.format )
 				, { VkImageAspectFlags( ashes::isDepthFormat( info.format )
 						? VK_IMAGE_ASPECT_DEPTH_BIT
 						: ( ashes::isStencilFormat( info.format )
@@ -910,9 +910,9 @@ namespace castor3d
 		}
 	}
 
-	VkFormat RenderWindow::getPixelFormat()const
+	castor::PixelFormat RenderWindow::getPixelFormat()const
 	{
-		VkFormat result = VK_FORMAT_UNDEFINED;
+		castor::PixelFormat result = castor::PixelFormat::eUNDEFINED;
 
 		if ( auto target = getRenderTarget() )
 		{
@@ -1203,12 +1203,12 @@ namespace castor3d
 			<< cuT( ", MODE(" ) << castor::makeString( ashes::getName( m_swapChain->getPresentMode() ) ) << cuT( ")]" ) << std::endl;
 
 		if ( !m_renderPass
-			|| m_swapChain->getFormat() != m_swapchainFormat )
+			|| m_swapChain->getFormat() != convert( m_swapchainFormat ) )
 		{
 			doCreateRenderPass();
 		}
 
-		m_swapchainFormat = m_swapChain->getFormat();
+		m_swapchainFormat = castor::convert( m_swapChain->getFormat() );
 		doCreateRenderingResources();
 		doCreateFrameBuffers();
 
@@ -1388,16 +1388,16 @@ namespace castor3d
 		}
 
 		m_renderQuad = RenderQuadBuilder{}
-			.binding( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D )
+			.binding( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, ImageViewType::e2D )
 			.binding( VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER )
 			.texcoordConfig( rq::Texcoord{} )
 			.tex3DResult( m_tex3DTo2DIntermediate )
 			.build( m_device
 				, getName()
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
-				, VK_FILTER_NEAREST );
+				, FilterMode::eNearest );
 #else
-				, VK_FILTER_LINEAR );
+				, FilterMode::eLinear );
 #endif
 		m_renderQuad->createPipeline( VkExtent2D{ m_size[0], m_size[1] }
 			, castor::Position{}
@@ -1467,14 +1467,14 @@ namespace castor3d
 				, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
 
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
-			if ( intermediate.layout != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
+			if ( intermediate.layout != ImageLayout::eShaderReadOnly )
 			{
-				commandBuffer->memoryBarrier( ashes::getStageMask( intermediateBarrierView.layout )
+				commandBuffer->memoryBarrier( ashes::getStageMask( convert( intermediateBarrierView.layout ) )
 					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 					, makeLayoutTransition( m_resources.createImage( context, intermediateBarrierView.viewId.data->image )
 						, intermediateBarrierView.viewId.data->info.subresourceRange
 						, intermediateBarrierView.layout
-						, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+						, ImageLayout::eShaderReadOnly
 						, VK_QUEUE_FAMILY_IGNORED
 						, VK_QUEUE_FAMILY_IGNORED ) );
 			}
@@ -1486,14 +1486,14 @@ namespace castor3d
 			m_renderQuad->registerPass( *commandBuffer, passIndex );
 			commandBuffer->endRenderPass();
 
-			if ( intermediate.layout != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				&& intermediate.layout != VK_IMAGE_LAYOUT_UNDEFINED )
+			if ( intermediate.layout != ImageLayout::eShaderReadOnly
+				&& intermediate.layout != ImageLayout::eUndefined )
 			{
 				commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, ashes::getStageMask( intermediateBarrierView.layout )
+					, ashes::getStageMask( convert( intermediateBarrierView.layout ) )
 					, makeLayoutTransition( m_resources.createImage( context, intermediateBarrierView.viewId.data->image )
 						, intermediateBarrierView.viewId.data->info.subresourceRange
-						, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+						, ImageLayout::eShaderReadOnly
 						, intermediateBarrierView.layout
 						, VK_QUEUE_FAMILY_IGNORED
 						, VK_QUEUE_FAMILY_IGNORED ) );
@@ -1565,7 +1565,7 @@ namespace castor3d
 
 		m_tex3DTo2DIntermediate = { cuT( "Texture3DTo2DResult" )
 			, m_texture3Dto2D->getTarget().sampledViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, ImageLayout::eShaderReadOnly
 			, castor3d::TextureFactors{}.invert( true ) };
 		m_intermediateBarrierViews = rendwndw::doCreateBarrierViews( m_device
 			, m_tex3DTo2DIntermediate
@@ -1588,7 +1588,7 @@ namespace castor3d
 	void RenderWindow::doCreateSaveData()
 	{
 		auto target = getRenderTarget();
-		m_saveBuffer = castor::PxBufferBase::create( target->getSize(), convert( target->getPixelFormat() ) );
+		m_saveBuffer = castor::PxBufferBase::create( target->getSize(), target->getPixelFormat() );
 		auto targetExtent = makeExtent2D( m_saveBuffer->getDimensions() );
 		auto bufferSize = ashes::getAlignedSize( ashes::getLevelsSize( targetExtent
 			, VK_FORMAT_R32G32B32A32_SFLOAT // Reserve enough room to hold max image size
@@ -1714,7 +1714,7 @@ namespace castor3d
 		, crg::SemaphoreWaitArray toWait )
 	{
 		toWait.push_back( { *resources.imageAvailableSemaphore
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT } );
+			, PipelineStageFlags::eColorAttachmentOutput } );
 		return loadingScreen.render( *queue.queue
 			, *m_frameBuffers[resources.imageIndex]
 			, toWait
@@ -1788,21 +1788,21 @@ namespace castor3d
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, makeLayoutTransition( srcImage
 				, m_picking->getImageView().data->info.subresourceRange
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+				, ImageLayout::eShaderReadOnly
+				, ImageLayout::eTransferSrc
 				, VK_QUEUE_FAMILY_IGNORED
 				, VK_QUEUE_FAMILY_IGNORED ) );
 #else
 		VkImage srcImage = m_resources.createImage( context, intermediateBarrierView.viewId.data->image );
 
-		if ( intermediate.layout != VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
+		if ( intermediate.layout != ImageLayout::eTransferSrc )
 		{
-			commands.memoryBarrier( ashes::getStageMask( intermediateBarrierView.layout )
+			commands.memoryBarrier( convert( getStageMask( intermediateBarrierView.layout ) )
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
 				, makeLayoutTransition( srcImage
 					, intermediateBarrierView.viewId.data->info.subresourceRange
 					, intermediateBarrierView.layout
-					, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+					, ImageLayout::eTransferSrc
 					, VK_QUEUE_FAMILY_IGNORED
 					, VK_QUEUE_FAMILY_IGNORED ) );
 		}
@@ -1862,19 +1862,19 @@ namespace castor3d
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, makeLayoutTransition( srcImage
 				, m_picking->getImageView().data->info.subresourceRange
-				, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+				, ImageLayout::eShaderReadOnly
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, VK_QUEUE_FAMILY_IGNORED
 				, VK_QUEUE_FAMILY_IGNORED ) );
 #else
-		if ( intermediate.layout != VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-			&& intermediate.layout != VK_IMAGE_LAYOUT_UNDEFINED )
+		if ( intermediate.layout != ImageLayout::eShaderReadOnly
+			&& intermediate.layout != ImageLayout::eUndefined )
 		{
 			commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-				, ashes::getStageMask( intermediateBarrierView.layout )
+				, convert( getStageMask( intermediateBarrierView.layout ) )
 				, makeLayoutTransition( srcImage
 					, intermediateBarrierView.viewId.data->info.subresourceRange
-					, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+					, ImageLayout::eShaderReadOnly
 					, intermediateBarrierView.layout
 					, VK_QUEUE_FAMILY_IGNORED
 					, VK_QUEUE_FAMILY_IGNORED ) );
@@ -1903,7 +1903,7 @@ namespace castor3d
 #else
 				auto const & intermediates = target->getIntermediateViews();
 				auto const & debugConfig = target->getDebugConfig();
-				m_savedFormat = intermediates[debugConfig.intermediateImageIndex].viewId.data->info.format;
+				m_savedFormat = getFormat( intermediates[debugConfig.intermediateImageIndex].viewId );
 #endif
 				auto & transferCommands = m_transferCommands[debugConfig.intermediateImageIndex];
 				doInitialiseTransferCommands( queueData, transferCommands, debugConfig.intermediateImageIndex );
@@ -1949,7 +1949,7 @@ namespace castor3d
 			m_savedFormat = m_picking->getImageView().data->info.format;
 #else
 			auto intermediates = target->getIntermediateViews();
-			m_savedFormat = intermediates[passIndex].viewId.data->info.format;
+			m_savedFormat = getFormat( intermediates[passIndex].viewId );
 #endif
 			auto & transferCommands = m_transferCommands[passIndex];
 			doInitialiseTransferCommands( queueData, transferCommands, passIndex );
@@ -1995,7 +1995,7 @@ namespace castor3d
 				dstExtent.width = std::max( 1u, dstExtent.width >> mipLevel );
 				dstExtent.height = std::max( 1u, dstExtent.height >> mipLevel );
 				m_saveBuffer = castor::PxBufferBase::create( makeSize( dstExtent )
-					, convert( target->getPixelFormat() )
+					, target->getPixelFormat()
 					, m_snapshotData.data()
 					, castor::PixelFormat( m_savedFormat )
 					, 0u );

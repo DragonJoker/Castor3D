@@ -50,7 +50,7 @@ namespace castor3d::shader
 		 *\param[in]	opaque			\p true pour les noeuds opaques, \p false pour les transparents.
 		 */
 		C3D_API static void applyAlphaFunc( sdw::ShaderWriter & writer
-			, VkCompareOp alphaFunc
+			, ComparisonFunc alphaFunc
 			, sdw::Float & opacity
 			, sdw::Float const & alphaRef
 			, bool opaque = true );
@@ -145,7 +145,7 @@ namespace castor3d::shader
 		// Used by:
 		// - visibility resolve pass
 		// - opaque pass
-		C3D_API void blendMaterials( VkCompareOp alphaFunc
+		C3D_API void blendMaterials( ComparisonFunc alphaFunc
 			, PipelineFlags const & flags
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims
@@ -155,7 +155,7 @@ namespace castor3d::shader
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, BlendComponents & output )const;
 		C3D_API void blendMaterials( DebugOutput & debugOutput
-			, VkCompareOp alphaFunc
+			, ComparisonFunc alphaFunc
 			, PipelineFlags const & flags
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims

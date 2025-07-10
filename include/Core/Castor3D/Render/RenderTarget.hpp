@@ -290,7 +290,7 @@ namespace castor3d
 			return m_velocity;
 		}
 
-		VkFormat getPixelFormat()const noexcept
+		castor::PixelFormat getPixelFormat()const noexcept
 		{
 			return m_pixelFormat;
 		}
@@ -486,7 +486,7 @@ namespace castor3d
 		TargetType m_type{};
 		castor::Size m_size;
 		castor::Size m_safeBandedSize;
-		VkFormat m_pixelFormat{};
+		castor::PixelFormat m_pixelFormat{};
 		std::atomic_bool m_initialised{};
 		std::atomic_bool m_initialising{};
 		crg::ResourcesCache m_resources;

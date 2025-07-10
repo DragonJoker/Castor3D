@@ -74,7 +74,7 @@ namespace dof
 			, extent
 			, 1u
 			, 1u
-			, VK_FORMAT_R16_SFLOAT
+			, castor::PixelFormat::eR16_SFLOAT
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT ) };
 		m_nearBlur = castor3d::Texture{ device
@@ -94,7 +94,7 @@ namespace dof
 			, extent
 			, 1u
 			, 1u
-			, VK_FORMAT_R16_SFLOAT
+			, castor::PixelFormat::eR16_SFLOAT
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT ) };
 		m_farBlur = castor3d::Texture{ device

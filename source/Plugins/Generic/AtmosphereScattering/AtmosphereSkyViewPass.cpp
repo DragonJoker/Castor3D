@@ -167,8 +167,8 @@ namespace atmosphere_scattering
 			, skyview::eCamera );
 		atmosphereUbo.createPassBinding( pass
 			, skyview::eAtmosphere );
-		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR };
+		crg::SamplerDesc linearSampler{ castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear };
 		pass.addSampledView( transmittanceView
 			, skyview::eTransmittance
 			, linearSampler );

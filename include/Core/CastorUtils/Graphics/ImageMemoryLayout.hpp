@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CU_ImageLayout_HPP___
-#define ___CU_ImageLayout_HPP___
+#ifndef ___CU_ImageMemoryLayout_HPP___
+#define ___CU_ImageMemoryLayout_HPP___
 
 #include "CastorUtils/Math/Point.hpp"
 #include "CastorUtils/Math/Range.hpp"
@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	struct ImageLayout
+	struct ImageMemoryLayout
 	{
 		enum Type
 			: uint8_t
@@ -56,7 +56,7 @@ namespace castor
 		using DeviceSize = uint64_t;
 		using SubresourceRange = Range< DeviceSize >;
 
-		explicit ImageLayout( Type type = e2D
+		explicit ImageMemoryLayout( Type type = e2D
 			, PixelFormat format = PixelFormat::eR8G8B8A8_UNORM
 			, Point3ui extent = { 1u, 1u, 1u }
 			, uint32_t baseLayer = 0u
@@ -75,14 +75,14 @@ namespace castor
 		{
 		}
 
-		explicit ImageLayout( PxBufferBase const & buffer )
-			: ImageLayout{ getType( buffer ), buffer }
+		explicit ImageMemoryLayout( PxBufferBase const & buffer )
+			: ImageMemoryLayout{ getType( buffer ), buffer }
 		{
 		}
 
-		explicit ImageLayout( Type type
+		explicit ImageMemoryLayout( Type type
 			, PxBufferBase const & buffer )
-			: ImageLayout{ type
+			: ImageMemoryLayout{ type
 				, buffer.getFormat()
 				, Point3ui{ buffer.getWidth(), buffer.getHeight(), 1u }
 				, 0u
@@ -220,74 +220,74 @@ namespace castor
 		uint32_t alignment;
 	};
 
-	inline ImageLayout::DeviceSize getSliceSize( ImageLayout const & layout )
+	inline ImageMemoryLayout::DeviceSize getSliceSize( ImageMemoryLayout const & layout )
 	{
 		return layout.sliceSize();
 	}
 
-	inline ImageLayout::DeviceSize getSliceMipSize( ImageLayout const & layout
+	inline ImageMemoryLayout::DeviceSize getSliceMipSize( ImageMemoryLayout const & layout
 		, uint32_t level )
 	{
 		return layout.sliceMipSize( level );
 	}
 
-	inline ImageLayout::DeviceSize getLayerSize( ImageLayout const & layout )
+	inline ImageMemoryLayout::DeviceSize getLayerSize( ImageMemoryLayout const & layout )
 	{
 		return layout.layerSize();
 	}
 
-	inline ImageLayout::DeviceSize getLayerMipSize( ImageLayout const & layout
+	inline ImageMemoryLayout::DeviceSize getLayerMipSize( ImageMemoryLayout const & layout
 		, uint32_t level )
 	{
 		return layout.layerMipSize( level );
 	}
 
-	inline ImageLayout::DeviceSize getSliceOffset( ImageLayout const & layout
+	inline ImageMemoryLayout::DeviceSize getSliceOffset( ImageMemoryLayout const & layout
 		, uint32_t index )
 	{
 		return layout.sliceOffset( index );
 	}
 
-	inline ImageLayout::DeviceSize getSliceMipOffset( ImageLayout const & layout
+	inline ImageMemoryLayout::DeviceSize getSliceMipOffset( ImageMemoryLayout const & layout
 		, uint32_t index
 		, uint32_t level )
 	{
 		return layout.sliceMipOffset( index, level );
 	}
 
-	inline ImageLayout::DeviceSize getLayerOffset( ImageLayout const & layout
+	inline ImageMemoryLayout::DeviceSize getLayerOffset( ImageMemoryLayout const & layout
 		, uint32_t index )
 	{
 		return layout.layerOffset( index );
 	}
 
-	inline ImageLayout::DeviceSize getLayerMipOffset( ImageLayout const & layout
+	inline ImageMemoryLayout::DeviceSize getLayerMipOffset( ImageMemoryLayout const & layout
 		, uint32_t index
 		, uint32_t level )
 	{
 		return layout.layerMipOffset( index, level );
 	}
 
-	inline ImageLayout::Buffer getBuffer( ImageLayout const & layout
+	inline ImageMemoryLayout::Buffer getBuffer( ImageMemoryLayout const & layout
 		, PxBufferBase & buffer )
 	{
 		return layout.buffer( buffer );
 	}
 
-	inline ImageLayout::ConstBuffer getBuffer( ImageLayout const & layout
+	inline ImageMemoryLayout::ConstBuffer getBuffer( ImageMemoryLayout const & layout
 		, PxBufferBase const & buffer )
 	{
 		return layout.buffer( buffer );
 	}
 
-	inline ImageLayout::Buffer getLayerBuffer( ImageLayout const & layout
+	inline ImageMemoryLayout::Buffer getLayerBuffer( ImageMemoryLayout const & layout
 		, PxBufferBase & buffer
 		, uint32_t index )
 	{
 		return layout.layerBuffer( buffer, index );
 	}
 
-	inline ImageLayout::Buffer getLayerMipBuffer( ImageLayout const & layout
+	inline ImageMemoryLayout::Buffer getLayerMipBuffer( ImageMemoryLayout const & layout
 		, PxBufferBase & buffer
 		, uint32_t index
 		, uint32_t level )
@@ -295,14 +295,14 @@ namespace castor
 		return layout.layerMipBuffer( buffer, index, level );
 	}
 
-	inline ImageLayout::ConstBuffer getLayerBuffer( ImageLayout const & layout
+	inline ImageMemoryLayout::ConstBuffer getLayerBuffer( ImageMemoryLayout const & layout
 		, PxBufferBase const & buffer
 		, uint32_t index )
 	{
 		return layout.layerBuffer( buffer, index );
 	}
 
-	inline ImageLayout::ConstBuffer getLayerMipBuffer( ImageLayout const & layout
+	inline ImageMemoryLayout::ConstBuffer getLayerMipBuffer( ImageMemoryLayout const & layout
 		, PxBufferBase const & buffer
 		, uint32_t index
 		, uint32_t level )
@@ -310,14 +310,14 @@ namespace castor
 		return layout.layerMipBuffer( buffer, index, level );
 	}
 
-	inline bool hasLayerBuffer( ImageLayout const & layout
+	inline bool hasLayerBuffer( ImageMemoryLayout const & layout
 		, PxBufferBase const & buffer
 		, uint32_t index )
 	{
 		return layout.hasLayerBuffer( buffer, index );
 	}
 
-	inline bool hasLayerMipBuffer( ImageLayout const & layout
+	inline bool hasLayerMipBuffer( ImageMemoryLayout const & layout
 		, PxBufferBase const & buffer
 		, uint32_t index
 		, uint32_t level )
@@ -325,14 +325,14 @@ namespace castor
 		return layout.hasLayerMipBuffer( buffer, index, level );
 	}
 
-	inline ImageLayout::Buffer getSliceBuffer( ImageLayout const & layout
+	inline ImageMemoryLayout::Buffer getSliceBuffer( ImageMemoryLayout const & layout
 		, PxBufferBase & buffer
 		, uint32_t index )
 	{
 		return layout.sliceBuffer( buffer, index );
 	}
 
-	inline ImageLayout::Buffer getSliceMipBuffer( ImageLayout const & layout
+	inline ImageMemoryLayout::Buffer getSliceMipBuffer( ImageMemoryLayout const & layout
 		, PxBufferBase & buffer
 		, uint32_t index
 		, uint32_t level )
@@ -340,14 +340,14 @@ namespace castor
 		return layout.sliceMipBuffer( buffer, index, level );
 	}
 
-	inline ImageLayout::ConstBuffer getSliceBuffer( ImageLayout const & layout
+	inline ImageMemoryLayout::ConstBuffer getSliceBuffer( ImageMemoryLayout const & layout
 		, PxBufferBase const & buffer
 		, uint32_t index )
 	{
 		return layout.sliceBuffer( buffer, index );
 	}
 
-	inline ImageLayout::ConstBuffer getSliceMipBuffer( ImageLayout const & layout
+	inline ImageMemoryLayout::ConstBuffer getSliceMipBuffer( ImageMemoryLayout const & layout
 		, PxBufferBase const & buffer
 		, uint32_t index
 		, uint32_t level )
@@ -355,14 +355,14 @@ namespace castor
 		return layout.sliceMipBuffer( buffer, index, level );
 	}
 
-	inline bool hasSliceBuffer( ImageLayout const & layout
+	inline bool hasSliceBuffer( ImageMemoryLayout const & layout
 		, PxBufferBase const & buffer
 		, uint32_t index )
 	{
 		return layout.hasSliceBuffer( buffer, index );
 	}
 
-	inline bool hasSliceMipBuffer( ImageLayout const & layout
+	inline bool hasSliceMipBuffer( ImageMemoryLayout const & layout
 		, PxBufferBase const & buffer
 		, uint32_t index
 		, uint32_t level )

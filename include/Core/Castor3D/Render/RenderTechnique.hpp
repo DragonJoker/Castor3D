@@ -206,7 +206,7 @@ namespace castor3d
 			return m_colour->getExtent();
 		}
 
-		VkFormat getTargetFormat()const noexcept
+		castor::PixelFormat getTargetFormat()const noexcept
 		{
 			return m_colour->getFormat();
 		}

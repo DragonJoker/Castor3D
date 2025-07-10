@@ -835,24 +835,24 @@ namespace castor3d
 		return BlendMode::eNoBlend;
 	}
 
-	VkCompareOp Pass::getAlphaFunc()const
+	ComparisonFunc Pass::getAlphaFunc()const
 	{
 		if ( auto comp = getComponent< AlphaTestComponent >() )
 		{
 			return comp->getAlphaFunc();
 		}
 
-		return VK_COMPARE_OP_ALWAYS;
+		return ComparisonFunc::eAlways;
 	}
 
-	VkCompareOp Pass::getBlendAlphaFunc()const
+	ComparisonFunc Pass::getBlendAlphaFunc()const
 	{
 		if ( auto comp = getComponent< AlphaTestComponent >() )
 		{
 			return comp->getBlendAlphaFunc();
 		}
 
-		return VK_COMPARE_OP_ALWAYS;
+		return ComparisonFunc::eAlways;
 	}
 
 	bool Pass::hasAlphaBlending()const
@@ -865,19 +865,19 @@ namespace castor3d
 	{
 		return needsAlphaProcessing()
 			&& getAlphaBlendMode() != BlendMode::eNoBlend
-			&& getAlphaFunc() == VK_COMPARE_OP_ALWAYS;
+			&& getAlphaFunc() == ComparisonFunc::eAlways;
 	}
 
 	bool Pass::hasAlphaTest()const
 	{
 		return needsAlphaProcessing()
-			&& getAlphaFunc() != VK_COMPARE_OP_ALWAYS;
+			&& getAlphaFunc() != ComparisonFunc::eAlways;
 	}
 
 	bool Pass::hasBlendAlphaTest()const
 	{
 		return needsAlphaProcessing()
-			&& getBlendAlphaFunc() != VK_COMPARE_OP_ALWAYS;
+			&& getBlendAlphaFunc() != ComparisonFunc::eAlways;
 	}
 
 	bool Pass::hasEnvironmentMapping()const

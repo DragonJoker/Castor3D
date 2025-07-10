@@ -21,17 +21,17 @@ namespace castor3d
 	}
 
 	void CommandsSemaphore::submit( ashes::Queue const & queue
-		, VkPipelineStageFlags stage )const
+		, PipelineStageFlags stage )const
 	{
 		queue.submit( ashes::VkCommandBufferArray{ *commandBuffer }
 			, ashes::VkSemaphoreArray{}
-			, { stage }
+			, { convert( stage ) }
 			, ashes::VkSemaphoreArray{} );
 	}
 
 	ashes::Semaphore const & CommandsSemaphore::submit( ashes::Queue const & queue
 		, ashes::Semaphore const & toWait
-		, VkPipelineStageFlags stage )const
+		, PipelineStageFlags stage )const
 	{
 		return submit( queue, { toWait, stage } );
 	}
@@ -41,7 +41,7 @@ namespace castor3d
 	{
 		queue.submit( *commandBuffer
 			, toWait.semaphore
-			, toWait.dstStageMask
+			, convert( toWait.dstStageMask )
 			, *semaphore );
 		return *semaphore;
 	}

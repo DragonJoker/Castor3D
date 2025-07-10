@@ -88,10 +88,10 @@ namespace castor3d
 
 		if ( auto sampler = getEngine()->addNewSampler( m_font->getName(), *getEngine() ) )
 		{
-			sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-			sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-			sampler->setMinFilter( VK_FILTER_LINEAR );
-			sampler->setMagFilter( VK_FILTER_LINEAR );
+			sampler->setWrapS( WrapMode::eClampToEdge );
+			sampler->setWrapT( WrapMode::eClampToEdge );
+			sampler->setMinFilter( FilterMode::eLinear );
+			sampler->setMagFilter( FilterMode::eLinear );
 			sampler->setMinLod( 0.0f );
 			sampler->setMaxLod( 1.0f );
 
@@ -197,7 +197,7 @@ namespace castor3d
 			m_ubo->cpuUpdate( size, font->isSDF(), font->getPixelRange() );
 			resource.resource->setSource( castor::PxBufferBase::create( castor::Size( maxWidth * 16, maxHeight * count ), format ), true );
 			auto & image = resource.resource->getImage();
-			auto pixelSize = uint32_t( getBytesPerPixel( format ) );
+			auto pixelSize = uint32_t( castor::getBytesPerPixel( format ) );
 
 			auto it = font->begin();
 			castor::Size const & sizeImg = size;

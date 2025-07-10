@@ -405,11 +405,11 @@ namespace ocean_fft
 				, *m_ubo
 				, m_component.getFftConfig() );
 			graph.addInput( m_oceanFFT->getHeightDisplacement().sampledViewId
-				, { VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT } } );
+				, { ImageLayout::eShaderReadOnly, { AccessFlags::eShaderRead, PipelineStageFlags::eVertexShader } } );
 			graph.addInput( m_oceanFFT->getGradientJacobian().sampledViewId
-				, { VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT } } );
+				, { ImageLayout::eShaderReadOnly, { AccessFlags::eShaderRead, PipelineStageFlags::eVertexShader } } );
 			graph.addInput( m_oceanFFT->getNormals().sampledViewId
-				, { VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT } } );
+				, { ImageLayout::eShaderReadOnly, { AccessFlags::eShaderRead, PipelineStageFlags::eVertexShader } } );
 		}
 
 		return m_oceanFFT->getLastPasses();
@@ -418,11 +418,11 @@ namespace ocean_fft
 	void FFTWavesComponent::RenderData::registerDependencies( crg::FramePass & pass )const
 	{
 		pass.addImplicitColourView( m_oceanFFT->getHeightDisplacement().sampledViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, ImageLayout::eShaderReadOnly );
 		pass.addImplicitColourView( m_oceanFFT->getGradientJacobian().sampledViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, ImageLayout::eShaderReadOnly );
 		pass.addImplicitColourView( m_oceanFFT->getNormals().sampledViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, ImageLayout::eShaderReadOnly );
 	}
 
 	void FFTWavesComponent::RenderData::cleanup( RenderDevice const & device )

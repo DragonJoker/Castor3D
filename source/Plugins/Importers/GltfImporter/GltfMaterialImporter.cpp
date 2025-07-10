@@ -635,44 +635,44 @@ namespace c3d_gltf
 
 	//*********************************************************************************************
 
-	VkSamplerAddressMode convert( fastgltf::Wrap const & v )
+	castor3d::WrapMode convert( fastgltf::Wrap const & v )
 	{
 		switch ( v )
 		{
 		case fastgltf::Wrap::Repeat:
-			return VK_SAMPLER_ADDRESS_MODE_REPEAT;
+			return castor3d::WrapMode::eRepeat;
 		case fastgltf::Wrap::ClampToEdge:
-			return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+			return castor3d::WrapMode::eClampToEdge;
 		case fastgltf::Wrap::MirroredRepeat:
-			return VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT;
+			return castor3d::WrapMode::eMirroredRepeat;
 		default:
-			return VK_SAMPLER_ADDRESS_MODE_REPEAT;
+			return castor3d::WrapMode::eRepeat;
 		}
 	}
 
-	VkFilter convert( fastgltf::Filter const & v )
+	castor3d::FilterMode convert( fastgltf::Filter const & v )
 	{
 		switch ( v )
 		{
 		case fastgltf::Filter::Nearest:
 		case fastgltf::Filter::NearestMipMapNearest:
 		case fastgltf::Filter::NearestMipMapLinear:
-			return VK_FILTER_NEAREST;
+			return castor3d::FilterMode::eNearest;
 		default:
-			return VK_FILTER_LINEAR;
+			return castor3d::FilterMode::eLinear;
 		}
 	}
 
-	VkSamplerMipmapMode getMipFilter( fastgltf::Filter const & v )
+	castor3d::MipmapMode getMipFilter( fastgltf::Filter const & v )
 	{
 		switch ( v )
 		{
 		case fastgltf::Filter::Nearest:
 		case fastgltf::Filter::NearestMipMapNearest:
 		case fastgltf::Filter::LinearMipMapNearest:
-			return VK_SAMPLER_MIPMAP_MODE_NEAREST;
+			return castor3d::MipmapMode::eNearest;
 		default:
-			return VK_SAMPLER_MIPMAP_MODE_LINEAR;
+			return castor3d::MipmapMode::eLinear;
 		}
 	}
 
@@ -966,8 +966,8 @@ namespace c3d_gltf
 			pass.createComponent< castor3d::OpacityComponent >();
 			auto alphaTest = pass.createComponent< castor3d::AlphaTestComponent >();
 			alphaTest->setAlphaRefValue( impMaterial.alphaCutoff );
-			alphaTest->setAlphaFunc( VK_COMPARE_OP_GREATER );
-			alphaTest->setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
+			alphaTest->setAlphaFunc( castor3d::ComparisonFunc::eGreater );
+			alphaTest->setBlendAlphaFunc( castor3d::ComparisonFunc::eLessOrEqual );
 		}
 		else if ( impMaterial.alphaMode == fastgltf::AlphaMode::Blend )
 		{
@@ -980,8 +980,8 @@ namespace c3d_gltf
 			{
 				auto alphaTest = pass.createComponent< castor3d::AlphaTestComponent >();
 				alphaTest->setAlphaRefValue( 0.95f );
-				alphaTest->setAlphaFunc( VK_COMPARE_OP_GREATER );
-				alphaTest->setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
+				alphaTest->setAlphaFunc( castor3d::ComparisonFunc::eGreater );
+				alphaTest->setBlendAlphaFunc( castor3d::ComparisonFunc::eLessOrEqual );
 			}
 
 			auto blend = pass.createComponent< castor3d::BlendComponent >();

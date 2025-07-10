@@ -42,7 +42,7 @@ namespace castor
 	ResourceCacheTraitsT< Image, String >::ElementPtrT ResourceCacheTraitsT< Image, String >::makeElement( ResourceCacheBaseT< Image, String, ResourceCacheTraitsT< Image, String > > const &
 		, String const & name
 		, Path const & path
-		, ImageLayout layout
+		, ImageMemoryLayout layout
 		, PxBufferBaseUPtr buffer )
 	{
 		return makeResource< Image, String >( name

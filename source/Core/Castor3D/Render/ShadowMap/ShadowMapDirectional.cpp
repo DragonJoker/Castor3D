@@ -155,7 +155,7 @@ namespace castor3d
 			, 1u }
 		, m_blurIntermediate{ resources.getHandler().createImageId( crg::ImageData{ "DirectionalGB"
 			, 0u
-			, VK_IMAGE_TYPE_2D
+			, ImageType::e2D
 			, getFormat( device, SmTexture::eVariance )
 			, ( *m_result.begin() )->getExtent()
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
@@ -164,7 +164,7 @@ namespace castor3d
 		, m_blurIntermediateView{ resources.getHandler().createViewId( crg::ImageViewData{ m_blurIntermediate.data->name
 			, m_blurIntermediate
 			, 0u
-			, VK_IMAGE_VIEW_TYPE_2D
+			, ImageViewType::e2D
 			, getFormat( m_blurIntermediate )
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 		, m_cascades{ scene.getDirectionalShadowCascades() }
@@ -342,7 +342,7 @@ namespace castor3d
 								, context
 								, runnableGraph
 								, getShadowPassResult( isStatic )[SmTexture::eDepth].getExtent()
-								, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+								, ImageLayout::eShaderReadOnly
 								, crg::ru::Config{}
 								, crg::ImageCopy::GetPassIndexCallback( [](){ return 0u; } )
 								, crg::ImageCopy::IsEnabledCallback( [this, cascade](){ return doEnableCopyStatic( cascade ); } ) );
@@ -438,7 +438,7 @@ namespace castor3d
 								, context
 								, runnableGraph
 								, getShadowPassResult( isStatic )[SmTexture::eDepth].getExtent()
-								, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+								, ImageLayout::eShaderReadOnly
 								, crg::ru::Config{}
 								, crg::ImageCopy::GetPassIndexCallback( [](){ return 0u; } )
 								, crg::ImageCopy::IsEnabledCallback( [this, cascade](){ return doEnableCopyStatic( cascade ); } ) );

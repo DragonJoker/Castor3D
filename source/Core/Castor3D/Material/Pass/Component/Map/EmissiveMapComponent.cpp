@@ -206,7 +206,7 @@ namespace castor3d
 		castor::String name{ cuT( "DefaultEmissive" ) };
 		castor::ByteArray data{ 255u, 255u, 255u, 0u };
 		return { name
-			, castor::ImageCreateParams{ getFormatName( castor::PixelFormat::eR8G8B8A8_UNORM ), data } };
+			, castor::ImageCreateParams{ castor::getFormatName( castor::PixelFormat::eR8G8B8A8_UNORM ), data } };
 	}
 
 	//*********************************************************************************************

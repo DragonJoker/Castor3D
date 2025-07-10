@@ -39,10 +39,10 @@ namespace castor3d
 			, makeExtent3D( getOwner()->getSize() )
 			, 1u
 			, EnvironmentMipLevels
-			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, castor::PixelFormat::eR16G16B16A16_SFLOAT
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT )
-			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+			, BorderColour::eFloatOpaqueBlack }
 		, m_transparentPassResult{ ( weightedBlended
 			? castor::makeUnique< TransparentPassResult >( getOwner()->getResources()
 				, m_device
@@ -185,7 +185,7 @@ namespace castor3d
 				auto res = castor::make_unique< crg::GenerateMipmaps >( framePass
 					, context
 					, runnableGraph
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					, ImageLayout::eShaderReadOnly
 					, crg::ru::Config{}
 					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 					, crg::RunnablePass::IsEnabledCallback( [this](){ return m_enabled; } ) );
@@ -242,7 +242,7 @@ namespace castor3d
 			} );
 		result.addDependency( lastPass );
 		result.addImplicitColourView( m_mippedColour.targetViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, ImageLayout::eShaderReadOnly );
 		result.addInOutDepthStencilView( targetDepth );
 		result.addInOutColourView( targetResult );
 
@@ -313,13 +313,13 @@ namespace castor3d
 		result.addDependency( lastPass );
 		result.addInOutDepthStencilView( targetDepth );
 		result.addImplicitColourView( m_mippedColour.targetViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, ImageLayout::eShaderReadOnly );
 		result.addImplicitColourView( getOwner()->getDepthObj().targetViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, ImageLayout::eShaderReadOnly );
 		result.addImplicitColourView( getOwner()->getNormal().targetViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, ImageLayout::eShaderReadOnly );
 		result.addImplicitColourView( getOwner()->getSsaoResult().wholeViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, ImageLayout::eShaderReadOnly );
 		auto const & transparentPassResult = *m_transparentPassResult;
 		result.addOutputColourView( transparentPassResult[WbTexture::eAccumulation].targetViewId
 			, getClearValue( WbTexture::eAccumulation ) );

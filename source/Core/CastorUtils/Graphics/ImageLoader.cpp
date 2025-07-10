@@ -3,7 +3,7 @@
 #include "CastorUtils/Data/BinaryFile.hpp"
 #include "CastorUtils/Data/LoaderException.hpp"
 #include "CastorUtils/Data/Path.hpp"
-#include "CastorUtils/Graphics/ImageLayout.hpp"
+#include "CastorUtils/Graphics/ImageMemoryLayout.hpp"
 
 namespace castor
 {
@@ -55,7 +55,7 @@ namespace castor
 				buffer->generateMips();
 			}
 
-			ImageLayout newLayout{ layout.type, *buffer };
+			ImageMemoryLayout newLayout{ layout.type, *buffer };
 			return Image{ name
 				, path
 				, newLayout

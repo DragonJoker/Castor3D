@@ -47,8 +47,8 @@ namespace castor3d
 		, VkDeviceSize srcSize
 		, ashes::BufferBase const & dstBuffer
 		, VkDeviceSize dstOffset
-		, VkAccessFlags dstAccessFlags
-		, VkPipelineStageFlags dstPipelineFlags )
+		, AccessFlags dstAccessFlags
+		, PipelineStageFlags dstPipelineFlags )
 	{
 		if ( !srcSize || !srcData )
 		{
@@ -86,10 +86,10 @@ namespace castor3d
 	void UploadData::pushUpload( void const * srcData
 		, VkDeviceSize srcSize
 		, ashes::Image const & dstImage
-		, castor::ImageLayout dstLayout
+		, castor::ImageMemoryLayout dstLayout
 		, VkImageSubresourceRange dstRange
-		, VkImageLayout dstImageLayout
-		, VkPipelineStageFlags dstPipelineFlags )
+		, ImageLayout dstImageLayout
+		, PipelineStageFlags dstPipelineFlags )
 	{
 		if ( !srcSize || !srcData )
 		{
@@ -284,14 +284,14 @@ namespace castor3d
 		, VkDeviceSize srcOffset )const
 	{
 		auto & dstBuffer = *data.dstBuffer;
-		auto dstCurFlags = dstBuffer.getCompatibleStageFlags();
-		auto dstTrsFlags = srcBuffer ? VkPipelineStageFlags{ VK_PIPELINE_STAGE_TRANSFER_BIT } : VkPipelineStageFlags{ VK_PIPELINE_STAGE_HOST_BIT };
+		auto dstCurFlags = crg::getPipelineStageFlags( dstBuffer.getCompatibleStageFlags() );
+		auto dstTrsFlags = srcBuffer ? PipelineStageFlags::eTransfer : PipelineStageFlags::eHost;
 
 		if ( dstCurFlags != dstTrsFlags )
 		{
-			m_commandBuffer->memoryBarrier( dstCurFlags
-				, dstTrsFlags
-				, dstBuffer.makeMemoryTransitionBarrier( dstTrsFlags ) );
+			m_commandBuffer->memoryBarrier( convert( dstCurFlags )
+				, convert( dstTrsFlags )
+				, dstBuffer.makeMemoryTransitionBarrier( convert( dstTrsFlags ) ) );
 		}
 
 		if ( dstBuffer.getSize() < data.dstOffset + data.srcSize )
@@ -343,9 +343,9 @@ namespace castor3d
 
 		if ( dstTrsFlags != data.dstPipelineFlags )
 		{
-			m_commandBuffer->memoryBarrier( dstTrsFlags
-				, data.dstPipelineFlags
-				, dstBuffer.makeMemoryTransitionBarrier( data.dstAccessFlags ) );
+			m_commandBuffer->memoryBarrier( convert( dstTrsFlags )
+				, convert( data.dstPipelineFlags )
+				, dstBuffer.makeMemoryTransitionBarrier( convert( data.dstAccessFlags ) ) );
 		}
 	}
 
@@ -361,7 +361,7 @@ namespace castor3d
 			<< cuT( ")], Offset: " ) << srcOffset
 			<< cuT( ", Upload Size: " ) << data.srcSize
 			<< std::endl );
-		bool is3D = data.dstLayout.type == castor::ImageLayout::e3D;
+		bool is3D = data.dstLayout.type == castor::ImageMemoryLayout::e3D;
 		auto & dstImage = *data.dstImage;
 
 		ashes::VkBufferImageCopyArray copies;
@@ -408,9 +408,9 @@ namespace castor3d
 				, data.dstRange ) );
 		m_commandBuffer->copyToImage( copies, srcBuffer, dstImage );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-			, data.dstPipelineFlags
+			, convert( data.dstPipelineFlags )
 			, dstImage.makeTransition( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-				, data.dstImageLayout
+				, convert( data.dstImageLayout )
 				, data.dstRange ) );
 	}
 }

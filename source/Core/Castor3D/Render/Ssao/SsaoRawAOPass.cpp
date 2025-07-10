@@ -485,7 +485,7 @@ namespace castor3d
 		static Texture doCreateTexture( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, castor::String const & name
-			, VkFormat format
+			, castor::PixelFormat format
 			, VkExtent2D const & size )
 		{
 			return Texture{ device

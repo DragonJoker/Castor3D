@@ -367,8 +367,8 @@ namespace castor3d
 		C3D_API bool hasBlendAlphaTest()const;
 		C3D_API BlendMode getAlphaBlendMode()const;
 		C3D_API BlendMode getColourBlendMode()const;
-		C3D_API VkCompareOp getAlphaFunc()const;
-		C3D_API VkCompareOp getBlendAlphaFunc()const;
+		C3D_API ComparisonFunc getAlphaFunc()const;
+		C3D_API ComparisonFunc getBlendAlphaFunc()const;
 		C3D_API bool hasEnvironmentMapping()const;
 		C3D_API bool hasSubsurfaceScattering()const;
 		C3D_API bool isTwoSided()const;

@@ -39,7 +39,7 @@ namespace castor
 		reg.unregisterLoader( ktx2::listExtensions() );
 	}
 
-	ImageLayout Ktx2ImageLoader::load( String const & imageFormat
+	ImageMemoryLayout Ktx2ImageLoader::load( String const & imageFormat
 		, uint8_t const * data
 		, uint32_t size
 		, PxBufferBaseUPtr & buffer )const
@@ -78,14 +78,14 @@ namespace castor
 			CU_LoaderError( "Undefined pixel format" );
 		}
 
-		ImageLayout result;
+		ImageMemoryLayout result;
 		result.type = texture->baseDepth > 1u
-			? ImageLayout::Type::e3D
+			? ImageMemoryLayout::Type::e3D
 			: ( texture->isCubemap
-				? ImageLayout::Type::eCube
+				? ImageMemoryLayout::Type::eCube
 				: ( texture->isArray
-					? ImageLayout::Type::e2DArray
-					: ImageLayout::Type::e2D ) );
+					? ImageMemoryLayout::Type::e2DArray
+					: ImageMemoryLayout::Type::e2D ) );
 		result.format = format;
 		result.extent = { texture->baseWidth, texture->baseHeight, texture->baseDepth };
 		result.layers = texture->numLayers;

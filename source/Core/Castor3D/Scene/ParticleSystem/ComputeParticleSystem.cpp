@@ -129,25 +129,21 @@ namespace castor3d
 
 			// Initialise counts buffer to 0.
 			auto flags = m_generatedCountBuffer->getBuffer().getCompatibleStageFlags();
-			m_commandBuffer->memoryBarrier( flags
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
+			m_commandBuffer->memoryBarrier( flags, VK_PIPELINE_STAGE_TRANSFER_BIT
 				, m_generatedCountBuffer->getBuffer().makeTransferDestination() );
 			m_commandBuffer->fillBuffer( m_generatedCountBuffer->getBuffer()
 				, 0u
 				, m_generatedCountBuffer->getBuffer().getSize()
 				, 0u );
-			m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-				, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+			m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
 				, m_generatedCountBuffer->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT ) );
 
 			// Put In and Out buffers to compute state.
 			flags = m_particlesStorages[m_in]->getBuffer().getCompatibleStageFlags();
-			m_commandBuffer->memoryBarrier( flags
-				, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+			m_commandBuffer->memoryBarrier( flags, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
 				, m_particlesStorages[m_in]->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_SHADER_READ_BIT ) );
 			flags = m_particlesStorages[m_out]->getBuffer().getCompatibleStageFlags();
-			m_commandBuffer->memoryBarrier( flags
-				, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+			m_commandBuffer->memoryBarrier( flags, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
 				, m_particlesStorages[m_out]->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_SHADER_WRITE_BIT ) );
 
 			// Dispatch compute
@@ -159,32 +155,27 @@ namespace castor3d
 
 			// Put In and Out buffers to transfer state.
 			flags = m_particlesStorages[m_in]->getBuffer().getCompatibleStageFlags();
-			m_commandBuffer->memoryBarrier( flags
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
+			m_commandBuffer->memoryBarrier( flags, VK_PIPELINE_STAGE_TRANSFER_BIT
 				, m_particlesStorages[m_in]->getBuffer().makeTransferSource() );
 			flags = m_particlesStorages[m_out]->getBuffer().getCompatibleStageFlags();
-			m_commandBuffer->memoryBarrier( flags
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
+			m_commandBuffer->memoryBarrier( flags, VK_PIPELINE_STAGE_TRANSFER_BIT
 				, m_particlesStorages[m_out]->getBuffer().makeTransferSource() );
 
 			// Copy output storage to billboard's vertex buffer
 			flags = m_parent.getBillboards()->getVertexBuffer().getBuffer().getBuffer().getCompatibleStageFlags();
-			m_commandBuffer->memoryBarrier( flags
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
+			m_commandBuffer->memoryBarrier( flags, VK_PIPELINE_STAGE_TRANSFER_BIT
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer().getBuffer().makeTransferDestination() );
 			m_commandBuffer->copyBuffer( m_particlesStorages[m_out]->getBuffer()
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer()
 				, size
 				, 0u
 				, m_parent.getBillboards()->getVertexBuffer().getOffset() );
-			m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT
+			m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer().getBuffer().makeVertexShaderInputResource() );
 
 			// Put counts buffer to host visible state
 			flags = m_generatedCountBuffer->getBuffer().getCompatibleStageFlags();
-			m_commandBuffer->memoryBarrier( flags
-				, VK_PIPELINE_STAGE_HOST_BIT
+			m_commandBuffer->memoryBarrier( flags, VK_PIPELINE_STAGE_HOST_BIT
 				, m_generatedCountBuffer->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_HOST_READ_BIT ) );
 
 			updater.timer->endPass( *m_commandBuffer );

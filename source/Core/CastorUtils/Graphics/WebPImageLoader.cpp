@@ -38,7 +38,7 @@ namespace castor
 		reg.unregisterLoader( webpl::listExtensions() );
 	}
 
-	ImageLayout WebPImageLoader::load( String const & imageFormat
+	ImageMemoryLayout WebPImageLoader::load( String const & imageFormat
 		, uint8_t const * data
 		, uint32_t size
 		, PxBufferBaseUPtr & buffer )const
@@ -54,8 +54,8 @@ namespace castor
 			CU_LoaderError( "Can't retrieve image features" );
 		}
 
-		ImageLayout result;
-		result.type = ImageLayout::Type::e2D;
+		ImageMemoryLayout result;
+		result.type = ImageMemoryLayout::Type::e2D;
 		result.format = PixelFormat::eR8G8B8A8_SRGB;
 		result.extent = { config.input.width, config.input.height, 1u };
 		result.layers = 1u;

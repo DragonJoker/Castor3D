@@ -32,7 +32,7 @@ namespace castor3d
 			static constexpr uint64_t maxProgramMask = ( 0x1ULL << uint64_t( maxProgramSize ) ) - 1u;
 			static constexpr uint64_t maxLightingModelIDSize = castor::getBitSize( MaxLightingModels - 1u );
 			static constexpr uint64_t maxLightingModelIDMask = ( 0x1ULL << uint64_t( maxLightingModelIDSize ) ) - 1u;
-			static constexpr uint64_t maxCompareOpSize = castor::getBitSize( uint32_t( VK_COMPARE_OP_ALWAYS ) + 1u );
+			static constexpr uint64_t maxCompareOpSize = castor::getBitSize( uint32_t( ComparisonFunc::eMax ) + 1u );
 			static constexpr uint64_t maxCompareOpMask = ( 0x1ULL << uint64_t( maxCompareOpSize ) ) - 1u;
 			static constexpr uint64_t maxSubmeshDataSize = castor::getBitSize( MaxSubmeshDataBindings - 1u );
 			static constexpr uint64_t maxSubmeshDataMask = ( 0x1ULL << uint64_t( maxSubmeshDataSize ) ) - 1u;
@@ -97,7 +97,7 @@ namespace castor3d
 			offset += hi::maxProgramSize;
 			result.lightingModelId = ( LightingModelID( ( hiHash >> offset ) & hi::maxLightingModelIDMask ) + 1u );
 			offset += hi::maxLightingModelIDSize;
-			result.alphaFunc = VkCompareOp( ( hiHash >> offset ) & hi::maxCompareOpMask );
+			result.alphaFunc = ComparisonFunc( ( hiHash >> offset ) & hi::maxCompareOpMask );
 			offset += hi::maxCompareOpSize;
 			result.backgroundModelId = BackgroundModelID( ( ( hiHash >> offset ) & hi::maxBackgroundModelIDMask ) + 1u );
 			offset += hi::maxBackgroundModelIDSize;
@@ -144,7 +144,7 @@ namespace castor3d
 			offset += hi::maxProgramSize;
 			result |= ( uint64_t( flags.lightingModelId - 1u ) & hi::maxLightingModelIDMask ) << offset;
 			offset += hi::maxLightingModelIDSize;
-			result |= uint64_t( flags.alphaFunc & hi::maxCompareOpMask) << offset;
+			result |= uint64_t( uint64_t( flags.alphaFunc ) & hi::maxCompareOpMask) << offset;
 			offset += hi::maxCompareOpSize;
 			result |= uint64_t( ( flags.backgroundModelId - 1u ) & hi::maxBackgroundModelIDMask ) << offset;
 			offset += hi::maxBackgroundModelIDSize;

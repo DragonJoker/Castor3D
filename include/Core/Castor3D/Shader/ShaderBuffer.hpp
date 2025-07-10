@@ -36,7 +36,7 @@ namespace castor3d
 		C3D_API ShaderBuffer( RenderDevice const & device
 			, VkDeviceSize size
 			, castor::String const & name
-			, crg::AccessState wantedState = { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT } );
+			, crg::AccessState wantedState = { AccessFlags::eShaderRead, PipelineStageFlags::eFragmentShader } );
 		/**
 		 *\~english
 		 *\brief			Updates the buffer.

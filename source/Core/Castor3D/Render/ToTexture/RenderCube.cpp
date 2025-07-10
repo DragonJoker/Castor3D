@@ -40,12 +40,12 @@ namespace castor3d
 			castor::String const name = nearest
 				? castor::String{ cuT( "RenderCube_Nearest" ) }
 				: castor::String{ cuT( "RenderCube_Linear" ) };
-			VkFilter const minMagFilter = nearest
-				? VK_FILTER_NEAREST
-				: VK_FILTER_LINEAR;
-			VkSamplerMipmapMode const mipFilter = nearest
-				? VK_SAMPLER_MIPMAP_MODE_NEAREST
-				: VK_SAMPLER_MIPMAP_MODE_LINEAR;
+			FilterMode const minMagFilter = nearest
+				? FilterMode::eNearest
+				: FilterMode::eLinear;
+			MipmapMode const mipFilter = nearest
+				? MipmapMode::eNearest
+				: MipmapMode::eLinear;
 			auto & engine = *renderSystem.getEngine();
 			SamplerObs result{};
 
@@ -58,9 +58,9 @@ namespace castor3d
 				sampler->setMinFilter( minMagFilter );
 				sampler->setMagFilter( minMagFilter );
 				sampler->setMipFilter( mipFilter );
-				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				sampler->setWrapS( WrapMode::eClampToEdge );
+				sampler->setWrapT( WrapMode::eClampToEdge );
+				sampler->setWrapR( WrapMode::eClampToEdge );
 				result = sampler;
 			}
 
@@ -128,8 +128,8 @@ namespace castor3d
 					, result->getSize()
 					, result->getBuffer()
 					, 0u
-					, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+					, AccessFlags::eVertexAttributeRead
+					, PipelineStageFlags::eVertexInput );
 			}
 			return result;
 		}

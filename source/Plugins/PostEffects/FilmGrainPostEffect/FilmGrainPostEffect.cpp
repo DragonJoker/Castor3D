@@ -230,10 +230,10 @@ namespace film_grain
 		, crg::FramePass const & previousPass )
 	{
 		auto dim = m_noiseImages[0].getDimensions();
-		auto format = castor3d::convert( m_noiseImages[0].getPixelFormat() );
+		auto format = m_noiseImages[0].getPixelFormat();
 		m_noiseImg = m_graph.createImage( crg::ImageData{ "FGNoise"
 			, 0u
-			, VK_IMAGE_TYPE_3D
+			, castor3d::ImageType::e3D
 			, format
 			, { dim.getWidth(), dim.getHeight(), NoiseMapCount }
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
@@ -241,8 +241,8 @@ namespace film_grain
 		m_noiseView = m_graph.createView( crg::ImageViewData{ "FGNoise"
 			, m_noiseImg
 			, 0u
-			, VK_IMAGE_VIEW_TYPE_3D
-			, m_noiseImg.data->info.format
+			, castor3d::ImageViewType::e3D
+			, getFormat( m_noiseImg )
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
 		auto extent = castor3d::makeExtent2D( target.getExtent() );
 		m_pass = &m_graph.createPass( "FilmGrain"
@@ -251,7 +251,7 @@ namespace film_grain
 				, crg::RunnableGraph & graph )
 			{
 				auto dim = m_noiseImages[0].getDimensions();
-				auto format = castor3d::convert( m_noiseImages[0].getPixelFormat() );
+				auto format = convert( m_noiseImages[0].getPixelFormat() );
 				auto & device = getRenderSystem()->getRenderDevice();
 				auto staging = device->createStagingTexture( format
 					, VkExtent2D{ dim.getWidth(), dim.getHeight() } );
@@ -299,12 +299,12 @@ namespace film_grain
 			, postfx::FilmCfgUboIdx );
 		m_pass->addSampledView( m_noiseView
 			, postfx::NoiseTexIdx
-			, crg::SamplerDesc{ VK_FILTER_LINEAR
-				, VK_FILTER_LINEAR
-				, VK_SAMPLER_MIPMAP_MODE_LINEAR
-				, VK_SAMPLER_ADDRESS_MODE_REPEAT
-				, VK_SAMPLER_ADDRESS_MODE_REPEAT
-				, VK_SAMPLER_ADDRESS_MODE_REPEAT } );
+			, crg::SamplerDesc{ castor3d::FilterMode::eLinear
+				, castor3d::FilterMode::eLinear
+				, castor3d::MipmapMode::eLinear
+				, castor3d::WrapMode::eClampToEdge
+				, castor3d::WrapMode::eClampToEdge
+				, castor3d::WrapMode::eClampToEdge } );
 		m_pass->addSampledView( crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
 			, postfx::SourceTexIdx );
 		m_pass->addOutputColourView( crg::ImageViewIdArray{ target.targetViewId, source.targetViewId } );

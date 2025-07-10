@@ -151,8 +151,8 @@ namespace PbrBloom
 			result.push_back( graph.createView( crg::ImageViewData{ resultImg.data->name + castor::string::toMbString( i )
 				, resultImg
 				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, resultImg.data->info.format
+				, castor3d::ImageViewType::e2D
+				, getFormat( resultImg )
 				, { VK_IMAGE_ASPECT_COLOR_BIT, i, 1u, 0u, 1u } } ) );
 		}
 
@@ -219,12 +219,12 @@ namespace PbrBloom
 			pass.addDependency( *prev );
 			pass.addSampledView( src
 				, 0u
-				, crg::SamplerDesc{ VK_FILTER_LINEAR
-					, VK_FILTER_LINEAR
-					, VK_SAMPLER_MIPMAP_MODE_NEAREST
-					, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-					, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-					, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+				, crg::SamplerDesc{ castor3d::FilterMode::eLinear
+					, castor3d::FilterMode::eLinear
+					, castor3d::MipmapMode::eNearest
+					, castor3d::WrapMode::eClampToEdge
+					, castor3d::WrapMode::eClampToEdge
+					, castor3d::WrapMode::eClampToEdge
 					, 0.0f
 					, float( i == 0u ? i : i - 1u )
 					, float( i == 0u ? i + 1u : i ) } );

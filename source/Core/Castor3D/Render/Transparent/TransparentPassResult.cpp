@@ -26,13 +26,13 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	VkFormat getFormat( RenderDevice const &, WbTexture texture )
+	castor::PixelFormat getFormat( RenderDevice const &, WbTexture texture )
 	{
-		static castor::Array< VkFormat, size_t( WbTexture::eCount ) > Values
+		static castor::Array< castor::PixelFormat, size_t( WbTexture::eCount ) > Values
 		{
 			{
-				VK_FORMAT_R16G16B16A16_SFLOAT,
-				VK_FORMAT_R16_SFLOAT,
+				castor::PixelFormat::eR16G16B16A16_SFLOAT,
+				castor::PixelFormat::eR16_SFLOAT,
 			}
 		};
 		return Values[size_t( texture )];
@@ -62,13 +62,13 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	VkBorderColor getBorderColor( WbTexture texture )
+	BorderColour getBorderColor( WbTexture texture )
 	{
-		static castor::Array< VkBorderColor, size_t( WbTexture::eCount ) > Values
+		static castor::Array< BorderColour, size_t( WbTexture::eCount ) > Values
 		{
 			{
-				VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
-				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
+				BorderColour::eFloatTransparentBlack,
+				BorderColour::eFloatOpaqueWhite,
 			}
 		};
 		return Values[size_t( texture )];

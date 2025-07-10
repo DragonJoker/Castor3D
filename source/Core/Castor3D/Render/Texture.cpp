@@ -18,34 +18,34 @@ namespace castor3d
 
 	namespace texture
 	{
-		static VkFormat getDepthFormat( RenderDevice const & device
-			, VkFormat format )
+		static castor::PixelFormat getDepthFormat( RenderDevice const & device
+			, castor::PixelFormat format )
 		{
-			castor::Vector< VkFormat > depthFormats
+			castor::Vector< castor::PixelFormat > depthFormats
 			{
 				format,
-				VK_FORMAT_D24_UNORM_S8_UINT,
-				VK_FORMAT_D16_UNORM_S8_UINT,
+				castor::PixelFormat::eD24_UNORM_S8_UINT,
+				castor::PixelFormat::eD16_UNORM_S8_UINT,
 			};
 			return device.selectSuitableFormat( depthFormats
 				, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT );
 		}
 
-		static VkFormat retrieveFormat( RenderDevice const & device
-			, VkFormat format )
+		static castor::PixelFormat retrieveFormat( RenderDevice const & device
+			, castor::PixelFormat format )
 		{
-			return ashes::isDepthOrStencilFormat( format )
+			return isDepthOrStencilFormat( format )
 				? getDepthFormat( device, format )
 				: format;
 		}
 
 		static ashes::Sampler const * getSampler( RenderDevice const & device
-			, VkFilter minFilter
-			, VkFilter magFilter
-			, VkSamplerMipmapMode mipFilter
-			, VkSamplerAddressMode addressMode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VkBorderColor const & borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
-			, VkCompareOp compareOp = VK_COMPARE_OP_NEVER )
+			, FilterMode minFilter
+			, FilterMode magFilter
+			, MipmapMode mipFilter
+			, WrapMode addressMode = WrapMode::eClampToEdge
+			, BorderColour borderColor = BorderColour::eFloatTransparentBlack
+			, ComparisonFunc compareOp = ComparisonFunc::eNever )
 		{
 			auto & engine = *device.renderSystem.getEngine();
 			Sampler const * c3dSampler{};
@@ -73,7 +73,7 @@ namespace castor3d
 				created->setWrapR( addressMode );
 				created->setBorderColour( borderColor );
 
-				if ( compareOp != VK_COMPARE_OP_NEVER )
+				if ( compareOp != ComparisonFunc::eNever )
 				{
 					created->enableCompare( true );
 					created->setCompareOp( compareOp );
@@ -149,10 +149,10 @@ namespace castor3d
 		, VkExtent3D const & size
 		, uint32_t layerCount
 		, uint32_t mipLevels
-		, VkFormat format
+		, castor::PixelFormat format
 		, VkImageUsageFlags usageFlags
-		, VkBorderColor const & borderColor
-		, VkCompareOp compareOp
+		, BorderColour borderColor
+		, ComparisonFunc compareOp
 		, bool createSubviews )
 		: Texture{ device
 			, resources
@@ -165,10 +165,10 @@ namespace castor3d
 			, format
 			, usageFlags
 			, texture::getSampler( device
-				, VK_FILTER_LINEAR
-				, VK_FILTER_LINEAR
-				, VK_SAMPLER_MIPMAP_MODE_LINEAR
-				, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+				, FilterMode::eLinear
+				, FilterMode::eLinear
+				, MipmapMode::eLinear
+				, WrapMode::eClampToEdge
 				, borderColor
 				, compareOp )
 			, createSubviews }
@@ -182,14 +182,14 @@ namespace castor3d
 		, VkExtent3D const & size
 		, uint32_t layerCount
 		, uint32_t mipLevels
-		, VkFormat format
+		, castor::PixelFormat format
 		, VkImageUsageFlags usageFlags
-		, VkFilter minFilter
-		, VkFilter magFilter
-		, VkSamplerMipmapMode mipFilter
-		, VkSamplerAddressMode addressMode
-		, VkBorderColor const & borderColor
-		, VkCompareOp compareOp
+		, FilterMode minFilter
+		, FilterMode magFilter
+		, MipmapMode mipFilter
+		, WrapMode addressMode
+		, BorderColour borderColor
+		, ComparisonFunc compareOp
 		, bool createSubviews )
 		: Texture{ pdevice
 			, presources
@@ -219,7 +219,7 @@ namespace castor3d
 		, VkExtent3D const & size
 		, uint32_t layerCount
 		, uint32_t mipLevels
-		, VkFormat format
+		, castor::PixelFormat format
 		, VkImageUsageFlags usageFlags
 		, ashes::Sampler const * sampler
 		, bool createSubviews )
@@ -246,10 +246,10 @@ namespace castor3d
 		, uint32_t layerCount
 		, VkSampleCountFlagBits sampleCount
 		, uint32_t mipLevels
-		, VkFormat format
+		, castor::PixelFormat format
 		, VkImageUsageFlags usageFlags
-		, VkBorderColor const & borderColor
-		, VkCompareOp compareOp
+		, BorderColour borderColor
+		, ComparisonFunc compareOp
 		, bool createSubviews )
 		: Texture{ device
 			, resources
@@ -262,10 +262,10 @@ namespace castor3d
 			, format
 			, usageFlags
 			, texture::getSampler( device
-				, VK_FILTER_LINEAR
-				, VK_FILTER_LINEAR
-				, VK_SAMPLER_MIPMAP_MODE_LINEAR
-				, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+				, FilterMode::eLinear
+				, FilterMode::eLinear
+				, MipmapMode::eLinear
+				, WrapMode::eClampToEdge
 				, borderColor
 				, compareOp )
 			, createSubviews }
@@ -280,14 +280,14 @@ namespace castor3d
 		, uint32_t layerCount
 		, VkSampleCountFlagBits sampleCount
 		, uint32_t mipLevels
-		, VkFormat format
+		, castor::PixelFormat format
 		, VkImageUsageFlags usageFlags
-		, VkFilter minFilter
-		, VkFilter magFilter
-		, VkSamplerMipmapMode mipFilter
-		, VkSamplerAddressMode addressMode
-		, VkBorderColor const & borderColor
-		, VkCompareOp compareOp
+		, FilterMode minFilter
+		, FilterMode magFilter
+		, MipmapMode mipFilter
+		, WrapMode addressMode
+		, BorderColour borderColor
+		, ComparisonFunc compareOp
 		, bool createSubviews )
 		: Texture{ pdevice
 			, presources
@@ -318,7 +318,7 @@ namespace castor3d
 		, uint32_t layerCount
 		, VkSampleCountFlagBits sampleCount
 		, uint32_t mipLevels
-		, VkFormat format
+		, castor::PixelFormat format
 		, VkImageUsageFlags usageFlags
 		, ashes::Sampler const * psampler
 		, bool createSubviews )
@@ -338,10 +338,10 @@ namespace castor3d
 					? VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
 					: VkImageCreateFlagBits{} ) )
 			, ( size.depth > 1u
-				? VK_IMAGE_TYPE_3D
+				? ImageType::e3D
 				: ( isTexture1D
-					? VK_IMAGE_TYPE_1D
-					: VK_IMAGE_TYPE_2D ) )
+					? ImageType::e1D
+					: ImageType::e2D ) )
 			, texture::retrieveFormat( *device, format )
 			, size
 			, ( usageFlags
@@ -355,20 +355,20 @@ namespace castor3d
 			, imageId
 			, 0u
 			, ( size.depth > 1u
-				? VK_IMAGE_VIEW_TYPE_3D
+				? ImageViewType::e3D
 				: ( isTexture1D
 					? ( layerCount > 1u
-						? VK_IMAGE_VIEW_TYPE_1D_ARRAY
-						: VK_IMAGE_VIEW_TYPE_1D )
+						? ImageViewType::e1DArray
+						: ImageViewType::e1D )
 					: ( layerCount > 1u
 						? ( ashes::checkFlag( createFlags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT )
 							? ( layerCount > 6u
-								? VK_IMAGE_VIEW_TYPE_CUBE_ARRAY
-								: VK_IMAGE_VIEW_TYPE_CUBE )
-							: VK_IMAGE_VIEW_TYPE_2D_ARRAY )
-						: VK_IMAGE_VIEW_TYPE_2D ) ) )
+								? ImageViewType::eCubeArray
+								: ImageViewType::eCube )
+							: ImageViewType::e2DArray )
+						: ImageViewType::e2D ) ) )
 			, format
-			, { ashes::getAspectMask( format ), 0u, mipLevels, 0u, layerCount } } );
+			, { ashes::getAspectMask( convert( format ) ), 0u, mipLevels, 0u, layerCount } } );
 
 		if ( wholeViewId.data->info.viewType == VK_IMAGE_VIEW_TYPE_3D )
 		{
@@ -415,9 +415,9 @@ namespace castor3d
 				subViewsId.push_back( handler.createViewId( crg::ImageViewData{ mbName + "Sub" + castor::string::toMbString( index )
 					, imageId
 					, 0u
-					, ( isTexture1D ? VK_IMAGE_VIEW_TYPE_1D : VK_IMAGE_VIEW_TYPE_2D )
+					, ( isTexture1D ? ImageViewType::e1D : ImageViewType::e2D )
 					, format
-					, { ashes::getAspectMask( format ), 0u, 1u, index, 1u } } ) );
+					, { ashes::getAspectMask( convert( format ) ), 0u, 1u, index, 1u } } ) );
 			}
 		}
 	}
@@ -498,123 +498,123 @@ namespace castor3d
 		image = nullptr;
 	}
 
-	VkImageMemoryBarrier Texture::makeGeneralLayout( VkImageLayout srcLayout
-		, VkAccessFlags dstAccessFlags
+	VkImageMemoryBarrier Texture::makeGeneralLayout( ImageLayout srcLayout
+		, AccessFlags dstAccessFlags
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily
 		, bool target )const
 	{
 		return makeLayoutTransition( srcLayout
-			, VK_IMAGE_LAYOUT_GENERAL
-			, ashes::getAccessMask( srcLayout )
+			, ImageLayout::eGeneral
+			, getAccessMask( srcLayout )
 			, dstAccessFlags
 			, srcQueueFamily
 			, dstQueueFamily
 			, target );
 	}
 
-	VkImageMemoryBarrier Texture::makeTransferDestination( VkImageLayout srcLayout
+	VkImageMemoryBarrier Texture::makeTransferDestination( ImageLayout srcLayout
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily
 		, bool target )const
 	{
 		return makeLayoutTransition( srcLayout
-			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+			, ImageLayout::eTransferDst
 			, srcQueueFamily
 			, dstQueueFamily
 			, target );
 	}
 
-	VkImageMemoryBarrier Texture::makeTransferSource( VkImageLayout srcLayout
+	VkImageMemoryBarrier Texture::makeTransferSource( ImageLayout srcLayout
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily
 		, bool target )const
 	{
 		return makeLayoutTransition( srcLayout
-			, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+			, ImageLayout::eTransferSrc
 			, srcQueueFamily
 			, dstQueueFamily
 			, target );
 	}
 
-	VkImageMemoryBarrier Texture::makeShaderInputResource( VkImageLayout srcLayout
+	VkImageMemoryBarrier Texture::makeShaderInputResource( ImageLayout srcLayout
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily
 		, bool target )const
 	{
 		return makeLayoutTransition( srcLayout
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, ImageLayout::eShaderReadOnly
 			, srcQueueFamily
 			, dstQueueFamily
 			, target );
 	}
 
-	VkImageMemoryBarrier Texture::makeDepthStencilReadOnly( VkImageLayout srcLayout
+	VkImageMemoryBarrier Texture::makeDepthStencilReadOnly( ImageLayout srcLayout
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily
 		, bool target )const
 	{
 		return makeLayoutTransition( srcLayout
-			, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL
+			, ImageLayout::eDepthStencilReadOnly
 			, srcQueueFamily
 			, dstQueueFamily
 			, target );
 	}
 
-	VkImageMemoryBarrier Texture::makeColourAttachment( VkImageLayout srcLayout
+	VkImageMemoryBarrier Texture::makeColourAttachment( ImageLayout srcLayout
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily
 		, bool target )const
 	{
 		return makeLayoutTransition( srcLayout
-			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+			, ImageLayout::eColorAttachment
 			, srcQueueFamily
 			, dstQueueFamily
 			, target );
 	}
 
-	VkImageMemoryBarrier Texture::makeDepthStencilAttachment( VkImageLayout srcLayout
+	VkImageMemoryBarrier Texture::makeDepthStencilAttachment( ImageLayout srcLayout
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily
 		, bool target )const
 	{
 		return makeLayoutTransition( srcLayout
-			, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
+			, ImageLayout::eDepthStencilAttachment
 			, srcQueueFamily
 			, dstQueueFamily
 			, target );
 	}
 
-	VkImageMemoryBarrier Texture::makePresentSource( VkImageLayout srcLayout
+	VkImageMemoryBarrier Texture::makePresentSource( ImageLayout srcLayout
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily
 		, bool target )const
 	{
 		return makeLayoutTransition( srcLayout
-			, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR
+			, ImageLayout::ePresentSrc
 			, srcQueueFamily
 			, dstQueueFamily
 			, target );
 	}
 
-	VkImageMemoryBarrier Texture::makeLayoutTransition( VkImageLayout srcLayout
-		, VkImageLayout dstLayout
+	VkImageMemoryBarrier Texture::makeLayoutTransition( ImageLayout srcLayout
+		, ImageLayout dstLayout
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily
 		, bool target )const
 	{
 		return makeLayoutTransition( srcLayout
 			, dstLayout
-			, ashes::getAccessMask( srcLayout )
-			, ashes::getAccessMask( dstLayout )
+			, getAccessMask( srcLayout )
+			, getAccessMask( dstLayout )
 			, srcQueueFamily
 			, dstQueueFamily
 			, target );
 	}
 
-	VkImageMemoryBarrier Texture::makeLayoutTransition( VkImageLayout srcLayout
-		, VkImageLayout dstLayout
-		, VkAccessFlags srcAccessFlags
+	VkImageMemoryBarrier Texture::makeLayoutTransition( ImageLayout srcLayout
+		, ImageLayout dstLayout
+		, AccessFlags srcAccessFlags
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily
 		, bool target )const
@@ -622,24 +622,24 @@ namespace castor3d
 		return makeLayoutTransition( srcLayout
 			, dstLayout
 			, srcAccessFlags
-			, ashes::getAccessMask( dstLayout )
+			, getAccessMask( dstLayout )
 			, srcQueueFamily
 			, dstQueueFamily
 			, target );
 	}
 
-	VkImageMemoryBarrier Texture::makeLayoutTransition( VkImageLayout srcLayout
-		, VkImageLayout dstLayout
-		, VkAccessFlags srcAccessFlags
-		, VkAccessFlags dstAccessMask
+	VkImageMemoryBarrier Texture::makeLayoutTransition( ImageLayout srcLayout
+		, ImageLayout dstLayout
+		, AccessFlags srcAccessFlags
+		, AccessFlags dstAccessMask
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily
 		, bool target )const
 	{
-		return makeVkStruct< VkImageMemoryBarrier >( srcAccessFlags
-			, dstAccessMask
-			, srcLayout
-			, dstLayout
+		return makeVkStruct< VkImageMemoryBarrier >( convert( srcAccessFlags )
+			, convert( dstAccessMask )
+			, convert( srcLayout )
+			, convert( dstLayout )
 			, srcQueueFamily
 			, dstQueueFamily
 			, *image

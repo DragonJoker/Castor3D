@@ -80,13 +80,13 @@ namespace castor3d
 		}
 
 		static ashes::RenderPassPtr createRenderPass( RenderDevice const & device
-			, VkFormat format )
+			, castor::PixelFormat format )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
 			{
 				{
 					0u,
-					format,
+					convert( format ),
 					VK_SAMPLE_COUNT_1_BIT,
 					VK_ATTACHMENT_LOAD_OP_CLEAR,
 					VK_ATTACHMENT_STORE_OP_STORE,
@@ -160,7 +160,7 @@ namespace castor3d
 					ashes::ImageViewCRefArray attaches;
 					facePipeline.view = target.getTexture().createView( "EquirectangularToCube" + castor::string::toMbString( face )
 						, VK_IMAGE_VIEW_TYPE_2D
-						, target.getPixelFormat()
+						, convert( target.getPixelFormat() )
 						, 0u
 						, 1u
 						, face

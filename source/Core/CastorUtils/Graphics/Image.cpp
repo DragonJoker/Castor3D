@@ -68,7 +68,7 @@ namespace castor
 
 	Image::Image( String const & name
 		, Path const & path
-		, ImageLayout layout
+		, ImageMemoryLayout layout
 		, PxBufferBaseUPtr buffer )
 		: Named{ name }
 		, m_pathFile{ path }
@@ -131,7 +131,7 @@ namespace castor
 			return buffer;
 		}
 
-		ImageLayout layout{ *buffer };
+		ImageMemoryLayout layout{ *buffer };
 		auto format = buffer->getFormat();
 		auto channels = int( getComponentsCount( buffer->getFormat() ) );
 		int alpha{ hasAlpha( buffer->getFormat() )

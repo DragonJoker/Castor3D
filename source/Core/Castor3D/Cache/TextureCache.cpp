@@ -58,9 +58,9 @@ namespace castor3d
 			auto imagePixels = image.getPixels();
 
 			// Normalise format, regarding SRGB/Linear space
-			auto format = ( ( isSRGBFormat( imagePixels->getFormat() ) && sourceInfo.allowSRGB() )
+			auto format = ( ( castor::isSRGBFormat( imagePixels->getFormat() ) && sourceInfo.allowSRGB() )
 				? imagePixels->getFormat()
-				: getNonSRGBFormat( imagePixels->getFormat() ) );
+				: castor::getNonSRGBFormat( imagePixels->getFormat() ) );
 			auto buffer = castor::PxBufferBase::create( imagePixels->getDimensions()
 				, imagePixels->getLayers()
 				, imagePixels->getLevels()
@@ -155,8 +155,8 @@ namespace castor3d
 			if ( imagePixels->isZInverted() )
 				buffer->invertZ();
 
-			castor::ImageLayout layout{ ( ( buffer->getLayers() == 1u && image.getLayout().type == castor::ImageLayout::e2DArray )
-					? castor::ImageLayout::e2D
+			castor::ImageMemoryLayout layout{ ( ( buffer->getLayers() == 1u && image.getLayout().type == castor::ImageMemoryLayout::e2DArray )
+					? castor::ImageMemoryLayout::e2D
 					: image.getLayout().type )
 				, *buffer };
 			return engine.createImage( name
@@ -219,7 +219,7 @@ namespace castor3d
 
 				if ( it->second->isTextured() )
 				{
-					updateIndices( convert( it->second->getTexturePixelFormat() )
+					updateIndices( it->second->getTexturePixelFormat()
 						, merged );
 				}
 				else
@@ -458,8 +458,8 @@ namespace castor3d
 				, *texture->image
 				, data->image->getLayout()
 				, texture->sampledViewId.data->info.subresourceRange
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT );
+				, ImageLayout::eShaderReadOnly
+				, PipelineStageFlags::eFragmentShader );
 
 			for ( auto unit : doListTextureUnits( texture ) )
 			{
@@ -763,7 +763,7 @@ namespace castor3d
 				, VkExtent3D{ layout.extent->x, layout.extent->y, layout.extent->z }
 				, layout.layers
 				, layout.levels
-				, convert( layout.format )
+				, layout.format
 				, data.data->usage
 				, nullptr };
 			data.texture->create();

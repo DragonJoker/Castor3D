@@ -196,8 +196,8 @@ namespace castor3d
 
 	VkImageMemoryBarrier makeLayoutTransition( VkImage image
 		, VkImageSubresourceRange const & range
-		, VkImageLayout srcLayout
-		, VkImageLayout dstLayout
+		, ImageLayout srcLayout
+		, ImageLayout dstLayout
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily )
 	{
@@ -205,17 +205,17 @@ namespace castor3d
 			, range
 			, srcLayout
 			, dstLayout
-			, ashes::getAccessMask( srcLayout )
-			, ashes::getAccessMask( dstLayout )
+			, getAccessMask( srcLayout )
+			, getAccessMask( dstLayout )
 			, srcQueueFamily
 			, dstQueueFamily );
 	}
 
 	VkImageMemoryBarrier makeLayoutTransition( VkImage image
 		, VkImageSubresourceRange const & range
-		, VkImageLayout srcLayout
-		, VkImageLayout dstLayout
-		, VkAccessFlags srcAccessFlags
+		, ImageLayout srcLayout
+		, ImageLayout dstLayout
+		, AccessFlags srcAccessFlags
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily )
 	{
@@ -224,24 +224,24 @@ namespace castor3d
 			, srcLayout
 			, dstLayout
 			, srcAccessFlags
-			, ashes::getAccessMask( dstLayout )
+			, getAccessMask( dstLayout )
 			, srcQueueFamily
 			, dstQueueFamily );
 	}
 
 	VkImageMemoryBarrier makeLayoutTransition( VkImage image
 		, VkImageSubresourceRange const & range
-		, VkImageLayout srcLayout
-		, VkImageLayout dstLayout
-		, VkAccessFlags srcAccessFlags
-		, VkAccessFlags dstAccessMask
+		, ImageLayout srcLayout
+		, ImageLayout dstLayout
+		, AccessFlags srcAccessFlags
+		, AccessFlags dstAccessMask
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily )
 	{
-		return makeVkStruct< VkImageMemoryBarrier >( srcAccessFlags
-			, dstAccessMask
-			, srcLayout
-			, dstLayout
+		return makeVkStruct< VkImageMemoryBarrier >( convert( srcAccessFlags )
+			, convert( dstAccessMask )
+			, convert( srcLayout )
+			, convert( dstLayout )
 			, srcQueueFamily
 			, dstQueueFamily
 			, image
@@ -255,8 +255,8 @@ namespace castor3d
 		, crg::AccessState after
 		, crg::AccessState before )
 	{
-		buffer.makeMemoryTransitionBarrier( before.access
-			, before.pipelineStage
+		buffer.makeMemoryTransitionBarrier( convert( before.access )
+			, convert( before.pipelineStage )
 			, VK_QUEUE_FAMILY_IGNORED
 			, VK_QUEUE_FAMILY_IGNORED );
 		context.memoryBarrier( commandBuffer

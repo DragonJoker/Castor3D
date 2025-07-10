@@ -311,7 +311,7 @@ namespace castor3d
 			, info
 			, *data->queue
 			, { { *used.semaphore
-				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } } );
+				, PipelineStageFlags::eVertexInput } } );
 
 		for ( auto const & [_, window] : windows )
 		{

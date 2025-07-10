@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/BufferModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
-#include <CastorUtils/Graphics/ImageLayout.hpp>
+#include <CastorUtils/Graphics/ImageMemoryLayout.hpp>
 
 namespace castor3d
 {
@@ -33,15 +33,15 @@ namespace castor3d
 			, VkDeviceSize srcSize
 			, ashes::BufferBase const & dstBuffer
 			, VkDeviceSize dstOffset
-			, VkAccessFlags dstAccessFlags
-			, VkPipelineStageFlags dstPipelineFlags );
+			, AccessFlags dstAccessFlags
+			, PipelineStageFlags dstPipelineFlags );
 		C3D_API void pushUpload( void const * srcData
 			, VkDeviceSize srcSize
 			, ashes::Image const & dstImage
-			, castor::ImageLayout dstLayout
+			, castor::ImageMemoryLayout dstLayout
 			, VkImageSubresourceRange dstRange
-			, VkImageLayout dstImageLayout
-			, VkPipelineStageFlags dstPipelineFlags );
+			, ImageLayout dstImageLayout
+			, PipelineStageFlags dstPipelineFlags );
 		C3D_API void process();
 		C3D_API SemaphoreUsed end( ashes::Queue const & queue
 			, ashes::Fence const * fence = nullptr
@@ -50,8 +50,8 @@ namespace castor3d
 		void pushUpload( castor::ByteArray const & srcData
 			, ashes::BufferBase const & dstBuffer
 			, VkDeviceSize dstOffset
-			, VkAccessFlags dstAccessFlags
-			, VkPipelineStageFlags dstPipelineFlags )
+			, AccessFlags dstAccessFlags
+			, PipelineStageFlags dstPipelineFlags )
 		{
 			pushUpload( srcData.data()
 				, srcData.size()
@@ -63,10 +63,10 @@ namespace castor3d
 
 		void pushUpload( castor::ByteArray const & srcData
 			, ashes::Image const & dstImage
-			, castor::ImageLayout dstLayout
+			, castor::ImageMemoryLayout dstLayout
 			, VkImageSubresourceRange dstRange
-			, VkImageLayout dstImageLayout
-			, VkPipelineStageFlags dstPipelineFlags )
+			, ImageLayout dstImageLayout
+			, PipelineStageFlags dstPipelineFlags )
 		{
 			pushUpload( srcData.data()
 				, srcData.size()
@@ -80,8 +80,8 @@ namespace castor3d
 		void pushUpload( castor::ByteArrayView const & srcData
 			, ashes::BufferBase const & dstBuffer
 			, VkDeviceSize dstOffset
-			, VkAccessFlags dstAccessFlags
-			, VkPipelineStageFlags dstPipelineFlags )
+			, AccessFlags dstAccessFlags
+			, PipelineStageFlags dstPipelineFlags )
 		{
 			pushUpload( srcData.data()
 				, srcData.size()
@@ -93,10 +93,10 @@ namespace castor3d
 
 		void pushUpload( castor::ByteArrayView const & srcData
 			, ashes::Image const & dstImage
-			, castor::ImageLayout dstLayout
+			, castor::ImageMemoryLayout dstLayout
 			, VkImageSubresourceRange dstRange
-			, VkImageLayout dstImageLayout
-			, VkPipelineStageFlags dstPipelineFlags )
+			, ImageLayout dstImageLayout
+			, PipelineStageFlags dstPipelineFlags )
 		{
 			pushUpload( srcData.data()
 				, srcData.size()
@@ -129,8 +129,8 @@ namespace castor3d
 			VkDeviceSize srcSize{};
 			ashes::BufferBase const * dstBuffer{};
 			VkDeviceSize dstOffset{};
-			VkAccessFlags dstAccessFlags{};
-			VkPipelineStageFlags dstPipelineFlags{};
+			AccessFlags dstAccessFlags{};
+			PipelineStageFlags dstPipelineFlags{};
 		};
 
 		struct ImageDataRange
@@ -138,10 +138,10 @@ namespace castor3d
 			void const * srcData{};
 			VkDeviceSize srcSize{};
 			ashes::Image const * dstImage{};
-			castor::ImageLayout dstLayout{};
+			castor::ImageMemoryLayout dstLayout{};
 			VkImageSubresourceRange dstRange{};
-			VkImageLayout dstImageLayout{};
-			VkPipelineStageFlags dstPipelineFlags{};
+			ImageLayout dstImageLayout{};
+			PipelineStageFlags dstPipelineFlags{};
 		};
 
 		C3D_API UploadData( RenderDevice const & device

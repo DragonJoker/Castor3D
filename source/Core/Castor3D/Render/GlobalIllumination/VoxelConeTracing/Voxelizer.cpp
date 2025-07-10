@@ -48,14 +48,14 @@ namespace castor3d
 				, VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
 				, size
 				, 1u
-				, getMipLevels( size, VK_FORMAT_R16G16B16A16_SFLOAT )
-				, VK_FORMAT_R16G16B16A16_SFLOAT
+				, getMipLevels( size, castor::PixelFormat::eR16G16B16A16_SFLOAT )
+				, castor::PixelFormat::eR16G16B16A16_SFLOAT
 				, ( VK_IMAGE_USAGE_STORAGE_BIT
 					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 					| VK_IMAGE_USAGE_SAMPLED_BIT )
-				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK
-				, VK_COMPARE_OP_NEVER
+				, BorderColour::eFloatOpaqueBlack
+				, ComparisonFunc::eNever
 				, false };
 		}
 
@@ -84,7 +84,7 @@ namespace castor3d
 				, context
 				, graph
 				, { crg::defaultV< InitialiseCallback >
-					, GetPipelineStateCallback( []() { return crg::getPipelineState( VK_PIPELINE_STAGE_TRANSFER_BIT ); } )
+					, GetPipelineStateCallback( []() { return crg::getPipelineState( PipelineStageFlags::eTransfer ); } )
 					, [this]( crg::RecordContext &, VkCommandBuffer cb, uint32_t i ) { doRecordInto( cb, i ); }
 					, crg::defaultV< GetPassIndexCallback >
 					, castor::move( isEnabled ) } }
@@ -154,9 +154,9 @@ namespace castor3d
 			, m_runnable->getTimer() );
 		printGraph( *m_runnable );
 		m_graph.addOutput( m_firstBounce.wholeViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 		m_graph.addOutput( m_secondaryBounce.wholeViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 		auto runnable = m_runnable.get();
 		m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 			, [runnable]( RenderDevice const &
@@ -229,11 +229,11 @@ namespace castor3d
 	{
 		visitor.visit( cuT( "Voxelisation First Bounce" )
 			, m_firstBounce
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, ImageLayout::eShaderReadOnly
 			, TextureFactors::tex3D( &m_grid ) );
 		visitor.visit( cuT( "Voxelisation Secondary Bounce" )
 			, m_secondaryBounce
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, ImageLayout::eShaderReadOnly
 			, TextureFactors::tex3D( &m_grid ) );
 		m_staticsVoxelizePass->accept( visitor );
 		m_dynamicsVoxelizePass->accept( visitor );
@@ -447,7 +447,7 @@ namespace castor3d
 				auto res = castor::make_unique< crg::GenerateMipmaps >( framePass
 					, context
 					, runnableGraph
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					, ImageLayout::eShaderReadOnly
 					, crg::ru::Config{}
 					, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
 					, enable );

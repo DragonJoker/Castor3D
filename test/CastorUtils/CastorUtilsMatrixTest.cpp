@@ -294,22 +294,22 @@ namespace Testing
 		float right = 1920.0f;
 		float top = 100.0f;
 		float bottom = 1080.0f;
-		float near = 1.0f;
-		float far = 1000.0f;
+		float nearZ = 1.0f;
+		float farZ = 1000.0f;
 		CT_ON("	Ortho RH" );
 		{
 			Matrix4x4f mtx( 1 );
-			matrix::ortho( mtx, left, right, bottom, top, near, far );
+			matrix::ortho( mtx, left, right, bottom, top, nearZ, farZ );
 			glm::mat4 mat;
-			mat = glm::ortho( left, right, bottom, top, near, far );
+			mat = glm::ortho( left, right, bottom, top, nearZ, farZ );
 			CT_EQUAL( mtx, mat );
 		}
 		CT_ON("	Frustum" );
 		{
 			Matrix4x4f mtx( 1 );
-			matrix::frustum( mtx, left, right, bottom, top, near, far );
+			matrix::frustum( mtx, left, right, bottom, top, nearZ, farZ );
 			glm::mat4 mat;
-			mat = glm::frustum( left, right, bottom, top, near, far );
+			mat = glm::frustum( left, right, bottom, top, nearZ, farZ );
 			CT_EQUAL( mtx, mat );
 		}
 		CT_ON("	Perspective" );
@@ -317,9 +317,9 @@ namespace Testing
 			Angle fov{ 90.0_degrees };
 			float aspect = 4.0f / 3.0f;
 			Matrix4x4f mtx( 1 );
-			matrix::perspective( mtx, fov, aspect, near, far );
+			matrix::perspective( mtx, fov, aspect, nearZ, farZ );
 			glm::mat4 mat;
-			mat = glm::perspective< float >( fov.radians(), aspect, near, far );
+			mat = glm::perspective< float >( fov.radians(), aspect, nearZ, farZ );
 			CT_EQUAL( mtx, mat );
 		}
 	}

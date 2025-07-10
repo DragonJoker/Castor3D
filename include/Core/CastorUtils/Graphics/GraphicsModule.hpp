@@ -9,6 +9,8 @@ See LICENSE file in root folder
 #include "CastorUtils/Data/DataModule.hpp"
 #include "CastorUtils/Design/FlagCombination.hpp"
 
+#include <RenderGraph/FrameGraphPrerequisites.hpp>
+
 namespace castor
 {
 	/**@name Graphics */
@@ -19,14 +21,8 @@ namespace castor
 	\~french
 	\brief Enumération des formats de Pixel
 	*/
-	enum class PixelFormat
-		: uint32_t
-	{
-#define CUPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed ) e##name = value,
-#include "PixelFormat.enum"
-
-		CU_ScopedEnumBounds( eUNDEFINED, eASTC_12x12_SRGB_BLOCK ),
-	};
+	using crg::PixelFormat;
+	using crg::convert;
 	/**
 	\~english
 	\brief		Predefined colours enumeration
@@ -226,7 +222,7 @@ namespace castor
 	\~french
 	\brief		Le layout mémoire d'une image.
 	*/
-	struct ImageLayout;
+	struct ImageMemoryLayout;
 	/**
 	\~english
 	\brief		Box container class.

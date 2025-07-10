@@ -140,7 +140,7 @@ namespace castor3d
 				{
 					rq::BindingDescriptionArray tmp
 					{
-						{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+						{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, ImageViewType::e2D },
 					};
 					return tmp;
 				}() };
@@ -184,7 +184,7 @@ namespace castor3d
 
 	RenderQuad::RenderQuad( RenderDevice const & device
 		, castor::String const & name
-		, VkFilter samplerFilter
+		, FilterMode samplerFilter
 		, rq::Config config )
 		: castor::Named{ name + cuT( "Quad" ) }
 		, m_renderSystem{ device.renderSystem }

@@ -9,6 +9,8 @@ CU_ImplementSmartPtr( castor3d, SamplerCache )
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
 	namespace texmod
 	{
 		static castor::Image & getImage( Engine & engine
@@ -46,7 +48,28 @@ namespace castor3d
 		}
 	}
 
+	//*********************************************************************************************
+
 	const castor::String PtrCacheTraitsT< castor3d::Sampler, castor::String >::Name = cuT( "Sampler" );
+
+	//*********************************************************************************************
+
+	castor::String getName( BorderColour v )
+	{
+		return ashes::getName( convert( v ) );
+	}
+
+	VkBorderColor convert( BorderColour v )
+	{
+		return VkBorderColor( v );
+	}
+
+	BorderColour convert( VkBorderColor v )
+	{
+		return BorderColour( v );
+	}
+
+	//*********************************************************************************************
 
 	castor::String getName( TextureSpace value )
 	{
@@ -92,6 +115,8 @@ namespace castor3d
 		return result;
 	}
 
+	//*********************************************************************************************
+
 	castor::String getName( CubeMapFace value )
 	{
 		switch ( value )
@@ -114,9 +139,11 @@ namespace castor3d
 		}
 	}
 
-	castor::OutputStream & operator<<( castor::OutputStream & stream, castor::ImageLayout const & rhs )
+	//*********************************************************************************************
+
+	castor::OutputStream & operator<<( castor::OutputStream & stream, castor::ImageMemoryLayout const & rhs )
 	{
-		stream << castor::ImageLayout::getName( rhs.type )
+		stream << castor::ImageMemoryLayout::getName( rhs.type )
 			<< cuT( ", " ) << castor::makeString( ashes::getName( convert( rhs.format ) ) )
 			<< cuT( ", " ) << rhs.extent->x
 			<< cuT( "x" ) << rhs.extent->y;
@@ -146,6 +173,8 @@ namespace castor3d
 		return stream;
 	}
 
+	//*********************************************************************************************
+
 	castor::Image & getBufferImage( Engine & engine
 		, castor::String const & name
 		, castor::String const & type
@@ -168,6 +197,8 @@ namespace castor3d
 			, castor::ImageCreateParams{ folder / relative
 				, { false, false, false } } );
 	}
+
+	//*********************************************************************************************
 
 	TextureLayoutUPtr createTextureLayout( Engine const & engine
 		, castor::Path const & relative
@@ -218,11 +249,15 @@ namespace castor3d
 		return texture;
 	}
 
+	//*********************************************************************************************
+
 	uint32_t getMipLevels( VkExtent3D const & extent
-		, VkFormat format )
+		, castor::PixelFormat format )
 	{
-		auto blockSize = ashes::getBlockSize( format );
+		auto blockSize = ashes::getBlockSize( convert( format ) );
 		auto min = std::min( extent.width / blockSize.extent.width, extent.height / blockSize.extent.height );
 		return uint32_t( castor::getBitSize( min ) );
 	}
+
+	//*********************************************************************************************
 }

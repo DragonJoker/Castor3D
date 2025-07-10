@@ -424,7 +424,7 @@ namespace atmosphere_scattering
 				auto result = castor::make_unique< crg::GenerateMipmaps >( framePass
 					, context
 					, graph
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					, castor3d::ImageLayout::eShaderReadOnly
 					, crg::ru::Config{}
 					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 					, crg::RunnablePass::IsEnabledCallback( [&enabled](){ return enabled; } ) );

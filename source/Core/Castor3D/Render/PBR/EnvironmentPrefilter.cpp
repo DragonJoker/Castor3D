@@ -42,7 +42,7 @@ namespace castor3d
 				, { size[0], size[1], 1u }
 				, 6u
 				, MaxIblReflectionLod + 1u
-				, VK_FORMAT_R32G32B32A32_SFLOAT
+				, castor::PixelFormat::eR32G32B32A32_SFLOAT
 				, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT };
 			result.create();
 			return result;
@@ -65,12 +65,12 @@ namespace castor3d
 			else
 			{
 				auto created = engine.createSampler( name, engine );
-				created->setMinFilter( VK_FILTER_LINEAR );
-				created->setMagFilter( VK_FILTER_LINEAR );
-				created->setMipFilter( VK_SAMPLER_MIPMAP_MODE_LINEAR );
-				created->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				created->setMinFilter( FilterMode::eLinear );
+				created->setMagFilter( FilterMode::eLinear );
+				created->setMipFilter( MipmapMode::eLinear );
+				created->setWrapS( WrapMode::eClampToEdge );
+				created->setWrapT( WrapMode::eClampToEdge );
+				created->setWrapR( WrapMode::eClampToEdge );
 				created->setMinLod( 0.0f );
 				created->setMaxLod( float( maxLod ) );
 				created->setSerialisable( false );
@@ -205,13 +205,13 @@ namespace castor3d
 
 		static ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
 			, castor::String const & prefix
-			, VkFormat format )
+			, castor::PixelFormat format )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
 			{
 				{
 					0u,
-					format,
+					convert( format ),
 					VK_SAMPLE_COUNT_1_BIT,
 					VK_ATTACHMENT_LOAD_OP_CLEAR,
 					VK_ATTACHMENT_STORE_OP_STORE,
@@ -345,7 +345,7 @@ namespace castor3d
 	{
 		return { 1u
 			, { m_commands.submit( queue, signalsToWait )
-				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT } };
+				, PipelineStageFlags::eColorAttachmentOutput } };
 	}
 
 	//*********************************************************************************************
@@ -360,7 +360,7 @@ namespace castor3d
 		, m_srcView{ srcTexture }
 		, m_prefix{ isCharlie ? castor::String{ cuT( "Sheen" ) } : castor::String{} }
 		, m_srcImage{ m_srcView.image.get() }
-		, m_srcImageView{ m_srcImage->createView( castor::toUtf8( m_prefix ) + "EnvironmentPrefilterSrc", VK_IMAGE_VIEW_TYPE_CUBE, m_srcView.getFormat(), 0u, m_srcView.getMipLevels(), 0u, 6u ) }
+		, m_srcImageView{ m_srcImage->createView( castor::toUtf8( m_prefix ) + "EnvironmentPrefilterSrc", VK_IMAGE_VIEW_TYPE_CUBE, convert( m_srcView.getFormat() ), 0u, m_srcView.getMipLevels(), 0u, 6u ) }
 		, m_result{ envpref::doCreatePrefilteredTexture( m_device, *m_srcView.resources, size, m_prefix ) }
 		, m_sampler{ envpref::doCreateSampler( engine, m_device, m_prefix, m_result.getMipLevels() - 1u ) }
 		, m_renderPass{ envpref::doCreateRenderPass( m_device, m_prefix, m_result.getFormat() ) }

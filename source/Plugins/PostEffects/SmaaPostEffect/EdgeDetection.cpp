@@ -42,7 +42,7 @@ namespace smaa
 			, m_extent
 			, 1u
 			, 1u
-			, VK_FORMAT_R8G8B8A8_UNORM
+			, castor::PixelFormat::eR8G8B8A8_UNORM
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
@@ -60,8 +60,8 @@ namespace smaa
 		, m_outDepthStencilView{ m_graph.createView( crg::ImageViewData{ "SMEDStRes"
 			, m_outDepth.imageId
 			, 0u
-			, VK_IMAGE_VIEW_TYPE_2D
-			, m_outDepth.imageId.data->info.format
+			, castor3d::ImageViewType::e2D
+			, getFormat( m_outDepth.imageId )
 			, { VK_IMAGE_ASPECT_STENCIL_BIT, 0u, 1u, 0u, 1u } } ) }
 		, m_shader{ cuT( "SmaaEdge" ), castor::move( shader ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }

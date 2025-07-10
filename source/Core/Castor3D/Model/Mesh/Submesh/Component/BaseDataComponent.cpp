@@ -64,8 +64,8 @@ namespace castor3d
 				, data.size() * sizeof( castor::Point4f )
 				, buffer.getBuffer()
 				, buffer.getOffset()
-				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+				, AccessFlags::eVertexAttributeRead
+				, PipelineStageFlags::eVertexInput );
 		}
 	}
 

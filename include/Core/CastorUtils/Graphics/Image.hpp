@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Design/Resource.hpp"
 #include "CastorUtils/Graphics/Colour.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
-#include "CastorUtils/Graphics/ImageLayout.hpp"
+#include "CastorUtils/Graphics/ImageMemoryLayout.hpp"
 
 namespace castor
 {
@@ -44,7 +44,7 @@ namespace castor
 			, PxBufferBase const & buffer );
 		CU_API Image( String const & name
 			, Path const & path
-			, ImageLayout layout
+			, ImageMemoryLayout layout
 			, PxBufferBaseUPtr buffer = nullptr );
 		template< PixelFormat PFSrc, PixelFormat PFDst >
 		Image( String name
@@ -83,7 +83,7 @@ namespace castor
 		}
 
 		Image( String const & name
-			, ImageLayout layout
+			, ImageMemoryLayout layout
 			, PxBufferBaseUPtr buffer )
 			: Image{ name, {}, castor::move( layout ), castor::move( buffer ) }
 		{
@@ -274,41 +274,41 @@ namespace castor
 			return m_pathFile;
 		}
 
-		ImageLayout::Buffer getBuffer()
+		ImageMemoryLayout::Buffer getBuffer()
 		{
 			CU_Require( hasBuffer() );
 			return makeArrayView( m_buffer->getPtr()
 				, m_buffer->getPtr() + m_buffer->getSize() );
 		}
 
-		ImageLayout::ConstBuffer getBuffer()const
+		ImageMemoryLayout::ConstBuffer getBuffer()const
 		{
 			CU_Require( hasBuffer() );
 			return makeArrayView( m_buffer->getConstPtr()
 				, m_buffer->getConstPtr() + m_buffer->getSize() );
 		}
 
-		ImageLayout::Buffer getBuffer( uint32_t index )
+		ImageMemoryLayout::Buffer getBuffer( uint32_t index )
 		{
 			CU_Require( hasBuffer() );
 			return getLayerBuffer( m_layout, *m_buffer, index );
 		}
 
-		ImageLayout::ConstBuffer getBuffer( uint32_t index )const
+		ImageMemoryLayout::ConstBuffer getBuffer( uint32_t index )const
 		{
 			CU_Require( hasBuffer() );
 			auto const & buffer = *m_buffer;
 			return getLayerBuffer( m_layout, buffer, index );
 		}
 
-		ImageLayout::Buffer getBuffer( uint32_t index
+		ImageMemoryLayout::Buffer getBuffer( uint32_t index
 			, uint32_t level )
 		{
 			CU_Require( hasBuffer() );
 			return getLayerMipBuffer( m_layout, *m_buffer, index, level );
 		}
 
-		ImageLayout::ConstBuffer getBuffer( uint32_t index
+		ImageMemoryLayout::ConstBuffer getBuffer( uint32_t index
 			, uint32_t level )const
 		{
 			CU_Require( hasBuffer() );
@@ -338,12 +338,12 @@ namespace castor
 			return m_buffer.get();
 		}
 
-		ImageLayout const & getLayout()const noexcept
+		ImageMemoryLayout const & getLayout()const noexcept
 		{
 			return m_layout;
 		}
 
-		ImageLayout & getLayout()noexcept
+		ImageMemoryLayout & getLayout()noexcept
 		{
 			return m_layout;
 		}
@@ -365,7 +365,7 @@ namespace castor
 	private:
 		Path m_pathFile;
 		PxBufferBaseUPtr m_buffer;
-		ImageLayout m_layout;
+		ImageMemoryLayout m_layout;
 	};
 }
 

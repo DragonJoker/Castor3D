@@ -618,7 +618,7 @@ namespace castor3d
 							, attach.getBufferRange()
 							, currentState.access
 							, currentState.pipelineStage
-							, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+							, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
 					}
 				}
 			}
@@ -726,9 +726,9 @@ namespace castor3d
 				context.memoryBarrier( commandBuffer
 					, VkBuffer( buffer )
 					, crg::BufferSubresourceRange{ 0u, ashes::WholeSize }
-					, VkAccessFlags( VK_ACCESS_INDIRECT_COMMAND_READ_BIT )
-					, VkPipelineStageFlags( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT )
-					, crg::AccessState{ VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT } );
+					, AccessFlags::eIndirectCommandRead
+					, PipelineStageFlags::eComputeShader
+					, { AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect } );
 			}
 
 			void doPostRecord( crg::RecordContext & context
@@ -748,7 +748,7 @@ namespace castor3d
 							, attach.getBufferRange()
 							, currentState.access
 							, currentState.pipelineStage
-							, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+							, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
 					}
 				}
 			}

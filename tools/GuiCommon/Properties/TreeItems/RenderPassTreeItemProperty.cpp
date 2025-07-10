@@ -46,8 +46,8 @@ namespace GuiCommon
 						, engine.getRenderPassTypeID( renderPass.getTypeName() )
 						, scene.getDefaultLightingModel()
 						, scene.getBackgroundModelId()
-						, VK_COMPARE_OP_ALWAYS
-						, VK_COMPARE_OP_ALWAYS
+						, castor3d::ComparisonFunc::eAlways
+						, castor3d::ComparisonFunc::eAlways
 						, castor3d::TextureCombine{}
 						, castor3d::ProgramFlag::eNone
 						, castor3d::SceneFlag::eNone

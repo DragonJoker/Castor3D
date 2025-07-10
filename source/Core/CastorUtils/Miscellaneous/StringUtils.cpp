@@ -407,7 +407,7 @@ namespace castor::string
 
 namespace castor
 {
-	namespace convert
+	namespace conversion
 	{
 		thread_local std::locale const loc{ std::locale{ "C" } };
 
@@ -477,14 +477,14 @@ namespace castor
 	String makeString( MbStringView const & in )
 	{
 		String result;
-		convert::StringConverter< mbchar, xchar >::convert( in, result );
+		conversion::StringConverter< mbchar, xchar >::convert( in, result );
 		return result;
 	}
 
 	String makeString( WStringView const & in )
 	{
 		String result;
-		convert::StringConverter< wchar, xchar >::convert( in, result );
+		conversion::StringConverter< wchar, xchar >::convert( in, result );
 		return result;
 	}
 
@@ -495,7 +495,7 @@ namespace castor
 		if constexpr ( std::is_same_v< xchar, mbchar > )
 		{
 			MbString tmp;
-			convert::StringConverter< char32_t, mbchar >::convert( in, tmp );
+			conversion::StringConverter< char32_t, mbchar >::convert( in, tmp );
 			result = makeString( tmp );
 		}
 		else
@@ -512,14 +512,14 @@ namespace castor
 	MbString toUtf8( WStringView in )
 	{
 		MbString result;
-		convert::StringConverter< wchar, mbchar >::convert( in, result );
+		conversion::StringConverter< wchar, mbchar >::convert( in, result );
 		return result;
 	}
 
 	WString toSystemWide( MbStringView in )
 	{
 		WString result;
-		convert::StringConverter< mbchar, wchar >::convert( in, result );
+		conversion::StringConverter< mbchar, wchar >::convert( in, result );
 		return result;
 	}
 
@@ -537,7 +537,7 @@ namespace castor
 		else
 		{
 			auto tmp = toUtf8( in );
-			convert::StringConverter< mbchar, char32_t >::convert( tmp, result );
+			conversion::StringConverter< mbchar, char32_t >::convert( tmp, result );
 		}
 
 		return result;

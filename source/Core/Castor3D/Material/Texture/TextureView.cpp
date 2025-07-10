@@ -30,10 +30,10 @@ namespace castor3d
 			return stream.str();
 		}
 
-		static castor::ImageLayout getLayout( ashes::ImageViewCreateInfo const & value
+		static castor::ImageMemoryLayout getLayout( ashes::ImageViewCreateInfo const & value
 			, castor::Point3ui const & extent )
 		{
-			return castor::ImageLayout{ castor::ImageLayout::Type( value->viewType )
+			return castor::ImageMemoryLayout{ castor::ImageMemoryLayout::Type( value->viewType )
 				, castor::PixelFormat( value->format )
 				, extent
 				, value->subresourceRange.baseArrayLayer
@@ -88,13 +88,13 @@ namespace castor3d
 	}
 
 	void TextureView::update( VkExtent3D const & extent
-		, VkFormat format
+		, castor::PixelFormat format
 		, uint32_t mipLevels
 		, uint32_t arrayLayers )
 	{
 		auto info = m_info;
 		m_source.update( extent, format, mipLevels, arrayLayers );
-		m_info->format = format;
+		m_info->format = convert( format );
 		info->subresourceRange.layerCount = arrayLayers;
 		m_info->subresourceRange.levelCount = mipLevels;
 	}
@@ -130,12 +130,12 @@ namespace castor3d
 		return m_source.hasBuffer();
 	}
 
-	castor::ImageLayout::ConstBuffer TextureView::getBuffer()const
+	castor::ImageMemoryLayout::ConstBuffer TextureView::getBuffer()const
 	{
 		return m_source.getBuffer();
 	}
 
-	castor::ImageLayout::Buffer TextureView::getBuffer()
+	castor::ImageMemoryLayout::Buffer TextureView::getBuffer()
 	{
 		return m_source.getBuffer();
 	}

@@ -165,7 +165,7 @@ namespace diamond_square_terrain
 			, uint32_t width )
 		{
 			Matrix result{ width };
-			auto fractal = castor::makeFractalNoise( castor3d::getMipLevels( { width, width, 1u }, VK_FORMAT_R8G8B8A8_UNORM )
+			auto fractal = castor::makeFractalNoise( castor3d::getMipLevels( { width, width, 1u }, castor::PixelFormat::eR8G8B8A8_UNORM )
 				, castor::PerlinNoiseT< double >{ engine } );
 			auto yMin = std::numeric_limits< float >::max();
 			auto yMax = std::numeric_limits< float >::lowest();

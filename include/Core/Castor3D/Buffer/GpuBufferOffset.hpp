@@ -165,8 +165,8 @@ namespace castor3d
 				, getCount() );
 		}
 
-		void markDirty( VkAccessFlags dstAccessFlags
-			, VkPipelineStageFlags dstPipelineFlags )const
+		void markDirty( AccessFlags dstAccessFlags
+			, PipelineStageFlags dstPipelineFlags )const
 		{
 			markDirty( getSize()
 				, dstAccessFlags
@@ -174,8 +174,8 @@ namespace castor3d
 		}
 
 		void markDirty( VkDeviceSize size
-			, VkAccessFlags dstAccessFlags
-			, VkPipelineStageFlags dstPipelineFlags )const
+			, AccessFlags dstAccessFlags
+			, PipelineStageFlags dstPipelineFlags )const
 		{
 			buffer->markDirty( getOffset()
 				, std::min( size, getSize() )

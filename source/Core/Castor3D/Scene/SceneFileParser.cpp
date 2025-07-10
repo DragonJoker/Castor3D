@@ -63,7 +63,7 @@ namespace castor3d
 			keywords.emplace( "false" );
 			keywords.emplace( "screen_size" );
 
-			for ( uint32_t i = 0u; i < uint32_t( castor::PixelFormat::eCount ); ++i )
+			for ( uint32_t i = 0u; i < uint32_t( castor::PixelFormat::eCOUNT ); ++i )
 			{
 				keywords.insert( castor::getFormatName( castor::PixelFormat( i ) ) );
 			}

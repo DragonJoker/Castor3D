@@ -155,8 +155,8 @@ namespace castor3d
 							, VkDeviceSize( sizeof( uint16_t ) * indexData.size() )
 							, indexBuffer.getBuffer()
 							, 0u
-							, VK_ACCESS_INDEX_READ_BIT
-							, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+							, AccessFlags::eIndexRead
+							, PipelineStageFlags::eVertexInput );
 					}
 				}
 
@@ -203,8 +203,8 @@ namespace castor3d
 							, vertexData.size() * sizeof( Point3f )
 							, vertexBuffer.getBuffer()
 							, 0u
-							, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-							, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+							, AccessFlags::eVertexAttributeRead
+							, PipelineStageFlags::eVertexInput );
 					}
 				}
 
@@ -330,11 +330,11 @@ namespace castor3d
 			if ( !sampler )
 			{
 				auto created = getEngine()->createSampler( name, *getEngine() );
-				created->setMinFilter( VK_FILTER_LINEAR );
-				created->setMagFilter( VK_FILTER_LINEAR );
-				created->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				created->setMinFilter( FilterMode::eLinear );
+				created->setMagFilter( FilterMode::eLinear );
+				created->setWrapS( WrapMode::eClampToEdge );
+				created->setWrapT( WrapMode::eClampToEdge );
+				created->setWrapR( WrapMode::eClampToEdge );
 				created->setMinLod( 0.0f );
 				created->setMaxLod( float( m_texture->getMipLevels() - 1u ) );
 				created->setSerialisable( false );
@@ -342,7 +342,7 @@ namespace castor3d
 
 				if ( m_texture->getMipLevels() > 1u )
 				{
-					sampler->setMipFilter( VK_SAMPLER_MIPMAP_MODE_LINEAR );
+					sampler->setMipFilter( MipmapMode::eLinear );
 				}
 			}
 
@@ -442,15 +442,15 @@ namespace castor3d
 		{
 			auto & ibl = getIbl();
 			graph.addInput( ibl.getIrradianceTexture().sampledViewId
-				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+				, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 			graph.addInput( ibl.getPrefilteredEnvironmentTexture().sampledViewId
-				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+				, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 			graph.addInput( ibl.getPrefilteredEnvironmentSheenTexture().sampledViewId
-				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+				, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 		}
 
 		graph.addInput( m_textureId.sampledViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			, crg::makeLayoutState( ImageLayout::eShaderReadOnly ) );
 
 		auto & result = graph.createPass( "Background"
 			, [this, &backgroundPass, &device, progress, size, depth, forceVisible]( crg::FramePass const & framePass
@@ -482,15 +482,15 @@ namespace castor3d
 			, uint32_t( back::Bindings::eScene ) );
 		result.addSampledView( m_textureId.sampledViewId
 			, uint32_t( back::Bindings::eSkybox )
-			, crg::SamplerDesc{ VK_FILTER_LINEAR
-				, VK_FILTER_LINEAR } );
+			, crg::SamplerDesc{ FilterMode::eLinear
+				, FilterMode::eLinear } );
 
 		if ( hasIbl() )
 		{
 			result.addSampledView( getIbl().getIrradianceTexture().sampledViewId
 				, uint32_t( back::Bindings::eIrradiance )
-				, crg::SamplerDesc{ VK_FILTER_LINEAR
-					, VK_FILTER_LINEAR } );
+				, crg::SamplerDesc{ FilterMode::eLinear
+					, FilterMode::eLinear } );
 		}
 
 		if ( !depth.empty() )
@@ -530,21 +530,21 @@ namespace castor3d
 			auto & ibl = getIbl();
 			pass.addSampledView( ibl.getIrradianceTexture().sampledViewId
 				, index
-				, crg::SamplerDesc{ VK_FILTER_LINEAR
-					, VK_FILTER_LINEAR
-					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+				, crg::SamplerDesc{ FilterMode::eLinear
+					, FilterMode::eLinear
+					, MipmapMode::eLinear } );
 			++index;
 			pass.addSampledView( ibl.getPrefilteredEnvironmentTexture().sampledViewId
 				, index
-				, crg::SamplerDesc{ VK_FILTER_LINEAR
-					, VK_FILTER_LINEAR
-					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+				, crg::SamplerDesc{ FilterMode::eLinear
+					, FilterMode::eLinear
+					, MipmapMode::eLinear } );
 			++index;
 			pass.addSampledView( ibl.getPrefilteredEnvironmentSheenTexture().sampledViewId
 				, index
-				, crg::SamplerDesc{ VK_FILTER_LINEAR
-					, VK_FILTER_LINEAR
-					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+				, crg::SamplerDesc{ FilterMode::eLinear
+					, FilterMode::eLinear
+					, MipmapMode::eLinear } );
 			++index;
 		}
 	}
@@ -679,7 +679,7 @@ namespace castor3d
 		auto buffer = adaptBuffer( image.getPxBuffer()
 			, name
 			, generateMips );
-		castor::ImageLayout layout{ image.getLayout().type, * buffer };
+		castor::ImageMemoryLayout layout{ image.getLayout().type, * buffer };
 		return castor::makeUnique< castor::Image >( name
 			, folder / relative
 			, layout

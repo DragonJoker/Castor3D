@@ -380,7 +380,7 @@ namespace castor3d
 						, attach.getBufferRange()
 						, currentState.access
 						, currentState.pipelineStage
-						, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+						, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
 				}
 			}
 
@@ -486,7 +486,7 @@ namespace castor3d
 					, attach.getBufferRange()
 					, currentState.access
 					, currentState.pipelineStage
-					, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+					, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
 			}
 		};
 	}

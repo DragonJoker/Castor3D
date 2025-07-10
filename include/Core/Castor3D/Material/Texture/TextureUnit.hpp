@@ -171,7 +171,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API VkImageType getType()const;
+		C3D_API ImageType getType()const;
 		C3D_API castor::String toString()const;
 		C3D_API TextureFlagsSet getFlags()const;
 		C3D_API bool isInitialised()const;
@@ -183,7 +183,7 @@ namespace castor3d
 		C3D_API castor::String getTextureName()const;
 		C3D_API castor::Path getTexturePath()const;
 		C3D_API bool isTextureStatic()const;
-		C3D_API VkFormat getTexturePixelFormat()const;
+		C3D_API castor::PixelFormat getTexturePixelFormat()const;
 		C3D_API castor::Point3ui getTextureImageTiles()const;
 		C3D_API bool hasTextureImageBuffer()const;
 		C3D_API castor::PxBufferBase const & getTextureImageBuffer()const;

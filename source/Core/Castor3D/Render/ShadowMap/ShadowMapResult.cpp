@@ -29,14 +29,14 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	VkFormat getFormat( RenderDevice const & device, SmTexture texture )
+	castor::PixelFormat getFormat( RenderDevice const & device, SmTexture texture )
 	{
-		static castor::Array< VkFormat, size_t( SmTexture::eCount ) > Values
+		static castor::Array< castor::PixelFormat, size_t( SmTexture::eCount ) > Values
 		{
 			{
-				VK_FORMAT_D16_UNORM, // Depth
-				VK_FORMAT_R32_SFLOAT, // Linear
-				VK_FORMAT_R32G32_SFLOAT, // Variance
+				castor::PixelFormat::eD16_UNORM, // Depth
+				castor::PixelFormat::eR32_SFLOAT, // Linear
+				castor::PixelFormat::eR32G32_SFLOAT, // Variance
 				device.selectSmallestFormatRGBSFloatFormat( getFeatureFlags( getUsageFlags( SmTexture::eNormal ) ) ), // Normal
 				device.selectSmallestFormatRGBSFloatFormat( getFeatureFlags( getUsageFlags( SmTexture::ePosition ) ) ), // Position
 				device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( getUsageFlags( SmTexture::eFlux ) ) ), // Flux
@@ -77,33 +77,33 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	VkBorderColor getBorderColor( SmTexture texture )
+	BorderColour getBorderColor( SmTexture texture )
 	{
-		static castor::Array< VkBorderColor, size_t( SmTexture::eCount ) > Values
+		static castor::Array< BorderColour, size_t( SmTexture::eCount ) > Values
 		{
 			{
-				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,			// Depth
-				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,			// Linear
-				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,			// Variance
-				VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,	// Normal
-				VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,	// Position
-				VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,	// Flux
+				BorderColour::eFloatOpaqueWhite,		// Depth
+				BorderColour::eFloatOpaqueWhite,		// Linear
+				BorderColour::eFloatOpaqueWhite,		// Variance
+				BorderColour::eFloatTransparentBlack,	// Normal
+				BorderColour::eFloatTransparentBlack,	// Position
+				BorderColour::eFloatTransparentBlack,	// Flux
 			}
 		};
 		return Values[size_t( texture )];
 	}
 
-	inline VkCompareOp getCompareOp( SmTexture texture )
+	inline ComparisonFunc getCompareOp( SmTexture texture )
 	{
-		static castor::Array< VkCompareOp, size_t( SmTexture::eCount ) > Values
+		static castor::Array< ComparisonFunc, size_t( SmTexture::eCount ) > Values
 		{
 			{
-				VK_COMPARE_OP_NEVER,			// Depth
-				VK_COMPARE_OP_GREATER_OR_EQUAL,	// Linear
-				VK_COMPARE_OP_NEVER,			// Variance
-				VK_COMPARE_OP_NEVER,			// Normal
-				VK_COMPARE_OP_NEVER,			// Position
-				VK_COMPARE_OP_NEVER,			// Flux
+				ComparisonFunc::eNever,				// Depth
+				ComparisonFunc::eGreaterOrEqual,	// Linear
+				ComparisonFunc::eNever,				// Variance
+				ComparisonFunc::eNever,				// Normal
+				ComparisonFunc::eNever,				// Position
+				ComparisonFunc::eNever,				// Flux
 			}
 		};
 		return Values[size_t( texture )];

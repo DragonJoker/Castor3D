@@ -34,11 +34,11 @@ namespace castor3d
 			, { 512u, 1u, 1u }
 			, uint32_t( ashes::getAlignedSize( count, 64u ) ) /*layerCount*/
 			, 1u /*mipLevels*/
-			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, castor::PixelFormat::eR16G16B16A16_SFLOAT
 			, VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_LINEAR }
+			, FilterMode::eLinear
+			, FilterMode::eLinear
+			, MipmapMode::eLinear }
 		, m_data{ sssbuf::doBindData( m_buffer.getPtr(), count ) }
 	{
 		m_diffusionProfiles.create();

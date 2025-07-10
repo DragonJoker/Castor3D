@@ -19,7 +19,7 @@ namespace castor3d
 		, ashes::BufferBase const & dst
 		, VkDeviceSize offset
 		, VkDeviceSize size
-		, VkPipelineStageFlags flags )
+		, PipelineStageFlags flags )
 	{
 		auto dstSrcStage = dst.getCompatibleStageFlags();
 		commandBuffer.memoryBarrier( dstSrcStage
@@ -32,7 +32,7 @@ namespace castor3d
 			, 0u );
 		dstSrcStage = dst.getCompatibleStageFlags();
 		commandBuffer.memoryBarrier( dstSrcStage
-			, flags
+			, convert( flags )
 			, dst.makeUniformBufferInput() );
 	}
 

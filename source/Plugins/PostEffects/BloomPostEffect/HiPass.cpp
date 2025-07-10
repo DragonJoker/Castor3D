@@ -61,12 +61,12 @@ namespace Bloom
 					data.viewDesc = pass.images.back().view( dataIndex );
 					data.imageDesc = data.viewDesc.data->image;
 					data.image = graph.createImage( data.imageDesc );
-					auto const imageViewType = VkImageViewType( data.imageDesc.data->info.imageType );
+					auto const imageViewType = castor3d::ImageViewType( data.imageDesc.data->info.imageType );
 					crg::ImageViewData viewData{ data.imageDesc.data->name
 						, data.imageDesc
 						, 0u
 						, imageViewType
-						, data.imageDesc.data->info.format
+						, getFormat( data.imageDesc )
 						, { data.viewDesc.data->info.subresourceRange.aspectMask, 0u, 1u, 0u, 1u } };
 
 					viewData.info.subresourceRange.baseMipLevel = data.viewDesc.data->info.subresourceRange.baseMipLevel;
@@ -102,9 +102,7 @@ namespace Bloom
 				recordContext.memoryBarrier( commandBuffer
 					, data.viewDesc
 					, layoutState.layout
-					, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-						, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
-						, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
+					, makeLayoutState( castor3d::ImageLayout::eTransferSrc ) );
 
 				for ( auto & mipGen : data.mipGens )
 				{
@@ -137,10 +135,8 @@ namespace Bloom
 					// Transition destination mip level to transfer dst layout
 					recordContext.memoryBarrier( commandBuffer
 						, mipGen.dst
-						, VK_IMAGE_LAYOUT_UNDEFINED
-						, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
-							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
+						, castor3d::ImageLayout::eUndefined
+						, makeLayoutState( castor3d::ImageLayout::eTransferDst ) );
 
 					// Perform blit
 					m_context.vkCmdBlitImage( commandBuffer
@@ -155,15 +151,13 @@ namespace Bloom
 					// Transition destination mip level to transfer src layout
 					recordContext.memoryBarrier( commandBuffer
 						, mipGen.dst
-						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-						, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
-							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
+						, castor3d::ImageLayout::eTransferDst
+						, makeLayoutState( castor3d::ImageLayout::eTransferSrc ) );
 
 					// Transition source mip level to wanted output layout
 					recordContext.memoryBarrier( commandBuffer
 						, mipGen.src
-						, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+						, castor3d::ImageLayout::eTransferSrc
 						, layoutState );
 				}
 
@@ -171,7 +165,7 @@ namespace Bloom
 				auto & mipGen = data.mipGens.back();
 				recordContext.memoryBarrier( commandBuffer
 					, mipGen.dst
-					, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+					, castor3d::ImageLayout::eTransferSrc
 					, layoutState );
 #endif
 			}
@@ -241,7 +235,7 @@ namespace Bloom
 #if !Bloom_DebugHiPass
 		, m_resultImg{ graph.createImage( crg::ImageData{ "BLHi"
 			, 0u
-			, VK_IMAGE_TYPE_2D
+			, castor3d::ImageType::e2D
 			, getFormat( sceneView.front() )
 			, VkExtent3D{ size.width >> 1, size.height >> 1, 1u }
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
@@ -252,7 +246,7 @@ namespace Bloom
 #else
 		, m_resultImg{ graph.createImage( crg::ImageData{ "BLHi"
 			, 0u
-			, VK_IMAGE_TYPE_2D
+			, ImageType::e2D
 			, getFormat( sceneView.front() )
 			, VkExtent3D{ size.width, size.height, 1u }
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
@@ -281,8 +275,8 @@ namespace Bloom
 			m_resultViews.push_back( graph.createView( crg::ImageViewData{ m_resultImg.data->name + castor::string::toMbString( i )
 				, m_resultImg
 				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, m_resultImg.data->info.format
+				, castor3d::ImageViewType::e2D
+				, getFormat( m_resultImg )
 				, { VK_IMAGE_ASPECT_COLOR_BIT, i, 1u, 0u, 1u } } ) );
 		}
 

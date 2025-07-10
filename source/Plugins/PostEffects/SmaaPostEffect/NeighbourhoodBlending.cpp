@@ -256,12 +256,12 @@ namespace smaa
 		}
 
 		inputs.insert( inputs.end(), addInputs.begin(), addInputs.end() );
-		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_NEAREST
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
+		crg::SamplerDesc linearSampler{ castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear
+			, castor3d::MipmapMode::eNearest
+			, castor3d::WrapMode::eClampToEdge
+			, castor3d::WrapMode::eClampToEdge
+			, castor3d::WrapMode::eClampToEdge };
 		m_pass.addDependency( previousPass );
 		ubo.createPassBinding( m_pass
 			, SmaaUboIdx );
@@ -288,7 +288,7 @@ namespace smaa
 				, m_extent
 				, 1u
 				, 1u
-				, VK_FORMAT_R8G8B8A8_SRGB
+				, castor::PixelFormat::eR8G8B8A8_SRGB
 				, ( VK_IMAGE_USAGE_SAMPLED_BIT
 					| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT

@@ -100,7 +100,7 @@ namespace castor3d
 					, { size[0], size[1], 1u }
 					, 1u
 					, 1u
-					, VK_FORMAT_R8G8B8A8_UNORM
+					, castor::PixelFormat::eR8G8B8A8_UNORM
 					, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 						| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 						| VK_IMAGE_USAGE_SAMPLED_BIT ) };
@@ -130,7 +130,7 @@ namespace castor3d
 					, *buffer );
 
 				auto image = result.image.get();
-				auto view = image->createView( VK_IMAGE_VIEW_TYPE_2D, result.getFormat() );
+				auto view = image->createView( VK_IMAGE_VIEW_TYPE_2D, convert( result.getFormat() ) );
 				auto staging = device->createStagingTexture( VK_FORMAT_R8G8B8A8_UNORM
 					, makeExtent2D( buffer->getDimensions() ) );
 				auto data = device.graphicsData();
@@ -150,7 +150,7 @@ namespace castor3d
 					, { size[0], size[1], 1u }
 					, 1u
 					, 1u
-					, VK_FORMAT_R16G16B16A16_SFLOAT
+					, castor::PixelFormat::eR16G16B16A16_SFLOAT
 					, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 						| VK_IMAGE_USAGE_SAMPLED_BIT ) };
 				result.create();
@@ -679,22 +679,22 @@ namespace castor3d
 
 		if ( auto created = m_samplerCache->create( cuT( "Default" ), *this ) )
 		{
-			created->setMinFilter( VK_FILTER_LINEAR );
-			created->setMagFilter( VK_FILTER_LINEAR );
-			created->setWrapS( VK_SAMPLER_ADDRESS_MODE_REPEAT );
-			created->setWrapT( VK_SAMPLER_ADDRESS_MODE_REPEAT );
-			created->setWrapR( VK_SAMPLER_ADDRESS_MODE_REPEAT );
+			created->setMinFilter( FilterMode::eLinear );
+			created->setMagFilter( FilterMode::eLinear );
+			created->setWrapS( WrapMode::eRepeat );
+			created->setWrapT( WrapMode::eRepeat );
+			created->setWrapR( WrapMode::eRepeat );
 			created->setSerialisable( false );
 			m_defaultSampler = addSampler( created->getName(), created, true );
 		}
 
 		if ( auto created = m_samplerCache->create( castor::String{ eng::samplerName }, *this ) )
 		{
-			created->setMinFilter( VK_FILTER_NEAREST );
-			created->setMagFilter( VK_FILTER_NEAREST );
-			created->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-			created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-			created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			created->setMinFilter( FilterMode::eNearest );
+			created->setMagFilter( FilterMode::eNearest );
+			created->setWrapS( WrapMode::eClampToEdge );
+			created->setWrapT( WrapMode::eClampToEdge );
+			created->setWrapR( WrapMode::eClampToEdge );
 			created->setSerialisable( false );
 			m_lightsSampler = addSampler( created->getName(), created, true );
 		}

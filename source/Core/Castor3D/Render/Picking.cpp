@@ -114,8 +114,8 @@ namespace castor3d
 		, m_graph{ resources.getHandler(), "PickingGraph" }
 		, m_colourImage{ m_graph.createImage( crg::ImageData{ "PickingColour"
 			, 0u
-			, VK_IMAGE_TYPE_2D
-			, VK_FORMAT_R32G32B32A32_UINT
+			, ImageType::e2D
+			, castor::PixelFormat::eR32G32B32A32_UINT
 			, makeExtent3D( m_realSize )
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
@@ -124,21 +124,21 @@ namespace castor3d
 		, m_colourImageView{ m_graph.createView( crg::ImageViewData{ "PickingColour"
 			, m_colourImage
 			, 0u
-			, VK_IMAGE_VIEW_TYPE_2D
-			, m_colourImage.data->info.format
+			, ImageViewType::e2D
+			, getFormat( m_colourImage )
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 		, m_depthImage{ m_graph.createImage( crg::ImageData{ "PickingDepth"
 			, 0u
-			, VK_IMAGE_TYPE_2D
-			, VK_FORMAT_D32_SFLOAT
+			, ImageType::e2D
+			, castor::PixelFormat::eD32_SFLOAT
 			, makeExtent3D( m_realSize )
 			, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
 		, m_depthImageView{ m_graph.createView( crg::ImageViewData{ "PickingDepth"
 			, m_depthImage
 			, 0u
-			, VK_IMAGE_VIEW_TYPE_2D
-			, m_depthImage.data->info.format
+			, ImageViewType::e2D
+			, getFormat( m_depthImage )
 			, { VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u } } ) }
 		, m_pickingPassDesc{ &doCreatePickingPass( cameraUbo, sceneUbo, culler ) }
 		, m_copyRegion{ 0u

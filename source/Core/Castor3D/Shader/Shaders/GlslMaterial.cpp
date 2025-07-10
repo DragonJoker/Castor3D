@@ -25,7 +25,7 @@ namespace castor3d::shader
 	{
 		static void blendMaterials( Materials const & materials
 			, bool opaque
-			, VkCompareOp alphaFunc
+			, ComparisonFunc alphaFunc
 			, PipelineFlags const & flags
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
@@ -146,21 +146,21 @@ namespace castor3d::shader
 	}
 
 	void Material::applyAlphaFunc( sdw::ShaderWriter & writer
-		, VkCompareOp alphaFunc
+		, ComparisonFunc alphaFunc
 		, sdw::Float & alpha
 		, sdw::Float const & ref
 		, bool opaque )
 	{
-		if ( alphaFunc != VK_COMPARE_OP_ALWAYS
+		if ( alphaFunc != ComparisonFunc::eAlways
 			&& alpha.isEnabled()
 			&& ref.isEnabled() )
 		{
 			switch ( alphaFunc )
 			{
-			case VK_COMPARE_OP_NEVER:
+			case ComparisonFunc::eNever:
 				writer.demote();
 				break;
-			case VK_COMPARE_OP_LESS:
+			case ComparisonFunc::eLess:
 				sdwIF( writer, alpha >= ref )
 				{
 					writer.demote();
@@ -171,7 +171,7 @@ namespace castor3d::shader
 					alpha = 1.0_f;
 				}
 				break;
-			case VK_COMPARE_OP_EQUAL:
+			case ComparisonFunc::eEqual:
 				sdwIF( writer, alpha != ref )
 				{
 					writer.demote();
@@ -182,7 +182,7 @@ namespace castor3d::shader
 					alpha = 1.0_f;
 				}
 				break;
-			case VK_COMPARE_OP_LESS_OR_EQUAL:
+			case ComparisonFunc::eLessOrEqual:
 				sdwIF( writer, alpha > ref )
 				{
 					writer.demote();
@@ -193,7 +193,7 @@ namespace castor3d::shader
 					alpha = 1.0_f;
 				}
 				break;
-			case VK_COMPARE_OP_GREATER:
+			case ComparisonFunc::eGreater:
 				sdwIF( writer, alpha <= ref )
 				{
 					writer.demote();
@@ -204,7 +204,7 @@ namespace castor3d::shader
 					alpha = 1.0_f;
 				}
 				break;
-			case VK_COMPARE_OP_NOT_EQUAL:
+			case ComparisonFunc::eNotEqual:
 				sdwIF( writer, alpha == ref )
 				{
 					writer.demote();
@@ -215,7 +215,7 @@ namespace castor3d::shader
 					alpha = 1.0_f;
 				}
 				break;
-			case VK_COMPARE_OP_GREATER_OR_EQUAL:
+			case ComparisonFunc::eGreaterOrEqual:
 				sdwIF( writer, alpha < ref )
 				{
 					writer.demote();
@@ -226,7 +226,7 @@ namespace castor3d::shader
 					alpha = 1.0_f;
 				}
 				break;
-			case VK_COMPARE_OP_ALWAYS:
+			case ComparisonFunc::eAlways:
 				break;
 
 			default:
@@ -310,7 +310,7 @@ namespace castor3d::shader
 			, output );
 	}
 
-	void Materials::blendMaterials( VkCompareOp alphaFunc
+	void Materials::blendMaterials( ComparisonFunc alphaFunc
 		, PipelineFlags const & flags
 		, shader::TextureConfigurations const & textureConfigs
 		, shader::TextureAnimations const & textureAnims
@@ -327,7 +327,7 @@ namespace castor3d::shader
 	}
 
 	void Materials::blendMaterials( DebugOutput & debugOutput
-		, VkCompareOp alphaFunc
+		, ComparisonFunc alphaFunc
 		, PipelineFlags const & flags
 		, shader::TextureConfigurations const & textureConfigs
 		, shader::TextureAnimations const & textureAnims

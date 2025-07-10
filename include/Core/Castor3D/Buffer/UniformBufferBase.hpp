@@ -133,7 +133,7 @@ namespace castor3d
 			, const void * data
 			, size_t size
 			, uint32_t offset
-			, VkPipelineStageFlags flags )const;
+			, PipelineStageFlags flags )const;
 		/**
 		 *\~english
 		 *\brief		Transfers data to the GPU buffer from RAM.
@@ -159,7 +159,7 @@ namespace castor3d
 			, ashes::CommandPool const & commandPool
 			, ashes::ByteArray const & data
 			, uint32_t offset
-			, VkPipelineStageFlags flags )const
+			, PipelineStageFlags flags )const
 		{
 			return upload( stagingBuffer
 				, queue
@@ -194,7 +194,7 @@ namespace castor3d
 			, const void * data
 			, size_t size
 			, uint32_t offset
-			, VkPipelineStageFlags flags )const;
+			, PipelineStageFlags flags )const;
 		/**
 		 *\~english
 		 *\brief		Transfers data to the GPU buffer from RAM.
@@ -217,7 +217,7 @@ namespace castor3d
 			, ashes::CommandBuffer const & commandBuffer
 			, ashes::ByteArray const & data
 			, uint32_t offset
-			, VkPipelineStageFlags flags )const
+			, PipelineStageFlags flags )const
 		{
 			return upload( stagingBuffer
 				, commandBuffer
@@ -256,7 +256,7 @@ namespace castor3d
 			, const void * data
 			, size_t size
 			, uint32_t offset
-			, VkPipelineStageFlags flags
+			, PipelineStageFlags flags
 			, FramePassTimer & timer )const;
 		/**
 		 *\~english
@@ -285,7 +285,7 @@ namespace castor3d
 			, ashes::CommandPool const & commandPool
 			, ashes::ByteArray const & data
 			, uint32_t offset
-			, VkPipelineStageFlags flags
+			, PipelineStageFlags flags
 			, FramePassTimer & timer )const
 		{
 			return upload( stagingBuffer
@@ -324,7 +324,7 @@ namespace castor3d
 			, const void * data
 			, size_t size
 			, uint32_t offset
-			, VkPipelineStageFlags flags
+			, PipelineStageFlags flags
 			, FramePassTimer & timer )const;
 		/**
 		 *\~english
@@ -350,7 +350,7 @@ namespace castor3d
 			, ashes::CommandBuffer const & commandBuffer
 			, ashes::ByteArray const & data
 			, uint32_t offset
-			, VkPipelineStageFlags flags
+			, PipelineStageFlags flags
 			, FramePassTimer & timer )const
 		{
 			return upload( stagingBuffer
@@ -391,7 +391,7 @@ namespace castor3d
 			, void * data
 			, size_t size
 			, uint32_t offset
-			, VkPipelineStageFlags flags
+			, PipelineStageFlags flags
 			, FramePassTimer & timer )const;
 		/**
 		 *\~english
@@ -420,7 +420,7 @@ namespace castor3d
 			, ashes::CommandPool const & commandPool
 			, ashes::ByteArray & data
 			, uint32_t offset
-			, VkPipelineStageFlags flags
+			, PipelineStageFlags flags
 			, FramePassTimer & timer )const
 		{
 			data.resize( size_t( m_elemCount ) * m_elemSize );

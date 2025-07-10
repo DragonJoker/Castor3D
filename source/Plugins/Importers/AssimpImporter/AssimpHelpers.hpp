@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3DAssimp_Helpers___
 
 #include <Castor3D/Animation/Interpolator.hpp>
+#include <Castor3D/Material/Texture/TextureModule.hpp>
 #include <Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp>
 
 #include <CastorUtils/Design/ArrayView.hpp>
@@ -74,20 +75,20 @@ namespace c3d_assimp
 		return castor::Point3f{ v.x, v.y, v.z };
 	}
 
-	inline VkSamplerAddressMode fromAssimp( aiTextureMapMode v )
+	inline castor3d::WrapMode fromAssimp( aiTextureMapMode v )
 	{
 		switch ( v )
 		{
 		case aiTextureMapMode_Wrap:
-			return VK_SAMPLER_ADDRESS_MODE_REPEAT;
+			return castor3d::WrapMode::eRepeat;
 		case aiTextureMapMode_Clamp:
-			return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+			return castor3d::WrapMode::eClampToEdge;
 		case aiTextureMapMode_Decal:
-			return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
+			return castor3d::WrapMode::eClampToBorder;
 		case aiTextureMapMode_Mirror:
-			return VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT;
+			return castor3d::WrapMode::eMirroredRepeat;
 		default:
-			return VK_SAMPLER_ADDRESS_MODE_REPEAT;
+			return castor3d::WrapMode::eRepeat;
 		}
 	}
 
@@ -102,29 +103,29 @@ namespace c3d_assimp
 		LINEAR_MIPMAP_LINEAR = 0x2703,
 	};
 
-	inline VkFilter fromAssimp( GlFilter const & v )
+	inline castor3d::FilterMode fromAssimp( GlFilter const & v )
 	{
 		switch ( v )
 		{
 		case GlFilter::NEAREST:
 		case GlFilter::NEAREST_MIPMAP_NEAREST:
 		case GlFilter::NEAREST_MIPMAP_LINEAR:
-			return VK_FILTER_NEAREST;
+			return castor3d::FilterMode::eNearest;
 		default:
-			return VK_FILTER_LINEAR;
+			return castor3d::FilterMode::eLinear;
 		}
 	}
 
-	inline VkSamplerMipmapMode getMipFilter( GlFilter const & v )
+	inline castor3d::MipmapMode getMipFilter( GlFilter const & v )
 	{
 		switch ( v )
 		{
 		case GlFilter::NEAREST:
 		case GlFilter::NEAREST_MIPMAP_NEAREST:
 		case GlFilter::LINEAR_MIPMAP_NEAREST:
-			return VK_SAMPLER_MIPMAP_MODE_NEAREST;
+			return castor3d::MipmapMode::eNearest;
 		default:
-			return VK_SAMPLER_MIPMAP_MODE_LINEAR;
+			return castor3d::MipmapMode ::eLinear;
 		}
 	}
 

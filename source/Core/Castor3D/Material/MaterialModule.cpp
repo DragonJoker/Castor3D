@@ -2,14 +2,9 @@
 
 namespace castor3d
 {
-	VkFormat convert( castor::PixelFormat format )
+	castor::String getName( ComparisonFunc value )
 	{
-		return VkFormat( format );
-	}
-
-	castor::PixelFormat convert( VkFormat format )
-	{
-		return castor::PixelFormat( format );
+		return ashes::getName( VkCompareOp( value ) );
 	}
 
 	bool operator==( TextureCombine const & lhs, TextureCombine const & rhs )

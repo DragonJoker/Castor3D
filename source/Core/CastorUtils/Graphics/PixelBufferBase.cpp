@@ -135,15 +135,15 @@ namespace castor
 		{
 			switch ( format )
 			{
-#define CUPF_ENUM_VALUE_COLOR( name, value, components, alpha )\
+#define RGPF_ENUM_VALUE_COLOR( name, value, components, alpha )\
 			case PixelFormat::e##name:\
 				return generateMipmapsT< PixelFormat::e##name, KernelBoxFilterT >( extent, buffer, align, dstLevels );\
 				break;
-//#define CUPF_ENUM_VALUE_COLOR( name, value, components, alpha )\
+//#define RGPF_ENUM_VALUE_COLOR( name, value, components, alpha )\
 //			case PixelFormat::e##name:\
 //				return generateMipmapsT< PixelFormat::e##name, KernelLanczosFilterT >( extent, buffer, align, dstLevels );\
 //				break;
-#include "CastorUtils/Graphics/PixelFormat.enum"
+#include <RenderGraph/PixelFormat.enum>
 			default:
 				CU_Failure( "Unsupported format type for CPU mipmaps generation" );
 				return ByteArray{};

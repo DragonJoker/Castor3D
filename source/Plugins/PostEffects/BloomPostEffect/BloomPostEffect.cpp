@@ -111,7 +111,7 @@ namespace Bloom
 #if !Bloom_DebugHiPass
 		m_blurImg = m_graph.createImage( crg::ImageData{ "Blur"
 			, 0u
-			, VK_IMAGE_TYPE_2D
+			, castor3d::ImageType::e2D
 			, target.getFormat()
 			, VkExtent3D{ size.width >> 1, size.height >> 1, 1u }
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
@@ -124,8 +124,8 @@ namespace Bloom
 			m_blurViews.push_back( m_graph.createView( crg::ImageViewData{ m_blurImg.data->name + castor::string::toMbString( i )
 				, m_blurImg
 				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, m_blurImg.data->info.format
+				, castor3d::ImageViewType::e2D
+				, getFormat( m_blurImg )
 				, { VK_IMAGE_ASPECT_COLOR_BIT, i, 1u, 0u, 1u } } ) );
 		}
 #endif

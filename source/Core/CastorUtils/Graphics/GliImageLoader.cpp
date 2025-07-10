@@ -16,7 +16,7 @@ namespace castor
 	{
 		static PixelFormat convert( gli::format format )
 		{
-			if ( format < uint32_t( PixelFormat::eCount ) )
+			if ( format < uint32_t( PixelFormat::eCOUNT ) )
 			{
 				return PixelFormat( format );
 			}
@@ -40,27 +40,27 @@ namespace castor
 			}
 		}
 
-		static ImageLayout::Type convert( gli::target target )
+		static ImageMemoryLayout::Type convert( gli::target target )
 		{
 			switch ( target )
 			{
 			case gli::TARGET_1D:
-				return ImageLayout::e1D;
+				return ImageMemoryLayout::e1D;
 			case gli::TARGET_1D_ARRAY:
-				return ImageLayout::e1DArray;
+				return ImageMemoryLayout::e1DArray;
 			case gli::TARGET_2D:
-				return ImageLayout::e2D;
+				return ImageMemoryLayout::e2D;
 			case gli::TARGET_2D_ARRAY:
-				return ImageLayout::e2DArray;
+				return ImageMemoryLayout::e2DArray;
 			case gli::TARGET_3D:
-				return ImageLayout::e3D;
+				return ImageMemoryLayout::e3D;
 			case gli::TARGET_CUBE:
-				return ImageLayout::eCube;
+				return ImageMemoryLayout::eCube;
 			case gli::TARGET_CUBE_ARRAY:
-				return ImageLayout::eCubeArray;
+				return ImageMemoryLayout::eCubeArray;
 			default:
 				CU_Failure( "Unsupported target type" );
-				return ImageLayout::e2D;
+				return ImageMemoryLayout::e2D;
 			}
 		}
 
@@ -90,7 +90,7 @@ namespace castor
 		reg.unregisterLoader( glil::listExtensions() );
 	}
 
-	ImageLayout GliImageLoader::load( String const & imageFormat
+	ImageMemoryLayout GliImageLoader::load( String const & imageFormat
 		, uint8_t const * data
 		, uint32_t size
 		, PxBufferBaseUPtr & buffer )const
@@ -118,7 +118,7 @@ namespace castor
 			CU_LoaderError( "Can't load image: Failed to read data" );
 		}
 
-		ImageLayout result;
+		ImageMemoryLayout result;
 		result.type = glil::convert( texture.target() );
 		result.format = glil::convert( texture.format() );
 		result.extent = { texture.extent().x, texture.extent().y, texture.extent().z };

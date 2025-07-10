@@ -299,20 +299,20 @@ namespace atmosphere_scattering
 			, volclouds::eClouds );
 		cameraUbo.createPassBinding( pass
 			, volclouds::eCamera );
-		crg::SamplerDesc linearClampSampler{ VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR };
-		crg::SamplerDesc linearRepeatSampler{ VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_NEAREST
-			, VK_SAMPLER_ADDRESS_MODE_REPEAT
-			, VK_SAMPLER_ADDRESS_MODE_REPEAT
-			, VK_SAMPLER_ADDRESS_MODE_REPEAT };
-		crg::SamplerDesc mipLinearSampler{ VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_LINEAR
-			, VK_SAMPLER_ADDRESS_MODE_REPEAT
-			, VK_SAMPLER_ADDRESS_MODE_REPEAT
-			, VK_SAMPLER_ADDRESS_MODE_REPEAT };
+		crg::SamplerDesc linearClampSampler{ castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear };
+		crg::SamplerDesc linearRepeatSampler{ castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear
+			, castor3d::MipmapMode::eNearest
+			, castor3d::WrapMode::eRepeat
+			, castor3d::WrapMode::eRepeat
+			, castor3d::WrapMode::eRepeat };
+		crg::SamplerDesc mipLinearSampler{ castor3d::FilterMode::eLinear
+			, castor3d::FilterMode::eLinear
+			, castor3d::MipmapMode::eLinear
+			, castor3d::WrapMode::eRepeat
+			, castor3d::WrapMode::eRepeat
+			, castor3d::WrapMode::eRepeat };
 		pass.addSampledView( transmittance
 			, volclouds::eTransmittance
 			, linearClampSampler );

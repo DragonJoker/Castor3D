@@ -299,14 +299,14 @@ namespace castor
 	};
 
 	template<>
-	struct ParserEnumTraits< VkSamplerMipmapMode >
+	struct ParserEnumTraits< castor3d::MipmapMode >
 	{
 		static inline xchar const * const Name = cuT( "MipmapMode" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT( VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_MIPMAP_MODE_LINEAR );
-				result[cuT( "none" )] = uint32_t( VK_SAMPLER_MIPMAP_MODE_NEAREST );
+				result = castor3d::getEnumMapT( castor3d::MipmapMode::eNearest, castor3d::MipmapMode::eLinear );
+				result[cuT( "none" )] = uint32_t( castor3d::MipmapMode::eNearest );
 				return result;
 			}( );
 	};
@@ -348,49 +348,49 @@ namespace castor
 	};
 
 	template<>
-	struct ParserEnumTraits< VkFilter >
+	struct ParserEnumTraits< castor3d::FilterMode >
 	{
 		static inline xchar const * const Name = cuT( "Filter" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT( VK_FILTER_NEAREST, VK_FILTER_LINEAR );
+				result = castor3d::getEnumMapT( castor3d::FilterMode::eNearest, castor3d::FilterMode::eLinear );
 				return result;
 			}( );
 	};
 
 	template<>
-	struct ParserEnumTraits< VkSamplerAddressMode >
+	struct ParserEnumTraits< castor3d::WrapMode >
 	{
 		static inline xchar const * const Name = cuT( "AddressMode" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT( VK_SAMPLER_ADDRESS_MODE_REPEAT, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE );
+				result = castor3d::getEnumMapT( castor3d::WrapMode::eRepeat, castor3d::WrapMode::eMirrorClampToEdge );
 				return result;
 			}( );
 	};
 
 	template<>
-	struct ParserEnumTraits< VkBorderColor >
+	struct ParserEnumTraits< castor3d::BorderColour >
 	{
 		static inline xchar const * const Name = cuT( "BorderColor" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT( VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK, VK_BORDER_COLOR_INT_OPAQUE_WHITE );
+				result = castor3d::getEnumMapT( castor3d::BorderColour::eMin, castor3d::BorderColour::eMax );
 				return result;
 			}( );
 	};
 
 	template<>
-	struct ParserEnumTraits< VkCompareOp >
+	struct ParserEnumTraits< castor3d::ComparisonFunc >
 	{
-		static inline xchar const * const Name = cuT( "CompareFunc" );
+		static inline xchar const * const Name = cuT( "ComparisonFunc" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT( VK_COMPARE_OP_NEVER, VK_COMPARE_OP_ALWAYS );
+				result = castor3d::getEnumMapT( castor3d::ComparisonFunc::eMin, castor3d::ComparisonFunc::eMax );
 				return result;
 			}( );
 	};
@@ -408,9 +408,9 @@ namespace castor
 	};
 
 	template<>
-	struct ParserEnumTraits< castor3d::LimitedType< VkCompareOp > >
+	struct ParserEnumTraits< castor3d::LimitedType< castor3d::ComparisonFunc > >
 	{
-		static inline xchar const * const Name = cuT( "CompareOp" );
+		static inline xchar const * const Name = cuT( "ComparisonMode" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;

@@ -85,7 +85,7 @@ namespace castor3d
 		 *\param[in]	arrayLayers		Le nombre de layers.
 		 */
 		C3D_API void update( VkExtent3D const & extent
-			, VkFormat format
+			, castor::PixelFormat format
 			, uint32_t mipLevels
 			, uint32_t arrayLayers );
 		/**
@@ -106,8 +106,8 @@ namespace castor3d
 		/**@{*/
 		C3D_API castor::String toString()const;
 		C3D_API bool hasBuffer()const;
-		C3D_API castor::ImageLayout::ConstBuffer getBuffer()const;
-		C3D_API castor::ImageLayout::Buffer getBuffer();
+		C3D_API castor::ImageMemoryLayout::ConstBuffer getBuffer()const;
+		C3D_API castor::ImageMemoryLayout::Buffer getBuffer();
 		C3D_API uint32_t getLevelCount()const;
 		C3D_API ashes::ImageView const & getSampledView()const;
 		C3D_API ashes::ImageView const & getTargetView()const;

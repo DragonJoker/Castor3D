@@ -121,7 +121,7 @@ namespace castor
 		reg.unregisterLoader( freeimgl::listExtensions() );
 	}
 
-	ImageLayout FreeImageLoader::load( CU_UnusedParam( String const &, imageFormat )
+	ImageMemoryLayout FreeImageLoader::load( CU_UnusedParam( String const &, imageFormat )
 		, uint8_t const * data
 		, uint32_t size
 		, PxBufferBaseUPtr & buffer )const
@@ -198,11 +198,11 @@ namespace castor
 			, sourceFmt );
 		FreeImage_Unload( fiImage );
 		FreeImage_CloseMemory( fiMemory );
-		return ImageLayout{ ImageLayout::e2D, *buffer };
+		return ImageMemoryLayout{ ImageMemoryLayout::e2D, *buffer };
 
 #else
 
-		return ImageLayout{ ImageLayout::e2D };
+		return ImageMemoryLayout{ ImageMemoryLayout::e2D };
 
 #endif
 	}
