@@ -257,10 +257,8 @@ namespace castor3d
 					, *queueData->commandPool };
 				uploader->pushUpload( &vertices
 					, sizeof( Quad )
-					, vb.getBuffer()
-					, vb.getOffset()
-					, AccessFlags::eVertexAttributeRead
-					, PipelineStageFlags::eVertexInput );
+					, vb.getBuffer(), vb.getOffset()
+					, VertexAttributeInputState );
 			}
 
 			m_quadLayout = castor::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
@@ -352,8 +350,7 @@ namespace castor3d
 					gpuBuffer += m_vertexStride;
 				}
 
-				m_vertexBuffer.markDirty( AccessFlags::eVertexAttributeRead
-					, PipelineStageFlags::eVertexInput );
+				m_vertexBuffer.markDirty( VertexAttributeInputState );
 			}
 			catch ( castor::Exception const & exc )
 			{
@@ -508,8 +505,7 @@ namespace castor3d
 				, up.end()
 				, buffer );
 
-			m_vertexBuffer.markDirty( AccessFlags::eVertexAttributeRead
-				, PipelineStageFlags::eVertexInput );
+			m_vertexBuffer.markDirty( VertexAttributeInputState );
 		}
 
 		return BillboardBase::initialise( device, uint32_t( m_arrayPositions.size() ) );

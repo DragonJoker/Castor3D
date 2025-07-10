@@ -33,8 +33,7 @@ namespace castor3d
 			, VkDeviceSize srcSize
 			, ashes::BufferBase const & dstBuffer
 			, VkDeviceSize dstOffset
-			, AccessFlags dstAccessFlags
-			, PipelineStageFlags dstPipelineFlags );
+			, crg::AccessState const & dstAccessState );
 		C3D_API void pushUpload( void const * srcData
 			, VkDeviceSize srcSize
 			, ashes::Image const & dstImage
@@ -46,6 +45,20 @@ namespace castor3d
 		C3D_API SemaphoreUsed end( ashes::Queue const & queue
 			, ashes::Fence const * fence = nullptr
 			, castor::Milliseconds timeout = castor::Milliseconds{ ashes::MaxTimeout } );
+
+		void pushUpload( void const * srcData
+			, VkDeviceSize srcSize
+			, ashes::BufferBase const & dstBuffer
+			, VkDeviceSize dstOffset
+			, AccessFlags dstAccessFlags
+			, PipelineStageFlags dstPipelineFlags )
+		{
+			pushUpload( srcData
+				, srcSize
+				, dstBuffer
+				, dstOffset
+				, crg::AccessState{ dstAccessFlags, dstPipelineFlags });
+		}
 
 		void pushUpload( castor::ByteArray const & srcData
 			, ashes::BufferBase const & dstBuffer
@@ -129,8 +142,7 @@ namespace castor3d
 			VkDeviceSize srcSize{};
 			ashes::BufferBase const * dstBuffer{};
 			VkDeviceSize dstOffset{};
-			AccessFlags dstAccessFlags{};
-			PipelineStageFlags dstPipelineFlags{};
+			crg::AccessState dstAccessState{};
 		};
 
 		struct ImageDataRange

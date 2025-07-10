@@ -401,8 +401,7 @@ namespace ocean_fft
 				, distribution.size() * sizeof( cfloat )
 				, distribBuffer.getBuffer()
 				, 0u
-				, castor3d::AccessFlags::eShaderRead
-				, castor3d::PipelineStageFlags::eComputeShader );
+				, castor3d::ComputeShaderReadState );
 		}
 	}
 

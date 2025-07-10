@@ -244,8 +244,7 @@ namespace castor3d
 				, texture
 				, image.getLayout()
 				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, image.getLayout().depthLayers() }
-				, ImageLayout::eTransferSrc
-				, PipelineStageFlags::eTransfer );
+				, ImageLayout::eTransferSrc, PipelineStageFlags::eTransfer );
 		}
 
 		VkExtent3D extent{ m_2dTexture->getWidth(), m_2dTexture->getHeight(), 1u };

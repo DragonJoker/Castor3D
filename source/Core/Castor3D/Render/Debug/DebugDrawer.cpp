@@ -261,14 +261,12 @@ namespace castor3d
 				, vertexData.size() * sizeof( castor::Point4f )
 				, m_aabb.vertices.getBuffer( SubmeshData::ePositions )
 				, m_aabb.vertices.getOffset( SubmeshData::ePositions )
-				, AccessFlags::eVertexAttributeRead
-				, PipelineStageFlags::eVertexInput );
+				, VertexAttributeInputState );
 			uploader->pushUpload( indexData.data()->constPtr()
 				, indexData.size() * sizeof( castor::Point2ui )
 				, m_aabb.indices.getBuffer( SubmeshData::eIndex )
 				, m_aabb.indices.getOffset( SubmeshData::eIndex )
-				, AccessFlags::eVertexAttributeRead
-				, PipelineStageFlags::eVertexInput );
+				, VertexAttributeInputState );
 		}
 	}
 

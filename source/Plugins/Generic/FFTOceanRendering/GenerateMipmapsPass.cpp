@@ -197,11 +197,9 @@ namespace ocean_fft
 		auto neededLayoutState = getLayoutState( viewId );
 		auto toLayoutState = context.getNextLayoutState( viewId );
 		crg::LayoutState shaderRead{ castor3d::ImageLayout::eShaderReadOnly
-			, castor3d::AccessFlags::eShaderRead
-			, castor3d::PipelineStageFlags::eFragmentShader };
+			, castor3d::FragmentShaderReadState };
 		crg::LayoutState shaderWrite{ castor3d::ImageLayout::eGeneral
-			, castor3d::AccessFlags::eShaderWrite
-			, castor3d::PipelineStageFlags::eComputeShader };
+			, castor3d::ComputeShaderWriteState };
 		auto mipLevels = imageId.data->info.mipLevels;
 		auto srcImageLayout = neededLayoutState;
 		auto dstMipImageLayout = ( range.levelCount == mipLevels )

@@ -60,6 +60,22 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Uploads a memory range.
+		 *\param[in,out]	uploader		Receives the upload requests.
+		 *\param[in]		offset, size	The memory range.
+		 *\param[in]		dstAccessState	The pipeline stage flags wanted after upload.
+		 *\~french
+		 *\brief			Met à jour un intervalle mémoire en VRAM.
+		 *\param[in,out]	uploader		Reçoit les requêtes d'upload.
+		 *\param[in]		offset, size	L'intervalle mémoire.
+		 *\param[in]		dstAccessState	L'état d'accès voulu après l'upload.
+		 */
+		C3D_API void upload( UploadData & uploader
+			, VkDeviceSize offset
+			, VkDeviceSize size
+			, crg::AccessState dstAccessState );
+		/**
+		 *\~english
+		 *\brief			Uploads a memory range.
 		 *\param[in,out]	uploader			Receives the upload requests.
 		 *\param[in]		offset, size		The memory range.
 		 *\param[in]		dstAccessFlags		The access flags wanted after upload.
@@ -71,11 +87,28 @@ namespace castor3d
 		 *\param[in]		dstAccessFlags		Les flags d'accès voulus après l'upload.
 		 *\param[in]		dstPipelineFlags	Les flags d'étape de pipeline voulus après l'upload.
 		 */
-		C3D_API void upload( UploadData & uploader
+		void upload( UploadData & uploader
 			, VkDeviceSize offset
 			, VkDeviceSize size
 			, AccessFlags dstAccessFlags
-			, PipelineStageFlags dstPipelineFlags );
+			, PipelineStageFlags dstPipelineFlags )
+		{
+			upload( uploader, offset, size
+				, crg::AccessState{ dstAccessFlags, dstPipelineFlags } );
+		}
+		/**
+		 *\~english
+		 *\brief		Marks a memory range to be ready for upload.
+		 *\param[in]	offset, size	The memory range.
+		 *\param[in]	dstAccessState	The access and state wanted after upload.
+		 *\~french
+		 *\brief		Marque un intervalle mémoire comme prêt à l'upload.
+		 *\param[in]	offset, size	L'intervalle mémoire.
+		 *\param[in]	dstAccessState	L'état d'accès voulu après l'upload.
+		 */
+		C3D_API void markDirty( VkDeviceSize offset
+			, VkDeviceSize size
+			, crg::AccessState dstAccessState );
 		/**
 		 *\~english
 		 *\brief		Marks a memory range to be ready for upload.
@@ -88,10 +121,14 @@ namespace castor3d
 		 *\param[in]	dstAccessFlags		Les flags d'accès voulus après l'upload.
 		 *\param[in]	dstPipelineFlags	Les flags d'étape de pipeline voulus après l'upload.
 		 */
-		C3D_API void markDirty( VkDeviceSize offset
+		void markDirty( VkDeviceSize offset
 			, VkDeviceSize size
 			, AccessFlags dstAccessFlags
-			, PipelineStageFlags dstPipelineFlags );
+			, PipelineStageFlags dstPipelineFlags )
+		{
+			markDirty( offset, size
+				, crg::AccessState{ dstAccessFlags, dstPipelineFlags } );
+		}
 		/**
 		*\~english
 		*\return
@@ -203,19 +240,16 @@ namespace castor3d
 			MemoryRange() = default;
 			MemoryRange( VkDeviceSize offset
 				, VkDeviceSize size
-				, AccessFlags dstAccessFlags
-				, PipelineStageFlags dstPipelineFlags )
+				, crg::AccessState dstAccessState )
 				: offset{ offset }
 				, size{ size }
-				, dstAccessFlags{ dstAccessFlags }
-				, dstPipelineFlags{ dstPipelineFlags }
+				, dstAccessState{ std::move( dstAccessState ) }
 			{
 			}
 
 			VkDeviceSize offset{};
 			VkDeviceSize size{};
-			AccessFlags dstAccessFlags{};
-			PipelineStageFlags dstPipelineFlags{};
+			crg::AccessState dstAccessState;
 		};
 		using MemoryRangeArray = castor::Vector< MemoryRange >;
 		castor::UnorderedMap< size_t, MemoryRangeArray > m_ranges;

@@ -187,8 +187,7 @@ namespace castor3d
 			context.memoryBarrier( commandBuffer
 				, m_morphTargets.buffer->getBuffer()
 				, { m_morphTargets.chunk.offset, m_morphTargets.chunk.size }
-				, AccessFlags::eHostWrite, PipelineStageFlags::eHost
-				, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
+				, HostWriteState, ComputeShaderReadState );
 		}
 
 		if ( m_morphingWeights )
@@ -196,8 +195,7 @@ namespace castor3d
 			context.memoryBarrier( commandBuffer
 				, m_morphingWeights.buffer->getBuffer()
 				, { m_morphingWeights.chunk.offset, m_morphingWeights.chunk.size }
-				, AccessFlags::eHostWrite, PipelineStageFlags::eHost
-				, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
+				, HostWriteState, ComputeShaderReadState );
 		}
 
 		if ( m_skinTransforms )
@@ -205,8 +203,7 @@ namespace castor3d
 			context.memoryBarrier( commandBuffer
 				, m_skinTransforms.buffer->getBuffer()
 				, { m_skinTransforms.chunk.offset, m_skinTransforms.chunk.size }
-				, AccessFlags::eHostWrite, PipelineStageFlags::eHost
-				, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
+				, HostWriteState, ComputeShaderReadState );
 		}
 
 		auto itInput = m_input.buffers.begin();
@@ -219,13 +216,11 @@ namespace castor3d
 				context.memoryBarrier( commandBuffer
 					, itInput->buffer->getBuffer()
 					, { itInput->chunk.offset, itInput->chunk.size }
-					, AccessFlags::eHostWrite, PipelineStageFlags::eHost
-					, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
+					, HostWriteState, ComputeShaderReadState );
 				context.memoryBarrier( commandBuffer
 					, itOutput->buffer->getBuffer()
 					, { itOutput->chunk.offset, itOutput->chunk.size }
-					, AccessFlags::eHostWrite, PipelineStageFlags::eHost
-					, { AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader } );
+					, HostWriteState, ComputeShaderWriteState );
 			}
 
 			++itInput;
@@ -266,24 +261,21 @@ namespace castor3d
 				context.memoryBarrier( commandBuffer
 					, itOutput->buffer->getBuffer()
 					, { itOutput->chunk.offset, itOutput->chunk.size }
-					, AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader
-					, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
+					, ComputeShaderReadState, HostWriteState );
 
 				if ( m_pipeline.meshletsBounds )
 				{
 					context.memoryBarrier( commandBuffer
 						, itInput->buffer->getBuffer()
 						, { itInput->chunk.offset, itInput->chunk.size }
-						, AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader
-						, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
+						, ComputeShaderWriteState, ComputeShaderReadState );
 				}
 				else
 				{
 					context.memoryBarrier( commandBuffer
 						, itInput->buffer->getBuffer()
 						, { itInput->chunk.offset, itInput->chunk.size }
-						, AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader
-						, { AccessFlags::eVertexAttributeRead, PipelineStageFlags::eVertexInput } );
+						, ComputeShaderWriteState, VertexAttributeInputState );
 				}
 			}
 
@@ -298,8 +290,7 @@ namespace castor3d
 				context.memoryBarrier( commandBuffer
 					, m_skinTransforms.buffer->getBuffer()
 					, { m_skinTransforms.chunk.offset, m_skinTransforms.chunk.size }
-					, AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader
-					, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
+					, ComputeShaderReadState, HostWriteState );
 			}
 
 			if ( m_morphTargets )
@@ -307,8 +298,7 @@ namespace castor3d
 				context.memoryBarrier( commandBuffer
 					, m_morphTargets.buffer->getBuffer()
 					, { m_morphTargets.chunk.offset, m_morphTargets.chunk.size }
-					, AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader
-					, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
+					, ComputeShaderReadState, HostWriteState );
 			}
 
 			if ( m_morphingWeights )
@@ -316,8 +306,7 @@ namespace castor3d
 				context.memoryBarrier( commandBuffer
 					, m_morphingWeights.buffer->getBuffer()
 					, { m_morphingWeights.chunk.offset, m_morphingWeights.chunk.size }
-					, AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader
-					, { AccessFlags::eHostWrite, PipelineStageFlags::eHost } );
+					, ComputeShaderReadState, HostWriteState );
 			}
 		}
 	}

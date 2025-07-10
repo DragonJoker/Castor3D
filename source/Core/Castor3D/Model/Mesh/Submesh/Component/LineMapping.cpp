@@ -89,10 +89,8 @@ namespace castor3d
 		{
 			uploader.pushUpload( m_lines.data()
 				, m_lines.size() * sizeof( Line )
-				, buffer.getBuffer()
-				, buffer.getOffset()
-				, AccessFlags::eIndexRead
-				, PipelineStageFlags::eVertexInput );
+				, buffer.getBuffer(), buffer.getOffset()
+				, VertexIndexInputState );
 		}
 	}
 

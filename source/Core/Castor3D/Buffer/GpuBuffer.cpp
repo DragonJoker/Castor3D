@@ -115,8 +115,7 @@ namespace castor3d
 				upload( uploader
 					, range.offset
 					, range.size
-					, range.dstAccessFlags
-					, range.dstPipelineFlags );
+					, range.dstAccessState );
 			}
 		}
 	}
@@ -124,8 +123,7 @@ namespace castor3d
 	void GpuBufferBase::upload( UploadData & staging
 		, VkDeviceSize offset
 		, VkDeviceSize size
-		, AccessFlags dstAccessFlags
-		, PipelineStageFlags dstPipelineFlags )
+		, crg::AccessState dstAccessState )
 	{
 		auto [o, s] = adaptRange( offset
 			, size
@@ -134,17 +132,15 @@ namespace castor3d
 			, s
 			, getBuffer().getBuffer()
 			, o
-			, dstAccessFlags
-			, dstPipelineFlags );
+			, dstAccessState );
 	}
 
 	void GpuBufferBase::markDirty( VkDeviceSize offset
 		, VkDeviceSize size
-		, AccessFlags dstAccessFlags
-		, PipelineStageFlags dstPipelineFlags )
+		, crg::AccessState dstAccessState )
 	{
-		auto hash = std::hash< int32_t >{}( int32_t( dstAccessFlags ) );
-		hash = castor::hashCombine( hash, int32_t( dstPipelineFlags ) );
+		auto hash = std::hash< int32_t >{}( int32_t( dstAccessState.access ) );
+		hash = castor::hashCombine( hash, int32_t( dstAccessState.pipelineStage ) );
 		auto & ranges = m_ranges.try_emplace( hash ).first->second;
 		auto it = std::find_if( ranges.begin()
 			, ranges.end()
@@ -155,7 +151,7 @@ namespace castor3d
 
 		if ( it == ranges.end() )
 		{
-			ranges.emplace_back( offset, size, dstAccessFlags, dstPipelineFlags );
+			ranges.emplace_back( offset, size, std::move( dstAccessState ) );
 		}
 	}
 

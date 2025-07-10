@@ -155,10 +155,8 @@ namespace castor3d
 			m_up = passflags::convert( m_data );
 			uploader.pushUpload( m_up.data()
 				, m_up.size() * sizeof( castor::Point4ui )
-				, buffer.getBuffer()
-				, buffer.getOffset()
-				, AccessFlags::eVertexAttributeRead
-				, PipelineStageFlags::eVertexInput );
+				, buffer.getBuffer(), buffer.getOffset()
+				, VertexAttributeInputState );
 		}
 	}
 

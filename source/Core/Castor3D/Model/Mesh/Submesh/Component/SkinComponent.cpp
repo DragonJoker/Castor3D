@@ -57,10 +57,8 @@ namespace castor3d
 			CU_Require( buffer.getCount< VertexBoneData >() == count );
 			uploader.pushUpload( m_bones.data()
 				, m_bones.size() * sizeof( VertexBoneData )
-				, buffer.getBuffer()
-				, buffer.getOffset()
-				, AccessFlags::eVertexAttributeRead
-				, PipelineStageFlags::eVertexInput );
+				, buffer.getBuffer(), buffer.getOffset()
+				, VertexAttributeInputState );
 		}
 	}
 

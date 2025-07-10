@@ -47,15 +47,14 @@ namespace castor3d
 		, VkDeviceSize srcSize
 		, ashes::BufferBase const & dstBuffer
 		, VkDeviceSize dstOffset
-		, AccessFlags dstAccessFlags
-		, PipelineStageFlags dstPipelineFlags )
+		, crg::AccessState const & dstAccessState )
 	{
 		if ( !srcSize || !srcData )
 		{
 			return;
 		}
 
-		BufferDataRange upload{ srcData, srcSize, &dstBuffer, dstOffset, dstAccessFlags, dstPipelineFlags };
+		BufferDataRange upload{ srcData, srcSize, &dstBuffer, dstOffset, dstAccessState };
 		auto it = std::lower_bound( m_pendingBuffers.begin()
 			, m_pendingBuffers.end()
 			, upload
@@ -341,11 +340,11 @@ namespace castor3d
 				, data.dstOffset );
 		}
 
-		if ( dstTrsFlags != data.dstPipelineFlags )
+		if ( dstTrsFlags != data.dstAccessState.pipelineStage )
 		{
 			m_commandBuffer->memoryBarrier( convert( dstTrsFlags )
-				, convert( data.dstPipelineFlags )
-				, dstBuffer.makeMemoryTransitionBarrier( convert( data.dstAccessFlags ) ) );
+				, convert( data.dstAccessState.pipelineStage )
+				, dstBuffer.makeMemoryTransitionBarrier( convert( data.dstAccessState.access ) ) );
 		}
 	}
 

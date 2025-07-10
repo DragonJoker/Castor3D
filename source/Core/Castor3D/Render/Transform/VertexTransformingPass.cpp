@@ -94,8 +94,7 @@ namespace castor3d
 		context.memoryBarrier( commandBuffer
 			, m_modelsBuffer.getBuffer()
 			, { 0u, ashes::WholeSize }
-			, AccessFlags::eHostWrite, PipelineStageFlags::eHost
-			, { AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader } );
+			, HostWriteState, ComputeShaderReadState );
 
 		for ( auto const & [_, pass] : m_transformPasses )
 		{
@@ -105,8 +104,7 @@ namespace castor3d
 		context.memoryBarrier( commandBuffer
 			, m_modelsBuffer.getBuffer()
 			, { 0u, ashes::WholeSize }
-			, AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader
-			, { AccessFlags::eUniformRead, PipelineStageFlags::eVertexShader } );
+			, ComputeShaderReadState, VertexUniformReadState );
 	}
 
 	bool VertexTransformingPass::doIsComputePass()const noexcept

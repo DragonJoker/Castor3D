@@ -464,13 +464,8 @@ namespace castor3d
 						auto currentState = context.getAccessState( attach.buffer( passIndex )
 							, attach.getBufferRange() );
 						context.memoryBarrier( commandBuffer
-							, attach.buffer( passIndex )
-							, attach.getBufferRange()
-							, currentState.access
-							, currentState.pipelineStage
-							, ( ( idx == 2 )
-								? crg::AccessState{ AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader }
-								: crg::AccessState{ AccessFlags::eShaderRead | AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader } )
+							, attach.buffer( passIndex ), attach.getBufferRange()
+							, currentState, ( ( idx == 2 ) ? ComputeShaderReadState: ComputeShaderReadWriteState )
 							, true );
 					}
 				}
