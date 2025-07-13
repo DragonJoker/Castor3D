@@ -46,7 +46,7 @@ namespace castor3d
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, Scene const & scene
-			, VkExtent2D const & size
+			, Extent2D const & size
 			, Texture const & output
 			, HdrConfigUbo const & hdrConfigUbo
 			, bool drawGlobal = false );

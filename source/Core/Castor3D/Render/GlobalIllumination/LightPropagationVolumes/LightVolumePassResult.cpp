@@ -16,7 +16,7 @@ namespace castor3d
 			, device
 			, prefix + cuT( "LPVResult" )
 			, { nullptr, nullptr, nullptr }
-			, 0u
+			, ImageCreateFlags::eNone
 			, { size, size, size } }
 	{
 	}

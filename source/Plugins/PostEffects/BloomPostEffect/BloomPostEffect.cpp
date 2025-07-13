@@ -106,27 +106,27 @@ namespace Bloom
 		, castor3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
-		VkExtent2D size{ castor3d::makeExtent2D( target.getExtent() ) };
+		castor3d::Extent2D size{ castor3d::makeExtent2D( target.getExtent() ) };
 
 #if !Bloom_DebugHiPass
 		m_blurImg = m_graph.createImage( crg::ImageData{ "Blur"
-			, 0u
+			, castor3d::ImageCreateFlags::eNone
 			, castor3d::ImageType::e2D
 			, target.getFormat()
-			, VkExtent3D{ size.width >> 1, size.height >> 1, 1u }
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
+			, castor3d::Extent3D{ size.width >> 1, size.height >> 1, 1u }
+			, ( castor3d::ImageUsageFlags::eColorAttachment
+				| castor3d::ImageUsageFlags::eSampled
+				| castor3d::ImageUsageFlags::eTransferSrc )
 			, m_blurPassesCount } );
 
 		for ( uint32_t i = 0u; i < m_blurPassesCount; ++i )
 		{
 			m_blurViews.push_back( m_graph.createView( crg::ImageViewData{ m_blurImg.data->name + castor::string::toMbString( i )
 				, m_blurImg
-				, 0u
+				, castor3d::ImageViewCreateFlags::eNone
 				, castor3d::ImageViewType::e2D
 				, getFormat( m_blurImg )
-				, { VK_IMAGE_ASPECT_COLOR_BIT, i, 1u, 0u, 1u } } ) );
+				, { castor3d::ImageAspectFlags::eColor, i, 1u, 0u, 1u } } ) );
 		}
 #endif
 

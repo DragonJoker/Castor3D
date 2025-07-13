@@ -180,7 +180,7 @@ namespace atmosphere_scattering
 		AtmosphereModel( sdw::ShaderWriter & writer
 			, AtmosphereData const & atmosphereData
 			, Settings settings
-			, VkExtent2D transmittanceExtent );
+			, castor3d::Extent2D transmittanceExtent );
 
 		auto const & getLengthUnit()const noexcept
 		{
@@ -341,7 +341,7 @@ namespace atmosphere_scattering
 	public:
 		AtmosphereData const & atmosphereData;
 		Settings settings;
-		VkExtent2D transmittanceExtent{};
+		castor3d::Extent2D transmittanceExtent{};
 		sdw::Float planetRadiusOffset;
 		sdw::CombinedImage2DRgba32 const * transmittanceTexture{};
 		sdw::CombinedImage2DRgba32 const * multiScatTexture{};

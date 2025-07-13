@@ -40,24 +40,19 @@ namespace castor3d
 		}
 
 		static ashes::Sampler const * getSampler( RenderDevice const & device
-			, FilterMode minFilter
-			, FilterMode magFilter
-			, MipmapMode mipFilter
-			, WrapMode addressMode = WrapMode::eClampToEdge
-			, BorderColour borderColor = BorderColour::eFloatTransparentBlack
-			, ComparisonFunc compareOp = ComparisonFunc::eNever )
+			, TextureSamplerCreateInfo createInfo )
 		{
 			auto & engine = *device.renderSystem.getEngine();
 			Sampler const * c3dSampler{};
 
-			if ( auto splName = getSamplerName( compareOp
-					, minFilter
-					, magFilter
-					, mipFilter
-					, addressMode
-					, addressMode
-					, addressMode
-					, borderColor );
+			if ( auto splName = getSamplerName( createInfo.compareOp
+					, createInfo.minFilter
+					, createInfo.magFilter
+					, createInfo.mipFilter
+					, createInfo.addressMode
+					, createInfo.addressMode
+					, createInfo.addressMode
+					, createInfo.borderColor );
 				engine.hasSampler( splName ) )
 			{
 				c3dSampler = engine.findSampler( splName );
@@ -65,18 +60,18 @@ namespace castor3d
 			else
 			{
 				auto created = engine.createSampler( splName, engine );
-				created->setMinFilter( minFilter );
-				created->setMagFilter( magFilter );
-				created->setMipFilter( mipFilter );
-				created->setWrapS( addressMode );
-				created->setWrapT( addressMode );
-				created->setWrapR( addressMode );
-				created->setBorderColour( borderColor );
+				created->setMinFilter( createInfo.minFilter );
+				created->setMagFilter( createInfo.magFilter );
+				created->setMipFilter( createInfo.mipFilter );
+				created->setWrapS( createInfo.addressMode );
+				created->setWrapT( createInfo.addressMode );
+				created->setWrapR( createInfo.addressMode );
+				created->setBorderColour( createInfo.borderColor );
 
-				if ( compareOp != ComparisonFunc::eNever )
+				if ( createInfo.compareOp != ComparisonFunc::eNever )
 				{
 					created->enableCompare( true );
-					created->setCompareOp( compareOp );
+					created->setCompareOp( createInfo.compareOp );
 				}
 
 				created->initialise( device );
@@ -86,7 +81,7 @@ namespace castor3d
 			return &c3dSampler->getSampler();
 		}
 
-		static bool isTexture1D( VkExtent3D const & extent )
+		static bool isTexture1D( Extent3D const & extent )
 		{
 			return extent.height == 1
 				&& extent.width > 1;
@@ -142,238 +137,65 @@ namespace castor3d
 		return *this;
 	}
 
-	Texture::Texture( RenderDevice const & device
-		, crg::ResourcesCache & resources
-		, castor::String const & name
-		, VkImageCreateFlags createFlags
-		, VkExtent3D const & size
-		, uint32_t layerCount
-		, uint32_t mipLevels
-		, castor::PixelFormat format
-		, VkImageUsageFlags usageFlags
-		, BorderColour borderColor
-		, ComparisonFunc compareOp
-		, bool createSubviews )
-		: Texture{ device
-			, resources
-			, name
-			, createFlags
-			, size
-			, layerCount
-			, VK_SAMPLE_COUNT_1_BIT
-			, mipLevels
-			, format
-			, usageFlags
-			, texture::getSampler( device
-				, FilterMode::eLinear
-				, FilterMode::eLinear
-				, MipmapMode::eLinear
-				, WrapMode::eClampToEdge
-				, borderColor
-				, compareOp )
-			, createSubviews }
-	{
-	}
-
 	Texture::Texture( RenderDevice const & pdevice
 		, crg::ResourcesCache & presources
 		, castor::String const & name
-		, VkImageCreateFlags createFlags
-		, VkExtent3D const & size
-		, uint32_t layerCount
-		, uint32_t mipLevels
-		, castor::PixelFormat format
-		, VkImageUsageFlags usageFlags
-		, FilterMode minFilter
-		, FilterMode magFilter
-		, MipmapMode mipFilter
-		, WrapMode addressMode
-		, BorderColour borderColor
-		, ComparisonFunc compareOp
-		, bool createSubviews )
-		: Texture{ pdevice
-			, presources
-			, name
-			, createFlags
-			, size
-			, layerCount
-			, VK_SAMPLE_COUNT_1_BIT
-			, mipLevels
-			, format
-			, usageFlags
-			, texture::getSampler( pdevice
-				, minFilter
-				, magFilter
-				, mipFilter
-				, addressMode
-				, borderColor
-				, compareOp )
-			, createSubviews }
-	{
-	}
-	
-	Texture::Texture( RenderDevice const & device
-		, crg::ResourcesCache & resources
-		, castor::String const & name
-		, VkImageCreateFlags createFlags
-		, VkExtent3D const & size
-		, uint32_t layerCount
-		, uint32_t mipLevels
-		, castor::PixelFormat format
-		, VkImageUsageFlags usageFlags
-		, ashes::Sampler const * sampler
-		, bool createSubviews )
-		: Texture{ device
-			, resources
-			, name
-			, createFlags
-			, size
-			, layerCount
-			, VK_SAMPLE_COUNT_1_BIT
-			, mipLevels
-			, format
-			, usageFlags
-			, sampler
-			, createSubviews }
-	{
-	}
-
-	Texture::Texture( RenderDevice const & device
-		, crg::ResourcesCache & resources
-		, castor::String const & name
-		, VkImageCreateFlags createFlags
-		, VkExtent3D const & size
-		, uint32_t layerCount
-		, VkSampleCountFlagBits sampleCount
-		, uint32_t mipLevels
-		, castor::PixelFormat format
-		, VkImageUsageFlags usageFlags
-		, BorderColour borderColor
-		, ComparisonFunc compareOp
-		, bool createSubviews )
-		: Texture{ device
-			, resources
-			, name
-			, createFlags
-			, size
-			, layerCount
-			, sampleCount
-			, mipLevels
-			, format
-			, usageFlags
-			, texture::getSampler( device
-				, FilterMode::eLinear
-				, FilterMode::eLinear
-				, MipmapMode::eLinear
-				, WrapMode::eClampToEdge
-				, borderColor
-				, compareOp )
-			, createSubviews }
-	{
-	}
-
-	Texture::Texture( RenderDevice const & pdevice
-		, crg::ResourcesCache & presources
-		, castor::String const & name
-		, VkImageCreateFlags createFlags
-		, VkExtent3D const & size
-		, uint32_t layerCount
-		, VkSampleCountFlagBits sampleCount
-		, uint32_t mipLevels
-		, castor::PixelFormat format
-		, VkImageUsageFlags usageFlags
-		, FilterMode minFilter
-		, FilterMode magFilter
-		, MipmapMode mipFilter
-		, WrapMode addressMode
-		, BorderColour borderColor
-		, ComparisonFunc compareOp
-		, bool createSubviews )
-		: Texture{ pdevice
-			, presources
-			, name
-			, createFlags
-			, size
-			, layerCount
-			, sampleCount
-			, mipLevels
-			, format
-			, usageFlags
-			, texture::getSampler( pdevice
-				, minFilter
-				, magFilter
-				, mipFilter
-				, addressMode
-				, borderColor
-				, compareOp )
-			, createSubviews }
-	{
-	}
-
-	Texture::Texture( RenderDevice const & pdevice
-		, crg::ResourcesCache & presources
-		, castor::String const & name
-		, VkImageCreateFlags createFlags
-		, VkExtent3D const & size
-		, uint32_t layerCount
-		, VkSampleCountFlagBits sampleCount
-		, uint32_t mipLevels
-		, castor::PixelFormat format
-		, VkImageUsageFlags usageFlags
-		, ashes::Sampler const * psampler
+		, TextureCreateInfo const & imageInfo
+		, TextureSamplerInfo const & samplerInfo
 		, bool createSubviews )
 		: resources{ &presources }
 		, device{ &pdevice }
-		, sampler{ psampler }
+		, sampler{ ( samplerInfo.sampler
+			? samplerInfo.sampler
+			: texture::getSampler( pdevice, castor::move( samplerInfo.createInfo ) ) ) }
 	{
 		auto & handler = resources->getHandler();
-		mipLevels = std::max( 1u, mipLevels );
-		if ( size.depth > 1u )
-			layerCount = 1u;
+		auto mipLevels = std::max( 1u, imageInfo.mipLevels );
+		auto layerCount = ( imageInfo.extent.depth > 1u ? 1u : imageInfo.layerCount );
 		auto mbName = castor::toUtf8( name );
-		bool isTexture1D = texture::isTexture1D( size );
+		bool isTexture1D = texture::isTexture1D( imageInfo.extent );
 		imageId = handler.createImageId( crg::ImageData{ mbName
-			, ( createFlags
-				| ( size.depth > 1u
-					? VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
-					: VkImageCreateFlagBits{} ) )
-			, ( size.depth > 1u
+			, ( imageInfo.createFlags
+				| ( imageInfo.extent.depth > 1u
+					? ImageCreateFlags::e2DArrayCompatible
+					: ImageCreateFlags::eNone ) )
+			, ( imageInfo.extent.depth > 1u
 				? ImageType::e3D
 				: ( isTexture1D
 					? ImageType::e1D
 					: ImageType::e2D ) )
-			, texture::retrieveFormat( *device, format )
-			, size
-			, ( usageFlags
+			, texture::retrieveFormat( *device, imageInfo.format )
+			, imageInfo.extent
+			, ( imageInfo.usageFlags
 				| ( mipLevels > 1u
-					? ( VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT )
-					: VkImageUsageFlags{} ) )
+					? ( ImageUsageFlags::eTransferSrc | ImageUsageFlags::eTransferDst )
+					: ImageUsageFlags::eNone ) )
 			, mipLevels
 			, layerCount
-			, sampleCount } );
+			, imageInfo.sampleCount } );
 		wholeViewId = handler.createViewId( crg::ImageViewData{ mbName + "Whole"
 			, imageId
-			, 0u
-			, ( size.depth > 1u
+			, ImageViewCreateFlags::eNone
+			, ( imageInfo.extent.depth > 1u
 				? ImageViewType::e3D
 				: ( isTexture1D
 					? ( layerCount > 1u
 						? ImageViewType::e1DArray
 						: ImageViewType::e1D )
 					: ( layerCount > 1u
-						? ( ashes::checkFlag( createFlags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT )
+						? ( ashes::checkFlag( imageInfo.createFlags, ImageCreateFlags::eCubeCompatible )
 							? ( layerCount > 6u
 								? ImageViewType::eCubeArray
 								: ImageViewType::eCube )
 							: ImageViewType::e2DArray )
 						: ImageViewType::e2D ) ) )
-			, format
-			, { ashes::getAspectMask( convert( format ) ), 0u, mipLevels, 0u, layerCount } } );
+			, imageInfo.format
+			, { getAspectMask( imageInfo.format ), 0u, mipLevels, 0u, layerCount } } );
 
-		if ( wholeViewId.data->info.viewType == VK_IMAGE_VIEW_TYPE_3D )
+		if ( wholeViewId.data->info.viewType == ImageViewType::e3D )
 		{
 			auto createInfo = *wholeViewId.data;
-			createInfo.info.viewType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
+			createInfo.info.viewType = ImageViewType::e2DArray;
 			createInfo.name = mbName + "Target";
 			createInfo.info.subresourceRange.baseArrayLayer = 0u;
 			createInfo.info.subresourceRange.layerCount = createInfo.image.data->info.extent.depth;
@@ -394,11 +216,11 @@ namespace castor3d
 			targetViewId = wholeViewId;
 		}
 
-		if ( ashes::isDepthStencilFormat( wholeViewId.data->image.data->info.format ) )
+		if ( isDepthStencilFormat( wholeViewId.data->image.data->info.format ) )
 		{
 			auto createInfo = *wholeViewId.data;
 			createInfo.name = mbName + "Sampled";
-			createInfo.info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+			createInfo.info.subresourceRange.aspectMask = ImageAspectFlags::eDepth;
 			sampledViewId = handler.createViewId( createInfo );
 		}
 		else
@@ -408,16 +230,16 @@ namespace castor3d
 
 		if ( createSubviews )
 		{
-			auto sliceLayerCount = std::max( size.depth, layerCount );
+			auto sliceLayerCount = std::max( imageInfo.extent.depth, layerCount );
 
 			for ( uint32_t index = 0u; index < sliceLayerCount; ++index )
 			{
 				subViewsId.push_back( handler.createViewId( crg::ImageViewData{ mbName + "Sub" + castor::string::toMbString( index )
 					, imageId
-					, 0u
+					, ImageViewCreateFlags::eNone
 					, ( isTexture1D ? ImageViewType::e1D : ImageViewType::e2D )
-					, format
-					, { ashes::getAspectMask( convert( format ) ), 0u, 1u, index, 1u } } ) );
+					, imageInfo.format
+					, { getAspectMask( imageInfo.format ), 0u, 1u, index, 1u } } ) );
 			}
 		}
 	}
@@ -439,7 +261,7 @@ namespace castor3d
 		image = castor::make_unique< ashes::Image >( **device
 			, imageId.data->name
 			, resources->createImage( context, imageId )
-			, ashes::ImageCreateInfo{ imageId.data->info } );
+			, ashes::ImageCreateInfo{ convert( imageId.data->info ) } );
 		wholeView = resources->createImageView( context, wholeViewId );
 
 		if ( wholeViewId != targetViewId )
@@ -636,14 +458,14 @@ namespace castor3d
 		, uint32_t dstQueueFamily
 		, bool target )const
 	{
-		return makeVkStruct< VkImageMemoryBarrier >( convert( srcAccessFlags )
-			, convert( dstAccessMask )
+		return makeVkStruct< VkImageMemoryBarrier >( getAccessFlags( srcAccessFlags )
+			, getAccessFlags( dstAccessMask )
 			, convert( srcLayout )
 			, convert( dstLayout )
 			, srcQueueFamily
 			, dstQueueFamily
 			, *image
-			, ( target
+			, convert( target
 				? targetViewId.data->info.subresourceRange
 				: sampledViewId.data->info.subresourceRange ) );
 	}

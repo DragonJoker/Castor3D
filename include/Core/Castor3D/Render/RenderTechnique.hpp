@@ -118,7 +118,7 @@ namespace castor3d
 		 *\param[in]	queue	The queue recevant les commandes de dessin.
 		 *\return		Les sémaphores signalés par ce dessin.
 		 */
-		C3D_API crg::SemaphoreWaitArray preRender( crg::SemaphoreWaitArray const & toWait
+		C3D_API SemaphoreWaitArray preRender( SemaphoreWaitArray const & toWait
 			, ashes::Queue const & queue );
 		/**
 		*\~english
@@ -201,7 +201,7 @@ namespace castor3d
 			return *m_intermediate;
 		}
 
-		VkExtent3D const & getTargetExtent()const noexcept
+		Extent3D const & getTargetExtent()const noexcept
 		{
 			return m_colour->getExtent();
 		}
@@ -363,15 +363,15 @@ namespace castor3d
 		void doUpdateRsm( CpuUpdater & updater );
 		void doUpdateLpv( CpuUpdater & updater );
 
-		crg::SemaphoreWaitArray doRenderShadowMaps( crg::SemaphoreWaitArray const & semaphore
+		SemaphoreWaitArray doRenderShadowMaps( SemaphoreWaitArray const & semaphore
 			, ashes::Queue const & queue )const;
-		crg::SemaphoreWaitArray doRenderRSM( crg::SemaphoreWaitArray const & semaphore
+		SemaphoreWaitArray doRenderRSM( SemaphoreWaitArray const & semaphore
 			, ashes::Queue const & queue );
-		crg::SemaphoreWaitArray doRenderLPV( crg::SemaphoreWaitArray const & semaphore
+		SemaphoreWaitArray doRenderLPV( SemaphoreWaitArray const & semaphore
 			, ashes::Queue const & queue );
-		crg::SemaphoreWaitArray doRenderEnvironmentMaps( crg::SemaphoreWaitArray const & semaphore
+		SemaphoreWaitArray doRenderEnvironmentMaps( SemaphoreWaitArray const & semaphore
 			, ashes::Queue const & queue )const;
-		crg::SemaphoreWaitArray doRenderVCT( crg::SemaphoreWaitArray const & semaphore
+		SemaphoreWaitArray doRenderVCT( SemaphoreWaitArray const & semaphore
 			, ashes::Queue const & queue )const;
 
 	private:

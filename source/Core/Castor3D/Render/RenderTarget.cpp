@@ -66,14 +66,14 @@ namespace castor3d
 		{
 			struct ImageViewSlice
 			{
-				ImageViewSlice( VkImageViewCreateInfo info
+				ImageViewSlice( crg::ImageViewId info
 					, uint32_t slice )
 					: info{ castor::move( info ) }
 					, slice{ slice }
 				{
 				}
 
-				VkImageViewCreateInfo info;
+				crg::ImageViewId info;
 				uint32_t slice;
 			};
 
@@ -82,21 +82,8 @@ namespace castor3d
 				bool operator()( ImageViewSlice const & lhs
 					, ImageViewSlice const & rhs )const
 				{
-					return ( lhs.info.image < rhs.info.image
-						|| ( lhs.info.image == rhs.info.image
-							&& ( lhs.info.subresourceRange.baseArrayLayer < rhs.info.subresourceRange.baseArrayLayer
-								|| ( lhs.info.subresourceRange.baseArrayLayer == rhs.info.subresourceRange.baseArrayLayer
-									&& ( lhs.info.subresourceRange.baseMipLevel < rhs.info.subresourceRange.baseMipLevel
-										|| ( lhs.info.subresourceRange.baseMipLevel == rhs.info.subresourceRange.baseMipLevel
-											&& ( lhs.info.subresourceRange.layerCount < rhs.info.subresourceRange.layerCount
-												|| ( lhs.info.subresourceRange.layerCount == rhs.info.subresourceRange.layerCount
-													&& ( lhs.info.subresourceRange.levelCount < rhs.info.subresourceRange.levelCount
-														|| ( lhs.info.subresourceRange.levelCount == rhs.info.subresourceRange.levelCount
-															&& ( lhs.info.viewType < rhs.info.viewType
-																|| ( lhs.info.viewType == rhs.info.viewType
-																	&& ( lhs.info.format < rhs.info.format
-																		|| ( lhs.info.format == rhs.info.format
-																			&& lhs.slice < rhs.slice ) ) ) ) ) ) ) ) ) ) ) ) ) );
+					return lhs.info < rhs.info
+						|| ( lhs.info == rhs.info && lhs.slice < rhs.slice );
 
 				}
 			};
@@ -169,12 +156,9 @@ namespace castor3d
 				, ImageLayout layout
 				, TextureFactors const & factors )
 			{
-				auto info = viewId.data->info;
-				info.image = VkImage( uint64_t( viewId.data->image.id ) );
-
 				if ( factors.isSlice )
 				{
-					m_cache.emplace( info, factors.slice );
+					m_cache.emplace( viewId, factors.slice );
 					m_result.emplace_back( name
 						, viewId
 						, layout
@@ -182,7 +166,7 @@ namespace castor3d
 				}
 				else
 				{
-					m_cache.emplace( info, 0u );
+					m_cache.emplace( viewId, 0u );
 					m_result.emplace_back( name
 						, viewId
 						, layout
@@ -196,12 +180,11 @@ namespace castor3d
 				, TextureFactors const & factors )
 			{
 				auto info = viewId.data->info;
-				info.image = VkImage( uint64_t( viewId.data->image.id ) );
 
-				if ( info.viewType == VK_IMAGE_VIEW_TYPE_2D_ARRAY
-					|| info.viewType == VK_IMAGE_VIEW_TYPE_1D_ARRAY
-					|| info.viewType == VK_IMAGE_VIEW_TYPE_CUBE
-					|| info.viewType == VK_IMAGE_VIEW_TYPE_CUBE_ARRAY )
+				if ( info.viewType == ImageViewType::e2DArray
+					|| info.viewType == ImageViewType::e1DArray
+					|| info.viewType == ImageViewType::eCube
+					|| info.viewType == ImageViewType::eCubeArray )
 				{
 					auto layerInfo = info;
 					layerInfo.subresourceRange.layerCount = 1u;
@@ -213,8 +196,8 @@ namespace castor3d
 						if ( auto layerViewId = m_handler.createViewId( crg::ImageViewData{ viewId.data->name + castor::string::toMbString( layer )
 								, viewId.data->image
 								, layerInfo.flags
-								, castor::convert( layerInfo.viewType )
-								, castor::convert( layerInfo.format )
+								, layerInfo.viewType
+								, layerInfo.format
 								, layerInfo.subresourceRange } );
 							doFilter( layerViewId, {} ) )
 						{
@@ -236,17 +219,16 @@ namespace castor3d
 			{
 				auto info = viewId.data->info;
 
-				if ( ( info.viewType == VK_IMAGE_VIEW_TYPE_2D )
+				if ( ( info.viewType == ImageViewType::e2D )
 					&& ( info.subresourceRange.layerCount == 1u ) )
 				{
-					info.image = VkImage( uint64_t( viewId.data->image.id ) );
-					m_cache.emplace( info, 0u );
+					m_cache.emplace( viewId, 0u );
 					m_result.emplace_back( name
 						, viewId
 						, layout
 						, factors );
 				}
-				else if ( info.viewType == VK_IMAGE_VIEW_TYPE_3D )
+				else if ( info.viewType == ImageViewType::e3D )
 				{
 					doVisit3D( name, viewId, layout, factors );
 				}
@@ -262,10 +244,10 @@ namespace castor3d
 				bool result = false;
 
 				if ( auto & info = viewId.data->info;
-					info.viewType == VK_IMAGE_VIEW_TYPE_2D_ARRAY
-						|| info.viewType == VK_IMAGE_VIEW_TYPE_1D_ARRAY
-						|| info.viewType == VK_IMAGE_VIEW_TYPE_CUBE
-						|| info.viewType == VK_IMAGE_VIEW_TYPE_CUBE_ARRAY )
+					info.viewType == ImageViewType::e2DArray
+						|| info.viewType == ImageViewType::e1DArray
+						|| info.viewType == ImageViewType::eCube
+						|| info.viewType == ImageViewType::eCubeArray )
 				{
 					auto layerInfo = info;
 					layerInfo.subresourceRange.layerCount = 1u;
@@ -276,8 +258,8 @@ namespace castor3d
 						result = doFilter( m_handler.createViewId( crg::ImageViewData{ viewId.data->name + castor::string::toMbString( layer )
 								, viewId.data->image
 								, layerInfo.flags
-								, castor::convert( layerInfo.viewType )
-								, castor::convert( layerInfo.format )
+								, layerInfo.viewType
+								, layerInfo.format
 								, layerInfo.subresourceRange } )
 							, factors ) && result;
 						layerInfo.subresourceRange.baseArrayLayer++;
@@ -292,23 +274,15 @@ namespace castor3d
 			{
 				auto info = viewId.data->info;
 
-				if ( info.viewType == VK_IMAGE_VIEW_TYPE_3D )
-				{
-					info.image = VkImage( uint64_t( viewId.data->image.id ) );
-					return m_cache.end() == m_cache.find( { info, factors.slice } );
-				}
+				if ( info.viewType == ImageViewType::e3D )
+					return m_cache.end() == m_cache.find( { viewId, factors.slice } );
 
 				if ( info.subresourceRange.levelCount > 1u )
-				{
 					return false;
-				}
 
-				if ( info.viewType == VK_IMAGE_VIEW_TYPE_2D
+				if ( info.viewType == ImageViewType::e2D
 					&& info.subresourceRange.layerCount == 1u )
-				{
-					info.image = VkImage( uint64_t( viewId.data->image.id ) );
-					return m_cache.end() == m_cache.find( { info, 0u } );
-				}
+					return m_cache.end() == m_cache.find( { viewId, 0u } );
 
 				return doFilterArray( viewId, factors );
 			}
@@ -319,11 +293,11 @@ namespace castor3d
 			ImageViewCache & m_cache;
 		};
 
-		static VkImageUsageFlags constexpr objectsUsageFlags = ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-			| VK_IMAGE_USAGE_SAMPLED_BIT
-			| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-			| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-			| VK_IMAGE_USAGE_STORAGE_BIT );
+		static ImageUsageFlags constexpr objectsUsageFlags = ( ImageUsageFlags::eColorAttachment
+			| ImageUsageFlags::eSampled
+			| ImageUsageFlags::eTransferSrc
+			| ImageUsageFlags::eTransferDst
+			| ImageUsageFlags::eStorage );
 
 		static CU_ImplementAttributeParserBlock( parserScene, TargetContext )
 		{
@@ -649,81 +623,67 @@ namespace castor3d
 		, m_velocity{ m_device
 			, m_resources
 			, cuT( "Velocity" )
-			, 0u
-			, makeExtent3D( m_safeBandedSize )
-			, 1u
-			, 1u
-			, castor::PixelFormat::eR16G16_SFLOAT
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-				| VK_IMAGE_USAGE_STORAGE_BIT )
-			, BorderColour::eFloatOpaqueBlack }
+			, { ImageCreateFlags::eNone
+				, makeExtent3D( m_safeBandedSize ), 1u, 1u
+				, castor::PixelFormat::eR16G16_SFLOAT
+				, ( ImageUsageFlags::eColorAttachment
+					| ImageUsageFlags::eSampled
+					| ImageUsageFlags::eTransferSrc
+					| ImageUsageFlags::eTransferDst
+					| ImageUsageFlags::eStorage ) }
+			, { BorderColour::eFloatOpaqueBlack } }
 		, m_srgbObjects{ Texture{ m_device
 				, m_resources
 				, cuT( "SRGBResult0" )
-				, 0u
-				, makeExtent3D( m_safeBandedSize )
-				, 1u
-				, 1u
-				, getPixelFormat()
-				, rendtgt::objectsUsageFlags
-				, BorderColour::eFloatOpaqueBlack }
+				, { ImageCreateFlags::eNone
+					, makeExtent3D( m_safeBandedSize ), 1u, 1u
+					, getPixelFormat()
+					, rendtgt::objectsUsageFlags }
+				, { BorderColour::eFloatOpaqueBlack } }
 			, Texture{ m_device
 				, m_resources
 				, cuT( "SRGBResult1" )
-				, 0u
-				, makeExtent3D( m_safeBandedSize )
-				, 1u
-				, 1u
-				, getPixelFormat()
-				, rendtgt::objectsUsageFlags
-				, BorderColour::eFloatOpaqueBlack } }
+				, { ImageCreateFlags::eNone
+					, makeExtent3D( m_safeBandedSize ), 1u, 1u
+					, getPixelFormat()
+					, rendtgt::objectsUsageFlags }
+				, { BorderColour::eFloatOpaqueBlack } } }
 		, m_hdrObjects{ Texture{ m_device
 				, m_resources
 				, cuT( "HDRResult0" )
-				, 0u
-				, makeExtent3D( m_safeBandedSize )
-				, 1u
-				, 1u
-				, castor::PixelFormat::eR16G16B16A16_SFLOAT
-				, rendtgt::objectsUsageFlags
-				, BorderColour::eFloatOpaqueBlack }
+				, { ImageCreateFlags::eNone
+					, makeExtent3D( m_safeBandedSize ), 1u, 1u
+					, castor::PixelFormat::eR16G16B16A16_SFLOAT
+					, rendtgt::objectsUsageFlags }
+				, { BorderColour::eFloatOpaqueBlack } }
 			, Texture{ m_device
 				, m_resources
 				, cuT( "HDRResult1" )
-				, 0u
-				, makeExtent3D( m_safeBandedSize )
-				, 1u
-				, 1u
-				, castor::PixelFormat::eR16G16B16A16_SFLOAT
-				, rendtgt::objectsUsageFlags
-				, BorderColour::eFloatOpaqueBlack } }
+				, { ImageCreateFlags::eNone
+					, makeExtent3D( m_safeBandedSize ), 1u, 1u
+					, castor::PixelFormat::eR16G16B16A16_SFLOAT
+					, rendtgt::objectsUsageFlags }
+				, { BorderColour::eFloatOpaqueBlack } } }
 		, m_overlays{ m_device
 			, m_resources
 			, cuT( "Overlays" )
-			, 0u
-			, makeExtent3D( m_size )
-			, 1u
-			, 1u
-			, castor::PixelFormat::eR8G8B8A8_UNORM
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
-			, BorderColour::eFloatOpaqueBlack }
+			, { ImageCreateFlags::eNone
+				, makeExtent3D( m_size ), 1u, 1u
+				, castor::PixelFormat::eR8G8B8A8_UNORM
+				, ( ImageUsageFlags::eColorAttachment
+					| ImageUsageFlags::eSampled
+					| ImageUsageFlags::eTransferSrc ) }
+			, { BorderColour::eFloatOpaqueBlack } }
 		, m_combined{ m_device
 			, m_resources
 			, cuT( "Target" )
-			, 0u
-			, makeExtent3D( m_size )
-			, 1u
-			, 1u
-			, getPixelFormat()
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
-			, BorderColour::eFloatOpaqueBlack }
+			, { ImageCreateFlags::eNone
+				, makeExtent3D( m_size ), 1u, 1u
+				, getPixelFormat()
+				, ( ImageUsageFlags::eColorAttachment
+					| ImageUsageFlags::eSampled
+					| ImageUsageFlags::eTransferSrc ) }
+			, { BorderColour::eFloatOpaqueBlack } }
 		, m_cameraUbo{ m_device }
 		, m_overlayPassDesc{ doCreateOverlayPass( nullptr, m_device ) }
 	{
@@ -1009,15 +969,15 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWaitArray RenderTarget::render( ashes::Queue const & queue
-		, crg::SemaphoreWaitArray const & signalsToWait )
+	SemaphoreWaitArray RenderTarget::render( ashes::Queue const & queue
+		, SemaphoreWaitArray const & signalsToWait )
 	{
 		if ( !m_initialised )
 		{
 			return signalsToWait;
 		}
 
-		crg::SemaphoreWaitArray result{};
+		SemaphoreWaitArray result{};
 
 		if ( auto scene = getScene();
 			m_initialised
@@ -1582,8 +1542,8 @@ namespace castor3d
 		return *dst;
 	}
 
-	crg::SemaphoreWaitArray RenderTarget::doRender( ashes::Queue const & queue
-		, crg::SemaphoreWaitArray signalsToWait )
+	SemaphoreWaitArray RenderTarget::doRender( ashes::Queue const & queue
+		, SemaphoreWaitArray signalsToWait )
 	{
 		auto scene = getScene();
 

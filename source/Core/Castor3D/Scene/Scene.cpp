@@ -1605,9 +1605,9 @@ namespace castor3d
 		getEngine()->setDefaultLightingModel( value );
 	}
 
-	crg::SemaphoreWaitArray Scene::getRenderTargetsSemaphores()const
+	SemaphoreWaitArray Scene::getRenderTargetsSemaphores()const
 	{
-		crg::SemaphoreWaitArray result;
+		SemaphoreWaitArray result;
 		auto lock( castor::makeUniqueLock( getEngine()->getRenderTargetCache() ) );
 
 		for ( auto & target : getEngine()->getRenderTargetCache().getRenderTargets( TargetType::eTexture ) )

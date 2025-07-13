@@ -40,22 +40,20 @@ namespace castor3d
 		static Texture createTexture( RenderDevice const & device
 			, crg::ResourcesCache & resources
 			, castor::String const & name
-			, VkExtent3D const & size )
+			, Extent3D const & size )
 		{
 			return Texture{ device
 				, resources
 				, name
-				, VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
-				, size
-				, 1u
-				, getMipLevels( size, castor::PixelFormat::eR16G16B16A16_SFLOAT )
-				, castor::PixelFormat::eR16G16B16A16_SFLOAT
-				, ( VK_IMAGE_USAGE_STORAGE_BIT
-					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT )
-				, BorderColour::eFloatOpaqueBlack
-				, ComparisonFunc::eNever
+				, { ImageCreateFlags::e2DArrayCompatible
+					, size, 1u, getMipLevels( size, castor::PixelFormat::eR16G16B16A16_SFLOAT )
+					, castor::PixelFormat::eR16G16B16A16_SFLOAT
+					, ( ImageUsageFlags::eStorage
+						| ImageUsageFlags::eTransferSrc
+						| ImageUsageFlags::eTransferDst
+						| ImageUsageFlags::eSampled ) }
+				, { BorderColour::eFloatOpaqueBlack
+					, ComparisonFunc::eNever }
 				, false };
 		}
 
@@ -241,7 +239,7 @@ namespace castor3d
 		m_voxelSecondaryBounce->accept( visitor );
 	}
 
-	crg::SemaphoreWaitArray Voxelizer::render( crg::SemaphoreWaitArray const & semaphore
+	SemaphoreWaitArray Voxelizer::render( SemaphoreWaitArray const & semaphore
 		, ashes::Queue const & queue )
 	{
 		auto result = m_runnable->run( semaphore, queue );

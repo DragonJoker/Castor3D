@@ -53,7 +53,7 @@ namespace castor3d
 			auto voxels = pass.buffers.front();
 			auto result = pass.images.front();
 			ashes::WriteDescriptorSetArray writes;
-			auto write = voxels.getBufferWrite();
+			auto write = graph.getBufferWrite( voxels, 0u );
 			writes.emplace_back( write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
@@ -211,6 +211,8 @@ namespace castor3d
 
 		if ( !temporalSmoothing )
 		{
+			auto color = convert( transparentBlackClearColor );
+			auto subresourceRange = convert( view.data->info.subresourceRange );
 			context.memoryBarrier( commandBuffer
 				, view
 				, ImageLayout::eUndefined
@@ -218,9 +220,9 @@ namespace castor3d
 			m_context.vkCmdClearColorImage( commandBuffer
 				, image
 				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-				, &transparentBlackClearColor.color
+				, &color
 				, 1
-				, &view.data->info.subresourceRange );
+				, &subresourceRange );
 			context.memoryBarrier( commandBuffer
 				, view
 				, ImageLayout::eTransferDst

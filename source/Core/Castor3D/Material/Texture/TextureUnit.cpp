@@ -805,7 +805,7 @@ namespace castor3d
 		return getCPUImage().getPxBuffer();
 	}
 
-	VkExtent3D TextureUnit::getTextureDimensions()const
+	Extent3D TextureUnit::getTextureDimensions()const
 	{
 		CU_Require( isTextured() );
 		return m_texture->imageId.data->info.extent;

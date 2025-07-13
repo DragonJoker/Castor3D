@@ -76,7 +76,7 @@ namespace castor3d
 		*\param[in] pushRanges
 		*	Les intervalles de push constants.
 		*/
-		C3D_API void createPipelines( VkExtent2D const & size
+		C3D_API void createPipelines( Extent2D const & size
 			, ashes::PipelineShaderStageCreateInfoArray const & program
 			, ashes::ImageView const & view
 			, ashes::RenderPass const & renderPass
@@ -113,7 +113,7 @@ namespace castor3d
 		*\param[in] dsState
 		*	L'état de profondeur et stencil à utiliser.
 		*/
-		C3D_API void createPipelines( VkExtent2D const & size
+		C3D_API void createPipelines( Extent2D const & size
 			, ashes::PipelineShaderStageCreateInfoArray const & program
 			, ashes::ImageView const & view
 			, ashes::RenderPass const & renderPass

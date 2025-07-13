@@ -53,27 +53,22 @@ namespace castor3d
 
 	namespace bgimage
 	{
-		static ashes::ImageCreateInfo doGetImageCreate( castor::PixelFormat format
+		static ImageCreateInfo doGetImageCreate( castor::PixelFormat format
 			, castor::Size const & dimensions
 			, bool attachment
 			, uint32_t mipLevel = 1u )
 		{
-			return ashes::ImageCreateInfo
-			{
-				VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
-				VK_IMAGE_TYPE_2D,
-				convert( format ),
-				{ dimensions.getWidth(), dimensions.getHeight(), 1u },
-				mipLevel,
-				6u,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				( VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-					| VkImageUsageFlags( attachment
-						? VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-						: VkImageUsageFlagBits( 0u ) ) ),
-			};
+			return ImageCreateInfo{ ImageCreateFlags::eCubeCompatible
+				, ImageType::e2D
+				, format
+				, { dimensions.getWidth(), dimensions.getHeight(), 1u }
+				, mipLevel
+				, 6u
+				, SampleCount::e1
+				, ImageTiling::eOptimal
+				, ( ImageUsageFlags::eSampled
+					| ImageUsageFlags::eTransferDst
+					| ( attachment ? ImageUsageFlags::eColorAttachment : ImageUsageFlags::eNone ) ) };
 		}
 	}
 
@@ -112,16 +107,15 @@ namespace castor3d
 
 		try
 		{
-			ashes::ImageCreateInfo image{ 0u
-				, VK_IMAGE_TYPE_2D
-				, VK_FORMAT_UNDEFINED
+			ImageCreateInfo image{ ImageCreateFlags::eNone
+				, ImageType::e2D
+				, castor::PixelFormat::eUNDEFINED
 				, { 1u, 1u, 1u }
 				, 1u
 				, 1u
-				, VK_SAMPLE_COUNT_1_BIT
-				, VK_IMAGE_TILING_OPTIMAL
-				, ( VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
+				, SampleCount::e1
+				, ImageTiling::eOptimal
+				, ( ImageUsageFlags::eTransferSrc | ImageUsageFlags::eTransferDst ) };
 			m_2dTexture = castor::makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
 				, castor::move( image )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -243,7 +237,7 @@ namespace castor3d
 				, image.getPxBuffer().getSize()
 				, texture
 				, image.getLayout()
-				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, image.getLayout().depthLayers() }
+				, { ImageAspectFlags::eColor, 0u, 1u, 0u, image.getLayout().depthLayers() }
 				, ImageLayout::eTransferSrc, PipelineStageFlags::eTransfer );
 		}
 
@@ -258,13 +252,11 @@ namespace castor3d
 			m_textureId = Texture{ device
 				, getScene().getResources()
 				, cuT( "ImageBackgroundCube" )
-				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
-				, { dim, dim, 1u }
-				, 6u
-				, 1u
-				, m_2dTexture->getPixelFormat()
-				, ( VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
+				, { ImageCreateFlags::eCubeCompatible
+					, { dim, dim, 1u }, 6u, 1u
+					, m_2dTexture->getPixelFormat()
+					, ImageUsageFlags::eSampled | ImageUsageFlags::eTransferDst }
+				, {} };
 			m_textureId.create();
 			m_texture = castor::makeUnique< TextureLayout >( device.renderSystem
 				, cuT( "ImageBackgroundCube" )

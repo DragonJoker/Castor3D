@@ -40,18 +40,17 @@ namespace castor3d
 			, castor::String const & name
 			, castor::Size const & size
 			, castor::PixelFormat format
-			, VkImageUsageFlags usage )
+			, ImageUsageFlags usage )
 		{
-			auto result = Texture{ device
+			TextureSamplerCreateInfo samplerInfo{ BorderColour::eFloatOpaqueBlack };
+			TextureCreateInfo createInfo{ ImageCreateFlags::eNone
+				, makeExtent3D( size ), 1u, 1u
+				, format, usage };
+			Texture result{ device
 				, resources
 				, name
-				, 0u
-				, makeExtent3D( size )
-				, 1u
-				, 1u
-				, format
-				, usage
-				, BorderColour::eFloatOpaqueBlack };
+				, createInfo
+				, TextureSamplerInfo{ samplerInfo } };
 			result.create();
 			return result;
 		}
@@ -67,8 +66,8 @@ namespace castor3d
 				, name + cuT( "Col" )
 				, size
 				, format
-				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT ) );
+				, ( ImageUsageFlags::eColorAttachment
+					| ImageUsageFlags::eSampled ) );
 		}
 
 		static Texture createDepth( RenderDevice const & device
@@ -81,7 +80,7 @@ namespace castor3d
 				, name + cuT( "Dpt" )
 				, size
 				, device.selectSuitableDepthFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT )
-				, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT );
+				, ImageUsageFlags::eDepthStencilAttachment );
 		}
 
 		static CameraRPtr createCamera( Scene & scene
@@ -164,7 +163,7 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, VkRenderPass renderPass
-		, VkExtent2D const & renderSize )
+		, Extent2D const & renderSize )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
@@ -186,7 +185,7 @@ namespace castor3d
 	}
 
 	void LoadingScreen::WindowPass::setRenderPass( VkRenderPass renderPass
-		, VkExtent2D const & renderSize )
+		, Extent2D const & renderSize )
 	{
 		m_renderSize = renderSize;
 		m_renderPass = renderPass;
@@ -206,7 +205,7 @@ namespace castor3d
 		, castor::Vector< VkClearValue > clearValues )
 	{
 		m_framebuffer = framebuffer;
-		m_renderSize = framebuffer.getDimensions();
+		m_renderSize = crg::convert( framebuffer.getDimensions() );
 		m_clearValues = castor::move( clearValues );
 	}
 
@@ -226,7 +225,7 @@ namespace castor3d
 
 			auto beginInfo = makeVkStruct< VkRenderPassBeginInfo >( m_renderPass
 				, m_framebuffer
-				, VkRect2D{ {}, m_renderSize }
+				, VkRect2D{ {}, convert( m_renderSize ) }
 				, uint32_t( m_clearValues.size() )
 				, m_clearValues.data() );
 			m_context.vkCmdBeginRenderPass( commandBuffer
@@ -374,9 +373,9 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWaitArray LoadingScreen::render( ashes::Queue const & queue
+	SemaphoreWaitArray LoadingScreen::render( ashes::Queue const & queue
 		, ashes::FrameBuffer const & framebuffer
-		, crg::SemaphoreWaitArray const & toWait
+		, SemaphoreWaitArray const & toWait
 		, crg::Fence *& fence )
 	{
 		auto result = toWait;
@@ -413,7 +412,7 @@ namespace castor3d
 
 			m_windowPass->resetCommandBuffer( m_windowPass->getIndex() );
 			m_windowPass->setTarget( framebuffer
-				, { transparentBlackClearColor } );
+				, { convert( ClearValue{ transparentBlackClearColor } ) } );
 			m_windowPass->reRecordCurrent();
 			result = m_runnable->run( result, queue );
 			fence = &m_windowPass->getFence();

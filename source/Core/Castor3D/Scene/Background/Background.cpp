@@ -70,7 +70,7 @@ namespace castor3d
 			using IndexBufferHolder = castor::DataHolderT< ashes::BufferPtr< u16 > >;
 
 			crg::rm::Config buildConfig( RenderDevice const & device
-				, VkExtent2D const & size
+				, Extent2D const & size
 				, crg::ImageViewIdArray const & depth
 				, bool forceVisible )
 			{
@@ -99,7 +99,7 @@ namespace castor3d
 				, crg::RunnableGraph & graph
 				, RenderDevice const & device
 				, SceneBackground & background
-				, VkExtent2D const & size
+				, Extent2D const & size
 				, crg::ImageViewIdArray const & depth
 				, bool forceVisible )
 				: BackgroundPassBase{ pass
@@ -421,7 +421,7 @@ namespace castor3d
 	crg::FramePass & SceneBackground::createBackgroundPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, ProgressBar * progress
-		, VkExtent2D const & size
+		, Extent2D const & size
 		, crg::ImageViewIdArray const & colour
 		, crg::ImageViewIdArray const & depth
 		, crg::ImageViewId const * depthObj

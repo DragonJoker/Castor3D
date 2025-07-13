@@ -36,12 +36,11 @@ namespace castor3d
 			Texture result{ device
 				, resources
 				, cuT( "RadianceComputerResult" )
-				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
-				, { size[0], size[1], 1u }
-				, 6u
-				, 1u
-				, castor::PixelFormat::eR32G32B32A32_SFLOAT
-				, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT };
+				, { ImageCreateFlags::eCubeCompatible
+					, { size[0], size[1], 1u }, 6u, 1u
+					, castor::PixelFormat::eR32G32B32A32_SFLOAT
+					, ImageUsageFlags::eColorAttachment | ImageUsageFlags::eSampled }
+				, {} };
 			result.create();
 			return result;
 		}
@@ -249,12 +248,13 @@ namespace castor3d
 		cmd.beginDebugBlock( { "Generating irradiance map"
 			, makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ) } );
 
+		auto clearColor = convert( ClearValue{ transparentBlackClearColor } );
 		for ( auto face = 0u; face < 6u; ++face )
 		{
 			auto const & facePass = m_renderPasses[face];
 			cmd.beginRenderPass( *m_renderPass
 				, *facePass.frameBuffer
-				, { transparentBlackClearColor }
+				, { clearColor }
 				, VK_SUBPASS_CONTENTS_INLINE );
 			registerFrame( *m_commands.commandBuffer, face );
 			cmd.endRenderPass();
@@ -282,7 +282,7 @@ namespace castor3d
 		m_commands.submit( *queueData.queue );
 	}
 
-	crg::SemaphoreWaitArray RadianceComputer::render( crg::SemaphoreWaitArray const & signalsToWait
+	SemaphoreWaitArray RadianceComputer::render( SemaphoreWaitArray const & signalsToWait
 		, ashes::Queue const & queue )const
 	{
 		return { 1u, { m_commands.submit( queue, signalsToWait )

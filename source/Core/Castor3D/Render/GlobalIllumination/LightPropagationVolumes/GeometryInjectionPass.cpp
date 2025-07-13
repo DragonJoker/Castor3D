@@ -685,17 +685,15 @@ namespace castor3d
 		return { device
 			, resources
 			, prefix + cuT( "GeometryInjection" ) + castor::string::toString( index )
-			, VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
-			, VkExtent3D{ gridSize, gridSize, gridSize }
-			, 1u
-			, 1u
-			, castor::PixelFormat::eR16G16B16A16_SFLOAT
-			, ( VK_IMAGE_USAGE_TRANSFER_DST_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_STORAGE_BIT
-				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT )
-			, BorderColour::eFloatOpaqueBlack
-			, ComparisonFunc::eNever
+			, { ImageCreateFlags::e2DArrayCompatible
+				, Extent3D{ gridSize, gridSize, gridSize }, 1u, 1u
+				, castor::PixelFormat::eR16G16B16A16_SFLOAT
+				, ( ImageUsageFlags::eTransferDst
+					| ImageUsageFlags::eSampled
+					| ImageUsageFlags::eStorage
+					| ImageUsageFlags::eColorAttachment ) }
+			, { BorderColour::eFloatOpaqueBlack
+				, ComparisonFunc::eNever }
 			, false };
 	}
 }

@@ -215,7 +215,7 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, VkExtent2D dimensions
+		, Extent2D dimensions
 		, uint32_t const * passIndex )
 		: crg::RenderPass{ framePass
 			, context
@@ -225,7 +225,7 @@ namespace castor3d
 				, crg::defaultV< GetSubpassContentsCallback >
 				, GetPassIndexCallback( [passIndex](){ return *passIndex; } )
 				, IsEnabledCallback( [this](){ return doIsEnabled(); } ) }
-			, dimensions
+			, castor::move( dimensions )
 			, crg::ru::Config{ 2u } }
 		, m_device{ device }
 	{

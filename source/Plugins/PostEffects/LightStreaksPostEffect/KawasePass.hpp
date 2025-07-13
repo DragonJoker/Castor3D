@@ -23,7 +23,7 @@ namespace light_streaks
 			, crg::ImageViewIdArray const & hiViews
 			, crg::ImageViewIdArray const & kawaseViews
 			, KawaseUbo & kawaseUbo
-			, VkExtent2D dimensions
+			, castor3d::Extent2D dimensions
 			, bool const * enabled );
 		void accept( castor3d::ConfigurationVisitorBase & visitor );
 
@@ -42,7 +42,7 @@ namespace light_streaks
 				, castor3d::RenderDevice const & device
 				, crg::ImageViewId const & srcView
 				, crg::ImageViewId const & dstView
-				, VkExtent2D dimensions
+				, castor3d::Extent2D dimensions
 				, ashes::PipelineShaderStageCreateInfoArray const & stages
 				, KawaseUbo const & kawaseUbo
 				, uint32_t index

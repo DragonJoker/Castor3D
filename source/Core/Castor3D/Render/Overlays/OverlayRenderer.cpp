@@ -788,7 +788,7 @@ namespace castor3d
 			, VK_BLEND_FACTOR_SRC_ALPHA
 			, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA
 			, VK_BLEND_OP_ADD
-			, defaultColorWriteMask } };
+			, getColorComponentFlags( defaultColorWriteMask ) } };
 		ashes::PipelineColorBlendStateCreateInfo blState{ 0u
 			, VK_FALSE
 			, VK_LOGIC_OP_COPY

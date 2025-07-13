@@ -17,7 +17,7 @@ namespace Bloom
 			, crg::FramePass const & previousPass
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & sceneView
-			, VkExtent2D size
+			, castor3d::Extent2D size
 			, uint32_t blurPassesCount
 			, bool const * enabled
 			, uint32_t const * passIndex );

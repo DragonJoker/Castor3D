@@ -30,7 +30,7 @@ namespace castor3d
 
 					for ( uint32_t i = 0u; i < uint32_t( SmTexture::eCount ); ++i )
 					{
-						tmp.push_back( getClearValue( SmTexture( i ) ) );
+						tmp.push_back( convert(  getClearValue( SmTexture( i ) ) ) );
 					}
 
 					return tmp;
@@ -62,8 +62,9 @@ namespace castor3d
 			, ashes::CommandBuffer const & commandBuffer
 			, Texture const & texture
 			, ImageLayout finalLayout
-			, VkClearValue clearValue )
+			, ClearValue const & clearValue )
 		{
+			auto subresourceRange = convert( texture.wholeViewId.data->info.subresourceRange );
 			auto transferBarrier = makeVkStruct< VkImageMemoryBarrier >( 0u
 				, VkAccessFlags( VK_ACCESS_TRANSFER_WRITE_BIT )
 				, VK_IMAGE_LAYOUT_UNDEFINED
@@ -71,7 +72,7 @@ namespace castor3d
 				, VK_QUEUE_FAMILY_IGNORED
 				, VK_QUEUE_FAMILY_IGNORED
 				, *texture.image
-				, texture.wholeViewId.data->info.subresourceRange );
+				, subresourceRange );
 			device->vkCmdPipelineBarrier( commandBuffer
 				, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
@@ -83,36 +84,38 @@ namespace castor3d
 				, 1u
 				, &transferBarrier );
 
-			if ( ashes::isDepthOrStencilFormat( texture.imageId.data->info.format ) )
+			if ( isDepthOrStencilFormat( getFormat( texture.imageId ) ) )
 			{
+				auto depthStencil = convert( clearValue.depthStencil() );
 				device->vkCmdClearDepthStencilImage( commandBuffer
 					, *texture.image
 					, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-					, &clearValue.depthStencil
+					, &depthStencil
 					, 1u
-					, &texture.wholeViewId.data->info.subresourceRange );
+					, &subresourceRange );
 			}
 			else
 			{
+				auto color = convert( clearValue.color() );
 				device->vkCmdClearColorImage( commandBuffer
 					, *texture.image
 					, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-					, &clearValue.color
+					, &color
 					, 1u
-					, &texture.wholeViewId.data->info.subresourceRange );
+					, &subresourceRange );
 			}
 
 			auto shaderBarrier = makeVkStruct< VkImageMemoryBarrier >( VkAccessFlags( VK_ACCESS_TRANSFER_WRITE_BIT )
-				, convert( getAccessMask( finalLayout ) )
+				, getAccessFlags( getAccessMask( finalLayout ) )
 				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 				, convert( finalLayout )
 				, VK_QUEUE_FAMILY_IGNORED
 				, VK_QUEUE_FAMILY_IGNORED
 				, *texture.image
-				, texture.wholeViewId.data->info.subresourceRange );
+				, convert( texture.wholeViewId.data->info.subresourceRange ) );
 			device->vkCmdPipelineBarrier( commandBuffer
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, convert( getStageMask( finalLayout ) )
+				, getPipelineStageFlags( getStageMask( finalLayout ) )
 				, VK_DEPENDENCY_BY_REGION_BIT
 				, 0u
 				, nullptr
@@ -127,7 +130,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, Scene & scene
 		, LightType lightType
-		, VkImageCreateFlags createFlags
+		, ImageCreateFlags createFlags
 		, castor::Size const & size
 		, uint32_t layerCount
 		, uint32_t count )
@@ -236,7 +239,7 @@ namespace castor3d
 				auto smTexture = SmTexture( i );
 				visitor.visit( m_name + cuT( "/" ) + getTexName( smTexture ) + cuT( "L" ) + castor::string::toString( index )
 					, view
-					, ( ashes::isDepthOrStencilFormat( view.data->info.format )
+					, ( isDepthOrStencilFormat( getFormat( view ) )
 						? ImageLayout::eDepthStencilAttachment
 						: ImageLayout::eShaderReadOnly )
 					, TextureFactors::tex2D( { 25.0, 25.0, 25.0 }, { -24.0, -24.0, -24.0 } )
@@ -247,7 +250,7 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWaitArray ShadowMap::render( crg::SemaphoreWaitArray const & toWait
+	SemaphoreWaitArray ShadowMap::render( SemaphoreWaitArray const & toWait
 		, ashes::Queue const & queue
 		, uint32_t index )
 	{

@@ -32,7 +32,7 @@ namespace castor3d
 			, 0u );
 		dstSrcStage = dst.getCompatibleStageFlags();
 		commandBuffer.memoryBarrier( dstSrcStage
-			, convert( flags )
+			, getPipelineStageFlags( flags )
 			, dst.makeUniformBufferInput() );
 	}
 

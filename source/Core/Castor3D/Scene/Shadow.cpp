@@ -246,6 +246,7 @@ namespace castor3d
 		, LightType lightType )
 	{
 		auto baseBlock = visitor.visit( cuT( "Shadows" ) );
+		baseBlock.visit( cuT( "Enabled" ), enabled );
 		baseBlock.visit( cuT( "Type" )
 			, filterType
 			, castor::StringArray{ cuT( "None" ), cuT( "RAW" ), cuT( "PCF" ), cuT( "VSM" ) }

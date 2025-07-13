@@ -362,7 +362,7 @@ namespace castor3d
 			}
 		}
 
-		static crg::rq::Config getConfig( VkExtent2D const & renderSize
+		static crg::rq::Config getConfig( Extent2D const & renderSize
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
 			crg::rq::Config result;
@@ -380,7 +380,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, LightType lightType
 		, ShadowBuffer const & shadowBuffer
-		, VkExtent3D const & size
+		, Extent3D const & size
 		, CameraUbo const & cameraUbo
 		, crg::ImageViewId const & depthObj
 		, crg::ImageViewId const & nmlOcc
@@ -439,14 +439,14 @@ namespace castor3d
 		pass.addSampledView( smResult[SmTexture::eFlux].sampledViewId
 			, rsminterp::RsmFluxIdx );
 		pass.addInOutColourView( dst.targetViewId
-			, VkPipelineColorBlendAttachmentState{ VK_TRUE
-				, VK_BLEND_FACTOR_ONE
-				, VK_BLEND_FACTOR_ONE
-				, VK_BLEND_OP_ADD
-				, VK_BLEND_FACTOR_ONE
-				, VK_BLEND_FACTOR_ONE
-				, VK_BLEND_OP_ADD
-				, VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT } );
+			, crg::PipelineColorBlendAttachmentState{ VK_TRUE
+				, BlendFactor::eOne
+				, BlendFactor::eOne
+				, BlendOp::eAdd
+				, BlendFactor::eOne
+				, BlendFactor::eOne
+				, BlendOp::eAdd
+				, ColorComponentFlags::eR | ColorComponentFlags::eG | ColorComponentFlags::eB | ColorComponentFlags::eA } );
 		m_pass = &pass;
 	}
 

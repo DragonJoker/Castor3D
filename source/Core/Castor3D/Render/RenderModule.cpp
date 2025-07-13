@@ -161,14 +161,15 @@ namespace castor3d
 		, VkImage image
 		, crg::ImageId data )
 	{
-		return ashes::Image{ device, image, ashes::ImageCreateInfo{ data.data->info } };
+		return ashes::Image{ device, image
+			, ashes::ImageCreateInfo{ convert( data.data->info ) } };
 	}
 
 	ashes::ImageView makeImageView( ashes::Image const & image
 		, VkImageView view
 		, crg::ImageViewId data )
 	{
-		return ashes::ImageView{ data.data->info, view, &image };
+		return ashes::ImageView{ convert( data.data->info ), view, &image };
 	}
 
 	ashes::ImageView makeTargetImageView( Texture const & texture )
@@ -195,7 +196,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	VkImageMemoryBarrier makeLayoutTransition( VkImage image
-		, VkImageSubresourceRange const & range
+		, ImageSubresourceRange const & range
 		, ImageLayout srcLayout
 		, ImageLayout dstLayout
 		, uint32_t srcQueueFamily
@@ -212,7 +213,7 @@ namespace castor3d
 	}
 
 	VkImageMemoryBarrier makeLayoutTransition( VkImage image
-		, VkImageSubresourceRange const & range
+		, ImageSubresourceRange const & range
 		, ImageLayout srcLayout
 		, ImageLayout dstLayout
 		, AccessFlags srcAccessFlags
@@ -230,7 +231,7 @@ namespace castor3d
 	}
 
 	VkImageMemoryBarrier makeLayoutTransition( VkImage image
-		, VkImageSubresourceRange const & range
+		, ImageSubresourceRange const & range
 		, ImageLayout srcLayout
 		, ImageLayout dstLayout
 		, AccessFlags srcAccessFlags
@@ -238,25 +239,25 @@ namespace castor3d
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily )
 	{
-		return makeVkStruct< VkImageMemoryBarrier >( convert( srcAccessFlags )
-			, convert( dstAccessMask )
+		return makeVkStruct< VkImageMemoryBarrier >( getAccessFlags( srcAccessFlags )
+			, getAccessFlags( dstAccessMask )
 			, convert( srcLayout )
 			, convert( dstLayout )
 			, srcQueueFamily
 			, dstQueueFamily
 			, image
-			, range );
+			, convert( range ) );
 	}
 
 	void memoryBarrier( crg::RecordContext & context
 		, VkCommandBuffer commandBuffer
 		, ashes::BufferBase const & buffer
 		, crg::BufferSubresourceRange const & range
-		, crg::AccessState after
-		, crg::AccessState before )
+		, AccessState after
+		, AccessState before )
 	{
-		buffer.makeMemoryTransitionBarrier( convert( before.access )
-			, convert( before.pipelineStage )
+		buffer.makeMemoryTransitionBarrier( getAccessFlags( before.access )
+			, getPipelineStageFlags( before.pipelineStage )
 			, VK_QUEUE_FAMILY_IGNORED
 			, VK_QUEUE_FAMILY_IGNORED );
 		context.memoryBarrier( commandBuffer
@@ -291,7 +292,7 @@ namespace castor3d
 			, size.getHeight() + bandsSize };
 	}
 
-	VkExtent3D getSafeBandedExtent3D( castor::Size const & size )
+	Extent3D getSafeBandedExtent3D( castor::Size const & size )
 	{
 		return makeExtent3D( getSafeBandedSize( size ) );
 	}

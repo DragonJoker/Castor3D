@@ -61,7 +61,7 @@ namespace light_streaks
 	}
 
 	void KawaseUbo::update( uint32_t index
-		, VkExtent2D const & size
+		, castor3d::Extent2D const & size
 		, castor::Point2f const & direction
 		, uint32_t pass )
 	{

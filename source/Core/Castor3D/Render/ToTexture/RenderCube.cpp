@@ -163,7 +163,7 @@ namespace castor3d
 		cleanup();
 	}
 
-	void RenderCube::createPipelines( VkExtent2D const & size
+	void RenderCube::createPipelines( Extent2D const & size
 		, ashes::PipelineShaderStageCreateInfoArray const & program
 		, ashes::ImageView const & view
 		, ashes::RenderPass const & renderPass
@@ -177,7 +177,7 @@ namespace castor3d
 			, ashes::PipelineDepthStencilStateCreateInfo{ 0u, false, false } );
 	}
 
-	void RenderCube::createPipelines( VkExtent2D const & size
+	void RenderCube::createPipelines( Extent2D const & size
 		, ashes::PipelineShaderStageCreateInfoArray const & program
 		, ashes::ImageView const & view
 		, ashes::RenderPass const & renderPass

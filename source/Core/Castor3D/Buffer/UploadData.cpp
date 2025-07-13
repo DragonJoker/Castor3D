@@ -21,7 +21,27 @@ CU_ImplementSmartPtr( castor3d, UploadData )
 
 namespace castor3d
 {
-	castor::OutputStream & operator<<( castor::OutputStream & stream, VkImageSubresourceRange const & rhs )
+	castor::OutputStream & operator<<( castor::OutputStream & stream, ImageAspectFlags const & rhs )
+	{
+		std::string sep;
+		if ( checkFlag( rhs, ImageAspectFlags::eColor ) )
+		{
+			stream << sep << "Color";
+			sep = "|";
+		}
+		if ( checkFlag( rhs, ImageAspectFlags::eDepth ) )
+		{
+			stream << sep << "Depth";
+			sep = "|";
+		}
+		if ( checkFlag( rhs, ImageAspectFlags::eStencil ) )
+		{
+			stream << sep << "Stencil";
+		}
+		return stream;
+	}
+
+	castor::OutputStream & operator<<( castor::OutputStream & stream, ImageSubresourceRange const & rhs )
 	{
 		stream << rhs.aspectMask
 			<< ", Array[" << rhs.baseArrayLayer << "/" << rhs.layerCount << "]"
@@ -47,7 +67,7 @@ namespace castor3d
 		, VkDeviceSize srcSize
 		, ashes::BufferBase const & dstBuffer
 		, VkDeviceSize dstOffset
-		, crg::AccessState const & dstAccessState )
+		, AccessState const & dstAccessState )
 	{
 		if ( !srcSize || !srcData )
 		{
@@ -86,7 +106,7 @@ namespace castor3d
 		, VkDeviceSize srcSize
 		, ashes::Image const & dstImage
 		, castor::ImageMemoryLayout dstLayout
-		, VkImageSubresourceRange dstRange
+		, ImageSubresourceRange dstRange
 		, ImageLayout dstImageLayout
 		, PipelineStageFlags dstPipelineFlags )
 	{
@@ -288,9 +308,9 @@ namespace castor3d
 
 		if ( dstCurFlags != dstTrsFlags )
 		{
-			m_commandBuffer->memoryBarrier( convert( dstCurFlags )
-				, convert( dstTrsFlags )
-				, dstBuffer.makeMemoryTransitionBarrier( convert( dstTrsFlags ) ) );
+			m_commandBuffer->memoryBarrier( getPipelineStageFlags( dstCurFlags )
+				, getPipelineStageFlags( dstTrsFlags )
+				, dstBuffer.makeMemoryTransitionBarrier( getPipelineStageFlags( dstTrsFlags ) ) );
 		}
 
 		if ( dstBuffer.getSize() < data.dstOffset + data.srcSize )
@@ -342,9 +362,9 @@ namespace castor3d
 
 		if ( dstTrsFlags != data.dstAccessState.pipelineStage )
 		{
-			m_commandBuffer->memoryBarrier( convert( dstTrsFlags )
-				, convert( data.dstAccessState.pipelineStage )
-				, dstBuffer.makeMemoryTransitionBarrier( convert( data.dstAccessState.access ) ) );
+			m_commandBuffer->memoryBarrier( getPipelineStageFlags( dstTrsFlags )
+				, getPipelineStageFlags( data.dstAccessState.pipelineStage )
+				, dstBuffer.makeMemoryTransitionBarrier( getAccessFlags( data.dstAccessState.access ) ) );
 		}
 	}
 
@@ -372,7 +392,7 @@ namespace castor3d
 			layer < data.dstRange.baseArrayLayer + data.dstRange.layerCount;
 			++layer )
 		{
-			VkImageSubresourceLayers subresourceLayers{ data.dstRange.aspectMask
+			VkImageSubresourceLayers subresourceLayers{ getImageAspectFlags( data.dstRange.aspectMask )
 				, 0u
 				, ( is3D ? 0u : layer )
 				, 1u };
@@ -404,12 +424,12 @@ namespace castor3d
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, dstImage.makeTransition( VK_IMAGE_LAYOUT_UNDEFINED
 				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-				, data.dstRange ) );
+				, convert( data.dstRange ) ) );
 		m_commandBuffer->copyToImage( copies, srcBuffer, dstImage );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-			, convert( data.dstPipelineFlags )
+			, getPipelineStageFlags( data.dstPipelineFlags )
 			, dstImage.makeTransition( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 				, convert( data.dstImageLayout )
-				, data.dstRange ) );
+				, convert( data.dstRange ) ) );
 	}
 }

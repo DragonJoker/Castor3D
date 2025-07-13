@@ -237,19 +237,20 @@ namespace castor3d
 			protected:
 				void doRecordInto( VkCommandBuffer commandBuffer )const
 				{
-					auto clearValue = transparentBlackClearColor.color;
+					auto clearValue = convert( transparentBlackClearColor );
 
 					for ( auto & attach : m_pass.images )
 					{
 						auto view = attach.view();
 						auto image = m_graph.createImage( view.data->image );
+						auto subresourceRange = convert( view.data->info.subresourceRange );
 						assert( attach.isTransferOutputView() );
 						m_context.vkCmdClearColorImage( commandBuffer
 							, image
 							, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 							, &clearValue
 							, 1u
-							, &view.data->info.subresourceRange );
+							, &subresourceRange );
 					}
 				}
 			};
@@ -294,24 +295,24 @@ namespace castor3d
 			}
 		}
 
-		static VkImageUsageFlags constexpr depthUsageFlags = ( VK_IMAGE_USAGE_SAMPLED_BIT
-			| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-			| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-			| VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT );
-		static VkImageUsageFlags constexpr normalUsageFlags = ( VK_IMAGE_USAGE_SAMPLED_BIT
-			| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-			| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-			| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-			| VK_IMAGE_USAGE_STORAGE_BIT );
-		static VkImageUsageFlags constexpr scatteringUsageFlags = ( VK_IMAGE_USAGE_TRANSFER_DST_BIT
-			| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-			| VK_IMAGE_USAGE_STORAGE_BIT
-			| VK_IMAGE_USAGE_SAMPLED_BIT );
-		static VkImageUsageFlags constexpr diffuseUsageFlags = ( VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-			| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-			| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-			| VK_IMAGE_USAGE_STORAGE_BIT
-			| VK_IMAGE_USAGE_SAMPLED_BIT );
+		static ImageUsageFlags constexpr depthUsageFlags = ( ImageUsageFlags::eSampled
+			| ImageUsageFlags::eTransferDst
+			| ImageUsageFlags::eTransferSrc
+			| ImageUsageFlags::eDepthStencilAttachment );
+		static ImageUsageFlags constexpr normalUsageFlags = ( ImageUsageFlags::eSampled
+			| ImageUsageFlags::eTransferDst
+			| ImageUsageFlags::eColorAttachment
+			| ImageUsageFlags::eTransferSrc
+			| ImageUsageFlags::eStorage );
+		static ImageUsageFlags constexpr scatteringUsageFlags = ( ImageUsageFlags::eTransferDst
+			| ImageUsageFlags::eColorAttachment
+			| ImageUsageFlags::eStorage
+			| ImageUsageFlags::eSampled );
+		static ImageUsageFlags constexpr diffuseUsageFlags = ( ImageUsageFlags::eTransferSrc
+			| ImageUsageFlags::eTransferDst
+			| ImageUsageFlags::eColorAttachment
+			| ImageUsageFlags::eStorage
+			| ImageUsageFlags::eSampled );
 	}
 
 	//*************************************************************************************************
@@ -336,43 +337,35 @@ namespace castor3d
 		, m_depth{ m_device
 			, m_renderTarget.getResources()
 			, getName() + cuT( "/Depth" )
-			, 0u
-			, m_colour->getExtent()
-			, 1u
-			, 1u
-			, m_device.selectSuitableDepthStencilFormat( getFeatureFlags( rendtech::depthUsageFlags ) )
-			, rendtech::depthUsageFlags
-			, BorderColour::eFloatOpaqueBlack }
+			, { ImageCreateFlags::eNone
+				, m_colour->getExtent(), 1u, 1u
+				, m_device.selectSuitableDepthStencilFormat( getFeatureFlags( rendtech::depthUsageFlags ) )
+				, rendtech::depthUsageFlags }
+			, { BorderColour::eFloatOpaqueBlack } }
 		, m_normal{ m_device
 			, m_renderTarget.getResources()
 			, getName() + cuT( "/Normal" )
-			, 0u
-			, m_colour->getExtent()
-			, 1u
-			, 1u
-			, castor::PixelFormat::eR16G16B16A16_SFLOAT
-			, rendtech::normalUsageFlags
-			, BorderColour::eFloatOpaqueBlack }
+			, { ImageCreateFlags::eNone
+				, m_colour->getExtent(), 1u, 1u
+				, castor::PixelFormat::eR16G16B16A16_SFLOAT
+				, rendtech::normalUsageFlags }
+			, { BorderColour::eFloatOpaqueBlack } }
 		, m_scattering{ m_device
 			, m_renderTarget.getResources()
 			, getName() + cuT( "/Scattering" )
-			, 0u
-			, m_colour->getExtent()
-			, 1u
-			, 1u
-			, device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( rendtech::scatteringUsageFlags ) )
-			, rendtech::scatteringUsageFlags
-			, BorderColour::eFloatOpaqueBlack }
+			, { ImageCreateFlags::eNone
+				, m_colour->getExtent(), 1u, 1u
+				, device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( rendtech::scatteringUsageFlags ) )
+				, rendtech::scatteringUsageFlags }
+			, { BorderColour::eFloatOpaqueBlack } }
 		, m_diffuse{ m_device
 			, m_renderTarget.getResources()
 			, getName() + cuT( "/Diffuse" )
-			, 0u
-			, m_colour->getExtent()
-			, 1u
-			, 1u
-			, castor::PixelFormat::eR16G16B16A16_SFLOAT
-			, rendtech::diffuseUsageFlags | ( C3D_UseVisibilityBuffer ? VkImageUsageFlagBits{} : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT )
-			, BorderColour::eFloatOpaqueBlack }
+			, { ImageCreateFlags::eNone
+				, m_colour->getExtent(), 1u, 1u
+				, castor::PixelFormat::eR16G16B16A16_SFLOAT
+				, rendtech::diffuseUsageFlags | ( C3D_UseVisibilityBuffer ? ImageUsageFlags::eNone : ImageUsageFlags::eColorAttachment ) }
+			, { BorderColour::eFloatOpaqueBlack } }
 		, m_lpvConfigUbo{ m_device }
 		, m_llpvConfigUbo{ m_device }
 		, m_vctConfigUbo{ m_device }
@@ -415,14 +408,13 @@ namespace castor3d
 			? castor::makeUnique< Texture >( m_device
 				, m_renderTarget.getResources()
 				, getName() + "RSMResult"
-				, 0u
-				, colour.getExtent()
-				, 1u
-				, 1u
-				, castor::PixelFormat::eR16G16B16A16_SFLOAT
-				, VkImageUsageFlags( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) )
+				, TextureCreateInfo{ ImageCreateFlags::eNone
+					, colour.getExtent(), 1u, 1u
+					, castor::PixelFormat::eR16G16B16A16_SFLOAT
+					, ( ImageUsageFlags::eColorAttachment
+						| ImageUsageFlags::eSampled
+						| ImageUsageFlags::eTransferDst ) }
+				, TextureSamplerInfo{} )
 			: nullptr ) }
 		, m_lpvResult{ ( m_shadowBuffer
 			? castor::makeUnique< LightVolumePassResult >( m_renderTarget.getResources()
@@ -671,7 +663,7 @@ namespace castor3d
 		m_transparent.update( updater );
 	}
 
-	crg::SemaphoreWaitArray RenderTechnique::preRender( crg::SemaphoreWaitArray const & toWait
+	SemaphoreWaitArray RenderTechnique::preRender( SemaphoreWaitArray const & toWait
 		, ashes::Queue const & queue )
 	{
 		auto result = toWait;
@@ -1134,10 +1126,10 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWaitArray RenderTechnique::doRenderRSM( crg::SemaphoreWaitArray const & semaphore
+	SemaphoreWaitArray RenderTechnique::doRenderRSM( SemaphoreWaitArray const & semaphore
 		, ashes::Queue const & queue )
 	{
-		crg::SemaphoreWaitArray result = semaphore;
+		SemaphoreWaitArray result = semaphore;
 
 		if ( m_renderTarget.getScene()->needsGlobalIllumination( GlobalIlluminationType::eRsm )
 			&& m_reflectiveShadowMaps )
@@ -1148,10 +1140,10 @@ namespace castor3d
 		return result;
 	}
 
-	crg::SemaphoreWaitArray RenderTechnique::doRenderLPV( crg::SemaphoreWaitArray const & semaphore
+	SemaphoreWaitArray RenderTechnique::doRenderLPV( SemaphoreWaitArray const & semaphore
 		, ashes::Queue const & queue )
 	{
-		crg::SemaphoreWaitArray result = semaphore;
+		SemaphoreWaitArray result = semaphore;
 
 		if ( m_renderTarget.getScene()->needsGlobalIllumination()
 			&& m_clearLpvRunnable )
@@ -1185,10 +1177,10 @@ namespace castor3d
 		return result;
 	}
 
-	crg::SemaphoreWaitArray RenderTechnique::doRenderShadowMaps( crg::SemaphoreWaitArray const & semaphore
+	SemaphoreWaitArray RenderTechnique::doRenderShadowMaps( SemaphoreWaitArray const & semaphore
 		, ashes::Queue const & queue )const
 	{
-		crg::SemaphoreWaitArray result = semaphore;
+		SemaphoreWaitArray result = semaphore;
 
 		if ( auto scene = m_renderTarget.getScene();
 			scene && scene->hasShadows() )
@@ -1208,10 +1200,10 @@ namespace castor3d
 		return result;
 	}
 
-	crg::SemaphoreWaitArray RenderTechnique::doRenderEnvironmentMaps( crg::SemaphoreWaitArray const & semaphore
+	SemaphoreWaitArray RenderTechnique::doRenderEnvironmentMaps( SemaphoreWaitArray const & semaphore
 		, ashes::Queue const & queue )const
 	{
-		crg::SemaphoreWaitArray result = semaphore;
+		SemaphoreWaitArray result = semaphore;
 
 		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
 		{
@@ -1226,10 +1218,10 @@ namespace castor3d
 		return result;
 	}
 
-	crg::SemaphoreWaitArray RenderTechnique::doRenderVCT( crg::SemaphoreWaitArray const & semaphore
+	SemaphoreWaitArray RenderTechnique::doRenderVCT( SemaphoreWaitArray const & semaphore
 		, ashes::Queue const & queue )const
 	{
-		crg::SemaphoreWaitArray result = semaphore;
+		SemaphoreWaitArray result = semaphore;
 
 		if ( auto scene = m_renderTarget.getScene();
 			scene

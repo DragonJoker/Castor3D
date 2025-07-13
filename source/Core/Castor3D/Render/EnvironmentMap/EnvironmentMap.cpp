@@ -33,19 +33,18 @@ namespace castor3d
 			return Texture{ device
 				, resources
 				, name
-				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
-				, makeExtent3D( size )
-				, 6u * MaxEnvironmentMapCount
-				, uint32_t( castor::getBitSize( MapSize[0] ) )
-				, device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
-					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT
-					| VK_FORMAT_FEATURE_TRANSFER_DST_BIT
-					| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
-				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
-				, BorderColour::eFloatOpaqueBlack };
+				, { ImageCreateFlags::eCubeCompatible
+					, makeExtent3D( size ), 6u * MaxEnvironmentMapCount
+					, uint32_t( castor::getBitSize( MapSize[0] ) )
+					, device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+						| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT
+						| VK_FORMAT_FEATURE_TRANSFER_DST_BIT
+						| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
+					, ( ImageUsageFlags::eColorAttachment
+						| ImageUsageFlags::eSampled
+						| ImageUsageFlags::eTransferDst
+						| ImageUsageFlags::eTransferSrc ) }
+				, { BorderColour::eFloatOpaqueBlack } };
 		}
 
 		static Texture createDepthBuffer( RenderDevice const & device
@@ -56,15 +55,13 @@ namespace castor3d
 			return Texture{ device
 				, resources
 				, name + cuT( "/Depth" )
-				, 0u
-				, makeExtent3D( size )
-				, 6u * MaxEnvironmentMapCount
-				, 1u
-				, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
-					| VK_FORMAT_FEATURE_TRANSFER_DST_BIT )
-				, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
-				, BorderColour::eFloatOpaqueBlack };
+				, { ImageCreateFlags::eNone
+					, makeExtent3D( size ), 6u * MaxEnvironmentMapCount, 1u
+					, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+						| VK_FORMAT_FEATURE_TRANSFER_DST_BIT )
+					, ( ImageUsageFlags::eDepthStencilAttachment
+						| ImageUsageFlags::eTransferDst ) }
+				, { BorderColour::eFloatOpaqueBlack } };
 		}
 
 		static Texture createTmpTexture( RenderDevice const & device
@@ -76,14 +73,12 @@ namespace castor3d
 			return Texture{ device
 				, resources
 				, name + cuT( "/Temp" )
-				, 0u
-				, makeExtent3D( size )
-				, 6u * MaxEnvironmentMapCount
-				, 1u
-				, format
-				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
-				, BorderColour::eFloatOpaqueBlack };
+				, { ImageCreateFlags::eNone
+					, makeExtent3D( size ), 6u * MaxEnvironmentMapCount, 1u
+					, format
+					, ( ImageUsageFlags::eColorAttachment
+						| ImageUsageFlags::eTransferSrc ) }
+				, { BorderColour::eFloatOpaqueBlack } };
 		}
 
 		static EnvironmentMap::EnvironmentMapPasses createPass( RenderDevice const & device
@@ -134,7 +129,7 @@ namespace castor3d
 			, ashes::Image *& image )
 		{
 			castor::Vector< ashes::ImageView > result;
-			VkImageViewCreateInfo createInfo{ envMap.wholeViewId.data->info };
+			VkImageViewCreateInfo createInfo{ convert( envMap.wholeViewId.data->info ) };
 			createInfo.image = *envMap.image;
 			createInfo.viewType = VK_IMAGE_VIEW_TYPE_CUBE;
 			createInfo.subresourceRange.layerCount = 6u;
@@ -212,7 +207,7 @@ namespace castor3d
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
 				, view.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			commandBuffer->clear( view
-				, opaqueBlackClearColor.color );
+				, crg::convert( opaqueBlackClearColor ) );
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 				, view.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
@@ -329,7 +324,7 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWaitArray EnvironmentMap::render( crg::SemaphoreWaitArray const & toWait
+	SemaphoreWaitArray EnvironmentMap::render( SemaphoreWaitArray const & toWait
 		, ashes::Queue const & queue )
 	{
 		if ( !m_count )
@@ -337,7 +332,7 @@ namespace castor3d
 			return toWait;
 		}
 
-		crg::SemaphoreWaitArray result = toWait;
+		SemaphoreWaitArray result = toWait;
 
 		if ( m_first || !getEngine()->areUpdateOptimisationsEnabled() )
 		{

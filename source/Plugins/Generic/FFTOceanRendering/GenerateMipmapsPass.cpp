@@ -196,9 +196,9 @@ namespace ocean_fft
 		auto invSizeIt = m_invSizes.begin();
 		auto neededLayoutState = getLayoutState( viewId );
 		auto toLayoutState = context.getNextLayoutState( viewId );
-		crg::LayoutState shaderRead{ castor3d::ImageLayout::eShaderReadOnly
+		castor3d::LayoutState shaderRead{ castor3d::ImageLayout::eShaderReadOnly
 			, castor3d::FragmentShaderReadState };
-		crg::LayoutState shaderWrite{ castor3d::ImageLayout::eGeneral
+		castor3d::LayoutState shaderWrite{ castor3d::ImageLayout::eGeneral
 			, castor3d::ComputeShaderWriteState };
 		auto mipLevels = imageId.data->info.mipLevels;
 		auto srcImageLayout = neededLayoutState;
@@ -207,7 +207,7 @@ namespace ocean_fft
 			: toLayoutState;
 		auto format = getFormat( imageId );
 		auto const aspectMask = crg::getAspectMask( format );
-		VkImageSubresourceRange mipSubRange{ aspectMask
+		castor3d::ImageSubresourceRange mipSubRange{ aspectMask
 			, 0u
 			, 1u
 			, 0u

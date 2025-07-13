@@ -87,7 +87,7 @@ namespace castor3d
 			// was placed!]
 			// Costs 3 MADD.  Error is on the order of 10^3 at the far plane, partly due to z precision.
 			auto reconstructCSPosition = writer.implementFunction< sdw::Vec3 >( "reconstructCSPosition"
-				, [&]( sdw::Vec2 const & ssPosition
+				, [&writer]( sdw::Vec2 const & ssPosition
 					, sdw::Float const & csZ
 					, sdw::Vec4 const & projInfo )
 				{
@@ -99,7 +99,7 @@ namespace castor3d
 
 			// Reconstructs camera-space normal from camera-space position
 			auto reconstructNonUnitCSFaceNormal = writer.implementFunction< sdw::Vec3 >( "reconstructNonUnitCSFaceNormal"
-				, [&]( sdw::Vec3 const & csPosition )
+				, [&writer]( sdw::Vec3 const & csPosition )
 				{
 					writer.returnStmt( cross( dFdy( csPosition ), dFdx( csPosition ) ) );
 				}
@@ -108,7 +108,7 @@ namespace castor3d
 			// Returns a unit vector and a screen-space radius for the tap on a unit disk
 			//	(the caller should scale by the actual disk radius)
 			auto tapLocation = writer.implementFunction< sdw::Vec2 >( "tapLocation"
-				, [&]( sdw::Int const & sampleNumber
+				, [&writer, &c3d_ssaoConfigData]( sdw::Int const & sampleNumber
 					, sdw::Int const & sampleCount
 					, sdw::Float const & spinAngle
 					, sdw::Float ssRadius )
@@ -130,7 +130,7 @@ namespace castor3d
 
 			// Used for packing Z into the GB channels
 			auto csZToKey = writer.implementFunction< sdw::Float >( "csZToKey"
-				, [&]( sdw::Float const & csZ )
+				, [&writer, &c3d_ssaoConfigData]( sdw::Float const & csZ )
 				{
 					writer.returnStmt( clamp( csZ * ( 1.0_f / c3d_ssaoConfigData.farPlaneZ ), 0.0_f, 1.0_f ) );
 				}
@@ -152,7 +152,7 @@ namespace castor3d
 				, sdw::InIVec2{ writer, "ssPosition" } );
 
 			auto getMipLevel = writer.implementFunction< sdw::Int >( "getMipLevel"
-				, [&]( sdw::Float const & ssRadius )
+				, [&writer, &c3d_ssaoConfigData]( sdw::Float const & ssRadius )
 				{
 					// Derivation:
 					//  mipLevel = floor(log(ssR / MAX_OFFSET));
@@ -486,22 +486,21 @@ namespace castor3d
 			, RenderDevice const & device
 			, castor::String const & name
 			, castor::PixelFormat format
-			, VkExtent2D const & size )
+			, Extent2D const & size )
 		{
 			return Texture{ device
 				, resources
 				, name
-				, 0u
-				, VkExtent3D{ size.width, size.height, 1u }
-				, 1u
-				, 1u
-				, format
-				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) };
+				, { ImageCreateFlags::eNone
+					, makeExtent3D( size ), 1u, 1u
+					, format
+					, ( ImageUsageFlags::eColorAttachment
+						| ImageUsageFlags::eSampled
+						| ImageUsageFlags::eTransferSrc ) }
+				, {} };
 		}
 
-		static crg::rq::Config getConfig( VkExtent2D const & renderSize
+		static crg::rq::Config getConfig( Extent2D const & renderSize
 			, SsaoConfig const & ssaoConfig
 			, uint32_t const & passIndex
 			, ashes::PipelineShaderStageCreateInfoArray const & stages0
@@ -522,13 +521,13 @@ namespace castor3d
 	SsaoRawAOPass::RenderQuad::RenderQuad( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
-		, crg::ru::Config ruConfig
+		, crg::ru::Config const & ruConfig
 		, crg::rq::Config rqConfig
 		, SsaoConfig const & ssaoConfig )
 		: crg::RenderQuad{ pass
 			, context
 			, graph
-			, castor::move( ruConfig )
+			, ruConfig
 			, castor::move( rqConfig ) }
 		, ssaoConfig{ ssaoConfig }
 	{
@@ -556,7 +555,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, crg::FramePass const & previousPass
-		, VkExtent2D const & size
+		, Extent2D const & size
 		, SsaoConfig const & config
 		, SsaoConfigUbo & ssaoConfigUbo
 		, CameraUbo const & cameraUbo

@@ -216,15 +216,9 @@ namespace castor3d
 			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ castor::toUtf8( view.name ) + "Barrier"
 				, imageId
 				, info.flags
-				, castor::convert( info.viewType )
-				, castor::convert( info.format )
-				, { VkImageAspectFlags( ashes::isDepthStencilFormat( info.format )
-						? VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT
-						: ( ashes::isDepthFormat( info.format )
-							? VK_IMAGE_ASPECT_DEPTH_BIT
-							: ( ashes::isStencilFormat( info.format )
-								? VK_IMAGE_ASPECT_STENCIL_BIT
-								: VK_IMAGE_ASPECT_COLOR_BIT ) ) )
+				, info.viewType
+				, info.format
+				, { crg::getAspectMask( info.format )
 					, info.subresourceRange.baseMipLevel
 					, info.subresourceRange.levelCount
 					, info.subresourceRange.baseArrayLayer
@@ -251,7 +245,7 @@ namespace castor3d
 
 			for ( auto & view : views )
 			{
-				if ( view.viewId.data->info.viewType == VK_IMAGE_VIEW_TYPE_3D )
+				if ( view.viewId.data->info.viewType == crg::ImageViewType::e3D )
 				{
 					result.push_back( doCreateBarrierView( device, tex3DResult ) );
 				}
@@ -273,15 +267,9 @@ namespace castor3d
 			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ castor::toUtf8( view.name ) + "Sampled"
 				, imageId
 				, info.flags
-				, castor::convert( info.viewType )
-				, castor::convert( info.format )
-				, { VkImageAspectFlags( ashes::isDepthFormat( info.format )
-						? VK_IMAGE_ASPECT_DEPTH_BIT
-						: ( ashes::isStencilFormat( info.format )
-							? VK_IMAGE_ASPECT_STENCIL_BIT
-							: ( ashes::isDepthOrStencilFormat( info.format )
-								? VK_IMAGE_ASPECT_DEPTH_BIT
-								: VK_IMAGE_ASPECT_COLOR_BIT ) ) )
+				, info.viewType
+				, info.format
+				, { crg::getAspectMask( info.format )
 					, info.subresourceRange.baseMipLevel
 					, info.subresourceRange.levelCount
 					, info.subresourceRange.baseArrayLayer
@@ -308,7 +296,7 @@ namespace castor3d
 
 			for ( auto & view : views )
 			{
-				if ( view.viewId.data->info.viewType == VK_IMAGE_VIEW_TYPE_3D )
+				if ( view.viewId.data->info.viewType == crg::ImageViewType::e3D )
 				{
 					result.push_back( doCreateBarrierView( device, tex3DResult ) );
 				}
@@ -355,7 +343,7 @@ namespace castor3d
 		}
 #endif
 
-		static void convert( crg::SemaphoreWaitArray const & toWait
+		static void convert( SemaphoreWaitArray const & toWait
 			, std::vector< VkSemaphore > & semaphores )
 		{
 			for ( auto & wait : toWait )
@@ -754,7 +742,7 @@ namespace castor3d
 	}
 
 	void RenderWindow::render( bool waitOnly
-		, crg::SemaphoreWaitArray & baseToWait )
+		, SemaphoreWaitArray & baseToWait )
 	{
 		if ( m_skip )
 		{
@@ -1261,12 +1249,7 @@ namespace castor3d
 				, VK_IMAGE_VIEW_TYPE_2D
 				, m_swapChain->getFormat()
 				, VkComponentMapping{}
-				, VkImageSubresourceRange
-				{ ashes::getAspectMask( m_swapChain->getFormat() )
-				, 0u
-				, 1u
-				, 0u
-				, 1u } ) ) );
+				, VkImageSubresourceRange{ ashes::getAspectMask( m_swapChain->getFormat() ), 0u, 1u, 0u, 1u } ) ) );
 			attaches.emplace_back( m_swapchainViews[index].back() );
 		}
 
@@ -1399,7 +1382,7 @@ namespace castor3d
 #else
 				, FilterMode::eLinear );
 #endif
-		m_renderQuad->createPipeline( VkExtent2D{ m_size[0], m_size[1] }
+		m_renderQuad->createPipeline( Extent2D{ m_size[0], m_size[1] }
 			, castor::Position{}
 			, m_program
 			, *m_renderPass );
@@ -1481,7 +1464,7 @@ namespace castor3d
 
 			commandBuffer->beginRenderPass( *m_renderPass
 				, frameBuffer
-				, { opaqueWhiteClearColor }
+				, { convert( ClearValue{ opaqueWhiteClearColor } ) }
 			, VK_SUBPASS_CONTENTS_INLINE );
 			m_renderQuad->registerPass( *commandBuffer, passIndex );
 			commandBuffer->endRenderPass();
@@ -1555,7 +1538,7 @@ namespace castor3d
 				
 		if ( m_device.hasGeometryShader() )
 		{
-			VkExtent2D extent{ m_size.getWidth(), m_size.getHeight() };
+			Extent2D extent{ m_size.getWidth(), m_size.getHeight() };
 			m_texture3Dto2D = castor::makeUnique< Texture3DTo2D >( m_device
 				, m_resources
 				, extent
@@ -1590,7 +1573,7 @@ namespace castor3d
 		auto target = getRenderTarget();
 		m_saveBuffer = castor::PxBufferBase::create( target->getSize(), target->getPixelFormat() );
 		auto targetExtent = makeExtent2D( m_saveBuffer->getDimensions() );
-		auto bufferSize = ashes::getAlignedSize( ashes::getLevelsSize( targetExtent
+		auto bufferSize = ashes::getAlignedSize( ashes::getLevelsSize( convert( targetExtent )
 			, VK_FORMAT_R32G32B32A32_SFLOAT // Reserve enough room to hold max image size
 			, 0u
 			, 1u
@@ -1707,11 +1690,11 @@ namespace castor3d
 		return nullptr;
 	}
 
-	crg::SemaphoreWaitArray RenderWindow::doSubmitLoadingFrame( QueueData const & queue
+	SemaphoreWaitArray RenderWindow::doSubmitLoadingFrame( QueueData const & queue
 		, RenderingResources const & resources
 		, LoadingScreen & loadingScreen
 		, crg::Fence *& fence
-		, crg::SemaphoreWaitArray toWait )
+		, SemaphoreWaitArray toWait )
 	{
 		toWait.push_back( { *resources.imageAvailableSemaphore
 			, PipelineStageFlags::eColorAttachmentOutput } );
@@ -1724,7 +1707,7 @@ namespace castor3d
 	void RenderWindow::doPresentLoadingFrame( QueueData const & queueData
 		, crg::Fence * fence
 		, RenderingResources & resources
-		, crg::SemaphoreWaitArray const & toWait )
+		, SemaphoreWaitArray const & toWait )
 	{
 		try
 		{
@@ -1797,7 +1780,7 @@ namespace castor3d
 
 		if ( intermediate.layout != ImageLayout::eTransferSrc )
 		{
-			commands.memoryBarrier( convert( getStageMask( intermediateBarrierView.layout ) )
+			commands.memoryBarrier( getPipelineStageFlags( getStageMask( intermediateBarrierView.layout ) )
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
 				, makeLayoutTransition( srcImage
 					, intermediateBarrierView.viewId.data->info.subresourceRange
@@ -1845,12 +1828,12 @@ namespace castor3d
 		commands.copyToBuffer( VkBufferImageCopy{ 0u
 				, 0u
 				, 0u
-				, { subresourceRange.aspectMask
+				, { getImageAspectFlags( subresourceRange.aspectMask )
 					, mipLevel
 					, subresourceRange.baseArrayLayer
 					, subresourceRange.layerCount }
 				, srcOffset
-				, makeExtent3D( dstExtent ) }
+				, makeVkExtent3D( dstExtent ) }
 			, srcImage
 			, *m_snapshotBuffer );
 		commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
@@ -1871,7 +1854,7 @@ namespace castor3d
 			&& intermediate.layout != ImageLayout::eUndefined )
 		{
 			commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-				, convert( getStageMask( intermediateBarrierView.layout ) )
+				, getPipelineStageFlags( getStageMask( intermediateBarrierView.layout ) )
 				, makeLayoutTransition( srcImage
 					, intermediateBarrierView.viewId.data->info.subresourceRange
 					, ImageLayout::eShaderReadOnly
@@ -1886,7 +1869,7 @@ namespace castor3d
 	}
 
 	void RenderWindow::doWaitFrame( QueueData const & queueData
-		, crg::SemaphoreWaitArray const & toWait )
+		, SemaphoreWaitArray const & toWait )
 	{
 		auto target = getRenderTarget();
 
@@ -1924,7 +1907,7 @@ namespace castor3d
 
 	void RenderWindow::doSubmitFrame( QueueData const & queueData
 		, RenderingResources const * resources
-		, crg::SemaphoreWaitArray const & toWait )
+		, SemaphoreWaitArray const & toWait )
 	{
 		ashes::VkSemaphoreArray semaphores;
 		ashes::VkPipelineStageFlagsArray stages;

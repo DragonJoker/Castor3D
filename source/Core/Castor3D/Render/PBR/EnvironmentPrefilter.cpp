@@ -38,12 +38,11 @@ namespace castor3d
 			Texture result{ device
 				, resources
 				, prefix + cuT( "EnvironmentPrefilterResult" )
-				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
-				, { size[0], size[1], 1u }
-				, 6u
-				, MaxIblReflectionLod + 1u
-				, castor::PixelFormat::eR32G32B32A32_SFLOAT
-				, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT };
+				, { ImageCreateFlags::eCubeCompatible
+					, { size[0], size[1], 1u }, 6u, MaxIblReflectionLod + 1u
+					, castor::PixelFormat::eR32G32B32A32_SFLOAT
+					, ImageUsageFlags::eColorAttachment | ImageUsageFlags::eSampled }
+				, {} };
 			result.create();
 			return result;
 		}
@@ -103,7 +102,7 @@ namespace castor3d
 
 		template< typename SourceImageT >
 		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device
-			, VkExtent2D const & size
+			, Extent2D const & size
 			, uint32_t mipLevel
 			, bool isCharlie )
 		{
@@ -264,8 +263,8 @@ namespace castor3d
 		, crg::ResourcesCache & resources
 		, ashes::RenderPass const & renderPass
 		, uint32_t mipLevel
-		, VkExtent2D const & originalSize
-		, VkExtent2D const & size
+		, Extent2D const & originalSize
+		, Extent2D const & size
 		, ashes::ImageView const & srcView
 		, Texture const & dstTexture
 		, SamplerObs sampler
@@ -285,7 +284,7 @@ namespace castor3d
 			// Create the views.
 			auto data = *dstTexture.wholeViewId.data;
 			data.name = name;
-			data.info.viewType = VK_IMAGE_VIEW_TYPE_2D;
+			data.info.viewType = ImageViewType::e2D;
 			data.info.subresourceRange.baseArrayLayer = face;
 			data.info.subresourceRange.layerCount = 1u;
 			data.info.subresourceRange.baseMipLevel = mipLevel;
@@ -325,7 +324,7 @@ namespace castor3d
 			auto const & frameBuffer = m_frameBuffers[face];
 			cmd.beginRenderPass( m_renderPass
 				, *frameBuffer.frameBuffer
-				, { transparentBlackClearColor }
+				, { convert( ClearValue{ transparentBlackClearColor } ) }
 				, VK_SUBPASS_CONTENTS_INLINE );
 			registerFrame( *m_commands.commandBuffer, face );
 			cmd.endRenderPass();
@@ -340,7 +339,7 @@ namespace castor3d
 		m_commands.submit( *queueData.queue );
 	}
 
-	crg::SemaphoreWaitArray EnvironmentPrefilter::MipRenderCube::render( crg::SemaphoreWaitArray const & signalsToWait
+	SemaphoreWaitArray EnvironmentPrefilter::MipRenderCube::render( SemaphoreWaitArray const & signalsToWait
 		, ashes::Queue const & queue )const
 	{
 		return { 1u
@@ -365,12 +364,12 @@ namespace castor3d
 		, m_sampler{ envpref::doCreateSampler( engine, m_device, m_prefix, m_result.getMipLevels() - 1u ) }
 		, m_renderPass{ envpref::doCreateRenderPass( m_device, m_prefix, m_result.getFormat() ) }
 	{
-		VkExtent2D originalSize{ size.getWidth(), size.getHeight() };
+		Extent2D originalSize{ size.getWidth(), size.getHeight() };
 		auto data = m_device.graphicsData();
 
 		for ( auto mipLevel = 0u; mipLevel < MaxIblReflectionLod + 1u; ++mipLevel )
 		{
-			VkExtent2D mipSize{ originalSize.width >> mipLevel
+			Extent2D mipSize{ originalSize.width >> mipLevel
 				, originalSize.height >> mipLevel };
 			m_renderPasses.emplace_back( castor::make_unique< MipRenderCube >( m_device
 				, *data
@@ -404,7 +403,7 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWaitArray EnvironmentPrefilter::render( crg::SemaphoreWaitArray signalsToWait
+	SemaphoreWaitArray EnvironmentPrefilter::render( SemaphoreWaitArray signalsToWait
 		, ashes::Queue const & queue )const
 	{
 		for ( auto & cubePass : m_renderPasses )

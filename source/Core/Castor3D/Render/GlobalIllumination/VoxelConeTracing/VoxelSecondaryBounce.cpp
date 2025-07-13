@@ -68,13 +68,13 @@ namespace castor3d
 			auto firstBounce = pass.images.front();
 			auto secondBounce = pass.images.back();
 			ashes::WriteDescriptorSetArray writes;
-			auto write = voxelsBuffer.getBufferWrite();
+			auto write = graph.getBufferWrite( voxelsBuffer );
 			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
 				, write->descriptorType } );
 			writes.back().bufferInfo = write.bufferInfo;
-			write = voxelsUbo.getBufferWrite();
+			write = graph.getBufferWrite( voxelsUbo );
 			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
@@ -227,6 +227,8 @@ namespace castor3d
 		auto view = m_pass.images.back().view( index );
 		auto layoutState = getLayoutState( view );
 		auto image = m_graph.createImage( view.data->image );
+		auto color = convert( transparentBlackClearColor );
+		auto subresourceRange = convert( view.data->info.subresourceRange );
 
 		// Clear result
 		context.memoryBarrier( commandBuffer
@@ -236,9 +238,9 @@ namespace castor3d
 		m_context.vkCmdClearColorImage( commandBuffer
 			, image
 			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-			, &transparentBlackClearColor.color
+			, &color
 			, 1
-			, &view.data->info.subresourceRange );
+			, &subresourceRange );
 		context.memoryBarrier( commandBuffer
 			, view
 			, ImageLayout::eTransferDst

@@ -66,57 +66,52 @@ namespace dof
 		, castor3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
-		auto extent = ashes::getSubresourceDimensions( target.getExtent(), 1u );
+		auto extent = castor::convert( ashes::getSubresourceDimensions( convert( target.getExtent() ), 1u ) );
 		m_nearCoC = castor3d::Texture{ device
 			, m_renderTarget.getResources()
 			, "DoFNearCoC"
-			, 0u
-			, extent
-			, 1u
-			, 1u
-			, castor::PixelFormat::eR16_SFLOAT
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT ) };
+			, { castor3d::ImageCreateFlags::eNone
+				, extent, 1u, 1u
+				, castor::PixelFormat::eR16_SFLOAT
+				, ( castor3d::ImageUsageFlags::eColorAttachment
+					| castor3d::ImageUsageFlags::eSampled ) }
+			, {} };
 		m_nearBlur = castor3d::Texture{ device
 			, m_renderTarget.getResources()
 			, "DoFNearBlur"
-			, 0u
-			, extent
-			, 1u
-			, 1u
-			, target.getFormat()
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT ) };
+			, { castor3d::ImageCreateFlags::eNone
+				, extent, 1u, 1u
+				, target.getFormat()
+				, ( castor3d::ImageUsageFlags::eColorAttachment
+					| castor3d::ImageUsageFlags::eSampled ) }
+			, {} };
 		m_farCoC = castor3d::Texture{ device
 			, m_renderTarget.getResources()
 			, "DoFFarCoC"
-			, 0u
-			, extent
-			, 1u
-			, 1u
-			, castor::PixelFormat::eR16_SFLOAT
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT ) };
+			, { castor3d::ImageCreateFlags::eNone
+				, extent, 1u, 1u
+				, castor::PixelFormat::eR16_SFLOAT
+				, ( castor3d::ImageUsageFlags::eColorAttachment
+					| castor3d::ImageUsageFlags::eSampled ) }
+			, {} };
 		m_farBlur = castor3d::Texture{ device
 			, m_renderTarget.getResources()
 			, "DoFFarBlur"
-			, 0u
-			, extent
-			, 1u
-			, 1u
-			, target.getFormat()
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT ) };
+			, { castor3d::ImageCreateFlags::eNone
+				, extent, 1u, 1u
+				, target.getFormat()
+				, ( castor3d::ImageUsageFlags::eColorAttachment
+					| castor3d::ImageUsageFlags::eSampled ) }
+			, {} };
 		m_intermediate = castor3d::Texture{ device
 			, m_renderTarget.getResources()
 			, "DoFFarBlur"
-			, 0u
-			, extent
-			, 1u
-			, 1u
-			, target.getFormat()
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT ) };
+			, { castor3d::ImageCreateFlags::eNone
+				, extent, 1u, 1u
+				, target.getFormat()
+				, ( castor3d::ImageUsageFlags::eColorAttachment
+					| castor3d::ImageUsageFlags::eSampled ) }
+			, {} };
 		m_nearCoC.create();
 		m_farCoC.create();
 		m_nearBlur.create();

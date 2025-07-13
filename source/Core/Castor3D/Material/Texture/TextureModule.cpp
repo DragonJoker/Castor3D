@@ -227,18 +227,15 @@ namespace castor3d
 		, castor::Path const & relative
 		, castor::Path const & folder )
 	{
-		ashes::ImageCreateInfo createInfo
-		{
-			0u,
-			VK_IMAGE_TYPE_2D,
-			VK_FORMAT_UNDEFINED,
-			{ 1u, 1u, 1u },
-			20u,
-			1u,
-			VK_SAMPLE_COUNT_1_BIT,
-			VK_IMAGE_TILING_OPTIMAL,
-			VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
-		};
+		ImageCreateInfo createInfo{ ImageCreateFlags::eNone
+			, ImageType::e2D
+			, castor::PixelFormat::eUNDEFINED
+			, { 1u, 1u, 1u }
+			, 20u
+			, 1u
+			, SampleCount::e1
+			, ImageTiling::eOptimal
+			, ImageUsageFlags::eSampled | ImageUsageFlags::eTransferDst };
 		auto texture = castor::makeUnique< TextureLayout >( *engine.getRenderSystem()
 			, createInfo
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -252,17 +249,17 @@ namespace castor3d
 		, castor::PxBufferBaseUPtr buffer
 		, bool isStatic )
 	{
-		ashes::ImageCreateInfo createInfo{ 0u
+		ImageCreateInfo createInfo{ ImageCreateFlags::eNone
 			, ( buffer->getHeight() <= 1u && buffer->getWidth() > 1u
-				? VK_IMAGE_TYPE_1D
-				: VK_IMAGE_TYPE_2D )
-			, VK_FORMAT_UNDEFINED
+				? ImageType::e1D
+				: ImageType::e2D )
+			, castor::PixelFormat::eUNDEFINED
 			, { buffer->getWidth(), buffer->getHeight(), 1u }
 			, uint32_t( castor::getBitSize( std::min( buffer->getWidth(), buffer->getHeight() ) ) )
 			, 1u// TODO: Support array layers: buffer->getLayers()
-			, VK_SAMPLE_COUNT_1_BIT
-			, VK_IMAGE_TILING_OPTIMAL
-			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT };
+			, SampleCount::e1
+			, ImageTiling::eOptimal
+			, ImageUsageFlags::eSampled | ImageUsageFlags::eTransferDst };
 		log::debug << ( cuT( "Creating " ) + name + cuT( " texture layout.\n" ) );
 		auto texture = castor::makeUnique< TextureLayout >( *engine.getRenderSystem()
 			, createInfo
@@ -274,7 +271,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	uint32_t getMipLevels( VkExtent3D const & extent
+	uint32_t getMipLevels( Extent3D const & extent
 		, castor::PixelFormat format )
 	{
 		auto blockSize = ashes::getBlockSize( convert( format ) );

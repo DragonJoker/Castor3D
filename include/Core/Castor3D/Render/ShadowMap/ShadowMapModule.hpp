@@ -40,8 +40,8 @@ namespace castor3d
 		, SmTexture texture );
 	C3D_API castor::String getTexName( SmTexture texture );
 	C3D_API castor::PixelFormat getFormat( RenderDevice const & device, SmTexture texture );
-	C3D_API VkClearValue getClearValue( SmTexture texture );
-	C3D_API VkImageUsageFlags getUsageFlags( SmTexture texture );
+	C3D_API ClearValue getClearValue( SmTexture texture );
+	C3D_API ImageUsageFlags getUsageFlags( SmTexture texture );
 	C3D_API BorderColour getBorderColor( SmTexture texture );
 	C3D_API ComparisonFunc getCompareOp( SmTexture texture );
 	C3D_API uint32_t getMipLevels( RenderDevice const & device
@@ -49,7 +49,7 @@ namespace castor3d
 		, castor::Size const & size );
 	inline uint32_t getMipLevels( RenderDevice const & device
 		, SmTexture texture
-		, VkExtent3D const & size )
+		, Extent3D const & size )
 	{
 		return getMipLevels( device
 			, texture

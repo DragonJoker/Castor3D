@@ -33,8 +33,8 @@ namespace castor3d
 	C3D_API castor::String getTextureName( WbTexture texture );
 	C3D_API castor::String getTexName( WbTexture texture );
 	C3D_API castor::PixelFormat getFormat( RenderDevice const & device, WbTexture texture );
-	C3D_API VkClearValue getClearValue( WbTexture texture );
-	C3D_API VkImageUsageFlags getUsageFlags( WbTexture texture );
+	C3D_API ClearValue getClearValue( WbTexture texture );
+	C3D_API ImageUsageFlags getUsageFlags( WbTexture texture );
 	C3D_API BorderColour getBorderColor( WbTexture texture );
 	inline uint32_t getMipLevels( RenderDevice const & /*device*/
 		, WbTexture /*texture*/
@@ -44,7 +44,7 @@ namespace castor3d
 	}
 	inline uint32_t getMipLevels( RenderDevice const & device
 		, WbTexture texture
-		, VkExtent3D const & size )
+		, Extent3D const & size )
 	{
 		return getMipLevels( device
 			, texture

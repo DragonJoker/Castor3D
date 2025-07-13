@@ -41,8 +41,8 @@ namespace castor3d
 		, castor::String const & infix );
 	C3D_API castor::String getTexName( LpvTexture texture );
 	C3D_API castor::PixelFormat getFormat( RenderDevice const & device, LpvTexture texture );
-	C3D_API VkClearValue getClearValue( LpvTexture texture );
-	C3D_API VkImageUsageFlags getUsageFlags( LpvTexture texture );
+	C3D_API ClearValue getClearValue( LpvTexture texture );
+	C3D_API ImageUsageFlags getUsageFlags( LpvTexture texture );
 	C3D_API BorderColour getBorderColor( LpvTexture texture );
 	inline uint32_t getMipLevels( RenderDevice const & /*device*/
 		, LpvTexture /*texture*/
@@ -52,7 +52,7 @@ namespace castor3d
 	}
 	inline uint32_t getMipLevels( RenderDevice const & device
 		, LpvTexture texture
-		, VkExtent3D const & size )
+		, Extent3D const & size )
 	{
 		return getMipLevels( device
 			, texture

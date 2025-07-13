@@ -25,7 +25,7 @@ namespace atmosphere_scattering
 		AtmosphereBackgroundModel( castor3d::Engine const & engine
 			, sdw::ShaderWriter & writer
 			, castor3d::shader::Utils & utils
-			, VkExtent2D targetSize
+			, castor3d::Extent2D targetSize
 			, bool needsForeground
 			, uint32_t & binding
 			, uint32_t set );
@@ -33,7 +33,7 @@ namespace atmosphere_scattering
 		static castor3d::shader::BackgroundModelPtr create( castor3d::Engine const & engine
 			, sdw::ShaderWriter & writer
 			, castor3d::shader::Utils & utils
-			, VkExtent2D targetSize
+			, castor3d::Extent2D targetSize
 			, bool needsForeground
 			, uint32_t & binding
 			, uint32_t set );

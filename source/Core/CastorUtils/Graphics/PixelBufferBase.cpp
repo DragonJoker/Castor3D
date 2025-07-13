@@ -19,7 +19,7 @@ namespace castor
 
 	namespace pxbb
 	{
-		static VkDeviceSize getDataAt( VkFormat format
+		static VkDeviceSize getDataAt( castor::PixelFormat format
 			, uint32_t x
 			, uint32_t y
 			, uint32_t index
@@ -28,26 +28,27 @@ namespace castor
 			, uint32_t align
 			, PxBufferBase const & buffer )
 		{
-			return ( index * ashes::getLevelsSize( VkExtent2D{ x, y }, format, 0u, levels, align ) )
-				+ ashes::getLevelsSize( VkExtent2D{ x, y }, format, 0u, level, 1u )
-				+ ( ( y * buffer.getWidth() + x ) * ashes::getMinimalSize( format ) );
+			return ( index * ashes::getLevelsSize( VkExtent2D{ x, y }, convert( format ), 0u, levels, align ) )
+				+ ashes::getLevelsSize( VkExtent2D{ x, y }, convert( format ), 0u, level, 1u )
+				+ ( ( y * buffer.getWidth() + x ) * ashes::getMinimalSize( convert( format ) ) );
 		}
 
 		template< PixelFormat PFT, template< PixelFormat > typename FilterT >
-		static ByteArray generateMipmapsT( VkExtent3D const & extent
+		static ByteArray generateMipmapsT( crg::Extent3D const & extent
 			, uint8_t const * buffer
 			, uint32_t align
 			, uint32_t dstLevels )
 		{
 			ByteArray result;
-			auto vkfmt = VkFormat( PFT );
-			VkExtent2D dim{ extent.width, extent.height };
-			auto srcLayerSize = ashes::getLevelsSize( dim
+			auto vkfmt = convert( PFT );
+			crg::Extent2D dim{ extent.width, extent.height };
+			VkExtent2D vkDim{ extent.width, extent.height };
+			auto srcLayerSize = ashes::getLevelsSize( vkDim
 				, vkfmt
 				, 0u
 				, 1u
 				, 0u );
-			auto dstLayerSize = ashes::getLevelsSize( dim
+			auto dstLayerSize = ashes::getLevelsSize( vkDim
 				, vkfmt
 				, 0u
 				, dstLevels
@@ -58,7 +59,7 @@ namespace castor
 
 			for ( auto layer = 0u; layer < extent.depth; ++layer )
 			{
-				auto levelSize = ashes::getSize( dim
+				auto levelSize = ashes::getSize( vkDim
 					, vkfmt
 					, 0u
 					, align );
@@ -74,7 +75,7 @@ namespace castor
 				{
 					auto srcLevel = dstLevel;
 					dstLevel += levelSize;
-					levelSize = ashes::getSize( dim
+					levelSize = ashes::getSize( vkDim
 						, vkfmt
 						, i );
 					FilterT< PFT >::compute( dim
@@ -91,8 +92,8 @@ namespace castor
 			return result;
 		}
 
-		static ByteArray resample( VkExtent3D const & srcDimensions
-			, VkExtent3D const & dstDimensions
+		static ByteArray resample( crg::Extent3D const & srcDimensions
+			, crg::Extent3D const & dstDimensions
 			, PixelFormat format
 			, uint8_t const * src )
 		{
@@ -107,7 +108,7 @@ namespace castor
 				? STBIR_COLORSPACE_SRGB
 				: STBIR_COLORSPACE_LINEAR };
 			auto dstLayerSize = ashes::getSize( VkExtent2D{ dstDimensions.width, dstDimensions.height }
-				, VkFormat( format ) );
+				, convert( format ) );
 			ByteArray result;
 			result.resize( size_t( dstLayerSize ) );
 			auto dst = result.data();
@@ -127,7 +128,7 @@ namespace castor
 			return result;
 		}
 
-		static ByteArray generateMipmaps( VkExtent3D const & extent
+		static ByteArray generateMipmaps( crg::Extent3D const & extent
 			, uint8_t const * buffer
 			, PixelFormat format
 			, uint32_t align
@@ -150,7 +151,7 @@ namespace castor
 			}
 		}
 
-		static ByteArray prepareForCompression( VkExtent3D & extent
+		static ByteArray prepareForCompression( crg::Extent3D & extent
 			, uint8_t const * buffer
 			, PixelFormat bufferFormat
 			, uint32_t bufferAlign
@@ -159,7 +160,7 @@ namespace castor
 		{
 			ByteArray result;
 
-			if ( auto blockSize = ashes::getBlockSize( VkFormat( compressed ) );
+			if ( auto blockSize = ashes::getBlockSize( convert( compressed ) );
 				( extent.width % blockSize.extent.width ) != 0
 					|| ( extent.height % blockSize.extent.height ) != 0 )
 			{
@@ -175,7 +176,7 @@ namespace castor
 				dstLevels = 1u;
 			}
 
-			if ( auto requiredLevels = ashes::getMaxMipCount( extent );
+			if ( auto requiredLevels = ashes::getMaxMipCount( convert( extent ) );
 				dstLevels <= 1u && requiredLevels > 1u )
 			{
 				// Since blitting to compressed formats may not be supported by graphics API,
@@ -199,7 +200,7 @@ namespace castor
 			, size_t dstBufferSize
 			, PixelFormat dstFormat
 			, uint32_t dstAlign
-			, VkExtent3D const & extent
+			, crg::Extent3D const & extent
 			, uint32_t layers
 			, uint32_t levels )
 		{
@@ -211,8 +212,9 @@ namespace castor
 				: uint32_t( getBytesPerPixel( dstFormat ) ) );
 			auto srcLayerStart = srcBuffer;
 			auto dstLayerStart = dstBuffer;
-			auto srcBlockSize = ashes::getBlockSize( VkFormat( srcFormat ) );
-			auto dstBlockSize = ashes::getBlockSize( VkFormat( dstFormat ) );
+			auto srcBlockSize = ashes::getBlockSize( convert( srcFormat ) );
+			auto dstBlockSize = ashes::getBlockSize( convert( dstFormat ) );
+			auto vkExtent = convert( extent );
 			uint32_t written = 0u;
 
 			for ( uint32_t layer = 0u; layer < layers; ++layer )
@@ -224,22 +226,22 @@ namespace castor
 				{
 					auto srcLevel = srcLevelStart;
 					auto dstLevel = dstLevelStart;
-					auto srcLevelSize = uint32_t( ashes::getSize( VkFormat( srcFormat )
-						, extent
+					auto srcLevelSize = uint32_t( ashes::getSize( convert( srcFormat )
+						, vkExtent
 						, srcBlockSize
 						, level
 						, srcAlign ) );
-					auto dstLevelSize = uint32_t( ashes::getSize( VkFormat( dstFormat )
-						, extent
+					auto dstLevelSize = uint32_t( ashes::getSize( convert( dstFormat )
+						, vkExtent
 						, dstBlockSize
 						, level
 						, dstAlign ) );
 					auto srcLevelExtent = ashes::getSubresourceDimensions( VkExtent2D{ dimensions.getWidth(), dimensions.getHeight() }
 						, level
-						, VkFormat( srcFormat ) );
+						, convert( srcFormat ) );
 					auto dstLevelExtent = ashes::getSubresourceDimensions( VkExtent2D{ dimensions.getWidth(), dimensions.getHeight() }
 						, level
-						, VkFormat( dstFormat ) );
+						, convert( dstFormat ) );
 
 					CU_Require( ( written + dstLevelSize ) <= dstBufferSize );
 					convertBuffer( { srcLevelExtent.width, srcLevelExtent.height }
@@ -272,7 +274,7 @@ namespace castor
 			, size_t dstBufferSize
 			, PixelFormat dstFormat
 			, uint32_t dstAlign
-			, VkExtent3D const & extent
+			, crg::Extent3D const & extent
 			, uint32_t layers
 			, uint32_t levels )
 		{
@@ -284,8 +286,9 @@ namespace castor
 				: uint32_t( getBytesPerPixel( dstFormat ) ) );
 			auto srcLayerStart = srcBuffer;
 			auto dstLayerStart = dstBuffer;
-			auto srcBlockSize = ashes::getBlockSize( VkFormat( srcFormat ) );
-			auto dstBlockSize = ashes::getBlockSize( VkFormat( dstFormat ) );
+			auto srcBlockSize = ashes::getBlockSize( convert( srcFormat ) );
+			auto dstBlockSize = ashes::getBlockSize( convert( dstFormat ) );
+			auto vkExtent = convert( extent );
 			uint32_t written = 0u;
 
 			for ( uint32_t layer = 0u; layer < layers; ++layer )
@@ -302,22 +305,22 @@ namespace castor
 
 					auto srcLevel = srcLevelStart;
 					auto dstLevel = dstLevelStart;
-					auto srcLevelSize = uint32_t( ashes::getSize( VkFormat( srcFormat )
-						, extent
+					auto srcLevelSize = uint32_t( ashes::getSize( convert( srcFormat )
+						, vkExtent
 						, srcBlockSize
 						, level
 						, srcAlign ) );
-					auto dstLevelSize = uint32_t( ashes::getSize( VkFormat( dstFormat )
-						, extent
+					auto dstLevelSize = uint32_t( ashes::getSize( convert( dstFormat )
+						, vkExtent
 						, dstBlockSize
 						, level
 						, dstAlign ) );
 					auto srcLevelExtent = ashes::getSubresourceDimensions( VkExtent2D{ dimensions.getWidth(), dimensions.getHeight() }
 						, level
-						, VkFormat( srcFormat ) );
+						, convert( srcFormat ) );
 					auto dstLevelExtent = ashes::getSubresourceDimensions( VkExtent2D{ dimensions.getWidth(), dimensions.getHeight() }
 						, level
-						, VkFormat( srcFormat ) );
+						, convert( srcFormat ) );
 
 					CU_Require( ( written + dstLevelSize ) <= dstBufferSize );
 					compressBuffer( options
@@ -342,13 +345,13 @@ namespace castor
 			return written;
 		}
 
-		static uint32_t getMipLevels( VkExtent3D const & extent )
+		static uint32_t getMipLevels( crg::Extent3D const & extent )
 		{
-			return ashes::getMaxMipCount( extent );
+			return ashes::getMaxMipCount( convert( extent ) );
 		}
 
 		static uint32_t getMinMipLevels( uint32_t mipLevels
-			, VkExtent3D const & extent )
+			, crg::Extent3D const & extent )
 		{
 			return std::min( getMipLevels( extent ), mipLevels );
 		}
@@ -553,7 +556,7 @@ namespace castor
 		, PixelFormat bufferFormat
 		, uint32_t bufferAlign )
 	{
-		auto extent = VkExtent3D{ m_size.getWidth(), m_size.getHeight(), m_layers };
+		auto extent = crg::Extent3D{ m_size.getWidth(), m_size.getHeight(), m_layers };
 
 		if ( isCompressed( getFormat() )
 			&& !isCompressed( bufferFormat )
@@ -573,7 +576,7 @@ namespace castor
 				: std::max( VkDeviceSize( options->getAdditionalAlign( getFormat() ) ), getBytesPerPixel( getFormat() ) ) );
 			VkDeviceSize newSize = m_layers
 				* ashes::getLevelsSize( VkExtent2D{ extent.width, extent.height }
-					, VkFormat( getFormat() )
+					, convert( getFormat() )
 					, 0u
 					, m_levels
 					, m_align );
@@ -599,7 +602,7 @@ namespace castor
 				: getBytesPerPixel( getFormat() ) );
 			VkDeviceSize newSize = m_layers
 				* ashes::getLevelsSize( VkExtent2D{ extent.width, extent.height }
-					, VkFormat( getFormat() )
+					, convert( getFormat() )
 					, 0u
 					, m_levels
 					, m_align );
@@ -620,7 +623,7 @@ namespace castor
 					, getFormat()
 					, m_align
 					, ( m_layers > 1u
-						? VkExtent3D{ extent.width, extent.height, 1u }
+						? crg::Extent3D{ extent.width, extent.height, 1u }
 						: extent )
 					, m_layers
 					, m_levels );
@@ -681,11 +684,11 @@ namespace castor
 		VkExtent2D dstSize{ m_size.getWidth() * tilesX, m_size.getHeight() * tilesY };
 		PxArray result;
 		result.resize( size_t( ashes::getLevelsSize( dstSize
-			, VkFormat( getFormat() )
+			, convert( getFormat() )
 			, 0u
 			, m_levels
 			, m_align ) ) );
-		auto blockSize = ashes::getBlockSize( VkFormat( m_format ) );
+		auto blockSize = ashes::getBlockSize( convert( m_format ) );
 		auto src = m_buffer.data();
 		auto dst = result.data();
 		VkDeviceSize written = 0u;
@@ -698,10 +701,10 @@ namespace castor
 
 			for ( uint32_t level = 0u; level < m_levels; ++level )
 			{
-				auto dstMipOffset = ashes::getLevelsSize( dstSize, VkFormat( m_format ), 0u, level, 1u );
+				auto dstMipOffset = ashes::getLevelsSize( dstSize, convert( m_format ), 0u, level, 1u );
 				auto srcLevel = srcLayer;
 
-				auto levelSize = ashes::getSize( srcSize, VkFormat( m_format ), level );
+				auto levelSize = ashes::getSize( srcSize, convert( m_format ), level );
 
 				if ( auto lines = ashes::getSubresourceDimension( srcSize.height, level ) / blockSize.extent.height )
 				{
@@ -736,8 +739,9 @@ namespace castor
 	void PxBufferBase::update( uint32_t layers
 		, uint32_t levels )
 	{
-		auto extent = VkExtent3D{ m_size.getWidth(), m_size.getHeight(), 1u };
-		levels = ashes::isCompressedFormat( VkFormat( m_format ) )
+		auto extent = crg::Extent3D{ m_size.getWidth(), m_size.getHeight(), 1u };
+		auto vkExtent = convert( extent );
+		levels = ashes::isCompressedFormat( convert( m_format ) )
 			? m_levels
 			: pxbb::getMinMipLevels( levels, extent );
 
@@ -750,22 +754,22 @@ namespace castor
 			m_levels = levels;
 
 			auto newSize = m_layers
-				* ashes::getLevelsSize( extent
-					, VkFormat( getFormat() )
+				* ashes::getLevelsSize( vkExtent
+					, convert( getFormat() )
 					, 0u
 					, m_levels
 					, m_align );
 			m_buffer.resize( size_t( newSize ) );
 
 			auto srcBuffer = buffer.data();
-			auto srcLayerSize = ashes::getLevelsSize( extent
-				, VkFormat( getFormat() )
+			auto srcLayerSize = ashes::getLevelsSize( vkExtent
+				, convert( getFormat() )
 				, 0u
 				, srcLevels
 				, m_align );
 			auto dstBuffer = m_buffer.data();
-			auto dstLayerSize = ashes::getLevelsSize( extent
-				, VkFormat( getFormat() )
+			auto dstLayerSize = ashes::getLevelsSize( vkExtent
+				, convert( getFormat() )
 				, 0u
 				, m_levels
 				, m_align );
@@ -801,7 +805,7 @@ namespace castor
 	{
 		CU_Require( x < getWidth() && y < getHeight() );
 		return m_buffer.begin()
-			+ ptrdiff_t( pxbb::getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, m_align, *this ) );
+			+ ptrdiff_t( pxbb::getDataAt( m_format, x, y, index, level, m_levels, m_align, *this ) );
 	}
 
 	PxBufferBase::ConstPixelData PxBufferBase::getAt( uint32_t x
@@ -811,7 +815,7 @@ namespace castor
 	{
 		CU_Require( x < getWidth() && y < getHeight() );
 		return m_buffer.begin()
-			+ ptrdiff_t( pxbb::getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, m_align, *this ) );
+			+ ptrdiff_t( pxbb::getDataAt( m_format, x, y, index, level, m_levels, m_align, *this ) );
 	}
 
 	PxBufferBaseUPtr PxBufferBase::create( PxBufferConvertOptions const * options

@@ -51,19 +51,20 @@ namespace castor3d
 			void doRecordInto( VkCommandBuffer commandBuffer
 				, uint32_t index )
 			{
-				auto clearValue = transparentBlackClearColor.color;
+				auto clearValue = convert( transparentBlackClearColor );
 
 				for ( auto & attach : m_pass.images )
 				{
 					auto view = attach.view( index );
 					auto image = m_graph.createImage( view.data->image );
+					auto subresourceRange = convert( view.data->info.subresourceRange );
 					assert( attach.isTransferOutputView() );
 					m_context.vkCmdClearColorImage( commandBuffer
 						, image
 						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 						, &clearValue
 						, 1u
-						, &view.data->info.subresourceRange );
+						, &subresourceRange );
 				}
 			}
 		};
@@ -302,7 +303,7 @@ namespace castor3d
 		, m_downsampledSmResult{ resources
 			, device
 			, cuT( "LPV" )
-			, ( ( lightType == LightType::ePoint ) ? VkImageCreateFlags( VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT ) : VkImageCreateFlags{} )
+			, ( ( lightType == LightType::ePoint ) ? ImageCreateFlags::eCubeCompatible : ImageCreateFlags::eNone )
 			, castor::Size{ 512u, 512u }
 			, smResult[SmTexture::eDepth].imageId.data->info.arrayLayers }
 		, m_lpvResult{ lpvResult }
@@ -501,7 +502,7 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWaitArray LayeredLightPropagationVolumesBase::render( crg::SemaphoreWaitArray const & toWait
+	SemaphoreWaitArray LayeredLightPropagationVolumesBase::render( SemaphoreWaitArray const & toWait
 		, ashes::Queue const & queue )
 	{
 		if ( !m_initialised
@@ -653,10 +654,10 @@ namespace castor3d
 					return castor::make_unique< crg::ImageBlit >( framePass
 						, context
 						, graph
-						, VkOffset3D{}
+						, Offset3D{}
 						, extent
-						, VkOffset3D{}
-						, VkExtent3D{ 512u, 512u, 1u }
+						, Offset3D{}
+						, Extent3D{ 512u, 512u, 1u }
 						, FilterMode::eLinear );
 				} );
 			pass.addDependency( *lastPass );

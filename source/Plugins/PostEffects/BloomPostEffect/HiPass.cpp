@@ -38,7 +38,7 @@ namespace Bloom
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
 				, crg::VkPipelineShaderStageCreateInfoArray program
-				, VkExtent2D const & renderSize
+				, castor3d::Extent2D const & renderSize
 				, bool const * enabled
 				, uint32_t const * passIndex )
 				: crg::RenderQuad{ pass
@@ -64,7 +64,7 @@ namespace Bloom
 					auto const imageViewType = castor3d::ImageViewType( data.imageDesc.data->info.imageType );
 					crg::ImageViewData viewData{ data.imageDesc.data->name
 						, data.imageDesc
-						, 0u
+						, castor3d::ImageViewCreateFlags::eNone
 						, imageViewType
 						, getFormat( data.imageDesc )
 						, { data.viewDesc.data->info.subresourceRange.aspectMask, 0u, 1u, 0u, 1u } };
@@ -225,7 +225,7 @@ namespace Bloom
 		, crg::FramePass const & previousPass
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & sceneView
-		, VkExtent2D size
+		, castor3d::Extent2D size
 		, uint32_t blurPassesCount
 		, bool const * enabled
 		, uint32_t const * passIndex )
@@ -234,24 +234,24 @@ namespace Bloom
 		, m_stages{ makeProgramStates( device, m_shader ) }
 #if !Bloom_DebugHiPass
 		, m_resultImg{ graph.createImage( crg::ImageData{ "BLHi"
-			, 0u
+			, castor3d::ImageCreateFlags::eNone
 			, castor3d::ImageType::e2D
 			, getFormat( sceneView.front() )
-			, VkExtent3D{ size.width >> 1, size.height >> 1, 1u }
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
+			, castor3d::Extent3D{ size.width >> 1, size.height >> 1, 1u }
+			, ( castor3d::ImageUsageFlags::eColorAttachment
+				| castor3d::ImageUsageFlags::eSampled
+				| castor3d::ImageUsageFlags::eTransferSrc
+				| castor3d::ImageUsageFlags::eTransferDst )
 			, blurPassesCount } ) }
 #else
 		, m_resultImg{ graph.createImage( crg::ImageData{ "BLHi"
 			, 0u
 			, ImageType::e2D
 			, getFormat( sceneView.front() )
-			, VkExtent3D{ size.width, size.height, 1u }
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
+			, castor3d::Extent3D{ size.width, size.height, 1u }
+			, ( castor3d::ImageUsageFlags::eColorAttachment
+				| castor3d::ImageUsageFlags::eSampled
+				| castor3d::ImageUsageFlags::eTransferSrc ) } ) }
 #endif
 		, m_pass{ graph.createPass( "HDR"
 			, [this, &device, enabled, passIndex]( crg::FramePass const & framePass
@@ -262,7 +262,7 @@ namespace Bloom
 					, context
 					, graph
 					, ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages )
-					, VkExtent2D{ m_resultImg.data->info.extent.width, m_resultImg.data->info.extent.height }
+					, castor3d::Extent2D{ m_resultImg.data->info.extent.width, m_resultImg.data->info.extent.height }
 					, enabled
 					, passIndex );
 				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
@@ -274,10 +274,10 @@ namespace Bloom
 		{
 			m_resultViews.push_back( graph.createView( crg::ImageViewData{ m_resultImg.data->name + castor::string::toMbString( i )
 				, m_resultImg
-				, 0u
+				, castor3d::ImageViewCreateFlags::eNone
 				, castor3d::ImageViewType::e2D
 				, getFormat( m_resultImg )
-				, { VK_IMAGE_ASPECT_COLOR_BIT, i, 1u, 0u, 1u } } ) );
+				, { castor3d::ImageAspectFlags::eColor, i, 1u, 0u, 1u } } ) );
 		}
 
 		m_pass.addDependency( previousPass );

@@ -16,7 +16,7 @@ namespace light_streaks
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & sceneView
 			, crg::ImageViewIdArray const & resultViews
-			, VkExtent2D size
+			, castor3d::Extent2D size
 			, bool const * enabled
 			, uint32_t const * passIndex );
 		void accept( castor3d::ConfigurationVisitorBase & visitor );

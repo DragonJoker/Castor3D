@@ -108,7 +108,7 @@ namespace castor3d
 		 *\param[in]	isStatic			Dit si ce layout est statique.
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
-			, ashes::ImageCreateInfo info
+			, ImageCreateInfo info
 			, VkMemoryPropertyFlags memoryProperties
 			, castor::String const & debugName
 			, bool isStatic = false );
@@ -144,7 +144,7 @@ namespace castor3d
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
 			, ashes::ImagePtr image
-			, VkImageCreateInfo const & createInfo );
+			, ImageCreateInfo const & createInfo );
 		/**
 		 *\~english
 		 *\brief		Initialises the texture and all its views.
@@ -223,10 +223,10 @@ namespace castor3d
 			, bool isStatic = false );
 		C3D_API void setSource( castor::Path const & folder
 			, castor::Path const & relative );
-		C3D_API void setSource( VkExtent3D const & extent
+		C3D_API void setSource( Extent3D const & extent
 			, castor::PixelFormat format );
 
-		void setSource( VkExtent2D const & extent
+		void setSource( Extent2D const & extent
 			, castor::PixelFormat format )
 		{
 			return setSource( { extent.width, extent.height, 1u }
@@ -255,14 +255,14 @@ namespace castor3d
 
 		uint32_t getLayersCount()const noexcept
 		{
-			return m_info->arrayLayers;
+			return m_info.arrayLayers;
 		}
 
 		uint32_t isCube()const noexcept
 		{
 			return getLayersCount() >= 6u
 				&& ( getLayersCount() % 6u ) == 0u
-				&& ashes::checkFlag( m_info->flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT );
+				&& checkFlag( m_info.flags, ImageCreateFlags::eCubeCompatible );
 		}
 
 		bool isInitialised()const noexcept
@@ -277,7 +277,7 @@ namespace castor3d
 
 		ImageType getType()const noexcept
 		{
-			return castor::convert( m_info->imageType );
+			return m_info.imageType;
 		}
 
 		castor::Image const & getImage()const noexcept
@@ -296,39 +296,39 @@ namespace castor3d
 			return *m_texture;
 		}
 
-		ashes::ImageCreateInfo const & getCreateInfo()const noexcept
+		ImageCreateInfo const & getCreateInfo()const noexcept
 		{
 			return m_info;
 		}
 
 		uint32_t getWidth()const noexcept
 		{
-			return m_info->extent.width;
+			return m_info.extent.width;
 		}
 
 		uint32_t getHeight()const noexcept
 		{
-			return m_info->extent.height;
+			return m_info.extent.height;
 		}
 
 		uint32_t getDepth()const noexcept
 		{
-			return m_info->extent.depth;
+			return m_info.extent.depth;
 		}
 
 		uint32_t getMipLevels()const noexcept
 		{
-			return m_info->mipLevels;
+			return m_info.mipLevels;
 		}
 
-		VkExtent3D const & getDimensions()const noexcept
+		Extent3D const & getDimensions()const noexcept
 		{
-			return m_info->extent;
+			return m_info.extent;
 		}
 
 		castor::PixelFormat getPixelFormat()const noexcept
 		{
-			return crg::convert( m_info->format );
+			return m_info.format;
 		}
 		/**@}*/
 
@@ -361,7 +361,7 @@ namespace castor3d
 	private:
 		bool m_initialised{ false };
 		bool m_static{ false };
-		ashes::ImageCreateInfo m_info;
+		ImageCreateInfo m_info;
 		VkMemoryPropertyFlags m_properties;
 		castor::Image m_image;
 		MipView m_defaultView;
@@ -373,12 +373,12 @@ namespace castor3d
 	};
 
 	inline ashes::ImagePtr makeImage( RenderDevice const & device
-		, ashes::ImageCreateInfo createInfo
+		, ImageCreateInfo createInfo
 		, VkMemoryPropertyFlags flags
 		, castor::String const & name )
 	{
 		auto mbName = castor::toUtf8( name );
-		auto result = device->createImage( mbName + "Map", castor::move( createInfo ) );
+		auto result = device->createImage( mbName + "Map", ashes::ImageCreateInfo{ convert( createInfo ) } );
 		auto requirements = result->getMemoryRequirements();
 		uint32_t deduced = device->deduceMemoryType( requirements.memoryTypeBits
 			, flags );

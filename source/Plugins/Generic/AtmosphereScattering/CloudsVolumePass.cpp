@@ -130,8 +130,8 @@ namespace atmosphere_scattering
 		};
 
 		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
-			, VkExtent3D renderSize
-			, VkExtent3D const & transmittanceExtent
+			, castor3d::Extent3D renderSize
+			, castor3d::Extent3D const & transmittanceExtent
 			, bool hasDepth )
 		{
 			ShaderWriter< useCompute >::Type writer{ &engine.getShaderAllocator() };

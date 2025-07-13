@@ -15,6 +15,33 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct TextureSamplerCreateInfo
+	{
+		BorderColour borderColor{ BorderColour::eFloatTransparentBlack };
+		ComparisonFunc compareOp{ ComparisonFunc::eNever };
+		WrapMode addressMode{ WrapMode::eClampToEdge };
+		FilterMode minFilter{ FilterMode::eLinear };
+		FilterMode magFilter{ FilterMode::eLinear };
+		MipmapMode mipFilter{ MipmapMode::eLinear };
+	};
+
+	struct TextureSamplerInfo
+	{
+		TextureSamplerCreateInfo createInfo{};
+		ashes::Sampler const * sampler{};
+	};
+
+	struct TextureCreateInfo
+	{
+		ImageCreateFlags createFlags;
+		Extent3D extent;
+		uint32_t layerCount;
+		uint32_t mipLevels;
+		castor::PixelFormat format;
+		ImageUsageFlags usageFlags;
+		SampleCount sampleCount{ SampleCount::e1 };
+	};
+
 	struct Texture
 	{
 		C3D_API Texture( Texture const & ) = delete;
@@ -26,83 +53,8 @@ namespace castor3d
 		C3D_API Texture( RenderDevice const & device
 			, crg::ResourcesCache & resources
 			, castor::String const & name
-			, VkImageCreateFlags createFlags
-			, VkExtent3D const & size
-			, uint32_t layerCount
-			, uint32_t mipLevels
-			, castor::PixelFormat format
-			, VkImageUsageFlags usageFlags
-			, BorderColour borderColor = BorderColour::eFloatTransparentBlack
-			, ComparisonFunc compareOp = ComparisonFunc::eNever
-			, bool createSubviews = true );
-		C3D_API Texture( RenderDevice const & device
-			, crg::ResourcesCache & resources
-			, castor::String const & name
-			, VkImageCreateFlags createFlags
-			, VkExtent3D const & size
-			, uint32_t layerCount
-			, uint32_t mipLevels
-			, castor::PixelFormat format
-			, VkImageUsageFlags usageFlags
-			, FilterMode minFilter
-			, FilterMode magFilter
-			, MipmapMode mipFilter
-			, WrapMode addressMode = WrapMode::eClampToEdge
-			, BorderColour borderColor = BorderColour::eFloatTransparentBlack
-			, ComparisonFunc compareOp = ComparisonFunc::eNever
-			, bool createSubviews = true );
-		C3D_API Texture( RenderDevice const & device
-			, crg::ResourcesCache & resources
-			, castor::String const & name
-			, VkImageCreateFlags createFlags
-			, VkExtent3D const & size
-			, uint32_t layerCount
-			, uint32_t mipLevels
-			, castor::PixelFormat format
-			, VkImageUsageFlags usageFlags
-			, ashes::Sampler const * sampler
-			, bool createSubviews = true );
-		C3D_API Texture( RenderDevice const & device
-			, crg::ResourcesCache & resources
-			, castor::String const & name
-			, VkImageCreateFlags createFlags
-			, VkExtent3D const & size
-			, uint32_t layerCount
-			, VkSampleCountFlagBits sampleCount
-			, uint32_t mipLevels
-			, castor::PixelFormat format
-			, VkImageUsageFlags usageFlags
-			, BorderColour borderColor = BorderColour::eFloatTransparentBlack
-			, ComparisonFunc compareOp = ComparisonFunc::eNever
-			, bool createSubviews = true );
-		C3D_API Texture( RenderDevice const & device
-			, crg::ResourcesCache & resources
-			, castor::String const & name
-			, VkImageCreateFlags createFlags
-			, VkExtent3D const & size
-			, uint32_t layerCount
-			, VkSampleCountFlagBits sampleCount
-			, uint32_t mipLevels
-			, castor::PixelFormat format
-			, VkImageUsageFlags usageFlags
-			, FilterMode minFilter
-			, FilterMode magFilter
-			, MipmapMode mipFilter
-			, WrapMode addressMode = WrapMode::eClampToBorder
-			, BorderColour borderColor = BorderColour::eFloatTransparentBlack
-			, ComparisonFunc compareOp = ComparisonFunc::eNever
-			, bool createSubviews = true );
-		C3D_API Texture( RenderDevice const & device
-			, crg::ResourcesCache & resources
-			, castor::String const & name
-			, VkImageCreateFlags createFlags
-			, VkExtent3D const & size
-			, uint32_t layerCount
-			, VkSampleCountFlagBits sampleCount
-			, uint32_t mipLevels
-			, castor::PixelFormat format
-			, VkImageUsageFlags usageFlags
-			, ashes::Sampler const * sampler
+			, TextureCreateInfo const & imageInfo
+			, TextureSamplerInfo const & samplerInfo
 			, bool createSubviews = true );
 		C3D_API ~Texture()noexcept;
 
@@ -177,7 +129,7 @@ namespace castor3d
 			return crg::getFormat( imageId );
 		}
 
-		VkExtent3D const & getExtent()const noexcept
+		Extent3D const & getExtent()const noexcept
 		{
 			return crg::getExtent( imageId );
 		}

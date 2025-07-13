@@ -113,33 +113,33 @@ namespace castor3d
 		, m_realSize{ getSafeBandedSize( size ) }
 		, m_graph{ resources.getHandler(), "PickingGraph" }
 		, m_colourImage{ m_graph.createImage( crg::ImageData{ "PickingColour"
-			, 0u
+			, ImageCreateFlags::eNone
 			, ImageType::e2D
 			, castor::PixelFormat::eR32G32B32A32_UINT
 			, makeExtent3D( m_realSize )
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
+			, ( ImageUsageFlags::eColorAttachment
+				| ImageUsageFlags::eTransferSrc
+				| ImageUsageFlags::eTransferDst
+				| ImageUsageFlags::eSampled ) } ) }
 		, m_colourImageView{ m_graph.createView( crg::ImageViewData{ "PickingColour"
 			, m_colourImage
-			, 0u
+			, ImageViewCreateFlags::eNone
 			, ImageViewType::e2D
 			, getFormat( m_colourImage )
-			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
+			, { ImageAspectFlags::eColor, 0u, 1u, 0u, 1u } } ) }
 		, m_depthImage{ m_graph.createImage( crg::ImageData{ "PickingDepth"
-			, 0u
+			, ImageCreateFlags::eNone
 			, ImageType::e2D
 			, castor::PixelFormat::eD32_SFLOAT
 			, makeExtent3D( m_realSize )
-			, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
+			, ( ImageUsageFlags::eDepthStencilAttachment
+				| ImageUsageFlags::eSampled ) } ) }
 		, m_depthImageView{ m_graph.createView( crg::ImageViewData{ "PickingDepth"
 			, m_depthImage
-			, 0u
+			, ImageViewCreateFlags::eNone
 			, ImageViewType::e2D
 			, getFormat( m_depthImage )
-			, { VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u } } ) }
+			, { ImageAspectFlags::eDepth, 0u, 1u, 0u, 1u } } ) }
 		, m_pickingPassDesc{ &doCreatePickingPass( cameraUbo, sceneUbo, culler ) }
 		, m_copyRegion{ 0u
 			, 0u
@@ -165,8 +165,8 @@ namespace castor3d
 		printGraph( *m_runnable );
 		m_colourTexture = castor::make_unique< ashes::Image >( *m_device
 			, m_runnable->createImage( m_colourImage )
-			, ashes::ImageCreateInfo{ m_colourImage.data->info } );
-		m_colourView = ashes::ImageView{ m_colourImageView.data->info
+			, ashes::ImageCreateInfo{ convert( m_colourImage.data->info ) } );
+		m_colourView = ashes::ImageView{ convert( m_colourImageView.data->info )
 			, m_runnable->createImageView( m_colourImageView )
 			, m_colourTexture.get() };
 	}
@@ -243,10 +243,10 @@ namespace castor3d
 			, defaultClearDepthStencil );
 #if C3D_DebugPicking
 		result.addOutputColourView( m_colourImageView
-			, makeClearValue( 0u, 0u, 0u, 0u ) );
+			, ClearColorValue{ 0u, 0u, 0u, 0u } );
 #else
 		result.addOutputColourView( m_colourImageView
-			, makeClearValue( 0u, 0u, 0u, 0u ) );
+			, ClearColorValue{ 0u, 0u, 0u, 0u } );
 #endif
 		return result;
 	}
@@ -254,7 +254,7 @@ namespace castor3d
 	castor::Point4ui Picking::doFboPick( castor::Position const & position )
 	{
 		auto queueData = m_device.graphicsData();
-		m_toWait = m_runnable->run( crg::SemaphoreWaitArray{}, *queueData->queue );
+		m_toWait = m_runnable->run( SemaphoreWaitArray{}, *queueData->queue );
 
 		m_copyRegion.imageOffset.x = std::clamp( position.x() - rendpick::PickingOffset
 			, 0

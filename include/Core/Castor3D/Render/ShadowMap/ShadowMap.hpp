@@ -97,7 +97,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, Scene & scene
 			, LightType lightType
-			, VkImageCreateFlags createFlags
+			, ImageCreateFlags createFlags
 			, castor::Size const & size
 			, uint32_t layerCount
 			, uint32_t count );
@@ -153,7 +153,7 @@ namespace castor3d
 		 *\param[in]	index	L'index de la layer à dessiner.
 		 *\return		Les sémaphores signalés par ce dessin.
 		 */
-		C3D_API crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray const & toWait
+		C3D_API SemaphoreWaitArray render( SemaphoreWaitArray const & toWait
 			, ashes::Queue const & queue
 			, uint32_t index );
 		/**

@@ -209,12 +209,12 @@ namespace castor3d
 
 		result.addInOutColourView( targetColourView
 			, { VK_TRUE
-				, VK_BLEND_FACTOR_SRC_ALPHA
-				, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA
-				, VK_BLEND_OP_ADD
-				, VK_BLEND_FACTOR_SRC_ALPHA
-				, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA
-				, VK_BLEND_OP_ADD
+				, BlendFactor::eSrcAlpha
+				, BlendFactor::eOneMinusSrcAlpha
+				, BlendOp::eAdd
+				, BlendFactor::eSrcAlpha
+				, BlendFactor::eOneMinusSrcAlpha
+				, BlendOp::eAdd
 				, defaultColorWriteMask } );
 
 		return result;

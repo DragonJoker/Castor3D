@@ -93,17 +93,17 @@ namespace castor3d
 		{
 			if constexpr ( !C3D_GenerateBRDFIntegration )
 			{
+				TextureCreateInfo createInfo{ ImageCreateFlags::eNone
+					, { size[0], size[1], 1u }, 1u, 1u
+					, castor::PixelFormat::eR8G8B8A8_UNORM
+					, ( ImageUsageFlags::eColorAttachment
+						| ImageUsageFlags::eTransferDst
+						| ImageUsageFlags::eSampled ) };
 				Texture result{ device
 					, resources
 					, cuT( "BrdfLUT" )
-					, 0u
-					, { size[0], size[1], 1u }
-					, 1u
-					, 1u
-					, castor::PixelFormat::eR8G8B8A8_UNORM
-					, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-						| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-						| VK_IMAGE_USAGE_SAMPLED_BIT ) };
+					, createInfo
+					, TextureSamplerInfo{} };
 				result.create();
 				castor::PxBufferBase const * bufferRG;
 				castor::PxBufferBase const * bufferB;
@@ -132,7 +132,7 @@ namespace castor3d
 				auto image = result.image.get();
 				auto view = image->createView( VK_IMAGE_VIEW_TYPE_2D, convert( result.getFormat() ) );
 				auto staging = device->createStagingTexture( VK_FORMAT_R8G8B8A8_UNORM
-					, makeExtent2D( buffer->getDimensions() ) );
+					, makeVkExtent2D( buffer->getDimensions() ) );
 				auto data = device.graphicsData();
 				staging->uploadTextureData( *data->queue
 					, *data->commandPool
@@ -143,16 +143,18 @@ namespace castor3d
 			}
 			else
 			{
-				Texture result{ device
-					, resources
-					, cuT( "GeneratedBrdfLUT" )
-					, 0u
+				TextureCreateInfo createInfo{ ImageCreateFlags::eNone
 					, { size[0], size[1], 1u }
 					, 1u
 					, 1u
 					, castor::PixelFormat::eR16G16B16A16_SFLOAT
-					, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-						| VK_IMAGE_USAGE_SAMPLED_BIT ) };
+					, ( ImageUsageFlags::eColorAttachment
+						| ImageUsageFlags::eSampled ) };
+				Texture result{ device
+					, resources
+					, cuT( "GeneratedBrdfLUT" )
+					, createInfo
+					, TextureSamplerInfo{} };
 				result.create();
 				BrdfPrefilter filter{ engine
 					, device

@@ -67,7 +67,7 @@ namespace light_streaks
 		, crg::ImageViewIdArray const & sceneView
 		, crg::ImageViewIdArray const & kawaseViews
 		, crg::ImageViewIdArray const & resultView
-		, VkExtent2D const & size
+		, castor3d::Extent2D const & size
 		, bool const * enabled
 		, uint32_t const * passIndex )
 		: m_shader{ cuT( "LightStreaksCombine" ), combine::getProgram( device ) }

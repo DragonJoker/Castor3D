@@ -217,7 +217,7 @@ namespace ocean_fft
 
 		static VkFFTApplication createApp( VkFFTConfig const & config
 			, castor3d::RenderDevice const & device
-			, VkExtent2D const & extent
+			, castor3d::Extent2D const & extent
 			, VkDeviceSize & inBufferSize
 			, VkBuffer & vkInput
 			, VkDeviceSize & outBufferSize
@@ -281,7 +281,7 @@ namespace ocean_fft
 	//************************************************************************************************
 
 	VkFFTConfig::VkFFTConfig( castor3d::RenderDevice const & device
-			, VkExtent2D const & dimensions )
+		, castor3d::Extent2D const & dimensions )
 		: device{ device }
 		, fence{ device->createFence( "OceanFFT" ) }
 		, vkPhysicalDevice{ device->getPhysicalDevice() }
@@ -299,7 +299,7 @@ namespace ocean_fft
 		, crg::RunnableGraph & graph
 		, castor3d::RenderDevice const & device
 		, VkFFTConfig const & config
-		, VkExtent2D const & extent
+		, castor3d::Extent2D const & extent
 		, ashes::BufferBase const & input
 		, castor::Array< ashes::BufferBasePtr, 2u > const & output
 		, crg::RunnablePass::IsEnabledCallback isEnabled )
@@ -366,7 +366,7 @@ namespace ocean_fft
 		, castor3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
-		, VkExtent2D const & extent
+		, castor3d::Extent2D const & extent
 		, VkFFTConfig const & config
 		, ashes::BufferBase const & input
 		, castor::Array< ashes::BufferBasePtr, 2u > const & output )

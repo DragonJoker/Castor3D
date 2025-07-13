@@ -43,7 +43,7 @@ namespace draw_edges
 		};
 
 		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
-			, VkExtent3D const & extent )
+			, castor3d::Extent3D const & extent )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 

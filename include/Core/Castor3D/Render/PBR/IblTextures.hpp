@@ -60,7 +60,7 @@ namespace castor3d
 		 *\param[in]	queue			La queue recevant les commandes GPU.
 		 *\return		Les sémaphores signalés par cette passe.
 		 */
-		C3D_API crg::SemaphoreWaitArray update( crg::SemaphoreWaitArray signalsToWait
+		C3D_API SemaphoreWaitArray update( SemaphoreWaitArray signalsToWait
 			, ashes::Queue const & queue )const;
 		/**
 		*\~english

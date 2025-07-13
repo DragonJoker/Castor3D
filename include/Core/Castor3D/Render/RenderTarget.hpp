@@ -113,8 +113,8 @@ namespace castor3d
 		 *\param[in]	toWait	Les sémaphores à attendre.
 		 *\return		Les sémaphores signalés par ce dessin.
 		 */
-		C3D_API crg::SemaphoreWaitArray render( ashes::Queue const & queue
-			, crg::SemaphoreWaitArray const & toWait = {} );
+		C3D_API SemaphoreWaitArray render( ashes::Queue const & queue
+			, SemaphoreWaitArray const & toWait = {} );
 		/**
 		 *\~english
 		 *\return		The number of steps needed for initialisation, to show progression.
@@ -321,7 +321,7 @@ namespace castor3d
 			return m_toneMapping.get();
 		}
 
-		crg::SemaphoreWaitArray const & getSemaphore()const noexcept
+		SemaphoreWaitArray const & getSemaphore()const noexcept
 		{
 			return m_signalFinished;
 		}
@@ -476,8 +476,8 @@ namespace castor3d
 		Texture const & doUpdatePostEffects( CpuUpdater & updater
 			, PostEffectArray const & effects
 			, castor::Vector< Texture const * > const & images )const;
-		crg::SemaphoreWaitArray doRender( ashes::Queue const & queue
-			, crg::SemaphoreWaitArray signalsToWait );
+		SemaphoreWaitArray doRender( ashes::Queue const & queue
+			, SemaphoreWaitArray signalsToWait );
 		void doListIntermediateViews( IntermediateViewArray & result )const;
 
 	private:
@@ -508,7 +508,7 @@ namespace castor3d
 		SsaoConfig m_ssaoConfig;
 		castor::Point2f m_jitter;
 		ashes::SemaphorePtr m_signalReady;
-		crg::SemaphoreWaitArray m_signalFinished;
+		SemaphoreWaitArray m_signalFinished;
 		SceneCullerUPtr m_culler;
 		crg::FrameGraph m_graph;
 		Texture m_velocity;

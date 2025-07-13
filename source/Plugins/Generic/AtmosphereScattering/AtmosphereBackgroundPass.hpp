@@ -41,7 +41,7 @@ namespace atmosphere_scattering
 			, crg::RunnableGraph & graph
 			, castor3d::RenderDevice const & device
 			, AtmosphereBackground & background
-			, VkExtent2D const & size
+			, castor3d::Extent2D const & size
 			, crg::ImageViewIdArray const & colour
 			, bool forceVisible );
 
@@ -50,7 +50,7 @@ namespace atmosphere_scattering
 
 		crg::VkPipelineShaderStageCreateInfoArray doInitialiseShader( castor3d::RenderDevice const & device
 			, AtmosphereBackground & background
-			, VkExtent2D const & size
+			, castor3d::Extent2D const & size
 			, uint32_t passIndex );
 	};
 }

@@ -56,7 +56,7 @@ namespace castor3d
 			, ProgressBar * progress
 			, castor::String const & prefix
 			, SsaoConfig const & ssaoConfig
-			, VkExtent2D const & size
+			, Extent2D const & size
 			, Texture const & depthObj );
 		/**
 		 *\~english
@@ -112,7 +112,7 @@ namespace castor3d
 		Engine & m_engine;
 		SsaoConfig const & m_ssaoConfig;
 		castor::String m_prefix;
-		VkExtent2D m_size;
+		Extent2D m_size;
 		Texture m_result;
 		crg::ImageViewIdArray m_mipViews;
 		UniformBufferOffsetT< castor::Point3f > m_clipInfo;

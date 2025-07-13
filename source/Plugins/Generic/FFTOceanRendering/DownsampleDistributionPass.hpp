@@ -38,7 +38,7 @@ namespace ocean_fft
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, castor3d::RenderDevice const & device
-			, VkExtent2D const & extent
+			, castor3d::Extent2D const & extent
 			, uint32_t downsample
 			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 		/**
@@ -64,14 +64,14 @@ namespace ocean_fft
 		ashes::ComputePipelinePtr m_pipeline;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
 		ashes::DescriptorSetPtr m_descriptorSet;
-		VkExtent3D m_extent;
+		castor3d::Extent3D m_extent;
 	};
 	crg::FramePass const & createDownsampleDistributionPass( castor::String const & prefix
 		, castor::String const & name
 		, castor3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
 		, crg::FramePassArray previousPasses
-		, VkExtent2D const & extent
+		, castor3d::Extent2D const & extent
 		, uint32_t downsample
 		, OceanUbo const & ubo
 		, ashes::BufferBase const & input

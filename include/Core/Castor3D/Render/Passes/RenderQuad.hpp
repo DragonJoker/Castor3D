@@ -77,7 +77,7 @@ namespace castor3d
 		struct ConfigT
 		{
 			WrapperT< BindingDescriptionArray > bindings;
-			WrapperT< VkImageSubresourceRange > range;
+			WrapperT< ImageSubresourceRange > range;
 			WrapperT< Texcoord > texcoordConfig;
 			WrapperT< BlendMode > blendMode;
 			WrapperT< IntermediateView > tex3DResult;
@@ -176,7 +176,7 @@ namespace castor3d
 		*\param[in] dsState
 		*	L'état de profondeur et stencil.
 		*/
-		C3D_API void createPipeline( VkExtent2D const & size
+		C3D_API void createPipeline( Extent2D const & size
 			, castor::Position const & position
 			, ashes::PipelineShaderStageCreateInfoArray const & program
 			, ashes::RenderPass const & renderPass
@@ -254,7 +254,7 @@ namespace castor3d
 		*\param[in] dsState
 		*	L'état de profondeur et stencil à utiliser.
 		*/
-		C3D_API void createPipelineAndPass( VkExtent2D const & size
+		C3D_API void createPipelineAndPass( Extent2D const & size
 			, castor::Position const & position
 			, ashes::PipelineShaderStageCreateInfoArray const & program
 			, ashes::RenderPass const & renderPass
@@ -365,7 +365,7 @@ namespace castor3d
 		*\param[in] range
 		*	Contient les mip levels, pour l'échantillonneur.
 		*/
-		BuilderT & range( VkImageSubresourceRange const & range )
+		BuilderT & range( ImageSubresourceRange const & range )
 		{
 			m_config.range = range;
 			return static_cast< BuilderT & >( *this );

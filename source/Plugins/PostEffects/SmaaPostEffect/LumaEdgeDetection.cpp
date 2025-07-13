@@ -164,10 +164,10 @@ namespace smaa
 		{
 			return crg::ImageViewData{ "SMLEDPred"
 				, pred.data->image
-				, 0u
+				, castor3d::ImageViewCreateFlags::eNone
 				, castor3d::ImageViewType::e2D
 				, getFormat( pred )
-				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } };
+				, { castor3d::ImageAspectFlags::eColor, 0u, 1u, 0u, 1u } };
 		}
 	}
 

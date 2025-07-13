@@ -23,7 +23,7 @@ namespace castor3d
 	ShaderBuffer::ShaderBuffer( RenderDevice const & device
 		, VkDeviceSize size
 		, castor::String const & name
-		, crg::AccessState wantedState )
+		, AccessState wantedState )
 		: m_device{ device }
 		, m_size{ ashes::getAlignedSize( size + shdbuf::HeaderSize
 			, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) }

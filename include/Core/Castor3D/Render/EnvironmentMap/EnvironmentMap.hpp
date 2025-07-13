@@ -87,7 +87,7 @@ namespace castor3d
 		 *\param[in]	queue	The queue recevant les commandes de dessin.
 		 *\return		Les sémaphores signalés par ce dessin.
 		 */
-		C3D_API crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray const & toWait
+		C3D_API SemaphoreWaitArray render( SemaphoreWaitArray const & toWait
 			, ashes::Queue const & queue );
 		/**
 		 *\~english
@@ -136,7 +136,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		VkExtent3D const & getSize()const noexcept
+		Extent3D const & getSize()const noexcept
 		{
 			return m_extent;
 		}
@@ -184,7 +184,7 @@ namespace castor3d
 		Texture m_environmentMap;
 		Texture m_depthBuffer;
 		Texture m_tmpImage;
-		VkExtent3D m_extent;
+		Extent3D m_extent;
 		castor::Set< SceneNode * > m_reflectionNodes;
 		castor::Set< SceneNode * > m_savedReflectionNodes;
 		castor::Map< SceneNode const *, uint32_t > m_sortedNodes;

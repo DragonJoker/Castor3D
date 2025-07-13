@@ -110,27 +110,25 @@ namespace light_streaks
 		m_hiImage = { device
 			, m_renderTarget.getResources()
 			, cuT( "LSHi" )
-			, 0u
-			, VkExtent3D{ size.width, size.height, 1u }
-			, Count + 1u
-			, 1u
-			, target.getFormat()
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) };
+			, { castor3d::ImageCreateFlags::eNone
+				, castor3d::Extent3D{ size.width, size.height, 1u }, Count + 1u, 1u
+				, target.getFormat()
+				, ( castor3d::ImageUsageFlags::eColorAttachment
+					| castor3d::ImageUsageFlags::eSampled
+					| castor3d::ImageUsageFlags::eTransferDst
+					| castor3d::ImageUsageFlags::eTransferSrc ) }
+			, {} };
 		m_kawaseImage = { device
 			, m_renderTarget.getResources()
 			, cuT( "LSKaw" )
-			, 0u
-			, VkExtent3D{ size.width, size.height, 1u }
-			, Count
-			, 1u
-			, target.getFormat()
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) };
+			, { castor3d::ImageCreateFlags::eNone
+				, castor3d::Extent3D{ size.width, size.height, 1u }, Count, 1u
+				, target.getFormat()
+				, ( castor3d::ImageUsageFlags::eColorAttachment
+					| castor3d::ImageUsageFlags::eSampled
+					| castor3d::ImageUsageFlags::eTransferDst
+					| castor3d::ImageUsageFlags::eTransferSrc ) }
+			, {} };
 
 		for ( auto i = 0u; i < Count; ++i )
 		{

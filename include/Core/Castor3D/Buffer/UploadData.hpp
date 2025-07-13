@@ -33,12 +33,12 @@ namespace castor3d
 			, VkDeviceSize srcSize
 			, ashes::BufferBase const & dstBuffer
 			, VkDeviceSize dstOffset
-			, crg::AccessState const & dstAccessState );
+			, AccessState const & dstAccessState );
 		C3D_API void pushUpload( void const * srcData
 			, VkDeviceSize srcSize
 			, ashes::Image const & dstImage
 			, castor::ImageMemoryLayout dstLayout
-			, VkImageSubresourceRange dstRange
+			, ImageSubresourceRange dstRange
 			, ImageLayout dstImageLayout
 			, PipelineStageFlags dstPipelineFlags );
 		C3D_API void process();
@@ -57,7 +57,7 @@ namespace castor3d
 				, srcSize
 				, dstBuffer
 				, dstOffset
-				, crg::AccessState{ dstAccessFlags, dstPipelineFlags });
+				, AccessState{ dstAccessFlags, dstPipelineFlags });
 		}
 
 		void pushUpload( castor::ByteArray const & srcData
@@ -77,7 +77,7 @@ namespace castor3d
 		void pushUpload( castor::ByteArray const & srcData
 			, ashes::Image const & dstImage
 			, castor::ImageMemoryLayout dstLayout
-			, VkImageSubresourceRange dstRange
+			, ImageSubresourceRange dstRange
 			, ImageLayout dstImageLayout
 			, PipelineStageFlags dstPipelineFlags )
 		{
@@ -85,7 +85,7 @@ namespace castor3d
 				, srcData.size()
 				, dstImage
 				, castor::move( dstLayout )
-				, dstRange
+				, castor::move( dstRange )
 				, dstImageLayout
 				, dstPipelineFlags );
 		}
@@ -107,7 +107,7 @@ namespace castor3d
 		void pushUpload( castor::ByteArrayView const & srcData
 			, ashes::Image const & dstImage
 			, castor::ImageMemoryLayout dstLayout
-			, VkImageSubresourceRange dstRange
+			, ImageSubresourceRange dstRange
 			, ImageLayout dstImageLayout
 			, PipelineStageFlags dstPipelineFlags )
 		{
@@ -115,7 +115,7 @@ namespace castor3d
 				, srcData.size()
 				, dstImage
 				, castor::move( dstLayout )
-				, dstRange
+				, castor::move( dstRange )
 				, dstImageLayout
 				, dstPipelineFlags );
 		}
@@ -142,7 +142,7 @@ namespace castor3d
 			VkDeviceSize srcSize{};
 			ashes::BufferBase const * dstBuffer{};
 			VkDeviceSize dstOffset{};
-			crg::AccessState dstAccessState{};
+			AccessState dstAccessState{};
 		};
 
 		struct ImageDataRange
@@ -151,7 +151,7 @@ namespace castor3d
 			VkDeviceSize srcSize{};
 			ashes::Image const * dstImage{};
 			castor::ImageMemoryLayout dstLayout{};
-			VkImageSubresourceRange dstRange{};
+			ImageSubresourceRange dstRange{};
 			ImageLayout dstImageLayout{};
 			PipelineStageFlags dstPipelineFlags{};
 		};
@@ -203,7 +203,7 @@ namespace castor3d
 		}
 	};
 
-	C3D_API castor::OutputStream & operator<<( castor::OutputStream & stream, VkImageSubresourceRange const & rhs );
+	C3D_API castor::OutputStream & operator<<( castor::OutputStream & stream, ImageSubresourceRange const & rhs );
 }
 
 #endif

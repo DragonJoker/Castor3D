@@ -1084,7 +1084,7 @@ namespace castor3d
 		static ShaderPtr getProgram( RenderDevice const & device
 			, Scene const & scene
 			, RenderTechnique const & technique
-			, VkExtent3D const & imageSize
+			, Extent3D const & imageSize
 			, PipelineFlags const & flags
 			, IndirectLightingData const * indirectLighting
 			, DebugConfig & debugConfig
@@ -2022,7 +2022,7 @@ namespace castor3d
 				: VK_ACCESS_SHADER_READ_BIT );
 			ashes::VkAttachmentDescriptionArray attaches;
 			attaches.emplace_back( VkAttachmentDescription{ 0u
-				, targetImage.front().data->info.format
+				, convert( targetImage.front().data->info.format )
 				, VK_SAMPLE_COUNT_1_BIT
 				, VK_ATTACHMENT_LOAD_OP_LOAD
 				, VK_ATTACHMENT_STORE_OP_STORE
@@ -2102,7 +2102,7 @@ namespace castor3d
 		}
 
 		static ashes::PipelinePtr createPipeline( RenderDevice const & device
-			, VkExtent3D const & extent
+			, Extent3D const & extent
 			, ashes::PipelineShaderStageCreateInfoArray stages
 			, ashes::PipelineLayout const & pipelineLayout
 			, ashes::RenderPass const & renderPass
@@ -2545,8 +2545,8 @@ namespace castor3d
 			, *getScene().getBindlessTexDescriptorSet() };
 		visres::PushData pushData{ 0u, 0u };
 		castor::Vector< VkClearValue > clearValues;
-		clearValues.push_back( transparentBlackClearColor );
-		clearValues.push_back( transparentBlackClearColor );
+		clearValues.push_back( convert( ClearValue{ transparentBlackClearColor } ) );
+		clearValues.push_back( convert( ClearValue{ transparentBlackClearColor } ) );
 		auto & extent = m_parent->getNormal().getExtent();
 		VkRenderPassBeginInfo beginInfo{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
 			, nullptr

@@ -121,24 +121,22 @@ namespace castor3d
 
 	namespace skybox
 	{
-		static ashes::ImageCreateInfo doGetImageCreate( castor::PixelFormat format
+		static ImageCreateInfo doGetImageCreate( castor::PixelFormat format
 			, castor::Size const & dimensions
 			, bool attachment
 			, uint32_t mipLevel = 1u )
 		{
-			return ashes::ImageCreateInfo{ VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
-				, VK_IMAGE_TYPE_2D
-				, convert( format )
+			return ImageCreateInfo{ ImageCreateFlags::eCubeCompatible
+				, ImageType::e2D
+				, format
 				, { dimensions.getWidth(), dimensions.getHeight(), 1u }
 				, mipLevel
 				, 6u
-				, VK_SAMPLE_COUNT_1_BIT
-				, VK_IMAGE_TILING_OPTIMAL
-				, ( VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-					| VkImageUsageFlags( attachment
-						? VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-						: VkImageUsageFlagBits( 0u ) ) ) };
+				, SampleCount::e1
+				, ImageTiling::eOptimal
+				, ( ImageUsageFlags::eSampled
+					| ImageUsageFlags::eTransferDst
+					| ( attachment ? ImageUsageFlags::eColorAttachment : ImageUsageFlags::eNone ) ) };
 		}
 
 		static CU_ImplementAttributeParserBlock( parserVisible, SkyboxContext )
@@ -505,16 +503,15 @@ namespace castor3d
 		, castor::Path const & relative
 		, uint32_t size )
 	{
-		ashes::ImageCreateInfo image{ 0u
-			, VK_IMAGE_TYPE_2D
-			, VK_FORMAT_UNDEFINED
+		ImageCreateInfo image{ ImageCreateFlags::eNone
+			, ImageType::e2D
+			, castor::PixelFormat::eUNDEFINED
 			, { size, size, 1u }
 			, 1u
 			, 1u
-			, VK_SAMPLE_COUNT_1_BIT
-			, VK_IMAGE_TILING_OPTIMAL
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
+			, SampleCount::e1
+			, ImageTiling::eOptimal
+			, ( ImageUsageFlags::eSampled | ImageUsageFlags::eTransferDst ) };
 		m_equiTexture = castor::makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
 			, castor::move( image )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -593,7 +590,7 @@ namespace castor3d
 
 	void SkyboxBackground::doUpload( UploadData & uploader )
 	{
-		VkImageSubresourceRange dstSubresource{ VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u };
+		ImageSubresourceRange dstSubresource{ ImageAspectFlags::eColor, 0u, 1u, 0u, 1u };
 
 		for ( auto const & layer : m_layerTexture )
 		{
@@ -679,13 +676,12 @@ namespace castor3d
 		m_textureId = { device
 			, getScene().getResources()
 			, cuT( "SkyboxBackgroundLayerCube" )
-			, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
-			, { maxDim, maxDim, 1u }
-			, 6u
-			, ashes::getMaxMipCount( { maxDim, maxDim, maxDim } )
-			, m_layerTexture[0]->getPxBuffer().getFormat()
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
+			, { ImageCreateFlags::eCubeCompatible
+				, { maxDim, maxDim, 1u }, 6u, ashes::getMaxMipCount( { maxDim, maxDim, maxDim } )
+				, m_layerTexture[0]->getPxBuffer().getFormat()
+				, ( ImageUsageFlags::eSampled
+					| ImageUsageFlags::eTransferDst ) }
+			, {} };
 		m_textureId.create();
 		m_texture = castor::makeUnique< TextureLayout >( device.renderSystem
 			, cuT( "SkyboxBackgroundLayerCube" )
@@ -710,7 +706,7 @@ namespace castor3d
 				, image.getPxBuffer().getSize()
 				, texture
 				, image.getLayout()
-				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, image.getLayout().depthLayers() }
+				, { ImageAspectFlags::eColor, 0u, 1u, 0u, image.getLayout().depthLayers() }
 				, ImageLayout::eShaderReadOnly
 				, PipelineStageFlags::eFragmentShader );
 		}
@@ -722,14 +718,13 @@ namespace castor3d
 			m_textureId = { device
 				, getScene().getResources()
 				, cuT( "SkyboxBackgroundEquiCube" )
-				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
-				, makeExtent3D( m_equiSize )
-				, 6u
-				, ashes::getMaxMipCount( makeExtent3D( m_equiSize ) )
-				, m_equiTexture->getPixelFormat()
-				, ( VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-					| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT ) };
+				, { ImageCreateFlags::eCubeCompatible
+					, makeExtent3D( m_equiSize ), 6u, ashes::getMaxMipCount( makeVkExtent3D( m_equiSize ) )
+					, m_equiTexture->getPixelFormat()
+					, ( ImageUsageFlags::eSampled
+						| ImageUsageFlags::eTransferDst
+						| ImageUsageFlags::eColorAttachment ) }
+				, {} };
 			m_textureId.create();
 			m_texture = castor::makeUnique< TextureLayout >( device.renderSystem
 				, cuT( "SkyboxBackgroundEquiCube" )
@@ -748,7 +743,7 @@ namespace castor3d
 		, castor::Image const & lines
 		, uint32_t index )
 	{
-		auto name = lines.getName() + faceName.data();
+		auto name = lines.getName() + castor::String{ faceName };
 		auto height = lines.getHeight();
 		auto width = height;
 		auto blockExtent = ashes::getMinimalExtent2D( convert( lines.getPixelFormat() ) );

@@ -44,47 +44,47 @@ namespace castor3d
 			{
 				m_logger->pushMessage( castor::LogType::eError, msg, newLine );
 			} );
-		crg::Logger::setTraceCallback( []( castor::MbString const & msg, bool newLine )
+		crg::Logger::setTraceCallback( []( castor::MbStringView msg, bool newLine )noexcept
 			{
-				m_logger->pushMessage( castor::LogType::eTrace, msg, newLine );
+				m_logger->pushMessage( castor::LogType::eTrace, castor::MbString{ msg }, newLine );
 			} );
-		crg::Logger::setDebugCallback( []( castor::MbString const & msg, bool newLine )
+		crg::Logger::setDebugCallback( []( castor::MbStringView msg, bool newLine )noexcept
 			{
-				m_logger->pushMessage( castor::LogType::eDebug, msg, newLine );
+				m_logger->pushMessage( castor::LogType::eDebug, castor::MbString{ msg }, newLine );
 			} );
-		crg::Logger::setInfoCallback( []( castor::MbString const & msg, bool newLine )
+		crg::Logger::setInfoCallback( []( castor::MbStringView msg, bool newLine )noexcept
 			{
-				m_logger->pushMessage( castor::LogType::eInfo, msg, newLine );
+				m_logger->pushMessage( castor::LogType::eInfo, castor::MbString{ msg }, newLine );
 			} );
-		crg::Logger::setWarningCallback( []( castor::MbString const & msg, bool newLine )
+		crg::Logger::setWarningCallback( []( castor::MbStringView msg, bool newLine )noexcept
 			{
-				m_logger->pushMessage( castor::LogType::eWarning, msg, newLine );
+				m_logger->pushMessage( castor::LogType::eWarning, castor::MbString{ msg }, newLine );
 			} );
-		crg::Logger::setErrorCallback( []( castor::MbString const & msg, bool newLine )
+		crg::Logger::setErrorCallback( []( castor::MbStringView msg, bool newLine )noexcept
 			{
-				m_logger->pushMessage( castor::LogType::eError, msg, newLine );
+				m_logger->pushMessage( castor::LogType::eError, castor::MbString{ msg }, newLine );
 			} );
 		return m_logger;
 	}
 
 	void log::cleanup()
 	{
-		crg::Logger::setTraceCallback( []( castor::MbString const &, bool )
+		crg::Logger::setTraceCallback( []( castor::MbStringView, bool )noexcept
 			{
 			} );
-		crg::Logger::setDebugCallback( []( castor::MbString const & msg, bool newLine )
+		crg::Logger::setDebugCallback( []( castor::MbStringView msg, bool newLine )noexcept
 			{
 				std::clog << msg << ( newLine ? "\n" : "" );
 			} );
-		crg::Logger::setInfoCallback( []( castor::MbString const & msg, bool newLine )
+		crg::Logger::setInfoCallback( []( castor::MbStringView msg, bool newLine )noexcept
 			{
 				std::cout << msg << ( newLine ? "\n" : "" );
 			} );
-		crg::Logger::setWarningCallback( []( castor::MbString const & msg, bool newLine )
+		crg::Logger::setWarningCallback( []( castor::MbStringView msg, bool newLine )noexcept
 			{
 				std::cout << msg << ( newLine ? "\n" : "" );
 			} );
-		crg::Logger::setErrorCallback( []( castor::MbString const & msg, bool newLine )
+		crg::Logger::setErrorCallback( []( castor::MbStringView msg, bool newLine )noexcept
 			{
 				std::cerr << msg << ( newLine ? "\n" : "" );
 			} );

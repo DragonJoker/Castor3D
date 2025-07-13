@@ -127,21 +127,20 @@ namespace castor3d
 
 		static Texture doCreateTexture( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, VkExtent2D const & size
+			, Extent2D const & size
 			, castor::String const & prefix )
 		{
 			return Texture{ device
 				, resources
 				, prefix + cuT( "LinearisedDepth" )
-				, 0u
-				, { size.width, size.height, 1u }
-				, 1u
-				, MaxLinearizedDepthMipLevel + 1u
-				, castor::PixelFormat::eR32_SFLOAT
-				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) };
+				, { ImageCreateFlags::eNone
+					, { size.width, size.height, 1u }, 1u, MaxLinearizedDepthMipLevel + 1u
+					, castor::PixelFormat::eR32_SFLOAT
+					, ( ImageUsageFlags::eColorAttachment
+						| ImageUsageFlags::eSampled
+						| ImageUsageFlags::eTransferDst
+						| ImageUsageFlags::eTransferSrc ) }
+				, {} };
 		}
 	}
 
@@ -154,7 +153,7 @@ namespace castor3d
 		, ProgressBar * progress
 		, castor::String const & prefix
 		, SsaoConfig const & ssaoConfig
-		, VkExtent2D const & size
+		, Extent2D const & size
 		, Texture const & depthObj )
 		: m_device{ device }
 		, m_graph{ graph }
@@ -269,16 +268,16 @@ namespace castor3d
 			size.height >>= 1;
 			auto source = m_graph.createView( crg::ImageViewData{ m_result.imageId.data->name + castor::string::toMbString( index )
 				, m_result.imageId
-				, 0u
+				, ImageViewCreateFlags::eNone
 				, ImageViewType::e2D
 				, m_result.getFormat()
-				, VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, index, 1u, 0u, 1u } } );
+				, ImageSubresourceRange{ ImageAspectFlags::eColor, index, 1u, 0u, 1u } } );
 			auto destination = m_graph.createView( crg::ImageViewData{ m_result.imageId.data->name + castor::string::toMbString( index + 1u )
 				, m_result.imageId
-				, 0u
+				, ImageViewCreateFlags::eNone
 				, ImageViewType::e2D
 				, m_result.getFormat()
-				, VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, index + 1u, 1u, 0u, 1u } } );
+				, ImageSubresourceRange{ ImageAspectFlags::eColor, index + 1u, 1u, 0u, 1u } } );
 			auto & pass = m_graph.createPass( "MinimiseDepth" + castor::string::toMbString( index )
 				, [this, progress, size]( crg::FramePass const & framePass
 					, crg::GraphContext & context
