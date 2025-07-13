@@ -811,41 +811,41 @@ namespace smaa
 			, castor3d::RenderDevice const & device
 			, castor::String const & name
 			, castor::PixelFormat format
-			, VkExtent3D const & dimensions
+			, castor3d::Extent3D const & dimensions
 			, castor::ArrayView< const unsigned char > const & bytes )
 		{
 			auto & context = device.makeContext();
 			auto mbName = castor::toUtf8( name );
 			auto imageId = graph.createImage( crg::ImageData{ mbName
-				, 0u
+				, castor3d::ImageCreateFlags::eNone
 				, castor3d::ImageType::e2D
 				, format
 				, dimensions
-				, ( VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } );
+				, ( castor3d::ImageUsageFlags::eSampled
+					| castor3d::ImageUsageFlags::eTransferDst ) } );
 			auto result = graph.createView( crg::ImageViewData{ mbName
 				, imageId
-				, 0u
+				, castor3d::ImageViewCreateFlags::eNone
 				, castor3d::ImageViewType::e2D
 				, getFormat( imageId )
-				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
-			auto staging = device->createStagingTexture( convert( format ), dimensions );
+				, { castor3d::ImageAspectFlags::eColor, 0u, 1u, 0u, 1u } } );
+			auto staging = device->createStagingTexture( convert( format ), convert( dimensions ) );
 			auto image = castor::make_unique< ashes::Image >( *device
 				, resources.createImage( context, imageId )
-				, ashes::ImageCreateInfo{ imageId.data->info } );
-			ashes::ImageView view{ ashes::ImageViewCreateInfo{ result.data->info }
+				, ashes::ImageCreateInfo{ convert( imageId.data->info ) } );
+			ashes::ImageView view{ ashes::ImageViewCreateInfo{ convert( result.data->info ) }
 				, resources.createImageView( context, result )
 				, image.get() };
 			auto data = device.graphicsData();
 			staging->uploadTextureData( *data->queue
 				, *data->commandPool
-				, { result.data->info.subresourceRange.aspectMask
+				, { getImageAspectFlags( result.data->info.subresourceRange.aspectMask )
 					, result.data->info.subresourceRange.baseMipLevel
 					, result.data->info.subresourceRange.baseArrayLayer
 					, result.data->info.subresourceRange.layerCount }
 				, convert( format )
 				, { 0, 0, 0 }
-				, dimensions
+				, convert( dimensions )
 				, bytes.data()
 				, view );
 			return result;
@@ -884,14 +884,13 @@ namespace smaa
 		, m_result{ m_device
 			, m_resources
 			, cuT( "SMBWRes" )
-			, 0u
-			, m_extent
-			, 1u
-			, 1u
-			, castor::PixelFormat::eR8G8B8A8_UNORM
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
+			, { castor3d::ImageCreateFlags::eNone
+				, m_extent, 1u, 1u
+				, castor::PixelFormat::eR8G8B8A8_UNORM
+				, ( castor3d::ImageUsageFlags::eSampled
+					| castor3d::ImageUsageFlags::eColorAttachment
+					| castor3d::ImageUsageFlags::eTransferSrc ) }
+			, {} }
 		, m_shader{ cuT( "SmaaBlendingWeight" ), bwcalc::getProgram( device ) }
 		, m_stages{ makeProgramStates( m_device, m_shader ) }
 		, m_pass{ m_graph.createPass( "BlendingWeight"

@@ -36,7 +36,7 @@ namespace castor3d
 		C3D_API ShaderBuffer( RenderDevice const & device
 			, VkDeviceSize size
 			, castor::String const & name
-			, crg::AccessState wantedState = FragmentShaderReadState );
+			, AccessState wantedState = FragmentShaderReadState );
 		/**
 		 *\~english
 		 *\brief			Updates the buffer.
@@ -184,7 +184,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		VkDeviceSize m_size;
-		crg::AccessState m_wantedState;
+		AccessState m_wantedState;
 		ashes::BufferBasePtr m_buffer;
 		castor::ByteArray m_ownData;
 		uint8_t * m_rawData;

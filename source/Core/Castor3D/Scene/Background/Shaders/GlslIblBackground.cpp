@@ -25,7 +25,7 @@ namespace castor3d::shader
 
 	IblBackgroundModel::IblBackgroundModel( sdw::ShaderWriter & writer
 		, Utils & utils
-		, VkExtent2D targetSize
+		, Extent2D targetSize
 		, uint32_t & binding
 		, uint32_t set )
 		: BackgroundModel{ writer, utils, castor::move( targetSize ), true, true, true }
@@ -51,7 +51,7 @@ namespace castor3d::shader
 	BackgroundModelPtr IblBackgroundModel::create( Engine const & /*engine*/
 		, sdw::ShaderWriter & writer
 		, Utils & utils
-		, VkExtent2D targetSize
+		, Extent2D targetSize
 		, bool /*needsForeground*/
 		, uint32_t & binding
 		, uint32_t set )

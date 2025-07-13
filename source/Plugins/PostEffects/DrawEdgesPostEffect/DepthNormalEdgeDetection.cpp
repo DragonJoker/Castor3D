@@ -33,7 +33,7 @@ namespace draw_edges
 		namespace c3d = castor3d::shader;
 
 		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device
-			, VkExtent3D const & extent )
+			, castor3d::Extent3D const & extent )
 		{
 			auto & engine = *device.renderSystem.getEngine();
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
@@ -205,14 +205,13 @@ namespace draw_edges
 		, m_result{ m_device
 			, renderTarget.getResources()
 			, cuT( "DNEdges" )
-			, 0u
-			, m_extent
-			, 1u
-			, 1u
-			, castor::PixelFormat::eR16_SFLOAT
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
+			, { castor3d::ImageCreateFlags::eNone
+				, m_extent, 1u, 1u
+				, castor::PixelFormat::eR16_SFLOAT
+				, ( castor3d::ImageUsageFlags::eSampled
+					| castor3d::ImageUsageFlags::eColorAttachment
+					| castor3d::ImageUsageFlags::eTransferSrc ) }
+			, {} }
 		, m_shader{ cuT( "DNEdgesDetection" ), dned::getProgram( device, m_extent ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_pass{ m_graph.createPass( "EdgesDetection"

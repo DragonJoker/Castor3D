@@ -91,7 +91,7 @@ namespace castor3d
 		m_environmentSheenPrefilter.render( queueData );
 	}
 
-	crg::SemaphoreWaitArray IblTextures::update( crg::SemaphoreWaitArray signalsToWait
+	SemaphoreWaitArray IblTextures::update( SemaphoreWaitArray signalsToWait
 		, ashes::Queue const & queue )const
 	{
 		signalsToWait = m_radianceComputer.render( signalsToWait, queue );

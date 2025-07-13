@@ -43,7 +43,7 @@ namespace draw_edges
 		};
 
 		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
-			, VkExtent3D const & extent
+			, castor3d::Extent3D const & extent
 			, int contourMethod )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
@@ -183,15 +183,14 @@ namespace draw_edges
 		, m_result{ m_device
 			, renderTarget.getResources()
 			, cuT( "DEObjDet" )
-			, 0u
-			, m_extent
-			, 1u
-			, 1u
-			, castor::PixelFormat::eR16_SFLOAT
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) }
+			, { castor3d::ImageCreateFlags::eNone
+				, m_extent, 1u, 1u
+				, castor::PixelFormat::eR16_SFLOAT
+				, ( castor3d::ImageUsageFlags::eSampled
+					| castor3d::ImageUsageFlags::eColorAttachment
+					| castor3d::ImageUsageFlags::eTransferSrc
+					| castor3d::ImageUsageFlags::eTransferDst ) }
+			, {} }
 		, m_pass{ m_graph.createPass( "ObjectIDDetection"
 			, [this, &device, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context

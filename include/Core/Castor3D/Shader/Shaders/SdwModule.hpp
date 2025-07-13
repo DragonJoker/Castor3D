@@ -324,7 +324,7 @@ namespace castor3d::shader
 	using BackgroundModelCreator = castor::Function< BackgroundModelPtr( Engine const & engine
 		, sdw::ShaderWriter & writer
 		, Utils & utils
-		, VkExtent2D targetSize
+		, Extent2D targetSize
 		, bool needsForeground
 		, uint32_t & binding
 		, uint32_t set ) >;

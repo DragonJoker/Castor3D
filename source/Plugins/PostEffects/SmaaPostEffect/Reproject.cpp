@@ -130,14 +130,13 @@ namespace smaa
 		, m_result{ m_device
 			, renderTarget.getResources()
 			, cuT( "SMRpRes" )
-			, 0u
-			, m_extent
-			, 1u
-			, 1u
-			, renderTarget.getPixelFormat()
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
+			, { castor3d::ImageCreateFlags::eNone
+				, m_extent, 1u, 1u
+				, renderTarget.getPixelFormat()
+				, ( castor3d::ImageUsageFlags::eSampled
+					| castor3d::ImageUsageFlags::eColorAttachment
+					| castor3d::ImageUsageFlags::eTransferSrc ) }
+			, {} }
 		, m_pass{ m_graph.createPass( "Reproject"
 			, [this, &device, &config, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -165,15 +164,15 @@ namespace smaa
 		{
 			auto image = castor::make_unique< ashes::Image >( *device
 				, renderTarget.getResources().createImage( context, view.data->image )
-				, ashes::ImageCreateInfo{ view.data->image.data->info } );
-			auto createInfo = view.data->info;
+				, ashes::ImageCreateInfo{ convert( view.data->image.data->info ) } );
+			auto createInfo = convert( view.data->info );
 			createInfo.image = *image;
 			auto imageView = image->createView( createInfo );
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
 				, imageView.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			commandBuffer->clear( imageView
-				, castor3d::opaqueBlackClearColor.color );
+				, convert( castor3d::opaqueBlackClearColor ) );
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 				, imageView.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );

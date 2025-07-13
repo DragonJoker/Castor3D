@@ -17,7 +17,7 @@ namespace castor3d
 		C3D_API ShadowMapResult( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, castor::String const & prefix
-			, VkImageCreateFlags createFlags
+			, ImageCreateFlags createFlags
 			, castor::Size const & size
 			, uint32_t layerCount );
 	};

@@ -24,7 +24,7 @@ namespace castor3d
 	struct NodesPassDesc
 	{
 	public:
-		NodesPassDesc( VkExtent3D size
+		NodesPassDesc( Extent3D size
 			, CameraUbo const & cameraUbo
 			, SceneUbo const * sceneUbo
 			, RenderFilters filters )
@@ -68,7 +68,7 @@ namespace castor3d
 			return *this;
 		}
 
-		VkExtent3D m_size;
+		Extent3D m_size;
 		CameraUbo const & m_cameraUbo;
 		SceneUbo const * m_sceneUbo{};
 		RenderFilters m_filters;

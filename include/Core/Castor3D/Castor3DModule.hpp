@@ -46,33 +46,64 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	static uint32_t constexpr InvalidIndex = ~0u;
-	static VkColorComponentFlags const defaultColorWriteMask{ VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
+	static crg::ColorComponentFlags const defaultColorWriteMask{ crg::ColorComponentFlags::eR | crg::ColorComponentFlags::eG | crg::ColorComponentFlags::eB | crg::ColorComponentFlags::eA };
 
 	using crg::AccessFlags;
+	using crg::AttachmentLoadOp;
+	using crg::AttachmentStoreOp;
+	using crg::BlendFactor;
+	using crg::BlendOp;
+	using crg::ColorComponentFlags;
+	using crg::FilterMode;
+	using crg::ImageAspectFlags;
+	using crg::ImageCreateFlags;
 	using crg::ImageLayout;
+	using crg::ImageTiling;
 	using crg::ImageType;
+	using crg::ImageUsageFlags;
+	using crg::ImageViewCreateFlags;
 	using crg::ImageViewType;
+	using crg::MipmapMode;
 	using crg::PipelineStageFlags;
+	using crg::SampleCount;
+	using crg::WrapMode;
 
-	static constexpr crg::AccessState VertexAttributeInputState{ AccessFlags::eVertexAttributeRead, PipelineStageFlags::eVertexInput };
-	static constexpr crg::AccessState VertexIndexInputState{ AccessFlags::eIndexRead, PipelineStageFlags::eVertexInput };
-	static constexpr crg::AccessState FragmentShaderReadState{ AccessFlags::eShaderRead, PipelineStageFlags::eFragmentShader };
-	static constexpr crg::AccessState VertexShaderReadState{ AccessFlags::eShaderRead, PipelineStageFlags::eVertexShader };
-	static constexpr crg::AccessState ComputeShaderReadState{ AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader };
-	static constexpr crg::AccessState ComputeShaderReadWriteState{ AccessFlags::eShaderRead | AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader };
-	static constexpr crg::AccessState ComputeShaderWriteState{ AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader };
-	static constexpr crg::AccessState MeshShaderReadState{ AccessFlags::eShaderRead, PipelineStageFlags::eMeshShader };
-	static constexpr crg::AccessState TaskShaderReadState{ AccessFlags::eShaderRead, PipelineStageFlags::eTaskShader };
-	static constexpr crg::AccessState FragmentUniformReadState{ AccessFlags::eUniformRead, PipelineStageFlags::eFragmentShader };
-	static constexpr crg::AccessState VertexUniformReadState{ AccessFlags::eUniformRead, PipelineStageFlags::eVertexShader };
-	static constexpr crg::AccessState ComputeUniformReadState{ AccessFlags::eUniformRead, PipelineStageFlags::eComputeShader };
-	static constexpr crg::AccessState MeshUniformReadState{ AccessFlags::eUniformRead, PipelineStageFlags::eMeshShader };
-	static constexpr crg::AccessState TaskUniformReadState{ AccessFlags::eUniformRead, PipelineStageFlags::eTaskShader };
-	static constexpr crg::AccessState ComputeIndirectCommandReadState{ AccessFlags::eIndirectCommandRead, PipelineStageFlags::eComputeShader };
-	static constexpr crg::AccessState DrawIndirectCommandState{ AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect };
-	static constexpr crg::AccessState TransferReadState{ AccessFlags::eTransferRead, PipelineStageFlags::eTransfer };
-	static constexpr crg::AccessState TransferWriteState{ AccessFlags::eTransferWrite, PipelineStageFlags::eTransfer };
-	static constexpr crg::AccessState HostWriteState{ AccessFlags::eHostWrite, PipelineStageFlags::eHost };
+	using crg::AccessState;
+	using crg::ClearColorValue;
+	using crg::ClearDepthStencilValue;
+	using crg::ClearValue;
+	using crg::Extent2D;
+	using crg::Extent3D;
+	using crg::ImageCreateInfo;
+	using crg::ImageSubresourceRange;
+	using crg::ImageViewCreateInfo;
+	using crg::LayoutState;
+	using crg::Offset2D;
+	using crg::Offset3D;
+	using crg::PipelineState;
+	using crg::Rect2D;
+	using crg::SemaphoreWait;
+	using crg::SemaphoreWaitArray;
+
+	static constexpr AccessState VertexAttributeInputState{ AccessFlags::eVertexAttributeRead, PipelineStageFlags::eVertexInput };
+	static constexpr AccessState VertexIndexInputState{ AccessFlags::eIndexRead, PipelineStageFlags::eVertexInput };
+	static constexpr AccessState FragmentShaderReadState{ AccessFlags::eShaderRead, PipelineStageFlags::eFragmentShader };
+	static constexpr AccessState VertexShaderReadState{ AccessFlags::eShaderRead, PipelineStageFlags::eVertexShader };
+	static constexpr AccessState ComputeShaderReadState{ AccessFlags::eShaderRead, PipelineStageFlags::eComputeShader };
+	static constexpr AccessState ComputeShaderReadWriteState{ AccessFlags::eShaderRead | AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader };
+	static constexpr AccessState ComputeShaderWriteState{ AccessFlags::eShaderWrite, PipelineStageFlags::eComputeShader };
+	static constexpr AccessState MeshShaderReadState{ AccessFlags::eShaderRead, PipelineStageFlags::eMeshShader };
+	static constexpr AccessState TaskShaderReadState{ AccessFlags::eShaderRead, PipelineStageFlags::eTaskShader };
+	static constexpr AccessState FragmentUniformReadState{ AccessFlags::eUniformRead, PipelineStageFlags::eFragmentShader };
+	static constexpr AccessState VertexUniformReadState{ AccessFlags::eUniformRead, PipelineStageFlags::eVertexShader };
+	static constexpr AccessState ComputeUniformReadState{ AccessFlags::eUniformRead, PipelineStageFlags::eComputeShader };
+	static constexpr AccessState MeshUniformReadState{ AccessFlags::eUniformRead, PipelineStageFlags::eMeshShader };
+	static constexpr AccessState TaskUniformReadState{ AccessFlags::eUniformRead, PipelineStageFlags::eTaskShader };
+	static constexpr AccessState ComputeIndirectCommandReadState{ AccessFlags::eIndirectCommandRead, PipelineStageFlags::eComputeShader };
+	static constexpr AccessState DrawIndirectCommandState{ AccessFlags::eIndirectCommandRead, PipelineStageFlags::eDrawIndirect };
+	static constexpr AccessState TransferReadState{ AccessFlags::eTransferRead, PipelineStageFlags::eTransfer };
+	static constexpr AccessState TransferWriteState{ AccessFlags::eTransferWrite, PipelineStageFlags::eTransfer };
+	static constexpr AccessState HostWriteState{ AccessFlags::eHostWrite, PipelineStageFlags::eHost };
 
 	using castor::StringHash;
 	using castor::xchar;
@@ -201,7 +232,17 @@ namespace castor3d
 		return castor::Size{ size.width, size.height };
 	}
 
+	inline castor::Size makeSize( Extent2D const & size )
+	{
+		return castor::Size{ size.width, size.height };
+	}
+
 	inline castor::Size makeSize( VkExtent3D const & size )
+	{
+		return castor::Size{ size.width, size.height };
+	}
+
+	inline castor::Size makeSize( Extent3D const & size )
 	{
 		return castor::Size{ size.width, size.height };
 	}
@@ -211,12 +252,36 @@ namespace castor3d
 		return VkExtent2D{ size.width, size.height };
 	}
 
+	inline Extent2D makeExtent2D( Extent3D const & size )
+	{
+		return Extent2D{ size.width, size.height };
+	}
+
 	inline VkExtent3D makeExtent3D( VkExtent2D const & size )
 	{
 		return VkExtent3D{ size.width, size.height, 1u };
 	}
 
-	inline VkExtent2D makeExtent2D( castor::Coords2ui const & size )
+	inline Extent3D makeExtent3D( Extent2D const & size )
+	{
+		return Extent3D{ size.width, size.height, 1u };
+	}
+
+	inline VkExtent3D makeVkExtent3D( Extent2D const & size )
+	{
+		return VkExtent3D{ size.width, size.height, 1u };
+	}
+
+	inline Extent2D makeExtent2D( castor::Coords2ui const & size )
+	{
+		return Extent2D
+		{
+			size[0],
+			size[1],
+		};
+	}
+
+	inline VkExtent2D makeVkExtent2D( castor::Coords2ui const & size )
 	{
 		return VkExtent2D
 		{
@@ -225,16 +290,26 @@ namespace castor3d
 		};
 	}
 
-	inline VkExtent2D makeExtent2D( castor::Point2ui const & size )
+	inline Extent2D makeExtent2D( castor::Point2ui const & size )
 	{
-		return VkExtent2D
+		return Extent2D
 		{
 			size[0],
 			size[1],
 		};
 	}
 
-	inline VkExtent3D makeExtent3D( castor::Coords2ui const & size )
+	inline Extent3D makeExtent3D( castor::Coords2ui const & size )
+	{
+		return Extent3D
+		{
+			size[0],
+			size[1],
+			1u,
+		};
+	}
+
+	inline VkExtent3D makeVkExtent3D( castor::Coords2ui const & size )
 	{
 		return VkExtent3D
 		{
@@ -244,9 +319,9 @@ namespace castor3d
 		};
 	}
 
-	inline VkExtent3D makeExtent3D( castor::Point2ui const & size )
+	inline Extent3D makeExtent3D( castor::Point2ui const & size )
 	{
-		return VkExtent3D
+		return Extent3D
 		{
 			size[0],
 			size[1],
@@ -254,27 +329,27 @@ namespace castor3d
 		};
 	}
 
-	inline VkOffset2D makeOffset2D( castor::Coords2i const & pos )
+	inline Offset2D makeOffset2D( castor::Coords2i const & pos )
 	{
-		return VkOffset2D
+		return Offset2D
 		{
 			pos[0],
 			pos[1],
 		};
 	}
 
-	inline VkOffset2D makeOffset2D( castor::Point2i const & pos )
+	inline Offset2D makeOffset2D( castor::Point2i const & pos )
 	{
-		return VkOffset2D
+		return Offset2D
 		{
 			pos[0],
 			pos[1],
 		};
 	}
 
-	inline VkOffset3D makeOffset3D( castor::Coords2i const & pos )
+	inline Offset3D makeOffset3D( castor::Coords2i const & pos )
 	{
-		return VkOffset3D
+		return Offset3D
 		{
 			pos[0],
 			pos[1],
@@ -282,9 +357,9 @@ namespace castor3d
 		};
 	}
 
-	inline VkOffset3D makeOffset3D( castor::Point2i const & pos )
+	inline Offset3D makeOffset3D( castor::Point2i const & pos )
 	{
-		return VkOffset3D
+		return Offset3D
 		{
 			pos[0],
 			pos[1],
@@ -297,7 +372,7 @@ namespace castor3d
 		, float zMax = 1.0f )
 	{
 		return ashes::makeViewport( {}
-			, makeExtent2D( size )
+			, convert( makeExtent2D( size ) )
 			, zMin
 			, zMax );
 	}
@@ -307,7 +382,7 @@ namespace castor3d
 		, float zMax = 1.0f )
 	{
 		return ashes::makeViewport( {}
-			, makeExtent2D( size )
+			, convert( makeExtent2D( size ) )
 			, zMin
 			, zMax );
 	}
@@ -317,8 +392,8 @@ namespace castor3d
 		, float zMin = 0.0f
 		, float zMax = 1.0f )
 	{
-		return ashes::makeViewport( makeOffset2D( pos )
-			, makeExtent2D( size )
+		return ashes::makeViewport( convert( makeOffset2D( pos ) )
+			, convert( makeExtent2D( size ) )
 			, zMin
 			, zMax );
 	}
@@ -328,8 +403,8 @@ namespace castor3d
 		, float zMin = 0.0f
 		, float zMax = 1.0f )
 	{
-		return ashes::makeViewport( makeOffset2D( pos )
-			, makeExtent2D( size )
+		return ashes::makeViewport( convert( makeOffset2D( pos ) )
+			, convert( makeExtent2D( size ) )
 			, zMin
 			, zMax );
 	}
@@ -339,8 +414,8 @@ namespace castor3d
 		, float zMin = 0.0f
 		, float zMax = 1.0f )
 	{
-		return ashes::makeViewport( makeOffset2D( pos )
-			, makeExtent2D( size )
+		return ashes::makeViewport( convert( makeOffset2D( pos ) )
+			, convert( makeExtent2D( size ) )
 			, zMin
 			, zMax );
 	}
@@ -350,8 +425,8 @@ namespace castor3d
 		, float zMin = 0.0f
 		, float zMax = 1.0f )
 	{
-		return ashes::makeViewport( makeOffset2D( pos )
-			, makeExtent2D( size )
+		return ashes::makeViewport( convert( makeOffset2D( pos ) )
+			, convert( makeExtent2D( size ) )
 			, zMin
 			, zMax );
 	}
@@ -359,61 +434,41 @@ namespace castor3d
 	inline VkRect2D makeScissor( castor::Coords2ui const & size )
 	{
 		return ashes::makeScissor( {}
-		, makeExtent2D( size ) );
+		, convert( makeExtent2D( size ) ) );
 	}
 
 	inline VkRect2D makeScissor( castor::Point2ui const & size )
 	{
 		return ashes::makeScissor( {}
-		, makeExtent2D( size ) );
+		, convert( makeExtent2D( size ) ) );
 	}
 
 	inline VkRect2D makeScissor( castor::Coords2i const & pos
 		, castor::Coords2ui const & size )
 	{
-		return ashes::makeScissor( makeOffset2D( pos )
-			, makeExtent2D( size ) );
+		return ashes::makeScissor( convert( makeOffset2D( pos ) )
+			, convert( makeExtent2D( size ) ) );
 	}
 
 	inline VkRect2D makeScissor( castor::Point2i const & pos
 		, castor::Coords2ui const & size )
 	{
-		return ashes::makeScissor( makeOffset2D( pos )
-			, makeExtent2D( size ) );
+		return ashes::makeScissor( convert( makeOffset2D( pos ) )
+			, convert( makeExtent2D( size ) ) );
 	}
 
 	inline VkRect2D makeScissor( castor::Coords2i const & pos
 		, castor::Point2ui const & size )
 	{
-		return ashes::makeScissor( makeOffset2D( pos )
-			, makeExtent2D( size ) );
+		return ashes::makeScissor( convert( makeOffset2D( pos ) )
+			, convert( makeExtent2D( size ) ) );
 	}
 
 	inline VkRect2D makeScissor( castor::Point2i const & pos
 		, castor::Point2ui const & size )
 	{
-		return ashes::makeScissor( makeOffset2D( pos )
-			, makeExtent2D( size ) );
-	}
-
-	inline VkClearValue makeClearValue( float depth, uint32_t stencil = 0u )
-	{
-		return ashes::makeClearValue( VkClearDepthStencilValue{ depth, stencil } );
-	}
-
-	inline VkClearValue makeClearValue( uint32_t r, uint32_t g, uint32_t b, uint32_t a )
-	{
-		VkClearColorValue v{};
-		v.uint32[0] = r;
-		v.uint32[1] = g;
-		v.uint32[2] = b;
-		v.uint32[3] = a;
-		return ashes::makeClearValue( v );
-	}
-
-	inline VkClearValue makeClearValue( float r, float g, float b, float a = 1.0f )
-	{
-		return ashes::makeClearValue( { r, g, b, a } );
+		return ashes::makeScissor( convert( makeOffset2D( pos ) )
+			, convert( makeExtent2D( size ) ) );
 	}
 
 	template< typename EnumT >
@@ -436,14 +491,14 @@ namespace castor3d
 		return getEnumMapT( EnumT::eMin, EnumT::eMax );
 	}
 
-	static VkClearValue const defaultClearDepthStencil{ makeClearValue( 0.0f, 0u ) };
-	static VkClearValue const opaqueBlackClearColor{ makeClearValue( 0.0f, 0.0f, 0.0f, 1.0f ) };
-	static VkClearValue const transparentBlackClearColor{ makeClearValue( 0.0f, 0.0f, 0.0f, 0.0f ) };
-	static VkClearValue const opaqueWhiteClearColor{ makeClearValue( 1.0f, 1.0f, 1.0f, 1.0f ) };
-	static VkClearValue const transparentWhiteClearColor{ makeClearValue( 1.0f, 1.0f, 1.0f, 0.0f ) };
+	static ClearDepthStencilValue const defaultClearDepthStencil{ 0.0f, 0u };
+	static ClearColorValue const opaqueBlackClearColor{ 0.0f, 0.0f, 0.0f, 1.0f };
+	static ClearColorValue const transparentBlackClearColor{ 0.0f, 0.0f, 0.0f, 0.0f };
+	static ClearColorValue const opaqueWhiteClearColor{ 1.0f, 1.0f, 1.0f, 1.0f };
+	static ClearColorValue const transparentWhiteClearColor{ 1.0f, 1.0f, 1.0f, 0.0f };
 
-	inline bool operator>( VkImageSubresourceRange const & lhs
-		, VkImageSubresourceRange const & rhs )
+	inline bool operator>( ImageSubresourceRange const & lhs
+		, ImageSubresourceRange const & rhs )
 	{
 		return lhs.aspectMask > rhs.aspectMask
 			|| ( lhs.aspectMask == rhs.aspectMask
@@ -463,8 +518,8 @@ namespace castor3d
 				);
 	}
 
-	inline bool operator<( VkImageSubresourceRange const & lhs
-		, VkImageSubresourceRange const & rhs )
+	inline bool operator<( ImageSubresourceRange const & lhs
+		, ImageSubresourceRange const & rhs )
 	{
 		return lhs.aspectMask < rhs.aspectMask
 			|| ( lhs.aspectMask == rhs.aspectMask
@@ -484,28 +539,22 @@ namespace castor3d
 				);
 	}
 
-	inline bool operator<=( VkImageSubresourceRange const & lhs
-		, VkImageSubresourceRange const & rhs )
+	inline bool operator<=( ImageSubresourceRange const & lhs
+		, ImageSubresourceRange const & rhs )
 	{
 		return !( lhs > rhs );
 	}
 
-	inline bool operator>=( VkImageSubresourceRange const & lhs
-		, VkImageSubresourceRange const & rhs )
+	inline bool operator>=( ImageSubresourceRange const & lhs
+		, ImageSubresourceRange const & rhs )
 	{
 		return !( lhs < rhs );
 	}
 
-	inline bool operator!=( VkImageSubresourceRange const & lhs
-		, VkImageSubresourceRange const & rhs )
+	inline bool operator!=( ImageSubresourceRange const & lhs
+		, ImageSubresourceRange const & rhs )
 	{
 		return lhs < rhs || lhs > rhs;
-	}
-
-	inline bool operator==( VkImageSubresourceRange const & lhs
-		, VkImageSubresourceRange const & rhs )
-	{
-		return lhs >= rhs && lhs <= rhs;
 	}
 }
 

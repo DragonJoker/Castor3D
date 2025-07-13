@@ -95,7 +95,7 @@ namespace castor3d
 		RenderDevice const & m_device;
 		SsaoConfig & m_ssaoConfig;
 		crg::FramePassGroup & m_group;
-		VkExtent2D m_size;
+		Extent2D m_size;
 		uint32_t m_passIndex{};
 		LineariseDepthPassUPtr m_linearisePass;
 		SsaoConfigUbo m_ssaoConfigUbo;

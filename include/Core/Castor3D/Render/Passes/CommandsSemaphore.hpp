@@ -28,9 +28,9 @@ namespace castor3d
 			, ashes::Semaphore const & toWait
 			, PipelineStageFlags stage = PipelineStageFlags::eColorAttachmentOutput )const;
 		C3D_API ashes::Semaphore const & submit( ashes::Queue const & queue
-			, crg::SemaphoreWait const & toWait )const;
+			, SemaphoreWait const & toWait )const;
 		C3D_API ashes::Semaphore const & submit( ashes::Queue const & queue
-			, crg::SemaphoreWaitArray const & toWait )const;
+			, SemaphoreWaitArray const & toWait )const;
 		C3D_API void submit( ashes::Queue const & queue
 			, ashes::VkSemaphoreArray & semaphores
 			, ashes::VkPipelineStageFlagsArray & stages )const;

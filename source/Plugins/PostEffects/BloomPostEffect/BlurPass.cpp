@@ -114,7 +114,7 @@ namespace Bloom
 		}
 
 		static UboOffsetArray doCreateUbo( castor3d::RenderDevice const & device
-			, VkExtent2D dimensions
+			, castor3d::Extent2D dimensions
 			, uint32_t blurKernelSize
 			, uint32_t blurPassesCount
 			, bool isVertical )
@@ -145,7 +145,7 @@ namespace Bloom
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & srcImages
 			, crg::ImageViewIdArray const & dstImages
-			, VkExtent2D dimensions
+			, castor3d::Extent2D dimensions
 			, ashes::PipelineShaderStageCreateInfoArray const & stages
 			, UboOffsetArray const & blurUbo
 			, uint32_t blurPassesCount
@@ -183,7 +183,7 @@ namespace Bloom
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & srcView
 		, crg::ImageViewId const & dstView
-		, VkExtent2D dimensions
+		, castor3d::Extent2D dimensions
 		, ashes::PipelineShaderStageCreateInfoArray const & stages
 		, castor3d::UniformBufferOffsetT< castor3d::GaussianBlur::Configuration > const & blurUbo
 		, uint32_t index
@@ -229,7 +229,7 @@ namespace Bloom
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & srcImages
 		, crg::ImageViewIdArray const & dstImages
-		, VkExtent2D dimensions
+		, castor3d::Extent2D dimensions
 		, uint32_t blurKernelSize
 		, uint32_t blurPassesCount
 		, bool isVertical
@@ -259,7 +259,7 @@ namespace Bloom
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & srcImages
 		, crg::ImageViewIdArray const & dstImages
-		, VkExtent2D dimensions
+		, castor3d::Extent2D dimensions
 		, uint32_t blurKernelSize
 		, uint32_t blurPassesCount
 		, bool isVertical

@@ -33,7 +33,7 @@ namespace ocean_fft
 	struct VkFFTConfig
 	{
 		VkFFTConfig( castor3d::RenderDevice const & device
-			, VkExtent2D const & dimensions );
+			, castor3d::Extent2D const & dimensions );
 
 		castor3d::RenderDevice const & device;
 		ashes::FencePtr fence;

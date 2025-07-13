@@ -40,7 +40,7 @@ namespace ocean_fft
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, castor3d::RenderDevice const & device
-			, VkExtent2D const & extent
+			, castor3d::Extent2D const & extent
 			, castor::Point2f const & heightMapSize
 			, uint32_t displacementDownsample
 			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
@@ -73,7 +73,7 @@ namespace ocean_fft
 		ashes::ComputePipelinePtr m_pipeline;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
 		ashes::DescriptorSetPtr m_descriptorSet;
-		VkExtent2D m_extent{};
+		castor3d::Extent2D m_extent{};
 		castor::Point2f m_heightMapSize;
 		uint32_t m_displacementDownsample{};
 		Data m_data{};
@@ -82,7 +82,7 @@ namespace ocean_fft
 	crg::FramePass const & createBakeHeightGradientPass( castor3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
 		, crg::FramePassArray previousPasses
-		, VkExtent2D const & extent
+		, castor3d::Extent2D const & extent
 		, castor::Point2f const & heightMapSize
 		, uint32_t displacementDownsample
 		, OceanUbo const & ubo

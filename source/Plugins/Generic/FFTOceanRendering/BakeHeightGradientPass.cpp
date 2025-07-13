@@ -54,21 +54,21 @@ namespace ocean_fft
 		{
 			ashes::WriteDescriptorSetArray writes;
 
-			auto write = pass.buffers[BakeHeightGradientPass::eConfig].getBufferWrite();
+			auto write = graph.getBufferWrite( pass.buffers[BakeHeightGradientPass::eConfig] );
 			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
 				, write->descriptorType } );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			write = pass.buffers[BakeHeightGradientPass::eHeight].getBufferWrite();
+			write = graph.getBufferWrite( pass.buffers[BakeHeightGradientPass::eHeight] );
 			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
 				, write->descriptorType } );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			write = pass.buffers[BakeHeightGradientPass::eDisplacement].getBufferWrite();
+			write = graph.getBufferWrite( pass.buffers[BakeHeightGradientPass::eDisplacement] );
 			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
@@ -234,7 +234,7 @@ namespace ocean_fft
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, castor3d::RenderDevice const & device
-		, VkExtent2D const & extent
+		, castor3d::Extent2D const & extent
 		, castor::Point2f const & heightMapSize
 		, uint32_t displacementDownsample
 		, crg::RunnablePass::IsEnabledCallback isEnabled )
@@ -319,7 +319,7 @@ namespace ocean_fft
 	crg::FramePass const & createBakeHeightGradientPass( castor3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
 		, crg::FramePassArray previousPasses
-		, VkExtent2D const & extent
+		, castor3d::Extent2D const & extent
 		, castor::Point2f const & heightMapSize
 		, uint32_t displacementDownsample
 		, OceanUbo const & ubo

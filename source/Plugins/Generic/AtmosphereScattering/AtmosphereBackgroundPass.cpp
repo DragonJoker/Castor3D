@@ -27,7 +27,7 @@ namespace atmosphere_scattering
 		castor::String const Name{ cuT( "Atmosphere" ) };
 
 		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
-			, VkExtent2D const & renderSize
+			, castor3d::Extent2D const & renderSize
 			, bool isVisible )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
@@ -70,7 +70,7 @@ namespace atmosphere_scattering
 		, crg::RunnableGraph & graph
 		, castor3d::RenderDevice const & device
 		, AtmosphereBackground & background
-		, VkExtent2D const & size
+		, castor3d::Extent2D const & size
 		, crg::ImageViewIdArray const & colour
 		, bool forceVisible )
 		: castor3d::BackgroundPassBase{ pass
@@ -103,7 +103,7 @@ namespace atmosphere_scattering
 
 	crg::VkPipelineShaderStageCreateInfoArray AtmosphereBackgroundPass::doInitialiseShader( castor3d::RenderDevice const & device
 		, AtmosphereBackground & background
-		, VkExtent2D const & size
+		, castor3d::Extent2D const & size
 		, uint32_t passIndex )
 	{
 		auto & engine = *device.renderSystem.getEngine();

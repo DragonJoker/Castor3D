@@ -245,7 +245,7 @@ namespace castor3d
 	void RenderLoop::doGpuStep( RenderInfo & info )
 	{
 		auto & windows = getEngine()->getRenderWindows();
-		crg::SemaphoreWaitArray toWait;
+		SemaphoreWaitArray toWait;
 		auto & device = m_renderSystem.getRenderDevice();
 		auto data = m_reservedQueue;
 

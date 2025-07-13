@@ -19,7 +19,7 @@ namespace castor3d
 	C3D_API SamplerObs createSampler( Engine & engine
 		, castor::String const & baseName
 		, FilterMode filter
-		, VkImageSubresourceRange const * range );
+		, ImageSubresourceRange const * range );
 	C3D_API castor::String getSamplerName( ComparisonFunc compareOp
 		, FilterMode minFilter
 		, FilterMode magFilter

@@ -284,15 +284,14 @@ namespace smaa
 			m_images.emplace_back( m_device
 				, renderTarget.getResources()
 				, cuT( "SMNBRes" ) + castor::string::toString( i )
-				, 0u
-				, m_extent
-				, 1u
-				, 1u
-				, castor::PixelFormat::eR8G8B8A8_SRGB
-				, ( VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
+				, castor3d::TextureCreateInfo{ castor3d::ImageCreateFlags::eNone
+				, m_extent, 1u, 1u
+					, castor::PixelFormat::eR8G8B8A8_SRGB
+					, ( castor3d::ImageUsageFlags::eColorAttachment
+						| castor3d::ImageUsageFlags::eSampled
+						| castor3d::ImageUsageFlags::eTransferSrc
+						| castor3d::ImageUsageFlags::eTransferDst ) }
+				, castor3d::TextureSamplerInfo{} );
 			auto & image = m_images.back();
 			image.create();
 			m_imageViews.push_back( image.wholeViewId );

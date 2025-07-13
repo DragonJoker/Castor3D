@@ -92,10 +92,10 @@ namespace PbrBloom
 	{
 		auto intermediateView = graph.createView( crg::ImageViewData{ rhs.data->name + "0"
 			, rhs
-			, 0u
+			, castor3d::ImageViewCreateFlags::eNone
 			, castor3d::ImageViewType::e2D
 			, getFormat( rhs )
-			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
+			, { castor3d::ImageAspectFlags::eColor, 0u, 1u, 0u, 1u } } );
 		m_pass.addDependency( previousPass );
 		m_pass.addSampledView( intermediateView
 			, 0u

@@ -37,7 +37,7 @@ namespace castor3d
 		 *\param[in]	debugName	Le nom de debug pour ce layout.
 		 */
 		C3D_API TextureView( TextureLayout & layout
-			, ashes::ImageViewCreateInfo info
+			, ImageViewCreateInfo info
 			, uint32_t index
 			, castor::String debugName );
 		/**
@@ -84,7 +84,7 @@ namespace castor3d
 		 *\param[in]	mipLevels		Le nombre de miplevels.
 		 *\param[in]	arrayLayers		Le nombre de layers.
 		 */
-		C3D_API void update( VkExtent3D const & extent
+		C3D_API void update( Extent3D const & extent
 			, castor::PixelFormat format
 			, uint32_t mipLevels
 			, uint32_t arrayLayers );
@@ -117,14 +117,14 @@ namespace castor3d
 			return m_index;
 		}
 
-		VkImageSubresourceRange const & getSubresourceRange()const
+		ImageSubresourceRange const & getSubresourceRange()const
 		{
-			return m_info->subresourceRange;
+			return m_info.subresourceRange;
 		}
 
 		uint32_t getBaseMipLevel()const
 		{
-			return m_info->subresourceRange.baseMipLevel;
+			return m_info.subresourceRange.baseMipLevel;
 		}
 
 		void setMipmapsGenerationNeeded( bool value )
@@ -152,17 +152,17 @@ namespace castor3d
 			return m_needsZInversion;
 		}
 
-		static VkImageViewCreateInfo convertToSampledView( VkImageViewCreateInfo createInfo );
-		static VkImageViewCreateInfo convertToTargetView( VkImageViewCreateInfo createInfo
+		static ImageViewCreateInfo convertToSampledView( ImageViewCreateInfo createInfo );
+		static ImageViewCreateInfo convertToTargetView( ImageViewCreateInfo createInfo
 			, uint32_t depth );
 		/**@}*/
 
 	private:
-		C3D_API void doUpdate( ashes::ImageViewCreateInfo info );
+		C3D_API void doUpdate( ImageViewCreateInfo info );
 
 	private:
 		uint32_t m_index;
-		ashes::ImageViewCreateInfo m_info;
+		ImageViewCreateInfo m_info;
 		castor::String m_debugName;
 		TextureSource m_source;
 		mutable ashes::ImageView m_sampledView;

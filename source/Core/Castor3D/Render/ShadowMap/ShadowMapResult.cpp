@@ -45,33 +45,33 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	VkClearValue getClearValue( SmTexture texture )
+	ClearValue getClearValue( SmTexture texture )
 	{
-		static castor::Array< VkClearValue, size_t( SmTexture::eCount ) > Values
+		static castor::Array< ClearValue, size_t( SmTexture::eCount ) > Values
 		{
 			{
-				defaultClearDepthStencil,		// Depth
-				transparentBlackClearColor,		// Linear
-				opaqueWhiteClearColor,			// Variance
-				transparentBlackClearColor,		// Normal
-				transparentBlackClearColor,		// Position
-				transparentBlackClearColor		// Flux
+				ClearValue{ defaultClearDepthStencil }, // Depth
+				ClearValue{ transparentBlackClearColor }, // Linear
+				ClearValue{ opaqueWhiteClearColor }, // Variance
+				ClearValue{ transparentBlackClearColor }, // Normal
+				ClearValue{ transparentBlackClearColor }, // Position
+				ClearValue{ transparentBlackClearColor }// Flux
 			}
 		};
 		return Values[size_t( texture )];
 	}
 
-	VkImageUsageFlags getUsageFlags( SmTexture texture )
+	ImageUsageFlags getUsageFlags( SmTexture texture )
 	{
-		static castor::Array< VkImageUsageFlags, size_t( SmTexture::eCount ) > Values
+		static castor::Array< ImageUsageFlags, size_t( SmTexture::eCount ) > Values
 		{
 			{
-				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,	// Depth
-				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,			// Linear
-				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,			// Variance
-				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,			// Normal
-				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,			// Position
-				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,			// Flux
+				ImageUsageFlags::eTransferDst | ImageUsageFlags::eTransferSrc | ImageUsageFlags::eSampled | ImageUsageFlags::eDepthStencilAttachment, // Depth
+				ImageUsageFlags::eTransferDst | ImageUsageFlags::eTransferSrc | ImageUsageFlags::eSampled | ImageUsageFlags::eColorAttachment, // Linear
+				ImageUsageFlags::eTransferDst | ImageUsageFlags::eTransferSrc | ImageUsageFlags::eSampled | ImageUsageFlags::eColorAttachment, // Variance
+				ImageUsageFlags::eTransferDst | ImageUsageFlags::eTransferSrc | ImageUsageFlags::eSampled | ImageUsageFlags::eColorAttachment, // Normal
+				ImageUsageFlags::eTransferDst | ImageUsageFlags::eTransferSrc | ImageUsageFlags::eSampled | ImageUsageFlags::eColorAttachment, // Position
+				ImageUsageFlags::eTransferDst | ImageUsageFlags::eTransferSrc | ImageUsageFlags::eSampled | ImageUsageFlags::eColorAttachment, // Flux
 			}
 		};
 		return Values[size_t( texture )];
@@ -82,12 +82,12 @@ namespace castor3d
 		static castor::Array< BorderColour, size_t( SmTexture::eCount ) > Values
 		{
 			{
-				BorderColour::eFloatOpaqueWhite,		// Depth
-				BorderColour::eFloatOpaqueWhite,		// Linear
-				BorderColour::eFloatOpaqueWhite,		// Variance
-				BorderColour::eFloatTransparentBlack,	// Normal
-				BorderColour::eFloatTransparentBlack,	// Position
-				BorderColour::eFloatTransparentBlack,	// Flux
+				BorderColour::eFloatOpaqueWhite, // Depth
+				BorderColour::eFloatOpaqueWhite, // Linear
+				BorderColour::eFloatOpaqueWhite, // Variance
+				BorderColour::eFloatTransparentBlack, // Normal
+				BorderColour::eFloatTransparentBlack, // Position
+				BorderColour::eFloatTransparentBlack, // Flux
 			}
 		};
 		return Values[size_t( texture )];
@@ -98,12 +98,12 @@ namespace castor3d
 		static castor::Array< ComparisonFunc, size_t( SmTexture::eCount ) > Values
 		{
 			{
-				ComparisonFunc::eNever,				// Depth
-				ComparisonFunc::eGreaterOrEqual,	// Linear
-				ComparisonFunc::eNever,				// Variance
-				ComparisonFunc::eNever,				// Normal
-				ComparisonFunc::eNever,				// Position
-				ComparisonFunc::eNever,				// Flux
+				ComparisonFunc::eNever, // Depth
+				ComparisonFunc::eGreaterOrEqual, // Linear
+				ComparisonFunc::eNever, // Variance
+				ComparisonFunc::eNever, // Normal
+				ComparisonFunc::eNever, // Position
+				ComparisonFunc::eNever, // Flux
 			}
 		};
 		return Values[size_t( texture )];
@@ -114,7 +114,7 @@ namespace castor3d
 		, castor::Size const & size )
 	{
 		return texture == SmTexture::eVariance
-			? getMipLevels( VkExtent3D{ size.getWidth(), size.getHeight(), 1u }
+			? getMipLevels( Extent3D{ size.getWidth(), size.getHeight(), 1u }
 				, getFormat( device, texture ) )
 			: 1u;
 	}
@@ -124,7 +124,7 @@ namespace castor3d
 	ShadowMapResult::ShadowMapResult( crg::ResourcesCache & resources
 		, RenderDevice const & device
 		, castor::String const & prefix
-		, VkImageCreateFlags createFlags
+		, ImageCreateFlags createFlags
 		, castor::Size const & size
 		, uint32_t layerCount )
 		: GBufferT< SmTexture >{ resources

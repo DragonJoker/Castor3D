@@ -330,7 +330,7 @@ namespace castor3d
 			}
 		}
 
-		static crg::rq::Config getConfig( VkExtent2D const & renderSize
+		static crg::rq::Config getConfig( Extent2D const & renderSize
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
 			crg::rq::Config result;
@@ -348,7 +348,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, LightType lightType
 		, ShadowBuffer const & shadowBuffer
-		, VkExtent3D const & size
+		, Extent3D const & size
 		, CameraUbo const & cameraUbo
 		, crg::ImageViewId const & depthObj
 		, crg::ImageViewId const & nmlOcc

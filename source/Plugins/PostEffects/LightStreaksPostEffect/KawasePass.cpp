@@ -75,7 +75,7 @@ namespace light_streaks
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & srcImages
 			, crg::ImageViewIdArray const & dstImages
-			, VkExtent2D dimensions
+			, castor3d::Extent2D dimensions
 			, ashes::PipelineShaderStageCreateInfoArray const & stages
 			, KawaseUbo const & kawaseUbo
 			, bool const * enabled
@@ -135,7 +135,7 @@ namespace light_streaks
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & srcView
 		, crg::ImageViewId const & dstView
-		, VkExtent2D dimensions
+		, castor3d::Extent2D dimensions
 		, ashes::PipelineShaderStageCreateInfoArray const & stages
 		, KawaseUbo const & kawaseUbo
 		, uint32_t index
@@ -181,7 +181,7 @@ namespace light_streaks
 		, crg::ImageViewIdArray const & hiViews
 		, crg::ImageViewIdArray const & kawaseViews
 		, KawaseUbo & kawaseUbo
-		, VkExtent2D dimensions
+		, castor3d::Extent2D dimensions
 		, bool const * enabled )
 		: m_device{ device }
 		, m_kawaseUbo{ kawaseUbo }

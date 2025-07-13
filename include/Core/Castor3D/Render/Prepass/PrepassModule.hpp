@@ -31,8 +31,8 @@ namespace castor3d
 	C3D_API castor::String getTextureName( PpTexture texture );
 	C3D_API castor::String getTexName( PpTexture texture );
 	C3D_API castor::PixelFormat getFormat( RenderDevice const & device, PpTexture texture );
-	C3D_API VkClearValue getClearValue( PpTexture texture );
-	C3D_API VkImageUsageFlags getUsageFlags( PpTexture texture );
+	C3D_API ClearValue getClearValue( PpTexture texture );
+	C3D_API ImageUsageFlags getUsageFlags( PpTexture texture );
 	C3D_API BorderColour getBorderColor( PpTexture texture );
 	inline uint32_t getMipLevels( RenderDevice const & /*device*/
 		, PpTexture /*texture*/

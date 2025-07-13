@@ -216,7 +216,7 @@ namespace castor3d
 		 *\param[in]		toWait		Les sémaphores à attendre.
 		 */
 		C3D_API void render( bool signalOnly
-			, crg::SemaphoreWaitArray & toWait );
+			, SemaphoreWaitArray & toWait );
 		/**
 		 *\~english
 		 *\brief		Resizes the window.
@@ -495,20 +495,20 @@ namespace castor3d
 		void doResetSwapChain();
 		void doResetSwapChainAndCommands();
 		RenderingResources * doGetResources();
-		crg::SemaphoreWaitArray doSubmitLoadingFrame( QueueData const & queueData
+		SemaphoreWaitArray doSubmitLoadingFrame( QueueData const & queueData
 			, RenderingResources const & resources
 			, LoadingScreen & loadingScreen
 			, crg::Fence *& fence
-			, crg::SemaphoreWaitArray toWait );
+			, SemaphoreWaitArray toWait );
 		void doPresentLoadingFrame( QueueData const & queueData
 			, crg::Fence * fence
 			, RenderingResources & resources
-			, crg::SemaphoreWaitArray const & toWait );
+			, SemaphoreWaitArray const & toWait );
 		void doWaitFrame( QueueData const & queueData
-			, crg::SemaphoreWaitArray const & toWait );
+			, SemaphoreWaitArray const & toWait );
 		void doSubmitFrame( QueueData const & queueData
 			, RenderingResources const * resources
-			, crg::SemaphoreWaitArray const & toWait );
+			, SemaphoreWaitArray const & toWait );
 		void doPresentFrame( QueueData const & queueData
 			, RenderingResources * resources );
 		bool doCheckNeedReset( VkResult errCode

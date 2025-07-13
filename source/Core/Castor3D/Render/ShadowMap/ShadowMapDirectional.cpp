@@ -149,24 +149,24 @@ namespace castor3d
 			, device
 			, scene
 			, LightType::eDirectional
-			, 0u
+			, ImageCreateFlags::eNone
 			, { ShadowMapDirectionalTextureSize, ShadowMapDirectionalTextureSize }
 			, scene.getDirectionalShadowCascades()
 			, 1u }
 		, m_blurIntermediate{ resources.getHandler().createImageId( crg::ImageData{ "DirectionalGB"
-			, 0u
+			, ImageCreateFlags::eNone
 			, ImageType::e2D
 			, getFormat( device, SmTexture::eVariance )
 			, ( *m_result.begin() )->getExtent()
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
+			, ( ImageUsageFlags::eColorAttachment
+				| ImageUsageFlags::eSampled
+				| ImageUsageFlags::eTransferSrc ) } ) }
 		, m_blurIntermediateView{ resources.getHandler().createViewId( crg::ImageViewData{ m_blurIntermediate.data->name
 			, m_blurIntermediate
-			, 0u
+			, ImageViewCreateFlags::eNone
 			, ImageViewType::e2D
 			, getFormat( m_blurIntermediate )
-			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
+			, { ImageAspectFlags::eColor , 0u, 1u, 0u, 1u } } ) }
 		, m_cascades{ scene.getDirectionalShadowCascades() }
 	{
 #if C3D_DebugCascadeFrustum
@@ -298,19 +298,19 @@ namespace castor3d
 			{
 				if ( isStatic )
 				{
-					pass.addOutputDepthView( depth.targetViewId, getClearValue( SmTexture::eDepth ) );
-					pass.addOutputColourView( linear.targetViewId, getClearValue( SmTexture::eLinearDepth ) );
+					pass.addOutputDepthView( depth.targetViewId, getClearValue( SmTexture::eDepth ).depthStencil() );
+					pass.addOutputColourView( linear.targetViewId, getClearValue( SmTexture::eLinearDepth ).color() );
 
 					if ( vsm )
 					{
-						pass.addOutputColourView( variance.targetViewId, getClearValue( SmTexture::eVariance ) );
+						pass.addOutputColourView( variance.targetViewId, getClearValue( SmTexture::eVariance ).color() );
 					}
 
 					if ( rsm )
 					{
-						pass.addOutputColourView( normal.targetViewId, getClearValue( SmTexture::eNormal ) );
-						pass.addOutputColourView( position.targetViewId, getClearValue( SmTexture::ePosition ) );
-						pass.addOutputColourView( flux.targetViewId, getClearValue( SmTexture::eFlux ) );
+						pass.addOutputColourView( normal.targetViewId, getClearValue( SmTexture::eNormal ).color() );
+						pass.addOutputColourView( position.targetViewId, getClearValue( SmTexture::ePosition ).color() );
+						pass.addOutputColourView( flux.targetViewId, getClearValue( SmTexture::eFlux ).color() );
 					}
 				}
 				else
@@ -393,19 +393,19 @@ namespace castor3d
 			{
 				if ( isStatic )
 				{
-					pass.addOutputDepthView( depth.subViewsId[cascade], getClearValue( SmTexture::eDepth ) );
-					pass.addOutputColourView( linear.subViewsId[cascade], getClearValue( SmTexture::eLinearDepth ) );
+					pass.addOutputDepthView( depth.subViewsId[cascade], getClearValue( SmTexture::eDepth ).depthStencil() );
+					pass.addOutputColourView( linear.subViewsId[cascade], getClearValue( SmTexture::eLinearDepth ).color() );
 
 					if ( vsm )
 					{
-						pass.addOutputColourView( variance.subViewsId[cascade], getClearValue( SmTexture::eVariance ) );
+						pass.addOutputColourView( variance.subViewsId[cascade], getClearValue( SmTexture::eVariance ).color() );
 					}
 
 					if ( rsm )
 					{
-						pass.addOutputColourView( normal.subViewsId[cascade], getClearValue( SmTexture::eNormal ) );
-						pass.addOutputColourView( position.subViewsId[cascade], getClearValue( SmTexture::ePosition ) );
-						pass.addOutputColourView( flux.subViewsId[cascade], getClearValue( SmTexture::eFlux ) );
+						pass.addOutputColourView( normal.subViewsId[cascade], getClearValue( SmTexture::eNormal ).color() );
+						pass.addOutputColourView( position.subViewsId[cascade], getClearValue( SmTexture::ePosition ).color() );
+						pass.addOutputColourView( flux.subViewsId[cascade], getClearValue( SmTexture::eFlux ).color() );
 					}
 				}
 				else

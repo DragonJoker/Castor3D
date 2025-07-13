@@ -15,7 +15,7 @@ namespace castor3d
 	struct RenderNodesPassDesc
 	{
 	private:
-		RenderNodesPassDesc( VkExtent3D size
+		RenderNodesPassDesc( Extent3D size
 			, CameraUbo const & cameraUbo
 			, SceneUbo const * sceneUbo
 			, SceneCuller & culler
@@ -30,7 +30,7 @@ namespace castor3d
 		}
 
 	public:
-		RenderNodesPassDesc( VkExtent3D size
+		RenderNodesPassDesc( Extent3D size
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, SceneCuller & culler
@@ -58,7 +58,7 @@ namespace castor3d
 		 *\param[in]	cameraUbo	L'UBO des matrices de la scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */
-		RenderNodesPassDesc( VkExtent3D size
+		RenderNodesPassDesc( Extent3D size
 			, CameraUbo const & cameraUbo
 			, SceneCuller & culler )
 			: RenderNodesPassDesc{ castor::move( size )
@@ -84,7 +84,7 @@ namespace castor3d
 		 *\param[in]	sceneUbo	L'UBO de scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */
-		RenderNodesPassDesc( VkExtent3D size
+		RenderNodesPassDesc( Extent3D size
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, SceneCuller & culler )
@@ -113,7 +113,7 @@ namespace castor3d
 		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	oit			Le statut de rendu indépendant de l'ordre des objets.
 		 */
-		RenderNodesPassDesc( VkExtent3D size
+		RenderNodesPassDesc( Extent3D size
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, SceneCuller & culler

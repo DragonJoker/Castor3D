@@ -12,7 +12,7 @@ namespace castor3d::shader
 {
 	BackgroundModel::BackgroundModel( sdw::ShaderWriter & writer
 		, Utils & utils
-		, VkExtent2D targetSize
+		, Extent2D targetSize
 		, bool reflectionSupport
 		, bool refractionSupport
 		, bool iblSupport )
@@ -28,7 +28,7 @@ namespace castor3d::shader
 	BackgroundModelPtr BackgroundModel::createModel( Scene const & scene
 		, sdw::ShaderWriter & writer
 		, Utils & utils
-		, VkExtent2D targetSize
+		, Extent2D targetSize
 		, bool needsForeground
 		, uint32_t & binding
 		, uint32_t set )

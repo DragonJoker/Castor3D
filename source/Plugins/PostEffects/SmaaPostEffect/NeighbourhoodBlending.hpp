@@ -49,7 +49,7 @@ namespace smaa
 		crg::FramePassGroup & m_graph;
 		crg::ImageViewId const & m_blendView;
 		crg::ImageViewId const * m_velocityView;
-		VkExtent3D m_extent;
+		castor3d::Extent3D m_extent;
 		castor3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		castor3d::TextureArray m_images;

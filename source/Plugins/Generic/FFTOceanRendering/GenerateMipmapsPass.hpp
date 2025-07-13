@@ -38,7 +38,7 @@ namespace ocean_fft
 		static castor::MbString const Name;
 
 	private:
-		crg::LayoutState m_outputLayout;
+		castor3d::LayoutState m_outputLayout;
 		castor3d::RenderDevice const & m_device;
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;

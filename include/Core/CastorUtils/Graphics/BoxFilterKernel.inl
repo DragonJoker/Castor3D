@@ -56,15 +56,16 @@ namespace castor
 	}
 
 	template< PixelFormat PFT >
-	void KernelBoxFilterT< PFT >::compute( VkExtent2D const & fullExtent
+	void KernelBoxFilterT< PFT >::compute( crg::Extent2D const & fullExtent
 		, uint8_t const * srcBuffer
 		, uint8_t * dstBuffer
 		, uint32_t level
 		, CU_UnusedParam( uint32_t, levelSize ) )
 	{
 		auto pixelSize = getBytesPerPixel( PFT );
-		auto srcLevelExtent = ashes::getSubresourceDimensions( fullExtent, level - 1u, VkFormat( PFT ) );
-		auto dstLevelExtent = ashes::getSubresourceDimensions( fullExtent, level, VkFormat( PFT ) );
+		auto vkExtent = convert( fullExtent );
+		auto srcLevelExtent = ashes::getSubresourceDimensions( vkExtent, level - 1u, VkFormat( PFT ) );
+		auto dstLevelExtent = ashes::getSubresourceDimensions( vkExtent, level, VkFormat( PFT ) );
 		auto srcLineSize = pixelSize * srcLevelExtent.width;
 		auto dstLineSize = pixelSize * dstLevelExtent.width;
 

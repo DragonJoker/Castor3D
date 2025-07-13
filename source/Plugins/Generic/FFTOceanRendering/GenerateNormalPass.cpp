@@ -16,6 +16,8 @@
 #include <ashespp/Pipeline/ComputePipeline.hpp>
 #include <ashespp/Pipeline/PipelineLayout.hpp>
 
+#include <RenderGraph/RunnableGraph.hpp>
+
 #include <ShaderWriter/Source.hpp>
 
 namespace ocean_fft
@@ -45,21 +47,21 @@ namespace ocean_fft
 		{
 			ashes::WriteDescriptorSetArray writes;
 
-			auto write = pass.buffers[GenerateNormalPass::eConfig].getBufferWrite();
+			auto write = graph.getBufferWrite( pass.buffers[GenerateNormalPass::eConfig] );
 			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
 				, write->descriptorType } );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			write = pass.buffers[GenerateNormalPass::eInput].getBufferWrite();
+			write = graph.getBufferWrite( pass.buffers[GenerateNormalPass::eInput] );
 			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
 				, write->descriptorType } );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			write = pass.buffers[GenerateNormalPass::eOutput].getBufferWrite();
+			write = graph.getBufferWrite( pass.buffers[GenerateNormalPass::eOutput] );
 			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
@@ -182,7 +184,7 @@ namespace ocean_fft
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, castor3d::RenderDevice const & device
-		, VkExtent2D const & extent
+		, castor3d::Extent2D const & extent
 		, crg::RunnablePass::IsEnabledCallback isEnabled )
 		: crg::RunnablePass{ pass
 			, context

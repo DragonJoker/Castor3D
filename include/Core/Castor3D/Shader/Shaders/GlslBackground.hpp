@@ -13,7 +13,7 @@ namespace castor3d::shader
 	public:
 		C3D_API BackgroundModel( sdw::ShaderWriter & writer
 			, Utils & utils
-			, VkExtent2D targetSize
+			, Extent2D targetSize
 			, bool reflectionSupport
 			, bool refractionSupport
 			, bool iblSupport );
@@ -22,7 +22,7 @@ namespace castor3d::shader
 		C3D_API static BackgroundModelPtr createModel( Scene const & scene
 			, sdw::ShaderWriter & writer
 			, Utils & utils
-			, VkExtent2D targetSize
+			, Extent2D targetSize
 			, bool needsForeground
 			, uint32_t & binding
 			, uint32_t set );
@@ -72,7 +72,7 @@ namespace castor3d::shader
 			, sdw::Float const & NdotV
 			, sdw::Float const & roughness );
 
-		VkExtent2D const & getTargetSize()const noexcept
+		Extent2D const & getTargetSize()const noexcept
 		{
 			return m_targetSize;
 		}
@@ -95,7 +95,7 @@ namespace castor3d::shader
 	protected:
 		sdw::ShaderWriter & m_writer;
 		Utils & m_utils;
-		VkExtent2D m_targetSize;
+		Extent2D m_targetSize;
 		bool m_reflectionSupport{};
 		bool m_refractionSupport{};
 		bool m_iblSupport{};

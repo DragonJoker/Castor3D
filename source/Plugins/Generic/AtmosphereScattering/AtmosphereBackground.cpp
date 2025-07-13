@@ -172,7 +172,7 @@ namespace atmosphere_scattering
 		, castor3d::SceneUbo const & sceneUbo
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, CloudsUbo const & cloudsUbo
-		, VkExtent2D const & size
+		, castor3d::Extent2D const & size
 		, castor::Point2ui const & skyViewResolution
 		, uint32_t volumeResolution
 		, uint32_t index
@@ -181,79 +181,55 @@ namespace atmosphere_scattering
 		: skyView{ device
 			, background.getScene().getResources()
 			, cuT( "AtmosphereSkyView" ) + castor::string::toString( index )
-			, 0u
-			, { skyViewResolution->x, skyViewResolution->y, 1u }
-			, 1u
-			, 1u
-			, castor::PixelFormat::eB10G11R11_UFLOAT
-			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
-			, castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest }
+			, {castor3d::ImageCreateFlags::eNone
+				, { skyViewResolution->x, skyViewResolution->y, 1u }, 1u, 1u
+				, castor::PixelFormat::eB10G11R11_UFLOAT
+				, castor3d::ImageUsageFlags::eColorAttachment | castor3d::ImageUsageFlags::eSampled }
+			, { { .mipFilter = castor3d::MipmapMode::eNearest } } }
 		, volume{ device
 			, background.getScene().getResources()
 			, cuT( "AtmosphereVolume" ) + castor::string::toString( index )
-			, 0u
-			, { volumeResolution, volumeResolution, volumeResolution }
-			, 1u
-			, 1u
-			, castor::PixelFormat::eR16G16B16A16_SFLOAT
-			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
-			, castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest }
+			, { castor3d::ImageCreateFlags::eNone
+				, { volumeResolution, volumeResolution, volumeResolution }, 1u, 1u
+				, castor::PixelFormat::eR16G16B16A16_SFLOAT
+				, castor3d::ImageUsageFlags::eColorAttachment | castor3d::ImageUsageFlags::eSampled }
+			, { { .mipFilter = castor3d::MipmapMode::eNearest } } }
 		, skyColour{ device
 			, background.getScene().getResources()
 			, cuT( "SkyColour" ) + castor::string::toString( index )
-			, 0u
-			, { size.width, size.height, 1u }
-			, 1u
-			, 1u
-			, castor::PixelFormat::eR16G16B16A16_SFLOAT
-			, VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-			, castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest
-			, castor3d::WrapMode::eRepeat }
+			, { castor3d::ImageCreateFlags::eNone
+				, { size.width, size.height, 1u }, 1u, 1u
+				, castor::PixelFormat::eR16G16B16A16_SFLOAT
+				, castor3d::ImageUsageFlags::eStorage | castor3d::ImageUsageFlags::eSampled | castor3d::ImageUsageFlags::eColorAttachment }
+			, { { .addressMode = castor3d::WrapMode::eRepeat
+				, .mipFilter = castor3d::MipmapMode::eNearest } } }
 		, sunColour{ device
 			, background.getScene().getResources()
 			, cuT( "SunColour" ) + castor::string::toString( index )
-			, 0u
-			, { size.width, size.height, 1u }
-			, 1u
-			, 1u
-			, castor::PixelFormat::eR16G16B16A16_SFLOAT
-			, VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-			, castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest
-			, castor3d::WrapMode::eRepeat }
+			, { castor3d::ImageCreateFlags::eNone
+				, { size.width, size.height, 1u }, 1u, 1u
+				, castor::PixelFormat::eR16G16B16A16_SFLOAT
+				, castor3d::ImageUsageFlags::eStorage | castor3d::ImageUsageFlags::eSampled | castor3d::ImageUsageFlags::eColorAttachment }
+			, { { .addressMode = castor3d::WrapMode::eRepeat
+				, .mipFilter = castor3d::MipmapMode::eNearest } } }
 		, cloudsColour{ device
 			, background.getScene().getResources()
 			, cuT( "CloudsColour" ) + castor::string::toString( index )
-			, 0u
-			, { size.width, size.height, 1u }
-			, 1u
-			, 1u
-			, castor::PixelFormat::eR16G16B16A16_SFLOAT
-			, VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-			, castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest
-			, castor3d::WrapMode::eRepeat }
+			, { castor3d::ImageCreateFlags::eNone
+				, { size.width, size.height, 1u }, 1u, 1u
+				, castor::PixelFormat::eR16G16B16A16_SFLOAT
+				, castor3d::ImageUsageFlags::eStorage | castor3d::ImageUsageFlags::eSampled | castor3d::ImageUsageFlags::eColorAttachment }
+			, { { .addressMode = castor3d::WrapMode::eRepeat
+				, .mipFilter = castor3d::MipmapMode::eNearest } } }
 		, cloudsResult{ device
 			, background.getScene().getResources()
 			, cuT( "CloudsResult" ) + castor::string::toString( index )
-			, 0u
-			, { size.width, size.height, 1u }
-			, 1u
-			, 1u
-			, castor::PixelFormat::eR16G16B16A16_SFLOAT
-			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
-			, castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest
-			, castor3d::WrapMode::eRepeat }
+			, { castor3d::ImageCreateFlags::eNone
+				, { size.width, size.height, 1u }, 1u, 1u
+				, castor::PixelFormat::eR16G16B16A16_SFLOAT
+				, castor3d::ImageUsageFlags::eColorAttachment | castor3d::ImageUsageFlags::eSampled }
+			, { { .addressMode = castor3d::WrapMode::eRepeat
+				, .mipFilter = castor3d::MipmapMode::eNearest } } }
 		, cameraUbo{ device, camAtmoChanged }
 		, skyViewPass{ castor::make_unique< AtmosphereSkyViewPass >( graph
 			, crg::FramePassArray{ &transmittancePass }
@@ -571,7 +547,7 @@ namespace atmosphere_scattering
 	crg::FramePass & AtmosphereBackground::createBackgroundPass( crg::FramePassGroup & graph
 		, castor3d::RenderDevice const & device
 		, castor3d::ProgressBar * progress
-		, VkExtent2D const & size
+		, castor3d::Extent2D const & size
 		, crg::ImageViewIdArray const & colour
 		, crg::ImageViewIdArray const & depth
 		, crg::ImageViewId const * depthObj
@@ -706,16 +682,12 @@ namespace atmosphere_scattering
 		m_worley = castor3d::Texture{ device
 			, resources
 			, cuT( "WorleyNoise" )
-			, 0u
-			, { dimension, dimension, dimension }
-			, 1u
-			, castor3d::getMipLevels( VkExtent3D{ dimension, dimension, dimension }, castor::PixelFormat::eR8G8B8A8_UNORM )
-			, castor::PixelFormat::eR8G8B8A8_UNORM
-			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT
-			, castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eLinear
-			, castor3d::WrapMode::eRepeat };
+			, { castor3d::ImageCreateFlags::eNone
+				, { dimension, dimension, dimension }, 1u
+				, castor3d::getMipLevels( castor3d::Extent3D{ dimension, dimension, dimension }, castor::PixelFormat::eR8G8B8A8_UNORM )
+				, castor::PixelFormat::eR8G8B8A8_UNORM
+				, castor3d::ImageUsageFlags::eSampled | castor3d::ImageUsageFlags::eTransferSrc | castor3d::ImageUsageFlags::eTransferDst | castor3d::ImageUsageFlags::eStorage }
+			, { { .addressMode = castor3d::WrapMode::eRepeat } } };
 		notifyChanged();
 	}
 
@@ -727,16 +699,12 @@ namespace atmosphere_scattering
 		m_perlinWorley = castor3d::Texture{ device
 			, resources
 			, cuT( "PerlinWorleyNoise" )
-			, 0u
-			, { dimension, dimension, dimension }
-			, 1u
-			, castor3d::getMipLevels( VkExtent3D{ dimension, dimension , dimension }, castor::PixelFormat::eR8G8B8A8_UNORM )
-			, castor::PixelFormat::eR8G8B8A8_UNORM
-			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT
-			, castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eLinear
-			, castor3d::WrapMode::eRepeat };
+			, { castor3d::ImageCreateFlags::eNone
+				, { dimension, dimension, dimension }, 1u
+				, castor3d::getMipLevels( castor3d::Extent3D{ dimension, dimension , dimension }, castor::PixelFormat::eR8G8B8A8_UNORM )
+				, castor::PixelFormat::eR8G8B8A8_UNORM
+				, castor3d::ImageUsageFlags::eSampled | castor3d::ImageUsageFlags::eTransferSrc | castor3d::ImageUsageFlags::eTransferDst | castor3d::ImageUsageFlags::eStorage }
+			, { { .addressMode = castor3d::WrapMode::eRepeat } } };
 		notifyChanged();
 	}
 
@@ -748,16 +716,12 @@ namespace atmosphere_scattering
 		m_curl = castor3d::Texture{ device
 			, resources
 			, cuT( "CurlNoise" )
-			, 0u
-			, { dimension, dimension, 1u }
-			, 1u
-			, 1u
-			, castor::PixelFormat::eR8G8_UNORM
-			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT
-			, castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest
-			, castor3d::WrapMode::eRepeat };
+			, { castor3d::ImageCreateFlags::eNone
+				, { dimension, dimension, 1u }, 1u, 1u
+				, castor::PixelFormat::eR8G8_UNORM
+				, castor3d::ImageUsageFlags::eSampled | castor3d::ImageUsageFlags::eTransferSrc | castor3d::ImageUsageFlags::eTransferDst | castor3d::ImageUsageFlags::eStorage }
+			, { { .addressMode = castor3d::WrapMode::eRepeat
+				, .mipFilter = castor3d::MipmapMode::eNearest } } };
 		notifyChanged();
 	}
 
@@ -769,16 +733,12 @@ namespace atmosphere_scattering
 		m_weather = castor3d::Texture{ device
 			, resources
 			, cuT( "Weather" )
-			, 0u
-			, { dimension, dimension, 1u }
-			, 1u
-			, 1u
-			, castor::PixelFormat::eR32G32_SFLOAT
-			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-			, castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest
-			, castor3d::WrapMode::eRepeat };
+			, { castor3d::ImageCreateFlags::eNone
+				, { dimension, dimension, 1u }, 1u, 1u
+				, castor::PixelFormat::eR32G32_SFLOAT
+				, castor3d::ImageUsageFlags::eSampled | castor3d::ImageUsageFlags::eStorage | castor3d::ImageUsageFlags::eColorAttachment }
+			, { { .addressMode = castor3d::WrapMode::eRepeat
+				, .mipFilter = castor3d::MipmapMode::eNearest } } };
 		notifyChanged();
 	}
 
@@ -789,15 +749,11 @@ namespace atmosphere_scattering
 		m_transmittance = castor3d::Texture{ device
 			, resources
 			, cuT( "Transmittance" )
-			, 0u
-			, { dimensions->x, dimensions->y, 1u }
-			, 1u
-			, 1u
+			, { castor3d::ImageCreateFlags::eNone
+			, { dimensions->x, dimensions->y, 1u }, 1u, 1u
 			, castor::PixelFormat::eR16G16B16A16_SFLOAT
-			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
-			, castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest };
+			, castor3d::ImageUsageFlags::eColorAttachment | castor3d::ImageUsageFlags::eSampled }
+			, { { .mipFilter = castor3d::MipmapMode::eNearest } } };
 		notifyChanged();
 	}
 
@@ -808,15 +764,11 @@ namespace atmosphere_scattering
 		m_multiScatter = castor3d::Texture{ device
 			, resources
 			, cuT( "MultiScatter" )
-			, 0u
-			, { dimension, dimension, 1u }
-			, 1u
-			, 1u
-			, castor::PixelFormat::eR16G16B16A16_SFLOAT
-			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT
-			, castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest };
+			, { castor3d::ImageCreateFlags::eNone
+				, { dimension, dimension, 1u }, 1u, 1u
+				, castor::PixelFormat::eR16G16B16A16_SFLOAT
+				, castor3d::ImageUsageFlags::eColorAttachment | castor3d::ImageUsageFlags::eSampled | castor3d::ImageUsageFlags::eStorage }
+			, { { .mipFilter = castor3d::MipmapMode::eNearest } } };;
 		notifyChanged();
 	}
 
@@ -839,15 +791,11 @@ namespace atmosphere_scattering
 		m_textureId = castor3d::Texture{ device
 			, resources
 			, cuT( "Dummy" )
-			, 0u
-			, { SkyTexSize, SkyTexSize, 1u }
-			, 1u
-			, 1u
-			, castor::PixelFormat::eB10G11R11_UFLOAT
-			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
-			, castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest };
+			, { castor3d::ImageCreateFlags::eNone
+				, { SkyTexSize, SkyTexSize, 1u }, 1u, 1u
+				, castor::PixelFormat::eB10G11R11_UFLOAT
+				, castor3d::ImageUsageFlags::eColorAttachment | castor3d::ImageUsageFlags::eSampled }
+			, { { .mipFilter = castor3d::MipmapMode::eNearest } } };
 		m_transmittance.create();
 		m_multiScatter.create();
 		m_textureId.create();

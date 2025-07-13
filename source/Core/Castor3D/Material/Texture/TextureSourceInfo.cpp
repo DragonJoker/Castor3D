@@ -62,10 +62,10 @@ namespace castor3d
 
 	TextureSourceInfo::TextureSourceInfo( castor::String name
 		, TextureConfiguration textureConfig
-		, ashes::ImageCreateInfo const & createInfo )
+		, ImageCreateInfo createInfo )
 		: m_name{ castor::move( name ) }
 		, m_textureConfig{ castor::move( textureConfig ) }
-		, m_createInfo{ static_cast< VkImageCreateInfo  const & >( createInfo ) }
+		, m_createInfo{ castor::move( createInfo ) }
 	{
 	}
 

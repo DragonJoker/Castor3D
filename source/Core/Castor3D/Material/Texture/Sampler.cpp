@@ -412,7 +412,7 @@ namespace castor3d
 	SamplerObs createSampler( Engine & engine
 		, castor::String const & baseName
 		, FilterMode filter
-		, VkImageSubresourceRange const * range )
+		, ImageSubresourceRange const * range )
 	{
 		castor::String const name = baseName
 			+ cuT( "_" ) + castor::makeString( getName( filter ) )

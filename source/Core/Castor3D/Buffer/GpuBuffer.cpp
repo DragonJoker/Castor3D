@@ -49,8 +49,8 @@ namespace castor3d
 			, dst );
 		auto dstDstStage = dst.getCompatibleStageFlags();
 		commandBuffer.memoryBarrier( dstDstStage
-			, convert( dstPipelineFlags )
-			, dst.makeMemoryTransitionBarrier( convert( dstAccessFlags ) ) );
+			, getPipelineStageFlags( dstPipelineFlags )
+			, dst.makeMemoryTransitionBarrier( getAccessFlags( dstAccessFlags ) ) );
 	}
 
 	void updateBuffer( ashes::CommandBuffer const & commandBuffer
@@ -74,8 +74,8 @@ namespace castor3d
 
 		auto dstDstStage = dst.getCompatibleStageFlags();
 		commandBuffer.memoryBarrier( dstDstStage
-			, convert( dstPipelineFlags )
-			, dst.makeMemoryTransitionBarrier( convert( dstAccessFlags ) ) );
+			, getPipelineStageFlags( dstPipelineFlags )
+			, dst.makeMemoryTransitionBarrier( getAccessFlags( dstAccessFlags ) ) );
 	}
 
 	//*********************************************************************************************
@@ -123,7 +123,7 @@ namespace castor3d
 	void GpuBufferBase::upload( UploadData & staging
 		, VkDeviceSize offset
 		, VkDeviceSize size
-		, crg::AccessState dstAccessState )
+		, AccessState dstAccessState )
 	{
 		auto [o, s] = adaptRange( offset
 			, size
@@ -137,7 +137,7 @@ namespace castor3d
 
 	void GpuBufferBase::markDirty( VkDeviceSize offset
 		, VkDeviceSize size
-		, crg::AccessState dstAccessState )
+		, AccessState dstAccessState )
 	{
 		auto hash = std::hash< int32_t >{}( int32_t( dstAccessState.access ) );
 		hash = castor::hashCombine( hash, int32_t( dstAccessState.pipelineStage ) );

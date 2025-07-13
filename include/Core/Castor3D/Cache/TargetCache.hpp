@@ -101,10 +101,10 @@ namespace castor3d
 		 *\param[in]		signalsToWait	Les sémaphores et stages à attendre.
 		 *\return			Les sémaphores et stages qui seront signalés.
 		 */
-		C3D_API crg::SemaphoreWaitArray render( RenderDevice const & device
+		C3D_API SemaphoreWaitArray render( RenderDevice const & device
 			, RenderInfo & info
 			, ashes::Queue const & queue
-			, crg::SemaphoreWaitArray signalsToWait );
+			, SemaphoreWaitArray signalsToWait );
 		/**
 		 *\~english
 		 *\brief		Cleans up the collection.

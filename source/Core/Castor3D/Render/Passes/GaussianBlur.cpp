@@ -147,15 +147,15 @@ namespace castor3d
 			result.info.subresourceRange.layerCount = 1u;
 			result.info.subresourceRange.levelCount = 1u;
 
-			if ( result.info.viewType == VK_IMAGE_VIEW_TYPE_1D_ARRAY )
+			if ( result.info.viewType == ImageViewType::e1DArray )
 			{
-				result.info.viewType = VK_IMAGE_VIEW_TYPE_1D;
+				result.info.viewType = ImageViewType::e1D;
 			}
-			else if ( result.info.viewType == VK_IMAGE_VIEW_TYPE_2D_ARRAY
-				|| result.info.viewType == VK_IMAGE_VIEW_TYPE_CUBE_ARRAY
-				|| result.info.viewType == VK_IMAGE_VIEW_TYPE_3D )
+			else if ( result.info.viewType == ImageViewType::e2DArray
+				|| result.info.viewType == ImageViewType::eCubeArray
+				|| result.info.viewType == ImageViewType::e3D )
 			{
-				result.info.viewType = VK_IMAGE_VIEW_TYPE_2D;
+				result.info.viewType = ImageViewType::e2D;
 			}
 
 			result.name = source.data->name;
@@ -167,27 +167,27 @@ namespace castor3d
 		static crg::ImageViewId createIntermediate( crg::FramePassGroup const & graph
 			, castor::String const & prefix
 			, castor::PixelFormat format
-			, VkExtent3D const & size
+			, Extent3D const & size
 			, uint32_t mipLevels )
 		{
 			auto mbPrefix = castor::toUtf8( prefix );
 			auto intermediate = graph.createImage( crg::ImageData{ mbPrefix + "GB"
-				, 0u
+				, ImageCreateFlags::eNone
 				, ImageType::e2D
 				, format
 				, { size.width, size.height, 1u }
-				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT
+				, ( ImageUsageFlags::eColorAttachment
+					| ImageUsageFlags::eSampled
 					| ( mipLevels > 1u
-						? ( VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
-						: 0u ) )
+						? ( ImageUsageFlags::eTransferDst | ImageUsageFlags::eTransferSrc )
+						: ImageUsageFlags::eNone ) )
 				, mipLevels } );
 			return graph.createView( crg::ImageViewData{ mbPrefix + "GB"
 				, intermediate
-				, 0u
+				, ImageViewCreateFlags::eNone
 				, ImageViewType::e2D
 				, format
-				, { ashes::getAspectMask( convert( format ) ), 0u, mipLevels, 0u, 1u } } );
+				, { getAspectMask( format ), 0u, mipLevels, 0u, 1u } } );
 		}
 
 		static crg::ImageViewIdArray createViews( crg::FramePassGroup const & graph

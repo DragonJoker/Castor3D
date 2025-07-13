@@ -44,7 +44,7 @@ namespace castor3d
 			if ( ubo == &src )
 			{
 				commandBuffer.memoryBarrier( srcSrcStage
-					, convert( flags )
+					, getPipelineStageFlags( flags )
 					, src.makeUniformBufferInput() );
 			}
 			else
@@ -57,7 +57,7 @@ namespace castor3d
 			if ( ubo == &dst )
 			{
 				commandBuffer.memoryBarrier( dstSrcStage
-					, convert( flags )
+					, getPipelineStageFlags( flags )
 					, dst.makeUniformBufferInput() );
 			}
 			else

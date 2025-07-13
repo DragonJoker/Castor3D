@@ -166,7 +166,7 @@ namespace castor3d
 		}
 
 		void markDirty( VkDeviceSize size
-			, crg::AccessState dstAccessState )const
+			, AccessState dstAccessState )const
 		{
 			buffer->markDirty( getOffset()
 				, std::min( size, getSize() )
@@ -183,7 +183,7 @@ namespace castor3d
 				, dstPipelineFlags );
 		}
 
-		void markDirty( crg::AccessState dstAccessState )const
+		void markDirty( AccessState dstAccessState )const
 		{
 			markDirty( getSize(), std::move( dstAccessState ) );
 		}

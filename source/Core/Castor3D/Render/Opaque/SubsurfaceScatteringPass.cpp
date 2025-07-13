@@ -319,19 +319,17 @@ namespace castor3d
 			, castor::PixelFormat format
 			, castor::String const & name )
 		{
-			return { device
+			return Texture{ device
 				, resources
 				, name
-				, 0u
-				, makeExtent3D( size )
-				, 1u
-				, 1u
-				, format
-				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_STORAGE_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
-				, BorderColour::eFloatTransparentBlack };
+				, { ImageCreateFlags::eNone
+					, makeExtent3D( size ), 1u, 1u
+					, format
+					, ( ImageUsageFlags::eColorAttachment
+						| ImageUsageFlags::eSampled
+						| ImageUsageFlags::eStorage
+						| ImageUsageFlags::eTransferDst ) }
+				, { BorderColour::eFloatTransparentBlack } };
 		}
 
 		static crg::rq::Config createConfig( castor::Size const & size

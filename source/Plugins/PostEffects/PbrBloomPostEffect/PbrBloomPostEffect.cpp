@@ -99,17 +99,17 @@ namespace PbrBloom
 		m_extent = target.getExtent();
 		data->x = float( m_blurRadius ) / float( std::max( m_extent.width, m_extent.height ) );
 		data->y = m_bloomStrength;
-		auto extent = ashes::getSubresourceDimensions( m_extent, 1u );
+		auto extent = ashes::getSubresourceDimensions( convert( m_extent ), 1u );
 		auto mipCount = ashes::getMaxMipCount( extent );
 		m_intermediateImg = m_graph.createImage( crg::ImageData{ "PBLInt"
-			, 0u
+			, castor3d::ImageCreateFlags::eNone
 			, castor3d::ImageType::e2D
 			, target.getFormat()
-			, extent
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
+			, castor::convert( extent )
+			, ( castor3d::ImageUsageFlags::eColorAttachment
+				| castor3d::ImageUsageFlags::eSampled
+				| castor3d::ImageUsageFlags::eTransferSrc
+				| castor3d::ImageUsageFlags::eTransferDst )
 			, mipCount } );
 
 		m_duPassesCount = std::min( m_duPassesCount, mipCount );

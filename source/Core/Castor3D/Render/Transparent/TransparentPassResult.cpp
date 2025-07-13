@@ -38,25 +38,25 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	VkClearValue getClearValue( WbTexture texture )
+	ClearValue getClearValue( WbTexture texture )
 	{
-		static castor::Array< VkClearValue, size_t( WbTexture::eCount ) > Values
+		static castor::Array< ClearValue, size_t( WbTexture::eCount ) > Values
 		{
 			{
-				transparentBlackClearColor,
-				opaqueWhiteClearColor,
+				ClearValue{ transparentBlackClearColor },
+				ClearValue{ opaqueWhiteClearColor },
 			}
 		};
 		return Values[size_t( texture )];
 	}
 
-	VkImageUsageFlags getUsageFlags( WbTexture texture )
+	ImageUsageFlags getUsageFlags( WbTexture texture )
 	{
-		static castor::Array< VkImageUsageFlags, size_t( WbTexture::eCount ) > Values
+		static castor::Array< ImageUsageFlags, size_t( WbTexture::eCount ) > Values
 		{
 			{
-				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
-				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
+				ImageUsageFlags::eSampled | ImageUsageFlags::eColorAttachment | ImageUsageFlags::eTransferDst | ImageUsageFlags::eTransferSrc,
+				ImageUsageFlags::eSampled | ImageUsageFlags::eColorAttachment | ImageUsageFlags::eTransferDst | ImageUsageFlags::eTransferSrc,
 			}
 		};
 		return Values[size_t( texture )];
@@ -83,7 +83,7 @@ namespace castor3d
 			, device
 			, cuT( "WBResult" )
 			, { nullptr, nullptr }
-			, 0u
+			, ImageCreateFlags::eNone
 			, size }
 	{
 	}

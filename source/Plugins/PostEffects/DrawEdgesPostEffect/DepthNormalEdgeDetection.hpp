@@ -55,7 +55,7 @@ namespace draw_edges
 	protected:
 		castor3d::RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;
-		VkExtent3D m_extent;
+		castor3d::Extent3D m_extent;
 		castor3d::Texture m_result;
 		castor3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;

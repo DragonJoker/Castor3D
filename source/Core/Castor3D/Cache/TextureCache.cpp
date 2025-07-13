@@ -756,16 +756,14 @@ namespace castor3d
 		{
 			auto const & device = *getEngine()->getRenderDevice();
 			auto & layout = data.data->image->getLayout();
+			TextureCreateInfo createInfo{ ImageCreateFlags::eNone
+				, Extent3D{ layout.extent->x, layout.extent->y, layout.extent->z }
+				, layout.layers, layout.levels, layout.format, data.data->usage };
 			*data.texture = Texture{ device
 				, m_resources
 				, data.data->image->getName()
-				, 0u
-				, VkExtent3D{ layout.extent->x, layout.extent->y, layout.extent->z }
-				, layout.layers
-				, layout.levels
-				, layout.format
-				, data.data->usage
-				, nullptr };
+				, createInfo
+				, TextureSamplerInfo{} };
 			data.texture->create();
 			{
 				auto lock( castor::makeUniqueLock( m_uploadMtx ) );

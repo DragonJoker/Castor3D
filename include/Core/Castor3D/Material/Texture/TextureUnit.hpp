@@ -27,7 +27,7 @@ namespace castor3d
 	{
 		explicit TextureData( TextureSourceInfo psourceInfo
 			, castor::ImageRPtr pimage = {}
-			, VkImageUsageFlags pusage = VkImageUsageFlags{ VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT } )
+			, ImageUsageFlags pusage = ImageUsageFlags::eSampled | ImageUsageFlags::eTransferDst )
 			: sourceInfo{ castor::move( psourceInfo ) }
 			, image{ castor::move( pimage ) }
 			, usage{ pusage }
@@ -36,7 +36,7 @@ namespace castor3d
 
 		TextureSourceInfo sourceInfo;
 		castor::ImageRPtr image;
-		VkImageUsageFlags usage;
+		ImageUsageFlags usage;
 	};
 
 	struct TextureUnitData
@@ -187,7 +187,7 @@ namespace castor3d
 		C3D_API castor::Point3ui getTextureImageTiles()const;
 		C3D_API bool hasTextureImageBuffer()const;
 		C3D_API castor::PxBufferBase const & getTextureImageBuffer()const;
-		C3D_API VkExtent3D getTextureDimensions()const;
+		C3D_API Extent3D getTextureDimensions()const;
 		C3D_API uint32_t getTextureMipmapCount()const;
 
 		TextureConfiguration const & getConfiguration()const noexcept

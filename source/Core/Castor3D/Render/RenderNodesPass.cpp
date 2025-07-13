@@ -418,7 +418,7 @@ namespace castor3d
 			}
 		}
 
-		attach.colorWriteMask = defaultColorWriteMask;
+		attach.colorWriteMask = getColorComponentFlags( defaultColorWriteMask );
 
 		return ashes::PipelineColorBlendStateCreateInfo
 		{

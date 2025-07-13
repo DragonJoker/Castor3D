@@ -52,7 +52,7 @@ namespace atmosphere_scattering
 	AtmosphereModel::AtmosphereModel( sdw::ShaderWriter & pwriter
 		, AtmosphereData const & patmosphereData
 		, Settings psettings
-		, VkExtent2D ptransmittanceExtent )
+		, castor3d::Extent2D ptransmittanceExtent )
 		: writer{ pwriter }
 		, atmosphereData{ patmosphereData }
 		, settings{ psettings }

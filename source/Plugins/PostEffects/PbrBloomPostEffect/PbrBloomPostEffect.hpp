@@ -76,7 +76,7 @@ namespace PbrBloom
 		uint32_t m_blurRadius;
 		float m_bloomStrength;
 		uint32_t m_duPassesCount;
-		VkExtent3D m_extent{};
+		castor3d::Extent3D m_extent{};
 	};
 }
 

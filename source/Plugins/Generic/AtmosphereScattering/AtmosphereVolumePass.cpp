@@ -82,8 +82,8 @@ namespace atmosphere_scattering
 		};
 
 		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
-			, VkExtent3D const & renderSize
-			, VkExtent3D const & transmittanceExtent )
+			, castor3d::Extent3D const & renderSize
+			, castor3d::Extent3D const & transmittanceExtent )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 

@@ -1037,26 +1037,26 @@ namespace castor3d
 	C3D_API uint32_t getSafeBandsSize( castor::Size const & size );
 	C3D_API uint32_t getSafeBandSize( castor::Size const & size );
 	C3D_API castor::Size getSafeBandedSize( castor::Size const & size );
-	C3D_API VkExtent3D getSafeBandedExtent3D( castor::Size const & size );
+	C3D_API Extent3D getSafeBandedExtent3D( castor::Size const & size );
 	C3D_API castor::Angle getSafeBandedFovY( castor::Angle const & fovY
 		, castor::Size const & size );
 	C3D_API float getSafeBandedAspect( float aspect
 		, castor::Size const & size );
 	C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImage image
-		, VkImageSubresourceRange const & range
+		, ImageSubresourceRange const & range
 		, ImageLayout sourceLayout
 		, ImageLayout destinationLayout
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily );
 	C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImage image
-		, VkImageSubresourceRange const & range
+		, ImageSubresourceRange const & range
 		, ImageLayout srcLayout
 		, ImageLayout dstLayout
 		, AccessFlags srcAccessFlags
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily );
 	C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImage image
-		, VkImageSubresourceRange const & range
+		, ImageSubresourceRange const & range
 		, ImageLayout srcLayout
 		, ImageLayout dstLayout
 		, AccessFlags srcAccessFlags
@@ -1067,8 +1067,8 @@ namespace castor3d
 		, VkCommandBuffer commandBuffer
 		, ashes::BufferBase const & buffer
 		, crg::BufferSubresourceRange const & range
-		, crg::AccessState after
-		, crg::AccessState before );
+		, AccessState after
+		, AccessState before );
 	C3D_API ashes::Image makeImage( ashes::Device const & device
 		, VkImage image
 		, crg::ImageId data );

@@ -31,15 +31,15 @@ namespace castor3d
 				, crg::ResourcesCache & resources
 				, ashes::RenderPass const & renderPass
 				, uint32_t mipLevel
-				, VkExtent2D const & originalSize
-				, VkExtent2D const & size
+				, Extent2D const & originalSize
+				, Extent2D const & size
 				, ashes::ImageView const & srcView
 				, Texture const & dstTexture
 				, SamplerObs sampler
 				, bool isCharlie );
 			void registerFrames();
 			void render( QueueData const & queueData )const;
-			crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray const & signalsToWait
+			SemaphoreWaitArray render( SemaphoreWaitArray const & signalsToWait
 				, ashes::Queue const & queue )const;
 
 		private:
@@ -101,7 +101,7 @@ namespace castor3d
 		 *\param[in]	signalsToWait	Les sémaphores de la passe de rendu précédente.
 		 *\return		Les sémaphores signalés par ce dessin.
 		 */
-		C3D_API crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray signalsToWait
+		C3D_API SemaphoreWaitArray render( SemaphoreWaitArray signalsToWait
 			, ashes::Queue const & queue )const;
 		/**
 		*\~english

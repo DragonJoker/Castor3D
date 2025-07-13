@@ -38,7 +38,7 @@ namespace ocean_fft
 		, castor3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
 		, crg::FramePassArray previousPasses
-		, VkExtent2D const & extent
+		, castor3d::Extent2D const & extent
 		, OceanUbo const & ubo
 		, ashes::BufferBase const & input
 		, ashes::BufferBase const & output )
@@ -81,7 +81,7 @@ namespace ocean_fft
 			, crg::FramePassGroup & graph
 			, crg::FramePassArray previousPasses
 			, OceanUbo const & ubo
-			, VkExtent2D dimensions
+			, castor3d::Extent2D dimensions
 			, VkFFTConfig const & pfftConfig
 			, ashes::Buffer< cfloat > const & distribution
 			, FFTMode mode )
@@ -191,7 +191,7 @@ namespace ocean_fft
 		OceanFFTConfig m_config;
 		std::default_random_engine m_engine;
 		std::normal_distribution< float > m_normDis{ 0.0f, 1.0f };
-		VkExtent2D m_heightMapSamples{ 2u, 2u };
+		castor3d::Extent2D m_heightMapSamples{ 2u, 2u };
 		uint32_t m_displacementDownsample{ 1u };
 		VkFFTConfig m_fftConfig;
 		ashes::BufferPtr< cfloat > m_heightSeeds;

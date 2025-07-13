@@ -156,7 +156,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
 				, RenderDevice const & device
-				, VkExtent2D dimensions
+				, Extent2D dimensions
 				, uint32_t const * passIndex );
 			~FramePass()noexcept override;
 

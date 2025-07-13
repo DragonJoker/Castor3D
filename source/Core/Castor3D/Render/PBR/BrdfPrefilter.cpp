@@ -36,8 +36,8 @@ namespace castor3d
 		, m_device{ device }
 		, m_image{ castor::make_unique< ashes::Image >( *m_device
 			, *dstTexture.image
-			, ashes::ImageCreateInfo{ dstTexture.imageId.data->info } ) }
-		, m_view{ dstTexture.targetViewId.data->info
+			, ashes::ImageCreateInfo{ convert( dstTexture.imageId.data->info ) } ) }
+		, m_view{ convert( dstTexture.targetViewId.data->info )
 			, dstTexture.targetView
 			, m_image.get() }
 		, m_commands{ m_device, *m_device.graphicsData(), cuT( "BrdfPrefilter" ) }
@@ -164,7 +164,7 @@ namespace castor3d
 			, makeFloatArray( m_renderSystem.getEngine()->getNextRainbowColour() ) } );
 		cmd.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, { transparentBlackClearColor }
+			, { convert( ClearValue{ transparentBlackClearColor } ) }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		cmd.bindPipeline( *m_pipeline );
 		cmd.bindVertexBuffer( 0u

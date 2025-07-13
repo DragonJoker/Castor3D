@@ -338,21 +338,20 @@ namespace castor3d
 			, crg::ResourcesCache & resources
 			, castor::String const & name
 			, castor::PixelFormat format
-			, VkExtent2D const & size
+			, Extent2D const & size
 			, bool transferDst )
 		{
-			return { device
+			return Texture{ device
 				, resources
 				, name
-				, 0u
-				, { size.width, size.height, 1u }
-				, 1u
-				, 1u
-				, format
-				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-					| VkImageUsageFlags( transferDst ? VK_IMAGE_USAGE_TRANSFER_DST_BIT : VkImageUsageFlagBits{} ) ) };
+				, { ImageCreateFlags::eNone
+					, { size.width, size.height, 1u }, 1u, 1u
+					, format
+					, ( ImageUsageFlags::eColorAttachment
+						| ImageUsageFlags::eSampled
+						| ImageUsageFlags::eTransferSrc
+						| ( transferDst ? ImageUsageFlags::eTransferDst : ImageUsageFlags::eNone ) ) }
+				, {} };
 		}
 
 		static castor::String getName( bool useNormalsBuffer )
@@ -360,7 +359,7 @@ namespace castor3d
 			return cuT( "SsaoBlur" ) + ( useNormalsBuffer ? castor::String{ cuT( "Nml" ) } : castor::String{} );
 		}
 
-		static crg::rq::Config getRqConfig( VkExtent2D const & renderSize
+		static crg::rq::Config getRqConfig( Extent2D const & renderSize
 			, SsaoConfig const & ssaoConfig
 			, uint32_t const & passIndex
 			, ashes::PipelineShaderStageCreateInfoArray const & stages0
@@ -432,7 +431,7 @@ namespace castor3d
 		, ProgressBar * progress
 		, crg::FramePass const & previousPass
 		, castor::String const & prefix
-		, VkExtent2D const & size
+		, Extent2D const & size
 		, SsaoConfig const & config
 		, SsaoConfigUbo & ssaoConfigUbo
 		, CameraUbo const & cameraUbo

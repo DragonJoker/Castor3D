@@ -38,7 +38,7 @@ namespace castor3d
 		{
 		}
 
-		void update( VkExtent3D const & extent
+		void update( Extent3D const & extent
 			, castor::PixelFormat format
 			, uint32_t mipLevels
 			, uint32_t arrayLayers )

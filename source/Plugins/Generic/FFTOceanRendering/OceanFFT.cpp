@@ -104,7 +104,7 @@ namespace ocean_fft
 					auto res = castor::make_unique< crg::BufferToImageCopy >( framePass
 						, context
 						, graph
-						, VkOffset3D{}
+						, castor3d::Offset3D{}
 						, extent
 						, crg::ru::Config{}
 						, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
@@ -140,28 +140,24 @@ namespace ocean_fft
 
 		castor3d::Texture createTexture( castor3d::RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, VkExtent2D heightMapSamples
+			, castor3d::Extent2D heightMapSamples
 			, castor::String const & name
 			, castor::PixelFormat format
 			, castor3d::MipmapMode mipMode )
 		{
-			VkExtent3D dimensions{ heightMapSamples.width, heightMapSamples.height, 1u };
+			castor3d::Extent3D dimensions{ heightMapSamples.width, heightMapSamples.height, 1u };
 			castor3d::Texture result{ device
 				, resources
 				, name
-				, 0u
-				, dimensions
-				, 1u
-				, ashes::getMaxMipCount( dimensions ) - 2u
-				, format
-				, ( VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_STORAGE_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
-				, castor3d::FilterMode::eLinear
-				, castor3d::FilterMode::eLinear
-				, mipMode
-				, castor3d::WrapMode::eClampToEdge
-				, castor3d::BorderColour::eFloatTransparentBlack };
+				, { castor3d::ImageCreateFlags::eNone
+					, dimensions, 1u, ashes::getMaxMipCount( convert( dimensions ) ) - 2u
+					, format
+					, ( castor3d::ImageUsageFlags::eSampled
+						| castor3d::ImageUsageFlags::eStorage
+						| castor3d::ImageUsageFlags::eTransferDst ) }
+				, { { .borderColor = castor3d::BorderColour::eFloatTransparentBlack
+					, .addressMode = castor3d::WrapMode::eClampToEdge
+					, .mipFilter = mipMode } } };
 			result.create();
 			return result;
 		}

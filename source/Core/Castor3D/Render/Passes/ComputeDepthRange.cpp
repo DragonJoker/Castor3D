@@ -51,7 +51,7 @@ namespace castor3d
 				, ashes::VkDescriptorImageInfoArray{ VkDescriptorImageInfo{ VK_NULL_HANDLE
 					, graph.createImageView( input.view() )
 					, VK_IMAGE_LAYOUT_GENERAL } } );
-			auto write = output.getBufferWrite();
+			auto write = graph.getBufferWrite( output );
 			writes.emplace_back( write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount

@@ -541,7 +541,7 @@ namespace castor3d
 					{
 						auto buffer = attach.buffer( passIndex );
 						auto currentState = context.getAccessState( buffer, attach.getBufferRange() );
-						crg::AccessState dstState;
+						AccessState dstState;
 
 						if ( bufferIndex < 2u )
 						{

@@ -74,9 +74,9 @@ namespace castor3d
 		 *\param[in]	fence		La fence à attendre, \p nullptr pour ne pas attendre.
 		 *\return		Les sémaphores signalés par ce dessin.
 		 */
-		C3D_API crg::SemaphoreWaitArray render( ashes::Queue const & queue
+		C3D_API SemaphoreWaitArray render( ashes::Queue const & queue
 			, ashes::FrameBuffer const & framebuffer
-			, crg::SemaphoreWaitArray const & toWait
+			, SemaphoreWaitArray const & toWait
 			, crg::Fence *& fence );
 		/**
 		 *\~english
@@ -94,14 +94,14 @@ namespace castor3d
 		 *\param[in]	fence		La fence à attendre, \p nullptr pour ne pas attendre.
 		 *\return		Les sémaphores signalés par ce dessin.
 		 */
-		crg::SemaphoreWaitArray render( ashes::Queue const & queue
+		SemaphoreWaitArray render( ashes::Queue const & queue
 			, ashes::FrameBuffer const & framebuffer
-			, crg::SemaphoreWait const & toWait
+			, SemaphoreWait const & toWait
 			, crg::Fence *& fence )
 		{
 			return render( queue
 				, framebuffer
-				, crg::SemaphoreWaitArray{ toWait }
+				, SemaphoreWaitArray{ toWait }
 				, fence );
 		}
 		/**
@@ -173,10 +173,10 @@ namespace castor3d
 				, crg::RunnableGraph & graph
 				, RenderDevice const & device
 				, VkRenderPass renderPass
-				, VkExtent2D const & renderSize );
+				, Extent2D const & renderSize );
 
 			void setRenderPass( VkRenderPass renderPass
-				, VkExtent2D const & renderSize );
+				, Extent2D const & renderSize );
 			void setTarget( ashes::FrameBuffer const & framebuffer
 				, castor::Vector< VkClearValue > clearValues );
 
@@ -191,7 +191,7 @@ namespace castor3d
 				, uint32_t index );
 
 		private:
-			VkExtent2D m_renderSize;
+			Extent2D m_renderSize;
 			VkRenderPass m_renderPass{};
 			ProgramModule m_shader;
 			ashes::PipelineShaderStageCreateInfoArray m_stages;

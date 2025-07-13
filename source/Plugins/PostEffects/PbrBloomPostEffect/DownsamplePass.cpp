@@ -150,10 +150,10 @@ namespace PbrBloom
 		{
 			result.push_back( graph.createView( crg::ImageViewData{ resultImg.data->name + castor::string::toMbString( i )
 				, resultImg
-				, 0u
+				, castor3d::ImageViewCreateFlags::eNone
 				, castor3d::ImageViewType::e2D
 				, getFormat( resultImg )
-				, { VK_IMAGE_ASPECT_COLOR_BIT, i, 1u, 0u, 1u } } ) );
+				, { castor3d::ImageAspectFlags::eColor, i, 1u, 0u, 1u } } ) );
 		}
 
 		return result;

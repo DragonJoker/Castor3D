@@ -40,7 +40,7 @@ namespace castor3d
 			, RenderTargetRPtr renderTarget );
 		C3D_API TextureSourceInfo( castor::String name
 			, TextureConfiguration textureConfig
-			, ashes::ImageCreateInfo const & createInfo );
+			, ImageCreateInfo createInfo );
 		C3D_API TextureSourceInfo( castor::String name
 			, TextureConfiguration textureConfig
 			, castor::ImageCreateParams imageParams );
@@ -67,7 +67,7 @@ namespace castor3d
 
 		bool isVulkanImage()const noexcept
 		{
-			return m_createInfo->format != VK_FORMAT_UNDEFINED;
+			return m_createInfo.format != castor::PixelFormat::eUNDEFINED;
 		}
 
 		TextureConfiguration const & textureConfig()const noexcept
@@ -150,7 +150,7 @@ namespace castor3d
 			return m_loadConfig;
 		}
 
-		ashes::ImageCreateInfo const & createInfo()const noexcept
+		ImageCreateInfo const & createInfo()const noexcept
 		{
 			CU_Require( isVulkanImage() );
 			return m_createInfo;
@@ -181,7 +181,7 @@ namespace castor3d
 		castor::String m_type{};
 		castor::ByteArray m_data{};
 		// Vulkan image mode.
-		ashes::ImageCreateInfo m_createInfo{ {} };
+		ImageCreateInfo m_createInfo{ {} };
 	};
 }
 

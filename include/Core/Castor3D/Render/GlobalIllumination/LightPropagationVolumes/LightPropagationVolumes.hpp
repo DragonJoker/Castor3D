@@ -44,7 +44,7 @@ namespace castor3d
 		C3D_API void cleanup()noexcept;
 		C3D_API void registerLight( LightInstance * light );
 		C3D_API void update( CpuUpdater & updater );
-		C3D_API crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray const & toWait
+		C3D_API SemaphoreWaitArray render( SemaphoreWaitArray const & toWait
 			, ashes::Queue const & queue );
 		C3D_API void accept( ConfigurationVisitorBase & visitor )const;
 

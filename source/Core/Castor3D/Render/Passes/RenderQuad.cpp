@@ -101,11 +101,11 @@ namespace castor3d
 		struct DefaultValueGetterT;
 
 		template<>
-		struct DefaultValueGetterT< VkImageSubresourceRange >
+		struct DefaultValueGetterT< ImageSubresourceRange >
 		{
-			static inline VkImageSubresourceRange const Value{ 0u, 0u, 1u, 0u, 1u };
+			static inline ImageSubresourceRange const Value{ ImageAspectFlags::eNone, 0u, 1u, 0u, 1u };
 
-			static VkImageSubresourceRange const & get()
+			static ImageSubresourceRange const & get()
 			{
 				return Value;
 			}
@@ -194,7 +194,7 @@ namespace castor3d
 			, samplerFilter
 			, ( config.range ? &config.range.value() : nullptr ) ) }
 		, m_config{ ( config.bindings ? *config.bindings : passrquad::defaultV< rq::BindingDescriptionArray > )
-			, ( config.range ? *config.range : passrquad::defaultV< VkImageSubresourceRange > )
+			, ( config.range ? *config.range : passrquad::defaultV< ImageSubresourceRange > )
 			, ( config.texcoordConfig ? *config.texcoordConfig : passrquad::defaultV< rq::Texcoord > )
 			, ( config.blendMode ? *config.blendMode : passrquad::defaultV< BlendMode > )
 			, ( config.tex3DResult ? *config.tex3DResult : passrquad::defaultV< IntermediateView > ) }
@@ -245,7 +245,7 @@ namespace castor3d
 		m_descriptorSetLayout.reset();
 	}
 
-	void RenderQuad::createPipeline( VkExtent2D const & size
+	void RenderQuad::createPipeline( Extent2D const & size
 		, castor::Position const & position
 		, ashes::PipelineShaderStageCreateInfoArray const & program
 		, ashes::RenderPass const & renderPass
@@ -422,7 +422,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderQuad::createPipelineAndPass( VkExtent2D const & size
+	void RenderQuad::createPipelineAndPass( Extent2D const & size
 		, castor::Position const & position
 		, ashes::PipelineShaderStageCreateInfoArray const & program
 		, ashes::RenderPass const & renderPass

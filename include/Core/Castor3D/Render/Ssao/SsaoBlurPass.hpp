@@ -58,7 +58,7 @@ namespace castor3d
 			, ProgressBar * progress
 			, crg::FramePass const & previousPass
 			, castor::String const & prefix
-			, VkExtent2D const & size
+			, Extent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
 			, CameraUbo const & cameraUbo
@@ -158,7 +158,7 @@ namespace castor3d
 		CameraUbo const & m_cameraUbo;
 		Texture const & m_bentInput;
 		SsaoConfig const & m_config;
-		VkExtent2D m_size;
+		Extent2D m_size;
 		Texture m_result;
 		Texture m_bentResult;
 		UniformBufferOffsetT< Configuration > m_configurationUbo;

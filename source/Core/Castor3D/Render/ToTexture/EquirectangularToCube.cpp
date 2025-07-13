@@ -151,7 +151,7 @@ namespace castor3d
 				, m_view{ equiRectangular.getDefaultSampledView() }
 				, m_renderPass{ createRenderPass( m_device, target.getPixelFormat() ) }
 			{
-				auto size = VkExtent2D{ target.getWidth(), target.getHeight() };
+				auto size = Extent2D{ target.getWidth(), target.getHeight() };
 				auto program = createProgram( device );
 				uint32_t face = 0u;
 
@@ -167,7 +167,7 @@ namespace castor3d
 						, 1u );
 					attaches.emplace_back( facePipeline.view );
 					facePipeline.frameBuffer = m_renderPass->createFrameBuffer( "EquirectangularToCube" + castor::string::toMbString( face )
-						, size
+						, convert( size )
 						, castor::move( attaches ) );
 					++face;
 				}
@@ -191,7 +191,7 @@ namespace castor3d
 				{
 					m_commandBuffer->beginRenderPass( *m_renderPass
 						, *frameBuffer.frameBuffer
-						, { transparentBlackClearColor }
+						, { convert( ClearValue{ transparentBlackClearColor } ) }
 						, VK_SUBPASS_CONTENTS_INLINE );
 					registerFrame( *m_commandBuffer, face );
 					m_commandBuffer->endRenderPass();

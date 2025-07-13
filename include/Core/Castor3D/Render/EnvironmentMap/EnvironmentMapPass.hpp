@@ -93,7 +93,7 @@ namespace castor3d
 		 *\param[in]	queue	The queue recevant les commandes de dessin.
 		 *\return		Les sémaphores signalés par ce dessin.
 		 */
-		C3D_API crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray const & toWait
+		C3D_API SemaphoreWaitArray render( SemaphoreWaitArray const & toWait
 			, ashes::Queue const & queue );
 		/**
 		 *\~english

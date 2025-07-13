@@ -55,19 +55,20 @@ namespace castor3d
 				, VkCommandBuffer commandBuffer
 				, [[maybe_unused]] uint32_t index )
 			{
-				auto clearValue = transparentBlackClearColor.color;
+				auto clearValue = crg::convert( transparentBlackClearColor );
 
 				for ( auto & attach : m_pass.images )
 				{
 					auto view = attach.view();
 					auto image = m_graph.createImage( view.data->image );
+					auto subresourceRange = convert( view.data->info.subresourceRange );
 					assert( attach.isTransferOutputView() );
 					m_context.vkCmdClearColorImage( commandBuffer
 						, image
 						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 						, &clearValue
 						, 1u
-						, &view.data->info.subresourceRange );
+						, &subresourceRange );
 				}
 			}
 		};
@@ -76,25 +77,24 @@ namespace castor3d
 			, crg::ResourcesCache & resources
 			, castor::String const & name
 			, castor::PixelFormat format
-			, VkExtent3D const & size )
+			, Extent3D const & size )
 		{
 			return Texture{ device
 				, resources
 				, name
-				, 0u
-				, VkExtent3D{ size.width / 4u, size.height / 4u, 1u }
-				, 1u
-				, 1u
-				, format
-				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
+				, { ImageCreateFlags::eNone
+					, Extent3D{ size.width / 4u, size.height / 4u, 1u }, 1u, 1u
+					, format
+					, ( ImageUsageFlags::eColorAttachment
+						| ImageUsageFlags::eSampled
+						| ImageUsageFlags::eTransferDst ) }
+				, {} };
 		}
 
 		static TextureArray createImages( RenderDevice const & device
 			, crg::ResourcesCache & resources
 			, castor::String const & name
-			, VkExtent3D const & size )
+			, Extent3D const & size )
 		{
 			TextureArray result;
 			result.emplace_back( createImage( device, resources, name + "GI", castor::PixelFormat::eR16G16B16A16_SFLOAT, size ) );
@@ -287,7 +287,7 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWaitArray ReflectiveShadowMaps::render( crg::SemaphoreWaitArray const & toWait
+	SemaphoreWaitArray ReflectiveShadowMaps::render( SemaphoreWaitArray const & toWait
 		, ashes::Queue const & queue )
 	{
 		if ( !m_initialised

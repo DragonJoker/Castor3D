@@ -53,7 +53,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, crg::FramePass const & previousPass
-			, VkExtent2D const & size
+			, Extent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
 			, CameraUbo const & cameraUbo
@@ -106,7 +106,7 @@ namespace castor3d
 			RenderQuad( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
-				, crg::ru::Config ruConfig
+				, crg::ru::Config const & ruConfig
 				, crg::rq::Config rqConfig
 				, SsaoConfig const & ssaoConfig );
 
@@ -133,7 +133,7 @@ namespace castor3d
 		SsaoConfig const & m_ssaoConfig;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		CameraUbo const & m_cameraUbo;
-		VkExtent2D m_size;
+		Extent2D m_size;
 		Texture m_result;
 		Texture m_bentNormals;
 		castor::Array< Program, 2u > m_programs;

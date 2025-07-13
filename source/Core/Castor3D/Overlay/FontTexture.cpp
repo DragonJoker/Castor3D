@@ -36,19 +36,19 @@ namespace castor3d
 				? font->getMaxImageHeight()
 				: uint32_t( font->getMaxGlyphHeight() );
 			auto const format = font->isSDF()
-				? VK_FORMAT_R32G32B32A32_SFLOAT
-				: VK_FORMAT_R8_UNORM;
+				? castor::PixelFormat::eR32G32B32A32_SFLOAT
+				: castor::PixelFormat::eR8_UNORM;
 			uint32_t const count = castor::divRoundUp( uint32_t( std::distance( font->begin(), font->end() ) ), 16u );
 
-			ashes::ImageCreateInfo image{ 0u
-				, VK_IMAGE_TYPE_2D
+			ImageCreateInfo image{ ImageCreateFlags::eNone
+				, ImageType::e2D
 				, format
 				, { maxWidth * 16, maxHeight * count, 1u }
 				, 1u
 				, 1u
-				, VK_SAMPLE_COUNT_1_BIT
-				, VK_IMAGE_TILING_OPTIMAL
-				, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT };
+				, SampleCount::e1
+				, ImageTiling::eOptimal
+				, ImageUsageFlags::eTransferDst | ImageUsageFlags::eSampled };
 			return castor::makeUnique< TextureLayout >( *engine.getRenderSystem()
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT

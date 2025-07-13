@@ -108,7 +108,7 @@ namespace castor3d
 			return m_colourImageView;
 		}
 
-		crg::SemaphoreWaitArray const & getSemaphoreWait()const noexcept
+		SemaphoreWaitArray const & getSemaphoreWait()const noexcept
 		{
 			return m_toWait;
 		}
@@ -157,7 +157,7 @@ namespace castor3d
 		ashes::FencePtr m_transferFence;
 		PickNodeType m_pickNodeType{ PickNodeType::eNone };
 		std::atomic_bool m_picking{ false };
-		crg::SemaphoreWaitArray m_toWait;
+		SemaphoreWaitArray m_toWait;
 		bool m_first{ true };
 	};
 }

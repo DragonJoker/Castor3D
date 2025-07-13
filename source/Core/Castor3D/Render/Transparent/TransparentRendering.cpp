@@ -35,14 +35,12 @@ namespace castor3d
 		, m_mippedColour{ m_device
 			, getOwner()->getResources()
 			, getOwner()->getName() + cuT( "/MippedColour" )
-			, 0u
-			, makeExtent3D( getOwner()->getSize() )
-			, 1u
-			, EnvironmentMipLevels
-			, castor::PixelFormat::eR16G16B16A16_SFLOAT
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT )
-			, BorderColour::eFloatOpaqueBlack }
+			, { ImageCreateFlags::eNone
+				, makeExtent3D( getOwner()->getSize() ), 1u, EnvironmentMipLevels
+				, castor::PixelFormat::eR16G16B16A16_SFLOAT
+				, ( ImageUsageFlags::eColorAttachment
+					| ImageUsageFlags::eSampled ) }
+			, { BorderColour::eFloatOpaqueBlack } }
 		, m_transparentPassResult{ ( weightedBlended
 			? castor::makeUnique< TransparentPassResult >( getOwner()->getResources()
 				, m_device
@@ -322,9 +320,9 @@ namespace castor3d
 			, ImageLayout::eShaderReadOnly );
 		auto const & transparentPassResult = *m_transparentPassResult;
 		result.addOutputColourView( transparentPassResult[WbTexture::eAccumulation].targetViewId
-			, getClearValue( WbTexture::eAccumulation ) );
+			, getClearValue( WbTexture::eAccumulation ).color() );
 		result.addOutputColourView( transparentPassResult[WbTexture::eRevealage].targetViewId
-			, getClearValue( WbTexture::eRevealage ) );
+			, getClearValue( WbTexture::eRevealage ).color() );
 
 		return result;
 	}

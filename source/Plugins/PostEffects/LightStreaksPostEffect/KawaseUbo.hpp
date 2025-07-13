@@ -61,7 +61,7 @@ namespace light_streaks
 		explicit KawaseUbo( castor3d::RenderDevice const & device );
 		~KawaseUbo();
 		void update( uint32_t index
-			, VkExtent2D const & size
+			, castor3d::Extent2D const & size
 			, castor::Point2f const & direction
 			, uint32_t pass );
 		void update( KawaseConfig const & config );

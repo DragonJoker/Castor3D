@@ -38,31 +38,29 @@ namespace smaa
 		, m_outColour{ m_device
 			, renderTarget.getResources()
 			, cuT( "SMEDRes" )
-			, 0u
-			, m_extent
-			, 1u
-			, 1u
-			, castor::PixelFormat::eR8G8B8A8_UNORM
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
+			, { castor3d::ImageCreateFlags::eNone
+				, m_extent, 1u, 1u
+				, castor::PixelFormat::eR8G8B8A8_UNORM
+				, ( castor3d::ImageUsageFlags::eSampled
+					| castor3d::ImageUsageFlags::eColorAttachment
+					| castor3d::ImageUsageFlags::eTransferSrc ) }
+			, {} }
 		, m_outDepth{ m_device
 			, renderTarget.getResources()
 			, cuT( "SMEDStRes" )
-			, 0u
-			, m_extent
-			, 1u
-			, 1u
-			, device.selectSuitableStencilFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
-				| VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT )
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT ) }
+			, { castor3d::ImageCreateFlags::eNone
+				, m_extent, 1u, 1u
+				, device.selectSuitableStencilFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+					| VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT )
+				, ( castor3d::ImageUsageFlags::eSampled
+					| castor3d::ImageUsageFlags::eDepthStencilAttachment ) }
+			, {} }
 		, m_outDepthStencilView{ m_graph.createView( crg::ImageViewData{ "SMEDStRes"
 			, m_outDepth.imageId
-			, 0u
+			, castor3d::ImageViewCreateFlags::eNone
 			, castor3d::ImageViewType::e2D
 			, getFormat( m_outDepth.imageId )
-			, { VK_IMAGE_ASPECT_STENCIL_BIT, 0u, 1u, 0u, 1u } } ) }
+			, { castor3d::ImageAspectFlags::eStencil, 0u, 1u, 0u, 1u } } ) }
 		, m_shader{ cuT( "SmaaEdge" ), castor::move( shader ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_pass{ m_graph.createPass( "EdgeDetection"

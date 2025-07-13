@@ -26,7 +26,7 @@ namespace castor3d
 	namespace envpass
 	{
 		static CameraUPtr doCreateCamera( SceneNode & node
-			, VkExtent3D const & size )
+			, Extent3D const & size )
 		{
 			float const aspect = float( size.width ) / float( size.height );
 			float const nearZ = 0.1f;
@@ -158,7 +158,7 @@ namespace castor3d
 		m_runnable->record();
 	}
 
-	crg::SemaphoreWaitArray EnvironmentMapPass::render( crg::SemaphoreWaitArray const & toWait
+	SemaphoreWaitArray EnvironmentMapPass::render( SemaphoreWaitArray const & toWait
 		, ashes::Queue const & queue )
 	{
 		return m_runnable->run( toWait, queue );

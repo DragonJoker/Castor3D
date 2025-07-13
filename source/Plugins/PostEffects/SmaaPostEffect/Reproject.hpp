@@ -47,7 +47,7 @@ namespace smaa
 		crg::ImageViewIdArray m_currentColourViews;
 		crg::ImageViewIdArray m_previousColourViews;
 		crg::ImageViewId const * m_velocityView;
-		VkExtent3D m_extent;
+		castor3d::Extent3D m_extent;
 		castor3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		castor3d::Texture m_result;

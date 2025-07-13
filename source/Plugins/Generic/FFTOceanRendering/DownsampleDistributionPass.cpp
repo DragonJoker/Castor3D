@@ -47,21 +47,21 @@ namespace ocean_fft
 		{
 			ashes::WriteDescriptorSetArray writes;
 
-			auto write = pass.buffers[DownsampleDistributionPass::eConfig].getBufferWrite();
+			auto write = graph.getBufferWrite( pass.buffers[DownsampleDistributionPass::eConfig] );
 			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
 				, write->descriptorType } );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			write = pass.buffers[DownsampleDistributionPass::eInput].getBufferWrite();
+			write = graph.getBufferWrite( pass.buffers[DownsampleDistributionPass::eInput] );
 			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
 				, write->descriptorType } );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			write = pass.buffers[DownsampleDistributionPass::eOutput].getBufferWrite();
+			write = graph.getBufferWrite( pass.buffers[DownsampleDistributionPass::eOutput] );
 			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
@@ -154,7 +154,7 @@ namespace ocean_fft
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, castor3d::RenderDevice const & device
-		, VkExtent2D const & extent
+		, castor3d::Extent2D const & extent
 		, uint32_t downsample
 		, crg::RunnablePass::IsEnabledCallback isEnabled )
 		: crg::RunnablePass{ pass
@@ -174,7 +174,7 @@ namespace ocean_fft
 		, m_pipeline{ downdist::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
 		, m_descriptorSet{ downdist::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
-		, m_extent{ ashes::getSubresourceDimensions( extent, downsample ) }
+		, m_extent{ crg::convert( ashes::getSubresourceDimensions( convert( extent ), downsample ) ) }
 	{
 	}
 
@@ -222,7 +222,7 @@ namespace ocean_fft
 		, castor3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
 		, crg::FramePassArray previousPasses
-		, VkExtent2D const & extent
+		, castor3d::Extent2D const & extent
 		, uint32_t downsample
 		, OceanUbo const & ubo
 		, ashes::BufferBase const & input

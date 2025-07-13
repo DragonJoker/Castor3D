@@ -43,27 +43,27 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	VkClearValue getClearValue( LpvTexture texture )
+	ClearValue getClearValue( LpvTexture texture )
 	{
-		static castor::Array< VkClearValue, size_t( LpvTexture::eCount ) > Values
+		static castor::Array< ClearValue, size_t( LpvTexture::eCount ) > Values
 		{
 			{
-				transparentBlackClearColor,
-				transparentBlackClearColor,
-				transparentBlackClearColor,
+				ClearValue{ transparentBlackClearColor },
+				ClearValue{ transparentBlackClearColor },
+				ClearValue{ transparentBlackClearColor },
 			}
 		};
 		return Values[size_t( texture )];
 	}
 
-	VkImageUsageFlags getUsageFlags( LpvTexture texture )
+	ImageUsageFlags getUsageFlags( LpvTexture texture )
 	{
-		static castor::Array< VkImageUsageFlags, size_t( LpvTexture::eCount ) > Values
+		static castor::Array< ImageUsageFlags, size_t( LpvTexture::eCount ) > Values
 		{
 			{
-				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+				ImageUsageFlags::eTransferDst | ImageUsageFlags::eStorage | ImageUsageFlags::eSampled | ImageUsageFlags::eColorAttachment,
+				ImageUsageFlags::eTransferDst | ImageUsageFlags::eStorage | ImageUsageFlags::eSampled | ImageUsageFlags::eColorAttachment,
+				ImageUsageFlags::eTransferDst | ImageUsageFlags::eStorage | ImageUsageFlags::eSampled | ImageUsageFlags::eColorAttachment,
 			}
 		};
 		return Values[size_t( texture )];

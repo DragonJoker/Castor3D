@@ -124,7 +124,7 @@ namespace castor
 	}
 
 	template< PixelFormat PFT >
-	void KernelLanczosFilterT< PFT >::compute( VkExtent2D const & fullExtent
+	void KernelLanczosFilterT< PFT >::compute( crg::Extent2D const & fullExtent
 		, uint8_t const * srcBuffer
 		, uint8_t * dstBuffer
 		, uint32_t level

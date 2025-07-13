@@ -76,13 +76,13 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWaitArray RenderTargetCache::render( RenderDevice const & device
+	SemaphoreWaitArray RenderTargetCache::render( RenderDevice const & device
 		, RenderInfo & info
 		, ashes::Queue const & queue
-		, crg::SemaphoreWaitArray signalsToWait )
+		, SemaphoreWaitArray signalsToWait )
 	{
 		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
-		crg::SemaphoreWaitArray result;
+		SemaphoreWaitArray result;
 
 		for ( auto const & target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{

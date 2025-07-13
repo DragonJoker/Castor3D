@@ -91,33 +91,29 @@ namespace castor3d
 			Texture result{ device
 				, resources
 				, cuT( "Texture3DToTexture2DDepth" )
-				, 0u
-				, colourView.getExtent()
-				, 1u
-				, 1u
-				, castor::PixelFormat::eD32_SFLOAT
-				, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
-				, BorderColour::eFloatTransparentBlack };
+				, { ImageCreateFlags::eNone
+					, colourView.getExtent(), 1u, 1u
+					, castor::PixelFormat::eD32_SFLOAT
+					, ImageUsageFlags::eDepthStencilAttachment }
+				, { BorderColour::eFloatTransparentBlack } };
 			result.create();
 			return result;
 		}
 
 		static Texture createTarget( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, VkExtent2D const & size )
+			, Extent2D const & size )
 		{
 			Texture result{ device
 				, resources
 				, cuT( "Texture3DToTexture2DColor" )
-				, 0u
-				, { size.width, size.height, 1u }
-				, 1u
-				, 1u
-				, castor::PixelFormat::eR8G8B8A8_UNORM
-				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
-				, BorderColour::eFloatTransparentBlack };
+				, { ImageCreateFlags::eNone
+					, { size.width, size.height, 1u }, 1u, 1u
+					, castor::PixelFormat::eR8G8B8A8_UNORM
+					, ( ImageUsageFlags::eColorAttachment
+						| ImageUsageFlags::eSampled
+						| ImageUsageFlags::eTransferSrc ) }
+				, { BorderColour::eFloatTransparentBlack } };
 			result.create();
 			return result;
 		}
@@ -365,7 +361,7 @@ namespace castor3d
 
 			cmd.beginRenderPass( renderPass
 				, frameBuffer
-				, { opaqueBlackClearColor, defaultClearDepthStencil }
+				, { convert( ClearValue{ opaqueBlackClearColor } ), convert( ClearValue{ defaultClearDepthStencil } ) }
 				, VK_SUBPASS_CONTENTS_INLINE );
 			cmd.bindPipeline( pipeline );
 			cmd.bindDescriptorSet( descriptorSet, pipelineLayout );
@@ -440,12 +436,12 @@ namespace castor3d
 			return vec4( writer.cast< sdw::Float >( in ) );
 		}
 
-		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::IVec2 const in )
+		static sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::IVec2 const in )
 		{
 			return vec4( vec2( in ), 0.0_f, 1.0_f );
 		}
 
-		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::IVec4 const in )
+		static sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::IVec4 const in )
 		{
 			return vec4( vec3( in.xyz() ), 1.0_f );
 		}
@@ -455,32 +451,32 @@ namespace castor3d
 			return vec4( writer.cast< sdw::Float >( in ) );
 		}
 
-		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::UVec2 const in )
+		static sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::UVec2 const in )
 		{
 			return vec4( vec2( in ), 0.0_f, 1.0_f );
 		}
 
-		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::UVec4 const in )
+		static sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::UVec4 const in )
 		{
 			return vec4( vec3( in.xyz() ), 1.0_f );
 		}
 
-		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Float const in )
+		static sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Float const in )
 		{
 			return vec4( in );
 		}
 
-		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Vec2 const in )
+		static sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Vec2 const in )
 		{
 			return vec4( in, 0.0_f, 1.0_f );
 		}
 
-		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Vec3 const in )
+		static sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Vec3 const in )
 		{
 			return vec4( in, 1.0_f );
 		}
 
-		static sdw::Vec4 makeVec4( sdw::ShaderWriter & writer, sdw::Vec4 const in )
+		static sdw::Vec4 makeVec4( sdw::ShaderWriter const &, sdw::Vec4 const in )
 		{
 			return vec4( in );
 		}
@@ -498,7 +494,7 @@ namespace castor3d
 
 			// Creates a unit cube triangle strip from just vertex ID (14 vertices)
 			auto createCube = writer.implementFunction< sdw::Vec3 >( "createCube"
-				, [&]( sdw::UInt const & vertexID )
+				, [&writer]( sdw::UInt const & vertexID )
 				{
 					auto b = writer.declLocale( "b"
 						, 1_u << vertexID );
@@ -508,7 +504,7 @@ namespace castor3d
 				}
 				, sdw::InUInt{ writer, "vertexID" } );
 
-			writer.implementEntryPointT< sdw::VoidT, SurfaceT >( [&]( sdw::VertexIn const & in
+			writer.implementEntryPointT< sdw::VoidT, SurfaceT >( [&writer, &grid, &utils, &inSource]( sdw::VertexIn const & in
 				, sdw::VertexOutT< SurfaceT > out )
 				{
 					auto coord = writer.declLocale( "coord"
@@ -519,7 +515,7 @@ namespace castor3d
 					out.voxelColour() = makeVec4( writer, inSource.load( ivec3( coord ) ) );
 				} );
 
-			writer.implementEntryPointT< 14u, sdw::PointListT< SurfaceT >, sdw::TriangleStreamT< SurfaceT > >( [&]( sdw::GeometryIn const & in
+			writer.implementEntryPointT< 14u, sdw::PointListT< SurfaceT >, sdw::TriangleStreamT< SurfaceT > >( [&writer, &grid, &createCube, &c3d_cameraData]( sdw::GeometryIn const &
 				, sdw::PointListT< SurfaceT > const & list
 				, sdw::TriangleStreamT< SurfaceT > out )
 				{
@@ -555,7 +551,7 @@ namespace castor3d
 					sdwFI
 				} );
 
-			writer.implementEntryPointT< SurfaceT, shader::Colour4FT >( [&]( sdw::FragmentInT< SurfaceT > const & in
+			writer.implementEntryPointT< SurfaceT, shader::Colour4FT >( []( sdw::FragmentInT< SurfaceT > const & in
 				, sdw::FragmentOutT< shader::Colour4FT > const & out )
 				{
 					out.colour() = vec4( in.voxelColour().rgb(), 1.0_f );
@@ -572,14 +568,14 @@ namespace castor3d
 			UBO_GRID( writer, eGridUbo );
 			auto inSource( writer.declCombinedImg< Img3DRgba >( "inSource", eSource, 0u ) );
 
-			writer.implementEntryPointT< sdw::VoidT, shader::Uv2FT >( [&]( sdw::VertexIn const & in
+			writer.implementEntryPointT< sdw::VoidT, shader::Uv2FT >( []( sdw::VertexIn const & in
 				, sdw::VertexOutT< shader::Uv2FT > out )
 				{
 					out.uv() = vec2( ( in.vertexIndex << 1 ) & 2, in.vertexIndex & 2 );
 					out.vtx.position = vec4( out.uv() * 2.0f - 1.0f, 0.0f, 1.0f );
 				} );
 
-			writer.implementEntryPointT< shader::Uv2FT, shader::Colour4FT >( [&]( sdw::FragmentInT< shader::Uv2FT > const & in
+			writer.implementEntryPointT< shader::Uv2FT, shader::Colour4FT >( [&grid, inSource]( sdw::FragmentInT< shader::Uv2FT > const & in
 				, sdw::FragmentOutT< shader::Colour4FT > const & out )
 				{
 					out.colour() = inSource.lod( vec3( in.uv(), grid.sliceIndex / grid.maxSlice ), 0.0_f );
@@ -810,7 +806,7 @@ namespace castor3d
 
 	Texture3DTo2D::Texture3DTo2D( RenderDevice const & device
 		, crg::ResourcesCache & resources
-		, VkExtent2D const & size
+		, Extent2D const & size
 		, CameraUbo const & cameraUbo )
 		: m_device{ device }
 		, m_resources{ resources }
@@ -869,7 +865,7 @@ namespace castor3d
 
 		for ( auto & intermediate : m_textures )
 		{
-			if ( intermediate.viewId.data->image.data->info.imageType == VK_IMAGE_TYPE_3D )
+			if ( intermediate.viewId.data->image.data->info.imageType == ImageType::e3D )
 			{
 				if ( intermediate.factors.isSlice )
 				{
@@ -986,8 +982,8 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWait Texture3DTo2D::render( ashes::Queue const & queue
-		, crg::SemaphoreWait const & toWait )
+	SemaphoreWait Texture3DTo2D::render( ashes::Queue const & queue
+		, SemaphoreWait const & toWait )
 	{
 		auto result = toWait;
 

@@ -38,7 +38,7 @@ namespace ocean_fft
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, castor3d::RenderDevice const & device
-			, VkExtent2D const & extent
+			, castor3d::Extent2D const & extent
 			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
@@ -63,7 +63,7 @@ namespace ocean_fft
 		ashes::ComputePipelinePtr m_pipeline;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
 		ashes::DescriptorSetPtr m_descriptorSet;
-		VkExtent2D m_extent;
+		castor3d::Extent2D m_extent;
 	};
 }
 

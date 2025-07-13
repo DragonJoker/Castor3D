@@ -232,18 +232,18 @@ namespace film_grain
 		auto dim = m_noiseImages[0].getDimensions();
 		auto format = m_noiseImages[0].getPixelFormat();
 		m_noiseImg = m_graph.createImage( crg::ImageData{ "FGNoise"
-			, 0u
+			, castor3d::ImageCreateFlags::eNone
 			, castor3d::ImageType::e3D
 			, format
 			, { dim.getWidth(), dim.getHeight(), NoiseMapCount }
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } );
+			, ( castor3d::ImageUsageFlags::eSampled
+				| castor3d::ImageUsageFlags::eTransferDst ) } );
 		m_noiseView = m_graph.createView( crg::ImageViewData{ "FGNoise"
 			, m_noiseImg
-			, 0u
+			, castor3d::ImageViewCreateFlags::eNone
 			, castor3d::ImageViewType::e3D
 			, getFormat( m_noiseImg )
-			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
+			, { castor3d::ImageAspectFlags::eColor, 0u, 1u, 0u, 1u } } );
 		auto extent = castor3d::makeExtent2D( target.getExtent() );
 		m_pass = &m_graph.createPass( "FilmGrain"
 			, [this, extent]( crg::FramePass const & framePass
@@ -257,8 +257,8 @@ namespace film_grain
 					, VkExtent2D{ dim.getWidth(), dim.getHeight() } );
 				auto noiseImg = castor::make_unique< ashes::Image >( *device
 					, graph.createImage( m_noiseImg )
-					, ashes::ImageCreateInfo{ m_noiseImg.data->info } );
-				ashes::ImageView noiseView{ ashes::ImageViewCreateInfo{ m_noiseView.data->info }
+					, ashes::ImageCreateInfo{ convert( m_noiseImg.data->info ) } );
+				ashes::ImageView noiseView{ ashes::ImageViewCreateInfo{ convert( m_noiseView.data->info ) }
 					, graph.createImageView( m_noiseView )
 					, noiseImg.get() };
 				auto data = device.graphicsData();
@@ -267,13 +267,13 @@ namespace film_grain
 				{
 					staging->uploadTextureData( *data->queue
 						, *data->commandPool
-						, { m_noiseView.data->info.subresourceRange.aspectMask
+						, { getImageAspectFlags( m_noiseView.data->info.subresourceRange.aspectMask )
 							, m_noiseView.data->info.subresourceRange.baseMipLevel
 							, m_noiseView.data->info.subresourceRange.baseArrayLayer
 							, m_noiseView.data->info.subresourceRange.layerCount }
 						, format
 						, { 0, 0, int32_t( i ) }
-						, castor3d::makeExtent3D( dim )
+						, castor3d::makeVkExtent3D( dim )
 						, m_noiseImages[i].getBuffer().data()
 						, noiseView );
 				}

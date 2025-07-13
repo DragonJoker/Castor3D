@@ -65,7 +65,7 @@ namespace atmosphere_scattering
 		crg::FramePass & createBackgroundPass( crg::FramePassGroup & graph
 			, castor3d::RenderDevice const & device
 			, castor3d::ProgressBar * progress
-			, VkExtent2D const & size
+			, castor3d::Extent2D const & size
 			, crg::ImageViewIdArray const & colour
 			, crg::ImageViewIdArray const & depth
 			, crg::ImageViewId const * depthObj
@@ -258,7 +258,7 @@ namespace atmosphere_scattering
 				, castor3d::SceneUbo const & sceneUbo
 				, AtmosphereScatteringUbo const & atmosphereUbo
 				, CloudsUbo const & cloudsUbo
-				, VkExtent2D const & size
+				, castor3d::Extent2D const & size
 				, castor::Point2ui const & skyViewResolution
 				, uint32_t volumeResolution
 				, uint32_t index

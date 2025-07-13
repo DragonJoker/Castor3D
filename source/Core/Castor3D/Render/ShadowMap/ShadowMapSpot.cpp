@@ -69,24 +69,24 @@ namespace castor3d
 			, device
 			, scene
 			, LightType::eSpot
-			, 0u
+			, ImageCreateFlags::eNone
 			, castor::Size{ ShadowMapSpotTextureSize, ShadowMapSpotTextureSize }
 			, shader::getSpotShadowMapCount()
 			, shader::getSpotShadowMapCount() }
 		, m_blurIntermediate{ resources.getHandler().createImageId( crg::ImageData{ "SpotGB"
-			, 0u
+			, ImageCreateFlags::eNone
 			, ImageType::e2D
 			, getFormat( device, SmTexture::eVariance )
 			, ( *m_result.begin() )->getExtent()
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
+			, ( ImageUsageFlags::eColorAttachment
+				| ImageUsageFlags::eSampled
+				| ImageUsageFlags::eTransferSrc ) } ) }
 		, m_blurIntermediateView{ resources.getHandler().createViewId( crg::ImageViewData{ m_blurIntermediate.data->name
 			, m_blurIntermediate
-			, 0u
+			, ImageViewCreateFlags::eNone
 			, ImageViewType::e2D
 			, getFormat( m_blurIntermediate )
-			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
+			, { ImageAspectFlags::eColor, 0u, 1u, 0u, 1u } } ) }
 	{
 		stepProgressBarLocal( progress, cuT( "Creating ShadowMapSpot" ) );
 		m_resources.createImage( device.makeContext(), m_blurIntermediate );
@@ -161,19 +161,19 @@ namespace castor3d
 
 		if ( isStatic )
 		{
-			pass.addOutputDepthView( depth.subViewsId[index], getClearValue( SmTexture::eDepth ) );
-			pass.addOutputColourView( linear.subViewsId[index], getClearValue( SmTexture::eLinearDepth ) );
+			pass.addOutputDepthView( depth.subViewsId[index], getClearValue( SmTexture::eDepth ).depthStencil() );
+			pass.addOutputColourView( linear.subViewsId[index], getClearValue( SmTexture::eLinearDepth ).color() );
 
 			if ( vsm )
 			{
-				pass.addOutputColourView( variance.subViewsId[index], getClearValue( SmTexture::eVariance ) );
+				pass.addOutputColourView( variance.subViewsId[index], getClearValue( SmTexture::eVariance ).color() );
 			}
 
 			if ( rsm )
 			{
-				pass.addOutputColourView( normal.subViewsId[index], getClearValue( SmTexture::eNormal ) );
-				pass.addOutputColourView( position.subViewsId[index], getClearValue( SmTexture::ePosition ) );
-				pass.addOutputColourView( flux.subViewsId[index], getClearValue( SmTexture::eFlux ) );
+				pass.addOutputColourView( normal.subViewsId[index], getClearValue( SmTexture::eNormal ).color() );
+				pass.addOutputColourView( position.subViewsId[index], getClearValue( SmTexture::ePosition ).color() );
+				pass.addOutputColourView( flux.subViewsId[index], getClearValue( SmTexture::eFlux ).color() );
 			}
 		}
 		else

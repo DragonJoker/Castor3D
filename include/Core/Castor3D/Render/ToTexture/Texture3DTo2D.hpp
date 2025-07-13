@@ -32,7 +32,7 @@ namespace castor3d
 	public:
 		C3D_API Texture3DTo2D( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, VkExtent2D const & size
+			, Extent2D const & size
 			, CameraUbo const & cameraUbo );
 		C3D_API ~Texture3DTo2D()noexcept;
 
@@ -40,8 +40,8 @@ namespace castor3d
 			, IntermediateViewArray intermediates );
 		C3D_API void initialise( QueueData const & queueData );
 		C3D_API void update( CpuUpdater & updater );
-		C3D_API crg::SemaphoreWait render( ashes::Queue const & queue
-			, crg::SemaphoreWait const & toWait );
+		C3D_API SemaphoreWait render( ashes::Queue const & queue
+			, SemaphoreWait const & toWait );
 		C3D_API void render( ashes::Queue const & queue
 			, ashes::VkSemaphoreArray & semaphores
 			, ashes::VkPipelineStageFlagsArray & stages );

@@ -232,7 +232,7 @@ namespace castor3d
 		C3D_API virtual crg::FramePass & createBackgroundPass( crg::FramePassGroup & graph
 			, RenderDevice const & device
 			, ProgressBar * progress
-			, VkExtent2D const & size
+			, Extent2D const & size
 			, crg::ImageViewIdArray const & colour
 			, crg::ImageViewIdArray const & depth
 			, crg::ImageViewId const * depthObj
