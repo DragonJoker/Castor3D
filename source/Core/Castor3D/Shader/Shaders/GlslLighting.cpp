@@ -148,14 +148,16 @@ namespace castor3d::shader
 					auto output = m_writer.declLocale( "output"
 						, DirectLighting{ m_writer } );
 					lightSurface.updateL( derivVec3( -light.direction() ) );
+					doInitLightSpecifics( lightSurface, components );
 					auto radiance = m_writer.declLocale( "radiance"
 						, m_scattering->computeRadiance( light.base(), lightSurface.L().value() ) );
+					auto diffuseLightIntensity = m_writer.declLocale( "diffuseLightIntensity"
+						, light.intensity() );
 					auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
-						, vec3( 0.0_f ) );
-					doInitLightSpecifics( lightSurface, components );
-					auto lightIntensity = doInternalComputeLightDiffuse( light.base(), components, lightSurface
-						, 1.0_f, radiance
-						, rawDiffuse, output.diffuse );
+						, doInternalComputeLightRawDiffuse( components, lightSurface
+							, diffuseLightIntensity, radiance ) );
+					doInternalComputeLightDiffuse( light.base(), components, lightSurface
+						, diffuseLightIntensity, rawDiffuse, output.diffuse );
 					auto shadows = m_writer.declLocale( "shadows"
 						, m_shadowModel.getDirectionalShadows()
 						, m_shadowModel.isEnabled() );
@@ -172,18 +174,14 @@ namespace castor3d::shader
 							&& ( receivesShadows != 0_u )
 							&& ( sssProfileIndex != 0_u ) )
 						{
-							output.diffuse += m_lights.computeSssTransmittance( debugOutput
-								, components
-								, light
-								, shadows
-								, lightSurface
-								, rawDiffuse );
+							output.diffuse += m_lights.computeSssTransmittance( debugOutput, components
+								, light, shadows, lightSurface, rawDiffuse );
 						}
 						sdwFI
 					}
 
 					auto specularLightIntensity = doInternalComputeLightSpecular( light.base(), components, lightSurface
-						, lightIntensity, radiance
+						, diffuseLightIntensity, radiance
 						, output );
 					doInternalComputeLayers( components, lightSurface, specularLightIntensity, output );
 
@@ -241,16 +239,18 @@ namespace castor3d::shader
 					auto output = m_writer.declLocale( "output"
 						, DirectLighting{ m_writer } );
 					lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
+					doInitLightSpecifics( lightSurface, components );
 					auto radiance = m_writer.declLocale( "radiance"
 						, m_scattering->computeRadiance( light.base(), lightSurface.L().value() ) );
-					auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
-						, vec3( 0.0_f ) );
 					auto attenuationFactor = m_writer.declLocale( "attenuationFactor"
 						, light.getAttenuationFactor( lightSurface.lengthL().value() ) );
-					doInitLightSpecifics( lightSurface, components );
-					auto lightIntensity = doInternalComputeLightDiffuse( light.base(), components, lightSurface
-						, attenuationFactor, radiance
-						, rawDiffuse, output.diffuse );
+					auto diffuseLightIntensity = m_writer.declLocale( "diffuseLightIntensity"
+						, attenuationFactor * light.intensity() );
+					auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
+						, doInternalComputeLightRawDiffuse( components, lightSurface
+							, diffuseLightIntensity, radiance ) );
+					doInternalComputeLightDiffuse( light.base(), components, lightSurface
+						, diffuseLightIntensity, rawDiffuse, output.diffuse );
 					auto shadows = m_writer.declLocale( "shadows"
 						, m_shadowModel.getPointShadows( light.shadowMapIndex() )
 						, m_shadowModel.isEnabled() );
@@ -267,18 +267,14 @@ namespace castor3d::shader
 							&& ( receivesShadows != 0_u )
 							&& ( sssProfileIndex != 0_u ) )
 						{
-							output.diffuse += m_lights.computeSssTransmittance( debugOutput
-								, components
-								, light
-								, shadows
-								, lightSurface
-								, rawDiffuse );
+							output.diffuse += m_lights.computeSssTransmittance( debugOutput, components
+								, light, shadows, lightSurface, rawDiffuse );
 						}
 						sdwFI
 					}
 
 					auto specularLightIntensity = doInternalComputeLightSpecular( light.base(), components, lightSurface
-						, lightIntensity, radiance
+						, diffuseLightIntensity, radiance
 						, output );
 					doInternalComputeLayers( components, lightSurface, specularLightIntensity, output );
 
@@ -326,6 +322,7 @@ namespace castor3d::shader
 					, DirectLighting parentOutput )
 				{
 					lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
+					doInitLightSpecifics( lightSurface, components );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
 						, dot( lightSurface.L().value(), light.direction() ) );
 
@@ -333,17 +330,18 @@ namespace castor3d::shader
 					{
 						auto output = m_writer.declLocale( "output"
 							, DirectLighting{ m_writer } );
-						spotFactor = clamp( ( spotFactor - light.outerCutOffCos() ) / light.cutOffsCosDiff(), 0.0_f, 1.0_f );
 						auto radiance = m_writer.declLocale( "radiance"
 							, m_scattering->computeRadiance( light.base(), lightSurface.L().value() ) );
-						auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
-							, vec3( 0.0_f ) );
+						spotFactor = clamp( ( spotFactor - light.outerCutOffCos() ) / light.cutOffsCosDiff(), 0.0_f, 1.0_f );
 						auto attenuationFactor = m_writer.declLocale( "attenuationFactor"
 							, spotFactor * light.getAttenuationFactor( lightSurface.lengthL().value() ) );
-						doInitLightSpecifics( lightSurface, components );
-						auto lightIntensity = doInternalComputeLightDiffuse( light.base(), components, lightSurface
-							, attenuationFactor, radiance
-							, rawDiffuse, output.diffuse );
+						auto diffuseLightIntensity = m_writer.declLocale( "diffuseLightIntensity"
+							, attenuationFactor * light.intensity() );
+						auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
+							, doInternalComputeLightRawDiffuse( components, lightSurface
+								, diffuseLightIntensity, radiance ) );
+						doInternalComputeLightDiffuse( light.base(), components, lightSurface
+							, diffuseLightIntensity, rawDiffuse, output.diffuse );
 						auto shadows = m_writer.declLocale( "shadows"
 							, m_shadowModel.getSpotShadows( light.shadowMapIndex() )
 							, m_shadowModel.isEnabled() );
@@ -360,18 +358,14 @@ namespace castor3d::shader
 								&& ( receivesShadows != 0_u )
 								&& ( sssProfileIndex != 0_u ) )
 							{
-								output.diffuse += m_lights.computeSssTransmittance( debugOutput
-									, components
-									, light
-									, shadows
-									, lightSurface
-									, rawDiffuse );
+								output.diffuse += m_lights.computeSssTransmittance( debugOutput, components
+									, light, shadows, lightSurface, rawDiffuse );
 							}
 							sdwFI
 						}
 
 						auto specularLightIntensity = doInternalComputeLightSpecular( light.base(), components, lightSurface
-							, lightIntensity, radiance
+							, diffuseLightIntensity, radiance
 							, output );
 						doInternalComputeLayers( components, lightSurface, specularLightIntensity, output );
 
@@ -415,49 +409,29 @@ namespace castor3d::shader
 		{
 			m_scattering->initialiseBackground( background, m_shadowModel );
 			m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( castor::toUtf8( m_prefix ) + "computeDirectionalLightDiffuse"
-				, [this, &debugOutput]( DirectionalLight const & light
+				, [this]( DirectionalLight const & light
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows )
 				{
 					lightSurface.updateL( derivVec3( -light.direction() ) );
-					auto radiance = m_writer.declLocale( "radiance"
-						, m_scattering->computeRadiance( light.base(), lightSurface.L().value() ) );
-					auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
-						, vec3( 0.0_f ) );
+					doInitLightSpecifics( lightSurface, components );
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
-					doInitLightSpecifics( lightSurface, components );
+					auto radiance = m_writer.declLocale( "radiance"
+						, m_scattering->computeRadiance( light.base(), lightSurface.L().value() ) );
+					auto diffuseLightIntensity = m_writer.declLocale( "diffuseLightIntensity"
+						, light.intensity() );
+					auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
+						, doInternalComputeLightRawDiffuse( components, lightSurface
+							, diffuseLightIntensity, radiance ) );
 					doInternalComputeLightDiffuse( light.base(), components, lightSurface
-						, 1.0_f, radiance
-						, rawDiffuse, diffuse );
-					auto shadows = m_writer.declLocale( "shadows"
-						, m_shadowModel.getDirectionalShadows()
-						, m_shadowModel.isEnabled() );
+						, diffuseLightIntensity, rawDiffuse, diffuse );
 
 					if ( m_shadowModel.isEnabled() )
 					{
-						if ( m_lights.hasSssTransmittance()
-							&& components.hasMember( "sssProfileIndex" ) )
-						{
-							auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex" );
-
-							sdwIF( m_writer
-								, ( light.shadowMapIndex() >= 0_i )
-								&& ( shadows.base().shadowType() != sdw::UInt( uint32_t( ShadowType::eNone ) ) )
-								&& ( receivesShadows != 0_u )
-								&& ( sssProfileIndex != 0_u ) )
-							{
-								diffuse += m_lights.computeSssTransmittance( debugOutput
-									, components
-									, light
-									, shadows
-									, lightSurface
-									, rawDiffuse );
-							}
-							sdwFI
-						}
-
+						auto shadows = m_writer.declLocale( "shadows"
+							, m_shadowModel.getDirectionalShadows() );
 						doApplyShadowsDiffuse( shadows
 							, light.shadowMapIndex()
 							, lightSurface
@@ -489,51 +463,31 @@ namespace castor3d::shader
 		if ( !m_computePointDiffuse )
 		{
 			m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( castor::toUtf8( m_prefix ) + "computePointLightDiffuse"
-				, [this, &debugOutput]( PointLight const & light
+				, [this]( PointLight const & light
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows )
 				{
 					lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
+					doInitLightSpecifics( lightSurface, components );
 					auto radiance = m_writer.declLocale( "radiance"
 						, m_scattering->computeRadiance( light.base(), lightSurface.L().value() ) );
-					auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
-						, vec3( 0.0_f ) );
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
 					auto attenuationFactor = m_writer.declLocale( "attenuationFactor"
 						, light.getAttenuationFactor( lightSurface.lengthL().value() ) );
-					doInitLightSpecifics( lightSurface, components );
+					auto diffuseLightIntensity = m_writer.declLocale( "diffuseLightIntensity"
+						, attenuationFactor * light.intensity() );
+					auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
+						, doInternalComputeLightRawDiffuse( components, lightSurface
+							, diffuseLightIntensity, radiance ) );
 					doInternalComputeLightDiffuse( light.base(), components, lightSurface
-						, attenuationFactor, radiance
-						, rawDiffuse, diffuse );
-					auto shadows = m_writer.declLocale( "shadows"
-						, m_shadowModel.getPointShadows( light.shadowMapIndex() )
-						, m_shadowModel.isEnabled() );
+						, diffuseLightIntensity, rawDiffuse, diffuse );
 
 					if ( m_shadowModel.isEnabled() )
 					{
-						if ( m_lights.hasSssTransmittance()
-							&& components.hasMember( "sssProfileIndex" ) )
-						{
-							auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex" );
-
-							sdwIF( m_writer
-								, ( light.shadowMapIndex() >= 0_i )
-								&& ( shadows.base().shadowType() != sdw::UInt( uint32_t( ShadowType::eNone ) ) )
-								&& ( receivesShadows != 0_u )
-								&& ( sssProfileIndex != 0_u ) )
-							{
-								diffuse += m_lights.computeSssTransmittance( debugOutput
-									, components
-									, light
-									, shadows
-									, lightSurface
-									, rawDiffuse );
-							}
-							sdwFI
-						}
-
+						auto shadows = m_writer.declLocale( "shadows"
+							, m_shadowModel.getPointShadows( light.shadowMapIndex() ) );
 						doApplyShadowsDiffuse( shadows
 							, light.shadowMapIndex()
 							, computeRange( light )
@@ -566,12 +520,13 @@ namespace castor3d::shader
 		if ( !m_computeSpotDiffuse )
 		{
 			m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( castor::toUtf8( m_prefix ) + "computeSpotLightDiffuse"
-				, [this, &debugOutput]( SpotLight const & light
+				, [this]( SpotLight const & light
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows )
 				{
 					lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
+					doInitLightSpecifics( lightSurface, components );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
 						, dot( lightSurface.L().value(), light.direction() ) );
 					auto diffuse = m_writer.declLocale( "diffuse"
@@ -582,41 +537,20 @@ namespace castor3d::shader
 						spotFactor = clamp( ( spotFactor - light.outerCutOffCos() ) / light.cutOffsCosDiff(), 0.0_f, 1.0_f );
 						auto radiance = m_writer.declLocale( "radiance"
 							, m_scattering->computeRadiance( light.base(), lightSurface.L().value() ) );
-						auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
-							, vec3( 0.0_f ) );
 						auto attenuationFactor = m_writer.declLocale( "attenuationFactor"
 							, spotFactor * light.getAttenuationFactor( lightSurface.lengthL().value() ) );
-						doInitLightSpecifics( lightSurface, components );
+						auto diffuseLightIntensity = m_writer.declLocale( "diffuseLightIntensity"
+							, attenuationFactor * light.intensity() );
+						auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
+							, doInternalComputeLightRawDiffuse( components, lightSurface
+								, diffuseLightIntensity, radiance ) );
 						doInternalComputeLightDiffuse( light.base(), components, lightSurface
-							, attenuationFactor, radiance
-							, rawDiffuse, diffuse );
-						auto shadows = m_writer.declLocale( "shadows"
-							, m_shadowModel.getSpotShadows( light.shadowMapIndex() )
-							, m_shadowModel.isEnabled() );
+							, diffuseLightIntensity, rawDiffuse, diffuse );
 
 						if ( m_shadowModel.isEnabled() )
 						{
-							if ( m_lights.hasSssTransmittance()
-								&& components.hasMember( "sssProfileIndex" ) )
-							{
-								auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex" );
-
-								sdwIF( m_writer
-									, ( light.shadowMapIndex() >= 0_i )
-									&& ( shadows.base().shadowType() != sdw::UInt( uint32_t( ShadowType::eNone ) ) )
-									&& ( receivesShadows != 0_u )
-									&& ( sssProfileIndex != 0_u ) )
-								{
-									diffuse += m_lights.computeSssTransmittance( debugOutput
-										, components
-										, light
-										, shadows
-										, lightSurface
-										, rawDiffuse );
-								}
-								sdwFI
-							}
-
+							auto shadows = m_writer.declLocale( "shadows"
+								, m_shadowModel.getSpotShadows( light.shadowMapIndex() ) );
 							doApplyShadowsDiffuse( shadows
 								, light.shadowMapIndex()
 								, computeRange( light )
@@ -657,7 +591,7 @@ namespace castor3d::shader
 		{
 			m_scattering->initialiseBackground( background, m_shadowModel );
 			m_computeDirectionalAllButDiffuse = m_writer.implementFunction< sdw::Void >( castor::toUtf8( m_prefix ) + "computeDirectionalLightAllButDiffuse"
-				, [this]( DirectionalLight const & light
+				, [this, &debugOutput]( DirectionalLight const & light
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows
@@ -668,17 +602,39 @@ namespace castor3d::shader
 						, DirectLighting{ m_writer } );
 					output.diffuse = diffuse;
 					lightSurface.updateL( derivVec3( -light.direction() ) );
+					doInitLightSpecifics( lightSurface, components );
 					auto radiance = m_writer.declLocale( "radiance"
 						, m_scattering->computeRadiance( light.base(), lightSurface.L().value() ) );
-					auto lightIntensity = m_writer.declLocale( "diffuseLightIntensity"
+					auto diffuseLightIntensity = m_writer.declLocale( "diffuseLightIntensity"
 						, light.intensity() );
-					doInitLightSpecifics( lightSurface, components );
-					auto specularLightIntensity = doInternalComputeLightSpecular( light.base(), components, lightSurface
-						, lightIntensity, radiance
-						, output );
-					doInternalComputeLayers( components, lightSurface, specularLightIntensity, output );
 					auto shadows = m_writer.declLocale( "shadows"
 						, m_shadowModel.getDirectionalShadows() );
+
+					if ( m_shadowModel.isEnabled()
+						&& m_lights.hasSssTransmittance()
+						&& components.hasMember( "sssProfileIndex" ) )
+					{
+						auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex" );
+
+						sdwIF( m_writer
+							, ( light.shadowMapIndex() >= 0_i )
+							&& ( shadows.base().shadowType() != sdw::UInt( uint32_t( ShadowType::eNone ) ) )
+							&& ( receivesShadows != 0_u )
+							&& ( sssProfileIndex != 0_u ) )
+						{
+							auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
+								, doInternalComputeLightRawDiffuse( components, lightSurface
+									, diffuseLightIntensity, radiance ) );
+							output.diffuse += m_lights.computeSssTransmittance( debugOutput, components
+								, light, shadows, lightSurface, rawDiffuse );
+						}
+						sdwFI
+					}
+
+					auto specularLightIntensity = doInternalComputeLightSpecular( light.base(), components, lightSurface
+						, diffuseLightIntensity, radiance
+						, output );
+					doInternalComputeLayers( components, lightSurface, specularLightIntensity, output );
 
 					if ( m_shadowModel.isEnabled() )
 					{
@@ -729,7 +685,7 @@ namespace castor3d::shader
 		if ( !m_computePointAllButDiffuse )
 		{
 			m_computePointAllButDiffuse = m_writer.implementFunction< sdw::Void >( castor::toUtf8( m_prefix ) + "computePointLightLightAllButDiffuse"
-				, [this]( PointLight const & light
+				, [this, &debugOutput]( PointLight const & light
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows
@@ -740,22 +696,45 @@ namespace castor3d::shader
 						, DirectLighting{ m_writer } );
 					output.diffuse = diffuse;
 					lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
+					doInitLightSpecifics( lightSurface, components );
 					auto radiance = m_writer.declLocale( "radiance"
 						, m_scattering->computeRadiance( light.base(), lightSurface.L().value() ) );
 					auto attenuationFactor = m_writer.declLocale( "attenuationFactor"
 						, light.getAttenuationFactor( lightSurface.lengthL().value() ) );
-					auto lightIntensity = m_writer.declLocale( "diffuseLightIntensity"
+					auto diffuseLightIntensity = m_writer.declLocale( "diffuseLightIntensity"
 						, attenuationFactor * light.intensity() );
-					doInitLightSpecifics( lightSurface, components );
+					auto shadows = m_writer.declLocale( "shadows"
+						, m_shadowModel.getPointShadows( light.shadowMapIndex() )
+						, m_shadowModel.isEnabled() );
+
+					if ( m_shadowModel.isEnabled()
+						&& m_lights.hasSssTransmittance()
+						&& components.hasMember( "sssProfileIndex" ) )
+					{
+						auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex" );
+
+						sdwIF( m_writer
+							, ( light.shadowMapIndex() >= 0_i )
+							&& ( shadows.base().shadowType() != sdw::UInt( uint32_t( ShadowType::eNone ) ) )
+							&& ( receivesShadows != 0_u )
+							&& ( sssProfileIndex != 0_u ) )
+						{
+							auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
+								, doInternalComputeLightRawDiffuse( components, lightSurface
+									, diffuseLightIntensity, radiance ) );
+							output.diffuse += m_lights.computeSssTransmittance( debugOutput, components
+								, light, shadows, lightSurface, rawDiffuse );
+						}
+						sdwFI
+					}
+
 					auto specularLightIntensity = doInternalComputeLightSpecular( light.base(), components, lightSurface
-						, lightIntensity, radiance
+						, diffuseLightIntensity, radiance
 						, output );
 					doInternalComputeLayers( components, lightSurface, specularLightIntensity, output );
 
 					if ( m_shadowModel.isEnabled() )
 					{
-						auto shadows = m_writer.declLocale( "shadows"
-							, m_shadowModel.getPointShadows( light.shadowMapIndex() ) );
 						doApplyShadows( shadows
 							, light.shadowMapIndex()
 							, computeRange( light )
@@ -795,7 +774,7 @@ namespace castor3d::shader
 		if ( !m_computeSpotAllButDiffuse )
 		{
 			m_computeSpotAllButDiffuse = m_writer.implementFunction< sdw::Void >( castor::toUtf8( m_prefix ) + "computeSpotLightLightAllButDiffuse"
-				, [this]( SpotLight const & light
+				, [this, &debugOutput]( SpotLight const & light
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows
@@ -812,23 +791,46 @@ namespace castor3d::shader
 							, DirectLighting{ m_writer } );
 						output.diffuse = diffuse;
 						lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
+						doInitLightSpecifics( lightSurface, components );
 						auto radiance = m_writer.declLocale( "radiance"
 							, m_scattering->computeRadiance( light.base(), lightSurface.L().value() ) );
 						spotFactor = clamp( ( spotFactor - light.outerCutOffCos() ) / light.cutOffsCosDiff(), 0.0_f, 1.0_f );
 						auto attenuationFactor = m_writer.declLocale( "attenuationFactor"
 							, spotFactor * light.getAttenuationFactor( lightSurface.lengthL().value() ) );
-						auto lightIntensity = m_writer.declLocale( "diffuseLightIntensity"
+						auto diffuseLightIntensity = m_writer.declLocale( "diffuseLightIntensity"
 							, attenuationFactor * light.intensity() );
-						doInitLightSpecifics( lightSurface, components );
+						auto shadows = m_writer.declLocale( "shadows"
+							, m_shadowModel.getSpotShadows( light.shadowMapIndex() )
+							, m_shadowModel.isEnabled() );
+
+						if ( m_shadowModel.isEnabled()
+							&& m_lights.hasSssTransmittance()
+								&& components.hasMember( "sssProfileIndex" ) )
+						{
+							auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex" );
+
+							sdwIF( m_writer
+								, ( light.shadowMapIndex() >= 0_i )
+								&& ( shadows.base().shadowType() != sdw::UInt( uint32_t( ShadowType::eNone ) ) )
+								&& ( receivesShadows != 0_u )
+								&& ( sssProfileIndex != 0_u ) )
+							{
+								auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
+									, doInternalComputeLightRawDiffuse( components, lightSurface
+										, diffuseLightIntensity, radiance ) );
+								output.diffuse += m_lights.computeSssTransmittance( debugOutput, components
+									, light, shadows, lightSurface, rawDiffuse );
+							}
+							sdwFI
+						}
+
 						auto specularLightIntensity = doInternalComputeLightSpecular( light.base(), components, lightSurface
-							, lightIntensity, radiance
+							, diffuseLightIntensity, radiance
 							, output );
 						doInternalComputeLayers( components, lightSurface, specularLightIntensity, output );
 
 						if ( m_shadowModel.isEnabled() )
 						{
-							auto shadows = m_writer.declLocale( "shadows"
-								, m_shadowModel.getSpotShadows( light.shadowMapIndex() ) );
 							doApplyShadows( shadows
 								, light.shadowMapIndex()
 								, computeRange( light )
@@ -1189,34 +1191,25 @@ namespace castor3d::shader
 		}
 	}
 	
-	void LightingModel::doInternalComputeLightRawDiffuse( Light const & light
-		, BlendComponents const & components
+	sdw::Vec3 LightingModel::doInternalComputeLightRawDiffuse( BlendComponents const & components
 		, LightSurface const & lightSurface
-		, sdw::Float const & attenuation
-		, sdw::Float const & lightIntensity
-		, sdw::Vec3 const & radiance
-		, sdw::Vec3 & rawDiffuse )
+		, sdw::Float const & diffuseLightIntensity
+		, sdw::Vec3 const & radiance )
 	{
-		rawDiffuse = m_diffuse->compute( components
+		return m_diffuse->compute( components
 			, lightSurface
 			, radiance
-			, lightIntensity
+			, diffuseLightIntensity
 			, doGetNdotL( lightSurface, components ).value() );
 	}
 	
-	sdw::Float LightingModel::doInternalComputeLightDiffuse( Light const & light
+	void LightingModel::doInternalComputeLightDiffuse( Light const & light
 		, BlendComponents const & components
 		, LightSurface const & lightSurface
-		, sdw::Float const & attenuation
-		, sdw::Vec3 const & radiance
-		, sdw::Vec3 & rawDiffuse
+		, sdw::Float const & diffuseLightIntensity
+		, sdw::Vec3 const & rawDiffuse
 		, sdw::Vec3 & result )
 	{
-		auto lightIntensity = m_writer.declLocale( "diffuseLightIntensity"
-			, attenuation * light.intensity() );
-		doInternalComputeLightRawDiffuse( light, components, lightSurface
-			, attenuation, lightIntensity, radiance
-			, rawDiffuse );
 		result = rawDiffuse * doGetNdotL( lightSurface, components ).value() * components.baseColour;
 
 		if ( components.hasMember( "diffuseTransmissionFactor" ) )
@@ -1224,7 +1217,7 @@ namespace castor3d::shader
 			lightSurface.updateN( -lightSurface.N() );
 			auto diffuseBtdf = m_writer.declLocale( "diffuseBtdf"
 				, doGetNdotL( lightSurface, components ).value()
-					* lightIntensity
+					* diffuseLightIntensity
 					* m_diffuse->compute( components
 						, lightSurface
 						, components.diffuseTransmissionColour
@@ -1277,7 +1270,7 @@ namespace castor3d::shader
 
 			// Transmission BTDF
 			auto transmittedLight = m_writer.declLocale( "transmittedLight"
-				, lightIntensity * ( 1.0_f - F ) * components.baseColour * D * Vis );
+				, diffuseLightIntensity * ( 1.0_f - F ) * components.baseColour * D * Vis );
 
 			if ( components.hasMember( "thicknessFactor" )
 				&& components.hasMember( "attenuationDistance" ) )
@@ -1291,8 +1284,6 @@ namespace castor3d::shader
 
 			lightSurface.updateL( lightSurface.vertexToLight() + transmissionRay );
 		}
-
-		return lightIntensity;
 	}
 
 	sdw::Vec3 LightingModel::doInternalComputeLightSpecular( Light const & light

@@ -174,6 +174,24 @@ namespace castor3d::shader
 		C3D_API PointShadowData getPointShadows( sdw::Int const & index );
 		C3D_API SpotShadowData getSpotShadows( sdw::Int const & index );
 
+		C3D_API sdw::Vec2 getDirectionalShadowDepths( shader::ShadowData const & shadows
+			, sdw::Mat4 const & lightTransform
+			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsPosition
+			, sdw::Vec3 const & wsLightToVertex
+			, sdw::UInt const & cascadeIndex );
+		C3D_API sdw::Vec2 getPointShadowDepths( shader::ShadowData const & shadows
+			, sdw::Float const & lightRange
+			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsLightToVertex
+			, sdw::Int const & shadowMapIndex );
+		C3D_API sdw::Vec2 getSpotShadowDepths( shader::ShadowData const & shadows
+			, sdw::Mat4 const & lightTransform
+			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsPosition
+			, sdw::Vec3 const & wsVertexToLight
+			, sdw::Int const & shadowMapIndex );
+
 		C3D_API sdw::Float computeDirectional( shader::ShadowData const & shadows
 			, sdw::Vec3 const & wsVertexToLight
 			, sdw::Vec3 const & wsNormal
