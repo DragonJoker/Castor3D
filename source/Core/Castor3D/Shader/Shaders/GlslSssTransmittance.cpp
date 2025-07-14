@@ -17,7 +17,7 @@ CU_ImplementSmartPtr( castor3d::shader, SssTransmittance )
 namespace castor3d::shader
 {
 	SssTransmittance::SssTransmittance( sdw::ShaderWriter & writer
-		, Shadow const & shadows
+		, Shadow & shadows
 		, ShadowOptions shadowOptions
 		, SssProfiles const & sssProfiles
 		, sdw::CombinedImage1DArrayRgba16 const & sssDiffusionProfiles )
@@ -45,46 +45,42 @@ namespace castor3d::shader
 		if ( !m_computeDirectional )
 		{
 			m_computeDirectional = m_writer.implementFunction< sdw::Vec3 >( "C3D_computeSssTransmittanceDirectional"
-				, [this, &debugOutput]( sdw::UInt const & sssProfileIndex
+				, [this, &debugOutput]( shader::ShadowData const & shadows
+					, sdw::UInt const & sssProfileIndex
 					, sdw::Float const & transmittanceFactor
 					, DirectionalLight const & light
 					, sdw::Mat4x4 const & lightTransform
+					, sdw::Vec3 const & wsVertexToLight
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & wsPosition
 					, sdw::Vec3 const & lightRadiance )
 				{
 					auto result = m_writer.declLocale( "result"
 						, vec3( 0.0_f ) );
-					auto c3d_mapNormalDepthDirectional = m_shadows.getMapDepthDirectional();
 
 					// We shrink the position inwards the surface to avoid artifacts.
 					auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
 						, vec4( wsPosition - wsNormal * 0.005_f, 1.0_f ) );
 
-					auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
-						, lightTransform * shrinkedPos );
-					lightSpacePosition /= lightSpacePosition.w();
-					lightSpacePosition.xy() = sdw::fma( lightSpacePosition.xy()
-						, vec2( 0.5_f )
-						, vec2( 0.5_f ) );
-					auto vertexToLight = m_writer.declLocale( "vertexToLight"
-						, -light.direction() );
-					auto shadowDepth = m_writer.declLocale( "shadowDepth"
-						, c3d_mapNormalDepthDirectional.lod( vec3( lightSpacePosition.xy(), 0.0_f ), 0.0_f ) );
+					auto shadowDepths = m_writer.declLocale( "shadowDepth"
+						, m_shadows.getDirectionalShadowDepths( shadows, lightTransform
+							, wsNormal, shrinkedPos.xyz(), wsVertexToLight, 0_u ) );
 					result = doCompute( debugOutput
-						, 1.0_f - lightSpacePosition.z()
-						, 1.0_f - shadowDepth
+						, shadowDepths.x()
+						, shadowDepths.y()
 						, sssProfileIndex
 						, wsNormal
 						, transmittanceFactor
-						, vertexToLight );
+						, wsVertexToLight );
 					debugOutput.registerOutput( cuT( "Final Transmittance" ), result * lightRadiance );
 					m_writer.returnStmt( result * lightRadiance );
 				}
+				, InShadowData{ m_writer, "shadows" }
 				, sdw::InUInt{ m_writer, "sssProfileIndex" }
 				, sdw::InFloat{ m_writer, "transmittanceFactor" }
 				, InDirectionalLight{ m_writer, "light" }
 				, sdw::InMat4{ m_writer, "lightTransform" }
+				, sdw::InVec3{ m_writer, "wsVertexToLight" }
 				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InVec3{ m_writer, "wsPosition" }
 				, sdw::InVec3{ m_writer, "lightRadiance" } );
@@ -92,10 +88,12 @@ namespace castor3d::shader
 
 		auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex", true );
 		auto transmittanceFactor = components.getMember< sdw::Float >( "transmittance", true );
-		return m_computeDirectional( sssProfileIndex
+		return m_computeDirectional( pshadow.base()
+			, sssProfileIndex
 			, transmittanceFactor
 			, plight
 			, pshadow.transforms()[0]
+			, plightSurface.vertexToLight().value()
 			, plightSurface.N().value()
 			, plightSurface.worldPosition().value().xyz()
 			, plightRadiance );
@@ -117,7 +115,8 @@ namespace castor3d::shader
 		if ( !m_computePoint )
 		{
 			m_computePoint = m_writer.implementFunction< sdw::Vec3 >( "C3D_computeSssTransmittancePoint"
-				, [this, &debugOutput]( sdw::UInt const & sssProfileIndex
+				, [this, &debugOutput]( shader::ShadowData const & shadows
+					, sdw::UInt const & sssProfileIndex
 					, sdw::Float const & transmittanceFactor
 					, PointLight const & light
 					, sdw::Int const & shadowMapIndex
@@ -127,7 +126,6 @@ namespace castor3d::shader
 				{
 					auto result = m_writer.declLocale( "result"
 						, vec3( 0.0_f ) );
-					auto c3d_mapNormalDepthPoint = m_shadows.getMapDepthPoint();
 
 					// We shrink the position inwards the surface to avoid artifacts.
 					auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
@@ -135,13 +133,13 @@ namespace castor3d::shader
 
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
 						, shrinkedPos - light.position() );
-					auto shadowDepth = m_writer.declLocale( "shadowDepth"
-						, c3d_mapNormalDepthPoint.lod( vec4( lightToVertex, m_writer.cast< sdw::Float >( shadowMapIndex ) ), 0.0_f ) );
+					auto shadowDepths = m_writer.declLocale( "shadowDepth"
+						, m_shadows.getPointShadowDepths( shadows, computeRange( light ), wsNormal, lightToVertex, shadowMapIndex ) );
 					auto vertexToLight = m_writer.declLocale( "vertexToLight"
 						, normalize( -lightToVertex ) );
 					result = doCompute( debugOutput
-						, ( shrinkedPos - light.position() ).z() / computeRange( light )
-						, shadowDepth
+						, shadowDepths.x()
+						, shadowDepths.y()
 						, sssProfileIndex
 						, wsNormal
 						, transmittanceFactor
@@ -149,6 +147,7 @@ namespace castor3d::shader
 					debugOutput.registerOutput( cuT( "Final Transmittance" ), result * lightRadiance );
 					m_writer.returnStmt( result * lightRadiance );
 				}
+				, InShadowData{ m_writer, "shadows" }
 				, sdw::InUInt{ m_writer, "sssProfileIndex" }
 				, sdw::InFloat{ m_writer, "transmittanceFactor" }
 				, InPointLight{ m_writer, "light" }
@@ -160,7 +159,8 @@ namespace castor3d::shader
 
 		auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex", true );
 		auto transmittanceFactor = components.getMember< sdw::Float >( "transmittance", true );
-		return m_computePoint( sssProfileIndex
+		return m_computePoint( pshadow.base()
+			, sssProfileIndex
 			, transmittanceFactor
 			, plight
 			, plight.shadowMapIndex()
@@ -185,7 +185,8 @@ namespace castor3d::shader
 		if ( !m_computeSpot )
 		{
 			m_computeSpot = m_writer.implementFunction< sdw::Vec3 >( "C3D_computeSssTransmittanceSpot"
-				, [this, &debugOutput]( sdw::UInt const & sssProfileIndex
+				, [this, &debugOutput]( shader::ShadowData const & shadows
+					, sdw::UInt const & sssProfileIndex
 					, sdw::Float const & transmittanceFactor
 					, SpotLight const & light
 					, sdw::Mat4x4 const & lightTransform
@@ -199,24 +200,21 @@ namespace castor3d::shader
 					// We shrink the position inwards the surface to avoid artifacts.
 					auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
 						, wsPosition - wsNormal * 0.005_f );
+					auto wsVertexToLight = m_writer.declLocale( "wsVertexToLight"
+						, light.position() - shrinkedPos );
 					auto vertexToLight = m_writer.declLocale( "vertexToLight"
-						, normalize( light.position() - shrinkedPos ) );
+						, normalize( wsVertexToLight ) );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
 						, dot( vertexToLight, light.direction() ) );
 
 					sdwIF( m_writer, spotFactor > light.outerCutOffCos() )
 					{
 						spotFactor = clamp( ( spotFactor - light.outerCutOffCos() ) / light.cutOffsCosDiff(), 0.0_f, 1.0_f );
-						auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
-							, lightTransform * vec4( shrinkedPos, 1.0_f ) ); // [-w, w]
-						lightSpacePosition /= lightSpacePosition.w(); // [-1, 1]
-						lightSpacePosition.xy() = sdw::fma( lightSpacePosition.xy(), vec2( 0.5_f ), vec2( 0.5_f ) ); // [0, 1]
-						auto c3d_mapDepthSpot = m_shadows.getMapDepthSpot();
-						auto shadowDepth = m_writer.declLocale( "shadowDepth"
-							, c3d_mapDepthSpot.lod( vec3( lightSpacePosition.xy(), m_writer.cast< sdw::Float >( shadowMapIndex ) ), 0.0_f ) );
+						auto shadowDepths = m_writer.declLocale( "shadowDepth"
+							, m_shadows.getSpotShadowDepths( shadows, lightTransform, wsNormal, shrinkedPos.xyz(), wsVertexToLight, shadowMapIndex ) );
 						result = spotFactor * doCompute( debugOutput
-							, lightSpacePosition.z()
-							, shadowDepth
+							, shadowDepths.x()
+							, shadowDepths.y()
 							, sssProfileIndex
 							, wsNormal
 							, transmittanceFactor
@@ -227,6 +225,7 @@ namespace castor3d::shader
 					debugOutput.registerOutput( cuT( "Final Transmittance" ), result * lightRadiance );
 					m_writer.returnStmt( result * lightRadiance );
 				}
+				, InShadowData{ m_writer, "shadows" }
 				, sdw::InUInt{ m_writer, "sssProfileIndex" }
 				, sdw::InFloat{ m_writer, "transmittanceFactor" }
 				, InSpotLight{ m_writer, "light" }
@@ -239,7 +238,8 @@ namespace castor3d::shader
 
 		auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex", true );
 		auto transmittanceFactor = components.getMember< sdw::Float >( "transmittance", true );
-		return m_computeSpot( sssProfileIndex
+		return m_computeSpot( pshadow.base()
+			, sssProfileIndex
 			, transmittanceFactor
 			, plight
 			, pshadow.transform()

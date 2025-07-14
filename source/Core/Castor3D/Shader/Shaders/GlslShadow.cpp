@@ -419,6 +419,91 @@ namespace castor3d::shader
 		return m_writer.declLocale< SpotShadowData >( "c3d_sptShadows" );
 	}
 
+	sdw::Vec2 Shadow::getDirectionalShadowDepths( shader::ShadowData const & shadows
+		, sdw::Mat4 const & lightTransform
+		, sdw::Vec3 const & wsNormal
+		, sdw::Vec3 const & wsPosition
+		, sdw::Vec3 const & wsVertexToLight
+		, sdw::UInt const & cascadeIndex )
+	{
+		//
+		auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
+			, getLightSpacePosition( lightTransform, wsPosition ) );
+		auto lightToVertex = m_writer.declLocale( "lightToVertex"
+			, -normalize( wsVertexToLight ) );
+		auto depthBias = m_writer.declLocale( "depthBias"
+			, getShadowOffset( wsNormal
+				, lightToVertex
+				, -shadows.rawShadowOffsets().x()
+				, -shadows.rawShadowOffsets().y() ) );
+		auto lightSpaceDepth = m_writer.declLocale( "lightSpaceDepth"
+			, lightSpacePosition.z() - depthBias );
+
+		//
+		auto c3d_mapNormalDepthDirectional = m_writer.getVariable< sdw::CombinedImage2DArrayR32 >( shadow::MapDepthDirectional );
+		auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
+			, c3d_mapNormalDepthDirectional.lod( vec3( lightSpacePosition.xy(), m_writer.cast< sdw::Float >( cascadeIndex ) ), 0.0_f ) );
+
+		//
+		return vec2( lightSpaceDepth, shadowMapDepth );
+	}
+
+	sdw::Vec2 Shadow::getPointShadowDepths( shader::ShadowData const & shadows
+		, sdw::Float const & lightRange
+		, sdw::Vec3 const & wsNormal
+		, sdw::Vec3 const & wsLightToVertex
+		, sdw::Int const & shadowMapIndex )
+	{
+		//
+		auto lightSpaceDepth = m_writer.declLocale( "lightSpaceDepth"
+			, wsLightToVertex.z() / lightRange );
+		auto lightDirection = m_writer.declLocale( "lightDirection"
+			, normalize( wsLightToVertex ) );
+		auto depthBias = m_writer.declLocale( "depthBias"
+			, getShadowOffset( wsNormal
+				, lightDirection
+				, -shadows.rawShadowOffsets().x()
+				, -shadows.rawShadowOffsets().y() ) );
+		lightSpaceDepth -= depthBias;
+
+		//
+		auto c3d_mapDepthPoint = m_writer.getVariable< sdw::CombinedImageCubeArrayR32 >( shadow::MapDepthPoint );
+		auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
+			, c3d_mapDepthPoint.lod( vec4( wsLightToVertex, shadowMapIndex ), 0.0_f ) );
+
+		//
+		return vec2( lightSpaceDepth, shadowMapDepth );
+	}
+
+	sdw::Vec2 Shadow::getSpotShadowDepths( shader::ShadowData const & shadows
+		, sdw::Mat4 const & lightTransform
+		, sdw::Vec3 const & wsNormal
+		, sdw::Vec3 const & wsPosition
+		, sdw::Vec3 const & wsVertexToLight
+		, sdw::Int const & shadowMapIndex )
+	{
+		//
+		auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
+			, getLightSpacePosition( lightTransform, wsPosition.xyz() ) );
+		auto lightToVertex = m_writer.declLocale( "lightToVertex"
+			, -normalize( wsVertexToLight ) );
+		auto depthBias = m_writer.declLocale( "depthBias"
+			, getShadowOffset( wsNormal
+				, lightToVertex
+				, -shadows.rawShadowOffsets().x()
+				, -shadows.rawShadowOffsets().y() ) );
+		auto lightSpaceDepth = m_writer.declLocale( "lightSpaceDepth"
+			, lightSpacePosition.z() - depthBias );
+
+		//
+		auto c3d_mapNormalDepthSpot = m_writer.getVariable< sdw::CombinedImage2DArrayR32 >( shadow::MapDepthSpot );
+		auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
+			, c3d_mapNormalDepthSpot.lod( vec3( lightSpacePosition.xy(), shadowMapIndex ), 0.0_f ) );
+
+		//
+		return vec2( lightSpaceDepth, shadowMapDepth );
+	}
+
 	sdw::Float Shadow::computeDirectional( shader::ShadowData const & pshadows
 		, sdw::Vec3 const & pwsVertexToLight
 		, sdw::Vec3 const & pwsNormal
@@ -565,37 +650,33 @@ namespace castor3d::shader
 								, shadows.vsmMinVariance()
 								, shadows.vsmLightBleedingReduction() );
 						}
+						sdwELSEIF( shadows.shadowType() == sdw::UInt( int( ShadowType::ePCF ) ) )
+						{
+							auto c3d_mapNormalDepthCmpSpot = m_writer.getVariable< shadow::CombinedImage2DArray >( shadow::MapDepthCmpSpot );
+							auto depthBias = m_writer.declLocale( "depthBias"
+								, getShadowOffset( wsNormal
+									, lightDirection
+									, -shadows.pcfShadowOffsets().x()
+									, -shadows.pcfShadowOffsets().y() ) );
+							result = filterPCF( lightSpacePosition.xyz()
+								, c3d_mapNormalDepthCmpSpot
+								, vec2( sdw::Float( 1.0f / float( ShadowMapSpotTextureSize ) ) )
+								, m_writer.cast< sdw::UInt >( shadowMapIndex )
+								, depthBias
+								, shadows.pcfSampleCount()
+								, shadows.pcfFilterSize() );
+						}
 						sdwELSE
 						{
-							sdwIF( m_writer, shadows.shadowType() == sdw::UInt( int( ShadowType::ePCF ) ) )
-							{
-								auto c3d_mapNormalDepthCmpSpot = m_writer.getVariable< shadow::CombinedImage2DArray >( shadow::MapDepthCmpSpot );
-								auto depthBias = m_writer.declLocale( "depthBias"
-									, getShadowOffset( wsNormal
-										, lightDirection
-										, -shadows.pcfShadowOffsets().x()
-										, -shadows.pcfShadowOffsets().y() ) );
-								result = filterPCF( lightSpacePosition.xyz()
-									, c3d_mapNormalDepthCmpSpot
-									, vec2( sdw::Float( 1.0f / float( ShadowMapSpotTextureSize ) ) )
-									, m_writer.cast< sdw::UInt >( shadowMapIndex )
-									, depthBias
-									, shadows.pcfSampleCount()
-									, shadows.pcfFilterSize() );
-							}
-							sdwELSE
-							{
-								auto c3d_mapNormalDepthSpot = m_writer.getVariable< sdw::CombinedImage2DArrayR32 >( shadow::MapDepthSpot );
-								auto depthBias = m_writer.declLocale( "depthBias"
-									, getShadowOffset( wsNormal
-										, lightDirection
-										, -shadows.rawShadowOffsets().x()
-										, -shadows.rawShadowOffsets().y() ) );
-								auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
-									, c3d_mapNormalDepthSpot.lod( vec3( lightSpacePosition.xy(), shadowMapIndex ), 0.0_f ) );
-								result = step( 1.0_f - ( lightSpacePosition.z() - depthBias ), 1.0_f - shadowMapDepth );
-							}
-							sdwFI
+							auto c3d_mapNormalDepthSpot = m_writer.getVariable< sdw::CombinedImage2DArrayR32 >( shadow::MapDepthSpot );
+							auto depthBias = m_writer.declLocale( "depthBias"
+								, getShadowOffset( wsNormal
+									, lightDirection
+									, -shadows.rawShadowOffsets().x()
+									, -shadows.rawShadowOffsets().y() ) );
+							auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
+								, c3d_mapNormalDepthSpot.lod( vec3( lightSpacePosition.xy(), shadowMapIndex ), 0.0_f ) );
+							result = step( 1.0_f - ( lightSpacePosition.z() - depthBias ), 1.0_f - shadowMapDepth );
 						}
 						sdwFI
 
@@ -658,38 +739,34 @@ namespace castor3d::shader
 								, shadows.vsmMinVariance()
 								, shadows.vsmLightBleedingReduction() );
 						}
+						sdwELSEIF( shadows.shadowType() == sdw::UInt( int( ShadowType::ePCF ) ) )
+						{
+							auto c3d_mapDepthCmpPoint = m_writer.getVariable< shadow::CombinedImageCubeArray >( shadow::MapDepthCmpPoint );
+							auto depthBias = m_writer.declLocale( "depthBias"
+								, getShadowOffset( wsNormal
+									, lightDirection
+									, -shadows.pcfShadowOffsets().x()
+									, -shadows.pcfShadowOffsets().y() ) );
+							result = filterPCF( lightToVertex
+								, c3d_mapDepthCmpPoint
+								, vec2( sdw::Float( 1.0f / float( ShadowMapPointTextureSize ) ) )
+								, m_writer.cast< sdw::UInt >( shadowMapIndex )
+								, depth
+								, depthBias
+								, shadows.pcfSampleCount()
+								, shadows.pcfFilterSize() );
+						}
 						sdwELSE
 						{
-							sdwIF( m_writer, shadows.shadowType() == sdw::UInt( int( ShadowType::ePCF ) ) )
-							{
-								auto c3d_mapDepthCmpPoint = m_writer.getVariable< shadow::CombinedImageCubeArray >( shadow::MapDepthCmpPoint );
-								auto depthBias = m_writer.declLocale( "depthBias"
-									, getShadowOffset( wsNormal
-										, lightDirection
-										, -shadows.pcfShadowOffsets().x()
-										, -shadows.pcfShadowOffsets().y() ) );
-								result = filterPCF( lightToVertex
-									, c3d_mapDepthCmpPoint
-									, vec2( sdw::Float( 1.0f / float( ShadowMapPointTextureSize ) ) )
-									, m_writer.cast< sdw::UInt >( shadowMapIndex )
-									, depth
-									, depthBias
-									, shadows.pcfSampleCount()
-									, shadows.pcfFilterSize() );
-							}
-							sdwELSE
-							{
-								auto c3d_mapDepthPoint = m_writer.getVariable< sdw::CombinedImageCubeArrayR32 >( shadow::MapDepthPoint );
-								auto depthBias = m_writer.declLocale( "depthBias"
-									, getShadowOffset( wsNormal
-										, lightDirection
-										, -shadows.rawShadowOffsets().x()
-										, -shadows.rawShadowOffsets().y() ) );
-								auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
-									, c3d_mapDepthPoint.lod( vec4( lightToVertex, shadowMapIndex ), 0.0_f ) );
-								result = step( 1.0_f - ( depth - depthBias ), 1.0_f - shadowMapDepth );
-							}
-							sdwFI
+							auto c3d_mapDepthPoint = m_writer.getVariable< sdw::CombinedImageCubeArrayR32 >( shadow::MapDepthPoint );
+							auto depthBias = m_writer.declLocale( "depthBias"
+								, getShadowOffset( wsNormal
+									, lightDirection
+									, -shadows.rawShadowOffsets().x()
+									, -shadows.rawShadowOffsets().y() ) );
+							auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
+								, c3d_mapDepthPoint.lod( vec4( lightToVertex, shadowMapIndex ), 0.0_f ) );
+							result = step( 1.0_f - ( depth - depthBias ), 1.0_f - shadowMapDepth );
 						}
 						sdwFI
 

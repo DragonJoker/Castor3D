@@ -239,19 +239,15 @@ namespace castor3d::shader
 			, sdw::Vec3 & backgroundResult );
 
 	private:
-		void doInternalComputeLightRawDiffuse( Light const & light
+		sdw::Vec3 doInternalComputeLightRawDiffuse( BlendComponents const & components
+			, LightSurface const & lightSurface
+			, sdw::Float const & diffuseLightIntensity
+			, sdw::Vec3 const & radiance );
+		void doInternalComputeLightDiffuse( Light const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
-			, sdw::Float const & attenuation
-			, sdw::Float const & lightIntensity
-			, sdw::Vec3 const & radiance
-			, sdw::Vec3 & rawDiffuse );
-		sdw::Float doInternalComputeLightDiffuse( Light const & light
-			, BlendComponents const & components
-			, LightSurface const & lightSurface
-			, sdw::Float const & attenuation
-			, sdw::Vec3 const & radiance
-			, sdw::Vec3 & rawDiffuse
+			, sdw::Float const & diffuseLightIntensity
+			, sdw::Vec3 const & rawDiffuse
 			, sdw::Vec3 & result );
 		sdw::Vec3 doInternalComputeLightSpecular( Light const & light
 			, BlendComponents const & components

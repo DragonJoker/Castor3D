@@ -16,7 +16,7 @@ namespace castor3d::shader
 	{
 	public:
 		C3D_API SssTransmittance( sdw::ShaderWriter & writer
-			, Shadow const & shadows
+			, Shadow & shadows
 			, ShadowOptions shadowOptions
 			, SssProfiles const & sssProfiles
 			, sdw::CombinedImage1DArrayRgba16 const & sssDiffusionProfiles );
@@ -50,7 +50,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & lightToVertex );
 
 		sdw::ShaderWriter & m_writer;
-		Shadow const & m_shadows;
+		Shadow & m_shadows;
 		SssProfiles const & m_sssProfiles;
 		sdw::CombinedImage1DArrayRgba16 const & m_sssDiffusionProfiles;
 
@@ -65,14 +65,17 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InFloat > m_compute;
 		sdw::Function < sdw::Vec3
+			, InShadowData
 			, sdw::InUInt
 			, sdw::InFloat
 			, InDirectionalLight
 			, sdw::InMat4
 			, sdw::InVec3
 			, sdw::InVec3
+			, sdw::InVec3
 			, sdw::InVec3 > m_computeDirectional;
 		sdw::Function < sdw::Vec3
+			, InShadowData
 			, sdw::InUInt
 			, sdw::InFloat
 			, InPointLight
@@ -81,6 +84,7 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InVec3 > m_computePoint;
 		sdw::Function < sdw::Vec3
+			, InShadowData
 			, sdw::InUInt
 			, sdw::InFloat
 			, InSpotLight
