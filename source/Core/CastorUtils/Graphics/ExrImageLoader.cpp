@@ -9,7 +9,7 @@
 #include "tinyexr.h"
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	//************************************************************************************************
 
@@ -63,7 +63,7 @@ namespace castor
 	void ExrImageLoader::registerLoader( ImageLoader & reg )
 	{
 		reg.registerLoader( exrl::listExtensions()
-			, castor::make_unique< ExrImageLoader >() );
+			, c3d::makeRawUnique< ExrImageLoader >() );
 	}
 
 	void ExrImageLoader::unregisterLoader( ImageLoader & reg )

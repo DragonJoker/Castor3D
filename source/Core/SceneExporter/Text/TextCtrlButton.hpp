@@ -9,27 +9,27 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::ButtonCtrl >
-		: public TextWriterT< castor3d::ButtonCtrl >
+	class TextWriter< ButtonCtrl >
+		: public TextWriterT< ButtonCtrl >
 	{
 	public:
 		explicit TextWriter( String const & tabs );
-		bool operator()( castor3d::ButtonCtrl const & overlay
-			, castor::StringStream & file )override;
+		bool operator()( ButtonCtrl const & overlay
+			, StringStream & file )override;
 	};
 
 	template<>
-	class TextWriter< castor3d::ButtonStyle >
-		: public TextWriterT< castor3d::ButtonStyle >
+	class TextWriter< ButtonStyle >
+		: public TextWriterT< ButtonStyle >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, String const & fontName );
-		bool operator()( castor3d::ButtonStyle const & overlay
-			, castor::StringStream & file )override;
+		bool operator()( ButtonStyle const & overlay
+			, StringStream & file )override;
 
 	private:
 		String m_fontName;

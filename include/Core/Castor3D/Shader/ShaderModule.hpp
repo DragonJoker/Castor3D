@@ -10,12 +10,12 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/FlagCombination.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Shader */
 	//@{
 
-	using ShaderPtr = castor::RawUniquePtr< ast::Shader >;
+	using ShaderPtr = RawUniquePtr< ast::Shader >;
 
 	/**
 	*\~english
@@ -27,8 +27,8 @@ namespace castor3d
 	*/
 	struct SpirVShader
 	{
-		castor::UInt32Array spirv;
-		castor::MbString text;
+		UInt32Array spirv;
+		MbString text;
 	};
 	/**
 	*\~english
@@ -48,17 +48,17 @@ namespace castor3d
 		C3D_API ~ShaderModule()noexcept = default;
 
 		C3D_API ShaderModule( VkShaderStageFlagBits stage
-			, castor::String const & name );
+			, String const & name );
 		C3D_API ShaderModule( VkShaderStageFlagBits stage
-			, castor::String const & name
-			, castor::MbString source );
+			, String const & name
+			, MbString source );
 		C3D_API ShaderModule( VkShaderStageFlagBits stage
-			, castor::String const & name
+			, String const & name
 			, ShaderPtr shader );
 
 		VkShaderStageFlagBits stage{};
-		castor::String name{};
-		castor::MbString source{};
+		String name{};
+		MbString source{};
 		ShaderPtr shader{};
 		SpirVShader compiled{};
 	};
@@ -79,13 +79,13 @@ namespace castor3d
 		C3D_API ProgramModule() = default;
 		C3D_API ~ProgramModule()noexcept = default;
 
-		C3D_API explicit ProgramModule( castor::String const & name );
-		C3D_API ProgramModule( castor::String const & name
+		C3D_API explicit ProgramModule( String const & name );
+		C3D_API ProgramModule( String const & name
 			, ShaderPtr shader );
 
-		castor::String name{};
+		String name{};
 		ShaderPtr shader{};
-		castor::Map< ast::ShaderStage, SpirVShader > compiled;
+		Map< ast::ShaderStage, SpirVShader > compiled;
 	};
 	/**
 	*\~english
@@ -186,10 +186,10 @@ namespace castor3d
 	class StructuredShaderBuffer;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, ShaderAppendBuffer, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ShaderBuffer, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ShaderProgram, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LightingModelFactory, C3D_API );
+	CU_DeclareSmartPtr( c3d, ShaderAppendBuffer, C3D_API );
+	CU_DeclareSmartPtr( c3d, ShaderBuffer, C3D_API );
+	CU_DeclareSmartPtr( c3d, ShaderProgram, C3D_API );
+	CU_DeclareSmartPtr( c3d, LightingModelFactory, C3D_API );
 	/** @endcond */
 
 	//@}

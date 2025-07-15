@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "ComponentModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	struct FaceInfos
 	{
@@ -24,10 +24,10 @@ namespace castor3d
 			int m_index{ -1 };
 			//!\~english	Vertex normal.
 			//!\~french		Normale du sommet.
-			castor::Array< float, 3 > m_normal{ { 0.0f, 0.0f, 0.0f } };
+			Array< float, 3 > m_normal{ { 0.0f, 0.0f, 0.0f } };
 			//!\~english	Vertex UV.
 			//!\~french		UV du sommet.
-			castor::Array< float, 2 > m_texCoords{ { 0.0f, 0.0f } };
+			Array< float, 2 > m_texCoords{ { 0.0f, 0.0f } };
 			//!\~english	Tells the vertex has a normal.
 			//!\~french		Dit que le sommet a une normale.
 			bool m_hasNormal{ false };
@@ -37,7 +37,7 @@ namespace castor3d
 		};
 		//!\~english	The 3 vertex informations.
 		//!\~french		Les informations des 3 sommets.
-		castor::Array< Vertex, 3 > m_vertex;
+		Array< Vertex, 3 > m_vertex;
 	};
 }
 

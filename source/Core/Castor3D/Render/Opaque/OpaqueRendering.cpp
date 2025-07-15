@@ -30,16 +30,16 @@
 
 #include <RenderGraph/FramePassTimer.hpp>
 
-CU_ImplementSmartPtr( castor3d, OpaqueRendering )
+CU_ImplementSmartPtr( c3d, OpaqueRendering )
 
-namespace castor3d
+namespace c3d
 {
 	OpaqueRendering::OpaqueRendering( RenderTechnique & parent
 		, RenderDevice const & device
 		, PrepassRendering const & previous
 		, crg::FramePassArray const & previousPasses
 		, ProgressBar * progress )
-		: castor::OwnedBy< RenderTechnique >{ parent }
+		: OwnedBy< RenderTechnique >{ parent }
 		, m_device{ device }
 		, m_graph{ getOwner()->getGraph().createPassGroup( "Opaque" ) }
 		, m_materialsCounts{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() )
@@ -50,7 +50,7 @@ namespace castor3d
 				, getOwner()->getName() + cuT( "/MaterialsCounts1" ) )
 			: nullptr ) }
 		, m_materialsIndirectCounts{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() )
-			? makeBuffer< castor::Point3ui >( m_device
+			? makeBuffer< Point3ui >( m_device
 				, getEngine()->getMaxPassTypeCount()
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -64,7 +64,7 @@ namespace castor3d
 				, getOwner()->getName() + cuT( "/MaterialsStarts" ) )
 			: nullptr ) }
 		, m_pixelsXY{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() )
-			? makeBuffer< castor::Point2ui >( m_device
+			? makeBuffer< Point2ui >( m_device
 				, getOwner()->getTargetExtent().width * getOwner()->getTargetExtent().height
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -74,7 +74,7 @@ namespace castor3d
 		, m_deferredOpaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsDeferredOpaquePassEnabled(); } } }
 		, m_visibilityOpaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsVisibilityOpaquePassEnabled(); } } }
 		, m_visibilityReorder{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() )
-			? castor::makeUnique< VisibilityReorderPass >( m_graph
+			? makeUnique< VisibilityReorderPass >( m_graph
 				, crg::FramePassArray{ &previous.getLastPass() }
 				, m_device
 				, previous.getVisibility().sampledViewId
@@ -91,7 +91,7 @@ namespace castor3d
 		, m_opaquePassDesc{ ( m_visibilityResolveDesc
 			? m_visibilityResolveDesc
 			: &doCreateOpaquePass( progress, previous.getLastPass(), previousPasses, false ) ) }
-		, m_subsurfaceScattering{ castor::makeUnique< SubsurfaceScatteringPass >( m_graph
+		, m_subsurfaceScattering{ makeUnique< SubsurfaceScatteringPass >( m_graph
 			, *m_opaquePassDesc
 			, m_device
 			, progress
@@ -119,7 +119,7 @@ namespace castor3d
 		, crg::FramePassArray previousPasses )const
 	{
 		previousPasses.push_back( &lastPass );
-		return castor::makeUnique< SsaoPass >( m_graph
+		return makeUnique< SsaoPass >( m_graph
 			, m_device
 			, progress
 			, previousPasses
@@ -260,7 +260,7 @@ namespace castor3d
 
 		auto targetResult = getOwner()->getTargetResult();
 		auto targetDepth = getOwner()->getTargetDepth();
-		auto & result = m_graph.createPass( isDeferredLighting ? castor::MbString{ "DeferredVisibilityResolve" } : castor::MbString{ "VisibilityResolve" }
+		auto & result = m_graph.createPass( isDeferredLighting ? MbString{ "DeferredVisibilityResolve" } : MbString{ "VisibilityResolve" }
 			, [this, targetResult, targetDepth, progress, isDeferredLighting, &previous]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -292,20 +292,20 @@ namespace castor3d
 				auto diffuseIt = std::next( resultIt );
 				renderPassDesc.implicitAction( diffuseIt->view(), crg::RecordContext::clearAttachment( *diffuseIt ) );
 
-				auto res = castor::make_unique< VisibilityResolvePass >( getOwner()
+				auto res = makeRawUnique< VisibilityResolvePass >( getOwner()
 					, framePass
 					, context
 					, runnableGraph
 					, m_device
 					, cuT( "Visibility" )
 					, ( isDeferredLighting
-						? castor::String{ cuT( "DeferredResolve" ) }
-						: castor::String{ cuT( "Resolve" ) } )
+						? String{ cuT( "DeferredResolve" ) }
+						: String{ cuT( "Resolve" ) } )
 					, previous.getVisibilityPass()
 					, targetResult
 					, targetDepth
-					, castor::move( renderPassDesc )
-					, castor::move( techniquePassDesc ) );
+					, c3d::move( renderPassDesc )
+					, c3d::move( techniquePassDesc ) );
 
 				if ( isDeferredLighting )
 				{
@@ -316,7 +316,7 @@ namespace castor3d
 					m_opaquePass = res.get();
 				}
 
-				getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -420,7 +420,7 @@ namespace castor3d
 					.indirect( getOwner()->getIndirectLighting() )
 					.clustersConfig( getOwner()->getClustersConfig() )
 					.outputScattering();
-				auto res = castor::make_unique< ForwardRenderTechniquePass >( getOwner()
+				auto res = makeRawUnique< ForwardRenderTechniquePass >( getOwner()
 					, framePass
 					, context
 					, runnableGraph
@@ -429,10 +429,10 @@ namespace castor3d
 					, cuT( "Default" )
 					, targetResult
 					, targetDepth
-					, castor::move( renderPassDesc )
-					, castor::move( techniquePassDesc ) );
+					, c3d::move( renderPassDesc )
+					, c3d::move( techniquePassDesc ) );
 				m_visibilityOpaquePass = res.get();
-				getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -469,7 +469,7 @@ namespace castor3d
 
 		auto targetResult = getOwner()->getTargetResult();
 		auto targetDepth = getOwner()->getTargetDepth();
-		auto & result = m_graph.createPass( isDeferredLighting ? castor::MbString{ "DeferredNodesPass" } : castor::MbString{ "NodesPass" }
+		auto & result = m_graph.createPass( isDeferredLighting ? MbString{ "DeferredNodesPass" } : MbString{ "NodesPass" }
 			, [this, targetResult, targetDepth, progress, isDeferredLighting]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -504,7 +504,7 @@ namespace castor3d
 					renderPassDesc.implicitAction( diffuseIt->view(), crg::RecordContext::clearAttachment( *diffuseIt ) );
 				}
 
-				auto res = castor::make_unique< ForwardRenderTechniquePass >( getOwner()
+				auto res = makeRawUnique< ForwardRenderTechniquePass >( getOwner()
 					, framePass
 					, context
 					, runnableGraph
@@ -513,8 +513,8 @@ namespace castor3d
 					, cuT( "Default" )
 					, targetResult
 					, targetDepth
-					, castor::move( renderPassDesc )
-					, castor::move( techniquePassDesc ) );
+					, c3d::move( renderPassDesc )
+					, c3d::move( techniquePassDesc ) );
 
 				if ( isDeferredLighting )
 				{
@@ -525,7 +525,7 @@ namespace castor3d
 					m_opaquePass = res.get();
 				}
 
-				getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );

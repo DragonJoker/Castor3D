@@ -24,47 +24,47 @@ namespace GuiCommon
 {
 	namespace spcmse
 	{
-		static castor::Point3f & convert( navlib::point_t const & in
-			, castor::Point3f & out )
+		static c3d::Point3f & convert( navlib::point_t const & in
+			, c3d::Point3f & out )
 		{
 			return out = { in.x, in.y, in.z };
 		}
 
-		static castor::Point3f & convert( navlib::vector_t const & in
-			, castor::Point3f & out )
+		static c3d::Point3f & convert( navlib::vector_t const & in
+			, c3d::Point3f & out )
 		{
 			return out = { in.x, in.y, in.z };
 		}
 
-		static navlib::point_t & convert( castor::Point3f const & in
+		static navlib::point_t & convert( c3d::Point3f const & in
 			, navlib::point_t & out )
 		{
 			return out = { in->x, in->y, in->z };
 		}
 
-		static navlib::vector_t & convert( castor::Point3f const & in
+		static navlib::vector_t & convert( c3d::Point3f const & in
 			, navlib::vector_t & out )
 		{
 			return out = { in->x, in->y, in->z };
 		}
 
-		static navlib::matrix_t & convert( castor::Matrix4x4d const & in
+		static navlib::matrix_t & convert( c3d::Matrix4x4d const & in
 			, navlib::matrix_t & out )
 		{
 			std::copy_n( in.constPtr(), 16u, out.begin() );
 			return out;
 		}
 
-		static navlib::matrix_t & convert( castor::Matrix4x4f const & in
+		static navlib::matrix_t & convert( c3d::Matrix4x4f const & in
 			, navlib::matrix_t & out )
 		{
-			return convert( castor::Matrix4x4d{ in }, out );
+			return convert( c3d::Matrix4x4d{ in }, out );
 		}
 
-		static castor::Matrix4x4f & convert( navlib::matrix_t const & in
-			, castor::Matrix4x4f & out )
+		static c3d::Matrix4x4f & convert( navlib::matrix_t const & in
+			, c3d::Matrix4x4f & out )
 		{
-			castor::Matrix4x4d mtx;
+			c3d::Matrix4x4d mtx;
 			std::copy_n( &in.m00, 16u, mtx.ptr() );
 			return out = mtx;
 		}
@@ -74,13 +74,13 @@ namespace GuiCommon
 			, public I3DController
 		{
 		public:
-			SpaceMouseController( castor::String const & appName
-				, castor3d::FrameListener & listener )
+			SpaceMouseController( c3d::String const & appName
+				, c3d::FrameListener & listener )
 				: m_listener{ listener }
 			{
 				try
 				{
-					PutProfileHint( castor::toUtf8( appName ).c_str() );
+					PutProfileHint( c3d::toUtf8( appName ).c_str() );
 					PutFrameTimingSource( TimingSource::SpaceMouse );
 					EnableNavigation( true );
 					Write( getMotionModelSettingsName(), "FreeCamera" );
@@ -90,11 +90,11 @@ namespace GuiCommon
 				}
 				catch ( std::exception & exc )
 				{
-					castor::Logger::logError( cuT( "Couldn't initialise space mouse controller: " ) + castor::makeString( exc.what() ) );
+					c3d::Logger::logError( cuT( "Couldn't initialise space mouse controller: " ) + c3d::makeString( exc.what() ) );
 				}
 				catch ( ... )
 				{
-					castor::Logger::logError( cuT( "Couldn't initialise space mouse controller: Unknown error" ) );
+					c3d::Logger::logError( cuT( "Couldn't initialise space mouse controller: Unknown error" ) );
 				}
 			}
 
@@ -106,27 +106,27 @@ namespace GuiCommon
 				}
 			}
 
-			static castor::MbString const & getSettingsName()
+			static c3d::MbString const & getSettingsName()
 			{
-				static castor::MbString const result{ navlib::settings_k };
+				static c3d::MbString const result{ navlib::settings_k };
 				return result;
 			}
 
-			static castor::MbString const & getMotionModelSettingsName()
+			static c3d::MbString const & getMotionModelSettingsName()
 			{
-				static castor::MbString const result{ getSettingsName() + ".MotionModel" };
+				static c3d::MbString const result{ getSettingsName() + ".MotionModel" };
 				return result;
 			}
 
-			static castor::MbString const & getLockHorizonSettingsName()
+			static c3d::MbString const & getLockHorizonSettingsName()
 			{
-				static castor::MbString const result{ getSettingsName() + ".LockHorizon" };
+				static c3d::MbString const result{ getSettingsName() + ".LockHorizon" };
 				return result;
 			}
 
-			static castor::MbString const & getMoveObjectsSettingsName()
+			static c3d::MbString const & getMoveObjectsSettingsName()
 			{
-				static castor::MbString const result{ getSettingsName() + ".MoveObjects" };
+				static c3d::MbString const result{ getSettingsName() + ".MoveObjects" };
 				return result;
 			}
 
@@ -143,13 +143,13 @@ namespace GuiCommon
 				}
 			}
 
-			void setCamera( castor3d::CameraRPtr camera )override
+			void setCamera( c3d::CameraRPtr camera )override
 			{
 				m_camera = camera;
 				reset();
 			}
 
-			void setGeometry( castor3d::Geometry const * geometry )override
+			void setGeometry( c3d::Geometry const * geometry )override
 			{
 				m_geometry = geometry;
 				reset();
@@ -181,9 +181,9 @@ namespace GuiCommon
 			}
 
 		public:
-			static castor::Matrix4x4d getCoordinateSystem()
+			static c3d::Matrix4x4d getCoordinateSystem()
 			{
-				static castor::Matrix4x4d const cs{ castor::Array< double, 16u >
+				static c3d::Matrix4x4d const cs{ c3d::Array< double, 16u >
 					{ 1.0, 0.0, 0.0, 0.0
 					, 0.0, 1.0, 0.0, 0.0
 					, 0.0, 0.0, 1.0, 0.0
@@ -264,11 +264,11 @@ namespace GuiCommon
 					// at the model position
 					auto translation = m_camera->getParent()->getPosition();
 
-					if ( m_camera->getViewport().getType() == castor3d::ViewportType::eOrtho )
+					if ( m_camera->getViewport().getType() == c3d::ViewportType::eOrtho )
 					{
 						// The camera's z-axis
-						auto zAxis = castor::Point3f{ m_camera->getParent()->getTransformationMatrix().getRow( 2u ) };
-						plane = { { zAxis->x, zAxis->y, zAxis->z }, -castor::point::dot( zAxis, translation ) };
+						auto zAxis = c3d::Point3f{ m_camera->getParent()->getTransformationMatrix().getRow( 2u ) };
+						plane = { { zAxis->x, zAxis->y, zAxis->z }, -c3d::point::dot( zAxis, translation ) };
 					}
 					else
 					{
@@ -297,15 +297,15 @@ namespace GuiCommon
 			long GetViewFOV( double & fov )const override
 			{
 				if ( isCameraActive()
-					&& ( m_camera->getViewportType() == castor3d::ViewportType::ePerspective
-						|| m_camera->getViewportType() == castor3d::ViewportType::eFrustum ) )
+					&& ( m_camera->getViewportType() == c3d::ViewportType::ePerspective
+						|| m_camera->getViewportType() == c3d::ViewportType::eFrustum ) )
 				{
 					auto & viewport = m_camera->getViewport();
 
-					if ( m_camera->getViewportType() == castor3d::ViewportType::eFrustum )
+					if ( m_camera->getViewportType() == c3d::ViewportType::eFrustum )
 					{
 						double halfHeight = ( double( viewport.getTop() ) - viewport.getBottom() ) / 2.0;
-						fov = ( castor::atand( halfHeight / viewport.getNear() ) * 2.0 ).radians();
+						fov = ( c3d::atand( halfHeight / viewport.getNear() ) * 2.0 ).radians();
 					}
 					else
 					{
@@ -321,12 +321,12 @@ namespace GuiCommon
 			long GetViewFrustum( navlib::frustum_t & frustum )const override
 			{
 				if ( isCameraActive()
-					&& ( m_camera->getViewportType() == castor3d::ViewportType::ePerspective
-						|| m_camera->getViewportType() == castor3d::ViewportType::eFrustum ) )
+					&& ( m_camera->getViewportType() == c3d::ViewportType::ePerspective
+						|| m_camera->getViewportType() == c3d::ViewportType::eFrustum ) )
 				{
 					auto & viewport = m_camera->getViewport();
 
-					if ( m_camera->getViewportType() == castor3d::ViewportType::eFrustum )
+					if ( m_camera->getViewportType() == c3d::ViewportType::eFrustum )
 					{
 						frustum = { viewport.getLeft(), viewport.getRight()
 							, viewport.getBottom(), viewport.getTop()
@@ -352,8 +352,8 @@ namespace GuiCommon
 			{
 				if ( isCameraActive() )
 				{
-					perspective = ( m_camera->getViewportType() == castor3d::ViewportType::ePerspective
-							|| m_camera->getViewportType() == castor3d::ViewportType::eFrustum )
+					perspective = ( m_camera->getViewportType() == c3d::ViewportType::ePerspective
+							|| m_camera->getViewportType() == c3d::ViewportType::eFrustum )
 						? 1u
 						: 0u;
 					return 0;
@@ -387,7 +387,7 @@ namespace GuiCommon
 			long SetViewExtents( const navlib::box_t & extents )override
 			{
 				if ( isCameraActive()
-					&& m_camera->getViewportType() == castor3d::ViewportType::eOrtho )
+					&& m_camera->getViewportType() == c3d::ViewportType::eOrtho )
 				{
 					auto & viewport = m_camera->getViewport();
 					double scale = viewport.getProjectionScale();
@@ -403,11 +403,11 @@ namespace GuiCommon
 			long SetViewFOV( double fov )override
 			{
 				if ( isCameraActive()
-					&& ( m_camera->getViewportType() == castor3d::ViewportType::ePerspective
-						|| m_camera->getViewportType() == castor3d::ViewportType::eFrustum ) )
+					&& ( m_camera->getViewportType() == c3d::ViewportType::ePerspective
+						|| m_camera->getViewportType() == c3d::ViewportType::eFrustum ) )
 				{
 					auto & viewport = m_camera->getViewport();
-					viewport.setPerspective( castor::Angle::fromDegrees( fov )
+					viewport.setPerspective( c3d::Angle::fromDegrees( fov )
 						, viewport.getRatio()
 						, viewport.getNear(), viewport.getFar() );
 					return 0;
@@ -419,8 +419,8 @@ namespace GuiCommon
 			long SetViewFrustum( const navlib::frustum_t & frustum )override
 			{
 				if ( isCameraActive()
-					&& ( m_camera->getViewportType() == castor3d::ViewportType::ePerspective
-						|| m_camera->getViewportType() == castor3d::ViewportType::eFrustum ) )
+					&& ( m_camera->getViewportType() == c3d::ViewportType::ePerspective
+						|| m_camera->getViewportType() == c3d::ViewportType::eFrustum ) )
 				{
 					auto & viewport = m_camera->getViewport();
 					viewport.setFrustum( float( frustum.left ), float( frustum.right )
@@ -544,12 +544,12 @@ namespace GuiCommon
 			{
 				if ( isCameraActive() )
 				{
-					castor::Matrix4x4d nodeMtx{ m_camera->getParent()->getTransformationMatrix() };
-					castor::Point3f pos;
-					castor::Point3f scl;
-					castor::Quaternion rotation;
-					castor::matrix::decompose( nodeMtx, pos, scl, rotation );
-					castor::Point3f front{ 0.0, 0.0, 1.0 };
+					c3d::Matrix4x4d nodeMtx{ m_camera->getParent()->getTransformationMatrix() };
+					c3d::Point3f pos;
+					c3d::Point3f scl;
+					c3d::Quaternion rotation;
+					c3d::matrix::decompose( nodeMtx, pos, scl, rotation );
+					c3d::Point3f front{ 0.0, 0.0, 1.0 };
 					rotation.transform( front, front );
 					position.x = front->x;
 					position.y = front->y;
@@ -627,27 +627,27 @@ namespace GuiCommon
 			}
 
 			void loadMatrix( navlib::matrix_t const & matrix
-				, castor3d::SceneNode & node
-				, castor::Matrix4x4f & savedMatrix )
+				, c3d::SceneNode & node
+				, c3d::Matrix4x4f & savedMatrix )
 			{
-				castor::Matrix4x4f nodeMtx;
+				c3d::Matrix4x4f nodeMtx;
 				convert( matrix, nodeMtx );
 				auto localTransform = savedMatrix.getInverse() * nodeMtx;
 				savedMatrix = nodeMtx;
 
-				castor::Point3f position;
-				castor::Point3f scaling;
-				castor::Quaternion orientation;
-				castor::matrix::decompose( nodeMtx
+				c3d::Point3f position;
+				c3d::Point3f scaling;
+				c3d::Quaternion orientation;
+				c3d::matrix::decompose( nodeMtx
 					, position
 					, scaling
 					, orientation );
 
 				// Retrieve transform relative to previous one.
-				castor::Point3f translate;
-				castor::Point3f scale;
-				castor::Quaternion rotation;
-				castor::matrix::decompose( localTransform
+				c3d::Point3f translate;
+				c3d::Point3f scale;
+				c3d::Quaternion rotation;
+				c3d::matrix::decompose( localTransform
 					, translate
 					, scale
 					, rotation );
@@ -658,7 +658,7 @@ namespace GuiCommon
 				// Recompute to full transform
 				orientation.transform( translate, translate );
 
-				m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+				m_listener.postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 					, [this, &node, translate, rotation]()
 					{
 						node.translate( translate * m_speedFactor * 5.0f );
@@ -668,33 +668,33 @@ namespace GuiCommon
 
 		private:
 			bool m_connected{};
-			castor3d::FrameListener & m_listener;
-			castor3d::CameraRPtr m_camera{};
-			castor3d::Geometry const * m_geometry{};
+			c3d::FrameListener & m_listener;
+			c3d::CameraRPtr m_camera{};
+			c3d::Geometry const * m_geometry{};
 			float m_lookAperture{};
-			castor::Point3f m_lookDirection{};
-			castor::Point3f m_lookPosition{};
+			c3d::Point3f m_lookDirection{};
+			c3d::Point3f m_lookPosition{};
 			bool m_hitSelectionOnly{};
 			bool m_moving{ true };
-			mutable castor::Matrix4x4f m_cameraMatrix;
-			mutable castor::Matrix4x4f m_geometryMatrix;
+			mutable c3d::Matrix4x4f m_cameraMatrix;
+			mutable c3d::Matrix4x4f m_geometryMatrix;
 			float m_speedFactor{ 1.0f };
-			castor::Point3f m_axisScale{ -1.0, 1.0, -1.0 };
+			c3d::Point3f m_axisScale{ -1.0, 1.0, -1.0 };
 		};
 	}
 
-	I3DControllerUPtr I3DController::create( castor::String const & appName
-		, castor3d::FrameListener & listener )
+	I3DControllerUPtr I3DController::create( c3d::String const & appName
+		, c3d::FrameListener & listener )
 	{
-		return castor::makeUniqueDerived< I3DController, spcmse::SpaceMouseController >( appName, listener );
+		return c3d::makeUniqueDerived< I3DController, spcmse::SpaceMouseController >( appName, listener );
 	}
 }
 #else
 
 namespace GuiCommon
 {
-	I3DControllerUPtr I3DController::create( castor::String const & appName
-		, castor3d::FrameListener & listener )
+	I3DControllerUPtr I3DController::create( c3d::String const & appName
+		, c3d::FrameListener & listener )
 	{
 		return nullptr;
 	}

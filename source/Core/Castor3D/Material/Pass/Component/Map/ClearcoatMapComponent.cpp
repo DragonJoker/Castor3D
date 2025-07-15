@@ -16,16 +16,16 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::ClearcoatMapComponent >
-		: public TextWriterT< castor3d::ClearcoatMapComponent >
+	class TextWriter< ClearcoatMapComponent >
+		: public TextWriterT< ClearcoatMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, uint32_t mask = 0u )
-			: TextWriterT< castor3d::ClearcoatMapComponent >{ tabs }
+			: TextWriterT< ClearcoatMapComponent >{ tabs }
 			, m_mask{ mask }
 		{
 		}
@@ -35,7 +35,7 @@ namespace castor
 			return writeMask( file, cuT( "clearcoat_mask" ), m_mask );
 		}
 
-		bool operator()( castor3d::ClearcoatMapComponent const & object
+		bool operator()( ClearcoatMapComponent const & object
 			, StringStream & file )override
 		{
 			return true;
@@ -44,10 +44,7 @@ namespace castor
 	private:
 		uint32_t m_mask;
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace trscmp
@@ -118,7 +115,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void ClearcoatMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void ClearcoatMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "clearcoat" )
@@ -130,29 +127,29 @@ namespace castor3d
 					, 0x00FF0000u );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "clearcoat_mask" )
 			, trscmp::parserUnitClearcoatMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "clearcoat_mask" )
 			, trscmp::parserUnitClearcoatMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "clearcoat" )
 			, trscmp::parserTexRemapClearcoat );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "clearcoat_mask" )
 			, trscmp::parserTexRemapClearcoatMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 
 	bool ClearcoatMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -163,22 +160,22 @@ namespace castor3d
 	}
 
 	void ClearcoatMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, ClearcoatMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, ClearcoatMapComponent >( pass ) );
 	}
 
 	bool ClearcoatMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< ClearcoatMapComponent >{ tabs, mask }( file );
+		return TextWriter< ClearcoatMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const ClearcoatMapComponent::TypeName = C3D_MakePassMapComponentName( "clearcoat" );
+	String const ClearcoatMapComponent::TypeName = C3D_MakePassMapComponentName( "clearcoat" );
 
 	ClearcoatMapComponent::ClearcoatMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -190,7 +187,7 @@ namespace castor3d
 
 	PassComponentUPtr ClearcoatMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, ClearcoatMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, ClearcoatMapComponent >( pass );
 	}
 
 	void ClearcoatMapComponent::doFillConfig( TextureConfiguration & configuration

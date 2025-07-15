@@ -11,14 +11,14 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StorageBuffer.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	class BufferBase
 	{
 	public:
 		BufferBase( sdw::ShaderWriter & writer
-			, castor::MbString blockName
-			, castor::MbString variableName
+			, MbString blockName
+			, MbString variableName
 			, uint32_t binding
 			, uint32_t set
 			, bool enabled = true )
@@ -27,9 +27,9 @@ namespace castor3d::shader
 		{
 			if ( enabled )
 			{
-				m_ssbo = castor::make_unique< sdw::StorageBuffer >( m_writer
-					, castor::move( blockName )
-					, castor::move( variableName )
+				m_ssbo = makeRawUnique< sdw::StorageBuffer >( m_writer
+					, c3d::move( blockName )
+					, c3d::move( variableName )
 					, binding
 					, set );
 				m_ssbo->declMember< sdw::UVec4 >( "counts" );
@@ -81,8 +81,8 @@ namespace castor3d::shader
 
 	protected:
 		sdw::ShaderWriter & m_writer;
-		castor::RawUniquePtr< sdw::StorageBuffer > m_ssbo;
-		castor::MbString m_variableName;
+		RawUniquePtr< sdw::StorageBuffer > m_ssbo;
+		MbString m_variableName;
 	};
 
 	template< typename DataT >
@@ -92,22 +92,22 @@ namespace castor3d::shader
 	public:
 		template< typename ... ParamsT >
 		BufferT( sdw::ShaderWriter & writer
-			, castor::MbString blockName
-			, castor::MbString variableName
+			, MbString blockName
+			, MbString variableName
 			, uint32_t binding
 			, uint32_t set
 			, bool enabled = true
 			, ParamsT && ... params )
 			: BufferBase{ writer
-				, castor::move( blockName )
-				, castor::move( variableName )
+				, c3d::move( blockName )
+				, c3d::move( variableName )
 				, binding
 				, set
 				, enabled }
 		{
 			if ( isEnabled() )
 			{
-				m_ssbo->declMemberArray< DataT >( "d", isEnabled(), castor::forward< ParamsT >( params )... );
+				m_ssbo->declMemberArray< DataT >( "d", isEnabled(), c3d::forward< ParamsT >( params )... );
 				m_ssbo->end();
 			}
 		}
@@ -118,7 +118,7 @@ namespace castor3d::shader
 		{
 			return ( m_ssbo
 				? m_ssbo->getMemberArray< DataT >( "d", isEnabled() )[index]
-				: m_writer.declLocale< DataT >( "disabled_" + m_variableName + "_data", false, castor::forward< ParamsT >( params )... ) );
+				: m_writer.declLocale< DataT >( "disabled_" + m_variableName + "_data", false, c3d::forward< ParamsT >( params )... ) );
 		}
 	};
 }

@@ -12,7 +12,7 @@
 #include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/GraphContext.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace passovy
 	{
@@ -21,8 +21,8 @@ namespace castor3d
 			, OverlayPreparer & preparer )
 		{
 			OverlaysCounts result{};
-			auto lock( castor::makeUniqueLock( cache ) );
-			castor::Vector< OverlayCategory * > categories;
+			auto lock( makeUniqueLock( cache ) );
+			Vector< OverlayCategory * > categories;
 			categories.reserve( cache.getCategories().size() );
 
 			for ( auto category : cache.getCategories() )
@@ -84,7 +84,7 @@ namespace castor3d
 			, graph
 			, 1u
 			, size }
-		, m_renderer{ castor::makeUnique< OverlayRenderer >( device, output, hdrConfigUbo, m_timer, VK_COMMAND_BUFFER_LEVEL_SECONDARY ) }
+		, m_renderer{ makeUnique< OverlayRenderer >( device, output, hdrConfigUbo, m_timer, VK_COMMAND_BUFFER_LEVEL_SECONDARY ) }
 		, m_drawGlobal{ drawGlobal }
 	{
 	}

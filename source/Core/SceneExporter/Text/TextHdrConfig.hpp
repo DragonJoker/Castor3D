@@ -8,16 +8,16 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::HdrConfig >
-		: public TextWriterT< castor3d::HdrConfig >
+	class TextWriter< HdrConfig >
+		: public TextWriterT< HdrConfig >
 	{
 	public:
 		explicit TextWriter( String const & tabs );
-		bool operator()( castor3d::HdrConfig const & obj
-			, castor::StringStream & file )override;
+		bool operator()( HdrConfig const & obj
+			, StringStream & file )override;
 	};
 }
 

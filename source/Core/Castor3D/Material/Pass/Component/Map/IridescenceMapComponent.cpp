@@ -16,16 +16,16 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::IridescenceMapComponent >
-		: public TextWriterT< castor3d::IridescenceMapComponent >
+	class TextWriter< IridescenceMapComponent >
+		: public TextWriterT< IridescenceMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, uint32_t mask = 0u )
-			: TextWriterT< castor3d::IridescenceMapComponent >{ tabs }
+			: TextWriterT< IridescenceMapComponent >{ tabs }
 			, m_mask{ mask }
 		{
 		}
@@ -35,7 +35,7 @@ namespace castor
 			return writeMask( file, cuT( "iridescence_mask" ), m_mask );
 		}
 
-		bool operator()( castor3d::IridescenceMapComponent const & object
+		bool operator()( IridescenceMapComponent const & object
 			, StringStream & file )override
 		{
 			return true;
@@ -44,10 +44,7 @@ namespace castor
 	private:
 		uint32_t m_mask;
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace trscmp
@@ -118,7 +115,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void IridescenceMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void IridescenceMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "iridescence" )
@@ -130,29 +127,29 @@ namespace castor3d
 					, 0x00FF0000u );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "iridescence_mask" )
 			, trscmp::parserUnitIridescenceMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "iridescence_mask" )
 			, trscmp::parserUnitIridescenceMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "iridescence" )
 			, trscmp::parserTexRemapIridescence );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "iridescence_mask" )
 			, trscmp::parserTexRemapIridescenceMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 
 	bool IridescenceMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -164,22 +161,22 @@ namespace castor3d
 	}
 
 	void IridescenceMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, IridescenceMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, IridescenceMapComponent >( pass ) );
 	}
 
 	bool IridescenceMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< IridescenceMapComponent >{ tabs, mask }( file );
+		return TextWriter< IridescenceMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const IridescenceMapComponent::TypeName = C3D_MakePassMapComponentName( "iridescence" );
+	String const IridescenceMapComponent::TypeName = C3D_MakePassMapComponentName( "iridescence" );
 
 	IridescenceMapComponent::IridescenceMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -191,7 +188,7 @@ namespace castor3d
 
 	PassComponentUPtr IridescenceMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, IridescenceMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, IridescenceMapComponent >( pass );
 	}
 
 	void IridescenceMapComponent::doFillConfig( TextureConfiguration & configuration

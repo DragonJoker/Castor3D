@@ -26,19 +26,19 @@ namespace ocean_fft
 
 	namespace genhgt
 	{
-		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( castor3d::RenderDevice const & device )
+		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( c3d::RenderDevice const & device )
 		{
-			ashes::VkDescriptorSetLayoutBindingArray bindings{ castor3d::makeDescriptorSetLayoutBinding( GenerateHeightmapPass::eConfig
+			ashes::VkDescriptorSetLayoutBindingArray bindings{ c3d::makeDescriptorSetLayoutBinding( GenerateHeightmapPass::eConfig
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, castor3d::makeDescriptorSetLayoutBinding( GenerateHeightmapPass::eInput
+				, c3d::makeDescriptorSetLayoutBinding( GenerateHeightmapPass::eInput
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, castor3d::makeDescriptorSetLayoutBinding( GenerateHeightmapPass::eOutput
+				, c3d::makeDescriptorSetLayoutBinding( GenerateHeightmapPass::eOutput
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT ) };
 			return device->createDescriptorSetLayout( GenerateHeightmapPass::Name 
-				, castor::move( bindings ) );
+				, c3d::move( bindings ) );
 		}
 
 		static ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
@@ -74,25 +74,25 @@ namespace ocean_fft
 			return descriptorSet;
 		}
 
-		static ashes::PipelineLayoutPtr createPipelineLayout( castor3d::RenderDevice const & device
+		static ashes::PipelineLayoutPtr createPipelineLayout( c3d::RenderDevice const & device
 			, ashes::DescriptorSetLayout const & dslayout )
 		{
 			return device->createPipelineLayout( GenerateHeightmapPass::Name
 				, ashes::DescriptorSetLayoutCRefArray{ std::ref( dslayout ) } );
 		}
 
-		static ashes::ComputePipelinePtr createPipeline( castor3d::RenderDevice const & device
+		static ashes::ComputePipelinePtr createPipeline( c3d::RenderDevice const & device
 			, ashes::PipelineLayout const & pipelineLayout
-			, castor3d::ShaderModule & computeShader )
+			, c3d::ShaderModule & computeShader )
 		{
 			// Initialise the pipeline.
 			return device->createPipeline( GenerateHeightmapPass::Name
 				, ashes::ComputePipelineCreateInfo( 0u
-					, castor3d::makeShaderState( device, computeShader )
+					, c3d::makeShaderState( device, computeShader )
 					, pipelineLayout ) );
 		}
 
-		static castor3d::ShaderPtr createShader( castor3d::RenderDevice const & device )
+		static c3d::ShaderPtr createShader( c3d::RenderDevice const & device )
 		{
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 			auto const G = writer.declConstant( "G", 9.81_f );
@@ -175,19 +175,19 @@ namespace ocean_fft
 
 	//************************************************************************************************
 
-	castor::MbString const GenerateHeightmapPass::Name{ "GenerateHeightmap" };
+	c3d::MbString const GenerateHeightmapPass::Name{ "GenerateHeightmap" };
 
 	GenerateHeightmapPass::GenerateHeightmapPass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
-		, castor3d::RenderDevice const & device
-		, castor3d::Extent2D const & extent
+		, c3d::RenderDevice const & device
+		, c3d::Extent2D const & extent
 		, crg::RunnablePass::IsEnabledCallback isEnabled )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
 			, { []( uint32_t index ){}
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( castor3d::PipelineStageFlags::eComputeShader ); } )
+				, GetPipelineStateCallback( [](){ return crg::getPipelineState( c3d::PipelineStageFlags::eComputeShader ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
 				, isEnabled
@@ -196,7 +196,7 @@ namespace ocean_fft
 		, m_device{ device }
 		, m_descriptorSetLayout{ genhgt::createDescriptorLayout( m_device ) }
 		, m_pipelineLayout{ genhgt::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, castor::makeString( Name ), genhgt::createShader( device ) }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, c3d::makeString( Name ), genhgt::createShader( device ) }
 		, m_pipeline{ genhgt::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
 		, m_descriptorSet{ genhgt::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
@@ -204,7 +204,7 @@ namespace ocean_fft
 	{
 	}
 
-	void GenerateHeightmapPass::accept( castor3d::RenderTechniqueVisitor & visitor )
+	void GenerateHeightmapPass::accept( c3d::RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( m_shader );
 	}

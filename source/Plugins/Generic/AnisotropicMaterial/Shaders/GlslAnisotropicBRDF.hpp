@@ -11,21 +11,21 @@ See LICENSE file in root folder
 
 namespace anisotropy::shader
 {
-	namespace c3d = castor3d::shader;
+	namespace c3ds = c3d::shader;
 
 	class AnisotropicBRDF
-		: public c3d::SpecularBRDF
+		: public c3ds::SpecularBRDF
 	{
 	public:
 		AnisotropicBRDF( sdw::ShaderWriter & writer
-			, c3d::BRDFHelpers & brdfHelpers );
+			, c3ds::BRDFHelpers & brdfHelpers );
 
-		static c3d::SpecularBRDFPtr create( sdw::ShaderWriter & writer
-			, c3d::BRDFHelpers & brdfHelpers );
-		static castor::StringView constexpr Name{ cuT( "anisotropic" ) };
+		static c3ds::SpecularBRDFPtr create( sdw::ShaderWriter & writer
+			, c3ds::BRDFHelpers & brdfHelpers );
+		static c3d::StringView constexpr Name{ cuT( "anisotropic" ) };
 
 	private:
-		void doGenerate( c3d::BlendComponents const & components )override;
+		void doGenerate( c3ds::BlendComponents const & components )override;
 
 	private:
 		sdw::Function< sdw::Float

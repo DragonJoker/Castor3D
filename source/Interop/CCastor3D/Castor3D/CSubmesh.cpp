@@ -48,11 +48,11 @@ extern "C"
 		auto const & type = object->internal->getIndexMapping()->getType();
 		*result = C3D_INDEX_MAPPING_TYPE_UNSUPPORTED;
 
-		if ( type == castor3d::LineMapping::TypeName )
+		if ( type == c3d::LineMapping::TypeName )
 		{
 			*result = C3D_INDEX_MAPPING_TYPE_LINES;
 		}
-		else if ( type == castor3d::TriFaceMapping::TypeName )
+		else if ( type == c3d::TriFaceMapping::TypeName )
 		{
 			*result = C3D_INDEX_MAPPING_TYPE_TRIANGLES;
 		}
@@ -70,11 +70,11 @@ extern "C"
 		try
 		{
 			auto res = object->internal->getIndexMapping();
-			if ( object->internal->getIndexMapping()->getType() != castor3d::TriFaceMapping::TypeName )
+			if ( object->internal->getIndexMapping()->getType() != c3d::TriFaceMapping::TypeName )
 				return cc3d::reportError( C3D_FAILURE, ERROR_WRONG_MAPPING_TYPE );
 
 			C3D_SafeAlloc( *result, C3DTriFaceMapping );
-			( *result )->internal = static_cast< castor3d::TriFaceMapping * >( res );
+			( *result )->internal = static_cast< c3d::TriFaceMapping * >( res );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -91,11 +91,11 @@ extern "C"
 		try
 		{
 			auto res = object->internal->getIndexMapping();
-			if ( object->internal->getIndexMapping()->getType() != castor3d::LineMapping::TypeName )
+			if ( object->internal->getIndexMapping()->getType() != c3d::LineMapping::TypeName )
 				return cc3d::reportError( C3D_FAILURE, ERROR_WRONG_MAPPING_TYPE );
 
 			C3D_SafeAlloc( *result, C3DLineMapping );
-			( *result )->internal = static_cast< castor3d::LineMapping * >( res );
+			( *result )->internal = static_cast< c3d::LineMapping * >( res );
 		}
 		C3D_CatchCommonExceptions()
 

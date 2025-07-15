@@ -8,24 +8,24 @@
 #include "Castor3D/Overlay/TextOverlay.hpp"
 #include "Castor3D/Render/Overlays/OverlayRenderer.hpp"
 
-CU_ImplementSmartPtr( castor3d, OverlayCategory )
+CU_ImplementSmartPtr( c3d, OverlayCategory )
 
-namespace castor3d
+namespace c3d
 {
 	namespace ovrlcat
 	{
-		static castor::Point4d intersect( castor::Point4d const & lhs
-			, castor::Point4d const & rhs )
+		static Point4d intersect( Point4d const & lhs
+			, Point4d const & rhs )
 		{
-			castor::Point2d start{ std::max( lhs->x, rhs->x ), std::max( lhs->y, rhs->y ) };
-			castor::Point2d end{ std::min( lhs->z, rhs->z ), std::min( lhs->w, rhs->w ) };
+			Point2d start{ std::max( lhs->x, rhs->x ), std::max( lhs->y, rhs->y ) };
+			Point2d end{ std::min( lhs->z, rhs->z ), std::min( lhs->w, rhs->w ) };
 
 			if ( ( start->x > lhs->z ) || ( start->y > lhs->w ) )
 			{
-				return castor::Point4d{};
+				return Point4d{};
 			}
 
-			return castor::Point4d{ start->x, start->y, end->x, end->y };
+			return Point4d{ start->x, start->y, end->x, end->y };
 		}
 	}
 
@@ -46,7 +46,7 @@ namespace castor3d
 		updatePosition( renderer );
 		updateSize( renderer );
 		updateClientArea();
-		m_displayable = m_relSize != castor::Point2d{};
+		m_displayable = m_relSize != Point2d{};
 
 		if ( isChanged() || isSizeChanged() || renderer.isSizeChanged() )
 		{
@@ -61,33 +61,33 @@ namespace castor3d
 		m_material = material;
 	}
 
-	castor::String const & OverlayCategory::getOverlayName()const
+	String const & OverlayCategory::getOverlayName()const
 	{
 		return m_overlay->getName();
 	}
 
-	castor::Position OverlayCategory::getAbsolutePosition( castor::Size const & size )const
+	Position OverlayCategory::getAbsolutePosition( Size const & size )const
 	{
 		auto position = getAbsolutePosition();
-		return castor::Position{ int32_t( double( size->x ) * position->x )
+		return Position{ int32_t( double( size->x ) * position->x )
 			, int32_t( double( size->y ) * position->y ) };
 	}
 
-	castor::Size OverlayCategory::getAbsoluteSize( castor::Size const & size )const
+	Size OverlayCategory::getAbsoluteSize( Size const & size )const
 	{
 		if ( m_pxSize )
 		{
 			return *m_pxSize;
 		}
 
-		castor::Point2d absoluteSize = getAbsoluteSize();
-		return castor::Size{ uint32_t( size->x * absoluteSize->x )
+		Point2d absoluteSize = getAbsoluteSize();
+		return Size{ uint32_t( size->x * absoluteSize->x )
 			, uint32_t( size->y * absoluteSize->y ) };
 	}
 
-	castor::Point2d OverlayCategory::getRenderRatio( castor::Size const & size )const
+	Point2d OverlayCategory::getRenderRatio( Size const & size )const
 	{
-		castor::Point2d result{ 1, 1 };
+		Point2d result{ 1, 1 };
 
 		if ( m_computeSize->x != 0 )
 		{
@@ -102,9 +102,9 @@ namespace castor3d
 		return result;
 	}
 
-	castor::Point2d OverlayCategory::getAbsolutePosition()const
+	Point2d OverlayCategory::getAbsolutePosition()const
 	{
-		castor::Point2d position = getRelativePosition();
+		Point2d position = getRelativePosition();
 
 		if ( auto parent = getOverlay().getParent() )
 		{
@@ -115,9 +115,9 @@ namespace castor3d
 		return position;
 	}
 
-	castor::Point2d OverlayCategory::getAbsoluteSize()const
+	Point2d OverlayCategory::getAbsoluteSize()const
 	{
-		castor::Point2d size = getRelativeSize();
+		Point2d size = getRelativeSize();
 
 		if ( auto parent = getOverlay().getParent() )
 		{
@@ -155,7 +155,7 @@ namespace castor3d
 		return changed;
 	}
 
-	castor::Size OverlayCategory::computePixelSize()const
+	Size OverlayCategory::computePixelSize()const
 	{
 		if ( m_pxSize )
 		{
@@ -165,11 +165,11 @@ namespace castor3d
 		auto parentSize = getOverlay().getParent()
 			? getOverlay().getParent()->getAbsoluteSize( m_computeSize )
 			: m_computeSize;
-		return castor::Size{ uint32_t( double( parentSize->x ) * m_relSize->x )
+		return Size{ uint32_t( double( parentSize->x ) * m_relSize->x )
 			, uint32_t( double( parentSize->y ) * m_relSize->y ) };
 	}
 
-	castor::Position OverlayCategory::computePixelPosition()const
+	Position OverlayCategory::computePixelPosition()const
 	{
 		if ( m_pxPosition )
 		{
@@ -179,13 +179,13 @@ namespace castor3d
 		auto parentSize = getOverlay().getParent()
 			? getOverlay().getParent()->getAbsoluteSize( m_computeSize )
 			: m_computeSize;
-		return castor::Position{ int32_t( double( parentSize->x ) * m_relPosition->x )
+		return Position{ int32_t( double( parentSize->x ) * m_relPosition->x )
 			, int32_t( double( parentSize->y ) * m_relPosition->y ) };
 	}
 
-	castor::Point4d OverlayCategory::computeScissorRect()const
+	Point4d OverlayCategory::computeScissorRect()const
 	{
-		castor::Point4d result = m_displayRect;
+		Point4d result = m_displayRect;
 		doUpdateClientArea( result );
 		auto overlay = &getOverlay();
 
@@ -203,11 +203,11 @@ namespace castor3d
 		if ( m_pxPosition
 			&& ( isPositionChanged() || renderer.isSizeChanged() ) )
 		{
-			castor::Size renderSize = renderer.getSize();
-			castor::Point2d parentSize = getParentSize() * renderSize;
+			Size renderSize = renderer.getSize();
+			Point2d parentSize = getParentSize() * renderSize;
 			bool changed = m_positionChanged;
 			auto & pxPos = *m_pxPosition;
-			castor::Point2d relPos = getRelativePosition();
+			Point2d relPos = getRelativePosition();
 
 			auto v = double( pxPos.x() ) / parentSize->x;
 			changed = changed || ( relPos->x != v );
@@ -231,11 +231,11 @@ namespace castor3d
 		if ( m_pxSize
 			&& ( isSizeChanged() || renderer.isSizeChanged() ) )
 		{
-			castor::Size renderSize = renderer.getSize();
-			castor::Point2d parentSize = getParentSize() * renderSize;
+			Size renderSize = renderer.getSize();
+			Point2d parentSize = getParentSize() * renderSize;
 			bool changed = m_sizeChanged;
 			auto & pxSize = *m_pxSize;
-			castor::Point2d relSize = getRelativeSize();
+			Point2d relSize = getRelativeSize();
 
 			auto v = double( pxSize->x ) / parentSize->x;
 			changed = changed || ( relSize->x != v );
@@ -264,9 +264,9 @@ namespace castor3d
 		}
 	}
 
-	castor::Point2d OverlayCategory::getParentSize()const
+	Point2d OverlayCategory::getParentSize()const
 	{
-		castor::Point2d result( 1.0, 1.0 );
+		Point2d result( 1.0, 1.0 );
 
 		if ( auto parent = getOverlay().getParent() )
 		{

@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Exception/Assertion.hpp"
 #include "CastorUtils/Math/Point.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	class Matrix

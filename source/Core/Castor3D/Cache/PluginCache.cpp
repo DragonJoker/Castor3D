@@ -8,16 +8,11 @@
 
 #include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
-CU_ImplementSmartPtr( castor3d, PluginCache )
+CU_ImplementSmartPtr( c3d, PluginCache )
 
-namespace castor3d
+namespace c3d
 {
-	const castor::String PtrCacheTraitsT< castor3d::Plugin, castor::String >::Name = cuT( "Plugin" );
-}
-
-namespace castor
-{
-	using namespace castor3d;
+	const String PtrCacheTraitsT< Plugin, String >::Name = cuT( "Plugin" );
 
 	namespace cacheplgn
 	{
@@ -114,10 +109,10 @@ namespace castor
 		return result;
 	}
 
-	castor::StringMap< PluginRPtr > ResourceCacheT< Plugin, String, PluginCacheTraits >::getPlugins( PluginType type )
+	StringMap< PluginRPtr > ResourceCacheT< Plugin, String, PluginCacheTraits >::getPlugins( PluginType type )
 	{
 		auto lock( makeUniqueLock( m_mutexLoadedPlugins ) );
-		castor::StringMap< PluginRPtr > result;
+		StringMap< PluginRPtr > result;
 
 		for ( auto const & [name, plugin] : m_loadedPlugins[size_t( type )] )
 		{
@@ -164,7 +159,7 @@ namespace castor
 				CU_Exception( cuT( "File [" ) + pathFile + cuT( "] does not exist" ) );
 			}
 
-			DynamicLibraryUPtr library{ castor::makeUnique< DynamicLibrary >( pathFile ) };
+			DynamicLibraryUPtr library{ makeUnique< DynamicLibrary >( pathFile ) };
 			Plugin::IsDebugFunction pfnIsDebug;
 
 			if ( !library->getFunction( pfnIsDebug, cacheplgn::isDebugFunctionABIName ) )
@@ -176,7 +171,7 @@ namespace castor
 			int isDebugPlugin{};
 			pfnIsDebug( &isDebugPlugin );
 
-			if ( int isDebug = castor::system::isDebug() ? 1 : 0;
+			if ( int isDebug = system::isDebug() ? 1 : 0;
 				isDebug != isDebugPlugin )
 			{
 				return nullptr;
@@ -203,7 +198,7 @@ namespace castor
 			case PluginType::ePostEffect:
 			case PluginType::eParticle:
 			case PluginType::eGenerator:
-				plugin = castor::makeUnique< Plugin >( type, castor::move( library ), m_engine );
+				plugin = makeUnique< Plugin >( type, c3d::move( library ), m_engine );
 				break;
 
 			default:
@@ -223,7 +218,7 @@ namespace castor
 				m_loadedPluginTypes.try_emplace( pathFile, type );
 				{
 					auto lockPlugins( makeUniqueLock( m_mutexLoadedPlugins ) );
-					result = m_loadedPlugins[size_t( type )].try_emplace( pathFile, castor::move( plugin ) ).first->second.get();
+					result = m_loadedPlugins[size_t( type )].try_emplace( pathFile, c3d::move( plugin ) ).first->second.get();
 				}
 				log::info << cuT( "Plug-in [" ) << result->getName() << cuT( "] - Required engine version : " ) << toCheck << cuT( ", loaded" ) << std::endl;
 			}

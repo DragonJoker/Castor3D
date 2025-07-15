@@ -8,16 +8,16 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::AnimatedObjectGroup >
-		: public TextWriterT< castor3d::AnimatedObjectGroup >
+	class TextWriter< AnimatedObjectGroup >
+		: public TextWriterT< AnimatedObjectGroup >
 	{
 	public:
 		explicit TextWriter( String const & tabs );
-		virtual bool operator()( castor3d::AnimatedObjectGroup const & group
-			, castor::StringStream & file )override;
+		virtual bool operator()( AnimatedObjectGroup const & group
+			, StringStream & file )override;
 	};
 }
 

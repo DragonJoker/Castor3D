@@ -25,7 +25,7 @@ See LICENSE file in root folder
 namespace atmosphere_scattering
 {
 	class AtmosphereBackground
-		: public castor3d::SceneBackground
+		: public c3d::SceneBackground
 	{
 	public:
 		/**
@@ -48,54 +48,54 @@ namespace atmosphere_scattering
 		*\param parameters
 		*	Les paramètres du fond.
 		*/
-		AtmosphereBackground( castor3d::Engine & engine
-			, castor3d::Scene & scene );
+		AtmosphereBackground( c3d::Engine & engine
+			, c3d::Scene & scene );
 		~AtmosphereBackground()override;
 		/**
-		*\copydoc	castor3d::SceneBackground::accept
+		*\copydoc	c3d::SceneBackground::accept
 		*/
-		void accept( castor3d::BackgroundVisitor & visitor )override;
+		void accept( c3d::BackgroundVisitor & visitor )override;
 		/**
-		*\copydoc	castor3d::SceneBackground::accept
+		*\copydoc	c3d::SceneBackground::accept
 		*/
-		void accept( castor3d::ConfigurationVisitorBase & visitor )override;
+		void accept( c3d::ConfigurationVisitorBase & visitor )override;
 		/**
-		*\copydoc	castor3d::SceneBackground::createBackgroundPass
+		*\copydoc	c3d::SceneBackground::createBackgroundPass
 		*/
 		crg::FramePass & createBackgroundPass( crg::FramePassGroup & graph
-			, castor3d::RenderDevice const & device
-			, castor3d::ProgressBar * progress
-			, castor3d::Extent2D const & size
+			, c3d::RenderDevice const & device
+			, c3d::ProgressBar * progress
+			, c3d::Extent2D const & size
 			, crg::ImageViewIdArray const & colour
 			, crg::ImageViewIdArray const & depth
 			, crg::ImageViewId const * depthObj
-			, castor3d::UniformBufferOffsetT< castor3d::ModelBufferConfiguration > const & modelUbo
-			, castor3d::CameraUbo const & cameraUbo
-			, castor3d::HdrConfigUbo const & hdrConfigUbo
-			, castor3d::SceneUbo const & sceneUbo
+			, c3d::UniformBufferOffsetT< c3d::ModelBufferConfiguration > const & modelUbo
+			, c3d::CameraUbo const & cameraUbo
+			, c3d::HdrConfigUbo const & hdrConfigUbo
+			, c3d::SceneUbo const & sceneUbo
 			, bool clearColour
 			, bool clearDepth
 			, bool forceVisible
-			, castor3d::BackgroundPassBase *& backgroundPass )override;
+			, c3d::BackgroundPassBase *& backgroundPass )override;
 		/**
-		*\copydoc	castor3d::SceneBackground::write
+		*\copydoc	c3d::SceneBackground::write
 		*/
-		bool write( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::StringStream & stream )const override;
+		bool write( c3d::String const & tabs
+			, c3d::Path const & folder
+			, c3d::StringStream & stream )const override;
 		/**
-		*\copydoc	castor3d::SceneBackground::write
+		*\copydoc	c3d::SceneBackground::write
 		*/
-		castor::String const & getModelName()const override;
+		c3d::String const & getModelName()const override;
 
 		void loadWorley( uint32_t dimension );
 		void loadPerlinWorley( uint32_t dimension );
 		void loadCurl( uint32_t dimension );
 		void loadWeather( uint32_t dimension );
-		void loadTransmittance( castor::Point2ui const & dimensions );
+		void loadTransmittance( c3d::Point2ui const & dimensions );
 		void loadMultiScatter( uint32_t dimension );
 		void loadAtmosphereVolume( uint32_t dimension );
-		void loadSkyView( castor::Point2ui const & dimensions );
+		void loadSkyView( c3d::Point2ui const & dimensions );
 
 		bool hasScattering()const noexcept override
 		{
@@ -107,12 +107,12 @@ namespace atmosphere_scattering
 			return true;
 		}
 
-		void setSunNode( castor3d::SceneNode const & node )noexcept
+		void setSunNode( c3d::SceneNode const & node )noexcept
 		{
 			m_sunNode = &node;
 		}
 
-		void setPlanetNode( castor3d::SceneNode const & node )noexcept
+		void setPlanetNode( c3d::SceneNode const & node )noexcept
 		{
 			m_planetNode = &node;
 		}
@@ -129,7 +129,7 @@ namespace atmosphere_scattering
 
 		void setAtmosphereCfg( AtmosphereScatteringConfig config )noexcept
 		{
-			m_atmosphereCfg = castor::move( config );
+			m_atmosphereCfg = c3d::move( config );
 		}
 
 		auto & getAtmosphereCfg()const noexcept
@@ -139,7 +139,7 @@ namespace atmosphere_scattering
 
 		void setWeatherCfg( WeatherConfig config )noexcept
 		{
-			m_weatherCfg = castor::move( config );
+			m_weatherCfg = c3d::move( config );
 		}
 
 		auto & getWeatherCfg()const noexcept
@@ -149,7 +149,7 @@ namespace atmosphere_scattering
 
 		void setCloudsCfg( CloudsConfig config )noexcept
 		{
-			m_cloudsCfg = castor::move( config );
+			m_cloudsCfg = c3d::move( config );
 		}
 
 		auto & getCloudsCfg()const noexcept
@@ -198,25 +198,25 @@ namespace atmosphere_scattering
 		}
 
 	private:
-		bool doInitialise( castor3d::RenderDevice const & device )override;
+		bool doInitialise( c3d::RenderDevice const & device )override;
 		void doCleanup()override;
-		void doCpuUpdate( castor3d::CpuUpdater & updater )const override;
-		void doGpuUpdate( castor3d::GpuUpdater & updater )const override;
-		void doUpload( castor3d::UploadData & uploader )override;
+		void doCpuUpdate( c3d::CpuUpdater & updater )const override;
+		void doGpuUpdate( c3d::GpuUpdater & updater )const override;
+		void doUpload( c3d::UploadData & uploader )override;
 		/**
-		*\copydoc	castor3d::SceneBackground::doAddPassBindings
+		*\copydoc	c3d::SceneBackground::doAddPassBindings
 		*/
 		void doAddPassBindings( crg::FramePass & pass
 			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const override;
 		/**
-		*\copydoc	castor3d::SceneBackground::doAddBindings
+		*\copydoc	c3d::SceneBackground::doAddBindings
 		*/
 		void doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, VkShaderStageFlags shaderStages
 			, uint32_t & index )const override;
 		/**
-		*\copydoc	castor3d::SceneBackground::doAddDescriptors
+		*\copydoc	c3d::SceneBackground::doAddDescriptors
 		*/
 		void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
 			, crg::ImageViewIdArray const & targetImage
@@ -241,7 +241,7 @@ namespace atmosphere_scattering
 		struct CameraPasses
 		{
 			CameraPasses( crg::FramePassGroup & graph
-				, castor3d::RenderDevice const & device
+				, c3d::RenderDevice const & device
 				, AtmosphereBackground & background
 				, crg::FramePass const & transmittancePass
 				, crg::FramePass const & multiscatterPass
@@ -254,81 +254,81 @@ namespace atmosphere_scattering
 				, crg::ImageViewId const & weather
 				, crg::ImageViewIdArray const & colour
 				, crg::ImageViewId const * depthObj
-				, castor3d::HdrConfigUbo const & hdrConfigUbo
-				, castor3d::SceneUbo const & sceneUbo
+				, c3d::HdrConfigUbo const & hdrConfigUbo
+				, c3d::SceneUbo const & sceneUbo
 				, AtmosphereScatteringUbo const & atmosphereUbo
 				, CloudsUbo const & cloudsUbo
-				, castor3d::Extent2D const & size
-				, castor::Point2ui const & skyViewResolution
+				, c3d::Extent2D const & size
+				, c3d::Point2ui const & skyViewResolution
 				, uint32_t volumeResolution
 				, uint32_t index
 				, bool forceVisible
-				, castor3d::BackgroundPassBase *& backgroundPass );
+				, c3d::BackgroundPassBase *& backgroundPass );
 			~CameraPasses();
 
-			void accept( castor3d::ConfigurationVisitorBase & visitor );
+			void accept( c3d::ConfigurationVisitorBase & visitor );
 
-			void update( castor3d::CpuUpdater & updater
-				, castor::Point3f const & sunDirection
-				, castor::Vector3f const & planetPosition )const;
-			void update( castor3d::Camera const & camera
+			void update( c3d::CpuUpdater & updater
+				, c3d::Point3f const & sunDirection
+				, c3d::Vector3f const & planetPosition )const;
+			void update( c3d::Camera const & camera
 				, bool safeBanded
-				, castor::Point3f const & sunDirection
-				, castor::Vector3f const & planetPosition )const;
+				, c3d::Point3f const & sunDirection
+				, c3d::Vector3f const & planetPosition )const;
 
-			castor3d::Texture skyView;
-			castor3d::Texture volume;
-			castor3d::Texture skyColour;
-			castor3d::Texture sunColour;
-			castor3d::Texture cloudsColour;
-			castor3d::Texture cloudsResult;
+			c3d::Texture skyView;
+			c3d::Texture volume;
+			c3d::Texture skyColour;
+			c3d::Texture sunColour;
+			c3d::Texture cloudsColour;
+			c3d::Texture cloudsResult;
 			mutable bool camAtmoChanged{ true };
 			mutable CameraUbo cameraUbo;
-			castor::RawUniquePtr< AtmosphereSkyViewPass > skyViewPass;
-			castor::RawUniquePtr< AtmosphereVolumePass > volumePass;
-			castor::RawUniquePtr< CloudsVolumePass > volumetricCloudsPass;
-			castor::RawUniquePtr< CloudsResolvePass > cloudsResolvePass;
+			c3d::RawUniquePtr< AtmosphereSkyViewPass > skyViewPass;
+			c3d::RawUniquePtr< AtmosphereVolumePass > volumePass;
+			c3d::RawUniquePtr< CloudsVolumePass > volumetricCloudsPass;
+			c3d::RawUniquePtr< CloudsResolvePass > cloudsResolvePass;
 			crg::FramePass * lastPass;
 		};
 
 	private:
-		castor3d::SceneNode const * m_sunNode{};
-		castor3d::SceneNode const * m_planetNode{};
+		c3d::SceneNode const * m_sunNode{};
+		c3d::SceneNode const * m_planetNode{};
 		// Clouds
 		WeatherConfig m_weatherCfg;
 		CloudsConfig m_cloudsCfg;
-		castor3d::Texture m_worley;
-		castor3d::Texture m_perlinWorley;
-		castor3d::Texture m_curl;
-		castor3d::Texture m_weather;
+		c3d::Texture m_worley;
+		c3d::Texture m_perlinWorley;
+		c3d::Texture m_curl;
+		c3d::Texture m_weather;
 		mutable bool m_first{ true };
 		mutable bool m_generateWorley{ true };
 		mutable bool m_generatePerlinWorley{ true };
 		mutable bool m_generateCurl{ true };
 		mutable bool m_cloudsChanged{ true };
 		mutable bool m_weatherChanged{ true };
-		castor::RawUniquePtr< WeatherUbo > m_weatherUbo;
-		castor::RawUniquePtr< CloudsUbo > m_cloudsUbo;
-		castor::RawUniquePtr< CloudsWorleyPass > m_worleyPass;
-		castor::RawUniquePtr< CloudsPerlinPass > m_perlinWorleyPass;
-		castor::RawUniquePtr< CloudsCurlPass > m_curlPass;
-		castor::RawUniquePtr< CloudsWeatherPass > m_weatherPass;
+		c3d::RawUniquePtr< WeatherUbo > m_weatherUbo;
+		c3d::RawUniquePtr< CloudsUbo > m_cloudsUbo;
+		c3d::RawUniquePtr< CloudsWorleyPass > m_worleyPass;
+		c3d::RawUniquePtr< CloudsPerlinPass > m_perlinWorleyPass;
+		c3d::RawUniquePtr< CloudsCurlPass > m_curlPass;
+		c3d::RawUniquePtr< CloudsWeatherPass > m_weatherPass;
 		// Atmosphere
 		AtmosphereScatteringConfig m_atmosphereCfg;
-		castor3d::Texture m_transmittance;
-		castor3d::Texture m_multiScatter;
+		c3d::Texture m_transmittance;
+		c3d::Texture m_multiScatter;
 		uint32_t m_volumeResolution{ 32u };
-		castor::Point2ui m_skyViewResolution{ 192u, 108u };
+		c3d::Point2ui m_skyViewResolution{ 192u, 108u };
 		uint32_t m_worleyResolution{ 32u };
 		uint32_t m_perlinWorleyResolution{ 32u };
 		uint32_t m_curlResolution{ 32u };
 		uint32_t m_weatherResolution{ 32u };
 		mutable bool m_atmosphereChanged{ true };
-		castor::RawUniquePtr< AtmosphereScatteringUbo > m_atmosphereUbo;
-		castor::RawUniquePtr< AtmosphereTransmittancePass > m_transmittancePass;
-		castor::RawUniquePtr< AtmosphereMultiScatteringPass > m_multiScatteringPass;
-		castor::Map< crg::ImageData const *, castor::RawUniquePtr< CameraPasses > > m_cameraPasses;
-		mutable castor::PreciseTimer m_timer;
+		c3d::RawUniquePtr< AtmosphereScatteringUbo > m_atmosphereUbo;
+		c3d::RawUniquePtr< AtmosphereTransmittancePass > m_transmittancePass;
+		c3d::RawUniquePtr< AtmosphereMultiScatteringPass > m_multiScatteringPass;
+		c3d::Map< crg::ImageData const *, c3d::RawUniquePtr< CameraPasses > > m_cameraPasses;
+		mutable c3d::PreciseTimer m_timer;
 		mutable float m_time{};
 	};
 }

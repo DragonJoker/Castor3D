@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Mesh/Submesh/Component/FaceInfos.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/Face.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class TriFaceMapping
 		: public IndexMapping
@@ -24,7 +24,7 @@ namespace castor3d
 			{
 			}
 			/**
-			 *\copydoc		castor3d::SubmeshComponentData::copy
+			 *\copydoc		SubmeshComponentData::copy
 			 */
 			void copy( SubmeshComponentDataRPtr data )const override;
 			/**
@@ -80,8 +80,8 @@ namespace castor3d
 			 *\param[in]	maxUV	L'UV du coin haut droit.
 			 */
 			C3D_API void addQuadFace( uint32_t a, uint32_t b, uint32_t c, uint32_t d
-				, castor::Point3f const & minUV = castor::Point3f()
-				, castor::Point3f const & maxUV = castor::Point3f( 1, 1, 1 ) );
+				, Point3f const & minUV = Point3f()
+				, Point3f const & maxUV = Point3f( 1, 1, 1 ) );
 			/**
 			 *\~english
 			 *\brief		Creates and adds faces to the submesh.
@@ -90,7 +90,7 @@ namespace castor3d
 			 *\brief		Crée et ajoute une face au sous-maillage.
 			 *\param[in]	faces	Les faces.
 			 */
-			void addFaceGroup( castor::Vector< FaceIndices > const & faces )
+			void addFaceGroup( Vector< FaceIndices > const & faces )
 			{
 				addFaceGroup( faces.data(), faces.data() + faces.size() );
 			}
@@ -103,7 +103,7 @@ namespace castor3d
 			 *\param[in]	faces	Les faces.
 			 */
 			template< size_t Count >
-			void addFaceGroup( castor::Array< FaceIndices, Count > const & faces )
+			void addFaceGroup( Array< FaceIndices, Count > const & faces )
 			{
 				addFaceGroup( faces.data(), faces.data() + Count );
 			}
@@ -139,7 +139,7 @@ namespace castor3d
 
 			void setData( FaceArray faces )
 			{
-				m_faces = castor::move( faces );
+				m_faces = c3d::move( faces );
 				needsUpdate();
 			}
 
@@ -179,7 +179,7 @@ namespace castor3d
 			bool m_hasNormals{ false };
 			//!\~english	The transformed camera position at last sort.
 			//!\~french		La position transformée de la caméra au dernier tri.
-			castor::Point3f m_cameraPosition;
+			Point3f m_cameraPosition;
 		};
 
 		class Plugin
@@ -190,7 +190,7 @@ namespace castor3d
 
 			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
 			{
-				return castor::makeUniqueDerived< SubmeshComponent, TriFaceMapping >( submesh );
+				return makeUniqueDerived< SubmeshComponent, TriFaceMapping >( submesh );
 			}
 
 			SubmeshComponentFlag getTriangleIndexFlag()const noexcept override
@@ -206,7 +206,7 @@ namespace castor3d
 
 		static SubmeshComponentPluginUPtr createPlugin( SubmeshComponentRegister const & submeshComponents )
 		{
-			return castor::makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
+			return makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
 		}
 		/**
 		 *\~english
@@ -241,8 +241,8 @@ namespace castor3d
 		 *\param[out]	normals		Les normales des sommets.
 		 *\param[in]	reverted	\p true pour inverser les normales.
 		 */
-		C3D_API void computeNormals( castor::Point3fArray const & positions
-			, castor::Point3fArray & normals
+		C3D_API void computeNormals( Point3fArray const & positions
+			, Point3fArray & normals
 			, bool reverted = false )const;
 		/**
 		 *\~english
@@ -260,32 +260,32 @@ namespace castor3d
 		 *\param[in]	normals		Les normales des sommets.
 		 *\param[out]	tangents	Les tangentes des sommets.
 		 */
-		C3D_API void computeTangentsFromNormals( castor::Point3fArray const & positions
-			, castor::Point3fArray const & texcoords
-			, castor::Point3fArray const & normals
-			, castor::Point4fArray & tangents )const;
+		C3D_API void computeTangentsFromNormals( Point3fArray const & positions
+			, Point3fArray const & texcoords
+			, Point3fArray const & normals
+			, Point4fArray & tangents )const;
 		/**
-		 *\copydoc		castor3d::IndexMapping::getCount
+		 *\copydoc		c3d::IndexMapping::getCount
 		 */
 		C3D_API uint32_t getCount()const override;
 		/**
-		 *\copydoc		castor3d::IndexMapping::setCount
+		 *\copydoc		c3d::IndexMapping::setCount
 		 */
 		C3D_API void setCount( uint32_t value )override;
 		/**
-		 *\copydoc		castor3d::IndexMapping::getComponentsCount
+		 *\copydoc		c3d::IndexMapping::getComponentsCount
 		 */
 		C3D_API uint32_t getComponentsCount()const override;
 		/**
-		 *\copydoc		castor3d::IndexMapping::computeNormals
+		 *\copydoc		c3d::IndexMapping::computeNormals
 		 */
 		C3D_API void computeNormals( bool reverted = false )override;
 		/**
-		 *\copydoc		castor3d::IndexMapping::computeTangents
+		 *\copydoc		c3d::IndexMapping::computeTangents
 		 */
 		C3D_API void computeTangents()override;
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::clone
+		 *\copydoc		SubmeshComponent::clone
 		 */
 		C3D_API SubmeshComponentUPtr clone( Submesh & submesh )const override;
 
@@ -295,7 +295,7 @@ namespace castor3d
 		}
 
 	public:
-		C3D_API static castor::String const TypeName;
+		C3D_API static String const TypeName;
 	};
 }
 

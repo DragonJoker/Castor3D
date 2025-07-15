@@ -13,23 +13,23 @@ See LICENSE file in root folder
 namespace light_streaks
 {
 	class PostEffect
-		: public castor3d::PostEffect
+		: public c3d::PostEffect
 	{
 	public:
-		PostEffect( castor3d::RenderTarget & renderTarget
-			, castor3d::RenderSystem & renderSystem
-			, castor3d::Parameters const & params );
-		static castor3d::PostEffectUPtr create( castor3d::RenderTarget & renderTarget
-			, castor3d::RenderSystem & renderSystem
-			, castor3d::Parameters const & params );
+		PostEffect( c3d::RenderTarget & renderTarget
+			, c3d::RenderSystem & renderSystem
+			, c3d::Parameters const & params );
+		static c3d::PostEffectUPtr create( c3d::RenderTarget & renderTarget
+			, c3d::RenderSystem & renderSystem
+			, c3d::Parameters const & params );
 		/**
-		 *\copydoc		castor3d::PostEffect::accept
+		 *\copydoc		c3d::PostEffect::accept
 		 */
-		void accept( castor3d::ConfigurationVisitorBase & visitor )override;
+		void accept( c3d::ConfigurationVisitorBase & visitor )override;
 		/**
-		 *\copydoc		castor3d::PostEffect::setParameters
+		 *\copydoc		c3d::PostEffect::setParameters
 		 */
-		void setParameters( castor3d::Parameters parameters )override;
+		void setParameters( c3d::Parameters parameters )override;
 
 		crg::FramePass const & getPass()const override
 		{
@@ -39,39 +39,39 @@ namespace light_streaks
 
 	private:
 		/**
-		*\copydoc		castor3d::PostEffect::doInitialise
+		*\copydoc		c3d::PostEffect::doInitialise
 		*/
-		bool doInitialise( castor3d::RenderDevice const & device
-			, castor3d::Texture const & source
-			, castor3d::Texture const & target
+		bool doInitialise( c3d::RenderDevice const & device
+			, c3d::Texture const & source
+			, c3d::Texture const & target
 			, crg::FramePass const & previousPass )override;
 		/**
-		*\copydoc		castor3d::PostEffect::doCleanup
+		*\copydoc		c3d::PostEffect::doCleanup
 		*/
-		void doCleanup( castor3d::RenderDevice const & device )override;
+		void doCleanup( c3d::RenderDevice const & device )override;
 		/**
-		 *\copydoc		castor3d::PostEffect::doCpuUpdate
+		 *\copydoc		c3d::PostEffect::doCpuUpdate
 		 */
-		void doCpuUpdate( castor3d::CpuUpdater & updater )override;
+		void doCpuUpdate( c3d::CpuUpdater & updater )override;
 		/**
-		 *\copydoc		castor3d::PostEffect::doWriteInto
+		 *\copydoc		c3d::PostEffect::doWriteInto
 		 */
-		bool doWriteInto( castor::StringStream & file, castor::String const & tabs )override;
+		bool doWriteInto( c3d::StringStream & file, c3d::String const & tabs )override;
 
 	public:
-		static castor::String const Type;
-		static castor::MbString const Name;
+		static c3d::String const Type;
+		static c3d::MbString const Name;
 		static uint32_t const Count = 4u;
 
 	private:
-		castor3d::Texture m_hiImage;
-		castor3d::Texture m_kawaseImage;
+		c3d::Texture m_hiImage;
+		c3d::Texture m_kawaseImage;
 		KawaseConfig m_kawaseCfg;
 		KawaseUbo m_kawaseUbo;
 		crg::FramePass const * m_pass{};
-		castor::RawUniquePtr< HiPass > m_hiPass;
-		castor::RawUniquePtr< KawasePass > m_kawasePass;
-		castor::RawUniquePtr< CombinePass > m_combinePass;
+		c3d::RawUniquePtr< HiPass > m_hiPass;
+		c3d::RawUniquePtr< KawasePass > m_kawasePass;
+		c3d::RawUniquePtr< CombinePass > m_combinePass;
 	};
 }
 

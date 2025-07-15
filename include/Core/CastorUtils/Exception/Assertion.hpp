@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/CastorUtils.hpp"
 
-namespace castor
+namespace c3d
 {
 	CU_API void cuLogError( char const * const description )noexcept;
 	CU_API void cuFailure( char const * const description )noexcept;
@@ -22,10 +22,10 @@ namespace castor
 
 #	if !defined( NDEBUG )
 #		define CU_Assert( pred, text ) ( !!( pred ) )\
-			|| ( castor::cuFailure( text ), 0 )
+			|| ( c3d::cuFailure( text ), 0 )
 #	else
 #		define CU_Assert( pred, text ) ( !!( pred ) )\
-			|| ( castor::cuLogError( text ), 0 )
+			|| ( c3d::cuLogError( text ), 0 )
 #	endif
 
 //!\~english	Calls invariant checking function.
@@ -38,7 +38,7 @@ namespace castor
 #		define CU_Assert( pred, text ) assert( pred && text )
 #	else
 #		define CU_Assert( pred, text ) ( !!( pred ) )\
-			|| ( castor::cuLogError( text ), 0 )
+			|| ( c3d::cuLogError( text ), 0 )
 #	endif
 #	define CU_CheckInvariants() ((void)0)
 

@@ -1,13 +1,13 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp"
 
-CU_ImplementSmartPtr( castor3d, IndexMapping )
+CU_ImplementSmartPtr( c3d, IndexMapping )
 
-namespace castor3d
+namespace c3d
 {
 	IndexMapping::IndexMapping( Submesh & submesh
-		, castor::String const & type
+		, String const & type
 		, SubmeshComponentDataUPtr data )
-		: SubmeshComponent{ submesh, type, castor::move( data ) }
+		: SubmeshComponent{ submesh, type, c3d::move( data ) }
 	{
 	}
 }

@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Scene */
 	//@{
@@ -53,7 +53,7 @@ namespace castor3d
 		eMatIndex = 0x800,
 	};
 	CU_ImplementFlags( ElementUsage )
-	C3D_API castor::String getName( ElementUsage value );
+	C3D_API String getName( ElementUsage value );
 	enum class ParticleFormat
 	{
 		eInt = 0,
@@ -73,7 +73,7 @@ namespace castor3d
 		eMat4f = 14,
 		CU_ScopedEnumBounds( eInt, eMat4f )
 	};
-	C3D_API castor::String getName( ParticleFormat value );
+	C3D_API String getName( ParticleFormat value );
 	/**
 	*\~english
 	*\brief
@@ -185,34 +185,34 @@ namespace castor3d
 	*	Spécialisation pour ParticleSystem.
 	*/
 	template<>
-	struct ObjectCacheTraitsT< ParticleSystem, castor::String >
-		: ObjectCacheTraitsBaseT< ParticleSystem, castor::String >
+	struct ObjectCacheTraitsT< ParticleSystem, String >
+		: ObjectCacheTraitsBaseT< ParticleSystem, String >
 	{
-		using KeyT = castor::String;
+		using KeyT = String;
 		using ElementT = ParticleSystem;
 		using BaseT = ObjectCacheTraitsBaseT< ElementT, KeyT >;
 		using ElementPtrT = typename BaseT::ElementPtrT;
 
-		C3D_API static const castor::String Name;
+		C3D_API static const String Name;
 	};
 
-	using ParticleSystemCacheTraits = ObjectCacheTraitsT< ParticleSystem, castor::String >;
+	using ParticleSystemCacheTraits = ObjectCacheTraitsT< ParticleSystem, String >;
 	using ParticleSystemCache = ObjectCacheT< ParticleSystem
-		, castor::String
+		, String
 		, ParticleSystemCacheTraits >;
 	using ParticleSystemRes = CameraCacheTraits::ElementPtrT;
 	using ParticleSystemResPtr = CameraCacheTraits::ElementObsT;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, ParticleSystemCache, C3D_API );
+	CU_DeclareSmartPtr( c3d, ParticleSystemCache, C3D_API );
 
-	CU_DeclareSmartPtr( castor3d, ComputeParticleSystem, C3D_API );
-	CU_DeclareSmartPtr( castor3d, CpuParticleSystem, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ParticleElementDeclaration, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ParticleEmitter, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ParticleSystem, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ParticleSystemImpl, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ParticleUpdater, C3D_API );
+	CU_DeclareSmartPtr( c3d, ComputeParticleSystem, C3D_API );
+	CU_DeclareSmartPtr( c3d, CpuParticleSystem, C3D_API );
+	CU_DeclareSmartPtr( c3d, ParticleElementDeclaration, C3D_API );
+	CU_DeclareSmartPtr( c3d, ParticleEmitter, C3D_API );
+	CU_DeclareSmartPtr( c3d, ParticleSystem, C3D_API );
+	CU_DeclareSmartPtr( c3d, ParticleSystemImpl, C3D_API );
+	CU_DeclareSmartPtr( c3d, ParticleUpdater, C3D_API );
 
 	CU_DeclareVector( Particle, Particle );
 	CU_DeclareVector( ParticleEmitterUPtr, ParticleEmitter );
@@ -227,13 +227,13 @@ namespace castor3d
 	*\brief
 	*	Fabrique de système de particules.
 	*/
-	using ParticleFactory = castor::Factory< CpuParticleSystem
-		, castor::String
+	using ParticleFactory = Factory< CpuParticleSystem
+		, String
 		, CpuParticleSystemUPtr
-		, castor::Function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
+		, Function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, ParticleFactory, C3D_API );
+	CU_DeclareSmartPtr( c3d, ParticleFactory, C3D_API );
 	/** @endcond */
 
 	//@}

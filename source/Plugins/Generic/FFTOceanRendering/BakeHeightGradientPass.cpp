@@ -27,25 +27,25 @@ namespace ocean_fft
 
 	namespace bakehg
 	{
-		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( castor3d::RenderDevice const & device )
+		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( c3d::RenderDevice const & device )
 		{
-			ashes::VkDescriptorSetLayoutBindingArray bindings{ castor3d::makeDescriptorSetLayoutBinding( BakeHeightGradientPass::eConfig
+			ashes::VkDescriptorSetLayoutBindingArray bindings{ c3d::makeDescriptorSetLayoutBinding( BakeHeightGradientPass::eConfig
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, castor3d::makeDescriptorSetLayoutBinding( BakeHeightGradientPass::eHeight
+				, c3d::makeDescriptorSetLayoutBinding( BakeHeightGradientPass::eHeight
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, castor3d::makeDescriptorSetLayoutBinding( BakeHeightGradientPass::eDisplacement
+				, c3d::makeDescriptorSetLayoutBinding( BakeHeightGradientPass::eDisplacement
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, castor3d::makeDescriptorSetLayoutBinding( BakeHeightGradientPass::eHeightDisplacement
+				, c3d::makeDescriptorSetLayoutBinding( BakeHeightGradientPass::eHeightDisplacement
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, castor3d::makeDescriptorSetLayoutBinding( BakeHeightGradientPass::eGradientJacobian
+				, c3d::makeDescriptorSetLayoutBinding( BakeHeightGradientPass::eGradientJacobian
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, VK_SHADER_STAGE_COMPUTE_BIT ) };
 			return device->createDescriptorSetLayout( BakeHeightGradientPass::Name 
-				, castor::move( bindings ) );
+				, c3d::move( bindings ) );
 		}
 
 		static ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
@@ -97,7 +97,7 @@ namespace ocean_fft
 			return descriptorSet;
 		}
 
-		static ashes::PipelineLayoutPtr createPipelineLayout( castor3d::RenderDevice const & device
+		static ashes::PipelineLayoutPtr createPipelineLayout( c3d::RenderDevice const & device
 			, ashes::DescriptorSetLayout const & dslayout )
 		{
 			return device->createPipelineLayout( BakeHeightGradientPass::Name
@@ -105,18 +105,18 @@ namespace ocean_fft
 				, ashes::VkPushConstantRangeArray{ { VK_SHADER_STAGE_COMPUTE_BIT, 0u, uint32_t( sizeof( BakeHeightGradientPass::Data ) ) } } );
 		}
 
-		static ashes::ComputePipelinePtr createPipeline( castor3d::RenderDevice const & device
+		static ashes::ComputePipelinePtr createPipeline( c3d::RenderDevice const & device
 			, ashes::PipelineLayout const & pipelineLayout
-			, castor3d::ShaderModule & computeShader )
+			, c3d::ShaderModule & computeShader )
 		{
 			// Initialise the pipeline.
 			return device->createPipeline( BakeHeightGradientPass::Name
 				, ashes::ComputePipelineCreateInfo( 0u
-					, castor3d::makeShaderState( device, computeShader )
+					, c3d::makeShaderState( device, computeShader )
 					, pipelineLayout ) );
 		}
 
-		static castor3d::ShaderPtr createShader( castor3d::RenderDevice const & device )
+		static c3d::ShaderPtr createShader( c3d::RenderDevice const & device )
 		{
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
@@ -228,21 +228,21 @@ namespace ocean_fft
 
 	//************************************************************************************************
 
-	castor::MbString const BakeHeightGradientPass::Name{ "BakeHeightGradient" };
+	c3d::MbString const BakeHeightGradientPass::Name{ "BakeHeightGradient" };
 
 	BakeHeightGradientPass::BakeHeightGradientPass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
-		, castor3d::RenderDevice const & device
-		, castor3d::Extent2D const & extent
-		, castor::Point2f const & heightMapSize
+		, c3d::RenderDevice const & device
+		, c3d::Extent2D const & extent
+		, c3d::Point2f const & heightMapSize
 		, uint32_t displacementDownsample
 		, crg::RunnablePass::IsEnabledCallback isEnabled )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
 			, { []( uint32_t index ){}
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( castor3d::PipelineStageFlags::eComputeShader ); } )
+				, GetPipelineStateCallback( [](){ return crg::getPipelineState( c3d::PipelineStageFlags::eComputeShader ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
 				, isEnabled
@@ -251,7 +251,7 @@ namespace ocean_fft
 		, m_device{ device }
 		, m_descriptorSetLayout{ bakehg::createDescriptorLayout( m_device ) }
 		, m_pipelineLayout{ bakehg::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, castor::makeString( Name ), bakehg::createShader( device ) }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, c3d::makeString( Name ), bakehg::createShader( device ) }
 		, m_pipeline{ bakehg::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
 		, m_descriptorSet{ bakehg::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
@@ -261,7 +261,7 @@ namespace ocean_fft
 	{
 	}
 
-	void BakeHeightGradientPass::accept( castor3d::RenderTechniqueVisitor & visitor )
+	void BakeHeightGradientPass::accept( c3d::RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( m_shader );
 	}
@@ -316,24 +316,24 @@ namespace ocean_fft
 
 	//************************************************************************************************
 
-	crg::FramePass const & createBakeHeightGradientPass( castor3d::RenderDevice const & device
+	crg::FramePass const & createBakeHeightGradientPass( c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
 		, crg::FramePassArray previousPasses
-		, castor3d::Extent2D const & extent
-		, castor::Point2f const & heightMapSize
+		, c3d::Extent2D const & extent
+		, c3d::Point2f const & heightMapSize
 		, uint32_t displacementDownsample
 		, OceanUbo const & ubo
 		, ashes::BufferBase const & height
 		, ashes::BufferBase const & displacement
-		, castor::Array< castor3d::Texture, 2u > const & heightDisp
-		, castor::Array< castor3d::Texture, 2u > const & gradJacob )
+		, c3d::Array< c3d::Texture, 2u > const & heightDisp
+		, c3d::Array< c3d::Texture, 2u > const & gradJacob )
 	{
 		auto & result = graph.createPass( "BakeHeightGradient"
 			, [&device, extent, heightMapSize, displacementDownsample]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto res = castor::make_unique< BakeHeightGradientPass >( framePass
+				auto res = c3d::makeRawUnique< BakeHeightGradientPass >( framePass
 					, context
 					, runnableGraph
 					, device
@@ -341,7 +341,7 @@ namespace ocean_fft
 					, heightMapSize
 					, displacementDownsample
 					, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );

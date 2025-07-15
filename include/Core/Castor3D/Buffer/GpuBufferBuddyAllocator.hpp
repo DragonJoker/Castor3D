@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "BufferModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	struct GpuBufferBuddyAllocatorTraits
 	{

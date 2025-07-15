@@ -17,10 +17,10 @@ See LICENSE file in root folder
 
 #include <RenderGraph/RunnablePass.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class VisibilityResolvePass
-		: public castor::Named
+		: public Named
 		, public RenderTechniquePass
 		, public crg::RunnablePass
 	{
@@ -60,23 +60,23 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, castor::String const & category
-			, castor::String const & name
+			, String const & category
+			, String const & name
 			, RenderNodesPass const & nodesPass
 			, crg::ImageViewIdArray targetImage
 			, crg::ImageViewIdArray targetDepth
 			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc );
 		/**
-		 *\copydoc	castor3d::RenderTechniquePass::accept
+		 *\copydoc	RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 		/**
-		 *\copydoc	castor3d::RenderTechniquePass::update
+		 *\copydoc	RenderTechniquePass::update
 		 */
 		C3D_API void update( CpuUpdater & updater )override;
 		/**
-		 *\copydoc	castor3d::RenderTechniquePass::createPipelineFlags
+		 *\copydoc	RenderTechniquePass::createPipelineFlags
 		 */
 		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine const & passComponents
 			, SubmeshComponentCombine const & submeshComponents
@@ -93,41 +93,41 @@ namespace castor3d
 			, VkPrimitiveTopology topology
 			, bool isFrontCulled
 			, uint32_t passLayerIndex
-			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+			, GpuBufferOffsetT< Point4f > const & morphTargets
 			, SubmeshRenderData * submeshData
 			, uint32_t vertexStride )const override;
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::areValidPassFlags
+		 *\copydoc	RenderNodesPass::areValidPassFlags
 		 */
 		C3D_API bool areValidPassFlags( PassComponentCombine const & passFlags )const noexcept override;
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::getShaderFlags
+		 *\copydoc	RenderNodesPass::getShaderFlags
 		 */
 		C3D_API ShaderFlags getShaderFlags()const noexcept override;
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::countNodes
+		 *\copydoc	RenderNodesPass::countNodes
 		 */
 		C3D_API void countNodes( RenderInfo & info )const noexcept override;
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::isPassEnabled
+		 *\copydoc	RenderNodesPass::isPassEnabled
 		 */
 		C3D_API bool isPassEnabled()const noexcept override;
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::getDeferredLightingFilter
+		 *\copydoc	RenderNodesPass::getDeferredLightingFilter
 		 */
 		DeferredLightingFilter getDeferredLightingFilter()const noexcept
 		{
 			return m_deferredLightingFilter;
 		}
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::getParallaxOcclusionFilter
+		 *\copydoc	RenderNodesPass::getParallaxOcclusionFilter
 		 */
 		ParallaxOcclusionFilter getParallaxOcclusionFilter()const noexcept
 		{
 			return m_parallaxOcclusionFilter;
 		}
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::getComponentsMask
+		 *\copydoc	RenderNodesPass::getComponentsMask
 		 */
 		C3D_API static ComponentModeFlags getComponentsMask()noexcept;
 
@@ -147,7 +147,7 @@ namespace castor3d
 		struct Pipeline
 		{
 			explicit Pipeline( PipelineFlags pflags )
-				: flags{ castor::move( pflags ) }
+				: flags{ c3d::move( pflags ) }
 			{
 			}
 
@@ -159,7 +159,7 @@ namespace castor3d
 			ashes::DescriptorSetPoolPtr ioDescriptorPool{};
 			ProgramModule shader;
 			ashes::PipelinePtr pipeline{};
-			castor::UnorderedMap< size_t, ashes::DescriptorSetPtr > vtxDescriptorSets{};
+			HashMap< size_t, ashes::DescriptorSetPtr > vtxDescriptorSets{};
 			ashes::DescriptorSetPtr ioDescriptorSet{};
 		};
 		struct PipelineNodesDescriptors
@@ -167,15 +167,15 @@ namespace castor3d
 			uint32_t pipelineId{};
 			ashes::DescriptorSet const * vtxDescriptorSet{};
 		};
-		using PipelinePtr = castor::RawUniquePtr< Pipeline >;
-		using SubmeshPipelinesNodesDescriptors = castor::Map< ashes::DescriptorSet const *, UInt32Array >;
-		using SubmeshPipelinesMap = castor::Map< Pipeline const *, SubmeshPipelinesNodesDescriptors >;
-		using BillboardPipelinesNodesDescriptors = castor::Map< uint32_t, PipelineNodesDescriptors >;
-		using BillboardPipelinesMap = castor::Map< Pipeline const *, BillboardPipelinesNodesDescriptors >;
-		using PipelineContainer = castor::Vector< PipelinePtr >;
+		using PipelinePtr = RawUniquePtr< Pipeline >;
+		using SubmeshPipelinesNodesDescriptors = Map< ashes::DescriptorSet const *, UInt32Array >;
+		using SubmeshPipelinesMap = Map< Pipeline const *, SubmeshPipelinesNodesDescriptors >;
+		using BillboardPipelinesNodesDescriptors = Map< uint32_t, PipelineNodesDescriptors >;
+		using BillboardPipelinesMap = Map< Pipeline const *, BillboardPipelinesNodesDescriptors >;
+		using PipelineContainer = Vector< PipelinePtr >;
 
 	private:
-		void doAccept( castor3d::RenderTechniqueVisitor & visitor )override;
+		void doAccept( RenderTechniqueVisitor & visitor )override;
 		bool doIsEnabled()const noexcept;
 		void doRecordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
@@ -211,7 +211,7 @@ namespace castor3d
 		SubmeshPipelinesMap m_activePipelines;
 		BillboardPipelinesMap m_activeBillboardPipelines;
 		ClustersConfig const * m_clustersConfig{};
-		castor::ChangeTracked< uint32_t > m_maxPipelineId{};
+		ChangeTracked< uint32_t > m_maxPipelineId{};
 	};
 }
 

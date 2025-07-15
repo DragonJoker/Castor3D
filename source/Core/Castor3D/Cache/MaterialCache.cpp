@@ -19,16 +19,11 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 
-CU_ImplementSmartPtr( castor3d, MaterialCache )
+CU_ImplementSmartPtr( c3d, MaterialCache )
 
-namespace castor3d
+namespace c3d
 {
-	const castor::String PtrCacheTraitsT< castor3d::Material, castor::String >::Name = cuT( "Material" );
-}
-
-namespace castor
-{
-	using namespace castor3d;
+	const String PtrCacheTraitsT< Material, String >::Name = cuT( "Material" );
 
 	//*********************************************************************************************
 
@@ -48,13 +43,13 @@ namespace castor
 		}
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::update( castor3d::PassBuffer & passBuffer
-		, castor3d::UploadData & uploader )const
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::update( PassBuffer & passBuffer
+		, UploadData & uploader )const
 	{
 		passBuffer.update( m_buffers, uploader );
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::registerBuffer( castor::String const & name
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::registerBuffer( String const & name
 		, SpecificsBuffer buffer )
 	{
 		if ( auto it = m_buffers.find( name );
@@ -63,10 +58,10 @@ namespace castor
 			CU_Exception( "Buffer with given name already registered." );
 		}
 
-		m_buffers.try_emplace( name, castor::move( buffer ), nullptr );
+		m_buffers.try_emplace( name, c3d::move( buffer ), nullptr );
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::unregisterBuffer( castor::String const & name )
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::unregisterBuffer( String const & name )
 	{
 		if ( auto it = m_buffers.find( name );
 			it != m_buffers.end() )
@@ -107,7 +102,7 @@ namespace castor
 	}
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::declareShaderBuffers( sdw::ShaderWriter & writer
-		, castor::StringMap< shader::BufferBaseUPtr > & buffers
+		, StringMap< shader::BufferBaseUPtr > & buffers
 		, uint32_t & binding
 		, uint32_t set )const
 	{
@@ -131,7 +126,7 @@ namespace castor
 			{
 				m_engine.postEvent( makeCpuCleanupEvent( resource ) );
 			}
-			, castor::ResourceMergerT< MaterialCache >{ cuT( "_" ) } }
+			, ResourceMergerT< MaterialCache >{ cuT( "_" ) } }
 		, m_engine{ engine }
 	{
 	}
@@ -149,23 +144,23 @@ namespace castor
 					, m_engine
 					, m_engine.getDefaultLightingModel() );
 				material->createPass();
-				material->getPass( 0 )->createComponent< castor3d::TwoSidedComponent >()->setTwoSided( true );
+				material->getPass( 0 )->createComponent< TwoSidedComponent >()->setTwoSided( true );
 				material->setSerialisable( false );
 			}
 
 			m_defaultMaterial = material;
-			m_passBuffer = castor::makeUnique< PassBuffer >( m_engine
+			m_passBuffer = makeUnique< PassBuffer >( m_engine
 				, device
 				, MaxMaterialsCount );
-			m_sssProfileBuffer = castor::makeUnique< SssProfileBuffer >( m_engine
+			m_sssProfileBuffer = makeUnique< SssProfileBuffer >( m_engine
 				, device
 				, MaxSssProfilesCount );
-			m_texConfigBuffer = castor::makeUnique< TextureConfigurationBuffer >( m_engine
+			m_texConfigBuffer = makeUnique< TextureConfigurationBuffer >( m_engine
 				, device
 				, ( device.hasBindless()
 					? device.getMaxBindlessSampled()
 					: MaxTextureConfigurationCount ) );
-			m_texAnimBuffer = castor::makeUnique< TextureAnimationBuffer >( m_engine
+			m_texAnimBuffer = makeUnique< TextureAnimationBuffer >( m_engine
 				, device
 				, ( device.hasBindless()
 					? device.getMaxBindlessSampled()
@@ -235,7 +230,7 @@ namespace castor
 	{
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::upload( castor3d::UploadData & uploader )const
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::upload( UploadData & uploader )const
 	{
 		if ( m_passBuffer )
 		{
@@ -246,13 +241,13 @@ namespace castor
 		}
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::registerSpecificsBuffer( castor::String const & name
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::registerSpecificsBuffer( String const & name
 		, SpecificsBuffer buffer )
 	{
-		m_specificsBuffers.registerBuffer( name, castor::move( buffer ) );
+		m_specificsBuffers.registerBuffer( name, c3d::move( buffer ) );
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterSpecificsBuffer( castor::String const & name )noexcept
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterSpecificsBuffer( String const & name )noexcept
 	{
 		m_specificsBuffers.unregisterBuffer( name );
 	}
@@ -277,7 +272,7 @@ namespace castor
 	}
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::declareSpecificsShaderBuffers( sdw::ShaderWriter & writer
-		, castor::StringMap< shader::BufferBaseUPtr > & buffers
+		, StringMap< shader::BufferBaseUPtr > & buffers
 		, uint32_t & binding
 		, uint32_t set )const
 	{
@@ -307,8 +302,8 @@ namespace castor
 		return m_passBuffer->getPassTypeDetails( passTypeIndex );
 	}
 
-	uint32_t ResourceCacheT< Material, String, MaterialCacheTraits >::getPassTypeIndex( castor3d::PassComponentCombineID passType
-		, castor3d::TextureCombineID textureFlags )const
+	uint32_t ResourceCacheT< Material, String, MaterialCacheTraits >::getPassTypeIndex( PassComponentCombineID passType
+		, TextureCombineID textureFlags )const
 	{
 		return m_passBuffer->getPassTypeIndex( passType, textureFlags );
 	}
@@ -430,12 +425,12 @@ namespace castor
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::doUpdatePending()
 	{
-		castor::Vector< castor3d::Pass * > passes;
-		castor::Vector< castor3d::TextureUnit * > units;
-		castor::Vector< castor3d::AnimatedTexture const * > textures;
-		castor::swap( passes, m_pendingPasses );
-		castor::swap( units, m_pendingUnits );
-		castor::swap( textures, m_pendingTextures );
+		Vector< Pass * > passes;
+		Vector< TextureUnit * > units;
+		Vector< AnimatedTexture const * > textures;
+		c3d::swap( passes, m_pendingPasses );
+		c3d::swap( units, m_pendingUnits );
+		c3d::swap( textures, m_pendingTextures );
 
 		for ( auto pass : passes )
 		{

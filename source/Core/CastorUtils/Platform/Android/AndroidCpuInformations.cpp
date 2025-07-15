@@ -6,7 +6,7 @@
 
 #include <android/cpufeatures/cpu-features.h>
 
-namespace castor::platform
+namespace c3d::platform
 {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-prototypes"

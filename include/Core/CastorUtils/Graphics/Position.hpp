@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Design/DataHolder.hpp"
 #include "CastorUtils/Math/Coords.hpp"
 
-namespace castor
+namespace c3d
 {
 	union PositionData
 	{

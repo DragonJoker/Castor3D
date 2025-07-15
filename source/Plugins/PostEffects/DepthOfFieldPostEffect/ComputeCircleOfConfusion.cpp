@@ -26,7 +26,7 @@ namespace dof
 {
 	namespace coc
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 		template< sdw::var::Flag FlagT >
 		using CoCResultStructT = sdw::IOStructInstanceHelperT< FlagT
 			, "C3D_CoCResult"
@@ -40,7 +40,7 @@ namespace dof
 			CoCResultT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled )
-				: CoCResultStructT< FlagT >{ writer, castor::move( expr ), enabled }
+				: CoCResultStructT< FlagT >{ writer, c3d::move( expr ), enabled }
 			{
 			}
 
@@ -49,7 +49,7 @@ namespace dof
 		};
 
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
@@ -57,14 +57,14 @@ namespace dof
 			auto c3d_mapColour = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColour", 1u, 0u );
 			C3D_DepthOfField( writer, 2u, 0u );
 
-			writer.implementEntryPointT< c3d::Position2FT, c3d::Uv2FT >( []( sdw::VertexInT< c3d::Position2FT > const & in
-				, sdw::VertexOutT< c3d::Uv2FT > out )
+			writer.implementEntryPointT< c3ds::Position2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::Position2FT > const & in
+				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = ( in.position() + 1.0_f ) / 2.0_f;
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, CoCResultT >( [&]( sdw::FragmentInT< c3d::Uv2FT > const & in
+			writer.implementEntryPointT< c3ds::Uv2FT, CoCResultT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > const & in
 				, sdw::FragmentOutT< CoCResultT > out )
 				{
 					auto depth = writer.declLocale( "depth"
@@ -99,7 +99,7 @@ namespace dof
 			FramePass( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
-				, castor3d::RenderDevice const & device
+				, c3d::RenderDevice const & device
 				, crg::rq::Config config )
 				: crg::RenderQuad{ framePass, context, graph
 					, crg::ru::Config{ 2u }
@@ -112,7 +112,7 @@ namespace dof
 		private:
 			struct ProgramData
 			{
-				castor3d::ProgramModule programModule;
+				c3d::ProgramModule programModule;
 				ashes::PipelineShaderStageCreateInfoArray stages;
 			};
 
@@ -121,7 +121,7 @@ namespace dof
 			{
 				if ( m_program.stages.empty() )
 				{
-					m_program.programModule = castor3d::ProgramModule{ cuT( "DoF/ComputeCoC" ), getProgram( m_device ) };
+					m_program.programModule = c3d::ProgramModule{ cuT( "DoF/ComputeCoC" ), getProgram( m_device ) };
 					m_program.stages = makeProgramStates( m_device, m_program.programModule );
 				}
 
@@ -129,21 +129,21 @@ namespace dof
 			}
 
 		private:
-			castor3d::RenderDevice const & m_device;
+			c3d::RenderDevice const & m_device;
 			ProgramData m_program;
 		};
 	}
 
 	//*********************************************************************************************
 
-	crg::FramePassArray createComputeCircleOfConfusionPass( castor3d::RenderDevice const & device
+	crg::FramePassArray createComputeCircleOfConfusionPass( c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, DepthOfFieldUbo const & configurationUbo
-		, castor3d::Texture const & depth
+		, c3d::Texture const & depth
 		, crg::ImageViewIdArray const & colour
-		, castor3d::Texture const & nearCoC
-		, castor3d::Texture const & farCoC
+		, c3d::Texture const & nearCoC
+		, c3d::Texture const & farCoC
 		, bool const * enabled
 		, uint32_t const * passIndex )
 	{
@@ -153,15 +153,15 @@ namespace dof
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< coc::FramePass >( framePass
+				auto result = c3d::makeRawUnique< coc::FramePass >( framePass
 					, context
 					, graph
 					, device
 					, crg::rq::Config{}
-						.renderSize( castor3d::makeExtent2D( extent ) )
+						.renderSize( c3d::makeExtent2D( extent ) )
 						.enabled( enabled )
 						.passIndex( passIndex ) );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

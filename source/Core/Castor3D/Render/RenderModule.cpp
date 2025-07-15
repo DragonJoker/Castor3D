@@ -20,10 +20,10 @@
 #include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/DotExport.hpp>
 
-CU_ImplementExportedOwnedBy( castor3d::RenderSystem, RenderSystem )
-CU_ImplementExportedOwnedBy( castor3d::RenderDevice, RenderDevice )
+CU_ImplementExportedOwnedBy( RenderSystem, RenderSystem )
+CU_ImplementExportedOwnedBy( RenderDevice, RenderDevice )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -39,7 +39,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String getName( Corner value )
+	String getName( Corner value )
 	{
 		switch ( value )
 		{
@@ -61,11 +61,11 @@ namespace castor3d
 			return cuT( "near_right_bottom" );
 		default:
 			CU_Failure( "Unsupported Corner" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( FrustumPlane value )
+	String getName( FrustumPlane value )
 	{
 		switch ( value )
 		{
@@ -83,11 +83,11 @@ namespace castor3d
 			return cuT( "bottom" );
 		default:
 			CU_Failure( "Unsupported FrustumPlane" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( PickNodeType value )
+	String getName( PickNodeType value )
 	{
 		switch ( value )
 		{
@@ -99,11 +99,11 @@ namespace castor3d
 			return cuT( "billboard" );
 		default:
 			CU_Failure( "Unsupported PickNodeType" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( TargetType value )
+	String getName( TargetType value )
 	{
 		switch ( value )
 		{
@@ -113,11 +113,11 @@ namespace castor3d
 			return cuT( "texture" );
 		default:
 			CU_Failure( "Unsupported TargetType" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( ViewportType value )
+	String getName( ViewportType value )
 	{
 		switch ( value )
 		{
@@ -133,11 +133,11 @@ namespace castor3d
 			return cuT( "frustum" );
 		default:
 			CU_Failure( "Unsupported ViewportType" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( RenderFilter value )
+	String getName( RenderFilter value )
 	{
 		switch ( value )
 		{
@@ -153,7 +153,7 @@ namespace castor3d
 			return cuT( "opaque" );
 		default:
 			CU_Failure( "Unsupported RenderFilter" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
@@ -270,35 +270,35 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	uint32_t getSafeBandsSize( castor::Size const & size )
+	uint32_t getSafeBandsSize( Size const & size )
 	{
 #if C3D_DebugDisableSafeBands
 		return 0u;
 #else
-		return castor::getNextPowerOfTwo( std::min( size.getWidth()
+		return getNextPowerOfTwo( std::min( size.getWidth()
 			, size.getHeight() ) / 10u );
 #endif
 	}
 	
-	uint32_t getSafeBandSize( castor::Size const & size )
+	uint32_t getSafeBandSize( Size const & size )
 	{
 		return getSafeBandsSize( size ) / 2u;
 	}
 
-	castor::Size getSafeBandedSize( castor::Size const & size )
+	Size getSafeBandedSize( Size const & size )
 	{
 		auto bandsSize = getSafeBandsSize( size );
 		return { size.getWidth() + bandsSize
 			, size.getHeight() + bandsSize };
 	}
 
-	Extent3D getSafeBandedExtent3D( castor::Size const & size )
+	Extent3D getSafeBandedExtent3D( Size const & size )
 	{
 		return makeExtent3D( getSafeBandedSize( size ) );
 	}
 
-	castor::Angle getSafeBandedFovY( castor::Angle const & fovY
-		, castor::Size const & size )
+	Angle getSafeBandedFovY( Angle const & fovY
+		, Size const & size )
 	{
 		auto bandsSize = double( getSafeBandsSize( size ) );
 		auto ratio = bandsSize / size.getHeight();
@@ -306,7 +306,7 @@ namespace castor3d
 	}
 
 	float getSafeBandedAspect( float aspect
-		, castor::Size const & size )
+		, Size const & size )
 	{
 		auto bandsSize = double( getSafeBandsSize( size ) );
 		return float( ( aspect * float( size.getHeight() ) + bandsSize ) / ( float( size.getHeight() ) + bandsSize ) );
@@ -316,31 +316,31 @@ namespace castor3d
 
 	void printGraph( crg::RunnableGraph const & graph )
 	{
-		auto name = castor::File::normaliseFileName( castor::makeString( graph.getGraph()->getName() ) );
+		auto name = File::normaliseFileName( makeString( graph.getGraph()->getName() ) );
 		auto graphsDir = Engine::getEngineDirectory() / cuT( "Graphs" );
 
-		if ( !castor::File::directoryExists( graphsDir ) )
+		if ( !File::directoryExists( graphsDir ) )
 		{
-			castor::File::directoryCreate( graphsDir );
+			File::directoryCreate( graphsDir );
 		}
 
 		{
 			auto path = graphsDir / cuT( "Transitions" );
 
-			if ( !castor::File::directoryExists( path ) )
+			if ( !File::directoryExists( path ) )
 			{
-				castor::File::directoryCreate( path );
+				File::directoryCreate( path );
 			}
 
 			{
 				auto streams = crg::dot::displayTransitions( graph, { true, true, true, false } );
 				std::ofstream file{ path / ( name + cuT( ".dot" ) ) };
-				file << streams.find( castor::MbString{} )->second.str();
+				file << streams.find( MbString{} )->second.str();
 			}
 			{
 				auto streams = crg::dot::displayTransitions( graph, { true, true, false, false } );
 				std::ofstream file{ path / ( cuT( "flat_" ) + name + cuT( ".dot" ) ) };
-				file << streams.find( castor::MbString{} )->second.str();
+				file << streams.find( MbString{} )->second.str();
 			}
 			{
 				auto streams = crg::dot::displayTransitions( graph, { true, true, true, true } );
@@ -349,7 +349,7 @@ namespace castor3d
 				{
 					if ( !str.empty() )
 					{
-						std::ofstream file{ path / ( name + cuT( "_" ) + castor::makeString( str ) + cuT( ".dot" ) ) };
+						std::ofstream file{ path / ( name + cuT( "_" ) + makeString( str ) + cuT( ".dot" ) ) };
 						file << strm.str();
 					}
 				}
@@ -358,20 +358,20 @@ namespace castor3d
 		{
 			auto path = graphsDir / cuT( "Passes" );
 
-			if ( !castor::File::directoryExists( path ) )
+			if ( !File::directoryExists( path ) )
 			{
-				castor::File::directoryCreate( path );
+				File::directoryCreate( path );
 			}
 
 			{
 				auto streams = crg::dot::displayPasses( graph, { true, true, true, false } );
 				std::ofstream file{ path / ( name + cuT( ".dot" ) ) };
-				file << streams.find( castor::MbString{} )->second.str();
+				file << streams.find( MbString{} )->second.str();
 			}
 			{
 				auto streams = crg::dot::displayPasses( graph, { true, true, false, false } );
 				std::ofstream file{ path / ( cuT( "flat_" ) + name + cuT( ".dot" ) ) };
-				file << streams.find( castor::MbString{} )->second.str();
+				file << streams.find( MbString{} )->second.str();
 			}
 			{
 				auto streams = crg::dot::displayPasses( graph, { true, true, true, true } );
@@ -380,7 +380,7 @@ namespace castor3d
 				{
 					if ( !str.empty() )
 					{
-						std::ofstream file{ path / ( name + cuT( "_" ) + castor::makeString( str ) + cuT( ".dot" ) ) };
+						std::ofstream file{ path / ( name + cuT( "_" ) + makeString( str ) + cuT( ".dot" ) ) };
 						file << strm.str();
 					}
 				}

@@ -4,14 +4,14 @@
 
 #include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
-CU_ImplementSmartPtr( castor3d, Animable )
+CU_ImplementSmartPtr( c3d, Animable )
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
 	Animable::Animable( Engine & owner )
-		: castor::OwnedBy< Engine >{ owner }
+		: OwnedBy< Engine >{ owner }
 	{
 	}
 
@@ -25,30 +25,30 @@ namespace castor3d
 		return !m_animations.empty();
 	}
 
-	bool Animable::hasAnimation( castor::String const & name )const
+	bool Animable::hasAnimation( String const & name )const
 	{
 		return m_animations.find( name ) != m_animations.end();
 	}
 
-	Animation const & Animable::getAnimation( castor::String const & name )const
+	Animation const & Animable::getAnimation( String const & name )const
 	{
 		auto it = m_animations.find( name );
 
 		if ( it == m_animations.end() )
 		{
-			CU_Exception( "No animation named [" + castor::toUtf8( name ) + "]" );
+			CU_Exception( "No animation named [" + toUtf8( name ) + "]" );
 		}
 
 		return *it->second;
 	}
 
-	Animation & Animable::getAnimation( castor::String const & name )
+	Animation & Animable::getAnimation( String const & name )
 	{
 		auto it = m_animations.find( name );
 
 		if ( it == m_animations.end() )
 		{
-			CU_Exception( "No animation named [" + castor::toUtf8( name ) + "]" );
+			CU_Exception( "No animation named [" + toUtf8( name ) + "]" );
 		}
 
 		return *it->second;
@@ -65,16 +65,16 @@ namespace castor3d
 
 			while ( it->second )
 			{
-				auto name = animation->getName() + castor::string::toString( index );
+				auto name = animation->getName() + string::toString( index );
 				++index;
 				it = m_animations.try_emplace( name, nullptr ).first;
 			}
 		}
 
-		it->second = castor::move( animation );
+		it->second = c3d::move( animation );
 	}
 
-	void Animable::doRemoveAnimation( castor::String const & name )
+	void Animable::doRemoveAnimation( String const & name )
 	{
 		auto it = m_animations.find( name );
 

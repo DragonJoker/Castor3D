@@ -85,7 +85,7 @@ namespace GuiCommon
 			bool UpdateTime()override
 			{
 				auto now = clock::now();
-				uint64_t timeDiff = std::chrono::duration_cast< castor::Milliseconds >( now - m_saved ).count();
+				uint64_t timeDiff = std::chrono::duration_cast< c3d::Milliseconds >( now - m_saved ).count();
 
 				if ( m_recordedCount )
 				{
@@ -95,7 +95,7 @@ namespace GuiCommon
 				return doUpdateTime( timeDiff );
 			}
 
-			bool StartRecord( castor::Size const & size, int wantedFPS )override
+			bool StartRecord( c3d::Size const & size, int wantedFPS )override
 			{
 				bool result = false;
 				m_wantedFPS = wantedFPS;
@@ -125,14 +125,14 @@ namespace GuiCommon
 						strMsg += wxT( ":\n" );
 						strMsg += wxString( exc.what(), wxMBConvLibc() );
 						strMsg += wxT( ")" );
-						throw std::runtime_error( castor::toUtf8( make_String( strMsg ) ) );
+						throw std::runtime_error( c3d::toUtf8( make_String( strMsg ) ) );
 					}
 				}
 
 				return result;
 			}
 
-			bool RecordFrame( castor::PxBufferBaseRPtr buffer )override
+			bool RecordFrame( c3d::PxBufferBaseRPtr buffer )override
 			{
 				doRecordFrame( buffer );
 				m_saved = clock::now();
@@ -141,9 +141,9 @@ namespace GuiCommon
 			}
 
 		protected:
-			virtual bool doStartRecord( castor::Size const & size, wxString const & name ) = 0;
+			virtual bool doStartRecord( c3d::Size const & size, wxString const & name ) = 0;
 			virtual bool doUpdateTime( uint64_t uiTimeDiff ) = 0;
-			virtual void doRecordFrame( castor::PxBufferBaseRPtr buffer ) = 0;
+			virtual void doRecordFrame( c3d::PxBufferBaseRPtr buffer ) = 0;
 
 		protected:
 			time_point m_saved;
@@ -366,7 +366,7 @@ namespace GuiCommon
 				return ptimeDiff >= 1000 / m_wantedFPS;
 			}
 
-			bool doStartRecord( castor::Size const & insize, wxString const & name )override
+			bool doStartRecord( c3d::Size const & insize, wxString const & name )override
 			{
 				wxSize size( insize.getWidth(), insize.getHeight() );
 				getFormat( name );
@@ -423,7 +423,7 @@ namespace GuiCommon
 				return true;
 			}
 
-			void doRecordFrame( castor::PxBufferBaseRPtr inbuffer )override
+			void doRecordFrame( c3d::PxBufferBaseRPtr inbuffer )override
 			{
 				if ( IsRecording() )
 				{
@@ -434,7 +434,7 @@ namespace GuiCommon
 						auto outputHeight = libffmpeg::sws_scale( m_swsContext, &buffer, lineSize, 0, inbuffer->getHeight(), m_frame->data, m_frame->linesize );
 						libffmpeg::AVPacket packet{ 0 };
 						libffmpeg::av_init_packet( &packet );
-						castor::Vector< uint8_t > outbuf( packet.size );
+						c3d::Vector< uint8_t > outbuf( packet.size );
 						packet.pts = m_recordedCount;
 						packet.dts = m_recordedCount;
 #	if LIBAVUTIL_VERSION_INT > AV_VERSION_INT(54, 6, 0)
@@ -467,7 +467,7 @@ namespace GuiCommon
 			int const m_bitRate{ 600000 };
 			libffmpeg::AVPixelFormat const m_pixelFmt{ libffmpeg::AV_PIX_FMT_YUV420P };// or PIX_FMT_YUV420P
 			libffmpeg::SwsContext * m_swsContext{ nullptr };
-			castor::Array< ByteArray, AV_NUM_DATA_POINTERS > m_frameBuffers;
+			c3d::Array< ByteArray, AV_NUM_DATA_POINTERS > m_frameBuffers;
 		};
 
 #else
@@ -476,7 +476,7 @@ namespace GuiCommon
 			: public Recorder::IRecorderImpl
 		{
 		public:
-			bool StartRecord( castor::Size const & size, int wantedFPS )override
+			bool StartRecord( c3d::Size const & size, int wantedFPS )override
 			{
 				return true;
 			}
@@ -491,7 +491,7 @@ namespace GuiCommon
 				return false;
 			}
 
-			bool RecordFrame( castor::PxBufferBaseRPtr )override
+			bool RecordFrame( c3d::PxBufferBaseRPtr )override
 			{
 				return true;
 			}
@@ -507,7 +507,7 @@ namespace GuiCommon
 	//*************************************************************************************************
 
 	Recorder::Recorder()
-		: m_impl( castor::make_unique< RecorderImpl >() )
+		: m_impl( c3d::makeRawUnique< RecorderImpl >() )
 	{
 	}
 }

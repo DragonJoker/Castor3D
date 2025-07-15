@@ -29,7 +29,7 @@ See LICENSE file in root folder
 #include <atomic>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class LoadingScreen
 	{
@@ -39,7 +39,7 @@ namespace castor3d
 			, crg::ResourcesCache & resources
 			, SceneRPtr scene
 			, VkRenderPass renderPass
-			, castor::Size const & size );
+			, Size const & size );
 		C3D_API ~LoadingScreen()noexcept;
 
 		C3D_API void enable()noexcept;
@@ -47,8 +47,8 @@ namespace castor3d
 		C3D_API void update( CpuUpdater & updater );
 		C3D_API void update( GpuUpdater & updater );
 		C3D_API void setRenderPass( VkRenderPass renderPass
-			, castor::Size const & renderSize
-			, castor::PixelFormat swapchainFormat );
+			, Size const & renderSize
+			, PixelFormat swapchainFormat );
 		/**
 		 *\~english
 		 *\brief			Uploads overlays GPU buffers to VRAM.
@@ -118,18 +118,18 @@ namespace castor3d
 			m_progressBar.initGlobalRange( value );
 		}
 
-		void stepGlobal( castor::String const & globalTitle )
+		void stepGlobal( String const & globalTitle )
 		{
 			m_progressBar.stepGlobal( globalTitle );
 		}
 
-		void initLocalRange( castor::String const & globalLabel
+		void initLocalRange( String const & globalLabel
 			, uint32_t value )
 		{
 			m_progressBar.initLocalRange( globalLabel, value );
 		}
 
-		void stepLocal( castor::String const & label )
+		void stepLocal( String const & label )
 		{
 			m_progressBar.stepLocal( label );
 		}
@@ -161,7 +161,7 @@ namespace castor3d
 		crg::FramePass & doCreateWindowPass( crg::FramePass const * previousPass );
 
 	public:
-		C3D_API static castor::String const SceneName;
+		C3D_API static String const SceneName;
 
 	private:
 		class WindowPass
@@ -178,7 +178,7 @@ namespace castor3d
 			void setRenderPass( VkRenderPass renderPass
 				, Extent2D const & renderSize );
 			void setTarget( ashes::FrameBuffer const & framebuffer
-				, castor::Vector< VkClearValue > clearValues );
+				, Vector< VkClearValue > clearValues );
 
 			crg::Fence & getFence()
 			{
@@ -197,23 +197,23 @@ namespace castor3d
 			ashes::PipelineShaderStageCreateInfoArray m_stages;
 			crg::RenderQuadHolder m_renderQuad;
 			VkFramebuffer m_framebuffer{};
-			castor::Vector< VkClearValue > m_clearValues;
+			Vector< VkClearValue > m_clearValues;
 		};
 
 	private:
 		RenderDevice const & m_device;
 		ProgressBar & m_progressBar;
-		castor::RawUniquePtr< crg::FrameGraph > m_graph;
+		RawUniquePtr< crg::FrameGraph > m_graph;
 		std::atomic_bool m_enabled{};
 		std::atomic_bool m_needsRecreate{};
 		SceneRPtr m_scene;
 		SceneBackground & m_background;
 		VkRenderPass m_renderPass;
-		castor::Size m_initialRenderSize;
-		castor::Size m_renderSize;
+		Size m_initialRenderSize;
+		Size m_renderSize;
 		CameraRPtr m_camera;
 		SceneCullerUPtr m_culler;
-		castor::PixelFormat m_swapchainFormat{ castor::PixelFormat::eR8G8B8A8_UNORM };
+		PixelFormat m_swapchainFormat{ PixelFormat::eR8G8B8A8_UNORM };
 		Texture m_colour;
 		Texture m_depth;
 		CameraUbo m_cameraUbo;

@@ -11,7 +11,7 @@
 
 #pragma warning( disable: 4191 )
 
-namespace castor
+namespace c3d
 {
 	void DynamicLibrary::doOpen()noexcept
 	{

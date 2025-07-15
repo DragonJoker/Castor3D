@@ -8,9 +8,9 @@
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Core/Device.hpp>
 
-CU_ImplementSmartPtr( castor3d, UniformBufferPool )
+CU_ImplementSmartPtr( c3d, UniformBufferPool )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -39,10 +39,10 @@ namespace castor3d
 	//*********************************************************************************************
 
 	UniformBufferPool::UniformBufferPool( RenderDevice const & device
-		, castor::String debugName )
-		: castor::OwnedBy< RenderSystem >{ device.renderSystem }
+		, String debugName )
+		: OwnedBy< RenderSystem >{ device.renderSystem }
 		, m_device{ device }
-		, m_debugName{ castor::move( debugName ) }
+		, m_debugName{ c3d::move( debugName ) }
 	{
 	}
 
@@ -70,9 +70,9 @@ namespace castor3d
 		return result;
 	}
 
-	castor::Vector< castor::Pair< MemChunk, castor::String > > UniformBufferPool::listAllocations()const
+	Vector< Pair< MemChunk, String > > UniformBufferPool::listAllocations()const
 	{
-		castor::Vector< castor::Pair< MemChunk, castor::String > > result;
+		Vector< Pair< MemChunk, String > > result;
 		for ( auto const & [_, buffers] : m_buffers )
 		{
 			for ( auto const & buffer : buffers )
@@ -168,7 +168,7 @@ namespace castor3d
 			, flags
 			, m_debugName
 			, sharingMode );
-		buffers.push_back( { m_currentUboIndex, castor::move( buffer ) } );
+		buffers.push_back( { m_currentUboIndex, c3d::move( buffer ) } );
 		++m_currentUboIndex;
 		auto itB = std::next( buffers.begin()
 			, ptrdiff_t( buffers.size() - 1 ) );

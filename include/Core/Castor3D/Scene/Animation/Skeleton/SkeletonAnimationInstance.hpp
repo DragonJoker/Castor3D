@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Animation/AnimationInstance.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class SkeletonAnimationInstance
 		: public AnimationInstance
@@ -60,7 +60,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'objet.
 		 */
 		C3D_API SkeletonAnimationInstanceObjectRPtr getObject( SkeletonNodeType type
-			, castor::String const & name )const;
+			, String const & name )const;
 		/**
 		 *\~english
 		 *\return		The objects count.

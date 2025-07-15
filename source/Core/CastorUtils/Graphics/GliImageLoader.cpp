@@ -8,7 +8,7 @@
 #include <gli/gli.hpp>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	//************************************************************************************************
 
@@ -82,7 +82,7 @@ namespace castor
 	void GliImageLoader::registerLoader( ImageLoader & reg )
 	{
 		reg.registerLoader( glil::listExtensions()
-			, castor::make_unique< GliImageLoader >() );
+			, c3d::makeRawUnique< GliImageLoader >() );
 	}
 
 	void GliImageLoader::unregisterLoader( ImageLoader & reg )

@@ -11,15 +11,15 @@ See LICENSE file in root folder
 namespace c3d_assimp
 {
 	class AssimpLightImporter
-		: public castor3d::LightImporter
+		: public c3d::LightImporter
 	{
 	public:
-		explicit AssimpLightImporter( castor3d::Engine & engine );
+		explicit AssimpLightImporter( c3d::Engine & engine );
 
 	private:
-		bool doImportLight( castor3d::Light & light )override;
+		bool doImportLight( c3d::Light & light )override;
 
-		bool doImportLightGroup( castor3d::LightGroup & )override
+		bool doImportLightGroup( c3d::LightGroup & )override
 		{
 			return false;
 		}

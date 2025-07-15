@@ -15,7 +15,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/FontCache.hpp>
 
-namespace castor
+namespace c3d
 {
 	/**
 	\~english
@@ -24,13 +24,13 @@ namespace castor
 	\brief		Collection d'incrustations, avec des fonctions additionnelles d'ajout et de suppression pour gérer les Z-Index
 	*/
 	template<>
-	class ResourceCacheT< castor3d::Overlay, String, castor3d::OverlayCacheTraits > final
-		: public ResourceCacheBaseT< castor3d::Overlay, String, castor3d::OverlayCacheTraits >
+	class ResourceCacheT< Overlay, String, OverlayCacheTraits > final
+		: public ResourceCacheBaseT< Overlay, String, OverlayCacheTraits >
 	{
 	public:
-		using ElementT = castor3d::Overlay;
+		using ElementT = Overlay;
 		using ElementKeyT = String;
-		using ElementCacheTraitsT = castor3d::OverlayCacheTraits;
+		using ElementCacheTraitsT = OverlayCacheTraits;
 		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementCacheT::ElementPtrT;
 		using ElementObsT = typename ElementCacheT::ElementObsT;
@@ -38,10 +38,10 @@ namespace castor
 		using ElementInitialiserT = typename ElementCacheT::ElementInitialiserT;
 		using ElementCleanerT = typename ElementCacheT::ElementCleanerT;
 		using ElementMergerT = typename ElementCacheT::ElementMergerT;
-		using iterator = castor::Map< ElementT, ElementKeyT >::iterator;
-		using const_iterator = castor::Map< ElementT, ElementKeyT >::const_iterator;
-		CU_DeclareMap( ElementKeyT, castor3d::FontTextureUPtr, FontTextureStr );
-		using OverlayCategories = castor::Vector< castor3d::OverlayCategoryRPtr >;
+		using iterator = Map< ElementT, ElementKeyT >::iterator;
+		using const_iterator = Map< ElementT, ElementKeyT >::const_iterator;
+		CU_DeclareMap( ElementKeyT, FontTextureUPtr, FontTextureStr );
+		using OverlayCategories = Vector< OverlayCategoryRPtr >;
 
 	public:
 		/**
@@ -52,7 +52,7 @@ namespace castor
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API explicit ResourceCacheT( castor3d::Engine & engine );
+		C3D_API explicit ResourceCacheT( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Clears all overlays lists
@@ -67,9 +67,9 @@ namespace castor
 		 *\brief		Nettoie les incrustations.
 		 */
 		C3D_API void cleanup();
-		C3D_API void initialise( castor3d::Overlay & overlay );
-		C3D_API void cleanup( castor3d::Overlay & overlay );
-		C3D_API void upload( castor3d::UploadData & uploader );
+		C3D_API void initialise( Overlay & overlay );
+		C3D_API void cleanup( Overlay & overlay );
+		C3D_API void upload( UploadData & uploader );
 		/**
 		 *\~english
 		 *\brief		Retrieves a FontTexture given a font name.
@@ -80,7 +80,7 @@ namespace castor
 		 *\param[in]	name	Le nom de la police.
 		 *\return		La FontTexture si elle exite, nullptr sinon.
 		 */
-		C3D_API castor3d::FontTextureRPtr getFontTexture( String const & name );
+		C3D_API FontTextureRPtr getFontTexture( String const & name );
 		/**
 		 *\~english
 		 *\brief		Creates a FontTexture from a font.
@@ -91,7 +91,7 @@ namespace castor
 		 *\param[in]	font	La police.
 		 *\return		La FontTexture créée.
 		 */
-		C3D_API castor3d::FontTextureRPtr createFontTexture( castor::FontResPtr font );
+		C3D_API FontTextureRPtr createFontTexture( FontResPtr font );
 		/**
 		*\~english
 		*\name Iteration.
@@ -111,30 +111,30 @@ namespace castor
 		 *\name Accesseurs.
 		 **/
 		/**@{*/
-		castor3d::OverlayFactory const & getOverlayFactory()const noexcept
+		OverlayFactory const & getOverlayFactory()const noexcept
 		{
 			return m_overlayFactory;
 		}
 
-		castor3d::OverlayFactory & getFactory()noexcept
+		OverlayFactory & getFactory()noexcept
 		{
 			return m_overlayFactory;
 		}
 
-		castor3d::Engine & getEngine()const noexcept
+		Engine & getEngine()const noexcept
 		{
 			return m_engine;
 		}
 		/**@}*/
 
 	private:
-		castor3d::Engine & m_engine;
-		castor3d::OverlayFactory m_overlayFactory;
+		Engine & m_engine;
+		OverlayFactory m_overlayFactory;
 		OverlayCategories m_overlays;
-		castor3d::Viewport m_viewport;
+		Viewport m_viewport;
 		Matrix4x4f m_projection;
 		FontTextureStrMap m_fontTextures;
-		castor::Map< uint32_t, castor::Map< uint32_t, uint32_t > > m_overlayCountPerLevel;
+		Map< uint32_t, Map< uint32_t, uint32_t > > m_overlayCountPerLevel;
 	};
 }
 

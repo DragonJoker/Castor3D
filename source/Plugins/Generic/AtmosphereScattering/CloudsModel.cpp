@@ -15,7 +15,7 @@ namespace atmosphere_scattering
 	//************************************************************************************************
 
 	CloudsModel::CloudsModel( sdw::ShaderWriter & pwriter
-		, castor3d::shader::Utils & putils
+		, c3d::shader::Utils & putils
 		, AtmosphereModel & patmosphere
 		, ScatteringModel & pscattering
 		, CloudsData const & pclouds
@@ -44,7 +44,7 @@ namespace atmosphere_scattering
 	{
 	}
 
-	sdw::RetVec4 CloudsModel::applyClouds( castor3d::shader::Ray const & pray
+	sdw::RetVec4 CloudsModel::applyClouds( c3d::shader::Ray const & pray
 		, sdw::Float const & pobjectId
 		, sdw::Float const & plinearDepth
 		, sdw::IVec2 const & pfragCoord
@@ -55,7 +55,7 @@ namespace atmosphere_scattering
 		if ( !m_applyClouds )
 		{
 			m_applyClouds = writer.implementFunction< sdw::Vec4 >( "clouds_apply"
-				, [&]( castor3d::shader::Ray const & ray
+				, [&]( c3d::shader::Ray const & ray
 					, sdw::Float const & objectId
 					, sdw::Float const & linearDepth
 					, sdw::IVec2 const & fragCoord
@@ -284,7 +284,7 @@ namespace atmosphere_scattering
 					skyBlendFactor = planetShadow0 * fogAmount0;
 					writer.returnStmt( result );
 				}
-				, castor3d::shader::InRay{ writer, "ray" }
+				, c3d::shader::InRay{ writer, "ray" }
 				, sdw::InFloat{ writer, "objectId" }
 				, sdw::InFloat{ writer, "linearDepth" }
 				, sdw::InIVec2{ writer, "fragCoord" }
@@ -597,7 +597,7 @@ namespace atmosphere_scattering
 				{
 					auto coneStep = 1.0_f / 6.0_f;
 					auto noiseKernel = writer.declConstantArray( "noiseKernel"
-						, castor::Vector< sdw::Vec3 >{ vec3( 0.38051305_f, 0.92453449_f, -0.02111345_f )
+						, c3d::Vector< sdw::Vec3 >{ vec3( 0.38051305_f, 0.92453449_f, -0.02111345_f )
 						, vec3( -0.50625799_f, -0.03590792_f, -0.86163418_f )
 						, vec3( -0.32509218_f, -0.94557439_f, 0.01428793_f )
 						, vec3( 0.09026238_f, -0.27376545_f, 0.95755165_f )
@@ -706,7 +706,7 @@ namespace atmosphere_scattering
 					auto cloudsMinTransmittance = 1e-1_f;
 					auto bayerFactor = 1.0_f / 16.0_f;
 					auto bayerFilter = writer.declConstantArray( "bayerFilter"
-						, castor::Vector< sdw::Float >{ 0.0_f * bayerFactor, 8.0_f * bayerFactor, 2.0_f * bayerFactor, 10.0_f * bayerFactor
+						, c3d::Vector< sdw::Float >{ 0.0_f * bayerFactor, 8.0_f * bayerFactor, 2.0_f * bayerFactor, 10.0_f * bayerFactor
 							, 12.0_f * bayerFactor, 4.0_f * bayerFactor, 14.0_f * bayerFactor, 6.0_f * bayerFactor
 							, 3.0_f * bayerFactor, 11.0_f * bayerFactor, 1.0_f * bayerFactor, 9.0_f * bayerFactor
 							, 15.0_f * bayerFactor, 7.0_f * bayerFactor, 13.0_f * bayerFactor, 5.0_f * bayerFactor } );

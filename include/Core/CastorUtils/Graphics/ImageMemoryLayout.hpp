@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Graphics/Colour.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 
-namespace castor
+namespace c3d
 {
 	using crg::ImageViewType;
 

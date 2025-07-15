@@ -29,7 +29,7 @@
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -80,7 +80,7 @@ namespace castor3d
 		}
 
 		static ashes::RenderPassPtr createRenderPass( RenderDevice const & device
-			, castor::PixelFormat format )
+			, PixelFormat format )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
 			{
@@ -131,12 +131,12 @@ namespace castor3d
 			ashes::RenderPassCreateInfo createInfo
 			{
 				0u,
-				castor::move( attaches ),
-				castor::move( subpasses ),
-				castor::move( dependencies ),
+				c3d::move( attaches ),
+				c3d::move( subpasses ),
+				c3d::move( dependencies ),
 			};
 			return device->createRenderPass( "EquirectangularToCube"
-				, castor::move( createInfo ) );
+				, c3d::move( createInfo ) );
 		}
 
 		class EquirectangularToCube
@@ -158,7 +158,7 @@ namespace castor3d
 				for ( auto & facePipeline : m_frameBuffers )
 				{
 					ashes::ImageViewCRefArray attaches;
-					facePipeline.view = target.getTexture().createView( "EquirectangularToCube" + castor::string::toMbString( face )
+					facePipeline.view = target.getTexture().createView( "EquirectangularToCube" + string::toMbString( face )
 						, VK_IMAGE_VIEW_TYPE_2D
 						, convert( target.getPixelFormat() )
 						, 0u
@@ -166,9 +166,9 @@ namespace castor3d
 						, face
 						, 1u );
 					attaches.emplace_back( facePipeline.view );
-					facePipeline.frameBuffer = m_renderPass->createFrameBuffer( "EquirectangularToCube" + castor::string::toMbString( face )
+					facePipeline.frameBuffer = m_renderPass->createFrameBuffer( "EquirectangularToCube" + string::toMbString( face )
 						, convert( size )
-						, castor::move( attaches ) );
+						, c3d::move( attaches ) );
 					++face;
 				}
 
@@ -212,7 +212,7 @@ namespace castor3d
 				ashes::ImageView view;
 				ashes::FrameBufferPtr frameBuffer;
 			};
-			castor::Array< FrameBuffer, 6u > m_frameBuffers;
+			Array< FrameBuffer, 6u > m_frameBuffers;
 			ashes::CommandBufferPtr m_commandBuffer;
 			ashes::ImageView const & m_view;
 			ashes::RenderPassPtr m_renderPass;

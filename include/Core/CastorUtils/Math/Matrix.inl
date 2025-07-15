@@ -5,7 +5,7 @@
 #pragma warning( push )
 #pragma warning( disable: 4582 )
 
-namespace castor
+namespace c3d
 {
 //*************************************************************************************************
 

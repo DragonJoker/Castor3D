@@ -9,7 +9,7 @@ namespace GuiCommon
 		, const wxPoint & pos
 		, const wxSize & wndSize )
 		: wxDialog{ parent, wxID_ANY, title, pos, wndSize }
-		, m_properties{ castor::move( properties ) }
+		, m_properties{ c3d::move( properties ) }
 	{
 		auto size = GetClientSize();
 		SetBackgroundColour( PANEL_BACKGROUND_COLOUR );

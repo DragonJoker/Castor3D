@@ -12,12 +12,12 @@ See LICENSE file in root folder
 
 #include <ashespp/Image/ImageCreateInfo.hpp>
 
-namespace castor
+namespace c3d
 {
 	struct ImageCreateParams;
 }
 
-namespace castor3d
+namespace c3d
 {
 	class TextureSourceInfo
 	{
@@ -25,25 +25,25 @@ namespace castor3d
 		C3D_API TextureSourceInfo()noexcept = default;
 		C3D_API TextureSourceInfo( TextureSourceInfo const & rhs
 			, TextureConfiguration textureConfig );
-		C3D_API TextureSourceInfo( castor::String name
+		C3D_API TextureSourceInfo( String name
 			, TextureConfiguration textureConfig
-			, castor::Path folder
-			, castor::Path relative
-			, castor::ImageLoaderConfig loadConfig = { true, true, true } );
-		C3D_API TextureSourceInfo( castor::String name
+			, Path folder
+			, Path relative
+			, ImageLoaderConfig loadConfig = { true, true, true } );
+		C3D_API TextureSourceInfo( String name
 			, TextureConfiguration textureConfig
-			, castor::String type
-			, castor::ByteArray data
-			, castor::ImageLoaderConfig loadConfig = { true, true, true } );
-		C3D_API TextureSourceInfo( castor::String name
+			, String type
+			, ByteArray data
+			, ImageLoaderConfig loadConfig = { true, true, true } );
+		C3D_API TextureSourceInfo( String name
 			, TextureConfiguration textureConfig
 			, RenderTargetRPtr renderTarget );
-		C3D_API TextureSourceInfo( castor::String name
+		C3D_API TextureSourceInfo( String name
 			, TextureConfiguration textureConfig
 			, ImageCreateInfo createInfo );
-		C3D_API TextureSourceInfo( castor::String name
+		C3D_API TextureSourceInfo( String name
 			, TextureConfiguration textureConfig
-			, castor::ImageCreateParams imageParams );
+			, ImageCreateParams imageParams );
 
 		bool isSerialisable()const noexcept
 		{
@@ -67,7 +67,7 @@ namespace castor3d
 
 		bool isVulkanImage()const noexcept
 		{
-			return m_createInfo.format != castor::PixelFormat::eUNDEFINED;
+			return m_createInfo.format != PixelFormat::eUNDEFINED;
 		}
 
 		TextureConfiguration const & textureConfig()const noexcept
@@ -81,30 +81,30 @@ namespace castor3d
 			return m_renderTarget;
 		}
 
-		castor::Path const & folder()const noexcept
+		Path const & folder()const noexcept
 		{
 			CU_Require( isFileImage() );
 			return m_folder;
 		}
 
-		castor::Path const & relative()const noexcept
+		Path const & relative()const noexcept
 		{
 			CU_Require( isFileImage() );
 			return m_relative;
 		}
 
-		castor::String name()const noexcept
+		String name()const noexcept
 		{
 			return m_name;
 		}
 
-		castor::String const & type()const noexcept
+		String const & type()const noexcept
 		{
 			CU_Require( isBufferImage() );
 			return m_type;
 		}
 
-		castor::ByteArray const & buffer()const noexcept
+		ByteArray const & buffer()const noexcept
 		{
 			CU_Require( isBufferImage() );
 			return m_data;
@@ -144,7 +144,7 @@ namespace castor3d
 			return m_loadConfig.layersToTiles;
 		}
 
-		castor::ImageLoaderConfig const & loadConfig()const noexcept
+		ImageLoaderConfig const & loadConfig()const noexcept
 		{
 			CU_Require( isFileImage() || isBufferImage() );
 			return m_loadConfig;
@@ -156,10 +156,10 @@ namespace castor3d
 			return m_createInfo;
 		}
 
-		void setBuffer( castor::ByteArray data )noexcept
+		void setBuffer( ByteArray data )noexcept
 		{
 			CU_Require( !isRenderTarget() );
-			m_data = castor::move( data );
+			m_data = c3d::move( data );
 		}
 
 		void setSerialisable( bool v )noexcept
@@ -168,18 +168,18 @@ namespace castor3d
 		}
 
 	private:
-		castor::String m_name{};
+		String m_name{};
 		TextureConfiguration m_textureConfig{};
 		bool m_serialisable{ true };
 		// Render target mode.
 		RenderTargetRPtr m_renderTarget{};
 		// Image file mode.
-		castor::Path m_folder{};
-		castor::Path m_relative{};
-		castor::ImageLoaderConfig m_loadConfig{};
+		Path m_folder{};
+		Path m_relative{};
+		ImageLoaderConfig m_loadConfig{};
 		// Image buffer mode
-		castor::String m_type{};
-		castor::ByteArray m_data{};
+		String m_type{};
+		ByteArray m_data{};
 		// Vulkan image mode.
 		ImageCreateInfo m_createInfo{ {} };
 	};

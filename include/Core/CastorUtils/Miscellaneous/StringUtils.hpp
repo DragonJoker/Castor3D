@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <sstream>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor::string
+namespace c3d::string
 {
 	namespace details
 	{
@@ -1337,9 +1337,9 @@ namespace castor::string
 	}
 }
 
-constexpr castor::StringView operator "" _sv( castor::xchar const * const value, size_t length )noexcept
+constexpr c3d::StringView operator "" _sv( c3d::xchar const * const value, size_t length )noexcept
 {
-	return castor::StringView{ value, length };
+	return c3d::StringView{ value, length };
 }
 
 #include "StringUtils.inl"

@@ -13,7 +13,7 @@
 #include "stb_image.h"
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	//************************************************************************************************
 
@@ -28,25 +28,25 @@ namespace castor
 				, isHdr ? PixelFormat::eR8G8_UNORM : PixelFormat::eR8G8_SRGB
 				, data
 				, isHdr ? PixelFormat::eR8G8_UNORM : PixelFormat::eR8G8_SRGB );
-			auto redChannel = castor::extractComponent( result.get()
+			auto redChannel = c3d::extractComponent( result.get()
 				, PixelComponent::eRed );
-			auto alphaChannel = castor::extractComponent( result.get()
+			auto alphaChannel = c3d::extractComponent( result.get()
 				, PixelComponent::eGreen );
 			result = PxBufferBase::create( { uint32_t( width ), uint32_t( height ) }
 			, isHdr ? PixelFormat::eR8G8B8A8_UNORM : PixelFormat::eR8G8B8A8_SRGB );
-			castor::copyBufferComponents( PixelComponent::eRed
+			c3d::copyBufferComponents( PixelComponent::eRed
 				, PixelComponent::eRed
 				, *redChannel
 				, *result );
-			castor::copyBufferComponents( PixelComponent::eRed
+			c3d::copyBufferComponents( PixelComponent::eRed
 				, PixelComponent::eGreen
 				, *redChannel
 				, *result );
-			castor::copyBufferComponents( PixelComponent::eRed
+			c3d::copyBufferComponents( PixelComponent::eRed
 				, PixelComponent::eBlue
 				, *redChannel
 				, *result );
-			castor::copyBufferComponents( PixelComponent::eRed
+			c3d::copyBufferComponents( PixelComponent::eRed
 				, PixelComponent::eAlpha
 				, *alphaChannel
 				, *result );
@@ -126,25 +126,25 @@ namespace castor
 				, PixelFormat::eR32G32_SFLOAT
 				, BytePtr( data )
 				, PixelFormat::eR32G32_SFLOAT );
-			auto redChannel = castor::extractComponent( result.get()
+			auto redChannel = c3d::extractComponent( result.get()
 				, PixelComponent::eRed );
-			auto alphaChannel = castor::extractComponent( result.get()
+			auto alphaChannel = c3d::extractComponent( result.get()
 				, PixelComponent::eGreen );
 			result = PxBufferBase::create( { uint32_t( width ), uint32_t( height ) }
 			, PixelFormat::eR32G32B32A32_SFLOAT );
-			castor::copyBufferComponents( PixelComponent::eRed
+			c3d::copyBufferComponents( PixelComponent::eRed
 				, PixelComponent::eRed
 				, *redChannel
 				, *result );
-			castor::copyBufferComponents( PixelComponent::eRed
+			c3d::copyBufferComponents( PixelComponent::eRed
 				, PixelComponent::eGreen
 				, *redChannel
 				, *result );
-			castor::copyBufferComponents( PixelComponent::eRed
+			c3d::copyBufferComponents( PixelComponent::eRed
 				, PixelComponent::eBlue
 				, *redChannel
 				, *result );
-			castor::copyBufferComponents( PixelComponent::eRed
+			c3d::copyBufferComponents( PixelComponent::eRed
 				, PixelComponent::eAlpha
 				, *alphaChannel
 				, *result );
@@ -245,7 +245,7 @@ namespace castor
 	void StbImageLoader::registerLoader( ImageLoader & reg )
 	{
 		reg.registerLoader( stbil::listExtensions()
-			, castor::make_unique< StbImageLoader >() );
+			, c3d::makeRawUnique< StbImageLoader >() );
 	}
 
 	void StbImageLoader::unregisterLoader( ImageLoader & reg )

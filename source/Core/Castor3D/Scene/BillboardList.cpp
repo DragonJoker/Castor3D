@@ -17,10 +17,10 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, BillboardBase )
-CU_ImplementSmartPtr( castor3d, BillboardList )
+CU_ImplementSmartPtr( c3d, BillboardBase )
+CU_ImplementSmartPtr( c3d, BillboardList )
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
@@ -29,7 +29,7 @@ namespace castor3d
 		struct Element
 		{
 			uint8_t * m_buffer;
-			castor::Coords3f m_position;
+			Coords3f m_position;
 			uint32_t m_stride;
 
 			~Element()noexcept = default;
@@ -52,7 +52,7 @@ namespace castor3d
 
 			Element( Element && rhs )noexcept
 				: m_buffer{ rhs.m_buffer }
-				, m_position{ castor::move( rhs.m_position ) }
+				, m_position{ c3d::move( rhs.m_position ) }
 				, m_stride{ rhs.m_stride }
 			{
 				rhs.m_buffer = nullptr;
@@ -69,7 +69,7 @@ namespace castor3d
 				if ( &rhs != this )
 				{
 					m_buffer = rhs.m_buffer;
-					m_position = castor::move( rhs.m_position );
+					m_position = c3d::move( rhs.m_position );
 					m_stride = rhs.m_stride;
 					rhs.m_buffer = nullptr;
 				}
@@ -77,14 +77,14 @@ namespace castor3d
 			}
 		};
 
-		static castor::Point4fArray convert( castor::Point3fArray const & src )
+		static Point4fArray convert( Point3fArray const & src )
 		{
-			castor::Point4fArray result;
+			Point4fArray result;
 			result.reserve( src.size() );
 
 			for ( auto & value : src )
 			{
-				result.push_back( castor::Point4f{ value->x, value->y, value->z, 1.0f } );
+				result.push_back( Point4f{ value->x, value->y, value->z, 1.0f } );
 			}
 
 			return result;
@@ -94,7 +94,7 @@ namespace castor3d
 		{
 			if ( blockContext->billboards )
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 
 				if ( auto parent = blockContext->scene->scene->findSceneNode( name ) )
 				{
@@ -164,7 +164,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 
 				if ( auto material = getEngine( *blockContext )->tryFindMaterial( name ) )
 				{
@@ -186,7 +186,7 @@ namespace castor3d
 			}
 			else
 			{
-				blockContext->billboards->setDimensions( params[0]->get< castor::Point2f >() );
+				blockContext->billboards->setDimensions( params[0]->get< Point2f >() );
 			}
 		}
 		CU_EndAttribute()
@@ -212,7 +212,7 @@ namespace castor3d
 			}
 			else
 			{
-				blockContext->billboards->addPoint( params[0]->get< castor::Point3f >() );
+				blockContext->billboards->addPoint( params[0]->get< Point3f >() );
 			}
 		}
 		CU_EndAttribute()
@@ -227,8 +227,8 @@ namespace castor3d
 		, GpuBufferOffsetT< uint8_t > vertexBuffer )
 		: m_scene{ scene }
 		, m_node{ node }
-		, m_vertexBuffer{ castor::move( vertexBuffer ) }
-		, m_vertexLayout{ castor::move( vertexLayout ) }
+		, m_vertexBuffer{ c3d::move( vertexBuffer ) }
+		, m_vertexLayout{ c3d::move( vertexLayout ) }
 		, m_vertexStride{ vertexStride }
 		, m_proxyCombine{ scene.getEngine()->getSubmeshComponentsRegister().getDefaultComponentCombine() }
 	{
@@ -242,10 +242,10 @@ namespace castor3d
 			m_count = count;
 			Quad vertices
 			{
-				BillboardVertex{ castor::Point3f{ -0.5f, -0.5f, 1.0f }, castor::Point2f{ 0.0f, 0.0f } },
-				BillboardVertex{ castor::Point3f{ -0.5f, +0.5f, 1.0f }, castor::Point2f{ 0.0f, 1.0f } },
-				BillboardVertex{ castor::Point3f{ +0.5f, -0.5f, 1.0f }, castor::Point2f{ 1.0f, 0.0f } },
-				BillboardVertex{ castor::Point3f{ +0.5f, +0.5f, 1.0f }, castor::Point2f{ 1.0f, 1.0f } },
+				BillboardVertex{ Point3f{ -0.5f, -0.5f, 1.0f }, Point2f{ 0.0f, 0.0f } },
+				BillboardVertex{ Point3f{ -0.5f, +0.5f, 1.0f }, Point2f{ 0.0f, 1.0f } },
+				BillboardVertex{ Point3f{ +0.5f, -0.5f, 1.0f }, Point2f{ 1.0f, 0.0f } },
+				BillboardVertex{ Point3f{ +0.5f, +0.5f, 1.0f }, Point2f{ 1.0f, 1.0f } },
 			};
 			m_bufferOffsets = device.vertexPools->getBuffer< Quad >( 1u );
 			auto const & vb = m_bufferOffsets.getBufferChunk( SubmeshData::ePositions );
@@ -261,13 +261,13 @@ namespace castor3d
 					, VertexAttributeInputState );
 			}
 
-			m_quadLayout = castor::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+			m_quadLayout = makeRawUnique< ashes::PipelineVertexInputStateCreateInfo >( 0u
 				, ashes::VkVertexInputBindingDescriptionArray{ { 0u, sizeof( BillboardVertex ), VK_VERTEX_INPUT_RATE_VERTEX } }
 				, ashes::VkVertexInputAttributeDescriptionArray{ { 0u, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( BillboardVertex, position ) }
 					, { 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( BillboardVertex, uv ) } } );
 
 			ashes::BufferCRefArray buffers;
-			castor::Vector< uint64_t > offsets;
+			Vector< uint64_t > offsets;
 			ashes::PipelineVertexInputStateCreateInfoCRefArray layouts;
 			doGatherBuffers( buffers, offsets, layouts );
 
@@ -281,14 +281,14 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, stages ) );
 			m_descriptorLayout = device->createDescriptorSetLayout( "BillboardBaseVtx"
-				, castor::move( bindings ) );
+				, c3d::move( bindings ) );
 			m_descriptorPool = m_descriptorLayout->createPool( "BillboardBaseVtx"
 				, 1u );
 			m_descriptorSet = m_descriptorPool->createDescriptorSet( "BillboardBaseVtx"
 				, RenderPipeline::eMeshBuffers );
 			ashes::WriteDescriptorSetArray writes;
 			writes.push_back( m_vertexBuffer.getStorageBinding( uint32_t( MeshBuffersIdx::ePosition ) ) );
-			m_descriptorSet->setBindings( castor::move( writes ) );
+			m_descriptorSet->setBindings( c3d::move( writes ) );
 			m_descriptorSet->update();
 
 			m_initialised = true;
@@ -321,9 +321,9 @@ namespace castor3d
 		if ( m_count && !m_gpuFilled )
 		{
 			auto gpuBuffer = m_vertexBuffer.getData().data();
-			castor::ByteArray copy{ gpuBuffer
+			ByteArray copy{ gpuBuffer
 				, gpuBuffer + ( size_t( m_vertexStride ) * m_count ) };
-			castor::Vector< billboard::Element > elements;
+			Vector< billboard::Element > elements;
 			auto buffer = copy.data();
 			elements.reserve( m_count );
 
@@ -340,8 +340,8 @@ namespace castor3d
 					, [this]( billboard::Element const & a
 					, billboard::Element const & b )
 					{
-						return castor::point::lengthSquared( a.m_position - m_cameraPosition )
-							> castor::point::lengthSquared( b.m_position - m_cameraPosition );
+						return point::lengthSquared( a.m_position - m_cameraPosition )
+							> point::lengthSquared( b.m_position - m_cameraPosition );
 					} );
 
 				for ( auto const & element : elements )
@@ -352,9 +352,9 @@ namespace castor3d
 
 				m_vertexBuffer.markDirty( VertexAttributeInputState );
 			}
-			catch ( castor::Exception const & exc )
+			catch ( Exception const & exc )
 			{
-				log::error << cuT( "Submesh::SortFaces - Error: " ) << castor::makeString( exc.what() ) << std::endl;
+				log::error << cuT( "Submesh::SortFaces - Error: " ) << makeString( exc.what() ) << std::endl;
 			}
 		}
 	}
@@ -440,7 +440,7 @@ namespace castor3d
 	}
 
 	void BillboardBase::doGatherBuffers( ashes::BufferCRefArray & buffers
-		, castor::Vector< uint64_t > & offsets
+		, Vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts )
 	{
 		layouts.emplace_back( *m_quadLayout );
@@ -454,7 +454,7 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	BillboardList::BillboardList( castor::String const & name
+	BillboardList::BillboardList( String const & name
 		, Scene & scene
 		, SceneNode & node )
 		: MovableObject( name
@@ -463,24 +463,24 @@ namespace castor3d
 			, node )
 		, BillboardBase{ scene
 			, &node
-			, castor::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
-				, ashes::VkVertexInputBindingDescriptionArray{ { 1u, sizeof( castor::Point4f ), VK_VERTEX_INPUT_RATE_INSTANCE } }
+			, makeRawUnique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+				, ashes::VkVertexInputBindingDescriptionArray{ { 1u, sizeof( Point4f ), VK_VERTEX_INPUT_RATE_INSTANCE } }
 				, ashes::VkVertexInputAttributeDescriptionArray{ { 2u, 1u, VK_FORMAT_R32G32B32_SFLOAT, 0u } } )
-			, sizeof( castor::Point4f ) }
+			, sizeof( Point4f ) }
 	{
 	}
 	
-	BillboardList::BillboardList( castor::String const & name
+	BillboardList::BillboardList( String const & name
 		, Scene & scene )
 		: MovableObject( name
 			, scene
 			, MovableType::eBillboard )
 		, BillboardBase{ scene
 			, nullptr
-			, castor::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
-				, ashes::VkVertexInputBindingDescriptionArray{ { 1u, sizeof( castor::Point4f ), VK_VERTEX_INPUT_RATE_INSTANCE } }
+			, makeRawUnique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+				, ashes::VkVertexInputBindingDescriptionArray{ { 1u, sizeof( Point4f ), VK_VERTEX_INPUT_RATE_INSTANCE } }
 				, ashes::VkVertexInputAttributeDescriptionArray{ { 2u, 1u, VK_FORMAT_R32G32B32_SFLOAT, 0u } } )
-			, sizeof( castor::Point4f ) }
+			, sizeof( Point4f ) }
 	{
 	}
 
@@ -499,7 +499,7 @@ namespace castor3d
 				, uint32_t( m_arrayPositions.size() ) * m_vertexStride
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 
-			auto * buffer = reinterpret_cast< castor::Point4f * >( m_vertexBuffer.getData().data() );
+			auto * buffer = reinterpret_cast< Point4f * >( m_vertexBuffer.getData().data() );
 			auto up = billboard::convert( m_arrayPositions );
 			std::copy( up.begin()
 				, up.end()
@@ -520,13 +520,13 @@ namespace castor3d
 		}
 	}
 
-	void BillboardList::addPoint( castor::Point3f const & position )
+	void BillboardList::addPoint( Point3f const & position )
 	{
 		m_arrayPositions.push_back( position );
 		m_needUpdate = true;
 	}
 
-	void BillboardList::addPoints( castor::Point3fArray const & positions )
+	void BillboardList::addPoints( Point3fArray const & positions )
 	{
 		m_arrayPositions.insert( m_arrayPositions.end(), positions.begin(), positions.end() );
 		m_needUpdate = true;
@@ -538,9 +538,8 @@ namespace castor3d
 		setNode( node );
 	}
 
-	void BillboardList::addParsers( castor::AttributeParsers & result )
+	void BillboardList::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< BillboardsContext > listCtx{ result, CSCNSection::eBillboard, CSCNSection::eScene };
 		BlockParserContextT< BillboardsContext > billboardCtx{ result, CSCNSection::eBillboardList, CSCNSection::eBillboard };
 

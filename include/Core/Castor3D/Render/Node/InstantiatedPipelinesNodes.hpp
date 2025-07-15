@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Node/PipelinesNodes.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	template< typename NodeT >
 	struct InstantiatedObjectsNodesViewT
@@ -14,7 +14,7 @@ namespace castor3d
 		using NodeObject = NodeObjectT< NodeT >;
 		using NodeInstance = NodeInstanceT< NodeT >;
 		using RenderedNode = RenderedNodeT< NodeT >;
-		using NodeInstances = castor::Pair< RenderedNode, castor::UnorderedSet< NodeInstance const * > >;
+		using NodeInstances = Pair< RenderedNode, HashSet< NodeInstance const * > >;
 
 		static uint64_t constexpr maxObjects = 1024ULL;
 		static uint64_t constexpr maxCount = maxObjects;
@@ -24,7 +24,7 @@ namespace castor3d
 			auto data = &node.node->data;
 			auto it = std::find_if( begin()
 				, end()
-				, [&data]( castor::Pair< NodeObject const *, NodeInstances > const & lookup )
+				, [&data]( Pair< NodeObject const *, NodeInstances > const & lookup )
 				{
 					return lookup.first == data;
 				} );
@@ -43,8 +43,8 @@ namespace castor3d
 					}
 				}
 
-				NodeInstances instances{ castor::move( node ), {} };
-				m_objects.emplace_back( data, castor::move( instances ) );
+				NodeInstances instances{ c3d::move( node ), {} };
+				m_objects.emplace_back( data, c3d::move( instances ) );
 				it = std::next( begin(), ptrdiff_t( size() - 1u ) );
 			}
 
@@ -93,7 +93,7 @@ namespace castor3d
 		}
 
 	private:
-		castor::Vector< castor::Pair< NodeObject const *, NodeInstances > > m_objects;
+		Vector< Pair< NodeObject const *, NodeInstances > > m_objects;
 	};
 
 	template< typename NodeT >
@@ -155,7 +155,7 @@ namespace castor3d
 			, RenderedNode node )
 		{
 			auto it = emplace( posBuffer, idxBuffer );
-			it->nodes.emplace( castor::move( node ) );
+			it->nodes.emplace( c3d::move( node ) );
 		}
 
 		void clear()noexcept
@@ -206,7 +206,7 @@ namespace castor3d
 		}
 
 	private:
-		castor::Vector< BufferNodes > m_buffers;
+		Vector< BufferNodes > m_buffers;
 	};
 
 	template< typename NodeT >
@@ -226,7 +226,7 @@ namespace castor3d
 		{
 			PipelineNodes( PipelineAndID pipeline
 				, bool isFrontCulled )
-				: pipeline{ castor::move( pipeline ) }
+				: pipeline{ c3d::move( pipeline ) }
 				, isFrontCulled{ isFrontCulled }
 			{
 			}
@@ -270,8 +270,8 @@ namespace castor3d
 		{
 			auto & node = *culled.node;
 			size_t hash = std::hash< NodeObject const * >{}( &node.data );
-			hash = castor::hashCombine( hash, node.pass->getHash() );
-			hash = castor::hashCombine( hash, isFrontCulled );
+			hash = hashCombine( hash, node.pass->getHash() );
+			hash = hashCombine( hash, isFrontCulled );
 
 			if ( m_countedNodes.emplace( hash ).second )
 			{
@@ -290,7 +290,7 @@ namespace castor3d
 				, idxBuffer
 				, RenderedNode{ culled.node
 					, culled.visible
-					, castor::move( command ) } );
+					, c3d::move( command ) } );
 		}
 
 		void clear()noexcept
@@ -342,8 +342,8 @@ namespace castor3d
 		}
 
 	private:
-		castor::UnorderedSet< size_t > m_countedNodes;
-		castor::Map< uint32_t, PipelineNodes > m_pipelines;
+		HashSet< size_t > m_countedNodes;
+		Map< uint32_t, PipelineNodes > m_pipelines;
 	};
 }
 

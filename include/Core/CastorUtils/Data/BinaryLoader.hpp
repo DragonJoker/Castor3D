@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Data/Loader.hpp"
 #include "CastorUtils/Data/BinaryFile.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< class T >
 	class BinaryLoader

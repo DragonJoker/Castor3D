@@ -34,9 +34,9 @@
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 #include <CastorUtils/Multithreading/MultithreadingModule.hpp>
 
-CU_ImplementSmartPtr( castor3d, SceneRenderNodes )
+CU_ImplementSmartPtr( c3d, SceneRenderNodes )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -47,8 +47,8 @@ namespace castor3d
 			, Geometry const & instance )
 		{
 			auto hash = std::hash< Submesh const * >{}( &data );
-			hash = castor::hashCombinePtr( hash, instance );
-			hash = castor::hashCombine( hash, pass.getHash() );
+			hash = hashCombinePtr( hash, instance );
+			hash = hashCombine( hash, pass.getHash() );
 			return hash;
 		}
 
@@ -56,12 +56,12 @@ namespace castor3d
 			, BillboardBase const & instance )
 		{
 			auto hash = std::hash< BillboardBase const * >{}( &instance );
-			hash = castor::hashCombine( hash, pass.getHash() );
+			hash = hashCombine( hash, pass.getHash() );
 			return hash;
 		}
 
 		static void rem( LightingModelID id
-			, castor::Map< LightingModelID, size_t > & models )
+			, Map< LightingModelID, size_t > & models )
 		{
 			auto it = models.find( id );
 
@@ -73,7 +73,7 @@ namespace castor3d
 		}
 
 		static void add( LightingModelID id
-			, castor::Map< LightingModelID, size_t > & models )
+			, Map< LightingModelID, size_t > & models )
 		{
 			auto it = models.emplace( id, 0u ).first;
 			it->second++;
@@ -115,7 +115,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	SceneRenderNodes::SceneRenderNodes( Scene & scene )
-		: castor::OwnedBy< Scene >{ scene }
+		: OwnedBy< Scene >{ scene }
 		, m_device{ scene.getEngine()->getRenderSystem()->getRenderDevice() }
 		, m_modelsData{ makeBuffer< ModelBufferConfiguration >( m_device
 			, MaxObjectNodesCount
@@ -127,14 +127,14 @@ namespace castor3d
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, getOwner()->getName() + cuT( "BillboardsDimensions" ) ) }
-		, m_modelsBuffer{ castor::makeArrayView( m_modelsData->lock( 0u, ashes::WholeSize, 0u )
+		, m_modelsBuffer{ makeArrayView( m_modelsData->lock( 0u, ashes::WholeSize, 0u )
 			, m_modelsData->getCount() ) }
-		, m_billboardsBuffer{ castor::makeArrayView( m_billboardsData->lock( 0u, ashes::WholeSize, 0u )
+		, m_billboardsBuffer{ makeArrayView( m_billboardsData->lock( 0u, ashes::WholeSize, 0u )
 			, m_billboardsData->getCount() ) }
-		, m_vertexTransform{ castor::makeUnique< VertexTransforming >( scene, m_device ) }
+		, m_vertexTransform{ makeUnique< VertexTransforming >( scene, m_device ) }
 	{
 #if C3D_DebugTimers
-		m_timerRenderNodes = castor::makeUnique< crg::FramePassTimer >( m_device.makeContext(), getOwner()->getName() + "/RenderNodes", crg::TimerScope::eUpdate );
+		m_timerRenderNodes = makeUnique< crg::FramePassTimer >( m_device.makeContext(), getOwner()->getName() + "/RenderNodes", crg::TimerScope::eUpdate );
 		getOwner()->getEngine()->registerTimer( getOwner()->getName() + "/RenderNodes", *m_timerRenderNodes );
 #endif
 	}
@@ -163,7 +163,7 @@ namespace castor3d
 
 	void SceneRenderNodes::clear()noexcept
 	{
-		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
+		auto lock( makeUniqueLock( m_nodesMutex ) );
 
 		for ( auto const & [_, node] : m_submeshNodes )
 		{
@@ -192,12 +192,12 @@ namespace castor3d
 		, AnimatedMesh * mesh
 		, AnimatedSkeleton * skeleton )
 	{
-		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
+		auto lock( makeUniqueLock( m_nodesMutex ) );
 		auto [it, res] = m_submeshNodes.try_emplace( scnrendnd::makeNodeHash( pass, data, instance ) );
 
 		if ( res )
 		{
-			it->second = castor::makeUnique< SubmeshRenderNode >( pass
+			it->second = makeUnique< SubmeshRenderNode >( pass
 				, data
 				, instance
 				, m_modelsBuffer[m_nodeId] );
@@ -232,7 +232,7 @@ namespace castor3d
 
 			if ( data.isDynamic() )
 			{
-				static GpuBufferOffsetT< castor::Point4f > const morphTargets{};
+				static GpuBufferOffsetT< Point4f > const morphTargets{};
 				static GpuBufferOffsetT< MorphingWeightsConfiguration > const morphingWeights{};
 				static GpuBufferOffsetT< SkinningTransformsConfiguration > const skinTransforms{};
 
@@ -269,12 +269,12 @@ namespace castor3d
 	BillboardRenderNode & SceneRenderNodes::createNode( Pass & pass
 		, BillboardBase & instance )
 	{
-		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
+		auto lock( makeUniqueLock( m_nodesMutex ) );
 		auto [it, res] = m_billboardNodes.try_emplace( scnrendnd::makeNodeHash( pass, instance ) );
 
 		if ( res )
 		{
-			it->second = castor::makeUnique< BillboardRenderNode >( pass
+			it->second = makeUnique< BillboardRenderNode >( pass
 				, instance
 				, m_modelsBuffer[m_nodeId]
 				, m_billboardsBuffer[m_nodeId] );
@@ -378,7 +378,7 @@ namespace castor3d
 		, Material const & oldMaterial
 		, Material const & newMaterial )
 	{
-		castor::Vector< castor::Pair< uint32_t, SubmeshRenderNodeUPtr > > nodes;
+		Vector< Pair< uint32_t, SubmeshRenderNodeUPtr > > nodes;
 
 		for ( auto & pass : oldMaterial )
 		{
@@ -387,7 +387,7 @@ namespace castor3d
 			if ( submeshIt != m_submeshNodes.end() )
 			{
 				scnrendnd::rem( pass->getLightingModelId(), m_lightingModels );
-				auto node = castor::move( submeshIt->second );
+				auto node = c3d::move( submeshIt->second );
 				m_submeshNodes.erase( submeshIt );
 
 				for ( auto & culler : m_cullers )
@@ -395,7 +395,7 @@ namespace castor3d
 					culler->removeCulled( *node );
 				}
 
-				nodes.emplace_back( instance.getId( *pass, data ), castor::move( node ) );
+				nodes.emplace_back( instance.getId( *pass, data ), c3d::move( node ) );
 			}
 		}
 
@@ -410,7 +410,7 @@ namespace castor3d
 				auto pass = passIt->get();
 				scnrendnd::add( pass->getLightingModelId(), m_lightingModels );
 				auto submeshIt = m_submeshNodes.emplace( scnrendnd::makeNodeHash( *pass, data, instance ), nullptr ).first;
-				submeshIt->second = castor::move( nodeIt->second );
+				submeshIt->second = c3d::move( nodeIt->second );
 
 				auto it = std::find_if( m_nodesData.begin()
 					, m_nodesData.end()
@@ -459,7 +459,7 @@ namespace castor3d
 		, Material const & oldMaterial
 		, Material const & newMaterial )
 	{
-		castor::Vector< castor::Pair< uint32_t, BillboardRenderNodeUPtr > > nodes;
+		Vector< Pair< uint32_t, BillboardRenderNodeUPtr > > nodes;
 
 		for ( auto & pass : oldMaterial )
 		{
@@ -468,7 +468,7 @@ namespace castor3d
 			if ( billboardIt != m_billboardNodes.end() )
 			{
 				scnrendnd::rem( pass->getLightingModelId(), m_lightingModels );
-				auto node = castor::move( billboardIt->second );
+				auto node = c3d::move( billboardIt->second );
 				m_billboardNodes.erase( billboardIt );
 
 				for ( auto & culler : m_cullers )
@@ -476,7 +476,7 @@ namespace castor3d
 					culler->removeCulled( *node );
 				}
 
-				nodes.emplace_back( billboard.getId( *pass ), castor::move( node ) );
+				nodes.emplace_back( billboard.getId( *pass ), c3d::move( node ) );
 			}
 		}
 
@@ -491,7 +491,7 @@ namespace castor3d
 				auto pass = passIt->get();
 				scnrendnd::add( pass->getLightingModelId(), m_lightingModels );
 				auto billboardIt = m_billboardNodes.emplace( scnrendnd::makeNodeHash( *pass, billboard ), nullptr ).first;
-				billboardIt->second = castor::move( nodeIt->second );
+				billboardIt->second = c3d::move( nodeIt->second );
 
 				auto it = std::find_if( m_nodesData.begin()
 					, m_nodesData.end()
@@ -532,7 +532,7 @@ namespace castor3d
 #if C3D_DebugTimers
 		auto block( m_timerRenderNodes->start() );
 #endif
-		castor::Map< Submesh const *, castor::Map< uint32_t, uint32_t > > indices;
+		Map< Submesh const *, Map< uint32_t, uint32_t > > indices;
 		
 		for ( auto const & [_, node] : m_submeshNodes )
 		{

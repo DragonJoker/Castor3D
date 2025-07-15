@@ -2,9 +2,9 @@
 
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationNode.hpp"
 
-CU_ImplementSmartPtr( castor3d, SkeletonAnimationInstanceNode )
+CU_ImplementSmartPtr( c3d, SkeletonAnimationInstanceNode )
 
-namespace castor3d
+namespace c3d
 {
 	SkeletonAnimationInstanceNode::SkeletonAnimationInstanceNode( SkeletonAnimationInstance & animationInstance
 		, SkeletonAnimationNode & animationObject

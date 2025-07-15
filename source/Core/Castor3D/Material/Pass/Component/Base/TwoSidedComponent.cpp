@@ -7,28 +7,25 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::TwoSidedComponent >
-		: public TextWriterT< castor3d::TwoSidedComponent >
+	class TextWriter< TwoSidedComponent >
+		: public TextWriterT< TwoSidedComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::TwoSidedComponent >{ tabs }
+			: TextWriterT< TwoSidedComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::TwoSidedComponent const & object
+		bool operator()( TwoSidedComponent const & object
 			, StringStream & file )override
 		{
 			return writeOpt( file, cuT( "two_sided" ), object.isTwoSided(), false );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace tws
@@ -52,22 +49,22 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void TwoSidedComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void TwoSidedComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "two_sided" )
 			, tws::parserPassTwoSided
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			, { makeParameter< ParameterType::eBool >() } );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const TwoSidedComponent::TypeName = C3D_MakePassBaseComponentName( "two_sided" );
+	String const TwoSidedComponent::TypeName = C3D_MakePassBaseComponentName( "two_sided" );
 
 	TwoSidedComponent::TwoSidedComponent( Pass & pass)
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName }
+		: BaseDataPassComponentT< AtomicGroupChangeTracked< bool > >{ pass, TypeName }
 	{
 	}
 
@@ -78,17 +75,17 @@ namespace castor3d
 
 	PassComponentUPtr TwoSidedComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< TwoSidedComponent >( pass );
+		auto result = makeRawUnique< TwoSidedComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool TwoSidedComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool TwoSidedComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< TwoSidedComponent >{ tabs }( *this, file );
+		return TextWriter< TwoSidedComponent >{ tabs }( *this, file );
 	}
 
 	//*********************************************************************************************

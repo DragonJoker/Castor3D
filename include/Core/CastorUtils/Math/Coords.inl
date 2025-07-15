@@ -3,7 +3,7 @@
 #include <cstring>
 #include <numeric>
 
-namespace castor
+namespace c3d
 {
 	//*************************************************************************************************
 
@@ -102,7 +102,7 @@ namespace castor
 	template< typename T, uint32_t Count >
 	void Coords< T, Count >::swap( Coords< T, Count > & rhs )noexcept
 	{
-		castor::swap( m_coords, rhs.m_coords );
+		c3d::swap( m_coords, rhs.m_coords );
 	}
 
 	template< typename T, uint32_t Count, typename U, uint32_t UCount >

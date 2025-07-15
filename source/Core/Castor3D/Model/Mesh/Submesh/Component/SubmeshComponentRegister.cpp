@@ -14,9 +14,9 @@
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 
-CU_ImplementSmartPtr( castor3d, SubmeshComponentRegister )
+CU_ImplementSmartPtr( c3d, SubmeshComponentRegister )
 
-namespace castor3d
+namespace c3d
 {
 	namespace smshcompreg
 	{
@@ -31,7 +31,7 @@ namespace castor3d
 	}
 
 	SubmeshComponentRegister::SubmeshComponentRegister( Engine & engine )
-		: castor::OwnedBy< Engine >{ engine }
+		: OwnedBy< Engine >{ engine }
 	{
 		m_renderDatas.push_back( nullptr );
 
@@ -244,9 +244,9 @@ namespace castor3d
 		return SubmeshData::eCount;
 	}
 
-	castor::Vector< shader::SubmeshVertexSurfaceShader * > SubmeshComponentRegister::getVertexSurfaceShaders( PipelineFlags const & flags )const
+	Vector< shader::SubmeshVertexSurfaceShader * > SubmeshComponentRegister::getVertexSurfaceShaders( PipelineFlags const & flags )const
 	{
-		castor::Vector< shader::SubmeshVertexSurfaceShader * > result;
+		Vector< shader::SubmeshVertexSurfaceShader * > result;
 
 		for ( auto & [componentId, surfaceShader] : m_vertexSurfaceShaders )
 		{
@@ -259,9 +259,9 @@ namespace castor3d
 		return result;
 	}
 
-	castor::Vector< shader::SubmeshRasterSurfaceShader * > SubmeshComponentRegister::getRasterSurfaceShaders( PipelineFlags const & flags )const
+	Vector< shader::SubmeshRasterSurfaceShader * > SubmeshComponentRegister::getRasterSurfaceShaders( PipelineFlags const & flags )const
 	{
-		castor::Vector< shader::SubmeshRasterSurfaceShader * > result;
+		Vector< shader::SubmeshRasterSurfaceShader * > result;
 
 		for ( auto & [componentId, surfaceShader] : m_rasterSurfaceShaders )
 		{
@@ -338,7 +338,7 @@ namespace castor3d
 		return m_renderDatas[value];
 	}
 
-	SubmeshComponentID SubmeshComponentRegister::registerComponent( castor::String const & componentType
+	SubmeshComponentID SubmeshComponentRegister::registerComponent( String const & componentType
 		, SubmeshComponentPluginUPtr componentPlugin )
 	{
 		if ( auto id = getNameId( componentType );
@@ -352,11 +352,11 @@ namespace castor3d
 		auto & componentDesc = getNextId();
 		registerComponent( componentDesc
 			, componentType
-			, castor::move( componentPlugin ) );
+			, c3d::move( componentPlugin ) );
 		return componentDesc.id;
 	}
 
-	void SubmeshComponentRegister::unregisterComponent( castor::String const & componentType )
+	void SubmeshComponentRegister::unregisterComponent( String const & componentType )
 	{
 		auto id = getNameId( componentType );
 
@@ -370,7 +370,7 @@ namespace castor3d
 		unregisterComponent( id );
 	}
 
-	SubmeshComponentID SubmeshComponentRegister::getNameId( castor::String const & componentType )const
+	SubmeshComponentID SubmeshComponentRegister::getNameId( String const & componentType )const
 	{
 		auto it = std::find_if( m_registered.begin()
 			, m_registered.end()
@@ -417,12 +417,12 @@ namespace castor3d
 	}
 
 	void SubmeshComponentRegister::registerComponent( Component & componentDesc
-		, castor::String const & componentType
+		, String const & componentType
 		, SubmeshComponentPluginUPtr componentPlugin )
 	{
 		componentPlugin->setId( componentDesc.id );
 		componentDesc.name = componentType;
-		componentDesc.plugin = castor::move( componentPlugin );
+		componentDesc.plugin = c3d::move( componentPlugin );
 
 		if ( componentDesc.plugin->getLineIndexFlag() != 0u )
 		{
@@ -511,24 +511,24 @@ namespace castor3d
 
 		if ( auto shader = componentDesc.plugin->createVertexSurfaceShader() )
 		{
-			m_vertexSurfaceShaders.emplace( componentDesc.id, castor::move( shader ) );
+			m_vertexSurfaceShaders.emplace( componentDesc.id, c3d::move( shader ) );
 		}
 
 		if ( auto shader = componentDesc.plugin->createRasterSurfaceShader() )
 		{
-			m_rasterSurfaceShaders.emplace( componentDesc.id, castor::move( shader ) );
+			m_rasterSurfaceShaders.emplace( componentDesc.id, c3d::move( shader ) );
 		}
 
 		if ( auto shader = componentDesc.plugin->createRenderShader() )
 		{
-			m_renderShaders.emplace( componentDesc.id, castor::move( shader ) );
+			m_renderShaders.emplace( componentDesc.id, c3d::move( shader ) );
 			m_renderShaderFlags.emplace_back( componentDesc.plugin->getComponentFlags() );
 		}
 
-		castor::AttributeParsers parsers;
+		AttributeParsers parsers;
 		componentDesc.plugin->createParsers( parsers );
 
-		castor::StrUInt32Map sections;
+		StrUInt32Map sections;
 		componentDesc.plugin->createSections( sections );
 
 		getEngine()->registerParsers( componentType

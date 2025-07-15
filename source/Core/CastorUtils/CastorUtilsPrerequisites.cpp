@@ -7,7 +7,7 @@
 #include "CastorUtils/Math/SquareMatrix.hpp"
 #include "CastorUtils/Math/Angle.hpp"
 
-namespace castor
+namespace c3d
 {
 	Point3f operator*( Matrix4x4f const & lhs, Point3f const & rhs )
 	{

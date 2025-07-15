@@ -10,28 +10,25 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::PassHeaderComponent >
-		: public TextWriterT< castor3d::PassHeaderComponent >
+	class TextWriter< PassHeaderComponent >
+		: public TextWriterT< PassHeaderComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::PassHeaderComponent >{ tabs }
+			: TextWriterT< PassHeaderComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::PassHeaderComponent const & object
+		bool operator()( PassHeaderComponent const & object
 			, StringStream & file )override
 		{
 			return writeOpt( file, cuT( "lighting" ), object.isLightingEnabled(), true );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace phcmp
@@ -78,14 +75,14 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void PassHeaderComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void PassHeaderComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "lighting" )
 			, phcmp::parserPassLighting
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			, { makeParameter< ParameterType::eBool >() } );
 	}
 
 	void PassHeaderComponent::Plugin::zeroBuffer( Pass const & pass
@@ -100,10 +97,10 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const PassHeaderComponent::TypeName = C3D_MakePassBaseComponentName( "header" );
+	String const PassHeaderComponent::TypeName = C3D_MakePassBaseComponentName( "header" );
 
 	PassHeaderComponent::PassHeaderComponent( Pass & pass )
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName }
+		: BaseDataPassComponentT< AtomicGroupChangeTracked< bool > >{ pass, TypeName }
 	{
 		enableLighting( true );
 	}
@@ -115,17 +112,17 @@ namespace castor3d
 
 	PassComponentUPtr PassHeaderComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< PassHeaderComponent >( pass );
+		auto result = makeRawUnique< PassHeaderComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool PassHeaderComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool PassHeaderComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< PassHeaderComponent >{ tabs }( *this, file );
+		return TextWriter< PassHeaderComponent >{ tabs }( *this, file );
 	}
 
 	void PassHeaderComponent::doFillBuffer( PassBuffer & buffer )const

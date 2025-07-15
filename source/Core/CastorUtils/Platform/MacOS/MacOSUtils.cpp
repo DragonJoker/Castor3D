@@ -7,7 +7,7 @@
 
 extern void getDisplaySize( uint32_t * w, uint32_t * h );
 
-namespace castor
+namespace c3d
 {
 	namespace system
 	{

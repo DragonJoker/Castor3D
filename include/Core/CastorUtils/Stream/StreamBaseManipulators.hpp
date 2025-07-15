@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <cassert>
 #include <climits>
 
-namespace castor::manip
+namespace c3d::manip
 {
 	template< typename CharT >
 	struct BasicBaseManip

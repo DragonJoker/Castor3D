@@ -8,20 +8,20 @@ See LICENSE file in root folder
 
 #include <ashespp/Command/CommandBuffer.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class DirectUploadData
-		: private castor::DataHolderT< ashes::CommandBufferPtr >
+		: private DataHolderT< ashes::CommandBufferPtr >
 		, public UploadData
 	{
-		using CommandBufferHolder = castor::DataHolderT< ashes::CommandBufferPtr >;
+		using CommandBufferHolder = DataHolderT< ashes::CommandBufferPtr >;
 
 	public:
 		C3D_API DirectUploadData( RenderDevice const & device
-			, castor::String debugName
+			, String debugName
 			, ashes::CommandBuffer const & commandBuffer );
 		C3D_API DirectUploadData( RenderDevice const & device
-			, castor::String debugName
+			, String debugName
 			, ashes::CommandPool const & commandPool );
 
 	private:
@@ -30,9 +30,9 @@ namespace castor3d
 		VkDeviceSize doUpload( ImageDataRange & data )override;
 		SemaphoreUsed doEnd( ashes::Queue const & queue
 			, ashes::Fence const * fence
-			, castor::Milliseconds timeout )override;
+			, Milliseconds timeout )override;
 
-		castor::Vector< ashes::BufferBasePtr > m_buffers;
+		Vector< ashes::BufferBasePtr > m_buffers;
 	};
 
 	using InstantDirectUploadData = InstantUploadDataT< DirectUploadData >;

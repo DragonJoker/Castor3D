@@ -6,14 +6,14 @@ See LICENSE file in root folder
 
 #include "Castor3D/Animation/AnimationModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class Animable
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	protected:
-		using AnimationPtr = castor::UniquePtr< Animation >;
-		using AnimationsMap = castor::StringMap< AnimationPtr >;
+		using AnimationPtr = UniquePtr< Animation >;
+		using AnimationsMap = StringMap< AnimationPtr >;
 		/**
 		 *\~english
 		 *\name Construction / Destruction.
@@ -52,7 +52,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation
 		 *\return		\p true si l'objet a une animation ayant le nom donné.
 		 */
-		C3D_API bool hasAnimation( castor::String const & name )const;
+		C3D_API bool hasAnimation( String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
@@ -63,7 +63,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		C3D_API Animation const & getAnimation( castor::String const & name )const;
+		C3D_API Animation const & getAnimation( String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
@@ -74,7 +74,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		C3D_API Animation & getAnimation( castor::String const & name );
+		C3D_API Animation & getAnimation( String const & name );
 		/**
 		 *\~english
 		 *\brief		Adds an animation.
@@ -104,7 +104,7 @@ namespace castor3d
 		 *\brief		Enlève une animation.
 		 *\param[in]	name	Le nom de l'animation
 		 */
-		C3D_API void doRemoveAnimation( castor::String const & name );
+		C3D_API void doRemoveAnimation( String const & name );
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
@@ -116,7 +116,7 @@ namespace castor3d
 		 *\return		L'animation
 		 */
 		template< typename AnimationType >
-		AnimationType & doGetAnimation( castor::String const & name )
+		AnimationType & doGetAnimation( String const & name )
 		{
 			return static_cast< AnimationType & >( getAnimation( name ) );
 		}
@@ -131,7 +131,7 @@ namespace castor3d
 		 *\return		L'animation
 		 */
 		template< typename AnimationType >
-		AnimationType const & doGetAnimation( castor::String const & name )const
+		AnimationType const & doGetAnimation( String const & name )const
 		{
 			return static_cast< AnimationType const & >( getAnimation( name ) );
 		}

@@ -30,22 +30,22 @@ namespace draw_edges
 {
 	namespace dned
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device
-			, castor3d::Extent3D const & extent )
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device
+			, c3d::Extent3D const & extent )
 		{
 			auto & engine = *device.renderSystem.getEngine();
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			castor3d::shader::Utils utils{ writer };
-			castor3d::shader::PassShaders passShaders{ engine.getPassComponentsRegister()
-				, castor3d::TextureCombine{}
-				, castor3d::ComponentModeFlag::eNone
+			c3d::shader::Utils utils{ writer };
+			c3d::shader::PassShaders passShaders{ engine.getPassComponentsRegister()
+				, c3d::TextureCombine{}
+				, c3d::ComponentModeFlag::eNone
 				, utils };
 
 			auto specifics = uint32_t( DepthNormalEdgeDetection::eSpecifics );
-			castor3d::shader::Materials materials{ engine, writer, passShaders, DepthNormalEdgeDetection::eMaterials, 0u, specifics };
+			c3d::shader::Materials materials{ engine, writer, passShaders, DepthNormalEdgeDetection::eMaterials, 0u, specifics };
 			C3D_ModelsData( writer, DepthNormalEdgeDetection::eModels, 0u );
 			auto depthObj( writer.declCombinedImg< FImg2DRgba32 >( "depthObj", DepthNormalEdgeDetection::eDepthObj, 0u ) );
 			auto nmlOcc( writer.declCombinedImg< FImg2DRgba32 >( "nmlOcc", DepthNormalEdgeDetection::eNmlOcc, 0u ) );
@@ -132,14 +132,14 @@ namespace draw_edges
 				, sdw::InFloat{ writer, "depthFactor" }
 				, sdw::InFloat{ writer, "normalFactor" } );
 
-			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
-				, sdw::VertexOutT< c3d::Uv2FT > out )
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 					out.uv() = in.uv();
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, sdw::VoidT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
+			writer.implementEntryPointT< c3ds::Uv2FT, sdw::VoidT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
 				, sdw::FragmentOut out )
 				{
 					auto size = writer.declLocale( "size"
@@ -192,25 +192,25 @@ namespace draw_edges
 
 	DepthNormalEdgeDetection::DepthNormalEdgeDetection( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
-		, castor3d::RenderTarget & renderTarget
-		, castor3d::RenderDevice const & device
-		, castor3d::PassBuffer const & passBuffer
+		, c3d::RenderTarget & renderTarget
+		, c3d::RenderDevice const & device
+		, c3d::PassBuffer const & passBuffer
 		, crg::ImageViewId const & depthObj
 		, crg::ImageViewId const & nmlOcc
 		, ashes::Buffer< int32_t > const & depthRange
 		, bool const * enabled )
 		: m_device{ device }
 		, m_graph{ graph }
-		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
+		, m_extent{ c3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
 		, m_result{ m_device
 			, renderTarget.getResources()
 			, cuT( "DNEdges" )
-			, { castor3d::ImageCreateFlags::eNone
+			, { c3d::ImageCreateFlags::eNone
 				, m_extent, 1u, 1u
-				, castor::PixelFormat::eR16_SFLOAT
-				, ( castor3d::ImageUsageFlags::eSampled
-					| castor3d::ImageUsageFlags::eColorAttachment
-					| castor3d::ImageUsageFlags::eTransferSrc ) }
+				, c3d::PixelFormat::eR16_SFLOAT
+				, ( c3d::ImageUsageFlags::eSampled
+					| c3d::ImageUsageFlags::eColorAttachment
+					| c3d::ImageUsageFlags::eTransferSrc ) }
 			, {} }
 		, m_shader{ cuT( "DNEdgesDetection" ), dned::getProgram( device, m_extent ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
@@ -226,13 +226,13 @@ namespace draw_edges
 				dsState->back = dsState->front;
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
-					.renderSize( castor3d::makeExtent2D( m_extent ) )
+					.renderSize( c3d::makeExtent2D( m_extent ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.depthStencilState( dsState )
 					.enabled( enabled )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }
@@ -250,7 +250,7 @@ namespace draw_edges
 		auto index = uint32_t( eSpecifics );
 		device.renderSystem.getEngine()->createSpecificsBuffersPassBindings( m_pass, index );
 		m_pass.addOutputColourView( m_result.targetViewId
-			, castor3d::transparentBlackClearColor );
+			, c3d::transparentBlackClearColor );
 		m_result.create();
 	}
 
@@ -259,12 +259,12 @@ namespace draw_edges
 		m_result.destroy();
 	}
 
-	void DepthNormalEdgeDetection::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void DepthNormalEdgeDetection::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 		visitor.visit( cuT( "Depth Normal Edge Detection Result" )
 			, m_result
 			, m_graph.getFinalLayoutState( m_result.sampledViewId ).layout
-			, castor3d::TextureFactors{}.invert( true ) );
+			, c3d::TextureFactors{}.invert( true ) );
 	}
 }

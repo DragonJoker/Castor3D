@@ -12,9 +12,9 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementSmartPtr( castor3d, LpvGridConfigUbo )
+CU_ImplementSmartPtr( c3d, LpvGridConfigUbo )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -23,7 +23,7 @@ namespace castor3d
 		LpvGridData::LpvGridData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstance{ writer, castor::move( expr ), enabled }
+			: StructInstance{ writer, c3d::move( expr ), enabled }
 			, minVolumeCornerSize{ getMember< sdw::Vec4 >( "minVolumeCornerSize" ) }
 			, gridSizeAtt{ getMember< sdw::Vec4 >( "gridSizeAtt" ) }
 			, cameraPos4{ getMember< sdw::Vec4 >( "cameraPosition" ) }
@@ -53,9 +53,9 @@ namespace castor3d
 			return result;
 		}
 
-		castor::RawUniquePtr< sdw::Struct > LpvGridData::declare( sdw::ShaderWriter & writer )
+		RawUniquePtr< sdw::Struct > LpvGridData::declare( sdw::ShaderWriter & writer )
 		{
-			return castor::make_unique< sdw::Struct >( writer
+			return makeRawUnique< sdw::Struct >( writer
 				, makeType( writer.getTypesCache() ) );
 		}
 
@@ -100,8 +100,8 @@ namespace castor3d
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	castor::Grid const & LpvGridConfigUbo::cpuUpdate( castor::BoundingBox const & aabb
-		, castor::Point3f const & cameraPos
+	Grid const & LpvGridConfigUbo::cpuUpdate( BoundingBox const & aabb
+		, Point3f const & cameraPos
 		, uint32_t gridDim
 		, float indirectAttenuation )
 	{
@@ -116,17 +116,17 @@ namespace castor3d
 		auto gridSize = m_grid.getDimensions();
 		cellSize = m_grid.getCellSize();
 
-		configuration.minVolumeCorner = castor::Point4f{ minVolumeCorner->x, minVolumeCorner->y, minVolumeCorner->z, cellSize };
-		configuration.gridSizeAtt = castor::Point4f{ gridSize->x, gridSize->y, gridSize->z, indirectAttenuation };
-		configuration.cameraPos = castor::Point4f{ cameraPos->x, cameraPos->y, cameraPos->z, 0.0f };
+		configuration.minVolumeCorner = Point4f{ minVolumeCorner->x, minVolumeCorner->y, minVolumeCorner->z, cellSize };
+		configuration.gridSizeAtt = Point4f{ gridSize->x, gridSize->y, gridSize->z, indirectAttenuation };
+		configuration.cameraPos = Point4f{ cameraPos->x, cameraPos->y, cameraPos->z, 0.0f };
 
 		return m_grid;
 	}
 
-	castor::Grid const & LpvGridConfigUbo::cpuUpdate( float gridLevelScale
-		, castor::Grid const & grid
-		, castor::Point3f const & cameraPos
-		, castor::Point3f const & cameraDir
+	Grid const & LpvGridConfigUbo::cpuUpdate( float gridLevelScale
+		, Grid const & grid
+		, Point3f const & cameraPos
+		, Point3f const & cameraDir
 		, float indirectAttenuation )
 	{
 		auto & configuration = m_ubo.getData();
@@ -137,9 +137,9 @@ namespace castor3d
 		auto gridSize = m_grid.getDimensions();
 		auto cellSize = m_grid.getCellSize();
 
-		configuration.minVolumeCorner = castor::Point4f{ minVolumeCorner->x, minVolumeCorner->y, minVolumeCorner->z, cellSize };
-		configuration.gridSizeAtt = castor::Point4f{ gridSize->x, gridSize->y, gridSize->z, indirectAttenuation };
-		configuration.cameraPos = castor::Point4f{ cameraPos->x, cameraPos->y, cameraPos->z, 0.0f };
+		configuration.minVolumeCorner = Point4f{ minVolumeCorner->x, minVolumeCorner->y, minVolumeCorner->z, cellSize };
+		configuration.gridSizeAtt = Point4f{ gridSize->x, gridSize->y, gridSize->z, indirectAttenuation };
+		configuration.cameraPos = Point4f{ cameraPos->x, cameraPos->y, cameraPos->z, 0.0f };
 
 		return m_grid;
 	}

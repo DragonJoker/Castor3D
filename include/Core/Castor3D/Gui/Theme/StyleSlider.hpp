@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/RangedValue.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class SliderStyle
 		: public ControlStyle
@@ -16,10 +16,10 @@ namespace castor3d
 	public:
 		static ControlType constexpr Type = ControlType::eSlider;
 
-		SliderStyle( castor::String const & name
+		SliderStyle( String const & name
 			, Scene * scene
 			, Engine & engine
-			, castor::String const & fontName )
+			, String const & fontName )
 			: ControlStyle{ Type
 				, name
 				, scene
@@ -29,9 +29,9 @@ namespace castor3d
 		{
 		}
 
-		SliderStyle( castor::String const & name
+		SliderStyle( String const & name
 			, Engine & engine
-			, castor::String const & fontName )
+			, String const & fontName )
 			: SliderStyle{ name, nullptr, engine, fontName }
 		{
 		}

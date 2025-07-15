@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include <ctime>
 #include <type_traits>
 
-namespace castor
+namespace c3d
 {
 	template< typename T >
 	inline uint32_t hashCombine32( uint32_t & hash

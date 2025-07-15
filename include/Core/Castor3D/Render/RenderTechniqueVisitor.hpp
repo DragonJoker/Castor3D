@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class RenderTechniqueVisitor
 		: public ConfigurationVisitor
@@ -18,8 +18,8 @@ namespace castor3d
 		inline RenderTechniqueVisitor( PipelineFlags flags
 			, Scene const & scene
 			, Config config = { false } )noexcept
-			: ConfigurationVisitor{ castor::move( config ) }
-			, m_flags{ castor::move( flags ) }
+			: ConfigurationVisitor{ c3d::move( config ) }
+			, m_flags{ c3d::move( flags ) }
 			, m_scene{ scene }
 		{
 		}

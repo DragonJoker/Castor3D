@@ -17,7 +17,7 @@ See LICENSE file in root folder
 
 #include <unordered_map>
 
-namespace castor3d
+namespace c3d
 {
 	class GpuBufferBase
 	{
@@ -45,7 +45,7 @@ namespace castor3d
 		C3D_API GpuBufferBase( RenderSystem const & renderSystem
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags memoryFlags
-			, castor::String const & debugName
+			, String const & debugName
 			, ashes::QueueShare sharingMode
 			, VkDeviceSize allocatedSize );
 		/**
@@ -209,7 +209,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		castor::ByteArrayView const & getDatas()const noexcept
+		ByteArrayView const & getDatas()const noexcept
 		{
 			return m_data;
 		}
@@ -221,7 +221,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		castor::ByteArrayView & getDatas()noexcept
+		ByteArrayView & getDatas()noexcept
 		{
 			return m_data;
 		}
@@ -233,8 +233,8 @@ namespace castor3d
 		ashes::QueueShare m_sharingMode;
 		VkDeviceSize m_allocatedSize;
 		ashes::BufferPtr< uint8_t > m_buffer;
-		castor::ByteArray m_ownData;
-		castor::ByteArrayView m_data;
+		ByteArray m_ownData;
+		ByteArrayView m_data;
 		struct MemoryRange
 		{
 			MemoryRange() = default;
@@ -251,8 +251,8 @@ namespace castor3d
 			VkDeviceSize size{};
 			AccessState dstAccessState;
 		};
-		using MemoryRangeArray = castor::Vector< MemoryRange >;
-		castor::UnorderedMap< size_t, MemoryRangeArray > m_ranges;
+		using MemoryRangeArray = Vector< MemoryRange >;
+		HashMap< size_t, MemoryRangeArray > m_ranges;
 	};
 
 	template< typename AllocatorT >
@@ -283,7 +283,7 @@ namespace castor3d
 		GpuBufferT( RenderSystem const & renderSystem
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags memoryFlags
-			, castor::String const & debugName
+			, String const & debugName
 			, ashes::QueueShare sharingMode
 			, AllocatorT allocator );
 		/**
@@ -359,7 +359,7 @@ namespace castor3d
 		GpuBaseBufferT( RenderDevice const & device
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags memoryFlags
-			, castor::String const & debugName
+			, String const & debugName
 			, ashes::QueueShare sharingMode
 			, AllocatorT allocator );
 		/**
@@ -440,7 +440,7 @@ namespace castor3d
 		AllocatorT m_allocator;
 	};
 
-	C3D_API castor::Pair< VkDeviceSize, VkDeviceSize > adaptRange( VkDeviceSize offset
+	C3D_API Pair< VkDeviceSize, VkDeviceSize > adaptRange( VkDeviceSize offset
 		, VkDeviceSize size
 		, VkDeviceSize align );
 
@@ -449,14 +449,14 @@ namespace castor3d
 		, VkDeviceSize count
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
-		, castor::String const & name
+		, String const & name
 		, ashes::QueueShare sharingMode = {} )
 	{
 		ashes::BufferPtr< T > result = ashes::makeBuffer< T >( *device.device
-			, castor::toUtf8( name + cuT( "Buf" ) )
+			, toUtf8( name + cuT( "Buf" ) )
 			, count
 			, usage
-			, castor::move( sharingMode ) );
+			, c3d::move( sharingMode ) );
 		ashes::BufferBase & buffer = result->getBuffer();
 		result->bindMemory( setupMemory( device, buffer, flags, name + cuT( "Buf" ) ) );
 		return result;
@@ -466,14 +466,14 @@ namespace castor3d
 		, VkDeviceSize size
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
-		, castor::String const & name
+		, String const & name
 		, ashes::QueueShare sharingMode = {} )
 	{
 		auto result = ashes::makeBufferBase( *device.device
-			, castor::toUtf8( name + cuT( "Buf" ) )
+			, toUtf8( name + cuT( "Buf" ) )
 			, size
 			, usage
-			, castor::move( sharingMode ) );
+			, c3d::move( sharingMode ) );
 		result->bindMemory( setupMemory( device, *result, flags, name + cuT( "Buf" ) ) );
 		return result;
 	}
@@ -483,14 +483,14 @@ namespace castor3d
 		, VkDeviceSize count
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
-		, castor::String const & name
+		, String const & name
 		, ashes::QueueShare sharingMode = {} )
 	{
 		ashes::VertexBufferPtr< T > result = ashes::makeVertexBuffer< T >( *device.device
-			, castor::toUtf8( name + cuT( "Vbo" ) )
+			, toUtf8( name + cuT( "Vbo" ) )
 			, count
 			, usage
-			, castor::move( sharingMode ) );
+			, c3d::move( sharingMode ) );
 		ashes::BufferBase & buffer = result->getBuffer();
 		result->bindMemory( setupMemory( device, buffer, flags, name + cuT( "Vbo" ) ) );
 		return result;
@@ -500,14 +500,14 @@ namespace castor3d
 		, VkDeviceSize size
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
-		, castor::String const & name
+		, String const & name
 		, ashes::QueueShare sharingMode = {} )
 	{
 		auto result = ashes::makeVertexBufferBase( *device.device
-			, castor::toUtf8( name + cuT( "Vbo" ) )
+			, toUtf8( name + cuT( "Vbo" ) )
 			, size
 			, usage
-			, castor::move( sharingMode ) );
+			, c3d::move( sharingMode ) );
 		result->bindMemory( setupMemory( device, *result, flags, name + cuT( "Vbo" ) ) );
 		return result;
 	}

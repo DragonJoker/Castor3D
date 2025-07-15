@@ -14,28 +14,25 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::MetalnessComponent >
-		: public TextWriterT< castor3d::MetalnessComponent >
+	class TextWriter< MetalnessComponent >
+		: public TextWriterT< MetalnessComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::MetalnessComponent >{ tabs }
+			: TextWriterT< MetalnessComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::MetalnessComponent const & object
+		bool operator()( MetalnessComponent const & object
 			, StringStream & file )override
 		{
-			return writeOpt( file, cuT( "metalness" ), object.getMetalness(), castor3d::MetalnessComponent::Default );
+			return writeOpt( file, cuT( "metalness" ), object.getMetalness(), MetalnessComponent::Default );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace mtlcmp
@@ -130,14 +127,14 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void MetalnessComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void MetalnessComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "metalness" )
 			, mtlcmp::parserPassMetalness
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { makeParameter< ParameterType::eFloat >() } );
 	}
 
 	void MetalnessComponent::Plugin::zeroBuffer( Pass const & pass
@@ -157,7 +154,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const MetalnessComponent::TypeName = C3D_MakePassLightingComponentName( "metalness" );
+	String const MetalnessComponent::TypeName = C3D_MakePassLightingComponentName( "metalness" );
 
 	MetalnessComponent::MetalnessComponent( Pass & pass
 		, float defaultValue )
@@ -176,17 +173,17 @@ namespace castor3d
 
 	PassComponentUPtr MetalnessComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< MetalnessComponent >( pass );
+		auto result = makeRawUnique< MetalnessComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool MetalnessComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool MetalnessComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< MetalnessComponent >{ tabs }( *this, file );
+		return TextWriter< MetalnessComponent >{ tabs }( *this, file );
 	}
 
 	void MetalnessComponent::doFillBuffer( PassBuffer & buffer )const

@@ -12,7 +12,7 @@
 namespace GuiCommon
 {
 	NodeTreeItemProperty::NodeTreeItemProperty( bool editable
-		, castor3d::Engine * engine )
+		, c3d::Engine * engine )
 		: TreeItemProperty{ engine, editable }
 	{
 		CreateTreeItemMenu();
@@ -41,16 +41,16 @@ namespace GuiCommon
 			return;
 		}
 
-		addPropertyT( grid, PROPERTY_NODE_VISIBLE, m_node->isVisible(), m_node, &castor3d::SceneNode::setVisible );
+		addPropertyT( grid, PROPERTY_NODE_VISIBLE, m_node->isVisible(), m_node, &c3d::SceneNode::setVisible );
 
 		if ( !m_node->isStatic() )
 		{
 			static wxString PROPERTY_NODE_POSITION = _( "Position" );
 			static wxString PROPERTY_NODE_SCALE = _( "Scale" );
 			static wxString PROPERTY_NODE_ORIENTATION = _( "Orientation" );
-			addPropertyT( grid, PROPERTY_NODE_POSITION, m_node->getPosition(), m_node, &castor3d::SceneNode::setPosition );
-			addPropertyT( grid, PROPERTY_NODE_SCALE, m_node->getScale(), m_node, &castor3d::SceneNode::setScale );
-			addPropertyT( grid, PROPERTY_NODE_ORIENTATION, m_node->getOrientation(), m_node, &castor3d::SceneNode::setOrientation );
+			addPropertyT( grid, PROPERTY_NODE_POSITION, m_node->getPosition(), m_node, &c3d::SceneNode::setPosition );
+			addPropertyT( grid, PROPERTY_NODE_SCALE, m_node->getScale(), m_node, &c3d::SceneNode::setScale );
+			addPropertyT( grid, PROPERTY_NODE_ORIENTATION, m_node->getOrientation(), m_node, &c3d::SceneNode::setOrientation );
 		}
 	}
 }

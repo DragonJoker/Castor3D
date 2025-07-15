@@ -10,7 +10,7 @@
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Image/Image.hpp>
 
-CU_ImplementSmartPtr( castor3d, UploadData )
+CU_ImplementSmartPtr( c3d, UploadData )
 
 #if C3D_DebugUpload
 #	define traceUpload( x )\
@@ -19,9 +19,9 @@ CU_ImplementSmartPtr( castor3d, UploadData )
 #	define traceUpload( x )
 #endif
 
-namespace castor3d
+namespace c3d
 {
-	castor::OutputStream & operator<<( castor::OutputStream & stream, ImageAspectFlags const & rhs )
+	OutputStream & operator<<( OutputStream & stream, ImageAspectFlags const & rhs )
 	{
 		std::string sep;
 		if ( checkFlag( rhs, ImageAspectFlags::eColor ) )
@@ -41,7 +41,7 @@ namespace castor3d
 		return stream;
 	}
 
-	castor::OutputStream & operator<<( castor::OutputStream & stream, ImageSubresourceRange const & rhs )
+	OutputStream & operator<<( OutputStream & stream, ImageSubresourceRange const & rhs )
 	{
 		stream << rhs.aspectMask
 			<< ", Array[" << rhs.baseArrayLayer << "/" << rhs.layerCount << "]"
@@ -50,10 +50,10 @@ namespace castor3d
 	}
 
 	UploadData::UploadData( RenderDevice const & device
-		, castor::String debugName
+		, String debugName
 		, ashes::CommandBuffer const * commandBuffer )
 		: m_device{ device }
-		, m_debugName{ castor::move( debugName ) }
+		, m_debugName{ c3d::move( debugName ) }
 		, m_commandBuffer{ commandBuffer }
 	{
 	}
@@ -86,26 +86,26 @@ namespace castor3d
 
 		if ( upload.dstOffset >= upload.dstBuffer->getSize() )
 		{
-			log::error << "StagedUploadBuffer: Trying to copy at invalid offset for target [" << castor::makeString( upload.dstBuffer->getName() )
+			log::error << "StagedUploadBuffer: Trying to copy at invalid offset for target [" << makeString( upload.dstBuffer->getName() )
 				<< "] buffer: dstOffset = " << upload.dstOffset << std::endl;
 			CU_Failure( "Trying to copy at invalid offset for target buffer" );
 		}
 
 		if ( upload.dstOffset + upload.srcSize > upload.dstBuffer->getSize() )
 		{
-			log::error << "StagedUploadBuffer: Trying to copy more than there is in target [" << castor::makeString( upload.dstBuffer->getName() )
+			log::error << "StagedUploadBuffer: Trying to copy more than there is in target [" << makeString( upload.dstBuffer->getName() )
 				<< "] buffer: dstOffset = " << upload.dstOffset
 				<< ", size = " << upload.srcSize << std::endl;
 			CU_Failure( "Trying to copy more than there is in target buffer" );
 		}
 
-		m_pendingBuffers.emplace( it, castor::move( upload ) );
+		m_pendingBuffers.emplace( it, c3d::move( upload ) );
 	}
 
 	void UploadData::pushUpload( void const * srcData
 		, VkDeviceSize srcSize
 		, ashes::Image const & dstImage
-		, castor::ImageMemoryLayout dstLayout
+		, ImageMemoryLayout dstLayout
 		, ImageSubresourceRange dstRange
 		, ImageLayout dstImageLayout
 		, PipelineStageFlags dstPipelineFlags )
@@ -115,7 +115,7 @@ namespace castor3d
 			return;
 		}
 
-		ImageDataRange upload{ srcData, srcSize, &dstImage, castor::move( dstLayout ), dstRange, dstImageLayout, dstPipelineFlags };
+		ImageDataRange upload{ srcData, srcSize, &dstImage, c3d::move( dstLayout ), dstRange, dstImageLayout, dstPipelineFlags };
 		auto it = std::lower_bound( m_pendingImages.begin()
 			, m_pendingImages.end()
 			, upload
@@ -131,21 +131,21 @@ namespace castor3d
 		if ( auto imgSize = upload.dstImage->getMemoryRequirements().size;
 			upload.srcSize > imgSize )
 		{
-			log::warn << "StagedUploadImage: Trying to copy more than there can be in image [" << castor::makeString( upload.dstImage->getName() )
+			log::warn << "StagedUploadImage: Trying to copy more than there can be in image [" << makeString( upload.dstImage->getName() )
 				<< "] device memory: size = " << upload.srcSize << std::endl;
 			upload.srcSize = imgSize;
 		}
 
 		if ( upload.dstRange.baseArrayLayer >= upload.dstImage->getLayerCount() )
 		{
-			log::error << "StagedUploadImage: Trying to copy to invalid base array layer for image [" << castor::makeString( upload.dstImage->getName() )
+			log::error << "StagedUploadImage: Trying to copy to invalid base array layer for image [" << makeString( upload.dstImage->getName() )
 				<< "]: baseArrayLayer = " << upload.dstRange.baseArrayLayer << std::endl;
 			CU_Failure( "Trying to copy to invalid base array layer for image" );
 		}
 
 		if ( upload.dstRange.baseArrayLayer + upload.dstRange.layerCount > upload.dstImage->getLayerCount() )
 		{
-			log::error << "StagedUploadImage: Trying to copy to invalid array layers for image [" << castor::makeString( upload.dstImage->getName() )
+			log::error << "StagedUploadImage: Trying to copy to invalid array layers for image [" << makeString( upload.dstImage->getName() )
 				<< "]: baseArrayLayer = " << upload.dstRange.baseArrayLayer
 				<< ", layerCount = " << upload.dstRange.layerCount << std::endl;
 			CU_Failure( "Trying to copy to invalid array layers for image" );
@@ -153,26 +153,26 @@ namespace castor3d
 
 		if ( upload.dstRange.baseMipLevel >= upload.dstImage->getMipmapLevels() )
 		{
-			log::error << "StagedUploadImage: Trying to copy to invalid base mip level for image [" << castor::makeString( upload.dstImage->getName() )
+			log::error << "StagedUploadImage: Trying to copy to invalid base mip level for image [" << makeString( upload.dstImage->getName() )
 				<< "]: baseMipLevel = " << upload.dstRange.baseArrayLayer << std::endl;
 			CU_Failure( "Trying to copy to invalid base mip level for image" );
 		}
 
 		if ( upload.dstRange.baseMipLevel + upload.dstRange.levelCount > upload.dstImage->getMipmapLevels() )
 		{
-			log::error << "StagedUploadImage: Trying to copy to invalid mip levels for image [" << castor::makeString( upload.dstImage->getName() )
+			log::error << "StagedUploadImage: Trying to copy to invalid mip levels for image [" << makeString( upload.dstImage->getName() )
 				<< "]: baseMipLevel = " << upload.dstRange.baseMipLevel
 				<< ", levelCount = " << upload.dstRange.levelCount << std::endl;
 			CU_Failure( "Trying to copy to invalid mip levels for image" );
 		}
 
-		m_pendingImages.emplace( it, castor::move( upload ) );
+		m_pendingImages.emplace( it, c3d::move( upload ) );
 	}
 
 	void UploadData::process()
 	{
-		castor::Vector< BufferDataRange > * pendingBuffers;
-		castor::Vector< ImageDataRange > * pendingImages;
+		Vector< BufferDataRange > * pendingBuffers;
+		Vector< ImageDataRange > * pendingImages;
 		traceUpload( "Start upload" << std::endl );
 		doPreprocess( pendingBuffers, pendingImages );
 #if C3D_DebugUpload
@@ -209,7 +209,7 @@ namespace castor3d
 
 	UploadData::SemaphoreUsed UploadData::end( ashes::Queue const & queue
 		, ashes::Fence const * fence
-		, castor::Milliseconds timeout )
+		, Milliseconds timeout )
 	{
 		return doEnd( queue, fence, timeout );
 	}
@@ -224,7 +224,7 @@ namespace castor3d
 		if ( size != ashes::WholeSize
 			&& dstOffset + size > dstBuffer.getSize() )
 		{
-			log::error << cuT( "StagedUpload: Trying to copy more than there can be in dst [" ) << castor::makeString( dstBuffer.getName() )
+			log::error << cuT( "StagedUpload: Trying to copy more than there can be in dst [" ) << makeString( dstBuffer.getName() )
 				<< cuT( "] buffer: dstOffset = " ) << dstOffset
 				<< cuT( ", size = " ) << size << std::endl;
 			CU_Failure( "Trying to copy more than there can be in dst buffer" );
@@ -278,7 +278,7 @@ namespace castor3d
 		if ( !isFullSizeMap
 			&& mappedOffset + mappedSize > dstBuffer.getSize() )
 		{
-			log::error << cuT( "StagedUpload: Mapped destination is bigger that buffer [" ) << castor::makeString( dstBuffer.getName() )
+			log::error << cuT( "StagedUpload: Mapped destination is bigger that buffer [" ) << makeString( dstBuffer.getName() )
 				<< cuT( "] size, mappedOffset = " ) << mappedOffset
 				<< cuT( ", mappedSize = " ) << mappedSize
 				<< cuT( ", buffer size = " ) << dstBuffer.getSize() << std::endl;
@@ -315,7 +315,7 @@ namespace castor3d
 
 		if ( dstBuffer.getSize() < data.dstOffset + data.srcSize )
 		{
-			log::error << cuT( "StagedUpload: Trying to copy more than there can be in dst [" ) << castor::makeString( dstBuffer.getName() )
+			log::error << cuT( "StagedUpload: Trying to copy more than there can be in dst [" ) << makeString( dstBuffer.getName() )
 				<< cuT( "] buffer: dstOffset = " ) << data.dstOffset
 				<< cuT( ", srcSize = " ) << data.srcSize << std::endl;
 			CU_Failure( "Trying to copy more than there can be in dst buffer" );
@@ -323,10 +323,10 @@ namespace castor3d
 
 		if ( srcBuffer )
 		{
-			traceUpload( cuT( "    Registering buffer upload commands: [" ) << castor::toUtf8( data.dstBuffer->getName() )
+			traceUpload( cuT( "    Registering buffer upload commands: [" ) << toUtf8( data.dstBuffer->getName() )
 				<< cuT( "(" ) << data.dstBuffer->getSize()
 				<< cuT( ")], Offset: " ) << data.dstOffset
-				<< cuT( ", from buffer [" ) << castor::makeString( srcBuffer->getName() )
+				<< cuT( ", from buffer [" ) << makeString( srcBuffer->getName() )
 				<< cuT( "(" ) << srcBuffer->getSize()
 				<< cuT( ")], Offset: " ) << srcOffset
 				<< cuT( ", Upload Size: " ) << data.srcSize
@@ -334,7 +334,7 @@ namespace castor3d
 
 			if ( srcBuffer->getSize() < srcOffset + data.srcSize )
 			{
-				log::error << cuT( "StagedUpload: Trying to copy more than there is in src [" ) << castor::makeString( srcBuffer->getName() )
+				log::error << cuT( "StagedUpload: Trying to copy more than there is in src [" ) << makeString( srcBuffer->getName() )
 					<< cuT( "] buffer: srcOffset = " ) << srcOffset
 					<< cuT( ", srcSize = " ) << data.srcSize << std::endl;
 				CU_Failure( "Trying to copy more than there is in src buffer" );
@@ -348,7 +348,7 @@ namespace castor3d
 		}
 		else
 		{
-			traceUpload( cuT( "    Registering buffer upload commands: [" ) << castor::makeString( data.dstBuffer->getName() )
+			traceUpload( cuT( "    Registering buffer upload commands: [" ) << makeString( data.dstBuffer->getName() )
 				<< cuT( "(" ) << data.dstBuffer->getSize()
 				<< cuT( ")], Offset: " ) << data.dstOffset
 				<< cuT( ", Upload Size: " ) << data.srcSize
@@ -372,10 +372,10 @@ namespace castor3d
 		, ashes::BufferBase const & srcBuffer
 		, VkDeviceSize srcOffset )const
 	{
-		traceUpload( cuT( "    Registering image upload commands: [" ) << castor::makeString( data.dstImage->getName() )
+		traceUpload( cuT( "    Registering image upload commands: [" ) << makeString( data.dstImage->getName() )
 			<< cuT( "], Layout: [" ) << data.dstLayout
 			<< cuT( "], Range: [" ) << data.dstRange
-			<< cuT( ", from buffer [" ) << castor::makeString( srcBuffer.getName() )
+			<< cuT( ", from buffer [" ) << makeString( srcBuffer.getName() )
 			<< cuT( "(" ) << srcBuffer.getSize()
 			<< cuT( ")], Offset: " ) << srcOffset
 			<< cuT( ", Upload Size: " ) << data.srcSize

@@ -20,28 +20,25 @@
 
 //*************************************************************************************************
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::SpecularComponent >
-		: public TextWriterT< castor3d::SpecularComponent >
+	class TextWriter< SpecularComponent >
+		: public TextWriterT< SpecularComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::SpecularComponent >{ tabs }
+			: TextWriterT< SpecularComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::SpecularComponent const & object
+		bool operator()( SpecularComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSubOpt( file, cuT( "specular_colour" ), object.getSpecular(), castor3d::SpecularComponent::DefaultColour );
+			return writeNamedSubOpt( file, cuT( "specular_colour" ), object.getSpecular(), SpecularComponent::DefaultColour );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace spccmp
@@ -55,7 +52,7 @@ namespace castor3d
 			else if ( !params.empty() )
 			{
 				auto & component = getPassComponent< SpecularComponent >( *blockContext );
-				component.setSpecular( params[0]->get< castor::RgbColour >() );
+				component.setSpecular( params[0]->get< RgbColour >() );
 			}
 		}
 		CU_EndAttribute()
@@ -132,19 +129,19 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void SpecularComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void SpecularComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "specular" )
 			, spccmp::parserPassSpecular
-			, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eRgbColour >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "specular_colour" )
 			, spccmp::parserPassSpecular
-			, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+			, { makeParameter< ParameterType::eRgbColour >() } );
 	}
 
 	void SpecularComponent::Plugin::zeroBuffer( Pass const & pass
@@ -163,10 +160,10 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const SpecularComponent::TypeName = C3D_MakePassLightingComponentName( "specular" );
+	String const SpecularComponent::TypeName = C3D_MakePassLightingComponentName( "specular" );
 
 	SpecularComponent::SpecularComponent( Pass & pass
-		, castor::RgbColour defaultValue )
+		, RgbColour defaultValue )
 		: BaseDataPassComponentT{ pass, TypeName, {}
 			, defaultValue }
 	{
@@ -180,17 +177,17 @@ namespace castor3d
 
 	PassComponentUPtr SpecularComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< SpecularComponent >( pass );
+		auto result = makeRawUnique< SpecularComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool SpecularComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool SpecularComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< SpecularComponent >{ tabs }( *this, file );
+		return TextWriter< SpecularComponent >{ tabs }( *this, file );
 	}
 
 	void SpecularComponent::doFillBuffer( PassBuffer & buffer )const

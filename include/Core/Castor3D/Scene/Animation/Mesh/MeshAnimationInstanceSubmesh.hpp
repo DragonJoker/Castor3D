@@ -8,10 +8,10 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Mesh/Animation/MeshAnimationModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class MeshAnimationInstanceSubmesh
-		: public castor::OwnedBy< MeshAnimationInstance >
+		: public OwnedBy< MeshAnimationInstance >
 	{
 	public:
 		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstanceSubmesh && rhs ) = default;
@@ -54,10 +54,10 @@ namespace castor3d
 		 *\param[in]	curbb	La bounding box pour le tampon d'animation courant.
 		 */
 		C3D_API void update( float factor
-			, castor::Vector< float > const & prv
-			, castor::Vector< float > const & cur
-			, castor::BoundingBox const & prvbb
-			, castor::BoundingBox const & curbb );
+			, Vector< float > const & prv
+			, Vector< float > const & cur
+			, BoundingBox const & prvbb
+			, BoundingBox const & curbb );
 		/**
 		 *\~english
 		 *\brief		Moves the object back to initial state.
@@ -78,7 +78,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Les poids courants.
 		 */
-		castor::Vector< float > getWeights()const
+		Vector< float > getWeights()const
 		{
 			return m_cur;
 		}
@@ -89,7 +89,7 @@ namespace castor3d
 		MeshAnimationSubmesh & m_animationObject;
 		//!\~english	The current animation buffer.
 		//!\~french		Le tampon d'animation actuel.
-		castor::Vector< float > m_cur;
+		Vector< float > m_cur;
 	};
 }
 

@@ -20,19 +20,19 @@ namespace GuiCommon
 	namespace
 	{
 		class ToneMappingShaderGatherer
-			: public castor3d::ToneMappingVisitor
+			: public c3d::ToneMappingVisitor
 		{
 		private:
-			explicit ToneMappingShaderGatherer( castor3d::RenderDevice const & device
+			explicit ToneMappingShaderGatherer( c3d::RenderDevice const & device
 				, ShaderSources & sources )
-				: castor3d::ToneMappingVisitor{ { true } }
+				: c3d::ToneMappingVisitor{ { true } }
 				, m_device{ device }
 				, m_sources{ sources }
 			{
 			}
 
 		public:
-			static ShaderSources submit( castor3d::ToneMapping & toneMapping )
+			static ShaderSources submit( c3d::ToneMapping & toneMapping )
 			{
 				ShaderSources result;
 				ToneMappingShaderGatherer vis{ *toneMapping.getEngine()->getRenderDevice(), result };
@@ -40,7 +40,7 @@ namespace GuiCommon
 				return result;
 			}
 
-			void visit( castor3d::ShaderModule const & module
+			void visit( c3d::ShaderModule const & module
 				, bool forceProgramsVisit )override
 			{
 				if ( !module.shader
@@ -53,10 +53,10 @@ namespace GuiCommon
 
 				doGetSource( module.name ).sources.push_back( { module.shader.get()
 					, module.compiled
-					, castor3d::getEntryPointType( m_device, module.stage ) } );
+					, c3d::getEntryPointType( m_device, module.stage ) } );
 			}
 
-			void visit( castor3d::ProgramModule const & module
+			void visit( c3d::ProgramModule const & module
 				, ast::EntryPoint entryPoint
 				, bool forceProgramsVisit )override
 			{
@@ -75,24 +75,24 @@ namespace GuiCommon
 					, entryPoint } );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, VkShaderStageFlags shaders
-				, castor3d::HdrConfig & value )override
+				, c3d::HdrConfig & value )override
 			{
 				auto & source = doGetSource( name );
 				UniformBufferValues ubo{ make_String( wxT( "HdrConfig" ) ), VK_SHADER_STAGE_FRAGMENT_BIT };
 				ubo.uniforms.emplace_back( makeUniformValue( wxT( "Exposure" ), value.exposure ) );
 				ubo.uniforms.emplace_back( makeUniformValue( wxT( "Gamma" ), value.gamma ) );
-				source.ubos.emplace_back( castor::move( ubo ) );
+				source.ubos.emplace_back( c3d::move( ubo ) );
 			}
 
 		private:
-			castor::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
+			c3d::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( c3d::String const & category )override
 			{
-				return castor::RawUniquePtr< ConfigurationVisitorBase >( new ToneMappingShaderGatherer{ m_device, m_sources } );
+				return c3d::RawUniquePtr< ConfigurationVisitorBase >( new ToneMappingShaderGatherer{ m_device, m_sources } );
 			}
 
-			ShaderSource & doGetSource( castor::String const & name )
+			ShaderSource & doGetSource( c3d::String const & name )
 			{
 				auto it = std::find_if( m_sources.begin()
 					, m_sources.end()
@@ -107,18 +107,18 @@ namespace GuiCommon
 				}
 
 				ShaderSource source{ name };
-				m_sources.emplace_back( castor::move( source ) );
+				m_sources.emplace_back( c3d::move( source ) );
 				return m_sources.back();
 			}
 
 		private:
-			castor3d::RenderDevice const & m_device;
+			c3d::RenderDevice const & m_device;
 			ShaderSources & m_sources;
 		};
 	}
 
 	ToneMappingTreeItemProperty::ToneMappingTreeItemProperty( bool editable
-		, castor3d::RenderTarget & target
+		, c3d::RenderTarget & target
 		, wxWindow * parent )
 		: TreeItemProperty{ target.getEngine(), editable }
 		, m_target{ target }
@@ -164,7 +164,7 @@ namespace GuiCommon
 			prop->SetValue( m_choices[m_nameToChoice[m_target.getToneMapping()->getName()]] );
 		}
 
-		castor3d::HdrConfig & hdrConfig = m_target.getHdrConfig();
+		c3d::HdrConfig & hdrConfig = m_target.getHdrConfig();
 		addPropertyT( grid, PROPERTY_TONE_MAPPING_EXPOSURE, &hdrConfig.exposure );
 		addPropertyT( grid, PROPERTY_TONE_MAPPING_GAMMA, &hdrConfig.gamma );
 		addProperty( grid, PROPERTY_TONE_MAPPING_SHADER
@@ -179,7 +179,7 @@ namespace GuiCommon
 		{
 			ShaderSources sources = ToneMappingShaderGatherer::submit( *toneMapping );
 			ShaderDialog * editor = new ShaderDialog{ toneMapping->getEngine()
-				, castor::move( sources )
+				, c3d::move( sources )
 				, toneMapping->getFullName()
 				, m_parent };
 			editor->Show();

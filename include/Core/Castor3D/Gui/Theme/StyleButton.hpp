@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "StyleControl.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class ButtonStyle
 		: public ControlStyle
@@ -14,10 +14,10 @@ namespace castor3d
 	public:
 		static ControlType constexpr Type = ControlType::eButton;
 
-		ButtonStyle( castor::String const & name
+		ButtonStyle( String const & name
 			, Scene * scene
 			, Engine & engine
-			, castor::String const & fontName )
+			, String const & fontName )
 			: ControlStyle{ Type
 				, name
 				, scene
@@ -37,9 +37,9 @@ namespace castor3d
 		{
 		}
 
-		ButtonStyle( castor::String const & name
+		ButtonStyle( String const & name
 			, Engine & engine
-			, castor::String const & fontName )
+			, String const & fontName )
 			: ButtonStyle{ name, nullptr, engine, fontName }
 		{
 		}
@@ -94,7 +94,7 @@ namespace castor3d
 			m_disabledTextMaterial = material;
 		}
 
-		void setFont( castor::StringView value )
+		void setFont( String value )
 		{
 			m_fontName = value;
 		}
@@ -149,7 +149,7 @@ namespace castor3d
 			return m_textMaterial;
 		}
 
-		castor::String const & getFontName()const
+		String const & getFontName()const
 		{
 			return m_fontName;
 		}
@@ -176,7 +176,7 @@ namespace castor3d
 		MaterialObs m_disabledTextMaterial{};
 		MaterialObs m_disabledBackgroundMaterial{};
 		MaterialObs m_disabledForegroundMaterial{};
-		castor::String m_fontName{};
+		String m_fontName{};
 	};
 }
 

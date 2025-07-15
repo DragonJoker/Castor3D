@@ -14,7 +14,7 @@
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace smshbase
 	{
@@ -23,7 +23,7 @@ namespace castor3d
 			, uint32_t & currentLocation )
 		{
 			ashes::VkVertexInputBindingDescriptionArray bindings{ { currentBinding
-				, sizeof( castor::Point4f ), VK_VERTEX_INPUT_RATE_VERTEX } };
+				, sizeof( Point4f ), VK_VERTEX_INPUT_RATE_VERTEX } };
 			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { currentLocation++
 				, currentBinding
 				, ( ( submeshData == SubmeshData::ePositions || submeshData == SubmeshData::eTangents )
@@ -34,14 +34,14 @@ namespace castor3d
 			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
 		}
 
-		static castor::Point4fArray convert( castor::Point3fArray const & src )
+		static Point4fArray convert( Point3fArray const & src )
 		{
-			castor::Point4fArray result;
+			Point4fArray result;
 			result.reserve( src.size() );
 
 			for ( auto & value : src )
 			{
-				result.push_back( castor::Point4f{ value->x, value->y, value->z, 1.0f } );
+				result.push_back( Point4f{ value->x, value->y, value->z, 1.0f } );
 			}
 
 			return result;
@@ -50,8 +50,8 @@ namespace castor3d
 
 	void uploadBaseData( SubmeshData submeshData
 		, Submesh const & submesh
-		, castor::Point4fArray const & data
-		, castor::Point4fArray &
+		, Point4fArray const & data
+		, Point4fArray &
 		, UploadData & uploader )
 	{
 		auto count = uint32_t( data.size() );
@@ -61,7 +61,7 @@ namespace castor3d
 		if ( count && buffer.hasData() )
 		{
 			uploader.pushUpload( data.data()
-				, data.size() * sizeof( castor::Point4f )
+				, data.size() * sizeof( Point4f )
 				, buffer.getBuffer(), buffer.getOffset()
 				, VertexAttributeInputState );
 		}
@@ -69,8 +69,8 @@ namespace castor3d
 
 	void uploadBaseData( SubmeshData submeshData
 		, Submesh const & submesh
-		, castor::Point3fArray const & data
-		, castor::Point4fArray & up
+		, Point3fArray const & data
+		, Point4fArray & up
 		, UploadData & uploader )
 	{
 		up = smshbase::convert( data );
@@ -85,11 +85,11 @@ namespace castor3d
 		, ObjectBufferOffset const & bufferOffsets
 		, PipelineFlags const & flags
 		, ashes::BufferCRefArray & buffers
-		, castor::Vector< uint64_t > & offsets
+		, Vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding
 		, uint32_t & currentLocation
-		, castor::UnorderedMap< size_t, ashes::PipelineVertexInputStateCreateInfo > & cache )
+		, HashMap< size_t, ashes::PipelineVertexInputStateCreateInfo > & cache )
 	{
 		auto & bufferChunk = bufferOffsets.getBufferChunk( submeshData );
 
@@ -97,7 +97,7 @@ namespace castor3d
 			&& flags.enableVertexInput( submeshData ) )
 		{
 			auto hash = std::hash< uint32_t >{}( currentBinding );
-			hash = castor::hashCombine( hash, currentLocation );
+			hash = hashCombine( hash, currentLocation );
 			auto layoutIt = cache.find( hash );
 
 			if ( layoutIt == cache.end() )
@@ -125,43 +125,43 @@ namespace castor3d
 	{
 		switch (submeshData)
 		{
-		case castor3d::SubmeshData::ePositions:
+		case SubmeshData::ePositions:
 			type.declMember( "position", ast::type::Kind::eVec4F, ast::type::NotArray, index );
 			++index;
 			break;
-		case castor3d::SubmeshData::eNormals:
+		case SubmeshData::eNormals:
 			type.declMember( "normal", ast::type::Kind::eVec3F, ast::type::NotArray, index );
 			++index;
 			break;
-		case castor3d::SubmeshData::eTangents:
+		case SubmeshData::eTangents:
 			type.declMember( "tangent", ast::type::Kind::eVec4F, ast::type::NotArray, index );
 			++index;
 			break;
-		case castor3d::SubmeshData::eBitangents:
+		case SubmeshData::eBitangents:
 			type.declMember( "bitangent", ast::type::Kind::eVec3F, ast::type::NotArray, index );
 			++index;
 			break;
-		case castor3d::SubmeshData::eTexcoords0:
+		case SubmeshData::eTexcoords0:
 			type.declMember( "texture0", ast::type::Kind::eVec3F, ast::type::NotArray, index );
 			++index;
 			break;
-		case castor3d::SubmeshData::eTexcoords1:
+		case SubmeshData::eTexcoords1:
 			type.declMember( "texture1", ast::type::Kind::eVec3F, ast::type::NotArray, index );
 			++index;
 			break;
-		case castor3d::SubmeshData::eTexcoords2:
+		case SubmeshData::eTexcoords2:
 			type.declMember( "texture2", ast::type::Kind::eVec3F, ast::type::NotArray, index );
 			++index;
 			break;
-		case castor3d::SubmeshData::eTexcoords3:
+		case SubmeshData::eTexcoords3:
 			type.declMember( "texture3", ast::type::Kind::eVec3F, ast::type::NotArray, index );
 			++index;
 			break;
-		case castor3d::SubmeshData::eColours:
+		case SubmeshData::eColours:
 			type.declMember( "colour", ast::type::Kind::eVec3F, ast::type::NotArray, index );
 			++index;
 			break;
-		case castor3d::SubmeshData::ePassMasks:
+		case SubmeshData::ePassMasks:
 			type.declMember( "passMasks", ast::type::Kind::eVec4U, ast::type::NotArray, index );
 			++index;
 			break;
@@ -175,34 +175,34 @@ namespace castor3d
 	{
 		switch (submeshData)
 		{
-		case castor3d::SubmeshData::ePositions:
+		case SubmeshData::ePositions:
 			type.declMember( "position", ast::type::Kind::eVec4F, ast::type::NotArray );
 			break;
-		case castor3d::SubmeshData::eNormals:
+		case SubmeshData::eNormals:
 			type.declMember( "normal", ast::type::Kind::eVec3F, ast::type::NotArray );
 			break;
-		case castor3d::SubmeshData::eTangents:
+		case SubmeshData::eTangents:
 			type.declMember( "tangent", ast::type::Kind::eVec4F, ast::type::NotArray );
 			break;
-		case castor3d::SubmeshData::eBitangents:
+		case SubmeshData::eBitangents:
 			type.declMember( "bitangent", ast::type::Kind::eVec3F, ast::type::NotArray );
 			break;
-		case castor3d::SubmeshData::eTexcoords0:
+		case SubmeshData::eTexcoords0:
 			type.declMember( "texture0", ast::type::Kind::eVec3F, ast::type::NotArray );
 			break;
-		case castor3d::SubmeshData::eTexcoords1:
+		case SubmeshData::eTexcoords1:
 			type.declMember( "texture1", ast::type::Kind::eVec3F, ast::type::NotArray );
 			break;
-		case castor3d::SubmeshData::eTexcoords2:
+		case SubmeshData::eTexcoords2:
 			type.declMember( "texture2", ast::type::Kind::eVec3F, ast::type::NotArray );
 			break;
-		case castor3d::SubmeshData::eTexcoords3:
+		case SubmeshData::eTexcoords3:
 			type.declMember( "texture3", ast::type::Kind::eVec3F, ast::type::NotArray );
 			break;
-		case castor3d::SubmeshData::eColours:
+		case SubmeshData::eColours:
 			type.declMember( "colour", ast::type::Kind::eVec3F, ast::type::NotArray );
 			break;
-		case castor3d::SubmeshData::ePassMasks:
+		case SubmeshData::ePassMasks:
 			type.declMember( "passMasks", ast::type::Kind::eVec4U, ast::type::NotArray );
 			break;
 		default:
@@ -210,8 +210,8 @@ namespace castor3d
 		}
 	}
 
-	castor::String getBaseDataComponentName( SubmeshData submeshData )
+	String getBaseDataComponentName( SubmeshData submeshData )
 	{
-		return cuT( "c3d.submesh." ) + castor::string::lowerCase( getName( submeshData ) );
+		return cuT( "c3d.submesh." ) + string::lowerCase( getName( submeshData ) );
 	}
 }

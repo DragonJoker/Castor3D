@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <utility>
 
-namespace castor
+namespace c3d
 {
 	template< typename NoiseT >
 	class FractalNoiseT
@@ -30,7 +30,7 @@ namespace castor
 	template< typename NoiseT >
 	FractalNoiseT< NoiseT >::FractalNoiseT( uint32_t octaves
 		, NoiseT noise )
-		: m_noise{ castor::move( noise ) }
+		: m_noise{ c3d::move( noise ) }
 		, m_octaves{ octaves }
 	{
 	}
@@ -64,7 +64,7 @@ namespace castor
 		, NoiseT noise )
 	{
 		return FractalNoiseT< NoiseT >{ octaves
-			, castor::move( noise ) };
+			, c3d::move( noise ) };
 	}
 }
 

@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Cache/CacheModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Event */
 	//@{
@@ -35,7 +35,7 @@ namespace castor3d
 		ePostCpuStep = 2,
 		CU_ScopedEnumBounds( ePreGpuStep, ePostCpuStep )
 	};
-	C3D_API castor::String getName( CpuEventType value );
+	C3D_API String getName( CpuEventType value );
 	/**
 	*\~english
 	*\brief
@@ -58,7 +58,7 @@ namespace castor3d
 		ePostRender = 2,
 		CU_ScopedEnumBounds( ePreUpload, ePostRender )
 	};
-	C3D_API castor::String getName( GpuEventType value );
+	C3D_API String getName( GpuEventType value );
 	/**
 	*\~english
 	*\brief
@@ -140,33 +140,33 @@ namespace castor3d
 	*	Spécialisation pour FrameListener.
 	*/
 	template<>
-	struct PtrCacheTraitsT< FrameListener, castor::String >
-		: PtrCacheTraitsBaseT< FrameListener, castor::String >
+	struct PtrCacheTraitsT< FrameListener, String >
+		: PtrCacheTraitsBaseT< FrameListener, String >
 	{
 		using ResT = FrameListener;
-		using KeyT = castor::String;
+		using KeyT = String;
 		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
 		using ElementT = typename Base::ElementT;
 		using ElementPtrT = typename Base::ElementPtrT;
 
-		C3D_API static const castor::String Name;
+		C3D_API static const String Name;
 	};
 
-	using FrameListenerCacheTraits = PtrCacheTraitsT< FrameListener, castor::String >;
-	using FrameListenerCache = castor::ResourceCacheT< FrameListener
-		, castor::String
+	using FrameListenerCacheTraits = PtrCacheTraitsT< FrameListener, String >;
+	using FrameListenerCache = ResourceCacheT< FrameListener
+		, String
 		, FrameListenerCacheTraits >;
 
 	using FrameListenerRes = FrameListenerCacheTraits::ElementPtrT;
 	using FrameListenerResPtr = FrameListenerCacheTraits::ElementObsT;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, CpuFrameEvent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, FrameListener, C3D_API );
-	CU_DeclareSmartPtr( castor3d, GpuFrameEvent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, CpuFunctorEvent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, GpuFunctorEvent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, FrameListenerCache, C3D_API );
+	CU_DeclareSmartPtr( c3d, CpuFrameEvent, C3D_API );
+	CU_DeclareSmartPtr( c3d, FrameListener, C3D_API );
+	CU_DeclareSmartPtr( c3d, GpuFrameEvent, C3D_API );
+	CU_DeclareSmartPtr( c3d, CpuFunctorEvent, C3D_API );
+	CU_DeclareSmartPtr( c3d, GpuFunctorEvent, C3D_API );
+	CU_DeclareSmartPtr( c3d, FrameListenerCache, C3D_API );
 
 	CU_DeclareVector( CpuFrameEventUPtr, CpuFrameEventPtr );
 	CU_DeclareVector( GpuFrameEventUPtr, GpuFrameEventPtr );

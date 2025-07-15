@@ -1,6 +1,6 @@
 #include "CastorUtils/Miscellaneous/MiscellaneousModule.hpp"
 
-namespace castor::debug
+namespace c3d::debug
 {
 #if defined( NDEBUG )
 

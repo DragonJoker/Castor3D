@@ -12,7 +12,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	PbrLightingModel::PbrLightingModel( LightingModelID lightingModelId
 		, sdw::ShaderWriter & writer
@@ -39,7 +39,7 @@ namespace castor3d::shader
 	{
 	}
 
-	castor::StringView PbrLightingModel::getName()
+	String PbrLightingModel::getName()
 	{
 		return cuT( "c3d.pbr" );
 	}
@@ -54,7 +54,7 @@ namespace castor3d::shader
 		, Lights & lights
 		, bool enableVolumetric )
 	{
-		return castor::makeUniqueDerived< LightingModel, PbrLightingModel >( lightingModelId
+		return makeUniqueDerived< LightingModel, PbrLightingModel >( lightingModelId
 			, writer
 			, materials
 			, utils

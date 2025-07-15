@@ -23,45 +23,45 @@ namespace smaa
 {
 	EdgeDetection::EdgeDetection( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
-		, castor3d::RenderTarget & renderTarget
-		, castor3d::RenderDevice const & device
+		, c3d::RenderTarget & renderTarget
+		, c3d::RenderDevice const & device
 		, SmaaUbo const & ubo
 		, SmaaConfig const & config
-		, castor3d::ShaderPtr shader
+		, c3d::ShaderPtr shader
 		, bool const * enabled
 		, uint32_t const * passIndex
 		, uint32_t passCount )
 		: m_device{ device }
 		, m_graph{ graph }
 		, m_config{ config }
-		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
+		, m_extent{ c3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
 		, m_outColour{ m_device
 			, renderTarget.getResources()
 			, cuT( "SMEDRes" )
-			, { castor3d::ImageCreateFlags::eNone
+			, { c3d::ImageCreateFlags::eNone
 				, m_extent, 1u, 1u
-				, castor::PixelFormat::eR8G8B8A8_UNORM
-				, ( castor3d::ImageUsageFlags::eSampled
-					| castor3d::ImageUsageFlags::eColorAttachment
-					| castor3d::ImageUsageFlags::eTransferSrc ) }
+				, c3d::PixelFormat::eR8G8B8A8_UNORM
+				, ( c3d::ImageUsageFlags::eSampled
+					| c3d::ImageUsageFlags::eColorAttachment
+					| c3d::ImageUsageFlags::eTransferSrc ) }
 			, {} }
 		, m_outDepth{ m_device
 			, renderTarget.getResources()
 			, cuT( "SMEDStRes" )
-			, { castor3d::ImageCreateFlags::eNone
+			, { c3d::ImageCreateFlags::eNone
 				, m_extent, 1u, 1u
 				, device.selectSuitableStencilFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
 					| VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT )
-				, ( castor3d::ImageUsageFlags::eSampled
-					| castor3d::ImageUsageFlags::eDepthStencilAttachment ) }
+				, ( c3d::ImageUsageFlags::eSampled
+					| c3d::ImageUsageFlags::eDepthStencilAttachment ) }
 			, {} }
 		, m_outDepthStencilView{ m_graph.createView( crg::ImageViewData{ "SMEDStRes"
 			, m_outDepth.imageId
-			, castor3d::ImageViewCreateFlags::eNone
-			, castor3d::ImageViewType::e2D
+			, c3d::ImageViewCreateFlags::eNone
+			, c3d::ImageViewType::e2D
 			, getFormat( m_outDepth.imageId )
-			, { castor3d::ImageAspectFlags::eStencil, 0u, 1u, 0u, 1u } } ) }
-		, m_shader{ cuT( "SmaaEdge" ), castor::move( shader ) }
+			, { c3d::ImageAspectFlags::eStencil, 0u, 1u, 0u, 1u } } ) }
+		, m_shader{ cuT( "SmaaEdge" ), c3d::move( shader ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_pass{ m_graph.createPass( "EdgeDetection"
 			, [this, &device, passIndex, enabled, passCount]( crg::FramePass const & framePass
@@ -75,7 +75,7 @@ namespace smaa
 				dsState->back = dsState->front;
 				auto builder = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
-					.renderSize( castor3d::makeExtent2D( m_extent ) )
+					.renderSize( c3d::makeExtent2D( m_extent ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.depthStencilState( dsState )
@@ -90,7 +90,7 @@ namespace smaa
 					, context
 					, graph
 					, crg::ru::Config{ passCount } );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }
@@ -99,9 +99,9 @@ namespace smaa
 		ubo.createPassBinding( m_pass
 			, SmaaUboIdx );
 		m_pass.addOutputStencilView( m_outDepthStencilView
-			, castor3d::defaultClearDepthStencil );
+			, c3d::defaultClearDepthStencil );
 		m_pass.addOutputColourView( m_outColour.targetViewId
-			, castor3d::transparentBlackClearColor );
+			, c3d::transparentBlackClearColor );
 		m_outColour.create();
 		m_outDepth.create();
 	}
@@ -112,19 +112,19 @@ namespace smaa
 		m_outDepth.destroy();
 	}
 
-	void EdgeDetection::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void EdgeDetection::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 		visitor.visit( cuT( "SMAA EdgeDetection Colour Result" )
 			, m_outColour
 			, m_graph.getFinalLayoutState( m_outColour.sampledViewId ).layout
-			, castor3d::TextureFactors{}.invert( true ) );
+			, c3d::TextureFactors{}.invert( true ) );
 	}
 
 	void EdgeDetection::getVertexProgram( sdw::TraditionalGraphicsWriter & writer
 		, SmaaData const & smaaData )
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
 		auto SMAAEdgeDetectionVS = writer.implementFunction< sdw::Void >( "SMAAEdgeDetectionVS"
 			, [&]( sdw::Vec2 const & texCoord
@@ -137,7 +137,7 @@ namespace smaa
 			, sdw::InVec2{ writer, "texCoord" }
 			, sdw::OutVec4Array{ writer, "offset", 3u } );
 
-		writer.implementEntryPointT< c3d::PosUv2FT, EDVertexT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+		writer.implementEntryPointT< c3ds::PosUv2FT, EDVertexT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
 			, sdw::VertexOutT< EDVertexT > out )
 			{
 				out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );

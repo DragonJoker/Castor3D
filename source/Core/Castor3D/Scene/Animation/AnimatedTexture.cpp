@@ -10,40 +10,40 @@
 #include "Castor3D/Scene/Animation/Texture/TextureAnimationInstance.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
-CU_ImplementSmartPtr( castor3d, AnimatedTexture )
+CU_ImplementSmartPtr( c3d, AnimatedTexture )
 
-namespace castor3d
+namespace c3d
 {
 	namespace anmtex
 	{
-		static castor::String write( castor::String const & name
+		static String write( String const & name
 			, TextureFlagConfiguration const & config )
 		{
-			auto stream = castor::makeStringStream();
+			auto stream = makeStringStream();
 			stream << name
 				<< cuT( "_" ) << config.flag
 				<< cuT( "0x" ) << std::hex << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << config.componentsMask;
 			return stream.str();
 		}
 
-		static castor::String write( castor::String const & name, float v )
+		static String write( String const & name, float v )
 		{
-			auto stream = castor::makeStringStream();
+			auto stream = makeStringStream();
 			stream << name << std::setprecision( 2 ) << std::fixed << v;
 			return stream.str();
 		}
 
-		static castor::String write( castor::String const & name, bool v )
+		static String write( String const & name, bool v )
 		{
-			auto stream = castor::makeStringStream();
+			auto stream = makeStringStream();
 			stream << name << v;
 			return stream.str();
 		}
 
-		static castor::String getTexName( TextureSourceInfo const & sourceInfo
+		static String getTexName( TextureSourceInfo const & sourceInfo
 			, TextureConfiguration const & configuration )
 		{
-			castor::String result{ sourceInfo.relative() };
+			String result{ sourceInfo.relative() };
 			result += write( cuT( "_c0" ), configuration.components[0] );
 			result += write( cuT( "_c1" ), configuration.components[1] );
 			result += write( cuT( "_c2" ), configuration.components[2] );
@@ -63,13 +63,13 @@ namespace castor3d
 		, Pass & pass )
 		: AnimatedObject{ AnimationType::eTexture
 			, pass.getOwner()->getName()
-				+ cuT( "_" ) + castor::string::toString( pass.getId() )
+				+ cuT( "_" ) + string::toString( pass.getId() )
 				+ cuT( "_" ) + anmtex::getTexName( sourceInfo, config ) }
 		, m_pass{ pass }
 	{
 	}
 
-	void AnimatedTexture::update( castor::Milliseconds const & elpased )
+	void AnimatedTexture::update( Milliseconds const & elpased )
 	{
 		if ( m_playingAnimation )
 		{
@@ -106,14 +106,14 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedTexture::doAddAnimation( castor::String const & name )
+	void AnimatedTexture::doAddAnimation( String const & name )
 	{
 		if ( auto it = m_animations.find( name );
 			it == m_animations.end() && m_texture && m_texture->hasAnimation() )
 		{
 			auto & animation = m_texture->getAnimation();
-			auto instance = castor::makeUniqueDerived< AnimationInstance, TextureAnimationInstance >( *this, animation );
-			m_animations.try_emplace( name, castor::move( instance ) );
+			auto instance = makeUniqueDerived< AnimationInstance, TextureAnimationInstance >( *this, animation );
+			m_animations.try_emplace( name, c3d::move( instance ) );
 			m_pass.getOwner()->getEngine()->getMaterialCache().registerTexture( *this );
 			startAnimation( animation.getName() );
 		}

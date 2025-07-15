@@ -17,19 +17,19 @@ namespace dof
 {
 	struct DepthOfFieldConfig
 	{
-		void setParameters( castor3d::Parameters parameters );
-		void accept( castor3d::ConfigurationVisitorBase & visitor );
-		bool write( castor::StringStream & file, castor::String const & tabs )const;
-		static castor::AttributeParsers createParsers();
-		static castor::StrUInt32Map createSections();
+		void setParameters( c3d::Parameters parameters );
+		void accept( c3d::ConfigurationVisitorBase & visitor );
+		bool write( c3d::StringStream & file, c3d::String const & tabs )const;
+		static c3d::AttributeParsers createParsers();
+		static c3d::StrUInt32Map createSections();
 
-		castor::RangedValue< float > focalDistance{ 10.0f, castor::makeRange( 0.0f, 100.0f ) };
-		castor::RangedValue< float > focalLength{ 1.0f, castor::makeRange( 0.0f, 100.0f ) };
-		castor::RangedValue< float > bokehScale{ 1.0f, castor::makeRange( 0.0f, 10.0f ) };
+		c3d::RangedValue< float > focalDistance{ 10.0f, c3d::makeRange( 0.0f, 100.0f ) };
+		c3d::RangedValue< float > focalLength{ 1.0f, c3d::makeRange( 0.0f, 100.0f ) };
+		c3d::RangedValue< float > bokehScale{ 1.0f, c3d::makeRange( 0.0f, 10.0f ) };
 		bool enableFarBlur;
 
-		castor::Point2f pixelStepFull{ 1.0f, 1.0f };
-		castor::Point2f pixelStepHalf{ 1.0f, 1.0f };
+		c3d::Point2f pixelStepFull{ 1.0f, 1.0f };
+		c3d::Point2f pixelStepHalf{ 1.0f, 1.0f };
 	};
 
 	struct DepthOfFieldUboConfiguration
@@ -39,11 +39,11 @@ namespace dof
 		float bokehScale{ 1.0f };
 		uint32_t enableFarBlur{ 1u };
 
-		castor::Point2f pixelStepFull{ 1.0f, 1.0f };
-		castor::Point2f pixelStepHalf{ 1.0f, 1.0f };
+		c3d::Point2f pixelStepFull{ 1.0f, 1.0f };
+		c3d::Point2f pixelStepHalf{ 1.0f, 1.0f };
 
-		std::array< castor::Point4f, 64 > points64;
-		std::array< castor::Point4f, 16 > points16;
+		std::array< c3d::Point4f, 64 > points64;
+		std::array< c3d::Point4f, 16 > points16;
 	};
 
 	struct DepthOfFieldData
@@ -82,7 +82,7 @@ namespace dof
 		using Configuration = DepthOfFieldUboConfiguration;
 
 	public:
-		explicit DepthOfFieldUbo( castor3d::RenderDevice const & device );
+		explicit DepthOfFieldUbo( c3d::RenderDevice const & device );
 		~DepthOfFieldUbo();
 		void cpuUpdate( DepthOfFieldConfig const & data );
 
@@ -98,18 +98,18 @@ namespace dof
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
 
-		castor3d::UniformBufferOffsetT< Configuration > const & getUbo()const
+		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
 			return m_ubo;
 		}
 
 	public:
-		static const castor::MbString Buffer;
-		static const castor::MbString Data;
+		static const c3d::MbString Buffer;
+		static const c3d::MbString Data;
 
 	private:
-		castor3d::RenderDevice const & m_device;
-		castor3d::UniformBufferOffsetT< Configuration > m_ubo;
+		c3d::RenderDevice const & m_device;
+		c3d::UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

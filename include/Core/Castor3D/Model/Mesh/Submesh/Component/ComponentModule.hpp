@@ -15,7 +15,7 @@ See LICENSE file in root folder
 #define C3D_PluginMakeSubmeshRenderComponentName( p, x ) C3D_Join4Strings( p, "submesh", "render", x )
 #define C3D_MakeSubmeshRenderComponentName( x ) C3D_PluginMakeSubmeshRenderComponentName( "c3d", x )
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Model */
 	//@{
@@ -49,14 +49,14 @@ namespace castor3d
 		bool hasRenderFlag{};
 	};
 
-	using SubmeshComponentCombines = castor::Vector< SubmeshComponentCombine >;
+	using SubmeshComponentCombines = Vector< SubmeshComponentCombine >;
 
 	C3D_API bool operator==( SubmeshComponentCombine const & lhs, SubmeshComponentCombine const & rhs )noexcept;
 
 	C3D_API bool hasAny( SubmeshComponentCombine const & lhs
 		, SubmeshComponentFlag rhs )noexcept;
 	C3D_API bool hasAny( SubmeshComponentCombine const & lhs
-		, castor::Vector< SubmeshComponentFlag > const & rhs )noexcept;
+		, Vector< SubmeshComponentFlag > const & rhs )noexcept;
 	C3D_API void remFlags( SubmeshComponentCombine & lhs
 		, SubmeshComponentFlag rhs )noexcept;
 	C3D_API void remFlags( SubmeshComponentCombine & lhs
@@ -75,7 +75,7 @@ namespace castor3d
 	\~french
 	\brief		Composant de sous-maillage détenant des données basiques d'un sous-maillage.
 	*/
-	template< SubmeshData SubmeshDataT, typename DataT = castor::Point3f >
+	template< SubmeshData SubmeshDataT, typename DataT = Point3f >
 	class BaseDataComponentT;
 	/**
 	\~english
@@ -239,7 +239,7 @@ namespace castor3d
 	\~french
 	\brief		Le composant de sous-maillage contenant les tangentes.
 	*/
-	using TangentsComponent = BaseDataComponentT< SubmeshData::eTangents, castor::Point4f >;
+	using TangentsComponent = BaseDataComponentT< SubmeshData::eTangents, Point4f >;
 	/**
 	\~english
 	\brief		The submesh component holding texture coordinates.
@@ -283,63 +283,58 @@ namespace castor3d
 	*/
 	using VelocityComponent = BaseDataComponentT< SubmeshData::eVelocity >;
 
-	using SubmeshComponentDataUPtr = castor::RawUniquePtr< SubmeshComponentData >;
+	using SubmeshComponentDataUPtr = RawUniquePtr< SubmeshComponentData >;
 	using SubmeshComponentDataRPtr = SubmeshComponentData *;
-	using SubmeshRenderDataPtr = castor::RawUniquePtr< SubmeshRenderData >;
-	using SubmeshRenderShaderPtr = castor::RawUniquePtr< SubmeshRenderShader >;
+	using SubmeshRenderDataPtr = RawUniquePtr< SubmeshRenderData >;
+	using SubmeshRenderShaderPtr = RawUniquePtr< SubmeshRenderShader >;
 
 	namespace shader
 	{
 		struct SubmeshVertexSurfaceShader;
 		struct SubmeshRasterSurfaceShader;
 
-		using SubmeshVertexSurfaceShaderPtr = castor::RawUniquePtr< SubmeshVertexSurfaceShader >;
-		using SubmeshRasterSurfaceShaderPtr = castor::RawUniquePtr< SubmeshRasterSurfaceShader >;
+		using SubmeshVertexSurfaceShaderPtr = RawUniquePtr< SubmeshVertexSurfaceShader >;
+		using SubmeshRasterSurfaceShaderPtr = RawUniquePtr< SubmeshRasterSurfaceShader >;
 	}
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, DefaultRenderComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, IndexMapping, C3D_API );
-	CU_DeclareSmartPtr( castor3d, InstantiationComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LineMapping, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MeshletComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MorphComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PassMasksComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SkinComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SubmeshComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SubmeshComponentPlugin, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SubmeshComponentRegister, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TriFaceMapping, C3D_API );
+	CU_DeclareSmartPtr( c3d, DefaultRenderComponent, C3D_API );
+	CU_DeclareSmartPtr( c3d, IndexMapping, C3D_API );
+	CU_DeclareSmartPtr( c3d, InstantiationComponent, C3D_API );
+	CU_DeclareSmartPtr( c3d, LineMapping, C3D_API );
+	CU_DeclareSmartPtr( c3d, MeshletComponent, C3D_API );
+	CU_DeclareSmartPtr( c3d, MorphComponent, C3D_API );
+	CU_DeclareSmartPtr( c3d, PassMasksComponent, C3D_API );
+	CU_DeclareSmartPtr( c3d, SkinComponent, C3D_API );
+	CU_DeclareSmartPtr( c3d, SubmeshComponent, C3D_API );
+	CU_DeclareSmartPtr( c3d, SubmeshComponentPlugin, C3D_API );
+	CU_DeclareSmartPtr( c3d, SubmeshComponentRegister, C3D_API );
+	CU_DeclareSmartPtr( c3d, TriFaceMapping, C3D_API );
 
 	CU_DeclareMap( SubmeshComponentID, SubmeshComponentUPtr, SubmeshComponentID );
 	//! Face array
 	CU_DeclareVector( Face, Face );
 	/** @endcond */
 
-	using CreateSubmeshComponentPlugin = castor::Function< SubmeshComponentPluginUPtr( SubmeshComponentRegister const & ) >;
+	using CreateSubmeshComponentPlugin = Function< SubmeshComponentPluginUPtr( SubmeshComponentRegister const & ) >;
 
 	//@}
 	//@}
 	//@}
 	//@}
-}
 
-namespace castor
-{
-	template< castor3d::SubmeshData SubmeshDataT, typename DataT >
-	struct Deleter< castor3d::BaseDataComponentT< SubmeshDataT, DataT > >
+	template< SubmeshData SubmeshDataT, typename DataT >
+	struct Deleter< BaseDataComponentT< SubmeshDataT, DataT > >
 	{
-		void operator()( castor3d::BaseDataComponentT< SubmeshDataT, DataT > * pointer )noexcept
+		void operator()( BaseDataComponentT< SubmeshDataT, DataT > * pointer )noexcept
 		{
 			delete pointer;
 		}
 	};
-}
-namespace castor3d
-{
-	template< castor3d::SubmeshData SubmeshDataT, typename DataT >
-	using BaseDataComponentUPtrT = castor::UniquePtr< BaseDataComponentT< SubmeshDataT, DataT > >;
-	template< castor3d::SubmeshData SubmeshDataT, typename DataT >
+
+	template< SubmeshData SubmeshDataT, typename DataT >
+	using BaseDataComponentUPtrT = UniquePtr< BaseDataComponentT< SubmeshDataT, DataT > >;
+	template< SubmeshData SubmeshDataT, typename DataT >
 	using BaseDataComponentRPtrT = BaseDataComponentT< SubmeshDataT, DataT > *;
 }
 

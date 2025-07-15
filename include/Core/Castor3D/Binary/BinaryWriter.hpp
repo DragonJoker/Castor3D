@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Binary/ChunkWriter.hpp"
 #include "Castor3D/Miscellaneous/Version.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	template< class TWritten >
 	class BinaryWriterBase
@@ -27,7 +27,7 @@ namespace castor3d
 		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
 		inline bool write( TWritten const & obj
-			, castor::BinaryFile & file )
+			, BinaryFile & file )
 		{
 			BinaryChunk chunk{ ChunkType::eCmshFile };
 			bool result = doWriteHeader( chunk );
@@ -88,8 +88,8 @@ namespace castor3d
 
 			if ( result )
 			{
-				castor::StringStream stream{ castor::makeStringStream() };
-				stream << cuT( "Castor 3D - Version " ) << castor3d::Version{};
+				StringStream stream{ makeStringStream() };
+				stream << cuT( "Castor 3D - Version " ) << Version{};
 				result = doWriteChunk( stream.str(), ChunkType::eName, schunk );
 			}
 
@@ -161,7 +161,7 @@ namespace castor3d
 		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
 		template< typename T, size_t Count >
-		inline bool doWriteChunk( castor::Array< T, Count > const & values
+		inline bool doWriteChunk( Array< T, Count > const & values
 			, ChunkType chunkType
 			, BinaryChunk & chunk )const
 		{
@@ -182,7 +182,7 @@ namespace castor3d
 		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
 		template< typename T >
-		inline bool doWriteChunk( castor::Vector< T > const & values
+		inline bool doWriteChunk( Vector< T > const & values
 			, ChunkType chunkType
 			, BinaryChunk & chunk )const
 		{

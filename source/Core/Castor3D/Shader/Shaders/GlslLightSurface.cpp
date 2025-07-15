@@ -6,12 +6,12 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	LightSurface::LightSurface( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: StructInstance{ writer, castor::move( expr ), enabled }
+		: StructInstance{ writer, c3d::move( expr ), enabled }
 		, m_eyePosition{ getMember< sdw::Vec3 >( "eyePosition" ) }
 		, m_worldPosition{ getMember< DerivVec4 >( "worldPosition" ) }
 		, m_viewPosition{ getMember< DerivVec3 >( "viewPosition" ) }
@@ -57,7 +57,7 @@ namespace castor3d::shader
 	{
 		auto type = cache.getStruct( ast::type::MemoryLayout::eC
 			, "C3D_LightSurface"
-				+ ( enableDotProducts ? castor::MbString{ "Prods" } : castor::MbString{} ) );
+				+ ( enableDotProducts ? MbString{ "Prods" } : MbString{} ) );
 
 		if ( type->empty() )
 		{
@@ -90,7 +90,7 @@ namespace castor3d::shader
 	}
 
 	LightSurface LightSurface::create( sdw::ShaderWriter & writer
-		, castor::MbString const & name
+		, MbString const & name
 		, sdw::Vec3 const eye
 		, DerivVec4 const world
 		, DerivVec3 const view
@@ -105,7 +105,7 @@ namespace castor3d::shader
 	}
 
 	LightSurface LightSurface::create( sdw::ShaderWriter & writer
-		, castor::MbString const & name
+		, MbString const & name
 		, DerivVec4 const world
 		, sdw::Vec3 const clip
 		, DerivVec3 const normal
@@ -117,7 +117,7 @@ namespace castor3d::shader
 
 	LightSurface LightSurface::create( sdw::ShaderWriter & writer
 		, Utils & utils
-		, castor::MbString const & name
+		, MbString const & name
 		, sdw::Vec3 const eye
 		, DerivVec4 const world
 		, DerivVec3 const view
@@ -199,6 +199,6 @@ namespace castor3d::shader
 			inits.push_back( makeExpr( derivFloat( 0.0_f ) ) ); // HdotL
 		}
 
-		return sdw::makeAggrInit( type, castor::move( inits ) );
+		return sdw::makeAggrInit( type, c3d::move( inits ) );
 	}
 }

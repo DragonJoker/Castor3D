@@ -20,9 +20,9 @@ extern "C"
 
 		try
 		{
-			auto buffer = castor::PxBufferBase::create( { size->width, size->height }, castor::PixelFormat( pf ) );
+			auto buffer = c3d::PxBufferBase::create( { size->width, size->height }, c3d::PixelFormat( pf ) );
 			C3D_SafeAlloc( *result, C3DPixelBuffer );
-			( *result )->internal = castor::move( buffer );
+			( *result )->internal = c3d::move( buffer );
 		}
 		C3D_CatchCommonExceptions()
 

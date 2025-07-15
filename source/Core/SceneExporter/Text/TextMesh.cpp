@@ -5,10 +5,8 @@
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< Mesh >::TextWriter( String const & tabs
 		, String const & subfolder )
 		: TextWriterT< Mesh >{ tabs }

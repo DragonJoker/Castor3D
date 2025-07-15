@@ -10,10 +10,10 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, SkeletonCache )
-CU_ImplementSmartPtr( castor3d, Skeleton )
+CU_ImplementSmartPtr( c3d, SkeletonCache )
+CU_ImplementSmartPtr( c3d, Skeleton )
 
-namespace castor3d
+namespace c3d
 {
 	namespace skel
 	{
@@ -29,13 +29,13 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Path path;
-				castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+				Path path;
+				Path pathFile = context.file.getPath() / params[0]->get( path );
 				Parameters parameters;
 
 				if ( params.size() > 1 )
 				{
-					auto importParams = params[1]->get< castor::String >();
+					auto importParams = params[1]->get< String >();
 					fillMeshImportParameters( context, importParams, parameters );
 				}
 
@@ -62,8 +62,8 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Path path;
-				castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+				Path path;
+				Path pathFile = context.file.getPath() / params[0]->get( path );
 				Parameters parameters;
 
 				if ( auto prefix = getPrefix( *blockContext );
@@ -78,12 +78,12 @@ namespace castor3d
 
 				if ( params.size() > 1 )
 				{
-					auto importParams = params[1]->get< castor::String >();
+					auto importParams = params[1]->get< String >();
 					fillMeshImportParameters( context, importParams, parameters );
 				}
 
 				auto const & engine = *getEngine( *blockContext );
-				auto extension = castor::string::lowerCase( path.getExtension() );
+				auto extension = string::lowerCase( path.getExtension() );
 
 				if ( !engine.getImporterFileFactory().isTypeRegistered( extension ) )
 				{
@@ -91,7 +91,7 @@ namespace castor3d
 				}
 				else
 				{
-					castor::String preferredImporter = cuT( "any" );
+					String preferredImporter = cuT( "any" );
 					parameters.get( cuT( "preferred_importer" ), preferredImporter );
 					auto file = engine.getImporterFileFactory().create( extension
 						, preferredImporter
@@ -103,7 +103,7 @@ namespace castor3d
 					{
 						for ( auto animName : file->listSkeletonAnimations( *blockContext->skeleton ) )
 						{
-							auto animation = castor::makeUnique< SkeletonAnimation >( *blockContext->skeleton
+							auto animation = makeUnique< SkeletonAnimation >( *blockContext->skeleton
 								, animName );
 
 							if ( !importer->importData( *animation
@@ -114,7 +114,7 @@ namespace castor3d
 							}
 							else
 							{
-								blockContext->skeleton->addAnimation( castor::ptrRefCast< Animation >( animation ) );
+								blockContext->skeleton->addAnimation( ptrRefCast< Animation >( animation ) );
 							}
 						}
 					}
@@ -135,9 +135,9 @@ namespace castor3d
 			}
 			else
 			{
-				auto animRename = params[0]->get< castor::String >();
-				auto path = params[1]->get< castor::Path >();
-				castor::Path pathFile = context.file.getPath() / path;
+				auto animRename = params[0]->get< String >();
+				auto path = params[1]->get< Path >();
+				Path pathFile = context.file.getPath() / path;
 				Parameters parameters;
 
 				if ( auto prefix = getPrefix( *blockContext );
@@ -152,12 +152,12 @@ namespace castor3d
 
 				if ( params.size() > 2 )
 				{
-					auto importParams = params[2]->get< castor::String >();
+					auto importParams = params[2]->get< String >();
 					fillMeshImportParameters( context, importParams, parameters );
 				}
 
 				auto const & engine = *getEngine( *blockContext );
-				auto extension = castor::string::lowerCase( path.getExtension() );
+				auto extension = string::lowerCase( path.getExtension() );
 
 				if ( !engine.getImporterFileFactory().isTypeRegistered( extension ) )
 				{
@@ -165,7 +165,7 @@ namespace castor3d
 				}
 				else
 				{
-					castor::String preferredImporter = cuT( "any" );
+					String preferredImporter = cuT( "any" );
 					parameters.get( cuT( "preferred_importer" ), preferredImporter );
 					auto file = engine.getImporterFileFactory().create( extension
 						, preferredImporter
@@ -187,7 +187,7 @@ namespace castor3d
 						}
 						else
 						{
-							auto animation = castor::makeUnique< SkeletonAnimation >( *blockContext->skeleton
+							auto animation = makeUnique< SkeletonAnimation >( *blockContext->skeleton
 								, *animations.begin() );
 
 							if ( !importer->importData( *animation
@@ -199,7 +199,7 @@ namespace castor3d
 							else
 							{
 								animation->rename( animRename );
-								blockContext->skeleton->addAnimation( castor::ptrRefCast< Animation >( animation ) );
+								blockContext->skeleton->addAnimation( ptrRefCast< Animation >( animation ) );
 							}
 						}
 					}
@@ -227,11 +227,11 @@ namespace castor3d
 		CU_EndAttributePop()
 	}
 
-	const castor::String PtrCacheTraitsT< castor3d::Skeleton, castor::String >::Name = cuT( "Skeleton" );
+	const String PtrCacheTraitsT< Skeleton, String >::Name = cuT( "Skeleton" );
 
-	Skeleton::Skeleton( castor::String name
+	Skeleton::Skeleton( String name
 		, Scene & scene )
-		: castor::Named{ name }
+		: Named{ name }
 		, Animable{ *scene.getEngine() }
 		, m_scene{ &scene }
 	{
@@ -242,25 +242,25 @@ namespace castor3d
 		Animable::cleanupAnimations();
 	}
 
-	SkeletonNode * Skeleton::createNode( castor::String name )
+	SkeletonNode * Skeleton::createNode( String name )
 	{
-		auto node = castor::makeUnique< SkeletonNode >( castor::move( name ), *this );
+		auto node = makeUnique< SkeletonNode >( c3d::move( name ), *this );
 		auto result = node.get();
-		m_nodes.emplace_back( castor::move( node ) );
+		m_nodes.emplace_back( c3d::move( node ) );
 		return result;
 	}
 
-	BoneNode * Skeleton::createBone( castor::String name
-		, castor::Matrix4x4f const & offset )
+	BoneNode * Skeleton::createBone( String name
+		, Matrix4x4f const & offset )
 	{
-		auto node = castor::makeUniqueDerived< SkeletonNode, BoneNode >( castor::move( name ), *this, offset, uint32_t( m_bones.size() ) );
+		auto node = makeUniqueDerived< SkeletonNode, BoneNode >( c3d::move( name ), *this, offset, uint32_t( m_bones.size() ) );
 		auto result = &static_cast< BoneNode & >( *node );
-		m_nodes.emplace_back( castor::move( node ) );
+		m_nodes.emplace_back( c3d::move( node ) );
 		m_bones.emplace_back( result );
 		return result;
 	}
 
-	SkeletonNode * Skeleton::findNode( castor::String const & name )const
+	SkeletonNode * Skeleton::findNode( String const & name )const
 	{
 		auto it = std::find_if( m_nodes.begin()
 			, m_nodes.end()
@@ -325,23 +325,23 @@ namespace castor3d
 
 		if ( parentDist > nodeDist )
 		{
-			auto parentNode = castor::move( *parentIt );
+			auto parentNode = c3d::move( *parentIt );
 			m_nodes.erase( parentIt );
-			m_nodes.emplace( std::next( m_nodes.begin(), nodeDist ), castor::move( parentNode ) );
+			m_nodes.emplace( std::next( m_nodes.begin(), nodeDist ), c3d::move( parentNode ) );
 		}
 	}
 
-	SkeletonAnimation & Skeleton::createAnimation( castor::String const & name )
+	SkeletonAnimation & Skeleton::createAnimation( String const & name )
 	{
 		if ( !hasAnimation( name ) )
 		{
-			addAnimation( castor::makeUniqueDerived< Animation, SkeletonAnimation >( *this, name ) );
+			addAnimation( makeUniqueDerived< Animation, SkeletonAnimation >( *this, name ) );
 		}
 
 		return doGetAnimation< SkeletonAnimation >( name );
 	}
 
-	void Skeleton::removeAnimation( castor::String const & name )
+	void Skeleton::removeAnimation( String const & name )
 	{
 		if ( hasAnimation( name ) )
 		{
@@ -397,9 +397,8 @@ namespace castor3d
 		}
 	}
 
-	void Skeleton::addParsers( castor::AttributeParsers & result )
+	void Skeleton::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< SkeletonContext > context{ result, CSCNSection::eSkeleton, CSCNSection::eScene };
 
 		context.addParser( cuT( "import" ), skel::parserSkeletonImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
@@ -408,7 +407,7 @@ namespace castor3d
 		context.addPopParser( cuT( "}" ), skel::parserSkeletonEnd );
 	}
 
-	castor::String getPrefix( SkeletonContext const & context )
+	String getPrefix( SkeletonContext const & context )
 	{
 		return getPrefix( *context.scene );
 	}

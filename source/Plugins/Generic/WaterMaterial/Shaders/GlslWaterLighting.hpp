@@ -11,56 +11,56 @@ See LICENSE file in root folder
 namespace water::shader
 {
 	class WaterLightingModel
-		: public c3d::LightingModel
+		: public c3ds::LightingModel
 	{
 	public:
-		WaterLightingModel( castor3d::LightingModelID lightingModelId
+		WaterLightingModel( c3d::LightingModelID lightingModelId
 			, sdw::ShaderWriter & writer
-			, c3d::Materials const & materials
-			, c3d::Utils & utils
-			, c3d::BRDFHelpers & brdfHelpers
-			, c3d::LightingModelSpec spec
-			, c3d::Shadow & shadowModel
-			, c3d::Lights & lights
+			, c3ds::Materials const & materials
+			, c3ds::Utils & utils
+			, c3ds::BRDFHelpers & brdfHelpers
+			, c3ds::LightingModelSpec spec
+			, c3ds::Shadow & shadowModel
+			, c3ds::Lights & lights
 			, bool enableVolumetric );
-		static castor::StringView getName();
-		static c3d::LightingModelPtr create( castor3d::LightingModelID lightingModelId
-			, c3d::LightingModelDesc const & desc
+		static c3d::StringView getName();
+		static c3ds::LightingModelPtr create( c3d::LightingModelID lightingModelId
+			, c3ds::LightingModelDesc const & desc
 			, sdw::ShaderWriter & writer
-			, c3d::Materials const & materials
-			, c3d::Utils & utils
-			, c3d::BRDFHelpers & brdfHelpers
-			, c3d::Shadow & shadowModel
-			, c3d::Lights & lights
+			, c3ds::Materials const & materials
+			, c3ds::Utils & utils
+			, c3ds::BRDFHelpers & brdfHelpers
+			, c3ds::Shadow & shadowModel
+			, c3ds::Lights & lights
 			, bool enableVolumetric );
 
 	private:
-		void doCombine( c3d::DebugOutputCategory const & debugOutput
-			, c3d::ReflectionModel & reflections
+		void doCombine( c3ds::DebugOutputCategory const & debugOutput
+			, c3ds::ReflectionModel & reflections
 			, sdw::CombinedImage2DRgba32 const & brdf
-			, c3d::BlendComponents const & components
-			, c3d::LightSurface const & lightSurface
+			, c3ds::BlendComponents const & components
+			, c3ds::LightSurface const & lightSurface
 			, sdw::Vec3 const & incident
 			, sdw::Float const & ambientOcclusion
-			, c3d::DirectLighting const & directLighting
-			, c3d::IndirectLighting const & indirectLighting
-			, c3d::ReflectionRefraction const & reflRefr
+			, c3ds::DirectLighting const & directLighting
+			, c3ds::IndirectLighting const & indirectLighting
+			, c3ds::ReflectionRefraction const & reflRefr
 			, sdw::Vec3 & combineResult )override;
-		void processBackground( c3d::DebugOutputCategory const & debugOutput
-			, c3d::BlendComponents const & components
-			, c3d::ReflectionRefraction reflRefr
+		void processBackground( c3ds::DebugOutputCategory const & debugOutput
+			, c3ds::BlendComponents const & components
+			, c3ds::ReflectionRefraction reflRefr
 			, sdw::Vec3 const & metalFresnel
 			, sdw::Vec3 const & dielectricFresnel
 			, sdw::Vec3 const & clearcoatFresnel
 			, sdw::Vec3 & backgroundResult );
-		void processDirectLighting( c3d::DebugOutputCategory const & debugOutput
-			, c3d::BlendComponents const & components
-			, c3d::DirectLighting const & directLighting
+		void processDirectLighting( c3ds::DebugOutputCategory const & debugOutput
+			, c3ds::BlendComponents const & components
+			, c3ds::DirectLighting const & directLighting
 			, sdw::Float const & fresnelFactor
 			, sdw::Vec3 & directLightingResult );
-		void processIndirectLighting( c3d::DebugOutputCategory const & debugOutput
-			, c3d::BlendComponents const & components
-			, c3d::IndirectLighting const & indirectLighting
+		void processIndirectLighting( c3ds::DebugOutputCategory const & debugOutput
+			, c3ds::BlendComponents const & components
+			, c3ds::IndirectLighting const & indirectLighting
 			, sdw::Vec3 const & metalFresnel
 			, sdw::Vec3 const & dielectricFresnel
 			, sdw::Vec3 & indirectLightingResult );

@@ -24,24 +24,24 @@ namespace GuiCommon
 	public:
 		struct Properties
 		{
-			explicit Properties( castor3d::PassComponentUPtr pownComponent = {}
-				, castor3d::PassComponentRPtr pcomponent = {}
+			explicit Properties( c3d::PassComponentUPtr pownComponent = {}
+				, c3d::PassComponentRPtr pcomponent = {}
 				, PropertyArray pproperties = {} )
-				: ownComponent{ castor::move( pownComponent ) }
-				, component{ castor::move( pcomponent ) }
-				, properties{ castor::move( pproperties ) }
+				: ownComponent{ c3d::move( pownComponent ) }
+				, component{ c3d::move( pcomponent ) }
+				, properties{ c3d::move( pproperties ) }
 
 			{
 			}
 
-			castor3d::PassComponentUPtr ownComponent;
-			castor3d::PassComponentRPtr component;
+			c3d::PassComponentUPtr ownComponent;
+			c3d::PassComponentRPtr component;
 			PropertyArray properties;
 			wxPGProperty * container{};
 		};
 
-		using PropertiesPtr = castor::RawUniquePtr< Properties >;
-		using PropertiesArray = castor::Vector< PropertiesPtr >;
+		using PropertiesPtr = c3d::RawUniquePtr< Properties >;
+		using PropertiesArray = c3d::Vector< PropertiesPtr >;
 
 	public:
 		/**
@@ -57,10 +57,10 @@ namespace GuiCommon
 		 *\param[in]	parent		La fenêtre parent.
 		 */
 		PassTreeItemProperty( bool editable
-			, castor3d::Scene & scene
+			, c3d::Scene & scene
 			, wxWindow * parent );
 
-		void setData( castor3d::Pass & data )noexcept
+		void setData( c3d::Pass & data )noexcept
 		{
 			clearProperties();
 			m_pass = &data;
@@ -72,12 +72,12 @@ namespace GuiCommon
 		 */
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
-		void moveComponentsToPass( castor3d::PassComponentUPtr component );
-		void moveComponentsToProps( castor::Vector< castor3d::PassComponentUPtr > removed );
+		void moveComponentsToPass( c3d::PassComponentUPtr component );
+		void moveComponentsToProps( c3d::Vector< c3d::PassComponentUPtr > removed );
 
 	private:
-		castor3d::PassRPtr m_pass{};
-		castor3d::Scene & m_scene;
+		c3d::PassRPtr m_pass{};
+		c3d::Scene & m_scene;
 		wxWindow * m_parent;
 		PropertiesArray m_properties;
 	};

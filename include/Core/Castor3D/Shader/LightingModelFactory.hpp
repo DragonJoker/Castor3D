@@ -9,20 +9,20 @@ See LICENSE file in root folder
 
 #include <unordered_set>
 
-namespace castor3d
+namespace c3d
 {
 	class LightingModelFactory
 	{
 	public:
 		using Obj = shader::LightingModel;
-		using Key = castor::String;
+		using Key = String;
 		using Id = LightingModelID;
 		using PtrType = shader::LightingModelPtr;
 		using Creator = shader::LightingModelCreator;
 		using ObjPtr = PtrType;
 		struct LightingModel
 		{
-			explicit LightingModel( castor::String name = {}
+			explicit LightingModel( String name = {}
 				, Creator create = {}
 				, shader::LightingModelDesc defaultDesc = {} )
 				: name{ std::move( name ) }
@@ -31,12 +31,12 @@ namespace castor3d
 			{
 			}
 
-			castor::String name{};
+			String name{};
 			Creator create{};
 			shader::LightingModelDesc defaultDesc{};
 		};
 		using LightingModelPtr = std::unique_ptr< LightingModel >;
-		using LightingModelCont = castor::Vector< LightingModelPtr >;
+		using LightingModelCont = Vector< LightingModelPtr >;
 		struct Entry
 		{
 			LightingModel const * model;
@@ -44,7 +44,7 @@ namespace castor3d
 			LightingModelID lightingModelId{};
 			shader::LightingModelDesc desc{};
 		};
-		using ObjCont = castor::Vector< Entry >;
+		using ObjCont = Vector< Entry >;
 
 	public:
 		/**
@@ -59,7 +59,7 @@ namespace castor3d
 		 *\param[in]	defaultDesc	La description du modèle par défaut.
 		 *\param[in]	create		La fonction de création d'objet.
 		 */
-		C3D_API void registerType( castor::String const & baseName
+		C3D_API void registerType( String const & baseName
 			, shader::LightingModelDesc const & defaultDesc
 			, Creator const & create );
 		/**
@@ -70,7 +70,7 @@ namespace castor3d
 		 *\brief		Désenregistre un modèle d'éclairage.
 		 *\param[in]	baseName	Le nom de base du modèle d'éclairage.
 		 */
-		C3D_API void unregisterType( castor::String const & baseName );
+		C3D_API void unregisterType( String const & baseName );
 		/**
 		 *\~english
 		 *\brief		Registers a diffuse BRDF.
@@ -88,7 +88,7 @@ namespace castor3d
 		 *\brief		Désenregistre une BRDF de diffuse.
 		 *\param[in]	name	Le nom de la BRDF.
 		 */
-		C3D_API void unregisterDiffuseBrdf( castor::String const & name );
+		C3D_API void unregisterDiffuseBrdf( String const & name );
 		/**
 		 *\~english
 		 *\brief		Registers a specular BRDF.
@@ -106,7 +106,7 @@ namespace castor3d
 		 *\brief		Désenregistre une BRDF de spéculaire.
 		 *\param[in]	name	Le nom de la BRDF.
 		 */
-		C3D_API void unregisterSpecularBrdf( castor::String const & name );
+		C3D_API void unregisterSpecularBrdf( String const & name );
 		/**
 		 *\~english
 		 *\brief		Registers a sheen BRDF.
@@ -124,7 +124,7 @@ namespace castor3d
 		 *\brief		Désenregistre une BRDF de sheen.
 		 *\param[in]	name	Le nom de la BRDF.
 		 */
-		C3D_API void unregisterSheenBrdf( castor::String const & name );
+		C3D_API void unregisterSheenBrdf( String const & name );
 		/**
 		 *\~english
 		 *\brief		Registers a clearcoat BRDF.
@@ -142,7 +142,7 @@ namespace castor3d
 		 *\brief		Désenregistre une BRDF de clearcoat.
 		 *\param[in]	name	Le nom de la BRDF.
 		 */
-		C3D_API void unregisterClearcoatBrdf( castor::String const & name );
+		C3D_API void unregisterClearcoatBrdf( String const & name );
 		/**
 		 *\~english
 		 *\brief		Registers a scattering model.
@@ -160,7 +160,7 @@ namespace castor3d
 		 *\brief		Désenregistre un modèle de scattering.
 		 *\param[in]	name	Le nom du modèle.
 		 */
-		C3D_API void unregisterScatteringModel( castor::String const & name );
+		C3D_API void unregisterScatteringModel( String const & name );
 		/**
 		 *\~english
 		 *\param[in]	baseName	The lighting model base name.
@@ -171,7 +171,7 @@ namespace castor3d
 		 *\param[in]	descNames	Les noms de la description du modèle.
 		 *\return		L'ID du modèle d'éclairage.
 		 */
-		C3D_API Id getLightingModelId( castor::String const & baseName
+		C3D_API Id getLightingModelId( String const & baseName
 			, shader::LightingModelNames descNames = {} );
 		/**
 		 *\~english
@@ -181,7 +181,7 @@ namespace castor3d
 		 *\param[in]	baseName	Le nom de base du modèle d'éclairage.
 		 *\return		La description du modèle d'éclairage.
 		 */
-		C3D_API LightingModel const & getModel( castor::String const & baseName )const;
+		C3D_API LightingModel const & getModel( String const & baseName )const;
 		/**
 		 *\~english
 		 *\param[in]	id	The lighting model ID.
@@ -199,7 +199,7 @@ namespace castor3d
 		 *\param[in]	id	L'ID du modèle d'éclairage pour la diffuse BRDF.
 		 *\return		Le nom de la diffuse BRDF.
 		 */
-		C3D_API castor::String getDiffuseBrdfName( Id const & id )const;
+		C3D_API String getDiffuseBrdfName( Id const & id )const;
 		/**
 		 *\~english
 		 *\param[in]	id	The lighting model ID.
@@ -208,7 +208,7 @@ namespace castor3d
 		 *\param[in]	id	L'ID du modèle d'éclairage.
 		 *\return		Le nom de la specular BRDF.
 		 */
-		C3D_API castor::String getSpecularBrdfName( Id const & id )const;
+		C3D_API String getSpecularBrdfName( Id const & id )const;
 		/**
 		 *\~english
 		 *\param[in]	id	The lighting model ID.
@@ -217,7 +217,7 @@ namespace castor3d
 		 *\param[in]	id	L'ID du modèle d'éclairage.
 		 *\return		Le nom de la sheen BRDF.
 		 */
-		C3D_API castor::String getSheenBrdfName( Id const & id )const;
+		C3D_API String getSheenBrdfName( Id const & id )const;
 		/**
 		 *\~english
 		 *\param[in]	id	The lighting model ID.
@@ -226,7 +226,7 @@ namespace castor3d
 		 *\param[in]	id	L'ID du modèle d'éclairage.
 		 *\return		Le nom de la clearcoat BRDF.
 		 */
-		C3D_API castor::String getClearcoatBrdfName( Id const & id )const;
+		C3D_API String getClearcoatBrdfName( Id const & id )const;
 		/**
 		 *\~english
 		 *\param[in]	id	The lighting model ID.
@@ -235,28 +235,28 @@ namespace castor3d
 		 *\param[in]	id	L'ID du modèle d'éclairage.
 		 *\return		Le nom du modèle de scattering.
 		 */
-		C3D_API castor::String getScatteringModelName( Id const & id )const;
+		C3D_API String getScatteringModelName( Id const & id )const;
 		/**
 		 *\~english
 		 *\return		The unique lighting models IDs.
 		 *\~french
 		 *\return		Les ID uniques des modèles d'éclairage.
 		 */
-		C3D_API castor::Vector< LightingModelID > getLightingModelsID()const;
+		C3D_API Vector< LightingModelID > getLightingModelsID()const;
 		/**
 		 *\~english
 		 *\return		The lighting models names.
 		 *\~french
 		 *\return		Les noms des modèles d'éclairage.
 		 */
-		C3D_API castor::StringArray listRegisteredTypes()const;
+		C3D_API StringArray listRegisteredTypes()const;
 		/**
 		 *\~english
 		 *\brief		Replaces old names with registered ones.
 		 *\~french
 		 *\brief		Remplace les anciens nommages par ceux enregistrés.
 		 */
-		C3D_API static castor::String normaliseName( castor::String name );
+		C3D_API static String normaliseName( String name );
 		/**
 		 *\~english
 		 *\brief		Creates an object from an ID.
@@ -287,18 +287,18 @@ namespace castor3d
 
 			if ( it == m_registered.end() )
 			{
-				CU_Exception( castor::ERROR_UNKNOWN_OBJECT );
+				CU_Exception( c3d::ERROR_UNKNOWN_OBJECT );
 			}
 
 			return it->model->create( lightingModelId
 				, it->desc
-				, castor::forward< Parameters >( params )... );
+				, c3d::forward< Parameters >( params )... );
 		}
 
 	private:
 		void registerType( LightingModel const & model
 			, shader::LightingModelDesc desc );
-		void unregisterType( castor::String const & baseName
+		void unregisterType( String const & baseName
 			, shader::LightingModelNames const & descNames );
 
 	private:

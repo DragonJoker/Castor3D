@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-namespace castor
+namespace c3d
 {
 	namespace hdrcol
 	{
@@ -14,13 +14,13 @@ namespace castor
 		}
 	}
 
-	HdrColourComponent::HdrColourComponent( ColourComponent const & rhs
+	HdrColourComponentValue::HdrColourComponentValue( ColourComponentValue const & rhs
 		, float gamma )
 		: m_component{ hdrcol::removeGamma( rhs.value(), gamma ) }
 	{
 	}
 
-	bool operator==( HdrColourComponent const & lhs, HdrColourComponent const & rhs )
+	bool operator==( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs )
 	{
 		float uiA;
 		float uiB;
@@ -29,43 +29,43 @@ namespace castor
 		return uiA == uiB;
 	}
 
-	bool operator!=( HdrColourComponent const & lhs, HdrColourComponent const & rhs )
+	bool operator!=( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs )
 	{
 		return !( lhs == rhs );
 	}
 
-	float operator-( HdrColourComponent const & lhs, HdrColourComponent const & rhs )
+	float operator-( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs )
 	{
 		float fValue;
 		lhs.convertTo( fValue );
-		HdrColourComponent cpnt( fValue );
+		HdrColourComponentValue cpnt( fValue );
 		cpnt -= rhs;
 		return cpnt;
 	}
 
-	float operator+( HdrColourComponent const & lhs, HdrColourComponent const & rhs )
+	float operator+( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs )
 	{
 		float fValue;
 		lhs.convertTo( fValue );
-		HdrColourComponent cpnt( fValue );
+		HdrColourComponentValue cpnt( fValue );
 		cpnt += rhs;
 		return cpnt;
 	}
 
-	float operator*( HdrColourComponent const & lhs, HdrColourComponent const & rhs )
+	float operator*( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs )
 	{
 		float fValue;
 		lhs.convertTo( fValue );
-		HdrColourComponent cpnt( fValue );
+		HdrColourComponentValue cpnt( fValue );
 		cpnt *= rhs;
 		return cpnt;
 	}
 
-	float operator/( HdrColourComponent const & lhs, HdrColourComponent const & rhs )
+	float operator/( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs )
 	{
 		float fValue;
 		lhs.convertTo( fValue );
-		HdrColourComponent cpnt( fValue );
+		HdrColourComponentValue cpnt( fValue );
 		cpnt /= rhs;
 		return cpnt;
 	}

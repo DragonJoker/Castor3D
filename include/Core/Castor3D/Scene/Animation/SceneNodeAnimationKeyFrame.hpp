@@ -10,11 +10,11 @@ See LICENSE file in root folder
 #include "Castor3D/Animation/AnimationKeyFrame.hpp"
 #include "Castor3D/Binary/BinaryParser.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class SceneNodeAnimationKeyFrame
 		: public AnimationKeyFrame
-		, public castor::OwnedBy< SceneNodeAnimation >
+		, public OwnedBy< SceneNodeAnimation >
 	{
 	public:
 		/**
@@ -28,7 +28,7 @@ namespace castor3d
 		 *\param[in]	timeIndex	Quand la key frame commence.
 		 */
 		C3D_API SceneNodeAnimationKeyFrame( SceneNodeAnimation & parent
-			, castor::Milliseconds const & timeIndex );
+			, Milliseconds const & timeIndex );
 		/**
 		 *\~english
 		 *\return		A clone of this object.
@@ -37,55 +37,55 @@ namespace castor3d
 		 */
 		C3D_API AnimationKeyFrameUPtr clone( Animation & parent )const override;
 
-		castor::Point3f const & getPosition()const
+		Point3f const & getPosition()const
 		{
 			return m_position;
 		}
 
-		castor::Quaternion const & getRotation()const
+		Quaternion const & getRotation()const
 		{
 			return m_rotation;
 		}
 
-		castor::Point3f const & getScale()const
+		Point3f const & getScale()const
 		{
 			return m_scale;
 		}
 
-		void setTransform( castor::Point3f translate
-			, castor::Quaternion rotate
-			, castor::Point3f scale )
+		void setTransform( Point3f translate
+			, Quaternion rotate
+			, Point3f scale )
 		{
-			m_position = castor::move( translate );
-			m_rotation = castor::move( rotate );
-			m_scale = castor::move( scale );
+			m_position = c3d::move( translate );
+			m_rotation = c3d::move( rotate );
+			m_scale = c3d::move( scale );
 		}
 
-		void setPosition( castor::Point3f value )
+		void setPosition( Point3f value )
 		{
-			m_position = castor::move( value );
+			m_position = c3d::move( value );
 		}
 
-		void setRotation( castor::Quaternion value )
+		void setRotation( Quaternion value )
 		{
-			m_rotation = castor::move( value );
+			m_rotation = c3d::move( value );
 		}
 
-		void setScale( castor::Point3f value )
+		void setScale( Point3f value )
 		{
-			m_scale = castor::move( value );
+			m_scale = c3d::move( value );
 		}
 
 	private:
-		void doSetTimeIndex( castor::Milliseconds const & time )
+		void doSetTimeIndex( Milliseconds const & time )
 		{
 			m_timeIndex = time;
 		}
 
 	private:
-		castor::Point3f m_position;
-		castor::Quaternion m_rotation;
-		castor::Point3f m_scale;
+		Point3f m_position;
+		Quaternion m_rotation;
+		Point3f m_scale;
 
 		friend class BinaryParser< SceneNodeAnimationKeyFrame >;
 	};

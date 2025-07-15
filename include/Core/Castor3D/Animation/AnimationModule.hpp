@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/Quaternion.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Animation */
 	//@{
@@ -35,7 +35,7 @@ namespace castor3d
 		ePaused = 2,
 		CU_ScopedEnumBounds( ePlaying, ePaused )
 	};
-	C3D_API castor::String getName( AnimationState value );
+	C3D_API String getName( AnimationState value );
 	/**
 	*\~english
 	*\brief
@@ -61,7 +61,7 @@ namespace castor3d
 		eTexture = 3,
 		CU_ScopedEnumBounds( eSceneNode, eTexture )
 	};
-	C3D_API castor::String getName( AnimationType value );
+	C3D_API String getName( AnimationType value );
 	/**
 	*\~english
 	*\brief
@@ -81,7 +81,7 @@ namespace castor3d
 		eLinear = 1,
 		CU_ScopedEnumBounds( eNearest, eLinear )
 	};
-	C3D_API castor::String getName( InterpolatorType value );
+	C3D_API String getName( InterpolatorType value );
 	/**
 	*\~english
 	*\brief
@@ -142,28 +142,18 @@ namespace castor3d
 	*	Classe de base pour l'import de fichiers externes
 	*/
 	class AnimationImporter;
-	/**
-	*\~english
-	*\brief
-	*	The importer factory.
-	*\~french
-	*\brief
-	*	La fabrique d'importeurs.
-	*/
-	class AnimationImporterFactory;
 
-	using Point3rInterpolator = Interpolator< castor::Point3f >;
-	using QuaternionInterpolator = Interpolator< castor::Quaternion >;
+	using Point3rInterpolator = Interpolator< Point3f >;
+	using QuaternionInterpolator = Interpolator< Quaternion >;
 
 	template< typename DataT >
-	using InterpolatorPtr = castor::RawUniquePtr< Interpolator< DataT > >;
+	using InterpolatorPtr = RawUniquePtr< Interpolator< DataT > >;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, Animable, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Animation, C3D_API );
-	CU_DeclareSmartPtr( castor3d, AnimationKeyFrame, C3D_API );
-	CU_DeclareSmartPtr( castor3d, AnimationImporter, C3D_API );
-	CU_DeclareSmartPtr( castor3d, AnimationImporterFactory, C3D_API );
+	CU_DeclareSmartPtr( c3d, Animable, C3D_API );
+	CU_DeclareSmartPtr( c3d, Animation, C3D_API );
+	CU_DeclareSmartPtr( c3d, AnimationKeyFrame, C3D_API );
+	CU_DeclareSmartPtr( c3d, AnimationImporter, C3D_API );
 
 	CU_DeclareVector( AnimationKeyFrameUPtr, AnimationKeyFrame );
 	/** @endcond */

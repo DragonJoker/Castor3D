@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 #include <set>
 
-namespace castor3d
+namespace c3d
 {
 	class UniformBufferBase
 	{
@@ -43,7 +43,7 @@ namespace castor3d
 			, VkDeviceSize elemSize
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags flags
-			, castor::String debugName
+			, String debugName
 			, ashes::QueueShare sharingMode = {} );
 		/**
 		 *\~english
@@ -520,9 +520,9 @@ namespace castor3d
 		uint32_t m_elemCount;
 		uint32_t m_elemSize;
 		ashes::QueueShare m_sharingMode;
-		castor::Set< uint32_t > m_available;
+		Set< uint32_t > m_available;
 		ashes::UniformBufferPtr m_buffer;
-		castor::String m_debugName;
+		String m_debugName;
 		ashes::FencePtr m_transferFence;
 	};
 
@@ -531,16 +531,16 @@ namespace castor3d
 		, VkDeviceSize size
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
-		, castor::String name
+		, String name
 		, ashes::QueueShare sharingMode = {} )
 	{
-		return castor::makeUnique< UniformBufferBase >( renderSystem
+		return makeUnique< UniformBufferBase >( renderSystem
 			, uint32_t( count )
 			, uint32_t( size )
 			, usage
 			, flags
-			, castor::move( name )
-			, castor::move( sharingMode ) );
+			, c3d::move( name )
+			, c3d::move( sharingMode ) );
 	}
 }
 

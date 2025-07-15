@@ -7,7 +7,7 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	void RenderedObject::fillEntry( uint32_t nodeId
 		, Pass const & pass
@@ -60,13 +60,13 @@ namespace castor3d
 	void RenderedObject::doFillEntry( uint32_t nodeId
 		, Pass const & pass
 		, SceneNode const & sceneNode
-		, castor::Matrix4x4f modelMtx
+		, Matrix4x4f modelMtx
 		, uint32_t meshletCount
 		, uint32_t indexCount
 		, uint32_t vertexCount
 		, ModelBufferConfiguration & modelData )
 	{
-		auto normalMtx = castor::Matrix3x3f{ modelMtx }.getInverse().getTransposed();
+		auto normalMtx = Matrix3x3f{ modelMtx }.getInverse().getTransposed();
 
 		if ( !sceneNode.isVisible()
 			|| !pass.isVisible() )
@@ -80,7 +80,7 @@ namespace castor3d
 			: modelData.curModel;
 		m_firstUpdate = m_firstUpdate ? m_firstUpdate - 1u : 0u;
 		modelData.curModel = modelMtx;
-		modelData.normal = castor::Matrix4x4f{ normalMtx };
+		modelData.normal = Matrix4x4f{ normalMtx };
 		modelData.indexCount = indexCount;
 		modelData.vertexCount = vertexCount;
 

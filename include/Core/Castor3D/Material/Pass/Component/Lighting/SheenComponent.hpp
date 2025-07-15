@@ -10,20 +10,20 @@ See LICENSE file in root folder
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Graphics/RgbColour.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct SheenData
 	{
 		explicit SheenData( std::atomic_bool & dirty
-			, castor::HdrRgbColour col
+			, HdrRgbColour col
 			, float rgh )
 			: colour{ dirty, std::move( col ) }
 			, roughness{ dirty, rgh }
 		{
 		}
 
-		castor::AtomicGroupChangeTracked< castor::HdrRgbColour > colour;
-		castor::AtomicGroupChangeTracked< float > roughness;
+		AtomicGroupChangeTracked< HdrRgbColour > colour;
+		AtomicGroupChangeTracked< float > roughness;
 	};
 
 	struct SheenComponent
@@ -66,10 +66,10 @@ namespace castor3d
 
 			PassComponentUPtr createComponent( Pass & pass )const override
 			{
-				return castor::makeUniqueDerived< PassComponent, SheenComponent >( pass );
+				return makeUniqueDerived< PassComponent, SheenComponent >( pass );
 			}
 
-			void createParsers( castor::AttributeParsers & parsers
+			void createParsers( AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
 			void zeroBuffer( Pass const & pass
 				, shader::PassMaterialShader const & materialShader
@@ -79,25 +79,25 @@ namespace castor3d
 
 			shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
-				return castor::make_unique< ComponentsShader >( *this );
+				return makeRawUnique< ComponentsShader >( *this );
 			}
 
 			shader::PassMaterialShaderPtr createMaterialShader()const override
 			{
-				return castor::make_unique< MaterialShader >();
+				return makeRawUnique< MaterialShader >();
 			}
 		};
 
 		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )
 		{
-			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
+			return makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
 		C3D_API explicit SheenComponent( Pass & pass );
 
 		C3D_API void accept( ConfigurationVisitorBase & vis )override;
 
-		castor::HdrRgbColour const & getSheenColour()const
+		HdrRgbColour const & getSheenColour()const
 		{
 			return m_value.colour;
 		}
@@ -107,7 +107,7 @@ namespace castor3d
 			return m_value.roughness;
 		}
 
-		void setSheenColour( castor::HdrRgbColour const & v )
+		void setSheenColour( HdrRgbColour const & v )
 		{
 			m_value.colour = v;
 		}
@@ -117,17 +117,17 @@ namespace castor3d
 			m_value.roughness = v;
 		}
 
-		C3D_API static castor::String const TypeName;
+		C3D_API static String const TypeName;
 		C3D_API static float constexpr DefaultComponent{ 0.0f };
-		C3D_API static castor::HdrRgbColour constexpr DefaultFactor{ DefaultComponent, DefaultComponent, DefaultComponent };
+		C3D_API static HdrRgbColour constexpr DefaultFactor{ DefaultComponent, DefaultComponent, DefaultComponent };
 		C3D_API static float constexpr DefaultRoughness{ 0.0f };
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;
-		bool doWriteText( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::String const & subfolder
-			, castor::StringStream & file )const override;
+		bool doWriteText( String const & tabs
+			, Path const & folder
+			, String const & subfolder
+			, StringStream & file )const override;
 		void doFillBuffer( PassBuffer & buffer )const override;
 	};
 }

@@ -11,17 +11,17 @@
 
 #include <RenderGraph/FrameGraph.hpp>
 
-CU_ImplementSmartPtr( castor3d, SsaoPass )
+CU_ImplementSmartPtr( c3d, SsaoPass )
 
 #define C3D_DebugRawPass 0
 
-namespace castor3d
+namespace c3d
 {
 	SsaoPass::SsaoPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, crg::FramePassArray const & previousPasses
-		, castor::Size const & size
+		, Size const & size
 		, SsaoConfig & ssaoConfig
 		, Texture const & depthObj
 		, Texture const & normal
@@ -30,7 +30,7 @@ namespace castor3d
 		, m_ssaoConfig{ ssaoConfig }
 		, m_group{ graph.createPassGroup( "SSAO" ) }
 		, m_size{ makeExtent2D( size ) }
-		, m_linearisePass{ castor::makeUnique< LineariseDepthPass >( *depthObj.resources
+		, m_linearisePass{ makeUnique< LineariseDepthPass >( *depthObj.resources
 			, m_group
 			, previousPasses
 			, m_device
@@ -40,7 +40,7 @@ namespace castor3d
 			, m_size
 			, depthObj ) }
 		, m_ssaoConfigUbo{ m_device }
-		, m_rawAoPass{ castor::makeUnique< SsaoRawAOPass >( m_group
+		, m_rawAoPass{ makeUnique< SsaoRawAOPass >( m_group
 			, m_device
 			, progress
 			, m_linearisePass->getLastPass()
@@ -52,7 +52,7 @@ namespace castor3d
 			, normal
 			, m_passIndex ) }
 #if !C3D_DebugRawPass
-		, m_horizontalBlur{ castor::makeUnique< SsaoBlurPass >( m_group
+		, m_horizontalBlur{ makeUnique< SsaoBlurPass >( m_group
 			, m_device
 			, progress
 			, m_rawAoPass->getLastPass()
@@ -61,12 +61,12 @@ namespace castor3d
 			, m_ssaoConfig
 			, m_ssaoConfigUbo
 			, cameraUbo
-			, castor::Point2i{ 1, 0 }
+			, Point2i{ 1, 0 }
 			, m_rawAoPass->getResult()
 			, m_rawAoPass->getBentResult()
 			, normal
 			, m_passIndex ) }
-		, m_verticalBlur{ castor::makeUnique< SsaoBlurPass >( m_group
+		, m_verticalBlur{ makeUnique< SsaoBlurPass >( m_group
 			, m_device
 			, progress
 			, m_horizontalBlur->getLastPass()
@@ -75,7 +75,7 @@ namespace castor3d
 			, m_ssaoConfig
 			, m_ssaoConfigUbo
 			, cameraUbo
-			, castor::Point2i{ 0, 1 }
+			, Point2i{ 0, 1 }
 			, m_horizontalBlur->getResult()
 			, m_horizontalBlur->getBentResult()
 			, normal

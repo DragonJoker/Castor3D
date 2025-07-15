@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
 
-  <Type Name="castor::DynamicBitsetT&lt;*&gt;">
+  <Type Name="c3d::DynamicBitsetT&lt;*&gt;">
     <DisplayString>dynbitset {m_blocks}</DisplayString>
     <Expand>
       <ArrayItems>
@@ -11,7 +11,7 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::Point&lt;*, 2&gt;">
+  <Type Name="c3d::Point&lt;*, 2&gt;">
     <DisplayString>{{x={m_data.coords[0]} y={m_data.coords[1]}}}</DisplayString>
     <Expand>
       <Item Name="x">m_data.coords[0]</Item>
@@ -19,7 +19,7 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::Point&lt;*, 3&gt;">
+  <Type Name="c3d::Point&lt;*, 3&gt;">
     <DisplayString>{{x={m_data.coords[0]} y={m_data.coords[1]} z={m_data.coords[2]}}}</DisplayString>
     <Expand>
       <Item Name="x">m_data.coords[0]</Item>
@@ -28,7 +28,7 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::Point&lt;*, 4&gt;">
+  <Type Name="c3d::Point&lt;*, 4&gt;">
     <DisplayString>{{x={m_data.coords[0]} y={m_data.coords[1]} z={m_data.coords[2]} w={m_data.coords[3]}}}</DisplayString>
     <Expand>
       <Item Name="x">m_data.coords[0]</Item>
@@ -38,21 +38,21 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::ColourComponent">
+  <Type Name="c3d::ColourComponent">
     <DisplayString>{m_component}</DisplayString>
     <Expand>
       <Item Name="component">m_component</Item>
     </Expand>
   </Type>
 
-  <Type Name="castor::HdrColourComponent">
+  <Type Name="c3d::HdrColourComponent">
     <DisplayString>{m_component}</DisplayString>
     <Expand>
       <Item Name="component">m_component</Item>
     </Expand>
   </Type>
 
-  <Type Name="castor::RgbaColourT&lt;*&gt;">
+  <Type Name="c3d::RgbaColourT&lt;*&gt;">
     <DisplayString>{{r={m_components[0]} g={m_components[1]} b={m_components[2]} a={m_components[3]}}}</DisplayString>
     <Expand>
       <Item Name="r">m_components[0]</Item>
@@ -62,7 +62,7 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::RgbColourT&lt;*&gt;">
+  <Type Name="c3d::RgbColourT&lt;*&gt;">
     <DisplayString>{{r={m_components[0]} g={m_components[1]} b={m_components[2]}}}</DisplayString>
     <Expand>
       <Item Name="r">m_components[0]</Item>
@@ -71,7 +71,7 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::Coords&lt;*, 2&gt;">
+  <Type Name="c3d::Coords&lt;*, 2&gt;">
     <DisplayString>{{x={m_coords[0]} y={m_coords[1]}}}</DisplayString>
     <Expand>
       <Item Name="x">m_coords[0]</Item>
@@ -79,7 +79,7 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::Coords&lt;*, 3&gt;">
+  <Type Name="c3d::Coords&lt;*, 3&gt;">
     <DisplayString>{{x={m_coords[0]} y={m_coords[1]} z={m_coords[2]}}}</DisplayString>
     <Expand>
       <Item Name="x">m_coords[0]</Item>
@@ -88,7 +88,7 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::Coords&lt;*, 4&gt;">
+  <Type Name="c3d::Coords&lt;*, 4&gt;">
     <DisplayString>{{x={m_coords[0]} y={m_coords[1]} z={m_coords[2]} w={m_coords[3]}}}</DisplayString>
     <Expand>
       <Item Name="x">m_coords[0]</Item>
@@ -98,7 +98,7 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::FlagCombination&lt;*&gt;">
+  <Type Name="c3d::FlagCombination&lt;*&gt;">
     <DisplayString>{m_value,X}</DisplayString>
     <Expand>
       <Item Name="value">m_value,X</Item>
@@ -119,7 +119,7 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::FlagIterator&lt;*&gt;">
+  <Type Name="c3d::FlagIterator&lt;*&gt;">
     <DisplayString>{m_value}</DisplayString>
     <Expand>
       <Item Name="value">m_value</Item>
@@ -128,7 +128,7 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::Glyph">
+  <Type Name="c3d::Glyph">
     <DisplayString>{m_character}</DisplayString>
     <Expand>
       <Item Name="character">m_character</Item>
@@ -139,7 +139,7 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::Font">
+  <Type Name="c3d::Font">
     <DisplayString>Font {m_name} ({m_faceName} {m_height})</DisplayString>
     <Expand>
       <Item Name="name">m_name</Item>
@@ -153,14 +153,14 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::Matrix&lt;*, 2, *&gt;">
+  <Type Name="c3d::Matrix&lt;*, 2, *&gt;">
     <Expand>
       <Item Name="col 0">m_columns[0]</Item>
       <Item Name="col 1">m_columns[1]</Item>
     </Expand>
   </Type>
 
-  <Type Name="castor::Matrix&lt;*, 3, *&gt;">
+  <Type Name="c3d::Matrix&lt;*, 3, *&gt;">
     <Expand>
       <Item Name="col 0">m_columns[0]</Item>
       <Item Name="col 1">m_columns[1]</Item>
@@ -168,7 +168,7 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::Matrix&lt;*, 4, *&gt;">
+  <Type Name="c3d::Matrix&lt;*, 4, *&gt;">
     <Expand>
       <Item Name="col 0">m_columns[0]</Item>
       <Item Name="col 1">m_columns[1]</Item>
@@ -177,21 +177,21 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::OwnedBy&lt;*&gt;" Inheritable="false">
+  <Type Name="c3d::OwnedBy&lt;*&gt;" Inheritable="false">
     <DisplayString>{{owner={m_owner}}}</DisplayString>
     <Expand>
       <Item Name="owner">m_owner</Item>
     </Expand>
   </Type>
 
-  <Type Name="castor::NamedBase$&lt;*&gt;" Inheritable="false">
+  <Type Name="c3d::NamedBase$&lt;*&gt;" Inheritable="false">
     <DisplayString>{{name={m_name}}}</DisplayString>
     <Expand>
       <Item Name="name">m_name</Item>
     </Expand>
   </Type>
 
-  <Type Name="castor::Resource" Inheritable="false">
+  <Type Name="c3d::Resource" Inheritable="false">
     <DisplayString>{{name={m_name}}}</DisplayString>
     <Expand>
       <Item Name="name">m_name</Item>
@@ -199,7 +199,7 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::Image">
+  <Type Name="c3d::Image">
     <DisplayString Condition="m_buffer != nullptr">{{{m_name} {*m_buffer}}}</DisplayString>
     <DisplayString>{{{m_name}}}</DisplayString>
     <Expand>
@@ -210,7 +210,7 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::PxBufferBase">
+  <Type Name="c3d::PxBufferBase">
     <DisplayString>{{{m_format} {m_size}}}</DisplayString>
     <Expand>
       <Item Name="format">m_format</Item>
@@ -224,28 +224,28 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::BoundingBox">
+  <Type Name="c3d::BoundingBox">
     <Expand>
       <Item Name="center">m_center</Item>
       <Item Name="dimensions">m_dimensions</Item>
     </Expand>
   </Type>
 
-  <Type Name="castor::BoundingSphere">
+  <Type Name="c3d::BoundingSphere">
     <Expand>
       <Item Name="center">m_center</Item>
       <Item Name="radius">m_radius</Item>
     </Expand>
   </Type>
 
-  <Type Name="castor::PlaneEquation">
+  <Type Name="c3d::PlaneEquation">
     <Expand>
       <Item Name="normal">m_normal</Item>
       <Item Name="d">m_d</Item>
     </Expand>
   </Type>
 
-  <Type Name="castor::ChangeTracked&lt;*&gt;">
+  <Type Name="c3d::ChangeTracked&lt;*&gt;">
     <DisplayString>{{value={m_value}, dirty={m_dirty}}}</DisplayString>
     <Expand>
       <Item Name="value">m_value</Item>
@@ -253,14 +253,14 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::GroupChangeTracked&lt;*&gt;">
+  <Type Name="c3d::GroupChangeTracked&lt;*&gt;">
     <DisplayString>{{value={m_value}, dirty={m_dirty}}}</DisplayString>
     <Expand>
       <Item Name="value">m_value</Item>
       <Item Name="dirty">m_dirty</Item>
     </Expand>
   </Type>
-  <Type Name="castor::ArrayView&lt;*&gt;">
+  <Type Name="c3d::ArrayView&lt;*&gt;">
     <DisplayString>{{ size={m_end - m_begin} }}</DisplayString>
     <Expand>
       <Item Name="[size]" ExcludeView="simple">m_end - m_begin</Item>

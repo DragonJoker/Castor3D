@@ -21,7 +21,7 @@ namespace Uncharted2
 			, bool enabled );
 
 		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-		static castor::RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+		static c3d::RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 	private:
 		using sdw::StructInstance::getMember;
@@ -60,7 +60,7 @@ namespace Uncharted2
 		Uncharted2Ubo & operator=( Uncharted2Ubo const & rhs ) = delete;
 		Uncharted2Ubo( Uncharted2Ubo && rhs ) = default;
 		Uncharted2Ubo & operator=( Uncharted2Ubo && rhs ) = delete;
-		explicit Uncharted2Ubo( castor3d::RenderDevice const & device );
+		explicit Uncharted2Ubo( c3d::RenderDevice const & device );
 		~Uncharted2Ubo();
 
 		void createPassBinding( crg::FramePass & pass
@@ -75,18 +75,18 @@ namespace Uncharted2
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
 
-		castor3d::UniformBufferOffsetT< Configuration > const & getUbo()const
+		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
 			return m_ubo;
 		}
 
 	public:
-		static const castor::String Buffer;
-		static const castor::String Data;
+		static const c3d::String Buffer;
+		static const c3d::String Data;
 
 	private:
-		castor3d::RenderDevice const & m_device;
-		castor3d::UniformBufferOffsetT< Configuration > m_ubo;
+		c3d::RenderDevice const & m_device;
+		c3d::UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

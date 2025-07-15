@@ -26,7 +26,7 @@
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -80,8 +80,8 @@ namespace castor3d
 		}
 
 		class FramePass
-			: private castor::DataHolderT< ShaderModule >
-			, private castor::DataHolderT< ashes::PipelineShaderStageCreateInfoArray >
+			: private DataHolderT< ShaderModule >
+			, private DataHolderT< ashes::PipelineShaderStageCreateInfoArray >
 			, public crg::ComputePass
 		{
 			using ShaderHolder = DataHolderT< ShaderModule >;
@@ -95,7 +95,7 @@ namespace castor3d
 				, crg::cp::Config config
 				, FrustumClusters const & clusters
 				, LightType lightType )
-				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, castor::String{ cuT( "SortAssigned/" ) } + getName( lightType ), createShader( device, clusters.getConfig() ) } }
+				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, String{ cuT( "SortAssigned/" ) } + getName( lightType ), createShader( device, clusters.getConfig() ) } }
 				, CreateInfoHolder{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, ShaderHolder::getData() ) } }
 				, crg::ComputePass{ framePass
 					, context
@@ -121,7 +121,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< sort::FramePass >( framePass
+				auto result = makeRawUnique< sort::FramePass >( framePass
 					, context
 					, graph
 					, device
@@ -132,7 +132,7 @@ namespace castor3d
 						.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return clusters.getConfig().enablePostAssignSort && !clusters.getCamera().getScene()->getLightCache().getLightInstances( LightType::ePoint ).empty(); } ) )
 					, clusters
 					, LightType::ePoint );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -147,7 +147,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< sort::FramePass >( framePass
+				auto result = makeRawUnique< sort::FramePass >( framePass
 					, context
 					, graph
 					, device
@@ -158,7 +158,7 @@ namespace castor3d
 						.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return clusters.getConfig().enablePostAssignSort && !clusters.getCamera().getScene()->getLightCache().getLightInstances( LightType::eSpot ).empty(); } ) )
 					, clusters
 					, LightType::eSpot );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

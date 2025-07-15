@@ -20,7 +20,7 @@
 namespace GuiCommon
 {
 	OverlayTreeItemProperty::OverlayTreeItemProperty( bool editable
-		, castor3d::Engine * engine )
+		, c3d::Engine * engine )
 		: TreeItemProperty{ engine, editable }
 	{
 		CreateTreeItemMenu();
@@ -43,7 +43,7 @@ namespace GuiCommon
 		auto & engine = *overlay.getOverlay().getEngine();
 		m_materials = getMaterialsList();
 		addProperty( grid, PROPERTY_CATEGORY_OVERLAY + wxString( overlay.getOverlayName() ) );
-		addPropertyT( grid, PROPERTY_OVERLAY_VISIBLE, overlay.isVisible(), &overlay, &castor3d::OverlayCategory::setVisible );
+		addPropertyT( grid, PROPERTY_OVERLAY_VISIBLE, overlay.isVisible(), &overlay, &c3d::OverlayCategory::setVisible );
 		addProperty( grid, PROPERTY_OVERLAY_POSITION, overlay.computePixelPosition()
 			, [&overlay]( wxVariant const & var )
 			{
@@ -55,17 +55,17 @@ namespace GuiCommon
 				overlay.setPixelSize( SizeRefFromVariant( var ) );
 			} );
 		addMaterial( grid, engine, PROPERTY_OVERLAY_MATERIAL, m_materials, overlay.getMaterial()
-			, [&overlay]( castor3d::MaterialObs material ) { overlay.setMaterial( material ); } );
+			, [&overlay]( c3d::MaterialObs material ) { overlay.setMaterial( material ); } );
 
 		switch ( overlay.getType() )
 		{
-		case castor3d::OverlayType::ePanel:
+		case c3d::OverlayType::ePanel:
 			break;
-		case castor3d::OverlayType::eBorderPanel:
-			doCreateBorderPanelOverlayProperties( grid, static_cast< castor3d::BorderPanelOverlay & >( overlay ) );
+		case c3d::OverlayType::eBorderPanel:
+			doCreateBorderPanelOverlayProperties( grid, static_cast< c3d::BorderPanelOverlay & >( overlay ) );
 			break;
-		case castor3d::OverlayType::eText:
-			doCreateTextOverlayProperties( grid, static_cast< castor3d::TextOverlay & >( overlay ) );
+		case c3d::OverlayType::eText:
+			doCreateTextOverlayProperties( grid, static_cast< c3d::TextOverlay & >( overlay ) );
 			break;
 		default:
 			CU_Failure( "Unsupported OverlayType" );
@@ -74,7 +74,7 @@ namespace GuiCommon
 	}
 
 	void OverlayTreeItemProperty::doCreateBorderPanelOverlayProperties( wxPropertyGrid * grid
-		, castor3d::BorderPanelOverlay & overlay )
+		, c3d::BorderPanelOverlay & overlay )
 	{
 		static wxString PROPERTY_CATEGORY_BORDER_PANEL_OVERLAY = _( "Borders" );
 		static wxString PROPERTY_OVERLAY_BORDER_SIZE = _( "Borders Size" );
@@ -82,7 +82,7 @@ namespace GuiCommon
 		static wxString PROPERTY_OVERLAY_BORDER_INNER_UV = _( "Borders Inner UV" );
 		static wxString PROPERTY_OVERLAY_BORDER_OUTER_UV = _( "Borders Outer UV" );
 		static wxString PROPERTY_OVERLAY_BORDER_POSITION = _( "Borders Position" );
-		static castor::Array< wxString, size_t( castor3d::BorderPosition::eCount ) > PROPERTY_OVERLAY_BORDER_POSITION_TEXTS{ _( "Internal" ), _( "Middle" ), _( "External" ) };
+		static c3d::Array< wxString, size_t( c3d::BorderPosition::eCount ) > PROPERTY_OVERLAY_BORDER_POSITION_TEXTS{ _( "Internal" ), _( "Middle" ), _( "External" ) };
 
 		auto & engine = *overlay.getOverlay().getEngine();
 		addProperty( grid, PROPERTY_CATEGORY_BORDER_PANEL_OVERLAY );
@@ -95,28 +95,28 @@ namespace GuiCommon
 				overlay.setPixelBorderSize( Point4uiRefFromVariant( var ) );
 			} );
 		addMaterial( grid, engine, PROPERTY_OVERLAY_BORDER_MATERIAL, m_materials, overlay.getBorderMaterial()
-			, [&overlay]( castor3d::MaterialObs material ) { overlay.setBorderMaterial( material ); } );
-		addPropertyT( grid, PROPERTY_OVERLAY_BORDER_INNER_UV, overlay.getBorderInnerUV(), &overlay, &castor3d::BorderPanelOverlay::setBorderInnerUV );
-		addPropertyT( grid, PROPERTY_OVERLAY_BORDER_OUTER_UV, overlay.getBorderOuterUV(), &overlay, &castor3d::BorderPanelOverlay::setBorderOuterUV );
-		addPropertyET( grid, PROPERTY_OVERLAY_BORDER_POSITION, choices, overlay.getBorderPosition(), &overlay, &castor3d::BorderPanelOverlay::setBorderPosition );
+			, [&overlay]( c3d::MaterialObs material ) { overlay.setBorderMaterial( material ); } );
+		addPropertyT( grid, PROPERTY_OVERLAY_BORDER_INNER_UV, overlay.getBorderInnerUV(), &overlay, &c3d::BorderPanelOverlay::setBorderInnerUV );
+		addPropertyT( grid, PROPERTY_OVERLAY_BORDER_OUTER_UV, overlay.getBorderOuterUV(), &overlay, &c3d::BorderPanelOverlay::setBorderOuterUV );
+		addPropertyET( grid, PROPERTY_OVERLAY_BORDER_POSITION, choices, overlay.getBorderPosition(), &overlay, &c3d::BorderPanelOverlay::setBorderPosition );
 	}
 
 	void OverlayTreeItemProperty::doCreateTextOverlayProperties( wxPropertyGrid * grid
-		, castor3d::TextOverlay & overlay )
+		, c3d::TextOverlay & overlay )
 	{
 		static wxString PROPERTY_CATEGORY_TEXT_OVERLAY = _( "Text" );
 		static wxString PROPERTY_OVERLAY_FONT = _( "Font" );
 		static wxString PROPERTY_OVERLAY_CAPTION = _( "Caption" );
 		static wxString PROPERTY_OVERLAY_HALIGN = _( "Horiz. align." );
-		static castor::Array< wxString, size_t( castor3d::HAlign::eCount ) > PROPERTY_OVERLAY_HALIGN_TEXTS{ _( "Left" ), _( "Center" ), _( "Right" ) };
+		static c3d::Array< wxString, size_t( c3d::HAlign::eCount ) > PROPERTY_OVERLAY_HALIGN_TEXTS{ _( "Left" ), _( "Center" ), _( "Right" ) };
 		static wxString PROPERTY_OVERLAY_VALIGN = _( "Vertic. align." );
-		static castor::Array< wxString, size_t( castor3d::VAlign::eCount ) > PROPERTY_OVERLAY_VALIGN_TEXTS{ _( "Top" ), _( "Center" ), _( "Bottom" ) };
+		static c3d::Array< wxString, size_t( c3d::VAlign::eCount ) > PROPERTY_OVERLAY_VALIGN_TEXTS{ _( "Top" ), _( "Center" ), _( "Bottom" ) };
 		static wxString PROPERTY_OVERLAY_WRAPPING = _( "Wrapping" );
-		static castor::Array< wxString, size_t( castor3d::TextWrappingMode::eCount ) > PROPERTY_OVERLAY_WRAPPING_TEXTS{ _( "None" ), _( "Letter" ), _( "Word" ) };
+		static c3d::Array< wxString, size_t( c3d::TextWrappingMode::eCount ) > PROPERTY_OVERLAY_WRAPPING_TEXTS{ _( "None" ), _( "Letter" ), _( "Word" ) };
 		static wxString PROPERTY_OVERLAY_SPACING = _( "Line spacing" );
-		static castor::Array< wxString, size_t( castor3d::TextLineSpacingMode::eCount ) > PROPERTY_OVERLAY_SPACING_TEXTS{ _( "Own height" ), _( "Max lines height" ), _( "Max fonts height" ) };
+		static c3d::Array< wxString, size_t( c3d::TextLineSpacingMode::eCount ) > PROPERTY_OVERLAY_SPACING_TEXTS{ _( "Own height" ), _( "Max lines height" ), _( "Max fonts height" ) };
 		static wxString PROPERTY_OVERLAY_TEXTURING = _( "Texture mapping" );
-		static castor::Array< wxString, size_t( castor3d::TextTexturingMode::eCount ) > PROPERTY_OVERLAY_TEXTURING_TEXTS{ _( "Letter" ), _( "Text" ) };
+		static c3d::Array< wxString, size_t( c3d::TextTexturingMode::eCount ) > PROPERTY_OVERLAY_TEXTURING_TEXTS{ _( "Letter" ), _( "Text" ) };
 
 		wxArrayString haligns{ make_wxArrayString( PROPERTY_OVERLAY_HALIGN_TEXTS ) };
 		wxString halign{ PROPERTY_OVERLAY_HALIGN_TEXTS[size_t( overlay.getHAlign() )] };
@@ -133,13 +133,13 @@ namespace GuiCommon
 		addProperty( grid, PROPERTY_OVERLAY_FONT, *overlay.getFontTexture()->getFont()
 			, [&overlay]( wxVariant const & var )
 			{
-				overlay.setFont( variantCast< castor::FontRPtr >( var )->getName() );
+				overlay.setFont( variantCast< c3d::FontRPtr >( var )->getName() );
 			} );
-		addPropertyT( grid, PROPERTY_OVERLAY_CAPTION, overlay.getCaption(), &overlay, &castor3d::TextOverlay::setCaption );
-		addPropertyET( grid, PROPERTY_OVERLAY_HALIGN, haligns, overlay.getHAlign(), &overlay, &castor3d::TextOverlay::setHAlign );
-		addPropertyET( grid, PROPERTY_OVERLAY_VALIGN, valigns, overlay.getVAlign(), &overlay, &castor3d::TextOverlay::setVAlign );
-		addPropertyET( grid, PROPERTY_OVERLAY_WRAPPING, wrappings, overlay.getTextWrappingMode(), &overlay, &castor3d::TextOverlay::setTextWrappingMode );
-		addPropertyET( grid, PROPERTY_OVERLAY_SPACING, spacings, overlay.getLineSpacingMode(), &overlay, &castor3d::TextOverlay::setLineSpacingMode );
-		addPropertyET( grid, PROPERTY_OVERLAY_TEXTURING, texturings, overlay.getTexturingMode(), &overlay, &castor3d::TextOverlay::setTexturingMode );
+		addPropertyT( grid, PROPERTY_OVERLAY_CAPTION, overlay.getCaption(), &overlay, &c3d::TextOverlay::setCaption );
+		addPropertyET( grid, PROPERTY_OVERLAY_HALIGN, haligns, overlay.getHAlign(), &overlay, &c3d::TextOverlay::setHAlign );
+		addPropertyET( grid, PROPERTY_OVERLAY_VALIGN, valigns, overlay.getVAlign(), &overlay, &c3d::TextOverlay::setVAlign );
+		addPropertyET( grid, PROPERTY_OVERLAY_WRAPPING, wrappings, overlay.getTextWrappingMode(), &overlay, &c3d::TextOverlay::setTextWrappingMode );
+		addPropertyET( grid, PROPERTY_OVERLAY_SPACING, spacings, overlay.getLineSpacingMode(), &overlay, &c3d::TextOverlay::setLineSpacingMode );
+		addPropertyET( grid, PROPERTY_OVERLAY_TEXTURING, texturings, overlay.getTexturingMode(), &overlay, &c3d::TextOverlay::setTexturingMode );
 	}
 }

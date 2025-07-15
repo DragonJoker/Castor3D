@@ -9,7 +9,7 @@
 #include <cstdint>
 #include <random>
 
-namespace castor
+namespace c3d
 {
 	class WhiteNoise
 	{

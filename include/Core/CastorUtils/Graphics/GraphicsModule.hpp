@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include <RenderGraph/FrameGraphPrerequisites.hpp>
 
-namespace castor
+namespace c3d
 {
 	/**@name Graphics */
 	//@{
@@ -265,24 +265,24 @@ namespace castor
 	class BoundingSphere;
 	/**
 	\~english
-	\brief		Defines a colour component (R, G, B or A) to be used in castor::RgbColour or castor::RgbaColour.
+	\brief		Defines a colour component (R, G, B or A) to be used in c3d::RgbColour or c3d::RgbaColour.
 	\remark		Holds conversion operators to be converted either into float or uint8_t, with corresponding operations.
 				<br />A colour component value is a floating number between 0.0 and 1.0.
 	\~french
-	\brief		Représente une composante de couleur (R, V, B ou A) pour l'utilisation dans castor::RgbColour ou castor::RgbaColour.
+	\brief		Représente une composante de couleur (R, V, B ou A) pour l'utilisation dans c3d::RgbColour ou c3d::RgbaColour.
 	\remark		Définit les opérateurs de conversion en float ou uint8_t, avec les opérations correspondantes.
 				<br />La valeur d'une composante de couleur est un nombre flottant compris entre 0.0 et 1.0.
 	*/
-	class ColourComponent;
+	class ColourComponentValue;
 	/**
 	\~english
-	\brief		Defines a HDR colour component (R, G, B or A) to be used in castor::HdrRgbColour or castor::HdrRgbaColour.
+	\brief		Defines a HDR colour component (R, G, B or A) to be used in c3d::HdrRgbColour or c3d::HdrRgbaColour.
 	\remark		Holds conversion operators to be converted either into float or uint8_t, with corresponding operations
 	\~french
-	\brief		Représente une composante de couleur HDR (R, V, B ou A) pour l'utilisation dans castor::HdrRgbColour ou castor::HdrRgbaColour.
+	\brief		Représente une composante de couleur HDR (R, V, B ou A) pour l'utilisation dans c3d::HdrRgbColour ou c3d::HdrRgbaColour.
 	\remark		Définit les opérateurs de conversion en float ou uint8_t, avec les opérations correspondantes.
 	*/
-	class HdrColourComponent;
+	class HdrColourComponentValue;
 	/**
 	\~english
 	\brief		Font resource
@@ -816,11 +816,11 @@ namespace castor
 	*\~english
 	*	Helper structure to specialise a cache behaviour.
 	*\remarks
-	*	Specialisation for castor::Font.
+	*	Specialisation for c3d::Font.
 	*\~french
 	*	Structure permettant de spécialiser le comportement d'un cache.
 	*\remarks
-	*	Spécialisation pour castor::Font.
+	*	Spécialisation pour c3d::Font.
 	*/
 	template<>
 	struct ResourceCacheTraitsT< Font, String >
@@ -843,22 +843,22 @@ namespace castor
 	};
 	using FontCacheTraits = ResourceCacheTraitsT< Font, String >;
 
-	using ImageLoaderPtr = castor::RawUniquePtr< ImageLoaderImpl >;
-	using ImageWriterPtr = castor::RawUniquePtr< ImageWriterImpl >;
+	using ImageLoaderPtr = c3d::RawUniquePtr< ImageLoaderImpl >;
+	using ImageWriterPtr = c3d::RawUniquePtr< ImageWriterImpl >;
 	using PixelBuffer = PxBuffer< PixelFormat::eR8G8B8A8_UNORM >;
 	using FontCache = ResourceCacheT< Font, String, FontCacheTraits >;
 
-	CU_DeclareSmartPtr( castor, BoundingBox, CU_API );
-	CU_DeclareSmartPtr( castor, BoundingSphere, CU_API );
-	CU_DeclareSmartPtr( castor, Image, CU_API );
-	CU_DeclareSmartPtr( castor, Font, CU_API );
-	CU_DeclareSmartPtr( castor, PxBufferBase, CU_API );
-	CU_DeclareSmartPtr( castor, FontCache, CU_API );
+	CU_DeclareSmartPtr( c3d, BoundingBox, CU_API );
+	CU_DeclareSmartPtr( c3d, BoundingSphere, CU_API );
+	CU_DeclareSmartPtr( c3d, Image, CU_API );
+	CU_DeclareSmartPtr( c3d, Font, CU_API );
+	CU_DeclareSmartPtr( c3d, PxBufferBase, CU_API );
+	CU_DeclareSmartPtr( c3d, FontCache, CU_API );
 
-	using RgbColour = RgbColourT< ColourComponent >;
-	using RgbaColour = RgbaColourT< ColourComponent >;
-	using HdrRgbColour = RgbColourT< HdrColourComponent >;
-	using HdrRgbaColour = RgbaColourT< HdrColourComponent >;
+	using RgbColour = RgbColourT< ColourComponentValue >;
+	using RgbaColour = RgbaColourT< ColourComponentValue >;
+	using HdrRgbColour = RgbColourT< HdrColourComponentValue >;
+	using HdrRgbaColour = RgbaColourT< HdrColourComponentValue >;
 
 	CU_API bool hasAlphaChannel( Image const & image );
 	//@}

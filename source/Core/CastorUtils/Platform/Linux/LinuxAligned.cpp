@@ -34,7 +34,7 @@
 #	define CU_AlignedFree( m )\
 	free( m )
 
-namespace castor
+namespace c3d
 {
 	void * alignedAlloc( size_t alignment, size_t size )
 	{

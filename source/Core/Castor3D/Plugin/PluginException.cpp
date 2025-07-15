@@ -2,14 +2,14 @@
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	PluginException::PluginException( bool critical
-		, castor::MbString const & description
+		, MbString const & description
 		, char const * file
 		, char const * function
 		, uint32_t line )
-		: castor::Exception( "Plugin loading error : " + description, file, function, line )
+		: Exception( "Plugin loading error : " + description, file, function, line )
 		, m_critical( critical )
 	{
 	}

@@ -18,7 +18,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/Size.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class Camera
 		: public MovableObject
@@ -40,7 +40,7 @@ namespace castor3d
 		 *\param[in]	viewport	Viewport à copier.
 		 *\param[in]	ownProjMtx	Dit si la matrice de projection est définie par le viewport \p false, ou pas \p true.
 		 */
-		C3D_API Camera( castor::String const & name
+		C3D_API Camera( String const & name
 			, Scene & scene
 			, SceneNode & node
 			, Viewport viewport
@@ -59,7 +59,7 @@ namespace castor3d
 		 *\param[in]	node		SceneNode parent.
 		 *\param[in]	ownProjMtx	Dit si la matrice de projection est définie par le viewport \p false, ou pas \p true.
 		 */
-		C3D_API Camera( castor::String const & name
+		C3D_API Camera( String const & name
 			, Scene & scene
 			, SceneNode & node
 			, bool ownProjMtx = false );
@@ -73,7 +73,7 @@ namespace castor3d
 		 *\param[in]	name		Le nom de la caméra.
 		 *\param[in]	createInfo	Les informations de création de la caméra.
 		 */
-		C3D_API Camera( castor::String const & name
+		C3D_API Camera( String const & name
 			, CameraCreateInfo const & createInfo );
 		/**
 		 *\~english
@@ -97,7 +97,7 @@ namespace castor3d
 		 *\brief		Définit la matrice de projection, met à jour le viewport et le frustum.
 		 *\param[in]	projection	La matrice de projection.
 		 */
-		C3D_API void setProjection( castor::Matrix4x4f const & projection );
+		C3D_API void setProjection( Matrix4x4f const & projection );
 		/**
 		 *\~english
 		 *\brief		Checks if a submesh is visible, through a geometry.
@@ -122,7 +122,7 @@ namespace castor3d
 		 */
 		C3D_API void cloneInto( Camera & output )const;
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 		/**
 		*\~english
 		*name
@@ -132,7 +132,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API castor::Matrix4x4f getRescaledProjection( float scale
+		C3D_API Matrix4x4f getRescaledProjection( float scale
 			, bool safeBanded )const;
 
 		Viewport const & getViewport()const
@@ -145,12 +145,12 @@ namespace castor3d
 			return m_viewport;
 		}
 
-		castor::Matrix4x4f const & getView()const
+		Matrix4x4f const & getView()const
 		{
 			return m_view;
 		}
 
-		castor::Matrix4x4f const & getProjection( bool safeBanded )const
+		Matrix4x4f const & getProjection( bool safeBanded )const
 		{
 			return m_ownProjection
 				? m_projection
@@ -164,7 +164,7 @@ namespace castor3d
 			return m_viewport.getType();
 		}
 
-		castor::Size const & getSize()const
+		Size const & getSize()const
 		{
 			return m_viewport.getSize();
 		}
@@ -194,7 +194,7 @@ namespace castor3d
 			return m_viewport.getRatio();
 		}
 
-		castor::Angle const & getFovY()const
+		Angle const & getFovY()const
 		{
 			return m_viewport.getFovY();
 		}
@@ -204,23 +204,23 @@ namespace castor3d
 			return m_viewport.getProjectionScale();
 		}
 
-		bool isVisible( castor::BoundingBox const & box
-			, castor::Matrix4x4f const & transformations )const
+		bool isVisible( BoundingBox const & box
+			, Matrix4x4f const & transformations )const
 		{
 			return m_frustum.isVisible( box
 				, transformations );
 		}
 
-		bool isVisible( castor::BoundingSphere const & sphere
-			, castor::Matrix4x4f const & transformations
-			, castor::Point3f const & scale )const
+		bool isVisible( BoundingSphere const & sphere
+			, Matrix4x4f const & transformations
+			, Point3f const & scale )const
 		{
 			return m_frustum.isVisible( sphere
 				, transformations
 				, scale );
 		}
 
-		bool isVisible( castor::Point3f const & point )const
+		bool isVisible( Point3f const & point )const
 		{
 			return m_frustum.isVisible( point );
 		}
@@ -259,7 +259,7 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setView( castor::Matrix4x4f const & view )
+		void setView( Matrix4x4f const & view )
 		{
 			m_view = view;
 			markDirty();
@@ -267,10 +267,10 @@ namespace castor3d
 
 		void resize( uint32_t width, uint32_t height )
 		{
-			resize( castor::Size( width, height ) );
+			resize( Size( width, height ) );
 		}
 
-		void resize( castor::Size const & size )
+		void resize( Size const & size )
 		{
 			if ( m_viewport.getSize() != size )
 			{
@@ -287,12 +287,12 @@ namespace castor3d
 
 		void setHdrConfig( HdrConfig value )
 		{
-			m_hdrConfig = castor::move( value );
+			m_hdrConfig = c3d::move( value );
 		}
 
 		void setColourGradingConfig( ColourGradingConfig config )noexcept
 		{
-			m_colourGradingConfig = castor::move( config );
+			m_colourGradingConfig = c3d::move( config );
 		}
 		/**@}*/
 
@@ -305,11 +305,11 @@ namespace castor3d
 		friend class Scene;
 		Viewport m_viewport;
 		Frustum m_frustum;
-		castor::Matrix4x4f m_view;
+		Matrix4x4f m_view;
 		HdrConfig m_hdrConfig;
 		ColourGradingConfig m_colourGradingConfig;
 		bool m_ownProjection{ false };
-		castor::Matrix4x4f m_projection;
+		Matrix4x4f m_projection;
 	};
 
 	struct CameraContext
@@ -322,16 +322,16 @@ namespace castor3d
 	};
 }
 
-namespace castor
+namespace c3d
 {
 	template<>
-	struct ParserEnumTraits< castor3d::ViewportType >
+	struct ParserEnumTraits< ViewportType >
 	{
 		static inline xchar const * const Name = cuT( "ViewportType" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT< castor3d::ViewportType >();
+				result = getEnumMapT< ViewportType >();
 				return result;
 			}( );
 	};

@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <RenderGraph/ImageData.hpp>
 #include <RenderGraph/ImageViewData.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct TextureSamplerCreateInfo
 	{
@@ -37,7 +37,7 @@ namespace castor3d
 		Extent3D extent;
 		uint32_t layerCount;
 		uint32_t mipLevels;
-		castor::PixelFormat format;
+		PixelFormat format;
 		ImageUsageFlags usageFlags;
 		SampleCount sampleCount{ SampleCount::e1 };
 	};
@@ -52,7 +52,7 @@ namespace castor3d
 		C3D_API Texture() = default;
 		C3D_API Texture( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, castor::String const & name
+			, String const & name
 			, TextureCreateInfo const & imageInfo
 			, TextureSamplerInfo const & samplerInfo
 			, bool createSubviews = true );
@@ -124,7 +124,7 @@ namespace castor3d
 			return crg::getMipLevels( imageId );
 		}
 
-		castor::PixelFormat getFormat()const noexcept
+		PixelFormat getFormat()const noexcept
 		{
 			return crg::getFormat( imageId );
 		}
@@ -145,7 +145,7 @@ namespace castor3d
 		VkImageView targetView{};
 		VkImageView sampledView{};
 		crg::ImageViewIdArray subViewsId{};
-		castor::Vector< VkImageView > subViews{};
+		Vector< VkImageView > subViews{};
 		ashes::Sampler const * sampler{};
 	};
 
@@ -153,29 +153,29 @@ namespace castor3d
 	{
 		C3D_API IntermediateView() = default;
 
-		IntermediateView( castor::String name
+		IntermediateView( String name
 			, crg::ImageViewId const & viewId
 			, ImageLayout layout
 			, TextureFactors factors = {} )noexcept
-			: name{ castor::move( name ) }
+			: name{ c3d::move( name ) }
 			, viewId{ viewId }
 			, layout{ layout }
-			, factors{ castor::move( factors ) }
+			, factors{ c3d::move( factors ) }
 		{
 		}
 
-		IntermediateView( castor::String name
+		IntermediateView( String name
 			, Texture const & texture
 			, ImageLayout layout
 			, TextureFactors factors = {} )noexcept
-			: IntermediateView{ castor::move( name )
+			: IntermediateView{ c3d::move( name )
 				, texture.sampledViewId
 				, layout
-				, castor::move( factors ) }
+				, c3d::move( factors ) }
 		{
 		}
 
-		castor::String name{};
+		String name{};
 		crg::ImageViewId viewId{};
 		ImageLayout layout{};
 		TextureFactors factors{};

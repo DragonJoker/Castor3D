@@ -6,13 +6,13 @@ See LICENSE file in root folder
 
 #include "GpuFrameEvent.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class GpuFunctorEvent
 		: public GpuFrameEvent
 	{
 	public:
-		using Functor = castor::Function< void( RenderDevice const &, QueueData const & ) >;
+		using Functor = Function< void( RenderDevice const &, QueueData const & ) >;
 
 	private:
 		GpuFunctorEvent( GpuFunctorEvent const & copy ) = delete;
@@ -32,7 +32,7 @@ namespace castor3d
 		GpuFunctorEvent( GpuEventType type
 			, Functor functor )
 			: GpuFrameEvent{ type }
-			, m_functor{ castor::move( functor ) }
+			, m_functor{ c3d::move( functor ) }
 		{
 		}
 
@@ -59,7 +59,7 @@ namespace castor3d
 	inline GpuFrameEventUPtr makeGpuFunctorEvent( GpuEventType type
 		, GpuFunctorEvent::Functor functor )
 	{
-		return castor::makeUniqueDerived< GpuFrameEvent, GpuFunctorEvent >( type, functor );
+		return makeUniqueDerived< GpuFrameEvent, GpuFunctorEvent >( type, functor );
 	}
 	/**
 	 *\~english

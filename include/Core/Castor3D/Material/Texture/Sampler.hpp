@@ -14,13 +14,13 @@ See LICENSE file in root folder
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Multithreading/SpinMutex.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	C3D_API SamplerObs createSampler( Engine & engine
-		, castor::String const & baseName
+		, String const & baseName
 		, FilterMode filter
 		, ImageSubresourceRange const * range );
-	C3D_API castor::String getSamplerName( ComparisonFunc compareOp
+	C3D_API String getSamplerName( ComparisonFunc compareOp
 		, FilterMode minFilter
 		, FilterMode magFilter
 		, MipmapMode mipFilter
@@ -30,8 +30,8 @@ namespace castor3d
 		, BorderColour borderColor = BorderColour::eFloatTransparentBlack );
 
 	class Sampler
-		: public castor::Named
-		, public castor::OwnedBy< Engine >
+		: public Named
+		, public OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -44,7 +44,7 @@ namespace castor3d
 		 *\param[in]	engine	Le moteur
 		 *\param[in]	name	Le nom du sampler
 		 */
-		C3D_API Sampler( castor::String const & name
+		C3D_API Sampler( String const & name
 			, Engine & engine );
 		/**
 		 *\~english
@@ -58,7 +58,7 @@ namespace castor3d
 		 *\param[in]	name		Le nom du sampler.
 		 *\param[in]	createInfo	Les informations de création.
 		 */
-		C3D_API Sampler( castor::String const & name
+		C3D_API Sampler( String const & name
 			, Engine & engine
 			, ashes::SamplerCreateInfo const & createInfo );
 		/**
@@ -80,7 +80,7 @@ namespace castor3d
 		 */
 		C3D_API void cleanup();
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 		/**
 		*\~english
 		*name

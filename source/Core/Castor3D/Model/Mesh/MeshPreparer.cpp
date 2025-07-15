@@ -17,25 +17,25 @@
 #include <meshoptimizer.h>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace meshopt
 	{
 		struct Remapped
 		{
 			FaceArray indices;
-			castor::Map< SubmeshData, castor::Point3fArray > baseBuffers;
-			castor::Point4fArray tangentBuffer;
-			castor::Vector< SubmeshAnimationBuffer > morphTargets;
+			Map< SubmeshData, Point3fArray > baseBuffers;
+			Point4fArray tangentBuffer;
+			Vector< SubmeshAnimationBuffer > morphTargets;
 			VertexBoneDataArray skin;
-			castor::Vector< PassMasks > passMasks;
+			Vector< PassMasks > passMasks;
 		};
 
-		static castor::Vector< meshopt_Stream > gather( Submesh & submesh
+		static Vector< meshopt_Stream > gather( Submesh & submesh
 			, TriFaceMapping const & triangles
 			, Remapped & remapped )
 		{
-			castor::Vector< meshopt_Stream > result;
+			Vector< meshopt_Stream > result;
 			remapped.indices = triangles.getData().getFaces();
 
 			for ( uint32_t i = 1u; i < uint32_t( SubmeshData::eOtherMin ); ++i )
@@ -55,8 +55,8 @@ namespace castor3d
 							|| submeshData == SubmeshData::eTexcoords0 )
 						{
 							result.push_back( { submesh.getBaseData( submeshData ).data()
-								, sizeof( castor::Point3f )
-								, sizeof( castor::Point3f ) } );
+								, sizeof( Point3f )
+								, sizeof( Point3f ) } );
 						}
 
 						remapped.baseBuffers.try_emplace( submeshData, submesh.getBaseData( submeshData ) );
@@ -85,22 +85,22 @@ namespace castor3d
 			return result;
 		}
 
-		static void * getPtr( castor::Point3fArray & data )
+		static void * getPtr( Point3fArray & data )
 		{
 			return data.data()->ptr();
 		}
 
-		static void * getPtr( castor::Point4fArray & data )
+		static void * getPtr( Point4fArray & data )
 		{
 			return data.data()->ptr();
 		}
 
-		static void const * getConstPtr( castor::Point3fArray & data )
+		static void const * getConstPtr( Point3fArray & data )
 		{
 			return data.data()->constPtr();
 		}
 
-		static void const * getConstPtr( castor::Point4fArray & data )
+		static void const * getConstPtr( Point4fArray & data )
 		{
 			return data.data()->constPtr();
 		}
@@ -115,12 +115,12 @@ namespace castor3d
 			return data.data();
 		}
 
-		static void * getPtr( castor::Vector< PassMasks > & data )
+		static void * getPtr( Vector< PassMasks > & data )
 		{
 			return data.data()->data.data();
 		}
 
-		static void const * getConstPtr( castor::Vector< PassMasks > & data )
+		static void const * getConstPtr( Vector< PassMasks > & data )
 		{
 			return data.data()->data.data();
 		}
@@ -128,42 +128,42 @@ namespace castor3d
 		template< typename DataT >
 		static void applyRemap( size_t originalVertexCount
 			, size_t destinationVertexCount
-			, castor::Vector< uint32_t > const & remap
-			, castor::Vector< DataT > & buffer )
+			, Vector< uint32_t > const & remap
+			, Vector< DataT > & buffer )
 		{
 			if ( !buffer.empty() )
 			{
-				castor::Vector< DataT > result;
+				Vector< DataT > result;
 				result.resize( destinationVertexCount );
 				meshopt_remapVertexBuffer( getPtr( result )
 					, getConstPtr( buffer )
 					, originalVertexCount
 					, sizeof( DataT )
 					, remap.data() );
-				buffer = castor::move( result );
+				buffer = c3d::move( result );
 			}
 		}
 
 		static void applyRemap( size_t /*originalVertexCount*/
 			, size_t /*destinationVertexCount*/
-			, castor::Vector< uint32_t > const & remap
-			, castor::Vector< Face > & buffer )
+			, Vector< uint32_t > const & remap
+			, Vector< Face > & buffer )
 		{
 			if ( !buffer.empty() )
 			{
-				castor::Vector< Face > result;
+				Vector< Face > result;
 				result.resize( buffer.size() );
 				meshopt_remapIndexBuffer( result.data()->data()
 					, buffer.data()->data()
 					, buffer.size() * 3u
 					, remap.data() );
-				buffer = castor::move( result );
+				buffer = c3d::move( result );
 			}
 		}
 
 		static void applyRemap( size_t originalVertexCount
 			, size_t destinationVertexCount
-			, castor::Vector< uint32_t > const & remap
+			, Vector< uint32_t > const & remap
 			, SubmeshAnimationBuffer & buffers )
 		{
 			applyRemap( originalVertexCount
@@ -210,7 +210,7 @@ namespace castor3d
 
 		static void applyRemap( size_t originalVertexCount
 			, size_t destinationVertexCount
-			, castor::Vector< uint32_t > const & remap
+			, Vector< uint32_t > const & remap
 			, Remapped & remapped )
 		{
 			applyRemap( originalVertexCount
@@ -259,12 +259,12 @@ namespace castor3d
 			}
 		}
 
-		static size_t remap( castor::Vector< meshopt_Stream > const & streams
+		static size_t remap( Vector< meshopt_Stream > const & streams
 			, Remapped & remapped )
 		{
 			auto indexCount = remapped.indices.size() * 3u;
 			auto vertexCount = remapped.baseBuffers.begin()->second.size();
-			castor::Vector< uint32_t > remap( vertexCount );
+			Vector< uint32_t > remap( vertexCount );
 			auto newVertexCount = meshopt_generateVertexRemapMulti( remap.data()
 				, remapped.indices.data()->data()
 				, indexCount
@@ -299,7 +299,7 @@ namespace castor3d
 				, indexCount
 				, it->second.data()->constPtr()
 				, it->second.size()
-				, sizeof( castor::Point3f )
+				, sizeof( Point3f )
 				, 1.05f );
 		}
 
@@ -307,7 +307,7 @@ namespace castor3d
 		{
 			auto indexCount = remapped.indices.size() * 3u;
 			auto vertexCount = remapped.baseBuffers.begin()->second.size();
-			castor::Vector< uint32_t > remap;
+			Vector< uint32_t > remap;
 			remap.resize( vertexCount );
 			auto newVertexCount = meshopt_optimizeVertexFetchRemap( remap.data()
 				, remapped.indices.data()->data()
@@ -321,7 +321,7 @@ namespace castor3d
 
 #if C3D_UseMeshShaders
 
-		static castor::Vector< Meshlet > buildMeshlets( Remapped const & remapped )
+		static Vector< Meshlet > buildMeshlets( Remapped const & remapped )
 		{
 			auto indexCount = remapped.indices.size() * 3u;
 			auto maxMeshlets = meshopt_buildMeshletsBound( indexCount
@@ -329,9 +329,9 @@ namespace castor3d
 				, MaxMeshletTriangleCount );
 
 			auto vertexCount = remapped.baseBuffers.begin()->second.size();
-			castor::Vector< meshopt_Meshlet > meshlets( maxMeshlets );
-			castor::Vector< uint8_t > triangles( maxMeshlets * MaxMeshletTriangleCount * 3 );
-			castor::Vector< uint32_t > vertices( maxMeshlets * MaxMeshletVertexCount );
+			Vector< meshopt_Meshlet > meshlets( maxMeshlets );
+			Vector< uint8_t > triangles( maxMeshlets * MaxMeshletTriangleCount * 3 );
+			Vector< uint32_t > vertices( maxMeshlets * MaxMeshletVertexCount );
 			auto meshletCount = meshopt_buildMeshletsScan( meshlets.data()
 				, vertices.data()
 				, triangles.data()
@@ -340,7 +340,7 @@ namespace castor3d
 				, vertexCount
 				, MaxMeshletVertexCount
 				, MaxMeshletTriangleCount );
-			castor::Vector< Meshlet > result( meshletCount );
+			Vector< Meshlet > result( meshletCount );
 			auto itSrc = meshlets.begin();
 			auto itDst = result.begin();
 			uint32_t meshletIndex{};
@@ -365,10 +365,10 @@ namespace castor3d
 
 #	if C3D_UseTaskShaders
 
-		static castor::Vector< MeshletCullData > buildBoundingData( castor::Vector< Meshlet > const & meshlets
+		static Vector< MeshletCullData > buildBoundingData( Vector< Meshlet > const & meshlets
 			, Remapped const & remapped )
 		{
-			castor::Vector< MeshletCullData > result;
+			Vector< MeshletCullData > result;
 			result.reserve( meshlets.size() );
 			auto it = remapped.baseBuffers.find( SubmeshData::ePositions );
 
@@ -379,9 +379,9 @@ namespace castor3d
 					, meshlet.triangleCount
 					, it->second.data()->constPtr()
 					, it->second.size()
-					, sizeof( castor::Point3f ) );
-				result.push_back( { castor::Point4f{ bounds.center[0], bounds.center[1], bounds.center[2], bounds.radius }
-					, castor::Point4f{ bounds.cone_axis[0], bounds.cone_axis[1], bounds.cone_axis[2], bounds.cone_cutoff } } );
+					, sizeof( Point3f ) );
+				result.push_back( { Point4f{ bounds.center[0], bounds.center[1], bounds.center[2], bounds.radius }
+					, Point4f{ bounds.cone_axis[0], bounds.cone_axis[1], bounds.cone_axis[2], bounds.cone_cutoff } } );
 			}
 
 			return result;
@@ -406,7 +406,7 @@ namespace castor3d
 		, Parameters const & parameters )
 	{
 		auto indexMapping = submesh.getIndexMapping();
-		castor::String param;
+		String param;
 
 		if ( !indexMapping
 			|| indexMapping->getComponentsCount() != 3u )
@@ -443,38 +443,38 @@ namespace castor3d
 				auto meshlets = meshopt::buildMeshlets( remapped );
 #	if C3D_UseTaskShaders
 				auto cullData = meshopt::buildBoundingData( meshlets, remapped );
-				meshlet->getData().getCullData() = castor::move( cullData );
+				meshlet->getData().getCullData() = c3d::move( cullData );
 #	endif
-				meshlet->getData().getMeshletsData() = castor::move( meshlets );
+				meshlet->getData().getMeshletsData() = c3d::move( meshlets );
 			}
 		}
 #endif
 
-		triangles.getData().getFaces() = castor::move( remapped.indices );
+		triangles.getData().getFaces() = c3d::move( remapped.indices );
 
 		for ( auto & [comp, data] : remapped.baseBuffers )
 		{
-			submesh.setBaseData( comp, castor::move( data ) );
+			submesh.setBaseData( comp, c3d::move( data ) );
 		}
 
 		if ( auto tangents = submesh.getComponent< TangentsComponent >() )
 		{
-			tangents->getData().getData() = castor::move( remapped.tangentBuffer );
+			tangents->getData().getData() = c3d::move( remapped.tangentBuffer );
 		}
 
 		if ( auto skin = submesh.getComponent< SkinComponent >() )
 		{
-			skin->getData().getData() = castor::move( remapped.skin );
+			skin->getData().getData() = c3d::move( remapped.skin );
 		}
 
 		if ( auto passMasks = submesh.getComponent< PassMasksComponent >() )
 		{
-			passMasks->getData().getData() = castor::move( remapped.passMasks );
+			passMasks->getData().getData() = c3d::move( remapped.passMasks );
 		}
 
 		if ( auto morph = submesh.getComponent< MorphComponent >() )
 		{
-			morph->getData().getMorphTargetsBuffers() = castor::move( remapped.morphTargets );
+			morph->getData().getMorphTargetsBuffers() = c3d::move( remapped.morphTargets );
 		}
 
 		return true;

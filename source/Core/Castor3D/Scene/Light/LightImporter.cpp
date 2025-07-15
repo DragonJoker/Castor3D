@@ -6,18 +6,18 @@
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/LightGroup.hpp"
 
-CU_ImplementSmartPtr( castor3d, LightImporter )
+CU_ImplementSmartPtr( c3d, LightImporter )
 
-namespace castor3d
+namespace c3d
 {
 	LightImporter::LightImporter( Engine & engine
-		, castor::String const & prefix )
+		, String const & prefix )
 		: OwnedBy< Engine >{ engine }
 		, m_prefix{ prefix + cuT( " - " ) }
 	{
 	}
 
-	LightUPtr LightImporter::importData( castor::String const & name
+	LightUPtr LightImporter::importData( String const & name
 		, LightCreateInfo const & createInfo
 		, ImporterFile * file
 		, Parameters const & parameters )
@@ -59,7 +59,7 @@ namespace castor3d
 		return result;
 	}
 
-	LightGroupUPtr LightImporter::importData( castor::String const & name
+	LightGroupUPtr LightImporter::importData( String const & name
 		, LightGroupCreateInfo const & createInfo
 		, ImporterFile * file
 		, Parameters const & parameters )
@@ -102,11 +102,11 @@ namespace castor3d
 	}
 
 	bool LightImporter::importData( Light & light
-		, castor::Path const & path
+		, Path const & path
 		, Parameters const & parameters )
 	{
 		auto & engine = *light.getOwner()->getEngine();
-		auto extension = castor::string::lowerCase( path.getExtension() );
+		auto extension = string::lowerCase( path.getExtension() );
 
 		if ( !engine.getImporterFileFactory().isTypeRegistered( extension ) )
 		{
@@ -128,11 +128,11 @@ namespace castor3d
 	}
 
 	bool LightImporter::importData( LightGroup & light
-		, castor::Path const & path
+		, Path const & path
 		, Parameters const & parameters )
 	{
 		auto & engine = *light.getOwner()->getEngine();
-		auto extension = castor::string::lowerCase( path.getExtension() );
+		auto extension = string::lowerCase( path.getExtension() );
 
 		if ( !engine.getImporterFileFactory().isTypeRegistered( extension ) )
 		{
@@ -153,13 +153,13 @@ namespace castor3d
 		return false;
 	}
 
-	LightUPtr LightImporter::doCreateLight( castor::String const & name
+	LightUPtr LightImporter::doCreateLight( String const & name
 			, LightCreateInfo const & createInfo )
 	{
 		return createInfo.scene->createLight( name, createInfo );
 	}
 
-	LightGroupUPtr LightImporter::doCreateLightGroup( castor::String const & name
+	LightGroupUPtr LightImporter::doCreateLightGroup( String const & name
 			, LightGroupCreateInfo const & createInfo )
 	{
 		return createInfo.scene->createLightGroup( name, createInfo );

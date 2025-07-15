@@ -21,9 +21,9 @@ namespace PbrBloom
 {
 	namespace up
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
@@ -33,15 +33,15 @@ namespace PbrBloom
 			auto bloomStrength = constants.declMember< sdw::Float >( "bloomStrength" );
 			constants.end();
 
-			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
-				, sdw::VertexOutT< c3d::Uv2FT > out )
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour3FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
-				, sdw::FragmentOutT< c3d::Colour3FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour3FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
+				, sdw::FragmentOutT< c3ds::Colour3FT > out )
 				{
 					// The filter kernel is applied with a radius, specified in texture
 					// coordinates, so that the radius will vary across mip resolutions.
@@ -93,9 +93,9 @@ namespace PbrBloom
 
 	UpsamplePass::UpsamplePass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, crg::ImageId const & image
-		, castor3d::UniformBufferOffsetT< castor::Point2f > const & ubo
+		, c3d::UniformBufferOffsetT< c3d::Point2f > const & ubo
 		, uint32_t passesCount
 		, bool const * enabled )
 		: m_graph{ graph }
@@ -107,16 +107,16 @@ namespace PbrBloom
 	}
 
 
-	void UpsamplePass::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void UpsamplePass::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 
 		for ( auto & view : m_resultViews )
 		{
-			visitor.visit( cuT( "PostFX: PBRB - Up " ) + castor::string::toString( view.data->info.subresourceRange.baseMipLevel )
+			visitor.visit( cuT( "PostFX: PBRB - Up " ) + c3d::string::toString( view.data->info.subresourceRange.baseMipLevel )
 				, view
 				, m_graph.getFinalLayoutState( view ).layout
-				, castor3d::TextureFactors{}.invert( true ) );
+				, c3d::TextureFactors{}.invert( true ) );
 		}
 	}
 
@@ -128,32 +128,32 @@ namespace PbrBloom
 
 		for ( uint32_t i = 0u; i < passesCount; ++i )
 		{
-			result.push_back( graph.createView( crg::ImageViewData{ resultImg.data->name + castor::string::toMbString( i )
+			result.push_back( graph.createView( crg::ImageViewData{ resultImg.data->name + c3d::string::toMbString( i )
 				, resultImg
-				, castor3d::ImageViewCreateFlags::eNone
-				, castor3d::ImageViewType::e2D
+				, c3d::ImageViewCreateFlags::eNone
+				, c3d::ImageViewType::e2D
 				, getFormat( resultImg )
-				, { castor3d::ImageAspectFlags::eColor, i, 1u, 0u, 1u } } ) );
+				, { c3d::ImageAspectFlags::eColor, i, 1u, 0u, 1u } } ) );
 		}
 
 		return result;
 	}
 
-	castor::Vector< crg::FramePass * > UpsamplePass::doCreatePasses( crg::FramePassGroup & graph
+	c3d::Vector< crg::FramePass * > UpsamplePass::doCreatePasses( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
-		, castor3d::RenderDevice const & device
-		, castor3d::UniformBufferOffsetT< castor::Point2f > const & ubo
+		, c3d::RenderDevice const & device
+		, c3d::UniformBufferOffsetT< c3d::Point2f > const & ubo
 		, uint32_t passesCount
 		, bool const * enabled )
 	{
-		castor::Vector< crg::FramePass * > result;
+		c3d::Vector< crg::FramePass * > result;
 		auto prev = &previousPass;
 		auto src = &m_resultViews.back();
 
 		for ( auto i = int32_t( passesCount - 2u ); i >= 0; --i )
 		{
-			auto dstExtent = castor3d::makeExtent2D( getMipExtent( m_resultViews[uint32_t( i )] ) );
-			auto & pass = graph.createPass( "Upsample" + castor::string::toMbString( i )
+			auto dstExtent = c3d::makeExtent2D( getMipExtent( m_resultViews[uint32_t( i )] ) );
+			auto & pass = graph.createPass( "Upsample" + c3d::string::toMbString( i )
 				, [this, &device, enabled, dstExtent]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
@@ -164,7 +164,7 @@ namespace PbrBloom
 						.renderSize( dstExtent )
 						.texcoordConfig( {} )
 						.build( framePass, context, graph, crg::ru::Config{} );
-					device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+					device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );
@@ -172,12 +172,12 @@ namespace PbrBloom
 			pass.addDependency( *prev );
 			pass.addSampledView( *src
 				, 0u
-				, crg::SamplerDesc{ castor3d::FilterMode::eLinear
-					, castor3d::FilterMode::eLinear
-					, castor3d::MipmapMode::eNearest
-					, castor3d::WrapMode::eClampToEdge
-					, castor3d::WrapMode::eClampToEdge
-					, castor3d::WrapMode::eClampToEdge
+				, crg::SamplerDesc{ c3d::FilterMode::eLinear
+					, c3d::FilterMode::eLinear
+					, c3d::MipmapMode::eNearest
+					, c3d::WrapMode::eClampToEdge
+					, c3d::WrapMode::eClampToEdge
+					, c3d::WrapMode::eClampToEdge
 					, 0.0f
 					, float( i )
 					, float( i + 1u ) } );

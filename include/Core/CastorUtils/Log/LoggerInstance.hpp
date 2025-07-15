@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include <thread>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	class LoggerInstance
 	{
@@ -553,7 +553,7 @@ namespace castor
 			"****ERROR**** ",
 		};
 		MessageQueue m_queue;
-		mutable castor::Mutex m_mutexQueue;
+		mutable c3d::Mutex m_mutexQueue;
 		std::thread m_logThread;
 		std::atomic_bool m_initialised{ false };
 		std::atomic_bool m_stopped{ false };

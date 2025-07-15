@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Scene */
 	//@{
@@ -39,7 +39,7 @@ namespace castor3d
 		eSpot = 2,
 		CU_ScopedEnumBounds( eDirectional, eSpot )
 	};
-	C3D_API castor::String getName( LightType value );
+	C3D_API String getName( LightType value );
 	/**
 	*\~english
 	*\brief
@@ -169,21 +169,21 @@ namespace castor3d
 
 	struct LightCreateInfo
 	{
-		castor::NotNullT< Scene > scene;
-		castor::NotNullT< SceneNode > parentNode;
-		castor::NotNullT< LightFactory > factory;
+		NotNullT< Scene > scene;
+		NotNullT< SceneNode > parentNode;
+		NotNullT< LightFactory > factory;
 		LightType lightType;
 	};
 
 	struct LightGroupCreateInfo
 	{
-		castor::NotNullT< Scene > scene;
-		castor::NotNullT< LightFactory > factory;
+		NotNullT< Scene > scene;
+		NotNullT< LightFactory > factory;
 		LightType lightType;
 	};
 
-	using OnLightChangedFunction = castor::Function< void( LightInstance & ) >;
-	using OnLightChanged = castor::SignalT< OnLightChangedFunction >;
+	using OnLightChangedFunction = Function< void( LightInstance & ) >;
+	using OnLightChanged = SignalT< OnLightChangedFunction >;
 	using OnLightChangedConnection = OnLightChanged::connection;
 	/**
 	*\~english
@@ -196,23 +196,23 @@ namespace castor3d
 	*	Spécialisation pour Light.
 	*/
 	template<>
-	struct ObjectCacheTraitsT< Light, castor::String >
-		: ObjectCacheTraitsBaseT< Light, castor::String >
+	struct ObjectCacheTraitsT< Light, String >
+		: ObjectCacheTraitsBaseT< Light, String >
 	{
-		using KeyT = castor::String;
+		using KeyT = String;
 		using ElementT = Light;
 		using BaseT = ObjectCacheTraitsBaseT< ElementT, KeyT >;
 		using ElementPtrT = typename BaseT::ElementPtrT;
 
-		C3D_API static const castor::String Name;
+		C3D_API static const String Name;
 	};
 
 	template<>
-	class ObjectCacheT< Light, castor::String >;
+	class ObjectCacheT< Light, String >;
 
-	using LightCacheTraits = ObjectCacheTraitsT< Light, castor::String >;
+	using LightCacheTraits = ObjectCacheTraitsT< Light, String >;
 	using LightCache = ObjectCacheT< Light
-		, castor::String
+		, String
 		, LightCacheTraits >;
 	using LightRes = CameraCacheTraits::ElementPtrT;
 	using LightResPtr = CameraCacheTraits::ElementObsT;
@@ -228,21 +228,21 @@ namespace castor3d
 	*	Spécialisation pour LightGroup.
 	*/
 	template<>
-	struct PtrCacheTraitsT< LightGroup, castor::String >
-		: PtrCacheTraitsBaseT< LightGroup, castor::String >
+	struct PtrCacheTraitsT< LightGroup, String >
+		: PtrCacheTraitsBaseT< LightGroup, String >
 	{
 		using ResT = LightGroup;
-		using KeyT = castor::String;
+		using KeyT = String;
 		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
 		using ElementT = typename Base::ElementT;
 		using ElementPtrT = typename Base::ElementPtrT;
 
-		C3D_API static const castor::String Name;
+		C3D_API static const String Name;
 	};
 
-	using LightGroupCacheTraits = PtrCacheTraitsT< LightGroup, castor::String >;
-	using LightGroupCache = castor::ResourceCacheT< LightGroup
-		, castor::String
+	using LightGroupCacheTraits = PtrCacheTraitsT< LightGroup, String >;
+	using LightGroupCache = ResourceCacheT< LightGroup
+		, String
 		, LightGroupCacheTraits >;
 	using LightGroupPtr = LightGroupCacheTraits::ElementPtrT;
 	using LightGroupObs = LightGroupCacheTraits::ElementObsT;
@@ -253,8 +253,8 @@ namespace castor3d
 		u32 cascadeCount;
 		f32 pcfFilterSize;
 		u32 pcfSampleCount;
-		castor::Point2f rawShadowsOffsets;
-		castor::Point2f pcfShadowsOffsets;
+		Point2f rawShadowsOffsets;
+		Point2f pcfShadowsOffsets;
 		f32 vsmMinVariance;
 		f32 vsmLightBleedingReduction;
 		u32 volumetricSteps;
@@ -264,43 +264,43 @@ namespace castor3d
 	struct DirectionalShadowData
 		: BaseShadowData
 	{
-		using CascasdeFloatArray = castor::Array< f32, ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ) >;
+		using CascasdeFloatArray = Array< f32, ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ) >;
 		CascasdeFloatArray splitDepths;
 		CascasdeFloatArray splitScales;
-		castor::Array< castor::Matrix4x4f, MaxDirectionalCascadesCount > transforms;
+		Array< Matrix4x4f, MaxDirectionalCascadesCount > transforms;
 	};
 
 	struct PointShadowData
 		: BaseShadowData
 	{
-		castor::Point4f position;
+		Point4f position;
 	};
 
 	struct SpotShadowData
 		: BaseShadowData
 	{
-		castor::Matrix4x4f transform;
+		Matrix4x4f transform;
 	};
 
 	struct AllShadowData
 	{
 		DirectionalShadowData directional;
-		castor::Array< PointShadowData, MaxPointShadowMapCount > point;
-		castor::Array< SpotShadowData, MaxSpotShadowMapCount > spot;
+		Array< PointShadowData, MaxPointShadowMapCount > point;
+		Array< SpotShadowData, MaxSpotShadowMapCount > spot;
 	};
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, Light, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LightCache, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LightCategory, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LightFactory, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LightGroup, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LightGroupCache, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LightImporter, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LightInstance, C3D_API );
-	CU_DeclareSmartPtr( castor3d, DirectionalLight, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PointLight, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SpotLight, C3D_API );
+	CU_DeclareSmartPtr( c3d, Light, C3D_API );
+	CU_DeclareSmartPtr( c3d, LightCache, C3D_API );
+	CU_DeclareSmartPtr( c3d, LightCategory, C3D_API );
+	CU_DeclareSmartPtr( c3d, LightFactory, C3D_API );
+	CU_DeclareSmartPtr( c3d, LightGroup, C3D_API );
+	CU_DeclareSmartPtr( c3d, LightGroupCache, C3D_API );
+	CU_DeclareSmartPtr( c3d, LightImporter, C3D_API );
+	CU_DeclareSmartPtr( c3d, LightInstance, C3D_API );
+	CU_DeclareSmartPtr( c3d, DirectionalLight, C3D_API );
+	CU_DeclareSmartPtr( c3d, PointLight, C3D_API );
+	CU_DeclareSmartPtr( c3d, SpotLight, C3D_API );
 
 	//! Array of light instances
 	CU_DeclareVector( LightInstanceRPtr, LightInstances );
@@ -335,11 +335,11 @@ namespace castor3d
 	*\return
 	*	La valeur.
 	*/
-	C3D_API float getMaxDistance( castor::Point3f const & colour
-		, castor::LuminousIntensity const & intensity
-		, castor::Point3f const & attenuation );
+	C3D_API float getMaxDistance( Point3f const & colour
+		, LuminousIntensity const & intensity
+		, Point3f const & attenuation );
 
-	C3D_API float computeRange( castor::LuminousIntensity const & intensity
+	C3D_API float computeRange( LuminousIntensity const & intensity
 		, float range );
 
 	//@}

@@ -3,15 +3,15 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
 
-GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( castor, Position )
+GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( c3d, Position )
 
 namespace GuiCommon
 {
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( PositionProperty, wxPGProperty, castor::Position, castor::Position const &, TextCtrl )
+	WX_PG_IMPLEMENT_PROPERTY_CLASS( PositionProperty, wxPGProperty, c3d::Position, c3d::Position const &, TextCtrl )
 
 	PositionProperty::PositionProperty( wxString const & label
 		, wxString const & name
-		, castor::Position const & value )
+		, c3d::Position const & value )
 		: wxPGProperty( label, name )
 	{
 		setValueI( value );
@@ -23,7 +23,7 @@ namespace GuiCommon
 	{
 		if ( GetChildCount() )
 		{
-			const castor::Position & point = PositionRefFromVariant( m_value );
+			const c3d::Position & point = PositionRefFromVariant( m_value );
 			Item( 0 )->SetValue( long( point.x() ) );
 			Item( 1 )->SetValue( long( point.y() ) );
 		}
@@ -31,7 +31,7 @@ namespace GuiCommon
 
 	wxVariant PositionProperty::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
 	{
-		castor::Position & point = PositionRefFromVariant( thisValue );
+		c3d::Position & point = PositionRefFromVariant( thisValue );
 		auto val = int( childValue.GetLong() );
 
 		switch ( childIndex )

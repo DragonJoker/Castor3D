@@ -49,9 +49,9 @@
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
-CU_ImplementSmartPtr( castor3d, RenderWindow )
+CU_ImplementSmartPtr( c3d, RenderWindow )
 
-namespace castor3d
+namespace c3d
 {
 	namespace rendwndw
 	{
@@ -213,7 +213,7 @@ namespace castor3d
 			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
 			auto imageId = view.viewId.data->image;
 			auto info = view.viewId.data->info;
-			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ castor::toUtf8( view.name ) + "Barrier"
+			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ toUtf8( view.name ) + "Barrier"
 				, imageId
 				, info.flags
 				, info.viewType
@@ -233,7 +233,7 @@ namespace castor3d
 			, IntermediateView const & tex3DResult
 			, IntermediateViewArray const & views )
 		{
-			using castor3d::operator!=;
+			using c3d::operator!=;
 			IntermediateViewArray result;
 
 			if ( views.size() == 1u )
@@ -264,7 +264,7 @@ namespace castor3d
 			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
 			auto imageId = view.viewId.data->image;
 			auto info = view.viewId.data->info;
-			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ castor::toUtf8( view.name ) + "Sampled"
+			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ toUtf8( view.name ) + "Sampled"
 				, imageId
 				, info.flags
 				, info.viewType
@@ -284,7 +284,7 @@ namespace castor3d
 			, IntermediateView const & tex3DResult
 			, IntermediateViewArray const & views )
 		{
-			using castor3d::operator!=;
+			using c3d::operator!=;
 			IntermediateViewArray result;
 
 			if ( views.size() == 1u )
@@ -311,15 +311,15 @@ namespace castor3d
 
 #endif
 
-		static castor::Size getScreenSize()
+		static Size getScreenSize()
 		{
-			castor::Size result;
-			castor::system::getScreenSize( 0u, result );
+			Size result;
+			system::getScreenSize( 0u, result );
 			return result;
 		}
 
 #ifdef VK_EXT_device_fault
-		static castor::StringView getAddressTypeName( VkDeviceFaultAddressTypeEXT v )
+		static String getAddressTypeName( VkDeviceFaultAddressTypeEXT v )
 		{
 			switch ( v )
 			{
@@ -363,8 +363,8 @@ namespace castor3d
 			newBlockContext->window = blockContext;
 			newBlockContext->targetType = TargetType::eWindow;
 			newBlockContext->size = { 1u, 1u };
-			newBlockContext->srgbPixelFormat = castor::PixelFormat::eUNDEFINED;
-			newBlockContext->hdrPixelFormat = castor::PixelFormat::eUNDEFINED;
+			newBlockContext->srgbPixelFormat = PixelFormat::eUNDEFINED;
+			newBlockContext->hdrPixelFormat = PixelFormat::eUNDEFINED;
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eRenderTarget )
 
@@ -413,7 +413,7 @@ namespace castor3d
 				<< ", HDR(" << blockContext->window.allowHdr << ")"
 				<< ", VSYNC(" << blockContext->window.enableVSync << ")"
 				<< ", FS(" << blockContext->window.fullscreen << ")]" << std::endl;
-			blockContext->root->window = castor::move( blockContext->window );
+			blockContext->root->window = c3d::move( blockContext->window );
 		}
 		CU_EndAttributePop()
 	}
@@ -429,23 +429,23 @@ namespace castor3d
 
 	uint32_t RenderWindow::s_nbRenderWindows = 0;
 
-	RenderWindow::RenderWindow( castor::String const & name
+	RenderWindow::RenderWindow( String const & name
 		, Engine & engine
-		, castor::Size const & size
+		, Size const & size
 		, ashes::WindowHandle handle )
 		: OwnedBy< Engine >{ engine }
-		, castor::Named{ name }
-		, m_evtHandler{ castor::make_unique< EvtHandler >( *this ) }
+		, Named{ name }
+		, m_evtHandler{ makeRawUnique< EvtHandler >( *this ) }
 		, m_index{ s_nbRenderWindows++ }
 		, m_device{ engine.getRenderSystem()->getRenderDevice() }
 		, m_surface{ m_device.renderSystem.getInstance().createSurface( m_device.renderSystem.getPhysicalDevice()
-			, castor::move( handle ) ) }
+			, c3d::move( handle ) ) }
 		, m_queues{ rendwndw::getQueueFamily( *m_surface, m_device.queueFamilies ) }
 		, m_reservedQueue{ m_queues->getQueueSize() > 1 ? m_queues->reserveQueue() : nullptr }
 		, m_commandBufferPool{ m_device->createCommandPool( m_device.getGraphicsQueueFamilyIndex()
 			, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT ) }
 		, m_resources{ engine.getGraphResourceHandler() }
-		, m_listener{ getEngine()->addNewFrameListener( getName() + castor::string::toString( m_index ) ) }
+		, m_listener{ getEngine()->addNewFrameListener( getName() + string::toString( m_index ) ) }
 		, m_size{ size }
 		, m_loading{ engine.isThreaded() }
 		, m_configUbo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
@@ -490,7 +490,7 @@ namespace castor3d
 	{
 		log::debug << "Destroyed render window " << m_index << std::endl;
 		auto & engine = *getEngine();
-		auto listener = engine.removeFrameListener( getName() + castor::string::toString( m_index ) );
+		auto listener = engine.removeFrameListener( getName() + string::toString( m_index ) );
 
 		if ( rendwndw::C3D_PersistLoadingScreen
 			&& engine.isThreaded() )
@@ -645,7 +645,7 @@ namespace castor3d
 			return;
 		}
 
-		auto lock( castor::makeUniqueLock( m_renderMutex ) );
+		auto lock( makeUniqueLock( m_renderMutex ) );
 
 		if ( m_loadingScreen && m_loadingScreen->isEnabled() )
 		{
@@ -670,7 +670,7 @@ namespace castor3d
 					if ( intermediate.factors.grid )
 					{
 						updater.cellSize = ( *intermediate.factors.grid )->w;
-						updater.gridCenter = castor::Point3f{ *intermediate.factors.grid };
+						updater.gridCenter = Point3f{ *intermediate.factors.grid };
 					}
 					else
 					{
@@ -684,9 +684,9 @@ namespace castor3d
 					}
 
 					auto & config = m_configUbo.getData();
-					config.multiply = castor::Point4f{ intermediate.factors.multiply };
-					config.add = castor::Point4f{ intermediate.factors.add };
-					config.data = castor::Point4f{ intermediate.factors.isDepth ? 1.0f : 0.0f
+					config.multiply = Point4f{ intermediate.factors.multiply };
+					config.add = Point4f{ intermediate.factors.add };
+					config.data = Point4f{ intermediate.factors.isDepth ? 1.0f : 0.0f
 						, 0.0f, 0.0f, 0.0f };
 				}
 				else
@@ -696,8 +696,8 @@ namespace castor3d
 					updater.cellSize = 0.0f;
 					updater.gridCenter = {};
 					auto & config = m_configUbo.getData();
-					config.multiply = castor::Point4f{ 1.0f, 1.0f, 1.0f, 1.0f };
-					config.add = castor::Point4f{};
+					config.multiply = Point4f{ 1.0f, 1.0f, 1.0f, 1.0f };
+					config.add = Point4f{};
 				}
 			}
 		}
@@ -710,7 +710,7 @@ namespace castor3d
 			return;
 		}
 
-		auto lock( castor::makeUniqueLock( m_renderMutex ) );
+		auto lock( makeUniqueLock( m_renderMutex ) );
 
 		if ( m_loadingScreen && m_loadingScreen->isEnabled() )
 		{
@@ -729,7 +729,7 @@ namespace castor3d
 			return;
 		}
 
-		auto lock( castor::makeUniqueLock( m_renderMutex ) );
+		auto lock( makeUniqueLock( m_renderMutex ) );
 
 		if ( m_loadingScreen && m_loadingScreen->isEnabled() )
 		{
@@ -773,7 +773,7 @@ namespace castor3d
 					, *resources
 					, *m_loadingScreen
 					, fence
-					, castor::move( baseToWait ) );
+					, c3d::move( baseToWait ) );
 				doPresentLoadingFrame( *queueData
 					, fence
 					, *resources
@@ -834,7 +834,7 @@ namespace castor3d
 		resize( { x, y } );
 	}
 
-	void RenderWindow::resize( castor::Size const & size )
+	void RenderWindow::resize( Size const & size )
 	{
 		m_size = size;
 		log::debug << "Resizing RenderWindow to " << size << std::endl;
@@ -898,9 +898,9 @@ namespace castor3d
 		}
 	}
 
-	castor::PixelFormat RenderWindow::getPixelFormat()const
+	PixelFormat RenderWindow::getPixelFormat()const
 	{
-		castor::PixelFormat result = castor::PixelFormat::eUNDEFINED;
+		PixelFormat result = PixelFormat::eUNDEFINED;
 
 		if ( auto target = getRenderTarget() )
 		{
@@ -958,12 +958,12 @@ namespace castor3d
 		}
 	}
 
-	castor::Size RenderWindow::getSize()const
+	Size RenderWindow::getSize()const
 	{
 		return m_size;
 	}
 
-	PickNodeType RenderWindow::pick( castor::Position const & position )
+	PickNodeType RenderWindow::pick( Position const & position )
 	{
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 
@@ -996,9 +996,8 @@ namespace castor3d
 		m_renderMutex.unlock();
 	}
 
-	void RenderWindow::addParsers( castor::AttributeParsers & result )
+	void RenderWindow::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< WindowContext > context{ result, CSCNSection::eWindow, CSCNSection::eRoot };
 
 		context.addParser( cuT( "vsync" ), rendwndw::parserVSync, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
@@ -1105,11 +1104,11 @@ namespace castor3d
 				, VK_ACCESS_MEMORY_READ_BIT
 				, VK_DEPENDENCY_BY_REGION_BIT } };
 		ashes::RenderPassCreateInfo createInfo{ 0u
-			, castor::move( attaches )
-			, castor::move( subpasses )
-			, castor::move( dependencies ) };
-		m_renderPass = getDevice()->createRenderPass( castor::toUtf8( getName() )
-			, castor::move( createInfo ) );
+			, c3d::move( attaches )
+			, c3d::move( subpasses )
+			, c3d::move( dependencies ) };
+		m_renderPass = getDevice()->createRenderPass( toUtf8( getName() )
+			, c3d::move( createInfo ) );
 	}
 
 	void RenderWindow::doDestroyRenderPass()noexcept
@@ -1185,10 +1184,10 @@ namespace castor3d
 			, { m_size.getWidth(), m_size.getHeight() }
 			, m_allowHdrSwapchain ) );
 		log::info << cuT( "Created SwapChain [" ) << getName()
-			<< cuT( ", FMT(" ) << castor::makeString( ashes::getName( m_swapChain->getFormat() ) ) << cuT( ")" )
+			<< cuT( ", FMT(" ) << makeString( ashes::getName( m_swapChain->getFormat() ) ) << cuT( ")" )
 			<< cuT( ", IMGS(" ) << m_swapChain->getImageCount() << cuT( ")" )
 			<< cuT( ", DIM(" ) << makeSize( m_swapChain->getDimensions() ) << cuT( ")" )
-			<< cuT( ", MODE(" ) << castor::makeString( ashes::getName( m_swapChain->getPresentMode() ) ) << cuT( ")]" ) << std::endl;
+			<< cuT( ", MODE(" ) << makeString( ashes::getName( m_swapChain->getPresentMode() ) ) << cuT( ")]" ) << std::endl;
 
 		if ( !m_renderPass
 			|| m_swapChain->getFormat() != convert( m_swapchainFormat ) )
@@ -1196,7 +1195,7 @@ namespace castor3d
 			doCreateRenderPass();
 		}
 
-		m_swapchainFormat = castor::convert( m_swapChain->getFormat() );
+		m_swapchainFormat = c3d::convert( m_swapChain->getFormat() );
 		doCreateRenderingResources();
 		doCreateFrameBuffers();
 
@@ -1223,8 +1222,8 @@ namespace castor3d
 	{
 		for ( uint32_t i = 0u; i < uint32_t( m_swapChain->getImageCount() ); ++i )
 		{
-			auto mbName = castor::toUtf8( getName() + castor::string::toString( i ) );
-			m_renderingResources.emplace_back( castor::make_unique< RenderingResources >( getDevice()->createSemaphore( mbName + "ImageAvailable" )
+			auto mbName = toUtf8( getName() + string::toString( i ) );
+			m_renderingResources.emplace_back( makeRawUnique< RenderingResources >( getDevice()->createSemaphore( mbName + "ImageAvailable" )
 				, getDevice()->createSemaphore( mbName + "FinishedRendering" )
 				, getDevice()->createFence( mbName, VkFenceCreateFlags{ 0u } )
 				, m_commandBufferPool->createCommandBuffer( mbName )
@@ -1264,10 +1263,10 @@ namespace castor3d
 		for ( size_t i = 0u; i < m_frameBuffers.size(); ++i )
 		{
 			auto attaches = doPrepareAttaches( uint32_t( i ) );
-			auto mbName = castor::toUtf8( getName() + castor::string::toString( i ) );
+			auto mbName = toUtf8( getName() + string::toString( i ) );
 			m_frameBuffers[i] = m_renderPass->createFrameBuffer( mbName
 				, m_swapChain->getDimensions()
-				, castor::move( attaches ) );
+				, c3d::move( attaches ) );
 		}
 	}
 
@@ -1292,7 +1291,7 @@ namespace castor3d
 
 		if ( !m_progressBar )
 		{
-			m_progressBar = castor::makeUnique< ProgressBar >( *getEngine()
+			m_progressBar = makeUnique< ProgressBar >( *getEngine()
 				, static_cast< ProgressCtrl * >( global )
 				, static_cast< ProgressCtrl * >(  local ) );
 		}
@@ -1305,7 +1304,7 @@ namespace castor3d
 		if ( rendwndw::C3D_PersistLoadingScreen
 			&& getEngine()->isThreaded() )
 		{
-			m_loadingScreen = castor::makeUnique< LoadingScreen >( *m_progressBar
+			m_loadingScreen = makeUnique< LoadingScreen >( *m_progressBar
 				, m_device
 				, m_resources
 				, scene
@@ -1314,7 +1313,7 @@ namespace castor3d
 		}
 		else
 		{
-			m_loadingScreen = castor::makeUnique< LoadingScreen >( *m_progressBar
+			m_loadingScreen = makeUnique< LoadingScreen >( *m_progressBar
 				, m_device
 				, m_resources
 				, scene
@@ -1347,7 +1346,7 @@ namespace castor3d
 			return;
 		}
 
-		m_picking = castor::makeUnique< Picking >( m_resources
+		m_picking = makeUnique< Picking >( m_resources
 			, m_device
 			, queueData
 			, target->getSize()
@@ -1383,7 +1382,7 @@ namespace castor3d
 				, FilterMode::eLinear );
 #endif
 		m_renderQuad->createPipeline( Extent2D{ m_size[0], m_size[1] }
-			, castor::Position{}
+			, Position{}
 			, m_program
 			, *m_renderPass );
 		auto & context = m_device.makeContext();
@@ -1434,7 +1433,7 @@ namespace castor3d
 		for ( auto & commandBuffer : commandBuffers )
 		{
 			auto const & frameBuffer = *m_frameBuffers[index];
-			auto name = castor::toUtf8( getName() + castor::string::toString( index ) );
+			auto name = toUtf8( getName() + string::toString( index ) );
 
 			if ( !commandBuffer )
 			{
@@ -1539,7 +1538,7 @@ namespace castor3d
 		if ( m_device.hasGeometryShader() )
 		{
 			Extent2D extent{ m_size.getWidth(), m_size.getHeight() };
-			m_texture3Dto2D = castor::makeUnique< Texture3DTo2D >( m_device
+			m_texture3Dto2D = makeUnique< Texture3DTo2D >( m_device
 				, m_resources
 				, extent
 				, target->getCameraUbo() );
@@ -1549,7 +1548,7 @@ namespace castor3d
 		m_tex3DTo2DIntermediate = { cuT( "Texture3DTo2DResult" )
 			, m_texture3Dto2D->getTarget().sampledViewId
 			, ImageLayout::eShaderReadOnly
-			, castor3d::TextureFactors{}.invert( true ) };
+			, TextureFactors{}.invert( true ) };
 		m_intermediateBarrierViews = rendwndw::doCreateBarrierViews( m_device
 			, m_tex3DTo2DIntermediate
 			, intermediates );
@@ -1571,7 +1570,7 @@ namespace castor3d
 	void RenderWindow::doCreateSaveData()
 	{
 		auto target = getRenderTarget();
-		m_saveBuffer = castor::PxBufferBase::create( target->getSize(), target->getPixelFormat() );
+		m_saveBuffer = PxBufferBase::create( target->getSize(), target->getPixelFormat() );
 		auto targetExtent = makeExtent2D( m_saveBuffer->getDimensions() );
 		auto bufferSize = ashes::getAlignedSize( ashes::getLevelsSize( convert( targetExtent )
 			, VK_FORMAT_R32G32B32A32_SFLOAT // Reserve enough room to hold max image size
@@ -1584,7 +1583,7 @@ namespace castor3d
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, cuT( "Snapshot" ) );
-		m_snapshotData = castor::makeArrayView( m_snapshotBuffer->lock( 0u, bufferSize, 0u )
+		m_snapshotData = makeArrayView( m_snapshotBuffer->lock( 0u, bufferSize, 0u )
 			, bufferSize );
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 		m_transferCommands.resize( 1u );
@@ -1977,10 +1976,10 @@ namespace castor3d
 				auto mipLevel = subresourceRange.baseMipLevel;
 				dstExtent.width = std::max( 1u, dstExtent.width >> mipLevel );
 				dstExtent.height = std::max( 1u, dstExtent.height >> mipLevel );
-				m_saveBuffer = castor::PxBufferBase::create( makeSize( dstExtent )
+				m_saveBuffer = PxBufferBase::create( makeSize( dstExtent )
 					, target->getPixelFormat()
 					, m_snapshotData.data()
-					, castor::PixelFormat( m_savedFormat )
+					, PixelFormat( m_savedFormat )
 					, 0u );
 				m_savedFormat = {};
 				m_toSave = false;
@@ -2062,7 +2061,7 @@ namespace castor3d
 #endif
 	}
 
-	castor::String getPrefix( WindowContext const & context )
+	String getPrefix( WindowContext const & context )
 	{
 		return getPrefix( *context.root );
 	}

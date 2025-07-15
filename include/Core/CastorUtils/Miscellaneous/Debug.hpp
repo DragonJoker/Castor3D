@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <string>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor
+namespace c3d
 {
 	class DynamicLibrary;
 

@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Render */
 	//@{
@@ -37,7 +37,7 @@ namespace castor3d
 		eLayeredLpvG = 5,
 		CU_ScopedEnumBounds( eNone, eLayeredLpvG ),
 	};
-	C3D_API castor::String getName( GlobalIlluminationType giType );
+	C3D_API String getName( GlobalIlluminationType giType );
 	/**
 	*\~english
 	*\brief
@@ -76,7 +76,7 @@ namespace castor3d
 	class VoxelizerUbo;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, LightVolumePassResult, C3D_API );
+	CU_DeclareSmartPtr( c3d, LightVolumePassResult, C3D_API );
 
 	CU_DeclareVector( LightVolumePassResultUPtr, LightVolumePassResult );
 	/** @endcond */

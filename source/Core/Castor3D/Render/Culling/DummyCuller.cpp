@@ -7,7 +7,7 @@
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	DummyCuller::DummyCuller( Scene & scene
 		, Camera * camera

@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Sync/Fence.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	template< UploadDataT UploaderT >
 	class InstantUploadDataT
@@ -21,7 +21,7 @@ namespace castor3d
 		template< typename ... ParamsT >
 		InstantUploadDataT( ashes::Queue const & queue
 			, ParamsT && ... params )
-			: m_upload{ castor::forward< ParamsT >( params )... }
+			: m_upload{ c3d::forward< ParamsT >( params )... }
 			, m_queue{ queue }
 		{
 			m_upload.begin();
@@ -31,9 +31,9 @@ namespace castor3d
 		{
 			UploadData & upload = m_upload;
 			RenderDevice const & device = upload.getDevice();
-			auto fence = device->createFence( castor::toUtf8( upload.getName() ) );
+			auto fence = device->createFence( toUtf8( upload.getName() ) );
 			upload.process();
-			upload.end( m_queue, fence.get(), castor::Milliseconds{ ashes::MaxTimeout } );
+			upload.end( m_queue, fence.get(), Milliseconds{ ashes::MaxTimeout } );
 		}
 
 		operator UploaderT & ()

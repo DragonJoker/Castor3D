@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/Line.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class LineMapping
 		: public IndexMapping
@@ -18,7 +18,7 @@ namespace castor3d
 		{
 			using IndexMapping::ComponentData::ComponentData;
 			/**
-			 *\copydoc		castor3d::SubmeshComponentData::copy
+			 *\copydoc		SubmeshComponentData::copy
 			 */
 			void copy( SubmeshComponentDataRPtr data )const override;
 			/**
@@ -61,7 +61,7 @@ namespace castor3d
 			 *\brief		Crée et ajoute un group de lignes au sous-maillage.
 			 *\param[in]	lines	Les lignes.
 			 */
-			void addLineGroup( castor::Vector< LineIndices > const & lines )
+			void addLineGroup( Vector< LineIndices > const & lines )
 			{
 				addLineGroup( lines.data(), lines.data() + lines.size() );
 			}
@@ -74,7 +74,7 @@ namespace castor3d
 			 *\param[in]	lines	Les lignes.
 			 */
 			template< size_t Count >
-			void addLineGroup( castor::Array< LineIndices, Count > const & lines )
+			void addLineGroup( Array< LineIndices, Count > const & lines )
 			{
 				addLineGroup( lines.data(), lines.data() + Count );
 			}
@@ -148,7 +148,7 @@ namespace castor3d
 			LineArray m_lines;
 			//!\~english	The transformed camera position at last sort.
 			//!\~french		La position transformée de la caméra au dernier tri.
-			castor::Point3f m_cameraPosition;
+			Point3f m_cameraPosition;
 		};
 
 		class Plugin
@@ -159,7 +159,7 @@ namespace castor3d
 
 			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
 			{
-				return castor::makeUniqueDerived< SubmeshComponent, LineMapping >( submesh );
+				return makeUniqueDerived< SubmeshComponent, LineMapping >( submesh );
 			}
 
 			SubmeshComponentFlag getLineIndexFlag()const noexcept override
@@ -175,7 +175,7 @@ namespace castor3d
 
 		static SubmeshComponentPluginUPtr createPlugin( SubmeshComponentRegister const & submeshComponents )
 		{
-			return castor::makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
+			return makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
 		}
 		/**
 		 *\~english
@@ -190,27 +190,27 @@ namespace castor3d
 		C3D_API explicit LineMapping( Submesh & submesh
 			, VkBufferUsageFlags bufferUsageFlags = {} );
 		/**
-		 *\copydoc		castor3d::IndexMapping::getCount
+		 *\copydoc		c3d::IndexMapping::getCount
 		 */
 		C3D_API uint32_t getCount()const override;
 		/**
-		 *\copydoc		castor3d::IndexMapping::setCount
+		 *\copydoc		c3d::IndexMapping::setCount
 		 */
 		C3D_API void setCount( uint32_t value )override;
 		/**
-		 *\copydoc		castor3d::IndexMapping::getComponentsCount
+		 *\copydoc		c3d::IndexMapping::getComponentsCount
 		 */
 		C3D_API uint32_t getComponentsCount()const override;
 		/**
-		 *\copydoc		castor3d::IndexMapping::computeNormals
+		 *\copydoc		c3d::IndexMapping::computeNormals
 		 */
 		C3D_API void computeNormals( bool reverted = false )override;
 		/**
-		 *\copydoc		castor3d::IndexMapping::computeTangents
+		 *\copydoc		c3d::IndexMapping::computeTangents
 		 */
 		C3D_API void computeTangents()override;
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::clone
+		 *\copydoc		SubmeshComponent::clone
 		 */
 		C3D_API SubmeshComponentUPtr clone( Submesh & submesh )const override;
 
@@ -220,7 +220,7 @@ namespace castor3d
 		}
 
 	public:
-		C3D_API static castor::String const TypeName;
+		C3D_API static String const TypeName;
 	};
 }
 

@@ -16,16 +16,16 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::ClearcoatRoughnessMapComponent >
-		: public TextWriterT< castor3d::ClearcoatRoughnessMapComponent >
+	class TextWriter< ClearcoatRoughnessMapComponent >
+		: public TextWriterT< ClearcoatRoughnessMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, uint32_t mask = 0u )
-			: TextWriterT< castor3d::ClearcoatRoughnessMapComponent >{ tabs }
+			: TextWriterT< ClearcoatRoughnessMapComponent >{ tabs }
 			, m_mask{ mask }
 		{
 		}
@@ -35,7 +35,7 @@ namespace castor
 			return writeMask( file, cuT( "clearcoat_roughness_mask" ), m_mask );
 		}
 
-		bool operator()( castor3d::ClearcoatRoughnessMapComponent const & object
+		bool operator()( ClearcoatRoughnessMapComponent const & object
 			, StringStream & file )override
 		{
 			return true;
@@ -44,10 +44,7 @@ namespace castor
 	private:
 		uint32_t m_mask;
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace trscmp
@@ -118,7 +115,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void ClearcoatRoughnessMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void ClearcoatRoughnessMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "clearcoat_roughness" )
@@ -130,29 +127,29 @@ namespace castor3d
 					, 0x0000FF00u );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "clearcoat_roughness_mask" )
 			, trscmp::parserUnitClearcoatRoughnessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "clearcoat_roughness_mask" )
 			, trscmp::parserUnitClearcoatRoughnessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "clearcoat_roughness" )
 			, trscmp::parserTexRemapClearcoatRoughness );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "clearcoat_roughness_mask" )
 			, trscmp::parserTexRemapClearcoatRoughnessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 
 	bool ClearcoatRoughnessMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -163,22 +160,22 @@ namespace castor3d
 	}
 
 	void ClearcoatRoughnessMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, ClearcoatRoughnessMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, ClearcoatRoughnessMapComponent >( pass ) );
 	}
 
 	bool ClearcoatRoughnessMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< ClearcoatRoughnessMapComponent >{ tabs, mask }( file );
+		return TextWriter< ClearcoatRoughnessMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const ClearcoatRoughnessMapComponent::TypeName = C3D_MakePassMapComponentName( "clearcoat_roughness" );
+	String const ClearcoatRoughnessMapComponent::TypeName = C3D_MakePassMapComponentName( "clearcoat_roughness" );
 
 	ClearcoatRoughnessMapComponent::ClearcoatRoughnessMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -190,7 +187,7 @@ namespace castor3d
 
 	PassComponentUPtr ClearcoatRoughnessMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, ClearcoatRoughnessMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, ClearcoatRoughnessMapComponent >( pass );
 	}
 
 	void ClearcoatRoughnessMapComponent::doFillConfig( TextureConfiguration & configuration

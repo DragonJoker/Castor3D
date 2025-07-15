@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	class SubmeshShaders
 	{
@@ -28,8 +28,8 @@ namespace castor3d::shader
 
 	private:
 		SubmeshComponentRegister const & m_compRegister;
-		castor::Vector< SubmeshVertexSurfaceShader * > m_vertexShaders;
-		castor::Vector< SubmeshRasterSurfaceShader * > m_rasterShaders;
+		Vector< SubmeshVertexSurfaceShader * > m_vertexShaders;
+		Vector< SubmeshRasterSurfaceShader * > m_rasterShaders;
 		PipelineFlags const & m_flags;
 	};
 }

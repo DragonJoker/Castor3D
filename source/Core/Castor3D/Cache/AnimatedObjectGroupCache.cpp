@@ -18,35 +18,30 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementSmartPtr( castor3d, AnimatedObjectGroupCache )
+CU_ImplementSmartPtr( c3d, AnimatedObjectGroupCache )
 
-namespace castor3d
+namespace c3d
 {
-	const castor::String PtrCacheTraitsT< castor3d::AnimatedObjectGroup, castor::String >::Name = cuT( "AnimatedObjectGroup" );
-}
-
-namespace castor
-{
-	using namespace castor3d;
+	const String PtrCacheTraitsT< AnimatedObjectGroup, String >::Name = cuT( "AnimatedObjectGroup" );
 
 	namespace cacheanmgrp
 	{
-		static void doInitialiseBuffer( GpuBufferOffsetT< castor3d::SkinningTransformsConfiguration > & transforms )
+		static void doInitialiseBuffer( GpuBufferOffsetT< SkinningTransformsConfiguration > & transforms )
 		{
 			for ( auto & dst : transforms.getData() )
 			{
 				std::fill_n( dst.bonesMatrix.begin()
 					, dst.bonesMatrix.size()
-					, castor::Matrix4x4f::getIdentity() );
+					, Matrix4x4f::getIdentity() );
 			}
 
 			transforms.markDirty( VertexShaderReadState );
 		}
 
-		static size_t makeHash( castor3d::AnimatedMesh const & mesh
-			, castor3d::Submesh const & submesh )
+		static size_t makeHash( AnimatedMesh const & mesh
+			, Submesh const & submesh )
 		{
-			auto hash = std::hash< castor3d::AnimatedMesh const * >{}( &mesh );
+			auto hash = std::hash< AnimatedMesh const * >{}( &mesh );
 			return hashCombinePtr( hash, submesh );
 		}
 	}
@@ -62,7 +57,7 @@ namespace castor
 			{
 				doUnregister( resource );
 			}
-			, castor::ResourceMergerT< AnimatedObjectGroupCache >{ scene.getName() } }
+			, ResourceMergerT< AnimatedObjectGroupCache >{ scene.getName() } }
 		, m_engine{ *scene.getEngine() }
 		, m_device{ m_engine.getRenderSystem()->getRenderDevice() }
 		, m_morphingWeights{ m_device.bufferPool->getBuffer< MorphingWeightsConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
@@ -73,13 +68,13 @@ namespace castor
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 	{
 #if C3D_DebugTimers
-		m_timerAnimations = castor::makeUnique< crg::FramePassTimer >( m_device.makeContext(), getScene()->getName() + "/Animations", crg::TimerScope::eUpdate );
+		m_timerAnimations = makeUnique< crg::FramePassTimer >( m_device.makeContext(), getScene()->getName() + "/Animations", crg::TimerScope::eUpdate );
 		m_engine.registerTimer( getScene()->getName() + "/Animations", *m_timerAnimations );
 #endif
 		cacheanmgrp::doInitialiseBuffer( m_skinningTransformsData );
 	}
 
-	ResourceCacheT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::~ResourceCacheT()noexcept
+	ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::~ResourceCacheT()noexcept
 	{
 #if C3D_DebugTimers
 		m_engine.unregisterTimer( getScene()->getName() + "/Animations", *m_timerAnimations );
@@ -97,7 +92,7 @@ namespace castor
 		}
 	}
 
-	void ResourceCacheT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::initialise( RenderDevice const & )
+	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::initialise( RenderDevice const & )
 	{
 		if ( !m_morphingWeights )
 		{
@@ -111,9 +106,9 @@ namespace castor
 		}
 	}
 
-	void ResourceCacheT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::cleanup()
+	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::cleanup()
 	{
-		ResourceCacheBaseT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::cleanup();
+		ResourceCacheBaseT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::cleanup();
 
 		if ( m_skinningTransformsData )
 		{
@@ -133,7 +128,7 @@ namespace castor
 #if C3D_DebugTimers
 		auto block( m_timerAnimations->start() );
 #endif
-		auto lock( castor::makeUniqueLock( *this ) );
+		auto lock( makeUniqueLock( *this ) );
 
 		for ( auto const & [name, group] : *this )
 		{
@@ -150,7 +145,7 @@ namespace castor
 					max > 0 )
 				{
 					m_skinningTransformsData.buffer->markDirty( m_skinningTransformsData.getOffset() + ( id - 1u ) * sizeof( SkinningTransformsConfiguration )
-						, sizeof( castor::Matrix4x4f ) * max
+						, sizeof( Matrix4x4f ) * max
 						, VertexUniformReadState );
 				}
 			}
@@ -167,7 +162,7 @@ namespace castor
 				{
 					auto offset = m_morphingWeights.getOffset() + ( id - 1u ) * sizeof( MorphingWeightsConfiguration );
 					m_morphingWeights.buffer->markDirty( offset
-						, sizeof( castor::Point4ui ) + sizeof( float ) * max
+						, sizeof( Point4ui ) + sizeof( float ) * max
 						, VertexUniformReadState );
 					offset += sizeof( float ) * MaxMorphTargets * 4u;
 					m_morphingWeights.buffer->markDirty( offset
@@ -177,7 +172,7 @@ namespace castor
 				else
 				{
 					m_morphingWeights.buffer->markDirty( m_morphingWeights.getOffset() + ( id - 1u ) * sizeof( MorphingWeightsConfiguration )
-						, sizeof( castor::Point4ui )
+						, sizeof( Point4ui )
 						, VertexUniformReadState );
 				}
 			}
@@ -186,16 +181,16 @@ namespace castor
 
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::clear( RenderDevice const & )
 	{
-		auto lock( castor::makeUniqueLock( *this ) );
+		auto lock( makeUniqueLock( *this ) );
 		doClearNoLock();
 		m_meshEntries.clear();
 		m_skeletonEntries.clear();
 	}
 
-	castor::Vector< AnimatedObject * > ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::findObject( castor::String const & name )const
+	Vector< AnimatedObject * > ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::findObject( String const & name )const
 	{
-		castor::Vector< AnimatedObject * > result;
-		auto lock( castor::makeUniqueLock( *this ) );
+		Vector< AnimatedObject * > result;
+		auto lock( makeUniqueLock( *this ) );
 
 		for ( auto const & [_, group] : *this )
 		{
@@ -211,7 +206,7 @@ namespace castor
 	ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::MeshPoolsEntry ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doCreateEntry( RenderDevice const &
 		, AnimatedObjectGroup const & group
 		, AnimatedMesh const & mesh
-		, castor3d::Submesh const & submesh )const
+		, Submesh const & submesh )const
 	{
 		return
 		{
@@ -234,7 +229,7 @@ namespace castor
 
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( RenderDevice const &
 		, AnimatedMesh const & mesh
-		, castor3d::Submesh const & submesh )
+		, Submesh const & submesh )
 	{
 		m_meshEntries.erase( cacheanmgrp::makeHash( mesh, submesh ) );
 	}
@@ -245,8 +240,8 @@ namespace castor
 		m_skeletonEntries.erase( &skeleton );
 	}
 
-	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( castor3d::RenderDevice const &
-		, castor3d::AnimatedTexture const & texture )const
+	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( RenderDevice const &
+		, AnimatedTexture const & texture )const
 	{
 		getOwner()->getEngine()->getMaterialCache().unregisterTexture( texture );
 	}

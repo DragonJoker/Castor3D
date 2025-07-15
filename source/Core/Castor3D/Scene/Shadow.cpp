@@ -9,9 +9,9 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, ShadowConfig )
+CU_ImplementSmartPtr( c3d, ShadowConfig )
 
-namespace castor3d
+namespace c3d
 {
 	namespace shdcfg
 	{
@@ -88,11 +88,11 @@ namespace castor3d
 		{
 			if ( blockContext->light )
 			{
-				blockContext->light->light->setShadowConfig( castor::move( *blockContext->shadowConfig ) );
+				blockContext->light->light->setShadowConfig( c3d::move( *blockContext->shadowConfig ) );
 			}
 			else if ( blockContext->lightGroup )
 			{
-				blockContext->lightGroup->light->setShadowConfig( castor::move( *blockContext->shadowConfig ) );
+				blockContext->lightGroup->light->setShadowConfig( c3d::move( *blockContext->shadowConfig ) );
 			}
 			else
 			{
@@ -249,16 +249,16 @@ namespace castor3d
 		baseBlock.visit( cuT( "Enabled" ), enabled );
 		baseBlock.visit( cuT( "Type" )
 			, filterType
-			, castor::StringArray{ cuT( "None" ), cuT( "RAW" ), cuT( "PCF" ), cuT( "VSM" ) }
+			, StringArray{ cuT( "None" ), cuT( "RAW" ), cuT( "PCF" ), cuT( "VSM" ) }
 			, ConfigurationVisitorBase::OnEnumValueChangeT< ShadowType >( [this]( ShadowType, ShadowType newV )
 			{
 				filterType = newV;
 			} ) );
-		if ( lightType == castor3d::LightType::eDirectional )
+		if ( lightType == LightType::eDirectional )
 		{
 			baseBlock.visit( cuT( "GI Type" )
 				, globalIllumination
-				, castor::StringArray{ cuT( "None" ), cuT( "RSM" ), cuT( "LPV" ), cuT( "LPV (Geometry)" ), cuT( "Layered LPV" ), cuT( "Layered LPV (Geometry)" ) }
+				, StringArray{ cuT( "None" ), cuT( "RSM" ), cuT( "LPV" ), cuT( "LPV (Geometry)" ), cuT( "Layered LPV" ), cuT( "Layered LPV (Geometry)" ) }
 				, ConfigurationVisitorBase::OnEnumValueChangeT< GlobalIlluminationType >( [this]( GlobalIlluminationType, GlobalIlluminationType newV )
 				{
 					globalIllumination = GlobalIlluminationType( newV );
@@ -268,14 +268,14 @@ namespace castor3d
 		{
 			baseBlock.visit( cuT( "GI Type" )
 				, globalIllumination
-				, castor::StringArray{ cuT( "None" ), cuT( "RSM" ), cuT( "LPV" ), cuT( "LPV (Geometry)" ) }
+				, StringArray{ cuT( "None" ), cuT( "RSM" ), cuT( "LPV" ), cuT( "LPV (Geometry)" ) }
 				, ConfigurationVisitorBase::OnEnumValueChangeT< GlobalIlluminationType >( [this]( GlobalIlluminationType, GlobalIlluminationType newV )
 				{
 					globalIllumination = GlobalIlluminationType( newV );
 				} ) );
 		}
 
-		if ( lightType == castor3d::LightType::eDirectional )
+		if ( lightType == LightType::eDirectional )
 		{
 			baseBlock.visit( cuT( "Volumetric Steps" ), volumetricSteps );
 			baseBlock.visit( cuT( "Volumetric Scattering Factor" ), volumetricScattering );
@@ -301,21 +301,20 @@ namespace castor3d
 		lpvConfig.accept( *baseBlock );
 	}
 
-	void ShadowConfig::addParsers( castor::AttributeParsers & result
+	void ShadowConfig::addParsers( AttributeParsers & result
 		, CSCNSection light, CSCNSection shadows
 		, CSCNSection shadowsRaw, CSCNSection shadowsPcf, CSCNSection shadowsVsm
-		, castor::RawParserFunctionT< void > parserShadows, castor::RawParserFunctionT< void > parserShadowProducer
-		, castor::RawParserFunctionT< ShadowContext > parserRawConfig, castor::RawParserFunctionT< ShadowContext > parserPcfConfig, castor::RawParserFunctionT< ShadowContext > parserVsmConfig )
+		, RawParserFunctionT< void > parserShadows, RawParserFunctionT< void > parserShadowProducer
+		, RawParserFunctionT< ShadowContext > parserRawConfig, RawParserFunctionT< ShadowContext > parserPcfConfig, RawParserFunctionT< ShadowContext > parserVsmConfig )
 	{
-		using namespace castor;
 		BlockParserContextT< LightContext > lightContext{ result, light, CSCNSection::eScene };
 		BlockParserContextT< ShadowContext > shadowsContext{ result, shadows, light };
 		BlockParserContextT< ShadowContext > rawContext{ result, shadowsRaw, shadows };
 		BlockParserContextT< ShadowContext > pcfContext{ result, shadowsPcf, shadows };
 		BlockParserContextT< ShadowContext > vsmContext{ result, shadowsVsm, shadows };
 
-		lightContext.addPushParser( cuT( "shadows" ), shadows, castor::move( parserShadows ) );
-		lightContext.addParser( cuT( "shadow_producer" ), castor::move( parserShadowProducer ), { makeParameter< ParameterType::eBool >() } );
+		lightContext.addPushParser( cuT( "shadows" ), shadows, c3d::move( parserShadows ) );
+		lightContext.addParser( cuT( "shadow_producer" ), c3d::move( parserShadowProducer ), { makeParameter< ParameterType::eBool >() } );
 
 		shadowsContext.addParser( cuT( "producer" ), shdcfg::parserProducer, { makeParameter< ParameterType::eBool >() } );
 		shadowsContext.addParser( cuT( "filter" ), shdcfg::parserFilter, { makeParameter< ParameterType::eCheckedText, ShadowType >() } );

@@ -27,29 +27,29 @@ namespace water::shader
 	{
 	}
 
-	void WaterProfiles::update( castor3d::ShaderBuffer & buffer
-		, castor3d::Pass const & pass )
+	void WaterProfiles::update( c3d::ShaderBuffer & buffer
+		, c3d::Pass const & pass )
 	{
 		if ( auto edges = pass.getComponent< WaterComponent >() )
 		{
-			auto profiles = castor::makeArrayView( reinterpret_cast< WaterProfileData * >( buffer.getPtr() ), castor3d::MaxMaterialsCount );
+			auto profiles = c3d::makeArrayView( reinterpret_cast< WaterProfileData * >( buffer.getPtr() ), c3d::MaxMaterialsCount );
 			auto & data = profiles[pass.getId() - 1u];
 			edges->fillProfileBuffer( data );
 		}
 	}
 
-	castor3d::ShaderBufferUPtr WaterProfiles::create( castor3d::RenderDevice const & device )
+	c3d::ShaderBufferUPtr WaterProfiles::create( c3d::RenderDevice const & device )
 	{
-		return castor::makeUnique< castor3d::ShaderBuffer >( device
-			, castor3d::MaxMaterialsCount * sizeof( WaterProfileData )
+		return c3d::makeUnique< c3d::ShaderBuffer >( device
+			, c3d::MaxMaterialsCount * sizeof( WaterProfileData )
 			, cuT( "WaterProfilesBuffer" ) );
 	}
 
-	c3d::BufferBaseUPtr WaterProfiles::declare( sdw::ShaderWriter & writer
+	c3ds::BufferBaseUPtr WaterProfiles::declare( sdw::ShaderWriter & writer
 		, uint32_t binding
 		, uint32_t set )
 	{
-		return castor::makeUniqueDerived< c3d::BufferBase, WaterProfiles >( writer
+		return c3d::makeUniqueDerived< c3ds::BufferBase, WaterProfiles >( writer
 			, binding
 			, set
 			, true );

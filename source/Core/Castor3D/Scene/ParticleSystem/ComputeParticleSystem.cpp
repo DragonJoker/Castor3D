@@ -19,9 +19,9 @@
 
 #include <random>
 
-CU_ImplementSmartPtr( castor3d, ComputeParticleSystem )
+CU_ImplementSmartPtr( c3d, ComputeParticleSystem )
 
-namespace castor3d
+namespace c3d
 {
 	namespace compptcl
 	{
@@ -31,12 +31,12 @@ namespace castor3d
 		static uint32_t constexpr OutParticlesBufferBinding = 3u;
 		static uint32_t constexpr ParticleSystemBufferBinding = 4u;
 
-		static castor::Point3ui doDispatch( uint32_t count
-			, castor::Point3i const & sizes )
+		static Point3ui doDispatch( uint32_t count
+			, Point3i const & sizes )
 		{
 			auto blockSize = uint32_t( sizes[0] * sizes[1] * sizes[2] );
 			auto numBlocks = ( count + blockSize - 1 ) / blockSize;
-			return castor::Point3ui{ numBlocks
+			return Point3ui{ numBlocks
 				, sizes[1] > 1 ? numBlocks : 1
 				, sizes[2] > 1 ? numBlocks : 1 };
 		}
@@ -194,15 +194,15 @@ namespace castor3d
 				m_particlesCount = std::min( particlesCount, m_parent.getMaxParticlesCount() );
 			}
 
-			castor::swap( m_in, m_out );
+			c3d::swap( m_in, m_out );
 		}
 
 		return m_particlesCount;
 	}
 
-	void ComputeParticleSystem::addParticleVariable( castor::String const & name
+	void ComputeParticleSystem::addParticleVariable( String const & name
 		, ParticleFormat type
-		, castor::String const & defaultValue )
+		, String const & defaultValue )
 	{
 		m_inputs.push_back( ParticleElementDeclaration{ name, ElementUsage::eUnknown, type, m_inputs.stride() } );
 	}
@@ -272,9 +272,9 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_COMPUTE_BIT ),
 		};
-		auto mbName = castor::toUtf8( m_parent.getName() ) + "/Compute";
+		auto mbName = toUtf8( m_parent.getName() ) + "/Compute";
 		m_descriptorLayout = device->createDescriptorSetLayout( mbName
-			, castor::move( bindings ) );
+			, c3d::move( bindings ) );
 		m_pipelineLayout = device->createPipelineLayout( mbName
 			, *m_descriptorLayout );
 
@@ -322,7 +322,7 @@ namespace castor3d
 
 	void ComputeParticleSystem::doPrepareCommandBuffers( RenderDevice const & device )
 	{
-		auto mbName = castor::toUtf8( m_parent.getName() ) + "/Compute";
+		auto mbName = toUtf8( m_parent.getName() ) + "/Compute";
 		m_commandBuffer = device.graphicsData()->commandPool->createCommandBuffer( mbName );
 		m_fence = device->createFence( mbName );
 	}

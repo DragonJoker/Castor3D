@@ -11,11 +11,11 @@ See LICENSE file in root folder
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class Material
-		: public castor::Named
-		, public castor::OwnedBy< Engine >
+		: public Named
+		, public OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -30,7 +30,7 @@ namespace castor3d
 		 *\param[in]	engine			Le moteur.
 		 *\param[in]	lightingModelId	L'ID du modèle d'éclairage du matériau.
 		 */
-		C3D_API Material( castor::String const & name
+		C3D_API Material( String const & name
 			, Engine & engine
 			, LightingModelID lightingModelId );
 		C3D_API virtual ~Material() = default;
@@ -91,8 +91,8 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API static void addParsers( castor::AttributeParsers & result
-			, castor::UInt32StrMap const & textureChannels );
+		C3D_API static void addParsers( AttributeParsers & result
+			, UInt32StrMap const & textureChannels );
 		/**@}*/
 		/**
 		*\~english
@@ -203,12 +203,12 @@ namespace castor3d
 		OnMaterialChanged onChanged;
 		//!\~english	The default material name.
 		//!\~french		Le nom du matériau par défaut.
-		static const castor::String DefaultMaterialName;
+		static const String DefaultMaterialName;
 
 	private:
 		PassPtrArray m_passes;
 		LightingModelID m_lightingModelId;
-		castor::Map< PassRPtr, OnPassChangedConnection > m_passListeners;
+		Map< PassRPtr, OnPassChangedConnection > m_passListeners;
 		RenderPassRegisterInfo * m_renderPassInfo{};
 		bool m_serialisable{ true };
 		bool m_initialised{};
@@ -222,14 +222,14 @@ namespace castor3d
 	{
 		RootContext * root{};
 		SceneContext * scene{};
-		castor::String name{};
+		String name{};
 		MaterialObs material{};
 		MaterialPtr ownMaterial{};
 		uint32_t passIndex{};
 		bool createMaterial{ true };
 	};
 
-	C3D_API castor::String getPrefix( MaterialContext const & context );
+	C3D_API String getPrefix( MaterialContext const & context );
 	C3D_API Engine * getEngine( MaterialContext const & context );
 }
 

@@ -15,14 +15,14 @@ namespace light_streaks
 	public:
 		CombinePass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
-			, castor3d::RenderDevice const & device
+			, c3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & sceneView
 			, crg::ImageViewIdArray const & kawaseViews
 			, crg::ImageViewIdArray const & resultView
-			, castor3d::Extent2D const & size
+			, c3d::Extent2D const & size
 			, bool const * enabled
 			, uint32_t const * passIndex );
-		void accept( castor3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor );
 
 		crg::FramePass const & getPass()const
 		{
@@ -30,11 +30,11 @@ namespace light_streaks
 		}
 
 	public:
-		static castor::MbString const CombineMapScene;
-		static castor::MbString const CombineMapKawase;
+		static c3d::MbString const CombineMapScene;
+		static c3d::MbString const CombineMapKawase;
 
 	private:
-		castor3d::ProgramModule m_shader;
+		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass & m_pass;
 	};

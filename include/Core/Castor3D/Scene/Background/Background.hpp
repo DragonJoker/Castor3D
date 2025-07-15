@@ -12,11 +12,11 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class SceneBackground
-		: public castor::OwnedBy< Engine >
-		, public castor::Named
+		: public OwnedBy< Engine >
+		, public Named
 	{
 	public:
 		static uint32_t constexpr VisiblePassIndex = 0u;
@@ -55,8 +55,8 @@ namespace castor3d
 		*/
 		C3D_API explicit SceneBackground( Engine & engine
 			, Scene & scene
-			, castor::String const & name
-			, castor::String type
+			, String const & name
+			, String type
 			, bool hasIBLSupport );
 		/**
 		*\~english
@@ -321,7 +321,7 @@ namespace castor3d
 		*\return
 		*	Le nom du modèle de fond.
 		*/
-		C3D_API virtual castor::String const & getModelName()const;
+		C3D_API virtual String const & getModelName()const;
 		C3D_API BackgroundModelID getModelID()const;
 		/**
 		*\~english
@@ -343,9 +343,9 @@ namespace castor3d
 		*\param	stream
 		*	Le flux.
 		*/
-		C3D_API virtual bool write( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::StringStream & stream )const = 0;
+		C3D_API virtual bool write( String const & tabs
+			, Path const & folder
+			, StringStream & stream )const = 0;
 		/**
 		*\~english
 		*name
@@ -408,7 +408,7 @@ namespace castor3d
 			return m_scene;
 		}
 
-		castor::String const & getType()const noexcept
+		String const & getType()const noexcept
 		{
 			return m_type;
 		}
@@ -477,27 +477,27 @@ namespace castor3d
 
 	protected:
 		Scene & m_scene;
-		castor::String m_type;
+		String m_type;
 		std::atomic_bool m_initialised{ false };
 		bool m_hdr{ true };
 		bool m_srgb{ false };
 		Texture m_textureId;
 		TextureLayoutUPtr m_texture;
 		SamplerObs m_sampler{};
-		castor::RawUniquePtr< IblTextures > m_ibl;
+		RawUniquePtr< IblTextures > m_ibl;
 		bool m_hasIBLSupport;
 		bool m_visible{ true };
 		bool m_showIrradiance{ false };
 		uint32_t m_passIndex{ 0u };
 		bool m_needsUpload{};
 
-		C3D_API static castor::PxBufferBaseUPtr adaptBuffer( castor::PxBufferBase const & buffer
-			, castor::String const & name
+		C3D_API static PxBufferBaseUPtr adaptBuffer( PxBufferBase const & buffer
+			, String const & name
 			, bool generateMips );
-		C3D_API static castor::ImageUPtr loadImage( Engine & engine
-			, castor::String const & name
-			, castor::Path const & folder
-			, castor::Path const & relative
+		C3D_API static ImageUPtr loadImage( Engine & engine
+			, String const & name
+			, Path const & folder
+			, Path const & relative
 			, bool generateMips );
 
 	private:

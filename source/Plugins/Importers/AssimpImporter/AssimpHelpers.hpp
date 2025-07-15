@@ -21,38 +21,38 @@ See LICENSE file in root folder
 
 namespace c3d_assimp
 {
-	inline castor::String makeString( aiString const & name )
+	inline c3d::String makeString( aiString const & name )
 	{
-		return castor::makeString( name.C_Str() );
+		return c3d::makeString( name.C_Str() );
 	}
 
-	inline castor::MbString toUtf8( aiString const & name )
+	inline c3d::MbString toUtf8( aiString const & name )
 	{
-		return castor::toUtf8( makeString( name ) );
+		return c3d::toUtf8( makeString( name ) );
 	}
 
-	inline castor::String normalizeName( castor::String const & name )
+	inline c3d::String normalizeName( c3d::String const & name )
 	{
-		return castor::File::normaliseFileName( name, cuT( "-"_sv ) );
+		return c3d::File::normaliseFileName( name, cuT( "-"_sv ) );
 	}
 
-	inline castor::Matrix4x4f fromAssimp( aiMatrix4x4 const & aiMatrix )
+	inline c3d::Matrix4x4f fromAssimp( aiMatrix4x4 const & aiMatrix )
 	{
-		castor::Array< float, 16u > data
+		c3d::Array< float, 16u > data
 			{ aiMatrix.a1, aiMatrix.b1, aiMatrix.c1, aiMatrix.d1
 			, aiMatrix.a2, aiMatrix.b2, aiMatrix.c2, aiMatrix.d2
 			, aiMatrix.a3, aiMatrix.b3, aiMatrix.c3, aiMatrix.d3
 			, aiMatrix.a4, aiMatrix.b4, aiMatrix.c4, aiMatrix.d4 };
-		return castor::Matrix4x4f{ data.data() };
+		return c3d::Matrix4x4f{ data.data() };
 	}
 
-	inline castor::Matrix4x4f fromAssimp( castor::Point3f const & direction
-		, castor::Point3f const & up )
+	inline c3d::Matrix4x4f fromAssimp( c3d::Point3f const & direction
+		, c3d::Point3f const & up )
 	{
-		castor::Matrix4x4f result;
+		c3d::Matrix4x4f result;
 		result.setIdentity();
-		castor::Point3f xaxis = castor::point::getNormalised( castor::point::cross( up, direction ) );
-		castor::Point3f yaxis = castor::point::getNormalised( castor::point::cross( direction, xaxis ) );
+		c3d::Point3f xaxis = c3d::point::getNormalised( c3d::point::cross( up, direction ) );
+		c3d::Point3f yaxis = c3d::point::getNormalised( c3d::point::cross( direction, xaxis ) );
 
 		result.setColumn( 0u, { xaxis->x, yaxis->x, direction->x, 0.0f } );
 		result.setColumn( 1u, { xaxis->y, yaxis->y, direction->y, 0.0f } );
@@ -61,34 +61,34 @@ namespace c3d_assimp
 		return result;
 	}
 
-	inline castor::Milliseconds fromAssimp( double ticks
+	inline c3d::Milliseconds fromAssimp( double ticks
 		, int64_t ticksPerSecond )
 	{
 		// Turn ticks to seconds.
 		auto time = ticks / double( ticksPerSecond );
 		// Turn seconds to milliseconds.
-		return castor::Milliseconds{ int64_t( time * 1000.0 ) };
+		return c3d::Milliseconds{ int64_t( time * 1000.0 ) };
 	}
 
-	inline castor::Point3f fromAssimp( aiVector3D const & v )
+	inline c3d::Point3f fromAssimp( aiVector3D const & v )
 	{
-		return castor::Point3f{ v.x, v.y, v.z };
+		return c3d::Point3f{ v.x, v.y, v.z };
 	}
 
-	inline castor3d::WrapMode fromAssimp( aiTextureMapMode v )
+	inline c3d::WrapMode fromAssimp( aiTextureMapMode v )
 	{
 		switch ( v )
 		{
 		case aiTextureMapMode_Wrap:
-			return castor3d::WrapMode::eRepeat;
+			return c3d::WrapMode::eRepeat;
 		case aiTextureMapMode_Clamp:
-			return castor3d::WrapMode::eClampToEdge;
+			return c3d::WrapMode::eClampToEdge;
 		case aiTextureMapMode_Decal:
-			return castor3d::WrapMode::eClampToBorder;
+			return c3d::WrapMode::eClampToBorder;
 		case aiTextureMapMode_Mirror:
-			return castor3d::WrapMode::eMirroredRepeat;
+			return c3d::WrapMode::eMirroredRepeat;
 		default:
-			return castor3d::WrapMode::eRepeat;
+			return c3d::WrapMode::eRepeat;
 		}
 	}
 
@@ -103,35 +103,35 @@ namespace c3d_assimp
 		LINEAR_MIPMAP_LINEAR = 0x2703,
 	};
 
-	inline castor3d::FilterMode fromAssimp( GlFilter const & v )
+	inline c3d::FilterMode fromAssimp( GlFilter const & v )
 	{
 		switch ( v )
 		{
 		case GlFilter::NEAREST:
 		case GlFilter::NEAREST_MIPMAP_NEAREST:
 		case GlFilter::NEAREST_MIPMAP_LINEAR:
-			return castor3d::FilterMode::eNearest;
+			return c3d::FilterMode::eNearest;
 		default:
-			return castor3d::FilterMode::eLinear;
+			return c3d::FilterMode::eLinear;
 		}
 	}
 
-	inline castor3d::MipmapMode getMipFilter( GlFilter const & v )
+	inline c3d::MipmapMode getMipFilter( GlFilter const & v )
 	{
 		switch ( v )
 		{
 		case GlFilter::NEAREST:
 		case GlFilter::NEAREST_MIPMAP_NEAREST:
 		case GlFilter::LINEAR_MIPMAP_NEAREST:
-			return castor3d::MipmapMode::eNearest;
+			return c3d::MipmapMode::eNearest;
 		default:
-			return castor3d::MipmapMode ::eLinear;
+			return c3d::MipmapMode ::eLinear;
 		}
 	}
 
-	inline castor::Quaternion fromAssimp( aiQuaternion const & v )
+	inline c3d::Quaternion fromAssimp( aiQuaternion const & v )
 	{
-		castor::Quaternion result;
+		c3d::Quaternion result;
 		result->x = v.x;
 		result->y = v.y;
 		result->z = v.z;
@@ -139,18 +139,18 @@ namespace c3d_assimp
 		return result;
 	}
 
-	inline castor::String getLongestCommonSubstring( castor::String const & a, castor::String const & b )
+	inline c3d::String getLongestCommonSubstring( c3d::String const & a, c3d::String const & b )
 	{
-		auto result = castor::string::getLongestCommonSubstring( a, b );
-		return castor::string::trim( result
+		auto result = c3d::string::getLongestCommonSubstring( a, b );
+		return c3d::string::trim( result
 			, true
 			, true
-			, castor::StringView{ cuT( " \r\t-_/\\|*$<>[](){}" ) } );
+			, c3d::StringView{ cuT( " \r\t-_/\\|*$<>[](){}" ) } );
 	}
 
 	inline bool isValidMesh( aiMesh const & mesh )
 	{
-		auto faces = castor::makeArrayView( mesh.mFaces, mesh.mNumFaces );
+		auto faces = c3d::makeArrayView( mesh.mFaces, mesh.mNumFaces );
 		auto count = uint32_t( std::count_if( faces.begin()
 			, faces.end()
 			, []( aiFace const & face )
@@ -163,15 +163,15 @@ namespace c3d_assimp
 
 	template< typename aiMeshType >
 	inline void createVertexBuffer( aiMeshType const & aiMesh
-		, castor::Point3fArray & positions
-		, castor::Point3fArray & normals
-		, castor::Point4fArray & tangents
-		, castor::Point3fArray & bitangents
-		, castor::Point3fArray & texcoords0
-		, castor::Point3fArray & texcoords1
-		, castor::Point3fArray & texcoords2
-		, castor::Point3fArray & texcoords3
-		, castor::Point3fArray & colours )
+		, c3d::Point3fArray & positions
+		, c3d::Point3fArray & normals
+		, c3d::Point4fArray & tangents
+		, c3d::Point3fArray & bitangents
+		, c3d::Point3fArray & texcoords0
+		, c3d::Point3fArray & texcoords1
+		, c3d::Point3fArray & texcoords2
+		, c3d::Point3fArray & texcoords3
+		, c3d::Point3fArray & colours )
 	{
 		uint32_t index{ 0u };
 
@@ -303,22 +303,22 @@ namespace c3d_assimp
 		}
 	}
 
-	inline castor::Vector< castor3d::SubmeshAnimationBuffer > gatherMeshAnimBuffers( castor::Point3fArray const & positions
-		, castor::Point3fArray const & normals
-		, castor::Point4fArray const & tangents
-		, castor::Point3fArray const & bitangents
-		, castor::Point3fArray const & texcoords0
-		, castor::Point3fArray const & texcoords1
-		, castor::Point3fArray const & texcoords2
-		, castor::Point3fArray const & texcoords3
-		, castor::Point3fArray const & colours
-		, castor::ArrayView< aiAnimMesh * > animMeshes )
+	inline c3d::Vector< c3d::SubmeshAnimationBuffer > gatherMeshAnimBuffers( c3d::Point3fArray const & positions
+		, c3d::Point3fArray const & normals
+		, c3d::Point4fArray const & tangents
+		, c3d::Point3fArray const & bitangents
+		, c3d::Point3fArray const & texcoords0
+		, c3d::Point3fArray const & texcoords1
+		, c3d::Point3fArray const & texcoords2
+		, c3d::Point3fArray const & texcoords3
+		, c3d::Point3fArray const & colours
+		, c3d::ArrayView< aiAnimMesh * > animMeshes )
 	{
-		castor::Vector< castor3d::SubmeshAnimationBuffer > result;
+		c3d::Vector< c3d::SubmeshAnimationBuffer > result;
 
 		for ( auto aiAnimMesh : animMeshes )
 		{
-			castor3d::SubmeshAnimationBuffer buffer;
+			c3d::SubmeshAnimationBuffer buffer;
 			createVertexBuffer( *aiAnimMesh
 				, buffer.positions
 				, buffer.normals
@@ -430,7 +430,7 @@ namespace c3d_assimp
 				}
 			}
 
-			result.emplace_back( castor::move( buffer ) );
+			result.emplace_back( c3d::move( buffer ) );
 		}
 
 		return result;
@@ -467,7 +467,7 @@ namespace c3d_assimp
 		double maxTicks = 0.0;
 		double minTicks = std::numeric_limits< double >::max();
 
-		for ( auto nodeAnim : castor::makeArrayView( aiAnimation.mChannels, aiAnimation.mNumChannels ) )
+		for ( auto nodeAnim : c3d::makeArrayView( aiAnimation.mChannels, aiAnimation.mNumChannels ) )
 		{
 			count = std::max( { count
 				, nodeAnim->mNumPositionKeys
@@ -501,7 +501,7 @@ namespace c3d_assimp
 	inline aiNode const * findMeshNode( uint32_t meshIndex
 		, aiNode const & node )
 	{
-		auto meshes = castor::makeArrayView( node.mMeshes, node.mNumMeshes );
+		auto meshes = c3d::makeArrayView( node.mMeshes, node.mNumMeshes );
 
 		if ( auto meshIt = std::find( meshes.begin(), meshes.end(), meshIndex );
 			meshIt != meshes.end() )
@@ -510,7 +510,7 @@ namespace c3d_assimp
 		}
 
 		aiNode const * result{};
-		auto children = castor::makeArrayView( node.mChildren, node.mNumChildren );
+		auto children = c3d::makeArrayView( node.mChildren, node.mNumChildren );
 		auto childIt = children.begin();
 
 		while ( !result && childIt != children.end() )
@@ -523,10 +523,10 @@ namespace c3d_assimp
 	}
 
 	inline aiNode const * findRootSkeletonNode( aiNode const & sceneRootNode
-		, castor::ArrayView< aiBone * > bones
+		, c3d::ArrayView< aiBone * > bones
 		, aiNode const * meshNode )
 	{
-		castor::Vector< aiNode const * > bonesRootNodes;
+		c3d::Vector< aiNode const * > bonesRootNodes;
 		auto insertNode = [&bonesRootNodes]( aiNode const * node )
 		{
 			if ( std::all_of( bonesRootNodes.begin()
@@ -573,11 +573,11 @@ namespace c3d_assimp
 		return *bonesRootNodes.begin();
 	}
 
-	inline castor::String findSkeletonName( castor::StringMap< castor::Matrix4x4f > const & bonesNodes
+	inline c3d::String findSkeletonName( c3d::StringMap< c3d::Matrix4x4f > const & bonesNodes
 		, aiNode const & rootNode )
 	{
-		castor::Vector< aiNode const * > bones;
-		castor::Vector< aiNode const * > work;
+		c3d::Vector< aiNode const * > bones;
+		c3d::Vector< aiNode const * > work;
 		work.push_back( &rootNode );
 		auto name = makeString( rootNode.mName );
 
@@ -586,7 +586,7 @@ namespace c3d_assimp
 			auto node = work.back();
 			work.pop_back();
 
-			for ( auto child : castor::makeArrayView( node->mChildren, node->mNumChildren ) )
+			for ( auto child : c3d::makeArrayView( node->mChildren, node->mNumChildren ) )
 			{
 				work.push_back( child );
 			}
@@ -617,24 +617,24 @@ namespace c3d_assimp
 	template<>
 	struct KeyDataTyperT< aiVectorKey >
 	{
-		using Type = castor::Point3f;
+		using Type = c3d::Point3f;
 	};
 
 	template<>
 	struct KeyDataTyperT< aiQuatKey >
 	{
-		using Type = castor::Quaternion;
+		using Type = c3d::Quaternion;
 	};
 
 	template< typename KeyT >
 	using KeyDataTypeT = typename KeyDataTyperT< KeyT >::Type;
 
 	template< typename KeyT >
-	inline castor::Map< castor::Milliseconds, KeyDataTypeT< KeyT > > processKeys( castor::ArrayView< KeyT > const & keys
+	inline c3d::Map< c3d::Milliseconds, KeyDataTypeT< KeyT > > processKeys( c3d::ArrayView< KeyT > const & keys
 		, int64_t ticksPerSecond
-		, castor::Set< castor::Milliseconds > & times )
+		, c3d::Set< c3d::Milliseconds > & times )
 	{
-		castor::Map< castor::Milliseconds, KeyDataTypeT< KeyT > > result;
+		c3d::Map< c3d::Milliseconds, KeyDataTypeT< KeyT > > result;
 
 		for ( auto const & key : keys )
 		{
@@ -650,26 +650,26 @@ namespace c3d_assimp
 	}
 
 	template< typename KeyFrameT, typename AnimationT >
-	inline KeyFrameT & getKeyFrame( castor::Milliseconds const & time
+	inline KeyFrameT & getKeyFrame( c3d::Milliseconds const & time
 		, AnimationT & animation
-		, castor::Map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes )
+		, c3d::Map< c3d::Milliseconds, c3d::UniquePtr< KeyFrameT > > & keyframes )
 	{
 		auto it = keyframes.find( time );
 
 		if ( it == keyframes.end() )
 		{
 			it = keyframes.emplace( time
-				, castor::makeUnique< KeyFrameT >( animation, time ) ).first;
+				, c3d::makeUnique< KeyFrameT >( animation, time ) ).first;
 		}
 
 		return *it->second;
 	}
 
 	template< typename T >
-	inline void findValue( castor::Milliseconds time
-		, typename castor::Map< castor::Milliseconds, T > const & map
-		, typename castor::Map< castor::Milliseconds, T >::const_iterator & prv
-		, typename castor::Map< castor::Milliseconds, T >::const_iterator & cur )
+	inline void findValue( c3d::Milliseconds time
+		, typename c3d::Map< c3d::Milliseconds, T > const & map
+		, typename c3d::Map< c3d::Milliseconds, T >::const_iterator & prv
+		, typename c3d::Map< c3d::Milliseconds, T >::const_iterator & cur )
 	{
 		if ( map.empty() )
 		{
@@ -680,7 +680,7 @@ namespace c3d_assimp
 		{
 			cur = std::find_if( map.begin()
 				, map.end()
-				, [&time]( castor::Pair< castor::Milliseconds, T > const & pair )
+				, [&time]( c3d::Pair< c3d::Milliseconds, T > const & pair )
 				{
 					return pair.first > time;
 				} );
@@ -700,9 +700,9 @@ namespace c3d_assimp
 	}
 
 	template< typename T >
-	inline T interpolate( castor::Milliseconds const & time
-		, castor3d::Interpolator< T > const & interpolator
-		, castor::Map< castor::Milliseconds, T > const & values )
+	inline T interpolate( c3d::Milliseconds const & time
+		, c3d::Interpolator< T > const & interpolator
+		, c3d::Map< c3d::Milliseconds, T > const & values )
 	{
 		T result;
 
@@ -732,22 +732,22 @@ namespace c3d_assimp
 	}
 
 	template< typename AnimationT, typename KeyFrameT, typename FuncT >
-	inline void synchroniseKeys( castor::Map< castor::Milliseconds, castor::Point3f > const & translates
-		, castor::Map< castor::Milliseconds, castor::Point3f > const & scales
-		, castor::Map< castor::Milliseconds, castor::Quaternion > const & rotates
-		, [[maybe_unused]] castor::Set< castor::Milliseconds > const & times
+	inline void synchroniseKeys( c3d::Map< c3d::Milliseconds, c3d::Point3f > const & translates
+		, c3d::Map< c3d::Milliseconds, c3d::Point3f > const & scales
+		, c3d::Map< c3d::Milliseconds, c3d::Quaternion > const & rotates
+		, [[maybe_unused]] c3d::Set< c3d::Milliseconds > const & times
 		, uint32_t fps
-		, castor::Milliseconds minTime
-		, castor::Milliseconds maxTime
+		, c3d::Milliseconds minTime
+		, c3d::Milliseconds maxTime
 		, AnimationT & animation
-		, castor::Map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes
+		, c3d::Map< c3d::Milliseconds, c3d::UniquePtr< KeyFrameT > > & keyframes
 		, FuncT fillKeyFrame )
 	{
-		castor3d::InterpolatorT< castor::Point3f, castor3d::InterpolatorType::eLinear > pointInterpolator;
-		castor3d::InterpolatorT< castor::Quaternion, castor3d::InterpolatorType::eLinear > quatInterpolator;
+		c3d::InterpolatorT< c3d::Point3f, c3d::InterpolatorType::eLinear > pointInterpolator;
+		c3d::InterpolatorT< c3d::Quaternion, c3d::InterpolatorType::eLinear > quatInterpolator;
 		// Limit the key frames per second to 60, to spare RAM...
 		auto wantedFps = std::min< int64_t >( 60, int64_t( fps ) );
-		castor::Milliseconds step{ 1000 / wantedFps };
+		c3d::Milliseconds step{ 1000 / wantedFps };
 
 		for ( auto time = minTime; time <= maxTime; time += step )
 		{
@@ -767,23 +767,23 @@ namespace c3d_assimp
 		, typename FuncT >
 	inline void processAnimationNodeKeys( aiAnimT const & aiAnim
 		, uint32_t wantedFps
-		, castor::Milliseconds minTime
-		, castor::Milliseconds maxTime
+		, c3d::Milliseconds minTime
+		, c3d::Milliseconds maxTime
 		, int64_t ticksPerSecond
 		, AnimationT & animation
-		, castor::Map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes
+		, c3d::Map< c3d::Milliseconds, c3d::UniquePtr< KeyFrameT > > & keyframes
 		, FuncT fillKeyFrame )
 	{
-		castor::Set< castor::Milliseconds > times;
-		auto translates = processKeys( castor::makeArrayView( aiAnim.mPositionKeys
+		c3d::Set< c3d::Milliseconds > times;
+		auto translates = processKeys( c3d::makeArrayView( aiAnim.mPositionKeys
 				, aiAnim.mNumPositionKeys )
 			, ticksPerSecond
 			, times );
-		auto scales = processKeys( castor::makeArrayView( aiAnim.mScalingKeys
+		auto scales = processKeys( c3d::makeArrayView( aiAnim.mScalingKeys
 				, aiAnim.mNumScalingKeys )
 			, ticksPerSecond
 			, times );
-		auto rotates = processKeys( castor::makeArrayView( aiAnim.mRotationKeys
+		auto rotates = processKeys( c3d::makeArrayView( aiAnim.mRotationKeys
 				, aiAnim.mNumRotationKeys )
 			, ticksPerSecond
 			, times );

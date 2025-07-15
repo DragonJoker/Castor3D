@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class BrdfPrefilter
 	{
@@ -34,7 +34,7 @@ namespace castor3d
 		 */
 		C3D_API explicit BrdfPrefilter( Engine const & engine
 			, RenderDevice const & device
-			, castor::Size const & size
+			, Size const & size
 			, Texture const & dstTexture );
 		/**
 		 *\~english

@@ -5,15 +5,15 @@
 
 #include <CastorUtils/Design/BlockGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace rendlpsnc
 	{
-		static castor::MbString const CALL_START_RENDERING = "Can't call beginRendering in a synchronous render loop";
-		static castor::MbString const CALL_END_RENDERING = "Can't call endRendering in a synchronous render loop";
-		static castor::MbString const CALL_PAUSE_RENDERING = "Can't call Pause in a synchronous render loop";
-		static castor::MbString const CALL_RESUME_RENDERING = "Can't call Resume in a synchronous render loop";
-		static castor::MbString const RLS_UNKNOWN_EXCEPTION = "Unknown exception";
+		static MbString const CALL_START_RENDERING = "Can't call beginRendering in a synchronous render loop";
+		static MbString const CALL_END_RENDERING = "Can't call endRendering in a synchronous render loop";
+		static MbString const CALL_PAUSE_RENDERING = "Can't call Pause in a synchronous render loop";
+		static MbString const CALL_RESUME_RENDERING = "Can't call Resume in a synchronous render loop";
+		static MbString const RLS_UNKNOWN_EXCEPTION = "Unknown exception";
 	}
 
 	RenderLoopSync::RenderLoopSync( Engine & engine
@@ -32,7 +32,7 @@ namespace castor3d
 		CU_Exception( rendlpsnc::CALL_START_RENDERING );
 	}
 
-	void RenderLoopSync::renderSyncFrame( castor::Milliseconds tslf )
+	void RenderLoopSync::renderSyncFrame( Milliseconds tslf )
 	{
 		if ( m_active )
 		{
@@ -40,19 +40,19 @@ namespace castor3d
 			{
 				doRenderFrame( tslf );
 			}
-			catch ( castor::Exception & exc )
+			catch ( Exception & exc )
 			{
-				log::error << castor::makeString( exc.getFullDescription() ) << std::endl;
+				log::error << makeString( exc.getFullDescription() ) << std::endl;
 				m_active = false;
 			}
 			catch ( std::exception & exc )
 			{
-				log::error << castor::makeString( exc.what() ) << std::endl;
+				log::error << makeString( exc.what() ) << std::endl;
 				m_active = false;
 			}
 			catch ( ... )
 			{
-				log::error << castor::makeString( rendlpsnc::RLS_UNKNOWN_EXCEPTION ) << std::endl;
+				log::error << makeString( rendlpsnc::RLS_UNKNOWN_EXCEPTION ) << std::endl;
 				m_active = false;
 			}
 		}

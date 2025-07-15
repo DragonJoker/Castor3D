@@ -13,35 +13,35 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementSmartPtr( castor3d, EditCtrl )
+CU_ImplementSmartPtr( c3d, EditCtrl )
 
-namespace castor3d
+namespace c3d
 {
 	static uint32_t constexpr LineEndWidth = 5u;
 
 	EditCtrl::EditCtrl( SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, EditStyleRPtr style
 		, ControlRPtr parent )
 		: EditCtrl{ scene
 			, name
 			, style
 			, parent
-			, castor::String{}
-			, castor::Position{}
-			, castor::Size{}
+			, String{}
+			, Position{}
+			, Size{}
 			, 0
 			, true }
 	{
 	}
 
 	EditCtrl::EditCtrl( SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, EditStyleRPtr style
 		, ControlRPtr parent
-		, castor::String const & caption
-		, castor::Position const & position
-		, castor::Size const & size
+		, String const & caption
+		, Position const & position
+		, Size const & size
 		, ControlFlagType flags
 		, bool visible )
 		: Control{ Type
@@ -55,14 +55,14 @@ namespace castor3d
 			, visible }
 		, ScrollableCtrl{ static_cast< Control & >( *this )
 			, style }
-		, m_caption{ castor::toUtf8U32String( caption ) }
-		, m_onScrollContent{ onScrollContent.connect( [this]( castor::Position const & pos )
+		, m_caption{ toUtf8U32String( caption ) }
+		, m_onScrollContent{ onScrollContent.connect( [this]( Position const & pos )
 			{
 				doScrollContent( pos );
 			} ) }
 	{
 		m_caret.indices.updateIndex( m_caption.size(), m_caption );
-		setBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
+		setBorderSize( Point4ui{ 1, 1, 1, 1 } );
 		EventHandler::connect( KeyboardEventType::ePushed
 			, [this]( KeyboardEvent const & event )
 			{
@@ -132,11 +132,11 @@ namespace castor3d
 			{
 				if ( m_scene )
 				{
-					m_scene->removeOverlay( getName() + cuT( "/Selection" ) + castor::string::toString( i ), true );
+					m_scene->removeOverlay( getName() + cuT( "/Selection" ) + string::toString( i ), true );
 				}
 				else
 				{
-					getEngine().removeOverlay( getName() + cuT( "/Selection" ) + castor::string::toString( i ), true );
+					getEngine().removeOverlay( getName() + cuT( "/Selection" ) + string::toString( i ), true );
 				}
 			}
 
@@ -168,9 +168,9 @@ namespace castor3d
 		}
 	}
 
-	void EditCtrl::updateCaption( castor::String const & value )
+	void EditCtrl::updateCaption( String const & value )
 	{
-		m_caption = castor::toUtf8U32String( value );
+		m_caption = toUtf8U32String( value );
 	}
 
 	void EditCtrl::doUpdateStyle()
@@ -228,17 +228,17 @@ namespace castor3d
 		unregisterControl( *control );
 	}
 
-	castor::Point4ui EditCtrl::doUpdateClientRect( castor::Point4ui const & clientRect )
+	Point4ui EditCtrl::doUpdateClientRect( Point4ui const & clientRect )
 	{
 		return updateScrollableClientRect( clientRect );
 	}
 
-	void EditCtrl::doSetPosition( castor::Position const & value )
+	void EditCtrl::doSetPosition( Position const & value )
 	{
 		updateScrollBars();
 	}
 
-	void EditCtrl::doSetSize( castor::Size const & value )
+	void EditCtrl::doSetSize( Size const & value )
 	{
 		// Add 1 to account for caret at line end.
 		if ( !hasVerticalScrollBar()
@@ -256,12 +256,12 @@ namespace castor3d
 		}
 	}
 
-	void EditCtrl::doSetBorderSize( castor::Point4ui const & value )
+	void EditCtrl::doSetBorderSize( Point4ui const & value )
 	{
 		updateScrollBars();
 	}
 
-	void EditCtrl::doSetCaption( castor::U32String const & value )
+	void EditCtrl::doSetCaption( U32String const & value )
 	{
 		m_caption = value;
 		m_caret.indices.updateIndex( m_caption.size(), m_caption );
@@ -352,7 +352,7 @@ namespace castor3d
 		{
 			if ( isMultiLine() )
 			{
-				if ( castor::checkFlag( getFlags(), ScrollBarFlag::eHorizontal ) )
+				if ( checkFlag( getFlags(), ScrollBarFlag::eHorizontal ) )
 				{
 					text->setTextWrappingMode( TextWrappingMode::eNone );
 				}
@@ -502,12 +502,12 @@ namespace castor3d
 	{
 	}
 
-	void EditCtrl::doAddCharAtCaret( castor::String const & c )
+	void EditCtrl::doAddCharAtCaret( String const & c )
 	{
 		auto diff = size_t( std::distance( m_caption.cbegin(), m_caret.indices.captionIt ) );
-		m_caption = castor::U32String( m_caption.cbegin(), m_caret.indices.captionIt )
-			+ castor::toUtf8U32String( c )
-			+ castor::U32String( m_caret.indices.captionIt, m_caption.cend() );
+		m_caption = U32String( m_caption.cbegin(), m_caret.indices.captionIt )
+			+ toUtf8U32String( c )
+			+ U32String( m_caret.indices.captionIt, m_caption.cend() );
 		m_caret.indices.updateIndex( diff + 1, m_caption );
 		doUpdateCaption();
 		doUpdateCaret();
@@ -525,7 +525,7 @@ namespace castor3d
 		}
 
 		auto diff = size_t( std::distance( m_caption.cbegin(), m_caret.indices.captionIt ) );
-		castor::U32String caption( m_caption.cbegin(), m_caret.indices.captionIt );
+		U32String caption( m_caption.cbegin(), m_caret.indices.captionIt );
 
 		if ( auto it = m_caret.indices.captionIt;
 			it != m_caption.end() )
@@ -534,7 +534,7 @@ namespace castor3d
 
 			if ( it != m_caption.end() )
 			{
-				caption += castor::U32String( it, m_caption.cend() );
+				caption += U32String( it, m_caption.cend() );
 			}
 		}
 
@@ -556,7 +556,7 @@ namespace castor3d
 
 		m_caret.indices.updateIndex( m_caret.indices.captionIndex - 1u, m_caption );
 		auto diff = size_t( std::distance( m_caption.cbegin(), m_caret.indices.captionIt ) );
-		castor::U32String caption( m_caption.cbegin(), m_caret.indices.captionIt );
+		U32String caption( m_caption.cbegin(), m_caret.indices.captionIt );
 
 		if ( auto it = m_caret.indices.captionIt;
 			it != m_caption.end() )
@@ -565,7 +565,7 @@ namespace castor3d
 
 			if ( it != m_caption.end() )
 			{
-				caption += castor::U32String( it, m_caption.cend() );
+				caption += U32String( it, m_caption.cend() );
 			}
 		}
 
@@ -595,7 +595,7 @@ namespace castor3d
 			std::u32string_view caption{ m_caption.data(), m_caret.indices.captionIndex - 1u };
 			auto rit = caption.find_last_of( U" \n\t" );
 
-			if ( rit == castor::U32String::npos )
+			if ( rit == U32String::npos )
 			{
 				m_caret.indices.updateIndex( 0, m_caption );
 			}
@@ -641,7 +641,7 @@ namespace castor3d
 		{
 			auto it = m_caption.find_first_of( U" \n\t", m_caret.indices.captionIndex + 1u );
 
-			if ( it == castor::U32String::npos )
+			if ( it == U32String::npos )
 			{
 				m_caret.indices.updateIndex( m_caption.size(), m_caption );
 			}
@@ -857,7 +857,7 @@ namespace castor3d
 		doAdjustTextPosition();
 	}
 
-	void EditCtrl::doUpdateCaretPosition( castor::Position const & pos
+	void EditCtrl::doUpdateCaretPosition( Position const & pos
 		, CaretIndices & indices )
 	{
 		auto text = m_text;
@@ -871,7 +871,7 @@ namespace castor3d
 		uint32_t index{};
 		auto lineIt = std::find_if( m_metrics.lines.begin()
 			, m_metrics.lines.end()
-			, [&position, &index]( castor::TextLineMetrics const & lookup )
+			, [&position, &index]( TextLineMetrics const & lookup )
 			{
 				auto height = uint32_t( lookup.yMax - lookup.yMin );
 				auto result = uint32_t( lookup.top ) + height > uint32_t( position->y );
@@ -965,8 +965,8 @@ namespace castor3d
 			if ( auto caret = m_caret.overlay )
 			{
 				auto font = text->getFontTexture()->getFont();
-				castor::Position position{};
-				castor::Size size{ 1u, font->getHeight() };
+				Position position{};
+				Size size{ 1u, font->getHeight() };
 
 				if ( !m_caption.empty() )
 				{
@@ -1016,7 +1016,7 @@ namespace castor3d
 		{
 			auto fontTexture = text->getFontTexture();
 			auto font = fontTexture->getFont();
-			castor::Vector< char32_t > newCaption;
+			Vector< char32_t > newCaption;
 
 			for ( auto c : m_caption )
 			{
@@ -1099,11 +1099,11 @@ namespace castor3d
 		while ( lineDiff >= m_selections.size() )
 		{
 			auto panel = m_scene
-				? m_scene->addNewOverlay( getName() + cuT( "/Selection" ) + castor::string::toString( m_selections.size() )
+				? m_scene->addNewOverlay( getName() + cuT( "/Selection" ) + string::toString( m_selections.size() )
 					, getEngine()
 					, OverlayType::ePanel
 					, &text->getOverlay() )->getPanelOverlay()
-				: getEngine().addNewOverlay( getName() + cuT( "/Selection" ) + castor::string::toString( m_selections.size() )
+				: getEngine().addNewOverlay( getName() + cuT( "/Selection" ) + string::toString( m_selections.size() )
 					, getEngine()
 					, OverlayType::ePanel
 					, &text->getOverlay() )->getPanelOverlay();
@@ -1201,7 +1201,7 @@ namespace castor3d
 			}
 		}
 
-		for ( auto sel : castor::makeArrayView( m_selections.begin() + selLineIndex, m_selections.end() ) )
+		for ( auto sel : makeArrayView( m_selections.begin() + selLineIndex, m_selections.end() ) )
 		{
 			if ( auto panel = sel )
 			{
@@ -1234,7 +1234,7 @@ namespace castor3d
 			|| ( selBegin.lineIndex == selEnd.lineIndex
 				&& selBegin.charIndex > selEnd.charIndex ) )
 		{
-			castor::swap( selBegin, selEnd );
+			c3d::swap( selBegin, selEnd );
 		}
 
 		return { selBegin, selEnd };
@@ -1341,7 +1341,7 @@ namespace castor3d
 			{
 				auto clientSize = getClientSize();
 				auto clientOffset = getClientOffset();
-				auto caretPos = caret->getPixelPosition() + castor::Point2i{};
+				auto caretPos = caret->getPixelPosition() + Point2i{};
 				auto caretSize = caret->getPixelSize();
 				auto position = text->getPixelPosition() - clientOffset;
 				auto caretTextPos = caretPos + position;
@@ -1403,7 +1403,7 @@ namespace castor3d
 		}
 	}
 
-	void EditCtrl::doScrollContent( castor::Position const & position )
+	void EditCtrl::doScrollContent( Position const & position )
 	{
 		if ( auto text = m_text )
 		{

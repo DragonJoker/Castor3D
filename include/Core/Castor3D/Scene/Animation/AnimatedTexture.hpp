@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/Animation/TextureAnimationModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class AnimatedTexture
 		: public AnimatedObject
@@ -38,12 +38,12 @@ namespace castor3d
 			, TextureConfiguration const & config
 			, Pass & pass );
 		/**
-		 *\copydoc		castor3d::AnimatedObject::update
+		 *\copydoc		AnimatedObject::update
 		 */
-		C3D_API void update( castor::Milliseconds const & elapsed )override;
+		C3D_API void update( Milliseconds const & elapsed )override;
 		C3D_API void fillBuffer( TextureAnimationData * buffer )const;
 		/**
-		 *\copydoc		castor3d::AnimatedObject::isPlayingAnimation
+		 *\copydoc		AnimatedObject::isPlayingAnimation
 		 */
 		C3D_API bool isPlayingAnimation()const override
 		{
@@ -87,7 +87,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doAddAnimation( castor::String const & name )override;
+		void doAddAnimation( String const & name )override;
 		void doStartAnimation( AnimationInstance & animation )override;
 		void doStopAnimation( AnimationInstance & animation )override;
 		void doClearAnimations()override;

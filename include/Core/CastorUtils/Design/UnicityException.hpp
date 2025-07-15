@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Exception/Exception.hpp"
 
-namespace castor
+namespace c3d
 {
 	/**
 	\~english
@@ -55,6 +55,6 @@ namespace castor
 }
 //!\~english	Helper macro to use UnicityException.
 //\~french		Macro pour faciliter l'utilisation de UnicityException.
-#define CU_UnicityError( error, text ) throw castor::UnicityException{ error, text, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
+#define CU_UnicityError( error, text ) throw c3d::UnicityException{ error, text, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 
 #endif

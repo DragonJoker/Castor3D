@@ -10,11 +10,11 @@ See LICENSE file in root folder
 #include "Castor3D/Animation/AnimationKeyFrame.hpp"
 #include "Castor3D/Binary/BinaryParser.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class TextureAnimationKeyFrame
 		: public AnimationKeyFrame
-		, public castor::OwnedBy< TextureAnimation >
+		, public OwnedBy< TextureAnimation >
 	{
 	public:
 		/**
@@ -28,7 +28,7 @@ namespace castor3d
 		 *\param[in]	timeIndex	Quand la key frame commence.
 		 */
 		C3D_API TextureAnimationKeyFrame( TextureAnimation & parent
-			, castor::Milliseconds const & timeIndex );
+			, Milliseconds const & timeIndex );
 		/**
 		 *\~english
 		 *\return		A clone of this object.
@@ -37,24 +37,24 @@ namespace castor3d
 		 */
 		C3D_API AnimationKeyFrameUPtr clone( Animation & parent )const override;
 
-		void setTile( castor::Point2ui tile )noexcept
+		void setTile( Point2ui tile )noexcept
 		{
-			m_tile = castor::move( tile );
+			m_tile = c3d::move( tile );
 		}
 
-		castor::Point2ui const & getTile()const noexcept
+		Point2ui const & getTile()const noexcept
 		{
 			return m_tile;
 		}
 
 	private:
-		void doSetTimeIndex( castor::Milliseconds const & time )noexcept
+		void doSetTimeIndex( Milliseconds const & time )noexcept
 		{
 			m_timeIndex = time;
 		}
 
 	private:
-		castor::Point2ui m_tile;
+		Point2ui m_tile;
 
 		friend class BinaryParser< TextureAnimationKeyFrame >;
 	};

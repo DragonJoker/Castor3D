@@ -4,7 +4,7 @@
 #include "CastorUtils/FileParser/FileParserContext.hpp"
 #include "CastorUtils/Design/ArrayView.hpp"
 
-namespace castor
+namespace c3d
 {
 	//*************************************************************************************************
 
@@ -840,7 +840,7 @@ namespace castor
 
 	inline ParserParameterBaseSPtr ParserParameter< ParameterType::eName >::clone()const
 	{
-		return castor::make_shared< ParserParameter< ParameterType::eName > >( *this );
+		return c3d::makeShared< ParserParameter< ParameterType::eName > >( *this );
 	}
 
 	inline bool ParserParameter< ParameterType::eName >::parse( CU_UnusedParam( LoggerInstance &, logger )
@@ -889,7 +889,7 @@ namespace castor
 
 	inline ParserParameterBaseSPtr ParserParameter< ParameterType::eCheckedText >::clone()const
 	{
-		return castor::make_shared< ParserParameter< ParameterType::eCheckedText > >( *this );
+		return c3d::makeShared< ParserParameter< ParameterType::eCheckedText > >( *this );
 	}
 
 	inline bool ParserParameter< ParameterType::eCheckedText >::parse( CU_UnusedParam( LoggerInstance &, logger )
@@ -946,7 +946,7 @@ namespace castor
 
 	inline ParserParameterBaseSPtr ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::clone()const
 	{
-		return castor::make_shared< ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText > >( *this );
+		return c3d::makeShared< ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText > >( *this );
 	}
 
 	inline bool ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::parse( CU_UnusedParam( LoggerInstance &, logger )
@@ -1027,7 +1027,7 @@ namespace castor
 
 	inline ParserParameterBaseSPtr ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::clone()const
 	{
-		return castor::make_shared< ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText > >( *this );
+		return c3d::makeShared< ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText > >( *this );
 	}
 
 	inline bool ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::parse( CU_UnusedParam( LoggerInstance &, logger )

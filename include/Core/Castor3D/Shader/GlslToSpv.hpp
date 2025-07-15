@@ -7,7 +7,7 @@ See LICENSE file in root folder.
 #include "ShaderModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**
 	*\~english
@@ -49,5 +49,5 @@ namespace castor3d
 	*/
 	C3D_API UInt32Array compileGlslToSpv( RenderDevice const & device
 		, VkShaderStageFlagBits stage
-		, castor::MbString const & shader );
+		, MbString const & shader );
 }

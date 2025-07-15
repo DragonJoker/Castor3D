@@ -1,6 +1,6 @@
 #include "CastorUtils/Math/TransformationMatrix.hpp"
 
-namespace castor
+namespace c3d
 {
 	//*************************************************************************************************
 
@@ -332,7 +332,7 @@ namespace castor
 		}
 		else
 		{
-			angle = castor::acosf( w );
+			angle = c3d::acosf( w );
 			angle *= 2;
 			axis[0] = x / s;
 			axis[1] = y / s;
@@ -361,7 +361,7 @@ namespace castor
 		}
 		else
 		{
-			angle = castor::acosf( w );
+			angle = c3d::acosf( w );
 			angle *= 2;
 			axis[0] = x / s;
 			axis[1] = y / s;

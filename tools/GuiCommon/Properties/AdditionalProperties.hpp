@@ -193,7 +193,7 @@ namespace GuiCommon
 		return ValueTraitsT< ValueT >::convert( value );
 	}
 
-	using ButtonEventMethod = castor::Function< void ( wxVariant const & ) >;
+	using ButtonEventMethod = c3d::Function< void ( wxVariant const & ) >;
 
 	class ButtonData
 		: public wxClientData
@@ -309,7 +309,7 @@ namespace GuiCommon
 
 	wxPGProperty * addAttributes( wxPGProperty * prop );
 
-	uint32_t toBGRPacked( castor3d::ColourWrapper const & colour );
+	uint32_t toBGRPacked( c3d::ColourWrapper const & colour );
 
 	template< typename PropertyType >
 	PropertyType * CreateProperty( wxString const & name, wxVariant && value, wxString const & help )
@@ -425,7 +425,7 @@ namespace GuiCommon
 		wxDECLARE_DYNAMIC_CLASS( gcImageFileProperty );
 
 	public:
-		gcImageFileProperty( castor::ImageLoader * loader = nullptr
+		gcImageFileProperty( c3d::ImageLoader * loader = nullptr
 			, wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
 			, wxString const & value = wxEmptyString );
@@ -438,9 +438,9 @@ namespace GuiCommon
 			, wxPGPaintData & paintdata ) override;
 
 	protected:
-		castor::ImageLoader * m_loader;
-		castor::RawUniquePtr< castor::Image > m_image; // intermediate thumbnail area
-		castor::RawUniquePtr< wxBitmap > m_bitmap; // final thumbnail area
+		c3d::ImageLoader * m_loader;
+		c3d::RawUniquePtr< c3d::Image > m_image; // intermediate thumbnail area
+		c3d::RawUniquePtr< wxBitmap > m_bitmap; // final thumbnail area
 
 	private:
 		// Initialize m_image using the current file name.
@@ -453,10 +453,10 @@ namespace GuiCommon
 		wxDECLARE_DYNAMIC_CLASS( gcTextureProperty );
 
 	public:
-		gcTextureProperty( castor::ImageLoader * loader = nullptr
+		gcTextureProperty( c3d::ImageLoader * loader = nullptr
 			, wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
-			, castor3d::TextureSourceInfo * value = nullptr );
+			, c3d::TextureSourceInfo * value = nullptr );
 
 		void OnSetValue()override;
 
@@ -466,18 +466,18 @@ namespace GuiCommon
 			, wxPGPaintData & paintdata ) override;
 
 	protected:
-		castor::ImageLoader * m_loader;
-		castor3d::TextureSourceInfo * m_source;
-		castor::RawUniquePtr< castor::Image > m_image; // intermediate thumbnail area
-		castor::RawUniquePtr< wxBitmap > m_bitmap; // final thumbnail area
+		c3d::ImageLoader * m_loader;
+		c3d::TextureSourceInfo * m_source;
+		c3d::RawUniquePtr< c3d::Image > m_image; // intermediate thumbnail area
+		c3d::RawUniquePtr< wxBitmap > m_bitmap; // final thumbnail area
 
 	private:
 		// Initialize m_image using the current file name.
 		void doLoadImage();
 		void doLoadImageFromFile();
 		void doLoadImageFromBuffer();
-		void doLoadImageBuffer( castor::String const & name
-			, castor::PxBufferBaseUPtr buffer );
+		void doLoadImageBuffer( c3d::String const & name
+			, c3d::PxBufferBaseUPtr buffer );
 	};
 }
 

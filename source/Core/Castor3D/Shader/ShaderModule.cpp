@@ -7,84 +7,84 @@
 #include <ShaderWriter/CompositeTypes/Struct.hpp>
 #include <ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp>
 
-CU_ImplementSmartPtr( castor3d::shader, BufferBase )
+CU_ImplementSmartPtr( c3d::shader, BufferBase )
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************
 
 	ShaderModule::ShaderModule( ShaderModule && rhs )noexcept
 		: stage{ rhs.stage }
-		, name{ castor::move( rhs.name ) }
-		, source{ castor::move( rhs.source ) }
-		, shader{ castor::move( rhs.shader ) }
-		, compiled{ castor::move( rhs.compiled ) }
+		, name{ c3d::move( rhs.name ) }
+		, source{ c3d::move( rhs.source ) }
+		, shader{ c3d::move( rhs.shader ) }
+		, compiled{ c3d::move( rhs.compiled ) }
 	{
 	}
 
 	ShaderModule & ShaderModule::operator=( ShaderModule && rhs )noexcept
 	{
 		stage = rhs.stage;
-		name = castor::move( rhs.name );
-		source = castor::move( rhs.source );
-		shader = castor::move( rhs.shader );
-		compiled = castor::move( rhs.compiled );
+		name = c3d::move( rhs.name );
+		source = c3d::move( rhs.source );
+		shader = c3d::move( rhs.shader );
+		compiled = c3d::move( rhs.compiled );
 
 		return *this;
 	}
 
 	ShaderModule::ShaderModule( VkShaderStageFlagBits stage
-		, castor::String const & name )
+		, String const & name )
 		: stage{ stage }
 		, name{ name }
 	{
 	}
 
 	ShaderModule::ShaderModule( VkShaderStageFlagBits stage
-		, castor::String const & name
-		, castor::MbString source )
+		, String const & name
+		, MbString source )
 		: stage{ stage }
 		, name{ name }
-		, source{ castor::move( source ) }
+		, source{ c3d::move( source ) }
 	{
 	}
 
 	ShaderModule::ShaderModule( VkShaderStageFlagBits stage
-		, castor::String const & name
+		, String const & name
 		, ShaderPtr shader )
 		: stage{ stage }
 		, name{ name }
-		, shader{ castor::move( shader ) }
+		, shader{ c3d::move( shader ) }
 	{
 	}
 
 	//*************************************************************************
 
 	ProgramModule::ProgramModule( ProgramModule && rhs )noexcept
-		: name{ castor::move( rhs.name ) }
-		, shader{ castor::move( rhs.shader ) }
-		, compiled{ castor::move( rhs.compiled ) }
+		: name{ c3d::move( rhs.name ) }
+		, shader{ c3d::move( rhs.shader ) }
+		, compiled{ c3d::move( rhs.compiled ) }
 	{
 	}
 
 	ProgramModule & ProgramModule::operator=( ProgramModule && rhs )noexcept
 	{
-		name = castor::move( rhs.name );
-		shader = castor::move( rhs.shader );
-		compiled = castor::move( rhs.compiled );
+		name = c3d::move( rhs.name );
+		shader = c3d::move( rhs.shader );
+		compiled = c3d::move( rhs.compiled );
 
 		return *this;
 	}
 
-	ProgramModule::ProgramModule( castor::String const & pname )
+	ProgramModule::ProgramModule( String const & pname )
 		: name{ pname }
 	{
 	}
 
-	ProgramModule::ProgramModule( castor::String const & pname
+	ProgramModule::ProgramModule( String const & pname
 		, ShaderPtr pshader )
 		: name{ pname }
-		, shader{ castor::move( pshader ) }
+		, shader{ c3d::move( pshader ) }
 	{
 	}
 
@@ -110,11 +110,11 @@ namespace castor3d
 					| sdw::type::MemorySemanticsMask::eWorkgroupMemory ) );
 		}
 
-		castor::String concatModelNames( castor::String lhs
-			, castor::String rhs )
+		String concatModelNames( String lhs
+			, String rhs )
 		{
-			castor::string::replace( lhs, cuT( "c3d." ), cuT( "" ) );
-			castor::string::replace( rhs, cuT( "c3d." ), cuT( "" ) );
+			string::replace( lhs, cuT( "c3d." ), cuT( "" ) );
+			string::replace( rhs, cuT( "c3d." ), cuT( "" ) );
 			return cuT( "c3d." ) + lhs + cuT( "." ) + rhs;
 		}
 	}

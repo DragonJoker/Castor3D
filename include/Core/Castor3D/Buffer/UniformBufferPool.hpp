@@ -14,10 +14,10 @@ See LICENSE file in root folder
 #include <mutex>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class UniformBufferPool
-		: public castor::OwnedBy< RenderSystem >
+		: public OwnedBy< RenderSystem >
 	{
 	public:
 		struct Buffer
@@ -25,7 +25,7 @@ namespace castor3d
 			uint32_t index;
 			PoolUniformBufferUPtr buffer;
 		};
-		using BufferArray = castor::Vector< Buffer >;
+		using BufferArray = Vector< Buffer >;
 
 	public:
 		/**
@@ -39,7 +39,7 @@ namespace castor3d
 		 *\param[in]	debugName		Le nom debug du tampon.
 		 */
 		C3D_API UniformBufferPool( RenderDevice const & device
-			, castor::String debugName );
+			, String debugName );
 		/**
 		 *\~english
 		 *\brief		Cleans up all GPU buffers.
@@ -60,7 +60,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les statistiques d'allocation.
 		 */
-		C3D_API castor::Vector< castor::Pair< MemChunk, castor::String > > listAllocations()const;
+		C3D_API Vector< Pair< MemChunk, String > > listAllocations()const;
 		/**
 		 *\~english
 		 *\brief		Uploads all GPU buffers to VRAM.
@@ -110,9 +110,9 @@ namespace castor3d
 		RenderDevice const & m_device;
 		uint32_t m_maxUboSize{ 0u };
 		uint32_t m_currentUboIndex{ 0u };
-		castor::Map< uint32_t, BufferArray > m_buffers;
-		castor::String m_debugName;
-		castor::Mutex m_mutex;
+		Map< uint32_t, BufferArray > m_buffers;
+		String m_debugName;
+		Mutex m_mutex;
 	};
 }
 

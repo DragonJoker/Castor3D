@@ -16,7 +16,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Buffer/Buffer.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class DebugDrawer;
 
@@ -91,7 +91,7 @@ namespace castor3d
 
 		C3D_API static uint32_t getBucketSortBucketSize();
 
-		castor::Point3ui const & getDimensions()const noexcept
+		Point3ui const & getDimensions()const noexcept
 		{
 			return m_dimensions;
 		}
@@ -191,25 +191,25 @@ namespace castor3d
 			return getSpotLightIndicesBuffer( m_spotLightMortonIndicesInput );
 		}
 
-		castor::Vector< ashes::BufferBase const * > getOutputPointLightIndicesBuffers()const noexcept
+		Vector< ashes::BufferBase const * > getOutputPointLightIndicesBuffers()const noexcept
 		{
 			return { &getPointLightIndicesBuffer( 1u - m_pointLightMortonIndicesInput )
 				, &getPointLightIndicesBuffer( m_pointLightMortonIndicesInput ) };
 		}
 
-		castor::Vector< ashes::BufferBase const * > getOutputSpotLightIndicesBuffers()const noexcept
+		Vector< ashes::BufferBase const * > getOutputSpotLightIndicesBuffers()const noexcept
 		{
 			return { &getSpotLightIndicesBuffer( 1u - m_spotLightMortonIndicesInput )
 				, &getSpotLightIndicesBuffer( m_spotLightMortonIndicesInput ) };
 		}
 
-		castor::Vector< ashes::BufferBase const * > getInputPointLightIndicesBuffers()const noexcept
+		Vector< ashes::BufferBase const * > getInputPointLightIndicesBuffers()const noexcept
 		{
 			return { &getPointLightIndicesBuffer( m_pointLightMortonIndicesInput )
 				, &getPointLightIndicesBuffer( 1u - m_pointLightMortonIndicesInput ) };
 		}
 
-		castor::Vector< ashes::BufferBase const * > getInputSpotLightIndicesBuffers()const noexcept
+		Vector< ashes::BufferBase const * > getInputSpotLightIndicesBuffers()const noexcept
 		{
 			return { &getSpotLightIndicesBuffer( m_spotLightMortonIndicesInput )
 				, &getSpotLightIndicesBuffer( 1u - m_spotLightMortonIndicesInput ) };
@@ -235,25 +235,25 @@ namespace castor3d
 			return getSpotLightMortonCodesBuffer( m_spotLightMortonIndicesInput );
 		}
 
-		castor::Vector< ashes::BufferBase const * > getOutputPointLightMortonCodesBuffers()const noexcept
+		Vector< ashes::BufferBase const * > getOutputPointLightMortonCodesBuffers()const noexcept
 		{
 			return { &getPointLightMortonCodesBuffer( 1u - m_pointLightMortonIndicesInput )
 				, &getPointLightMortonCodesBuffer( m_pointLightMortonIndicesInput ) };
 		}
 
-		castor::Vector< ashes::BufferBase const * > getOutputSpotLightMortonCodesBuffers()const noexcept
+		Vector< ashes::BufferBase const * > getOutputSpotLightMortonCodesBuffers()const noexcept
 		{
 			return { &getSpotLightMortonCodesBuffer( 1u - m_spotLightMortonIndicesInput )
 				, &getSpotLightMortonCodesBuffer( m_spotLightMortonIndicesInput ) };
 		}
 
-		castor::Vector< ashes::BufferBase const * > getInputPointLightMortonCodesBuffers()const noexcept
+		Vector< ashes::BufferBase const * > getInputPointLightMortonCodesBuffers()const noexcept
 		{
 			return { &getPointLightMortonCodesBuffer( m_pointLightMortonIndicesInput )
 				, &getPointLightMortonCodesBuffer( 1u - m_pointLightMortonIndicesInput ) };
 		}
 
-		castor::Vector< ashes::BufferBase const * > getInputSpotLightMortonCodesBuffers()const noexcept
+		Vector< ashes::BufferBase const * > getInputSpotLightMortonCodesBuffers()const noexcept
 		{
 			return { &getSpotLightMortonCodesBuffer( m_spotLightMortonIndicesInput )
 				, &getSpotLightMortonCodesBuffer( 1u - m_spotLightMortonIndicesInput ) };
@@ -309,18 +309,18 @@ namespace castor3d
 	private:
 		struct AABB
 		{
-			castor::Point4f min;
-			castor::Point4f max;
+			Point4f min;
+			Point4f max;
 		};
 
 		struct Buffers
 		{
 			Buffers( RenderDevice const & device
-				, castor::String const & name );
+				, String const & name );
 
 			// Fixed size buffers, related to lights
-			castor::Array< ashes::BufferPtr< u32 >, 2u > mortonCodes;
-			castor::Array< ashes::BufferPtr< u32 >, 2u > indices;
+			Array< ashes::BufferPtr< u32 >, 2u > mortonCodes;
+			Array< ashes::BufferPtr< u32 >, 2u > indices;
 			ashes::BufferPtr< AABB > bvh;
 			// Variable size buffers, related to frustum dimensions
 			ashes::BufferBasePtr clusterGrid;
@@ -339,10 +339,10 @@ namespace castor3d
 		int32_t m_first{ 5 };
 		uint32_t m_pointLightMortonIndicesInput{ 1u };
 		uint32_t m_spotLightMortonIndicesInput{ 1u };
-		castor::GroupChangeTracked< castor::Point3ui > m_dimensions;
-		castor::GroupChangeTracked< castor::Point2ui > m_clusterSize;
-		castor::GroupChangeTracked< castor::Matrix4x4f > m_cameraProjection;
-		castor::GroupChangeTracked< castor::Matrix4x4f > m_cameraView;
+		GroupChangeTracked< Point3ui > m_dimensions;
+		GroupChangeTracked< Point2ui > m_clusterSize;
+		GroupChangeTracked< Matrix4x4f > m_cameraProjection;
+		GroupChangeTracked< Matrix4x4f > m_cameraView;
 		ClustersUbo m_clustersUbo;
 		CameraUbo m_clustersCameraUbo;
 		ashes::BufferPtr< VkDispatchIndirectCommand > m_clustersIndirect;
@@ -359,7 +359,7 @@ namespace castor3d
 		ashes::BufferBasePtr m_aabbBuffer;
 		ashes::BufferBasePtr m_clusterFlags;
 		ashes::BufferBasePtr m_uniqueClusters;
-		castor::Vector< ashes::BufferBasePtr > m_toDelete;
+		Vector< ashes::BufferBasePtr > m_toDelete;
 
 		ashes::PipelineShaderStageCreateInfoArray m_displayClustersAABBProgram;
 		ashes::VkDescriptorSetLayoutBindingArray m_displayClustersAABBBindings;

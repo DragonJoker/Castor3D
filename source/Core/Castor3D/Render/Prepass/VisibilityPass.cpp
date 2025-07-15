@@ -31,13 +31,13 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementSmartPtr( castor3d, VisibilityPass )
+CU_ImplementSmartPtr( c3d, VisibilityPass )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
-	castor::String const VisibilityPass::Type = cuT( "c3d.visibility" );
+	String const VisibilityPass::Type = cuT( "c3d.visibility" );
 
 	VisibilityPass::VisibilityPass( RenderTechnique * parent
 		, crg::FramePass const & pass
@@ -54,7 +54,7 @@ namespace castor3d
 			, device
 			, Type
 			, {}
-			, castor::move( targetDepth )
+			, c3d::move( targetDepth )
 			, renderPassDesc
 			, techniquePassDesc }
 	{
@@ -148,7 +148,7 @@ namespace castor3d
 		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
-		auto constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
+		auto constexpr maxPipelinesSize = uint32_t( getBitSize( MaxPipelines ) );
 
 		shader::Lights lights{ *getEngine()
 			, flags.lightingModelId
@@ -203,7 +203,7 @@ namespace castor3d
 				}
 				else if ( isMeshShading() )
 				{
-					auto constexpr maxPrimitiveIDSize = uint32_t( castor::getBitSize( MaxMeshletTriangleCount ) );
+					auto constexpr maxPrimitiveIDSize = uint32_t( getBitSize( MaxMeshletTriangleCount ) );
 					out.visibility = uvec2( ( in.nodeId << maxPipelinesSize ) | pipelineID
 						, ( in.meshletId << maxPrimitiveIDSize ) | writer.cast< sdw::UInt >( in.primitiveID ) );
 				}

@@ -158,7 +158,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_TEXT );
 
-		return cc3d::copyString( castor::makeString( object->internal->getCaption() ), result );
+		return cc3d::copyString( c3d::makeString( object->internal->getCaption() ), result );
 	}
 
 	C3D_CAPIMETHODIMP c3dTextOverlay_setCaption( C3DTextOverlay * object, C3DString val )
@@ -168,7 +168,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_TEXT );
 
-		object->internal->setCaption( castor::toUtf8U32String( castor::makeString( val ) ) );
+		object->internal->setCaption( c3d::toUtf8U32String( c3d::makeString( val ) ) );
 
 		return C3D_OK;
 	}

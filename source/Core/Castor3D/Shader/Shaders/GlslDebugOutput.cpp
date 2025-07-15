@@ -6,15 +6,15 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	DebugOutput::DebugOutput( DebugConfig & config
-		, castor::String category
+		, String category
 		, sdw::UInt const index
 		, sdw::Vec4 const output
 		, bool enable )
 		: m_config{ config }
-		, m_categories{ castor::move( category ) }
+		, m_categories{ c3d::move( category ) }
 		, m_index{ index }
 		, m_output{ output }
 		, m_enable{ enable }
@@ -38,16 +38,16 @@ namespace castor3d::shader
 		}
 	}
 
-	void DebugOutput::registerOutput( castor::String category
-		, castor::String name
+	void DebugOutput::registerOutput( String category
+		, String name
 		, sdw::Vec4 const value )
 	{
 		if ( m_enable )
 			registerOutput( category, name, value.xyz() );
 	}
 
-	void DebugOutput::registerOutput( castor::String category
-		, castor::String name
+	void DebugOutput::registerOutput( String category
+		, String name
 		, sdw::Vec3 const value )
 	{
 		if ( m_enable )
@@ -64,32 +64,32 @@ namespace castor3d::shader
 		}
 	}
 
-	void DebugOutput::registerOutput( castor::String category
-		, castor::String name
+	void DebugOutput::registerOutput( String category
+		, String name
 		, sdw::Vec2 const value )
 	{
 		if ( m_enable )
 			registerOutput( category, name, vec3( value, 0.0_f ) );
 	}
 
-	void DebugOutput::registerOutput( castor::String category
-		, castor::String name
+	void DebugOutput::registerOutput( String category
+		, String name
 		, sdw::Float const value )
 	{
 		if ( m_enable )
 			registerOutput( category, name, vec3( value ) );
 	}
 
-	DebugOutputCategory DebugOutput::pushBlock( castor::String category )
+	DebugOutputCategory DebugOutput::pushBlock( String category )
 	{
-		m_categories.push_back( castor::move( category ) );
+		m_categories.push_back( c3d::move( category ) );
 		return DebugOutputCategory{ *this };
 	}
 
-	castor::String DebugOutput::concatenateCategories()const
+	String DebugOutput::concatenateCategories()const
 	{
-		castor::String result;
-		castor::String sep;
+		String result;
+		String sep;
 
 		for ( auto const & category : m_categories )
 		{

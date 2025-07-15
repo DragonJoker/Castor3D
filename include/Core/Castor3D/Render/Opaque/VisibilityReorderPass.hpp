@@ -15,10 +15,10 @@ See LICENSE file in root folder
 
 #include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class VisibilityReorderPass
-		: public castor::Named
+		: public Named
 	{
 	public:
 		VisibilityReorderPass( crg::FramePassGroup & graph
@@ -26,9 +26,9 @@ namespace castor3d
 			, RenderDevice const & device
 			, crg::ImageViewId const & data
 			, ashes::Buffer< uint32_t > const & materialsCounts
-			, ashes::Buffer< castor::Point3ui > const & indirectCounts
+			, ashes::Buffer< Point3ui > const & indirectCounts
 			, ashes::Buffer< uint32_t > const & materialsStarts
-			, ashes::Buffer< castor::Point2ui > const & pixels
+			, ashes::Buffer< Point2ui > const & pixels
 			, crg::RunnablePass::IsEnabledCallback isEnabled );
 		void accept( ConfigurationVisitorBase & visitor )const;
 

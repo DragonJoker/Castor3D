@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	struct ModelData
 		: public sdw::StructInstanceHelperT< "C3D_ModelData"
@@ -32,7 +32,7 @@ namespace castor3d::shader
 		ModelData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -127,7 +127,7 @@ namespace castor3d::shader
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd430\
 		, true };\
-	auto c3d_modelsData = c3d_modelsDataBuffer.declMemberArray< castor3d::shader::ModelData >( "d" );\
+	auto c3d_modelsData = c3d_modelsDataBuffer.declMemberArray< c3d::shader::ModelData >( "d" );\
 	c3d_modelsDataBuffer.end()
 
 #define C3D_ModelData( writer, binding, set )\
@@ -138,7 +138,7 @@ namespace castor3d::shader
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_modelData = c3d_modelDataBuffer.declMember< castor3d::shader::ModelData >( "d" );\
+	auto c3d_modelData = c3d_modelDataBuffer.declMember< c3d::shader::ModelData >( "d" );\
 	c3d_modelDataBuffer.end()
 
 #endif

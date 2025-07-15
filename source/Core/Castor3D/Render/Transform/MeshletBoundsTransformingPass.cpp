@@ -6,7 +6,7 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -15,7 +15,7 @@ namespace castor3d
 		static size_t makeHash( GpuBufferOffsetT< MeshletCullData > const & output )
 		{
 			auto result = std::hash< VkDeviceSize >{}( output.getOffset() );
-			castor::hashCombinePtr( result, output.getBuffer() );
+			hashCombinePtr( result, output.getBuffer() );
 			return result;
 		}
 	}
@@ -49,7 +49,7 @@ namespace castor3d
 		if ( auto [it, res] = m_transformPasses.emplace( hash, nullptr );
 			res )
 		{
-			it->second = castor::makeUnique< MeshletBoundsTransformPass >( m_device
+			it->second = makeUnique< MeshletBoundsTransformPass >( m_device
 				, node
 				, pipeline
 				, output );

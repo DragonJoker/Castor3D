@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
-	using VCTConfigTreeItemProperty = TreeItemPropertyT< castor3d::VctConfig >;
+	using VCTConfigTreeItemProperty = TreeItemPropertyT< c3d::VctConfig >;
 }
 
 #endif

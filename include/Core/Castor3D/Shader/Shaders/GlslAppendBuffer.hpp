@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	template< typename DataT >
 	class AppendArrayT
@@ -25,7 +25,7 @@ namespace castor3d::shader
 		AppendArrayT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled )
-			: sdw::StructInstance{ writer, castor::move( expr ), enabled }
+			: sdw::StructInstance{ writer, c3d::move( expr ), enabled }
 			, m_count{ getMember< sdw::UInt >( "count" ) }
 			, m_data{ this->template getMemberArray< DataT >( "data" ) }
 		{
@@ -33,7 +33,7 @@ namespace castor3d::shader
 
 		template< typename ... ParamsT >
 		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache
-			, castor::MbString const & name
+			, MbString const & name
 			, uint32_t arraySize
 			, ParamsT && ... params )
 		{
@@ -46,7 +46,7 @@ namespace castor3d::shader
 					, sdw::type::Kind::eUInt
 					, sdw::type::NotArray );
 				result->declMember( "data"
-					, DataT::makeType( cache, castor::forward< ParamsT >( params )... )
+					, DataT::makeType( cache, c3d::forward< ParamsT >( params )... )
 					, arraySize );
 			}
 
@@ -126,8 +126,8 @@ namespace castor3d::shader
 	{
 	public:
 		C3D_API AppendBufferBase( sdw::ShaderWriter & writer
-			, castor::MbString blockName
-			, castor::MbString variableName
+			, MbString blockName
+			, MbString variableName
 			, uint32_t binding
 			, uint32_t set
 			, bool enabled = true );
@@ -151,9 +151,9 @@ namespace castor3d::shader
 
 	protected:
 		sdw::ShaderWriter & m_writer;
-		castor::RawUniquePtr< sdw::StorageBuffer > m_ssbo;
-		castor::RawUniquePtr< sdw::UInt32 > m_count;
-		castor::MbString m_variableName;
+		RawUniquePtr< sdw::StorageBuffer > m_ssbo;
+		RawUniquePtr< sdw::UInt32 > m_count;
+		MbString m_variableName;
 	};
 
 	template< typename DataT >
@@ -163,24 +163,24 @@ namespace castor3d::shader
 	public:
 		template< typename ... ParamsT >
 		AppendBufferT( sdw::ShaderWriter & writer
-			, castor::String blockName
-			, castor::String variableName
+			, String blockName
+			, String variableName
 			, uint32_t binding
 			, uint32_t set
 			, bool enabled = true
 			, ParamsT && ... params )
 			: AppendBufferBase{ writer
-				, castor::move( blockName )
-				, castor::move( variableName )
+				, c3d::move( blockName )
+				, c3d::move( variableName )
 				, binding
 				, set
 				, enabled }
 		{
 			if ( isEnabled() )
 			{
-				m_data = castor::make_unique< sdw::Array< DataT > >( m_ssbo->declMemberArray< DataT >( "d"
+				m_data = makeRawUnique< sdw::Array< DataT > >( m_ssbo->declMemberArray< DataT >( "d"
 					, true
-					, castor::forward< ParamsT >( params )... ) );
+					, c3d::forward< ParamsT >( params )... ) );
 				m_ssbo->end();
 			}
 		}
@@ -191,7 +191,7 @@ namespace castor3d::shader
 		{
 			return ( m_ssbo
 				? ( *m_data )[index]
-				: m_writer.declLocale< DataT >( "disabled_" + m_variableName + "_data", false, castor::forward< ParamsT >( params )... ) );
+				: m_writer.declLocale< DataT >( "disabled_" + m_variableName + "_data", false, c3d::forward< ParamsT >( params )... ) );
 		}
 
 		void appendData( DataT const data )
@@ -234,7 +234,7 @@ namespace castor3d::shader
 		}
 
 	private:
-		castor::RawUniquePtr< sdw::Array< DataT > > m_data;
+		RawUniquePtr< sdw::Array< DataT > > m_data;
 	};
 }
 

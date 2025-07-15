@@ -11,7 +11,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -57,7 +57,7 @@ namespace castor3d
 		voxelData.clipToGrid = float( voxelGridSize );
 		voxelData.gridToClip = 1.0f / float( voxelGridSize );
 		voxelData.radianceMaxDistance = voxelConfig.maxDistance;
-		voxelData.radianceMips = float( castor::getBitSize( voxelGridSize ) );
+		voxelData.radianceMips = float( getBitSize( voxelGridSize ) );
 		voxelData.radianceNumCones = voxelConfig.numCones.value();
 		voxelData.radianceNumConesInv = 1.0f / float( voxelData.radianceNumCones );
 		voxelData.rayStepSize = voxelConfig.rayStepSize;

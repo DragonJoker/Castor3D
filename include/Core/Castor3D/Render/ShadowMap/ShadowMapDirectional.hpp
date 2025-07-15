@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Image/ImageView.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ShadowMapDirectional
 		: public ShadowMap
@@ -63,7 +63,7 @@ namespace castor3d
 		crg::ImageViewId m_blurIntermediateView;
 		ShadowType m_shadowType{ ShadowType::eRaw };
 		uint32_t m_cascades;
-		castor::Vector< MeshResPtr > m_frustumMeshes;
+		Vector< MeshResPtr > m_frustumMeshes;
 	};
 }
 

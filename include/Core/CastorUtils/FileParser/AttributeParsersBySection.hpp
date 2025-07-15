@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "CastorUtils/FileParser/FileParserModule.hpp"
 
 #if defined( CU_CompilerMSVC )
-namespace castor
+namespace c3d
 {
 	class AttributeParserMap
 	{

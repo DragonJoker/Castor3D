@@ -33,29 +33,29 @@ See LICENSE file in root folder
 namespace ocean_fft
 {
 	template< typename GeneratePassT >
-	crg::FramePass const & createGenerateFrequencyPassT( castor::String const & prefix
-		, castor::String const & name
-		, castor3d::RenderDevice const & device
+	crg::FramePass const & createGenerateFrequencyPassT( c3d::String const & prefix
+		, c3d::String const & name
+		, c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
 		, crg::FramePassArray previousPasses
-		, castor3d::Extent2D const & extent
+		, c3d::Extent2D const & extent
 		, OceanUbo const & ubo
 		, ashes::BufferBase const & input
 		, ashes::BufferBase const & output )
 	{
-		auto mbName = castor::toUtf8( name );
+		auto mbName = c3d::toUtf8( name );
 		auto & result = graph.createPass( "GenerateFrequency" + mbName
 			, [&device, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto res = castor::make_unique< GeneratePassT >( framePass
+				auto res = c3d::makeRawUnique< GeneratePassT >( framePass
 					, context
 					, runnableGraph
 					, device
 					, extent
 					, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -76,27 +76,27 @@ namespace ocean_fft
 	template< typename DistributionPassT, typename FrequencyPassT >
 	struct GenerateFFTPassT
 	{
-		GenerateFFTPassT( castor::String const & prefix
-			, castor::String const & name
+		GenerateFFTPassT( c3d::String const & prefix
+			, c3d::String const & name
 			, crg::FramePassGroup & graph
 			, crg::FramePassArray previousPasses
 			, OceanUbo const & ubo
-			, castor3d::Extent2D dimensions
+			, c3d::Extent2D dimensions
 			, VkFFTConfig const & pfftConfig
 			, ashes::Buffer< cfloat > const & distribution
 			, FFTMode mode )
 			: fftConfig{ pfftConfig }
-			, frequency{ castor3d::makeBuffer< cfloat >( fftConfig.device
+			, frequency{ c3d::makeBuffer< cfloat >( fftConfig.device
 					, dimensions.width * dimensions.height
 					, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 					, prefix + name + cuT( "Frequency" ) ) }
-			, result{ castor3d::makeBufferBase( pfftConfig.device
+			, result{ c3d::makeBufferBase( pfftConfig.device
 					, sizeof( cfloat ) * dimensions.width * dimensions.height
 					, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 					, prefix + name + cuT( "Result0" ) )
-				, castor3d::makeBufferBase( pfftConfig.device
+				, c3d::makeBufferBase( pfftConfig.device
 					, sizeof( cfloat ) * dimensions.width * dimensions.height
 					, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -134,7 +134,7 @@ namespace ocean_fft
 	private:
 		VkFFTConfig const & fftConfig;
 		ashes::BufferPtr< cfloat > frequency;
-		castor::Array< ashes::BufferBasePtr, 2u > result;
+		c3d::Array< ashes::BufferBasePtr, 2u > result;
 		crg::FramePass const * generateFrequency{};
 		crg::FramePass const * processFFT{};
 	};
@@ -145,7 +145,7 @@ namespace ocean_fft
 		using Config = OceanFFTConfig;
 
 	public:
-		OceanFFT( castor3d::RenderDevice const & device
+		OceanFFT( c3d::RenderDevice const & device
 			, crg::ResourcesCache & resources
 			, crg::FramePassGroup & graph
 			, crg::FramePassArray previousPasses
@@ -153,26 +153,26 @@ namespace ocean_fft
 			, OceanFFTConfig const & config );
 		~OceanFFT();
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		c3d::RenderTechniquePass::accept
 		 */
-		void accept( castor3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor );
 
 		Config const & getConfig()const
 		{
 			return m_config;
 		}
 
-		castor3d::Texture const & getNormals()const
+		c3d::Texture const & getNormals()const
 		{
 			return m_normals;
 		}
 
-		castor3d::Texture const & getHeightDisplacement()const
+		c3d::Texture const & getHeightDisplacement()const
 		{
 			return m_heightDisplacement.front();
 		}
 
-		castor3d::Texture const & getGradientJacobian()const
+		c3d::Texture const & getGradientJacobian()const
 		{
 			return m_gradientJacobian.front();
 		}
@@ -180,18 +180,18 @@ namespace ocean_fft
 		crg::FramePassArray getLastPasses();
 
 	public:
-		static castor::String const Name;
+		static c3d::String const Name;
 
 	private:
 		void generateDistributionSeeds( ashes::Buffer< cfloat > & distribBuffer );
 
 	private:
-		castor3d::RenderDevice const & m_device;
+		c3d::RenderDevice const & m_device;
 		crg::FramePassGroup & m_group;
 		OceanFFTConfig m_config;
 		std::default_random_engine m_engine;
 		std::normal_distribution< float > m_normDis{ 0.0f, 1.0f };
-		castor3d::Extent2D m_heightMapSamples{ 2u, 2u };
+		c3d::Extent2D m_heightMapSamples{ 2u, 2u };
 		uint32_t m_displacementDownsample{ 1u };
 		VkFFTConfig m_fftConfig;
 		ashes::BufferPtr< cfloat > m_heightSeeds;
@@ -201,8 +201,8 @@ namespace ocean_fft
 		ashes::BufferPtr< cfloat > m_displacementDistribution;
 		crg::FramePass const * m_generateDisplacementDistribution{};
 		GenerateFFTPassT< GenerateDistributionPass, GenerateDisplacementPass > m_displacement;
-		castor::Array< castor3d::Texture, 2u > m_heightDisplacement;
-		castor::Array< castor3d::Texture, 2u > m_gradientJacobian;
+		c3d::Array< c3d::Texture, 2u > m_heightDisplacement;
+		c3d::Array< c3d::Texture, 2u > m_gradientJacobian;
 		crg::FramePass const * m_bakeHeightGradient{};
 		crg::FramePass const * m_generateHeightDispMips{};
 		crg::FramePass const * m_generateGradJacobMips{};
@@ -210,7 +210,7 @@ namespace ocean_fft
 		ashes::BufferPtr< cfloat > m_normalDistribution;
 		crg::FramePass const * m_generateNormalDistribution{};
 		GenerateFFTPassT< GenerateDistributionPass, GenerateNormalPass > m_normal;
-		castor3d::Texture m_normals;
+		c3d::Texture m_normals;
 		crg::FramePass const * m_generateNormalsMips{};
 	};
 }

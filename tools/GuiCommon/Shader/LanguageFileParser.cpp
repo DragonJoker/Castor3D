@@ -13,9 +13,9 @@ namespace GuiCommon
 
 	namespace parse
 	{
-		static castor::String const ParsersName{ cuT( "gc.language" ) };
+		static c3d::String const ParsersName{ cuT( "gc.language" ) };
 
-		static LanguageFileContext & getParserContext( castor::FileParserContext & context )
+		static LanguageFileContext & getParserContext( c3d::FileParserContext & context )
 		{
 			return *static_cast< LanguageFileContext * >( context.getUserContext( ParsersName ) );
 		}
@@ -45,12 +45,12 @@ namespace GuiCommon
 			}
 			else
 			{
-				castor::String strParams;
+				c3d::String strParams;
 				params[0]->get( strParams );
 
 				if ( !strParams.empty() )
 				{
-					auto array = castor::string::split( strParams, cuT( "\t ,;" ), 100, false );
+					auto array = c3d::string::split( strParams, cuT( "\t ,;" ), 100, false );
 					langContext.currentLanguage->filePattern.clear();
 
 					for ( auto & pattern : array )
@@ -81,12 +81,12 @@ namespace GuiCommon
 			}
 			else
 			{
-				castor::String strParams;
+				c3d::String strParams;
 				params[0]->get( strParams );
 
 				if ( !strParams.empty() )
 				{
-					auto array = castor::string::split( strParams, cuT( "\t ,;" ), 100, false );
+					auto array = c3d::string::split( strParams, cuT( "\t ,;" ), 100, false );
 					langContext.currentLanguage->foldFlags = 0u;
 
 					for ( auto & flag : array )
@@ -208,7 +208,7 @@ namespace GuiCommon
 			}
 			else
 			{
-				langContext.keywords.push_back( params[0]->get< castor::String >() );
+				langContext.keywords.push_back( params[0]->get< c3d::String >() );
 			}
 		}
 		CU_EndAttribute()
@@ -292,7 +292,7 @@ namespace GuiCommon
 			}
 			else
 			{
-				castor::String name;
+				c3d::String name;
 				params[0]->get( name );
 				langContext.currentStyle->foreground = wxColour( name );
 			}
@@ -309,7 +309,7 @@ namespace GuiCommon
 			}
 			else
 			{
-				castor::String name;
+				c3d::String name;
 				params[0]->get( name );
 				langContext.currentStyle->background = wxColour( name );
 			}
@@ -318,13 +318,13 @@ namespace GuiCommon
 
 		static CU_ImplementAttributeParser( Style_FontStyle )
 		{
-			castor::String langParams;
+			c3d::String langParams;
 			params[0]->get( langParams );
 
 			if ( !langParams.empty() )
 			{
 				auto & langContext = getParserContext( context );
-				auto styles = castor::string::split( castor::string::lowerCase( castor::string::trim( langParams ) ), cuT( "\t " ), 10, false );
+				auto styles = c3d::string::split( c3d::string::lowerCase( c3d::string::trim( langParams ) ), cuT( "\t " ), 10, false );
 				int style = 0;
 
 				for ( auto name : styles )
@@ -363,9 +363,9 @@ namespace GuiCommon
 		}
 		CU_EndAttributePop()
 
-			static castor::AttributeParsers registerParsers()
+			static c3d::AttributeParsers registerParsers()
 		{
-			using namespace castor;
+			using namespace c3d;
 			static UInt32StrMap mapTypes;
 
 			if ( mapTypes.empty() )
@@ -409,7 +409,7 @@ namespace GuiCommon
 			}
 
 
-			castor::AttributeParsers result;
+			c3d::AttributeParsers result;
 
 			addParser( result, uint32_t( LANGSection::eRoot ), cuT( "language" ), Root_Language, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "pattern" ), Language_Pattern, { makeParameter< ParameterType::eText >() } );
@@ -439,22 +439,22 @@ namespace GuiCommon
 			return result;
 		}
 
-		static castor::StrUInt32Map registerSections()
+		static c3d::StrUInt32Map registerSections()
 		{
-			return { { uint32_t( LANGSection::eRoot ), castor::String{} }
+			return { { uint32_t( LANGSection::eRoot ), c3d::String{} }
 				, { uint32_t( LANGSection::eLanguage ), cuT( "language" ) }
 				, { uint32_t( LANGSection::eKeywords ), cuT( "keywords" ) }
 				, { uint32_t( LANGSection::eStyle ), cuT( "style" ) } };
 		}
 
-		static void * createContext( castor::FileParserContext & context )
+		static void * createContext( c3d::FileParserContext & context )
 		{
 			LanguageFileContext * userContext = new LanguageFileContext;
 			userContext->currentLanguage.reset( new LanguageInfo );
 			return userContext;
 		}
 
-		static castor::AdditionalParsers createParsers()
+		static c3d::AdditionalParsers createParsers()
 		{
 			return { registerParsers()
 				, registerSections()
@@ -465,26 +465,26 @@ namespace GuiCommon
 	//*********************************************************************************************
 
 	LanguageFileParser::LanguageFileParser( StcContext * stcContext )
-		: FileParser{ castor::SectionId( LANGSection::eRoot ) }
+		: FileParser{ c3d::SectionId( LANGSection::eRoot ) }
 		, m_stcContext{ stcContext }
 	{
 		registerParsers( parse::ParsersName, parse::createParsers() );
 	}
 
-	void LanguageFileParser::doCleanupParser( castor::PreprocessedFile & preprocessed )
+	void LanguageFileParser::doCleanupParser( c3d::PreprocessedFile & preprocessed )
 	{
 		parse::getParserContext( preprocessed.getContext() ).currentLanguage.reset();
 	}
 
-	void LanguageFileParser::doValidate( castor::PreprocessedFile & preprocessed )
+	void LanguageFileParser::doValidate( c3d::PreprocessedFile & preprocessed )
 	{
 		auto & context = parse::getParserContext( preprocessed.getContext() );
-		m_stcContext->push_back( castor::move( context.currentLanguage ) );
+		m_stcContext->push_back( c3d::move( context.currentLanguage ) );
 	}
 
-	castor::String LanguageFileParser::doGetSectionName( castor::SectionId section )const
+	c3d::String LanguageFileParser::doGetSectionName( c3d::SectionId section )const
 	{
-		castor::String result;
+		c3d::String result;
 
 		switch ( LANGSection( section ) )
 		{
@@ -511,9 +511,9 @@ namespace GuiCommon
 		return result;
 	}
 
-	castor::RawUniquePtr< castor::FileParser > LanguageFileParser::doCreateParser()const
+	c3d::RawUniquePtr< c3d::FileParser > LanguageFileParser::doCreateParser()const
 	{
-		return castor::make_unique< LanguageFileParser >( m_stcContext );
+		return c3d::makeRawUnique< LanguageFileParser >( m_stcContext );
 	}
 
 	//*********************************************************************************************

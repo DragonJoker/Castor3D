@@ -2,11 +2,11 @@
 
 #include "Castor3D/Animation/AnimationKeyFrame.hpp"
 
-CU_ImplementSmartPtr( castor3d, AnimationKeyFrame )
+CU_ImplementSmartPtr( c3d, AnimationKeyFrame )
 
-namespace castor3d
+namespace c3d
 {
-	castor::String getName( AnimationType value )
+	String getName( AnimationType value )
 	{
 		switch ( value )
 		{
@@ -20,11 +20,11 @@ namespace castor3d
 			return cuT( "texture" );
 		default:
 			CU_Failure( "Unsupported AnimationType" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( InterpolatorType value )
+	String getName( InterpolatorType value )
 	{
 		switch ( value )
 		{
@@ -34,11 +34,11 @@ namespace castor3d
 			return cuT( "linear" );
 		default:
 			CU_Failure( "Unsupported InterpolatorType" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( AnimationState value )
+	String getName( AnimationState value )
 	{
 		switch ( value )
 		{
@@ -50,7 +50,7 @@ namespace castor3d
 			return cuT( "paused" );
 		default:
 			CU_Failure( "Unsupported AnimationState" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 }

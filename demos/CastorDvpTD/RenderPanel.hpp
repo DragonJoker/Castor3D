@@ -29,9 +29,9 @@ namespace castortd
 		~RenderPanel()override;
 
 		void reset();
-		void updateRenderWindow( castor3d::RenderWindowDesc const & window );
+		void updateRenderWindow( c3d::RenderWindowDesc const & window );
 
-		castor3d::RenderWindow const & getRenderWindow()const
+		c3d::RenderWindow const & getRenderWindow()const
 		{
 			return *m_renderWindow;
 		}
@@ -41,7 +41,7 @@ namespace castortd
 		float doTransformY( int y );
 		int doTransformX( float x );
 		int doTransformY( float y );
-		void doUpdateSelectedGeometry( castor3d::GeometryRPtr geometry );
+		void doUpdateSelectedGeometry( c3d::GeometryRPtr geometry );
 		void doUpgradeTowerDamage();
 		void doUpgradeTowerSpeed();
 		void doUpgradeTowerRange();
@@ -81,12 +81,12 @@ namespace castortd
 		float m_oldX{ 0.0f };
 		float m_oldY{ 0.0f };
 		bool m_mouseLeftDown{ false };
-		castor::Array< wxTimer *, size_t( TimerID::eCount ) > m_timers;
+		c3d::Array< wxTimer *, size_t( TimerID::eCount ) > m_timers;
 		GuiCommon::NodeStatePtr m_cameraState{};
-		castor3d::RenderWindowUPtr m_renderWindow{};
-		castor3d::FrameListenerRPtr m_listener{};
-		castor3d::GeometryRPtr m_selectedGeometry{};
-		castor3d::SceneNodeRPtr m_marker{};
+		c3d::RenderWindowUPtr m_renderWindow{};
+		c3d::FrameListenerRPtr m_listener{};
+		c3d::GeometryRPtr m_selectedGeometry{};
+		c3d::SceneNodeRPtr m_marker{};
 		Game & m_game;
 		TowerPtr m_selectedTower{};
 		LongRangeTower m_longRange;

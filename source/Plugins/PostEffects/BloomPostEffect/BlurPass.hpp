@@ -9,34 +9,34 @@ See LICENSE file in root folder
 
 namespace Bloom
 {
-	using UboOffset = castor3d::UniformBufferOffsetT< castor3d::GaussianBlur::Configuration >;
-	using UboOffsetArray = castor::Vector< UboOffset >;
+	using UboOffset = c3d::UniformBufferOffsetT< c3d::GaussianBlur::Configuration >;
+	using UboOffsetArray = c3d::Vector< UboOffset >;
 
 	class BlurPass
 	{
 	public:
 		BlurPass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
-			, castor3d::RenderDevice const & device
+			, c3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & srcImages
 			, crg::ImageViewIdArray const & dstImages
-			, castor3d::Extent2D dimensions
+			, c3d::Extent2D dimensions
 			, uint32_t blurKernelSize
 			, uint32_t blurPassesCount
 			, bool isVertical
 			, bool const * enabled );
 		BlurPass( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
-			, castor3d::RenderDevice const & device
+			, c3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & srcImages
 			, crg::ImageViewIdArray const & dstImages
-			, castor3d::Extent2D dimensions
+			, c3d::Extent2D dimensions
 			, uint32_t blurKernelSize
 			, uint32_t blurPassesCount
 			, bool isVertical
 			, bool const * enabled );
 		~BlurPass()noexcept;
-		void accept( castor3d::ConfigurationVisitorBase & visitor )const;
+		void accept( c3d::ConfigurationVisitorBase & visitor )const;
 
 		void update( uint32_t kernelSize );
 
@@ -52,12 +52,12 @@ namespace Bloom
 		{
 			Subpass( crg::FramePassGroup & graph
 				, crg::FramePass const & previousPass
-				, castor3d::RenderDevice const & device
+				, c3d::RenderDevice const & device
 				, crg::ImageViewId const & srcView
 				, crg::ImageViewId const & dstView
-				, castor3d::Extent2D dimensions
+				, c3d::Extent2D dimensions
 				, ashes::PipelineShaderStageCreateInfoArray const & stages
-				, castor3d::UniformBufferOffsetT< castor3d::GaussianBlur::Configuration > const & blurUbo
+				, c3d::UniformBufferOffsetT< c3d::GaussianBlur::Configuration > const & blurUbo
 				, uint32_t index
 				, bool isVertical
 				, bool const * enabled );
@@ -66,13 +66,13 @@ namespace Bloom
 		};
 
 	private:
-		castor3d::RenderDevice const & m_device;
+		c3d::RenderDevice const & m_device;
 		uint32_t m_blurPassesCount;
 		UboOffsetArray m_blurUbo;
-		castor3d::ProgramModule m_shader;
+		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePassArray m_passes;
-		castor::Vector< Subpass > m_subpasses;
+		c3d::Vector< Subpass > m_subpasses;
 	};
 }
 

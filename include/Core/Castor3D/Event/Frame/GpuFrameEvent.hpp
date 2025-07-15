@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <atomic>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class GpuFrameEvent
 	{
@@ -88,7 +88,7 @@ namespace castor3d
 
 		//!\~english	The event creation stack trace.
 		//!\~french		La pile d'appels lors de la création de l'évènement.
-		castor::String m_stackTrace;
+		String m_stackTrace;
 
 #endif
 	};
@@ -96,7 +96,7 @@ namespace castor3d
 	template< typename EventT, typename ... ParamsT >
 	inline GpuFrameEventUPtr makeGpuFrameEvent( ParamsT && ... params )
 	{
-		return castor::makeUniqueDerived< GpuFrameEvent, EventT >( castor::forward< ParamsT >( params )... );
+		return makeUniqueDerived< GpuFrameEvent, EventT >( c3d::forward< ParamsT >( params )... );
 	}
 }
 

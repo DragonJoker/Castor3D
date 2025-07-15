@@ -8,13 +8,13 @@ See LICENSE file in root folder
 
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class SkeletonAnimationInstanceKeyFrame
-		: public castor::OwnedBy< SkeletonAnimationInstance >
+		: public OwnedBy< SkeletonAnimationInstance >
 	{
 	public:
-		using ObjectArray = castor::Vector< castor::Pair< SkeletonAnimationInstanceObject *, castor::Matrix4x4f > >;
+		using ObjectArray = Vector< Pair< SkeletonAnimationInstanceObject *, Matrix4x4f > >;
 
 	public:
 		/**
@@ -45,7 +45,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le temps de départ.
 		 */
-		castor::Milliseconds const & getTimeIndex()const
+		Milliseconds const & getTimeIndex()const
 		{
 			return m_keyFrame.getTimeIndex();
 		}
@@ -56,7 +56,7 @@ namespace castor3d
 		ObjectArray m_objects;
 		SubmeshBoundingBoxList m_boxes;
 	};
-	using SkeletonAnimationInstanceKeyFrameArray = castor::Vector< SkeletonAnimationInstanceKeyFrame >;
+	using SkeletonAnimationInstanceKeyFrameArray = Vector< SkeletonAnimationInstanceKeyFrame >;
 }
 
 #endif

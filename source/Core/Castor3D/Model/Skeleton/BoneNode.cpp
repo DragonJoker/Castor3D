@@ -5,27 +5,27 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 
-CU_ImplementSmartPtr( castor3d, BoneNode )
+CU_ImplementSmartPtr( c3d, BoneNode )
 
-namespace castor3d
+namespace c3d
 {
-	BoneNode::BoneNode( castor::String name
+	BoneNode::BoneNode( String name
 		, Skeleton & skeleton
-		, castor::Matrix4x4f inverseTransform
+		, Matrix4x4f inverseTransform
 		, uint32_t id )
-		: SkeletonNode{ SkeletonNodeType::eBone, castor::move( name ), skeleton }
+		: SkeletonNode{ SkeletonNodeType::eBone, c3d::move( name ), skeleton }
 		, m_id{ id }
-		, m_inverseTransform{ castor::move( inverseTransform ) }
+		, m_inverseTransform{ c3d::move( inverseTransform ) }
 	{
 	}
 
-	castor::BoundingBox BoneNode::computeBoundingBox( Mesh const & mesh
+	BoundingBox BoneNode::computeBoundingBox( Mesh const & mesh
 		, uint32_t boneIndex )const
 	{
 		auto constexpr rmax = std::numeric_limits< float >::max();
 		auto constexpr rmin = std::numeric_limits< float >::lowest();
-		castor::Point3f min{ rmax, rmax, rmax };
-		castor::Point3f max{ rmin, rmin, rmin };
+		Point3f min{ rmax, rmax, rmax };
+		Point3f max{ rmin, rmin, rmin };
 
 		for ( auto & submesh : mesh )
 		{
@@ -54,13 +54,13 @@ namespace castor3d
 			}
 		}
 
-		return castor::BoundingBox{ min, max };
+		return BoundingBox{ min, max };
 	}
 
 	SkeletonNodeUPtr BoneNode::clone( Skeleton & parent )const
 	{
-		auto result = castor::makeUnique< BoneNode >( getName(), parent, getInverseTransform(), getId() );
+		auto result = makeUnique< BoneNode >( getName(), parent, getInverseTransform(), getId() );
 		doCloneInto( *result );
-		return castor::ptrRefCast< SkeletonNode >( result );
+		return ptrRefCast< SkeletonNode >( result );
 	}
 }

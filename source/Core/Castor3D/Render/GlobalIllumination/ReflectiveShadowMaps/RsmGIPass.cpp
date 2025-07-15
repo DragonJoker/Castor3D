@@ -51,9 +51,9 @@
 #include <numeric>
 #include <random>
 
-CU_ImplementSmartPtr( castor3d, RsmGIPass )
+CU_ImplementSmartPtr( c3d, RsmGIPass )
 
-namespace castor3d
+namespace c3d
 {
 	namespace rsmgi
 	{
@@ -87,7 +87,7 @@ namespace castor3d
 					vtx_texture = uv;
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return makeRawUnique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		static ShaderPtr getDirectionalPixelShaderSource()
@@ -161,7 +161,7 @@ namespace castor3d
 					pxl_rsmNormal = wsNormal;
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return makeRawUnique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		static ShaderPtr getSpotPixelShaderSource()
@@ -239,7 +239,7 @@ namespace castor3d
 					pxl_rsmNormal = wsNormal;
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return makeRawUnique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		static ShaderPtr getPointPixelShaderSource()
@@ -311,7 +311,7 @@ namespace castor3d
 					pxl_rsmNormal = wsNormal;
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return makeRawUnique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		static std::unique_ptr< ast::Shader > getPixelProgram( LightType lightType )
@@ -354,9 +354,9 @@ namespace castor3d
 		, crg::ImageViewId const & nmlOcc
 		, ShadowMapResult const & smResult
 		, TextureArray const & output )
-		: castor::Named{ castor3d::getName( lightType ) + "Rsm" }
+		: Named{ c3d::getName( lightType ) + "Rsm" }
 		, m_rsmConfigUbo{ device }
-		, m_rsmSamplesSsbo{ device.bufferPool->getBuffer< castor::Point4f >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+		, m_rsmSamplesSsbo{ device.bufferPool->getBuffer< Point4f >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, MaxRsmRange
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), rsmgi::getVertexProgram() }
@@ -370,7 +370,7 @@ namespace castor3d
 		for ( auto & point : m_rsmSamplesSsbo.getData() )
 		{
 			auto xi2 = dist( rng );
-			auto twoPIy = castor::PiMult2< float > *xi2;
+			auto twoPIy = PiMult2< float > *xi2;
 			auto xi1 = dist( rng );
 			point[0] = float( xi1 * sin( twoPIy ) );
 			point[1] = float( xi1 * cos( twoPIy ) );
@@ -385,13 +385,13 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto result = std::make_unique< crg::RenderQuad >( framePass
+				auto result = makeRawUnique< crg::RenderQuad >( framePass
 					, context
 					, runnableGraph
 					, crg::ru::Config{ 1u, false }
 					, rsmgi::getConfig( { size.width, size.height }
 						, m_stages ) );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

@@ -10,10 +10,10 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/Path.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class LightImporter
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
 		virtual ~LightImporter() = default;
@@ -28,7 +28,7 @@ namespace castor3d
 		 *\param[in]	prefix	Le préfixe utilisé pour le logging.
 		 */
 		C3D_API explicit LightImporter( Engine & engine
-			, castor::String const & prefix );
+			, String const & prefix );
 		/**
 		 *\~english
 		 *\brief		Light import function.
@@ -45,7 +45,7 @@ namespace castor3d
 		 *\param[in]	parameters	Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API LightUPtr importData( castor::String const & name
+		C3D_API LightUPtr importData( String const & name
 			, LightCreateInfo const & createInfo
 			, ImporterFile * file
 			, Parameters const & parameters );
@@ -82,7 +82,7 @@ namespace castor3d
 		 *\param[in]	parameters	Paramètres de configuration de l'import.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API LightGroupUPtr importData( castor::String const & name
+		C3D_API LightGroupUPtr importData( String const & name
 			, LightGroupCreateInfo const & createInfo
 			, ImporterFile * file
 			, Parameters const & parameters );
@@ -118,7 +118,7 @@ namespace castor3d
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API static bool importData( Light & light
-			, castor::Path const & pathFile
+			, Path const & pathFile
 			, Parameters const & parameters );
 		/**
 		 *\~english
@@ -135,24 +135,24 @@ namespace castor3d
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API static bool importData( LightGroup & light
-			, castor::Path const & pathFile
+			, Path const & pathFile
 			, Parameters const & parameters );
 
-		castor::StringView getPrefix()const noexcept
+		String getPrefix()const noexcept
 		{
 			return m_prefix;
 		}
 
 	private:
-		C3D_API virtual LightUPtr doCreateLight( castor::String const & name
+		C3D_API virtual LightUPtr doCreateLight( String const & name
 			, LightCreateInfo const & createInfo );
-		C3D_API virtual LightGroupUPtr doCreateLightGroup( castor::String const & name
+		C3D_API virtual LightGroupUPtr doCreateLightGroup( String const & name
 			, LightGroupCreateInfo const & createInfo );
 		virtual bool doImportLight( Light & light ) = 0;
 		virtual bool doImportLightGroup( LightGroup & light ) = 0;
 
 	protected:
-		castor::String m_prefix;
+		String m_prefix;
 		ImporterFile * m_file{};
 		Parameters m_parameters;
 	};

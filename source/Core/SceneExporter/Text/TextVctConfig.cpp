@@ -4,10 +4,8 @@
 
 #pragma GCC diagnostic ignored "-Wrestrict"
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< VctConfig >::TextWriter( String const & tabs )
 		: TextWriterT< VctConfig >{ tabs }
 	{

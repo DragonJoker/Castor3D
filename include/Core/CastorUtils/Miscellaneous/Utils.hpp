@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #include <ctime>
 
-namespace castor
+namespace c3d
 {
 	namespace system
 	{

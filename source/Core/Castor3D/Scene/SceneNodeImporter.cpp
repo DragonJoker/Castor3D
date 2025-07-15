@@ -5,18 +5,18 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 
-CU_ImplementSmartPtr( castor3d, SceneNodeImporter )
+CU_ImplementSmartPtr( c3d, SceneNodeImporter )
 
-namespace castor3d
+namespace c3d
 {
 	SceneNodeImporter::SceneNodeImporter( Engine & engine
-		, castor::String const & prefix )
+		, String const & prefix )
 		: OwnedBy< Engine >{ engine }
 		, m_prefix{ prefix + cuT( " - " ) }
 	{
 	}
 
-	SceneNodeUPtr SceneNodeImporter::importData( castor::String const & name
+	SceneNodeUPtr SceneNodeImporter::importData( String const & name
 		, SceneNodeCreateInfo const & createInfo
 		, ImporterFile * file
 		, Parameters const & parameters )
@@ -59,10 +59,10 @@ namespace castor3d
 	}
 
 	bool SceneNodeImporter::importData( SceneNode & node
-		, castor::Path const & pathFile
+		, Path const & pathFile
 		, Parameters const & parameters )
 	{
-		auto extension = castor::string::lowerCase( pathFile.getExtension() );
+		auto extension = string::lowerCase( pathFile.getExtension() );
 		auto file = node.getEngine()->getImporterFileFactory().create( extension
 			, *node.getEngine()
 			, pathFile
@@ -76,7 +76,7 @@ namespace castor3d
 		return false;
 	}
 
-	SceneNodeUPtr SceneNodeImporter::doCreateSceneNode( castor::String const & name
+	SceneNodeUPtr SceneNodeImporter::doCreateSceneNode( String const & name
 		, SceneNodeCreateInfo const & createInfo )
 	{
 		return createInfo.scene->createSceneNode( name, createInfo );

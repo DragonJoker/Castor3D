@@ -28,20 +28,18 @@
 #include <ashespp/Shader/ShaderModule.hpp>
 #include <ashespp/Sync/Fence.hpp>
 
-CU_ImplementSmartPtr( castor3d, SkyboxBackground )
+CU_ImplementSmartPtr( c3d, SkyboxBackground )
 
 #pragma GCC diagnostic ignored "-Wrestrict"
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	template<>
-	class TextWriter< castor3d::SkyboxBackground >
-		: public TextWriterT< castor3d::SkyboxBackground >
+	class TextWriter< c3d::SkyboxBackground >
+		: public TextWriterT< c3d::SkyboxBackground >
 	{
 	public:
-		explicit TextWriter( castor::String const & tabs
+		explicit TextWriter( String const & tabs
 			, Path const & folder )
 			: TextWriterT< SkyboxBackground >{ tabs }
 			, m_folder{ folder }
@@ -49,7 +47,7 @@ namespace castor
 		}
 
 		bool operator()( SkyboxBackground const & background
-			, castor::StringStream & file )override
+			, StringStream & file )override
 		{
 			log::info << tabs() << cuT( "Writing SkyboxBackground" ) << std::endl;
 			auto result = true;
@@ -67,7 +65,7 @@ namespace castor
 				}
 
 				if ( !background.getEquiTexturePath().empty()
-					&& castor::File::fileExists( background.getEquiTexturePath() ) )
+					&& File::fileExists( background.getEquiTexturePath() ) )
 				{
 						Path subfolder{ cuT( "Textures" ) };
 						String relative = copyFile( background.getEquiTexturePath()
@@ -78,19 +76,19 @@ namespace castor
 						file << ( tabs() + cuT( "equirectangular" )
 							+ cuT( " \"" ) + relative + cuT( "\" " )
 							+ string::toString( size.getWidth() ) + cuT( "\n" ) );
-						castor::TextWriter< SkyboxBackground >::checkError( result, cuT( "Skybox equi-texture" ) );
+						TextWriter< SkyboxBackground >::checkError( result, cuT( "Skybox equi-texture" ) );
 				}
 				else if ( !background.getCrossTexturePath().empty()
-					&& castor::File::fileExists( background.getCrossTexturePath() ) )
+					&& File::fileExists( background.getCrossTexturePath() ) )
 				{
 					result = writeFile( file, cuT( "cross" ), background.getCrossTexturePath(), m_folder, cuT( "Textures" ) );
 				}
-				else if ( castor::File::fileExists( background.getLayerTexturePath()[0u] )
-					&& castor::File::fileExists( background.getLayerTexturePath()[1u] )
-					&& castor::File::fileExists( background.getLayerTexturePath()[2u] )
-					&& castor::File::fileExists( background.getLayerTexturePath()[3u] )
-					&& castor::File::fileExists( background.getLayerTexturePath()[4u] )
-					&& castor::File::fileExists( background.getLayerTexturePath()[5u] ) )
+				else if ( File::fileExists( background.getLayerTexturePath()[0u] )
+					&& File::fileExists( background.getLayerTexturePath()[1u] )
+					&& File::fileExists( background.getLayerTexturePath()[2u] )
+					&& File::fileExists( background.getLayerTexturePath()[3u] )
+					&& File::fileExists( background.getLayerTexturePath()[4u] )
+					&& File::fileExists( background.getLayerTexturePath()[5u] ) )
 				{
 					result = true;
 
@@ -113,16 +111,13 @@ namespace castor
 	private:
 		Path m_folder;
 	};
-}
 
-namespace castor3d
-{
 	//************************************************************************************************
 
 	namespace skybox
 	{
-		static ImageCreateInfo doGetImageCreate( castor::PixelFormat format
-			, castor::Size const & dimensions
+		static ImageCreateInfo doGetImageCreate( PixelFormat format
+			, Size const & dimensions
 			, bool attachment
 			, uint32_t mipLevel = 1u )
 		{
@@ -185,17 +180,17 @@ namespace castor3d
 			}
 			else
 			{
-				auto path = params[0]->get< castor::Path >();
+				auto path = params[0]->get< Path >();
 				auto filePath = context.file.getPath();
 
-				if ( castor::File::fileExists( filePath / path ) )
+				if ( File::fileExists( filePath / path ) )
 				{
 					blockContext->skybox->setEquiTexture( filePath, path, params[1]->get< uint32_t >() );
 				}
 				else
 				{
 					blockContext->skybox.reset();
-					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
 					CU_ParsingError( err );
 				}
 			}
@@ -214,17 +209,17 @@ namespace castor3d
 			}
 			else
 			{
-				auto path = params[0]->get< castor::Path >();
+				auto path = params[0]->get< Path >();
 				auto filePath = context.file.getPath();
 
-				if ( castor::File::fileExists( filePath / path ) )
+				if ( File::fileExists( filePath / path ) )
 				{
 					blockContext->skybox->setCrossTexture( filePath, path );
 				}
 				else
 				{
 					blockContext->skybox.reset();
-					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
 					CU_ParsingError( err );
 				}
 			}
@@ -239,17 +234,17 @@ namespace castor3d
 			}
 			else if ( blockContext->skybox )
 			{
-				auto path = params[0]->get< castor::Path >();
+				auto path = params[0]->get< Path >();
 				auto filePath = context.file.getPath();
 
-				if ( castor::File::fileExists( filePath / path ) )
+				if ( File::fileExists( filePath / path ) )
 				{
 					blockContext->skybox->setLeftImage( filePath, path );
 				}
 				else
 				{
 					blockContext->skybox.reset();
-					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
 					CU_ParsingError( err );
 				}
 			}
@@ -268,17 +263,17 @@ namespace castor3d
 			}
 			else if ( blockContext->skybox )
 			{
-				auto path = params[0]->get< castor::Path >();
+				auto path = params[0]->get< Path >();
 				auto filePath = context.file.getPath();
 
-				if ( castor::File::fileExists( filePath / path ) )
+				if ( File::fileExists( filePath / path ) )
 				{
 					blockContext->skybox->setRightImage( filePath, path );
 				}
 				else
 				{
 					blockContext->skybox.reset();
-					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
 					CU_ParsingError( err );
 				}
 			}
@@ -297,17 +292,17 @@ namespace castor3d
 			}
 			else if ( blockContext->skybox )
 			{
-				auto path = params[0]->get< castor::Path >();
+				auto path = params[0]->get< Path >();
 				auto filePath = context.file.getPath();
 
-				if ( castor::File::fileExists( filePath / path ) )
+				if ( File::fileExists( filePath / path ) )
 				{
 					blockContext->skybox->setTopImage( filePath, path );
 				}
 				else
 				{
 					blockContext->skybox.reset();
-					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
 					CU_ParsingError( err );
 				}
 			}
@@ -326,17 +321,17 @@ namespace castor3d
 			}
 			else if ( blockContext->skybox )
 			{
-				auto path = params[0]->get< castor::Path >();
+				auto path = params[0]->get< Path >();
 				auto filePath = context.file.getPath();
 
-				if ( castor::File::fileExists( filePath / path ) )
+				if ( File::fileExists( filePath / path ) )
 				{
 					blockContext->skybox->setBottomImage( filePath, path );
 				}
 				else
 				{
 					blockContext->skybox.reset();
-					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
 					CU_ParsingError( err );
 				}
 			}
@@ -355,17 +350,17 @@ namespace castor3d
 			}
 			else if ( blockContext->skybox )
 			{
-				auto path = params[0]->get< castor::Path >();
+				auto path = params[0]->get< Path >();
 				auto filePath = context.file.getPath();
 
-				if ( castor::File::fileExists( filePath / path ) )
+				if ( File::fileExists( filePath / path ) )
 				{
 					blockContext->skybox->setFrontImage( filePath, path );
 				}
 				else
 				{
 					blockContext->skybox.reset();
-					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
 					CU_ParsingError( err );
 				}
 			}
@@ -384,17 +379,17 @@ namespace castor3d
 			}
 			else if ( blockContext->skybox )
 			{
-				auto path = params[0]->get< castor::Path >();
+				auto path = params[0]->get< Path >();
 				auto filePath = context.file.getPath();
 
-				if ( castor::File::fileExists( filePath / path ) )
+				if ( File::fileExists( filePath / path ) )
 				{
 					blockContext->skybox->setBackImage( filePath, path );
 				}
 				else
 				{
 					blockContext->skybox.reset();
-					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
 					CU_ParsingError( err );
 				}
 			}
@@ -410,7 +405,7 @@ namespace castor3d
 			if ( blockContext->skybox )
 			{
 				log::info << "Loaded skybox" << std::endl;
-				blockContext->skybox->getScene().setBackground( castor::ptrRefCast< SceneBackground >( blockContext->skybox ) );
+				blockContext->skybox->getScene().setBackground( ptrRefCast< SceneBackground >( blockContext->skybox ) );
 			}
 			else
 			{
@@ -424,11 +419,11 @@ namespace castor3d
 
 	SkyboxBackground::SkyboxBackground( Engine & engine
 		, Scene & scene
-		, castor::String const & name )
+		, String const & name )
 		: SceneBackground{ engine, scene, name + cuT( "Skybox" ), cuT( "skybox" ), true }
 	{
-		m_texture = castor::makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
-			, skybox::doGetImageCreate( castor::PixelFormat::eR8G8B8A8_UNORM, { 16u, 16u }, false )
+		m_texture = makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
+			, skybox::doGetImageCreate( PixelFormat::eR8G8B8A8_UNORM, { 16u, 16u }, false )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackground_Colour" )
 			, true /* isStatic */ );
@@ -443,77 +438,77 @@ namespace castor3d
 	{
 	}
 
-	bool SkyboxBackground::write( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::StringStream & stream )const
+	bool SkyboxBackground::write( String const & tabs
+		, Path const & folder
+		, StringStream & stream )const
 	{
-		return castor::TextWriter< SkyboxBackground >{ tabs, folder }( *this, stream );
+		return TextWriter< SkyboxBackground >{ tabs, folder }( *this, stream );
 	}
 
-	void SkyboxBackground::setLeftImage( castor::Path const & folder
-		, castor::Path const & relative )
+	void SkyboxBackground::setLeftImage( Path const & folder
+		, Path const & relative )
 	{
 		setFaceTexture( folder, relative, SkyboxFace::eLeft );
 	}
 
-	void SkyboxBackground::setRightImage( castor::Path const & folder
-		, castor::Path const & relative )
+	void SkyboxBackground::setRightImage( Path const & folder
+		, Path const & relative )
 	{
 		setFaceTexture( folder, relative, SkyboxFace::eRight );
 	}
 
-	void SkyboxBackground::setTopImage( castor::Path const & folder
-		, castor::Path const & relative )
+	void SkyboxBackground::setTopImage( Path const & folder
+		, Path const & relative )
 	{
 		setFaceTexture( folder, relative, SkyboxFace::eTop );
 	}
 
-	void SkyboxBackground::setBottomImage( castor::Path const & folder
-		, castor::Path const & relative )
+	void SkyboxBackground::setBottomImage( Path const & folder
+		, Path const & relative )
 	{
 		setFaceTexture( folder, relative, SkyboxFace::eBottom );
 	}
 
-	void SkyboxBackground::setFrontImage( castor::Path const & folder
-		, castor::Path const & relative )
+	void SkyboxBackground::setFrontImage( Path const & folder
+		, Path const & relative )
 	{
 		setFaceTexture( folder, relative, SkyboxFace::eFront );
 	}
 
-	void SkyboxBackground::setBackImage( castor::Path const & folder
-		, castor::Path const & relative )
+	void SkyboxBackground::setBackImage( Path const & folder
+		, Path const & relative )
 	{
 		setFaceTexture( folder, relative, SkyboxFace::eBack );
 	}
 
-	void SkyboxBackground::setFaceTexture( castor::Path const & folder
-		, castor::Path const & relative
+	void SkyboxBackground::setFaceTexture( Path const & folder
+		, Path const & relative
 		, SkyboxFace face )
 	{
 		m_layerTexturePath[size_t( face )] = folder / relative;
 		m_layerTexture[size_t( face )] = SceneBackground::loadImage( *getScene().getEngine()
-			, cuT( "SkyboxBackground" ) + castor::String{ castor3d::getName( face ) }
+			, cuT( "SkyboxBackground" ) + String{ c3d::getName( face ) }
 			, folder
 			, relative
 			, true );
 		notifyChanged();
 	}
 
-	void SkyboxBackground::setEquiTexture( castor::Path const & folder
-		, castor::Path const & relative
+	void SkyboxBackground::setEquiTexture( Path const & folder
+		, Path const & relative
 		, uint32_t size )
 	{
 		ImageCreateInfo image{ ImageCreateFlags::eNone
 			, ImageType::e2D
-			, castor::PixelFormat::eUNDEFINED
+			, PixelFormat::eUNDEFINED
 			, { size, size, 1u }
 			, 1u
 			, 1u
 			, SampleCount::e1
 			, ImageTiling::eOptimal
 			, ( ImageUsageFlags::eSampled | ImageUsageFlags::eTransferDst ) };
-		m_equiTexture = castor::makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
-			, castor::move( image )
+		m_equiTexture = makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
+			, c3d::move( image )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackgroundEquirectangular" ) );
 		m_equiTexture->setSource( folder, relative );
@@ -529,8 +524,8 @@ namespace castor3d
 		notifyChanged();
 	}
 
-	void SkyboxBackground::setCrossTexture( castor::Path const & folder
-		, castor::Path const & relative )
+	void SkyboxBackground::setCrossTexture( Path const & folder
+		, Path const & relative )
 	{
 		m_crossTexturePath = folder / relative;
 		m_layerTexture = splitCrossImageBuffer( *getScene().getEngine()
@@ -541,9 +536,8 @@ namespace castor3d
 		notifyChanged();
 	}
 
-	void SkyboxBackground::addParsers( castor::AttributeParsers & result )
+	void SkyboxBackground::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< SkyboxContext > context{ result, CSCNSection::eSkybox, CSCNSection::eScene };
 
 		context.addParser( cuT( "visible" ), skybox::parserVisible, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
@@ -649,15 +643,15 @@ namespace castor3d
 			doInitialiseLayerTexture( device );
 		}
 
-		m_hdr = m_texture->getPixelFormat() == castor::PixelFormat::eR32_SFLOAT
-			|| m_texture->getPixelFormat() == castor::PixelFormat::eR32G32_SFLOAT
-			|| m_texture->getPixelFormat() == castor::PixelFormat::eR32G32B32_SFLOAT
-			|| m_texture->getPixelFormat() == castor::PixelFormat::eR32G32B32A32_SFLOAT
-			|| m_texture->getPixelFormat() == castor::PixelFormat::eR16_SFLOAT
-			|| m_texture->getPixelFormat() == castor::PixelFormat::eR16G16_SFLOAT
-			|| m_texture->getPixelFormat() == castor::PixelFormat::eR16G16B16_SFLOAT
-			|| m_texture->getPixelFormat() == castor::PixelFormat::eR16G16B16A16_SFLOAT;
-		m_srgb = castor::isSRGBFormat( m_texture->getPixelFormat() );
+		m_hdr = m_texture->getPixelFormat() == PixelFormat::eR32_SFLOAT
+			|| m_texture->getPixelFormat() == PixelFormat::eR32G32_SFLOAT
+			|| m_texture->getPixelFormat() == PixelFormat::eR32G32B32_SFLOAT
+			|| m_texture->getPixelFormat() == PixelFormat::eR32G32B32A32_SFLOAT
+			|| m_texture->getPixelFormat() == PixelFormat::eR16_SFLOAT
+			|| m_texture->getPixelFormat() == PixelFormat::eR16G16_SFLOAT
+			|| m_texture->getPixelFormat() == PixelFormat::eR16G16B16_SFLOAT
+			|| m_texture->getPixelFormat() == PixelFormat::eR16G16B16A16_SFLOAT;
+		m_srgb = isSRGBFormat( m_texture->getPixelFormat() );
 		return m_texture->initialise( device );
 	}
 
@@ -683,7 +677,7 @@ namespace castor3d
 					| ImageUsageFlags::eTransferDst ) }
 			, {} };
 		m_textureId.create();
-		m_texture = castor::makeUnique< TextureLayout >( device.renderSystem
+		m_texture = makeUnique< TextureLayout >( device.renderSystem
 			, cuT( "SkyboxBackgroundLayerCube" )
 			, *m_textureId.image
 			, m_textureId.wholeViewId );
@@ -726,7 +720,7 @@ namespace castor3d
 						| ImageUsageFlags::eColorAttachment ) }
 				, {} };
 			m_textureId.create();
-			m_texture = castor::makeUnique< TextureLayout >( device.renderSystem
+			m_texture = makeUnique< TextureLayout >( device.renderSystem
 				, cuT( "SkyboxBackgroundEquiCube" )
 				, *m_textureId.image
 				, m_textureId.wholeViewId );
@@ -738,12 +732,12 @@ namespace castor3d
 		m_equiTexture->cleanup();
 	}
 
-	castor::ImageUPtr SkyboxBackground::copyCrossImageFace( Engine & engine
-		, castor::StringView faceName
-		, castor::Image const & lines
+	ImageUPtr SkyboxBackground::copyCrossImageFace( Engine & engine
+		, String faceName
+		, Image const & lines
 		, uint32_t index )
 	{
-		auto name = lines.getName() + castor::String{ faceName };
+		auto name = lines.getName() + String{ faceName };
 		auto height = lines.getHeight();
 		auto width = height;
 		auto blockExtent = ashes::getMinimalExtent2D( convert( lines.getPixelFormat() ) );
@@ -751,7 +745,7 @@ namespace castor3d
 		auto lineSize = lines.getWidth() * blockSize;
 		auto sectionSize = lineSize / 4u;
 		auto lineOffset = ptrdiff_t( index * sectionSize );
-		auto buffer = castor::PxBufferBase::create( { width, height }, lines.getPixelFormat() );
+		auto buffer = PxBufferBase::create( { width, height }, lines.getPixelFormat() );
 		auto srcData = lines.getBuffer().data() + lineOffset;
 		auto dstData = buffer->getPtr();
 		auto blockCount = height / blockExtent.height;
@@ -766,16 +760,16 @@ namespace castor3d
 		buffer = adaptBuffer( *buffer
 			, name
 			, true );
-		castor::ImageMemoryLayout layout{ lines.getLayout().type, *buffer };
+		ImageMemoryLayout layout{ lines.getLayout().type, *buffer };
 		log::info << "Loaded skybox image [" << name << "] (" << layout << ")" << std::endl;
-		return castor::makeUnique< castor::Image >( lines.getName()
+		return makeUnique< Image >( lines.getName()
 			, lines.getPath()
 			, layout
-			, castor::move( buffer ) );
+			, c3d::move( buffer ) );
 	}
 
-	castor::Array< castor::ImageUPtr, 6u > SkyboxBackground::splitCrossImageBuffer( Engine & engine
-		, castor::Image const & cross )
+	Array< ImageUPtr, 6u > SkyboxBackground::splitCrossImageBuffer( Engine & engine
+		, Image const & cross )
 	{
 		auto height = cross.getHeight() / 3u;
 		CU_Require( cross.getWidth() / 4u == height );
@@ -783,10 +777,10 @@ namespace castor3d
 
 		// First, split vertically, since it's the most straightforward.
 		auto linesStride = height * cross.getPxBuffer().getSize() / cross.getHeight();
-		castor::Array< castor::ImageUPtr, 3u > lines{
-			castor::makeUnique< castor::Image >( cross.getName(), cross.getPath(), castor::Size{ cross.getWidth(), height }, cross.getPixelFormat(), buffer + ptrdiff_t( linesStride * 0 ), cross.getPixelFormat() ),
-			castor::makeUnique< castor::Image >( cross.getName(), cross.getPath(), castor::Size{ cross.getWidth(), height }, cross.getPixelFormat(), buffer + ptrdiff_t( linesStride * 1 ), cross.getPixelFormat() ),
-			castor::makeUnique< castor::Image >( cross.getName(), cross.getPath(), castor::Size{ cross.getWidth(), height }, cross.getPixelFormat(), buffer + ptrdiff_t( linesStride * 2 ), cross.getPixelFormat() ) };
+		Array< ImageUPtr, 3u > lines{
+			makeUnique< Image >( cross.getName(), cross.getPath(), Size{ cross.getWidth(), height }, cross.getPixelFormat(), buffer + ptrdiff_t( linesStride * 0 ), cross.getPixelFormat() ),
+			makeUnique< Image >( cross.getName(), cross.getPath(), Size{ cross.getWidth(), height }, cross.getPixelFormat(), buffer + ptrdiff_t( linesStride * 1 ), cross.getPixelFormat() ),
+			makeUnique< Image >( cross.getName(), cross.getPath(), Size{ cross.getWidth(), height }, cross.getPixelFormat(), buffer + ptrdiff_t( linesStride * 2 ), cross.getPixelFormat() ) };
 
 		// Then split horizontally
 		return { copyCrossImageFace( engine, cuT( "/Face/Left" ), *lines[1], 2u )

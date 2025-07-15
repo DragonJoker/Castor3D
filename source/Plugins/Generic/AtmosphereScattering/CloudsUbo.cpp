@@ -10,10 +10,10 @@
 
 namespace atmosphere_scattering
 {
-	castor::MbString const CloudsUbo::Buffer = "C3D_ATM_Clouds";
-	castor::MbString const CloudsUbo::Data = "d";
+	c3d::MbString const CloudsUbo::Buffer = "C3D_ATM_Clouds";
+	c3d::MbString const CloudsUbo::Data = "d";
 
-	CloudsUbo::CloudsUbo( castor3d::RenderDevice const & device
+	CloudsUbo::CloudsUbo( c3d::RenderDevice const & device
 		, bool & dirty )
 		: m_device{ device }
 		, m_ubo{ device.uboPool->getBuffer< Configuration >( 0u ) }
@@ -34,6 +34,6 @@ namespace atmosphere_scattering
 		data = config;
 		data.crispiness *= 10.0f;
 		data.time = totalTime;
-		data.windDirection = castor::point::getNormalised( data.windDirection );
+		data.windDirection = c3d::point::getNormalised( data.windDirection );
 	}
 }

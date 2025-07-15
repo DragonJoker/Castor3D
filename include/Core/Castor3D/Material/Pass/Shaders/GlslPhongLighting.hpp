@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	class PhongLightingModel
 		: public LightingModel
@@ -24,7 +24,7 @@ namespace castor3d::shader
 			, Shadow & shadowModel
 			, Lights & lights
 			, bool enableVolumetric );
-		C3D_API static castor::StringView getName();
+		C3D_API static String getName();
 		C3D_API static LightingModelPtr create( LightingModelID lightingModelId
 			, LightingModelDesc const & desc
 			, sdw::ShaderWriter & writer

@@ -12,7 +12,7 @@
 #include <gli/gli.hpp>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	//************************************************************************************************
 
@@ -111,7 +111,7 @@ namespace castor
 	void GliImageWriter::registerWriter( ImageWriter & reg )
 	{
 		reg.registerWriter( gliw::listExtensions()
-			, castor::make_unique< GliImageWriter >() );
+			, c3d::makeRawUnique< GliImageWriter >() );
 	}
 
 	void GliImageWriter::unregisterWriter( ImageWriter & reg )

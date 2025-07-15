@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	struct Material
 		: public sdw::StructInstance
@@ -194,7 +194,7 @@ namespace castor3d::shader
 
 	private:
 		PassShaders & m_passShaders;
-		castor::StringMap< BufferBaseUPtr > m_buffers;
+		StringMap< BufferBaseUPtr > m_buffers;
 	};
 }
 

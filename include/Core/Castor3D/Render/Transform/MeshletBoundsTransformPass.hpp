@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class MeshletBoundsTransformPass
 	{

@@ -13,12 +13,10 @@
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-CU_ImplementSmartPtr( castor3d, ImageBackground )
+CU_ImplementSmartPtr( c3d, ImageBackground )
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	template<>
 	class TextWriter< ImageBackground >
 		: public TextWriterT< ImageBackground >
@@ -45,16 +43,13 @@ namespace castor
 	private:
 		Path const & m_folder;
 	};
-}
 
-namespace castor3d
-{
 	//************************************************************************************************
 
 	namespace bgimage
 	{
-		static ImageCreateInfo doGetImageCreate( castor::PixelFormat format
-			, castor::Size const & dimensions
+		static ImageCreateInfo doGetImageCreate( PixelFormat format
+			, Size const & dimensions
 			, bool attachment
 			, uint32_t mipLevel = 1u )
 		{
@@ -76,11 +71,11 @@ namespace castor3d
 
 	ImageBackground::ImageBackground( Engine & engine
 		, Scene & scene
-		, castor::String const & name )
+		, String const & name )
 		: SceneBackground{ engine, scene, name + cuT( "Image" ), cuT( "image" ), false }
 	{
-		m_texture = castor::makeUnique< TextureLayout >( *engine.getRenderSystem()
-			, bgimage::doGetImageCreate( castor::PixelFormat::eR8G8B8A8_UNORM, { 16u, 16u }, false )
+		m_texture = makeUnique< TextureLayout >( *engine.getRenderSystem()
+			, bgimage::doGetImageCreate( PixelFormat::eR8G8B8A8_UNORM, { 16u, 16u }, false )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "ImageBackground_Dummy" ) );
 	}
@@ -94,14 +89,14 @@ namespace castor3d
 	{
 	}
 
-	bool ImageBackground::write( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::StringStream & stream )const
+	bool ImageBackground::write( String const & tabs
+		, Path const & folder
+		, StringStream & stream )const
 	{
-		return castor::TextWriter< ImageBackground >{ tabs, folder }( *this, stream );
+		return TextWriter< ImageBackground >{ tabs, folder }( *this, stream );
 	}
 
-	bool ImageBackground::setImage( castor::Path const & folder, castor::Path const & relative )
+	bool ImageBackground::setImage( Path const & folder, Path const & relative )
 	{
 		bool result = false;
 
@@ -109,15 +104,15 @@ namespace castor3d
 		{
 			ImageCreateInfo image{ ImageCreateFlags::eNone
 				, ImageType::e2D
-				, castor::PixelFormat::eUNDEFINED
+				, PixelFormat::eUNDEFINED
 				, { 1u, 1u, 1u }
 				, 1u
 				, 1u
 				, SampleCount::e1
 				, ImageTiling::eOptimal
 				, ( ImageUsageFlags::eTransferSrc | ImageUsageFlags::eTransferDst ) };
-			m_2dTexture = castor::makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
-				, castor::move( image )
+			m_2dTexture = makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
+				, c3d::move( image )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, cuT( "SkyboxBackground2D" ) );
 			m_2dTexture->setSource( folder, relative );
@@ -126,7 +121,7 @@ namespace castor3d
 			notifyChanged();
 			result = true;
 		}
-		catch ( castor::Exception & exc )
+		catch ( Exception & exc )
 		{
 			log::error << exc.what() << std::endl;
 		}
@@ -134,7 +129,7 @@ namespace castor3d
 		return result;
 	}
 
-	castor::String const & ImageBackground::getModelName()const
+	String const & ImageBackground::getModelName()const
 	{
 		return shader::ImgBackgroundModel::Name;
 	}
@@ -142,15 +137,15 @@ namespace castor3d
 	bool ImageBackground::doInitialise( RenderDevice const & device )
 	{
 		doInitialise2DTexture( device );
-		m_hdr = m_texture->getPixelFormat() == castor::PixelFormat::eR32_SFLOAT
-			|| m_texture->getPixelFormat() == castor::PixelFormat::eR32G32_SFLOAT
-			|| m_texture->getPixelFormat() == castor::PixelFormat::eR32G32B32_SFLOAT
-			|| m_texture->getPixelFormat() == castor::PixelFormat::eR32G32B32A32_SFLOAT
-			|| m_texture->getPixelFormat() == castor::PixelFormat::eR16_SFLOAT
-			|| m_texture->getPixelFormat() == castor::PixelFormat::eR16G16_SFLOAT
-			|| m_texture->getPixelFormat() == castor::PixelFormat::eR16G16B16_SFLOAT
-			|| m_texture->getPixelFormat() == castor::PixelFormat::eR16G16B16A16_SFLOAT;
-		m_srgb = castor::isSRGBFormat( m_texture->getPixelFormat() );
+		m_hdr = m_texture->getPixelFormat() == PixelFormat::eR32_SFLOAT
+			|| m_texture->getPixelFormat() == PixelFormat::eR32G32_SFLOAT
+			|| m_texture->getPixelFormat() == PixelFormat::eR32G32B32_SFLOAT
+			|| m_texture->getPixelFormat() == PixelFormat::eR32G32B32A32_SFLOAT
+			|| m_texture->getPixelFormat() == PixelFormat::eR16_SFLOAT
+			|| m_texture->getPixelFormat() == PixelFormat::eR16G16_SFLOAT
+			|| m_texture->getPixelFormat() == PixelFormat::eR16G16B16_SFLOAT
+			|| m_texture->getPixelFormat() == PixelFormat::eR16G16B16A16_SFLOAT;
+		m_srgb = isSRGBFormat( m_texture->getPixelFormat() );
 		return m_texture->initialise( device );
 	}
 
@@ -170,11 +165,11 @@ namespace castor3d
 			, 2.0f );
 		viewport.update();
 		auto node = updater.camera->getParent();
-		castor::Matrix4x4f view;
-		castor::matrix::lookAt( view
+		Matrix4x4f view;
+		matrix::lookAt( view
 			, node->getDerivedPosition()
-			, node->getDerivedPosition() + castor::Point3f{ 0.0f, 0.0f, 1.0f }
-			, castor::Point3f{ 0.0f, 1.0f, 0.0f } );
+			, node->getDerivedPosition() + Point3f{ 0.0f, 0.0f, 1.0f }
+			, Point3f{ 0.0f, 1.0f, 0.0f } );
 		updater.bgMtxView = view;
 		updater.bgMtxProj = updater.isSafeBanded
 			? viewport.getSafeBandedProjection()
@@ -258,7 +253,7 @@ namespace castor3d
 					, ImageUsageFlags::eSampled | ImageUsageFlags::eTransferDst }
 				, {} };
 			m_textureId.create();
-			m_texture = castor::makeUnique< TextureLayout >( device.renderSystem
+			m_texture = makeUnique< TextureLayout >( device.renderSystem
 				, cuT( "ImageBackgroundCube" )
 				, *m_textureId.image
 				, m_textureId.wholeViewId );
@@ -271,7 +266,7 @@ namespace castor3d
 		VkImageSubresourceLayers srcSubresource{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1 };
 		VkImageSubresourceLayers dstSubresource{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1 };
 
-		castor::Array< VkImageCopy, 6u > copyInfos;
+		Array< VkImageCopy, 6u > copyInfos;
 		copyInfos[uint32_t( CubeMapFace::ePositiveX )].extent = extent;
 		copyInfos[uint32_t( CubeMapFace::ePositiveX )].srcSubresource = srcSubresource;
 		copyInfos[uint32_t( CubeMapFace::ePositiveX )].srcOffset = srcOffset;

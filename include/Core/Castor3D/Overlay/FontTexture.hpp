@@ -16,21 +16,21 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/FontCache.hpp>
 #include <CastorUtils/Graphics/Position.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	C3D_API void postPreRenderGpuEvent( Engine & engine
-		, castor::Function< void( RenderDevice const &, QueueData const & ) > event );
+		, Function< void( RenderDevice const &, QueueData const & ) > event );
 	C3D_API void postQueueRenderCpuEvent( Engine & engine
-		, castor::Function< void() > event );
+		, Function< void() > event );
 
 	template< typename ResourceT, template< typename ResT > typename PointerT >
 	class DoubleBufferedResourceT
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
 		using ResourcePtrT = PointerT< ResourceT >;
-		using OnChangedFunction = castor::Function< void( DoubleBufferedResourceT const & ) >;
-		using OnChanged = castor::SignalT< OnChangedFunction >;
+		using OnChangedFunction = Function< void( DoubleBufferedResourceT const & ) >;
+		using OnChanged = SignalT< OnChangedFunction >;
 
 		struct Resource
 		{
@@ -43,8 +43,8 @@ namespace castor3d
 			, ResourcePtrT back
 			, ResourcePtrT front )
 			: OwnedBy{ parent }
-			, m_back{ castor::move( back ) }
-			, m_front{ castor::move( front ) }
+			, m_back{ c3d::move( back ) }
+			, m_front{ c3d::move( front ) }
 		{
 		}
 
@@ -139,7 +139,7 @@ namespace castor3d
 						postQueueRenderCpuEvent( *getEngine()
 							, [this]()
 							{
-								castor::swap( m_front, m_back );
+								c3d::swap( m_front, m_back );
 								swapResources();
 								onResourceChanged( *this );
 							} );
@@ -167,13 +167,13 @@ namespace castor3d
 		C3D_API virtual void updateResource( Resource & resource ) = 0;
 		C3D_API virtual void swapResources() = 0;
 	};
-	using DoubleBufferedTextureLayout = DoubleBufferedResourceT< TextureLayout, castor::UniquePtr >;
+	using DoubleBufferedTextureLayout = DoubleBufferedResourceT< TextureLayout, UniquePtr >;
 
 	class FontTexture
 		: public DoubleBufferedTextureLayout
 	{
 	public:
-		CU_DeclareMap( char32_t, castor::Position, GlyphPosition );
+		CU_DeclareMap( char32_t, Position, GlyphPosition );
 
 	public:
 		/**
@@ -187,7 +187,7 @@ namespace castor3d
 		 *\param[in]	font	La police.
 		 */
 		C3D_API FontTexture( Engine & engine
-			, castor::FontResPtr font );
+			, FontResPtr font );
 		/**
 		 *\~english
 		 *\brief		Initialises the texture.
@@ -220,7 +220,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Convertit un texte en tableau d'index de glyphe.
 		 */
-		C3D_API castor::UInt32Array convert( castor::U32String const & text )const;
+		C3D_API UInt32Array convert( U32String const & text )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the font name.
@@ -229,7 +229,7 @@ namespace castor3d
 		 *\brief		Récupère le nom de la police.
 		 *\return		La valeur.
 		 */
-		C3D_API castor::String const & getFontName()const;
+		C3D_API String const & getFontName()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the wanted glyph position.
@@ -240,7 +240,7 @@ namespace castor3d
 		 *\param[in]	glyphChar	L'indice de la glyphe.
 		 *\return		La position.
 		 */
-		C3D_API castor::Position const & getGlyphPosition( char32_t glyphChar )const;
+		C3D_API Position const & getGlyphPosition( char32_t glyphChar )const;
 		/**
 		 *\~english
 		 *name Getters.
@@ -248,7 +248,7 @@ namespace castor3d
 		 *name Accesseurs.
 		**/
 		/**@{*/
-		castor::FontRPtr getFont()const
+		FontRPtr getFont()const
 		{
 			return m_font;
 		}
@@ -290,12 +290,12 @@ namespace castor3d
 		void swapResources()override;
 
 	private:
-		castor::FontResPtr m_font{};
+		FontResPtr m_font{};
 		SamplerObs m_sampler{};
 		GlyphPositionMap m_glyphsPositions;
 		uint32_t m_id;
 		FontUboUPtr m_ubo;
-		castor::Map< char32_t, uint32_t > m_charIndices;
+		Map< char32_t, uint32_t > m_charIndices;
 	};
 }
 

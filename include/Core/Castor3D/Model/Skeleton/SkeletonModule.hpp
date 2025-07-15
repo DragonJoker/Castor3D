@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/Quaternion.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Model */
 	//@{
@@ -32,7 +32,7 @@ namespace castor3d
 		eBone = 1,
 		CU_ScopedEnumBounds( eNode, eBone )
 	};
-	C3D_API castor::String getName( SkeletonNodeType value );
+	C3D_API String getName( SkeletonNodeType value );
 	/**
 	*\~english
 	*\brief
@@ -98,33 +98,33 @@ namespace castor3d
 	*	Spécialisation pour Skeleton.
 	*/
 	template<>
-	struct PtrCacheTraitsT< Skeleton, castor::String >
-		: PtrCacheTraitsBaseT< Skeleton, castor::String >
+	struct PtrCacheTraitsT< Skeleton, String >
+		: PtrCacheTraitsBaseT< Skeleton, String >
 	{
 		using ResT = Skeleton;
-		using KeyT = castor::String;
+		using KeyT = String;
 		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
 		using ElementT = typename Base::ElementT;
 		using ElementPtrT = typename Base::ElementPtrT;
 
-		C3D_API static const castor::String Name;
+		C3D_API static const String Name;
 	};
 
-	using SkeletonCacheTraits = PtrCacheTraitsT< Skeleton, castor::String >;
-	using SkeletonCache = castor::ResourceCacheT< Skeleton
-		, castor::String
+	using SkeletonCacheTraits = PtrCacheTraitsT< Skeleton, String >;
+	using SkeletonCache = ResourceCacheT< Skeleton
+		, String
 		, SkeletonCacheTraits >;
 
 	using SkeletonRes = SkeletonCacheTraits::ElementPtrT;
 	using SkeletonResPtr = SkeletonCacheTraits::ElementObsT;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, BoneNode, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SkeletonNode, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Skeleton, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SkeletonCache, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SkeletonImporter, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SkeletonImporterFactory, C3D_API );
+	CU_DeclareSmartPtr( c3d, BoneNode, C3D_API );
+	CU_DeclareSmartPtr( c3d, SkeletonNode, C3D_API );
+	CU_DeclareSmartPtr( c3d, Skeleton, C3D_API );
+	CU_DeclareSmartPtr( c3d, SkeletonCache, C3D_API );
+	CU_DeclareSmartPtr( c3d, SkeletonImporter, C3D_API );
+	CU_DeclareSmartPtr( c3d, SkeletonImporterFactory, C3D_API );
 
 	//! Skinned vertex data array
 	CU_DeclareVector( VertexBoneData, VertexBoneData );
@@ -134,9 +134,9 @@ namespace castor3d
 
 	struct NodeTransform
 	{
-		castor::Point3f translate{};
-		castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
-		castor::Quaternion rotate{};
+		Point3f translate{};
+		Point3f scale{ 1.0f, 1.0f, 1.0f };
+		Quaternion rotate{};
 	};
 
 	inline bool operator==( NodeTransform const & lhs, NodeTransform const & rhs )noexcept

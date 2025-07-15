@@ -11,7 +11,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -20,7 +20,7 @@ namespace castor3d
 		RsmConfigData::RsmConfigData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstance{ writer, castor::move( expr ), enabled }
+			: StructInstance{ writer, c3d::move( expr ), enabled }
 			, intensity{ getMember< sdw::Float >( "intensity" ) }
 			, maxRadius{ getMember< sdw::Float >( "maxRadius" ) }
 			, sampleCount{ getMember< sdw::UInt >( "sampleCount" ) }
@@ -44,9 +44,9 @@ namespace castor3d
 			return result;
 		}
 
-		castor::RawUniquePtr< sdw::Struct > RsmConfigData::declare( sdw::ShaderWriter & writer )
+		RawUniquePtr< sdw::Struct > RsmConfigData::declare( sdw::ShaderWriter & writer )
 		{
-			return castor::make_unique< sdw::Struct >( writer
+			return makeRawUnique< sdw::Struct >( writer
 				, makeType( writer.getTypesCache() ) );
 		}
 	}

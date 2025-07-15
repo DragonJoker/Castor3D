@@ -20,7 +20,7 @@ namespace Bloom
 {
 	namespace blur
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
 		enum Idx
 		{
@@ -28,28 +28,28 @@ namespace Bloom
 			DifImgIdx,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			auto config = writer.declUniformBuffer( castor3d::GaussianBlur::Config, GaussCfgUboIdx, 0u );
-			auto c3d_pixelSize = config.declMember< sdw::Vec2 >( castor3d::GaussianBlur::TextureSize );
-			auto c3d_coefficientsCount = config.declMember< sdw::UInt >( castor3d::GaussianBlur::CoefficientsCount );
+			auto config = writer.declUniformBuffer( c3d::GaussianBlur::Config, GaussCfgUboIdx, 0u );
+			auto c3d_pixelSize = config.declMember< sdw::Vec2 >( c3d::GaussianBlur::TextureSize );
+			auto c3d_coefficientsCount = config.declMember< sdw::UInt >( c3d::GaussianBlur::CoefficientsCount );
 			auto c3d_dump = config.declMember< sdw::UInt >( "c3d_dump" ); // to keep a 16 byte alignment.
-			auto c3d_coefficients = config.declMember< sdw::Vec4 >( castor3d::GaussianBlur::Coefficients, castor3d::GaussianBlur::MaxCoefficients / 4u );
+			auto c3d_coefficients = config.declMember< sdw::Vec4 >( c3d::GaussianBlur::Coefficients, c3d::GaussianBlur::MaxCoefficients / 4u );
 			config.end();
 			auto c3d_mapSource = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapSource", DifImgIdx, 0u );
 
-			writer.implementEntryPointT< c3d::Position2FT, c3d::Uv2FT >( []( sdw::VertexInT< c3d::Position2FT > const & in
-				, sdw::VertexOutT< c3d::Uv2FT > out )
+			writer.implementEntryPointT< c3ds::Position2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::Position2FT > const & in
+				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = ( in.position() + 1.0_f ) / 2.0_f;
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&writer, &c3d_mapSource, c3d_coefficients, &c3d_coefficientsCount, &c3d_pixelSize]
-				( sdw::FragmentInT< c3d::Uv2FT > const & in
-					, sdw::FragmentOutT< c3d::Colour4FT > const & out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&writer, &c3d_mapSource, c3d_coefficients, &c3d_coefficientsCount, &c3d_pixelSize]
+				( sdw::FragmentInT< c3ds::Uv2FT > const & in
+					, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					auto offset = writer.declLocale( "offset"
 						, vec2( 0.0_f, 0.0_f ) );
@@ -66,9 +66,9 @@ namespace Bloom
 			return writer.getBuilder().releaseShader();
 		}
 
-		static castor::Vector< float > getHalfPascal( uint32_t height )
+		static c3d::Vector< float > getHalfPascal( uint32_t height )
 		{
-			castor::Vector< float > result;
+			c3d::Vector< float > result;
 			result.resize( height );
 			auto x = 1.0f;
 			auto max = 1 + height;
@@ -103,9 +103,9 @@ namespace Bloom
 			return result;
 		}
 
-		static castor::Array< castor::Point4f, 15u > doCreateKernel( uint32_t count )
+		static c3d::Array< c3d::Point4f, 15u > doCreateKernel( uint32_t count )
 		{
-			castor::Array< castor::Point4f, 15u > result;
+			c3d::Array< c3d::Point4f, 15u > result;
 			auto kernel = getHalfPascal( count );
 			std::memcpy( result.data()->ptr()
 				, kernel.data()
@@ -113,8 +113,8 @@ namespace Bloom
 			return result;
 		}
 
-		static UboOffsetArray doCreateUbo( castor3d::RenderDevice const & device
-			, castor3d::Extent2D dimensions
+		static UboOffsetArray doCreateUbo( c3d::RenderDevice const & device
+			, c3d::Extent2D dimensions
 			, uint32_t blurKernelSize
 			, uint32_t blurPassesCount
 			, bool isVertical )
@@ -125,34 +125,34 @@ namespace Bloom
 
 			for ( auto i = 0u; i < blurPassesCount; ++i )
 			{
-				auto ubo = device.uboPool->getBuffer< castor3d::GaussianBlur::Configuration >( 0u );
+				auto ubo = device.uboPool->getBuffer< c3d::GaussianBlur::Configuration >( 0u );
 				auto & data = ubo.getData();
-				data.textureSize = castor::Point2f
+				data.textureSize = c3d::Point2f
 				{
 					isVertical ? 0.0f : 1.0f / float( dimensions.width >> ( i + 1 ) ),
 					isVertical ? 1.0f / float( dimensions.height >> ( i + 1 ) ) : 0.0f
 				};
 				data.blurCoeffsCount = coefficientsCount;
 				data.blurCoeffs = kernel;
-				result.emplace_back( castor::move( ubo ) );
+				result.emplace_back( c3d::move( ubo ) );
 			}
 
 			return result;
 		}
 
-		static castor::Vector< BlurPass::Subpass > doCreateSubpasses( crg::FramePassGroup & graph
+		static c3d::Vector< BlurPass::Subpass > doCreateSubpasses( crg::FramePassGroup & graph
 			, crg::FramePassArray & previousPasses
-			, castor3d::RenderDevice const & device
+			, c3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & srcImages
 			, crg::ImageViewIdArray const & dstImages
-			, castor3d::Extent2D dimensions
+			, c3d::Extent2D dimensions
 			, ashes::PipelineShaderStageCreateInfoArray const & stages
 			, UboOffsetArray const & blurUbo
 			, uint32_t blurPassesCount
 			, bool isVertical
 			, bool const * enabled )
 		{
-			castor::Vector< BlurPass::Subpass > result;
+			c3d::Vector< BlurPass::Subpass > result;
 			assert( srcImages.size() == dstImages.size()
 				&& srcImages.size() == blurPassesCount );
 
@@ -180,16 +180,16 @@ namespace Bloom
 
 	BlurPass::Subpass::Subpass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, crg::ImageViewId const & srcView
 		, crg::ImageViewId const & dstView
-		, castor3d::Extent2D dimensions
+		, c3d::Extent2D dimensions
 		, ashes::PipelineShaderStageCreateInfoArray const & stages
-		, castor3d::UniformBufferOffsetT< castor3d::GaussianBlur::Configuration > const & blurUbo
+		, c3d::UniformBufferOffsetT< c3d::GaussianBlur::Configuration > const & blurUbo
 		, uint32_t index
 		, bool isVertical
 		, bool const * enabled )
-		: pass{ graph.createPass( "Blur" + castor::string::toMbString( index ) + ( isVertical ? "Y" : "X" )
+		: pass{ graph.createPass( "Blur" + c3d::string::toMbString( index ) + ( isVertical ? "Y" : "X" )
 			, [&device, &stages, dimensions, index, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -201,21 +201,21 @@ namespace Bloom
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) )
 					.enabled( enabled )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }
 	{
 		pass.addDependency( previousPass );
-		blurUbo.createPassBinding( pass, castor::MbString{ "BlurCfg" } + ( isVertical ? "Y" : "X" ), blur::GaussCfgUboIdx );
+		blurUbo.createPassBinding( pass, c3d::MbString{ "BlurCfg" } + ( isVertical ? "Y" : "X" ), blur::GaussCfgUboIdx );
 		pass.addSampledView( srcView
 			, blur::DifImgIdx
-			, crg::SamplerDesc{ castor3d::FilterMode::eNearest
-				, castor3d::FilterMode::eNearest
-				, castor3d::MipmapMode::eNearest
-				, castor3d::WrapMode::eClampToEdge
-				, castor3d::WrapMode::eClampToEdge
-				, castor3d::WrapMode::eClampToEdge
+			, crg::SamplerDesc{ c3d::FilterMode::eNearest
+				, c3d::FilterMode::eNearest
+				, c3d::MipmapMode::eNearest
+				, c3d::WrapMode::eClampToEdge
+				, c3d::WrapMode::eClampToEdge
+				, c3d::WrapMode::eClampToEdge
 				, 0.0f
 				, float( index )
 				, float( index + 1u ) } );
@@ -226,10 +226,10 @@ namespace Bloom
 
 	BlurPass::BlurPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & srcImages
 		, crg::ImageViewIdArray const & dstImages
-		, castor3d::Extent2D dimensions
+		, c3d::Extent2D dimensions
 		, uint32_t blurKernelSize
 		, uint32_t blurPassesCount
 		, bool isVertical
@@ -256,10 +256,10 @@ namespace Bloom
 
 	BlurPass::BlurPass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & srcImages
 		, crg::ImageViewIdArray const & dstImages
-		, castor3d::Extent2D dimensions
+		, c3d::Extent2D dimensions
 		, uint32_t blurKernelSize
 		, uint32_t blurPassesCount
 		, bool isVertical
@@ -297,7 +297,7 @@ namespace Bloom
 		}
 	}
 
-	void BlurPass::accept( castor3d::ConfigurationVisitorBase & visitor )const
+	void BlurPass::accept( c3d::ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_shader );
 	}

@@ -59,9 +59,9 @@
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 
-CU_ImplementSmartPtr( castor3d, PassComponentRegister )
+CU_ImplementSmartPtr( c3d, PassComponentRegister )
 
-namespace castor3d
+namespace c3d
 {
 	namespace passcompreg
 	{
@@ -100,9 +100,9 @@ namespace castor3d
 			, ComponentModeFlags filter
 			, PassComponentID componentId
 			, PassComponentPlugin const & component
-			, castor::Vector< shader::PassComponentsShaderPtr > & shaders
-			, castor::Vector< UpdateComponent > & updateComponents
-			, castor::Vector< FinishComponent > & finishComponents )
+			, Vector< shader::PassComponentsShaderPtr > & shaders
+			, Vector< UpdateComponent > & updateComponents
+			, Vector< FinishComponent > & finishComponents )
 		{
 			if ( isValidComponent( flags, componentId ) )
 			{
@@ -110,7 +110,7 @@ namespace castor3d
 				{
 					if ( auto shader = component.createComponentsShader() )
 					{
-						shaders.push_back( castor::move( shader ) );
+						shaders.push_back( c3d::move( shader ) );
 					}
 
 					if ( component.updateComponent != nullptr )
@@ -140,7 +140,7 @@ namespace castor3d
 	}
 
 	PassComponentRegister::PassComponentRegister( Engine & engine )
-		: castor::OwnedBy< Engine >{ engine }
+		: OwnedBy< Engine >{ engine }
 	{
 		// 
 		// Order is important here, for priority.
@@ -346,7 +346,7 @@ namespace castor3d
 		}
 	}
 
-	shader::PassMaterialShader * PassComponentRegister::getMaterialShader( castor::String const & componentType )const
+	shader::PassMaterialShader * PassComponentRegister::getMaterialShader( String const & componentType )const
 	{
 		auto it = m_materialShaders.find( getNameId( componentType ) );
 		return it == m_materialShaders.end()
@@ -364,12 +364,12 @@ namespace castor3d
 		}
 	}
 
-	castor::Vector< shader::PassComponentsShaderPtr > PassComponentRegister::getComponentsShaders( TextureCombine const & combine
+	Vector< shader::PassComponentsShaderPtr > PassComponentRegister::getComponentsShaders( TextureCombine const & combine
 		, ComponentModeFlags filter
-		, castor::Vector< UpdateComponent > & updateComponents
-		, castor::Vector< FinishComponent > & finishComponents )const
+		, Vector< UpdateComponent > & updateComponents
+		, Vector< FinishComponent > & finishComponents )const
 	{
-		castor::Vector< shader::PassComponentsShaderPtr > result;
+		Vector< shader::PassComponentsShaderPtr > result;
 
 		for ( auto & componentDesc : m_registered )
 		{
@@ -385,12 +385,12 @@ namespace castor3d
 		return result;
 	}
 
-	castor::Vector< shader::PassComponentsShaderPtr > PassComponentRegister::getComponentsShaders( PipelineFlags const & flags
+	Vector< shader::PassComponentsShaderPtr > PassComponentRegister::getComponentsShaders( PipelineFlags const & flags
 		, ComponentModeFlags filter
-		, castor::Vector< UpdateComponent > & updateComponents
-		, castor::Vector< FinishComponent > & finishComponents )const
+		, Vector< UpdateComponent > & updateComponents
+		, Vector< FinishComponent > & finishComponents )const
 	{
-		castor::Vector< shader::PassComponentsShaderPtr > result;
+		Vector< shader::PassComponentsShaderPtr > result;
 
 		for ( auto & componentDesc : m_registered )
 		{
@@ -457,11 +457,11 @@ namespace castor3d
 		return components.end() != components.find( getPlugin( SubsurfaceScatteringComponent::TypeName ).getComponentFlags() );
 	}
 
-	void PassComponentRegister::updateMapComponents( castor::Vector< TextureFlagConfiguration > const & texConfigs
+	void PassComponentRegister::updateMapComponents( Vector< TextureFlagConfiguration > const & texConfigs
 		, Pass & result )
 	{
-		castor::Vector< PassComponentUPtr > components;
-		castor::Map< PassComponentID, Component const * > needed;
+		Vector< PassComponentUPtr > components;
+		Map< PassComponentID, Component const * > needed;
 
 		// First gather the needed map components.
 		for ( auto & texConfig : texConfigs )
@@ -500,13 +500,13 @@ namespace castor3d
 
 		for ( auto & component : components )
 		{
-			result.addComponent( castor::move( component ) );
+			result.addComponent( c3d::move( component ) );
 		}
 	}
 
 	bool PassComponentRegister::writeTextureConfig( TextureConfiguration const & configuration
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
 		bool result = true;
 
@@ -648,10 +648,10 @@ namespace castor3d
 			} );
 	}
 
-	castor::Map< uint32_t, PassComponentTextureFlag > PassComponentRegister::getTexcoordModifs( PipelineFlags const & flags )const
+	Map< uint32_t, PassComponentTextureFlag > PassComponentRegister::getTexcoordModifs( PipelineFlags const & flags )const
 	{
 		auto & textures = flags.textures;
-		castor::Map< uint32_t, PassComponentTextureFlag > result;
+		Map< uint32_t, PassComponentTextureFlag > result;
 		uint32_t index = 0u;
 
 		for ( auto flag : textures.flags )
@@ -665,9 +665,9 @@ namespace castor3d
 		return result;
 	}
 
-	castor::Map< uint32_t, PassComponentTextureFlag > PassComponentRegister::getTexcoordModifs( TextureCombine const & combine )const
+	Map< uint32_t, PassComponentTextureFlag > PassComponentRegister::getTexcoordModifs( TextureCombine const & combine )const
 	{
-		castor::Map< uint32_t, PassComponentTextureFlag > result;
+		Map< uint32_t, PassComponentTextureFlag > result;
 		uint32_t index = 0u;
 
 		for ( auto flag : combine.flags )
@@ -681,7 +681,7 @@ namespace castor3d
 		return result;
 	}
 
-	PassComponentID PassComponentRegister::registerComponent( castor::String const & componentType
+	PassComponentID PassComponentRegister::registerComponent( String const & componentType
 		, PassComponentPluginUPtr componentPlugin )
 	{
 		if ( auto id = getNameId( componentType );
@@ -695,11 +695,11 @@ namespace castor3d
 		auto & componentDesc = getNextId();
 		registerComponent( componentDesc
 			, componentType
-			, castor::move( componentPlugin ) );
+			, c3d::move( componentPlugin ) );
 		return componentDesc.id;
 	}
 
-	void PassComponentRegister::unregisterComponent( castor::String const & componentType )noexcept
+	void PassComponentRegister::unregisterComponent( String const & componentType )noexcept
 	{
 		auto id = getNameId( componentType );
 
@@ -713,7 +713,7 @@ namespace castor3d
 		unregisterComponent( id );
 	}
 
-	PassComponentID PassComponentRegister::getNameId( castor::String const & componentType )const
+	PassComponentID PassComponentRegister::getNameId( String const & componentType )const
 	{
 		auto it = std::find_if( m_registered.begin()
 			, m_registered.end()
@@ -760,12 +760,12 @@ namespace castor3d
 	}
 
 	void PassComponentRegister::registerComponent( Component & componentDesc
-		, castor::String const & componentType
+		, String const & componentType
 		, PassComponentPluginUPtr componentPlugin )
 	{
 		componentPlugin->setId( componentDesc.id );
 		componentDesc.name = componentType;
-		componentDesc.plugin = castor::move( componentPlugin );
+		componentDesc.plugin = c3d::move( componentPlugin );
 
 		if ( componentDesc.plugin->getAlphaBlendingFlag() != 0u )
 		{
@@ -799,7 +799,7 @@ namespace castor3d
 
 		if ( auto shader = componentDesc.plugin->createMaterialShader() )
 		{
-			m_materialShaders.emplace( componentDesc.id, castor::move( shader ) );
+			m_materialShaders.emplace( componentDesc.id, c3d::move( shader ) );
 
 			if ( !m_pauseOrder )
 			{
@@ -807,7 +807,7 @@ namespace castor3d
 			}
 		}
 
-		castor::AttributeParsers parsers;
+		AttributeParsers parsers;
 		ChannelFillers fillers;
 		componentDesc.plugin->createParsers( parsers, fillers );
 
@@ -817,7 +817,7 @@ namespace castor3d
 			m_channels.try_emplace( it->first, it->second.first );
 		}
 
-		castor::StrUInt32Map sections;
+		StrUInt32Map sections;
 		componentDesc.plugin->createSections( sections );
 
 		getEngine()->registerParsers( componentType
@@ -877,9 +877,9 @@ namespace castor3d
 		m_bufferOrder.clear();
 		m_bufferShaders.clear();
 		m_fillMaterial.clear();
-		using NamedChunk = castor::Pair< castor::String, MemChunk >;
-		using IdNamedChunk = castor::Pair< PassComponentID, castor::Pair< castor::String, MemChunk > >;
-		using Chunks = castor::Map< PassComponentID, NamedChunk >;
+		using NamedChunk = Pair< String, MemChunk >;
+		using IdNamedChunk = Pair< PassComponentID, Pair< String, MemChunk > >;
+		using Chunks = Map< PassComponentID, NamedChunk >;
 		Chunks chunks;
 
 		for ( auto const & [id, shader] : m_materialShaders )
@@ -894,7 +894,7 @@ namespace castor3d
 		auto constexpr baseOffset = 0u;
 
 		// First put vec4s and 16 bit aligned structs
-		castor::Vector< IdNamedChunk > ordered;
+		Vector< IdNamedChunk > ordered;
 		auto it = chunks.begin();
 		VkDeviceSize offset = baseOffset;
 
@@ -907,7 +907,7 @@ namespace castor3d
 			{
 				chunk.second.second.offset = offset;
 				offset += chunk.second.second.askedSize;
-				ordered.emplace_back( castor::move( chunk ) );
+				ordered.emplace_back( c3d::move( chunk ) );
 				it = chunks.erase( it );
 			}
 			else
@@ -932,7 +932,7 @@ namespace castor3d
 			{
 				chunk.second.second.offset = offset;
 				offset += alignment;
-				ordered.emplace_back( castor::move( chunk ) );
+				ordered.emplace_back( c3d::move( chunk ) );
 				it = chunks.erase( it );
 			}
 			else
@@ -956,7 +956,7 @@ namespace castor3d
 				chunk.second.second.offset = offset;
 				offset += alignment;
 				++oit;
-				oit = ordered.emplace( oit, castor::move( chunk ) );
+				oit = ordered.emplace( oit, c3d::move( chunk ) );
 				it = chunks.erase( it );
 				++oit;
 			}
@@ -969,13 +969,13 @@ namespace castor3d
 		// Fill holes with padding
 		while ( oit != ordered.end() )
 		{
-			castor::Pair< PassComponentID, castor::Pair< castor::String, MemChunk > > chunk{};
+			Pair< PassComponentID, Pair< String, MemChunk > > chunk{};
 			chunk.first = passcompreg::InvalidId;
 			chunk.second.second.askedSize = 4u;
 			chunk.second.second.offset = offset;
 			offset += 4u;
 			++oit;
-			oit = ordered.emplace( oit, castor::move( chunk ) );
+			oit = ordered.emplace( oit, c3d::move( chunk ) );
 			++oit;
 		}
 
@@ -994,7 +994,7 @@ namespace castor3d
 			{
 				chunk.second.second.offset = offset;
 				offset += 8u;
-				ordered.emplace_back( castor::move( chunk ) );
+				ordered.emplace_back( c3d::move( chunk ) );
 				it = chunks.erase( it );
 			}
 			else
@@ -1015,7 +1015,7 @@ namespace castor3d
 			{
 				chunk.second.second.offset = offset;
 				offset += 4u;
-				ordered.emplace_back( castor::move( chunk ) );
+				ordered.emplace_back( c3d::move( chunk ) );
 				it = chunks.erase( it );
 			}
 			else
@@ -1027,12 +1027,12 @@ namespace castor3d
 		// Fill holes with padding
 		while ( ( offset % alignment ) != 0u )
 		{
-			castor::Pair< PassComponentID, castor::Pair< castor::String, MemChunk > > chunk{};
+			Pair< PassComponentID, Pair< String, MemChunk > > chunk{};
 			chunk.first = passcompreg::InvalidId;
 			chunk.second.second.askedSize = 4u;
 			chunk.second.second.size = 4u;
 			chunk.second.second.offset = offset;
-			ordered.emplace_back( castor::move( chunk ) );
+			ordered.emplace_back( c3d::move( chunk ) );
 			offset += 4u;
 		}
 
@@ -1048,7 +1048,7 @@ namespace castor3d
 			auto & chunk = *it;
 			chunk.second.second.offset = offset;
 			offset += ashes::getAlignedSize( chunk.second.second.askedSize, alignment );
-			ordered.emplace_back( castor::move( chunk ) );
+			ordered.emplace_back( c3d::move( chunk ) );
 			it = chunks.erase( it );
 		}
 
@@ -1082,7 +1082,7 @@ namespace castor3d
 					, uint32_t & padIndex )
 					{
 						++padIndex;
-						type.declMember( "pad" + castor::string::toMbString( padIndex ), ast::type::Kind::eFloat );
+						type.declMember( "pad" + string::toMbString( padIndex ), ast::type::Kind::eFloat );
 						inits.push_back( makeExpr( 0.0_f ) );
 					} );
 			}

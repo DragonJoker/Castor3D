@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <vector>
 
-namespace castor3d
+namespace c3d
 {
 	struct GpuBufferLinearAllocator
 	{
@@ -85,7 +85,7 @@ namespace castor3d
 	private:
 		uint32_t m_alignSize;
 		size_t m_allocatedSize;
-		castor::Vector< VkDeviceSize > m_free;
+		Vector< VkDeviceSize > m_free;
 	};
 }
 

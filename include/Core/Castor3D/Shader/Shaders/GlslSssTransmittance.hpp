@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/BaseTypes/UInt.hpp>
 #include <ShaderWriter/VecTypes/Vec3.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	class SssTransmittance
 	{
@@ -64,7 +64,7 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InVec3
 			, sdw::InFloat > m_compute;
-		sdw::Function < sdw::Vec3
+		sdw::Function< sdw::Vec3
 			, InShadowData
 			, sdw::InUInt
 			, sdw::InFloat
@@ -74,7 +74,7 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3 > m_computeDirectional;
-		sdw::Function < sdw::Vec3
+		sdw::Function< sdw::Vec3
 			, InShadowData
 			, sdw::InUInt
 			, sdw::InFloat
@@ -83,7 +83,7 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3 > m_computePoint;
-		sdw::Function < sdw::Vec3
+		sdw::Function< sdw::Vec3
 			, InShadowData
 			, sdw::InUInt
 			, sdw::InFloat

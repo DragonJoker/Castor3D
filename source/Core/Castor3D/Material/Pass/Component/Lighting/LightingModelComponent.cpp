@@ -17,23 +17,23 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::LightingModelComponent >
-		: public TextWriterT< castor3d::LightingModelComponent >
+	class TextWriter< LightingModelComponent >
+		: public TextWriterT< LightingModelComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::LightingModelComponent >{ tabs }
+			: TextWriterT< LightingModelComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::LightingModelComponent const & object
+		bool operator()( LightingModelComponent const & object
 			, StringStream & file )override
 		{
 			bool result{};
-			castor3d::Engine const & engine = *object.getOwner()->getOwner()->getEngine();
+			Engine const & engine = *object.getOwner()->getOwner()->getEngine();
 			auto baseName = object.getLightingModelName();
 			auto diffuseBrdf = object.getDiffuseBrdfName();
 			auto specularBrdf = object.getSpecularBrdfName();
@@ -64,7 +64,7 @@ namespace castor
 	};
 }
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -74,7 +74,7 @@ namespace castor3d
 		{
 			RootContext * root{};
 			PassContext * pass{};
-			castor::String lightingModel{};
+			String lightingModel{};
 			shader::LightingModelNames descNames;
 			bool defaultModel{};
 		};
@@ -89,7 +89,7 @@ namespace castor3d
 			{
 				newBlockContext->root = blockContext;
 				newBlockContext->defaultModel = true;
-				newBlockContext->lightingModel = LightingModelFactory::normaliseName( params[0]->get< castor::String >() );
+				newBlockContext->lightingModel = LightingModelFactory::normaliseName( params[0]->get< String >() );
 			}
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eDefaultLightingModel )
@@ -107,7 +107,7 @@ namespace castor3d
 			else
 			{
 				newBlockContext->pass = blockContext;
-				newBlockContext->lightingModel = LightingModelFactory::normaliseName( params[0]->get< castor::String >() );
+				newBlockContext->lightingModel = LightingModelFactory::normaliseName( params[0]->get< String >() );
 			}
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eLightingModel )
@@ -252,84 +252,84 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void LightingModelComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void LightingModelComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, uint32_t( CSCNSection::eRoot )
 			, uint32_t( CSCNSection::eDefaultLightingModel )
 			, cuT( "materials" )
 			, lgtmdl::parserRootDefaultLightingModel
-			, { castor::makeParameter< castor::ParameterType::eText >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eText >() } );
+		c3d::addParserT( parsers
 			, uint32_t( CSCNSection::eRoot )
 			, uint32_t( CSCNSection::eDefaultLightingModel )
 			, cuT( "default_lighting_model" )
 			, lgtmdl::parserRootDefaultLightingModel
-			, { castor::makeParameter< castor::ParameterType::eText >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eText >() } );
+		c3d::addParserT( parsers
 			, uint32_t( CSCNSection::eDefaultLightingModel )
 			, cuT( "diffuse_brdf" )
 			, lgtmdl::parserPassDiffuseBRDF
-			, { castor::makeParameter< castor::ParameterType::eText >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eText >() } );
+		c3d::addParserT( parsers
 			, uint32_t( CSCNSection::eDefaultLightingModel )
 			, cuT( "specular_brdf" )
 			, lgtmdl::parserPassSpecularBRDF
-			, { castor::makeParameter< castor::ParameterType::eText >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eText >() } );
+		c3d::addParserT( parsers
 			, uint32_t( CSCNSection::eDefaultLightingModel )
 			, cuT( "sheen_brdf" )
 			, lgtmdl::parserPassSheenBRDF
-			, { castor::makeParameter< castor::ParameterType::eText >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eText >() } );
+		c3d::addParserT( parsers
 			, uint32_t( CSCNSection::eDefaultLightingModel )
 			, cuT( "clearcoat_brdf" )
 			, lgtmdl::parserPassClearcoatBRDF
-			, { castor::makeParameter< castor::ParameterType::eText >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eText >() } );
+		c3d::addParserT( parsers
 			, uint32_t( CSCNSection::eDefaultLightingModel )
 			, cuT( "scattering_model" )
 			, lgtmdl::parserPassScatteringModel
-			, { castor::makeParameter< castor::ParameterType::eText >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eText >() } );
+		c3d::addParserT( parsers
 			, uint32_t( CSCNSection::eDefaultLightingModel )
 			, uint32_t( CSCNSection::eRoot )
 			, cuT( "}" )
 			, lgtmdl::parserPassDefaultLightingModelEnd );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, uint32_t( CSCNSection::ePass )
 			, uint32_t( CSCNSection::eLightingModel )
 			, cuT( "lighting_model" )
 			, lgtmdl::parserPassLightingModel
-			, { castor::makeParameter< castor::ParameterType::eText >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eText >() } );
+		c3d::addParserT( parsers
 			, uint32_t( CSCNSection::eLightingModel )
 			, cuT( "diffuse_brdf" )
 			, lgtmdl::parserPassDiffuseBRDF
-			, { castor::makeParameter< castor::ParameterType::eText >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eText >() } );
+		c3d::addParserT( parsers
 			, uint32_t( CSCNSection::eLightingModel )
 			, cuT( "specular_brdf" )
 			, lgtmdl::parserPassSpecularBRDF
-			, { castor::makeParameter< castor::ParameterType::eText >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eText >() } );
+		c3d::addParserT( parsers
 			, uint32_t( CSCNSection::eLightingModel )
 			, cuT( "sheen_brdf" )
 			, lgtmdl::parserPassSheenBRDF
-			, { castor::makeParameter< castor::ParameterType::eText >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eText >() } );
+		c3d::addParserT( parsers
 			, uint32_t( CSCNSection::eLightingModel )
 			, cuT( "clearcoat_brdf" )
 			, lgtmdl::parserPassClearcoatBRDF
-			, { castor::makeParameter< castor::ParameterType::eText >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eText >() } );
+		c3d::addParserT( parsers
 			, uint32_t( CSCNSection::eLightingModel )
 			, cuT( "scattering_model" )
 			, lgtmdl::parserPassScatteringModel
-			, { castor::makeParameter< castor::ParameterType::eText >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eText >() } );
+		c3d::addParserT( parsers
 			, uint32_t( CSCNSection::eLightingModel )
 			, uint32_t( CSCNSection::ePass )
 			, cuT( "}" )
@@ -353,7 +353,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const LightingModelComponent::TypeName = C3D_MakePassLightingComponentName( "model" );
+	String const LightingModelComponent::TypeName = C3D_MakePassLightingComponentName( "model" );
 
 	LightingModelComponent::LightingModelComponent( Pass & pass )
 		: BaseDataPassComponentT{ pass, TypeName, {}, pass.getLightingModelId() }
@@ -363,7 +363,7 @@ namespace castor3d
 	void LightingModelComponent::accept( ConfigurationVisitorBase & vis )
 	{
 		LightingModelFactory const & factory = getOwner()->getOwner()->getEngine()->getLightingModelFactory();
-		castor::StringArray values = factory.listRegisteredTypes();
+		StringArray values = factory.listRegisteredTypes();
 		vis.visit( cuT( "Lighting Model" )
 			, m_zeroBasedValue
 			, values
@@ -375,49 +375,49 @@ namespace castor3d
 			, ConfigurationVisitorBase::makeControlsList< bool >( nullptr ) );
 	}
 
-	castor::String LightingModelComponent::getLightingModelName()const
+	String LightingModelComponent::getLightingModelName()const
 	{
 		return getOwner()->getOwner()->getEngine()->getLightingModelFactory().getBaseName( getLightingModelId() );
 	}
 
-	castor::String LightingModelComponent::getDiffuseBrdfName()const
+	String LightingModelComponent::getDiffuseBrdfName()const
 	{
 		return getOwner()->getOwner()->getEngine()->getLightingModelFactory().getDiffuseBrdfName( getLightingModelId() );
 	}
 
-	castor::String LightingModelComponent::getSpecularBrdfName()const
+	String LightingModelComponent::getSpecularBrdfName()const
 	{
 		return getOwner()->getOwner()->getEngine()->getLightingModelFactory().getSpecularBrdfName( getLightingModelId() );
 	}
 
-	castor::String LightingModelComponent::getSheenBrdfName()const
+	String LightingModelComponent::getSheenBrdfName()const
 	{
 		return getOwner()->getOwner()->getEngine()->getLightingModelFactory().getSheenBrdfName( getLightingModelId() );
 	}
 
-	castor::String LightingModelComponent::getClearcoatBrdfName()const
+	String LightingModelComponent::getClearcoatBrdfName()const
 	{
 		return getOwner()->getOwner()->getEngine()->getLightingModelFactory().getClearcoatBrdfName( getLightingModelId() );
 	}
 
-	castor::String LightingModelComponent::getScatteringModelName()const
+	String LightingModelComponent::getScatteringModelName()const
 	{
 		return getOwner()->getOwner()->getEngine()->getLightingModelFactory().getScatteringModelName( getLightingModelId() );
 	}
 
 	PassComponentUPtr LightingModelComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< LightingModelComponent >( pass );
+		auto result = makeRawUnique< LightingModelComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool LightingModelComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool LightingModelComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< LightingModelComponent >{ tabs }( *this, file );
+		return TextWriter< LightingModelComponent >{ tabs }( *this, file );
 	}
 
 	void LightingModelComponent::doFillBuffer( PassBuffer & buffer )const

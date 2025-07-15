@@ -12,10 +12,8 @@
 #include <CastorUtils/Data/Text/TextPosition.hpp>
 #include <CastorUtils/Data/Text/TextSize.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< OverlayCategory >::TextWriter( String const & tabs )
 		: TextWriterT< OverlayCategory >{ tabs }
 	{

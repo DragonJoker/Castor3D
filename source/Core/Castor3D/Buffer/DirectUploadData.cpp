@@ -20,21 +20,21 @@
 #	define traceUpload( x )
 #endif
 
-namespace castor3d
+namespace c3d
 {
 	DirectUploadData::DirectUploadData( RenderDevice const & device
-		, castor::String debugName
+		, String debugName
 		, ashes::CommandBuffer const & commandBuffer )
 		: CommandBufferHolder{ nullptr }
-		, UploadData{ device, castor::move( debugName ), &commandBuffer }
+		, UploadData{ device, c3d::move( debugName ), &commandBuffer }
 	{
 	}
 
 	DirectUploadData::DirectUploadData( RenderDevice const & device
-		, castor::String debugName
+		, String debugName
 		, ashes::CommandPool const & commandPool )
-		: CommandBufferHolder{ commandPool.createCommandBuffer( castor::toUtf8( debugName ) ) }
-		, UploadData{ device, castor::move( debugName ), CommandBufferHolder::getData().get() }
+		: CommandBufferHolder{ commandPool.createCommandBuffer( toUtf8( debugName ) ) }
+		, UploadData{ device, c3d::move( debugName ), CommandBufferHolder::getData().get() }
 	{
 	}
 
@@ -51,7 +51,7 @@ namespace castor3d
 
 	VkDeviceSize DirectUploadData::doUpload( ImageDataRange & data )
 	{
-		traceUpload( "    Registering image upload commands: [" << castor::makeString( data.dstImage->getName() )
+		traceUpload( "    Registering image upload commands: [" << makeString( data.dstImage->getName() )
 			<< "], Layout: [" << data.dstLayout
 			<< "], Range: [" << data.dstRange
 			<< ", Upload Size: " << data.srcSize
@@ -77,7 +77,7 @@ namespace castor3d
 
 	UploadData::SemaphoreUsed DirectUploadData::doEnd( ashes::Queue const & queue
 		, ashes::Fence const * fence
-		, castor::Milliseconds timeout )
+		, Milliseconds timeout )
 	{
 		m_commandBuffer->end();
 		queue.submit( getCommandBuffer(), fence );

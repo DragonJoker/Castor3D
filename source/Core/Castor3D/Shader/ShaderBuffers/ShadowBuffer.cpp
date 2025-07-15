@@ -4,9 +4,9 @@
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 
-CU_ImplementSmartPtr( castor3d, ShadowBuffer )
+CU_ImplementSmartPtr( c3d, ShadowBuffer )
 
-namespace castor3d
+namespace c3d
 {
 	ShadowBuffer::ShadowBuffer( RenderDevice const & device )
 		: m_device{ device }

@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Buffer/BufferView.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ShaderAppendBuffer
 	{
@@ -32,7 +32,7 @@ namespace castor3d
 		 */
 		C3D_API ShaderAppendBuffer( RenderDevice const & device
 			, VkDeviceSize size
-			, castor::String const & name );
+			, String const & name );
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor set layout binding at given point.

@@ -13,20 +13,20 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementSmartPtr( castor3d, FrameCtrl )
+CU_ImplementSmartPtr( c3d, FrameCtrl )
 
-namespace castor3d
+namespace c3d
 {
 	FrameCtrl::FrameCtrl( SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, FrameStyle * style
 		, ControlRPtr parent )
 		: FrameCtrl{ scene
 			, name
 			, style
 			, parent
-			, castor::Position{}
-			, castor::Size{}
+			, Position{}
+			, Size{}
 			, 25u
 			, 0u
 			, true }
@@ -34,11 +34,11 @@ namespace castor3d
 	}
 
 	FrameCtrl::FrameCtrl( SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, FrameStyle * style
 		, ControlRPtr parent
-		, castor::Position const & position
-		, castor::Size const & size
+		, Position const & position
+		, Size const & size
 		, uint32_t headerHeight
 		, ControlFlagType flags
 		, bool visible )
@@ -52,19 +52,19 @@ namespace castor3d
 			, flags | ControlFlag::eMovable | ControlFlag::eResizable
 			, visible }
 		, m_headerHeight{ headerHeight }
-		, m_header{ getEngine().getControlsManager()->registerControlT( castor::makeUnique< StaticCtrl >( m_scene
+		, m_header{ getEngine().getControlsManager()->registerControlT( makeUnique< StaticCtrl >( m_scene
 			, cuT( "Header" )
 			, &style->getHeaderStyle()
 			, this
-			, castor::toUtf8U32String( name )
-			, castor::Position{ 0, 0 }
-			, castor::Size{ size->x - m_headerHeight, m_headerHeight } ) ) }
-		, m_content{ getEngine().getControlsManager()->registerControlT( castor::makeUnique< PanelCtrl >( m_scene
+			, toUtf8U32String( name )
+			, Position{ 0, 0 }
+			, Size{ size->x - m_headerHeight, m_headerHeight } ) ) }
+		, m_content{ getEngine().getControlsManager()->registerControlT( makeUnique< PanelCtrl >( m_scene
 			, cuT( "Content" )
 			, &style->getContentStyle()
 			, this
-			, castor::Position{ 0, int32_t( m_headerHeight ) }
-			, castor::Size{ size->x, size->y - m_headerHeight } ) ) }
+			, Position{ 0, int32_t( m_headerHeight ) }
+			, Size{ size->x, size->y - m_headerHeight } ) ) }
 	{
 		setBorderSize( { 0u, 0u, 0u, 0u } );
 		m_header->setVisible( visible );
@@ -114,30 +114,30 @@ namespace castor3d
 		}
 	}
 
-	castor::Position FrameCtrl::doUpdatePosition( castor::Position const & value )const noexcept
+	Position FrameCtrl::doUpdatePosition( Position const & value )const noexcept
 	{
 		return { std::max( 0, value.x() )
 			, std::max( 0, value.y() ) };
 	}
 
-	castor::Size FrameCtrl::doUpdateSize( castor::Size const & value )const noexcept
+	Size FrameCtrl::doUpdateSize( Size const & value )const noexcept
 	{
 		return { std::max( m_minSize->x, value->x )
 			, std::max( m_minSize->y, value->y ) };
 	}
 
-	void FrameCtrl::doSetPosition( castor::Position const & value )
+	void FrameCtrl::doSetPosition( Position const & value )
 	{
 		doUpdatePositions();
 	}
 
-	void FrameCtrl::doSetSize( castor::Size const & value )
+	void FrameCtrl::doSetSize( Size const & value )
 	{
 		doUpdatePositions();
 		doUpdateSizes();
 	}
 
-	void FrameCtrl::doSetBorderSize( castor::Point4ui const & value )
+	void FrameCtrl::doSetBorderSize( Point4ui const & value )
 	{
 		doUpdatePositions();
 		doUpdateSizes();

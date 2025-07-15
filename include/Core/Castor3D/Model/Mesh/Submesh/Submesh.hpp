@@ -29,13 +29,13 @@ See LICENSE file in root folder
 
 #include <unordered_map>
 
-namespace castor3d
+namespace c3d
 {
 	class Submesh
-		: public castor::OwnedBy< Mesh >
+		: public OwnedBy< Mesh >
 	{
 	private:
-		CU_DeclareList( castor::ByteArray, BytePtr );
+		CU_DeclareList( ByteArray, BytePtr );
 
 	public:
 		Submesh( Submesh const & ) = delete;
@@ -159,7 +159,7 @@ namespace castor3d
 		 *\param[in]	precision	La précision de comparaison
 		 *\return		L'index du point s'il a été trouvé, -1 sinon
 		 */
-		C3D_API int isInMyPoints( castor::Point3f const & position, double precision );
+		C3D_API int isInMyPoints( Point3f const & position, double precision );
 		/**
 		 *\~english
 		 *\brief		Creates and Adds a vertex to my list
@@ -185,7 +185,7 @@ namespace castor3d
 		 *\param[in]	value	Le point
 		 *\return		Le vertex créé
 		 */
-		C3D_API InterleavedVertex addPoint( castor::Point3f const & value );
+		C3D_API InterleavedVertex addPoint( Point3f const & value );
 		/**
 		 *\~english
 		 *\brief		Creates and Adds a vertex to my list
@@ -318,7 +318,7 @@ namespace castor3d
 		 */
 		C3D_API void cloneInto( Submesh & output )const;
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 		/**
 		*\~english
 		*name
@@ -337,15 +337,15 @@ namespace castor3d
 		 *\param[in]	updateScene	Dit si cet appel déclenche une mise à jour de la scène.
 		 */
 		C3D_API void enableSceneUpdate( bool updateScene );
-		C3D_API void setBaseData( SubmeshData submeshData, castor::Point3fArray data );
-		C3D_API void setBaseData( SubmeshData submeshData, castor::Point4fArray data );
+		C3D_API void setBaseData( SubmeshData submeshData, Point3fArray data );
+		C3D_API void setBaseData( SubmeshData submeshData, Point4fArray data );
 		C3D_API void addComponent( SubmeshComponentUPtr component );
 		C3D_API void setIndexCount( uint32_t value );
 		void disableSceneUpdate();
 		void needsUpdate();
-		void addPoints( castor::Vector< InterleavedVertex > const & vertices );
+		void addPoints( Vector< InterleavedVertex > const & vertices );
 		template< size_t Count >
-		void addPoints( castor::Array< InterleavedVertex, Count > const & vertices );
+		void addPoints( Array< InterleavedVertex, Count > const & vertices );
 		void setDefaultMaterial( MaterialObs material );
 		void setIndexMapping( IndexMappingUPtr mapping );
 		IndexMappingRPtr getIndexMapping()const;
@@ -362,30 +362,30 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API InterleavedVertex getInterleavedPoint( uint32_t index )const;
-		C3D_API castor::Point3fArray const & getPositions()const;
-		C3D_API castor::Point3fArray & getPositions();
-		C3D_API castor::Point3fArray const & getNormals()const;
-		C3D_API castor::Point3fArray & getNormals();
-		C3D_API castor::Point4fArray const & getTangents()const;
-		C3D_API castor::Point4fArray & getTangents();
-		C3D_API castor::Point3fArray const & getBitangents()const;
-		C3D_API castor::Point3fArray & getBitangents();
-		C3D_API castor::Point3fArray const & getTexcoords0()const;
-		C3D_API castor::Point3fArray & getTexcoords0();
-		C3D_API castor::Point3fArray const & getTexcoords1()const;
-		C3D_API castor::Point3fArray & getTexcoords1();
-		C3D_API castor::Point3fArray const & getTexcoords2()const;
-		C3D_API castor::Point3fArray & getTexcoords2();
-		C3D_API castor::Point3fArray const & getTexcoords3()const;
-		C3D_API castor::Point3fArray & getTexcoords3();
-		C3D_API castor::Point3fArray const & getColours()const;
-		C3D_API castor::Point3fArray & getColours();
-		C3D_API castor::Point3fArray const & getBaseData( SubmeshData submeshData )const;
-		C3D_API castor::Point3fArray & getBaseData( SubmeshData submeshData );
-		C3D_API GpuBufferOffsetT< castor::Point4f > const & getMorphTargets()const;
+		C3D_API Point3fArray const & getPositions()const;
+		C3D_API Point3fArray & getPositions();
+		C3D_API Point3fArray const & getNormals()const;
+		C3D_API Point3fArray & getNormals();
+		C3D_API Point4fArray const & getTangents()const;
+		C3D_API Point4fArray & getTangents();
+		C3D_API Point3fArray const & getBitangents()const;
+		C3D_API Point3fArray & getBitangents();
+		C3D_API Point3fArray const & getTexcoords0()const;
+		C3D_API Point3fArray & getTexcoords0();
+		C3D_API Point3fArray const & getTexcoords1()const;
+		C3D_API Point3fArray & getTexcoords1();
+		C3D_API Point3fArray const & getTexcoords2()const;
+		C3D_API Point3fArray & getTexcoords2();
+		C3D_API Point3fArray const & getTexcoords3()const;
+		C3D_API Point3fArray & getTexcoords3();
+		C3D_API Point3fArray const & getColours()const;
+		C3D_API Point3fArray & getColours();
+		C3D_API Point3fArray const & getBaseData( SubmeshData submeshData )const;
+		C3D_API Point3fArray & getBaseData( SubmeshData submeshData );
+		C3D_API GpuBufferOffsetT< Point4f > const & getMorphTargets()const;
 		C3D_API uint32_t getMorphTargetsCount()const;
-		C3D_API castor::Vector< Meshlet > const & getMeshlets()const;
-		C3D_API castor::Vector< Meshlet > & getMeshlets();
+		C3D_API Vector< Meshlet > const & getMeshlets()const;
+		C3D_API Vector< Meshlet > & getMeshlets();
 		C3D_API uint32_t getMeshletsCount()const;
 		C3D_API uint32_t getIndexCount()const;
 		C3D_API bool isDynamic()const;
@@ -403,28 +403,28 @@ namespace castor3d
 		C3D_API VkDeviceSize getIndexOffset()const;
 		C3D_API VkDeviceSize getMeshletOffset()const;
 		C3D_API SubmeshComponentRegister & getSubmeshComponentsRegister()const;
-		C3D_API SubmeshComponentID getComponentId( castor::String const & componentType )const;
+		C3D_API SubmeshComponentID getComponentId( String const & componentType )const;
 		C3D_API SubmeshComponentPlugin const & getComponentPlugin( SubmeshComponentID componentId )const;
 		C3D_API SubmeshComponentCombineID getComponentCombineID()const noexcept;
 		C3D_API bool hasRenderComponent()const noexcept;
 		C3D_API SubmeshRenderData * getRenderData()const;
 		SkeletonRPtr getSkeleton()const noexcept;
 		MaterialObs getDefaultMaterial()const noexcept;
-		castor::BoundingBox const & getBoundingBox()const noexcept;
-		castor::BoundingBox & getBoundingBox()noexcept;
-		castor::BoundingSphere const & getBoundingSphere()const noexcept;
-		castor::BoundingSphere & getBoundingSphere()noexcept;
+		BoundingBox const & getBoundingBox()const noexcept;
+		BoundingBox & getBoundingBox()noexcept;
+		BoundingSphere const & getBoundingSphere()const noexcept;
+		BoundingSphere & getBoundingSphere()noexcept;
 		bool isInitialised()const noexcept;
 		Mesh & getParent()const noexcept;
 		uint32_t getId()const noexcept;
-		bool hasComponent( castor::String const & name )const noexcept;
-		SubmeshComponentRPtr getComponent( castor::String const & name )const noexcept;
+		bool hasComponent( String const & name )const noexcept;
+		SubmeshComponentRPtr getComponent( String const & name )const noexcept;
 		InstantiationComponent & getInstantiation()noexcept;
 		InstantiationComponent const & getInstantiation()const noexcept;
 		SubmeshComponentIDMap const & getComponents()const noexcept;
 		VkPrimitiveTopology getTopology()const noexcept;
 		SubmeshComponentCombine getComponentCombine()const noexcept;
-		SubmeshComponentPlugin const & getComponentPlugin( castor::String const & componentType )const;
+		SubmeshComponentPlugin const & getComponentPlugin( String const & componentType )const;
 		ashes::DescriptorSetLayout const & getDescriptorLayout()const;
 
 		template< typename ComponentT >
@@ -446,8 +446,8 @@ namespace castor3d
 		uint32_t m_id;
 		SubmeshComponentCombine m_componentCombine;
 		MaterialObs m_defaultMaterial;
-		castor::BoundingBox m_box;
-		castor::BoundingSphere m_sphere;
+		BoundingBox m_box;
+		BoundingSphere m_sphere;
 		SubmeshComponentIDMap m_components;
 		InstantiationComponentRPtr m_instantiation{};
 		IndexMappingRPtr m_indexMapping{};
@@ -457,13 +457,13 @@ namespace castor3d
 		bool m_dirty{ true };
 		VkPrimitiveTopology m_topology{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
 		ObjectBufferOffset m_sourceBufferOffset;
-		castor::UnorderedMap< size_t, ObjectBufferOffset > m_finalBufferOffsets;
-		mutable castor::UnorderedMap< size_t, GeometryBuffers > m_geometryBuffers;
+		HashMap< size_t, ObjectBufferOffset > m_finalBufferOffsets;
+		mutable HashMap< size_t, GeometryBuffers > m_geometryBuffers;
 		bool m_needsNormalsCompute{ false };
 		bool m_disableSceneUpdate{ false };
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorPool;
-		castor::UnorderedMap< size_t, ashes::DescriptorSetPtr > m_descriptorSets;
+		HashMap< size_t, ashes::DescriptorSetPtr > m_descriptorSets;
 
 		friend class BinaryWriter< Submesh >;
 		friend class BinaryParser< Submesh >;
@@ -484,7 +484,7 @@ namespace castor3d
 		UInt32Array faces{};
 	};
 
-	C3D_API castor::String getPrefix( SubmeshContext const & context );
+	C3D_API String getPrefix( SubmeshContext const & context );
 	C3D_API Engine * getEngine( SubmeshContext const & context );
 }
 

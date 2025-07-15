@@ -25,9 +25,9 @@ namespace GuiCommon
 		 *\param[in]	engine		Le moteur.
 		 */
 		ControlTreeItemProperty( bool editable
-			, castor3d::Engine * engine );
+			, c3d::Engine * engine );
 
-		void setData( castor3d::Control & control
+		void setData( c3d::Control & control
 			, bool full
 			, bool inLayout )noexcept
 		{
@@ -44,18 +44,18 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		void doCreateControlProperties( wxPropertyGrid * grid, castor3d::ButtonCtrl & object );
-		void doCreateControlProperties( wxPropertyGrid * grid, castor3d::ComboBoxCtrl & object );
-		void doCreateControlProperties( wxPropertyGrid * grid, castor3d::EditCtrl & object );
-		void doCreateControlProperties( wxPropertyGrid * grid, castor3d::ExpandablePanelCtrl & object );
-		void doCreateControlProperties( wxPropertyGrid * grid, castor3d::FrameCtrl & object );
-		void doCreateControlProperties( wxPropertyGrid * grid, castor3d::ListBoxCtrl & object );
-		void doCreateControlProperties( wxPropertyGrid * grid, castor3d::PanelCtrl & object );
-		void doCreateControlProperties( wxPropertyGrid * grid, castor3d::SliderCtrl & object );
-		void doCreateControlProperties( wxPropertyGrid * grid, castor3d::StaticCtrl & object );
+		void doCreateControlProperties( wxPropertyGrid * grid, c3d::ButtonCtrl & object );
+		void doCreateControlProperties( wxPropertyGrid * grid, c3d::ComboBoxCtrl & object );
+		void doCreateControlProperties( wxPropertyGrid * grid, c3d::EditCtrl & object );
+		void doCreateControlProperties( wxPropertyGrid * grid, c3d::ExpandablePanelCtrl & object );
+		void doCreateControlProperties( wxPropertyGrid * grid, c3d::FrameCtrl & object );
+		void doCreateControlProperties( wxPropertyGrid * grid, c3d::ListBoxCtrl & object );
+		void doCreateControlProperties( wxPropertyGrid * grid, c3d::PanelCtrl & object );
+		void doCreateControlProperties( wxPropertyGrid * grid, c3d::SliderCtrl & object );
+		void doCreateControlProperties( wxPropertyGrid * grid, c3d::StaticCtrl & object );
 
 	private:
-		castor3d::Control * m_control{};
+		c3d::Control * m_control{};
 		bool m_full{};
 		bool m_inLayout{};
 	};

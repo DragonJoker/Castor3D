@@ -19,9 +19,9 @@
 #include <RenderGraph/RunnablePasses/GenerateMipmaps.hpp>
 #include <RenderGraph/RunnablePasses/ImageCopy.hpp>
 
-CU_ImplementSmartPtr( castor3d, TransparentRendering )
+CU_ImplementSmartPtr( c3d, TransparentRendering )
 
-namespace castor3d
+namespace c3d
 {
 	TransparentRendering::TransparentRendering( RenderTechnique & parent
 		, RenderDevice const & device
@@ -29,7 +29,7 @@ namespace castor3d
 		, crg::FramePassArray const & previousPasses
 		, ProgressBar * progress
 		, bool weightedBlended )
-		: castor::OwnedBy< RenderTechnique >{ parent }
+		: OwnedBy< RenderTechnique >{ parent }
 		, m_device{ device }
 		, m_graph{ getOwner()->getGraph().createPassGroup( "Transparent" ) }
 		, m_mippedColour{ m_device
@@ -37,12 +37,12 @@ namespace castor3d
 			, getOwner()->getName() + cuT( "/MippedColour" )
 			, { ImageCreateFlags::eNone
 				, makeExtent3D( getOwner()->getSize() ), 1u, EnvironmentMipLevels
-				, castor::PixelFormat::eR16G16B16A16_SFLOAT
+				, PixelFormat::eR16G16B16A16_SFLOAT
 				, ( ImageUsageFlags::eColorAttachment
 					| ImageUsageFlags::eSampled ) }
 			, { BorderColour::eFloatOpaqueBlack } }
 		, m_transparentPassResult{ ( weightedBlended
-			? castor::makeUnique< TransparentPassResult >( getOwner()->getResources()
+			? makeUnique< TransparentPassResult >( getOwner()->getResources()
 				, m_device
 				, makeSize( getOwner()->getTargetExtent() ) )
 			: nullptr ) }
@@ -55,7 +55,7 @@ namespace castor3d
 			: &doCreateForwardTransparentPass( progress
 				, *m_mipgenPassDesc ) ) }
 		, m_weightedBlendRendering{ ( weightedBlended
-			? castor::makeUnique< WeightedBlendRendering >( m_graph
+			? makeUnique< WeightedBlendRendering >( m_graph
 				, m_device
 				, progress
 				, m_enabled
@@ -158,14 +158,14 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBarLocal( progress, cuT( "Initialising colour copy pass" ) );
-				auto res = castor::make_unique< crg::ImageCopy >( framePass
+				auto res = makeRawUnique< crg::ImageCopy >( framePass
 					, context
 					, runnableGraph
 					, m_mippedColour.getExtent()
 					, crg::ru::Config{ 1u }
 					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 					, crg::RunnablePass::IsEnabledCallback( [this](){ return m_enabled; } ) );
-				getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -180,14 +180,14 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBarLocal( progress, cuT( "Initialising mips generation pass" ) );
-				auto res = castor::make_unique< crg::GenerateMipmaps >( framePass
+				auto res = makeRawUnique< crg::GenerateMipmaps >( framePass
 					, context
 					, runnableGraph
 					, ImageLayout::eShaderReadOnly
 					, crg::ru::Config{}
 					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 					, crg::RunnablePass::IsEnabledCallback( [this](){ return m_enabled; } ) );
-				getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -210,7 +210,7 @@ namespace castor3d
 				stepProgressBarLocal( progress, cuT( "Initialising transparent pass" ) );
 				static constexpr bool isOit = false;
 				static constexpr bool hasVelocity = false;
-				auto res = castor::make_unique< ForwardRenderTechniquePass >( getOwner()
+				auto res = makeRawUnique< ForwardRenderTechniquePass >( getOwner()
 					, framePass
 					, context
 					, runnableGraph
@@ -234,7 +234,7 @@ namespace castor3d
 						.hasVelocity( hasVelocity )
 					, &m_mippedColour );
 				m_transparentPass = res.get();
-				getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -259,7 +259,7 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBarLocal( progress, cuT( "Initialising transparent pass" ) );
-				castor::String name = cuT( "Accumulation" );
+				String name = cuT( "Accumulation" );
 				static constexpr bool isOit = true;
 				static constexpr bool hasVelocity = false;
 				auto depthIt = framePass.images.begin();
@@ -269,7 +269,7 @@ namespace castor3d
 				auto ssaoIt = std::next( normalIt );
 				auto accumIt = std::next( ssaoIt );
 				auto revealIt = std::next( accumIt );
-				auto res = castor::make_unique< TransparentPass >( getOwner()
+				auto res = makeRawUnique< TransparentPass >( getOwner()
 					, framePass
 					, context
 					, runnableGraph
@@ -304,7 +304,7 @@ namespace castor3d
 						.clustersConfig( getOwner()->getClustersConfig() )
 						.hasVelocity( hasVelocity ) );
 				m_transparentPass = res.get();
-				getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );

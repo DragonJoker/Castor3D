@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class SkeletonAnimationInstanceNode
 		: public SkeletonAnimationInstanceObject

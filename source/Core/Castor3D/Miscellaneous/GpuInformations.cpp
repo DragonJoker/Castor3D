@@ -1,19 +1,19 @@
 #include "Castor3D/Miscellaneous/GpuInformations.hpp"
 
-namespace castor3d
+namespace c3d
 {
-	castor::OutputStream & operator<<( castor::OutputStream & stream, GpuInformations const & object )
+	OutputStream & operator<<( OutputStream & stream, GpuInformations const & object )
 	{
 		auto support = []( bool supported )
 		{
 			return ( supported ? "supported" : "not supported" );
 		};
-		castor::Array< castor::String, size_t( GpuMin::eCount ) > const minNames
+		Array< String, size_t( GpuMin::eCount ) > const minNames
 		{
 			cuT( "Min buffer map size" ),
 			cuT( "Min uniform buffer offset alignment" ),
 		};
-		castor::Array< castor::String, size_t( GpuMax::eCount ) > const maxNames
+		Array< String, size_t( GpuMax::eCount ) > const maxNames
 		{
 			cuT( "Max image 1D size" ),
 			cuT( "Max image 2D size" ),

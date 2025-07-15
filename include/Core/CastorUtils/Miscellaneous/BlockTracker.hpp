@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Miscellaneous/MiscellaneousModule.hpp"
 #include "CastorUtils/Design/NonCopyable.hpp"
 
-namespace castor
+namespace c3d
 {
 	class BlockTracker
 		: public NonMovable
@@ -43,6 +43,6 @@ namespace castor
 	};
 }
 
-#define CU_Track() castor::BlockTracker CU_Join( tracker, __LINE__ ){ __FUNCTION__, __FILE__, uint32_t( __LINE__ ) }
+#define CU_Track() c3d::BlockTracker CU_Join( tracker, __LINE__ ){ __FUNCTION__, __FILE__, uint32_t( __LINE__ ) }
 
 #endif

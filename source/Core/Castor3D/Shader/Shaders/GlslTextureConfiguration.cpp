@@ -10,14 +10,14 @@
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//*****************************************************************************************
 
 	TextureConfigData::TextureConfigData( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+		: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 	{
 	}
 

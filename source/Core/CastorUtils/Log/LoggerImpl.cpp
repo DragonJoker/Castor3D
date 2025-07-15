@@ -7,22 +7,22 @@
 
 #include "CastorUtils/Config/MultiThreadConfig.hpp"
 
-namespace castor
+namespace c3d
 {
 	LoggerImpl::LoggerImpl( LoggerImpl && rhs )noexcept
 		: m_parent{ rhs.m_parent }
-		, m_console{ castor::move( rhs.m_console ) }
-		, m_logFilePath{ castor::move( rhs.m_logFilePath ) }
-		, m_mapCallbacks{ castor::move( rhs.m_mapCallbacks ) }
+		, m_console{ c3d::move( rhs.m_console ) }
+		, m_logFilePath{ c3d::move( rhs.m_logFilePath ) }
+		, m_mapCallbacks{ c3d::move( rhs.m_mapCallbacks ) }
 	{
 		rhs.m_console = nullptr;
 	}
 
 	LoggerImpl & LoggerImpl::operator=( LoggerImpl && rhs )noexcept
 	{
-		m_console = castor::move( rhs.m_console );
-		m_logFilePath = castor::move( rhs.m_logFilePath );
-		m_mapCallbacks = castor::move( rhs.m_mapCallbacks );
+		m_console = c3d::move( rhs.m_console );
+		m_logFilePath = c3d::move( rhs.m_logFilePath );
+		m_mapCallbacks = c3d::move( rhs.m_mapCallbacks );
 		rhs.m_console = nullptr;
 		return *this;
 	}
@@ -38,7 +38,7 @@ namespace castor
 	void LoggerImpl::registerCallback( LogCallback callback, void * caller )
 	{
 		auto lock( makeUniqueLock( m_mutexCallbacks ) );
-		m_mapCallbacks[caller] = castor::move( callback );
+		m_mapCallbacks[caller] = c3d::move( callback );
 	}
 
 	void LoggerImpl::unregisterCallback( void * caller )
@@ -69,7 +69,7 @@ namespace castor
 		}
 
 		FILE * file;
-		castor::fileOpen( file, makePath( logFilePath ), "w" );
+		c3d::fileOpen( file, makePath( logFilePath ), "w" );
 
 		if ( file )
 		{

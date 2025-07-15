@@ -24,14 +24,14 @@ namespace smaa
 
 	struct SmaaUboConfiguration
 	{
-		castor::Point4f rtMetrics;
-		castor::Point4f predication;
-		castor::Point4f subsampleIndices;
-		castor::Point4f searchSizes;
-		castor::Point4f areaTexPixelSizeAndLocalContrast;
-		castor::Point4f areaTexSizesReprojWS;
-		castor::Point4i maxsSearchSteps;
-		castor::Point4i tweaks;
+		c3d::Point4f rtMetrics;
+		c3d::Point4f predication;
+		c3d::Point4f subsampleIndices;
+		c3d::Point4f searchSizes;
+		c3d::Point4f areaTexPixelSizeAndLocalContrast;
+		c3d::Point4f areaTexSizesReprojWS;
+		c3d::Point4i maxsSearchSteps;
+		c3d::Point4i tweaks;
 	};
 
 	struct SmaaData
@@ -93,10 +93,10 @@ namespace smaa
 		SmaaUbo & operator=( SmaaUbo const & rhs ) = delete;
 		SmaaUbo( SmaaUbo && rhs ) = default;
 		SmaaUbo & operator=( SmaaUbo && rhs ) = delete;
-		explicit SmaaUbo( castor3d::RenderDevice const & device );
+		explicit SmaaUbo( c3d::RenderDevice const & device );
 		~SmaaUbo();
 
-		void cpuUpdate( castor::Size const & renderSize
+		void cpuUpdate( c3d::Size const & renderSize
 			, SmaaConfig const & config );
 
 		void createPassBinding( crg::FramePass & pass
@@ -111,18 +111,18 @@ namespace smaa
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
 
-		castor3d::UniformBufferOffsetT< Configuration > const & getUbo()const
+		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
 			return m_ubo;
 		}
 
 	public:
-		static const castor::MbString Buffer;
-		static const castor::MbString Data;
+		static const c3d::MbString Buffer;
+		static const c3d::MbString Data;
 
 	private:
-		castor3d::RenderDevice const & m_device;
-		castor3d::UniformBufferOffsetT< Configuration > m_ubo;
+		c3d::RenderDevice const & m_device;
+		c3d::UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

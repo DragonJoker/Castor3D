@@ -7,10 +7,8 @@
 
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	//*********************************************************************************************
 
 	TextWriter< SliderCtrl >::TextWriter( String const & tabs )

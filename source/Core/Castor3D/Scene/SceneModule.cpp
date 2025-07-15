@@ -6,21 +6,21 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 
-CU_ImplementExportedOwnedBy( castor3d::Scene, Scene )
-CU_ImplementSmartPtr( castor3d, CameraCache )
-CU_ImplementSmartPtr( castor3d, SceneCache )
-CU_ImplementSmartPtr( castor3d, MaterialCacheView )
-CU_ImplementSmartPtr( castor3d, SamplerCacheView )
-CU_ImplementSmartPtr( castor3d, FontCacheView )
-CU_ImplementSmartPtr( castor3d, ImageCacheView )
+CU_ImplementExportedOwnedBy( Scene, Scene )
+CU_ImplementSmartPtr( c3d, CameraCache )
+CU_ImplementSmartPtr( c3d, SceneCache )
+CU_ImplementSmartPtr( c3d, MaterialCacheView )
+CU_ImplementSmartPtr( c3d, SamplerCacheView )
+CU_ImplementSmartPtr( c3d, FontCacheView )
+CU_ImplementSmartPtr( c3d, ImageCacheView )
 
 
-namespace castor3d
+namespace c3d
 {
-	const castor::String PtrCacheTraitsT< Scene, castor::String >::Name = cuT( "Scene" );
-	const castor::String ObjectCacheTraitsT< Camera, castor::String >::Name = cuT( "Camera" );
+	const String PtrCacheTraitsT< Scene, String >::Name = cuT( "Scene" );
+	const String ObjectCacheTraitsT< Camera, String >::Name = cuT( "Camera" );
 
-	castor::String getName( MovableType value )
+	String getName( MovableType value )
 	{
 		switch ( value )
 		{
@@ -36,11 +36,11 @@ namespace castor3d
 			return cuT( "particle_emitter" );
 		default:
 			CU_Failure( "Unsupported MovableType" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( ShadowType value )
+	String getName( ShadowType value )
 	{
 		switch ( value )
 		{
@@ -54,11 +54,11 @@ namespace castor3d
 			return cuT( "variance" );
 		default:
 			CU_Failure( "Unsupported ShadowType" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( FogType value )
+	String getName( FogType value )
 	{
 		switch ( value )
 		{
@@ -72,11 +72,11 @@ namespace castor3d
 			return cuT( "squared_exponential" );
 		default:
 			CU_Failure( "Unsupported FogType" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( BillboardType value )
+	String getName( BillboardType value )
 	{
 		switch ( value )
 		{
@@ -86,11 +86,11 @@ namespace castor3d
 			return cuT( "cylindrical" );
 		default:
 			CU_Failure( "Unsupported BillboardType" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( BillboardSize value )
+	String getName( BillboardSize value )
 	{
 		switch ( value )
 		{
@@ -100,7 +100,7 @@ namespace castor3d
 			return cuT( "fixed" );
 		default:
 			CU_Failure( "Unsupported BillboardSize" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
@@ -124,7 +124,7 @@ namespace castor3d
 		return result;
 	}
 
-	castor::LoggerInstance & getLogger( Scene const & scene )
+	LoggerInstance & getLogger( Scene const & scene )
 	{
 		return getLogger( *scene.getEngine() );
 	}

@@ -28,51 +28,51 @@ namespace diamond_square_terrain
 		}
 	}
 
-	castor::MbString const Generator::Name = "Diamond Square Terrain Generator";
-	castor::String const Generator::Type = cuT( "diamond_square_terrain" );
-	castor::String const Generator::Biome = cuT( "biome" );
-	castor::String const Generator::BiomeRange = cuT( "range" );
-	castor::String const Generator::BiomeLowSteepness = cuT( "lowSteepness" );
-	castor::String const Generator::BiomeMediumSteepness = cuT( "mediumSteepness" );
-	castor::String const Generator::BiomeHighSteepness = cuT( "highSteepness" );
-	castor::String const Generator::ParamRandomSeed = cuT( "disableRandomSeed" );
-	castor::String const Generator::ParamHeightRange = cuT( "heightRange" );
-	castor::String const Generator::ParamYMin = cuT( "yMin" );
-	castor::String const Generator::ParamYMax = cuT( "yMax" );
-	castor::String const Generator::ParamXzScale = cuT( "xzScale" );
-	castor::String const Generator::ParamXScale = cuT( "xScale" );
-	castor::String const Generator::ParamZScale = cuT( "zScale" );
-	castor::String const Generator::ParamUvScale = cuT( "uvScale" );
-	castor::String const Generator::ParamUScale = cuT( "uScale" );
-	castor::String const Generator::ParamVScale = cuT( "vScale" );
-	castor::String const Generator::ParamDetail = cuT( "detail" );
-	castor::String const Generator::ParamGradient = cuT( "gradient" );
-	castor::String const Generator::ParamGradientFolder = cuT( "gradientFolder" );
-	castor::String const Generator::ParamGradientRelative = cuT( "gradientRelative" );
-	castor::String const Generator::ParamHeatOffset = cuT( "heatOffset" );
-	castor::String const Generator::ParamIsland = cuT( "island" );
+	c3d::MbString const Generator::Name = "Diamond Square Terrain Generator";
+	c3d::String const Generator::Type = cuT( "diamond_square_terrain" );
+	c3d::String const Generator::Biome = cuT( "biome" );
+	c3d::String const Generator::BiomeRange = cuT( "range" );
+	c3d::String const Generator::BiomeLowSteepness = cuT( "lowSteepness" );
+	c3d::String const Generator::BiomeMediumSteepness = cuT( "mediumSteepness" );
+	c3d::String const Generator::BiomeHighSteepness = cuT( "highSteepness" );
+	c3d::String const Generator::ParamRandomSeed = cuT( "disableRandomSeed" );
+	c3d::String const Generator::ParamHeightRange = cuT( "heightRange" );
+	c3d::String const Generator::ParamYMin = cuT( "yMin" );
+	c3d::String const Generator::ParamYMax = cuT( "yMax" );
+	c3d::String const Generator::ParamXzScale = cuT( "xzScale" );
+	c3d::String const Generator::ParamXScale = cuT( "xScale" );
+	c3d::String const Generator::ParamZScale = cuT( "zScale" );
+	c3d::String const Generator::ParamUvScale = cuT( "uvScale" );
+	c3d::String const Generator::ParamUScale = cuT( "uScale" );
+	c3d::String const Generator::ParamVScale = cuT( "vScale" );
+	c3d::String const Generator::ParamDetail = cuT( "detail" );
+	c3d::String const Generator::ParamGradient = cuT( "gradient" );
+	c3d::String const Generator::ParamGradientFolder = cuT( "gradientFolder" );
+	c3d::String const Generator::ParamGradientRelative = cuT( "gradientRelative" );
+	c3d::String const Generator::ParamHeatOffset = cuT( "heatOffset" );
+	c3d::String const Generator::ParamIsland = cuT( "island" );
 
 	Generator::Generator()
 		: MeshGenerator{ cuT( "diamond_square_terrain" ) }
 	{
 	}
 
-	castor3d::MeshGeneratorUPtr Generator::create()
+	c3d::MeshGeneratorUPtr Generator::create()
 	{
-		return castor::makeUniqueDerived< castor3d::MeshGenerator, Generator >();
+		return c3d::makeUniqueDerived< c3d::MeshGenerator, Generator >();
 	}
 
-	void Generator::doGenerate( castor3d::Mesh & mesh
-		, castor3d::Parameters const & parameters )
+	void Generator::doGenerate( c3d::Mesh & mesh
+		, c3d::Parameters const & parameters )
 	{
-		castor::String param;
+		c3d::String param;
 		uint32_t size = 0u;
 		float xScale = 1.0f;
 		float zScale = 1.0f;
 		float uScale = 1.0f;
 		float vScale = 1.0f;
 		float heatOffset = 0.0f;
-		castor::Range< float > heightRange{ -500.0f, 500.0f };
+		c3d::Range< float > heightRange{ -500.0f, 500.0f };
 		bool disableRandomSeed = false;
 		bool island = false;
 
@@ -88,44 +88,44 @@ namespace diamond_square_terrain
 
 		if ( parameters.get( ParamYMin, param ) )
 		{
-			heightRange = castor::makeRange( heightRange.getMin()
-				, castor::string::toFloat( param ) );
+			heightRange = c3d::makeRange( heightRange.getMin()
+				, c3d::string::toFloat( param ) );
 		}
 
 		if ( parameters.get( ParamYMax, param ) )
 		{
-			heightRange = castor::makeRange( castor::string::toFloat( param )
+			heightRange = c3d::makeRange( c3d::string::toFloat( param )
 				, heightRange.getMax() );
 		}
 
 		if ( parameters.get( ParamXScale, param ) )
 		{
-			xScale = castor::string::toFloat( param );
+			xScale = c3d::string::toFloat( param );
 		}
 
 		if ( parameters.get( ParamZScale, param ) )
 		{
-			zScale = castor::string::toFloat( param );
+			zScale = c3d::string::toFloat( param );
 		}
 
 		if ( parameters.get( ParamUScale, param ) )
 		{
-			uScale = castor::string::toFloat( param );
+			uScale = c3d::string::toFloat( param );
 		}
 
 		if ( parameters.get( ParamVScale, param ) )
 		{
-			vScale = castor::string::toFloat( param );
+			vScale = c3d::string::toFloat( param );
 		}
 
 		if ( parameters.get( ParamDetail, param ) )
 		{
-			size = uint32_t( pow( 2, castor::string::toUInt( param ) ) );
+			size = uint32_t( pow( 2, c3d::string::toUInt( param ) ) );
 		}
 
 		if ( parameters.get( ParamHeatOffset, param ) )
 		{
-			heatOffset = castor::string::toFloat( param );
+			heatOffset = c3d::string::toFloat( param );
 		}
 
 		if ( size )
@@ -141,14 +141,14 @@ namespace diamond_square_terrain
 
 			auto zeroPoint = heightRange.percent( 0.0f );
 			// Generate quads 
-			castor3d::SubmeshAnimationBuffer submeshBuffers;
+			c3d::SubmeshAnimationBuffer submeshBuffers;
 
 			auto transform = [&]( uint32_t v, float s )
 			{
 				return s * ( float( v ) - float( max ) / 2.0f );
 			};
 
-			castor::Map< uint32_t, uint32_t > vertexMap;
+			c3d::Map< uint32_t, uint32_t > vertexMap;
 			uint32_t index{};
 
 			for ( auto z = 1u; z < max; z++ )
@@ -161,7 +161,7 @@ namespace diamond_square_terrain
 				}
 			}
 
-			castor3d::FaceArray faces;
+			c3d::FaceArray faces;
 
 			for ( auto y = 1u; y < max - 2; y++ )
 			{
@@ -178,10 +178,10 @@ namespace diamond_square_terrain
 
 			submeshBuffers.normals.resize( submeshBuffers.positions.size() );
 			submeshBuffers.tangents.resize( submeshBuffers.positions.size() );
-			castor3d::SubmeshUtils::computeNormals( submeshBuffers.positions
+			c3d::SubmeshUtils::computeNormals( submeshBuffers.positions
 				, submeshBuffers.normals
 				, faces );
-			castor3d::SubmeshUtils::computeTangentsFromNormals( submeshBuffers.positions
+			c3d::SubmeshUtils::computeTangentsFromNormals( submeshBuffers.positions
 				, submeshBuffers.texcoords0
 				, submeshBuffers.normals
 				, submeshBuffers.tangents
@@ -198,21 +198,21 @@ namespace diamond_square_terrain
 				, submeshBuffers );
 
 			auto submesh = mesh.createSubmesh();
-			submesh->createComponent< castor3d::PositionsComponent >()->getData().setData( submeshBuffers.positions );
-			submesh->createComponent< castor3d::Texcoords0Component >()->getData().setData( submeshBuffers.texcoords0 );
-			submesh->createComponent< castor3d::NormalsComponent >()->getData().setData( submeshBuffers.normals );
-			submesh->createComponent< castor3d::TangentsComponent >()->getData().setData( submeshBuffers.tangents );
-			submesh->createComponent< castor3d::TriFaceMapping >()->getData().setData( castor::move( faces ) );
-			submesh->createComponent< castor3d::DefaultRenderComponent >();
+			submesh->createComponent< c3d::PositionsComponent >()->getData().setData( submeshBuffers.positions );
+			submesh->createComponent< c3d::Texcoords0Component >()->getData().setData( submeshBuffers.texcoords0 );
+			submesh->createComponent< c3d::NormalsComponent >()->getData().setData( submeshBuffers.normals );
+			submesh->createComponent< c3d::TangentsComponent >()->getData().setData( submeshBuffers.tangents );
+			submesh->createComponent< c3d::TriFaceMapping >()->getData().setData( c3d::move( faces ) );
+			submesh->createComponent< c3d::DefaultRenderComponent >();
 
 			if ( !submeshBuffers.colours.empty() )
 			{
-				submesh->createComponent< castor3d::ColoursComponent >()->getData().setData( submeshBuffers.colours );
+				submesh->createComponent< c3d::ColoursComponent >()->getData().setData( submeshBuffers.colours );
 			}
 
 			if ( !submeshBuffers.passMasks.empty() )
 			{
-				submesh->createComponent< castor3d::PassMasksComponent >()->getData().setData( submeshBuffers.passMasks );
+				submesh->createComponent< c3d::PassMasksComponent >()->getData().setData( submeshBuffers.passMasks );
 			}
 		}
 	}

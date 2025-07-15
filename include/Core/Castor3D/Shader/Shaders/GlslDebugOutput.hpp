@@ -13,34 +13,34 @@ See LICENSE file in root folder
 #include <unordered_set>
 #include <vector>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	class DebugOutput
 	{
 	public:
 		C3D_API DebugOutput( DebugConfig & config
-			, castor::String category
+			, String category
 			, sdw::UInt const index
 			, sdw::Vec4 const output
 			, bool enable );
 		C3D_API ~DebugOutput()noexcept;
 
-		C3D_API void registerOutput( castor::String category
-			, castor::String name
+		C3D_API void registerOutput( String category
+			, String name
 			, sdw::Vec4 const value );
-		C3D_API void registerOutput( castor::String category
-			, castor::String name
+		C3D_API void registerOutput( String category
+			, String name
 			, sdw::Vec3 const value );
-		C3D_API void registerOutput( castor::String category
-			, castor::String name
+		C3D_API void registerOutput( String category
+			, String name
 			, sdw::Vec2 const value );
-		C3D_API void registerOutput( castor::String category
-			, castor::String name
+		C3D_API void registerOutput( String category
+			, String name
 			, sdw::Float const value );
-		C3D_API DebugOutputCategory pushBlock( castor::String category );
+		C3D_API DebugOutputCategory pushBlock( String category );
 
 		template< typename ValueT >
-		void registerOutput( castor::String name
+		void registerOutput( String name
 			, ValueT const & value )
 		{
 			registerOutput( concatenateCategories(), name, value );
@@ -54,7 +54,7 @@ namespace castor3d::shader
 	private:
 		friend class DebugOutputCategory;
 
-		C3D_API castor::String concatenateCategories()const;
+		C3D_API String concatenateCategories()const;
 
 		void popBlock()
 		{
@@ -63,7 +63,7 @@ namespace castor3d::shader
 
 	private:
 		DebugConfig & m_config;
-		castor::StringArray m_categories;
+		StringArray m_categories;
 		sdw::UInt m_index;
 		sdw::Vec4 m_output;
 		bool m_enable;
@@ -118,16 +118,16 @@ namespace castor3d::shader
 			return m_debugOutput->isEnabled();
 		}
 
-		DebugOutputCategory pushBlock( castor::String category )const
+		DebugOutputCategory pushBlock( String category )const
 		{
-			return m_debugOutput->pushBlock( castor::move( category ) );
+			return m_debugOutput->pushBlock( c3d::move( category ) );
 		}
 
 		template< typename ValueT >
-		void registerOutput( castor::String name
+		void registerOutput( String name
 			, ValueT const & value )const
 		{
-			m_debugOutput->registerOutput( castor::move( name ), value );
+			m_debugOutput->registerOutput( c3d::move( name ), value );
 		}
 
 	private:

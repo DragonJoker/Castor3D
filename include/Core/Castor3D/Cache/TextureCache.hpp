@@ -19,10 +19,10 @@ See LICENSE file in root folder
 #include <unordered_set>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class TextureUnitCache
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
 		struct ThreadData
@@ -140,7 +140,7 @@ namespace castor3d
 
 	private:
 		Texture const * doGetTexture( TextureData & data
-			, castor::Function< void( TextureData const & , Texture const *, bool ) > const & onEndCpuLoad );
+			, Function< void( TextureData const & , Texture const *, bool ) > const & onEndCpuLoad );
 		void doInitTexture( ThreadData & data );
 		void doUpload( ThreadData & data );
 		void doAddWrite( TextureUnit & unit );
@@ -148,7 +148,7 @@ namespace castor3d
 		ThreadData & doCreateThreadData( TextureData & data );
 		ThreadData & doFindThreadData( TextureData & data );
 		void doDestroyThreadData( ThreadData & data );
-		castor::Vector< TextureUnit * > doListTextureUnits( Texture const * texture );
+		Vector< TextureUnit * > doListTextureUnits( Texture const * texture );
 
 		bool hasBindless()const
 		{
@@ -157,26 +157,26 @@ namespace castor3d
 
 	private:
 		crg::ResourcesCache & m_resources;
-		castor::CheckedMutex m_dirtyMtx;
-		castor::UnorderedSet< Pass * > m_dirty;
-		castor::CheckedMutex m_loadMtx;
-		castor::CheckedMutex m_uploadMtx;
-		castor::Vector< castor::RawUniquePtr< ThreadData > > m_loading;
-		castor::UnorderedMap< size_t, TextureUPtr > m_loaded;
-		castor::UnorderedMap< size_t, TextureUnitUPtr > m_loadedUnits;
+		CheckedMutex m_dirtyMtx;
+		HashSet< Pass * > m_dirty;
+		CheckedMutex m_loadMtx;
+		CheckedMutex m_uploadMtx;
+		Vector< RawUniquePtr< ThreadData > > m_loading;
+		HashMap< size_t, TextureUPtr > m_loaded;
+		HashMap< size_t, TextureUnitUPtr > m_loadedUnits;
 		ashes::DescriptorSetLayoutPtr m_bindlessTexLayout;
 		ashes::DescriptorPoolPtr m_bindlessTexPool;
 		ashes::DescriptorSetPtr m_bindlessTexSet;
-		castor::Mutex m_dirtyWritesMtx;
-		castor::Vector< ashes::WriteDescriptorSet > m_dirtyWrites;
-		castor::Map< TextureUnit const *, OnTextureUnitChangedConnection > m_units;
-		castor::Map< size_t, TextureDataUPtr > m_datas;
-		castor::Map< size_t, TextureUnitDataUPtr > m_unitDatas;
+		Mutex m_dirtyWritesMtx;
+		Vector< ashes::WriteDescriptorSet > m_dirtyWrites;
+		Map< TextureUnit const *, OnTextureUnitChangedConnection > m_units;
+		Map< size_t, TextureDataUPtr > m_datas;
+		Map< size_t, TextureUnitDataUPtr > m_unitDatas;
 		std::atomic_bool m_initialised{};
-		castor::Vector< TextureUnit * > m_pendingUnits;
-		mutable castor::Vector< TextureCombine > m_texturesCombines;
-		castor::Map< TextureData *, Texture * > m_toUpload;
-		castor::Map< Texture const *, castor::Vector< TextureUnit * > > m_unitsToAdd;
+		Vector< TextureUnit * > m_pendingUnits;
+		mutable Vector< TextureCombine > m_texturesCombines;
+		Map< TextureData *, Texture * > m_toUpload;
+		Map< Texture const *, Vector< TextureUnit * > > m_unitsToAdd;
 	};
 }
 

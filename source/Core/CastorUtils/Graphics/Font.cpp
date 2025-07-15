@@ -9,9 +9,9 @@ FT_BEGIN_HEADER
 #	include FT_GLYPH_H
 FT_END_HEADER
 
-CU_ImplementSmartPtr( castor, Font )
+CU_ImplementSmartPtr( c3d, Font )
 
-namespace castor
+namespace c3d
 {
 	namespace ft
 	{
@@ -430,13 +430,13 @@ namespace castor
 				{
 					if ( font.isSDF() )
 					{
-						auto loader = castor::make_unique< msdf::GlyphLoader >( pathFile );
+						auto loader = c3d::makeRawUnique< msdf::GlyphLoader >( pathFile );
 						font.m_sdfInfo = loader->getSdfInfo();
 						font.setGlyphLoader( std::move( loader ) );
 					}
 					else
 					{
-						font.setGlyphLoader( castor::make_unique< ft::GlyphLoader >( pathFile, m_height ) );
+						font.setGlyphLoader( c3d::makeRawUnique< ft::GlyphLoader >( pathFile, m_height ) );
 					}
 				}
 
@@ -476,7 +476,7 @@ namespace castor
 		: Named{ name }
 		, m_height{ height }
 		, m_pathFile{ path }
-		, m_glyphLoader{ castor::make_unique< ft::GlyphLoader >( path, height ) }
+		, m_glyphLoader{ c3d::makeRawUnique< ft::GlyphLoader >( path, height ) }
 	{
 		BinaryLoader{}( *this, path, height );
 	}
@@ -490,7 +490,7 @@ namespace castor
 	Font::Font( String const & name, Path const & path )
 		: Named{ name }
 		, m_pathFile{ path }
-		, m_glyphLoader{ castor::make_unique< msdf::GlyphLoader >( path ) }
+		, m_glyphLoader{ c3d::makeRawUnique< msdf::GlyphLoader >( path ) }
 		, m_sdf{ true }
 	{
 		m_glyphLoader->initialise();

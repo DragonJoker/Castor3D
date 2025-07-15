@@ -8,10 +8,10 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/Factory.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class OverlayFactory
-		: public castor::Factory< OverlayCategory
+		: public Factory< OverlayCategory
 			, OverlayType
 			, OverlayCategoryUPtr >
 	{

@@ -7,7 +7,7 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
-namespace castor3d
+namespace c3d
 {
 	SphereSection::SphereSection()
 		: MeshGenerator( cuT( "sphere_section" ) )
@@ -16,41 +16,41 @@ namespace castor3d
 
 	MeshGeneratorUPtr SphereSection::create()
 	{
-		return castor::makeUniqueDerived< MeshGenerator, SphereSection >();
+		return makeUniqueDerived< MeshGenerator, SphereSection >();
 	}
 
 	void SphereSection::doGenerate( Mesh & mesh, Parameters const & parameters )
 	{
-		castor::String param;
+		String param;
 		float radius{};
-		castor::Angle angle{};
+		Angle angle{};
 		uint32_t nbFaces{};
 
 		if ( parameters.get( cuT( "subdiv" ), param ) )
 		{
-			nbFaces = castor::string::toUInt( param );
+			nbFaces = string::toUInt( param );
 		}
 
 		if ( parameters.get( cuT( "radius" ), param ) )
 		{
-			radius = castor::string::toFloat( param );
+			radius = string::toFloat( param );
 		}
 
 		if ( parameters.get( cuT( "angle" ), param ) )
 		{
-			angle = castor::Angle::fromDegrees( castor::string::toFloat( param ) );
+			angle = Angle::fromDegrees( string::toFloat( param ) );
 		}
 
 		if ( nbFaces >= 3
 			&& angle.degrees() > 0.0f )
 		{
 			auto arcAngle = angle / ( 2.0f * float( nbFaces ) );
-			castor::Vector< castor::Point2f > arc( nbFaces + 1u );
-			castor::Angle arcAlpha = 0.0_degrees;
+			Vector< Point2f > arc( nbFaces + 1u );
+			Angle arcAlpha = 0.0_degrees;
 			uint32_t iCur = 0;
 			uint32_t iPrv = 0;
 			float rAlphaI = 0;
-			auto rAngle = castor::PiMult2< float > / float( nbFaces );
+			auto rAngle = PiMult2< float > / float( nbFaces );
 
 			for ( uint32_t i = 0; i <= nbFaces; i++ )
 			{
@@ -66,8 +66,8 @@ namespace castor3d
 
 			for ( uint32_t k = 0; k < nbFaces; k++ )
 			{
-				castor::Point2f ptT = arc[k + 0];
-				castor::Point2f ptB = arc[k + 1];
+				Point2f ptT = arc[k + 0];
+				Point2f ptB = arc[k + 1];
 
 				if ( k == 0 )
 				{
@@ -76,11 +76,11 @@ namespace castor3d
 					{
 						auto rCos = float( cos( rAlphaI ) );
 						auto rSin = float( sin( rAlphaI ) );
-						auto pos = castor::Point3f{ ptT->x * rCos, ptT->x * rSin, ptT->y };
+						auto pos = Point3f{ ptT->x * rCos, ptT->x * rSin, ptT->y };
 						baseSubmesh.addPoint( InterleavedVertex{}
 							.position( pos )
-							.normal( castor::point::getNormalised( pos ) )
-							.texcoord( castor::Point2f{ 0.5f, 0.5f } ) );
+							.normal( point::getNormalised( pos ) )
+							.texcoord( Point2f{ 0.5f, 0.5f } ) );
 						iCur++;
 					}
 				}
@@ -92,11 +92,11 @@ namespace castor3d
 				{
 					auto rCos = float( cos( rAlphaI ) );
 					auto rSin = float( sin( rAlphaI ) );
-					auto pos = castor::Point3f{ ptB->x * rCos, ptB->x * rSin, ptB->y };
+					auto pos = Point3f{ ptB->x * rCos, ptB->x * rSin, ptB->y };
 					InterleavedVertex vertex{};
 					vertex.position( pos )
-						.normal( castor::point::getNormalised( pos ) )
-						.texcoord( castor::Point2f{ 0.5 + ( float( k ) / float( nbFaces ) ) * rCos / 2.0f
+						.normal( point::getNormalised( pos ) )
+						.texcoord( Point2f{ 0.5 + ( float( k ) / float( nbFaces ) ) * rCos / 2.0f
 							, 0.5 + ( float( k ) / float( nbFaces ) ) * rSin / 2.0f } );
 					baseSubmesh.addPoint( vertex );
 				}
@@ -118,7 +118,7 @@ namespace castor3d
 
 			// Constitution des côtés
 			Submesh & sideSubmesh = *mesh.createDefaultSubmesh();
-			castor::Point2f ptA = arc[nbFaces];
+			Point2f ptA = arc[nbFaces];
 			rAlphaI = 0;
 
 			// Calcul de la position des points des côtés
@@ -128,10 +128,10 @@ namespace castor3d
 				auto rSin = float( sin( rAlphaI ) );
 				sideSubmesh.addPoint( InterleavedVertex{}
 					.position( { ptA->x * rCos, ptA->x * rSin, ptA->y } )
-					.texcoord( castor::Point2f{ float( i ) / float( nbFaces ), float( 0.0 ) } ) );
+					.texcoord( Point2f{ float( i ) / float( nbFaces ), float( 0.0 ) } ) );
 				sideSubmesh.addPoint( InterleavedVertex{}
 					.position( { 0.0f, 0.0f, 0.0f } )
-					.texcoord( castor::Point2f{ float( i ) / float( nbFaces ), float( 1.0 ) } ) );
+					.texcoord( Point2f{ float( i ) / float( nbFaces ), float( 1.0 ) } ) );
 				iCur++;
 			}
 

@@ -5,7 +5,7 @@
 
 #include <cmath>
 
-namespace castor
+namespace c3d
 {
 	//*************************************************************************************************
 
@@ -426,7 +426,7 @@ namespace castor
 		return result;
 	}
 
-	Point3ub toRGBByte( RgbColourT< ColourComponent > const & colour )
+	Point3ub toRGBByte( RgbColourT< ColourComponentValue > const & colour )
 	{
 		Point3ub result;
 		colour.get( RgbComponent::eRed ).convertTo( result[0] );
@@ -435,7 +435,7 @@ namespace castor
 		return result;
 	}
 
-	Point3ub toBGRByte( RgbColourT< ColourComponent > const & colour )
+	Point3ub toBGRByte( RgbColourT< ColourComponentValue > const & colour )
 	{
 		Point3ub result;
 		colour.get( RgbComponent::eBlue ).convertTo( result[0] );
@@ -444,7 +444,7 @@ namespace castor
 		return result;
 	}
 
-	Point4ub toRGBAByte( RgbColourT< ColourComponent > const & colour )
+	Point4ub toRGBAByte( RgbColourT< ColourComponentValue > const & colour )
 	{
 		Point4ub result;
 		colour.get( RgbComponent::eRed ).convertTo( result[0] );
@@ -454,7 +454,7 @@ namespace castor
 		return result;
 	}
 
-	Point4ub toBGRAByte( RgbColourT< ColourComponent > const & colour )
+	Point4ub toBGRAByte( RgbColourT< ColourComponentValue > const & colour )
 	{
 		Point4ub result;
 		colour.get( RgbComponent::eBlue ).convertTo( result[0] );
@@ -464,7 +464,7 @@ namespace castor
 		return result;
 	}
 
-	Point4ub toARGBByte( RgbColourT< ColourComponent > const & colour )
+	Point4ub toARGBByte( RgbColourT< ColourComponentValue > const & colour )
 	{
 		Point4ub result;
 		result[0] = 255u;
@@ -474,7 +474,7 @@ namespace castor
 		return result;
 	}
 
-	Point4ub toABGRByte( RgbColourT< ColourComponent > const & colour )
+	Point4ub toABGRByte( RgbColourT< ColourComponentValue > const & colour )
 	{
 		Point4ub result;
 		result[0] = 255u;
@@ -548,7 +548,7 @@ namespace castor
 		return result;
 	}
 
-	uint32_t toRGBPacked( RgbColourT< ColourComponent > const & colour )
+	uint32_t toRGBPacked( RgbColourT< ColourComponentValue > const & colour )
 	{
 		uint32_t r = 0;
 		uint32_t g = 0;
@@ -559,7 +559,7 @@ namespace castor
 		return ( r << 16 ) | ( g << 8 ) | ( b << 0 );
 	}
 
-	uint32_t toBGRPacked( RgbColourT< ColourComponent > const & colour )
+	uint32_t toBGRPacked( RgbColourT< ColourComponentValue > const & colour )
 	{
 		uint32_t r = 0;
 		uint32_t g = 0;
@@ -570,7 +570,7 @@ namespace castor
 		return ( r << 0 ) | ( g << 8 ) | ( b << 16 );
 	}
 
-	uint32_t toARGBPacked( RgbColourT< ColourComponent > const & colour )
+	uint32_t toARGBPacked( RgbColourT< ColourComponentValue > const & colour )
 	{
 		uint32_t r = 0u;
 		uint32_t g = 0u;
@@ -582,7 +582,7 @@ namespace castor
 		return ( a << 24 ) | ( r << 16 ) | ( g << 8 ) | ( b << 0 );
 	}
 
-	uint32_t toRGBAPacked( RgbColourT< ColourComponent > const & colour )
+	uint32_t toRGBAPacked( RgbColourT< ColourComponentValue > const & colour )
 	{
 		uint32_t r = 0;
 		uint32_t g = 0;
@@ -594,7 +594,7 @@ namespace castor
 		return ( r << 24 ) | ( g << 16 ) | ( b << 8 ) | ( a << 0 );
 	}
 
-	uint32_t toABGRPacked( RgbColourT< ColourComponent > const & colour )
+	uint32_t toABGRPacked( RgbColourT< ColourComponentValue > const & colour )
 	{
 		uint32_t r = 0;
 		uint32_t g = 0;
@@ -606,7 +606,7 @@ namespace castor
 		return ( a << 24 ) | ( b << 16 ) | ( g << 8 ) | ( r << 0 );
 	}
 
-	uint32_t toBGRAPacked( RgbColourT< ColourComponent > const & colour )
+	uint32_t toBGRAPacked( RgbColourT< ColourComponentValue > const & colour )
 	{
 		uint32_t r = 0;
 		uint32_t g = 0;

@@ -15,7 +15,7 @@ See LICENSE file in root folder
 #include <algorithm>
 #include <numeric>
 
-namespace castor
+namespace c3d
 {
 	bool decompressBC1Block( uint8_t const * bitstring
 		, uint8_t * pixelBuffer );

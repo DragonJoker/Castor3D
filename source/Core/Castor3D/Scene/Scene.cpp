@@ -53,9 +53,9 @@
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/FontCache.hpp>
 
-CU_ImplementSmartPtr( castor3d, Scene )
+CU_ImplementSmartPtr( c3d, Scene )
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
@@ -73,7 +73,7 @@ namespace castor3d
 			}
 			else
 			{
-				blockContext->scene->setBackgroundColour( params[0]->get< castor::RgbColour >() );
+				blockContext->scene->setBackgroundColour( params[0]->get< RgbColour >() );
 			}
 		}
 		CU_EndAttribute()
@@ -90,10 +90,10 @@ namespace castor3d
 			}
 			else
 			{
-				auto imgBackground = castor::makeUnique< ImageBackground >( *getEngine( *blockContext )
+				auto imgBackground = makeUnique< ImageBackground >( *getEngine( *blockContext )
 					, *blockContext->scene );
-				imgBackground->setImage( context.file.getPath(), params[0]->get< castor::Path >() );
-				blockContext->scene->setBackground( castor::ptrRefCast< SceneBackground >( imgBackground ) );
+				imgBackground->setImage( context.file.getPath(), params[0]->get< Path >() );
+				blockContext->scene->setBackground( ptrRefCast< SceneBackground >( imgBackground ) );
 			}
 		}
 		CU_EndAttribute()
@@ -144,7 +144,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				newBlockContext->sampler = getEngine( *blockContext )->tryFindSampler( name );
 
 				if ( !newBlockContext->sampler )
@@ -170,7 +170,7 @@ namespace castor3d
 			else
 			{
 				newBlockContext->scene = blockContext;
-				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				newBlockContext->name = getPrefixedName( params[0]->get< String >(), *blockContext );
 			}
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eCamera )
@@ -187,7 +187,7 @@ namespace castor3d
 			}
 			else
 			{
-				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				newBlockContext->name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				newBlockContext->scene = blockContext;
 				newBlockContext->isCameraNode = true;
 				newBlockContext->parentNode = blockContext->scene->getCameraRootNode();
@@ -208,7 +208,7 @@ namespace castor3d
 			}
 			else
 			{
-				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				newBlockContext->name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				newBlockContext->scene = blockContext;
 				newBlockContext->isCameraNode = false;
 				newBlockContext->parentNode = blockContext->scene->getObjectRootNode();
@@ -229,7 +229,7 @@ namespace castor3d
 			}
 			else
 			{
-				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				newBlockContext->name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				newBlockContext->scene = blockContext;
 				newBlockContext->ownGeometry = blockContext->scene->createGeometry( newBlockContext->name
 					, *blockContext->scene );
@@ -250,7 +250,7 @@ namespace castor3d
 			}
 			else
 			{
-				blockContext->scene->setAmbientLight( params[0]->get< castor::RgbColour >() );
+				blockContext->scene->setAmbientLight( params[0]->get< RgbColour >() );
 			}
 		}
 		CU_EndAttribute()
@@ -273,9 +273,9 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				newBlockContext->scene = blockContext;
-				newBlockContext->ownBillboards = castor::makeUnique< BillboardList >( name
+				newBlockContext->ownBillboards = makeUnique< BillboardList >( name
 					, *blockContext->scene );
 				newBlockContext->billboards = newBlockContext->ownBillboards.get();
 			}
@@ -294,7 +294,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				newBlockContext->scene = blockContext;
 				newBlockContext->animGroup = blockContext->scene->addNewAnimatedObjectGroup( name
 					, *blockContext->scene );
@@ -314,8 +314,8 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
-				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
+				blockContext->overlays->parentOverlays.push_back( c3d::move( blockContext->overlays->overlay ) );
 				auto & parent = blockContext->overlays->parentOverlays.back();
 				blockContext->overlays->overlay.rptr = blockContext->scene->tryFindOverlay( name );
 
@@ -346,8 +346,8 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
-				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
+				blockContext->overlays->parentOverlays.push_back( c3d::move( blockContext->overlays->overlay ) );
 				auto & parent = blockContext->overlays->parentOverlays.back();
 				blockContext->overlays->overlay.rptr = blockContext->scene->tryFindOverlay( name );
 
@@ -378,8 +378,8 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
-				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
+				blockContext->overlays->parentOverlays.push_back( c3d::move( blockContext->overlays->overlay ) );
 				auto & parent = blockContext->overlays->parentOverlays.back();
 				blockContext->overlays->overlay.rptr = blockContext->scene->tryFindOverlay( name );
 
@@ -406,7 +406,7 @@ namespace castor3d
 			}
 			else
 			{
-				newBlockContext->skybox = castor::makeUnique< SkyboxBackground >( *getEngine( *blockContext )
+				newBlockContext->skybox = makeUnique< SkyboxBackground >( *getEngine( *blockContext )
 					, *blockContext->scene );
 			}
 		}
@@ -492,7 +492,7 @@ namespace castor3d
 		{
 			if ( blockContext->scene )
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				newBlockContext->scene = blockContext;
 				newBlockContext->root = blockContext->root;
 				newBlockContext->mesh = blockContext->scene->tryFindMesh( name );
@@ -515,7 +515,7 @@ namespace castor3d
 		{
 			if ( blockContext->scene )
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				newBlockContext->scene = blockContext;
 				newBlockContext->skeleton = blockContext->scene->tryFindSkeleton( name );
 
@@ -544,7 +544,7 @@ namespace castor3d
 
 				if ( blockContext->scene->getName() == LoadingScreen::SceneName )
 				{
-					getEngine( *blockContext )->setLoadingScene( castor::move( blockContext->ownScene ) );
+					getEngine( *blockContext )->setLoadingScene( c3d::move( blockContext->ownScene ) );
 				}
 				else if ( blockContext->ownScene )
 				{
@@ -558,16 +558,16 @@ namespace castor3d
 
 		static CU_ImplementAttributeParserBlock( parserImportFile, SceneImportContext )
 		{
-			castor::Path path;
-			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+			Path path;
+			Path pathFile = context.file.getPath() / params[0]->get( path );
 			blockContext->files.push_back( pathFile );
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserImportAnimFile, SceneImportContext )
 		{
-			castor::Path path;
-			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+			Path path;
+			Path pathFile = context.file.getPath() / params[0]->get( path );
 			blockContext->animFiles.push_back( pathFile );
 		}
 		CU_EndAttribute()
@@ -782,73 +782,73 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	castor::String print( castor::Point3f const & obj )
+	String print( Point3f const & obj )
 	{
-		auto stream = castor::makeStringStream();
+		auto stream = makeStringStream();
 		stream << std::setprecision( 4 ) << obj->x
 			<< ", " << std::setprecision( 4 ) << obj->y
 			<< ", " << std::setprecision( 4 ) << obj->z;
 		return stream.str();
 	}
 
-	castor::String print( castor::BoundingBox const & obj )
+	String print( BoundingBox const & obj )
 	{
-		auto stream = castor::makeStringStream();
+		auto stream = makeStringStream();
 		stream << "min: " << print( obj.getMin() ) << ", max: " << print( obj.getMax() );
 		return stream.str();
 	}
 
 	//*************************************************************************************************
 
-	castor::String Scene::RootNode = cuT( "C3D.RootNode" );
-	castor::String Scene::CameraRootNode = cuT( "C3D.CameraRootNode" );
-	castor::String Scene::ObjectRootNode = cuT( "C3D.ObjectRootNode" );
+	String Scene::RootNode = cuT( "C3D.RootNode" );
+	String Scene::CameraRootNode = cuT( "C3D.CameraRootNode" );
+	String Scene::ObjectRootNode = cuT( "C3D.ObjectRootNode" );
 
-	Scene::Scene( castor::String const & name, Engine & engine )
-		: castor::OwnedBy< Engine >{ engine }
-		, castor::Named{ name }
+	Scene::Scene( String const & name, Engine & engine )
+		: OwnedBy< Engine >{ engine }
+		, Named{ name }
 		, m_resources{ engine.getGraphResourceHandler() }
-		, m_sceneNodeCache{ makeObjectCache< SceneNode, castor::String, SceneNodeCacheTraits >( *this
+		, m_sceneNodeCache{ makeObjectCache< SceneNode, String, SceneNodeCacheTraits >( *this
 			, SceneNodeInitialiserT< SceneNodeCache >{}
-			, castor::DummyFunctorT< SceneNodeCache >{}
+			, DummyFunctorT< SceneNodeCache >{}
 			, SceneNodeMergerT< SceneNodeCache >{ getName() }
 			, SceneNodeAttacherT< SceneNodeCache >{}
 			, SceneNodeDetacherT< SceneNodeCache >{} ) }
 		, m_rootNode{ m_sceneNodeCache->find( RootNode ) }
 		, m_rootCameraNode{ m_sceneNodeCache->find( CameraRootNode ) }
 		, m_rootObjectNode{ m_sceneNodeCache->find( ObjectRootNode ) }
-		, m_background{ castor::makeUniqueDerived< SceneBackground, ColourBackground >( engine, *this ) }
-		, m_lightFactory{ castor::makeUnique< LightFactory >() }
-		, m_listener{ engine.addNewFrameListener( cuT( "Scene_" ) + name + castor::string::toString( intptr_t( this ) ) ) }
-		, m_renderNodes{ castor::makeUnique< SceneRenderNodes >( *this ) }
+		, m_background{ makeUniqueDerived< SceneBackground, ColourBackground >( engine, *this ) }
+		, m_lightFactory{ makeUnique< LightFactory >() }
+		, m_listener{ engine.addNewFrameListener( cuT( "Scene_" ) + name + string::toString( intptr_t( this ) ) ) }
+		, m_renderNodes{ makeUnique< SceneRenderNodes >( *this ) }
 		, m_sceneUbo{ *engine.getRenderDevice() }
 	{
 		m_rootNode->setSerialisable( false );
 		m_rootCameraNode->setSerialisable( false );
 		m_rootObjectNode->setSerialisable( false );
-		m_billboardCache = makeObjectCache< BillboardList, castor::String, BillboardListCacheTraits >( *this
+		m_billboardCache = makeObjectCache< BillboardList, String, BillboardListCacheTraits >( *this
 			, m_rootNode
 			, m_rootCameraNode
 			, m_rootObjectNode );
-		m_cameraCache = makeObjectCache< Camera, castor::String, CameraCacheTraits >( *this
+		m_cameraCache = makeObjectCache< Camera, String, CameraCacheTraits >( *this
 			, m_rootNode
 			, m_rootCameraNode
 			, m_rootObjectNode
-			, castor::DummyFunctorT< CameraCache >{}
-			, castor::DummyFunctorT< CameraCache >{}
+			, DummyFunctorT< CameraCache >{}
+			, DummyFunctorT< CameraCache >{}
 			, MovableMergerT< CameraCache >{ getName() }
 			, MovableAttacherT< CameraCache >{}
 			, MovableDetacherT< CameraCache >{} );
-		m_geometryCache = makeObjectCache< Geometry, castor::String, GeometryCacheTraits >( *this
+		m_geometryCache = makeObjectCache< Geometry, String, GeometryCacheTraits >( *this
 			, m_rootNode
 			, m_rootCameraNode
 			, m_rootObjectNode );
-		m_lightCache = makeObjectCache< Light, castor::String, LightCacheTraits >( *this
+		m_lightCache = makeObjectCache< Light, String, LightCacheTraits >( *this
 			, m_rootNode
 			, m_rootCameraNode
 			, m_rootObjectNode );
-		m_lightGroupCache = castor::makeCache< LightGroup, castor::String, LightGroupCacheTraits >( *this );
-		m_particleSystemCache = makeObjectCache< ParticleSystem, castor::String, ParticleSystemCacheTraits >( *this
+		m_lightGroupCache = makeCache< LightGroup, String, LightGroupCacheTraits >( *this );
+		m_particleSystemCache = makeObjectCache< ParticleSystem, String, ParticleSystemCacheTraits >( *this
 			, m_rootNode
 			, m_rootCameraNode
 			, m_rootObjectNode
@@ -874,15 +874,15 @@ namespace castor3d
 			, MovableMergerT< ParticleSystemCache >{ getName() }
 			, MovableAttacherT< ParticleSystemCache >{}
 			, MovableDetacherT< ParticleSystemCache >{} );
-		m_animatedObjectGroupCache = castor::makeCache< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >( *this );
-		m_meshCache = castor::makeCache< Mesh, castor::String, MeshCacheTraits >( getLogger( engine )
+		m_animatedObjectGroupCache = makeCache< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >( *this );
+		m_meshCache = makeCache< Mesh, String, MeshCacheTraits >( getLogger( engine )
 			, CpuEventInitialiserT< MeshCache >{ getListener() }
 			, CpuEventCleanerT< MeshCache >{ getListener() }
-			, castor::ResourceMergerT< MeshCache >{ getName() } );
-		m_skeletonCache = castor::makeCache< Skeleton, castor::String, SkeletonCacheTraits >( getLogger( engine )
-			, castor::DummyFunctorT< SkeletonCache >{}
-			, castor::DummyFunctorT< SkeletonCache >{}
-			, castor::ResourceMergerT< SkeletonCache >{ getName() } );
+			, ResourceMergerT< MeshCache >{ getName() } );
+		m_skeletonCache = makeCache< Skeleton, String, SkeletonCacheTraits >( getLogger( engine )
+			, DummyFunctorT< SkeletonCache >{}
+			, DummyFunctorT< SkeletonCache >{}
+			, ResourceMergerT< SkeletonCache >{ getName() } );
 
 		m_materialCacheView = makeCacheView( getName()
 			, getEngine()->getMaterialCache()
@@ -912,16 +912,16 @@ namespace castor3d
 			{
 				element.cleanup();
 			} );
-		m_overlayCache = castor::makeCache< Overlay, castor::String, OverlayCacheTraits >( *getEngine() );
+		m_overlayCache = makeCache< Overlay, String, OverlayCacheTraits >( *getEngine() );
 		m_fontCacheView = makeCacheView( getName()
 			, getEngine()->getFontCache( {} )
-			, castor::DummyFunctorT< castor::FontCache >{}
-			, castor::DummyFunctorT< castor::FontCache >{} );
+			, DummyFunctorT< FontCache >{}
+			, DummyFunctorT< FontCache >{} );
 
 		addNewAnimatedObjectGroup( cuT( "C3D_Textures" ), *this );
 		auto & device = engine.getRenderSystem()->getRenderDevice();
 		auto data = device.graphicsData();
-		m_reflectionMap = castor::makeUnique< EnvironmentMap >( m_resources
+		m_reflectionMap = makeUnique< EnvironmentMap >( m_resources
 			, device
 			, *data
 			, *this );
@@ -998,23 +998,23 @@ namespace castor3d
 	{
 		auto & engine = *getEngine();
 		auto const & device = engine.getRenderSystem()->getRenderDevice();
-		auto mbName = castor::toUtf8( getName() );
-		m_timerParticlesGpu = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/ParticlesGPU", crg::TimerScope::eUpdate );
+		auto mbName = toUtf8( getName() );
+		m_timerParticlesGpu = makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/ParticlesGPU", crg::TimerScope::eUpdate );
 		engine.registerTimer( getName() + cuT( "/ParticlesGPU" ), *m_timerParticlesGpu );
 #if C3D_DebugTimers
-		m_timerSceneNodes = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/SceneNodes", crg::TimerScope::eUpdate );
+		m_timerSceneNodes = makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/SceneNodes", crg::TimerScope::eUpdate );
 		engine.registerTimer( getName() + cuT( "/SceneNodes" ), *m_timerSceneNodes );
-		m_timerBoundingBox = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/BoundingBoxes", crg::TimerScope::eUpdate );
+		m_timerBoundingBox = makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/BoundingBoxes", crg::TimerScope::eUpdate );
 		engine.registerTimer( getName() + cuT( "/BoundingBoxes" ), *m_timerBoundingBox );
-		m_timerMaterials = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/Materials", crg::TimerScope::eUpdate );
+		m_timerMaterials = makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/Materials", crg::TimerScope::eUpdate );
 		engine.registerTimer( getName() + cuT( "/Materials" ), *m_timerMaterials );
-		m_timerLights = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/Lights", crg::TimerScope::eUpdate );
+		m_timerLights = makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/Lights", crg::TimerScope::eUpdate );
 		engine.registerTimer( getName() + cuT( "/Lights" ), *m_timerLights );
-		m_timerParticlesCpu = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/ParticlesCPU", crg::TimerScope::eUpdate );
+		m_timerParticlesCpu = makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/ParticlesCPU", crg::TimerScope::eUpdate );
 		engine.registerTimer( getName() + cuT( "/ParticlesCPU" ), *m_timerParticlesCpu );
-		m_timerGpuUpdate = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/GPUUpdate", crg::TimerScope::eUpdate );
+		m_timerGpuUpdate = makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/GPUUpdate", crg::TimerScope::eUpdate );
 		engine.registerTimer( getName() + cuT( "/GPUUpdate" ), *m_timerGpuUpdate );
-		m_timerMovables = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/Movables", crg::TimerScope::eUpdate );
+		m_timerMovables = makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/Movables", crg::TimerScope::eUpdate );
 		engine.registerTimer( getName() + cuT( "/Movables" ), *m_timerMovables );
 #endif
 
@@ -1032,17 +1032,17 @@ namespace castor3d
 	void Scene::updateBoundingBox()
 	{
 #if C3D_DebugTimers
-		auto block( m_timerBoundingBox ? castor::make_unique< crg::FramePassTimerBlock >( m_timerBoundingBox->start() ) : nullptr );
+		auto block( m_timerBoundingBox ? makeRawUnique< crg::FramePassTimerBlock >( m_timerBoundingBox->start() ) : nullptr );
 #endif
 		auto & cache = *m_geometryCache;
-		auto lock( castor::makeUniqueLock( cache ) );
+		auto lock( makeUniqueLock( cache ) );
 
 		if ( !cache.isEmptyNoLock() )
 		{
 			constexpr float fmin = std::numeric_limits< float >::max();
 			constexpr float fmax = std::numeric_limits< float >::lowest();
-			castor::Point3f min{ fmin, fmin, fmin };
-			castor::Point3f max{ fmax, fmax, fmax };
+			Point3f min{ fmin, fmin, fmin };
+			Point3f max{ fmax, fmax, fmax };
 
 			for ( auto const & [_, geometry] : cache )
 			{
@@ -1065,7 +1065,7 @@ namespace castor3d
 		}
 		else
 		{
-			m_boundingBox = castor::BoundingBox{};
+			m_boundingBox = BoundingBox{};
 		}
 	}
 
@@ -1132,7 +1132,7 @@ namespace castor3d
 		m_timerParticlesGpu.reset();
 
 		{
-			auto lock( castor::makeUniqueLock( getEngine()->getRenderTargetCache() ) );
+			auto lock( makeUniqueLock( getEngine()->getRenderTargetCache() ) );
 			for ( auto & target : getEngine()->getRenderTargetCache().getRenderTargets( TargetType::eTexture ) )
 			{
 				if ( target->getScene() == this )
@@ -1209,7 +1209,7 @@ namespace castor3d
 
 	void Scene::setBackground( SceneBackgroundUPtr value )
 	{
-		m_background = castor::move( value );
+		m_background = c3d::move( value );
 		m_background->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
 		onSetBackground( *m_background );
 	}
@@ -1231,8 +1231,8 @@ namespace castor3d
 	uint32_t Scene::getVertexCount()const
 	{
 		uint32_t result = 0;
-		using LockType = castor::UniqueLock< GeometryCache >;
-		LockType lock{ castor::makeUniqueLock( *m_geometryCache ) };
+		using LockType = UniqueLock< GeometryCache >;
+		LockType lock{ makeUniqueLock( *m_geometryCache ) };
 
 		for ( auto const & [_, geometry] : *m_geometryCache )
 		{
@@ -1248,8 +1248,8 @@ namespace castor3d
 	uint32_t Scene::getFaceCount()const
 	{
 		uint32_t result = 0;
-		using LockType = castor::UniqueLock< GeometryCache >;
-		LockType lock{ castor::makeUniqueLock( *m_geometryCache ) };
+		using LockType = UniqueLock< GeometryCache >;
+		LockType lock{ makeUniqueLock( *m_geometryCache ) };
 
 		for ( auto const & [_, geometry] : *m_geometryCache )
 		{
@@ -1380,12 +1380,12 @@ namespace castor3d
 		return m_reflectionMap->getIndex( node );
 	}
 
-	castor::String const & Scene::getBackgroundModel()const
+	String const & Scene::getBackgroundModel()const
 	{
 		return m_background->getModelName();
 	}
 
-	castor::Vector< LightingModelID > Scene::getLightingModelsID()const
+	Vector< LightingModelID > Scene::getLightingModelsID()const
 	{
 		return getEngine()->getLightingModelFactory().getLightingModelsID();
 	}
@@ -1406,7 +1406,7 @@ namespace castor3d
 			return;
 		}
 
-		castor::Vector< SceneNode * > work;
+		Vector< SceneNode * > work;
 		work.push_back( &node );
 
 		while ( !work.empty() )
@@ -1512,9 +1512,8 @@ namespace castor3d
 		}
 	}
 
-	void Scene::addParsers( castor::AttributeParsers & result )
+	void Scene::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< SceneContext > sceneCtx{ result, CSCNSection::eScene, CSCNSection::eRoot };
 		BlockParserContextT< SceneImportContext > importCtx{ result, CSCNSection::eSceneImport, CSCNSection::eScene };
 
@@ -1523,7 +1522,7 @@ namespace castor3d
 		sceneCtx.addParser( cuT( "ambient_light" ), scene::parserAmbientLight, { makeParameter< ParameterType::eRgbColour >() } );
 		sceneCtx.addParser( cuT( "fog_type" ), scene::parserFogType, { makeParameter< ParameterType::eCheckedText, FogType >() } );
 		sceneCtx.addParser( cuT( "fog_density" ), scene::parserFogDensity, { makeParameter< ParameterType::eFloat >() } );
-		sceneCtx.addParser( cuT( "directional_shadow_cascades" ), scene::parserDirectionalShadowCascades, { makeParameter< ParameterType::eUInt32 >( castor::makeRange( 0u, MaxDirectionalCascadesCount ) ) } );
+		sceneCtx.addParser( cuT( "directional_shadow_cascades" ), scene::parserDirectionalShadowCascades, { makeParameter< ParameterType::eUInt32 >( makeRange( 0u, MaxDirectionalCascadesCount ) ) } );
 		sceneCtx.addParser( cuT( "lpv_indirect_attenuation" ), scene::parserGlobalIndirectAttenuation, { makeParameter< ParameterType::eFloat >() } );
 		sceneCtx.addPushParser( cuT( "font" ), CSCNSection::eFont, scene::parserFont, { makeParameter< ParameterType::eName >() } );
 		sceneCtx.addPushParser( cuT( "sdf_font" ), CSCNSection::eSdfFont, scene::parserSdfFont, { makeParameter< ParameterType::eName >() } );
@@ -1574,7 +1573,7 @@ namespace castor3d
 		return getEngine()->getDefaultLightingModel();
 	}
 
-	castor::String Scene::getDefaultLightingModelName()const
+	String Scene::getDefaultLightingModelName()const
 	{
 		return getEngine()->getDefaultLightingModelName();
 	}
@@ -1588,7 +1587,7 @@ namespace castor3d
 	{
 		return std::any_of( m_giTypes.begin()
 			, m_giTypes.end()
-			, [&giType]( castor::Set< GlobalIlluminationType > const & lookup )
+			, [&giType]( Set< GlobalIlluminationType > const & lookup )
 			{
 				return lookup.end() != lookup.find( giType );
 			} );
@@ -1608,7 +1607,7 @@ namespace castor3d
 	SemaphoreWaitArray Scene::getRenderTargetsSemaphores()const
 	{
 		SemaphoreWaitArray result;
-		auto lock( castor::makeUniqueLock( getEngine()->getRenderTargetCache() ) );
+		auto lock( makeUniqueLock( getEngine()->getRenderTargetCache() ) );
 
 		for ( auto & target : getEngine()->getRenderTargetCache().getRenderTargets( TargetType::eTexture ) )
 		{
@@ -1854,7 +1853,7 @@ namespace castor3d
 		auto block( m_timerParticlesCpu->start() );
 #endif
 		auto & cache = getParticleSystemCache();
-		auto lock( castor::makeUniqueLock( cache ) );
+		auto lock( makeUniqueLock( cache ) );
 		updater.index = 0u;
 
 		for ( auto const & [_, particleSystem] : cache )
@@ -1866,7 +1865,7 @@ namespace castor3d
 	void Scene::doUpdateParticles( GpuUpdater & updater )
 	{
 		auto & cache = getParticleSystemCache();
-		auto lock( castor::makeUniqueLock( cache ) );
+		auto lock( makeUniqueLock( cache ) );
 
 		if ( !m_timerParticlesGpu )
 		{
@@ -1944,8 +1943,8 @@ namespace castor3d
 	{
 		bool needsGI = false;
 		bool hasAnyShadows = false;
-		castor::Array< bool, size_t( LightType::eCount ) > hasShadows{};
-		castor::Array< castor::Set< GlobalIlluminationType >, size_t( LightType::eCount ) > giTypes{};
+		Array< bool, size_t( LightType::eCount ) > hasShadows{};
+		Array< Set< GlobalIlluminationType >, size_t( LightType::eCount ) > giTypes{};
 
 		m_lightCache->forEach( [&giTypes, &needsGI, &hasAnyShadows, &hasShadows]( Light const & light )
 			{
@@ -2012,7 +2011,7 @@ namespace castor3d
 		m_dirtyMaterials = true;
 	}
 
-	castor::String getPrefix( SceneContext const & context )
+	String getPrefix( SceneContext const & context )
 	{
 		return context.prefix;
 	}

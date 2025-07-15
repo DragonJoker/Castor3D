@@ -15,10 +15,10 @@ See LICENSE file in root folder
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ReflectiveShadowMaps
-		: public castor::Named
+		: public Named
 	{
 	public:
 		C3D_API ReflectiveShadowMaps( crg::ResourceHandler & handler

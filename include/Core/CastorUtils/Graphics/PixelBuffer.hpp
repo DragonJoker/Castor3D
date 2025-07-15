@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <cstddef>
 #include <iterator>
 
-namespace castor
+namespace c3d
 {
 	template< PixelFormat PF >
 	class PxBuffer

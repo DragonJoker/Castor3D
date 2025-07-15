@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class Scene;
 
@@ -32,7 +32,7 @@ namespace castor3d
 		eText = 2,
 		CU_ScopedEnumBounds( ePanel, eText )
 	};
-	C3D_API castor::String getName( OverlayType value );
+	C3D_API String getName( OverlayType value );
 	/**
 	*\~english
 	*\brief
@@ -54,7 +54,7 @@ namespace castor3d
 		eBreakWords = 2,
 		CU_ScopedEnumBounds( eNone, eBreakWords )
 	};
-	C3D_API castor::String getName( TextWrappingMode value );
+	C3D_API String getName( TextWrappingMode value );
 	/**
 	*\~english
 	*\brief
@@ -73,7 +73,7 @@ namespace castor3d
 		eText = 1,
 		CU_ScopedEnumBounds( eLetter, eText )
 	};
-	C3D_API castor::String getName( TextTexturingMode value );
+	C3D_API String getName( TextTexturingMode value );
 	/**
 	*\~english
 	*\brief
@@ -95,7 +95,7 @@ namespace castor3d
 		eMaxFontHeight = 2,
 		CU_ScopedEnumBounds( eOwnHeight, eMaxFontHeight )
 	};
-	C3D_API castor::String getName( TextLineSpacingMode value );
+	C3D_API String getName( TextLineSpacingMode value );
 	/**
 	*\~english
 	*\brief
@@ -117,7 +117,7 @@ namespace castor3d
 		eRight = 2,
 		CU_ScopedEnumBounds( eLeft, eRight )
 	};
-	C3D_API castor::String getName( HAlign value );
+	C3D_API String getName( HAlign value );
 	/**
 	*\~english
 	*\brief
@@ -139,7 +139,7 @@ namespace castor3d
 		eBottom = 2,
 		CU_ScopedEnumBounds( eTop, eBottom )
 	};
-	C3D_API castor::String getName( VAlign value );
+	C3D_API String getName( VAlign value );
 	/**
 	*\~english
 	*\brief
@@ -161,7 +161,7 @@ namespace castor3d
 		eExternal = 2,
 		CU_ScopedEnumBounds( eInternal, eExternal )
 	};
-	C3D_API castor::String getName( BorderPosition value );
+	C3D_API String getName( BorderPosition value );
 	/**
 	*\~english
 	*\brief
@@ -276,16 +276,16 @@ namespace castor3d
 	{
 		//!\~english	The character dimensions.
 		//!\~french		Les dimensions du caractère.
-		castor::Point2f size{};
+		Point2f size{};
 		//!\~english	The glyph position relative to cursor.
 		//!\~french		La position de la glyphe par rapport au curseur.
-		castor::Point2f bearing{};
+		Point2f bearing{};
 		//!\~english	The character UV left/top point.
 		//!\~french		Le point gauche/haut de l'UV du caractère.
-		castor::Point2f uvLeftTop{};
+		Point2f uvLeftTop{};
 		//!\~english	The character UV right/bottom point.
 		//!\~french		Le point droite/bas de l'UV du caractère.
-		castor::Point2f uvRightBottom{};
+		Point2f uvRightBottom{};
 		//!\~english	The character position, relative to its line.
 		//!\~french		La position du caractère, relative à sa ligne.
 		float left{};
@@ -309,7 +309,7 @@ namespace castor3d
 	{
 		//!\~english	The y range, relative to bearing.
 		//!\~french		L'intervalle y, relatif au bearing.
-		castor::Point2f range{};
+		Point2f range{};
 		//!\~english	The word position.
 		//!\~french		La position du mot.
 		float left{};
@@ -329,9 +329,9 @@ namespace castor3d
 		//!\~french
 		uint32_t pad{};
 
-		auto chars( castor::Array< TextChar, MaxCharsPerOverlay > & cont )const
+		auto chars( Array< TextChar, MaxCharsPerOverlay > & cont )const
 		{
-			return castor::makeArrayView( cont.begin() + charBegin, charEnd - charBegin );
+			return makeArrayView( cont.begin() + charBegin, charEnd - charBegin );
 		}
 	};
 	/**
@@ -344,7 +344,7 @@ namespace castor3d
 	{
 		uint32_t count{};
 		uint32_t pad{};
-		castor::Array< TextWord, MaxTextsContsPerOverlay > elems{};
+		Array< TextWord, MaxTextsContsPerOverlay > elems{};
 
 		auto & getNext()
 		{
@@ -355,12 +355,12 @@ namespace castor3d
 
 		auto words()const
 		{
-			return castor::makeArrayView( elems.data(), elems.data() + count );
+			return makeArrayView( elems.data(), elems.data() + count );
 		}
 
 		auto words()
 		{
-			return castor::makeArrayView( elems.begin(), count );
+			return makeArrayView( elems.begin(), count );
 		}
 	};
 	/**
@@ -373,10 +373,10 @@ namespace castor3d
 	{
 		//!\~english	The line position.
 		//!\~french		La position de la ligne.
-		castor::Point2f position{};
+		Point2f position{};
 		//!\~english	The y range, relative to bearing.
 		//!\~french		L'intervalle y, relatif au bearing.
-		castor::Point2f range{};
+		Point2f range{};
 		//!\~english	The line width.
 		//!\~french		La longueur de la ligne.
 		float width{};
@@ -398,12 +398,12 @@ namespace castor3d
 
 		auto words( OverlayWords & cont )const
 		{
-			return castor::makeArrayView( cont.elems.begin() + wordBegin, wordEnd - wordBegin );
+			return makeArrayView( cont.elems.begin() + wordBegin, wordEnd - wordBegin );
 		}
 
-		auto chars( castor::Array< TextChar, MaxCharsPerOverlay > & cont )const
+		auto chars( Array< TextChar, MaxCharsPerOverlay > & cont )const
 		{
-			return castor::makeArrayView( cont.begin() + charBegin, charEnd - charBegin );
+			return makeArrayView( cont.begin() + charBegin, charEnd - charBegin );
 		}
 	};
 	/**
@@ -414,10 +414,10 @@ namespace castor3d
 	*/
 	struct OverlayLines
 	{
-		castor::Point2f maxRange{};
+		Point2f maxRange{};
 		float topOffset{};
 		uint32_t count{};
-		castor::Array< TextLine, MaxTextsContsPerOverlay > elems{};
+		Array< TextLine, MaxTextsContsPerOverlay > elems{};
 
 		auto & getNext()
 		{
@@ -428,12 +428,12 @@ namespace castor3d
 
 		auto lines()const
 		{
-			return castor::makeArrayView( elems.data(), elems.data() + count );
+			return makeArrayView( elems.data(), elems.data() + count );
 		}
 
 		auto lines()
 		{
-			return castor::makeArrayView( elems.begin(), count );
+			return makeArrayView( elems.begin(), count );
 		}
 	};
 	/**
@@ -447,52 +447,52 @@ namespace castor3d
 	*	Spécialisation pour Overlay.
 	*/
 	template<>
-	struct PtrCacheTraitsT< Overlay, castor::String >
-		: PtrCacheTraitsBaseT< Overlay, castor::String >
+	struct PtrCacheTraitsT< Overlay, String >
+		: PtrCacheTraitsBaseT< Overlay, String >
 	{
 		using ResT = Overlay;
-		using KeyT = castor::String;
+		using KeyT = String;
 		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
 		using ElementT = typename Base::ElementT;
 		using ElementPtrT = typename Base::ElementPtrT;
 		using ElementObsT = typename Base::ElementObsT;
 
-		C3D_API static const castor::String Name;
+		C3D_API static const String Name;
 	};
 
-	using OverlayCacheTraits = PtrCacheTraitsT< Overlay, castor::String >;
-	using OverlayCache = castor::ResourceCacheT< Overlay
-		, castor::String
+	using OverlayCacheTraits = PtrCacheTraitsT< Overlay, String >;
+	using OverlayCache = ResourceCacheT< Overlay
+		, String
 		, OverlayCacheTraits >;
 
 	using OverlayRes = OverlayCacheTraits::ElementPtrT;
 	using OverlayResPtr = OverlayCacheTraits::ElementObsT;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, BorderPanelOverlay, C3D_API );
-	CU_DeclareSmartPtr( castor3d, DebugOverlays, C3D_API );
-	CU_DeclareSmartPtr( castor3d, FontTexture, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Overlay, C3D_API );
-	CU_DeclareSmartPtr( castor3d, OverlayCache, C3D_API );
-	CU_DeclareSmartPtr( castor3d, OverlayCategory, C3D_API );
-	CU_DeclareSmartPtr( castor3d, OverlayFactory, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PanelOverlay, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextOverlay, C3D_API );
-	CU_DeclareSmartPtr( castor3d, OverlayContext, C3D_API );
+	CU_DeclareSmartPtr( c3d, BorderPanelOverlay, C3D_API );
+	CU_DeclareSmartPtr( c3d, DebugOverlays, C3D_API );
+	CU_DeclareSmartPtr( c3d, FontTexture, C3D_API );
+	CU_DeclareSmartPtr( c3d, Overlay, C3D_API );
+	CU_DeclareSmartPtr( c3d, OverlayCache, C3D_API );
+	CU_DeclareSmartPtr( c3d, OverlayCategory, C3D_API );
+	CU_DeclareSmartPtr( c3d, OverlayFactory, C3D_API );
+	CU_DeclareSmartPtr( c3d, PanelOverlay, C3D_API );
+	CU_DeclareSmartPtr( c3d, TextOverlay, C3D_API );
+	CU_DeclareSmartPtr( c3d, OverlayContext, C3D_API );
 
 	CU_DeclareVector( OverlayRPtr, OverlayPtr );
-	CU_DeclareMap( castor::String, OverlayResPtr, OverlayPtrStr );
+	CU_DeclareMap( String, OverlayResPtr, OverlayPtrStr );
 	/** @endcond */
 
 	//@}
 }
 
-namespace castor
+namespace c3d
 {
 	template<>
-	struct ResourceCacheT< castor3d::Overlay
+	struct ResourceCacheT< Overlay
 		, String
-		, castor3d::OverlayCacheTraits >;
+		, OverlayCacheTraits >;
 }
 
 #endif

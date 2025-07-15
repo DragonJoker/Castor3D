@@ -24,11 +24,11 @@ namespace diamond_square_terrain
 			return *it;
 		}
 
-		static castor::Point3f getColour( float steepness
+		static c3d::Point3f getColour( float steepness
 			, Biome const & biome )
 		{
 			auto & steepnessRange = findBlendRange( steepness, biome.steepnessRanges );
-			castor::Point3f result{};
+			c3d::Point3f result{};
 
 			if ( steepnessRange.beginIndex == steepnessRange.endIndex )
 			{
@@ -47,13 +47,13 @@ namespace diamond_square_terrain
 			return result;
 		}
 
-		static castor::Point3f getColour( float height
+		static c3d::Point3f getColour( float height
 			, float steepness
 			, BlendRanges const & ranges
 			, Biomes const & biomes )
 		{
 			auto & heightRange = findBlendRange( height, ranges );
-			castor::Point3f result{};
+			c3d::Point3f result{};
 
 			if ( heightRange.beginIndex == heightRange.endIndex )
 			{
@@ -72,11 +72,11 @@ namespace diamond_square_terrain
 			return result;
 		}
 
-		static castor::Map< uint32_t, float > getPassWeights( float steepness
+		static c3d::Map< uint32_t, float > getPassWeights( float steepness
 			, Biome const & biome )
 		{
 			auto & steepnessRange = findBlendRange( steepness, biome.steepnessRanges );
-			castor::Map< uint32_t, float > result{};
+			c3d::Map< uint32_t, float > result{};
 
 			if ( steepnessRange.beginIndex == steepnessRange.endIndex )
 			{
@@ -92,11 +92,11 @@ namespace diamond_square_terrain
 			return result;
 		}
 
-		static castor::Map< uint32_t, float > mergeWeights( castor::Map< uint32_t, float > const & lhs
-			, castor::Map< uint32_t, float > const & rhs
+		static c3d::Map< uint32_t, float > mergeWeights( c3d::Map< uint32_t, float > const & lhs
+			, c3d::Map< uint32_t, float > const & rhs
 			, float weight )
 		{
-			castor::Map< uint32_t, float > result;
+			c3d::Map< uint32_t, float > result;
 
 			for ( auto & pair : lhs )
 			{
@@ -111,13 +111,13 @@ namespace diamond_square_terrain
 			return result;
 		}
 
-		static castor::Map< uint32_t, float > getPassWeights( float height
+		static c3d::Map< uint32_t, float > getPassWeights( float height
 			, float steepness
 			, BlendRanges const & ranges
 			, Biomes const & biomes )
 		{
 			auto & heightRange = findBlendRange( height, ranges );
-			castor::Map< uint32_t, float > result;
+			c3d::Map< uint32_t, float > result;
 
 			if ( heightRange.beginIndex == heightRange.endIndex )
 			{
@@ -135,13 +135,13 @@ namespace diamond_square_terrain
 			return result;
 		}
 
-		static castor3d::PassMasks getPassMasks( float height
+		static c3d::PassMasks getPassMasks( float height
 			, float steepness
 			, BlendRanges const & ranges
 			, Biomes const & biomes )
 		{
 			auto weights = getPassWeights( height, steepness, ranges, biomes );
-			castor3d::PassMasks result{};
+			c3d::PassMasks result{};
 
 			for ( auto & pair : weights )
 			{
@@ -165,8 +165,8 @@ namespace diamond_square_terrain
 			, uint32_t width )
 		{
 			Matrix result{ width };
-			auto fractal = castor::makeFractalNoise( castor3d::getMipLevels( { width, width, 1u }, castor::PixelFormat::eR8G8B8A8_UNORM )
-				, castor::PerlinNoiseT< double >{ engine } );
+			auto fractal = c3d::makeFractalNoise( c3d::getMipLevels( { width, width, 1u }, c3d::PixelFormat::eR8G8B8A8_UNORM )
+				, c3d::PerlinNoiseT< double >{ engine } );
 			auto yMin = std::numeric_limits< float >::max();
 			auto yMax = std::numeric_limits< float >::lowest();
 
@@ -183,7 +183,7 @@ namespace diamond_square_terrain
 				}
 			}
 
-			auto range = castor::makeRange( yMin, yMax );
+			auto range = c3d::makeRange( yMin, yMax );
 
 			for ( auto x = 0u; x < width; x++ )
 			{
@@ -204,9 +204,9 @@ namespace diamond_square_terrain
 		, float zeroPoint
 		, Matrix const & heightMap
 		, Biomes biomes
-		, castor3d::FaceArray const & faces
-		, castor::Map< uint32_t, uint32_t > const & vertexMap
-		, castor3d::SubmeshAnimationBuffer & submesh )
+		, c3d::FaceArray const & faces
+		, c3d::Map< uint32_t, uint32_t > const & vertexMap
+		, c3d::SubmeshAnimationBuffer & submesh )
 	{
 		bool areMaterial = !biomes.empty();
 

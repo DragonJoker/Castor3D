@@ -5,7 +5,7 @@
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	Plane::Plane()
 		: MeshGenerator{ cuT( "plane" ) }
@@ -14,7 +14,7 @@ namespace castor3d
 
 	MeshGeneratorUPtr Plane::create()
 	{
-		return castor::makeUniqueDerived< MeshGenerator, Plane >();
+		return makeUniqueDerived< MeshGenerator, Plane >();
 	}
 
 	void Plane::doGenerate( Mesh & mesh, Parameters const & parameters )
@@ -26,29 +26,29 @@ namespace castor3d
 		bool flipYZ{};
 		parameters.get( cuT( "flipYZ" ), flipYZ );
 
-		castor::String param;
+		String param;
 		uint32_t subDivisionsW{};
 		if ( parameters.get( cuT( "width_subdiv" ), param ) )
 		{
-			subDivisionsW = castor::string::toUInt( param );
+			subDivisionsW = string::toUInt( param );
 		}
 
 		uint32_t subDivisionsD{};
 		if ( parameters.get( cuT( "depth_subdiv" ), param ) )
 		{
-			subDivisionsD = castor::string::toUInt( param );
+			subDivisionsD = string::toUInt( param );
 		}
 
 		float width{};
 		if ( parameters.get( cuT( "width" ), param ) )
 		{
-			width = castor::string::toFloat( param );
+			width = string::toFloat( param );
 		}
 
 		float depth{};
 		if ( parameters.get( cuT( "depth" ), param ) )
 		{
-			depth = castor::string::toFloat( param );
+			depth = string::toFloat( param );
 		}
 
 		++subDivisionsW;
@@ -74,9 +74,9 @@ namespace castor3d
 				for ( uint32_t j = 0; j < nbVertexH; j++ )
 				{
 					points.emplace_back()
-						.position( castor::Point3f{ offsetW + ( float( i ) * gapW ), 0.0, offsetH + ( float( j ) * gapH ) } )
-						.normal( castor::Point3f{ 0.0, 1.0, 0.0 } )
-						.texcoord( castor::Point3f{ float( i ) * gapW / width, float( j ) * gapH / depth, 0.0f } );
+						.position( Point3f{ offsetW + ( float( i ) * gapW ), 0.0, offsetH + ( float( j ) * gapH ) } )
+						.normal( Point3f{ 0.0, 1.0, 0.0 } )
+						.texcoord( Point3f{ float( i ) * gapW / width, float( j ) * gapH / depth, 0.0f } );
 				}
 			}
 
@@ -86,9 +86,9 @@ namespace castor3d
 					, std::end( points )
 					, [&]( InterleavedVertex a, InterleavedVertex b )
 					{
-							a.pos -= castor::Point3f{ float( nbVertexW ) / 2.0f, 0.0f, float( nbVertexH ) / 2.0f };
-							b.pos -= castor::Point3f{ float( nbVertexW ) / 2.0f, 0.0f, float( nbVertexH ) / 2.0f };
-							return castor::point::dot( a.pos, a.pos ) < castor::point::dot( b.pos, b.pos );
+							a.pos -= Point3f{ float( nbVertexW ) / 2.0f, 0.0f, float( nbVertexH ) / 2.0f };
+							b.pos -= Point3f{ float( nbVertexW ) / 2.0f, 0.0f, float( nbVertexH ) / 2.0f };
+							return point::dot( a.pos, a.pos ) < point::dot( b.pos, b.pos );
 					} );
 			}
 		}
@@ -99,9 +99,9 @@ namespace castor3d
 				for ( uint32_t j = 0; j < nbVertexH; j++ )
 				{
 					points.emplace_back()
-						.position( castor::Point3f{ offsetW + ( float( i ) * gapW ), offsetH + ( float( j ) * gapH ), 0.0 } )
-						.normal( castor::Point3f{ 0.0, 0.0, 1.0 } )
-						.texcoord( castor::Point3f{ float( i ) * gapW / width, float( j ) * gapH / depth, 0.0f } );
+						.position( Point3f{ offsetW + ( float( i ) * gapW ), offsetH + ( float( j ) * gapH ), 0.0 } )
+						.normal( Point3f{ 0.0, 0.0, 1.0 } )
+						.texcoord( Point3f{ float( i ) * gapW / width, float( j ) * gapH / depth, 0.0f } );
 				}
 			}
 
@@ -111,9 +111,9 @@ namespace castor3d
 					, std::end( points )
 					, [&]( InterleavedVertex a, InterleavedVertex b )
 					{
-							a.pos -= castor::Point3f{ float( nbVertexW ) / 2.0f, float( nbVertexH ) / 2.0f, 0.0f };
-							b.pos -= castor::Point3f{ float( nbVertexW ) / 2.0f, float( nbVertexH ) / 2.0f, 0.0f };
-							return castor::point::dot( a.pos, a.pos ) < castor::point::dot( b.pos, b.pos );
+							a.pos -= Point3f{ float( nbVertexW ) / 2.0f, float( nbVertexH ) / 2.0f, 0.0f };
+							b.pos -= Point3f{ float( nbVertexW ) / 2.0f, float( nbVertexH ) / 2.0f, 0.0f };
+							return point::dot( a.pos, a.pos ) < point::dot( b.pos, b.pos );
 					} );
 			}
 		}
@@ -124,7 +124,7 @@ namespace castor3d
 		{
 			auto indexMapping = submesh->createComponent< TriFaceMapping >();
 			auto & indexMappingData = indexMapping->getData();
-			castor::Vector< FaceIndices > faces;
+			Vector< FaceIndices > faces;
 			faces.reserve( size_t( subDivisionsW ) * subDivisionsD * 2u );
 
 			for ( uint32_t i = 0; i < subDivisionsW; i++ )
@@ -151,7 +151,7 @@ namespace castor3d
 			{
 				for ( uint32_t j = 0; j < nbVertexH; j++ )
 				{
-					tiledUV.push_back( castor::Point3f{ float( ( subDivisionsW + 1u )* i ) * gapW / width
+					tiledUV.push_back( Point3f{ float( ( subDivisionsW + 1u )* i ) * gapW / width
 						, float( ( subDivisionsD + 1u ) * j ) * gapH / depth
 						, 0.0f } );
 				}

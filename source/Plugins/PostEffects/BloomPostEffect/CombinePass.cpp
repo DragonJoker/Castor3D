@@ -22,9 +22,9 @@ namespace Bloom
 {
 	namespace combine
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device
 			, uint32_t blurPassesCount )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
@@ -32,15 +32,15 @@ namespace Bloom
 			auto c3d_mapPasses = writer.declCombinedImg< FImg2DRgba32 >( CombinePass::CombineMapPasses, 0u, 0u );
 			auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba32 >( CombinePass::CombineMapScene, 1u, 0u );
 
-			writer.implementEntryPointT< c3d::Position2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::Position2FT > in
-				, sdw::VertexOutT< c3d::Uv2FT > out )
+			writer.implementEntryPointT< c3ds::Position2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::Position2FT > in
+				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = ( in.position() + 1.0_f ) / 2.0_f;
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
+				, sdw::FragmentOutT< c3ds::Colour4FT > out )
 				{
 					out.colour() = c3d_mapScene.sample( in.uv() );
 
@@ -55,16 +55,16 @@ namespace Bloom
 
 	//*********************************************************************************************
 
-	castor::MbString const CombinePass::CombineMapPasses = "c3d_mapPasses";
-	castor::MbString const CombinePass::CombineMapScene = "c3d_mapScene";
+	c3d::MbString const CombinePass::CombineMapPasses = "c3d_mapPasses";
+	c3d::MbString const CombinePass::CombineMapScene = "c3d_mapScene";
 
 	CombinePass::CombinePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & sceneView
 		, crg::ImageViewIdArray const & blurViews
 		, crg::ImageViewIdArray const & result
-		, castor3d::Extent2D const & size
+		, c3d::Extent2D const & size
 		, uint32_t blurPassesCount
 		, bool const * enabled
 		, uint32_t const * passIndex )
@@ -85,22 +85,22 @@ namespace Bloom
 						, context
 						, graph
 						, crg::ru::Config{ 2u } );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 							, result->getTimer() );
 				return result;
 			} ) }
 	{
 		m_pass.addDependencies( previousPasses );
 		m_pass.addImplicitColourView( blurViews.front()
-			, castor3d::ImageLayout::eColorAttachment );
+			, c3d::ImageLayout::eColorAttachment );
 		m_pass.addSampledView( m_pass.mergeViews( blurViews )
 			, 0u
-			, crg::SamplerDesc{ castor3d::FilterMode::eLinear
-				, castor3d::FilterMode::eLinear
-				, castor3d::MipmapMode::eNearest
-				, castor3d::WrapMode::eClampToEdge
-				, castor3d::WrapMode::eClampToEdge
-				, castor3d::WrapMode::eClampToEdge
+			, crg::SamplerDesc{ c3d::FilterMode::eLinear
+				, c3d::FilterMode::eLinear
+				, c3d::MipmapMode::eNearest
+				, c3d::WrapMode::eClampToEdge
+				, c3d::WrapMode::eClampToEdge
+				, c3d::WrapMode::eClampToEdge
 				, 0.0f
 				, 0.0f
 				, float( blurPassesCount ) } );
@@ -109,7 +109,7 @@ namespace Bloom
 		m_pass.addOutputColourView( result );
 	}
 
-	void CombinePass::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void CombinePass::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 	}

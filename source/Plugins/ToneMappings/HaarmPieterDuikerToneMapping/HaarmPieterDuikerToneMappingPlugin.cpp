@@ -18,26 +18,26 @@
 
 extern "C"
 {
-	C3D_HaarmPieterDuikerToneMapping_API void getRequiredVersion( castor3d::Version * version );
+	C3D_HaarmPieterDuikerToneMapping_API void getRequiredVersion( c3d::Version * version );
 	C3D_HaarmPieterDuikerToneMapping_API void isDebug( int * value );
-	C3D_HaarmPieterDuikerToneMapping_API void getType( castor3d::PluginType * type );
+	C3D_HaarmPieterDuikerToneMapping_API void getType( c3d::PluginType * type );
 	C3D_HaarmPieterDuikerToneMapping_API void getName( char const ** name );
-	C3D_HaarmPieterDuikerToneMapping_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
-	C3D_HaarmPieterDuikerToneMapping_API void onUnload( castor3d::Engine * engine );
+	C3D_HaarmPieterDuikerToneMapping_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin );
+	C3D_HaarmPieterDuikerToneMapping_API void onUnload( c3d::Engine * engine );
 
-	C3D_HaarmPieterDuikerToneMapping_API void getRequiredVersion( castor3d::Version * version )
+	C3D_HaarmPieterDuikerToneMapping_API void getRequiredVersion( c3d::Version * version )
 	{
-		*version = castor3d::Version();
+		*version = c3d::Version();
 	}
 
 	C3D_HaarmPieterDuikerToneMapping_API void isDebug( int * value )
 	{
-		*value = castor::system::isDebug() ? 1 : 0;
+		*value = c3d::system::isDebug() ? 1 : 0;
 	}
 
-	C3D_HaarmPieterDuikerToneMapping_API void getType( castor3d::PluginType * type )
+	C3D_HaarmPieterDuikerToneMapping_API void getType( c3d::PluginType * type )
 	{
-		*type = castor3d::PluginType::eToneMapping;
+		*type = c3d::PluginType::eToneMapping;
 	}
 
 	C3D_HaarmPieterDuikerToneMapping_API void getName( char const ** name )
@@ -45,15 +45,15 @@ extern "C"
 		*name = HaarmPieterDuiker::ToneMapping::Name.c_str();
 	}
 
-	C3D_HaarmPieterDuikerToneMapping_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
+	C3D_HaarmPieterDuikerToneMapping_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin )
 	{
 		engine->getToneMappingFactory().registerType( HaarmPieterDuiker::ToneMapping::Type
 			, &HaarmPieterDuiker::ToneMapping::create );
 		engine->getRenderTargetCache().registerToneMappingName( HaarmPieterDuiker::ToneMapping::Type
-			, castor::makeString( HaarmPieterDuiker::ToneMapping::Name ) );
+			, c3d::makeString( HaarmPieterDuiker::ToneMapping::Name ) );
 	}
 
-	C3D_HaarmPieterDuikerToneMapping_API void onUnload( castor3d::Engine * engine )
+	C3D_HaarmPieterDuikerToneMapping_API void onUnload( c3d::Engine * engine )
 	{
 		engine->getToneMappingFactory().unregisterType( HaarmPieterDuiker::ToneMapping::Type );
 	}

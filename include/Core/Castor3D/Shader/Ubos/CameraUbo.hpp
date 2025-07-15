@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace shader
 	{
@@ -46,7 +46,7 @@ namespace castor3d
 			CameraData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
-				: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+				: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 			{
 			}
 
@@ -166,12 +166,12 @@ namespace castor3d
 		 *\param[in]	debugIndex	L'indice des données de debug actuellement sélectionnées.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		C3D_API Configuration & cpuUpdate( castor::Size const & size
+		C3D_API Configuration & cpuUpdate( Size const & size
 			, Camera const & camera
-			, castor::Matrix4x4f const & view
-			, castor::Matrix4x4f const & projection
+			, Matrix4x4f const & view
+			, Matrix4x4f const & projection
 			, uint32_t debugIndex
-			, castor::Point2f const & jitter = castor::Point2f{} );
+			, Point2f const & jitter = Point2f{} );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -191,11 +191,11 @@ namespace castor3d
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
 		C3D_API Configuration & cpuUpdate( Camera const & camera
-			, castor::Matrix4x4f const & view
-			, castor::Matrix4x4f const & projection
+			, Matrix4x4f const & view
+			, Matrix4x4f const & projection
 			, uint32_t debugIndex
 			, bool safeBanded
-			, castor::Point2f const & jitter = castor::Point2f{} );
+			, Point2f const & jitter = Point2f{} );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -213,7 +213,7 @@ namespace castor3d
 		C3D_API Configuration & cpuUpdate( Camera const & camera
 			, uint32_t debugIndex
 			, bool safeBanded
-			, castor::Point2f const & jitter = castor::Point2f{} );
+			, Point2f const & jitter = Point2f{} );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -230,11 +230,11 @@ namespace castor3d
 		 *\param[in]	safeBanded	\p true pour utiliser la matrice de projection avec les safebands.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		C3D_API Configuration & cpuUpdate( castor::Size const & size
+		C3D_API Configuration & cpuUpdate( Size const & size
 			, Camera const & camera
 			, uint32_t debugIndex
 			, bool safeBanded
-			, castor::Point2f const & jitter = castor::Point2f{} );
+			, Point2f const & jitter = Point2f{} );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -253,12 +253,12 @@ namespace castor3d
 		 *\param[in]	frustum		Le frustum depuis lequel les plans sont copiés.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		C3D_API Configuration & cpuUpdate( castor::Size const & size
-			, castor::Matrix4x4f const & view
-			, castor::Matrix4x4f const & projection
+		C3D_API Configuration & cpuUpdate( Size const & size
+			, Matrix4x4f const & view
+			, Matrix4x4f const & projection
 			, uint32_t debugIndex
 			, Frustum const & frustum
-			, castor::Point2f const & jitter = castor::Point2f{} );
+			, Point2f const & jitter = Point2f{} );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -273,8 +273,8 @@ namespace castor3d
 		 *\param[in]	projection	La nouvelle matrice de projection.
 		 *\param[in]	debugIndex	L'indice des données de debug actuellement sélectionnées.
 		 */
-		C3D_API Configuration & cpuUpdate( castor::Size const & size
-			, castor::Matrix4x4f const & projection
+		C3D_API Configuration & cpuUpdate( Size const & size
+			, Matrix4x4f const & projection
 			, uint32_t debugIndex );
 
 		void createPassBinding( crg::FramePass & pass
@@ -314,7 +314,7 @@ namespace castor3d
 		, uint32_t( set )\
 		, sdw::type::MemoryLayout::eStd140\
 		, enabled };\
-	auto c3d_cameraData##suffix = camera##suffix.declMember< castor3d::shader::CameraData >( "c", enabled );\
+	auto c3d_cameraData##suffix = camera##suffix.declMember< c3d::shader::CameraData >( "c", enabled );\
 	camera##suffix.end()
 
 #define C3D_CameraEx( writer, binding, set, enabled )\

@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <memory>
 
-namespace castor3d
+namespace c3d
 {
 	class DebugCallbacks
 	{
@@ -30,7 +30,7 @@ namespace castor3d
 		VkDebugReportCallbackEXT m_callback{};
 #endif
 	};
-	using DebugCallbacksPtr = castor::RawUniquePtr< DebugCallbacks >;
+	using DebugCallbacksPtr = RawUniquePtr< DebugCallbacks >;
 }
 
 #endif

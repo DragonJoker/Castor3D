@@ -6,13 +6,13 @@ See LICENSE file in root folder
 
 #include "CpuFrameEvent.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class CpuFunctorEvent
 		: public CpuFrameEvent
 	{
 	public:
-		using Functor = castor::Function< void() >;
+		using Functor = Function< void() >;
 
 	private:
 		CpuFunctorEvent( CpuFunctorEvent const & copy ) = delete;
@@ -32,7 +32,7 @@ namespace castor3d
 		CpuFunctorEvent( CpuEventType type
 			, Functor functor )
 			: CpuFrameEvent{ type }
-			, m_functor{ castor::move( functor ) }
+			, m_functor{ c3d::move( functor ) }
 		{
 		}
 
@@ -58,7 +58,7 @@ namespace castor3d
 	inline CpuFrameEventUPtr makeCpuFunctorEvent( CpuEventType type
 		, CpuFunctorEvent::Functor functor )
 	{
-		return castor::makeUniqueDerived< CpuFrameEvent, CpuFunctorEvent >( type, functor );
+		return makeUniqueDerived< CpuFrameEvent, CpuFunctorEvent >( type, functor );
 	}
 	/**
 	 *\~english

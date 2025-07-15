@@ -15,7 +15,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/Pass/Component/PassComponent.hpp"
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	class PassShaders
 	{
@@ -91,8 +91,8 @@ namespace castor3d::shader
 			, ModelData const & model
 			, Utils & utils
 			, BlendComponents & components )const;
-		C3D_API castor::Map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( PipelineFlags const & flags )const;
-		C3D_API castor::Map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( TextureCombine const & combine )const;
+		C3D_API Map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( PipelineFlags const & flags )const;
+		C3D_API Map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( TextureCombine const & combine )const;
 		C3D_API bool enableParallaxOcclusionMapping( PipelineFlags const & flags )const;
 		C3D_API bool enableParallaxOcclusionMappingOne( PipelineFlags const & flags )const;
 		C3D_API sdw::Vec4 sampleMap( PipelineFlags const & flags
@@ -176,10 +176,10 @@ namespace castor3d::shader
 		TextureCombine m_texturesCombine;
 		Utils & m_utils;
 		PassComponentRegister const & m_compRegister;
-		castor::Vector< UpdateComponent > m_updateComponents;
-		castor::Vector< FinishComponent > m_finishComponents;
-		castor::Vector< PassComponentsShaderPtr > m_shaders;
-		castor::Vector< PassMapComponentsShader * > m_mapShaders;
+		Vector< UpdateComponent > m_updateComponents;
+		Vector< FinishComponent > m_finishComponents;
+		Vector< PassComponentsShaderPtr > m_shaders;
+		Vector< PassMapComponentsShader * > m_mapShaders;
 		PassReflRefrShaderPtr m_reflRefr;
 		ComponentModeFlags m_filter;
 		bool m_opacity{};

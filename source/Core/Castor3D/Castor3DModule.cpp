@@ -7,24 +7,24 @@
 
 #include <RenderGraph/FramePassTimer.hpp>
 
-CU_ImplementExportedOwnedBy( castor3d::Engine, Engine )
-CU_ImplementSmartPtr( castor3d, FramePassTimer )
+CU_ImplementExportedOwnedBy( Engine, Engine )
+CU_ImplementSmartPtr( c3d, FramePassTimer )
 
-namespace castor3d
+namespace c3d
 {
-	castor::LoggerInstance & getLogger( Engine const & engine )
+	LoggerInstance & getLogger( Engine const & engine )
 	{
 		return engine.getLogger();
 	}
 
-	castor::Matrix4x4f convert( castor::Array< float, 16 > const & value )
+	Matrix4x4f convert( Array< float, 16 > const & value )
 	{
-		castor::Matrix4x4f result;
+		Matrix4x4f result;
 		std::memcpy( result.ptr(), value.data(), 16 * sizeof( float ) );
 		return result;
 	}
 
-	VkClearColorValue convert( castor::RgbaColour const & value )
+	VkClearColorValue convert( RgbaColour const & value )
 	{
 		VkClearColorValue result;
 		result.float32[0] = value.red();
@@ -34,9 +34,9 @@ namespace castor3d
 		return result;
 	}
 
-	castor::RgbaColour convert( VkClearColorValue const & value )
+	RgbaColour convert( VkClearColorValue const & value )
 	{
-		castor::RgbaColour result;
+		RgbaColour result;
 		result.red() = value.float32[0];
 		result.green() = value.float32[1];
 		result.blue() = value.float32[2];
@@ -44,7 +44,7 @@ namespace castor3d
 		return result;
 	}
 
-	castor::Array< float, 4u > makeFloatArray( castor::RgbaColour const & value )
+	Array< float, 4u > makeFloatArray( RgbaColour const & value )
 	{
 		return
 		{

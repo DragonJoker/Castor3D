@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderLoop.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class RenderLoopSync
 		: public RenderLoop
@@ -32,23 +32,23 @@ namespace castor3d
 		 */
 		C3D_API ~RenderLoopSync()noexcept override;
 		/**
-		 *\copydoc		castor3d::RenderLoop::beginRendering
+		 *\copydoc		RenderLoop::beginRendering
 		 */
 		C3D_API void beginRendering()override;
 		/**
-		 *\copydoc		castor3d::RenderLoop::renderSyncFrame
+		 *\copydoc		RenderLoop::renderSyncFrame
 		 */
-		C3D_API void renderSyncFrame( castor::Milliseconds tslf )override;
+		C3D_API void renderSyncFrame( Milliseconds tslf )override;
 		/**
-		 *\copydoc		castor3d::RenderLoop::pause
+		 *\copydoc		RenderLoop::pause
 		 */
 		C3D_API void pause()override;
 		/**
-		 *\copydoc		castor3d::RenderLoop::resume
+		 *\copydoc		RenderLoop::resume
 		 */
 		C3D_API void resume()override;
 		/**
-		 *\copydoc		castor3d::RenderLoop::endRendering
+		 *\copydoc		RenderLoop::endRendering
 		 */
 		C3D_API void endRendering()override;
 

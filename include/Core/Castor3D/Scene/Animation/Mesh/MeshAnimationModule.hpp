@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Scene */
 	//@{
@@ -39,7 +39,7 @@ namespace castor3d
 	class MeshAnimationInstanceSubmesh;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, MeshAnimationInstance, C3D_API );
+	CU_DeclareSmartPtr( c3d, MeshAnimationInstance, C3D_API );
 
 	//! MeshAnimationInstanceSubmesh map, sorted by submesh ID.
 	CU_DeclareMap( uint32_t, MeshAnimationInstanceSubmesh, MeshAnimationInstanceSubmesh );

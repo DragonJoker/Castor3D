@@ -23,10 +23,8 @@
 #include <Castor3D/Gui/Controls/CtrlStatic.hpp>
 #include <Castor3D/Gui/Layout/LayoutBox.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< LayoutControl >::TextWriter( String const & tabs
 		, bool customStyle )
 		: TextWriterT< LayoutControl >{ tabs }
@@ -71,7 +69,7 @@ namespace castor
 
 	bool writeControl( TextWriterBase & writer
 		, Control const & control
-		, castor::StringStream & file
+		, StringStream & file
 		, String const & prefix )
 	{
 		bool result{};

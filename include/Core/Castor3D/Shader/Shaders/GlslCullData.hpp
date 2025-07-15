@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	struct CullData
 		: public sdw::StructInstance

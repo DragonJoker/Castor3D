@@ -5,7 +5,7 @@
 #include "CastorUtils/Data/Path.hpp"
 #include "CastorUtils/Graphics/ImageMemoryLayout.hpp"
 
-namespace castor
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -59,7 +59,7 @@ namespace castor
 			return Image{ name
 				, path
 				, newLayout
-				, castor::move( buffer ) };
+				, c3d::move( buffer ) };
 		}
 	}
 
@@ -73,7 +73,7 @@ namespace castor
 	{
 		PxBufferBaseUPtr buffer;
 		auto layout = load( imageFormat, data, size, buffer );
-		return Image{ name, imagePath, layout, castor::move( buffer ) };
+		return Image{ name, imagePath, layout, c3d::move( buffer ) };
 	}
 
 	Image ImageLoaderImpl::load( String const & name
@@ -103,20 +103,20 @@ namespace castor
 	//*********************************************************************************************
 
 	ImageLoader::ImageLoader( PxCompressionSupport support )
-		: m_options{ castor::move( support ) }
+		: m_options{ c3d::move( support ) }
 	{
 	}
 
 	void ImageLoader::registerLoader( String const & extension, ImageLoaderPtr loader )
 	{
-		m_loaders.emplace_back( castor::move( loader ) );
+		m_loaders.emplace_back( c3d::move( loader ) );
 		auto ptr = m_loaders.back().get();
 		m_extLoaders[string::lowerCase( extension )] = ptr;
 	}
 
 	void ImageLoader::registerLoader( StringArray const & extensions, ImageLoaderPtr loader )
 	{
-		m_loaders.emplace_back( castor::move( loader ) );
+		m_loaders.emplace_back( c3d::move( loader ) );
 		auto ptr = m_loaders.back().get();
 
 		for ( auto & extension : extensions )

@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Gui/Controls/CtrlControl.hpp"
 #include "Castor3D/Gui/Theme/StyleProgress.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class ProgressCtrl
 		: public Control
@@ -20,23 +20,23 @@ namespace castor3d
 		 *\param[in]	parent	The parent control, if any
 		*/
 		C3D_API ProgressCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, ProgressStyle * style
 			, ControlRPtr parent );
 		C3D_API ~ProgressCtrl()noexcept override;
 
-		C3D_API void setTitle( castor::U32String value );
-		C3D_API void setRange( castor::Range< int32_t > const & value );
+		C3D_API void setTitle( U32String value );
+		C3D_API void setRange( Range< int32_t > const & value );
 		C3D_API void setProgress( int32_t value );
-		C3D_API void setContainerBorderSize( castor::Point4ui const & value );
-		C3D_API void setBarBorderSize( castor::Point4ui const & value );
+		C3D_API void setContainerBorderSize( Point4ui const & value );
+		C3D_API void setBarBorderSize( Point4ui const & value );
 		C3D_API void setLeftToRight()noexcept;
 		C3D_API void setRightToLeft()noexcept;
 		C3D_API void setTopToBottom()noexcept;
 		C3D_API void setBottomToTop()noexcept;
 		C3D_API void showTitle( bool show )noexcept;
 
-		castor::Range< int32_t > const & getRange()const noexcept
+		Range< int32_t > const & getRange()const noexcept
 		{
 			return m_value.range();
 		}
@@ -53,27 +53,27 @@ namespace castor3d
 
 		bool isLeftToRight()const noexcept
 		{
-			return castor::checkFlag( getFlags(), ProgressFlag::eLeftRight );
+			return checkFlag( getFlags(), ProgressFlag::eLeftRight );
 		}
 
 		bool isRightToLeft()const noexcept
 		{
-			return castor::checkFlag( getFlags(), ProgressFlag::eRightLeft );
+			return checkFlag( getFlags(), ProgressFlag::eRightLeft );
 		}
 
 		bool isTopToBottom()const noexcept
 		{
-			return castor::checkFlag( getFlags(), ProgressFlag::eTopBottom );
+			return checkFlag( getFlags(), ProgressFlag::eTopBottom );
 		}
 
 		bool isBottomToTop()const noexcept
 		{
-			return castor::checkFlag( getFlags(), ProgressFlag::eBottomTop );
+			return checkFlag( getFlags(), ProgressFlag::eBottomTop );
 		}
 
 		bool hasTitle()const noexcept
 		{
-			return castor::checkFlag( getFlags(), ProgressFlag::eHasTitle );
+			return checkFlag( getFlags(), ProgressFlag::eHasTitle );
 		}
 
 		bool isVertical()const noexcept
@@ -124,22 +124,22 @@ namespace castor3d
 		/** Sets the background borders size.
 		 *\param[in]	value		The new value.
 		 */
-		void doSetBorderSize( castor::Point4ui const & value )override;
+		void doSetBorderSize( Point4ui const & value )override;
 
 		/** Sets the position
 		*\param[in]	value		The new value
 		*/
-		void doSetPosition( castor::Position const & value )override;
+		void doSetPosition( Position const & value )override;
 
 		/** Sets the size
 		*\param[in]	value	The new value
 		*/
-		void doSetSize( castor::Size const & value )override;
+		void doSetSize( Size const & value )override;
 
 		/** Sets the caption.
 		*\param[in]	caption	The new value
 		*/
-		void doSetCaption( castor::U32String const & caption )override;
+		void doSetCaption( U32String const & caption )override;
 
 		/** Sets the visibility
 		 *\remarks		Used for derived control specific behavious
@@ -156,7 +156,7 @@ namespace castor3d
 		PanelCtrlRPtr m_container{};
 		PanelCtrlRPtr m_progress{};
 		StaticCtrlRPtr m_text{};
-		castor::RangedValue< int32_t > m_value{ castor::makeRangedValue( 0, 0, 100 ) };
+		RangedValue< int32_t > m_value{ makeRangedValue( 0, 0, 100 ) };
 	};
 }
 

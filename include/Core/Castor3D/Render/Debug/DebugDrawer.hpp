@@ -14,10 +14,10 @@ See LICENSE file in root folder
 
 #include <RenderGraph/RunnablePasses/RenderPass.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class DebugDrawer
-		: public castor::OwnedBy< RenderTarget >
+		: public OwnedBy< RenderTarget >
 	{
 	public:
 		/**
@@ -126,7 +126,7 @@ namespace castor3d
 				ashes::DescriptorSetPtr descriptorSet;
 			};
 
-			castor::UnorderedMap< size_t, Instance > instances;
+			HashMap< size_t, Instance > instances;
 		};
 
 		struct AABBBuffer
@@ -146,7 +146,7 @@ namespace castor3d
 			ashes::WriteDescriptorSetArray writes;
 		};
 
-		using PipelinePtr = castor::RawUniquePtr< Pipeline >;
+		using PipelinePtr = RawUniquePtr< Pipeline >;
 
 		class FramePass
 			: public crg::RenderPass
@@ -185,8 +185,8 @@ namespace castor3d
 
 		private:
 			RenderDevice const & m_device;
-			castor::UnorderedMap< size_t, PipelinePtr > m_pipelines;
-			castor::Vector< AABBBuffer > m_aabbs;
+			HashMap< size_t, PipelinePtr > m_pipelines;
+			Vector< AABBBuffer > m_aabbs;
 			Object m_aabb;
 			bool m_pending{};
 		};

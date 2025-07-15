@@ -8,7 +8,7 @@
 #include <tchar.h>
 #include <iomanip>
 
-namespace castor
+namespace c3d
 {
 	void printCDBConsole( MbString const & toLog, bool newLine )
 	{
@@ -116,7 +116,7 @@ namespace castor
 	ProgramConsole::ProgramConsole( bool showConsole )
 	{
 		std::ios::sync_with_stdio( false );
-		m_console = castor::make_unique< Win32Console >( showConsole );
+		m_console = c3d::makeRawUnique< Win32Console >( showConsole );
 	}
 
 	void ProgramConsole::beginLog( LogType logLevel )

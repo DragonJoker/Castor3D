@@ -25,13 +25,13 @@ namespace GuiCommon
 			switch ( uniform.getType() )
 			{
 			case UniformType::eInt:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::RangedValue< int32_t > > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< c3d::RangedValue< int32_t > > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eUInt:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::RangedValue< uint32_t > > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< c3d::RangedValue< uint32_t > > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eFloat:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::RangedValue< float > > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< c3d::RangedValue< float > > > & >( uniform ).getValue() );
 				break;
 			default:
 				CU_Failure( "Unsupported UniformType" );
@@ -57,34 +57,34 @@ namespace GuiCommon
 				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< float > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eVec2f:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Point2f > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< c3d::Point2f > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eVec3f:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Point3f > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< c3d::Point3f > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eVec4f:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Point4f > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< c3d::Point4f > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eVec2i:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Point2i > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< c3d::Point2i > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eVec3i:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Point3i > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< c3d::Point3i > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eVec4i:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Point4i > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< c3d::Point4i > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eVec2ui:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Point2ui > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< c3d::Point2ui > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eVec3ui:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Point3ui > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< c3d::Point3ui > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eVec4ui:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Point4ui > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< c3d::Point4ui > > & >( uniform ).getValue() );
 				break;
 			case UniformType::eMat4f:
-				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< castor::Matrix4x4f > > & >( uniform ).getValue() );
+				property->addPropertyT( grid, name, &static_cast< UniformValue< HolderT< c3d::Matrix4x4f > > & >( uniform ).getValue() );
 				break;
 			default:
 				CU_Failure( "Unsupported UniformType" );
@@ -93,7 +93,7 @@ namespace GuiCommon
 		}
 	}
 
-	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( castor3d::Engine * engine
+	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( c3d::Engine * engine
 		, bool editable
 		, UniformValueBase & uniform )
 		: TreeItemProperty{ engine, editable }
@@ -119,11 +119,11 @@ namespace GuiCommon
 		{
 			if ( m_uniform.isRanged() )
 			{
-				addRangedValueProperty< castor::ChangeTracked >( this, grid, PROPERTY_VALUE, m_uniform );
+				addRangedValueProperty< c3d::ChangeTracked >( this, grid, PROPERTY_VALUE, m_uniform );
 			}
 			else
 			{
-				addValueProperty< castor::ChangeTracked >( this, grid, PROPERTY_VALUE, m_uniform );
+				addValueProperty< c3d::ChangeTracked >( this, grid, PROPERTY_VALUE, m_uniform );
 			}
 		}
 		else

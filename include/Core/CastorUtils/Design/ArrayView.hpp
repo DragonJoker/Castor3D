@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <iterator>
 
-namespace castor
+namespace c3d
 {
 	template< typename ValueT, typename IteratorTraitsT >
 	class ArrayView

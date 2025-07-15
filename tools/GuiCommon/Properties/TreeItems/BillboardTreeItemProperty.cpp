@@ -11,7 +11,7 @@
 namespace GuiCommon
 {
 	BillboardTreeItemProperty::BillboardTreeItemProperty( bool editable
-			, castor3d::Engine * engine )
+			, c3d::Engine * engine )
 		: TreeItemProperty{ engine, editable }
 	{
 		CreateTreeItemMenu();
@@ -32,8 +32,8 @@ namespace GuiCommon
 		auto & engine = *m_billboard->getEngine();
 
 		addProperty( grid, PROPERTY_CATEGORY + wxString( m_billboard->getName() ) );
-		addPropertyT( grid, PROPERTY_SIZE, m_billboard->getDimensions(), m_billboard, &castor3d::BillboardList::setDimensions );
+		addPropertyT( grid, PROPERTY_SIZE, m_billboard->getDimensions(), m_billboard, &c3d::BillboardList::setDimensions );
 		addMaterial( grid, engine, PROPERTY_MATERIAL, m_materials, m_billboard->getMaterial()
-			, [this]( castor3d::MaterialObs material ) { m_billboard->setMaterial( material ); } );
+			, [this]( c3d::MaterialObs material ) { m_billboard->setMaterial( material ); } );
 	}
 }

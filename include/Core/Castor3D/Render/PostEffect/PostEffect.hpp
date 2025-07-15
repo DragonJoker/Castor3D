@@ -13,11 +13,11 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/Named.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class PostEffect
-		: public castor::OwnedBy< RenderSystem >
-		, public castor::Named
+		: public OwnedBy< RenderSystem >
+		, public Named
 	{
 	public:
 		enum class Kind
@@ -50,9 +50,9 @@ namespace castor3d
 		 *\param[in]	passesCount		Le nombre de passes pour cet effet.
 		 *\param[in]	kind			Le type d'effet.
 		 */
-		C3D_API PostEffect( castor::String const & name
-			, castor::String const & groupName
-			, castor::String const & fullName
+		C3D_API PostEffect( String const & name
+			, String const & groupName
+			, String const & fullName
 			, RenderTarget & renderTarget
 			, RenderSystem & renderSystem
 			, Parameters const & parameters
@@ -77,8 +77,8 @@ namespace castor3d
 		 *\param[in]	file	Le fichier.
 		 *\param[in]	tabs	L'indentation actuelle.
 		 */
-		C3D_API bool writeInto( castor::StringStream & file
-			, castor::String const & tabs );
+		C3D_API bool writeInto( StringStream & file
+			, String const & tabs );
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
@@ -95,7 +95,7 @@ namespace castor3d
 		 *\param[in]	previousPass	La frame pass précédente.
 		 *\return		\p true if ok.
 		 */
-		C3D_API bool initialise( castor3d::RenderDevice const & device
+		C3D_API bool initialise( RenderDevice const & device
 			, Texture const & source
 			, Texture const & target
 			, crg::FramePass const & previousPass );
@@ -107,7 +107,7 @@ namespace castor3d
 		 *\brief		Fonction de nettoyage.
 		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API void cleanup( castor3d::RenderDevice const & device );
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\param[in, out]	updater	The update data.
@@ -165,7 +165,7 @@ namespace castor3d
 			return m_kind == Kind::eSRGB;
 		}
 
-		castor::String const & getFullName()const noexcept
+		String const & getFullName()const noexcept
 		{
 			return m_fullName;
 		}
@@ -193,7 +193,7 @@ namespace castor3d
 		 *\param[in]	previousPass	La frame pass précédente.
 		 *\return		\p false en cas d'échec.
 		 */
-		C3D_API virtual bool doInitialise( castor3d::RenderDevice const & device
+		C3D_API virtual bool doInitialise( RenderDevice const & device
 			, Texture const & source
 			, Texture const & target
 			, crg::FramePass const & previousPass ) = 0;
@@ -205,7 +205,7 @@ namespace castor3d
 		 *\brief		Fonction de nettoyage.
 		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API virtual void doCleanup( castor3d::RenderDevice const & device ) = 0;
+		C3D_API virtual void doCleanup( RenderDevice const & device ) = 0;
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -234,11 +234,11 @@ namespace castor3d
 		 *\param[in]	file	Le fichier.
 		 *\param[in]	tabs	L'indentation actuelle.
 		 */
-		C3D_API virtual bool doWriteInto( castor::StringStream & file
-			, castor::String const & tabs ) = 0;
+		C3D_API virtual bool doWriteInto( StringStream & file
+			, String const & tabs ) = 0;
 
 	protected:
-		castor::String m_fullName;
+		String m_fullName;
 		RenderTarget & m_renderTarget;
 		crg::FramePassGroup & m_graph;
 		uint32_t m_passesCount{ 1u };

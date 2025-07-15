@@ -15,9 +15,9 @@
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 
-CU_ImplementSmartPtr( castor3d, MorphComponent )
+CU_ImplementSmartPtr( c3d, MorphComponent )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -31,14 +31,14 @@ namespace castor3d
 			}
 
 			auto & points = buffer.positions;
-			castor::Point3f min{ points[0] };
-			castor::Point3f max{ points[0] };
+			Point3f min{ points[0] };
+			Point3f max{ points[0] };
 
 			if ( points.size() > 1 )
 			{
-				for ( auto const & vertex : castor::makeArrayView( &points[1], points.data() + points.size() ) )
+				for ( auto const & vertex : makeArrayView( &points[1], points.data() + points.size() ) )
 				{
-					castor::Point3f cur{ vertex };
+					Point3f cur{ vertex };
 					max[0] = std::max( cur[0], max[0] );
 					max[1] = std::max( cur[1], max[1] );
 					max[2] = std::max( cur[2], max[2] );
@@ -51,62 +51,62 @@ namespace castor3d
 			buffer.boundingBox.load( min, max );
 		}
 
-		static castor::Pair< MorphFlags, uint32_t > computeMorphFlags( SubmeshAnimationBuffer const & buffer )
+		static Pair< MorphFlags, uint32_t > computeMorphFlags( SubmeshAnimationBuffer const & buffer )
 		{
 			MorphFlags flags{};
 			uint32_t count{};
 
 			if ( !buffer.positions.empty() )
 			{
-				flags |= castor3d::MorphFlag::ePositions;
+				flags |= MorphFlag::ePositions;
 				++count;
 			}
 
 			if ( !buffer.normals.empty() )
 			{
-				flags |= castor3d::MorphFlag::eNormals;
+				flags |= MorphFlag::eNormals;
 				++count;
 			}
 
 			if ( !buffer.tangents.empty() )
 			{
-				flags |= castor3d::MorphFlag::eTangents;
+				flags |= MorphFlag::eTangents;
 				++count;
 			}
 
 			if ( !buffer.bitangents.empty() )
 			{
-				flags |= castor3d::MorphFlag::eBitangents;
+				flags |= MorphFlag::eBitangents;
 				++count;
 			}
 
 			if ( !buffer.texcoords0.empty() )
 			{
-				flags |= castor3d::MorphFlag::eTexcoords0;
+				flags |= MorphFlag::eTexcoords0;
 				++count;
 			}
 
 			if ( !buffer.texcoords1.empty() )
 			{
-				flags |= castor3d::MorphFlag::eTexcoords1;
+				flags |= MorphFlag::eTexcoords1;
 				++count;
 			}
 
 			if ( !buffer.texcoords2.empty() )
 			{
-				flags |= castor3d::MorphFlag::eTexcoords2;
+				flags |= MorphFlag::eTexcoords2;
 				++count;
 			}
 
 			if ( !buffer.texcoords3.empty() )
 			{
-				flags |= castor3d::MorphFlag::eTexcoords3;
+				flags |= MorphFlag::eTexcoords3;
 				++count;
 			}
 
 			if ( !buffer.colours.empty() )
 			{
-				flags |= castor3d::MorphFlag::eColours;
+				flags |= MorphFlag::eColours;
 				++count;
 			}
 
@@ -135,7 +135,7 @@ namespace castor3d
 
 		CU_Require( smshcompmorph::computeMorphFlags( data ).first == m_flags );
 		smshcompmorph::computeBoundingBox( data );
-		m_targets.emplace_back( castor::move( data ) );
+		m_targets.emplace_back( c3d::move( data ) );
 	}
 
 	bool MorphComponent::ComponentData::doInitialise( RenderDevice const & device )
@@ -145,7 +145,7 @@ namespace castor3d
 		if ( auto size = m_targetDataCount * vertexCount * MaxMorphTargets;
 			!m_buffer || size > m_buffer.getCount() )
 		{
-			m_buffer = device.bufferPool->getBuffer< castor::Point4f >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+			m_buffer = device.bufferPool->getBuffer< Point4f >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 				, size
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 		}
@@ -184,7 +184,7 @@ namespace castor3d
 					posIt != target.positions.end() )
 				{
 					posIt += index;
-					*bufIt = castor::Point4f{ *posIt };
+					*bufIt = Point4f{ *posIt };
 					++bufIt;
 				}
 
@@ -192,7 +192,7 @@ namespace castor3d
 					nmlIt != target.normals.end() )
 				{
 					nmlIt += index;
-					*bufIt = castor::Point4f{ *nmlIt };
+					*bufIt = Point4f{ *nmlIt };
 					++bufIt;
 				}
 
@@ -200,7 +200,7 @@ namespace castor3d
 					tanIt != target.tangents.end() )
 				{
 					tanIt += index;
-					*bufIt = castor::Point4f{ *tanIt };
+					*bufIt = Point4f{ *tanIt };
 					++bufIt;
 				}
 
@@ -208,7 +208,7 @@ namespace castor3d
 					binIt != target.bitangents.end() )
 				{
 					binIt += index;
-					*bufIt = castor::Point4f{ *binIt };
+					*bufIt = Point4f{ *binIt };
 					++bufIt;
 				}
 
@@ -216,7 +216,7 @@ namespace castor3d
 					tx0It != target.texcoords0.end() )
 				{
 					tx0It += index;
-					*bufIt = castor::Point4f{ *tx0It };
+					*bufIt = Point4f{ *tx0It };
 					++bufIt;
 				}
 
@@ -224,7 +224,7 @@ namespace castor3d
 					tx1It != target.texcoords1.end() )
 				{
 					tx1It += index;
-					*bufIt = castor::Point4f{ *tx1It };
+					*bufIt = Point4f{ *tx1It };
 					++bufIt;
 				}
 
@@ -232,7 +232,7 @@ namespace castor3d
 					tx2It != target.texcoords2.end() )
 				{
 					tx2It += index;
-					*bufIt = castor::Point4f{ *tx2It };
+					*bufIt = Point4f{ *tx2It };
 					++bufIt;
 				}
 
@@ -240,7 +240,7 @@ namespace castor3d
 					tx3It != target.texcoords3.end() )
 				{
 					tx3It += index;
-					*bufIt = castor::Point4f{ *tx3It };
+					*bufIt = Point4f{ *tx3It };
 					++bufIt;
 				}
 
@@ -248,7 +248,7 @@ namespace castor3d
 					colIt != target.colours.end() )
 				{
 					colIt += index;
-					*bufIt = castor::Point4f{ *colIt };
+					*bufIt = Point4f{ *colIt };
 					++bufIt;
 				}
 			}
@@ -262,19 +262,19 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const MorphComponent::TypeName = C3D_MakeSubmeshComponentName( "morph" );
+	String const MorphComponent::TypeName = C3D_MakeSubmeshComponentName( "morph" );
 
 	MorphComponent::MorphComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, TypeName
-			, castor::make_unique< ComponentData >( submesh ) }
+			, makeRawUnique< ComponentData >( submesh ) }
 	{
 	}
 
 	SubmeshComponentUPtr MorphComponent::clone( Submesh & submesh )const
 	{
-		auto result = castor::makeUnique< MorphComponent >( submesh );
+		auto result = makeUnique< MorphComponent >( submesh );
 		getData().copy( &result->getData() );
-		return castor::ptrRefCast< SubmeshComponent >( result );
+		return ptrRefCast< SubmeshComponent >( result );
 	}
 
 	//*********************************************************************************************

@@ -12,33 +12,33 @@ See LICENSE file in root folder
 
 #include <unordered_map>
 
-namespace castor3d
+namespace c3d
 {
 	C3D_API void uploadBaseData( SubmeshData submeshData
 		, Submesh const & submesh
-		, castor::Point4fArray const & data
-		, castor::Point4fArray & up
+		, Point4fArray const & data
+		, Point4fArray & up
 		, UploadData & uploader );
 	C3D_API void uploadBaseData( SubmeshData submeshData
 		, Submesh const & submesh
-		, castor::Point3fArray const & data
-		, castor::Point4fArray & up
+		, Point3fArray const & data
+		, Point4fArray & up
 		, UploadData & uploader );
 	C3D_API void gatherBaseDataBuffer( SubmeshData submeshData
 		, ObjectBufferOffset const & bufferOffsets
 		, PipelineFlags const & flags
 		, ashes::BufferCRefArray & buffers
-		, castor::Vector< uint64_t > & offsets
+		, Vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding
 		, uint32_t & currentLocation
-		, castor::UnorderedMap< size_t, ashes::PipelineVertexInputStateCreateInfo > & cache );
+		, HashMap< size_t, ashes::PipelineVertexInputStateCreateInfo > & cache );
 	C3D_API void fillBaseSurfaceType( SubmeshData submeshData
 		, sdw::type::IOStruct & type
 		, uint32_t & index );
 	C3D_API void fillBaseSurfaceType( SubmeshData submeshData
 		, sdw::type::BaseStruct & type );
-	C3D_API castor::String getBaseDataComponentName( SubmeshData submeshData );
+	C3D_API String getBaseDataComponentName( SubmeshData submeshData );
 
 	template< SubmeshData SubmeshDataT, typename DataT >
 	class BaseDataComponentT
@@ -67,13 +67,13 @@ namespace castor3d
 		{
 			using SubmeshComponentData::SubmeshComponentData;
 			/**
-			 *\copydoc		castor3d::SubmeshComponentData::gather
+			 *\copydoc		SubmeshComponentData::gather
 			 */
 			void gather( PipelineFlags const & flags
 				, Pass const & pass
 				, ObjectBufferOffset const & bufferOffsets
 				, ashes::BufferCRefArray & buffers
-				, castor::Vector< uint64_t > & offsets
+				, Vector< uint64_t > & offsets
 				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 				, uint32_t & currentBinding
 				, uint32_t & currentLocation )override
@@ -89,26 +89,26 @@ namespace castor3d
 					, m_layouts );
 			}
 			/**
-			 *\copydoc		castor3d::SubmeshComponentData::copy
+			 *\copydoc		SubmeshComponentData::copy
 			 */
 			void copy( SubmeshComponentDataRPtr data )const override
 			{
 				static_cast< ComponentData * >( data )->m_data = m_data;
 			}
 
-			void setData( castor::Vector< DataT > const & data )
+			void setData( Vector< DataT > const & data )
 			{
 				m_data = data;
 				needsUpdate();
 			}
 
-			castor::Vector< DataT > & getData()
+			Vector< DataT > & getData()
 			{
 				needsUpdate();
 				return m_data;
 			}
 
-			castor::Vector< DataT > const & getData()const
+			Vector< DataT > const & getData()const
 			{
 				return m_data;
 			}
@@ -130,9 +130,9 @@ namespace castor3d
 			}
 
 		private:
-			castor::Vector< DataT > m_data;
-			castor::Point4fArray m_up;
-			castor::UnorderedMap< size_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
+			Vector< DataT > m_data;
+			Point4fArray m_up;
+			HashMap< size_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
 		};
 
 		class Plugin
@@ -143,7 +143,7 @@ namespace castor3d
 
 			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
 			{
-				return castor::makeUniqueDerived< SubmeshComponent, BaseDataComponentT< SubmeshDataT, DataT > >( submesh );
+				return makeUniqueDerived< SubmeshComponent, BaseDataComponentT< SubmeshDataT, DataT > >( submesh );
 			}
 
 			SubmeshComponentFlag getPositionFlag()const noexcept override
@@ -198,13 +198,13 @@ namespace castor3d
 
 			shader::SubmeshVertexSurfaceShaderPtr createVertexSurfaceShader()const override
 			{
-				return castor::make_unique< SurfaceShader >();
+				return makeRawUnique< SurfaceShader >();
 			}
 		};
 
 		static SubmeshComponentPluginUPtr createPlugin( SubmeshComponentRegister const & submeshComponents )
 		{
-			return castor::makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
+			return makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
 		}
 		/**
 		 *\~english
@@ -216,17 +216,17 @@ namespace castor3d
 		 */
 		explicit BaseDataComponentT( Submesh & submesh )
 			: SubmeshComponent{ submesh, TypeName
-				, castor::make_unique< ComponentData >( submesh ) }
+				, makeRawUnique< ComponentData >( submesh ) }
 		{
 		}
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::clone
+		 *\copydoc		SubmeshComponent::clone
 		 */
 		SubmeshComponentUPtr clone( Submesh & submesh )const override
 		{
-			auto result = castor::makeUnique< BaseDataComponentT >( submesh );
+			auto result = makeUnique< BaseDataComponentT >( submesh );
 			getData().copy( &result->getData() );
-			return castor::ptrRefCast< SubmeshComponent >( result );
+			return ptrRefCast< SubmeshComponent >( result );
 		}
 
 		ComponentData & getData()const noexcept
@@ -235,11 +235,11 @@ namespace castor3d
 		}
 
 	public:
-		static castor::String const TypeName;
+		static String const TypeName;
 	};
 
 	template< SubmeshData SubmeshDataT, typename DataT >
-	castor::String const BaseDataComponentT< SubmeshDataT, DataT >::TypeName{ []()
+	String const BaseDataComponentT< SubmeshDataT, DataT >::TypeName{ []()
 		{
 			return getBaseDataComponentName( SubmeshDataT );
 		}() };

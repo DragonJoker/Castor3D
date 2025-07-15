@@ -45,9 +45,9 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
-CU_ImplementSmartPtr( castor3d, VoxelizePass )
+CU_ImplementSmartPtr( c3d, VoxelizePass )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -78,7 +78,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const VoxelizePass::Type = cuT( "c3d.voxelize" );
+	String const VoxelizePass::Type = cuT( "c3d.voxelize" );
 
 	VoxelizePass::VoxelizePass( crg::FramePass const & pass
 		, crg::GraphContext & context
@@ -269,7 +269,7 @@ namespace castor3d
 			, passShaders
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
-		auto index = uint32_t( castor3d::GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
+		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 		++index;
 		C3D_Voxelizer( writer
 			, index++
@@ -298,12 +298,12 @@ namespace castor3d
 				, sdw::VertexOutT< shader::VoxelSurfaceT > out )
 				{
 					auto bbPositions = writer.declConstantArray( "bbPositions"
-						, castor::Vector< sdw::Vec3 >{ vec3( -0.5_f, -0.5_f, 1.0_f )
+						, Vector< sdw::Vec3 >{ vec3( -0.5_f, -0.5_f, 1.0_f )
 						, vec3( -0.5_f, +0.5_f, 1.0_f )
 						, vec3( +0.5_f, -0.5_f, 1.0_f )
 						, vec3( +0.5_f, +0.5_f, 1.0_f ) } );
 					auto bbTexcoords = writer.declConstantArray( "bbTexcoords"
-						, castor::Vector< sdw::Vec2 >{ vec2( 0.0_f, 0.0_f )
+						, Vector< sdw::Vec2 >{ vec2( 0.0_f, 0.0_f )
 						, vec2( 0.0_f, 1.0_f )
 						, vec2( 1.0_f, 0.0_f )
 						, vec2( 1.0_f, 1.0_f ) } );
@@ -351,7 +351,7 @@ namespace castor3d
 						, c3d_cameraData.worldToCurView( out.vtx.position ) );
 					out.viewPosition = viewPosition;
 					out.normal = normalize( c3d_cameraData.getPosToCamera( curBbcenter ) );
-					auto passMultipliers = castor::Vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
+					auto passMultipliers = Vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
 						, vec4( 0.0_f )
 						, vec4( 0.0_f )
 						, vec4( 0.0_f ) };
@@ -504,7 +504,7 @@ namespace castor3d
 			, flags
 			, getComponentsMask()
 			, utils };
-		auto addIndex = uint32_t( castor3d::GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
+		auto addIndex = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera

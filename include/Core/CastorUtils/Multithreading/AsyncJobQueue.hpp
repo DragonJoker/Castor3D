@@ -11,13 +11,13 @@ See LICENSE file in root folder
 #include <atomic>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	class AsyncJobQueue
 		: public NonMovable
 	{
 	public:
-		using Job = castor::Function< void() >;
+		using Job = c3d::Function< void() >;
 		using JobArray = Vector< Job >;
 
 	public:
@@ -79,7 +79,7 @@ namespace castor
 		std::atomic_bool m_ended{};
 		JobArray m_pending;
 		ThreadPool m_pool;
-		castor::Mutex m_mutex;
+		c3d::Mutex m_mutex;
 		std::thread m_worker;
 	};
 }

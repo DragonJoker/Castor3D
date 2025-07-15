@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Math/SquareMatrix.hpp"
 #include "CastorUtils/Math/Point.hpp"
 
-namespace castor
+namespace c3d
 {
 	class Grid
 	{

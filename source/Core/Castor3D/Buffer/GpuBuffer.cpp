@@ -8,14 +8,14 @@
 
 #include <ashespp/Command/CommandBuffer.hpp>
 
-CU_ImplementSmartPtr( castor3d, GpuBuddyBuffer )
-CU_ImplementSmartPtr( castor3d, GpuBufferBase )
+CU_ImplementSmartPtr( c3d, GpuBuddyBuffer )
+CU_ImplementSmartPtr( c3d, GpuBufferBase )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 	
-	castor::Pair< VkDeviceSize, VkDeviceSize > adaptRange( VkDeviceSize offset
+	Pair< VkDeviceSize, VkDeviceSize > adaptRange( VkDeviceSize offset
 		, VkDeviceSize size
 		, VkDeviceSize align )
 	{
@@ -36,7 +36,7 @@ namespace castor3d
 	void copyBuffer( ashes::CommandBuffer const & commandBuffer
 		, ashes::BufferBase const & src
 		, ashes::BufferBase const & dst
-		, castor::Vector< VkBufferCopy > const & regions
+		, Vector< VkBufferCopy > const & regions
 		, AccessFlags dstAccessFlags
 		, PipelineStageFlags dstPipelineFlags )
 	{
@@ -54,9 +54,9 @@ namespace castor3d
 	}
 
 	void updateBuffer( ashes::CommandBuffer const & commandBuffer
-		, castor::ByteArray src
+		, ByteArray src
 		, ashes::BufferBase const & dst
-		, castor::Vector< VkBufferCopy > const & regions
+		, Vector< VkBufferCopy > const & regions
 		, AccessFlags dstAccessFlags
 		, PipelineStageFlags dstPipelineFlags )
 	{
@@ -83,13 +83,13 @@ namespace castor3d
 	GpuBufferBase::GpuBufferBase( RenderSystem const & renderSystem
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags memoryFlags
-		, castor::String const & debugName
+		, String const & debugName
 		, ashes::QueueShare sharingMode
 		, VkDeviceSize allocatedSize )
 		: m_renderSystem{ renderSystem }
 		, m_usage{ usage }
 		, m_memoryFlags{ memoryFlags }
-		, m_sharingMode{ castor::move( sharingMode ) }
+		, m_sharingMode{ c3d::move( sharingMode ) }
 		, m_allocatedSize{ allocatedSize }
 		, m_buffer{ makeBuffer< uint8_t >( renderSystem.getRenderDevice()
 			, uint32_t( m_allocatedSize )
@@ -98,15 +98,15 @@ namespace castor3d
 			, debugName
 			, m_sharingMode ) }
 		, m_ownData( size_t( m_allocatedSize ) )
-		, m_data{ castor::makeArrayView( m_ownData.begin()
+		, m_data{ makeArrayView( m_ownData.begin()
 			, m_ownData.end() ) }
 	{
 	}
 
 	void GpuBufferBase::upload( UploadData & uploader )
 	{
-		castor::UnorderedMap< size_t, MemoryRangeArray > allRanges;
-		castor::swap( m_ranges, allRanges );
+		HashMap< size_t, MemoryRangeArray > allRanges;
+		c3d::swap( m_ranges, allRanges );
 
 		for ( auto const & [id, ranges] : allRanges )
 		{
@@ -140,7 +140,7 @@ namespace castor3d
 		, AccessState dstAccessState )
 	{
 		auto hash = std::hash< int32_t >{}( int32_t( dstAccessState.access ) );
-		hash = castor::hashCombine( hash, int32_t( dstAccessState.pipelineStage ) );
+		hash = hashCombine( hash, int32_t( dstAccessState.pipelineStage ) );
 		auto & ranges = m_ranges.try_emplace( hash ).first->second;
 		auto it = std::find_if( ranges.begin()
 			, ranges.end()

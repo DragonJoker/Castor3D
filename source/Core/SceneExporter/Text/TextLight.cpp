@@ -9,10 +9,8 @@
 
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< Light >::TextWriter( String const & tabs )
 		: TextWriterT< Light >{ tabs }
 	{
@@ -26,7 +24,7 @@ namespace castor
 
 		if ( auto block{ beginBlock( file, cuT( "light" ), light.getName() ) } )
 		{
-			result = write( file, cuT( "type" ), castor3d::getName( light.getLightType() ) )
+			result = write( file, cuT( "type" ), getName( light.getLightType() ) )
 				&& writeName( file, cuT( "parent" ), light.getParent()->getName() )
 				&& writeNamedSub( file, cuT( "colour" ), light.getColour() );
 

@@ -31,13 +31,13 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementSmartPtr( castor3d, DepthPass )
+CU_ImplementSmartPtr( c3d, DepthPass )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
-	castor::String const DepthPass::Type = cuT( "c3d.depth" );
+	String const DepthPass::Type = cuT( "c3d.depth" );
 
 	DepthPass::DepthPass( RenderTechnique * parent
 		, crg::FramePass const & pass
@@ -54,7 +54,7 @@ namespace castor3d
 			, device
 			, Type
 			, {}
-			, castor::move( targetDepth )
+			, c3d::move( targetDepth )
 			, renderPassDesc
 			, { false, ssaoConfig } }
 	{

@@ -17,10 +17,10 @@ See LICENSE file in root folder
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ShadowMap
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
 		struct PassData
@@ -28,15 +28,15 @@ namespace castor3d
 			PassData() = default;
 
 			explicit PassData( SceneCullerUPtr culler )
-				: ownCuller{ castor::move( culler ) }
+				: ownCuller{ c3d::move( culler ) }
 				, culler{ ownCuller.get() }
 			{
 			}
 
 			PassData( ViewportUPtr viewport
 				, SceneCullerUPtr culler )
-				: viewport{ castor::move( viewport ) }
-				, ownCuller{ castor::move( culler ) }
+				: viewport{ c3d::move( viewport ) }
+				, ownCuller{ c3d::move( culler ) }
 				, culler{ ownCuller.get() }
 			{
 			}
@@ -52,20 +52,20 @@ namespace castor3d
 			SceneCuller * culler{};
 			ShadowMapPass * pass{};
 		};
-		using PassDataPtr = castor::RawUniquePtr< PassData >;
+		using PassDataPtr = RawUniquePtr< PassData >;
 
 		struct Passes
 		{
-			castor::Vector< PassDataPtr > passes;
-			castor::Vector< castor::RawUniquePtr< crg::FrameGraph > > graphs;
-			castor::Vector< crg::RunnableGraphPtr > runnables;
-			castor::Vector< GaussianBlurUPtr > blurs;
+			Vector< PassDataPtr > passes;
+			Vector< RawUniquePtr< crg::FrameGraph > > graphs;
+			Vector< crg::RunnableGraphPtr > runnables;
+			Vector< GaussianBlurUPtr > blurs;
 		};
 
 		struct AllPasses
 		{
-			castor::Vector< castor::RawUniquePtr< CameraUbo > > cameraUbos;
-			castor::Vector< CameraUPtr > cameras;
+			Vector< RawUniquePtr< CameraUbo > > cameraUbos;
+			Vector< CameraUPtr > cameras;
 			Passes staticNodes;
 			Passes otherNodes;
 		};
@@ -98,7 +98,7 @@ namespace castor3d
 			, Scene & scene
 			, LightType lightType
 			, ImageCreateFlags createFlags
-			, castor::Size const & size
+			, Size const & size
 			, uint32_t layerCount
 			, uint32_t count );
 		/**
@@ -232,12 +232,12 @@ namespace castor3d
 		RenderDevice const & m_device;
 		crg::ResourcesCache & m_resources;
 		Scene & m_scene;
-		castor::String m_name;
+		String m_name;
 		LightType m_lightType;
 		ShadowMapResult m_staticsResult;
 		ShadowMapResult m_result;
 		uint32_t m_count;
-		castor::Array< AllPasses, 4u > m_passes;
+		Array< AllPasses, 4u > m_passes;
 		uint32_t m_passesIndex{};
 	};
 }

@@ -16,7 +16,7 @@ See LICENSE file in root folder
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class SsaoRawAOPass
 	{
@@ -121,7 +121,7 @@ namespace castor3d
 		{
 			Program( RenderDevice const & device
 				, bool useNormalsBuffer
-				, castor::String const & prefix );
+				, String const & prefix );
 
 			ProgramModule shader;
 			ashes::PipelineShaderStageCreateInfoArray stages;
@@ -136,7 +136,7 @@ namespace castor3d
 		Extent2D m_size;
 		Texture m_result;
 		Texture m_bentNormals;
-		castor::Array< Program, 2u > m_programs;
+		Array< Program, 2u > m_programs;
 		crg::FramePass const * m_lastPass{};
 	};
 }

@@ -8,7 +8,7 @@
 
 namespace GuiCommon
 {
-	MaterialTreeItemProperty::MaterialTreeItemProperty( bool editable, castor3d::Engine * engine )
+	MaterialTreeItemProperty::MaterialTreeItemProperty( bool editable, c3d::Engine * engine )
 		: TreeItemProperty( engine, editable )
 	{
 		CreateTreeItemMenu();
@@ -22,7 +22,7 @@ namespace GuiCommon
 		if ( m_material )
 		{
 			addProperty( grid, PROPERTY_CATEGORY_MATERIAL + wxString( m_material->getName() ) );
-			addPropertyT( grid, PROPERTY_MATERIAL_VISIBLE, m_material->isVisible(), m_material, &castor3d::Material::setVisible );
+			addPropertyT( grid, PROPERTY_MATERIAL_VISIBLE, m_material->isVisible(), m_material, &c3d::Material::setVisible );
 		}
 	}
 }

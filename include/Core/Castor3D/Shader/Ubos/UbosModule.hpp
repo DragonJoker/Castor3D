@@ -12,7 +12,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Shader */
 	//@{
@@ -83,7 +83,7 @@ namespace castor3d
 	*/
 	struct BillboardUboConfiguration
 	{
-		castor::Point2f dimensions{};
+		Point2f dimensions{};
 		uint32_t isSpherical{};
 		uint32_t isFixedSize{};
 	};
@@ -106,7 +106,7 @@ namespace castor3d
 	*/
 	struct FontUboConfiguration
 	{
-		castor::Point2f imgSize{};
+		Point2f imgSize{};
 		uint32_t sdfFont{};
 		float pixelRange{};
 	};
@@ -143,9 +143,9 @@ namespace castor3d
 	*/
 	struct LpvGridConfigUboConfiguration
 	{
-		castor::Point4f minVolumeCorner{};
-		castor::Point4f gridSizeAtt{};
-		castor::Point4f cameraPos{};
+		Point4f minVolumeCorner{};
+		Point4f gridSizeAtt{};
+		Point4f cameraPos{};
 	};
 	/**
 	*\~english
@@ -166,7 +166,7 @@ namespace castor3d
 	*/
 	struct LpvLightConfigUboConfiguration
 	{
-		castor::Matrix4x4f lightView{};
+		Matrix4x4f lightView{};
 		float texelAreaModifier = 1.0f;
 		float tanFovXHalf = 1.0f;
 		float tanFovYHalf = 1.0f;
@@ -182,9 +182,9 @@ namespace castor3d
 	*/
 	struct LayeredLpvGridConfigUboConfiguration
 	{
-		castor::Array< castor::Point4f, LpvMaxCascadesCount > allMinVolumeCorners{};
-		castor::Point4f allCellSizes{};
-		castor::Point4f gridSizeAtt{};
+		Array< Point4f, LpvMaxCascadesCount > allMinVolumeCorners{};
+		Point4f allCellSizes{};
+		Point4f gridSizeAtt{};
 	};
 	/**
 	*\brief
@@ -213,20 +213,20 @@ namespace castor3d
 	*/
 	struct CameraUboConfiguration
 	{
-		castor::Array< castor::Point4f, 6u > frustumPlanes{};
-		castor::Matrix4x4f projection{};
-		castor::Matrix4x4f invProjection{};
-		castor::Matrix4x4f curView{};
-		castor::Matrix4x4f invCurView{};
-		castor::Matrix4x4f prvView{};
-		castor::Matrix4x4f invPrvView{};
-		castor::Matrix4x4f curViewProj{};
-		castor::Matrix4x4f invCurViewProj{};
-		castor::Matrix4x4f prvViewProj{};
-		castor::Matrix4x4f invPrvViewProj{};
-		castor::Point2ui size{};
-		castor::Point2f jitter{};
-		castor::Point3f position{};
+		Array< Point4f, 6u > frustumPlanes{};
+		Matrix4x4f projection{};
+		Matrix4x4f invProjection{};
+		Matrix4x4f curView{};
+		Matrix4x4f invCurView{};
+		Matrix4x4f prvView{};
+		Matrix4x4f invPrvView{};
+		Matrix4x4f curViewProj{};
+		Matrix4x4f invCurViewProj{};
+		Matrix4x4f prvViewProj{};
+		Matrix4x4f invPrvViewProj{};
+		Point2ui size{};
+		Point2f jitter{};
+		Point3f position{};
 		float gamma{};
 		uint32_t debugIndex{};
 		float pad{};
@@ -253,13 +253,13 @@ namespace castor3d
 	struct ClustersUboConfiguration
 	{
 		// The 3D dimensions of the cluster grid.
-		castor::Point3ui gridDim{};
+		Point3ui gridDim{};
 		// The clusters Z split scheme.
 		uint32_t splitScheme{};
 		// The size of a cluster in screen space (pixels).
-		castor::Point2ui clusterSize{};
+		Point2ui clusterSize{};
 		// The distance to the near and far clipping plane. (Used for computing the index in the cluster grid)
-		castor::Point2f viewNearFar{};
+		Point2f viewNearFar{};
 		// The number of BVH levels for point lights.
 		uint32_t pointLightLevelsCount{};
 		// The number of BVH levels for spot lights.
@@ -307,14 +307,14 @@ namespace castor3d
 	*/
 	struct ModelBufferConfiguration
 	{
-		castor::Matrix4x4f prvModel{};
-		castor::Matrix4x4f curModel{};
-		castor::Matrix4x4f normal{};
+		Matrix4x4f prvModel{};
+		Matrix4x4f curModel{};
+		Matrix4x4f normal{};
 		uint32_t materialId{};
 		uint32_t shadowReceiver{};
 		uint32_t envMapId{};
 		uint32_t vertexOffset{};
-		castor::Point3f scale{};
+		Point3f scale{};
 		uint32_t meshletCount{};
 		uint32_t indexOffset{};
 		uint32_t meshletOffset{};
@@ -341,11 +341,11 @@ namespace castor3d
 	struct MorphingWeightsConfiguration
 	{
 		// Contains the actual number of weights
-		castor::Point4ui morphTargetsData{};
+		Point4ui morphTargetsData{};
 		// x4 because the shader stores a uvec4[MaxMorphTargets]
-		castor::Array< uint32_t, MaxMorphTargets * 4u > morphTargetsIndices{};
+		Array< uint32_t, MaxMorphTargets * 4u > morphTargetsIndices{};
 		// x4 because the shader stores a vec4[MaxMorphTargets]
-		castor::Array< float, MaxMorphTargets * 4u > morphTargetsWeights{};
+		Array< float, MaxMorphTargets * 4u > morphTargetsWeights{};
 	};
 	/**
 	*\~english
@@ -381,14 +381,14 @@ namespace castor3d
 	*/
 	struct OverlayUboConfiguration
 	{
-		castor::Point4f uv{};
-		castor::Point4f parentRect{};
-		castor::Point4f renderArea{};
-		castor::Point2f relativePosition{};
-		castor::Point2f relativeSize{};
-		castor::Point4f border{};
-		castor::Point4f borderInnerUV{};
-		castor::Point4f borderOuterUV{};
+		Point4f uv{};
+		Point4f parentRect{};
+		Point4f renderArea{};
+		Point2f relativePosition{};
+		Point2f relativeSize{};
+		Point4f border{};
+		Point4f borderInnerUV{};
+		Point4f borderOuterUV{};
 		uint32_t vertexOffset{};
 		uint32_t materialId{};
 		uint32_t borderPosition{};
@@ -441,9 +441,9 @@ namespace castor3d
 	*/
 	struct SceneUboConfiguration
 	{
-		castor::Point3f ambientLight{};
+		Point3f ambientLight{};
 		uint32_t fogType{};
-		castor::Point3f backgroundColour{};
+		Point3f backgroundColour{};
 		float fogDensity{};
 	};
 	/**
@@ -465,9 +465,9 @@ namespace castor3d
 	*/
 	struct ShadowMapUboConfiguration
 	{
-		castor::Matrix4x4f lightProjection{};
-		castor::Matrix4x4f lightView{};
-		castor::Point4f lightPosFarPlane{};
+		Matrix4x4f lightProjection{};
+		Matrix4x4f lightView{};
+		Point4f lightPosFarPlane{};
 		uint32_t lightOffset{};
 	};
 	/**
@@ -489,7 +489,7 @@ namespace castor3d
 	*/
 	struct SkinningTransformsConfiguration
 	{
-		castor::Array< castor::Matrix4x4f, MaxBonesCount > bonesMatrix{};
+		Array< Matrix4x4f, MaxBonesCount > bonesMatrix{};
 	};
 	/**
 	*\~english
@@ -502,17 +502,17 @@ namespace castor3d
 	struct VoxelizerUboConfiguration;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, FontUbo, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LayeredLpvGridConfigUbo, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LpvGridConfigUbo, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LpvLightConfigUbo, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SceneUbo, C3D_API );
+	CU_DeclareSmartPtr( c3d, FontUbo, C3D_API );
+	CU_DeclareSmartPtr( c3d, LayeredLpvGridConfigUbo, C3D_API );
+	CU_DeclareSmartPtr( c3d, LpvGridConfigUbo, C3D_API );
+	CU_DeclareSmartPtr( c3d, LpvLightConfigUbo, C3D_API );
+	CU_DeclareSmartPtr( c3d, SceneUbo, C3D_API );
 
 	CU_DeclareVector( LpvLightConfigUbo, LpvLightConfigUbo );
 	CU_DeclareVector( LpvGridConfigUbo, LpvGridConfigUbo );
 
 	// Needs to be last, because of namespace changes...
-	CU_DeclareSmartPtr( castor3d::shader, ClustersData, C3D_API );
+	CU_DeclareSmartPtr( c3d::shader, ClustersData, C3D_API );
 	/** @endcond */
 
 	//@}

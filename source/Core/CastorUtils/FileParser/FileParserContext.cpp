@@ -2,9 +2,9 @@
 
 #include "CastorUtils/FileParser/FileParser.hpp"
 
-CU_ImplementSmartPtr( castor, FileParserContext )
+CU_ImplementSmartPtr( c3d, FileParserContext )
 
-namespace castor
+namespace c3d
 {
 	FileParserContext::FileParserContext( FileParser & pparser
 		, Path const & ppath )

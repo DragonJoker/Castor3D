@@ -1,6 +1,6 @@
 #include "Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	ParticleDeclaration::ParticleDeclaration()
 		: ParticleDeclaration( nullptr, 0 )

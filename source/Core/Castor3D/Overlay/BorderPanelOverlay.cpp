@@ -11,9 +11,9 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementSmartPtr( castor3d, BorderPanelOverlay )
+CU_ImplementSmartPtr( c3d, BorderPanelOverlay )
 
-namespace castor3d
+namespace c3d
 {
 	BorderPanelOverlay::BorderPanelOverlay()
 		: OverlayCategory( OverlayType::eBorderPanel )
@@ -22,7 +22,7 @@ namespace castor3d
 
 	OverlayCategoryUPtr BorderPanelOverlay::create()
 	{
-		return castor::makeUniqueDerived< OverlayCategory, BorderPanelOverlay >();
+		return makeUniqueDerived< OverlayCategory, BorderPanelOverlay >();
 	}
 
 	void BorderPanelOverlay::accept( OverlayVisitor & visitor )const
@@ -45,22 +45,22 @@ namespace castor3d
 		m_borderMaterial = material;
 	}
 
-	castor::Point4ui BorderPanelOverlay::getAbsoluteBorderSize( castor::Size const & size )const
+	Point4ui BorderPanelOverlay::getAbsoluteBorderSize( Size const & size )const
 	{
 		auto absoluteSize = getAbsoluteBorderSize();
-		return castor::Point4ui{ int32_t( absoluteSize->x * size->x )
+		return Point4ui{ int32_t( absoluteSize->x * size->x )
 			, int32_t( absoluteSize->y * size->y )
 			, int32_t( absoluteSize->z * size->x )
 			, int32_t( absoluteSize->w * size->y ) };
 	}
 
-	castor::Point4d BorderPanelOverlay::getAbsoluteBorderSize()const
+	Point4d BorderPanelOverlay::getAbsoluteBorderSize()const
 	{
-		castor::Point4d absoluteSize = getRelativeBorderSize();
+		Point4d absoluteSize = getRelativeBorderSize();
 
 		if ( auto parent = getOverlay().getParent() )
 		{
-			castor::Point2d parentSize = parent->getAbsoluteSize();
+			Point2d parentSize = parent->getAbsoluteSize();
 			absoluteSize->x *= parentSize->x;
 			absoluteSize->y *= parentSize->y;
 			absoluteSize->z *= parentSize->x;
@@ -70,7 +70,7 @@ namespace castor3d
 		return absoluteSize;
 	}
 
-	castor::Point4ui BorderPanelOverlay::computePixelBorderSize()const
+	Point4ui BorderPanelOverlay::computePixelBorderSize()const
 	{
 		if ( m_pxBorderSize )
 		{
@@ -80,7 +80,7 @@ namespace castor3d
 		auto parentSize = getOverlay().getParent()
 			? getOverlay().getParent()->getAbsoluteSize( m_computeSize )
 			: m_computeSize;
-		return castor::Point4ui{ uint32_t( double( parentSize->x ) * m_relBorderSize->x )
+		return Point4ui{ uint32_t( double( parentSize->x ) * m_relBorderSize->x )
 			, uint32_t( double( parentSize->y ) * m_relBorderSize->y )
 			, uint32_t( double( parentSize->x ) * m_relBorderSize->z )
 			, uint32_t( double( parentSize->y ) * m_relBorderSize->w ) };
@@ -254,8 +254,8 @@ namespace castor3d
 		if ( m_pxBorderSize
 			&& ( isSizeChanged() || isChanged() || renderer.isSizeChanged() ) )
 		{
-			castor::Size renderSize = renderer.getSize();
-			castor::Point2d parentSize = getParentSize() * renderSize;
+			Size renderSize = renderer.getSize();
+			Point2d parentSize = getParentSize() * renderSize;
 			bool changed = m_borderChanged;
 			auto & pxBorderSize = *m_pxBorderSize;
 			auto relBorderSize = getRelativeBorderSize();
@@ -284,7 +284,7 @@ namespace castor3d
 		}
 	}
 
-	void BorderPanelOverlay::doUpdateClientArea( castor::Point4d & clientArea )const
+	void BorderPanelOverlay::doUpdateClientArea( Point4d & clientArea )const
 	{
 		auto border = getAbsoluteBorderSize();
 
@@ -296,7 +296,7 @@ namespace castor3d
 		case BorderPosition::eExternal:
 			break;
 		default:
-			border = castor::Point4d{};
+			border = Point4d{};
 			break;
 		}
 

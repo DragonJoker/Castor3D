@@ -11,34 +11,34 @@
 #include <RenderGraph/GraphContext.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 
-CU_ImplementSmartPtr( castor3d, PostEffect )
+CU_ImplementSmartPtr( c3d, PostEffect )
 
-namespace castor3d
+namespace c3d
 {
-	PostEffect::PostEffect( castor::String const & name
-		, castor::String const & groupName
-		, castor::String const & fullName
+	PostEffect::PostEffect( String const & name
+		, String const & groupName
+		, String const & fullName
 		, RenderTarget & renderTarget
 		, RenderSystem & renderSystem
 		, CU_UnusedParam( Parameters const &, parameters )
 		, uint32_t passesCount
 		, Kind kind )
-		: castor::OwnedBy< RenderSystem >{ renderSystem }
-		, castor::Named{ name }
+		: OwnedBy< RenderSystem >{ renderSystem }
+		, Named{ name }
 		, m_fullName{ fullName }
 		, m_renderTarget{ renderTarget }
-		, m_graph{ m_renderTarget.getGraph().createPassGroup( castor::toUtf8( groupName ) ) }
+		, m_graph{ m_renderTarget.getGraph().createPassGroup( toUtf8( groupName ) ) }
 		, m_passesCount{ passesCount }
 		, m_kind{ kind }
 	{
 	}
 
-	bool PostEffect::writeInto( castor::StringStream & file, castor::String const & tabs )
+	bool PostEffect::writeInto( StringStream & file, String const & tabs )
 	{
 		return doWriteInto( file, tabs );
 	}
 
-	bool PostEffect::initialise( castor3d::RenderDevice const & device
+	bool PostEffect::initialise( RenderDevice const & device
 		, Texture const & source
 		, Texture const & target
 		, crg::FramePass const & previousPass )
@@ -50,7 +50,7 @@ namespace castor3d
 			, previousPass );
 	}
 
-	void PostEffect::cleanup( castor3d::RenderDevice const & device )
+	void PostEffect::cleanup( RenderDevice const & device )
 	{
 		doCleanup( device );
 	}

@@ -12,17 +12,17 @@
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
 
-CU_ImplementSmartPtr( castor3d, FontTexture )
+CU_ImplementSmartPtr( c3d, FontTexture )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 	namespace fonttex
 	{
 		static TextureLayoutUPtr createTexture( Engine const & engine
-			, castor::FontResPtr font
-			, castor::String suffix )
+			, FontResPtr font
+			, String suffix )
 		{
 			if ( !font )
 			{
@@ -36,9 +36,9 @@ namespace castor3d
 				? font->getMaxImageHeight()
 				: uint32_t( font->getMaxGlyphHeight() );
 			auto const format = font->isSDF()
-				? castor::PixelFormat::eR32G32B32A32_SFLOAT
-				: castor::PixelFormat::eR8_UNORM;
-			uint32_t const count = castor::divRoundUp( uint32_t( std::distance( font->begin(), font->end() ) ), 16u );
+				? PixelFormat::eR32G32B32A32_SFLOAT
+				: PixelFormat::eR8_UNORM;
+			uint32_t const count = divRoundUp( uint32_t( std::distance( font->begin(), font->end() ) ), 16u );
 
 			ImageCreateInfo image{ ImageCreateFlags::eNone
 				, ImageType::e2D
@@ -49,11 +49,11 @@ namespace castor3d
 				, SampleCount::e1
 				, ImageTiling::eOptimal
 				, ImageUsageFlags::eTransferDst | ImageUsageFlags::eSampled };
-			return castor::makeUnique< TextureLayout >( *engine.getRenderSystem()
+			return makeUnique< TextureLayout >( *engine.getRenderSystem()
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, cuT( "FontTexture_" ) + font->getFaceName()
-					+ ( font->isSDF() ? castor::String{ cuT( "SDF" ) } : castor::string::toString( font->getHeight() ) )
+					+ ( font->isSDF() ? String{ cuT( "SDF" ) } : string::toString( font->getHeight() ) )
 					+ suffix );
 		}
 	}
@@ -61,25 +61,25 @@ namespace castor3d
 	//*********************************************************************************************
 
 	void postPreRenderGpuEvent( Engine & engine
-		, castor::Function< void( RenderDevice const &, QueueData const & ) > event )
+		, Function< void( RenderDevice const &, QueueData const & ) > event )
 	{
-		engine.postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload, castor::move( event ) ) );
+		engine.postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload, c3d::move( event ) ) );
 	}
 
 	void postQueueRenderCpuEvent( Engine & engine
-		, castor::Function< void() > event )
+		, Function< void() > event )
 	{
-		engine.postEvent( makeCpuFunctorEvent( CpuEventType::ePreCpuStep, castor::move( event ) ) );
+		engine.postEvent( makeCpuFunctorEvent( CpuEventType::ePreCpuStep, c3d::move( event ) ) );
 	}
 
 	//*********************************************************************************************
 
-	FontTexture::FontTexture( Engine & engine, castor::FontResPtr font )
+	FontTexture::FontTexture( Engine & engine, FontResPtr font )
 		: DoubleBufferedTextureLayout{ engine
 			, fonttex::createTexture( engine, font, "_0" )
 			, fonttex::createTexture( engine, font, "_1" ) }
 		, m_font( font )
-		, m_ubo{ castor::makeUnique< FontUbo >( *engine.getRenderDevice() ) }
+		, m_ubo{ makeUnique< FontUbo >( *engine.getRenderDevice() ) }
 	{
 		if ( !m_font )
 		{
@@ -125,9 +125,9 @@ namespace castor3d
 		}
 	}
 
-	castor::UInt32Array FontTexture::convert( castor::U32String const & text )const
+	UInt32Array FontTexture::convert( U32String const & text )const
 	{
-		castor::UInt32Array result;
+		UInt32Array result;
 		result.resize( text.size() );
 
 		if ( auto defaultIt = m_charIndices.find( U'?' );
@@ -147,12 +147,12 @@ namespace castor3d
 		return result;
 	}
 
-	castor::String const & FontTexture::getFontName()const
+	String const & FontTexture::getFontName()const
 	{
 		return getFont()->getName();
 	}
 
-	castor::Position const & FontTexture::getGlyphPosition( char32_t glyphChar )const
+	Position const & FontTexture::getGlyphPosition( char32_t glyphChar )const
 	{
 		auto it = m_glyphsPositions.find( glyphChar );
 
@@ -190,17 +190,17 @@ namespace castor3d
 				? font->getMaxImageHeight()
 				: uint32_t( font->getMaxGlyphHeight() );
 			auto const format = font->isSDF()
-				? castor::PixelFormat::eR32G32B32A32_SFLOAT
-				: castor::PixelFormat::eR8_UNORM;
-			uint32_t const count = castor::divRoundUp( uint32_t( std::distance( font->begin(), font->end() ) ), 16u );
-			castor::Size size{ maxWidth * 16, maxHeight * count };
+				? PixelFormat::eR32G32B32A32_SFLOAT
+				: PixelFormat::eR8_UNORM;
+			uint32_t const count = divRoundUp( uint32_t( std::distance( font->begin(), font->end() ) ), 16u );
+			Size size{ maxWidth * 16, maxHeight * count };
 			m_ubo->cpuUpdate( size, font->isSDF(), font->getPixelRange() );
-			resource.resource->setSource( castor::PxBufferBase::create( castor::Size( maxWidth * 16, maxHeight * count ), format ), true );
+			resource.resource->setSource( PxBufferBase::create( Size( maxWidth * 16, maxHeight * count ), format ), true );
 			auto & image = resource.resource->getImage();
-			auto pixelSize = uint32_t( castor::getBytesPerPixel( format ) );
+			auto pixelSize = uint32_t( getBytesPerPixel( format ) );
 
 			auto it = font->begin();
-			castor::Size const & sizeImg = size;
+			Size const & sizeImg = size;
 			uint32_t const imgLineSize = sizeImg.getWidth();
 			uint32_t offY = sizeImg.getHeight() - maxHeight;
 			auto buffer = image.getBuffer();
@@ -212,10 +212,10 @@ namespace castor3d
 
 				for ( uint32_t x = 0; x < 16 && it != font->end(); ++x )
 				{
-					castor::Glyph const & glyph = *it;
+					Glyph const & glyph = *it;
 					auto const glyphSize = font->isSDF()
-						? castor::Point2ui{ glyph.getBitmapSize()->x, glyph.getBitmapSize()->y }
-						: castor::Point2ui{ glyph.getSize() };
+						? Point2ui{ glyph.getBitmapSize()->x, glyph.getBitmapSize()->y }
+						: Point2ui{ glyph.getSize() };
 					auto srcGlyphBuffer = glyph.getBitmap().data();
 					uint32_t dstGlyphIndex = ( imgLineSize * offY ) + offX;
 					uint8_t * dstGlyphBuffer = &dstBuffer[dstGlyphIndex * pixelSize];
@@ -229,7 +229,7 @@ namespace castor3d
 						srcGlyphBuffer += glyphSize->x * pixelSize;
 					}
 
-					glyphPositions[glyph.getCharacter()] = castor::Position( int32_t( offX ), int32_t( offY ) );
+					glyphPositions[glyph.getCharacter()] = Position( int32_t( offX ), int32_t( offY ) );
 					offX += maxWidth;
 					++it;
 

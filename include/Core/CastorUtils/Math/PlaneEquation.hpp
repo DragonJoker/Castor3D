@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Math/Line3D.hpp"
 #include "CastorUtils/Math/Point.hpp"
 
-namespace castor
+namespace c3d
 {
 	class PlaneEquation
 	{

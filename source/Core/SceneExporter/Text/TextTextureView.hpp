@@ -8,15 +8,15 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::TextureView >
-		: public TextWriterT< castor3d::TextureView >
+	class TextWriter< TextureView >
+		: public TextWriterT< TextureView >
 	{
 	public:
 		explicit TextWriter( String const & tabs );
-		bool operator()( castor3d::TextureView const & obj
+		bool operator()( TextureView const & obj
 			, StringStream & file )override;
 	};
 }

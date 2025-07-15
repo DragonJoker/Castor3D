@@ -14,7 +14,7 @@ namespace draw_edges
 	{
 		struct EdgesContext
 		{
-			castor3d::RenderTargetRPtr renderTarget{};
+			c3d::RenderTargetRPtr renderTarget{};
 			DrawEdgesUboConfiguration data{};
 		};
 
@@ -24,7 +24,7 @@ namespace draw_edges
 			eRoot = CU_MakeSectionName( 'D', 'R', 'E', 'D' ),
 		};
 
-		static CU_ImplementAttributeParserNewBlock( parserDrawEdges, castor3d::TargetContext, EdgesContext )
+		static CU_ImplementAttributeParserNewBlock( parserDrawEdges, c3d::TargetContext, EdgesContext )
 		{
 			newBlockContext->renderTarget = blockContext->renderTarget;
 		}
@@ -58,9 +58,9 @@ namespace draw_edges
 
 		static CU_ImplementAttributeParserBlock( parserDrawEdgesEnd, EdgesContext )
 		{
-			castor3d::Parameters parameters;
-			parameters.add( PostEffect::NormalDepthWidth, castor::string::toString( blockContext->data.normalDepthWidth ) );
-			parameters.add( PostEffect::ObjectWidth, castor::string::toString( blockContext->data.objectWidth ) );
+			c3d::Parameters parameters;
+			parameters.add( PostEffect::NormalDepthWidth, c3d::string::toString( blockContext->data.normalDepthWidth ) );
+			parameters.add( PostEffect::ObjectWidth, c3d::string::toString( blockContext->data.objectWidth ) );
 
 			auto effect = blockContext->renderTarget->getPostEffect( PostEffect::Type );
 			effect->enable( true );
@@ -69,13 +69,13 @@ namespace draw_edges
 		CU_EndAttributePop()
 	}
 
-	castor::AttributeParsers createParsers()
+	c3d::AttributeParsers createParsers()
 	{
 		using namespace draw_edges;
-		castor::AttributeParsers result;
+		c3d::AttributeParsers result;
 
 		addParserT( result
-			, castor3d::CSCNSection::eRenderTarget
+			, c3d::CSCNSection::eRenderTarget
 			, parse::Section::eRoot
 			, PostEffect::Type
 			, &parse::parserDrawEdges );
@@ -83,21 +83,21 @@ namespace draw_edges
 			, parse::Section::eRoot
 			, PostEffect::NormalDepthWidth
 			, &parse::parserNormalDepthWidth
-			, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 1000 ) ) } );
+			, { c3d::makeParameter< c3d::ParameterType::eInt32 >( c3d::makeRange( 0, 1000 ) ) } );
 		addParserT( result
 			, parse::Section::eRoot
 			, PostEffect::ObjectWidth
 			, &parse::parserObjectWidth
-			, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 1000 ) ) } );
+			, { c3d::makeParameter< c3d::ParameterType::eInt32 >( c3d::makeRange( 0, 1000 ) ) } );
 		addParserT( result
 			, parse::Section::eRoot
-			, castor3d::CSCNSection::eRenderTarget
+			, c3d::CSCNSection::eRenderTarget
 			, cuT( "}" )
 			, &parse::parserDrawEdgesEnd );
 		return result;
 	}
 
-	castor::StrUInt32Map createSections()
+	c3d::StrUInt32Map createSections()
 	{
 		return
 		{

@@ -8,7 +8,7 @@
 #include "CastorUtils/Exception/Exception.hpp"
 #include "CastorUtils/Log/Logger.hpp"
 
-namespace castor
+namespace c3d
 {
 	void DynamicLibrary::doOpen()noexcept
 	{

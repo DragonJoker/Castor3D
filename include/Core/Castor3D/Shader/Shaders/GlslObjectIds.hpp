@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/BaseTypes/Array.hpp>
 #include <ShaderWriter/BaseTypes/UInt.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	struct ObjectIds
 		: public sdw::StructInstanceHelperT< "C3D_ObjectIdsData"
@@ -23,7 +23,7 @@ namespace castor3d::shader
 		ObjectIds( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 		

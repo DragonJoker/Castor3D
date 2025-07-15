@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/Angle.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class SphereSection
 		: public MeshGenerator
@@ -23,7 +23,7 @@ namespace castor3d
 		 */
 		C3D_API SphereSection();
 		/**
-		 *\copydoc		castor3d::MeshGenerator::create
+		 *\copydoc		MeshGenerator::create
 		 */
 		C3D_API static MeshGeneratorUPtr create();
 

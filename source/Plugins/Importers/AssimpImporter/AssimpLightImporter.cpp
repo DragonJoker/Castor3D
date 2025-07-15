@@ -10,12 +10,12 @@
 
 namespace c3d_assimp
 {
-	AssimpLightImporter::AssimpLightImporter( castor3d::Engine & engine )
-		: castor3d::LightImporter{ engine, cuT( "Assimp" ) }
+	AssimpLightImporter::AssimpLightImporter( c3d::Engine & engine )
+		: c3d::LightImporter{ engine, cuT( "Assimp" ) }
 	{
 	}
 
-	bool AssimpLightImporter::doImportLight( castor3d::Light & light )
+	bool AssimpLightImporter::doImportLight( c3d::Light & light )
 	{
 		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
 		auto name = light.getName();
@@ -28,7 +28,7 @@ namespace c3d_assimp
 
 		auto & aiLight = *it->second;
 		auto & scene = *light.getScene();
-		castor3d::SceneNodeRPtr node{};
+		c3d::SceneNodeRPtr node{};
 
 		if ( scene.hasSceneNode( name ) )
 		{
@@ -41,7 +41,7 @@ namespace c3d_assimp
 			node = scene.addSceneNode( name, ownNode );
 		}
 
-		castor::Point3f colour{ aiLight.mColorDiffuse.r, aiLight.mColorDiffuse.g, aiLight.mColorDiffuse.b };
+		c3d::Point3f colour{ aiLight.mColorDiffuse.r, aiLight.mColorDiffuse.g, aiLight.mColorDiffuse.b };
 		auto max = std::max( { colour->x, colour->y, colour->z } );
 
 		if ( max != 0.0 )
@@ -58,7 +58,7 @@ namespace c3d_assimp
 
 				if ( max != 0.0 )
 				{
-					point->setIntensity( castor::LuminousIntensity{ max } );
+					point->setIntensity( c3d::LuminousIntensity{ max } );
 				}
 			}
 			break;
@@ -66,12 +66,12 @@ namespace c3d_assimp
 			{
 				auto spot = light.getSpotLight();
 				spot->setAttenuation( { aiLight.mAttenuationConstant, aiLight.mAttenuationLinear, aiLight.mAttenuationQuadratic } );
-				spot->setInnerCutOff( castor::Angle::fromRadians( aiLight.mAngleInnerCone ) );
-				spot->setOuterCutOff( castor::Angle::fromRadians( aiLight.mAngleOuterCone ) );
+				spot->setInnerCutOff( c3d::Angle::fromRadians( aiLight.mAngleInnerCone ) );
+				spot->setOuterCutOff( c3d::Angle::fromRadians( aiLight.mAngleOuterCone ) );
 
 				if ( max != 0.0 )
 				{
-					spot->setIntensity( castor::LuminousIntensity{ max } );
+					spot->setIntensity( c3d::LuminousIntensity{ max } );
 				}
 			}
 			break;
@@ -79,14 +79,14 @@ namespace c3d_assimp
 			if ( max != 0.0 )
 			{
 				auto directional = light.getDirectionalLight();
-				directional->setIllumination( castor::Illumination{ max } );
+				directional->setIllumination( c3d::Illumination{ max } );
 			}
 			break;
 		default:
 			break;
 		}
 
-		light.setColour( castor::RgbColour::fromComponents( colour->x, colour->y, colour->z ) );
+		light.setColour( c3d::RgbColour::fromComponents( colour->x, colour->y, colour->z ) );
 		node->attachObject( light );
 		return true;
 	}

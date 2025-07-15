@@ -16,10 +16,10 @@ See LICENSE file in root folder
 namespace ocean_fft
 {
 	struct FFTWaterComponent
-		: public castor3d::BaseDataPassComponentT< castor::AtomicGroupChangeTracked< float > >
+		: public c3d::BaseDataPassComponentT< c3d::AtomicGroupChangeTracked< float > >
 	{
 		struct MaterialShader
-			: castor3d::shader::PassMaterialShader
+			: c3d::shader::PassMaterialShader
 		{
 			MaterialShader();
 			void fillMaterialType( sdw::type::BaseStruct & type
@@ -27,84 +27,84 @@ namespace ocean_fft
 		};
 
 		struct ComponentsShader
-			: castor3d::shader::PassComponentsShader
+			: c3d::shader::PassComponentsShader
 		{
-			explicit ComponentsShader( castor3d::PassComponentPlugin const & plugin )
+			explicit ComponentsShader( c3d::PassComponentPlugin const & plugin )
 				: PassComponentsShader{ plugin }
 			{
 			}
 
-			void fillComponents( castor3d::ComponentModeFlags componentsMask
+			void fillComponents( c3d::ComponentModeFlags componentsMask
 				, sdw::type::BaseStruct & components
-				, castor3d::shader::Materials const & materials
+				, c3d::shader::Materials const & materials
 				, sdw::StructInstance const * surface )const override;
 			void fillComponentsInits( sdw::type::BaseStruct const & components
-				, castor3d::shader::Materials const & materials
-				, castor3d::shader::Material const * material
+				, c3d::shader::Materials const & materials
+				, c3d::shader::Material const * material
 				, sdw::StructInstance const * surface
 				, sdw::Vec4 const * clrCot
 				, sdw::expr::ExprList & inits )const override;
-			void blendComponents( castor3d::shader::Materials const & materials
+			void blendComponents( c3d::shader::Materials const & materials
 				, sdw::Float const & passMultiplier
-				, castor3d::shader::BlendComponents & res
-				, castor3d::shader::BlendComponents const & src )const override;
+				, c3d::shader::BlendComponents & res
+				, c3d::shader::BlendComponents const & src )const override;
 			void updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-				, castor3d::shader::Material const & material
-				, castor3d::shader::BlendComponents & components
+				, c3d::shader::Material const & material
+				, c3d::shader::BlendComponents & components
 				, bool isFrontCulled )const override;
 		};
 
 		class Plugin
-			: public castor3d::PassComponentPlugin
+			: public c3d::PassComponentPlugin
 		{
 		public:
-			explicit Plugin( castor3d::PassComponentRegister const & passComponents )
+			explicit Plugin( c3d::PassComponentRegister const & passComponents )
 				: PassComponentPlugin{ passComponents }
 			{
 			}
 
-			void createParsers( castor::AttributeParsers & parsers
-				, castor3d::ChannelFillers & channelFillers )const override;
-			void zeroBuffer(castor3d::Pass const & pass
-				, castor3d::shader::PassMaterialShader const & materialShader
-				, castor3d::PassBuffer & buffer )const override;
-			bool isComponentNeeded( castor3d::TextureCombine const & textures
-				, castor3d::ComponentModeFlags const & filter )const override;
+			void createParsers( c3d::AttributeParsers & parsers
+				, c3d::ChannelFillers & channelFillers )const override;
+			void zeroBuffer(c3d::Pass const & pass
+				, c3d::shader::PassMaterialShader const & materialShader
+				, c3d::PassBuffer & buffer )const override;
+			bool isComponentNeeded( c3d::TextureCombine const & textures
+				, c3d::ComponentModeFlags const & filter )const override;
 
-			castor3d::PassComponentUPtr createComponent( castor3d::Pass & pass )const override
+			c3d::PassComponentUPtr createComponent( c3d::Pass & pass )const override
 			{
-				return castor::makeUniqueDerived< castor3d::PassComponent, FFTWaterComponent >( pass );
+				return c3d::makeUniqueDerived< c3d::PassComponent, FFTWaterComponent >( pass );
 			}
 
-			castor3d::shader::PassComponentsShaderPtr createComponentsShader()const override
+			c3d::shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
-				return castor::make_unique< ComponentsShader >( *this );
+				return c3d::makeRawUnique< ComponentsShader >( *this );
 			}
 
-			castor3d::shader::PassMaterialShaderPtr createMaterialShader()const override
+			c3d::shader::PassMaterialShaderPtr createMaterialShader()const override
 			{
-				return castor::make_unique< MaterialShader >();
+				return c3d::makeRawUnique< MaterialShader >();
 			}
 
-			void filterComponentFlags( castor3d::ComponentModeFlags filter
-				, castor3d::PassComponentCombine & componentsFlags )const override
+			void filterComponentFlags( c3d::ComponentModeFlags filter
+				, c3d::PassComponentCombine & componentsFlags )const override
 			{
-				if ( !checkFlag( filter, castor3d::ComponentModeFlag::eDiffuseLighting )
-					&& !checkFlag( filter, castor3d::ComponentModeFlag::eSpecularLighting ) )
+				if ( !checkFlag( filter, c3d::ComponentModeFlag::eDiffuseLighting )
+					&& !checkFlag( filter, c3d::ComponentModeFlag::eSpecularLighting ) )
 				{
 					remFlags( componentsFlags, getComponentFlags() );
 				}
 			}
 		};
 
-		static castor3d::PassComponentPluginUPtr createPlugin( castor3d::PassComponentRegister const & passComponent )
+		static c3d::PassComponentPluginUPtr createPlugin( c3d::PassComponentRegister const & passComponent )
 		{
-			return castor::makeUniqueDerived< castor3d::PassComponentPlugin, Plugin >( passComponent );
+			return c3d::makeUniqueDerived< c3d::PassComponentPlugin, Plugin >( passComponent );
 		}
 
-		explicit FFTWaterComponent( castor3d::Pass & pass );
+		explicit FFTWaterComponent( c3d::Pass & pass );
 
-		void accept( castor3d::ConfigurationVisitorBase & vis )override;
+		void accept( c3d::ConfigurationVisitorBase & vis )override;
 
 		float getWaterDensity()const
 		{
@@ -116,16 +116,16 @@ namespace ocean_fft
 			setData( v );
 		}
 
-		static castor::String const TypeName;
+		static c3d::String const TypeName;
 		static float constexpr Default = 1.0f;
 
 	private:
-		castor3d::PassComponentUPtr doClone( castor3d::Pass & pass )const override;
-		bool doWriteText( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::String const & subfolder
-			, castor::StringStream & file )const override;
-		void doFillBuffer( castor3d::PassBuffer & buffer )const override;
+		c3d::PassComponentUPtr doClone( c3d::Pass & pass )const override;
+		bool doWriteText( c3d::String const & tabs
+			, c3d::Path const & folder
+			, c3d::String const & subfolder
+			, c3d::StringStream & file )const override;
+		void doFillBuffer( c3d::PassBuffer & buffer )const override;
 	};
 
 	CU_DeclareSmartPtr( ocean_fft, FFTWaterComponent, );

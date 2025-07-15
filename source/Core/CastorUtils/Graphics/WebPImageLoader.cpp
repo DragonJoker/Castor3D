@@ -8,7 +8,7 @@
 #include <webp/decode.h>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	//************************************************************************************************
 
@@ -30,7 +30,7 @@ namespace castor
 	void WebPImageLoader::registerLoader( ImageLoader & reg )
 	{
 		reg.registerLoader( webpl::listExtensions()
-			, castor::make_unique< WebPImageLoader >() );
+			, c3d::makeRawUnique< WebPImageLoader >() );
 	}
 
 	void WebPImageLoader::unregisterLoader( ImageLoader & reg )

@@ -22,7 +22,7 @@ extern "C"
 
 		try
 		{
-			auto logger = castor::Logger::initialise( castor::LogType( level ) );
+			auto logger = c3d::Logger::initialise( c3d::LogType( level ) );
 			C3D_SafeAlloc( *result, C3DLogger );
 			( *result )->internal = logger;
 		}
@@ -38,7 +38,7 @@ extern "C"
 		if ( !object->internal )
 			cc3d::reportWarning( ERROR_UNINITIALISED_LOGGER );
 
-		castor::Logger::cleanup();
+		c3d::Logger::cleanup();
 		delete object;
 
 		return C3D_OK;
@@ -53,7 +53,7 @@ extern "C"
 
 		try
 		{
-			object->internal->setFileName( castor::Path{ castor::makeString( name ) }, castor::LogType( target ) );
+			object->internal->setFileName( c3d::Path{ c3d::makeString( name ) }, c3d::LogType( target ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -69,7 +69,7 @@ extern "C"
 
 		try
 		{
-			object->internal->logTrace( castor::makeString( msg ) );
+			object->internal->logTrace( c3d::makeString( msg ) );
 		}
 		C3D_CatchCommonExceptions()
 		return C3D_OK;
@@ -84,7 +84,7 @@ extern "C"
 
 		try
 		{
-			object->internal->logDebug( castor::makeString( msg ) );
+			object->internal->logDebug( c3d::makeString( msg ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -100,7 +100,7 @@ extern "C"
 
 		try
 		{
-			object->internal->logInfo( castor::makeString( msg ) );
+			object->internal->logInfo( c3d::makeString( msg ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -116,7 +116,7 @@ extern "C"
 
 		try
 		{
-			object->internal->logWarning( castor::makeString( msg ) );
+			object->internal->logWarning( c3d::makeString( msg ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -132,7 +132,7 @@ extern "C"
 
 		try
 		{
-			object->internal->logError( castor::makeString( msg ) );
+			object->internal->logError( c3d::makeString( msg ) );
 		}
 		C3D_CatchCommonExceptions()
 

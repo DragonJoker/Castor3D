@@ -7,9 +7,9 @@
 
 #include <ShaderWriter/Writer.hpp>
 
-CU_ImplementSmartPtr( castor3d, LayeredLpvGridConfigUbo )
+CU_ImplementSmartPtr( c3d, LayeredLpvGridConfigUbo )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -18,7 +18,7 @@ namespace castor3d
 		LayeredLpvGridData::LayeredLpvGridData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstance{ writer, castor::move( expr ), enabled }
+			: StructInstance{ writer, c3d::move( expr ), enabled }
 			, allMinVolumeCorners{ getMemberArray< sdw::Vec4 >( "allMinVolumeCorners" ) }
 			, allCellSizes{ getMember< sdw::Vec4 >( "allCellSizes" ) }
 			, gridSizesAtt{ getMember< sdw::Vec4 >( "gridSizesAtt" ) }
@@ -42,9 +42,9 @@ namespace castor3d
 			return result;
 		}
 
-		castor::RawUniquePtr< sdw::Struct > LayeredLpvGridData::declare( sdw::ShaderWriter & writer )
+		RawUniquePtr< sdw::Struct > LayeredLpvGridData::declare( sdw::ShaderWriter & writer )
 		{
-			return castor::make_unique< sdw::Struct >( writer
+			return makeRawUnique< sdw::Struct >( writer
 				, makeType( writer.getTypesCache() ) );
 		}
 	}
@@ -62,7 +62,7 @@ namespace castor3d
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	void LayeredLpvGridConfigUbo::cpuUpdate( castor::Array< castor::Grid const *, LpvMaxCascadesCount > const & grids
+	void LayeredLpvGridConfigUbo::cpuUpdate( Array< Grid const *, LpvMaxCascadesCount > const & grids
 		, float indirectAttenuation )
 	{
 		CU_Require( m_ubo );
@@ -71,11 +71,11 @@ namespace castor3d
 		for ( auto i = 0u; i < grids.size(); ++i )
 		{
 			auto min = grids[i]->getMin();
-			data.allMinVolumeCorners[i] = castor::Point4f{ min->x, min->y, min->z, 0.0f };
+			data.allMinVolumeCorners[i] = Point4f{ min->x, min->y, min->z, 0.0f };
 			data.allCellSizes[i] = grids[i]->getCellSize();
 		}
 
 		auto dim = grids[0]->getDimensions();
-		data.gridSizeAtt = castor::Point4f{ dim->x, dim->y, dim->z, indirectAttenuation };
+		data.gridSizeAtt = Point4f{ dim->x, dim->y, dim->z, indirectAttenuation };
 	}
 }

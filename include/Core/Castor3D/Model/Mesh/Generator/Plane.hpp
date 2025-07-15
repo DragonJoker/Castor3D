@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Mesh/Generator/MeshGeneratorModule.hpp"
 #include "Castor3D/Model/Mesh/MeshGenerator.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class Plane
 		: public MeshGenerator
@@ -21,7 +21,7 @@ namespace castor3d
 		 */
 		C3D_API Plane();
 		/**
-		 *\copydoc		castor3d::MeshGenerator::create
+		 *\copydoc		MeshGenerator::create
 		 */
 		C3D_API static MeshGeneratorUPtr create();
 

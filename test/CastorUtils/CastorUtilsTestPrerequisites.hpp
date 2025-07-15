@@ -58,7 +58,7 @@ namespace Testing
 	}
 
 	template< typename T >
-	inline bool compare( castor::SquareMatrix< T, 4 > const & a, castor::SquareMatrix< T, 4 > const & b )
+	inline bool compare( c3d::SquareMatrix< T, 4 > const & a, c3d::SquareMatrix< T, 4 > const & b )
 	{
 		double epsilon = 0.001;
 		return std::abs( a[0][0] - b[0][0] ) < epsilon
@@ -80,7 +80,7 @@ namespace Testing
 	}
 
 	template< typename T >
-	inline bool compare( castor::SquareMatrix< T, 3 > const & a, castor::SquareMatrix< T, 3 > const & b )
+	inline bool compare( c3d::SquareMatrix< T, 3 > const & a, c3d::SquareMatrix< T, 3 > const & b )
 	{
 		float epsilon = 0.001f;
 		return std::abs( a[0][0] - b[0][0] ) < epsilon
@@ -95,7 +95,7 @@ namespace Testing
 	}
 
 	template< typename T, uint32_t C >
-	inline bool compare( castor::Point< T, C > const & a, castor::Point< T, C > const & b )
+	inline bool compare( c3d::Point< T, C > const & a, c3d::Point< T, C > const & b )
 	{
 		float epsilon = 0.001f;
 		return std::abs( a[0] - b[0] ) < epsilon
@@ -104,7 +104,7 @@ namespace Testing
 	}
 
 	template< typename T, uint32_t C >
-	inline bool compare( castor::Coords< T, C > const & a, castor::Coords< T, C > const & b )
+	inline bool compare( c3d::Coords< T, C > const & a, c3d::Coords< T, C > const & b )
 	{
 		float epsilon = 0.001f;
 		return std::abs( a[0] - b[0] ) < epsilon
@@ -115,9 +115,9 @@ namespace Testing
 	//*********************************************************************************************
 
 	template< typename ValueT, uint32_t ColumnsT, uint32_t RowsT >
-	struct Stringifier< castor::Matrix< ValueT, ColumnsT, RowsT > >
+	struct Stringifier< c3d::Matrix< ValueT, ColumnsT, RowsT > >
 	{
-		static std::string get( castor::Matrix< ValueT, ColumnsT, RowsT > const & value )
+		static std::string get( c3d::Matrix< ValueT, ColumnsT, RowsT > const & value )
 		{
 			std::stringstream stream;
 			stream.precision( 10 );
@@ -137,9 +137,9 @@ namespace Testing
 	};
 
 	template< typename ValueT, uint32_t CountT >
-	struct Stringifier< castor::SquareMatrix< ValueT, CountT > >
+	struct Stringifier< c3d::SquareMatrix< ValueT, CountT > >
 	{
-		static std::string get( castor::SquareMatrix< ValueT, CountT > const & value )
+		static std::string get( c3d::SquareMatrix< ValueT, CountT > const & value )
 		{
 			std::stringstream stream;
 			stream.precision( 10 );
@@ -159,9 +159,9 @@ namespace Testing
 	};
 
 	template< typename ValueT, uint32_t CountT >
-	struct Stringifier< castor::Point< ValueT, CountT > >
+	struct Stringifier< c3d::Point< ValueT, CountT > >
 	{
-		static std::string get( castor::Point< ValueT, CountT > const & value )
+		static std::string get( c3d::Point< ValueT, CountT > const & value )
 		{
 			std::stringstream stream;
 			stream.precision( 10 );
@@ -176,9 +176,9 @@ namespace Testing
 	};
 
 	template< typename ValueT >
-	struct Stringifier< castor::QuaternionT< ValueT > >
+	struct Stringifier< c3d::QuaternionT< ValueT > >
 	{
-		static std::string get( castor::QuaternionT< ValueT > const & value )
+		static std::string get( c3d::QuaternionT< ValueT > const & value )
 		{
 			std::stringstream stream;
 			stream.precision( 10 );
@@ -193,9 +193,9 @@ namespace Testing
 	};
 
 	template< typename ValueT >
-	struct Stringifier< castor::AngleT< ValueT > >
+	struct Stringifier< c3d::AngleT< ValueT > >
 	{
-		static std::string get( castor::AngleT< ValueT > const & value )
+		static std::string get( c3d::AngleT< ValueT > const & value )
 		{
 			std::stringstream stream;
 			stream << value.degrees();
@@ -204,9 +204,9 @@ namespace Testing
 	};
 
 	template<>
-	struct Stringifier< castor::LuminousIntensity >
+	struct Stringifier< c3d::LuminousIntensity >
 	{
-		static std::string get( castor::LuminousIntensity const & value )
+		static std::string get( c3d::LuminousIntensity const & value )
 		{
 			std::stringstream stream;
 			stream << value.candela();
@@ -215,9 +215,9 @@ namespace Testing
 	};
 
 	template<>
-	struct Stringifier< castor::Illumination >
+	struct Stringifier< c3d::Illumination >
 	{
-		static std::string get( castor::Illumination const & value )
+		static std::string get( c3d::Illumination const & value )
 		{
 			std::stringstream stream;
 			stream << value.lux();
@@ -226,9 +226,9 @@ namespace Testing
 	};
 
 	template< typename ValueT >
-	struct Stringifier< castor::ChangeTracked< ValueT > >
+	struct Stringifier< c3d::ChangeTracked< ValueT > >
 	{
-		static std::string get( castor::ChangeTracked< ValueT > const & value )
+		static std::string get( c3d::ChangeTracked< ValueT > const & value )
 		{
 			std::stringstream stream;
 			stream << toString( *value );
@@ -237,9 +237,9 @@ namespace Testing
 	};
 
 	template< typename ValueT >
-	struct Stringifier< castor::ArrayView< ValueT > >
+	struct Stringifier< c3d::ArrayView< ValueT > >
 	{
-		static std::string get( castor::ArrayView< ValueT > const & values )
+		static std::string get( c3d::ArrayView< ValueT > const & values )
 		{
 			std::stringstream stream;
 			stream << values.size() << ":";
@@ -258,7 +258,7 @@ namespace Testing
 	//*********************************************************************************************
 
 	template< typename T >
-	inline bool compare( castor::SquareMatrix< T, 4 > const & a, glm::mat4x4 const & b )
+	inline bool compare( c3d::SquareMatrix< T, 4 > const & a, glm::mat4x4 const & b )
 	{
 		T epsilon = T( 0.001 );
 		return std::abs( a[0][0] - b[0][0] ) < epsilon
@@ -280,7 +280,7 @@ namespace Testing
 	}
 
 	template< typename T >
-	inline bool compare( castor::SquareMatrix< T, 3 > const & a, glm::mat3x3 const & b )
+	inline bool compare( c3d::SquareMatrix< T, 3 > const & a, glm::mat3x3 const & b )
 	{
 		T epsilon = T( 0.001 );
 		return std::abs( a[0][0] - b[0][0] ) < epsilon
@@ -295,7 +295,7 @@ namespace Testing
 	}
 
 	template< typename T >
-	inline bool compare( castor::SquareMatrix< T, 2 > const & a, glm::mat2x2 const & b )
+	inline bool compare( c3d::SquareMatrix< T, 2 > const & a, glm::mat2x2 const & b )
 	{
 		T epsilon = T( 0.001 );
 		return std::abs( a[0][0] - b[0][0] ) < epsilon

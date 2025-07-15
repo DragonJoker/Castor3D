@@ -13,10 +13,10 @@ See LICENSE file in root folder
 #include <map>
 #include <unordered_map>
 
-namespace castor3d
+namespace c3d
 {
 	class PassComponentRegister
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -70,7 +70,7 @@ namespace castor3d
 		 */
 		C3D_API void fillBuffer( Pass const & pass
 			, PassBuffer & buffer )const;
-		C3D_API shader::PassMaterialShader * getMaterialShader( castor::String const & componentType )const;
+		C3D_API shader::PassMaterialShader * getMaterialShader( String const & componentType )const;
 		C3D_API void fillMaterial( sdw::type::BaseStruct & material
 			, sdw::expr::ExprList & inits
 			, uint32_t padIndex )const;
@@ -94,14 +94,14 @@ namespace castor3d
 		 *	Gestion des composants de sortie des shaders.
 		 */
 		/**@{*/
-		C3D_API castor::Vector< shader::PassComponentsShaderPtr > getComponentsShaders( TextureCombine const & texturesFlags
+		C3D_API Vector< shader::PassComponentsShaderPtr > getComponentsShaders( TextureCombine const & texturesFlags
 			, ComponentModeFlags filter
-			, castor::Vector< UpdateComponent > & updateComponents
-			, castor::Vector< FinishComponent > & finishComponents )const;
-		C3D_API castor::Vector< shader::PassComponentsShaderPtr > getComponentsShaders( PipelineFlags const & flags
+			, Vector< UpdateComponent > & updateComponents
+			, Vector< FinishComponent > & finishComponents )const;
+		C3D_API Vector< shader::PassComponentsShaderPtr > getComponentsShaders( PipelineFlags const & flags
 			, ComponentModeFlags filter
-			, castor::Vector< UpdateComponent > & updateComponents
-			, castor::Vector< FinishComponent > & finishComponents )const;
+			, Vector< UpdateComponent > & updateComponents
+			, Vector< FinishComponent > & finishComponents )const;
 		/**@}*/
 		/**
 		 *\~english
@@ -173,7 +173,7 @@ namespace castor3d
 		 *\param[in]		texConfigs	Utilisé pour déterminer si un composant de texture est nécessaire.
 		 *\param[in,out]	result		La passe.
 		 */
-		C3D_API void updateMapComponents( castor::Vector< TextureFlagConfiguration > const & texConfigs
+		C3D_API void updateMapComponents( Vector< TextureFlagConfiguration > const & texConfigs
 			, Pass & result );
 		/**
 		 *\~english
@@ -188,8 +188,8 @@ namespace castor3d
 		 *\param[in]	file			Le fichier de sortie.
 		 */
 		C3D_API bool writeTextureConfig( TextureConfiguration const & configuration
-			, castor::String const & tabs
-			, castor::StringStream & file )const;
+			, String const & tabs
+			, StringStream & file )const;
 		C3D_API void fillChannels( PassComponentTextureFlag const & flags
 			, TextureContext & parsingContext )const;
 		C3D_API TextureCombine filterTextureFlags( ComponentModeFlags filter
@@ -203,10 +203,10 @@ namespace castor3d
 			, TextureConfiguration & result )const;
 		C3D_API bool hasTexcoordModif( PassComponentTextureFlag const & flag
 			, PipelineFlags const * flags )const;
-		C3D_API castor::Map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( PipelineFlags const & flags )const;
-		C3D_API castor::Map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( TextureCombine const & combine )const;
+		C3D_API Map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( PipelineFlags const & flags )const;
+		C3D_API Map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( TextureCombine const & combine )const;
 
-		castor::UInt32StrMap const & getTextureChannels()const
+		UInt32StrMap const & getTextureChannels()const
 		{
 			return m_channels;
 		}
@@ -220,13 +220,13 @@ namespace castor3d
 		 *	Enregistrement des composants.
 		 */
 		/**@{*/
-		C3D_API PassComponentID registerComponent( castor::String const & componentType
+		C3D_API PassComponentID registerComponent( String const & componentType
 			, PassComponentPluginUPtr componentPlugin );
-		C3D_API void unregisterComponent( castor::String const & componentType )noexcept;
-		C3D_API PassComponentID getNameId( castor::String const & componentType )const;
+		C3D_API void unregisterComponent( String const & componentType )noexcept;
+		C3D_API PassComponentID getNameId( String const & componentType )const;
 		C3D_API PassComponentPlugin const & getPlugin( PassComponentID componentId )const;
 
-		PassComponentPlugin const & getPlugin( castor::String const & componentType )const
+		PassComponentPlugin const & getPlugin( String const & componentType )const
 		{
 			return getPlugin( getNameId( componentType ) );
 		}
@@ -265,35 +265,35 @@ namespace castor3d
 			}
 
 			PassComponentID id{};
-			castor::String name{};
+			String name{};
 			PassComponentPluginUPtr plugin{};
 		};
-		using Components = castor::Vector< Component >;
+		using Components = Vector< Component >;
 
 	private:
 		Component & getNextId();
 		void registerComponent( Component & componentDesc
-			, castor::String const & componentType
+			, String const & componentType
 			, PassComponentPluginUPtr componentPlugin );
 		void unregisterComponent( PassComponentID id )noexcept;
 		void reorderBuffer();
 		void fillPassComponentCombine( PassComponentCombine & combine )const;
 
-		using FillMaterialType = castor::Function< void ( sdw::type::BaseStruct & type
+		using FillMaterialType = Function< void ( sdw::type::BaseStruct & type
 			, sdw::expr::ExprList & inits
 			, uint32_t & padIndex ) >;
 
 	private:
 		Components m_registered;
-		castor::Map< PassComponentID, shader::PassMaterialShaderPtr > m_materialShaders;
-		castor::UInt32StrMap m_channels;
+		Map< PassComponentID, shader::PassMaterialShaderPtr > m_materialShaders;
+		UInt32StrMap m_channels;
 		ChannelFillers m_channelsFillers;
 		bool m_pauseOrder{ true };
-		castor::Vector< PassComponentID > m_bufferOrder;
-		castor::Vector< shader::PassMaterialShader * > m_bufferShaders;
-		castor::Vector< FillMaterialType > m_fillMaterial;
+		Vector< PassComponentID > m_bufferOrder;
+		Vector< shader::PassMaterialShader * > m_bufferShaders;
+		Vector< FillMaterialType > m_fillMaterial;
 		VkDeviceSize m_bufferStride{};
-		mutable castor::Vector< PassComponentCombine > m_componentCombines{};
+		mutable Vector< PassComponentCombine > m_componentCombines{};
 		PassComponentFlag m_alphaBlendingFlag{};
 		PassComponentFlag m_alphaTestFlag{};
 		PassComponentFlag m_transmissionFlag{};

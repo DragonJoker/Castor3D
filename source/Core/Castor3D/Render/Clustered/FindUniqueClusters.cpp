@@ -26,7 +26,7 @@
 
 #include <limits>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -81,9 +81,9 @@ namespace castor3d
 		}
 
 		class FramePass
-			: private castor::DataHolderT< ShaderModule >
-			, private castor::DataHolderT< ashes::PipelineShaderStageCreateInfoArray >
-			, private castor::DataHolderT< bool >
+			: private DataHolderT< ShaderModule >
+			, private DataHolderT< ashes::PipelineShaderStageCreateInfoArray >
+			, private DataHolderT< bool >
 			, public crg::ComputePass
 		{
 			using ShaderHolder = DataHolderT< ShaderModule >;
@@ -105,7 +105,7 @@ namespace castor3d
 					, crg::ru::Config{}
 					, crg::cp::Config{}
 						.isEnabled( IsEnabledCallback( [&clusters]() { return clusters.getConfig().parseDepthBuffer && clusters.getCamera().getScene()->getLightCache().hasClusteredLights(); } ) )
-						.groupCountX( castor::divRoundUp( clusters.getDimensions()->x * clusters.getDimensions()->y * clusters.getDimensions()->z, NumThreads ) )
+						.groupCountX( divRoundUp( clusters.getDimensions()->x * clusters.getDimensions()->y * clusters.getDimensions()->z, NumThreads ) )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( CreateInfoHolder::getData() ) ) }
 			{
 			}
@@ -124,12 +124,12 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< fndunq::FramePass >( framePass
+				auto result = makeRawUnique< fndunq::FramePass >( framePass
 					, context
 					, graph
 					, device
 					, clusters );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

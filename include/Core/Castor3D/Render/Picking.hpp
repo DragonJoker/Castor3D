@@ -18,10 +18,10 @@ See LICENSE file in root folder
 #include <atomic>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class Picking
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -47,7 +47,7 @@ namespace castor3d
 		C3D_API Picking( crg::ResourcesCache const & resources
 			, RenderDevice const & device
 			, QueueData const & queueData
-			, castor::Size const & size
+			, Size const & size
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, SceneCuller & culler );
@@ -68,7 +68,7 @@ namespace castor3d
 		 *\param[in]	position	La position dans la passe.
 		 *\return		PickingPass::PickNodeType si rien n'a été pické.
 		 */
-		C3D_API PickNodeType pick( castor::Position position );
+		C3D_API PickNodeType pick( Position position );
 		/**
 		*\~english
 		*name
@@ -123,8 +123,8 @@ namespace castor3d
 		crg::FramePass & doCreatePickingPass( CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, SceneCuller & culler );
-		castor::Point4ui doFboPick( castor::Position const & position );
-		PickNodeType doPick( castor::Point4ui const & pixel
+		Point4ui doFboPick( Position const & position );
+		PickNodeType doPick( Point4ui const & pixel
 			, Scene const & scene );
 
 	private:
@@ -133,7 +133,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		uint32_t m_bandSize;
-		castor::Size m_realSize;
+		Size m_realSize;
 		crg::FrameGraph m_graph;
 		crg::ImageId m_colourImage;
 		crg::ImageViewId m_colourImageView;
@@ -145,15 +145,15 @@ namespace castor3d
 		ashes::ImagePtr m_colourTexture;
 		ashes::ImageView m_colourView;
 		VkBufferImageCopy m_copyRegion;
-		castor::Vector< VkBufferImageCopy > m_pickDisplayRegions;
+		Vector< VkBufferImageCopy > m_pickDisplayRegions;
 		ashes::CommandBufferPtr m_commandBuffer;
-		ashes::BufferPtr< castor::Point4ui > m_pickBuffer;
-		castor::ArrayView< castor::Point4ui > m_pickData;
+		ashes::BufferPtr< Point4ui > m_pickBuffer;
+		ArrayView< Point4ui > m_pickData;
 		Geometry const * m_geometry{};
 		Submesh const * m_submesh{};
 		BillboardBase const * m_billboard{};
 		uint32_t m_face{ 0u };
-		castor::Vector< castor::Point4ui > m_buffer;
+		Vector< Point4ui > m_buffer;
 		ashes::FencePtr m_transferFence;
 		PickNodeType m_pickNodeType{ PickNodeType::eNone };
 		std::atomic_bool m_picking{ false };

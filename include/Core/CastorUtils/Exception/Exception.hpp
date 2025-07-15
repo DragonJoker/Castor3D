@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include <sstream>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	class Exception
 		: public std::exception
@@ -196,19 +196,19 @@ namespace castor
 }
 /**
 *\~english
-*\brief		Macro to ease the use of castor::Exception
+*\brief		Macro to ease the use of c3d::Exception
 *\~french
-*\brief		Macro définie pour faciliter l'utilisation de castor::Exception
+*\brief		Macro définie pour faciliter l'utilisation de c3d::Exception
 */
 #define CU_Exception( text )\
-	throw castor::Exception{ text, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
+	throw c3d::Exception{ text, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 /**
 *\~english
-*\brief		Macro to ease the use of castor::Exception
+*\brief		Macro to ease the use of c3d::Exception
 *\~french
-*\brief		Macro définie pour faciliter l'utilisation de castor::Exception
+*\brief		Macro définie pour faciliter l'utilisation de c3d::Exception
 */
 #define CU_SrcException( source, text )\
-	throw castor::Exception{ source ": " text, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
+	throw c3d::Exception{ source ": " text, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 
 #endif

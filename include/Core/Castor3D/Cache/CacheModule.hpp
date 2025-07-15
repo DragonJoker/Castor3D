@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <memory>
 #include <unordered_map>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Cache */
 	//@{
@@ -22,14 +22,14 @@ namespace castor3d
 	{
 		using ElementT = ResT;
 		using ElementKeyT = KeyT;
-		using ElementPtrT = castor::UniquePtr< ElementT >;
+		using ElementPtrT = UniquePtr< ElementT >;
 		using ElementObsT = ElementT *;
-		using ElementContT = castor::UnorderedMap< ElementKeyT, ElementPtrT >;
-		using ElementCacheT = castor::ResourceCacheBaseT< ElementT, ElementKeyT, PtrCacheTraitsT< ElementT, ElementKeyT > >;
+		using ElementContT = HashMap< ElementKeyT, ElementPtrT >;
+		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT, PtrCacheTraitsT< ElementT, ElementKeyT > >;
 
-		using ElementInitialiserT = castor::Function< void( ElementT & ) >;
-		using ElementCleanerT = castor::Function< void( ElementT & ) >;
-		using ElementMergerT = castor::Function< void( ElementCacheT const &
+		using ElementInitialiserT = Function< void( ElementT & ) >;
+		using ElementCleanerT = Function< void( ElementT & ) >;
+		using ElementMergerT = Function< void( ElementCacheT const &
 			, ElementContT &
 			, ElementPtrT ) >;
 
@@ -38,8 +38,8 @@ namespace castor3d
 			, ElementKeyT const & key
 			, ParametersT && ... params )
 		{
-			return castor::makeUnique< ElementT >( key
-				, castor::forward< ParametersT >( params )... );
+			return makeUnique< ElementT >( key
+				, c3d::forward< ParametersT >( params )... );
 		}
 
 		static ElementObsT makeElementObs( ElementPtrT const & element )
@@ -157,16 +157,16 @@ namespace castor3d
 	using ObjectDetacherT = typename ObjectCacheTraitsT< ObjT, KeyT >::ElementDetacherT;
 
 	template< typename ObjT, typename KeyT, typename TraitsT >
-	using ObjectCachePtrT = castor::UniquePtr< ObjectCacheT< ObjT, KeyT, TraitsT > >;
+	using ObjectCachePtrT = UniquePtr< ObjectCacheT< ObjT, KeyT, TraitsT > >;
 
 	class RenderTargetCache;
 	class ShaderProgramCache;
 	class TextureUnitCache;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, RenderTargetCache, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ShaderProgramCache, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureUnitCache, C3D_API );
+	CU_DeclareSmartPtr( c3d, RenderTargetCache, C3D_API );
+	CU_DeclareSmartPtr( c3d, ShaderProgramCache, C3D_API );
+	CU_DeclareSmartPtr( c3d, TextureUnitCache, C3D_API );
 	/** @endcond */
 	//@}
 }
@@ -191,14 +191,14 @@ namespace castor3d
 			, ParametersT && ... parameters )const\
 		{\
 			return m_##memberName##Cache->create( key\
-				, castor::forward< ParametersT >( parameters )... );\
+				, c3d::forward< ParametersT >( parameters )... );\
 		}\
 		template< typename ... ParametersT >\
 		className##Cache::ElementObsT addNew##className( className##Cache::ElementKeyT const & key\
 			, ParametersT && ... parameters )\
 		{\
 			return m_##memberName##Cache->addNew( key\
-				, castor::forward< ParametersT >( parameters )... );\
+				, c3d::forward< ParametersT >( parameters )... );\
 		}\
 		className##Cache::ElementObsT add##className( className##Cache::ElementKeyT const & key\
 			, className##Cache::ElementPtrT & element\
@@ -245,7 +245,7 @@ namespace castor3d
 			, ParametersT && ... parameters )const\
 		{\
 			return m_##memberName##Cache->create( key\
-				, castor::forward< ParametersT >( parameters )... );\
+				, c3d::forward< ParametersT >( parameters )... );\
 		}\
 		className##Cache::ElementPtrT remove##className( className##Cache::ElementKeyT const & key\
 			, bool cleanup = false )noexcept\
@@ -265,7 +265,7 @@ namespace castor3d
 			return m_##memberName##Cache->tryFind( key );\
 		}\
 	private:\
-		castor::ConnectionT< castor::OnCacheChanged > m_on##className##Changed;\
+		ConnectionT< OnCacheChanged > m_on##className##Changed;\
 		className##Cache##UPtr m_##memberName##Cache
 
 #define DECLARE_OBJECT_CACHE_MEMBER( memberName, className )\
@@ -275,7 +275,7 @@ namespace castor3d
 			, ParametersT && ... parameters )\
 		{\
 			return m_##memberName##Cache->addNew( key\
-				, castor::forward< ParametersT >( parameters )... );\
+				, c3d::forward< ParametersT >( parameters )... );\
 		}\
 		className##Cache::ElementObsT add##className( className##Cache::ElementKeyT const & key\
 			, className##Cache::ElementPtrT & element\
@@ -287,11 +287,11 @@ namespace castor3d
 
 #define DECLARE_CACHE_VIEW_MEMBER( memberName, className )\
 	public:\
-		castor::CacheViewT< className##Cache > & get##className##View()noexcept\
+		CacheViewT< className##Cache > & get##className##View()noexcept\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
-		castor::CacheViewT< className##Cache > const & get##className##View()const noexcept\
+		CacheViewT< className##Cache > const & get##className##View()const noexcept\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
@@ -304,7 +304,7 @@ namespace castor3d
 			, ParametersT && ... parameters )\
 		{\
 			return m_##memberName##CacheView->addNew( key\
-				, castor::forward< ParametersT >( parameters )... );\
+				, c3d::forward< ParametersT >( parameters )... );\
 		}\
 		className##Cache::ElementObsT add##className( className##Cache::ElementKeyT const & key\
 			, className##Cache::ElementPtrT & element\
@@ -325,48 +325,6 @@ namespace castor3d
 			return m_##memberName##CacheView->tryFind( key );\
 		}\
 	private:\
-		castor::CacheViewPtrT< className##Cache > m_##memberName##CacheView
-
-#define DECLARE_CU_CACHE_VIEW_MEMBER( memberName, className )\
-	public:\
-		castor::CacheViewT< castor::className##Cache > & get##className##View()noexcept\
-		{\
-			return *m_##memberName##CacheView;\
-		}\
-		castor::CacheViewT< castor::className##Cache > const & get##className##View()const noexcept\
-		{\
-			return *m_##memberName##CacheView;\
-		}\
-		bool has##className( castor::className##Cache::ElementKeyT const & key )const noexcept\
-		{\
-			return m_##memberName##CacheView->has( key );\
-		}\
-		template< typename ... ParametersT >\
-		castor::className##Cache::ElementObsT addNew##className( castor::className##Cache::ElementKeyT const & key\
-			, ParametersT && ... parameters )\
-		{\
-			return m_##memberName##CacheView->addNew( key\
-				, castor::forward< ParametersT >( parameters )... );\
-		}\
-		castor::className##Cache::ElementObsT add##className( castor::className##Cache::ElementKeyT const & key\
-			, castor::className##Cache::ElementPtrT & element\
-			, bool initialise = false )\
-		{\
-			return m_##memberName##CacheView->add( key, element, initialise );\
-		}\
-		castor::className##Cache::ElementPtrT remove##className( castor::className##Cache::ElementKeyT const & key )noexcept\
-		{\
-			return m_##memberName##CacheView->remove( key );\
-		}\
-		castor::className##Cache::ElementObsT find##className( castor::className##Cache::ElementKeyT const & key )const\
-		{\
-			return m_##memberName##CacheView->find( key );\
-		}\
-		castor::className##Cache::ElementObsT tryFind##className( castor::className##Cache::ElementKeyT const & key )const noexcept\
-		{\
-			return m_##memberName##CacheView->tryFind( key );\
-		}\
-	private:\
-		castor::CacheViewPtrT< castor::className##Cache > m_##memberName##CacheView
+		CacheViewPtrT< className##Cache > m_##memberName##CacheView
 
 #endif

@@ -17,21 +17,21 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::NormalMapComponent >
-		: public TextWriterT< castor3d::NormalMapComponent >
+	class TextWriter< NormalMapComponent >
+		: public TextWriterT< NormalMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
-			, castor3d::TextureConfiguration const & configuration )
-			: TextWriterT< castor3d::NormalMapComponent >{ tabs }
+			, TextureConfiguration const & configuration )
+			: TextWriterT< NormalMapComponent >{ tabs }
 			, m_configuration{ configuration }
 		{
 		}
 
-		bool operator()( castor3d::NormalMapComponent const & object
+		bool operator()( NormalMapComponent const & object
 			, StringStream & file )override
 		{
 			return writeMask( file, cuT( "normal_mask" ), getComponentsMask( m_configuration, object.getTextureFlags() ) )
@@ -50,12 +50,9 @@ namespace castor
 		}
 
 	private:
-		castor3d::TextureConfiguration const & m_configuration;
+		TextureConfiguration const & m_configuration;
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace nmlcmp
@@ -180,8 +177,8 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		castor::MbString valueName = "normal";
-		castor::MbString mapName = "normal";
+		MbString valueName = "normal";
+		MbString mapName = "normal";
 		auto textureName = mapName + "MapAndMask";
 
 		if ( !material.hasMember( textureName )
@@ -261,7 +258,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void NormalMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void NormalMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "normal" )
@@ -273,69 +270,69 @@ namespace castor3d
 					, 0x00FFFFFF );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "normal_mask" )
 			, nmlcmp::parserUnitNormalMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eUInt32 >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "normal_factor" )
 			, nmlcmp::parserUnitNormalFactor
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "normal_directx" )
 			, nmlcmp::parserUnitNormalDirectX
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eBool >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "normal_2channels" )
 			, nmlcmp::parserUnitNormal2Channels
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			, { makeParameter< ParameterType::eBool >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "normal_mask" )
 			, nmlcmp::parserUnitNormalMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eUInt32 >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "normal_factor" )
 			, nmlcmp::parserUnitNormalFactor
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "normal_directx" )
 			, nmlcmp::parserUnitNormalDirectX
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eBool >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "normal_2channels" )
 			, nmlcmp::parserUnitNormal2Channels
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			, { makeParameter< ParameterType::eBool >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "normal" )
 			, nmlcmp::parserTexRemapNormal );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "normal_mask" )
 			, nmlcmp::parserTexRemapNormalMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eUInt32 >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "normal_directx" )
 			, nmlcmp::parserTexRemapNormalDirectX
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eBool >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "normal_2channels" )
 			, nmlcmp::parserTexRemapNormal2Channels
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			, { makeParameter< ParameterType::eBool >() } );
 	}
 
 	bool NormalMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -349,22 +346,22 @@ namespace castor3d
 	}
 
 	void NormalMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, NormalMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, NormalMapComponent >( pass ) );
 	}
 
 	bool NormalMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< NormalMapComponent >{ tabs, configuration }( file, mask );
+		return TextWriter< NormalMapComponent >{ tabs, configuration }( file, mask );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const NormalMapComponent::TypeName = C3D_MakePassMapComponentName( "normal" );
+	String const NormalMapComponent::TypeName = C3D_MakePassMapComponentName( "normal" );
 
 	NormalMapComponent::NormalMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -376,7 +373,7 @@ namespace castor3d
 
 	PassComponentUPtr NormalMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, NormalMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, NormalMapComponent >( pass );
 	}
 
 	void NormalMapComponent::doFillConfig( TextureConfiguration & configuration
@@ -391,13 +388,13 @@ namespace castor3d
 
 	PassMapDefaultImageParams NormalMapComponent::createDefaultImage()const
 	{
-		castor::String name{ cuT( "DefaultNormal" ) };
-		castor::Point4f defaultNml{ 0.5, 0.5, 1.0, 0.0 };
-		castor::ByteArray data;
+		String name{ cuT( "DefaultNormal" ) };
+		Point4f defaultNml{ 0.5, 0.5, 1.0, 0.0 };
+		ByteArray data;
 		data.resize( sizeof( float ) * 4 );
 		std::memcpy( data.data(), defaultNml.constPtr(), data.size() );
 		return { name
-			, castor::ImageCreateParams{ castor::getFormatName( castor::PixelFormat::eR32G32B32A32_SFLOAT ), data } };
+			, ImageCreateParams{ getFormatName( PixelFormat::eR32G32B32A32_SFLOAT ), data } };
 	}
 
 	//*********************************************************************************************

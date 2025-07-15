@@ -13,7 +13,7 @@
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 #include <CastorUtils/Data/File.hpp>
 
-namespace castor
+namespace c3d
 {
 	namespace txtexdata
 	{
@@ -35,22 +35,20 @@ namespace castor
 			}
 
 			// Remove TextureCache generated suffixes.
-			castor::string::replace( texName, cuT( "/Compressed" ), cuT( "" ) );
-			castor::string::replace( texName, cuT( "/Mipped" ), cuT( "" ) );
-			castor::string::replace( texName, cuT( "/Tiled" ), cuT( "" ) );
-			castor::string::replace( texName, cuT( "/RGBA" ), cuT( "" ) );
-			castor::string::replace( texName, cuT( "/HResampled" ), cuT( "" ) );
-			castor::string::replace( texName, cuT( "/WResampled" ), cuT( "" ) );
+			string::replace( texName, cuT( "/Compressed" ), cuT( "" ) );
+			string::replace( texName, cuT( "/Mipped" ), cuT( "" ) );
+			string::replace( texName, cuT( "/Tiled" ), cuT( "" ) );
+			string::replace( texName, cuT( "/RGBA" ), cuT( "" ) );
+			string::replace( texName, cuT( "/HResampled" ), cuT( "" ) );
+			string::replace( texName, cuT( "/WResampled" ), cuT( "" ) );
 
 			texName = File::normaliseFileName( texName );
 			path = Path{ Path{ texName }.getFileName() + cuT( ".dds" ) };
 		}
 	}
 
-	using namespace castor3d;
-
 	TextWriter< TextureData >::TextWriter( String const & tabs
-		, castor3d::Engine const & engine
+		, Engine const & engine
 		, Path const & folder
 		, String subFolder )
 		: TextWriterT< TextureData >{ tabs, cuT( "TextureData" ) }
@@ -90,7 +88,7 @@ namespace castor
 					if ( createImageFile )
 					{
 						log::info << tabs() << cuT( "\tCreating texture image" ) << std::endl;
-						castor::Path path{ cuT( "Textures" ) };
+						Path path{ cuT( "Textures" ) };
 
 						if ( !m_subFolder.empty() )
 						{
@@ -102,9 +100,9 @@ namespace castor
 							File::directoryCreate( m_folder / path );
 						}
 
-						castor::Path imageFile = sourceInfo.isFileImage()
+						Path imageFile = sourceInfo.isFileImage()
 							? sourceInfo.relative()
-							: castor::Path{ name };
+							: Path{ name };
 						txtexdata::reworkImageFileName( name, imageFile, config.needsYInversion );
 						path /= imageFile;
 						auto & writer = m_engine.getImageWriter();

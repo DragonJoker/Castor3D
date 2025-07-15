@@ -8,7 +8,7 @@
 
 #	include <cstdlib>
 
-namespace castor::debug
+namespace c3d::debug
 {
 	namespace backtrace
 	{

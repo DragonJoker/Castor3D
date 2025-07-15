@@ -4,7 +4,7 @@
 
 #pragma warning( disable: 4273 )
 
-namespace castor::string
+namespace c3d::string
 {
 	bool isInteger( String const & text, CU_UnusedParam( std::locale const &, locale ) )
 	{
@@ -405,7 +405,7 @@ namespace castor::string
 	}
 }
 
-namespace castor
+namespace c3d
 {
 	namespace conversion
 	{

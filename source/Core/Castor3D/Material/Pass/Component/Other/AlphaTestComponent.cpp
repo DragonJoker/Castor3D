@@ -12,31 +12,31 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::AlphaTestComponent >
-		: public TextWriterT< castor3d::AlphaTestComponent >
+	class TextWriter< AlphaTestComponent >
+		: public TextWriterT< AlphaTestComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::AlphaTestComponent >{ tabs }
+			: TextWriterT< AlphaTestComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::AlphaTestComponent const & object
+		bool operator()( AlphaTestComponent const & object
 			, StringStream & file )override
 		{
-			static castor::Map< castor3d::ComparisonFunc, String > alphaFuncs
+			static Map< ComparisonFunc, String > alphaFuncs
 			{
-				{ castor3d::ComparisonFunc ::eAlways, cuT( "always" ) },
-				{ castor3d::ComparisonFunc ::eLess, cuT( "less" ) },
-				{ castor3d::ComparisonFunc ::eLessOrEqual, cuT( "less_equal" ) },
-				{ castor3d::ComparisonFunc ::eEqual, cuT( "equal" ) },
-				{ castor3d::ComparisonFunc ::eNotEqual, cuT( "not_equal" ) },
-				{ castor3d::ComparisonFunc ::eGreaterOrEqual, cuT( "greater_equal" ) },
-				{ castor3d::ComparisonFunc ::eGreater, cuT( "greater" ) },
-				{ castor3d::ComparisonFunc ::eNever, cuT( "never" ) },
+				{ ComparisonFunc ::eAlways, cuT( "always" ) },
+				{ ComparisonFunc ::eLess, cuT( "less" ) },
+				{ ComparisonFunc ::eLessOrEqual, cuT( "less_equal" ) },
+				{ ComparisonFunc ::eEqual, cuT( "equal" ) },
+				{ ComparisonFunc ::eNotEqual, cuT( "not_equal" ) },
+				{ ComparisonFunc ::eGreaterOrEqual, cuT( "greater_equal" ) },
+				{ ComparisonFunc ::eGreater, cuT( "greater" ) },
+				{ ComparisonFunc ::eNever, cuT( "never" ) },
 			};
 			bool result = true;
 
@@ -53,10 +53,7 @@ namespace castor
 			return result;
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace alptst
@@ -171,19 +168,19 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void AlphaTestComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void AlphaTestComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "alpha_func" )
 			, alptst::parserPassAlphaFunc
-			, { castor::makeParameter< castor::ParameterType::eCheckedText, ComparisonFunc >(), castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eCheckedText, ComparisonFunc >(), makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "blend_alpha_func" )
 			, alptst::parserPassBlendAlphaFunc
-			, { castor::makeParameter< castor::ParameterType::eCheckedText, ComparisonFunc >(), castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { makeParameter< ParameterType::eCheckedText, ComparisonFunc >(), makeParameter< ParameterType::eFloat >() } );
 	}
 
 	void AlphaTestComponent::Plugin::zeroBuffer( Pass const & pass
@@ -202,7 +199,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const AlphaTestComponent::TypeName = C3D_MakePassOtherComponentName( "alpha_test" );
+	String const AlphaTestComponent::TypeName = C3D_MakePassOtherComponentName( "alpha_test" );
 
 	AlphaTestComponent::AlphaTestComponent( Pass & pass )
 		: BaseDataPassComponentT< AlphaTestData >{ pass, TypeName }
@@ -211,7 +208,7 @@ namespace castor3d
 
 	void AlphaTestComponent::accept( ConfigurationVisitorBase & vis )
 	{
-		static castor::StringArray names{ cuT( "Never" )
+		static StringArray names{ cuT( "Never" )
 			, cuT( "Less" )
 			, cuT( "Equal" )
 			, cuT( "Less Or Equal" )
@@ -239,17 +236,17 @@ namespace castor3d
 
 	PassComponentUPtr AlphaTestComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< AlphaTestComponent >( pass );
+		auto result = makeRawUnique< AlphaTestComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool AlphaTestComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool AlphaTestComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< AlphaTestComponent >{ tabs }( *this, file );
+		return TextWriter< AlphaTestComponent >{ tabs }( *this, file );
 	}
 
 	void AlphaTestComponent::doFillBuffer( PassBuffer & buffer )const

@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Render */
 	//@{
@@ -42,9 +42,9 @@ namespace castor3d
 	class Texture3DTo2D;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, EquirectangularToCube, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderCube, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Texture3DTo2D, C3D_API );
+	CU_DeclareSmartPtr( c3d, EquirectangularToCube, C3D_API );
+	CU_DeclareSmartPtr( c3d, RenderCube, C3D_API );
+	CU_DeclareSmartPtr( c3d, Texture3DTo2D, C3D_API );
 	/** @endcond */
 
 	//@}

@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Exception/Assertion.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename TypeT >
 	class LengthT
@@ -376,39 +376,39 @@ namespace castor
 	/**@}*/
 }
 
-inline castor::Length operator "" _km( long double value )
+inline c3d::Length operator "" _km( long double value )
 {
-	return castor::Length::fromKilometres( value );
+	return c3d::Length::fromKilometres( value );
 }
 
-inline castor::Length operator "" _m( long double value )
+inline c3d::Length operator "" _m( long double value )
 {
-	return castor::Length::fromMetres( value );
+	return c3d::Length::fromMetres( value );
 }
 
-inline castor::Length operator "" _cm( long double value )
+inline c3d::Length operator "" _cm( long double value )
 {
-	return castor::Length::fromCentimetres( value );
+	return c3d::Length::fromCentimetres( value );
 }
 
-inline castor::Length operator "" _mm( long double value )
+inline c3d::Length operator "" _mm( long double value )
 {
-	return castor::Length::fromMillimetres( value );
+	return c3d::Length::fromMillimetres( value );
 }
 
-inline castor::Length operator "" _yd( long double value )
+inline c3d::Length operator "" _yd( long double value )
 {
-	return castor::Length::fromYards( value );
+	return c3d::Length::fromYards( value );
 }
 
-inline castor::Length operator "" _ft( long double value )
+inline c3d::Length operator "" _ft( long double value )
 {
-	return castor::Length::fromFeet( value );
+	return c3d::Length::fromFeet( value );
 }
 
-inline castor::Length operator "" _in( long double value )
+inline c3d::Length operator "" _in( long double value )
 {
-	return castor::Length::fromInches( value );
+	return c3d::Length::fromInches( value );
 }
 
 #include "Length.inl"

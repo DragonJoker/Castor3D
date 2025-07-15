@@ -6,17 +6,17 @@
 
 #include <mikktspace.h>
 
-namespace castor3d
+namespace c3d
 {
 	namespace mikkt
 	{
 		struct SubmeshData
 		{
-			castor::Point3fArray const * positions{};
-			castor::Point3fArray const * texcoords{};
-			castor::Point3fArray const * normals{};
+			Point3fArray const * positions{};
+			Point3fArray const * texcoords{};
+			Point3fArray const * normals{};
 			FaceArray const * faces{};
-			castor::Point4fArray * tangents{};
+			Point4fArray * tangents{};
 		};
 
 		static int getNumFaces( SMikkTSpaceContext const * pContext )
@@ -84,7 +84,7 @@ namespace castor3d
 		}
 	}
 
-	void SubmeshUtils::computeFacesFromPolygonVertex( castor::Point3fArray & texcoords
+	void SubmeshUtils::computeFacesFromPolygonVertex( Point3fArray & texcoords
 		, TriFaceMapping const & triFace )
 	{
 		if ( !texcoords.empty() )
@@ -94,27 +94,27 @@ namespace castor3d
 			auto * v2 = &texcoords[1];
 			auto * v3 = &texcoords[2];
 			data.addFace( 0, 1, 2 );
-			*v1 = castor::Point3f{ 0.0, 0.0, 0.0 };
-			*v2 = castor::Point3f{ 0.0, 0.0, 0.0 };
-			*v3 = castor::Point3f{ 0.0, 0.0, 0.0 };
+			*v1 = Point3f{ 0.0, 0.0, 0.0 };
+			*v2 = Point3f{ 0.0, 0.0, 0.0 };
+			*v3 = Point3f{ 0.0, 0.0, 0.0 };
 
 			for ( uint32_t i = 2; i < uint32_t( texcoords.size() - 1 ); i++ )
 			{
 				v2 = &texcoords[i];
 				v3 = &texcoords[i + 1];
 				data.addFace( 0, i, i + 1 );
-				*v2 = castor::Point3f{ 0.0, 0.0, 0.0 };
-				*v3 = castor::Point3f{ 0.0, 0.0, 0.0 };
+				*v2 = Point3f{ 0.0, 0.0, 0.0 };
+				*v3 = Point3f{ 0.0, 0.0, 0.0 };
 			}
 		}
 	}
 
-	void SubmeshUtils::computeNormals( castor::Point3fArray const & positions
-		, castor::Point3fArray & normals
+	void SubmeshUtils::computeNormals( Point3fArray const & positions
+		, Point3fArray & normals
 		, FaceArray const & faces
 		, bool reverted )
 	{
-		static const castor::Point3f pt0{};
+		static const Point3f pt0{};
 
 		// First we flush normals and tangents
 		for ( auto & pt : normals )
@@ -135,7 +135,7 @@ namespace castor3d
 				auto & nml3 = normals[face[1]];
 				auto const vec2m1 = pos2 - pos1;
 				auto const vec3m1 = pos3 - pos1;
-				auto const faceNormal = castor::point::cross( vec3m1, vec2m1 );
+				auto const faceNormal = point::cross( vec3m1, vec2m1 );
 				nml1 += faceNormal;
 				nml2 += faceNormal;
 				nml3 += faceNormal;
@@ -153,7 +153,7 @@ namespace castor3d
 				auto & nml3 = normals[face[2]];
 				auto const vec2m1 = pos2 - pos1;
 				auto const vec3m1 = pos3 - pos1;
-				auto const faceNormal = castor::point::cross( vec3m1, vec2m1 );
+				auto const faceNormal = point::cross( vec3m1, vec2m1 );
 				nml1 += faceNormal;
 				nml2 += faceNormal;
 				nml3 += faceNormal;
@@ -163,14 +163,14 @@ namespace castor3d
 		// Eventually we normalize the normals and tangents
 		for ( auto & nml : normals )
 		{
-			castor::point::normalise( nml );
+			point::normalise( nml );
 		}
 	}
 
-	void SubmeshUtils::computeTangentsFromNormals( castor::Point3fArray const & positions
-		, castor::Point3fArray const & texcoords
-		, castor::Point3fArray const & normals
-		, castor::Point4fArray & tangents
+	void SubmeshUtils::computeTangentsFromNormals( Point3fArray const & positions
+		, Point3fArray const & texcoords
+		, Point3fArray const & normals
+		, Point4fArray & tangents
 		, FaceArray const & faces )
 	{
 		if ( texcoords.empty() )

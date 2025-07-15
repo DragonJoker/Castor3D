@@ -7,7 +7,7 @@
 
 #include <ShaderWriter/Writer.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//************************************************************************************************
 

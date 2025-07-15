@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct OcclusionMapComponent
 		: public PassMapComponent
@@ -65,15 +65,15 @@ namespace castor3d
 
 			PassComponentUPtr createComponent( Pass & pass )const override
 			{
-				return castor::makeUniqueDerived< PassComponent, OcclusionMapComponent >( pass );
+				return makeUniqueDerived< PassComponent, OcclusionMapComponent >( pass );
 			}
 
-			void createParsers( castor::AttributeParsers & parsers
+			void createParsers( AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
 			bool isComponentNeeded( TextureCombine const & textures
 				, ComponentModeFlags const & filter )const override;
 			void createMapComponent( Pass & pass
-				, castor::Vector< PassComponentUPtr > & result )const override;
+				, Vector< PassComponentUPtr > & result )const override;
 
 			bool isMapComponent()const override
 			{
@@ -82,12 +82,12 @@ namespace castor3d
 
 			shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
-				return castor::make_unique< ComponentsShader >( *this );
+				return makeRawUnique< ComponentsShader >( *this );
 			}
 
 			shader::PassMaterialShaderPtr createMaterialShader()const override
 			{
-				return castor::make_unique< MaterialShader >();
+				return makeRawUnique< MaterialShader >();
 			}
 
 			PassComponentTextureFlag getOcclusionMapFlags()const override
@@ -116,31 +116,31 @@ namespace castor3d
 				addFlagConfiguration( result, { getTextureFlags(), ( mask == 0 ? 0x00FF0000u : mask ) } );
 			}
 
-			castor::String getTextureFlagsName( PassComponentTextureFlag const & flags )const override
+			String getTextureFlagsName( PassComponentTextureFlag const & flags )const override
 			{
 				auto [passIndex, textureFlags] = splitTextureFlag( flags );
 				return ( passIndex == getId() && checkFlag( textureFlags, Occlusion ) )
-					? castor::String{ cuT( "Occlusion" ) }
-					: castor::String{};
+					? String{ cuT( "Occlusion" ) }
+					: String{};
 			}
 
 		private:
 			bool doWriteTextureConfig( TextureConfiguration const & configuration
 				, uint32_t mask
-				, castor::String const & tabs
-				, castor::StringStream & file )const override;
+				, String const & tabs
+				, StringStream & file )const override;
 		};
 
 		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )
 		{
-			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
+			return makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
 		C3D_API explicit OcclusionMapComponent( Pass & pass );
 
 		C3D_API PassMapDefaultImageParams createDefaultImage()const;
 
-		C3D_API static castor::String const TypeName;
+		C3D_API static String const TypeName;
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;

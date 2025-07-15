@@ -11,33 +11,33 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementSmartPtr( castor3d, StaticCtrl )
+CU_ImplementSmartPtr( c3d, StaticCtrl )
 
-namespace castor3d
+namespace c3d
 {
 	StaticCtrl::StaticCtrl( SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, StaticStyle * style
 		, ControlRPtr parent )
 		: StaticCtrl{ scene
 			, name
 			, style
 			, parent
-			, castor::U32String{}
-			, castor::Position{}
-			, castor::Size{}
+			, U32String{}
+			, Position{}
+			, Size{}
 			, 0
 			, true }
 	{
 	}
 
 	StaticCtrl::StaticCtrl( SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, StaticStyle * style
 		, ControlRPtr parent
-		, castor::U32String const & caption
-		, castor::Position const & position
-		, castor::Size const & size
+		, U32String const & caption
+		, Position const & position
+		, Size const & size
 		, ControlFlagType flags
 		, bool visible )
 		: Control{ Type
@@ -51,7 +51,7 @@ namespace castor3d
 			, visible }
 		, m_caption{ caption }
 	{
-		setBorderSize( castor::Point4ui{} );
+		setBorderSize( Point4ui{} );
 		auto text = m_scene
 			? m_scene->addNewOverlay( getName() + cuT( "/Text" )
 				, getEngine()
@@ -132,12 +132,12 @@ namespace castor3d
 
 	HAlign StaticCtrl::getHAlign()const
 	{
-		if ( castor::checkFlag( getFlags(), StaticFlag::eHAlignCenter ) )
+		if ( checkFlag( getFlags(), StaticFlag::eHAlignCenter ) )
 		{
 			return HAlign::eCenter;
 		}
 
-		if ( castor::checkFlag( getFlags(), StaticFlag::eHAlignRight ) )
+		if ( checkFlag( getFlags(), StaticFlag::eHAlignRight ) )
 		{
 			return HAlign::eRight;
 		}
@@ -147,12 +147,12 @@ namespace castor3d
 
 	VAlign StaticCtrl::getVAlign()const
 	{
-		if ( castor::checkFlag( getFlags(), StaticFlag::eVAlignCenter ) )
+		if ( checkFlag( getFlags(), StaticFlag::eVAlignCenter ) )
 		{
 			return VAlign::eCenter;
 		}
 
-		if ( castor::checkFlag( getFlags(), StaticFlag::eVAlignBottom ) )
+		if ( checkFlag( getFlags(), StaticFlag::eVAlignBottom ) )
 		{
 			return VAlign::eBottom;
 		}
@@ -179,7 +179,7 @@ namespace castor3d
 	{
 	}
 
-	void StaticCtrl::doSetPosition( castor::Position const & value )
+	void StaticCtrl::doSetPosition( Position const & value )
 	{
 		if ( auto text = m_text )
 		{
@@ -187,7 +187,7 @@ namespace castor3d
 		}
 	}
 
-	void StaticCtrl::doSetSize( castor::Size const & value )
+	void StaticCtrl::doSetSize( Size const & value )
 	{
 		if ( auto text = m_text )
 		{
@@ -195,7 +195,7 @@ namespace castor3d
 		}
 	}
 
-	void StaticCtrl::doSetBorderSize( castor::Point4ui const & value )
+	void StaticCtrl::doSetBorderSize( Point4ui const & value )
 	{
 		if ( auto text = m_text )
 		{
@@ -204,7 +204,7 @@ namespace castor3d
 		}
 	}
 
-	void StaticCtrl::doSetCaption( castor::U32String const & value )
+	void StaticCtrl::doSetCaption( U32String const & value )
 	{
 		m_caption = value;
 

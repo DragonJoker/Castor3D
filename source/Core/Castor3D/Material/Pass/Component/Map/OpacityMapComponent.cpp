@@ -18,21 +18,21 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::OpacityMapComponent >
-		: public TextWriterT< castor3d::OpacityMapComponent >
+	class TextWriter< OpacityMapComponent >
+		: public TextWriterT< OpacityMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, uint32_t mask )
-			: TextWriterT< castor3d::OpacityMapComponent >{ tabs }
+			: TextWriterT< OpacityMapComponent >{ tabs }
 			, m_mask{ mask }
 		{
 		}
 
-		bool operator()( castor3d::OpacityMapComponent const & object
+		bool operator()( OpacityMapComponent const & object
 			, StringStream & file )override
 		{
 			return writeMask( file, cuT( "opacity_mask" ), m_mask );
@@ -46,10 +46,7 @@ namespace castor
 	private:
 		uint32_t m_mask;
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace opacmp
@@ -120,7 +117,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void OpacityMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void OpacityMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "opacity" )
@@ -132,29 +129,29 @@ namespace castor3d
 					, 0xFF000000 );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "opacity_mask" )
 			, opacmp::parserUnitOpacityMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "opacity_mask" )
 			, opacmp::parserUnitOpacityMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "opacity" )
 			, opacmp::parserTexRemapOpacity );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "opacity_mask" )
 			, opacmp::parserTexRemapOpacityMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 
 	bool OpacityMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -165,22 +162,22 @@ namespace castor3d
 	}
 
 	void OpacityMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, OpacityMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, OpacityMapComponent >( pass ) );
 	}
 
 	bool OpacityMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< OpacityMapComponent >{ tabs, mask }( file );
+		return TextWriter< OpacityMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const OpacityMapComponent::TypeName = C3D_MakePassMapComponentName( "opacity" );
+	String const OpacityMapComponent::TypeName = C3D_MakePassMapComponentName( "opacity" );
 
 	OpacityMapComponent::OpacityMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -192,7 +189,7 @@ namespace castor3d
 
 	PassComponentUPtr OpacityMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, OpacityMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, OpacityMapComponent >( pass );
 	}
 
 	void OpacityMapComponent::doFillConfig( TextureConfiguration & configuration

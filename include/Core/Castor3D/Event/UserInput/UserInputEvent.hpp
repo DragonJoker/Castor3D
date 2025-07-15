@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "UserInputEventModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**
 	*\~english

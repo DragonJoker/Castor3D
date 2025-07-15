@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/Signal.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Shader */
 	//@{
@@ -72,19 +72,19 @@ namespace castor3d
 	class TextureAnimationBuffer;
 
 	struct GpuDataBufferOffset;
-	using GpuDataBufferOffsetPtr = castor::RawUniquePtr< GpuDataBufferOffset >;
+	using GpuDataBufferOffsetPtr = RawUniquePtr< GpuDataBufferOffset >;
 
-	using GpuDataBufferOffsetModifyFunc = castor::Function< void( GpuDataBufferOffset const & ) >;
-	using GpuDataBufferOffsetModifySignal = castor::SignalT< GpuDataBufferOffsetModifyFunc >;
-	using GpuDataBufferOffsetModifyConnection = castor::ConnectionT< GpuDataBufferOffsetModifySignal >;
+	using GpuDataBufferOffsetModifyFunc = Function< void( GpuDataBufferOffset const & ) >;
+	using GpuDataBufferOffsetModifySignal = SignalT< GpuDataBufferOffsetModifyFunc >;
+	using GpuDataBufferOffsetModifyConnection = ConnectionT< GpuDataBufferOffsetModifySignal >;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, LightBuffer, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PassBuffer, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ShadowBuffer, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SssProfileBuffer, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureConfigurationBuffer, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureAnimationBuffer, C3D_API );
+	CU_DeclareSmartPtr( c3d, LightBuffer, C3D_API );
+	CU_DeclareSmartPtr( c3d, PassBuffer, C3D_API );
+	CU_DeclareSmartPtr( c3d, ShadowBuffer, C3D_API );
+	CU_DeclareSmartPtr( c3d, SssProfileBuffer, C3D_API );
+	CU_DeclareSmartPtr( c3d, TextureConfigurationBuffer, C3D_API );
+	CU_DeclareSmartPtr( c3d, TextureAnimationBuffer, C3D_API );
 	/** @endcond */
 
 	struct ShaderBufferTypes
@@ -100,7 +100,7 @@ namespace castor3d
 				return *this;
 			}
 
-			Data2T & operator=( castor::Point2< DataT > const & rhs )
+			Data2T & operator=( Point2< DataT > const & rhs )
 			{
 				x = rhs->x;
 				y = rhs->y;
@@ -122,14 +122,14 @@ namespace castor3d
 				return *this;
 			}
 
-			Data3T & operator=( castor::Point2< DataT > const & rhs )
+			Data3T & operator=( Point2< DataT > const & rhs )
 			{
 				x = rhs->x;
 				y = rhs->y;
 				return *this;
 			}
 
-			Data3T & operator=( castor::Point3< DataT > const & rhs )
+			Data3T & operator=( Point3< DataT > const & rhs )
 			{
 				x = rhs->x;
 				y = rhs->y;
@@ -153,14 +153,14 @@ namespace castor3d
 				return *this;
 			}
 
-			Data4T & operator=( castor::Point2< DataT > const & rhs )
+			Data4T & operator=( Point2< DataT > const & rhs )
 			{
 				x = rhs->x;
 				y = rhs->y;
 				return *this;
 			}
 
-			Data4T & operator=( castor::Point3< DataT > const & rhs )
+			Data4T & operator=( Point3< DataT > const & rhs )
 			{
 				x = rhs->x;
 				y = rhs->y;
@@ -168,7 +168,7 @@ namespace castor3d
 				return *this;
 			}
 
-			Data4T & operator=( castor::Point4< DataT > const & rhs )
+			Data4T & operator=( Point4< DataT > const & rhs )
 			{
 				x = rhs->x;
 				y = rhs->y;
@@ -187,7 +187,7 @@ namespace castor3d
 
 		struct Float4x4
 		{
-			Float4x4 & operator=( castor::Matrix4x4f const & rhs )
+			Float4x4 & operator=( Matrix4x4f const & rhs )
 			{
 				c0 = rhs[0];
 				c1 = rhs[1];

@@ -8,16 +8,16 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::SubsurfaceScattering >
-		: public TextWriterT< castor3d::SubsurfaceScattering >
+	class TextWriter< SubsurfaceScattering >
+		: public TextWriterT< SubsurfaceScattering >
 	{
 	public:
-		explicit TextWriter( castor::String const & tabs );
-		bool operator()( castor3d::SubsurfaceScattering const & pass
-			, castor::StringStream & file )override;
+		explicit TextWriter( String const & tabs );
+		bool operator()( SubsurfaceScattering const & pass
+			, StringStream & file )override;
 	};
 }
 

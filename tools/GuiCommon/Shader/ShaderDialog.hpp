@@ -15,7 +15,7 @@ namespace GuiCommon
 		: public wxFrame
 	{
 	public:
-		ShaderDialog( castor3d::Engine * engine
+		ShaderDialog( c3d::Engine * engine
 			, ShaderSources sources
 			, wxString const & title
 			, wxWindow * parent
@@ -47,11 +47,11 @@ namespace GuiCommon
 		void onMenuPreferences( wxCommandEvent & event );
 
 	private:
-		castor3d::Engine * m_engine;
+		c3d::Engine * m_engine;
 		wxAuiManager m_auiManager;
 		wxAuiNotebook * m_programs;
-		castor::RawUniquePtr< StcContext > m_stcContext;
-		castor::Vector< ShaderProgramPage * > m_pages;
+		c3d::RawUniquePtr< StcContext > m_stcContext;
+		c3d::Vector< ShaderProgramPage * > m_pages;
 		ShaderSources m_sources;
 		wxMenuItem * m_glslRadio;
 		wxMenuItem * m_hlslRadio;

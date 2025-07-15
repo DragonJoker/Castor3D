@@ -15,18 +15,18 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/SquareMatrix.hpp>
 #include <CastorUtils/Multithreading/SpinMutex.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class SceneNode
 		: public Animable
-		, public castor::Named
+		, public Named
 	{
 	public:
 		//!\~english	The total number of scene nodes.
 		//!\~french		Le nombre total de noeuds de scène.
 		static uint64_t Count;
-		using SceneNodeMap = castor::StringMap< SceneNodeRPtr >;
-		using MovableArray = castor::List< castor::ReferenceWrapper< MovableObject > >;
+		using SceneNodeMap = StringMap< SceneNodeRPtr >;
+		using MovableArray = List< ReferenceWrapper< MovableObject > >;
 
 	public:
 		/**
@@ -39,7 +39,7 @@ namespace castor3d
 		 *\param[in]	name		Le nom du noeud.
 		 *\param[in]	createInfo	Les données de création.
 		 */
-		C3D_API SceneNode( castor::String const & name
+		C3D_API SceneNode( String const & name
 			, SceneNodeCreateInfo const & createInfo );
 		/**
 		 *\~english
@@ -61,12 +61,12 @@ namespace castor3d
 		 *\param[in]	scale		L'échelle initiale.
 		 *\param[in]	isStatic	\p true pour un noeud statique.
 		 */
-		C3D_API SceneNode( castor::String const & name
+		C3D_API SceneNode( String const & name
 			, Scene & scene
 			, SceneNode * parent
-			, castor::Point3f position
-			, castor::Quaternion orientation
-			, castor::Point3f scale
+			, Point3f position
+			, Quaternion orientation
+			, Point3f scale
 			, bool isStatic = true );
 		/**
 		 *\~english
@@ -78,7 +78,7 @@ namespace castor3d
 		 *\param[in]	name		Le nom du noeud.
 		 *\param[in]	scene		La scène parente.
 		 */
-		C3D_API SceneNode( castor::String const & name
+		C3D_API SceneNode( String const & name
 			, Scene & scene );
 		/**
 		 *\~english
@@ -126,7 +126,7 @@ namespace castor3d
 		 */
 		C3D_API void detachObject( MovableObject const & object );
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 		/**@}*/
 		/**
 		 *\name Children management.
@@ -156,7 +156,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom du noeud
 		 *\return		\p true si un des enfants de ce noeud a le nom donné
 		 */
-		C3D_API bool hasChild( castor::String const & name )const;
+		C3D_API bool hasChild( String const & name )const;
 		/**
 		 *\~english
 		 *\brief		add the given node to my childs if it isn't already
@@ -183,7 +183,7 @@ namespace castor3d
 		 *\brief		Détache un noeud des enfants de ce noeud, s'il en fait partie
 		 *\param[in]	childName	Le nom du noeud à détacher
 		 */
-		C3D_API void detachChild( castor::String const & childName )noexcept;
+		C3D_API void detachChild( String const & childName )noexcept;
 		/**
 		 *\~english
 		 *\brief		Detaches all my childs
@@ -211,7 +211,7 @@ namespace castor3d
 		 *\brief		Tourne le noeud autour de son axe Y
 		 *\param[in]	angle	L'angle de rotation
 		 */
-		C3D_API void yaw( castor::Angle const & angle );
+		C3D_API void yaw( Angle const & angle );
 		/**
 		 *\~english
 		 *\brief		Rotates around Z axis
@@ -220,7 +220,7 @@ namespace castor3d
 		 *\brief		Tourne le noeud autour de son axe Z
 		 *\param[in]	angle	L'angle de rotation
 		 */
-		C3D_API void pitch( castor::Angle const & angle );
+		C3D_API void pitch( Angle const & angle );
 		/**
 		 *\~english
 		 *\brief		Rotates around X axis
@@ -229,7 +229,7 @@ namespace castor3d
 		 *\brief		Tourne le noeud autour de son axe X
 		 *\param[in]	angle	L'angle de rotation
 		 */
-		C3D_API void roll( castor::Angle const & angle );
+		C3D_API void roll( Angle const & angle );
 		/**
 		 *\~english
 		 *\brief		Rotate the node with the given orientation
@@ -238,7 +238,7 @@ namespace castor3d
 		 *\brief		Tourne le noeud d'une rotation donnée
 		 *\param[in]	quat	La rotation à appliquer
 		 */
-		C3D_API void rotate( castor::Quaternion const & quat );
+		C3D_API void rotate( Quaternion const & quat );
 		/**
 		 *\~english
 		 *\brief		Translates the node
@@ -247,7 +247,7 @@ namespace castor3d
 		 *\brief		Translate le noeud
 		 *\param[in]	t	The La valeur de translation
 		 */
-		C3D_API void translate( castor::Point3f const & t );
+		C3D_API void translate( Point3f const & t );
 		/**
 		 *\~english
 		 *\brief		Scales the node
@@ -256,7 +256,7 @@ namespace castor3d
 		 *\brief		Change l'échelle du noeud
 		 *\param[in]	s	La valeur d'échelle
 		 */
-		C3D_API void scale( castor::Point3f const & s );
+		C3D_API void scale( Point3f const & s );
 		/**
 		 *\~english
 		 *\brief		Creates an animation
@@ -267,7 +267,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation
 		 *\return		l'animation
 		 */
-		C3D_API SceneNodeAnimation & createAnimation( castor::String const & name );
+		C3D_API SceneNodeAnimation & createAnimation( String const & name );
 		/**
 		 *\~english
 		 *\brief		Removes an animation
@@ -276,37 +276,37 @@ namespace castor3d
 		 *\brief		Retire une animation
 		 *\param[in]	name	Le nom de l'animation
 		 */
-		C3D_API void removeAnimation( castor::String const & name );
+		C3D_API void removeAnimation( String const & name );
 		/**@}*/
 		/**
 		 *\name Absolute value getters.
 		**/
 		/**@{*/
-		C3D_API castor::Point3f getDerivedPosition()const;
-		C3D_API castor::Quaternion getDerivedOrientation()const;
-		C3D_API castor::Point3f getDerivedScale()const;
-		C3D_API castor::Matrix4x4f const & getTransformationMatrix()const;
-		C3D_API castor::Matrix4x4f const & getDerivedTransformationMatrix()const;
+		C3D_API Point3f getDerivedPosition()const;
+		C3D_API Quaternion getDerivedOrientation()const;
+		C3D_API Point3f getDerivedScale()const;
+		C3D_API Matrix4x4f const & getTransformationMatrix()const;
+		C3D_API Matrix4x4f const & getDerivedTransformationMatrix()const;
 		/**
 		 *\name Local value getters.
 		**/
 		/**@{*/
-		castor::Point3f const & getPosition()const
+		Point3f const & getPosition()const
 		{
 			return m_position;
 		}
 
-		castor::Quaternion const & getOrientation()const
+		Quaternion const & getOrientation()const
 		{
 			return m_orientation;
 		}
 
-		castor::Point3f const & getScale()const
+		Point3f const & getScale()const
 		{
 			return m_scale;
 		}
 
-		void getAxisAngle( castor::Point3f & axis, castor::Angle & angle )const
+		void getAxisAngle( Point3f & axis, Angle & angle )const
 		{
 			m_orientation.toAxisAngle( axis, angle );
 		}
@@ -316,7 +316,7 @@ namespace castor3d
 		**/
 		/**@{*/
 		C3D_API SceneNodeMap const & getChildren()const;
-		C3D_API SceneNodeRPtr getChild( castor::String const & name )const;
+		C3D_API SceneNodeRPtr getChild( String const & name )const;
 		C3D_API MovableArray const & getObjects()const;
 
 		C3D_API bool isVisible()const noexcept;
@@ -360,10 +360,10 @@ namespace castor3d
 		 *\name Setters.
 		**/
 		/**@{*/
-		C3D_API void setOrientation( castor::Quaternion const & orientation );
-		C3D_API void setPosition( castor::Point3f const & position );
-		C3D_API void setScale( castor::Point3f const & scale );
-		C3D_API void setTransformationMatrix( castor::Matrix4x4f const & transform );
+		C3D_API void setOrientation( Quaternion const & orientation );
+		C3D_API void setPosition( Point3f const & position );
+		C3D_API void setScale( Point3f const & scale );
+		C3D_API void setTransformationMatrix( Matrix4x4f const & transform );
 		C3D_API void setVisible( bool visible );
 
 		void setScene( Scene & scene )noexcept
@@ -383,7 +383,7 @@ namespace castor3d
 		void doAttachTo( SceneNode & node );
 		void doDetach()noexcept;
 		void doAddChild( SceneNode & child );
-		void doDetachChild( castor::String const & childName )noexcept;
+		void doDetachChild( String const & childName )noexcept;
 		void doDetachChildren( bool cleanup )noexcept;
 
 	public:
@@ -399,13 +399,13 @@ namespace castor3d
 		bool m_displayable;
 		bool m_visible{ true };
 		bool m_serialisable{ true };
-		castor::Quaternion m_orientation;
-		castor::Point3f m_position;
-		castor::Point3f m_scale;
+		Quaternion m_orientation;
+		Point3f m_position;
+		Point3f m_scale;
 		bool m_mtxSet{ false };
-		castor::Matrix4x4f m_transform{ 1.0f };
+		Matrix4x4f m_transform{ 1.0f };
 		bool m_mtxChanged{ true };
-		castor::Matrix4x4f m_derivedTransform{ 1.0f };
+		Matrix4x4f m_derivedTransform{ 1.0f };
 		bool m_derivedMtxChanged{ true };
 		SceneNode * m_parent{};
 		SceneNodeMap m_children;
@@ -452,10 +452,10 @@ namespace castor3d
 
 	template< typename CacheT >
 	struct SceneNodeMergerT
-		: public castor::Named
+		: public Named
 	{
-		explicit SceneNodeMergerT( castor::String const & name )
-			: castor::Named{ name }
+		explicit SceneNodeMergerT( String const & name )
+			: Named{ name }
 		{
 		}
 
@@ -487,7 +487,7 @@ namespace castor3d
 				ires = destination.emplace( name, ElementPtrT{} );
 			}
 
-			ires.first->second = castor::move( element );
+			ires.first->second = c3d::move( element );
 			ires.first->second->rename( name );
 		}
 	};
@@ -497,18 +497,18 @@ namespace castor3d
 	struct NodeContext
 	{
 		SceneContext * scene{};
-		castor::String name{};
+		String name{};
 		SceneNodeRPtr parentNode{};
 		SceneNodeRPtr currentNode{};
 		bool isCameraNode{};
 		bool isStatic{};
 		bool isVisible{ true };
-		castor::Point3f position{};
-		castor::Quaternion orientation{ castor::Quaternion::identity() };
-		castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
+		Point3f position{};
+		Quaternion orientation{ Quaternion::identity() };
+		Point3f scale{ 1.0f, 1.0f, 1.0f };
 	};
 
-	C3D_API castor::String getPrefix( NodeContext const & context );
+	C3D_API String getPrefix( NodeContext const & context );
 	C3D_API Engine * getEngine( NodeContext const & context );
 }
 

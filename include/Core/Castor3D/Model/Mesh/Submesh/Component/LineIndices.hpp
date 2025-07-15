@@ -6,13 +6,13 @@ See LICENSE file in root folder
 
 #include "ComponentModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	struct LineIndices
 	{
 		//!\~english	The indices.
 		//!\~french		Les indices.
-		castor::Array< uint32_t, 2 > m_index;
+		Array< uint32_t, 2 > m_index;
 
 		uint32_t const & operator[]( size_t i )const noexcept
 		{

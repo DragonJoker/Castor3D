@@ -10,20 +10,20 @@ See LICENSE file in root folder
 
 namespace c3d_gltf
 {
-	using SkeletonAnimationKeyFrameMap = castor::Map< castor::Milliseconds, castor3d::SkeletonAnimationKeyFrameUPtr >;
-	using SkeletonAnimationObjectSet = castor::Set< castor3d::SkeletonAnimationObjectRPtr >;
+	using SkeletonAnimationKeyFrameMap = c3d::Map< c3d::Milliseconds, c3d::SkeletonAnimationKeyFrameUPtr >;
+	using SkeletonAnimationObjectSet = c3d::Set< c3d::SkeletonAnimationObjectRPtr >;
 
 	class GltfAnimationImporter
-		: public castor3d::AnimationImporter
+		: public c3d::AnimationImporter
 	{
 	public:
-		explicit GltfAnimationImporter( castor3d::Engine & engine );
+		explicit GltfAnimationImporter( c3d::Engine & engine );
 
 	private:
-		bool doImportSkeleton( castor3d::SkeletonAnimation & animation )override;
-		bool doImportMesh( castor3d::MeshAnimation & animation )override;
-		bool doImportNode( castor3d::SceneNodeAnimation & animation )override;
-		bool doImportTexture( castor3d::TextureAnimation & animation )override;
+		bool doImportSkeleton( c3d::SkeletonAnimation & animation )override;
+		bool doImportMesh( c3d::MeshAnimation & animation )override;
+		bool doImportNode( c3d::SceneNodeAnimation & animation )override;
+		bool doImportTexture( c3d::TextureAnimation & animation )override;
 	};
 }
 

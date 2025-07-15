@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/Path.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Plugin */
 	//@{
@@ -80,44 +80,44 @@ namespace castor3d
 	*	Spécialisation pour Plugin.
 	*/
 	template<>
-	struct PtrCacheTraitsT< Plugin, castor::String >
-		: PtrCacheTraitsBaseT< Plugin, castor::String >
+	struct PtrCacheTraitsT< Plugin, String >
+		: PtrCacheTraitsBaseT< Plugin, String >
 	{
 		using ResT = Plugin;
-		using KeyT = castor::String;
+		using KeyT = String;
 		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
 		using ElementT = typename Base::ElementT;
 		using ElementPtrT = typename Base::ElementPtrT;
 
-		C3D_API static const castor::String Name;
+		C3D_API static const String Name;
 	};
 
-	using PluginCacheTraits = PtrCacheTraitsT< Plugin, castor::String >;
-	using PluginCache = castor::ResourceCacheT< Plugin
-		, castor::String
+	using PluginCacheTraits = PtrCacheTraitsT< Plugin, String >;
+	using PluginCache = ResourceCacheT< Plugin
+		, String
 		, PluginCacheTraits >;
 
 	using PluginRes = PluginCacheTraits::ElementPtrT;
 	using PluginResPtr = PluginCacheTraits::ElementObsT;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, Plugin, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PluginCache, C3D_API );
+	CU_DeclareSmartPtr( c3d, Plugin, C3D_API );
+	CU_DeclareSmartPtr( c3d, PluginCache, C3D_API );
 
-	CU_DeclareMap( castor::String, PluginUPtr, PluginStr );
+	CU_DeclareMap( String, PluginUPtr, PluginStr );
 	CU_DeclareArray( PluginStrMap, PluginType::eCount, PluginStrMap );
-	CU_DeclareMap( castor::Path, PluginType, PluginTypePath );
+	CU_DeclareMap( Path, PluginType, PluginTypePath );
 	/** @endcond */
 
 	//@}
 }
 
-namespace castor
+namespace c3d
 {
 	template<>
-	struct ResourceCacheT< castor3d::Plugin
+	struct ResourceCacheT< Plugin
 		, String
-		, castor3d::PluginCacheTraits >;
+		, PluginCacheTraits >;
 }
 
 #endif

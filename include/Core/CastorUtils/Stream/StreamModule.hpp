@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include <string>
 
-namespace castor
+namespace c3d
 {
 	/**@name Stream */
 	//@{

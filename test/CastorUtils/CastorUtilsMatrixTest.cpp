@@ -17,21 +17,21 @@ namespace Testing
 {
 	//*********************************************************************************************
 
-	namespace matrix = castor::matrix;
-	using castor::Angle;
-	using castor::Logger;
-	using castor::Matrix4x4f;
-	using castor::Matrix4x4d;
-	using castor::Matrix3x3f;
-	using castor::Matrix3x3d;
-	using castor::Matrix2x2f;
-	using castor::Matrix2x2d;
-	using castor::Point3f;
-	using castor::Point3d;
-	using castor::Point4f;
-	using castor::Point4d;
-	using castor::Quaternion;
-	using castor::StringStream;
+	namespace matrix = c3d::matrix;
+	using c3d::Angle;
+	using c3d::Logger;
+	using c3d::Matrix4x4f;
+	using c3d::Matrix4x4d;
+	using c3d::Matrix3x3f;
+	using c3d::Matrix3x3d;
+	using c3d::Matrix2x2f;
+	using c3d::Matrix2x2d;
+	using c3d::Point3f;
+	using c3d::Point3d;
+	using c3d::Point4f;
+	using c3d::Point4d;
+	using c3d::Quaternion;
+	using c3d::StringStream;
 
 	//*********************************************************************************************
 
@@ -76,17 +76,17 @@ namespace Testing
 		return Testing::compare( lhs, rhs );
 	}
 
-	bool CastorUtilsMatrixTest::compare( castor::Point3d const & lhs, castor::Point3d const & rhs )
+	bool CastorUtilsMatrixTest::compare( c3d::Point3d const & lhs, c3d::Point3d const & rhs )
 	{
 		return Testing::compare( lhs, rhs );
 	}
 
-	bool CastorUtilsMatrixTest::compare( castor::Point3f const & lhs, castor::Point3f const & rhs )
+	bool CastorUtilsMatrixTest::compare( c3d::Point3f const & lhs, c3d::Point3f const & rhs )
 	{
 		return Testing::compare( lhs, rhs );
 	}
 
-	bool CastorUtilsMatrixTest::compare( castor::Quaternion const & lhs, castor::Quaternion const & rhs )
+	bool CastorUtilsMatrixTest::compare( c3d::Quaternion const & lhs, c3d::Quaternion const & rhs )
 	{
 		return Testing::compare( lhs, rhs );
 	}

@@ -11,21 +11,21 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/LuminousIntensity.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class PointLight
 		: public LightCategory
 	{
 	private:
 		PointLight( bool & dirty
-			, castor::Function< void() > const & markParentDirty );
+			, Function< void() > const & markParentDirty );
 
 	public:
 		/**
 		 *\copydoc		LightCategory::instantiate
 		 */
 		C3D_API LightInstanceUPtr instantiate( SceneNode & node
-			, castor::Function< bool() > isParentEnabled )override;
+			, Function< bool() > isParentEnabled )override;
 		/**
 		 *\~english
 		 *\brief		Creation function, used by Factory.
@@ -39,14 +39,14 @@ namespace castor3d
 		 *\return		Une source lumineuse.
 		 */
 		C3D_API static LightCategoryUPtr create( bool & dirty
-			, castor::Function< void() > const & markParentDirty );
+			, Function< void() > const & markParentDirty );
 		/**
 		 *\~english
 		 *\return		The vertices needed to draw the mesh materialising the ligh's volume of effect.
 		 *\~french
 		 *\return		Les sommets nécessaires au dessin du maillage représentant le volume d'effet de la lumière.
 		 */
-		C3D_API static castor::Point3fArray const & generateVertices();
+		C3D_API static Point3fArray const & generateVertices();
 		/**
 		*\~english
 		*name
@@ -56,7 +56,7 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setAttenuation( castor::Point3f const & value )
+		void setAttenuation( Point3f const & value )
 		{
 			setRange( getMaxDistance( getColour(), getIntensity(), value ) );
 		}
@@ -66,7 +66,7 @@ namespace castor3d
 			m_range = value;
 		}
 
-		void setIntensity( castor::LuminousIntensity const & value )
+		void setIntensity( LuminousIntensity const & value )
 		{
 			m_intensity = value;
 		}
@@ -83,7 +83,7 @@ namespace castor3d
 			return m_range.value();
 		}
 
-		castor::LuminousIntensity const & getIntensity()const noexcept
+		LuminousIntensity const & getIntensity()const noexcept
 		{
 			return m_intensity;
 		}
@@ -97,8 +97,8 @@ namespace castor3d
 	private:
 		friend class Scene;
 
-		castor::GroupChangeTracked< float > m_range;
-		castor::GroupChangeTracked< castor::LuminousIntensity > m_intensity;
+		GroupChangeTracked< float > m_range;
+		GroupChangeTracked< LuminousIntensity > m_intensity;
 	};
 
 	class PointLightInstance
@@ -115,8 +115,8 @@ namespace castor3d
 	public:
 		C3D_API PointLightInstance( SceneNode & node
 			, PointLight & category
-			, castor::Function< void() > markParentDirty
-			, castor::Function< bool() > isParentEnabled );
+			, Function< void() > markParentDirty
+			, Function< bool() > isParentEnabled );
 		/**
 		 *\~english
 		 *\brief		Puts the shadow data into the given buffer.
@@ -127,7 +127,7 @@ namespace castor3d
 		 */
 		C3D_API void fillShadowBuffer( AllShadowData & data )const override;
 
-		castor::Matrix4x4f const & getViewMatrix( CubeMapFace face )const noexcept
+		Matrix4x4f const & getViewMatrix( CubeMapFace face )const noexcept
 		{
 			return m_lightViews[size_t( face )];
 		}
@@ -137,12 +137,12 @@ namespace castor3d
 		void doUpdateShadow( Camera const & viewCamera
 			, Camera * lightCamera
 			, int32_t index )override;
-		void doFillLightBuffer( castor::Point4f * data )const override;
+		void doFillLightBuffer( Point4f * data )const override;
 		void doCloneInto( LightInstance & output )const override;
 
 	private:
-		castor::GroupChangeTracked< castor::Point3f > m_position;
-		castor::Array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) > m_lightViews;
+		GroupChangeTracked< Point3f > m_position;
+		Array< Matrix4x4f, size_t( CubeMapFace::eCount ) > m_lightViews;
 	};
 }
 

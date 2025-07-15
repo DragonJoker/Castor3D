@@ -15,9 +15,9 @@
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp>
 
-CU_ImplementSmartPtr( castor3d::shader, Material )
+CU_ImplementSmartPtr( c3d::shader, Material )
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//*********************************************************************************************
 
@@ -107,7 +107,7 @@ namespace castor3d::shader
 	Material::Material( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: StructInstance{ writer, castor::move( expr ), enabled }
+		: StructInstance{ writer, c3d::move( expr ), enabled }
 		, passId{ getMember< sdw::UInt >( "passId" ) }
 		, index{ getMember < sdw::UInt >( "index" ) }
 		, passCount{ getMember < sdw::UInt >( "passCount" ) }
@@ -240,7 +240,7 @@ namespace castor3d::shader
 	{
 		sdw::expr::ExprList initializers;
 		auto type = Material::makeType( writer.getTypesCache(), passShaders, initializers );
-		return sdw::makeAggrInit( type, castor::move( initializers ) );
+		return sdw::makeAggrInit( type, c3d::move( initializers ) );
 	}
 
 	//*********************************************************************************************

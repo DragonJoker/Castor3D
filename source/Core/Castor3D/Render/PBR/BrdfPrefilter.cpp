@@ -26,15 +26,15 @@
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	BrdfPrefilter::BrdfPrefilter( Engine const & engine
 		, RenderDevice const & device
-		, castor::Size const & size
+		, Size const & size
 		, Texture const & dstTexture )
 		: m_renderSystem{ *engine.getRenderSystem() }
 		, m_device{ device }
-		, m_image{ castor::make_unique< ashes::Image >( *m_device
+		, m_image{ makeRawUnique< ashes::Image >( *m_device
 			, *dstTexture.image
 			, ashes::ImageCreateInfo{ convert( dstTexture.imageId.data->info ) } ) }
 		, m_view{ convert( dstTexture.targetViewId.data->info )
@@ -46,12 +46,12 @@ namespace castor3d
 		auto queueData = m_device.graphicsData();
 		m_vertexBuffer = device.vertexPools->getBuffer< TexturedQuad >( 1u );
 		auto const & vb = m_vertexBuffer.getBufferChunk( SubmeshData::ePositions );
-		TexturedQuad data{ { TexturedQuad::Vertex{ castor::Point2f{ -1.0, -1.0 }, castor::Point2f{ 0.0, 0.0 } }
-			, TexturedQuad::Vertex{ castor::Point2f{ -1.0, +1.0 }, castor::Point2f{ 0.0, 1.0 } }
-			, TexturedQuad::Vertex{ castor::Point2f{ +1.0, -1.0 }, castor::Point2f{ 1.0, 0.0 } }
-			, TexturedQuad::Vertex{ castor::Point2f{ +1.0, -1.0 }, castor::Point2f{ 1.0, 0.0 } }
-			, TexturedQuad::Vertex{ castor::Point2f{ -1.0, +1.0 }, castor::Point2f{ 0.0, 1.0 } }
-			, TexturedQuad::Vertex{ castor::Point2f{ +1.0, +1.0 }, castor::Point2f{ 1.0, 1.0 } } } };
+		TexturedQuad data{ { TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }, Point2f{ 0.0, 0.0 } }
+			, TexturedQuad::Vertex{ Point2f{ -1.0, +1.0 }, Point2f{ 0.0, 1.0 } }
+			, TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }, Point2f{ 1.0, 0.0 } }
+			, TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }, Point2f{ 1.0, 0.0 } }
+			, TexturedQuad::Vertex{ Point2f{ -1.0, +1.0 }, Point2f{ 0.0, 1.0 } }
+			, TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }, Point2f{ 1.0, 1.0 } } } };
 		{
 			InstantDirectUploadData uploader{ *queueData->queue
 				, m_device
@@ -63,7 +63,7 @@ namespace castor3d
 		}
 
 		// Initialise the vertex layout.
-		m_vertexLayout = castor::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+		m_vertexLayout = makeRawUnique< ashes::PipelineVertexInputStateCreateInfo >( 0u
 			, ashes::VkVertexInputBindingDescriptionArray
 			{
 				{ 0u, sizeof( TexturedQuad::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
@@ -124,19 +124,19 @@ namespace castor3d
 		ashes::RenderPassCreateInfo createInfo
 		{
 			0u,
-			castor::move( attaches ),
-			castor::move( subpasses ),
-			castor::move( dependencies ),
+			c3d::move( attaches ),
+			c3d::move( subpasses ),
+			c3d::move( dependencies ),
 		};
 		m_renderPass = m_device->createRenderPass( "BrdfPrefilter"
-			, castor::move( createInfo ) );
+			, c3d::move( createInfo ) );
 
 		// Initialise the frame buffer.
 		ashes::ImageViewCRefArray views;
 		views.emplace_back( m_view );
 		m_frameBuffer = m_renderPass->createFrameBuffer( "BrdfPrefilter"
 			, VkExtent2D{ size.getWidth(), size.getHeight() }
-			, castor::move( views ) );
+			, c3d::move( views ) );
 
 		// Initialise the pipeline.
 		m_pipelineLayout = m_device->createPipelineLayout( "BrdfPrefilter" );
@@ -145,7 +145,7 @@ namespace castor3d
 			{
 				0u,
 				doCreateProgram(),
-				castor::move( *m_vertexLayout ),
+				c3d::move( *m_vertexLayout ),
 				ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST },
 				ashes::nullopt,
 				ashes::PipelineViewportStateCreateInfo{ 0u, 1u, { VkViewport{ 0.0f, 0.0f, float( size.getWidth() ), float( size.getHeight() ), 0.0f, 1.0f } }, 1u, { VkRect2D{ 0, 0, size.getWidth(), size.getHeight() } } },
@@ -308,7 +308,7 @@ namespace castor3d
 
 					writer.returnStmt( vec3( 4.0_f * A / writer.cast< sdw::Float >( sampleCount )
 						, 4.0_f * B / writer.cast< sdw::Float >( sampleCount )
-						, 4.0_f * 2.0_f * castor::Pi< float > * C / writer.cast< sdw::Float >( sampleCount ) ) );
+						, 4.0_f * 2.0_f * Pi< float > * C / writer.cast< sdw::Float >( sampleCount ) ) );
 				}
 				, sdw::InFloat( writer, "NdotV" )
 				, sdw::InFloat( writer, "roughness" ) );

@@ -6,9 +6,9 @@
 
 #include <ShaderWriter/Writer.hpp>
 
-CU_ImplementDeleter( castor3d::shader, ClearcoatBRDF )
+CU_ImplementDeleter( c3d::shader, ClearcoatBRDF )
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	ClearcoatBRDF::ClearcoatBRDF( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdfHelpers )
@@ -42,7 +42,7 @@ namespace castor3d::shader
 	ClearcoatBRDFPtr ClearcoatBRDF::create( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdfHelpers )
 	{
-		return castor::makeUnique< ClearcoatBRDF >( writer, brdfHelpers );
+		return makeUnique< ClearcoatBRDF >( writer, brdfHelpers );
 	}
 
 	void ClearcoatBRDF::doGenerate( BlendComponents const & pcomponents )

@@ -25,10 +25,10 @@ See LICENSE file in root folder
 #include <RenderGraph/Attachment.hpp>
 #include <RenderGraph/FramePass.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class OpaqueRendering
-		: public castor::OwnedBy< RenderTechnique >
+		: public OwnedBy< RenderTechnique >
 	{
 	public:
 		/**
@@ -67,7 +67,7 @@ namespace castor3d
 		 *\brief		Liste les vues intermédiaires utilisées par toute la technique.
 		 *\param[out]	intermediates	Reçoit les vues intermédiaires.
 		 */
-		C3D_API void listIntermediates( castor::Vector< IntermediateView > & intermediates );
+		C3D_API void listIntermediates( Vector< IntermediateView > & intermediates );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -119,7 +119,7 @@ namespace castor3d
 			return *m_materialsCounts;
 		}
 
-		ashes::Buffer< castor::Point3ui > const & getMaterialsIndirectCounts()const noexcept
+		ashes::Buffer< Point3ui > const & getMaterialsIndirectCounts()const noexcept
 		{
 			return *m_materialsIndirectCounts;
 		}
@@ -129,14 +129,14 @@ namespace castor3d
 			return *m_materialsStarts;
 		}
 
-		ashes::Buffer< castor::Point2ui > const & getPixelXY()const noexcept
+		ashes::Buffer< Point2ui > const & getPixelXY()const noexcept
 		{
 			return *m_pixelsXY;
 		}
 		/**@}*/
 
 	public:
-		using ShadowMapArray = castor::Vector< ShadowMapUPtr >;
+		using ShadowMapArray = Vector< ShadowMapUPtr >;
 
 	private:
 		SsaoPassUPtr doCreateSsaoPass( ProgressBar * progress
@@ -161,9 +161,9 @@ namespace castor3d
 		RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;
 		ashes::BufferPtr< uint32_t > m_materialsCounts;
-		ashes::BufferPtr< castor::Point3ui > m_materialsIndirectCounts;
+		ashes::BufferPtr< Point3ui > m_materialsIndirectCounts;
 		ashes::BufferPtr< uint32_t > m_materialsStarts;
-		ashes::BufferPtr< castor::Point2ui > m_pixelsXY;
+		ashes::BufferPtr< Point2ui > m_pixelsXY;
 		crg::RunnablePass::IsEnabledCallback m_opaquePassEnabled;
 		crg::RunnablePass::IsEnabledCallback m_deferredOpaquePassEnabled;
 		crg::RunnablePass::IsEnabledCallback m_visibilityOpaquePassEnabled;

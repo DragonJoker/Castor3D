@@ -15,7 +15,7 @@ namespace GuiCommon
 		: public wxPanel
 	{
 	public:
-		ShaderProgramPage( castor3d::Engine * engine
+		ShaderProgramPage( c3d::Engine * engine
 			, bool canEdit
 			, StcContext & stcContext
 			, ShaderSource & source
@@ -28,7 +28,7 @@ namespace GuiCommon
 		void loadLanguage( ShaderLanguage language );
 
 	private:
-		void doInitialiseLayout( castor3d::Engine * engine );
+		void doInitialiseLayout( c3d::Engine * engine );
 		void doLoadPages( ShaderLanguage language );
 		void doCleanup();
 
@@ -39,13 +39,13 @@ namespace GuiCommon
 		void onClose( wxCloseEvent & event );
 
 	protected:
-		castor3d::Engine * m_engine;
+		c3d::Engine * m_engine;
 		ShaderSource & m_source;
 		StcContext & m_stcContext;
 		wxAuiManager m_auiManager;
 		bool m_canEdit;
 		wxAuiNotebook * m_editors{};
-		castor::Vector< ShaderEditor * > m_pages;
+		c3d::Vector< ShaderEditor * > m_pages;
 	};
 }
 

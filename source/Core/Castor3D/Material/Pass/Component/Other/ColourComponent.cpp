@@ -13,27 +13,27 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::ColourComponent >
-		: public TextWriterT< castor3d::ColourComponent >
+	class TextWriter< ColourComponent >
+		: public TextWriterT< ColourComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::ColourComponent >{ tabs }
+			: TextWriterT< ColourComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::ColourComponent const & object
+		bool operator()( ColourComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSubOpt( file, cuT( "colour_hdr" ), object.getColour(), castor3d::ColourComponent::DefaultColour );
+			return writeNamedSubOpt( file, cuT( "colour_hdr" ), object.getColour(), ColourComponent::DefaultColour );
 		}
 	};
 }
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -47,7 +47,7 @@ namespace castor3d
 			}
 			else if ( !params.empty() )
 			{
-				castor::HdrRgbColour value;
+				HdrRgbColour value;
 				params[0]->get( value );
 				auto & component = getPassComponent< ColourComponent >( *blockContext );
 				component.setColour( value );
@@ -63,7 +63,7 @@ namespace castor3d
 			}
 			else if ( !params.empty() )
 			{
-				castor::RgbColour value;
+				RgbColour value;
 				params[0]->get( value );
 				auto & component = getPassComponent< ColourComponent >( *blockContext );
 				component.setColour( value );
@@ -157,29 +157,29 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void ColourComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void ColourComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "colour_hdr" )
 			, albcmp::parserPassHdrColour
-			, { castor::makeParameter< castor::ParameterType::eHdrRgbColour >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eHdrRgbColour >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "colour_srgb" )
 			, albcmp::parserPassSrgbColour
-			, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eRgbColour >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "albedo" )
 			, albcmp::parserPassHdrColour
-			, { castor::makeParameter< castor::ParameterType::eHdrRgbColour >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eHdrRgbColour >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "diffuse" )
 			, albcmp::parserPassSrgbColour
-			, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+			, { makeParameter< ParameterType::eRgbColour >() } );
 	}
 
 	void ColourComponent::Plugin::zeroBuffer( Pass const & pass
@@ -198,13 +198,13 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const ColourComponent::TypeName = C3D_MakePassOtherComponentName( "colour" );
-	castor::HdrRgbColour const ColourComponent::DefaultColour{ castor::RgbColour{ 1.0f, 1.0f, 1.0f }, 2.2f };
+	String const ColourComponent::TypeName = C3D_MakePassOtherComponentName( "colour" );
+	HdrRgbColour const ColourComponent::DefaultColour{ RgbColour{ 1.0f, 1.0f, 1.0f }, 2.2f };
 
 	ColourComponent::ColourComponent( Pass & pass
-		, castor::HdrRgbColour defaultValue )
+		, HdrRgbColour defaultValue )
 		: BaseDataPassComponentT{ pass, TypeName, {}
-			, castor::move( defaultValue ) }
+			, c3d::move( defaultValue ) }
 	{
 	}
 
@@ -215,17 +215,17 @@ namespace castor3d
 
 	PassComponentUPtr ColourComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< ColourComponent >( pass );
+		auto result = makeRawUnique< ColourComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool ColourComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool ColourComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< ColourComponent >{ tabs }( *this, file );
+		return TextWriter< ColourComponent >{ tabs }( *this, file );
 	}
 
 	void ColourComponent::doFillBuffer( PassBuffer & buffer )const

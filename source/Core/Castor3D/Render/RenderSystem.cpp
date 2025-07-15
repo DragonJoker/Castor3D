@@ -27,11 +27,11 @@
 #include <atomic>
 #include <random>
 
-CU_ImplementSmartPtr( castor3d, RenderSystem )
+CU_ImplementSmartPtr( c3d, RenderSystem )
 
 #pragma warning( disable: 4191 ) // Unsafe conversion from 'PFN_vkVoidFunction' to 'PFN_vkAnyOtherFunction'
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************
 
@@ -140,7 +140,7 @@ namespace castor3d
 				, uint32_t align )
 				: m_align{ align }
 				, m_size{ ashes::getAlignedSize( size, m_align ) }
-				, m_memory{ reinterpret_cast< uint8_t * >( castor::alignedAlloc( m_align, m_size ) ) }
+				, m_memory{ reinterpret_cast< uint8_t * >( c3d::alignedAlloc( m_align, m_size ) ) }
 			{
 				CU_Require( m_memory );
 				log::info << cuT( "Vulkan memory allocator, allocating " ) << m_size << cuT( " bytes" ) << std::endl;
@@ -153,7 +153,7 @@ namespace castor3d
 				log::info << cuT( "	Allocated at most: " ) << m_maxAllocated << cuT( " bytes" ) << std::endl;
 				log::info << cuT( "	Spoiled memory: " ) << m_totalSpoilt << cuT( " bytes" ) << std::endl;
 				log::info << cuT( "	Leaked memory: " ) << m_currentAllocated << cuT( " bytes" ) << std::endl;
-				castor::alignedFree( m_memory );
+				c3d::alignedFree( m_memory );
 			}
 			/**
 			*\~copydoc
@@ -235,35 +235,35 @@ namespace castor3d
 
 		//*************************************************************************
 
-		static bool isValidationLayer( castor::MbString const & name )
+		static bool isValidationLayer( MbString const & name )
 		{
-			static castor::Set< castor::MbString > const validNames
+			static Set< MbString > const validNames
 			{
 				"VK_LAYER_KHRONOS_validation",
 			};
 			return validNames.find( name ) != validNames.end();
 		}
 
-		static bool isSynchronisationLayer( castor::MbString const & name )
+		static bool isSynchronisationLayer( MbString const & name )
 		{
-			static castor::Set< castor::MbString > const validNames
+			static Set< MbString > const validNames
 			{
 				"VK_LAYER_KHRONOS_synchronization2",
 			};
 			return validNames.find( name ) != validNames.end();
 		}
 
-		static bool isApiTraceLayer( castor::MbString const & name )
+		static bool isApiTraceLayer( MbString const & name )
 		{
-			static castor::Set< castor::MbString > const validNames
+			static Set< MbString > const validNames
 			{
 				"VK_LAYER_LUNARG_api_dump",
 			};
 			return validNames.find( name ) != validNames.end();
 		}
 
-		static bool isExtensionAvailable( castor::Vector< VkExtensionProperties > const & available
-			, castor::MbString const & requested )
+		static bool isExtensionAvailable( Vector< VkExtensionProperties > const & available
+			, MbString const & requested )
 		{
 			return available.end() != std::find_if( available.begin()
 				, available.end()
@@ -273,7 +273,7 @@ namespace castor3d
 				} );
 		}
 
-		static void addOptionalDebugLayers( castor::Vector< VkExtensionProperties > const & available
+		static void addOptionalDebugLayers( Vector< VkExtensionProperties > const & available
 			, Extensions & extensions )
 		{
 #if VK_KHR_synchronization2
@@ -307,7 +307,7 @@ namespace castor3d
 #endif
 		}
 
-		static void checkExtensionsAvailability( castor::Vector< VkExtensionProperties > const & available
+		static void checkExtensionsAvailability( Vector< VkExtensionProperties > const & available
 			, ashes::StringArray const & requested )
 		{
 			for ( auto const & name : requested )
@@ -327,7 +327,7 @@ namespace castor3d
 			}
 
 			uint32_t count;
-			castor::Vector< VkLayerProperties > result;
+			Vector< VkLayerProperties > result;
 			VkResult res;
 
 			do
@@ -351,7 +351,7 @@ namespace castor3d
 		}
 
 		static ashes::VkExtensionPropertiesArray enumerateExtensionProperties( PFN_vkEnumerateInstanceExtensionProperties enumInstanceExtensionProperties
-			, castor::MbString const & layerName )
+			, MbString const & layerName )
 		{
 			if ( !enumInstanceExtensionProperties )
 			{
@@ -359,7 +359,7 @@ namespace castor3d
 			}
 
 			uint32_t count;
-			castor::Vector< VkExtensionProperties > result;
+			Vector< VkExtensionProperties > result;
 			VkResult res;
 
 			do
@@ -391,7 +391,7 @@ namespace castor3d
 		{
 			return ashes::ApplicationInfo
 			{
-				castor::toUtf8( engine.getAppName() ),
+				toUtf8( engine.getAppName() ),
 				engine.getAppVersion().getVkVersion(),
 				"Castor3D",
 				Version{}.getVkVersion(),
@@ -543,8 +543,8 @@ namespace castor3d
 		, AshPluginDescription pdesc
 		, Extensions pinstanceExtensions
 		, uint32_t gpuIndex )
-		: desc{ castor::move( pdesc ) }
-		, instanceExtensions{ castor::move( pinstanceExtensions ) }
+		: desc{ c3d::move( pdesc ) }
+		, instanceExtensions{ c3d::move( pinstanceExtensions ) }
 		, instance{ RenderSystem::createInstance( engine, desc, instanceExtensions ) }
 		, gpus{ instance->enumeratePhysicalDevices() }
 	{
@@ -563,7 +563,7 @@ namespace castor3d
 		, Renderer renderer
 		, Extensions pdeviceExtensions )
 		: OwnedBy< Engine >{ engine }
-		, m_renderer{ castor::move( renderer ) }
+		, m_renderer{ c3d::move( renderer ) }
 	{
 		if ( !m_renderer.gpu )
 		{
@@ -574,7 +574,7 @@ namespace castor3d
 
 		if ( getEngine()->isValidationEnabled() )
 		{
-			m_debug = castor::make_unique< DebugCallbacks >( *m_renderer.instance
+			m_debug = makeRawUnique< DebugCallbacks >( *m_renderer.instance
 				, this );
 		}
 
@@ -589,13 +589,13 @@ namespace castor3d
 			, m_features.textureCompressionBC == VK_TRUE
 			, false } );
 
-		m_device = castor::makeUnique< RenderDevice >( *this
+		m_device = makeUnique< RenderDevice >( *this
 			, gpu
 			, m_renderer.desc
-			, castor::move( pdeviceExtensions ) );
+			, c3d::move( pdeviceExtensions ) );
 		doCreateRandomStorage( *m_device );
 
-		static castor::Map< uint32_t, castor::String > vendors
+		static Map< uint32_t, String > vendors
 		{
 			{ 0x1002, cuT( "AMD" ) },
 			{ 0x10DE, cuT( "NVIDIA" ) },
@@ -606,18 +606,18 @@ namespace castor3d
 		auto const & features = device.features;
 		auto const & properties = device.properties;
 		auto const & limits = properties.limits;
-		castor::StringStream stream( castor::makeStringStream() );
+		StringStream stream( makeStringStream() );
 		stream << ( properties.apiVersion >> 22 ) << cuT( "." ) << ( ( properties.apiVersion >> 12 ) & 0x0FFF );
 		m_gpuInformations.setVendor( vendors[properties.vendorID] );
-		m_gpuInformations.setRenderer( castor::makeString( properties.deviceName ) );
+		m_gpuInformations.setRenderer( makeString( properties.deviceName ) );
 		m_gpuInformations.setVersion( stream.str() );
-		m_gpuInformations.updateFeature( castor3d::GpuFeature::eStereoRendering, limits.maxViewports > 1u );
-		m_gpuInformations.updateFeature( castor3d::GpuFeature::eShaderStorageBuffers, m_renderer.desc.features.hasStorageBuffers != 0 );
-		m_gpuInformations.updateFeature( castor3d::GpuFeature::eBindless, m_device->hasBindless() );
-		m_gpuInformations.updateFeature( castor3d::GpuFeature::eGeometry, features.geometryShader != 0 );
-		m_gpuInformations.updateFeature( castor3d::GpuFeature::eTessellation, features.tessellationShader != 0 );
-		m_gpuInformations.updateFeature( castor3d::GpuFeature::eRayTracing, m_device->hasRayTracing() );
-		m_gpuInformations.updateFeature( castor3d::GpuFeature::eMesh, m_device->hasMeshAndTaskShaders() );
+		m_gpuInformations.updateFeature( GpuFeature::eStereoRendering, limits.maxViewports > 1u );
+		m_gpuInformations.updateFeature( GpuFeature::eShaderStorageBuffers, m_renderer.desc.features.hasStorageBuffers != 0 );
+		m_gpuInformations.updateFeature( GpuFeature::eBindless, m_device->hasBindless() );
+		m_gpuInformations.updateFeature( GpuFeature::eGeometry, features.geometryShader != 0 );
+		m_gpuInformations.updateFeature( GpuFeature::eTessellation, features.tessellationShader != 0 );
+		m_gpuInformations.updateFeature( GpuFeature::eRayTracing, m_device->hasRayTracing() );
+		m_gpuInformations.updateFeature( GpuFeature::eMesh, m_device->hasMeshAndTaskShaders() );
 
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_COMPUTE_BIT, device.device->getInstance().getFeatures().hasComputeShaders != 0 );
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, features.tessellationShader != 0 );
@@ -672,8 +672,8 @@ namespace castor3d
 		, Extensions instanceExtensions
 		, Extensions deviceExtensions )
 		: RenderSystem{ engine
-			, Renderer{ engine, castor::move( desc ), castor::move( instanceExtensions ), 0u }
-			, castor::move( deviceExtensions ) }
+			, Renderer{ engine, c3d::move( desc ), c3d::move( instanceExtensions ), 0u }
+			, c3d::move( deviceExtensions ) }
 	{
 	}
 
@@ -696,7 +696,7 @@ namespace castor3d
 			, globalLayer.layerName );
 
 		// On récupère la liste d'extensions pour chaque couche de l'instance.
-		castor::Map< castor::MbString, ashes::VkExtensionPropertiesArray > layersExtensions;
+		Map< MbString, ashes::VkExtensionPropertiesArray > layersExtensions;
 		for ( auto const & layerProperties : layers )
 		{
 			layersExtensions.try_emplace( layerProperties.layerName
@@ -815,13 +815,13 @@ namespace castor3d
 		};
 		log::debug << "Enabled layers count: " << uint32_t( layerNames.size() ) << std::endl;
 		log::debug << "Enabled extensions count: " << uint32_t( extensionNames.size() ) << std::endl;
-		return castor::make_unique< ashes::Instance >( castor::move( plugin )
+		return makeRawUnique< ashes::Instance >( c3d::move( plugin )
 #if C3D_UseAllocationCallbacks
 			, ashes::makeAllocator< rendsys::AlignedBuddyAllocatorTraits >()
 #else
 			, nullptr
 #endif
-			, castor::move( createInfo ) );
+			, c3d::move( createInfo ) );
 	}
 
 	void RenderSystem::completeLayerNames( Engine const & engine
@@ -841,7 +841,7 @@ namespace castor3d
 		}
 	}
 
-	SpirVShader const & RenderSystem::compileShader( castor3d::ShaderModule & shaderModule )
+	SpirVShader const & RenderSystem::compileShader( ShaderModule & shaderModule )
 	{
 		SpirVShader result;
 
@@ -886,11 +886,11 @@ namespace castor3d
 	}
 
 	SpirVShader RenderSystem::compileShader( VkShaderStageFlagBits stage
-		, castor::String const & name
+		, String const & name
 		, ast::Shader const & shader
 		, ast::EntryPointConfig const & entryPoint )
 	{
-		log::debug << cuT( "Compiling " ) << castor::makeString( ashes::getName( stage ) ) << cuT( " shader [" ) << name << cuT( "] ..." );
+		log::debug << cuT( "Compiling " ) << makeString( ashes::getName( stage ) ) << cuT( " shader [" ) << name << cuT( "] ..." );
 		SpirVShader result;
 		auto availableExtensions = rendsys::listSpirVExtensions( *m_device, getEngine()->getShaderDebugLevel() );
 		spirv::SpirVConfig spirvConfig{ rendsys::getSpirVVersion( m_properties.apiVersion )
@@ -904,7 +904,7 @@ namespace castor3d
 		auto statements = ast::selectEntryPoint( compileStmtCache, compileExprCache, entryPoint, *shader.getStatements() );
 		auto shaderModule = spirv::compileSpirV( *allocator, shader, statements.get(), entryPoint.stage, spirvConfig );
 		result.spirv = spirv::serialiseModule( *shaderModule );
-		castor::MbString glsl;
+		MbString glsl;
 
 #if C3D_HasGLSL
 		if ( ( getEngine()->areTextShadersKept() && spirvConfig.debugLevel != spirv::DebugLevel::eDebugInfo )
@@ -932,33 +932,33 @@ namespace castor3d
 		if ( getEngine()->isShaderValidationEnabled() )
 		{
 			auto shadersDir = Engine::getEngineDirectory() / cuT( "Shaders" );
-			auto fileBaseName = castor::File::normaliseFileName( name + cuT( "_" ) + castor::makeString( ashes::getName( stage ) ) );
+			auto fileBaseName = File::normaliseFileName( name + cuT( "_" ) + makeString( ashes::getName( stage ) ) );
 
-			if ( !castor::File::directoryExists( shadersDir ) )
+			if ( !File::directoryExists( shadersDir ) )
 			{
-				castor::File::directoryCreate( shadersDir );
+				File::directoryCreate( shadersDir );
 			}
 
 			{
-				if ( !castor::File::directoryExists( shadersDir / cuT( "SPV" ) ) )
+				if ( !File::directoryExists( shadersDir / cuT( "SPV" ) ) )
 				{
-					castor::File::directoryCreate( shadersDir / cuT( "SPV" ) );
+					File::directoryCreate( shadersDir / cuT( "SPV" ) );
 				}
 
-				castor::BinaryFile file{ shadersDir / cuT( "SPV" ) / ( fileBaseName + cuT( ".spirv" ) )
-					, castor::File::OpenMode::eWrite };
+				BinaryFile file{ shadersDir / cuT( "SPV" ) / ( fileBaseName + cuT( ".spirv" ) )
+					, File::OpenMode::eWrite };
 				file.writeArray( result.spirv.data()
 					, result.spirv.size() );
 			}
 #if C3D_HasGLSL
 			{
-				if ( !castor::File::directoryExists( shadersDir / cuT( "GLSL" ) ) )
+				if ( !File::directoryExists( shadersDir / cuT( "GLSL" ) ) )
 				{
-					castor::File::directoryCreate( shadersDir / cuT( "GLSL" ) );
+					File::directoryCreate( shadersDir / cuT( "GLSL" ) );
 				}
 
-				castor::BinaryFile glslFile{ shadersDir / cuT( "GLSL" ) / ( fileBaseName + cuT( ".glsl" ) )
-					, castor::File::OpenMode::eWrite };
+				BinaryFile glslFile{ shadersDir / cuT( "GLSL" ) / ( fileBaseName + cuT( ".glsl" ) )
+					, File::OpenMode::eWrite };
 				glslFile.writeArray( glsl.data()
 					, glsl.size() );
 			}
@@ -982,8 +982,8 @@ namespace castor3d
 	}
 
 	SpirVShader RenderSystem::compileShader( VkShaderStageFlagBits stage
-		, castor::String const & name
-		, castor::MbString const & glsl )const
+		, String const & name
+		, MbString const & glsl )const
 	{
 		SpirVShader result;
 		CU_Require( !glsl.empty() );
@@ -993,45 +993,45 @@ namespace castor3d
 			result.text = glsl;
 		}
 
-		log::debug << "Compiling " << castor::makeString( ashes::getName( stage ) ) << " shader [" << name << "] ... SPV ...";
-		result.spirv = castor3d::compileGlslToSpv( getRenderDevice(), stage, glsl );
+		log::debug << "Compiling " << makeString( ashes::getName( stage ) ) << " shader [" << name << "] ... SPV ...";
+		result.spirv = c3d::compileGlslToSpv( getRenderDevice(), stage, glsl );
 		log::debug << " Done." << std::endl;
 		return result;
 	}
 
-	castor::Matrix4x4f RenderSystem::getFrustum( float left
+	Matrix4x4f RenderSystem::getFrustum( float left
 		, float right
 		, float bottom
 		, float top
 		, float zNear
 		, float zFar )const
 	{
-		return castor::matrix::reverseDepth( castor::matrix::frustum( left, right, bottom, top, zNear, zFar ) );
+		return matrix::reverseDepth( matrix::frustum( left, right, bottom, top, zNear, zFar ) );
 	}
 
-	castor::Matrix4x4f RenderSystem::getPerspective( castor::Angle const & fovy
+	Matrix4x4f RenderSystem::getPerspective( Angle const & fovy
 		, float aspect
 		, float zNear
 		, float zFar )const
 	{
-		return castor::matrix::reverseDepth( castor::matrix::perspective( fovy, aspect, zNear, zFar ) );
+		return matrix::reverseDepth( matrix::perspective( fovy, aspect, zNear, zFar ) );
 	}
 
-	castor::Matrix4x4f RenderSystem::getOrtho( float left
+	Matrix4x4f RenderSystem::getOrtho( float left
 		, float right
 		, float bottom
 		, float top
 		, float zNear
 		, float zFar )const
 	{
-		return castor::matrix::reverseDepth( castor::matrix::ortho( left, right, bottom, top, zNear, zFar ) );
+		return matrix::reverseDepth( matrix::ortho( left, right, bottom, top, zNear, zFar ) );
 	}
 
-	castor::Matrix4x4f RenderSystem::getInfinitePerspective( castor::Angle const & fovy
+	Matrix4x4f RenderSystem::getInfinitePerspective( Angle const & fovy
 		, float aspect
 		, float zNear )const
 	{
-		return castor::matrix::reverseDepth( castor::matrix::perspective( fovy, aspect, zNear ) );
+		return matrix::reverseDepth( matrix::perspective( fovy, aspect, zNear ) );
 	}
 
 	Texture const & RenderSystem::getPrefilteredBrdfTexture()const
@@ -1042,7 +1042,7 @@ namespace castor3d
 
 	bool RenderSystem::doCreateRandomStorage( RenderDevice const & device )
 	{
-		m_randomStorage = makeBuffer< castor::Point4f >( device
+		m_randomStorage = makeBuffer< Point4f >( device
 			, RandomDataCount
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -1072,12 +1072,12 @@ namespace castor3d
 
 	ast::ShaderAllocator & RenderSystem::doGetShaderAllocator()
 	{
-		auto lock = castor::makeUniqueLock( m_allocMutex );
+		auto lock = makeUniqueLock( m_allocMutex );
 		auto [it, res] = m_shaderCompileAllocator.try_emplace( std::this_thread::get_id() );
 
 		if ( res )
 		{
-			it->second = castor::make_unique< ast::ShaderAllocator >( ast::AllocationMode::eIncremental );
+			it->second = makeRawUnique< ast::ShaderAllocator >( ast::AllocationMode::eIncremental );
 		}
 
 		return *it->second;

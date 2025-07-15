@@ -11,28 +11,25 @@
 
 #include <ShaderWriter/Intrinsics/IntrinsicFunctions.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::ReflectionComponent >
-		: public TextWriterT< castor3d::ReflectionComponent >
+	class TextWriter< ReflectionComponent >
+		: public TextWriterT< ReflectionComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::ReflectionComponent >{ tabs }
+			: TextWriterT< ReflectionComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::ReflectionComponent const & object
+		bool operator()( ReflectionComponent const & object
 			, StringStream & file )override
 		{
 			return writeOpt( file, cuT( "reflections" ), object.hasReflections() );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace reflcmp
@@ -128,14 +125,14 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void ReflectionComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void ReflectionComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "reflections" )
 			, reflcmp::parserPassReflections
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			, { makeParameter< ParameterType::eBool >() } );
 	}
 
 	void ReflectionComponent::Plugin::zeroBuffer( Pass const & pass
@@ -154,10 +151,10 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const ReflectionComponent::TypeName = C3D_MakePassOtherComponentName( "reflection" );
+	String const ReflectionComponent::TypeName = C3D_MakePassOtherComponentName( "reflection" );
 
 	ReflectionComponent::ReflectionComponent( Pass & pass )
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName }
+		: BaseDataPassComponentT< AtomicGroupChangeTracked< bool > >{ pass, TypeName }
 	{
 	}
 
@@ -169,17 +166,17 @@ namespace castor3d
 
 	PassComponentUPtr ReflectionComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< ReflectionComponent >( pass );
+		auto result = makeRawUnique< ReflectionComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool ReflectionComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool ReflectionComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< ReflectionComponent >{ tabs }( *this, file );
+		return TextWriter< ReflectionComponent >{ tabs }( *this, file );
 	}
 
 	void ReflectionComponent::doFillBuffer( PassBuffer & buffer )const

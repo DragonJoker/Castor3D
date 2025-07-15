@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class RenderedObject
 	{
@@ -87,7 +87,7 @@ namespace castor3d
 		void doFillEntry( uint32_t nodeId
 			, Pass const & pass
 			, SceneNode const & sceneNode
-			, castor::Matrix4x4f modelMtx
+			, Matrix4x4f modelMtx
 			, uint32_t meshletCount
 			, uint32_t indexCount
 			, uint32_t vertexCount
@@ -99,7 +99,7 @@ namespace castor3d
 		bool m_receivesShadows{ true };
 		bool m_cullable{ true };
 		uint32_t m_firstUpdate{ 5u };
-		castor::UnorderedMap< uint32_t, castor::Pair< ModelBufferConfiguration *, Offsets > > m_modelsDataOffsets{};
+		HashMap< uint32_t, Pair< ModelBufferConfiguration *, Offsets > > m_modelsDataOffsets{};
 	};
 }
 

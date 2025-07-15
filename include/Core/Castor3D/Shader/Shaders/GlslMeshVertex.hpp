@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	struct MeshVertexBase
 		: public sdw::StructInstance
@@ -68,7 +68,7 @@ namespace castor3d::shader
 		MeshPosition( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled = true )
-			: sdw::StructInstance{ writer, castor::move( expr ), enabled }
+			: sdw::StructInstance{ writer, c3d::move( expr ), enabled }
 			, position{ getMember< sdw::Vec4 >( "position" ) }
 			, fill{ getMemberArray< sdw::Vec4 >( "fill", true ) }
 		{
@@ -89,7 +89,7 @@ namespace castor3d::shader
 					, sdw::type::NotArray );
 				auto fillCount = stride == 0u
 					? 0u
-					: uint32_t( ( stride / sizeof( castor::Point4f ) ) - 1u );
+					: uint32_t( ( stride / sizeof( Point4f ) ) - 1u );
 				result->declMember( "fill"
 					, sdw::type::Kind::eVec4F
 					, fillCount

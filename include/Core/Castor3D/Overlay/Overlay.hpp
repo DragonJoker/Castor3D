@@ -12,13 +12,13 @@ See LICENSE file in root folder
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class Overlay final
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
-		friend class castor::ResourceCacheT< Overlay
-			, castor::String
+		friend class ResourceCacheT< Overlay
+			, String
 			, OverlayCacheTraits >;
 
 	public:
@@ -44,7 +44,7 @@ namespace castor3d
 		 *\param[in]	parent	L'incrustation parente.
 		 *\param[in]	level	Le niveau de base de l'incrustation.
 		 */
-		C3D_API Overlay( castor::String const & name
+		C3D_API Overlay( String const & name
 			, Engine & engine
 			, OverlayType type
 			, OverlayRPtr parent
@@ -136,7 +136,7 @@ namespace castor3d
 		 */
 		C3D_API uint32_t computeLevel()const;
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 		/**
 		*\~english
 		*\name
@@ -151,22 +151,22 @@ namespace castor3d
 			return *m_category;
 		}
 
-		castor::Position getAbsolutePosition( castor::Size const & size )const noexcept
+		Position getAbsolutePosition( Size const & size )const noexcept
 		{
 			return m_category->getAbsolutePosition( size );
 		}
 
-		castor::Size getAbsoluteSize( castor::Size const & size )const noexcept
+		Size getAbsoluteSize( Size const & size )const noexcept
 		{
 			return m_category->getAbsoluteSize( size );
 		}
 
-		castor::Point2d getAbsolutePosition()const noexcept
+		Point2d getAbsolutePosition()const noexcept
 		{
 			return m_category->getAbsolutePosition();
 		}
 
-		castor::Point2d getAbsoluteSize()const noexcept
+		Point2d getAbsoluteSize()const noexcept
 		{
 			return m_category->getAbsoluteSize();
 		}
@@ -181,17 +181,17 @@ namespace castor3d
 			return m_category->isPositionChanged();
 		}
 
-		castor::String const & getName()const noexcept
+		String const & getName()const noexcept
 		{
 			return m_name;
 		}
 
-		castor::Point2d const & getRelativePosition()const noexcept
+		Point2d const & getRelativePosition()const noexcept
 		{
 			return m_category->getRelativePosition();
 		}
 
-		castor::Point2d const & getRelativeSize()const noexcept
+		Point2d const & getRelativeSize()const noexcept
 		{
 			return m_category->getRelativeSize();
 		}
@@ -284,27 +284,27 @@ namespace castor3d
 			m_category->setMaterial( material );
 		}
 
-		void setRelativePosition( castor::Point2d const & position )
+		void setRelativePosition( Point2d const & position )
 		{
 			m_category->setRelativePosition( position );
 		}
 
-		void setRelativeSize( castor::Point2d const & size )
+		void setRelativeSize( Point2d const & size )
 		{
 			m_category->setRelativeSize( size );
 		}
 
-		void setPixelPosition( castor::Position const & position )
+		void setPixelPosition( Position const & position )
 		{
 			m_category->setPixelPosition( position );
 		}
 
-		void setPixelSize( castor::Size const & size )
+		void setPixelSize( Size const & size )
 		{
 			m_category->setPixelSize( size );
 		}
 
-		void rename( castor::StringView name )
+		void rename( String name )
 		{
 			m_name = name;
 		}
@@ -326,7 +326,7 @@ namespace castor3d
 		void clear()noexcept;
 
 	private:
-		castor::String m_name;
+		String m_name;
 		OverlayRPtr m_parent{};
 		OverlayPtrArray m_children;
 		OverlayCategoryUPtr m_category;
@@ -346,83 +346,83 @@ namespace castor3d
 		SceneContext * scene{};
 		RootContext * root{};
 		OverlayPtr overlay;
-		castor::Vector< OverlayPtr > parentOverlays{};
+		Vector< OverlayPtr > parentOverlays{};
 	};
 
-	C3D_API castor::String getPrefix( OverlayContext const & context );
+	C3D_API String getPrefix( OverlayContext const & context );
 	C3D_API Engine * getEngine( OverlayContext const & context );
 }
 
-namespace castor
+namespace c3d
 {
 	template<>
-	struct ParserEnumTraits< castor3d::TextWrappingMode >
+	struct ParserEnumTraits< TextWrappingMode >
 	{
 		static StringView constexpr Name = cuT( "TextWrappingMode" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT< castor3d::TextWrappingMode >();
+				result = getEnumMapT< TextWrappingMode >();
 				return result;
 			}( );
 	};
 
 	template<>
-	struct ParserEnumTraits< castor3d::BorderPosition >
+	struct ParserEnumTraits< BorderPosition >
 	{
 		static StringView constexpr Name = cuT( "BorderPosition" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT< castor3d::BorderPosition >();
+				result = getEnumMapT< BorderPosition >();
 				return result;
 			}( );
 	};
 
 	template<>
-	struct ParserEnumTraits< castor3d::VAlign >
+	struct ParserEnumTraits< VAlign >
 	{
 		static StringView constexpr Name = cuT( "VAlign" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT< castor3d::VAlign >();
+				result = getEnumMapT< VAlign >();
 				return result;
 			}( );
 	};
 
 	template<>
-	struct ParserEnumTraits< castor3d::HAlign >
+	struct ParserEnumTraits< HAlign >
 	{
 		static StringView constexpr Name = cuT( "HAlign" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT< castor3d::HAlign >();
+				result = getEnumMapT< HAlign >();
 				return result;
 			}( );
 	};
 
 	template<>
-	struct ParserEnumTraits< castor3d::TextTexturingMode >
+	struct ParserEnumTraits< TextTexturingMode >
 	{
 		static StringView constexpr Name = cuT( "TextTexturingMode" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT< castor3d::TextTexturingMode >();
+				result = getEnumMapT< TextTexturingMode >();
 				return result;
 			}( );
 	};
 
 	template<>
-	struct ParserEnumTraits< castor3d::TextLineSpacingMode >
+	struct ParserEnumTraits< TextLineSpacingMode >
 	{
 		static StringView constexpr Name = cuT( "TextLineSpacingMode" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT< castor3d::TextLineSpacingMode >();
+				result = getEnumMapT< TextLineSpacingMode >();
 				return result;
 			}( );
 	};

@@ -20,14 +20,14 @@ See LICENSE file in root folder
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ShaderProgram
-		: public castor::Named
-		, public castor::OwnedBy< RenderSystem >
+		: public Named
+		, public OwnedBy< RenderSystem >
 		, public std::enable_shared_from_this< ShaderProgram >
 	{
-		friend class castor::TextWriter< castor3d::ShaderProgram >;
+		friend class TextWriter< ShaderProgram >;
 
 	public:
 		/**
@@ -40,7 +40,7 @@ namespace castor3d
 		 *\param[in]	name			Le nom du programme.
 		 *\param[in]	renderSystem	Le RenderSystem.
 		 */
-		C3D_API explicit ShaderProgram( castor::String const & name
+		C3D_API explicit ShaderProgram( String const & name
 			, RenderSystem & renderSystem );
 		/**
 		 *\~english
@@ -52,7 +52,7 @@ namespace castor3d
 		 *\param[in]	target		Le module shader concerné.
 		 *\param[in]	pathFile	Le nom du fichier.
 		 */
-		C3D_API void setFile( VkShaderStageFlagBits target, castor::Path const & pathFile );
+		C3D_API void setFile( VkShaderStageFlagBits target, Path const & pathFile );
 		/**
 		 *\~english
 		 *\brief		Sets the shader source.
@@ -63,7 +63,7 @@ namespace castor3d
 		 *\param[in]	target	Le shader object concerné.
 		 *\param[in]	source	Le code de la source.
 		 */
-		C3D_API void setSource( VkShaderStageFlagBits target, castor::MbString const & source );
+		C3D_API void setSource( VkShaderStageFlagBits target, MbString const & source );
 		/**
 		 *\~english
 		 *\brief		Sets the shader source.
@@ -94,7 +94,7 @@ namespace castor3d
 		 */
 		C3D_API bool hasSource( ast::ShaderStage stage )const;
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 		/**
 		*\~english
 		*name
@@ -116,7 +116,7 @@ namespace castor3d
 		/**@}*/
 
 	protected:
-		castor::Map< VkShaderStageFlagBits, castor::Path > m_files;
+		Map< VkShaderStageFlagBits, Path > m_files;
 		ProgramModule m_module;
 		ashes::PipelineShaderStageCreateInfoArray m_states;
 	};
@@ -144,22 +144,22 @@ namespace castor3d
 	inline ashes::PipelineShaderStageCreateInfo makeShaderState( ashes::Device const & device
 		, VkShaderStageFlagBits stage
 		, SpirVShader const & code
-		, castor::String const & name
-		, castor::String const & mainFuncName = cuT( "main" )
+		, String const & name
+		, String const & mainFuncName = cuT( "main" )
 		, ashes::Optional< ashes::SpecializationInfo > specialization = ashes::nullopt )
 	{
-		auto shaderModule = device.createShaderModule( castor::toUtf8( name ) + "ShdMod_" + ashes::getName( stage )
+		auto shaderModule = device.createShaderModule( toUtf8( name ) + "ShdMod_" + ashes::getName( stage )
 			, code.spirv );
 		return ashes::PipelineShaderStageCreateInfo{ 0u
 			, stage
-			, castor::move( shaderModule )
-			, castor::toUtf8( mainFuncName )
-			, castor::move( specialization ) };
+			, c3d::move( shaderModule )
+			, toUtf8( mainFuncName )
+			, c3d::move( specialization ) };
 	}
 
 	inline ashes::PipelineShaderStageCreateInfo makeShaderState( RenderDevice const & device
 		, ShaderModule & shaderModule
-		, castor::String const & mainFuncName = cuT( "main" )
+		, String const & mainFuncName = cuT( "main" )
 		, ashes::Optional< ashes::SpecializationInfo > specialization = ashes::nullopt )
 	{
 		return makeShaderState( *device
@@ -167,7 +167,7 @@ namespace castor3d
 			, compileShader( device, shaderModule )
 			, shaderModule.name
 			, mainFuncName
-			, castor::move( specialization ) );
+			, c3d::move( specialization ) );
 	}
 
 	struct ParticleSystemContext;
@@ -175,7 +175,7 @@ namespace castor3d
 	struct ProgramContext
 	{
 		ParticleSystemContext * particleSystem{};
-		castor::String name{};
+		String name{};
 		ShaderProgramRPtr shaderProgram{};
 		VkShaderStageFlagBits shaderStage{};
 	};

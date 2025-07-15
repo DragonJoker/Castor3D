@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ShadowMap/ShadowMapPoint.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapSpot.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class TransparentPass
 		: public RenderTechniqueNodesPass
@@ -60,7 +60,7 @@ namespace castor3d
 			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 		/**
@@ -72,7 +72,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		void setDepthFormat( castor::PixelFormat value )noexcept
+		void setDepthFormat( PixelFormat value )noexcept
 		{
 			m_depthFormat = value;
 		}
@@ -85,16 +85,16 @@ namespace castor3d
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, castor3d::ShadowMapLightTypeArray const & shadowMaps
+			, ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const * shadowBuffer )override;
 		void doGetPixelShaderSource( PipelineFlags const & flags
 			, ast::ShaderBuilder & builder )const override;
 
 	public:
-		C3D_API static castor::String const Type;
+		C3D_API static String const Type;
 
 	private:
-		castor::PixelFormat m_depthFormat{};
+		PixelFormat m_depthFormat{};
 		Texture const & m_sceneImage;
 		Texture const & m_depthObjImage;
 		Texture const & m_normalsImage;

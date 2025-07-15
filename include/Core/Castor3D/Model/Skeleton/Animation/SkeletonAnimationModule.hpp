@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/Quaternion.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Model */
 	//@{
@@ -64,19 +64,19 @@ namespace castor3d
 	{
 		SkeletonAnimationObject * object{};
 		NodeTransform transform{};
-		castor::Matrix4x4f cumulative{};
+		Matrix4x4f cumulative{};
 	};
-	using TransformArray = castor::Vector< ObjectTransform >;
+	using TransformArray = Vector< ObjectTransform >;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, SkeletonAnimation, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SkeletonAnimationKeyFrame, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SkeletonAnimationObject, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SkeletonAnimationBone, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SkeletonAnimationNode, C3D_API );
+	CU_DeclareSmartPtr( c3d, SkeletonAnimation, C3D_API );
+	CU_DeclareSmartPtr( c3d, SkeletonAnimationKeyFrame, C3D_API );
+	CU_DeclareSmartPtr( c3d, SkeletonAnimationObject, C3D_API );
+	CU_DeclareSmartPtr( c3d, SkeletonAnimationBone, C3D_API );
+	CU_DeclareSmartPtr( c3d, SkeletonAnimationNode, C3D_API );
 	/** @endcond */
 
-	using SkeletonAnimationObjectArray = castor::Vector< SkeletonAnimationObjectRPtr >;
+	using SkeletonAnimationObjectArray = Vector< SkeletonAnimationObjectRPtr >;
 
 	//@}
 	//@}

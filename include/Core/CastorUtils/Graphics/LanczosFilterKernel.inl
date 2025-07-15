@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #include "GraphicsModule.hpp"
 #include "PixelFormat.hpp"
 
-namespace castor
+namespace c3d
 {
 	namespace lanczos
 	{

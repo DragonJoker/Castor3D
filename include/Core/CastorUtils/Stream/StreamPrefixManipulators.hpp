@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Stream/StreamPrefixBuffer.hpp"
 #include "CastorUtils/Stream/StreamPrefixBufferManager.hpp"
 
-namespace castor
+namespace c3d
 {
 	namespace format
 	{

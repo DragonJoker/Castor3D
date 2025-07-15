@@ -3,10 +3,10 @@
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 
-CU_ImplementSmartPtr( castor3d, GpuPackedBuffer )
-CU_ImplementSmartPtr( castor3d, GpuPackedBaseBuffer )
+CU_ImplementSmartPtr( c3d, GpuPackedBuffer )
+CU_ImplementSmartPtr( c3d, GpuPackedBaseBuffer )
 
-namespace castor3d
+namespace c3d
 {
 	static bool constexpr C3D_DebugGPUPackedAllocator = false;
 

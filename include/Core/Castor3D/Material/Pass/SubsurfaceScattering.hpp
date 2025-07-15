@@ -9,13 +9,13 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
 #include <CastorUtils/Design/Signal.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class SubsurfaceScattering
 	{
 	public:
-		using Changed = castor::Function< void( SubsurfaceScattering const & ) >;
-		using OnChanged = castor::SignalT< Changed >;
+		using Changed = Function< void( SubsurfaceScattering const & ) >;
+		using OnChanged = SignalT< Changed >;
 		using OnChangedConnection = OnChanged::connection;
 
 	public:
@@ -85,7 +85,7 @@ namespace castor3d
 			onChanged( *this );
 		}
 
-		void addProfileFactor( castor::Point4f const & value )
+		void addProfileFactor( Point4f const & value )
 		{
 			m_dirty = true;
 			m_profileFactors.emplace_back( m_dirty, value );
@@ -127,31 +127,31 @@ namespace castor3d
 		bool m_dirty{ true };
 		//!\~english	The Gaussian filter width.
 		//!\~french		La largeur du filtre Gaussien.
-		castor::GroupChangeTracked< float > m_gaussianWidth;
+		GroupChangeTracked< float > m_gaussianWidth;
 		//!\~english	The scattering strength.
 		//!\~french		La force du scattering.
-		castor::GroupChangeTracked< float > m_strength;
+		GroupChangeTracked< float > m_strength;
 		//!\~english	The radius of the largest Gaussian.
 		//!\~french		Le rayon du plus large filtre Gaussien.
-		castor::GroupChangeTracked< float > m_subsurfaceRadius;
+		GroupChangeTracked< float > m_subsurfaceRadius;
 		//!\~english	The scale used when computing surface thickness.
 		//!\~french		L'échelle utilisée lors du cacul de l'épaisseur de la surface.
-		castor::GroupChangeTracked< float > m_thicknessScale;
+		GroupChangeTracked< float > m_thicknessScale;
 		//!\~english	The radius of the largest Gaussian.
 		//!\~french		Le rayon du plus large filtre Gaussien.
-		castor::GroupChangeTracked< castor::Point3f > m_originalBlendFactors;
+		GroupChangeTracked< Point3f > m_originalBlendFactors;
 		//!\~english	The radius of the largest Gaussian.
 		//!\~french		Le rayon du plus large filtre Gaussien.
-		castor::GroupChangeTracked< castor::Point3f > m_subsurfaceBlends;
+		GroupChangeTracked< Point3f > m_subsurfaceBlends;
 		//!\~english	The radius of the largest Gaussian.
 		//!\~french		Le rayon du plus large filtre Gaussien.
-		castor::GroupChangeTracked< castor::Point3f > m_subsurfaceGaussianExponents;
+		GroupChangeTracked< Point3f > m_subsurfaceGaussianExponents;
 		//!\~english	The colour used to modulate back-lit transmittance.
 		//!\~french		La couleur utilisée pour moduler la lumière transmise par les faces arrières.
-		castor::GroupChangeTracked< castor::Point3f > m_transmittanceCoefficients;
+		GroupChangeTracked< Point3f > m_transmittanceCoefficients;
 		//!\~english	The transmittance profile factors.
 		//!\~french		Les facteurs du profil de transmission.
-		castor::Vector< castor::GroupChangeTracked< castor::Point4f > > m_profileFactors;
+		Vector< GroupChangeTracked< Point4f > > m_profileFactors;
 	};
 }
 

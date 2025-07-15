@@ -12,9 +12,9 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, SceneNode )
+CU_ImplementSmartPtr( c3d, SceneNode )
 
-namespace castor3d
+namespace c3d
 {
 	namespace node
 	{
@@ -39,7 +39,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				SceneNodeRPtr parent;
 
 				if ( name == Scene::ObjectRootNode )
@@ -115,8 +115,8 @@ namespace castor3d
 			}
 			else
 			{
-				blockContext->orientation = castor::Quaternion::fromAxisAngle( params[0]->get< castor::Point3f >()
-					, castor::Angle::fromDegrees( params[1]->get< float >() ) );
+				blockContext->orientation = Quaternion::fromAxisAngle( params[0]->get< Point3f >()
+					, Angle::fromDegrees( params[1]->get< float >() ) );
 
 				if ( blockContext->currentNode )
 				{
@@ -134,8 +134,8 @@ namespace castor3d
 			}
 			else
 			{
-				blockContext->orientation *= castor::Quaternion::fromAxisAngle( params[0]->get< castor::Point3f >()
-					, castor::Angle::fromDegrees( params[1]->get< float >() ) );
+				blockContext->orientation *= Quaternion::fromAxisAngle( params[0]->get< Point3f >()
+					, Angle::fromDegrees( params[1]->get< float >() ) );
 
 				if ( blockContext->currentNode )
 				{
@@ -153,11 +153,11 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Point3f direction;
+				Point3f direction;
 				params[0]->get( direction );
-				castor::Point3f up{ 0, 1, 0 };
-				castor::Point3f right{ castor::point::cross( direction, up ) };
-				blockContext->orientation = castor::Quaternion::fromAxes( right, up, direction );
+				Point3f up{ 0, 1, 0 };
+				Point3f right{ point::cross( direction, up ) };
+				blockContext->orientation = Quaternion::fromAxes( right, up, direction );
 
 				if ( blockContext->currentNode )
 				{
@@ -215,7 +215,7 @@ namespace castor3d
 							{
 								auto & animation = node->createAnimation( animName );
 								BinaryParser< SceneNodeAnimation > parser;
-								castor::BinaryFile animFile{ fileName, castor::File::OpenMode::eRead };
+								BinaryFile animFile{ fileName, File::OpenMode::eRead };
 								parser.parse( animation, animFile );
 							}
 						}
@@ -231,7 +231,7 @@ namespace castor3d
 	uint64_t SceneNode::Count = 0;
 	uint64_t SceneNode::CurrentId = 0;
 
-	SceneNode::SceneNode( castor::String const & name
+	SceneNode::SceneNode( String const & name
 		, SceneNodeCreateInfo const & createInfo )
 		: SceneNode{ name
 			, *createInfo.scene
@@ -243,26 +243,26 @@ namespace castor3d
 	{
 	}
 
-	SceneNode::SceneNode( castor::String const & name
+	SceneNode::SceneNode( String const & name
 		, Scene & scene
 		, SceneNode * parent
-		, castor::Point3f position
-		, castor::Quaternion orientation
-		, castor::Point3f scale
+		, Point3f position
+		, Quaternion orientation
+		, Point3f scale
 		, bool isStatic )
 		: Animable{ *scene.getEngine() }
-		, castor::Named{ name }
+		, Named{ name }
 		, m_scene{ &scene }
 		, m_static{ isStatic }
 		, m_displayable{ name == Scene::RootNode }
-		, m_orientation{ castor::move( orientation ) }
-		, m_position{ castor::move( position ) }
-		, m_scale{ castor::move( scale ) }
+		, m_orientation{ c3d::move( orientation ) }
+		, m_position{ c3d::move( position ) }
+		, m_scale{ c3d::move( scale ) }
 	{
 		if ( m_name.empty() )
 		{
 			m_name = cuT( "SceneNode_" );
-			m_name += castor::string::toString( Count );
+			m_name += string::toString( Count );
 		}
 
 		if ( parent )
@@ -274,14 +274,14 @@ namespace castor3d
 		++Count;
 	}
 
-	SceneNode::SceneNode( castor::String const & name
+	SceneNode::SceneNode( String const & name
 		, Scene & scene )
 		: SceneNode{ name
 			, scene
 			, nullptr
-			, castor::Point3f{}
-			, castor::Quaternion::identity()
-			, castor::Point3f{ 1.0f, 1.0f, 1.0f }
+			, Point3f{}
+			, Quaternion::identity()
+			, Point3f{ 1.0f, 1.0f, 1.0f }
 			, false }
 	{
 	}
@@ -332,7 +332,7 @@ namespace castor3d
 	{
 		auto it = std::find_if( m_objects.begin()
 			, m_objects.end()
-			, [&object]( castor::ReferenceWrapper< MovableObject > obj )
+			, [&object]( ReferenceWrapper< MovableObject > obj )
 			{
 				return &obj.get() == &object;
 			} );
@@ -343,9 +343,8 @@ namespace castor3d
 		}
 	}
 
-	void SceneNode::addParsers( castor::AttributeParsers & result )
+	void SceneNode::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< NodeContext > context{ result, CSCNSection::eNode, CSCNSection::eScene };
 		context.addParser( cuT( "static" ), node::parserStatic, { makeParameter< ParameterType::eBool >() } );
 		context.addParser( cuT( "visible" ), node::parserVisible, { makeParameter< ParameterType::eBool >() } );
@@ -377,7 +376,7 @@ namespace castor3d
 		}
 	}
 
-	bool SceneNode::hasChild( castor::String const & name )const
+	bool SceneNode::hasChild( String const & name )const
 	{
 		bool found = false;
 
@@ -385,7 +384,7 @@ namespace castor3d
 		{
 			found = m_children.end() != std::find_if( m_children.begin()
 				, m_children.end()
-				, [&name]( castor::Pair< castor::String, SceneNodeRPtr > const & pair )
+				, [&name]( Pair< String, SceneNodeRPtr > const & pair )
 				{
 					return pair.second->hasChild( name );
 				} );
@@ -404,7 +403,7 @@ namespace castor3d
 		doDetachChild( child.getName() );
 	}
 
-	void SceneNode::detachChild( castor::String const & childName )noexcept
+	void SceneNode::detachChild( String const & childName )noexcept
 	{
 		doDetachChild( childName );
 	}
@@ -414,33 +413,33 @@ namespace castor3d
 		doDetachChildren( cleanup );
 	}
 
-	void SceneNode::yaw( castor::Angle const & angle )
+	void SceneNode::yaw( Angle const & angle )
 	{
 		CU_Require( !m_static );
 
 		if ( !m_static )
 		{
-			rotate( castor::Quaternion::fromAxisAngle( castor::Point3d( 0.0, 1.0, 0.0 ), angle ) );
+			rotate( Quaternion::fromAxisAngle( Point3d( 0.0, 1.0, 0.0 ), angle ) );
 		}
 	}
 
-	void SceneNode::pitch( castor::Angle const & angle )
+	void SceneNode::pitch( Angle const & angle )
 	{
 		CU_Require( !m_static );
 
 		if ( !m_static )
 		{
-			rotate( castor::Quaternion::fromAxisAngle( castor::Point3d( 1.0, 0.0, 0.0 ), angle ) );
+			rotate( Quaternion::fromAxisAngle( Point3d( 1.0, 0.0, 0.0 ), angle ) );
 		}
 	}
 
-	void SceneNode::roll( castor::Angle const & angle )
+	void SceneNode::roll( Angle const & angle )
 	{
 		CU_Require( !m_static );
 
 		if ( !m_static )
 		{
-			rotate( castor::Quaternion::fromAxisAngle( castor::Point3d( 0.0, 0.0, 1.0 ), angle ) );
+			rotate( Quaternion::fromAxisAngle( Point3d( 0.0, 0.0, 1.0 ), angle ) );
 		}
 	}
 
@@ -449,7 +448,7 @@ namespace castor3d
 		m_scene->markDirty( *this );
 	}
 
-	void SceneNode::rotate( castor::Quaternion const & orientation )
+	void SceneNode::rotate( Quaternion const & orientation )
 	{
 		CU_Require( !m_static );
 
@@ -463,7 +462,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneNode::translate( castor::Point3f const & position )
+	void SceneNode::translate( Point3f const & position )
 	{
 		CU_Require( !m_static );
 
@@ -477,7 +476,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneNode::scale( castor::Point3f const & scale )
+	void SceneNode::scale( Point3f const & scale )
 	{
 		CU_Require( !m_static );
 
@@ -491,19 +490,19 @@ namespace castor3d
 		}
 	}
 
-	SceneNodeAnimation & SceneNode::createAnimation( castor::String const & name )
+	SceneNodeAnimation & SceneNode::createAnimation( String const & name )
 	{
 		CU_Require( !m_static );
 
 		if ( !hasAnimation( name ) )
 		{
-			addAnimation( castor::makeUniqueDerived< Animation, SceneNodeAnimation >( *this, name ) );
+			addAnimation( makeUniqueDerived< Animation, SceneNodeAnimation >( *this, name ) );
 		}
 
 		return doGetAnimation< SceneNodeAnimation >( name );
 	}
 
-	void SceneNode::removeAnimation( castor::String const & name )
+	void SceneNode::removeAnimation( String const & name )
 	{
 		CU_Require( !m_static );
 
@@ -513,7 +512,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneNode::setOrientation( castor::Quaternion const & orientation )
+	void SceneNode::setOrientation( Quaternion const & orientation )
 	{
 		CU_Require( !m_static );
 
@@ -527,7 +526,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneNode::setPosition( castor::Point3f const & position )
+	void SceneNode::setPosition( Point3f const & position )
 	{
 		CU_Require( !m_static );
 
@@ -541,7 +540,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneNode::setScale( castor::Point3f const & scale )
+	void SceneNode::setScale( Point3f const & scale )
 	{
 		CU_Require( !m_static );
 
@@ -555,7 +554,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneNode::setTransformationMatrix( castor::Matrix4x4f const & transform )
+	void SceneNode::setTransformationMatrix( Matrix4x4f const & transform )
 	{
 		CU_Require( !m_static );
 
@@ -563,7 +562,7 @@ namespace castor3d
 		{
 			m_transform = transform;
 			doUpdateChildsDerivedTransform();
-			castor::matrix::decompose( m_transform
+			matrix::decompose( m_transform
 				, m_position
 				, m_scale
 				, m_orientation );
@@ -573,21 +572,21 @@ namespace castor3d
 		}
 	}
 
-	castor::Point3f SceneNode::getDerivedPosition()const
+	Point3f SceneNode::getDerivedPosition()const
 	{
-		castor::Point3f result( m_position );
+		Point3f result( m_position );
 
 		if ( auto parent = getParent() )
 		{
-			result = castor::matrix::getTransformed( parent->getDerivedTransformationMatrix(), m_position );
+			result = matrix::getTransformed( parent->getDerivedTransformationMatrix(), m_position );
 		}
 
 		return result;
 	}
 
-	castor::Quaternion SceneNode::getDerivedOrientation()const
+	Quaternion SceneNode::getDerivedOrientation()const
 	{
-		castor::Quaternion result( m_orientation );
+		Quaternion result( m_orientation );
 
 		if ( auto parent = getParent() )
 		{
@@ -597,9 +596,9 @@ namespace castor3d
 		return result;
 	}
 
-	castor::Point3f SceneNode::getDerivedScale()const
+	Point3f SceneNode::getDerivedScale()const
 	{
-		castor::Point3f result( m_scale );
+		Point3f result( m_scale );
 
 		if ( auto parent = getParent() )
 		{
@@ -609,12 +608,12 @@ namespace castor3d
 		return result;
 	}
 
-	castor::Matrix4x4f const & SceneNode::getTransformationMatrix()const
+	Matrix4x4f const & SceneNode::getTransformationMatrix()const
 	{
 		return m_transform;
 	}
 
-	castor::Matrix4x4f const & SceneNode::getDerivedTransformationMatrix()const
+	Matrix4x4f const & SceneNode::getDerivedTransformationMatrix()const
 	{
 		return m_derivedTransform;
 	}
@@ -641,7 +640,7 @@ namespace castor3d
 		return m_children;
 	}
 
-	SceneNodeRPtr SceneNode::getChild( castor::String const & name )const
+	SceneNodeRPtr SceneNode::getChild( String const & name )const
 	{
 		return ( m_children.find( name ) != m_children.end() ? m_children.find( name )->second : nullptr );
 	}
@@ -659,7 +658,7 @@ namespace castor3d
 
 			if ( !m_mtxSet )
 			{
-				castor::matrix::setTransform( m_transform, m_position, m_scale, m_orientation );
+				matrix::setTransform( m_transform, m_position, m_scale, m_orientation );
 			}
 
 			m_mtxChanged = false;
@@ -744,7 +743,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneNode::doDetachChild( castor::String const & childName )noexcept
+	void SceneNode::doDetachChild( String const & childName )noexcept
 	{
 		auto it = m_children.find( childName );
 
@@ -767,7 +766,7 @@ namespace castor3d
 	void SceneNode::doDetachChildren( bool cleanup )noexcept
 	{
 		SceneNodeMap flush;
-		castor::swap( flush, m_children );
+		c3d::swap( flush, m_children );
 
 		for ( auto const & [_, current] : flush )
 		{
@@ -778,7 +777,7 @@ namespace castor3d
 		}
 	}
 
-	castor::String getPrefix( NodeContext const & context )
+	String getPrefix( NodeContext const & context )
 	{
 		return getPrefix( *context.scene );
 	}

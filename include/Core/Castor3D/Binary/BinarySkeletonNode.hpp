@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**
 	\~english
@@ -58,7 +58,7 @@ namespace castor3d
 		: public BinaryParserBase< SkeletonNode >
 	{
 	public:
-		castor::String parentName;
+		String parentName;
 
 	private:
 		/**

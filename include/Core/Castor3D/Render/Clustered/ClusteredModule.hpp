@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/DesignModule.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Render */
 	//@{
@@ -22,7 +22,7 @@ namespace castor3d
 		eExponentialLinearHybrid = 2,
 		CU_ScopedEnumBounds( eExponentialBase, eExponentialLinearHybrid )
 	};
-	C3D_API castor::String getName( ClusterSplitScheme value );
+	C3D_API String getName( ClusterSplitScheme value );
 	/**
 	*\~english
 	*\brief
@@ -51,13 +51,13 @@ namespace castor3d
 	*/
 	class FrustumClusters;
 
-	using ClustersBuffersChangedFunction = castor::Function< void( FrustumClusters const & ) >;
-	using OnClustersBuffersChanged = castor::SignalT< ClustersBuffersChangedFunction >;
-	using OnClustersBuffersChangedConnection = castor::ConnectionT< ClustersBuffersChangedFunction >;
+	using ClustersBuffersChangedFunction = Function< void( FrustumClusters const & ) >;
+	using OnClustersBuffersChanged = SignalT< ClustersBuffersChangedFunction >;
+	using OnClustersBuffersChangedConnection = ConnectionT< ClustersBuffersChangedFunction >;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, ClustersConfig, C3D_API );
-	CU_DeclareSmartPtr( castor3d, FrustumClusters, C3D_API );
+	CU_DeclareSmartPtr( c3d, ClustersConfig, C3D_API );
+	CU_DeclareSmartPtr( c3d, FrustumClusters, C3D_API );
 	/** @endcond */
 
 	C3D_API u32 getLightsMortonCodeChunkCount( u32 lightCount );

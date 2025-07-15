@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <mutex>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class Spacer
 	{
@@ -52,7 +52,7 @@ namespace castor3d
 	};
 
 	class Layout
-		: public castor::Named
+		: public Named
 	{
 	public:
 		struct Item
@@ -82,7 +82,7 @@ namespace castor3d
 				, OnControlChangedConnection o )noexcept
 				: m_type{ eControl }
 				, m_flags{ f }
-				, m_connection{ castor::move( o ) }
+				, m_connection{ c3d::move( o ) }
 			{
 				m_value.control = &c;
 			}
@@ -139,7 +139,7 @@ namespace castor3d
 
 			/** \return	The size including padding.
 			*/
-			C3D_API castor::Size getPaddedSize()const noexcept;
+			C3D_API Size getPaddedSize()const noexcept;
 
 			/** \return	The item horizontal alignment.
 			*/
@@ -206,7 +206,7 @@ namespace castor3d
 		*\param[in] manager
 		*	The parent controls manager.
 		*/
-		C3D_API explicit Layout( castor::String const & typeName
+		C3D_API explicit Layout( String const & typeName
 			, ControlsManager & manager );
 
 		/** Constructor
@@ -215,7 +215,7 @@ namespace castor3d
 		*\param[in] container
 		*	The parent layout control.
 		*/
-		C3D_API explicit Layout( castor::String const & typeName
+		C3D_API explicit Layout( String const & typeName
 			, LayoutControl & container );
 
 		/** Marks the layout as dirty.
@@ -297,8 +297,8 @@ namespace castor3d
 	protected:
 		ControlsManager * m_manager{};
 		LayoutControl * m_container{};
-		castor::Vector< Item > m_items;
-		castor::Vector< SpacerUPtr > m_spacers;
+		Vector< Item > m_items;
+		Vector< SpacerUPtr > m_spacers;
 		CpuFrameEvent * m_event{};
 		std::atomic_bool m_updating{ false };
 	};

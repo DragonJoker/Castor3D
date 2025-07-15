@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "StyleButton.hpp"
 #include "StyleListBox.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class ComboBoxStyle
 		: public ControlStyle
@@ -15,10 +15,10 @@ namespace castor3d
 	public:
 		static ControlType constexpr Type = ControlType::eComboBox;
 
-		ComboBoxStyle( castor::String const & name
+		ComboBoxStyle( String const & name
 			, Scene * scene
 			, Engine & engine
-			, castor::String const & fontName )
+			, String const & fontName )
 			: ControlStyle{ Type
 				, name
 				, scene
@@ -28,9 +28,9 @@ namespace castor3d
 		{
 		}
 
-		ComboBoxStyle( castor::String const & name
+		ComboBoxStyle( String const & name
 			, Engine & engine
-			, castor::String const & fontName )
+			, String const & fontName )
 			: ComboBoxStyle{ name, nullptr, engine, fontName }
 		{
 		}

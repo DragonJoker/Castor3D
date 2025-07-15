@@ -1,4 +1,4 @@
-namespace castor3d::shader
+namespace c3d::shader
 {
 	template< typename ValueT, sdw::StringLiteralT StructNameT >
 	DerivativeValueT< ValueT, StructNameT > DerivativeValueT< ValueT, StructNameT >::operator-()const

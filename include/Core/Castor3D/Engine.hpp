@@ -61,7 +61,7 @@ See LICENSE file in root folder
 #include <unordered_map>
 #include <unordered_set>
 
-namespace castor3d
+namespace c3d
 {
 	struct PrivEngineToken
 	{
@@ -78,7 +78,7 @@ namespace castor3d
 		uint32_t overlayCount;
 		uint32_t samplerCount;
 
-		C3D_API explicit EngineCounts( castor3d::Engine const & engine );
+		C3D_API explicit EngineCounts( Engine const & engine );
 	};
 
 	struct EngineConfig
@@ -89,7 +89,7 @@ namespace castor3d
 		*\~french
 		*	Le nom de l'application.
 		*/
-		castor::String appName;
+		String appName;
 		/**
 		*\~english
 		*	The user application version.
@@ -156,12 +156,12 @@ namespace castor3d
 	};
 
 	class Engine
-		: public castor::Unique< Engine >
+		: public Unique< Engine >
 	{
 	private:
 		Engine( EngineConfig config
-			, castor::LoggerInstancePtr ownedLogger
-			, castor::LoggerInstance * logger );
+			, LoggerInstancePtr ownedLogger
+			, LoggerInstance * logger );
 
 	public:
 		/**
@@ -184,7 +184,7 @@ namespace castor3d
 		 *\param[in]	logger	L'instance de logger.
 		 */
 		C3D_API Engine( EngineConfig config
-			, castor::LoggerInstance & logger );
+			, LoggerInstance & logger );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -222,7 +222,7 @@ namespace castor3d
 		 *\param[in]	type	Le type de renderer.
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool loadRenderer( castor::String const & type );
+		C3D_API bool loadRenderer( String const & type );
 		/**
 		 *\~english
 		 *\brief		Loads a renderer plug-in, given the renderer type
@@ -275,7 +275,7 @@ namespace castor3d
 		 *\param[in]	shift		Dit si la touche Shift est enfoncée.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API bool fireMouseMove( castor::Position const & position
+		C3D_API bool fireMouseMove( Position const & position
 			, bool ctrl
 			, bool alt
 			, bool shift );
@@ -334,14 +334,14 @@ namespace castor3d
 		 *\brief		Met dans la file la tâche CPU donnée.
 		 *\param[in]	job	Le job à exécuter.
 		 */
-		C3D_API void pushCpuJob( castor::AsyncJobQueue::Job job );
+		C3D_API void pushCpuJob( AsyncJobQueue::Job job );
 		/**
 		 *\~english
 		 *\brief		Retrieves a colour issued from a rainbow colours iterator.
 		 *\~french
 		 *\brief		Récupère une couleur issue d'un itérateur de couleurs d'arc-en-ciel.
 		 */
-		C3D_API castor::RgbaColour getNextRainbowColour()const;
+		C3D_API RgbaColour getNextRainbowColour()const;
 		/**
 		 *\~english
 		 *\brief		Registers a RenderWindow.
@@ -374,10 +374,10 @@ namespace castor3d
 		 *\param[in]	sections		Les sections.
 		 *\param[in]	contextCreator	La fonction de création de contexte de parser.
 		 */
-		C3D_API void registerParsers( castor::String name
-			, castor::AttributeParsers parsers
-			, castor::StrUInt32Map sections
-			, castor::UserContextCreator contextCreator );
+		C3D_API void registerParsers( String name
+			, AttributeParsers parsers
+			, StrUInt32Map sections
+			, UserContextCreator contextCreator );
 		/**
 		 *\~english
 		 *\brief		Unregisters parsers for SceneFileParser.
@@ -386,7 +386,7 @@ namespace castor3d
 		 *\brief		Désenregistre des analyseurs pour SceneFileParser.
 		 *\param[in]	name	Le nom d'enregistrement.
 		 */
-		C3D_API void unregisterParsers( castor::String const & name )noexcept;
+		C3D_API void unregisterParsers( String const & name )noexcept;
 		/**
 		 *\~english
 		 *\brief		Registers a render pass timer.
@@ -397,7 +397,7 @@ namespace castor3d
 		 *\param[in]	category	Le nom de la catégorie du timer.
 		 *\param[in]	timer		Le timer à enregistrer.
 		 */
-		C3D_API void registerTimer( castor::String const & category
+		C3D_API void registerTimer( String const & category
 			, FramePassTimer & timer );
 		/**
 		 *\~english
@@ -409,7 +409,7 @@ namespace castor3d
 		 *\param[in]	category	Le nom de la catégorie du timer.
 		 *\param[in]	timer		Le timer à désenregistrer.
 		 */
-		C3D_API void unregisterTimer( castor::String const & category
+		C3D_API void unregisterTimer( String const & category
 			, FramePassTimer & timer )noexcept;
 		/**
 		 *\~english
@@ -423,7 +423,7 @@ namespace castor3d
 		 *\param[in]	defaultDesc	La description du modèle par défaut.
 		 *\param[in]	creator		La fonction de création du modèle.
 		 */
-		C3D_API void registerLightingModel( castor::String const & baseName
+		C3D_API void registerLightingModel( String const & baseName
 			, shader::LightingModelDesc const & defaultDesc
 			, shader::LightingModelCreator const & creator )const;
 		/**
@@ -434,7 +434,7 @@ namespace castor3d
 		 *\brief		Désenregistre un modèle d'éclairage.
 		 *\param[in]	baseName	Le nom de base du modèle d'éclairage.
 		 */
-		C3D_API void unregisterLightingModel( castor::String const & baseName )const;
+		C3D_API void unregisterLightingModel( String const & baseName )const;
 		/**
 		 *\~english
 		 *\brief		Registers a diffuse BRDF.
@@ -452,7 +452,7 @@ namespace castor3d
 		 *\brief		Désenregistre une BRDF de diffuse.
 		 *\param[in]	name	Le nom de la BRDF.
 		 */
-		C3D_API void unregisterDiffuseBrdf( castor::String const & name )const;
+		C3D_API void unregisterDiffuseBrdf( String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Registers a specular BRDF.
@@ -470,7 +470,7 @@ namespace castor3d
 		 *\brief		Désenregistre une BRDF de spéculaire.
 		 *\param[in]	name	Le nom de la BRDF.
 		 */
-		C3D_API void unregisterSpecularBrdf( castor::String const & name )const;
+		C3D_API void unregisterSpecularBrdf( String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Registers a sheen BRDF.
@@ -488,7 +488,7 @@ namespace castor3d
 		 *\brief		Désenregistre une BRDF de sheen.
 		 *\param[in]	name	Le nom de la BRDF.
 		 */
-		C3D_API void unregisterSheenBrdf( castor::String const & name )const;
+		C3D_API void unregisterSheenBrdf( String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Registers a clearcoat BRDF.
@@ -506,7 +506,7 @@ namespace castor3d
 		 *\brief		Désenregistre une BRDF de clearcoat.
 		 *\param[in]	name	Le nom de la BRDF.
 		 */
-		C3D_API void unregisterClearcoatBrdf( castor::String const & name )const;
+		C3D_API void unregisterClearcoatBrdf( String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Registers a scattering model.
@@ -524,7 +524,7 @@ namespace castor3d
 		 *\brief		Désenregistre un modèle de scattering.
 		 *\param[in]	name	Le nom du modèle.
 		 */
-		C3D_API void unregisterScatteringModel( castor::String const & name )const;
+		C3D_API void unregisterScatteringModel( String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Registers a Background Model.
@@ -537,7 +537,7 @@ namespace castor3d
 		 *\param[in]	creator	La fonction dde création du modèle.
 		 *\return		L'ID du modèle.
 		 */
-		C3D_API BackgroundModelID registerBackgroundModel( castor::String const & name
+		C3D_API BackgroundModelID registerBackgroundModel( String const & name
 			, shader::BackgroundModelCreator creator );
 		/**
 		 *\~english
@@ -547,7 +547,7 @@ namespace castor3d
 		 *\brief		Désenregistre un Background Model.
 		 *\param[in]	name	Le nom du modèle.
 		 */
-		C3D_API BackgroundModelID unregisterBackgroundModel( castor::String const & name );
+		C3D_API BackgroundModelID unregisterBackgroundModel( String const & name );
 		/**
 		 *\~english
 		 *\brief		Registers a ShaderBuffer.
@@ -583,7 +583,7 @@ namespace castor3d
 		 *\brief		Désenregistre un modèle de passe.
 		 *\param[in]	baseName	Le nom de base du modèle.
 		 */
-		C3D_API void unregisterPassModel( castor::String const & baseName )const;
+		C3D_API void unregisterPassModel( String const & baseName )const;
 		/**
 		 *\~english
 		 *\brief			Registers a specific data shader buffer.
@@ -594,8 +594,8 @@ namespace castor3d
 		 *\param[in,out]	name	Le nom du shader buffer.
 		 *\param[out]		buffer	Le shader buffer.
 		 */
-		C3D_API void registerSpecificsBuffer( castor::String const & name
-			, castor3d::SpecificsBuffer buffer )const;
+		C3D_API void registerSpecificsBuffer( String const & name
+			, SpecificsBuffer buffer )const;
 		/**
 		 *\~english
 		 *\brief			Unregisters a pass' specific data buffer.
@@ -604,7 +604,7 @@ namespace castor3d
 		 *\brief			Désenregistre un shader buffer de données spécifiques.
 		 *\param[in,out]	name	Le nom du shader buffer.
 		 */
-		C3D_API void unregisterSpecificsBuffer( castor::String const & name )const;
+		C3D_API void unregisterSpecificsBuffer( String const & name )const;
 		/**
 		 *\~english
 		 *\brief			Addw the pass' specific data buffer into the given descriptor layout bindings array.
@@ -659,7 +659,7 @@ namespace castor3d
 		 *\param[in]		set		L'indice de descriptor set.
 		 */
 		C3D_API void declareSpecificsShaderBuffers( sdw::ShaderWriter & writer
-			, castor::StringMap< castor3d::shader::BufferBaseUPtr > & buffers
+			, StringMap< shader::BufferBaseUPtr > & buffers
 			, uint32_t & binding
 			, uint32_t set )const;
 		/**
@@ -672,7 +672,7 @@ namespace castor3d
 		 *\param[in]	type			Le nom du type de composant.
 		 *\param[in]	componentPlugin	Les fonctions spécifiques du composant.
 		 */
-		C3D_API PassComponentID registerPassComponent( castor::String const & type
+		C3D_API PassComponentID registerPassComponent( String const & type
 			, PassComponentPluginUPtr componentPlugin )const;
 		/**
 		 *\~english
@@ -682,7 +682,7 @@ namespace castor3d
 		 *\brief		Désenregistre un composant de passe.
 		 *\param[in]	type	Le nom du type de composant.
 		 */
-		C3D_API void unregisterPassComponent( castor::String const & type )const;
+		C3D_API void unregisterPassComponent( String const & type )const;
 		/**
 		 *\~english
 		 *\brief		Registers a pass component.
@@ -693,7 +693,7 @@ namespace castor3d
 		 *\param[in]	type			Le nom du type de composant.
 		 *\param[in]	componentPlugin	Les fonctions spécifiques du composant.
 		 */
-		C3D_API SubmeshComponentID registerSubmeshComponent( castor::String const & type
+		C3D_API SubmeshComponentID registerSubmeshComponent( String const & type
 			, SubmeshComponentPluginUPtr componentPlugin )const;
 		/**
 		 *\~english
@@ -703,7 +703,7 @@ namespace castor3d
 		 *\brief		Désenregistre un composant de passe.
 		 *\param[in]	type	Le nom du type de composant.
 		 */
-		C3D_API void unregisterSubmeshComponent( castor::String const & type )const;
+		C3D_API void unregisterSubmeshComponent( String const & type )const;
 		/**
 		 *\~english
 		 *\brief		Registers a scene render pass type, used to render given material pass type.
@@ -714,8 +714,8 @@ namespace castor3d
 		 *\param[in]	renderPassType	Le nom du type de la passe.
 		 *\param[in]	info			Les informations de création de la passe.
 		 */
-		C3D_API void registerRenderPassType( castor::String const & renderPassType
-			, castor::UniquePtr< RenderPassRegisterInfo > info );
+		C3D_API void registerRenderPassType( String const & renderPassType
+			, UniquePtr< RenderPassRegisterInfo > info );
 		/**
 		 *\~english
 		 *\brief		Registers a scene render pass type's configuration parameters.
@@ -726,7 +726,7 @@ namespace castor3d
 		 *\param[in]	renderPassType	Le nom du type de la passe.
 		 *\param[in]	parameters		Les paramètres de configuration de la passe.
 		 */
-		C3D_API void setRenderPassTypeConfiguration( castor::String const & renderPassType
+		C3D_API void setRenderPassTypeConfiguration( String const & renderPassType
 			, Parameters parameters );
 		/**
 		 *\~english
@@ -738,7 +738,7 @@ namespace castor3d
 		 *\param[in]	renderPassType	Le nom du type de la passe.
 		 *\return		Les paramètres de configuration de la passe.
 		 */
-		C3D_API Parameters getRenderPassTypeConfiguration( castor::String const & renderPassType )const;
+		C3D_API Parameters getRenderPassTypeConfiguration( String const & renderPassType )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the ID for given scene render pass type name.
@@ -747,7 +747,7 @@ namespace castor3d
 		 *\brief		Récupère l'ID correspondant au nom de type de passe de rendu de scène donné.
 		 *\param[in]	renderPassType	Le nom du type de la passe.
 		 */
-		C3D_API RenderPassTypeID getRenderPassTypeID( castor::String const & renderPassType )const;
+		C3D_API RenderPassTypeID getRenderPassTypeID( String const & renderPassType )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a scene render pass type's creation informations.
@@ -756,7 +756,7 @@ namespace castor3d
 		 *\brief		Récupère les informations de création d'un type de passe de rendu de scène.
 		 *\param[in]	renderPassType	Le nom du type de la passe.
 		 */
-		C3D_API RenderPassRegisterInfo * getRenderPassInfo( castor::String const & renderPassType )const;
+		C3D_API RenderPassRegisterInfo * getRenderPassInfo( String const & renderPassType )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the scene render passes type creation informations.
@@ -765,7 +765,7 @@ namespace castor3d
 		 *\brief		Récupère les informations de création des types de passes de rendu de scène.
 		 *\param[in]	event	Le type d'évènement des passes considérées.
 		 */
-		C3D_API castor::Vector< RenderPassRegisterInfo * > getRenderPassInfos( TechniquePassEvent event )const;
+		C3D_API Vector< RenderPassRegisterInfo * > getRenderPassInfos( TechniquePassEvent event )const;
 		/**
 		 *\~english
 		 *\brief		Unregisters a scene render pass type.
@@ -774,7 +774,7 @@ namespace castor3d
 		 *\brief		Désenregistre un type de passe de rendu de scène.
 		 *\param[in]	renderPassType	Le nom du type de la passe.
 		 */
-		C3D_API void unregisterRenderPassType( castor::String const & renderPassType );
+		C3D_API void unregisterRenderPassType( String const & renderPassType );
 		/**
 		 *\~english
 		 *\return		A random engine, with a random seed if enabled.
@@ -790,7 +790,7 @@ namespace castor3d
 		 *\brief		Récupère le chemin des plug-ins
 		 *\return		Le chemin des plug-ins
 		 */
-		C3D_API static castor::Path getPluginsDirectory();
+		C3D_API static Path getPluginsDirectory();
 		/**
 		 *\~english
 		 *\brief		Gives the Castor directory
@@ -799,7 +799,7 @@ namespace castor3d
 		 *\brief		donne le répertoire du Castor
 		 *\return		Le répertoire
 		 */
-		C3D_API static castor::Path getEngineDirectory();
+		C3D_API static Path getEngineDirectory();
 		/**
 		 *\~english
 		 *\brief		Retrieves data path
@@ -808,7 +808,7 @@ namespace castor3d
 		 *\brief		Récupère le chemin des données
 		 *\return		Le chemin des données
 		 */
-		C3D_API static castor::Path getDataDirectory();
+		C3D_API static Path getDataDirectory();
 		/**
 		 *\~english
 		 *\brief		Retrieves data path
@@ -819,7 +819,7 @@ namespace castor3d
 		 */
 		C3D_API static std::locale const & getLocale();
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 		/**
 		*\~english
 		*\name
@@ -829,13 +829,13 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API castor::String getDefaultLightingModelName()const;
+		C3D_API String getDefaultLightingModelName()const;
 		C3D_API ToneMappingFactory const & getToneMappingFactory()const;
 		C3D_API ToneMappingFactory & getToneMappingFactory();
 		C3D_API PostEffectFactory const & getPostEffectFactory()const;
 		C3D_API PostEffectFactory & getPostEffectFactory();
 		C3D_API uint32_t getWantedFps()const;
-		C3D_API castor3d::MaterialObs getDefaultMaterial()const;
+		C3D_API MaterialObs getDefaultMaterial()const;
 		C3D_API bool hasMeshShaders()const;
 		C3D_API uint32_t getMaxPassTypeCount()const;
 		C3D_API RenderDevice * getRenderDevice()const;
@@ -843,7 +843,7 @@ namespace castor3d
 		C3D_API UploadData & getUploadData()const noexcept;
 		C3D_API ast::ShaderAllocator & getShaderAllocator();
 
-		castor::String const & getAppName()const noexcept
+		String const & getAppName()const noexcept
 		{
 			return m_config.appName;
 		}
@@ -968,7 +968,7 @@ namespace castor3d
 			return *m_particleFactory;
 		}
 
-		castor::CpuInformations const & getCpuInformations()const noexcept
+		CpuInformations const & getCpuInformations()const noexcept
 		{
 			return m_cpuInformations;
 		}
@@ -978,17 +978,17 @@ namespace castor3d
 			return m_lightingModelId;
 		}
 
-		castor::ImageLoader const & getImageLoader()const noexcept
+		ImageLoader const & getImageLoader()const noexcept
 		{
 			return m_imageLoader;
 		}
 
-		castor::ImageLoader & getImageLoader()noexcept
+		ImageLoader & getImageLoader()noexcept
 		{
 			return m_imageLoader;
 		}
 
-		castor::ImageWriter const & getImageWriter()const noexcept
+		ImageWriter const & getImageWriter()const noexcept
 		{
 			return m_imageWriter;
 		}
@@ -998,7 +998,7 @@ namespace castor3d
 			return m_rendererList;
 		}
 
-		castor::LoggerInstance & getLogger()const noexcept
+		LoggerInstance & getLogger()const noexcept
 		{
 			return *m_logger;
 		}
@@ -1053,7 +1053,7 @@ namespace castor3d
 			return m_brdf;
 		}
 
-		castor::LengthUnit getLengthUnit()const noexcept
+		LengthUnit getLengthUnit()const noexcept
 		{
 			return m_unit;
 		}
@@ -1071,13 +1071,13 @@ namespace castor3d
 
 		void setUserInputListener( UserInputListenerUPtr listener )noexcept
 		{
-			m_userInputListener = castor::move( listener );
+			m_userInputListener = c3d::move( listener );
 		}
 
 		template< typename ListenerT >
-		void setUserInputListenerT( castor::UniquePtr< ListenerT > listener )noexcept
+		void setUserInputListenerT( UniquePtr< ListenerT > listener )noexcept
 		{
-			m_userInputListener = castor::ptrRefCast< UserInputListener >( listener );
+			m_userInputListener = ptrRefCast< UserInputListener >( listener );
 		}
 
 		void setDefaultLightingModel( LightingModelID value )noexcept
@@ -1114,7 +1114,7 @@ namespace castor3d
 				, createPlugin( *m_submeshComponents ) );
 		}
 
-		void setLengthUnit( castor::LengthUnit value )noexcept
+		void setLengthUnit( LengthUnit value )noexcept
 		{
 			m_unit = value;
 		}
@@ -1125,59 +1125,59 @@ namespace castor3d
 		*/
 		/**@{*/
 		template< typename ... ParametersT >
-		castor::FontCache::ElementPtrT createFont( castor::String const & name
+		FontCache::ElementPtrT createFont( String const & name
 			, uint32_t height
-			, castor::Path const & path )const
+			, Path const & path )const
 		{
 			return m_fontCache.create( name, height, path );
 		}
 
 		template< typename ... ParametersT >
-		castor::FontCache::ElementObsT addNewFont( castor::String const & name
+		FontCache::ElementObsT addNewFont( String const & name
 			, uint32_t height
-			, castor::Path const & path )
+			, Path const & path )
 		{
 			return m_fontCache.addNew( name, height, path );
 		}
 
 		template< typename ... ParametersT >
-		castor::FontCache::ElementPtrT createSdfFont( castor::String const & name
-			, castor::Path const & path )const
+		FontCache::ElementPtrT createSdfFont( String const & name
+			, Path const & path )const
 		{
 			return m_fontCache.create( name, path );
 		}
 
 		template< typename ... ParametersT >
-		castor::FontCache::ElementObsT addNewSdfFont( castor::String const & name
-			, castor::Path const & path )
+		FontCache::ElementObsT addNewSdfFont( String const & name
+			, Path const & path )
 		{
 			return m_fontCache.addNew( name, path );
 		}
 
-		castor::FontCache::ElementObsT addFont( castor::FontCache::ElementKeyT const & key
-			, castor::FontCache::ElementPtrT & element
+		FontCache::ElementObsT addFont( FontCache::ElementKeyT const & key
+			, FontCache::ElementPtrT & element
 			, bool initialise = false )
 		{
 			return m_fontCache.add( key, element, initialise );
 		}
 
-		void removeFont( castor::FontCache::ElementKeyT const & key
+		void removeFont( FontCache::ElementKeyT const & key
 			, bool cleanup = false )
 		{
 			m_fontCache.remove( key, cleanup );
 		}
 
-		castor::FontCache::ElementObsT findFont( castor::FontCache::ElementKeyT const & key )const
+		FontCache::ElementObsT findFont( FontCache::ElementKeyT const & key )const
 		{
 			return m_fontCache.find( key );
 		}
 
-		bool hasFont( castor::FontCache::ElementKeyT const & key )const
+		bool hasFont( FontCache::ElementKeyT const & key )const
 		{
 			return m_fontCache.has( key );
 		}
 
-		castor::FontCache::ElementObsT tryFindFont( castor::FontCache::ElementKeyT const & key )const
+		FontCache::ElementObsT tryFindFont( FontCache::ElementKeyT const & key )const
 		{
 			return m_fontCache.tryFind( key );
 		}
@@ -1185,7 +1185,7 @@ namespace castor3d
 		template< typename FuncT >
 		void forEachFont( FuncT func )const
 		{
-			auto lock( castor::makeUniqueLock( m_fontCache ) );
+			auto lock( makeUniqueLock( m_fontCache ) );
 
 			for ( auto const & [name, font] : m_fontCache )
 			{
@@ -1193,14 +1193,14 @@ namespace castor3d
 			}
 		}
 
-		castor::FontResPtr getDefaultFont()
+		FontResPtr getDefaultFont()
 		{
 			return m_fontCache.isEmpty()
 				? nullptr
 				: m_fontCache.begin()->second.get();
 		}
 
-		castor::FontCache & getFontCache( PrivEngineToken const & )
+		FontCache & getFontCache( PrivEngineToken const & )
 		{
 			return m_fontCache;
 		}
@@ -1216,45 +1216,45 @@ namespace castor3d
 		*/
 		/**@{*/
 		template< typename ... ParametersT >
-		castor::ImageCache::ElementPtrT createImage( castor::ImageCache::ElementKeyT const & key
+		ImageCache::ElementPtrT createImage( ImageCache::ElementKeyT const & key
 			, ParametersT && ... parameters )const
 		{
 			return m_imageCache.create( key
-				, castor::forward< ParametersT >( parameters )... );
+				, c3d::forward< ParametersT >( parameters )... );
 		}
 
 		template< typename ... ParametersT >
-		castor::ImageCache::ElementObsT addNewImage( castor::ImageCache::ElementKeyT const & key
+		ImageCache::ElementObsT addNewImage( ImageCache::ElementKeyT const & key
 			, ParametersT && ... parameters )
 		{
 			return m_imageCache.addNew( key
-				, castor::forward< ParametersT >( parameters )... );
+				, c3d::forward< ParametersT >( parameters )... );
 		}
 
-		castor::ImageCache::ElementObsT addImage( castor::ImageCache::ElementKeyT const & key
-			, castor::ImageCache::ElementPtrT & element
+		ImageCache::ElementObsT addImage( ImageCache::ElementKeyT const & key
+			, ImageCache::ElementPtrT & element
 			, bool initialise = false )
 		{
 			return m_imageCache.add( key, element, initialise );
 		}
 
-		void removeImage( castor::ImageCache::ElementKeyT const & key
+		void removeImage( ImageCache::ElementKeyT const & key
 			, bool cleanup = false )noexcept
 		{
 			m_imageCache.remove( key, cleanup );
 		}
 
-		castor::ImageCache::ElementObsT findImage( castor::ImageCache::ElementKeyT const & key )const
+		ImageCache::ElementObsT findImage( ImageCache::ElementKeyT const & key )const
 		{
 			return m_imageCache.find( key );
 		}
 
-		bool hasImage( castor::ImageCache::ElementKeyT const & key )const
+		bool hasImage( ImageCache::ElementKeyT const & key )const
 		{
 			return m_imageCache.has( key );
 		}
 
-		castor::ImageCache::ElementObsT tryFindImage( castor::ImageCache::ElementKeyT const & key )const noexcept
+		ImageCache::ElementObsT tryFindImage( ImageCache::ElementKeyT const & key )const noexcept
 		{
 			return m_imageCache.tryFind( key );
 		}
@@ -1269,8 +1269,8 @@ namespace castor3d
 		void doLoadCoreData();
 
 	private:
-		castor::LoggerInstancePtr m_ownedLogger;
-		castor::LoggerInstance * m_logger;
+		LoggerInstancePtr m_ownedLogger;
+		LoggerInstance * m_logger;
 		EngineConfig m_config;
 		RenderLoopUPtr m_renderLoop;
 		Version m_version;
@@ -1281,8 +1281,8 @@ namespace castor3d
 		bool m_threaded{ false };
 		SamplerObs m_defaultSampler{};
 		SamplerObs m_lightsSampler{};
-		castor::ImageLoader m_imageLoader;
-		castor::ImageWriter m_imageWriter;
+		ImageLoader m_imageLoader;
+		ImageWriter m_imageWriter;
 		DECLARE_CACHE_MEMBER_MIN( shader, ShaderProgram );
 		DECLARE_CACHE_MEMBER( sampler, Sampler );
 		DECLARE_CACHE_MEMBER( material, Material );
@@ -1291,35 +1291,35 @@ namespace castor3d
 		DECLARE_CACHE_MEMBER( scene, Scene );
 		DECLARE_CACHE_MEMBER( listener, FrameListener );
 		FrameListenerRPtr m_defaultListener{};
-		castor::StringMap< RenderWindow * > m_renderWindows;
-		castor::Map< RenderWindow const *, UserInputListenerUPtr > m_windowInputListeners;
+		StringMap< RenderWindow * > m_renderWindows;
+		Map< RenderWindow const *, UserInputListenerUPtr > m_windowInputListeners;
 		UserInputListenerUPtr m_userInputListener;
 		DECLARE_CACHE_MEMBER_MIN( target, RenderTarget );
 		DECLARE_CACHE_MEMBER_MIN( texture, TextureUnit );
-		castor::FontCache m_fontCache;
-		castor::ImageCache m_imageCache;
-		castor::StringMap< castor::AdditionalParsers > m_additionalParsers;
+		FontCache m_fontCache;
+		ImageCache m_imageCache;
+		StringMap< AdditionalParsers > m_additionalParsers;
 		MeshFactoryUPtr m_meshFactory;
 		ImporterFileFactoryUPtr m_importerFileFactory;
 		ParticleFactoryUPtr m_particleFactory;
 		PassFactoryUPtr m_passFactory;
 		PassComponentRegisterUPtr m_passComponents;
 		SubmeshComponentRegisterUPtr m_submeshComponents;
-		castor::CpuInformations m_cpuInformations;
+		CpuInformations m_cpuInformations;
 		LightingModelID m_lightingModelId{};
 		uint32_t m_lpvGridSize{ 32u };
 		uint32_t m_maxImageSize{ 0xFFFFFFFF };
-		castor::AsyncJobQueue m_cpuJobs;
+		AsyncJobQueue m_cpuJobs;
 		crg::ResourceHandler m_resourceHandler;
 		crg::ResourcesCache m_resources;
 		LightingModelFactoryUPtr m_lightingModelFactory;
 		shader::BackgroundModelFactory m_backgroundModelFactory;
 		SceneUPtr m_loadingScene;
-		castor::UnorderedStringMap< castor::UniquePtr< RenderPassRegisterInfo > > m_passRenderPassTypes;
-		castor::UnorderedStringMap< castor::Pair< RenderPassTypeID, Parameters > > m_renderPassTypes;
-		castor::LengthUnit m_unit{ castor::LengthUnit::eMetre };
-		mutable castor::Mutex m_allocMutex;
-		castor::UnorderedMap< std::thread::id, castor::RawUniquePtr< ast::ShaderAllocator > > m_shaderAllocators;
+		HashStringMap< UniquePtr< RenderPassRegisterInfo > > m_passRenderPassTypes;
+		HashStringMap< Pair< RenderPassTypeID, Parameters > > m_renderPassTypes;
+		LengthUnit m_unit{ LengthUnit::eMetre };
+		mutable Mutex m_allocMutex;
+		HashMap< std::thread::id, RawUniquePtr< ast::ShaderAllocator > > m_shaderAllocators;
 	};
 }
 

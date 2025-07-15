@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <mutex>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class TextureConfigurationBuffer
 	{
@@ -105,11 +105,11 @@ namespace castor3d
 	public:
 		struct Data
 		{
-			castor::Point3f translate{};
+			Point3f translate{};
 			float rotateU{};
-			castor::Point3f scale{};
+			Point3f scale{};
 			float rotateV{};
-			castor::Point4f tileSet{};
+			Point4f tileSet{};
 			float normalGMult{};
 			float normalFactor{};
 			uint32_t normal2Chan{};
@@ -124,18 +124,18 @@ namespace castor3d
 			uint32_t pad1{};
 		};
 
-		using TextureConfigurationsData = castor::ArrayView< Data >;
+		using TextureConfigurationsData = ArrayView< Data >;
 
 		static uint32_t constexpr DataSize = uint32_t( sizeof( Data ) );
 		static_assert( DataSize == 96u );
 
 	private:
 		ShaderBuffer m_buffer;
-		castor::Vector< TextureConfiguration > m_configurations;
-		castor::Vector< TextureUnit const * > m_dirty;
-		castor::Vector< OnTextureUnitChangedConnection > m_connections;
+		Vector< TextureConfiguration > m_configurations;
+		Vector< TextureUnit const * > m_dirty;
+		Vector< OnTextureUnitChangedConnection > m_connections;
 		TextureConfigurationsData m_data;
-		castor::Mutex m_mutex;
+		Mutex m_mutex;
 	};
 }
 

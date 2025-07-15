@@ -1,6 +1,6 @@
 #include "CastorUtils/Graphics/Grid.hpp"
 
-namespace castor
+namespace c3d
 {
 	Grid::Grid( uint32_t gridSize
 		, float cellSize

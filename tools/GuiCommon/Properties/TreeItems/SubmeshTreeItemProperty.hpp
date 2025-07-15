@@ -29,10 +29,10 @@ namespace GuiCommon
 		 *\param[in]	engine		Le moteur.
 		 */
 		SubmeshTreeItemProperty( bool editable
-			, castor3d::Engine * engine );
+			, c3d::Engine * engine );
 
-		void setData( castor3d::Geometry & geometry
-			, castor3d::Submesh & submesh )noexcept
+		void setData( c3d::Geometry & geometry
+			, c3d::Submesh & submesh )noexcept
 		{
 			clearProperties();
 			m_geometry = &geometry;
@@ -50,8 +50,8 @@ namespace GuiCommon
 		void onTopologyChange( wxVariant const & var );
 
 	private:
-		castor3d::Geometry * m_geometry{};
-		castor3d::Submesh * m_submesh{};
+		c3d::Geometry * m_geometry{};
+		c3d::Submesh * m_submesh{};
 		wxArrayString m_materials;
 	};
 }

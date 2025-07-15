@@ -2,35 +2,35 @@
 
 #include "Castor3D/Render/RenderTarget.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	namespace cachetgt
 	{
-		using LockType = castor::UniqueLock< RenderTargetCache >;
+		using LockType = UniqueLock< RenderTargetCache >;
 	}
 
 	RenderTargetCache::RenderTargetCache( Engine & engine )
-		: castor::OwnedBy< Engine >{ engine }
+		: OwnedBy< Engine >{ engine }
 	{
 	}
 
 	RenderTargetRPtr RenderTargetCache::addNew( TargetType type
-		, castor::Size const & size
-		, castor::PixelFormat pixelFormat )
+		, Size const & size
+		, PixelFormat pixelFormat )
 	{
-		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
-		auto result = castor::makeUnique< RenderTarget >( *getEngine()
+		cachetgt::LockType lock{ makeUniqueLock( *this ) };
+		auto result = makeUnique< RenderTarget >( *getEngine()
 			, type
 			, size
 			, pixelFormat );
 		auto ret = result.get();
-		m_renderTargets[size_t( type )].push_back( castor::move( result ) );
+		m_renderTargets[size_t( type )].push_back( c3d::move( result ) );
 		return ret;
 	}
 
 	void RenderTargetCache::remove( RenderTarget const * target )noexcept
 	{
-		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
+		cachetgt::LockType lock{ makeUniqueLock( *this ) };
 		auto v = std::next( m_renderTargets.begin()
 			, ptrdiff_t( target->getTargetType() ) );
 		auto it = std::find_if( v->begin()
@@ -48,7 +48,7 @@ namespace castor3d
 
 	void RenderTargetCache::update( CpuUpdater & updater )
 	{
-		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
+		cachetgt::LockType lock{ makeUniqueLock( *this ) };
 
 		for ( auto const & target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
@@ -58,7 +58,7 @@ namespace castor3d
 
 	void RenderTargetCache::update( GpuUpdater & updater )
 	{
-		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
+		cachetgt::LockType lock{ makeUniqueLock( *this ) };
 
 		for ( auto const & target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
@@ -68,7 +68,7 @@ namespace castor3d
 
 	void RenderTargetCache::upload( UploadData & uploader )
 	{
-		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
+		cachetgt::LockType lock{ makeUniqueLock( *this ) };
 
 		for ( auto const & target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
@@ -81,7 +81,7 @@ namespace castor3d
 		, ashes::Queue const & queue
 		, SemaphoreWaitArray signalsToWait )
 	{
-		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
+		cachetgt::LockType lock{ makeUniqueLock( *this ) };
 		SemaphoreWaitArray result;
 
 		for ( auto const & target : m_renderTargets[size_t( TargetType::eTexture )] )
@@ -101,7 +101,7 @@ namespace castor3d
 
 	void RenderTargetCache::cleanup( RenderDevice const & device )
 	{
-		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
+		cachetgt::LockType lock{ makeUniqueLock( *this ) };
 
 		for ( auto const & array : m_renderTargets )
 		{
@@ -114,7 +114,7 @@ namespace castor3d
 
 	void RenderTargetCache::clear()
 	{
-		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
+		cachetgt::LockType lock{ makeUniqueLock( *this ) };
 
 		for ( auto & array : m_renderTargets )
 		{
@@ -122,8 +122,8 @@ namespace castor3d
 		}
 	}
 
-	void RenderTargetCache::registerToneMappingName( castor::String const & name
-		, castor::StringView fullName )
+	void RenderTargetCache::registerToneMappingName( String const & name
+		, String fullName )
 	{
 		m_toneMappings[name] = fullName;
 	}

@@ -32,11 +32,11 @@ See LICENSE file in root folder
 
 #include <RenderGraph/FramePass.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class RenderTechnique
-		: public castor::OwnedBy< Engine >
-		, public castor::Named
+		: public OwnedBy< Engine >
+		, public Named
 	{
 		friend class RenderTechniquePass;
 
@@ -65,7 +65,7 @@ namespace castor3d
 		 *\param[in]	visbuffer		\p true pour activer le visibility buffer.
 		 *\param[in]	weightedBlended	\p true pour activer le weighed blended rendering.
 		 */
-		C3D_API RenderTechnique( castor::String const & name
+		C3D_API RenderTechnique( String const & name
 			, RenderTarget & renderTarget
 			, RenderDevice const & device
 			, Texture const & colour
@@ -156,7 +156,7 @@ namespace castor3d
 		C3D_API CameraUbo const & getCameraUbo()const noexcept;
 		C3D_API SceneUbo const & getSceneUbo()const noexcept;
 
-		castor::Size const & getSize()const noexcept
+		Size const & getSize()const noexcept
 		{
 			return m_rawSize;
 		}
@@ -206,7 +206,7 @@ namespace castor3d
 			return m_colour->getExtent();
 		}
 
-		castor::PixelFormat getTargetFormat()const noexcept
+		PixelFormat getTargetFormat()const noexcept
 		{
 			return m_colour->getFormat();
 		}
@@ -281,7 +281,7 @@ namespace castor3d
 			return m_opaque.getMaterialsCounts();
 		}
 
-		ashes::Buffer< castor::Point3ui > const & getMaterialsIndirectCounts()const noexcept
+		ashes::Buffer< Point3ui > const & getMaterialsIndirectCounts()const noexcept
 		{
 			return m_opaque.getMaterialsIndirectCounts();
 		}
@@ -291,7 +291,7 @@ namespace castor3d
 			return m_opaque.getMaterialsStarts();
 		}
 
-		ashes::Buffer< castor::Point2ui > const & getPixelXY()const noexcept
+		ashes::Buffer< Point2ui > const & getPixelXY()const noexcept
 		{
 			return m_opaque.getPixelXY();
 		}
@@ -349,7 +349,7 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		using ShadowMapArray = castor::Vector< ShadowMapUPtr >;
+		using ShadowMapArray = Vector< ShadowMapUPtr >;
 
 	private:
 		crg::FramePassArray doCreateRenderPasses( TechniquePassEvent event
@@ -377,8 +377,8 @@ namespace castor3d
 	private:
 		RenderTarget & m_renderTarget;
 		RenderDevice const & m_device;
-		castor::Size m_targetSize;
-		castor::Size m_rawSize;
+		Size m_targetSize;
+		Size m_rawSize;
 		Texture const * m_colour;
 		Texture const * m_intermediate;
 		Texture m_depth;

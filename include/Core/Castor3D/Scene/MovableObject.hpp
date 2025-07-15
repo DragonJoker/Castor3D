@@ -13,11 +13,11 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class MovableObject
-		: public castor::OwnedBy< Scene >
-		, public castor::Named
+		: public OwnedBy< Scene >
+		, public Named
 	{
 	public:
 		/**
@@ -34,7 +34,7 @@ namespace castor3d
 		 *\param[in]	node	Noeud parent
 		 *\param[in]	type	Le type de MovableObject
 		 */
-		C3D_API MovableObject( castor::String const & name
+		C3D_API MovableObject( String const & name
 			, Scene & scene
 			, MovableType type
 			, SceneNode & node );
@@ -50,7 +50,7 @@ namespace castor3d
 		 *\param[in]	scene	La scène parente
 		 *\param[in]	type	Le type de MovableObject
 		 */
-		C3D_API MovableObject( castor::String const & name
+		C3D_API MovableObject( String const & name
 			, Scene & scene
 			, MovableType type );
 		/**
@@ -120,10 +120,10 @@ namespace castor3d
 
 	template< typename CacheT >
 	struct MovableMergerT
-		: public castor::Named
+		: public Named
 	{
-		explicit MovableMergerT( castor::String name )
-			: castor::Named{ castor::move( name ) }
+		explicit MovableMergerT( String name )
+			: Named{ c3d::move( name ) }
 		{
 		}
 
@@ -155,7 +155,7 @@ namespace castor3d
 				ires = destination.emplace( name, ElementPtrT{} );
 			}
 
-			ires.first->second = castor::move( element );
+			ires.first->second = c3d::move( element );
 			ires.first->second->rename( name );
 		}
 	};
@@ -191,24 +191,21 @@ namespace castor3d
 	struct MovableContext
 	{
 		SceneContext * scene{};
-		castor::String name{};
+		String name{};
 		SceneNodeRPtr parentNode{};
 	};
 
-	C3D_API castor::String getPrefix( MovableContext const & context );
+	C3D_API String getPrefix( MovableContext const & context );
 	C3D_API Engine * getEngine( MovableContext const & context );
-}
 
-namespace castor
-{
 	template<>
-	struct ParserEnumTraits< castor3d::MovableType >
+	struct ParserEnumTraits< MovableType >
 	{
 		static inline xchar const * const Name = cuT( "MovableType" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT< castor3d::MovableType >();
+				result = getEnumMapT< MovableType >();
 				return result;
 			}( );
 	};

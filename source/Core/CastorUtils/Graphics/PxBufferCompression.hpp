@@ -21,7 +21,7 @@ See LICENSE file in root folder
 #	pragma warning( pop )
 #endif
 
-namespace castor
+namespace c3d
 {
 	using X8UGetter = uint8_t( * )( uint8_t const * );
 	using X8SGetter = int8_t( * )( uint8_t const * );

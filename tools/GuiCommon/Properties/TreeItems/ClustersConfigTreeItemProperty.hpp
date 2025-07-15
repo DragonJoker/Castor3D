@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
-	using ClustersConfigTreeItemProperty = TreeItemPropertyT< castor3d::ClustersConfig >;
+	using ClustersConfigTreeItemProperty = TreeItemPropertyT< c3d::ClustersConfig >;
 }
 
 #endif

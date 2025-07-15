@@ -4,7 +4,7 @@
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	Cube::Cube()
 		: MeshGenerator( cuT( "cube" ) )
@@ -13,29 +13,29 @@ namespace castor3d
 
 	MeshGeneratorUPtr Cube::create()
 	{
-		return castor::makeUniqueDerived< MeshGenerator, Cube >();
+		return makeUniqueDerived< MeshGenerator, Cube >();
 	}
 
 	void Cube::doGenerate( Mesh & mesh, Parameters const & parameters )
 	{
-		castor::String param;
+		String param;
 		float height{};
 		float width{};
 		float depth{};
 
 		if ( parameters.get( cuT( "width" ), param ) )
 		{
-			width = castor::string::toFloat( param );
+			width = string::toFloat( param );
 		}
 
 		if ( parameters.get( cuT( "height" ), param ) )
 		{
-			height = castor::string::toFloat( param );
+			height = string::toFloat( param );
 		}
 
 		if ( parameters.get( cuT( "depth" ), param ) )
 		{
-			depth = castor::string::toFloat( param );
+			depth = string::toFloat( param );
 		}
 
 		int CptNegatif = 0;
@@ -61,54 +61,54 @@ namespace castor3d
 		auto submesh4 = mesh.createDefaultSubmesh();
 		auto submesh5 = mesh.createDefaultSubmesh();
 		auto submesh6 = mesh.createDefaultSubmesh();
-		static castor::Point4f const zero;
+		static Point4f const zero;
 
 		// Face avant
 		submesh1->addPoints( {
-			InterleavedVertex{ castor::Point3f{ +width / 2, -height / 2, +depth / 2 }, castor::Point3f{ 0.0, 0.0, 1.0 }, zero, castor::Point3f{ 1.0, 0.0, 0.0 } },
-			InterleavedVertex{ castor::Point3f{ -width / 2, -height / 2, +depth / 2 }, castor::Point3f{ 0.0, 0.0, 1.0 }, zero, castor::Point3f{ 0.0, 0.0, 0.0 } },
-			InterleavedVertex{ castor::Point3f{ -width / 2, +height / 2, +depth / 2 }, castor::Point3f{ 0.0, 0.0, 1.0 }, zero, castor::Point3f{ 0.0, 1.0, 0.0 } },
-			InterleavedVertex{ castor::Point3f{ +width / 2, +height / 2, +depth / 2 }, castor::Point3f{ 0.0, 0.0, 1.0 }, zero, castor::Point3f{ 1.0, 1.0, 0.0 } },
+			InterleavedVertex{ Point3f{ +width / 2, -height / 2, +depth / 2 }, Point3f{ 0.0, 0.0, 1.0 }, zero, Point3f{ 1.0, 0.0, 0.0 } },
+			InterleavedVertex{ Point3f{ -width / 2, -height / 2, +depth / 2 }, Point3f{ 0.0, 0.0, 1.0 }, zero, Point3f{ 0.0, 0.0, 0.0 } },
+			InterleavedVertex{ Point3f{ -width / 2, +height / 2, +depth / 2 }, Point3f{ 0.0, 0.0, 1.0 }, zero, Point3f{ 0.0, 1.0, 0.0 } },
+			InterleavedVertex{ Point3f{ +width / 2, +height / 2, +depth / 2 }, Point3f{ 0.0, 0.0, 1.0 }, zero, Point3f{ 1.0, 1.0, 0.0 } },
 		} );
 
 		// Face arrière
 		submesh2->addPoints( {
-			InterleavedVertex{ castor::Point3f{ -width / 2, -height / 2, -depth / 2 }, castor::Point3f{ 0.0, 0.0, -1.0 }, zero, castor::Point3f{ 1.0, 0.0, 0.0 } },
-			InterleavedVertex{ castor::Point3f{ +width / 2, -height / 2, -depth / 2 }, castor::Point3f{ 0.0, 0.0, -1.0 }, zero, castor::Point3f{ 0.0, 0.0, 0.0 } },
-			InterleavedVertex{ castor::Point3f{ +width / 2, +height / 2, -depth / 2 }, castor::Point3f{ 0.0, 0.0, -1.0 }, zero, castor::Point3f{ 0.0, 1.0, 0.0 } },
-			InterleavedVertex{ castor::Point3f{ -width / 2, +height / 2, -depth / 2 }, castor::Point3f{ 0.0, 0.0, -1.0 }, zero, castor::Point3f{ 1.0, 1.0, 0.0 } },
+			InterleavedVertex{ Point3f{ -width / 2, -height / 2, -depth / 2 }, Point3f{ 0.0, 0.0, -1.0 }, zero, Point3f{ 1.0, 0.0, 0.0 } },
+			InterleavedVertex{ Point3f{ +width / 2, -height / 2, -depth / 2 }, Point3f{ 0.0, 0.0, -1.0 }, zero, Point3f{ 0.0, 0.0, 0.0 } },
+			InterleavedVertex{ Point3f{ +width / 2, +height / 2, -depth / 2 }, Point3f{ 0.0, 0.0, -1.0 }, zero, Point3f{ 0.0, 1.0, 0.0 } },
+			InterleavedVertex{ Point3f{ -width / 2, +height / 2, -depth / 2 }, Point3f{ 0.0, 0.0, -1.0 }, zero, Point3f{ 1.0, 1.0, 0.0 } },
 		} );
 
 		// Face gauche
 		submesh3->addPoints( {
-			InterleavedVertex{ castor::Point3f{ -width / 2, -height / 2, +depth / 2 }, castor::Point3f{ -1.0, 0.0, 0.0 }, zero, castor::Point3f{ 1.0, 0.0, 0.0 } },
-			InterleavedVertex{ castor::Point3f{ -width / 2, -height / 2, -depth / 2 }, castor::Point3f{ -1.0, 0.0, 0.0 }, zero, castor::Point3f{ 0.0, 0.0, 0.0 } },
-			InterleavedVertex{ castor::Point3f{ -width / 2, +height / 2, -depth / 2 }, castor::Point3f{ -1.0, 0.0, 0.0 }, zero, castor::Point3f{ 0.0, 1.0, 0.0 } },
-			InterleavedVertex{ castor::Point3f{ -width / 2, +height / 2, +depth / 2 }, castor::Point3f{ -1.0, 0.0, 0.0 }, zero, castor::Point3f{ 1.0, 1.0, 0.0 } },
+			InterleavedVertex{ Point3f{ -width / 2, -height / 2, +depth / 2 }, Point3f{ -1.0, 0.0, 0.0 }, zero, Point3f{ 1.0, 0.0, 0.0 } },
+			InterleavedVertex{ Point3f{ -width / 2, -height / 2, -depth / 2 }, Point3f{ -1.0, 0.0, 0.0 }, zero, Point3f{ 0.0, 0.0, 0.0 } },
+			InterleavedVertex{ Point3f{ -width / 2, +height / 2, -depth / 2 }, Point3f{ -1.0, 0.0, 0.0 }, zero, Point3f{ 0.0, 1.0, 0.0 } },
+			InterleavedVertex{ Point3f{ -width / 2, +height / 2, +depth / 2 }, Point3f{ -1.0, 0.0, 0.0 }, zero, Point3f{ 1.0, 1.0, 0.0 } },
 		} );
 
 		// Face droite
 		submesh4->addPoints( {
-			InterleavedVertex{ castor::Point3f{ +width / 2, -height / 2, -depth / 2 }, castor::Point3f{ 1.0, 0.0, 0.0 }, zero, castor::Point3f{ 1.0, 0.0, 0.0 } },
-			InterleavedVertex{ castor::Point3f{ +width / 2, -height / 2, +depth / 2 }, castor::Point3f{ 1.0, 0.0, 0.0 }, zero, castor::Point3f{ 0.0, 0.0, 0.0 } },
-			InterleavedVertex{ castor::Point3f{ +width / 2, +height / 2, +depth / 2 }, castor::Point3f{ 1.0, 0.0, 0.0 }, zero, castor::Point3f{ 0.0, 1.0, 0.0 } },
-			InterleavedVertex{ castor::Point3f{ +width / 2, +height / 2, -depth / 2 }, castor::Point3f{ 1.0, 0.0, 0.0 }, zero, castor::Point3f{ 1.0, 1.0, 0.0 } },
+			InterleavedVertex{ Point3f{ +width / 2, -height / 2, -depth / 2 }, Point3f{ 1.0, 0.0, 0.0 }, zero, Point3f{ 1.0, 0.0, 0.0 } },
+			InterleavedVertex{ Point3f{ +width / 2, -height / 2, +depth / 2 }, Point3f{ 1.0, 0.0, 0.0 }, zero, Point3f{ 0.0, 0.0, 0.0 } },
+			InterleavedVertex{ Point3f{ +width / 2, +height / 2, +depth / 2 }, Point3f{ 1.0, 0.0, 0.0 }, zero, Point3f{ 0.0, 1.0, 0.0 } },
+			InterleavedVertex{ Point3f{ +width / 2, +height / 2, -depth / 2 }, Point3f{ 1.0, 0.0, 0.0 }, zero, Point3f{ 1.0, 1.0, 0.0 } },
 		} );
 
 		// Face bas
 		submesh5->addPoints( {
-			InterleavedVertex{ castor::Point3f{ -width / 2, -height / 2, +depth / 2 }, castor::Point3f{ 0.0, -1.0, 0.0 }, zero, castor::Point3f{ 1.0, 0.0, 0.0 } },
-			InterleavedVertex{ castor::Point3f{ +width / 2, -height / 2, +depth / 2 }, castor::Point3f{ 0.0, -1.0, 0.0 }, zero, castor::Point3f{ 0.0, 0.0, 0.0 } },
-			InterleavedVertex{ castor::Point3f{ +width / 2, -height / 2, -depth / 2 }, castor::Point3f{ 0.0, -1.0, 0.0 }, zero, castor::Point3f{ 0.0, 1.0, 0.0 } },
-			InterleavedVertex{ castor::Point3f{ -width / 2, -height / 2, -depth / 2 }, castor::Point3f{ 0.0, -1.0, 0.0 }, zero, castor::Point3f{ 1.0, 1.0, 0.0 } },
+			InterleavedVertex{ Point3f{ -width / 2, -height / 2, +depth / 2 }, Point3f{ 0.0, -1.0, 0.0 }, zero, Point3f{ 1.0, 0.0, 0.0 } },
+			InterleavedVertex{ Point3f{ +width / 2, -height / 2, +depth / 2 }, Point3f{ 0.0, -1.0, 0.0 }, zero, Point3f{ 0.0, 0.0, 0.0 } },
+			InterleavedVertex{ Point3f{ +width / 2, -height / 2, -depth / 2 }, Point3f{ 0.0, -1.0, 0.0 }, zero, Point3f{ 0.0, 1.0, 0.0 } },
+			InterleavedVertex{ Point3f{ -width / 2, -height / 2, -depth / 2 }, Point3f{ 0.0, -1.0, 0.0 }, zero, Point3f{ 1.0, 1.0, 0.0 } },
 		} );
 
 		// Face haut
 		submesh6->addPoints( {
-			InterleavedVertex{ castor::Point3f{ -width / 2, height / 2, -depth / 2 }, castor::Point3f{ 0.0, 1.0, 0.0 }, zero, castor::Point3f{ 1.0, 0.0, 0.0 } },
-			InterleavedVertex{ castor::Point3f{ +width / 2, height / 2, -depth / 2 }, castor::Point3f{ 0.0, 1.0, 0.0 }, zero, castor::Point3f{ 0.0, 0.0, 0.0 } },
-			InterleavedVertex{ castor::Point3f{ +width / 2, height / 2, +depth / 2 }, castor::Point3f{ 0.0, 1.0, 0.0 }, zero, castor::Point3f{ 0.0, 1.0, 0.0 } },
-			InterleavedVertex{ castor::Point3f{ -width / 2, height / 2, +depth / 2 }, castor::Point3f{ 0.0, 1.0, 0.0 }, zero, castor::Point3f{ 1.0, 1.0, 0.0 } },
+			InterleavedVertex{ Point3f{ -width / 2, height / 2, -depth / 2 }, Point3f{ 0.0, 1.0, 0.0 }, zero, Point3f{ 1.0, 0.0, 0.0 } },
+			InterleavedVertex{ Point3f{ +width / 2, height / 2, -depth / 2 }, Point3f{ 0.0, 1.0, 0.0 }, zero, Point3f{ 0.0, 0.0, 0.0 } },
+			InterleavedVertex{ Point3f{ +width / 2, height / 2, +depth / 2 }, Point3f{ 0.0, 1.0, 0.0 }, zero, Point3f{ 0.0, 1.0, 0.0 } },
+			InterleavedVertex{ Point3f{ -width / 2, height / 2, +depth / 2 }, Point3f{ 0.0, 1.0, 0.0 }, zero, Point3f{ 1.0, 1.0, 0.0 } },
 		} );
 
 		auto mapping1 = submesh1->createComponent< TriFaceMapping >();

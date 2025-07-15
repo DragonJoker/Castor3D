@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <memory>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename TypeT >
 	struct Deleter
@@ -21,8 +21,6 @@ namespace castor
 	using std::forward;
 	using std::move;
 	using std::swap;
-	using std::make_unique;
-	using std::make_shared;
 	using std::ref;
 
 	template< class DataT >
@@ -43,13 +41,25 @@ namespace castor
 	template< typename BaseT, typename DerivedT, typename ... ParamsT >
 	UniquePtr< BaseT > makeUniqueDerived( ParamsT && ... params )
 	{
-		return UniquePtr< BaseT >( new DerivedT( castor::forward< ParamsT >( params )... ) );
+		return UniquePtr< BaseT >( new DerivedT( c3d::forward< ParamsT >( params )... ) );
 	}
 
 	template< typename TypeT, typename ... ParamsT >
 	UniquePtr< TypeT > makeUnique( ParamsT && ... params )
 	{
-		return UniquePtr< TypeT >( new TypeT( castor::forward< ParamsT >( params )... ) );
+		return UniquePtr< TypeT >( new TypeT( c3d::forward< ParamsT >( params )... ) );
+	}
+
+	template< typename TypeT, typename ... ParamsT >
+	SharedPtr< TypeT > makeShared( ParamsT &&... params )
+	{
+		return std::make_shared< TypeT >( std::forward< ParamsT >( params )... );
+	}
+
+	template< typename TypeT, typename ... ParamsT >
+	RawUniquePtr< TypeT > makeRawUnique( ParamsT && ... params )
+	{
+		return std::make_unique< TypeT >( std::forward< ParamsT >( params )... );
 	}
 
 	template< typename TypeU, typename TypeT >
@@ -79,7 +89,7 @@ namespace castor
 
 #define CU_DeclareDeleter( nmspc, class_name, expdecl )\
 }\
-namespace castor\
+namespace c3d\
 {\
 	template<>\
 	struct Deleter< nmspc::class_name >\
@@ -91,7 +101,7 @@ namespace nmspc\
 {
 
 #define CU_ImplementDeleter( nmspc, class_name )\
-namespace castor\
+namespace c3d\
 {\
 	void Deleter< nmspc::class_name >::operator()( nmspc::class_name * pointer )noexcept\
 	{\
@@ -101,7 +111,7 @@ namespace castor\
 
 #define CU_DeclareSmartPtr( nmspc, class_name, expdecl )\
 	CU_DeclareDeleter( nmspc, class_name, expdecl )\
-	using class_name##UPtr = castor::UniquePtr< class_name >;\
+	using class_name##UPtr = c3d::UniquePtr< class_name >;\
 	using class_name##RPtr = class_name *
 
 #define CU_ImplementSmartPtr( nmspc, class_name )\
@@ -109,7 +119,7 @@ namespace castor\
 
 #define CU_DeclareTemplateSmartPtr( nmspc, class_name )\
 }\
-namespace castor\
+namespace c3d\
 {\
 	template< typename InstT >\
 	struct Deleter< nmspc::class_name##T< InstT > >\
@@ -123,13 +133,13 @@ namespace castor\
 namespace nmspc\
 {\
 	template< typename InstT >\
-	using class_name##UPtrT = castor::UniquePtr< class_name##T< InstT > >;\
+	using class_name##UPtrT = c3d::UniquePtr< class_name##T< InstT > >;\
 	template< typename InstT >\
 	using class_name##RPtrT = class_name##T< InstT > *
 
 #define CU_DeclareEnumTemplateSmartPtr( nmspc, class_name, enum_name )\
 }\
-namespace castor\
+namespace c3d\
 {\
 	template< enum_name EnumT >\
 	struct Deleter< nmspc::class_name##T< EnumT > >\
@@ -143,7 +153,7 @@ namespace castor\
 namespace nmspc\
 {\
 	template< enum_name EnumT >\
-	using class_name##UPtrT = castor::UniquePtr< class_name##T< EnumT > >;\
+	using class_name##UPtrT = c3d::UniquePtr< class_name##T< EnumT > >;\
 	template< enum_name EnumT >\
 	using class_name##RPtrT = class_name##T< EnumT > *
 

@@ -5,10 +5,8 @@
 
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< LayoutBox >::TextWriter( String const & tabs )
 		: TextWriterT< LayoutBox >{ tabs }
 	{
@@ -51,7 +49,7 @@ namespace castor
 							&& writeOpt( file, cuT( "vertical_align" ), getName( item.flags().vAlign() ), getName( VAlign::eTop ) )
 							&& writeOpt( file, cuT( "stretch" ), item.flags().expand(), false )
 							&& writeOpt( file, cuT( "reserve_if_hidden" ), item.flags().reserveSpaceIfHidden(), false )
-							&& writeOpt( file, cuT( "padding" ), item.flags().padding(), castor::Point4ui{} );
+							&& writeOpt( file, cuT( "padding" ), item.flags().padding(), Point4ui{} );
 					}
 				}
 			}

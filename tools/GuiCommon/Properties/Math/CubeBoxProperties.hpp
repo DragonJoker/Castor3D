@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, BoundingBox )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, BoundingBox )
 
 namespace GuiCommon
 {
@@ -20,13 +20,13 @@ namespace GuiCommon
 	public:
 		BoundingBoxProperty( wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
-			, castor::BoundingBox const & value = castor::BoundingBox{} );
+			, c3d::BoundingBox const & value = c3d::BoundingBox{} );
 
 		void RefreshChildren()override;
 
 	protected:
 		// I stands for internal
-		inline void setValueI( castor::BoundingBox const & value )
+		inline void setValueI( c3d::BoundingBox const & value )
 		{
 			m_value = WXVARIANT( value );
 		}

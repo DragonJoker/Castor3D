@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #include <unordered_map>
 
-namespace castor3d
+namespace c3d
 {
 	struct RenderNodesPassDesc
 	{
@@ -22,7 +22,7 @@ namespace castor3d
 			, RenderFilters filters
 			, bool oit
 			, bool forceTwoSided )
-			: m_base{ castor::move( size ), cameraUbo, sceneUbo, filters }
+			: m_base{ c3d::move( size ), cameraUbo, sceneUbo, filters }
 			, m_culler{ culler }
 			, m_oit{ oit }
 			, m_forceTwoSided{ forceTwoSided }
@@ -37,7 +37,7 @@ namespace castor3d
 			, RenderFilters filters
 			, bool oit
 			, bool forceTwoSided )
-			: RenderNodesPassDesc{ castor::move( size )
+			: RenderNodesPassDesc{ c3d::move( size )
 				, cameraUbo
 				, & sceneUbo
 				, culler
@@ -61,7 +61,7 @@ namespace castor3d
 		RenderNodesPassDesc( Extent3D size
 			, CameraUbo const & cameraUbo
 			, SceneCuller & culler )
-			: RenderNodesPassDesc{ castor::move( size )
+			: RenderNodesPassDesc{ c3d::move( size )
 				, cameraUbo
 				, nullptr
 				, culler
@@ -88,7 +88,7 @@ namespace castor3d
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, SceneCuller & culler )
-			: RenderNodesPassDesc{ castor::move( size )
+			: RenderNodesPassDesc{ c3d::move( size )
 				, cameraUbo
 				, sceneUbo
 				, culler
@@ -118,7 +118,7 @@ namespace castor3d
 			, SceneUbo const & sceneUbo
 			, SceneCuller & culler
 			, bool oit )
-			: RenderNodesPassDesc{ castor::move( size )
+			: RenderNodesPassDesc{ c3d::move( size )
 				, cameraUbo
 				, sceneUbo
 				, culler
@@ -214,7 +214,7 @@ namespace castor3d
 		RenderNodesPassDesc & implicitAction( crg::ImageViewId view
 			, crg::RecordContext::ImplicitAction action )
 		{
-			m_ruConfig.implicitAction( view, castor::move( action ) );
+			m_ruConfig.implicitAction( view, c3d::move( action ) );
 			return *this;
 		}
 		/**
@@ -296,8 +296,8 @@ namespace castor3d
 		ParallaxOcclusionFilter m_parallaxOcclusionFilter{ ParallaxOcclusionFilter::eIgnore };
 	};
 
-	using SceneCullerHolder = castor::DataHolderT< SceneCuller * >;
-	using RenderQueueHolder = castor::DataHolderT< RenderQueueUPtr >;
+	using SceneCullerHolder = DataHolderT< SceneCuller * >;
+	using RenderQueueHolder = DataHolderT< RenderQueueUPtr >;
 
 	class RenderNodesPass
 		: public NodesPass
@@ -332,7 +332,7 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, castor::String const & typeName
+			, String const & typeName
 			, crg::ImageViewIdArray targetImage
 			, crg::ImageViewIdArray targetDepth
 			, RenderNodesPassDesc const & desc );
@@ -445,7 +445,7 @@ namespace castor3d
 			, VkPrimitiveTopology topology
 			, bool isFrontCulled
 			, uint32_t passLayerIndex
-			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+			, GpuBufferOffsetT< Point4f > const & morphTargets
 			, SubmeshRenderData const * submeshData
 			, uint32_t vertexStride )const noexcept;
 		/**
@@ -481,7 +481,7 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, VkPrimitiveTopology topology
 			, bool isFrontCulled
-			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+			, GpuBufferOffsetT< Point4f > const & morphTargets
 			, SubmeshRenderData const * submeshData
 			, uint32_t vertexStride )const noexcept;
 		/**
@@ -702,9 +702,9 @@ namespace castor3d
 		C3D_API bool doAreValidPassFlags( PassComponentCombine const & passFlags )const noexcept override;
 		C3D_API bool doIsValidNode( SceneNode const & node )const noexcept override;
 		/**
-		 *\copydoc	castor3d::RenderTechniquePass::doAccept
+		 *\copydoc	RenderTechniquePass::doAccept
 		 */
-		C3D_API void doAccept( castor3d::RenderTechniqueVisitor & visitor );
+		C3D_API void doAccept( RenderTechniqueVisitor & visitor );
 		C3D_API void doUpdateFlags( PipelineFlags & flags )const;
 		C3D_API void doAddShadowBindings( Scene const & scene
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
@@ -735,10 +735,10 @@ namespace castor3d
 
 	private:
 		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const;
-		castor::Vector< RenderPipelineUPtr > & doGetFrontPipelines();
-		castor::Vector< RenderPipelineUPtr > & doGetBackPipelines();
-		castor::Vector< RenderPipelineUPtr > const & doGetFrontPipelines()const;
-		castor::Vector< RenderPipelineUPtr > const & doGetBackPipelines()const;
+		Vector< RenderPipelineUPtr > & doGetFrontPipelines();
+		Vector< RenderPipelineUPtr > & doGetBackPipelines();
+		Vector< RenderPipelineUPtr > const & doGetFrontPipelines()const;
+		Vector< RenderPipelineUPtr > const & doGetBackPipelines()const;
 		PipelineAndID doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 			, ashes::DescriptorSetLayout const * vertexPullingLayouts
 			, ashes::DescriptorSetLayout const * meshletDescriptorLayout
@@ -855,11 +855,11 @@ namespace castor3d
 			ashes::DescriptorSetLayoutPtr layout{};
 			ashes::DescriptorSetPtr set{};
 		};
-		using PassDescriptorsMap = castor::UnorderedMap< size_t, PassDescriptors >;
+		using PassDescriptorsMap = HashMap< size_t, PassDescriptors >;
 
 		PassDescriptorsMap m_additionalDescriptors;
-		castor::Vector< RenderPipelineUPtr > m_frontPipelines;
-		castor::Vector< RenderPipelineUPtr > m_backPipelines;
+		Vector< RenderPipelineUPtr > m_frontPipelines;
+		Vector< RenderPipelineUPtr > m_backPipelines;
 	};
 }
 

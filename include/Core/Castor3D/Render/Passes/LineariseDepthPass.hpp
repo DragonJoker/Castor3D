@@ -20,7 +20,7 @@ See LICENSE file in root folder
 
 #define C3D_DebugLinearisePass 0
 
-namespace castor3d
+namespace c3d
 {
 	class LineariseDepthPass
 	{
@@ -54,7 +54,7 @@ namespace castor3d
 			, crg::FramePassArray const & previousPasses
 			, RenderDevice const & device
 			, ProgressBar * progress
-			, castor::String const & prefix
+			, String const & prefix
 			, SsaoConfig const & ssaoConfig
 			, Extent2D const & size
 			, Texture const & depthObj );
@@ -75,7 +75,7 @@ namespace castor3d
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		RenderTechniquePass::accept
 		 */
 		C3D_API void accept( ConfigurationVisitorBase & visitor );
 		/**
@@ -111,12 +111,12 @@ namespace castor3d
 		crg::FramePassGroup & m_graph;
 		Engine & m_engine;
 		SsaoConfig const & m_ssaoConfig;
-		castor::String m_prefix;
+		String m_prefix;
 		Extent2D m_size;
 		Texture m_result;
 		crg::ImageViewIdArray m_mipViews;
-		UniformBufferOffsetT< castor::Point3f > m_clipInfo;
-		castor::ChangeTracked< castor::Point3f > m_clipInfoValue;
+		UniformBufferOffsetT< Point3f > m_clipInfo;
+		ChangeTracked< Point3f > m_clipInfoValue;
 		crg::FramePass const * m_lastPass{};
 		/**
 		*name
@@ -132,7 +132,7 @@ namespace castor3d
 		*	Minification.
 		*/
 		/**@{*/
-		castor::Vector< UniformBufferOffsetT< castor::Point2i > > m_previousLevel;
+		Vector< UniformBufferOffsetT< Point2i > > m_previousLevel;
 		ProgramModule m_minifyShader;
 		ashes::PipelineShaderStageCreateInfoArray m_minifyStages;
 		/**@}*/

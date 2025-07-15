@@ -8,16 +8,16 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::SpotLight >
-		: public TextWriterT< castor3d::SpotLight >
+	class TextWriter< SpotLight >
+		: public TextWriterT< SpotLight >
 	{
 	public:
-		explicit TextWriter( castor::String const & tabs );
-		bool operator()( castor3d::SpotLight const & light
-			, castor::StringStream & file )override;
+		explicit TextWriter( String const & tabs );
+		bool operator()( SpotLight const & light
+			, StringStream & file )override;
 	};
 }
 

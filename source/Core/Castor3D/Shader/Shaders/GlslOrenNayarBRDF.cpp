@@ -5,14 +5,14 @@
 
 #include <ShaderWriter/Writer.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//*********************************************************************************************
 
 	namespace fujii
 	{
-		static float constexpr constant1 = float( 0.5 - 2.0 / ( 3.0 * castor::Pi< double > ) );
-		static float constexpr constant2 = float( 2.0 / 3.0 - 28.0 / ( 15.0 * castor::Pi< double > ) );
+		static float constexpr constant1 = float( 0.5 - 2.0 / ( 3.0 * Pi< double > ) );
+		static float constexpr constant2 = float( 2.0 / 3.0 - 28.0 / ( 15.0 * Pi< double > ) );
 	}
 
 	//*********************************************************************************************
@@ -41,7 +41,7 @@ namespace castor3d::shader
 					, components.perceptualRoughness );
 
 				auto sigma = m_writer.declLocale( "sigma"
-					, roughness * castor::PiDiv2< float > );
+					, roughness * PiDiv2< float > );
 				auto s = m_writer.declLocale( "s"
 					, LdotV - NdotL * NdotV );
 				auto oneOverT = m_writer.declLocale( "oneOverT"
@@ -55,7 +55,7 @@ namespace castor3d::shader
 					, 0.45_f * ( sqSigma / ( sqSigma + 0.09_f ) ) );
 
 				auto diffuseReflectance = m_writer.declLocale( "diffuseReflectance"
-					, ( A + B * s * oneOverT ) * radiance / sdw::Float{ castor::Pi< float > } );
+					, ( A + B * s * oneOverT ) * radiance / sdw::Float{ Pi< float > } );
 				m_writer.returnStmt( max( diffuseReflectance * intensity, vec3( 0.0_f ) ) );
 			}
 			, InBlendComponents{ m_writer, "components", pcomponents }
@@ -68,7 +68,7 @@ namespace castor3d::shader
 	DiffuseBRDFPtr QualitativeOrenNayarBRDF::create( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdfHelpers )
 	{
-		return castor::makeUniqueDerived< DiffuseBRDF, QualitativeOrenNayarBRDF >( writer, brdfHelpers );
+		return makeUniqueDerived< DiffuseBRDF, QualitativeOrenNayarBRDF >( writer, brdfHelpers );
 	}
 
 	//*********************************************************************************************
@@ -104,7 +104,7 @@ namespace castor3d::shader
 					, 1.0_f / ( 1.0_f + roughness * sdw::Float{ fujii::constant1 } ) );
 
 				auto diffuseReflectance = m_writer.declLocale( "diffuseReflectance"
-					, A * ( 1.0_f + roughness * sOverT ) * radiance / sdw::Float{ castor::Pi< float > } );
+					, A * ( 1.0_f + roughness * sOverT ) * radiance / sdw::Float{ Pi< float > } );
 				m_writer.returnStmt( max( diffuseReflectance * intensity, vec3( 0.0_f ) ) );
 			}
 			, InBlendComponents{ m_writer, "components", pcomponents }
@@ -117,7 +117,7 @@ namespace castor3d::shader
 	DiffuseBRDFPtr FujiiOrenNayarBRDF::create( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdfHelpers )
 	{
-		return castor::makeUniqueDerived< DiffuseBRDF, FujiiOrenNayarBRDF >( writer, brdfHelpers );
+		return makeUniqueDerived< DiffuseBRDF, FujiiOrenNayarBRDF >( writer, brdfHelpers );
 	}
 
 	//*********************************************************************************************
@@ -145,7 +145,7 @@ namespace castor3d::shader
 				//auto G = m_writer.declLocale( "G"
 				//	, Si * ( acos( mu ) - Si * mu )
 				//		+ ( 2.0_f / 3.0_f ) * ( ( Si / mu ) * ( 1.0_f - ( Si * Si * Si ) ) - Si ) );
-				//m_writer.returnStmt( A + ( B / castor::Pi< float > ) * G );
+				//m_writer.returnStmt( A + ( B / Pi< float > ) * G );
 
 				// Approximate
 				auto Gcoeffs = m_writer.declConstant( "Gcoeffs"
@@ -187,7 +187,7 @@ namespace castor3d::shader
 					, 1.0_f / ( 1.0_f + roughness * sdw::Float{ fujii::constant1 } ) );
 
 				auto singleScatter = m_writer.declLocale( "singleScatter"
-					, A * ( 1.0_f + roughness * sOverT ) * radiance / sdw::Float{ castor::Pi< float > } );
+					, A * ( 1.0_f + roughness * sOverT ) * radiance / sdw::Float{ Pi< float > } );
 
 				auto Eo = m_writer.declLocale( "Eo"
 					, m_fujiiOrenNayarAlbedo( roughness, NdotV ) );
@@ -199,7 +199,7 @@ namespace castor3d::shader
 					, ( radiance * radiance ) * avgE / ( vec3( 1.0_f ) - radiance * ( 1.0_f - avgE ) ) );
 				const auto eps = 1.0e-7_f;
 				auto multiScatter = m_writer.declLocale( "multiScatter"
-					, ( msRadiance / sdw::Float{ castor::Pi< float > } )
+					, ( msRadiance / sdw::Float{ Pi< float > } )
 						* sdw::max( eps, 1.0_f - Eo ) // multi-scatter lobe
 						* sdw::max( eps, 1.0_f - Ei )
 						/ sdw::max( eps, 1.0_f - avgE ) );
@@ -218,7 +218,7 @@ namespace castor3d::shader
 	DiffuseBRDFPtr EnergyConservativeOrenNayarBRDF::create( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdfHelpers )
 	{
-		return castor::makeUniqueDerived< DiffuseBRDF, EnergyConservativeOrenNayarBRDF >( writer, brdfHelpers );
+		return makeUniqueDerived< DiffuseBRDF, EnergyConservativeOrenNayarBRDF >( writer, brdfHelpers );
 	}
 
 	//*********************************************************************************************

@@ -21,7 +21,7 @@ See LICENSE file in root folder
 #include <ashespp/Pipeline/PipelineLayout.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class OverlayPreparer
 	{
@@ -60,19 +60,19 @@ namespace castor3d
 		void doUpdateUbo( OverlayUboConfiguration & data
 			, PanelOverlay const & overlay
 			, Pass const & pass
-			, castor::Size const & renderSize
+			, Size const & renderSize
 			, uint32_t vertexOffset
 			, OverlayTextBufferIndex const & textBuffer )const;
 		void doUpdateUbo( OverlayUboConfiguration & data
 			, BorderPanelOverlay const & overlay
 			, Pass const & pass
-			, castor::Size const & renderSize
+			, Size const & renderSize
 			, uint32_t vertexOffset
 			, OverlayTextBufferIndex const & textBuffer )const;
 		void doUpdateUbo( OverlayUboConfiguration & data
 			, TextOverlay const & overlay
 			, Pass const & pass
-			, castor::Size const & renderSize
+			, Size const & renderSize
 			, uint32_t vertexOffset
 			, OverlayTextBufferIndex const & textBuffer )const;
 
@@ -80,13 +80,13 @@ namespace castor3d
 		OverlayRenderer & m_renderer;
 		RenderDevice const & m_device;
 		crg::Fence & m_fence;
-		using OverlayDataArray = castor::Vector< OverlayDrawData >;
-		using OverlayDatasMap = castor::Map< OverlayPipelineData *, OverlayDataArray >;
-		castor::Map< uint32_t, OverlayDatasMap > m_levelsOverlays;
+		using OverlayDataArray = Vector< OverlayDrawData >;
+		using OverlayDatasMap = Map< OverlayPipelineData *, OverlayDataArray >;
+		Map< uint32_t, OverlayDatasMap > m_levelsOverlays;
 		VkRenderPass m_renderPass;
 		VkFramebuffer m_framebuffer;
-		castor::Vector< OverlayDrawData > m_overlays;
-		castor::Map< size_t, uint32_t > m_descriptorsCounts{};
+		Vector< OverlayDrawData > m_overlays;
+		Map< size_t, uint32_t > m_descriptorsCounts{};
 		uint32_t * m_drawCounts{};
 	};
 }

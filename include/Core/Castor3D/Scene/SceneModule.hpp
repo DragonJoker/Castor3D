@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/GraphicsModule.hpp>
 #include <CastorUtils/Graphics/ImageCache.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class Viewport;
 
@@ -22,8 +22,8 @@ namespace castor3d
 
 	struct BillboardVertex
 	{
-		castor::Point3f position;
-		castor::Point2f uv;
+		Point3f position;
+		Point2f uv;
 	};
 	/**
 	*\~english
@@ -47,7 +47,7 @@ namespace castor3d
 		eParticleEmitter = 4,
 		CU_ScopedEnumBounds( eCamera, eParticleEmitter )
 	};
-	C3D_API castor::String getName( MovableType value );
+	C3D_API String getName( MovableType value );
 	/**
 	*\~english
 	*\brief
@@ -73,7 +73,7 @@ namespace castor3d
 		eVariance = 3,
 		CU_ScopedEnumBounds( eNone, eVariance )
 	};
-	C3D_API castor::String getName( ShadowType value );
+	C3D_API String getName( ShadowType value );
 	/**
 	*\~english
 	*\brief
@@ -98,7 +98,7 @@ namespace castor3d
 		eSquaredExponential = 3,
 		CU_ScopedEnumBounds( eDisabled, eSquaredExponential )
 	};
-	C3D_API castor::String getName( FogType value );
+	C3D_API String getName( FogType value );
 	/**
 	*\~english
 	*\brief
@@ -181,7 +181,7 @@ namespace castor3d
 		eCylindrical = 1,
 		CU_ScopedEnumBounds( eSpherical, eCylindrical )
 	};
-	C3D_API castor::String getName( BillboardType value );
+	C3D_API String getName( BillboardType value );
 	/**
 	*\~english
 	*\brief
@@ -200,7 +200,7 @@ namespace castor3d
 		eFixed = 1,
 		CU_ScopedEnumBounds( eDynamic, eFixed )
 	};
-	C3D_API castor::String getName( BillboardSize value );
+	C3D_API String getName( BillboardSize value );
 	/**
 	*\~english
 	*\brief
@@ -352,43 +352,43 @@ namespace castor3d
 	*/
 	struct ShadowConfig;
 
-	using OnSceneChangedFunction = castor::Function< void( Scene const & ) >;
-	using OnSceneChanged = castor::SignalT< OnSceneChangedFunction >;
+	using OnSceneChangedFunction = Function< void( Scene const & ) >;
+	using OnSceneChanged = SignalT< OnSceneChangedFunction >;
 	using OnSceneChangedConnection = OnSceneChanged::connection;
 
-	using OnSceneUpdateFunction = castor::Function< void( Scene const & ) >;
-	using OnSceneUpdate = castor::SignalT< OnSceneUpdateFunction >;
+	using OnSceneUpdateFunction = Function< void( Scene const & ) >;
+	using OnSceneUpdate = SignalT< OnSceneUpdateFunction >;
 	using OnSceneUpdateConnection = OnSceneUpdate::connection;
 
-	using OnCameraChangedFunction = castor::Function< void( Camera const & ) >;
-	using OnCameraChanged = castor::SignalT< OnCameraChangedFunction >;
+	using OnCameraChangedFunction = Function< void( Camera const & ) >;
+	using OnCameraChanged = SignalT< OnCameraChangedFunction >;
 	using OnCameraChangedConnection = OnCameraChanged::connection;
 
-	using OnSceneNodeChangedFunction = castor::Function< void( SceneNode const & ) >;
-	using OnSceneNodeChanged = castor::SignalT< OnSceneNodeChangedFunction >;
+	using OnSceneNodeChangedFunction = Function< void( SceneNode const & ) >;
+	using OnSceneNodeChanged = SignalT< OnSceneNodeChangedFunction >;
 	using OnSceneNodeChangedConnection = OnSceneNodeChanged::connection;
 
-	using OnSceneNodeReparentFunction = castor::Function< void( SceneNode & ) >;
-	using OnSceneNodeReparent = castor::SignalT< OnSceneNodeReparentFunction >;
+	using OnSceneNodeReparentFunction = Function< void( SceneNode & ) >;
+	using OnSceneNodeReparent = SignalT< OnSceneNodeReparentFunction >;
 	using OnSceneNodeReparentConnection = OnSceneNodeReparent::connection;
 
-	using SubmeshMaterialMap = castor::Map< Submesh const *, MaterialObs >;
+	using SubmeshMaterialMap = Map< Submesh const *, MaterialObs >;
 
 	struct CameraCreateInfo
 	{
-		castor::NotNullT< Scene > scene;
-		castor::NotNullT< SceneNode > parentNode;
+		NotNullT< Scene > scene;
+		NotNullT< SceneNode > parentNode;
 		Viewport * viewport{ nullptr };
 		bool ownProjMtx{ false };
 	};
 
 	struct SceneNodeCreateInfo
 	{
-		castor::NotNullT< Scene > scene;
+		NotNullT< Scene > scene;
 		SceneNode * parentNode{};
-		castor::Point3f position{};
-		castor::Quaternion orientation{ castor::Quaternion::identity() };
-		castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
+		Point3f position{};
+		Quaternion orientation{ Quaternion::identity() };
+		Point3f scale{ 1.0f, 1.0f, 1.0f };
 		bool isStatic{ false };
 	};
 	/**
@@ -402,20 +402,20 @@ namespace castor3d
 	*	Spécialisation pour Scene.
 	*/
 	template<>
-	struct PtrCacheTraitsT< Scene, castor::String >
-		: PtrCacheTraitsBaseT< Scene, castor::String >
+	struct PtrCacheTraitsT< Scene, String >
+		: PtrCacheTraitsBaseT< Scene, String >
 	{
 		using ResT = Scene;
-		using KeyT = castor::String;
+		using KeyT = String;
 		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
 		using ElementT = typename Base::ElementT;
 		using ElementPtrT = typename Base::ElementPtrT;
 
-		C3D_API static const castor::String Name;
+		C3D_API static const String Name;
 	};
 	/**
 	*\~english
-	*	Helper structure to build a castor3d::ObjectCacheTraitsT.
+	*	Helper structure to build a ObjectCacheTraitsT.
 	*\remarks
 	*	Predefines:
 	*	<ul>
@@ -436,7 +436,7 @@ namespace castor3d
 	*	<li>Name: The element type name.</li>
 	*	</ul>
 	*\~french
-	*	Structure d'aide à la création d'un castor3d::ObjectCacheTraitsT.
+	*	Structure d'aide à la création d'un ObjectCacheTraitsT.
 	*\remarks
 	*	Prédéfinit:
 	*	<ul>
@@ -462,32 +462,32 @@ namespace castor3d
 	{
 		using ElementT = ObjT;
 		using ElementKeyT = KeyT;
-		using ElementPtrT = castor::UniquePtr< ElementT >;
+		using ElementPtrT = UniquePtr< ElementT >;
 		using ElementObsT = ElementT *;
-		using ElementContT = castor::Map< KeyT, ElementPtrT >;
+		using ElementContT = Map< KeyT, ElementPtrT >;
 		using ElementCacheT = ObjectCacheBaseT< ElementT, KeyT >;
 
-		using ElementInitialiserT = castor::Function< void( ElementT & ) >;
-		using ElementCleanerT = castor::Function< void( ElementT & ) >;
-		using ElementMergerT = castor::Function< void( ElementCacheT const &
+		using ElementInitialiserT = Function< void( ElementT & ) >;
+		using ElementCleanerT = Function< void( ElementT & ) >;
+		using ElementMergerT = Function< void( ElementCacheT const &
 			, ElementContT &
 			, ElementPtrT
 			, SceneNode *
 			, SceneNode * ) >;
-		using ElementAttacherT = castor::Function< void( ElementT &
+		using ElementAttacherT = Function< void( ElementT &
 			, SceneNode &
 			, SceneNode *
 			, SceneNode *
 			, SceneNode * ) >;
-		using ElementDetacherT = castor::Function< void( ElementT & ) >;
+		using ElementDetacherT = Function< void( ElementT & ) >;
 
 		template< typename ... ParametersT >
 		static ElementPtrT makeElement( ElementCacheT const & cache
 			, ElementKeyT const & key
 			, ParametersT && ... params )
 		{
-			return castor::makeUnique< ElementT >( key
-				, castor::forward< ParametersT >( params )... );
+			return makeUnique< ElementT >( key
+				, c3d::forward< ParametersT >( params )... );
 		}
 
 		static ElementObsT makeElementObs( ElementPtrT const & element )
@@ -535,15 +535,15 @@ namespace castor3d
 	*	Spécialisation pour BillboardList.
 	*/
 	template<>
-	struct ObjectCacheTraitsT< BillboardList, castor::String >
-		: ObjectCacheTraitsBaseT< BillboardList, castor::String >
+	struct ObjectCacheTraitsT< BillboardList, String >
+		: ObjectCacheTraitsBaseT< BillboardList, String >
 	{
-		using KeyT = castor::String;
+		using KeyT = String;
 		using ElementT = BillboardList;
 		using BaseT = ObjectCacheTraitsBaseT< ElementT, KeyT >;
 		using ElementPtrT = typename BaseT::ElementPtrT;
 
-		C3D_API static const castor::String Name;
+		C3D_API static const String Name;
 	};
 	/**
 	*\~english
@@ -556,15 +556,15 @@ namespace castor3d
 	*	Spécialisation pour Camera.
 	*/
 	template<>
-	struct ObjectCacheTraitsT< Camera, castor::String >
-		: ObjectCacheTraitsBaseT< Camera, castor::String >
+	struct ObjectCacheTraitsT< Camera, String >
+		: ObjectCacheTraitsBaseT< Camera, String >
 	{
-		using KeyT = castor::String;
+		using KeyT = String;
 		using ElementT = Camera;
 		using BaseT = ObjectCacheTraitsBaseT< ElementT, KeyT >;
 		using ElementPtrT = typename BaseT::ElementPtrT;
 
-		C3D_API static const castor::String Name;
+		C3D_API static const String Name;
 	};
 	/**
 	*\~english
@@ -577,15 +577,15 @@ namespace castor3d
 	*	Spécialisation pour Geometry.
 	*/
 	template<>
-	struct ObjectCacheTraitsT< Geometry, castor::String >
-		: ObjectCacheTraitsBaseT< Geometry, castor::String >
+	struct ObjectCacheTraitsT< Geometry, String >
+		: ObjectCacheTraitsBaseT< Geometry, String >
 	{
-		using KeyT = castor::String;
+		using KeyT = String;
 		using ElementT = Geometry;
 		using BaseT = ObjectCacheTraitsBaseT< ElementT, KeyT >;
 		using ElementPtrT = typename BaseT::ElementPtrT;
 
-		C3D_API static const castor::String Name;
+		C3D_API static const String Name;
 	};
 	/**
 	*\~english
@@ -598,42 +598,42 @@ namespace castor3d
 	*	Spécialisation pour SceneNode.
 	*/
 	template<>
-	struct ObjectCacheTraitsT< SceneNode, castor::String >
-		: ObjectCacheTraitsBaseT< SceneNode, castor::String >
+	struct ObjectCacheTraitsT< SceneNode, String >
+		: ObjectCacheTraitsBaseT< SceneNode, String >
 	{
-		using KeyT = castor::String;
+		using KeyT = String;
 		using ElementT = SceneNode;
 		using BaseT = ObjectCacheTraitsBaseT< ElementT, KeyT >;
 		using ElementPtrT = typename BaseT::ElementPtrT;
 
-		C3D_API static const castor::String Name;
+		C3D_API static const String Name;
 	};
 
 	template<>
-	class ObjectCacheT< BillboardList, castor::String >;
+	class ObjectCacheT< BillboardList, String >;
 	template<>
-	class ObjectCacheT< Geometry, castor::String >;
+	class ObjectCacheT< Geometry, String >;
 
-	using SceneCacheTraits = PtrCacheTraitsT< Scene, castor::String >;
-	using BillboardListCacheTraits = ObjectCacheTraitsT< BillboardList, castor::String >;
-	using CameraCacheTraits = ObjectCacheTraitsT< Camera, castor::String >;
-	using GeometryCacheTraits = ObjectCacheTraitsT< Geometry, castor::String >;
-	using SceneNodeCacheTraits = ObjectCacheTraitsT< SceneNode, castor::String >;
+	using SceneCacheTraits = PtrCacheTraitsT< Scene, String >;
+	using BillboardListCacheTraits = ObjectCacheTraitsT< BillboardList, String >;
+	using CameraCacheTraits = ObjectCacheTraitsT< Camera, String >;
+	using GeometryCacheTraits = ObjectCacheTraitsT< Geometry, String >;
+	using SceneNodeCacheTraits = ObjectCacheTraitsT< SceneNode, String >;
 
-	using SceneCache = castor::ResourceCacheT< Scene
-		, castor::String
+	using SceneCache = ResourceCacheT< Scene
+		, String
 		, SceneCacheTraits >;
 	using BillboardListCache = ObjectCacheT< BillboardList
-		, castor::String
+		, String
 		, BillboardListCacheTraits >;
 	using CameraCache = ObjectCacheT< Camera
-		, castor::String
+		, String
 		, CameraCacheTraits >;
 	using GeometryCache = ObjectCacheT< Geometry
-		, castor::String
+		, String
 		, GeometryCacheTraits >;
 	using SceneNodeCache = ObjectCacheT< SceneNode
-		, castor::String
+		, String
 		, SceneNodeCacheTraits >;
 
 	using SceneRes = SceneCacheTraits::ElementPtrT;
@@ -646,47 +646,47 @@ namespace castor3d
 	using GeometryResPtr = CameraCacheTraits::ElementObsT;
 	using SceneNodeRes = CameraCacheTraits::ElementPtrT;
 	using SceneNodeResPtr = CameraCacheTraits::ElementObsT;
-	using MaterialCacheView = castor::CacheViewT< MaterialCache >;
-	using SamplerCacheView = castor::CacheViewT< SamplerCache >;
-	using FontCacheView = castor::CacheViewT< castor::FontCache >;
-	using ImageCacheView = castor::CacheViewT< castor::ImageCache >;
+	using MaterialCacheView = CacheViewT< MaterialCache >;
+	using SamplerCacheView = CacheViewT< SamplerCache >;
+	using FontCacheView = CacheViewT< FontCache >;
+	using ImageCacheView = CacheViewT< ImageCache >;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, BillboardBase, C3D_API );
-	CU_DeclareSmartPtr( castor3d, BillboardList, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Camera, C3D_API );
-	CU_DeclareSmartPtr( castor3d, CameraImporter, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Geometry, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MovableObject, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SceneFileParser, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SceneNode, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Scene, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SceneImporter, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SceneNodeImporter, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ShadowConfig, C3D_API );
+	CU_DeclareSmartPtr( c3d, BillboardBase, C3D_API );
+	CU_DeclareSmartPtr( c3d, BillboardList, C3D_API );
+	CU_DeclareSmartPtr( c3d, Camera, C3D_API );
+	CU_DeclareSmartPtr( c3d, CameraImporter, C3D_API );
+	CU_DeclareSmartPtr( c3d, Geometry, C3D_API );
+	CU_DeclareSmartPtr( c3d, MovableObject, C3D_API );
+	CU_DeclareSmartPtr( c3d, SceneFileParser, C3D_API );
+	CU_DeclareSmartPtr( c3d, SceneNode, C3D_API );
+	CU_DeclareSmartPtr( c3d, Scene, C3D_API );
+	CU_DeclareSmartPtr( c3d, SceneImporter, C3D_API );
+	CU_DeclareSmartPtr( c3d, SceneNodeImporter, C3D_API );
+	CU_DeclareSmartPtr( c3d, ShadowConfig, C3D_API );
 
-	CU_DeclareSmartPtr( castor3d, SceneCache, C3D_API );
-	CU_DeclareSmartPtr( castor3d, BillboardListCache, C3D_API );
-	CU_DeclareSmartPtr( castor3d, CameraCache, C3D_API );
-	CU_DeclareSmartPtr( castor3d, GeometryCache, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SceneNodeCache, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MaterialCacheView, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SamplerCacheView, C3D_API );
-	CU_DeclareSmartPtr( castor3d, FontCacheView, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ImageCacheView, C3D_API );
+	CU_DeclareSmartPtr( c3d, SceneCache, C3D_API );
+	CU_DeclareSmartPtr( c3d, BillboardListCache, C3D_API );
+	CU_DeclareSmartPtr( c3d, CameraCache, C3D_API );
+	CU_DeclareSmartPtr( c3d, GeometryCache, C3D_API );
+	CU_DeclareSmartPtr( c3d, SceneNodeCache, C3D_API );
+	CU_DeclareSmartPtr( c3d, MaterialCacheView, C3D_API );
+	CU_DeclareSmartPtr( c3d, SamplerCacheView, C3D_API );
+	CU_DeclareSmartPtr( c3d, FontCacheView, C3D_API );
+	CU_DeclareSmartPtr( c3d, ImageCacheView, C3D_API );
 
 	//! SceneNode pointer array.
 	CU_DeclareVector( SceneNodeRPtr, SceneNodePtr );
 	//! Scene pointer map, sorted by name.
-	CU_DeclareMap( castor::String, SceneRPtr, ScenePtrStr );
+	CU_DeclareMap( String, SceneRPtr, ScenePtrStr );
 	/** @endcond */
 
-	C3D_API castor::LoggerInstance & getLogger( Scene const & scene );
+	C3D_API LoggerInstance & getLogger( Scene const & scene );
 	C3D_API Engine & getEngine( Scene const & scene );
 
 	//@}
 }
 
-CU_DeclareExportedOwnedBy( C3D_API, castor3d::Scene, Scene )
+CU_DeclareExportedOwnedBy( C3D_API, Scene, Scene )
 
 #endif

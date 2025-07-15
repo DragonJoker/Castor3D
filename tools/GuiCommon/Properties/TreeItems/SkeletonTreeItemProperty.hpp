@@ -29,9 +29,9 @@ namespace GuiCommon
 		 *\param[in]	engine		Le moteur.
 		 */
 		SkeletonTreeItemProperty( bool editable
-			, castor3d::Engine * engine );
+			, c3d::Engine * engine );
 
-		void setData( castor3d::Skeleton & data )noexcept
+		void setData( c3d::Skeleton & data )noexcept
 		{
 			clearProperties();
 			m_skeleton = &data;
@@ -44,7 +44,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::Skeleton * m_skeleton{};
+		c3d::Skeleton * m_skeleton{};
 	};
 }
 

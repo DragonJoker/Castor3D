@@ -6,7 +6,7 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
-namespace castor3d
+namespace c3d
 {
 	Torus::Torus()
 		: MeshGenerator( cuT( "torus" ) )
@@ -15,12 +15,12 @@ namespace castor3d
 
 	MeshGeneratorUPtr Torus::create()
 	{
-		return castor::makeUniqueDerived< MeshGenerator, Torus >();
+		return makeUniqueDerived< MeshGenerator, Torus >();
 	}
 
 	void Torus::doGenerate( Mesh & mesh, Parameters const & parameters )
 	{
-		castor::String param;
+		String param;
 		float internalRadius{};
 		float externalRadius{};
 		uint32_t internalNbFaces{};
@@ -28,22 +28,22 @@ namespace castor3d
 
 		if ( parameters.get( cuT( "inner_size" ), param ) )
 		{
-			internalRadius = castor::string::toFloat( param );
+			internalRadius = string::toFloat( param );
 		}
 
 		if ( parameters.get( cuT( "outer_size" ), param ) )
 		{
-			externalRadius = castor::string::toFloat( param );
+			externalRadius = string::toFloat( param );
 		}
 
 		if ( parameters.get( cuT( "inner_count" ), param ) )
 		{
-			internalNbFaces = castor::string::toUInt( param );
+			internalNbFaces = string::toUInt( param );
 		}
 
 		if ( parameters.get( cuT( "outer_count" ), param ) )
 		{
-			externalNbFaces = castor::string::toUInt( param );
+			externalNbFaces = string::toUInt( param );
 		}
 
 		mesh.cleanup();
@@ -61,20 +61,20 @@ namespace castor3d
 			uint32_t uiIntMax = internalNbFaces;
 
 			// Build the internal circle that will be rotated to build the torus
-			float step = castor::PiMult2< float > / float( internalNbFaces );
+			float step = PiMult2< float > / float( internalNbFaces );
 
 			for ( uint32_t j = 0; j <= uiIntMax; j++ )
 			{
 				submesh.addPoint( InterleavedVertex{}
-					.position( castor::Point3f{ internalRadius * cos( rAngleIn ) + externalRadius, internalRadius * sin( rAngleIn ), 0.0 } )
-					.normal( castor::point::getNormalised( castor::Point3f{ float( cos( rAngleIn ) ), float( sin( rAngleIn ) ), 0.0f } ) )
-					.texcoord( castor::Point2f{ 0.0f, float( j ) / float( internalNbFaces ) } ) );
+					.position( Point3f{ internalRadius * cos( rAngleIn ) + externalRadius, internalRadius * sin( rAngleIn ), 0.0 } )
+					.normal( point::getNormalised( Point3f{ float( cos( rAngleIn ) ), float( sin( rAngleIn ) ), 0.0f } ) )
+					.texcoord( Point2f{ 0.0f, float( j ) / float( internalNbFaces ) } ) );
 				uiCur++;
 				rAngleIn += step;
 			}
 
 			// Build the torus
-			step = castor::PiMult2< float > / float( externalNbFaces );
+			step = PiMult2< float > / float( externalNbFaces );
 			auto indexMapping = submesh.createComponent< TriFaceMapping >();
 			auto & indexMappingData = indexMapping->getData();
 
@@ -87,9 +87,9 @@ namespace castor3d
 				for ( uint32_t j = 0; j <= uiIntMax; j++ )
 				{
 					auto vertex = submesh.getInterleavedPoint( j );
-					vertex.pos = castor::Point3f{ vertex.pos[0] * cos( rAngleEx ), vertex.pos[1], vertex.pos[0] * sin( rAngleEx ) };
-					vertex.tex = castor::Point3f{ float( i ) / float( externalNbFaces ), float( j ) / float( internalNbFaces ) };
-					vertex.nml = castor::point::getNormalised( castor::Point3f( float( vertex.nml[0] * cos( rAngleEx ) ), vertex.nml[1], float( vertex.nml[0] * sin( rAngleEx ) ) ) );
+					vertex.pos = Point3f{ vertex.pos[0] * cos( rAngleEx ), vertex.pos[1], vertex.pos[0] * sin( rAngleEx ) };
+					vertex.tex = Point3f{ float( i ) / float( externalNbFaces ), float( j ) / float( internalNbFaces ) };
+					vertex.nml = point::getNormalised( Point3f( float( vertex.nml[0] * cos( rAngleEx ) ), vertex.nml[1], float( vertex.nml[0] * sin( rAngleEx ) ) ) );
 					submesh.addPoint( vertex );
 				}
 

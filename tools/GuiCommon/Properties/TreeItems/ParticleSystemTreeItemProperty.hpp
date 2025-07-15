@@ -29,9 +29,9 @@ namespace GuiCommon
 		 *\param[in]	engine		Le moteur.
 		 */
 		ParticleSystemTreeItemProperty( bool editable
-			, castor3d::Engine * engine );
+			, c3d::Engine * engine );
 
-		void setData( castor3d::ParticleSystem & data )noexcept
+		void setData( c3d::ParticleSystem & data )noexcept
 		{
 			clearProperties();
 			m_particleSystem = &data;
@@ -44,7 +44,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::ParticleSystem * m_particleSystem{};
+		c3d::ParticleSystem * m_particleSystem{};
 		wxArrayString m_materials;
 	};
 }

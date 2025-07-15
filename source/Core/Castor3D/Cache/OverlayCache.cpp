@@ -9,16 +9,11 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementSmartPtr( castor3d, OverlayCache )
+CU_ImplementSmartPtr( c3d, OverlayCache )
 
-namespace castor3d
+namespace c3d
 {
-	const castor::String PtrCacheTraitsT< castor3d::Overlay, castor::String >::Name = cuT( "Overlay" );
-}
-
-namespace castor
-{
-	using namespace castor3d;
+	const String PtrCacheTraitsT< Overlay, String >::Name = cuT( "Overlay" );
 
 	void ResourceCacheT< Overlay, String, OverlayCacheTraits >::initialise( Overlay & overlay )
 	{
@@ -79,7 +74,7 @@ namespace castor
 		}
 	}
 
-	void ResourceCacheT< Overlay, String, OverlayCacheTraits >::upload( castor3d::UploadData & uploader )
+	void ResourceCacheT< Overlay, String, OverlayCacheTraits >::upload( UploadData & uploader )
 	{
 		auto lock( makeUniqueLock( *this ) );
 
@@ -102,7 +97,7 @@ namespace castor
 			{
 				cleanup( resource );
 			}
-			, castor::ResourceMergerT< OverlayCache >{ cuT( "_" ) } }
+			, ResourceMergerT< OverlayCache >{ cuT( "_" ) } }
 		, m_engine{ engine }
 		, m_viewport{ engine }
 	{
@@ -150,7 +145,7 @@ namespace castor
 		return result;
 	}
 
-	FontTextureRPtr ResourceCacheT< Overlay, String, OverlayCacheTraits >::createFontTexture( castor::FontResPtr font )
+	FontTextureRPtr ResourceCacheT< Overlay, String, OverlayCacheTraits >::createFontTexture( FontResPtr font )
 	{
 		auto lock( makeUniqueLock( *this ) );
 		auto fontName = font->getName();
@@ -158,7 +153,7 @@ namespace castor
 
 		if ( res )
 		{
-			auto result = castor::makeUnique< FontTexture >( m_engine, font );
+			auto result = makeUnique< FontTexture >( m_engine, font );
 			auto tmp = result.get();
 			m_engine.postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 				, [tmp]( RenderDevice const & device
@@ -166,7 +161,7 @@ namespace castor
 				{
 					tmp->initialise( device, queueData );
 				} ) );
-			it->second = castor::move( result );
+			it->second = c3d::move( result );
 		}
 
 		return it->second.get();

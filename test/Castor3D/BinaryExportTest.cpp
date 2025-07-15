@@ -24,7 +24,7 @@
 
 namespace Testing
 {
-	BinaryExportTest::BinaryExportTest( castor3d::Engine & engine )
+	BinaryExportTest::BinaryExportTest( c3d::Engine & engine )
 		: C3DTestCase{ "BinaryExportTest", engine }
 	{
 	}
@@ -38,16 +38,16 @@ namespace Testing
 
 	void BinaryExportTest::SimpleMesh()
 	{
-		CT_EQUAL( sizeof( castor::Point3f ), sizeof( float ) * 3 );
-		CT_EQUAL( sizeof( castor::Point2f ), sizeof( float ) * 2 );
+		CT_EQUAL( sizeof( c3d::Point3f ), sizeof( float ) * 3 );
+		CT_EQUAL( sizeof( c3d::Point2f ), sizeof( float ) * 2 );
 
-		castor::String name = cuT( "SimpleTestMesh" );
-		castor::Path path{ name + cuT( ".cmsh" ) };
-		castor3d::Scene scene{ cuT( "TestScene" ), m_engine };
+		c3d::String name = cuT( "SimpleTestMesh" );
+		c3d::Path path{ name + cuT( ".cmsh" ) };
+		c3d::Scene scene{ cuT( "TestScene" ), m_engine };
 
 		auto src = scene.addNewMesh( name, scene );
 		CT_REQUIRE( src != nullptr );
-		castor3d::Parameters parameters;
+		c3d::Parameters parameters;
 		parameters.add( cuT( "width" ), cuT( "1.0" ) );
 		parameters.add( cuT( "height" ), cuT( "1.0" ) );
 		parameters.add( cuT( "depth" ), cuT( "1.0" ) );
@@ -69,25 +69,25 @@ namespace Testing
 		doTestMeshFile( cuT( "AnimTestMesh" ) );
 	}
 
-	void BinaryExportTest::doTestMeshFile( castor::String const & name )
+	void BinaryExportTest::doTestMeshFile( c3d::String const & name )
 	{
-		castor::Path path{ name + cuT( ".cmsh" ) };
-		castor3d::Scene scene{ cuT( "TestScene" ), m_engine };
+		c3d::Path path{ name + cuT( ".cmsh" ) };
+		c3d::Scene scene{ cuT( "TestScene" ), m_engine };
 
 		auto src = scene.addNewMesh( name, scene );
 		CT_REQUIRE( src != nullptr );
 		{
-			castor::BinaryFile mshfile{ m_testDataFolder / path, castor::File::OpenMode::eRead };
-			castor3d::BinaryParser< castor3d::Mesh > parser;
+			c3d::BinaryFile mshfile{ m_testDataFolder / path, c3d::File::OpenMode::eRead };
+			c3d::BinaryParser< c3d::Mesh > parser;
 			auto result = CT_CHECK( parser.parse( *src, mshfile ) );
 
-			if ( result && castor::File::fileExists( m_testDataFolder / ( name + cuT( ".cskl" ) ) ) )
+			if ( result && c3d::File::fileExists( m_testDataFolder / ( name + cuT( ".cskl" ) ) ) )
 			{
 				src->computeContainers();
 				auto skeleton = src->getScene()->addNewSkeleton( name, *src->getScene() );
-				castor::BinaryFile sklfile{ m_testDataFolder / ( name + cuT( ".cskl" ) )
-					, castor::File::OpenMode::eRead };
-				result = CT_CHECK( castor3d::BinaryParser< castor3d::Skeleton >().parse( *skeleton, sklfile ) );
+				c3d::BinaryFile sklfile{ m_testDataFolder / ( name + cuT( ".cskl" ) )
+					, c3d::File::OpenMode::eRead };
+				result = CT_CHECK( c3d::BinaryParser< c3d::Skeleton >().parse( *skeleton, sklfile ) );
 
 				if ( result )
 				{
@@ -102,15 +102,15 @@ namespace Testing
 		m_engine.getRenderLoop().renderSyncFrame();
 	}
 
-	void BinaryExportTest::doTestMesh( castor3d::Mesh & src )
+	void BinaryExportTest::doTestMesh( c3d::Mesh & src )
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto surface = renderSystem.getInstance().createSurface( renderSystem.getPhysicalDevice()
-			, ashes::WindowHandle{ castor::make_unique< TestWindowHandle >() } );
+			, ashes::WindowHandle{ c3d::makeRawUnique< TestWindowHandle >() } );
 		auto & device = renderSystem.getRenderDevice();
-		castor3d::Scene & scene = *src.getScene();
-		castor::String name = src.getName();
-		castor::Path path{ name + cuT( ".cmsh" ) };
+		c3d::Scene & scene = *src.getScene();
+		c3d::String name = src.getName();
+		c3d::Path path{ name + cuT( ".cmsh" ) };
 
 		for ( auto & submesh : src )
 		{
@@ -118,32 +118,32 @@ namespace Testing
 		}
 
 		{
-			castor::BinaryFile mshfile{ path, castor::File::OpenMode::eWrite };
-			castor3d::BinaryWriter< castor3d::Mesh > writer;
+			c3d::BinaryFile mshfile{ path, c3d::File::OpenMode::eWrite };
+			c3d::BinaryWriter< c3d::Mesh > writer;
 			auto result = CT_CHECK( writer.write( src, mshfile ) );
 			auto skeleton = src.getSkeleton();
 
 			if ( result && skeleton )
 			{
-				castor::BinaryFile sklfile{ castor::Path{ path.getFileName() + cuT( ".cskl" ) }, castor::File::OpenMode::eWrite };
-				result = CT_CHECK( castor3d::BinaryWriter< castor3d::Skeleton >().write( *skeleton, sklfile ) );
+				c3d::BinaryFile sklfile{ c3d::Path{ path.getFileName() + cuT( ".cskl" ) }, c3d::File::OpenMode::eWrite };
+				result = CT_CHECK( c3d::BinaryWriter< c3d::Skeleton >().write( *skeleton, sklfile ) );
 			}
 		}
 
 		auto dst = scene.createMesh( name + cuT( "_imp" ), scene );
 		CT_REQUIRE( dst != nullptr );
 		{
-			castor::BinaryFile mshfile{ path, castor::File::OpenMode::eRead };
-			castor3d::BinaryParser< castor3d::Mesh > parser;
+			c3d::BinaryFile mshfile{ path, c3d::File::OpenMode::eRead };
+			c3d::BinaryParser< c3d::Mesh > parser;
 			auto result = CT_CHECK( parser.parse( *dst, mshfile ) );
 
-			if ( result && castor::File::fileExists( castor::Path{ path.getFileName() + cuT( ".cskl" ) } ) )
+			if ( result && c3d::File::fileExists( c3d::Path{ path.getFileName() + cuT( ".cskl" ) } ) )
 			{
 				dst->computeContainers();
 				auto skeleton = dst->getScene()->addNewSkeleton( path.getFileName(), *dst->getScene() );
-				castor::BinaryFile sklfile{ castor::Path{ path.getFileName() + cuT( ".cskl" ) }
-					, castor::File::OpenMode::eRead };
-				result = CT_CHECK( castor3d::BinaryParser< castor3d::Skeleton >().parse( *skeleton, sklfile ) );
+				c3d::BinaryFile sklfile{ c3d::Path{ path.getFileName() + cuT( ".cskl" ) }
+					, c3d::File::OpenMode::eRead };
+				result = CT_CHECK( c3d::BinaryParser< c3d::Skeleton >().parse( *skeleton, sklfile ) );
 
 				if ( result )
 				{
@@ -154,9 +154,9 @@ namespace Testing
 			dst->initialise();
 		}
 
-		auto & rhs = static_cast< castor3d::Mesh const & >( *dst );
+		auto & rhs = static_cast< c3d::Mesh const & >( *dst );
 		CT_EQUAL( src, rhs );
-		castor::File::deleteFile( path );
+		c3d::File::deleteFile( path );
 		m_engine.getRenderLoop().renderSyncFrame();
 		dst->cleanup();
 		m_engine.getRenderLoop().renderSyncFrame();

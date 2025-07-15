@@ -1,8 +1,8 @@
 #include "Castor3D/Material/MaterialModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
-	castor::String getName( ComparisonFunc value )
+	String getName( ComparisonFunc value )
 	{
 		return ashes::getName( VkCompareOp( value ) );
 	}
@@ -33,7 +33,7 @@ namespace castor3d
 				auto [lhsComponentId, lhsTextureFlag] = splitTextureFlag( lookup );
 				return lhsComponentId == rhsComponentId
 					&& ( rhsTextureFlag == 0
-						|| castor::hasAny( lhsTextureFlag, rhsTextureFlag ) );
+						|| hasAny( lhsTextureFlag, rhsTextureFlag ) );
 			} );
 		return it != lhs.end();
 	}

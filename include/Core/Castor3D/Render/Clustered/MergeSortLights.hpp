@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "ClusteredModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	C3D_API crg::FramePassArray createMergeSortLightsPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses

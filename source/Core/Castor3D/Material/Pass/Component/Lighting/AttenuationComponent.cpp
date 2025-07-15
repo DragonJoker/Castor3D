@@ -13,29 +13,26 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::AttenuationComponent >
-		: public TextWriterT< castor3d::AttenuationComponent >
+	class TextWriter< AttenuationComponent >
+		: public TextWriterT< AttenuationComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::AttenuationComponent >{ tabs }
+			: TextWriterT< AttenuationComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::AttenuationComponent const & object
+		bool operator()( AttenuationComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSubOpt( file, cuT( "attenuation_colour" ), object.getAttenuationColour(), castor3d::AttenuationComponent::DefaultColour )
-				&& writeOpt( file, cuT( "attenuation_distance" ), object.getAttenuationDistance(), castor3d::AttenuationComponent::DefaultDistance );
+			return writeNamedSubOpt( file, cuT( "attenuation_colour" ), object.getAttenuationColour(), AttenuationComponent::DefaultColour )
+				&& writeOpt( file, cuT( "attenuation_distance" ), object.getAttenuationDistance(), AttenuationComponent::DefaultDistance );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace trsatt
@@ -53,7 +50,7 @@ namespace castor3d
 			else
 			{
 				auto & component = getPassComponent< AttenuationComponent >( *blockContext );
-				component.setAttenuationColour( params[0]->get< castor::RgbColour >() );
+				component.setAttenuationColour( params[0]->get< RgbColour >() );
 			}
 		}
 		CU_EndAttribute()
@@ -156,19 +153,19 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void AttenuationComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void AttenuationComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "attenuation_colour" )
 			, trsatt::parserPassAttenuationColour
-			, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eRgbColour >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "attenuation_distance" )
 			, trsatt::parserPassAttenuationDistance
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { makeParameter< ParameterType::eFloat >() } );
 	}
 
 	void AttenuationComponent::Plugin::zeroBuffer( Pass const & pass
@@ -190,7 +187,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const AttenuationComponent::TypeName = C3D_MakePassLightingComponentName( "attenuation" );
+	String const AttenuationComponent::TypeName = C3D_MakePassLightingComponentName( "attenuation" );
 
 	AttenuationComponent::AttenuationComponent( Pass & pass )
 		: BaseDataPassComponentT{ pass, TypeName, { TransmissionComponent::TypeName }
@@ -207,17 +204,17 @@ namespace castor3d
 
 	PassComponentUPtr AttenuationComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< AttenuationComponent >( pass );
+		auto result = makeRawUnique< AttenuationComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool AttenuationComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool AttenuationComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< AttenuationComponent >{ tabs }( *this, file );
+		return TextWriter< AttenuationComponent >{ tabs }( *this, file );
 	}
 
 	void AttenuationComponent::doFillBuffer( PassBuffer & buffer )const

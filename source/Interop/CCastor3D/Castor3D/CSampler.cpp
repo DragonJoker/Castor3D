@@ -43,7 +43,7 @@ extern "C"
 		if ( !object->getInternal() )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SAMPLER );
 
-		object->getInternal()->setMinFilter( castor3d::FilterMode( val ) );
+		object->getInternal()->setMinFilter( c3d::FilterMode( val ) );
 
 		return C3D_OK;
 	}
@@ -67,7 +67,7 @@ extern "C"
 		if ( !object->getInternal() )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SAMPLER );
 
-		object->getInternal()->setMagFilter( castor3d::FilterMode( val ) );
+		object->getInternal()->setMagFilter( c3d::FilterMode( val ) );
 
 		return C3D_OK;
 	}
@@ -91,7 +91,7 @@ extern "C"
 		if ( !object->getInternal() )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SAMPLER );
 
-		object->getInternal()->setMipFilter( castor3d::MipmapMode( val ) );
+		object->getInternal()->setMipFilter( c3d::MipmapMode( val ) );
 
 		return C3D_OK;
 	}
@@ -115,7 +115,7 @@ extern "C"
 		if ( !object->getInternal() )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SAMPLER );
 
-		object->getInternal()->setWrapS( castor3d::WrapMode( val ) );
+		object->getInternal()->setWrapS( c3d::WrapMode( val ) );
 
 		return C3D_OK;
 	}
@@ -139,7 +139,7 @@ extern "C"
 		if ( !object->getInternal() )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SAMPLER );
 
-		object->getInternal()->setWrapT( castor3d::WrapMode( val ) );
+		object->getInternal()->setWrapT( c3d::WrapMode( val ) );
 
 		return C3D_OK;
 	}
@@ -163,7 +163,7 @@ extern "C"
 		if ( !object->getInternal() )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SAMPLER );
 
-		object->getInternal()->setWrapR( castor3d::WrapMode( val ) );
+		object->getInternal()->setWrapR( c3d::WrapMode( val ) );
 
 		return C3D_OK;
 	}
@@ -283,7 +283,7 @@ extern "C"
 		if ( !object->getInternal() )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SAMPLER );
 
-		object->getInternal()->setBorderColour( castor3d::BorderColour( val ) );
+		object->getInternal()->setBorderColour( c3d::BorderColour( val ) );
 
 		return C3D_OK;
 	}

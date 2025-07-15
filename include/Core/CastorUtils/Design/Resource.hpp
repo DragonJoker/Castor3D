@@ -16,7 +16,7 @@ See LICENSE file in root folder
 #include <atomic>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename ResT, typename KeyT >
 	class ResourceT final
@@ -84,7 +84,7 @@ namespace castor
 		*	Signal.
 		**/
 		/**@{*/
-		using OnResourceFunc = castor::Function< void( ElementT const & ) >;
+		using OnResourceFunc = c3d::Function< void( ElementT const & ) >;
 		using OnResourceEvent = SignalT< OnResourceFunc >;
 		using Connection = ConnectionT< OnResourceEvent >;
 
@@ -137,7 +137,7 @@ namespace castor
 		using ElementPtrT = typename CacheT::ElementPtrT;
 
 		explicit ResourceMergerT( String name )
-			: Named{ castor::move( name ) }
+			: Named{ c3d::move( name ) }
 		{
 		}
 
@@ -154,7 +154,7 @@ namespace castor
 				ires = destination.emplace( name, ElementPtrT{} );
 			}
 
-			ires.first->second = castor::move( element );
+			ires.first->second = c3d::move( element );
 			ires.first->second->rename( name );
 		}
 	};
@@ -170,7 +170,7 @@ namespace castor
 		, typename ... ParametersT >
 	inline ResourcePtrT< ResT, KeyT > makeResource( ParametersT && ... params )
 	{
-		return castor::makeUnique< ResourceT< ResT, KeyT > >( castor::forward< ParametersT >( params )... );
+		return c3d::makeUnique< ResourceT< ResT, KeyT > >( c3d::forward< ParametersT >( params )... );
 	}
 }
 

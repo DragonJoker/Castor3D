@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Graphics/Rectangle.hpp"
 #include "CastorUtils/Graphics/Size.hpp"
 
-namespace castor
+namespace c3d
 {
 	/**
 	\~english
@@ -41,33 +41,33 @@ namespace castor
 		 *\brief		Constructor.
 		 */
 		explicit ParserParameter( ValueType rhs )
-			: m_value{ castor::move( rhs ) }
+			: m_value{ c3d::move( rhs ) }
 			, m_set{ true }
 		{
 		}
 		/**
-		 *\copydoc		castor::ParserParameterBase::getType
+		 *\copydoc		c3d::ParserParameterBase::getType
 		 */
 		ParameterType getType()const override
 		{
 			return ParserParameterParamType< Type >;
 		}
 		/**
-		 *\copydoc		castor::ParserParameterBase::getStrType
+		 *\copydoc		c3d::ParserParameterBase::getStrType
 		 */
 		StringView getStrType()const override
 		{
 			return ParserParameterStringType< Type >;
 		}
 		/**
-		 *\copydoc		castor::ParserParameterBase::clone
+		 *\copydoc		c3d::ParserParameterBase::clone
 		 */
 		ParserParameterBaseSPtr clone()const override
 		{
-			return castor::make_shared< ParserParameter< Type > >( *this );
+			return c3d::makeShared< ParserParameter< Type > >( *this );
 		}
 		/**
-		 *\copydoc		castor::ParserParameterBase::parse
+		 *\copydoc		c3d::ParserParameterBase::parse
 		 */
 		bool parse( LoggerInstance & logger
 			, String & params )override
@@ -76,7 +76,7 @@ namespace castor
 			return m_set;
 		}
 		/**
-		 *\copydoc		castor::ParserParameterBase::isSet
+		 *\copydoc		c3d::ParserParameterBase::isSet
 		 */
 		bool isSet()override
 		{
@@ -125,7 +125,7 @@ namespace castor
 		 *\brief		Constructor.
 		 */
 		explicit ParserParameter( ValueType rhs )
-			: m_value{ castor::move( rhs ) }
+			: m_value{ c3d::move( rhs ) }
 			, m_range{ makeRange( std::numeric_limits< ValueType >::lowest(), std::numeric_limits< ValueType >::max() ) }
 			, m_set{ true }
 		{
@@ -154,34 +154,34 @@ namespace castor
 		 */
 		explicit ParserParameter( ValueType rhs
 			, Range< ValueType > const & range )
-			: m_value{ castor::move( rhs ) }
+			: m_value{ c3d::move( rhs ) }
 			, m_range{ range }
 			, m_set{ true }
 		{
 		}
 		/**
-		 *\copydoc		castor::ParserParameterBase::getType
+		 *\copydoc		c3d::ParserParameterBase::getType
 		 */
 		ParameterType getType()const override
 		{
 			return ParserParameterParamType< Type >;
 		}
 		/**
-		 *\copydoc		castor::ParserParameterBase::getStrType
+		 *\copydoc		c3d::ParserParameterBase::getStrType
 		 */
 		StringView getStrType()const override
 		{
 			return ParserParameterStringType< Type >;
 		}
 		/**
-		 *\copydoc		castor::ParserParameterBase::clone
+		 *\copydoc		c3d::ParserParameterBase::clone
 		 */
 		ParserParameterBaseSPtr clone()const override
 		{
-			return castor::make_shared< ParserParameter< Type > >( *this );
+			return c3d::makeShared< ParserParameter< Type > >( *this );
 		}
 		/**
-		 *\copydoc		castor::ParserParameterBase::parse
+		 *\copydoc		c3d::ParserParameterBase::parse
 		 */
 		bool parse( LoggerInstance & logger
 			, String & params )override
@@ -190,7 +190,7 @@ namespace castor
 			return m_set;
 		}
 		/**
-		 *\copydoc		castor::ParserParameterBase::isSet
+		 *\copydoc		c3d::ParserParameterBase::isSet
 		 */
 		bool isSet()override
 		{
@@ -234,27 +234,27 @@ namespace castor
 		 *\brief		Constructor.
 		 */
 		explicit ParserParameter( String rhs )
-			: ParserParameter< ParameterType::eText >{ castor::move( rhs ) }
+			: ParserParameter< ParameterType::eText >{ c3d::move( rhs ) }
 		{
 		}
 		/**
-		 *\copydoc		castor::ParserParameterBase::getType
+		 *\copydoc		c3d::ParserParameterBase::getType
 		 */
 		ParameterType getType()const override;
 		/**
-		 *\copydoc		castor::ParserParameterBase::getBaseType
+		 *\copydoc		c3d::ParserParameterBase::getBaseType
 		 */
 		ParameterType getBaseType()const override;
 		/**
-		 *\copydoc		castor::ParserParameterBase::getStrType
+		 *\copydoc		c3d::ParserParameterBase::getStrType
 		 */
 		StringView getStrType()const override;
 		/**
-		 *\copydoc		castor::ParserParameterBase::clone
+		 *\copydoc		c3d::ParserParameterBase::clone
 		 */
 		ParserParameterBaseSPtr clone()const override;
 		/**
-		 *\copydoc		castor::ParserParameterBase::parse
+		 *\copydoc		c3d::ParserParameterBase::parse
 		 */
 		bool parse( LoggerInstance & logger
 			, String & params )override;
@@ -297,23 +297,23 @@ namespace castor
 		{
 		}
 		/**
-		 *\copydoc		castor::ParserParameterBase::getType
+		 *\copydoc		c3d::ParserParameterBase::getType
 		 */
 		ParameterType getType()const override;
 		/**
-		 *\copydoc		castor::ParserParameterBase::getBaseType
+		 *\copydoc		c3d::ParserParameterBase::getBaseType
 		 */
 		ParameterType getBaseType()const override;
 		/**
-		 *\copydoc		castor::ParserParameterBase::getStrType
+		 *\copydoc		c3d::ParserParameterBase::getStrType
 		 */
 		StringView getStrType()const override;
 		/**
-		 *\copydoc		castor::ParserParameterBase::clone
+		 *\copydoc		c3d::ParserParameterBase::clone
 		 */
 		ParserParameterBaseSPtr clone()const override;
 		/**
-		 *\copydoc		castor::ParserParameterBase::parse
+		 *\copydoc		c3d::ParserParameterBase::parse
 		 */
 		bool parse( LoggerInstance & logger
 			, String & params )override;
@@ -360,23 +360,23 @@ namespace castor
 		{
 		}
 		/**
-		 *\copydoc		castor::ParserParameterBase::getType
+		 *\copydoc		c3d::ParserParameterBase::getType
 		 */
 		ParameterType getType()const override;
 		/**
-		 *\copydoc		castor::ParserParameterBase::getBaseType
+		 *\copydoc		c3d::ParserParameterBase::getBaseType
 		 */
 		ParameterType getBaseType()const override;
 		/**
-		 *\copydoc		castor::ParserParameterBase::getStrType
+		 *\copydoc		c3d::ParserParameterBase::getStrType
 		 */
 		StringView getStrType()const override;
 		/**
-		 *\copydoc		castor::ParserParameterBase::clone
+		 *\copydoc		c3d::ParserParameterBase::clone
 		 */
 		ParserParameterBaseSPtr clone()const override;
 		/**
-		 *\copydoc		castor::ParserParameterBase::parse
+		 *\copydoc		c3d::ParserParameterBase::parse
 		 */
 		bool parse( LoggerInstance & logger
 			, String & params )override;
@@ -423,23 +423,23 @@ namespace castor
 		{
 		}
 		/**
-		 *\copydoc		castor::ParserParameterBase::getType
+		 *\copydoc		c3d::ParserParameterBase::getType
 		 */
 		ParameterType getType()const override;
 		/**
-		 *\copydoc		castor::ParserParameterBase::getBaseType
+		 *\copydoc		c3d::ParserParameterBase::getBaseType
 		 */
 		ParameterType getBaseType()const override;
 		/**
-		 *\copydoc		castor::ParserParameterBase::getStrType
+		 *\copydoc		c3d::ParserParameterBase::getStrType
 		 */
 		StringView getStrType()const override;
 		/**
-		 *\copydoc		castor::ParserParameterBase::clone
+		 *\copydoc		c3d::ParserParameterBase::clone
 		 */
 		ParserParameterBaseSPtr clone()const override;
 		/**
-		 *\copydoc		castor::ParserParameterBase::parse
+		 *\copydoc		c3d::ParserParameterBase::parse
 		 */
 		bool parse( LoggerInstance & logger
 			, String & params )override;
@@ -459,7 +459,7 @@ namespace castor
 	template< ParameterType Type >
 	ParserParameterBaseSPtr makeParameter()
 	{
-		return castor::make_shared< ParserParameter< Type > >();
+		return c3d::makeShared< ParserParameter< Type > >();
 	}
 	/**
 	 *\~english
@@ -473,8 +473,8 @@ namespace castor
 	ParserParameterBaseSPtr makeDefaultedParameter( ParserParameterValueType< Type > defaultValue
 		, Params && ... params )
 	{
-		return castor::make_shared< ParserParameter< Type > >( defaultValue
-			, castor::forward< Params >( params )... );
+		return c3d::makeShared< ParserParameter< Type > >( defaultValue
+			, c3d::forward< Params >( params )... );
 	}
 	/**
 	 *\~english
@@ -502,7 +502,7 @@ namespace castor
 				|| ( Type == ParameterType::eLongDouble && std::is_same_v< T, long double > )
 			, "C type and ParameterType must match." );
 
-		return castor::make_shared< ParserParameter< Type > >( range );
+		return c3d::makeShared< ParserParameter< Type > >( range );
 	}
 	/**
 	 *\~english
@@ -522,7 +522,7 @@ namespace castor
 	{
 		static_assert( Type == ParameterType::eCheckedText || Type == ParameterType::eBitwiseOred32BitsCheckedText
 			, "Only for ParameterType::eCheckedText or ParameterType::eBitwiseOred32BitsCheckedText" );
-		return castor::make_shared< ParserParameter< Type > >( values, name );
+		return c3d::makeShared< ParserParameter< Type > >( values, name );
 	}
 	/**
 	 *\~english
@@ -542,7 +542,7 @@ namespace castor
 	{
 		static_assert( Type == ParameterType::eBitwiseOred64BitsCheckedText
 			, "Only for ParameterType::eBitwiseOred64BitsCheckedText" );
-		return castor::make_shared< ParserParameter< Type > >( values, name );
+		return c3d::makeShared< ParserParameter< Type > >( values, name );
 	}
 	/**
 	 *\~english
@@ -557,7 +557,7 @@ namespace castor
 	{
 		static_assert( Type == ParameterType::eCheckedText || Type == ParameterType::eBitwiseOred32BitsCheckedText || Type == ParameterType::eBitwiseOred64BitsCheckedText
 			, "Only for ParameterType::eCheckedText or ParameterType::eBitwiseOred32BitsCheckedText or ParameterType::eBitwiseOred64BitsCheckedText" );
-		return castor::make_shared< ParserParameter< Type > >( ParserEnumTraits< EnumType >::Values
+		return c3d::makeShared< ParserParameter< Type > >( ParserEnumTraits< EnumType >::Values
 			, ParserEnumTraits< EnumType >::Name );
 	}
 }

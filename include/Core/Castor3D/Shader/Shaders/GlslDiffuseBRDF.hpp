@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	class DiffuseBRDF
 	{

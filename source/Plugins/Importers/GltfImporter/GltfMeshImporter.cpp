@@ -23,14 +23,14 @@ namespace c3d_gltf
 		template< typename IndexT >
 		static void parseLineList( fastgltf::Asset const & impAsset
 			, fastgltf::Accessor const & impAccessor
-			, castor3d::LineMapping & mapping
+			, c3d::LineMapping & mapping
 			, CompressedBufferDataAdapter const & adapter )
 		{
 			auto count = impAccessor.count;
 			auto lineCount = count / 2u;
-			castor::Vector< castor3d::LineIndices > indicesGroup;
+			c3d::Vector< c3d::LineIndices > indicesGroup;
 			indicesGroup.reserve( lineCount );
-			castor3d::LineIndices curIndices;
+			c3d::LineIndices curIndices;
 			uint32_t idx{};
 
 			iterateAccessor< IndexT >( impAsset
@@ -54,7 +54,7 @@ namespace c3d_gltf
 		static void parseLineStrip( fastgltf::Asset const & impAsset
 			, fastgltf::Accessor const & impAccessor
 			, uint32_t lineCount
-			, castor3d::LineMapping & mapping
+			, c3d::LineMapping & mapping
 			, bool loop
 			, CompressedBufferDataAdapter const & adapter )
 		{
@@ -63,9 +63,9 @@ namespace c3d_gltf
 				--lineCount;
 			}
 
-			castor::Vector< castor3d::LineIndices > indicesGroup;
+			c3d::Vector< c3d::LineIndices > indicesGroup;
 			indicesGroup.reserve( lineCount );
-			castor3d::LineIndices curIndices;
+			c3d::LineIndices curIndices;
 			uint32_t prvIndex{ ~0u };
 
 			iterateAccessor< IndexT >( impAsset
@@ -99,14 +99,14 @@ namespace c3d_gltf
 		template< typename IndexT >
 		static void parseTriangleList( fastgltf::Asset const & impAsset
 			, fastgltf::Accessor const & impAccessor
-			, castor3d::TriFaceMapping & mapping
+			, c3d::TriFaceMapping & mapping
 			, CompressedBufferDataAdapter const & adapter )
 		{
 			auto count = impAccessor.count;
 			auto faceCount = count / 3u;
-			castor::Vector< castor3d::FaceIndices > indicesGroup;
+			c3d::Vector< c3d::FaceIndices > indicesGroup;
 			indicesGroup.reserve( faceCount );
-			castor3d::FaceIndices curIndices;
+			c3d::FaceIndices curIndices;
 			uint32_t idx{};
 
 			iterateAccessor< IndexT >( impAsset
@@ -119,7 +119,7 @@ namespace c3d_gltf
 					if ( idx == 3u )
 					{
 						idx = 0u;
-						castor::swap( curIndices[0], curIndices[1] );
+						c3d::swap( curIndices[0], curIndices[1] );
 						indicesGroup.push_back( curIndices );
 					}
 				}
@@ -130,11 +130,11 @@ namespace c3d_gltf
 		template< typename IndexT, bool IsStripT >
 		static void parseTriangleStrip( fastgltf::Asset const & impAsset
 			, fastgltf::Accessor const & impAccessor
-			, castor3d::TriFaceMapping & mapping
+			, c3d::TriFaceMapping & mapping
 			, CompressedBufferDataAdapter const & adapter )
 		{
 			auto count = impAccessor.count;
-			castor::UInt32Array indices;
+			c3d::UInt32Array indices;
 			indices.reserve( count );
 			iterateAccessor< IndexT >( impAsset
 				, impAccessor
@@ -145,9 +145,9 @@ namespace c3d_gltf
 				, adapter );
 
 			auto faceCount = count - 2u;
-			castor::Vector< castor3d::FaceIndices > indicesGroup;
+			c3d::Vector< c3d::FaceIndices > indicesGroup;
 			indicesGroup.reserve( faceCount );
-			castor3d::FaceIndices curIndices;
+			c3d::FaceIndices curIndices;
 
 			if constexpr ( IsStripT )
 			{
@@ -204,7 +204,7 @@ namespace c3d_gltf
 		static bool parseAttributeData( fastgltf::Asset const & impAsset
 			, auto const & impAttributes
 			, std::pmr::string const & attrName
-			, castor::Vector< castor::Point< DstDataT, DstCountT > > & result
+			, c3d::Vector< c3d::Point< DstDataT, DstCountT > > & result
 			, CompressedBufferDataAdapter const & adapter )
 		{
 			auto it = findAttribute( impAttributes, attrName );
@@ -214,15 +214,15 @@ namespace c3d_gltf
 			}
 
 			auto & impAccessor = impAsset.accessors[it->accessorIndex];
-			if ( impAccessor.type != fastgltf::ElementTraits< castor::Point< SrcDataT, SrcCountT > >::type )
+			if ( impAccessor.type != fastgltf::ElementTraits< c3d::Point< SrcDataT, SrcCountT > >::type )
 			{
 				return false;
 			}
 
 			result.reserve( impAccessor.count );
-			iterateAccessor< castor::Point< SrcDataT, SrcCountT > >( impAsset
+			iterateAccessor< c3d::Point< SrcDataT, SrcCountT > >( impAsset
 				, impAccessor
-				, [&result]( castor::Point< SrcDataT, SrcCountT > value )
+				, [&result]( c3d::Point< SrcDataT, SrcCountT > value )
 				{
 					if constexpr ( InvYT )
 					{
@@ -232,11 +232,11 @@ namespace c3d_gltf
 					if constexpr ( SrcCountT == DstCountT && std::is_same_v< SrcDataT, DstDataT > )
 					{
 
-						result.push_back( castor::move( value ) );
+						result.push_back( c3d::move( value ) );
 					}
 					else
 					{
-						result.push_back( castor::Point < DstDataT, DstCountT >{ value } );
+						result.push_back( c3d::Point < DstDataT, DstCountT >{ value } );
 					}
 				}
 				, adapter );
@@ -245,14 +245,14 @@ namespace c3d_gltf
 
 		inline void createVertexBuffer( fastgltf::Asset const & impAsset
 			, auto const & impAttributes
-			, castor::Point3fArray & positions
-			, castor::Point3fArray & normals
-			, castor::Point4fArray & tangents
-			, castor::Point3fArray & texcoords0
-			, castor::Point3fArray & texcoords1
-			, castor::Point3fArray & texcoords2
-			, castor::Point3fArray & texcoords3
-			, castor::Point3fArray & colours
+			, c3d::Point3fArray & positions
+			, c3d::Point3fArray & normals
+			, c3d::Point4fArray & tangents
+			, c3d::Point3fArray & texcoords0
+			, c3d::Point3fArray & texcoords1
+			, c3d::Point3fArray & texcoords2
+			, c3d::Point3fArray & texcoords3
+			, c3d::Point3fArray & colours
 			, CompressedBufferDataAdapter const & adapter
 			, bool ignoreVertexColour )
 		{
@@ -285,7 +285,7 @@ namespace c3d_gltf
 		}
 
 		template< uint32_t CountT >
-		static void applyWeight( castor::Vector< castor::Point< float, CountT > > & points
+		static void applyWeight( c3d::Vector< c3d::Point< float, CountT > > & points
 			, float weight )
 		{
 			for ( auto & point : points )
@@ -294,7 +294,7 @@ namespace c3d_gltf
 			}
 		}
 
-		static void applyWeight( castor3d::SubmeshAnimationBuffer & buffer
+		static void applyWeight( c3d::SubmeshAnimationBuffer & buffer
 			, float weight )
 		{
 			applyWeight( buffer.positions, weight );
@@ -310,12 +310,12 @@ namespace c3d_gltf
 
 	//*********************************************************************************************
 
-	GltfMeshImporter::GltfMeshImporter( castor3d::Engine & engine )
-		: castor3d::MeshImporter{ engine, cuT( "Gltf" ) }
+	GltfMeshImporter::GltfMeshImporter( c3d::Engine & engine )
+		: c3d::MeshImporter{ engine, cuT( "Gltf" ) }
 	{
 	}
 
-	bool GltfMeshImporter::doImportMesh( castor3d::Mesh & mesh, uint32_t submeshIndex )
+	bool GltfMeshImporter::doImportMesh( c3d::Mesh & mesh, uint32_t submeshIndex )
 	{
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto name = mesh.getName();
@@ -326,9 +326,9 @@ namespace c3d_gltf
 			return false;
 		}
 
-		using PrimitiveMap = castor::Map< fastgltf::PrimitiveType, PrimitiveArray >;
-		using MaterialPrimitiveMap = castor::Map< castor3d::Material *, PrimitiveMap >;
-		castor::Map< fastgltf::Mesh const *, MaterialPrimitiveMap > submeshes;
+		using PrimitiveMap = c3d::Map< fastgltf::PrimitiveType, PrimitiveArray >;
+		using MaterialPrimitiveMap = c3d::Map< c3d::Material *, PrimitiveMap >;
+		c3d::Map< fastgltf::Mesh const *, MaterialPrimitiveMap > submeshes;
 		auto & engine = *file.getOwner();
 		uint32_t meshIndex{};
 
@@ -340,7 +340,7 @@ namespace c3d_gltf
 
 				for ( auto & primitive : impMesh.primitives )
 				{
-					castor3d::MaterialRPtr material;
+					c3d::MaterialRPtr material;
 
 					if ( primitive.materialIndex )
 					{
@@ -419,8 +419,8 @@ namespace c3d_gltf
 		return true;
 	}
 
-	void GltfMeshImporter::doProcessPointsSubmesh( castor3d::Mesh & mesh
-		, castor3d::Material * material
+	void GltfMeshImporter::doProcessPointsSubmesh( c3d::Mesh & mesh
+		, c3d::Material * material
 		, fastgltf::Mesh const & impMesh
 		, fastgltf::Primitive const & impPrimitive )
 	{
@@ -431,7 +431,7 @@ namespace c3d_gltf
 		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, mesh, *submesh, material ) )
 		{
 			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_POINT_LIST );
-			submesh->createComponent< castor3d::DefaultRenderComponent >();
+			submesh->createComponent< c3d::DefaultRenderComponent >();
 		}
 		else
 		{
@@ -439,8 +439,8 @@ namespace c3d_gltf
 		}
 	}
 
-	void GltfMeshImporter::doProcessLinesSubmesh( castor3d::Mesh & mesh
-		, castor3d::Material * material
+	void GltfMeshImporter::doProcessLinesSubmesh( c3d::Mesh & mesh
+		, c3d::Material * material
 		, fastgltf::Mesh const & impMesh
 		, fastgltf::Primitive const & impPrimitive )
 	{
@@ -451,12 +451,12 @@ namespace c3d_gltf
 		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, mesh, *submesh, material ) )
 		{
 			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
-			submesh->createComponent< castor3d::DefaultRenderComponent >();
+			submesh->createComponent< c3d::DefaultRenderComponent >();
 
 			if ( impPrimitive.indicesAccessor )
 			{
 				auto & impAccessor = impAsset.accessors[*impPrimitive.indicesAccessor];
-				auto mapping = castor::makeUnique< castor3d::LineMapping >( *submesh );
+				auto mapping = c3d::makeUnique< c3d::LineMapping >( *submesh );
 
 				switch ( impAccessor.componentType )
 				{
@@ -471,13 +471,13 @@ namespace c3d_gltf
 					break;
 				default:
 					mapping.reset();
-					castor3d::log::error << "Unsupported data type for face index\n";
+					c3d::log::error << "Unsupported data type for face index\n";
 					return;
 				}
 
 				if ( mapping )
 				{
-					submesh->addComponent( castor::ptrRefCast< castor3d::SubmeshComponent >( mapping ) );
+					submesh->addComponent( c3d::ptrRefCast< c3d::SubmeshComponent >( mapping ) );
 				}
 			}
 		}
@@ -487,8 +487,8 @@ namespace c3d_gltf
 		}
 	}
 
-	void GltfMeshImporter::doProcessLineStripSubmesh( castor3d::Mesh & mesh
-		, castor3d::Material * material
+	void GltfMeshImporter::doProcessLineStripSubmesh( c3d::Mesh & mesh
+		, c3d::Material * material
 		, fastgltf::Mesh const & impMesh
 		, fastgltf::Primitive const & impPrimitive
 		, bool loop )
@@ -500,13 +500,13 @@ namespace c3d_gltf
 		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, mesh, *submesh, material ) )
 		{
 			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
-			submesh->createComponent< castor3d::DefaultRenderComponent >();
+			submesh->createComponent< c3d::DefaultRenderComponent >();
 
 			if ( impPrimitive.indicesAccessor )
 			{
 				auto & impAccessor = impAsset.accessors[*impPrimitive.indicesAccessor];
 				auto count = uint32_t( impAccessor.count );
-				auto mapping = castor::makeUnique< castor3d::LineMapping >( *submesh );
+				auto mapping = c3d::makeUnique< c3d::LineMapping >( *submesh );
 
 				switch ( impAccessor.componentType )
 				{
@@ -521,13 +521,13 @@ namespace c3d_gltf
 					break;
 				default:
 					mapping.reset();
-					castor3d::log::error << "Unsupported data type for face index\n";
+					c3d::log::error << "Unsupported data type for face index\n";
 					return;
 				}
 
 				if ( mapping )
 				{
-					submesh->addComponent( castor::ptrRefCast< castor3d::SubmeshComponent >( mapping ) );
+					submesh->addComponent( c3d::ptrRefCast< c3d::SubmeshComponent >( mapping ) );
 				}
 			}
 		}
@@ -537,8 +537,8 @@ namespace c3d_gltf
 		}
 	}
 
-	void GltfMeshImporter::doProcessTrianglesSubmesh( castor3d::Mesh & mesh
-		, castor3d::Material * material
+	void GltfMeshImporter::doProcessTrianglesSubmesh( c3d::Mesh & mesh
+		, c3d::Material * material
 		, fastgltf::Mesh const & impMesh
 		, fastgltf::Primitive const & impPrimitive )
 	{
@@ -548,12 +548,12 @@ namespace c3d_gltf
 
 		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, mesh, *submesh, material ) )
 		{
-			submesh->createComponent< castor3d::DefaultRenderComponent >();
+			submesh->createComponent< c3d::DefaultRenderComponent >();
 
 			if ( impPrimitive.indicesAccessor )
 			{
 				auto & impAccessor = impAsset.accessors[*impPrimitive.indicesAccessor];
-				auto mapping = castor::makeUnique< castor3d::TriFaceMapping >( *submesh );
+				auto mapping = c3d::makeUnique< c3d::TriFaceMapping >( *submesh );
 
 				switch ( impAccessor.componentType )
 				{
@@ -568,27 +568,27 @@ namespace c3d_gltf
 					break;
 				default:
 					mapping.reset();
-					castor3d::log::error << "Unsupported data type for face index\n";
+					c3d::log::error << "Unsupported data type for face index\n";
 					return;
 				}
 
-				doCheckNmlTan( *submesh, castor::ptrRefCast< castor3d::IndexMapping >( mapping ) );
+				doCheckNmlTan( *submesh, c3d::ptrRefCast< c3d::IndexMapping >( mapping ) );
 			}
 			else
 			{
-				auto mapping = castor::makeUnique< castor3d::TriFaceMapping >( *submesh );
+				auto mapping = c3d::makeUnique< c3d::TriFaceMapping >( *submesh );
 				uint32_t count = submesh->getPointsCount();
 				uint32_t faceCount = count / 3u;
 
 				if ( faceCount * 3 != count )
 				{
-					castor3d::log::warn << "The number of vertices was not compatible with the TRIANGLES mode. Some vertices were dropped.\n";
+					c3d::log::warn << "The number of vertices was not compatible with the TRIANGLES mode. Some vertices were dropped.\n";
 					count = uint32_t( faceCount  * 3u );
 				}
 
-				castor::Vector< castor3d::FaceIndices > indicesGroup;
+				c3d::Vector< c3d::FaceIndices > indicesGroup;
 				indicesGroup.reserve( faceCount );
-				castor3d::FaceIndices indices{};
+				c3d::FaceIndices indices{};
 
 				for ( uint32_t i = 0u; i < count; i += 3 )
 				{
@@ -599,7 +599,7 @@ namespace c3d_gltf
 				}
 
 				mapping->getData().addFaceGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
-				doCheckNmlTan( *submesh, castor::ptrRefCast< castor3d::IndexMapping >( mapping ) );
+				doCheckNmlTan( *submesh, c3d::ptrRefCast< c3d::IndexMapping >( mapping ) );
 			}
 		}
 		else
@@ -608,8 +608,8 @@ namespace c3d_gltf
 		}
 	}
 
-	void GltfMeshImporter::doProcessTriangleStripSubmesh( castor3d::Mesh & mesh
-		, castor3d::Material * material
+	void GltfMeshImporter::doProcessTriangleStripSubmesh( c3d::Mesh & mesh
+		, c3d::Material * material
 		, fastgltf::Mesh const & impMesh
 		, fastgltf::Primitive const & impPrimitive )
 	{
@@ -619,12 +619,12 @@ namespace c3d_gltf
 
 		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, mesh, *submesh, material ) )
 		{
-			submesh->createComponent< castor3d::DefaultRenderComponent >();
+			submesh->createComponent< c3d::DefaultRenderComponent >();
 
 			if ( impPrimitive.indicesAccessor )
 			{
 				auto & impAccessor = impAsset.accessors[*impPrimitive.indicesAccessor];
-				auto mapping = castor::makeUnique< castor3d::TriFaceMapping >( *submesh );
+				auto mapping = c3d::makeUnique< c3d::TriFaceMapping >( *submesh );
 
 				switch ( impAccessor.componentType )
 				{
@@ -639,20 +639,20 @@ namespace c3d_gltf
 					break;
 				default:
 					mapping.reset();
-					castor3d::log::error << "Unsupported data type for face index\n";
+					c3d::log::error << "Unsupported data type for face index\n";
 					return;
 				}
 
-				doCheckNmlTan( *submesh, castor::ptrRefCast< castor3d::IndexMapping >( mapping ) );
+				doCheckNmlTan( *submesh, c3d::ptrRefCast< c3d::IndexMapping >( mapping ) );
 			}
 			else
 			{
-				auto mapping = castor::makeUnique< castor3d::TriFaceMapping >( *submesh );
+				auto mapping = c3d::makeUnique< c3d::TriFaceMapping >( *submesh );
 				uint32_t count = submesh->getPointsCount();
 				uint32_t faceCount = count  - 2;
-				castor::Vector< castor3d::FaceIndices > indicesGroup;
+				c3d::Vector< c3d::FaceIndices > indicesGroup;
 				indicesGroup.reserve( faceCount );
-				castor3d::FaceIndices indices{};
+				c3d::FaceIndices indices{};
 
 				for ( uint32_t i = 0u; i < faceCount; ++i )
 				{
@@ -673,7 +673,7 @@ namespace c3d_gltf
 				}
 
 				mapping->getData().addFaceGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
-				doCheckNmlTan( *submesh, castor::ptrRefCast< castor3d::IndexMapping >( mapping ) );
+				doCheckNmlTan( *submesh, c3d::ptrRefCast< c3d::IndexMapping >( mapping ) );
 			}
 		}
 		else
@@ -682,8 +682,8 @@ namespace c3d_gltf
 		}
 	}
 
-	void GltfMeshImporter::doProcessTriangleFanSubmesh( castor3d::Mesh & mesh
-		, castor3d::Material * material
+	void GltfMeshImporter::doProcessTriangleFanSubmesh( c3d::Mesh & mesh
+		, c3d::Material * material
 		, fastgltf::Mesh const & impMesh
 		, fastgltf::Primitive const & impPrimitive )
 	{
@@ -693,12 +693,12 @@ namespace c3d_gltf
 
 		if ( doProcessMeshVertices( impAsset, impMesh, impPrimitive, mesh, *submesh, material ) )
 		{
-			submesh->createComponent< castor3d::DefaultRenderComponent >();
+			submesh->createComponent< c3d::DefaultRenderComponent >();
 
 			if ( impPrimitive.indicesAccessor )
 			{
 				auto & impAccessor = impAsset.accessors[*impPrimitive.indicesAccessor];
-				auto mapping = castor::makeUnique< castor3d::TriFaceMapping >( *submesh );
+				auto mapping = c3d::makeUnique< c3d::TriFaceMapping >( *submesh );
 
 				switch ( impAccessor.componentType )
 				{
@@ -713,20 +713,20 @@ namespace c3d_gltf
 					break;
 				default:
 					mapping.reset();
-					castor3d::log::error << "Unsupported data type for face index\n";
+					c3d::log::error << "Unsupported data type for face index\n";
 					return;
 				}
 
-				doCheckNmlTan( *submesh, castor::ptrRefCast< castor3d::IndexMapping >( mapping ) );
+				doCheckNmlTan( *submesh, c3d::ptrRefCast< c3d::IndexMapping >( mapping ) );
 			}
 			else
 			{
-				auto mapping = castor::makeUnique< castor3d::TriFaceMapping >( *submesh );
+				auto mapping = c3d::makeUnique< c3d::TriFaceMapping >( *submesh );
 				uint32_t count = submesh->getPointsCount();
 				uint32_t faceCount = count - 2;
-				castor::Vector< castor3d::FaceIndices > indicesGroup;
+				c3d::Vector< c3d::FaceIndices > indicesGroup;
 				indicesGroup.reserve( faceCount );
-				castor3d::FaceIndices indices{};
+				c3d::FaceIndices indices{};
 				indices.m_index[0] = 0;
 				indices.m_index[1] = 1;
 				indices.m_index[2] = 2;
@@ -741,7 +741,7 @@ namespace c3d_gltf
 				}
 
 				mapping->getData().addFaceGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
-				doCheckNmlTan( *submesh, castor::ptrRefCast< castor3d::IndexMapping >( mapping ) );
+				doCheckNmlTan( *submesh, c3d::ptrRefCast< c3d::IndexMapping >( mapping ) );
 			}
 		}
 		else
@@ -753,61 +753,61 @@ namespace c3d_gltf
 	bool GltfMeshImporter::doProcessMeshVertices( fastgltf::Asset const & impAsset
 		, fastgltf::Mesh const & impMesh
 		, fastgltf::Primitive const & impPrimitive
-		, castor3d::Mesh & mesh
-		, castor3d::Submesh & submesh
-		, castor3d::Material * material )
+		, c3d::Mesh & mesh
+		, c3d::Submesh & submesh
+		, c3d::Material * material )
 	{
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		submesh.setDefaultMaterial( material );
-		auto positions = submesh.createComponent< castor3d::PositionsComponent >();
-		castor::Point3fArray nml;
-		castor::Point4fArray tan;
-		castor::Point3fArray tex0;
-		castor::Point3fArray tex1;
-		castor::Point3fArray tex2;
-		castor::Point3fArray tex3;
-		castor::Point3fArray col;
-		castor::Point3fArray * normals = &nml;
-		castor::Point4fArray * tangents = &tan;
-		castor::Point3fArray * texcoords0 = &tex0;
-		castor::Point3fArray * texcoords1 = &tex1;
-		castor::Point3fArray * texcoords2 = &tex2;
-		castor::Point3fArray * texcoords3 = &tex3;
-		castor::Point3fArray * colours = &col;
+		auto positions = submesh.createComponent< c3d::PositionsComponent >();
+		c3d::Point3fArray nml;
+		c3d::Point4fArray tan;
+		c3d::Point3fArray tex0;
+		c3d::Point3fArray tex1;
+		c3d::Point3fArray tex2;
+		c3d::Point3fArray tex3;
+		c3d::Point3fArray col;
+		c3d::Point3fArray * normals = &nml;
+		c3d::Point4fArray * tangents = &tan;
+		c3d::Point3fArray * texcoords0 = &tex0;
+		c3d::Point3fArray * texcoords1 = &tex1;
+		c3d::Point3fArray * texcoords2 = &tex2;
+		c3d::Point3fArray * texcoords3 = &tex3;
+		c3d::Point3fArray * colours = &col;
 
 		if ( meshes::hasAttribute( impPrimitive.attributes, "NORMAL" ) )
 		{
-			auto nmlComp = submesh.createComponent< castor3d::NormalsComponent >();
+			auto nmlComp = submesh.createComponent< c3d::NormalsComponent >();
 			normals = &nmlComp->getData().getData();
 
 			if ( meshes::hasAttribute( impPrimitive.attributes, "TANGENT" ) )
 			{
-				auto tanComp = submesh.createComponent< castor3d::TangentsComponent >();
+				auto tanComp = submesh.createComponent< c3d::TangentsComponent >();
 				tangents = &tanComp->getData().getData();
 			}
 		}
 
 		if ( meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_0" ) )
 		{
-			auto texComp = submesh.createComponent< castor3d::Texcoords0Component >();
+			auto texComp = submesh.createComponent< c3d::Texcoords0Component >();
 			texcoords0 = &texComp->getData().getData();
 		}
 
 		if ( meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_1" ) )
 		{
-			auto texComp = submesh.createComponent< castor3d::Texcoords1Component >();
+			auto texComp = submesh.createComponent< c3d::Texcoords1Component >();
 			texcoords1 = &texComp->getData().getData();
 		}
 
 		if ( meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_2" ) )
 		{
-			auto texComp = submesh.createComponent< castor3d::Texcoords2Component >();
+			auto texComp = submesh.createComponent< c3d::Texcoords2Component >();
 			texcoords2 = &texComp->getData().getData();
 		}
 
 		if ( meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_3" ) )
 		{
-			auto texComp = submesh.createComponent< castor3d::Texcoords3Component >();
+			auto texComp = submesh.createComponent< c3d::Texcoords3Component >();
 			texcoords3 = &texComp->getData().getData();
 		}
 
@@ -816,7 +816,7 @@ namespace c3d_gltf
 		if ( meshes::hasAttribute( impPrimitive.attributes, "COLOR_0" )
 			&& !ignoreVertexColours )
 		{
-			auto colComp = submesh.createComponent< castor3d::ColoursComponent >();
+			auto colComp = submesh.createComponent< c3d::ColoursComponent >();
 			colours = &colComp->getData().getData();
 		}
 
@@ -832,12 +832,12 @@ namespace c3d_gltf
 			, *colours
 			, file.getAdapter()
 			, ignoreVertexColours );
-		castor::Vector< castor3d::SubmeshAnimationBuffer > morphTargets;
+		c3d::Vector< c3d::SubmeshAnimationBuffer > morphTargets;
 		uint32_t index{};
 
 		for ( auto & impAttributes : impPrimitive.targets )
 		{
-			castor3d::SubmeshAnimationBuffer buffer;
+			c3d::SubmeshAnimationBuffer buffer;
 			meshes::createVertexBuffer( impAsset
 				, impAttributes
 				, buffer.positions
@@ -857,15 +857,15 @@ namespace c3d_gltf
 				meshes::applyWeight( buffer, impMesh.weights[index++] );
 			}
 
-			morphTargets.emplace_back( castor::move( buffer ) );
+			morphTargets.emplace_back( c3d::move( buffer ) );
 		}
 
 		if ( !morphTargets.empty() )
 		{
-			castor3d::log::debug << cuT( "    Morph targets found: [" ) << uint32_t( morphTargets.size() ) << cuT( "]" ) << std::endl;
-			auto component = submesh.hasComponent( castor3d::MorphComponent::TypeName )
-				? submesh.getComponent< castor3d::MorphComponent >()
-				: submesh.createComponent< castor3d::MorphComponent >();
+			c3d::log::debug << cuT( "    Morph targets found: [" ) << uint32_t( morphTargets.size() ) << cuT( "]" ) << std::endl;
+			auto component = submesh.hasComponent( c3d::MorphComponent::TypeName )
+				? submesh.getComponent< c3d::MorphComponent >()
+				: submesh.createComponent< c3d::MorphComponent >();
 
 			for ( auto & morphTarget : morphTargets )
 			{
@@ -873,7 +873,7 @@ namespace c3d_gltf
 			}
 		}
 
-		castor::Point4uiArray joints;
+		c3d::Point4uiArray joints;
 
 		if ( !meshes::parseAttributeData< 4u, uint8_t >( impAsset, impPrimitive.attributes, "JOINTS_0", joints, file.getAdapter() ) )
 		{
@@ -882,17 +882,17 @@ namespace c3d_gltf
 
 		if ( !joints.empty() )
 		{
-			castor::Point4fArray weights;
+			c3d::Point4fArray weights;
 
 			if ( meshes::parseAttributeData< 4u, float >( impAsset, impPrimitive.attributes, "WEIGHTS_0", weights, file.getAdapter() )
 				&& weights.size() == joints.size() )
 			{
-				castor3d::VertexBoneDataArray datas;
+				c3d::VertexBoneDataArray datas;
 				datas.reserve( weights.size() );
 
 				for ( size_t i = 0u; i < weights.size(); ++i )
 				{
-					castor3d::VertexBoneData data;
+					c3d::VertexBoneData data;
 					data.addBoneData( joints[i][0], weights[i][0] );
 					data.addBoneData( joints[i][1], weights[i][1] );
 					data.addBoneData( joints[i][2], weights[i][2] );
@@ -900,55 +900,55 @@ namespace c3d_gltf
 					datas.push_back( data );
 				}
 
-				submesh.createComponent< castor3d::SkinComponent >()->getData().addDatas( datas );
+				submesh.createComponent< c3d::SkinComponent >()->getData().addDatas( datas );
 			}
 		}
 
 		return submesh.getPointsCount() > 0;
 	}
 
-	void GltfMeshImporter::doCheckNmlTan( castor3d::Submesh & submesh
-		, castor3d::IndexMappingUPtr mapping )
+	void GltfMeshImporter::doCheckNmlTan( c3d::Submesh & submesh
+		, c3d::IndexMappingUPtr mapping )
 	{
 		if ( mapping )
 		{
-			if ( !submesh.hasComponent( castor3d::NormalsComponent::TypeName ) )
+			if ( !submesh.hasComponent( c3d::NormalsComponent::TypeName ) )
 			{
-				auto normals = submesh.createComponent< castor3d::NormalsComponent >();
+				auto normals = submesh.createComponent< c3d::NormalsComponent >();
 				normals->getData().getData().resize( submesh.getPositions().size() );
 
-				if ( !submesh.hasComponent( castor3d::TangentsComponent::TypeName )
-					&& submesh.hasComponent( castor3d::Texcoords0Component::TypeName ) )
+				if ( !submesh.hasComponent( c3d::TangentsComponent::TypeName )
+					&& submesh.hasComponent( c3d::Texcoords0Component::TypeName ) )
 				{
-					auto tangents = submesh.createComponent< castor3d::TangentsComponent >();
+					auto tangents = submesh.createComponent< c3d::TangentsComponent >();
 					tangents->getData().getData().resize( submesh.getPositions().size() );
 				}
 
 				mapping->computeNormals();
 				mapping->computeTangents();
 			}
-			else if ( !submesh.hasComponent( castor3d::TangentsComponent::TypeName )
-				&& submesh.hasComponent( castor3d::Texcoords0Component::TypeName ) )
+			else if ( !submesh.hasComponent( c3d::TangentsComponent::TypeName )
+				&& submesh.hasComponent( c3d::Texcoords0Component::TypeName ) )
 			{
-				auto tangents = submesh.createComponent< castor3d::TangentsComponent >();
+				auto tangents = submesh.createComponent< c3d::TangentsComponent >();
 				tangents->getData().getData().resize( submesh.getPositions().size() );
 				mapping->computeTangents();
 			}
 
-			submesh.addComponent( castor::ptrRefCast< castor3d::SubmeshComponent >( mapping ) );
+			submesh.addComponent( c3d::ptrRefCast< c3d::SubmeshComponent >( mapping ) );
 		}
 	}
 
 	void GltfMeshImporter::doTransformMesh( fastgltf::Node const & impNode
-		, castor::Vector< fastgltf::Node > const & impNodes
-		, castor3d::Mesh & mesh
-		, castor::Matrix4x4f transformAcc )
+		, c3d::Vector< fastgltf::Node > const & impNodes
+		, c3d::Mesh & mesh
+		, c3d::Matrix4x4f transformAcc )
 	{
 		auto transform = convert( impNode.transform );
-		castor::Matrix4x4f matrix;
-		castor::matrix::setTransform( matrix, transform.translate, transform.scale, transform.rotate );
+		c3d::Matrix4x4f matrix;
+		c3d::matrix::setTransform( matrix, transform.translate, transform.scale, transform.rotate );
 		transformAcc = transformAcc * matrix;
-		castor::matrix::decompose( transformAcc, transform.translate, transform.scale, transform.rotate );
+		c3d::matrix::decompose( transformAcc, transform.translate, transform.scale, transform.rotate );
 
 		if ( impNode.meshIndex )
 		{
@@ -959,9 +959,9 @@ namespace c3d_gltf
 				auto submesh = mesh.getSubmesh( impMeshIndex );
 				auto matrixAcc = transformAcc;
 
-				if ( submesh->hasComponent( castor3d::SkinComponent::TypeName ) )
+				if ( submesh->hasComponent( c3d::SkinComponent::TypeName ) )
 				{
-					castor::matrix::setTranslate( matrixAcc, transform.translate );
+					c3d::matrix::setTranslate( matrixAcc, transform.translate );
 				}
 
 				for ( auto & vertex : submesh->getPositions() )

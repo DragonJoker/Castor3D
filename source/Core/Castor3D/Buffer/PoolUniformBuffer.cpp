@@ -6,20 +6,20 @@
 
 #include <algorithm>
 
-CU_ImplementSmartPtr( castor3d, PoolUniformBuffer )
+CU_ImplementSmartPtr( c3d, PoolUniformBuffer )
 
-namespace castor3d
+namespace c3d
 {
 	PoolUniformBuffer::PoolUniformBuffer( RenderSystem const & renderSystem
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
-		, castor::String debugName
+		, String debugName
 		, ashes::QueueShare sharingMode )
 		: m_renderSystem{ renderSystem }
 		, m_usage{ usage }
 		, m_flags{ flags | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT }
-		, m_sharingMode{ castor::move( sharingMode ) }
-		, m_debugName{ castor::move( debugName ) }
+		, m_sharingMode{ c3d::move( sharingMode ) }
+		, m_debugName{ c3d::move( debugName ) }
 	{
 		initialise( m_renderSystem.getRenderDevice() );
 	}
@@ -31,13 +31,13 @@ namespace castor3d
 		auto maxSize = std::min( 65536u, m_renderSystem.getValue( GpuMax::eUniformBufferSize ) );
 		auto elemCount = uint32_t( std::floor( float( maxSize ) / float( elemSize ) ) );
 		m_buffer = ashes::makeUniformBuffer( *device.device
-			, castor::toUtf8( m_debugName + cuT( "Ubo" ) )
+			, toUtf8( m_debugName + cuT( "Ubo" ) )
 			, elemCount
 			, elemSize
 			, m_usage | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, m_sharingMode );
 		m_buffer->bindMemory( setupMemory( device, *m_buffer, m_flags, m_debugName + cuT( "Ubo" ) ) );
-		m_data = castor::makeArrayView( m_buffer->getBuffer().lock( 0u, ashes::WholeSize, 0u )
+		m_data = makeArrayView( m_buffer->getBuffer().lock( 0u, ashes::WholeSize, 0u )
 			, m_buffer->getBuffer().getSize() );
 		return uint32_t( m_buffer->getBuffer().getSize() );
 	}
@@ -69,7 +69,7 @@ namespace castor3d
 			: m_buffer->getBuffer().getSize();
 	}
 
-	castor::Vector< castor::Pair< MemChunk, castor::String > > PoolUniformBuffer::listAllocations()const
+	Vector< Pair< MemChunk, String > > PoolUniformBuffer::listAllocations()const
 	{
 		return { m_allocated.begin(), m_allocated.end() };
 	}
@@ -94,9 +94,9 @@ namespace castor3d
 			: m_allocated.rbegin()->first.offset + m_allocated.rbegin()->first.size;
 		auto realSize = getAlignedSize( uint32_t( size ) );
 #if !defined( NDEBUG )
-		castor::String stackTrace;
-		castor::StringStream stream = castor::makeStringStream();
-		stream << castor::debug::Backtrace{ 20, 4 };
+		String stackTrace;
+		StringStream stream = makeStringStream();
+		stream << debug::Backtrace{ 20, 4 };
 		stackTrace = stream.str();
 		m_allocated.try_emplace( MemChunk{ offset, realSize, size }, stackTrace );
 #else

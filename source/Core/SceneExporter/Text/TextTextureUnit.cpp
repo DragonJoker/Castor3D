@@ -13,16 +13,14 @@
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 #include <CastorUtils/Data/File.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< TextureUnit >::TextWriter( String const & tabs
 		, Path const & folder
 		, String subFolder )
 		: TextWriterT< TextureUnit >{ tabs, cuT( "TextureUnit" ) }
 		, m_folder{ folder }
-		, m_subFolder{ castor::move( subFolder ) }
+		, m_subFolder{ c3d::move( subFolder ) }
 	{
 	}
 
@@ -41,7 +39,7 @@ namespace castor
 			{
 				if ( unit.getSampler().getSampler() && defaultSampler != &unit.getSampler().getSampler() )
 				{
-					result = writeName( file, cuT( "sampler" ), castor::makeString( unit.getSampler().getName() ) );
+					result = writeName( file, cuT( "sampler" ), makeString( unit.getSampler().getName() ) );
 				}
 
 				if ( result )
@@ -54,7 +52,7 @@ namespace castor
 				if ( auto format = unit.getTexturePixelFormat();
 					result
 					&& unit.getTextureMipmapCount() > 1
-					&& unit.getTextureMipmapCount() < castor::getMipLevels( dimensions, format ) )
+					&& unit.getTextureMipmapCount() < getMipLevels( dimensions, format ) )
 				{
 					result = write( file, cuT( "levels_count" ), unit.getTextureMipmapCount() );
 				}
@@ -68,23 +66,23 @@ namespace castor
 				{
 					auto const & transform = config.transform;
 					auto rotate = transform.rotate.degrees();
-					auto translate = castor::Point3f{ transform.translate };
-					auto scale = castor::Point3f{ transform.scale };
+					auto translate = Point3f{ transform.translate };
+					auto scale = Point3f{ transform.scale };
 
 					if ( config.tileSet->z > 1 || config.tileSet->w > 1 )
 					{
-						result = writeNamedSub( file, cuT( "tile" ), castor::Point2ui{ config.tileSet } );
+						result = writeNamedSub( file, cuT( "tile" ), Point2ui{ config.tileSet } );
 					}
 
-					if ( translate != castor::Point3f{}
+					if ( translate != Point3f{}
 						|| rotate != 0.0f
-						|| scale != castor::Point3f{ 1.0f, 1.0f, 1.0f } )
+						|| scale != Point3f{ 1.0f, 1.0f, 1.0f } )
 					{
 						if ( auto animBlock{ beginBlock( file, cuT( "transform" ) ) } )
 						{
-							result = writeNamedSubOpt( file, cuT( "translate" ), translate, castor::Point3f{} )
+							result = writeNamedSubOpt( file, cuT( "translate" ), translate, Point3f{} )
 								&& writeNamedSubOpt( file, cuT( "rotate" ), rotate, 0.0f )
-								&& writeNamedSubOpt( file, cuT( "scale" ), scale, castor::Point3f{ 1.0f, 1.0f, 1.0f } );
+								&& writeNamedSubOpt( file, cuT( "scale" ), scale, Point3f{ 1.0f, 1.0f, 1.0f } );
 						}
 					}
 				}
@@ -98,9 +96,9 @@ namespace castor
 					auto scale = anim.getScaleSpeed().getValue();
 
 					if ( anim.isTileAnimated()
-						|| translate != castor::Point2f{}
+						|| translate != Point2f{}
 						|| rotate != 0.0f
-						|| scale != castor::Point2f{} )
+						|| scale != Point2f{} )
 					{
 						if ( auto animBlock{ beginBlock( file, cuT( "animation" ) ) } )
 						{
@@ -109,14 +107,14 @@ namespace castor
 								result = write( file, cuT( "tiles" ), anim.isTileAnimated() );
 							}
 
-							if ( translate != castor::Point2f{}
+							if ( translate != Point2f{}
 								|| rotate != 0.0f
-								|| scale != castor::Point2f{} )
+								|| scale != Point2f{} )
 							{
 								result = result
-									&& writeNamedSubOpt( file, cuT( "translate" ), translate, castor::Point2f{} )
+									&& writeNamedSubOpt( file, cuT( "translate" ), translate, Point2f{} )
 									&& writeNamedSubOpt( file, cuT( "rotate" ), rotate, 0.0f )
-									&& writeNamedSubOpt( file, cuT( "scale" ), scale, castor::Point2f{} );
+									&& writeNamedSubOpt( file, cuT( "scale" ), scale, Point2f{} );
 							}
 						}
 					}

@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include <memory>
 
-namespace castor
+namespace c3d
 {
 	template< typename ResT, typename KeyT, typename TraitsT >
 	class ResourceCacheT final
@@ -36,9 +36,9 @@ namespace castor
 			, ElementCleanerT clean = ElementCleanerT{}
 			, ElementMergerT merge = ElementMergerT{} )
 			: ElementCacheT{ logger
-				, castor::move( initialise )
-				, castor::move( clean )
-				, castor::move( merge ) }
+				, c3d::move( initialise )
+				, c3d::move( clean )
+				, c3d::move( merge ) }
 		{
 		}
 		/**@}*/
@@ -76,7 +76,7 @@ namespace castor
 		, typename ... ParametersT >
 	ResourceCachePtrT< ResT, KeyT, TraitsT > makeCache( ParametersT && ... parameters )
 	{
-		return castor::makeUnique< ResourceCacheT< ResT, KeyT, TraitsT > >( castor::forward< ParametersT >( parameters )... );
+		return c3d::makeUnique< ResourceCacheT< ResT, KeyT, TraitsT > >( c3d::forward< ParametersT >( parameters )... );
 	}
 }
 

@@ -11,13 +11,13 @@
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, Sampler )
+CU_ImplementSmartPtr( c3d, Sampler )
 
-namespace castor3d
+namespace c3d
 {
 	namespace sampler
 	{
-		static castor::String getName( ComparisonFunc value )
+		static String getName( ComparisonFunc value )
 		{
 			switch ( value )
 			{
@@ -43,7 +43,7 @@ namespace castor3d
 			}
 		}
 
-		static castor::String getName( FilterMode value )
+		static String getName( FilterMode value )
 		{
 			switch ( value )
 			{
@@ -57,7 +57,7 @@ namespace castor3d
 			}
 		}
 
-		static castor::String getName( MipmapMode value )
+		static String getName( MipmapMode value )
 		{
 			switch ( value )
 			{
@@ -71,7 +71,7 @@ namespace castor3d
 			}
 		}
 
-		static castor::String getName( WrapMode value )
+		static String getName( WrapMode value )
 		{
 			switch ( value )
 			{
@@ -91,7 +91,7 @@ namespace castor3d
 			}
 		}
 
-		static castor::String getName( BorderColour value )
+		static String getName( BorderColour value )
 		{
 			switch ( value )
 			{
@@ -181,7 +181,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + castor::string::toString( rValue ) );
+					CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + string::toString( rValue ) );
 				}
 			}
 			else
@@ -208,7 +208,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + castor::string::toString( rValue ) );
+					CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + string::toString( rValue ) );
 				}
 			}
 			else
@@ -235,7 +235,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + castor::string::toString( rValue ) );
+					CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + string::toString( rValue ) );
 				}
 			}
 			else
@@ -410,15 +410,15 @@ namespace castor3d
 	}
 
 	SamplerObs createSampler( Engine & engine
-		, castor::String const & baseName
+		, String const & baseName
 		, FilterMode filter
 		, ImageSubresourceRange const * range )
 	{
-		castor::String const name = baseName
-			+ cuT( "_" ) + castor::makeString( getName( filter ) )
+		String const name = baseName
+			+ cuT( "_" ) + makeString( getName( filter ) )
 			+ ( range
-				? cuT( "_" ) + castor::string::toString( range->baseMipLevel ) + cuT( "_" ) + castor::string::toString( range->levelCount )
-				: castor::String{} );
+				? cuT( "_" ) + string::toString( range->baseMipLevel ) + cuT( "_" ) + string::toString( range->levelCount )
+				: String{} );
 		SamplerObs sampler{};
 
 		if ( engine.hasSampler( name ) )
@@ -450,7 +450,7 @@ namespace castor3d
 			};
 			auto resource = engine.createSampler( name
 				, engine
-				, castor::move( createInfo ) );
+				, c3d::move( createInfo ) );
 			sampler = engine.addSampler( name
 				, resource
 				, false );
@@ -460,7 +460,7 @@ namespace castor3d
 		return sampler;
 	}
 
-	castor::String getSamplerName( ComparisonFunc compareOp
+	String getSamplerName( ComparisonFunc compareOp
 		, FilterMode minFilter
 		, FilterMode magFilter
 		, MipmapMode mipFilter
@@ -481,19 +481,19 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	Sampler::Sampler( castor::String const & name
+	Sampler::Sampler( String const & name
 		, Engine & engine )
-		: castor::Named{ name }
-		, castor::OwnedBy< Engine >{ engine }
+		: Named{ name }
+		, OwnedBy< Engine >{ engine }
 	{
 		CU_Require( m_info.sType == VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO );
 	}
 	
-	Sampler::Sampler( castor::String const & name
+	Sampler::Sampler( String const & name
 		, Engine & engine
 		, ashes::SamplerCreateInfo const & createInfo )
-		: castor::Named{ name }
-		, castor::OwnedBy< Engine >{ engine }
+		: Named{ name }
+		, OwnedBy< Engine >{ engine }
 		, m_info{ static_cast< VkSamplerCreateInfo const & >( createInfo ) }
 	{
 		CU_Require( m_info.sType == VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO );
@@ -507,7 +507,7 @@ namespace castor3d
 		{
 			CU_Require( m_info.sType == VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO );
 			m_info.maxAnisotropy = std::min( m_info.maxAnisotropy, device.properties.limits.maxSamplerAnisotropy );
-			m_sampler = device->createSampler( castor::toUtf8( getName() )
+			m_sampler = device->createSampler( toUtf8( getName() )
 				, m_info );
 			m_initialised = true;
 			m_initialising = false;
@@ -522,9 +522,8 @@ namespace castor3d
 		m_sampler.reset();
 	}
 
-	void Sampler::addParsers( castor::AttributeParsers & result )
+	void Sampler::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< SamplerContext > context{ result, CSCNSection::eSampler };
 
 		context.addParser( cuT( "min_filter" ), sampler::parserMinFilter, { makeParameter< ParameterType::eCheckedText, FilterMode >() } );

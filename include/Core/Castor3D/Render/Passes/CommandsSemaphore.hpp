@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include <RenderGraph/FrameGraphPrerequisites.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct CommandsSemaphore
 	{
@@ -19,7 +19,7 @@ namespace castor3d
 			, ashes::SemaphorePtr semaphore = nullptr );
 		C3D_API CommandsSemaphore( RenderDevice const & device
 			, QueueData const & queueData
-			, castor::String const & name
+			, String const & name
 			, VkCommandBufferLevel level = VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 
 		C3D_API void submit( ashes::Queue const & queue

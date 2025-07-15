@@ -2,7 +2,7 @@
 
 #include "CastorUtils/Config/MultiThreadConfig.hpp"
 
-namespace castor
+namespace c3d
 {
 	AsyncJobQueue::AsyncJobQueue( size_t count )
 		: m_pool{ count }
@@ -22,7 +22,7 @@ namespace castor
 		auto lock( makeUniqueLock( m_mutex ) );
 		if ( !m_ended )
 		{
-			m_pending.emplace_back( castor::move( job ) );
+			m_pending.emplace_back( c3d::move( job ) );
 		}
 	}
 

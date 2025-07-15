@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/RangedValue.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class SliderCtrl
 		: public Control
@@ -22,7 +22,7 @@ namespace castor3d
 		 *\param[in]	parent	The parent control, if any
 		 */
 		C3D_API SliderCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, SliderStyleRPtr style
 			, ControlRPtr parent );
 
@@ -38,12 +38,12 @@ namespace castor3d
 		 *\param[in]	visible		Initial visibility status
 		 */
 		C3D_API SliderCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, SliderStyleRPtr style
 			, ControlRPtr parent
-			, castor::RangedValue< int32_t > const & value
-			, castor::Position const & position
-			, castor::Size const & size
+			, RangedValue< int32_t > const & value
+			, Position const & position
+			, Size const & size
 			, ControlFlagType flags = 0
 			, bool visible = true );
 
@@ -52,7 +52,7 @@ namespace castor3d
 		/** sets the range
 		*\param[in]	value		The new value
 		*/
-		C3D_API void setRange( castor::Range< int32_t > const & value );
+		C3D_API void setRange( Range< int32_t > const & value );
 
 		/** sets the caption
 		*\param[in]	value		The new value
@@ -62,7 +62,7 @@ namespace castor3d
 		/** Retrieves the range
 		 *\return		The value
 		*/
-		castor::Range< int32_t > const & getRange()const
+		Range< int32_t > const & getRange()const
 		{
 			return m_value.range();
 		}
@@ -83,7 +83,7 @@ namespace castor3d
 		OnSliderEventConnection connect( SliderEvent event
 			, OnSliderEventFunction function )
 		{
-			return m_signals[size_t( event )].connect( castor::move( function ) );
+			return m_signals[size_t( event )].connect( c3d::move( function ) );
 		}
 
 		/**
@@ -115,11 +115,11 @@ namespace castor3d
 
 		/** @copydoc Control::doSetPosition
 		*/
-		void doSetPosition( castor::Position const & value )override;
+		void doSetPosition( Position const & value )override;
 
 		/** @copydoc Control::doSetSize
 		*/
-		void doSetSize( castor::Size const & value )override;
+		void doSetSize( Size const & value )override;
 
 		/** @copydoc Control::doUpdateStyle
 		*/
@@ -178,20 +178,20 @@ namespace castor3d
 		/** Updates the tick position
 		 *\param[in]	delta		The position delta
 		 */
-		void doUpdateTick( castor::Position const & delta );
+		void doUpdateTick( Position const & delta );
 
 		/** Updates the mouse position
 		 *\param[in]	mouse		The new mouse position
 		 */
-		void doMoveMouse( castor::Position const & mouse );
+		void doMoveMouse( Position const & mouse );
 
 	private:
-		castor::RangedValue< int32_t > m_value;
+		RangedValue< int32_t > m_value;
 		bool m_scrolling{};
-		castor::Position m_mouse{};
+		Position m_mouse{};
 		StaticCtrlRPtr m_line{};
 		StaticCtrlRPtr m_tick{};
-		castor::Array< OnSliderEvent, size_t( SliderEvent::eCount ) > m_signals;
+		Array< OnSliderEvent, size_t( SliderEvent::eCount ) > m_signals;
 	};
 }
 

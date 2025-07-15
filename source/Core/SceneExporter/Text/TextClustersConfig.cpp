@@ -2,10 +2,8 @@
 
 #include <Castor3D/Miscellaneous/Logger.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< ClustersConfig >::TextWriter( String const & tabs )
 		: TextWriterT< ClustersConfig >{ tabs }
 	{
@@ -14,11 +12,11 @@ namespace castor
 	bool TextWriter< ClustersConfig >::operator()( ClustersConfig const & object
 		, StringStream & file )
 	{
-		static const String splitSchemes[uint32_t( castor3d::ClusterSplitScheme::eCount )] =
+		static const String splitSchemes[uint32_t( ClusterSplitScheme::eCount )] =
 		{
-			getName( castor3d::ClusterSplitScheme::eExponentialBase ),
-			getName( castor3d::ClusterSplitScheme::eLinear ),
-			getName( castor3d::ClusterSplitScheme::eExponentialLinearHybrid ),
+			getName( ClusterSplitScheme::eExponentialBase ),
+			getName( ClusterSplitScheme::eLinear ),
+			getName( ClusterSplitScheme::eExponentialLinearHybrid ),
 		};
 
 		bool result{ false };
@@ -35,7 +33,7 @@ namespace castor
 				&& writeOpt( file, cuT( "use_spot_tight_aabb" ), object.useSpotTightBoundingBox.value(), true )
 				&& writeOpt( file, cuT( "enable_reduce_warp_optimisation" ), object.enableReduceWarpOptimisation.value(), false )
 				&& writeOpt( file, cuT( "enable_bvh_warp_optimisation" ), object.enableBVHWarpOptimisation.value(), true )
-				&& writeOpt( file, cuT( "split_scheme" ), splitSchemes[uint32_t( object.splitScheme.value() )], splitSchemes[uint32_t( castor3d::ClusterSplitScheme::eExponentialLinearHybrid )] )
+				&& writeOpt( file, cuT( "split_scheme" ), splitSchemes[uint32_t( object.splitScheme.value() )], splitSchemes[uint32_t( ClusterSplitScheme::eExponentialLinearHybrid )] )
 				&& writeOpt( file, cuT( "min_distance" ), object.minDistance.value(), 1.0f );
 		}
 

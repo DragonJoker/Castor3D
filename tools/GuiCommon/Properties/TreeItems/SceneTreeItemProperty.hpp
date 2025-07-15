@@ -33,7 +33,7 @@ namespace GuiCommon
 		 *\param[in]	scene		L'objet cible
 		 */
 		SceneTreeItemProperty( bool editable
-			, castor3d::Scene & scene );
+			, c3d::Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Retrieves the object
@@ -42,7 +42,7 @@ namespace GuiCommon
 		 *\brief		Récupère l'objet
 		 *\return		La valeur
 		 */
-		inline castor3d::Scene & getScene()
+		inline c3d::Scene & getScene()
 		{
 			return m_scene;
 		}
@@ -59,7 +59,7 @@ namespace GuiCommon
 		void onAmbientLightChange( wxVariant const & var );
 
 	private:
-		castor3d::Scene & m_scene;
+		c3d::Scene & m_scene;
 	};
 }
 

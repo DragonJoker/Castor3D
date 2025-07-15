@@ -11,18 +11,18 @@
 
 #include <CastorUtils/Graphics/Image.hpp>
 
-CU_ImplementSmartPtr( castor3d, TextureView )
+CU_ImplementSmartPtr( c3d, TextureView )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 	namespace texview
 	{
-		static castor::String getName( ImageViewCreateInfo const & value )
+		static String getName( ImageViewCreateInfo const & value )
 		{
-			auto stream = castor::makeStringStream();
-			stream << cuT( "_fmt_" ) << castor::makeString( getName( value.format ) )
+			auto stream = makeStringStream();
+			stream << cuT( "_fmt_" ) << makeString( getName( value.format ) )
 				<< cuT( "_lay_" ) << value.subresourceRange.baseArrayLayer
 				<< cuT( "x" ) << value.subresourceRange.layerCount
 				<< cuT( "_mip_" ) << value.subresourceRange.baseMipLevel
@@ -30,10 +30,10 @@ namespace castor3d
 			return stream.str();
 		}
 
-		static castor::ImageMemoryLayout getLayout( ImageViewCreateInfo const & value
-			, castor::Point3ui const & extent )
+		static ImageMemoryLayout getLayout( ImageViewCreateInfo const & value
+			, Point3ui const & extent )
 		{
-			return castor::ImageMemoryLayout{ value.viewType
+			return ImageMemoryLayout{ value.viewType
 				, value.format
 				, extent
 				, value.subresourceRange.baseArrayLayer
@@ -48,11 +48,11 @@ namespace castor3d
 	TextureView::TextureView( TextureLayout & layout
 		, ImageViewCreateInfo info
 		, uint32_t index
-		, castor::String debugName )
+		, String debugName )
 		: OwnedBy< TextureLayout >{ layout }
 		, m_index{ index }
-		, m_info{ castor::move( info ) }
-		, m_debugName{ castor::move( debugName ) }
+		, m_info{ c3d::move( info ) }
+		, m_debugName{ c3d::move( debugName ) }
 		, m_source{ getOwner()->getImage()
 			, m_debugName + texview::getName( m_info )
 			, texview::getLayout( m_info, layout.getImage().getLayout().extent ) }
@@ -87,7 +87,7 @@ namespace castor3d
 	}
 
 	void TextureView::update( Extent3D const & extent
-		, castor::PixelFormat format
+		, PixelFormat format
 		, uint32_t mipLevels
 		, uint32_t arrayLayers )
 	{
@@ -107,7 +107,7 @@ namespace castor3d
 		info.subresourceRange.layerCount = layerCount;
 		info.subresourceRange.baseMipLevel = baseMipLevel;
 		info.subresourceRange.levelCount = levelCount;
-		doUpdate( castor::move( info ) );
+		doUpdate( c3d::move( info ) );
 	}
 
 	void TextureView::cleanup()
@@ -116,7 +116,7 @@ namespace castor3d
 		m_targetView = ashes::ImageView{};
 	}
 
-	castor::String TextureView::toString()const
+	String TextureView::toString()const
 	{
 		return m_source.toString();
 	}
@@ -126,12 +126,12 @@ namespace castor3d
 		return m_source.hasBuffer();
 	}
 
-	castor::ImageMemoryLayout::ConstBuffer TextureView::getBuffer()const
+	ImageMemoryLayout::ConstBuffer TextureView::getBuffer()const
 	{
 		return m_source.getBuffer();
 	}
 
-	castor::ImageMemoryLayout::Buffer TextureView::getBuffer()
+	ImageMemoryLayout::Buffer TextureView::getBuffer()
 	{
 		return m_source.getBuffer();
 	}
@@ -145,11 +145,11 @@ namespace castor3d
 	{
 		if ( !m_sampledView )
 		{
-			CU_Require( m_info.format != castor::PixelFormat::eUNDEFINED );
+			CU_Require( m_info.format != PixelFormat::eUNDEFINED );
 			auto & image = getOwner()->getTexture();
-			auto debugName = castor::toUtf8( m_debugName )
-				+ "L(" + castor::string::toMbString( m_info.subresourceRange.baseArrayLayer ) + "x" + castor::string::toMbString( m_info.subresourceRange.layerCount ) + ")"
-				+ "M(" + castor::string::toMbString( m_info.subresourceRange.baseMipLevel ) + "x" + castor::string::toMbString( m_info.subresourceRange.levelCount ) + ")";
+			auto debugName = toUtf8( m_debugName )
+				+ "L(" + string::toMbString( m_info.subresourceRange.baseArrayLayer ) + "x" + string::toMbString( m_info.subresourceRange.layerCount ) + ")"
+				+ "M(" + string::toMbString( m_info.subresourceRange.baseMipLevel ) + "x" + string::toMbString( m_info.subresourceRange.levelCount ) + ")";
 			auto createInfo = convertToSampledView( m_info );
 			m_sampledView = image.createView( debugName
 				, convert( createInfo ) );
@@ -162,11 +162,11 @@ namespace castor3d
 	{
 		if ( !m_targetView )
 		{
-			CU_Require( m_info.format != castor::PixelFormat::eUNDEFINED );
+			CU_Require( m_info.format != PixelFormat::eUNDEFINED );
 			auto & image = getOwner()->getTexture();
-			auto debugName = castor::toUtf8( m_debugName )
-				+ "L(" + castor::string::toMbString( m_info.subresourceRange.baseArrayLayer ) + "x" + castor::string::toMbString( m_info.subresourceRange.layerCount ) + ")"
-				+ "M(" + castor::string::toMbString( m_info.subresourceRange.baseMipLevel ) + "x" + castor::string::toMbString( m_info.subresourceRange.levelCount ) + ")";
+			auto debugName = toUtf8( m_debugName )
+				+ "L(" + string::toMbString( m_info.subresourceRange.baseArrayLayer ) + "x" + string::toMbString( m_info.subresourceRange.layerCount ) + ")"
+				+ "M(" + string::toMbString( m_info.subresourceRange.baseMipLevel ) + "x" + string::toMbString( m_info.subresourceRange.levelCount ) + ")";
 			auto createInfo = convertToTargetView( m_info, image.getDimensions().depth );
 			m_targetView = image.createView( debugName
 				, convert( createInfo ) );
@@ -201,7 +201,7 @@ namespace castor3d
 
 	void TextureView::doUpdate( ImageViewCreateInfo info )
 	{
-		m_info = castor::move( info );
+		m_info = c3d::move( info );
 		m_source = TextureSource{ getOwner()->getImage()
 			, m_debugName + texview::getName( m_info )
 			, texview::getLayout( m_info, getOwner()->getImage().getLayout().extent ) };

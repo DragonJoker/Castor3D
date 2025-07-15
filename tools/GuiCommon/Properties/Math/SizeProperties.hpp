@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/Size.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Size )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Size )
 
 namespace GuiCommon
 {
@@ -18,14 +18,14 @@ namespace GuiCommon
 		WX_PG_DECLARE_PROPERTY_CLASS( SizeProperty )
 
 	public:
-		SizeProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::Size const & value = castor::Size() );
+		SizeProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, c3d::Size const & value = c3d::Size() );
 
 		wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const override;
 		void RefreshChildren()override;
 
 	protected:
 		// I stands for internal
-		inline void setValueI( castor::Size const & value )
+		inline void setValueI( c3d::Size const & value )
 		{
 			m_value = WXVARIANT( value );
 		}

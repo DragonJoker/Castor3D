@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/LuminousIntensity.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class SpotLight
 		: public LightCategory
@@ -22,14 +22,14 @@ namespace castor3d
 
 	private:
 		explicit SpotLight( bool & dirty
-			, castor::Function< void() > const & markParentDirty );
+			, Function< void() > const & markParentDirty );
 
 	public:
 		/**
 		 *\copydoc		LightCategory::instantiate
 		 */
 		C3D_API LightInstanceUPtr instantiate( SceneNode & node
-			, castor::Function< bool() > isParentEnabled )override;
+			, Function< bool() > isParentEnabled )override;
 		/**
 		 *\~english
 		 *\brief		Creation function, used by Factory.
@@ -43,14 +43,14 @@ namespace castor3d
 		 *\return		Une source lumineuse.
 		 */
 		C3D_API static LightCategoryUPtr create( bool & dirty
-			, castor::Function< void() > const & markParentDirty );
+			, Function< void() > const & markParentDirty );
 		/**
 		 *\~english
 		 *\return		The vertices needed to draw the mesh materialising the ligh's volume of effect.
 		 *\~french
 		 *\return		Les sommets nécessaires au dessin du maillage représentant le volume d'effet de la lumière.
 		 */
-		C3D_API static castor::Point3fArray const & generateVertices( uint32_t angle );
+		C3D_API static Point3fArray const & generateVertices( uint32_t angle );
 		/**
 		 *\~english
 		 *\name Mutators.
@@ -58,12 +58,12 @@ namespace castor3d
 		 *\name Mutateurs.
 		 **/
 		/**@{*/
-		C3D_API void setAttenuation( castor::Point3f const & value );
+		C3D_API void setAttenuation( Point3f const & value );
 		C3D_API void setRange( float value );
 		C3D_API void setExponent( float value );
-		C3D_API void setIntensity( castor::LuminousIntensity const & value );
-		C3D_API void setInnerCutOff( castor::Angle const & value );
-		C3D_API void setOuterCutOff( castor::Angle const & value );
+		C3D_API void setIntensity( LuminousIntensity const & value );
+		C3D_API void setInnerCutOff( Angle const & value );
+		C3D_API void setOuterCutOff( Angle const & value );
 		/**@}*/
 		/**
 		 *\~english
@@ -77,12 +77,12 @@ namespace castor3d
 			return m_exponent.value();
 		}
 
-		castor::Angle const & getInnerCutOff()const noexcept
+		Angle const & getInnerCutOff()const noexcept
 		{
 			return m_innerCutOff.value();
 		}
 
-		castor::Angle const & getOuterCutOff()const noexcept
+		Angle const & getOuterCutOff()const noexcept
 		{
 			return m_outerCutOff.value();
 		}
@@ -92,7 +92,7 @@ namespace castor3d
 			return m_range.value();
 		}
 
-		castor::LuminousIntensity const & getIntensity()const noexcept
+		LuminousIntensity const & getIntensity()const noexcept
 		{
 			return m_intensity;
 		}
@@ -104,11 +104,11 @@ namespace castor3d
 		void doCloneInto( LightCategory & output )const override;
 
 	private:
-		castor::GroupChangeTracked< float > m_range;
-		castor::GroupChangeTracked< float > m_exponent;
-		castor::GroupChangeTracked< castor::LuminousIntensity > m_intensity;
-		castor::GroupChangeTracked< castor::Angle > m_innerCutOff;
-		castor::GroupChangeTracked< castor::Angle > m_outerCutOff;
+		GroupChangeTracked< float > m_range;
+		GroupChangeTracked< float > m_exponent;
+		GroupChangeTracked< LuminousIntensity > m_intensity;
+		GroupChangeTracked< Angle > m_innerCutOff;
+		GroupChangeTracked< Angle > m_outerCutOff;
 	};
 
 		class SpotLightInstance
@@ -139,8 +139,8 @@ namespace castor3d
 		public:
 			C3D_API SpotLightInstance( SceneNode & node
 				, SpotLight & category
-				, castor::Function< void() > markParentDirty
-				, castor::Function< bool() > isParentEnabled );
+				, Function< void() > markParentDirty
+				, Function< bool() > isParentEnabled );
 			/**
 			 *\~english
 			 *\brief		Puts the shadow data into the given buffer.
@@ -157,22 +157,22 @@ namespace castor3d
 			 *\name Accesseurs.
 			 **/
 			/**@{*/
-			castor::Point3f const & getDirection()const noexcept
+			Point3f const & getDirection()const noexcept
 			{
 				return m_direction;
 			}
 
-			castor::Matrix4x4f const & getViewMatrix()const noexcept
+			Matrix4x4f const & getViewMatrix()const noexcept
 			{
 				return m_lightView.value();
 			}
 
-			castor::Matrix4x4f const & getProjectionMatrix()const noexcept
+			Matrix4x4f const & getProjectionMatrix()const noexcept
 			{
 				return m_lightProj.value();
 			}
 
-			castor::Matrix4x4f const & getLightSpaceTransform()const noexcept
+			Matrix4x4f const & getLightSpaceTransform()const noexcept
 			{
 				return m_lightSpace;
 			}
@@ -183,14 +183,14 @@ namespace castor3d
 			void doUpdateShadow( Camera const & viewCamera
 				, Camera * lightCamera
 				, int32_t index )override;
-			void doFillLightBuffer( castor::Point4f * data )const override;
+			void doFillLightBuffer( Point4f * data )const override;
 			void doCloneInto( LightInstance & output )const override;
 
 		private:
-			castor::GroupChangeTracked< castor::Matrix4x4f > m_lightView;
-			castor::GroupChangeTracked< castor::Matrix4x4f > m_lightProj;
-			castor::Matrix4x4f m_lightSpace;
-			castor::Point3f m_direction;
+			GroupChangeTracked< Matrix4x4f > m_lightView;
+			GroupChangeTracked< Matrix4x4f > m_lightProj;
+			Matrix4x4f m_lightSpace;
+			Point3f m_direction;
 		};
 }
 

@@ -14,7 +14,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Pipeline/GraphicsPipeline.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class BackgroundPassBase
 	{

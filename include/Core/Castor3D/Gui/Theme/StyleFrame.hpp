@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "StylePanel.hpp"
 #include "StyleStatic.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class FrameStyle
 		: public ControlStyle
@@ -17,10 +17,10 @@ namespace castor3d
 	public:
 		static ControlType constexpr Type = ControlType::eFrame;
 
-		FrameStyle( castor::String const & name
+		FrameStyle( String const & name
 			, Scene * scene
 			, Engine & engine
-			, castor::String const & fontName )
+			, String const & fontName )
 			: ControlStyle{ Type
 				, name
 				, scene
@@ -33,14 +33,14 @@ namespace castor3d
 			m_contentStyle.setForegroundInvisible( true );
 		}
 
-		FrameStyle( castor::String const & name
+		FrameStyle( String const & name
 			, Engine & engine
-			, castor::String const & fontName )
+			, String const & fontName )
 			: FrameStyle{ name, nullptr, engine, fontName }
 		{
 		}
 
-		void setHeaderFont( castor::StringView value )
+		void setHeaderFont( String value )
 		{
 			m_headerStyle.setFont( value );
 		}
@@ -50,7 +50,7 @@ namespace castor3d
 			m_headerStyle.setTextMaterial( value );
 		}
 
-		castor::String const & getHeaderFontName()const
+		String const & getHeaderFontName()const
 		{
 			return m_headerStyle.getFontName();
 		}

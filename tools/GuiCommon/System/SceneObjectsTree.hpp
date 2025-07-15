@@ -37,12 +37,12 @@ namespace GuiCommon
 		: public wxTreeCtrl
 	{
 	public:
-		using SelectLightFunc = std::function< void( castor3d::LightInstance * ) >;
-		using SelectSubmeshFunc = std::function< void( castor3d::Geometry *, castor3d::Submesh const * ) >;
-		using SelectNodeFunc = std::function< void( castor3d::SceneNode * ) >;
-		using SelectLightSignal = castor::SignalT< SelectLightFunc >;
-		using SelectSubmeshSignal = castor::SignalT< SelectSubmeshFunc >;
-		using SelectNodeSignal = castor::SignalT< SelectNodeFunc >;
+		using SelectLightFunc = std::function< void( c3d::LightInstance * ) >;
+		using SelectSubmeshFunc = std::function< void( c3d::Geometry *, c3d::Submesh const * ) >;
+		using SelectNodeFunc = std::function< void( c3d::SceneNode * ) >;
+		using SelectLightSignal = c3d::SignalT< SelectLightFunc >;
+		using SelectSubmeshSignal = c3d::SignalT< SelectSubmeshFunc >;
+		using SelectNodeSignal = c3d::SignalT< SelectNodeFunc >;
 		using SelectLightConnection = SelectLightSignal::connection;
 		using SelectSubmeshConnection = SelectSubmeshSignal::connection;
 		using SelectNodeConnection = SelectNodeSignal::connection;
@@ -75,10 +75,10 @@ namespace GuiCommon
 		class DataType
 			: public wxTreeItemData
 		{
-			using PassTexture = std::tuple< castor3d::Pass *, castor3d::TextureUnit * >;
-			using ControlData = std::tuple< castor3d::Control *, bool, bool >;
-			using AnimationData = std::tuple< castor3d::AnimatedObjectGroup *, castor3d::GroupAnimation >;
-			using SubmeshData = std::tuple< castor3d::Geometry *, castor3d::Submesh * >;
+			using PassTexture = std::tuple< c3d::Pass *, c3d::TextureUnit * >;
+			using ControlData = std::tuple< c3d::Control *, bool, bool >;
+			using AnimationData = std::tuple< c3d::AnimatedObjectGroup *, c3d::GroupAnimation >;
+			using SubmeshData = std::tuple< c3d::Geometry *, c3d::Submesh * >;
 
 		public:
 			explicit DataType( ObjectType type
@@ -94,14 +94,14 @@ namespace GuiCommon
 			{
 			}
 
-			explicit DataType( castor3d::Pass & pass
-				, castor3d::TextureUnit & texture )
+			explicit DataType( c3d::Pass & pass
+				, c3d::TextureUnit & texture )
 				: m_type{ ObjectType::eTexture }
 				, m_passTexture{ std::make_unique< PassTexture >( &pass, &texture ) }
 			{
 			}
 
-			explicit DataType( castor3d::Control & control
+			explicit DataType( c3d::Control & control
 				, bool full
 				, bool inLayout )
 				: m_type{ ObjectType::eControl }
@@ -109,15 +109,15 @@ namespace GuiCommon
 			{
 			}
 
-			explicit DataType( castor3d::AnimatedObjectGroup & group
-				, castor3d::GroupAnimation anim )
+			explicit DataType( c3d::AnimatedObjectGroup & group
+				, c3d::GroupAnimation anim )
 				: m_type{ ObjectType::eAnimation }
 				, m_animationlData{ std::make_unique< AnimationData >( &group, std::move( anim ) ) }
 			{
 			}
 
-			explicit DataType( castor3d::Geometry & geometry
-				, castor3d::Submesh & submesh )
+			explicit DataType( c3d::Geometry & geometry
+				, c3d::Submesh & submesh )
 				: m_type{ ObjectType::eSubmesh }
 				, m_submeshData{ std::make_unique< SubmeshData >( &geometry, &submesh ) }
 			{
@@ -170,9 +170,9 @@ namespace GuiCommon
 		};
 
 	private:
-		using SubmeshIdMap = castor::Map< castor3d::Submesh const *, wxTreeItemId >;
-		using GeometrySubmeshIdMap = castor::Map< castor3d::Geometry const *, SubmeshIdMap >;
-		using MaterialIdMap = castor::Map< castor3d::MaterialRPtr, wxTreeItemId >;
+		using SubmeshIdMap = c3d::Map< c3d::Submesh const *, wxTreeItemId >;
+		using GeometrySubmeshIdMap = c3d::Map< c3d::Geometry const *, SubmeshIdMap >;
+		using MaterialIdMap = c3d::Map< c3d::MaterialRPtr, wxTreeItemId >;
 
 	public:
 		SceneObjectsTree( PropertiesContainer * propertiesHolder
@@ -180,25 +180,25 @@ namespace GuiCommon
 			, wxPoint const & ptPos = wxDefaultPosition
 			, wxSize const & size = wxDefaultSize );
 
-		void loadScene( castor3d::Engine * engine
-			, castor3d::RenderWindow & window
-			, castor3d::SceneRPtr scene );
-		void loadSceneMaterials( castor3d::Engine * engine
-			, castor3d::SceneRPtr scene );
-		void loadSceneOverlays( castor3d::Engine * engine
-			, castor3d::SceneRPtr scene );
-		void loadSceneGui( castor3d::Engine * engine
-			, castor3d::SceneRPtr scene );
-		void loadSceneNodes( castor3d::Engine * engine
-			, castor3d::SceneRPtr scene );
-		void loadSceneLights( castor3d::Engine * engine
-			, castor3d::SceneRPtr scene );
-		void loadSceneObjects( castor3d::Engine * engine
-			, castor3d::SceneRPtr scene );
+		void loadScene( c3d::Engine * engine
+			, c3d::RenderWindow & window
+			, c3d::SceneRPtr scene );
+		void loadSceneMaterials( c3d::Engine * engine
+			, c3d::SceneRPtr scene );
+		void loadSceneOverlays( c3d::Engine * engine
+			, c3d::SceneRPtr scene );
+		void loadSceneGui( c3d::Engine * engine
+			, c3d::SceneRPtr scene );
+		void loadSceneNodes( c3d::Engine * engine
+			, c3d::SceneRPtr scene );
+		void loadSceneLights( c3d::Engine * engine
+			, c3d::SceneRPtr scene );
+		void loadSceneObjects( c3d::Engine * engine
+			, c3d::SceneRPtr scene );
 		void unloadScene();
-		void select( castor3d::Geometry const * geometry
-			, castor3d::Submesh const * submesh );
-		void select( castor3d::MaterialRPtr material );
+		void select( c3d::Geometry const * geometry
+			, c3d::Submesh const * submesh );
+		void select( c3d::MaterialRPtr material );
 
 		SelectLightSignal onSelectLight;
 		SelectSubmeshSignal onSelectSubmesh;
@@ -206,53 +206,53 @@ namespace GuiCommon
 
 	private:
 		void doAddSubmesh( wxTreeItemId id
-			, castor3d::Geometry const * geometry
-			, castor3d::Submesh const * submesh );
+			, c3d::Geometry const * geometry
+			, c3d::Submesh const * submesh );
 		void doAddSkeleton( wxTreeItemId id
-			, castor3d::Skeleton const & skeleton );
+			, c3d::Skeleton const & skeleton );
 		void doAddGeometry( wxTreeItemId id
-			, castor3d::Geometry & geometry );
+			, c3d::Geometry & geometry );
 		void doAddCamera( wxTreeItemId id
-			, castor3d::Camera & camera );
+			, c3d::Camera & camera );
 		void doAddBillboard( wxTreeItemId id
-			, castor3d::BillboardList & billboard );
+			, c3d::BillboardList & billboard );
 		void doAddParticleSystem( wxTreeItemId id
-			, castor3d::ParticleSystem & particleSystem );
+			, c3d::ParticleSystem & particleSystem );
 		void doAddNode( wxTreeItemId id
-			, castor3d::SceneNode const & node );
+			, c3d::SceneNode const & node );
 		void doAddAnimatedObjectGroup( wxTreeItemId id
-			, castor3d::AnimatedObjectGroup & group );
+			, c3d::AnimatedObjectGroup & group );
 		void doAddOverlay( wxTreeItemId id
-			, castor3d::OverlayCategory & overlay );
+			, c3d::OverlayCategory & overlay );
 		void doAddStyles( wxTreeItemId id
-			, castor3d::StylesHolder const & styles
-			, castor3d::SceneRPtr scene );
+			, c3d::StylesHolder const & styles
+			, c3d::SceneRPtr scene );
 		void doAddStyle( wxTreeItemId id
-			, castor::String const & name
-			, castor3d::ControlStyle & style
-			, castor3d::SceneRPtr scene );
+			, c3d::String const & name
+			, c3d::ControlStyle & style
+			, c3d::SceneRPtr scene );
 		void doAddControl( wxTreeItemId id
-			, castor::String const & name
-			, castor3d::Control & control
+			, c3d::String const & name
+			, c3d::Control & control
 			, bool full
 			, bool inLayout );
 		void doAddMaterial( wxTreeItemId id
-			, castor3d::MaterialObs material );
+			, c3d::MaterialObs material );
 		void doAddPass( wxTreeItemId id
 			, uint32_t index
-			, castor3d::Pass & pass );
+			, c3d::Pass & pass );
 		void doAddTexture( wxTreeItemId id
 			, uint32_t index
-			, castor3d::Pass & pass
-			, castor3d::TextureUnit & texture );
+			, c3d::Pass & pass
+			, c3d::TextureUnit & texture );
 		void doLoadSceneLights( wxTreeItemId id
 			, wxString const & name
-			, castor3d::LightType type
+			, c3d::LightType type
 			, int icon
 			, int iconSel );
 		void doLoadSceneLightGroups( wxTreeItemId id
 			, wxString const & name
-			, castor3d::LightType type
+			, c3d::LightType type
 			, int icon
 			, int iconSel );
 
@@ -264,8 +264,8 @@ namespace GuiCommon
 		void onSelectItem( wxTreeEvent & event );
 
 	private:
-		castor3d::SceneRPtr m_scene{};
-		castor3d::Engine * m_engine{};
+		c3d::SceneRPtr m_scene{};
+		c3d::Engine * m_engine{};
 		PropertiesContainer * m_propertiesHolder{};
 		wxImageList m_images{};
 		GeometrySubmeshIdMap m_objects{};

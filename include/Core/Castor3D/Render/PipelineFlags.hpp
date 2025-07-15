@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/DynamicBitset.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct PipelineBaseHash
 	{
@@ -45,9 +45,9 @@ namespace castor3d
 			, uint32_t psubmeshDataBindings = 0u
 			, VkPrimitiveTopology ptopology = VkPrimitiveTopology::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 			, bool pisStatic = false )noexcept
-			: pass{ castor::move( ppassComponents ) }
-			, submesh{ castor::move( psubmeshComponents ) }
-			, textures{ castor::move( ptextures ) }
+			: pass{ c3d::move( ppassComponents ) }
+			, submesh{ c3d::move( psubmeshComponents ) }
+			, textures{ c3d::move( ptextures ) }
 			, lightingModelId{ plightingModelId }
 			, backgroundModelId{ pbackgroundModelId }
 			, alphaFunc{ palphaFunc }
@@ -112,8 +112,8 @@ namespace castor3d
 			, BlendMode alphaBlendMode = BlendMode::eNoBlend
 			, RenderPassTypeID renderPassType = 0u
 			, uint32_t ppatchVertices = 3u )noexcept
-			: PipelineHiHashDetails{ castor::move( hiDetails ) }
-			, PipelineLoHashDetails{ castor::move( loDetails ) }
+			: PipelineHiHashDetails{ c3d::move( hiDetails ) }
+			, PipelineLoHashDetails{ c3d::move( loDetails ) }
 			, m_sceneFlags{ sceneFlags }
 			, colourBlendMode{ colourBlendMode }
 			, alphaBlendMode{ alphaBlendMode }
@@ -142,12 +142,12 @@ namespace castor3d
 			, SubmeshRenderData const * psubmeshData = {}
 			, bool pisStatic = false
 			, uint32_t pvertexStride = 0u )noexcept
-			: PipelineFlags{ PipelineHiHashDetails{ castor::move( ppassComponents )
-					, castor::move( psubmeshComponents )
+			: PipelineFlags{ PipelineHiHashDetails{ c3d::move( ppassComponents )
+					, c3d::move( psubmeshComponents )
 					, plightingModelId
 					, pbackgroundModelId
 					, pprogramFlags
-					, castor::move( textures )
+					, c3d::move( textures )
 					, pshaderFlags
 					, palphaFunc
 					, ppassLayerIndex
@@ -173,12 +173,12 @@ namespace castor3d
 			, ShaderFlags shaderFlags
 			, ComparisonFunc alphaFunc
 			, uint32_t passLayerIndex = 0u )
-			: PipelineFlags{ PipelineHiHashDetails{ castor::move( ppassComponents )
-					, castor::move( psubmeshComponents )
+			: PipelineFlags{ PipelineHiHashDetails{ c3d::move( ppassComponents )
+					, c3d::move( psubmeshComponents )
 					, lightingModelId
 					, pbackgroundModelId
 					, programFlags
-					, castor::move( textures )
+					, c3d::move( textures )
 					, shaderFlags
 					, alphaFunc
 					, passLayerIndex

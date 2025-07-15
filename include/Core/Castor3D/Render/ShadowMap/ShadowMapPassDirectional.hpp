@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/ShadowMap/ShadowMapPass.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class ShadowMapPassDirectional
 		: public ShadowMapPass
@@ -79,7 +79,7 @@ namespace castor3d
 		}
 
 	public:
-		C3D_API static castor::String const Type;
+		C3D_API static String const Type;
 
 	private:
 		Camera & m_camera;

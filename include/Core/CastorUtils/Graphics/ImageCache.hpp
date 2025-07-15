@@ -12,13 +12,13 @@ See LICENSE file in root folder
 #include "CastorUtils/Design/Resource.hpp"
 #include "CastorUtils/Design/ResourceCache.hpp"
 
-namespace castor
+namespace c3d
 {
 	/**
 	*\~english
-	*	castor::Image creation parameters.
+	*	c3d::Image creation parameters.
 	*\~french
-	*	Paramètres de création d'une castor::Image.
+	*	Paramètres de création d'une c3d::Image.
 	*/
 	struct ImageCreateParams
 	{
@@ -32,8 +32,8 @@ namespace castor
 		explicit ImageCreateParams( Path ppath
 			, ImageLoaderConfig ploadConfig = { true, true, true } )
 			: mode{ eFile }
-			, path{ castor::move( ppath ) }
-			, loadConfig{ castor::move( ploadConfig ) }
+			, path{ c3d::move( ppath ) }
+			, loadConfig{ c3d::move( ploadConfig ) }
 		{
 		}
 
@@ -41,9 +41,9 @@ namespace castor
 			, ByteArray pdata
 			, ImageLoaderConfig ploadConfig = { true, true, true } )
 			: mode{ eBuffer }
-			, loadConfig{ castor::move( ploadConfig ) }
-			, type{ castor::move( ptype ) }
-			, data{ castor::move( pdata ) }
+			, loadConfig{ c3d::move( ploadConfig ) }
+			, type{ c3d::move( ptype ) }
+			, data{ c3d::move( pdata ) }
 		{
 		}
 
@@ -70,11 +70,11 @@ namespace castor
 	*\~english
 	*	Helper structure to specialise a cache behaviour.
 	*\remarks
-	*	Specialisation for castor::Image.
+	*	Specialisation for c3d::Image.
 	*\~french
 	*	Structure permettant de spécialiser le comportement d'un cache.
 	*\remarks
-	*	Spécialisation pour castor::Image.
+	*	Spécialisation pour c3d::Image.
 	*/
 	template<>
 	struct ResourceCacheTraitsT< Image, String >
@@ -101,11 +101,11 @@ namespace castor
 	*\~english
 	*	Base class for an element cache.
 	*\remarks
-	*	Specialisation for castor::Image.
+	*	Specialisation for c3d::Image.
 	*\~french
 	*	Classe de base pour un cache d'éléments.
 	*\remarks
-	*	Spécialisation pour castor::Image.
+	*	Spécialisation pour c3d::Image.
 	*/
 	template<>
 	class ResourceCacheT< Image, String, ImageCacheTraits > final
@@ -143,7 +143,7 @@ namespace castor
 	using ImageRes = ImageCacheTraits::ElementPtrT;
 	using ImageResPtr = ImageCacheTraits::ElementObsT;
 
-	CU_DeclareSmartPtr( castor, ImageCache, CU_API );
+	CU_DeclareSmartPtr( c3d, ImageCache, CU_API );
 }
 
 #endif

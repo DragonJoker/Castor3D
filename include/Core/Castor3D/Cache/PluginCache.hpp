@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Plugin/PluginModule.hpp"
 
-namespace castor
+namespace c3d
 {
 	/**
 	\~english
@@ -18,13 +18,13 @@ namespace castor
 	\brief		Cache de plug-ins.
 	*/
 	template<>
-	class ResourceCacheT< castor3d::Plugin, String, castor3d::PluginCacheTraits > final
-		: public ResourceCacheBaseT< castor3d::Plugin, String, castor3d::PluginCacheTraits >
+	class ResourceCacheT< Plugin, String, PluginCacheTraits > final
+		: public ResourceCacheBaseT< Plugin, String, PluginCacheTraits >
 	{
 	public:
-		using ElementT = castor3d::Plugin;
+		using ElementT = Plugin;
 		using ElementKeyT = String;
-		using ElementCacheTraitsT = castor3d::PluginCacheTraits;
+		using ElementCacheTraitsT = PluginCacheTraits;
 		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementCacheT::ElementPtrT;
 		using ElementContT = typename ElementCacheT::ElementContT;
@@ -39,7 +39,7 @@ namespace castor
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API explicit ResourceCacheT( castor3d::Engine & engine );
+		C3D_API explicit ResourceCacheT( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.
@@ -82,7 +82,7 @@ namespace castor
 		 *\param[in]	type	Le type de plu-ins
 		 *\return		\p nullptr si non trouvé
 		 */
-		C3D_API castor::StringMap< castor3d::PluginRPtr > getPlugins( castor3d::PluginType type );
+		C3D_API StringMap< PluginRPtr > getPlugins( PluginType type );
 		/**
 		 *\~english
 		 *\brief		Loads all the plug-ins located in working folder
@@ -97,19 +97,19 @@ namespace castor
 		ElementObsT doloadPlugin( Path const & pathFile );
 
 	private:
-		castor3d::Engine & m_engine;
+		Engine & m_engine;
 		//!\~english	The loaded plug-ins map.
 		//!\~french		La map des plug-ins chargés.
-		castor3d::PluginStrMapArray m_loadedPlugins;
+		PluginStrMapArray m_loadedPlugins;
 		//!\~english	The mutex protecting the loaded plug-ins map.
 		//!\~french		Le mutex protégeant la map des plug-ins chargés.
-		castor::RecursiveMutex m_mutexLoadedPlugins;
+		RecursiveMutex m_mutexLoadedPlugins;
 		//!\~english	The loaded plug-ins map, sorted by plug-in type.
 		//!\~french		La map des plug-ins chargés, triés par type de plug-in.
-		castor3d::PluginTypePathMap m_loadedPluginTypes;
+		PluginTypePathMap m_loadedPluginTypes;
 		//!\~english	The mutex protecting the loaded plug-ins map sorted by type.
 		//!\~french		Le mutex protégeant la map de plug-ins chargés triés par type.
-		castor::RecursiveMutex m_mutexLoadedPluginTypes;
+		RecursiveMutex m_mutexLoadedPluginTypes;
 	};
 }
 

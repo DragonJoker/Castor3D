@@ -10,15 +10,15 @@
 
 #include <CastorUtils/Math/Math.hpp>
 
-CU_ImplementSmartPtr( castor3d, LightBuffer )
+CU_ImplementSmartPtr( c3d, LightBuffer )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 	namespace lgtbuf
 	{
-		static VkDeviceSize constexpr MaxLightComponentsCount = castor::maxValueT< uint32_t
+		static VkDeviceSize constexpr MaxLightComponentsCount = maxValueT< uint32_t
 			, DirectionalLightInstance::LightDataComponents
 			, PointLightInstance::LightDataComponents
 			, SpotLightInstance::LightDataComponents >;
@@ -29,19 +29,19 @@ namespace castor3d
 	LightBuffer::LightBuffer( RenderDevice const & device
 		, uint32_t count )
 		: m_buffer{ device
-			, VkDeviceSize( count ) * lgtbuf::MaxLightComponentsCount * sizeof( castor::Point4f )
+			, VkDeviceSize( count ) * lgtbuf::MaxLightComponentsCount * sizeof( Point4f )
 			, cuT( "C3D_LightBuffer" ) }
 		, m_lightSizes{ DirectionalLightInstance::LightDataComponents
 			, PointLightInstance::LightDataComponents
 			, SpotLightInstance::LightDataComponents }
-		, m_data{ castor::makeArrayView( reinterpret_cast< castor::Point4f * >( m_buffer.getPtr() )
+		, m_data{ makeArrayView( reinterpret_cast< Point4f * >( m_buffer.getPtr() )
 			, VkDeviceSize( count ) * lgtbuf::MaxLightComponentsCount ) }
 	{
 	}
 
 	void LightBuffer::addLight( LightInstance & light )
 	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 		auto index = size_t( light.getLightType() );
 		auto & lights = m_typeSortedLights[index];
 		auto it = std::find( lights.begin()
@@ -65,7 +65,7 @@ namespace castor3d
 
 	void LightBuffer::removeLight( LightInstance & light )
 	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 		auto index = size_t( light.getLightType() );
 		auto & lights = m_typeSortedLights[index];
 		auto it = std::find( lights.begin()
@@ -85,14 +85,14 @@ namespace castor3d
 
 	void LightBuffer::update( [[maybe_unused]] CpuUpdater const & updater )
 	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 
 		if ( !m_dirty.empty() )
 		{
-			castor::Vector< LightInstance * > dirty;
-			castor::swap( m_dirty, dirty );
+			Vector< LightInstance * > dirty;
+			c3d::swap( m_dirty, dirty );
 
-			for ( auto light : castor::makeArrayView( dirty.begin(), std::unique( dirty.begin(), dirty.end() ) ) )
+			for ( auto light : makeArrayView( dirty.begin(), std::unique( dirty.begin(), dirty.end() ) ) )
 			{
 				auto [index, offset] = doGetOffsetIndex( *light );
 
@@ -163,7 +163,7 @@ namespace castor3d
 			: ( MaxLightsCount - result ) );
 	}
 
-	castor::Pair< uint32_t, uint32_t > LightBuffer::doGetOffsetIndex( LightInstance const & light )const
+	Pair< uint32_t, uint32_t > LightBuffer::doGetOffsetIndex( LightInstance const & light )const
 	{
 		uint32_t index{};
 		uint32_t result{};
@@ -199,7 +199,7 @@ namespace castor3d
 			auto begin = m_typeSortedLights[i].begin() + index;
 			index = 0u;
 
-			for ( auto it : castor::makeArrayView( begin, m_typeSortedLights[i].end() ) )
+			for ( auto it : makeArrayView( begin, m_typeSortedLights[i].end() ) )
 			{
 				m_dirty.emplace_back( it );
 			}

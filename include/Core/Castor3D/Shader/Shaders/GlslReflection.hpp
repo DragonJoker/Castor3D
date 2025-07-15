@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	class ReflectionModel
 	{

@@ -12,13 +12,13 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/SquareMatrix.hpp>
 #include <CastorUtils/Math/Quaternion.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class SkeletonAnimationInstanceObject
-		: public castor::OwnedBy< SkeletonAnimationInstance >
+		: public OwnedBy< SkeletonAnimationInstance >
 	{
 	protected:
-		using ObjectArray = castor::Vector< SkeletonAnimationInstanceObjectRPtr >;
+		using ObjectArray = Vector< SkeletonAnimationInstanceObjectRPtr >;
 
 		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstanceObject && rhs )noexcept = default;
 		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstanceObject const & rhs ) = delete;
@@ -67,14 +67,14 @@ namespace castor3d
 		 *\brief		Met à jour les transformations appliquées à l'objet.
 		 *\param[in]	current		La matrice de transformation courante.
 		 */
-		C3D_API void update( castor::Matrix4x4f const & current );
+		C3D_API void update( Matrix4x4f const & current );
 		/**
 		 *\~english
 		 *\brief		The final object's animations transformation.
 		 *\~french
 		 *\brief		La transfomation finale des animations du de cet objet.
 		 */
-		castor::Matrix4x4f const & getFinalTransform()const
+		Matrix4x4f const & getFinalTransform()const
 		{
 			return m_finalTransform;
 		}
@@ -123,10 +123,10 @@ namespace castor3d
 		ObjectArray m_children;
 		//!\~english	The cumulative animation transformations.
 		//!\~french		Les transformations cumulées de l'animation.
-		castor::Matrix4x4f m_cumulativeTransform;
+		Matrix4x4f m_cumulativeTransform;
 		//!\~english	The matrix holding transformation at current time.
 		//!\~french		La matrice de transformation complète au temps courant de l'animation.
-		castor::Matrix4x4f m_finalTransform;
+		Matrix4x4f m_finalTransform;
 	};
 }
 

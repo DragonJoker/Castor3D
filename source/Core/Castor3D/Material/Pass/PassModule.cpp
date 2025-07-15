@@ -2,11 +2,11 @@
 #include "Castor3D/Material/Pass/Component/PassComponent.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
-CU_ImplementSmartPtr( castor3d, RenderPassRegisterInfo )
+CU_ImplementSmartPtr( c3d, RenderPassRegisterInfo )
 
-namespace castor3d
+namespace c3d
 {
-	castor::String getName( ParallaxOcclusionMode value )
+	String getName( ParallaxOcclusionMode value )
 	{
 		switch ( value )
 		{
@@ -18,11 +18,11 @@ namespace castor3d
 			return cuT( "repeat" );
 		default:
 			CU_Failure( "Unsupported ParallaxOcclusionMode" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 	
-	castor::String getName( BlendMode value )
+	String getName( BlendMode value )
 	{
 		switch ( value )
 		{
@@ -40,7 +40,7 @@ namespace castor3d
 			return cuT( "depth_peeling" );
 		default:
 			CU_Failure( "Unsupported BlendMode" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
@@ -49,7 +49,7 @@ namespace castor3d
 		return component.getOwner();
 	}
 
-	castor::String const & getPassComponentType( PassComponent const & component )
+	String const & getPassComponentType( PassComponent const & component )
 	{
 		return component.getType();
 	}

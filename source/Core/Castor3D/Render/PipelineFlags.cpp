@@ -14,7 +14,7 @@
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -22,25 +22,25 @@ namespace castor3d
 	{
 		namespace hi
 		{
-			static constexpr uint64_t maxSubmeshSize = castor::getBitSize( MaxSubmeshCombines - 1u );
+			static constexpr uint64_t maxSubmeshSize = getBitSize( MaxSubmeshCombines - 1u );
 			static constexpr uint64_t maxSubmeshMask = ( 0x1ULL << uint64_t( maxSubmeshSize ) ) - 1u;
-			static constexpr uint64_t maxPassSize = castor::getBitSize( MaxPassCombines - 1u );
+			static constexpr uint64_t maxPassSize = getBitSize( MaxPassCombines - 1u );
 			static constexpr uint64_t maxPassMask = ( 0x1ULL << uint64_t( maxPassSize ) ) - 1u;
-			static constexpr uint64_t maxTexturesSize = castor::getBitSize( MaxTextureCombines - 1u );
+			static constexpr uint64_t maxTexturesSize = getBitSize( MaxTextureCombines - 1u );
 			static constexpr uint64_t maxTexturesMask = ( 0x1ULL << uint64_t( maxTexturesSize ) ) - 1u;
-			static constexpr uint64_t maxProgramSize = castor::getBitSize( uint32_t( ProgramFlag::eAllBase ) );
+			static constexpr uint64_t maxProgramSize = getBitSize( uint32_t( ProgramFlag::eAllBase ) );
 			static constexpr uint64_t maxProgramMask = ( 0x1ULL << uint64_t( maxProgramSize ) ) - 1u;
-			static constexpr uint64_t maxLightingModelIDSize = castor::getBitSize( MaxLightingModels - 1u );
+			static constexpr uint64_t maxLightingModelIDSize = getBitSize( MaxLightingModels - 1u );
 			static constexpr uint64_t maxLightingModelIDMask = ( 0x1ULL << uint64_t( maxLightingModelIDSize ) ) - 1u;
-			static constexpr uint64_t maxCompareOpSize = castor::getBitSize( uint32_t( ComparisonFunc::eMax ) + 1u );
+			static constexpr uint64_t maxCompareOpSize = getBitSize( uint32_t( ComparisonFunc::eMax ) + 1u );
 			static constexpr uint64_t maxCompareOpMask = ( 0x1ULL << uint64_t( maxCompareOpSize ) ) - 1u;
-			static constexpr uint64_t maxSubmeshDataSize = castor::getBitSize( MaxSubmeshDataBindings - 1u );
+			static constexpr uint64_t maxSubmeshDataSize = getBitSize( MaxSubmeshDataBindings - 1u );
 			static constexpr uint64_t maxSubmeshDataMask = ( 0x1ULL << uint64_t( maxSubmeshDataSize ) ) - 1u;
-			static constexpr uint64_t maxBackgroundModelIDSize = castor::getBitSize( MaxBackgroundModels - 1u );
+			static constexpr uint64_t maxBackgroundModelIDSize = getBitSize( MaxBackgroundModels - 1u );
 			static constexpr uint64_t maxBackgroundModelIDMask = ( 0x1ULL << uint64_t( maxBackgroundModelIDSize ) ) - 1u;
-			static constexpr uint64_t maxPassLayerSize = castor::getBitSize( MaxPassLayers - 1u );
+			static constexpr uint64_t maxPassLayerSize = getBitSize( MaxPassLayers - 1u );
 			static constexpr uint64_t maxPassLayerMask = ( 0x1ULL << uint64_t( maxPassLayerSize ) ) - 1u;
-			static constexpr uint64_t maxTopologySize = castor::getBitSize( uint32_t( VK_PRIMITIVE_TOPOLOGY_PATCH_LIST ) + 1u );
+			static constexpr uint64_t maxTopologySize = getBitSize( uint32_t( VK_PRIMITIVE_TOPOLOGY_PATCH_LIST ) + 1u );
 			static constexpr uint64_t maxTopologyMask = ( 0x1ULL << uint64_t( maxTopologySize ) ) - 1u;
 			static constexpr uint64_t maxSize = maxSubmeshSize + maxProgramSize + maxLightingModelIDSize + maxPassSize + maxTexturesSize + maxCompareOpSize + maxSubmeshDataSize + maxBackgroundModelIDSize + maxPassLayerSize + maxTopologySize + 1u;
 			static_assert( 64 >= maxSize );
@@ -63,14 +63,14 @@ namespace castor3d
 		{
 			switch ( submeshFlag )
 			{
-			case castor3d::SubmeshData::eNormals:
+			case SubmeshData::eNormals:
 				return checkFlag( shaderFlags, ShaderFlag::eNormal );
-			case castor3d::SubmeshData::eTangents:
-			case castor3d::SubmeshData::eBitangents:
+			case SubmeshData::eTangents:
+			case SubmeshData::eBitangents:
 				return checkFlag( shaderFlags, ShaderFlag::eTangent );
-			case castor3d::SubmeshData::eVelocity:
+			case SubmeshData::eVelocity:
 				return checkFlag( shaderFlags, ShaderFlag::eVelocity );
-			case castor3d::SubmeshData::eColours:
+			case SubmeshData::eColours:
 				return checkFlag( shaderFlags, ShaderFlag::eColour );
 			default:
 				return true;
@@ -408,31 +408,31 @@ namespace castor3d
 	{
 		switch (data)
 		{
-		case castor3d::SubmeshData::eIndex:
+		case SubmeshData::eIndex:
 			return submesh.hasLineIndexFlag || submesh.hasTriangleIndexFlag;
-		case castor3d::SubmeshData::ePositions:
+		case SubmeshData::ePositions:
 			return submesh.hasPositionFlag;
-		case castor3d::SubmeshData::eNormals:
+		case SubmeshData::eNormals:
 			return submesh.hasNormalFlag;
-		case castor3d::SubmeshData::eTangents:
+		case SubmeshData::eTangents:
 			return submesh.hasTangentFlag;
-		case castor3d::SubmeshData::eBitangents:
+		case SubmeshData::eBitangents:
 			return submesh.hasBitangentFlag;
-		case castor3d::SubmeshData::eTexcoords0:
+		case SubmeshData::eTexcoords0:
 			return submesh.hasTexcoord0Flag;
-		case castor3d::SubmeshData::eTexcoords1:
+		case SubmeshData::eTexcoords1:
 			return submesh.hasTexcoord1Flag;
-		case castor3d::SubmeshData::eTexcoords2:
+		case SubmeshData::eTexcoords2:
 			return submesh.hasTexcoord2Flag;
-		case castor3d::SubmeshData::eTexcoords3:
+		case SubmeshData::eTexcoords3:
 			return submesh.hasTexcoord3Flag;
-		case castor3d::SubmeshData::eColours:
+		case SubmeshData::eColours:
 			return submesh.hasColourFlag;
-		case castor3d::SubmeshData::eSkin:
+		case SubmeshData::eSkin:
 			return submesh.hasSkinFlag;
-		case castor3d::SubmeshData::ePassMasks:
+		case SubmeshData::ePassMasks:
 			return submesh.hasPassMaskFlag;
-		case castor3d::SubmeshData::eVelocity:
+		case SubmeshData::eVelocity:
 			return submesh.hasVelocityFlag;
 		default:
 			return false;

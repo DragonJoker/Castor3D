@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include <condition_variable>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename Lockable >
 	using UniqueLock = std::unique_lock< Lockable >;
@@ -69,7 +69,7 @@ namespace castor
 		mutable MutexT m_mutex;
 	};
 
-	using CheckedMutex = CheckedMutexT< castor::Mutex >;
+	using CheckedMutex = CheckedMutexT< c3d::Mutex >;
 }
 
 #endif

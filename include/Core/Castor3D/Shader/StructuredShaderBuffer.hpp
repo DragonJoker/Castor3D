@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Shader/ShaderBuffer.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	template< typename ElementTypeTraits >
 	class StructuredShaderBuffer
@@ -83,16 +83,16 @@ namespace castor3d
 		ElementTypeTraits m_traits;
 		//!\~english	The current elements.
 		//!\~french		Les éléments actuels.
-		castor::Vector< ashes::AttributeFormat * > m_elements;
+		Vector< ashes::AttributeFormat * > m_elements;
 		//!\~english	The modified elements.
 		//!\~french		Les éléments modifiés.
-		castor::Vector< ashes::AttributeFormat const * > m_dirty;
+		Vector< ashes::AttributeFormat const * > m_dirty;
 		//!\~english	The maximum element count.
 		//!\~french		Le nombre maximal d'éléments.
 		uint32_t const m_maxElemCount;
 		//!\~english	The connections to change signal for current elements.
 		//!\~french		Les connexions aux signaux de changement des éléments actuels.
-		castor::Vector< typename ElementType::OnChangedConnection > m_connections;
+		Vector< typename ElementType::OnChangedConnection > m_connections;
 	};
 }
 

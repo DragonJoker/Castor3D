@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Render */
 	//@{
@@ -180,15 +180,15 @@ namespace castor3d
 	class StencilPass;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, BackgroundRenderer, C3D_API );
-	CU_DeclareSmartPtr( castor3d, CombinePass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, DownscalePass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, GaussianBlur, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LineariseDepthPass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PickingPass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderQuad, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderGrid, C3D_API );
-	CU_DeclareSmartPtr( castor3d, StencilPass, C3D_API );
+	CU_DeclareSmartPtr( c3d, BackgroundRenderer, C3D_API );
+	CU_DeclareSmartPtr( c3d, CombinePass, C3D_API );
+	CU_DeclareSmartPtr( c3d, DownscalePass, C3D_API );
+	CU_DeclareSmartPtr( c3d, GaussianBlur, C3D_API );
+	CU_DeclareSmartPtr( c3d, LineariseDepthPass, C3D_API );
+	CU_DeclareSmartPtr( c3d, PickingPass, C3D_API );
+	CU_DeclareSmartPtr( c3d, RenderQuad, C3D_API );
+	CU_DeclareSmartPtr( c3d, RenderGrid, C3D_API );
+	CU_DeclareSmartPtr( c3d, StencilPass, C3D_API );
 
 	CU_DeclareVector( CommandsSemaphore, CommandsSemaphore );
 	/** @endcond */

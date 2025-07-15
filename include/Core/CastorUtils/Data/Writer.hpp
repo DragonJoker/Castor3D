@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Data/LoaderException.hpp"
 #include "CastorUtils/Design/NonCopyable.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< class DataT, typename StreamT >
 	class Writer

@@ -2,10 +2,8 @@
 
 #include <Castor3D/Miscellaneous/Logger.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	template<>
 	class TextWriter< GroupAnimation >
 		: public TextWriterT< GroupAnimation >
@@ -17,7 +15,7 @@ namespace castor
 		}
 
 		virtual bool operator()( GroupAnimation const & group
-			, castor::StringStream & file )override
+			, StringStream & file )override
 		{
 			bool result = false;
 

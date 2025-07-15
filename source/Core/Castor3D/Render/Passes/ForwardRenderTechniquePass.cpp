@@ -47,17 +47,17 @@
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
-namespace castor3d
+namespace c3d
 {
-	castor::String const ForwardRenderTechniquePass::Type = cuT( "c3d.forward" );
+	String const ForwardRenderTechniquePass::Type = cuT( "c3d.forward" );
 
 	ForwardRenderTechniquePass::ForwardRenderTechniquePass( RenderTechnique * parent
 		, crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, castor::String const & typeName
-		, castor::String const & groupName
+		, String const & typeName
+		, String const & groupName
 		, crg::ImageViewIdArray targetImage
 		, crg::ImageViewIdArray targetDepth
 		, RenderNodesPassDesc const & renderPassDesc
@@ -70,8 +70,8 @@ namespace castor3d
 			, graph
 			, device
 			, typeName
-			, castor::move( targetImage )
-			, castor::move( targetDepth )
+			, c3d::move( targetImage )
+			, c3d::move( targetDepth )
 			, renderPassDesc
 			, techniquePassDesc }
 		, m_mippedColour{ mippedColour }
@@ -209,7 +209,7 @@ namespace castor3d
 			, utils };
 		shader::SubmeshShaders submeshShaders{ getEngine()->getSubmeshComponentsRegister()
 			, flags };
-		auto index = uint32_t( castor3d::GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
+		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera

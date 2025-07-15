@@ -13,10 +13,10 @@ See LICENSE file in root folder
 
 #include <unordered_map>
 
-namespace castor3d
+namespace c3d
 {
 	class VertexTransforming
-		: public castor::OwnedBy< Scene const >
+		: public OwnedBy< Scene const >
 	{
 	public:
 		C3D_API VertexTransforming( Scene const & scene
@@ -26,7 +26,7 @@ namespace castor3d
 			, crg::FramePass const * previousPass = nullptr );
 
 		C3D_API void registerNode( SubmeshRenderNode const & node
-			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+			, GpuBufferOffsetT< Point4f > const & morphTargets
 			, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights
 			, GpuBufferOffsetT< SkinningTransformsConfiguration > const & skinTransforms );
 
@@ -36,12 +36,12 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		castor::UnorderedMap< uint32_t, TransformPipeline > m_pipelines;
-		castor::Array< castor::RawUniquePtr< BoundsTransformPipeline >, 2u > m_boundsPipelines;
+		HashMap< uint32_t, TransformPipeline > m_pipelines;
+		Array< RawUniquePtr< BoundsTransformPipeline >, 2u > m_boundsPipelines;
 		struct PendingNode
 		{
 			PendingNode( SubmeshRenderNode const * node
-				, GpuBufferOffsetT< castor::Point4f > const * morphTargets
+				, GpuBufferOffsetT< Point4f > const * morphTargets
 				, GpuBufferOffsetT< MorphingWeightsConfiguration > const * morphingWeights
 				, GpuBufferOffsetT< SkinningTransformsConfiguration > const * skinTransforms )
 				: node{ node }
@@ -51,11 +51,11 @@ namespace castor3d
 			{
 			}
 			SubmeshRenderNode const * node;
-			GpuBufferOffsetT< castor::Point4f > const * morphTargets;
+			GpuBufferOffsetT< Point4f > const * morphTargets;
 			GpuBufferOffsetT< MorphingWeightsConfiguration > const * morphingWeights;
 			GpuBufferOffsetT< SkinningTransformsConfiguration > const * skinTransforms;
 		};
-		castor::Vector< PendingNode > m_pending;
+		Vector< PendingNode > m_pending;
 		VertexTransformingPass * m_pass{};
 		MeshletBoundsTransformingPass * m_boundsPass{};
 	};

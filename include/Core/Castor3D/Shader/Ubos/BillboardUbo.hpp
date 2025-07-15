@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace shader
 	{
@@ -23,7 +23,7 @@ namespace castor3d
 			BillboardData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
-				: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+				: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 			{
 			}
 
@@ -47,7 +47,7 @@ namespace castor3d
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd430\
 		, true };\
-	auto c3d_billboardData = billboard.declMemberArray< castor3d::shader::BillboardData >( "d" );\
+	auto c3d_billboardData = billboard.declMemberArray< c3d::shader::BillboardData >( "d" );\
 	billboard.end()
 
 #define C3D_BillboardOpt( writer, binding, set, enable )\
@@ -58,7 +58,7 @@ namespace castor3d
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd430\
 		, enable };\
-	auto c3d_billboardData = billboard.declMemberArray< castor3d::shader::BillboardData >( "d", enable );\
+	auto c3d_billboardData = billboard.declMemberArray< c3d::shader::BillboardData >( "d", enable );\
 	billboard.end()
 
 #endif

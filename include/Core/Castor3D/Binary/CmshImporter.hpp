@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/SceneNodeImporter.hpp"
 #include "Castor3D/Scene/Light/LightImporter.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class CmshImporterFile
 		: public ImporterFile
@@ -22,23 +22,23 @@ namespace castor3d
 	private:
 		CmshImporterFile( Engine & engine
 			, Scene * scene
-			, castor::Path const & path
+			, Path const & path
 			, Parameters const & parameters
 			, ProgressBar * progress );
 
 	public:
-		castor::StringArray listMaterials()override;
-		castor::Vector< MeshData > listMeshes()override;
-		castor::StringArray listSkeletons()override;
-		castor::Vector< NodeData > listSceneNodes()override;
-		castor::Vector< LightData > listLights()override;
-		castor::Vector< LightGroupData > listLightGroups()override;
-		castor::Vector< GeometryData > listGeometries()override;
-		castor::Vector< CameraData > listCameras()override;
-		castor::StringArray listMeshAnimations( Mesh const & mesh )override;
-		castor::StringArray listSkeletonAnimations( Skeleton const & skeleton )override;
-		castor::StringArray listSceneNodeAnimations( SceneNode const & node )override;
-		castor::Vector< uint32_t > listTextureAnimations( Material const & material
+		StringArray listMaterials()override;
+		Vector< MeshData > listMeshes()override;
+		StringArray listSkeletons()override;
+		Vector< NodeData > listSceneNodes()override;
+		Vector< LightData > listLights()override;
+		Vector< LightGroupData > listLightGroups()override;
+		Vector< GeometryData > listGeometries()override;
+		Vector< CameraData > listCameras()override;
+		StringArray listMeshAnimations( Mesh const & mesh )override;
+		StringArray listSkeletonAnimations( Skeleton const & skeleton )override;
+		StringArray listSceneNodeAnimations( SceneNode const & node )override;
+		Vector< uint32_t > listTextureAnimations( Material const & material
 			, uint32_t pass )override;
 		uint32_t countAllMeshAnimations()const override;
 		uint32_t countAllSkeletonAnimations()const override;
@@ -55,7 +55,7 @@ namespace castor3d
 
 		static ImporterFileUPtr create( Engine & engine
 			, Scene * scene
-			, castor::Path const & path
+			, Path const & path
 			, Parameters const & parameters
 			, ProgressBar * progress );
 	};
@@ -85,12 +85,12 @@ namespace castor3d
 
 	protected:
 		/**
-		 *\copydoc		castor3d::MeshImporter::doImportMesh
+		 *\copydoc		MeshImporter::doImportMesh
 		 */
 		C3D_API bool doImportMesh( Mesh & mesh, uint32_t submeshIndex )override;
 
 	public:
-		static castor::String const Type;
+		static String const Type;
 	};
 
 	class CmshSkeletonImporter
@@ -118,12 +118,12 @@ namespace castor3d
 
 	protected:
 		/**
-		 *\copydoc		castor3d::SkeletonImporter::doImportSkeleton
+		 *\copydoc		SkeletonImporter::doImportSkeleton
 		 */
 		C3D_API bool doImportSkeleton( Skeleton & skeleton )override;
 
 	public:
-		static castor::String const Type;
+		static String const Type;
 	};
 
 	class CmshAnimationImporter
@@ -151,26 +151,26 @@ namespace castor3d
 
 	private:
 		/**
-		 *\copydoc		castor3d::AnimationImporter::doImportSkeleton
+		 *\copydoc		AnimationImporter::doImportSkeleton
 		 */
 		bool doImportSkeleton( SkeletonAnimation & skeleton )override;
 		/**
-		 *\copydoc		castor3d::AnimationImporter::doImportMesh
+		 *\copydoc		AnimationImporter::doImportMesh
 		 */
 		bool doImportMesh( MeshAnimation & mesh )override;
 		/**
-		 *\copydoc		castor3d::AnimationImporter::doImportNode
+		 *\copydoc		AnimationImporter::doImportNode
 		 */
 		bool doImportNode( SceneNodeAnimation & node )override;
 		/**
-		 *\copydoc		castor3d::AnimationImporter::doImportTexture
+		 *\copydoc		AnimationImporter::doImportTexture
 		 */
 		bool doImportTexture( TextureAnimation & texture )override;
 
 	public:
-		static castor::String const MeshAnimType;
-		static castor::String const SkeletonAnimType;
-		static castor::String const NodeAnimType;
+		static String const MeshAnimType;
+		static String const SkeletonAnimType;
+		static String const NodeAnimType;
 	};
 }
 

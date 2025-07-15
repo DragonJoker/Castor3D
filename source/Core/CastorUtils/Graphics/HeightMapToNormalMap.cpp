@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 
-namespace castor
+namespace c3d
 {
 	namespace hgttonml
 	{

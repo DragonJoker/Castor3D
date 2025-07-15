@@ -11,18 +11,18 @@ See LICENSE file in root folder
 namespace c3d_gltf
 {
 	class GltfLightImporter
-		: public castor3d::LightImporter
+		: public c3d::LightImporter
 	{
 	public:
-		explicit GltfLightImporter( castor3d::Engine & engine );
+		explicit GltfLightImporter( c3d::Engine & engine );
 
 	private:
-		bool doImportLight( castor3d::Light & light )override;
-		bool doImportLightGroup( castor3d::LightGroup & light )override;
+		bool doImportLight( c3d::Light & light )override;
+		bool doImportLightGroup( c3d::LightGroup & light )override;
 		void doImportLightCategory( fastgltf::Light const & impLight
-			, castor3d::LightCategory & category );
-		castor3d::SceneNode * doLoadNode( castor3d::Scene & scene
-			, castor::String const & nodeName
+			, c3d::LightCategory & category );
+		c3d::SceneNode * doLoadNode( c3d::Scene & scene
+			, c3d::String const & nodeName
 			, bool invertY );
 	};
 }

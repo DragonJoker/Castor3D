@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "ParticleModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class ParticleSystemImpl
 	{
@@ -80,9 +80,9 @@ namespace castor3d
 		 *\param[in]	type			Le type de la variable.
 		 *\param[in]	defaultValue	La valeur par défaut de la variable.
 		 */
-		C3D_API virtual void addParticleVariable( castor::String const & name
+		C3D_API virtual void addParticleVariable( String const & name
 			, ParticleFormat type
-			, castor::String const & defaultValue ) = 0;
+			, String const & defaultValue ) = 0;
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.

@@ -15,7 +15,7 @@ See LICENSE file in root folder
 
 #include <array>
 
-namespace castor3d
+namespace c3d
 {
 	class RadianceComputer
 		: private RenderCube
@@ -37,7 +37,7 @@ namespace castor3d
 		 */
 		C3D_API explicit RadianceComputer( Engine & engine
 			, RenderDevice const & device
-			, castor::Size const & size
+			, Size const & size
 			, Texture const & srcTexture );
 		C3D_API ~RadianceComputer()noexcept override;
 		/**
@@ -86,7 +86,7 @@ namespace castor3d
 			VkImageView dstView;
 			ashes::FrameBufferPtr frameBuffer;
 		};
-		using RenderPasses = castor::Array< RenderPass, 6 >;
+		using RenderPasses = Array< RenderPass, 6 >;
 
 		Texture m_result;
 		SamplerObs m_sampler{};

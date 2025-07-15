@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <vector>
 
-namespace castor
+namespace c3d
 {
 	template< typename ValueT, typename ControlT >
 	class ChangeTrackedT
@@ -17,8 +17,8 @@ namespace castor
 		ChangeTrackedT()noexcept = default;
 		~ChangeTrackedT()noexcept = default;
 
-		explicit ChangeTrackedT( castor::Function< void() > callback )noexcept
-			: m_callback{ castor::move( callback ) }
+		explicit ChangeTrackedT( c3d::Function< void() > callback )noexcept
+			: m_callback{ c3d::move( callback ) }
 		{
 		}
 
@@ -28,15 +28,15 @@ namespace castor
 		}
 
 		explicit ChangeTrackedT( ValueT const & rhs
-			, castor::Function< void() > callback )noexcept
+			, c3d::Function< void() > callback )noexcept
 			: m_value{ rhs }
-			, m_callback{ castor::move( callback ) }
+			, m_callback{ c3d::move( callback ) }
 		{
 		}
 
 		ChangeTrackedT( ChangeTrackedT && rhs )noexcept
-			: m_value{ castor::move( rhs.m_value ) }
-			, m_callback{ castor::move( rhs.m_callback ) }
+			: m_value{ c3d::move( rhs.m_value ) }
+			, m_callback{ c3d::move( rhs.m_callback ) }
 		{
 			this->doCopy( m_dirty, rhs.m_dirty );
 		}
@@ -64,7 +64,7 @@ namespace castor
 		ChangeTrackedT & operator=( ChangeTrackedT && rhs )noexcept
 		{
 			this->doCopy( m_dirty, rhs.m_dirty );
-			m_value = castor::move( rhs.m_value );
+			m_value = c3d::move( rhs.m_value );
 			return *this;
 		}
 
@@ -88,7 +88,7 @@ namespace castor
 			return m_dirty;
 		}
 
-		castor::Function< void() > callback()const noexcept
+		c3d::Function< void() > callback()const noexcept
 		{
 			return m_callback;
 		}
@@ -166,7 +166,7 @@ namespace castor
 	private:
 		ValueT m_value{};
 		ControlT m_dirty{ true };
-		castor::Function< void() > m_callback;
+		c3d::Function< void() > m_callback;
 	};
 
 	template< typename ValueT, typename ControlT >

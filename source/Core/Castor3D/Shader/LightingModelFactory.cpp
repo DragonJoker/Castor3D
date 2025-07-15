@@ -5,28 +5,28 @@
 
 #include <CastorUtils/Exception/Exception.hpp>
 
-CU_ImplementSmartPtr( castor3d, LightingModelFactory )
+CU_ImplementSmartPtr( c3d, LightingModelFactory )
 
-namespace castor3d
+namespace c3d
 {
 	namespace lgtmdlfct
 	{
-		static const castor::MbString OBJECT_NOT_FOUND = "Lighting model is not declared";
-		static const castor::MbString TOO_MANY_OBJECTS = "Too many lighting models declared";
+		static const MbString OBJECT_NOT_FOUND = "Lighting model is not declared";
+		static const MbString TOO_MANY_OBJECTS = "Too many lighting models declared";
 
-		static castor::String getFullName( castor::String const & baseName
+		static String getFullName( String const & baseName
 			, shader::LightingModelNames const & descNames )
 		{
 			return baseName
-				+ ( descNames.diffuse.empty() ? castor::String{} : ( cuT( "." ) + descNames.diffuse ) )
-				+ ( descNames.specular.empty() ? castor::String{} : ( cuT( "." ) + descNames.specular ) )
-				+ ( descNames.sheen.empty() ? castor::String{} : ( cuT( "." ) + descNames.sheen ) )
-				+ ( descNames.clearcoat.empty() ? castor::String{} : ( cuT( "." ) + descNames.clearcoat ) )
-				+ ( descNames.scattering.empty() ? castor::String{} : ( cuT( "." ) + descNames.scattering ) );
+				+ ( descNames.diffuse.empty() ? String{} : ( cuT( "." ) + descNames.diffuse ) )
+				+ ( descNames.specular.empty() ? String{} : ( cuT( "." ) + descNames.specular ) )
+				+ ( descNames.sheen.empty() ? String{} : ( cuT( "." ) + descNames.sheen ) )
+				+ ( descNames.clearcoat.empty() ? String{} : ( cuT( "." ) + descNames.clearcoat ) )
+				+ ( descNames.scattering.empty() ? String{} : ( cuT( "." ) + descNames.scattering ) );
 		}
 	}
 
-	void LightingModelFactory::registerType( castor::String const & baseName
+	void LightingModelFactory::registerType( String const & baseName
 		, shader::LightingModelDesc const & defaultDesc
 		, Creator const & create )
 	{
@@ -38,13 +38,13 @@ namespace castor3d
 			} );
 			it == m_models.end() )
 		{
-			m_models.push_back( std::make_unique< LightingModel >( baseName
+			m_models.push_back( makeRawUnique< LightingModel >( baseName
 				, create
 				, defaultDesc ) );
 		}
 	}
 
-	void LightingModelFactory::unregisterType( castor::String const & baseName )
+	void LightingModelFactory::unregisterType( String const & baseName )
 	{
 		auto it = std::find_if( m_models.begin()
 			, m_models.end()
@@ -71,7 +71,7 @@ namespace castor3d
 		}
 	}
 
-	LightingModelFactory::Id LightingModelFactory::getLightingModelId( castor::String const & baseName
+	LightingModelFactory::Id LightingModelFactory::getLightingModelId( String const & baseName
 		, shader::LightingModelNames descNames )
 	{
 		if ( descNames.diffuse.empty()
@@ -191,7 +191,7 @@ namespace castor3d
 		}
 	}
 
-	void LightingModelFactory::unregisterDiffuseBrdf( castor::String const & name )
+	void LightingModelFactory::unregisterDiffuseBrdf( String const & name )
 	{
 		if ( auto it = std::find_if( m_diffuseBrdfs.begin(), m_diffuseBrdfs.end()
 			, [&name]( auto const & lookup )
@@ -229,7 +229,7 @@ namespace castor3d
 		}
 	}
 
-	void LightingModelFactory::unregisterSpecularBrdf( castor::String const & name )
+	void LightingModelFactory::unregisterSpecularBrdf( String const & name )
 	{
 		if ( auto it = std::find_if( m_specularBrdfs.begin(), m_specularBrdfs.end()
 			, [&name]( auto const & lookup )
@@ -267,7 +267,7 @@ namespace castor3d
 		}
 	}
 
-	void LightingModelFactory::unregisterSheenBrdf( castor::String const & name )
+	void LightingModelFactory::unregisterSheenBrdf( String const & name )
 	{
 		if ( auto it = std::find_if( m_sheenBrdfs.begin(), m_sheenBrdfs.end()
 			, [&name]( auto const & lookup )
@@ -305,7 +305,7 @@ namespace castor3d
 		}
 	}
 
-	void LightingModelFactory::unregisterClearcoatBrdf( castor::String const & name )
+	void LightingModelFactory::unregisterClearcoatBrdf( String const & name )
 	{
 		if ( auto it = std::find_if( m_clearcoatBrdfs.begin(), m_clearcoatBrdfs.end()
 			, [&name]( auto const & lookup )
@@ -343,7 +343,7 @@ namespace castor3d
 		}
 	}
 
-	void LightingModelFactory::unregisterScatteringModel( castor::String const & name )
+	void LightingModelFactory::unregisterScatteringModel( String const & name )
 	{
 		if ( auto it = std::find_if( m_scatteringModels.begin(), m_scatteringModels.end()
 			, [&name]( auto const & lookup )
@@ -368,7 +368,7 @@ namespace castor3d
 		}
 	}
 
-	LightingModelFactory::LightingModel const & LightingModelFactory::getModel( castor::String const & baseName )const
+	LightingModelFactory::LightingModel const & LightingModelFactory::getModel( String const & baseName )const
 	{
 		if ( auto it = std::find_if( m_models.begin()
 			, m_models.end()
@@ -394,11 +394,11 @@ namespace castor3d
 			return id == lookup.lightingModelId;
 			} );
 		return it == m_registered.end()
-			? castor::String{}
+			? String{}
 			: it->model->name;
 	}
 
-	castor::String LightingModelFactory::getDiffuseBrdfName( Id const & id )const
+	String LightingModelFactory::getDiffuseBrdfName( Id const & id )const
 	{
 		auto it = std::find_if( m_registered.begin()
 			, m_registered.end()
@@ -407,11 +407,11 @@ namespace castor3d
 				return id == lookup.lightingModelId;
 			} );
 		return it == m_registered.end()
-			? castor::String{}
+			? String{}
 			: it->desc.diffuse.name;
 	}
 
-	castor::String LightingModelFactory::getSpecularBrdfName( Id const & id )const
+	String LightingModelFactory::getSpecularBrdfName( Id const & id )const
 	{
 		auto it = std::find_if( m_registered.begin()
 			, m_registered.end()
@@ -420,11 +420,11 @@ namespace castor3d
 				return id == lookup.lightingModelId;
 			} );
 		return it == m_registered.end()
-			? castor::String{}
+			? String{}
 			: it->desc.specular.name;
 	}
 
-	castor::String LightingModelFactory::getSheenBrdfName( Id const & id )const
+	String LightingModelFactory::getSheenBrdfName( Id const & id )const
 	{
 		auto it = std::find_if( m_registered.begin()
 			, m_registered.end()
@@ -433,11 +433,11 @@ namespace castor3d
 				return id == lookup.lightingModelId;
 			} );
 		return it == m_registered.end()
-			? castor::String{}
+			? String{}
 			: it->desc.sheen.name;
 	}
 
-	castor::String LightingModelFactory::getClearcoatBrdfName( Id const & id )const
+	String LightingModelFactory::getClearcoatBrdfName( Id const & id )const
 	{
 		auto it = std::find_if( m_registered.begin()
 			, m_registered.end()
@@ -446,11 +446,11 @@ namespace castor3d
 				return id == lookup.lightingModelId;
 			} );
 		return it == m_registered.end()
-			? castor::String{}
+			? String{}
 			: it->desc.clearcoat.name;
 	}
 
-	castor::String LightingModelFactory::getScatteringModelName( Id const & id )const
+	String LightingModelFactory::getScatteringModelName( Id const & id )const
 	{
 		auto it = std::find_if( m_registered.begin()
 			, m_registered.end()
@@ -459,13 +459,13 @@ namespace castor3d
 				return id == lookup.lightingModelId;
 			} );
 		return it == m_registered.end()
-			? castor::String{}
+			? String{}
 			: it->desc.scattering.name;
 	}
 
-	castor::Vector< LightingModelID > LightingModelFactory::getLightingModelsID()const
+	Vector< LightingModelID > LightingModelFactory::getLightingModelsID()const
 	{
-		castor::UnorderedSet< LightingModelID > result;
+		HashSet< LightingModelID > result;
 
 		for ( auto & entry : m_registered )
 		{
@@ -475,9 +475,9 @@ namespace castor3d
 		return { result.begin(), result.end() };
 	}
 
-	castor::StringArray LightingModelFactory::listRegisteredTypes()const
+	StringArray LightingModelFactory::listRegisteredTypes()const
 	{
-		castor::Vector< castor::String > result;
+		Vector< String > result;
 
 		for ( auto & entry : m_registered )
 		{
@@ -487,15 +487,15 @@ namespace castor3d
 		return result;
 	}
 
-	castor::String LightingModelFactory::normaliseName( castor::String name )
+	String LightingModelFactory::normaliseName( String name )
 	{
 		if ( name == cuT( "blinn_phong" ) || name == cuT( "phong" ) )
 		{
-			name = castor3d::PhongPass::LightingModel;
+			name = PhongPass::LightingModel;
 		}
 		else if ( name == cuT( "pbr" ) )
 		{
-			name = castor3d::PbrPass::LightingModel;
+			name = PbrPass::LightingModel;
 		}
 
 		return name;
@@ -527,10 +527,10 @@ namespace castor3d
 		entry.name = name;
 		entry.model = &model;
 		entry.lightingModelId = Id( m_registered.size() );
-		entry.desc = castor::move( desc );
+		entry.desc = c3d::move( desc );
 	}
 
-	void LightingModelFactory::unregisterType( castor::String const & baseName
+	void LightingModelFactory::unregisterType( String const & baseName
 		, shader::LightingModelNames const & descNames )
 	{
 		auto name = lgtmdlfct::getFullName( baseName, descNames );

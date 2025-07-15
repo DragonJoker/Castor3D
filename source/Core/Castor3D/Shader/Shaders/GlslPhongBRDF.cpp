@@ -7,36 +7,36 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//*********************************************************************************************
 
 	PhongDiffuseBRDF::PhongDiffuseBRDF( sdw::ShaderWriter & writer
-		, c3d::BRDFHelpers & brdfHelpers )
-		: c3d::DiffuseBRDF{ writer, brdfHelpers }
+		, c3ds::BRDFHelpers & brdfHelpers )
+		: c3ds::DiffuseBRDF{ writer, brdfHelpers }
 	{
 	}
 
-	c3d::DiffuseBRDFPtr PhongDiffuseBRDF::create( sdw::ShaderWriter & writer
-		, c3d::BRDFHelpers & brdfHelpers )
+	c3ds::DiffuseBRDFPtr PhongDiffuseBRDF::create( sdw::ShaderWriter & writer
+		, c3ds::BRDFHelpers & brdfHelpers )
 	{
-		return castor::makeUniqueDerived< DiffuseBRDF, PhongDiffuseBRDF >( writer, brdfHelpers );
+		return makeUniqueDerived< DiffuseBRDF, PhongDiffuseBRDF >( writer, brdfHelpers );
 	}
 
-	void PhongDiffuseBRDF::doGenerate( c3d::BlendComponents const & pcomponents
-		, c3d::LightSurface const & plightSurface )
+	void PhongDiffuseBRDF::doGenerate( c3ds::BlendComponents const & pcomponents
+		, c3ds::LightSurface const & plightSurface )
 	{
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computePhongDiffuse"
-			, [this]( c3d::BlendComponents const & /*components*/
-				, c3d::LightSurface const & /*lightSurface*/
+			, [this]( c3ds::BlendComponents const & /*components*/
+				, c3ds::LightSurface const & /*lightSurface*/
 				, sdw::Vec3 const & radiance
 				, sdw::Float const & intensity
 				, sdw::Float const & /*NdotL*/ )
 			{
 				m_writer.returnStmt( radiance * intensity );
 			}
-			, c3d::InBlendComponents{ m_writer, "components", pcomponents }
-			, c3d::InLightSurface{ m_writer, "lightSurface", plightSurface }
+			, c3ds::InBlendComponents{ m_writer, "components", pcomponents }
+			, c3ds::InLightSurface{ m_writer, "lightSurface", plightSurface }
 			, sdw::InVec3{ m_writer, "radiance" }
 			, sdw::InFloat{ m_writer, "intensity" }
 			, sdw::InFloat{ m_writer, "NdotL" } );
@@ -45,8 +45,8 @@ namespace castor3d::shader
 	//*********************************************************************************************
 
 	PhongSpecularBRDF::PhongSpecularBRDF( sdw::ShaderWriter & writer
-		, c3d::BRDFHelpers & brdfHelpers )
-		: c3d::SpecularBRDF{ writer, brdfHelpers }
+		, c3ds::BRDFHelpers & brdfHelpers )
+		: c3ds::SpecularBRDF{ writer, brdfHelpers }
 	{
 	}
 
@@ -60,16 +60,16 @@ namespace castor3d::shader
 		output.metal = vec3( 0.0_f );
 	}
 
-	c3d::SpecularBRDFPtr PhongSpecularBRDF::create( sdw::ShaderWriter & writer
-		, c3d::BRDFHelpers & brdfHelpers )
+	c3ds::SpecularBRDFPtr PhongSpecularBRDF::create( sdw::ShaderWriter & writer
+		, c3ds::BRDFHelpers & brdfHelpers )
 	{
-		return castor::makeUniqueDerived< SpecularBRDF, PhongSpecularBRDF >( writer, brdfHelpers );
+		return makeUniqueDerived< SpecularBRDF, PhongSpecularBRDF >( writer, brdfHelpers );
 	}
 
-	void PhongSpecularBRDF::doGenerate( c3d::BlendComponents const & pcomponents )
+	void PhongSpecularBRDF::doGenerate( c3ds::BlendComponents const & pcomponents )
 	{
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computePhongSpecular"
-			, [this]( c3d::BlendComponents const & components
+			, [this]( c3ds::BlendComponents const & components
 				, sdw::Vec3 const & /*N*/
 				, sdw::Vec3 const & /*L*/
 				, sdw::Vec3 const & /*H*/
@@ -79,7 +79,7 @@ namespace castor3d::shader
 			{
 				m_writer.returnStmt( vec3( pow( NdotH, ( 1.0_f - components.perceptualRoughness ) * 256.0_f ) ) );
 			}
-			, c3d::InBlendComponents{ m_writer, "components", pcomponents }
+			, c3ds::InBlendComponents{ m_writer, "components", pcomponents }
 			, sdw::InVec3{ m_writer, "N" }
 			, sdw::InVec3{ m_writer, "L" }
 			, sdw::InVec3{ m_writer, "H" }
@@ -91,21 +91,21 @@ namespace castor3d::shader
 	//*********************************************************************************************
 
 	PhongClearcoatBRDF::PhongClearcoatBRDF( sdw::ShaderWriter & writer
-		, c3d::BRDFHelpers & brdfHelpers )
-		: c3d::ClearcoatBRDF{ writer, brdfHelpers }
+		, c3ds::BRDFHelpers & brdfHelpers )
+		: c3ds::ClearcoatBRDF{ writer, brdfHelpers }
 	{
 	}
 
-	c3d::ClearcoatBRDFPtr PhongClearcoatBRDF::create( sdw::ShaderWriter & writer
-		, c3d::BRDFHelpers & brdfHelpers )
+	c3ds::ClearcoatBRDFPtr PhongClearcoatBRDF::create( sdw::ShaderWriter & writer
+		, c3ds::BRDFHelpers & brdfHelpers )
 	{
-		return castor::makeUniqueDerived< ClearcoatBRDF, PhongClearcoatBRDF >( writer, brdfHelpers );
+		return makeUniqueDerived< ClearcoatBRDF, PhongClearcoatBRDF >( writer, brdfHelpers );
 	}
 
-	void PhongClearcoatBRDF::doGenerate( c3d::BlendComponents const & pcomponents )
+	void PhongClearcoatBRDF::doGenerate( c3ds::BlendComponents const & pcomponents )
 	{
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computePhongClearcoat"
-			, [this]( c3d::BlendComponents const & components
+			, [this]( c3ds::BlendComponents const & components
 				, sdw::Vec3 const & /*N*/
 				, sdw::Vec3 const & /*L*/
 				, sdw::Vec3 const & /*H*/
@@ -115,7 +115,7 @@ namespace castor3d::shader
 			{
 				m_writer.returnStmt( pow( NdotH, ( 1.0_f - components.perceptualRoughness ) * 256.0_f ) );
 			}
-			, c3d::InBlendComponents{ m_writer, "components", pcomponents }
+			, c3ds::InBlendComponents{ m_writer, "components", pcomponents }
 			, sdw::InVec3{ m_writer, "N" }
 			, sdw::InVec3{ m_writer, "L" }
 			, sdw::InVec3{ m_writer, "H" }

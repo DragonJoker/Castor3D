@@ -13,7 +13,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//*********************************************************************************************
 
@@ -166,7 +166,7 @@ namespace castor3d::shader
 					auto tan2 = m_writer.declLocale( "tan2Alpha"
 						, ( cos2 - 1.0_f ) / cos2 );
 					auto denom = m_writer.declLocale( "denom"
-						, castor::Pi< float > * alpha * cos2 * cos2 );
+						, Pi< float > * alpha * cos2 * cos2 );
 					m_writer.returnStmt( exp( tan2 / alpha ) / denom );
 				}
 				, sdw::InFloat{ m_writer, "NdotH" }
@@ -189,7 +189,7 @@ namespace castor3d::shader
 						, alphaRoughness * alphaRoughness );
 					auto f = m_writer.declLocale( "f"
 						, ( NdotH * NdotH ) * ( sqAlphaRoughness - 1.0_f ) + 1.0_f );
-					m_writer.returnStmt( sqAlphaRoughness / ( f * f * castor::Pi< float > ) );
+					m_writer.returnStmt( sqAlphaRoughness / ( f * f * Pi< float > ) );
 				}
 				, sdw::InFloat{ m_writer, "NdotH" }
 				, sdw::InFloat{ m_writer, "alpha" } );
@@ -216,7 +216,7 @@ namespace castor3d::shader
 						, NdotH * NdotH );
 					auto sin2h = m_writer.declLocale( "sin2h"
 						, 1.0_f - cos2h );
-					m_writer.returnStmt( ( 2.0_f * invR ) * pow( sin2h, invR * 0.5_f ) / castor::Tau< float > );
+					m_writer.returnStmt( ( 2.0_f * invR ) * pow( sin2h, invR * 0.5_f ) / Tau< float > );
 				}
 				, sdw::InFloat{ m_writer, "NdotH" }
 				, sdw::InFloat{ m_writer, "sheenRoughness" } );
@@ -242,7 +242,7 @@ namespace castor3d::shader
 					auto a2 = m_writer.declLocale( "a2"
 						, alpha * alpha );
 
-					result.phi() = castor::Tau< float > *xi.x();
+					result.phi() = Tau< float > *xi.x();
 					result.cosTheta() = sqrt( ( 1.0_f - xi.y() ) / ( 1.0_f + ( a2 - 1.0_f ) * xi.y() ) );
 					result.sinTheta() = sqrt( 1.0_f - result.cosTheta() * result.cosTheta() );
 
@@ -280,7 +280,7 @@ namespace castor3d::shader
 					auto alpha = m_writer.declLocale( "alpha"
 						, roughness * roughness );
 
-					result.phi() = castor::Tau< float > *xi.x();
+					result.phi() = Tau< float > *xi.x();
 					result.sinTheta() = m_writer.ternary( alpha == 0.0_f
 						, 0.0_f
 						, pow( xi.y(), alpha / ( 2.0f * alpha + 1.0_f ) ) );

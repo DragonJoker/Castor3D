@@ -22,7 +22,7 @@ namespace GuiCommon
 
 	//*********************************************************************************************
 
-	RendererSelector::RendererSelector( castor3d::Engine & engine
+	RendererSelector::RendererSelector( c3d::Engine & engine
 		, wxWindow * parent
 		, wxString const & title )
 		: wxDialog{ parent, wxID_ANY, title + _( " - Select renderer" ), wxDefaultPosition, wxSize( 500, 400 + ( rendsel::ListHeight * 2 ) ), wxDEFAULT_DIALOG_STYLE }
@@ -76,15 +76,15 @@ namespace GuiCommon
 		doDraw( & clientDC );
 	}
 
-	castor3d::Renderer RendererSelector::getSelected()
+	c3d::Renderer RendererSelector::getSelected()
 	{
-		castor3d::Renderer result;
+		c3d::Renderer result;
 		auto selected = uint32_t( m_renderersList->GetSelection() );
 
 		if ( selected < m_renderersList->GetCount() )
 		{
 			auto it = std::next( m_renderers.begin(), selected );
-			result = castor::move( *it );
+			result = c3d::move( *it );
 			m_renderers.erase( it );
 		}
 
@@ -135,7 +135,7 @@ namespace GuiCommon
 		return result;
 	}
 
-	void RendererSelector::doFillDevices( castor3d::Renderer const & renderer )
+	void RendererSelector::doFillDevices( c3d::Renderer const & renderer )
 	{
 		uint32_t count{};
 		m_devicesList->Clear();

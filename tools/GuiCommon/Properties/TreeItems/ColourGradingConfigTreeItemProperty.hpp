@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
-	using ColourGradingConfigTreeItemProperty = TreeItemPropertyT< castor3d::ColourGradingConfig >;
+	using ColourGradingConfigTreeItemProperty = TreeItemPropertyT< c3d::ColourGradingConfig >;
 }
 
 #endif

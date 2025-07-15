@@ -1,6 +1,6 @@
 #if CU_UseSSE2
 
-namespace castor
+namespace c3d
 {
 	inline Float4::Float4( float const * rhs )
 		: m_value( _mm_load_ps( rhs ) )

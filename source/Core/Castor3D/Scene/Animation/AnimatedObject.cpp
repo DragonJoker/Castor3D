@@ -3,23 +3,23 @@
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 
-CU_ImplementSmartPtr( castor3d, AnimatedObject )
+CU_ImplementSmartPtr( c3d, AnimatedObject )
 
-namespace castor3d
+namespace c3d
 {
 	AnimatedObject::AnimatedObject( AnimationType kind
-		, castor::String const & name )
-		: castor::Named{ name }
+		, String const & name )
+		: Named{ name }
 		, m_kind{ kind }
 	{
 	}
 
-	void AnimatedObject::addAnimation( castor::String const & name )
+	void AnimatedObject::addAnimation( String const & name )
 	{
 		doAddAnimation( name );
 	}
 
-	void AnimatedObject::startAnimation( castor::String const & name )
+	void AnimatedObject::startAnimation( String const & name )
 	{
 		if ( auto it = m_animations.find( name );
 			it != m_animations.end() )
@@ -41,7 +41,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedObject::stopAnimation( castor::String const & name )
+	void AnimatedObject::stopAnimation( String const & name )
 	{
 		if ( auto it = m_animations.find( name );
 			it != m_animations.end() )
@@ -56,7 +56,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedObject::pauseAnimation( castor::String const & name )
+	void AnimatedObject::pauseAnimation( String const & name )
 	{
 		if ( auto it = m_animations.find( name );
 			it != m_animations.end() )
@@ -94,13 +94,13 @@ namespace castor3d
 		}
 	}
 
-	AnimationInstance & AnimatedObject::getAnimation( castor::String const & name )
+	AnimationInstance & AnimatedObject::getAnimation( String const & name )
 	{
 		auto it = m_animations.find( name );
 
 		if ( it == m_animations.end() )
 		{
-			CU_Exception( "No animation named " + castor::toUtf8( name ) );
+			CU_Exception( "No animation named " + toUtf8( name ) );
 		}
 
 		return *it->second;

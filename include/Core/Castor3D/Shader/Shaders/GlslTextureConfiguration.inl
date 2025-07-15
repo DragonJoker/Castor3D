@@ -7,7 +7,7 @@
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	namespace shdtex
 	{

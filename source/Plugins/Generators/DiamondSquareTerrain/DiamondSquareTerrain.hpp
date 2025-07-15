@@ -12,51 +12,51 @@ See LICENSE file in root folder
 namespace diamond_square_terrain
 {
 	class Generator
-		: public castor3d::MeshGenerator
+		: public c3d::MeshGenerator
 	{
 	public:
 		Generator();
 		/**
-		*\copydoc		castor3d::MeshGenerator::create
+		*\copydoc		c3d::MeshGenerator::create
 		*/
-		static castor3d::MeshGeneratorUPtr create();
+		static c3d::MeshGeneratorUPtr create();
 
 		void setBiomes( Biomes biomes )
 		{
-			m_biomes = castor::move( biomes );
+			m_biomes = c3d::move( biomes );
 		}
 
 	private:
 		/**
-		 *\copydoc		castor3d::MeshGenerator::doGenerate
+		 *\copydoc		c3d::MeshGenerator::doGenerate
 		 */
-		virtual void doGenerate( castor3d::Mesh & mesh
-			, castor3d::Parameters const & parameters )override;
+		virtual void doGenerate( c3d::Mesh & mesh
+			, c3d::Parameters const & parameters )override;
 
 	public:
-		static castor::MbString const Name;
-		static castor::String const Type;
-		static castor::String const Biome;
-		static castor::String const BiomeRange;
-		static castor::String const BiomeLowSteepness;
-		static castor::String const BiomeMediumSteepness;
-		static castor::String const BiomeHighSteepness;
-		static castor::String const ParamRandomSeed;
-		static castor::String const ParamHeightRange;
-		static castor::String const ParamYMin;
-		static castor::String const ParamYMax;
-		static castor::String const ParamXzScale;
-		static castor::String const ParamXScale;
-		static castor::String const ParamZScale;
-		static castor::String const ParamUvScale;
-		static castor::String const ParamUScale;
-		static castor::String const ParamVScale;
-		static castor::String const ParamDetail;
-		static castor::String const ParamGradient;
-		static castor::String const ParamGradientFolder;
-		static castor::String const ParamGradientRelative;
-		static castor::String const ParamHeatOffset;
-		static castor::String const ParamIsland;
+		static c3d::MbString const Name;
+		static c3d::String const Type;
+		static c3d::String const Biome;
+		static c3d::String const BiomeRange;
+		static c3d::String const BiomeLowSteepness;
+		static c3d::String const BiomeMediumSteepness;
+		static c3d::String const BiomeHighSteepness;
+		static c3d::String const ParamRandomSeed;
+		static c3d::String const ParamHeightRange;
+		static c3d::String const ParamYMin;
+		static c3d::String const ParamYMax;
+		static c3d::String const ParamXzScale;
+		static c3d::String const ParamXScale;
+		static c3d::String const ParamZScale;
+		static c3d::String const ParamUvScale;
+		static c3d::String const ParamUScale;
+		static c3d::String const ParamVScale;
+		static c3d::String const ParamDetail;
+		static c3d::String const ParamGradient;
+		static c3d::String const ParamGradientFolder;
+		static c3d::String const ParamGradientRelative;
+		static c3d::String const ParamHeatOffset;
+		static c3d::String const ParamIsland;
 
 	private:
 		Biomes m_biomes;

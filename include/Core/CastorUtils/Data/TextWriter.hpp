@@ -22,7 +22,7 @@ See LICENSE file in root folder
 #include <iostream>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	class TextWriterBase
 	{
@@ -180,7 +180,7 @@ namespace castor
 	public:
 		explicit TextWriterT( String tabs
 			, StringView name = String{} )
-			: TextWriterBase{ castor::move( tabs ), name }
+			: TextWriterBase{ c3d::move( tabs ), name }
 		{
 		}
 	};

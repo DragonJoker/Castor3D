@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**
 	*\~english
@@ -90,7 +90,7 @@ namespace castor3d
 	struct SceneContext;
 
 	template< typename ContextT >
-	static castor::String getPrefixedName( castor::String const & name
+	static String getPrefixedName( String const & name
 		, ContextT const & blockContext )
 	{
 		auto prefix = getPrefix( blockContext );
@@ -107,16 +107,16 @@ namespace castor3d
 		bool enableFullLoading{};
 		ScenePtrStrMap mapScenes{};
 		RenderWindowDesc window{};
-		castor::LoggerInstance * logger{};
-		castor::PathArray files{};
-		castor::PathArray csnaFiles{};
-		castor::StringMap< TextureSourceInfoUPtr > sourceInfos{};
+		LoggerInstance * logger{};
+		PathArray files{};
+		PathArray csnaFiles{};
+		StringMap< TextureSourceInfoUPtr > sourceInfos{};
 		ProgressBar * progress{};
 	};
 
-	inline castor::String getPrefix( RootContext const & context )
+	inline String getPrefix( RootContext const & context )
 	{
-		return castor::String{};
+		return String{};
 	}
 
 	inline Engine * getEngine( RootContext const & context )
@@ -128,8 +128,8 @@ namespace castor3d
 	{
 		RootContext * root{};
 		SceneContext * scene{};
-		castor::String name{};
-		castor::Path path{};
+		String name{};
+		Path path{};
 		int16_t height{};
 	};
 
@@ -147,8 +147,8 @@ namespace castor3d
 		ShadowConfigRPtr shadowConfig{};
 	};
 
-	C3D_API void fillMeshImportParameters( castor::FileParserContext & context
-		, castor::String const & meshParams
+	C3D_API void fillMeshImportParameters( FileParserContext & context
+		, String const & meshParams
 		, Parameters & parameters );
 
 	C3D_API CU_DeclareAttributeParser( parserDefaultEnd )
@@ -157,7 +157,7 @@ namespace castor3d
 	struct BlockParserContextT
 	{
 		template< typename SectionT, typename SectionU >
-		explicit BlockParserContextT( castor::AttributeParsers & pparsers
+		explicit BlockParserContextT( AttributeParsers & pparsers
 			, SectionT psection
 			, SectionU poldSection )
 			: section{ uint32_t( psection ) }
@@ -167,89 +167,89 @@ namespace castor3d
 		}
 
 		template< typename SectionT >
-		explicit BlockParserContextT( castor::AttributeParsers & pparsers
+		explicit BlockParserContextT( AttributeParsers & pparsers
 			, SectionT psection )
-			: BlockParserContextT{ pparsers, psection, castor::PreviousSection }
+			: BlockParserContextT{ pparsers, psection, PreviousSection }
 		{
 		}
 
 		template< typename BlockContextU >
-		void addParser( castor::String const & name
-			, castor::ParserFunctionT< BlockContextU > function
-			, castor::ParserParameterArray params = castor::ParserParameterArray{} )
+		void addParser( String const & name
+			, ParserFunctionT< BlockContextU > function
+			, ParserParameterArray params = ParserParameterArray{} )
 		{
-			castor::addParser( parsers
+			c3d::addParser( parsers
 				, section
 				, name
-				, castor::ParserFunctionT< void >( function )
-				, castor::move( params ) );
+				, ParserFunctionT< void >( function )
+				, c3d::move( params ) );
 		}
 
 		template< typename BlockContextU >
-		void addParser( castor::String const & name
-			, castor::RawParserFunctionT< BlockContextU > function
-			, castor::ParserParameterArray params = castor::ParserParameterArray{} )
+		void addParser( String const & name
+			, RawParserFunctionT< BlockContextU > function
+			, ParserParameterArray params = ParserParameterArray{} )
 		{
-			castor::addParser( parsers
+			c3d::addParser( parsers
 				, section
 				, name
-				, castor::RawParserFunctionT< void >( function )
-				, castor::move( params ) );
+				, RawParserFunctionT< void >( function )
+				, c3d::move( params ) );
 		}
 
 		template< typename BlockContextU, typename SectionT >
-		void addPushParser( castor::String const & name
+		void addPushParser( String const & name
 			, SectionT newSection
-			, castor::ParserFunctionT< BlockContextU > function
-			, castor::ParserParameterArray params = castor::ParserParameterArray{} )
+			, ParserFunctionT< BlockContextU > function
+			, ParserParameterArray params = ParserParameterArray{} )
 		{
-			castor::addParser( parsers
+			c3d::addParser( parsers
 				, section
 				, uint32_t( newSection )
 				, name
-				, castor::ParserFunctionT< void >( function )
-				, castor::move( params ) );
+				, ParserFunctionT< void >( function )
+				, c3d::move( params ) );
 		}
 
 		template< typename BlockContextU, typename SectionT >
-		void addPushParser( castor::String const & name
+		void addPushParser( String const & name
 			, SectionT newSection
-			, castor::RawParserFunctionT< BlockContextU > function
-			, castor::ParserParameterArray params = castor::ParserParameterArray{} )
+			, RawParserFunctionT< BlockContextU > function
+			, ParserParameterArray params = ParserParameterArray{} )
 		{
-			castor::addParser( parsers
+			c3d::addParser( parsers
 				, section
 				, uint32_t( newSection )
 				, name
-				, castor::RawParserFunctionT< void >( function )
-				, castor::move( params ) );
+				, RawParserFunctionT< void >( function )
+				, c3d::move( params ) );
 		}
 
 		template< typename BlockContextU >
-		void addPopParser( castor::String const & name
-			, castor::ParserFunctionT< BlockContextU > function )
+		void addPopParser( String const & name
+			, ParserFunctionT< BlockContextU > function )
 		{
-			castor::addParser( parsers
+			c3d::addParser( parsers
 				, section
 				, oldSection
 				, name
-				, castor::ParserFunctionT< void >( function ) );
+				, ParserFunctionT< void >( function ) );
 		}
 
 		template< typename BlockContextU >
-		void addPopParser( castor::String const & name
-			, castor::RawParserFunctionT< BlockContextU > function )
+		void addPopParser( String const & name
+			, RawParserFunctionT< BlockContextU > function )
 		{
-			castor::addParser( parsers
+			c3d::addParser( parsers
 				, section
 				, oldSection
 				, name
-				, castor::RawParserFunctionT< void >( function ) );
+				, RawParserFunctionT< void >( function ) );
 		}
 
 		void addDefaultPopParser()
 		{
-			castor::addParser( parsers
+			c3d::addParser( parsers
 				, section
 				, oldSection
 				, cuT( "}" )
@@ -258,17 +258,14 @@ namespace castor3d
 
 		uint32_t section;
 		uint32_t oldSection;
-		castor::AttributeParsers & parsers;
+		AttributeParsers & parsers;
 	};
 
 	template< typename Type >
 	struct LimitedType
 	{
 	};
-}
 
-namespace castor
-{
 	template<>
 	struct ParserEnumTraits< LengthUnit >
 	{
@@ -276,7 +273,7 @@ namespace castor
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT< LengthUnit >();
+				result = getEnumMapT< LengthUnit >();
 				return result;
 			}( );
 	};
@@ -288,25 +285,25 @@ namespace castor
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result[castor::makeString( ashes::getName( VK_SHADER_STAGE_VERTEX_BIT ) )] = uint32_t( VK_SHADER_STAGE_VERTEX_BIT );
-				result[castor::makeString( ashes::getName( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT ) )] = uint32_t( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT );
-				result[castor::makeString( ashes::getName( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT ) )] = uint32_t( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT );
-				result[castor::makeString( ashes::getName( VK_SHADER_STAGE_GEOMETRY_BIT ) )] = uint32_t( VK_SHADER_STAGE_GEOMETRY_BIT );
-				result[castor::makeString( ashes::getName( VK_SHADER_STAGE_FRAGMENT_BIT ) )] = uint32_t( VK_SHADER_STAGE_FRAGMENT_BIT );
-				result[castor::makeString( ashes::getName( VK_SHADER_STAGE_COMPUTE_BIT ) )] = uint32_t( VK_SHADER_STAGE_COMPUTE_BIT );
+				result[makeString( ashes::getName( VK_SHADER_STAGE_VERTEX_BIT ) )] = uint32_t( VK_SHADER_STAGE_VERTEX_BIT );
+				result[makeString( ashes::getName( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT ) )] = uint32_t( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT );
+				result[makeString( ashes::getName( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT ) )] = uint32_t( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT );
+				result[makeString( ashes::getName( VK_SHADER_STAGE_GEOMETRY_BIT ) )] = uint32_t( VK_SHADER_STAGE_GEOMETRY_BIT );
+				result[makeString( ashes::getName( VK_SHADER_STAGE_FRAGMENT_BIT ) )] = uint32_t( VK_SHADER_STAGE_FRAGMENT_BIT );
+				result[makeString( ashes::getName( VK_SHADER_STAGE_COMPUTE_BIT ) )] = uint32_t( VK_SHADER_STAGE_COMPUTE_BIT );
 				return result;
 			}( );
 	};
 
 	template<>
-	struct ParserEnumTraits< castor3d::MipmapMode >
+	struct ParserEnumTraits< MipmapMode >
 	{
 		static inline xchar const * const Name = cuT( "MipmapMode" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT( castor3d::MipmapMode::eNearest, castor3d::MipmapMode::eLinear );
-				result[cuT( "none" )] = uint32_t( castor3d::MipmapMode::eNearest );
+				result = getEnumMapT( MipmapMode::eNearest, MipmapMode::eLinear );
+				result[cuT( "none" )] = uint32_t( MipmapMode::eNearest );
 				return result;
 			}( );
 	};
@@ -318,7 +315,7 @@ namespace castor
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT( VK_BLEND_FACTOR_ZERO, VK_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA );
+				result = getEnumMapT( VK_BLEND_FACTOR_ZERO, VK_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA );
 				return result;
 			}( );
 	};
@@ -330,7 +327,7 @@ namespace castor
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT( VK_IMAGE_TYPE_1D, VK_IMAGE_TYPE_3D );
+				result = getEnumMapT( VK_IMAGE_TYPE_1D, VK_IMAGE_TYPE_3D );
 				return result;
 			}( );
 	};
@@ -342,55 +339,55 @@ namespace castor
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT( VK_BLEND_OP_ADD, VK_BLEND_OP_MAX );
+				result = getEnumMapT( VK_BLEND_OP_ADD, VK_BLEND_OP_MAX );
 				return result;
 			}( );
 	};
 
 	template<>
-	struct ParserEnumTraits< castor3d::FilterMode >
+	struct ParserEnumTraits< FilterMode >
 	{
 		static inline xchar const * const Name = cuT( "Filter" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT( castor3d::FilterMode::eNearest, castor3d::FilterMode::eLinear );
+				result = getEnumMapT( FilterMode::eNearest, FilterMode::eLinear );
 				return result;
 			}( );
 	};
 
 	template<>
-	struct ParserEnumTraits< castor3d::WrapMode >
+	struct ParserEnumTraits< WrapMode >
 	{
 		static inline xchar const * const Name = cuT( "AddressMode" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT( castor3d::WrapMode::eRepeat, castor3d::WrapMode::eMirrorClampToEdge );
+				result = getEnumMapT( WrapMode::eRepeat, WrapMode::eMirrorClampToEdge );
 				return result;
 			}( );
 	};
 
 	template<>
-	struct ParserEnumTraits< castor3d::BorderColour >
+	struct ParserEnumTraits< BorderColour >
 	{
 		static inline xchar const * const Name = cuT( "BorderColor" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT( castor3d::BorderColour::eMin, castor3d::BorderColour::eMax );
+				result = getEnumMapT( BorderColour::eMin, BorderColour::eMax );
 				return result;
 			}( );
 	};
 
 	template<>
-	struct ParserEnumTraits< castor3d::ComparisonFunc >
+	struct ParserEnumTraits< ComparisonFunc >
 	{
 		static inline xchar const * const Name = cuT( "ComparisonFunc" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT( castor3d::ComparisonFunc::eMin, castor3d::ComparisonFunc::eMax );
+				result = getEnumMapT( ComparisonFunc::eMin, ComparisonFunc::eMax );
 				return result;
 			}( );
 	};
@@ -402,13 +399,13 @@ namespace castor
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT( VK_PRIMITIVE_TOPOLOGY_POINT_LIST, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY );
+				result = getEnumMapT( VK_PRIMITIVE_TOPOLOGY_POINT_LIST, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY );
 				return result;
 			}( );
 	};
 
 	template<>
-	struct ParserEnumTraits< castor3d::LimitedType< castor3d::ComparisonFunc > >
+	struct ParserEnumTraits< LimitedType< ComparisonFunc > >
 	{
 		static inline xchar const * const Name = cuT( "ComparisonMode" );
 		static inline UInt32StrMap const Values = []()
@@ -421,15 +418,15 @@ namespace castor
 	};
 
 	template<>
-	struct ParserEnumTraits< castor3d::LimitedType< VkPrimitiveTopology > >
+	struct ParserEnumTraits< LimitedType< VkPrimitiveTopology > >
 	{
 		static inline xchar const * const Name = cuT( "PrimitiveType" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result[castor::makeString( ashes::getName( VK_PRIMITIVE_TOPOLOGY_POINT_LIST ) )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_POINT_LIST );
-				result[castor::makeString( ashes::getName( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP ) )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP );
-				result[castor::makeString( ashes::getName( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP ) )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP );
+				result[makeString( ashes::getName( VK_PRIMITIVE_TOPOLOGY_POINT_LIST ) )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_POINT_LIST );
+				result[makeString( ashes::getName( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP ) )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP );
+				result[makeString( ashes::getName( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP ) )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP );
 				return result;
 			}( );
 	};

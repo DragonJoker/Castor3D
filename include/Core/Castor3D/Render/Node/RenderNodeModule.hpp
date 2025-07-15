@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include <unordered_map>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Render */
 	//@{
@@ -111,13 +111,13 @@ namespace castor3d
 		ashes::BufferBase const * posBuffer;
 		ashes::BufferBase const * idxBuffer;
 	};
-	using PipelineBufferArray = castor::Vector< PipelineBuffer >;
+	using PipelineBufferArray = Vector< PipelineBuffer >;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, BillboardRenderNode, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SubmeshRenderNode, C3D_API );
-	CU_DeclareSmartPtr( castor3d, QueueRenderNodes, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SceneRenderNodes, C3D_API );
+	CU_DeclareSmartPtr( c3d, BillboardRenderNode, C3D_API );
+	CU_DeclareSmartPtr( c3d, SubmeshRenderNode, C3D_API );
+	CU_DeclareSmartPtr( c3d, QueueRenderNodes, C3D_API );
+	CU_DeclareSmartPtr( c3d, SceneRenderNodes, C3D_API );
 	/** @endcond */
 
 	//@}

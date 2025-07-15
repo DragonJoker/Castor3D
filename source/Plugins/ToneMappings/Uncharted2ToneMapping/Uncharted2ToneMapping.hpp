@@ -16,8 +16,8 @@ namespace Uncharted2
 	*/
 	struct ToneMapping
 	{
-		static castor::String Type;
-		static castor::MbString Name;
+		static c3d::String Type;
+		static c3d::MbString Name;
 		static void create( ast::ShaderBuilder & builder );
 	};
 }

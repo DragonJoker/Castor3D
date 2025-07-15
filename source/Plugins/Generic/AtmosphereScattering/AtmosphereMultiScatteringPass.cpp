@@ -31,9 +31,9 @@ namespace atmosphere_scattering
 			eCount,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
+		static c3d::ShaderPtr getProgram( c3d::Engine & engine
 			, uint32_t renderSize
-			, castor3d::Extent3D const & transmittanceExtent )
+			, c3d::Extent3D const & transmittanceExtent )
 		{
 			sdw::ComputeWriter writer{ &engine.getShaderAllocator() };
 
@@ -58,7 +58,7 @@ namespace atmosphere_scattering
 				, 20.0_f );// a minimum set of step is required for accuracy unfortunately
 			auto depthBufferValue = writer.declConstant( "depthBufferValue"
 				, -1.0_f );
-			auto const PI{ sdw::Float{ castor::Pi< float > } };
+			auto const PI{ sdw::Float{ c3d::Pi< float > } };
 			auto sphereSolidAngle = writer.declConstant( "sphereSolidAngle"
 				, 4.0_f * PI );
 			auto isotropicPhase = writer.declConstant( "isotropicPhase"
@@ -66,7 +66,7 @@ namespace atmosphere_scattering
 
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
-				, AtmosphereModel::Settings{ castor::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
+				, AtmosphereModel::Settings{ c3d::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
 					.setUseGround( true )
 					.setIlluminanceIsOne( true )
 				, { transmittanceExtent.width, transmittanceExtent.height } };
@@ -246,7 +246,7 @@ namespace atmosphere_scattering
 
 	AtmosphereMultiScatteringPass::AtmosphereMultiScatteringPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, crg::ImageViewId const & transmittanceLut
 		, crg::ImageViewId const & resultView
@@ -260,7 +260,7 @@ namespace atmosphere_scattering
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< crg::ComputePass >( framePass
+				auto result = c3d::makeRawUnique< crg::ComputePass >( framePass
 					, context
 					, graph
 					, crg::ru::Config{}
@@ -269,15 +269,15 @@ namespace atmosphere_scattering
 						.groupCountY( renderSize.height )
 						.enabled( &enabled )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) ) );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
 		pass.addDependencies( previousPasses );
 		atmosphereUbo.createPassBinding( pass
 			, multiscatter::eAtmosphere );
-		crg::SamplerDesc linearSampler{ castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear };
+		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
+			, c3d::FilterMode::eLinear };
 		pass.addSampledView( transmittanceLut
 			, multiscatter::eTransmittance
 			, linearSampler );
@@ -286,7 +286,7 @@ namespace atmosphere_scattering
 		m_lastPass = &pass;
 	}
 
-	void AtmosphereMultiScatteringPass::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void AtmosphereMultiScatteringPass::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_computeShader );
 	}

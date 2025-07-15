@@ -200,7 +200,7 @@ namespace GuiCommon
 	 *\param[in]	flip	Tells if the image mut be flipped.
 	 *\param[out]	bitmap	Reçoit le bitmap généré.
 	 */
-	void createBitmapFromBuffer( castor::PxBufferBase const & buffer
+	void createBitmapFromBuffer( c3d::PxBufferBase const & buffer
 		, bool flip
 		, wxBitmap & bitmap );
 	/**
@@ -217,7 +217,7 @@ namespace GuiCommon
 	 *\param[in]	flip	Tells if the image must be flipped.
 	 *\param[out]	bitmap	Reçoit le bitmap généré.
 	 */
-	void createBitmapFromBuffer( castor3d::TextureUnit const & unit
+	void createBitmapFromBuffer( c3d::TextureUnit const & unit
 		, bool flip
 		, wxBitmap & bitmap );
 	/**
@@ -232,10 +232,10 @@ namespace GuiCommon
 	 *\param[in]	fileName	Le nom du fichier de scène.
 	 *\return		true si tout s'est bien passé.
 	 */
-	castor3d::RenderWindowDesc loadScene( castor3d::Engine & engine
-		, castor::String const & appName
-		, castor::Path const & fileName
-		, castor3d::ProgressBar * progress );
+	c3d::RenderWindowDesc loadScene( c3d::Engine & engine
+		, c3d::String const & appName
+		, c3d::Path const & fileName
+		, c3d::ProgressBar * progress );
 	/**
 	 *\~english
 	 *\brief		Loads a scene, asynchronously, notifying an event handler on end.
@@ -250,10 +250,10 @@ namespace GuiCommon
 	 *\param[in]	fileName	Le nom du fichier de scène.
 	 *\return		true si tout s'est bien passé.
 	 */
-	void loadScene( castor3d::Engine & engine
-		, castor::String const & appName
-		, castor::Path const & fileName
-		, castor3d::ProgressBar * progress
+	void loadScene( c3d::Engine & engine
+		, c3d::String const & appName
+		, c3d::Path const & fileName
+		, c3d::ProgressBar * progress
 		, wxWindow * window
 		, int eventID );
 	/**
@@ -264,7 +264,7 @@ namespace GuiCommon
 	 *\brief		Charge les plug-ins du moteur.
 	 *\param[in]	engine	Le moteur.
 	 */
-	void loadPlugins( castor3d::Engine & engine );
+	void loadPlugins( c3d::Engine & engine );
 	/**
 	*\~english
 	*\name
@@ -274,11 +274,11 @@ namespace GuiCommon
 	*	Conversions de Castor vers wxWidgets.
 	*/
 	//@{
-	wxString make_wxString( castor::MbString const & value );
-	wxString make_wxString( castor::WString const & value );
-	wxString make_wxString( castor::U32String const & value );
-	wxSize make_wxSize( castor::Size const & value );
-	wxArrayString make_wxArrayString( castor::StringArray const & values );
+	wxString make_wxString( c3d::MbString const & value );
+	wxString make_wxString( c3d::WString const & value );
+	wxString make_wxString( c3d::U32String const & value );
+	wxSize make_wxSize( c3d::Size const & value );
+	wxArrayString make_wxArrayString( c3d::StringArray const & values );
 	//@}
 	/**
 	*\~english
@@ -289,12 +289,12 @@ namespace GuiCommon
 	*	Conversions de wxWidgets vers Castor.
 	*/
 	//@{
-	castor::FontUPtr make_Font( wxFont const & font );
-	castor::String make_String( wxString const & value );
-	castor::U32String make_U32String( wxString const & value );
-	castor::Path make_Path( wxString const & value );
-	castor::Size makeSize( wxSize const & value );
-	castor::StringArray make_StringArray( wxArrayString const & values );
+	c3d::FontUPtr make_Font( wxFont const & font );
+	c3d::String make_String( wxString const & value );
+	c3d::U32String make_U32String( wxString const & value );
+	c3d::Path make_Path( wxString const & value );
+	c3d::Size makeSize( wxSize const & value );
+	c3d::StringArray make_StringArray( wxArrayString const & values );
 	//@}
 	/**
 	 *\brief		Builds a wxArrayString from a an array of wxString.
@@ -302,7 +302,7 @@ namespace GuiCommon
 	 *\return		The wxArrayString.
 	 */
 	template< size_t Count >
-	wxArrayString make_wxArrayString( castor::Array< wxString, Count > values )
+	wxArrayString make_wxArrayString( c3d::Array< wxString, Count > values )
 	{
 		return wxArrayString{ Count, values.data() };
 	}
@@ -312,7 +312,7 @@ namespace GuiCommon
 	 *\return		The make_wxArrayInt.
 	 */
 	template< size_t Count >
-	wxArrayInt make_wxArrayInt( castor::Array< int, Count > values )
+	wxArrayInt make_wxArrayInt( c3d::Array< int, Count > values )
 	{
 		wxArrayInt result{ Count };
 		std::memcpy( &result[0], values.data(), Count * sizeof( int ) );
@@ -335,7 +335,7 @@ namespace GuiCommon
 	template< typename WindowT, typename ... ParamsT >
 	wxWindowPtr< WindowT > wxMakeWindowPtr( ParamsT && ... params )
 	{
-		return wxWindowPtr< WindowT >{ new WindowT{ castor::forward< ParamsT >( params )... } };
+		return wxWindowPtr< WindowT >{ new WindowT{ c3d::forward< ParamsT >( params )... } };
 	}
 }
 

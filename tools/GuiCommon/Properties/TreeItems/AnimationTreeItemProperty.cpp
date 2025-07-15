@@ -11,7 +11,7 @@
 namespace GuiCommon
 {
 	AnimationTreeItemProperty::AnimationTreeItemProperty( bool editable
-		, castor3d::Engine * engine )
+		, c3d::Engine * engine )
 		: TreeItemProperty{ engine, editable }
 	{
 		CreateTreeItemMenu();
@@ -46,13 +46,13 @@ namespace GuiCommon
 		addProperty( grid, PROPERTY_ANIMATION_STARTING_POINT, m_groupAnim.startingPoint
 			, [this]( wxVariant const & var )
 			{
-				m_groupAnim.startingPoint = variantCast< castor::Milliseconds >( var );
+				m_groupAnim.startingPoint = variantCast< c3d::Milliseconds >( var );
 				m_group->setAnimationStartingPoint( m_groupAnim.name, m_groupAnim.startingPoint );
 			} );
 		addProperty( grid, PROPERTY_ANIMATION_STOPPING_POINT, m_groupAnim.stoppingPoint
 			, [this]( wxVariant const & var )
 			{
-				m_groupAnim.stoppingPoint = variantCast< castor::Milliseconds >( var );
+				m_groupAnim.stoppingPoint = variantCast< c3d::Milliseconds >( var );
 				m_group->setAnimationStoppingPoint( m_groupAnim.name, m_groupAnim.stoppingPoint );
 			} );
 		addProperty( grid, PROPERTY_ANIMATION_LOOPED, m_groupAnim.looped
@@ -64,21 +64,21 @@ namespace GuiCommon
 		addProperty( grid, PROPERTY_ANIMATION_STATE, choices, choices[size_t( m_groupAnim.state )]
 			, [this]( wxVariant const & var )
 			{
-				auto state = castor3d::AnimationState( var.GetLong() );
+				auto state = c3d::AnimationState( var.GetLong() );
 
 				switch ( state )
 				{
-				case castor3d::AnimationState::ePlaying:
+				case c3d::AnimationState::ePlaying:
 					m_group->startAnimation( m_groupAnim.name );
-					m_groupAnim.state = castor3d::AnimationState::ePlaying;
+					m_groupAnim.state = c3d::AnimationState::ePlaying;
 					break;
-				case castor3d::AnimationState::eStopped:
+				case c3d::AnimationState::eStopped:
 					m_group->stopAnimation( m_groupAnim.name );
-					m_groupAnim.state = castor3d::AnimationState::eStopped;
+					m_groupAnim.state = c3d::AnimationState::eStopped;
 					break;
-				case castor3d::AnimationState::ePaused:
+				case c3d::AnimationState::ePaused:
 					m_group->pauseAnimation( m_groupAnim.name );
-					m_groupAnim.state = castor3d::AnimationState::ePaused;
+					m_groupAnim.state = c3d::AnimationState::ePaused;
 					break;
 				default:
 					break;

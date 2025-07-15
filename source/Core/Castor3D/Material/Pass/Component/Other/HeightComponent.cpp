@@ -11,22 +11,22 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::HeightComponent >
-		: public TextWriterT< castor3d::HeightComponent >
+	class TextWriter< HeightComponent >
+		: public TextWriterT< HeightComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::HeightComponent >{ tabs }
+			: TextWriterT< HeightComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::HeightComponent const & object
+		bool operator()( HeightComponent const & object
 			, StringStream & file )override
 		{
-			if ( object.getParallaxOcclusion() != castor3d::ParallaxOcclusionMode::eNone )
+			if ( object.getParallaxOcclusion() != ParallaxOcclusionMode::eNone )
 			{
 				return write( file, cuT( "parallax_occlusion" ), getName( object.getParallaxOcclusion() ) );
 			}
@@ -34,10 +34,7 @@ namespace castor
 			return true;
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace hgtcmp
@@ -125,14 +122,14 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void HeightComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void HeightComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "parallax_occlusion" )
 			, hgtcmp::parserPassParallaxOcclusion
-			, { castor::makeParameter< castor::ParameterType::eCheckedText, ParallaxOcclusionMode >() } );
+			, { makeParameter< ParameterType::eCheckedText, ParallaxOcclusionMode >() } );
 	}
 
 	bool HeightComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -143,16 +140,16 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const HeightComponent::TypeName = C3D_MakePassOtherComponentName( "height" );
+	String const HeightComponent::TypeName = C3D_MakePassOtherComponentName( "height" );
 
 	HeightComponent::HeightComponent( Pass & pass )
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< ParallaxOcclusionMode > >{ pass, TypeName }
+		: BaseDataPassComponentT< AtomicGroupChangeTracked< ParallaxOcclusionMode > >{ pass, TypeName }
 	{
 	}
 
 	void HeightComponent::accept( ConfigurationVisitorBase & vis )
 	{
-		static castor::StringArray names{ cuT( "None" )
+		static StringArray names{ cuT( "None" )
 			, cuT( "One" )
 			, cuT( "Repeat" ) };
 		vis.visit( cuT( "Parallax Occlusion" ) );
@@ -167,17 +164,17 @@ namespace castor3d
 
 	PassComponentUPtr HeightComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< HeightComponent >( pass );
+		auto result = makeRawUnique< HeightComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool HeightComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool HeightComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< HeightComponent >{ tabs }( *this, file );
+		return TextWriter< HeightComponent >{ tabs }( *this, file );
 	}
 
 	//*********************************************************************************************

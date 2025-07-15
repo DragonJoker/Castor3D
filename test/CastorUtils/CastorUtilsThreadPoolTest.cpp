@@ -21,8 +21,8 @@ namespace Testing
 	void CastorUtilsThreadPoolTest::Underload()
 	{
 		static constexpr size_t count = 1000000u;
-		castor::ThreadPool pool( 5u );
-		castor::Vector< size_t > data;
+		c3d::ThreadPool pool( 5u );
+		c3d::Vector< size_t > data;
 		pool.pushJob( [&data]()
 		{
 			while ( data.size() < count )
@@ -40,7 +40,7 @@ namespace Testing
 	void CastorUtilsThreadPoolTest::Exactload()
 	{
 		static constexpr size_t count = 1000000u;
-		castor::ThreadPool pool( 5u );
+		c3d::ThreadPool pool( 5u );
 		std::atomic_int value{ 0 };
 
 		auto job = [&value]()
@@ -69,7 +69,7 @@ namespace Testing
 	void CastorUtilsThreadPoolTest::Overload()
 	{
 		static constexpr size_t count = 1000000u;
-		castor::ThreadPool pool( 5u );
+		c3d::ThreadPool pool( 5u );
 		std::atomic_int value{ 0 };
 
 		auto job = [&value]()

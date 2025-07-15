@@ -6,16 +6,16 @@
 
 namespace c3d_assimp
 {
-	AssimpSceneNodeImporter::AssimpSceneNodeImporter( castor3d::Engine & engine )
-		: castor3d::SceneNodeImporter{ engine, cuT( "Assimp" ) }
+	AssimpSceneNodeImporter::AssimpSceneNodeImporter( c3d::Engine & engine )
+		: c3d::SceneNodeImporter{ engine, cuT( "Assimp" ) }
 	{
 	}
 
-	bool AssimpSceneNodeImporter::doImportSceneNode( castor3d::SceneNode & node )
+	bool AssimpSceneNodeImporter::doImportSceneNode( c3d::SceneNode & node )
 	{
 		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
 		auto name = node.getName();
-		bool isDefaultName = name == cuT( "SceneNode_" ) + castor::string::toString( node.getId() );
+		bool isDefaultName = name == cuT( "SceneNode_" ) + c3d::string::toString( node.getId() );
 		auto it = std::find_if( file.getNodes().begin()
 			, file.getNodes().end()
 			, [&name, isDefaultName]( AssimpNodeData const & lookup )

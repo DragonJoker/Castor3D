@@ -26,7 +26,7 @@ namespace atmosphere_scattering
 			eCount,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device
 			, uint32_t dimension )
 		{
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
@@ -108,7 +108,7 @@ namespace atmosphere_scattering
 
 	CloudsCurlPass::CloudsCurlPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, crg::ImageViewId const & resultView
 		, bool & enabled )
 		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "Clouds/CurlPass" ), curl::getProgram( device, getExtent( resultView ).width ) }
@@ -120,7 +120,7 @@ namespace atmosphere_scattering
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< crg::ComputePass >( framePass
+				auto result = c3d::makeRawUnique< crg::ComputePass >( framePass
 					, context
 					, graph
 					, crg::ru::Config{}
@@ -129,7 +129,7 @@ namespace atmosphere_scattering
 						.groupCountY( renderSize.height / 4u )
 						.enabled( &enabled )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) ) );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -139,7 +139,7 @@ namespace atmosphere_scattering
 		m_lastPass = &computePass;
 	}
 
-	void CloudsCurlPass::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void CloudsCurlPass::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_computeShader );
 	}

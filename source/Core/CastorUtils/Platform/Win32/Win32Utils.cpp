@@ -8,7 +8,7 @@
 #include <Windows.h>
 #include <VersionHelpers.h>
 
-namespace castor
+namespace c3d
 {
 	namespace system
 	{

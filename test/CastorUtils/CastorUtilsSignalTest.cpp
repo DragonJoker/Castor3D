@@ -7,7 +7,7 @@
 
 namespace Testing
 {
-	using castor::SignalT;
+	using c3d::SignalT;
 
 	CastorUtilsSignalTest::CastorUtilsSignalTest()
 		: TestCase( "CastorUtilsSignalTest" )
@@ -23,14 +23,14 @@ namespace Testing
 
 	void CastorUtilsSignalTest::Creation()
 	{
-		SignalT< castor::Function< void() > > signal;
+		SignalT< c3d::Function< void() > > signal;
 		auto connection( signal.connect( [](){ CU_Exception( "coucou" ); } ) );
 		CT_CHECK_THROW( signal() );
 	}
 
 	void CastorUtilsSignalTest::Assignment()
 	{
-		SignalT< castor::Function< void() > > signal;
+		SignalT< c3d::Function< void() > > signal;
 		auto connection = signal.connect( [](){ CU_Exception( "coucou" ); } );
 		connection = signal.connect( [](){ CU_Exception( "coin" ); } );
 		try
@@ -38,7 +38,7 @@ namespace Testing
 			signal();
 			CT_FAILURE( "Signal should have raised an exception" );
 		}
-		catch ( castor::Exception & exc )
+		catch ( c3d::Exception & exc )
 		{
 			CT_EQUAL( exc.getDescription(), "coin" );
 		}
@@ -47,13 +47,13 @@ namespace Testing
 
 	void CastorUtilsSignalTest::MultipleSignalConnectionAssignment()
 	{
-		SignalT< castor::Function< void() > > signal1;
-		SignalT< castor::Function< void() > > signal2;
+		SignalT< c3d::Function< void() > > signal1;
+		SignalT< c3d::Function< void() > > signal2;
 		auto conn1 = signal1.connect( [](){ CU_Exception( "coucou" ); } );
 		auto conn2 = signal2.connect( [](){ CU_Exception( "coin" ); } );
 		CT_CHECK_THROW( signal1() );
 		CT_CHECK_THROW( signal2() );
-		conn1 = castor::move( conn2 );
+		conn1 = c3d::move( conn2 );
 		CT_CHECK_NOTHROW( signal1() );
 		CT_CHECK_THROW( signal2() );
 		conn1 = signal1.connect( [](){ CU_Exception( "coucou" ); } );

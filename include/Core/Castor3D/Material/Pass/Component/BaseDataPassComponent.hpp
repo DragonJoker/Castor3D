@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_BaseDataPassComponent_H___
@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	template< typename DataT >
 	struct BaseDataPassComponentT
@@ -35,11 +35,11 @@ namespace castor3d
 		 */
 		template< typename ... ParamsT >
 		BaseDataPassComponentT( Pass & pass
-			, castor::String type
-			, castor::StringArray deps = {}
+			, String type
+			, StringArray deps = {}
 			, ParamsT && ... params )
-			: PassComponent{ pass, castor::move( type ), castor::move( deps ) }
-			, m_value{ m_dirty, castor::forward< ParamsT >( params )... }
+			: PassComponent{ pass, c3d::move( type ), c3d::move( deps ) }
+			, m_value{ m_dirty, c3d::forward< ParamsT >( params )... }
 		{
 		}
 		/**@}*/
@@ -61,7 +61,7 @@ namespace castor3d
 		template< typename ... ParamsT >
 		void setData( ParamsT && ... params )
 		{
-			m_value = { m_dirty, castor::forward< ParamsT >( params )... };
+			m_value = { m_dirty, c3d::forward< ParamsT >( params )... };
 		}
 		/**@}*/
 		/**

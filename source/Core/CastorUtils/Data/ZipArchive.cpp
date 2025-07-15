@@ -21,7 +21,7 @@
 #	include <io.h>
 #endif
 
-namespace castor
+namespace c3d
 {
 	static const size_t CHUNK = 16384;
 
@@ -31,7 +31,7 @@ namespace castor
 	{
 		static MbString getError( int error )
 		{
-			return "(code " + castor::string::toMbString( error ) + ")";
+			return "(code " + c3d::string::toMbString( error ) + ")";
 		}
 
 		struct ZipImpl
@@ -439,7 +439,7 @@ namespace castor
 	//*********************************************************************************************
 
 	ZipArchive::ZipArchive( Path const & path, File::OpenMode mode )
-		: m_impl( castor::make_unique< zlib::ZipImpl >() )
+		: m_impl( c3d::makeRawUnique< zlib::ZipImpl >() )
 	{
 		m_impl->open( path, mode );
 	}

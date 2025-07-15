@@ -7,7 +7,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -16,7 +16,7 @@ namespace castor3d
 		HdrConfigData::HdrConfigData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstance{ writer, castor::move( expr ), enabled }
+			: StructInstance{ writer, c3d::move( expr ), enabled }
 			, m_exposure{ getMember< sdw::Float >( "exposure" ) }
 			, m_gamma{ getMember< sdw::Float >( "gamma" ) }
 		{
@@ -36,9 +36,9 @@ namespace castor3d
 			return result;
 		}
 
-		castor::RawUniquePtr< sdw::Struct > HdrConfigData::declare( sdw::ShaderWriter & writer )
+		RawUniquePtr< sdw::Struct > HdrConfigData::declare( sdw::ShaderWriter & writer )
 		{
-			return castor::make_unique< sdw::Struct >( writer
+			return makeRawUnique< sdw::Struct >( writer
 				, makeType( writer.getTypesCache() ) );
 		}
 

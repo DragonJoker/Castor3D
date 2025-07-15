@@ -10,17 +10,17 @@
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceNode.hpp"
 
-CU_ImplementSmartPtr( castor3d, SkeletonAnimationInstance )
+CU_ImplementSmartPtr( c3d, SkeletonAnimationInstance )
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
 	namespace sklanminst
 	{
-		static castor::String const & getObjectTypeName( SkeletonNodeType type )
+		static String const & getObjectTypeName( SkeletonNodeType type )
 		{
-			static castor::Map< SkeletonNodeType, castor::String > Names
+			static Map< SkeletonNodeType, String > Names
 			{
 				{ SkeletonNodeType::eNode, cuT( "Node_" ) },
 				{ SkeletonNodeType::eBone, cuT( "Bone_" ) },
@@ -42,7 +42,7 @@ namespace castor3d
 			{
 			case SkeletonNodeType::eNode:
 				{
-					m_toMove.push_back( castor::makeUniqueDerived< SkeletonAnimationInstanceObject, SkeletonAnimationInstanceNode >( *this
+					m_toMove.push_back( makeUniqueDerived< SkeletonAnimationInstanceObject, SkeletonAnimationInstanceNode >( *this
 						, static_cast< SkeletonAnimationNode & >( *moving )
 						, m_toMove ) );
 				}
@@ -50,7 +50,7 @@ namespace castor3d
 
 			case SkeletonNodeType::eBone:
 				{
-					m_toMove.push_back( castor::makeUniqueDerived< SkeletonAnimationInstanceObject, SkeletonAnimationInstanceBone >( *this
+					m_toMove.push_back( makeUniqueDerived< SkeletonAnimationInstanceObject, SkeletonAnimationInstanceBone >( *this
 						, static_cast< SkeletonAnimationBone & >( *moving )
 						, m_toMove ) );
 				}
@@ -84,7 +84,7 @@ namespace castor3d
 	}
 
 	SkeletonAnimationInstanceObjectRPtr SkeletonAnimationInstance::getObject( SkeletonNodeType type
-		, castor::String const & name )const
+		, String const & name )const
 	{
 		SkeletonAnimationInstanceObjectRPtr result{};
 		auto fullName = sklanminst::getObjectTypeName( type ) + name;

@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <type_traits>
 #include <functional>
 
-namespace castor
+namespace c3d
 {
 	static const MbString ERROR_UNKNOWN_OBJECT = "Unknown object type";
 
@@ -207,7 +207,7 @@ namespace castor
 				CU_Exception( ERROR_UNKNOWN_OBJECT );
 			}
 
-			return it->create( castor::forward< Parameters >( params )... );
+			return it->create( c3d::forward< Parameters >( params )... );
 		}
 
 	protected:

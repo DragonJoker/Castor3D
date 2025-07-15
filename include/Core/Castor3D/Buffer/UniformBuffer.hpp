@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <vector>
 
-namespace castor3d
+namespace c3d
 {
 	template< typename DataT >
 	class UniformBufferT
@@ -37,7 +37,7 @@ namespace castor3d
 			, VkDeviceSize count
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags flags
-			, castor::String debugName
+			, String debugName
 			, ashes::QueueShare sharingMode = {} );
 		/**
 		 *\~english
@@ -224,7 +224,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		castor::Vector< DataT > const & getDatas()const
+		Vector< DataT > const & getDatas()const
 		{
 			return m_data;
 		}
@@ -236,13 +236,13 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		castor::Vector< DataT > & getDatas()
+		Vector< DataT > & getDatas()
 		{
 			return m_data;
 		}
 
 	private:
-		castor::Vector< DataT > m_data;
+		Vector< DataT > m_data;
 	};
 
 	template< typename DataT >
@@ -250,15 +250,15 @@ namespace castor3d
 		, VkDeviceSize count
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
-		, castor::String name
+		, String name
 		, ashes::QueueShare sharingMode = {} )
 	{
-		return castor::makeUnique< UniformBufferT< DataT > >( renderSystem
+		return makeUnique< UniformBufferT< DataT > >( renderSystem
 			, count
 			, usage
 			, flags
-			, castor::move( name )
-			, castor::move( sharingMode ) );
+			, c3d::move( name )
+			, c3d::move( sharingMode ) );
 	}
 }
 

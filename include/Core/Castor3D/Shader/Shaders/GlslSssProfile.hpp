@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	struct SssProfile
 		: public sdw::StructInstanceHelperT< "C3D_SssProfile"
@@ -26,7 +26,7 @@ namespace castor3d::shader
 		inline SssProfile( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 

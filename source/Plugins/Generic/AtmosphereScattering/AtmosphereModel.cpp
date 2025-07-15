@@ -52,11 +52,11 @@ namespace atmosphere_scattering
 	AtmosphereModel::AtmosphereModel( sdw::ShaderWriter & pwriter
 		, AtmosphereData const & patmosphereData
 		, Settings psettings
-		, castor3d::Extent2D ptransmittanceExtent )
+		, c3d::Extent2D ptransmittanceExtent )
 		: writer{ pwriter }
 		, atmosphereData{ patmosphereData }
 		, settings{ psettings }
-		, transmittanceExtent{ castor::move( ptransmittanceExtent ) }
+		, transmittanceExtent{ c3d::move( ptransmittanceExtent ) }
 		, planetRadiusOffset{ 0.01_f }
 	{
 	}
@@ -261,7 +261,7 @@ namespace atmosphere_scattering
 					auto tPrev = writer.declLocale( "tPrev", 0.0_f );
 
 					auto sampleSegmentT = 0.3_f;
-					auto uniformPhase = 1.0_f / ( 4.0_f * sdw::Float{ castor::Pi< float > } );
+					auto uniformPhase = 1.0_f / ( 4.0_f * sdw::Float{ c3d::Pi< float > } );
 
 					sdwFOR( writer, sdw::Float, s, 0.0_f, s < sampleCount, s += 1.0_f )
 					{
@@ -387,7 +387,7 @@ namespace atmosphere_scattering
 									: vec3( 0.0_f ) ) );
 
 							auto NdotL = writer.declLocale( "NdotL", clamp( dot( normalize( upVector ), normalize( sunDir ) ), 0.0_f, 1.0_f ) );
-							L += globalL * transmittanceToSun * throughput * NdotL * atmosphereData.groundAlbedo() / castor::Pi< float >;
+							L += globalL * transmittanceToSun * throughput * NdotL * atmosphereData.groundAlbedo() / c3d::Pi< float >;
 						}
 						sdwFI
 					}
@@ -705,7 +705,7 @@ namespace atmosphere_scattering
 						, 1.0f - g * g );
 					auto denom = writer.declLocale( "denom"
 						, 1.0f + g * g + 2.0f * g * cosTheta );
-					writer.returnStmt( numer / ( 4.0f * castor::Pi< float > * denom * sqrt( denom ) ) );
+					writer.returnStmt( numer / ( 4.0f * c3d::Pi< float > * denom * sqrt( denom ) ) );
 				}
 				, sdw::InFloat{ writer, "g" }
 				, sdw::InFloat{ writer, "cosTheta" } );
@@ -764,7 +764,7 @@ namespace atmosphere_scattering
 
 	sdw::Float AtmosphereModel::rayleighPhase( sdw::Float const & cosTheta )
 	{
-		return 3.0_f / ( 16.0_f * castor::Pi< float > ) * ( 1.0_f + cosTheta * cosTheta );
+		return 3.0_f / ( 16.0_f * c3d::Pi< float > ) * ( 1.0_f + cosTheta * cosTheta );
 	}
 
 	sdw::Float AtmosphereModel::fromUnitToSubUvs( sdw::Float u, sdw::Float resolution )
@@ -884,7 +884,7 @@ namespace atmosphere_scattering
 					auto beta = writer.declLocale( "beta"
 						, acos( cosBeta ) );
 					auto zenithHorizonAngle = writer.declLocale( "zenithHorizonAngle"
-						, castor::Pi< float > - beta );
+						, c3d::Pi< float > - beta );
 
 					sdwIF( writer, uv.y() < 0.5_f )
 					{
@@ -943,7 +943,7 @@ namespace atmosphere_scattering
 					auto beta = writer.declLocale( "beta"
 						, acos( cosBeta ) );
 					auto zenithHorizonAngle = writer.declLocale( "zenithHorizonAngle"
-						, sdw::Float{ castor::Pi< float > } - beta );
+						, sdw::Float{ c3d::Pi< float > } - beta );
 
 					sdwIF( writer, !intersectGround )
 					{

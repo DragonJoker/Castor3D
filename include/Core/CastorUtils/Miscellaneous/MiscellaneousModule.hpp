@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #define CU_Concat( x, y ) x ## y
 #define CU_Join( x, y ) CU_Concat( x, y )
 
-namespace castor
+namespace c3d
 {
 	/**@name Miscellaneous */
 	//@{
@@ -92,7 +92,7 @@ namespace castor
 
 	static const String cuEmptyString;
 
-	CU_DeclareSmartPtr( castor, DynamicLibrary, CU_API );
+	CU_DeclareSmartPtr( c3d, DynamicLibrary, CU_API );
 	//@}
 }
 

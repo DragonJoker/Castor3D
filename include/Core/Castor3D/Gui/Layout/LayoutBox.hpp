@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Gui/Layout/Layout.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class LayoutBox
 		: public Layout
@@ -42,12 +42,12 @@ namespace castor3d
 		//@}
 
 	private:
-		/** @copydoc	castor3d::Layout::doUpdate
+		/** @copydoc	c3d::Layout::doUpdate
 		*/
 		void doUpdate()override;
 
 		uint32_t doComputeSeparator( uint32_t component )const;
-		castor::Pair< int32_t, uint32_t > doGetFixedPosSize( Item const & item
+		Pair< int32_t, uint32_t > doGetFixedPosSize( Item const & item
 			, uint32_t limit
 			, uint32_t component )const;
 

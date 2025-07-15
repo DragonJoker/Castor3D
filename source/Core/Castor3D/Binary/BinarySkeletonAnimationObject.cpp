@@ -11,7 +11,7 @@
 #include "Castor3D/Binary/BinarySkeletonAnimationKeyFrame.hpp"
 #include "Castor3D/Binary/BinarySkeletonAnimationNode.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
@@ -20,23 +20,23 @@ namespace castor3d
 		template< typename T >
 		struct KeyFrameT
 		{
-			castor::Milliseconds m_timeIndex{};
-			castor::SquareMatrix< T, 4u > m_transform;
+			Milliseconds m_timeIndex{};
+			SquareMatrix< T, 4u > m_transform;
 		};
 
 		using KeyFrame = KeyFrameT< float >;
-		using KeyFramed = castor::Array< double, 17 >;
+		using KeyFramed = Array< double, 17 >;
 
-		static void doConvert( castor::Vector< KeyFramed > const & in
-			, castor::Vector< KeyFrame > & out )
+		static void doConvert( Vector< KeyFramed > const & in
+			, Vector< KeyFrame > & out )
 		{
 			out.resize( in.size() );
 			auto it = out.begin();
 
 			for ( auto & kf : in )
 			{
-				castor::Milliseconds timeIndex{ int64_t( kf[0] * 1000.0 ) };
-				castor::Matrix4x4f transform{ &kf[1] };
+				Milliseconds timeIndex{ int64_t( kf[0] * 1000.0 ) };
+				Matrix4x4f transform{ &kf[1] };
 				( *it ) = KeyFrame{ timeIndex, transform };
 				++it;
 			}
@@ -72,7 +72,7 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template<>
-	castor::String BinaryParserBase< SkeletonAnimationObject >::Name = cuT( "SkeletonAnimationObject" );
+	String BinaryParserBase< SkeletonAnimationObject >::Name = cuT( "SkeletonAnimationObject" );
 
 	bool BinaryParser< SkeletonAnimationObject >::doParse( SkeletonAnimationObject & obj )
 	{
@@ -86,14 +86,14 @@ namespace castor3d
 			case ChunkType::eSkeletonAnimationBone:
 				if ( m_fileVersion > Version{ 1, 5, 0 } )
 				{
-					auto bone = castor::makeUnique< SkeletonAnimationBone >( *obj.getOwner() );
+					auto bone = makeUnique< SkeletonAnimationBone >( *obj.getOwner() );
 					result = createBinaryParser< SkeletonAnimationBone >().parse( *bone, chunk );
 					checkError( result, cuT( "Couldn't parse animation bone." ) );
 
 					if ( result )
 					{
 						obj.addChild( bone.get() );
-						obj.getOwner()->addObject( castor::ptrRefCast< SkeletonAnimationObject >( bone )
+						obj.getOwner()->addObject( ptrRefCast< SkeletonAnimationObject >( bone )
 							, &obj );
 					}
 				}
@@ -101,14 +101,14 @@ namespace castor3d
 			case ChunkType::eSkeletonAnimationNode:
 				if ( m_fileVersion > Version{ 1, 5, 0 } )
 				{
-					auto node = castor::makeUnique< SkeletonAnimationNode >( *obj.getOwner() );
+					auto node = makeUnique< SkeletonAnimationNode >( *obj.getOwner() );
 					result = createBinaryParser< SkeletonAnimationNode >().parse( *node, chunk );
 					checkError( result, cuT( "Couldn't parse animation node." ) );
 
 					if ( result )
 					{
 						obj.addChild( node.get() );
-						obj.getOwner()->addObject( castor::ptrRefCast< SkeletonAnimationObject >( node )
+						obj.getOwner()->addObject( ptrRefCast< SkeletonAnimationObject >( node )
 							, &obj );
 					}
 				}
@@ -124,8 +124,8 @@ namespace castor3d
 	bool BinaryParser< SkeletonAnimationObject >::doParse_v1_1( SkeletonAnimationObject & obj )
 	{
 		bool result = true;
-		castor::Vector< binsklanmobj::KeyFrame > keyframes;
-		castor::Vector< binsklanmobj::KeyFramed > keyframesd;
+		Vector< binsklanmobj::KeyFrame > keyframes;
+		Vector< binsklanmobj::KeyFramed > keyframesd;
 		BinaryChunk chunk{ doIsLittleEndian() };
 		uint32_t count{ 0 };
 		float length{ 0.0f };
@@ -169,16 +169,16 @@ namespace castor3d
 
 						if ( it == animation.end() )
 						{
-							animation.addKeyFrame( castor::makeUniqueDerived< AnimationKeyFrame, SkeletonAnimationKeyFrame >( *obj.getOwner()
+							animation.addKeyFrame( makeUniqueDerived< AnimationKeyFrame, SkeletonAnimationKeyFrame >( *obj.getOwner()
 								, keyframe.m_timeIndex ) );
 							it = animation.find( keyframe.m_timeIndex );
 						}
 
 						auto & keyFrame = static_cast< SkeletonAnimationKeyFrame & >( **it );
-						castor::Point3f translate;
-						castor::Point3f scale;
-						castor::Quaternion rotate;
-						castor::matrix::decompose( keyframe.m_transform, translate, scale, rotate );
+						Point3f translate;
+						Point3f scale;
+						Quaternion rotate;
+						matrix::decompose( keyframe.m_transform, translate, scale, rotate );
 						keyFrame.addAnimationObject( obj
 							, translate
 							, rotate
@@ -221,7 +221,7 @@ namespace castor3d
 			case ChunkType::eSkeletonAnimationBone:
 				if ( m_fileVersion <= Version{ 1, 5, 0 } )
 				{
-					auto bone = castor::makeUnique< SkeletonAnimationBone >( *obj.getOwner() );
+					auto bone = makeUnique< SkeletonAnimationBone >( *obj.getOwner() );
 					result = createBinaryParser< SkeletonAnimationBone >().parse( *bone, chunk );
 					checkError( result, cuT( "Couldn't parse animation bone." ) );
 
@@ -234,7 +234,7 @@ namespace castor3d
 							skeleton.setNodeParent( *bone->getBone(), *objNode );
 						}
 
-						obj.getOwner()->addObject( castor::ptrRefCast< SkeletonAnimationObject >( bone )
+						obj.getOwner()->addObject( ptrRefCast< SkeletonAnimationObject >( bone )
 							, &obj );
 					}
 				}
@@ -242,7 +242,7 @@ namespace castor3d
 			case ChunkType::eSkeletonAnimationNode:
 				if ( m_fileVersion <= Version{ 1, 5, 0 } )
 				{
-					auto node = castor::makeUnique< SkeletonAnimationNode >( *obj.getOwner() );
+					auto node = makeUnique< SkeletonAnimationNode >( *obj.getOwner() );
 					result = createBinaryParser< SkeletonAnimationNode >().parse( *node, chunk );
 					checkError( result, cuT( "Couldn't parse animation node." ) );
 
@@ -255,7 +255,7 @@ namespace castor3d
 							skeleton.setNodeParent( *node->getNode(), *objNode );
 						}
 
-						obj.getOwner()->addObject( castor::ptrRefCast< SkeletonAnimationObject >( node )
+						obj.getOwner()->addObject( ptrRefCast< SkeletonAnimationObject >( node )
 							, &obj );
 					}
 				}

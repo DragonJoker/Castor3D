@@ -10,22 +10,22 @@
 
 #include <CastorUtils/Graphics/HeightMapToNormalMap.hpp>
 
-CU_ImplementSmartPtr( castor3d, MaterialImporter )
+CU_ImplementSmartPtr( c3d, MaterialImporter )
 
-namespace castor3d
+namespace c3d
 {
 	namespace matimp
 	{
-		static bool findImage( castor::Path const & path
-			, castor::Path const & filePath
-			, castor::Path & folder
-			, castor::Path & relative )
+		static bool findImage( Path const & path
+			, Path const & filePath
+			, Path & folder
+			, Path & relative )
 		{
-			if ( castor::File::fileExists( path ) )
+			if ( File::fileExists( path ) )
 			{
 				relative = path;
 			}
-			else if ( castor::File::fileExists( filePath / path ) )
+			else if ( File::fileExists( filePath / path ) )
 			{
 				auto fullPath = filePath / path;
 				folder = fullPath.getPath();
@@ -33,12 +33,12 @@ namespace castor3d
 			}
 			else
 			{
-				castor::PathArray files;
-				castor::String fileName = path.getFileName( true );
-				castor::File::listDirectoryFiles( filePath, files, true );
+				PathArray files;
+				String fileName = path.getFileName( true );
+				File::listDirectoryFiles( filePath, files, true );
 				auto it = std::find_if( files.begin()
 					, files.end()
-					, [&fileName]( castor::Path const & file )
+					, [&fileName]( Path const & file )
 					{
 						return file.getFileName( true ) == fileName
 							|| file.getFileName( true ).find( fileName ) == 0;
@@ -49,15 +49,15 @@ namespace castor3d
 				if ( it != files.end() )
 				{
 					relative = *it;
-					relative = castor::Path{ relative.substr( folder.size() + 1 ) };
+					relative = Path{ relative.substr( folder.size() + 1 ) };
 				}
 				else
 				{
-					relative = castor::Path{ fileName };
+					relative = Path{ fileName };
 				}
 			}
 
-			if ( !castor::File::fileExists( folder / relative ) )
+			if ( !File::fileExists( folder / relative ) )
 			{
 				log::error << cuT( "Couldn't load texture file [" ) << path << cuT( "]: File does not exist." ) << std::endl;
 				return false;
@@ -68,13 +68,13 @@ namespace castor3d
 	}
 
 	MaterialImporter::MaterialImporter( Engine & engine
-		, castor::String const & prefix )
+		, String const & prefix )
 		: MaterialImporter{ engine, prefix, nullptr }
 	{
 	}
 
 	MaterialImporter::MaterialImporter( Engine & engine
-		, castor::String const & prefix
+		, String const & prefix
 		, ImporterFile * file )
 		: OwnedBy< Engine >{ engine }
 		, m_prefix{ prefix + cuT( " - " ) }
@@ -82,10 +82,10 @@ namespace castor3d
 	{
 	}
 
-	MaterialPtr MaterialImporter::importData( castor::String const & name
+	MaterialPtr MaterialImporter::importData( String const & name
 		, ImporterFile * file
 		, Parameters const & parameters
-		, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
+		, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
 	{
 		if ( !m_file )
 		{
@@ -106,7 +106,7 @@ namespace castor3d
 	bool MaterialImporter::importData( Material & material
 		, ImporterFile * file
 		, Parameters const & parameters
-		, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
+		, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
 	{
 		if ( !m_file )
 		{
@@ -140,12 +140,12 @@ namespace castor3d
 	}
 
 	bool MaterialImporter::importData( Material & material
-		, castor::Path const & path
+		, Path const & path
 		, Parameters const & parameters
-		, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
+		, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
 	{
 		auto & engine = *material.getEngine();
-		auto extension = castor::string::lowerCase( path.getExtension() );
+		auto extension = string::lowerCase( path.getExtension() );
 
 		if ( !engine.getImporterFileFactory().isTypeRegistered( extension ) )
 		{
@@ -169,10 +169,10 @@ namespace castor3d
 		return false;
 	}
 
-	castor::ImageRPtr MaterialImporter::loadImage( castor::String const & name
-		, castor::ImageCreateParams const & params )const
+	ImageRPtr MaterialImporter::loadImage( String const & name
+		, ImageCreateParams const & params )const
 	{
-		castor::ImageRPtr result{};
+		ImageRPtr result{};
 
 		try
 		{
@@ -186,7 +186,7 @@ namespace castor3d
 
 			result = image;
 		}
-		catch ( castor::Exception & exc )
+		catch ( Exception & exc )
 		{
 			log::error << cuT( "Error encountered while loading image file [" ) << name << cuT( "]: " ) << exc.what() << std::endl;
 		}
@@ -202,43 +202,43 @@ namespace castor3d
 		return result;
 	}
 
-	castor::ImageRPtr MaterialImporter::loadImage( castor::Path const & path
-		, castor::ImageLoaderConfig const & loadConfig )const
+	ImageRPtr MaterialImporter::loadImage( Path const & path
+		, ImageLoaderConfig const & loadConfig )const
 	{
-		castor::ImageRPtr result{};
-		castor::Path relative;
+		ImageRPtr result{};
+		Path relative;
 
-		if ( castor::Path folder;
+		if ( Path folder;
 			matimp::findImage( path, m_file->getFilePath(), folder, relative ) )
 		{
 			result = loadImage( relative.getFileName()
-				, castor::ImageCreateParams{ folder / relative
-					, castor::move( loadConfig ) } );
+				, ImageCreateParams{ folder / relative
+					, c3d::move( loadConfig ) } );
 		}
 
 		return result;
 	}
 
-	castor::ImageRPtr MaterialImporter::loadImage( castor::Path const & path )const
+	ImageRPtr MaterialImporter::loadImage( Path const & path )const
 	{
 		return loadImage( path
 			, { false, false, false } );
 	}
 
-	castor::ImageRPtr MaterialImporter::loadImage( castor::String const & name
-		, castor::String type
-		, castor::ByteArray data
-		, castor::ImageLoaderConfig const & loadConfig )const
+	ImageRPtr MaterialImporter::loadImage( String const & name
+		, String type
+		, ByteArray data
+		, ImageLoaderConfig const & loadConfig )const
 	{
 		return loadImage( name
-			, castor::ImageCreateParams{ castor::move( type )
-				, castor::move( data )
-				, castor::move( loadConfig ) } );
+			, ImageCreateParams{ c3d::move( type )
+				, c3d::move( data )
+				, c3d::move( loadConfig ) } );
 	}
 
-	castor::ImageRPtr MaterialImporter::loadImage( castor::String name
-		, castor::String type
-		, castor::ByteArray data )const
+	ImageRPtr MaterialImporter::loadImage( String name
+		, String type
+		, ByteArray data )const
 	{
 		return loadImage( std::move( name )
 			, std::move( type )
@@ -246,15 +246,15 @@ namespace castor3d
 			, { false, false, false } );
 	}
 
-	TextureSourceInfo MaterialImporter::loadTexture( castor::Path const & path
+	TextureSourceInfo MaterialImporter::loadTexture( Path const & path
 		, TextureConfiguration const & config
-		, castor::ImageLoaderConfig const & loadConfig )const
+		, ImageLoaderConfig const & loadConfig )const
 	{
 		auto image = loadImage( path );
 
 		if ( !image )
 		{
-			CU_Exception( "Couldn't find image at path [" + castor::toUtf8( path ) + "]" );
+			CU_Exception( "Couldn't find image at path [" + toUtf8( path ) + "]" );
 		}
 
 		auto loaderConfig = loadConfig;
@@ -267,7 +267,7 @@ namespace castor3d
 			, std::move( loaderConfig ) };
 	}
 
-	TextureSourceInfo MaterialImporter::loadTexture( castor::Path const & path
+	TextureSourceInfo MaterialImporter::loadTexture( Path const & path
 		, TextureConfiguration const & config )const
 	{
 		return loadTexture( path
@@ -275,31 +275,31 @@ namespace castor3d
 			, { true, true, true } );
 	}
 
-	TextureSourceInfo MaterialImporter::loadTexture( castor::String name
-		, castor::String type
-		, castor::ByteArray data
+	TextureSourceInfo MaterialImporter::loadTexture( String name
+		, String type
+		, ByteArray data
 		, TextureConfiguration const & config
-		, castor::ImageLoaderConfig const & loadConfig )const
+		, ImageLoaderConfig const & loadConfig )const
 	{
 		if ( auto image = loadImage( name, type, data );
 			!image )
 		{
-			CU_Exception( "Couldn't load image [" + castor::toUtf8( name ) + "]" );
+			CU_Exception( "Couldn't load image [" + toUtf8( name ) + "]" );
 		}
 
 		auto loaderConfig = loadConfig;
 		loaderConfig.allowCompression = loaderConfig.allowCompression
 			&& !checkFlag( config.textureSpace, TextureSpace::eTangentSpace );
-		return TextureSourceInfo{ castor::move( name )
+		return TextureSourceInfo{ c3d::move( name )
 			, config
-			, castor::move( type )
-			, castor::move( data )
-			, castor::move( loaderConfig ) };
+			, c3d::move( type )
+			, c3d::move( data )
+			, c3d::move( loaderConfig ) };
 	}
 
-	TextureSourceInfo MaterialImporter::loadTexture( castor::String name
-		, castor::String type
-		, castor::ByteArray data
+	TextureSourceInfo MaterialImporter::loadTexture( String name
+		, String type
+		, ByteArray data
 		, TextureConfiguration const & config )const
 	{
 		return loadTexture( std::move( name )
@@ -309,11 +309,11 @@ namespace castor3d
 			, { true, true, true } );
 	}
 
-	void MaterialImporter::loadTexture( castor::Path const & path
+	void MaterialImporter::loadTexture( Path const & path
 		, TextureConfiguration const & config
 		, PassTextureConfig const & passConfig
 		, Pass & pass
-		, castor::ImageLoaderConfig const & loadConfig )const
+		, ImageLoaderConfig const & loadConfig )const
 	{
 		try
 		{
@@ -326,7 +326,7 @@ namespace castor3d
 		}
 	}
 
-	void MaterialImporter::loadTexture( castor::Path const & path
+	void MaterialImporter::loadTexture( Path const & path
 		, TextureConfiguration const & config
 		, PassTextureConfig const & passConfig
 		, Pass & pass )const
@@ -338,19 +338,19 @@ namespace castor3d
 			, { true, true, true } );
 	}
 
-	void MaterialImporter::loadTexture( castor::String name
-		, castor::String type
-		, castor::ByteArray data
+	void MaterialImporter::loadTexture( String name
+		, String type
+		, ByteArray data
 		, TextureConfiguration const & config
 		, PassTextureConfig const & passConfig
 		, Pass & pass
-		, castor::ImageLoaderConfig const & loadConfig )const
+		, ImageLoaderConfig const & loadConfig )const
 	{
 		try
 		{
-			pass.registerTexture( loadTexture( castor::move( name )
-					, castor::move( type )
-					, castor::move( data )
+			pass.registerTexture( loadTexture( c3d::move( name )
+					, c3d::move( type )
+					, c3d::move( data )
 					, config )
 				, passConfig );
 		}
@@ -360,9 +360,9 @@ namespace castor3d
 		}
 	}
 
-	void MaterialImporter::loadTexture( castor::String name
-		, castor::String type
-		, castor::ByteArray data
+	void MaterialImporter::loadTexture( String name
+		, String type
+		, ByteArray data
 		, TextureConfiguration const & config
 		, PassTextureConfig const & passConfig
 		, Pass & pass )const
@@ -376,7 +376,7 @@ namespace castor3d
 			, { true, true, true } );
 	}
 
-	bool MaterialImporter::convertToNormalMap( castor::Path & path
+	bool MaterialImporter::convertToNormalMap( Path & path
 		, TextureConfiguration & config )const
 	{
 		auto result = false;
@@ -387,12 +387,12 @@ namespace castor3d
 			{
 				log::info << getPrefix() << "Converting height map to normal map." << std::endl;
 
-				if ( castor::convertToNormalMap( 3.0f, *image ) )
+				if ( c3d::convertToNormalMap( 3.0f, *image ) )
 				{
-					castor3d::addFlagConfiguration( config
+					c3d::addFlagConfiguration( config
 						, { getEngine()->getPassComponentsRegister().getNormalMapFlags()
 							, 0x00FFFFFF } );
-					castor3d::addFlagConfiguration( config
+					c3d::addFlagConfiguration( config
 						, { getEngine()->getPassComponentsRegister().getHeightMapFlags()
 							, 0xFF000000 } );
 					path = image->getPath();
@@ -405,7 +405,7 @@ namespace castor3d
 		return result;
 	}
 
-	MaterialPtr MaterialImporter::doCreateMaterial( castor::String const & name )
+	MaterialPtr MaterialImporter::doCreateMaterial( String const & name )
 	{
 		return getOwner()->createMaterial( name
 			, *getOwner()

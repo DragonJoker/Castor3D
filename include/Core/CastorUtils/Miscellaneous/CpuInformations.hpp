@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <bitset>
 
-namespace castor
+namespace c3d
 {
 	/**
 	\~english

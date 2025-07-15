@@ -1,6 +1,6 @@
 #include "CastorUtils/Math/Quaternion.hpp"
 
-namespace castor::matrix
+namespace c3d::matrix
 {
 	template< typename T, typename U >
 	Matrix4x4< T > & rotate( Matrix4x4< T > & matrix
@@ -481,10 +481,10 @@ namespace castor::matrix
 	{
 		auto col2 = matrix[2];
 		auto col3 = matrix[3];
-		castor::swap( col2[0], col3[0] );
-		castor::swap( col2[1], col3[1] );
-		castor::swap( col2[2], col3[2] );
-		castor::swap( col2[3], col3[3] );
+		c3d::swap( col2[0], col3[0] );
+		c3d::swap( col2[1], col3[1] );
+		c3d::swap( col2[2], col3[2] );
+		c3d::swap( col2[3], col3[3] );
 		return matrix;
 	}
 	template< typename T >

@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "StyleControl.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class StaticStyle
 		: public ControlStyle
@@ -14,17 +14,17 @@ namespace castor3d
 	public:
 		static ControlType constexpr Type = ControlType::eStatic;
 
-		StaticStyle( castor::String const & name
+		StaticStyle( String const & name
 			, Engine & engine
-			, castor::String const & fontName )
+			, String const & fontName )
 			: StaticStyle{ name, nullptr, engine, fontName }
 		{
 		}
 
-		StaticStyle( castor::String const & name
+		StaticStyle( String const & name
 			, Scene * scene
 			, Engine & engine
-			, castor::String const & fontName )
+			, String const & fontName )
 			: ControlStyle{ Type
 				, name
 				, scene
@@ -34,7 +34,7 @@ namespace castor3d
 		{
 		}
 
-		void setFont( castor::StringView value )
+		void setFont( String value )
 		{
 			m_fontName = value;
 		}
@@ -44,7 +44,7 @@ namespace castor3d
 			m_textMaterial = value;
 		}
 
-		castor::String const & getFontName()const
+		String const & getFontName()const
 		{
 			return m_fontName;
 		}
@@ -64,7 +64,7 @@ namespace castor3d
 		}
 
 	private:
-		castor::String m_fontName{};
+		String m_fontName{};
 		MaterialObs m_textMaterial{};
 	};
 }

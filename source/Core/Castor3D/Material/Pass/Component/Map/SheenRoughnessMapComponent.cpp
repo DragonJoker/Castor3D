@@ -16,16 +16,16 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::SheenRoughnessMapComponent >
-		: public TextWriterT< castor3d::SheenRoughnessMapComponent >
+	class TextWriter< SheenRoughnessMapComponent >
+		: public TextWriterT< SheenRoughnessMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, uint32_t mask = 0u )
-			: TextWriterT< castor3d::SheenRoughnessMapComponent >{ tabs }
+			: TextWriterT< SheenRoughnessMapComponent >{ tabs }
 			, m_mask{ mask }
 		{
 		}
@@ -35,7 +35,7 @@ namespace castor
 			return writeMask( file, cuT( "sheen_roughness_mask" ), m_mask );
 		}
 
-		bool operator()( castor3d::SheenRoughnessMapComponent const & object
+		bool operator()( SheenRoughnessMapComponent const & object
 			, StringStream & file )override
 		{
 			return true;
@@ -44,10 +44,7 @@ namespace castor
 	private:
 		uint32_t m_mask;
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace trscmp
@@ -118,7 +115,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void SheenRoughnessMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void SheenRoughnessMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "sheen_roughness" )
@@ -130,29 +127,29 @@ namespace castor3d
 					, 0xFF000000u );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "sheen_roughness_mask" )
 			, trscmp::parserUnitSheenRoughnessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "sheen_roughness_mask" )
 			, trscmp::parserUnitSheenRoughnessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "sheen_roughness" )
 			, trscmp::parserTexRemapSheenRoughness );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "sheen_roughness_mask" )
 			, trscmp::parserTexRemapSheenRoughnessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 
 	bool SheenRoughnessMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -163,22 +160,22 @@ namespace castor3d
 	}
 
 	void SheenRoughnessMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, SheenRoughnessMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, SheenRoughnessMapComponent >( pass ) );
 	}
 
 	bool SheenRoughnessMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< SheenRoughnessMapComponent >{ tabs, mask }( file );
+		return TextWriter< SheenRoughnessMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const SheenRoughnessMapComponent::TypeName = C3D_MakePassMapComponentName( "sheen_roughness" );
+	String const SheenRoughnessMapComponent::TypeName = C3D_MakePassMapComponentName( "sheen_roughness" );
 
 	SheenRoughnessMapComponent::SheenRoughnessMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -190,7 +187,7 @@ namespace castor3d
 
 	PassComponentUPtr SheenRoughnessMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, SheenRoughnessMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, SheenRoughnessMapComponent >( pass );
 	}
 
 	void SheenRoughnessMapComponent::doFillConfig( TextureConfiguration & configuration

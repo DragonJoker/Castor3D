@@ -19,19 +19,19 @@ namespace GuiCommon
 	namespace
 	{
 		class PostEffectShaderGatherer
-			: public castor3d::ConfigurationVisitor
+			: public c3d::ConfigurationVisitor
 		{
 		private:
-			explicit PostEffectShaderGatherer( castor3d::RenderDevice const & device
+			explicit PostEffectShaderGatherer( c3d::RenderDevice const & device
 				, ShaderSources & sources )
-				: castor3d::ConfigurationVisitor{ { true } }
+				: c3d::ConfigurationVisitor{ { true } }
 				, m_device{ device }
 				, m_sources{ sources }
 			{
 			}
 
 		public:
-			static ShaderSources submit( castor3d::PostEffect & postEffect )
+			static ShaderSources submit( c3d::PostEffect & postEffect )
 			{
 				ShaderSources result;
 				PostEffectShaderGatherer vis{ postEffect.getRenderSystem()->getRenderDevice(), result };
@@ -39,7 +39,7 @@ namespace GuiCommon
 				return result;
 			}
 
-			void visit( castor3d::ShaderModule const & module
+			void visit( c3d::ShaderModule const & module
 				, bool forceProgramsVisit )override
 			{
 				if ( !module.shader
@@ -52,10 +52,10 @@ namespace GuiCommon
 
 				doGetSource( module.name ).sources.push_back( { module.shader.get()
 					, module.compiled
-					, castor3d::getEntryPointType( m_device, module.stage ) } );
+					, c3d::getEntryPointType( m_device, module.stage ) } );
 			}
 
-			void visit( castor3d::ProgramModule const & module
+			void visit( c3d::ProgramModule const & module
 				, ast::EntryPoint entryPoint
 				, bool forceProgramsVisit )override
 			{
@@ -75,12 +75,12 @@ namespace GuiCommon
 			}
 
 		private:
-			castor::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
+			c3d::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( c3d::String const & category )override
 			{
-				return castor::RawUniquePtr< ConfigurationVisitorBase >( new PostEffectShaderGatherer{ m_device, m_sources } );
+				return c3d::RawUniquePtr< ConfigurationVisitorBase >( new PostEffectShaderGatherer{ m_device, m_sources } );
 			}
 
-			ShaderSource & doGetSource( castor::String const & name )
+			ShaderSource & doGetSource( c3d::String const & name )
 			{
 				auto it = std::find_if( m_sources.begin()
 					, m_sources.end()
@@ -95,18 +95,18 @@ namespace GuiCommon
 				}
 
 				ShaderSource source{ name };
-				m_sources.emplace_back( castor::move( source ) );
+				m_sources.emplace_back( c3d::move( source ) );
 				return m_sources.back();
 			}
 
 		private:
-			castor3d::RenderDevice const & m_device;
+			c3d::RenderDevice const & m_device;
 			ShaderSources & m_sources;
 		};
 	}
 
 	PostEffectTreeItemProperty::PostEffectTreeItemProperty( bool editable
-		, castor3d::PostEffect & effect
+		, c3d::PostEffect & effect
 		, wxWindow * parent )
 		: TreeItemProperty{ effect.getRenderSystem()->getEngine(), editable }
 		, m_effect{ effect }
@@ -123,13 +123,13 @@ namespace GuiCommon
 		static wxString PROPERTY_POST_EFFECT_EDIT_SHADER = _( "View Shaders..." );
 
 		addProperty( grid, PROPERTY_CATEGORY_POST_EFFECT + m_effect.getName() );
-		addPropertyT( grid, PROPERTY_POST_EFFECT_ENABLED, m_effect.isEnabled(), &m_effect, &castor3d::PostEffect::enable );
+		addPropertyT( grid, PROPERTY_POST_EFFECT_ENABLED, m_effect.isEnabled(), &m_effect, &c3d::PostEffect::enable );
 		addProperty( grid, PROPERTY_POST_EFFECT_SHADER
 			, [this]( wxVariant const & var )
 			{
 				ShaderSources sources = PostEffectShaderGatherer::submit( m_effect );
 				ShaderDialog * editor = new ShaderDialog{ m_effect.getRenderSystem()->getEngine()
-					, castor::move( sources )
+					, c3d::move( sources )
 					, m_effect.getFullName()
 					, m_parent };
 				editor->Show();

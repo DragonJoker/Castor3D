@@ -1,6 +1,6 @@
 #include "CastorUtils/Data/Text/TextPosition.hpp"
 
-namespace castor
+namespace c3d
 {
 	TextWriter< Position >::TextWriter( String const & tabs )
 		: TextWriterT< Position >{ tabs }

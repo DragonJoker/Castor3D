@@ -52,10 +52,10 @@ namespace GuiCommon
 			bool validate{ false };
 			uint32_t shaderDebugLevel{ 0u };
 			bool unlimFPS{ false };
-			castor::LogType log{ castor::LogType::eInfo };
+			c3d::LogType log{ c3d::LogType::eInfo };
 			uint32_t fixedFPS{ 60u };
 			bool syncRender{ false };
-			castor::String rendererName;
+			c3d::String rendererName;
 			uint32_t gpuIndex{ 0u };
 			bool disableUpdateOptimisations{ false };
 			bool disableRandom{ false };
@@ -64,7 +64,7 @@ namespace GuiCommon
 			bool keepTextShaders{ false };
 			bool enableDebugTargets{ false };
 			uint32_t maxImageSize{ 0u };
-			castor::String fileName{};
+			c3d::String fileName{};
 		};
 
 	public:
@@ -82,13 +82,13 @@ namespace GuiCommon
 		 *\param[in]	steps			Le nombre d'àtapes de l'initialisation, sert pour l'affichage du splash screen.
 		 *\param[in]	version			La version de l'application.
 		 */
-		CastorApplication( castor::String internalName
-			, castor::String displayName
+		CastorApplication( c3d::String internalName
+			, c3d::String displayName
 			, uint32_t steps
-			, castor3d::Version version
+			, c3d::Version version
 			, uint32_t wantedFPS
 			, bool isCastorThreaded
-			, castor::String rendererType = castor3d::RenderTypeUndefined );
+			, c3d::String rendererType = c3d::RenderTypeUndefined );
 
 		static void assertHandler( wxString const & file
 			, int line
@@ -101,7 +101,7 @@ namespace GuiCommon
 		 *\~french
 		 *\return		Le nom de l'application.
 		 */
-		castor::String const & getInternalName()const
+		c3d::String const & getInternalName()const
 		{
 			return m_internalName;
 		}
@@ -111,7 +111,7 @@ namespace GuiCommon
 		 *\~french
 		 *\return		Le nom de l'application, tel qu'affiché dans les fenêtres.
 		 */
-		castor::String const & getDisplayName()const
+		c3d::String const & getDisplayName()const
 		{
 			return m_displayName;
 		}
@@ -121,7 +121,7 @@ namespace GuiCommon
 		 *\~french
 		 *\return		Le nom du fichier donné en ligne de commande via l'option -f.
 		 */
-		castor::String const & getFileName()const
+		c3d::String const & getFileName()const
 		{
 			return m_config.fileName;
 		}
@@ -131,7 +131,7 @@ namespace GuiCommon
 		 *\~french
 		 *\return		Le moteur Castor3D.
 		 */
-		castor3d::Engine * getCastor()const
+		c3d::Engine * getCastor()const
 		{
 			return m_castor.get();
 		}
@@ -161,7 +161,7 @@ namespace GuiCommon
 		 *\~french
 		 *\return		La version de l'application.
 		 */
-		castor3d::Version const & getVersion()const
+		c3d::Version const & getVersion()const
 		{
 			return m_version;
 		}
@@ -219,15 +219,15 @@ namespace GuiCommon
 
 	protected:
 		ImagesLoader m_imagesLoader;
-		castor::String m_internalName;
-		castor::String m_displayName;
-		castor3d::EngineUPtr m_castor;
+		c3d::String m_internalName;
+		c3d::String m_displayName;
+		c3d::EngineUPtr m_castor;
 
 	private:
-		castor::RawUniquePtr< wxLocale > m_locale;
+		c3d::RawUniquePtr< wxLocale > m_locale;
 		uint32_t m_steps;
 		SplashScreen * m_splashScreen;
-		castor3d::Version m_version;
+		c3d::Version m_version;
 		Config m_config;
 	};
 }

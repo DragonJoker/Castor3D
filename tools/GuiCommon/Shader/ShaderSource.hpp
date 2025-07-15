@@ -35,7 +35,7 @@ namespace GuiCommon
 	};
 	inline wxString const & getName( UniformType value )
 	{
-		static castor::Vector< wxString > const Names
+		static c3d::Vector< wxString > const Names
 		{
 			wxT( "Float" ),
 			wxT( "Int" ),
@@ -72,52 +72,52 @@ namespace GuiCommon
 		static UniformType constexpr value = UniformType::eUInt;
 	};
 	template<>
-	struct UniformTyper< castor::Point2f >
+	struct UniformTyper< c3d::Point2f >
 	{
 		static UniformType constexpr value = UniformType::eVec2f;
 	};
 	template<>
-	struct UniformTyper< castor::Point3f >
+	struct UniformTyper< c3d::Point3f >
 	{
 		static UniformType constexpr value = UniformType::eVec3f;
 	};
 	template<>
-	struct UniformTyper< castor::Point4f >
+	struct UniformTyper< c3d::Point4f >
 	{
 		static UniformType constexpr value = UniformType::eVec4f;
 	};
 	template<>
-	struct UniformTyper< castor::Point2i >
+	struct UniformTyper< c3d::Point2i >
 	{
 		static UniformType constexpr value = UniformType::eVec2i;
 	};
 	template<>
-	struct UniformTyper< castor::Point3i >
+	struct UniformTyper< c3d::Point3i >
 	{
 		static UniformType constexpr value = UniformType::eVec3i;
 	};
 	template<>
-	struct UniformTyper< castor::Point4i >
+	struct UniformTyper< c3d::Point4i >
 	{
 		static UniformType constexpr value = UniformType::eVec4i;
 	};
 	template<>
-	struct UniformTyper< castor::Point2ui >
+	struct UniformTyper< c3d::Point2ui >
 	{
 		static UniformType constexpr value = UniformType::eVec2ui;
 	};
 	template<>
-	struct UniformTyper< castor::Point3ui >
+	struct UniformTyper< c3d::Point3ui >
 	{
 		static UniformType constexpr value = UniformType::eVec3ui;
 	};
 	template<>
-	struct UniformTyper< castor::Point4ui >
+	struct UniformTyper< c3d::Point4ui >
 	{
 		static UniformType constexpr value = UniformType::eVec4ui;
 	};
 	template<>
-	struct UniformTyper< castor::Matrix4x4f >
+	struct UniformTyper< c3d::Matrix4x4f >
 	{
 		static UniformType constexpr value = UniformType::eMat4f;
 	};
@@ -200,12 +200,12 @@ namespace GuiCommon
 	};
 
 	template< typename T >
-	class UniformValue< castor::ChangeTracked< T > >
+	class UniformValue< c3d::ChangeTracked< T > >
 		: public UniformValueBase
 	{
 	public:
 		using ValueType = T;
-		using RefType = castor::ChangeTracked< ValueType > & ;
+		using RefType = c3d::ChangeTracked< ValueType > & ;
 		using ConstRefType = ValueType const &;
 		static bool constexpr IsTracked = true;
 		static bool constexpr IsRanged = false;
@@ -234,12 +234,12 @@ namespace GuiCommon
 	};
 
 	template< typename T >
-	class UniformValue< castor::RangedValue< T > >
+	class UniformValue< c3d::RangedValue< T > >
 		: public UniformValueBase
 	{
 	public:
 		using ValueType = T;
-		using RefType = castor::RangedValue< ValueType > &;
+		using RefType = c3d::RangedValue< ValueType > &;
 		using ConstRefType = ValueType const &;
 		static bool constexpr IsTracked = true;
 		static bool constexpr IsRanged = false;
@@ -267,12 +267,12 @@ namespace GuiCommon
 	};
 
 	template< typename T >
-	class UniformValue< castor::ChangeTracked< castor::RangedValue< T > > >
+	class UniformValue< c3d::ChangeTracked< c3d::RangedValue< T > > >
 		: public UniformValueBase
 	{
 	public:
 		using ValueType = T;
-		using RefType = castor::ChangeTracked< castor::RangedValue< ValueType > > &;
+		using RefType = c3d::ChangeTracked< c3d::RangedValue< ValueType > > &;
 		using ConstRefType = ValueType const &;
 		static bool constexpr IsTracked = true;
 		static bool constexpr IsRanged = false;
@@ -337,28 +337,28 @@ namespace GuiCommon
 	};
 
 	template< typename ValueT >
-	castor::RawUniquePtr< UniformValueBase > makeUniformValue( wxString const & name
+	c3d::RawUniquePtr< UniformValueBase > makeUniformValue( wxString const & name
 		, ValueT & value )
 	{
-		return castor::make_unique< UniformValue< ValueT > >( name, value );
+		return c3d::makeRawUnique< UniformValue< ValueT > >( name, value );
 	}
 	
 	template< typename ValueT, typename ControlT >
-	castor::RawUniquePtr< UniformValueBase > makeUniformValue( wxString const & name
+	c3d::RawUniquePtr< UniformValueBase > makeUniformValue( wxString const & name
 		, ValueT & value
-		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > control )
+		, c3d::ConfigurationVisitorBase::ControlsListT< ControlT > control )
 	{
-		return castor::make_unique< UniformValue< ValueT > >( name, value );
+		return c3d::makeRawUnique< UniformValue< ValueT > >( name, value );
 	}
 
 	struct UniformBufferValues
 	{
-		explicit UniformBufferValues( castor::String pname
+		explicit UniformBufferValues( c3d::String pname
 			, VkShaderStageFlags pstages = {}
-			, castor::Vector< castor::RawUniquePtr< UniformValueBase > > puniforms = {} )
-			: name{ castor::move( pname ) }
+			, c3d::Vector< c3d::RawUniquePtr< UniformValueBase > > puniforms = {} )
+			: name{ c3d::move( pname ) }
 			, stages{ pstages }
-			, uniforms{ castor::move( puniforms ) }
+			, uniforms{ c3d::move( puniforms ) }
 		{
 		}
 
@@ -369,24 +369,24 @@ namespace GuiCommon
 
 		wxString name;
 		VkShaderStageFlags stages;
-		castor::Vector< castor::RawUniquePtr< UniformValueBase > > uniforms;
+		c3d::Vector< c3d::RawUniquePtr< UniformValueBase > > uniforms;
 	};
 
 	struct ShaderEntryPoint
 	{
 		ast::Shader * shader;
-		castor3d::SpirVShader source;
+		c3d::SpirVShader source;
 		ast::EntryPoint entryPoint;
 	};
 
 	struct ShaderSource
 	{
-		explicit ShaderSource( castor::String pname
-			, castor::Vector< ShaderEntryPoint > psources = {}
-			, castor::Vector< UniformBufferValues > pubos = {} )
-			: name{ castor::move( pname ) }
-			, sources{ castor::move( psources ) }
-			, ubos{ castor::move( pubos ) }
+		explicit ShaderSource( c3d::String pname
+			, c3d::Vector< ShaderEntryPoint > psources = {}
+			, c3d::Vector< UniformBufferValues > pubos = {} )
+			: name{ c3d::move( pname ) }
+			, sources{ c3d::move( psources ) }
+			, ubos{ c3d::move( pubos ) }
 		{
 		}
 
@@ -395,12 +395,12 @@ namespace GuiCommon
 		ShaderSource & operator=( ShaderSource const & ) = delete;
 		ShaderSource & operator=( ShaderSource && ) = default;
 
-		castor::String name;
-		castor::Vector< ShaderEntryPoint > sources;
-		castor::Vector< UniformBufferValues > ubos;
+		c3d::String name;
+		c3d::Vector< ShaderEntryPoint > sources;
+		c3d::Vector< UniformBufferValues > ubos;
 	};
 
-	using ShaderSources = castor::Vector< ShaderSource >;
+	using ShaderSources = c3d::Vector< ShaderSource >;
 }
 
 #endif

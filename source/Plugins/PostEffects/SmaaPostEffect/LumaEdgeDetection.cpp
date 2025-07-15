@@ -25,7 +25,7 @@ namespace smaa
 {
 	namespace lumaed
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
 		enum Idx : uint32_t
 		{
@@ -33,7 +33,7 @@ namespace smaa
 			PredicationTexIdx,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device
 			, bool predication )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
@@ -150,24 +150,24 @@ namespace smaa
 
 			EdgeDetection::getVertexProgram( writer, c3d_smaaData );
 
-			writer.implementEntryPointT< EDVertexT, c3d::Colour4FT >( [&]( sdw::FragmentInT< EDVertexT > in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< EDVertexT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< EDVertexT > in
+				, sdw::FragmentOutT< c3ds::Colour4FT > out )
 				{
 					out.colour() = vec4( 0.0_f );
 					out.colour().xy() = SMAALumaEdgeDetectionPS( in.texcoord(), in.offset() );
 				} );
 
-			return castor::make_unique< sdw::Shader >( castor::move( writer.getShader() ) );
+			return c3d::makeRawUnique< sdw::Shader >( c3d::move( writer.getShader() ) );
 		}
 
 		static crg::ImageViewData doCreatePredicationView( crg::ImageViewId const & pred )
 		{
 			return crg::ImageViewData{ "SMLEDPred"
 				, pred.data->image
-				, castor3d::ImageViewCreateFlags::eNone
-				, castor3d::ImageViewType::e2D
+				, c3d::ImageViewCreateFlags::eNone
+				, c3d::ImageViewType::e2D
 				, getFormat( pred )
-				, { castor3d::ImageAspectFlags::eColor, 0u, 1u, 0u, 1u } };
+				, { c3d::ImageAspectFlags::eColor, 0u, 1u, 0u, 1u } };
 		}
 	}
 
@@ -175,8 +175,8 @@ namespace smaa
 
 	LumaEdgeDetection::LumaEdgeDetection( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
-		, castor3d::RenderTarget & renderTarget
-		, castor3d::RenderDevice const & device
+		, c3d::RenderTarget & renderTarget
+		, c3d::RenderDevice const & device
 		, SmaaUbo const & ubo
 		, crg::ImageViewIdArray const & colourView
 		, crg::ImageViewId const * predication
@@ -197,12 +197,12 @@ namespace smaa
 			? m_graph.createView( lumaed::doCreatePredicationView( *predication ) )
 			: crg::ImageViewId{} ) }
 	{
-		crg::SamplerDesc linearSampler{ castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest
-			, castor3d::WrapMode::eClampToEdge
-			, castor3d::WrapMode::eClampToEdge
-			, castor3d::WrapMode::eClampToEdge };
+		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
+			, c3d::FilterMode::eLinear
+			, c3d::MipmapMode::eNearest
+			, c3d::WrapMode::eClampToEdge
+			, c3d::WrapMode::eClampToEdge
+			, c3d::WrapMode::eClampToEdge };
 		m_pass.addSampledView( colourView
 			, lumaed::ColorTexIdx
 			, linearSampler );

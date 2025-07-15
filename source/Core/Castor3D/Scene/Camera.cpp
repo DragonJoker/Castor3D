@@ -8,15 +8,15 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, Camera )
+CU_ImplementSmartPtr( c3d, Camera )
 
-namespace castor3d
+namespace c3d
 {
 	namespace camera
 	{
 		static CU_ImplementAttributeParserBlock( parserCameraParent, CameraContext )
 		{
-			auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+			auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 			SceneNodeRPtr parent = blockContext->scene->scene->findSceneNode( name );
 
 			if ( parent )
@@ -45,7 +45,7 @@ namespace castor3d
 
 		static CU_ImplementAttributeParserBlock( parserCameraViewport, CameraContext )
 		{
-			blockContext->viewport = castor::makeUnique< Viewport >( *getEngine( *blockContext ) );
+			blockContext->viewport = makeUnique< Viewport >( *getEngine( *blockContext ) );
 			blockContext->viewport->setPerspective( 0.0_degrees, 1, 0, 1 );
 		}
 		CU_EndAttributePushBlock( CSCNSection::eViewport, blockContext )
@@ -77,9 +77,9 @@ namespace castor3d
 				auto camera = blockContext->scene->scene->addNewCamera( blockContext->name
 					, *blockContext->scene->scene
 					, *node
-					, castor::move( *blockContext->viewport.release() ) );
-				camera->setHdrConfig( castor::move( blockContext->hdrConfig ) );
-				camera->setColourGradingConfig( castor::move( blockContext->colourGradingConfig ) );
+					, c3d::move( *blockContext->viewport.release() ) );
+				camera->setHdrConfig( c3d::move( blockContext->hdrConfig ) );
+				camera->setColourGradingConfig( c3d::move( blockContext->colourGradingConfig ) );
 				log::info << "Loaded camera [" << camera->getName() << "]" << std::endl;
 			}
 		}
@@ -184,7 +184,7 @@ namespace castor3d
 			}
 			else
 			{
-				blockContext->viewport->resize( params[0]->get< castor::Size >() );
+				blockContext->viewport->resize( params[0]->get< Size >() );
 			}
 		}
 		CU_EndAttribute()
@@ -197,7 +197,7 @@ namespace castor3d
 			}
 			else
 			{
-				blockContext->viewport->updateFovY( castor::Angle::fromDegrees( params[0]->get< float >() ) );
+				blockContext->viewport->updateFovY( Angle::fromDegrees( params[0]->get< float >() ) );
 			}
 		}
 		CU_EndAttribute()
@@ -216,19 +216,19 @@ namespace castor3d
 		CU_EndAttribute()
 	}
 
-	Camera::Camera( castor::String const & name
+	Camera::Camera( String const & name
 		, Scene & scene
 		, SceneNode & node
 		, Viewport viewport
 		, bool ownProjMtx )
 		: MovableObject{ name, scene, MovableType::eCamera, node }
-		, m_viewport{ castor::move( viewport ) }
+		, m_viewport{ c3d::move( viewport ) }
 		, m_frustum{ m_viewport }
 		, m_ownProjection{ ownProjMtx }
 	{
 	}
 
-	Camera::Camera( castor::String const & name
+	Camera::Camera( String const & name
 		, Scene & scene
 		, SceneNode & node
 		, bool ownProjMtx )
@@ -240,7 +240,7 @@ namespace castor3d
 	{
 	}
 
-	Camera::Camera( castor::String const & name
+	Camera::Camera( String const & name
 		, CameraCreateInfo const & createInfo )
 		: Camera{ name
 			, *createInfo.scene
@@ -271,21 +271,21 @@ namespace castor3d
 			m_viewport.update();
 			auto position = node->getDerivedPosition();
 			auto const & orientation = node->getDerivedOrientation();
-			castor::Point3f right{ 1.0, 0.0, 0.0 };
-			castor::Point3f up{ 0.0, 1.0, 0.0 };
+			Point3f right{ 1.0, 0.0, 0.0 };
+			Point3f up{ 0.0, 1.0, 0.0 };
 			orientation.transform( right, right );
 			orientation.transform( up, up );
-			castor::Point3f front{ castor::point::cross( right, up ) };
-			up = castor::point::cross( front, right );
+			Point3f front{ point::cross( right, up ) };
+			up = point::cross( front, right );
 
 			// Update view matrix
-			castor::matrix::lookAt( m_view, position, position + front, up );
+			matrix::lookAt( m_view, position, position + front, up );
 			updateFrustum();
 			onGpuChanged( *this );
 		}
 	}
 
-	void Camera::setProjection( castor::Matrix4x4f const & projection )
+	void Camera::setProjection( Matrix4x4f const & projection )
 	{
 		CU_Require( m_ownProjection );
 
@@ -319,9 +319,8 @@ namespace castor3d
 		m_viewport.cloneInto( output.m_viewport );
 	}
 
-	void Camera::addParsers( castor::AttributeParsers & result )
+	void Camera::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< CameraContext > cameraCtx{ result, CSCNSection::eCamera, CSCNSection::eScene };
 		BlockParserContextT< CameraContext > viewportCtx{ result, CSCNSection::eViewport, CSCNSection::eCamera };
 
@@ -343,7 +342,7 @@ namespace castor3d
 		viewportCtx.addDefaultPopParser();
 	}
 
-	castor::Matrix4x4f Camera::getRescaledProjection( float scale
+	Matrix4x4f Camera::getRescaledProjection( float scale
 		, bool safeBanded )const
 	{
 		if ( m_ownProjection )

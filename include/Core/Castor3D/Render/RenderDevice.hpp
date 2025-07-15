@@ -18,7 +18,7 @@ See LICENSE file in root folder
 #include <array>
 #include <vector>
 
-namespace castor3d
+namespace c3d
 {
 	struct VkStructure
 	{
@@ -32,19 +32,19 @@ namespace castor3d
 
 	struct ExtensionStruct
 	{
-		ExtensionStruct( castor::MbString extName
+		ExtensionStruct( MbString extName
 			, VkStructure * extStruct )
-			: extName{ castor::move( extName ) }
+			: extName{ c3d::move( extName ) }
 			, extStruct{ extStruct }
 		{
 		}
 
-		castor::MbString extName;
+		MbString extName;
 		VkStructure * extStruct;
 	};
 
-	using FeatureArray = castor::Vector< ExtensionStruct >;
-	using PropertyArray = castor::Vector< ExtensionStruct >;
+	using FeatureArray = Vector< ExtensionStruct >;
+	using PropertyArray = Vector< ExtensionStruct >;
 
 	struct Extensions
 	{
@@ -57,7 +57,7 @@ namespace castor3d
 		*\brief
 		*	Ajoute une extension.
 		*/
-		C3D_API void addExtension( castor::MbString const & extName );
+		C3D_API void addExtension( MbString const & extName );
 		/**
 		*\~english
 		*\brief
@@ -66,7 +66,7 @@ namespace castor3d
 		*\brief
 		*	Ajoute une extension, et sa feature structure optionnelle, qui sera remplie via le physical device.
 		*/
-		C3D_API void addExtension( castor::MbString const & extName
+		C3D_API void addExtension( MbString const & extName
 			, VkStructure * featureStruct
 			, VkStructure * propertyStruct = nullptr );
 		/**
@@ -78,7 +78,7 @@ namespace castor3d
 		*	Ajoute une feature structure, qui sera remplie via le physical device.
 		*/
 		template< typename StructT >
-		void addFeature( castor::MbString const & extName
+		void addFeature( MbString const & extName
 			, StructT * featureStruct )
 		{
 			if ( featureStruct )
@@ -98,7 +98,7 @@ namespace castor3d
 		template< typename StructT >
 		void addFeature( StructT * featureStruct )
 		{
-			addFeature( castor::MbString{}, featureStruct );
+			addFeature( MbString{}, featureStruct );
 		}
 		/**
 		*\~english
@@ -109,7 +109,7 @@ namespace castor3d
 		*	Ajoute une feature structure, qui sera remplie via le physical device.
 		*/
 		template< typename StructT >
-		void addProperty( castor::MbString const & extName
+		void addProperty( MbString const & extName
 			, StructT * propStruct )
 		{
 			if ( propStruct )
@@ -129,7 +129,7 @@ namespace castor3d
 		template< typename StructT >
 		void addProperty( StructT * propStruct )
 		{
-			addProperty( castor::MbString{}, propStruct );
+			addProperty( MbString{}, propStruct );
 		}
 
 		ashes::StringArray const & getExtensionsNames()const noexcept
@@ -189,7 +189,7 @@ namespace castor3d
 		ashes::QueuePtr queue;
 		ashes::CommandPoolPtr commandPool;
 	};
-	using QueueDataPtr = castor::RawUniquePtr< QueueData >;
+	using QueueDataPtr = RawUniquePtr< QueueData >;
 
 	struct QueueDataWrapper
 	{
@@ -275,17 +275,17 @@ namespace castor3d
 			QueueData const * data{};
 			uint32_t count{};
 #ifndef NDEBUG
-			castor::String callstack{};
+			String callstack{};
 #endif
 		};
 
-		castor::Vector< QueueDataPtr > m_allQueuesData;
+		Vector< QueueDataPtr > m_allQueuesData;
 
-		mutable castor::Mutex m_mutex;
-		mutable castor::Vector< QueueData const * > m_remainingQueuesData;
-		castor::Map< std::thread::id, QueueThreadData > m_busyQueues;
+		mutable Mutex m_mutex;
+		mutable Vector< QueueData const * > m_remainingQueuesData;
+		Map< std::thread::id, QueueThreadData > m_busyQueues;
 	};
-	using QueueFamilies = castor::Vector< QueuesData >;
+	using QueueFamilies = Vector< QueuesData >;
 
 	struct RenderDevice
 	{
@@ -295,14 +295,14 @@ namespace castor3d
 			, Extensions deviceExtensions );
 		C3D_API ~RenderDevice()noexcept;
 
-		C3D_API castor::PixelFormat selectSuitableDepthFormat( VkFormatFeatureFlags requiredFeatures )const;
-		C3D_API castor::PixelFormat selectSuitableStencilFormat( VkFormatFeatureFlags requiredFeatures )const;
-		C3D_API castor::PixelFormat selectSuitableDepthStencilFormat( VkFormatFeatureFlags requiredFeatures )const;
-		C3D_API castor::PixelFormat selectSmallestFormatRSFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
-		C3D_API castor::PixelFormat selectSmallestFormatRGSFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
-		C3D_API castor::PixelFormat selectSmallestFormatRGBUFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
-		C3D_API castor::PixelFormat selectSmallestFormatRGBSFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
-		C3D_API castor::PixelFormat selectSuitableFormat( castor::Vector< castor::PixelFormat > const & formats
+		C3D_API PixelFormat selectSuitableDepthFormat( VkFormatFeatureFlags requiredFeatures )const;
+		C3D_API PixelFormat selectSuitableStencilFormat( VkFormatFeatureFlags requiredFeatures )const;
+		C3D_API PixelFormat selectSuitableDepthStencilFormat( VkFormatFeatureFlags requiredFeatures )const;
+		C3D_API PixelFormat selectSmallestFormatRSFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
+		C3D_API PixelFormat selectSmallestFormatRGSFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
+		C3D_API PixelFormat selectSmallestFormatRGBUFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
+		C3D_API PixelFormat selectSmallestFormatRGBSFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
+		C3D_API PixelFormat selectSuitableFormat( Vector< PixelFormat > const & formats
 			, VkFormatFeatureFlags requiredFeatures )const;
 		C3D_API QueueDataWrapper graphicsData()const noexcept;
 		C3D_API size_t graphicsQueueSize()const noexcept;
@@ -310,7 +310,7 @@ namespace castor3d
 		C3D_API void unreserveGraphicsData( QueueData const * queueData )const noexcept;
 		C3D_API void putGraphicsData( QueueData const * queueData )const noexcept;
 		C3D_API crg::GraphContext & makeContext()const noexcept;
-		C3D_API bool hasExtension( castor::MbStringView name )const noexcept;
+		C3D_API bool hasExtension( MbStringView name )const noexcept;
 		C3D_API bool hasTerminateInvocation()const noexcept;
 		C3D_API bool hasDemoteToHelperInvocation()const noexcept;
 		C3D_API bool hasMeshAndTaskShaders()const noexcept;
@@ -409,7 +409,7 @@ namespace castor3d
 		UniformBufferPoolUPtr uboPool;
 
 	private:
-		bool doTryAddExtension( castor::MbString const & name
+		bool doTryAddExtension( MbString const & name
 			, void * pFeature = nullptr
 			, void * pProperty = nullptr );
 
@@ -545,9 +545,9 @@ namespace castor3d
 		bool m_hasFeatures12{};
 		bool m_hasFeatures13{};
 
-		using GraphContextPtr = castor::RawUniquePtr< crg::GraphContext >;
-		using ThreadGraphContexts = castor::Map< std::thread::id, GraphContextPtr >;
-		mutable castor::Mutex m_mutex;
+		using GraphContextPtr = RawUniquePtr< crg::GraphContext >;
+		using ThreadGraphContexts = Map< std::thread::id, GraphContextPtr >;
+		mutable Mutex m_mutex;
 		mutable ThreadGraphContexts m_contexts;
 	};
 }

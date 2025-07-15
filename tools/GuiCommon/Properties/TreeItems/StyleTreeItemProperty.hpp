@@ -25,9 +25,9 @@ namespace GuiCommon
 		 *\param[in]	engine		Le moteur.
 		 */
 		StyleTreeItemProperty( bool editable
-			, castor3d::Engine * engine );
+			, c3d::Engine * engine );
 
-		void setData( castor3d::ControlStyle & data )noexcept
+		void setData( c3d::ControlStyle & data )noexcept
 		{
 			clearProperties();
 			m_style = &data;
@@ -40,18 +40,18 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		void doCreateStyleProperties( wxPropertyGrid * grid, castor3d::ButtonStyle & object );
-		void doCreateStyleProperties( wxPropertyGrid * grid, castor3d::ComboBoxStyle & object );
-		void doCreateStyleProperties( wxPropertyGrid * grid, castor3d::EditStyle & object );
-		void doCreateStyleProperties( wxPropertyGrid * grid, castor3d::ExpandablePanelStyle & object );
-		void doCreateStyleProperties( wxPropertyGrid * grid, castor3d::FrameStyle & object );
-		void doCreateStyleProperties( wxPropertyGrid * grid, castor3d::ListBoxStyle & object );
-		void doCreateStyleProperties( wxPropertyGrid * grid, castor3d::PanelStyle & object );
-		void doCreateStyleProperties( wxPropertyGrid * grid, castor3d::SliderStyle & object );
-		void doCreateStyleProperties( wxPropertyGrid * grid, castor3d::StaticStyle & object );
+		void doCreateStyleProperties( wxPropertyGrid * grid, c3d::ButtonStyle & object );
+		void doCreateStyleProperties( wxPropertyGrid * grid, c3d::ComboBoxStyle & object );
+		void doCreateStyleProperties( wxPropertyGrid * grid, c3d::EditStyle & object );
+		void doCreateStyleProperties( wxPropertyGrid * grid, c3d::ExpandablePanelStyle & object );
+		void doCreateStyleProperties( wxPropertyGrid * grid, c3d::FrameStyle & object );
+		void doCreateStyleProperties( wxPropertyGrid * grid, c3d::ListBoxStyle & object );
+		void doCreateStyleProperties( wxPropertyGrid * grid, c3d::PanelStyle & object );
+		void doCreateStyleProperties( wxPropertyGrid * grid, c3d::SliderStyle & object );
+		void doCreateStyleProperties( wxPropertyGrid * grid, c3d::StaticStyle & object );
 
 	private:
-		castor3d::ControlStyle * m_style{};
+		c3d::ControlStyle * m_style{};
 		wxArrayString m_materials;
 		wxArrayString m_fonts;
 	};

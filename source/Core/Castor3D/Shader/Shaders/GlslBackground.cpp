@@ -8,7 +8,7 @@
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	BackgroundModel::BackgroundModel( sdw::ShaderWriter & writer
 		, Utils & utils
@@ -18,7 +18,7 @@ namespace castor3d::shader
 		, bool iblSupport )
 		: m_writer{ writer }
 		, m_utils{ utils }
-		, m_targetSize{ castor::move( targetSize ) }
+		, m_targetSize{ c3d::move( targetSize ) }
 		, m_reflectionSupport{ reflectionSupport }
 		, m_refractionSupport{ refractionSupport }
 		, m_iblSupport{ iblSupport }
@@ -37,7 +37,7 @@ namespace castor3d::shader
 			, *scene.getEngine()
 			, writer
 			, utils
-			, castor::move( targetSize )
+			, c3d::move( targetSize )
 			, needsForeground
 			, binding
 			, set );

@@ -15,17 +15,17 @@ namespace GuiCommon
 		{
 		public:
 			virtual ~IRecorderImpl() = default;
-			virtual bool StartRecord( castor::Size const & size, int wantedFPS ) = 0;
+			virtual bool StartRecord( c3d::Size const & size, int wantedFPS ) = 0;
 			virtual bool IsRecording() = 0;
 			virtual bool UpdateTime() = 0;
-			virtual bool RecordFrame( castor::PxBufferBaseRPtr buffer ) = 0;
+			virtual bool RecordFrame( c3d::PxBufferBaseRPtr buffer ) = 0;
 			virtual void StopRecord() = 0;
 		};
 
 	public:
 		Recorder();
 
-		inline bool StartRecord( castor::Size const & size, int wantedFPS )
+		inline bool StartRecord( c3d::Size const & size, int wantedFPS )
 		{
 			bool result = !IsRecording();
 
@@ -47,7 +47,7 @@ namespace GuiCommon
 			return m_impl->UpdateTime();
 		}
 
-		inline bool RecordFrame( castor::PxBufferBaseRPtr buffer )
+		inline bool RecordFrame( c3d::PxBufferBaseRPtr buffer )
 		{
 			return m_impl->RecordFrame( buffer );
 		}
@@ -61,7 +61,7 @@ namespace GuiCommon
 		}
 
 	private:
-		castor::RawUniquePtr< IRecorderImpl > m_impl;
+		c3d::RawUniquePtr< IRecorderImpl > m_impl;
 	};
 }
 

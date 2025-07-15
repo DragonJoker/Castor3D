@@ -15,29 +15,26 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::ClearcoatComponent >
-		: public TextWriterT< castor3d::ClearcoatComponent >
+	class TextWriter< ClearcoatComponent >
+		: public TextWriterT< ClearcoatComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::ClearcoatComponent >{ tabs }
+			: TextWriterT< ClearcoatComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::ClearcoatComponent const & object
+		bool operator()( ClearcoatComponent const & object
 			, StringStream & file )override
 		{
-			return writeOpt( file, cuT( "clearcoat_factor" ), object.getClearcoatFactor(), castor3d::ClearcoatComponent::DefaultFactor )
-				&& writeOpt( file, cuT( "clearcoat_roughness_factor" ), object.getRoughnessFactor(), castor3d::ClearcoatComponent::DefaultRoughness );
+			return writeOpt( file, cuT( "clearcoat_factor" ), object.getClearcoatFactor(), ClearcoatComponent::DefaultFactor )
+				&& writeOpt( file, cuT( "clearcoat_roughness_factor" ), object.getRoughnessFactor(), ClearcoatComponent::DefaultRoughness );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace coating
@@ -225,19 +222,19 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void ClearcoatComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void ClearcoatComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "clearcoat_factor" )
 			, coating::parserPassClearcoatFactor
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "clearcoat_roughness_factor" )
 			, coating::parserPassRoughnessFactor
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { makeParameter< ParameterType::eFloat >() } );
 	}
 
 	void ClearcoatComponent::Plugin::zeroBuffer( Pass const & pass
@@ -258,7 +255,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const ClearcoatComponent::TypeName = C3D_MakePassLightingComponentName( "clearcoat" );
+	String const ClearcoatComponent::TypeName = C3D_MakePassLightingComponentName( "clearcoat" );
 
 	ClearcoatComponent::ClearcoatComponent( Pass & pass )
 		: BaseDataPassComponentT{ pass, TypeName, {}
@@ -275,17 +272,17 @@ namespace castor3d
 
 	PassComponentUPtr ClearcoatComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< ClearcoatComponent >( pass );
+		auto result = makeRawUnique< ClearcoatComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool ClearcoatComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool ClearcoatComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< ClearcoatComponent >{ tabs }( *this, file );
+		return TextWriter< ClearcoatComponent >{ tabs }( *this, file );
 	}
 
 	void ClearcoatComponent::doFillBuffer( PassBuffer & buffer )const

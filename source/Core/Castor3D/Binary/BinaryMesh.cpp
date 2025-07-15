@@ -7,7 +7,7 @@
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
@@ -32,7 +32,7 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template<>
-	castor::String BinaryParserBase< Mesh >::Name = cuT( "Mesh" );
+	String BinaryParserBase< Mesh >::Name = cuT( "Mesh" );
 
 	BinaryParser< Mesh >::BinaryParser( uint32_t submeshIndex )
 		: m_submeshIndex{ submeshIndex }
@@ -52,7 +52,7 @@ namespace castor3d
 			{
 				if ( m_submeshIndex == 0xFFFFFFFFu || m_submeshIndex == submeshIndex )
 				{
-					submesh = castor::makeUnique< Submesh >( obj, obj.getSubmeshCount() );
+					submesh = makeUnique< Submesh >( obj, obj.getSubmeshCount() );
 					result = createBinaryParser< Submesh >().parse( *submesh, chunk );
 					checkError( result, cuT( "Couldn't parse submesh." ) );
 
@@ -61,7 +61,7 @@ namespace castor3d
 						&& ( !submesh->getIndexMapping()
 							|| submesh->getIndexMapping()->getCount() > 0 ) )
 					{
-						obj.m_submeshes.push_back( castor::move( submesh ) );
+						obj.m_submeshes.push_back( c3d::move( submesh ) );
 					}
 				}
 

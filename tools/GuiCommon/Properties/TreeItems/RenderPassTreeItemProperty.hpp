@@ -12,7 +12,7 @@ namespace GuiCommon
 {
 	void fillRenderPassConfiguration( wxPropertyGrid * grid
 		, TreeItemProperty & properties
-		, castor3d::RenderTechniqueNodesPass & renderPass );
+		, c3d::RenderTechniqueNodesPass & renderPass );
 }
 
 #endif

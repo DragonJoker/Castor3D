@@ -13,36 +13,36 @@
 #include <ShaderAST/Expr/ExprComma.hpp>
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementSmartPtr( castor3d::shader, Shadow )
-CU_ImplementSmartPtr( castor3d::shader, ShadowsBuffer )
+CU_ImplementSmartPtr( c3d::shader, Shadow )
+CU_ImplementSmartPtr( c3d::shader, ShadowsBuffer )
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//*********************************************************************************************
 
 	namespace shadow
 	{
-		castor::MbString const MapDepthDirectional = "c3d_shdMapDepthDirectional";
-		castor::MbString const MapDepthSpot = "c3d_shdMapDepthSpot";
-		castor::MbString const MapDepthPoint = "c3d_shdMapDepthPoint";
-		castor::MbString const MapDepthCmpDirectional = "c3d_shdMapDepthCmpDirectional";
-		castor::MbString const MapDepthCmpSpot = "c3d_shdMapDepthCmpSpot";
-		castor::MbString const MapDepthCmpPoint = "c3d_shdMapDepthCmpPoint";
-		castor::MbString const MapVarianceDirectional = "c3d_shdMapVarianceDirectional";
-		castor::MbString const MapVarianceSpot = "c3d_shdMapVarianceSpot";
-		castor::MbString const MapVariancePoint = "c3d_shdMapVariancePoint";
-		castor::MbString const MapNormalDirectional = "c3d_shdMapNormalDirectional";
-		castor::MbString const MapNormalSpot = "c3d_shdMapNormalSpot";
-		castor::MbString const MapNormalPoint = "c3d_shdMapNormalPoint";
-		castor::MbString const MapPositionDirectional = "c3d_shdMapPositionDirectional";
-		castor::MbString const MapPositionSpot = "c3d_shdMapPositionSpot";
-		castor::MbString const MapPositionPoint = "c3d_shdMapPositionPoint";
-		castor::MbString const MapFluxDirectional = "c3d_shdMapFluxDirectional";
-		castor::MbString const MapFluxSpot = "c3d_shdMapFluxSpot";
-		castor::MbString const MapFluxPoint = "c3d_shdMapFluxPoint";
-		castor::MbString const RandomBuffer = "c3d_shdRandomBuffer";
-		castor::MbString const MaxCascadeCount = "c3d_maxCascadeCount";
-		castor::MbString const VolumetricDither = "c3d_volumetricDither";
+		MbString const MapDepthDirectional = "c3d_shdMapDepthDirectional";
+		MbString const MapDepthSpot = "c3d_shdMapDepthSpot";
+		MbString const MapDepthPoint = "c3d_shdMapDepthPoint";
+		MbString const MapDepthCmpDirectional = "c3d_shdMapDepthCmpDirectional";
+		MbString const MapDepthCmpSpot = "c3d_shdMapDepthCmpSpot";
+		MbString const MapDepthCmpPoint = "c3d_shdMapDepthCmpPoint";
+		MbString const MapVarianceDirectional = "c3d_shdMapVarianceDirectional";
+		MbString const MapVarianceSpot = "c3d_shdMapVarianceSpot";
+		MbString const MapVariancePoint = "c3d_shdMapVariancePoint";
+		MbString const MapNormalDirectional = "c3d_shdMapNormalDirectional";
+		MbString const MapNormalSpot = "c3d_shdMapNormalSpot";
+		MbString const MapNormalPoint = "c3d_shdMapNormalPoint";
+		MbString const MapPositionDirectional = "c3d_shdMapPositionDirectional";
+		MbString const MapPositionSpot = "c3d_shdMapPositionSpot";
+		MbString const MapPositionPoint = "c3d_shdMapPositionPoint";
+		MbString const MapFluxDirectional = "c3d_shdMapFluxDirectional";
+		MbString const MapFluxSpot = "c3d_shdMapFluxSpot";
+		MbString const MapFluxPoint = "c3d_shdMapFluxPoint";
+		MbString const RandomBuffer = "c3d_shdRandomBuffer";
+		MbString const MaxCascadeCount = "c3d_maxCascadeCount";
+		MbString const VolumetricDither = "c3d_volumetricDither";
 
 		using CombinedImage2DArray = sdw::CombinedImage2DArrayR32;
 		using CombinedImageCubeArray = sdw::CombinedImageCubeArrayR32;
@@ -69,7 +69,7 @@ namespace castor3d::shader
 			, uint32_t( set )
 			, sdw::type::MemoryLayout::eStd140
 			, enable };
-		m_data = castor::make_unique< AllShadowData >( buffer.declMember< AllShadowData >( "s", enable ) );
+		m_data = makeRawUnique< AllShadowData >( buffer.declMember< AllShadowData >( "s", enable ) );
 		buffer.end();
 	}
 
@@ -93,9 +93,9 @@ namespace castor3d::shader
 	Shadow::Shadow( ShadowOptions shadowOptions
 		, sdw::ShaderWriter & writer )
 		: m_writer{ writer }
-		, m_shadowOptions{ castor::move( shadowOptions ) }
+		, m_shadowOptions{ c3d::move( shadowOptions ) }
 		, m_poissonSamples{ m_writer.declConstantArray( "c3d_poissonSamples"
-			, castor::Vector< sdw::Vec2 >{ vec2( -0.613392_d, 0.617481_d )
+			, Vector< sdw::Vec2 >{ vec2( -0.613392_d, 0.617481_d )
 				, vec2( 0.170019_d, -0.040254_d )
 				, vec2( -0.299417_d, 0.791925_d )
 				, vec2( 0.645680_d, 0.493210_d )
@@ -174,7 +174,7 @@ namespace castor3d::shader
 			m_writer.declConstant( shadow::MaxCascadeCount
 				, sdw::UInt( MaxDirectionalCascadesCount ) );
 			m_writer.declConstantArray( shadow::VolumetricDither
-				, castor::Vector< sdw::Vec4 >{ vec4( 0.0_f, 0.5_f, 0.125_f, 0.625_f )
+				, Vector< sdw::Vec4 >{ vec4( 0.0_f, 0.5_f, 0.125_f, 0.625_f )
 					, vec4( 0.75_f, 0.22_f, 0.875_f, 0.375_f )
 					, vec4( 0.1875_f, 0.6875_f, 0.0625_f, 0.5625_f )
 					, vec4( 0.9375_f, 0.4375_f, 0.8125_f, 0.3125_f ) } );
@@ -218,7 +218,7 @@ namespace castor3d::shader
 				, set
 				, spotEnabled );
 
-			m_shadowsBuffer = castor::makeUnique< ShadowsBuffer >( m_writer
+			m_shadowsBuffer = makeUnique< ShadowsBuffer >( m_writer
 				, index
 				, set );
 			++index;
@@ -226,7 +226,7 @@ namespace castor3d::shader
 				, index
 				, set );
 			++index;
-			m_randomData = castor::make_unique< sdw::Vec4Array >( randomSsbo.declMember< sdw::Vec4 >( "c3d_randomData", RandomDataCount ) );
+			m_randomData = makeRawUnique< sdw::Vec4Array >( randomSsbo.declMember< sdw::Vec4 >( "c3d_randomData", RandomDataCount ) );
 			randomSsbo.end();
 		}
 		else if ( m_shadowOptions.reserveIds )
@@ -246,7 +246,7 @@ namespace castor3d::shader
 			m_writer.declConstant( shadow::MaxCascadeCount
 				, sdw::UInt( MaxDirectionalCascadesCount ) );
 			m_writer.declConstantArray( shadow::VolumetricDither
-				, castor::Vector< sdw::Vec4 >{ vec4( 0.0_f, 0.5_f, 0.125_f, 0.625_f )
+				, Vector< sdw::Vec4 >{ vec4( 0.0_f, 0.5_f, 0.125_f, 0.625_f )
 					, vec4( 0.75_f, 0.22_f, 0.875_f, 0.375_f )
 					, vec4( 0.1875_f, 0.6875_f, 0.0625_f, 0.5625_f )
 					, vec4( 0.9375_f, 0.4375_f, 0.8125_f, 0.3125_f ) } );
@@ -264,7 +264,7 @@ namespace castor3d::shader
 				, set );
 			++index;
 
-			m_shadowsBuffer = castor::makeUnique< ShadowsBuffer >( m_writer
+			m_shadowsBuffer = makeUnique< ShadowsBuffer >( m_writer
 				, index
 				, set );
 			++index;
@@ -272,7 +272,7 @@ namespace castor3d::shader
 				, index
 				, set );
 			++index;
-			m_randomData = castor::make_unique< sdw::Vec4Array >( randomSsbo.declMember< sdw::Vec4 >( "c3d_randomData", RandomDataCount ) );
+			m_randomData = makeRawUnique< sdw::Vec4Array >( randomSsbo.declMember< sdw::Vec4 >( "c3d_randomData", RandomDataCount ) );
 			randomSsbo.end();
 		}
 		else if ( m_shadowOptions.reserveIds )
@@ -300,7 +300,7 @@ namespace castor3d::shader
 				, set );
 			++index;
 
-			m_shadowsBuffer = castor::makeUnique< ShadowsBuffer >( m_writer
+			m_shadowsBuffer = makeUnique< ShadowsBuffer >( m_writer
 				, index
 				, set );
 			++index;
@@ -308,7 +308,7 @@ namespace castor3d::shader
 				, index
 				, set );
 			++index;
-			m_randomData = castor::make_unique< sdw::Vec4Array >( randomSsbo.declMember< sdw::Vec4 >( "c3d_randomData", RandomDataCount ) );
+			m_randomData = makeRawUnique< sdw::Vec4Array >( randomSsbo.declMember< sdw::Vec4 >( "c3d_randomData", RandomDataCount ) );
 			randomSsbo.end();
 		}
 		else if ( m_shadowOptions.reserveIds )
@@ -336,7 +336,7 @@ namespace castor3d::shader
 				, set );
 			++index;
 
-			m_shadowsBuffer = castor::makeUnique< ShadowsBuffer >( m_writer
+			m_shadowsBuffer = makeUnique< ShadowsBuffer >( m_writer
 				, index
 				, set );
 			++index;
@@ -344,7 +344,7 @@ namespace castor3d::shader
 				, index
 				, set );
 			++index;
-			m_randomData = castor::make_unique< sdw::Vec4Array >( randomSsbo.declMember< sdw::Vec4 >( "c3d_randomData", RandomDataCount ) );
+			m_randomData = makeRawUnique< sdw::Vec4Array >( randomSsbo.declMember< sdw::Vec4 >( "c3d_randomData", RandomDataCount ) );
 			randomSsbo.end();
 		}
 		else if ( m_shadowOptions.reserveIds )
@@ -838,7 +838,7 @@ namespace castor3d::shader
 			, cascadeIndex
 			, maxCascade
 			, oneMinusVolumeScattering / ( 4.0_f
-				* sdw::Float{ castor::Pi< float > }
+				* sdw::Float{ Pi< float > }
 				* pow( max( 1.0_f + sqVolumetricScattering - dblVolumetricScattering * -RdotL, 0.0_f ), 1.5_f ) ) );
 	}
 
@@ -1046,7 +1046,7 @@ namespace castor3d::shader
 					auto randomSamplePos = m_writer.declLocale( "randomSamplePos"
 						, screenPos.x() % RandomDataCount );
 					auto theta = m_writer.declLocale( "theta"
-						, ( *m_randomData )[randomSamplePos][screenPos.y() % 4_u] * sdw::Float{ castor::Pi< float > } );
+						, ( *m_randomData )[randomSamplePos][screenPos.y() % 4_u] * sdw::Float{ Pi< float > } );
 					auto randomRotationMatrix = m_writer.declLocale( "randomRotationMatrix"
 						, mat2x2( vec2( cos( theta ), -sin( theta ) )
 							, vec2( sin( theta ), cos( theta ) ) ) );
@@ -1196,7 +1196,7 @@ namespace castor3d::shader
 					auto randomSamplePos = m_writer.declLocale( "randomSamplePos"
 						, screenPos.x() % RandomDataCount );
 					auto theta = m_writer.declLocale( "theta"
-						, ( *m_randomData )[randomSamplePos][screenPos.y() % 4_u] * sdw::Float{ castor::Pi< float > } );
+						, ( *m_randomData )[randomSamplePos][screenPos.y() % 4_u] * sdw::Float{ Pi< float > } );
 					auto randomRotationMatrix = m_writer.declLocale( "randomRotationMatrix"
 						, mat2x2( vec2( cos( theta ), -sin( theta ) )
 							, vec2( sin( theta ), cos( theta ) ) ) );

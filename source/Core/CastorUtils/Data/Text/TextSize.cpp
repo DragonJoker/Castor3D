@@ -1,6 +1,6 @@
 #include "CastorUtils/Data/Text/TextSize.hpp"
 
-namespace castor
+namespace c3d
 {
 	TextWriter< Size >::TextWriter( String const & tabs )
 		: TextWriterT< Size >{ tabs }

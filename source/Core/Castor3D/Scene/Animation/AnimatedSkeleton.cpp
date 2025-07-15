@@ -8,11 +8,11 @@
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp"
 
-CU_ImplementSmartPtr( castor3d, AnimatedSkeleton )
+CU_ImplementSmartPtr( c3d, AnimatedSkeleton )
 
-namespace castor3d
+namespace c3d
 {
-	AnimatedSkeleton::AnimatedSkeleton( castor::String const & name
+	AnimatedSkeleton::AnimatedSkeleton( String const & name
 		, Skeleton & skeleton
 		, Mesh & mesh
 		, Geometry & geometry )
@@ -23,7 +23,7 @@ namespace castor3d
 	{
 	}
 
-	void AnimatedSkeleton::update( castor::Milliseconds const & elapsed )
+	void AnimatedSkeleton::update( Milliseconds const & elapsed )
 	{
 		if ( !m_playingAnimations.empty() )
 		{
@@ -48,7 +48,7 @@ namespace castor3d
 
 				for ( auto bone : skeleton.getBones() )
 				{
-					buffer->bonesMatrix[bone->getId()] = castor::Matrix4x4f::getIdentity();
+					buffer->bonesMatrix[bone->getId()] = Matrix4x4f::getIdentity();
 				}
 			}
 		}
@@ -56,7 +56,7 @@ namespace castor3d
 		{
 			for ( auto bone : skeleton.getBones() )
 			{
-				castor::Matrix4x4f finalTransform{ castor::Matrix4x4f::getIdentity() };
+				Matrix4x4f finalTransform{ Matrix4x4f::getIdentity() };
 
 				for ( auto animation : m_playingAnimations )
 				{
@@ -75,14 +75,14 @@ namespace castor3d
 		return uint32_t( skeleton.getBonesCount() );
 	}
 
-	void AnimatedSkeleton::doAddAnimation( castor::String const & name )
+	void AnimatedSkeleton::doAddAnimation( String const & name )
 	{
 		if ( auto it = m_animations.find( name );
 			it == m_animations.end() )
 		{
 			auto & animation = static_cast< SkeletonAnimation & >( m_skeleton.getAnimation( name ) );
-			auto instance = castor::makeUniqueDerived< AnimationInstance, SkeletonAnimationInstance >( *this, animation );
-			m_animations.try_emplace( name, castor::move( instance ) );
+			auto instance = makeUniqueDerived< AnimationInstance, SkeletonAnimationInstance >( *this, animation );
+			m_animations.try_emplace( name, c3d::move( instance ) );
 		}
 	}
 

@@ -19,24 +19,24 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, TextureData )
-CU_ImplementSmartPtr( castor3d, TextureUnit )
-CU_ImplementSmartPtr( castor3d, TextureUnitData )
+CU_ImplementSmartPtr( c3d, TextureData )
+CU_ImplementSmartPtr( c3d, TextureUnit )
+CU_ImplementSmartPtr( c3d, TextureUnitData )
 
-namespace castor3d
+namespace c3d
 {
 	namespace texunit
 	{
-		static TextureSourceInfoUPtr getSourceInfo( castor::FileParserContext & context
-			, castor::String name
+		static TextureSourceInfoUPtr getSourceInfo( FileParserContext & context
+			, String name
 			, TextureContext & texture )
 		{
 			TextureSourceInfoUPtr result;
 
 			if ( texture.renderTarget )
 			{
-				result = castor::makeUnique< TextureSourceInfo >( castor::move( name )
-					, castor::move( texture.configuration )
+				result = makeUnique< TextureSourceInfo >( c3d::move( name )
+					, c3d::move( texture.configuration )
 					, texture.renderTarget );
 			}
 			else if ( texture.folder.empty() && texture.relative.empty() )
@@ -45,8 +45,8 @@ namespace castor3d
 			}
 			else
 			{
-				result = castor::makeUnique< TextureSourceInfo >( castor::move( name )
-					, castor::move( texture.configuration )
+				result = makeUnique< TextureSourceInfo >( c3d::move( name )
+					, c3d::move( texture.configuration )
 					, texture.folder
 					, texture.relative );
 			}
@@ -54,7 +54,7 @@ namespace castor3d
 			return result;
 		}
 
-		static castor::String getTextureName( TextureContext const & texture )
+		static String getTextureName( TextureContext const & texture )
 		{
 			TextureSourceInfoUPtr result;
 
@@ -68,7 +68,7 @@ namespace castor3d
 				return ( texture.folder / texture.relative ).getFileName();
 			}
 
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 
 		static CU_ImplementAttributeParserNewBlock( parserRootTexture, RootContext, TextureContext )
@@ -79,7 +79,7 @@ namespace castor3d
 			}
 			else
 			{
-				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				newBlockContext->name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				newBlockContext->root = blockContext;
 			}
 		}
@@ -93,7 +93,7 @@ namespace castor3d
 			}
 			else
 			{
-				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				newBlockContext->name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				newBlockContext->root = blockContext->root;
 				newBlockContext->scene = blockContext;
 			}
@@ -108,11 +108,11 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Path folder;
-				castor::Path relative;
+				Path folder;
+				Path relative;
 				params[0]->get( relative );
 
-				if ( castor::File::fileExists( context.file.getPath() / relative ) )
+				if ( File::fileExists( context.file.getPath() / relative ) )
 				{
 					folder = context.file.getPath();
 					auto & engine = *getEngine( *blockContext );
@@ -121,12 +121,12 @@ namespace castor3d
 					if ( !blockContext->image )
 					{
 						auto img = engine.createImage( relative.getFileName()
-							, castor::ImageCreateParams{ folder / relative
+							, ImageCreateParams{ folder / relative
 								, { false, false, false } } );
 						blockContext->image = engine.addImage( relative.getFileName(), img );
 					}
 				}
-				else if ( !castor::File::fileExists( relative ) )
+				else if ( !File::fileExists( relative ) )
 				{
 					CU_ParsingError( cuT( "File [" ) + relative + cuT( "] not found, check the relativeness of the path" ) );
 					relative.clear();
@@ -186,7 +186,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Point2i value;
+				Point2i value;
 				params[0]->get( value );
 				blockContext->configuration.tileSet->z = uint32_t( value->x );
 				blockContext->configuration.tileSet->w = uint32_t( value->y );
@@ -202,7 +202,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Point2i value;
+				Point2i value;
 				params[0]->get( value );
 				blockContext->configuration.tileSet->x = uint32_t( value->x );
 				blockContext->configuration.tileSet->y = uint32_t( value->y );
@@ -228,7 +228,7 @@ namespace castor3d
 			if ( auto sourceInfo = getSourceInfo( context, blockContext->name, *blockContext ) )
 			{
 				getEngine( *blockContext )->getTextureUnitCache().getSourceData( *sourceInfo );
-				blockContext->root->sourceInfos.try_emplace( blockContext->name, castor::move( sourceInfo ) );
+				blockContext->root->sourceInfos.try_emplace( blockContext->name, c3d::move( sourceInfo ) );
 			}
 		}
 		CU_EndAttributePop()
@@ -302,7 +302,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				auto it = blockContext->root->sourceInfos.find( name );
 
 				if ( it != blockContext->root->sourceInfos.end() )
@@ -325,7 +325,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				auto sampler = getEngine( *blockContext )->findSampler( name );
 
 				if ( sampler )
@@ -392,7 +392,7 @@ namespace castor3d
 
 					blockContext->pass->pass->registerTexture( sourceInfo
 						, PassTextureConfig{ blockContext->sampler, blockContext->texcoordSet }
-						, castor::move( blockContext->textureAnimation ) );
+						, c3d::move( blockContext->textureAnimation ) );
 				}
 			}
 			else
@@ -410,7 +410,7 @@ namespace castor3d
 			}
 			else
 			{
-				blockContext->textureTransform.rotate = castor::Angle::fromDegrees( params[0]->get< float >() );
+				blockContext->textureTransform.rotate = Angle::fromDegrees( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
@@ -423,9 +423,9 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Point2f value;
+				Point2f value;
 				params[0]->get( value );
-				blockContext->textureTransform.translate = castor::Point3f{ value->x, value->y, 0.0f };
+				blockContext->textureTransform.translate = Point3f{ value->x, value->y, 0.0f };
 			}
 		}
 		CU_EndAttribute()
@@ -438,9 +438,9 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Point2f value;
+				Point2f value;
 				params[0]->get( value );
-				blockContext->textureTransform.scale = castor::Point3f{ value->x, value->y, 1.0f };
+				blockContext->textureTransform.scale = Point3f{ value->x, value->y, 1.0f };
 			}
 		}
 		CU_EndAttribute()
@@ -449,7 +449,7 @@ namespace castor3d
 		{
 			if ( blockContext->pass )
 			{
-				blockContext->textureAnimation = castor::makeUnique< TextureAnimation >( *getEngine( *blockContext )
+				blockContext->textureAnimation = makeUnique< TextureAnimation >( *getEngine( *blockContext )
 					, cuT( "Default" ) );
 			}
 		}
@@ -467,7 +467,7 @@ namespace castor3d
 			}
 			else
 			{
-				blockContext->textureAnimation->setRotateSpeed( TextureRotateSpeed{ castor::Angle::fromDegrees( params[0]->get< float >() ) } );
+				blockContext->textureAnimation->setRotateSpeed( TextureRotateSpeed{ Angle::fromDegrees( params[0]->get< float >() ) } );
 			}
 		}
 		CU_EndAttribute()
@@ -484,7 +484,7 @@ namespace castor3d
 			}
 			else
 			{
-				blockContext->textureAnimation->setTranslateSpeed( TextureTranslateSpeed{ params[0]->get< castor::Point2f >() } );
+				blockContext->textureAnimation->setTranslateSpeed( TextureTranslateSpeed{ params[0]->get< Point2f >() } );
 			}
 		}
 		CU_EndAttribute()
@@ -501,7 +501,7 @@ namespace castor3d
 			}
 			else
 			{
-				blockContext->textureAnimation->setScaleSpeed( TextureScaleSpeed{ params[0]->get< castor::Point2f >() } );
+				blockContext->textureAnimation->setScaleSpeed( TextureScaleSpeed{ params[0]->get< Point2f >() } );
 			}
 		}
 		CU_EndAttribute()
@@ -528,16 +528,16 @@ namespace castor3d
 	}
 
 	TextureUnit::TextureUnit( TextureUnit && rhs )noexcept
-		: Animable{ castor::move( rhs ) }
+		: Animable{ c3d::move( rhs ) }
 		, m_data{ rhs.m_data }
-		, m_device{ castor::move( rhs.m_device ) }
-		, m_configuration{ castor::move( rhs.m_configuration ) }
-		, m_transform{ castor::move( rhs.m_transform ) }
-		, m_transformations{ castor::move( rhs.m_transformations ) }
-		, m_texture{ castor::move( rhs.m_texture ) }
-		, m_descriptor{ castor::move( rhs.m_descriptor ) }
+		, m_device{ c3d::move( rhs.m_device ) }
+		, m_configuration{ c3d::move( rhs.m_configuration ) }
+		, m_transform{ c3d::move( rhs.m_transform ) }
+		, m_transformations{ c3d::move( rhs.m_transformations ) }
+		, m_texture{ c3d::move( rhs.m_texture ) }
+		, m_descriptor{ c3d::move( rhs.m_descriptor ) }
 		, m_id{ rhs.m_id }
-		, m_name{ castor::move( rhs.m_name ) }
+		, m_name{ c3d::move( rhs.m_name ) }
 		, m_initialised{ rhs.m_initialised }
 		, m_animated{ rhs.m_animated }
 		, m_setIndex{ rhs.m_setIndex }
@@ -642,7 +642,7 @@ namespace castor3d
 	{
 		if ( !hasAnimation() )
 		{
-			addAnimation( castor::makeUniqueDerived< Animation, TextureAnimation >( *getEngine(), cuT( "Default" ) ) );
+			addAnimation( makeUniqueDerived< Animation, TextureAnimation >( *getEngine(), cuT( "Default" ) ) );
 			m_animated = true;
 		}
 
@@ -669,11 +669,9 @@ namespace castor3d
 		return doGetAnimation< TextureAnimation >( cuT( "Default" ) );
 	}
 
-	void TextureUnit::addParsers( castor::AttributeParsers & result
-		, castor::UInt32StrMap const & textureChannels )
+	void TextureUnit::addParsers( AttributeParsers & result
+		, UInt32StrMap const & textureChannels )
 	{
-		using namespace castor;
-
 		BlockParserContextT< RootContext > rootContext{ result, CSCNSection::eRoot };
 		BlockParserContextT< SceneContext > sceneContext{ result, CSCNSection::eScene, CSCNSection::eRoot };
 		BlockParserContextT< PassContext > passContext{ result, CSCNSection::ePass, CSCNSection::eMaterial };
@@ -727,14 +725,14 @@ namespace castor3d
 		return getImageType( m_texture->imageId );
 	}
 
-	castor::String TextureUnit::toString()const
+	String TextureUnit::toString()const
 	{
 		return m_name;
 	}
 
 	TextureFlagsSet TextureUnit::getFlags()const
 	{
-		return castor3d::getFlags( m_configuration );
+		return c3d::getFlags( m_configuration );
 	}
 
 	bool TextureUnit::isInitialised()const
@@ -766,13 +764,13 @@ namespace castor3d
 		return m_data.base->sourceInfo.renderTarget();
 	}
 
-	castor::String TextureUnit::getTextureName()const
+	String TextureUnit::getTextureName()const
 	{
 		CU_Require( isTextured() );
 		return m_name;
 	}
 
-	castor::Path TextureUnit::getTexturePath()const
+	Path TextureUnit::getTexturePath()const
 	{
 		CU_Require( isTextured() );
 		return getCPUImage().getPath();
@@ -784,13 +782,13 @@ namespace castor3d
 			|| m_data.base->sourceInfo.isFileImage();
 	}
 
-	castor::PixelFormat TextureUnit::getTexturePixelFormat()const
+	PixelFormat TextureUnit::getTexturePixelFormat()const
 	{
 		CU_Require( isTextured() );
 		return getFormat( m_texture->imageId );
 	}
 
-	castor::Point3ui TextureUnit::getTextureImageTiles()const
+	Point3ui TextureUnit::getTextureImageTiles()const
 	{
 		return getCPUImage().getPxBuffer().getTiles();
 	}
@@ -800,7 +798,7 @@ namespace castor3d
 		return getCPUImage().hasBuffer();
 	}
 
-	castor::PxBufferBase const & TextureUnit::getTextureImageBuffer()const
+	PxBufferBase const & TextureUnit::getTextureImageBuffer()const
 	{
 		return getCPUImage().getPxBuffer();
 	}
@@ -819,12 +817,12 @@ namespace castor3d
 
 	void TextureUnit::setConfiguration( TextureConfiguration value )
 	{
-		auto format = castor::PixelFormat::eR8G8B8A8_UNORM;
+		auto format = PixelFormat::eR8G8B8A8_UNORM;
 
 		if ( m_data.base->sourceInfo.isRenderTarget() )
 		{
 			auto renderTarget = m_data.base->sourceInfo.renderTarget();
-			format = castor::PixelFormat( renderTarget->getPixelFormat() );
+			format = PixelFormat( renderTarget->getPixelFormat() );
 		}
 		else if ( m_texture )
 		{
@@ -843,7 +841,7 @@ namespace castor3d
 		auto invZPixels = m_data.base->image
 			? m_data.base->image->getPixels()->isZInverted()
 			: needsZInversion;
-		m_configuration = castor::move( value );
+		m_configuration = c3d::move( value );
 		m_configuration.needsXInversion = ( ( invXPixels && needsXInversion )
 			? 0u
 			: ( ( invXPixels || needsXInversion ) ? 1u : 0u ) );
@@ -858,9 +856,9 @@ namespace castor3d
 		onChanged( *this );
 	}
 
-	void TextureUnit::setTransform( castor::Point3f const & translate
-		, castor::Angle const & rotate
-		, castor::Point3f const & scale )
+	void TextureUnit::setTransform( Point3f const & translate
+		, Angle const & rotate
+		, Point3f const & scale )
 	{
 		m_transform.translate->x = translate->x;
 		m_transform.translate->y = translate->y;
@@ -880,19 +878,19 @@ namespace castor3d
 	void TextureUnit::setTransform( TextureTransform const & transform )
 	{
 		m_transform = transform;
-		doUpdateTransform( castor::Point3f{ m_transform.translate }
+		doUpdateTransform( Point3f{ m_transform.translate }
 			, m_transform.rotate
-			, castor::Point3f{ m_transform.scale } );
+			, Point3f{ m_transform.scale } );
 	}
 
-	void TextureUnit::setAnimationTransform( castor::Point3f const & translate
-		, castor::Angle const & rotate
-		, castor::Point3f const & scale )
+	void TextureUnit::setAnimationTransform( Point3f const & translate
+		, Angle const & rotate
+		, Point3f const & scale )
 	{
 		CU_Require( hasAnimation() );
-		doUpdateTransform( castor::Point3f{ m_transform.translate } + translate
+		doUpdateTransform( Point3f{ m_transform.translate } + translate
 			, m_transform.rotate + rotate
-			, castor::Point3f{ m_transform.scale } * scale );
+			, Point3f{ m_transform.scale } * scale );
 	}
 
 	void TextureUnit::setTexcoordSet( uint32_t value )
@@ -901,9 +899,9 @@ namespace castor3d
 		onChanged( *this );
 	}
 
-	void TextureUnit::doUpdateTransform( castor::Point3f const & translate
-		, castor::Angle const & rotate
-		, castor::Point3f const & scale )
+	void TextureUnit::doUpdateTransform( Point3f const & translate
+		, Angle const & rotate
+		, Point3f const & scale )
 	{
 		m_configuration.transform.translate->x = translate->x;
 		m_configuration.transform.translate->y = translate->y;
@@ -918,7 +916,7 @@ namespace castor3d
 		onChanged( *this );
 	}
 
-	castor::String getPrefix( TextureContext const & context )
+	String getPrefix( TextureContext const & context )
 	{
 		return context.scene
 			? getPrefix( *context.scene )

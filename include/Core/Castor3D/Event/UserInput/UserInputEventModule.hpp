@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #include <array>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Event */
 	//@{
@@ -38,7 +38,7 @@ namespace castor3d
 		eHandler = 2,
 		CU_ScopedEnumBounds( eMouse, eHandler )
 	};
-	C3D_API castor::String getName( UserInputEventType value );
+	C3D_API String getName( UserInputEventType value );
 	/**
 	*\~english
 	*\brief
@@ -73,7 +73,7 @@ namespace castor3d
 		eWheel = 6,
 		CU_ScopedEnumBounds( eMove, eWheel )
 	};
-	C3D_API castor::String getName( MouseEventType value );
+	C3D_API String getName( MouseEventType value );
 	/**
 	*\~english
 	*\brief
@@ -96,7 +96,7 @@ namespace castor3d
 		eChar = 2,
 		CU_ScopedEnumBounds( ePushed, eChar )
 	};
-	C3D_API castor::String getName( KeyboardEventType value );
+	C3D_API String getName( KeyboardEventType value );
 	/**
 	*\~english
 	*\brief
@@ -116,7 +116,7 @@ namespace castor3d
 		eDeactivate = 1,
 		CU_ScopedEnumBounds( eActivate, eDeactivate )
 	};
-	C3D_API castor::String getName( HandlerEventType value );
+	C3D_API String getName( HandlerEventType value );
 	/**
 	*\~english
 	*\brief
@@ -138,7 +138,7 @@ namespace castor3d
 		eRight = 2,
 		CU_ScopedEnumBounds( eLeft, eRight )
 	};
-	C3D_API castor::String getName( MouseButton value );
+	C3D_API String getName( MouseButton value );
 	/**
 	*\~english
 	*\brief
@@ -323,13 +323,13 @@ namespace castor3d
 	{
 		//!\~english	The current position.
 		//!\~french		La position actuelle.
-		castor::Position position;
+		Position position;
 		//!\~english	The wheel position.
 		//!\~french		La position de la molette.
-		castor::Position wheel;
+		Position wheel;
 		//!\~english	The buttons state (true = down).
 		//!\~french		L'état des boutons (true = enfoncé).
-		castor::Array< bool, size_t( MouseButton::eCount ) > buttons;
+		Array< bool, size_t( MouseButton::eCount ) > buttons;
 		//!\~english	The button which had the last change.
 		//!\~french		Le bouton ayant reçu le dernier changement.
 		MouseButton changed;
@@ -394,14 +394,14 @@ namespace castor3d
 	class UserInputListener;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, EventHandler, C3D_API );
-	CU_DeclareSmartPtr( castor3d, UserInputListener, C3D_API );
+	CU_DeclareSmartPtr( c3d, EventHandler, C3D_API );
+	CU_DeclareSmartPtr( c3d, UserInputListener, C3D_API );
 	/** @endcond */
 
-	using UserInputEventSPtr = castor::SharedPtr< UserInputEvent >;
-	using KeyboardEventSPtr = castor::SharedPtr< KeyboardEvent >;
-	using MouseEventSPtr = castor::SharedPtr< MouseEvent >;
-	using HandlerEventSPtr = castor::SharedPtr< HandlerEvent >;
+	using UserInputEventSPtr = SharedPtr< UserInputEvent >;
+	using KeyboardEventSPtr = SharedPtr< KeyboardEvent >;
+	using MouseEventSPtr = SharedPtr< MouseEvent >;
+	using HandlerEventSPtr = SharedPtr< HandlerEvent >;
 
 	template< class Derived >
 	class NonClientEventHandler;

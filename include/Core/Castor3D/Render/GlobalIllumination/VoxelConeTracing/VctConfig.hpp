@@ -12,26 +12,26 @@ See LICENSE file in root folder
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct VctConfig
 	{
 		C3D_API void accept( ConfigurationVisitorBase & visitor );
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 
 		bool enabled{ false };
 		bool enableConservativeRasterization{ false };
 		bool enableOcclusion{ false };
 		bool enableSecondaryBounce{ false };
 		bool enableTemporalSmoothing{ false };
-		castor::RangedValue< uint32_t > gridSize{ 2u, castor::makeRange( 2u, VctMaxTextureSize ) };
+		RangedValue< uint32_t > gridSize{ 2u, makeRange( 2u, VctMaxTextureSize ) };
 		//!\~english	The maximum distance for cones.
 		//!\~french		La distance maximale pour les cones.
 		float maxDistance{ 20.0f };
 		//!\~english	The number of radiance cones used in voxel cone tracing.
 		//!\~french		Le nombre de cones de radiance utilisés dans le voxel cone tracing.
-		castor::RangedValue< uint32_t > numCones{ 2u, castor::makeRange( 1u, VctMaxDiffuseCones ) };
+		RangedValue< uint32_t > numCones{ 2u, makeRange( 1u, VctMaxDiffuseCones ) };
 		//!\~english	The size of a ray step in voxel cone tracint.
 		//!\~french		La taille d'un pas de rayon dans le voxel cone tracing.
 		float rayStepSize{ 0.75f };

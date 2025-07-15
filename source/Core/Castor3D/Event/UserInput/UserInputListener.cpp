@@ -11,12 +11,12 @@
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
-CU_ImplementSmartPtr( castor3d, UserInputListener )
+CU_ImplementSmartPtr( c3d, UserInputListener )
 
-namespace castor3d
+namespace c3d
 {
-	UserInputListener::UserInputListener( Engine & engine, castor::String const & name )
-		: castor::OwnedBy< Engine >{ engine }
+	UserInputListener::UserInputListener( Engine & engine, String const & name )
+		: OwnedBy< Engine >{ engine }
 		, m_frameListener{ engine.addNewFrameListener( name ) }
 	{
 		m_mouse.buttons[size_t( MouseButton::eLeft )] = false;
@@ -52,8 +52,8 @@ namespace castor3d
 
 		m_activeHandler = {};
 		m_lastMouseTarget = {};
-		using LockType = castor::UniqueLock< castor::Mutex >;
-		LockType lock{ castor::makeUniqueLock( m_mutexHandlers ) };
+		using LockType = UniqueLock< Mutex >;
+		LockType lock{ makeUniqueLock( m_mutexHandlers ) };
 		auto it = m_handlers.begin();
 
 		while ( it != m_handlers.end() )
@@ -82,18 +82,18 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::registerMouseMoveAction( castor::String const & handler
+	void UserInputListener::registerMouseMoveAction( String const & handler
 		, OnMouseMoveActionFunction function )
 	{
 		auto it = m_onMouseMoveActions.find( handler );
 
 		if ( it == m_onMouseMoveActions.end() )
 		{
-			m_onMouseMoveActions.try_emplace( handler, castor::move( function ) );
+			m_onMouseMoveActions.try_emplace( handler, c3d::move( function ) );
 		}
 	}
 
-	void UserInputListener::registerClickAction( castor::String const & handler
+	void UserInputListener::registerClickAction( String const & handler
 		, OnClickActionFunction function )
 	{
 		auto it = m_onClickActions.find( handler );
@@ -104,50 +104,50 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::registerSelectAction( castor::String const & handler
+	void UserInputListener::registerSelectAction( String const & handler
 		, OnSelectActionFunction function )
 	{
 		auto it = m_onSelectActions.find( handler );
 
 		if ( it == m_onSelectActions.end() )
 		{
-			m_onSelectActions.try_emplace( handler, castor::move( function ) );
+			m_onSelectActions.try_emplace( handler, c3d::move( function ) );
 		}
 	}
 
-	void UserInputListener::registerTextAction( castor::String const & handler
+	void UserInputListener::registerTextAction( String const & handler
 		, OnTextActionFunction function )
 	{
 		auto it = m_onTextActions.find( handler );
 
 		if ( it == m_onTextActions.end() )
 		{
-			m_onTextActions.try_emplace( handler, castor::move( function ) );
+			m_onTextActions.try_emplace( handler, c3d::move( function ) );
 		}
 	}
 
-	void UserInputListener::registerExpandAction( castor::String const & handler
+	void UserInputListener::registerExpandAction( String const & handler
 		, OnExpandActionFunction function )
 	{
 		auto it = m_onExpandActions.find( handler );
 
 		if ( it == m_onExpandActions.end() )
 		{
-			m_onExpandActions.try_emplace( handler, castor::move( function ) );
+			m_onExpandActions.try_emplace( handler, c3d::move( function ) );
 		}
 	}
 
 	void UserInputListener::registerCursorAction( OnCursorActionFunction function )
 	{
-		m_onCursorAction = castor::move( function );
+		m_onCursorAction = c3d::move( function );
 	}
 
 	void UserInputListener::registerClipboardTextAction( OnClipboardTextActionFunction function )
 	{
-		m_onClipboardTextAction = castor::move( function );
+		m_onClipboardTextAction = c3d::move( function );
 	}
 
-	void UserInputListener::unregisterMouseMoveAction( castor::String const & handler )
+	void UserInputListener::unregisterMouseMoveAction( String const & handler )
 	{
 		auto it = m_onMouseMoveActions.find( handler );
 
@@ -157,7 +157,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::unregisterClickAction( castor::String const & handler )
+	void UserInputListener::unregisterClickAction( String const & handler )
 	{
 		auto it = m_onClickActions.find( handler );
 
@@ -167,7 +167,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::unregisterSelectAction( castor::String const & handler )
+	void UserInputListener::unregisterSelectAction( String const & handler )
 	{
 		auto it = m_onSelectActions.find( handler );
 
@@ -177,7 +177,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::unregisterTextAction( castor::String const & handler )
+	void UserInputListener::unregisterTextAction( String const & handler )
 	{
 		auto it = m_onTextActions.find( handler );
 
@@ -187,7 +187,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::unregisterExpandAction( castor::String const & handler )
+	void UserInputListener::unregisterExpandAction( String const & handler )
 	{
 		auto it = m_onExpandActions.find( handler );
 
@@ -207,7 +207,7 @@ namespace castor3d
 		m_onClipboardTextAction = {};
 	}
 
-	void UserInputListener::onMouseMoveAction( castor::String const & handler )const
+	void UserInputListener::onMouseMoveAction( String const & handler )const
 	{
 		auto it = m_onMouseMoveActions.find( handler );
 
@@ -217,7 +217,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::onClickAction( castor::String const & handler )const
+	void UserInputListener::onClickAction( String const & handler )const
 	{
 		auto it = m_onClickActions.find( handler );
 
@@ -227,7 +227,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::onSelectAction( castor::String const & handler, int index )const
+	void UserInputListener::onSelectAction( String const & handler, int index )const
 	{
 		auto it = m_onSelectActions.find( handler );
 
@@ -237,8 +237,8 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::onTextAction( castor::String const & handler
-		, castor::U32String const & text )const
+	void UserInputListener::onTextAction( String const & handler
+		, U32String const & text )const
 	{
 		auto it = m_onTextActions.find( handler );
 
@@ -248,7 +248,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::onExpandAction( castor::String const & handler
+	void UserInputListener::onExpandAction( String const & handler
 		, bool expand )const
 	{
 		auto it = m_onExpandActions.find( handler );
@@ -267,15 +267,15 @@ namespace castor3d
 		}
 	}
 
-	castor::U32String UserInputListener::onClipboardTextAction( bool set
-		, castor::U32String text )const
+	U32String UserInputListener::onClipboardTextAction( bool set
+		, U32String text )const
 	{
 		return m_onClipboardTextAction
-			? m_onClipboardTextAction( set, castor::move( text ) )
-			: castor::U32String{};
+			? m_onClipboardTextAction( set, c3d::move( text ) )
+			: U32String{};
 	}
 
-	void UserInputListener::enableHandler( castor::String const & handler )
+	void UserInputListener::enableHandler( String const & handler )
 	{
 		auto it = std::find_if( m_handlers.begin()
 			, m_handlers.end()
@@ -290,7 +290,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::disableHandler( castor::String const & handler )
+	void UserInputListener::disableHandler( String const & handler )
 	{
 		auto it = std::find_if( m_handlers.begin()
 			, m_handlers.end()
@@ -305,7 +305,7 @@ namespace castor3d
 		}
 	}
 
-	bool UserInputListener::fireMouseMove( castor::Position const & position, bool ctrl, bool alt, bool shift )
+	bool UserInputListener::fireMouseMove( Position const & position, bool ctrl, bool alt, bool shift )
 	{
 		bool result = false;
 		doUpdateCommandKeys( ctrl, alt, shift );
@@ -404,7 +404,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool UserInputListener::fireMouseWheel( castor::Position const & offsets, bool ctrl, bool alt, bool shift )
+	bool UserInputListener::fireMouseWheel( Position const & offsets, bool ctrl, bool alt, bool shift )
 	{
 		bool result = false;
 		doUpdateCommandKeys( ctrl, alt, shift );
@@ -459,7 +459,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool UserInputListener::fireChar( KeyboardKey key, castor::String const & value )
+	bool UserInputListener::fireChar( KeyboardKey key, String const & value )
 	{
 		bool result = false;
 

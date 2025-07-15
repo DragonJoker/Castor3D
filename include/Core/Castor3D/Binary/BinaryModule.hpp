@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Castor3DModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Binary */
 	//@{

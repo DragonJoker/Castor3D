@@ -22,7 +22,7 @@ namespace Testing
 			CT_ON("	Check build from dynamically allocated buffer" );
 			uint64_t const size = 8;
 			int * tmp = new int[size];
-			castor::ArrayView< int > view1 = castor::makeArrayView( tmp, size );
+			c3d::ArrayView< int > view1 = c3d::makeArrayView( tmp, size );
 			CT_CHECK( view1.size() == size );
 			CT_CHECK( !view1.empty() );
 			CT_CHECK( view1.begin() == tmp );
@@ -46,7 +46,7 @@ namespace Testing
 			CT_ON("	Check build from statically allocated buffer" );
 			static size_t const size = 8;
 			int tmp[size];
-			castor::ArrayView< int > view1 = castor::makeArrayView( tmp );
+			c3d::ArrayView< int > view1 = c3d::makeArrayView( tmp );
 			CT_CHECK( view1.size() == size );
 			CT_CHECK( !view1.empty() );
 			CT_CHECK( view1.begin() == tmp );
@@ -69,7 +69,7 @@ namespace Testing
 			CT_ON("	Check build buffer part" );
 			uint32_t const size = 0;
 			int * tmp = new int[size + 1];
-			castor::ArrayView< int > view1 = castor::makeArrayView( tmp, size );
+			c3d::ArrayView< int > view1 = c3d::makeArrayView( tmp, size );
 			CT_CHECK( view1.size() == size );
 			CT_CHECK( view1.empty() );
 			CT_CHECK( view1.begin() == tmp );

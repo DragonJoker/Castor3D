@@ -7,15 +7,15 @@ See LICENSE file in root folder
 
 #include "CastorUtils/CastorUtils.hpp"
 
-namespace castor
+namespace c3d
 {
 	/**@name Data */
 	//@{
 	/**
 	\~english
-	\brief		castor::Loader supported file types enumeration
+	\brief		c3d::Loader supported file types enumeration
 	\~french
-	\brief		Enumération des types de fichier supportés par castor::Loader
+	\brief		Enumération des types de fichier supportés par c3d::Loader
 	*/
 	enum class FileType
 		: uint8_t
@@ -63,24 +63,24 @@ namespace castor
 	class File;
 	/**
 	\~english
-	\brief		Partial castor::Loader specialisation for binary files
+	\brief		Partial c3d::Loader specialisation for binary files
 	\~french
-	\brief		Spécialisation partielle de castor::Loader, pour les fichiers binaires
+	\brief		Spécialisation partielle de c3d::Loader, pour les fichiers binaires
 	*/
 	template< class DataT >
 	class BinaryWriter;
 	/**
 	\~english
-	\brief		Partial castor::Writer specialisation for text files
+	\brief		Partial c3d::Writer specialisation for text files
 	\~french
-	\brief		Spécialisation partielle de castor::Writer, pour les fichiers texte
+	\brief		Spécialisation partielle de c3d::Writer, pour les fichiers texte
 	*/
 	class TextWriterBase;
 	/**
 	\~english
-	\brief		Partial castor::Writer specialisation for text files
+	\brief		Partial c3d::Writer specialisation for text files
 	\~french
-	\brief		Spécialisation partielle de castor::Writer, pour les fichiers texte
+	\brief		Spécialisation partielle de c3d::Writer, pour les fichiers texte
 	*/
 	template< class DataT >
 	class TextWriterT;
@@ -102,9 +102,9 @@ namespace castor
 	class FileWriter;
 	/**
 	\~english
-	\brief		Partial castor::Loader specialisation for binary files
+	\brief		Partial c3d::Loader specialisation for binary files
 	\~french
-	\brief		Spécialisation partielle de castor::Loader, pour les fichiers binaires
+	\brief		Spécialisation partielle de c3d::Loader, pour les fichiers binaires
 	*/
 	template< class T >
 	class BinaryLoader;

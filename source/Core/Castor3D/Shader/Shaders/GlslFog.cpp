@@ -4,7 +4,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	Fog::Fog( sdw::ShaderWriter & writer )
 	{

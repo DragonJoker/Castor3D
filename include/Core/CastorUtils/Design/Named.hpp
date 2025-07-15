@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Design/DesignModule.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename T >
 	class NamedBaseT
@@ -21,7 +21,7 @@ namespace castor
 		 *\param[in]	name	Le nom
 		 */
 		explicit NamedBaseT( T name )noexcept
-			: m_name{ castor::move( name ) }
+			: m_name{ c3d::move( name ) }
 		{
 		}
 		/**
@@ -39,7 +39,7 @@ namespace castor
 
 		void rename( T name )noexcept
 		{
-			m_name = castor::move( name );
+			m_name = c3d::move( name );
 		}
 
 	protected:

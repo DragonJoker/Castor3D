@@ -12,22 +12,22 @@ See LICENSE file in root folder
 
 #include <unordered_map>
 
-namespace castor3d
+namespace c3d
 {
 	class VertexBufferPool
-		: public castor::OwnedBy< RenderSystem >
+		: public OwnedBy< RenderSystem >
 	{
 	public:
 		struct ModelBuffers
 		{
 			explicit ModelBuffers( GpuPackedBaseBufferUPtr vtx )
-				: vertex{ castor::move( vtx ) }
+				: vertex{ c3d::move( vtx ) }
 			{
 			}
 
 			GpuPackedBaseBufferUPtr vertex;
 		};
-		using BufferArray = castor::Vector< ModelBuffers >;
+		using BufferArray = Vector< ModelBuffers >;
 
 	public:
 		/**
@@ -41,7 +41,7 @@ namespace castor3d
 		 *\param[in]	debugName		Le nom debug.
 		 */
 		C3D_API explicit VertexBufferPool( RenderDevice const & device
-			, castor::String debugName );
+			, String debugName );
 		/**
 		 *\~english
 		 *\brief		Cleans up all GPU buffers.
@@ -82,29 +82,29 @@ namespace castor3d
 	private:
 		C3D_API BufferArray::iterator doFindBuffer( VkDeviceSize size
 			, BufferArray & array )const;
-		C3D_API castor::Vector< castor::Pair< size_t, BufferArray > >::iterator doInsertBuffers( size_t align );
-		C3D_API castor::Vector< castor::Pair< size_t, BufferArray > >::const_iterator doFindBuffers( size_t align )const;
+		C3D_API Vector< Pair< size_t, BufferArray > >::iterator doInsertBuffers( size_t align );
+		C3D_API Vector< Pair< size_t, BufferArray > >::const_iterator doFindBuffers( size_t align )const;
 
 	private:
 		RenderDevice const & m_device;
-		castor::String m_debugName;
-		castor::Vector < castor::Pair< size_t, BufferArray > > m_buffers;
+		String m_debugName;
+		Vector < Pair< size_t, BufferArray > > m_buffers;
 	};
 
 	class IndexBufferPool
-		: public castor::OwnedBy< RenderSystem >
+		: public OwnedBy< RenderSystem >
 	{
 	public:
 		struct ModelBuffers
 		{
 			explicit ModelBuffers( GpuPackedBaseBufferUPtr idx )
-				: index{ castor::move( idx ) }
+				: index{ c3d::move( idx ) }
 			{
 			}
 
 			GpuPackedBaseBufferUPtr index;
 		};
-		using BufferArray = castor::Vector< ModelBuffers >;
+		using BufferArray = Vector< ModelBuffers >;
 
 	public:
 		/**
@@ -118,7 +118,7 @@ namespace castor3d
 		 *\param[in]	debugName		Le nom debug.
 		 */
 		C3D_API explicit IndexBufferPool( RenderDevice const & device
-			, castor::String debugName );
+			, String debugName );
 		/**
 		 *\~english
 		 *\brief		Cleans up all GPU buffers.
@@ -161,24 +161,24 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		castor::String m_debugName;
+		String m_debugName;
 		BufferArray m_buffers;
 	};
 
 	class ObjectBufferPool
-		: public castor::OwnedBy< RenderSystem >
+		: public OwnedBy< RenderSystem >
 	{
 	public:
 		struct ModelBuffers
 		{
-			explicit ModelBuffers( castor::Array< GpuPackedBaseBufferUPtr, size_t( SubmeshData::eCount ) > bufs = {} )
-				: buffers{ castor::move( bufs ) }
+			explicit ModelBuffers( Array< GpuPackedBaseBufferUPtr, size_t( SubmeshData::eCount ) > bufs = {} )
+				: buffers{ c3d::move( bufs ) }
 			{
 			}
 
-			castor::Array< GpuPackedBaseBufferUPtr, size_t( SubmeshData::eCount ) > buffers;
+			Array< GpuPackedBaseBufferUPtr, size_t( SubmeshData::eCount ) > buffers;
 		};
-		using BufferArray = castor::Vector< ModelBuffers >;
+		using BufferArray = Vector< ModelBuffers >;
 
 	public:
 		/**
@@ -192,7 +192,7 @@ namespace castor3d
 		 *\param[in]	debugName		Le nom debug.
 		 */
 		C3D_API explicit ObjectBufferPool( RenderDevice const & device
-			, castor::String debugName );
+			, String debugName );
 		/**
 		 *\~english
 		 *\brief		Cleans up all GPU buffers.
@@ -285,9 +285,9 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		castor::String m_debugName;
-		castor::UnorderedMap< size_t, BufferArray > m_buffers;
-		castor::UnorderedMap< ashes::BufferBase const * , ashes::BufferBase const * > m_indexBuffers;
+		String m_debugName;
+		HashMap< size_t, BufferArray > m_buffers;
+		HashMap< ashes::BufferBase const * , ashes::BufferBase const * > m_indexBuffers;
 	};
 }
 

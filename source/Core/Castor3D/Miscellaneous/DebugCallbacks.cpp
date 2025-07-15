@@ -8,30 +8,30 @@
 #include <ashespp/Core/Instance.hpp>
 #include <ashespp/Core/RendererList.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace dbg
 	{
-		static castor::String formatMessage( castor::StringView prefix
-			, castor::MbStringView message )
+		static String formatMessage( String prefix
+			, MbStringView message )
 		{
-			auto mbPrefix = castor::toUtf8( prefix );
+			auto mbPrefix = toUtf8( prefix );
 
 			if ( message.find_first_of( "|\n" ) == message.find( "\n" ) )
 			{
-				auto split = castor::string::split( castor::MbStringView{ message.data() }, "\n", ~0u, false );
-				castor::MbStringStream stream;
+				auto split = string::split( MbStringView{ message.data() }, "\n", ~0u, false );
+				MbStringStream stream;
 
 				for ( auto const & str : split )
 				{
 					stream << "\n" << mbPrefix << str;
 				}
 
-				return castor::makeString( stream.str() );
+				return makeString( stream.str() );
 			}
 
-			auto split = castor::string::split( castor::MbStringView{ message.data() }, "|", ~0u, false );
-			castor::MbStringStream stream;
+			auto split = string::split( MbStringView{ message.data() }, "|", ~0u, false );
+			MbStringStream stream;
 
 			if ( !split.empty() )
 			{
@@ -41,21 +41,21 @@ namespace castor3d
 
 				if ( split.size() > 1u )
 				{
-					for ( auto & str : castor::makeArrayView( split.begin() + 1u, split.end() ) )
+					for ( auto & str : makeArrayView( split.begin() + 1u, split.end() ) )
 					{
-						stream << "\n" << mbPrefix << castor::string::trim( str );
+						stream << "\n" << mbPrefix << string::trim( str );
 					}
 				}
 			}
 
-			return castor::makeString( stream.str() );
+			return makeString( stream.str() );
 		}
 
 #if VK_EXT_debug_utils
 
-		static castor::OutputStream & operator<<( castor::OutputStream & stream, VkDebugUtilsObjectNameInfoEXT const & value )
+		static OutputStream & operator<<( OutputStream & stream, VkDebugUtilsObjectNameInfoEXT const & value )
 		{
-			stream << cuT( "(" ) << std::hex << value.objectHandle << cuT( ") " ) << castor::makeString( ashes::getName( value.objectType ) );
+			stream << cuT( "(" ) << std::hex << value.objectHandle << cuT( ") " ) << makeString( ashes::getName( value.objectType ) );
 
 			if ( value.pObjectName )
 			{
@@ -65,7 +65,7 @@ namespace castor3d
 			return stream;
 		}
 
-		static castor::OutputStream & operator<<( castor::OutputStream & stream, VkDebugUtilsLabelEXT const & value )
+		static OutputStream & operator<<( OutputStream & stream, VkDebugUtilsLabelEXT const & value )
 		{
 			stream << cuT( "(" ) << value.color[0]
 				<< cuT( ", " ) << value.color[1]
@@ -81,12 +81,12 @@ namespace castor3d
 		}
 
 		template< typename ObjectT >
-		static void print( castor::OutputStream & stream
-			, castor::String const & name
+		static void print( OutputStream & stream
+			, String const & name
 			, uint32_t count
 			, ObjectT const * objects
-			, castor::String const & lineEnd
-			, castor::String const & lineBegin )
+			, String const & lineEnd
+			, String const & lineBegin )
 		{
 			stream << lineBegin << name << cuT( ": " ) << count << lineEnd;
 
@@ -110,10 +110,10 @@ namespace castor3d
 
 			// Select prefix depending on flags passed to the callback
 			// Note that multiple flags may be set for a single validation message
-			auto stream = castor::makeStringStream();
+			auto stream = makeStringStream();
 			stream << cuT( "Vulkan " );
-			castor::String lineEnd;
-			castor::String lineBegin = cuT( ", " );
+			String lineEnd;
+			String lineBegin = cuT( ", " );
 
 			// Error that may result in undefined behaviour
 			switch ( messageSeverity )
@@ -225,10 +225,10 @@ namespace castor3d
 		{
 			// Select prefix depending on flags passed to the callback
 			// Note that multiple flags may be set for a single validation message
-			auto stream = castor::makeStringStream();
+			auto stream = makeStringStream();
 			stream << cuT( "Vulkan " );
-			castor::String lineEnd;
-			castor::String lineBegin = cuT( ", " );
+			String lineEnd;
+			String lineBegin = cuT( ", " );
 
 			// Error that may result in undefined behaviour
 			if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_ERROR_BIT_EXT ) )
@@ -266,7 +266,7 @@ namespace castor3d
 			// Display message to default output (console/logcat)
 			stream << cuT( "Layer: " ) << pLayerPrefix << lineEnd;
 			stream << lineBegin << cuT( "Code: 0x" ) << std::hex << messageCode << lineEnd;
-			stream << lineBegin << cuT( "Object: (" ) << std::hex << object << cuT( ") " ) << castor::makeString( ashes::getName( objectType ) ) << lineEnd;
+			stream << lineBegin << cuT( "Object: (" ) << std::hex << object << cuT( ") " ) << makeString( ashes::getName( objectType ) ) << lineEnd;
 			stream << lineBegin << cuT( "Message: " ) << formatMessage( lineBegin + cuT( "  " ), pMessage );
 
 			VkBool32 result = VK_FALSE;

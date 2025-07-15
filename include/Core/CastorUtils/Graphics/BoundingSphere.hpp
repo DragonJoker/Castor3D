@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Graphics/BoundingContainer.hpp"
 
-namespace castor
+namespace c3d
 {
 	class BoundingSphere
 		: public BoundingContainer3D

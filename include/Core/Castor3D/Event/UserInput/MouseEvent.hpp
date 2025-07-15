@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/Position.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class MouseEvent
 		: public UserInputEvent
@@ -27,7 +27,7 @@ namespace castor3d
 		 *\param[in]	button		Le bouton de la souris.
 		 */
 		MouseEvent( MouseEventType type
-			, castor::Position const & position
+			, Position const & position
 			, MouseButton button = MouseButton::eCount )
 			: UserInputEvent{ UserInputEventType::eMouse }
 			, m_mouseEventType{ type }
@@ -61,7 +61,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La position, de la souris ou de la molette, selon le type d'évènement.
 		 */
-		castor::Position const & getPosition()const
+		Position const & getPosition()const
 		{
 			return m_position;
 		}
@@ -69,7 +69,7 @@ namespace castor3d
 	private:
 		MouseEventType const m_mouseEventType;
 		MouseButton const m_button;
-		castor::Position const m_position;
+		Position const m_position;
 	};
 }
 

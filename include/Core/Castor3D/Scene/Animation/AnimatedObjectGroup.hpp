@@ -15,14 +15,14 @@ See LICENSE file in root folder
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class AnimatedObjectGroup
-		: public castor::Named
-		, public castor::OwnedBy< Scene >
+		: public Named
+		, public OwnedBy< Scene >
 	{
 	public:
-		using AnimatedObjectMap = castor::StringMap< AnimatedObjectUPtr >;
+		using AnimatedObjectMap = StringMap< AnimatedObjectUPtr >;
 		/**
 		 *\~english
 		 *\brief		Specified constructor
@@ -33,7 +33,7 @@ namespace castor3d
 		 *\param[in]	scene	La scène
 		 *\param[in]	name	Le nom du groupe
 		 */
-		C3D_API AnimatedObjectGroup( castor::String const & name
+		C3D_API AnimatedObjectGroup( String const & name
 			, Scene & scene );
 		/**
 		 *\~english
@@ -53,7 +53,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'instance du SceneNode.
 		 */
 		C3D_API AnimatedObjectRPtr addObject( SceneNode & node
-			, castor::String const & name );
+			, String const & name );
 		/**
 		 *\~english
 		 *\brief		Creates an AnimatedObject from the Mesh given as a parameter, adds it to the list.
@@ -68,7 +68,7 @@ namespace castor3d
 		 */
 		C3D_API AnimatedObjectRPtr addObject( Mesh & mesh
 			, Geometry & geometry
-			, castor::String const & name );
+			, String const & name );
 		/**
 		 *\~english
 		 *\brief		Creates an AnimatedObject from the Skeleton given as a parameter, adds it to the list.
@@ -86,7 +86,7 @@ namespace castor3d
 		C3D_API AnimatedObjectRPtr addObject( Skeleton & skeleton
 			, Mesh & mesh
 			, Geometry & geometry
-			, castor::String const & name );
+			, String const & name );
 		/**
 		 *\~english
 		 *\brief		Creates an AnimatedObject for a texture, adds it to the list.
@@ -121,7 +121,7 @@ namespace castor3d
 		 *\brief		Recherche un AnimatedObject en fonction de son nom.
 		 *\param[in]	name	Le nom de l'AnimatedObject.
 		 */
-		C3D_API AnimatedObject * findObject( castor::String const & name )const;
+		C3D_API AnimatedObject * findObject( String const & name )const;
 		/**
 		 *\~english
 		 *\brief		adds the animation to the list.
@@ -132,7 +132,7 @@ namespace castor3d
 		 *\param[in]	name	L'animation à ajouter.
 		 *\return		\p true si l'animation n'existait pas encore.
 		 */
-		C3D_API bool addAnimation( castor::String const & name );
+		C3D_API bool addAnimation( String const & name );
 		/**
 		 *\~english
 		 *\brief		Sets the loop status of wanted animation.
@@ -143,7 +143,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation.
 		 *\param[in]	looped	Le statut.
 		 */
-		C3D_API void setAnimationLooped( castor::String const & name
+		C3D_API void setAnimationLooped( String const & name
 			, bool looped );
 		/**
 		 *\~english
@@ -155,7 +155,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation.
 		 *\param[in]	scale	Le multiplicateur.
 		 */
-		C3D_API void setAnimationScale( castor::String const & name
+		C3D_API void setAnimationScale( String const & name
 			, float scale );
 		/**
 		 *\~english
@@ -167,8 +167,8 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation.
 		 *\param[in]	value	Le point de départ.
 		 */
-		C3D_API void setAnimationStartingPoint( castor::String const & name
-			, castor::Milliseconds value );
+		C3D_API void setAnimationStartingPoint( String const & name
+			, Milliseconds value );
 		/**
 		 *\~english
 		 *\brief		Sets the stopping point of wanted animation.
@@ -179,8 +179,8 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation.
 		 *\param[in]	value	Le point d'arrêt.
 		 */
-		C3D_API void setAnimationStoppingPoint( castor::String const & name
-			, castor::Milliseconds value );
+		C3D_API void setAnimationStoppingPoint( String const & name
+			, Milliseconds value );
 		/**
 		 *\~english
 		 *\brief		Sets the interpolation mode of wanted animation.
@@ -191,7 +191,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation.
 		 *\param[in]	mode	Le mode d'interpolation.
 		 */
-		C3D_API void setAnimationInterpolation( castor::String const & name
+		C3D_API void setAnimationInterpolation( String const & name
 			, InterpolatorType mode );
 		/**
 		 *\~english
@@ -210,7 +210,7 @@ namespace castor3d
 		 *\brief		Démarre l'animation identifiée par le nom donné
 		 *\param[in]	name	Le nom de l'animation
 		 */
-		C3D_API void startAnimation( castor::String const & name );
+		C3D_API void startAnimation( String const & name );
 		/**
 		 *\~english
 		 *\brief		Stops the animation identified by the given name
@@ -219,7 +219,7 @@ namespace castor3d
 		 *\brief		Stoppe l'animation identifiée par le nom donné
 		 *\param[in]	name	Le nom de l'animation
 		 */
-		C3D_API void stopAnimation( castor::String const & name );
+		C3D_API void stopAnimation( String const & name );
 		/**
 		 *\~english
 		 *\brief		Pauses the animation identified by the given name
@@ -228,7 +228,7 @@ namespace castor3d
 		 *\brief		Met en pause l'animation identifiée par le nom donné
 		 *\param[in]	name	Le nom de l'animation
 		 */
-		C3D_API void pauseAnimation( castor::String const & name );
+		C3D_API void pauseAnimation( String const & name );
 		/**
 		 *\~english
 		 *\brief		Starts all animations
@@ -271,7 +271,7 @@ namespace castor3d
 			return m_objects;
 		}
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 
 	public:
 		OnAnimatedSkeletonChange onSkeletonAdded;
@@ -286,7 +286,7 @@ namespace castor3d
 	private:
 		GroupAnimationMap m_animations;
 		AnimatedObjectMap m_objects;
-		castor::PreciseTimer m_timer;
+		PreciseTimer m_timer;
 	};
 
 	struct SceneContext;
@@ -299,23 +299,20 @@ namespace castor3d
 		AnimatedObjectRPtr animMesh{};
 		AnimatedObjectRPtr animNode{};
 		AnimatedObjectRPtr animTexture{};
-		castor::String animName{};
+		String animName{};
 	};
 
-	C3D_API castor::String getPrefix( AnimGroupContext const & context );
+	C3D_API String getPrefix( AnimGroupContext const & context );
 	C3D_API Engine * getEngine( AnimGroupContext const & context );
-}
 
-namespace castor
-{
 	template<>
-	struct ParserEnumTraits< castor3d::InterpolatorType >
+	struct ParserEnumTraits< InterpolatorType >
 	{
 		static inline xchar const * const Name = cuT( "InterpolatorType" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT< castor3d::InterpolatorType >();
+				result = getEnumMapT< InterpolatorType >();
 				return result;
 			}( );
 	};

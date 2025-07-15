@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <list>
 
-namespace castor3d
+namespace c3d
 {
 	template< typename T >
 	class Pattern
@@ -17,7 +17,7 @@ namespace castor3d
 		using TObj = T;
 		using TObjRef = T &;
 		using TObjConstRef = T const &;
-		using TObjList = typename castor::List< TObj > ;
+		using TObjList = typename List< TObj > ;
 
 	public:
 		/**

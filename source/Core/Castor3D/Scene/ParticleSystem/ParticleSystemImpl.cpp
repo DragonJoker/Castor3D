@@ -2,7 +2,7 @@
 
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	ParticleSystemImpl::ParticleSystemImpl( Type type, ParticleSystem & parent )
 		: m_parent{ parent }

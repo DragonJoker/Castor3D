@@ -13,31 +13,28 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::IridescenceComponent >
-		: public TextWriterT< castor3d::IridescenceComponent >
+	class TextWriter< IridescenceComponent >
+		: public TextWriterT< IridescenceComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::IridescenceComponent >{ tabs }
+			: TextWriterT< IridescenceComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::IridescenceComponent const & object
+		bool operator()( IridescenceComponent const & object
 			, StringStream & file )override
 		{
-			return write( file, cuT( "iridescence_factor" ), object.getFactor(), castor3d::IridescenceComponent::DefaultFactor )
-				&& writeOpt( file, cuT( "iridescence_ior" ), object.getIor(), castor3d::IridescenceComponent::DefaultIor )
-				&& writeOpt( file, cuT( "iridescence_min_thickness" ), object.getMinThickness(), castor3d::IridescenceComponent::DefaultMinThickness )
-				&& writeOpt( file, cuT( "iridescence_max_thickness" ), object.getMaxThickness(), castor3d::IridescenceComponent::DefaultMaxThickness );
+			return write( file, cuT( "iridescence_factor" ), object.getFactor(), IridescenceComponent::DefaultFactor )
+				&& writeOpt( file, cuT( "iridescence_ior" ), object.getIor(), IridescenceComponent::DefaultIor )
+				&& writeOpt( file, cuT( "iridescence_min_thickness" ), object.getMinThickness(), IridescenceComponent::DefaultMinThickness )
+				&& writeOpt( file, cuT( "iridescence_max_thickness" ), object.getMaxThickness(), IridescenceComponent::DefaultMaxThickness );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace irid
@@ -254,29 +251,29 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void IridescenceComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void IridescenceComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "iridescence_factor" )
 			, irid::parserPassIridescenceFactor
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "iridescence_ior" )
 			, irid::parserPassIridescenceIor
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "iridescence_min_thickness" )
 			, irid::parserPassIridescenceMinThickness
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "iridescence_max_thickness" )
 			, irid::parserPassIridescenceMaxThickness
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { makeParameter< ParameterType::eFloat >() } );
 	}
 
 	void IridescenceComponent::Plugin::zeroBuffer( Pass const & pass
@@ -300,7 +297,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const IridescenceComponent::TypeName = C3D_MakePassLightingComponentName( "iridescence" );
+	String const IridescenceComponent::TypeName = C3D_MakePassLightingComponentName( "iridescence" );
 
 	IridescenceComponent::IridescenceComponent( Pass & pass )
 		: BaseDataPassComponentT{ pass, TypeName, {}
@@ -320,17 +317,17 @@ namespace castor3d
 
 	PassComponentUPtr IridescenceComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< IridescenceComponent >( pass );
+		auto result = makeRawUnique< IridescenceComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool IridescenceComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool IridescenceComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< IridescenceComponent >{ tabs }( *this, file );
+		return TextWriter< IridescenceComponent >{ tabs }( *this, file );
 	}
 
 	void IridescenceComponent::doFillBuffer( PassBuffer & buffer )const

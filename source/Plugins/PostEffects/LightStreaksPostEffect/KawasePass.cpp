@@ -20,7 +20,7 @@ namespace light_streaks
 {
 	namespace kawase
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
 		enum Idx
 		{
@@ -28,22 +28,22 @@ namespace light_streaks
 			DifImgIdx,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			C3D_Kawase( writer, KawaseUboIdx, 0u );
 			auto c3d_mapHiPass = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapHiPass", DifImgIdx, 0u );
 
-			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
-				, sdw::VertexOutT< c3d::Uv2FT > out )
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
+				, sdw::FragmentOutT< c3ds::Colour4FT > out )
 				{
 					auto colour = writer.declLocale( "colour"
 						, vec3( 0.0_f ) );
@@ -70,18 +70,18 @@ namespace light_streaks
 			return writer.getBuilder().releaseShader();
 		}
 
-		static castor::Vector< KawasePass::Subpass > doCreateSubpasses( crg::FramePassGroup & graph
+		static c3d::Vector< KawasePass::Subpass > doCreateSubpasses( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
-			, castor3d::RenderDevice const & device
+			, c3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & srcImages
 			, crg::ImageViewIdArray const & dstImages
-			, castor3d::Extent2D dimensions
+			, c3d::Extent2D dimensions
 			, ashes::PipelineShaderStageCreateInfoArray const & stages
 			, KawaseUbo const & kawaseUbo
 			, bool const * enabled
 			, crg::FramePassArray & lastPasses )
 		{
-			castor::Vector< KawasePass::Subpass > result;
+			c3d::Vector< KawasePass::Subpass > result;
 			assert( srcImages.size() == dstImages.size() + 1u
 				&& dstImages.size() == PostEffect::Count );
 			uint32_t index = 0u;
@@ -106,7 +106,7 @@ namespace light_streaks
 
 				for ( auto j = 1u; j < 3u; ++j )
 				{
-					castor::swap( source, destination );
+					c3d::swap( source, destination );
 					result.emplace_back( graph
 						, *previousPass
 						, device
@@ -132,15 +132,15 @@ namespace light_streaks
 
 	KawasePass::Subpass::Subpass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, crg::ImageViewId const & srcView
 		, crg::ImageViewId const & dstView
-		, castor3d::Extent2D dimensions
+		, c3d::Extent2D dimensions
 		, ashes::PipelineShaderStageCreateInfoArray const & stages
 		, KawaseUbo const & kawaseUbo
 		, uint32_t index
 		, bool const * enabled )
-		: pass{ graph.createPass( "Kawase" + castor::string::toMbString( index )
+		: pass{ graph.createPass( "Kawase" + c3d::string::toMbString( index )
 			, [&device, &stages, dimensions, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -152,17 +152,17 @@ namespace light_streaks
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) )
 					.enabled( enabled )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }
 	{
-		crg::SamplerDesc linearSampler{ castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest
-			, castor3d::WrapMode::eClampToEdge
-			, castor3d::WrapMode::eClampToEdge
-			, castor3d::WrapMode::eClampToEdge };
+		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
+			, c3d::FilterMode::eLinear
+			, c3d::MipmapMode::eNearest
+			, c3d::WrapMode::eClampToEdge
+			, c3d::WrapMode::eClampToEdge
+			, c3d::WrapMode::eClampToEdge };
 		pass.addDependency( previousPass );
 		kawaseUbo.createPassBinding( pass
 			, kawase::KawaseUboIdx
@@ -177,11 +177,11 @@ namespace light_streaks
 
 	KawasePass::KawasePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & hiViews
 		, crg::ImageViewIdArray const & kawaseViews
 		, KawaseUbo & kawaseUbo
-		, castor3d::Extent2D dimensions
+		, c3d::Extent2D dimensions
 		, bool const * enabled )
 		: m_device{ device }
 		, m_kawaseUbo{ kawaseUbo }
@@ -200,7 +200,7 @@ namespace light_streaks
 	{
 	}
 
-	void KawasePass::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void KawasePass::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 	}

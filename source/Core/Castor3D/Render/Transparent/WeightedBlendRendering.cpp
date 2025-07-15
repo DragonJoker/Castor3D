@@ -20,9 +20,9 @@
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
-CU_ImplementSmartPtr( castor3d, WeightedBlendRendering )
+CU_ImplementSmartPtr( c3d, WeightedBlendRendering )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -49,8 +49,8 @@ namespace castor3d
 			C3D_Scene( writer, SceneUboIndex, 0u );
 			C3D_HdrConfig( writer, HdrUboIndex, 0u );
 			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", uint32_t( DepthTexIndex ), 0u );
-			auto c3d_mapAccumulation = writer.declCombinedImg< FImg2DRgba32 >( castor::toUtf8( getTextureName( WbTexture::eAccumulation ) ), uint32_t( AccumTexIndex ), 0u );
-			auto c3d_mapRevealage = writer.declCombinedImg< FImg2DRgba32 >( castor::toUtf8( getTextureName( WbTexture::eRevealage ) ), uint32_t( RevealTexIndex ), 0u );
+			auto c3d_mapAccumulation = writer.declCombinedImg< FImg2DRgba32 >( toUtf8( getTextureName( WbTexture::eAccumulation ) ), uint32_t( AccumTexIndex ), 0u );
+			auto c3d_mapRevealage = writer.declCombinedImg< FImg2DRgba32 >( toUtf8( getTextureName( WbTexture::eRevealage ) ), uint32_t( RevealTexIndex ), 0u );
 
 			writer.implementEntryPointT< shader::PosUv2FT, sdw::VoidT >( [&]( sdw::VertexInT< shader::PosUv2FT > const & in
 				, sdw::VertexOut out )
@@ -125,7 +125,7 @@ namespace castor3d
 		, Texture const & depthObj
 		, TransparentPassResult const & transparentPassResult
 		, crg::ImageViewIdArray const & targetColourView
-		, castor::Size const & size
+		, Size const & size
 		, CameraUbo const & cameraUbo
 		, SceneUbo const & sceneUbo
 		, HdrConfigUbo const & hdrConfigUbo )
@@ -189,7 +189,7 @@ namespace castor3d
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &m_enabled )
 					.build( framePass, context, graph, crg::ru::Config{ 1u } );
-				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

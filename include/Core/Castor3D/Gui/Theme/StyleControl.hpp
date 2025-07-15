@@ -16,20 +16,20 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/Rectangle.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ControlStyle
-		: public castor::Named
+		: public Named
 	{
 	public:
 		C3D_API virtual ~ControlStyle()noexcept = default;
 
 		ControlStyle( ControlType type
-			, castor::String const & name
+			, String const & name
 			, Scene * scene
 			, Engine & engine
 			, MouseCursor cursor = MouseCursor::eArrow )
-			: castor::Named{ name }
+			: Named{ name }
 			, m_scene{ scene }
 			, m_engine{ engine }
 			, m_type{ type }
@@ -115,14 +115,14 @@ namespace castor3d
 	protected:
 		MaterialObs doCreateMaterial( MaterialObs material
 			, float offset
-			, castor::String const & suffix )const
+			, String const & suffix )const
 		{
 			if ( !material )
 			{
 				return material;
 			}
 
-			castor::HdrRgbColour colour = getMaterialColour( *material->getPass( 0u ) );
+			HdrRgbColour colour = getMaterialColour( *material->getPass( 0u ) );
 			colour.red() = float( colour.red() ) + offset;
 			colour.green() = float( colour.green() ) + offset;
 			colour.blue() = float( colour.blue() ) + offset;

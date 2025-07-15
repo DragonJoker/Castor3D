@@ -16,14 +16,14 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::Animable">
+	<Type Name="Animable">
 		<Expand>
 			<Item Name="owner">m_owner</Item>
 			<Item Name="animations">m_animations</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::Animation">
+	<Type Name="Animation">
 		<DisplayString>{m_name} {m_length}</DisplayString>
 		<Expand>
 			<Item Name="name">m_name</Item>
@@ -35,7 +35,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::AnimationKeyFrame">
+	<Type Name="AnimationKeyFrame">
 		<DisplayString>{m_timeIndex}</DisplayString>
 		<Expand>
 			<Item Name="timeIndex">m_timeIndex</Item>
@@ -43,7 +43,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::BaseDataComponentT&lt;*&gt;::ComponentData">
+	<Type Name="BaseDataComponentT&lt;*&gt;::ComponentData">
 		<DisplayString>data={m_data}</DisplayString>
 		<Expand>
 			<Item Name="initialised">m_initialised</Item>
@@ -53,7 +53,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::BaseDataComponentT&lt;*&gt;">
+	<Type Name="BaseDataComponentT&lt;*&gt;">
 		<DisplayString>{m_id} {m_type} {*m_data}</DisplayString>
 		<Expand>
 			<Item Name="id">m_id</Item>
@@ -61,7 +61,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::BoneNode">
+	<Type Name="c3d::BoneNode">
 		<DisplayString>Bone [{m_id}]{m_name}</DisplayString>
 		<Expand>
 			<Item Name="id">m_id</Item>
@@ -72,7 +72,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::EventHandler">
+	<Type Name="c3d::EventHandler">
 		<DisplayString>EvtHandler {m_name}</DisplayString>
 		<Expand>
 			<Item Name="name">m_name</Item>
@@ -91,10 +91,10 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::NonClientEventHandler&lt;*&gt;">
+	<Type Name="c3d::NonClientEventHandler&lt;*&gt;">
 		<DisplayString>NCEvtHandler {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[EvtHdr]">(castor3d::EventHandler *)this,nd</Item>
+			<Item Name="[EvtHdr]">(c3d::EventHandler *)this,nd</Item>
 			<Item Name="ncMouseSlots">m_ncMouseSlots</Item>
 			<Item Name="ncKeyboardSlots">m_ncKeyboardSlots</Item>
 			<Item Name="ncHandlerSlots">m_ncHandlerSlots</Item>
@@ -104,21 +104,21 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::Face">
+	<Type Name="c3d::Face">
 		<DisplayString>{m_face}</DisplayString>
 		<Expand>
 			<Item Name="face">m_face</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::FaceIndices">
+	<Type Name="c3d::FaceIndices">
 		<DisplayString>{m_index[0]}, {m_index[1]}, {m_index[2]}</DisplayString>
 		<Expand>
 			<Item Name="index">m_index</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::NodesViewT&lt;*&gt;">
+	<Type Name="c3d::NodesViewT&lt;*&gt;">
 		<DisplayString>{{ size={m_count} }}</DisplayString>
 		<Expand>
 			<Item Name="[size]">m_count</Item>
@@ -130,20 +130,20 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::BuffersNodesViewT&lt;*&gt;">
+	<Type Name="c3d::BuffersNodesViewT&lt;*&gt;">
 		<Expand>
 			<Item Name="[buffers]">m_buffers</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::PipelinesNodesT&lt;*&gt;">
+	<Type Name="PipelinesNodesT&lt;*&gt;">
 		<Expand>
 			<Item Name="[pipelines]">m_pipelines</Item>
 			<Item Name="[countedNodes]">m_countedNodes</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::FontTexture">
+	<Type Name="FontTexture">
 		<DisplayString>FontTexture {m_font}[{m_id}]</DisplayString>
 		<Expand>
 			<Item Name="font">m_font</Item>
@@ -156,7 +156,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::Frustum">
+	<Type Name="c3d::Frustum">
 		<DisplayString>{m_planes}</DisplayString>
 		<Expand>
 			<Item Name="viewport">m_viewport</Item>
@@ -164,7 +164,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::MemChunk">
+	<Type Name="c3d::MemChunk">
 		<DisplayString>[{offset}, {offset + size}]</DisplayString>
 		<Expand>
 			<Item Name="offset">offset</Item>
@@ -173,7 +173,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::ObjectBufferOffset::GpuBufferChunk">
+	<Type Name="ObjectBufferOffset::GpuBufferChunk">
 		<DisplayString>{chunk} [{buffer}]</DisplayString>
 		<Expand>
 			<Item Name="chunk">chunk</Item>
@@ -181,7 +181,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::MovableObject">
+	<Type Name="MovableObject">
 		<DisplayString>{m_name}</DisplayString>
 		<Expand>
 			<Item Name="name">m_name</Item>
@@ -192,10 +192,10 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::Camera">
+	<Type Name="c3d::Camera">
 		<DisplayString>Camera {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[movable]">(castor3d::MovableObject *)this,nd</Item>
+			<Item Name="[movable]">(MovableObject *)this,nd</Item>
 			<Item Name="viewport">m_viewport</Item>
 			<Item Name="frustum">m_frustum</Item>
 			<Item Name="view">m_view</Item>
@@ -206,10 +206,10 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::Geometry">
+	<Type Name="c3d::Geometry">
 		<DisplayString>Object {m_name}({m_meshName})</DisplayString>
 		<Expand>
-			<Item Name="[movable]">(castor3d::MovableObject *)this,nd</Item>
+			<Item Name="[movable]">(MovableObject *)this,nd</Item>
 			<Item Name="ids">m_ids</Item>
 			<Item Name="mesh">m_mesh</Item>
 			<Item Name="meshName">m_meshName</Item>
@@ -222,7 +222,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::ImporterFile">
+	<Type Name="c3d::ImporterFile">
 		<DisplayString>{m_extension} {m_fileName}</DisplayString>
 		<Expand>
 			<Item Name="fileName">m_fileName</Item>
@@ -233,7 +233,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::InstantiationComponent::ComponentData">
+	<Type Name="c3d::InstantiationComponent::ComponentData">
 		<DisplayString>instances={m_instances}</DisplayString>
 		<Expand>
 			<Item Name="initialised">m_initialised</Item>
@@ -244,7 +244,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::InstantiationComponent">
+	<Type Name="c3d::InstantiationComponent">
 		<DisplayString>{m_id} {m_type} {*m_data}</DisplayString>
 		<Expand>
 			<Item Name="submesh">m_owner</Item>
@@ -253,14 +253,14 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::LineIndices">
+	<Type Name="LineIndices">
 		<DisplayString>{m_index}</DisplayString>
 		<Expand>
 			<Item Name="index">m_index</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::LineMapping::ComponentData">
+	<Type Name="LineMapping::ComponentData">
 		<DisplayString>lines={m_lines}</DisplayString>
 		<Expand>
 			<Item Name="initialised">m_initialised</Item>
@@ -270,7 +270,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::LineMapping">
+	<Type Name="LineMapping">
 		<DisplayString>{m_id} {m_type} {*m_data}</DisplayString>
 		<Expand>
 			<Item Name="id">m_id</Item>
@@ -278,7 +278,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::Material">
+	<Type Name="Material">
 		<DisplayString>{m_name} (type={m_lightingModelId}, passes={m_passes})</DisplayString>
 		<Expand>
 			<Item Name="name">m_name</Item>
@@ -288,7 +288,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::Mesh">
+	<Type Name="Mesh">
 		<DisplayString>{m_name} {m_submeshes}</DisplayString>
 		<Expand>
 			<Item Name="name">m_name</Item>
@@ -301,7 +301,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::MeshAnimation">
+	<Type Name="MeshAnimation">
 		<DisplayString>{m_name} {m_length}</DisplayString>
 		<Expand>
 			<Item Name="name">m_name</Item>
@@ -314,7 +314,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::MeshAnimationSubmesh">
+	<Type Name="MeshAnimationSubmesh">
 		<DisplayString>{m_submesh}</DisplayString>
 		<Expand>
 			<Item Name="submesh">m_submesh</Item>
@@ -322,7 +322,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::MeshMorphTarget">
+	<Type Name="MeshMorphTarget">
 		<DisplayString>{m_timeIndex}</DisplayString>
 		<Expand>
 			<Item Name="timeIndex">m_timeIndex</Item>
@@ -331,7 +331,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::MeshletComponent">
+	<Type Name="MeshletComponent">
 		<DisplayString>{m_id} {m_type} {m_meshlets}</DisplayString>
 		<Expand>
 			<Item Name="meshletBuffer">m_meshletBuffer</Item>
@@ -345,7 +345,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::MorphComponent">
+	<Type Name="MorphComponent">
 		<DisplayString>{m_id} {m_type}</DisplayString>
 		<Expand>
 			<Item Name="id">m_id</Item>
@@ -359,7 +359,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::ObjectTransform">
+	<Type Name="ObjectTransform">
 		<DisplayString>{*object} {translate} {scale} {rotate}</DisplayString>
 		<Expand>
 			<Item Name="object">object</Item>
@@ -370,7 +370,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::Overlay">
+	<Type Name="Overlay">
 		<DisplayString>{m_name}</DisplayString>
 		<Expand>
 			<Item Name="name">m_name</Item>
@@ -380,7 +380,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::OverlayCategory">
+	<Type Name="OverlayCategory">
 		<DisplayString>{*m_overlay}</DisplayString>
 		<Expand>
 			<Item Name="overlay">m_overlay</Item>
@@ -402,17 +402,17 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::PanelOverlay">
+	<Type Name="PanelOverlay">
 		<DisplayString>PanelOv {*m_overlay}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::OverlayCategory *)this,nd</Item>
+			<Item Name="[base]">(OverlayCategory *)this,nd</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::BorderPanelOverlay">
+	<Type Name="BorderPanelOverlay">
 		<DisplayString>BorderPanelOv {*m_overlay}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::OverlayCategory *)this,nd</Item>
+			<Item Name="[base]">(OverlayCategory *)this,nd</Item>
 			<Item Name="borderMaterial">m_borderMaterial</Item>
 			<Item Name="relBorderSize">m_relBorderSize</Item>
 			<Item Name="pxBorderSize">m_pxBorderSize</Item>
@@ -423,10 +423,10 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::TextOverlay">
+	<Type Name="TextOverlay">
 		<DisplayString>TextOv {*m_overlay}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::OverlayCategory *)this,nd</Item>
+			<Item Name="[base]">(OverlayCategory *)this,nd</Item>
 			<Item Name="currentCaption">m_currentCaption</Item>
 			<Item Name="previousCaption">m_previousCaption</Item>
 			<Item Name="fontTexture">m_fontTexture</Item>
@@ -444,7 +444,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::Pass">
+	<Type Name="Pass">
 		<DisplayString>{m_id} ({m_owner->m_name} {m_index})</DisplayString>
 		<Expand>
 			<Item Name="id">m_id</Item>
@@ -461,7 +461,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::Sampler">
+	<Type Name="Sampler">
 		<DisplayString>{m_name}</DisplayString>
 		<Expand>
 			<Item Name="info">m_info</Item>
@@ -470,14 +470,14 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::SceneRenderPass">
+	<Type Name="SceneRenderPass">
 		<DisplayString>{m_name}({m_pass})</DisplayString>
 	</Type>
 
-	<Type Name="castor3d::SceneNode">
+	<Type Name="SceneNode">
 		<DisplayString>[{m_id}]{m_name}</DisplayString>
 		<Expand>
-			<Item Name="[animable]">(castor3d::Animable *)this,nd</Item>
+			<Item Name="[animable]">(Animable *)this,nd</Item>
 			<Item Name="id">m_id</Item>
 			<Item Name="displayable">m_displayable</Item>
 			<Item Name="visible">m_visible</Item>
@@ -494,7 +494,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::SceneNodeAnimationKeyFrame">
+	<Type Name="SceneNodeAnimationKeyFrame">
 		<DisplayString>{m_timeIndex}</DisplayString>
 		<Expand>
 			<Item Name="timeIndex">m_timeIndex</Item>
@@ -505,7 +505,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::ShaderProgram">
+	<Type Name="ShaderProgram">
 		<DisplayString>{m_name}</DisplayString>
 		<Expand>
 			<Item Name="name">m_name</Item>
@@ -517,7 +517,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::ShaderProgram::CompiledShader">
+	<Type Name="ShaderProgram::CompiledShader">
 		<DisplayString>{name}</DisplayString>
 		<Expand>
 			<Item Name="name">name</Item>
@@ -525,7 +525,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::SkeletonAnimationBone">
+	<Type Name="SkeletonAnimationBone">
 		<DisplayString>[{m_bone->m_id}] {m_bone->m_name}</DisplayString>
 		<Expand>
 			<Item Name="bone">m_bone</Item>
@@ -536,7 +536,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::SkeletonAnimationKeyFrame">
+	<Type Name="SkeletonAnimationKeyFrame">
 		<DisplayString>{m_timeIndex} {m_transforms}</DisplayString>
 		<Expand>
 			<Item Name="timeIndex">m_timeIndex</Item>
@@ -546,7 +546,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::SkeletonAnimationNode">
+	<Type Name="SkeletonAnimationNode">
 		<DisplayString>{m_node->m_name}</DisplayString>
 		<Expand>
 			<Item Name="node">m_node</Item>
@@ -557,7 +557,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::SkeletonNode">
+	<Type Name="SkeletonNode">
 		<DisplayString>Node {m_name}</DisplayString>
 		<Expand>
 			<Item Name="name">m_name</Item>
@@ -566,7 +566,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::Skeleton">
+	<Type Name="Skeleton">
 		<DisplayString>{m_name}</DisplayString>
 		<Expand>
 			<Item Name="scene">m_scene</Item>
@@ -578,7 +578,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::SkinComponent">
+	<Type Name="SkinComponent">
 		<DisplayString>{m_id} {m_type} data={m_bones}</DisplayString>
 		<Expand>
 			<Item Name="id">m_id</Item>
@@ -589,7 +589,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::StagedUploadData::GpuBufferOffset">
+	<Type Name="c3d::StagedUploadData::GpuBufferOffset">
 		<DisplayString>{chunk}({*buffer})</DisplayString>
 		<Expand>
 			<Item Name="chunk">chunk</Item>
@@ -597,7 +597,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::Submesh">
+	<Type Name="Submesh">
 		<DisplayString>{*m_owner}({m_id})</DisplayString>
 		<Expand>
 			<Item Name="mesh">*m_owner</Item>
@@ -621,14 +621,14 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::SubmeshComponentData">
+	<Type Name="SubmeshComponentData">
 		<Expand>
 			<Item Name="initialised">m_initialised</Item>
 			<Item Name="dirty">m_dirty</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::SubmeshComponent">
+	<Type Name="SubmeshComponent">
 		<DisplayString>{m_id} {m_type}</DisplayString>
 		<Expand>
 			<Item Name="submesh">m_owner</Item>
@@ -639,7 +639,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::TextureAnimationKeyFrame">
+	<Type Name="TextureAnimationKeyFrame">
 		<DisplayString>{m_timeIndex} {m_tile}</DisplayString>
 		<Expand>
 			<Item Name="timeIndex">m_timeIndex</Item>
@@ -648,7 +648,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::TextureSourceInfo">
+	<Type Name="TextureSourceInfo">
 		<DisplayString Condition="m_renderTarget!=nullptr">TargetImage {*m_renderTarget}</DisplayString>
 		<DisplayString Condition="m_relative._Mypair._Myval2._Mysize>0">FileImage "{m_folder,sb}/{m_relative,sb}"</DisplayString>
 		<DisplayString Condition="m_createInfo.vk.format!=0">VulkanImage {m_createInfo}</DisplayString>
@@ -666,7 +666,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::TextureData">
+	<Type Name="TextureData">
 		<DisplayString >{sourceInfo}</DisplayString>
 		<Expand>
 			<Item Name="sourceInfo">sourceInfo</Item>
@@ -675,7 +675,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::Texture">
+	<Type Name="Texture">
 		<DisplayString >{imageId} [{*sampler}]</DisplayString>
 		<Expand>
 			<Item Name="resources">resources</Item>
@@ -694,7 +694,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::TextureUnitData">
+	<Type Name="TextureUnitData">
 		<DisplayString >{*base}</DisplayString>
 		<Expand>
 			<Item Name="base">*base</Item>
@@ -703,7 +703,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::TextureUnit">
+	<Type Name="TextureUnit">
 		<DisplayString >{m_id} {m_name} [{m_data}]</DisplayString>
 		<Expand>
 			<Item Name="owner">m_owner</Item>
@@ -726,7 +726,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::TriFaceMapping::ComponentData">
+	<Type Name="c3d::TriFaceMapping::ComponentData">
 		<DisplayString>faces={m_faces}</DisplayString>
 		<Expand>
 			<Item Name="initialised">m_initialised</Item>
@@ -737,7 +737,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::TriFaceMapping">
+	<Type Name="c3d::TriFaceMapping">
 		<DisplayString>{m_id} {m_type} {*m_data}</DisplayString>
 		<Expand>
 			<Item Name="submesh">m_owner</Item>
@@ -746,10 +746,10 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::Control">
+	<Type Name="c3d::Control">
 		<DisplayString>Control {m_name} {*m_style}</DisplayString>
 		<Expand>
-			<Item Name="[NCEvtHdr]">(castor3d::NonClientEventHandler&lt;castor3d::Control&gt; *)this,nd</Item>
+			<Item Name="[NCEvtHdr]">(c3d::NonClientEventHandler&lt;c3d::Control&gt; *)this,nd</Item>
 			<Item Name="id">m_id</Item>
 			<Item Name="name">m_name</Item>
 			<Item Name="type">m_type</Item>
@@ -767,7 +767,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::ControlStyle">
+	<Type Name="c3d::ControlStyle">
 		<DisplayString>ControlStyle {m_name}</DisplayString>
 		<Expand>
 			<Item Name="engine">m_engine</Item>
@@ -778,14 +778,14 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::ScrollableStyle">
+	<Type Name="c3d::ScrollableStyle">
 		<Expand>
 			<Item Name="vertical">m_verticalStyle</Item>
 			<Item Name="horizontal">m_horizontalStyle</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::ScrollableCtrl">
+	<Type Name="c3d::ScrollableCtrl">
 		<Expand>
 			<Item Name="target">m_target</Item>
 			<Item Name="scrollableStyle">m_scrollableStyle</Item>
@@ -794,7 +794,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::StylesHolder">
+	<Type Name="c3d::StylesHolder">
 		<DisplayString>StylesHolder {m_holderName}</DisplayString>
 		<Expand>
 			<Item Name="holderName">m_holderName</Item>
@@ -811,18 +811,18 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::LayoutControl">
+	<Type Name="c3d::LayoutControl">
 		<DisplayString>LayoutCtrl {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[ctrl]">(castor3d::Control *)this,nd</Item>
+			<Item Name="[ctrl]">(c3d::Control *)this,nd</Item>
 			<Item Name="layout">m_layout</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::ButtonCtrl">
+	<Type Name="c3d::ButtonCtrl">
 		<DisplayString>ButtonCtrl {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[ctrl]">(castor3d::Control *)this,nd</Item>
+			<Item Name="[ctrl]">(c3d::Control *)this,nd</Item>
 			<Item Name="caption">m_caption</Item>
 			<Item Name="text">m_text</Item>
 			<Item Name="signals">m_signals</Item>
@@ -830,10 +830,10 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::ButtonStyle">
+	<Type Name="c3d::ButtonStyle">
 		<DisplayString>ButtonStyle {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
+			<Item Name="[base]">(c3d::ControlStyle *)this,nd</Item>
 			<Item Name="textMaterial">m_textMaterial</Item>
 			<Item Name="highlightedTextMaterial">m_highlightedTextMaterial</Item>
 			<Item Name="highlightedBackgroundMaterial">m_highlightedBackgroundMaterial</Item>
@@ -848,10 +848,10 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::ComboBoxCtrl">
+	<Type Name="c3d::ComboBoxCtrl">
 		<DisplayString>ComboBoxCtrl {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[ctrl]">(castor3d::Control *)this,nd</Item>
+			<Item Name="[ctrl]">(c3d::Control *)this,nd</Item>
 			<Item Name="text">m_text</Item>
 			<Item Name="expand">m_expand</Item>
 			<Item Name="choices">m_choices</Item>
@@ -863,20 +863,20 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::ComboBoxStyle">
+	<Type Name="c3d::ComboBoxStyle">
 		<DisplayString>ComboBoxStyle {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
+			<Item Name="[base]">(c3d::ControlStyle *)this,nd</Item>
 			<Item Name="buttonStyle">m_buttonStyle</Item>
 			<Item Name="listBoxStyle">m_listBoxStyle</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::EditCtrl">
+	<Type Name="c3d::EditCtrl">
 		<DisplayString>EditCtrl {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[ctrl]">(castor3d::Control *)this,nd</Item>
-			<Item Name="[scroll]">(castor3d::ScrollableCtrl *)this,nd</Item>
+			<Item Name="[ctrl]">(c3d::Control *)this,nd</Item>
+			<Item Name="[scroll]">(c3d::ScrollableCtrl *)this,nd</Item>
 			<Item Name="caption">m_caption</Item>
 			<Item Name="metrics">m_metrics</Item>
 			<Item Name="active">m_active</Item>
@@ -889,20 +889,20 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::EditStyle">
+	<Type Name="c3d::EditStyle">
 		<DisplayString>EditStyle {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
-			<Item Name="[scroll]">(castor3d::ScrollableStyle *)this,nd</Item>
+			<Item Name="[base]">(c3d::ControlStyle *)this,nd</Item>
+			<Item Name="[scroll]">(c3d::ScrollableStyle *)this,nd</Item>
 			<Item Name="fontName">m_fontName</Item>
 			<Item Name="textMaterial">m_textMaterial</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::ExpandablePanelCtrl">
+	<Type Name="c3d::ExpandablePanelCtrl">
 		<DisplayString>ExpandablePanelCtrl {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[ctrl]">(castor3d::Control *)this,nd</Item>
+			<Item Name="[ctrl]">(c3d::Control *)this,nd</Item>
 			<Item Name="headerHeight">m_headerHeight</Item>
 			<Item Name="header">m_header</Item>
 			<Item Name="expand">m_expand</Item>
@@ -913,20 +913,20 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::ExpandablePanelStyle">
+	<Type Name="c3d::ExpandablePanelStyle">
 		<DisplayString>ExpandablePanelStyle {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
+			<Item Name="[base]">(c3d::ControlStyle *)this,nd</Item>
 			<Item Name="headerStyle">m_headerStyle</Item>
 			<Item Name="expandStyle">m_expandStyle</Item>
 			<Item Name="panelStyle">m_panelStyle</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::ListBoxCtrl">
+	<Type Name="c3d::ListBoxCtrl">
 		<DisplayString>ListBoxCtrl {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[ctrl]">(castor3d::Control *)this,nd</Item>
+			<Item Name="[ctrl]">(c3d::Control *)this,nd</Item>
 			<Item Name="initialValues">m_initialValues</Item>
 			<Item Name="values">m_values</Item>
 			<Item Name="selected">m_selected</Item>
@@ -936,44 +936,44 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::ListBoxStyle">
+	<Type Name="c3d::ListBoxStyle">
 		<DisplayString>ListBoxStyle {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
+			<Item Name="[base]">(c3d::ControlStyle *)this,nd</Item>
 			<Item Name="itemStyle">m_itemStyle</Item>
 			<Item Name="selectedItemStyle">m_selectedItemStyle</Item>
 			<Item Name="highlightedItemStyle">m_highlightedItemStyle</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::PanelCtrl">
+	<Type Name="PanelCtrl">
 		<DisplayString>PanelCtrl {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[layout]">(castor3d::LayoutControl *)this,nd</Item>
-			<Item Name="[scroll]">(castor3d::ScrollableCtrl *)this,nd</Item>
+			<Item Name="[layout]">(c3d::LayoutControl *)this,nd</Item>
+			<Item Name="[scroll]">(c3d::ScrollableCtrl *)this,nd</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::PanelStyle">
+	<Type Name="PanelStyle">
 		<DisplayString>PanelStyle {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
-			<Item Name="[holder]">(castor3d::StylesHolder *)this,nd</Item>
-			<Item Name="[scroll]">(castor3d::ScrollableStyle *)this,nd</Item>
+			<Item Name="[base]">(c3d::ControlStyle *)this,nd</Item>
+			<Item Name="[holder]">(c3d::StylesHolder *)this,nd</Item>
+			<Item Name="[scroll]">(c3d::ScrollableStyle *)this,nd</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::Theme">
+	<Type Name="c3d::Theme">
 		<DisplayString>Theme {getName()}</DisplayString>
 		<Expand>
-			<Item Name="[holder]">(castor3d::StylesHolder *)this,nd</Item>
+			<Item Name="[holder]">(c3d::StylesHolder *)this,nd</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::ScrollBarCtrl">
+	<Type Name="c3d::ScrollBarCtrl">
 		<DisplayString>ScrollBarCtrl {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[ctrl]">(castor3d::Control *)this,nd</Item>
+			<Item Name="[ctrl]">(c3d::Control *)this,nd</Item>
 			<Item Name="value">m_value</Item>
 			<Item Name="begin">*m_begin</Item>
 			<Item Name="bar">*m_bar</Item>
@@ -985,10 +985,10 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::ScrollBarStyle">
+	<Type Name="c3d::ScrollBarStyle">
 		<DisplayString>ScrollBarStyle {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
+			<Item Name="[base]">(c3d::ControlStyle *)this,nd</Item>
 			<Item Name="barStyle">m_barStyle</Item>
 			<Item Name="thumbStyle">m_thumbStyle</Item>
 			<Item Name="beginStyle">m_beginStyle</Item>
@@ -996,10 +996,10 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::SliderCtrl">
+	<Type Name="c3d::SliderCtrl">
 		<DisplayString>SliderCtrl {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[ctrl]">(castor3d::Control *)this,nd</Item>
+			<Item Name="[ctrl]">(c3d::Control *)this,nd</Item>
 			<Item Name="value">m_value</Item>
 			<Item Name="scrolling">m_scrolling</Item>
 			<Item Name="mouse">m_mouse</Item>
@@ -1009,34 +1009,34 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::SliderStyle">
+	<Type Name="c3d::SliderStyle">
 		<DisplayString>SliderStyle {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
+			<Item Name="[base]">(c3d::ControlStyle *)this,nd</Item>
 			<Item Name="lineStyle">m_lineStyle</Item>
 			<Item Name="tickStyle">m_tickStyle</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::StaticCtrl">
+	<Type Name="c3d::StaticCtrl">
 		<DisplayString>StaticCtrl {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[ctrl]">(castor3d::Control *)this,nd</Item>
+			<Item Name="[ctrl]">(c3d::Control *)this,nd</Item>
 			<Item Name="m_caption">m_caption</Item>
 			<Item Name="m_text">m_text</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::StaticStyle">
+	<Type Name="c3d::StaticStyle">
 		<DisplayString>StaticStyle {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
+			<Item Name="[base]">(c3d::ControlStyle *)this,nd</Item>
 			<Item Name="fontName">m_fontName</Item>
 			<Item Name="textMaterial">m_textMaterial</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::Layout">
+	<Type Name="c3d::Layout">
 		<DisplayString>Layout {m_container}</DisplayString>
 		<Expand>
 			<Item Name="items">m_items</Item>
@@ -1046,15 +1046,15 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::Spacer">
-		<DisplayString Condition="m_size==castor3d::Spacer::Dynamic">DynSpacer</DisplayString>
-		<DisplayString Condition="m_size==castor3d::Spacer::Dynamic">StaSpacer {m_size}</DisplayString>
+	<Type Name="c3d::Spacer">
+		<DisplayString Condition="m_size==c3d::Spacer::Dynamic">DynSpacer</DisplayString>
+		<DisplayString Condition="m_size==c3d::Spacer::Dynamic">StaSpacer {m_size}</DisplayString>
 		<Expand>
 			<Item Name="size">m_size</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::Layout::Item">
+	<Type Name="c3d::Layout::Item">
 		<DisplayString Condition="m_type==0">LayoutCtrl {*m_value.control}</DisplayString>
 		<DisplayString Condition="m_type==1">LayoutSpacer {*m_value.spacer}</DisplayString>
 		<Expand>
@@ -1066,7 +1066,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::LayoutItemFlags">
+	<Type Name="c3d::LayoutItemFlags">
 		<Expand>
 			<Item Name="hAlign">m_hAlign</Item>
 			<Item Name="vAlign">m_vAlign</Item>
@@ -1076,15 +1076,15 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::BoxLayout">
+	<Type Name="c3d::BoxLayout">
 		<DisplayString>StaticCtrl {m_name}[{m_id}]</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::Layout *)this,nd</Item>
+			<Item Name="[base]">(c3d::Layout *)this,nd</Item>
 			<Item Name="horizontal">m_horizontal</Item>
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::PassComponentPlugin">
+	<Type Name="c3d::PassComponentPlugin">
 		<DisplayString>PassComponentPlugin {m_id}</DisplayString>
 		<Expand>
 			<Item Name="finishComponent">finishComponent</Item>
@@ -1093,7 +1093,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::PassComponent">
+	<Type Name="c3d::PassComponent">
 		<DisplayString>{m_type}[{m_id}]</DisplayString>
 		<Expand>
 			<Item Name="pass">m_owner</Item>
@@ -1106,7 +1106,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::PassMapComponent">
+	<Type Name="c3d::PassMapComponent">
 		<DisplayString>{m_type}[{m_id}]({m_textureFlags})</DisplayString>
 		<Expand>
 			<Item Name="pass">m_owner</Item>
@@ -1120,7 +1120,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::BaseDataPassComponent&lt;*&gt;">
+	<Type Name="BaseDataPassComponent&lt;*&gt;">
 		<DisplayString>{m_type}[{m_id}]({m_textureFlags})</DisplayString>
 		<Expand>
 			<Item Name="pass">m_owner</Item>
@@ -1134,7 +1134,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::SubmeshRenderNode">
+	<Type Name="SubmeshRenderNode">
 		<DisplayString>{instance} {data}</DisplayString>
 		<Expand>
 			<Item Name="pass">pass</Item>
@@ -1146,7 +1146,7 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::BillboardRenderNode">
+	<Type Name="BillboardRenderNode">
 		<DisplayString>{instance} {data}</DisplayString>
 		<Expand>
 			<Item Name="pass">pass</Item>

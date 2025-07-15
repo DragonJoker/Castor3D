@@ -7,9 +7,9 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementSmartPtr( castor3d::shader, ClustersData )
+CU_ImplementSmartPtr( c3d::shader, ClustersData )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -269,8 +269,8 @@ namespace castor3d
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	void ClustersUbo::cpuUpdate( castor::Point3ui gridDim
-		, castor::Point2ui clusterSize
+	void ClustersUbo::cpuUpdate( Point3ui gridDim
+		, Point2ui clusterSize
 		, float viewNear
 		, float viewFar
 		, uint32_t pointLightsCount

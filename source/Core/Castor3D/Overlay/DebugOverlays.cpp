@@ -22,17 +22,17 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
-CU_ImplementSmartPtr( castor3d, DebugOverlays )
+CU_ImplementSmartPtr( c3d, DebugOverlays )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 	namespace dbgovl
 	{
-		static castor::String toString( castor::Nanoseconds const & duration )
+		static String toString( Nanoseconds const & duration )
 		{
-			castor::StringStream stream;
+			StringStream stream;
 			stream << std::setprecision( 3 ) << ( float( duration.count() ) / 1000000.0f ) << cuT( " ms" );
 			return stream.str();
 		}
@@ -43,8 +43,8 @@ namespace castor3d
 		}
 
 		template< typename DataT, typename RatioT >
-		static bool areRelevantTimes( castor::Nanoseconds const & cpu
-			, castor::Nanoseconds const & gpu
+		static bool areRelevantTimes( Nanoseconds const & cpu
+			, Nanoseconds const & gpu
 			, std::chrono::duration< DataT, RatioT > const & threshold )
 		{
 			return cpu >= threshold || gpu >= threshold;
@@ -53,38 +53,38 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	DebugOverlays::DebugPanel::DebugPanel( castor::String const & name
-		, castor::String const & label
+	DebugOverlays::DebugPanel::DebugPanel( String const & name
+		, String const & label
 		, Engine & engine
 		, PanelCtrl & parent
-		, castor::Function< castor::String() > value )
+		, Function< String() > value )
 		: m_engine{ engine }
-		, m_v{ castor::move( value ) }
+		, m_v{ c3d::move( value ) }
 	{
 		auto & manager = *parent.getControlsManager();
 		auto panelStyle = parent.getStyle().getStyle< PanelStyle >( cuT( "Entry" ) );
 		auto labelStyle = panelStyle->getStyle< StaticStyle >( cuT( "Label" ) );
 		auto valueStyle = panelStyle->getStyle< StaticStyle >( cuT( "Value" ) );
-		m_panel = manager.registerControlT( castor::makeUnique< PanelCtrl >( nullptr
+		m_panel = manager.registerControlT( makeUnique< PanelCtrl >( nullptr
 			, name
 			, panelStyle
 			, &parent
-			, castor::Position{}
-			, castor::Size{ DebugLineWidth, PanelHeight } ) );
-		m_label = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
+			, Position{}
+			, Size{ DebugLineWidth, PanelHeight } ) );
+		m_label = manager.registerControlT( makeUnique< StaticCtrl >( nullptr
 			, cuT( "Label" )
 			, labelStyle
 			, m_panel
-			, castor::toUtf8U32String( label )
-			, castor::Position{ 0, 2 }
-			, castor::Size{ DebugLabelWidth, PanelHeight } ) );
-		m_value = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
+			, toUtf8U32String( label )
+			, Position{ 0, 2 }
+			, Size{ DebugLabelWidth, PanelHeight } ) );
+		m_value = manager.registerControlT( makeUnique< StaticCtrl >( nullptr
 			, cuT( "Value" )
 			, valueStyle
 			, m_panel
 			, U""
-			, castor::Position{ DebugLabelWidth, 2 }
-			, castor::Size{ DebugValueWidth, PanelHeight } ) );
+			, Position{ DebugLabelWidth, 2 }
+			, Size{ DebugValueWidth, PanelHeight } ) );
 
 		manager.create( m_panel );
 		manager.create( m_label );
@@ -97,10 +97,10 @@ namespace castor3d
 
 	DebugOverlays::DebugPanel::DebugPanel( DebugPanel && rhs )noexcept
 		: m_engine{ rhs.m_engine }
-		, m_v{ castor::move( rhs.m_v ) }
-		, m_panel{ castor::move( rhs.m_panel ) }
-		, m_label{ castor::move( rhs.m_label ) }
-		, m_value{ castor::move( rhs.m_value ) }
+		, m_v{ c3d::move( rhs.m_v ) }
+		, m_panel{ c3d::move( rhs.m_panel ) }
+		, m_label{ c3d::move( rhs.m_label ) }
+		, m_value{ c3d::move( rhs.m_value ) }
 	{
 		rhs.m_panel = {};
 		rhs.m_label = {};
@@ -131,12 +131,12 @@ namespace castor3d
 
 	void DebugOverlays::DebugPanel::update()
 	{
-		m_value->setCaption( castor::toUtf8U32String( m_v() ) );
+		m_value->setCaption( toUtf8U32String( m_v() ) );
 	}
 
 	//*********************************************************************************************
 
-	DebugOverlays::DebugPanels::DebugPanels( castor::String const & title
+	DebugOverlays::DebugPanels::DebugPanels( String const & title
 		, Engine & engine
 		, PanelCtrl & parent )
 		: m_engine{ engine }
@@ -144,22 +144,22 @@ namespace castor3d
 		auto & manager = dbgovl::getControlsManager( m_engine );
 		auto containerStyle = manager.getStyle< ExpandablePanelStyle >( cuT( "Debug/Main/Container" ) );
 		auto titleStyle = containerStyle->getHeaderStyle().getStyle< StaticStyle >( cuT( "Title" ) );
-		m_panel = manager.registerControlT( castor::makeUnique< ExpandablePanelCtrl >( nullptr
+		m_panel = manager.registerControlT( makeUnique< ExpandablePanelCtrl >( nullptr
 			, title
 			, containerStyle
 			, &parent
-			, castor::Position{}
-			, castor::Size{ DebugPanelWidth, PanelHeight }
+			, Position{}
+			, Size{ DebugPanelWidth, PanelHeight }
 			, PanelHeight
 			, true ) );
-		m_panel->getContent()->setLayout( castor::makeUniqueDerived< Layout, LayoutBox >( *m_panel->getContent() ) );
-		m_title = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
+		m_panel->getContent()->setLayout( makeUniqueDerived< Layout, LayoutBox >( *m_panel->getContent() ) );
+		m_title = manager.registerControlT( makeUnique< StaticCtrl >( nullptr
 			, cuT( "Title" )
 			, titleStyle
 			, m_panel->getHeader()
-			, castor::toUtf8U32String( title )
-			, castor::Position{ 0, 3 }
-			, castor::Size{ DebugPanelWidth - PanelHeight, PanelHeight } ) );
+			, toUtf8U32String( title )
+			, Position{ 0, 3 }
+			, Size{ DebugPanelWidth - PanelHeight, PanelHeight } ) );
 
 		m_title->setHAlign( HAlign::eCenter );
 
@@ -171,9 +171,9 @@ namespace castor3d
 
 	DebugOverlays::DebugPanels::DebugPanels( DebugPanels && rhs )noexcept
 		: m_engine{ rhs.m_engine }
-		, m_panel{ castor::move( rhs.m_panel ) }
-		, m_title{ castor::move( rhs.m_title ) }
-		, m_panels{ castor::move( rhs.m_panels ) }
+		, m_panel{ c3d::move( rhs.m_panel ) }
+		, m_title{ c3d::move( rhs.m_title ) }
+		, m_panels{ c3d::move( rhs.m_panels ) }
 	{
 		rhs.m_panel = {};
 		rhs.m_title = {};
@@ -221,9 +221,9 @@ namespace castor3d
 		return y + height;
 	}
 
-	void DebugOverlays::DebugPanels::add( castor::String const & name
-		, castor::String const & label
-		, castor::Function< castor::String() > value )
+	void DebugOverlays::DebugPanels::add( String const & name
+		, String const & label
+		, Function< String() > value )
 	{
 		m_panels.emplace_back( name
 			, label
@@ -234,24 +234,24 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	DebugOverlays::MainDebugPanel::MainDebugPanel( Engine & engine, castor::String const & name )
+	DebugOverlays::MainDebugPanel::MainDebugPanel( Engine & engine, String const & name )
 		: m_engine{ engine }
 	{
 		auto & manager = dbgovl::getControlsManager( m_engine );
-		m_panel = manager.registerControlT( castor::makeUnique< PanelCtrl >( nullptr
+		m_panel = manager.registerControlT( makeUnique< PanelCtrl >( nullptr
 			, cuT( "Debug/" ) + name
 			, manager.getStyle< PanelStyle >( cuT( "Debug/Main" ) )
 			, nullptr
-			, castor::Position{}
-			, castor::Size{ DebugPanelWidth, PanelHeight }
+			, Position{}
+			, Size{ DebugPanelWidth, PanelHeight }
 			, ControlFlagType( ControlFlag::eAlwaysOnTop ) ) );
-		m_panel->setLayout( castor::makeUniqueDerived< Layout, LayoutBox >( *m_panel ) );
+		m_panel->setLayout( makeUniqueDerived< Layout, LayoutBox >( *m_panel ) );
 		manager.create( m_panel );
 
-		m_times = castor::make_unique< DebugPanels >( cuT( "Times" ), m_engine, *m_panel );
-		m_fps = castor::make_unique< DebugPanels >( cuT( "FPS" ), m_engine, *m_panel );
-		m_counts = castor::make_unique< DebugPanels >( cuT( "Counts" ), m_engine, *m_panel );
-		m_stats = castor::make_unique< DebugPanels >( cuT( "Allocations" ), m_engine, *m_panel );
+		m_times = makeRawUnique< DebugPanels >( cuT( "Times" ), m_engine, *m_panel );
+		m_fps = makeRawUnique< DebugPanels >( cuT( "FPS" ), m_engine, *m_panel );
+		m_counts = makeRawUnique< DebugPanels >( cuT( "Counts" ), m_engine, *m_panel );
+		m_stats = makeRawUnique< DebugPanels >( cuT( "Allocations" ), m_engine, *m_panel );
 	}
 
 	DebugOverlays::MainDebugPanel::~MainDebugPanel()noexcept
@@ -282,9 +282,9 @@ namespace castor3d
 		m_panel->setVisible( visible );
 	}
 
-	void DebugOverlays::MainDebugPanel::addTimePanel( castor::String const & name
-		, castor::String const & label
-		, castor::Nanoseconds const & value )
+	void DebugOverlays::MainDebugPanel::addTimePanel( String const & name
+		, String const & label
+		, Nanoseconds const & value )
 	{
 		auto v = &value;
 		m_times->add( name
@@ -293,36 +293,36 @@ namespace castor3d
 		doUpdatePosition();
 	}
 
-	void DebugOverlays::MainDebugPanel::addCountPanel( castor::String const & name
-		, castor::String const & label
+	void DebugOverlays::MainDebugPanel::addCountPanel( String const & name
+		, String const & label
 		, uint32_t const & value )
 	{
 		auto v = &value;
 		m_counts->add( name
 			, label
-			, [v]() { return castor::string::toString( *v ); } );
+			, [v]() { return string::toString( *v ); } );
 		doUpdatePosition();
 	}
 
-	void DebugOverlays::MainDebugPanel::addStatsPanel( castor::String const & name
-		, castor::String const & label
+	void DebugOverlays::MainDebugPanel::addStatsPanel( String const & name
+		, String const & label
 		, AllocationStats const & value )
 	{
 		auto v = &value;
 		m_stats->add( name
 			, label
-			, [v]() { return castor::string::toString( v->total - v->available ); } );
+			, [v]() { return string::toString( v->total - v->available ); } );
 		doUpdatePosition();
 	}
 
-	void DebugOverlays::MainDebugPanel::addFpsPanel( castor::String const & name
-		, castor::String const & label
+	void DebugOverlays::MainDebugPanel::addFpsPanel( String const & name
+		, String const & label
 		, float const & value )
 	{
 		auto v = &value;
 		m_fps->add( name
 			, label
-			, [v]() { return castor::string::toString( *v ); } );
+			, [v]() { return string::toString( *v ); } );
 		doUpdatePosition();
 	}
 
@@ -332,14 +332,14 @@ namespace castor3d
 		y = m_fps->updatePosition( y );
 		y = m_counts->updatePosition( y );
 		y = m_stats->updatePosition( y );
-		m_panel->setSize( castor::Size{ DebugPanelWidth, y } );
+		m_panel->setSize( Size{ DebugPanelWidth, y } );
 	}
 
 	//*********************************************************************************************
 
 	DebugOverlays::PassOverlays::PassOverlays( Engine & engine
 		, PanelCtrl & parent
-		, castor::String const & name
+		, String const & name
 		, uint32_t leftOffset
 		, uint32_t )
 		: m_parent{ &parent }
@@ -350,53 +350,53 @@ namespace castor3d
 		auto nameStyle = panelStyle->getStyle< StaticStyle >( cuT( "Name" ) );
 		auto counterStyle = panelStyle->getStyle< StaticStyle >( cuT( "Counter" ) );
 		auto maxWidth = CategoryLineWidth - leftOffset;
-		m_panel = manager.registerControlT( castor::makeUnique< PanelCtrl >( nullptr
+		m_panel = manager.registerControlT( makeUnique< PanelCtrl >( nullptr
 			, m_name + cuT( "Pass" )
 			, panelStyle
 			, m_parent
-			, castor::Position{}
-			, castor::Size{ maxWidth, PanelHeight } ) );
+			, Position{}
+			, Size{ maxWidth, PanelHeight } ) );
 		int32_t posX{};
 		auto nameWidth = CategoryNameWidth - leftOffset;
-		m_passName = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
+		m_passName = manager.registerControlT( makeUnique< StaticCtrl >( nullptr
 			, cuT( "PassName" )
 			, nameStyle
 			, m_panel
-			, castor::toUtf8U32String( m_name )
-			, castor::Position{ posX, 2 }
-			, castor::Size{ nameWidth, PanelHeight } ) );
+			, toUtf8U32String( m_name )
+			, Position{ posX, 2 }
+			, Size{ nameWidth, PanelHeight } ) );
 		posX += nameWidth;
-		m_cpu.name = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
+		m_cpu.name = manager.registerControlT( makeUnique< StaticCtrl >( nullptr
 			, cuT( "CPUName" )
 			, counterStyle
 			, m_panel
 			, U"CPU:"
-			, castor::Position{ posX, 0 }
-			, castor::Size{ CpuNameWidth, PanelHeight } ) );
+			, Position{ posX, 0 }
+			, Size{ CpuNameWidth, PanelHeight } ) );
 		posX += CpuNameWidth;
-		m_cpu.value = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
+		m_cpu.value = manager.registerControlT( makeUnique< StaticCtrl >( nullptr
 			, cuT( "CPUValue" )
 			, counterStyle
 			, m_panel
 			, U""
-			, castor::Position{ posX, 0 }
-			, castor::Size{ CpuValueWidth, PanelHeight } ) );
+			, Position{ posX, 0 }
+			, Size{ CpuValueWidth, PanelHeight } ) );
 		posX += CpuValueWidth;
-		m_gpu.name = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
+		m_gpu.name = manager.registerControlT( makeUnique< StaticCtrl >( nullptr
 			, cuT( "GPUName" )
 			, counterStyle
 			, m_panel
 			, U"GPU:"
-			, castor::Position{ posX, 0 }
-			, castor::Size{ GpuNameWidth, PanelHeight } ) );
+			, Position{ posX, 0 }
+			, Size{ GpuNameWidth, PanelHeight } ) );
 		posX += GpuNameWidth;
-		m_gpu.value = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
+		m_gpu.value = manager.registerControlT( makeUnique< StaticCtrl >( nullptr
 			, cuT( "GPUValue" )
 			, counterStyle
 			, m_panel
 			, U""
-			, castor::Position{ posX, 0 }
-			, castor::Size{ GpuValueWidth, PanelHeight } ) );
+			, Position{ posX, 0 }
+			, Size{ GpuValueWidth, PanelHeight } ) );
 
 		m_cpu.name->setVAlign( VAlign::eCenter );
 		m_gpu.name->setVAlign( VAlign::eCenter );
@@ -421,14 +421,14 @@ namespace castor3d
 	}
 
 	DebugOverlays::PassOverlays::PassOverlays( PassOverlays && rhs )noexcept
-		: m_parent{ castor::move( rhs.m_parent ) }
-		, m_name{ castor::move( rhs.m_name ) }
+		: m_parent{ c3d::move( rhs.m_parent ) }
+		, m_name{ c3d::move( rhs.m_name ) }
 		, m_visible{ rhs.m_visible }
-		, m_timers{ castor::move( rhs.m_timers ) }
-		, m_panel{ castor::move( rhs.m_panel ) }
-		, m_passName{ castor::move( rhs.m_passName ) }
-		, m_cpu{ castor::move( rhs.m_cpu ) }
-		, m_gpu{ castor::move( rhs.m_gpu ) }
+		, m_timers{ c3d::move( rhs.m_timers ) }
+		, m_panel{ c3d::move( rhs.m_panel ) }
+		, m_passName{ c3d::move( rhs.m_passName ) }
+		, m_cpu{ c3d::move( rhs.m_cpu ) }
+		, m_gpu{ c3d::move( rhs.m_gpu ) }
 	{
 		rhs.m_parent = {};
 		rhs.m_visible = {};
@@ -516,8 +516,8 @@ namespace castor3d
 			return false;
 		}
 
-		m_cpu.value->setCaption( castor::toUtf8U32String( dbgovl::toString( m_cpu.time ) ) );
-		m_gpu.value->setCaption( castor::toUtf8U32String( dbgovl::toString( m_gpu.time ) ) );
+		m_cpu.value->setCaption( toUtf8U32String( dbgovl::toString( m_cpu.time ) ) );
+		m_gpu.value->setCaption( toUtf8U32String( dbgovl::toString( m_gpu.time ) ) );
 		top += PanelHeight;
 
 		return m_visible;
@@ -558,7 +558,7 @@ namespace castor3d
 	{
 	}
 
-	DebugOverlays::CategoryOverlays::CategoryOverlays( castor::String const & category
+	DebugOverlays::CategoryOverlays::CategoryOverlays( String const & category
 		, Engine & engine
 		, PanelCtrl & parent
 		, uint32_t leftOffset
@@ -573,55 +573,55 @@ namespace castor3d
 		auto containerStyle = manager.getStyle< ExpandablePanelStyle >( cuT( "Debug/RenderPasses/Category" ) );
 		auto nameStyle = containerStyle->getHeaderStyle().getStyle< StaticStyle >( cuT( "Name" ) );
 		auto counterStyle = containerStyle->getHeaderStyle().getStyle< StaticStyle >( cuT( "Counter" ) );
-		m_container = manager.registerControlT( castor::makeUnique< ExpandablePanelCtrl >( nullptr
+		m_container = manager.registerControlT( makeUnique< ExpandablePanelCtrl >( nullptr
 			, m_categoryName
 			, containerStyle
 			, m_parent
-			, castor::Position{}
-			, castor::Size{ CategoryLineWidth, PanelHeight }
+			, Position{}
+			, Size{ CategoryLineWidth, PanelHeight }
 			, PanelHeight
 			, expanded ) );
-		m_container->getContent()->setLayout( castor::makeUniqueDerived< Layout, LayoutBox >( *m_container->getContent() ) );
+		m_container->getContent()->setLayout( makeUniqueDerived< Layout, LayoutBox >( *m_container->getContent() ) );
 		auto nameWidth = CategoryNameWidth - m_leftOffset;
-		m_name = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
+		m_name = manager.registerControlT( makeUnique< StaticCtrl >( nullptr
 			, cuT( "Title" )
 			, nameStyle
 			, m_container->getHeader()
-			, castor::toUtf8U32String( m_categoryName )
-			, castor::Position{ m_posX, 2 }
-			, castor::Size{ nameWidth, PanelHeight } ) );
+			, toUtf8U32String( m_categoryName )
+			, Position{ m_posX, 2 }
+			, Size{ nameWidth, PanelHeight } ) );
 		m_posX += nameWidth;
-		m_cpu.name = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
+		m_cpu.name = manager.registerControlT( makeUnique< StaticCtrl >( nullptr
 			, cuT( "CPUName" )
 			, counterStyle
 			, m_container->getHeader()
 			,  U"CPU:"
-			, castor::Position{ m_posX, 0 }
-			, castor::Size{ CpuNameWidth, PanelHeight } ) );
+			, Position{ m_posX, 0 }
+			, Size{ CpuNameWidth, PanelHeight } ) );
 		m_posX += CpuNameWidth;
-		m_cpu.value = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
+		m_cpu.value = manager.registerControlT( makeUnique< StaticCtrl >( nullptr
 			, cuT( "CPUValue" )
 			, counterStyle
 			, m_container->getHeader()
 			,  U""
-			, castor::Position{ m_posX, 0 }
-			, castor::Size{ CpuValueWidth, PanelHeight } ) );
+			, Position{ m_posX, 0 }
+			, Size{ CpuValueWidth, PanelHeight } ) );
 		m_posX += CpuValueWidth;
-		m_gpu.name = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
+		m_gpu.name = manager.registerControlT( makeUnique< StaticCtrl >( nullptr
 			, cuT( "GPUName" )
 			, counterStyle
 			, m_container->getHeader()
 			,  U"GPU:"
-			, castor::Position{ m_posX, 0 }
-			, castor::Size{ GpuNameWidth, PanelHeight } ) );
+			, Position{ m_posX, 0 }
+			, Size{ GpuNameWidth, PanelHeight } ) );
 		m_posX += GpuNameWidth;
-		m_gpu.value = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
+		m_gpu.value = manager.registerControlT( makeUnique< StaticCtrl >( nullptr
 			, cuT( "GPUValue" )
 			, counterStyle
 			, m_container->getHeader()
 			, U""
-			, castor::Position{ m_posX, 0 }
-			, castor::Size{ GpuValueWidth, PanelHeight } ) );
+			, Position{ m_posX, 0 }
+			, Size{ GpuValueWidth, PanelHeight } ) );
 		m_posX += GpuValueWidth;
 
 		m_cpu.name->setVAlign( VAlign::eCenter );
@@ -648,19 +648,19 @@ namespace castor3d
 
 	DebugOverlays::CategoryOverlays & DebugOverlays::CategoryOverlays::operator=( CategoryOverlays && rhs )noexcept
 	{
-		m_engine = castor::move( rhs.m_engine );
-		m_parent = castor::move( rhs.m_parent );
-		m_categoryName = castor::move( rhs.m_categoryName );
+		m_engine = c3d::move( rhs.m_engine );
+		m_parent = c3d::move( rhs.m_parent );
+		m_categoryName = c3d::move( rhs.m_categoryName );
 		m_leftOffset = rhs.m_leftOffset;
 		m_posX = rhs.m_posX;
 		m_visible = rhs.m_visible;
 		m_parentVisible = rhs.m_parentVisible;
-		m_passes = castor::move( rhs.m_passes );
-		m_categories = castor::move( rhs.m_categories );
-		m_container = castor::move( rhs.m_container );
-		m_name = castor::move( rhs.m_name );
-		m_cpu = castor::move( rhs.m_cpu );
-		m_gpu = castor::move( rhs.m_gpu );
+		m_passes = c3d::move( rhs.m_passes );
+		m_categories = c3d::move( rhs.m_categories );
+		m_container = c3d::move( rhs.m_container );
+		m_name = c3d::move( rhs.m_name );
+		m_cpu = c3d::move( rhs.m_cpu );
+		m_gpu = c3d::move( rhs.m_gpu );
 
 		rhs.m_engine = {};
 		rhs.m_parent = {};
@@ -679,19 +679,19 @@ namespace castor3d
 	}
 
 	DebugOverlays::CategoryOverlays::CategoryOverlays( CategoryOverlays && rhs )noexcept
-		: m_engine{ castor::move( rhs.m_engine ) }
-		, m_parent{ castor::move( rhs.m_parent ) }
-		, m_categoryName{ castor::move( rhs.m_categoryName ) }
+		: m_engine{ c3d::move( rhs.m_engine ) }
+		, m_parent{ c3d::move( rhs.m_parent ) }
+		, m_categoryName{ c3d::move( rhs.m_categoryName ) }
 		, m_leftOffset{ rhs.m_leftOffset }
 		, m_posX{ rhs.m_posX }
 		, m_visible{ rhs.m_visible }
 		, m_parentVisible{ rhs.m_parentVisible }
-		, m_passes{ castor::move( rhs.m_passes ) }
-		, m_categories{ castor::move( rhs.m_categories ) }
-		, m_container{ castor::move( rhs.m_container ) }
-		, m_name{ castor::move( rhs.m_name ) }
-		, m_cpu{ castor::move( rhs.m_cpu ) }
-		, m_gpu{ castor::move( rhs.m_gpu ) }
+		, m_passes{ c3d::move( rhs.m_passes ) }
+		, m_categories{ c3d::move( rhs.m_categories ) }
+		, m_container{ c3d::move( rhs.m_container ) }
+		, m_name{ c3d::move( rhs.m_name ) }
+		, m_cpu{ c3d::move( rhs.m_cpu ) }
+		, m_gpu{ c3d::move( rhs.m_gpu ) }
 	{
 		rhs.m_engine = {};
 		rhs.m_parent = {};
@@ -747,8 +747,8 @@ namespace castor3d
 		}
 	}
 
-	void DebugOverlays::CategoryOverlays::addTimer( castor::String const & name
-		, castor::StringArray & categories
+	void DebugOverlays::CategoryOverlays::addTimer( String const & name
+		, StringArray & categories
 		, FramePassTimer & timer )
 	{
 		if ( categories.empty() )
@@ -766,12 +766,12 @@ namespace castor3d
 				{
 					auto index = uint32_t( m_passes.size() );
 
-						auto passOverlays = castor::make_unique< PassOverlays >( *m_engine
+						auto passOverlays = makeRawUnique< PassOverlays >( *m_engine
 							, *m_container->getContent()
 							, name
 							, m_leftOffset + 5u
 							, index );
-						m_passes.push_back( castor::move( passOverlays ) );
+						m_passes.push_back( c3d::move( passOverlays ) );
 						it = std::next( m_passes.begin()
 							, ptrdiff_t( m_passes.size() - 1 ) );
 				}
@@ -798,7 +798,7 @@ namespace castor3d
 			{
 				if ( it == m_categories.end() )
 				{
-					m_categories.emplace_back( castor::make_unique< CategoryOverlays >( current
+					m_categories.emplace_back( makeRawUnique< CategoryOverlays >( current
 						, *m_engine
 						, *m_container->getContent()
 						, m_leftOffset + 5u ) );
@@ -815,8 +815,8 @@ namespace castor3d
 		}
 	}
 
-	bool DebugOverlays::CategoryOverlays::removeTimer( castor::String const & name
-		, castor::StringArray & categories
+	bool DebugOverlays::CategoryOverlays::removeTimer( String const & name
+		, StringArray & categories
 		, FramePassTimer & timer )
 	{
 		if ( categories.empty() )
@@ -832,7 +832,7 @@ namespace castor3d
 			{
 				if ( ( *it )->removeTimer( timer ) )
 				{
-					auto pass = castor::move( *it );
+					auto pass = c3d::move( *it );
 					m_passes.erase( it );
 				}
 			}
@@ -856,7 +856,7 @@ namespace castor3d
 			{
 				if ( ( *it )->removeTimer( name, categories, timer ) )
 				{
-					auto category = castor::move( *it );
+					auto category = c3d::move( *it );
 					m_categories.erase( it );
 				}
 			}
@@ -941,8 +941,8 @@ namespace castor3d
 			return false;
 		}
 
-		m_cpu.value->setCaption( castor::toUtf8U32String( dbgovl::toString( m_cpu.time ) ) );
-		m_gpu.value->setCaption( castor::toUtf8U32String( dbgovl::toString( m_gpu.time ) ) );
+		m_cpu.value->setCaption( toUtf8U32String( dbgovl::toString( m_cpu.time ) ) );
+		m_gpu.value->setCaption( toUtf8U32String( dbgovl::toString( m_gpu.time ) ) );
 
 		return m_visible;
 	}
@@ -996,7 +996,7 @@ namespace castor3d
 		return m_container->getContent();
 	}
 
-	void DebugOverlays::CategoryOverlays::dumpFrameTimes( castor::String prefix
+	void DebugOverlays::CategoryOverlays::dumpFrameTimes( String prefix
 		, Parameters & params )const
 	{
 		if ( !prefix.empty() )
@@ -1033,7 +1033,7 @@ namespace castor3d
 		if ( m_totalTime > 0_ns )
 		{
 			log::info << cuT( "Counts:\n" )
-				<< cuT( "  Average Frame Time: " ) << ( float( std::chrono::duration_cast< castor::Microseconds >( m_averageTime ).count() ) / 1000.0f ) << cuT( " ms\n" )
+				<< cuT( "  Average Frame Time: " ) << ( float( std::chrono::duration_cast< Microseconds >( m_averageTime ).count() ) / 1000.0f ) << cuT( " ms\n" )
 				<< cuT( "  Average Frames per second: " ) <<  m_averageFps << std::endl;
 		}
 
@@ -1055,11 +1055,11 @@ namespace castor3d
 		return m_renderInfo;
 	}
 
-	void DebugOverlays::registerTimer( castor::String const & category
+	void DebugOverlays::registerTimer( String const & category
 		, FramePassTimer & timer )
 	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
-		auto words = castor::string::split( category, cuT( "/" ), 0xFFFFFFFF, false );
+		auto lock( makeUniqueLock( m_mutex ) );
+		auto words = string::split( category, cuT( "/" ), 0xFFFFFFFF, false );
 
 		if ( words.empty() )
 		{
@@ -1073,11 +1073,11 @@ namespace castor3d
 		m_dirty = true;
 	}
 
-	void DebugOverlays::unregisterTimer( castor::String const & category
+	void DebugOverlays::unregisterTimer( String const & category
 		, FramePassTimer & timer )
 	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
-		auto words = castor::string::split( category, cuT( "/" ), 0xFFFFFFFF, false );
+		auto lock( makeUniqueLock( m_mutex ) );
+		auto words = string::split( category, cuT( "/" ), 0xFFFFFFFF, false );
 
 		if ( words.empty() )
 		{
@@ -1093,12 +1093,12 @@ namespace castor3d
 
 	void DebugOverlays::dumpFrameTimes( Parameters & params )
 	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 		params.add( cuT( "Average" ), m_averageTime );
-		m_renderPasses.dumpFrameTimes( castor::String{}, params );
+		m_renderPasses.dumpFrameTimes( String{}, params );
 	}
 
-	castor::Microseconds DebugOverlays::endFrame( bool first )
+	Microseconds DebugOverlays::endFrame( bool first )
 	{
 		m_totalTime = m_frameTimer.getElapsed();
 
@@ -1111,18 +1111,18 @@ namespace castor3d
 			m_averageTime = std::accumulate( m_framesTimes.begin()
 				, std::next( m_framesTimes.begin(), ptrdiff_t( count ) )
 				, 0_ns ) / count;
-			m_averageFps = 1000000.0f / float( std::chrono::duration_cast< castor::Microseconds >( m_averageTime ).count() );
+			m_averageFps = 1000000.0f / float( std::chrono::duration_cast< Microseconds >( m_averageTime ).count() );
 			auto v = ( ++m_frameIndex ) % FrameSamplesCount;
 			m_frameIndex = v;
 		}
 
-		auto result = std::chrono::duration_cast< castor::Microseconds >( m_totalTime );
+		auto result = std::chrono::duration_cast< Microseconds >( m_totalTime );
 		m_fps = 1000000.0f / float( result.count() );
 		doCompute();
 
 		if ( m_visible )
 		{
-			auto lock( castor::makeUniqueLock( m_mutex ) );
+			auto lock( makeUniqueLock( m_mutex ) );
 			uint32_t top{};
 			m_renderPasses.update( top );
 
@@ -1138,7 +1138,7 @@ namespace castor3d
 	void DebugOverlays::endGpuTasks()
 	{
 		{
-			auto lock( castor::makeUniqueLock( m_mutex ) );
+			auto lock( makeUniqueLock( m_mutex ) );
 			m_renderPasses.retrieveGpuTime();
 		}
 	}
@@ -1167,14 +1167,14 @@ namespace castor3d
 	{
 		auto & engine = *getEngine();
 		auto & manager = dbgovl::getControlsManager( engine );
-		m_passesContainer = manager.registerControlT( castor::makeUnique< PanelCtrl >( nullptr
+		m_passesContainer = manager.registerControlT( makeUnique< PanelCtrl >( nullptr
 			, cuT( "Debug/RenderPasses" )
 			, manager.getPanelStyle( cuT( "Debug/RenderPasses" ) )
 			, nullptr
-			, castor::Position{ PassPanelLeft, 0 }
-			, castor::Size{ CategoryLineWidth, 600u }
+			, Position{ PassPanelLeft, 0 }
+			, Size{ CategoryLineWidth, 600u }
 			, ControlFlagType( ControlFlag::eAlwaysOnTop ) ) );
-		m_passesContainer->setLayout( castor::makeUniqueDerived< Layout, LayoutBox >( *m_passesContainer ) );
+		m_passesContainer->setLayout( makeUniqueDerived< Layout, LayoutBox >( *m_passesContainer ) );
 		manager.create( m_passesContainer );
 
 		m_passesContainer->setVisible( m_visible );
@@ -1188,7 +1188,7 @@ namespace castor3d
 
 	void DebugOverlays::doCreateMainDebugPanel()
 	{
-		m_debugPanel = castor::make_unique< MainDebugPanel >( *getEngine(), cuT( "Main" ) );
+		m_debugPanel = makeRawUnique< MainDebugPanel >( *getEngine(), cuT( "Main" ) );
 		m_debugPanel->addTimePanel( cuT( "CpuTime" )
 			, cuT( "CPU:" )
 			, m_cpuTime );
@@ -1264,7 +1264,7 @@ namespace castor3d
 	void DebugOverlays::doCompute()
 	{
 		{
-			auto lock( castor::makeUniqueLock( m_mutex ) );
+			auto lock( makeUniqueLock( m_mutex ) );
 			m_renderPasses.compute();
 			m_gpuTime += m_renderPasses.getGpuTime();
 			m_cpuTime -= m_gpuTime;

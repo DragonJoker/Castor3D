@@ -29,9 +29,9 @@
 #include <RenderGraph/RunnablePasses/BufferCopy.hpp>
 #include <RenderGraph/RunnablePasses/GenerateMipmaps.hpp>
 
-CU_ImplementSmartPtr( castor3d, Voxelizer )
+CU_ImplementSmartPtr( c3d, Voxelizer )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -39,15 +39,15 @@ namespace castor3d
 	{
 		static Texture createTexture( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, castor::String const & name
+			, String const & name
 			, Extent3D const & size )
 		{
 			return Texture{ device
 				, resources
 				, name
 				, { ImageCreateFlags::e2DArrayCompatible
-					, size, 1u, getMipLevels( size, castor::PixelFormat::eR16G16B16A16_SFLOAT )
-					, castor::PixelFormat::eR16G16B16A16_SFLOAT
+					, size, 1u, getMipLevels( size, PixelFormat::eR16G16B16A16_SFLOAT )
+					, PixelFormat::eR16G16B16A16_SFLOAT
 					, ( ImageUsageFlags::eStorage
 						| ImageUsageFlags::eTransferSrc
 						| ImageUsageFlags::eTransferDst
@@ -58,10 +58,10 @@ namespace castor3d
 		}
 
 		static ashes::BufferPtr< Voxel > createSsbo( RenderDevice const & device
-			, castor::String const & name
+			, String const & name
 			, uint32_t voxelGridSize )
 		{
-			return castor3d::makeBuffer< Voxel >( device
+			return makeBuffer< Voxel >( device
 				, voxelGridSize * voxelGridSize * voxelGridSize
 				, ( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 					| VK_BUFFER_USAGE_TRANSFER_SRC_BIT
@@ -85,7 +85,7 @@ namespace castor3d
 					, GetPipelineStateCallback( []() { return crg::getPipelineState( PipelineStageFlags::eTransfer ); } )
 					, [this]( crg::RecordContext &, VkCommandBuffer cb, uint32_t i ) { doRecordInto( cb, i ); }
 					, crg::defaultV< GetPassIndexCallback >
-					, castor::move( isEnabled ) } }
+					, c3d::move( isEnabled ) } }
 			{
 			}
 
@@ -110,7 +110,7 @@ namespace castor3d
 	Voxelizer::Voxelizer( crg::ResourcesCache & resources
 		, RenderDevice const & device
 		, ProgressBar * progress
-		, castor::String const & prefix
+		, String const & prefix
 		, Scene & scene
 		, Camera & camera
 		, VoxelizerUbo & voxelizerUbo
@@ -121,9 +121,9 @@ namespace castor3d
 		, m_voxelConfig{ voxelConfig }
 		, m_scene{ scene }
 		, m_camera{ camera }
-		, m_staticsCuller{ castor::makeUniqueDerived< SceneCuller, DummyCuller >( m_scene, nullptr, true ) }
-		, m_dynamicsCuller{ castor::makeUniqueDerived< SceneCuller, DummyCuller >( m_scene, nullptr, false ) }
-		, m_graph{ resources.getHandler(), castor::toUtf8( prefix ) + "/Voxelizer" }
+		, m_staticsCuller{ makeUniqueDerived< SceneCuller, DummyCuller >( m_scene, nullptr, true ) }
+		, m_dynamicsCuller{ makeUniqueDerived< SceneCuller, DummyCuller >( m_scene, nullptr, false ) }
+		, m_graph{ resources.getHandler(), toUtf8( prefix ) + "/Voxelizer" }
 		, m_cameraUbo{ device }
 		, m_firstBounce{ vxlsr::createTexture( device, resources, cuT( "VoxelizedSceneFirstBounce" ), { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
 		, m_secondaryBounce{ vxlsr::createTexture( device, resources, cuT( "VoxelizedSceneSecondaryBounce" ), { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
@@ -148,7 +148,7 @@ namespace castor3d
 			, progress ) }
 		, m_runnable{ m_graph.compile( m_device.makeContext() ) }
 	{
-		m_scene.getEngine()->registerTimer( castor::makeString( m_runnable->getName() + "/Graph" )
+		m_scene.getEngine()->registerTimer( makeString( m_runnable->getName() + "/Graph" )
 			, m_runnable->getTimer() );
 		printGraph( *m_runnable );
 		m_graph.addOutput( m_firstBounce.wholeViewId
@@ -166,7 +166,7 @@ namespace castor3d
 
 	Voxelizer::~Voxelizer()noexcept
 	{
-		m_scene.getEngine()->unregisterTimer( castor::makeString( m_runnable->getName() + "/Graph" )
+		m_scene.getEngine()->unregisterTimer( makeString( m_runnable->getName() + "/Graph" )
 			, m_runnable->getTimer() );
 		m_runnable.reset();
 		m_firstBounce.destroy();
@@ -185,13 +185,13 @@ namespace castor3d
 			auto max = std::max( aabb.getDimensions()->x, std::max( aabb.getDimensions()->y, aabb.getDimensions()->z ) );
 			auto cellSize = float( m_voxelConfig.gridSize.value() ) / max;
 			auto voxelSize = ( cellSize * m_voxelConfig.voxelSizeFactor );
-			m_grid = castor::Point4f{ 0.0f
+			m_grid = Point4f{ 0.0f
 				, 0.0f
 				, 0.0f
 				, voxelSize };
-			static const castor::Matrix4x4f identity{ []()
+			static const Matrix4x4f identity{ []()
 				{
-					castor::Matrix4x4f res;
+					Matrix4x4f res;
 					res.setIdentity();
 					return res;
 				}() };
@@ -277,7 +277,7 @@ namespace castor3d
 		, SceneCuller & culler
 		, bool isStatic )
 	{
-		castor::MbString name = "NodesPass";
+		MbString name = "NodesPass";
 
 		if ( isStatic )
 		{
@@ -291,7 +291,7 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBarLocal( progress, cuT( "Initialising voxelize pass" ) );
-				auto res = castor::make_unique< VoxelizePass >( framePass
+				auto res = makeRawUnique< VoxelizePass >( framePass
 					, context
 					, runnableGraph
 					, m_device
@@ -313,7 +313,7 @@ namespace castor3d
 					m_dynamicsVoxelizePass = res.get();
 				}
 
-				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -323,7 +323,7 @@ namespace castor3d
 			result.addDependencies( previousPasses );
 		}
 
-		castor::MbString bufName = "Voxels";
+		MbString bufName = "Voxels";
 
 		if ( isStatic )
 		{
@@ -347,11 +347,11 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBarLocal( progress, cuT( "Initialising clear static pass" ) );
-				auto res = castor::make_unique< vxlsr::VoxelsClear >( framePass
+				auto res = makeRawUnique< vxlsr::VoxelsClear >( framePass
 					, context
 					, runnableGraph
 					, crg::BufferCopy::IsEnabledCallback( [this]() { return doEnableClearStatic(); } ) );
-				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -373,7 +373,7 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBarLocal( progress, cuT( "Initialising copy static to dynamic pass" ) );
-				auto res = castor::make_unique< crg::BufferCopy >( framePass
+				auto res = makeRawUnique< crg::BufferCopy >( framePass
 					, context
 					, runnableGraph
 					, 0u
@@ -381,7 +381,7 @@ namespace castor3d
 					, crg::ru::Config{}
 					, crg::BufferCopy::GetPassIndexCallback( []() { return 0u; } )
 					, crg::BufferCopy::IsEnabledCallback( [this]() { return doEnableCopyStatic(); } ) );
-				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -408,14 +408,14 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBarLocal( progress, cuT( "Initialising voxel buffer to texture pass" ) );
-				auto res = castor::make_unique< VoxelBufferToTexture >( framePass
+				auto res = makeRawUnique< VoxelBufferToTexture >( framePass
 					, context
 					, runnableGraph
 					, m_device
 					, m_voxelConfig
 					, crg::RunnablePass::IsEnabledCallback( [this]() { return doEnableVoxelToTexture(); } ) );
 				m_voxelToTexture = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -430,26 +430,26 @@ namespace castor3d
 	}
 
 	crg::FramePass & Voxelizer::doCreateVoxelMipGen( crg::FramePass const & previousPass
-		, castor::String const & name
+		, String const & name
 		, crg::ImageViewId const & view
 		, crg::RunnablePass::IsEnabledCallback isEnabled
 		, ProgressBar * progress )
 	{
 		stepProgressBarLocal( progress, cuT( "Creating voxel mipmap generation pass" ) );
-		auto & result = m_graph.createPass( castor::toUtf8( name )
-			, [this, progress, enable = castor::move( isEnabled )]( crg::FramePass const & framePass
+		auto & result = m_graph.createPass( toUtf8( name )
+			, [this, progress, enable = c3d::move( isEnabled )]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBarLocal( progress, cuT( "Initialising voxel mipmap generation pass" ) );
-				auto res = castor::make_unique< crg::GenerateMipmaps >( framePass
+				auto res = makeRawUnique< crg::GenerateMipmaps >( framePass
 					, context
 					, runnableGraph
 					, ImageLayout::eShaderReadOnly
 					, crg::ru::Config{}
 					, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
 					, enable );
-				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -469,14 +469,14 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBarLocal( progress, cuT( "Initialising voxel secondary bounce pass" ) );
-				auto res = castor::make_unique< VoxelSecondaryBounce >( framePass
+				auto res = makeRawUnique< VoxelSecondaryBounce >( framePass
 					, context
 					, runnableGraph
 					, m_device
 					, m_voxelConfig
 					, crg::RunnablePass::IsEnabledCallback( [this]() { return doEnableSecondaryBounce(); } ) );
 				m_voxelSecondaryBounce = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );

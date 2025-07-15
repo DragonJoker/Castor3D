@@ -16,9 +16,9 @@
 #include <ashespp/Sync/Fence.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
-CU_ImplementSmartPtr( castor3d, ShadowMap )
+CU_ImplementSmartPtr( c3d, ShadowMap )
 
-namespace castor3d
+namespace c3d
 {
 	namespace shdmap
 	{
@@ -131,14 +131,14 @@ namespace castor3d
 		, Scene & scene
 		, LightType lightType
 		, ImageCreateFlags createFlags
-		, castor::Size const & size
+		, Size const & size
 		, uint32_t layerCount
 		, uint32_t count )
 		: OwnedBy< Engine >{ *scene.getEngine() }
 		, m_device{ device }
 		, m_resources{ resources }
 		, m_scene{ scene }
-		, m_name{ castor::string::snakeToCamelCase( getName( lightType ) ) }
+		, m_name{ string::snakeToCamelCase( getName( lightType ) ) }
 		, m_lightType{ lightType }
 		, m_staticsResult{ resources
 			, m_device
@@ -197,7 +197,7 @@ namespace castor3d
 		if ( updater.index < doGetMaxCount()
 			&& updater.index >= myPasses.otherNodes.runnables.size() )
 		{
-			auto graph = castor::make_unique< crg::FrameGraph >( m_resources.getHandler(), castor::toUtf8( m_name ) + "SM" );
+			auto graph = makeRawUnique< crg::FrameGraph >( m_resources.getHandler(), toUtf8( m_name ) + "SM" );
 			auto previous = doCreatePasses( *graph
 				, crg::FramePassArray{}
 				, updater.index
@@ -213,7 +213,7 @@ namespace castor3d
 				, false
 				, myPasses.otherNodes );
 			myPasses.staticNodes.graphs.emplace_back( nullptr );
-			myPasses.otherNodes.graphs.emplace_back( castor::move( graph ) );
+			myPasses.otherNodes.graphs.emplace_back( c3d::move( graph ) );
 		}
 
 		doUpdate( updater, myPasses.staticNodes );
@@ -237,7 +237,7 @@ namespace castor3d
 			for ( auto & view : result.subViewsId )
 			{
 				auto smTexture = SmTexture( i );
-				visitor.visit( m_name + cuT( "/" ) + getTexName( smTexture ) + cuT( "L" ) + castor::string::toString( index )
+				visitor.visit( m_name + cuT( "/" ) + getTexName( smTexture ) + cuT( "L" ) + string::toString( index )
 					, view
 					, ( isDepthOrStencilFormat( getFormat( view ) )
 						? ImageLayout::eDepthStencilAttachment
@@ -269,7 +269,7 @@ namespace castor3d
 		{
 			CU_Require( myPasses.otherNodes.graphs[index] != nullptr );
 			myPasses.otherNodes.runnables[index] = myPasses.otherNodes.graphs[index]->compile( m_device.makeContext() );
-			getEngine()->registerTimer( castor::makeString( myPasses.otherNodes.runnables[index]->getName() )
+			getEngine()->registerTimer( makeString( myPasses.otherNodes.runnables[index]->getName() )
 				, myPasses.otherNodes.runnables[index]->getTimer() );
 			printGraph( *myPasses.otherNodes.runnables.back() );
 			myPasses.otherNodes.runnables[index]->record();
@@ -324,7 +324,7 @@ namespace castor3d
 		{
 			// The graph will be defined for finale shadow map pass, but not for static one.
 			passes.runnables.push_back( graph.compile( m_device.makeContext() ) );
-			getEngine()->registerTimer( castor::makeString( passes.runnables.back()->getName() )
+			getEngine()->registerTimer( makeString( passes.runnables.back()->getName() )
 				, passes.runnables.back()->getTimer() );
 			printGraph( *passes.runnables.back() );
 			passes.runnables.back()->record();

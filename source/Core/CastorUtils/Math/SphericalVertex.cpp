@@ -1,6 +1,6 @@
 #include "CastorUtils/Math/SphericalVertex.hpp"
 
-namespace castor
+namespace c3d
 {
 	SphericalVertex::SphericalVertex( float radius, float phi, float theta )
 		: m_radius( radius )

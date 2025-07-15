@@ -12,7 +12,7 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	FrustumCuller::FrustumCuller( Scene & scene
 		, Camera & camera
@@ -35,8 +35,8 @@ namespace castor3d
 	{
 	}
 
-	void FrustumCuller::updateFrustum( castor::Matrix4x4f const & projection
-		, castor::Matrix4x4f const & view )
+	void FrustumCuller::updateFrustum( Matrix4x4f const & projection
+		, Matrix4x4f const & view )
 	{
 		m_frustum->update( projection, view );
 	}

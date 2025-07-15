@@ -5,13 +5,13 @@
 #include <CastorUtils/Graphics/PixelFormat.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 	namespace texconf
 	{
-		static void updateStartIndex( castor::PixelFormat format
+		static void updateStartIndex( PixelFormat format
 			, TextureFlagConfiguration & config )
 		{
 			if ( config.componentsMask )
@@ -21,7 +21,7 @@ namespace castor3d
 				switch ( components.size() )
 				{
 				case 1:
-					config.startIndex = castor::getComponentIndex( *components.begin(), format );
+					config.startIndex = getComponentIndex( *components.begin(), format );
 					break;
 				case 2:
 					if ( config.componentsMask == 0x0000FFFF )
@@ -136,8 +136,8 @@ namespace castor3d
 	size_t getHash( TextureFlagConfiguration const & config )
 	{
 		size_t result = std::hash< PassComponentTextureFlag >{}( config.flag );
-		castor::hashCombine( result, config.startIndex );
-		castor::hashCombine( result, config.componentsMask );
+		hashCombine( result, config.startIndex );
+		hashCombine( result, config.componentsMask );
 		return result;
 	}
 
@@ -148,21 +148,21 @@ namespace castor3d
 
 		for ( auto flag : flags )
 		{
-			castor::hashCombine( result, flag );
+			hashCombine( result, flag );
 		}
 
-		castor::hashCombine( result, config.normalFactor );
-		castor::hashCombine( result, config.heightFactor );
-		castor::hashCombine( result, config.normalDirectX );
-		castor::hashCombine( result, config.needsYInversion );
-		castor::hashCombine( result, config.needsXInversion );
-		castor::hashCombine( result, config.needsZInversion );
-		castor::hashCombine( result, config.normal2Channels );
-		castor::hashCombine( result, config.transform.translate->x );
-		castor::hashCombine( result, config.transform.translate->y );
-		castor::hashCombine( result, config.transform.rotate.radians() );
-		castor::hashCombine( result, config.transform.scale->x );
-		castor::hashCombine( result, config.transform.scale->y );
+		hashCombine( result, config.normalFactor );
+		hashCombine( result, config.heightFactor );
+		hashCombine( result, config.normalDirectX );
+		hashCombine( result, config.needsYInversion );
+		hashCombine( result, config.needsXInversion );
+		hashCombine( result, config.needsZInversion );
+		hashCombine( result, config.normal2Channels );
+		hashCombine( result, config.transform.translate->x );
+		hashCombine( result, config.transform.translate->y );
+		hashCombine( result, config.transform.rotate.radians() );
+		hashCombine( result, config.transform.scale->x );
+		hashCombine( result, config.transform.scale->y );
 		return result;
 	}
 
@@ -181,36 +181,36 @@ namespace castor3d
 		return result;
 	}
 
-	castor::PixelComponents getPixelComponents( uint32_t mask )
+	PixelComponents getPixelComponents( uint32_t mask )
 	{
-		castor::PixelComponents result;
+		PixelComponents result;
 
 		if ( mask & 0xFF000000 )
 		{
-			result |= castor::PixelComponent::eAlpha;
+			result |= PixelComponent::eAlpha;
 		}
 
 		if ( mask & 0x00FF0000 )
 		{
-			result |= castor::PixelComponent::eRed;
+			result |= PixelComponent::eRed;
 		}
 
 		if ( mask & 0x0000FF00 )
 		{
-			result |= castor::PixelComponent::eGreen;
+			result |= PixelComponent::eGreen;
 		}
 
 		if ( mask & 0x000000FF )
 		{
-			result |= castor::PixelComponent::eBlue;
+			result |= PixelComponent::eBlue;
 		}
 
 		return result;
 	}
 
-	castor::PixelComponents getPixelComponents( TextureConfiguration const & config )
+	PixelComponents getPixelComponents( TextureConfiguration const & config )
 	{
-		castor::PixelComponents result;
+		PixelComponents result;
 		result |= getPixelComponents( config.components[0].componentsMask );
 		result |= getPixelComponents( config.components[1].componentsMask );
 		result |= getPixelComponents( config.components[2].componentsMask );
@@ -218,7 +218,7 @@ namespace castor3d
 		return result;
 	}
 
-	void updateIndices( castor::PixelFormat format
+	void updateIndices( PixelFormat format
 		, TextureConfiguration & config )
 	{
 		texconf::updateStartIndex( format, config.components[0] );
@@ -265,7 +265,7 @@ namespace castor3d
 			{
 				auto [lhsPassIndex, lhsTextureFlag] = splitTextureFlag( lookup.flag );
 				return lhsPassIndex == rhsPassIndex
-					&& castor::hasAny( lhsTextureFlag, rhsTextureFlag );
+					&& hasAny( lhsTextureFlag, rhsTextureFlag );
 			} );
 		return it != lhs.end();
 	}
@@ -283,7 +283,7 @@ namespace castor3d
 
 			while ( nxt != config.components.end() )
 			{
-				*it = castor::move( *nxt );
+				*it = c3d::move( *nxt );
 				++it;
 				++nxt;
 			}
@@ -313,7 +313,7 @@ namespace castor3d
 			}
 		}
 
-		*it = castor::move( flagConfiguration );
+		*it = c3d::move( flagConfiguration );
 	}
 
 	TextureFlagConfiguration & getFlagConfiguration( TextureConfiguration & configuration

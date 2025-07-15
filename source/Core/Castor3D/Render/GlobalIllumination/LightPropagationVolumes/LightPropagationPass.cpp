@@ -31,9 +31,9 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
-CU_ImplementSmartPtr( castor3d, LightPropagationPass )
+CU_ImplementSmartPtr( c3d, LightPropagationPass )
 
-namespace castor3d
+namespace c3d
 {
 	namespace lpvprop
 	{
@@ -44,7 +44,7 @@ namespace castor3d
 			SurfaceT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
-				: sdw::StructInstance{ writer, castor::move( expr ), enabled }
+				: sdw::StructInstance{ writer, c3d::move( expr ), enabled }
 				, cellIndex{ getMember< sdw::IVec3 >( "cellIndex" ) }
 			{
 			}
@@ -94,22 +94,22 @@ namespace castor3d
 
 			/*Spherical harmonics coefficients - precomputed*/
 			auto SH_C0 = writer.declConstant( "SH_C0"
-				, sdw::Float{ 1.0f / float( 2.0f * sqrt( castor::Pi< float > ) ) } );
+				, sdw::Float{ 1.0f / float( 2.0f * sqrt( Pi< float > ) ) } );
 			auto SH_C1 = writer.declConstant( "SH_C1"
-				, sdw::Float{ float( sqrt( 3.0f / castor::Pi< float > ) / 2.0f ) } );
+				, sdw::Float{ float( sqrt( 3.0f / Pi< float > ) / 2.0f ) } );
 
 			/*Cosine lobe coeff*/
 			auto SH_cosLobe_C0 = writer.declConstant( "SH_cosLobe_C0"
-				, sdw::Float{ float( sqrt( castor::Pi< float > ) / 2.0f ) } );
+				, sdw::Float{ float( sqrt( Pi< float > ) / 2.0f ) } );
 			auto SH_cosLobe_C1 = writer.declConstant( "SH_cosLobe_C1"
-				, sdw::Float{ float( sqrt( castor::Pi< float > ) / 3.0f ) } );
+				, sdw::Float{ float( sqrt( Pi< float > ) / 3.0f ) } );
 
 			auto directFaceSubtendedSolidAngle = writer.declConstant( "directFaceSubtendedSolidAngle"
-				, sdw::Float{ 0.4006696846f / castor::Pi< float > } );
+				, sdw::Float{ 0.4006696846f / Pi< float > } );
 			auto sideFaceSubtendedSolidAngle = writer.declConstant( "sideFaceSubtendedSolidAngle"
-				, sdw::Float{ 0.4234413544f / castor::Pi< float > } );
+				, sdw::Float{ 0.4234413544f / Pi< float > } );
 			auto propDirections = writer.declConstantArray( "propDirections"
-				, castor::Vector< sdw::IVec3 >
+				, Vector< sdw::IVec3 >
 				{
 					//+Z
 					ivec3( 0_i, 0_i, 1_i ),
@@ -127,7 +127,7 @@ namespace castor3d
 
 			//Sides of the cell - right, top, left, bottom
 			auto cellSides = writer.declConstantArray( "cellSides"
-				, castor::Vector< sdw::IVec2 >
+				, Vector< sdw::IVec2 >
 				{
 					ivec2( 1_i, 0_i ),
 					ivec2( 0_i, 1_i ),
@@ -136,9 +136,9 @@ namespace castor3d
 				} );
 
 			C3D_LpvGridConfig( writer, LightPropagationPass::LpvGridUboIdx, 0u, true );
-			auto c3d_lpvGridR = writer.declCombinedImg< FImg3DRgba16 >( castor::toUtf8( getTextureName( LpvTexture::eR, cuT( "Grid" ) ) ), LightPropagationPass::RLpvGridIdx, 0u );
-			auto c3d_lpvGridG = writer.declCombinedImg< FImg3DRgba16 >( castor::toUtf8( getTextureName( LpvTexture::eG, cuT( "Grid" ) ) ), LightPropagationPass::GLpvGridIdx, 0u );
-			auto c3d_lpvGridB = writer.declCombinedImg< FImg3DRgba16 >( castor::toUtf8( getTextureName( LpvTexture::eB, cuT( "Grid" ) ) ), LightPropagationPass::BLpvGridIdx, 0u );
+			auto c3d_lpvGridR = writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eR, cuT( "Grid" ) ) ), LightPropagationPass::RLpvGridIdx, 0u );
+			auto c3d_lpvGridG = writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eG, cuT( "Grid" ) ) ), LightPropagationPass::GLpvGridIdx, 0u );
+			auto c3d_lpvGridB = writer.declCombinedImg< FImg3DRgba16 >( toUtf8( getTextureName( LpvTexture::eB, cuT( "Grid" ) ) ), LightPropagationPass::BLpvGridIdx, 0u );
 			auto c3d_geometryVolume = writer.declCombinedImg< FImg3DRgba16 >( "c3d_geometryVolume", LightPropagationPass::GpGridIdx, 0u, occlusion );
 
 			auto inPosition = writer.declInput< sdw::Vec3 >( "inPosition", sdw::EntryPoint::eVertex, 0u );
@@ -339,11 +339,11 @@ namespace castor3d
 			return writer.getBuilder().releaseShader();
 		}
 
-		static GpuBufferOffsetT< castor::Point3f > createVertexBuffer( RenderDevice const & device
+		static GpuBufferOffsetT< Point3f > createVertexBuffer( RenderDevice const & device
 			, uint32_t gridSize )
 		{
 			auto bufferSize = gridSize * gridSize * gridSize;
-			auto result = device.bufferPool->getBuffer< castor::Point3f >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
+			auto result = device.bufferPool->getBuffer< Point3f >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
 				, bufferSize
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			auto buffer = result.getData().data();
@@ -354,7 +354,7 @@ namespace castor3d
 				{
 					for ( uint32_t r = 0; r < gridSize; r++ )
 					{
-						*buffer = castor::Point3f{ float( r ), float( c ), float( d ) };
+						*buffer = Point3f{ float( r ), float( c ), float( d ) };
 						++buffer;
 					}
 				}
@@ -373,7 +373,7 @@ namespace castor3d
 		, crg::pp::Config config
 		, uint32_t gridSize
 		, BlendMode blendMode )
-		: m_holder{ pass, context, graph, castor::move( config ), VK_PIPELINE_BIND_POINT_GRAPHICS, 1u }
+		: m_holder{ pass, context, graph, c3d::move( config ), VK_PIPELINE_BIND_POINT_GRAPHICS, 1u }
 		, m_gridSize{ gridSize }
 		, m_blendMode{ blendMode }
 	{
@@ -402,7 +402,7 @@ namespace castor3d
 	{
 		ashes::PipelineVertexInputStateCreateInfo vertexState{ 0u
 			, { { 0u
-				, sizeof( castor::Point3f )
+				, sizeof( Point3f )
 				, VK_VERTEX_INPUT_RATE_VERTEX } }
 			, ashes::VkVertexInputAttributeDescriptionArray{ { 0u
 				, 0u
@@ -480,7 +480,7 @@ namespace castor3d
 		, bool occlusion
 		, uint32_t gridSize
 		, BlendMode blendMode )
-		: castor::Named{ castor::makeString( pass.getName() ) }
+		: Named{ makeString( pass.getName() ) }
 		, crg::RenderPass{ pass
 			, context
 			, graph

@@ -45,7 +45,7 @@ See LICENSE file in root folder
 #include <map>
 
 #define CU_DeclareMap( key, value, name )\
-	using name##Map = castor::Map< key, value >;\
+	using name##Map = c3d::Map< key, value >;\
 	using name##MapIt = name##Map::iterator;\
 	using name##MapRIt = name##Map::reverse_iterator;\
 	using name##MapConstIt = name##Map::const_iterator;\
@@ -53,7 +53,7 @@ See LICENSE file in root folder
 	using name##MapValueType = name##Map::value_type
 
 #define CU_DeclareMultimap( key, value, name )\
-	using name##MMap = castor::MultiMap< key, value >;\
+	using name##MMap = c3d::MultiMap< key, value >;\
 	using name##MMapIt = name##MMap::iterator;\
 	using name##MMapRIt = name##MMap::reverse_iterator;\
 	using name##MMapConstIt = name##MMap::const_iterator;\
@@ -63,14 +63,14 @@ See LICENSE file in root folder
 #include <set>
 
 #define CU_DeclareSet( key, name )\
-	using name##Set = castor::Set< key >;\
+	using name##Set = c3d::Set< key >;\
 	using name##SetIt = name##Set::iterator;\
 	using name##SetRIt = name##Set::reverse_iterator;\
 	using name##SetConstIt = name##Set::const_iterator;\
 	using name##SetConstRIt = name##Set::const_reverse_iterator
 
 #define CU_DeclareMultiset( key, name )\
-	using name##Mset = castor::MultiSet< key >;\
+	using name##Mset = c3d::MultiSet< key >;\
 	using name##MSetIt = name##MSet::iterator;\
 	using name##MSetRIt = name##MSet::reverse_iterator;\
 	using name##MSetConstIt = name##MSet::const_iterator;\
@@ -79,7 +79,7 @@ See LICENSE file in root folder
 #include <vector>
 
 #define CU_DeclareVector( key, name )\
-	using name##Array = castor::Vector< key >;\
+	using name##Array = c3d::Vector< key >;\
 	using name##ArrayIt = name##Array::iterator;\
 	using name##ArrayRIt = name##Array::reverse_iterator;\
 	using name##ArrayConstIt = name##Array::const_iterator;\
@@ -88,7 +88,7 @@ See LICENSE file in root folder
 #include <array>
 
 #define CU_DeclareArray( key, count, name )\
-	using name##Array = castor::Array< key, size_t( count ) >;\
+	using name##Array = c3d::Array< key, size_t( count ) >;\
 	using name##ArrayIt = name##Array::iterator;\
 	using name##ArrayRIt = name##Array::reverse_iterator;\
 	using name##ArrayConstIt = name##Array::const_iterator;\
@@ -97,14 +97,14 @@ See LICENSE file in root folder
 #include <list>
 
 #define CU_DeclareList( key, name )\
-	using name##List = castor::List< key >;\
+	using name##List = c3d::List< key >;\
 	using name##ListIt = name##List::iterator;\
 	using name##ListRIt = name##List::reverse_iterator;\
 	using name##ListConstIt = name##List::const_iterator;\
 	using name##ListConstRIt = name##List::const_reverse_iterator
 
 #define CU_DeclareTemplateMap( key, value, name )\
-	using name##Map = castor::Map< key, value >;\
+	using name##Map = c3d::Map< key, value >;\
 	using name##MapIt = typename name##Map::iterator;\
 	using name##MapRIt = typename name##Map::reverse_iterator;\
 	using name##MapConstIt = typename name##Map::const_iterator;\
@@ -112,28 +112,28 @@ See LICENSE file in root folder
 	using name##Pair = typename name##Map::value_type
 
 #define CU_DeclareTemplateSet( key, name )\
-	using name##Set = castor::Set< key >;\
+	using name##Set = c3d::Set< key >;\
 	using name##SetIt = typename name##Set::iterator;\
 	using name##SetRIt = typename name##Set::reverse_iterator;\
 	using name##SetConstIt = typename name##Set::const_iterator;\
 	using name##SetConstRIt = typename name##Set::const_reverse_iterator
 
 #define CU_DeclareTemplateVector( key, name )\
-	using name##Array = castor::Vector< key >;\
+	using name##Array = c3d::Vector< key >;\
 	using name##ArrayIt = typename name##Array::iterator;\
 	using name##ArrayRIt = typename name##Array::reverse_iterator;\
 	using name##ArrayConstIt = typename name##Array::const_iterator;\
 	using name##ArrayConstRIt = typename name##Array::const_reverse_iterator
 
 #define CU_DeclareTemplateArray( key, count, name )\
-	using name##Array = castor::Array< key, count >;\
+	using name##Array = c3d::Array< key, count >;\
 	using name##ArrayIt = typename name##Array::iterator;\
 	using name##ArrayRIt = typename name##Array::reverse_iterator;\
 	using name##ArrayConstIt = typename name##Array::const_iterator;\
 	using name##ArrayConstRIt = typename name##Array::const_reverse_iterator
 
 #define CU_DeclareTemplateList( key, name )\
-	using name##List = castor::List< key >;\
+	using name##List = c3d::List< key >;\
 	using name##ListIt = typename name##List::iterator;\
 	using name##ListRIt = typename name##List::reverse_iterator;\
 	using name##ListConstIt = typename name##List::const_iterator;\
@@ -179,7 +179,7 @@ See LICENSE file in root folder
 	eMax = eCount - 1
 
 #define CU_ImplementFlags( FlagType )\
-	using FlagType##s = castor::FlagCombination< FlagType >;\
+	using FlagType##s = c3d::FlagCombination< FlagType >;\
 	inline constexpr FlagType##s operator|( FlagType lhs, FlagType rhs )\
 	{\
 		return FlagType##s( lhs ) | rhs;\
@@ -194,7 +194,7 @@ See LICENSE file in root folder
 	}
 
 #define CU_ImplementClassFlags( Class, FlagType )\
-	using Class##FlagType##s = castor::FlagCombination< Class::FlagType >;\
+	using Class##FlagType##s = c3d::FlagCombination< Class::FlagType >;\
 	inline constexpr Class##FlagType##s operator|( Class::FlagType lhs, Class::FlagType rhs )\
 	{\
 		return Class##FlagType##s( lhs ) | rhs;\

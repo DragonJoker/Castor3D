@@ -26,7 +26,7 @@ namespace ocean_fft
 
 	namespace procfft
 	{
-		static castor::String getName( VkFFTResult result )
+		static c3d::String getName( VkFFTResult result )
 		{
 			switch ( result )
 			{
@@ -207,24 +207,24 @@ namespace ocean_fft
 			}
 		}
 
-		static castor::String getErrorText( castor::xchar const * action
+		static c3d::String getErrorText( c3d::xchar const * action
 			, VkFFTResult result )
 		{
-			auto stream = castor::makeStringStream();
+			auto stream = c3d::makeStringStream();
 			stream << cuT( "Error during " ) << action << cuT( ": " ) << getName( result );
 			return stream.str();
 		}
 
 		static VkFFTApplication createApp( VkFFTConfig const & config
-			, castor3d::RenderDevice const & device
-			, castor3d::Extent2D const & extent
+			, c3d::RenderDevice const & device
+			, c3d::Extent2D const & extent
 			, VkDeviceSize & inBufferSize
 			, VkBuffer & vkInput
 			, VkDeviceSize & outBufferSize
-			, castor::Array< VkBuffer, 2u > & vkOutput )
+			, c3d::Array< VkBuffer, 2u > & vkOutput )
 		{
-			static castor::Mutex mutex;
-			auto lock( castor::makeUniqueLock( mutex ) );
+			static c3d::Mutex mutex;
+			auto lock( c3d::makeUniqueLock( mutex ) );
 			auto graphics = device.graphicsData();
 			VkQueue vkQueue = *graphics->queue;
 			VkCommandPool vkCommandPool = *graphics->commandPool;
@@ -257,7 +257,7 @@ namespace ocean_fft
 
 	//************************************************************************************************
 
-	bool checkFFTResult( castor::xchar const * action
+	bool checkFFTResult( c3d::xchar const * action
 		, VkFFTResult result )
 	{
 		if ( result == VKFFT_SUCCESS )
@@ -265,23 +265,23 @@ namespace ocean_fft
 			return true;
 		}
 
-		castor3d::log::error << procfft::getErrorText( action, result ) << std::endl;
+		c3d::log::error << procfft::getErrorText( action, result ) << std::endl;
 		return false;
 	}
 
-	void checkFFTResultMandat( castor::xchar const * action
+	void checkFFTResultMandat( c3d::xchar const * action
 		, VkFFTResult result )
 	{
 		if ( !checkFFTResult( action, result ) )
 		{
-			CU_Exception( castor::toUtf8( procfft::getErrorText( action, result ) ) );
+			CU_Exception( c3d::toUtf8( procfft::getErrorText( action, result ) ) );
 		}
 	}
 
 	//************************************************************************************************
 
-	VkFFTConfig::VkFFTConfig( castor3d::RenderDevice const & device
-		, castor3d::Extent2D const & dimensions )
+	VkFFTConfig::VkFFTConfig( c3d::RenderDevice const & device
+		, c3d::Extent2D const & dimensions )
 		: device{ device }
 		, fence{ device->createFence( "OceanFFT" ) }
 		, vkPhysicalDevice{ device->getPhysicalDevice() }
@@ -292,22 +292,22 @@ namespace ocean_fft
 
 	//************************************************************************************************
 
-	castor::String const ProcessFFTPass::Name{ cuT( "GenerateHeightmap" ) };
+	c3d::String const ProcessFFTPass::Name{ cuT( "GenerateHeightmap" ) };
 
 	ProcessFFTPass::ProcessFFTPass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, VkFFTConfig const & config
-		, castor3d::Extent2D const & extent
+		, c3d::Extent2D const & extent
 		, ashes::BufferBase const & input
-		, castor::Array< ashes::BufferBasePtr, 2u > const & output
+		, c3d::Array< ashes::BufferBasePtr, 2u > const & output
 		, crg::RunnablePass::IsEnabledCallback isEnabled )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
 			, { []( uint32_t index ){}
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( castor3d::PipelineStageFlags::eComputeShader ); } )
+				, GetPipelineStateCallback( [](){ return crg::getPipelineState( c3d::PipelineStageFlags::eComputeShader ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
 				, isEnabled
@@ -334,7 +334,7 @@ namespace ocean_fft
 		deleteVkFFT( &m_app );
 	}
 
-	void ProcessFFTPass::accept( castor3d::RenderTechniqueVisitor & visitor )
+	void ProcessFFTPass::accept( c3d::RenderTechniqueVisitor & visitor )
 	{
 	}
 
@@ -362,22 +362,22 @@ namespace ocean_fft
 
 	//************************************************************************************************
 
-	crg::FramePass const & createProcessFFTPass( castor::String const & name
-		, castor3d::RenderDevice const & device
+	crg::FramePass const & createProcessFFTPass( c3d::String const & name
+		, c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
-		, castor3d::Extent2D const & extent
+		, c3d::Extent2D const & extent
 		, VkFFTConfig const & config
 		, ashes::BufferBase const & input
-		, castor::Array< ashes::BufferBasePtr, 2u > const & output )
+		, c3d::Array< ashes::BufferBasePtr, 2u > const & output )
 	{
-		auto mbName = castor::toUtf8( name );
+		auto mbName = c3d::toUtf8( name );
 		auto & result = graph.createPass( "Process" + mbName
 			, [&device, extent, &input, &output, &config]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto res = castor::make_unique< ProcessFFTPass >( framePass
+				auto res = c3d::makeRawUnique< ProcessFFTPass >( framePass
 					, context
 					, runnableGraph
 					, device
@@ -386,7 +386,7 @@ namespace ocean_fft
 					, input
 					, output
 					, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );

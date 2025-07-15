@@ -20,15 +20,15 @@ See LICENSE file in root folder
 
 #include <unordered_map>
 
-namespace castor3d
+namespace c3d
 {
 	class Geometry
 		: public MovableObject
 		, public RenderedObject
 	{
 	public:
-		using IdRenderNode = castor::Pair< uint32_t, SubmeshRenderNode * >;
-		using SubmeshIdRenderNodeMap = castor::UnorderedMap< uint32_t, IdRenderNode >;
+		using IdRenderNode = Pair< uint32_t, SubmeshRenderNode * >;
+		using SubmeshIdRenderNodeMap = HashMap< uint32_t, IdRenderNode >;
 
 	public:
 		/**
@@ -45,7 +45,7 @@ namespace castor3d
 		 *\param[in]	node	Le scene node auquel la géométrie est attachée.
 		 *\param[in]	mesh	Le maillage.
 		 */
-		C3D_API Geometry( castor::String const & name
+		C3D_API Geometry( String const & name
 			, Scene & scene
 			, SceneNode & node
 			, MeshResPtr mesh = {} );
@@ -61,7 +61,7 @@ namespace castor3d
 		 *\param[in]	scene	La scène parente.
 		 *\param[in]	mesh	Le maillage.
 		 */
-		C3D_API Geometry( castor::String const & name
+		C3D_API Geometry( String const & name
 			, Scene & scene
 			, MeshResPtr mesh = {} );
 		/**
@@ -129,7 +129,7 @@ namespace castor3d
 		 *\param[in]	submesh	Le sous-maillage.
 		 *\return		La boîte de collision pour le sous-maillage donné.
 		 */
-		C3D_API castor::BoundingBox const & getBoundingBox( Submesh const & submesh )const;
+		C3D_API BoundingBox const & getBoundingBox( Submesh const & submesh )const;
 		/**
 		 *\~english
 		 *\param[in]	submesh	The submesh.
@@ -138,7 +138,7 @@ namespace castor3d
 		 *\param[in]	submesh	Le sous-maillage.
 		 *\return		La sphère de collision pour le sous-maillage donné.
 		 */
-		C3D_API castor::BoundingSphere const & getBoundingSphere( Submesh const & submesh )const;
+		C3D_API BoundingSphere const & getBoundingSphere( Submesh const & submesh )const;
 		/**
 		 *\~english
 		 *\brief		Sets the bounding box for given submesh.
@@ -150,7 +150,7 @@ namespace castor3d
 		 *\param[in]	box		La bounding box.
 		 */
 		C3D_API void setBoundingBox( Submesh const & submesh
-			, castor::BoundingBox const & box );
+			, BoundingBox const & box );
 		/**
 		 *\~english
 		 *\brief		Retrieves the object ID in models buffer.
@@ -211,9 +211,9 @@ namespace castor3d
 		 *\~french
 		 *\return		La transformation glbale de l'objet, depuis son scene node et son squelette.
 		 */
-		C3D_API castor::Matrix4x4f getGlobalTransform()const;
+		C3D_API Matrix4x4f getGlobalTransform()const;
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 		/**
 		*\~english
 		*name
@@ -223,7 +223,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		castor::UnorderedMap< Pass const *, SubmeshIdRenderNodeMap > const & getIds()const
+		HashMap< Pass const *, SubmeshIdRenderNodeMap > const & getIds()const
 		{
 			return m_ids;
 		}
@@ -233,12 +233,12 @@ namespace castor3d
 			return m_mesh;
 		}
 
-		castor::BoundingBox const & getBoundingBox()const
+		BoundingBox const & getBoundingBox()const
 		{
 			return m_box;
 		}
 
-		castor::BoundingSphere const & getBoundingSphere()const
+		BoundingSphere const & getBoundingSphere()const
 		{
 			return m_sphere;
 		}
@@ -250,15 +250,15 @@ namespace castor3d
 
 	private:
 		MeshResPtr m_mesh{};
-		castor::String m_meshName;
+		String m_meshName;
 		bool m_listCreated{ false };
-		mutable castor::SpinMutex m_mutex;
+		mutable SpinMutex m_mutex;
 		SubmeshMaterialMap m_submeshesMaterials;
 		SubmeshBoundingBoxMap m_submeshesBoxes;
 		SubmeshBoundingSphereMap m_submeshesSpheres;
-		castor::BoundingBox m_box;
-		castor::BoundingSphere m_sphere;
-		castor::UnorderedMap< Pass const *, SubmeshIdRenderNodeMap > m_ids{};
+		BoundingBox m_box;
+		BoundingSphere m_sphere;
+		HashMap< Pass const *, SubmeshIdRenderNodeMap > m_ids{};
 		MeshChangeConnection m_onMeshChanged;
 	};
 

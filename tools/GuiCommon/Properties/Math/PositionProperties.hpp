@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/Position.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Position )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Position )
 
 namespace GuiCommon
 {
@@ -18,14 +18,14 @@ namespace GuiCommon
 		WX_PG_DECLARE_PROPERTY_CLASS( PositionProperty )
 
 	public:
-		PositionProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::Position const & value = castor::Position() );
+		PositionProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, c3d::Position const & value = c3d::Position() );
 
 		wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const override;
 		void RefreshChildren()override;
 
 	protected:
 		// I stands for internal
-		inline void setValueI( castor::Position const & value )
+		inline void setValueI( c3d::Position const & value )
 		{
 			m_value = WXVARIANT( value );
 		}

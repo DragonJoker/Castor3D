@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	enum class GUISection
 		: uint32_t
@@ -44,8 +44,8 @@ namespace castor3d
 		eLayoutCtrl = CU_MakeSectionName( 'L', 'T', 'C', 'T' ),
 	};
 
-	C3D_API castor::AttributeParsers createGuiParsers();
-	C3D_API castor::StrUInt32Map createGuiSections();
+	C3D_API AttributeParsers createGuiParsers();
+	C3D_API StrUInt32Map createGuiSections();
 }
 
 #endif

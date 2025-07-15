@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class VertexTransformPass
 	{
@@ -53,7 +53,7 @@ namespace castor3d
 			, ObjectBufferOffset const & input
 			, ObjectBufferOffset const & output
 			, ashes::Buffer< ModelBufferConfiguration > const & modelsBuffer
-			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+			, GpuBufferOffsetT< Point4f > const & morphTargets
 			, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights
 			, GpuBufferOffsetT< SkinningTransformsConfiguration > const & skinTransforms );
 
@@ -65,7 +65,7 @@ namespace castor3d
 		TransformPipeline const & m_pipeline;
 		ObjectBufferOffset const & m_input;
 		ObjectBufferOffset const & m_output;
-		GpuBufferOffsetT< castor::Point4f > const & m_morphTargets;
+		GpuBufferOffsetT< Point4f > const & m_morphTargets;
 		GpuBufferOffsetT< MorphingWeightsConfiguration > const & m_morphingWeights;
 		GpuBufferOffsetT< SkinningTransformsConfiguration > const & m_skinTransforms;
 		ObjectIdsConfiguration m_objectIds;

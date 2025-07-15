@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace shader
 	{
@@ -25,7 +25,7 @@ namespace castor3d
 			SDW_DeclStructInstance( C3D_API, RsmConfigData );
 
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static castor::RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+			C3D_API static RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 			sdw::Float intensity;
 			sdw::Float maxRadius;
@@ -100,7 +100,7 @@ namespace castor3d
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, enable };\
-	auto c3d_rsmConfigData = rsmConfig.declMember< shader::RsmConfigData >( "c3d_rsmConfigData" );\
+	auto c3d_rsmConfigData = rsmConfig.declMember< c3d::shader::RsmConfigData >( "c3d_rsmConfigData" );\
 	rsmConfig.end()
 
 #define C3D_RsmConfig( writer, binding, set )\

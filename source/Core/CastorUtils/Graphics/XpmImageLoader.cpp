@@ -4,7 +4,7 @@
 #include "CastorUtils/Data/Path.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 
-namespace castor
+namespace c3d
 {
 	namespace xpml
 	{
@@ -62,7 +62,7 @@ namespace castor
 	void XpmImageLoader::registerLoader( ImageLoader & reg )
 	{
 		reg.registerLoader( xpml::listExtensions()
-			, castor::make_unique< XpmImageLoader >() );
+			, c3d::makeRawUnique< XpmImageLoader >() );
 	}
 
 	void XpmImageLoader::unregisterLoader( ImageLoader & reg )
@@ -100,7 +100,7 @@ namespace castor
 
 		// Parse colours
 		Map< MbString, xpml::R8G8B8Pixel, std::less<> > colours;
-		for ( auto line : castor::makeArrayView( &data[1], &data[1 + coloursCount] ) )
+		for ( auto line : c3d::makeArrayView( &data[1], &data[1 + coloursCount] ) )
 		{
 			xpml::parseColour( line, charCount, colours );
 		}

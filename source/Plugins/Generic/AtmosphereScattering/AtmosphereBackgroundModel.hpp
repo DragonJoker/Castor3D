@@ -19,21 +19,21 @@ See LICENSE file in root folder
 namespace atmosphere_scattering
 {
 	class AtmosphereBackgroundModel
-		: public castor3d::shader::BackgroundModel
+		: public c3d::shader::BackgroundModel
 	{
 	public:
-		AtmosphereBackgroundModel( castor3d::Engine const & engine
+		AtmosphereBackgroundModel( c3d::Engine const & engine
 			, sdw::ShaderWriter & writer
-			, castor3d::shader::Utils & utils
-			, castor3d::Extent2D targetSize
+			, c3d::shader::Utils & utils
+			, c3d::Extent2D targetSize
 			, bool needsForeground
 			, uint32_t & binding
 			, uint32_t set );
 
-		static castor3d::shader::BackgroundModelPtr create( castor3d::Engine const & engine
+		static c3d::shader::BackgroundModelPtr create( c3d::Engine const & engine
 			, sdw::ShaderWriter & writer
-			, castor3d::shader::Utils & utils
-			, castor3d::Extent2D targetSize
+			, c3d::shader::Utils & utils
+			, c3d::Extent2D targetSize
 			, bool needsForeground
 			, uint32_t & binding
 			, uint32_t set );
@@ -50,7 +50,7 @@ namespace atmosphere_scattering
 			, sdw::Vec4 & output )override;
 		sdw::Vec3 getSunRadiance( sdw::Vec3 const & sunDir );
 
-		castor3d::shader::RetRay getPixelTransLum( sdw::Vec2 const & fragPos
+		c3d::shader::RetRay getPixelTransLum( sdw::Vec2 const & fragPos
 			, sdw::Vec2 const & fragSize
 			, sdw::Float const & fragDepth
 			, sdw::Vec4 & transmittance
@@ -64,9 +64,9 @@ namespace atmosphere_scattering
 		}
 
 	public:
-		static castor::String const Name;
-		static castor::String const PluginType;
-		static castor::MbString const PluginName;
+		static c3d::String const Name;
+		static c3d::String const PluginType;
+		static c3d::MbString const PluginName;
 
 		sdw::UniformBuffer cameraBuffer;
 		CameraData cameraData;

@@ -47,18 +47,18 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementSmartPtr( castor3d, PickingPass )
+CU_ImplementSmartPtr( c3d, PickingPass )
 
-namespace castor3d
+namespace c3d
 {
 	uint32_t const PickingPass::UboBindingPoint = 7u;
-	castor::String const PickingPass::Type = cuT( "c3d.pick" );
+	String const PickingPass::Type = cuT( "c3d.pick" );
 
 	PickingPass::PickingPass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, castor::Size const & size
+		, Size const & size
 		, CameraUbo const & cameraUbo
 		, SceneUbo const & sceneUbo
 		, SceneCuller & culler )

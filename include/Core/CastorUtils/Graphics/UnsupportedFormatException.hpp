@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Exception/Exception.hpp"
 
-namespace castor
+namespace c3d
 {
 	class UnsupportedFormatException
 		: public Exception
@@ -23,6 +23,6 @@ namespace castor
 *\~french
 *\brief		Macro écrite pour faciliter l'utilisation de UnsupportedFormatException
 */
-#define CU_UnsupportedError( text ) throw castor::UnsupportedFormatException{ text, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
+#define CU_UnsupportedError( text ) throw c3d::UnsupportedFormatException{ text, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 
 #endif

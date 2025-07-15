@@ -13,7 +13,7 @@ extern "C"
 		if ( !result || !matrix )
 			return C3D_POINTER;
 
-		*result = cc3d::convert( castor::Quaternion::fromMatrix( cc3d::convert( *matrix ) ) );
+		*result = cc3d::convert( c3d::Quaternion::fromMatrix( cc3d::convert( *matrix ) ) );
 
 		return C3D_OK;
 	}
@@ -23,7 +23,7 @@ extern "C"
 		if ( !result || !axis )
 			return C3D_POINTER;
 
-		*result = cc3d::convert( castor::Quaternion::fromAxisAngle( cc3d::convert( *axis ), castor::Angle::fromRadians( angle ) ) );
+		*result = cc3d::convert( c3d::Quaternion::fromAxisAngle( cc3d::convert( *axis ), c3d::Angle::fromRadians( angle ) ) );
 
 		return C3D_OK;
 	}
@@ -33,7 +33,7 @@ extern "C"
 		if ( !result || !x || !y || !z )
 			return C3D_POINTER;
 
-		*result = cc3d::convert( castor::Quaternion::fromAxes( cc3d::convert( *x ), cc3d::convert( *y ), cc3d::convert( *z ) ) );
+		*result = cc3d::convert( c3d::Quaternion::fromAxes( cc3d::convert( *x ), cc3d::convert( *y ), cc3d::convert( *z ) ) );
 
 		return C3D_OK;
 	}
@@ -43,7 +43,7 @@ extern "C"
 		if ( !object || !result )
 			return C3D_POINTER;
 
-		castor::Matrix4x4f matrix;
+		c3d::Matrix4x4f matrix;
 		cc3d::convert( *object ).toMatrix( matrix );
 		*result = cc3d::convert( matrix );
 
@@ -55,8 +55,8 @@ extern "C"
 		if ( !object || !axis || !angle )
 			return C3D_POINTER;
 
-		castor::Point3f caxis;
-		castor::Angle cangle;
+		c3d::Point3f caxis;
+		c3d::Angle cangle;
 		cc3d::convert( *object ).toAxisAngle( caxis, cangle );
 		*axis = cc3d::convert( caxis );
 		*angle = cangle.radians();
@@ -69,9 +69,9 @@ extern "C"
 		if ( !object || !x || !y || !z )
 			return C3D_POINTER;
 
-		castor::Point3f cx;
-		castor::Point3f cy;
-		castor::Point3f cz;
+		c3d::Point3f cx;
+		c3d::Point3f cy;
+		c3d::Point3f cz;
 		cc3d::convert( *object ).toAxes( cx, cy, cz );
 		*x = cc3d::convert( cx );
 		*y = cc3d::convert( cy );
@@ -154,8 +154,8 @@ extern "C"
 		if ( !object || !result )
 			return C3D_POINTER;
 
-		castor::Point3f res;
-		cc3d::convert( *object ).transform( castor::Point3f{ val->x, val->y, val->z }, res );
+		c3d::Point3f res;
+		cc3d::convert( *object ).transform( c3d::Point3f{ val->x, val->y, val->z }, res );
 		*result = cc3d::convert( res );
 
 		return C3D_OK;

@@ -38,15 +38,15 @@ namespace film_grain
 {
 	namespace postfx
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
-		static castor::MbString const FilmGrainUbo = "FilmGrainUbo";
-		static castor::MbString const PixelSize = "c3d_pixelSize";
-		static castor::MbString const NoiseIntensity = "c3d_noiseIntensity";
-		static castor::MbString const Exposure = "c3d_exposure";
-		static castor::MbString const Time = "c3d_time";
-		static castor::MbString const SrcTex = "c3d_srcTex";
-		static castor::MbString const NoiseTex = "c3d_noiseTex";
+		static c3d::MbString const FilmGrainUbo = "FilmGrainUbo";
+		static c3d::MbString const PixelSize = "c3d_pixelSize";
+		static c3d::MbString const NoiseIntensity = "c3d_noiseIntensity";
+		static c3d::MbString const Exposure = "c3d_exposure";
+		static c3d::MbString const Time = "c3d_time";
+		static c3d::MbString const SrcTex = "c3d_srcTex";
+		static c3d::MbString const NoiseTex = "c3d_noiseTex";
 
 		enum Idx : uint32_t
 		{
@@ -55,7 +55,7 @@ namespace film_grain
 			SourceTexIdx,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine )
+		static c3d::ShaderPtr getProgram( c3d::Engine & engine )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
@@ -109,15 +109,15 @@ namespace film_grain
 				, sdw::InVec3{ writer, "color" }
 				, sdw::InVec2{ writer, "texcoord" } );
 
-			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( []( sdw::VertexInT< c3d::PosUv2FT > const & in
-				, sdw::VertexOutT< c3d::Uv2FT > out )
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::PosUv2FT > const & in
+				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position().xy(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&writer, &c3d_srcTex, &addNoise]( sdw::FragmentInT< c3d::Uv2FT > const & in
-				, sdw::FragmentOutT< c3d::Colour4FT > const & out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&writer, &c3d_srcTex, &addNoise]( sdw::FragmentInT< c3ds::Uv2FT > const & in
+				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					auto colour = writer.declLocale( "colour"
 						, c3d_srcTex.sample( in.uv() ).xyz() );
@@ -127,29 +127,29 @@ namespace film_grain
 			return writer.getBuilder().releaseShader();
 		}
 
-		static castor::Array< castor::Image, PostEffect::NoiseMapCount > loadImages( castor3d::Engine const & engine )
+		static c3d::Array< c3d::Image, PostEffect::NoiseMapCount > loadImages( c3d::Engine const & engine )
 		{
 			auto & loader = engine.getImageLoader();
-			return { loader.load( cuT( "FilmGrainNoise0" ), cuT( "xpm" ), castor3d::ByteCPtr( NoiseLayer1_xpm ), uint32_t( castor::getCountOf( NoiseLayer1_xpm ) ), {} )
-				, loader.load( cuT( "FilmGrainNoise1" ), cuT( "xpm" ), castor3d::ByteCPtr( NoiseLayer2_xpm ), uint32_t( castor::getCountOf( NoiseLayer2_xpm ) ), {} )
-				, loader.load( cuT( "FilmGrainNoise2" ), cuT( "xpm" ), castor3d::ByteCPtr( NoiseLayer3_xpm ), uint32_t( castor::getCountOf( NoiseLayer3_xpm ) ), {} )
-				, loader.load( cuT( "FilmGrainNoise3" ), cuT( "xpm" ), castor3d::ByteCPtr( NoiseLayer4_xpm ), uint32_t( castor::getCountOf( NoiseLayer4_xpm ) ), {} )
-				, loader.load( cuT( "FilmGrainNoise4" ), cuT( "xpm" ), castor3d::ByteCPtr( NoiseLayer5_xpm ), uint32_t( castor::getCountOf( NoiseLayer5_xpm ) ), {} )
-				, loader.load( cuT( "FilmGrainNoise5" ), cuT( "xpm" ), castor3d::ByteCPtr( NoiseLayer6_xpm ), uint32_t( castor::getCountOf( NoiseLayer6_xpm ) ), {} ) };
+			return { loader.load( cuT( "FilmGrainNoise0" ), cuT( "xpm" ), c3d::ByteCPtr( NoiseLayer1_xpm ), uint32_t( c3d::getCountOf( NoiseLayer1_xpm ) ), {} )
+				, loader.load( cuT( "FilmGrainNoise1" ), cuT( "xpm" ), c3d::ByteCPtr( NoiseLayer2_xpm ), uint32_t( c3d::getCountOf( NoiseLayer2_xpm ) ), {} )
+				, loader.load( cuT( "FilmGrainNoise2" ), cuT( "xpm" ), c3d::ByteCPtr( NoiseLayer3_xpm ), uint32_t( c3d::getCountOf( NoiseLayer3_xpm ) ), {} )
+				, loader.load( cuT( "FilmGrainNoise3" ), cuT( "xpm" ), c3d::ByteCPtr( NoiseLayer4_xpm ), uint32_t( c3d::getCountOf( NoiseLayer4_xpm ) ), {} )
+				, loader.load( cuT( "FilmGrainNoise4" ), cuT( "xpm" ), c3d::ByteCPtr( NoiseLayer5_xpm ), uint32_t( c3d::getCountOf( NoiseLayer5_xpm ) ), {} )
+				, loader.load( cuT( "FilmGrainNoise5" ), cuT( "xpm" ), c3d::ByteCPtr( NoiseLayer6_xpm ), uint32_t( c3d::getCountOf( NoiseLayer6_xpm ) ), {} ) };
 		}
 	}
 
 	//*********************************************************************************************
 
-	castor::String PostEffect::Type = cuT( "film_grain" );
-	castor::MbString PostEffect::Name = "FilmGrain PostEffect";
+	c3d::String PostEffect::Type = cuT( "film_grain" );
+	c3d::MbString PostEffect::Name = "FilmGrain PostEffect";
 
-	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
-		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & params )
-		: castor3d::PostEffect{ PostEffect::Type
+	PostEffect::PostEffect( c3d::RenderTarget & renderTarget
+		, c3d::RenderSystem & renderSystem
+		, c3d::Parameters const & params )
+		: c3d::PostEffect{ PostEffect::Type
 			, cuT( "FilmGrain" )
-			, castor::makeString( PostEffect::Name )
+			, c3d::makeString( PostEffect::Name )
 			, renderTarget
 			, renderSystem
 			, params }
@@ -158,7 +158,7 @@ namespace film_grain
 		, m_configUbo{ renderSystem.getRenderDevice().uboPool->getBuffer< Configuration >( 0u ) }
 		, m_noiseImages{ postfx::loadImages( *renderTarget.getEngine() ) }
 	{
-		m_config.pixelSize = castor::Point2f{ m_renderTarget.getSize().getWidth()
+		m_config.pixelSize = c3d::Point2f{ m_renderTarget.getSize().getWidth()
 			, m_renderTarget.getSize().getHeight() };
 		m_config.noiseIntensity = 1.0f;
 		m_config.exposure = 1.0f;
@@ -169,14 +169,14 @@ namespace film_grain
 		{
 			auto format = image.getPixelFormat();
 
-			if ( format == castor::PixelFormat::eR8G8B8_UNORM )
+			if ( format == c3d::PixelFormat::eR8G8B8_UNORM )
 			{
-				auto buffer = castor::PxBufferBase::create( image.getDimensions()
-					, castor::PixelFormat::eR8G8B8A8_UNORM
+				auto buffer = c3d::PxBufferBase::create( image.getDimensions()
+					, c3d::PixelFormat::eR8G8B8A8_UNORM
 					, image.getPxBuffer().getConstPtr()
 					, image.getPxBuffer().getFormat()
 					, image.getPxBuffer().getAlign() );
-				image = castor::Image{ image.getName()
+				image = c3d::Image{ image.getName()
 					, image.getPath()
 					, *buffer };
 			}
@@ -191,16 +191,16 @@ namespace film_grain
 		getRenderSystem()->getRenderDevice().uboPool->putBuffer( m_configUbo );
 	}
 
-	castor3d::PostEffectUPtr PostEffect::create( castor3d::RenderTarget & renderTarget
-		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & params )
+	c3d::PostEffectUPtr PostEffect::create( c3d::RenderTarget & renderTarget
+		, c3d::RenderSystem & renderSystem
+		, c3d::Parameters const & params )
 	{
-		return castor::makeUniqueDerived< castor3d::PostEffect, PostEffect >( renderTarget
+		return c3d::makeUniqueDerived< c3d::PostEffect, PostEffect >( renderTarget
 			, renderSystem
 			, params );
 	}
 
-	void PostEffect::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void PostEffect::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 		visitor.visit( cuT( "Exposure" )
@@ -209,42 +209,42 @@ namespace film_grain
 			, m_config.noiseIntensity );
 	}
 
-	void PostEffect::setParameters( castor3d::Parameters parameters )
+	void PostEffect::setParameters( c3d::Parameters parameters )
 	{
-		castor::String param;
+		c3d::String param;
 
 		if ( parameters.get( cuT( "exposure" ), param ) )
 		{
-			m_config.exposure = castor::string::toFloat( param );
+			m_config.exposure = c3d::string::toFloat( param );
 		}
 
 		if ( parameters.get( cuT( "noiseIntensity" ), param ) )
 		{
-			m_config.noiseIntensity = castor::string::toFloat( param );
+			m_config.noiseIntensity = c3d::string::toFloat( param );
 		}
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
-		, castor3d::Texture const & source
-		, castor3d::Texture const & target
+	bool PostEffect::doInitialise( c3d::RenderDevice const & device
+		, c3d::Texture const & source
+		, c3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
 		auto dim = m_noiseImages[0].getDimensions();
 		auto format = m_noiseImages[0].getPixelFormat();
 		m_noiseImg = m_graph.createImage( crg::ImageData{ "FGNoise"
-			, castor3d::ImageCreateFlags::eNone
-			, castor3d::ImageType::e3D
+			, c3d::ImageCreateFlags::eNone
+			, c3d::ImageType::e3D
 			, format
 			, { dim.getWidth(), dim.getHeight(), NoiseMapCount }
-			, ( castor3d::ImageUsageFlags::eSampled
-				| castor3d::ImageUsageFlags::eTransferDst ) } );
+			, ( c3d::ImageUsageFlags::eSampled
+				| c3d::ImageUsageFlags::eTransferDst ) } );
 		m_noiseView = m_graph.createView( crg::ImageViewData{ "FGNoise"
 			, m_noiseImg
-			, castor3d::ImageViewCreateFlags::eNone
-			, castor3d::ImageViewType::e3D
+			, c3d::ImageViewCreateFlags::eNone
+			, c3d::ImageViewType::e3D
 			, getFormat( m_noiseImg )
-			, { castor3d::ImageAspectFlags::eColor, 0u, 1u, 0u, 1u } } );
-		auto extent = castor3d::makeExtent2D( target.getExtent() );
+			, { c3d::ImageAspectFlags::eColor, 0u, 1u, 0u, 1u } } );
+		auto extent = c3d::makeExtent2D( target.getExtent() );
 		m_pass = &m_graph.createPass( "FilmGrain"
 			, [this, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -255,7 +255,7 @@ namespace film_grain
 				auto & device = getRenderSystem()->getRenderDevice();
 				auto staging = device->createStagingTexture( format
 					, VkExtent2D{ dim.getWidth(), dim.getHeight() } );
-				auto noiseImg = castor::make_unique< ashes::Image >( *device
+				auto noiseImg = c3d::makeRawUnique< ashes::Image >( *device
 					, graph.createImage( m_noiseImg )
 					, ashes::ImageCreateInfo{ convert( m_noiseImg.data->info ) } );
 				ashes::ImageView noiseView{ ashes::ImageViewCreateInfo{ convert( m_noiseView.data->info ) }
@@ -273,7 +273,7 @@ namespace film_grain
 							, m_noiseView.data->info.subresourceRange.layerCount }
 						, format
 						, { 0, 0, int32_t( i ) }
-						, castor3d::makeVkExtent3D( dim )
+						, c3d::makeVkExtent3D( dim )
 						, m_noiseImages[i].getBuffer().data()
 						, noiseView );
 				}
@@ -289,7 +289,7 @@ namespace film_grain
 						, context
 						, graph
 						, crg::ru::Config{ 2u } );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -299,26 +299,26 @@ namespace film_grain
 			, postfx::FilmCfgUboIdx );
 		m_pass->addSampledView( m_noiseView
 			, postfx::NoiseTexIdx
-			, crg::SamplerDesc{ castor3d::FilterMode::eLinear
-				, castor3d::FilterMode::eLinear
-				, castor3d::MipmapMode::eLinear
-				, castor3d::WrapMode::eClampToEdge
-				, castor3d::WrapMode::eClampToEdge
-				, castor3d::WrapMode::eClampToEdge } );
+			, crg::SamplerDesc{ c3d::FilterMode::eLinear
+				, c3d::FilterMode::eLinear
+				, c3d::MipmapMode::eLinear
+				, c3d::WrapMode::eClampToEdge
+				, c3d::WrapMode::eClampToEdge
+				, c3d::WrapMode::eClampToEdge } );
 		m_pass->addSampledView( crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
 			, postfx::SourceTexIdx );
 		m_pass->addOutputColourView( crg::ImageViewIdArray{ target.targetViewId, source.targetViewId } );
 		return true;
 	}
 
-	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
+	void PostEffect::doCleanup( c3d::RenderDevice const & device )
 	{
 	}
 
-	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
+	void PostEffect::doCpuUpdate( c3d::CpuUpdater & updater )
 	{
 		static auto const defaultTime = 25_ms;
-		auto time = std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );
+		auto time = std::chrono::duration_cast< c3d::Milliseconds >( m_timer.getElapsed() );
 
 		if ( m_firstUpdate )
 		{
@@ -352,8 +352,8 @@ namespace film_grain
 		}
 	}
 
-	bool PostEffect::doWriteInto( castor::StringStream & file
-		, castor::String const & tabs )
+	bool PostEffect::doWriteInto( c3d::StringStream & file
+		, c3d::String const & tabs )
 	{
 		file << ( tabs + cuT( "postfx \"" ) + Type + cuT( "\"\n" ) );
 		return true;

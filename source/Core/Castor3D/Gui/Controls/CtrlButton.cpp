@@ -14,33 +14,33 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementSmartPtr( castor3d, ButtonCtrl )
+CU_ImplementSmartPtr( c3d, ButtonCtrl )
 
-namespace castor3d
+namespace c3d
 {
 	ButtonCtrl::ButtonCtrl( SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, ButtonStyleRPtr style
 		, ControlRPtr parent )
 		: ButtonCtrl{ scene
 			, name
 			, style
 			, parent
-			, castor::U32String{}
-			, castor::Position{}
-			, castor::Size{}
+			, U32String{}
+			, Position{}
+			, Size{}
 			, 0u
 			, true }
 	{
 	}
 
 	ButtonCtrl::ButtonCtrl( SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, ButtonStyleRPtr style
 		, ControlRPtr parent
-		, castor::U32String const & caption
-		, castor::Position const & position
-		, castor::Size const & size
+		, U32String const & caption
+		, Position const & position
+		, Size const & size
 		, ControlFlagType flags
 		, bool visible )
 		: Control{ Type
@@ -71,7 +71,7 @@ namespace castor3d
 				}
 			} ) }
 	{
-		setBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
+		setBorderSize( Point4ui{ 1, 1, 1, 1 } );
 		setHAlign( HAlign::eCenter );
 		setVAlign( VAlign::eCenter );
 
@@ -157,12 +157,12 @@ namespace castor3d
 
 	HAlign ButtonCtrl::getHAlign()const
 	{
-		if ( castor::checkFlag( getFlags(), StaticFlag::eHAlignCenter ) )
+		if ( checkFlag( getFlags(), StaticFlag::eHAlignCenter ) )
 		{
 			return HAlign::eCenter;
 		}
 
-		if ( castor::checkFlag( getFlags(), StaticFlag::eHAlignRight ) )
+		if ( checkFlag( getFlags(), StaticFlag::eHAlignRight ) )
 		{
 			return HAlign::eRight;
 		}
@@ -172,12 +172,12 @@ namespace castor3d
 
 	VAlign ButtonCtrl::getVAlign()const
 	{
-		if ( castor::checkFlag( getFlags(), StaticFlag::eVAlignCenter ) )
+		if ( checkFlag( getFlags(), StaticFlag::eVAlignCenter ) )
 		{
 			return VAlign::eCenter;
 		}
 
-		if ( castor::checkFlag( getFlags(), StaticFlag::eVAlignBottom ) )
+		if ( checkFlag( getFlags(), StaticFlag::eVAlignBottom ) )
 		{
 			return VAlign::eBottom;
 		}
@@ -218,7 +218,7 @@ namespace castor3d
 		getControlsManager()->disconnectEvents( *this );
 	}
 
-	void ButtonCtrl::doSetPosition( castor::Position const & value )
+	void ButtonCtrl::doSetPosition( Position const & value )
 	{
 		if ( auto text = m_text )
 		{
@@ -226,7 +226,7 @@ namespace castor3d
 		}
 	}
 
-	void ButtonCtrl::doSetSize( castor::Size const & value )
+	void ButtonCtrl::doSetSize( Size const & value )
 	{
 		if ( auto text = m_text )
 		{
@@ -234,7 +234,7 @@ namespace castor3d
 		}
 	}
 
-	void ButtonCtrl::doSetBorderSize( castor::Point4ui const & value )
+	void ButtonCtrl::doSetBorderSize( Point4ui const & value )
 	{
 		if ( auto text = m_text )
 		{
@@ -243,7 +243,7 @@ namespace castor3d
 		}
 	}
 
-	void ButtonCtrl::doSetCaption( castor::U32String const & value )
+	void ButtonCtrl::doSetCaption( U32String const & value )
 	{
 		m_caption = value;
 

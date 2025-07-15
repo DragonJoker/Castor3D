@@ -24,7 +24,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/Size.hpp>
 
 #define C3D_CatchCommonExceptions() \
-	catch ( castor::Exception & exc ) \
+	catch ( c3d::Exception & exc ) \
 	{ \
 		return cc3d::reportError( C3D_FAILURE, exc.what() ); \
 	} \
@@ -44,25 +44,25 @@ See LICENSE file in root folder
 
 namespace cc3d
 {
-	inline C3D_RESULT reportError( C3D_RESULT error, castor::xchar const * const text )
+	inline C3D_RESULT reportError( C3D_RESULT error, c3d::xchar const * const text )
 	{
-		castor::Logger::logError( text );
+		c3d::Logger::logError( text );
 		return error;
 	}
 
-	inline void reportWarning( castor::xchar const * const text )
+	inline void reportWarning( c3d::xchar const * const text )
 	{
-		castor::Logger::logWarning( text );
+		c3d::Logger::logWarning( text );
 	}
 
-	inline void copyStringN( castor::String const & value, C3DChar * result, size_t resultSize )
+	inline void copyStringN( c3d::String const & value, C3DChar * result, size_t resultSize )
 	{
 		result[0] = 0;
 		strncpy( result, value.data()
 			, resultSize <= value.size() ? resultSize : value.size() );
 	}
 
-	inline C3D_RESULT copyString( castor::String const & value, C3DString * result )
+	inline C3D_RESULT copyString( c3d::String const & value, C3DString * result )
 	{
 		size_t byteSize = sizeof( C3DChar ) * ( value.size() + 1U );
 		auto res = static_cast< C3DChar * >( malloc( byteSize ) );
@@ -75,52 +75,52 @@ namespace cc3d
 		return C3D_OK;
 	}
 
-	inline C3DRgbColour convert( castor::RgbColour const & value )
+	inline C3DRgbColour convert( c3d::RgbColour const & value )
 	{
 		return { value.red(), value.green(), value.blue() };
 	}
 
-	inline C3DHdrRgbColour convert( castor::HdrRgbColour const & value )
+	inline C3DHdrRgbColour convert( c3d::HdrRgbColour const & value )
 	{
 		return { value.red(), value.green(), value.blue() };
 	}
 
-	inline C3DRgbaColour convert( castor::RgbaColour const & value )
+	inline C3DRgbaColour convert( c3d::RgbaColour const & value )
 	{
 		return { value.red(), value.green(), value.blue(), value.alpha() };
 	}
 
-	inline C3DHdrRgbaColour convert( castor::HdrRgbaColour const & value )
+	inline C3DHdrRgbaColour convert( c3d::HdrRgbaColour const & value )
 	{
 		return { value.red(), value.green(), value.blue(), value.alpha() };
 	}
 
-	inline C3DQuat convert( castor::Quaternion const & value )
+	inline C3DQuat convert( c3d::Quaternion const & value )
 	{
 		return C3DQuat{ value->x, value->y, value->z, value->w };
 	}
 
-	inline C3DPosition convert( castor::Position const & value )
+	inline C3DPosition convert( c3d::Position const & value )
 	{
 		return C3DPosition{ value.x(), value.y() };
 	}
 
-	inline C3DSize convert( castor::Size const & value )
+	inline C3DSize convert( c3d::Size const & value )
 	{
 		return C3DSize{ value.getWidth(), value.getHeight() };
 	}
 
-	inline C3DVec2 convert( castor::Point2f const & value )
+	inline C3DVec2 convert( c3d::Point2f const & value )
 	{
 		return C3DVec2{ value->x, value->y };
 	}
 
-	inline C3DVec3 convert( castor::Point3f const & value )
+	inline C3DVec3 convert( c3d::Point3f const & value )
 	{
 		return C3DVec3{ value->x, value->y, value->z };
 	}
 
-	inline C3DMat4 convert( castor::Matrix4x4f const & value )
+	inline C3DMat4 convert( c3d::Matrix4x4f const & value )
 	{
 		return { value[0][0], value[0][1], value[0][2], value[0][3]
 			, value[1][0], value[1][1], value[1][2], value[1][3]
@@ -128,54 +128,54 @@ namespace cc3d
 			, value[3][0], value[3][1], value[3][2], value[3][3] };
 	}
 
-	inline castor::RgbColour convert( C3DRgbColour const & value )
+	inline c3d::RgbColour convert( C3DRgbColour const & value )
 	{
-		return castor::RgbColour::fromComponents( value.r, value.g, value.b );
+		return c3d::RgbColour::fromComponents( value.r, value.g, value.b );
 	}
 
-	inline castor::HdrRgbColour convert( C3DHdrRgbColour const & value )
+	inline c3d::HdrRgbColour convert( C3DHdrRgbColour const & value )
 	{
-		return castor::HdrRgbColour::fromComponents( value.r, value.g, value.b );
+		return c3d::HdrRgbColour::fromComponents( value.r, value.g, value.b );
 	}
 
-	inline castor::RgbaColour convert( C3DRgbaColour const & value )
+	inline c3d::RgbaColour convert( C3DRgbaColour const & value )
 	{
-		return castor::RgbaColour::fromComponents( value.r, value.g, value.b, value.a );
+		return c3d::RgbaColour::fromComponents( value.r, value.g, value.b, value.a );
 	}
 
-	inline castor::HdrRgbaColour convert( C3DHdrRgbaColour const & value )
+	inline c3d::HdrRgbaColour convert( C3DHdrRgbaColour const & value )
 	{
-		return castor::HdrRgbaColour::fromComponents( value.r, value.g, value.b, value.a );
+		return c3d::HdrRgbaColour::fromComponents( value.r, value.g, value.b, value.a );
 	}
 
-	inline castor::Quaternion convert( C3DQuat const & value )
+	inline c3d::Quaternion convert( C3DQuat const & value )
 	{
-		return castor::Quaternion::fromComponents( value.x, value.y, value.z, value.w );
+		return c3d::Quaternion::fromComponents( value.x, value.y, value.z, value.w );
 	}
 
-	inline castor::Point2f convert( C3DVec2 const & value )
+	inline c3d::Point2f convert( C3DVec2 const & value )
 	{
-		return castor::Point2f{ value.x, value.y };
+		return c3d::Point2f{ value.x, value.y };
 	}
 
-	inline castor::Point3f convert( C3DVec3 const & value )
+	inline c3d::Point3f convert( C3DVec3 const & value )
 	{
-		return castor::Point3f{ value.x, value.y, value.z };
+		return c3d::Point3f{ value.x, value.y, value.z };
 	}
 
-	inline castor::Position convert( C3DPosition const & value )
+	inline c3d::Position convert( C3DPosition const & value )
 	{
-		return castor::Position{ value.x, value.y };
+		return c3d::Position{ value.x, value.y };
 	}
 
-	inline castor::Size convert( C3DSize const & value )
+	inline c3d::Size convert( C3DSize const & value )
 	{
-		return castor::Size{ value.width, value.height };
+		return c3d::Size{ value.width, value.height };
 	}
 
-	inline castor::Matrix4x4f convert( C3DMat4 const & value )
+	inline c3d::Matrix4x4f convert( C3DMat4 const & value )
 	{
-		return castor::Matrix4x4f{ { value.m11, value.m12, value.m13, value.m14
+		return c3d::Matrix4x4f{ { value.m11, value.m12, value.m13, value.m14
 		, value.m21, value.m22, value.m23, value.m24
 		, value.m31, value.m32, value.m33, value.m34
 		, value.m41, value.m42, value.m43, value.m44 } };
@@ -189,82 +189,82 @@ extern "C"
 
 	struct C3DLogger_
 	{
-		castor::LoggerInstance * internal;
+		c3d::LoggerInstance * internal;
 	};
 
 	struct C3DGlyph_
 	{
-		castor::Glyph * internal;
+		c3d::Glyph * internal;
 	};
 
 	struct C3DFont_
 	{
-		castor::ResourceObsT< castor::Font, castor::String > internal;
+		c3d::ResourceObsT< c3d::Font, c3d::String > internal;
 	};
 
 	struct C3DPixelBuffer_
 	{
-		castor::PxBufferBaseUPtr internal;
+		c3d::PxBufferBaseUPtr internal;
 	};
 
 	struct C3DImage_
 	{
-		castor::ResourceObsT< castor::Image, castor::String > internal;
+		c3d::ResourceObsT< c3d::Image, c3d::String > internal;
 	};
 
 	struct C3DEngine_
 	{
-		castor3d::EngineUPtr internal;
+		c3d::EngineUPtr internal;
 	};
 
 	struct C3DRenderTarget_
 	{
-		castor3d::RenderTarget * internal;
+		c3d::RenderTarget * internal;
 	};
 
 	struct C3DMaterial_
 	{
-		castor3d::Material * internal;
+		c3d::Material * internal;
 	};
 
 	struct C3DBorderPanelOverlay_
 	{
-		castor3d::BorderPanelOverlay * internal;
+		c3d::BorderPanelOverlay * internal;
 	};
 
 	struct C3DPanelOverlay_
 	{
-		castor3d::PanelOverlay * internal;
+		c3d::PanelOverlay * internal;
 	};
 
 	struct C3DTextOverlay_
 	{
-		castor3d::TextOverlay * internal;
+		c3d::TextOverlay * internal;
 	};
 
 	struct C3DRenderWindow_
 	{
-		castor3d::RenderWindowUPtr internal;
+		c3d::RenderWindowUPtr internal;
 	};
 
 	struct C3DSampler_
 	{
-		void setInternal( castor3d::SamplerUPtr v )noexcept
+		void setInternal( c3d::SamplerUPtr v )noexcept
 		{
-			ownInternal = castor::move( v );
+			ownInternal = c3d::move( v );
 		}
 
-		void setInternal( castor3d::Sampler * v )noexcept
+		void setInternal( c3d::Sampler * v )noexcept
 		{
 			internal = v;
 		}
 
-		castor3d::SamplerUPtr releaseInternal()noexcept
+		c3d::SamplerUPtr releaseInternal()noexcept
 		{
-			return castor::move( ownInternal );
+			return c3d::move( ownInternal );
 		}
 
-		castor3d::Sampler * getInternal()const noexcept
+		c3d::Sampler * getInternal()const noexcept
 		{
 			return ownInternal
 				? ownInternal.get()
@@ -272,28 +272,28 @@ extern "C"
 		}
 
 	private:
-		castor3d::SamplerUPtr ownInternal;
-		castor3d::Sampler * internal;
+		c3d::SamplerUPtr ownInternal;
+		c3d::Sampler * internal;
 	};
 
 	struct C3DScene_
 	{
-		void setInternal( castor3d::SceneUPtr v )noexcept
+		void setInternal( c3d::SceneUPtr v )noexcept
 		{
-			ownInternal = castor::move( v );
+			ownInternal = c3d::move( v );
 		}
 
-		void setInternal( castor3d::Scene * v )noexcept
+		void setInternal( c3d::Scene * v )noexcept
 		{
 			internal = v;
 		}
 
-		castor3d::SceneUPtr releaseInternal()noexcept
+		c3d::SceneUPtr releaseInternal()noexcept
 		{
-			return castor::move( ownInternal );
+			return c3d::move( ownInternal );
 		}
 
-		castor3d::Scene * getInternal()const noexcept
+		c3d::Scene * getInternal()const noexcept
 		{
 			return ownInternal
 				? ownInternal.get()
@@ -301,28 +301,28 @@ extern "C"
 		}
 
 	private:
-		castor3d::SceneUPtr ownInternal;
-		castor3d::Scene * internal;
+		c3d::SceneUPtr ownInternal;
+		c3d::Scene * internal;
 	};
 
 	struct C3DOverlay_
 	{
-		void setInternal( castor3d::OverlayUPtr v )noexcept
+		void setInternal( c3d::OverlayUPtr v )noexcept
 		{
-			ownInternal = castor::move( v );
+			ownInternal = c3d::move( v );
 		}
 
-		void setInternal( castor3d::Overlay * v )noexcept
+		void setInternal( c3d::Overlay * v )noexcept
 		{
 			internal = v;
 		}
 
-		castor3d::OverlayUPtr releaseInternal()noexcept
+		c3d::OverlayUPtr releaseInternal()noexcept
 		{
-			return castor::move( ownInternal );
+			return c3d::move( ownInternal );
 		}
 
-		castor3d::Overlay * getInternal()const noexcept
+		c3d::Overlay * getInternal()const noexcept
 		{
 			return ownInternal
 				? ownInternal.get()
@@ -330,28 +330,28 @@ extern "C"
 		}
 
 	private:
-		castor3d::OverlayUPtr ownInternal;
-		castor3d::Overlay * internal;
+		c3d::OverlayUPtr ownInternal;
+		c3d::Overlay * internal;
 	};
 
 	struct C3DSceneNode_
 	{
-		void setInternal( castor3d::SceneNodeUPtr v )noexcept
+		void setInternal( c3d::SceneNodeUPtr v )noexcept
 		{
-			ownInternal = castor::move( v );
+			ownInternal = c3d::move( v );
 		}
 
-		void setInternal( castor3d::SceneNode * v )noexcept
+		void setInternal( c3d::SceneNode * v )noexcept
 		{
 			internal = v;
 		}
 
-		castor3d::SceneNodeUPtr releaseInternal()noexcept
+		c3d::SceneNodeUPtr releaseInternal()noexcept
 		{
-			return castor::move( ownInternal );
+			return c3d::move( ownInternal );
 		}
 
-		castor3d::SceneNode * getInternal()const noexcept
+		c3d::SceneNode * getInternal()const noexcept
 		{
 			return ownInternal
 				? ownInternal.get()
@@ -359,28 +359,28 @@ extern "C"
 		}
 
 	private:
-		castor3d::SceneNodeUPtr ownInternal;
-		castor3d::SceneNode * internal;
+		c3d::SceneNodeUPtr ownInternal;
+		c3d::SceneNode * internal;
 	};
 
 	struct C3DCamera_
 	{
-		void setInternal( castor3d::CameraUPtr v )noexcept
+		void setInternal( c3d::CameraUPtr v )noexcept
 		{
-			ownInternal = castor::move( v );
+			ownInternal = c3d::move( v );
 		}
 
-		void setInternal( castor3d::Camera * v )noexcept
+		void setInternal( c3d::Camera * v )noexcept
 		{
 			internal = v;
 		}
 
-		castor3d::CameraUPtr releaseInternal()noexcept
+		c3d::CameraUPtr releaseInternal()noexcept
 		{
-			return castor::move( ownInternal );
+			return c3d::move( ownInternal );
 		}
 
-		castor3d::Camera * getInternal()const noexcept
+		c3d::Camera * getInternal()const noexcept
 		{
 			return ownInternal
 				? ownInternal.get()
@@ -388,28 +388,28 @@ extern "C"
 		}
 
 	private:
-		castor3d::CameraUPtr ownInternal;
-		castor3d::Camera * internal;
+		c3d::CameraUPtr ownInternal;
+		c3d::Camera * internal;
 	};
 
 	struct C3DGeometry_
 	{
-		void setInternal( castor3d::GeometryUPtr v )noexcept
+		void setInternal( c3d::GeometryUPtr v )noexcept
 		{
-			ownInternal = castor::move( v );
+			ownInternal = c3d::move( v );
 		}
 
-		void setInternal( castor3d::Geometry * v )noexcept
+		void setInternal( c3d::Geometry * v )noexcept
 		{
 			internal = v;
 		}
 
-		castor3d::GeometryUPtr releaseInternal()noexcept
+		c3d::GeometryUPtr releaseInternal()noexcept
 		{
-			return castor::move( ownInternal );
+			return c3d::move( ownInternal );
 		}
 
-		castor3d::Geometry * getInternal()const noexcept
+		c3d::Geometry * getInternal()const noexcept
 		{
 			return ownInternal
 				? ownInternal.get()
@@ -417,28 +417,28 @@ extern "C"
 		}
 
 	private:
-		castor3d::GeometryUPtr ownInternal;
-		castor3d::Geometry * internal;
+		c3d::GeometryUPtr ownInternal;
+		c3d::Geometry * internal;
 	};
 
 	struct C3DLight_
 	{
-		void setInternal( castor3d::LightUPtr v )noexcept
+		void setInternal( c3d::LightUPtr v )noexcept
 		{
-			ownInternal = castor::move( v );
+			ownInternal = c3d::move( v );
 		}
 
-		void setInternal( castor3d::Light * v )noexcept
+		void setInternal( c3d::Light * v )noexcept
 		{
 			internal = v;
 		}
 
-		castor3d::LightUPtr releaseInternal()noexcept
+		c3d::LightUPtr releaseInternal()noexcept
 		{
-			return castor::move( ownInternal );
+			return c3d::move( ownInternal );
 		}
 
-		castor3d::Light * getInternal()const noexcept
+		c3d::Light * getInternal()const noexcept
 		{
 			return ownInternal
 				? ownInternal.get()
@@ -446,28 +446,28 @@ extern "C"
 		}
 
 	private:
-		castor3d::LightUPtr ownInternal;
-		castor3d::Light * internal;
+		c3d::LightUPtr ownInternal;
+		c3d::Light * internal;
 	};
 
 	struct C3DLightGroup_
 	{
-		void setInternal( castor3d::LightGroupUPtr v )noexcept
+		void setInternal( c3d::LightGroupUPtr v )noexcept
 		{
-			ownInternal = castor::move( v );
+			ownInternal = c3d::move( v );
 		}
 
-		void setInternal( castor3d::LightGroup * v )noexcept
+		void setInternal( c3d::LightGroup * v )noexcept
 		{
 			internal = v;
 		}
 
-		castor3d::LightGroupUPtr releaseInternal()noexcept
+		c3d::LightGroupUPtr releaseInternal()noexcept
 		{
-			return castor::move( ownInternal );
+			return c3d::move( ownInternal );
 		}
 
-		castor3d::LightGroup * getInternal()const noexcept
+		c3d::LightGroup * getInternal()const noexcept
 		{
 			return ownInternal
 				? ownInternal.get()
@@ -475,28 +475,28 @@ extern "C"
 		}
 
 	private:
-		castor3d::LightGroupUPtr ownInternal;
-		castor3d::LightGroup * internal;
+		c3d::LightGroupUPtr ownInternal;
+		c3d::LightGroup * internal;
 	};
 
 	struct C3DMesh_
 	{
-		void setInternal( castor3d::MeshRes v )noexcept
+		void setInternal( c3d::MeshRes v )noexcept
 		{
-			ownInternal = castor::move( v );
+			ownInternal = c3d::move( v );
 		}
 
-		void setInternal( castor3d::MeshResPtr v )noexcept
+		void setInternal( c3d::MeshResPtr v )noexcept
 		{
 			internal = v;
 		}
 
-		castor3d::MeshRes releaseInternal()noexcept
+		c3d::MeshRes releaseInternal()noexcept
 		{
-			return castor::move( ownInternal );
+			return c3d::move( ownInternal );
 		}
 
-		castor3d::MeshResPtr getInternal()const noexcept
+		c3d::MeshResPtr getInternal()const noexcept
 		{
 			return ownInternal
 				? ownInternal.get()
@@ -504,53 +504,53 @@ extern "C"
 		}
 
 	private:
-		castor3d::MeshRes ownInternal;
-		castor3d::MeshResPtr internal;
+		c3d::MeshRes ownInternal;
+		c3d::MeshResPtr internal;
 	};
 
 	struct C3DSubmesh_
 	{
-		castor3d::Submesh * internal;
+		c3d::Submesh * internal;
 	};
 
 	struct C3DDirectionalLight_
 	{
-		castor3d::DirectionalLight * internal;
+		c3d::DirectionalLight * internal;
 	};
 
 	struct C3DPointLight_
 	{
-		castor3d::PointLight * internal;
+		c3d::PointLight * internal;
 	};
 
 	struct C3DSpotLight_
 	{
-		castor3d::SpotLight * internal;
+		c3d::SpotLight * internal;
 	};
 
 	struct C3DShadow_
 	{
-		castor3d::ShadowConfig * internal;
+		c3d::ShadowConfig * internal;
 	};
 
 	struct C3DLineMapping_
 	{
-		castor3d::LineMapping * internal;
+		c3d::LineMapping * internal;
 	};
 
 	struct C3DTriFaceMapping_
 	{
-		castor3d::TriFaceMapping * internal;
+		c3d::TriFaceMapping * internal;
 	};
 
 	struct C3DPass_
 	{
-		castor3d::Pass * internal;
+		c3d::Pass * internal;
 	};
 
 	struct C3DSkybox_
 	{
-		castor3d::SkyboxBackgroundUPtr internal;
+		c3d::SkyboxBackgroundUPtr internal;
 	};
 
 #ifdef __cplusplus

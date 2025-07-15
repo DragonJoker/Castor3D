@@ -7,7 +7,7 @@
 namespace GuiCommon
 {
 	BoneTreeItemProperty::BoneTreeItemProperty( bool editable
-		, castor3d::Engine * engine )
+		, c3d::Engine * engine )
 		: TreeItemProperty{ engine, editable }
 	{
 		CreateTreeItemMenu();
@@ -29,7 +29,7 @@ namespace GuiCommon
 		addProperty( grid, PROPERTY_CATEGORY_BONE + wxString( m_bone->getName() ) );
 		addProperty( grid, PROPERTY_CATEGORY_TRANSLATE, m_bone->getTransform().translate, [&]( wxVariant const & var ){} );
 		auto rotate = m_bone->getTransform().rotate;
-		addProperty( grid, PROPERTY_CATEGORY_ROTATE, castor::Point4f{ rotate->x, rotate->y, rotate->z, rotate->w }, [&]( wxVariant const & var ){} );
+		addProperty( grid, PROPERTY_CATEGORY_ROTATE, c3d::Point4f{ rotate->x, rotate->y, rotate->z, rotate->w }, [&]( wxVariant const & var ){} );
 		addProperty( grid, PROPERTY_CATEGORY_SCALE, m_bone->getTransform().scale, [&]( wxVariant const & var ){} );
 		addProperty( grid, PROPERTY_CATEGORY_INVERSE_BIND, m_bone->getInverseTransform(), [&]( wxVariant const & var ){} );
 	}

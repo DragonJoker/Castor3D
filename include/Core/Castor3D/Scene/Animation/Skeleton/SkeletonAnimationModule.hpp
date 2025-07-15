@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Scene */
 	//@{
@@ -74,10 +74,10 @@ namespace castor3d
 	class SkeletonAnimationInstanceObject;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, SkeletonAnimationInstance, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SkeletonAnimationInstanceBone, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SkeletonAnimationInstanceNode, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SkeletonAnimationInstanceObject, C3D_API );
+	CU_DeclareSmartPtr( c3d, SkeletonAnimationInstance, C3D_API );
+	CU_DeclareSmartPtr( c3d, SkeletonAnimationInstanceBone, C3D_API );
+	CU_DeclareSmartPtr( c3d, SkeletonAnimationInstanceNode, C3D_API );
+	CU_DeclareSmartPtr( c3d, SkeletonAnimationInstanceObject, C3D_API );
 
 	//! SkeletonAnimationInstanceObject pointer array.
 	CU_DeclareVector( SkeletonAnimationInstanceObjectUPtr, SkeletonAnimationInstanceObjectPtr );

@@ -21,16 +21,16 @@
 
 //*************************************************************************************************
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::SpecularMapComponent >
-		: public TextWriterT< castor3d::SpecularMapComponent >
+	class TextWriter< SpecularMapComponent >
+		: public TextWriterT< SpecularMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, uint32_t mask )
-			: TextWriterT< castor3d::SpecularMapComponent >{ tabs }
+			: TextWriterT< SpecularMapComponent >{ tabs }
 			, m_mask{ mask }
 		{
 		}
@@ -40,7 +40,7 @@ namespace castor
 			return writeMask( file, cuT( "specular_mask" ), m_mask );
 		}
 
-		bool operator()( castor3d::SpecularMapComponent const & object
+		bool operator()( SpecularMapComponent const & object
 			, StringStream & file )override
 		{
 			return writeMask( file, cuT( "specular_mask" ), m_mask );
@@ -49,10 +49,7 @@ namespace castor
 	private:
 		uint32_t m_mask;
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace spccmp
@@ -123,7 +120,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void SpecularMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void SpecularMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "specular" )
@@ -135,29 +132,29 @@ namespace castor3d
 					, 0x00FFFFFF );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "specular_mask" )
 			, spccmp::parserUnitSpecularMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "specular_mask" )
 			, spccmp::parserUnitSpecularMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "specular" )
 			, spccmp::parserTexRemapSpecular );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "specular_mask" )
 			, spccmp::parserTexRemapSpecularMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 
 	bool SpecularMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -168,22 +165,22 @@ namespace castor3d
 	}
 
 	void SpecularMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, SpecularMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, SpecularMapComponent >( pass ) );
 	}
 
 	bool SpecularMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< SpecularMapComponent >{ tabs, mask }( file );
+		return TextWriter< SpecularMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const SpecularMapComponent::TypeName = C3D_MakePassMapComponentName( "specular" );
+	String const SpecularMapComponent::TypeName = C3D_MakePassMapComponentName( "specular" );
 
 	SpecularMapComponent::SpecularMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -195,7 +192,7 @@ namespace castor3d
 
 	PassComponentUPtr SpecularMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, SpecularMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, SpecularMapComponent >( pass );
 	}
 
 	void SpecularMapComponent::doFillConfig( TextureConfiguration & configuration
@@ -207,10 +204,10 @@ namespace castor3d
 
 	PassMapDefaultImageParams SpecularMapComponent::createDefaultImage()const
 	{
-		castor::String name{ cuT( "DefaultSpecular" ) };
-		castor::ByteArray data{ 255u, 255u, 255u, 0 };
+		String name{ cuT( "DefaultSpecular" ) };
+		ByteArray data{ 255u, 255u, 255u, 0 };
 		return { name
-			, castor::ImageCreateParams{ castor::getFormatName( castor::PixelFormat::eR8G8B8A8_UNORM ), data } };
+			, ImageCreateParams{ getFormatName( PixelFormat::eR8G8B8A8_UNORM ), data } };
 	}
 
 	//*********************************************************************************************

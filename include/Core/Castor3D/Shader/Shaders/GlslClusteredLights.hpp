@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	class ClusteredLights
 	{
@@ -68,18 +68,18 @@ namespace castor3d::shader
 		sdw::ShaderWriter & m_writer;
 		bool m_enabled;
 		ClustersDataUPtr m_clusterData;
-		castor::RawUniquePtr< sdw::Vec4 > m_clustersLightsData;
-		castor::RawUniquePtr< sdw::UInt32Array > m_pointLightIndices;
-		castor::RawUniquePtr< sdw::U32Vec2Array > m_pointLightClusters;
-		castor::RawUniquePtr< sdw::UInt32Array > m_spotLightIndices;
-		castor::RawUniquePtr< sdw::U32Vec2Array > m_spotLightClusters;
+		RawUniquePtr< sdw::Vec4 > m_clustersLightsData;
+		RawUniquePtr< sdw::UInt32Array > m_pointLightIndices;
+		RawUniquePtr< sdw::U32Vec2Array > m_pointLightClusters;
+		RawUniquePtr< sdw::UInt32Array > m_spotLightIndices;
+		RawUniquePtr< sdw::U32Vec2Array > m_spotLightClusters;
 	};
 
 #define C3D_ClustersAABB( writer, binding, set ) \
 	auto clustersAABBBuffer = writer.declStorageBuffer( "c3d_clustersAABBBuffer" \
 		, uint32_t( binding ) \
 		, set ); \
-	auto c3D_clustersAABB = clustersAABBBuffer.declMemberArray< shader::AABB >( "cb" ); \
+	auto c3D_clustersAABB = clustersAABBBuffer.declMemberArray< c3d::shader::AABB >( "cb" ); \
 	clustersAABBBuffer.end()
 
 
@@ -169,7 +169,7 @@ namespace castor3d::shader
 		, set \
 		, sdw::type::MemoryLayout::eStd430 \
 		, enabled ); \
-	auto c3d_allLightsAABB = allLightsAABBBuffer.declMemberArray< shader::AABB >( "ab", enabled ); \
+	auto c3d_allLightsAABB = allLightsAABBBuffer.declMemberArray< c3d::shader::AABB >( "ab", enabled ); \
 	allLightsAABBBuffer.end()
 
 #define C3D_AllLightsAABB( writer, binding, set ) \
@@ -185,7 +185,7 @@ namespace castor3d::shader
 		, enabled ); \
 	auto c3d_clustersLightsData = reducedLightsAABBBuffer.declMember< sdw::Vec4 >( "c3d_clustersLightsData", enabled ); \
 	auto c3d_lightsAABBRange = reducedLightsAABBBuffer.declMember< sdw::Vec4 >( "c3d_lightsAABBRange", enabled ); \
-	auto c3d_reducedLightsAABB = reducedLightsAABBBuffer.declMemberArray< shader::AABB >( "rb", enabled ); \
+	auto c3d_reducedLightsAABB = reducedLightsAABBBuffer.declMemberArray< c3d::shader::AABB >( "rb", enabled ); \
 	reducedLightsAABBBuffer.end()
 
 #define C3D_ReducedLightsAABB( writer, binding, set ) \
@@ -199,7 +199,7 @@ namespace castor3d::shader
 		, set \
 		, sdw::type::MemoryLayout::eStd430 \
 		, enabled ); \
-	auto c3d_pointLightBVH = pointLightBVHBuffer.declMemberArray< shader::AABB >( "pb", enabled ); \
+	auto c3d_pointLightBVH = pointLightBVHBuffer.declMemberArray< c3d::shader::AABB >( "pb", enabled ); \
 	pointLightBVHBuffer.end()
 
 #define C3D_PointLightBVH( writer, binding, set ) \
@@ -211,7 +211,7 @@ namespace castor3d::shader
 		, set \
 		, sdw::type::MemoryLayout::eStd430 \
 		, enabled ); \
-	auto c3d_spotLightBVH = spotLightBVHBuffer.declMemberArray< shader::AABB >( "sb", enabled ); \
+	auto c3d_spotLightBVH = spotLightBVHBuffer.declMemberArray< c3d::shader::AABB >( "sb", enabled ); \
 	spotLightBVHBuffer.end()
 
 #define C3D_SpotLightBVH( writer, binding, set ) \
@@ -223,7 +223,7 @@ namespace castor3d::shader
 		, set \
 		, sdw::type::MemoryLayout::eStd430 \
 		, enabled ); \
-	auto c3d_lightBVH = lightBVHBuffer.declMemberArray< shader::AABB >( "lb", enabled ); \
+	auto c3d_lightBVH = lightBVHBuffer.declMemberArray< c3d::shader::AABB >( "lb", enabled ); \
 	lightBVHBuffer.end()
 
 #define C3D_LightBVH( writer, binding, set ) \

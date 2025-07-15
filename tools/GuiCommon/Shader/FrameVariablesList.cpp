@@ -37,7 +37,7 @@ namespace GuiCommon
 		}	eID;
 	}
 
-	FrameVariablesList::FrameVariablesList( castor3d::Engine * engine
+	FrameVariablesList::FrameVariablesList( c3d::Engine * engine
 		, PropertiesContainer * propertiesHolder
 		, wxWindow * parent
 		, wxPoint const & ptPos
@@ -84,13 +84,13 @@ namespace GuiCommon
 	}
 
 	void FrameVariablesList::loadVariables( VkShaderStageFlagBits stage
-		, castor::Vector< UniformBufferValues > & ubos )
+		, c3d::Vector< UniformBufferValues > & ubos )
 	{
 		wxTreeItemId root = AddRoot( _( "Root" ) );
 
 		for ( auto & ubo : ubos )
 		{
-			if ( castor::checkFlag( ubo.stages, stage ) )
+			if ( c3d::checkFlag( ubo.stages, stage ) )
 			{
 				doAddBuffer( root, ubo );
 			}

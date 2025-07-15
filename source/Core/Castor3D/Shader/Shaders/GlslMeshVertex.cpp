@@ -6,14 +6,14 @@
 #include <ShaderWriter/Writer.hpp>
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//*********************************************************************************************
 
 	MeshVertexBase::MeshVertexBase( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: StructInstance{ writer, castor::move( expr ), enabled }
+		: StructInstance{ writer, c3d::move( expr ), enabled }
 		// Base
 		, position{ this->getMember< sdw::Vec4 >( "position", true ) }
 		, normal{ this->getMember< sdw::Vec3 >( "normal", true ) }
@@ -68,7 +68,7 @@ namespace castor3d::shader
 	[&writer, &flags, &firstBinding, set, Stride]()\
 	{\
 		sdw::StorageBuffer Name##Buffer{ writer\
-			, #Name + castor::MbString{ "Buffer" }\
+			, #Name + MbString{ "Buffer" }\
 			, firstBinding++\
 			, set\
 			, ast::type::MemoryLayout::eStd430\
@@ -86,7 +86,7 @@ namespace castor3d::shader
 		: positions{ [&writer, &flags, &firstBinding, set, stride]()
 			{
 				sdw::StorageBuffer c3d_inPositionBuffer{ writer
-					, castor::MbString{ "c3d_inPositionsBuffer" }
+					, MbString{ "c3d_inPositionsBuffer" }
 					, firstBinding++
 					, set
 					, ast::type::MemoryLayout::eStd430

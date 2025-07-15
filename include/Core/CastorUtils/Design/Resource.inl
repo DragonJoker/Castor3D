@@ -3,7 +3,7 @@ See LICENSE file in root folder
 */
 #include "CastorUtils/Design/Resource.hpp"
 
-namespace castor
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -18,20 +18,20 @@ namespace castor
 	template< typename ResT, typename KeyT >
 	template< typename ... ParametersT >
 	ResourceT< ResT, KeyT >::ResourceT( ParametersT && ... params )
-		: ResT{ castor::forward< ParametersT >( params )... }
+		: ResT{ c3d::forward< ParametersT >( params )... }
 	{
 	}
 
 	template< typename ResT, typename KeyT >
 	ResourceT< ResT, KeyT >::ResourceT( ElementT && rhs )
-		: ResT{ castor::move( rhs ) }
+		: ResT{ c3d::move( rhs ) }
 	{
 	}
 
 	template< typename ResT, typename KeyT >
 	ResourceT< ResT, KeyT > & ResourceT< ResT, KeyT >::operator=( ElementT && rhs )
 	{
-		ResT::operator=( castor::move( rhs ) );
+		ResT::operator=( c3d::move( rhs ) );
 		return *this;
 	}
 
@@ -42,7 +42,7 @@ namespace castor
 		if ( !m_initialised.exchange( true ) )
 		{
 			onInitialising( *this );
-			ResT::initialise( castor::forward< ParametersT >( params )... );
+			ResT::initialise( c3d::forward< ParametersT >( params )... );
 			onInitialised( *this );
 		}
 	}
@@ -54,7 +54,7 @@ namespace castor
 		if ( m_initialised.exchange( false ) )
 		{
 			onCleaning( *this );
-			ResT::cleanup( castor::forward< ParametersT >( params )... );
+			ResT::cleanup( c3d::forward< ParametersT >( params )... );
 			onCleaned( *this );
 		}
 	}
@@ -66,8 +66,8 @@ namespace castor
 	{
 		if ( m_initialised )
 		{
-			cleanup( castor::forward< ParametersT >( paramsT )... );
-			initialise( castor::forward< ParametersU >( paramsU )... );
+			cleanup( c3d::forward< ParametersT >( paramsT )... );
+			initialise( c3d::forward< ParametersU >( paramsU )... );
 		}
 	}
 

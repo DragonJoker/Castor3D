@@ -10,29 +10,29 @@
 
 #include <ashespp/Image/Image.hpp>
 
-CU_ImplementSmartPtr( castor3d, Texture )
+CU_ImplementSmartPtr( c3d, Texture )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 	namespace texture
 	{
-		static castor::PixelFormat getDepthFormat( RenderDevice const & device
-			, castor::PixelFormat format )
+		static PixelFormat getDepthFormat( RenderDevice const & device
+			, PixelFormat format )
 		{
-			castor::Vector< castor::PixelFormat > depthFormats
+			Vector< PixelFormat > depthFormats
 			{
 				format,
-				castor::PixelFormat::eD24_UNORM_S8_UINT,
-				castor::PixelFormat::eD16_UNORM_S8_UINT,
+				PixelFormat::eD24_UNORM_S8_UINT,
+				PixelFormat::eD16_UNORM_S8_UINT,
 			};
 			return device.selectSuitableFormat( depthFormats
 				, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT );
 		}
 
-		static castor::PixelFormat retrieveFormat( RenderDevice const & device
-			, castor::PixelFormat format )
+		static PixelFormat retrieveFormat( RenderDevice const & device
+			, PixelFormat format )
 		{
 			return isDepthOrStencilFormat( format )
 				? getDepthFormat( device, format )
@@ -91,18 +91,18 @@ namespace castor3d
 	//*********************************************************************************************
 
 	Texture::Texture( Texture && rhs )noexcept
-		: resources{ castor::move( rhs.resources ) }
-		, device{ castor::move( rhs.device ) }
-		, imageId{ castor::move( rhs.imageId ) }
-		, image{ castor::move( rhs.image ) }
-		, wholeViewId{ castor::move( rhs.wholeViewId ) }
-		, targetViewId{ castor::move( rhs.targetViewId ) }
-		, sampledViewId{ castor::move( rhs.sampledViewId ) }
-		, wholeView{ castor::move( rhs.wholeView ) }
-		, targetView{ castor::move( rhs.targetView ) }
-		, sampledView{ castor::move( rhs.sampledView ) }
-		, subViewsId{ castor::move( rhs.subViewsId ) }
-		, sampler{ castor::move( rhs.sampler ) }
+		: resources{ c3d::move( rhs.resources ) }
+		, device{ c3d::move( rhs.device ) }
+		, imageId{ c3d::move( rhs.imageId ) }
+		, image{ c3d::move( rhs.image ) }
+		, wholeViewId{ c3d::move( rhs.wholeViewId ) }
+		, targetViewId{ c3d::move( rhs.targetViewId ) }
+		, sampledViewId{ c3d::move( rhs.sampledViewId ) }
+		, wholeView{ c3d::move( rhs.wholeView ) }
+		, targetView{ c3d::move( rhs.targetView ) }
+		, sampledView{ c3d::move( rhs.sampledView ) }
+		, subViewsId{ c3d::move( rhs.subViewsId ) }
+		, sampler{ c3d::move( rhs.sampler ) }
 	{
 		rhs.device = nullptr;
 		rhs.resources = nullptr;
@@ -114,18 +114,18 @@ namespace castor3d
 
 	Texture & Texture::operator=( Texture && rhs )noexcept
 	{
-		resources = castor::move( rhs.resources );
-		device = castor::move( rhs.device );
-		imageId = castor::move( rhs.imageId );
-		image = castor::move( rhs.image );
-		wholeViewId = castor::move( rhs.wholeViewId );
-		targetViewId = castor::move( rhs.targetViewId );
-		sampledViewId = castor::move( rhs.sampledViewId );
-		wholeView = castor::move( rhs.wholeView );
-		targetView = castor::move( rhs.targetView );
-		sampledView = castor::move( rhs.sampledView );
-		subViewsId = castor::move( rhs.subViewsId );
-		sampler = castor::move( rhs.sampler );
+		resources = c3d::move( rhs.resources );
+		device = c3d::move( rhs.device );
+		imageId = c3d::move( rhs.imageId );
+		image = c3d::move( rhs.image );
+		wholeViewId = c3d::move( rhs.wholeViewId );
+		targetViewId = c3d::move( rhs.targetViewId );
+		sampledViewId = c3d::move( rhs.sampledViewId );
+		wholeView = c3d::move( rhs.wholeView );
+		targetView = c3d::move( rhs.targetView );
+		sampledView = c3d::move( rhs.sampledView );
+		subViewsId = c3d::move( rhs.subViewsId );
+		sampler = c3d::move( rhs.sampler );
 
 		rhs.device = nullptr;
 		rhs.resources = nullptr;
@@ -139,7 +139,7 @@ namespace castor3d
 
 	Texture::Texture( RenderDevice const & pdevice
 		, crg::ResourcesCache & presources
-		, castor::String const & name
+		, String const & name
 		, TextureCreateInfo const & imageInfo
 		, TextureSamplerInfo const & samplerInfo
 		, bool createSubviews )
@@ -147,12 +147,12 @@ namespace castor3d
 		, device{ &pdevice }
 		, sampler{ ( samplerInfo.sampler
 			? samplerInfo.sampler
-			: texture::getSampler( pdevice, castor::move( samplerInfo.createInfo ) ) ) }
+			: texture::getSampler( pdevice, c3d::move( samplerInfo.createInfo ) ) ) }
 	{
 		auto & handler = resources->getHandler();
 		auto mipLevels = std::max( 1u, imageInfo.mipLevels );
 		auto layerCount = ( imageInfo.extent.depth > 1u ? 1u : imageInfo.layerCount );
-		auto mbName = castor::toUtf8( name );
+		auto mbName = toUtf8( name );
 		bool isTexture1D = texture::isTexture1D( imageInfo.extent );
 		imageId = handler.createImageId( crg::ImageData{ mbName
 			, ( imageInfo.createFlags
@@ -234,7 +234,7 @@ namespace castor3d
 
 			for ( uint32_t index = 0u; index < sliceLayerCount; ++index )
 			{
-				subViewsId.push_back( handler.createViewId( crg::ImageViewData{ mbName + "Sub" + castor::string::toMbString( index )
+				subViewsId.push_back( handler.createViewId( crg::ImageViewData{ mbName + "Sub" + string::toMbString( index )
 					, imageId
 					, ImageViewCreateFlags::eNone
 					, ( isTexture1D ? ImageViewType::e1D : ImageViewType::e2D )
@@ -258,7 +258,7 @@ namespace castor3d
 
 		auto & context = device->makeContext();
 		
-		image = castor::make_unique< ashes::Image >( **device
+		image = makeRawUnique< ashes::Image >( **device
 			, imageId.data->name
 			, resources->createImage( context, imageId )
 			, ashes::ImageCreateInfo{ convert( imageId.data->info ) } );

@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class TextOverlay
 		: public OverlayCategory
@@ -35,14 +35,14 @@ namespace castor3d
 		*/
 		struct Vertex
 		{
-			castor::Point2f coords;
-			castor::Point2f texture;
-			castor::Point2f text;
+			Point2f coords;
+			Point2f texture;
+			Point2f text;
 		};
 		CU_DeclareVector( Vertex, Vertex );
 
 	public:
-		CU_DeclareMap( char32_t, castor::Position, GlyphPosition );
+		CU_DeclareMap( char32_t, Position, GlyphPosition );
 
 	public:
 		/**
@@ -62,7 +62,7 @@ namespace castor3d
 		 */
 		C3D_API static OverlayCategoryUPtr create();
 		/**
-		 *\copydoc		castor3d::OverlayCategory::accept
+		 *\copydoc		OverlayCategory::accept
 		 */
 		C3D_API void accept( OverlayVisitor & visitor )const override;
 		/**
@@ -87,9 +87,9 @@ namespace castor3d
 		 *\param[out]	lines			Vue sur les text lines alloués pour l'incrustation.
 		 */
 		C3D_API float fillBuffer( uint32_t overlayIndex
-			, castor::ArrayView< TextChar > texts
-			, castor::ArrayView< TextWord > words
-			, castor::ArrayView< TextLine > lines )const noexcept;
+			, ArrayView< TextChar > texts
+			, ArrayView< TextWord > words
+			, ArrayView< TextLine > lines )const noexcept;
 		/**
 		 *\~english
 		 *\brief		Creates the shader program used to compute the overlay's vertices.
@@ -107,7 +107,7 @@ namespace castor3d
 		 *\brief		Définit la police du texte
 		 *\param[in]	value	La nouvelle valeur
 		 */
-		C3D_API void setFont( castor::String const & value );
+		C3D_API void setFont( String const & value );
 		/**
 		*\~english
 		*\name
@@ -122,7 +122,7 @@ namespace castor3d
 			return m_textChanged;
 		}
 
-		castor::String const & getFontName()const
+		String const & getFontName()const
 		{
 			return getFontTexture()->getFontName();
 		}
@@ -132,7 +132,7 @@ namespace castor3d
 			return m_fontTexture;
 		}
 
-		castor::U32String getCaption()const
+		U32String getCaption()const
 		{
 			return m_currentCaption;
 		}
@@ -191,9 +191,9 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setCaption( castor::U32String value )noexcept
+		void setCaption( U32String value )noexcept
 		{
-			m_currentCaption = castor::move( value );
+			m_currentCaption = c3d::move( value );
 			m_textChanged = true;
 		}
 
@@ -235,15 +235,15 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		using UvGenFunc = castor::Function< void( castor::Point2f const & size
-			, castor::Point4i const & absolute
-			, castor::Point4f & uv ) >;
+		using UvGenFunc = Function< void( Point2f const & size
+			, Point4i const & absolute
+			, Point4f & uv ) >;
 		/**
-		 *\copydoc	castor3d::OverlayCategory::doReset
+		 *\copydoc	OverlayCategory::doReset
 		 */
 		void doReset()override;
 		/**
-		 *\copydoc	castor3d::OverlayCategory::doUpdate
+		 *\copydoc	OverlayCategory::doUpdate
 		 */
 		void doUpdate( OverlayRenderer const & renderer )override;
 		/**
@@ -254,11 +254,11 @@ namespace castor3d
 		 *\brief		Calcule les lignes à afficher.
 		 *\param[in]	renderSize	Les dimensions de la zone de rendu.
 		 */
-		void doPrepareText( castor::Size const & renderSize );
+		void doPrepareText( Size const & renderSize );
 
 	private:
-		castor::U32String m_currentCaption;
-		castor::U32String m_previousCaption;
+		U32String m_currentCaption;
+		U32String m_previousCaption;
 		FontTextureRPtr m_fontTexture{};
 		TextWrappingMode m_wrappingMode{ TextWrappingMode::eNone };
 		TextLineSpacingMode m_lineSpacingMode{ TextLineSpacingMode::eOwnHeight };
@@ -268,7 +268,7 @@ namespace castor3d
 		bool m_textChanged{ true };
 		FontTexture::OnChanged::connection m_connection;
 		TextTexturingMode m_texturingMode{ TextTexturingMode::eText };
-		castor::Array< TextChar, MaxCharsPerOverlay > m_text;
+		Array< TextChar, MaxCharsPerOverlay > m_text;
 		uint32_t m_charsCount{};
 		OverlayWords m_words;
 		OverlayLines m_lines;

@@ -28,18 +28,18 @@ namespace water
 
 	template< typename TypeT >
 	class TextWriter
-		: public castor::TextWriterT< WaterComponent >
+		: public c3d::TextWriterT< WaterComponent >
 	{
 	public:
-		explicit TextWriter( castor::String const & tabs )
-			: castor::TextWriterT< WaterComponent >{ tabs }
+		explicit TextWriter( c3d::String const & tabs )
+			: c3d::TextWriterT< WaterComponent >{ tabs }
 		{
 		}
 
 		bool operator()( WaterComponent const & pass
-			, castor::StringStream & file )override
+			, c3d::StringStream & file )override
 		{
-			castor3d::log::info << this->tabs() << cuT( "Writing Water data " ) << std::endl;
+			c3d::log::info << this->tabs() << cuT( "Writing Water data " ) << std::endl;
 			return this->writeOpt( file, cuT( "dampeningFactor" ), pass.getDampeningFactor(), 5.0f )
 				&& this->writeOpt( file, cuT( "depthSofteningDistance" ), pass.getDepthSofteningDistance(), 0.5f )
 				&& this->writeOpt( file, cuT( "noiseTiling" ), pass.getNoiseTiling(), 1.0f )
@@ -57,7 +57,7 @@ namespace water
 
 	namespace waterpass
 	{
-		static CU_ImplementAttributeParserBlock( parserDampeningFactor, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserDampeningFactor, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -69,13 +69,13 @@ namespace water
 			}
 			else
 			{
-				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< WaterComponent >( *blockContext );
 				component.setDampeningFactor( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserDepthSofteningDistance, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserDepthSofteningDistance, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -87,13 +87,13 @@ namespace water
 			}
 			else
 			{
-				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< WaterComponent >( *blockContext );
 				component.setDepthSofteningDistance( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserNoiseTiling, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserNoiseTiling, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -105,13 +105,13 @@ namespace water
 			}
 			else
 			{
-				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< WaterComponent >( *blockContext );
 				component.setNoiseTiling( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserRefrDistortionFactor, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserRefrDistortionFactor, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -123,13 +123,13 @@ namespace water
 			}
 			else
 			{
-				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< WaterComponent >( *blockContext );
 				component.setRefractionDistortionFactor( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserRefrHeightFactor, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserRefrHeightFactor, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -141,13 +141,13 @@ namespace water
 			}
 			else
 			{
-				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< WaterComponent >( *blockContext );
 				component.setRefractionHeightFactor( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserRefrDistanceFactor, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserRefrDistanceFactor, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -159,13 +159,13 @@ namespace water
 			}
 			else
 			{
-				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< WaterComponent >( *blockContext );
 				component.setRefractionDistanceFactor( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserSsrStepSize, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserSsrStepSize, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -177,13 +177,13 @@ namespace water
 			}
 			else
 			{
-				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< WaterComponent >( *blockContext );
 				component.setSsrStepSize( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserSsrFwdStepCount, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserSsrFwdStepCount, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -195,13 +195,13 @@ namespace water
 			}
 			else
 			{
-				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< WaterComponent >( *blockContext );
 				component.setSsrForwardStepsCount( params[0]->get< uint32_t >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserSsrBckStepCount, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserSsrBckStepCount, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -213,13 +213,13 @@ namespace water
 			}
 			else
 			{
-				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< WaterComponent >( *blockContext );
 				component.setSsrBackwardStepsCount( params[0]->get< uint32_t >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserSsrDepthMult, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserSsrDepthMult, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -231,13 +231,13 @@ namespace water
 			}
 			else
 			{
-				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< WaterComponent >( *blockContext );
 				component.setSsrDepthMult( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserFoamHeightStart, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserFoamHeightStart, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -249,13 +249,13 @@ namespace water
 			}
 			else
 			{
-				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< WaterComponent >( *blockContext );
 				component.setFoamHeightStart( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserFoamFadeDistance, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserFoamFadeDistance, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -267,13 +267,13 @@ namespace water
 			}
 			else
 			{
-				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< WaterComponent >( *blockContext );
 				component.setFoamFadeDistance( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserFoamTiling, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserFoamTiling, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -285,13 +285,13 @@ namespace water
 			}
 			else
 			{
-				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< WaterComponent >( *blockContext );
 				component.setFoamTiling( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserFoamNoiseTiling, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserFoamNoiseTiling, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -303,13 +303,13 @@ namespace water
 			}
 			else
 			{
-				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< WaterComponent >( *blockContext );
 				component.setFoamNoiseTiling( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserFoamAngleExponent, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserFoamAngleExponent, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -321,13 +321,13 @@ namespace water
 			}
 			else
 			{
-				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< WaterComponent >( *blockContext );
 				component.setFoamAngleExponent( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserFoamBrightness, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserFoamBrightness, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -339,7 +339,7 @@ namespace water
 			}
 			else
 			{
-				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< WaterComponent >( *blockContext );
 				component.setFoamBrightness( params[0]->get< float >() );
 			}
 		}
@@ -348,9 +348,9 @@ namespace water
 
 	//*********************************************************************************************
 
-	void WaterComponent::ComponentsShader::fillComponents( castor3d::ComponentModeFlags componentsMask
+	void WaterComponent::ComponentsShader::fillComponents( c3d::ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
-		, castor3d::shader::Materials const & materials
+		, c3d::shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
 		if ( !isComponentAvailable( componentsMask, materials ) )
@@ -380,8 +380,8 @@ namespace water
 	}
 
 	void WaterComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
-		, castor3d::shader::Materials const & materials
-		, castor3d::shader::Material const * material
+		, c3d::shader::Materials const & materials
+		, c3d::shader::Material const * material
 		, sdw::StructInstance const * surface
 		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )const
@@ -435,10 +435,10 @@ namespace water
 		}
 	}
 
-	void WaterComponent::ComponentsShader::blendComponents( castor3d::shader::Materials const & materials
+	void WaterComponent::ComponentsShader::blendComponents( c3d::shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, castor3d::shader::BlendComponents & res
-		, castor3d::shader::BlendComponents const & src )const
+		, c3d::shader::BlendComponents & res
+		, c3d::shader::BlendComponents const & src )const
 	{
 		if ( res.hasMember( "dampeningFactor" ) )
 		{
@@ -462,8 +462,8 @@ namespace water
 	}
 
 	void WaterComponent::ComponentsShader::updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, castor3d::shader::Material const & material
-		, castor3d::shader::BlendComponents & components
+		, c3d::shader::Material const & material
+		, c3d::shader::BlendComponents & components
 		, bool isFrontCulled )const
 	{
 		if ( !components.hasMember( "normal" )
@@ -476,7 +476,7 @@ namespace water
 
 		auto & writer{ *components.getWriter() };
 		auto tbn = writer.declLocale( "waterTBN"
-			, castor3d::shader::Utils::getTBN( components.getRawNormal()
+			, c3d::shader::Utils::getTBN( components.getRawNormal()
 				, components.getRawTangent().xyz()
 				, components.getRawBitangent() ) );
 		auto finalNormal = writer.declLocale( "finalNormal"
@@ -513,90 +513,90 @@ namespace water
 
 	//*********************************************************************************************
 
-	void WaterComponent::Plugin::createParsers( castor::AttributeParsers & parsers
-		, castor3d::ChannelFillers & channelFillers )const
+	void WaterComponent::Plugin::createParsers( c3d::AttributeParsers & parsers
+		, c3d::ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
-			, uint32_t( castor3d::CSCNSection::ePass )
+		c3d::addParserT( parsers
+			, uint32_t( c3d::CSCNSection::ePass )
 			, cuT( "dampeningFactor" )
-			, &waterpass::parserDampeningFactor, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
-			, uint32_t( castor3d::CSCNSection::ePass )
+			, &waterpass::parserDampeningFactor, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
+			, uint32_t( c3d::CSCNSection::ePass )
 			, cuT( "refractionDistortionFactor" )
-			, &waterpass::parserRefrDistortionFactor, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
-			, uint32_t( castor3d::CSCNSection::ePass )
+			, &waterpass::parserRefrDistortionFactor, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
+			, uint32_t( c3d::CSCNSection::ePass )
 			, cuT( "refractionHeightFactor" )
-			, &waterpass::parserRefrHeightFactor, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
-			, uint32_t( castor3d::CSCNSection::ePass )
+			, &waterpass::parserRefrHeightFactor, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
+			, uint32_t( c3d::CSCNSection::ePass )
 			, cuT( "refractionDistanceFactor" )
-			, &waterpass::parserRefrDistanceFactor, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
-			, uint32_t( castor3d::CSCNSection::ePass )
+			, &waterpass::parserRefrDistanceFactor, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
+			, uint32_t( c3d::CSCNSection::ePass )
 			, cuT( "depthSofteningDistance" )
-			, &waterpass::parserDepthSofteningDistance, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
-			, uint32_t( castor3d::CSCNSection::ePass )
+			, &waterpass::parserDepthSofteningDistance, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
+			, uint32_t( c3d::CSCNSection::ePass )
 			, cuT( "noiseTiling" )
-			, &waterpass::parserNoiseTiling, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
-			, uint32_t( castor3d::CSCNSection::ePass )
+			, &waterpass::parserNoiseTiling, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
+			, uint32_t( c3d::CSCNSection::ePass )
 			, cuT( "ssrStepSize" )
-			, &waterpass::parserSsrStepSize, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
-			, uint32_t( castor3d::CSCNSection::ePass )
+			, &waterpass::parserSsrStepSize, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
+			, uint32_t( c3d::CSCNSection::ePass )
 			, cuT( "ssrForwardStepsCount" )
-			, &waterpass::parserSsrFwdStepCount, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		castor::addParserT( parsers
-			, uint32_t( castor3d::CSCNSection::ePass )
+			, &waterpass::parserSsrFwdStepCount, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
+		c3d::addParserT( parsers
+			, uint32_t( c3d::CSCNSection::ePass )
 			, cuT( "ssrBackwardStepsCount" )
-			, &waterpass::parserSsrBckStepCount, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		castor::addParserT( parsers
-			, uint32_t( castor3d::CSCNSection::ePass )
+			, &waterpass::parserSsrBckStepCount, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
+		c3d::addParserT( parsers
+			, uint32_t( c3d::CSCNSection::ePass )
 			, cuT( "ssrDepthMult" )
-			, &waterpass::parserSsrDepthMult, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
-			, uint32_t( castor3d::CSCNSection::ePass )
+			, &waterpass::parserSsrDepthMult, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
+			, uint32_t( c3d::CSCNSection::ePass )
 			, cuT( "foamHeightStart" )
-			, &waterpass::parserFoamHeightStart, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
-			, uint32_t( castor3d::CSCNSection::ePass )
+			, &waterpass::parserFoamHeightStart, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
+			, uint32_t( c3d::CSCNSection::ePass )
 			, cuT( "foamFadeDistance" )
-			, &waterpass::parserFoamFadeDistance, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
-			, uint32_t( castor3d::CSCNSection::ePass )
+			, &waterpass::parserFoamFadeDistance, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
+			, uint32_t( c3d::CSCNSection::ePass )
 			, cuT( "foamTiling" )
-			, &waterpass::parserFoamTiling, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
-			, uint32_t( castor3d::CSCNSection::ePass )
+			, &waterpass::parserFoamTiling, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
+			, uint32_t( c3d::CSCNSection::ePass )
 			, cuT( "foamNoiseTiling" )
-			, &waterpass::parserFoamNoiseTiling, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
-			, uint32_t( castor3d::CSCNSection::ePass )
+			, &waterpass::parserFoamNoiseTiling, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
+			, uint32_t( c3d::CSCNSection::ePass )
 			, cuT( "foamAngleExponent" )
-			, &waterpass::parserFoamAngleExponent, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
-			, uint32_t( castor3d::CSCNSection::ePass )
+			, &waterpass::parserFoamAngleExponent, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
+			, uint32_t( c3d::CSCNSection::ePass )
 			, cuT( "foamBrightness" )
-			, &waterpass::parserFoamBrightness, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, &waterpass::parserFoamBrightness, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 	}
 
-	bool WaterComponent::Plugin::isComponentNeeded( castor3d::TextureCombine const & textures
-		, castor3d::ComponentModeFlags const & filter )const
+	bool WaterComponent::Plugin::isComponentNeeded( c3d::TextureCombine const & textures
+		, c3d::ComponentModeFlags const & filter )const
 	{
-		return checkFlag( filter, castor3d::ComponentModeFlag::eColour );
+		return checkFlag( filter, c3d::ComponentModeFlag::eColour );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const WaterComponent::TypeName = C3D_PluginMakePassOtherComponentName( "water", "base" );
+	c3d::String const WaterComponent::TypeName = C3D_PluginMakePassOtherComponentName( "water", "base" );
 
-	WaterComponent::WaterComponent( castor3d::Pass & pass )
+	WaterComponent::WaterComponent( c3d::Pass & pass )
 		: BaseDataPassComponentT< WaterData >{ pass, TypeName
-			, { castor3d::BlendComponent::TypeName
-				, castor3d::OpacityComponent::TypeName
-				, castor3d::TransmissionComponent::TypeName
+			, { c3d::BlendComponent::TypeName
+				, c3d::OpacityComponent::TypeName
+				, c3d::TransmissionComponent::TypeName
 				, WaterReflRefrComponent::TypeName } }
 	{
 	}
@@ -605,19 +605,19 @@ namespace water
 	{
 		if ( auto pass = getOwner() )
 		{
-			if ( auto blend = pass->getComponent< castor3d::BlendComponent >() )
+			if ( auto blend = pass->getComponent< c3d::BlendComponent >() )
 			{
-				blend->setAlphaBlendMode( castor3d::BlendMode::eInterpolative );
+				blend->setAlphaBlendMode( c3d::BlendMode::eInterpolative );
 			}
 
-			if ( auto transmission = pass->getComponent< castor3d::TransmissionComponent >() )
+			if ( auto transmission = pass->getComponent< c3d::TransmissionComponent >() )
 			{
 				transmission->setTransmission( 1.0f );
 			}
 		}
 	}
 
-	void WaterComponent::accept( castor3d::ConfigurationVisitorBase & vis )
+	void WaterComponent::accept( c3d::ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Water" ) );
 		vis.visit( cuT( "Dampening factor" ), m_value.dampeningFactor );
@@ -658,29 +658,29 @@ namespace water
 		data.foamBrightness = getFoamBrightness();
 	}
 
-	bool WaterComponent::isComponentAvailable( castor3d::ComponentModeFlags componentsMask
-		, castor3d::shader::Materials const & materials )
+	bool WaterComponent::isComponentAvailable( c3d::ComponentModeFlags componentsMask
+		, c3d::shader::Materials const & materials )
 	{
 		return materials.hasSpecificsBuffer< shader::WaterProfile >()
-			&& ( checkFlag( componentsMask, castor3d::ComponentModeFlag::eSpecifics )
-				|| checkFlag( componentsMask, castor3d::ComponentModeFlag::eDiffuseLighting )
-				|| checkFlag( componentsMask, castor3d::ComponentModeFlag::eSpecularLighting ) )
-			&& ( checkFlag( materials.getFilter(), castor3d::ComponentModeFlag::eSpecifics )
-				|| checkFlag( materials.getFilter(), castor3d::ComponentModeFlag::eDiffuseLighting )
-				|| checkFlag( materials.getFilter(), castor3d::ComponentModeFlag::eSpecularLighting ) );
+			&& ( checkFlag( componentsMask, c3d::ComponentModeFlag::eSpecifics )
+				|| checkFlag( componentsMask, c3d::ComponentModeFlag::eDiffuseLighting )
+				|| checkFlag( componentsMask, c3d::ComponentModeFlag::eSpecularLighting ) )
+			&& ( checkFlag( materials.getFilter(), c3d::ComponentModeFlag::eSpecifics )
+				|| checkFlag( materials.getFilter(), c3d::ComponentModeFlag::eDiffuseLighting )
+				|| checkFlag( materials.getFilter(), c3d::ComponentModeFlag::eSpecularLighting ) );
 	}
 
-	castor3d::PassComponentUPtr WaterComponent::doClone( castor3d::Pass & pass )const
+	c3d::PassComponentUPtr WaterComponent::doClone( c3d::Pass & pass )const
 	{
-		auto result = castor::make_unique< WaterComponent >( pass );
+		auto result = c3d::makeRawUnique< WaterComponent >( pass );
 		result->setData( getData() );
-		return castor3d::PassComponentUPtr{ result.release() };
+		return c3d::PassComponentUPtr{ result.release() };
 	}
 
-	bool WaterComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool WaterComponent::doWriteText( c3d::String const & tabs
+		, c3d::Path const & folder
+		, c3d::String const & subfolder
+		, c3d::StringStream & file )const
 	{
 		return TextWriter< WaterComponent >{ tabs }( *this, file );
 	}

@@ -26,17 +26,17 @@ namespace smaa
 {
 	namespace dpthed
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
 		enum Idx : uint32_t
 		{
 			DepthTexIdx = SmaaUboIdx + 1,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
-			c3d::Utils utils{ writer };
+			c3ds::Utils utils{ writer };
 
 			// Shader inputs
 			C3D_Smaa( writer, SmaaUboIdx, 0u );
@@ -85,8 +85,8 @@ namespace smaa
 
 			EdgeDetection::getVertexProgram( writer, c3d_smaaData );
 
-			writer.implementEntryPointT< EDVertexT, c3d::Colour4FT >( [&]( sdw::FragmentInT< EDVertexT > in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< EDVertexT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< EDVertexT > in
+				, sdw::FragmentOutT< c3ds::Colour4FT > out )
 				{
 					out.colour() = vec4( 0.0_f );
 					out.colour().xy() = SMAADepthEdgeDetectionPS( utils.topDownToBottomUp( in.texcoord() ), in.offset(), c3d_depthObjTex );
@@ -99,8 +99,8 @@ namespace smaa
 
 	DepthEdgeDetection::DepthEdgeDetection( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
-		, castor3d::RenderTarget & renderTarget
-		, castor3d::RenderDevice const & device
+		, c3d::RenderTarget & renderTarget
+		, c3d::RenderDevice const & device
 		, SmaaUbo const & ubo
 		, crg::ImageViewId const & depthObj
 		, SmaaConfig const & config
@@ -116,12 +116,12 @@ namespace smaa
 			, nullptr
 			, 1u }
 	{
-		crg::SamplerDesc linearSampler{ castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest
-			, castor3d::WrapMode::eClampToEdge
-			, castor3d::WrapMode::eClampToEdge
-			, castor3d::WrapMode::eClampToEdge };
+		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
+			, c3d::FilterMode::eLinear
+			, c3d::MipmapMode::eNearest
+			, c3d::WrapMode::eClampToEdge
+			, c3d::WrapMode::eClampToEdge
+			, c3d::WrapMode::eClampToEdge };
 		m_pass.addSampledView( depthObj
 			, dpthed::DepthTexIdx
 			, linearSampler );

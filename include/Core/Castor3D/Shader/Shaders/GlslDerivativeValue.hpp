@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructHelper.hpp>
 #include <ShaderWriter/Intrinsics/IntrinsicFunctions.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	template< typename ValueT
 		, sdw::StringLiteralT StructNameT >
@@ -27,7 +27,7 @@ namespace castor3d::shader
 		DerivativeValueT( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: DerivativeValueHelperT< ValueT, StructNameT >{ writer, castor::move( expr ), enabled }
+			: DerivativeValueHelperT< ValueT, StructNameT >{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -65,7 +65,7 @@ namespace castor3d::shader
 namespace sdw
 {
 	template< typename ValueT, StringLiteralT StructNameT >
-	struct TypeTraits< castor3d::shader::DerivativeValueT< ValueT, StructNameT > >
+	struct TypeTraits< c3d::shader::DerivativeValueT< ValueT, StructNameT > >
 	{
 		static ast::type::Kind constexpr TypeEnum = TypeTraits< StructInstance >::TypeEnum;
 		static bool constexpr HasArithmeticOperators = TypeTraits< StructInstance >::HasArithmeticOperators;
@@ -78,7 +78,7 @@ namespace sdw
 	};
 }
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	/** @cond !Doxygen */
 	/**@name Shader */

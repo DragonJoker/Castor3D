@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class LightCategory
 	{
@@ -33,7 +33,7 @@ namespace castor3d
 		 */
 		C3D_API explicit LightCategory( LightType lightType
 			, bool & dirty
-			, castor::Function< void() > markParentDirty );
+			, Function< void() > markParentDirty );
 
 	public:
 		/**
@@ -54,7 +54,7 @@ namespace castor3d
 		 *\param[in]	isParentEnabled	Utilisé pour déterminer si le parent est actif.
 		 */
 		C3D_API virtual LightInstanceUPtr instantiate( SceneNode & node
-			, castor::Function< bool() > isParentEnabled ) = 0;
+			, Function< bool() > isParentEnabled ) = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the light.
@@ -148,12 +148,12 @@ namespace castor3d
 			return m_shadows.volumetricScattering;
 		}
 
-		castor::Point2f const & getShadowRawOffsets()const
+		Point2f const & getShadowRawOffsets()const
 		{
 			return m_shadows.rawOffsets;
 		}
 
-		castor::Point2f const & getShadowPcfOffsets()const
+		Point2f const & getShadowPcfOffsets()const
 		{
 			return m_shadows.pcfOffsets;
 		}
@@ -168,12 +168,12 @@ namespace castor3d
 			return m_shadows.vsmLightBleedingReduction;
 		}
 
-		castor::RangedValue< uint32_t > getShadowPcfFilterSize()const
+		RangedValue< uint32_t > getShadowPcfFilterSize()const
 		{
 			return m_shadows.pcfFilterSize;
 		}
 
-		castor::RangedValue< uint32_t > getShadowPcfSampleCount()const
+		RangedValue< uint32_t > getShadowPcfSampleCount()const
 		{
 			return m_shadows.pcfSampleCount;
 		}
@@ -198,12 +198,12 @@ namespace castor3d
 			return m_farPlane;
 		}
 
-		castor::Point3f const & getColour()const
+		Point3f const & getColour()const
 		{
 			return m_colour;
 		}
 
-		castor::BoundingBox const & getBoundingBox()const
+		BoundingBox const & getBoundingBox()const
 		{
 			return m_cubeBox;
 		}
@@ -217,14 +217,14 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setColour( castor::Point3f const & value )
+		void setColour( Point3f const & value )
 		{
 			m_colour = value;
 		}
 
 		void setShadowConfig( ShadowConfig config )
 		{
-			m_shadows = castor::move( config );
+			m_shadows = c3d::move( config );
 		}
 
 		void setGlobalIlluminationType( GlobalIlluminationType value )
@@ -290,13 +290,13 @@ namespace castor3d
 
 	protected:
 		bool & m_dirty;
-		castor::Function< void() > m_markParentDirty;
+		Function< void() > m_markParentDirty;
 
 	private:
 		LightType m_lightType;
 		std::atomic_bool m_currentShadowCaster{};
 		std::atomic< GlobalIlluminationType > m_currentGlobalIllumination{};
-		castor::GroupChangeTracked< castor::Point3f > m_colour;
+		GroupChangeTracked< Point3f > m_colour;
 		ShadowConfig m_shadows;
 		/**
 		 *\~english
@@ -331,7 +331,7 @@ namespace castor3d
 	protected:
 		//!\~english	The cube box for the light volume of effect.
 		//!\~french		La cube box pour le volume d'effet de la lumière.
-		castor::BoundingBox m_cubeBox;
+		BoundingBox m_cubeBox;
 		//!\~english	The far plane's depth.
 		//!\~french		La profondeur du plan éloigné.
 		float m_farPlane{ 1.0f };
@@ -408,7 +408,7 @@ namespace castor3d
 		 */
 		C3D_API void fillLightBuffer( uint32_t index
 			, VkDeviceSize offset
-			, castor::Point4f * data );
+			, Point4f * data );
 		/**
 		 *\~english
 		 *\brief		Puts the shadow data into the given buffer.
@@ -427,7 +427,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API castor::String const & getName()const noexcept;
+		C3D_API String const & getName()const noexcept;
 		C3D_API Scene * getScene()const noexcept;
 		C3D_API DirectionalLightRPtr getDirectionalLight()const;
 		C3D_API PointLightRPtr getPointLight()const;
@@ -443,7 +443,7 @@ namespace castor3d
 			return m_category;
 		}
 
-		castor::BoundingBox const & getBoundingBox()const
+		BoundingBox const & getBoundingBox()const
 		{
 			return m_category.getBoundingBox();
 		}
@@ -565,8 +565,8 @@ namespace castor3d
 		 */
 		C3D_API explicit LightInstance( SceneNode & node
 			, LightCategory & category
-			, castor::Function< void() > markParentDirty
-			, castor::Function< bool() > isParentEnabled );
+			, Function< void() > markParentDirty
+			, Function< bool() > isParentEnabled );
 		/**
 		 *\~english
 		 *\brief		Puts the shadow data into the given buffer.
@@ -606,7 +606,7 @@ namespace castor3d
 		 *\brief		Met la lumière dans le buffer donné.
 		 *\param[out]	data	Reçoit les données de la source lumineuse.
 		 */
-		virtual void doFillLightBuffer( castor::Point4f * data )const = 0;
+		virtual void doFillLightBuffer( Point4f * data )const = 0;
 		/**
 		 *\~english
 		 *\brief			Clones this object into the given one.
@@ -623,8 +623,8 @@ namespace castor3d
 	protected:
 		SceneNode * m_node;
 		LightCategory & m_category;
-		castor::Function< void() > m_markParentDirty;
-		castor::Function< bool() > m_isParentEnabled;
+		Function< void() > m_markParentDirty;
+		Function< bool() > m_isParentEnabled;
 
 		bool m_dirty{ true };
 		bool m_dirtyShadows{ true };

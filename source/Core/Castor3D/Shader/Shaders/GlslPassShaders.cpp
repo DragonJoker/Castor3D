@@ -12,7 +12,7 @@
 
 #include <ShaderWriter/Writer.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//************************************************************************************************
 
@@ -253,12 +253,12 @@ namespace castor3d::shader
 		}
 	}
 
-	castor::Map< uint32_t, PassComponentTextureFlag > PassShaders::getTexcoordModifs( PipelineFlags const & flags )const
+	Map< uint32_t, PassComponentTextureFlag > PassShaders::getTexcoordModifs( PipelineFlags const & flags )const
 	{
 		return m_compRegister.getTexcoordModifs( flags );
 	}
 
-	castor::Map< uint32_t, PassComponentTextureFlag > PassShaders::getTexcoordModifs( TextureCombine const & combine )const
+	Map< uint32_t, PassComponentTextureFlag > PassShaders::getTexcoordModifs( TextureCombine const & combine )const
 	{
 		return m_compRegister.getTexcoordModifs( combine );
 	}

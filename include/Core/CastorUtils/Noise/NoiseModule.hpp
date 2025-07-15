@@ -7,7 +7,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/CastorUtils.hpp"
 
-namespace castor
+namespace c3d
 {
 	/**@name Noise */
 	//@{

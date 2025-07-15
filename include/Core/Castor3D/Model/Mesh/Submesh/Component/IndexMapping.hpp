@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class IndexMapping
 		: public SubmeshComponent
@@ -26,7 +26,7 @@ namespace castor3d
 		 *\param[in]	data	Les données du composant.
 		 */
 		C3D_API IndexMapping( Submesh & submesh
-			, castor::String const & type
+			, String const & type
 			, SubmeshComponentDataUPtr data );
 		/**
 		 *\~english
@@ -81,20 +81,20 @@ namespace castor3d
 			{
 			}
 			/**
-			 *\copydoc		castor3d::SubmeshComponentData::gather
+			 *\copydoc		SubmeshComponentData::gather
 			 */
 			void gather( PipelineFlags const & flags
 				, Pass const & pass
 				, ObjectBufferOffset const & bufferOffsets
 				, ashes::BufferCRefArray & buffers
-				, castor::Vector< uint64_t > & offsets
+				, Vector< uint64_t > & offsets
 				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 				, uint32_t & currentBinding
 				, uint32_t & currentLocation )override final
 			{
 			}
 			/**
-			 *\copydoc		castor3d::SubmeshComponentData::getUsageFlags
+			 *\copydoc		SubmeshComponentData::getUsageFlags
 			 */
 			VkBufferUsageFlags getUsageFlags()const noexcept override
 			{

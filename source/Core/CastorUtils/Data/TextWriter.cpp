@@ -2,7 +2,7 @@
 
 #include "CastorUtils/Miscellaneous/Utils.hpp"
 
-namespace castor
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -121,7 +121,7 @@ namespace castor
 
 	TextWriterBase::TextWriterBase( String tabs
 		, StringView name )
-		: m_tabs{ castor::move( tabs ) }
+		: m_tabs{ c3d::move( tabs ) }
 		, m_name{ name.empty() ? String{ name } : String{ name } + cuT( " - " ) }
 	{
 	}
@@ -387,7 +387,7 @@ namespace castor
 	//*********************************************************************************************
 
 	TextWriter< int8_t >::TextWriter( String tabs )
-		: TextWriterT< int8_t >{ castor::move( tabs ) }
+		: TextWriterT< int8_t >{ c3d::move( tabs ) }
 	{
 	}
 
@@ -402,7 +402,7 @@ namespace castor
 	//*********************************************************************************************
 
 	TextWriter< uint8_t >::TextWriter( String tabs )
-		: TextWriterT< uint8_t >{ castor::move( tabs ) }
+		: TextWriterT< uint8_t >{ c3d::move( tabs ) }
 	{
 	}
 
@@ -417,7 +417,7 @@ namespace castor
 	//*********************************************************************************************
 
 	TextWriter< int16_t >::TextWriter( String tabs )
-		: TextWriterT< int16_t >{ castor::move( tabs ) }
+		: TextWriterT< int16_t >{ c3d::move( tabs ) }
 	{
 	}
 
@@ -432,7 +432,7 @@ namespace castor
 	//*********************************************************************************************
 
 	TextWriter< uint16_t >::TextWriter( String tabs )
-		: TextWriterT< uint16_t >{ castor::move( tabs ) }
+		: TextWriterT< uint16_t >{ c3d::move( tabs ) }
 	{
 	}
 
@@ -447,7 +447,7 @@ namespace castor
 	//*********************************************************************************************
 
 	TextWriter< int32_t >::TextWriter( String tabs )
-		: TextWriterT< int32_t >{ castor::move( tabs ) }
+		: TextWriterT< int32_t >{ c3d::move( tabs ) }
 	{
 	}
 
@@ -462,7 +462,7 @@ namespace castor
 	//*********************************************************************************************
 
 	TextWriter< uint32_t >::TextWriter( String tabs )
-		: TextWriterT< uint32_t >{ castor::move( tabs ) }
+		: TextWriterT< uint32_t >{ c3d::move( tabs ) }
 	{
 	}
 
@@ -477,7 +477,7 @@ namespace castor
 	//*********************************************************************************************
 
 	TextWriter< int64_t >::TextWriter( String tabs )
-		: TextWriterT< int64_t >{ castor::move( tabs ) }
+		: TextWriterT< int64_t >{ c3d::move( tabs ) }
 	{
 	}
 
@@ -492,7 +492,7 @@ namespace castor
 	//*********************************************************************************************
 
 	TextWriter< uint64_t >::TextWriter( String tabs )
-		: TextWriterT< uint64_t >{ castor::move( tabs ) }
+		: TextWriterT< uint64_t >{ c3d::move( tabs ) }
 	{
 	}
 
@@ -507,7 +507,7 @@ namespace castor
 	//*********************************************************************************************
 
 	TextWriter< float >::TextWriter( String tabs )
-		: TextWriterT< float >{ castor::move( tabs ) }
+		: TextWriterT< float >{ c3d::move( tabs ) }
 	{
 	}
 
@@ -524,7 +524,7 @@ namespace castor
 	//*********************************************************************************************
 
 	TextWriter< double >::TextWriter( String tabs )
-		: TextWriterT< double >{ castor::move( tabs ) }
+		: TextWriterT< double >{ c3d::move( tabs ) }
 	{
 	}
 
@@ -541,7 +541,7 @@ namespace castor
 	//*********************************************************************************************
 
 	TextWriter< String >::TextWriter( String tabs )
-		: TextWriterT< String >{ castor::move( tabs ) }
+		: TextWriterT< String >{ c3d::move( tabs ) }
 	{
 	}
 

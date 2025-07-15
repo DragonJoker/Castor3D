@@ -24,7 +24,7 @@ See LICENSE file in root folder
 
 #include <type_traits>
 
-namespace castor3d
+namespace c3d
 {
 	namespace rq
 	{
@@ -71,7 +71,7 @@ namespace castor3d
 			ashes::Optional< ImageViewType > viewType;
 			VkShaderStageFlags stageFlags;
 		};
-		using BindingDescriptionArray = castor::Vector< BindingDescription >;
+		using BindingDescriptionArray = Vector< BindingDescription >;
 
 		template< template< typename ValueT > typename WrapperT >
 		struct ConfigT
@@ -97,7 +97,7 @@ namespace castor3d
 	}
 
 	class RenderQuad
-		: public castor::Named
+		: public Named
 	{
 		template< typename ConfigT, typename BuilderT >
 		friend class RenderQuadBuilderT;
@@ -128,7 +128,7 @@ namespace castor3d
 		*	La configuration.
 		*/
 		C3D_API RenderQuad( RenderDevice const & device
-			, castor::String const & name
+			, String const & name
 			, FilterMode samplerFilter
 			, rq::Config config );
 
@@ -177,7 +177,7 @@ namespace castor3d
 		*	L'état de profondeur et stencil.
 		*/
 		C3D_API void createPipeline( Extent2D const & size
-			, castor::Position const & position
+			, Position const & position
 			, ashes::PipelineShaderStageCreateInfoArray const & program
 			, ashes::RenderPass const & renderPass
 			, ashes::VkPushConstantRangeArray const & pushRanges = ashes::VkPushConstantRangeArray{}
@@ -255,7 +255,7 @@ namespace castor3d
 		*	L'état de profondeur et stencil à utiliser.
 		*/
 		C3D_API void createPipelineAndPass( Extent2D const & size
-			, castor::Position const & position
+			, Position const & position
 			, ashes::PipelineShaderStageCreateInfoArray const & program
 			, ashes::RenderPass const & renderPass
 			, ashes::WriteDescriptorSetArray const & writes
@@ -326,9 +326,9 @@ namespace castor3d
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
-		castor::Vector< ashes::WriteDescriptorSetArray > m_passes;
-		castor::Vector< ashes::DescriptorSetPtr > m_descriptorSets;
-		castor::Vector< bool > m_invertY;
+		Vector< ashes::WriteDescriptorSetArray > m_passes;
+		Vector< ashes::DescriptorSetPtr > m_descriptorSets;
+		Vector< bool > m_invertY;
 		ashes::VertexBufferPtr< TexturedQuad::Vertex > m_vertexBuffer;
 		ashes::VertexBufferPtr< TexturedQuad::Vertex > m_uvInvVertexBuffer;
 	};
@@ -338,7 +338,7 @@ namespace castor3d
 	{
 		static_assert( std::is_same_v< ConfigT, rq::Config >
 			|| std::is_base_of_v< rq::Config, ConfigT >
-			, "RenderQuadBuilderT::ConfigT must derive from castor3d::rq::Config" );
+			, "RenderQuadBuilderT::ConfigT must derive from c3d::rq::Config" );
 
 	public:
 		RenderQuadBuilderT()
@@ -497,10 +497,10 @@ namespace castor3d
 		*	Le filtre d'échantillonnage pour la texture source.
 		*/
 		RenderQuadUPtr build( RenderDevice const & device
-			, castor::String const & name
+			, String const & name
 			, FilterMode samplerFilter )
 		{
-			return castor::UniquePtr< RenderQuad >( new RenderQuad{ device
+			return UniquePtr< RenderQuad >( new RenderQuad{ device
 				, name
 				, samplerFilter
 				, m_config } );

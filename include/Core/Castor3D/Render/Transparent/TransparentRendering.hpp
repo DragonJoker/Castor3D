@@ -15,10 +15,10 @@ See LICENSE file in root folder
 
 #include <RenderGraph/FramePassGroup.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class TransparentRendering
-		: public castor::OwnedBy< RenderTechnique >
+		: public OwnedBy< RenderTechnique >
 	{
 	public:
 		/**
@@ -67,7 +67,7 @@ namespace castor3d
 		 *\brief		Liste les vues intermédiaires utilisées par toute la technique.
 		 *\param[out]	intermediates	Reçoit les vues intermédiaires.
 		 */
-		C3D_API void listIntermediates( castor::Vector< IntermediateView > & intermediates );
+		C3D_API void listIntermediates( Vector< IntermediateView > & intermediates );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.

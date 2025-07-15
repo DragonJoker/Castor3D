@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Graphics/GraphicsModule.hpp"
 
-namespace castor
+namespace c3d
 {
 	CU_API bool convertToNormalMap( float strength
 		, Image & image )noexcept;

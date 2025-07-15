@@ -1,6 +1,6 @@
 #include "CastorUtils/Graphics/Size.hpp"
 
-namespace castor
+namespace c3d
 {
 	Size::Size()noexcept
 		: Size{ 0u, 0u }

@@ -3,9 +3,9 @@
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 
-CU_ImplementSmartPtr( castor3d, FontUbo )
+CU_ImplementSmartPtr( c3d, FontUbo )
 
-namespace castor3d
+namespace c3d
 {
 	FontUbo::FontUbo( RenderDevice const & device )
 		: m_device{ device }
@@ -18,7 +18,7 @@ namespace castor3d
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	void FontUbo::cpuUpdate( castor::Size const & imgSize
+	void FontUbo::cpuUpdate( Size const & imgSize
 		, bool sdfFont
 		, float pixelRange )
 	{

@@ -34,10 +34,8 @@
 #include <CastorUtils/Design/CacheView.hpp>
 #include <CastorUtils/Design/ResourceCache.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	//*************************************************************************************************
 
 	namespace txtscn
@@ -78,7 +76,7 @@ namespace castor
 		}
 
 		template<>
-		bool writable< castor::Font >( castor::Font const & object )
+		bool writable< Font >( Font const & object )
 		{
 			return object.isSerialisable();
 		}
@@ -156,9 +154,9 @@ namespace castor
 			{
 				file << ( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) );
 				log::info << writer.tabs() << cuT( "Scene::write - " ) << elemsName << std::endl;
-				castor::TextWriter< ObjType > subWriter{ writer.tabs()
-					, castor::forward< Params >( params )... };
-				auto lock( castor::makeUniqueLock( cache ) );
+				TextWriter< ObjType > subWriter{ writer.tabs()
+					, c3d::forward< Params >( params )... };
+				auto lock( makeUniqueLock( cache ) );
 
 				for ( auto const & it : cache )
 				{
@@ -179,7 +177,7 @@ namespace castor
 			, CacheTypeT const & cache
 			, String const & elemsName
 			, TextWriterBase const & writer
-			, castor::Function< bool( ObjType const & ) > filter = []( ObjType const & )
+			, Function< bool( ObjType const & ) > filter = []( ObjType const & )
 			{
 				return true;
 			}
@@ -191,8 +189,8 @@ namespace castor
 			{
 				file << ( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) );
 				log::info << writer.tabs() << cuT( "Scene::write - " ) << elemsName << std::endl;
-				castor::TextWriter< ObjType > subWriter{ writer.tabs()
-					, castor::forward< Params >( params )... };
+				TextWriter< ObjType > subWriter{ writer.tabs()
+					, c3d::forward< Params >( params )... };
 
 				for ( auto const & it : cache )
 				{
@@ -227,7 +225,7 @@ namespace castor
 
 			return writeCache( file, cache, elemsName, writer
 				, filter
-				, castor::forward< Params >( params )... );
+				, c3d::forward< Params >( params )... );
 		}
 
 		template< typename ObjType
@@ -249,8 +247,8 @@ namespace castor
 			{
 				file << ( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) );
 				log::info << writer.tabs() << cuT( "Scene::write - " ) << elemsName << std::endl;
-				castor::TextWriter< ObjType > subWriter{ writer.tabs()
-					, castor::forward< Params >( params )... };
+				TextWriter< ObjType > subWriter{ writer.tabs()
+					, c3d::forward< Params >( params )... };
 
 				for ( auto const & name : view )
 				{
@@ -293,7 +291,7 @@ namespace castor
 
 			return writeView( file, view, elemsName, writer
 				, filter
-				, castor::forward< Params >( params )... );
+				, c3d::forward< Params >( params )... );
 		}
 
 		static bool writeInclude( StringStream & file
@@ -320,7 +318,7 @@ namespace castor
 			{
 				file << ( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) );
 				log::info << writer.tabs() << cuT( "Scene::write - " ) << elemsName << std::endl;
-				castor::TextWriter< SceneNode > subWriter{ writer.tabs(), scale };
+				TextWriter< SceneNode > subWriter{ writer.tabs(), scale };
 
 				for ( auto const & it : nodes )
 				{
@@ -352,8 +350,8 @@ namespace castor
 		}
 
 		static bool writeDefaultLightingModel( StringStream & file
-			, castor3d::Engine const & engine
-			, castor3d::LightingModelID lightingModelId )
+			, Engine const & engine
+			, LightingModelID lightingModelId )
 		{
 			bool result{};
 			TextWriterBase writer{};
@@ -425,7 +423,7 @@ namespace castor
 					result = writeNamedSub( file, cuT( "ambient_light" ), scene.getAmbientLight() )
 						&& writeNamedSub( file, cuT( "background_colour" ), scene.getBackgroundColour() )
 						&& write( file, cuT( "lpv_indirect_attenuation" ), scene.getLpvIndirectAttenuation() )
-						&& txtscn::writeIncludedView( file, scene.getFontView(), cuT( "Fonts" ), m_options.sceneFontsFile, *this, txtscn::writable< castor::Font >, m_options.rootFolder )
+						&& txtscn::writeIncludedView( file, scene.getFontView(), cuT( "Fonts" ), m_options.sceneFontsFile, *this, txtscn::writable< Font >, m_options.rootFolder )
 						&& txtscn::writeInclude( file, m_options.sceneTexturesFile, *this )
 						&& txtscn::writeInclude( file, m_options.sceneSamplersFile, *this )
 						&& txtscn::writeInclude( file, m_options.sceneMaterialsFile, *this )

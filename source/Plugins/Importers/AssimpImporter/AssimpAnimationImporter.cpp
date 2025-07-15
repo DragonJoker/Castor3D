@@ -23,7 +23,7 @@ namespace c3d_assimp
 	namespace anims
 	{
 		static aiNodeAnim const * findSkelNodeAnim( aiAnimation const & animation
-			, const castor::String & nodeName )
+			, const c3d::String & nodeName )
 		{
 			aiNodeAnim const * result = nullptr;
 
@@ -41,12 +41,12 @@ namespace c3d_assimp
 			return result;
 		}
 
-		static void fillKeyFrame( castor::ArrayView< uint32_t > values
-			, castor::ArrayView< double > weights
-			, castor3d::Submesh const & submesh
-			, castor3d::MeshMorphTarget & keyFrame )
+		static void fillKeyFrame( c3d::ArrayView< uint32_t > values
+			, c3d::ArrayView< double > weights
+			, c3d::Submesh const & submesh
+			, c3d::MeshMorphTarget & keyFrame )
 		{
-			castor::Vector< float > res;
+			c3d::Vector< float > res;
 			res.resize( submesh.getMorphTargetsCount() );
 			auto valueIt = values.begin();
 			auto weightIt = weights.begin();
@@ -64,18 +64,18 @@ namespace c3d_assimp
 		}
 	}
 
-	using SceneNodeAnimationKeyFrameMap = castor::Map< castor::Milliseconds, castor3d::SceneNodeAnimationKeyFrameUPtr >;
+	using SceneNodeAnimationKeyFrameMap = c3d::Map< c3d::Milliseconds, c3d::SceneNodeAnimationKeyFrameUPtr >;
 
-	AssimpAnimationImporter::AssimpAnimationImporter( castor3d::Engine & engine )
-		: castor3d::AnimationImporter{ engine, cuT( "Assimp" ) }
+	AssimpAnimationImporter::AssimpAnimationImporter( c3d::Engine & engine )
+		: c3d::AnimationImporter{ engine, cuT( "Assimp" ) }
 	{
 	}
 
-	bool AssimpAnimationImporter::doImportSkeleton( castor3d::SkeletonAnimation & animation )
+	bool AssimpAnimationImporter::doImportSkeleton( c3d::SkeletonAnimation & animation )
 	{
 		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
 		auto name = animation.getName();
-		auto & skeleton = static_cast< castor3d::Skeleton const & >( *animation.getAnimable() );
+		auto & skeleton = static_cast< c3d::Skeleton const & >( *animation.getAnimable() );
 		auto & animations = file.getSkeletonsAnimations( skeleton );
 		auto it = animations.find( name );
 
@@ -128,16 +128,16 @@ namespace c3d_assimp
 
 		for ( auto & keyFrame : keyframes )
 		{
-			animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame.second ) );
+			animation.addKeyFrame( c3d::ptrRefCast< c3d::AnimationKeyFrame >( keyFrame.second ) );
 		}
 		return true;
 	}
 
-	bool AssimpAnimationImporter::doImportMesh( castor3d::MeshAnimation & animation )
+	bool AssimpAnimationImporter::doImportMesh( c3d::MeshAnimation & animation )
 	{
 		auto & file = static_cast< AssimpImporterFile & >( *m_file );
 		auto name = animation.getName();
-		auto & mesh = static_cast< castor3d::Mesh const & >( *animation.getAnimable() );
+		auto & mesh = static_cast< c3d::Mesh const & >( *animation.getAnimable() );
 
 		for ( auto & submesh : mesh )
 		{
@@ -149,28 +149,28 @@ namespace c3d_assimp
 			{
 				auto & aiAnimation = *animIt->second.second;
 
-				castor3d::MeshAnimationSubmesh animSubmesh{ animation, *submesh };
-				animation.addChild( castor::move( animSubmesh ) );
+				c3d::MeshAnimationSubmesh animSubmesh{ animation, *submesh };
+				animation.addChild( c3d::move( animSubmesh ) );
 
-				for ( auto & morphKey : castor::makeArrayView( aiAnimation.mKeys, aiAnimation.mNumKeys ) )
+				for ( auto & morphKey : c3d::makeArrayView( aiAnimation.mKeys, aiAnimation.mNumKeys ) )
 				{
-					auto timeIndex = castor::Milliseconds{ uint64_t( morphKey.mTime ) };
+					auto timeIndex = c3d::Milliseconds{ uint64_t( morphKey.mTime ) };
 					auto kfit = animation.find( timeIndex );
-					castor3d::MeshMorphTarget * kf{};
+					c3d::MeshMorphTarget * kf{};
 
 					if ( kfit == animation.end() )
 					{
-						auto keyFrame = castor::makeUnique< castor3d::MeshMorphTarget >( animation, timeIndex );
+						auto keyFrame = c3d::makeUnique< c3d::MeshMorphTarget >( animation, timeIndex );
 						kf = keyFrame.get();
-						animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame ) );
+						animation.addKeyFrame( c3d::ptrRefCast< c3d::AnimationKeyFrame >( keyFrame ) );
 					}
 					else
 					{
-						kf = &static_cast< castor3d::MeshMorphTarget & >( **kfit );
+						kf = &static_cast< c3d::MeshMorphTarget & >( **kfit );
 					}
 
-					anims::fillKeyFrame( castor::makeArrayView( morphKey.mValues, morphKey.mNumValuesAndWeights )
-						, castor::makeArrayView( morphKey.mWeights, morphKey.mNumValuesAndWeights )
+					anims::fillKeyFrame( c3d::makeArrayView( morphKey.mValues, morphKey.mNumValuesAndWeights )
+						, c3d::makeArrayView( morphKey.mWeights, morphKey.mNumValuesAndWeights )
 						, *submesh
 						, *kf );
 				}
@@ -180,11 +180,11 @@ namespace c3d_assimp
 		return true;
 	}
 
-	bool AssimpAnimationImporter::doImportNode( castor3d::SceneNodeAnimation & animation )
+	bool AssimpAnimationImporter::doImportNode( c3d::SceneNodeAnimation & animation )
 	{
 		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
 		auto name = animation.getName();
-		auto & node = static_cast< castor3d::SceneNode const & >( *animation.getAnimable() );
+		auto & node = static_cast< c3d::SceneNode const & >( *animation.getAnimable() );
 		auto & animations = file.getNodesAnimations( node );
 		auto it = animations.find( name );
 
@@ -207,27 +207,27 @@ namespace c3d_assimp
 			, ticksPerSecond
 			, animation
 			, keyframes
-			, []( castor3d::SceneNodeAnimationKeyFrame & keyframe
-				, castor::Point3f const & position
-				, castor::Quaternion const & orientation
-				, castor::Point3f const & scale )
+			, []( c3d::SceneNodeAnimationKeyFrame & keyframe
+				, c3d::Point3f const & position
+				, c3d::Quaternion const & orientation
+				, c3d::Point3f const & scale )
 			{
 				keyframe.setTransform( position, orientation, scale );
 			} );
 
 		for ( auto & keyFrame : keyframes )
 		{
-			animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame.second ) );
+			animation.addKeyFrame( c3d::ptrRefCast< c3d::AnimationKeyFrame >( keyFrame.second ) );
 		}
 
 		return true;
 	}
 
-	void AssimpAnimationImporter::doProcessSkeletonAnimationNodes( castor3d::SkeletonAnimation & animation
-		, castor::Milliseconds minTime
-		, castor::Milliseconds maxTime
+	void AssimpAnimationImporter::doProcessSkeletonAnimationNodes( c3d::SkeletonAnimation & animation
+		, c3d::Milliseconds minTime
+		, c3d::Milliseconds maxTime
 		, int64_t ticksPerSecond
-		, castor3d::Skeleton const & skeleton
+		, c3d::Skeleton const & skeleton
 		, aiNode const & aiNode
 		, aiAnimation const & aiAnimation
 		, SkeletonAnimationKeyFrameMap & keyFrames
@@ -242,7 +242,7 @@ namespace c3d_assimp
 			const aiNodeAnim * aiNodeAnim = anims::findSkelNodeAnim( aiAnimation
 				, nodeName );
 			auto parentSkelNode = skelNode->getParent();
-			castor3d::SkeletonAnimationObjectRPtr parent{};
+			c3d::SkeletonAnimationObjectRPtr parent{};
 
 			if ( parentSkelNode )
 			{
@@ -251,12 +251,12 @@ namespace c3d_assimp
 				CU_Require( parent );
 			}
 
-			castor3d::SkeletonAnimationObjectRPtr object{};
+			c3d::SkeletonAnimationObjectRPtr object{};
 			CU_Require( !animation.hasObject( skelNode->getType(), name ) );
 
-			if ( skelNode->getType() == castor3d::SkeletonNodeType::eBone )
+			if ( skelNode->getType() == c3d::SkeletonNodeType::eBone )
 			{
-				object = animation.addObject( static_cast< castor3d::BoneNode & >( *skelNode )
+				object = animation.addObject( static_cast< c3d::BoneNode & >( *skelNode )
 					, parent );
 			}
 			else
@@ -278,10 +278,10 @@ namespace c3d_assimp
 					, ticksPerSecond
 					, animation
 					, keyFrames
-					, [&object]( castor3d::SkeletonAnimationKeyFrame & keyframe
-						, castor::Point3f const & position
-						, castor::Quaternion const & orientation
-						, castor::Point3f const & scale )
+					, [&object]( c3d::SkeletonAnimationKeyFrame & keyframe
+						, c3d::Point3f const & position
+						, c3d::Quaternion const & orientation
+						, c3d::Point3f const & scale )
 					{
 						keyframe.addAnimationObject( *object, position, orientation, scale );
 					} );
@@ -293,7 +293,7 @@ namespace c3d_assimp
 		}
 	}
 
-	bool AssimpAnimationImporter::doImportTexture( castor3d::TextureAnimation & animation )
+	bool AssimpAnimationImporter::doImportTexture( c3d::TextureAnimation & animation )
 	{
 		return true;
 	}

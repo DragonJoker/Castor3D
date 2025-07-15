@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/Pass/Pass.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class PbrPass
 	{
@@ -14,8 +14,8 @@ namespace castor3d
 		C3D_API static PassUPtr create( LightingModelID lightingModelId
 			, Material & parent );
 
-		C3D_API static castor::StringView const Type;
-		C3D_API static castor::StringView const LightingModel;
+		C3D_API static String const Type;
+		C3D_API static String const LightingModel;
 
 		C3D_API static shader::DiffuseBrdfDesc const DefaultDiffuseBrdf;
 		C3D_API static shader::DiffuseBrdfArray const DiffuseBrdfs;

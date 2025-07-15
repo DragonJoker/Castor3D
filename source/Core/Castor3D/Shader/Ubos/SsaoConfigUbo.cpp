@@ -11,7 +11,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -21,7 +21,7 @@ namespace castor3d
 		{
 			static uint32_t constexpr numPrecomputed = 100u;
 
-			static castor::Array< int, numPrecomputed > constexpr minDiscrepancyArray
+			static Array< int, numPrecomputed > constexpr minDiscrepancyArray
 			{
 			//   0   1   2   3   4   5   6   7   8   9
 				 1,  1,  1,  2,  3,  2,  5,  2,  3,  2,  // 0
@@ -42,7 +42,7 @@ namespace castor3d
 		SsaoConfigData::SsaoConfigData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstance{ writer, castor::move( expr ), enabled }
+			: StructInstance{ writer, c3d::move( expr ), enabled }
 			, projInfo{ getMember< sdw::Vec4 >( "projInfo" ) }
 			, numSamples{ getMember< sdw::Int >( "numSamples" ) }
 			, numSpiralTurns{ getMember< sdw::Int >( "numSpiralTurns" ) }
@@ -104,9 +104,9 @@ namespace castor3d
 			return result;
 		}
 
-		castor::RawUniquePtr< sdw::Struct > SsaoConfigData::declare( sdw::ShaderWriter & writer )
+		RawUniquePtr< sdw::Struct > SsaoConfigData::declare( sdw::ShaderWriter & writer )
 		{
-			return castor::make_unique< sdw::Struct >( writer
+			return makeRawUnique< sdw::Struct >( writer
 				, makeType( writer.getTypesCache() ) );
 		}
 	}
@@ -153,7 +153,7 @@ namespace castor3d
 		// Hack because setting farZ lower results in banding artefacts on some scenes, should tune later.
 		farZ = std::min( farZ, -1000.0f );
 		auto const & proj = camera.getProjection( true );
-		configuration.projInfo = castor::Point4f
+		configuration.projInfo = Point4f
 		{
 			-2.0f / ( float( viewport.getWidth() ) * proj[0][0] ),
 			-2.0f / ( float( viewport.getHeight() ) * proj[1][1] ),

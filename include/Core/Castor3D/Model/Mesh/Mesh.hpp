@@ -20,10 +20,10 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 #include <CastorUtils/Graphics/BoundingSphere.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class Mesh
-		: public castor::Named
+		: public Named
 		, public Animable
 	{
 	public:
@@ -37,7 +37,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom du maillage.
 		 *\param[in]	scene	La scèene parente.
 		 */
-		C3D_API Mesh( castor::String const & name
+		C3D_API Mesh( String const & name
 			, Scene & scene );
 		/**
 		 *\~english
@@ -215,7 +215,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation
 		 *\return		l'animation
 		 */
-		C3D_API MeshAnimation & createAnimation( castor::String const & name );
+		C3D_API MeshAnimation & createAnimation( String const & name );
 		/**
 		 *\~english
 		 *\brief		Removes an animation
@@ -224,7 +224,7 @@ namespace castor3d
 		 *\brief		Retire une animation
 		 *\param[in]	name	Le nom de l'animation
 		 */
-		C3D_API void removeAnimation( castor::String const & name );
+		C3D_API void removeAnimation( String const & name );
 		/**
 		 *\~english
 		 *\brief			Clones this object into the given one.
@@ -235,7 +235,7 @@ namespace castor3d
 		 */
 		C3D_API void cloneInto( Mesh & output )const;
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the begin of the submeshes
@@ -285,12 +285,12 @@ namespace castor3d
 			return uint32_t( m_submeshes.size() );
 		}
 
-		castor::BoundingBox const & getBoundingBox()const
+		BoundingBox const & getBoundingBox()const
 		{
 			return m_box;
 		}
 
-		castor::BoundingSphere const & getBoundingSphere()const
+		BoundingSphere const & getBoundingSphere()const
 		{
 			return m_sphere;
 		}
@@ -326,8 +326,8 @@ namespace castor3d
 		friend class MeshGenerator;
 
 		Scene * m_scene{};
-		castor::BoundingBox m_box;
-		castor::BoundingSphere m_sphere;
+		BoundingBox m_box;
+		BoundingSphere m_sphere;
 		SubmeshPtrArray m_submeshes{};
 		SkeletonRPtr m_skeleton{};
 		bool m_serialisable{ true };
@@ -352,7 +352,7 @@ namespace castor3d
 		SubmeshComponent * submeshComponent{};
 	};
 
-	C3D_API castor::String getPrefix( MeshContext const & context );
+	C3D_API String getPrefix( MeshContext const & context );
 	C3D_API Engine * getEngine( MeshContext const & context );
 }
 

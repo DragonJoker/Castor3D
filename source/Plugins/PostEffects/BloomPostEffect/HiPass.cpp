@@ -21,7 +21,7 @@ namespace Bloom
 {
 	namespace hi
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
 		template< typename T >
 		inline constexpr T getSubresourceDimension( T const & extent
@@ -38,7 +38,7 @@ namespace Bloom
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
 				, crg::VkPipelineShaderStageCreateInfoArray program
-				, castor3d::Extent2D const & renderSize
+				, c3d::Extent2D const & renderSize
 				, bool const * enabled
 				, uint32_t const * passIndex )
 				: crg::RenderQuad{ pass
@@ -46,7 +46,7 @@ namespace Bloom
 					, graph
 					, crg::ru::Config{ 2u }
 					, crg::rq::Config{}
-						.baseConfig( crg::pp::Config{ castor::Vector< crg::VkPipelineShaderStageCreateInfoArray >{ castor::move( program ) }, {}, {} } )
+						.baseConfig( crg::pp::Config{ c3d::Vector< crg::VkPipelineShaderStageCreateInfoArray >{ c3d::move( program ) }, {}, {} } )
 						.texcoordConfig( crg::Texcoord{} )
 						.enabled( enabled )
 						.passIndex( passIndex )
@@ -61,10 +61,10 @@ namespace Bloom
 					data.viewDesc = pass.images.back().view( dataIndex );
 					data.imageDesc = data.viewDesc.data->image;
 					data.image = graph.createImage( data.imageDesc );
-					auto const imageViewType = castor3d::ImageViewType( data.imageDesc.data->info.imageType );
+					auto const imageViewType = c3d::ImageViewType( data.imageDesc.data->info.imageType );
 					crg::ImageViewData viewData{ data.imageDesc.data->name
 						, data.imageDesc
-						, castor3d::ImageViewCreateFlags::eNone
+						, c3d::ImageViewCreateFlags::eNone
 						, imageViewType
 						, getFormat( data.imageDesc )
 						, { data.viewDesc.data->info.subresourceRange.aspectMask, 0u, 1u, 0u, 1u } };
@@ -102,7 +102,7 @@ namespace Bloom
 				recordContext.memoryBarrier( commandBuffer
 					, data.viewDesc
 					, layoutState.layout
-					, makeLayoutState( castor3d::ImageLayout::eTransferSrc ) );
+					, makeLayoutState( c3d::ImageLayout::eTransferSrc ) );
 
 				for ( auto & mipGen : data.mipGens )
 				{
@@ -135,8 +135,8 @@ namespace Bloom
 					// Transition destination mip level to transfer dst layout
 					recordContext.memoryBarrier( commandBuffer
 						, mipGen.dst
-						, castor3d::ImageLayout::eUndefined
-						, makeLayoutState( castor3d::ImageLayout::eTransferDst ) );
+						, c3d::ImageLayout::eUndefined
+						, makeLayoutState( c3d::ImageLayout::eTransferDst ) );
 
 					// Perform blit
 					m_context.vkCmdBlitImage( commandBuffer
@@ -151,13 +151,13 @@ namespace Bloom
 					// Transition destination mip level to transfer src layout
 					recordContext.memoryBarrier( commandBuffer
 						, mipGen.dst
-						, castor3d::ImageLayout::eTransferDst
-						, makeLayoutState( castor3d::ImageLayout::eTransferSrc ) );
+						, c3d::ImageLayout::eTransferDst
+						, makeLayoutState( c3d::ImageLayout::eTransferSrc ) );
 
 					// Transition source mip level to wanted output layout
 					recordContext.memoryBarrier( commandBuffer
 						, mipGen.src
-						, castor3d::ImageLayout::eTransferSrc
+						, c3d::ImageLayout::eTransferSrc
 						, layoutState );
 				}
 
@@ -165,7 +165,7 @@ namespace Bloom
 				auto & mipGen = data.mipGens.back();
 				recordContext.memoryBarrier( commandBuffer
 					, mipGen.dst
-					, castor3d::ImageLayout::eTransferSrc
+					, c3d::ImageLayout::eTransferSrc
 					, layoutState );
 #endif
 			}
@@ -182,27 +182,27 @@ namespace Bloom
 				crg::ImageViewId viewDesc;
 				crg::ImageId imageDesc;
 				VkImage image{};
-				castor::Vector< LevelMipGen > mipGens;
+				c3d::Vector< LevelMipGen > mipGens;
 			};
-			castor::Array< PassData, 2u > m_hiPasses;
+			c3d::Array< PassData, 2u > m_hiPasses;
 #endif
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", 0u, 0u );
 
-			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
-				, sdw::VertexOutT< c3d::Uv2FT > out )
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
+				, sdw::FragmentOutT< c3ds::Colour4FT > out )
 				{
 					out.colour() = vec4( c3d_mapColor.sample( in.uv(), 0.0_f ).xyz(), 1.0_f );
 					auto maxComponent = writer.declLocale( "maxComponent"
@@ -223,9 +223,9 @@ namespace Bloom
 
 	HiPass::HiPass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & sceneView
-		, castor3d::Extent2D size
+		, c3d::Extent2D size
 		, uint32_t blurPassesCount
 		, bool const * enabled
 		, uint32_t const * passIndex )
@@ -234,50 +234,50 @@ namespace Bloom
 		, m_stages{ makeProgramStates( device, m_shader ) }
 #if !Bloom_DebugHiPass
 		, m_resultImg{ graph.createImage( crg::ImageData{ "BLHi"
-			, castor3d::ImageCreateFlags::eNone
-			, castor3d::ImageType::e2D
+			, c3d::ImageCreateFlags::eNone
+			, c3d::ImageType::e2D
 			, getFormat( sceneView.front() )
-			, castor3d::Extent3D{ size.width >> 1, size.height >> 1, 1u }
-			, ( castor3d::ImageUsageFlags::eColorAttachment
-				| castor3d::ImageUsageFlags::eSampled
-				| castor3d::ImageUsageFlags::eTransferSrc
-				| castor3d::ImageUsageFlags::eTransferDst )
+			, c3d::Extent3D{ size.width >> 1, size.height >> 1, 1u }
+			, ( c3d::ImageUsageFlags::eColorAttachment
+				| c3d::ImageUsageFlags::eSampled
+				| c3d::ImageUsageFlags::eTransferSrc
+				| c3d::ImageUsageFlags::eTransferDst )
 			, blurPassesCount } ) }
 #else
 		, m_resultImg{ graph.createImage( crg::ImageData{ "BLHi"
 			, 0u
 			, ImageType::e2D
 			, getFormat( sceneView.front() )
-			, castor3d::Extent3D{ size.width, size.height, 1u }
-			, ( castor3d::ImageUsageFlags::eColorAttachment
-				| castor3d::ImageUsageFlags::eSampled
-				| castor3d::ImageUsageFlags::eTransferSrc ) } ) }
+			, c3d::Extent3D{ size.width, size.height, 1u }
+			, ( c3d::ImageUsageFlags::eColorAttachment
+				| c3d::ImageUsageFlags::eSampled
+				| c3d::ImageUsageFlags::eTransferSrc ) } ) }
 #endif
 		, m_pass{ graph.createPass( "HDR"
 			, [this, &device, enabled, passIndex]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< hi::HiPassQuad >( framePass
+				auto result = c3d::makeRawUnique< hi::HiPassQuad >( framePass
 					, context
 					, graph
 					, ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages )
-					, castor3d::Extent2D{ m_resultImg.data->info.extent.width, m_resultImg.data->info.extent.height }
+					, c3d::Extent2D{ m_resultImg.data->info.extent.width, m_resultImg.data->info.extent.height }
 					, enabled
 					, passIndex );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }
 	{
 		for ( uint32_t i = 0u; i < blurPassesCount; ++i )
 		{
-			m_resultViews.push_back( graph.createView( crg::ImageViewData{ m_resultImg.data->name + castor::string::toMbString( i )
+			m_resultViews.push_back( graph.createView( crg::ImageViewData{ m_resultImg.data->name + c3d::string::toMbString( i )
 				, m_resultImg
-				, castor3d::ImageViewCreateFlags::eNone
-				, castor3d::ImageViewType::e2D
+				, c3d::ImageViewCreateFlags::eNone
+				, c3d::ImageViewType::e2D
 				, getFormat( m_resultImg )
-				, { castor3d::ImageAspectFlags::eColor, i, 1u, 0u, 1u } } ) );
+				, { c3d::ImageAspectFlags::eColor, i, 1u, 0u, 1u } } ) );
 		}
 
 		m_pass.addDependency( previousPass );
@@ -285,16 +285,16 @@ namespace Bloom
 		m_pass.addOutputColourView( m_pass.mergeViews( m_resultViews, false ) );
 	}
 
-	void HiPass::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void HiPass::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 
 		for ( auto & view : m_resultViews )
 		{
-			visitor.visit( cuT( "PostFX: HDRB - Hi " ) + castor::string::toString( view.data->info.subresourceRange.baseMipLevel )
+			visitor.visit( cuT( "PostFX: HDRB - Hi " ) + c3d::string::toString( view.data->info.subresourceRange.baseMipLevel )
 				, view
 				, m_graph.getFinalLayoutState( view ).layout
-				, castor3d::TextureFactors{}.invert( true ) );
+				, c3d::TextureFactors{}.invert( true ) );
 		}
 	}
 }

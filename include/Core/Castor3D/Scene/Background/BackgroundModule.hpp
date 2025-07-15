@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/Signal.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Scene */
 	//@{
@@ -25,7 +25,7 @@ namespace castor3d
 		eFront = 5,
 		CU_ScopedEnumBounds( eLeft, eBack )
 	};
-	castor::StringView getName( SkyboxFace face );
+	String getName( SkyboxFace face );
 
 	using BackgroundModelID = uint8_t;
 	/**
@@ -83,15 +83,15 @@ namespace castor3d
 	*/
 	class SkyboxBackground;
 
-	using BackgroundChangedFunc = castor::Function< void( SceneBackground const & ) >;
-	using OnBackgroundChanged = castor::SignalT< BackgroundChangedFunc >;
+	using BackgroundChangedFunc = Function< void( SceneBackground const & ) >;
+	using OnBackgroundChanged = SignalT< BackgroundChangedFunc >;
 	using OnBackgroundChangedConnection = OnBackgroundChanged::connection;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, SceneBackground, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ColourBackground, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ImageBackground, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SkyboxBackground, C3D_API );
+	CU_DeclareSmartPtr( c3d, SceneBackground, C3D_API );
+	CU_DeclareSmartPtr( c3d, ColourBackground, C3D_API );
+	CU_DeclareSmartPtr( c3d, ImageBackground, C3D_API );
+	CU_DeclareSmartPtr( c3d, SkyboxBackground, C3D_API );
 	/** @endcond */
 
 	//@}

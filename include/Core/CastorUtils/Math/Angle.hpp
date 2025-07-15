@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Math/MathModule.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename Type >
 	class AngleT
@@ -560,19 +560,19 @@ namespace castor
 	using Angle = AngleT< float >;
 }
 
-constexpr castor::Angle operator "" _turns( long double value )
+constexpr c3d::Angle operator "" _turns( long double value )
 {
-	return castor::Angle::fromTurns( value );
+	return c3d::Angle::fromTurns( value );
 }
 
-constexpr castor::Angle operator "" _degrees( long double value )
+constexpr c3d::Angle operator "" _degrees( long double value )
 {
-	return castor::Angle::fromDegrees( value );
+	return c3d::Angle::fromDegrees( value );
 }
 
-constexpr castor::Angle operator "" _radians( long double value )
+constexpr c3d::Angle operator "" _radians( long double value )
 {
-	return castor::Angle::fromRadians( value );
+	return c3d::Angle::fromRadians( value );
 }
 
 #include "Angle.inl"

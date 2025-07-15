@@ -12,28 +12,25 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::DispersionComponent >
-		: public TextWriterT< castor3d::DispersionComponent >
+	class TextWriter< DispersionComponent >
+		: public TextWriterT< DispersionComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::DispersionComponent >{ tabs }
+			: TextWriterT< DispersionComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::DispersionComponent const & object
+		bool operator()( DispersionComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSubOpt( file, cuT( "dispersion" ), object.getDispersion(), castor3d::DispersionComponent::Default );
+			return writeNamedSubOpt( file, cuT( "dispersion" ), object.getDispersion(), DispersionComponent::Default );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace trsatt
@@ -130,14 +127,14 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void DispersionComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void DispersionComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "dispersion" )
 			, trsatt::parserPassDispersion
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { makeParameter< ParameterType::eFloat >() } );
 	}
 
 	void DispersionComponent::Plugin::zeroBuffer( Pass const & pass
@@ -157,7 +154,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const DispersionComponent::TypeName = C3D_MakePassLightingComponentName( "dispersion" );
+	String const DispersionComponent::TypeName = C3D_MakePassLightingComponentName( "dispersion" );
 
 	DispersionComponent::DispersionComponent( Pass & pass )
 		: BaseDataPassComponentT{ pass, TypeName, { TransmissionComponent::TypeName }
@@ -173,17 +170,17 @@ namespace castor3d
 
 	PassComponentUPtr DispersionComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< DispersionComponent >( pass );
+		auto result = makeRawUnique< DispersionComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool DispersionComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool DispersionComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< DispersionComponent >{ tabs }( *this, file );
+		return TextWriter< DispersionComponent >{ tabs }( *this, file );
 	}
 
 	void DispersionComponent::doFillBuffer( PassBuffer & buffer )const

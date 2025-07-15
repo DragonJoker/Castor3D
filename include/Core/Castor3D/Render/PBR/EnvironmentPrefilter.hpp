@@ -17,7 +17,7 @@ See LICENSE file in root folder
 
 #include <array>
 
-namespace castor3d
+namespace c3d
 {
 	class EnvironmentPrefilter
 	{
@@ -49,8 +49,8 @@ namespace castor3d
 				ashes::FrameBufferPtr frameBuffer;
 			};
 			ashes::RenderPass const & m_renderPass;
-			castor::String m_prefix;
-			castor::Array< FrameBuffer, 6u > m_frameBuffers;
+			String m_prefix;
+			Array< FrameBuffer, 6u > m_frameBuffers;
 			CommandsSemaphore m_commands;
 		};
 
@@ -75,7 +75,7 @@ namespace castor3d
 		 */
 		C3D_API explicit EnvironmentPrefilter( Engine & engine
 			, RenderDevice const & device
-			, castor::Size const & size
+			, Size const & size
 			, Texture const & srcTexture
 			, SamplerObs sampler
 			, bool isCharlie );
@@ -127,13 +127,13 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		Texture const & m_srcView;
-		castor::String m_prefix;
+		String m_prefix;
 		ashes::Image * m_srcImage;
 		ashes::ImageView m_srcImageView;
 		Texture m_result;
 		SamplerObs m_sampler{};
 		ashes::RenderPassPtr m_renderPass;
-		castor::Vector< castor::RawUniquePtr< MipRenderCube > > m_renderPasses;
+		Vector< RawUniquePtr< MipRenderCube > > m_renderPasses;
 	};
 }
 

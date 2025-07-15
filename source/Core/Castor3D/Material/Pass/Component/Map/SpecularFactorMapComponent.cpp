@@ -21,16 +21,16 @@
 
 //*************************************************************************************************
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::SpecularFactorMapComponent >
-		: public TextWriterT< castor3d::SpecularFactorMapComponent >
+	class TextWriter< SpecularFactorMapComponent >
+		: public TextWriterT< SpecularFactorMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, uint32_t mask )
-			: TextWriterT< castor3d::SpecularFactorMapComponent >{ tabs }
+			: TextWriterT< SpecularFactorMapComponent >{ tabs }
 			, m_mask{ mask }
 		{
 		}
@@ -40,7 +40,7 @@ namespace castor
 			return writeMask( file, cuT( "specular_factor_mask" ), m_mask );
 		}
 
-		bool operator()( castor3d::SpecularFactorMapComponent const & object
+		bool operator()( SpecularFactorMapComponent const & object
 			, StringStream & file )override
 		{
 			return writeMask( file, cuT( "specular_factor_mask" ), m_mask );
@@ -49,10 +49,7 @@ namespace castor
 	private:
 		uint32_t m_mask;
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace spcftcmp
@@ -123,7 +120,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void SpecularFactorMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void SpecularFactorMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "specular_factor" )
@@ -135,29 +132,29 @@ namespace castor3d
 					, 0x00FFFFFF );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "specular_factor_mask" )
 			, spcftcmp::parserUnitSpecularFactorMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "specular_factor_mask" )
 			, spcftcmp::parserUnitSpecularFactorMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "specular_factor" )
 			, spcftcmp::parserTexRemapSpecularFactor );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "specular_factor_mask" )
 			, spcftcmp::parserTexRemapSpecularFactorMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 
 	bool SpecularFactorMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -168,22 +165,22 @@ namespace castor3d
 	}
 
 	void SpecularFactorMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, SpecularFactorMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, SpecularFactorMapComponent >( pass ) );
 	}
 
 	bool SpecularFactorMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< SpecularFactorMapComponent >{ tabs, mask }( file );
+		return TextWriter< SpecularFactorMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const SpecularFactorMapComponent::TypeName = C3D_MakePassMapComponentName( "specular_factor" );
+	String const SpecularFactorMapComponent::TypeName = C3D_MakePassMapComponentName( "specular_factor" );
 
 	SpecularFactorMapComponent::SpecularFactorMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -195,7 +192,7 @@ namespace castor3d
 
 	PassComponentUPtr SpecularFactorMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, SpecularFactorMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, SpecularFactorMapComponent >( pass );
 	}
 
 	void SpecularFactorMapComponent::doFillConfig( TextureConfiguration & configuration

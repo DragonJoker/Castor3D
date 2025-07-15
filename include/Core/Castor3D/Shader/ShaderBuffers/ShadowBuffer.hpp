@@ -14,12 +14,12 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ShadowBuffer
 	{
 	public:
-		using ShadowsData = castor::ArrayView< AllShadowData >;
+		using ShadowsData = ArrayView< AllShadowData >;
 
 	public:
 		/**

@@ -6,8 +6,8 @@ namespace castortd
 {
 	Boulder::Boulder( float speed
 		, uint32_t damage
-		, castor3d::SceneNode & node
-		, castor::Point3f target )
+		, c3d::SceneNode & node
+		, c3d::Point3f target )
 		: m_node{ node }
 		, m_target{ target }
 		, m_speed{ speed }
@@ -17,8 +17,8 @@ namespace castortd
 
 	void Boulder::load( float speed
 		, uint32_t damage
-		, castor::Point3f const & origin
-		, castor::Point3f target )
+		, c3d::Point3f const & origin
+		, c3d::Point3f target )
 	{
 		m_damage = damage;
 		m_node.get().setPosition( origin );
@@ -29,9 +29,9 @@ namespace castortd
 	bool Boulder::accept( Game & game )
 	{
 		auto speed = float( game.getElapsed().count() ) * m_speed / 1000;
-		castor::Point3f position{ m_node.get().getPosition() };
-		castor::Point3f direction{ m_target - position };
-		auto distanceToDst = castor::point::length( direction );
+		c3d::Point3f position{ m_node.get().getPosition() };
+		c3d::Point3f direction{ m_target - position };
+		auto distanceToDst = c3d::point::length( direction );
 		direction[0] *= float( speed / distanceToDst );
 		direction[2] *= float( speed / distanceToDst );
 		auto reachDst = distanceToDst <= speed;
@@ -43,7 +43,7 @@ namespace castortd
 		else
 		{
 			game.areaDamage( m_target, m_damage );
-			m_node.get().setPosition( castor::Point3f{ 0, -10, 0 } );
+			m_node.get().setPosition( c3d::Point3f{ 0, -10, 0 } );
 		}
 
 		return reachDst;

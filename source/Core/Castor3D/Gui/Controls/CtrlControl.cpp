@@ -15,17 +15,17 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementSmartPtr( castor3d, Control )
+CU_ImplementSmartPtr( c3d, Control )
 
-namespace castor3d
+namespace c3d
 {
 	namespace ctrl
 	{
-		static size_t makeHash( castor::String const & name
+		static size_t makeHash( String const & name
 			, Scene const * scene )
 		{
-			auto result = std::hash< castor::String >{}( name );
-			result = castor::hashCombine( result, scene );
+			auto result = std::hash< String >{}( name );
+			result = hashCombine( result, scene );
 			return result;
 		}
 	}
@@ -34,11 +34,11 @@ namespace castor3d
 
 	Control::Control( ControlType type
 		, SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, ControlStyleRPtr style
 		, ControlRPtr parent
-		, castor::Position const & position
-		, castor::Size const & size
+		, Position const & position
+		, Size const & size
 		, ControlFlagType flags
 		, bool visible )
 		: NonClientEventHandler< Control >{ ( parent ? parent->getName() + cuT( "/" ) + name : name ), type != ControlType::eStatic }
@@ -141,7 +141,7 @@ namespace castor3d
 		doUpdateStyle();
 	}
 
-	void Control::setSize( castor::Size const & value )
+	void Control::setSize( Size const & value )
 	{
 		m_size = doUpdateSize( value );
 		updateClientRect();
@@ -150,7 +150,7 @@ namespace castor3d
 		onChanged( *this );
 	}
 
-	void Control::setPosition( castor::Position const & value )
+	void Control::setPosition( Position const & value )
 	{
 		m_position = doUpdatePosition( value );
 		updateClientRect();
@@ -168,12 +168,12 @@ namespace castor3d
 		onChanged( *this );
 	}
 
-	void Control::setUV( castor::Point4d const & value )const
+	void Control::setUV( Point4d const & value )const
 	{
 		doGetBackground().setUV( value );
 	}
 
-	void Control::setBorderSize( castor::Point4ui const & value )
+	void Control::setBorderSize( Point4ui const & value )
 	{
 		m_borders = doUpdateBorderSize( value );
 		updateClientRect();
@@ -182,17 +182,17 @@ namespace castor3d
 		onChanged( *this );
 	}
 
-	void Control::setBorderInnerUV( castor::Point4d const & value )const
+	void Control::setBorderInnerUV( Point4d const & value )const
 	{
 		doGetBackground().setBorderInnerUV( value );
 	}
 
-	void Control::setBorderOuterUV( castor::Point4d const & value )const
+	void Control::setBorderOuterUV( Point4d const & value )const
 	{
 		doGetBackground().setBorderOuterUV( value );
 	}
 
-	void Control::setCaption( castor::U32String const & caption )
+	void Control::setCaption( U32String const & caption )
 	{
 		doSetCaption( caption );
 	}
@@ -204,7 +204,7 @@ namespace castor3d
 		onChanged( *this );
 	}
 
-	castor::Position Control::getAbsolutePosition()const
+	Position Control::getAbsolutePosition()const
 	{
 		auto result = m_position;
 
@@ -231,7 +231,7 @@ namespace castor3d
 
 	ControlRPtr Control::getChildControl( ControlID id )const
 	{
-		auto lock( castor::makeUniqueLock( m_mutexChildren ) );
+		auto lock( makeUniqueLock( m_mutexChildren ) );
 		auto it = std::find_if( std::begin( m_children )
 			, std::end( m_children )
 			, [&id]( Control const * lookup )
@@ -247,7 +247,7 @@ namespace castor3d
 		return *it;
 	}
 
-	castor::Array< bool, 4u > Control::isInResizeRange( castor::Position const & position )const
+	Array< bool, 4u > Control::isInResizeRange( Position const & position )const
 	{
 		auto size = getSize();
 		auto pos = position - getAbsolutePosition();
@@ -258,12 +258,12 @@ namespace castor3d
 		return { isOnN, isOnW, isOnS, isOnE };
 	}
 
-	castor::Point4d const & Control::getBorderInnerUV()const
+	Point4d const & Control::getBorderInnerUV()const
 	{
 		return doGetBackground().getBorderInnerUV();
 	}
 
-	castor::Point4d const & Control::getBorderOuterUV()const
+	Point4d const & Control::getBorderOuterUV()const
 	{
 		return doGetBackground().getBorderOuterUV();
 	}
@@ -273,7 +273,7 @@ namespace castor3d
 		return doGetBackground().getBorderPosition();
 	}
 
-	castor::Point4d const & Control::getUV()const
+	Point4d const & Control::getUV()const
 	{
 		return doGetBackground().getUV();
 	}
@@ -296,7 +296,7 @@ namespace castor3d
 		}
 	}
 
-	void Control::setBackgroundSize( castor::Size const & value )const
+	void Control::setBackgroundSize( Size const & value )const
 	{
 		doGetBackground().setPixelSize( value );
 	}
@@ -342,14 +342,14 @@ namespace castor3d
 
 	void Control::addChild( ControlRPtr control )
 	{
-		auto lock( castor::makeUniqueLock( m_mutexChildren ) );
+		auto lock( makeUniqueLock( m_mutexChildren ) );
 		m_children.push_back( control );
 		doAddChild( control );
 	}
 
 	void Control::removeChild( ControlRPtr control )
 	{
-		auto lock( castor::makeUniqueLock( m_mutexChildren ) );
+		auto lock( makeUniqueLock( m_mutexChildren ) );
 		auto it = std::find( m_children.begin(), m_children.end(), control );
 
 		if ( it != m_children.end() )
@@ -365,7 +365,7 @@ namespace castor3d
 		doGetBackground().setOrder( level + offset, 0u );
 		doAdjustZIndex( offset );
 		{
-			auto lock( castor::makeUniqueLock( m_mutexChildren ) );
+			auto lock( makeUniqueLock( m_mutexChildren ) );
 
 			for ( auto control : m_children )
 			{
@@ -378,10 +378,10 @@ namespace castor3d
 	}
 
 	void Control::updateZIndex( uint32_t & index
-		, castor::Vector< Control * > & controls
-		, castor::Vector< Control * > & topControls )
+		, Vector< Control * > & controls
+		, Vector< Control * > & topControls )
 	{
-		auto lock( castor::makeUniqueLock( m_mutexChildren ) );
+		auto lock( makeUniqueLock( m_mutexChildren ) );
 		bool hasMovable = std::any_of( m_children.begin()
 			, m_children.end()
 			, []( auto const & lookup )
@@ -408,7 +408,7 @@ namespace castor3d
 			doGetBackground().setOrder( *realIndex, 0u );
 			++( *realIndex );
 			doUpdateZIndex( *realIndex );
-			castor::Vector< Control * > scrollbars;
+			Vector< Control * > scrollbars;
 
 			for ( auto control : m_children )
 			{
@@ -436,7 +436,7 @@ namespace castor3d
 			++( *realIndex );
 			auto findex = *realIndex;
 			doUpdateZIndex( findex );
-			castor::Vector< Control * > scrollbars;
+			Vector< Control * > scrollbars;
 			auto maxIndex = findex;
 
 			for ( auto control : m_children )
@@ -611,7 +611,7 @@ namespace castor3d
 	void Control::resize( MouseEvent const & event )
 	{
 		auto diff = event.getPosition() - m_mouseStartMousePosition;
-		castor::Point2i newPos{ m_mouseStartPosition.x(), m_mouseStartPosition.y() };
+		Point2i newPos{ m_mouseStartPosition.x(), m_mouseStartPosition.y() };
 
 		if ( m_resizingW )
 		{

@@ -30,10 +30,10 @@ See LICENSE file in root folder
 #include <RenderGraph/RunnablePasses/RenderPass.hpp>
 #include <RenderGraph/RunnablePasses/PipelineHolder.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class LightInjectionPass
-		: public castor::Named
+		: public Named
 		, public crg::RenderPass
 	{
 	public:
@@ -103,7 +103,7 @@ namespace castor3d
 			, uint32_t gridSize
 			, uint32_t rsmSize );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		RenderTechniquePass::accept
 		 */
 		C3D_API void accept( ConfigurationVisitorBase & visitor );
 

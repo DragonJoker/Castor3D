@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Align/Aligned.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< size_t Align >
 	class AlignedMemoryAllocator

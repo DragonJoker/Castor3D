@@ -4,7 +4,7 @@
 
 #include "SceneExporter.hpp"
 
-namespace castor3d::exporter
+namespace c3d::exporter
 {
 	/**
 	\~english
@@ -17,12 +17,12 @@ namespace castor3d::exporter
 	{
 	public:
 		CSE_API explicit CscnSceneExporter( ExportOptions options );
-		CSE_API bool exportScene( castor3d::Scene const & scene
-			, castor::Path const & fileName )override;
-		CSE_API bool exportMesh( castor3d::Scene const & scene
-			, castor3d::Mesh const & mesh
-			, castor::Path const & outputFolder
-			, castor::String const & outputName )override;
+		CSE_API bool exportScene( Scene const & scene
+			, Path const & fileName )override;
+		CSE_API bool exportMesh( Scene const & scene
+			, Mesh const & mesh
+			, Path const & outputFolder
+			, String const & outputName )override;
 
 	private:
 		bool carryOn( bool result )const noexcept;

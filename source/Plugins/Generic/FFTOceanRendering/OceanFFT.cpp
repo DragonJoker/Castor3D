@@ -28,25 +28,25 @@ namespace ocean_fft
 
 	namespace
 	{
-		crg::FramePass const & createGenerateMipmapsPass( castor::String const & name
-			, castor3d::RenderDevice const & device
+		crg::FramePass const & createGenerateMipmapsPass( c3d::String const & name
+			, c3d::RenderDevice const & device
 			, crg::FramePassGroup & graph
 			, crg::FramePass const * previousPass
 			, crg::ImageViewId imageView )
 		{
-			auto & result = graph.createPass( "GenMips" + castor::toUtf8( name )
+			auto & result = graph.createPass( "GenMips" + c3d::toUtf8( name )
 				, [&device]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-						auto res = castor::make_unique< crg::GenerateMipmaps >( framePass
+						auto res = c3d::makeRawUnique< crg::GenerateMipmaps >( framePass
 							, context
 							, graph
-							, castor3d::ImageLayout::eShaderReadOnly
+							, c3d::ImageLayout::eShaderReadOnly
 							, crg::ru::Config{}
 							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 							, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-						device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+						device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 							, res->getTimer() );
 						return res;
 				} );
@@ -55,25 +55,25 @@ namespace ocean_fft
 			return result;
 		}
 
-		crg::FramePass const & createGenerateSpecMipmapsPass( castor::String const & name
-			, castor3d::RenderDevice const & device
+		crg::FramePass const & createGenerateSpecMipmapsPass( c3d::String const & name
+			, c3d::RenderDevice const & device
 			, crg::FramePassGroup & graph
 			, crg::FramePass const * previousPass
 			, crg::ImageViewId imageView )
 		{
-			auto & result = graph.createPass( "GenMips" + castor::toUtf8( name )
+			auto & result = graph.createPass( "GenMips" + c3d::toUtf8( name )
 				, [&device]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-						auto res = castor::make_unique< GenerateMipmapsPass >( framePass
+						auto res = c3d::makeRawUnique< GenerateMipmapsPass >( framePass
 							, context
 							, graph
 							, device
 							, crg::ru::Config{}
 							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 							, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-						device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+						device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 							, res->getTimer() );
 						return res;
 				} );
@@ -83,14 +83,14 @@ namespace ocean_fft
 			return result;
 		}
 
-		crg::FramePass const & createCopyAndGenerateMipmapsPass( castor::String const & name
-			, castor3d::RenderDevice const & device
+		crg::FramePass const & createCopyAndGenerateMipmapsPass( c3d::String const & name
+			, c3d::RenderDevice const & device
 			, crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, ashes::BufferBase const & srcBuffer
 			, crg::ImageViewId dstImageView )
 		{
-			auto mbName = castor::toUtf8( name );
+			auto mbName = c3d::toUtf8( name );
 			auto data = *dstImageView.data;
 			data.name = data.image.data->name + "_L0";
 			data.info.subresourceRange.levelCount = 1u;
@@ -101,15 +101,15 @@ namespace ocean_fft
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					auto res = castor::make_unique< crg::BufferToImageCopy >( framePass
+					auto res = c3d::makeRawUnique< crg::BufferToImageCopy >( framePass
 						, context
 						, graph
-						, castor3d::Offset3D{}
+						, c3d::Offset3D{}
 						, extent
 						, crg::ru::Config{}
 						, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 						, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-					device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+					device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 						, res->getTimer() );
 					return res;
 				} );
@@ -122,14 +122,14 @@ namespace ocean_fft
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-						auto res = castor::make_unique< crg::GenerateMipmaps >( framePass
+						auto res = c3d::makeRawUnique< crg::GenerateMipmaps >( framePass
 							, context
 							, graph
-							, castor3d::ImageLayout::eShaderReadOnly
+							, c3d::ImageLayout::eShaderReadOnly
 							, crg::ru::Config{}
 							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 							, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-						device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+						device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 							, res->getTimer() );
 						return res;
 				} );
@@ -138,25 +138,25 @@ namespace ocean_fft
 			return result;
 		}
 
-		castor3d::Texture createTexture( castor3d::RenderDevice const & device
+		c3d::Texture createTexture( c3d::RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, castor3d::Extent2D heightMapSamples
-			, castor::String const & name
-			, castor::PixelFormat format
-			, castor3d::MipmapMode mipMode )
+			, c3d::Extent2D heightMapSamples
+			, c3d::String const & name
+			, c3d::PixelFormat format
+			, c3d::MipmapMode mipMode )
 		{
-			castor3d::Extent3D dimensions{ heightMapSamples.width, heightMapSamples.height, 1u };
-			castor3d::Texture result{ device
+			c3d::Extent3D dimensions{ heightMapSamples.width, heightMapSamples.height, 1u };
+			c3d::Texture result{ device
 				, resources
 				, name
-				, { castor3d::ImageCreateFlags::eNone
+				, { c3d::ImageCreateFlags::eNone
 					, dimensions, 1u, ashes::getMaxMipCount( convert( dimensions ) ) - 2u
 					, format
-					, ( castor3d::ImageUsageFlags::eSampled
-						| castor3d::ImageUsageFlags::eStorage
-						| castor3d::ImageUsageFlags::eTransferDst ) }
-				, { { .borderColor = castor3d::BorderColour::eFloatTransparentBlack
-					, .addressMode = castor3d::WrapMode::eClampToEdge
+					, ( c3d::ImageUsageFlags::eSampled
+						| c3d::ImageUsageFlags::eStorage
+						| c3d::ImageUsageFlags::eTransferDst ) }
+				, { { .borderColor = c3d::BorderColour::eFloatTransparentBlack
+					, .addressMode = c3d::WrapMode::eClampToEdge
 					, .mipFilter = mipMode } } };
 			result.create();
 			return result;
@@ -176,9 +176,9 @@ namespace ocean_fft
 
 	//************************************************************************************************
 
-	castor::String const OceanFFT::Name{ cuT( "OceanFFT" ) };
+	c3d::String const OceanFFT::Name{ cuT( "OceanFFT" ) };
 
-	OceanFFT::OceanFFT( castor3d::RenderDevice const & device
+	OceanFFT::OceanFFT( c3d::RenderDevice const & device
 			, crg::ResourcesCache & resources
 			, crg::FramePassGroup & graph
 			, crg::FramePassArray previousPasses
@@ -191,12 +191,12 @@ namespace ocean_fft
 		, m_heightMapSamples{ m_config.heightMapSamples, m_config.heightMapSamples }
 		, m_displacementDownsample{ m_config.displacementDownsample }
 		, m_fftConfig{ device, m_heightMapSamples }
-		, m_heightSeeds{ castor3d::makeBuffer< cfloat >( device
+		, m_heightSeeds{ c3d::makeBuffer< cfloat >( device
 			, m_heightMapSamples.width * m_heightMapSamples.height
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, Name + cuT( "HeightSeeds" ) ) }
-		, m_heightDistribution{ castor3d::makeBuffer< cfloat >( device
+		, m_heightDistribution{ c3d::makeBuffer< cfloat >( device
 			, m_heightMapSamples.width * m_heightMapSamples.height
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -220,7 +220,7 @@ namespace ocean_fft
 			, m_fftConfig
 			, *m_heightDistribution
 			, FFTMode::eC2R }
-		, m_displacementDistribution{ castor3d::makeBuffer< cfloat >( device
+		, m_displacementDistribution{ c3d::makeBuffer< cfloat >( device
 			, ( m_heightMapSamples.width >> m_displacementDownsample ) * ( m_heightMapSamples.height >> m_displacementDownsample )
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -248,26 +248,26 @@ namespace ocean_fft
 				, resources
 				, m_heightMapSamples
 				, cuT( "OceanFFTHeightDisplacement0" )
-				, castor::PixelFormat::eR16G16B16A16_SFLOAT
-				, castor3d::MipmapMode::eNearest )
+				, c3d::PixelFormat::eR16G16B16A16_SFLOAT
+				, c3d::MipmapMode::eNearest )
 			, createTexture( device
 				, resources
 				, m_heightMapSamples
 				, cuT( "OceanFFTHeightDisplacement1" )
-				, castor::PixelFormat::eR16G16B16A16_SFLOAT
-				, castor3d::MipmapMode::eNearest ) }
+				, c3d::PixelFormat::eR16G16B16A16_SFLOAT
+				, c3d::MipmapMode::eNearest ) }
 		, m_gradientJacobian{ createTexture( device
 				, resources
 				, m_heightMapSamples
 				, cuT( "OceanFFTGradientJacobian0" )
-				, castor::PixelFormat::eR16G16B16A16_SFLOAT
-				, castor3d::MipmapMode::eLinear )
+				, c3d::PixelFormat::eR16G16B16A16_SFLOAT
+				, c3d::MipmapMode::eLinear )
 			, createTexture( device
 				, resources
 				, m_heightMapSamples
 				, cuT( "OceanFFTGradientJacobian1" )
-				, castor::PixelFormat::eR16G16B16A16_SFLOAT
-				, castor3d::MipmapMode::eLinear ) }
+				, c3d::PixelFormat::eR16G16B16A16_SFLOAT
+				, c3d::MipmapMode::eLinear ) }
 		, m_bakeHeightGradient{ &createBakeHeightGradientPass( m_fftConfig.device
 			, m_group
 			, { &m_height.getLastPass(), &m_displacement.getLastPass() }
@@ -289,12 +289,12 @@ namespace ocean_fft
 			, m_group
 			, m_bakeHeightGradient
 			, m_gradientJacobian.front().sampledViewId ) }
-		, m_normalSeeds{ castor3d::makeBuffer< cfloat >( device
+		, m_normalSeeds{ c3d::makeBuffer< cfloat >( device
 			, m_heightMapSamples.width * m_heightMapSamples.height
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, Name + cuT( "NormalsSeeds" ) ) }
-		, m_normalDistribution{ castor3d::makeBuffer< cfloat >( device
+		, m_normalDistribution{ c3d::makeBuffer< cfloat >( device
 			, m_heightMapSamples.width * m_heightMapSamples.height
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -322,8 +322,8 @@ namespace ocean_fft
 			, resources
 			, m_heightMapSamples
 			, cuT( "OceanFFTNormals" )
-			, castor::PixelFormat::eR32G32_SFLOAT
-			, castor3d::MipmapMode::eLinear ) }
+			, c3d::PixelFormat::eR32G32_SFLOAT
+			, c3d::MipmapMode::eLinear ) }
 		, m_generateNormalsMips{ &createCopyAndGenerateMipmapsPass( cuT( "Normals" )
 			, device
 			, m_group
@@ -356,7 +356,7 @@ namespace ocean_fft
 		m_normals.destroy();
 	}
 
-	void OceanFFT::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void OceanFFT::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "Tile XZ size" ), m_config.size );
 		visitor.visit( cuT( "Amplitude" ), m_config.amplitude );
@@ -377,7 +377,7 @@ namespace ocean_fft
 	{
 		auto Nx = int32_t( m_heightMapSamples.width );
 		auto Nz = int32_t( m_heightMapSamples.height );
-		castor::Vector< cfloat > distribution;
+		c3d::Vector< cfloat > distribution;
 		distribution.resize( distribBuffer.getCount() );
 
 		for ( int32_t z = 0; z < Nz; z++ )
@@ -389,7 +389,7 @@ namespace ocean_fft
 		}
 		{
 			auto queueData = m_device.graphicsData();
-			castor3d::InstantDirectUploadData uploader{ *queueData->queue
+			c3d::InstantDirectUploadData uploader{ *queueData->queue
 				, m_device
 				, cuT( "OceanFFTDistributionSeeds" )
 				, *queueData->commandPool};
@@ -397,7 +397,7 @@ namespace ocean_fft
 				, distribution.size() * sizeof( cfloat )
 				, distribBuffer.getBuffer()
 				, 0u
-				, castor3d::ComputeShaderReadState );
+				, c3d::ComputeShaderReadState );
 		}
 	}
 

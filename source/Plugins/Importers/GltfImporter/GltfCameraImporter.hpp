@@ -11,13 +11,13 @@ See LICENSE file in root folder
 namespace c3d_gltf
 {
 	class GltfCameraImporter
-		: public castor3d::CameraImporter
+		: public c3d::CameraImporter
 	{
 	public:
-		explicit GltfCameraImporter( castor3d::Engine & engine );
+		explicit GltfCameraImporter( c3d::Engine & engine );
 
 	private:
-		bool doImportCamera( castor3d::Camera & camera )override;
+		bool doImportCamera( c3d::Camera & camera )override;
 	};
 }
 

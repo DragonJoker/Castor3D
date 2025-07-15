@@ -82,8 +82,8 @@ namespace GuiCommon
 			wxString GetNext()override;
 
 		private:
-			castor::Set< wxString > m_keywords;
-			castor::Set< wxString >::iterator m_current;
+			c3d::Set< wxString > m_keywords;
+			c3d::Set< wxString >::iterator m_current;
 			wxString m_prefix;
 		};
 #endif

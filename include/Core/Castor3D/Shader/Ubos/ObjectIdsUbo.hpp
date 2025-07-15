@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	struct ObjectsIds
 		: public sdw::StructInstance
@@ -93,7 +93,7 @@ namespace castor3d::shader
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd430\
 		, !flags.enableInstantiation() };\
-	auto c3d_objectIdsData = objectIdsDataBuffer.declMemberArray< castor3d::shader::ObjectsIds >( "d"\
+	auto c3d_objectIdsData = objectIdsDataBuffer.declMemberArray< c3d::shader::ObjectsIds >( "d"\
 		, !flags.enableInstantiation() );\
 	objectIdsDataBuffer.end()
 

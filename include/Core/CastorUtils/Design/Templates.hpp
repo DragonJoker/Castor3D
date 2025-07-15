@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <algorithm>
 #include <functional>
 
-namespace castor
+namespace c3d
 {
 	template< typename T >
 	struct CallTraits

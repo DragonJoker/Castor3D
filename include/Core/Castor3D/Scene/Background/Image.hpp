@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ImageBackground
 		: public SceneBackground
@@ -36,21 +36,21 @@ namespace castor3d
 		*/
 		C3D_API explicit ImageBackground( Engine & engine
 			, Scene & scene
-			, castor::String const & name = castor::String{} );
+			, String const & name = String{} );
 		/**
-		*\copydoc	castor3d::SceneBackground::accept
+		*\copydoc	SceneBackground::accept
 		*/
 		C3D_API void accept( BackgroundVisitor & visitor )override;
 		/**
-		*\copydoc	castor3d::SceneBackground::accept
+		*\copydoc	SceneBackground::accept
 		*/
 		C3D_API void accept( ConfigurationVisitorBase & visitor )override;
 		/**
-		*\copydoc	castor3d::SceneBackground::write
+		*\copydoc	SceneBackground::write
 		*/
-		C3D_API bool write( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::StringStream & stream )const override;
+		C3D_API bool write( String const & tabs
+			, Path const & folder
+			, StringStream & stream )const override;
 		/**
 		*\~english
 		*\return
@@ -67,14 +67,14 @@ namespace castor3d
 		*\param[in] relative
 		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
-		C3D_API bool setImage( castor::Path const & folder
-			, castor::Path const & relative );
+		C3D_API bool setImage( Path const & folder
+			, Path const & relative );
 		/**
-		*\copydoc	castor3d::SceneBackground::getModelName
+		*\copydoc	SceneBackground::getModelName
 		*/
-		castor::String const & getModelName()const override;
+		String const & getModelName()const override;
 
-		castor::Path const & getImagePath()const noexcept
+		Path const & getImagePath()const noexcept
 		{
 			return m_2dTexturePath;
 		}
@@ -98,7 +98,7 @@ namespace castor3d
 
 	private:
 		TextureLayoutUPtr m_2dTexture;
-		castor::Path m_2dTexturePath;
+		Path m_2dTexturePath;
 		float m_ratio;
 	};
 }

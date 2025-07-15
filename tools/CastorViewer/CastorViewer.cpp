@@ -32,9 +32,9 @@ namespace CastorViewer
 		static const int wantedFPS = 60;
 #endif
 
-		castor3d::Version getVersion()
+		c3d::Version getVersion()
 		{
-			return castor3d::Version
+			return c3d::Version
 			{
 				CastorViewer_VERSION_MAJOR,
 				CastorViewer_VERSION_MINOR,

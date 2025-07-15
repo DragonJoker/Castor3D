@@ -12,10 +12,10 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class SkeletonNode
-		: public castor::Named
+		: public Named
 	{
 		friend class Skeleton;
 		friend class BinaryWriter< SkeletonNode >;
@@ -37,7 +37,7 @@ namespace castor3d
 		 *\param[in]	skeleton			Le squelette parent.
 		 */
 		C3D_API SkeletonNode( SkeletonNodeType type
-			, castor::String name
+			, String name
 			, Skeleton & skeleton );
 
 	public:
@@ -51,7 +51,7 @@ namespace castor3d
 		 *\param[in]	name				Le nom du noeud.
 		 *\param[in]	skeleton			Le squelette parent.
 		 */
-		C3D_API SkeletonNode( castor::String name
+		C3D_API SkeletonNode( String name
 			, Skeleton & skeleton );
 		/**
 		 *\~english
@@ -90,7 +90,7 @@ namespace castor3d
 
 		void setTransform( NodeTransform tranform )noexcept
 		{
-			m_transform = castor::move( tranform );
+			m_transform = c3d::move( tranform );
 		}
 
 	protected:
@@ -129,7 +129,7 @@ namespace castor3d
 		Skeleton & m_skeleton;
 		SkeletonNode * m_parent{};
 		NodeTransform m_transform{};
-		castor::StringMap< SkeletonNode * > m_children;
+		StringMap< SkeletonNode * > m_children;
 	};
 }
 

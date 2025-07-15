@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Gui/Controls/CtrlStatic.hpp"
 #include "Castor3D/Gui/Theme/StyleFrame.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class FrameCtrl
 		: public Control
@@ -21,7 +21,7 @@ namespace castor3d
 		 *\param[in]	parent	The parent control, if any.
 		 */
 		C3D_API FrameCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, FrameStyle * style
 			, ControlRPtr parent );
 
@@ -37,11 +37,11 @@ namespace castor3d
 		 *\param[in]	visible			Initial visibility status.
 		 */
 		C3D_API FrameCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, FrameStyle * style
 			, ControlRPtr parent
-			, castor::Position const & position
-			, castor::Size const & size
+			, Position const & position
+			, Size const & size
 			, uint32_t headerHeight
 			, ControlFlagType flags = 0
 			, bool visible = true );
@@ -55,7 +55,7 @@ namespace castor3d
 			return static_cast< FrameStyle const & >( getBaseStyle() );
 		}
 
-		castor::U32String const & getHeaderCaption()const noexcept
+		U32String const & getHeaderCaption()const noexcept
 		{
 			return m_header->getCaption();
 		}
@@ -70,17 +70,17 @@ namespace castor3d
 			return m_header->getVAlign();
 		}
 
-		castor::Size const & getMinSize()const noexcept
+		Size const & getMinSize()const noexcept
 		{
 			return m_minSize;
 		}
 
-		void setMinSize( castor::Size const & size )noexcept
+		void setMinSize( Size const & size )noexcept
 		{
 			m_minSize = size;
 		}
 
-		void setHeaderCaption( castor::U32String const & v )noexcept
+		void setHeaderCaption( U32String const & v )noexcept
 		{
 			setCaption( v );
 		}
@@ -123,23 +123,23 @@ namespace castor3d
 
 		/** @copydoc Control::doUpdatePosition
 		*/
-		castor::Position doUpdatePosition( castor::Position const & value )const noexcept override;
+		Position doUpdatePosition( Position const & value )const noexcept override;
 
 		/** @copydoc Control::doUpdateSize
 		*/
-		castor::Size doUpdateSize( castor::Size const & value )const noexcept override;
+		Size doUpdateSize( Size const & value )const noexcept override;
 
 		/** @copydoc Control::doSetPosition
 		*/
-		void doSetPosition( castor::Position const & value )override;
+		void doSetPosition( Position const & value )override;
 
 		/** @copydoc Control::doSetSize
 		*/
-		void doSetSize( castor::Size const & value )override;
+		void doSetSize( Size const & value )override;
 
 		/** @copydoc Control::doSetBorderSize
 		*/
-		void doSetBorderSize( castor::Point4ui const & value )override;
+		void doSetBorderSize( Point4ui const & value )override;
 
 		/** @copydoc Control::doUpdateStyle
 		*/
@@ -155,7 +155,7 @@ namespace castor3d
 
 		/** @copydoc Control::doSetCaption
 		*/
-		void doSetCaption( castor::U32String const & caption )override
+		void doSetCaption( U32String const & caption )override
 		{
 			m_header->setCaption( caption );
 		}
@@ -172,7 +172,7 @@ namespace castor3d
 		uint32_t m_headerHeight;
 		StaticCtrlRPtr m_header;
 		PanelCtrlRPtr m_content;
-		castor::Size m_minSize;
+		Size m_minSize;
 	};
 }
 

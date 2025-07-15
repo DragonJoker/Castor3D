@@ -16,7 +16,7 @@
 #	pragma warning( pop )
 #endif
 
-namespace castor::debug
+namespace c3d::debug
 {
 #if !defined( NDEBUG )
 
@@ -107,11 +107,11 @@ namespace castor::debug
 			Map< DynamicLibrary const *, DWORD64 > libraryBaseAddress;
 		};
 
-		using DbgHelpContextPtr = castor::RawUniquePtr< DbgHelpContext >;
+		using DbgHelpContextPtr = c3d::RawUniquePtr< DbgHelpContext >;
 
 		static DbgHelpContextPtr & getContext()
 		{
-			static DbgHelpContextPtr result{ castor::make_unique< DbgHelpContext >() };
+			static DbgHelpContextPtr result{ c3d::makeRawUnique< DbgHelpContext >() };
 			return result;
 		}
 
@@ -144,8 +144,8 @@ namespace castor::debug
 			, int toCapture
 			, int toSkip )
 		{
-			static castor::Mutex mutex;
-			using LockType = castor::UniqueLock< castor::Mutex >;
+			static c3d::Mutex mutex;
+			using LockType = c3d::UniqueLock< c3d::Mutex >;
 
 			if ( auto const & context = getContext();
 				context && context->initialised )

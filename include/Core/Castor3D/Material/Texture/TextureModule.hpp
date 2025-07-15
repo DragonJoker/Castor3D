@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/Signal.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Material */
 	//@{
@@ -29,7 +29,7 @@ namespace castor3d
 		eIntOpaqueWhite,
 		CU_ScopedEnumBounds( eFloatTransparentBlack, eIntOpaqueWhite )
 	};
-	C3D_API castor::String getName( BorderColour v );
+	C3D_API String getName( BorderColour v );
 	C3D_API VkBorderColor convert( BorderColour v );
 	C3D_API BorderColour convert( VkBorderColor v );
 	/**
@@ -79,8 +79,8 @@ namespace castor3d
 		eAllowSRGB = 0x0001 << 10,
 	};
 	CU_ImplementFlags( TextureSpace )
-	C3D_API castor::String getName( TextureSpace value );
-	C3D_API castor::String getName( TextureSpaces value );
+	C3D_API String getName( TextureSpace value );
+	C3D_API String getName( TextureSpaces value );
 	/**
 	*\~english
 	*\brief
@@ -112,7 +112,7 @@ namespace castor3d
 		eNegativeZ = 5,
 		CU_ScopedEnumBounds( ePositiveX, eNegativeZ )
 	};
-	C3D_API castor::String getName( CubeMapFace value );
+	C3D_API String getName( CubeMapFace value );
 	/**
 	*\~english
 	*\brief
@@ -239,16 +239,16 @@ namespace castor3d
 	*/
 	class TextureView;
 
-	using OnTextureUnitChangedFunction = castor::Function< void( TextureUnit const & ) >;
-	using OnTextureUnitChanged = castor::SignalT< OnTextureUnitChangedFunction >;
+	using OnTextureUnitChangedFunction = Function< void( TextureUnit const & ) >;
+	using OnTextureUnitChanged = SignalT< OnTextureUnitChangedFunction >;
 	using OnTextureUnitChangedConnection = OnTextureUnitChanged::connection;
 
 	// ARGB => 4 components => 4 channels per configuration.
-	using TextureFlagConfigurations = castor::Array< TextureFlagConfiguration, 4u >;
+	using TextureFlagConfigurations = Array< TextureFlagConfiguration, 4u >;
 
-	castor::OutputStream & operator<<( castor::OutputStream & stream, castor::ImageMemoryLayout const & rhs );
-	castor::OutputStream & operator<<( castor::OutputStream & stream, castor::Image const & rhs );
-	castor::OutputStream & operator<<( castor::OutputStream & stream, TextureLayout const & layout );
+	OutputStream & operator<<( OutputStream & stream, ImageMemoryLayout const & rhs );
+	OutputStream & operator<<( OutputStream & stream, Image const & rhs );
+	OutputStream & operator<<( OutputStream & stream, TextureLayout const & layout );
 	/**
 	*\~english
 	*	Helper structure to specialise a cache behaviour.
@@ -260,44 +260,44 @@ namespace castor3d
 	*	Spécialisation pour Sampler.
 	*/
 	template<>
-	struct PtrCacheTraitsT< Sampler, castor::String >
-		: PtrCacheTraitsBaseT< Sampler, castor::String >
+	struct PtrCacheTraitsT< Sampler, String >
+		: PtrCacheTraitsBaseT< Sampler, String >
 	{
 		using ResT = Sampler;
-		using KeyT = castor::String;
+		using KeyT = String;
 		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
 		using ElementT = typename Base::ElementT;
 		using ElementPtrT = typename Base::ElementPtrT;
 
-		C3D_API static const castor::String Name;
+		C3D_API static const String Name;
 	};
 
-	using SamplerCacheTraits = PtrCacheTraitsT< Sampler, castor::String >;
-	using SamplerCache = castor::ResourceCacheT< Sampler
-		, castor::String
+	using SamplerCacheTraits = PtrCacheTraitsT< Sampler, String >;
+	using SamplerCache = ResourceCacheT< Sampler
+		, String
 		, SamplerCacheTraits >;
 
 	using SamplerPtr = SamplerCacheTraits::ElementPtrT;
 	using SamplerObs = SamplerCacheTraits::ElementObsT;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, Sampler, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SamplerCache, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureData, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureLayout, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureSource, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureSourceInfo, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureUnit, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureUnitData, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureView, C3D_API );
+	CU_DeclareSmartPtr( c3d, Sampler, C3D_API );
+	CU_DeclareSmartPtr( c3d, SamplerCache, C3D_API );
+	CU_DeclareSmartPtr( c3d, TextureData, C3D_API );
+	CU_DeclareSmartPtr( c3d, TextureLayout, C3D_API );
+	CU_DeclareSmartPtr( c3d, TextureSource, C3D_API );
+	CU_DeclareSmartPtr( c3d, TextureSourceInfo, C3D_API );
+	CU_DeclareSmartPtr( c3d, TextureUnit, C3D_API );
+	CU_DeclareSmartPtr( c3d, TextureUnitData, C3D_API );
+	CU_DeclareSmartPtr( c3d, TextureView, C3D_API );
 
 	//! TextureUnit array
 	CU_DeclareVector( TextureUnit, TextureUnit );
 	/** @endcond */
 
-	using TextureUnitDatas = castor::Vector< TextureUnitDataUPtr >;
-	using TextureUnitDataRefs = castor::Vector< TextureUnitDataRPtr >;
-	using TextureUnitDataSet = castor::Map< PassComponentTextureFlag, TextureUnitDataRPtr >;
+	using TextureUnitDatas = Vector< TextureUnitDataUPtr >;
+	using TextureUnitDataRefs = Vector< TextureUnitDataRPtr >;
+	using TextureUnitDataSet = Map< PassComponentTextureFlag, TextureUnitDataRPtr >;
 
 	struct TextureSourceInfoHasher
 	{
@@ -325,23 +325,23 @@ namespace castor3d
 		return !( lhs == rhs );
 	}
 
-	C3D_API castor::Image & getBufferImage( Engine & engine
-		, castor::String const & name
-		, castor::String const & type
-		, castor::ByteArray const & data );
-	C3D_API castor::Image & getFileImage( Engine & engine
-		, castor::String const & name
-		, castor::Path const & folder
-		, castor::Path const & relative );
+	C3D_API Image & getBufferImage( Engine & engine
+		, String const & name
+		, String const & type
+		, ByteArray const & data );
+	C3D_API Image & getFileImage( Engine & engine
+		, String const & name
+		, Path const & folder
+		, Path const & relative );
 	C3D_API TextureLayoutUPtr createTextureLayout( Engine const & engine
-		, castor::Path const & relative
-		, castor::Path const & folder );
+		, Path const & relative
+		, Path const & folder );
 	C3D_API TextureLayoutUPtr createTextureLayout( Engine const & engine
-		, castor::String const & name
-		, castor::PxBufferBaseUPtr buffer
+		, String const & name
+		, PxBufferBaseUPtr buffer
 		, bool isStatic = false );
 	C3D_API uint32_t getMipLevels( Extent3D const & extent
-		, castor::PixelFormat format );
+		, PixelFormat format );
 
 	//@}
 	//@}

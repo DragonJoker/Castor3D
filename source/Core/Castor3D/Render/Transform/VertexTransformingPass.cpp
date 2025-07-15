@@ -6,7 +6,7 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -17,12 +17,12 @@ namespace castor3d
 			, Geometry const & geometry )
 		{
 			auto result = input.hash;
-			castor::hashCombinePtr( result, input.getBuffer( SubmeshData::ePositions ) );
-			castor::hashCombine( result, input.getOffset( SubmeshData::ePositions ) );
-			castor::hashCombine( result, output.hash );
-			castor::hashCombinePtr( result, output.getBuffer( SubmeshData::ePositions ) );
-			castor::hashCombine( result, output.getOffset( SubmeshData::ePositions ) );
-			castor::hashCombinePtr( result, geometry );
+			hashCombinePtr( result, input.getBuffer( SubmeshData::ePositions ) );
+			hashCombine( result, input.getOffset( SubmeshData::ePositions ) );
+			hashCombine( result, output.hash );
+			hashCombinePtr( result, output.getBuffer( SubmeshData::ePositions ) );
+			hashCombine( result, output.getOffset( SubmeshData::ePositions ) );
+			hashCombinePtr( result, geometry );
 			return result;
 		}
 	}
@@ -51,8 +51,8 @@ namespace castor3d
 
 	void VertexTransformingPass::registerNode( SubmeshRenderNode const & node
 		, TransformPipeline const & pipeline
-		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-		, GpuBufferOffsetT< castor3d::MorphingWeightsConfiguration > const & morphingWeights
+		, GpuBufferOffsetT< Point4f > const & morphTargets
+		, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights
 		, GpuBufferOffsetT< SkinningTransformsConfiguration > const & skinTransforms )
 	{
 		auto & input = node.getSourceBufferOffsets();
@@ -62,7 +62,7 @@ namespace castor3d
 
 		if ( res )
 		{
-			it->second = castor::makeUnique< VertexTransformPass >( m_device
+			it->second = makeUnique< VertexTransformPass >( m_device
 				, node
 				, pipeline
 				, input

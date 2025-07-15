@@ -28,15 +28,15 @@
 
 #include <RenderGraph/FramePassGroup.hpp>
 
-CU_ImplementSmartPtr( castor3d, FrustumClusters )
+CU_ImplementSmartPtr( c3d, FrustumClusters )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 	namespace frscls
 	{
-		inline const castor::Array< uint32_t, 6u > NumLevelNodes
+		inline const Array< uint32_t, 6u > NumLevelNodes
 		{
 			1,          // 1st level (32^0)
 			32,         // 2nd level (32^1)
@@ -46,7 +46,7 @@ namespace castor3d
 			33554432,   // 6th level (32^5)
 		};
 
-		inline const castor::Array< uint32_t, 6u > NumBVHNodes
+		inline const Array< uint32_t, 6u > NumBVHNodes
 		{
 			1,          // 1 level  =32^0
 			33,         // 2 levels +32^1
@@ -59,14 +59,14 @@ namespace castor3d
 		template< typename DataT >
 		void updateBuffer( RenderDevice const & device
 			, VkDeviceSize elementCount
-			, castor::String const & debugName
+			, String const & debugName
 			, ashes::BufferBasePtr & buffer
-			, castor::Vector< ashes::BufferBasePtr > & toDelete
+			, Vector< ashes::BufferBasePtr > & toDelete
 			, VkBufferUsageFlags usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT )
 		{
 			if ( buffer )
 			{
-				toDelete.emplace_back( castor::move( buffer ) );
+				toDelete.emplace_back( c3d::move( buffer ) );
 			}
 
 			buffer = makeBufferBase( device
@@ -80,7 +80,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	FrustumClusters::Buffers::Buffers( RenderDevice const & device
-		, castor::String const & name )
+		, String const & name )
 		: mortonCodes{ { makeBuffer< u32 >( device
 				, MaxLightsCount
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
@@ -118,9 +118,9 @@ namespace castor3d
 		, m_camera{ camera }
 		, m_config{ config }
 		, m_dimensions{ m_clustersDirty, { 32u, 16u, 64u } }
-		, m_clusterSize{ m_clustersDirty, castor::Point2ui{} }
-		, m_cameraProjection{ m_clustersDirty, castor::Matrix4x4f{} }
-		, m_cameraView{ m_clustersDirty, castor::Matrix4x4f{} }
+		, m_clusterSize{ m_clustersDirty, Point2ui{} }
+		, m_cameraProjection{ m_clustersDirty, Matrix4x4f{} }
+		, m_cameraView{ m_clustersDirty, Matrix4x4f{} }
 		, m_clustersUbo{ m_device }
 		, m_clustersCameraUbo{ m_device }
 		, m_clustersIndirect{ makeBuffer< VkDispatchIndirectCommand >( m_device
@@ -150,7 +150,7 @@ namespace castor3d
 		// Radix sort will sort Morton codes (keys) into chunks of BucketSortBucketSize size.
 		uint32_t chunkSize = getBucketSortBucketSize();
 		// The number of chunks that need to be merge sorted after Radix sort finishes.
-		uint32_t numChunks = castor::divRoundUp( maxElements, chunkSize );
+		uint32_t numChunks = divRoundUp( maxElements, chunkSize );
 		// The number of sort groups that are needed to sort the first set of chunks.
 		// Each sort group will sort 2 chunks. So the maximum number of sort groups is 1/2 of the 
 		// number of chunks.
@@ -159,7 +159,7 @@ namespace castor3d
 		// to be sorted per sort group (2 chunks) divided by the number of elements 
 		// that can be sorted per thread group. One is added to account for the 
 		// merge path partition at the END of the chunk.
-		uint32_t numMergePathPartitionsPerSortGroup = castor::divRoundUp( chunkSize * 2u, ElementsPerThread * NumThreadsPerThreadGroup ) + 1u;
+		uint32_t numMergePathPartitionsPerSortGroup = divRoundUp( chunkSize * 2u, ElementsPerThread * NumThreadsPerThreadGroup ) + 1u;
 
 		// The maximum number of merge path partitions is the number of merge path partitions
 		// needed by a single sort group multiplied by the maximum number of sort groups.
@@ -370,8 +370,8 @@ namespace castor3d
 
 		auto renderSize = getSafeBandedSize( m_camera.getSize() );
 		auto const & dimensions = m_dimensions.value();
-		m_clusterSize = { castor::divRoundUp( renderSize->x, dimensions->x )
-			, castor::divRoundUp( renderSize->y, dimensions->y ) };
+		m_clusterSize = { divRoundUp( renderSize->x, dimensions->x )
+			, divRoundUp( renderSize->y, dimensions->y ) };
 		m_cameraProjection = m_camera.getProjection( true );
 		m_cameraView = m_camera.getView();
 		auto cellCount = dimensions->x * dimensions->y * dimensions->z;
@@ -381,8 +381,8 @@ namespace castor3d
 		{
 			auto indexCount = cellCount * MaxLightsPerCluster;
 			frscls::updateBuffer< AABB >( m_device, cellCount, cuT( "ClustersAABB" ), m_aabbBuffer, m_toDelete );
-			frscls::updateBuffer< castor::Point2ui >( m_device, cellCount, cuT( "PointLightClusterGrid" ), m_pointBuffers.clusterGrid, m_toDelete );
-			frscls::updateBuffer< castor::Point2ui >( m_device, cellCount, cuT( "SpotLightClusterGrid" ), m_spotBuffers.clusterGrid, m_toDelete );
+			frscls::updateBuffer< Point2ui >( m_device, cellCount, cuT( "PointLightClusterGrid" ), m_pointBuffers.clusterGrid, m_toDelete );
+			frscls::updateBuffer< Point2ui >( m_device, cellCount, cuT( "SpotLightClusterGrid" ), m_spotBuffers.clusterGrid, m_toDelete );
 			frscls::updateBuffer< u32 >( m_device, indexCount, cuT( "PointLightClusterIndex" ), m_pointBuffers.clusterIndex, m_toDelete );
 			frscls::updateBuffer< u32 >( m_device, indexCount, cuT( "SpotLightClusterIndex" ), m_spotBuffers.clusterIndex, m_toDelete );
 			frscls::updateBuffer< u32 >( m_device, cellCount, cuT( "ClusterFlags" ), m_clusterFlags, m_toDelete );

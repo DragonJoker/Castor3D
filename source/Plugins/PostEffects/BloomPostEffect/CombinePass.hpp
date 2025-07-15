@@ -15,15 +15,15 @@ namespace Bloom
 	public:
 		CombinePass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
-			, castor3d::RenderDevice const & device
+			, c3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & sceneView
 			, crg::ImageViewIdArray const & blurViews
 			, crg::ImageViewIdArray const & result
-			, castor3d::Extent2D const & size
+			, c3d::Extent2D const & size
 			, uint32_t blurPassesCount
 			, bool const * enabled
 			, uint32_t const * passIndex );
-		void accept( castor3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor );
 
 		crg::FramePass const & getPass()const
 		{
@@ -31,11 +31,11 @@ namespace Bloom
 		}
 
 	public:
-		static castor::MbString const CombineMapPasses;
-		static castor::MbString const CombineMapScene;
+		static c3d::MbString const CombineMapPasses;
+		static c3d::MbString const CombineMapScene;
 
 	private:
-		castor3d::ProgramModule m_shader;
+		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass & m_pass;
 	};

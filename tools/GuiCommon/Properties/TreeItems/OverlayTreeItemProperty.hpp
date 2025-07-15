@@ -29,9 +29,9 @@ namespace GuiCommon
 		 *\param[in]	engine		Le moteur.
 		 */
 		OverlayTreeItemProperty( bool editable
-			, castor3d::Engine * engine );
+			, c3d::Engine * engine );
 
-		void setData( castor3d::OverlayCategory & data )noexcept
+		void setData( c3d::OverlayCategory & data )noexcept
 		{
 			clearProperties();
 			m_overlay = &data;
@@ -45,12 +45,12 @@ namespace GuiCommon
 
 	private:
 		void doCreateBorderPanelOverlayProperties( wxPropertyGrid * grid
-			, castor3d::BorderPanelOverlay & overlay );
+			, c3d::BorderPanelOverlay & overlay );
 		void doCreateTextOverlayProperties( wxPropertyGrid * grid
-			, castor3d::TextOverlay & overlay );
+			, c3d::TextOverlay & overlay );
 
 	private:
-		castor3d::OverlayCategory * m_overlay{};
+		c3d::OverlayCategory * m_overlay{};
 		wxArrayString m_materials;
 	};
 }

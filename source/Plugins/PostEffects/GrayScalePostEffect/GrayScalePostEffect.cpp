@@ -37,7 +37,7 @@ namespace grayscale
 {
 	namespace postfx
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
 		enum Idx : uint32_t
 		{
@@ -45,7 +45,7 @@ namespace grayscale
 			ColorTexIdx,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine )
+		static c3d::ShaderPtr getProgram( c3d::Engine & engine )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
@@ -54,15 +54,15 @@ namespace grayscale
 			configUbo.end();
 			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", ColorTexIdx, 0u );
 
-			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( []( sdw::VertexInT< c3d::PosUv2FT > const & in
-				, sdw::VertexOutT< c3d::Uv2FT > out )
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::PosUv2FT > const & in
+				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&writer, &c3d_mapColor, &c3d_factors]( sdw::FragmentInT< c3d::Uv2FT > const & in
-				, sdw::FragmentOutT< c3d::Colour4FT > const & out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&writer, &c3d_mapColor, &c3d_factors]( sdw::FragmentInT< c3ds::Uv2FT > const & in
+				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					auto colour = writer.declLocale( "colour"
 						, c3d_mapColor.sample( in.uv() ).xyz() );
@@ -74,19 +74,19 @@ namespace grayscale
 
 	//*********************************************************************************************
 
-	castor::String PostEffect::Type = cuT( "grayscale" );
-	castor::MbString PostEffect::Name = "GrayScale PostEffect";
+	c3d::String PostEffect::Type = cuT( "grayscale" );
+	c3d::MbString PostEffect::Name = "GrayScale PostEffect";
 
-	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
-		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & params )
-		: castor3d::PostEffect{ PostEffect::Type
+	PostEffect::PostEffect( c3d::RenderTarget & renderTarget
+		, c3d::RenderSystem & renderSystem
+		, c3d::Parameters const & params )
+		: c3d::PostEffect{ PostEffect::Type
 			, cuT( "GrayScale" )
-			, castor::makeString( PostEffect::Name )
+			, c3d::makeString( PostEffect::Name )
 			, renderTarget
 			, renderSystem
 			, params }
-		, m_configUbo{ renderSystem.getRenderDevice().uboPool->getBuffer< castor::Point3f >( 0u ) }
+		, m_configUbo{ renderSystem.getRenderDevice().uboPool->getBuffer< c3d::Point3f >( 0u ) }
 		, m_shader{ cuT( "GrayScale" ), postfx::getProgram( *renderTarget.getEngine() ) }
 		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 	{
@@ -97,32 +97,32 @@ namespace grayscale
 		getRenderSystem()->getRenderDevice().uboPool->putBuffer( m_configUbo );
 	}
 
-	castor3d::PostEffectUPtr PostEffect::create( castor3d::RenderTarget & renderTarget
-		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & params )
+	c3d::PostEffectUPtr PostEffect::create( c3d::RenderTarget & renderTarget
+		, c3d::RenderSystem & renderSystem
+		, c3d::Parameters const & params )
 	{
-		return castor::makeUniqueDerived< castor3d::PostEffect, PostEffect >( renderTarget
+		return c3d::makeUniqueDerived< c3d::PostEffect, PostEffect >( renderTarget
 			, renderSystem
 			, params );
 	}
 
-	void PostEffect::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void PostEffect::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 		visitor.visit( cuT( "Factors" )
 			, m_factors );
 	}
 
-	void PostEffect::setParameters( castor3d::Parameters parameters )
+	void PostEffect::setParameters( c3d::Parameters parameters )
 	{
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
-		, castor3d::Texture const & source
-		, castor3d::Texture const & target
+	bool PostEffect::doInitialise( c3d::RenderDevice const & device
+		, c3d::Texture const & source
+		, c3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
-		auto extent = castor3d::makeExtent2D( target.getExtent() );
+		auto extent = c3d::makeExtent2D( target.getExtent() );
 		m_pass = &m_graph.createPass( "GrayScale"
 			, [this, &device, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -139,7 +139,7 @@ namespace grayscale
 						, context
 						, graph
 						, crg::ru::Config{ 2u } );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -153,11 +153,11 @@ namespace grayscale
 		return true;
 	}
 
-	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
+	void PostEffect::doCleanup( c3d::RenderDevice const & device )
 	{
 	}
 
-	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
+	void PostEffect::doCpuUpdate( c3d::CpuUpdater & updater )
 	{
 		if ( m_factors.isDirty() )
 		{
@@ -166,7 +166,7 @@ namespace grayscale
 		}
 	}
 
-	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )
+	bool PostEffect::doWriteInto( c3d::StringStream & file, c3d::String const & tabs )
 	{
 		file << ( tabs + cuT( "postfx \"" ) + Type + cuT( "\"\n" ) );
 		return true;

@@ -24,24 +24,24 @@ namespace toon
 
 	template< typename TypeT >
 	class TextWriter
-		: public castor::TextWriterT< EdgesComponent >
+		: public c3d::TextWriterT< EdgesComponent >
 	{
 	public:
-		explicit TextWriter( castor::String const & tabs )
-			: castor::TextWriterT< EdgesComponent >{ tabs }
+		explicit TextWriter( c3d::String const & tabs )
+			: c3d::TextWriterT< EdgesComponent >{ tabs }
 		{
 		}
 
 		bool operator()( EdgesComponent const & pass
-			, castor::StringStream & file )override
+			, c3d::StringStream & file )override
 		{
-			castor3d::log::info << this->tabs() << cuT( "Writing Toon data " ) << std::endl;
+			c3d::log::info << this->tabs() << cuT( "Writing Toon data " ) << std::endl;
 			return this->writeOpt( file, cuT( "smooth_band_width" ), pass.getSmoothBandWidth(), 1.0f )
 				&& this->writeOpt( file, cuT( "edge_width" ), pass.getEdgeWidth(), 1.0f )
 				&& this->writeOpt( file, cuT( "edge_depth_factor" ), pass.getDepthFactor(), 1.0f )
 				&& this->writeOpt( file, cuT( "edge_normal_factor" ), pass.getNormalFactor(), 1.0f )
 				&& this->writeOpt( file, cuT( "edge_object_factor" ), pass.getObjectFactor(), 1.0f )
-				&& this->writeNamedSubOpt( file, cuT( "edge_colour" ), pass.getEdgeColour(), castor::HdrRgbaColour::fromPredefined( castor::PredefinedRgbaColour::eOpaqueBlack ) );
+				&& this->writeNamedSubOpt( file, cuT( "edge_colour" ), pass.getEdgeColour(), c3d::HdrRgbaColour::fromPredefined( c3d::PredefinedRgbaColour::eOpaqueBlack ) );
 		}
 	};
 
@@ -49,7 +49,7 @@ namespace toon
 
 	namespace toonpass
 	{
-		static CU_ImplementAttributeParserBlock( parserPassEdgeColour, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserPassEdgeColour, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -57,13 +57,13 @@ namespace toon
 			}
 			else if ( !params.empty() )
 			{
-				auto & component = castor3d::getPassComponent< EdgesComponent >( *blockContext );
-				component.setEdgeColour( params[0]->get< castor::HdrRgbaColour >() );
+				auto & component = c3d::getPassComponent< EdgesComponent >( *blockContext );
+				component.setEdgeColour( params[0]->get< c3d::HdrRgbaColour >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserPassEdgeWidth, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserPassEdgeWidth, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -71,13 +71,13 @@ namespace toon
 			}
 			else if ( !params.empty() )
 			{
-				auto & component = castor3d::getPassComponent< EdgesComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< EdgesComponent >( *blockContext );
 				component.setEdgeWidth( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserPassDepthFactor, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserPassDepthFactor, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -85,13 +85,13 @@ namespace toon
 			}
 			else if ( !params.empty() )
 			{
-				auto & component = castor3d::getPassComponent< EdgesComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< EdgesComponent >( *blockContext );
 				component.setDepthFactor( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserPassNormalFactor, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserPassNormalFactor, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -99,13 +99,13 @@ namespace toon
 			}
 			else if ( !params.empty() )
 			{
-				auto & component = castor3d::getPassComponent< EdgesComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< EdgesComponent >( *blockContext );
 				component.setNormalFactor( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserPassObjectFactor, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserPassObjectFactor, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -113,13 +113,13 @@ namespace toon
 			}
 			else if ( !params.empty() )
 			{
-				auto & component = castor3d::getPassComponent< EdgesComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< EdgesComponent >( *blockContext );
 				component.setObjectFactor( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserPassSmoothBandWidth, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserPassSmoothBandWidth, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -127,7 +127,7 @@ namespace toon
 			}
 			else if ( !params.empty() )
 			{
-				auto & component = castor3d::getPassComponent< EdgesComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< EdgesComponent >( *blockContext );
 				component.setSmoothBandWidth( params[0]->get< float >() );
 			}
 		}
@@ -136,17 +136,17 @@ namespace toon
 
 	//*********************************************************************************************
 
-	void EdgesComponent::ComponentsShader::fillComponents( castor3d::ComponentModeFlags componentsMask
+	void EdgesComponent::ComponentsShader::fillComponents( c3d::ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
-		, castor3d::shader::Materials const & materials
+		, c3d::shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( ( !checkFlag( componentsMask, castor3d::ComponentModeFlag::eSpecifics )
-				&& !checkFlag( componentsMask, castor3d::ComponentModeFlag::eDiffuseLighting )
-				&& !checkFlag( componentsMask, castor3d::ComponentModeFlag::eSpecularLighting ) )
-			|| ( !checkFlag( materials.getFilter(), castor3d::ComponentModeFlag::eSpecifics )
-				&& !checkFlag( materials.getFilter(), castor3d::ComponentModeFlag::eDiffuseLighting )
-				&& !checkFlag( materials.getFilter(), castor3d::ComponentModeFlag::eSpecularLighting ) )
+		if ( ( !checkFlag( componentsMask, c3d::ComponentModeFlag::eSpecifics )
+				&& !checkFlag( componentsMask, c3d::ComponentModeFlag::eDiffuseLighting )
+				&& !checkFlag( componentsMask, c3d::ComponentModeFlag::eSpecularLighting ) )
+			|| ( !checkFlag( materials.getFilter(), c3d::ComponentModeFlag::eSpecifics )
+				&& !checkFlag( materials.getFilter(), c3d::ComponentModeFlag::eDiffuseLighting )
+				&& !checkFlag( materials.getFilter(), c3d::ComponentModeFlag::eSpecularLighting ) )
 			|| !materials.hasSpecificsBuffer< shader::ToonProfile >() )
 		{
 			return;
@@ -164,8 +164,8 @@ namespace toon
 	}
 
 	void EdgesComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
-		, castor3d::shader::Materials const & materials
-		, castor3d::shader::Material const * material
+		, c3d::shader::Materials const & materials
+		, c3d::shader::Material const * material
 		, sdw::StructInstance const * surface
 		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )const
@@ -199,10 +199,10 @@ namespace toon
 		}
 	}
 
-	void EdgesComponent::ComponentsShader::blendComponents( castor3d::shader::Materials const & materials
+	void EdgesComponent::ComponentsShader::blendComponents( c3d::shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, castor3d::shader::BlendComponents & res
-		, castor3d::shader::BlendComponents const & src )const
+		, c3d::shader::BlendComponents & res
+		, c3d::shader::BlendComponents const & src )const
 	{
 		if ( res.hasMember( "edgeColour" ) )
 		{
@@ -217,57 +217,57 @@ namespace toon
 
 	//*********************************************************************************************
 
-	void EdgesComponent::Plugin::createParsers( castor::AttributeParsers & parsers
-		, castor3d::ChannelFillers & channelFillers )const
+	void EdgesComponent::Plugin::createParsers( c3d::AttributeParsers & parsers
+		, c3d::ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
-			, castor3d::CSCNSection::ePass
+		c3d::addParserT( parsers
+			, c3d::CSCNSection::ePass
 			, cuT( "smooth_band_width" )
 			, toonpass::parserPassSmoothBandWidth
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
-			, castor3d::CSCNSection::ePass
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
+			, c3d::CSCNSection::ePass
 			, cuT( "edge_width" )
 			, toonpass::parserPassEdgeWidth
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
-			, castor3d::CSCNSection::ePass
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
+			, c3d::CSCNSection::ePass
 			, cuT( "edge_depth_factor" )
 			, toonpass::parserPassDepthFactor
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
-			, castor3d::CSCNSection::ePass
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
+			, c3d::CSCNSection::ePass
 			, cuT( "edge_normal_factor" )
 			, toonpass::parserPassNormalFactor
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
-			, castor3d::CSCNSection::ePass
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
+			, c3d::CSCNSection::ePass
 			, cuT( "edge_object_factor" )
 			, toonpass::parserPassObjectFactor
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
-			, castor3d::CSCNSection::ePass
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
+			, c3d::CSCNSection::ePass
 			, cuT( "edge_colour" )
 			, toonpass::parserPassEdgeColour
-			, { castor::makeParameter< castor::ParameterType::eHdrRgbaColour >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eHdrRgbaColour >() } );
 	}
 
-	bool EdgesComponent::Plugin::isComponentNeeded( castor3d::TextureCombine const & textures
-		, castor3d::ComponentModeFlags const & filter )const
+	bool EdgesComponent::Plugin::isComponentNeeded( c3d::TextureCombine const & textures
+		, c3d::ComponentModeFlags const & filter )const
 	{
-		return checkFlag( filter, castor3d::ComponentModeFlag::eColour );
+		return checkFlag( filter, c3d::ComponentModeFlag::eColour );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const EdgesComponent::TypeName = C3D_PluginMakePassOtherComponentName( "toon", "edges" );
+	c3d::String const EdgesComponent::TypeName = C3D_PluginMakePassOtherComponentName( "toon", "edges" );
 
-	EdgesComponent::EdgesComponent( castor3d::Pass & pass )
+	EdgesComponent::EdgesComponent( c3d::Pass & pass )
 		: BaseDataPassComponentT< EdgesData >{ pass, TypeName }
 	{
 	}
 
-	void EdgesComponent::accept( castor3d::ConfigurationVisitorBase & vis )
+	void EdgesComponent::accept( c3d::ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Toon" ) );
 		vis.visit( cuT( "Edge colour" )
@@ -297,17 +297,17 @@ namespace toon
 		data.smoothBand = getSmoothBandWidth();
 	}
 
-	castor3d::PassComponentUPtr EdgesComponent::doClone( castor3d::Pass & pass )const
+	c3d::PassComponentUPtr EdgesComponent::doClone( c3d::Pass & pass )const
 	{
-		auto result = castor::make_unique< EdgesComponent >( pass );
+		auto result = c3d::makeRawUnique< EdgesComponent >( pass );
 		result->setData( getData() );
-		return castor3d::PassComponentUPtr{ result.release() };
+		return c3d::PassComponentUPtr{ result.release() };
 	}
 
-	bool EdgesComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool EdgesComponent::doWriteText( c3d::String const & tabs
+		, c3d::Path const & folder
+		, c3d::String const & subfolder
+		, c3d::StringStream & file )const
 	{
 		return TextWriter< EdgesComponent >{ tabs }( *this, file );
 	}

@@ -1,4 +1,4 @@
-namespace castor
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -150,7 +150,7 @@ namespace castor
 	template< PixelFormat FT >
 	Pixel< FT >::Pixel( Pixel && rhs )noexcept
 	{
-		m_components = castor::move( rhs.m_components );
+		m_components = c3d::move( rhs.m_components );
 		m_delete = rhs.m_delete;
 
 		rhs.m_components = nullptr;
@@ -197,7 +197,7 @@ namespace castor
 	{
 		clear();
 
-		m_components = castor::move( rhs.m_components );
+		m_components = c3d::move( rhs.m_components );
 		m_delete = rhs.m_delete;
 
 		rhs.m_components = nullptr;

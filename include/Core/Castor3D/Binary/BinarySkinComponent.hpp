@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**
 	\~english

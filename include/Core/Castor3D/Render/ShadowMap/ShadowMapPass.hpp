@@ -16,7 +16,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ShadowMapPass
 		: public RenderNodesPass
@@ -54,7 +54,7 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, castor::String const & typeName
+			, String const & typeName
 			, CameraUbo const & cameraUbo
 			, SceneCuller & culler
 			, ShadowMap const & shadowMap
@@ -73,7 +73,7 @@ namespace castor3d
 		C3D_API bool isPassEnabled()const noexcept override;
 		C3D_API bool isUpToDate()const;
 		/**
-		 *\copydoc		castor3d::RenderNodesPass::getShaderFlags
+		 *\copydoc		RenderNodesPass::getShaderFlags
 		 */
 		ShaderFlags getShaderFlags()const noexcept override
 		{

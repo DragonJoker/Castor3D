@@ -21,10 +21,10 @@ namespace sdw
 	class TraditionalGraphicsWriter;
 }
 
-namespace castor3d
+namespace c3d
 {
 	class ToneMapping
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -67,7 +67,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom du mappage de tons.
 		 *\param[in]	source	L'image source initiale.
 		 */
-		C3D_API void initialise( castor::String const & name
+		C3D_API void initialise( String const & name
 			, crg::ImageViewId const & source );
 		/**
 		 *\~english
@@ -87,7 +87,7 @@ namespace castor3d
 		 *\brief		Initialise le shader et le pipeline de mappage de tons.
 		 *\param[in]	name	Le nom du mappage de tons.
 		 */
-		C3D_API void updatePipeline( castor::String const & name );
+		C3D_API void updatePipeline( String const & name );
 		/**
 		 *\~english
 		 *\brief			Visitor acceptance function.
@@ -115,14 +115,14 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		C3D_API castor::String const & getFullName()const;
+		C3D_API String const & getFullName()const;
 
 		crg::FramePass const & getPass()const noexcept
 		{
 			return *m_pass;
 		}
 
-		castor::String const & getName()const noexcept
+		String const & getName()const noexcept
 		{
 			return m_name;
 		}
@@ -134,14 +134,14 @@ namespace castor3d
 			, crg::ImageViewId const & target
 			, crg::FramePass const & previousPass
 			, ProgressBar * progress );
-		void doCreate( castor::String const & name );
+		void doCreate( String const & name );
 		void doUpdatePassIndex( crg::ImageViewId const & source );
 
 	protected:
-		castor::String m_name{ cuT( "linear" ) };
+		String m_name{ cuT( "linear" ) };
 		HdrConfigUbo & m_hdrConfigUbo;
 		ColourGradingUbo & m_colourGradingUbo;
-		castor3d::ProgramModule m_shader{ cuT( "ToneMapping" ) };
+		ProgramModule m_shader{ cuT( "ToneMapping" ) };
 		crg::ImageViewId m_source;
 		ashes::PipelineShaderStageCreateInfoArray m_program;
 		crg::FramePass * m_pass{};

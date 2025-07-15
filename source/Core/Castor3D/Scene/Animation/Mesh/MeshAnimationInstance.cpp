@@ -8,9 +8,9 @@
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 
-CU_ImplementSmartPtr( castor3d, MeshAnimationInstance )
+CU_ImplementSmartPtr( c3d, MeshAnimationInstance )
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 

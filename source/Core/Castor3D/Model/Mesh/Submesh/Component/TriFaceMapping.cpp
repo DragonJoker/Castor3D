@@ -11,9 +11,9 @@
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
-CU_ImplementSmartPtr( castor3d, TriFaceMapping )
+CU_ImplementSmartPtr( c3d, TriFaceMapping )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -21,7 +21,7 @@ namespace castor3d
 	{
 		struct FaceDistance
 		{
-			castor::Array< uint32_t, 3u > m_index;
+			Array< uint32_t, 3u > m_index;
 			double m_distance;
 		};
 
@@ -64,12 +64,12 @@ namespace castor3d
 		, FaceIndices const * const end )
 	{
 		for ( auto size = m_submesh.getPointsCount();
-			auto & face : castor::makeArrayView( begin, end ) )
+			auto & face : makeArrayView( begin, end ) )
 		{
 			doCheckFace( size, face.m_index[0], face.m_index[1], face.m_index[2] );
 		}
 
-		for ( auto & face : castor::makeArrayView( begin, end ) )
+		for ( auto & face : makeArrayView( begin, end ) )
 		{
 			doAddFace( face.m_index[0], face.m_index[1], face.m_index[2] );
 		}
@@ -82,8 +82,8 @@ namespace castor3d
 		, uint32_t b
 		, uint32_t c
 		, uint32_t d
-		, castor::Point3f const & minUV
-		, castor::Point3f const & maxUV )
+		, Point3f const & minUV
+		, Point3f const & maxUV )
 	{
 		auto size = m_submesh.getPointsCount();
 		doCheckFace( size, a, b, c );
@@ -97,10 +97,10 @@ namespace castor3d
 		{
 			if ( auto texData = texComp->getDataT< Texcoords0Component::ComponentData >() )
 			{
-				texData->getData()[a] = castor::Point3f{ minUV[0], minUV[1], 0.0f };
-				texData->getData()[b] = castor::Point3f{ maxUV[0], minUV[1], 0.0f };
-				texData->getData()[c] = castor::Point3f{ maxUV[0], maxUV[1], 0.0f };
-				texData->getData()[d] = castor::Point3f{ minUV[0], maxUV[1], 0.0f };
+				texData->getData()[a] = Point3f{ minUV[0], minUV[1], 0.0f };
+				texData->getData()[b] = Point3f{ maxUV[0], minUV[1], 0.0f };
+				texData->getData()[c] = Point3f{ maxUV[0], maxUV[1], 0.0f };
+				texData->getData()[d] = Point3f{ minUV[0], maxUV[1], 0.0f };
 			}
 		}
 	}
@@ -140,12 +140,12 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const TriFaceMapping::TypeName = C3D_MakeSubmeshIndexComponentName( "triangles" );
+	String const TriFaceMapping::TypeName = C3D_MakeSubmeshIndexComponentName( "triangles" );
 
 	TriFaceMapping::TriFaceMapping( Submesh & submesh
 		, VkBufferUsageFlags bufferUsageFlags )
 		: IndexMapping{ submesh, TypeName
-			, castor::make_unique< ComponentData >( submesh, bufferUsageFlags ) }
+			, makeRawUnique< ComponentData >( submesh, bufferUsageFlags ) }
 	{
 	}
 
@@ -155,8 +155,8 @@ namespace castor3d
 			, *this );
 	}
 
-	void TriFaceMapping::computeNormals( castor::Point3fArray const & positions
-		, castor::Point3fArray & normals
+	void TriFaceMapping::computeNormals( Point3fArray const & positions
+		, Point3fArray & normals
 		, bool reverted )const
 	{
 		SubmeshUtils::computeNormals( positions
@@ -165,10 +165,10 @@ namespace castor3d
 			, reverted );
 	}
 
-	void TriFaceMapping::computeTangentsFromNormals( castor::Point3fArray const & positions
-		, castor::Point3fArray const & texcoords
-		, castor::Point3fArray const & normals
-		, castor::Point4fArray & tangents )const
+	void TriFaceMapping::computeTangentsFromNormals( Point3fArray const & positions
+		, Point3fArray const & texcoords
+		, Point3fArray const & normals
+		, Point4fArray & tangents )const
 	{
 		SubmeshUtils::computeTangentsFromNormals( positions
 			, texcoords
@@ -206,10 +206,10 @@ namespace castor3d
 
 	void TriFaceMapping::computeTangents()
 	{
-		static castor::Point4fArray tan;
-		static castor::Point3fArray tex;
-		castor::Point4fArray * tangents = &tan;
-		castor::Point3fArray const * texcoords = &tex;
+		static Point4fArray tan;
+		static Point3fArray tex;
+		Point4fArray * tangents = &tan;
+		Point3fArray const * texcoords = &tex;
 
 		if ( auto tanComp = getOwner()->getComponent< TangentsComponent >() )
 		{
@@ -229,9 +229,9 @@ namespace castor3d
 
 	SubmeshComponentUPtr TriFaceMapping::clone( Submesh & submesh )const
 	{
-		auto result = castor::makeUnique< TriFaceMapping >( submesh );
+		auto result = makeUnique< TriFaceMapping >( submesh );
 		getData().copy( &result->getData() );
-		return castor::ptrRefCast< SubmeshComponent >( result );
+		return ptrRefCast< SubmeshComponent >( result );
 	}
 
 	//*********************************************************************************************

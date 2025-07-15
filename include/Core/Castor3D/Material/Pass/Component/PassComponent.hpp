@@ -22,7 +22,7 @@ See LICENSE file in root folder
 #include <unordered_set>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace shader
 	{
@@ -427,7 +427,7 @@ namespace castor3d
 
 			void setMaterialChunk( MemChunk v )
 			{
-				m_chunk = castor::move( v );
+				m_chunk = c3d::move( v );
 			}
 
 		private:
@@ -494,7 +494,7 @@ namespace castor3d
 		*\param[in,out] channelFillers
 		*	Reçoit les canaux de textures et le moyen de les remplir.
 		*/
-		C3D_API virtual void createParsers( castor::AttributeParsers & parsers
+		C3D_API virtual void createParsers( AttributeParsers & parsers
 			, ChannelFillers & channelFillers )const
 		{
 		}
@@ -510,7 +510,7 @@ namespace castor3d
 		*\param[in,out] sections
 		*	Reçoit les sections.
 		*/
-		C3D_API virtual void createSections( castor::StrUInt32Map & sections )const
+		C3D_API virtual void createSections( StrUInt32Map & sections )const
 		{
 		}
 		/**
@@ -534,8 +534,8 @@ namespace castor3d
 		*	Le fichier de sortie.
 		*/
 		C3D_API virtual bool writeTextureConfig( TextureConfiguration const & configuration
-			, castor::String const & tabs
-			, castor::StringStream & file )const
+			, String const & tabs
+			, StringStream & file )const
 		{
 			return true;
 		}
@@ -720,7 +720,7 @@ namespace castor3d
 		*	Reçoit le composant créé.
 		*/
 		C3D_API virtual void createMapComponent( Pass & pass
-			, castor::Vector< PassComponentUPtr > & result )const
+			, Vector< PassComponentUPtr > & result )const
 		{
 		}
 		/**
@@ -845,9 +845,9 @@ namespace castor3d
 		*\return
 		*	Les noms concaténés des indicateurs de textures.
 		*/
-		C3D_API virtual castor::String getTextureFlagsName( PassComponentTextureFlag const & flags )const
+		C3D_API virtual String getTextureFlagsName( PassComponentTextureFlag const & flags )const
 		{
-			return castor::String{};
+			return String{};
 		}
 		/**
 		*\~english
@@ -1002,7 +1002,7 @@ namespace castor3d
 	};
 
 	struct PassComponent
-		: public castor::OwnedBy< Pass >
+		: public OwnedBy< Pass >
 	{
 		/**
 		*\name
@@ -1022,8 +1022,8 @@ namespace castor3d
 		 *\param[in]	deps	Les composants dont celui-ci dépend.
 		 */
 		C3D_API PassComponent( Pass & pass
-			, castor::String type
-			, castor::StringArray deps = {} );
+			, String type
+			, StringArray deps = {} );
 		C3D_API virtual ~PassComponent()noexcept = default;
 		/**
 		 *\~english
@@ -1063,10 +1063,10 @@ namespace castor3d
 		 *\param[in]		subfolder	Le sous-dossier de ressources.
 		 *\param[in,out]	file		Le fichier de sortie.
 		 */
-		C3D_API bool writeText( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::String const & subfolder
-			, castor::StringStream & file )const;
+		C3D_API bool writeText( String const & tabs
+			, Path const & folder
+			, String const & subfolder
+			, StringStream & file )const;
 		/**
 		 *\~english
 		 *\brief			Fills the pass buffer with this pass data.
@@ -1153,20 +1153,20 @@ namespace castor3d
 			return false;
 		}
 
-		C3D_API virtual castor::HdrRgbColour const & getColour()const
+		C3D_API virtual HdrRgbColour const & getColour()const
 		{
 			CU_Require( hasColour() );
 
-			static castor::HdrRgbColour const dummy{};
+			static HdrRgbColour const dummy{};
 			return dummy;
 		}
 
-		C3D_API virtual void setColour( castor::HdrRgbColour v )
+		C3D_API virtual void setColour( HdrRgbColour v )
 		{
 			CU_Require( hasColour() );
 
-			static castor::HdrRgbColour dummy{};
-			dummy = castor::move( v );
+			static HdrRgbColour dummy{};
+			dummy = c3d::move( v );
 		}
 
 		C3D_API virtual PassComponentFlag getPassFlags()const
@@ -1174,12 +1174,12 @@ namespace castor3d
 			return makePassComponentFlag( getId(), PassFlag::eNone );
 		}
 
-		castor::String const & getType()const
+		String const & getType()const
 		{
 			return m_type;
 		}
 
-		castor::StringArray const & getDependencies()const
+		StringArray const & getDependencies()const
 		{
 			return m_dependencies;
 		}
@@ -1194,20 +1194,20 @@ namespace castor3d
 			return m_id;
 		}
 
-		void setColour( castor::RgbColour const & v
+		void setColour( RgbColour const & v
 			, float gamma = 2.2f )
 		{
-			setColour( castor::HdrRgbColour{ v, gamma } );
+			setColour( HdrRgbColour{ v, gamma } );
 		}
 
-		void setColour( castor::Coords3f const & v )
+		void setColour( Coords3f const & v )
 		{
-			setColour( castor::HdrRgbColour{ v[0u], v[1u], v[2u] } );
+			setColour( HdrRgbColour{ v[0u], v[1u], v[2u] } );
 		}
 
-		void setColour( castor::Point3f const & v )
+		void setColour( Point3f const & v )
 		{
-			setColour( castor::HdrRgbColour{ v[0u], v[1u], v[2u] } );
+			setColour( HdrRgbColour{ v[0u], v[1u], v[2u] } );
 		}
 		/**@}*/
 
@@ -1235,10 +1235,10 @@ namespace castor3d
 		 *\param[in]		subfolder	Le sous-dossier de ressources.
 		 *\param[in,out]	file		Le fichier de sortie.
 		 */
-		virtual bool doWriteText( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::String const & subfolder
-			, castor::StringStream & file )const
+		virtual bool doWriteText( String const & tabs
+			, Path const & folder
+			, String const & subfolder
+			, StringStream & file )const
 		{
 			return true;
 		}
@@ -1255,8 +1255,8 @@ namespace castor3d
 		}
 
 	protected:
-		castor::String m_type;
-		castor::StringArray m_dependencies;
+		String m_type;
+		StringArray m_dependencies;
 		PassComponentID m_id;
 		PassComponentPlugin const & m_plugin;
 		std::atomic_bool & m_dirty;

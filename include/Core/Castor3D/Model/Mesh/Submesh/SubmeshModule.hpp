@@ -15,7 +15,7 @@ See LICENSE file in root folder
 
 #include <cstdint>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Model */
 	//@{
@@ -26,7 +26,7 @@ namespace castor3d
 
 	struct PassMasks
 	{
-		castor::Array< uint8_t, MaxPassLayers > data;
+		Array< uint8_t, MaxPassLayers > data;
 	};
 	/**
 	*\~english
@@ -87,37 +87,37 @@ namespace castor3d
 		CU_ScopedEnumBounds( eIndex, eMeshlets ),
 	};
 
-	inline castor::String getName( SubmeshData value )
+	inline String getName( SubmeshData value )
 	{
 		switch ( value )
 		{
-		case castor3d::SubmeshData::eIndex:
+		case SubmeshData::eIndex:
 			return cuT( "Index" );
-		case castor3d::SubmeshData::ePositions:
+		case SubmeshData::ePositions:
 			return cuT( "Positions" );
-		case castor3d::SubmeshData::eNormals:
+		case SubmeshData::eNormals:
 			return cuT( "Normals" );
-		case castor3d::SubmeshData::eTangents:
+		case SubmeshData::eTangents:
 			return cuT( "Tangents" );
-		case castor3d::SubmeshData::eBitangents:
+		case SubmeshData::eBitangents:
 			return cuT( "Bitangents" );
-		case castor3d::SubmeshData::eTexcoords0:
+		case SubmeshData::eTexcoords0:
 			return cuT( "Texcoords0" );
-		case castor3d::SubmeshData::eTexcoords1:
+		case SubmeshData::eTexcoords1:
 			return cuT( "Texcoords1" );
-		case castor3d::SubmeshData::eTexcoords2:
+		case SubmeshData::eTexcoords2:
 			return cuT( "Texcoords2" );
-		case castor3d::SubmeshData::eTexcoords3:
+		case SubmeshData::eTexcoords3:
 			return cuT( "Texcoords3" );
-		case castor3d::SubmeshData::eColours:
+		case SubmeshData::eColours:
 			return cuT( "Colours" );
-		case castor3d::SubmeshData::eSkin:
+		case SubmeshData::eSkin:
 			return cuT( "Skin" );
-		case castor3d::SubmeshData::ePassMasks:
+		case SubmeshData::ePassMasks:
 			return cuT( "PassMasks" );
-		case castor3d::SubmeshData::eVelocity:
+		case SubmeshData::eVelocity:
 			return cuT( "Velocity" );
-		case castor3d::SubmeshData::eMeshlets:
+		case SubmeshData::eMeshlets:
 			return cuT( "Meshlets" );
 		default:
 			CU_Failure( "Unsupported SubmeshData" );
@@ -127,19 +127,19 @@ namespace castor3d
 
 	constexpr uint32_t getSize( SubmeshData value )
 	{
-		constexpr castor::Array< size_t, size_t( SubmeshData::eCount ) > sizes = { sizeof( uint32_t ) /* SubmeshData::eIndex */
-			, sizeof( castor::Point4f ) /* SubmeshData::ePositions */
-			, sizeof( castor::Point4f ) /* SubmeshData::eNormals */
-			, sizeof( castor::Point4f ) /* SubmeshData::eTangents */
-			, sizeof( castor::Point4f ) /* SubmeshData::eBitangents */
-			, sizeof( castor::Point4f ) /* SubmeshData::eTexcoords0 */
-			, sizeof( castor::Point4f ) /* SubmeshData::eTexcoords1 */
-			, sizeof( castor::Point4f ) /* SubmeshData::eTexcoords2 */
-			, sizeof( castor::Point4f ) /* SubmeshData::eTexcoords3 */
-			, sizeof( castor::Point4f ) /* SubmeshData::eColours */
+		constexpr Array< size_t, size_t( SubmeshData::eCount ) > sizes = { sizeof( uint32_t ) /* SubmeshData::eIndex */
+			, sizeof( Point4f ) /* SubmeshData::ePositions */
+			, sizeof( Point4f ) /* SubmeshData::eNormals */
+			, sizeof( Point4f ) /* SubmeshData::eTangents */
+			, sizeof( Point4f ) /* SubmeshData::eBitangents */
+			, sizeof( Point4f ) /* SubmeshData::eTexcoords0 */
+			, sizeof( Point4f ) /* SubmeshData::eTexcoords1 */
+			, sizeof( Point4f ) /* SubmeshData::eTexcoords2 */
+			, sizeof( Point4f ) /* SubmeshData::eTexcoords3 */
+			, sizeof( Point4f ) /* SubmeshData::eColours */
 			, sizeof( VertexBoneData ) /* SubmeshData::eSkin */
-			, sizeof( castor::Point4ui ) /* SubmeshData::ePassMasks */
-			, sizeof( castor::Point4f ) /* SubmeshData::eVelocity */
+			, sizeof( Point4ui ) /* SubmeshData::ePassMasks */
+			, sizeof( Point4f ) /* SubmeshData::eVelocity */
 			, sizeof( Meshlet ) /* SubmeshData::eMeshlets */ };
 		return uint32_t( sizes[size_t( value )] );
 	}
@@ -158,7 +158,7 @@ namespace castor3d
 		return SubmeshComponentID( flag );
 	}
 
-	using SubmeshComponentFlagsSet = castor::Set< SubmeshComponentFlag >;
+	using SubmeshComponentFlagsSet = Set< SubmeshComponentFlag >;
 	/**
 	*\~english
 	*\brief
@@ -200,27 +200,27 @@ namespace castor3d
 		CU_ScopedEnumBounds( ePositions, eColours ),
 	};
 
-	inline castor::String getName( MorphData value )
+	inline String getName( MorphData value )
 	{
 		switch ( value )
 		{
-		case castor3d::MorphData::ePositions:
+		case MorphData::ePositions:
 			return cuT( "MorphPositions" );
-		case castor3d::MorphData::eNormals:
+		case MorphData::eNormals:
 			return cuT( "MorphNormals" );
-		case castor3d::MorphData::eTangents:
+		case MorphData::eTangents:
 			return cuT( "MorphTangents" );
-		case castor3d::MorphData::eBitangents:
+		case MorphData::eBitangents:
 			return cuT( "MorphBitangents" );
-		case castor3d::MorphData::eTexcoords0:
+		case MorphData::eTexcoords0:
 			return cuT( "MorphTexcoords0" );
-		case castor3d::MorphData::eTexcoords1:
+		case MorphData::eTexcoords1:
 			return cuT( "MorphTexcoords1" );
-		case castor3d::MorphData::eTexcoords2:
+		case MorphData::eTexcoords2:
 			return cuT( "MorphTexcoords2" );
-		case castor3d::MorphData::eTexcoords3:
+		case MorphData::eTexcoords3:
 			return cuT( "MorphTexcoords3" );
-		case castor3d::MorphData::eColours:
+		case MorphData::eColours:
 			return cuT( "MorphColours" );
 		default:
 			CU_Failure( "Unsupported MorphData" );
@@ -296,53 +296,53 @@ namespace castor3d
 	{
 		//!\~english	The positions buffer.
 		//!\~french		Le tampon de positions.
-		castor::Point3fArray positions{};
+		Point3fArray positions{};
 		//!\~english	The normals buffer.
 		//!\~french		Le tampon de normales.
-		castor::Point3fArray normals{};
+		Point3fArray normals{};
 		//!\~english	The tangents buffer.
 		//!\~french		Le tampon de tangentes.
-		castor::Point4fArray tangents{};
+		Point4fArray tangents{};
 		//!\~english	The tangents buffer.
 		//!\~french		Le tampon de tangentes.
-		castor::Point3fArray bitangents{};
+		Point3fArray bitangents{};
 		//!\~english	The texture coordinates buffer.
 		//!\~french		Le tampon de coordonnées de texture.
-		castor::Point3fArray texcoords0{};
+		Point3fArray texcoords0{};
 		//!\~english	The 2nd texture coordinates buffer.
 		//!\~french		Le 2e tampon de coordonnées de texture.
-		castor::Point3fArray texcoords1{};
+		Point3fArray texcoords1{};
 		//!\~english	The 3rd texture coordinates buffer.
 		//!\~french		Le 3e tampon de coordonnées de texture.
-		castor::Point3fArray texcoords2{};
+		Point3fArray texcoords2{};
 		//!\~english	The 4th texture coordinates buffer.
 		//!\~french		Le 4e tampon de coordonnées de texture.
-		castor::Point3fArray texcoords3{};
+		Point3fArray texcoords3{};
 		//!\~english	The colours buffer.
 		//!\~french		Le tampon de couleurs.
-		castor::Point3fArray colours{};
+		Point3fArray colours{};
 		//!\~english	The subpasses masks buffer.
 		//!\~french		Le tampon de masques de subpasses.
-		castor::Vector< PassMasks > passMasks{};
+		Vector< PassMasks > passMasks{};
 		//!\~english	The bounding box.
 		//!\~french		La bounding box.
-		castor::BoundingBox boundingBox{};
+		BoundingBox boundingBox{};
 	};
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, Submesh, C3D_API );
+	CU_DeclareSmartPtr( c3d, Submesh, C3D_API );
 
 	//! Submesh pointer array
 	CU_DeclareVector( SubmeshUPtr, SubmeshPtr );
-	CU_DeclareMap( Submesh const *, castor::BoundingBox, SubmeshBoundingBox );
-	CU_DeclareMap( Submesh const *, castor::BoundingSphere, SubmeshBoundingSphere );
-	CU_DeclareMap( uint32_t, castor::Vector< float >, SubmeshTargetWeight );
+	CU_DeclareMap( Submesh const *, BoundingBox, SubmeshBoundingBox );
+	CU_DeclareMap( Submesh const *, BoundingSphere, SubmeshBoundingSphere );
+	CU_DeclareMap( uint32_t, Vector< float >, SubmeshTargetWeight );
 	/** @endcond */
 
-	using SubmeshBoundingBoxList = castor::Vector< castor::Pair< Submesh const *, castor::BoundingBox > >;
+	using SubmeshBoundingBoxList = Vector< Pair< Submesh const *, BoundingBox > >;
 
 	C3D_API Submesh * getComponentSubmesh( SubmeshComponent const & component );
-	C3D_API castor::String const & getSubmeshComponentType( SubmeshComponent const & component );
+	C3D_API String const & getSubmeshComponentType( SubmeshComponent const & component );
 	
 	//@}
 	//@}

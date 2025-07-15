@@ -14,18 +14,18 @@
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
 	namespace mshanminstsm
 	{
-		static castor::BoundingBox doInterpolateBB( castor::BoundingBox const & prv
-			, castor::BoundingBox const & cur
-			, Interpolator< castor::Point3f > const & interpolator
+		static BoundingBox doInterpolateBB( BoundingBox const & prv
+			, BoundingBox const & cur
+			, Interpolator< Point3f > const & interpolator
 			, float const factor )
 		{
-			return castor::BoundingBox
+			return BoundingBox
 			{
 				interpolator.interpolate( prv.getMin(), cur.getMin(), factor ),
 				interpolator.interpolate( prv.getMax(), cur.getMax(), factor ),
@@ -43,10 +43,10 @@ namespace castor3d
 	}
 
 	void MeshAnimationInstanceSubmesh::update( float factor
-		, castor::Vector< float > const & prv
-		, castor::Vector< float > const & cur
-		, castor::BoundingBox const & prvbb
-		, castor::BoundingBox const & curbb )
+		, Vector< float > const & prv
+		, Vector< float > const & cur
+		, BoundingBox const & prvbb
+		, BoundingBox const & curbb )
 	{
 		CU_Require( prv.size() == cur.size() );
 
@@ -75,7 +75,7 @@ namespace castor3d
 			}
 		}
 
-		auto interpolator = makeInterpolator< castor::Point3f >( getOwner()->getInterpolation() );
+		auto interpolator = makeInterpolator< Point3f >( getOwner()->getInterpolation() );
 		getOwner()->getAnimatedMesh().getGeometry().setBoundingBox( m_animationObject.getSubmesh()
 			, mshanminstsm::doInterpolateBB( prvbb
 				, curbb

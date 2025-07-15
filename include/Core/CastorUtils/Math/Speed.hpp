@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Angle.hpp"
 #include "Point.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename ValueT >
 	struct IsSpeedT : std::false_type

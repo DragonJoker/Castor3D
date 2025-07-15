@@ -2,9 +2,9 @@
 
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 
-CU_ImplementSmartPtr( castor3d, SubsurfaceScattering )
+CU_ImplementSmartPtr( c3d, SubsurfaceScattering )
 
-namespace castor3d
+namespace c3d
 {
 	SubsurfaceScattering::SubsurfaceScattering()
 		: m_gaussianWidth{ m_dirty, 1.0f, [this](){ onChanged( *this ); } }
@@ -32,7 +32,7 @@ namespace castor3d
 
 		for ( auto & profileFactors : m_profileFactors )
 		{
-			vis.visit( cuT( "Factors " ) + castor::string::toString( i )
+			vis.visit( cuT( "Factors " ) + string::toString( i )
 				, profileFactors );
 			++i;
 		}

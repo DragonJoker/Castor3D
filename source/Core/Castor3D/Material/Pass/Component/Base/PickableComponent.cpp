@@ -7,28 +7,25 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::PickableComponent >
-		: public TextWriterT< castor3d::PickableComponent >
+	class TextWriter< PickableComponent >
+		: public TextWriterT< PickableComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::PickableComponent >{ tabs }
+			: TextWriterT< PickableComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::PickableComponent const & object
+		bool operator()( PickableComponent const & object
 			, StringStream & file )override
 		{
 			return writeOpt( file, cuT( "pickable" ), object.isPickable(), true );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace tws
@@ -52,23 +49,23 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void PickableComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void PickableComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "pickable" )
 			, tws::parserPassPickable
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			, { makeParameter< ParameterType::eBool >() } );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const PickableComponent::TypeName = C3D_MakePassBaseComponentName( "pickable" );
+	String const PickableComponent::TypeName = C3D_MakePassBaseComponentName( "pickable" );
 
 	PickableComponent::PickableComponent( Pass & pass
 		, bool pickable )
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName, {}, pickable }
+		: BaseDataPassComponentT< AtomicGroupChangeTracked< bool > >{ pass, TypeName, {}, pickable }
 	{
 	}
 
@@ -79,17 +76,17 @@ namespace castor3d
 
 	PassComponentUPtr PickableComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< PickableComponent >( pass );
+		auto result = makeRawUnique< PickableComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool PickableComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool PickableComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< PickableComponent >{ tabs }( *this, file );
+		return TextWriter< PickableComponent >{ tabs }( *this, file );
 	}
 
 	//*********************************************************************************************

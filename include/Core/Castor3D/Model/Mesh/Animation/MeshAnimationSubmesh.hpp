@@ -8,10 +8,10 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class MeshAnimationSubmesh
-		: public castor::OwnedBy< MeshAnimation >
+		: public OwnedBy< MeshAnimation >
 		, public std::enable_shared_from_this< MeshAnimationSubmesh >
 	{
 	public:

@@ -7,7 +7,7 @@
 namespace GuiCommon
 {
 	ExportOptionsTreeItemProperty::ExportOptionsTreeItemProperty( bool editable
-		, castor3d::exporter::ExportOptions & options )
+		, c3d::exporter::ExportOptions & options )
 		: TreeItemProperty{ nullptr, editable }
 		, m_options{ options }
 	{

@@ -15,20 +15,20 @@ See LICENSE file in root folder
 namespace atmosphere_scattering
 {
 	class AtmosphereVolumePass
-		: public castor::Named
+		: public c3d::Named
 		
 	{
 	public:
 		AtmosphereVolumePass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
-			, castor3d::RenderDevice const & device
+			, c3d::RenderDevice const & device
 			, CameraUbo const & cameraUbo
 			, AtmosphereScatteringUbo const & atmosphereUbo
 			, crg::ImageViewId const & transmittanceView
 			, crg::ImageViewId const & resultView
 			, uint32_t index
 			, bool const & enabled );
-		void accept( castor3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor );
 
 		crg::FramePass const & getLastPass()const
 		{
@@ -36,7 +36,7 @@ namespace atmosphere_scattering
 		}
 
 	private:
-		castor3d::ProgramModule m_shader;
+		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass const * m_lastPass;
 	};

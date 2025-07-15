@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/Resource.hpp>
 #include <CastorUtils/Design/Signal.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Material */
 	//@{
@@ -50,7 +50,7 @@ namespace castor3d
 		eAlways = 7,
 		CU_ScopedEnumBounds( eNever, eAlways )
 	};
-	C3D_API castor::String getName( ComparisonFunc value );
+	C3D_API String getName( ComparisonFunc value );
 
 	constexpr VkCompareOp convert( ComparisonFunc v )
 	{
@@ -92,13 +92,13 @@ namespace castor3d
 			| uint32_t( componentTextureFlag ) };
 	}
 
-	constexpr castor::Pair< PassComponentID, TextureFlags > splitTextureFlag( PassComponentTextureFlag flag )noexcept
+	constexpr Pair< PassComponentID, TextureFlags > splitTextureFlag( PassComponentTextureFlag flag )noexcept
 	{
 		return { PassComponentID( uint32_t( flag ) >> 8u )
 			, TextureFlags( uint32_t( flag ) & 0x000000FFu ) };
 	}
 
-	using TextureFlagsSet = castor::Set< PassComponentTextureFlag >;
+	using TextureFlagsSet = Set< PassComponentTextureFlag >;
 	/**
 	*\~english
 	*\brief
@@ -129,13 +129,13 @@ namespace castor3d
 			| uint32_t( componentTextureFlag ) };
 	}
 
-	constexpr castor::Pair< PassComponentID, PassFlags > splitPassComponentFlag( PassComponentFlag flag )noexcept
+	constexpr Pair< PassComponentID, PassFlags > splitPassComponentFlag( PassComponentFlag flag )noexcept
 	{
 		return { PassComponentID( uint32_t( flag ) >> 8u )
 			, PassFlags( uint32_t( flag ) & 0x000000FFu ) };
 	}
 
-	using PassComponentFlagsSet = castor::Set< PassComponentFlag >;
+	using PassComponentFlagsSet = Set< PassComponentFlag >;
 	/**
 	*\~english
 	*\brief
@@ -170,8 +170,8 @@ namespace castor3d
 
 	using PassTypeID = uint16_t;
 
-	using OnMaterialChangedFunction = castor::Function< void( Material const & ) >;
-	using OnMaterialChanged = castor::SignalT< OnMaterialChangedFunction >;
+	using OnMaterialChangedFunction = Function< void( Material const & ) >;
+	using OnMaterialChanged = SignalT< OnMaterialChangedFunction >;
 	using OnMaterialChangedConnection = OnMaterialChanged::connection;
 
 	/**
@@ -185,36 +185,36 @@ namespace castor3d
 	*	Spécialisation pour Material.
 	*/
 	template<>
-	struct PtrCacheTraitsT< Material, castor::String >
-		: PtrCacheTraitsBaseT< Material, castor::String >
+	struct PtrCacheTraitsT< Material, String >
+		: PtrCacheTraitsBaseT< Material, String >
 	{
 		using ResT = Material;
-		using KeyT = castor::String;
+		using KeyT = String;
 		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
 		using ElementT = typename Base::ElementT;
 		using ElementPtrT = typename Base::ElementPtrT;
 
-		C3D_API static const castor::String Name;
+		C3D_API static const String Name;
 	};
 
-	using MaterialCacheTraits = PtrCacheTraitsT< Material, castor::String >;
-	using MaterialCache = castor::ResourceCacheT< Material
-		, castor::String
+	using MaterialCacheTraits = PtrCacheTraitsT< Material, String >;
+	using MaterialCache = ResourceCacheT< Material
+		, String
 		, MaterialCacheTraits >;
 	using MaterialPtr = MaterialCacheTraits::ElementPtrT;
 	using MaterialObs = MaterialCacheTraits::ElementObsT;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, Material, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MaterialImporter, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MaterialImporterFactory, C3D_API );
+	CU_DeclareSmartPtr( c3d, Material, C3D_API );
+	CU_DeclareSmartPtr( c3d, MaterialImporter, C3D_API );
+	CU_DeclareSmartPtr( c3d, MaterialImporterFactory, C3D_API );
 
-	CU_DeclareSmartPtr( castor3d, MaterialCache, C3D_API );
+	CU_DeclareSmartPtr( c3d, MaterialCache, C3D_API );
 
 	//! Material pointer array
 	CU_DeclareVector( MaterialObs, MaterialPtr );
 	//! Material pointer map, sorted by name
-	CU_DeclareMap( castor::String, MaterialObs, MaterialPtrStr );
+	CU_DeclareMap( String, MaterialObs, MaterialPtrStr );
 	//! Material pointer map
 	CU_DeclareMap( uint32_t, MaterialObs, MaterialPtrUInt );
 	/** @endcond */
@@ -250,12 +250,12 @@ namespace castor3d
 	//@}
 }
 
-namespace castor
+namespace c3d
 {
 	template<>
-	struct ResourceCacheT< castor3d::Material
+	struct ResourceCacheT< Material
 		, String
-		, castor3d::MaterialCacheTraits >;
+		, MaterialCacheTraits >;
 }
 
 #endif

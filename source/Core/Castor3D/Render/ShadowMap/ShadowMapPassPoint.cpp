@@ -42,9 +42,9 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d
+namespace c3d
 {
-	castor::String const ShadowMapPassPoint::Type = cuT( "c3d.shadows.point" );
+	String const ShadowMapPassPoint::Type = cuT( "c3d.shadows.point" );
 
 	ShadowMapPassPoint::ShadowMapPassPoint( crg::FramePass const & pass
 		, crg::GraphContext & context
@@ -76,7 +76,7 @@ namespace castor3d
 		m_onNodeChanged.disconnect();
 	}
 
-	void ShadowMapPassPoint::updateFrustum( castor::Matrix4x4f const & viewMatrix )const
+	void ShadowMapPassPoint::updateFrustum( Matrix4x4f const & viewMatrix )const
 	{
 		static_cast< FrustumCuller & >( getCuller() ).updateFrustum( m_projection, viewMatrix );
 	}
@@ -280,7 +280,7 @@ namespace castor3d
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::eBuffers
 			, enableTextures };
-		auto index = uint32_t( castor3d::GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
+		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 		auto lightsIndex = index;
 		++index;
 		C3D_ShadowMap( writer

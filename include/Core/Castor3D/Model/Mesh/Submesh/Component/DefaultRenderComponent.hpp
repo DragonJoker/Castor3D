@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <unordered_map>
 
-namespace castor3d
+namespace c3d
 {
 	class DefaultRenderComponent
 		: public SubmeshComponent
@@ -17,12 +17,12 @@ namespace castor3d
 		struct RenderShader
 			: public SubmeshRenderShader
 		{
-			SubmeshRenderDataPtr createData( castor3d::SubmeshComponent const & component )override
+			SubmeshRenderDataPtr createData( SubmeshComponent const & component )override
 			{
 				return nullptr;
 			}
 			/**
-			 *\copydoc	castor3d::SubmeshRenderShader::getShaderSource
+			 *\copydoc	SubmeshRenderShader::getShaderSource
 			 */
 			void getShaderSource( Engine const & engine
 				, PipelineFlags const & flags
@@ -54,18 +54,18 @@ namespace castor3d
 		public:
 			using SubmeshComponentPlugin::SubmeshComponentPlugin;
 			/**
-			 *\copydoc		castor3d::SubmeshComponentPlugin::createComponent
+			 *\copydoc		SubmeshComponentPlugin::createComponent
 			*/
 			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
 			{
-				return castor::makeUniqueDerived< SubmeshComponent, DefaultRenderComponent >( submesh );
+				return makeUniqueDerived< SubmeshComponent, DefaultRenderComponent >( submesh );
 			}
 			/**
-			 *\copydoc		castor3d::SubmeshComponentPlugin::createRenderShader
+			 *\copydoc		SubmeshComponentPlugin::createRenderShader
 			*/
 			C3D_API SubmeshRenderShaderPtr createRenderShader()const override
 			{
-				return castor::make_unique< RenderShader >();
+				return makeRawUnique< RenderShader >();
 			}
 
 			C3D_API SubmeshComponentFlag getRenderFlag()const noexcept override
@@ -76,7 +76,7 @@ namespace castor3d
 
 		static SubmeshComponentPluginUPtr createPlugin( SubmeshComponentRegister const & submeshComponents )
 		{
-			return castor::makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
+			return makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
 		}
 		/**
 		 *\~english
@@ -88,12 +88,12 @@ namespace castor3d
 		 */
 		C3D_API explicit DefaultRenderComponent( Submesh & submesh );
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::clone
+		 *\copydoc		SubmeshComponent::clone
 		 */
 		C3D_API SubmeshComponentUPtr clone( Submesh & submesh )const override;
 
 	public:
-		C3D_API static castor::String const TypeName;
+		C3D_API static String const TypeName;
 	};
 }
 

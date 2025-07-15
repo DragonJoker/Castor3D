@@ -17,25 +17,25 @@
 
 #include <RenderGraph/RunnableGraph.hpp>
 
-CU_ImplementSmartPtr( castor3d, EnvironmentMap )
+CU_ImplementSmartPtr( c3d, EnvironmentMap )
 
-namespace castor3d
+namespace c3d
 {
 	namespace envmap
 	{
-		static castor::Size const MapSize{ EnvironmentMapSize, EnvironmentMapSize };
+		static Size const MapSize{ EnvironmentMapSize, EnvironmentMapSize };
 
 		static Texture createTexture( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, castor::String const & name
-			, castor::Size const & size )
+			, String const & name
+			, Size const & size )
 		{
 			return Texture{ device
 				, resources
 				, name
 				, { ImageCreateFlags::eCubeCompatible
 					, makeExtent3D( size ), 6u * MaxEnvironmentMapCount
-					, uint32_t( castor::getBitSize( MapSize[0] ) )
+					, uint32_t( getBitSize( MapSize[0] ) )
 					, device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
 						| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT
 						| VK_FORMAT_FEATURE_TRANSFER_DST_BIT
@@ -49,8 +49,8 @@ namespace castor3d
 
 		static Texture createDepthBuffer( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, castor::String const & name
-			, castor::Size const & size )
+			, String const & name
+			, Size const & size )
 		{
 			return Texture{ device
 				, resources
@@ -66,9 +66,9 @@ namespace castor3d
 
 		static Texture createTmpTexture( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, castor::String const & name
-			, castor::Size const & size
-			, castor::PixelFormat format )
+			, String const & name
+			, Size const & size
+			, PixelFormat format )
 		{
 			return Texture{ device
 				, resources
@@ -86,26 +86,26 @@ namespace castor3d
 			, uint32_t index
 			, SceneBackground & background )
 		{
-			static castor::Point3f const position;
-			static castor::Array< castor::Quaternion, size_t( CubeMapFace::eCount ) > orients
+			static Point3f const position;
+			static Array< Quaternion, size_t( CubeMapFace::eCount ) > orients
 			{
-				castor::Quaternion::fromMatrix( castor::matrix::lookAt( position, castor::Point3f{ -1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Positive X
-				castor::Quaternion::fromMatrix( castor::matrix::lookAt( position, castor::Point3f{ +1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Negative X
-				castor::Quaternion::fromMatrix( castor::matrix::lookAt( position, castor::Point3f{ +0.0f, -1.0f, +0.0f }, castor::Point3f{ +0.0f, +0.0f, +1.0f } ) ),// Positive Y
-				castor::Quaternion::fromMatrix( castor::matrix::lookAt( position, castor::Point3f{ +0.0f, +1.0f, +0.0f }, castor::Point3f{ +0.0f, +0.0f, -1.0f } ) ),// Negative Y
-				castor::Quaternion::fromMatrix( castor::matrix::lookAt( position, castor::Point3f{ +0.0f, +0.0f, -1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Positive Z
-				castor::Quaternion::fromMatrix( castor::matrix::lookAt( position, castor::Point3f{ +0.0f, +0.0f, +1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Negative Z
+				Quaternion::fromMatrix( matrix::lookAt( position, Point3f{ -1.0f, +0.0f, +0.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Positive X
+				Quaternion::fromMatrix( matrix::lookAt( position, Point3f{ +1.0f, +0.0f, +0.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Negative X
+				Quaternion::fromMatrix( matrix::lookAt( position, Point3f{ +0.0f, -1.0f, +0.0f }, Point3f{ +0.0f, +0.0f, +1.0f } ) ),// Positive Y
+				Quaternion::fromMatrix( matrix::lookAt( position, Point3f{ +0.0f, +1.0f, +0.0f }, Point3f{ +0.0f, +0.0f, -1.0f } ) ),// Negative Y
+				Quaternion::fromMatrix( matrix::lookAt( position, Point3f{ +0.0f, +0.0f, -1.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Positive Z
+				Quaternion::fromMatrix( matrix::lookAt( position, Point3f{ +0.0f, +0.0f, +1.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Negative Z
 			};
 
 			auto & scene = background.getScene();
-			castor::Array< SceneNodeUPtr, size_t( CubeMapFace::eCount ) > nodes
+			Array< SceneNodeUPtr, size_t( CubeMapFace::eCount ) > nodes
 			{
-				castor::makeUnique< SceneNode >( cuT( "C3D_Env" ) + scene.getName() + cuT( "PosX" ), scene ),
-				castor::makeUnique< SceneNode >( cuT( "C3D_Env" ) + scene.getName() + cuT( "NegX" ), scene ),
-				castor::makeUnique< SceneNode >( cuT( "C3D_Env" ) + scene.getName() + cuT( "PosY" ), scene ),
-				castor::makeUnique< SceneNode >( cuT( "C3D_Env" ) + scene.getName() + cuT( "NegY" ), scene ),
-				castor::makeUnique< SceneNode >( cuT( "C3D_Env" ) + scene.getName() + cuT( "PosZ" ), scene ),
-				castor::makeUnique< SceneNode >( cuT( "C3D_Env" ) + scene.getName() + cuT( "NegZ" ), scene ),
+				makeUnique< SceneNode >( cuT( "C3D_Env" ) + scene.getName() + cuT( "PosX" ), scene ),
+				makeUnique< SceneNode >( cuT( "C3D_Env" ) + scene.getName() + cuT( "NegX" ), scene ),
+				makeUnique< SceneNode >( cuT( "C3D_Env" ) + scene.getName() + cuT( "PosY" ), scene ),
+				makeUnique< SceneNode >( cuT( "C3D_Env" ) + scene.getName() + cuT( "NegY" ), scene ),
+				makeUnique< SceneNode >( cuT( "C3D_Env" ) + scene.getName() + cuT( "PosZ" ), scene ),
+				makeUnique< SceneNode >( cuT( "C3D_Env" ) + scene.getName() + cuT( "NegZ" ), scene ),
 			};
 
 			auto i = 0u;
@@ -117,18 +117,18 @@ namespace castor3d
 				++i;
 			}
 
-			return { castor::makeUnique< EnvironmentMapPass >( device, map, castor::move( nodes[0] ), index, CubeMapFace::ePositiveX, background )
-				, castor::makeUnique< EnvironmentMapPass >( device, map, castor::move( nodes[1] ), index, CubeMapFace::eNegativeX, background )
-				, castor::makeUnique< EnvironmentMapPass >( device, map, castor::move( nodes[2] ), index, CubeMapFace::ePositiveY, background )
-				, castor::makeUnique< EnvironmentMapPass >( device, map, castor::move( nodes[3] ), index, CubeMapFace::eNegativeY, background )
-				, castor::makeUnique< EnvironmentMapPass >( device, map, castor::move( nodes[4] ), index, CubeMapFace::ePositiveZ, background )
-				, castor::makeUnique< EnvironmentMapPass >( device, map, castor::move( nodes[5] ), index, CubeMapFace::eNegativeZ, background ) };
+			return { makeUnique< EnvironmentMapPass >( device, map, c3d::move( nodes[0] ), index, CubeMapFace::ePositiveX, background )
+				, makeUnique< EnvironmentMapPass >( device, map, c3d::move( nodes[1] ), index, CubeMapFace::eNegativeX, background )
+				, makeUnique< EnvironmentMapPass >( device, map, c3d::move( nodes[2] ), index, CubeMapFace::ePositiveY, background )
+				, makeUnique< EnvironmentMapPass >( device, map, c3d::move( nodes[3] ), index, CubeMapFace::eNegativeY, background )
+				, makeUnique< EnvironmentMapPass >( device, map, c3d::move( nodes[4] ), index, CubeMapFace::ePositiveZ, background )
+				, makeUnique< EnvironmentMapPass >( device, map, c3d::move( nodes[5] ), index, CubeMapFace::eNegativeZ, background ) };
 		}
 
-		static castor::Vector< ashes::ImageView > createViews( Texture const & envMap
+		static Vector< ashes::ImageView > createViews( Texture const & envMap
 			, ashes::Image *& image )
 		{
-			castor::Vector< ashes::ImageView > result;
+			Vector< ashes::ImageView > result;
 			VkImageViewCreateInfo createInfo{ convert( envMap.wholeViewId.data->info ) };
 			createInfo.image = *envMap.image;
 			createInfo.viewType = VK_IMAGE_VIEW_TYPE_CUBE;
@@ -138,21 +138,21 @@ namespace castor3d
 			for ( uint32_t i = 0u; i < MaxEnvironmentMapCount; ++i )
 			{
 				createInfo.subresourceRange.baseArrayLayer = i * 6u;
-				result.emplace_back( image->createView( envMap.imageId.data->name + castor::string::toMbString( i )
+				result.emplace_back( image->createView( envMap.imageId.data->name + string::toMbString( i )
 					, createInfo ) );
 			}
 
 			return result;
 		}
 
-		static castor::MultiMap< double, SceneNode * > sortNodes( castor::Set< SceneNode * > const & nodes
+		static MultiMap< double, SceneNode * > sortNodes( Set< SceneNode * > const & nodes
 			, Camera const & camera )
 		{
-			castor::MultiMap< double, SceneNode * > result;
+			MultiMap< double, SceneNode * > result;
 
 			for ( auto const & node : nodes )
 			{
-				result.emplace( castor::point::distanceSquared( camera.getParent()->getDerivedPosition()
+				result.emplace( point::distanceSquared( camera.getParent()->getDerivedPosition()
 					, node->getDerivedPosition() )
 					, node );
 			}
@@ -198,7 +198,7 @@ namespace castor3d
 		m_depthBuffer.create();
 		m_tmpImage.create();
 		m_environmentMapViews = envmap::createViews( m_environmentMap, m_image );
-		auto commandBuffer = queueData.commandPool->createCommandBuffer( "Env" + castor::toUtf8( scene.getName() ) + "InitialiseViews" );
+		auto commandBuffer = queueData.commandPool->createCommandBuffer( "Env" + toUtf8( scene.getName() ) + "InitialiseViews" );
 		commandBuffer->begin();
 
 		for ( auto const & view : m_environmentMapViews )

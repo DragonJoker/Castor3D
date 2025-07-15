@@ -10,28 +10,28 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::BlendComponent >
-		: public TextWriterT< castor3d::BlendComponent >
+	class TextWriter< BlendComponent >
+		: public TextWriterT< BlendComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::BlendComponent >{ tabs }
+			: TextWriterT< BlendComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::BlendComponent const & object
+		bool operator()( BlendComponent const & object
 			, StringStream & file )override
 		{
-			return writeOpt( file, cuT( "colour_blend_mode" ), getName( object.getColourBlendMode() ), getName( castor3d::BlendMode::eNoBlend ) )
-				&& writeOpt( file, cuT( "alpha_blend_mode" ), getName( object.getAlphaBlendMode() ), getName( castor3d::BlendMode::eNoBlend ) );
+			return writeOpt( file, cuT( "colour_blend_mode" ), getName( object.getColourBlendMode() ), getName( BlendMode::eNoBlend ) )
+				&& writeOpt( file, cuT( "alpha_blend_mode" ), getName( object.getAlphaBlendMode() ), getName( BlendMode::eNoBlend ) );
 		}
 	};
 }
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -72,24 +72,24 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void BlendComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void BlendComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "alpha_blend_mode" )
 			, bldcmp::parserPassAlphaBlendMode
-			, { castor::makeParameter< castor::ParameterType::eCheckedText, BlendMode >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eCheckedText, BlendMode >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "colour_blend_mode" )
 			, bldcmp::parserPassColourBlendMode
-			, { castor::makeParameter< castor::ParameterType::eCheckedText, BlendMode >() } );
+			, { makeParameter< ParameterType::eCheckedText, BlendMode >() } );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const BlendComponent::TypeName = C3D_MakePassBaseComponentName( "blend" );
+	String const BlendComponent::TypeName = C3D_MakePassBaseComponentName( "blend" );
 
 	BlendComponent::BlendComponent( Pass & pass )
 		: BaseDataPassComponentT< BlendData >{ pass, TypeName }
@@ -98,7 +98,7 @@ namespace castor3d
 
 	void BlendComponent::accept( ConfigurationVisitorBase & vis )
 	{
-		static castor::StringArray names{ cuT( "NoBlend" )
+		static StringArray names{ cuT( "NoBlend" )
 			, cuT( "Additive" )
 			, cuT( "Multiplicative" )
 			, cuT( "Interpolative" ) };
@@ -120,17 +120,17 @@ namespace castor3d
 
 	PassComponentUPtr BlendComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< BlendComponent >( pass );
+		auto result = makeRawUnique< BlendComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool BlendComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool BlendComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< BlendComponent >{ tabs }( *this, file );
+		return TextWriter< BlendComponent >{ tabs }( *this, file );
 	}
 
 	//*********************************************************************************************

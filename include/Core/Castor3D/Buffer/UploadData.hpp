@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/ImageMemoryLayout.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class UploadData
 	{
@@ -37,14 +37,14 @@ namespace castor3d
 		C3D_API void pushUpload( void const * srcData
 			, VkDeviceSize srcSize
 			, ashes::Image const & dstImage
-			, castor::ImageMemoryLayout dstLayout
+			, ImageMemoryLayout dstLayout
 			, ImageSubresourceRange dstRange
 			, ImageLayout dstImageLayout
 			, PipelineStageFlags dstPipelineFlags );
 		C3D_API void process();
 		C3D_API SemaphoreUsed end( ashes::Queue const & queue
 			, ashes::Fence const * fence = nullptr
-			, castor::Milliseconds timeout = castor::Milliseconds{ ashes::MaxTimeout } );
+			, Milliseconds timeout = Milliseconds{ ashes::MaxTimeout } );
 
 		void pushUpload( void const * srcData
 			, VkDeviceSize srcSize
@@ -60,7 +60,7 @@ namespace castor3d
 				, AccessState{ dstAccessFlags, dstPipelineFlags });
 		}
 
-		void pushUpload( castor::ByteArray const & srcData
+		void pushUpload( ByteArray const & srcData
 			, ashes::BufferBase const & dstBuffer
 			, VkDeviceSize dstOffset
 			, AccessFlags dstAccessFlags
@@ -74,9 +74,9 @@ namespace castor3d
 				, dstPipelineFlags );
 		}
 
-		void pushUpload( castor::ByteArray const & srcData
+		void pushUpload( ByteArray const & srcData
 			, ashes::Image const & dstImage
-			, castor::ImageMemoryLayout dstLayout
+			, ImageMemoryLayout dstLayout
 			, ImageSubresourceRange dstRange
 			, ImageLayout dstImageLayout
 			, PipelineStageFlags dstPipelineFlags )
@@ -84,13 +84,13 @@ namespace castor3d
 			pushUpload( srcData.data()
 				, srcData.size()
 				, dstImage
-				, castor::move( dstLayout )
-				, castor::move( dstRange )
+				, c3d::move( dstLayout )
+				, c3d::move( dstRange )
 				, dstImageLayout
 				, dstPipelineFlags );
 		}
 
-		void pushUpload( castor::ByteArrayView const & srcData
+		void pushUpload( ByteArrayView const & srcData
 			, ashes::BufferBase const & dstBuffer
 			, VkDeviceSize dstOffset
 			, AccessFlags dstAccessFlags
@@ -104,9 +104,9 @@ namespace castor3d
 				, dstPipelineFlags );
 		}
 
-		void pushUpload( castor::ByteArrayView const & srcData
+		void pushUpload( ByteArrayView const & srcData
 			, ashes::Image const & dstImage
-			, castor::ImageMemoryLayout dstLayout
+			, ImageMemoryLayout dstLayout
 			, ImageSubresourceRange dstRange
 			, ImageLayout dstImageLayout
 			, PipelineStageFlags dstPipelineFlags )
@@ -114,8 +114,8 @@ namespace castor3d
 			pushUpload( srcData.data()
 				, srcData.size()
 				, dstImage
-				, castor::move( dstLayout )
-				, castor::move( dstRange )
+				, c3d::move( dstLayout )
+				, c3d::move( dstRange )
 				, dstImageLayout
 				, dstPipelineFlags );
 		}
@@ -130,7 +130,7 @@ namespace castor3d
 			return m_device;
 		}
 
-		castor::String const & getName()const noexcept
+		String const & getName()const noexcept
 		{
 			return m_debugName;
 		}
@@ -150,14 +150,14 @@ namespace castor3d
 			void const * srcData{};
 			VkDeviceSize srcSize{};
 			ashes::Image const * dstImage{};
-			castor::ImageMemoryLayout dstLayout{};
+			ImageMemoryLayout dstLayout{};
 			ImageSubresourceRange dstRange{};
 			ImageLayout dstImageLayout{};
 			PipelineStageFlags dstPipelineFlags{};
 		};
 
 		C3D_API UploadData( RenderDevice const & device
-			, castor::String debugName
+			, String debugName
 			, ashes::CommandBuffer const * commandBuffer );
 
 		C3D_API bool doCopyData( void const * srcData
@@ -172,10 +172,10 @@ namespace castor3d
 			, VkDeviceSize srcOffset )const;
 
 		RenderDevice const & m_device;
-		castor::String m_debugName;
+		String m_debugName;
 		ashes::CommandBuffer const * m_commandBuffer;
-		castor::Vector< BufferDataRange > m_pendingBuffers;
-		castor::Vector< ImageDataRange > m_pendingImages;
+		Vector< BufferDataRange > m_pendingBuffers;
+		Vector< ImageDataRange > m_pendingImages;
 
 	private:
 		virtual VkDeviceSize doUpload( BufferDataRange & data ) = 0;
@@ -186,13 +186,13 @@ namespace castor3d
 
 		virtual SemaphoreUsed doEnd( ashes::Queue const & queue
 			, ashes::Fence const * fence
-			, castor::Milliseconds timeout )
+			, Milliseconds timeout )
 		{
 			return {};
 		}
 
-		virtual void doPreprocess( castor::Vector< BufferDataRange > *& pendingBuffers
-			, castor::Vector< ImageDataRange > *& pendingImages )
+		virtual void doPreprocess( Vector< BufferDataRange > *& pendingBuffers
+			, Vector< ImageDataRange > *& pendingImages )
 		{
 			pendingBuffers = &m_pendingBuffers;
 			pendingImages = &m_pendingImages;
@@ -203,7 +203,7 @@ namespace castor3d
 		}
 	};
 
-	C3D_API castor::OutputStream & operator<<( castor::OutputStream & stream, ImageSubresourceRange const & rhs );
+	C3D_API OutputStream & operator<<( OutputStream & stream, ImageSubresourceRange const & rhs );
 }
 
 #endif

@@ -16,10 +16,10 @@ See LICENSE file in root folder
 #include <CastorUtils/Data/Path.hpp>
 #include <CastorUtils/Graphics/ImageCache.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class MeshImporter
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
 		virtual ~MeshImporter() = default;
@@ -34,7 +34,7 @@ namespace castor3d
 		 *\param[in]	prefix	Le préfixe utilisé pour le logging.
 		 */
 		C3D_API explicit MeshImporter( Engine & engine
-			, castor::String const & prefix );
+			, String const & prefix );
 		/**
 		 *\~english
 		 *\brief		Mesh import Function.
@@ -53,7 +53,7 @@ namespace castor3d
 		 *\param[in]	forceImport	Dit si le mesh importé doit être importé même s'il est déjà rempli.
 		 *\return		Le Mesh importé, \p nullptr si un problème quelconque est survenu.
 		 */
-		C3D_API MeshRes importData( castor::String const & name
+		C3D_API MeshRes importData( String const & name
 			, Scene & scene
 			, ImporterFile * file
 			, Parameters const & parameters
@@ -95,21 +95,21 @@ namespace castor3d
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API static bool importData( Mesh & mesh
-			, castor::Path const & pathFile
+			, Path const & pathFile
 			, Parameters const & parameters
 			, bool forceImport );
 
-		castor::StringView getPrefix()const noexcept
+		String getPrefix()const noexcept
 		{
 			return m_prefix;
 		}
 
 	private:
-		C3D_API virtual MeshRes doCreateMesh( castor::String const & name, Scene & scene );
+		C3D_API virtual MeshRes doCreateMesh( String const & name, Scene & scene );
 		virtual bool doImportMesh( Mesh & mesh, uint32_t submeshIndex ) = 0;
 
 	protected:
-		castor::String m_prefix;
+		String m_prefix;
 		ImporterFile * m_file{};
 		//!\~english The loaded meshes.
 		//!\~french Les maillages chargés.

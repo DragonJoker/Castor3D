@@ -8,18 +8,18 @@
 namespace anisotropy::shader
 {
 	AnisotropicBRDF::AnisotropicBRDF( sdw::ShaderWriter & writer
-		, c3d::BRDFHelpers & brdfHelpers )
-		: c3d::SpecularBRDF{ writer, brdfHelpers }
+		, c3ds::BRDFHelpers & brdfHelpers )
+		: c3ds::SpecularBRDF{ writer, brdfHelpers }
 	{
 	}
 
-	c3d::SpecularBRDFPtr AnisotropicBRDF::create( sdw::ShaderWriter & writer
-		, c3d::BRDFHelpers & brdfHelpers )
+	c3ds::SpecularBRDFPtr AnisotropicBRDF::create( sdw::ShaderWriter & writer
+		, c3ds::BRDFHelpers & brdfHelpers )
 	{
-		return castor::makeUniqueDerived< c3d::SpecularBRDF, AnisotropicBRDF >( writer, brdfHelpers );
+		return c3d::makeUniqueDerived< c3ds::SpecularBRDF, AnisotropicBRDF >( writer, brdfHelpers );
 	}
 
-	void AnisotropicBRDF::doGenerate( c3d::BlendComponents const & pcomponents )
+	void AnisotropicBRDF::doGenerate( c3ds::BlendComponents const & pcomponents )
 	{
 		m_anisotropicGGXDistribution = m_writer.implementFunction< sdw::Float >( "c3dam_anisotropicGGXDistribution"
 			, [this]( sdw::Float const & NdotH
@@ -34,7 +34,7 @@ namespace anisotropy::shader
 					, vec3( ab * TdotH, at * BdotH, a2 * NdotH ) );
 				auto w2 = m_writer.declLocale( "w2"
 					, a2 / dot( f, f ) );
-				m_writer.returnStmt( a2 * w2 * w2 / castor::Pi< float > );
+				m_writer.returnStmt( a2 * w2 * w2 / c3d::Pi< float > );
 			}
 			, sdw::InFloat{ m_writer, "NdotH" }
 			, sdw::InFloat{ m_writer, "TdotH" }
@@ -70,7 +70,7 @@ namespace anisotropy::shader
 			, sdw::InFloat{ m_writer, "ab" } );
 
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3dam_computeAnisotropicSpecular"
-			, [this]( c3d::BlendComponents const & components
+			, [this]( c3ds::BlendComponents const & components
 				, sdw::Vec3 const & N
 				, sdw::Vec3 const & L
 				, sdw::Vec3 const & H
@@ -113,7 +113,7 @@ namespace anisotropy::shader
 
 				m_writer.returnStmt( max( vec3( specReflectance ), vec3( 0.0_f ) ) );
 			}
-			, c3d::InBlendComponents{ m_writer, "components", pcomponents }
+			, c3ds::InBlendComponents{ m_writer, "components", pcomponents }
 			, sdw::InVec3{ m_writer, "N" }
 			, sdw::InVec3{ m_writer, "L" }
 			, sdw::InVec3{ m_writer, "H" }

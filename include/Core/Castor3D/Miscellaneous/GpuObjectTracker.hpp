@@ -20,7 +20,7 @@ See LICENSE file in root folder
 
 #include <list>
 
-namespace castor3d
+namespace c3d
 {
 	class GpuObjectTracker
 	{
@@ -28,37 +28,37 @@ namespace castor3d
 		struct ObjectDeclaration
 		{
 			ObjectDeclaration( uint32_t id
-				, castor::String name
+				, String name
 				, void * object
-				, castor::String file
+				, String file
 				, int line
-				, castor::String stack )
+				, String stack )
 				: m_id{ id }
-				, m_name{ castor::move( name ) }
+				, m_name{ c3d::move( name ) }
 				, m_object{ object }
-				, m_file{ castor::move( file ) }
+				, m_file{ c3d::move( file ) }
 				, m_line{ line }
-				, m_stack{ castor::move( stack ) }
+				, m_stack{ c3d::move( stack ) }
 			{
 			}
 
 			uint32_t m_id;
-			castor::String m_name;
+			String m_name;
 			void * m_object;
-			castor::String m_file;
+			String m_file;
 			int m_line;
-			castor::String m_stack;
+			String m_stack;
 		};
 
 	public:
-		C3D_API bool track( void * object, castor::String const & type, castor::String const & file, int line, castor::String & name );
-		C3D_API bool track( castor::Named * object, castor::String const & type, castor::String const & file, int line, castor::String & name );
+		C3D_API bool track( void * object, String const & type, String const & file, int line, String & name );
+		C3D_API bool track( Named * object, String const & type, String const & file, int line, String & name );
 		C3D_API bool untrack( void * object, ObjectDeclaration & declaration );
 		C3D_API void reportTracked()const;
 
 	private:
 		uint32_t m_id = 0;
-		castor::List< ObjectDeclaration > m_allocated;
+		List< ObjectDeclaration > m_allocated;
 	};
 }
 

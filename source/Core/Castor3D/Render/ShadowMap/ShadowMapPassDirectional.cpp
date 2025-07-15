@@ -41,9 +41,9 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d
+namespace c3d
 {
-	castor::String const ShadowMapPassDirectional::Type = cuT( "c3d.shadows.directional" );
+	String const ShadowMapPassDirectional::Type = cuT( "c3d.shadows.directional" );
 
 	ShadowMapPassDirectional::ShadowMapPassDirectional( crg::FramePass const & pass
 		, crg::GraphContext & context
@@ -164,7 +164,7 @@ namespace castor3d
 			, passShaders
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
-		auto index = uint32_t( castor3d::GlobalBuffersIdx::eCount ) + flags.submeshDataBindings + 1u;
+		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings + 1u;
 		C3D_ShadowMap( writer
 			, index++
 			, RenderPipeline::eBuffers );
@@ -289,7 +289,7 @@ namespace castor3d
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::eBuffers
 			, enableTextures };
-		auto index = uint32_t( castor3d::GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
+		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 		auto lightsIndex = index;
 		++index;
 		C3D_ShadowMap( writer

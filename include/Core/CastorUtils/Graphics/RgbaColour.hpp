@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Graphics/HdrColourComponent.hpp"
 #include "CastorUtils/Math/Point.hpp"
 
-namespace castor
+namespace c3d
 {
 	/**
 	 *\~english
@@ -457,10 +457,10 @@ namespace castor
 		static RgbaColourT fromHSB( float hue, float saturation, float brightness );
 		/**
 		 *\~english
-		 *\brief		Retrieves an iterator to the first ColourComponent
+		 *\brief		Retrieves an iterator to the first ColourComponentValue
 		 *\return		The iterator
 		 *\~french
-		 *\brief		Récupère un itérateur sur le premier ColourComponent
+		 *\brief		Récupère un itérateur sur le premier ColourComponentValue
 		 *\return		L'itérateur
 		 */
 		ColourComponentArrayIt begin()
@@ -469,10 +469,10 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves a constant iterator to the first ColourComponent
+		 *\brief		Retrieves a constant iterator to the first ColourComponentValue
 		 *\return		The iterator
 		 *\~french
-		 *\brief		Récupère un itérateur constant sur le premier ColourComponent
+		 *\brief		Récupère un itérateur constant sur le premier ColourComponentValue
 		 *\return		L'itérateur
 		 */
 		ColourComponentArrayConstIt begin()const
@@ -481,10 +481,10 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves an iterator to beyond the last ColourComponent
+		 *\brief		Retrieves an iterator to beyond the last ColourComponentValue
 		 *\return		The iterator
 		 *\~french
-		 *\brief		Récupère un itérateur sur après le dernier ColourComponent
+		 *\brief		Récupère un itérateur sur après le dernier ColourComponentValue
 		 *\return		L'itérateur
 		 */
 		ColourComponentArrayIt end()
@@ -493,10 +493,10 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves a constant iterator to beyond the last ColourComponent
+		 *\brief		Retrieves a constant iterator to beyond the last ColourComponentValue
 		 *\return		The iterator
 		 *\~french
-		 *\brief		Récupère un itérateur constant sur après le dernier ColourComponent
+		 *\brief		Récupère un itérateur constant sur après le dernier ColourComponentValue
 		 *\return		L'itérateur
 		 */
 		ColourComponentArrayConstIt end()const
@@ -981,7 +981,7 @@ namespace castor
 	 *\param[in]	colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	inline Point3ub toRGBByte( RgbaColourT< ColourComponent > const & colour );
+	inline Point3ub toRGBByte( RgbaColourT< ColourComponentValue > const & colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in BGR format.
@@ -992,7 +992,7 @@ namespace castor
 	 *\param[in]	colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	inline Point3ub toBGRByte( RgbaColourT< ColourComponent > const & colour );
+	inline Point3ub toBGRByte( RgbaColourT< ColourComponentValue > const & colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in RGBA format.
@@ -1003,7 +1003,7 @@ namespace castor
 	 *\param[in]	colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	inline Point4ub toRGBAByte( RgbaColourT< ColourComponent > const & colour );
+	inline Point4ub toRGBAByte( RgbaColourT< ColourComponentValue > const & colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in BGRA format.
@@ -1014,7 +1014,7 @@ namespace castor
 	 *\param[in]	colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	inline Point4ub toBGRAByte( RgbaColourT< ColourComponent > const & colour );
+	inline Point4ub toBGRAByte( RgbaColourT< ColourComponentValue > const & colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in ARGB format.
@@ -1025,7 +1025,7 @@ namespace castor
 	 *\param[in]	colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	inline Point4ub toARGBByte( RgbaColourT< ColourComponent > const & colour );
+	inline Point4ub toARGBByte( RgbaColourT< ColourComponentValue > const & colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in ABGR format.
@@ -1036,7 +1036,7 @@ namespace castor
 	 *\param[in]	colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	inline Point4ub toABGRByte( RgbaColourT< ColourComponent > const & colour );
+	inline Point4ub toABGRByte( RgbaColourT< ColourComponentValue > const & colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in RGB format.
@@ -1118,7 +1118,7 @@ namespace castor
 	 *\brief		Compile les composantes de la couleur dans un uint32_t, au format RGB (0x00RRGGBB).
 	 *\param[in]	colour	La couleur.
 	 */
-	inline uint32_t toRGBPacked( RgbaColourT< ColourComponent > const & colour );
+	inline uint32_t toRGBPacked( RgbaColourT< ColourComponentValue > const & colour );
 	/**
 	 *\~english
 	 *\brief		Packs a colour's components into an uint32_t in the BGR format (0x00BBGGRR).
@@ -1129,7 +1129,7 @@ namespace castor
 	 *\param[in]	colour	La couleur.
 	 *\return		Les composantes compilées de la couleur.
 	 */
-	inline uint32_t toBGRPacked( RgbaColourT< ColourComponent > const & colour );
+	inline uint32_t toBGRPacked( RgbaColourT< ColourComponentValue > const & colour );
 	/**
 	 *\~english
 	 *\brief		Packs a colour's components into an uint32_t in the ARGB format (0xAARRGGBB).
@@ -1140,7 +1140,7 @@ namespace castor
 	 *\param[in]	colour	La couleur.
 	 *\return		Les composantes compilées de la couleur.
 	 */
-	inline uint32_t toARGBPacked( RgbaColourT< ColourComponent > const & colour );
+	inline uint32_t toARGBPacked( RgbaColourT< ColourComponentValue > const & colour );
 	/**
 	 *\~english
 	 *\brief		Packs a colour's components into an uint32_t in the RGBA format (0xRRGGBBAA).
@@ -1151,7 +1151,7 @@ namespace castor
 	 *\param[in]	colour	La couleur.
 	 *\return		Les composantes compilées de la couleur.
 	 */
-	inline uint32_t toRGBAPacked( RgbaColourT< ColourComponent > const & colour );
+	inline uint32_t toRGBAPacked( RgbaColourT< ColourComponentValue > const & colour );
 	/**
 	 *\~english
 	 *\brief		Packs a colour's components into an uint32_t in the ABGR format (0xAABBGGRR).
@@ -1162,7 +1162,7 @@ namespace castor
 	 *\param[in]	colour	La couleur.
 	 *\return		Les composantes compilées de la couleur.
 	 */
-	inline uint32_t toABGRPacked( RgbaColourT< ColourComponent > const & colour );
+	inline uint32_t toABGRPacked( RgbaColourT< ColourComponentValue > const & colour );
 	/**
 	 *\~english
 	 *\brief		Packs a colour's components into an uint32_t in the BGRA format (0xBBGGRRAA).
@@ -1173,7 +1173,7 @@ namespace castor
 	 *\param[in]	colour	La couleur.
 	 *\return		Les composantes compilées de la couleur.
 	 */
-	inline uint32_t toBGRAPacked( RgbaColourT< ColourComponent > const & colour );
+	inline uint32_t toBGRAPacked( RgbaColourT< ColourComponentValue > const & colour );
 }
 
 #include "RgbaColour.inl"

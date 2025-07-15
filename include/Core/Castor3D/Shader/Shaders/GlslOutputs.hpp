@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	template< sdw::var::Flag FlagT >
 	struct PrepassOutputT

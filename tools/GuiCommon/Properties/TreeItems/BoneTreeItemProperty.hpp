@@ -29,9 +29,9 @@ namespace GuiCommon
 		 *\param[in]	engine		Le moteur.
 		 */
 		BoneTreeItemProperty( bool editable
-			, castor3d::Engine * engine );
+			, c3d::Engine * engine );
 
-		void setData( castor3d::BoneNode & data )noexcept
+		void setData( c3d::BoneNode & data )noexcept
 		{
 			clearProperties();
 			m_bone = &data;
@@ -44,7 +44,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::BoneNode * m_bone{};
+		c3d::BoneNode * m_bone{};
 	};
 }
 

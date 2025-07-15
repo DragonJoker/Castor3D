@@ -10,20 +10,20 @@ See LICENSE file in root folder
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Math/Point.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct EmissiveData
 	{
 		explicit EmissiveData( std::atomic_bool & dirty
-			, castor::RgbColour col
+			, RgbColour col
 			, float fac )
 			: colour{ dirty, std::move( col ) }
 			, factor{ dirty, fac }
 		{
 		}
 
-		castor::AtomicGroupChangeTracked< castor::RgbColour > colour;
-		castor::AtomicGroupChangeTracked< float > factor;
+		AtomicGroupChangeTracked< RgbColour > colour;
+		AtomicGroupChangeTracked< float > factor;
 	};
 
 	struct EmissiveComponent
@@ -66,10 +66,10 @@ namespace castor3d
 
 			PassComponentUPtr createComponent( Pass & pass )const override
 			{
-				return castor::makeUniqueDerived< PassComponent, EmissiveComponent >( pass );
+				return makeUniqueDerived< PassComponent, EmissiveComponent >( pass );
 			}
 
-			void createParsers( castor::AttributeParsers & parsers
+			void createParsers( AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
 			void zeroBuffer( Pass const & pass
 				, shader::PassMaterialShader const & materialShader
@@ -79,25 +79,25 @@ namespace castor3d
 
 			shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
-				return castor::make_unique< ComponentsShader >( *this );
+				return makeRawUnique< ComponentsShader >( *this );
 			}
 
 			shader::PassMaterialShaderPtr createMaterialShader()const override
 			{
-				return castor::make_unique< MaterialShader >();
+				return makeRawUnique< MaterialShader >();
 			}
 		};
 
 		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )
 		{
-			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
+			return makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
 		C3D_API explicit EmissiveComponent( Pass & pass );
 
 		C3D_API void accept( ConfigurationVisitorBase & vis )override;
 
-		castor::RgbColour const & getEmissiveColour()const
+		RgbColour const & getEmissiveColour()const
 		{
 			return m_value.colour;
 		}
@@ -107,7 +107,7 @@ namespace castor3d
 			return m_value.factor;
 		}
 
-		void setEmissive( castor::RgbColour const & v )
+		void setEmissive( RgbColour const & v )
 		{
 			m_value.colour = v;
 		}
@@ -117,17 +117,17 @@ namespace castor3d
 			m_value.factor = v;
 		}
 
-		C3D_API static castor::String const TypeName;
+		C3D_API static String const TypeName;
 		C3D_API static float constexpr DefaultFactor{ 0.0f };
 		C3D_API static float constexpr DefaultComponent{ 1.0f };
-		C3D_API static castor::RgbColour constexpr DefaultColour{ DefaultComponent, DefaultComponent, DefaultComponent };
+		C3D_API static RgbColour constexpr DefaultColour{ DefaultComponent, DefaultComponent, DefaultComponent };
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;
-		bool doWriteText( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::String const & subfolder
-			, castor::StringStream & file )const override;
+		bool doWriteText( String const & tabs
+			, Path const & folder
+			, String const & subfolder
+			, StringStream & file )const override;
 		void doFillBuffer( PassBuffer & buffer )const override;
 	};
 }

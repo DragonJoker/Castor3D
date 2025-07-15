@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class AnimationKeyFrame
 	{
@@ -21,7 +21,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	timeIndex	Quand la key frame commence.
 		 */
-		explicit AnimationKeyFrame( castor::Milliseconds const & timeIndex = 0_ms )
+		explicit AnimationKeyFrame( Milliseconds const & timeIndex = 0_ms )
 			: m_timeIndex{ timeIndex }
 		{
 		}
@@ -54,7 +54,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le temps de départ.
 		 */
-		castor::Milliseconds const & getTimeIndex()const
+		Milliseconds const & getTimeIndex()const
 		{
 			return m_timeIndex;
 		}
@@ -64,7 +64,7 @@ namespace castor3d
 		 *\~french
 		 *\param[in]	timeIndex	Le temps de départ.
 		 */
-		void setTimeIndex( castor::Milliseconds const & timeIndex )
+		void setTimeIndex( Milliseconds const & timeIndex )
 		{
 			m_timeIndex = timeIndex;
 		}
@@ -74,7 +74,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La bounding box de la keyframe.
 		 */
-		castor::BoundingBox const & getBoundingBox()const
+		BoundingBox const & getBoundingBox()const
 		{
 			return m_boundingBox;
 		}
@@ -87,10 +87,10 @@ namespace castor3d
 
 		//!\~english	The start time index.
 		//!\~french		L'index de temps de début.
-		castor::Milliseconds m_timeIndex;
+		Milliseconds m_timeIndex;
 		//!\~english	The bounding box.
 		//!\~french		La bounding box.
-		castor::BoundingBox m_boundingBox;
+		BoundingBox m_boundingBox;
 	};
 }
 

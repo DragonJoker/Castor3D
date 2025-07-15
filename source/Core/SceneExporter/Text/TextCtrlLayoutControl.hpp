@@ -8,16 +8,16 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::LayoutControl >
-		: public TextWriterT< castor3d::LayoutControl >
+	class TextWriter< LayoutControl >
+		: public TextWriterT< LayoutControl >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, bool customStyle = false );
-		bool operator()( castor3d::LayoutControl const & overlay
+		bool operator()( LayoutControl const & overlay
 			, StringStream & file )override;
 
 	private:
@@ -25,7 +25,7 @@ namespace castor
 	};
 
 	bool writeControl( TextWriterBase & writer
-		, castor3d::Control const & control
+		, Control const & control
 		, StringStream & file
 		, String const & prefix = {} );
 }

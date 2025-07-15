@@ -6,12 +6,12 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Graphics/GraphicsModule.hpp"
 
-namespace castor
+namespace c3d
 {
-	class HdrColourComponent
+	class HdrColourComponentValue
 	{
 	public:
-		constexpr HdrColourComponent() = default;
+		constexpr HdrColourComponentValue() = default;
 		/**
 		 *\~english
 		 *\brief		Constructor from normalized component.
@@ -22,7 +22,7 @@ namespace castor
 		 *\param[in]	rhs		La valeur de la composante normalisée.
 		 *\param[in]	gamma	La valeur de la correction gamma.
 		 */
-		CU_API explicit HdrColourComponent( ColourComponent const & rhs
+		CU_API explicit HdrColourComponentValue( ColourComponentValue const & rhs
 			, float gamma = 2.2f );
 		/**
 		 *\~english
@@ -32,7 +32,7 @@ namespace castor
 		 *\brief		Constructeur spécifié
 		 *\param[in]	value	La valeur de la composante
 		 */
-		explicit constexpr HdrColourComponent( float value )
+		explicit constexpr HdrColourComponentValue( float value )
 			: m_component{ value }
 		{
 		}
@@ -46,7 +46,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( float rhs )
+		HdrColourComponentValue & operator=( float rhs )
 		{
 			m_component = rhs;
 			return *this;
@@ -61,7 +61,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( double rhs )
+		HdrColourComponentValue & operator=( double rhs )
 		{
 			m_component = float( rhs );
 			return *this;
@@ -76,7 +76,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( long double rhs )
+		HdrColourComponentValue & operator=( long double rhs )
 		{
 			m_component = float( rhs );
 			return *this;
@@ -91,7 +91,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( int8_t rhs )
+		HdrColourComponentValue & operator=( int8_t rhs )
 		{
 			m_component = float( uint8_t( rhs ) );
 			return *this;
@@ -106,7 +106,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( uint8_t rhs )
+		HdrColourComponentValue & operator=( uint8_t rhs )
 		{
 			m_component = float( rhs );
 			return *this;
@@ -121,7 +121,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( int16_t rhs )
+		HdrColourComponentValue & operator=( int16_t rhs )
 		{
 			m_component = float( rhs );
 			return *this;
@@ -136,7 +136,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( uint16_t rhs )
+		HdrColourComponentValue & operator=( uint16_t rhs )
 		{
 			m_component = float( rhs );
 			return *this;
@@ -151,7 +151,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( int32_t rhs )
+		HdrColourComponentValue & operator=( int32_t rhs )
 		{
 			m_component = float( rhs );
 			return *this;
@@ -166,7 +166,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( uint32_t rhs )
+		HdrColourComponentValue & operator=( uint32_t rhs )
 		{
 			m_component = float( rhs );
 			return *this;
@@ -181,7 +181,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( int64_t rhs )
+		HdrColourComponentValue & operator=( int64_t rhs )
 		{
 			m_component = float( rhs );
 			return *this;
@@ -196,7 +196,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( uint64_t rhs )
+		HdrColourComponentValue & operator=( uint64_t rhs )
 		{
 			m_component = float( rhs );
 			return *this;
@@ -323,7 +323,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur à ajouter
 		 *\return		Resultat de this + rhs
 		 */
-		HdrColourComponent & operator+=( HdrColourComponent const & rhs )
+		HdrColourComponentValue & operator+=( HdrColourComponentValue const & rhs )
 		{
 			m_component += rhs.value();
 			return *this;
@@ -340,7 +340,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur à soustraire
 		 *\return		Resultat de this - rhs
 		 */
-		HdrColourComponent & operator-=( HdrColourComponent const & rhs )
+		HdrColourComponentValue & operator-=( HdrColourComponentValue const & rhs )
 		{
 			m_component -= rhs.value();
 			return *this;
@@ -357,7 +357,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur à multiplier
 		 *\return		Resultat de this * rhs
 		 */
-		HdrColourComponent & operator*=( HdrColourComponent const & rhs )
+		HdrColourComponentValue & operator*=( HdrColourComponentValue const & rhs )
 		{
 			m_component *= rhs.value();
 			return *this;
@@ -374,7 +374,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur à diviser
 		 *\return		Resultat de this / rhs
 		 */
-		HdrColourComponent & operator/=( HdrColourComponent const & rhs )
+		HdrColourComponentValue & operator/=( HdrColourComponentValue const & rhs )
 		{
 			m_component /= rhs.value();
 			return *this;
@@ -390,7 +390,7 @@ namespace castor
 		 *\return		Resultat de this + rhs
 		 */
 		template< typename T >
-		HdrColourComponent & operator+=( T const & rhs )
+		HdrColourComponentValue & operator+=( T const & rhs )
 		{
 			m_component = float( m_component + rhs );
 			return *this;
@@ -406,7 +406,7 @@ namespace castor
 		 *\return		Resultat de this - rhs
 		 */
 		template< typename T >
-		HdrColourComponent & operator-=( T const & rhs )
+		HdrColourComponentValue & operator-=( T const & rhs )
 		{
 			m_component = float( m_component - rhs );
 			return *this;
@@ -422,7 +422,7 @@ namespace castor
 		 *\return		Resultat de this * rhs
 		 */
 		template< typename T >
-		HdrColourComponent & operator*=( T const & rhs )
+		HdrColourComponentValue & operator*=( T const & rhs )
 		{
 			m_component = float( m_component * rhs );
 			return *this;
@@ -438,7 +438,7 @@ namespace castor
 		 *\return		Resultat de this / rhs
 		 */
 		template< typename T >
-		HdrColourComponent & operator/=( T const & rhs )
+		HdrColourComponentValue & operator/=( T const & rhs )
 		{
 			m_component = float( m_component / rhs );
 			return *this;
@@ -483,7 +483,7 @@ namespace castor
 	private:
 		float m_component{};
 	};
-	static_assert( sizeof( HdrColourComponent ) == sizeof( float ) );
+	static_assert( sizeof( HdrColourComponentValue ) == sizeof( float ) );
 	/**
 	 *\~english
 	 *\brief		Equality operator
@@ -492,7 +492,7 @@ namespace castor
 	 *\brief		Opérateur d'égalité
 	 *\param[in]	lhs, rhs	Les composantes à comparer
 	 */
-	CU_API bool operator==( HdrColourComponent const & lhs, HdrColourComponent const & rhs );
+	CU_API bool operator==( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs );
 	/**
 	 *\~english
 	 *\brief		Inequality operator
@@ -501,7 +501,7 @@ namespace castor
 	 *\brief		Opérateur de différence
 	 *\param[in]	lhs, rhs	Les composantes à comparer
 	 */
-	CU_API bool operator!=( HdrColourComponent const & lhs, HdrColourComponent const & rhs );
+	CU_API bool operator!=( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs );
 	/**
 	 *\~english
 	 *\brief		addition assignment operator
@@ -513,11 +513,11 @@ namespace castor
 	 *\return		Resultat de lhs + rhs
 	 */
 	template< typename T >
-	float operator+( HdrColourComponent const & lhs, T const & rhs )
+	float operator+( HdrColourComponentValue const & lhs, T const & rhs )
 	{
 		float value;
 		lhs.convertTo( value );
-		HdrColourComponent cpnt( value );
+		HdrColourComponentValue cpnt( value );
 		cpnt += rhs;
 		return value;
 	}
@@ -532,11 +532,11 @@ namespace castor
 	 *\return		Resultat de lhs - rhs
 	 */
 	template< typename T >
-	float operator-( HdrColourComponent const & lhs, T const & rhs )
+	float operator-( HdrColourComponentValue const & lhs, T const & rhs )
 	{
 		float value;
 		lhs.convertTo( value );
-		HdrColourComponent cpnt( value );
+		HdrColourComponentValue cpnt( value );
 		cpnt -= rhs;
 		return value;
 	}
@@ -551,11 +551,11 @@ namespace castor
 	 *\return		Resultat de lhs / rhs
 	 */
 	template< typename T >
-	float operator/( HdrColourComponent const & lhs, T const & rhs )
+	float operator/( HdrColourComponentValue const & lhs, T const & rhs )
 	{
 		float value;
 		lhs.convertTo( value );
-		HdrColourComponent cpnt( value );
+		HdrColourComponentValue cpnt( value );
 		cpnt /= rhs;
 		return value;
 	}
@@ -570,11 +570,11 @@ namespace castor
 	 *\return		Resultat de lhs * rhs
 	 */
 	template< typename T >
-	float operator*( HdrColourComponent const & lhs, T const & rhs )
+	float operator*( HdrColourComponentValue const & lhs, T const & rhs )
 	{
 		float value;
 		lhs.convertTo( value );
-		HdrColourComponent cpnt( value );
+		HdrColourComponentValue cpnt( value );
 		cpnt *= rhs;
 		return value;
 	}
@@ -588,7 +588,7 @@ namespace castor
 	 *\param[in]	lhs, rhs	Les composantes à ajouter
 	 *\return		Resultat de lhs + rhs
 	 */
-	CU_API float operator+( HdrColourComponent const & lhs, HdrColourComponent const & rhs );
+	CU_API float operator+( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs );
 	/**
 	 *\~english
 	 *\brief		Subtraction operator
@@ -599,7 +599,7 @@ namespace castor
 	 *\param[in]	lhs, rhs	Les composantes à soustraire
 	 *\return		Resultat de lhs - rhs
 	 */
-	CU_API float operator-( HdrColourComponent const & lhs, HdrColourComponent const & rhs );
+	CU_API float operator-( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
@@ -610,7 +610,7 @@ namespace castor
 	 *\param[in]	lhs, rhs	Les composantes à multiplier
 	 *\return		Resultat de lhs * rhs
 	 */
-	CU_API float operator*( HdrColourComponent const & lhs, HdrColourComponent const & rhs );
+	CU_API float operator*( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs );
 	/**
 	 *\~english
 	 *\brief		Division operator
@@ -621,7 +621,7 @@ namespace castor
 	 *\param[in]	lhs, rhs	Les composantes à diviser
 	 *\return		Resultat de lhs / rhs
 	 */
-	CU_API float operator/( HdrColourComponent const & lhs, HdrColourComponent const & rhs );
+	CU_API float operator/( HdrColourComponentValue const & lhs, HdrColourComponentValue const & rhs );
 }
 
 #endif

@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/ImporterFile.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class CscnImporterFile
 		: public ImporterFile
@@ -15,73 +15,73 @@ namespace castor3d
 	public:
 		CscnImporterFile( Engine & engine
 			, Scene * scene
-			, castor::Path const & path
+			, Path const & path
 			, Parameters const & parameters
 			, ProgressBar * progress );
 		~CscnImporterFile()override;
 
 		static ImporterFileUPtr create( Engine & engine
 			, Scene * scene
-			, castor::Path const & path
+			, Path const & path
 			, Parameters const & parameters
 			, ProgressBar * progress );
 
-		castor::StringArray listMaterials()override
+		StringArray listMaterials()override
 		{
 			return {};
 		}
 
-		castor::Vector< MeshData > listMeshes()override
+		Vector< MeshData > listMeshes()override
 		{
 			return {};
 		}
 
-		castor::StringArray listSkeletons()override
+		StringArray listSkeletons()override
 		{
 			return {};
 		}
 
-		castor::Vector< NodeData > listSceneNodes()override
+		Vector< NodeData > listSceneNodes()override
 		{
 			return {};
 		}
 
-		castor::Vector< LightData > listLights()override
+		Vector< LightData > listLights()override
 		{
 			return {};
 		}
 
-		castor::Vector< LightGroupData > listLightGroups()override
+		Vector< LightGroupData > listLightGroups()override
 		{
 			return {};
 		}
 
-		castor::Vector< GeometryData > listGeometries()override
+		Vector< GeometryData > listGeometries()override
 		{
 			return {};
 		}
 
-		castor::Vector< CameraData > listCameras()override
+		Vector< CameraData > listCameras()override
 		{
 			return {};
 		}
 
-		castor::StringArray listMeshAnimations( Mesh const & mesh )override
+		StringArray listMeshAnimations( Mesh const & mesh )override
 		{
 			return {};
 		}
 
-		castor::StringArray listSkeletonAnimations( Skeleton const & skeleton )override
+		StringArray listSkeletonAnimations( Skeleton const & skeleton )override
 		{
 			return {};
 		}
 
-		castor::StringArray listSceneNodeAnimations( SceneNode const & node )override
+		StringArray listSceneNodeAnimations( SceneNode const & node )override
 		{
 			return {};
 		}
 
-		castor::Vector< uint32_t > listTextureAnimations( Material const & material
+		Vector< uint32_t > listTextureAnimations( Material const & material
 			, uint32_t pass )override
 		{
 			return {};
@@ -143,7 +143,7 @@ namespace castor3d
 		}
 
 	public:
-		static castor::MbString const Name;
+		static MbString const Name;
 
 	private:
 		SceneFileParser m_parser;

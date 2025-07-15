@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Castor3DModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Model */
 	//@{
@@ -29,7 +29,7 @@ namespace castor3d
 	//! SubmeshVertex array.
 	CU_DeclareVector( SubmeshVertex, SubmeshVertex );
 
-	using InterleavedVertexArray = castor::Vector< InterleavedVertex >;
+	using InterleavedVertexArray = Vector< InterleavedVertex >;
 
 	//@}
 }

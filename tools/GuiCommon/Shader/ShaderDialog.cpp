@@ -31,7 +31,7 @@ namespace GuiCommon
 		}	eID;
 	}
 
-	ShaderDialog::ShaderDialog( castor3d::Engine * engine
+	ShaderDialog::ShaderDialog( c3d::Engine * engine
 		, ShaderSources sources
 		, wxString const & title
 		, wxWindow * parent
@@ -40,8 +40,8 @@ namespace GuiCommon
 		: wxFrame( parent, wxID_ANY, title + wxT( " - " ) + _( "Shaders" ), position, size, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMAXIMIZE_BOX )
 		, m_engine{ engine }
 		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
-		, m_stcContext( castor::make_unique< StcContext >() )
-		, m_sources( castor::move( sources ) )
+		, m_stcContext( c3d::makeRawUnique< StcContext >() )
+		, m_sources( c3d::move( sources ) )
 	{
 		doInitialiseShaderLanguage();
 		doInitialiseLayout();
@@ -65,8 +65,8 @@ namespace GuiCommon
 
 	void ShaderDialog::doInitialiseShaderLanguage()
 	{
-		castor::PathArray arrayFiles;
-		castor::File::listDirectoryFiles( castor3d::Engine::getDataDirectory() / cuT( "Castor3D" ), arrayFiles, true );
+		c3d::PathArray arrayFiles;
+		c3d::File::listDirectoryFiles( c3d::Engine::getDataDirectory() / cuT( "Castor3D" ), arrayFiles, true );
 
 		for ( auto pathFile : arrayFiles )
 		{

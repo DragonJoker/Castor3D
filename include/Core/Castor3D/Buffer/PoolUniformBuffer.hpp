@@ -15,7 +15,7 @@ See LICENSE file in root folder
 
 #include <set>
 
-namespace castor3d
+namespace c3d
 {
 	class PoolUniformBuffer
 	{
@@ -39,7 +39,7 @@ namespace castor3d
 		C3D_API PoolUniformBuffer( RenderSystem const & renderSystem
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags flags
-			, castor::String debugName
+			, String debugName
 			, ashes::QueueShare sharingMode = {} );
 		/**
 		 *\~english
@@ -79,7 +79,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les statistiques d'allocation.
 		 */
-		C3D_API castor::Vector< castor::Pair< MemChunk, castor::String > > listAllocations()const;
+		C3D_API Vector< Pair< MemChunk, String > > listAllocations()const;
 		/**
 		 *\~english
 		 *\param		size	The size wanted.
@@ -160,7 +160,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		castor::ByteArrayView const & getDatas()const noexcept
+		ByteArrayView const & getDatas()const noexcept
 		{
 			return m_data;
 		}
@@ -172,7 +172,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		castor::ByteArrayView & getDatas()noexcept
+		ByteArrayView & getDatas()noexcept
 		{
 			return m_data;
 		}
@@ -262,23 +262,23 @@ namespace castor3d
 		VkBufferUsageFlags m_usage;
 		VkMemoryPropertyFlags m_flags;
 		ashes::QueueShare m_sharingMode;
-		castor::Map< MemChunk, castor::String > m_allocated;
+		Map< MemChunk, String > m_allocated;
 		ashes::UniformBufferPtr m_buffer;
-		castor::String m_debugName;
-		castor::ByteArrayView m_data;
+		String m_debugName;
+		ByteArrayView m_data;
 	};
 
 	inline PoolUniformBufferUPtr makePoolUniformBuffer( RenderSystem const & renderSystem
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
-		, castor::String name
+		, String name
 		, ashes::QueueShare sharingMode = {} )
 	{
-		return castor::makeUnique< PoolUniformBuffer >( renderSystem
+		return makeUnique< PoolUniformBuffer >( renderSystem
 			, usage
 			, flags
-			, castor::move( name )
-			, castor::move( sharingMode ) );
+			, c3d::move( name )
+			, c3d::move( sharingMode ) );
 	}
 }
 

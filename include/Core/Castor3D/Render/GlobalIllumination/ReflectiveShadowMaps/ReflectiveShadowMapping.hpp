@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ReflectiveShadowMapping
 	{

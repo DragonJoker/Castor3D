@@ -15,7 +15,7 @@ See LICENSE file in root folder
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class Voxelizer
 	{
@@ -47,7 +47,7 @@ namespace castor3d
 		C3D_API Voxelizer( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, ProgressBar * progress
-			, castor::String const & prefix
+			, String const & prefix
 			, Scene & scene
 			, Camera & camera
 			, VoxelizerUbo & voxelizerUbo
@@ -64,7 +64,7 @@ namespace castor3d
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 		/**
@@ -121,7 +121,7 @@ namespace castor3d
 		crg::FramePass & doCreateVoxelToTexture( crg::FramePass const & previousPass
 			, ProgressBar * progress );
 		crg::FramePass & doCreateVoxelMipGen( crg::FramePass const & previousPass
-			, castor::String const & name
+			, String const & name
 			, crg::ImageViewId const & view
 			, crg::RunnablePass::IsEnabledCallback isEnabled
 			, ProgressBar * progress );
@@ -149,7 +149,7 @@ namespace castor3d
 		ashes::BufferPtr< Voxel > m_staticsVoxels;
 		ashes::BufferPtr< Voxel > m_dynamicsVoxels;
 		VoxelizerUbo & m_voxelizerUbo;
-		castor::Point4f m_grid;
+		Point4f m_grid;
 		crg::FramePass & m_clearStatics;
 		crg::FramePass & m_staticsVoxelizePassDesc;
 		VoxelizePass * m_staticsVoxelizePass{};

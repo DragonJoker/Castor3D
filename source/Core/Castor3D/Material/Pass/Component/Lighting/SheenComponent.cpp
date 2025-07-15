@@ -15,29 +15,26 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::SheenComponent >
-		: public TextWriterT< castor3d::SheenComponent >
+	class TextWriter< SheenComponent >
+		: public TextWriterT< SheenComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::SheenComponent >{ tabs }
+			: TextWriterT< SheenComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::SheenComponent const & object
+		bool operator()( SheenComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSubOpt( file, cuT( "sheen_colour" ), object.getSheenColour(), castor3d::SheenComponent::DefaultFactor )
-				&& writeOpt( file, cuT( "sheen_roughness" ), object.getRoughnessFactor(), castor3d::SheenComponent::DefaultRoughness );
+			return writeNamedSubOpt( file, cuT( "sheen_colour" ), object.getSheenColour(), SheenComponent::DefaultFactor )
+				&& writeOpt( file, cuT( "sheen_roughness" ), object.getRoughnessFactor(), SheenComponent::DefaultRoughness );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace sheen
@@ -55,7 +52,7 @@ namespace castor3d
 			else
 			{
 				auto & component = getPassComponent< SheenComponent >( *blockContext );
-				component.setSheenColour( params[0]->get< castor::HdrRgbColour >() );
+				component.setSheenColour( params[0]->get< HdrRgbColour >() );
 			}
 		}
 		CU_EndAttribute()
@@ -156,19 +153,19 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void SheenComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void SheenComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "sheen_colour" )
 			, sheen::parserPassSheenFactor
-			, { castor::makeParameter< castor::ParameterType::eHdrRgbColour >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eHdrRgbColour >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "sheen_roughness" )
 			, sheen::parserPassRoughnessFactor
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { makeParameter< ParameterType::eFloat >() } );
 	}
 
 	void SheenComponent::Plugin::zeroBuffer( Pass const & pass
@@ -189,7 +186,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const SheenComponent::TypeName = C3D_MakePassLightingComponentName( "sheen" );
+	String const SheenComponent::TypeName = C3D_MakePassLightingComponentName( "sheen" );
 
 	SheenComponent::SheenComponent( Pass & pass )
 		: BaseDataPassComponentT{ pass, TypeName, {}
@@ -206,17 +203,17 @@ namespace castor3d
 
 	PassComponentUPtr SheenComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< SheenComponent >( pass );
+		auto result = makeRawUnique< SheenComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool SheenComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool SheenComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< SheenComponent >{ tabs }( *this, file );
+		return TextWriter< SheenComponent >{ tabs }( *this, file );
 	}
 
 	void SheenComponent::doFillBuffer( PassBuffer & buffer )const

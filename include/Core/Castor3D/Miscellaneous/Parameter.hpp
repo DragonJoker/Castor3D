@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #include <cstring>
 
-namespace castor3d
+namespace c3d
 {
 	template< typename KeyT >
 	class ParametersT
@@ -31,20 +31,20 @@ namespace castor3d
 		 *\brief		Analyse le texte donné en une liste de paramètres.
 		 *\param[in]	text	Le texte source.
 		 */
-		void parse( castor::String const & text )
+		void parse( String const & text )
 		{
-			if constexpr ( std::is_same_v< KeyT, castor::String > )
+			if constexpr ( std::is_same_v< KeyT, String > )
 			{
-				auto params = castor::string::split( text, cuT( " " ), 0xFFFFFFFF, false );
+				auto params = string::split( text, cuT( " " ), 0xFFFFFFFF, false );
 
 				for ( auto param : params )
 				{
-					if ( param.find( cuT( "-" ) ) != castor::String::npos )
+					if ( param.find( cuT( "-" ) ) != String::npos )
 					{
 						param = param.substr( 1 );
 					}
 
-					auto paramNameValue = castor::string::split( param, cuT( "=" ), 2, false );
+					auto paramNameValue = string::split( param, cuT( "=" ), 2, false );
 
 					if ( paramNameValue.size() > 1 )
 					{
@@ -161,7 +161,7 @@ namespace castor3d
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
 		 */
 		bool add( KeyT const & name
-			, castor::String const & value )
+			, String const & value )
 		{
 			bool result = false;
 
@@ -192,9 +192,9 @@ namespace castor3d
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
 		 */
 		bool add( KeyT const & name
-			, castor::Path const & value )
+			, Path const & value )
 		{
-			return add( name, static_cast< castor::String const & >( value ) );
+			return add( name, static_cast< String const & >( value ) );
 		}
 		/**
 		 *\~english
@@ -306,7 +306,7 @@ namespace castor3d
 		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
 		 */
 		bool get( KeyT const & name
-			, castor::String & value )const
+			, String & value )const
 		{
 			bool result = false;
 
@@ -333,9 +333,9 @@ namespace castor3d
 		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
 		 */
 		bool get( KeyT const & name
-			, castor::Path & value )const
+			, Path & value )const
 		{
-			return get( name, static_cast< castor::String & >( value ) );
+			return get( name, static_cast< String & >( value ) );
 		}
 		/**
 		 *\~english
@@ -369,8 +369,8 @@ namespace castor3d
 		}
 
 	private:
-		using ByteArray = castor::Vector< uint8_t >;
-		using ParamNameMap = castor::Map< KeyT, ByteArray, std::less<> >;
+		using ByteArray = Vector< uint8_t >;
+		using ParamNameMap = Map< KeyT, ByteArray, std::less<> >;
 		ParamNameMap m_values;
 	};
 }

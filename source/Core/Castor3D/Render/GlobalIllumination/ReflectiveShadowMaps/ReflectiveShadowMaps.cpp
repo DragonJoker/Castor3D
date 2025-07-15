@@ -26,9 +26,9 @@
 #include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/RunnablePass.hpp>
 
-CU_ImplementSmartPtr( castor3d, ReflectiveShadowMaps )
+CU_ImplementSmartPtr( c3d, ReflectiveShadowMaps )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -75,8 +75,8 @@ namespace castor3d
 
 		static Texture createImage( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, castor::String const & name
-			, castor::PixelFormat format
+			, String const & name
+			, PixelFormat format
 			, Extent3D const & size )
 		{
 			return Texture{ device
@@ -93,12 +93,12 @@ namespace castor3d
 
 		static TextureArray createImages( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, castor::String const & name
+			, String const & name
 			, Extent3D const & size )
 		{
 			TextureArray result;
-			result.emplace_back( createImage( device, resources, name + "GI", castor::PixelFormat::eR16G16B16A16_SFLOAT, size ) );
-			result.emplace_back( createImage( device, resources, name + "Normals", castor::PixelFormat::eR16G16B16A16_SFLOAT, size ) );
+			result.emplace_back( createImage( device, resources, name + "GI", PixelFormat::eR16G16B16A16_SFLOAT, size ) );
+			result.emplace_back( createImage( device, resources, name + "Normals", PixelFormat::eR16G16B16A16_SFLOAT, size ) );
 			return result;
 		}
 	}
@@ -118,7 +118,7 @@ namespace castor3d
 		, TextureArray const & intermediate
 		, Texture const & result )
 		: lightCache{ plightCache }
-		, giPass{ castor::makeUnique< RsmGIPass >( graph
+		, giPass{ makeUnique< RsmGIPass >( graph
 			, std::move( previousPasses )
 			, device
 			, lightType
@@ -129,7 +129,7 @@ namespace castor3d
 			, nmlOcc
 			, smResult
 			, intermediate ) }
-		, interpolatePass{ castor::makeUnique< RsmInterpolatePass >( graph
+		, interpolatePass{ makeUnique< RsmInterpolatePass >( graph
 			, giPass->getPass()
 			, device
 			, lightType
@@ -176,7 +176,7 @@ namespace castor3d
 		, ShadowMapResult const & pointSmResult
 		, ShadowMapResult const & spotSmResult
 		, Texture const & result )
-		: castor::Named{ "RSM" }
+		: Named{ "RSM" }
 		, m_scene{ scene }
 		, m_device{ device }
 		, m_cameraUbo{ cameraUbo }
@@ -237,7 +237,7 @@ namespace castor3d
 			lit == m_lightRsms.end() )
 		{
 			auto [it, res] = m_lightRsms.emplace( light
-				, std::make_unique< LightRsm >( m_graph
+				, makeRawUnique< LightRsm >( m_graph
 					, crg::FramePassArray{ m_lastPass }
 					, m_device
 					, light->getScene()->getLightCache()
@@ -332,7 +332,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				return std::make_unique< rsm::RsmClear >( pass
+				return makeRawUnique< rsm::RsmClear >( pass
 					, context
 					, graph );
 			} );

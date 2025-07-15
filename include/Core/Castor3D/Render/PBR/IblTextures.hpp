@@ -12,10 +12,10 @@ See LICENSE file in root folder
 #include "Castor3D/Render/PBR/EnvironmentPrefilter.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class IblTextures
-		: public castor::OwnedBy< Scene >
+		: public OwnedBy< Scene >
 	{
 	public:
 		/**

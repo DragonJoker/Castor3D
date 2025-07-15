@@ -19,8 +19,8 @@ namespace GuiCommon
 {
 	struct DebugMeshConfig
 	{
-		castor::Matrix4x4f world;
-		castor::Point4f colour;
+		c3d::Matrix4x4f world;
+		c3d::Point4f colour;
 	};
 	/**
 	*\brief
@@ -29,11 +29,11 @@ namespace GuiCommon
 	class DebugMeshManager
 	{
 	public:
-		explicit DebugMeshManager( castor3d::RenderTarget const & renderTarget );
+		explicit DebugMeshManager( c3d::RenderTarget const & renderTarget );
 		~DebugMeshManager();
-		void select( castor3d::LightInstance const & light );
-		void select( castor3d::Geometry const & object
-			, castor3d::Submesh const & submesh );
+		void select( c3d::LightInstance const & light );
+		void select( c3d::Geometry const & object
+			, c3d::Submesh const & submesh );
 		void unselect();
 
 	private:
@@ -41,24 +41,24 @@ namespace GuiCommon
 		void onDisplayLight();
 
 	private:
-		castor3d::RenderDevice const & m_device;
-		castor3d::RenderTarget const & m_renderTarget;
+		c3d::RenderDevice const & m_device;
+		c3d::RenderTarget const & m_renderTarget;
 		ashes::PipelineShaderStageCreateInfoArray m_cubeProgram;
 		ashes::PipelineShaderStageCreateInfoArray m_meshProgram;
 		ashes::VkDescriptorSetLayoutBindingArray m_bindings;
 		ashes::WriteDescriptorSetArray m_writes;
-		castor::Point4f m_aabbMeshColour{};
-		castor::Point4f m_obbMeshColour{};
-		castor::Point4f m_obbSelectedSubmeshColour{};
-		castor::Point4f m_obbSubmeshColour{};
-		castor::Point4f m_obbBoneColour{};
-		castor3d::Geometry const * m_object{};
-		castor3d::Submesh const * m_submesh{};
-		castor3d::LightInstance const * m_light{};
-		castor3d::OnSceneUpdateConnection m_sceneConnection;
-		castor3d::GpuBufferOffsetT< DebugMeshConfig > m_meshConfigBuffer;
-		castor3d::GpuBufferOffsetT< castor::Point4f > m_pointLightVertexBuffer;
-		castor::UnorderedMap< uint32_t, castor3d::GpuBufferOffsetT< castor::Point4f > > m_spotLightVertexBuffers;
+		c3d::Point4f m_aabbMeshColour{};
+		c3d::Point4f m_obbMeshColour{};
+		c3d::Point4f m_obbSelectedSubmeshColour{};
+		c3d::Point4f m_obbSubmeshColour{};
+		c3d::Point4f m_obbBoneColour{};
+		c3d::Geometry const * m_object{};
+		c3d::Submesh const * m_submesh{};
+		c3d::LightInstance const * m_light{};
+		c3d::OnSceneUpdateConnection m_sceneConnection;
+		c3d::GpuBufferOffsetT< DebugMeshConfig > m_meshConfigBuffer;
+		c3d::GpuBufferOffsetT< c3d::Point4f > m_pointLightVertexBuffer;
+		c3d::HashMap< uint32_t, c3d::GpuBufferOffsetT< c3d::Point4f > > m_spotLightVertexBuffers;
 	};
 }
 

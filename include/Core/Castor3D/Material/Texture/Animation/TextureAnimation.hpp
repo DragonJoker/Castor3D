@@ -14,7 +14,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/Speed.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class TextureAnimation
 		: public Animation
@@ -44,14 +44,14 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation.
 		 */
 		C3D_API explicit TextureAnimation( Engine & engine
-			, castor::String const & name = castor::cuEmptyString );
+			, String const & name = cuEmptyString );
 
 		C3D_API void setAnimable( TextureUnit & unit );
 		C3D_API void initialiseTiles( TextureUnit const & unit );
 
-		C3D_API castor::Point3f getTranslate( castor::Milliseconds const & time )const;
-		C3D_API castor::Angle getRotate( castor::Milliseconds const & time )const;
-		C3D_API castor::Point3f getScale( castor::Milliseconds const & time )const;
+		C3D_API Point3f getTranslate( Milliseconds const & time )const;
+		C3D_API Angle getRotate( Milliseconds const & time )const;
+		C3D_API Point3f getScale( Milliseconds const & time )const;
 		C3D_API bool isTransformAnimated()const;
 
 		void addPendingAnimated( AnimatedObject & object )noexcept
@@ -76,17 +76,17 @@ namespace castor3d
 
 		void setTranslateSpeed( TextureTranslateSpeed translate )noexcept
 		{
-			m_translate = castor::move( translate );
+			m_translate = c3d::move( translate );
 		}
 
 		void setRotateSpeed( TextureRotateSpeed rotate )noexcept
 		{
-			m_rotate = castor::move( rotate );
+			m_rotate = c3d::move( rotate );
 		}
 
 		void setScaleSpeed( TextureScaleSpeed scale )noexcept
 		{
-			m_scale = castor::move( scale );
+			m_scale = c3d::move( scale );
 		}
 
 		void enableTileAnim()noexcept
@@ -103,9 +103,9 @@ namespace castor3d
 			, TextureRotateSpeed rotate
 			, TextureScaleSpeed scale )noexcept
 		{
-			setTranslateSpeed( castor::move( translate ) );
-			setRotateSpeed( castor::move( rotate ) );
-			setScaleSpeed( castor::move( scale ) );
+			setTranslateSpeed( c3d::move( translate ) );
+			setRotateSpeed( c3d::move( rotate ) );
+			setScaleSpeed( c3d::move( scale ) );
 		}
 
 	private:
@@ -116,7 +116,7 @@ namespace castor3d
 		TextureRotateSpeed m_rotate{};
 		TextureScaleSpeed m_scale{};
 		bool m_tileAnim{};
-		castor::Set< AnimatedObject * > m_pending;
+		Set< AnimatedObject * > m_pending;
 
 		friend class BinaryWriter< TextureAnimation >;
 		friend class BinaryParser< TextureAnimation >;

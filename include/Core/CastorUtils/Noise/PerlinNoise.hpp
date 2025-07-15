@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <random>
 
-namespace castor
+namespace c3d
 {
 	template< typename T >
 	class PerlinNoiseT

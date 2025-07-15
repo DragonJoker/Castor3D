@@ -6,19 +6,17 @@
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 #include <CastorUtils/Data/Text/TextQuaternion.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	namespace txtnode
 	{
-		static bool isIgnored( castor::String const & name )
+		static bool isIgnored( String const & name )
 		{
 			return name == Scene::RootNode
 				|| name == Scene::ObjectRootNode
 				|| name == Scene::CameraRootNode
-				|| name.find( cuT( "_REye" ) ) != castor::String::npos
-				|| name.find( cuT( "_LEye" ) ) != castor::String::npos;
+				|| name.find( cuT( "_REye" ) ) != String::npos
+				|| name.find( cuT( "_LEye" ) ) != String::npos;
 		}
 
 		static bool isIgnored( SceneNode const & node )
@@ -28,7 +26,7 @@ namespace castor
 		}
 	}
 
-	TextWriter< SceneNode >::TextWriter( castor::String const & tabs
+	TextWriter< SceneNode >::TextWriter( String const & tabs
 		, float scale )
 		: TextWriterT< SceneNode >{ tabs }
 		, m_scale{ scale }
@@ -36,7 +34,7 @@ namespace castor
 	}
 
 	bool TextWriter< SceneNode >::operator()( SceneNode const & node
-		, castor::StringStream & file )
+		, StringStream & file )
 	{
 		bool result = true;
 
@@ -60,9 +58,9 @@ namespace castor
 				if ( result )
 				{
 					result = writeOpt( file, cuT( "visible" ), node.isVisible(), true )
-						&& writeNamedSubOpt( file, cuT( "orientation" ), node.getOrientation(), castor::Quaternion::identity() )
-						&& writeNamedSubOpt( file, cuT( "position" ), node.getPosition() * m_scale, castor::Point3f{} )
-						&& writeNamedSubOpt( file, cuT( "scale" ), node.getScale() * m_scale, castor::Point3f{ 1.0f, 1.0f, 1.0f } );
+						&& writeNamedSubOpt( file, cuT( "orientation" ), node.getOrientation(), Quaternion::identity() )
+						&& writeNamedSubOpt( file, cuT( "position" ), node.getPosition() * m_scale, Point3f{} )
+						&& writeNamedSubOpt( file, cuT( "scale" ), node.getScale() * m_scale, Point3f{ 1.0f, 1.0f, 1.0f } );
 				}
 			}
 		}

@@ -11,7 +11,7 @@
 #	include <cxxabi.h>
 #endif
 
-namespace castor::debug
+namespace c3d::debug
 {
 	namespace backtrace
 	{

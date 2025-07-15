@@ -61,7 +61,7 @@ namespace castortd
 			}
 		}
 
-		static void doPrepareTarget( PathNode const & cur, castor3d::Scene & scene, Grid & grid )
+		static void doPrepareTarget( PathNode const & cur, c3d::Scene & scene, Grid & grid )
 		{
 			for ( uint32_t x = cur.m_x - 2; x <= cur.m_x + 2; ++x )
 			{
@@ -74,9 +74,9 @@ namespace castortd
 			grid( cur.m_y, cur.m_x ).m_state = Cell::State::Target;
 		}
 
-		static void doUpdateMaterials( castor3d::Geometry & geometry
+		static void doUpdateMaterials( c3d::Geometry & geometry
 			, Tower::Category::Kind kind
-			, castor::CacheViewT< castor3d::MaterialCache > const & materials )
+			, c3d::CacheViewT< c3d::MaterialCache > const & materials )
 		{
 			if ( auto mesh = geometry.getMesh() )
 			{
@@ -97,7 +97,7 @@ namespace castortd
 		}
 	}
 
-	Game::Game( castor3d::Scene & scene )
+	Game::Game( c3d::Scene & scene )
 		: m_scene{ scene }
 		, m_hud{ *this, m_scene }
 		, m_path
@@ -130,7 +130,7 @@ namespace castortd
 		m_boulderMesh = m_scene.findMesh( cuT( "Boulder" ) );
 		m_boulderMaterial = m_scene.findMaterial( cuT( "Boulder" ) );
 		m_targetNode = m_scene.findSceneNode( cuT( "Target" ) );
-		m_updateTimer = castor::makeUnique< castor3d::FramePassTimer >( m_scene.getEngine()->getRenderSystem()->getRenderDevice().makeContext()
+		m_updateTimer = c3d::makeUnique< c3d::FramePassTimer >( m_scene.getEngine()->getRenderSystem()->getRenderDevice().makeContext()
 			, "CastorDvpTD/Update"
 			, crg::TimerScope::eUpdate );
 		m_scene.getEngine()->registerTimer( cuT( "CastorDvpTD/Update" ), *m_updateTimer );
@@ -149,7 +149,7 @@ namespace castortd
 	void Game::reset()
 	{
 		Grid grid;
-		castor::swap( m_grid, grid );
+		c3d::swap( m_grid, grid );
 
 		m_totalBullets = 0ull;
 		m_totalBoulders = 0ull;
@@ -162,7 +162,7 @@ namespace castortd
 
 		for ( auto & bullet : m_bullets )
 		{
-			bullet.getNode().setPosition( castor::Point3f{ 0, -10, 0 } );
+			bullet.getNode().setPosition( c3d::Point3f{ 0, -10, 0 } );
 			m_bulletsCache.push_back( bullet );
 		}
 
@@ -170,7 +170,7 @@ namespace castortd
 
 		for ( auto & boulder : m_boulders )
 		{
-			boulder.getNode().setPosition( castor::Point3f{ 0, -10, 0 } );
+			boulder.getNode().setPosition( c3d::Point3f{ 0, -10, 0 } );
 			m_bouldersCache.push_back( boulder );
 		}
 
@@ -178,14 +178,14 @@ namespace castortd
 
 		for ( auto & enemy : m_enemies )
 		{
-			m_spawner.killEnemy( *this, castor::move( enemy ) );
+			m_spawner.killEnemy( *this, c3d::move( enemy ) );
 		}
 
 		m_enemies.clear();
 
 		for ( auto & tower : m_towers )
 		{
-			tower->getNode().setPosition( castor::Point3f{ 0, -1000, 0 } );
+			tower->getNode().setPosition( c3d::Point3f{ 0, -1000, 0 } );
 		}
 
 		m_towers.clear();
@@ -238,7 +238,7 @@ namespace castortd
 		{
 			auto block = m_updateTimer->start();
 			m_elapsed = std::min( 40_ms
-				, std::chrono::duration_cast< castor::Milliseconds >( Clock::now() - m_saved ) );
+				, std::chrono::duration_cast< c3d::Milliseconds >( Clock::now() - m_saved ) );
 			doUpdateBullets();
 			doUpdateBoulders();
 			doUpdateTowers();
@@ -253,12 +253,12 @@ namespace castortd
 		return m_grid( uint32_t( y ), uint32_t( x ) );
 	}
 
-	Cell & Game::getCell( castor::Point2i const & position )
+	Cell & Game::getCell( c3d::Point2i const & position )
 	{
 		return getCell( position[0], position[1] );
 	}
 
-	Cell & Game::getCell( castor::Point3f const & position )
+	Cell & Game::getCell( c3d::Point3f const & position )
 	{
 		static Cell dummy;
 		dummy.m_state = Cell::State::Invalid;
@@ -279,12 +279,12 @@ namespace castortd
 			, uint32_t( x ) );
 	}
 
-	Cell const & Game::getCell( castor::Point2i const & position )const
+	Cell const & Game::getCell( c3d::Point2i const & position )const
 	{
 		return getCell( position[0], position[1] );
 	}
 
-	Cell const & Game::getCell( castor::Point3f const & position )const
+	Cell const & Game::getCell( c3d::Point3f const & position )const
 	{
 		static Cell dummy;
 		dummy.m_state = Cell::State::Invalid;
@@ -300,7 +300,7 @@ namespace castortd
 		return *result;
 	}
 
-	bool Game::buildTower( castor::Point3f const & position, Tower::CategoryPtr && category )
+	bool Game::buildTower( c3d::Point3f const & position, Tower::CategoryPtr && category )
 	{
 		bool result = false;
 
@@ -312,7 +312,7 @@ namespace castortd
 			{
 				cell.m_state = Cell::State::Tower;
 				spend( category->getTowerCost() );
-				doAddTower( cell, castor::move( category ) );
+				doAddTower( cell, c3d::move( category ) );
 				result = true;
 			}
 		}
@@ -320,24 +320,24 @@ namespace castortd
 		return result;
 	}
 
-	castor::Point3f Game::convert( castor::Point2i const & position )const
+	c3d::Point3f Game::convert( c3d::Point2i const & position )const
 	{
-		return castor::Point3f( ( float( position[0] ) - float( m_grid.getWidth() ) / 2 ) * m_cellDimensions[0]
+		return c3d::Point3f( ( float( position[0] ) - float( m_grid.getWidth() ) / 2 ) * m_cellDimensions[0]
 			, 0
 			, ( float( position[1] ) - float( m_grid.getHeight() ) / 2 ) * m_cellDimensions[2] );
 	}
 
-	castor::Point2i Game::convert( castor::Point3f const & position )const
+	c3d::Point2i Game::convert( c3d::Point3f const & position )const
 	{
-		return castor::Point2i( int( position[0] / m_cellDimensions[0] + float( m_grid.getWidth() / 2 ) )
+		return c3d::Point2i( int( position[0] / m_cellDimensions[0] + float( m_grid.getWidth() / 2 ) )
 			, int( position[2] / m_cellDimensions[2] + float( m_grid.getHeight() / 2 ) ) );
 	}
 
-	void Game::emitBullet( float speed, uint32_t damage, castor::Point3f const & origin, Enemy & target )
+	void Game::emitBullet( float speed, uint32_t damage, c3d::Point3f const & origin, Enemy & target )
 	{
 		if ( m_bulletsCache.empty() )
 		{
-			castor::String name = cuT( "Bullet_" ) + castor::string::toString( ++m_totalBullets );
+			c3d::String name = cuT( "Bullet_" ) + c3d::string::toString( ++m_totalBullets );
 			auto node = m_scene.addNewSceneNode( name );
 			auto geometry = m_scene.createGeometry( name
 				, m_scene
@@ -351,7 +351,7 @@ namespace castortd
 				geometry->setMaterial( *submesh, m_bulletMaterial );
 			}
 
-			m_scene.addGeometry( castor::move( geometry ) );
+			m_scene.addGeometry( c3d::move( geometry ) );
 			m_bullets.emplace_back( speed, damage, *node, target );
 		}
 		else
@@ -365,12 +365,12 @@ namespace castortd
 
 	void Game::emitBoulder( float speed
 		, uint32_t damage
-		, castor::Point3f const & origin
-		, castor::Point3f const & target )
+		, c3d::Point3f const & origin
+		, c3d::Point3f const & target )
 	{
 		if ( m_bouldersCache.empty() )
 		{
-			castor::String name = cuT( "Boulder_" ) + castor::string::toString( ++m_totalBoulders );
+			c3d::String name = cuT( "Boulder_" ) + c3d::string::toString( ++m_totalBoulders );
 			auto node = m_scene.addNewSceneNode( name );
 			auto geometry = m_scene.createGeometry( name
 				, m_scene
@@ -384,7 +384,7 @@ namespace castortd
 				geometry->setMaterial( *submesh, m_boulderMaterial );
 			}
 
-			m_scene.addGeometry( castor::move( geometry ) );
+			m_scene.addGeometry( c3d::move( geometry ) );
 			m_boulders.emplace_back( speed, damage, *node, target );
 		}
 		else
@@ -426,13 +426,13 @@ namespace castortd
 		}
 	}
 
-	void Game::areaDamage( castor::Point3f const & position, uint32_t damage )
+	void Game::areaDamage( c3d::Point3f const & position, uint32_t damage )
 	{
 		auto area = 32.0f;
 
 		for ( auto & enemy : m_enemies )
 		{
-			auto distance = castor::point::distance( enemy->getNode().getDerivedPosition(), position );
+			auto distance = c3d::point::distance( enemy->getNode().getDerivedPosition(), position );
 			auto enemyRatio = distance / area;
 
 			if ( enemyRatio <= 1.0 )
@@ -526,7 +526,7 @@ namespace castortd
 			m_enemies.push_back( m_spawner.spawn( *this, m_path ) );
 		}
 
-		castor::Angle const angle{ castor::Angle::fromDegrees( float( -m_elapsed.count() ) * 120 / 1000.0f ) };
+		c3d::Angle const angle{ c3d::Angle::fromDegrees( float( -m_elapsed.count() ) * 120 / 1000.0f ) };
 		auto it = m_enemies.begin();
 
 		while ( it != m_enemies.end() )
@@ -542,7 +542,7 @@ namespace castortd
 					if ( enemy->accept( *this ) )
 					{
 						loseLife( 1u );
-						m_spawner.killEnemy( *this, castor::move( enemy ) );
+						m_spawner.killEnemy( *this, c3d::move( enemy ) );
 						it = m_enemies.erase( it );
 					}
 					else
@@ -560,7 +560,7 @@ namespace castortd
 			{
 				enemy->die();
 				earn( enemy->getBounty() );
-				m_spawner.killEnemy( *this, castor::move( enemy ) );
+				m_spawner.killEnemy( *this, c3d::move( enemy ) );
 				it = m_enemies.erase( it );
 				++m_kills;
 			}
@@ -635,13 +635,13 @@ namespace castortd
 
 	void Game::doAddMapCube( Cell & cell )
 	{
-		castor::String name = cuT( "MapCube_" ) + castor::string::toString( cell.m_x ) + cuT( "x" ) + castor::string::toString( cell.m_y );
+		c3d::String name = cuT( "MapCube_" ) + c3d::string::toString( cell.m_x ) + cuT( "x" ) + c3d::string::toString( cell.m_y );
 		auto node = m_scene.addNewSceneNode( name );
 		auto geometry = m_scene.createGeometry( name
 			, m_scene
 			, *node
 			, m_mapCubeMesh );
-		node->setPosition( convert( castor::Point2i{ cell.m_x, cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1] / 2, 0 } );
+		node->setPosition( convert( c3d::Point2i{ cell.m_x, cell.m_y } ) + c3d::Point3f{ 0, m_cellDimensions[1] / 2, 0 } );
 		node->attachTo( *m_mapNode );
 
 		for ( auto & submesh : *geometry->getMesh() )
@@ -650,19 +650,19 @@ namespace castortd
 		}
 
 		m_lastMapCube = geometry.get();
-		m_scene.addGeometry( castor::move( geometry ) );
+		m_scene.addGeometry( c3d::move( geometry ) );
 		cell.m_state = Cell::State::Empty;
 	}
 
 	void Game::doAddTarget( Cell & cell )
 	{
-		m_targetNode->setPosition( convert( castor::Point2i{ cell.m_x, cell.m_y + 1 } ) );
+		m_targetNode->setPosition( convert( c3d::Point2i{ cell.m_x, cell.m_y + 1 } ) );
 		cell.m_state = Cell::State::Target;
 	}
 
-	castor3d::MeshResPtr Game::doSelectMesh( Tower::Category & category )
+	c3d::MeshResPtr Game::doSelectMesh( Tower::Category & category )
 	{
-		castor3d::MeshResPtr result{};
+		c3d::MeshResPtr result{};
 
 		switch ( category.getKind() )
 		{
@@ -680,9 +680,9 @@ namespace castortd
 
 	void Game::doAddTower( Cell & cell, Tower::CategoryPtr && category )
 	{
-		castor::String name = cuT( "Tower_" ) + castor::string::toString( cell.m_x ) + cuT( "x" ) + castor::string::toString( cell.m_y );
+		c3d::String name = cuT( "Tower_" ) + c3d::string::toString( cell.m_x ) + cuT( "x" ) + c3d::string::toString( cell.m_y );
 		auto node = m_scene.addNewSceneNode( name );
-		node->setPosition( convert( castor::Point2i{ cell.m_x, cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1], 0 } );
+		node->setPosition( convert( c3d::Point2i{ cell.m_x, cell.m_y } ) + c3d::Point3f{ 0, m_cellDimensions[1], 0 } );
 		node->attachTo( *m_mapNode );
 		auto mesh = doSelectMesh( *category );
 		auto tower = m_scene.createGeometry( name
@@ -691,7 +691,7 @@ namespace castortd
 			, mesh );
 		auto animGroup = m_scene.addNewAnimatedObjectGroup( name
 			, m_scene );
-		castor::Milliseconds time{ 0 };
+		c3d::Milliseconds time{ 0 };
 
 		if ( node->hasAnimation() )
 		{
@@ -727,14 +727,14 @@ namespace castortd
 		game::doUpdateMaterials( *tower
 			, category->getKind()
 			, m_scene.getMaterialView() );
-		m_scene.addGeometry( castor::move( tower ) );
+		m_scene.addGeometry( c3d::move( tower ) );
 		cell.m_state = Cell::State::Tower;
 		category->setAttackAnimationTime( time );
 		animGroup->startAnimation( category->getAttackAnimationName() );
 		animGroup->pauseAnimation( category->getAttackAnimationName() );
-		node->setScale( castor::Point3f{ 0.15, 0.15, 0.15 } );
+		node->setScale( c3d::Point3f{ 0.15, 0.15, 0.15 } );
 		std::clog << "Animation time: " << time.count() << std::endl;
-		m_towers.push_back( castor::make_shared< Tower >( castor::move( category ), *node, *animGroup, cell ) );
+		m_towers.push_back( c3d::makeShared< Tower >( c3d::move( category ), *node, *animGroup, cell ) );
 	}
 
 	void Game::doGameOver()

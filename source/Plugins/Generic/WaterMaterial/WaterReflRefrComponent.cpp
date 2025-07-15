@@ -16,23 +16,23 @@ CU_ImplementSmartPtr( water, WaterReflRefrComponent )
 
 namespace water
 {
-	using namespace castor3d;
+	using namespace c3d;
 
 	//*********************************************************************************************
 
-	void WaterReflRefrComponent::ReflRefrShader::computeWithTransmission( c3d::ReflectionModel & reflections
-		, c3d::BlendComponents & components
-		, c3d::LightSurface const & lightSurface
-		, c3d::BackgroundModel & backgroundModel
+	void WaterReflRefrComponent::ReflRefrShader::computeWithTransmission( c3ds::ReflectionModel & reflections
+		, c3ds::BlendComponents & components
+		, c3ds::LightSurface const & lightSurface
+		, c3ds::BackgroundModel & backgroundModel
 		, sdw::CombinedImage2DRgba32 const & mippedScene
-		, c3d::CameraData const & camera
-		, c3d::DirectLighting & lighting
-		, c3d::IndirectLighting & indirect
+		, c3ds::CameraData const & camera
+		, c3ds::DirectLighting & lighting
+		, c3ds::IndirectLighting & indirect
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
-		, c3d::ReflectionRefraction & output
-		, c3d::DebugOutputCategory const & debugOutput )const
+		, c3ds::ReflectionRefraction & output
+		, c3ds::DebugOutputCategory const & debugOutput )const
 	{
 		computeWithoutTransmission( reflections
 			, components
@@ -48,18 +48,18 @@ namespace water
 			, debugOutput );
 	}
 
-	void WaterReflRefrComponent::ReflRefrShader::computeWithoutTransmission( c3d::ReflectionModel & reflections
-		, c3d::BlendComponents & components
-		, c3d::LightSurface const & lightSurface
-		, c3d::BackgroundModel & backgroundModel
-		, c3d::CameraData const & camera
-		, c3d::DirectLighting & lighting
-		, c3d::IndirectLighting & indirect
+	void WaterReflRefrComponent::ReflRefrShader::computeWithoutTransmission( c3ds::ReflectionModel & reflections
+		, c3ds::BlendComponents & components
+		, c3ds::LightSurface const & lightSurface
+		, c3ds::BackgroundModel & backgroundModel
+		, c3ds::CameraData const & camera
+		, c3ds::DirectLighting & lighting
+		, c3ds::IndirectLighting & indirect
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
-		, c3d::ReflectionRefraction & output
-		, c3d::DebugOutputCategory const & debugOutput )const
+		, c3ds::ReflectionRefraction & output
+		, c3ds::DebugOutputCategory const & debugOutput )const
 	{
 		auto & writer = *components.getWriter();
 
@@ -245,17 +245,17 @@ namespace water
 
 	//*********************************************************************************************
 
-	castor::String const WaterReflRefrComponent::TypeName = C3D_PluginMakePassReflectionComponentName( "water", "water" );
+	c3d::String const WaterReflRefrComponent::TypeName = C3D_PluginMakePassReflectionComponentName( "water", "water" );
 
-	WaterReflRefrComponent::WaterReflRefrComponent( castor3d::Pass & pass )
-		: castor3d::PassComponent{ pass, TypeName }
+	WaterReflRefrComponent::WaterReflRefrComponent( c3d::Pass & pass )
+		: c3d::PassComponent{ pass, TypeName }
 	{
 	}
 
-	castor3d::PassComponentUPtr WaterReflRefrComponent::doClone( castor3d::Pass & pass )const
+	c3d::PassComponentUPtr WaterReflRefrComponent::doClone( c3d::Pass & pass )const
 	{
-		auto result = castor::makeUnique< WaterReflRefrComponent >( pass );
-		return castor::ptrRefCast< castor3d::PassComponent >( result );
+		auto result = c3d::makeUnique< WaterReflRefrComponent >( pass );
+		return c3d::ptrRefCast< c3d::PassComponent >( result );
 	}
 
 	//*********************************************************************************************

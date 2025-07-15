@@ -19,12 +19,12 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementDeleter( castor3d::shader, LightingModel )
-CU_ImplementDeleter( castor3d::shader, ScatteringModel )
+CU_ImplementDeleter( c3d::shader, LightingModel )
+CU_ImplementDeleter( c3d::shader, ScatteringModel )
 
 #define C3D_DebugCascades 0
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//*********************************************************************************************
 
@@ -63,7 +63,7 @@ namespace castor3d::shader
 
 	ScatteringModelPtr ScatteringModel::create( sdw::ShaderWriter & writer )
 	{
-		return castor::makeUnique< ScatteringModel >( writer );
+		return makeUnique< ScatteringModel >( writer );
 	}
 
 	//*********************************************************************************************
@@ -80,7 +80,7 @@ namespace castor3d::shader
 		, bool hasBackgroundReflectionsSupport
 		, bool hasBackgroundRefractionSupport
 		, bool enableVolumetric
-		, castor::String prefix )
+		, String prefix )
 		: m_lightingModelId{ lightingModelId }
 		, m_writer{ writer }
 		, m_materials{ materials }
@@ -97,7 +97,7 @@ namespace castor3d::shader
 		, m_hasBackgroundRefractionSupport{ hasBackgroundRefractionSupport }
 		, m_hasIblSupport{ hasIblSupport }
 		, m_enableVolumetric{ enableVolumetric }
-		, m_prefix{ castor::move( prefix ) }
+		, m_prefix{ c3d::move( prefix ) }
 	{
 	}
 
@@ -138,7 +138,7 @@ namespace castor3d::shader
 		if ( !m_computeDirectional )
 		{
 			m_scattering->initialiseBackground( background, m_shadowModel );
-			m_computeDirectional = m_writer.implementFunction< sdw::Void >( castor::toUtf8( m_prefix ) + "computeDirectionalLight"
+			m_computeDirectional = m_writer.implementFunction< sdw::Void >( toUtf8( m_prefix ) + "computeDirectionalLight"
 				, [this, &debugOutput]( DirectionalLight const & light
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
@@ -229,7 +229,7 @@ namespace castor3d::shader
 	{
 		if ( !m_computePoint )
 		{
-			m_computePoint = m_writer.implementFunction< sdw::Void >( castor::toUtf8( m_prefix ) + "computePointLight"
+			m_computePoint = m_writer.implementFunction< sdw::Void >( toUtf8( m_prefix ) + "computePointLight"
 				, [this, &debugOutput]( PointLight const & light
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
@@ -314,7 +314,7 @@ namespace castor3d::shader
 	{
 		if ( !m_computeSpot )
 		{
-			m_computeSpot = m_writer.implementFunction< sdw::Void >( castor::toUtf8( m_prefix ) + "computeSpotLight"
+			m_computeSpot = m_writer.implementFunction< sdw::Void >( toUtf8( m_prefix ) + "computeSpotLight"
 				, [this, &debugOutput]( SpotLight const & light
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
@@ -408,7 +408,7 @@ namespace castor3d::shader
 		if ( !m_computeDirectionalDiffuse )
 		{
 			m_scattering->initialiseBackground( background, m_shadowModel );
-			m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( castor::toUtf8( m_prefix ) + "computeDirectionalLightDiffuse"
+			m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( toUtf8( m_prefix ) + "computeDirectionalLightDiffuse"
 				, [this]( DirectionalLight const & light
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
@@ -462,7 +462,7 @@ namespace castor3d::shader
 	{
 		if ( !m_computePointDiffuse )
 		{
-			m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( castor::toUtf8( m_prefix ) + "computePointLightDiffuse"
+			m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( toUtf8( m_prefix ) + "computePointLightDiffuse"
 				, [this]( PointLight const & light
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
@@ -519,7 +519,7 @@ namespace castor3d::shader
 	{
 		if ( !m_computeSpotDiffuse )
 		{
-			m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( castor::toUtf8( m_prefix ) + "computeSpotLightDiffuse"
+			m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( toUtf8( m_prefix ) + "computeSpotLightDiffuse"
 				, [this]( SpotLight const & light
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
@@ -590,7 +590,7 @@ namespace castor3d::shader
 		if ( !m_computeDirectionalAllButDiffuse )
 		{
 			m_scattering->initialiseBackground( background, m_shadowModel );
-			m_computeDirectionalAllButDiffuse = m_writer.implementFunction< sdw::Void >( castor::toUtf8( m_prefix ) + "computeDirectionalLightAllButDiffuse"
+			m_computeDirectionalAllButDiffuse = m_writer.implementFunction< sdw::Void >( toUtf8( m_prefix ) + "computeDirectionalLightAllButDiffuse"
 				, [this, &debugOutput]( DirectionalLight const & light
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
@@ -684,7 +684,7 @@ namespace castor3d::shader
 	{
 		if ( !m_computePointAllButDiffuse )
 		{
-			m_computePointAllButDiffuse = m_writer.implementFunction< sdw::Void >( castor::toUtf8( m_prefix ) + "computePointLightLightAllButDiffuse"
+			m_computePointAllButDiffuse = m_writer.implementFunction< sdw::Void >( toUtf8( m_prefix ) + "computePointLightLightAllButDiffuse"
 				, [this, &debugOutput]( PointLight const & light
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
@@ -773,7 +773,7 @@ namespace castor3d::shader
 	{
 		if ( !m_computeSpotAllButDiffuse )
 		{
-			m_computeSpotAllButDiffuse = m_writer.implementFunction< sdw::Void >( castor::toUtf8( m_prefix ) + "computeSpotLightLightAllButDiffuse"
+			m_computeSpotAllButDiffuse = m_writer.implementFunction< sdw::Void >( toUtf8( m_prefix ) + "computeSpotLightLightAllButDiffuse"
 				, [this, &debugOutput]( SpotLight const & light
 					, BlendComponents const & components
 					, LightSurface const & lightSurface
@@ -905,9 +905,9 @@ namespace castor3d::shader
 		, DirectLighting & output
 		, bool withDiffuse )
 	{
-		m_directionalCascadeIndex = castor::make_unique< sdw::UInt >( m_writer.declLocale( "cascadeIndex"
+		m_directionalCascadeIndex = makeRawUnique< sdw::UInt >( m_writer.declLocale( "cascadeIndex"
 			, 0_u ) );
-		m_directionalCascadeCount = castor::make_unique< sdw::UInt >( m_writer.declLocale( "cascadeCount"
+		m_directionalCascadeCount = makeRawUnique< sdw::UInt >( m_writer.declLocale( "cascadeCount"
 			, 0_u ) );
 		auto baseShadows = m_writer.declLocale( "baseShadows"
 			, shadows.base() );
@@ -923,7 +923,7 @@ namespace castor3d::shader
 					, m_shadowModel.getMaxCascadeCount() ) );
 			*m_directionalCascadeIndex = m_writer.cast< sdw::UInt >( cascadeFactors.x() );
 			*m_directionalCascadeCount = shadows.cascadeCount();
-			m_directionalTransform = castor::make_unique< sdw::Mat4 >( m_writer.declLocale( "directionalTransform"
+			m_directionalTransform = makeRawUnique< sdw::Mat4 >( m_writer.declLocale( "directionalTransform"
 				, shadows.transforms()[*m_directionalCascadeIndex] ) );
 
 			sdwIF( m_writer, receivesShadows != 0_u )
@@ -1057,9 +1057,9 @@ namespace castor3d::shader
 	{
 		auto baseShadows = m_writer.declLocale( "baseShadows"
 			, shadows.base() );
-		m_directionalCascadeIndex = castor::make_unique< sdw::UInt >( m_writer.declLocale( "cascadeIndex"
+		m_directionalCascadeIndex = makeRawUnique< sdw::UInt >( m_writer.declLocale( "cascadeIndex"
 			, 0_u ) );
-		m_directionalCascadeCount = castor::make_unique< sdw::UInt >( m_writer.declLocale( "cascadeCount"
+		m_directionalCascadeCount = makeRawUnique< sdw::UInt >( m_writer.declLocale( "cascadeCount"
 			, 0_u ) );
 
 		sdwIF( m_writer
@@ -1068,7 +1068,7 @@ namespace castor3d::shader
 		{
 			*m_directionalCascadeIndex = shadows.cascadeCount() - 1_u;
 			*m_directionalCascadeCount = shadows.cascadeCount();
-			m_directionalTransform = castor::make_unique< sdw::Mat4 >( m_writer.declLocale( "directionalTransform"
+			m_directionalTransform = makeRawUnique< sdw::Mat4 >( m_writer.declLocale( "directionalTransform"
 				, shadows.transforms()[*m_directionalCascadeIndex] ) );
 
 			sdwIF( m_writer, receivesShadows != 0_u )

@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Graphics/Position.hpp"
 #include "CastorUtils/Graphics/Size.hpp"
 
-namespace castor
+namespace c3d
 {
 	union RectangleData
 	{

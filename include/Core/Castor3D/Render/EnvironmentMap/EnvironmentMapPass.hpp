@@ -24,11 +24,11 @@ See LICENSE file in root folder
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class EnvironmentMapPass
-		: public castor::OwnedBy< EnvironmentMap >
-		, public castor::Named
+		: public OwnedBy< EnvironmentMap >
+		, public Named
 	{
 	public:
 		/**

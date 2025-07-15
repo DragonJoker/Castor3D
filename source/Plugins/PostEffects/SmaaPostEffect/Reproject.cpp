@@ -28,7 +28,7 @@ namespace smaa
 {
 	namespace reproj
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
 		enum class Idx : uint32_t
 		{
@@ -37,7 +37,7 @@ namespace smaa
 			VelocityTexIdx,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device
 			, bool reprojection )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
@@ -91,15 +91,15 @@ namespace smaa
 				, sdw::InCombinedImage2DRgba32{ writer, "currentColorTex" }
 				, sdw::InCombinedImage2DRgba32{ writer, "previousColorTex" } );
 
-			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > const & in
-				, sdw::VertexOutT< c3d::Uv2FT > out )
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > const & in
+				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > const & in
-				, sdw::FragmentOutT< c3d::Colour4FT > const & out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > const & in
+				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					out.colour() = SMAAResolvePS( in.uv(), c3d_currentColourTex, c3d_previousColourTex );
 				} );
@@ -111,8 +111,8 @@ namespace smaa
 
 	Reproject::Reproject( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
-		, castor3d::RenderTarget & renderTarget
-		, castor3d::RenderDevice const & device
+		, c3d::RenderTarget & renderTarget
+		, c3d::RenderDevice const & device
 		, SmaaUbo const & ubo
 		, crg::ImageViewIdArray const & currentColourViews
 		, crg::ImageViewIdArray const & previousColourViews
@@ -124,18 +124,18 @@ namespace smaa
 		, m_currentColourViews{ currentColourViews }
 		, m_previousColourViews{ previousColourViews }
 		, m_velocityView{ velocityView }
-		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
+		, m_extent{ c3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
 		, m_shader{ cuT( "SmaaReproject" ), reproj::getProgram( device, velocityView != nullptr ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_result{ m_device
 			, renderTarget.getResources()
 			, cuT( "SMRpRes" )
-			, { castor3d::ImageCreateFlags::eNone
+			, { c3d::ImageCreateFlags::eNone
 				, m_extent, 1u, 1u
 				, renderTarget.getPixelFormat()
-				, ( castor3d::ImageUsageFlags::eSampled
-					| castor3d::ImageUsageFlags::eColorAttachment
-					| castor3d::ImageUsageFlags::eTransferSrc ) }
+				, ( c3d::ImageUsageFlags::eSampled
+					| c3d::ImageUsageFlags::eColorAttachment
+					| c3d::ImageUsageFlags::eTransferSrc ) }
 			, {} }
 		, m_pass{ m_graph.createPass( "Reproject"
 			, [this, &device, &config, enabled]( crg::FramePass const & framePass
@@ -144,13 +144,13 @@ namespace smaa
 			{
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
-					.renderSize( castor3d::makeExtent2D( m_extent ) )
+					.renderSize( c3d::makeExtent2D( m_extent ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.passIndex( &config.subsampleIndex )
 					.enabled( enabled )
 					.build( framePass, context, graph, { config.maxSubsampleIndices } );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }
@@ -162,7 +162,7 @@ namespace smaa
 
 		for ( auto const & view : m_currentColourViews )
 		{
-			auto image = castor::make_unique< ashes::Image >( *device
+			auto image = c3d::makeRawUnique< ashes::Image >( *device
 				, renderTarget.getResources().createImage( context, view.data->image )
 				, ashes::ImageCreateInfo{ convert( view.data->image.data->info ) } );
 			auto createInfo = convert( view.data->info );
@@ -172,7 +172,7 @@ namespace smaa
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
 				, imageView.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			commandBuffer->clear( imageView
-				, convert( castor3d::opaqueBlackClearColor ) );
+				, convert( c3d::opaqueBlackClearColor ) );
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 				, imageView.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
@@ -183,12 +183,12 @@ namespace smaa
 		data->queue->waitIdle();
 		commandBuffer.reset();
 
-		crg::SamplerDesc pointSampler{ castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest
-			, castor3d::WrapMode::eClampToEdge
-			, castor3d::WrapMode::eClampToEdge
-			, castor3d::WrapMode::eClampToEdge };
+		crg::SamplerDesc pointSampler{ c3d::FilterMode::eLinear
+			, c3d::FilterMode::eLinear
+			, c3d::MipmapMode::eNearest
+			, c3d::WrapMode::eClampToEdge
+			, c3d::WrapMode::eClampToEdge
+			, c3d::WrapMode::eClampToEdge };
 		m_pass.addDependency( previousPass );
 		m_pass.addOutputColourView( m_result.targetViewId );
 		ubo.createPassBinding( m_pass
@@ -214,13 +214,13 @@ namespace smaa
 		m_result.destroy();
 	}
 
-	void Reproject::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void Reproject::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 		visitor.visit( cuT( "SMAA Reprojection Result" )
 			, m_result
 			, m_graph.getFinalLayoutState( m_result.sampledViewId ).layout
-			, castor3d::TextureFactors{}.invert( true ) );
+			, c3d::TextureFactors{}.invert( true ) );
 	}
 
 	//*********************************************************************************************

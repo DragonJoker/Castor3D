@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Gui/Controls/CtrlPanel.hpp"
 #include "Castor3D/Gui/Theme/StyleExpandablePanel.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class ExpandablePanelCtrl
 		: public Control
@@ -21,7 +21,7 @@ namespace castor3d
 		*\param[in]	parent	The parent control, if any.
 		*/
 		C3D_API ExpandablePanelCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, ExpandablePanelStyle * style
 			, ControlRPtr parent );
 
@@ -38,11 +38,11 @@ namespace castor3d
 		*\param[in]	visible			Initial visibility status.
 		*/
 		C3D_API ExpandablePanelCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, ExpandablePanelStyle * style
 			, ControlRPtr parent
-			, castor::Position const & position
-			, castor::Size const & size
+			, Position const & position
+			, Size const & size
 			, uint32_t headerHeight
 			, bool expanded
 			, ControlFlagType flags = 0
@@ -50,8 +50,8 @@ namespace castor3d
 
 		C3D_API ~ExpandablePanelCtrl()noexcept override;
 
-		C3D_API void setExpandCaption( castor::U32String v );
-		C3D_API void setRetractCaption( castor::U32String v );
+		C3D_API void setExpandCaption( U32String v );
+		C3D_API void setRetractCaption( U32String v );
 
 		/** Connects a function to an event
 		*\param[in]	event		The event type
@@ -61,7 +61,7 @@ namespace castor3d
 		OnExpandablePanelEventConnection connect( ExpandablePanelEvent event
 			, OnExpandablePanelEventFunction function )
 		{
-			return m_signals[size_t( event )].connect( castor::move( function ) );
+			return m_signals[size_t( event )].connect( c3d::move( function ) );
 		}
 
 		/** \return	The expandable panel style.
@@ -119,11 +119,11 @@ namespace castor3d
 
 		/** @copydoc Control::doSetPosition
 		*/
-		void doSetPosition( castor::Position const & value )override;
+		void doSetPosition( Position const & value )override;
 
 		/** @copydoc Control::doSetSize
 		*/
-		void doSetSize( castor::Size const & value )override;
+		void doSetSize( Size const & value )override;
 
 		/** @copydoc Control::doUpdateStyle
 		*/
@@ -151,12 +151,12 @@ namespace castor3d
 
 	private:
 		uint32_t m_headerHeight;
-		castor::U32String m_expandCaption{ U"+" };
-		castor::U32String m_retractCaption{ U"-" };
+		U32String m_expandCaption{ U"+" };
+		U32String m_retractCaption{ U"-" };
 		PanelCtrlRPtr m_header;
 		ButtonCtrlRPtr m_expand;
 		PanelCtrlRPtr m_content;
-		castor::Array< OnExpandablePanelEvent, size_t( ExpandablePanelEvent::eCount ) > m_signals;
+		Array< OnExpandablePanelEvent, size_t( ExpandablePanelEvent::eCount ) > m_signals;
 		OnButtonEventConnection m_expandClickedConnection;
 		bool m_expanded{ true };
 	};

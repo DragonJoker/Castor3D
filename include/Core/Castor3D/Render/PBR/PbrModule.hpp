@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Render */
 	//@{
@@ -51,7 +51,7 @@ namespace castor3d
 	class RadianceComputer;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, IblTextures, C3D_API );
+	CU_DeclareSmartPtr( c3d, IblTextures, C3D_API );
 	/** @endcond */
 
 	//@}

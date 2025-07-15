@@ -38,15 +38,15 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/Size.hpp>
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class RenderTarget
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
-		using OnInitialisedFunc = castor::Function< void( RenderTarget const &, QueueData const & ) >;
-		using OnInitialised = castor::SignalT< OnInitialisedFunc >;
-		using OnInitialisedConnection = castor::ConnectionT< OnInitialised >;
-		using PostEffectArray = castor::Vector< PostEffectUPtr >;
+		using OnInitialisedFunc = Function< void( RenderTarget const &, QueueData const & ) >;
+		using OnInitialised = SignalT< OnInitialisedFunc >;
+		using OnInitialisedConnection = ConnectionT< OnInitialised >;
+		using PostEffectArray = Vector< PostEffectUPtr >;
 
 	public:
 		/**
@@ -65,8 +65,8 @@ namespace castor3d
 		 */
 		C3D_API RenderTarget( Engine & engine
 			, TargetType type
-			, castor::Size const & size
-			, castor::PixelFormat pixelFormat );
+			, Size const & size
+			, PixelFormat pixelFormat );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -199,7 +199,7 @@ namespace castor3d
 		 *\brief		Définit le type d'implémentation de mappage de tons.
 		 *\param[in]	name		Le type.
 		 */
-		C3D_API void setToneMappingType( castor::StringView name );
+		C3D_API void setToneMappingType( String name );
 		/**
 		 *\~english
 		 *\brief		adds a post effect to the list.
@@ -208,11 +208,11 @@ namespace castor3d
 		 *\brief		Ajoute un effet post rendu à la liste.
 		 *\param[in]	name	Le nom de l'effet.
 		 */
-		C3D_API PostEffectRPtr getPostEffect( castor::String const & name )const;
+		C3D_API PostEffectRPtr getPostEffect( String const & name )const;
 		C3D_API void resetSemaphore();
 		C3D_API crg::FramePass const & createVertexTransformPass( crg::FramePassGroup & graph )const;
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 		/**
 		*\~english
 		*name
@@ -254,7 +254,7 @@ namespace castor3d
 			return m_initialised;
 		}
 
-		castor::Size const & getSize()const noexcept
+		Size const & getSize()const noexcept
 		{
 			return m_size;
 		}
@@ -290,7 +290,7 @@ namespace castor3d
 			return m_velocity;
 		}
 
-		castor::PixelFormat getPixelFormat()const noexcept
+		PixelFormat getPixelFormat()const noexcept
 		{
 			return m_pixelFormat;
 		}
@@ -338,12 +338,12 @@ namespace castor3d
 			return *m_culler;
 		}
 
-		castor::Point2f const & getJitter()const noexcept
+		Point2f const & getJitter()const noexcept
 		{
 			return m_jitter;
 		}
 
-		castor::String const & getName()const noexcept
+		String const & getName()const noexcept
 		{
 			return m_name;
 		}
@@ -421,10 +421,10 @@ namespace castor3d
 		/**@{*/
 		void setSsaoConfig( SsaoConfig config )noexcept
 		{
-			m_ssaoConfig = castor::move( config );
+			m_ssaoConfig = c3d::move( config );
 		}
 
-		void setJitter( castor::Point2f const & value )noexcept
+		void setJitter( Point2f const & value )noexcept
 		{
 			m_jitter = value;
 		}
@@ -456,7 +456,7 @@ namespace castor3d
 
 		void setClustersConfig( ClustersConfig config )noexcept
 		{
-			m_clustersConfig = castor::move( config );
+			m_clustersConfig = c3d::move( config );
 		}
 		/**@}*/
 
@@ -475,7 +475,7 @@ namespace castor3d
 		void doCleanupCombineProgram();
 		Texture const & doUpdatePostEffects( CpuUpdater & updater
 			, PostEffectArray const & effects
-			, castor::Vector< Texture const * > const & images )const;
+			, Vector< Texture const * > const & images )const;
 		SemaphoreWaitArray doRender( ashes::Queue const & queue
 			, SemaphoreWaitArray signalsToWait );
 		void doListIntermediateViews( IntermediateViewArray & result )const;
@@ -484,21 +484,21 @@ namespace castor3d
 		static uint32_t sm_uiCount;
 		RenderDevice & m_device;
 		TargetType m_type{};
-		castor::Size m_size;
-		castor::Size m_safeBandedSize;
-		castor::PixelFormat m_pixelFormat{};
+		Size m_size;
+		Size m_safeBandedSize;
+		PixelFormat m_pixelFormat{};
 		std::atomic_bool m_initialised{};
 		std::atomic_bool m_initialising{};
 		crg::ResourcesCache m_resources;
-		castor::RawUniquePtr< HdrConfigUbo > m_hdrConfigUbo;
-		castor::RawUniquePtr< ColourGradingUbo > m_colourGradingUbo;
+		RawUniquePtr< HdrConfigUbo > m_hdrConfigUbo;
+		RawUniquePtr< ColourGradingUbo > m_colourGradingUbo;
 		RenderTechniqueUPtr m_renderTechnique{};
 		SceneRPtr m_scene{};
 		CameraRPtr m_camera{};
 		uint32_t m_index{};
-		castor::String m_name;
+		String m_name;
 		PostEffectArray m_hdrPostEffects;
-		castor::String m_toneMappingName{ cuT( "linear" ) };
+		String m_toneMappingName{ cuT( "linear" ) };
 		ToneMappingUPtr m_toneMapping;
 		PostEffectArray m_srgbPostEffects;
 		FramePassTimerUPtr m_overlaysTimer;
@@ -506,14 +506,14 @@ namespace castor3d
 		FramePassTimerUPtr m_gpuUpdateTimer;
 		ashes::PipelineShaderStageCreateInfoArray m_combineStages;
 		SsaoConfig m_ssaoConfig;
-		castor::Point2f m_jitter;
+		Point2f m_jitter;
 		ashes::SemaphorePtr m_signalReady;
 		SemaphoreWaitArray m_signalFinished;
 		SceneCullerUPtr m_culler;
 		crg::FrameGraph m_graph;
 		Texture m_velocity;
-		castor::Array< Texture, 2u > m_srgbObjects;
-		castor::Array< Texture, 2u > m_hdrObjects;
+		Array< Texture, 2u > m_srgbObjects;
+		Array< Texture, 2u > m_hdrObjects;
 		Texture m_overlays;
 		Texture m_combined;
 		CameraUbo m_cameraUbo;
@@ -528,7 +528,7 @@ namespace castor3d
 		crg::RunnableGraphPtr m_runnable;
 		ashes::SemaphorePtr m_combineSemaphore;
 		OnInitialised m_onInitialised;
-		castor::Vector< OnInitialisedConnection > m_onTargetInitialised;
+		Vector< OnInitialisedConnection > m_onTargetInitialised;
 		IntermediateViewArray m_intermediates;
 		TargetDebugConfig m_debugConfig;
 		ClustersConfig m_clustersConfig;
@@ -554,13 +554,13 @@ namespace castor3d
 		WindowContext * window{};
 		TargetType targetType{};
 		SsaoConfig ssaoConfig{};
-		castor::Size size{};
-		castor::PixelFormat hdrPixelFormat{};
-		castor::PixelFormat srgbPixelFormat{};
+		Size size{};
+		PixelFormat hdrPixelFormat{};
+		PixelFormat srgbPixelFormat{};
 		RenderTargetRPtr renderTarget{};
 	};
 
-	C3D_API castor::String getPrefix( TargetContext const & context );
+	C3D_API String getPrefix( TargetContext const & context );
 	C3D_API Engine * getEngine( TargetContext const & context );
 	C3D_API RootContext * getRootContext( TargetContext const & context );
 	/**

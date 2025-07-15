@@ -9,7 +9,7 @@
 #include <CastorUtils/Graphics/PixelBuffer.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
@@ -17,12 +17,12 @@ namespace castor3d
 	{
 		static uint32_t constexpr FaceCount = 40;
 
-		static castor::BoundingBox computeAABB( castor::Point3fArray const & points )
+		static BoundingBox computeAABB( Point3fArray const & points )
 		{
-			castor::Point3f min{ points[0] };
-			castor::Point3f max{ points[0] };
+			Point3f min{ points[0] };
+			Point3f max{ points[0] };
 
-			for ( auto & cur : castor::makeArrayView( &points[1], uint64_t( points.size() - 1u ) ) )
+			for ( auto & cur : makeArrayView( &points[1], uint64_t( points.size() - 1u ) ) )
 			{
 				max[0] = std::max( cur[0], max[0] );
 				max[1] = std::max( cur[1], max[1] );
@@ -32,49 +32,49 @@ namespace castor3d
 				min[2] = std::min( cur[2], min[2] );
 			}
 
-			return castor::BoundingBox{ min, max };
+			return BoundingBox{ min, max };
 		}
 	}
 
 	//*************************************************************************************************
 
 	SpotLight::SpotLight( bool & dirty
-		, castor::Function< void() > const & markParentDirty )
+		, Function< void() > const & markParentDirty )
 		: LightCategory{ LightType::eSpot, dirty, markParentDirty }
 		, m_range{ m_dirty, 10.0f, markParentDirty }
 		, m_exponent{ m_dirty, 1.0f, markParentDirty }
-		, m_intensity{ m_dirty, castor::LuminousIntensity{ 1.0f }, markParentDirty }
+		, m_intensity{ m_dirty, LuminousIntensity{ 1.0f }, markParentDirty }
 		, m_innerCutOff{ m_dirty, 22.5_degrees, markParentDirty }
 		, m_outerCutOff{ m_dirty, 45.0_degrees, markParentDirty }
 	{
 	}
 
 	LightInstanceUPtr SpotLight::instantiate( SceneNode & node
-		, castor::Function< bool() > isParentEnabled )
+		, Function< bool() > isParentEnabled )
 	{
-		return LightInstanceUPtr( new SpotLightInstance{ node, *this, m_markParentDirty, castor::move( isParentEnabled ) } );
+		return LightInstanceUPtr( new SpotLightInstance{ node, *this, m_markParentDirty, c3d::move( isParentEnabled ) } );
 	}
 
 	LightCategoryUPtr SpotLight::create( bool & dirty
-		, castor::Function< void() > const & markParentDirty )
+		, Function< void() > const & markParentDirty )
 	{
 		return LightCategoryUPtr( new SpotLight{ dirty, markParentDirty } );
 	}
 
-	castor::Point3fArray const & SpotLight::generateVertices( uint32_t angle )
+	Point3fArray const & SpotLight::generateVertices( uint32_t angle )
 	{
-		static castor::Map< uint32_t, castor::Point3fArray > cache;
+		static Map< uint32_t, Point3fArray > cache;
 		angle += 2u;
 		angle *= 2u;
 		auto & result = cache.try_emplace( angle ).first->second;
 
 		if ( result.empty() )
 		{
-			auto arcAngle = castor::Angle::fromDegrees( float( angle ) ) / ( 2.0f * float( lgtspot::FaceCount ) );
-			castor::Vector< castor::Point2f > arc( lgtspot::FaceCount + 1u );
-			castor::Angle arcAlpha = 0.0_degrees;
+			auto arcAngle = Angle::fromDegrees( float( angle ) ) / ( 2.0f * float( lgtspot::FaceCount ) );
+			Vector< Point2f > arc( lgtspot::FaceCount + 1u );
+			Angle arcAlpha = 0.0_degrees;
 			float rAlphaI = 0;
-			auto rAngle = castor::PiMult2< float > / float( lgtspot::FaceCount );
+			auto rAngle = PiMult2< float > / float( lgtspot::FaceCount );
 
 			for ( uint32_t i = 0; i <= lgtspot::FaceCount; i++ )
 			{
@@ -83,14 +83,14 @@ namespace castor3d
 				arcAlpha += arcAngle;
 			}
 
-			castor::Point3fArray data;
+			Point3fArray data;
 			// Constitution de la base sphérique
 			data.reserve( ( lgtspot::FaceCount + 1u ) * ( lgtspot::FaceCount + 1u ) );
 
 			for ( uint32_t k = 0; k < lgtspot::FaceCount; k++ )
 			{
-				castor::Point2f ptT = arc[k + 0];
-				castor::Point2f ptB = arc[k + 1];
+				Point2f ptT = arc[k + 0];
+				Point2f ptB = arc[k + 1];
 
 				if ( k == 0 )
 				{
@@ -99,7 +99,7 @@ namespace castor3d
 					{
 						auto rCos = float( cos( rAlphaI ) );
 						auto rSin = float( sin( rAlphaI ) );
-						data.push_back( castor::Point3f{ ptT->x * rCos, ptT->x * rSin, ptT->y } );
+						data.push_back( Point3f{ ptT->x * rCos, ptT->x * rSin, ptT->y } );
 					}
 				}
 
@@ -144,7 +144,7 @@ namespace castor3d
 				cur++;
 			}
 
-			castor::Point2f ptA = arc[lgtspot::FaceCount];
+			Point2f ptA = arc[lgtspot::FaceCount];
 			rAlphaI = 0;
 			data.clear();
 			data.reserve( ( lgtspot::FaceCount + 1u ) * 2 );
@@ -171,7 +171,7 @@ namespace castor3d
 		return result;
 	}
 
-	void SpotLight::setAttenuation( castor::Point3f const & attenuation )
+	void SpotLight::setAttenuation( Point3f const & attenuation )
 	{
 		setRange( getMaxDistance( getColour(), getIntensity(), attenuation) );
 	}
@@ -186,17 +186,17 @@ namespace castor3d
 		m_exponent = exponent;
 	}
 
-	void SpotLight::setIntensity( castor::LuminousIntensity const & value )
+	void SpotLight::setIntensity( LuminousIntensity const & value )
 	{
 		m_intensity = value;
 	}
 
-	void SpotLight::setInnerCutOff( castor::Angle const & cutOff )
+	void SpotLight::setInnerCutOff( Angle const & cutOff )
 	{
 		m_innerCutOff = cutOff;
 	}
 
-	void SpotLight::setOuterCutOff( castor::Angle const & cutOff )
+	void SpotLight::setOuterCutOff( Angle const & cutOff )
 	{
 		m_outerCutOff = cutOff;
 	}
@@ -233,9 +233,9 @@ namespace castor3d
 
 	SpotLightInstance::SpotLightInstance( SceneNode & node
 		, SpotLight & category
-		, castor::Function< void() > markParentDirty
-		, castor::Function< bool() > isParentEnabled )
-		: LightInstance{ node, category, castor::move( markParentDirty ), castor::move( isParentEnabled ) }
+		, Function< void() > markParentDirty
+		, Function< bool() > isParentEnabled )
+		: LightInstance{ node, category, c3d::move( markParentDirty ), c3d::move( isParentEnabled ) }
 		, m_lightView{ m_dirtyShadows }
 		, m_lightProj{ m_dirtyShadows }
 	{
@@ -251,7 +251,7 @@ namespace castor3d
 
 	void SpotLightInstance::doUpdate()
 	{
-		auto direction = castor::Point3f{ 0, 0, 1 };
+		auto direction = Point3f{ 0, 0, 1 };
 		m_node->getDerivedOrientation().transform( direction, direction );
 		m_direction = -direction;
 	}
@@ -277,7 +277,7 @@ namespace castor3d
 		}
 	}
 
-	void SpotLightInstance::doFillLightBuffer( castor::Point4f * data )const
+	void SpotLightInstance::doFillLightBuffer( Point4f * data )const
 	{
 		auto & spotLight = static_cast< SpotLight const & >( getCategory() );
 		auto & spot = *reinterpret_cast< LightData * >( data->ptr() );

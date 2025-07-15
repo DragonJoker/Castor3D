@@ -8,16 +8,16 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::DirectionalLight >
-		: public TextWriterT< castor3d::DirectionalLight >
+	class TextWriter< DirectionalLight >
+		: public TextWriterT< DirectionalLight >
 	{
 	public:
 		explicit TextWriter( String const & tabs );
-		bool operator()( castor3d::DirectionalLight const & light
-			, castor::StringStream & file )override;
+		bool operator()( DirectionalLight const & light
+			, StringStream & file )override;
 	};
 }
 

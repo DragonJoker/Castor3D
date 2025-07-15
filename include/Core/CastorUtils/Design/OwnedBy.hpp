@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Design/DesignModule.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< class Owner >
 	class OwnedBy
@@ -60,7 +60,7 @@ namespace castor
 	 *\remarks		doit être utilisée dans le namespace global.
 	 */
 #	define CU_DeclareExportedOwnedBy( Export, Owner, Name )\
-	namespace castor\
+	namespace c3d\
 	{\
 		template<>\
 		class Export OwnedBy< Owner >\
@@ -85,7 +85,7 @@ namespace castor
 	 *\remarks		doit être utilisée dans le namespace global.
 	 */
 #	define CU_ImplementExportedOwnedBy( Owner, Name )\
-	namespace castor\
+	namespace c3d\
 	{\
 		OwnedBy< Owner >::OwnedBy( Owner & owner )noexcept\
 			: m_owner( &owner )\

@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #	include <arm_acle.h>
 #endif
 
-namespace castor
+namespace c3d
 {
 	void SpinMutex::lock()noexcept
 	{

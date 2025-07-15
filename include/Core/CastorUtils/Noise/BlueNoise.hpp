@@ -15,7 +15,7 @@
 #include <random>
 #include <array>
 
-namespace castor
+namespace c3d
 {
 	class BlueNoise
 	{
@@ -58,7 +58,7 @@ namespace castor
 			if ( ( ( x ^ y ) & 4u ) == 0u )
 			{
 				// flip every other tile to reduce anisotropy
-				castor::swap( x, y );
+				c3d::swap( x, y );
 			}
 
 			if ( ( y & 4u ) == 0u )

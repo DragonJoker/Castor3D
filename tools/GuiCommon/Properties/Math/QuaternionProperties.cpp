@@ -3,15 +3,15 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
 
-GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( castor, Quaternion )
+GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( c3d, Quaternion )
 
 namespace GuiCommon
 {
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( QuaternionProperty, wxPGProperty, castor::Quaternion, castor::Quaternion const &, TextCtrl )
+	WX_PG_IMPLEMENT_PROPERTY_CLASS( QuaternionProperty, wxPGProperty, c3d::Quaternion, c3d::Quaternion const &, TextCtrl )
 
 	QuaternionProperty::QuaternionProperty( wxString const & label
 		, wxString const & name
-		, castor::Quaternion const & value )
+		, c3d::Quaternion const & value )
 		: wxPGProperty( label, name )
 	{
 		setValueI( value );
@@ -26,7 +26,7 @@ namespace GuiCommon
 	{
 		if ( GetChildCount() )
 		{
-			const castor::Quaternion & quat = QuaternionRefFromVariant( m_value );
+			const c3d::Quaternion & quat = QuaternionRefFromVariant( m_value );
 			quat.toAxisAngle( m_axis, m_angle );
 			Item( 0 )->SetValue( m_axis[0] );
 			Item( 1 )->SetValue( m_axis[1] );
@@ -37,7 +37,7 @@ namespace GuiCommon
 
 	wxVariant QuaternionProperty::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
 	{
-		castor::Quaternion & quat = QuaternionRefFromVariant( thisValue );
+		c3d::Quaternion & quat = QuaternionRefFromVariant( thisValue );
 		auto axis = m_axis;
 		auto angle = m_angle;
 		float val = float( childValue.GetDouble() );
@@ -61,7 +61,7 @@ namespace GuiCommon
 			break;
 		}
 
-		quat = castor::Quaternion::fromAxisAngle( axis, angle );
+		quat = c3d::Quaternion::fromAxisAngle( axis, angle );
 		wxVariant newVariant;
 		newVariant << quat;
 		return newVariant;

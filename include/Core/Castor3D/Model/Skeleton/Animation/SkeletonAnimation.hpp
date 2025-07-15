@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Animation/Animation.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class SkeletonAnimation
 		: public Animation
@@ -28,7 +28,7 @@ namespace castor3d
 		 *\param[in]	name		Le nom de l'animation.
 		 */
 		C3D_API explicit SkeletonAnimation( Animable & animable
-			, castor::String const & name = castor::cuEmptyString );
+			, String const & name = cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Move constructor.
@@ -104,7 +104,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'objet.
 		 */
 		C3D_API bool hasObject( SkeletonNodeType type
-			, castor::String const & name )const;
+			, String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated node.
@@ -134,7 +134,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'objet.
 		 */
 		C3D_API SkeletonAnimationObjectRPtr getObject( SkeletonNodeType type
-			, castor::String const & name )const;
+			, String const & name )const;
 		/**
 		 *\~english
 		 *\return		The moving objects.
@@ -161,7 +161,7 @@ namespace castor3d
 		void doCloneInto( Animation & output )const override;
 
 	private:
-		using ObjectMap = castor::StringMap< SkeletonAnimationObjectUPtr >;
+		using ObjectMap = StringMap< SkeletonAnimationObjectUPtr >;
 
 	private:
 		//!\~english	The root moving objects.

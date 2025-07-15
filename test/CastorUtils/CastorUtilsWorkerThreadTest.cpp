@@ -21,9 +21,9 @@ namespace Testing
 	void CastorUtilsWorkerThreadTest::SingleThread()
 	{
 		static constexpr size_t count = 1000000u;
-		castor::WorkerThread worker;
+		c3d::WorkerThread worker;
 		CT_CHECK( worker.isEnded() );
-		castor::Vector< size_t > data;
+		c3d::Vector< size_t > data;
 
 		worker.feed( [&data]()
 		{
@@ -45,8 +45,8 @@ namespace Testing
 	void CastorUtilsWorkerThreadTest::ProducerConsumer()
 	{
 		static constexpr size_t count = 1000000u;
-		castor::WorkerThread producer;
-		castor::WorkerThread consumer;
+		c3d::WorkerThread producer;
+		c3d::WorkerThread consumer;
 		std::atomic_int value{ 0 };
 
 		producer.feed( [&value]()
@@ -81,8 +81,8 @@ namespace Testing
 	void CastorUtilsWorkerThreadTest::MultipleSameTask()
 	{
 		static constexpr size_t count = 1000000u;
-		castor::WorkerThread worker1;
-		castor::WorkerThread worker2;
+		c3d::WorkerThread worker1;
+		c3d::WorkerThread worker2;
 		std::atomic_int value{ 0 };
 
 		auto job = [&value]()

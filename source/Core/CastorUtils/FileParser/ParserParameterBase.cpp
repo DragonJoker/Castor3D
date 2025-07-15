@@ -3,7 +3,7 @@
 #include "CastorUtils/FileParser/ParserParameter.hpp"
 #include "CastorUtils/FileParser/ParserParameterTypeException.hpp"
 
-namespace castor
+namespace c3d
 {
 	namespace prsparam
 	{

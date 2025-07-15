@@ -15,7 +15,7 @@ See LICENSE file in root folder
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**
 	*\~english
@@ -94,7 +94,7 @@ namespace castor3d
 	struct OverlayVertexBufferPoolT;
 
 	template< typename VertexT, uint32_t CountT >
-	using OverlayVertexBufferPoolPtrT = castor::RawUniquePtr< OverlayVertexBufferPoolT< VertexT, CountT > >;
+	using OverlayVertexBufferPoolPtrT = RawUniquePtr< OverlayVertexBufferPoolT< VertexT, CountT > >;
 
 	struct OverlayDrawPipeline
 	{
@@ -109,7 +109,7 @@ namespace castor3d
 			ashes::DescriptorSetPtr draw{};
 			ashes::DescriptorSetCRefArray all{};
 		};
-		using DescriptorSetsPtr = castor::RawUniquePtr< DescriptorSets >;
+		using DescriptorSetsPtr = RawUniquePtr< DescriptorSets >;
 
 		OverlayPipelineData( OverlayPipelineData const & ) = delete;
 		OverlayPipelineData & operator=( OverlayPipelineData const & ) = delete;
@@ -119,24 +119,24 @@ namespace castor3d
 		~OverlayPipelineData()noexcept = default;
 
 		OverlayPipelineData( ashes::BufferPtr< uint32_t > iDsBuffer
-			, castor::ArrayView< uint32_t > ids
+			, ArrayView< uint32_t > ids
 			, ashes::BufferPtr< VkDrawIndirectCommand > indirectBuffer
-			, castor::ArrayView< VkDrawIndirectCommand > indirect
+			, ArrayView< VkDrawIndirectCommand > indirect
 			, DescriptorSetsPtr descs
 			, uint32_t c )
-			: overlaysIDsBuffer{ castor::move( iDsBuffer ) }
-			, overlaysIDs{ castor::move( ids ) }
-			, indirectCommandsBuffer{ castor::move( indirectBuffer ) }
-			, indirectCommands{ castor::move( indirect ) }
-			, descriptorSets{ castor::move( descs ) }
+			: overlaysIDsBuffer{ c3d::move( iDsBuffer ) }
+			, overlaysIDs{ c3d::move( ids ) }
+			, indirectCommandsBuffer{ c3d::move( indirectBuffer ) }
+			, indirectCommands{ c3d::move( indirect ) }
+			, descriptorSets{ c3d::move( descs ) }
 			, count{ c }
 		{
 		}
 
 		ashes::BufferPtr< uint32_t > overlaysIDsBuffer{};
-		castor::ArrayView< uint32_t > overlaysIDs{};
+		ArrayView< uint32_t > overlaysIDs{};
 		ashes::BufferPtr< VkDrawIndirectCommand > indirectCommandsBuffer{};
-		castor::ArrayView< VkDrawIndirectCommand > indirectCommands{};
+		ArrayView< VkDrawIndirectCommand > indirectCommands{};
 		DescriptorSetsPtr descriptorSets{};
 		uint32_t count{};
 	};
@@ -179,7 +179,7 @@ namespace castor3d
 			, indirectData{ indirectData }
 			, overlayIndex{ overlayIndex }
 			, pipelineIndex{ pipelineIndex }
-			, textBuffer{ castor::move( textBuffer ) }
+			, textBuffer{ c3d::move( textBuffer ) }
 			, secondary{ secondary }
 		{
 		}
@@ -202,8 +202,8 @@ namespace castor3d
 	};
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, OverlayRenderer, C3D_API );
-	CU_DeclareSmartPtr( castor3d, OverlayTextBufferPool, C3D_API );
+	CU_DeclareSmartPtr( c3d, OverlayRenderer, C3D_API );
+	CU_DeclareSmartPtr( c3d, OverlayTextBufferPool, C3D_API );
 	/** @endcond */
 }
 

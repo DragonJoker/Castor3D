@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/ParticleSystem/ParticleEmitter.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystemImpl.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class CpuParticleSystem
 		: public ParticleSystemImpl
@@ -24,27 +24,27 @@ namespace castor3d
 		 */
 		C3D_API explicit CpuParticleSystem( ParticleSystem & parent );
 		/**
-		 *\copydoc		castor3d::ParticleSystemImpl::initialise
+		 *\copydoc		ParticleSystemImpl::initialise
 		 */
 		C3D_API bool initialise( RenderDevice const & device )override;
 		/**
-		 *\copydoc		castor3d::ParticleSystemImpl::cleanup
+		 *\copydoc		ParticleSystemImpl::cleanup
 		 */
 		C3D_API void cleanup( RenderDevice const & device )override;
 		/**
-		 *\copydoc		castor3d::ParticleSystemImpl::update
+		 *\copydoc		ParticleSystemImpl::update
 		 */
-		C3D_API void update( castor3d::CpuUpdater & updater )override;
+		C3D_API void update( CpuUpdater & updater )override;
 		/**
-		 *\copydoc		castor3d::ParticleSystemImpl::update
+		 *\copydoc		ParticleSystemImpl::update
 		 */
-		C3D_API uint32_t update( castor3d::GpuUpdater & updater )override;
+		C3D_API uint32_t update( GpuUpdater & updater )override;
 		/**
-		 *\copydoc		castor3d::ParticleSystemImpl::addParticleVariable
+		 *\copydoc		ParticleSystemImpl::addParticleVariable
 		 */
-		C3D_API void addParticleVariable( castor::String const & name
+		C3D_API void addParticleVariable( String const & name
 			, ParticleFormat type
-			, castor::String const & defaultValue )override;
+			, String const & defaultValue )override;
 
 	protected:
 		/**
@@ -123,7 +123,7 @@ namespace castor3d
 		uint32_t m_firstUnused{ 1u };
 
 	private:
-		castor::Vector< ParticleEmitter::OnEmitConnection > m_onEmits;
+		Vector< ParticleEmitter::OnEmitConnection > m_onEmits;
 	};
 }
 

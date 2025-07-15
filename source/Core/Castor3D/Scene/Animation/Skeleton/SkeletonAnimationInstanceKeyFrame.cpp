@@ -16,7 +16,7 @@
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	SkeletonAnimationInstanceKeyFrame::SkeletonAnimationInstanceKeyFrame( SkeletonAnimationInstance & skeletonAnimation
 		, SkeletonAnimationKeyFrame const & keyFrame
@@ -31,7 +31,7 @@ namespace castor3d
 			m_objects.emplace_back( object.get()
 				, ( it != m_keyFrame.end()
 					? it->cumulative
-					: castor::Matrix4x4f{ castor::Matrix4x4f::getIdentity() } ) );
+					: Matrix4x4f{ Matrix4x4f::getIdentity() } ) );
 		}
 
 		m_boxes = m_keyFrame.computeBoundingBoxes( m_skeleton.getMesh(), m_skeleton.getSkeleton() );

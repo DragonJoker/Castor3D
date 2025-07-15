@@ -3,18 +3,18 @@
 #include "CastorUtils/Data/LoaderException.hpp"
 #include "CastorUtils/Data/Path.hpp"
 
-namespace castor
+namespace c3d
 {
 	void ImageWriter::registerWriter( String const & extension, ImageWriterPtr writer )
 	{
-		m_writers.emplace_back( castor::move( writer ) );
+		m_writers.emplace_back( c3d::move( writer ) );
 		auto ptr = m_writers.back().get();
 		m_extWriters[string::lowerCase( extension )] = ptr;
 	}
 
 	void ImageWriter::registerWriter( StringArray const & extensions, ImageWriterPtr writer )
 	{
-		m_writers.emplace_back( castor::move( writer ) );
+		m_writers.emplace_back( c3d::move( writer ) );
 		auto ptr = m_writers.back().get();
 
 		for ( auto & extension : extensions )

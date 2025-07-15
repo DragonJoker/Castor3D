@@ -11,28 +11,25 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::FractalMappingComponent >
-		: public TextWriterT< castor3d::FractalMappingComponent >
+	class TextWriter< FractalMappingComponent >
+		: public TextWriterT< FractalMappingComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::FractalMappingComponent >{ tabs }
+			: TextWriterT< FractalMappingComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::FractalMappingComponent const & object
+		bool operator()( FractalMappingComponent const & object
 			, StringStream & file )override
 		{
 			return writeOpt( file, cuT( "fractal" ), object.isFractal(), false );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace fractal
@@ -221,22 +218,22 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void FractalMappingComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void FractalMappingComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "fractal" )
 			, fractal::parserPassFractal
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			, { makeParameter< ParameterType::eBool >() } );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const FractalMappingComponent::TypeName = C3D_MakePassBaseComponentName( "fractal" );
+	String const FractalMappingComponent::TypeName = C3D_MakePassBaseComponentName( "fractal" );
 
 	FractalMappingComponent::FractalMappingComponent( Pass & pass )
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName }
+		: BaseDataPassComponentT< AtomicGroupChangeTracked< bool > >{ pass, TypeName }
 	{
 	}
 
@@ -248,17 +245,17 @@ namespace castor3d
 
 	PassComponentUPtr FractalMappingComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< FractalMappingComponent >( pass );
+		auto result = makeRawUnique< FractalMappingComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.get() };
 	}
 
-	bool FractalMappingComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool FractalMappingComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< FractalMappingComponent >{ tabs }( *this, file );
+		return TextWriter< FractalMappingComponent >{ tabs }( *this, file );
 	}
 
 	//*********************************************************************************************

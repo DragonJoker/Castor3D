@@ -2,20 +2,20 @@
 
 #include "Castor3D/Render/RenderDevice.hpp"
 
-CU_ImplementSmartPtr( castor3d, TransparentPassResult )
+CU_ImplementSmartPtr( c3d, TransparentPassResult )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
-	castor::String getTextureName( WbTexture texture )
+	String getTextureName( WbTexture texture )
 	{
 		return cuT( "c3d_map" ) + getTexName( texture );
 	}
 
-	castor::String getTexName( WbTexture texture )
+	String getTexName( WbTexture texture )
 	{
-		static castor::Array< castor::String, size_t( WbTexture::eCount ) > Values
+		static Array< String, size_t( WbTexture::eCount ) > Values
 		{
 			{
 				cuT( "Accumulation" ),
@@ -26,13 +26,13 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	castor::PixelFormat getFormat( RenderDevice const &, WbTexture texture )
+	PixelFormat getFormat( RenderDevice const &, WbTexture texture )
 	{
-		static castor::Array< castor::PixelFormat, size_t( WbTexture::eCount ) > Values
+		static Array< PixelFormat, size_t( WbTexture::eCount ) > Values
 		{
 			{
-				castor::PixelFormat::eR16G16B16A16_SFLOAT,
-				castor::PixelFormat::eR16_SFLOAT,
+				PixelFormat::eR16G16B16A16_SFLOAT,
+				PixelFormat::eR16_SFLOAT,
 			}
 		};
 		return Values[size_t( texture )];
@@ -40,7 +40,7 @@ namespace castor3d
 
 	ClearValue getClearValue( WbTexture texture )
 	{
-		static castor::Array< ClearValue, size_t( WbTexture::eCount ) > Values
+		static Array< ClearValue, size_t( WbTexture::eCount ) > Values
 		{
 			{
 				ClearValue{ transparentBlackClearColor },
@@ -52,7 +52,7 @@ namespace castor3d
 
 	ImageUsageFlags getUsageFlags( WbTexture texture )
 	{
-		static castor::Array< ImageUsageFlags, size_t( WbTexture::eCount ) > Values
+		static Array< ImageUsageFlags, size_t( WbTexture::eCount ) > Values
 		{
 			{
 				ImageUsageFlags::eSampled | ImageUsageFlags::eColorAttachment | ImageUsageFlags::eTransferDst | ImageUsageFlags::eTransferSrc,
@@ -64,7 +64,7 @@ namespace castor3d
 
 	BorderColour getBorderColor( WbTexture texture )
 	{
-		static castor::Array< BorderColour, size_t( WbTexture::eCount ) > Values
+		static Array< BorderColour, size_t( WbTexture::eCount ) > Values
 		{
 			{
 				BorderColour::eFloatTransparentBlack,
@@ -78,7 +78,7 @@ namespace castor3d
 
 	TransparentPassResult::TransparentPassResult( crg::ResourcesCache & handler
 		, RenderDevice const & device
-		, castor::Size const & size )
+		, Size const & size )
 		: GBufferT< WbTexture >{ handler
 			, device
 			, cuT( "WBResult" )

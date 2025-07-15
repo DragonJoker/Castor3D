@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <cstdint>
 
-namespace castor3d
+namespace c3d
 {
 	struct SubmeshVertex
 	{

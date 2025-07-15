@@ -5,7 +5,7 @@
 
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -13,7 +13,7 @@ namespace castor3d
 		: index{ pindex }
 	{
 		constexpr auto maxSubmeshSize = sizeof( SubmeshComponentCombineID ) * 8u;
-		constexpr auto maxMorphSize = castor::getBitSize( uint32_t( MorphFlag::eAllBase ) );
+		constexpr auto maxMorphSize = getBitSize( uint32_t( MorphFlag::eAllBase ) );
 		uint32_t offset = 0u;
 		combineID = SubmeshComponentCombineID( ( index >> offset ) & SubmeshComponentCombineID( 0xFFFF ) );
 		offset += maxSubmeshSize;
@@ -30,7 +30,7 @@ namespace castor3d
 		, bool morphingWeights )
 	{
 		constexpr auto maxSubmeshSize = sizeof( SubmeshComponentCombineID ) * 8u;
-		constexpr auto maxMorphSize = castor::getBitSize( uint32_t( MorphFlag::eAllBase ) );
+		constexpr auto maxMorphSize = getBitSize( uint32_t( MorphFlag::eAllBase ) );
 		static_assert( maxSubmeshSize + maxMorphSize + 1u <= 32 );
 		auto offset = 0u;
 		uint32_t result{};
@@ -44,19 +44,19 @@ namespace castor3d
 		return result;
 	}
 
-	castor::String TransformPipeline::getName( Engine const & engine )const
+	String TransformPipeline::getName( Engine const & engine )const
 	{
 		return getName( engine, combineID, morphFlags, meshletsBounds, hasMorphingWeights );
 	}
 
-	castor::String TransformPipeline::getName( Engine const & engine
+	String TransformPipeline::getName( Engine const & engine
 		, SubmeshComponentCombineID combineID
 		, MorphFlags const & morphFlags
 		, bool meshletsBounds
 		, bool hasMorphingWeights )
 	{
 		auto combine = engine.getSubmeshComponentsRegister().getSubmeshComponentCombine( combineID );
-		castor::String result = cuT( "VertexTransformPass" );
+		String result = cuT( "VertexTransformPass" );
 
 		if ( morphFlags != MorphFlag::eNone )
 		{
@@ -88,14 +88,14 @@ namespace castor3d
 	{
 	}
 
-	castor::String BoundsTransformPipeline::getName()const
+	String BoundsTransformPipeline::getName()const
 	{
 		return getName( normals );
 	}
 
-	castor::String BoundsTransformPipeline::getName( bool normals )
+	String BoundsTransformPipeline::getName( bool normals )
 	{
-		castor::String result = cuT( "MeshletBoundsTransformPass" );
+		String result = cuT( "MeshletBoundsTransformPass" );
 
 		if ( normals )
 		{

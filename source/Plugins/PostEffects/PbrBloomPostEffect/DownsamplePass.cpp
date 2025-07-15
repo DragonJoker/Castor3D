@@ -21,9 +21,9 @@ namespace PbrBloom
 {
 	namespace down
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
@@ -32,15 +32,15 @@ namespace PbrBloom
 			constants.end();
 			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", 0u, 0u );
 
-			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
-				, sdw::VertexOutT< c3d::Uv2FT > out )
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour3FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
-				, sdw::FragmentOutT< c3d::Colour3FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour3FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
+				, sdw::FragmentOutT< c3ds::Colour3FT > out )
 				{
 					auto x = writer.declLocale( "x"
 						, srcTexelSize.x() );
@@ -112,7 +112,7 @@ namespace PbrBloom
 
 	DownsamplePass::DownsamplePass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & sceneView
 		, crg::ImageId const & resultImg
 		, uint32_t passesCount
@@ -127,16 +127,16 @@ namespace PbrBloom
 	}
 
 
-	void DownsamplePass::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void DownsamplePass::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 
 		for ( auto & view : m_resultViews )
 		{
-			visitor.visit( cuT( "PostFX: PBRB - Down " ) + castor::string::toString( view.data->info.subresourceRange.baseMipLevel )
+			visitor.visit( cuT( "PostFX: PBRB - Down " ) + c3d::string::toString( view.data->info.subresourceRange.baseMipLevel )
 				, view
 				, m_graph.getFinalLayoutState( view ).layout
-				, castor3d::TextureFactors{}.invert( true ) );
+				, c3d::TextureFactors{}.invert( true ) );
 		}
 	}
 
@@ -148,35 +148,35 @@ namespace PbrBloom
 
 		for ( uint32_t i = 0u; i < passesCount; ++i )
 		{
-			result.push_back( graph.createView( crg::ImageViewData{ resultImg.data->name + castor::string::toMbString( i )
+			result.push_back( graph.createView( crg::ImageViewData{ resultImg.data->name + c3d::string::toMbString( i )
 				, resultImg
-				, castor3d::ImageViewCreateFlags::eNone
-				, castor3d::ImageViewType::e2D
+				, c3d::ImageViewCreateFlags::eNone
+				, c3d::ImageViewType::e2D
 				, getFormat( resultImg )
-				, { castor3d::ImageAspectFlags::eColor, i, 1u, 0u, 1u } } ) );
+				, { c3d::ImageAspectFlags::eColor, i, 1u, 0u, 1u } } ) );
 		}
 
 		return result;
 	}
 
-	castor::Vector< crg::FramePass * > DownsamplePass::doCreatePasses( crg::FramePassGroup & graph
+	c3d::Vector< crg::FramePass * > DownsamplePass::doCreatePasses( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & sceneView
 		, uint32_t passesCount
 		, bool const * enabled
 		, uint32_t const * passIndex )
 	{
-		castor::Vector< crg::FramePass * > result;
+		c3d::Vector< crg::FramePass * > result;
 		auto prev = &previousPass;
 		auto src = sceneView;
 
 		for ( uint32_t i = 0u; i < passesCount; ++i )
 		{
-			auto srcExtent = castor3d::makeExtent2D( getMipExtent( src.front() ) );
-			auto dstExtent = castor3d::makeExtent2D( getMipExtent( m_resultViews[i] ) );
+			auto srcExtent = c3d::makeExtent2D( getMipExtent( src.front() ) );
+			auto dstExtent = c3d::makeExtent2D( getMipExtent( m_resultViews[i] ) );
 			auto count = uint32_t( src.size() );
-			auto & pass = graph.createPass( "Downsample" + castor::string::toMbString( i )
+			auto & pass = graph.createPass( "Downsample" + c3d::string::toMbString( i )
 				, [this, &device, passIndex, enabled, count, srcExtent, dstExtent, i]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
@@ -184,20 +184,20 @@ namespace PbrBloom
 					auto builder = crg::RenderQuadBuilder{}
 						.enabled( enabled )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
-						.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_FRAGMENT_BIT, 0u, sizeof( castor::Point2f ) } )
+						.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_FRAGMENT_BIT, 0u, sizeof( c3d::Point2f ) } )
 						.renderSize( dstExtent )
 						.texcoordConfig( {} )
 						.recordInto( [this, srcExtent, i]( crg::RecordContext & ctx
 							, VkCommandBuffer cb
 							, uint32_t idx )
 							{
-								castor::Point2f invSize{ 1.0f / float( srcExtent.width )
+								c3d::Point2f invSize{ 1.0f / float( srcExtent.width )
 									, 1.0f / float( srcExtent.height ) };
 								ctx.getContext().vkCmdPushConstants( cb
 									, m_quads[i]->getPipelineLayout()
 									, VK_SHADER_STAGE_FRAGMENT_BIT
 									, 0u
-									, sizeof( castor::Point2f )
+									, sizeof( c3d::Point2f )
 									, invSize.constPtr() );
 							} );
 
@@ -211,7 +211,7 @@ namespace PbrBloom
 						, graph
 						, crg::ru::Config{ count } );
 					m_quads.push_back( result.get() );
-					device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+					device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );
@@ -219,12 +219,12 @@ namespace PbrBloom
 			pass.addDependency( *prev );
 			pass.addSampledView( src
 				, 0u
-				, crg::SamplerDesc{ castor3d::FilterMode::eLinear
-					, castor3d::FilterMode::eLinear
-					, castor3d::MipmapMode::eNearest
-					, castor3d::WrapMode::eClampToEdge
-					, castor3d::WrapMode::eClampToEdge
-					, castor3d::WrapMode::eClampToEdge
+				, crg::SamplerDesc{ c3d::FilterMode::eLinear
+					, c3d::FilterMode::eLinear
+					, c3d::MipmapMode::eNearest
+					, c3d::WrapMode::eClampToEdge
+					, c3d::WrapMode::eClampToEdge
+					, c3d::WrapMode::eClampToEdge
 					, 0.0f
 					, float( i == 0u ? i : i - 1u )
 					, float( i == 0u ? i + 1u : i ) } );

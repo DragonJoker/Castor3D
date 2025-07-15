@@ -12,9 +12,9 @@
 
 namespace HaarmPieterDuiker
 {
-	namespace c3d = castor3d::shader;
-	castor::String ToneMapping::Type = cuT( "haarm" );
-	castor::MbString ToneMapping::Name = "Haarm Pieter Duiker Tone Mapping";
+	namespace c3ds = c3d::shader;
+	c3d::String ToneMapping::Type = cuT( "haarm" );
+	c3d::MbString ToneMapping::Name = "Haarm Pieter Duiker Tone Mapping";
 
 	void ToneMapping::create( ast::ShaderBuilder & builder )
 	{
@@ -31,8 +31,8 @@ namespace HaarmPieterDuiker
 			}
 			, sdw::InVec3{ writer, "v" } );
 
-		writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
-			, sdw::FragmentOutT< c3d::Colour4FT > out )
+		writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
+			, sdw::FragmentOutT< c3ds::Colour4FT > out )
 			{
 				auto hdrColor = writer.declLocale( "hdrColor"
 					, c3d_colourGrading.colourGrade( c3d_mapHdr.sample( in.uv() ).rgb() ) );

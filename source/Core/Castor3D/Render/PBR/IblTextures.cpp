@@ -27,9 +27,9 @@
 
 #include <RenderGraph/ResourceHandler.hpp>
 
-CU_ImplementSmartPtr( castor3d, IblTextures )
+CU_ImplementSmartPtr( c3d, IblTextures )
 
-namespace castor3d
+namespace c3d
 {
 	namespace ibltex
 	{
@@ -67,17 +67,17 @@ namespace castor3d
 		, m_sampler{ ibltex::doCreateSampler( *scene.getEngine() ) }
 		, m_radianceComputer{ *scene.getEngine()
 			, device
-			, castor::Size{ RadianceMapSize, RadianceMapSize }
+			, Size{ RadianceMapSize, RadianceMapSize }
 			, source }
 		, m_environmentPrefilter{ *scene.getEngine()
 			, device
-			, castor::Size{ PrefilteredEnvironmentMapSize, PrefilteredEnvironmentMapSize }
+			, Size{ PrefilteredEnvironmentMapSize, PrefilteredEnvironmentMapSize }
 			, source
 			, sampler
 			, false }
 		, m_environmentSheenPrefilter{ *scene.getEngine()
 			, device
-			, castor::Size{ PrefilteredEnvironmentMapSize, PrefilteredEnvironmentMapSize }
+			, Size{ PrefilteredEnvironmentMapSize, PrefilteredEnvironmentMapSize }
 			, source
 			, sampler
 			, true }

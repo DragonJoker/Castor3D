@@ -12,7 +12,7 @@ namespace Testing
 		: public C3DTestCase
 	{
 	public:
-		explicit SceneExportTest( castor3d::Engine & engine );
+		explicit SceneExportTest( c3d::Engine & engine );
 
 	private:
 		void doRegisterTests()override;
@@ -26,9 +26,9 @@ namespace Testing
 		void LoadCleanReload();
 
 	private:
-		castor3d::SceneRPtr doParseScene( castor::Path const & path, bool initialise = false );
-		void doTestScene( castor::String const & name );
-		void doTestCleanReloadScene( castor::String const & name );
+		c3d::SceneRPtr doParseScene( c3d::Path const & path, bool initialise = false );
+		void doTestScene( c3d::String const & name );
+		void doTestCleanReloadScene( c3d::String const & name );
 	};
 }
 

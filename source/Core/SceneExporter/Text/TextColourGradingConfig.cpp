@@ -2,10 +2,8 @@
 
 #include <Castor3D/Miscellaneous/Logger.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< ColourGradingConfig >::TextWriter( String const & tabs )
 		: TextWriterT< ColourGradingConfig >{ tabs }
 	{
@@ -42,8 +40,8 @@ namespace castor
 				&& writeOpt( file, cuT( "shadows" ), object.shadows, { 1.0f, 1.0f, 1.0f } )
 				&& writeOpt( file, cuT( "midtones" ), object.midtones, { 1.0f, 1.0f, 1.0f } )
 				&& writeOpt( file, cuT( "highlights" ), object.highlights, { 1.0f, 1.0f, 1.0f } )
-				&& writeOpt( file, cuT( "shadows_range" ), castor::Point2f{ object.shadowsStart, object.shadowsEnd }, { 0.0f, 1.0f } )
-				&& writeOpt( file, cuT( "highlights_range" ), castor::Point2f{ object.highlightsStart, object.highlightsEnd }, { 0.0f, 1.0f } );
+				&& writeOpt( file, cuT( "shadows_range" ), Point2f{ object.shadowsStart, object.shadowsEnd }, { 0.0f, 1.0f } )
+				&& writeOpt( file, cuT( "highlights_range" ), Point2f{ object.highlightsStart, object.highlightsEnd }, { 0.0f, 1.0f } );
 		}
 
 		return result;

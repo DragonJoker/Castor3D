@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Animation/Animation.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class SceneNodeAnimation
 		: public Animation
@@ -32,7 +32,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation.
 		 */
 		C3D_API explicit SceneNodeAnimation( SceneNode & node
-			, castor::String const & name = castor::cuEmptyString );
+			, String const & name = cuEmptyString );
 
 	private:
 		void doCloneInto( Animation & output )const override

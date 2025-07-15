@@ -12,7 +12,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class BorderPanelOverlay
 		: public OverlayCategory
@@ -43,7 +43,7 @@ namespace castor3d
 		 */
 		C3D_API static OverlayCategoryUPtr create();
 		/**
-		 *\copydoc	castor3d::OverlayCategory::accept
+		 *\copydoc	OverlayCategory::accept
 		 */
 		C3D_API void accept( OverlayVisitor & visitor )const override;
 		/**
@@ -74,7 +74,7 @@ namespace castor3d
 		 *\param[in]	size	La taille de l'écran
 		 *\return		La taille
 		 */
-		C3D_API castor::Point4ui getAbsoluteBorderSize( castor::Size const & size )const;
+		C3D_API Point4ui getAbsoluteBorderSize( Size const & size )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay borders size
@@ -83,7 +83,7 @@ namespace castor3d
 		 *\brief		Récupère la taille absolue des bordures de l'incrustation
 		 *\return		La taille
 		 */
-		C3D_API castor::Point4d getAbsoluteBorderSize()const;
+		C3D_API Point4d getAbsoluteBorderSize()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay borders size
@@ -92,7 +92,7 @@ namespace castor3d
 		 *\brief		Récupère la taille absolue des bordures de l'incrustation
 		 *\return		La taille
 		 */
-		C3D_API castor::Point4ui computePixelBorderSize()const;
+		C3D_API Point4ui computePixelBorderSize()const;
 		/**
 		 *\~english
 		 *\brief		Creates the shader program used to compute the overlay's vertices.
@@ -136,7 +136,7 @@ namespace castor3d
 			return m_relBorderSize->w;
 		}
 
-		castor::Point4d const & getRelativeBorderSize()const noexcept
+		Point4d const & getRelativeBorderSize()const noexcept
 		{
 			return m_relBorderSize;
 		}
@@ -170,7 +170,7 @@ namespace castor3d
 			return getPixelBorderSize()->w;
 		}
 
-		castor::Point4ui const & getPixelBorderSize()const noexcept
+		Point4ui const & getPixelBorderSize()const noexcept
 		{
 			CU_Require( hasPixelBorderSize() );
 			return *m_pxBorderSize;
@@ -186,12 +186,12 @@ namespace castor3d
 			return m_borderPosition;
 		}
 
-		castor::Point4d const & getBorderOuterUV()const noexcept
+		Point4d const & getBorderOuterUV()const noexcept
 		{
 			return m_borderOuterUv;
 		}
 
-		castor::Point4d const & getBorderInnerUV()const noexcept
+		Point4d const & getBorderInnerUV()const noexcept
 		{
 			return m_borderInnerUv;
 		}
@@ -233,7 +233,7 @@ namespace castor3d
 			m_borderChanged = true;
 		}
 
-		void setRelativeBorderSize( castor::Point4d const & size )noexcept
+		void setRelativeBorderSize( Point4d const & size )noexcept
 		{
 			m_relBorderSize->x = std::max( 0.0, size->x );
 			m_relBorderSize->y = std::max( 0.0, size->y );
@@ -247,7 +247,7 @@ namespace castor3d
 		{
 			if ( m_pxBorderSize == std::nullopt )
 			{
-				m_pxBorderSize = castor::Point4ui{};
+				m_pxBorderSize = Point4ui{};
 			}
 
 			( *m_pxBorderSize )->x = size;
@@ -259,7 +259,7 @@ namespace castor3d
 		{
 			if ( m_pxBorderSize == std::nullopt )
 			{
-				m_pxBorderSize = castor::Point4ui{};
+				m_pxBorderSize = Point4ui{};
 			}
 
 			( *m_pxBorderSize )->z = size;
@@ -271,7 +271,7 @@ namespace castor3d
 		{
 			if ( m_pxBorderSize == std::nullopt )
 			{
-				m_pxBorderSize = castor::Point4ui{};
+				m_pxBorderSize = Point4ui{};
 			}
 
 			( *m_pxBorderSize )->y = size;
@@ -283,7 +283,7 @@ namespace castor3d
 		{
 			if ( m_pxBorderSize == std::nullopt )
 			{
-				m_pxBorderSize = castor::Point4ui{};
+				m_pxBorderSize = Point4ui{};
 			}
 
 			( *m_pxBorderSize )->w = size;
@@ -291,7 +291,7 @@ namespace castor3d
 			m_borderChanged = true;
 		}
 
-		void setPixelBorderSize( castor::Point4ui const & size )noexcept
+		void setPixelBorderSize( Point4ui const & size )noexcept
 		{
 			m_pxBorderSize = size;
 			m_sizeChanged = true;
@@ -305,13 +305,13 @@ namespace castor3d
 			m_borderChanged = true;
 		}
 
-		void setBorderOuterUV( castor::Point4d const & value )noexcept
+		void setBorderOuterUV( Point4d const & value )noexcept
 		{
 			m_borderOuterUv = value;
 			m_borderChanged = true;
 		}
 
-		void setBorderInnerUV( castor::Point4d const & value )noexcept
+		void setBorderInnerUV( Point4d const & value )noexcept
 		{
 			m_borderInnerUv = value;
 			m_borderChanged = true;
@@ -320,15 +320,15 @@ namespace castor3d
 
 	private:
 		/**
-		 *\copydoc		castor3d::OverlayCategory::doUpdateSize
+		 *\copydoc		OverlayCategory::doUpdateSize
 		 */
 		void doUpdateSize( OverlayRenderer const & renderer )override;
 		/**
-		 *\copydoc		castor3d::OverlayCategory::doUpdateSize
+		 *\copydoc		OverlayCategory::doUpdateSize
 		 */
-		void doUpdateClientArea( castor::Point4d & clientArea )const override;
+		void doUpdateClientArea( Point4d & clientArea )const override;
 		/**
-		 *\copydoc		castor3d::OverlayCategory::doReset
+		 *\copydoc		OverlayCategory::doReset
 		 */
 		void doReset()override;
 
@@ -338,19 +338,19 @@ namespace castor3d
 		MaterialObs m_borderMaterial{};
 		//!\~english	The border size, relative to parent dimensions.
 		//!\~french		La taille des bords, relative aux dimensions du parent.
-		castor::Point4d m_relBorderSize{};
+		Point4d m_relBorderSize{};
 		//!\~english	The absolute border size, in pixels.
 		//!\~french		La taille absolue des bords, en pixels.
-		std::optional< castor::Point4ui > m_pxBorderSize{};
+		std::optional< Point4ui > m_pxBorderSize{};
 		//!\~english	The border material name.
 		//!\~french		Le nom du matériau des bords.
 		BorderPosition m_borderPosition{ BorderPosition::eInternal };
 		//!\~english	The UV for the outer part of the border.
 		//!\~french		Les UV de la partie extérieure de la bordure.
-		castor::Point4d m_borderOuterUv{ 0, 0, 1, 1 };
+		Point4d m_borderOuterUv{ 0, 0, 1, 1 };
 		//!\~english	The UV for the inner part of the border.
 		//!\~french		Les UV de la partie intérieure de la bordure.
-		castor::Point4d m_borderInnerUv{ 0.33, 0.33, 0.66, 0.66 };
+		Point4d m_borderInnerUv{ 0.33, 0.33, 0.66, 0.66 };
 		//!\~english	Tells if the border has changed, in any way.
 		//!\~french		Dit si la bordure a changé, de quelque manière que ce soit.
 		bool m_borderChanged{ true };

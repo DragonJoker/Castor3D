@@ -25,15 +25,15 @@ namespace GuiCommon
 {
 	namespace passtp
 	{
-		using onEnabledChange = castor::Function< void( wxVariant const & var
-			, castor3d::Pass & pass
-			, castor::String const & compName ) >;
+		using onEnabledChange = c3d::Function< void( wxVariant const & var
+			, c3d::Pass & pass
+			, c3d::String const & compName ) >;
 
 		class PassTreeGatherer
-			: public castor3d::ConfigurationVisitor
+			: public c3d::ConfigurationVisitor
 		{
 		public:
-			static PassTreeItemProperty::PropertiesArray submit( castor3d::Pass & pass
+			static PassTreeItemProperty::PropertiesArray submit( c3d::Pass & pass
 				, TreeItemProperty * properties
 				, wxPropertyGrid * grid
 				, wxPGProperty * mainContainer
@@ -48,7 +48,7 @@ namespace GuiCommon
 					if ( componentDesc.plugin
 						&& !componentDesc.plugin->isMapComponent() )
 					{
-						auto passCompProps = castor::make_unique< PassTreeItemProperty::Properties >();
+						auto passCompProps = c3d::makeRawUnique< PassTreeItemProperty::Properties >();
 						auto compProps = passCompProps.get();
 						compProps->container = mainContainer;
 						compProps->component = pass.getComponent( componentDesc.name );
@@ -82,7 +82,7 @@ namespace GuiCommon
 								compProps->container->SetExpanded( false );
 							}
 
-							result.emplace_back( castor::move( passCompProps ) );
+							result.emplace_back( c3d::move( passCompProps ) );
 						}
 					}
 				}
@@ -91,11 +91,11 @@ namespace GuiCommon
 			}
 
 		private:
-			PassTreeGatherer( castor3d::Pass & pass
+			PassTreeGatherer( c3d::Pass & pass
 				, TreeItemProperty * properties
 				, wxPropertyGrid * grid
 				, onEnabledChange onEnabled )
-				: castor3d::ConfigurationVisitor{}
+				: c3d::ConfigurationVisitor{}
 				, m_pass{ pass }
 				, m_properties{ properties }
 				, m_grid{ grid }
@@ -103,318 +103,318 @@ namespace GuiCommon
 			{
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, bool & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, int16_t & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, uint16_t & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, int32_t & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ));
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ));
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, uint32_t & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, int64_t & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ));
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ));
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, uint64_t & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, float & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, double & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::Angle & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+			void visit( c3d::String const & name
+				, c3d::Angle & value
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::LuminousIntensity & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+			void visit( c3d::String const & name
+				, c3d::LuminousIntensity & value
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::Illumination & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+			void visit( c3d::String const & name
+				, c3d::Illumination & value
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::RgbColour & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+			void visit( c3d::String const & name
+				, c3d::RgbColour & value
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::RgbaColour & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+			void visit( c3d::String const & name
+				, c3d::RgbaColour & value
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::HdrRgbColour & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+			void visit( c3d::String const & name
+				, c3d::HdrRgbColour & value
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::HdrRgbaColour & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+			void visit( c3d::String const & name
+				, c3d::HdrRgbaColour & value
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::RangedValue< float > & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+			void visit( c3d::String const & name
+				, c3d::RangedValue< float > & value
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::RangedValue< int32_t > & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+			void visit( c3d::String const & name
+				, c3d::RangedValue< int32_t > & value
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::RangedValue< uint32_t > & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+			void visit( c3d::String const & name
+				, c3d::RangedValue< uint32_t > & value
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, int32_t & enumValue
-				, castor::StringArray const & enumNames
-				, castor3d::ConfigurationVisitor::OnSEnumValueChange onChange
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+				, c3d::StringArray const & enumNames
+				, c3d::ConfigurationVisitor::OnSEnumValueChange onChange
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyET( m_compProps->container
 					, name
 					, make_wxArrayString( enumNames )
 					, &enumValue
-					, castor::move( controls )
+					, c3d::move( controls )
 					, onChange ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, uint32_t & enumValue
-				, castor::StringArray const & enumNames
-				, castor3d::ConfigurationVisitor::OnUEnumValueChange onChange
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
+				, c3d::StringArray const & enumNames
+				, c3d::ConfigurationVisitor::OnUEnumValueChange onChange
+				, c3d::ConfigurationVisitor::ControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyET( m_compProps->container
 					, name
 					, make_wxArrayString( enumNames )
 					, &enumValue
-					, castor::move( controls )
+					, c3d::move( controls )
 					, onChange ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, bool & value
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+				, c3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, int16_t & value
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+				, c3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, uint16_t & value
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+				, c3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, int32_t & value
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+				, c3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, uint32_t & value
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+				, c3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, int64_t & value
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+				, c3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, uint64_t & value
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+				, c3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, float & value
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+				, c3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, double & value
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+				, c3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::RgbColour & value
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+			void visit( c3d::String const & name
+				, c3d::RgbColour & value
+				, c3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::RgbaColour & value
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+			void visit( c3d::String const & name
+				, c3d::RgbaColour & value
+				, c3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::HdrRgbColour & value
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+			void visit( c3d::String const & name
+				, c3d::HdrRgbColour & value
+				, c3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::HdrRgbaColour & value
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+			void visit( c3d::String const & name
+				, c3d::HdrRgbaColour & value
+				, c3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::RangedValue< float > & value
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+			void visit( c3d::String const & name
+				, c3d::RangedValue< float > & value
+				, c3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::RangedValue< int32_t > & value
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+			void visit( c3d::String const & name
+				, c3d::RangedValue< int32_t > & value
+				, c3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::RangedValue< uint32_t > & value
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+			void visit( c3d::String const & name
+				, c3d::RangedValue< uint32_t > & value
+				, c3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, c3d::move( controls ) ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, int32_t & enumValue
-				, castor::StringArray const & enumNames
-				, castor3d::ConfigurationVisitor::OnSEnumValueChange onChange
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+				, c3d::StringArray const & enumNames
+				, c3d::ConfigurationVisitor::OnSEnumValueChange onChange
+				, c3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyET( m_compProps->container
 					, name
 					, make_wxArrayString( enumNames )
 					, &enumValue
-					, castor::move( controls )
+					, c3d::move( controls )
 					, onChange ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, uint32_t & enumValue
-				, castor::StringArray const & enumNames
-				, castor3d::ConfigurationVisitor::OnUEnumValueChange onChange
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+				, c3d::StringArray const & enumNames
+				, c3d::ConfigurationVisitor::OnUEnumValueChange onChange
+				, c3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyET( m_compProps->container
 					, name
 					, make_wxArrayString( enumNames )
 					, &enumValue
-					, castor::move( controls )
+					, c3d::move( controls )
 					, onChange ) );
 			}
 
 		private:
-			castor::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
+			c3d::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( c3d::String const & category )override
 			{
 				doVisit( category );
-				return castor::RawUniquePtr< ConfigurationVisitorBase >( new PassTreeGatherer{ m_pass
+				return c3d::RawUniquePtr< ConfigurationVisitorBase >( new PassTreeGatherer{ m_pass
 					, m_properties
 					, m_grid
 					, m_onEnabled } );
 			}
 
-			void doVisit( castor::String const & name )
+			void doVisit( c3d::String const & name )
 			{
 				m_properties->setPrefix( make_String( name ) );
 				m_compProps->container = m_properties->addProperty( m_grid, name );
@@ -432,7 +432,7 @@ namespace GuiCommon
 			}
 
 		private:
-			castor3d::Pass & m_pass;
+			c3d::Pass & m_pass;
 			TreeItemProperty * m_properties;
 			wxPropertyGrid * m_grid;
 			onEnabledChange m_onEnabled;
@@ -442,32 +442,32 @@ namespace GuiCommon
 		};
 
 		class PassShaderGatherer
-			: public castor3d::RenderTechniqueVisitor
+			: public c3d::RenderTechniqueVisitor
 		{
 		private:
-			PassShaderGatherer( castor3d::PipelineFlags flags
-				, castor3d::Scene const & scene
+			PassShaderGatherer( c3d::PipelineFlags flags
+				, c3d::Scene const & scene
 				, ShaderSources & sources )
-				: castor3d::RenderTechniqueVisitor{ castor::move( flags ), scene, { true } }
+				: c3d::RenderTechniqueVisitor{ c3d::move( flags ), scene, { true } }
 				, m_sources{ sources }
 			{
 			}
 
 		public:
-			static ShaderSources submit( castor3d::Pass const & pass
-				, castor3d::Scene const & scene )
+			static ShaderSources submit( c3d::Pass const & pass
+				, c3d::Scene const & scene )
 			{
 				ShaderSources result;
-				PassShaderGatherer vis{ castor3d::PipelineFlags{ scene.getEngine()->getPassComponentsRegister().getPassComponentCombine( pass )
+				PassShaderGatherer vis{ c3d::PipelineFlags{ scene.getEngine()->getPassComponentsRegister().getPassComponentCombine( pass )
 						, scene.getEngine()->getSubmeshComponentsRegister().getDefaultComponentCombine()
 						, pass.getLightingModelId()
 						, scene.getBackgroundModelId()
 						, pass.getColourBlendMode()
 						, pass.getAlphaBlendMode()
-						, ( pass.getRenderPassInfo()? pass.getRenderPassInfo()->id: castor3d::RenderPassTypeID{} )
-						, castor3d::ProgramFlag::eNone
+						, ( pass.getRenderPassInfo()? pass.getRenderPassInfo()->id: c3d::RenderPassTypeID{} )
+						, c3d::ProgramFlag::eNone
 						, scene.getFlags()
-						, castor3d::ShaderFlag::eNone
+						, c3d::ShaderFlag::eNone
 						, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 						, 3u
 						, pass.getAlphaFunc()
@@ -476,7 +476,7 @@ namespace GuiCommon
 					, scene
 					, result };
 				auto & engine = *pass.getOwner()->getEngine();
-				engine.getRenderTargetCache().forEach( [&vis]( castor3d::RenderTarget const & target )
+				engine.getRenderTargetCache().forEach( [&vis]( c3d::RenderTarget const & target )
 					{
 						if ( target.isInitialised() )
 						{
@@ -488,7 +488,7 @@ namespace GuiCommon
 			}
 
 		private:
-			void visit( castor3d::ShaderModule const & module
+			void visit( c3d::ShaderModule const & module
 				, bool forceProgramsVisit )override
 			{
 				if ( !module.shader
@@ -501,10 +501,10 @@ namespace GuiCommon
 
 				doGetSource( module.name ).sources.push_back( { module.shader.get()
 					, module.compiled
-					, castor3d::getEntryPointType( *getScene().getEngine()->getRenderDevice(), module.stage ) } );
+					, c3d::getEntryPointType( *getScene().getEngine()->getRenderDevice(), module.stage ) } );
 			}
 
-			void visit( castor3d::ProgramModule const & module
+			void visit( c3d::ProgramModule const & module
 				, ast::EntryPoint entryPoint
 				, bool forceProgramsVisit )override
 			{
@@ -524,7 +524,7 @@ namespace GuiCommon
 			}
 
 		private:
-			ShaderSource & doGetSource( castor::String const & name )
+			ShaderSource & doGetSource( c3d::String const & name )
 			{
 				auto it = std::find_if( m_sources.begin()
 					, m_sources.end()
@@ -539,14 +539,14 @@ namespace GuiCommon
 				}
 
 				ShaderSource source{ name };
-				m_sources.emplace_back( castor::move( source ) );
+				m_sources.emplace_back( c3d::move( source ) );
 				return m_sources.back();
 			}
 
 		private:
-			castor::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
+			c3d::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( c3d::String const & category )override
 			{
-				return castor::RawUniquePtr< ConfigurationVisitorBase >( new PassShaderGatherer{ getFlags(), getScene(), m_sources } );
+				return c3d::RawUniquePtr< ConfigurationVisitorBase >( new PassShaderGatherer{ getFlags(), getScene(), m_sources } );
 			}
 
 		private:
@@ -555,7 +555,7 @@ namespace GuiCommon
 	}
 
 	PassTreeItemProperty::PassTreeItemProperty( bool editable
-		, castor3d::Scene & scene
+		, c3d::Scene & scene
 		, wxWindow * parent )
 		: TreeItemProperty{ scene.getEngine(), editable }
 		, m_scene{ scene }
@@ -583,8 +583,8 @@ namespace GuiCommon
 			{
 				auto sources = passtp::PassShaderGatherer::submit( *m_pass, m_scene );
 				auto editor = new ShaderDialog{ m_pass->getOwner()->getEngine()
-					, castor::move( sources )
-					, m_pass->getOwner()->getName() + castor::string::toString( m_pass->getId() )
+					, c3d::move( sources )
+					, m_pass->getOwner()->getName() + c3d::string::toString( m_pass->getId() )
 					, m_parent };
 				editor->Show();
 			} );
@@ -593,8 +593,8 @@ namespace GuiCommon
 			, grid
 			, mainContainer
 			, [this]( wxVariant const & value
-				, castor3d::Pass & pass
-				, castor::String const & compName )
+				, c3d::Pass & pass
+				, c3d::String const & compName )
 			{
 				auto it = std::find_if( m_properties.begin()
 					, m_properties.end()
@@ -626,21 +626,21 @@ namespace GuiCommon
 				{
 					if ( compProps.ownComponent )
 					{
-						moveComponentsToPass( castor::move( compProps.ownComponent ) );
+						moveComponentsToPass( c3d::move( compProps.ownComponent ) );
 					}
 				}
 				else if ( pass.hasComponent( compProps.component->getType() ) )
 				{
 					auto removed = pass.removeComponent( compProps.component->getType() );
-					compProps.ownComponent = castor::move( removed.back() );
+					compProps.ownComponent = c3d::move( removed.back() );
 					removed.pop_back();
-					moveComponentsToProps( castor::move( removed ) );
+					moveComponentsToProps( c3d::move( removed ) );
 					CU_Require( compProps.ownComponent );
 				}
 			} );
 	}
 
-	void PassTreeItemProperty::moveComponentsToPass( castor3d::PassComponentUPtr component )
+	void PassTreeItemProperty::moveComponentsToPass( c3d::PassComponentUPtr component )
 	{
 		auto & pass = *component->getOwner();
 
@@ -656,14 +656,14 @@ namespace GuiCommon
 
 			if ( it != m_properties.end() )
 			{
-				moveComponentsToPass( castor::move( ( *it )->ownComponent ) );
+				moveComponentsToPass( c3d::move( ( *it )->ownComponent ) );
 			}
 		}
 
-		pass.addComponent( castor::move( component ) );
+		pass.addComponent( c3d::move( component ) );
 	}
 
-	void PassTreeItemProperty::moveComponentsToProps( castor::Vector< castor3d::PassComponentUPtr > removed )
+	void PassTreeItemProperty::moveComponentsToProps( c3d::Vector< c3d::PassComponentUPtr > removed )
 	{
 		for ( auto & rem : removed )
 		{
@@ -676,7 +676,7 @@ namespace GuiCommon
 
 			if ( it != m_properties.end() )
 			{
-				( *it )->ownComponent = castor::move( rem );
+				( *it )->ownComponent = c3d::move( rem );
 			}
 		}
 	}

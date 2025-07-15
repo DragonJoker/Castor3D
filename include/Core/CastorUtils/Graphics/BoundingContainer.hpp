@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Math/Point.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< uint8_t Dimension >
 	class BoundingContainer
@@ -30,7 +30,7 @@ namespace castor
 		 *\param[in]	center	Le centre.
 		 */
 		explicit BoundingContainer( MyPoint center )
-			: m_center{ castor::move( center ) }
+			: m_center{ c3d::move( center ) }
 		{
 		}
 		/**
@@ -69,7 +69,7 @@ namespace castor
 	protected:
 		void setCenter( MyPoint center )noexcept
 		{
-			m_center = castor::move( center );
+			m_center = c3d::move( center );
 		}
 
 	private:

@@ -32,9 +32,9 @@
 
 #include <algorithm>
 
-CU_ImplementSmartPtr( castor3d, RenderQuad )
+CU_ImplementSmartPtr( c3d, RenderQuad )
 
-namespace castor3d
+namespace c3d
 {
 	namespace passrquad
 	{
@@ -183,10 +183,10 @@ namespace castor3d
 	}
 
 	RenderQuad::RenderQuad( RenderDevice const & device
-		, castor::String const & name
+		, String const & name
 		, FilterMode samplerFilter
 		, rq::Config config )
-		: castor::Named{ name + cuT( "Quad" ) }
+		: Named{ name + cuT( "Quad" ) }
 		, m_renderSystem{ device.renderSystem }
 		, m_device{ device }
 		, m_sampler{ createSampler( *m_renderSystem.getEngine()
@@ -203,21 +203,21 @@ namespace castor3d
 	}
 
 	RenderQuad::RenderQuad( RenderQuad && rhs )noexcept
-		: castor::Named{ castor::move( rhs ) }
+		: Named{ c3d::move( rhs ) }
 		, m_renderSystem{ rhs.m_renderSystem }
 		, m_device{ rhs.m_device }
-		, m_sampler{ castor::move( rhs.m_sampler ) }
-		, m_config{ castor::move( rhs.m_config ) }
+		, m_sampler{ c3d::move( rhs.m_sampler ) }
+		, m_config{ c3d::move( rhs.m_config ) }
 		, m_useTexCoord{ rhs.m_useTexCoord }
-		, m_descriptorSetLayout{ castor::move( rhs.m_descriptorSetLayout ) }
-		, m_pipelineLayout{ castor::move( rhs.m_pipelineLayout ) }
-		, m_pipeline{ castor::move( rhs.m_pipeline ) }
-		, m_descriptorSetPool{ castor::move( rhs.m_descriptorSetPool ) }
-		, m_passes{ castor::move( rhs.m_passes ) }
-		, m_descriptorSets{ castor::move( rhs.m_descriptorSets ) }
-		, m_invertY{ castor::move( rhs.m_invertY ) }
-		, m_vertexBuffer{ castor::move( rhs.m_vertexBuffer ) }
-		, m_uvInvVertexBuffer{ castor::move( rhs.m_uvInvVertexBuffer ) }
+		, m_descriptorSetLayout{ c3d::move( rhs.m_descriptorSetLayout ) }
+		, m_pipelineLayout{ c3d::move( rhs.m_pipelineLayout ) }
+		, m_pipeline{ c3d::move( rhs.m_pipeline ) }
+		, m_descriptorSetPool{ c3d::move( rhs.m_descriptorSetPool ) }
+		, m_passes{ c3d::move( rhs.m_passes ) }
+		, m_descriptorSets{ c3d::move( rhs.m_descriptorSets ) }
+		, m_invertY{ c3d::move( rhs.m_invertY ) }
+		, m_vertexBuffer{ c3d::move( rhs.m_vertexBuffer ) }
+		, m_uvInvVertexBuffer{ c3d::move( rhs.m_uvInvVertexBuffer ) }
 	{
 	}
 
@@ -246,7 +246,7 @@ namespace castor3d
 	}
 
 	void RenderQuad::createPipeline( Extent2D const & size
-		, castor::Position const & position
+		, Position const & position
 		, ashes::PipelineShaderStageCreateInfoArray const & program
 		, ashes::RenderPass const & renderPass
 		, ashes::VkPushConstantRangeArray const & pushRanges
@@ -262,24 +262,24 @@ namespace castor3d
 
 		if ( auto buffer = m_vertexBuffer->lock( 0u, 4u, 0u ) )
 		{
-			castor::Array< TexturedQuad::Vertex, 4u > vertexData
+			Array< TexturedQuad::Vertex, 4u > vertexData
 			{
-				TexturedQuad::Vertex{ castor::Point2f{ -1.0, -1.0 }
+				TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }
 					, ( m_useTexCoord
-						? castor::Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
-						: castor::Point2f{} ) },
-				TexturedQuad::Vertex{ castor::Point2f{ -1.0, +1.0 }
+						? Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
+						: Point2f{} ) },
+				TexturedQuad::Vertex{ Point2f{ -1.0, +1.0 }
 					, ( m_useTexCoord
-						? castor::Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
-						: castor::Point2f{} ) },
-				TexturedQuad::Vertex{ castor::Point2f{ +1.0, -1.0 }
+						? Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
+						: Point2f{} ) },
+				TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }
 					, ( m_useTexCoord
-						? castor::Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
-						: castor::Point2f{} ) },
-				TexturedQuad::Vertex{ castor::Point2f{ +1.0, +1.0 }
+						? Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
+						: Point2f{} ) },
+				TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }
 					, ( m_useTexCoord
-						? castor::Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
-						: castor::Point2f{} ) },
+						? Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
+						: Point2f{} ) },
 			};
 			std::copy( vertexData.begin(), vertexData.end(), buffer );
 			m_vertexBuffer->flush( 0u, 4u );
@@ -295,24 +295,24 @@ namespace castor3d
 
 		if ( auto buffer = m_uvInvVertexBuffer->lock( 0u, 4u, 0u ) )
 		{
-			castor::Array< TexturedQuad::Vertex, 4u > vertexData
+			Array< TexturedQuad::Vertex, 4u > vertexData
 			{
-				TexturedQuad::Vertex{ castor::Point2f{ -1.0, -1.0 }
+				TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }
 					, ( m_useTexCoord
-						? castor::Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
-						: castor::Point2f{} ) },
-				TexturedQuad::Vertex{ castor::Point2f{ -1.0, +1.0 }
+						? Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
+						: Point2f{} ) },
+				TexturedQuad::Vertex{ Point2f{ -1.0, +1.0 }
 					, ( m_useTexCoord
-						? castor::Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
-						: castor::Point2f{} ) },
-				TexturedQuad::Vertex{ castor::Point2f{ +1.0, -1.0 }
+						? Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
+						: Point2f{} ) },
+				TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }
 					, ( m_useTexCoord
-						? castor::Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
-						: castor::Point2f{} ) },
-				TexturedQuad::Vertex{ castor::Point2f{ +1.0, +1.0 }
+						? Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
+						: Point2f{} ) },
+				TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }
 					, ( m_useTexCoord
-						? castor::Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
-						: castor::Point2f{} ) },
+						? Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
+						: Point2f{} ) },
 			};
 			std::copy( vertexData.begin(), vertexData.end(), buffer );
 			m_uvInvVertexBuffer->flush( 0u, 4u );
@@ -337,14 +337,14 @@ namespace castor3d
 			{
 				{ 0u, sizeof( TexturedQuad::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
 			},
-			castor::move( attributes ),
+			c3d::move( attributes ),
 		};
 
 		auto bindings = passrquad::createBindings( m_config.bindings );
 		CU_Require( bindings.capacity() < 1000u );
-		auto mbName = castor::toUtf8( getName() );
+		auto mbName = toUtf8( getName() );
 		m_descriptorSetLayout = m_device->createDescriptorSetLayout( mbName
-			, castor::move( bindings ) );
+			, c3d::move( bindings ) );
 		m_pipelineLayout = m_device->createPipelineLayout( mbName
 			, { *m_descriptorSetLayout }, pushRanges );
 
@@ -364,13 +364,13 @@ namespace castor3d
 			(
 				0u,
 				program,
-				castor::move( vertexState ),
+				c3d::move( vertexState ),
 				ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP },
 				ashes::nullopt,
-				castor::move( vpState ),
+				c3d::move( vpState ),
 				ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
 				ashes::PipelineMultisampleStateCreateInfo{},
-				ashes::Optional< ashes::PipelineDepthStencilStateCreateInfo >( castor::move( dsState ) ),
+				ashes::Optional< ashes::PipelineDepthStencilStateCreateInfo >( c3d::move( dsState ) ),
 				passrquad::doCreateBlendState( renderPass, m_config.blendMode ),
 				ashes::nullopt,
 				*m_pipelineLayout,
@@ -392,7 +392,7 @@ namespace castor3d
 	void RenderQuad::initialisePass( uint32_t passIndex )
 	{
 		CU_Require( m_descriptorSetLayout );
-		auto mbName = castor::toUtf8( getName() );
+		auto mbName = toUtf8( getName() );
 
 		if ( !m_descriptorSetPool )
 		{
@@ -404,11 +404,11 @@ namespace castor3d
 
 		if ( !m_descriptorSets[passIndex] )
 		{
-			auto prefix = mbName + ", Pass " + castor::string::toMbString( passIndex );
+			auto prefix = mbName + ", Pass " + string::toMbString( passIndex );
 			auto descriptorSet = m_descriptorSetPool->createDescriptorSet( prefix );
 			descriptorSet->setBindings( m_passes[passIndex] );
 			descriptorSet->update();
-			m_descriptorSets[passIndex] = castor::move( descriptorSet );
+			m_descriptorSets[passIndex] = c3d::move( descriptorSet );
 		}
 	}
 
@@ -423,7 +423,7 @@ namespace castor3d
 	}
 
 	void RenderQuad::createPipelineAndPass( Extent2D const & size
-		, castor::Position const & position
+		, Position const & position
 		, ashes::PipelineShaderStageCreateInfoArray const & program
 		, ashes::RenderPass const & renderPass
 		, ashes::WriteDescriptorSetArray const & writes
@@ -438,7 +438,7 @@ namespace castor3d
 			, program
 			, renderPass
 			, pushRanges
-			, castor::move( dsState ) );
+			, c3d::move( dsState ) );
 		m_passes.emplace_back( writes );
 		m_invertY.emplace_back( false );
 		initialisePasses();

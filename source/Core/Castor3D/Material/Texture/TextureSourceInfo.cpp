@@ -5,16 +5,16 @@
 #include <CastorUtils/Graphics/ImageCache.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementSmartPtr( castor3d, TextureSourceInfo )
+CU_ImplementSmartPtr( c3d, TextureSourceInfo )
 
-namespace castor3d
+namespace c3d
 {
 	//************************************************************************************************
 
 	TextureSourceInfo::TextureSourceInfo( TextureSourceInfo const & rhs
 		, TextureConfiguration textureConfig )
 		: m_name{ rhs.m_name }
-		, m_textureConfig{ castor::move( textureConfig ) }
+		, m_textureConfig{ c3d::move( textureConfig ) }
 		, m_renderTarget{ rhs.m_renderTarget }
 		, m_folder{ rhs.m_folder }
 		, m_relative{ rhs.m_relative }
@@ -25,60 +25,60 @@ namespace castor3d
 	{
 	}
 
-	TextureSourceInfo::TextureSourceInfo( castor::String name
+	TextureSourceInfo::TextureSourceInfo( String name
 		, TextureConfiguration textureConfig
-		, castor::Path folder
-		, castor::Path relative
-		, castor::ImageLoaderConfig loadConfig )
-		: m_name{ castor::move( name ) }
-		, m_textureConfig{ castor::move( textureConfig ) }
-		, m_folder{ castor::move( folder ) }
-		, m_relative{ castor::move( relative ) }
-		, m_loadConfig{ castor::move( loadConfig ) }
+		, Path folder
+		, Path relative
+		, ImageLoaderConfig loadConfig )
+		: m_name{ c3d::move( name ) }
+		, m_textureConfig{ c3d::move( textureConfig ) }
+		, m_folder{ c3d::move( folder ) }
+		, m_relative{ c3d::move( relative ) }
+		, m_loadConfig{ c3d::move( loadConfig ) }
 	{
 	}
 
-	TextureSourceInfo::TextureSourceInfo( castor::String name
+	TextureSourceInfo::TextureSourceInfo( String name
 		, TextureConfiguration textureConfig
-		, castor::String type
-		, castor::ByteArray data
-		, castor::ImageLoaderConfig loadConfig )
-		: m_name{ castor::move( name ) }
-		, m_textureConfig{ castor::move( textureConfig ) }
-		, m_loadConfig{ castor::move( loadConfig ) }
-		, m_type{ castor::move( type ) }
-		, m_data{ castor::move( data ) }
+		, String type
+		, ByteArray data
+		, ImageLoaderConfig loadConfig )
+		: m_name{ c3d::move( name ) }
+		, m_textureConfig{ c3d::move( textureConfig ) }
+		, m_loadConfig{ c3d::move( loadConfig ) }
+		, m_type{ c3d::move( type ) }
+		, m_data{ c3d::move( data ) }
 	{
 	}
 
-	TextureSourceInfo::TextureSourceInfo( castor::String name
+	TextureSourceInfo::TextureSourceInfo( String name
 		, TextureConfiguration textureConfig
 		, RenderTargetRPtr renderTarget )
-		: m_name{ castor::move( name ) }
-		, m_textureConfig{ castor::move( textureConfig ) }
-		, m_renderTarget{ castor::move( renderTarget ) }
+		: m_name{ c3d::move( name ) }
+		, m_textureConfig{ c3d::move( textureConfig ) }
+		, m_renderTarget{ c3d::move( renderTarget ) }
 	{
 	}
 
-	TextureSourceInfo::TextureSourceInfo( castor::String name
+	TextureSourceInfo::TextureSourceInfo( String name
 		, TextureConfiguration textureConfig
 		, ImageCreateInfo createInfo )
-		: m_name{ castor::move( name ) }
-		, m_textureConfig{ castor::move( textureConfig ) }
-		, m_createInfo{ castor::move( createInfo ) }
+		: m_name{ c3d::move( name ) }
+		, m_textureConfig{ c3d::move( textureConfig ) }
+		, m_createInfo{ c3d::move( createInfo ) }
 	{
 	}
 
-	TextureSourceInfo::TextureSourceInfo( castor::String name
+	TextureSourceInfo::TextureSourceInfo( String name
 		, TextureConfiguration textureConfig
-		, castor::ImageCreateParams imageParams )
-		: m_name{ castor::move( name ) }
-		, m_textureConfig{ castor::move( textureConfig ) }
+		, ImageCreateParams imageParams )
+		: m_name{ c3d::move( name ) }
+		, m_textureConfig{ c3d::move( textureConfig ) }
 		, m_folder{ imageParams.path.getPath() }
 		, m_relative{ imageParams.path.getFileName( true ) }
-		, m_loadConfig{ castor::move( imageParams.loadConfig ) }
-		, m_type{ castor::move( imageParams.type ) }
-		, m_data{ castor::move( imageParams.data ) }
+		, m_loadConfig{ c3d::move( imageParams.loadConfig ) }
+		, m_type{ c3d::move( imageParams.type ) }
+		, m_data{ c3d::move( imageParams.data ) }
 	{
 	}
 
@@ -90,29 +90,29 @@ namespace castor3d
 
 		if ( value.isVulkanImage() )
 		{
-			return castor::hashCombinePtr( result, value );
+			return hashCombinePtr( result, value );
 		}
 
 		if ( value.isRenderTarget() )
 		{
-			return castor::hashCombinePtr( result, *value.renderTarget() );
+			return hashCombinePtr( result, *value.renderTarget() );
 		}
 
 		if ( value.isBufferImage() )
 		{
-			result = castor::hashCombine( result, value.name() );
-			result = castor::hashCombine( result, value.type() );
-			result = castor::hashCombine( result, value.buffer().size() );
+			result = hashCombine( result, value.name() );
+			result = hashCombine( result, value.type() );
+			result = hashCombine( result, value.buffer().size() );
 		}
 		else
 		{
-			result = castor::hashCombine( result, static_cast< castor::String const & >( value.folder() ) );
-			result = castor::hashCombine( result, static_cast< castor::String const & >( value.relative() ) );
+			result = hashCombine( result, static_cast< String const & >( value.folder() ) );
+			result = hashCombine( result, static_cast< String const & >( value.relative() ) );
 		}
 
-		result = castor::hashCombine( result, value.allowCompression() );
-		result = castor::hashCombine( result, value.allowSRGB() );
-		return castor::hashCombine( result, value.generateMips() );
+		result = hashCombine( result, value.allowCompression() );
+		result = hashCombine( result, value.allowSRGB() );
+		return hashCombine( result, value.generateMips() );
 	}
 
 	bool operator==( TextureSourceInfo const & lhs
@@ -155,7 +155,7 @@ namespace castor3d
 	size_t PassTextureConfigHasher::operator()( PassTextureConfig const & value )const noexcept
 	{
 		auto result = std::hash< uint32_t >{}( value.texcoordSet );
-		return castor::hashCombinePtr( result, *value.sampler );
+		return hashCombinePtr( result, *value.sampler );
 	}
 
 	bool operator==( PassTextureConfig const & lhs

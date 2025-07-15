@@ -8,12 +8,12 @@
 
 namespace c3d_assimp
 {
-	AssimpCameraImporter::AssimpCameraImporter( castor3d::Engine & engine )
-		: castor3d::CameraImporter{ engine, cuT( "Assimp" ) }
+	AssimpCameraImporter::AssimpCameraImporter( c3d::Engine & engine )
+		: c3d::CameraImporter{ engine, cuT( "Assimp" ) }
 	{
 	}
 
-	bool AssimpCameraImporter::doImportCamera( castor3d::Camera & camera )
+	bool AssimpCameraImporter::doImportCamera( c3d::Camera & camera )
 	{
 		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
 		auto name = camera.getName();
@@ -27,7 +27,7 @@ namespace c3d_assimp
 		auto & aiCamera = *it->second;
 		auto & scene = *camera.getScene();
 		auto & viewport = camera.getViewport();
-		castor3d::SceneNodeRPtr node{};
+		c3d::SceneNodeRPtr node{};
 
 		if ( scene.hasSceneNode( name ) )
 		{
@@ -42,7 +42,7 @@ namespace c3d_assimp
 
 		if ( aiCamera.mOrthographicWidth == 0.0f )
 		{
-			viewport.setPerspective( castor::Angle::fromRadians( aiCamera.mHorizontalFOV * aiCamera.mAspect )
+			viewport.setPerspective( c3d::Angle::fromRadians( aiCamera.mHorizontalFOV * aiCamera.mAspect )
 				, aiCamera.mAspect
 				, aiCamera.mClipPlaneNear
 				, aiCamera.mClipPlaneFar );

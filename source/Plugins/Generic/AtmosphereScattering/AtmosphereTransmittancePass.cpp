@@ -31,8 +31,8 @@ namespace atmosphere_scattering
 			eAtmosphere,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
-			, castor3d::Extent3D renderSize )
+		static c3d::ShaderPtr getProgram( c3d::Engine & engine
+			, c3d::Extent3D renderSize )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
@@ -41,21 +41,21 @@ namespace atmosphere_scattering
 				, 0u );
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
-				, AtmosphereModel::Settings{ castor::Length::fromUnit( 1.0f, engine.getLengthUnit() ) } };
+				, AtmosphereModel::Settings{ c3d::Length::fromUnit( 1.0f, engine.getLengthUnit() ) } };
 
 			auto sampleCountIni = writer.declConstant( "sampleCountIni"
 				, 40.0_f );	// Can go a low as 10 sample but energy lost starts to be visible.
 			auto depthBufferValue = writer.declConstant( "depthBufferValue"
 				, -1.0_f );
 
-			writer.implementEntryPointT< c3d::Position2FT, sdw::VoidT >( [&]( sdw::VertexInT< c3d::Position2FT > in
+			writer.implementEntryPointT< c3ds::Position2FT, sdw::VoidT >( [&]( sdw::VertexInT< c3ds::Position2FT > in
 				, sdw::VertexOut out )
 				{
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< sdw::VoidT, c3d::Colour4FT >( [&]( sdw::FragmentIn in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< sdw::VoidT, c3ds::Colour4FT >( [&]( sdw::FragmentIn in
+				, sdw::FragmentOutT< c3ds::Colour4FT > out )
 				{
 					auto targetSize = writer.declLocale( "targetSize"
 						, vec2( sdw::Float{ float( renderSize.width + 1u ) }, float( renderSize.height + 1u ) ) );
@@ -94,7 +94,7 @@ namespace atmosphere_scattering
 
 	AtmosphereTransmittancePass::AtmosphereTransmittancePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, crg::ImageViewId const & resultView
 		, bool const & enabled )
@@ -112,7 +112,7 @@ namespace atmosphere_scattering
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &enabled )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -123,7 +123,7 @@ namespace atmosphere_scattering
 		m_lastPass = &pass;
 	}
 
-	void AtmosphereTransmittancePass::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void AtmosphereTransmittancePass::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 	}

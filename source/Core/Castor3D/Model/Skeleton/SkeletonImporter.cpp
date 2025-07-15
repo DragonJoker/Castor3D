@@ -7,13 +7,13 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneImporter.hpp"
 
-CU_ImplementSmartPtr( castor3d, SkeletonImporter )
+CU_ImplementSmartPtr( c3d, SkeletonImporter )
 
-namespace castor3d
+namespace c3d
 {
 	namespace skelimp
 	{
-		static void transformSkeleton( castor::Matrix4x4f const & transform
+		static void transformSkeleton( Matrix4x4f const & transform
 			, Skeleton & skeleton )
 		{
 			auto invTransform = transform.getInverse();
@@ -27,13 +27,13 @@ namespace castor3d
 	}
 
 	SkeletonImporter::SkeletonImporter( Engine & engine
-		, castor::String const & prefix )
+		, String const & prefix )
 		: OwnedBy< Engine >{ engine }
 		, m_prefix{ prefix + cuT( " - " ) }
 	{
 	}
 
-	SkeletonRes SkeletonImporter::importData( castor::String const & name
+	SkeletonRes SkeletonImporter::importData( String const & name
 		, Scene & scene
 		, ImporterFile * file
 		, Parameters const & parameters )
@@ -69,14 +69,14 @@ namespace castor3d
 
 			if ( result )
 			{
-				castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
-				castor::Quaternion orientation{ castor::Quaternion::identity() };
+				Point3f scale{ 1.0f, 1.0f, 1.0f };
+				Quaternion orientation{ Quaternion::identity() };
 
 				if ( parseImportParameters( m_parameters, scale, orientation ) )
 				{
-					castor::Matrix4x4f transform;
-					castor::matrix::setRotate( transform, orientation );
-					castor::matrix::scale( transform, scale );
+					Matrix4x4f transform;
+					matrix::setRotate( transform, orientation );
+					matrix::scale( transform, scale );
 					skelimp::transformSkeleton( transform, skeleton );
 				}
 
@@ -95,11 +95,11 @@ namespace castor3d
 	}
 
 	bool SkeletonImporter::importData( Skeleton & skeleton
-		, castor::Path const & path
+		, Path const & path
 		, Parameters const & parameters )
 	{
 		auto & engine = *skeleton.getEngine();
-		auto extension = castor::string::lowerCase( path.getExtension() );
+		auto extension = string::lowerCase( path.getExtension() );
 
 		if ( !engine.getImporterFileFactory().isTypeRegistered( extension ) )
 		{
@@ -107,7 +107,7 @@ namespace castor3d
 			return false;
 		}
 
-		castor::String preferredImporter = cuT( "any" );
+		String preferredImporter = cuT( "any" );
 		parameters.get( cuT( "preferred_importer" ), preferredImporter );
 		auto file = engine.getImporterFileFactory().create( extension
 			, preferredImporter
@@ -123,7 +123,7 @@ namespace castor3d
 		return false;
 	}
 
-	SkeletonRes SkeletonImporter::doCreateSkeleton( castor::String const & name
+	SkeletonRes SkeletonImporter::doCreateSkeleton( String const & name
 			, Scene & scene )
 	{
 		return scene.createSkeleton( name, scene );

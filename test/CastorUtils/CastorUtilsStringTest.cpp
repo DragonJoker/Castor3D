@@ -13,7 +13,7 @@ namespace Testing
 			{
 				using facet_type = std::codecvt< OutChar, InChar, std::mbstate_t >;
 				std::mbstate_t state{};
-				castor::Vector< OutChar > buffer( strIn.size() );
+				c3d::Vector< OutChar > buffer( strIn.size() );
 				InChar const * pEndIn = nullptr;
 				OutChar * pEndOut = nullptr;
 				std::use_facet< facet_type >( loc ).in( state,
@@ -42,48 +42,48 @@ namespace Testing
 
 	void CastorUtilsStringTest::StringConversions()
 	{
-		castor::String tstrRef = cuT( "STR : Bonjoir éêèàÉÊÈÀ" );
+		c3d::String tstrRef = cuT( "STR : Bonjoir éêèàÉÊÈÀ" );
 		std::string strRef = "STR : Bonjoir éêèàÉÊÈÀ";
 		std::wstring wstrRef = L"STR : Bonjoir éêèàÉÊÈÀ";
 		std::u32string u32strRef = U"STR : Bonjoir éêèàÉÊÈÀ";
 		{
 			CT_ON( "Conversion from std::string to String" );
-			auto out = castor::makeString( strRef );
+			auto out = c3d::makeString( strRef );
 			CT_WHEN( "Entry  = " + strRef );
 			CT_AND( cuT( " Result = " ) + out );
 			CT_EQUAL( out, tstrRef );
 		}
 		{
 			CT_ON( "Conversion from std::wstring to String" );
-			auto out = castor::makeString( wstrRef );
+			auto out = c3d::makeString( wstrRef );
 			CT_WHEN( L"Entry  = " + wstrRef );
 			CT_AND( cuT( " Result = " ) + out );
 			CT_EQUAL( out, tstrRef );
 		}
 		{
 			CT_ON( "Conversion from std::u32string to String" );
-			auto out = castor::makeString( u32strRef );
+			auto out = c3d::makeString( u32strRef );
 			CT_WHEN( U"Entry  = " + u32strRef );
 			CT_AND( cuT( " Result = " ) + out );
 			CT_EQUAL( out, tstrRef );
 		}
 		{
 			CT_ON( "Conversion from String to std::string" );
-			auto out = castor::toUtf8( tstrRef );
+			auto out = c3d::toUtf8( tstrRef );
 			CT_WHEN( cuT( "Entry  = " ) + tstrRef );
 			CT_AND( " Result = " + out );
 			CT_EQUAL( out, strRef );
 		}
 		{
 			CT_ON( "Conversion from String to std::wstring" );
-			auto out = castor::toSystemWide( tstrRef );
+			auto out = c3d::toSystemWide( tstrRef );
 			CT_WHEN( cuT( "Entry  = " ) + tstrRef );
 			CT_AND( L" Result = " + out );
 			CT_EQUAL( out, wstrRef );
 		}
 		{
 			CT_ON( "Conversion from String to std::u32string" );
-			auto out = castor::toUtf8U32String( tstrRef );
+			auto out = c3d::toUtf8U32String( tstrRef );
 			CT_WHEN( cuT( "Entry  = " ) + tstrRef );
 			CT_AND( U" Result = " + out );
 			CT_EQUAL( out, u32strRef );

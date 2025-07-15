@@ -2,10 +2,8 @@
 
 #include "TextStylesHolder.hpp"
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	//*********************************************************************************************
 
 	namespace stlhdrwrtr
@@ -26,7 +24,7 @@ namespace castor
 	//*********************************************************************************************
 
 	TextWriter< Theme >::TextWriter( String const & tabs
-		, castor3d::Scene const * scene )
+		, Scene const * scene )
 		: TextWriterT< Theme >{ tabs }
 		, m_scene{ scene }
 	{

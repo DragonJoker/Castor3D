@@ -22,122 +22,122 @@ See LICENSE file in root folder
 
 #include <unordered_map>
 
-namespace castor3d
+namespace c3d
 {
 	bool parseImportParameters( Parameters const & parameters
-		, castor::Point3f & scale
-		, castor::Quaternion & orientation );
+		, Point3f & scale
+		, Quaternion & orientation );
 
 	class ImporterFile
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
 		struct NodeData
 		{
-			NodeData( castor::String pparent
-				, castor::String pname
+			NodeData( String pparent
+				, String pname
 				, bool pisCamera )
-				: parent{ castor::move( pparent ) }
-				, name{ castor::move( pname ) }
+				: parent{ c3d::move( pparent ) }
+				, name{ c3d::move( pname ) }
 				, isCamera{ pisCamera }
 			{
 			}
 
-			castor::String parent{};
-			castor::String name{};
+			String parent{};
+			String name{};
 			bool isCamera{};
 		};
 
 		struct GeometryData
 		{
-			GeometryData( castor::String pname
-				, castor::String pnode
-				, castor::String pmesh )
-				: name{ castor::move( pname ) }
-				, node{ castor::move( pnode ) }
-				, mesh{ castor::move( pmesh ) }
+			GeometryData( String pname
+				, String pnode
+				, String pmesh )
+				: name{ c3d::move( pname ) }
+				, node{ c3d::move( pnode ) }
+				, mesh{ c3d::move( pmesh ) }
 			{
 			}
 
-			castor::String name;
-			castor::String node;
-			castor::String mesh;
+			String name;
+			String node;
+			String mesh;
 		};
 
 		struct MeshData
 		{
-			MeshData( castor::String pname
-				, castor::String pskeleton )
-				: name{ castor::move( pname ) }
-				, skeleton{ castor::move( pskeleton ) }
+			MeshData( String pname
+				, String pskeleton )
+				: name{ c3d::move( pname ) }
+				, skeleton{ c3d::move( pskeleton ) }
 			{
 			}
 
-			castor::String name;
-			castor::String skeleton;
+			String name;
+			String skeleton;
 		};
 
 		struct LightData
 		{
-			LightData( castor::String pname
+			LightData( String pname
 				, LightType ptype )
-				: name{ castor::move( pname ) }
-				, type{ castor::move( ptype ) }
+				: name{ c3d::move( pname ) }
+				, type{ c3d::move( ptype ) }
 			{
 			}
 
-			castor::String name;
+			String name;
 			LightType type;
 		};
 
 		struct LightGroupData
 		{
-			LightGroupData( castor::String pname
+			LightGroupData( String pname
 				, LightType ptype )
-				: name{ castor::move( pname ) }
-				, type{ castor::move( ptype ) }
+				: name{ c3d::move( pname ) }
+				, type{ c3d::move( ptype ) }
 			{
 			}
 
-			castor::String name;
+			String name;
 			LightType type;
 		};
 
 		struct CameraData
 		{
-			CameraData( castor::String pname
+			CameraData( String pname
 				, ViewportType ptype )
-				: name{ castor::move( pname ) }
+				: name{ c3d::move( pname ) }
 				, type{ ptype }
 			{
 			}
 
-			castor::String name;
+			String name;
 			ViewportType type;
 		};
 
 	protected:
 		C3D_API ImporterFile( Engine & engine
 			, Scene * scene
-			, castor::Path const & path
+			, Path const & path
 			, Parameters const & parameters
 			, ProgressBar * progress );
 
 	public:
 		C3D_API virtual ~ImporterFile() = default;
 
-		C3D_API virtual castor::Vector< castor::String > listMaterials() = 0;
-		C3D_API virtual castor::Vector< MeshData > listMeshes() = 0;
-		C3D_API virtual castor::Vector< castor::String > listSkeletons() = 0;
-		C3D_API virtual castor::Vector< NodeData > listSceneNodes() = 0;
-		C3D_API virtual castor::Vector< GeometryData > listGeometries() = 0;
-		C3D_API virtual castor::Vector< LightData > listLights() = 0;
-		C3D_API virtual castor::Vector< LightGroupData > listLightGroups() = 0;
-		C3D_API virtual castor::Vector< CameraData > listCameras() = 0;
-		C3D_API virtual castor::Vector< castor::String > listMeshAnimations( Mesh const & mesh ) = 0;
-		C3D_API virtual castor::Vector< castor::String > listSkeletonAnimations( Skeleton const & skeleton ) = 0;
-		C3D_API virtual castor::Vector< castor::String > listSceneNodeAnimations( SceneNode const & node ) = 0;
-		C3D_API virtual castor::Vector< uint32_t > listTextureAnimations( Material const & material
+		C3D_API virtual Vector< String > listMaterials() = 0;
+		C3D_API virtual Vector< MeshData > listMeshes() = 0;
+		C3D_API virtual Vector< String > listSkeletons() = 0;
+		C3D_API virtual Vector< NodeData > listSceneNodes() = 0;
+		C3D_API virtual Vector< GeometryData > listGeometries() = 0;
+		C3D_API virtual Vector< LightData > listLights() = 0;
+		C3D_API virtual Vector< LightGroupData > listLightGroups() = 0;
+		C3D_API virtual Vector< CameraData > listCameras() = 0;
+		C3D_API virtual Vector< String > listMeshAnimations( Mesh const & mesh ) = 0;
+		C3D_API virtual Vector< String > listSkeletonAnimations( Skeleton const & skeleton ) = 0;
+		C3D_API virtual Vector< String > listSceneNodeAnimations( SceneNode const & node ) = 0;
+		C3D_API virtual Vector< uint32_t > listTextureAnimations( Material const & material
 			, uint32_t pass ) = 0;
 		C3D_API virtual uint32_t countAllMeshAnimations()const = 0;
 		C3D_API virtual uint32_t countAllSkeletonAnimations()const = 0;
@@ -152,22 +152,22 @@ namespace castor3d
 		C3D_API virtual LightImporterUPtr createLightImporter() = 0;
 		C3D_API virtual CameraImporterUPtr createCameraImporter() = 0;
 
-		castor::String const & getExtension()const noexcept
+		String const & getExtension()const noexcept
 		{
 			return m_extension;
 		}
 
-		castor::String getName()const noexcept
+		String getName()const noexcept
 		{
 			return m_fileName.getFileName();
 		}
 
-		castor::Path const & getFileName()const noexcept
+		Path const & getFileName()const noexcept
 		{
 			return m_fileName;
 		}
 
-		castor::Path const & getFilePath()const noexcept
+		Path const & getFilePath()const noexcept
 		{
 			return m_filePath;
 		}
@@ -177,7 +177,7 @@ namespace castor3d
 			return m_parameters;
 		}
 
-		castor::String getExternalName( castor::String const & name )const
+		String getExternalName( String const & name )const
 		{
 			if ( name.find( m_prefix ) == 0u )
 			{
@@ -187,7 +187,7 @@ namespace castor3d
 			return name;
 		}
 
-		castor::String getInternalName( castor::String const & name )const
+		String getInternalName( String const & name )const
 		{
 			return m_prefix + name;
 		}
@@ -207,7 +207,7 @@ namespace castor3d
 			return m_progress;
 		}
 
-		castor::String const & getPrefix()const noexcept
+		String const & getPrefix()const noexcept
 		{
 			return m_prefix;
 		}
@@ -216,19 +216,19 @@ namespace castor3d
 		Scene * m_scene{};
 		//!\~english The file full path.
 		//!\~french Le chemin complet du fichier.
-		castor::Path m_fileName;
+		Path m_fileName;
 		//!\~english The file parent path.
 		//!\~french Le chemin parent du fichier.
-		castor::Path m_filePath;
-		castor::String m_extension;
+		Path m_filePath;
+		String m_extension;
 		Parameters m_parameters;
-		castor::String m_prefix;
+		String m_prefix;
 		ProgressBar * m_progress;
 	};
 
 	class ImporterFileFactory
 	{
-		using Creator = castor::Function< ImporterFileUPtr( Engine &, Scene *, castor::Path const &, Parameters const &, ProgressBar * ) >;
+		using Creator = Function< ImporterFileUPtr( Engine &, Scene *, Path const &, Parameters const &, ProgressBar * ) >;
 
 	public:
 		C3D_API ImporterFileFactory();
@@ -252,10 +252,10 @@ namespace castor3d
 		 *\param[in]	progress	Une barre de progression optionnelle.
 		 *\return		L'importeur créé.
 		 */
-		C3D_API ImporterFileUPtr create( castor::String const & type
-			, castor::String const & name
+		C3D_API ImporterFileUPtr create( String const & type
+			, String const & name
 			, Engine & engine
-			, castor::Path const & file
+			, Path const & file
 			, Parameters const & parameters
 			, ProgressBar * progress = nullptr )const;
 		/**
@@ -278,10 +278,10 @@ namespace castor3d
 		 *\param[in]	progress	Une barre de progression optionnelle.
 		 *\return		L'importeur créé.
 		 */
-		C3D_API ImporterFileUPtr create( castor::String const & type
-			, castor::String const & name
+		C3D_API ImporterFileUPtr create( String const & type
+			, String const & name
 			, Scene & scene
-			, castor::Path const & file
+			, Path const & file
 			, Parameters const & parameters
 			, ProgressBar * progress = nullptr )const;
 		/**
@@ -302,9 +302,9 @@ namespace castor3d
 		 *\param[in]	progress	Une barre de progression optionnelle.
 		 *\return		L'importeur créé.
 		 */
-		C3D_API ImporterFileUPtr create( castor::String const & type
+		C3D_API ImporterFileUPtr create( String const & type
 			, Engine & engine
-			, castor::Path const & file
+			, Path const & file
 			, Parameters const & parameters
 			, ProgressBar * progress = nullptr )const;
 		/**
@@ -325,9 +325,9 @@ namespace castor3d
 		 *\param[in]	progress	Une barre de progression optionnelle.
 		 *\return		L'importeur créé.
 		 */
-		C3D_API ImporterFileUPtr create( castor::String const & type
+		C3D_API ImporterFileUPtr create( String const & type
 			, Scene & scene
-			, castor::Path const & file
+			, Path const & file
 			, Parameters const & parameters
 			, ProgressBar * progress = nullptr )const;
 		/**
@@ -342,8 +342,8 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'importeur.
 		 *\param[in]	create	La fonction de création d'objet.
 		 */
-		void registerType( castor::String const & type
-			, castor::String const & name
+		void registerType( String const & type
+			, String const & name
 			, Creator create )
 		{
 			auto it = m_registered.try_emplace( type ).first;
@@ -359,8 +359,8 @@ namespace castor3d
 		 *\param[in]	type	Le type d'objet.
 		 *\param[in]	name	Le nom de l'importeur.
 		 */
-		void unregisterType( castor::String const & type
-			, castor::String const & name )noexcept
+		void unregisterType( String const & type
+			, String const & name )noexcept
 		{
 			if ( auto it = m_registered.find( type );
 				it != m_registered.end() )
@@ -387,22 +387,22 @@ namespace castor3d
 		 *\param[in]	type	Le type de fichier.
 		 *\return		\p true si enregistré.
 		 */
-		bool isTypeRegistered( castor::String const & type )const
+		bool isTypeRegistered( String const & type )const
 		{
 			return m_registered.end() != m_registered.find( type );
 		}
 
 	private:
-		ImporterFileUPtr doCreate( castor::String const & type
-			, castor::String const & name
+		ImporterFileUPtr doCreate( String const & type
+			, String const & name
 			, Engine & engine
 			, Scene * scene
-			, castor::Path const & file
+			, Path const & file
 			, Parameters const & parameters
 			, ProgressBar * progress )const;
 
 	private:
-		castor::UnorderedStringMap< castor::UnorderedStringMap< Creator > > m_registered;
+		HashStringMap< HashStringMap< Creator > > m_registered;
 	};
 }
 

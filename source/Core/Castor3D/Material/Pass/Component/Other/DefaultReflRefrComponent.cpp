@@ -17,7 +17,7 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -90,7 +90,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const DefaultReflRefrComponent::TypeName = C3D_MakePassReflectionComponentName( "default" );
+	String const DefaultReflRefrComponent::TypeName = C3D_MakePassReflectionComponentName( "default" );
 
 	DefaultReflRefrComponent::DefaultReflRefrComponent( Pass & pass )
 		: PassComponent{ pass, TypeName }
@@ -99,7 +99,7 @@ namespace castor3d
 
 	PassComponentUPtr DefaultReflRefrComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, DefaultReflRefrComponent >( pass );
+		return makeUniqueDerived< PassComponent, DefaultReflRefrComponent >( pass );
 	}
 
 	//*********************************************************************************************

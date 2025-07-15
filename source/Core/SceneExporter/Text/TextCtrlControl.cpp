@@ -8,10 +8,8 @@
 #include <CastorUtils/Data/Text/TextPosition.hpp>
 #include <CastorUtils/Data/Text/TextSize.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	//*********************************************************************************************
 
 	TextWriter< Control >::TextWriter( String const & tabs

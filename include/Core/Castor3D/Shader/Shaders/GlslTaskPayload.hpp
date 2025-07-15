@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/IOStructHelper.hpp>
 #include <ShaderWriter/CompositeTypes/IOStructInstanceHelper.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	template< sdw::var::Flag FlagT >
 	using PayloadStructT = sdw::IOStructInstanceHelperT< FlagT
@@ -24,7 +24,7 @@ namespace castor3d::shader
 		PayloadT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled = true )
-			: PayloadStructT< FlagT >{ writer, castor::move( expr ), enabled }
+			: PayloadStructT< FlagT >{ writer, c3d::move( expr ), enabled }
 		{
 		}
 

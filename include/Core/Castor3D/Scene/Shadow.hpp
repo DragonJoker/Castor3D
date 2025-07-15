@@ -13,30 +13,30 @@ See LICENSE file in root folder
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct ShadowConfig
 	{
 		C3D_API void accept( ConfigurationVisitorBase & visitor
 			, LightType lightType );
 
-		C3D_API static void addParsers( castor::AttributeParsers & result
+		C3D_API static void addParsers( AttributeParsers & result
 			, CSCNSection light, CSCNSection shadows
 			, CSCNSection shadowsRaw, CSCNSection shadowsPcf, CSCNSection shadowsVsm
-			, castor::RawParserFunctionT< void > parserShadows, castor::RawParserFunctionT< void > parserShadowProducer
-			, castor::RawParserFunctionT< ShadowContext > parserRawConfig, castor::RawParserFunctionT< ShadowContext > parserPcfConfig, castor::RawParserFunctionT< ShadowContext > parserVsmConfig );
+			, RawParserFunctionT< void > parserShadows, RawParserFunctionT< void > parserShadowProducer
+			, RawParserFunctionT< ShadowContext > parserRawConfig, RawParserFunctionT< ShadowContext > parserPcfConfig, RawParserFunctionT< ShadowContext > parserVsmConfig );
 
 		bool enabled{};
 		ShadowType filterType{ ShadowType::eNone };
 		GlobalIlluminationType globalIllumination{ GlobalIlluminationType::eNone };
 		uint32_t volumetricSteps{ 0u };
 		float volumetricScattering{ 0.2f };
-		castor::Point2f rawOffsets;
-		castor::Point2f pcfOffsets;
+		Point2f rawOffsets;
+		Point2f pcfOffsets;
 		float vsmMinVariance{};
 		float vsmLightBleedingReduction{};
-		castor::RangedValue< uint32_t > pcfFilterSize{ 4u, castor::makeRange( 0u, MaxPcfFilterSize ) };
-		castor::RangedValue< uint32_t > pcfSampleCount{ 8u, castor::makeRange( 0u, MaxPcfSampleCount ) };
+		RangedValue< uint32_t > pcfFilterSize{ 4u, makeRange( 0u, MaxPcfFilterSize ) };
+		RangedValue< uint32_t > pcfSampleCount{ 8u, makeRange( 0u, MaxPcfSampleCount ) };
 		LpvConfig lpvConfig;
 		RsmConfig rsmConfig;
 	};
@@ -58,28 +58,28 @@ namespace castor3d
 	}
 }
 
-namespace castor
+namespace c3d
 {
 	template<>
-	struct ParserEnumTraits< castor3d::ShadowType >
+	struct ParserEnumTraits< ShadowType >
 	{
 		static inline xchar const * const Name = cuT( "ShadowType" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT< castor3d::ShadowType >();
+				result = getEnumMapT< ShadowType >();
 				return result;
 			}( );
 	};
 
 	template<>
-	struct ParserEnumTraits< castor3d::GlobalIlluminationType >
+	struct ParserEnumTraits< GlobalIlluminationType >
 	{
 		static inline xchar const * const Name = cuT( "GlobalIlluminationType" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT< castor3d::GlobalIlluminationType >();
+				result = getEnumMapT< GlobalIlluminationType >();
 				return result;
 			}( );
 	};

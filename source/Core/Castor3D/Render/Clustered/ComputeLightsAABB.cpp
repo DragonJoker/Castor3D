@@ -24,7 +24,7 @@
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -279,7 +279,7 @@ namespace castor3d
 			}
 
 		private:
-			castor::Map< uint32_t, ProgramData > m_programs;
+			Map< uint32_t, ProgramData > m_programs;
 		};
 	}
 
@@ -362,7 +362,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< cptlgtb::FramePass >( framePass
+				auto result = makeRawUnique< cptlgtb::FramePass >( framePass
 					, context
 					, graph
 					, device
@@ -370,7 +370,7 @@ namespace castor3d
 						.groupCountX( MaxLightsCount / 1024u )
 						.enabled( &clusters.needsClustersUpdate() )
 					, clusters.getConfig() );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

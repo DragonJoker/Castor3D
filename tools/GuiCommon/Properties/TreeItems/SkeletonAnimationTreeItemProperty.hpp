@@ -31,9 +31,9 @@ namespace GuiCommon
 		 *\param[in]	engine		Le moteur.
 		 */
 		SkeletonAnimationTreeItemProperty( bool editable
-			, castor3d::Engine * engine );
+			, c3d::Engine * engine );
 
-		void setData( castor3d::SkeletonAnimation & data )noexcept
+		void setData( c3d::SkeletonAnimation & data )noexcept
 		{
 			clearProperties();
 			m_animation = &data;
@@ -46,7 +46,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::SkeletonAnimation * m_animation{};
+		c3d::SkeletonAnimation * m_animation{};
 	};
 }
 

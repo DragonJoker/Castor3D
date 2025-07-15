@@ -1,10 +1,10 @@
 #include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
-	castor::String getName( GlobalIlluminationType giType )
+	String getName( GlobalIlluminationType giType )
 	{
-		static castor::Array< castor::String, size_t( GlobalIlluminationType::eCount ) > const Values
+		static Array< String, size_t( GlobalIlluminationType::eCount ) > const Values
 		{
 			{
 				cuT( "none" ),

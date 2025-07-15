@@ -78,13 +78,13 @@ extern "C"
 		if ( !object->getInternal() )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SCENE );
 
-		castor::Path path{ castor::makeString( filePath ) };
-		if ( !castor::File::fileExists( path ) )
+		c3d::Path path{ c3d::makeString( filePath ) };
+		if ( !c3d::File::fileExists( path ) )
 			return cc3d::reportError( C3D_FAILURE, ERROR_WRONG_SCENE_FILE_NAME );
 
-		auto background = castor::makeUnique< castor3d::ImageBackground >( *object->getInternal()->getEngine(), *object->getInternal(), castor::String{} );
+		auto background = c3d::makeUnique< c3d::ImageBackground >( *object->getInternal()->getEngine(), *object->getInternal(), c3d::String{} );
 		background->setImage( path.getPath(), path.getFileName( true ) );
-		object->getInternal()->setBackground( castor::ptrRefCast< castor3d::SceneBackground >( background ) );
+		object->getInternal()->setBackground( c3d::ptrRefCast< c3d::SceneBackground >( background ) );
 
 		return C3D_OK;
 	}
@@ -96,7 +96,7 @@ extern "C"
 		if ( !object->getInternal() )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SCENE );
 
-		object->getInternal()->setBackground( castor::ptrRefCast< castor3d::SceneBackground >( skybox->internal ) );
+		object->getInternal()->setBackground( c3d::ptrRefCast< c3d::SceneBackground >( skybox->internal ) );
 
 		return C3D_OK;
 	}
@@ -221,7 +221,7 @@ extern "C"
 		try
 		{
 			auto own = val->releaseInternal();
-			val->setInternal( object->getInternal()->addGeometry( castor::move( own ) ) );
+			val->setInternal( object->getInternal()->addGeometry( c3d::move( own ) ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -323,7 +323,7 @@ extern "C"
 			if ( !own )
 				return cc3d::reportError( C3D_FAILURE, "SceneNode didn't exist in the scene" );
 
-			val->setInternal( castor::move( own ) );
+			val->setInternal( c3d::move( own ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -345,7 +345,7 @@ extern "C"
 			if ( !own )
 				return cc3d::reportError( C3D_FAILURE, "Geometry didn't exist in the scene" );
 
-			val->setInternal( castor::move( own ) );
+			val->setInternal( c3d::move( own ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -367,7 +367,7 @@ extern "C"
 			if ( !own )
 				return cc3d::reportError( C3D_FAILURE, "Camera didn't exist in the scene" );
 
-			val->setInternal( castor::move( own ) );
+			val->setInternal( c3d::move( own ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -389,7 +389,7 @@ extern "C"
 			if ( !own )
 				return cc3d::reportError( C3D_FAILURE, "Light didn't exist in the scene" );
 
-			val->setInternal( castor::move( own ) );
+			val->setInternal( c3d::move( own ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -411,7 +411,7 @@ extern "C"
 			if ( !own )
 				return cc3d::reportError( C3D_FAILURE, "LightGroup didn't exist in the scene" );
 
-			val->setInternal( castor::move( own ) );
+			val->setInternal( c3d::move( own ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -433,7 +433,7 @@ extern "C"
 			if ( !own )
 				return cc3d::reportError( C3D_FAILURE, "Mesh didn't exist in the scene" );
 
-			val->setInternal( castor::move( own ) );
+			val->setInternal( c3d::move( own ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -449,7 +449,7 @@ extern "C"
 
 		try
 		{
-			auto res = object->getInternal()->findSceneNode( castor::makeString( name ) );
+			auto res = object->getInternal()->findSceneNode( c3d::makeString( name ) );
 			if ( !res )
 				return cc3d::reportError( C3D_FAILURE, cuT( "Couldn't find the SceneNode" ) );
 
@@ -470,7 +470,7 @@ extern "C"
 
 		try
 		{
-			auto res = object->getInternal()->findGeometry( castor::makeString( name ) );
+			auto res = object->getInternal()->findGeometry( c3d::makeString( name ) );
 			if ( !res )
 				return cc3d::reportError( C3D_FAILURE, cuT( "Couldn't find the Geometry" ) );
 
@@ -491,7 +491,7 @@ extern "C"
 
 		try
 		{
-			auto res = object->getInternal()->findCamera( castor::makeString( name ) );
+			auto res = object->getInternal()->findCamera( c3d::makeString( name ) );
 			if ( !res )
 				return cc3d::reportError( C3D_FAILURE, cuT( "Couldn't find the Camera" ) );
 
@@ -512,7 +512,7 @@ extern "C"
 
 		try
 		{
-			auto res = object->getInternal()->findLight( castor::makeString( name ) );
+			auto res = object->getInternal()->findLight( c3d::makeString( name ) );
 			if ( !res )
 				return cc3d::reportError( C3D_FAILURE, cuT( "Couldn't find the Light" ) );
 
@@ -533,7 +533,7 @@ extern "C"
 
 		try
 		{
-			auto res = object->getInternal()->findLightGroup( castor::makeString( name ) );
+			auto res = object->getInternal()->findLightGroup( c3d::makeString( name ) );
 			if ( !res )
 				return cc3d::reportError( C3D_FAILURE, cuT( "Couldn't find the LightGroup" ) );
 
@@ -554,7 +554,7 @@ extern "C"
 
 		try
 		{
-			auto res = object->getInternal()->findMesh( castor::makeString( name ) );
+			auto res = object->getInternal()->findMesh( c3d::makeString( name ) );
 			if ( !res )
 				return cc3d::reportError( C3D_FAILURE, cuT( "Couldn't find the Mesh" ) );
 
@@ -575,7 +575,7 @@ extern "C"
 
 		try
 		{
-			if ( auto res = object->getInternal()->createSceneNode( castor::makeString( name ), *object->getInternal() ) )
+			if ( auto res = object->getInternal()->createSceneNode( c3d::makeString( name ), *object->getInternal() ) )
 			{
 				if ( parent )
 				{
@@ -587,7 +587,7 @@ extern "C"
 				}
 
 				C3D_SafeAlloc( *result, C3DSceneNode );
-				( *result )->setInternal( castor::move( res ) );
+				( *result )->setInternal( c3d::move( res ) );
 			}
 		}
 		C3D_CatchCommonExceptions()
@@ -604,12 +604,12 @@ extern "C"
 
 		try
 		{
-			auto res = object->getInternal()->createGeometry( castor::makeString( name )
+			auto res = object->getInternal()->createGeometry( c3d::makeString( name )
 				, *object->getInternal()
 				, *parent->getInternal()
 				, mesh->getInternal() );
 			C3D_SafeAlloc( *result, C3DGeometry );
-			( *result )->setInternal( castor::move( res ) );
+			( *result )->setInternal( c3d::move( res ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -625,15 +625,15 @@ extern "C"
 
 		try
 		{
-			castor3d::Viewport viewport{ *object->getInternal()->getEngine() };
-			viewport.setPerspective( castor::Angle::fromDegrees( 120.0f ), 4.0f / 3.0f, 0.1f, 1000.0f );
-			viewport.resize( castor::Size{ ww, wh } );
-			auto res = object->getInternal()->createCamera( castor::makeString( name )
+			c3d::Viewport viewport{ *object->getInternal()->getEngine() };
+			viewport.setPerspective( c3d::Angle::fromDegrees( 120.0f ), 4.0f / 3.0f, 0.1f, 1000.0f );
+			viewport.resize( c3d::Size{ ww, wh } );
+			auto res = object->getInternal()->createCamera( c3d::makeString( name )
 				, *object->getInternal()
 				, *parent->getInternal()
 				, std::move( viewport ) );
 			C3D_SafeAlloc( *result, C3DCamera );
-			( *result )->setInternal( castor::move( res ) );
+			( *result )->setInternal( c3d::move( res ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -649,13 +649,13 @@ extern "C"
 
 		try
 		{
-			auto res = object->getInternal()->createLight( castor::makeString( name )
+			auto res = object->getInternal()->createLight( c3d::makeString( name )
 				, *object->getInternal()
 				, *parent->getInternal()
 				, object->getInternal()->getLightsFactory()
-				, castor3d::LightType( type ) );
+				, c3d::LightType( type ) );
 			C3D_SafeAlloc( *result, C3DLight );
-			( *result )->setInternal( castor::move( res ) );
+			( *result )->setInternal( c3d::move( res ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -671,12 +671,12 @@ extern "C"
 
 		try
 		{
-			auto res = object->getInternal()->createLightGroup( castor::makeString( name )
+			auto res = object->getInternal()->createLightGroup( c3d::makeString( name )
 				, *object->getInternal()
 				, object->getInternal()->getLightsFactory()
-				, castor3d::LightType( type ) );
+				, c3d::LightType( type ) );
 			C3D_SafeAlloc( *result, C3DLightGroup );
-			( *result )->setInternal( castor::move( res ) );
+			( *result )->setInternal( c3d::move( res ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -693,9 +693,9 @@ extern "C"
 		try
 		{
 			auto res = object->getInternal()->createMesh( name, *object->getInternal() );
-			object->getInternal()->getEngine()->getMeshFactory().create( castor::makeString( name ) )->generate( *res, castor3d::Parameters{} );
+			object->getInternal()->getEngine()->getMeshFactory().create( c3d::makeString( name ) )->generate( *res, c3d::Parameters{} );
 			C3D_SafeAlloc( *result, C3DMesh );
-			( *result )->setInternal( castor::move( res ) );
+			( *result )->setInternal( c3d::move( res ) );
 		}
 		C3D_CatchCommonExceptions()
 

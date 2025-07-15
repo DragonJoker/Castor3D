@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Gui/Controls/CtrlControl.hpp"
 #include "Castor3D/Gui/Controls/CtrlScrollable.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	C3D_API bool isLayoutControl( ControlType type );
 	C3D_API bool isLayoutControl( Control const & control );
@@ -31,12 +31,12 @@ namespace castor3d
 		 */
 		C3D_API LayoutControl( ControlType type
 			, SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, ControlStyleRPtr controlStyle
 			, ScrollableStyleRPtr scrollableStyle
 			, ControlRPtr parent
-			, castor::Position const & position
-			, castor::Size const & size
+			, Position const & position
+			, Size const & size
 			, ControlFlagType flags = 0
 			, bool visible = true );
 
@@ -85,27 +85,27 @@ namespace castor3d
 
 		/** @copydoc Control::doUpdateClientRect
 		*/
-		castor::Point4ui doUpdateClientRect( castor::Point4ui const & clientRect )final;
+		Point4ui doUpdateClientRect( Point4ui const & clientRect )final;
 
 		/** Sets the background borders size.
 		 *\param[in]	value		The new value.
 		 */
-		void doSetBorderSize( castor::Point4ui const & value )final;
+		void doSetBorderSize( Point4ui const & value )final;
 
 		/** Sets the position
 		*\param[in]	value		The new value
 		*/
-		void doSetPosition( castor::Position const & value )final;
+		void doSetPosition( Position const & value )final;
 
 		/** Sets the size
 		*\param[in]	value	The new value
 		*/
-		void doSetSize( castor::Size const & value )final;
+		void doSetSize( Size const & value )final;
 
 		/** Sets the caption.
 		*\param[in]	caption	The new value
 		*/
-		void doSetCaption( castor::U32String const & caption )final;
+		void doSetCaption( U32String const & caption )final;
 
 		/** Sets the visibility
 		 *\remarks		Used for derived control specific behavious
@@ -115,7 +115,7 @@ namespace castor3d
 
 		/** @copydoc Control::doUpdateClientRect
 		*/
-		virtual castor::Point4ui doSubUpdateClientRect( castor::Point4ui const & clientRect )
+		virtual Point4ui doSubUpdateClientRect( Point4ui const & clientRect )
 		{
 			return clientRect;
 		}
@@ -123,21 +123,21 @@ namespace castor3d
 		/** Sets the background borders size.
 		 *\param[in]	value		The new value.
 		 */
-		virtual void doSubSetBorderSize( castor::Point4ui const & value ) {}
+		virtual void doSubSetBorderSize( Point4ui const & value ) {}
 		/** Sets the position
 		*\param[in]	value		The new value
 		*/
-		virtual void doSubSetPosition( castor::Position const & value ) {}
+		virtual void doSubSetPosition( Position const & value ) {}
 
 		/** Sets the size
 		*\param[in]	value	The new value
 		*/
-		virtual void doSubSetSize( castor::Size const & value ) {}
+		virtual void doSubSetSize( Size const & value ) {}
 
 		/** Sets the caption.
 		*\param[in]	caption	The new value
 		*/
-		virtual void doSubSetCaption( castor::U32String const & caption ) {}
+		virtual void doSubSetCaption( U32String const & caption ) {}
 
 		/** Sets the visibility
 		 *\remarks		Used for derived control specific behavious

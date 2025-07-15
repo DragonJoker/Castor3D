@@ -9,10 +9,10 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/Named.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class FrameListener
-		: public castor::Named
+		: public Named
 	{
 	public:
 		/**
@@ -23,7 +23,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	name	Le nom du listener.
 		 */
-		C3D_API explicit FrameListener( castor::String const & name );
+		C3D_API explicit FrameListener( String const & name );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -115,13 +115,13 @@ namespace castor3d
 	protected:
 		//!\~english	The CPU events arrays.
 		//!\~french		Les tableaux d'évènements CPU.
-		castor::Array< CpuFrameEventPtrArray,	size_t( CpuEventType::eCount ) > m_cpuEvents;
+		Array< CpuFrameEventPtrArray,	size_t( CpuEventType::eCount ) > m_cpuEvents;
 		//!\~english	The GPU events arrays.
 		//!\~french		Les tableaux d'évènements GPU.
-		castor::Array< GpuFrameEventPtrArray,	size_t( GpuEventType::eCount ) > m_gpuEvents;
+		Array< GpuFrameEventPtrArray,	size_t( GpuEventType::eCount ) > m_gpuEvents;
 		//!\~english	Mutex to make this class thread safe.
 		//!\~french		Mutex pour rendre cette classe thread safe.
-		castor::RecursiveMutex m_mutex;
+		RecursiveMutex m_mutex;
 	};
 }
 

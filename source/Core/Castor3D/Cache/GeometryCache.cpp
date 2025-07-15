@@ -22,11 +22,11 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementSmartPtr( castor3d, GeometryCache )
+CU_ImplementSmartPtr( c3d, GeometryCache )
 
-namespace castor3d
+namespace c3d
 {
-	const castor::String ObjectCacheTraitsT< Geometry, castor::String >::Name = cuT( "Geometry" );
+	const String ObjectCacheTraitsT< Geometry, String >::Name = cuT( "Geometry" );
 
 	//*********************************************************************************************
 
@@ -34,16 +34,16 @@ namespace castor3d
 		, Submesh const & submesh
 		, Pass const & pass )
 	{
-		size_t result = std::hash< castor::String >{}( geometry.getName() );
-		castor::hashCombine( result, submesh.getOwner()->getName() );
-		castor::hashCombine( result, submesh.getId() );
-		castor::hashCombine( result, pass.getHash() );
+		size_t result = std::hash< String >{}( geometry.getName() );
+		hashCombine( result, submesh.getOwner()->getName() );
+		hashCombine( result, submesh.getId() );
+		hashCombine( result, pass.getHash() );
 		return result;
 	}
 
 	//*********************************************************************************************
 
-	ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::ObjectCacheT( Scene & scene
+	ObjectCacheT< Geometry, String, GeometryCacheTraits >::ObjectCacheT( Scene & scene
 		, SceneNodeRPtr rootNode
 		, SceneNodeRPtr rootCameraNode
 		, SceneNodeRPtr rootObjectNode )
@@ -108,9 +108,9 @@ namespace castor3d
 	{
 	}
 
-	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::add( ElementPtrT element )
+	void ObjectCacheT< Geometry, String, GeometryCacheTraits >::add( ElementPtrT element )
 	{
-		auto lock( castor::makeUniqueLock( *this ) );
+		auto lock( makeUniqueLock( *this ) );
 		ElementObjectCacheT::doAddNoLock( element->getName(), element );
 	}
 

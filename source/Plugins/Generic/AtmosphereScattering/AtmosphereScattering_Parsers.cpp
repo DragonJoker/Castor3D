@@ -22,12 +22,12 @@ namespace atmosphere_scattering
 	{
 		struct AtmosphereContext
 		{
-			castor3d::SceneContext * sceneContext{};
-			castor3d::SceneRPtr scene{};
-			castor::Point2ui transmittanceDim{ 256u, 64u };
+			c3d::SceneContext * sceneContext{};
+			c3d::SceneRPtr scene{};
+			c3d::Point2ui transmittanceDim{ 256u, 64u };
 			uint32_t multiScatterDim{ 32u };
 			uint32_t atmosphereVolumeDim{ 32u };
-			castor::Point2ui skyViewDim{ 192u, 108u };
+			c3d::Point2ui skyViewDim{ 192u, 108u };
 			uint32_t worleyDim{ 32u };
 			uint32_t perlinWorleyDim{ 128u };
 			uint32_t curlDim{ 128u };
@@ -39,7 +39,7 @@ namespace atmosphere_scattering
 			AtmosphereBackgroundUPtr background{};
 		};
 
-		static castor::String getPrefix( AtmosphereContext const & context )
+		static c3d::String getPrefix( AtmosphereContext const & context )
 		{
 			return getPrefix( *context.sceneContext );
 		}
@@ -53,11 +53,11 @@ namespace atmosphere_scattering
 			eClouds = CU_MakeSectionName( 'A', 'T', 'C', 'L' ),
 		};
 		
-		static CU_ImplementAttributeParserNewBlock( parserAtmosphereScattering, castor3d::SceneContext, AtmosphereContext )
+		static CU_ImplementAttributeParserNewBlock( parserAtmosphereScattering, c3d::SceneContext, AtmosphereContext )
 		{
 			newBlockContext->sceneContext = blockContext;
 			newBlockContext->scene = blockContext->scene;
-			newBlockContext->background = castor::makeUnique< AtmosphereBackground >( *blockContext->scene->getEngine()
+			newBlockContext->background = c3d::makeUnique< AtmosphereBackground >( *blockContext->scene->getEngine()
 				, *blockContext->scene );
 		}
 		CU_EndAttributePushNewBlock( AtmosphereSection::eRoot )
@@ -75,9 +75,9 @@ namespace atmosphere_scattering
 			else
 			{
 				blockContext->atmosphere.multiScatteringLUTRes = float( blockContext->multiScatterDim );
-				blockContext->background->setAtmosphereCfg( castor::move( blockContext->atmosphere ) );
-				blockContext->background->setCloudsCfg( castor::move( blockContext->clouds ) );
-				blockContext->background->setWeatherCfg( castor::move( blockContext->weather ) );
+				blockContext->background->setAtmosphereCfg( c3d::move( blockContext->atmosphere ) );
+				blockContext->background->setCloudsCfg( c3d::move( blockContext->clouds ) );
+				blockContext->background->setWeatherCfg( c3d::move( blockContext->weather ) );
 				blockContext->background->loadTransmittance( blockContext->transmittanceDim );
 				blockContext->background->loadMultiScatter( blockContext->multiScatterDim );
 				blockContext->background->loadAtmosphereVolume( blockContext->atmosphereVolumeDim );
@@ -86,7 +86,7 @@ namespace atmosphere_scattering
 				blockContext->background->loadPerlinWorley( blockContext->perlinWorleyDim );
 				blockContext->background->loadCurl( blockContext->curlDim );
 				blockContext->background->loadWeather( blockContext->weatherDim );
-				blockContext->scene->setBackground( castor::ptrRefCast< castor3d::SceneBackground >( blockContext->background ) );
+				blockContext->scene->setBackground( c3d::ptrRefCast< c3d::SceneBackground >( blockContext->background ) );
 			}
 		}
 		CU_EndAttributePop()
@@ -99,7 +99,7 @@ namespace atmosphere_scattering
 			}
 			else
 			{
-				auto name = castor3d::getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = c3d::getPrefixedName( params[0]->get< c3d::String >(), *blockContext );
 
 				if ( auto node = blockContext->scene->findSceneNode( name ) )
 				{
@@ -121,7 +121,7 @@ namespace atmosphere_scattering
 			}
 			else
 			{
-				auto name = castor3d::getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = c3d::getPrefixedName( params[0]->get< c3d::String >(), *blockContext );
 
 				if ( auto node = blockContext->scene->findSceneNode( name ) )
 				{
@@ -299,7 +299,7 @@ namespace atmosphere_scattering
 			}
 			else
 			{
-				blockContext->atmosphere.muSMin = float( castor::Angle::fromDegrees( params[0]->get< float >() ).cos() );
+				blockContext->atmosphere.muSMin = float( c3d::Angle::fromDegrees( params[0]->get< float >() ).cos() );
 			}
 		}
 		CU_EndAttribute()
@@ -786,130 +786,130 @@ namespace atmosphere_scattering
 		CU_EndAttribute()
 	}
 
-	castor::AttributeParsers createParsers()
+	c3d::AttributeParsers createParsers()
 	{
-		castor::AttributeParsers result;
+		c3d::AttributeParsers result;
 
 		addParserT( result
-			, castor3d::CSCNSection::eScene
+			, c3d::CSCNSection::eScene
 			, parse::AtmosphereSection::eRoot
 			, cuT( "atmospheric_scattering" )
 			, &parse::parserAtmosphereScattering );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
-			, castor3d::CSCNSection::eScene
+			, c3d::CSCNSection::eScene
 			, cuT( "}" )
 			, &parse::parserAtmosphereScatteringEnd );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "sunNode" )
 			, &parse::parserSunNode
-			, { castor::makeParameter< castor::ParameterType::eName >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eName >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "planetNode" )
 			, &parse::parserPlanetNode
-			, { castor::makeParameter< castor::ParameterType::eName >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eName >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "transmittanceResolution" )
 			, &parse::parserTransmittanceResolution
-			, { castor::makeParameter< castor::ParameterType::ePoint2U >() } );
+			, { c3d::makeParameter< c3d::ParameterType::ePoint2U >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "multiScatterResolution" )
 			, &parse::parserMultiScatterResolution
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "atmosphereVolumeResolution" )
 			, &parse::parserAtmosphereVolumeResolution
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "skyViewResolution" )
 			, &parse::parserSkyViewResolution
-			, { castor::makeParameter< castor::ParameterType::ePoint2U >() } );
+			, { c3d::makeParameter< c3d::ParameterType::ePoint2U >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "sunIlluminance" )
 			, &parse::parserSunIlluminance
-			, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+			, { c3d::makeParameter< c3d::ParameterType::ePoint3F >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "sunIlluminanceScale" )
 			, &parse::parserSunIlluminanceScale
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "rayMarchMinSPP" )
 			, &parse::parserRayMarchMinSPP
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "rayMarchMaxSPP" )
 			, &parse::parserRayMarchMaxSPP
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "multipleScatteringFactor" )
 			, &parse::parserMultipleScatteringFactor
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "solarIrradiance" )
 			, &parse::parserSolarIrradiance
-			, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+			, { c3d::makeParameter< c3d::ParameterType::ePoint3F >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "sunAngularRadius" )
 			, &parse::parserSunAngularRadius
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "absorptionExtinction" )
 			, &parse::parserAbsorptionExtinction
-			, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+			, { c3d::makeParameter< c3d::ParameterType::ePoint3F >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "maxSunZenithAngle" )
 			, &parse::parserMaxSunZenithAngle
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "rayleighScattering" )
 			, &parse::parserRayleighScattering
-			, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+			, { c3d::makeParameter< c3d::ParameterType::ePoint3F >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "mieScattering" )
 			, &parse::parserMieScattering
-			, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+			, { c3d::makeParameter< c3d::ParameterType::ePoint3F >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "miePhaseFunctionG" )
 			, &parse::parserMiePhaseFunctionG
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "mieExtinction" )
 			, &parse::parserMieExtinction
-			, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+			, { c3d::makeParameter< c3d::ParameterType::ePoint3F >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "bottomRadius" )
 			, &parse::parserBottomRadius
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "topRadius" )
 			, &parse::parserTopRadius
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, cuT( "groundAlbedo" )
 			, &parse::parserGroundAlbedo
-			, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+			, { c3d::makeParameter< c3d::ParameterType::ePoint3F >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eRoot
 			, parse::AtmosphereSection::eDensity
@@ -954,27 +954,27 @@ namespace atmosphere_scattering
 			, parse::AtmosphereSection::eDensity
 			, cuT( "layerWidth" )
 			, &parse::parserDensityLayerWidth
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eDensity
 			, cuT( "expTerm" )
 			, &parse::parserDensityExpTerm
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eDensity
 			, cuT( "expScale" )
 			, &parse::parserDensityExpScale
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eDensity
 			, cuT( "linearTerm" )
 			, &parse::parserDensityLinearTerm
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eDensity
 			, cuT( "constantTerm" )
 			, &parse::parserDensityConstantTerm
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eDensity
 			, parse::AtmosphereSection::eRoot
@@ -984,122 +984,122 @@ namespace atmosphere_scattering
 			, parse::AtmosphereSection::eWeather
 			, cuT( "worleyResolution" )
 			, &parse::parserWorleyResolution
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eWeather
 			, cuT( "perlinWorleyResolution" )
 			, &parse::parserPerlinWorleyResolution
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eWeather
 			, cuT( "weatherResolution" )
 			, &parse::parserWeatherResolution
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eWeather
 			, cuT( "curlResolution" )
 			, &parse::parserCurlResolution
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eWeather
 			, cuT( "amplitude" )
 			, &parse::parserWeatherAmplitude
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eWeather
 			, cuT( "frequency" )
 			, &parse::parserWeatherFrequency
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eWeather
 			, cuT( "scale" )
 			, &parse::parserWeatherScale
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eWeather
 			, cuT( "octaves" )
 			, &parse::parserWeatherOctaves
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eWeather
 			, parse::AtmosphereSection::eRoot
 			, cuT( "}" )
-			, &castor3d::parserDefaultEnd );
+			, &c3d::parserDefaultEnd );
 		addParserT( result
 			, parse::AtmosphereSection::eClouds
 			, cuT( "windDirection" )
 			, &parse::parserCloudsWindDirection
-			, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+			, { c3d::makeParameter< c3d::ParameterType::ePoint3F >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eClouds
 			, cuT( "speed" )
 			, &parse::parserCloudsSpeed
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eClouds
 			, cuT( "coverage" )
 			, &parse::parserCloudsCoverage
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eClouds
 			, cuT( "crispiness" )
 			, &parse::parserCloudsCrispiness
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eClouds
 			, cuT( "curliness" )
 			, &parse::parserCloudsCurliness
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eClouds
 			, cuT( "density" )
 			, &parse::parserCloudsDensity
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eClouds
 			, cuT( "absorption" )
 			, &parse::parserCloudsAbsorption
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eClouds
 			, cuT( "innerRadius" )
 			, &parse::parserCloudsInnerRadius
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eClouds
 			, cuT( "outerRadius" )
 			, &parse::parserCloudsOuterRadius
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eClouds
 			, cuT( "topColour" )
 			, &parse::parserCloudsTopColour
-			, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+			, { c3d::makeParameter< c3d::ParameterType::ePoint3F >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eClouds
 			, cuT( "bottomColour" )
 			, &parse::parserCloudsBottomColour
-			, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+			, { c3d::makeParameter< c3d::ParameterType::ePoint3F >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eClouds
 			, cuT( "enablePowder" )
 			, &parse::parserCloudsEnablePowder
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eBool >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eClouds
 			, cuT( "topOffset" )
 			, &parse::parserCloudsTopOffset
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::AtmosphereSection::eClouds
 			, parse::AtmosphereSection::eRoot
 			, cuT( "}" )
-			, &castor3d::parserDefaultEnd );
+			, &c3d::parserDefaultEnd );
 
 		return result;
 	}
 
-	castor::StrUInt32Map createSections()
+	c3d::StrUInt32Map createSections()
 	{
 		return
 		{

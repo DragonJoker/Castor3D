@@ -17,12 +17,12 @@ namespace atmosphere_scattering
 	public:
 		AtmosphereMultiScatteringPass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
-			, castor3d::RenderDevice const & device
+			, c3d::RenderDevice const & device
 			, AtmosphereScatteringUbo const & atmosphereUbo
 			, crg::ImageViewId const & transmittanceLut
 			, crg::ImageViewId const & resultView
 			, bool const & enabled );
-		void accept( castor3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor );
 
 		crg::FramePass const & getLastPass()const
 		{
@@ -30,7 +30,7 @@ namespace atmosphere_scattering
 		}
 
 	private:
-		castor3d::ShaderModule m_computeShader;
+		c3d::ShaderModule m_computeShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass const * m_lastPass;
 	};

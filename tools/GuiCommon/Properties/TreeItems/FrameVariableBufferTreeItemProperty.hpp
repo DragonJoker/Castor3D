@@ -34,7 +34,7 @@ namespace GuiCommon
 		 *\param[in]	editable	Dit si les propriétés sont modifiables
 		 *\param[in]	buffer		Le tampon cible
 		 */
-		FrameVariableBufferTreeItemProperty( castor3d::Engine * engine
+		FrameVariableBufferTreeItemProperty( c3d::Engine * engine
 			, bool editable
 			, UniformBufferValues & buffer );
 

@@ -19,7 +19,7 @@
 namespace GuiCommon
 {
 	SubmeshTreeItemProperty::SubmeshTreeItemProperty( bool editable
-		, castor3d::Engine * engine )
+		, c3d::Engine * engine )
 		: TreeItemProperty{ engine, editable }
 	{
 		CreateTreeItemMenu();
@@ -40,7 +40,7 @@ namespace GuiCommon
 
 		addProperty( grid, PROPERTY_CATEGORY_SUBMESH + wxString( m_geometry->getName() ) );
 		addMaterial( grid, engine, PROPERTY_SUBMESH_MATERIAL, m_materials, m_geometry->getMaterial( *m_submesh )
-			, [this]( castor3d::MaterialObs material ) { m_geometry->setMaterial( *m_submesh, material ); } );
+			, [this]( c3d::MaterialObs material ) { m_geometry->setMaterial( *m_submesh, material ); } );
 		TreeItemConfigurationBuilder::submit( grid, *this, *m_submesh );
 	}
 }

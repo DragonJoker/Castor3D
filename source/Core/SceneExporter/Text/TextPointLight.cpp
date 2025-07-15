@@ -1,9 +1,7 @@
 #include "TextPointLight.hpp"
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< PointLight >::TextWriter( String const & tabs )
 		: TextWriterT< PointLight >{ tabs }
 	{

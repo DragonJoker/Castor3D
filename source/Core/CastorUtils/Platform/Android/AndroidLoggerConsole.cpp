@@ -6,7 +6,7 @@
 
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
-namespace castor
+namespace c3d
 {
 	//************************************************************************************************
 
@@ -59,7 +59,7 @@ namespace castor
 	ProgramConsole::ProgramConsole( CU_UnusedParam( bool, showConsole ) )
 	{
 		std::ios::sync_with_stdio( false );
-		m_console = castor::make_unique< LogcatConsole >();
+		m_console = c3d::makeRawUnique< LogcatConsole >();
 	}
 
 	void ProgramConsole::beginLog( LogType logLevel )

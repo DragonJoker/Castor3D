@@ -13,9 +13,9 @@
 #include "Castor3D/Overlay/TextOverlay.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-CU_ImplementSmartPtr( castor3d, LayoutControl )
+CU_ImplementSmartPtr( c3d, LayoutControl )
 
-namespace castor3d
+namespace c3d
 {
 	//************************************************************************************************
 
@@ -33,12 +33,12 @@ namespace castor3d
 
 	LayoutControl::LayoutControl( ControlType type
 		, SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, ControlStyleRPtr controlStyle
 		, ScrollableStyleRPtr scrollableStyle
 		, ControlRPtr parent
-		, castor::Position const & position
-		, castor::Size const & size
+		, Position const & position
+		, Size const & size
 		, ControlFlagType flags
 		, bool visible )
 		: Control{ type
@@ -58,7 +58,7 @@ namespace castor3d
 
 	void LayoutControl::setLayout( LayoutUPtr layout )
 	{
-		m_layout = castor::move( layout );
+		m_layout = c3d::move( layout );
 	}
 
 	void LayoutControl::doCreate()
@@ -102,12 +102,12 @@ namespace castor3d
 		adjustScrollZIndex( offset );
 	}
 
-	castor::Point4ui LayoutControl::doUpdateClientRect( castor::Point4ui const & clientRect )
+	Point4ui LayoutControl::doUpdateClientRect( Point4ui const & clientRect )
 	{
 		return doSubUpdateClientRect( updateScrollableClientRect( clientRect ) );
 	}
 
-	void LayoutControl::doSetBorderSize( castor::Point4ui const & value )
+	void LayoutControl::doSetBorderSize( Point4ui const & value )
 	{
 		if ( m_layout )
 		{
@@ -118,7 +118,7 @@ namespace castor3d
 		updateScrollBars();
 	}
 
-	void LayoutControl::doSetPosition( castor::Position const & value )
+	void LayoutControl::doSetPosition( Position const & value )
 	{
 		if ( m_layout )
 		{
@@ -129,7 +129,7 @@ namespace castor3d
 		updateScrollBars();
 	}
 
-	void LayoutControl::doSetSize( castor::Size const & value )
+	void LayoutControl::doSetSize( Size const & value )
 	{
 		if ( m_layout )
 		{
@@ -140,7 +140,7 @@ namespace castor3d
 		updateScrollBars();
 	}
 
-	void LayoutControl::doSetCaption( castor::U32String const & caption )
+	void LayoutControl::doSetCaption( U32String const & caption )
 	{
 		if ( m_layout )
 		{

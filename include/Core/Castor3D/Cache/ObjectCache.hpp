@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Cache/ObjectCacheBase.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	template< typename ObjT, typename KeyT, typename TraitsT >
 	class ObjectCacheT final
@@ -64,11 +64,11 @@ namespace castor3d
 				, rootNode
 				, rootCameraNode
 				, rootObjectNode
-				, castor::move( initialise )
-				, castor::move( clean )
-				, castor::move( merge )
-				, castor::move( attach )
-				, castor::move( detach ) }
+				, c3d::move( initialise )
+				, c3d::move( clean )
+				, c3d::move( merge )
+				, c3d::move( attach )
+				, c3d::move( detach ) }
 		{
 		}
 	};
@@ -86,7 +86,7 @@ namespace castor3d
 		, typename ... ParametersT >
 	ObjectCachePtrT< ObjT, KeyT, TraitsT > makeObjectCache( ParametersT && ... parameters )
 	{
-		return castor::makeUnique< ObjectCacheT< ObjT, KeyT, TraitsT > >( castor::forward< ParametersT >( parameters )... );
+		return makeUnique< ObjectCacheT< ObjT, KeyT, TraitsT > >( c3d::forward< ParametersT >( parameters )... );
 	}
 }
 

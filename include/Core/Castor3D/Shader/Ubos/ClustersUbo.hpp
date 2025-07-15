@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace shader
 	{
@@ -37,7 +37,7 @@ namespace castor3d
 			ClustersData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
-				: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+				: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 			{
 			}
 
@@ -109,8 +109,8 @@ namespace castor3d
 		C3D_API explicit ClustersUbo( RenderDevice const & device );
 		C3D_API ~ClustersUbo()noexcept;
 
-		C3D_API void cpuUpdate( castor::Point3ui gridDim
-			, castor::Point2ui clusterSize
+		C3D_API void cpuUpdate( Point3ui gridDim
+			, Point2ui clusterSize
 			, float viewNear
 			, float viewFar
 			, uint32_t pointLightsCount
@@ -128,7 +128,7 @@ namespace castor3d
 		VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t index
 			, VkShaderStageFlags stages )const
 		{
-			return castor3d::makeDescriptorSetLayoutBinding( index
+			return makeDescriptorSetLayoutBinding( index
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, stages );
 		}
@@ -137,7 +137,7 @@ namespace castor3d
 			, uint32_t & index
 			, VkShaderStageFlags stages )const
 		{
-			castor3d::addDescriptorSetLayoutBinding( bindings
+			c3d::addDescriptorSetLayoutBinding( bindings
 				, index
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, stages );
@@ -182,7 +182,7 @@ namespace castor3d
 		, uint32_t( set ) \
 		, ast::type::MemoryLayout::eStd140 \
 		, enabled }; \
-	auto c3d_clustersData = clusters.declMember< castor3d::shader::ClustersData >( "c", enabled ); \
+	auto c3d_clustersData = clusters.declMember< c3d::shader::ClustersData >( "c", enabled ); \
 	c3d_clustersData.setConfig( config ); \
 	clusters.end()
 

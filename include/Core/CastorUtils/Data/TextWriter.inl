@@ -1,4 +1,4 @@
-namespace castor
+namespace c3d
 {
 	template< typename Value1T, typename Value2T >
 	bool TextWriterBase::write( StringStream & file, StringView name, Value1T const & value1, Value2T const & value2 )const

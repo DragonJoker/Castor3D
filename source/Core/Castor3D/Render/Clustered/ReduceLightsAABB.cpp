@@ -27,7 +27,7 @@
 
 #include <limits>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -277,7 +277,7 @@ namespace castor3d
 			// Don't dispatch more than 512 thread groups. The reduction algorithm depends on the
 			// number of thread groups to be no more than 512. The buffer which stores the reduced AABB is sized
 			// for a maximum of 512 thread groups.
-			return std::min( 512u, castor::divRoundUp( maxLightsCount, 512u ) );
+			return std::min( 512u, divRoundUp( maxLightsCount, 512u ) );
 		}
 
 		class FirstFramePass
@@ -320,7 +320,7 @@ namespace castor3d
 			RenderDevice const & m_device;
 			FrustumClusters const & m_clusters;
 			LightCache const & m_lightCache;
-			castor::Map< uint32_t, ProgramData > m_programs;
+			Map< uint32_t, ProgramData > m_programs;
 			uint32_t m_dispatchCount{};
 
 		private:
@@ -426,7 +426,7 @@ namespace castor3d
 			RenderDevice const & m_device;
 			FrustumClusters const & m_clusters;
 			LightCache const & m_lightCache;
-			castor::Map< uint32_t, ProgramData > m_programs;
+			Map< uint32_t, ProgramData > m_programs;
 
 		private:
 			crg::VkPipelineShaderStageCreateInfoArray doCreateProgram( uint32_t passIndex )
@@ -499,13 +499,13 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< rdclgb::FirstFramePass >( framePass
+				auto result = makeRawUnique< rdclgb::FirstFramePass >( framePass
 					, context
 					, graph
 					, device
 					, clusters
 					, crg::cp::Config{} );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -521,13 +521,13 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< rdclgb::SecondFramePass >( framePass
+				auto result = makeRawUnique< rdclgb::SecondFramePass >( framePass
 					, context
 					, graph
 					, device
 					, clusters
 					, crg::cp::Config{} );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

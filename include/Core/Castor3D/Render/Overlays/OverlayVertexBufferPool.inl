@@ -17,11 +17,11 @@ See LICENSE file in root folder
 #include <ashespp/Descriptor/DescriptorSetPool.hpp>
 #include <ashespp/Pipeline/GraphicsPipeline.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	template< typename VertexT, uint32_t CountT >
 	OverlayVertexBufferPoolT< VertexT, CountT >::OverlayVertexBufferPoolT( Engine & engine
-		, castor::String const & debugName
+		, String const & debugName
 		, RenderDevice const & device
 		, CameraUbo const & cameraUbo
 		, HdrConfigUbo const & hdrConfigUbo
@@ -39,7 +39,7 @@ namespace castor3d
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, name + cuT( "Data" ) ) }
-		, overlaysBuffer{ castor::makeArrayView( overlaysData->lock( 0u, ashes::WholeSize, 0u )
+		, overlaysBuffer{ makeArrayView( overlaysData->lock( 0u, ashes::WholeSize, 0u )
 			, overlaysData->getCount() ) }
 		, vertexBuffer{ device.renderSystem
 			, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
@@ -48,7 +48,7 @@ namespace castor3d
 			, ashes::QueueShare{}
 			, MaxOverlayPipelines * sizeof( VertexT ) * CountT }
 		, descriptorPool{ descriptorLayout.createPool( 1000u ) }
-		, textBuffer{ castor::move( textBuf ) }
+		, textBuffer{ c3d::move( textBuf ) }
 	{
 	}
 
@@ -61,7 +61,7 @@ namespace castor3d
 		{
 			for ( auto & pipelines : it->second )
 			{
-				m_retired.emplace_back( castor::move( pipelines.second ) );
+				m_retired.emplace_back( c3d::move( pipelines.second ) );
 			}
 
 			it->second.clear();
@@ -75,8 +75,8 @@ namespace castor3d
 	{
 		auto & pipelines = m_pipelines.emplace( fontTexture, PipelineDataMap{} ).first->second;
 		auto [it, res] = pipelines.try_emplace( &pipeline );
-		auto debugName = name + ( fontTexture ? cuT( "-" ) + fontTexture->getFontName() : castor::String{} );
-		debugName += cuT( "-" ) + castor::makeString( pipeline.pipeline->getName() );
+		auto debugName = name + ( fontTexture ? cuT( "-" ) + fontTexture->getFontName() : String{} );
+		debugName += cuT( "-" ) + makeString( pipeline.pipeline->getName() );
 
 		if ( res )
 		{
@@ -86,16 +86,16 @@ namespace castor3d
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, debugName + cuT( "-PipelineIDs" ) );
-			pipelineData.overlaysIDs = castor::makeArrayView( pipelineData.overlaysIDsBuffer->lock( 0u, ashes::WholeSize, 0u )
+			pipelineData.overlaysIDs = makeArrayView( pipelineData.overlaysIDsBuffer->lock( 0u, ashes::WholeSize, 0u )
 				, pipelineData.overlaysIDsBuffer->getCount() );
 			pipelineData.indirectCommandsBuffer = makeBuffer< VkDrawIndirectCommand >( device
 				, MaxOverlayPipelines
 				, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, debugName + cuT( "-IndirectCommands" ) );
-			pipelineData.indirectCommands = castor::makeArrayView( pipelineData.indirectCommandsBuffer->lock( 0u, ashes::WholeSize, 0u )
+			pipelineData.indirectCommands = makeArrayView( pipelineData.indirectCommandsBuffer->lock( 0u, ashes::WholeSize, 0u )
 				, pipelineData.indirectCommandsBuffer->getCount() );
-			pipelineData.descriptorSets = castor::make_unique< OverlayPipelineData::DescriptorSets >();
+			pipelineData.descriptorSets = makeRawUnique< OverlayPipelineData::DescriptorSets >();
 
 			auto & descs = *pipelineData.descriptorSets;
 			descs.draw = doCreateDescriptorSet( debugName
@@ -139,7 +139,7 @@ namespace castor3d
 
 	template< typename VertexT, uint32_t CountT >
 	template< typename OverlayT >
-	bool OverlayVertexBufferPoolT< VertexT, CountT >::fill( castor::Size const & renderSize
+	bool OverlayVertexBufferPoolT< VertexT, CountT >::fill( Size const & renderSize
 		, OverlayT const & overlay
 		, OverlayDrawData & data
 		, bool secondary
@@ -223,7 +223,7 @@ namespace castor3d
 	}
 
 	template< typename VertexT, uint32_t CountT >
-	ashes::DescriptorSetPtr OverlayVertexBufferPoolT< VertexT, CountT >::doCreateDescriptorSet( castor::String debugName
+	ashes::DescriptorSetPtr OverlayVertexBufferPoolT< VertexT, CountT >::doCreateDescriptorSet( String debugName
 		, FontTexture const * fontTexture
 		, ashes::BufferBase const & idsBuffer )const
 	{
@@ -232,7 +232,7 @@ namespace castor3d
 			debugName += fontTexture->getFontName();
 		}
 
-		auto result = descriptorPool->createDescriptorSet( castor::toUtf8( debugName ) );
+		auto result = descriptorPool->createDescriptorSet( toUtf8( debugName ) );
 		engine.getMaterialCache().getPassBuffer().createBinding( *result
 			, descriptorLayout.getBinding( uint32_t( OverlayBindingId::eMaterials ) ) );
 		engine.getMaterialCache().getTexConfigBuffer().createBinding( *result

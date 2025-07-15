@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Graphics/Size.hpp"
 #include "CastorUtils/Graphics/Position.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< PixelFormat PFT >
 	struct KernelLanczosFilterT

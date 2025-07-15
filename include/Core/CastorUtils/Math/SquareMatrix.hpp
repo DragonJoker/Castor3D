@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Math/Matrix.hpp"
 
-namespace castor
+namespace c3d
 {
 	/**
 	\~english

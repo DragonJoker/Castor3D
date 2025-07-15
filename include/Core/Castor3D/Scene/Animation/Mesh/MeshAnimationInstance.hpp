@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Animation/AnimationInstance.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class MeshAnimationInstance
 		: public AnimationInstance

@@ -17,18 +17,18 @@ namespace dof
 	namespace parse
 	{
 		class TextWriter
-			: public castor::TextWriterT< DepthOfFieldConfig >
+			: public c3d::TextWriterT< DepthOfFieldConfig >
 		{
 		public:
-			explicit TextWriter( castor::String const & tabs )
+			explicit TextWriter( c3d::String const & tabs )
 				: TextWriterT< DepthOfFieldConfig >{ tabs }
 			{
 			}
 
 			bool operator()( DepthOfFieldConfig const & object
-				, castor::StringStream & file )override
+				, c3d::StringStream & file )override
 			{
-				castor3d::log::info << cuT( "Writing Depth of Field" ) << std::endl;
+				c3d::log::info << cuT( "Writing Depth of Field" ) << std::endl;
 				bool result = false;
 
 				if ( auto block{ beginBlock( file, cuT( "depth_of_field" ) ) } )
@@ -51,11 +51,11 @@ namespace dof
 
 		struct DoFContext
 		{
-			castor3d::TargetContext * target{};
+			c3d::TargetContext * target{};
 			DepthOfFieldUboConfiguration config{};
 		};
 
-		static CU_ImplementAttributeParserNewBlock( parserDepthOfField, castor3d::TargetContext, DoFContext )
+		static CU_ImplementAttributeParserNewBlock( parserDepthOfField, c3d::TargetContext, DoFContext )
 		{
 			if ( !blockContext->renderTarget )
 			{
@@ -123,7 +123,7 @@ namespace dof
 			if ( blockContext->target
 				&& blockContext->target->renderTarget )
 			{
-				castor3d::Parameters parameters;
+				c3d::Parameters parameters;
 				parameters.add( PostEffect::FocalDistance, blockContext->config.focalDistance );
 				parameters.add( PostEffect::FocalLength, blockContext->config.focalLength );
 				parameters.add( PostEffect::BokehScale, blockContext->config.bokehScale );
@@ -143,7 +143,7 @@ namespace dof
 
 	//*********************************************************************************************
 
-	void DepthOfFieldConfig::setParameters( castor3d::Parameters parameters )
+	void DepthOfFieldConfig::setParameters( c3d::Parameters parameters )
 	{
 		float value{};
 		uint32_t enable{};
@@ -169,7 +169,7 @@ namespace dof
 		}
 	}
 
-	void DepthOfFieldConfig::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void DepthOfFieldConfig::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "Depth Of Field" ) );
 		visitor.visit( cuT( "Focal Distance" ), focalDistance );
@@ -178,27 +178,27 @@ namespace dof
 		visitor.visit( cuT( "Enable Far Blur" ), enableFarBlur );
 	}
 
-	bool DepthOfFieldConfig::write( castor::StringStream & file, castor::String const & tabs )const
+	bool DepthOfFieldConfig::write( c3d::StringStream & file, c3d::String const & tabs )const
 	{
 		return dof::parse::TextWriter{ tabs }( *this, file );
 	}
 
-	castor::AttributeParsers DepthOfFieldConfig::createParsers()
+	c3d::AttributeParsers DepthOfFieldConfig::createParsers()
 	{
-		using namespace castor;
+		using namespace c3d;
 		AttributeParsers result;
 
-		addParserT( result, castor3d::CSCNSection::eRenderTarget, parse::Section::eRoot, cuT( "depth_of_field" ), parse::parserDepthOfField );
+		addParserT( result, c3d::CSCNSection::eRenderTarget, parse::Section::eRoot, cuT( "depth_of_field" ), parse::parserDepthOfField );
 		addParserT( result, parse::Section::eRoot, cuT( "focal_distance" ), parse::parserFocalDistance, { makeDefaultedParameter< ParameterType::eFloat >( 10.0f ) } );
 		addParserT( result, parse::Section::eRoot, cuT( "focal_length" ), parse::parserFocalLength, { makeDefaultedParameter< ParameterType::eFloat >( 1.0f ) } );
 		addParserT( result, parse::Section::eRoot, cuT( "bokeh_scale" ), parse::parserBokehScale, { makeDefaultedParameter< ParameterType::eFloat >( 1.0f ) } );
 		addParserT( result, parse::Section::eRoot, cuT( "enable_far_blur" ), parse::parserEnableFarBlur, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
-		addParserT( result, parse::Section::eRoot, castor3d::CSCNSection::eRenderTarget, cuT( "}" ), parse::parserEnd );
+		addParserT( result, parse::Section::eRoot, c3d::CSCNSection::eRenderTarget, cuT( "}" ), parse::parserEnd );
 
 		return result;
 	}
 
-	castor::StrUInt32Map DepthOfFieldConfig::createSections()
+	c3d::StrUInt32Map DepthOfFieldConfig::createSections()
 	{
 		return
 		{
@@ -208,10 +208,10 @@ namespace dof
 
 	//*********************************************************************************************
 
-	castor::MbString const DepthOfFieldUbo::Buffer = "DepthOfField";
-	castor::MbString const DepthOfFieldUbo::Data = "c3d_dofData";
+	c3d::MbString const DepthOfFieldUbo::Buffer = "DepthOfField";
+	c3d::MbString const DepthOfFieldUbo::Data = "c3d_dofData";
 
-	DepthOfFieldUbo::DepthOfFieldUbo( castor3d::RenderDevice const & device )
+	DepthOfFieldUbo::DepthOfFieldUbo( c3d::RenderDevice const & device )
 		: m_device{ device }
 		, m_ubo{ device.uboPool->getBuffer< Configuration >( 0u ) }
 	{
@@ -226,8 +226,8 @@ namespace dof
 	{
 		struct Points
 		{
-			std::array< castor::Point4f, 64 > points64;
-			std::array< castor::Point4f, 16 > points16;
+			std::array< c3d::Point4f, 64 > points64;
+			std::array< c3d::Point4f, 16 > points16;
 
 			Points()
 			{
@@ -240,7 +240,7 @@ namespace dof
 					auto theta = float( j ) * goldenAngle;
 					auto r = float( sqrt( j ) / sqrt( 80.0 ) );
 
-					castor::Point4f p{ r * cos( theta ), r * sin( theta ), 0.0f, 0.0f };
+					c3d::Point4f p{ r * cos( theta ), r * sin( theta ), 0.0f, 0.0f };
 
 					if ( j % 5 == 0 )
 					{

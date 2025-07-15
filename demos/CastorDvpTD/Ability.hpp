@@ -9,7 +9,7 @@ namespace castortd
 	template< typename T >
 	struct Ability
 	{
-		using ValueIncrementFunction = castor::Function< T( T const &, uint32_t ) >;
+		using ValueIncrementFunction = c3d::Function< T( T const &, uint32_t ) >;
 
 		void initialise( T const & value
 			, ValueIncrementFunction const & increment )
@@ -40,7 +40,7 @@ namespace castortd
 		: private Ability< T >
 	{
 		using ValueIncrementFunction = typename Ability< T >::ValueIncrementFunction;
-		using CostIncrementFunction = castor::Function< uint32_t( uint32_t, uint32_t ) >;
+		using CostIncrementFunction = c3d::Function< uint32_t( uint32_t, uint32_t ) >;
 
 		void initialise( T const & value
 			, ValueIncrementFunction const & valueIncrement

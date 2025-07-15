@@ -1,9 +1,7 @@
 #include "TextSpotLight.hpp"
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< SpotLight >::TextWriter( String const & tabs )
 		: TextWriterT< SpotLight >{ tabs }
 	{

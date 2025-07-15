@@ -11,29 +11,26 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::AmbientComponent >
-		: public TextWriterT< castor3d::AmbientComponent >
+	class TextWriter< AmbientComponent >
+		: public TextWriterT< AmbientComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::AmbientComponent >{ tabs }
+			: TextWriterT< AmbientComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::AmbientComponent const & object
+		bool operator()( AmbientComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSubOpt( file, cuT( "ambient_colour" ), object.getAmbientColour(), castor3d::AmbientComponent::DefaultColour )
-				&& writeOpt( file, cuT( "ambient_factor" ), object.getAmbientFactor(), castor3d::AmbientComponent::DefaultFactor );
+			return writeNamedSubOpt( file, cuT( "ambient_colour" ), object.getAmbientColour(), AmbientComponent::DefaultColour )
+				&& writeOpt( file, cuT( "ambient_factor" ), object.getAmbientFactor(), AmbientComponent::DefaultFactor );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace emscmp
@@ -61,7 +58,7 @@ namespace castor3d
 			else if ( !params.empty() )
 			{
 				auto & component = getPassComponent< AmbientComponent >( *blockContext );
-				component.setAmbient( params[0]->get< castor::RgbColour >() );
+				component.setAmbient( params[0]->get< RgbColour >() );
 			}
 		}
 		CU_EndAttribute()
@@ -144,24 +141,24 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void AmbientComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void AmbientComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "ambient" )
 			, emscmp::parserPassAmbient
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "ambient_factor" )
 			, emscmp::parserPassAmbient
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "ambient_colour" )
 			, emscmp::parserPassAmbientColour
-			, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+			, { makeParameter< ParameterType::eRgbColour >() } );
 	}
 
 	void AmbientComponent::Plugin::zeroBuffer( Pass const & pass
@@ -182,7 +179,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const AmbientComponent::TypeName = C3D_MakePassLightingComponentName( "ambient" );
+	String const AmbientComponent::TypeName = C3D_MakePassLightingComponentName( "ambient" );
 
 	AmbientComponent::AmbientComponent( Pass & pass )
 		: BaseDataPassComponentT{ pass, TypeName, {}
@@ -199,17 +196,17 @@ namespace castor3d
 
 	PassComponentUPtr AmbientComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< AmbientComponent >( pass );
+		auto result = makeRawUnique< AmbientComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool AmbientComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool AmbientComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< AmbientComponent >{ tabs }( *this, file );
+		return TextWriter< AmbientComponent >{ tabs }( *this, file );
 	}
 
 	void AmbientComponent::doFillBuffer( PassBuffer & buffer )const

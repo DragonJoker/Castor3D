@@ -4,7 +4,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	sdw::Vec3 BillboardData::getCameraRight( CameraData const & cameraData )const
 	{

@@ -10,13 +10,13 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderDevice.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	template< typename ResT >
 	inline ashes::DeviceMemoryPtr setupMemory( ashes::Device const & device
 		, ResT & resource
 		, VkMemoryPropertyFlags flags
-		, castor::String const & name )
+		, String const & name )
 	{
 		return setupMemory( device
 			, resource.getMemoryRequirements()
@@ -28,7 +28,7 @@ namespace castor3d
 	inline ashes::DeviceMemoryPtr setupMemory( RenderDevice const & device
 		, ResT & resource
 		, VkMemoryPropertyFlags flags
-		, castor::String const & name )
+		, String const & name )
 	{
 		return setupMemory( *device, resource, flags, name );
 	}

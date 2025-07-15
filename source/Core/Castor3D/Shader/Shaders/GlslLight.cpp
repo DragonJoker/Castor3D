@@ -19,9 +19,9 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementSmartPtr( castor3d::shader, LightsBuffer )
+CU_ImplementSmartPtr( c3d::shader, LightsBuffer )
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//*********************************************************************************************
 
@@ -217,11 +217,11 @@ namespace castor3d::shader
 		, m_brdfHelpers{ brdfHelpers }
 		, m_utils{ utils }
 		, m_enableVolumetric{ enableVolumetric }
-		, m_shadowModel{ castor::makeUnique< Shadow >( shadowOptions, m_writer ) }
+		, m_shadowModel{ makeUnique< Shadow >( shadowOptions, m_writer ) }
 		, m_sssTransmittance{ ( ( sssDiffusionProfiles && sssDiffusionProfiles->isEnabled() )
-			? castor::makeUnique< SssTransmittance >( m_writer
+			? makeUnique< SssTransmittance >( m_writer
 				, *m_shadowModel
-				, castor::move( shadowOptions )
+				, c3d::move( shadowOptions )
 				, *sssProfiles
 				, *sssDiffusionProfiles )
 			: nullptr ) }
@@ -254,7 +254,7 @@ namespace castor3d::shader
 			, enableVolumetric }
 	{
 		m_shadowModel->declare( shadowMapBinding, shadowMapSet );
-		m_lightsBuffer = castor::makeUnique< LightsBuffer >( m_writer
+		m_lightsBuffer = makeUnique< LightsBuffer >( m_writer
 			, lightsBufBinding
 			, lightsBufSet );
 	}
@@ -301,7 +301,7 @@ namespace castor3d::shader
 			break;
 		}
 
-		m_lightsBuffer = castor::makeUnique< LightsBuffer >( m_writer
+		m_lightsBuffer = makeUnique< LightsBuffer >( m_writer
 			, lightsBufBinding
 			, lightsBufSet );
 	}

@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include <iterator>
 #include <type_traits>
 
-namespace castor
+namespace c3d
 {
 	template< typename FlagTypeT, typename IteratorTraitsT >
 	struct FlagIterator

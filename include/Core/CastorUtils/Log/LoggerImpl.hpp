@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <mutex>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	class LoggerImpl
 	{
@@ -141,9 +141,9 @@ namespace castor
 		LoggerInstance & m_parent;
 		ProgramConsole * m_console;
 		Array< String, size_t( LogType::eCount ) > m_logFilePath;
-		castor::Mutex m_mutexFiles;
+		c3d::Mutex m_mutexFiles;
 		LoggerCallbackMap m_mapCallbacks;
-		castor::Mutex m_mutexCallbacks;
+		c3d::Mutex m_mutexCallbacks;
 	};
 }
 

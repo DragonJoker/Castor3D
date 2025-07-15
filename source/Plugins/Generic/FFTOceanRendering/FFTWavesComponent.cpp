@@ -37,7 +37,7 @@ CU_ImplementSmartPtr( ocean_fft, FFTWavesComponent )
 
 namespace ocean_fft
 {
-	using namespace castor3d;
+	using namespace c3d;
 
 	//*********************************************************************************************
 
@@ -45,9 +45,9 @@ namespace ocean_fft
 	{
 		struct OceanContext
 		{
-			castor3d::MeshRPtr mesh{};
+			c3d::MeshRPtr mesh{};
 			OceanFFTConfig fftConfig{};
-			castor::Vector< castor3d::MaterialObs > materials;
+			c3d::Vector< c3d::MaterialObs > materials;
 		};
 
 		enum class FFTWavesSection
@@ -56,7 +56,7 @@ namespace ocean_fft
 			eWaves = CU_MakeSectionName( 'O', 'C', 'N', 'R' ),
 		};
 
-		static CU_ImplementAttributeParserNewBlock( parserFftWavesComponent, castor3d::MeshContext, OceanContext )
+		static CU_ImplementAttributeParserNewBlock( parserFftWavesComponent, c3d::MeshContext, OceanContext )
 		{
 			if ( !blockContext->mesh )
 			{
@@ -215,22 +215,22 @@ namespace ocean_fft
 		static CU_ImplementAttributeParserBlock( parserFftWavesComponentEnd, OceanContext )
 		{
 			auto const & factory = blockContext->mesh->getOwner()->getMeshFactory();
-			castor3d::Parameters parameters;
+			c3d::Parameters parameters;
 			parameters.add( cuT( "width_subdiv" )
-				, castor::string::toString( blockContext->fftConfig.blocksCount->x - 1u ) );
+				, c3d::string::toString( blockContext->fftConfig.blocksCount->x - 1u ) );
 			parameters.add( cuT( "depth_subdiv" )
-				, castor::string::toString( blockContext->fftConfig.blocksCount->y - 1u ) );
+				, c3d::string::toString( blockContext->fftConfig.blocksCount->y - 1u ) );
 			parameters.add( cuT( "width" )
-				, castor::string::toString( float( blockContext->fftConfig.blocksCount->x ) * blockContext->fftConfig.patchSize->x ) );
+				, c3d::string::toString( float( blockContext->fftConfig.blocksCount->x ) * blockContext->fftConfig.patchSize->x ) );
 			parameters.add( cuT( "depth" )
-				, castor::string::toString( float( blockContext->fftConfig.blocksCount->y ) * blockContext->fftConfig.patchSize->y ) );
+				, c3d::string::toString( float( blockContext->fftConfig.blocksCount->y ) * blockContext->fftConfig.patchSize->y ) );
 			parameters.add( cuT( "flipYZ" ), true );
 			parameters.add( cuT( "sort_around_center" ), true );
 			factory.create( cuT( "plane" ) )->generate( *blockContext->mesh, parameters );
 
 			auto submesh = blockContext->mesh->getSubmesh( 0u );
 			auto & component = *submesh->createComponent< FFTWavesComponent >();
-			component.setFftConfig( castor::move( blockContext->fftConfig ) );
+			component.setFftConfig( c3d::move( blockContext->fftConfig ) );
 		}
 		CU_EndAttributePop()
 	}
@@ -248,7 +248,7 @@ namespace ocean_fft
 			PatchT( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
-				: StructInstance{ writer, castor::move( expr ), enabled }
+				: StructInstance{ writer, c3d::move( expr ), enabled }
 			{
 			}
 
@@ -256,7 +256,7 @@ namespace ocean_fft
 
 			static ast::type::IOStructPtr makeIOType( ast::type::TypesCache & cache
 				, sdw::EntryPoint entryPoint
-				, castor3d::PipelineFlags flags )
+				, c3d::PipelineFlags flags )
 			{
 				auto result = cache.getIOStruct( "C3DORFFT_Patch"
 					, entryPoint
@@ -293,7 +293,7 @@ namespace ocean_fft
 			}
 
 			static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
-				, castor3d::PipelineFlags flags )
+				, c3d::PipelineFlags flags )
 			{
 				auto result = cache.getStruct( ast::type::MemoryLayout::eC
 					, "C3DORFFT_Patch" );
@@ -355,7 +355,7 @@ namespace ocean_fft
 
 	//*********************************************************************************************
 
-	FFTWavesComponent::RenderData::RenderData( castor3d::SubmeshComponent const & component )
+	FFTWavesComponent::RenderData::RenderData( c3d::SubmeshComponent const & component )
 		: SubmeshRenderData{}
 		, m_component{ static_cast< FFTWavesComponent const & >( component ) }
 	{
@@ -368,15 +368,15 @@ namespace ocean_fft
 			return true;
 		}
 
-		m_ubo = castor::make_unique< OceanUbo >( device );
-		m_linearWrapSampler = device->createSampler( castor::toUtf8( m_component.getOwner()->getParent().getName() )
+		m_ubo = c3d::makeRawUnique< OceanUbo >( device );
+		m_linearWrapSampler = device->createSampler( c3d::toUtf8( m_component.getOwner()->getParent().getName() )
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT
 			, VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR
 			, VK_SAMPLER_MIPMAP_MODE_LINEAR );
-		m_pointClampSampler = device->createSampler( castor::toUtf8( m_component.getOwner()->getParent().getName() )
+		m_pointClampSampler = device->createSampler( c3d::toUtf8( m_component.getOwner()->getParent().getName() )
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
@@ -398,10 +398,10 @@ namespace ocean_fft
 
 		if ( !m_oceanFFT )
 		{
-			m_oceanFFT = castor::make_unique< OceanFFT >( device
+			m_oceanFFT = c3d::makeRawUnique< OceanFFT >( device
 				, resources
-				, graph.createPassGroup( castor::toUtf8( m_component.getOwner()->getParent().getName() ) + "/FFTWaves" )
-				, castor::move( previousPasses )
+				, graph.createPassGroup( c3d::toUtf8( m_component.getOwner()->getParent().getName() ) + "/FFTWaves" )
+				, c3d::move( previousPasses )
 				, *m_ubo
 				, m_component.getFftConfig() );
 			graph.addInput( m_oceanFFT->getHeightDisplacement().sampledViewId
@@ -437,14 +437,14 @@ namespace ocean_fft
 	{
 		auto tslf = updater.tslf > 0_ms
 			? updater.tslf
-			: std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );
+			: std::chrono::duration_cast< c3d::Milliseconds >( m_timer.getElapsed() );
 		m_config.time += float( tslf.count() ) / 1000.0f;
 		m_ubo->cpuUpdate( m_config
 			, m_component.getFftConfig()
 			, updater.camera->getParent()->getDerivedPosition() );
 	}
 
-	void FFTWavesComponent::RenderData::fillBindings( castor3d::PipelineFlags const & flags
+	void FFTWavesComponent::RenderData::fillBindings( c3d::PipelineFlags const & flags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
@@ -463,7 +463,7 @@ namespace ocean_fft
 			, VK_SHADER_STAGE_FRAGMENT_BIT );
 	}
 
-	void FFTWavesComponent::RenderData::fillDescriptor( castor3d::PipelineFlags const & flags
+	void FFTWavesComponent::RenderData::fillDescriptor( c3d::PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
@@ -473,7 +473,7 @@ namespace ocean_fft
 		bindTexture( m_oceanFFT->getNormals().sampledView, *m_linearWrapSampler, descriptorWrites, index );
 	}
 
-	void FFTWavesComponent::RenderData::accept( castor3d::ConfigurationVisitorBase & vis )
+	void FFTWavesComponent::RenderData::accept( c3d::ConfigurationVisitorBase & vis )
 	{
 		if ( m_oceanFFT )
 		{
@@ -483,12 +483,12 @@ namespace ocean_fft
 
 	//*********************************************************************************************
 
-	void FFTWavesComponent::RenderShader::getShaderSource( castor3d::Engine const & engine
-		, castor3d::PipelineFlags const & flags
-		, castor3d::ComponentModeFlags const & componentsMask
+	void FFTWavesComponent::RenderShader::getShaderSource( c3d::Engine const & engine
+		, c3d::PipelineFlags const & flags
+		, c3d::ComponentModeFlags const & componentsMask
 		, ast::ShaderBuilder & builder )const
 	{
-		using namespace castor3d;
+		using namespace c3d;
 		sdw::TraditionalGraphicsWriter writer{ builder };
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ engine.getPassComponentsRegister()
@@ -508,7 +508,7 @@ namespace ocean_fft
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
-		auto index = uint32_t( castor3d::GlobalBuffersIdx::eCount );
+		auto index = uint32_t( c3d::GlobalBuffersIdx::eCount );
 		C3D_FftOcean( writer
 			, index++
 			, RenderPipeline::eBuffers );
@@ -627,12 +627,12 @@ namespace ocean_fft
 					, sdw::VertexOutT< shd::PatchT > out )
 				{
 					auto bbPositions = writer.declConstantArray( "bbPositions"
-						, castor::Vector< sdw::Vec3 >{ vec3( -0.5_f, -0.5_f, 1.0_f )
+						, c3d::Vector< sdw::Vec3 >{ vec3( -0.5_f, -0.5_f, 1.0_f )
 						, vec3( -0.5_f, +0.5_f, 1.0_f )
 						, vec3( +0.5_f, -0.5_f, 1.0_f )
 						, vec3( +0.5_f, +0.5_f, 1.0_f ) } );
 					auto bbTexcoords = writer.declConstantArray( "bbTexcoords"
-						, castor::Vector< sdw::Vec2 >{ vec2( 0.0_f, 0.0_f )
+						, c3d::Vector< sdw::Vec2 >{ vec2( 0.0_f, 0.0_f )
 						, vec2( 0.0_f, 1.0_f )
 						, vec2( 1.0_f, 0.0_f )
 						, vec2( 1.0_f, 1.0_f ) } );
@@ -791,7 +791,7 @@ namespace ocean_fft
 				listOut.vtx.position = listIn[in.invocationID].vtx.position;
 			} );
 
-		writer.implementEntryPointT< shd::PatchT, shd::OutputVertices, shd::PatchT, castor3d::shader::FragmentSurfaceT >( sdw::TessEvalListInT< shd::PatchT, shd::OutputVertices >{ writer
+		writer.implementEntryPointT< shd::PatchT, shd::OutputVertices, shd::PatchT, c3d::shader::FragmentSurfaceT >( sdw::TessEvalListInT< shd::PatchT, shd::OutputVertices >{ writer
 				, ast::type::PatchDomain::eQuads
 				, ast::type::Partitioning::eFractionalEven
 				, ast::type::PrimitiveOrdering::eCW
@@ -799,14 +799,14 @@ namespace ocean_fft
 			, sdw::QuadsTessPatchInT< shd::PatchT >{ writer
 				, 9u
 				, flags }
-			, sdw::TessEvalDataOutT< castor3d::shader::FragmentSurfaceT >{ writer
+			, sdw::TessEvalDataOutT< c3d::shader::FragmentSurfaceT >{ writer
 				, submeshShaders
 				, passShaders
 				, flags }
 			, [&]( sdw::TessEvalMainIn mainIn
 				, sdw::TessEvalListInT< shd::PatchT, shd::OutputVertices > listIn
 				, sdw::QuadsTessPatchInT< shd::PatchT > patchIn
-				, sdw::TessEvalDataOutT< castor3d::shader::FragmentSurfaceT > out )
+				, sdw::TessEvalDataOutT< c3d::shader::FragmentSurfaceT > out )
 			{
 				auto tessCoord = writer.declLocale( "tessCoord"
 					, patchIn.tessCoord.xy() );
@@ -874,41 +874,41 @@ namespace ocean_fft
 
 	//*********************************************************************************************
 
-	FFTWavesComponent::Plugin::Plugin( castor3d::SubmeshComponentRegister const & submeshComponents )
-		: castor3d::SubmeshComponentPlugin{ submeshComponents, nullptr }
+	FFTWavesComponent::Plugin::Plugin( c3d::SubmeshComponentRegister const & submeshComponents )
+		: c3d::SubmeshComponentPlugin{ submeshComponents, nullptr }
 	{
 	}
 
-	void FFTWavesComponent::Plugin::createParsers( castor::AttributeParsers & parsers )const
+	void FFTWavesComponent::Plugin::createParsers( c3d::AttributeParsers & parsers )const
 	{
-		castor3d::BlockParserContextT< MeshContext > meshContext{ parsers, castor3d::CSCNSection::eMesh };
-		castor3d::BlockParserContextT< parse::OceanContext > wavesContext{ parsers, parse::FFTWavesSection::eWaves, castor3d::CSCNSection::eMesh };
+		c3d::BlockParserContextT< MeshContext > meshContext{ parsers, c3d::CSCNSection::eMesh };
+		c3d::BlockParserContextT< parse::OceanContext > wavesContext{ parsers, parse::FFTWavesSection::eWaves, c3d::CSCNSection::eMesh };
 
 		meshContext.addPushParser( cuT( "fft_waves" ), parse::FFTWavesSection::eWaves, &parse::parserFftWavesComponent );
 
-		wavesContext.addParser( cuT( "disableRandomSeed" ), &parse::parserFftDisableRandomSeed, { castor::makeParameter< castor::ParameterType::eBool >() } );
-		wavesContext.addParser( cuT( "size" ), &parse::parserFftSize, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-		wavesContext.addParser( cuT( "heightMapSamples" ), &parse::parserFftHeightMapSamples, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		wavesContext.addParser( cuT( "displacementDownsample" ), &parse::parserFftDisplacementDownsample, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		wavesContext.addParser( cuT( "normalMapFreqMod" ), &parse::parserFftNormalMapFreqMod, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-		wavesContext.addParser( cuT( "amplitude" ), &parse::parserFftAmplitude, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		wavesContext.addParser( cuT( "windDirection" ), &parse::parserFftWindDirection, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-		wavesContext.addParser( cuT( "windVelocity" ), &parse::parserFftWindVelocity, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		wavesContext.addParser( cuT( "patchSize" ), &parse::parserFftPatchSize, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-		wavesContext.addParser( cuT( "blocksCount" ), &parse::parserFftBlocksCount, { castor::makeParameter< castor::ParameterType::ePoint2U >() } );
-		wavesContext.addParser( cuT( "lod0Distance" ), &parse::parserFftLOD0Distance, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		wavesContext.addParser( cuT( "disableRandomSeed" ), &parse::parserFftDisableRandomSeed, { c3d::makeParameter< c3d::ParameterType::eBool >() } );
+		wavesContext.addParser( cuT( "size" ), &parse::parserFftSize, { c3d::makeParameter< c3d::ParameterType::ePoint2F >() } );
+		wavesContext.addParser( cuT( "heightMapSamples" ), &parse::parserFftHeightMapSamples, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
+		wavesContext.addParser( cuT( "displacementDownsample" ), &parse::parserFftDisplacementDownsample, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
+		wavesContext.addParser( cuT( "normalMapFreqMod" ), &parse::parserFftNormalMapFreqMod, { c3d::makeParameter< c3d::ParameterType::ePoint2F >() } );
+		wavesContext.addParser( cuT( "amplitude" ), &parse::parserFftAmplitude, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		wavesContext.addParser( cuT( "windDirection" ), &parse::parserFftWindDirection, { c3d::makeParameter< c3d::ParameterType::ePoint2F >() } );
+		wavesContext.addParser( cuT( "windVelocity" ), &parse::parserFftWindVelocity, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		wavesContext.addParser( cuT( "patchSize" ), &parse::parserFftPatchSize, { c3d::makeParameter< c3d::ParameterType::ePoint2F >() } );
+		wavesContext.addParser( cuT( "blocksCount" ), &parse::parserFftBlocksCount, { c3d::makeParameter< c3d::ParameterType::ePoint2U >() } );
+		wavesContext.addParser( cuT( "lod0Distance" ), &parse::parserFftLOD0Distance, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		wavesContext.addPopParser( cuT( "}" ), &parse::parserFftWavesComponentEnd );
 	}
 
-	void FFTWavesComponent::Plugin::createSections( castor::StrUInt32Map & sections )const
+	void FFTWavesComponent::Plugin::createSections( c3d::StrUInt32Map & sections )const
 	{
 		sections.emplace( uint32_t( parse::FFTWavesSection::eWaves ), cuT( "fft_waves" ) );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const FFTWavesComponent::TypeName = C3D_PluginMakeSubmeshRenderComponentName( "fft_ocean", "waves" );
-	castor::MbString const FFTWavesComponent::FullName = "FFT Waves Rendering";
+	c3d::String const FFTWavesComponent::TypeName = C3D_PluginMakeSubmeshRenderComponentName( "fft_ocean", "waves" );
+	c3d::MbString const FFTWavesComponent::FullName = "FFT Waves Rendering";
 
 	FFTWavesComponent::FFTWavesComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, TypeName }
@@ -917,12 +917,12 @@ namespace ocean_fft
 
 	SubmeshComponentUPtr FFTWavesComponent::clone( Submesh & submesh )const
 	{
-		auto result = castor::makeUnique< FFTWavesComponent >( submesh );
+		auto result = c3d::makeUnique< FFTWavesComponent >( submesh );
 		result->initialiseRenderData();
-		return castor::ptrRefCast< SubmeshComponent >( result );
+		return c3d::ptrRefCast< SubmeshComponent >( result );
 	}
 
-	void FFTWavesComponent::accept( castor3d::ConfigurationVisitorBase & vis )
+	void FFTWavesComponent::accept( c3d::ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Tile XZ size" ), m_fftConfig.size );
 		vis.visit( cuT( "Amplitude" ), m_fftConfig.amplitude );

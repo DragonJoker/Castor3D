@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "StyleScrollable.hpp"
 #include "StylesHolder.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class PanelStyle
 		: public ControlStyle
@@ -18,13 +18,13 @@ namespace castor3d
 	public:
 		static ControlType constexpr Type = ControlType::ePanel;
 
-		PanelStyle( castor::String const & name
+		PanelStyle( String const & name
 			, Engine & engine )
 			: PanelStyle{ name, nullptr, engine }
 		{
 		}
 
-		PanelStyle( castor::String const & name
+		PanelStyle( String const & name
 			, Scene * scene
 			, Engine & engine )
 			: ControlStyle{ Type, name, scene, engine }

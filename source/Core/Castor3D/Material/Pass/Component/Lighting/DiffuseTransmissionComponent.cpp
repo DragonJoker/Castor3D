@@ -14,29 +14,26 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::DiffuseTransmissionComponent >
-		: public TextWriterT< castor3d::DiffuseTransmissionComponent >
+	class TextWriter< DiffuseTransmissionComponent >
+		: public TextWriterT< DiffuseTransmissionComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::DiffuseTransmissionComponent >{ tabs }
+			: TextWriterT< DiffuseTransmissionComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::DiffuseTransmissionComponent const & object
+		bool operator()( DiffuseTransmissionComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSubOpt( file, cuT( "diffuse_transmission_factor" ), object.getTransmissionFactor(), castor3d::DiffuseTransmissionComponent::DefaultFactor )
-				&& writeNamedSubOpt( file, cuT( "diffuse_transmission_colour" ), object.getTransmissionColour(), castor3d::DiffuseTransmissionComponent::DefaultColour );
+			return writeNamedSubOpt( file, cuT( "diffuse_transmission_factor" ), object.getTransmissionFactor(), DiffuseTransmissionComponent::DefaultFactor )
+				&& writeNamedSubOpt( file, cuT( "diffuse_transmission_colour" ), object.getTransmissionColour(), DiffuseTransmissionComponent::DefaultColour );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace trs
@@ -72,7 +69,7 @@ namespace castor3d
 			else
 			{
 				auto & component = getPassComponent< DiffuseTransmissionComponent >( *blockContext );
-				component.setTransmissionColour( params[0]->get< castor::RgbColour >() );
+				component.setTransmissionColour( params[0]->get< RgbColour >() );
 			}
 		}
 		CU_EndAttribute()
@@ -157,19 +154,19 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void DiffuseTransmissionComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void DiffuseTransmissionComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "diffuse_transmission_factor" )
 			, trs::parserPassTransmissionFactor
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "diffuse_transmission_colour" )
 			, trs::parserPassTransmissionColour
-			, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+			, { makeParameter< ParameterType::eRgbColour >() } );
 	}
 
 	void DiffuseTransmissionComponent::Plugin::zeroBuffer( Pass const & pass
@@ -190,7 +187,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const DiffuseTransmissionComponent::TypeName = C3D_MakePassLightingComponentName( "diffuse_transmission" );
+	String const DiffuseTransmissionComponent::TypeName = C3D_MakePassLightingComponentName( "diffuse_transmission" );
 
 	DiffuseTransmissionComponent::DiffuseTransmissionComponent( Pass & pass )
 		: BaseDataPassComponentT{ pass, TypeName, { RefractionComponent::TypeName }
@@ -207,17 +204,17 @@ namespace castor3d
 
 	PassComponentUPtr DiffuseTransmissionComponent::doClone( Pass & pass )const
 	{
-		auto result = std::make_unique< DiffuseTransmissionComponent >( pass );
+		auto result = makeRawUnique< DiffuseTransmissionComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool DiffuseTransmissionComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool DiffuseTransmissionComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< DiffuseTransmissionComponent >{ tabs }( *this, file );
+		return TextWriter< DiffuseTransmissionComponent >{ tabs }( *this, file );
 	}
 
 	void DiffuseTransmissionComponent::doFillBuffer( PassBuffer & buffer )const

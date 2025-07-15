@@ -12,10 +12,10 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/SquareMatrix.hpp>
 #include <CastorUtils/Math/Quaternion.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class SkeletonAnimationObject
-		: public castor::OwnedBy< SkeletonAnimation >
+		: public OwnedBy< SkeletonAnimation >
 		, public std::enable_shared_from_this< SkeletonAnimationObject >
 	{
 	protected:
@@ -63,7 +63,7 @@ namespace castor3d
 		 *\brief		Récupère le nom de l'objet.
 		 *\return		Le nom.
 		 */
-		C3D_API virtual castor::String const & getName()const = 0;
+		C3D_API virtual String const & getName()const = 0;
 		/**
 		 *\~english
 		 *\return		The object's node transform.
@@ -127,7 +127,7 @@ namespace castor3d
 		SkeletonAnimationObjectRPtr m_parent{};
 		//!\~english	The bounding box.
 		//!\~french		La bounding box.
-		castor::BoundingBox m_boundingBox;
+		BoundingBox m_boundingBox;
 
 		friend class BinaryWriter< SkeletonAnimationObject >;
 		friend class BinaryParser< SkeletonAnimationObject >;

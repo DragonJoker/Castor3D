@@ -10,45 +10,45 @@ See LICENSE file in root folder
 
 namespace c3d_gltf
 {
-	castor3d::WrapMode convert( fastgltf::Wrap const & v );
-	castor3d::FilterMode convert( fastgltf::Filter const & v );
-	castor3d::MipmapMode getMipFilter( fastgltf::Filter const & v );
+	c3d::WrapMode convert( fastgltf::Wrap const & v );
+	c3d::FilterMode convert( fastgltf::Filter const & v );
+	c3d::MipmapMode getMipFilter( fastgltf::Filter const & v );
 
 	class GltfMaterialImporter
-		: public castor3d::MaterialImporter
+		: public c3d::MaterialImporter
 	{
 	public:
-		C3D_Gltf_API explicit GltfMaterialImporter( castor3d::Engine & engine );
-		C3D_Gltf_API explicit GltfMaterialImporter( castor3d::Engine & engine
+		C3D_Gltf_API explicit GltfMaterialImporter( c3d::Engine & engine );
+		C3D_Gltf_API explicit GltfMaterialImporter( c3d::Engine & engine
 			, GltfImporterFile * file );
 
 	private:
-		bool doImportMaterial( castor3d::Material & material )override;
+		bool doImportMaterial( c3d::Material & material )override;
 
 		void doImportSpecularData( fastgltf::Material const & impMaterial
-			, castor3d::Pass & pass );
+			, c3d::Pass & pass );
 		void doImportIridescenceData( fastgltf::Material const & impMaterial
-			, castor3d::Pass & pass );
+			, c3d::Pass & pass );
 		void doImportVolumeData( fastgltf::Material const & impMaterial
-			, castor3d::Pass & pass );
+			, c3d::Pass & pass );
 		void doImportTransmissionData( fastgltf::Material const & impMaterial
-			, castor3d::Pass & pass );
+			, c3d::Pass & pass );
 		void doImportClearcoatData( fastgltf::Material const & impMaterial
-			, castor3d::Pass & pass );
+			, c3d::Pass & pass );
 		void doImportSheenData( fastgltf::Material const & impMaterial
-			, castor3d::Pass & pass );
+			, c3d::Pass & pass );
 		void doImportEmissiveData( fastgltf::Material const & impMaterial
-			, castor3d::Pass & pass );
+			, c3d::Pass & pass );
 		void doImportAnisotropyData( fastgltf::Material const & impMaterial
-			, castor3d::Pass & pass );
+			, c3d::Pass & pass );
 		void doImportDiffuseTransmissionData( fastgltf::Material const & impMaterial
-			, castor3d::Pass & pass );
+			, c3d::Pass & pass );
 		void doImportAlphaModeData( fastgltf::Material const & impMaterial
-			, castor3d::Pass & pass )const;
+			, c3d::Pass & pass )const;
 		void doImportIorData( fastgltf::Material const & impMaterial
-			, castor3d::Pass & pass )const;
+			, c3d::Pass & pass )const;
 		void doImportDispersionData( fastgltf::Material const & impMaterial
-			, castor3d::Pass & pass )const;
+			, c3d::Pass & pass )const;
 	};
 }
 

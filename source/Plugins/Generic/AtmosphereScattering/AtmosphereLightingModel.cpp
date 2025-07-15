@@ -10,12 +10,12 @@
 namespace atmosphere_scattering
 {
 	AtmosphereScatteringModel::AtmosphereScatteringModel( sdw::ShaderWriter & writer )
-		: c3d::ScatteringModel{ writer }
+		: c3ds::ScatteringModel{ writer }
 	{
 	}
 
-	void AtmosphereScatteringModel::initialiseBackground( c3d::BackgroundModel & background
-		, c3d::Shadow & shadowModel )
+	void AtmosphereScatteringModel::initialiseBackground( c3ds::BackgroundModel & background
+		, c3ds::Shadow & shadowModel )
 	{
 		if ( !atmosphereBackground )
 		{
@@ -25,19 +25,19 @@ namespace atmosphere_scattering
 		}
 	}
 
-	sdw::Vec3 AtmosphereScatteringModel::computeRadiance( c3d::Light const & light
+	sdw::Vec3 AtmosphereScatteringModel::computeRadiance( c3ds::Light const & light
 		, sdw::Vec3 const & lightDirection )const
 	{
 		return atmosphereBackground->getSunRadiance( lightDirection );
 	}
 
-	void AtmosphereScatteringModel::computeScattering( c3d::LightingModel & lighting
-		, c3d::ShadowData const & shadows
+	void AtmosphereScatteringModel::computeScattering( c3ds::LightingModel & lighting
+		, c3ds::ShadowData const & shadows
 		, sdw::Int const shadowMapIndex
 		, sdw::Vec3 const & radiance
 		, sdw::Float const & lightIntensity
-		, c3d::BlendComponents const & components
-		, c3d::LightSurface const & lightSurface
+		, c3ds::BlendComponents const & components
+		, c3ds::LightSurface const & lightSurface
 		, sdw::Vec3 output )
 	{
 		auto & writer = sdw::findWriterMandat( lightSurface, output );
@@ -59,8 +59,8 @@ namespace atmosphere_scattering
 			, true /*multiply*/ );
 	}
 
-	c3d::ScatteringModelPtr AtmosphereScatteringModel::create( sdw::ShaderWriter & writer )
+	c3ds::ScatteringModelPtr AtmosphereScatteringModel::create( sdw::ShaderWriter & writer )
 	{
-		return castor::makeUniqueDerived< c3d::ScatteringModel, AtmosphereScatteringModel >( writer );
+		return c3d::makeUniqueDerived< c3ds::ScatteringModel, AtmosphereScatteringModel >( writer );
 	}
 }

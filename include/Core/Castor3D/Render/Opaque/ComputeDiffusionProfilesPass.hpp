@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include <RenderGraph/RunnablePass.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	C3D_API crg::FramePass const & createComputeDiffusionProfilesPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses

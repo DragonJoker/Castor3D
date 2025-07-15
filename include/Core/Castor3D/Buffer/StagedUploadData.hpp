@@ -18,13 +18,13 @@ See LICENSE file in root folder
 
 #include <unordered_set>
 
-namespace castor3d
+namespace c3d
 {
 	class StagedUploadData
-		: private castor::DataHolderT< ashes::CommandBufferPtr >
+		: private DataHolderT< ashes::CommandBufferPtr >
 		, public UploadData
 	{
-		using CommandBufferHolder = castor::DataHolderT< ashes::CommandBufferPtr >;
+		using CommandBufferHolder = DataHolderT< ashes::CommandBufferPtr >;
 
 		struct GpuBufferOffset
 		{
@@ -49,7 +49,7 @@ namespace castor3d
 
 	public:
 		C3D_API StagedUploadData( RenderDevice const & device
-			, castor::String debugName
+			, String debugName
 			, ashes::CommandBufferPtr commandBuffer );
 		C3D_API ~StagedUploadData()noexcept override;
 
@@ -60,26 +60,26 @@ namespace castor3d
 
 	private:
 		void doBegin()override;
-		void doPreprocess( castor::Vector< BufferDataRange > *& pendingBuffers
-			, castor::Vector< ImageDataRange > *& pendingImages )override;
+		void doPreprocess( Vector< BufferDataRange > *& pendingBuffers
+			, Vector< ImageDataRange > *& pendingImages )override;
 		VkDeviceSize doUpload( BufferDataRange & data )override;
 		VkDeviceSize doUpload( ImageDataRange & data )override;
 		void doPostprocess()override;
 		SemaphoreUsed doEnd( ashes::Queue const & queue
 			, ashes::Fence const * fence
-			, castor::Milliseconds timeout )override;
+			, Milliseconds timeout )override;
 
 		struct StagingBuffer
 		{
 			explicit StagingBuffer( GpuPackedBaseBufferUPtr buf )
-				: buffer{ castor::move( buf ) }
+				: buffer{ c3d::move( buf ) }
 			{
 			}
 
 			GpuPackedBaseBufferUPtr buffer;
 			u32 lifetime{};
 		};
-		using BufferArray = castor::Vector< StagingBuffer >;
+		using BufferArray = Vector< StagingBuffer >;
 
 		GpuBufferOffset doGetBuffer( BufferArray & pool
 			, VkDeviceSize size );
@@ -92,26 +92,26 @@ namespace castor3d
 			VkDeviceSize offset{ ~0ULL };
 			VkDeviceSize range{ 0ULL };
 		};
-		using BuffersRanges = castor::UnorderedMap< ashes::BufferBase const *, BufferRange >;
+		using BuffersRanges = HashMap< ashes::BufferBase const *, BufferRange >;
 
 		struct FrameBuffers
 		{
 			BufferArray pool;
-			castor::Map< BufferDataRange const *, GpuBufferOffset > bufferOffsets{};
-			castor::Map< ImageDataRange *, GpuBufferOffset > imageOffsets{};
+			Map< BufferDataRange const *, GpuBufferOffset > bufferOffsets{};
+			Map< ImageDataRange *, GpuBufferOffset > imageOffsets{};
 			BuffersRanges buffers{};
 			ashes::SemaphorePtr semaphore{};
 			bool used{};
-			castor::Vector< BufferDataRange > pendingBuffers{};
-			castor::Vector< ImageDataRange > pendingImages{};
+			Vector< BufferDataRange > pendingBuffers{};
+			Vector< ImageDataRange > pendingImages{};
 			VkDeviceSize currentSize{};
 			VkDeviceSize buffersCount{};
 
 			explicit FrameBuffers( ashes::SemaphorePtr psemaphore = {}
 				, BuffersRanges pbuffers = {}
 				, bool pused = true )noexcept
-				: buffers{ castor::move( pbuffers ) }
-				, semaphore{ castor::move( psemaphore ) }
+				: buffers{ c3d::move( pbuffers ) }
+				, semaphore{ c3d::move( psemaphore ) }
 				, used{ pused }
 			{
 			}
@@ -133,13 +133,13 @@ namespace castor3d
 			FrameBuffers & operator=( FrameBuffers && )noexcept = default;
 		};
 
-		castor::UnorderedMap< ashes::BufferBase const *, byte * > m_wholeBuffers;
-		castor::Array< FrameBuffers, 2u > m_buffers;
+		HashMap< ashes::BufferBase const *, byte * > m_wholeBuffers;
+		Array< FrameBuffers, 2u > m_buffers;
 		FrameBuffers * m_cpuBuffers{};
 		FrameBuffers * m_gpuBuffers{};
 		uint32_t m_frameIndex{};
 		FramePassTimerUPtr m_timer{};
-		castor::RawUniquePtr< crg::FramePassTimerBlock > m_cpuBlock{};
+		RawUniquePtr< crg::FramePassTimerBlock > m_cpuBlock{};
 	};
 
 	using InstantStagedUploadData = InstantUploadDataT< StagedUploadData >;

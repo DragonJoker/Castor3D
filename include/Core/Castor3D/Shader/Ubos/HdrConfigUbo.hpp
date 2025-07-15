@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/BaseTypes/Float.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace shader
 	{
@@ -26,7 +26,7 @@ namespace castor3d
 			SDW_DeclStructInstance( C3D_API, HdrConfigData );
 
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static castor::RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+			C3D_API static RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 			C3D_API sdw::Vec3 removeGamma( sdw::Vec3 const & srgb )const;
 			C3D_API sdw::Vec3 applyGamma( sdw::Vec3 const & hdr )const;
@@ -104,7 +104,7 @@ namespace castor3d
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_hdrConfigData = hdrConfig.declMember< castor3d::shader::HdrConfigData >( "d" );\
+	auto c3d_hdrConfigData = hdrConfig.declMember< c3d::shader::HdrConfigData >( "d" );\
 	hdrConfig.end()
 
 #endif

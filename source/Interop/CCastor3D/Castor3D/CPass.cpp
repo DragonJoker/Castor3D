@@ -38,7 +38,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		auto component = object->internal->getComponent< castor3d::TwoSidedComponent >();
+		auto component = object->internal->getComponent< c3d::TwoSidedComponent >();
 		if ( !component )
 			return cc3d::reportError( C3D_FAILURE, ERROR_COMPONENT_NOT_FOUND );
 
@@ -54,7 +54,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		if ( auto component = object->internal->createComponent< castor3d::TwoSidedComponent >() )
+		if ( auto component = object->internal->createComponent< c3d::TwoSidedComponent >() )
 		{
 			component->setTwoSided( val );
 		}
@@ -69,7 +69,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		auto component = object->internal->getComponent< castor3d::OpacityComponent >();
+		auto component = object->internal->getComponent< c3d::OpacityComponent >();
 		if ( !component )
 			return cc3d::reportError( C3D_FAILURE, ERROR_COMPONENT_NOT_FOUND );
 
@@ -85,7 +85,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		if ( auto component = object->internal->createComponent< castor3d::OpacityComponent >() )
+		if ( auto component = object->internal->createComponent< c3d::OpacityComponent >() )
 		{
 			component->setOpacity( val );
 		}
@@ -100,7 +100,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		auto component = object->internal->getComponent< castor3d::EmissiveComponent >();
+		auto component = object->internal->getComponent< c3d::EmissiveComponent >();
 		if ( !component )
 			return cc3d::reportError( C3D_FAILURE, ERROR_COMPONENT_NOT_FOUND );
 
@@ -116,7 +116,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		if ( auto component = object->internal->createComponent< castor3d::EmissiveComponent >() )
+		if ( auto component = object->internal->createComponent< c3d::EmissiveComponent >() )
 		{
 			component->setEmissive( cc3d::convert( *val ) );
 		}
@@ -131,7 +131,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		auto component = object->internal->getComponent< castor3d::EmissiveComponent >();
+		auto component = object->internal->getComponent< c3d::EmissiveComponent >();
 		if ( !component )
 			return cc3d::reportError( C3D_FAILURE, ERROR_COMPONENT_NOT_FOUND );
 
@@ -147,7 +147,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		if ( auto component = object->internal->createComponent< castor3d::EmissiveComponent >() )
+		if ( auto component = object->internal->createComponent< c3d::EmissiveComponent >() )
 		{
 			component->setEmissiveFactor( val );
 		}
@@ -162,7 +162,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		auto component = object->internal->getComponent< castor3d::RefractionComponent >();
+		auto component = object->internal->getComponent< c3d::RefractionComponent >();
 		if ( !component )
 			return cc3d::reportError( C3D_FAILURE, ERROR_COMPONENT_NOT_FOUND );
 
@@ -178,7 +178,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		if ( auto component = object->internal->createComponent< castor3d::RefractionComponent >() )
+		if ( auto component = object->internal->createComponent< c3d::RefractionComponent >() )
 		{
 			component->setRefractionRatio( val );
 		}
@@ -193,7 +193,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		auto component = object->internal->getComponent< castor3d::AlphaTestComponent >();
+		auto component = object->internal->getComponent< c3d::AlphaTestComponent >();
 		if ( !component )
 			return cc3d::reportError( C3D_FAILURE, ERROR_COMPONENT_NOT_FOUND );
 
@@ -209,9 +209,9 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		if ( auto component = object->internal->createComponent< castor3d::AlphaTestComponent >() )
+		if ( auto component = object->internal->createComponent< c3d::AlphaTestComponent >() )
 		{
-			component->setAlphaFunc( castor3d::ComparisonFunc( val ) );
+			component->setAlphaFunc( c3d::ComparisonFunc( val ) );
 		}
 
 		return C3D_OK;
@@ -224,7 +224,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		auto component = object->internal->getComponent< castor3d::AlphaTestComponent >();
+		auto component = object->internal->getComponent< c3d::AlphaTestComponent >();
 		if ( !component )
 			return cc3d::reportError( C3D_FAILURE, ERROR_COMPONENT_NOT_FOUND );
 
@@ -240,9 +240,9 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		if ( auto component = object->internal->createComponent< castor3d::AlphaTestComponent >() )
+		if ( auto component = object->internal->createComponent< c3d::AlphaTestComponent >() )
 		{
-			component->setBlendAlphaFunc( castor3d::ComparisonFunc( val ) );
+			component->setBlendAlphaFunc( c3d::ComparisonFunc( val ) );
 		}
 
 		return C3D_OK;
@@ -255,7 +255,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		auto component = object->internal->getComponent< castor3d::AlphaTestComponent >();
+		auto component = object->internal->getComponent< c3d::AlphaTestComponent >();
 		if ( !component )
 			return cc3d::reportError( C3D_FAILURE, ERROR_COMPONENT_NOT_FOUND );
 
@@ -271,7 +271,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		if ( auto component = object->internal->createComponent< castor3d::AlphaTestComponent >() )
+		if ( auto component = object->internal->createComponent< c3d::AlphaTestComponent >() )
 		{
 			component->setAlphaRefValue( val );
 		}
@@ -286,11 +286,11 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		auto component = object->internal->getComponent< castor3d::ColourComponent >();
+		auto component = object->internal->getComponent< c3d::ColourComponent >();
 		if ( !component )
 			return cc3d::reportError( C3D_FAILURE, ERROR_COMPONENT_NOT_FOUND );
 
-		*result = cc3d::convert( castor::RgbColour{ component->getColour(), 2.2f } );
+		*result = cc3d::convert( c3d::RgbColour{ component->getColour(), 2.2f } );
 
 		return C3D_OK;
 	}
@@ -302,7 +302,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		if ( auto component = object->internal->createComponent< castor3d::ColourComponent >() )
+		if ( auto component = object->internal->createComponent< c3d::ColourComponent >() )
 		{
 			component->setColour( cc3d::convert( *val ) );
 		}
@@ -317,7 +317,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		auto component = object->internal->getComponent< castor3d::ColourComponent >();
+		auto component = object->internal->getComponent< c3d::ColourComponent >();
 		if ( !component )
 			return cc3d::reportError( C3D_FAILURE, ERROR_COMPONENT_NOT_FOUND );
 
@@ -333,7 +333,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		if ( auto component = object->internal->createComponent< castor3d::ColourComponent >() )
+		if ( auto component = object->internal->createComponent< c3d::ColourComponent >() )
 		{
 			component->setColour( cc3d::convert( *val ) );
 		}
@@ -348,7 +348,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		auto component = object->internal->getComponent< castor3d::SpecularComponent >();
+		auto component = object->internal->getComponent< c3d::SpecularComponent >();
 		if ( !component )
 			return cc3d::reportError( C3D_FAILURE, ERROR_COMPONENT_NOT_FOUND );
 
@@ -364,7 +364,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		if ( auto component = object->internal->createComponent< castor3d::SpecularComponent >() )
+		if ( auto component = object->internal->createComponent< c3d::SpecularComponent >() )
 		{
 			component->setSpecular( cc3d::convert( *val ) );
 		}
@@ -379,7 +379,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		auto component = object->internal->getComponent< castor3d::SpecularFactorComponent >();
+		auto component = object->internal->getComponent< c3d::SpecularFactorComponent >();
 		if ( !component )
 			return cc3d::reportError( C3D_FAILURE, ERROR_COMPONENT_NOT_FOUND );
 
@@ -395,7 +395,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		if ( auto component = object->internal->createComponent< castor3d::SpecularFactorComponent >() )
+		if ( auto component = object->internal->createComponent< c3d::SpecularFactorComponent >() )
 		{
 			component->setFactor( val );
 		}
@@ -410,7 +410,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		auto component = object->internal->getComponent< castor3d::MetalnessComponent >();
+		auto component = object->internal->getComponent< c3d::MetalnessComponent >();
 		if ( !component )
 			return cc3d::reportError( C3D_FAILURE, ERROR_COMPONENT_NOT_FOUND );
 
@@ -426,7 +426,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		if ( auto component = object->internal->createComponent< castor3d::MetalnessComponent >() )
+		if ( auto component = object->internal->createComponent< c3d::MetalnessComponent >() )
 		{
 			component->setMetalness( val );
 		}
@@ -441,7 +441,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		auto component = object->internal->getComponent< castor3d::RoughnessComponent >();
+		auto component = object->internal->getComponent< c3d::RoughnessComponent >();
 		if ( !component )
 			return cc3d::reportError( C3D_FAILURE, ERROR_COMPONENT_NOT_FOUND );
 
@@ -457,7 +457,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		if ( auto component = object->internal->createComponent< castor3d::RoughnessComponent >() )
+		if ( auto component = object->internal->createComponent< c3d::RoughnessComponent >() )
 		{
 			component->setRoughness( val );
 		}
@@ -472,7 +472,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		auto component = object->internal->getComponent< castor3d::RoughnessComponent >();
+		auto component = object->internal->getComponent< c3d::RoughnessComponent >();
 		if ( !component )
 			return cc3d::reportError( C3D_FAILURE, ERROR_COMPONENT_NOT_FOUND );
 
@@ -488,7 +488,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		if ( auto component = object->internal->createComponent< castor3d::RoughnessComponent >() )
+		if ( auto component = object->internal->createComponent< c3d::RoughnessComponent >() )
 		{
 			component->setGlossiness( val );
 		}
@@ -503,7 +503,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		auto component = object->internal->getComponent< castor3d::RoughnessComponent >();
+		auto component = object->internal->getComponent< c3d::RoughnessComponent >();
 		if ( !component )
 			return cc3d::reportError( C3D_FAILURE, ERROR_COMPONENT_NOT_FOUND );
 
@@ -519,7 +519,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PASS );
 
-		if ( auto component = object->internal->createComponent< castor3d::RoughnessComponent >() )
+		if ( auto component = object->internal->createComponent< c3d::RoughnessComponent >() )
 		{
 			component->setShininess( val );
 		}

@@ -18,10 +18,10 @@ See LICENSE file in root folder
 
 #include <unordered_map>
 
-namespace castor3d
+namespace c3d
 {
 	class RenderPipeline
-		: public castor::OwnedBy< RenderNodesPass >
+		: public OwnedBy< RenderNodesPass >
 	{
 	public:
 		enum Descriptor
@@ -149,10 +149,10 @@ namespace castor3d
 			m_meshletDescriptorLayout = &layout;
 		}
 
-		void setVertexLayouts( castor::Vector< ashes::PipelineVertexInputStateCreateInfo > layouts )noexcept
+		void setVertexLayouts( Vector< ashes::PipelineVertexInputStateCreateInfo > layouts )noexcept
 		{
 			CU_Require( !m_pipeline );
-			m_vertexLayouts = castor::move( layouts );
+			m_vertexLayouts = c3d::move( layouts );
 		}
 
 		void setPushConstantRanges( ashes::VkPushConstantRangeArray const & pushConstantRanges )noexcept
@@ -164,13 +164,13 @@ namespace castor3d
 		void setViewport( VkViewport const & viewport )
 		{
 			CU_Require( !m_pipeline );
-			m_viewport = castor::make_unique< VkViewport >( viewport );
+			m_viewport = makeRawUnique< VkViewport >( viewport );
 		}
 
 		void setScissor( VkRect2D const & scissor )
 		{
 			CU_Require( !m_pipeline );
-			m_scissor = castor::make_unique< VkRect2D >( scissor );
+			m_scissor = makeRawUnique< VkRect2D >( scissor );
 		}
 		/**@}*/
 		/**
@@ -251,10 +251,10 @@ namespace castor3d
 		ShaderProgramRPtr m_program{};
 		PipelineFlags m_flags;
 		PipelineBaseHash m_flagsHash;
-		castor::Vector< ashes::PipelineVertexInputStateCreateInfo > m_vertexLayouts;
+		Vector< ashes::PipelineVertexInputStateCreateInfo > m_vertexLayouts;
 		ashes::VkPushConstantRangeArray m_pushConstantRanges;
-		castor::RawUniquePtr< VkViewport > m_viewport;
-		castor::RawUniquePtr< VkRect2D > m_scissor;
+		RawUniquePtr< VkViewport > m_viewport;
+		RawUniquePtr< VkRect2D > m_scissor;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::DescriptorSetLayout const * m_addDescriptorLayout{};

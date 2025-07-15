@@ -5,7 +5,7 @@
 
 namespace waves
 {
-	WavesUbo::WavesUbo( castor3d::RenderDevice const & device )
+	WavesUbo::WavesUbo( c3d::RenderDevice const & device )
 		: m_device{ device }
 		, m_ubo{ device.uboPool->getBuffer< Configuration >( 0u ) }
 	{

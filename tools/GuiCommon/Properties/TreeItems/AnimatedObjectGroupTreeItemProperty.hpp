@@ -29,9 +29,9 @@ namespace GuiCommon
 		 *\param[in]	engine		Le moteur.
 		 */
 		AnimatedObjectGroupTreeItemProperty( bool editable
-			, castor3d::Engine * engine );
+			, c3d::Engine * engine );
 
-		void setData( castor3d::AnimatedObjectGroup & data )noexcept
+		void setData( c3d::AnimatedObjectGroup & data )noexcept
 		{
 			clearProperties();
 			m_group = &data;
@@ -44,7 +44,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::AnimatedObjectGroup * m_group{};
+		c3d::AnimatedObjectGroup * m_group{};
 	};
 }
 

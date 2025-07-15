@@ -30,7 +30,7 @@ namespace GuiCommon
 	\brief Analyseur de fichiers de langage
 	*/
 	class LanguageFileParser
-		: public castor::FileParser
+		: public c3d::FileParser
 	{
 	public:
 		/**@name Construction / Destruction */
@@ -39,10 +39,10 @@ namespace GuiCommon
 		//@}
 
 	private:
-		void doCleanupParser( castor::PreprocessedFile & preprocessed )override;
-		void doValidate( castor::PreprocessedFile & preprocessed )override;
-		castor::String doGetSectionName( castor::SectionId section )const override;
-		castor::RawUniquePtr< castor::FileParser > doCreateParser()const override;
+		void doCleanupParser( c3d::PreprocessedFile & preprocessed )override;
+		void doValidate( c3d::PreprocessedFile & preprocessed )override;
+		c3d::String doGetSectionName( c3d::SectionId section )const override;
+		c3d::RawUniquePtr< c3d::FileParser > doCreateParser()const override;
 
 	private:
 		StcContext * m_stcContext;

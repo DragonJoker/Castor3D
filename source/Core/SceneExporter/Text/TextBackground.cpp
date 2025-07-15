@@ -1,9 +1,7 @@
 #include "TextBackground.hpp"
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< SceneBackground >::TextWriter( String const & tabs
 		, Path const & folder )
 		: TextWriterT< SceneBackground >{ tabs }

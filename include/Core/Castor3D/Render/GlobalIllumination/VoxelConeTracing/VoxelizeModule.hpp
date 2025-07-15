@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Buffer/BufferModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Render */
 	//@{
@@ -69,10 +69,10 @@ namespace castor3d
 	};
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, VoxelBufferToTexture, C3D_API );
-	CU_DeclareSmartPtr( castor3d, VoxelizePass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, VoxelSecondaryBounce, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Voxelizer, C3D_API );
+	CU_DeclareSmartPtr( c3d, VoxelBufferToTexture, C3D_API );
+	CU_DeclareSmartPtr( c3d, VoxelizePass, C3D_API );
+	CU_DeclareSmartPtr( c3d, VoxelSecondaryBounce, C3D_API );
+	CU_DeclareSmartPtr( c3d, Voxelizer, C3D_API );
 	/** @endcond */
 
 	//@}

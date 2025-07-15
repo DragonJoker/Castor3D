@@ -21,10 +21,10 @@ See LICENSE file in root folder
 #include <chrono>
 #include <unordered_set>
 
-namespace castor3d
+namespace c3d
 {
 	class RenderLoop
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
 		static constexpr uint32_t UnlimitedFPS = 0xFFFFFFFFu;
@@ -98,7 +98,7 @@ namespace castor3d
 		 *\param[in]	category	Le nom de la catégorie du timer.
 		 *\param[in]	timer		Le timer à enregistrer.
 		 */
-		C3D_API void registerTimer( castor::String const & category
+		C3D_API void registerTimer( String const & category
 			, FramePassTimer & timer );
 		/**
 		 *\~english
@@ -110,7 +110,7 @@ namespace castor3d
 		 *\param[in]	category	Le nom de la catégorie du timer.
 		 *\param[in]	timer		Le timer à désenregistrer.
 		 */
-		C3D_API void unregisterTimer( castor::String const & category
+		C3D_API void unregisterTimer( String const & category
 			, FramePassTimer & timer );
 		/**
 		 *\~english
@@ -150,7 +150,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le temps moyen pour une frame, en nanosecondes.
 		 */
-		C3D_API castor::Nanoseconds getAvgFrameTime()const;
+		C3D_API Nanoseconds getAvgFrameTime()const;
 		/**
 		 *\~english
 		 *\brief		Starts threaded render loop.
@@ -166,7 +166,7 @@ namespace castor3d
 		 *\brief		Rend une image, uniquement hors de la boucle de rendu.
 		 *\param[in]	tslf	Le temps écoulé depuis la dernière frame.
 		 */
-		C3D_API virtual void renderSyncFrame( castor::Milliseconds tslf = 0_ms ) = 0;
+		C3D_API virtual void renderSyncFrame( Milliseconds tslf = 0_ms ) = 0;
 		/**
 		 *\~english
 		 *\brief		Pauses the render loop.
@@ -199,7 +199,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		castor::Milliseconds getFrameTime()const noexcept
+		Milliseconds getFrameTime()const noexcept
 		{
 			return m_frameTime;
 		}
@@ -209,7 +209,7 @@ namespace castor3d
 			return m_wantedFPS;
 		}
 
-		castor::Microseconds getLastFrameTime()const noexcept
+		Microseconds getLastFrameTime()const noexcept
 		{
 			return m_lastFrameTime;
 		}
@@ -229,7 +229,7 @@ namespace castor3d
 		 *\brief		Commence le rendu threadé.
 		 *\param[in]	tslf	Le temps écoulé depuis la dernière frame.
 		 */
-		C3D_API void doRenderFrame( castor::Milliseconds tslf = 0_ms );
+		C3D_API void doRenderFrame( Milliseconds tslf = 0_ms );
 
 	private:
 		void doProcessEvents( CpuEventType eventType );
@@ -237,7 +237,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, QueueData const & queueData );
 		void doGpuStep( RenderInfo & info );
-		void doCpuStep( castor::Milliseconds tslf );
+		void doCpuStep( Milliseconds tslf );
 
 	protected:
 		//!\~english	The current RenderSystem.
@@ -248,22 +248,22 @@ namespace castor3d
 		uint32_t m_wantedFPS;
 		//!\~english	The wanted time for a frame.
 		//!\~french		Le temps voulu pour une frame.
-		castor::Milliseconds m_frameTime;
+		Milliseconds m_frameTime;
 		//!\~english	The elapsed time for the last frame.
 		//!\~french		Le temps écoulé pour la dernière frame.
-		std::atomic< castor::Microseconds > m_lastFrameTime;
+		std::atomic< Microseconds > m_lastFrameTime;
 		//!\~english	The debug overlays.
 		//!\~french		Les incrustations de débogage.
-		castor::RawUniquePtr< DebugOverlays > m_debugOverlays;
-		castor::Mutex m_debugOverlaysMtx;
+		RawUniquePtr< DebugOverlays > m_debugOverlays;
+		Mutex m_debugOverlaysMtx;
 
 	private:
 		int32_t m_ignored = 5;
 		QueueData const * m_reservedQueue{};
-		castor::UnorderedSet< ShaderBuffer const * > m_shaderBuffers;
-		castor::Mutex m_shaderBuffersMtx;
-		castor::Array< FramePassTimerUPtr, size_t( CpuEventType::eCount ) > m_timerCpuEvents;
-		castor::Array< FramePassTimerUPtr, size_t( GpuEventType::eCount ) > m_timerGpuEvents;
+		HashSet< ShaderBuffer const * > m_shaderBuffers;
+		Mutex m_shaderBuffersMtx;
+		Array< FramePassTimerUPtr, size_t( CpuEventType::eCount ) > m_timerCpuEvents;
+		Array< FramePassTimerUPtr, size_t( GpuEventType::eCount ) > m_timerGpuEvents;
 		UploadDataUPtr m_uploadData{};
 		ashes::FencePtr m_uploadFence{};
 	};

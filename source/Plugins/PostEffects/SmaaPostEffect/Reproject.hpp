@@ -19,8 +19,8 @@ namespace smaa
 	public:
 		Reproject( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
-			, castor3d::RenderTarget & renderTarget
-			, castor3d::RenderDevice const & device
+			, c3d::RenderTarget & renderTarget
+			, c3d::RenderDevice const & device
 			, SmaaUbo const & ubo
 			, crg::ImageViewIdArray const & currentColourViews
 			, crg::ImageViewIdArray const & previousColourViews
@@ -29,7 +29,7 @@ namespace smaa
 			, bool const * enabled );
 		~Reproject();
 
-		void accept( castor3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor );
 
 		crg::ImageViewId const & getResult()const
 		{
@@ -42,15 +42,15 @@ namespace smaa
 		}
 
 	private:
-		castor3d::RenderDevice const & m_device;
+		c3d::RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;
 		crg::ImageViewIdArray m_currentColourViews;
 		crg::ImageViewIdArray m_previousColourViews;
 		crg::ImageViewId const * m_velocityView;
-		castor3d::Extent3D m_extent;
-		castor3d::ProgramModule m_shader;
+		c3d::Extent3D m_extent;
+		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		castor3d::Texture m_result;
+		c3d::Texture m_result;
 		crg::FramePass & m_pass;
 	};
 }

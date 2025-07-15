@@ -12,11 +12,11 @@
 
 #include <ShaderWriter/ComputeWriter.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace difpfl
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
 		enum Idx : uint32_t
 		{
@@ -24,7 +24,7 @@ namespace castor3d
 			DiffusionProfileTexIdx,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine )
+		static ShaderPtr getProgram( Engine & engine )
 		{
 			sdw::ComputeWriter writer{ &engine.getShaderAllocator() };
 
@@ -147,7 +147,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< difpfl::FramePass >( framePass
+				auto result = makeRawUnique< difpfl::FramePass >( framePass
 					, context
 					, graph
 					, device
@@ -158,7 +158,7 @@ namespace castor3d
 						.groupCountX( imageWidth / 32u )
 						.groupCountY( imageHeight / 32u )
 						.groupCountZ( 1u ) );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

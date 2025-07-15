@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include <RenderGraph/RunnablePass.hpp>
 #include <RenderGraph/RunnablePasses/RenderPass.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class OverlayPass
 		: public crg::RunnablePass

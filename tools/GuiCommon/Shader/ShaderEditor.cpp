@@ -105,11 +105,11 @@ namespace GuiCommon
 #endif
 	}
 
-	ShaderEditor::ShaderEditor( castor3d::Engine * engine
+	ShaderEditor::ShaderEditor( c3d::Engine * engine
 		, bool canEdit
 		, StcContext & stcContext
 		, ShaderEntryPoint const & shader
-		, castor::Vector< UniformBufferValues > & ubos
+		, c3d::Vector< UniformBufferValues > & ubos
 		, ShaderLanguage language
 		, wxWindow * parent
 		, wxPoint const & position
@@ -124,7 +124,7 @@ namespace GuiCommon
 		doListAvailableLanguages();
 		doInitialiseLayout( engine );
 		loadLanguage( language );
-		m_frameVariablesList->loadVariables( castor3d::getVkShaderStage( m_shader.entryPoint ), m_ubos );
+		m_frameVariablesList->loadVariables( c3d::getVkShaderStage( m_shader.entryPoint ), m_ubos );
 	}
 
 	ShaderEditor::~ShaderEditor()
@@ -133,7 +133,7 @@ namespace GuiCommon
 		m_auiManager.UnInit();
 	}
 
-	void ShaderEditor::doInitialiseLayout( castor3d::Engine * engine )
+	void ShaderEditor::doInitialiseLayout( c3d::Engine * engine )
 	{
 		static int constexpr ListWidth = 200;
 		wxSize size = GetClientSize();
@@ -335,7 +335,7 @@ namespace GuiCommon
 
 		if ( auto glslIndex = m_shader.source.text.find( '#' );
 			glslIndex == 0u
-				&& spirvIndex != castor::MbString::npos
+				&& spirvIndex != c3d::MbString::npos
 				&& spirvIndex > glslIndex )
 		{
 #if GC_HasGLSL

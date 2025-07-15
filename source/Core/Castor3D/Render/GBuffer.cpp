@@ -1,6 +1,6 @@
 #include "Castor3D/Render/GBuffer.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	VkFormatFeatureFlags getFeatureFlags( ImageUsageFlags flags )
 	{
@@ -77,20 +77,20 @@ namespace castor3d
 	}
 
 	GBufferBase::GBufferBase( RenderDevice const & device
-		, castor::String name )
-		: castor::Named{ castor::move( name ) }
+		, String name )
+		: Named{ c3d::move( name ) }
 		, m_device{ device }
 	{
 	}
 
 	TextureUPtr GBufferBase::doCreateTexture( crg::ResourcesCache & resources
-		, castor::String const & name
+		, String const & name
 		, ImageCreateFlags createFlags
 		, Extent3D const & size
 		, uint32_t layerCount
 		, SampleCount sampleCount
 		, uint32_t mipLevels
-		, castor::PixelFormat format
+		, PixelFormat format
 		, ImageUsageFlags usageFlags
 		, BorderColour borderColor
 		, ComparisonFunc compareOp )const
@@ -100,7 +100,7 @@ namespace castor3d
 		TextureCreateInfo createInfo{ createFlags
 			, size, layerCount, mipLevels
 			, format, usageFlags, sampleCount };
-		return castor::makeUnique< Texture >( m_device
+		return makeUnique< Texture >( m_device
 			, resources
 			, name
 			, createInfo

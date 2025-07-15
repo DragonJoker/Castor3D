@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
-	using SsaoConfigTreeItemProperty = TreeItemPropertyT< castor3d::SsaoConfig >;
+	using SsaoConfigTreeItemProperty = TreeItemPropertyT< c3d::SsaoConfig >;
 }
 
 #endif

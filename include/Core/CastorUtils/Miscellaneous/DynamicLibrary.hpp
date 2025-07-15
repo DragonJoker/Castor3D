@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Data/Path.hpp"
 
-namespace castor
+namespace c3d
 {
 	using VoidFnType = void( CU_stdcall * )( );
 	class DynamicLibrary

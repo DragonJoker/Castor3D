@@ -18,9 +18,9 @@
 
 #include <ashespp/Core/Device.hpp>
 
-CU_ImplementSmartPtr( castor3d, ParticleSystem )
+CU_ImplementSmartPtr( c3d, ParticleSystem )
 
-namespace castor3d
+namespace c3d
 {
 	namespace ptclsys
 	{
@@ -66,40 +66,40 @@ namespace castor3d
 			}
 		}
 
-		static castor::PixelFormat getVkFormat( ParticleFormat format )
+		static PixelFormat getVkFormat( ParticleFormat format )
 		{
 			switch ( format )
 			{
 			case ParticleFormat::eInt:
-				return castor::PixelFormat::eR32_SINT;
+				return PixelFormat::eR32_SINT;
 			case ParticleFormat::eVec2i:
-				return castor::PixelFormat::eR32G32_SINT;
+				return PixelFormat::eR32G32_SINT;
 			case ParticleFormat::eVec3i:
-				return castor::PixelFormat::eR32G32B32_SINT;
+				return PixelFormat::eR32G32B32_SINT;
 			case ParticleFormat::eVec4i:
-				return castor::PixelFormat::eR32G32B32A32_SINT;
+				return PixelFormat::eR32G32B32A32_SINT;
 			case ParticleFormat::eUInt:
-				return castor::PixelFormat::eR32_UINT;
+				return PixelFormat::eR32_UINT;
 			case ParticleFormat::eVec2ui:
-				return castor::PixelFormat::eR32G32_UINT;
+				return PixelFormat::eR32G32_UINT;
 			case ParticleFormat::eVec3ui:
-				return castor::PixelFormat::eR32G32B32_UINT;
+				return PixelFormat::eR32G32B32_UINT;
 			case ParticleFormat::eVec4ui:
-				return castor::PixelFormat::eR32G32B32A32_UINT;
+				return PixelFormat::eR32G32B32A32_UINT;
 			case ParticleFormat::eFloat:
-				return castor::PixelFormat::eR32_SFLOAT;
+				return PixelFormat::eR32_SFLOAT;
 			case ParticleFormat::eVec2f:
 			case ParticleFormat::eMat2f:
-				return castor::PixelFormat::eR32G32_SFLOAT;
+				return PixelFormat::eR32G32_SFLOAT;
 			case ParticleFormat::eVec3f:
 			case ParticleFormat::eMat3f:
-				return castor::PixelFormat::eR32G32B32_SFLOAT;
+				return PixelFormat::eR32G32B32_SFLOAT;
 			case ParticleFormat::eVec4f:
 			case ParticleFormat::eMat4f:
-				return castor::PixelFormat::eR32G32B32A32_SFLOAT;
+				return PixelFormat::eR32G32B32A32_SFLOAT;
 			default:
 				assert( false );
-				return castor::PixelFormat::eR32G32B32A32_SFLOAT;
+				return PixelFormat::eR32G32B32A32_SFLOAT;
 			}
 		}
 
@@ -120,7 +120,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 
 				if ( auto node = blockContext->scene->scene->tryFindSceneNode( name ) )
 				{
@@ -163,7 +163,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 
 				if ( auto material = getEngine( *blockContext )->tryFindMaterial( name ) )
 				{
@@ -289,10 +289,10 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String type;
+				String type;
 
 				if ( Engine const * engine = getEngine( *blockContext );
-					engine && !engine->getParticleFactory().isTypeRegistered( castor::string::lowerCase( params[0]->get( type ) ) ) )
+					engine && !engine->getParticleFactory().isTypeRegistered( string::lowerCase( params[0]->get( type ) ) ) )
 				{
 					CU_ParsingError( cuT( "Particle type [" ) + type + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
 				}
@@ -316,14 +316,14 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String value;
+				String value;
 
 				if ( params.size() > 2 )
 				{
 					params[2]->get( value );
 				}
 
-				blockContext->particleSystem->addParticleVariable( params[0]->get< castor::String >(), ParticleFormat( params[1]->get< uint32_t >() ), value );
+				blockContext->particleSystem->addParticleVariable( params[0]->get< String >(), ParticleFormat( params[1]->get< uint32_t >() ), value );
 			}
 		}
 		CU_EndAttribute()
@@ -331,13 +331,13 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	ParticleSystem::ParticleSystem( castor::String const & name
+	ParticleSystem::ParticleSystem( String const & name
 		, Scene & scene
 		, SceneNode & node
 		, uint32_t count )
 		: MovableObject{ name, scene, MovableType::eParticleEmitter, node }
 		, m_particlesCount{ count }
-		, m_csImpl{ castor::makeUnique< ComputeParticleSystem >( *this ) }
+		, m_csImpl{ makeUnique< ComputeParticleSystem >( *this ) }
 	{
 	}
 
@@ -368,9 +368,9 @@ namespace castor3d
 
 		auto align = device.renderSystem.getValue( GpuMin::eBufferMapSize );
 		auto size = ashes::getAlignedSize( getMaxParticlesCount() * m_inputs.stride(), align );
-		m_particlesBillboard = castor::makeUnique< BillboardBase >( *getScene()
+		m_particlesBillboard = makeUnique< BillboardBase >( *getScene()
 			, getScene()->getObjectRootNode()
-			, castor::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u, bindings, attributes )
+			, makeRawUnique< ashes::PipelineVertexInputStateCreateInfo >( 0u, bindings, attributes )
 			, stride
 			, device.bufferPool->getBuffer< uint8_t >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 				, size
@@ -422,7 +422,7 @@ namespace castor3d
 			return;
 		}
 
-		auto time = std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );
+		auto time = std::chrono::duration_cast< Milliseconds >( m_timer.getElapsed() );
 
 		if ( m_firstUpdate )
 		{
@@ -470,7 +470,7 @@ namespace castor3d
 		}
 	}
 
-	void ParticleSystem::setDimensions( castor::Point2f const & dimensions )
+	void ParticleSystem::setDimensions( Point2f const & dimensions )
 	{
 		m_dimensions = dimensions;
 
@@ -480,7 +480,7 @@ namespace castor3d
 		}
 	}
 
-	void ParticleSystem::setParticleType( castor::String const & value )
+	void ParticleSystem::setParticleType( String const & value )
 	{
 		m_particleType = value;
 
@@ -491,7 +491,7 @@ namespace castor3d
 		}
 		else
 		{
-			CU_Exception( "Particle type [" + castor::toUtf8( value ) + "] is not registered, make sure you've got the matching plug-in installed." );
+			CU_Exception( "Particle type [" + toUtf8( value ) + "] is not registered, make sure you've got the matching plug-in installed." );
 		}
 	}
 
@@ -500,14 +500,14 @@ namespace castor3d
 		return m_material;
 	}
 
-	castor::Point2f const & ParticleSystem::getDimensions()const
+	Point2f const & ParticleSystem::getDimensions()const
 	{
 		return m_dimensions;
 	}
 
-	void ParticleSystem::addParticleVariable( castor::String const & name
+	void ParticleSystem::addParticleVariable( String const & name
 		, ParticleFormat type
-		, castor::String const & defaultValue )
+		, String const & defaultValue )
 	{
 		m_csImpl->addParticleVariable( name, type, defaultValue );
 		m_cpuImpl->addParticleVariable( name, type, defaultValue );
@@ -520,14 +520,13 @@ namespace castor3d
 		m_csImpl->setUpdateProgram( program );
 	}
 
-	void ParticleSystem::setCSGroupSizes( castor::Point3i sizes )
+	void ParticleSystem::setCSGroupSizes( Point3i sizes )
 	{
 		m_csImpl->setGroupSizes( sizes );
 	}
 
-	void ParticleSystem::addParsers( castor::AttributeParsers & result )
+	void ParticleSystem::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< ParticleSystemContext > systemCtx{ result, CSCNSection::eParticleSystem, CSCNSection::eScene };
 		BlockParserContextT< ParticleSystemContext > particleCtx{ result, CSCNSection::eParticle, CSCNSection::eParticleSystem };
 

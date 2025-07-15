@@ -6,7 +6,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	sdw::Mat4 ModelData::getPrvModelMtx( PipelineFlags const & flags
 		, sdw::Mat4 const & curModelMatrix )const

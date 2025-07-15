@@ -33,7 +33,7 @@ namespace smaa
 		EDVertexT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled )
-			: EDVertexStructT< FlagT >{ writer, castor::move( expr ), enabled }
+			: EDVertexStructT< FlagT >{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -46,17 +46,17 @@ namespace smaa
 	public:
 		EdgeDetection( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
-			, castor3d::RenderTarget & renderTarget
-			, castor3d::RenderDevice const & device
+			, c3d::RenderTarget & renderTarget
+			, c3d::RenderDevice const & device
 			, SmaaUbo const & ubo
 			, SmaaConfig const & config
-			, castor3d::ShaderPtr shader
+			, c3d::ShaderPtr shader
 			, bool const * enabled
 			, uint32_t const * passIndex
 			, uint32_t passCount );
 		~EdgeDetection();
 
-		void accept( castor3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor );
 
 		static void getVertexProgram( sdw::TraditionalGraphicsWriter & writer
 			, SmaaData const & smaaData );
@@ -77,14 +77,14 @@ namespace smaa
 		}
 
 	protected:
-		castor3d::RenderDevice const & m_device;
+		c3d::RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;
 		SmaaConfig const & m_config;
-		castor3d::Extent3D m_extent;
-		castor3d::Texture m_outColour;
-		castor3d::Texture m_outDepth;
+		c3d::Extent3D m_extent;
+		c3d::Texture m_outColour;
+		c3d::Texture m_outDepth;
 		crg::ImageViewId m_outDepthStencilView;
-		castor3d::ProgramModule m_shader;
+		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass & m_pass;
 	};

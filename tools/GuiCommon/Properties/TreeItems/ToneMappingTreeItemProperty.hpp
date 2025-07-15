@@ -33,7 +33,7 @@ namespace GuiCommon
 		*\param[in]	toneMapping	L'objet cible.
 		*/
 		ToneMappingTreeItemProperty( bool editable
-			, castor3d::RenderTarget & target
+			, c3d::RenderTarget & target
 			, wxWindow * parent );
 
 	private:
@@ -45,10 +45,10 @@ namespace GuiCommon
 		void onEditShader( wxVariant const & var );
 
 	private:
-		castor3d::RenderTarget & m_target;
+		c3d::RenderTarget & m_target;
 		wxWindow * m_parent;
 		wxArrayString m_choices;
-		castor::StringMap< uint32_t > m_nameToChoice;
+		c3d::StringMap< uint32_t > m_nameToChoice;
 	};
 }
 

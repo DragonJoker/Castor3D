@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Graphics/GraphicsModule.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< PixelFormat PFT, PixelComponent PCT >
 	uint8_t getX8U( uint8_t const * buffer );

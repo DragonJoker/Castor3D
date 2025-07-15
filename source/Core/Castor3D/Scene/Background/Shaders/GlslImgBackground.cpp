@@ -8,16 +8,16 @@
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 #include <ShaderWriter/Writer.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
-	castor::String const ImgBackgroundModel::Name = cuT( "c3d.img" );
+	String const ImgBackgroundModel::Name = cuT( "c3d.img" );
 
 	ImgBackgroundModel::ImgBackgroundModel( sdw::ShaderWriter & writer
 		, Utils & utils
 		, Extent2D targetSize
 		, uint32_t & binding
 		, uint32_t set )
-		: BackgroundModel{ writer, utils, castor::move( targetSize ), false, false, false }
+		: BackgroundModel{ writer, utils, c3d::move( targetSize ), false, false, false }
 	{
 		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapBackground"
 			, binding
@@ -33,9 +33,9 @@ namespace castor3d::shader
 		, uint32_t & binding
 		, uint32_t set )
 	{
-		return castor::make_unique< ImgBackgroundModel >( writer
+		return makeRawUnique< ImgBackgroundModel >( writer
 			, utils
-			, castor::move( targetSize )
+			, c3d::move( targetSize )
 			, binding
 			, set );
 	}

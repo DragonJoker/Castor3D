@@ -19,7 +19,7 @@
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -145,8 +145,8 @@ namespace castor3d
 		}
 
 		class FramePass
-			: private castor::DataHolderT< ShaderModule >
-			, private castor::DataHolderT< ashes::PipelineShaderStageCreateInfoArray >
+			: private DataHolderT< ShaderModule >
+			, private DataHolderT< ashes::PipelineShaderStageCreateInfoArray >
 			, public crg::ComputePass
 		{
 			using ShaderHolder = DataHolderT< ShaderModule >;
@@ -272,7 +272,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< cptclsb::FramePass >( framePass
+				auto result = makeRawUnique< cptclsb::FramePass >( framePass
 					, context
 					, graph
 					, device
@@ -282,7 +282,7 @@ namespace castor3d
 						.groupCountZ( clusters.getDimensions()->z )
 						.enabled( &clusters.needsClustersUpdate() )
 					, clusters.getConfig() );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			});

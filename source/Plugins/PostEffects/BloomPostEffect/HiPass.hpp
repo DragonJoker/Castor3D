@@ -15,13 +15,13 @@ namespace Bloom
 	public:
 		HiPass( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
-			, castor3d::RenderDevice const & device
+			, c3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & sceneView
-			, castor3d::Extent2D size
+			, c3d::Extent2D size
 			, uint32_t blurPassesCount
 			, bool const * enabled
 			, uint32_t const * passIndex );
-		void accept( castor3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor );
 
 		crg::ImageViewIdArray const & getResult()const
 		{
@@ -35,7 +35,7 @@ namespace Bloom
 
 	private:
 		crg::FramePassGroup & m_graph;
-		castor3d::ProgramModule m_shader;
+		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::ImageId m_resultImg;
 		crg::ImageViewId m_resultView;

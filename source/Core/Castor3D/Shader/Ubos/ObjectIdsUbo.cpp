@@ -4,7 +4,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//*********************************************************************************************
 	
@@ -18,7 +18,7 @@ namespace castor3d::shader
 	ObjectsIds::ObjectsIds( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: StructInstance{ writer, castor::move( expr ), enabled }
+		: StructInstance{ writer, c3d::move( expr ), enabled }
 		, m_data{ getMemberArray< sdw::UVec4 >( "data" ) }
 	{
 	}

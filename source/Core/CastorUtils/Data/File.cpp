@@ -7,7 +7,7 @@
 
 #include <filesystem>
 
-namespace castor
+namespace c3d
 {
 	File::File( Path const & fileName
 		, FlagCombination< OpenMode > const & modes
@@ -88,9 +88,9 @@ namespace castor
 		if ( m_file )
 		{
 			m_length = 0;
-			castor::fileSeek( m_file, 0, SEEK_END );
-			m_length = uint64_t( castor::fileTell( m_file ) );
-			castor::fileSeek( m_file, 0, SEEK_SET );
+			c3d::fileSeek( m_file, 0, SEEK_END );
+			m_length = uint64_t( c3d::fileTell( m_file ) );
+			c3d::fileSeek( m_file, 0, SEEK_SET );
 		}
 		else
 		{
@@ -118,17 +118,17 @@ namespace castor
 			switch ( origin )
 			{
 			case OffsetMode::eBeginning:
-				iReturn = castor::fileSeek( m_file, offset, SEEK_SET );
+				iReturn = c3d::fileSeek( m_file, offset, SEEK_SET );
 				m_cursor = uint64_t( offset );
 				break;
 
 			case OffsetMode::eCurrent:
-				iReturn = castor::fileSeek( m_file, offset, SEEK_CUR );
+				iReturn = c3d::fileSeek( m_file, offset, SEEK_CUR );
 				m_cursor += offset;
 				break;
 
 			case OffsetMode::eEnd:
-				iReturn = castor::fileSeek( m_file, offset, SEEK_END );
+				iReturn = c3d::fileSeek( m_file, offset, SEEK_END );
 				m_cursor = uint64_t( getLength() - offset );
 				break;
 
@@ -146,10 +146,10 @@ namespace castor
 	{
 		CU_CheckInvariants();
 		m_length = 0;
-		long long llPosition = castor::fileTell( m_file );
-		castor::fileSeek( m_file, 0, SEEK_END );
-		m_length = uint64_t( castor::fileTell( m_file ) );
-		castor::fileSeek( m_file, llPosition, SEEK_SET );
+		long long llPosition = c3d::fileTell( m_file );
+		c3d::fileSeek( m_file, 0, SEEK_END );
+		m_length = uint64_t( c3d::fileTell( m_file ) );
+		c3d::fileSeek( m_file, llPosition, SEEK_SET );
 		CU_CheckInvariants();
 		return int64_t( m_length );
 	}
@@ -168,7 +168,7 @@ namespace castor
 
 		if ( m_file )
 		{
-			llReturn = castor::fileTell( m_file );
+			llReturn = c3d::fileTell( m_file );
 		}
 
 		CU_CheckInvariants();
@@ -304,7 +304,7 @@ namespace castor
 		return result;
 	}
 
-	String File::normaliseFileName( String const & name, castor::StringView repl )
+	String File::normaliseFileName( String const & name, c3d::StringView repl )
 	{
 		auto result = name;
 		string::replace( result, cuT( "\\"_sv ), repl );

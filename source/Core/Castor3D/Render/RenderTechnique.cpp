@@ -52,20 +52,20 @@
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/FramePassTimer.hpp>
 
-CU_ImplementSmartPtr( castor3d, RenderTechnique )
+CU_ImplementSmartPtr( c3d, RenderTechnique )
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
 	namespace rendtech
 	{
-		static castor::Map< double, LightInstanceRPtr > doSortLights( LightCache const & cache
+		static Map< double, LightInstanceRPtr > doSortLights( LightCache const & cache
 			, LightType type
 			, Camera const & camera )
 		{
-			auto lock( castor::makeUniqueLock( cache ) );
-			castor::Map< double, LightInstanceRPtr > lights;
+			auto lock( makeUniqueLock( cache ) );
+			Map< double, LightInstanceRPtr > lights;
 
 			if ( cache.getLightsBufferCount( LightType::eDirectional ) <= 1u
 				&& cache.getLightsBufferCount( LightType::ePoint ) <= MaxPointShadowMapCount
@@ -97,7 +97,7 @@ namespace castor3d
 						|| camera.isVisible( light->getBoundingBox()
 							, light->getNode().getDerivedTransformationMatrix() ) ) )
 				{
-					lights.emplace( castor::point::distanceSquared( camera.getParent()->getDerivedPosition()
+					lights.emplace( point::distanceSquared( camera.getParent()->getDerivedPosition()
 							, light->getNode().getDerivedPosition() )
 						, light );
 				}
@@ -125,7 +125,7 @@ namespace castor3d
 			{
 				int32_t index = 0;
 				auto lightIt = lights.begin();
-				activeShadowMaps[size_t( type )].emplace_back( castor::ref( shadowMap ) );
+				activeShadowMaps[size_t( type )].emplace_back( c3d::ref( shadowMap ) );
 				auto & active = activeShadowMaps[size_t( type )].back();
 
 				for ( auto i = 0u; i < count; ++i )
@@ -197,15 +197,15 @@ namespace castor3d
 		static LightVolumePassResultArray doCreateLLPVResult( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, Scene const & scene
-			, castor::String const & prefix )
+			, String const & prefix )
 		{
 			LightVolumePassResultArray result;
 
 			for ( uint32_t i = 0u; i < LpvMaxCascadesCount; ++i )
 			{
-				result.emplace_back( castor::makeUnique< LightVolumePassResult >( resources
+				result.emplace_back( makeUnique< LightVolumePassResult >( resources
 					, device
-					, prefix + castor::string::toString( i )
+					, prefix + string::toString( i )
 					, scene.getLpvGridSize() ) );
 			}
 
@@ -214,7 +214,7 @@ namespace castor3d
 
 		static crg::FrameGraph doCreateClearLpvCommands( crg::ResourcesCache const & resources
 			, ProgressBar * progress
-			, castor::String const & name
+			, String const & name
 			, LightVolumePassResult  const & lpvResult
 			, LightVolumePassResultArray const & llpvResult )
 		{
@@ -256,7 +256,7 @@ namespace castor3d
 			};
 
 			stepProgressBarLocal( progress, cuT( "Creating clear LPV commands" ) );
-			auto mbName = castor::toUtf8( name );
+			auto mbName = toUtf8( name );
 			crg::FrameGraph result{ resources.getHandler(), mbName + "/ClearLpv" };
 			auto & pass = result.createPass( mbName + "LpvClear"
 				, [progress]( crg::FramePass const & framePass
@@ -264,7 +264,7 @@ namespace castor3d
 					, crg::RunnableGraph & runnableGraph )
 				{
 					stepProgressBarLocal( progress, cuT( "Initialising clear LPV commands" ) );
-					return castor::make_unique< LpvClear >( framePass
+					return makeRawUnique< LpvClear >( framePass
 						, context
 						, runnableGraph );
 				} );
@@ -317,7 +317,7 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	RenderTechnique::RenderTechnique( castor::String const & name
+	RenderTechnique::RenderTechnique( String const & name
 		, RenderTarget & renderTarget
 		, RenderDevice const & device
 		, Texture const & colour
@@ -326,8 +326,8 @@ namespace castor3d
 		, ProgressBar * progress
 		, bool visbuffer
 		, bool weightedBlended )
-		: castor::OwnedBy< Engine >{ *device.renderSystem.getEngine() }
-		, castor::Named{ name + cuT( "/Technique") }
+		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
+		, Named{ name + cuT( "/Technique") }
 		, m_renderTarget{ renderTarget }
 		, m_device{ device }
 		, m_targetSize{ m_renderTarget.getSize() }
@@ -347,7 +347,7 @@ namespace castor3d
 			, getName() + cuT( "/Normal" )
 			, { ImageCreateFlags::eNone
 				, m_colour->getExtent(), 1u, 1u
-				, castor::PixelFormat::eR16G16B16A16_SFLOAT
+				, PixelFormat::eR16G16B16A16_SFLOAT
 				, rendtech::normalUsageFlags }
 			, { BorderColour::eFloatOpaqueBlack } }
 		, m_scattering{ m_device
@@ -363,7 +363,7 @@ namespace castor3d
 			, getName() + cuT( "/Diffuse" )
 			, { ImageCreateFlags::eNone
 				, m_colour->getExtent(), 1u, 1u
-				, castor::PixelFormat::eR16G16B16A16_SFLOAT
+				, PixelFormat::eR16G16B16A16_SFLOAT
 				, rendtech::diffuseUsageFlags | ( C3D_UseVisibilityBuffer ? ImageUsageFlags::eNone : ImageUsageFlags::eColorAttachment ) }
 			, { BorderColour::eFloatOpaqueBlack } }
 		, m_lpvConfigUbo{ m_device }
@@ -372,29 +372,29 @@ namespace castor3d
 		, m_graph{ m_renderTarget.getGraph().createPassGroup( "Technique" ) }
 #if !C3D_DebugDisableShadowMaps
 		, m_shadowBuffer{ ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->hasShadows() )
-			? castor::makeUnique< ShadowBuffer >( device )
+			? makeUnique< ShadowBuffer >( device )
 			: nullptr ) }
 		, m_directionalShadowMap{ ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->hasShadows() )
-			? castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( m_renderTarget.getResources()
+			? makeUniqueDerived< ShadowMap, ShadowMapDirectional >( m_renderTarget.getResources()
 				, m_device
 				, *m_renderTarget.getScene()
 				, progress )
 			: nullptr ) }
 		, m_pointShadowMap{ ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->hasShadows() )
-			? castor::makeUniqueDerived< ShadowMap, ShadowMapPoint >( m_renderTarget.getResources()
+			? makeUniqueDerived< ShadowMap, ShadowMapPoint >( m_renderTarget.getResources()
 				, m_device
 				, *m_renderTarget.getScene()
 				, progress )
 			: nullptr ) }
 		, m_spotShadowMap{ ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->hasShadows() )
-			? castor::makeUniqueDerived< ShadowMap, ShadowMapSpot >( m_renderTarget.getResources()
+			? makeUniqueDerived< ShadowMap, ShadowMapSpot >( m_renderTarget.getResources()
 				, m_device
 				, *m_renderTarget.getScene()
 				, progress )
 			: nullptr ) }
 #endif
 		, m_voxelizer{ ( ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled ) && m_device.hasGeometryShader() )
-			? castor::makeUnique< Voxelizer >( m_renderTarget.getResources()
+			? makeUnique< Voxelizer >( m_renderTarget.getResources()
 				, m_device
 				, progress
 				, getName()
@@ -405,19 +405,19 @@ namespace castor3d
 				, previousPasses )
 			: nullptr ) }
 		, m_rsmResult{ ( m_shadowBuffer
-			? castor::makeUnique< Texture >( m_device
+			? makeUnique< Texture >( m_device
 				, m_renderTarget.getResources()
 				, getName() + "RSMResult"
 				, TextureCreateInfo{ ImageCreateFlags::eNone
 					, colour.getExtent(), 1u, 1u
-					, castor::PixelFormat::eR16G16B16A16_SFLOAT
+					, PixelFormat::eR16G16B16A16_SFLOAT
 					, ( ImageUsageFlags::eColorAttachment
 						| ImageUsageFlags::eSampled
 						| ImageUsageFlags::eTransferDst ) }
 				, TextureSamplerInfo{} )
 			: nullptr ) }
 		, m_lpvResult{ ( m_shadowBuffer
-			? castor::makeUnique< LightVolumePassResult >( m_renderTarget.getResources()
+			? makeUnique< LightVolumePassResult >( m_renderTarget.getResources()
 				, m_device
 				, getName()
 				, m_renderTarget.getScene()->getLpvGridSize() )
@@ -438,7 +438,7 @@ namespace castor3d
 			, ( m_voxelizer ? &m_voxelizer->getSecondaryBounce() : nullptr ) }
 		, m_prepass{ *this
 			, m_device
-			, doCreateRenderPasses( TechniquePassEvent::eBeforeDepth, &m_renderTarget.createVertexTransformPass( m_graph ), castor::move( previousPasses ) )
+			, doCreateRenderPasses( TechniquePassEvent::eBeforeDepth, &m_renderTarget.createVertexTransformPass( m_graph ), c3d::move( previousPasses ) )
 			, progress
 			, visbuffer }
 		, m_lastDepthPass{ &m_prepass.getLastPass() }
@@ -470,14 +470,14 @@ namespace castor3d
 		, m_lastTransparentPass{ &m_transparent.getLastPass() }
 		, m_clearLpvGraph{ ( m_shadowBuffer
 			? rendtech::doCreateClearLpvCommands( m_renderTarget.getResources(), progress, getName(), *m_lpvResult, m_llpvResult )
-			: crg::FrameGraph{ m_renderTarget.getResources().getHandler(), castor::toUtf8( getName() ) + "/ClearLpv" } ) }
+			: crg::FrameGraph{ m_renderTarget.getResources().getHandler(), toUtf8( getName() ) + "/ClearLpv" } ) }
 		, m_clearLpvRunnable{ ( m_shadowBuffer
 			? m_clearLpvGraph.compile( m_device.makeContext() )
 			: nullptr ) }
 	{
 		if ( m_clearLpvRunnable )
 		{
-			getEngine()->registerTimer( castor::makeString( m_clearLpvRunnable->getName() )
+			getEngine()->registerTimer( makeString( m_clearLpvRunnable->getName() )
 				, m_clearLpvRunnable->getTimer() );
 		}
 
@@ -506,17 +506,17 @@ namespace castor3d
 #if !C3D_DebugDisableShadowMaps
 		if ( m_directionalShadowMap )
 		{
-			m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( castor::ref( *m_directionalShadowMap ), UInt32Array{} );
+			m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( c3d::ref( *m_directionalShadowMap ), UInt32Array{} );
 		}
 
 		if ( m_spotShadowMap )
 		{
-			m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( castor::ref( *m_spotShadowMap ), UInt32Array{} );
+			m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( c3d::ref( *m_spotShadowMap ), UInt32Array{} );
 		}
 
 		if ( m_pointShadowMap )
 		{
-			m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( castor::ref( *m_pointShadowMap ), UInt32Array{} );
+			m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( c3d::ref( *m_pointShadowMap ), UInt32Array{} );
 		}
 
 		doInitialiseRsm();
@@ -528,7 +528,7 @@ namespace castor3d
 	{
 		if ( m_clearLpvRunnable )
 		{
-			getEngine()->unregisterTimer( castor::makeString( m_clearLpvRunnable->getName() )
+			getEngine()->unregisterTimer( makeString( m_clearLpvRunnable->getName() )
 				, m_clearLpvRunnable->getTimer() );
 		}
 
@@ -872,7 +872,7 @@ namespace castor3d
 				, *this
 				, m_renderPasses
 				, m_renderTarget.getResources()
-				, castor::move( result ) );
+				, c3d::move( result ) );
 		}
 
 		return result;
@@ -891,7 +891,7 @@ namespace castor3d
 		auto & graph = m_graph.createPassGroup( "Background" );
 		graph.addGroupOutput( getTargetResult().front() );
 		graph.addGroupOutput( getTargetResult().back() );
-		auto result = castor::makeUnique< BackgroundRenderer >( graph
+		auto result = makeUnique< BackgroundRenderer >( graph
 			, previousPasses
 			, m_device
 			, progress
@@ -916,7 +916,7 @@ namespace castor3d
 		if ( needRsm && !m_reflectiveShadowMaps )
 		{
 			m_rsmResult->create();
-			m_reflectiveShadowMaps = castor::makeUnique< ReflectiveShadowMaps >( getOwner()->getGraphResourceHandler()
+			m_reflectiveShadowMaps = makeUnique< ReflectiveShadowMaps >( getOwner()->getGraphResourceHandler()
 				, scene
 				, m_device
 				, getCameraUbo()
@@ -966,7 +966,7 @@ namespace castor3d
 
 			if ( needLpv && !m_lightPropagationVolumes[i] )
 			{
-				m_lightPropagationVolumes[i] = castor::makeUnique< LightPropagationVolumes >( getResources()
+				m_lightPropagationVolumes[i] = makeUnique< LightPropagationVolumes >( getResources()
 					, scene
 					, LightType( i )
 					, m_device
@@ -978,7 +978,7 @@ namespace castor3d
 
 			if ( needLpvG && !m_lightPropagationVolumesG[i] )
 			{
-				m_lightPropagationVolumesG[i] = castor::makeUnique< LightPropagationVolumesG >( getResources()
+				m_lightPropagationVolumesG[i] = makeUnique< LightPropagationVolumesG >( getResources()
 					, scene
 					, LightType( i )
 					, m_device
@@ -990,7 +990,7 @@ namespace castor3d
 
 			if ( needLLpv && !m_layeredLightPropagationVolumes[i] )
 			{
-				m_layeredLightPropagationVolumes[i] = castor::makeUnique< LayeredLightPropagationVolumes >( getResources()
+				m_layeredLightPropagationVolumes[i] = makeUnique< LayeredLightPropagationVolumes >( getResources()
 					, scene
 					, LightType( i )
 					, m_device
@@ -1002,7 +1002,7 @@ namespace castor3d
 
 			if ( needLLpvG && !m_layeredLightPropagationVolumesG[i] )
 			{
-				m_layeredLightPropagationVolumesG[i] = castor::makeUnique< LayeredLightPropagationVolumesG >( getResources()
+				m_layeredLightPropagationVolumesG[i] = makeUnique< LayeredLightPropagationVolumesG >( getResources()
 					, scene
 					, LightType( i )
 					, m_device

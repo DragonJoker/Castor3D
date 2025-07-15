@@ -22,12 +22,12 @@ namespace atmosphere_scattering
 {
 	struct CameraConfig
 	{
-		castor::Matrix4x4f camInvViewProj;
-		castor::Matrix4x4f objInvViewProj;
-		castor::Point3f position;
+		c3d::Matrix4x4f camInvViewProj;
+		c3d::Matrix4x4f objInvViewProj;
+		c3d::Point3f position;
 		float lightDotCameraFront;
 		int32_t isLightInFront;
-		castor::Point3i pad;
+		c3d::Point3i pad;
 	};
 
 	struct CameraData
@@ -62,13 +62,13 @@ namespace atmosphere_scattering
 		using Configuration = CameraConfig;
 
 	public:
-		explicit CameraUbo( castor3d::RenderDevice const & device
+		explicit CameraUbo( c3d::RenderDevice const & device
 			, bool & dirty );
 		~CameraUbo();
-		void cpuUpdate( castor3d::Camera const & camera
+		void cpuUpdate( c3d::Camera const & camera
 			, bool isSafeBanded
-			, castor::Point3f const & sunDirection
-			, castor::Vector3f const & planetPosition );
+			, c3d::Point3f const & sunDirection
+			, c3d::Vector3f const & planetPosition );
 
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const
@@ -88,25 +88,25 @@ namespace atmosphere_scattering
 			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
 		}
 
-		castor3d::UniformBufferOffsetT< Configuration > const & getUbo()const
+		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
 			return m_ubo;
 		}
 
-		castor3d::UniformBufferOffsetT< Configuration > & getUbo()
+		c3d::UniformBufferOffsetT< Configuration > & getUbo()
 		{
 			return m_ubo;
 		}
 
 	public:
-		static const castor::MbString Buffer;
-		static const castor::MbString Data;
+		static const c3d::MbString Buffer;
+		static const c3d::MbString Data;
 
 	private:
-		castor3d::RenderDevice const & m_device;
-		castor3d::UniformBufferOffsetT< Configuration > m_ubo;
-		castor::GroupChangeTracked< castor::Point3f > m_position;
-		castor::GroupChangeTracked< castor::Quaternion > m_orientation;
+		c3d::RenderDevice const & m_device;
+		c3d::UniformBufferOffsetT< Configuration > m_ubo;
+		c3d::GroupChangeTracked< c3d::Point3f > m_position;
+		c3d::GroupChangeTracked< c3d::Quaternion > m_orientation;
 	};
 }
 

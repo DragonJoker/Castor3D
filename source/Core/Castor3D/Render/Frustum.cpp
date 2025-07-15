@@ -6,18 +6,18 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
-CU_ImplementSmartPtr( castor3d, Frustum )
+CU_ImplementSmartPtr( c3d, Frustum )
 
-namespace castor3d
+namespace c3d
 {
 	namespace rendfrust
 	{
 		static bool constexpr C3D_DisableFrustumCulling = false;
 
-		static void updatePoints( castor::Matrix4x4f const & viewProj
-			, castor::Array< InterleavedVertex, 8u > & points )
+		static void updatePoints( Matrix4x4f const & viewProj
+			, Array< InterleavedVertex, 8u > & points )
 		{
-			castor::Array< castor::Point3f, 8u > corners;
+			Array< Point3f, 8u > corners;
 			auto constexpr neg1 = -1.0f;
 			auto constexpr pos1 = +1.0f;
 			corners[size_t( Corner::eFarLeftBottom )] = { neg1, neg1, pos1 };
@@ -47,31 +47,31 @@ namespace castor3d
 	{
 	}
 
-	void Frustum::update( castor::Matrix4x4f const & view )
+	void Frustum::update( Matrix4x4f const & view )
 	{
 		update( m_viewport->getProjection(), view );
 	}
 
-	void Frustum::update( castor::Matrix4x4f const & projection
-		, castor::Matrix4x4f const & view )
+	void Frustum::update( Matrix4x4f const & projection
+		, Matrix4x4f const & view )
 	{
 		if constexpr ( !rendfrust::C3D_DisableFrustumCulling )
 		{
 			auto const vp = projection * view;
-			castor::Array< castor::Point4f, size_t( FrustumPlane::eCount ) > points;
+			Array< Point4f, size_t( FrustumPlane::eCount ) > points;
 
-			const castor::Point4f x{ vp[0][0], vp[1][0], vp[2][0], vp[3][0] };
-			const castor::Point4f y{ vp[0][1], vp[1][1], vp[2][1], vp[3][1] };
-			const castor::Point4f z{ vp[0][2], vp[1][2], vp[2][2], vp[3][2] };
-			const castor::Point4f w{ vp[0][3], vp[1][3], vp[2][3], vp[3][3] };
+			const Point4f x{ vp[0][0], vp[1][0], vp[2][0], vp[3][0] };
+			const Point4f y{ vp[0][1], vp[1][1], vp[2][1], vp[3][1] };
+			const Point4f z{ vp[0][2], vp[1][2], vp[2][2], vp[3][2] };
+			const Point4f w{ vp[0][3], vp[1][3], vp[2][3], vp[3][3] };
 			points[size_t( FrustumPlane::eNear )] = z;
 			points[size_t( FrustumPlane::eFar )] = w - z;
 			points[size_t( FrustumPlane::eLeft )] = w + x;
 			points[size_t( FrustumPlane::eRight )] = w - x;
 			points[size_t( FrustumPlane::eTop )] = w - y;
 			points[size_t( FrustumPlane::eBottom )] = w + y;
-			castor::Point3f min{ points[0] };
-			castor::Point3f max{ points[0] };
+			Point3f min{ points[0] };
+			Point3f max{ points[0] };
 
 			for ( auto & point : points )
 			{
@@ -103,19 +103,19 @@ namespace castor3d
 			}
 
 			m_boundingBox.load( min, max );
-			m_planes[size_t( FrustumPlane::eNear )].set( castor::Point3f{ points[size_t( FrustumPlane::eNear )] }, points[size_t( FrustumPlane::eNear )][3] );
-			m_planes[size_t( FrustumPlane::eFar )].set( castor::Point3f{ points[size_t( FrustumPlane::eFar )] }, points[size_t( FrustumPlane::eFar )][3] );
-			m_planes[size_t( FrustumPlane::eLeft )].set( castor::Point3f{ points[size_t( FrustumPlane::eLeft )] }, points[size_t( FrustumPlane::eLeft )][3] );
-			m_planes[size_t( FrustumPlane::eRight )].set( castor::Point3f{ points[size_t( FrustumPlane::eRight )] }, points[size_t( FrustumPlane::eRight )][3] );
-			m_planes[size_t( FrustumPlane::eTop )].set( castor::Point3f{ points[size_t( FrustumPlane::eTop )] }, points[size_t( FrustumPlane::eTop )][3] );
-			m_planes[size_t( FrustumPlane::eBottom )].set( castor::Point3f{ points[size_t( FrustumPlane::eBottom )] }, points[size_t( FrustumPlane::eBottom )][3] );
+			m_planes[size_t( FrustumPlane::eNear )].set( Point3f{ points[size_t( FrustumPlane::eNear )] }, points[size_t( FrustumPlane::eNear )][3] );
+			m_planes[size_t( FrustumPlane::eFar )].set( Point3f{ points[size_t( FrustumPlane::eFar )] }, points[size_t( FrustumPlane::eFar )][3] );
+			m_planes[size_t( FrustumPlane::eLeft )].set( Point3f{ points[size_t( FrustumPlane::eLeft )] }, points[size_t( FrustumPlane::eLeft )][3] );
+			m_planes[size_t( FrustumPlane::eRight )].set( Point3f{ points[size_t( FrustumPlane::eRight )] }, points[size_t( FrustumPlane::eRight )][3] );
+			m_planes[size_t( FrustumPlane::eTop )].set( Point3f{ points[size_t( FrustumPlane::eTop )] }, points[size_t( FrustumPlane::eTop )][3] );
+			m_planes[size_t( FrustumPlane::eBottom )].set( Point3f{ points[size_t( FrustumPlane::eBottom )] }, points[size_t( FrustumPlane::eBottom )][3] );
 
 			rendfrust::updatePoints( vp, m_points );
 		}
 	}
 
-	bool Frustum::isVisible( castor::BoundingBox const & box
-		, castor::Matrix4x4f const & transformations )const
+	bool Frustum::isVisible( BoundingBox const & box
+		, Matrix4x4f const & transformations )const
 	{
 		if constexpr ( rendfrust::C3D_DisableFrustumCulling )
 		{
@@ -127,16 +127,16 @@ namespace castor3d
 			auto aabb = box.getAxisAligned( transformations );
 			return std::all_of( m_planes.begin()
 				, m_planes.end()
-				, [&aabb]( castor::PlaneEquation const & plane )
+				, [&aabb]( PlaneEquation const & plane )
 				{
 						return plane.distance( aabb.getPositiveVertex( plane.getNormal() ) ) >= 0;
 				} );
 		}
 	}
 
-	bool Frustum::isVisible( castor::BoundingSphere const & sphere
-		, castor::Matrix4x4f const & transformations
-		, castor::Point3f const & scale)const
+	bool Frustum::isVisible( BoundingSphere const & sphere
+		, Matrix4x4f const & transformations
+		, Point3f const & scale)const
 	{
 		if constexpr ( rendfrust::C3D_DisableFrustumCulling )
 		{
@@ -146,18 +146,18 @@ namespace castor3d
 		{
 			//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
 			auto maxScale = std::max( scale[0], std::max( scale[1], scale[2] ) );
-			castor::Point3f center = transformations * sphere.getCenter();
+			Point3f center = transformations * sphere.getCenter();
 			auto radius = sphere.getRadius() * maxScale;
 			return std::all_of( m_planes.begin()
 				, m_planes.end()
-				, [&center, &radius]( castor::PlaneEquation const & plane )
+				, [&center, &radius]( PlaneEquation const & plane )
 				{
 						return plane.distance( center ) >= -radius;
 				} );
 		}
 	}
 
-	bool Frustum::isVisible( castor::Point3f const & point )const
+	bool Frustum::isVisible( Point3f const & point )const
 	{
 		if constexpr ( rendfrust::C3D_DisableFrustumCulling )
 		{
@@ -168,7 +168,7 @@ namespace castor3d
 			//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
 			return std::all_of( m_planes.begin()
 				, m_planes.end()
-				, [&point]( castor::PlaneEquation const & plane )
+				, [&point]( PlaneEquation const & plane )
 				{
 						return plane.distance( point ) >= 0;
 				} );

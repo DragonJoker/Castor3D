@@ -38,7 +38,7 @@
 
 #include <limits>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -63,7 +63,7 @@ namespace castor3d
 					, device
 					, cuT( "c3d.clusters_mask" )
 					, {}
-					, castor::move( targetDepth )
+					, c3d::move( targetDepth )
 					, renderPassDesc
 					, { false, ssaoConfig } }
 			{
@@ -170,7 +170,7 @@ namespace castor3d
 					, RenderPipeline::eBuffers
 					, enableTextures };
 
-				auto index = uint32_t( castor3d::GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
+				auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 				C3D_Clusters( writer
 					, index++
 					, RenderPipeline::eBuffers
@@ -243,7 +243,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto res = castor::make_unique< clsmsk::NodesPass >( &technique
+				auto res = makeRawUnique< clsmsk::NodesPass >( &technique
 					, framePass
 					, context
 					, runnableGraph
@@ -263,7 +263,7 @@ namespace castor3d
 						.componentModeFlags( ComponentModeFlag::eOpacity
 							| ComponentModeFlag::eGeometry ) );
 				nodesPass = res.get();
-				nodesPass->getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				nodesPass->getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );

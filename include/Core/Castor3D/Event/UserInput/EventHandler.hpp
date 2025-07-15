@@ -17,40 +17,40 @@ See LICENSE file in root folder
 #include <mutex>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class EventHandler
-		: public castor::Named
+		: public Named
 	{
 	protected:
-		using EventHandlerFunction = castor::Function< void() >;
-		using EventQueue = castor::Deque< castor::Pair< UserInputEventSPtr, EventHandlerFunction > >;
+		using EventHandlerFunction = Function< void() >;
+		using EventQueue = Deque< Pair< UserInputEventSPtr, EventHandlerFunction > >;
 
 	public:
 		//!\~english	Catcher definition for mouse events.
 		//!\~french		Définition d'une fonction de traitement d'évènement de souris.
-		using ClientMouseFunction = castor::Function< void( MouseEvent const & ) >;
+		using ClientMouseFunction = Function< void( MouseEvent const & ) >;
 		//!\~english	Catcher definition for keyboard events.
 		//!\~french		Définition d'une fonction de traitement d'évènement de clavier.
-		using ClientKeyboardFunction = castor::Function< void( KeyboardEvent const & ) >;
+		using ClientKeyboardFunction = Function< void( KeyboardEvent const & ) >;
 		//!\~english	Catcher definition for handler events.
 		//!\~french		Définition d'une fonction de traitement d'évènement de gestionnaire.
-		using ClientHandlerFunction = castor::Function< void( HandlerEvent const & ) >;
+		using ClientHandlerFunction = Function< void( HandlerEvent const & ) >;
 		//!\~english	Signal function when handler is enabled/disabled.
 		//!\~french		Fonction de signal d'activation/désactivation du gestionnaire.
-		using EnableFunction = castor::Function< void( bool ) >;
+		using EnableFunction = Function< void( bool ) >;
 		//!\~english	Mouse event signal definition.
 		//!\~french		Définition d'un signal d'évènement de souris.
-		using OnClientMouseEvent = castor::SignalT< ClientMouseFunction >;
+		using OnClientMouseEvent = SignalT< ClientMouseFunction >;
 		//!\~english	Keyboard event signal definition.
 		//!\~french		Définition d'un signal d'évènement de clavier.
-		using OnClientKeyboardEvent = castor::SignalT< ClientKeyboardFunction >;
+		using OnClientKeyboardEvent = SignalT< ClientKeyboardFunction >;
 		//!\~english	Handler event signal definition.
 		//!\~french		Définition d'un signal d'évènement de gestionnaire.
-		using OnClientHandlerEvent = castor::SignalT< ClientHandlerFunction >;
+		using OnClientHandlerEvent = SignalT< ClientHandlerFunction >;
 		//!\~english	Signal when handler is enabled/disabled.
 		//!\~french		Signal d'activation/désactivation du gestionnaire.
-		using OnEnable = castor::SignalT< EnableFunction >;
+		using OnEnable = SignalT< EnableFunction >;
 		//!\~english	Mouse event signal connection definition.
 		//!\~french		Définition d'une connexion au signal d'évènement de souris.
 		using OnClientMouseEventConnection = OnClientMouseEvent::connection;
@@ -77,9 +77,9 @@ namespace castor3d
 		*\param[in]	name				Le nom du gestionnaire.
 		*\param[in]	catchMouseEvents	Dit si le gestionnaire d'évènements récupère les évènements souris.
 		*/
-		explicit EventHandler( castor::String const & name
+		explicit EventHandler( String const & name
 			, bool catchMouseEvents )
-			: castor::Named{ name }
+			: Named{ name }
 			, m_catchMouseEvents{ catchMouseEvents }
 		{
 		}
@@ -91,7 +91,7 @@ namespace castor3d
 		 */
 		virtual ~EventHandler()noexcept
 		{
-			auto lock( castor::makeUniqueLock( m_mutex ) );
+			auto lock( makeUniqueLock( m_mutex ) );
 			m_queue.clear();
 		}
 		/**
@@ -149,9 +149,9 @@ namespace castor3d
 		 */
 		void pushEvent( MouseEvent const & event )
 		{
-			auto myEvent = castor::make_shared< MouseEvent >( event );
-			using LockType = castor::UniqueLock< castor::Mutex >;
-			LockType lock{ castor::makeUniqueLock( m_mutex ) };
+			auto myEvent = makeShared< MouseEvent >( event );
+			using LockType = UniqueLock< Mutex >;
+			LockType lock{ makeUniqueLock( m_mutex ) };
 			m_queue.emplace_back( myEvent
 				, [this, myEvent]()
 				{
@@ -171,7 +171,7 @@ namespace castor3d
 		void connect( MouseEventType event
 			, ClientMouseFunction function )
 		{
-			m_mouseSlotsConnections[size_t( event )].push_back( m_mouseSlots[size_t( event )].connect( castor::move( function ) ) );
+			m_mouseSlotsConnections[size_t( event )].push_back( m_mouseSlots[size_t( event )].connect( c3d::move( function ) ) );
 		}
 		/**
 		 *\~english
@@ -207,9 +207,9 @@ namespace castor3d
 		 */
 		void pushEvent( KeyboardEvent const & event )
 		{
-			auto myEvent = castor::make_shared< KeyboardEvent >( event );
-			using LockType = castor::UniqueLock< castor::Mutex >;
-			LockType lock{ castor::makeUniqueLock( m_mutex ) };
+			auto myEvent = makeShared< KeyboardEvent >( event );
+			using LockType = UniqueLock< Mutex >;
+			LockType lock{ makeUniqueLock( m_mutex ) };
 			m_queue.emplace_back( myEvent
 				, [this, myEvent]()
 				{
@@ -229,7 +229,7 @@ namespace castor3d
 		void connect( KeyboardEventType event
 			, ClientKeyboardFunction function )
 		{
-			m_keyboardSlotsConnections[size_t( event )].push_back( m_keyboardSlots[size_t( event )].connect( castor::move( function ) ) );
+			m_keyboardSlotsConnections[size_t( event )].push_back( m_keyboardSlots[size_t( event )].connect( c3d::move( function ) ) );
 		}
 		/**
 		 *\~english
@@ -266,9 +266,9 @@ namespace castor3d
 		 */
 		void pushEvent( HandlerEvent const & event )
 		{
-			auto myEvent = castor::make_shared< HandlerEvent >( event );
-			using LockType = castor::UniqueLock< castor::Mutex >;
-			LockType lock{ castor::makeUniqueLock( m_mutex ) };
+			auto myEvent = makeShared< HandlerEvent >( event );
+			using LockType = UniqueLock< Mutex >;
+			LockType lock{ makeUniqueLock( m_mutex ) };
 			m_queue.emplace_back( myEvent
 				, [this, myEvent]()
 				{
@@ -287,7 +287,7 @@ namespace castor3d
 		 */
 		void connect( HandlerEventType event, ClientHandlerFunction function )
 		{
-			m_handlerSlotsConnections[size_t( event )].push_back( m_handlerSlots[size_t( event )].connect( castor::move( function ) ) );
+			m_handlerSlotsConnections[size_t( event )].push_back( m_handlerSlots[size_t( event )].connect( c3d::move( function ) ) );
 		}
 
 		//@}
@@ -344,9 +344,9 @@ namespace castor3d
 		*/
 		EventQueue doSwapQueue()
 		{
-			auto lock( castor::makeUniqueLock( m_mutex ) );
+			auto lock( makeUniqueLock( m_mutex ) );
 			EventQueue queue;
-			castor::swap( queue, m_queue );
+			c3d::swap( queue, m_queue );
 			return queue;
 		}
 		/**
@@ -401,22 +401,22 @@ namespace castor3d
 	protected:
 		//!\~english	The mouse events slots.
 		//!\~french		Les slots d'évènements souris.
-		castor::Array< OnClientMouseEvent, size_t( MouseEventType::eCount ) > m_mouseSlots;
+		Array< OnClientMouseEvent, size_t( MouseEventType::eCount ) > m_mouseSlots;
 		//!\~english	The mouse events slots connections.
 		//!\~french		Les connexions aux slots d'évènements souris.
-		castor::Array< castor::Vector< OnClientMouseEventConnection >, size_t( MouseEventType::eCount ) > m_mouseSlotsConnections;
+		Array< Vector< OnClientMouseEventConnection >, size_t( MouseEventType::eCount ) > m_mouseSlotsConnections;
 		//!\~english	The keyboard events slots.
 		//!\~french		Les slots d'évènements clavier.
-		castor::Array< OnClientKeyboardEvent, size_t( KeyboardEventType::eCount ) > m_keyboardSlots;
+		Array< OnClientKeyboardEvent, size_t( KeyboardEventType::eCount ) > m_keyboardSlots;
 		//!\~english	The keyboard events slots connections.
 		//!\~french		Les connexions aux slots d'évènements de clavier.
-		castor::Array< castor::Vector< OnClientKeyboardEventConnection >, size_t( KeyboardEventType::eCount ) > m_keyboardSlotsConnections;
+		Array< Vector< OnClientKeyboardEventConnection >, size_t( KeyboardEventType::eCount ) > m_keyboardSlotsConnections;
 		//!\~english	The handler events slots.
 		//!\~french		Les slots d'évènements de gestionnaire.
-		castor::Array< OnClientHandlerEvent, size_t( HandlerEventType::eCount ) > m_handlerSlots;
+		Array< OnClientHandlerEvent, size_t( HandlerEventType::eCount ) > m_handlerSlots;
 		//!\~english	The handler events slots connections.
 		//!\~french		Les connexions aux slots d'évènements de gestionnaire.
-		castor::Array< castor::Vector< OnClientHandlerEventConnection >, size_t( HandlerEventType::eCount ) > m_handlerSlotsConnections;
+		Array< Vector< OnClientHandlerEventConnection >, size_t( HandlerEventType::eCount ) > m_handlerSlotsConnections;
 
 	private:
 		//!\~english	Activation status.
@@ -424,7 +424,7 @@ namespace castor3d
 		bool m_enabled{ true };
 		//!\~english	The mutex used to protect the events queue.
 		//!\~french		Le mutex utilisà pour protàger la file d'évènements.
-		castor::Mutex m_mutex;
+		Mutex m_mutex;
 		//!\~english	The events queue.
 		//!\~french		La file d'évènements.
 		EventQueue m_queue;
@@ -459,22 +459,22 @@ namespace castor3d
 		using ClientHandlerFunction = EventHandler::ClientHandlerFunction;
 		//!\~english	Catcher definition for non client mouse events.
 		//!\~french		Définition d'une fonction de traitement d'évènement non client de souris.
-		using NonClientMouseFunction = castor::Function< void( DerivedPtr, MouseEvent const & ) >;
+		using NonClientMouseFunction = Function< void( DerivedPtr, MouseEvent const & ) >;
 		//!\~english	Catcher definition for non client keyboard events.
 		//!\~french		Définition d'une fonction de traitement d'évènement non client de clavier.
-		using NonClientKeyboardFunction = castor::Function< void( DerivedPtr, KeyboardEvent const & ) >;
+		using NonClientKeyboardFunction = Function< void( DerivedPtr, KeyboardEvent const & ) >;
 		//!\~english	Catcher definition for non client handler events.
 		//!\~french		Définition d'une fonction de traitement d'évènement non client de gestionnaire.
-		using NonClientHandlerFunction = castor::Function< void( DerivedPtr, HandlerEvent const & ) >;
+		using NonClientHandlerFunction = Function< void( DerivedPtr, HandlerEvent const & ) >;
 		//!\~english	Non client mouse event signal definition.
 		//!\~french		Définition d'un signal d'évènement non client de souris.
-		using OnNonClientMouseEvent = castor::SignalT< NonClientMouseFunction >;
+		using OnNonClientMouseEvent = SignalT< NonClientMouseFunction >;
 		//!\~english	Non client keyboard event signal definition.
 		//!\~french		Définition d'un signal d'évènement non client de clavier.
-		using OnNonClientKeyboardEvent = castor::SignalT< NonClientKeyboardFunction >;
+		using OnNonClientKeyboardEvent = SignalT< NonClientKeyboardFunction >;
 		//!\~english	Non client handler event signal definition.
 		//!\~french		Définition d'un signal d'évènement non client de gestionnaire.
-		using OnNonClientHandlerEvent = castor::SignalT< NonClientHandlerFunction >;
+		using OnNonClientHandlerEvent = SignalT< NonClientHandlerFunction >;
 		//!\~english	Non client mouse event signal connection definition.
 		//!\~french		Définition d'une connexion au signal d'évènement non client de souris.
 		using OnNonClientMouseEventConnection = typename OnNonClientMouseEvent::connection;
@@ -496,7 +496,7 @@ namespace castor3d
 		 *\param[in]	name				Le nom du gestionnaire.
 		 *\param[in]	catchMouseEvents	Dit si le gestionnaire d'évènements récupère les évènements souris.
 		 */
-		explicit NonClientEventHandler( castor::String const & name
+		explicit NonClientEventHandler( String const & name
 			, bool catchMouseEvents )
 			: EventHandler{ name, catchMouseEvents }
 		{
@@ -568,29 +568,29 @@ namespace castor3d
 	protected:
 		//!\~english	The non client mouse events slots.
 		//!\~french		Les slots d'évènements souris non clients.
-		castor::Array< OnNonClientMouseEvent, size_t( MouseEventType::eCount ) > m_ncMouseSlots;
+		Array< OnNonClientMouseEvent, size_t( MouseEventType::eCount ) > m_ncMouseSlots;
 		//!\~english	The non client mouse events slots.
 		//!\~french		Les slots d'évènements souris non clients.
-		castor::Array< castor::Vector< OnNonClientMouseEventConnection >, size_t( MouseEventType::eCount ) > m_ncMouseSlotsConnections;
+		Array< Vector< OnNonClientMouseEventConnection >, size_t( MouseEventType::eCount ) > m_ncMouseSlotsConnections;
 		//!\~english	The non client keyboard events slots.
 		//!\~french		Les slots d'évènements clavier non clients.
-		castor::Array< OnNonClientKeyboardEvent, size_t( KeyboardEventType::eCount ) > m_ncKeyboardSlots;
+		Array< OnNonClientKeyboardEvent, size_t( KeyboardEventType::eCount ) > m_ncKeyboardSlots;
 		//!\~english	The non client keyboard events slots.
 		//!\~french		Les slots d'évènements clavier non clients.
-		castor::Array< castor::Vector< OnNonClientKeyboardEventConnection >, size_t( KeyboardEventType::eCount ) > m_ncKeyboardSlotsConnections;
+		Array< Vector< OnNonClientKeyboardEventConnection >, size_t( KeyboardEventType::eCount ) > m_ncKeyboardSlotsConnections;
 		//!\~english	The non client handler events slots.
 		//!\~french		Les slots d'évènements de gestionnaire non clients.
-		castor::Array< OnNonClientHandlerEvent, size_t( HandlerEventType::eCount ) > m_ncHandlerSlots;
+		Array< OnNonClientHandlerEvent, size_t( HandlerEventType::eCount ) > m_ncHandlerSlots;
 		//!\~english	The non client handler events slots.
 		//!\~french		Les slots d'évènements de gestionnaire non clients.
-		castor::Array< castor::Vector< OnNonClientHandlerEventConnection >, size_t( HandlerEventType::eCount ) > m_ncHandlerSlotsConnections;
+		Array< Vector< OnNonClientHandlerEventConnection >, size_t( HandlerEventType::eCount ) > m_ncHandlerSlotsConnections;
 	};
 
 	class MouseEventHandler
 		: public EventHandler
 	{
 	public:
-		explicit MouseEventHandler( castor::String const & name )
+		explicit MouseEventHandler( String const & name )
 			: EventHandler{ name, true }
 		{
 		}

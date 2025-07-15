@@ -16,7 +16,7 @@ See LICENSE file in root folder
 
 #include <unordered_set>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	class ScatteringModel
 	{
@@ -37,7 +37,7 @@ namespace castor3d::shader
 			, LightSurface const & lightSurface
 			, sdw::Vec3 output );
 
-		static castor::StringView constexpr Name{ cuT( "default" ) };
+		static StringView constexpr Name{ cuT( "default" ) };
 		static ScatteringModelPtr create( sdw::ShaderWriter & writer );
 
 	protected:
@@ -59,7 +59,7 @@ namespace castor3d::shader
 			, bool hasBackgroundReflectionsSupport
 			, bool hasBackgroundRefractionSupport
 			, bool enableVolumetric
-			, castor::String prefix );
+			, String prefix );
 		C3D_API virtual ~LightingModel() = default;
 
 		LightingModelID getLightingModelId()const
@@ -288,11 +288,11 @@ namespace castor3d::shader
 		bool m_hasBackgroundRefractionSupport;
 		bool m_hasIblSupport;
 		bool m_enableVolumetric;
-		castor::String m_prefix;
-		castor::RawUniquePtr< sdw::Struct > m_type;
-		castor::RawUniquePtr< sdw::UInt > m_directionalCascadeIndex;
-		castor::RawUniquePtr< sdw::UInt > m_directionalCascadeCount;
-		castor::RawUniquePtr< sdw::Mat4 > m_directionalTransform;
+		String m_prefix;
+		RawUniquePtr< sdw::Struct > m_type;
+		RawUniquePtr< sdw::UInt > m_directionalCascadeIndex;
+		RawUniquePtr< sdw::UInt > m_directionalCascadeCount;
+		RawUniquePtr< sdw::Mat4 > m_directionalTransform;
 		sdw::Function< sdw::Void
 			, PDirectionalLight
 			, InBlendComponents

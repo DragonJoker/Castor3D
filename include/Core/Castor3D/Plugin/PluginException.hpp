@@ -8,10 +8,10 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Exception/Exception.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class PluginException
-		: public castor::Exception
+		: public Exception
 	{
 	public:
 		/**
@@ -30,7 +30,7 @@ namespace castor3d
 		 *\param[in]	function	La fonction
 		 *\param[in]	line		La ligne dans le fichier
 		 */
-		C3D_API PluginException( bool critical, castor::MbString const & description, char const * file, char const * function, uint32_t line );
+		C3D_API PluginException( bool critical, MbString const & description, char const * file, char const * function, uint32_t line );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -47,8 +47,8 @@ namespace castor3d
 		 *\param[in]	function	La fonction
 		 *\param[in]	line		La ligne dans le fichier
 		 */
-		C3D_API PluginException( bool critical, castor::WString const & description, char const * file, char const * function, uint32_t line )
-			: PluginException{ critical, castor::toUtf8( description ), file, function, line }
+		C3D_API PluginException( bool critical, WString const & description, char const * file, char const * function, uint32_t line )
+			: PluginException{ critical, toUtf8( description ), file, function, line }
 		{
 		}
 		/**
@@ -70,7 +70,7 @@ namespace castor3d
 }
 
 //! helper macro to ease the use of PluginException
-#define C3D_PluginException( description, critical ) throw castor3d::PluginException{ critical, description, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
+#define C3D_PluginException( description, critical ) throw PluginException{ critical, description, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 
 #endif
 

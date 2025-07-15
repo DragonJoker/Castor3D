@@ -11,29 +11,26 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::EmissiveComponent >
-		: public TextWriterT< castor3d::EmissiveComponent >
+	class TextWriter< EmissiveComponent >
+		: public TextWriterT< EmissiveComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::EmissiveComponent >{ tabs }
+			: TextWriterT< EmissiveComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::EmissiveComponent const & object
+		bool operator()( EmissiveComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSubOpt( file, cuT( "emissive_colour" ), object.getEmissiveColour(), castor3d::EmissiveComponent::DefaultColour )
-				&& writeOpt( file, cuT( "emissive_factor" ), object.getEmissiveFactor(), castor3d::EmissiveComponent::DefaultFactor );
+			return writeNamedSubOpt( file, cuT( "emissive_colour" ), object.getEmissiveColour(), EmissiveComponent::DefaultColour )
+				&& writeOpt( file, cuT( "emissive_factor" ), object.getEmissiveFactor(), EmissiveComponent::DefaultFactor );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace emscmp
@@ -61,7 +58,7 @@ namespace castor3d
 			else if ( !params.empty() )
 			{
 				auto & component = getPassComponent< EmissiveComponent >( *blockContext );
-				component.setEmissive( params[0]->get< castor::RgbColour >() );
+				component.setEmissive( params[0]->get< RgbColour >() );
 			}
 		}
 		CU_EndAttribute()
@@ -144,24 +141,24 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void EmissiveComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void EmissiveComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "emissive" )
 			, emscmp::parserPassEmissive
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "emissive_factor" )
 			, emscmp::parserPassEmissive
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "emissive_colour" )
 			, emscmp::parserPassEmissiveColour
-			, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+			, { makeParameter< ParameterType::eRgbColour >() } );
 	}
 
 	void EmissiveComponent::Plugin::zeroBuffer( Pass const & pass
@@ -182,7 +179,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const EmissiveComponent::TypeName = C3D_MakePassLightingComponentName( "emissive" );
+	String const EmissiveComponent::TypeName = C3D_MakePassLightingComponentName( "emissive" );
 
 	EmissiveComponent::EmissiveComponent( Pass & pass )
 		: BaseDataPassComponentT{ pass, TypeName, {}
@@ -199,17 +196,17 @@ namespace castor3d
 
 	PassComponentUPtr EmissiveComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< EmissiveComponent >( pass );
+		auto result = makeRawUnique< EmissiveComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool EmissiveComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool EmissiveComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< EmissiveComponent >{ tabs }( *this, file );
+		return TextWriter< EmissiveComponent >{ tabs }( *this, file );
 	}
 
 	void EmissiveComponent::doFillBuffer( PassBuffer & buffer )const

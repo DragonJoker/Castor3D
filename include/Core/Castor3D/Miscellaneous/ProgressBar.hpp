@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/RangedValue.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ProgressBar
 	{
@@ -25,19 +25,19 @@ namespace castor3d
 
 		C3D_API void initGlobalRange( uint32_t value );
 		C3D_API uint32_t incGlobalRange( uint32_t value );
-		C3D_API void stepGlobal( castor::String const & globalTitle );
-		C3D_API void setGlobalStep( castor::String const & globalTitle, uint32_t count );
+		C3D_API void stepGlobal( String const & globalTitle );
+		C3D_API void setGlobalStep( String const & globalTitle, uint32_t count );
 
-		C3D_API void initLocalRange( castor::String const & globalLabel
+		C3D_API void initLocalRange( String const & globalLabel
 			, uint32_t value );
-		C3D_API void stepLocal( castor::String const & label );
-		C3D_API void setLocalStep( castor::String const & label, uint32_t count );
+		C3D_API void stepLocal( String const & label );
+		C3D_API void setLocalStep( String const & label, uint32_t count );
 
-		C3D_API void setGlobalTitle( castor::String const & globalTitle );
-		C3D_API void stepGlobalStartLocal( castor::String const & globalLabel
+		C3D_API void setGlobalTitle( String const & globalTitle );
+		C3D_API void stepGlobalStartLocal( String const & globalLabel
 			, uint32_t rangeMax );
-		C3D_API void setLocal( castor::String const & globalLabel
-			, castor::String const & localLabel
+		C3D_API void setLocal( String const & globalLabel
+			, String const & localLabel
 			, uint32_t rangeMax
 			, uint32_t value );
 
@@ -54,8 +54,8 @@ namespace castor3d
 	private:
 		struct ProgressData
 		{
-			castor::String title{};
-			castor::String label{};
+			String title{};
+			String label{};
 			int32_t value{};
 			int32_t rangeMax{};
 		};
@@ -64,16 +64,16 @@ namespace castor3d
 		{
 			void update( ProgressCtrlRPtr progress );
 			void initRange( int32_t mod );
-			void setTitle( castor::StringView value );
-			void setLabel( castor::StringView value );
-			void step( castor::StringView label );
+			void setTitle( String value );
+			void setLabel( String value );
+			void step( String label );
 			void step();
-			void setStep( castor::StringView label, int32_t value );
+			void setStep( String label, int32_t value );
 			void setStep( int32_t value );
 			void setRange( int32_t max );
 			int32_t incRange( int32_t mod );
 			int32_t getIndex()const;
-			void set( castor::StringView label
+			void set( String label
 				, int32_t rangeMax
 				, int32_t value );
 
@@ -90,7 +90,7 @@ namespace castor3d
 		FrameListenerRPtr m_listener{};
 		ProgressLabel m_global{};
 		ProgressLabel m_local{};
-		castor::Mutex m_mutex{};
+		Mutex m_mutex{};
 	};
 }
 

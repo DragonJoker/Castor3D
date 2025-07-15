@@ -3,23 +3,23 @@
 #include "Castor3D/Animation/Animable.hpp"
 #include "Castor3D/Animation/Animation.hpp"
 
-CU_ImplementSmartPtr( castor3d, AnimationInstance )
+CU_ImplementSmartPtr( c3d, AnimationInstance )
 
-namespace castor3d
+namespace c3d
 {
 	AnimationInstance::AnimationInstance( AnimatedObject & object
 		, Animation & animation
 		, bool looped )
-		: castor::OwnedBy< AnimatedObject >{ object }
+		: OwnedBy< AnimatedObject >{ object }
 		, m_animation{ &animation }
 		, m_looped{ looped }
 		, m_totalTime{ m_animation->getLength() }
 	{
 	}
 
-	void AnimationInstance::update( castor::Milliseconds const & elapsed )
+	void AnimationInstance::update( Milliseconds const & elapsed )
 	{
-		if ( m_totalTime == castor::Milliseconds{ std::numeric_limits< int64_t >::max() } )
+		if ( m_totalTime == Milliseconds{ std::numeric_limits< int64_t >::max() } )
 		{
 			m_totalTime = m_animation->getLength();
 		}
@@ -33,7 +33,7 @@ namespace castor3d
 		{
 			if ( m_state == AnimationState::ePlaying )
 			{
-				m_currentTime += castor::Milliseconds( int64_t( double( elapsed.count() ) * scale ) );
+				m_currentTime += Milliseconds( int64_t( double( elapsed.count() ) * scale ) );
 
 				if ( m_currentTime >= length )
 				{
@@ -97,7 +97,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimationInstance::setTotalLength( castor::Milliseconds const & time )
+	void AnimationInstance::setTotalLength( Milliseconds const & time )
 	{
 		m_totalTime = time;
 	}

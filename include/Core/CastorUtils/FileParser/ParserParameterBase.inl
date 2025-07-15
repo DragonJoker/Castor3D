@@ -5,7 +5,7 @@
 #include "CastorUtils/Graphics/Size.hpp"
 #include "CastorUtils/Math/Point.hpp"
 
-namespace castor
+namespace c3d
 {
 	//*************************************************************************
 
@@ -176,10 +176,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::String.
+	\remarks	Specialisation for c3d::String.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::String.
+	\remarks	Spécialisation pour c3d::String.
 	*/
 	template<>
 	struct ParserValueTyper< String >
@@ -189,10 +189,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::Path.
+	\remarks	Specialisation for c3d::Path.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::Path.
+	\remarks	Spécialisation pour c3d::Path.
 	*/
 	template<>
 	struct ParserValueTyper< Path >
@@ -202,10 +202,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::PixelFormat.
+	\remarks	Specialisation for c3d::PixelFormat.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::PixelFormat.
+	\remarks	Spécialisation pour c3d::PixelFormat.
 	*/
 	template<>
 	struct ParserValueTyper< PixelFormat >
@@ -215,10 +215,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::Point2i.
+	\remarks	Specialisation for c3d::Point2i.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::Point2i.
+	\remarks	Spécialisation pour c3d::Point2i.
 	*/
 	template<>
 	struct ParserValueTyper< Point2i >
@@ -228,10 +228,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::Point3i.
+	\remarks	Specialisation for c3d::Point3i.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::Point3i.
+	\remarks	Spécialisation pour c3d::Point3i.
 	*/
 	template<>
 	struct ParserValueTyper< Point3i >
@@ -241,10 +241,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::Point4i.
+	\remarks	Specialisation for c3d::Point4i.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::Point4i.
+	\remarks	Spécialisation pour c3d::Point4i.
 	*/
 	template<>
 	struct ParserValueTyper< Point4i >
@@ -254,10 +254,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::Point2ui.
+	\remarks	Specialisation for c3d::Point2ui.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::Point2ui.
+	\remarks	Spécialisation pour c3d::Point2ui.
 	*/
 	template<>
 	struct ParserValueTyper< Point2ui >
@@ -267,10 +267,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::Point3ui.
+	\remarks	Specialisation for c3d::Point3ui.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::Point3ui.
+	\remarks	Spécialisation pour c3d::Point3ui.
 	*/
 	template<>
 	struct ParserValueTyper< Point3ui >
@@ -280,10 +280,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::Point4ui.
+	\remarks	Specialisation for c3d::Point4ui.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::Point4ui.
+	\remarks	Spécialisation pour c3d::Point4ui.
 	*/
 	template<>
 	struct ParserValueTyper< Point4ui >
@@ -293,10 +293,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::Point2f.
+	\remarks	Specialisation for c3d::Point2f.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::Point2f.
+	\remarks	Spécialisation pour c3d::Point2f.
 	*/
 	template<>
 	struct ParserValueTyper< Point2f >
@@ -306,10 +306,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::Point3f.
+	\remarks	Specialisation for c3d::Point3f.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::Point3f.
+	\remarks	Spécialisation pour c3d::Point3f.
 	*/
 	template<>
 	struct ParserValueTyper< Point3f >
@@ -319,10 +319,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::Point4f.
+	\remarks	Specialisation for c3d::Point4f.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::Point4f.
+	\remarks	Spécialisation pour c3d::Point4f.
 	*/
 	template<>
 	struct ParserValueTyper< Point4f >
@@ -332,10 +332,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::Point2d.
+	\remarks	Specialisation for c3d::Point2d.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::Point2d.
+	\remarks	Spécialisation pour c3d::Point2d.
 	*/
 	template<>
 	struct ParserValueTyper< Point2d >
@@ -345,10 +345,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::Point3d.
+	\remarks	Specialisation for c3d::Point3d.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::Point3d.
+	\remarks	Spécialisation pour c3d::Point3d.
 	*/
 	template<>
 	struct ParserValueTyper< Point3d >
@@ -358,10 +358,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::Point4d.
+	\remarks	Specialisation for c3d::Point4d.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::Point4d.
+	\remarks	Spécialisation pour c3d::Point4d.
 	*/
 	template<>
 	struct ParserValueTyper< Point4d >
@@ -371,10 +371,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::Size.
+	\remarks	Specialisation for c3d::Size.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::Size.
+	\remarks	Spécialisation pour c3d::Size.
 	*/
 	template<>
 	struct ParserValueTyper< Size >
@@ -384,10 +384,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::Position.
+	\remarks	Specialisation for c3d::Position.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::Position.
+	\remarks	Spécialisation pour c3d::Position.
 	*/
 	template<>
 	struct ParserValueTyper< Position >
@@ -397,10 +397,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::Rectangle.
+	\remarks	Specialisation for c3d::Rectangle.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::Rectangle.
+	\remarks	Spécialisation pour c3d::Rectangle.
 	*/
 	template<>
 	struct ParserValueTyper< Rectangle >
@@ -410,10 +410,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::RgbColour.
+	\remarks	Specialisation for c3d::RgbColour.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::RgbColour.
+	\remarks	Spécialisation pour c3d::RgbColour.
 	*/
 	template<>
 	struct ParserValueTyper< RgbColour >
@@ -423,10 +423,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::RgbaColour.
+	\remarks	Specialisation for c3d::RgbaColour.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::RgbaColour.
+	\remarks	Spécialisation pour c3d::RgbaColour.
 	*/
 	template<>
 	struct ParserValueTyper< RgbaColour >
@@ -436,10 +436,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::HdrRgbColour.
+	\remarks	Specialisation for c3d::HdrRgbColour.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::HdrRgbColour.
+	\remarks	Spécialisation pour c3d::HdrRgbColour.
 	*/
 	template<>
 	struct ParserValueTyper< HdrRgbColour >
@@ -449,10 +449,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
-	\remarks	Specialisation for castor::HdrRgbaColour.
+	\remarks	Specialisation for c3d::HdrRgbaColour.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
-	\remarks	Spécialisation pour castor::HdrRgbaColour.
+	\remarks	Spécialisation pour c3d::HdrRgbaColour.
 	*/
 	template<>
 	struct ParserValueTyper< HdrRgbaColour >

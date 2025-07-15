@@ -14,7 +14,7 @@ namespace Uncharted2
 	Uncharted2Data::Uncharted2Data( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: StructInstance{ writer, castor::move( expr ), enabled }
+		: StructInstance{ writer, c3d::move( expr ), enabled }
 		, shoulderStrength{ getMember< sdw::Float >( "shoulderStrength" ) }
 		, linearStrength{ getMember< sdw::Float >( "linearStrength" ) }
 		, linearAngle{ getMember< sdw::Float >( "linearAngle" ) }
@@ -46,18 +46,18 @@ namespace Uncharted2
 		return result;
 	}
 
-	castor::RawUniquePtr< sdw::Struct > Uncharted2Data::declare( sdw::ShaderWriter & writer )
+	c3d::RawUniquePtr< sdw::Struct > Uncharted2Data::declare( sdw::ShaderWriter & writer )
 	{
-		return castor::make_unique< sdw::Struct >( writer
+		return c3d::makeRawUnique< sdw::Struct >( writer
 			, makeType( writer.getTypesCache() ) );
 	}
 
 	//*********************************************************************************************
 
-	const castor::String Uncharted2Ubo::Buffer = cuT( "Uncharted2" );
-	const castor::String Uncharted2Ubo::Data = cuT( "Uncharted2Data" );
+	const c3d::String Uncharted2Ubo::Buffer = cuT( "Uncharted2" );
+	const c3d::String Uncharted2Ubo::Data = cuT( "Uncharted2Data" );
 
-	Uncharted2Ubo::Uncharted2Ubo( castor3d::RenderDevice const & device )
+	Uncharted2Ubo::Uncharted2Ubo( c3d::RenderDevice const & device )
 		: m_device{ device }
 		, m_ubo{ device.uboPool->getBuffer< Configuration >( 0u ) }
 	{

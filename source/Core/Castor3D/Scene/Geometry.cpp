@@ -13,9 +13,9 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, Geometry )
+CU_ImplementSmartPtr( c3d, Geometry )
 
-namespace castor3d
+namespace c3d
 {
 	namespace object
 	{
@@ -32,7 +32,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				SceneNodeRPtr parent;
 
 				if ( name == Scene::ObjectRootNode )
@@ -78,7 +78,7 @@ namespace castor3d
 			{
 				if ( blockContext->geometry->getMesh() )
 				{
-					auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+					auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 					auto material = getEngine( *blockContext )->tryFindMaterial( name );
 
 					if ( material )
@@ -105,7 +105,7 @@ namespace castor3d
 		{
 			if ( blockContext->geometry )
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				auto scene = blockContext->geometry->getScene();
 				newBlockContext->geometry = blockContext;
 				newBlockContext->scene = blockContext->scene;
@@ -189,7 +189,7 @@ namespace castor3d
 
 			if ( blockContext->ownGeometry )
 			{
-				blockContext->scene->scene->addGeometry( castor::move( blockContext->ownGeometry ) );
+				blockContext->scene->scene->addGeometry( c3d::move( blockContext->ownGeometry ) );
 			}
 		}
 		CU_EndAttributePop()
@@ -206,7 +206,7 @@ namespace castor3d
 			}
 			else if ( blockContext->geometry->getMesh() )
 			{
-				if ( auto name = getPrefixedName( params[1]->get< castor::String >(), *blockContext );
+				if ( auto name = getPrefixedName( params[1]->get< String >(), *blockContext );
 					auto material = getEngine( *blockContext )->tryFindMaterial( name ) )
 				{
 					uint16_t index;
@@ -240,24 +240,24 @@ namespace castor3d
 		CU_EndAttributePop()
 	}
 
-	Geometry::Geometry( castor::String const & name
+	Geometry::Geometry( String const & name
 		, Scene & scene
 		, SceneNode & node
 		, MeshResPtr mesh )
 		: MovableObject{ name, scene, MovableType::eGeometry, node }
 		, m_mesh{ mesh }
 	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 		doUpdateMesh();
 	}
 	
-	Geometry::Geometry( castor::String const & name
+	Geometry::Geometry( String const & name
 		, Scene & scene
 		, MeshResPtr mesh )
 		: MovableObject{ name, scene, MovableType::eGeometry }
 		, m_mesh{ mesh }
 	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 		doUpdateMesh();
 	}
 
@@ -282,7 +282,7 @@ namespace castor3d
 	{
 		m_onMeshChanged = {};
 		m_mesh = mesh;
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 		doUpdateMesh();
 		doUpdateContainers();
 		bool hasEnvironmentMapping = std::any_of( mesh->begin()
@@ -305,7 +305,7 @@ namespace castor3d
 	{
 		if ( auto mesh = getMesh() )
 		{
-			auto lock( castor::makeUniqueLock( m_mutex ) );
+			auto lock( makeUniqueLock( m_mutex ) );
 
 			if ( submesh.getId() >= mesh->getSubmeshCount() )
 			{
@@ -387,7 +387,7 @@ namespace castor3d
 
 	MaterialObs Geometry::getMaterial( Submesh const & submesh )const
 	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 		MaterialObs result{};
 
 		if ( auto it = m_submeshesMaterials.find( &submesh );
@@ -422,7 +422,7 @@ namespace castor3d
 
 	void Geometry::updateContainers( SubmeshBoundingBoxList const & boxes )
 	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 		m_submeshesBoxes.clear();
 		m_submeshesSpheres.clear();
 
@@ -441,10 +441,10 @@ namespace castor3d
 		}
 	}
 
-	castor::BoundingBox const & Geometry::getBoundingBox( Submesh const & submesh )const
+	BoundingBox const & Geometry::getBoundingBox( Submesh const & submesh )const
 	{
-		static castor::BoundingBox const dummy;
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		static BoundingBox const dummy;
+		auto lock( makeUniqueLock( m_mutex ) );
 
 		if ( auto it = m_submeshesBoxes.find( &submesh );
 			it != m_submeshesBoxes.end() )
@@ -455,10 +455,10 @@ namespace castor3d
 		return dummy;
 	}
 
-	castor::BoundingSphere const & Geometry::getBoundingSphere( Submesh const & submesh )const
+	BoundingSphere const & Geometry::getBoundingSphere( Submesh const & submesh )const
 	{
-		static castor::BoundingSphere const dummy;
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		static BoundingSphere const dummy;
+		auto lock( makeUniqueLock( m_mutex ) );
 
 		if ( auto it = m_submeshesSpheres.find( &submesh );
 			it != m_submeshesSpheres.end() )
@@ -470,11 +470,11 @@ namespace castor3d
 	}
 
 	void Geometry::setBoundingBox( Submesh const & submesh
-		, castor::BoundingBox const & box )
+		, BoundingBox const & box )
 	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 		m_submeshesBoxes[&submesh] = box;
-		m_submeshesSpheres[&submesh] = castor::BoundingSphere{ box };
+		m_submeshesSpheres[&submesh] = BoundingSphere{ box };
 		doUpdateContainers();
 	}
 
@@ -521,7 +521,7 @@ namespace castor3d
 			: std::hash< uint32_t >{}( pass.getHash() );
 	}
 
-	castor::Matrix4x4f Geometry::getGlobalTransform()const
+	Matrix4x4f Geometry::getGlobalTransform()const
 	{
 		auto result = getParent()->getDerivedTransformationMatrix();
 
@@ -533,9 +533,8 @@ namespace castor3d
 		return result;
 	}
 
-	void Geometry::addParsers( castor::AttributeParsers & result )
+	void Geometry::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< ObjectContext > objectCtx{ result, CSCNSection::eObject, CSCNSection::eScene };
 		BlockParserContextT< ObjectContext > materialsCtx{ result, CSCNSection::eObjectMaterials, CSCNSection::eObject };
 
@@ -580,7 +579,7 @@ namespace castor3d
 		}
 		else
 		{
-			m_meshName = castor::cuEmptyString;
+			m_meshName = cuEmptyString;
 		}
 	}
 

@@ -4,10 +4,8 @@
 
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< SubsurfaceScattering >::TextWriter( String const & tabs )
 		: TextWriterT< SubsurfaceScattering >{ tabs }
 	{

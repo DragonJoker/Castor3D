@@ -6,18 +6,18 @@
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 
-CU_ImplementSmartPtr( castor3d, LightCategory )
-CU_ImplementSmartPtr( castor3d, LightInstance )
+CU_ImplementSmartPtr( c3d, LightCategory )
+CU_ImplementSmartPtr( c3d, LightInstance )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 	LightCategory::LightCategory( LightType lightType
 		, bool & dirty
-		, castor::Function< void() > markParentDirty )
+		, Function< void() > markParentDirty )
 		: m_dirty{ dirty }
-		, m_markParentDirty{ castor::move( markParentDirty ) }
+		, m_markParentDirty{ c3d::move( markParentDirty ) }
 		, m_lightType{ lightType }
 		, m_colour{ m_dirty, { 1.0, 1.0, 1.0 }, m_markParentDirty }
 	{
@@ -50,12 +50,12 @@ namespace castor3d
 
 	LightInstance::LightInstance( SceneNode & node
 		, LightCategory & category
-		, castor::Function< void() > markParentDirty
-		, castor::Function< bool() > isParentEnabled )
+		, Function< void() > markParentDirty
+		, Function< bool() > isParentEnabled )
 		: m_node{ &node }
 		, m_category{ category }
-		, m_markParentDirty{ castor::move( markParentDirty ) }
-		, m_isParentEnabled{ castor::move( isParentEnabled ) }
+		, m_markParentDirty{ c3d::move( markParentDirty ) }
+		, m_isParentEnabled{ c3d::move( isParentEnabled ) }
 	{
 	}
 
@@ -89,7 +89,7 @@ namespace castor3d
 
 	void LightInstance::fillLightBuffer( uint32_t index
 		, VkDeviceSize offset
-		, castor::Point4f * data )
+		, Point4f * data )
 	{
 		m_bufferIndex = index;
 		m_bufferOffset = offset;
@@ -101,7 +101,7 @@ namespace castor3d
 		doFillLightBuffer( data );
 	}
 
-	castor::String const & LightInstance::getName()const noexcept
+	String const & LightInstance::getName()const noexcept
 	{
 		return m_node->getName();
 	}

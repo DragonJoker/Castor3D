@@ -32,7 +32,7 @@ namespace GuiCommon
 		 *\param[in]	editable	Dit si les propriétés sont modifiables.
 		 *\param[in]	uniform		La variable cible.
 		 */
-		FrameVariableTreeItemProperty( castor3d::Engine * engine
+		FrameVariableTreeItemProperty( c3d::Engine * engine
 			, bool editable
 			, UniformValueBase & uniform );
 

@@ -19,7 +19,7 @@ namespace motion_blur
 	{
 		struct BlurContext
 		{
-			castor3d::RenderTargetRPtr renderTarget{};
+			c3d::RenderTargetRPtr renderTarget{};
 			Configuration data{};
 			bool fpsScale{};
 		};
@@ -30,7 +30,7 @@ namespace motion_blur
 			eRoot = CU_MakeSectionName( 'M', 'T', 'B', 'R' ),
 		};
 
-		static CU_ImplementAttributeParserNewBlock( parserMotionBlur, castor3d::TargetContext, BlurContext )
+		static CU_ImplementAttributeParserNewBlock( parserMotionBlur, c3d::TargetContext, BlurContext )
 		{
 			newBlockContext->renderTarget = blockContext->renderTarget;
 		}
@@ -77,7 +77,7 @@ namespace motion_blur
 
 		static CU_ImplementAttributeParserBlock( parserMotionBlurEnd, BlurContext )
 		{
-			castor3d::Parameters parameters;
+			c3d::Parameters parameters;
 			parameters.add( cuT( "vectorDivider" ), blockContext->data.vectorDivider );
 			parameters.add( cuT( "samplesCount" ), blockContext->data.samplesCount );
 			parameters.add( cuT( "fpsScale" ), blockContext->fpsScale );
@@ -89,12 +89,12 @@ namespace motion_blur
 		CU_EndAttributePop()
 	}
 
-	castor::AttributeParsers createParsers()
+	c3d::AttributeParsers createParsers()
 	{
-		castor::AttributeParsers result;
+		c3d::AttributeParsers result;
 
 		addParserT( result
-			, castor3d::CSCNSection::eRenderTarget
+			, c3d::CSCNSection::eRenderTarget
 			, parse::MotionBlurSection::eRoot
 			, cuT( "linear_motion_blur" )
 			, &parse::parserMotionBlur );
@@ -102,25 +102,25 @@ namespace motion_blur
 		addParserT( result
 			, parse::MotionBlurSection::eRoot
 			, cuT( "vectorDivider" )
-			, &parse::parserDivider, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, &parse::parserDivider, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::MotionBlurSection::eRoot
 			, cuT( "samples" )
-			, &parse::parserSamples, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, &parse::parserSamples, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 		addParserT( result
 			, parse::MotionBlurSection::eRoot
 			, cuT( "fpsScale" )
-			, &parse::parserFpsScale, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			, &parse::parserFpsScale, { c3d::makeParameter< c3d::ParameterType::eBool >() } );
 		addParserT( result
 			, parse::MotionBlurSection::eRoot
-			, castor3d::CSCNSection::eRenderTarget
+			, c3d::CSCNSection::eRenderTarget
 			, cuT( "}" )
 			, &parse::parserMotionBlurEnd );
 
 		return result;
 	}
 
-	castor::StrUInt32Map createSections()
+	c3d::StrUInt32Map createSections()
 	{
 		return
 		{

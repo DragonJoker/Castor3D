@@ -14,12 +14,12 @@ See LICENSE file in root folder
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageCreateInfo.hpp>
 
-namespace castor3d
+namespace c3d
 {
-	struct MipView
+	struct ImageMipView
 	{
 		TextureViewUPtr view;
-		castor::Vector< TextureViewUPtr > levels;
+		Vector< TextureViewUPtr > levels;
 
 		template< typename FuncT >
 		void forEachView( FuncT function )const
@@ -36,10 +36,10 @@ namespace castor3d
 		}
 	};
 
-	struct CubeView
+	struct CubeImageView
 	{
-		MipView view;
-		castor::Vector< MipView > faces;
+		ImageMipView view;
+		Vector< ImageMipView > faces;
 
 		template< typename FuncT >
 		void forEachView( FuncT function )const
@@ -54,10 +54,10 @@ namespace castor3d
 	};
 
 	template< typename ViewT >
-	struct ArrayView
+	struct ArrayImageView
 	{
-		MipView * view;
-		castor::Vector< ViewT > layers{};
+		ImageMipView * view;
+		Vector< ViewT > layers{};
 
 		template< typename FuncT >
 		void forEachView( FuncT function )const
@@ -70,10 +70,10 @@ namespace castor3d
 	};
 
 	template< typename ViewT >
-	struct SliceView
+	struct ImageSliceView
 	{
-		MipView * view;
-		castor::Vector< ViewT > slices{};
+		ImageMipView * view;
+		Vector< ViewT > slices{};
 
 		template< typename FuncT >
 		void forEachView( FuncT function )const
@@ -86,7 +86,7 @@ namespace castor3d
 	};
 
 	class TextureLayout
-		: public castor::OwnedBy< RenderSystem >
+		: public OwnedBy< RenderSystem >
 	{
 		friend class TextureView;
 
@@ -110,7 +110,7 @@ namespace castor3d
 		C3D_API TextureLayout( RenderSystem & renderSystem
 			, ImageCreateInfo info
 			, VkMemoryPropertyFlags memoryProperties
-			, castor::String const & debugName
+			, String const & debugName
 			, bool isStatic = false );
 		/**
 		 *\~english
@@ -127,7 +127,7 @@ namespace castor3d
 		 *\param[in]	imageView		La vue sur l'image.
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
-			, castor::String const & name
+			, String const & name
 			, VkImage image
 			, crg::ImageViewId imageView );
 		/**
@@ -216,18 +216,18 @@ namespace castor3d
 		 *\~french
 		 *\brief		Définit la source de tout le layout.
 		 */
-		C3D_API void setSource( castor::PxBufferBaseUPtr buffer
+		C3D_API void setSource( PxBufferBaseUPtr buffer
 			, uint32_t bufferOrigLevels
 			, bool isStatic = false );
-		C3D_API void setSource( castor::PxBufferBaseUPtr buffer
+		C3D_API void setSource( PxBufferBaseUPtr buffer
 			, bool isStatic = false );
-		C3D_API void setSource( castor::Path const & folder
-			, castor::Path const & relative );
+		C3D_API void setSource( Path const & folder
+			, Path const & relative );
 		C3D_API void setSource( Extent3D const & extent
-			, castor::PixelFormat format );
+			, PixelFormat format );
 
 		void setSource( Extent2D const & extent
-			, castor::PixelFormat format )
+			, PixelFormat format )
 		{
 			return setSource( { extent.width, extent.height, 1u }
 				, format );
@@ -237,17 +237,17 @@ namespace castor3d
 		 *\name Getters.
 		 **/
 		/**@{*/
-		C3D_API castor::String getDefaultSourceString()const;
+		C3D_API String getDefaultSourceString()const;
 		C3D_API ashes::ImageView const & getDefaultSampledView()const noexcept;
 		C3D_API ashes::ImageView const & getDefaultTargetView()const noexcept;
-		C3D_API castor::String getLayerCubeSourceString( size_t layer )const noexcept;
+		C3D_API String getLayerCubeSourceString( size_t layer )const noexcept;
 		C3D_API ashes::ImageView const & getLayerCubeTargetView( size_t layer )const noexcept;
-		C3D_API castor::String getLayerCubeFaceSourceString( size_t layer
+		C3D_API String getLayerCubeFaceSourceString( size_t layer
 			, CubeMapFace face )const noexcept;
 		C3D_API ashes::ImageView const & getLayerCubeFaceTargetView( size_t layer
 			, CubeMapFace face )const noexcept;
-		C3D_API castor::String getName()const;
-		C3D_API castor::Path getPath()const;
+		C3D_API String getName()const;
+		C3D_API Path getPath()const;
 		C3D_API bool needsYInversion()const;
 		C3D_API bool needsXInversion()const;
 		C3D_API bool needsZInversion()const;
@@ -280,12 +280,12 @@ namespace castor3d
 			return m_info.imageType;
 		}
 
-		castor::Image const & getImage()const noexcept
+		Image const & getImage()const noexcept
 		{
 			return m_image;
 		}
 
-		castor::Image & getImage()noexcept
+		Image & getImage()noexcept
 		{
 			return m_image;
 		}
@@ -326,7 +326,7 @@ namespace castor3d
 			return m_info.extent;
 		}
 
-		castor::PixelFormat getPixelFormat()const noexcept
+		PixelFormat getPixelFormat()const noexcept
 		{
 			return m_info.format;
 		}
@@ -334,7 +334,7 @@ namespace castor3d
 
 	private:
 		uint32_t doUpdateViews();
-		void doUpdateCreateInfo( castor::ImageMemoryLayout const & layout );
+		void doUpdateCreateInfo( ImageMemoryLayout const & layout );
 		void doUpdateMips( bool genNeeded, uint32_t mipLevels );
 
 		TextureView & getDefaultView()const noexcept
@@ -343,7 +343,7 @@ namespace castor3d
 			return *m_defaultView.view;
 		}
 
-		CubeView const & getLayerCube( size_t layer )const noexcept
+		CubeImageView const & getLayerCube( size_t layer )const noexcept
 		{
 			CU_Require( m_arrayView.layers.empty() );
 			CU_Require( m_sliceView.slices.empty() );
@@ -352,7 +352,7 @@ namespace castor3d
 			return m_cubeView.layers[layer];
 		}
 
-		MipView const & getLayerCubeFace( size_t layer
+		ImageMipView const & getLayerCubeFace( size_t layer
 			, CubeMapFace face )const noexcept
 		{
 			return getLayerCube( layer ).faces[size_t( face )];
@@ -363,11 +363,11 @@ namespace castor3d
 		bool m_static{ false };
 		ImageCreateInfo m_info;
 		VkMemoryPropertyFlags m_properties;
-		castor::Image m_image;
-		MipView m_defaultView;
-		ArrayView< MipView > m_arrayView;
-		ArrayView< CubeView > m_cubeView;
-		SliceView< MipView > m_sliceView;
+		Image m_image;
+		ImageMipView m_defaultView;
+		ArrayImageView< ImageMipView > m_arrayView;
+		ArrayImageView< CubeImageView > m_cubeView;
+		ImageSliceView< ImageMipView > m_sliceView;
 		ashes::ImagePtr m_ownTexture;
 		ashes::Image * m_texture{};
 	};
@@ -375,16 +375,16 @@ namespace castor3d
 	inline ashes::ImagePtr makeImage( RenderDevice const & device
 		, ImageCreateInfo createInfo
 		, VkMemoryPropertyFlags flags
-		, castor::String const & name )
+		, String const & name )
 	{
-		auto mbName = castor::toUtf8( name );
+		auto mbName = toUtf8( name );
 		auto result = device->createImage( mbName + "Map", ashes::ImageCreateInfo{ convert( createInfo ) } );
 		auto requirements = result->getMemoryRequirements();
 		uint32_t deduced = device->deduceMemoryType( requirements.memoryTypeBits
 			, flags );
 		auto memory = device->allocateMemory( mbName + "MapMem"
 			, VkMemoryAllocateInfo{ VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO, nullptr, requirements.size, deduced } );
-		result->bindMemory( castor::move( memory ) );
+		result->bindMemory( c3d::move( memory ) );
 		return result;
 	}
 }

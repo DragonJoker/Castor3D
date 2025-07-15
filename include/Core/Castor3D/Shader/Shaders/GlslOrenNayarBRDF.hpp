@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Shader/Shaders/GlslDiffuseBRDF.hpp"
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	class QualitativeOrenNayarBRDF
 		: public DiffuseBRDF
@@ -17,7 +17,7 @@ namespace castor3d::shader
 
 		C3D_API static DiffuseBRDFPtr create( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
-		C3D_API static castor::StringView constexpr Name{ cuT( "qualitative_oren_nayar" ) };
+		C3D_API static StringView constexpr Name{ cuT( "qualitative_oren_nayar" ) };
 
 	private:
 		void doGenerate( BlendComponents const & components
@@ -33,7 +33,7 @@ namespace castor3d::shader
 
 		C3D_API static DiffuseBRDFPtr create( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
-		C3D_API static castor::StringView constexpr Name{ cuT( "fujii_oren_nayar" ) };
+		C3D_API static StringView constexpr Name{ cuT( "fujii_oren_nayar" ) };
 
 	private:
 		void doGenerate( BlendComponents const & components
@@ -49,7 +49,7 @@ namespace castor3d::shader
 
 		C3D_API static DiffuseBRDFPtr create( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
-		C3D_API static castor::StringView constexpr Name{ cuT( "energy_conservative_oren_nayar" ) };
+		C3D_API static StringView constexpr Name{ cuT( "energy_conservative_oren_nayar" ) };
 
 	private:
 		void doGenerate( BlendComponents const & components

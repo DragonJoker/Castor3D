@@ -13,10 +13,10 @@ See LICENSE file in root folder
 #include <map>
 #include <unordered_map>
 
-namespace castor3d
+namespace c3d
 {
 	class SubmeshComponentRegister
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -60,8 +60,8 @@ namespace castor3d
 		 *	Gestion des composants de sortie des shaders.
 		 */
 		/**@{*/
-		C3D_API castor::Vector< shader::SubmeshVertexSurfaceShader * > getVertexSurfaceShaders( PipelineFlags const & flags )const;
-		C3D_API castor::Vector< shader::SubmeshRasterSurfaceShader * > getRasterSurfaceShaders( PipelineFlags const & flags )const;
+		C3D_API Vector< shader::SubmeshVertexSurfaceShader * > getVertexSurfaceShaders( PipelineFlags const & flags )const;
+		C3D_API Vector< shader::SubmeshRasterSurfaceShader * > getRasterSurfaceShaders( PipelineFlags const & flags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader source matching the given flags.
@@ -89,13 +89,13 @@ namespace castor3d
 		 *	Enregistrement des composants.
 		 */
 		/**@{*/
-		C3D_API SubmeshComponentID registerComponent( castor::String const & componentType
+		C3D_API SubmeshComponentID registerComponent( String const & componentType
 			, SubmeshComponentPluginUPtr componentPlugin );
-		C3D_API void unregisterComponent( castor::String const & componentType );
-		C3D_API SubmeshComponentID getNameId( castor::String const & componentType )const;
+		C3D_API void unregisterComponent( String const & componentType );
+		C3D_API SubmeshComponentID getNameId( String const & componentType )const;
 		C3D_API SubmeshComponentPlugin const & getPlugin( SubmeshComponentID componentId )const;
 
-		SubmeshComponentPlugin const & getPlugin( castor::String const & componentType )const
+		SubmeshComponentPlugin const & getPlugin( String const & componentType )const
 		{
 			return getPlugin( getNameId( componentType ) );
 		}
@@ -219,28 +219,28 @@ namespace castor3d
 			}
 
 			SubmeshComponentID id{};
-			castor::String name{};
+			String name{};
 			SubmeshComponentPluginUPtr plugin{};
 		};
-		using Components = castor::Vector< Component >;
+		using Components = Vector< Component >;
 
 	private:
 		Component & getNextId();
 		void registerComponent( Component & componentDesc
-			, castor::String const & componentType
+			, String const & componentType
 			, SubmeshComponentPluginUPtr componentPlugin );
 		void unregisterComponent( SubmeshComponentID id );
 		void fillSubmeshComponentCombine( SubmeshComponentCombine & combine )const;
 
 	private:
 		Components m_registered;
-		castor::Map< SubmeshComponentID, shader::SubmeshVertexSurfaceShaderPtr > m_vertexSurfaceShaders;
-		castor::Map< SubmeshComponentID, shader::SubmeshRasterSurfaceShaderPtr > m_rasterSurfaceShaders;
-		castor::Map< SubmeshComponentID, SubmeshRenderShaderPtr > m_renderShaders;
-		castor::Vector< SubmeshComponentFlag > m_renderShaderFlags;
-		castor::Vector< SubmeshRenderData const * > m_renderDatas;
+		Map< SubmeshComponentID, shader::SubmeshVertexSurfaceShaderPtr > m_vertexSurfaceShaders;
+		Map< SubmeshComponentID, shader::SubmeshRasterSurfaceShaderPtr > m_rasterSurfaceShaders;
+		Map< SubmeshComponentID, SubmeshRenderShaderPtr > m_renderShaders;
+		Vector< SubmeshComponentFlag > m_renderShaderFlags;
+		Vector< SubmeshRenderData const * > m_renderDatas;
 		SubmeshComponentCombine m_defaultComponents;
-		mutable castor::Vector< SubmeshComponentCombine > m_componentCombines{};
+		mutable Vector< SubmeshComponentCombine > m_componentCombines{};
 		SubmeshComponentFlag m_lineIndexFlag{};
 		SubmeshComponentFlag m_triangleIndexFlag{};
 		SubmeshComponentFlag m_positionFlag{};

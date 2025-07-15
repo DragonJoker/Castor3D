@@ -11,12 +11,12 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/Signal.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ParticleEmitter
 	{
 	public:
-		C3D_API explicit ParticleEmitter( castor3d::ParticleDeclaration const & decl );
+		C3D_API explicit ParticleEmitter( ParticleDeclaration const & decl );
 		C3D_API virtual ~ParticleEmitter()noexcept = default;
 		/**
 		 *\~english
@@ -26,16 +26,16 @@ namespace castor3d
 		 *\brief		Emet une particle ayant les valeurs données.
 		 *\param[in]	value	Les valeurs de la particule.
 		 */
-		C3D_API castor3d::Particle emit( ParticleValues const & value )const;
+		C3D_API Particle emit( ParticleValues const & value )const;
 
-		using OnEmitFunction = castor::Function< void( Particle const & particle ) >;
-		using OnEmitSignal = castor::SignalT< OnEmitFunction >;
+		using OnEmitFunction = Function< void( Particle const & particle ) >;
+		using OnEmitSignal = SignalT< OnEmitFunction >;
 		using OnEmitConnection = OnEmitSignal::connection;
 
 		OnEmitSignal onEmit;
 
 	protected:
-		castor3d::ParticleDeclaration const & m_decl;
+		ParticleDeclaration const & m_decl;
 	};
 }
 

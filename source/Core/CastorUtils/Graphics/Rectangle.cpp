@@ -1,6 +1,6 @@
 #include "CastorUtils/Graphics/Rectangle.hpp"
 
-namespace castor
+namespace c3d
 {
 	Rectangle::Rectangle( Position const & ptStart, Size const & size )
 		: Coords4i{ getData().buffer.data() }

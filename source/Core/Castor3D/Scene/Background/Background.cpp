@@ -33,9 +33,9 @@
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
-CU_ImplementSmartPtr( castor3d, SceneBackground )
+CU_ImplementSmartPtr( c3d, SceneBackground )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -53,21 +53,21 @@ namespace castor3d
 
 		struct Shaders
 		{
-			castor3d::ProgramModule shader;
+			ProgramModule shader;
 			ashes::PipelineShaderStageCreateInfoArray stages;
 		};
 
-		using Programs = castor::Array< Shaders, SceneBackground::PassCount >;
+		using Programs = Array< Shaders, SceneBackground::PassCount >;
 
 		class BackgroundPass
-			: public castor::DataHolderT< ashes::VertexBufferPtr< castor::Point3f > >
-			, public castor::DataHolderT< ashes::BufferPtr< uint16_t > >
-			, public castor::DataHolderT< Programs >
+			: public DataHolderT< ashes::VertexBufferPtr< Point3f > >
+			, public DataHolderT< ashes::BufferPtr< uint16_t > >
+			, public DataHolderT< Programs >
 			, public BackgroundPassBase
 			, public crg::RenderMesh
 		{
-			using VertexBufferHolder = castor::DataHolderT< ashes::VertexBufferPtr< castor::Point3f > >;
-			using IndexBufferHolder = castor::DataHolderT< ashes::BufferPtr< u16 > >;
+			using VertexBufferHolder = DataHolderT< ashes::VertexBufferPtr< Point3f > >;
+			using IndexBufferHolder = DataHolderT< ashes::BufferPtr< u16 > >;
 
 			crg::rm::Config buildConfig( RenderDevice const & device
 				, Extent2D const & size
@@ -122,9 +122,9 @@ namespace castor3d
 
 			crg::IndexBuffer doCreateIndexBuffer( RenderDevice const & device )
 			{
-				if ( !castor::DataHolderT< ashes::BufferPtr< uint16_t > >::getData() )
+				if ( !DataHolderT< ashes::BufferPtr< uint16_t > >::getData() )
 				{
-					castor::Vector< uint16_t > indexData
+					Vector< uint16_t > indexData
 					{
 						// Front
 						0, 1, 2, 2, 1, 3,
@@ -139,12 +139,12 @@ namespace castor3d
 						// Left
 						20, 21, 22, 22, 21, 23,
 					};
-					castor::DataHolderT< ashes::BufferPtr< uint16_t > >::setData( makeBuffer< uint16_t >( device
+					DataHolderT< ashes::BufferPtr< uint16_t > >::setData( makeBuffer< uint16_t >( device
 						, uint32_t( indexData.size() )
 						, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 						, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 						, cuT( "BackgroundIndexBuffer" ) ) );
-					auto & indexBuffer = *castor::DataHolderT< ashes::BufferPtr< uint16_t > >::getData();
+					auto & indexBuffer = *DataHolderT< ashes::BufferPtr< uint16_t > >::getData();
 					{
 						auto data = m_device.graphicsData();
 						InstantDirectUploadData uploader{ *data->queue
@@ -158,7 +158,7 @@ namespace castor3d
 					}
 				}
 
-				auto & indexBuffer = *castor::DataHolderT< ashes::BufferPtr< uint16_t > >::getData();
+				auto & indexBuffer = *DataHolderT< ashes::BufferPtr< uint16_t > >::getData();
 				return crg::IndexBuffer{ crg::Buffer{ indexBuffer.getBuffer(), "Index" }
 					, indexBuffer.getBuffer().getStorage() };
 			}
@@ -167,10 +167,8 @@ namespace castor3d
 			{
 				if ( !VertexBufferHolder::getData() )
 				{
-					using castor::Point3f;
-
 					// Vertex Buffer
-					static constexpr castor::Array< Point3f, 24u > vertexData
+					static constexpr Array< Point3f, 24u > vertexData
 					{
 						// Front
 						Point3f{ -1.0, -1.0, +1.0 }, Point3f{ -1.0, +1.0, +1.0 }, Point3f{ +1.0, -1.0, +1.0 }, Point3f{ +1.0, +1.0, +1.0 },
@@ -208,13 +206,13 @@ namespace castor3d
 				return crg::VertexBuffer{ crg::Buffer{ vertexBuffer.getBuffer(), "Vertex" }
 					, vertexBuffer.getBuffer().getStorage()
 					, { 1u, VkVertexInputAttributeDescription{ 0u, 0u, VK_FORMAT_R32G32B32_SFLOAT, 0u } }
-					, { 1u, VkVertexInputBindingDescription{ 0u, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } } };
+					, { 1u, VkVertexInputBindingDescription{ 0u, sizeof( Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } } };
 			}
 
 			crg::VkPipelineShaderStageCreateInfoArray doInitialiseShader( RenderDevice const & device
 				, uint32_t programIndex )
 			{
-				auto & program = castor::DataHolderT< Programs >::getData()[programIndex];
+				auto & program = DataHolderT< Programs >::getData()[programIndex];
 
 				if ( program.stages.empty() )
 				{
@@ -286,13 +284,13 @@ namespace castor3d
 
 	SceneBackground::SceneBackground( Engine & engine
 		, Scene & scene
-		, castor::String const & name
-		, castor::String type
+		, String const & name
+		, String type
 		, bool hasIBLSupport )
-		: castor::OwnedBy< Engine >{ engine }
-		, castor::Named{ scene.getName() + name }
+		: OwnedBy< Engine >{ engine }
+		, Named{ scene.getName() + name }
 		, m_scene{ scene }
-		, m_type{ castor::move( type ) }
+		, m_type{ c3d::move( type ) }
 		, m_hasIBLSupport{ hasIBLSupport }
 	{
 	}
@@ -312,7 +310,7 @@ namespace castor3d
 					? IrradiancePassIndex
 					: HiddenPassIndex ) );
 			m_initialised = doInitialise( device );
-			castor::String const name = cuT( "Skybox_" ) + castor::string::toString( m_texture->getMipLevels() );
+			String const name = cuT( "Skybox_" ) + string::toString( m_texture->getMipLevels() );
 			{
 				auto queueData = device.graphicsData();
 				InstantDirectUploadData uploader{ *queueData->queue
@@ -349,7 +347,7 @@ namespace castor3d
 				&& m_hasIBLSupport
 				&& m_texture->getLayersCount() == 6u )
 			{
-				m_ibl = castor::make_unique< IblTextures >( m_scene
+				m_ibl = makeRawUnique< IblTextures >( m_scene
 					, device
 					, m_textureId
 					, device.renderSystem.getPrefilteredBrdfTexture()
@@ -380,14 +378,14 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
-			static castor::Point3f const Scale{ 1, -1, 1 };
-			static castor::Matrix3x3f const Identity{ 1.0f };
+			static Point3f const Scale{ 1, -1, 1 };
+			static Matrix3x3f const Identity{ 1.0f };
 
 			auto const & camera = *updater.camera;
 			auto node = camera.getParent();
 
-			castor::matrix::setTranslate( updater.bgMtxModl, node->getDerivedPosition() );
-			castor::matrix::scale( updater.bgMtxModl, Scale );
+			matrix::setTranslate( updater.bgMtxModl, node->getDerivedPosition() );
+			matrix::scale( updater.bgMtxModl, Scale );
 			doCpuUpdate( updater );
 		}
 	}
@@ -454,7 +452,7 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBarLocal( progress, cuT( "Initialising background pass" ) );
-				auto res = castor::make_unique< back::BackgroundPass >( framePass
+				auto res = makeRawUnique< back::BackgroundPass >( framePass
 					, context
 					, runnableGraph
 					, device
@@ -463,7 +461,7 @@ namespace castor3d
 					, depth
 					, forceVisible );
 				backgroundPass = res.get();
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -592,7 +590,7 @@ namespace castor3d
 		}
 	}
 
-	castor::String const & SceneBackground::getModelName()const
+	String const & SceneBackground::getModelName()const
 	{
 		if ( hasIbl() )
 		{
@@ -607,8 +605,8 @@ namespace castor3d
 		return getEngine()->getBackgroundModelFactory().getTypeId( getModelName() );
 	}
 
-	castor::PxBufferBaseUPtr SceneBackground::adaptBuffer( castor::PxBufferBase const & buffer
-		, castor::String const & name
+	PxBufferBaseUPtr SceneBackground::adaptBuffer( PxBufferBase const & buffer
+		, String const & name
 		, bool generateMips )
 	{
 		auto result = buffer.clone();
@@ -616,24 +614,24 @@ namespace castor3d
 
 		switch ( dstFormat )
 		{
-		case castor::PixelFormat::eR8G8B8_UNORM:
-			dstFormat = castor::PixelFormat::eR8G8B8A8_UNORM;
+		case PixelFormat::eR8G8B8_UNORM:
+			dstFormat = PixelFormat::eR8G8B8A8_UNORM;
 			break;
-		case castor::PixelFormat::eB8G8R8_UNORM:
-			dstFormat = castor::PixelFormat::eA8B8G8R8_UNORM;
+		case PixelFormat::eB8G8R8_UNORM:
+			dstFormat = PixelFormat::eA8B8G8R8_UNORM;
 			break;
-		case castor::PixelFormat::eR8G8_SRGB:
-		case castor::PixelFormat::eR8G8B8_SRGB:
-			dstFormat = castor::PixelFormat::eR8G8B8A8_SRGB;
+		case PixelFormat::eR8G8_SRGB:
+		case PixelFormat::eR8G8B8_SRGB:
+			dstFormat = PixelFormat::eR8G8B8A8_SRGB;
 			break;
-		case castor::PixelFormat::eB8G8R8_SRGB:
-			dstFormat = castor::PixelFormat::eA8B8G8R8_SRGB;
+		case PixelFormat::eB8G8R8_SRGB:
+			dstFormat = PixelFormat::eA8B8G8R8_SRGB;
 			break;
-		case castor::PixelFormat::eR16G16B16_SFLOAT:
-			dstFormat = castor::PixelFormat::eR16G16B16A16_SFLOAT;
+		case PixelFormat::eR16G16B16_SFLOAT:
+			dstFormat = PixelFormat::eR16G16B16A16_SFLOAT;
 			break;
-		case castor::PixelFormat::eR32G32B32_SFLOAT:
-			dstFormat = castor::PixelFormat::eR32G32B32A32_SFLOAT;
+		case PixelFormat::eR32G32B32_SFLOAT:
+			dstFormat = PixelFormat::eR32G32B32A32_SFLOAT;
 			break;
 		default:
 			// No conversion
@@ -643,7 +641,7 @@ namespace castor3d
 		if ( result->getFormat() != dstFormat )
 		{
 			log::debug << name << cuT( " - Converting RGB to RGBA.\n" );
-			result = castor::PxBufferBase::create( result->getDimensions()
+			result = PxBufferBase::create( result->getDimensions()
 				, result->getLayers()
 				, result->getLevels()
 				, dstFormat
@@ -653,7 +651,7 @@ namespace castor3d
 		}
 
 		if ( generateMips
-			&& !castor::isCompressed( result->getFormat() ) )
+			&& !isCompressed( result->getFormat() ) )
 		{
 			log::debug << ( name + cuT( " - Generating result mipmaps.\n" ) );
 			result->generateMips();
@@ -662,10 +660,10 @@ namespace castor3d
 		return result;
 	}
 
-	castor::ImageUPtr SceneBackground::loadImage( Engine & engine
-		, castor::String const & name
-		, castor::Path const & folder
-		, castor::Path const & relative
+	ImageUPtr SceneBackground::loadImage( Engine & engine
+		, String const & name
+		, Path const & folder
+		, Path const & relative
 		, bool generateMips )
 	{
 		auto & image = getFileImage( engine
@@ -675,11 +673,11 @@ namespace castor3d
 		auto buffer = adaptBuffer( image.getPxBuffer()
 			, name
 			, generateMips );
-		castor::ImageMemoryLayout layout{ image.getLayout().type, * buffer };
-		return castor::makeUnique< castor::Image >( name
+		ImageMemoryLayout layout{ image.getLayout().type, * buffer };
+		return makeUnique< Image >( name
 			, folder / relative
 			, layout
-			, castor::move( buffer ) );
+			, c3d::move( buffer ) );
 	}
 
 	//*********************************************************************************************

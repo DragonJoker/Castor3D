@@ -7,18 +7,18 @@
 #include <wx/propgrid/advprops.h>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( castor, BoundingBox )
+GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( c3d, BoundingBox )
 
 namespace GuiCommon
 {
 	WX_PG_IMPLEMENT_PROPERTY_CLASS( BoundingBoxProperty, wxPGProperty
-		, castor::BoundingBox
-		, castor::BoundingBox const &
+		, c3d::BoundingBox
+		, c3d::BoundingBox const &
 		, TextCtrl )
 
 		BoundingBoxProperty::BoundingBoxProperty( wxString const & label
 		, wxString const & name
-		, castor::BoundingBox const & value )
+		, c3d::BoundingBox const & value )
 		: wxPGProperty{ label, name }
 	{
 		setValueI( value );

@@ -15,10 +15,10 @@ See LICENSE file in root folder
 
 #include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class SubsurfaceScatteringPass
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -65,7 +65,7 @@ namespace castor3d
 		 */
 		C3D_API void update( CpuUpdater const & updater );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		RenderTechniquePass::accept
 		 */
 		C3D_API void accept( ConfigurationVisitorBase & visitor );
 
@@ -80,24 +80,24 @@ namespace castor3d
 		}
 
 	public:
-		static castor::MbString const Config;
-		static castor::MbString const Step;
-		static castor::MbString const Correction;
-		static castor::MbString const PixelSize;
-		static castor::MbString const Weights;
-		static castor::MbString const Offsets;
+		static MbString const Config;
+		static MbString const Step;
+		static MbString const Correction;
+		static MbString const PixelSize;
+		static MbString const Weights;
+		static MbString const Offsets;
 
 		struct BlurConfiguration
 		{
-			castor::Point2f blurPixelSize;
+			Point2f blurPixelSize;
 			float blurCorrection;
 		};
 
 		struct BlurWeights
 		{
-			castor::Point4f originalWeight;
-			castor::Point4f blurWeights[3u];
-			castor::Point4f blurVariance;
+			Point4f originalWeight;
+			Point4f blurWeights[3u];
+			Point4f blurVariance;
 		};
 
 	private:
@@ -110,9 +110,9 @@ namespace castor3d
 		Scene const & m_scene;
 		crg::FramePassGroup & m_group;
 		bool m_enabled;
-		castor::Size m_size;
+		Size m_size;
 		Texture m_intermediate;
-		castor::Array< Texture, 3u > m_blurImages;
+		Array< Texture, 3u > m_blurImages;
 		Texture m_result;
 		UniformBufferOffsetT< BlurConfiguration > m_blurCfgUbo;
 		UniformBufferOffsetT< BlurWeights > m_blurWgtUbo;

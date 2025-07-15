@@ -26,14 +26,14 @@ namespace castortd
 	class Bullet;
 	class Boulder;
 
-	using EnemyPtr = castor::SharedPtr< Enemy >;
-	using TowerPtr = castor::SharedPtr< Tower >;
+	using EnemyPtr = c3d::SharedPtr< Enemy >;
+	using TowerPtr = c3d::SharedPtr< Tower >;
 	using TowerRPtr = Tower *;
 
-	using TowerArray = castor::Vector< TowerPtr >;
-	using EnemyArray = castor::Vector< EnemyPtr >;
-	using BulletArray = castor::Vector< Bullet >;
-	using BoulderArray = castor::Vector< Boulder >;
+	using TowerArray = c3d::Vector< TowerPtr >;
+	using EnemyArray = c3d::Vector< EnemyPtr >;
+	using BulletArray = c3d::Vector< Bullet >;
+	using BoulderArray = c3d::Vector< Boulder >;
 
 	using Clock = std::chrono::high_resolution_clock;
 
@@ -42,6 +42,6 @@ namespace castortd
 	template< typename T, typename ... Params >
 	wxWindowPtr< T > wxMakeWindowPtr( Params && ... params )
 	{
-		return wxWindowPtr< T >( new T( castor::forward< Params >( params )... ) );
+		return wxWindowPtr< T >( new T( c3d::forward< Params >( params )... ) );
 	}
 }

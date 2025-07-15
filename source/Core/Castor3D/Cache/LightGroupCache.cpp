@@ -10,16 +10,11 @@
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 
-CU_ImplementSmartPtr( castor3d, LightGroupCache )
+CU_ImplementSmartPtr( c3d, LightGroupCache )
 
-namespace castor3d
+namespace c3d
 {
-	const castor::String PtrCacheTraitsT< LightGroup, castor::String >::Name = cuT( "LightGroup" );
-}
-
-namespace castor
-{
-	using namespace castor3d;
+	const String PtrCacheTraitsT< LightGroup, String >::Name = cuT( "LightGroup" );
 
 	ResourceCacheT< LightGroup, String, LightGroupCacheTraits >::ResourceCacheT( Scene & scene )
 		: ElementCacheT{ scene.getEngine()->getLogger()
@@ -41,8 +36,8 @@ namespace castor
 		{
 			auto lock( makeUniqueLock( *this ) );
 			m_lightBuffer = &m_scene.getLightCache().getLightBuffer();
-			castor::Vector< LightGroup * > pending;
-			castor::swap( pending, m_pendingLights );
+			Vector< LightGroup * > pending;
+			c3d::swap( pending, m_pendingLights );
 
 			for ( auto light : pending )
 			{
@@ -57,7 +52,7 @@ namespace castor
 		doCleanupNoLock();
 	}
 
-	castor::Vector< LightGroup * > const & ResourceCacheT< LightGroup, String, LightGroupCacheTraits >::getLightGroups( LightType type )const
+	Vector< LightGroup * > const & ResourceCacheT< LightGroup, String, LightGroupCacheTraits >::getLightGroups( LightType type )const
 	{
 		return m_lightsPerType[size_t( type )];
 	}

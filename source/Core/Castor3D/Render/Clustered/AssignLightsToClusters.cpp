@@ -26,7 +26,7 @@
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -149,9 +149,9 @@ namespace castor3d
 			sdw::Function< sdw::Void, sdw::InUInt > pushNode;
 			sdw::Function< sdw::UInt > popNode;
 
-			castor::Function< sdw::UInt( sdw::UInt, sdw::UInt ) > getFirstChild;
-			castor::Function< sdw::Boolean( sdw::UInt, sdw::UInt ) > isLeafNode;
-			castor::Function< sdw::UInt( sdw::UInt, sdw::UInt ) > getLeafIndex;
+			Function< sdw::UInt( sdw::UInt, sdw::UInt ) > getFirstChild;
+			Function< sdw::Boolean( sdw::UInt, sdw::UInt ) > isLeafNode;
+			Function< sdw::UInt( sdw::UInt, sdw::UInt ) > getLeafIndex;
 
 			if ( config.useLightsBVH )
 			{
@@ -623,7 +623,7 @@ namespace castor3d
 		private:
 			RenderDevice const & m_device;
 			ClustersConfig const & m_config;
-			castor::Map< uint32_t, ProgramData > m_programs;
+			Map< uint32_t, ProgramData > m_programs;
 		};
 
 		class FramePassDepth
@@ -747,7 +747,7 @@ namespace castor3d
 		private:
 			RenderDevice const & m_device;
 			ClustersConfig const & m_config;
-			castor::Map< uint32_t, ProgramData > m_programs;
+			Map< uint32_t, ProgramData > m_programs;
 		};
 	}
 
@@ -767,7 +767,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< dspclst::FramePassNoDepth >( framePass
+				auto result = makeRawUnique< dspclst::FramePassNoDepth >( framePass
 					, context
 					, graph
 					, device
@@ -776,7 +776,7 @@ namespace castor3d
 						.groupCountX( clusters.getDimensions()->x )
 						.groupCountY( clusters.getDimensions()->y )
 						.groupCountZ( clusters.getDimensions()->z ) );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -811,14 +811,14 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< dspclst::FramePassDepth >( framePass
+				auto result = makeRawUnique< dspclst::FramePassDepth >( framePass
 					, context
 					, graph
 					, device
 					, clusters
 					, crg::cp::Config{}
 						.indirectBuffer( crg::IndirectBuffer{ { clusters.getClustersIndirectBuffer(), "C3D_ClustersIndirect" }, uint32_t( sizeof( VkDispatchIndirectCommand ) ) } ) );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

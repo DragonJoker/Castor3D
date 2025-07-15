@@ -43,19 +43,19 @@ See LICENSE file in root folder
 */
 #if defined( CU_UseWChar )
 #define cuT( x ) L##x
-namespace castor
+namespace c3d
 {
 	using xchar = wchar_t;
 }
 #else
 #define cuT( x ) x
-namespace castor
+namespace c3d
 {
 	using xchar = char;
 }
 #endif
 
-namespace castor
+namespace c3d
 {
 	using mbchar = char;
 	using wchar = wchar_t;
@@ -137,9 +137,9 @@ namespace castor
 	template< typename KeyT, typename DataT, typename PredT = std::less<>, typename AllocT = std::allocator< KeyT > >
 	using MultiSet = std::multiset< KeyT, PredT, AllocT >;
 	template< typename KeyT, typename DataT, typename HashT = std::hash< KeyT >, typename KeyEqT = std::equal_to<>, typename AllocT = std::allocator< Pair< KeyT const, DataT > > >
-	using UnorderedMap = std::unordered_map< KeyT, DataT, HashT, KeyEqT, AllocT >;
+	using HashMap = std::unordered_map< KeyT, DataT, HashT, KeyEqT, AllocT >;
 	template< typename KeyT, typename HashT = std::hash< KeyT >, typename KeyEqT = std::equal_to<>, typename AllocT = std::allocator< KeyT > >
-	using UnorderedSet = std::unordered_set< KeyT, HashT, KeyEqT >;
+	using HashSet = std::unordered_set< KeyT, HashT, KeyEqT >;
 	template< typename DataT, typename AllocT = std::allocator< DataT > >
 	using Vector = std::vector< DataT, AllocT >;
 	template< typename DataT, typename AllocT = std::allocator< DataT > >
@@ -154,10 +154,10 @@ namespace castor
 	template< typename DataT >
 	using StringMap = Map< String, DataT >;
 	template< typename DataT >
-	using UnorderedStringMap = std::unordered_map< String, DataT, StringHash, std::equal_to<> >;
+	using HashStringMap = std::unordered_map< String, DataT, StringHash, std::equal_to<> >;
 
 	using StringSet = std::set< String >;
-	using UnorderedStringSet = std::unordered_set< String, StringHash, std::equal_to<> >;
+	using HashStringSet = std::unordered_set< String, StringHash, std::equal_to<> >;
 
 	using Seconds = std::chrono::seconds;
 	using Milliseconds = std::chrono::milliseconds;
@@ -333,24 +333,24 @@ namespace castor
 	}
 }
 
-constexpr castor::Seconds operator "" _s( unsigned long long value )
+constexpr c3d::Seconds operator "" _s( unsigned long long value )
 {
-	return castor::Seconds( int64_t( value ) );
+	return c3d::Seconds( int64_t( value ) );
 }
 
-constexpr castor::Milliseconds operator "" _ms( unsigned long long value )
+constexpr c3d::Milliseconds operator "" _ms( unsigned long long value )
 {
-	return castor::Milliseconds( int64_t( value ) );
+	return c3d::Milliseconds( int64_t( value ) );
 }
 
-constexpr castor::Microseconds operator "" _us( unsigned long long value )
+constexpr c3d::Microseconds operator "" _us( unsigned long long value )
 {
-	return castor::Microseconds( int64_t( value ) );
+	return c3d::Microseconds( int64_t( value ) );
 }
 
-constexpr castor::Nanoseconds operator "" _ns( unsigned long long value )
+constexpr c3d::Nanoseconds operator "" _ns( unsigned long long value )
 {
-	return castor::Nanoseconds( int64_t( value ) );
+	return c3d::Nanoseconds( int64_t( value ) );
 }
 //@}
 

@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "BufferModule.hpp"
 #include "ObjectBufferOffset.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	struct GeometryBuffers
 	{
@@ -16,10 +16,10 @@ namespace castor3d
 			, ashes::BufferCRefArray buffers
 			, ashes::UInt64Array offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray layouts )noexcept
-			: indexOffset{ castor::move( indexOffset ) }
-			, buffers{ castor::move( buffers ) }
-			, offsets{ castor::move( offsets ) }
-			, layouts{ castor::move( layouts ) }
+			: indexOffset{ c3d::move( indexOffset ) }
+			, buffers{ c3d::move( buffers ) }
+			, offsets{ c3d::move( offsets ) }
+			, layouts{ c3d::move( layouts ) }
 		{
 		}
 		ObjectBufferOffset::GpuBufferChunk indexOffset{};

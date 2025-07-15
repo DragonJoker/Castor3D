@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/BaseTypes/Float.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace shader
 	{

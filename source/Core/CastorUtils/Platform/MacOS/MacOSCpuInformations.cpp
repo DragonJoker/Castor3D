@@ -14,7 +14,7 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-declarations"
 
-namespace castor::platform
+namespace c3d::platform
 {
 	uint32_t getCoreCount()
 	{
@@ -51,7 +51,7 @@ namespace castor::platform
 
 		if ( sysctlbyname( "machdep.cpu.brand_string", buffer.data(), &size, nullptr, 0 ) >= 0 )
 		{
-			result = castor::makeString( buffer.data(), size );
+			result = c3d::makeString( buffer.data(), size );
 		}
 
 		return makeString( result );
@@ -61,7 +61,7 @@ namespace castor::platform
 #if defined( CU_ArchX86_64 ) || defined( CU_ArchX86_32 )
 #	include <cpuid.h>
 
-namespace castor::platform
+namespace c3d::platform
 {
 	namespace macos_x86
 	{
@@ -93,7 +93,7 @@ namespace castor::platform
 				result += c;
 			}
 
-			return castor::makeString( result );
+			return c3d::makeString( result );
 		};
 
 		static void callCpuid( uint32_t func, Array< int32_t, 4 > & p_data )
@@ -138,7 +138,7 @@ namespace castor::platform
 
 #else
 
-namespace castor::platform
+namespace c3d::platform
 {
 	String getCPUVendor()
 	{

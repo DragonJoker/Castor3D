@@ -5,13 +5,13 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
 
-GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( castor, Rectangle )
+GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( c3d, Rectangle )
 
 namespace GuiCommon
 {
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( RectangleProperty, wxPGProperty, castor::Rectangle, castor::Rectangle const &, TextCtrl )
+	WX_PG_IMPLEMENT_PROPERTY_CLASS( RectangleProperty, wxPGProperty, c3d::Rectangle, c3d::Rectangle const &, TextCtrl )
 
-	RectangleProperty::RectangleProperty( wxString const & label, wxString const & name, castor::Rectangle const & value )
+	RectangleProperty::RectangleProperty( wxString const & label, wxString const & name, c3d::Rectangle const & value )
 		: wxPGProperty( label, name )
 	{
 		setValueI( value );
@@ -26,7 +26,7 @@ namespace GuiCommon
 	{
 		if ( GetChildCount() )
 		{
-			const castor::Rectangle & point = RectangleRefFromVariant( m_value );
+			const c3d::Rectangle & point = RectangleRefFromVariant( m_value );
 			Item( 0 )->SetValue( point[0] );
 			Item( 1 )->SetValue( point[1] );
 			Item( 2 )->SetValue( point[2] );
@@ -36,7 +36,7 @@ namespace GuiCommon
 
 	wxVariant RectangleProperty::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
 	{
-		castor::Rectangle & point = RectangleRefFromVariant( thisValue );
+		c3d::Rectangle & point = RectangleRefFromVariant( thisValue );
 		auto val = int( childValue.GetLong() );
 
 		switch ( childIndex )
@@ -63,7 +63,7 @@ namespace GuiCommon
 		return newVariant;
 	}
 
-	void RectangleProperty::setValueI( castor::Rectangle const & value )
+	void RectangleProperty::setValueI( c3d::Rectangle const & value )
 	{
 		m_value = WXVARIANT( value );
 	}

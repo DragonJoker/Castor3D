@@ -1,9 +1,9 @@
 #include "Castor3D/Scene/ParticleSystem/Particle.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	Particle::Particle( ParticleDeclaration const & description
-		, castor::StrStrMap const & defaultValues )
+		, StrStrMap const & defaultValues )
 		: m_description{ description }
 	{
 		m_data.resize( description.stride() );
@@ -35,7 +35,7 @@ namespace castor3d
 
 	Particle::Particle( Particle && rhs )noexcept
 		: m_description{ rhs.m_description }
-		, m_data{ castor::move( rhs.m_data ) }
+		, m_data{ c3d::move( rhs.m_data ) }
 	{
 	}
 
@@ -47,7 +47,7 @@ namespace castor3d
 
 	Particle & Particle::operator=( Particle && rhs )noexcept
 	{
-		m_data = castor::move( rhs.m_data );
+		m_data = c3d::move( rhs.m_data );
 		return *this;
 	}
 }

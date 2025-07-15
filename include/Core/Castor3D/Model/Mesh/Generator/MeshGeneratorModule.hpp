@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Model/Mesh/MeshModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Model */
 	//@{

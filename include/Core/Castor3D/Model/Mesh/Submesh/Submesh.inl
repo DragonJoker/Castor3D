@@ -5,15 +5,15 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
 
-namespace castor3d
+namespace c3d
 {
-	inline void Submesh::addPoints( castor::Vector< InterleavedVertex > const & vertices )
+	inline void Submesh::addPoints( Vector< InterleavedVertex > const & vertices )
 	{
 		addPoints( vertices.data(), vertices.data() + vertices.size() );
 	}
 
 	template< size_t Count >
-	inline void Submesh::addPoints( castor::Array< InterleavedVertex, Count > const & vertices )
+	inline void Submesh::addPoints( Array< InterleavedVertex, Count > const & vertices )
 	{
 		addPoints( vertices.data(), vertices.data() + vertices.size() );
 	}
@@ -44,7 +44,7 @@ namespace castor3d
 
 		m_indexMapping = mapping.get();
 		auto id = mapping->getId();
-		m_components.emplace( id, castor::ptrRefCast< SubmeshComponent >( mapping ) );
+		m_components.emplace( id, ptrRefCast< SubmeshComponent >( mapping ) );
 	}
 
 	inline IndexMappingRPtr Submesh::getIndexMapping()const
@@ -55,10 +55,10 @@ namespace castor3d
 	template< typename ComponentT, typename ... ParamsT >
 	inline ComponentT * Submesh::createComponent( ParamsT && ... params )
 	{
-		auto component = castor::makeUnique< ComponentT >( *this
-			, castor::forward< ParamsT >( params )... );
+		auto component = makeUnique< ComponentT >( *this
+			, c3d::forward< ParamsT >( params )... );
 		auto result = component.get();
-		addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
+		addComponent( ptrRefCast< SubmeshComponent >( component ) );
 		return result;
 	}
 
@@ -77,22 +77,22 @@ namespace castor3d
 		return m_defaultMaterial;
 	}
 
-	inline castor::BoundingBox const & Submesh::getBoundingBox()const noexcept
+	inline BoundingBox const & Submesh::getBoundingBox()const noexcept
 	{
 		return m_box;
 	}
 
-	inline castor::BoundingBox & Submesh::getBoundingBox()noexcept
+	inline BoundingBox & Submesh::getBoundingBox()noexcept
 	{
 		return m_box;
 	}
 
-	inline castor::BoundingSphere const & Submesh::getBoundingSphere()const noexcept
+	inline BoundingSphere const & Submesh::getBoundingSphere()const noexcept
 	{
 		return m_sphere;
 	}
 
-	inline castor::BoundingSphere & Submesh::getBoundingSphere()noexcept
+	inline BoundingSphere & Submesh::getBoundingSphere()noexcept
 	{
 		return m_sphere;
 	}
@@ -112,7 +112,7 @@ namespace castor3d
 		return m_id;
 	}
 
-	inline bool Submesh::hasComponent( castor::String const & name )const noexcept
+	inline bool Submesh::hasComponent( String const & name )const noexcept
 	{
 		auto it = std::find_if( m_components.begin()
 			, m_components.end()
@@ -123,7 +123,7 @@ namespace castor3d
 		return it != m_components.end();
 	}
 
-	inline SubmeshComponentRPtr Submesh::getComponent( castor::String const & name )const noexcept
+	inline SubmeshComponentRPtr Submesh::getComponent( String const & name )const noexcept
 	{
 		SubmeshComponentRPtr result{};
 		auto it = std::find_if( m_components.begin()
@@ -169,7 +169,7 @@ namespace castor3d
 		return m_componentCombine;
 	}
 
-	inline SubmeshComponentPlugin const & Submesh::getComponentPlugin( castor::String const & componentType )const
+	inline SubmeshComponentPlugin const & Submesh::getComponentPlugin( String const & componentType )const
 	{
 		return getComponentPlugin( getComponentId( componentType ) );
 	}

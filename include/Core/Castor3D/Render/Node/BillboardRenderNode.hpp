@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	struct BillboardRenderNode
 	{
@@ -42,7 +42,7 @@ namespace castor3d
 		C3D_API ProgramFlags getProgramFlags()const;
 		C3D_API VkPrimitiveTopology getPrimitiveTopology()const;
 		C3D_API GeometryBuffers const & getGeometryBuffers( PipelineFlags const & flags )const;
-		C3D_API GpuBufferOffsetT< castor::Point4f > getMorphTargets()const;
+		C3D_API GpuBufferOffsetT< Point4f > getMorphTargets()const;
 		C3D_API SceneNode & getSceneNode()const;
 		C3D_API SubmeshRenderData * getRenderData()const;
 

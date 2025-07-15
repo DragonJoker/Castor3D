@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Design/DesignModule.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< class Data, size_t Index >
 	class DataHolderT
@@ -15,7 +15,7 @@ namespace castor
 		DataHolderT()noexcept = default;
 
 		explicit DataHolderT( Data d )noexcept
-			: m_data{ castor::move( d ) }
+			: m_data{ c3d::move( d ) }
 		{
 		}
 
@@ -31,7 +31,7 @@ namespace castor
 
 		void setData( Data data )
 		{
-			m_data = castor::move( data );
+			m_data = c3d::move( data );
 		}
 
 	private:

@@ -8,11 +8,11 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::Scene >
-		: public TextWriterT< castor3d::Scene >
+	class TextWriter< Scene >
+		: public TextWriterT< Scene >
 	{
 	public:
 		struct Options
@@ -38,26 +38,26 @@ namespace castor
 				, Path pglobalControlsFile = {}
 				, String psubfolder = {}
 				, float pscale = 1.0f )
-				: rootFolder{ castor::move( prootFolder ) }
-				, sceneTexturesFile{ castor::move( psceneTexturesFile ) }
-				, sceneSamplersFile{ castor::move( psceneSamplersFile ) }
-				, globalSamplersFile{ castor::move( pglobalSamplersFile ) }
-				, sceneMaterialsFile{ castor::move( psceneMaterialsFile ) }
-				, globalMaterialsFile{ castor::move( pglobalMaterialsFile ) }
-				, skeletonsFile{ castor::move( pskeletonsFile ) }
-				, meshesFile{ castor::move( pmeshesFile ) }
-				, nodesFile{ castor::move( pnodesFile ) }
-				, objectsFile{ castor::move( pobjectsFile ) }
-				, lightsFile{ castor::move( plightsFile ) }
-				, sceneFontsFile{ castor::move( psceneFontsFile ) }
-				, globalFontsFile{ castor::move( pglobalFontsFile ) }
-				, sceneThemesFile{ castor::move( psceneThemesFile ) }
-				, globalThemesFile{ castor::move( pglobalThemesFile ) }
-				, sceneStylesFile{ castor::move( psceneStylesFile ) }
-				, globalStylesFile{ castor::move( pglobalStylesFile ) }
-				, sceneControlsFile{ castor::move( psceneControlsFile ) }
-				, globalControlsFile{ castor::move( pglobalControlsFile ) }
-				, subfolder{ castor::move( psubfolder ) }
+				: rootFolder{ c3d::move( prootFolder ) }
+				, sceneTexturesFile{ c3d::move( psceneTexturesFile ) }
+				, sceneSamplersFile{ c3d::move( psceneSamplersFile ) }
+				, globalSamplersFile{ c3d::move( pglobalSamplersFile ) }
+				, sceneMaterialsFile{ c3d::move( psceneMaterialsFile ) }
+				, globalMaterialsFile{ c3d::move( pglobalMaterialsFile ) }
+				, skeletonsFile{ c3d::move( pskeletonsFile ) }
+				, meshesFile{ c3d::move( pmeshesFile ) }
+				, nodesFile{ c3d::move( pnodesFile ) }
+				, objectsFile{ c3d::move( pobjectsFile ) }
+				, lightsFile{ c3d::move( plightsFile ) }
+				, sceneFontsFile{ c3d::move( psceneFontsFile ) }
+				, globalFontsFile{ c3d::move( pglobalFontsFile ) }
+				, sceneThemesFile{ c3d::move( psceneThemesFile ) }
+				, globalThemesFile{ c3d::move( pglobalThemesFile ) }
+				, sceneStylesFile{ c3d::move( psceneStylesFile ) }
+				, globalStylesFile{ c3d::move( pglobalStylesFile ) }
+				, sceneControlsFile{ c3d::move( psceneControlsFile ) }
+				, globalControlsFile{ c3d::move( pglobalControlsFile ) }
+				, subfolder{ c3d::move( psubfolder ) }
 				, scale{ pscale }
 			{
 			}
@@ -87,8 +87,8 @@ namespace castor
 
 		explicit TextWriter( String const & tabs
 			, Options options = {} );
-		bool operator()( castor3d::Scene const & scene
-			, castor::StringStream & file )override;
+		bool operator()( Scene const & scene
+			, StringStream & file )override;
 
 	private:
 		Options m_options;

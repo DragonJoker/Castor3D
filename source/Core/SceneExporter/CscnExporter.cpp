@@ -50,7 +50,7 @@
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Data/Text/TextFont.hpp>
 
-namespace castor3d::exporter
+namespace c3d::exporter
 {
 	namespace
 	{
@@ -82,8 +82,8 @@ namespace castor3d::exporter
 		template< typename ObjType, typename ViewType, typename ... Params >
 		bool writeView( bool ignoreFailures
 			, ViewType const & view
-			, castor::String const & elemsName
-			, castor::StringStream & file
+			, String const & elemsName
+			, StringStream & file
 			, FilterFuncT< ObjType > filter = defaultFilterT< ObjType >
 			, Params && ... params )
 		{
@@ -93,8 +93,8 @@ namespace castor3d::exporter
 			{
 				file << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
 				log::info << cuT( "SceneExporter::write - " ) << elemsName << cuT( "\n" );
-				castor::TextWriter< ObjType > writer{ castor::cuEmptyString
-					, castor::forward< Params >( params )... };
+				TextWriter< ObjType > writer{ cuEmptyString
+					, c3d::forward< Params >( params )... };
 
 				for ( auto const & name : view )
 				{
@@ -114,9 +114,9 @@ namespace castor3d::exporter
 		template< typename ObjType, typename ViewType, typename ... Params >
 		bool writeView( bool ignoreFailures
 			, ViewType const & view
-			, castor::String const & elemsName
-			, castor::StringStream & sceneFile
-			, castor::StringStream & globalFile
+			, String const & elemsName
+			, StringStream & sceneFile
+			, StringStream & globalFile
 			, FilterFuncT< ObjType > filter = defaultFilterT< ObjType >
 			, Params && ... params )
 		{
@@ -127,8 +127,8 @@ namespace castor3d::exporter
 			{
 				auto scount = 0u;
 				auto gcount = 0u;
-				castor::StringStream sstream;
-				castor::StringStream gstream;
+				StringStream sstream;
+				StringStream gstream;
 				log::info << cuT( "SceneExporter::write - " ) << elemsName << cuT( "\n" );
 				gstream << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
 
@@ -137,9 +137,9 @@ namespace castor3d::exporter
 					sstream << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
 				}
 
-				castor::TextWriter< ObjType > writer{ castor::cuEmptyString
-					, castor::forward< Params >( params )... };
-				auto lock( castor::makeUniqueLock( cache ) );
+				TextWriter< ObjType > writer{ cuEmptyString
+					, c3d::forward< Params >( params )... };
+				auto lock( makeUniqueLock( cache ) );
 
 				for ( auto const & elemIt : cache )
 				{
@@ -180,8 +180,8 @@ namespace castor3d::exporter
 		template< typename ObjType, typename CacheType, typename ... Params >
 		bool writeCache( bool ignoreFailures
 			, CacheType const & cache
-			, castor::String const & elemsName
-			, castor::StringStream & file
+			, String const & elemsName
+			, StringStream & file
 			, FilterFuncT< ObjType > filter = defaultFilterT< ObjType >
 			, Params && ... params )
 		{
@@ -191,9 +191,9 @@ namespace castor3d::exporter
 			{
 				file << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
 				log::info << ( cuT( "SceneExporter::write - " ) + elemsName ) << cuT( "\n" );
-				castor::TextWriter< ObjType > writer{ castor::cuEmptyString
-					, castor::forward< Params >( params )... };
-				auto lock( castor::makeUniqueLock( cache ) );
+				TextWriter< ObjType > writer{ cuEmptyString
+					, c3d::forward< Params >( params )... };
+				auto lock( makeUniqueLock( cache ) );
 
 				for ( auto const & elemIt : cache )
 				{
@@ -213,9 +213,9 @@ namespace castor3d::exporter
 		template< typename ObjType, typename CacheType >
 		bool writeCache( bool ignoreFailures
 			, CacheType const & cache
-			, castor::String const & elemsName
-			, castor::String const & subfolder
-			, castor::StringStream & file
+			, String const & elemsName
+			, String const & subfolder
+			, StringStream & file
 			, FilterFuncT< ObjType > filter = defaultFilterT< ObjType > )
 		{
 			bool result = true;
@@ -224,8 +224,8 @@ namespace castor3d::exporter
 			{
 				file << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
 				log::info << ( cuT( "SceneExporter::write - " ) + elemsName ) << cuT( "\n" );
-				castor::TextWriter< ObjType > writer{ castor::cuEmptyString, subfolder };
-				auto lock( castor::makeUniqueLock( cache ) );
+				TextWriter< ObjType > writer{ cuEmptyString, subfolder };
+				auto lock( makeUniqueLock( cache ) );
 
 				for ( auto const & elemIt : cache )
 				{
@@ -248,11 +248,11 @@ namespace castor3d::exporter
 		namespace
 		{
 			bool writeSkeletons( bool ignoreFailures
-				, castor::Path const & /*folder*/
-				, castor::Path const & /*filePath*/
+				, Path const & /*folder*/
+				, Path const & /*filePath*/
 				, Scene const & scene
-				, castor::TextWriter< Scene >::Options const & options
-				, castor::StringStream & stream )
+				, TextWriter< Scene >::Options const & options
+				, StringStream & stream )
 			{
 				bool result = false;
 				{
@@ -270,11 +270,11 @@ namespace castor3d::exporter
 			}
 
 			bool writeMeshes( bool ignoreFailures
-				, castor::Path const & /*folder*/
-				, castor::Path const & /*filePath*/
+				, Path const & /*folder*/
+				, Path const & /*filePath*/
 				, Scene const & scene
-				, castor::TextWriter< Scene >::Options const & options
-				, castor::StringStream & stream )
+				, TextWriter< Scene >::Options const & options
+				, StringStream & stream )
 			{
 				bool result = false;
 				{
@@ -292,11 +292,11 @@ namespace castor3d::exporter
 			}
 
 			bool writeObjects( bool ignoreFailures
-				, castor::Path const & /*folder*/
-				, castor::Path const & /*filePath*/
+				, Path const & /*folder*/
+				, Path const & /*filePath*/
 				, Scene const & scene
-				, castor::TextWriter< Scene >::Options const & /*options*/
-				, castor::StringStream & stream )
+				, TextWriter< Scene >::Options const & /*options*/
+				, StringStream & stream )
 			{
 				bool result = false;
 				{
@@ -329,14 +329,14 @@ namespace castor3d::exporter
 			ObjectWriterOptionsT( ExportOptions const & poptions
 				, ObjectT const & pobject
 				, GeometryCache const & pgeometries
-				, castor::StringStream & pskeletons
-				, castor::StringStream & pmeshes
-				, castor::StringStream & pnodes
-				, castor::StringStream & pobjects
-				, castor::Path ppath
-				, castor::String pname
-				, castor::String psubfolder
-				, castor::String poutputName
+				, StringStream & pskeletons
+				, StringStream & pmeshes
+				, StringStream & pnodes
+				, StringStream & pobjects
+				, Path ppath
+				, String pname
+				, String psubfolder
+				, String poutputName
 				, bool psingleMesh )
 				: options{ poptions }
 				, object{ pobject }
@@ -345,10 +345,10 @@ namespace castor3d::exporter
 				, meshes{ pmeshes }
 				, nodes{ pnodes }
 				, objects{ pobjects }
-				, path{ castor::move( ppath ) }
-				, name{ castor::move( pname ) }
-				, subfolder{ castor::move( psubfolder ) }
-				, outputName{ castor::move( poutputName ) }
+				, path{ c3d::move( ppath ) }
+				, name{ c3d::move( pname ) }
+				, subfolder{ c3d::move( psubfolder ) }
+				, outputName{ c3d::move( poutputName ) }
 				, singleMesh{ psingleMesh }
 			{
 			}
@@ -356,7 +356,7 @@ namespace castor3d::exporter
 			template< typename ObjectU >
 			ObjectWriterOptionsT( ObjectWriterOptionsT< ObjectU > const & poptions
 				, ObjectT const & pobject
-				, castor::String pname )
+				, String pname )
 				: options{ poptions.options }
 				, object{ pobject }
 				, geometries{ poptions.geometries }
@@ -365,7 +365,7 @@ namespace castor3d::exporter
 				, nodes{ poptions.nodes }
 				, objects{ poptions.objects }
 				, path{ poptions.path }
-				, name{ castor::move( pname ) }
+				, name{ c3d::move( pname ) }
 				, subfolder{ poptions.subfolder }
 				, outputName{ poptions.outputName }
 				, singleMesh{ poptions.singleMesh }
@@ -375,46 +375,46 @@ namespace castor3d::exporter
 			ExportOptions const & options;
 			ObjectT const & object;
 			GeometryCache const & geometries;
-			castor::StringStream & skeletons;
-			castor::StringStream & meshes;
-			castor::StringStream & nodes;
-			castor::StringStream & objects;
-			castor::Path path;
-			castor::String name;
-			castor::String subfolder;
-			castor::String outputName;
+			StringStream & skeletons;
+			StringStream & meshes;
+			StringStream & nodes;
+			StringStream & objects;
+			Path path;
+			String name;
+			String subfolder;
+			String outputName;
 			bool singleMesh;
 		};
 
-		using MeshWriterOptions = ObjectWriterOptionsT< castor3d::Mesh >;
-		using SkeletonWriterOptions = ObjectWriterOptionsT< castor3d::Skeleton >;
+		using MeshWriterOptions = ObjectWriterOptionsT< Mesh >;
+		using SkeletonWriterOptions = ObjectWriterOptionsT< Skeleton >;
 
 		template<>
-		struct ObjectWriterOptionsT< castor3d::SceneNode >
+		struct ObjectWriterOptionsT< SceneNode >
 		{
 			ObjectWriterOptionsT( ExportOptions const & options
 				, SceneNode const & object
-				, castor::Path path
-				, castor::String name
-				, castor::String subfolder
-				, castor::String outputName )
+				, Path path
+				, String name
+				, String subfolder
+				, String outputName )
 				: options{ options }
 				, object{ object }
-				, path{ castor::move( path ) }
-				, name{ castor::move( name ) }
-				, subfolder{ castor::move( subfolder ) }
-				, outputName{ castor::move( outputName ) }
+				, path{ c3d::move( path ) }
+				, name{ c3d::move( name ) }
+				, subfolder{ c3d::move( subfolder ) }
+				, outputName{ c3d::move( outputName ) }
 			{
 			}
 
 			template< typename ObjectU >
 			ObjectWriterOptionsT( ObjectWriterOptionsT< ObjectU > const & options
 				, SceneNode const & object
-				, castor::String name )
+				, String name )
 				: options{ options.options }
 				, object{ object }
 				, path{ options.path }
-				, name{ castor::move( name ) }
+				, name{ c3d::move( name ) }
 				, subfolder{ options.subfolder }
 				, outputName{ options.outputName }
 			{
@@ -422,13 +422,13 @@ namespace castor3d::exporter
 
 			ExportOptions const & options;
 			SceneNode const & object;
-			castor::Path path;
-			castor::String name;
-			castor::String subfolder;
-			castor::String outputName;
+			Path path;
+			String name;
+			String subfolder;
+			String outputName;
 		};
 
-		using SceneNodeWriterOptions = ObjectWriterOptionsT< castor3d::SceneNode >;
+		using SceneNodeWriterOptions = ObjectWriterOptionsT< SceneNode >;
 
 		template< typename ObjectT >
 		bool carryOn( bool result, ObjectWriterOptionsT< ObjectT > const & options )noexcept
@@ -438,8 +438,8 @@ namespace castor3d::exporter
 
 		struct SplitInfo
 		{
-			castor3d::Mesh const * mesh;
-			castor3d::Submesh const * submesh;
+			Mesh const * mesh;
+			Submesh const * submesh;
 		};
 
 		template< bool SplitT, typename ObjectT >
@@ -452,7 +452,7 @@ namespace castor3d::exporter
 			{
 				result = ObjectWriterT< SplitT, ObjectT >{}( options, split );
 			}
-			catch ( castor::Exception & exc )
+			catch ( Exception & exc )
 			{
 				std::cerr << "Error encountered while writing file : " << exc.what() << std::endl;
 			}
@@ -476,7 +476,7 @@ namespace castor3d::exporter
 		}
 
 		template< bool SplitT >
-		struct ObjectPostWriterT< SplitT, castor3d::Mesh >
+		struct ObjectPostWriterT< SplitT, Mesh >
 		{
 			bool operator()( MeshWriterOptions const & options
 				, SplitInfo const & split )const
@@ -485,7 +485,7 @@ namespace castor3d::exporter
 
 				if constexpr ( SplitT )
 				{
-					castor::Point3f position;
+					Point3f position;
 
 					if ( options.options.recenter )
 					{
@@ -495,12 +495,12 @@ namespace castor3d::exporter
 						}
 					}
 
-					auto stream = castor::makeStringStream();
+					auto stream = makeStringStream();
 					stream << position[0] << cuT( " " ) << position[1] << cuT( " " ) << position[2];
 
 					options.meshes << ( cuT( "\nmesh \"Mesh_" ) + options.name + cuT( "\"\n" ) );
 					options.meshes << cuT( "{\n" );
-					options.meshes << ( cuT( "\timport \"Meshes/" ) + ( options.subfolder.empty() ? castor::cuEmptyString : ( options.subfolder + cuT( "/" ) ) ) + options.name + cuT( ".cmsh\"\n" ) );
+					options.meshes << ( cuT( "\timport \"Meshes/" ) + ( options.subfolder.empty() ? cuEmptyString : ( options.subfolder + cuT( "/" ) ) ) + options.name + cuT( ".cmsh\"\n" ) );
 
 					if ( auto skeleton = options.object.getSkeleton() )
 					{
@@ -515,7 +515,7 @@ namespace castor3d::exporter
 					options.meshes << cuT( "}\n" );
 					bool hasGeometries = false;
 					{
-						auto lock( castor::makeUniqueLock( options.geometries ) );
+						auto lock( makeUniqueLock( options.geometries ) );
 
 						for ( auto const & [name, geometry] : options.geometries )
 						{
@@ -566,7 +566,7 @@ namespace castor3d::exporter
 					{
 						options.meshes << ( cuT( "\nmesh \"Mesh_" ) + options.name + cuT( "\"\n" ) );
 						options.meshes << cuT( "{\n" );
-						options.meshes << ( cuT( "\timport \"Meshes/" ) + ( options.subfolder.empty() ? castor::cuEmptyString : ( options.subfolder + cuT( "/" ) ) ) + options.name + cuT( ".cmsh\"\n" ) );
+						options.meshes << ( cuT( "\timport \"Meshes/" ) + ( options.subfolder.empty() ? cuEmptyString : ( options.subfolder + cuT( "/" ) ) ) + options.name + cuT( ".cmsh\"\n" ) );
 
 						if ( auto skeleton = options.object.getSkeleton() )
 						{
@@ -592,7 +592,7 @@ namespace castor3d::exporter
 						{
 							if ( auto material = submesh->getDefaultMaterial() )
 							{
-								options.objects << ( cuT( "\t\tmaterial " ) + castor::string::toString( index ) + cuT( " \"" ) + material->getName() + cuT( "\"\n" ) );
+								options.objects << ( cuT( "\t\tmaterial " ) + string::toString( index ) + cuT( " \"" ) + material->getName() + cuT( "\"\n" ) );
 							}
 
 							++index;
@@ -608,7 +608,7 @@ namespace castor3d::exporter
 		};
 
 		template< bool SplitT >
-		struct ObjectPostWriterT< SplitT, castor3d::Skeleton >
+		struct ObjectPostWriterT< SplitT, Skeleton >
 		{
 			bool operator()( SkeletonWriterOptions const & options
 				, SplitInfo const & /*split*/ )const
@@ -619,7 +619,7 @@ namespace castor3d::exporter
 				{
 					options.skeletons << ( cuT( "\nskeleton \"Skeleton_" ) + options.name + cuT( "\"\n" ) );
 					options.skeletons << cuT( "{\n" );
-					options.skeletons << ( cuT( "\timport \"Skeletons/" ) + ( options.subfolder.empty() ? castor::cuEmptyString : ( options.subfolder + cuT( "/" ) ) ) + options.name + cuT( ".cskl\"\n" ) );
+					options.skeletons << ( cuT( "\timport \"Skeletons/" ) + ( options.subfolder.empty() ? cuEmptyString : ( options.subfolder + cuT( "/" ) ) ) + options.name + cuT( ".cskl\"\n" ) );
 					options.skeletons << cuT( "}\n" );
 				}
 				else
@@ -628,7 +628,7 @@ namespace castor3d::exporter
 					{
 						options.skeletons << ( cuT( "\nskeleton \"Skeleton_" ) + options.name + cuT( "\"\n" ) );
 						options.skeletons << cuT( "{\n" );
-						options.skeletons << ( cuT( "\timport \"Skeletons/" ) + ( options.subfolder.empty() ? castor::cuEmptyString : ( options.subfolder + cuT( "/" ) ) ) + options.name + cuT( ".cskl\"\n" ) );
+						options.skeletons << ( cuT( "\timport \"Skeletons/" ) + ( options.subfolder.empty() ? cuEmptyString : ( options.subfolder + cuT( "/" ) ) ) + options.name + cuT( ".cskl\"\n" ) );
 						options.skeletons << cuT( "}\n" );
 					}
 
@@ -636,9 +636,9 @@ namespace castor3d::exporter
 					{
 						if ( carryOn( result, options ) )
 						{
-							castor::BinaryFile animFile{ options.path / castor::File::normaliseFileName( options.name + cuT( "-" ) + name + cuT( ".cska" ) )
-								, castor::File::OpenMode::eWrite };
-							result = castor3d::BinaryWriter< SkeletonAnimation >{}.write( static_cast< SkeletonAnimation const & >( *animation ), animFile );
+							BinaryFile animFile{ options.path / File::normaliseFileName( options.name + cuT( "-" ) + name + cuT( ".cska" ) )
+								, File::OpenMode::eWrite };
+							result = BinaryWriter< SkeletonAnimation >{}.write( static_cast< SkeletonAnimation const & >( *animation ), animFile );
 						}
 					}
 				}
@@ -648,7 +648,7 @@ namespace castor3d::exporter
 		};
 
 		template< bool SplitT >
-		struct ObjectPostWriterT< SplitT, castor3d::SceneNode >
+		struct ObjectPostWriterT< SplitT, SceneNode >
 		{
 			bool operator()( SceneNodeWriterOptions const & options
 				, SplitInfo const & /*split*/ )const
@@ -661,9 +661,9 @@ namespace castor3d::exporter
 					{
 						if ( carryOn( result, options ) )
 						{
-							castor::BinaryFile animFile{ options.path / castor::File::normaliseFileName( options.name + cuT( "-" ) + name + cuT( ".csna" ) )
-								, castor::File::OpenMode::eWrite };
-							result = castor3d::BinaryWriter< SceneNodeAnimation >{}.write( static_cast< SceneNodeAnimation const & >( *animation ), animFile );
+							BinaryFile animFile{ options.path / File::normaliseFileName( options.name + cuT( "-" ) + name + cuT( ".csna" ) )
+								, File::OpenMode::eWrite };
+							result = BinaryWriter< SceneNodeAnimation >{}.write( static_cast< SceneNodeAnimation const & >( *animation ), animFile );
 						}
 					}
 				}
@@ -673,7 +673,7 @@ namespace castor3d::exporter
 		};
 
 		template< bool SplitT >
-		struct ObjectWriterT< SplitT, castor3d::Mesh >
+		struct ObjectWriterT< SplitT, Mesh >
 		{
 			bool operator()( MeshWriterOptions const & options
 				, SplitInfo const & split )const
@@ -688,7 +688,7 @@ namespace castor3d::exporter
 					{
 						if ( carryOn( result, options ) )
 						{
-							auto stream = castor::makeStringStream();
+							auto stream = makeStringStream();
 							stream << options.name << "-S" << index;
 
 							if ( srcSubmesh->getDefaultMaterial() )
@@ -697,8 +697,8 @@ namespace castor3d::exporter
 							}
 
 							auto name = stream.str();
-							auto newPath = options.path / castor::File::normaliseFileName( name + cuT( ".cmsh" ) );
-							auto mesh = castor::make_unique< castor3d::Mesh >( name, *options.object.getScene() );
+							auto newPath = options.path / File::normaliseFileName( name + cuT( ".cmsh" ) );
+							auto mesh = makeRawUnique< Mesh >( name, *options.object.getScene() );
 
 							if ( auto skeleton = options.object.getSkeleton() )
 							{
@@ -708,47 +708,47 @@ namespace castor3d::exporter
 							auto dstSubmesh = mesh->createSubmesh();
 							dstSubmesh->disableSceneUpdate();
 
-							if ( auto positions = srcSubmesh->getComponent< castor3d::PositionsComponent >() )
+							if ( auto positions = srcSubmesh->getComponent< PositionsComponent >() )
 							{
 								dstSubmesh->addComponent( positions->clone( *dstSubmesh ) );
 							}
 
-							if ( auto normals = srcSubmesh->getComponent< castor3d::NormalsComponent >() )
+							if ( auto normals = srcSubmesh->getComponent< NormalsComponent >() )
 							{
 								dstSubmesh->addComponent( normals->clone( *dstSubmesh ) );
 							}
 
-							if ( auto tangents = srcSubmesh->getComponent< castor3d::TangentsComponent >() )
+							if ( auto tangents = srcSubmesh->getComponent< TangentsComponent >() )
 							{
 								dstSubmesh->addComponent( tangents->clone( *dstSubmesh ) );
 							}
 
-							if ( auto bitangents = srcSubmesh->getComponent< castor3d::BitangentsComponent >() )
+							if ( auto bitangents = srcSubmesh->getComponent< BitangentsComponent >() )
 							{
 								dstSubmesh->addComponent( bitangents->clone( *dstSubmesh ) );
 							}
 
-							if ( auto texcoords = srcSubmesh->getComponent< castor3d::Texcoords0Component >() )
+							if ( auto texcoords = srcSubmesh->getComponent< Texcoords0Component >() )
 							{
 								dstSubmesh->addComponent( texcoords->clone( *dstSubmesh ) );
 							}
 
-							if ( auto texcoords = srcSubmesh->getComponent< castor3d::Texcoords1Component >() )
+							if ( auto texcoords = srcSubmesh->getComponent< Texcoords1Component >() )
 							{
 								dstSubmesh->addComponent( texcoords->clone( *dstSubmesh ) );
 							}
 
-							if ( auto texcoords = srcSubmesh->getComponent< castor3d::Texcoords2Component >() )
+							if ( auto texcoords = srcSubmesh->getComponent< Texcoords2Component >() )
 							{
 								dstSubmesh->addComponent( texcoords->clone( *dstSubmesh ) );
 							}
 
-							if ( auto texcoords = srcSubmesh->getComponent< castor3d::Texcoords3Component >() )
+							if ( auto texcoords = srcSubmesh->getComponent< Texcoords3Component >() )
 							{
 								dstSubmesh->addComponent( texcoords->clone( *dstSubmesh ) );
 							}
 
-							if ( auto colours = srcSubmesh->getComponent< castor3d::ColoursComponent >() )
+							if ( auto colours = srcSubmesh->getComponent< ColoursComponent >() )
 							{
 								dstSubmesh->addComponent( colours->clone( *dstSubmesh ) );
 							}
@@ -758,12 +758,12 @@ namespace castor3d::exporter
 								dstSubmesh->addComponent( indexMapping->clone( *dstSubmesh ) );
 							}
 
-							if ( auto bones = srcSubmesh->getComponent< castor3d::SkinComponent >() )
+							if ( auto bones = srcSubmesh->getComponent< SkinComponent >() )
 							{
 								dstSubmesh->addComponent( bones->clone( *dstSubmesh ) );
 							}
 
-							if ( auto morph = srcSubmesh->getComponent< castor3d::MorphComponent >() )
+							if ( auto morph = srcSubmesh->getComponent< MorphComponent >() )
 							{
 								dstSubmesh->addComponent( morph->clone( *dstSubmesh ) );
 							}
@@ -773,7 +773,7 @@ namespace castor3d::exporter
 
 							if ( options.options.recenter )
 							{
-								castor::Point3f position = dstSubmesh->getBoundingBox().getCenter();
+								Point3f position = dstSubmesh->getBoundingBox().getCenter();
 
 								for ( auto & point : dstSubmesh->getPositions() )
 								{
@@ -781,8 +781,8 @@ namespace castor3d::exporter
 								}
 							}
 
-							castor::BinaryFile file{ newPath, castor::File::OpenMode::eWrite };
-							castor3d::BinaryWriter< castor3d::Mesh > writer;
+							BinaryFile file{ newPath, File::OpenMode::eWrite };
+							BinaryWriter< Mesh > writer;
 							result = writer.write( *mesh, file );
 
 							if ( carryOn( result, options ) )
@@ -801,10 +801,10 @@ namespace castor3d::exporter
 				}
 				else
 				{
-					auto newPath = options.path / castor::File::normaliseFileName( options.name + cuT( ".cmsh" ) );
+					auto newPath = options.path / File::normaliseFileName( options.name + cuT( ".cmsh" ) );
 					{
-						castor::BinaryFile file{ newPath, castor::File::OpenMode::eWrite };
-						castor3d::BinaryWriter< castor3d::Mesh > writer;
+						BinaryFile file{ newPath, File::OpenMode::eWrite };
+						BinaryWriter< Mesh > writer;
 						result = writer.write( options.object, file );
 					}
 
@@ -812,9 +812,9 @@ namespace castor3d::exporter
 					{
 						if ( carryOn( result, options ) )
 						{
-							castor::BinaryFile animFile{ options.path / castor::File::normaliseFileName( options.object.getName() + cuT( "-" ) + name + cuT( ".cmsa" ) )
-								, castor::File::OpenMode::eWrite };
-							result = castor3d::BinaryWriter< MeshAnimation >{}.write( static_cast< MeshAnimation const & >( *animation ), animFile );
+							BinaryFile animFile{ options.path / File::normaliseFileName( options.object.getName() + cuT( "-" ) + name + cuT( ".cmsa" ) )
+								, File::OpenMode::eWrite };
+							result = BinaryWriter< MeshAnimation >{}.write( static_cast< MeshAnimation const & >( *animation ), animFile );
 						}
 					}
 				}
@@ -829,14 +829,14 @@ namespace castor3d::exporter
 		};
 
 		template< bool SplitT >
-		struct ObjectWriterT< SplitT, castor3d::Skeleton >
+		struct ObjectWriterT< SplitT, Skeleton >
 		{
 			bool operator()( SkeletonWriterOptions const & options
 				, SplitInfo const & split )const
 			{
-				auto newPath = options.path / castor::File::normaliseFileName( options.name + cuT( ".cskl" ) );
-				castor::BinaryFile file{ newPath, castor::File::OpenMode::eWrite };
-				castor3d::BinaryWriter< castor3d::Skeleton > writer;
+				auto newPath = options.path / File::normaliseFileName( options.name + cuT( ".cskl" ) );
+				BinaryFile file{ newPath, File::OpenMode::eWrite };
+				BinaryWriter< Skeleton > writer;
 				auto result = writer.write( options.object, file );
 
 				if ( carryOn( result, options ) )
@@ -852,25 +852,25 @@ namespace castor3d::exporter
 	namespace
 	{
 		bool writeTextures( bool ignoreFailures
-			, castor::Path const & folder
-			, castor::Path const & filePath
+			, Path const & folder
+			, Path const & filePath
 			, Scene const & scene
-			, castor::TextWriter< Scene >::Options & options )
+			, TextWriter< Scene >::Options & options )
 		{
 			log::info << cuT( "SceneExporter::write - Textures\n" );
-			castor::StringStream sceneStream;
-			castor::StringMap< castor3d::TextureData const * > sorted;
+			StringStream sceneStream;
+			StringMap< TextureData const * > sorted;
 
 			for ( auto & [hash, textureData] : scene.getEngine()->getTextureUnitCache() )
 			{
 				auto name = textureData->sourceInfo.name();
-				if ( name.find( cuT( "C3D_Default" ) ) == castor::String::npos )
+				if ( name.find( cuT( "C3D_Default" ) ) == String::npos )
 				{
 					sorted.try_emplace( name, textureData.get() );
 				}
 			}
 
-			castor::TextWriter< castor3d::TextureData > writer{ castor::cuEmptyString
+			TextWriter< TextureData > writer{ cuEmptyString
 				, *scene.getEngine()
 				, options.rootFolder
 				, options.subfolder };
@@ -883,9 +883,9 @@ namespace castor3d::exporter
 
 			if ( carryOn( result, ignoreFailures ) && !sceneStream.str().empty() )
 			{
-				options.sceneTexturesFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Textures.cscn" ) );
-				castor::TextFile file{ folder / options.sceneTexturesFile
-					, castor::File::OpenMode::eWrite };
+				options.sceneTexturesFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-Textures.cscn" ) );
+				TextFile file{ folder / options.sceneTexturesFile
+					, File::OpenMode::eWrite };
 				result = file.writeText( cuT( "// Textures\n" ) ) > 0
 					&& file.writeText( sceneStream.str() ) > 0;
 			}
@@ -894,16 +894,16 @@ namespace castor3d::exporter
 		}
 
 		bool writeSamplers( bool ignoreFailures
-			, castor::Path const & folder
-			, castor::Path const & filePath
+			, Path const & folder
+			, Path const & filePath
 			, Scene const & scene
-			, castor::TextWriter< Scene >::Options & options )
+			, TextWriter< Scene >::Options & options )
 		{
 			log::info << cuT( "SceneExporter::write - Samplers\n" );
-			castor::StringStream sceneStream;
-			castor::StringStream globalStream;
-			castor::Set< Sampler const * > sceneSamplers;
-			castor::Set< Sampler const * > globalSamplers;
+			StringStream sceneStream;
+			StringStream globalStream;
+			Set< Sampler const * > sceneSamplers;
+			Set< Sampler const * > globalSamplers;
 
 			for ( auto const & [materialName, material] : scene.getEngine()->getMaterialCache() )
 			{
@@ -938,7 +938,7 @@ namespace castor3d::exporter
 				}
 			}
 
-			castor::TextWriter< castor3d::Sampler > writer{ castor::cuEmptyString };
+			TextWriter< Sampler > writer{ cuEmptyString };
 			bool result = true;
 
 			for ( auto & sampler : sceneSamplers )
@@ -953,18 +953,18 @@ namespace castor3d::exporter
 
 			if ( carryOn( result, ignoreFailures ) && !sceneStream.str().empty() )
 			{
-				options.sceneSamplersFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Samplers.cscn" ) );
-				castor::TextFile file{ folder / options.sceneSamplersFile
-					, castor::File::OpenMode::eWrite };
+				options.sceneSamplersFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-Samplers.cscn" ) );
+				TextFile file{ folder / options.sceneSamplersFile
+					, File::OpenMode::eWrite };
 				result = file.writeText( cuT( "// Samplers\n" ) ) > 0
 					&& file.writeText( sceneStream.str() ) > 0;
 			}
 
 			if ( carryOn( result, ignoreFailures ) && !globalStream.str().empty() )
 			{
-				options.globalSamplersFile = cuT( "Helpers" ) / castor::Path( cuT( "Global-Samplers.cscn" ) );
-				castor::TextFile file{ folder / options.globalSamplersFile
-					, castor::File::OpenMode::eWrite };
+				options.globalSamplersFile = cuT( "Helpers" ) / Path( cuT( "Global-Samplers.cscn" ) );
+				TextFile file{ folder / options.globalSamplersFile
+					, File::OpenMode::eWrite };
 				result = file.writeText( cuT( "// Samplers\n" ) ) > 0
 					&& file.writeText( globalStream.str() ) > 0;
 			}
@@ -973,14 +973,14 @@ namespace castor3d::exporter
 		}
 
 		bool writeMaterials( bool ignoreFailures
-			, castor::Path const & folder
-			, castor::Path const & filePath
+			, Path const & folder
+			, Path const & filePath
 			, Scene const & scene
-			, castor::TextWriter< Scene >::Options & options )
+			, TextWriter< Scene >::Options & options )
 		{
 			bool result = false;
-			castor::StringStream sceneStream;
-			castor::StringStream globalStream;
+			StringStream sceneStream;
+			StringStream globalStream;
 			result = writeView< Material >( ignoreFailures
 				, scene.getMaterialView()
 				, cuT( "Materials" )
@@ -995,17 +995,17 @@ namespace castor3d::exporter
 
 			if ( carryOn( result, ignoreFailures ) && !sceneStream.str().empty() )
 			{
-				options.sceneMaterialsFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Materials.cscn" ) );
-				castor::TextFile file{ folder / options.sceneMaterialsFile
-					, castor::File::OpenMode::eWrite };
+				options.sceneMaterialsFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-Materials.cscn" ) );
+				TextFile file{ folder / options.sceneMaterialsFile
+					, File::OpenMode::eWrite };
 				result = file.writeText( sceneStream.str() ) > 0;
 			}
 
 			if ( carryOn( result, ignoreFailures ) && !globalStream.str().empty() )
 			{
-				options.globalMaterialsFile = cuT( "Helpers" ) / castor::Path( cuT( "Global-Materials.cscn" ) );
-				castor::TextFile file{ folder / options.globalMaterialsFile
-					, castor::File::OpenMode::eWrite };
+				options.globalMaterialsFile = cuT( "Helpers" ) / Path( cuT( "Global-Materials.cscn" ) );
+				TextFile file{ folder / options.globalMaterialsFile
+					, File::OpenMode::eWrite };
 				result = file.writeText( globalStream.str() ) > 0;
 			}
 
@@ -1013,20 +1013,20 @@ namespace castor3d::exporter
 		}
 
 		bool writeFonts( bool ignoreFailures
-			, castor::Path const & folder
-			, castor::Path const & filePath
+			, Path const & folder
+			, Path const & filePath
 			, Scene const & scene
-			, castor::TextWriter< Scene >::Options & options )
+			, TextWriter< Scene >::Options & options )
 		{
 			bool result = false;
-			castor::StringStream sceneStream;
-			castor::StringStream globalStream;
-			result = writeView< castor::Font >( ignoreFailures
+			StringStream sceneStream;
+			StringStream globalStream;
+			result = writeView< Font >( ignoreFailures
 				, scene.getFontView()
 				, cuT( "Fonts" )
 				, sceneStream
 				, globalStream
-				, []( castor::Font const & object )
+				, []( Font const & object )
 				{
 					return object.isSerialisable();
 				}
@@ -1034,17 +1034,17 @@ namespace castor3d::exporter
 
 			if ( carryOn( result, ignoreFailures ) && !sceneStream.str().empty() )
 			{
-				options.sceneFontsFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Fonts.cscn" ) );
-				castor::TextFile file{ folder / options.sceneFontsFile
-					, castor::File::OpenMode::eWrite };
+				options.sceneFontsFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-Fonts.cscn" ) );
+				TextFile file{ folder / options.sceneFontsFile
+					, File::OpenMode::eWrite };
 				result = file.writeText( sceneStream.str() ) > 0;
 			}
 
 			if ( carryOn( result, ignoreFailures ) && !globalStream.str().empty() )
 			{
-				options.globalFontsFile = cuT( "Helpers" ) / castor::Path( cuT( "Global-Fonts.cscn" ) );
-				castor::TextFile file{ folder / options.globalFontsFile
-					, castor::File::OpenMode::eWrite };
+				options.globalFontsFile = cuT( "Helpers" ) / Path( cuT( "Global-Fonts.cscn" ) );
+				TextFile file{ folder / options.globalFontsFile
+					, File::OpenMode::eWrite };
 				result = file.writeText( globalStream.str() ) > 0;
 			}
 
@@ -1052,17 +1052,17 @@ namespace castor3d::exporter
 		}
 
 		bool writeGuiThemes( bool ignoreFailures
-			, castor::Path const & folder
-			, castor::Path const & filePath
+			, Path const & folder
+			, Path const & filePath
 			, Scene const & scene
-			, castor::TextWriter< Scene >::Options & options )
+			, TextWriter< Scene >::Options & options )
 		{
 			log::info << cuT( "SceneExporter::write - GUI Themes\n" );
 			auto & manager = static_cast< ControlsManager const & >( *scene.getEngine()->getUserInputListener() );
-			castor::TextWriter< Theme > globalWriter{ castor::cuEmptyString, nullptr };
-			castor::TextWriter< Theme > sceneWriter{ castor::cuEmptyString, &scene };
-			castor::StringStream sceneStream;
-			castor::StringStream globalStream;
+			TextWriter< Theme > globalWriter{ cuEmptyString, nullptr };
+			TextWriter< Theme > sceneWriter{ cuEmptyString, &scene };
+			StringStream sceneStream;
+			StringStream globalStream;
 			bool result{ true };
 
 			for ( auto & [name, theme] : manager.getThemes() )
@@ -1085,18 +1085,18 @@ namespace castor3d::exporter
 
 			if ( carryOn( result, ignoreFailures ) && !globalStream.str().empty() )
 			{
-				options.globalThemesFile = cuT( "Helpers" ) / castor::Path( cuT( "Global-GUI-Themes.cscn" ) );
-				castor::TextFile file{ folder / options.globalThemesFile
-					, castor::File::OpenMode::eWrite };
+				options.globalThemesFile = cuT( "Helpers" ) / Path( cuT( "Global-GUI-Themes.cscn" ) );
+				TextFile file{ folder / options.globalThemesFile
+					, File::OpenMode::eWrite };
 				result = file.writeText( cuT( "// GUI Themes\n" ) ) > 0
 					&& file.writeText( globalStream.str() ) > 0;
 			}
 
 			if ( carryOn( result, ignoreFailures ) && !sceneStream.str().empty() )
 			{
-				options.sceneThemesFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-GUI-Themes.cscn" ) );
-				castor::TextFile file{ folder / options.sceneThemesFile
-					, castor::File::OpenMode::eWrite };
+				options.sceneThemesFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-GUI-Themes.cscn" ) );
+				TextFile file{ folder / options.sceneThemesFile
+					, File::OpenMode::eWrite };
 				result = file.writeText( cuT( "// GUI Themes\n" ) ) > 0
 					&& file.writeText( sceneStream.str() ) > 0;
 			}
@@ -1105,17 +1105,17 @@ namespace castor3d::exporter
 		}
 
 		bool writeGuiStyles( bool ignoreFailures
-			, castor::Path const & folder
-			, castor::Path const & filePath
+			, Path const & folder
+			, Path const & filePath
 			, Scene const & scene
-			, castor::TextWriter< Scene >::Options & options )
+			, TextWriter< Scene >::Options & options )
 		{
 			log::info << cuT( "SceneExporter::write - GUI Styles\n" );
 			auto & manager = static_cast< ControlsManager const & >( *scene.getEngine()->getUserInputListener() );
-			castor::TextWriter< StylesHolder > globalWriter{ castor::cuEmptyString, nullptr, cuT( "" ) };
-			castor::TextWriter< StylesHolder > sceneWriter{ castor::cuEmptyString, &scene, cuT( "" ) };
-			castor::StringStream sceneStream;
-			castor::StringStream globalStream;
+			TextWriter< StylesHolder > globalWriter{ cuEmptyString, nullptr, cuT( "" ) };
+			TextWriter< StylesHolder > sceneWriter{ cuEmptyString, &scene, cuT( "" ) };
+			StringStream sceneStream;
+			StringStream globalStream;
 			bool result = true;
 
 			if ( !manager.isEmpty() )
@@ -1130,18 +1130,18 @@ namespace castor3d::exporter
 
 			if ( carryOn( result, ignoreFailures ) && !globalStream.str().empty() )
 			{
-				options.globalStylesFile = cuT( "Helpers" ) / castor::Path( cuT( "Global-GUI-Styles.cscn" ) );
-				castor::TextFile file{ folder / options.globalStylesFile
-					, castor::File::OpenMode::eWrite };
+				options.globalStylesFile = cuT( "Helpers" ) / Path( cuT( "Global-GUI-Styles.cscn" ) );
+				TextFile file{ folder / options.globalStylesFile
+					, File::OpenMode::eWrite };
 				result = file.writeText( cuT( "// GUI Styles\n" ) ) > 0
 					&& file.writeText( globalStream.str() ) > 0;
 			}
 
 			if ( carryOn( result, ignoreFailures ) && !sceneStream.str().empty() )
 			{
-				options.sceneStylesFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-GUI-Styles.cscn" ) );
-				castor::TextFile file{ folder / options.sceneStylesFile
-					, castor::File::OpenMode::eWrite };
+				options.sceneStylesFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-GUI-Styles.cscn" ) );
+				TextFile file{ folder / options.sceneStylesFile
+					, File::OpenMode::eWrite };
 				result = file.writeText( cuT( "// GUI Styles\n" ) ) > 0
 					&& file.writeText( sceneStream.str() ) > 0;
 			}
@@ -1150,17 +1150,17 @@ namespace castor3d::exporter
 		}
 
 		bool writeGuiControls( bool ignoreFailures
-			, castor::Path const & folder
-			, castor::Path const & filePath
+			, Path const & folder
+			, Path const & filePath
 			, Scene const & scene
-			, castor::TextWriter< Scene >::Options & options )
+			, TextWriter< Scene >::Options & options )
 		{
 			log::info << cuT( "SceneExporter::write - GUI Controls\n" );
 			auto & manager = static_cast< ControlsManager const & >( *scene.getEngine()->getUserInputListener() );
-			castor::TextWriter< StylesHolder > writer{ castor::cuEmptyString, nullptr, cuT( "" ) };
-			castor::StringStream sceneStream;
-			castor::StringStream globalStream;
-			auto filter = [&scene, &sceneStream, &globalStream]( Control const & control ) -> castor::StringStream *
+			TextWriter< StylesHolder > writer{ cuEmptyString, nullptr, cuT( "" ) };
+			StringStream sceneStream;
+			StringStream globalStream;
+			auto filter = [&scene, &sceneStream, &globalStream]( Control const & control ) -> StringStream *
 			{
 				if ( control.getName() == cuT( "Debug/Main" )
 					|| control.getName() == cuT( "Debug/RenderPasses" ) )
@@ -1197,18 +1197,18 @@ namespace castor3d::exporter
 
 			if ( carryOn( result, ignoreFailures ) && !globalStream.str().empty() )
 			{
-				options.globalControlsFile = cuT( "Helpers" ) / castor::Path( cuT( "Global-GUI-Controls.cscn" ) );
-				castor::TextFile file{ folder / options.globalControlsFile
-					, castor::File::OpenMode::eWrite };
+				options.globalControlsFile = cuT( "Helpers" ) / Path( cuT( "Global-GUI-Controls.cscn" ) );
+				TextFile file{ folder / options.globalControlsFile
+					, File::OpenMode::eWrite };
 				result = file.writeText( cuT( "// GUI Controls\n" ) ) > 0
 					&& file.writeText( globalStream.str() ) > 0;
 			}
 
 			if ( carryOn( result, ignoreFailures ) && !sceneStream.str().empty() )
 			{
-				options.sceneControlsFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-GUI-Controls.cscn" ) );
-				castor::TextFile file{ folder / options.sceneControlsFile
-					, castor::File::OpenMode::eWrite };
+				options.sceneControlsFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-GUI-Controls.cscn" ) );
+				TextFile file{ folder / options.sceneControlsFile
+					, File::OpenMode::eWrite };
 				result = file.writeText( cuT( "// GUI Controls\n" ) ) > 0
 					&& file.writeText( sceneStream.str() ) > 0;
 			}
@@ -1217,13 +1217,13 @@ namespace castor3d::exporter
 		}
 
 		bool writeLights( bool ignoreFailures
-			, castor::Path const & folder
-			, castor::Path const & filePath
+			, Path const & folder
+			, Path const & filePath
 			, Scene const & scene
-			, castor::TextWriter< Scene >::Options & options )
+			, TextWriter< Scene >::Options & options )
 		{
 			bool result = false;
-			castor::StringStream stream;
+			StringStream stream;
 			{
 				result = writeCache< Light >( ignoreFailures
 					, scene.getLightCache()
@@ -1247,23 +1247,23 @@ namespace castor3d::exporter
 			}
 			if ( carryOn( result, ignoreFailures ) && !stream.str().empty() )
 			{
-				options.lightsFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Lights.cscn" ) );
-				castor::TextFile file{ folder / options.lightsFile
-					, castor::File::OpenMode::eWrite };
+				options.lightsFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-Lights.cscn" ) );
+				TextFile file{ folder / options.lightsFile
+					, File::OpenMode::eWrite };
 				result = file.writeText( stream.str() ) > 0;
 			}
 			return result;
 		}
 
-		bool writeNode( castor::Path const & folder
-			, castor::Path const & filePath
+		bool writeNode( Path const & folder
+			, Path const & filePath
 			, SceneNode & node
-			, castor::TextWriter< Scene >::Options & options
+			, TextWriter< Scene >::Options & options
 			, ExportOptions const & exportOptions
-			, castor::StringStream & stream )
+			, StringStream & stream )
 		{
 			bool result = true;
-			castor::TextWriter< SceneNode > writer{ castor::cuEmptyString
+			TextWriter< SceneNode > writer{ cuEmptyString
 				, exportOptions.scale };
 
 			if ( node.hasAnimation() )
@@ -1315,12 +1315,12 @@ namespace castor3d::exporter
 			return result;
 		}
 
-		bool writeNodes( castor::Path const & folder
-			, castor::Path const & filePath
+		bool writeNodes( Path const & folder
+			, Path const & filePath
 			, Scene const & scene
-			, castor::TextWriter< Scene >::Options & options
+			, TextWriter< Scene >::Options & options
 			, ExportOptions const & exportOptions
-			, castor::StringStream & stream )
+			, StringStream & stream )
 		{
 			log::info << cuT( "SceneExporter::write - Scene Nodes\n" );
 			stream << "// Nodes\n";
@@ -1334,23 +1334,23 @@ namespace castor3d::exporter
 			return result;
 		}
 
-		castor::TextWriter< castor3d::Scene >::Options prepareExport( ExportOptions const & exportOptions
-			, castor::Path const & fileName
-			, castor::Path & folder
-			, castor::Path & filePath
-			, castor::Path & skeletonFolder
-			, castor::Path & meshFolder )
+		TextWriter< Scene >::Options prepareExport( ExportOptions const & exportOptions
+			, Path const & fileName
+			, Path & folder
+			, Path & filePath
+			, Path & skeletonFolder
+			, Path & meshFolder )
 		{
 			folder = fileName.getPath();
 
-			if ( !castor::File::directoryExists( folder ) )
+			if ( !File::directoryExists( folder ) )
 			{
-				castor::File::directoryCreate( folder );
+				File::directoryCreate( folder );
 			}
 
-			castor::TextWriter< castor3d::Scene >::Options options;
+			TextWriter< Scene >::Options options;
 			options.rootFolder = fileName.getPath();
-			castor::String dataSubfolder;
+			String dataSubfolder;
 
 			if ( exportOptions.dataSubfolders )
 			{
@@ -1367,46 +1367,46 @@ namespace castor3d::exporter
 				meshFolder /= dataSubfolder;
 			}
 
-			if ( !castor::File::directoryExists( skeletonFolder ) )
+			if ( !File::directoryExists( skeletonFolder ) )
 			{
-				castor::File::directoryCreate( skeletonFolder );
+				File::directoryCreate( skeletonFolder );
 			}
 
-			if ( !castor::File::directoryExists( meshFolder ) )
+			if ( !File::directoryExists( meshFolder ) )
 			{
-				castor::File::directoryCreate( meshFolder );
+				File::directoryCreate( meshFolder );
 			}
 
 			filePath = folder / ( fileName.getFileName() + cuT( ".cscn" ) );
 
-			if ( !castor::File::directoryExists( folder / cuT( "Helpers" ) ) )
+			if ( !File::directoryExists( folder / cuT( "Helpers" ) ) )
 			{
-				castor::File::directoryCreate( folder / cuT( "Helpers" ) );
+				File::directoryCreate( folder / cuT( "Helpers" ) );
 			}
 
-			options.skeletonsFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Skeletons.cscn" ) );
-			options.meshesFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Meshes.cscn" ) );
-			options.objectsFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Objects.cscn" ) );
-			options.nodesFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Nodes.cscn" ) );
+			options.skeletonsFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-Skeletons.cscn" ) );
+			options.meshesFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-Meshes.cscn" ) );
+			options.objectsFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-Objects.cscn" ) );
+			options.nodesFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-Nodes.cscn" ) );
 			options.scale = exportOptions.scale;
 			return options;
 		}
 
-		castor::String getCameraPosition( castor3d::Mesh const & mesh
+		String getCameraPosition( Mesh const & mesh
 			, float & farPlane )
 		{
 			auto const &  aabb = mesh.getBoundingBox();
 			auto height = aabb.getDimensions()->y;
 			auto z = -( height * 1.5f );
 			farPlane = std::abs( z ) + std::max( aabb.getMax()->z, std::max( aabb.getMax()->x, aabb.getMax()->y ) ) * 2.0f;
-			return castor::string::toString( aabb.getCenter()->x ) + cuT( " " )
-				+ castor::string::toString( aabb.getCenter()->y ) + cuT( " " )
-				+ castor::string::toString( z );
+			return string::toString( aabb.getCenter()->x ) + cuT( " " )
+				+ string::toString( aabb.getCenter()->y ) + cuT( " " )
+				+ string::toString( z );
 		}
 
-		void printRenderWindow( castor::String const & sceneName
-			, castor::String const & cameraName
-			, castor::StringStream & stream )
+		void printRenderWindow( String const & sceneName
+			, String const & cameraName
+			, StringStream & stream )
 		{
 			stream << cuT( "\n" );
 			stream << cuT( "//Windows\n" );
@@ -1428,15 +1428,15 @@ namespace castor3d::exporter
 		}
 
 		bool finaliseExport( ExportOptions const & exportOptions
-			, castor3d::Mesh const * singleMesh
-			, castor::TextWriter< castor3d::Scene >::Options & options
-			, castor::StringStream const & skeletons
-			, castor::StringStream const & meshes
-			, castor::StringStream const & nodes
-			, castor::StringStream const & objects
-			, castor3d::Scene const & scene
-			, castor::Path const & folder
-			, castor::Path const & filePath )
+			, Mesh const * singleMesh
+			, TextWriter< Scene >::Options & options
+			, StringStream const & skeletons
+			, StringStream const & meshes
+			, StringStream const & nodes
+			, StringStream const & objects
+			, Scene const & scene
+			, Path const & folder
+			, Path const & filePath )
 		{
 			bool result = true;
 			auto skl = skeletons.str();
@@ -1446,8 +1446,8 @@ namespace castor3d::exporter
 
 			if ( !skl.empty() )
 			{
-				castor::TextFile sklFile{ folder / options.skeletonsFile
-					, castor::File::OpenMode::eWrite };
+				TextFile sklFile{ folder / options.skeletonsFile
+					, File::OpenMode::eWrite };
 				result = sklFile.writeText( skl ) > 0;
 			}
 			else
@@ -1457,8 +1457,8 @@ namespace castor3d::exporter
 
 			if ( carryOn( result, exportOptions ) && !msh.empty() )
 			{
-				castor::TextFile mshFile{ folder / options.meshesFile
-					, castor::File::OpenMode::eWrite };
+				TextFile mshFile{ folder / options.meshesFile
+					, File::OpenMode::eWrite };
 				result = mshFile.writeText( msh ) > 0;
 			}
 			else
@@ -1468,8 +1468,8 @@ namespace castor3d::exporter
 
 			if ( carryOn( result, exportOptions ) && !obj.empty() )
 			{
-				castor::TextFile objFile{ folder / options.objectsFile
-					, castor::File::OpenMode::eWrite };
+				TextFile objFile{ folder / options.objectsFile
+					, File::OpenMode::eWrite };
 				result = objFile.writeText( obj ) > 0;
 			}
 			else
@@ -1479,8 +1479,8 @@ namespace castor3d::exporter
 
 			if ( carryOn( result, exportOptions ) && !nod.empty() )
 			{
-				castor::TextFile nodFile{ folder / options.nodesFile
-					, castor::File::OpenMode::eWrite };
+				TextFile nodFile{ folder / options.nodesFile
+					, File::OpenMode::eWrite };
 				result = nodFile.writeText( nod ) > 0;
 			}
 			else
@@ -1490,7 +1490,7 @@ namespace castor3d::exporter
 
 			if ( carryOn( result, exportOptions ) )
 			{
-				castor::StringStream stream;
+				StringStream stream;
 
 				if ( singleMesh )
 				{
@@ -1634,7 +1634,7 @@ namespace castor3d::exporter
 				}
 				else
 				{
-					result = castor::TextWriter< Scene >{ castor::cuEmptyString, options }( scene, stream );
+					result = TextWriter< Scene >{ cuEmptyString, options }( scene, stream );
 
 					if ( scene.getEngine()->getRenderWindows().empty()
 						&& !scene.getCameraCache().isEmpty() )
@@ -1648,8 +1648,8 @@ namespace castor3d::exporter
 
 				if ( carryOn( result, exportOptions ) )
 				{
-					castor::TextFile scnFile{ castor::Path{ filePath }
-						, castor::File::OpenMode::eWrite };
+					TextFile scnFile{ Path{ filePath }
+						, File::OpenMode::eWrite };
 					result = scnFile.writeText( stream.str() ) > 0;
 				}
 			}
@@ -1661,19 +1661,19 @@ namespace castor3d::exporter
 	//*********************************************************************************************
 
 	CscnSceneExporter::CscnSceneExporter( ExportOptions options )
-		: SceneExporter{ castor::move( options ) }
+		: SceneExporter{ c3d::move( options ) }
 	{
 	}
 
-	bool CscnSceneExporter::exportMesh( castor3d::Scene const & scene
-		, castor3d::Mesh const & mesh
-		, castor::Path const & outputFolder
-		, castor::String const & outputName )
+	bool CscnSceneExporter::exportMesh( Scene const & scene
+		, Mesh const & mesh
+		, Path const & outputFolder
+		, String const & outputName )
 	{
-		castor::Path folder;
-		castor::Path filePath;
-		castor::Path skeletonFolder;
-		castor::Path meshFolder;
+		Path folder;
+		Path filePath;
+		Path skeletonFolder;
+		Path meshFolder;
 		auto options = prepareExport( m_options
 			, outputFolder
 			, folder
@@ -1697,10 +1697,10 @@ namespace castor3d::exporter
 
 		if ( carryOn( result ) )
 		{
-			castor::StringStream skeletons;
-			castor::StringStream meshes;
-			castor::StringStream nodes;
-			castor::StringStream objects;
+			StringStream skeletons;
+			StringStream meshes;
+			StringStream nodes;
+			StringStream objects;
 			skeletons << "// Skeletons\n";
 			meshes << "// Meshes\n";
 			nodes << "// Nodes\n";
@@ -1798,13 +1798,13 @@ namespace castor3d::exporter
 		return result;
 	}
 
-	bool CscnSceneExporter::exportScene( castor3d::Scene const & scene
-		, castor::Path const & fileName )
+	bool CscnSceneExporter::exportScene( Scene const & scene
+		, Path const & fileName )
 	{
-		castor::Path folder;
-		castor::Path filePath;
-		castor::Path skeletonFolder;
-		castor::Path meshFolder;
+		Path folder;
+		Path filePath;
+		Path skeletonFolder;
+		Path meshFolder;
 		auto options = prepareExport( m_options
 			, fileName
 			, folder
@@ -1879,10 +1879,10 @@ namespace castor3d::exporter
 				, scene
 				, options );
 
-			castor::StringStream skeletons;
-			castor::StringStream meshes;
-			castor::StringStream nodes;
-			castor::StringStream objects;
+			StringStream skeletons;
+			StringStream meshes;
+			StringStream nodes;
+			StringStream objects;
 
 			if ( carryOn( result ) )
 			{
@@ -1896,7 +1896,7 @@ namespace castor3d::exporter
 
 			if ( m_options.splitPerMaterial )
 			{
-				auto lock( castor::makeUniqueLock( scene.getMeshCache() ) );
+				auto lock( makeUniqueLock( scene.getMeshCache() ) );
 
 				for ( auto const & [name, skeleton] : scene.getSkeletonCache() )
 				{
@@ -1969,7 +1969,7 @@ namespace castor3d::exporter
 
 				if ( result )
 				{
-					auto lock( castor::makeUniqueLock( scene.getMeshCache() ) );
+					auto lock( makeUniqueLock( scene.getMeshCache() ) );
 
 					for ( auto const & [name, skeleton] : scene.getSkeletonCache() )
 					{

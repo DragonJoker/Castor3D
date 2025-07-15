@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**
 	\~english

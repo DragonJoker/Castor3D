@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 #include <unordered_map>
 
-namespace castor3d
+namespace c3d
 {
 	class MeshletBoundsTransformingPass
 		: public crg::RunnablePass
@@ -35,7 +35,7 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		castor::UnorderedMap< size_t, MeshletBoundsTransformPassUPtr > m_transformPasses;
+		HashMap< size_t, MeshletBoundsTransformPassUPtr > m_transformPasses;
 	};
 }
 

@@ -11,14 +11,14 @@ See LICENSE file in root folder
 #include <regex>
 
 #define CU_DO_WRITE_PARSER_NAME( funcname )\
-	funcname( castor::FileParserContext & context\
+	funcname( c3d::FileParserContext & context\
 		, void *\
-		, castor::ParserParameterArray const & params )
+		, c3d::ParserParameterArray const & params )
 
 #define CU_DO_WRITE_BLOCK_PARSER_NAME( funcname, block )\
-	funcname( castor::FileParserContext & context\
+	funcname( c3d::FileParserContext & context\
 		, block * blockContext\
-		, castor::ParserParameterArray const & params )
+		, c3d::ParserParameterArray const & params )
 
 #define CU_DO_WRITE_PARSER_CONTENT\
 		bool result = false;
@@ -54,7 +54,7 @@ See LICENSE file in root folder
 	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
 #define CU_EndAttributePush( section )\
 		CU_DO_WRITE_PARSER_END( true )\
-		context.pendingSection = castor::SectionId( section );\
+		context.pendingSection = c3d::SectionId( section );\
 		context.pendingBlock = nullptr;\
 		return result;\
 	}
@@ -70,7 +70,7 @@ See LICENSE file in root folder
 	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
 #define CU_EndAttributePushBlock( section, block )\
 		CU_DO_WRITE_PARSER_END( false )\
-		context.pendingSection = castor::SectionId( section );\
+		context.pendingSection = c3d::SectionId( section );\
 		context.pendingBlock = block;\
 		return result;\
 	}
@@ -81,14 +81,14 @@ See LICENSE file in root folder
 	bool CU_DO_WRITE_BLOCK_PARSER_NAME( funcname, oldBlock )\
 	{\
 		auto newBlockContext = new newBlock{};\
-		context.allocatedBlocks.emplace_back( newBlockContext, castor::makeContextDeleter< newBlock >() );\
+		context.allocatedBlocks.emplace_back( newBlockContext, c3d::makeContextDeleter< newBlock >() );\
 		CU_DO_WRITE_PARSER_CONTENT
 
 	//!\~english	Define to ease the implementation of a parser.
 	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
 #define CU_EndAttributePushNewBlock( section )\
 		CU_DO_WRITE_PARSER_END( true )\
-		context.pendingSection = castor::SectionId( section );\
+		context.pendingSection = c3d::SectionId( section );\
 		context.pendingBlock = newBlockContext;\
 		return result;\
 	}
@@ -120,9 +120,9 @@ See LICENSE file in root folder
 	//!\~english	Define to ease creation of a section name.
 	//!\~french		Un define pour faciliter la création d'un nom de section.
 #define CU_MakeSectionName( a, b, c, d )\
-	( (castor::SectionId( a ) << 24 ) | ( castor::SectionId( b ) << 16 ) | ( castor::SectionId( c ) << 8 ) | ( castor::SectionId( d ) << 0 ) )
+	( (c3d::SectionId( a ) << 24 ) | ( c3d::SectionId( b ) << 16 ) | ( c3d::SectionId( c ) << 8 ) | ( c3d::SectionId( d ) << 0 ) )
 
-namespace castor
+namespace c3d
 {
 	/**@name File Parser */
 	//@{
@@ -303,9 +303,9 @@ namespace castor
 	*/
 	class PreprocessedFile;
 
-	CU_DeclareSmartPtr( castor, FileParserContext, CU_API );
+	CU_DeclareSmartPtr( c3d, FileParserContext, CU_API );
 
-	using ParserParameterBaseSPtr = castor::SharedPtr< ParserParameterBase >;
+	using ParserParameterBaseSPtr = c3d::SharedPtr< ParserParameterBase >;
 
 	CU_DeclareVector( ParserParameterBaseSPtr, ParserParameter );
 	/**
@@ -322,7 +322,7 @@ namespace castor
 	 *\param[in]	params	Les paramètres contenus dans la ligne.
 	 *\return		\p true si une accolade doit être ouverte à la ligne suivante.
 	 */
-	using ParserFunction = castor::Function< bool( FileParserContext &, void *, ParserParameterArray const & ) >;
+	using ParserFunction = c3d::Function< bool( FileParserContext &, void *, ParserParameterArray const & ) >;
 	using RawParserFunction = bool( * )( FileParserContext &, void *, ParserParameterArray const & );
 	/**
 	 *\~english
@@ -339,7 +339,7 @@ namespace castor
 	 *\return		\p true si une accolade doit être ouverte à la ligne suivante.
 	 */
 	template< typename BlockContextT >
-	using ParserFunctionT = castor::Function< bool( FileParserContext &, BlockContextT *, ParserParameterArray const & ) >;
+	using ParserFunctionT = c3d::Function< bool( FileParserContext &, BlockContextT *, ParserParameterArray const & ) >;
 	template< typename BlockContextT >
 	using RawParserFunctionT = bool( * )( FileParserContext &, BlockContextT *, ParserParameterArray const & );
 	/**
@@ -357,9 +357,9 @@ namespace castor
 		ParserFunctionAndParams( ParserFunction function
 			, uint32_t resultSection
 			, ParserParameterArray params = {} )
-			: function{ castor::move( function ) }
+			: function{ c3d::move( function ) }
 			, resultSection{ resultSection }
-			, params{ castor::move( params ) }
+			, params{ c3d::move( params ) }
 		{
 		}
 
@@ -393,16 +393,16 @@ namespace castor
 	 *\~french
 	 *\brief		Fonction de création d'un contexte défini par l'utilisateur.
 	 */
-	using UserContextCreator = castor::Function< void * ( FileParserContext & ) >;
+	using UserContextCreator = c3d::Function< void * ( FileParserContext & ) >;
 
 	struct AdditionalParsers
 	{
 		AdditionalParsers( AttributeParsers pparsers = {}
 			, StrUInt32Map psections = {}
 			, UserContextCreator pcontextCreator = {} )
-			: parsers{ castor::move( pparsers ) }
-			, sections{ castor::move( psections ) }
-			, contextCreator{ castor::move( pcontextCreator ) }
+			: parsers{ c3d::move( pparsers ) }
+			, sections{ c3d::move( psections ) }
+			, contextCreator{ c3d::move( pcontextCreator ) }
 		{
 		}
 
@@ -486,8 +486,8 @@ namespace castor
 			, section
 			, section
 			, name
-			, castor::move( function )
-			, castor::move( params ) );
+			, c3d::move( function )
+			, c3d::move( params ) );
 	}
 
 	template< typename BlockContextT >
@@ -505,7 +505,7 @@ namespace castor
 			, uint32_t( section )
 			, name
 			, BaseFunction( function )
-			, castor::move( params ) );
+			, c3d::move( params ) );
 	}
 
 	template< typename SectionT, typename SectionU, typename BlockContextT >
@@ -522,7 +522,7 @@ namespace castor
 			, uint32_t( newSection )
 			, name
 			, BaseFunction( function )
-			, castor::move( params ) );
+			, c3d::move( params ) );
 	}
 	//@}
 }

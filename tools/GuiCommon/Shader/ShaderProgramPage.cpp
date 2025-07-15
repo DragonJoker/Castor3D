@@ -15,7 +15,7 @@ namespace GuiCommon
 		}	eID;
 	}
 
-	ShaderProgramPage::ShaderProgramPage( castor3d::Engine * engine
+	ShaderProgramPage::ShaderProgramPage( c3d::Engine * engine
 		, bool canEdit
 		, StcContext & stcContext
 		, ShaderSource & source
@@ -48,7 +48,7 @@ namespace GuiCommon
 		}
 	}
 
-	void ShaderProgramPage::doInitialiseLayout( castor3d::Engine * engine )
+	void ShaderProgramPage::doInitialiseLayout( c3d::Engine * engine )
 	{
 		wxSize size = GetClientSize();
 		m_editors = new wxAuiNotebook( this
@@ -74,7 +74,7 @@ namespace GuiCommon
 
 	void ShaderProgramPage::doLoadPages( ShaderLanguage language )
 	{
-		castor::Map< ast::EntryPoint, wxString > const texts
+		c3d::Map< ast::EntryPoint, wxString > const texts
 		{
 			{ ast::EntryPoint::eVertex, _( "Vertex" ) },
 			{ ast::EntryPoint::eTessellationControl, _( "Tessellation Control" ) },

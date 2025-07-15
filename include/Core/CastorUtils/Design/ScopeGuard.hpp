@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename ScopeExitFuncType >
 	class ScopeGuard

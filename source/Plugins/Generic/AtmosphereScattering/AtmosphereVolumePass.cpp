@@ -37,7 +37,7 @@ namespace atmosphere_scattering
 			SurfaceT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
-				: sdw::StructInstance{ writer, castor::move( expr ), enabled }
+				: sdw::StructInstance{ writer, c3d::move( expr ), enabled }
 				, sliceId{ getMember< sdw::Int >( "sliceId" ) }
 			{
 			}
@@ -81,9 +81,9 @@ namespace atmosphere_scattering
 			sdw::Int sliceId;
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
-			, castor3d::Extent3D const & renderSize
-			, castor3d::Extent3D const & transmittanceExtent )
+		static c3d::ShaderPtr getProgram( c3d::Engine & engine
+			, c3d::Extent3D const & renderSize
+			, c3d::Extent3D const & transmittanceExtent )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
@@ -106,7 +106,7 @@ namespace atmosphere_scattering
 
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
-				, AtmosphereModel::Settings{ castor::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
+				, AtmosphereModel::Settings{ c3d::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
 					.setCameraData( &atm_cameraData )
 					.setMieRayPhase( true )
 				, { transmittanceExtent.width, transmittanceExtent.height } };
@@ -207,7 +207,7 @@ namespace atmosphere_scattering
 				, sdw::InVec2{ writer, "pixPos" }
 				, sdw::InInt{ writer, "sliceId" } );
 
-			writer.implementEntryPointT< c3d::Position4FT, SurfaceT >( [&]( sdw::VertexInT< c3d::Position4FT > in
+			writer.implementEntryPointT< c3ds::Position4FT, SurfaceT >( [&]( sdw::VertexInT< c3ds::Position4FT > in
 				, sdw::VertexOutT< SurfaceT > out )
 				{
 					out.vtx.position = vec4( in.position().xy(), 0.9999999, 1.0 );
@@ -232,8 +232,8 @@ namespace atmosphere_scattering
 				out.restartStrip();
 			} );
 
-			writer.implementEntryPointT< SurfaceT, c3d::Colour4FT >( [&]( sdw::FragmentInT< SurfaceT > in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< SurfaceT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< SurfaceT > in
+				, sdw::FragmentOutT< c3ds::Colour4FT > out )
 				{
 					out.colour() = process( in.fragCoord.xy(), in.sliceId );
 				} );
@@ -246,19 +246,19 @@ namespace atmosphere_scattering
 
 	AtmosphereVolumePass::AtmosphereVolumePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, CameraUbo const & cameraUbo
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, crg::ImageViewId const & transmittanceView
 		, crg::ImageViewId const & resultView
 		, uint32_t index
 		, bool const & enabled )
-		: castor::Named{ cuT( "CameraVolumePass" ) + castor::string::toString( index ) }
+		: c3d::Named{ cuT( "CameraVolumePass" ) + c3d::string::toString( index ) }
 		, m_shader{ getName(), volume::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ), getExtent( transmittanceView ) ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		auto renderSize = getExtent( resultView );
-		auto & pass = graph.createPass( castor::toUtf8( getName() )
+		auto & pass = graph.createPass( c3d::toUtf8( getName() )
 			, [this, &device, &enabled, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -269,7 +269,7 @@ namespace atmosphere_scattering
 					.instances( renderSize.depth )
 					.enabled( &enabled )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -278,8 +278,8 @@ namespace atmosphere_scattering
 			, volume::eCamera );
 		atmosphereUbo.createPassBinding( pass
 			, volume::eAtmosphere );
-		crg::SamplerDesc linearSampler{ castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear };
+		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
+			, c3d::FilterMode::eLinear };
 		pass.addSampledView( transmittanceView
 			, volume::eTransmittance
 			, linearSampler );
@@ -287,7 +287,7 @@ namespace atmosphere_scattering
 		m_lastPass = &pass;
 	}
 
-	void AtmosphereVolumePass::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void AtmosphereVolumePass::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 	}

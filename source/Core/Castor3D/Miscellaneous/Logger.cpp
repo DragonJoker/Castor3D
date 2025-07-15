@@ -7,16 +7,16 @@ See LICENSE file in root folder
 
 #include <RenderGraph/Log.hpp>
 
-namespace castor3d
+namespace c3d
 {
-	castor::LoggerInstance * log::m_logger{ nullptr };
-	castor::LoggerStreamT< xchar, castor::TraceLoggerStreambufT > log::trace;
-	castor::LoggerStreamT< xchar, castor::DebugLoggerStreambufT > log::debug;
-	castor::LoggerStreamT< xchar, castor::InfoLoggerStreambufT > log::info;
-	castor::LoggerStreamT< xchar, castor::WarningLoggerStreambufT > log::warn;
-	castor::LoggerStreamT< xchar, castor::ErrorLoggerStreambufT > log::error;
+	LoggerInstance * log::m_logger{ nullptr };
+	LoggerStreamT< xchar, TraceLoggerStreambufT > log::trace;
+	LoggerStreamT< xchar, DebugLoggerStreambufT > log::debug;
+	LoggerStreamT< xchar, InfoLoggerStreambufT > log::info;
+	LoggerStreamT< xchar, WarningLoggerStreambufT > log::warn;
+	LoggerStreamT< xchar, ErrorLoggerStreambufT > log::error;
 
-	castor::LoggerInstance * log::initialise( castor::LoggerInstance & logger )
+	LoggerInstance * log::initialise( LoggerInstance & logger )
 	{
 		m_logger = &logger;
 		trace.set( *m_logger );
@@ -24,86 +24,86 @@ namespace castor3d
 		info.set( *m_logger );
 		warn.set( *m_logger );
 		error.set( *m_logger );
-		ashes::Logger::setTraceCallback( []( castor::MbString const & msg, bool newLine )
+		ashes::Logger::setTraceCallback( []( MbString const & msg, bool newLine )
 			{
-				m_logger->pushMessage( castor::LogType::eTrace, msg, newLine );
+				m_logger->pushMessage( LogType::eTrace, msg, newLine );
 			} );
-		ashes::Logger::setDebugCallback( []( castor::MbString const & msg, bool newLine )
+		ashes::Logger::setDebugCallback( []( MbString const & msg, bool newLine )
 			{
-				m_logger->pushMessage( castor::LogType::eDebug, msg, newLine );
+				m_logger->pushMessage( LogType::eDebug, msg, newLine );
 			} );
-		ashes::Logger::setInfoCallback( []( castor::MbString const & msg, bool newLine )
+		ashes::Logger::setInfoCallback( []( MbString const & msg, bool newLine )
 			{
-				m_logger->pushMessage( castor::LogType::eInfo, msg, newLine );
+				m_logger->pushMessage( LogType::eInfo, msg, newLine );
 			} );
-		ashes::Logger::setWarningCallback( []( castor::MbString const & msg, bool newLine )
+		ashes::Logger::setWarningCallback( []( MbString const & msg, bool newLine )
 			{
-				m_logger->pushMessage( castor::LogType::eWarning, msg, newLine );
+				m_logger->pushMessage( LogType::eWarning, msg, newLine );
 			} );
-		ashes::Logger::setErrorCallback( []( castor::MbString const & msg, bool newLine )
+		ashes::Logger::setErrorCallback( []( MbString const & msg, bool newLine )
 			{
-				m_logger->pushMessage( castor::LogType::eError, msg, newLine );
+				m_logger->pushMessage( LogType::eError, msg, newLine );
 			} );
-		crg::Logger::setTraceCallback( []( castor::MbStringView msg, bool newLine )noexcept
+		crg::Logger::setTraceCallback( []( MbStringView msg, bool newLine )noexcept
 			{
-				m_logger->pushMessage( castor::LogType::eTrace, castor::MbString{ msg }, newLine );
+				m_logger->pushMessage( LogType::eTrace, MbString{ msg }, newLine );
 			} );
-		crg::Logger::setDebugCallback( []( castor::MbStringView msg, bool newLine )noexcept
+		crg::Logger::setDebugCallback( []( MbStringView msg, bool newLine )noexcept
 			{
-				m_logger->pushMessage( castor::LogType::eDebug, castor::MbString{ msg }, newLine );
+				m_logger->pushMessage( LogType::eDebug, MbString{ msg }, newLine );
 			} );
-		crg::Logger::setInfoCallback( []( castor::MbStringView msg, bool newLine )noexcept
+		crg::Logger::setInfoCallback( []( MbStringView msg, bool newLine )noexcept
 			{
-				m_logger->pushMessage( castor::LogType::eInfo, castor::MbString{ msg }, newLine );
+				m_logger->pushMessage( LogType::eInfo, MbString{ msg }, newLine );
 			} );
-		crg::Logger::setWarningCallback( []( castor::MbStringView msg, bool newLine )noexcept
+		crg::Logger::setWarningCallback( []( MbStringView msg, bool newLine )noexcept
 			{
-				m_logger->pushMessage( castor::LogType::eWarning, castor::MbString{ msg }, newLine );
+				m_logger->pushMessage( LogType::eWarning, MbString{ msg }, newLine );
 			} );
-		crg::Logger::setErrorCallback( []( castor::MbStringView msg, bool newLine )noexcept
+		crg::Logger::setErrorCallback( []( MbStringView msg, bool newLine )noexcept
 			{
-				m_logger->pushMessage( castor::LogType::eError, castor::MbString{ msg }, newLine );
+				m_logger->pushMessage( LogType::eError, MbString{ msg }, newLine );
 			} );
 		return m_logger;
 	}
 
 	void log::cleanup()
 	{
-		crg::Logger::setTraceCallback( []( castor::MbStringView, bool )noexcept
+		crg::Logger::setTraceCallback( []( MbStringView, bool )noexcept
 			{
 			} );
-		crg::Logger::setDebugCallback( []( castor::MbStringView msg, bool newLine )noexcept
+		crg::Logger::setDebugCallback( []( MbStringView msg, bool newLine )noexcept
 			{
 				std::clog << msg << ( newLine ? "\n" : "" );
 			} );
-		crg::Logger::setInfoCallback( []( castor::MbStringView msg, bool newLine )noexcept
+		crg::Logger::setInfoCallback( []( MbStringView msg, bool newLine )noexcept
 			{
 				std::cout << msg << ( newLine ? "\n" : "" );
 			} );
-		crg::Logger::setWarningCallback( []( castor::MbStringView msg, bool newLine )noexcept
+		crg::Logger::setWarningCallback( []( MbStringView msg, bool newLine )noexcept
 			{
 				std::cout << msg << ( newLine ? "\n" : "" );
 			} );
-		crg::Logger::setErrorCallback( []( castor::MbStringView msg, bool newLine )noexcept
+		crg::Logger::setErrorCallback( []( MbStringView msg, bool newLine )noexcept
 			{
 				std::cerr << msg << ( newLine ? "\n" : "" );
 			} );
-		ashes::Logger::setTraceCallback( []( castor::MbString const &, bool )
+		ashes::Logger::setTraceCallback( []( MbString const &, bool )
 			{
 			} );
-		ashes::Logger::setDebugCallback( []( castor::MbString const & msg, bool newLine )
+		ashes::Logger::setDebugCallback( []( MbString const & msg, bool newLine )
 			{
 				std::clog << msg << ( newLine ? "\n" : "" );
 			} );
-		ashes::Logger::setInfoCallback( []( castor::MbString const & msg, bool newLine )
+		ashes::Logger::setInfoCallback( []( MbString const & msg, bool newLine )
 			{
 				std::cout << msg << ( newLine ? "\n" : "" );
 			} );
-		ashes::Logger::setWarningCallback( []( castor::MbString const & msg, bool newLine )
+		ashes::Logger::setWarningCallback( []( MbString const & msg, bool newLine )
 			{
 				std::cout << msg << ( newLine ? "\n" : "" );
 			} );
-		ashes::Logger::setErrorCallback( []( castor::MbString const & msg, bool newLine )
+		ashes::Logger::setErrorCallback( []( MbString const & msg, bool newLine )
 			{
 				std::cerr << msg << ( newLine ? "\n" : "" );
 			} );

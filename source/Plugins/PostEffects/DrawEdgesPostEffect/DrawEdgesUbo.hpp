@@ -46,7 +46,7 @@ namespace draw_edges
 		using Configuration = DrawEdgesUboConfiguration;
 
 	public:
-		explicit DrawEdgesUbo( castor3d::RenderDevice const & device );
+		explicit DrawEdgesUbo( c3d::RenderDevice const & device );
 		~DrawEdgesUbo();
 		void cpuUpdate( int normalDepthWidth
 			, int objectWidth );
@@ -63,23 +63,23 @@ namespace draw_edges
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
 
-		castor3d::UniformBufferOffsetT< Configuration > const & getUbo()const
+		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
 			return m_ubo;
 		}
 
-		castor3d::UniformBufferOffsetT< Configuration > & getUbo()
+		c3d::UniformBufferOffsetT< Configuration > & getUbo()
 		{
 			return m_ubo;
 		}
 
 	public:
-		static const castor::MbString Buffer;
-		static const castor::MbString Data;
+		static const c3d::MbString Buffer;
+		static const c3d::MbString Data;
 
 	private:
-		castor3d::RenderDevice const & m_device;
-		castor3d::UniformBufferOffsetT< Configuration > m_ubo;
+		c3d::RenderDevice const & m_device;
+		c3d::UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

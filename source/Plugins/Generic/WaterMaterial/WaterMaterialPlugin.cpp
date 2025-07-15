@@ -17,26 +17,26 @@
 
 extern "C"
 {
-	C3D_WaterMaterial_API void getRequiredVersion( castor3d::Version * version );
-	C3D_WaterMaterial_API void getType( castor3d::PluginType * type );
+	C3D_WaterMaterial_API void getRequiredVersion( c3d::Version * version );
+	C3D_WaterMaterial_API void getType( c3d::PluginType * type );
 	C3D_WaterMaterial_API void isDebug( int * value );
 	C3D_WaterMaterial_API void getName( char const ** name );
-	C3D_WaterMaterial_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
-	C3D_WaterMaterial_API void onUnload( castor3d::Engine * engine );
+	C3D_WaterMaterial_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin );
+	C3D_WaterMaterial_API void onUnload( c3d::Engine * engine );
 
-	C3D_WaterMaterial_API void getRequiredVersion( castor3d::Version * version )
+	C3D_WaterMaterial_API void getRequiredVersion( c3d::Version * version )
 	{
-		*version = castor3d::Version();
+		*version = c3d::Version();
 	}
 
 	C3D_WaterMaterial_API void isDebug( int * value )
 	{
-		*value = castor::system::isDebug() ? 1 : 0;
+		*value = c3d::system::isDebug() ? 1 : 0;
 	}
 
-	C3D_WaterMaterial_API void getType( castor3d::PluginType * type )
+	C3D_WaterMaterial_API void getType( c3d::PluginType * type )
 	{
-		*type = castor3d::PluginType::eGeneric;
+		*type = c3d::PluginType::eGeneric;
 	}
 
 	C3D_WaterMaterial_API void getName( char const ** name )
@@ -44,7 +44,7 @@ extern "C"
 		*name = "Water Material";
 	}
 
-	C3D_WaterMaterial_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
+	C3D_WaterMaterial_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin )
 	{
 		engine->registerPassComponent< water::WaterNormal1MapComponent >();
 		engine->registerPassComponent< water::WaterNormal2MapComponent >();
@@ -52,23 +52,23 @@ extern "C"
 		engine->registerPassComponent< water::WaterFoamMapComponent >();
 		engine->registerPassComponent< water::WaterComponent >();
 		engine->registerPassComponent< water::WaterReflRefrComponent >();
-		engine->registerLightingModel( castor::String{ water::shader::WaterLightingModel::getName() }
-			, { castor3d::PbrPass::DefaultDiffuseBrdf
-				, castor3d::PbrPass::DefaultSpecularBrdf
-				, castor3d::PbrPass::DefaultSheenBrdf
-				, castor3d::PbrPass::DefaultClearcoatBrdf
-				, castor3d::PbrPass::DefaultScatteringModel }
+		engine->registerLightingModel( c3d::String{ water::shader::WaterLightingModel::getName() }
+			, { c3d::PbrPass::DefaultDiffuseBrdf
+				, c3d::PbrPass::DefaultSpecularBrdf
+				, c3d::PbrPass::DefaultSheenBrdf
+				, c3d::PbrPass::DefaultClearcoatBrdf
+				, c3d::PbrPass::DefaultScatteringModel }
 			, water::shader::WaterLightingModel::create );
-		engine->registerSpecificsBuffer( castor::String{ water::shader::WaterProfile::getName() }
+		engine->registerSpecificsBuffer( c3d::String{ water::shader::WaterProfile::getName() }
 			, { &water::shader::WaterProfiles::create
 				, &water::shader::WaterProfiles::update
 				, &water::shader::WaterProfiles::declare } );
 	}
 
-	C3D_WaterMaterial_API void onUnload( castor3d::Engine * engine )
+	C3D_WaterMaterial_API void onUnload( c3d::Engine * engine )
 	{
-		engine->unregisterSpecificsBuffer( castor::String{ water::shader::WaterProfile::getName() } );
-		engine->unregisterLightingModel( castor::String{ water::shader::WaterLightingModel::getName() } );
+		engine->unregisterSpecificsBuffer( c3d::String{ water::shader::WaterProfile::getName() } );
+		engine->unregisterLightingModel( c3d::String{ water::shader::WaterLightingModel::getName() } );
 		engine->unregisterPassComponent( water::WaterReflRefrComponent::TypeName );
 		engine->unregisterPassComponent( water::WaterComponent::TypeName );
 		engine->unregisterPassComponent( water::WaterFoamMapComponent::TypeName );

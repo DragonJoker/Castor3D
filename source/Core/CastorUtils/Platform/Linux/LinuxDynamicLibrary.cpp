@@ -11,7 +11,7 @@
 #pragma clang diagnostic ignored "-Wunknown-warning-option" //clang 10 doesn't support the next GCC one...
 #pragma GCC diagnostic ignored "-Wconditionally-supported"
 
-namespace castor
+namespace c3d
 {
 	void DynamicLibrary::doOpen()noexcept
 	{

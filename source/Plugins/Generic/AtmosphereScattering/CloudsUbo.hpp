@@ -42,7 +42,7 @@ namespace atmosphere_scattering
 		CloudsData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -74,7 +74,7 @@ namespace atmosphere_scattering
 		using Configuration = CloudsConfig;
 
 	public:
-		CloudsUbo( castor3d::RenderDevice const & device
+		CloudsUbo( c3d::RenderDevice const & device
 			, bool & dirty );
 		~CloudsUbo();
 		void cpuUpdate( Configuration const & config
@@ -98,23 +98,23 @@ namespace atmosphere_scattering
 			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
 		}
 
-		castor3d::UniformBufferOffsetT< Configuration > const & getUbo()const
+		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
 			return m_ubo;
 		}
 
-		castor3d::UniformBufferOffsetT< Configuration > & getUbo()
+		c3d::UniformBufferOffsetT< Configuration > & getUbo()
 		{
 			return m_ubo;
 		}
 
 	public:
-		static const castor::MbString Buffer;
-		static const castor::MbString Data;
+		static const c3d::MbString Buffer;
+		static const c3d::MbString Data;
 
 	private:
-		castor3d::RenderDevice const & m_device;
-		castor3d::UniformBufferOffsetT< Configuration > m_ubo;
+		c3d::RenderDevice const & m_device;
+		c3d::UniformBufferOffsetT< Configuration > m_ubo;
 		CheckedCloudsConfig m_config;
 	};
 }

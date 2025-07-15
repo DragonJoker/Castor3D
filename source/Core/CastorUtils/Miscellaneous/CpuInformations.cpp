@@ -3,7 +3,7 @@
 #include "CastorUtils/Exception/Assertion.hpp"
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
-namespace castor
+namespace c3d
 {
 	namespace platform
 	{

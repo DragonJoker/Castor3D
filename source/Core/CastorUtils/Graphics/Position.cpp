@@ -1,6 +1,6 @@
 #include "CastorUtils/Graphics/Position.hpp"
 
-namespace castor
+namespace c3d
 {
 	Position::Position( int32_t x, int32_t y )
 		: BaseType{ getData().buffer.data() }

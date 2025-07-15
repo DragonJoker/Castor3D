@@ -6,7 +6,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
@@ -91,15 +91,15 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template<>
-	castor::String BinaryParserBase< MorphComponent >::Name = cuT( "MorphComponent" );
+	String BinaryParserBase< MorphComponent >::Name = cuT( "MorphComponent" );
 
 	bool BinaryParser< MorphComponent >::doParse( MorphComponent & obj )
 	{
 		bool result = true;
 		SubmeshAnimationBuffer buffer;
 		uint32_t count{ 0u };
-		castor::Set< MorphFlag > flags;
-		castor::Point3fArray values;
+		Set< MorphFlag > flags;
+		Point3fArray values;
 		BinaryChunk chunk{ doIsLittleEndian() };
 
 		while ( result && doGetSubChunk( chunk ) )
@@ -109,7 +109,7 @@ namespace castor3d
 			case ChunkType::eMorphTargetBufferSize:
 				if ( count )
 				{
-					obj.getData().addMorphTarget( castor::move( buffer ) );
+					obj.getData().addMorphTarget( c3d::move( buffer ) );
 					buffer = {};
 					count = 0u;
 				}
@@ -150,7 +150,7 @@ namespace castor3d
 			case ChunkType::eMorphTargetTangentsMikkt:
 				{
 					flags.insert( MorphFlag::eTangents );
-					castor::Point4fArray tangents;
+					Point4fArray tangents;
 					tangents.resize( count );
 					result = doParseChunk( tangents, chunk );
 					checkError( result, cuT( "Couldn't parse keyframe tangents." ) );
@@ -252,7 +252,7 @@ namespace castor3d
 
 		if ( result && count )
 		{
-			obj.getData().addMorphTarget( castor::move( buffer ) );
+			obj.getData().addMorphTarget( c3d::move( buffer ) );
 		}
 
 		return result;

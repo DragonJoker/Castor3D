@@ -15,7 +15,7 @@ See LICENSE file in root folder
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ShadowMapPoint
 		: public ShadowMap

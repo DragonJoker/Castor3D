@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Pool/PoolModule.hpp"
 
-namespace castor
+namespace c3d
 {
 	struct BuddyAllocatorTraits
 	{

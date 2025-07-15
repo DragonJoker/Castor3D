@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "AnimationModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	template< class DataT >
 	class Interpolator
@@ -129,12 +129,12 @@ namespace castor3d
 	\brief		Gère les interpolations linéaires de Quaternion.
 	*/
 	template<>
-	class InterpolatorT< castor::Quaternion, InterpolatorType::eLinear >
-		: public Interpolator< castor::Quaternion >
+	class InterpolatorT< Quaternion, InterpolatorType::eLinear >
+		: public Interpolator< Quaternion >
 	{
 	public:
 		InterpolatorT()
-			: Interpolator< castor::Quaternion >{ InterpolatorType::eLinear }
+			: Interpolator< Quaternion >{ InterpolatorType::eLinear }
 		{
 		}
 		/**
@@ -149,11 +149,11 @@ namespace castor3d
 		 *\param[in]	dst		L'arrivée.
 		 *\param[in]	percent	Le pourcentage.
 		 */
-		castor::Quaternion interpolate( castor::Quaternion const & src
-			, castor::Quaternion const & dst
+		Quaternion interpolate( Quaternion const & src
+			, Quaternion const & dst
 			, float percent )const override
 		{
-			castor::Quaternion result;
+			Quaternion result;
 
 			if ( percent <= 0.0 )
 			{
@@ -178,9 +178,9 @@ namespace castor3d
 		switch ( type )
 		{
 		case InterpolatorType::eNearest:
-			return castor::make_unique < InterpolatorT< DataT, InterpolatorType::eNearest > >();
+			return makeRawUnique < InterpolatorT< DataT, InterpolatorType::eNearest > >();
 		default:
-			return castor::make_unique< InterpolatorT< DataT, InterpolatorType::eLinear > >();
+			return makeRawUnique< InterpolatorT< DataT, InterpolatorType::eLinear > >();
 		}
 	}
 }

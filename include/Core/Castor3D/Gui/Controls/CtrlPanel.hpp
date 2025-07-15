@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Gui/Theme/StylePanel.hpp"
 #include "Castor3D/Gui/Theme/StyleScrollBar.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class PanelCtrl
 		: public LayoutControl
@@ -21,7 +21,7 @@ namespace castor3d
 		 *\param[in]	parent	The parent control, if any
 		*/
 		C3D_API PanelCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, PanelStyle * style
 			, ControlRPtr parent );
 
@@ -36,11 +36,11 @@ namespace castor3d
 		 *\param[in]	visible		Initial visibility status
 		 */
 		C3D_API PanelCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, PanelStyle * style
 			, ControlRPtr parent
-			, castor::Position const & position
-			, castor::Size const & size
+			, Position const & position
+			, Size const & size
 			, ControlFlagType flags = 0
 			, bool visible = true );
 

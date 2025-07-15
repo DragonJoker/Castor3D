@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Model/Mesh/MeshModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Model */
 	//@{
@@ -20,9 +20,9 @@ namespace castor3d
 	class MeshMorphTarget;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, MeshAnimation, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MeshAnimationSubmesh, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MeshMorphTarget, C3D_API );
+	CU_DeclareSmartPtr( c3d, MeshAnimation, C3D_API );
+	CU_DeclareSmartPtr( c3d, MeshAnimationSubmesh, C3D_API );
+	CU_DeclareSmartPtr( c3d, MeshMorphTarget, C3D_API );
 
 	CU_DeclareVector( MeshAnimationSubmesh, MeshAnimationSubmesh );
 	/** @endcond */

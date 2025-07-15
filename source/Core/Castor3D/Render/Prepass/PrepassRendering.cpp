@@ -18,16 +18,16 @@
 #include <RenderGraph/FramePass.hpp>
 #include <RenderGraph/FramePassTimer.hpp>
 
-CU_ImplementSmartPtr( castor3d, PrepassRendering )
+CU_ImplementSmartPtr( c3d, PrepassRendering )
 
-namespace castor3d
+namespace c3d
 {
 	PrepassRendering::PrepassRendering( RenderTechnique & parent
 		, RenderDevice const & device
 		, crg::FramePassArray const & previousPasses
 		, ProgressBar * progress
 		, bool visbuffer )
-		: castor::OwnedBy< RenderTechnique >{ parent }
+		: OwnedBy< RenderTechnique >{ parent }
 		, m_device{ device }
 		, m_graph{ parent.getGraph().createPassGroup( "Prepass" ) }
 		, m_result{ parent.getResources()
@@ -146,7 +146,7 @@ namespace castor3d
 				auto velocityIt = std::next( dataIt );
 				auto normalIt = std::next( velocityIt );
 				stepProgressBarLocal( progress, cuT( "Initialising depth/visibility pass" ) );
-				auto res = castor::make_unique< VisibilityPass >( getOwner()
+				auto res = makeRawUnique< VisibilityPass >( getOwner()
 					, framePass
 					, context
 					, runnableGraph
@@ -170,7 +170,7 @@ namespace castor3d
 					, RenderTechniquePassDesc{ false, getOwner()->getSsaoConfig() }
 						.hasVelocity( true ) );
 				m_visibilityPass = res.get();
-				getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -208,7 +208,7 @@ namespace castor3d
 				auto velocityIt = std::next( depthObjIt );
 				auto normalIt = std::next( velocityIt );
 				stepProgressBarLocal( progress, cuT( "Initialising forward depth pass" ) );
-				auto res = castor::make_unique< DepthPass >( getOwner()
+				auto res = makeRawUnique< DepthPass >( getOwner()
 					, framePass
 					, context
 					, runnableGraph
@@ -230,7 +230,7 @@ namespace castor3d
 						.implicitAction( velocityIt->view(), crg::RecordContext::clearAttachment( *velocityIt ) )
 						.implicitAction( depthObjIt->view(), crg::RecordContext::clearAttachment( *normalIt ) ) );
 				m_depthPass = res.get();
-				getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -260,12 +260,12 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBarLocal( progress, cuT( "Initialising compute depth range pass" ) );
-				auto res = castor::make_unique< ComputeDepthRange >( framePass
+				auto res = makeRawUnique< ComputeDepthRange >( framePass
 					, context
 					, runnableGraph
 					, m_device
 					, m_needsDepthRange );
-				getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );

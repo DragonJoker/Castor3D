@@ -26,7 +26,7 @@ namespace smaa
 {
 	namespace neighblend
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
 		enum Idx : uint32_t
 		{
@@ -48,7 +48,7 @@ namespace smaa
 			VertexT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled )
-				: VertexStructT< FlagT >{ writer, castor::move( expr ), enabled }
+				: VertexStructT< FlagT >{ writer, c3d::move( expr ), enabled }
 			{
 			}
 
@@ -56,7 +56,7 @@ namespace smaa
 			auto offset()const { return this->template getMember< "offset" >(); }
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device
 			, bool reprojection )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
@@ -188,7 +188,7 @@ namespace smaa
 				, sdw::InCombinedImage2DRgba32{ writer, "colourTex" }
 				, sdw::InCombinedImage2DRgba32{ writer, "blendTex" } );
 
-			writer.implementEntryPointT< c3d::PosUv2FT, VertexT >( [&]( sdw::VertexInT< c3d::PosUv2FT > const & in
+			writer.implementEntryPointT< c3ds::PosUv2FT, VertexT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > const & in
 				, sdw::VertexOutT< VertexT > out )
 				{
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
@@ -197,8 +197,8 @@ namespace smaa
 					SMAANeighborhoodBlendingVS( out.texcoord(), out.offset() );
 				} );
 
-			writer.implementEntryPointT< VertexT, c3d::Colour4FT >( [&]( sdw::FragmentInT< VertexT > const & in
-				, sdw::FragmentOutT< c3d::Colour4FT > const & out )
+			writer.implementEntryPointT< VertexT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< VertexT > const & in
+				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					out.colour() = SMAANeighborhoodBlendingPS( in.texcoord(), in.offset(), c3d_colourTex, c3d_blendTex );
 				} );
@@ -210,8 +210,8 @@ namespace smaa
 
 	NeighbourhoodBlending::NeighbourhoodBlending( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
-		, castor3d::RenderTarget & renderTarget
-		, castor3d::RenderDevice const & device
+		, c3d::RenderTarget & renderTarget
+		, c3d::RenderDevice const & device
 		, SmaaUbo const & ubo
 		, crg::ImageViewIdArray const & sourceView
 		, crg::ImageViewId const & blendView
@@ -223,7 +223,7 @@ namespace smaa
 		, m_graph{ graph }
 		, m_blendView{ blendView }
 		, m_velocityView{ velocityView }
-		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
+		, m_extent{ c3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
 		, m_shader{ cuT( "SmaaNeighbourhood" ), neighblend::getProgram( device, velocityView != nullptr ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_pass{ m_graph.createPass( "NeighbourhoodBlending"
@@ -233,13 +233,13 @@ namespace smaa
 			{
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
-					.renderSize( castor3d::makeExtent2D( m_extent ) )
+					.renderSize( c3d::makeExtent2D( m_extent ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.passIndex( passIndex )
 					.enabled( enabled )
 					.build( pass, context, frameGraph, { config.maxSubsampleIndices * 2u } );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( pass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( pass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }
@@ -256,12 +256,12 @@ namespace smaa
 		}
 
 		inputs.insert( inputs.end(), addInputs.begin(), addInputs.end() );
-		crg::SamplerDesc linearSampler{ castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest
-			, castor3d::WrapMode::eClampToEdge
-			, castor3d::WrapMode::eClampToEdge
-			, castor3d::WrapMode::eClampToEdge };
+		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
+			, c3d::FilterMode::eLinear
+			, c3d::MipmapMode::eNearest
+			, c3d::WrapMode::eClampToEdge
+			, c3d::WrapMode::eClampToEdge
+			, c3d::WrapMode::eClampToEdge };
 		m_pass.addDependency( previousPass );
 		ubo.createPassBinding( m_pass
 			, SmaaUboIdx );
@@ -283,22 +283,22 @@ namespace smaa
 		{
 			m_images.emplace_back( m_device
 				, renderTarget.getResources()
-				, cuT( "SMNBRes" ) + castor::string::toString( i )
-				, castor3d::TextureCreateInfo{ castor3d::ImageCreateFlags::eNone
+				, cuT( "SMNBRes" ) + c3d::string::toString( i )
+				, c3d::TextureCreateInfo{ c3d::ImageCreateFlags::eNone
 				, m_extent, 1u, 1u
-					, castor::PixelFormat::eR8G8B8A8_SRGB
-					, ( castor3d::ImageUsageFlags::eColorAttachment
-						| castor3d::ImageUsageFlags::eSampled
-						| castor3d::ImageUsageFlags::eTransferSrc
-						| castor3d::ImageUsageFlags::eTransferDst ) }
-				, castor3d::TextureSamplerInfo{} );
+					, c3d::PixelFormat::eR8G8B8A8_SRGB
+					, ( c3d::ImageUsageFlags::eColorAttachment
+						| c3d::ImageUsageFlags::eSampled
+						| c3d::ImageUsageFlags::eTransferSrc
+						| c3d::ImageUsageFlags::eTransferDst ) }
+				, c3d::TextureSamplerInfo{} );
 			auto & image = m_images.back();
 			image.create();
 			m_imageViews.push_back( image.wholeViewId );
 		}
 
 		m_pass.addOutputColourView( m_imageViews
-			, castor3d::transparentBlackClearColor );
+			, c3d::transparentBlackClearColor );
 	}
 
 	NeighbourhoodBlending::~NeighbourhoodBlending()
@@ -309,16 +309,16 @@ namespace smaa
 		}
 	}
 
-	void NeighbourhoodBlending::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void NeighbourhoodBlending::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 
 		for ( uint32_t i = 0; i < m_images.size(); ++i )
 		{
-			visitor.visit( cuT( "SMAA NeighbourhoodBlending " ) + castor::string::toString( i )
+			visitor.visit( cuT( "SMAA NeighbourhoodBlending " ) + c3d::string::toString( i )
 				, m_images[i]
 				, m_graph.getFinalLayoutState( m_images[i].wholeViewId ).layout
-				, castor3d::TextureFactors{}.invert( true ) );
+				, c3d::TextureFactors{}.invert( true ) );
 		}
 	}
 

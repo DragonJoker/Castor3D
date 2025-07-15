@@ -11,13 +11,13 @@ See LICENSE file in root folder
 namespace c3d_assimp
 {
 	class AssimpMaterialImporter
-		: public castor3d::MaterialImporter
+		: public c3d::MaterialImporter
 	{
 	public:
-		explicit AssimpMaterialImporter( castor3d::Engine & engine );
+		explicit AssimpMaterialImporter( c3d::Engine & engine );
 
 	private:
-		bool doImportMaterial( castor3d::Material & material )override;
+		bool doImportMaterial( c3d::Material & material )override;
 	};
 }
 

@@ -4,9 +4,9 @@
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
 
-CU_ImplementSmartPtr( castor3d, OverlayFactory )
+CU_ImplementSmartPtr( c3d, OverlayFactory )
 
-namespace castor3d
+namespace c3d
 {
 	OverlayFactory::OverlayFactory()
 		: Factory< OverlayCategory, OverlayType, OverlayCategoryUPtr >()

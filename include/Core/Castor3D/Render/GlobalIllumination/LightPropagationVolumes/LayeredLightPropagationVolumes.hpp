@@ -27,10 +27,10 @@ See LICENSE file in root folder
 
 #include <array>
 
-namespace castor3d
+namespace c3d
 {
 	class LayeredLightPropagationVolumesBase
-		: public castor::Named
+		: public Named
 	{
 	protected:
 		C3D_API LayeredLightPropagationVolumesBase( crg::ResourcesCache & resources
@@ -55,13 +55,13 @@ namespace castor3d
 		crg::FramePass & doCreateClearInjectionPass();
 		crg::FramePass & doCreateDownsamplePass();
 		crg::FramePass & doCreatePropagationPass( crg::FramePassArray const & previousPasses
-			, castor::String const & name
+			, String const & name
 			, LightVolumePassResult const & injection
 			, LightVolumePassResult const & lpvResult
 			, LightVolumePassResult const & propagation
 			, uint32_t cascade
 			, uint32_t index );
-		castor::Vector< crg::FramePass * > doCreatePropagationPasses();
+		Vector< crg::FramePass * > doCreatePropagationPasses();
 
 	private:
 		Scene const & m_scene;
@@ -70,52 +70,52 @@ namespace castor3d
 		ShadowMapResult m_downsampledSmResult;
 		LightVolumePassResultArray const & m_lpvResult;
 		LayeredLpvGridConfigUbo & m_lpvGridConfigUbo;
-		castor::Array< castor::Grid const *, LpvMaxCascadesCount > m_grids;
-		castor::Array < castor::Point4f, LpvMaxCascadesCount > m_gridsSizes;
+		Array< Grid const *, LpvMaxCascadesCount > m_grids;
+		Array < Point4f, LpvMaxCascadesCount > m_gridsSizes;
 		LpvGridConfigUboArray m_lpvGridConfigUbos;
 		bool m_geometryVolumes{ false };
 		crg::FrameGraph m_graph;
 		bool m_initialised{ false };
 		LightType m_lightType;
-		castor::Vector< LightVolumePassResult > m_injection;
+		Vector< LightVolumePassResult > m_injection;
 		TextureArray m_geometry;
-		castor::Vector< castor::Array< LightVolumePassResult, 2u > > m_propagate;
+		Vector< Array< LightVolumePassResult, 2u > > m_propagate;
 		struct LightLpv
 		{
 			LightLpv( crg::FramePassGroup & graph
 				, crg::FramePass const & previousPass
 				, RenderDevice const & device
-				, castor::String const & name
+				, String const & name
 				, LightCache const & lightCache
 				, LightType lightType
 				, ShadowMapResult const & smResult
 				, LpvGridConfigUboArray const & lpvGridConfigUbos
-				, castor::Vector< LightVolumePassResult > const & injection
+				, Vector< LightVolumePassResult > const & injection
 				, TextureArray const * geometry );
 			bool update( CpuUpdater & updater
-				, castor::Vector< float > const & lpvCellSizes );
+				, Vector< float > const & lpvCellSizes );
 
 			LightCache const & lightCache;
 			LpvLightConfigUboArray lpvLightConfigUbos;
 			crg::FramePass const * lastLightPass{};
 			crg::FramePass const * lastGeomPass{};
-			castor::Vector< LightInjectionPass * > lightInjectionPasses{};
-			castor::Vector< crg::FramePass * > lightInjectionPassesDesc;
-			castor::Vector< GeometryInjectionPass * > geometryInjectionPasses{};
-			castor::Vector< crg::FramePass * > geometryInjectionPassesDesc{};
+			Vector< LightInjectionPass * > lightInjectionPasses{};
+			Vector< crg::FramePass * > lightInjectionPassesDesc;
+			Vector< GeometryInjectionPass * > geometryInjectionPasses{};
+			Vector< crg::FramePass * > geometryInjectionPassesDesc{};
 
 		private:
 			crg::FramePass & doCreateInjectionPass( crg::FramePassGroup & graph
 				, RenderDevice const & device
-				, castor::String const & name
+				, String const & name
 				, LightType lightType
 				, ShadowMapResult const & smResult
 				, LpvGridConfigUboArray const & lpvGridConfigUbos
-				, castor::Vector< LightVolumePassResult > const & injection
+				, Vector< LightVolumePassResult > const & injection
 				, uint32_t cascade );
 			crg::FramePass & doCreateGeometryPass( crg::FramePassGroup & graph
 				, RenderDevice const & device
-				, castor::String const & name
+				, String const & name
 				, LightType lightType
 				, ShadowMapResult const & smResult
 				, LpvGridConfigUboArray const & lpvGridConfigUbos
@@ -125,13 +125,13 @@ namespace castor3d
 
 		crg::FramePass & m_clearInjectionPass;
 		crg::FramePass & m_downsamplePass;
-		castor::UnorderedMap< LightInstance *, LightLpv > m_lightLpvs;
-		castor::Vector< crg::FramePass * > m_lightPropagationPassesDesc;
-		castor::Vector< LightPropagationPass * > m_lightPropagationPasses;
+		HashMap< LightInstance *, LightLpv > m_lightLpvs;
+		Vector< crg::FramePass * > m_lightPropagationPassesDesc;
+		Vector< LightPropagationPass * > m_lightPropagationPasses;
 
-		castor::BoundingBox m_aabb;
-		castor::Point3f m_cameraPos;
-		castor::Point3f m_cameraDir;
+		BoundingBox m_aabb;
+		Point3f m_cameraPos;
+		Point3f m_cameraDir;
 		GpuFrameEvent * m_recordEvent{};
 		crg::RunnableGraphPtr m_runnable;
 	};
