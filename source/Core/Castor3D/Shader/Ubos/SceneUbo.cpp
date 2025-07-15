@@ -15,9 +15,9 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementSmartPtr( castor3d, SceneUbo )
+CU_ImplementSmartPtr( c3d, SceneUbo )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 

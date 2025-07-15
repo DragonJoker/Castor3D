@@ -2,13 +2,13 @@
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	template< ast::var::Flag FlagT >
 	MeshVertexT< FlagT >::MeshVertexT( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: MeshVertexBase{ writer, castor::move( expr ), enabled }
+		: MeshVertexBase{ writer, c3d::move( expr ), enabled }
 	{
 	}
 

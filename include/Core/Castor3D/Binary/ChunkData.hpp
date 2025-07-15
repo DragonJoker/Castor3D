@@ -23,25 +23,25 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/Quaternion.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	template< typename T >
 	struct OldInterleavedVertexT
 	{
-		castor::Point3< T > pos;
-		castor::Point3< T > nml;
-		castor::Point3< T > tan;
-		castor::Point3< T > bin;
-		castor::Point3< T > tex;
+		Point3< T > pos;
+		Point3< T > nml;
+		Point3< T > tan;
+		Point3< T > bin;
+		Point3< T > tex;
 	};
 	struct InterleavedVertexNoMikk
 	{
-		castor::Point3f pos;
-		castor::Point3f nml;
-		castor::Point3f tan;
-		castor::Point3f tex;
+		Point3f pos;
+		Point3f nml;
+		Point3f tan;
+		Point3f tex;
 	};
-	using InterleavedVertexNoMikkArray = castor::Vector< InterleavedVertexNoMikk >;
+	using InterleavedVertexNoMikkArray = Vector< InterleavedVertexNoMikk >;
 	/**
 	 *\~english
 	 *\brief		Retrieves the beginning of the buffer for given value.
@@ -404,7 +404,7 @@ namespace castor3d
 	 *\return		Le tampon (&value pour les types basiques).
 	 */
 	template< typename T >
-	static inline uint8_t const * getBuffer( castor::Vector< T > const & value )
+	static inline uint8_t const * getBuffer( Vector< T > const & value )
 	{
 		return ByteCPtr( value.data() );
 	}
@@ -419,7 +419,7 @@ namespace castor3d
 	 *\return		Le tampon (&value pour les types basiques).
 	 */
 	template< typename T >
-	static inline uint8_t * getBuffer( castor::Vector< T > & value )
+	static inline uint8_t * getBuffer( Vector< T > & value )
 	{
 		return BytePtr( value.data() );
 	}
@@ -434,7 +434,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T >
-	static inline size_t getDataSize( castor::Vector< T > const & value )
+	static inline size_t getDataSize( Vector< T > const & value )
 	{
 		return value.size() * sizeof( T );
 	}
@@ -449,7 +449,7 @@ namespace castor3d
 	 *\return		Le tampon (&value pour les types basiques).
 	 */
 	template< typename T, size_t Count >
-	static inline uint8_t const * getBuffer( castor::Array< T, Count > const & value )
+	static inline uint8_t const * getBuffer( Array< T, Count > const & value )
 	{
 		return ByteCPtr( value.data() );
 	}
@@ -464,7 +464,7 @@ namespace castor3d
 	 *\return		Le tampon (&value pour les types basiques).
 	 */
 	template< typename T, size_t Count >
-	static inline uint8_t * getBuffer( castor::Array< T, Count > & value )
+	static inline uint8_t * getBuffer( Array< T, Count > & value )
 	{
 		return BytePtr( value.data() );
 	}
@@ -479,7 +479,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T, size_t Count >
-	static inline size_t getDataSize( [[maybe_unused]] castor::Array< T, Count > const & value )
+	static inline size_t getDataSize( [[maybe_unused]] Array< T, Count > const & value )
 	{
 		return Count * sizeof( T );
 	}
@@ -494,7 +494,7 @@ namespace castor3d
 	 *\return		Le tampon.
 	 */
 	template< typename T, uint32_t Count >
-	static inline uint8_t const * getBuffer( castor::Point< T, Count > const & value )
+	static inline uint8_t const * getBuffer( Point< T, Count > const & value )
 	{
 		return ByteCPtr( value.constPtr() );
 	}
@@ -509,7 +509,7 @@ namespace castor3d
 	 *\return		Le tampon.
 	 */
 	template< typename T, uint32_t Count >
-	static inline uint8_t * getBuffer( castor::Point< T, Count > & value )
+	static inline uint8_t * getBuffer( Point< T, Count > & value )
 	{
 		return BytePtr( value.ptr() );
 	}
@@ -524,7 +524,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T, uint32_t Count >
-	static inline size_t getDataSize( [[maybe_unused]] castor::Point< T, Count > const & value )
+	static inline size_t getDataSize( [[maybe_unused]] Point< T, Count > const & value )
 	{
 		return Count * sizeof( T );
 	}
@@ -539,7 +539,7 @@ namespace castor3d
 	 *\return		Le tampon.
 	 */
 	template< typename T, uint32_t Count >
-	static inline uint8_t const * getBuffer( castor::Coords< T, Count > const & value )
+	static inline uint8_t const * getBuffer( Coords< T, Count > const & value )
 	{
 		return ByteCPtr( value.constPtr() );
 	}
@@ -554,7 +554,7 @@ namespace castor3d
 	 *\return		Le tampon.
 	 */
 	template< typename T, uint32_t Count >
-	static inline uint8_t * getBuffer( castor::Coords< T, Count > & value )
+	static inline uint8_t * getBuffer( Coords< T, Count > & value )
 	{
 		return BytePtr( value.ptr() );
 	}
@@ -569,7 +569,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T, uint32_t Count >
-	static inline size_t getDataSize( [[maybe_unused]] castor::Coords< T, Count > const & value )
+	static inline size_t getDataSize( [[maybe_unused]] Coords< T, Count > const & value )
 	{
 		return Count * sizeof( T );
 	}
@@ -584,7 +584,7 @@ namespace castor3d
 	 *\return		Le tampon.
 	 */
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	static inline uint8_t const * getBuffer( castor::Matrix< T, Columns, Rows > const & value )
+	static inline uint8_t const * getBuffer( Matrix< T, Columns, Rows > const & value )
 	{
 		return ByteCPtr( value.constPtr() );
 	}
@@ -599,7 +599,7 @@ namespace castor3d
 	 *\return		Le tampon.
 	 */
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	static inline uint8_t * getBuffer( castor::Matrix< T, Columns, Rows > & value )
+	static inline uint8_t * getBuffer( Matrix< T, Columns, Rows > & value )
 	{
 		return BytePtr( value.ptr() );
 	}
@@ -614,7 +614,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	static inline size_t getDataSize( [[maybe_unused]] castor::Matrix< T, Columns, Rows > const & value )
+	static inline size_t getDataSize( [[maybe_unused]] Matrix< T, Columns, Rows > const & value )
 	{
 		return Columns * Rows * sizeof( T );
 	}
@@ -629,7 +629,7 @@ namespace castor3d
 	 *\return		Le tampon.
 	 */
 	template< typename T, uint32_t Count >
-	static inline uint8_t const * getBuffer( castor::SquareMatrix< T, Count > const & value )
+	static inline uint8_t const * getBuffer( SquareMatrix< T, Count > const & value )
 	{
 		return ByteCPtr( value.constPtr() );
 	}
@@ -644,7 +644,7 @@ namespace castor3d
 	 *\return		Le tampon.
 	 */
 	template< typename T, uint32_t Count >
-	static inline uint8_t * getBuffer( castor::SquareMatrix< T, Count > & value )
+	static inline uint8_t * getBuffer( SquareMatrix< T, Count > & value )
 	{
 		return BytePtr( value.ptr() );
 	}
@@ -659,7 +659,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T, uint32_t Count >
-	static inline size_t getDataSize( [[maybe_unused]] castor::SquareMatrix< T, Count > const & value )
+	static inline size_t getDataSize( [[maybe_unused]] SquareMatrix< T, Count > const & value )
 	{
 		return Count * Count * sizeof( T );
 	}
@@ -673,7 +673,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		Le tampon.
 	 */
-	static inline uint8_t const * getBuffer( castor::RgbColour const & value )
+	static inline uint8_t const * getBuffer( RgbColour const & value )
 	{
 		return ByteCPtr( value.constPtr() );
 	}
@@ -687,7 +687,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		Le tampon.
 	 */
-	static inline uint8_t * getBuffer( castor::RgbColour & value )
+	static inline uint8_t * getBuffer( RgbColour & value )
 	{
 		return BytePtr( value.ptr() );
 	}
@@ -701,7 +701,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
-	static inline size_t getDataSize( [[maybe_unused]] castor::RgbColour const & value )
+	static inline size_t getDataSize( [[maybe_unused]] RgbColour const & value )
 	{
 		return 3u * sizeof( float );
 	}
@@ -715,7 +715,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		Le tampon.
 	 */
-	static inline uint8_t const * getBuffer( castor::RgbaColour const & value )
+	static inline uint8_t const * getBuffer( RgbaColour const & value )
 	{
 		return ByteCPtr( value.constPtr() );
 	}
@@ -729,7 +729,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		Le tampon.
 	 */
-	static inline uint8_t * getBuffer( castor::RgbaColour & value )
+	static inline uint8_t * getBuffer( RgbaColour & value )
 	{
 		return BytePtr( value.ptr() );
 	}
@@ -743,7 +743,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
-	static inline size_t getDataSize( [[maybe_unused]] castor::RgbaColour const & value )
+	static inline size_t getDataSize( [[maybe_unused]] RgbaColour const & value )
 	{
 		return 4u * sizeof( float );
 	}
@@ -757,7 +757,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		Le tampon.
 	 */
-	static inline uint8_t const * getBuffer( castor::Size const & value )
+	static inline uint8_t const * getBuffer( Size const & value )
 	{
 		return ByteCPtr( value.constPtr() );
 	}
@@ -771,7 +771,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		Le tampon.
 	 */
-	static inline uint8_t * getBuffer( castor::Size & value )
+	static inline uint8_t * getBuffer( Size & value )
 	{
 		return BytePtr( value.ptr() );
 	}
@@ -785,7 +785,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
-	static inline size_t getDataSize( [[maybe_unused]] castor::Size const & value )
+	static inline size_t getDataSize( [[maybe_unused]] Size const & value )
 	{
 		return 2 * sizeof( uint32_t );
 	}
@@ -799,7 +799,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		Le tampon.
 	 */
-	static inline uint8_t const * getBuffer( castor::Position const & value )
+	static inline uint8_t const * getBuffer( Position const & value )
 	{
 		return ByteCPtr( value.constPtr() );
 	}
@@ -813,7 +813,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		Le tampon.
 	 */
-	static inline uint8_t * getBuffer( castor::Position & value )
+	static inline uint8_t * getBuffer( Position & value )
 	{
 		return BytePtr( value.ptr() );
 	}
@@ -827,7 +827,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
-	static inline size_t getDataSize( [[maybe_unused]] castor::Position const & value )
+	static inline size_t getDataSize( [[maybe_unused]] Position const & value )
 	{
 		return 2 * sizeof( int32_t );
 	}
@@ -842,7 +842,7 @@ namespace castor3d
 	 *\return		Le tampon.
 	 */
 	template< typename T >
-	static inline uint8_t const * getBuffer( castor::QuaternionT< T > const & value )
+	static inline uint8_t const * getBuffer( QuaternionT< T > const & value )
 	{
 		return ByteCPtr( value.constPtr() );
 	}
@@ -857,7 +857,7 @@ namespace castor3d
 	 *\return		Le tampon.
 	 */
 	template< typename T >
-	static inline uint8_t * getBuffer( [[maybe_unused]] castor::QuaternionT< T > & value )
+	static inline uint8_t * getBuffer( [[maybe_unused]] QuaternionT< T > & value )
 	{
 		return BytePtr( value.ptr() );
 	}
@@ -872,7 +872,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T >
-	static inline size_t getDataSize( [[maybe_unused]] castor::QuaternionT< T > const & value )
+	static inline size_t getDataSize( [[maybe_unused]] QuaternionT< T > const & value )
 	{
 		return 4 * sizeof( T );
 	}
@@ -922,7 +922,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( int16_t & value )
 	{
-		castor::switchEndianness( value );
+		switchEndianness( value );
 	}
 	/**
 	 *\~english
@@ -934,7 +934,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( uint16_t & value )
 	{
-		castor::switchEndianness( value );
+		switchEndianness( value );
 	}
 	/**
 	 *\~english
@@ -946,7 +946,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( int32_t & value )
 	{
-		castor::switchEndianness( value );
+		switchEndianness( value );
 	}
 	/**
 	 *\~english
@@ -958,7 +958,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( uint32_t & value )
 	{
-		castor::switchEndianness( value );
+		switchEndianness( value );
 	}
 	/**
 	 *\~english
@@ -970,7 +970,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( int64_t & value )
 	{
-		castor::switchEndianness( value );
+		switchEndianness( value );
 	}
 	/**
 	 *\~english
@@ -982,7 +982,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( uint64_t & value )
 	{
-		castor::switchEndianness( value );
+		switchEndianness( value );
 	}
 	/**
 	 *\~english
@@ -994,7 +994,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( float & value )
 	{
-		castor::switchEndianness( value );
+		switchEndianness( value );
 	}
 	/**
 	 *\~english
@@ -1006,7 +1006,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( double & value )
 	{
-		castor::switchEndianness( value );
+		switchEndianness( value );
 	}
 	/**
 	 *\~english
@@ -1018,7 +1018,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( long double & value )
 	{
-		castor::switchEndianness( value );
+		switchEndianness( value );
 	}
 	/**
 	 *\~english
@@ -1029,11 +1029,11 @@ namespace castor3d
 	 *\param[in,out]	values	La valeur.
 	 */
 	template< typename T >
-	static inline void prepareChunkData( castor::Vector< T > & values )
+	static inline void prepareChunkData( Vector< T > & values )
 	{
 		for ( auto & value : values )
 		{
-			castor::switchEndianness( value );
+			switchEndianness( value );
 		}
 	}
 	/**
@@ -1045,11 +1045,11 @@ namespace castor3d
 	 *\param[in,out]	values	La valeur.
 	 */
 	template< typename T, size_t Count >
-	static inline void prepareChunkData( castor::Array< T, Count > & values )
+	static inline void prepareChunkData( Array< T, Count > & values )
 	{
 		for ( auto & value : values )
 		{
-			castor::switchEndianness( value );
+			switchEndianness( value );
 		}
 	}
 	/**
@@ -1061,11 +1061,11 @@ namespace castor3d
 	 *\param[in,out]	value	La valeur.
 	 */
 	template< typename T, uint32_t Count >
-	static inline void prepareChunkData( castor::SquareMatrix< T, Count > & value )
+	static inline void prepareChunkData( SquareMatrix< T, Count > & value )
 	{
 		for ( auto i = 0u; i < Count * Count; ++i )
 		{
-			castor::switchEndianness( value.ptr()[i] );
+			switchEndianness( value.ptr()[i] );
 		}
 	}
 	/**
@@ -1077,11 +1077,11 @@ namespace castor3d
 	 *\param[in,out]	value	La valeur.
 	 */
 	template< typename T, uint32_t Count >
-	static inline void prepareChunkData( castor::Point< T, Count > & value )
+	static inline void prepareChunkData( Point< T, Count > & value )
 	{
 		for ( auto & component : value )
 		{
-			castor::switchEndianness( component );
+			switchEndianness( component );
 		}
 	}
 	/**
@@ -1093,11 +1093,11 @@ namespace castor3d
 	 *\param[in,out]	value	La valeur.
 	 */
 	template< typename T, uint32_t Count >
-	static inline void prepareChunkData( castor::Coords< T, Count > & value )
+	static inline void prepareChunkData( Coords< T, Count > & value )
 	{
 		for ( auto & component : value )
 		{
-			castor::switchEndianness( component );
+			switchEndianness( component );
 		}
 	}
 	/**
@@ -1109,11 +1109,11 @@ namespace castor3d
 	 *\param[in,out]	value	La valeur.
 	 */
 	template< typename T >
-	static inline void prepareChunkData( castor::QuaternionT< T > & value )
+	static inline void prepareChunkData( QuaternionT< T > & value )
 	{
 		for ( auto & component : value )
 		{
-			castor::switchEndianness( component );
+			switchEndianness( component );
 		}
 	}
 	/**
@@ -1124,9 +1124,9 @@ namespace castor3d
 	 *\brief			Met la valeur donnée en big endian.
 	 *\param[in,out]	value	La valeur.
 	 */
-	static inline void prepareChunkData( castor::ColourComponent & value )
+	static inline void prepareChunkData( ColourComponentValue & value )
 	{
-		castor::switchEndianness( value.value() );
+		switchEndianness( value.value() );
 	}
 	/**
 	 *\~english
@@ -1136,11 +1136,11 @@ namespace castor3d
 	 *\brief			Met la valeur donnée en big endian.
 	 *\param[in,out]	value	La valeur.
 	 */
-	static inline void prepareChunkData( castor::RgbColour & value )
+	static inline void prepareChunkData( RgbColour & value )
 	{
 		for ( auto & component : value )
 		{
-			castor::switchEndianness( component );
+			switchEndianness( component );
 		}
 	}
 	/**
@@ -1151,11 +1151,11 @@ namespace castor3d
 	 *\brief			Met la valeur donnée en big endian.
 	 *\param[in,out]	value	La valeur.
 	 */
-	static inline void prepareChunkData( castor::RgbaColour & value )
+	static inline void prepareChunkData( RgbaColour & value )
 	{
 		for ( auto & component : value )
 		{
-			castor::switchEndianness( component );
+			switchEndianness( component );
 		}
 	}
 	/**
@@ -1169,18 +1169,18 @@ namespace castor3d
 	template< typename T >
 	static inline void prepareChunkData( OldInterleavedVertexT< T > & value )
 	{
-		castor::switchEndianness( value.pos[0] );
-		castor::switchEndianness( value.pos[1] );
-		castor::switchEndianness( value.pos[2] );
-		castor::switchEndianness( value.nml[0] );
-		castor::switchEndianness( value.nml[1] );
-		castor::switchEndianness( value.nml[2] );
-		castor::switchEndianness( value.tan[0] );
-		castor::switchEndianness( value.tan[1] );
-		castor::switchEndianness( value.tan[2] );
-		castor::switchEndianness( value.tex[0] );
-		castor::switchEndianness( value.tex[1] );
-		castor::switchEndianness( value.tex[2] );
+		switchEndianness( value.pos[0] );
+		switchEndianness( value.pos[1] );
+		switchEndianness( value.pos[2] );
+		switchEndianness( value.nml[0] );
+		switchEndianness( value.nml[1] );
+		switchEndianness( value.nml[2] );
+		switchEndianness( value.tan[0] );
+		switchEndianness( value.tan[1] );
+		switchEndianness( value.tan[2] );
+		switchEndianness( value.tex[0] );
+		switchEndianness( value.tex[1] );
+		switchEndianness( value.tex[2] );
 	}
 	/**
 	 *\~english
@@ -1192,18 +1192,18 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( InterleavedVertexNoMikk & value )
 	{
-		castor::switchEndianness( value.pos[0] );
-		castor::switchEndianness( value.pos[1] );
-		castor::switchEndianness( value.pos[2] );
-		castor::switchEndianness( value.nml[0] );
-		castor::switchEndianness( value.nml[1] );
-		castor::switchEndianness( value.nml[2] );
-		castor::switchEndianness( value.tan[0] );
-		castor::switchEndianness( value.tan[1] );
-		castor::switchEndianness( value.tan[2] );
-		castor::switchEndianness( value.tex[0] );
-		castor::switchEndianness( value.tex[1] );
-		castor::switchEndianness( value.tex[2] );
+		switchEndianness( value.pos[0] );
+		switchEndianness( value.pos[1] );
+		switchEndianness( value.pos[2] );
+		switchEndianness( value.nml[0] );
+		switchEndianness( value.nml[1] );
+		switchEndianness( value.nml[2] );
+		switchEndianness( value.tan[0] );
+		switchEndianness( value.tan[1] );
+		switchEndianness( value.tan[2] );
+		switchEndianness( value.tex[0] );
+		switchEndianness( value.tex[1] );
+		switchEndianness( value.tex[2] );
 	}
 	/**
 	 *\~english
@@ -1215,19 +1215,19 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( InterleavedVertex & value )
 	{
-		castor::switchEndianness( value.pos[0] );
-		castor::switchEndianness( value.pos[1] );
-		castor::switchEndianness( value.pos[2] );
-		castor::switchEndianness( value.nml[0] );
-		castor::switchEndianness( value.nml[1] );
-		castor::switchEndianness( value.nml[2] );
-		castor::switchEndianness( value.tan[0] );
-		castor::switchEndianness( value.tan[1] );
-		castor::switchEndianness( value.tan[2] );
-		castor::switchEndianness( value.tan[3] );
-		castor::switchEndianness( value.tex[0] );
-		castor::switchEndianness( value.tex[1] );
-		castor::switchEndianness( value.tex[2] );
+		switchEndianness( value.pos[0] );
+		switchEndianness( value.pos[1] );
+		switchEndianness( value.pos[2] );
+		switchEndianness( value.nml[0] );
+		switchEndianness( value.nml[1] );
+		switchEndianness( value.nml[2] );
+		switchEndianness( value.tan[0] );
+		switchEndianness( value.tan[1] );
+		switchEndianness( value.tan[2] );
+		switchEndianness( value.tan[3] );
+		switchEndianness( value.tex[0] );
+		switchEndianness( value.tex[1] );
+		switchEndianness( value.tex[2] );
 	}
 	/**
 	 *\~english
@@ -1239,13 +1239,13 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( SubmeshAnimationBuffer & value )
 	{
-		castor::switchEndianness( value.positions );
-		castor::switchEndianness( value.normals );
-		castor::switchEndianness( value.tangents );
-		castor::switchEndianness( value.texcoords0 );
-		castor::switchEndianness( value.texcoords1 );
-		castor::switchEndianness( value.texcoords2 );
-		castor::switchEndianness( value.texcoords3 );
+		switchEndianness( value.positions );
+		switchEndianness( value.normals );
+		switchEndianness( value.tangents );
+		switchEndianness( value.texcoords0 );
+		switchEndianness( value.texcoords1 );
+		switchEndianness( value.texcoords2 );
+		switchEndianness( value.texcoords3 );
 	}
 	/**
 	 *\~english
@@ -1257,9 +1257,9 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( FaceIndices & value )
 	{
-		castor::switchEndianness( value.m_index[0] );
-		castor::switchEndianness( value.m_index[1] );
-		castor::switchEndianness( value.m_index[2] );
+		switchEndianness( value.m_index[0] );
+		switchEndianness( value.m_index[1] );
+		switchEndianness( value.m_index[2] );
 	}
 	/**
 	 *\~english
@@ -1271,8 +1271,8 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( LineIndices & value )
 	{
-		castor::switchEndianness( value.m_index[0] );
-		castor::switchEndianness( value.m_index[1] );
+		switchEndianness( value.m_index[0] );
+		switchEndianness( value.m_index[1] );
 	}
 	/**
 	 *\~english
@@ -1284,22 +1284,22 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( VertexBoneData & value )
 	{
-		castor::switchEndianness( value.m_ids.data[0] );
-		castor::switchEndianness( value.m_ids.data[1] );
-		castor::switchEndianness( value.m_ids.data[2] );
-		castor::switchEndianness( value.m_ids.data[3] );
-		castor::switchEndianness( value.m_ids.data[4] );
-		castor::switchEndianness( value.m_ids.data[5] );
-		castor::switchEndianness( value.m_ids.data[6] );
-		castor::switchEndianness( value.m_ids.data[7] );
-		castor::switchEndianness( value.m_weights.data[0] );
-		castor::switchEndianness( value.m_weights.data[1] );
-		castor::switchEndianness( value.m_weights.data[2] );
-		castor::switchEndianness( value.m_weights.data[3] );
-		castor::switchEndianness( value.m_weights.data[4] );
-		castor::switchEndianness( value.m_weights.data[5] );
-		castor::switchEndianness( value.m_weights.data[6] );
-		castor::switchEndianness( value.m_weights.data[7] );
+		switchEndianness( value.m_ids.data[0] );
+		switchEndianness( value.m_ids.data[1] );
+		switchEndianness( value.m_ids.data[2] );
+		switchEndianness( value.m_ids.data[3] );
+		switchEndianness( value.m_ids.data[4] );
+		switchEndianness( value.m_ids.data[5] );
+		switchEndianness( value.m_ids.data[6] );
+		switchEndianness( value.m_ids.data[7] );
+		switchEndianness( value.m_weights.data[0] );
+		switchEndianness( value.m_weights.data[1] );
+		switchEndianness( value.m_weights.data[2] );
+		switchEndianness( value.m_weights.data[3] );
+		switchEndianness( value.m_weights.data[4] );
+		switchEndianness( value.m_weights.data[5] );
+		switchEndianness( value.m_weights.data[6] );
+		switchEndianness( value.m_weights.data[7] );
 	}
 	/**
 	 *\~english
@@ -1318,7 +1318,7 @@ namespace castor3d
 		if ( chunk )
 		{
 			// Read from chunk.
-			if ( isLittleEndian( *chunk ) == castor::isLittleEndian() )
+			if ( isLittleEndian( *chunk ) == isLittleEndian() )
 			{
 				// chunk and system endiannesses are identical, nothing to do
 				return;
@@ -1329,7 +1329,7 @@ namespace castor3d
 		else
 		{
 			// Write to chunk.
-			if constexpr ( !castor::isLittleEndian() )
+			if constexpr ( !isLittleEndian() )
 			{
 				prepareChunkData( value );
 			}
@@ -1340,11 +1340,11 @@ namespace castor3d
 	T & chunkEndianToSystemEndian( BinaryChunk const & chunk
 		, T & value )
 	{
-		if constexpr ( !castor::isLittleEndian() )
+		if constexpr ( !isLittleEndian() )
 		{
 			if ( isLittleEndian( chunk ) )
 			{
-				return castor::switchEndianness( value );
+				return switchEndianness( value );
 			}
 
 			return value;
@@ -1353,7 +1353,7 @@ namespace castor3d
 		{
 			if ( !isLittleEndian( chunk ) )
 			{
-				return castor::switchEndianness( value );
+				return switchEndianness( value );
 			}
 
 			return value;

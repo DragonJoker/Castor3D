@@ -3,17 +3,15 @@
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
-	TextWriter< Sampler >::TextWriter( castor::String const & tabs )
+	TextWriter< Sampler >::TextWriter( String const & tabs )
 		: TextWriterT< Sampler >{ tabs }
 	{
 	}
 
 	bool TextWriter< Sampler >::operator()( Sampler const & sampler
-		, castor::StringStream & file )
+		, StringStream & file )
 	{
 		bool result = true;
 
@@ -24,12 +22,12 @@ namespace castor
 
 			if ( auto block{ beginBlock( file, cuT( "sampler" ), sampler.getName() ) } )
 			{
-				result = write( file, cuT( "min_filter" ), castor::makeString( getName( sampler.getMinFilter() ) ) )
-					&& write( file, cuT( "mag_filter" ), castor::makeString( getName( sampler.getMagFilter() ) ) )
-					&& write( file, cuT( "mip_filter" ), castor::makeString( getName( sampler.getMipFilter() ) ) )
-					&& write( file, cuT( "u_wrap_mode" ), castor::makeString( getName( sampler.getWrapS() ) ) )
-					&& write( file, cuT( "v_wrap_mode" ), castor::makeString( getName( sampler.getWrapT() ) ) )
-					&& write( file, cuT( "w_wrap_mode" ), castor::makeString( getName( sampler.getWrapR() ) ) )
+				result = write( file, cuT( "min_filter" ), makeString( getName( sampler.getMinFilter() ) ) )
+					&& write( file, cuT( "mag_filter" ), makeString( getName( sampler.getMagFilter() ) ) )
+					&& write( file, cuT( "mip_filter" ), makeString( getName( sampler.getMipFilter() ) ) )
+					&& write( file, cuT( "u_wrap_mode" ), makeString( getName( sampler.getWrapS() ) ) )
+					&& write( file, cuT( "v_wrap_mode" ), makeString( getName( sampler.getWrapT() ) ) )
+					&& write( file, cuT( "w_wrap_mode" ), makeString( getName( sampler.getWrapR() ) ) )
 					&& write( file, cuT( "min_lod" ), sampler.getMinLod() )
 					&& write( file, cuT( "max_lod" ), sampler.getMaxLod() )
 					&& write( file, cuT( "lod_bias" ), sampler.getLodBias() )

@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "StyleControl.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	C3D_API bool isStylesHolder( ControlType type );
 	C3D_API bool isStylesHolder( ControlStyle const & style );
@@ -16,10 +16,10 @@ namespace castor3d
 	public:
 		C3D_API virtual ~StylesHolder()noexcept = default;
 
-		explicit StylesHolder( castor::String name
+		explicit StylesHolder( String name
 			, Engine & engine )
 			: m_engine{ engine }
-			, m_holderName{ castor::move( name ) }
+			, m_holderName{ c3d::move( name ) }
 			, m_defaultFont{ engine.getDefaultFont() }
 		{
 		}
@@ -30,7 +30,7 @@ namespace castor3d
 		*\return
 		*	The font
 		*/
-		castor::FontResPtr getDefaultFont()const
+		FontResPtr getDefaultFont()const
 		{
 			return m_defaultFont;
 		}
@@ -40,48 +40,48 @@ namespace castor3d
 		*\param[in] font
 		*	The font
 		*/
-		void setDefaultFont( castor::FontResPtr font )
+		void setDefaultFont( FontResPtr font )
 		{
 			m_defaultFont = font;
 		}
 
-		C3D_API ButtonStyleRPtr createButtonStyle( castor::String name
+		C3D_API ButtonStyleRPtr createButtonStyle( String name
 			, Scene * scene );
-		C3D_API ComboBoxStyleRPtr createComboBoxStyle( castor::String name
+		C3D_API ComboBoxStyleRPtr createComboBoxStyle( String name
 			, Scene * scene );
-		C3D_API EditStyleRPtr createEditStyle( castor::String name
+		C3D_API EditStyleRPtr createEditStyle( String name
 			, Scene * scene );
-		C3D_API ExpandablePanelStyleRPtr createExpandablePanelStyle( castor::String name
+		C3D_API ExpandablePanelStyleRPtr createExpandablePanelStyle( String name
 			, Scene * scene );
-		C3D_API FrameStyleRPtr createFrameStyle( castor::String name
+		C3D_API FrameStyleRPtr createFrameStyle( String name
 			, Scene * scene );
-		C3D_API ListBoxStyleRPtr createListBoxStyle( castor::String name
+		C3D_API ListBoxStyleRPtr createListBoxStyle( String name
 			, Scene * scene );
-		C3D_API PanelStyleRPtr createPanelStyle( castor::String name
+		C3D_API PanelStyleRPtr createPanelStyle( String name
 			, Scene * scene );
-		C3D_API ProgressStyleRPtr createProgressStyle( castor::String name
+		C3D_API ProgressStyleRPtr createProgressStyle( String name
 			, Scene * scene );
-		C3D_API ScrollBarStyleRPtr createScrollBarStyle( castor::String name
+		C3D_API ScrollBarStyleRPtr createScrollBarStyle( String name
 			, Scene * scene );
-		C3D_API SliderStyleRPtr createSliderStyle( castor::String name
+		C3D_API SliderStyleRPtr createSliderStyle( String name
 			, Scene * scene );
-		C3D_API StaticStyleRPtr createStaticStyle( castor::String name
+		C3D_API StaticStyleRPtr createStaticStyle( String name
 			, Scene * scene );
 
-		C3D_API virtual ButtonStyleRPtr getButtonStyle( castor::String const & name )const;
-		C3D_API virtual ComboBoxStyleRPtr getComboBoxStyle( castor::String const & name )const;
-		C3D_API virtual EditStyleRPtr getEditStyle( castor::String const & name )const;
-		C3D_API virtual ExpandablePanelStyleRPtr getExpandablePanelStyle( castor::String const & name )const;
-		C3D_API virtual FrameStyleRPtr getFrameStyle( castor::String const & name )const;
-		C3D_API virtual ListBoxStyleRPtr getListBoxStyle( castor::String const & name )const;
-		C3D_API virtual PanelStyleRPtr getPanelStyle( castor::String const & name )const;
-		C3D_API virtual ProgressStyleRPtr getProgressStyle( castor::String const & name )const;
-		C3D_API virtual ScrollBarStyleRPtr getScrollBarStyle( castor::String const & name )const;
-		C3D_API virtual SliderStyleRPtr getSliderStyle( castor::String const & name )const;
-		C3D_API virtual StaticStyleRPtr getStaticStyle( castor::String const & name )const;
+		C3D_API virtual ButtonStyleRPtr getButtonStyle( String const & name )const;
+		C3D_API virtual ComboBoxStyleRPtr getComboBoxStyle( String const & name )const;
+		C3D_API virtual EditStyleRPtr getEditStyle( String const & name )const;
+		C3D_API virtual ExpandablePanelStyleRPtr getExpandablePanelStyle( String const & name )const;
+		C3D_API virtual FrameStyleRPtr getFrameStyle( String const & name )const;
+		C3D_API virtual ListBoxStyleRPtr getListBoxStyle( String const & name )const;
+		C3D_API virtual PanelStyleRPtr getPanelStyle( String const & name )const;
+		C3D_API virtual ProgressStyleRPtr getProgressStyle( String const & name )const;
+		C3D_API virtual ScrollBarStyleRPtr getScrollBarStyle( String const & name )const;
+		C3D_API virtual SliderStyleRPtr getSliderStyle( String const & name )const;
+		C3D_API virtual StaticStyleRPtr getStaticStyle( String const & name )const;
 
 		template< typename StyleT >
-		StyleT * getStyle( castor::String const & name )const
+		StyleT * getStyle( String const & name )const
 		{
 			if constexpr ( std::is_same_v< StyleT, ButtonStyle > )
 			{
@@ -227,29 +227,29 @@ namespace castor3d
 
 	private:
 		template< typename StyleT >
-		StyleT * createControlStyle( castor::String name
+		StyleT * createControlStyle( String name
 			, Scene * scene
-			, castor::StringMap< castor::UniquePtr< StyleT > > & controls );
+			, StringMap< UniquePtr< StyleT > > & controls );
 
 		template< typename StyleT >
-		StyleT * getControlStyle( castor::String name
-			, castor::StringMap< castor::UniquePtr< StyleT > > const & controls )const;
+		StyleT * getControlStyle( String name
+			, StringMap< UniquePtr< StyleT > > const & controls )const;
 
 	private:
 		Engine & m_engine;
-		castor::String m_holderName;
-		castor::FontResPtr m_defaultFont;
-		castor::StringMap< ButtonStyleUPtr > m_buttonStyles;
-		castor::StringMap< ComboBoxStyleUPtr > m_comboBoxStyles;
-		castor::StringMap< EditStyleUPtr > m_editStyles;
-		castor::StringMap< ExpandablePanelStyleUPtr > m_expandablePanelStyles;
-		castor::StringMap< FrameStyleUPtr > m_frameStyles;
-		castor::StringMap< ListBoxStyleUPtr > m_listBoxStyles;
-		castor::StringMap< PanelStyleUPtr > m_panelStyles;
-		castor::StringMap< ProgressStyleUPtr > m_progressStyles;
-		castor::StringMap< ScrollBarStyleUPtr > m_scrollBarStyles;
-		castor::StringMap< SliderStyleUPtr > m_sliderStyles;
-		castor::StringMap< StaticStyleUPtr > m_staticStyles;
+		String m_holderName;
+		FontResPtr m_defaultFont;
+		StringMap< ButtonStyleUPtr > m_buttonStyles;
+		StringMap< ComboBoxStyleUPtr > m_comboBoxStyles;
+		StringMap< EditStyleUPtr > m_editStyles;
+		StringMap< ExpandablePanelStyleUPtr > m_expandablePanelStyles;
+		StringMap< FrameStyleUPtr > m_frameStyles;
+		StringMap< ListBoxStyleUPtr > m_listBoxStyles;
+		StringMap< PanelStyleUPtr > m_panelStyles;
+		StringMap< ProgressStyleUPtr > m_progressStyles;
+		StringMap< ScrollBarStyleUPtr > m_scrollBarStyles;
+		StringMap< SliderStyleUPtr > m_sliderStyles;
+		StringMap< StaticStyleUPtr > m_staticStyles;
 	};
 }
 

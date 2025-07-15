@@ -7,7 +7,7 @@
 #include <ShaderWriter/VecTypes/Vec3.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	namespace deriv
 	{

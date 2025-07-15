@@ -19,7 +19,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
-namespace castor
+namespace c3d
 {
 	/**
 	\~english
@@ -28,13 +28,13 @@ namespace castor
 	\brief		Collection de matériaux, avec des fonctions additionnelles
 	*/
 	template<>
-	class ResourceCacheT< castor3d::Material, String, castor3d::MaterialCacheTraits > final
-		: public ResourceCacheBaseT< castor3d::Material, String, castor3d::MaterialCacheTraits >
+	class ResourceCacheT< Material, String, MaterialCacheTraits > final
+		: public ResourceCacheBaseT< Material, String, MaterialCacheTraits >
 	{
 	public:
-		using ElementT = castor3d::Material;
+		using ElementT = Material;
 		using ElementKeyT = String;
-		using ElementCacheTraitsT = castor3d::MaterialCacheTraits;
+		using ElementCacheTraitsT = MaterialCacheTraits;
 		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementCacheT::ElementPtrT;
 		using ElementContT = typename ElementCacheT::ElementContT;
@@ -51,7 +51,7 @@ namespace castor
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API explicit ResourceCacheT( castor3d::Engine & engine );
+		C3D_API explicit ResourceCacheT( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Intialises the default material.
@@ -60,7 +60,7 @@ namespace castor
 		 *\brief		Initialise le matériau par défaut.
 		 *\param[in]	device		Le device GPU.
 		 */
-		C3D_API void initialise( castor3d::RenderDevice const & device );
+		C3D_API void initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Sets all the elements to be cleaned up.
@@ -83,7 +83,7 @@ namespace castor
 		 *\brief			Met à jour la passe de rendu, au niveau CPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API void update( castor3d::CpuUpdater & updater );
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, GPU wise.
@@ -92,7 +92,7 @@ namespace castor
 		 *\brief			Met à jour la passe de rendu, au niveau GPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API void update( castor3d::GpuUpdater & updater );
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Uploads all GPU buffers to VRAM.
@@ -101,7 +101,7 @@ namespace castor
 		 *\brief		Met à jour tous les tampons GPU en VRAM.
 		 *\param[in]	uploader	Reçoit les requêtes d'upload.
 		 */
-		C3D_API void upload( castor3d::UploadData & uploader )const;
+		C3D_API void upload( UploadData & uploader )const;
 		/**
 		 *\~english
 		 *\brief			Registers a specific data shader buffer.
@@ -112,8 +112,8 @@ namespace castor
 		 *\param[in,out]	name	Le nom du shader buffer.
 		 *\param[out]		buffer	Le shader buffer.
 		 */
-		C3D_API void registerSpecificsBuffer( castor::String const & name
-			, castor3d::SpecificsBuffer buffer );
+		C3D_API void registerSpecificsBuffer( String const & name
+			, SpecificsBuffer buffer );
 		/**
 		 *\~english
 		 *\brief			Unregisters a pass' specific data buffer.
@@ -122,7 +122,7 @@ namespace castor
 		 *\brief			Désenregistre un shader buffer de données spécifiques.
 		 *\param[in,out]	name	Le nom du shader buffer.
 		 */
-		C3D_API void unregisterSpecificsBuffer( castor::String const & name )noexcept;
+		C3D_API void unregisterSpecificsBuffer( String const & name )noexcept;
 		/**
 		 *\~english
 		 *\brief			Addw the pass' specific data buffer into the given descriptor layout bindings array.
@@ -177,7 +177,7 @@ namespace castor
 		 *\param[in]		set		L'indice de descriptor set.
 		 */
 		C3D_API void declareSpecificsShaderBuffers( sdw::ShaderWriter & writer
-			, castor::StringMap< castor3d::shader::BufferBaseUPtr > & buffers
+			, StringMap< shader::BufferBaseUPtr > & buffers
 			, uint32_t & binding
 			, uint32_t set )const;
 		/**
@@ -202,47 +202,47 @@ namespace castor
 		 *\~french
 		 *\brief		Les détails du type de passe pour l'index donné (pour l'utilisation de vibility buffer).
 		 */
-		C3D_API std::tuple< castor3d::PassComponentCombineID, castor3d::TextureCombineID > getPassTypeDetails( uint32_t passTypeIndex )const;
+		C3D_API std::tuple< PassComponentCombineID, TextureCombineID > getPassTypeDetails( uint32_t passTypeIndex )const;
 		/**
 		 *\~english
 		 *\return		The pass type index (for visibility buffer use).
 		 *\~french
 		 *\brief		L'indice de type de passe (pour l'utilisation de vibility buffer).
 		 */
-		C3D_API uint32_t getPassTypeIndex( castor3d::PassComponentCombineID passType
-			, castor3d::TextureCombineID textureFlags )const;
-		C3D_API bool registerPass( castor3d::Pass & pass );
-		C3D_API void unregisterPass( castor3d::Pass & pass )noexcept;
-		C3D_API bool registerUnit( castor3d::TextureUnit & unit );
-		C3D_API void unregisterUnit( castor3d::TextureUnit & unit )noexcept;
-		C3D_API bool registerTexture( castor3d::AnimatedTexture const & texture );
-		C3D_API void unregisterTexture( castor3d::AnimatedTexture const & texture )noexcept;
+		C3D_API uint32_t getPassTypeIndex( PassComponentCombineID passType
+			, TextureCombineID textureFlags )const;
+		C3D_API bool registerPass( Pass & pass );
+		C3D_API void unregisterPass( Pass & pass )noexcept;
+		C3D_API bool registerUnit( TextureUnit & unit );
+		C3D_API void unregisterUnit( TextureUnit & unit )noexcept;
+		C3D_API bool registerTexture( AnimatedTexture const & texture );
+		C3D_API void unregisterTexture( AnimatedTexture const & texture )noexcept;
 		C3D_API uint32_t getCurrentPassTypeCount()const;
 
-		castor3d::MaterialObs getDefaultMaterial()const
+		MaterialObs getDefaultMaterial()const
 		{
 			return m_defaultMaterial;
 		}
 
-		castor3d::PassBuffer const & getPassBuffer()const
+		PassBuffer const & getPassBuffer()const
 		{
 			CU_Require( m_passBuffer );
 			return *m_passBuffer;
 		}
 
-		castor3d::SssProfileBuffer const & getSssProfileBuffer()const
+		SssProfileBuffer const & getSssProfileBuffer()const
 		{
 			CU_Require( m_sssProfileBuffer );
 			return *m_sssProfileBuffer;
 		}
 
-		castor3d::TextureConfigurationBuffer const & getTexConfigBuffer()const
+		TextureConfigurationBuffer const & getTexConfigBuffer()const
 		{
 			CU_Require( m_texConfigBuffer );
 			return *m_texConfigBuffer;
 		}
 
-		castor3d::TextureAnimationBuffer const & getTexAnimBuffer()const
+		TextureAnimationBuffer const & getTexAnimBuffer()const
 		{
 			CU_Require( m_texAnimBuffer );
 			return *m_texAnimBuffer;
@@ -260,10 +260,10 @@ namespace castor
 			*	Initialisation / Update.
 			*/
 			/**@{*/
-			void initialise( castor3d::RenderDevice const & device );
+			void initialise( RenderDevice const & device );
 			void cleanup();
-			void update( castor3d::PassBuffer & passBuffer
-				, castor3d::UploadData & uploader )const;
+			void update( PassBuffer & passBuffer
+				, UploadData & uploader )const;
 			/**@}*/
 			/**
 			*\~english
@@ -274,9 +274,9 @@ namespace castor
 			*	Enregistrement.
 			*/
 			/**@{*/
-			void registerBuffer( castor::String const & name
-				, castor3d::SpecificsBuffer buffer );
-			void unregisterBuffer( castor::String const & name );
+			void registerBuffer( String const & name
+				, SpecificsBuffer buffer );
+			void unregisterBuffer( String const & name );
 			/**@}*/
 			/**
 			*\name
@@ -297,27 +297,27 @@ namespace castor
 			*/
 			/**@{*/
 			void declareShaderBuffers( sdw::ShaderWriter & writer
-				, castor::StringMap< castor3d::shader::BufferBaseUPtr > & buffers
+				, StringMap< shader::BufferBaseUPtr > & buffers
 				, uint32_t & binding
 				, uint32_t set )const;
 			/**@}*/
 
 		private:
-			castor3d::SpecificsBuffers m_buffers;
+			c3d::SpecificsBuffers m_buffers;
 		};
 
 		void doUpdatePending();
 
 	private:
-		castor3d::Engine & m_engine;
-		castor3d::MaterialObs m_defaultMaterial{};
-		castor3d::PassBufferUPtr m_passBuffer;
-		castor3d::SssProfileBufferUPtr m_sssProfileBuffer;
-		castor3d::TextureConfigurationBufferUPtr m_texConfigBuffer;
-		castor3d::TextureAnimationBufferUPtr m_texAnimBuffer;
-		castor::Vector< castor3d::Pass * > m_pendingPasses;
-		castor::Vector< castor3d::TextureUnit * > m_pendingUnits;
-		castor::Vector< castor3d::AnimatedTexture const * > m_pendingTextures;
+		Engine & m_engine;
+		MaterialObs m_defaultMaterial{};
+		PassBufferUPtr m_passBuffer;
+		SssProfileBufferUPtr m_sssProfileBuffer;
+		TextureConfigurationBufferUPtr m_texConfigBuffer;
+		TextureAnimationBufferUPtr m_texAnimBuffer;
+		Vector< Pass * > m_pendingPasses;
+		Vector< TextureUnit * > m_pendingUnits;
+		Vector< AnimatedTexture const * > m_pendingTextures;
 		PassDataBuffers m_specificsBuffers;
 	};
 }

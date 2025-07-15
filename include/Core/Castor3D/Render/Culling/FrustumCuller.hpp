@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/Frustum.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class FrustumCuller
 		: public SceneCuller
@@ -22,8 +22,8 @@ namespace castor3d
 			, Frustum & frustum
 			, std::optional< bool > isStatic = std::nullopt );
 
-		C3D_API void updateFrustum( castor::Matrix4x4f const & projection
-			, castor::Matrix4x4f const & view );
+		C3D_API void updateFrustum( Matrix4x4f const & projection
+			, Matrix4x4f const & view );
 
 	private:
 		bool isSubmeshVisible( SubmeshRenderNode const & node )const override;

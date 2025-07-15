@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class VoxelizePass
 		: public RenderNodesPass
@@ -59,7 +59,7 @@ namespace castor3d
 			, VctConfig const & voxelConfig
 			, bool isStatic );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 		/**
@@ -87,7 +87,7 @@ namespace castor3d
 		void doFillAdditionalDescriptor( PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps
-			, castor3d::ShadowBuffer const * shadowBuffer )override;
+			, ShadowBuffer const * shadowBuffer )override;
 		SubmeshComponentCombine doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const override;
 		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
@@ -97,7 +97,7 @@ namespace castor3d
 			, ast::ShaderBuilder & builder )const override;
 
 	public:
-		C3D_API static castor::String const Type;
+		C3D_API static String const Type;
 
 	private:
 		Scene const & m_scene;

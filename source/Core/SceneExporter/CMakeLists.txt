@@ -104,6 +104,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextHdrConfig.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextLayoutBox.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextLight.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextLightGroup.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextLpvConfig.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextMaterial.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextMesh.hpp

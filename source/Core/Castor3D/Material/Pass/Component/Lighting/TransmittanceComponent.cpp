@@ -14,28 +14,25 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::TransmittanceComponent >
-		: public TextWriterT< castor3d::TransmittanceComponent >
+	class TextWriter< TransmittanceComponent >
+		: public TextWriterT< TransmittanceComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::TransmittanceComponent >{ tabs }
+			: TextWriterT< TransmittanceComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::TransmittanceComponent const & object
+		bool operator()( TransmittanceComponent const & object
 			, StringStream & file )override
 		{
-			return writeOpt( file, cuT( "transmittance" ), object.getTransmittance(), castor3d::TransmittanceComponent::Default );
+			return writeOpt( file, cuT( "transmittance" ), object.getTransmittance(), TransmittanceComponent::Default );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace trscmp
@@ -132,14 +129,14 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void TransmittanceComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void TransmittanceComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "transmittance" )
 			, trscmp::parserTransmittance
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { makeParameter< ParameterType::eFloat >() } );
 	}
 
 	void TransmittanceComponent::Plugin::zeroBuffer( Pass const & pass
@@ -159,7 +156,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const TransmittanceComponent::TypeName = C3D_MakePassLightingComponentName( "transmittance" );
+	String const TransmittanceComponent::TypeName = C3D_MakePassLightingComponentName( "transmittance" );
 
 	TransmittanceComponent::TransmittanceComponent( Pass & pass )
 		: BaseDataPassComponentT{ pass, TypeName }
@@ -174,17 +171,17 @@ namespace castor3d
 
 	PassComponentUPtr TransmittanceComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< TransmittanceComponent >( pass );
+		auto result = makeRawUnique< TransmittanceComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool TransmittanceComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool TransmittanceComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< TransmittanceComponent >{ tabs }( *this, file );
+		return TextWriter< TransmittanceComponent >{ tabs }( *this, file );
 	}
 
 	void TransmittanceComponent::doFillBuffer( PassBuffer & buffer )const

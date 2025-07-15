@@ -27,19 +27,19 @@ namespace Testing
 	{
 		{
 			CT_ON( "	Size of 8, bits unset" );
-			castor::DynamicBitset bitset{ 8u };
+			c3d::DynamicBitset bitset{ 8u };
 			CT_REQUIRE( bitset.getSize() == 8u );
 			CT_REQUIRE( bitset.getBlockCount() == 1u );
 		}
 		{
 			CT_ON( "	Size of 8, bits set" );
-			castor::DynamicBitset bitset{ 8u, true };
+			c3d::DynamicBitset bitset{ 8u, true };
 			CT_REQUIRE( bitset.getSize() == 8u );
 			CT_REQUIRE( bitset.getBlockCount() == 1u );
 		}
 		{
 			CT_ON( "	Size of 37, bits set" );
-			castor::DynamicBitset bitset{ 37u, true };
+			c3d::DynamicBitset bitset{ 37u, true };
 			CT_REQUIRE( bitset.getSize() == 37u );
 			CT_REQUIRE( bitset.getBlockCount() == 2u );
 		}
@@ -49,45 +49,45 @@ namespace Testing
 	{
 		{
 			CT_ON( "	Size of 8, bits unset" );
-			castor::DynamicBitset bitset{ 8u };
+			c3d::DynamicBitset bitset{ 8u };
 
 			for ( size_t i = 0u; i < bitset.getSize(); ++i )
 			{
 				CT_EQUAL( bitset.get( i ), false );
 			}
 
-			castor::String test( 8u, '0' );
+			c3d::String test( 8u, '0' );
 			CT_EQUAL( bitset.toString(), test );
 		}
 		{
 			CT_ON( "	Size of 8, bits set" );
-			castor::DynamicBitset bitset{ 8u, true };
+			c3d::DynamicBitset bitset{ 8u, true };
 
 			for ( size_t i = 0u; i < bitset.getSize(); ++i )
 			{
 				CT_EQUAL( bitset.get( i ), true );
 			}
 
-			castor::String test( 8u, '1' );
+			c3d::String test( 8u, '1' );
 			CT_EQUAL( bitset.toString(), test );
 		}
 		{
 			CT_ON( "	Size of 37, bits set" );
-			castor::DynamicBitset bitset{ 37u, true };
+			c3d::DynamicBitset bitset{ 37u, true };
 
 			for ( size_t i = 0u; i < bitset.getSize(); ++i )
 			{
 				CT_EQUAL( bitset.get( i ), true );
 			}
 
-			castor::String test( 37u, '1' );
+			c3d::String test( 37u, '1' );
 			CT_EQUAL( bitset.toString(), test );
 		}
 		{
 			CT_ON( "	From string" );
-			castor::MbString test = "011011010101010101010010101010101010110110";
-			castor::DynamicBitset bitset{ test };
-			CT_EQUAL( bitset.toString(), castor::makeString( test ) );
+			c3d::MbString test = "011011010101010101010010101010101010110110";
+			c3d::DynamicBitset bitset{ test };
+			CT_EQUAL( bitset.toString(), c3d::makeString( test ) );
 			CT_EQUAL( bitset.getSize(), test.size() );
 		}
 	}
@@ -96,19 +96,19 @@ namespace Testing
 	{
 		{
 			CT_ON( "	Shift by 5" );
-			castor::DynamicBitset bitset{ "011011010101010101010010101010101010110110" };
+			c3d::DynamicBitset bitset{ "011011010101010101010010101010101010110110" };
 			bitset <<= 5;
 			CT_EQUAL( bitset.toString(), cuT( "101010101010101001010101010101011011000000" ) );
 		}
 		{
 			CT_ON( "	Shift by 35" );
-			castor::DynamicBitset bitset{ "011011010101010101010010101010101010110110" };
+			c3d::DynamicBitset bitset{ "011011010101010101010010101010101010110110" };
 			bitset <<= 35;
 			CT_EQUAL( bitset.toString(), cuT( "011011000000000000000000000000000000000000" ) );
 		}
 		{
 			CT_ON( "	Shift by size" );
-			castor::DynamicBitset bitset{ "011011010101010101010010101010101010110110" };
+			c3d::DynamicBitset bitset{ "011011010101010101010010101010101010110110" };
 			bitset <<= int( bitset.getSize() );
 			CT_EQUAL( bitset.toString(), cuT( "000000000000000000000000000000000000000000" ) );
 		}
@@ -118,19 +118,19 @@ namespace Testing
 	{
 		{
 			CT_ON( "	Shift by 5" );
-			castor::DynamicBitset bitset{ "011011010101010101010010101010101010110110" };
+			c3d::DynamicBitset bitset{ "011011010101010101010010101010101010110110" };
 			bitset >>= 5;
 			CT_EQUAL( bitset.toString(), cuT( "000000110110101010101010100101010101010101" ) );
 		}
 		{
 			CT_ON( "	Shift by 35" );
-			castor::DynamicBitset bitset{ "011011010101010101010010101010101010110110" };
+			c3d::DynamicBitset bitset{ "011011010101010101010010101010101010110110" };
 			bitset >>= 35;
 			CT_EQUAL( bitset.toString(), cuT( "000000000000000000000000000000000000110110" ) );
 		}
 		{
 			CT_ON( "	Shift by size" );
-			castor::DynamicBitset bitset{ "011011010101010101010010101010101010110110" };
+			c3d::DynamicBitset bitset{ "011011010101010101010010101010101010110110" };
 			bitset >>= int( bitset.getSize() );
 			CT_EQUAL( bitset.toString(), cuT( "000000000000000000000000000000000000000000" ) );
 		}
@@ -139,14 +139,14 @@ namespace Testing
 	void CastorUtilsDynamicBitsetTest::andTest()
 	{
 		{
-			castor::DynamicBitset lhs{ "011011010101010101010010101010101010110110" };
-			castor::DynamicBitset rhs{ "100100101010101010101101010101010101001001" };
+			c3d::DynamicBitset lhs{ "011011010101010101010010101010101010110110" };
+			c3d::DynamicBitset rhs{ "100100101010101010101101010101010101001001" };
 			auto result = lhs & rhs;
 			CT_CHECK( result.none() );
 		}
 		{
-			castor::DynamicBitset lhs{ "111" };
-			castor::DynamicBitset rhs{ "010" };
+			c3d::DynamicBitset lhs{ "111" };
+			c3d::DynamicBitset rhs{ "010" };
 			auto result = lhs & rhs;
 			CT_CHECK( result == rhs );
 		}
@@ -155,8 +155,8 @@ namespace Testing
 	void CastorUtilsDynamicBitsetTest::orTest()
 	{
 		{
-			castor::DynamicBitset lhs{ "011011010101010101010010101010101010110110" };
-			castor::DynamicBitset rhs{ "100100101010101010101101010101010101001001" };
+			c3d::DynamicBitset lhs{ "011011010101010101010010101010101010110110" };
+			c3d::DynamicBitset rhs{ "100100101010101010101101010101010101001001" };
 			auto result = lhs | rhs;
 			CT_CHECK( result.all() );
 		}
@@ -165,16 +165,16 @@ namespace Testing
 	void CastorUtilsDynamicBitsetTest::xorTest()
 	{
 		{
-			castor::DynamicBitset lhs{ "011011010101010101010010101010101010110110" };
-			castor::DynamicBitset rhs{ "100100101010101010101101010101010101001001" };
+			c3d::DynamicBitset lhs{ "011011010101010101010010101010101010110110" };
+			c3d::DynamicBitset rhs{ "100100101010101010101101010101010101001001" };
 			auto result = lhs ^ rhs;
 			CT_CHECK( result.all() );
 		}
 		{
-			castor::DynamicBitset lhs{ "111" };
-			castor::DynamicBitset rhs{ "010" };
+			c3d::DynamicBitset lhs{ "111" };
+			c3d::DynamicBitset rhs{ "010" };
 			auto result = lhs ^ rhs;
-			castor::DynamicBitset test{ "101" };
+			c3d::DynamicBitset test{ "101" };
 			CT_CHECK( result == test );
 		}
 	}
@@ -182,7 +182,7 @@ namespace Testing
 	void CastorUtilsDynamicBitsetTest::setTest()
 	{
 		{
-			castor::DynamicBitset value{ "011011010101010101010010101010101010110110" };
+			c3d::DynamicBitset value{ "011011010101010101010010101010101010110110" };
 
 			value.set( 0 );
 			CT_CHECK( bool( value[0] ) );

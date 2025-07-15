@@ -32,7 +32,7 @@ namespace GuiCommon
 		 *\param[in]	target	L'objet cible
 		 */
 		RenderWindowTreeItemProperty( bool editable
-			, castor3d::RenderWindow & target );
+			, c3d::RenderWindow & target );
 
 	private:
 		/**
@@ -43,7 +43,7 @@ namespace GuiCommon
 		void doCreateDebugProperties( wxPropertyGrid * grid );
 
 	private:
-		castor3d::RenderWindow & m_window;
+		c3d::RenderWindow & m_window;
 	};
 }
 

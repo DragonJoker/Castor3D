@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Miscellaneous/MiscellaneousModule.hpp"
 
-namespace castor
+namespace c3d
 {
 	static constexpr uint32_t getBitSize( uint64_t value )
 	{

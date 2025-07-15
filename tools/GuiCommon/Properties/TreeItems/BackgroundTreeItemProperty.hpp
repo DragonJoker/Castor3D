@@ -33,7 +33,7 @@ namespace GuiCommon
 		 *\param[in]	scene		L'objet cible
 		 */
 		BackgroundTreeItemProperty( bool editable
-			, castor3d::SceneBackground & background );
+			, c3d::SceneBackground & background );
 
 	private:
 		/**
@@ -43,10 +43,10 @@ namespace GuiCommon
 
 	private:
 		wxPGProperty * doCreateTextureImageProperty( wxString const & name
-			, castor3d::TextureLayout const & texture );
+			, c3d::TextureLayout const & texture );
 
 	private:
-		castor3d::SceneBackground & m_background;
+		c3d::SceneBackground & m_background;
 	};
 }
 

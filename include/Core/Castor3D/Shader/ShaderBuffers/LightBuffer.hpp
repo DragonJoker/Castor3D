@@ -18,12 +18,12 @@ See LICENSE file in root folder
 #include <mutex>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class LightBuffer
 	{
 	public:
-		using LightsData = castor::ArrayView< castor::Point4f >;
+		using LightsData = ArrayView< Point4f >;
 
 	public:
 		/**
@@ -139,19 +139,19 @@ namespace castor3d
 		}
 
 	private:
-		castor::Pair< uint32_t, uint32_t > doGetOffsetIndex( LightInstance const & light )const;
+		Pair< uint32_t, uint32_t > doGetOffsetIndex( LightInstance const & light )const;
 		void doMarkNextDirty( LightType type
 			, uint32_t index );
 		uint32_t doGetBufferEnd( LightType type )const noexcept;
 
 	private:
 		ShaderBuffer m_buffer;
-		castor::Array< LightInstancesArray, size_t( LightType::eCount ) > m_typeSortedLights;
-		castor::Vector< LightInstance * > m_dirty;
-		castor::Map< LightInstance *, OnLightChangedConnection > m_connections;
-		castor::Vector< uint32_t > m_lightSizes;
+		Array< LightInstancesArray, size_t( LightType::eCount ) > m_typeSortedLights;
+		Vector< LightInstance * > m_dirty;
+		Map< LightInstance *, OnLightChangedConnection > m_connections;
+		Vector< uint32_t > m_lightSizes;
 		LightsData m_data;
-		mutable castor::Mutex m_mutex;
+		mutable Mutex m_mutex;
 		bool m_wasDirty{};
 	};
 }

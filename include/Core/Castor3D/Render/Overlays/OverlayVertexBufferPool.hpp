@@ -16,19 +16,19 @@ See LICENSE file in root folder
 #include <ashespp/Descriptor/DescriptorSetPool.hpp>
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	template< typename VertexT, uint32_t CountT >
 	struct OverlayVertexBufferPoolT
 	{
-		using Quad = castor::Array< VertexT, CountT >;
+		using Quad = Array< VertexT, CountT >;
 		static bool constexpr isPanel = std::is_same_v< VertexT, OverlayCategory::Vertex > && ( CountT == 6u );
 		static bool constexpr isBorder = std::is_same_v< VertexT, OverlayCategory::Vertex > && ( CountT == 48u );
 		static bool constexpr isText = !isPanel && !isBorder;
 		static bool constexpr isCpuFilled = isText;
 
 		OverlayVertexBufferPoolT( Engine & engine
-			, castor::String const & debugName
+			, String const & debugName
 			, RenderDevice const & device
 			, CameraUbo const & cameraUbo
 			, HdrConfigUbo const & hdrConfigUbo
@@ -36,7 +36,7 @@ namespace castor3d
 			, uint32_t count
 			, OverlayTextBufferPoolUPtr textBuf = nullptr );
 		template< typename OverlayT >
-		bool fill( castor::Size const & renderSize
+		bool fill( Size const & renderSize
 			, OverlayT const & overlay
 			, OverlayDrawData & data
 			, bool secondary
@@ -57,9 +57,9 @@ namespace castor3d
 		CameraUbo const & cameraUbo;
 		HdrConfigUbo const & hdrConfigUbo;
 		ashes::DescriptorSetLayout const & descriptorLayout;
-		castor::String name;
+		String name;
 		ashes::BufferPtr< OverlayUboConfiguration > overlaysData;
-		castor::ArrayView< OverlayUboConfiguration > overlaysBuffer;
+		ArrayView< OverlayUboConfiguration > overlaysBuffer;
 		GpuBufferBase vertexBuffer;
 		uint32_t allocated{};
 		uint32_t index{};
@@ -67,12 +67,12 @@ namespace castor3d
 		OverlayTextBufferPoolUPtr textBuffer;
 
 	private:
-		using PipelineDataMap = castor::UnorderedMap< OverlayDrawPipeline const *, OverlayPipelineData >;
-		castor::UnorderedMap< FontTexture const *, PipelineDataMap > m_pipelines;
-		castor::Vector< OverlayPipelineData > m_retired;
+		using PipelineDataMap = HashMap< OverlayDrawPipeline const *, OverlayPipelineData >;
+		HashMap< FontTexture const *, PipelineDataMap > m_pipelines;
+		Vector< OverlayPipelineData > m_retired;
 
 	private:
-		ashes::DescriptorSetPtr doCreateDescriptorSet( castor::String debugName
+		ashes::DescriptorSetPtr doCreateDescriptorSet( String debugName
 			, FontTexture const * fontTexture
 			, ashes::BufferBase const & idsBuffer )const;
 	};

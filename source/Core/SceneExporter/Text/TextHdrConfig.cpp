@@ -1,9 +1,7 @@
 #include "TextHdrConfig.hpp"
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< HdrConfig >::TextWriter( String const & tabs )
 		: TextWriterT< HdrConfig >{ tabs }
 	{

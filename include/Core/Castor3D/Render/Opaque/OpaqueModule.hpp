@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/Size.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Render */
 	//@{
@@ -55,9 +55,9 @@ namespace castor3d
 	class VisibilityResolvePass;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, OpaqueRendering, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SubsurfaceScatteringPass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, VisibilityReorderPass, C3D_API );
+	CU_DeclareSmartPtr( c3d, OpaqueRendering, C3D_API );
+	CU_DeclareSmartPtr( c3d, SubsurfaceScatteringPass, C3D_API );
+	CU_DeclareSmartPtr( c3d, VisibilityReorderPass, C3D_API );
 	/** @endcond */
 
 	//@}

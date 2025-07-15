@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Sync/Semaphore.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct RenderTechniquePassDesc
 	{
@@ -34,7 +34,7 @@ namespace castor3d
 		 */
 		RenderTechniquePassDesc & indirect( IndirectLightingData value )
 		{
-			m_indirectLighting = castor::move( value );
+			m_indirectLighting = c3d::move( value );
 			return *this;
 		}
 		/**
@@ -163,13 +163,13 @@ namespace castor3d
 			doAccept( visitor );
 		}
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::update
+		 *\copydoc	RenderNodesPass::update
 		 */
 		C3D_API virtual void update( CpuUpdater & updater )
 		{
 		}
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::createPipelineFlags
+		 *\copydoc	RenderNodesPass::createPipelineFlags
 		 */
 		C3D_API virtual PipelineFlags createPipelineFlags( PassComponentCombine const & passComponents
 			, SubmeshComponentCombine const & submeshComponents
@@ -186,23 +186,23 @@ namespace castor3d
 			, VkPrimitiveTopology topology
 			, bool isFrontCulled
 			, uint32_t passLayerIndex
-			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+			, GpuBufferOffsetT< Point4f > const & morphTargets
 			, SubmeshRenderData * submeshData
 			, uint32_t vertexStride )const = 0;
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::areValidPassFlags
+		 *\copydoc	RenderNodesPass::areValidPassFlags
 		 */
 		C3D_API virtual bool areValidPassFlags( PassComponentCombine const & passFlags )const noexcept = 0;
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::getShaderFlags
+		 *\copydoc	RenderNodesPass::getShaderFlags
 		 */
 		C3D_API virtual ShaderFlags getShaderFlags()const noexcept = 0;
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::countNodes
+		 *\copydoc	RenderNodesPass::countNodes
 		 */
 		C3D_API virtual void countNodes( RenderInfo & info )const noexcept = 0;
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::isPassEnabled
+		 *\copydoc	RenderNodesPass::isPassEnabled
 		 */
 		C3D_API virtual bool isPassEnabled()const noexcept = 0;
 		/**
@@ -239,9 +239,9 @@ namespace castor3d
 
 	protected:
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		RenderTechniquePass::accept
 		 */
-		C3D_API virtual void doAccept( castor3d::RenderTechniqueVisitor & visitor ) = 0;
+		C3D_API virtual void doAccept( RenderTechniqueVisitor & visitor ) = 0;
 
 	protected:
 		RenderTechnique * m_parent{};
@@ -286,7 +286,7 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, castor::String const & typeName
+			, String const & typeName
 			, crg::ImageViewIdArray targetImage
 			, crg::ImageViewIdArray targetDepth
 			, RenderNodesPassDesc const & renderPassDesc
@@ -294,15 +294,15 @@ namespace castor3d
 
 	public:
 		/**
-		 *\copydoc	castor3d::RenderTechniquePass::accept
+		 *\copydoc	RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::update
+		 *\copydoc	RenderNodesPass::update
 		 */
 		C3D_API void update( CpuUpdater & updater )override;
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::createPipelineFlags
+		 *\copydoc	RenderNodesPass::createPipelineFlags
 		 */
 		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine const & passComponents
 			, SubmeshComponentCombine const & submeshComponents
@@ -319,32 +319,32 @@ namespace castor3d
 			, VkPrimitiveTopology topology
 			, bool isFrontCulled
 			, uint32_t passLayerIndex
-			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+			, GpuBufferOffsetT< Point4f > const & morphTargets
 			, SubmeshRenderData * submeshData
 			, uint32_t vertexStride )const override;
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::getShaderFlags
+		 *\copydoc	RenderNodesPass::getShaderFlags
 		 */
 		C3D_API ShaderFlags getShaderFlags()const noexcept override
 		{
 			return m_shaderFlags;
 		}
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::countNodes
+		 *\copydoc	RenderNodesPass::countNodes
 		 */
 		C3D_API void countNodes( RenderInfo & info )const noexcept override
 		{
 			RenderNodesPass::countNodes( info );
 		}
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::areValidPassFlags
+		 *\copydoc	RenderNodesPass::areValidPassFlags
 		 */
 		C3D_API bool areValidPassFlags( PassComponentCombine const & passFlags )const noexcept override
 		{
 			return RenderNodesPass::areValidPassFlags( passFlags );
 		}
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::isPassEnabled
+		 *\copydoc	RenderNodesPass::isPassEnabled
 		 */
 		C3D_API bool isPassEnabled()const noexcept override
 		{
@@ -396,7 +396,7 @@ namespace castor3d
 		/**@}*/
 
 	protected:
-		C3D_API void doAccept( castor3d::RenderTechniqueVisitor & visitor )override;
+		C3D_API void doAccept( RenderTechniqueVisitor & visitor )override;
 		C3D_API ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		C3D_API SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
 		C3D_API void doAddEnvBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings

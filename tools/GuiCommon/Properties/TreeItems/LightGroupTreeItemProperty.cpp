@@ -9,7 +9,7 @@
 
 namespace GuiCommon
 {
-	LightGroupTreeItemProperty::LightGroupTreeItemProperty( bool editable, castor3d::Engine * engine )
+	LightGroupTreeItemProperty::LightGroupTreeItemProperty( bool editable, c3d::Engine * engine )
 		: TreeItemProperty{ engine, editable }
 	{
 		CreateTreeItemMenu();

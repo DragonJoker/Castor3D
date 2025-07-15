@@ -20,9 +20,9 @@
 
 #include <ShaderAST/Shader.hpp>
 
-CU_ImplementSmartPtr( castor3d, ShadowMapPass )
+CU_ImplementSmartPtr( c3d, ShadowMapPass )
 
-namespace castor3d
+namespace c3d
 {
 	namespace shdmappass
 	{
@@ -84,7 +84,7 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, castor::String const & typeName
+		, String const & typeName
 		, CameraUbo const & cameraUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap

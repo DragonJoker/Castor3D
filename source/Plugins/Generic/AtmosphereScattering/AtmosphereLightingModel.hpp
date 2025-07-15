@@ -15,28 +15,28 @@ See LICENSE file in root folder
 
 namespace atmosphere_scattering
 {
-	namespace c3d = castor3d::shader;
+	namespace c3ds = c3d::shader;
 
 	class AtmosphereScatteringModel
-		: public c3d::ScatteringModel
+		: public c3ds::ScatteringModel
 	{
 	public:
 		explicit AtmosphereScatteringModel( sdw::ShaderWriter & writer );
-		void initialiseBackground( c3d::BackgroundModel & background
-			, c3d::Shadow & shadowModel )override;
-		sdw::Vec3 computeRadiance( c3d::Light const & light
+		void initialiseBackground( c3ds::BackgroundModel & background
+			, c3ds::Shadow & shadowModel )override;
+		sdw::Vec3 computeRadiance( c3ds::Light const & light
 			, sdw::Vec3 const & lightDirection )const override;
-		void computeScattering( c3d::LightingModel & lighting
-			, c3d::ShadowData const & shadows
+		void computeScattering( c3ds::LightingModel & lighting
+			, c3ds::ShadowData const & shadows
 			, sdw::Int const shadowMapIndex
 			, sdw::Vec3 const & radiance
 			, sdw::Float const & lightIntensity
-			, c3d::BlendComponents const & components
-			, c3d::LightSurface const & lightSurface
+			, c3ds::BlendComponents const & components
+			, c3ds::LightSurface const & lightSurface
 			, sdw::Vec3 output )override;
 
-		static castor::StringView constexpr Name{ cuT( "atmosphere_scattering" ) };
-		static c3d::ScatteringModelPtr create( sdw::ShaderWriter & writer );
+		static c3d::StringView constexpr Name{ cuT( "atmosphere_scattering" ) };
+		static c3ds::ScatteringModelPtr create( sdw::ShaderWriter & writer );
 
 	public:
 		AtmosphereBackgroundModel * atmosphereBackground{};

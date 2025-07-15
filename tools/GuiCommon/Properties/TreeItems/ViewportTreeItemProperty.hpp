@@ -33,7 +33,7 @@ namespace GuiCommon
 		 *\param[in]	engine	Le moteur
 		 *\param[in]	viewport	Le viewport cible
 		 */
-		ViewportTreeItemProperty( bool editable, castor3d::Engine & engine, castor3d::Viewport & viewport );
+		ViewportTreeItemProperty( bool editable, c3d::Engine & engine, c3d::Viewport & viewport );
 		/**
 		 *\~english
 		 *\brief		Retrieves the viewport
@@ -42,7 +42,7 @@ namespace GuiCommon
 		 *\brief		Récupère le viewport
 		 *\return		La valeur
 		 */
-		inline castor3d::Viewport & getViewport()
+		inline c3d::Viewport & getViewport()
 		{
 			return m_viewport;
 		}
@@ -54,7 +54,7 @@ namespace GuiCommon
 		 *\brief		Récupère le viewport
 		 *\return		La valeur
 		 */
-		inline castor3d::Viewport const & getViewport()const
+		inline c3d::Viewport const & getViewport()const
 		{
 			return m_viewport;
 		}
@@ -66,7 +66,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::Viewport & m_viewport;
+		c3d::Viewport & m_viewport;
 	};
 }
 

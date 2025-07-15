@@ -14,14 +14,14 @@ See LICENSE file in root folder
 #include <ashespp/Pipeline/ComputePipeline.hpp>
 #include <ashespp/Pipeline/PipelineLayout.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct TransformPipeline
 	{
 		C3D_API explicit TransformPipeline( uint32_t index );
 
-		C3D_API castor::String getName( Engine const & engine )const;
-		C3D_API static castor::String getName( Engine const & engine
+		C3D_API String getName( Engine const & engine )const;
+		C3D_API static String getName( Engine const & engine
 			, SubmeshComponentCombineID combine
 			, MorphFlags const & morphFlags
 			, bool meshletsBounds
@@ -48,8 +48,8 @@ namespace castor3d
 	{
 		C3D_API explicit BoundsTransformPipeline( bool normals );
 
-		C3D_API castor::String getName()const;
-		C3D_API static castor::String getName( bool normals );
+		C3D_API String getName()const;
+		C3D_API static String getName( bool normals );
 
 		bool normals;
 

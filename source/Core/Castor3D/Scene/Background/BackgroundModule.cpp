@@ -1,8 +1,8 @@
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
-	castor::StringView getName( SkyboxFace face )
+	String getName( SkyboxFace face )
 	{
 		switch ( face )
 		{

@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <bit>
 
-namespace castor
+namespace c3d
 {
 	/**
 	 *\~english
@@ -48,7 +48,7 @@ namespace castor
 
 		for ( lo = 0, hi = sizeof( T ) - 1; hi > lo; lo++, hi-- )
 		{
-			castor::swap( p[lo], p[hi] );
+			c3d::swap( p[lo], p[hi] );
 		}
 
 		return value;

@@ -31,9 +31,9 @@
 #include <CastorUtils/Miscellaneous/BlockTimer.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementSmartPtr( castor3d, SceneCuller )
+CU_ImplementSmartPtr( c3d, SceneCuller )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -62,12 +62,12 @@ namespace castor3d
 	//*********************************************************************************************
 
 	AnimatedObjectRPtr findAnimatedObject( Scene const & scene
-		, castor::String const & name )
+		, String const & name )
 	{
 		AnimatedObjectRPtr result{};
 		auto & cache = scene.getAnimatedObjectGroupCache();
-		using LockType = castor::UniqueLock< AnimatedObjectGroupCache const >;
-		LockType lock{ castor::makeUniqueLock( cache ) };
+		using LockType = UniqueLock< AnimatedObjectGroupCache const >;
+		LockType lock{ makeUniqueLock( cache ) };
 
 		for ( auto const & [_, group] : cache )
 		{
@@ -145,9 +145,9 @@ namespace castor3d
 		m_scene.getRenderNodes().registerCuller( *this );
 #if C3D_DebugTimers
 		auto & device = m_scene.getEngine()->getRenderSystem()->getRenderDevice();
-		m_timer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/General" ), crg::TimerScope::eUpdate );
-		m_timerDirty = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/Dirty" ), crg::TimerScope::eUpdate );
-		m_timerCompute = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/Compute" ), crg::TimerScope::eUpdate );
+		m_timer = makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/General" ), crg::TimerScope::eUpdate );
+		m_timerDirty = makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/Dirty" ), crg::TimerScope::eUpdate );
+		m_timerCompute = makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/Compute" ), crg::TimerScope::eUpdate );
 		m_scene.getEngine()->registerTimer( cuT( "Culling/General" ), *m_timer );
 		m_scene.getEngine()->registerTimer( cuT( "Culling/Dirty" ), *m_timerDirty );
 		m_scene.getEngine()->registerTimer( cuT( "Culling/Compute" ), *m_timerCompute );
@@ -250,7 +250,7 @@ namespace castor3d
 			if ( m_isStatic == std::nullopt
 				|| node->instance.getParent()->isStatic() == m_isStatic )
 			{
-				m_culledSubmeshes.emplace_back( castor::make_unique< CulledNodeT< SubmeshRenderNode > >( node.get()
+				m_culledSubmeshes.emplace_back( makeRawUnique< CulledNodeT< SubmeshRenderNode > >( node.get()
 					, node->getInstanceCount()
 					, isSubmeshVisible( *node ) ) );
 			}
@@ -265,7 +265,7 @@ namespace castor3d
 			if ( m_isStatic == std::nullopt
 				|| node->instance.getNode()->isStatic() == m_isStatic )
 			{
-				m_culledBillboards.emplace_back( castor::make_unique< CulledNodeT< BillboardRenderNode > >( node.get()
+				m_culledBillboards.emplace_back( makeRawUnique< CulledNodeT< BillboardRenderNode > >( node.get()
 					, node->getInstanceCount()
 					, isBillboardVisible( *node ) ) );
 			}
@@ -327,8 +327,8 @@ namespace castor3d
 
 	void SceneCuller::doUpdateCulled( CpuUpdater::DirtyObjects const & sceneObjs )
 	{
-		castor::Vector< SubmeshRenderNode const * > dirtySubmeshes;
-		castor::Vector< BillboardRenderNode const * > dirtyBillboards;
+		Vector< SubmeshRenderNode const * > dirtySubmeshes;
+		Vector< BillboardRenderNode const * > dirtyBillboards;
 		doMarkDirty( sceneObjs, dirtySubmeshes, dirtyBillboards );
 
 		if ( !dirtySubmeshes.empty()
@@ -344,8 +344,8 @@ namespace castor3d
 	}
 
 	void SceneCuller::doMarkDirty( CpuUpdater::DirtyObjects const & sceneObjs
-		, castor::Vector< SubmeshRenderNode const * > & dirtySubmeshes
-		, castor::Vector< BillboardRenderNode const * > & dirtyBillboards )const
+		, Vector< SubmeshRenderNode const * > & dirtySubmeshes
+		, Vector< BillboardRenderNode const * > & dirtyBillboards )const
 	{
 #if C3D_DebugTimers
 		auto blockDirty( m_timerDirty->start() );
@@ -361,7 +361,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneCuller::doUpdateCulledSubmeshes( castor::Vector< SubmeshRenderNode const * > const & dirtySubmeshes )
+	void SceneCuller::doUpdateCulledSubmeshes( Vector< SubmeshRenderNode const * > const & dirtySubmeshes )
 	{
 		for ( auto dirty : dirtySubmeshes )
 		{
@@ -394,13 +394,13 @@ namespace castor3d
 			else
 			{
 				m_culledChanged = true;
-				m_culledSubmeshes.emplace_back( castor::make_unique< CulledNodeT< SubmeshRenderNode > >( dirty, 1u, visible ) );
+				m_culledSubmeshes.emplace_back( makeRawUnique< CulledNodeT< SubmeshRenderNode > >( dirty, 1u, visible ) );
 				onSubmeshChanged( *this, *m_culledSubmeshes.back(), visible );
 			}
 		}
 	}
 
-	void SceneCuller::doUpdateCulledBillboards( castor::Vector< BillboardRenderNode const * > const & dirtyBillboards )
+	void SceneCuller::doUpdateCulledBillboards( Vector< BillboardRenderNode const * > const & dirtyBillboards )
 	{
 		for ( auto dirty : dirtyBillboards )
 		{
@@ -429,14 +429,14 @@ namespace castor3d
 			else
 			{
 				m_culledChanged = true;
-				m_culledBillboards.emplace_back( castor::make_unique< CulledNodeT< BillboardRenderNode > >( dirty, count, visible ) );
+				m_culledBillboards.emplace_back( makeRawUnique< CulledNodeT< BillboardRenderNode > >( dirty, count, visible ) );
 				onBillboardChanged( *this, *m_culledBillboards.back(), visible );
 			}
 		}
 	}
 
 	void SceneCuller::doMakeDirty( Geometry const & object
-		, castor::Vector< SubmeshRenderNode const * > & dirtySubmeshes )const
+		, Vector< SubmeshRenderNode const * > & dirtySubmeshes )const
 	{
 		if ( m_isStatic == std::nullopt
 			|| object.getParent()->isStatic() == m_isStatic )
@@ -462,7 +462,7 @@ namespace castor3d
 	}
 
 	void SceneCuller::doMakeDirty( BillboardBase const & object
-		, castor::Vector< BillboardRenderNode const * > & dirtyBillboards )const
+		, Vector< BillboardRenderNode const * > & dirtyBillboards )const
 	{
 		if ( m_isStatic == std::nullopt
 			|| object.getNode()->isStatic() == m_isStatic )

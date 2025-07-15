@@ -14,10 +14,8 @@
 #include <Castor3D/Gui/Theme/Theme.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	//*********************************************************************************************
 
 	namespace stlhdrwrtr
@@ -38,8 +36,8 @@ namespace castor
 		bool write( TextWriterBase & writer
 			, Scene const * scene
 			, StyleT const & style
-			, castor::String const & name
-			, castor::String const & sectionName
+			, String const & name
+			, String const & sectionName
 			, StringStream & file
 			, ParamsT && ... params )
 		{
@@ -51,7 +49,7 @@ namespace castor
 			if ( auto block{ writer.beginBlock( file, sectionName, name ) } )
 			{
 				TextWriter< StyleT > subWriter{ writer.tabs()
-					, castor::forward< ParamsT >( params )... };
+					, c3d::forward< ParamsT >( params )... };
 				return subWriter( style, file );
 			}
 
@@ -61,8 +59,8 @@ namespace castor
 		template< typename StyleT, typename ... ParamsT >
 		bool write( TextWriterBase & writer
 			, Scene const * scene
-			, castor::StringMap< castor::UniquePtr< StyleT > > const & styles
-			, castor::String const & sectionName
+			, StringMap< UniquePtr< StyleT > > const & styles
+			, String const & sectionName
 			, StringStream & file
 			, ParamsT && ... params )
 		{
@@ -77,7 +75,7 @@ namespace castor
 						, sub.first
 						, sectionName
 						, file
-						, castor::forward< ParamsT >( params )... );
+						, c3d::forward< ParamsT >( params )... );
 			}
 
 			return result;
@@ -87,7 +85,7 @@ namespace castor
 	//*********************************************************************************************
 
 	TextWriter< StylesHolder >::TextWriter( String const & tabs
-		, castor3d::Scene const * scene
+		, Scene const * scene
 		, String const & fontName )
 		: TextWriterT< StylesHolder >{ tabs }
 		, m_scene{ scene }

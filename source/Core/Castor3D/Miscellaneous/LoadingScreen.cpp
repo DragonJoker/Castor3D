@@ -29,17 +29,17 @@
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
-CU_ImplementSmartPtr( castor3d, LoadingScreen )
+CU_ImplementSmartPtr( c3d, LoadingScreen )
 
-namespace castor3d
+namespace c3d
 {
 	namespace loadscreen
 	{
 		static Texture createTexture( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, castor::String const & name
-			, castor::Size const & size
-			, castor::PixelFormat format
+			, String const & name
+			, Size const & size
+			, PixelFormat format
 			, ImageUsageFlags usage )
 		{
 			TextureSamplerCreateInfo samplerInfo{ BorderColour::eFloatOpaqueBlack };
@@ -57,9 +57,9 @@ namespace castor3d
 
 		static Texture createColour( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, castor::String const & name
-			, castor::Size const & size
-			, castor::PixelFormat format )
+			, String const & name
+			, Size const & size
+			, PixelFormat format )
 		{
 			return createTexture( device
 				, resources
@@ -72,8 +72,8 @@ namespace castor3d
 
 		static Texture createDepth( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, castor::String const & name
-			, castor::Size const & size )
+			, String const & name
+			, Size const & size )
 		{
 			return createTexture( device
 				, resources
@@ -84,7 +84,7 @@ namespace castor3d
 		}
 
 		static CameraRPtr createCamera( Scene & scene
-			, castor::Size const & size )
+			, Size const & size )
 		{
 			CameraRPtr result{};
 
@@ -100,10 +100,10 @@ namespace castor3d
 					, farZ );
 				viewport.resize( size );
 				viewport.update();
-				auto camera = castor::makeUnique< Camera >( LoadingScreen::SceneName
+				auto camera = makeUnique< Camera >( LoadingScreen::SceneName
 					, scene
 					, *scene.getCameraRootNode()
-					, castor::move( viewport ) );
+					, c3d::move( viewport ) );
 				result = scene.addCamera( LoadingScreen::SceneName
 					, camera );
 				result->update();
@@ -202,11 +202,11 @@ namespace castor3d
 	}
 
 	void LoadingScreen::WindowPass::setTarget( ashes::FrameBuffer const & framebuffer
-		, castor::Vector< VkClearValue > clearValues )
+		, Vector< VkClearValue > clearValues )
 	{
 		m_framebuffer = framebuffer;
 		m_renderSize = crg::convert( framebuffer.getDimensions() );
-		m_clearValues = castor::move( clearValues );
+		m_clearValues = c3d::move( clearValues );
 	}
 
 	void LoadingScreen::WindowPass::doRecordInto( crg::RecordContext & context
@@ -238,30 +238,30 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const LoadingScreen::SceneName = cuT( "C3D_LoadingScreen" );
+	String const LoadingScreen::SceneName = cuT( "C3D_LoadingScreen" );
 
 	LoadingScreen::LoadingScreen( ProgressBar & progressBar
 		, RenderDevice const & device
 		, crg::ResourcesCache & resources
 		, SceneRPtr scene
 		, VkRenderPass renderPass
-		, castor::Size const & size )
+		, Size const & size )
 		: m_device{ device }
 		, m_progressBar{ progressBar }
-		, m_graph{ castor::make_unique< crg::FrameGraph >( resources.getHandler(), castor::toUtf8( SceneName ) ) }
-		, m_scene{ castor::move( scene ) }
+		, m_graph{ makeRawUnique< crg::FrameGraph >( resources.getHandler(), toUtf8( SceneName ) ) }
+		, m_scene{ c3d::move( scene ) }
 		, m_background{ *m_scene->getBackground() }
 		, m_renderPass{ renderPass }
 		, m_initialRenderSize{ size }
 		, m_renderSize{ size }
 		, m_camera{ loadscreen::createCamera( *m_scene, m_renderSize ) }
-		, m_culler{ castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *m_camera ) }
+		, m_culler{ makeUniqueDerived< SceneCuller, FrustumCuller >( *m_camera ) }
 		, m_colour{ loadscreen::createColour( m_device, resources, SceneName, m_initialRenderSize, m_swapchainFormat ) }
 		, m_depth{ loadscreen::createDepth( m_device, resources, SceneName, m_initialRenderSize ) }
 		, m_cameraUbo{ m_device }
 		, m_hdrConfigUbo{ m_device }
 		, m_sceneUbo{ &scene->getUbo() }
-		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_graph->getDefaultGroup()
+		, m_backgroundRenderer{ makeUnique< BackgroundRenderer >( m_graph->getDefaultGroup()
 			, nullptr
 			, m_device
 			, nullptr
@@ -352,8 +352,8 @@ namespace castor3d
 	}
 
 	void LoadingScreen::setRenderPass( VkRenderPass renderPass
-		, castor::Size const & renderSize
-		, castor::PixelFormat swapchainFormat )
+		, Size const & renderSize
+		, PixelFormat swapchainFormat )
 	{
 		m_renderPass = renderPass;
 		m_renderSize = renderSize;
@@ -391,10 +391,10 @@ namespace castor3d
 				m_colour.destroy();
 				m_graph.reset();
 
-				m_graph = castor::make_unique< crg::FrameGraph >( resources.getHandler(), castor::toUtf8( SceneName ) );
+				m_graph = makeRawUnique< crg::FrameGraph >( resources.getHandler(), toUtf8( SceneName ) );
 				m_colour = loadscreen::createColour( m_device, resources, SceneName, m_initialRenderSize, m_swapchainFormat );
 				m_colour.create();
-				m_backgroundRenderer = castor::makeUnique< BackgroundRenderer >( m_graph->getDefaultGroup()
+				m_backgroundRenderer = makeUnique< BackgroundRenderer >( m_graph->getDefaultGroup()
 					, nullptr
 					, m_device
 					, nullptr
@@ -428,7 +428,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< ForwardRenderTechniquePass >( nullptr
+				auto result = makeRawUnique< ForwardRenderTechniquePass >( nullptr
 					, pass
 					, context
 					, graph
@@ -458,7 +458,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< ForwardRenderTechniquePass >( nullptr
+				auto result = makeRawUnique< ForwardRenderTechniquePass >( nullptr
 					, pass
 					, context
 					, graph
@@ -487,7 +487,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< OverlayPass >( pass
+				auto result = makeRawUnique< OverlayPass >( pass
 					, context
 					, graph
 					, m_device
@@ -510,7 +510,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< WindowPass >( pass
+				auto result = makeRawUnique< WindowPass >( pass
 					, context
 					, graph
 					, m_device

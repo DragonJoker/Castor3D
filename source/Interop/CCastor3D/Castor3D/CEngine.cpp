@@ -21,19 +21,19 @@
 
 namespace
 {
-	castor3d::RenderWindowDesc doLoadSceneFile( castor3d::Engine & engine, castor::Path const & fileName )
+	c3d::RenderWindowDesc doLoadSceneFile( c3d::Engine & engine, c3d::Path const & fileName )
 	{
-		castor3d::RenderWindowDesc result;
+		c3d::RenderWindowDesc result;
 
-		if ( castor::File::fileExists( fileName ) )
+		if ( c3d::File::fileExists( fileName ) )
 		{
-			castor::Logger::logInfo( cuT( "Loading scene file : " ) + fileName );
+			c3d::Logger::logInfo( cuT( "Loading scene file : " ) + fileName );
 
 			if ( fileName.getExtension() == cuT( "cscn" ) || fileName.getExtension() == cuT( "zip" ) )
 			{
 				try
 				{
-					castor3d::SceneFileParser parser( engine );
+					c3d::SceneFileParser parser( engine );
 
 					if ( parser.parseFile( fileName ) )
 					{
@@ -41,18 +41,18 @@ namespace
 					}
 					else
 					{
-						castor::Logger::logWarning( cuT( "Can't read scene file" ) );
+						c3d::Logger::logWarning( cuT( "Can't read scene file" ) );
 					}
 				}
 				catch ( std::exception & exc )
 				{
-					castor::Logger::logError( cuT( "Failed to parse the scene file, with following error:" ) + castor::makeString( exc.what() ) );
+					c3d::Logger::logError( cuT( "Failed to parse the scene file, with following error:" ) + c3d::makeString( exc.what() ) );
 				}
 			}
 		}
 		else
 		{
-			castor::Logger::logError( cuT( "Scene file doesn't exist: " ) + fileName );
+			c3d::Logger::logError( cuT( "Scene file doesn't exist: " ) + fileName );
 		}
 
 		return result;
@@ -82,12 +82,12 @@ extern "C"
 
 		try
 		{
-			auto engine = castor::makeUnique< castor3d::Engine >( castor3d::EngineConfig{ castor::makeString( appName )
-				, castor3d::Version{ CCastor3D_VERSION_MAJOR, CCastor3D_VERSION_MINOR, CCastor3D_VERSION_BUILD }
+			auto engine = c3d::makeUnique< c3d::Engine >( c3d::EngineConfig{ c3d::makeString( appName )
+				, c3d::Version{ CCastor3D_VERSION_MAJOR, CCastor3D_VERSION_MINOR, CCastor3D_VERSION_BUILD }
 				, enableValidation
 				, true } );
 			C3D_SafeAlloc( *result, C3DEngine );
-			( *result )->internal = castor::move( engine );
+			( *result )->internal = c3d::move( engine );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -160,7 +160,7 @@ extern "C"
 
 		try
 		{
-			if ( !object->internal->loadRenderer( castor::makeString( type ) ) )
+			if ( !object->internal->loadRenderer( c3d::makeString( type ) ) )
 				return cc3d::reportError( C3D_FAILURE, ERROR_RENDERER_NOT_LOADED );
 		}
 		C3D_CatchCommonExceptions()
@@ -177,7 +177,7 @@ extern "C"
 
 		try
 		{
-			object->internal->getPluginCache().loadPlugin( castor::Path{ castor::makeString( path ) } );
+			object->internal->getPluginCache().loadPlugin( c3d::Path{ c3d::makeString( path ) } );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -193,9 +193,9 @@ extern "C"
 
 		try
 		{
-			castor::Path fileName{ castor::makeString( name ) };
+			c3d::Path fileName{ c3d::makeString( name ) };
 
-			if ( !castor::File::fileExists( fileName ) )
+			if ( !c3d::File::fileExists( fileName ) )
 				return cc3d::reportError( C3D_FAILURE, cuT( "Scene file doesn't exist" ) );
 
 			if ( auto desc = doLoadSceneFile( *object->internal, fileName );
@@ -219,25 +219,25 @@ extern "C"
 
 		try
 		{
-			auto strName = castor::makeString( name );
-			castor::Path path{ castor::makeString( val ) };
-			castor::Path pathImage = path;
+			auto strName = c3d::makeString( name );
+			c3d::Path path{ c3d::makeString( val ) };
+			c3d::Path pathImage = path;
 
-			if ( !castor::File::fileExists( pathImage ) )
+			if ( !c3d::File::fileExists( pathImage ) )
 			{
-				pathImage = castor3d::Engine::getDataDirectory() / path;
+				pathImage = c3d::Engine::getDataDirectory() / path;
 			}
 
-			if ( !castor::File::fileExists( pathImage ) )
+			if ( !c3d::File::fileExists( pathImage ) )
 			{
-				pathImage = castor3d::Engine::getDataDirectory() / cuT( "Texture" ) / path;
+				pathImage = c3d::Engine::getDataDirectory() / cuT( "Texture" ) / path;
 			}
 
-			if ( !castor::File::fileExists( pathImage ) )
+			if ( !c3d::File::fileExists( pathImage ) )
 				return cc3d::reportError( C3D_FAILURE, ERROR_WRONG_FILE_NAME );
 
 			auto img = object->internal->addNewImage( strName
-				, castor::ImageCreateParams{ pathImage } );
+				, c3d::ImageCreateParams{ pathImage } );
 			C3D_SafeAlloc( *result, C3DImage );
 			( *result )->internal = img;
 		}
@@ -255,10 +255,10 @@ extern "C"
 
 		try
 		{
-			auto strName = castor::makeString( name );
+			auto strName = c3d::makeString( name );
 			auto img = object->internal->addNewImage( strName
-				, castor::ImageCreateParams{ castor::Size{ size->width, size->height }
-					, castor::PixelFormat( fmt ) } );
+				, c3d::ImageCreateParams{ c3d::Size{ size->width, size->height }
+					, c3d::PixelFormat( fmt ) } );
 			C3D_SafeAlloc( *result, C3DImage );
 			( *result )->internal = img;
 		}
@@ -276,16 +276,16 @@ extern "C"
 
 		try
 		{
-			castor::String strName = castor::makeString( name );
-			castor::Path strPath{ castor::makeString( path ) };
-			castor::Path pathFont = strPath;
+			c3d::String strName = c3d::makeString( name );
+			c3d::Path strPath{ c3d::makeString( path ) };
+			c3d::Path pathFont = strPath;
 
-			if ( !castor::File::fileExists( pathFont ) )
+			if ( !c3d::File::fileExists( pathFont ) )
 			{
-				pathFont = castor3d::Engine::getDataDirectory() / strPath;
+				pathFont = c3d::Engine::getDataDirectory() / strPath;
 			}
 
-			if ( !castor::File::fileExists( pathFont ) )
+			if ( !c3d::File::fileExists( pathFont ) )
 				return cc3d::reportError( C3D_FAILURE, ERROR_WRONG_FILE_NAME );
 
 			auto font = object->internal->addNewFont( strName, height, pathFont );
@@ -372,7 +372,7 @@ extern "C"
 			if ( !own )
 				return cc3d::reportError( C3D_FAILURE, "Scene didn't exist in the scene" );
 
-			val->setInternal( castor::move( own ) );
+			val->setInternal( c3d::move( own ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -394,7 +394,7 @@ extern "C"
 			if ( !own )
 				return cc3d::reportError( C3D_FAILURE, "Overlya didn't exist in the scene" );
 
-			val->setInternal( castor::move( own ) );
+			val->setInternal( c3d::move( own ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -416,7 +416,7 @@ extern "C"
 			if ( !own )
 				return cc3d::reportError( C3D_FAILURE, "Sampler didn't exist in the scene" );
 
-			val->setInternal( castor::move( own ) );
+			val->setInternal( c3d::move( own ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -432,7 +432,7 @@ extern "C"
 
 		try
 		{
-			auto res = object->internal->findScene( castor::makeString( name ) );
+			auto res = object->internal->findScene( c3d::makeString( name ) );
 			if ( !res )
 				return cc3d::reportError( C3D_FAILURE, cuT( "Couldn't find the Scene" ) );
 
@@ -453,7 +453,7 @@ extern "C"
 
 		try
 		{
-			auto res = object->internal->findOverlay( castor::makeString( name ) );
+			auto res = object->internal->findOverlay( c3d::makeString( name ) );
 			if ( !res )
 				return cc3d::reportError( C3D_FAILURE, cuT( "Couldn't find the Overlay" ) );
 
@@ -474,7 +474,7 @@ extern "C"
 
 		try
 		{
-			auto res = object->internal->findSampler( castor::makeString( name ) );
+			auto res = object->internal->findSampler( c3d::makeString( name ) );
 			if ( !res )
 				return cc3d::reportError( C3D_FAILURE, cuT( "Couldn't find the Sampler" ) );
 
@@ -577,13 +577,13 @@ extern "C"
 		{
 			auto listener = object->internal->getUserInputListener();
 			listener->registerClipboardTextAction( [callbacks]( bool set
-				, castor::U32String text )
+				, c3d::U32String text )
 				{
 					if ( set )
 					{
 						if ( callbacks->onSetClipBoardText )
 						{
-							callbacks->onSetClipBoardText( callbacks, castor::makeString( text ).c_str() );
+							callbacks->onSetClipBoardText( callbacks, c3d::makeString( text ).c_str() );
 						}
 					}
 					else
@@ -592,13 +592,13 @@ extern "C"
 						{
 							C3DString result;
 							callbacks->onGetClipBoardText( callbacks, &result );
-							text = castor::toUtf8U32String( castor::makeString( result ) );
+							text = c3d::toUtf8U32String( c3d::makeString( result ) );
 						}
 					}
 
 					return text;
 				} );
-			listener->registerCursorAction( [callbacks]( castor3d::MouseCursor cursor )
+			listener->registerCursorAction( [callbacks]( c3d::MouseCursor cursor )
 				{
 					if ( callbacks->onCursorChange )
 					{
@@ -638,13 +638,13 @@ extern "C"
 
 		try
 		{
-			castor3d::OverlayUPtr res;
-			res = object->internal->createOverlay( castor::makeString( name )
+			c3d::OverlayUPtr res;
+			res = object->internal->createOverlay( c3d::makeString( name )
 				, *object->internal
-				, castor3d::OverlayType( type )
+				, c3d::OverlayType( type )
 				, parent ? parent->getInternal() : nullptr );
 			C3D_SafeAlloc( *result, C3DOverlay );
-			( *result )->setInternal( castor::move( res ) );
+			( *result )->setInternal( c3d::move( res ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -660,18 +660,18 @@ extern "C"
 
 		try
 		{
-			auto window = castor::makeUnique< castor3d::RenderWindow >( castor::makeString( name )
+			auto window = c3d::makeUnique< c3d::RenderWindow >( c3d::makeString( name )
 				, *object->internal
-				, castor::Size{ size->width, size->height }
+				, c3d::Size{ size->width, size->height }
 #if defined( _WIN32 )
-				, ashes::WindowHandle( castor::make_unique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr ), reinterpret_cast< HWND >( handle.hWnd ) ) ) );
+				, ashes::WindowHandle( c3d::makeRawUnique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr ), reinterpret_cast< HWND >( handle.hWnd ) ) ) );
 #elif defined( __linux__ )
-				, ashes::WindowHandle( castor::make_unique< ashes::IXWindowHandle >( handle.drawable, handle.display ) ) );
+				, ashes::WindowHandle( c3d::makeRawUnique< ashes::IXWindowHandle >( handle.drawable, handle.display ) ) );
 #elif defined( __APPLE__ )
-				, ashes::WindowHandle( castor::make_unique< ashes::IMacOsWindowHandle >( handle.view ) ) );
+				, ashes::WindowHandle( c3d::makeRawUnique< ashes::IMacOsWindowHandle >( handle.view ) ) );
 #endif
 			C3D_SafeAlloc( *result, C3DRenderWindow );
-			( *result )->internal = castor::move( window );
+			( *result )->internal = c3d::move( window );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -687,9 +687,9 @@ extern "C"
 
 		try
 		{
-			auto res = object->internal->createSampler( castor::makeString( name ), *object->internal );
+			auto res = object->internal->createSampler( c3d::makeString( name ), *object->internal );
 			C3D_SafeAlloc( *result, C3DSampler );
-			( *result )->setInternal( castor::move( res ) );
+			( *result )->setInternal( c3d::move( res ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -705,9 +705,9 @@ extern "C"
 
 		try
 		{
-			auto res = object->internal->createScene( castor::makeString( name ), *object->internal );
+			auto res = object->internal->createScene( c3d::makeString( name ), *object->internal );
 			C3D_SafeAlloc( *result, C3DScene );
-			( *result )->setInternal( castor::move( res ) );
+			( *result )->setInternal( c3d::move( res ) );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -725,9 +725,9 @@ extern "C"
 
 		try
 		{
-			auto res = castor::makeUnique< castor3d::SkyboxBackground >( *object->internal, *scene->getInternal() );
+			auto res = c3d::makeUnique< c3d::SkyboxBackground >( *object->internal, *scene->getInternal() );
 			C3D_SafeAlloc( *result, C3DSkybox );
-			( *result )->internal = castor::move( res );
+			( *result )->internal = c3d::move( res );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -739,7 +739,7 @@ extern "C"
 		if ( !result )
 			return C3D_POINTER;
 
-		cc3d::copyStringN( castor3d::Engine::getPluginsDirectory(), result, resultSize );
+		cc3d::copyStringN( c3d::Engine::getPluginsDirectory(), result, resultSize );
 		return C3D_OK;
 	}
 
@@ -748,7 +748,7 @@ extern "C"
 		if ( !result )
 			return C3D_POINTER;
 
-		cc3d::copyStringN( castor3d::Engine::getEngineDirectory(), result, resultSize );
+		cc3d::copyStringN( c3d::Engine::getEngineDirectory(), result, resultSize );
 		return C3D_OK;
 	}
 
@@ -757,7 +757,7 @@ extern "C"
 		if ( !result )
 			return C3D_POINTER;
 
-		cc3d::copyStringN( castor3d::Engine::getDataDirectory(), result, resultSize );
+		cc3d::copyStringN( c3d::Engine::getDataDirectory(), result, resultSize );
 		return C3D_OK;
 	}
 

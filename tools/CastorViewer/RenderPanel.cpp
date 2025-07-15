@@ -33,9 +33,9 @@ namespace CastorViewer
 		static const float MIN_CAM_SPEED = 0.005f;
 		static const float CAM_SPEED_INC = 0.9f;
 
-		static castor3d::KeyboardKey doConvertKeyCode( int code )
+		static c3d::KeyboardKey doConvertKeyCode( int code )
 		{
-			castor3d::KeyboardKey result = castor3d::KeyboardKey::eNone;
+			c3d::KeyboardKey result = c3d::KeyboardKey::eNone;
 
 			if ( code < 0x20 )
 			{
@@ -45,7 +45,7 @@ namespace CastorViewer
 				case WXK_TAB:
 				case WXK_RETURN:
 				case WXK_ESCAPE:
-					result = castor3d::KeyboardKey( code );
+					result = c3d::KeyboardKey( code );
 					break;
 				default:
 					break;
@@ -53,24 +53,24 @@ namespace CastorViewer
 			}
 			else if ( code == 0x7F )
 			{
-				result = castor3d::KeyboardKey::eDelete;
+				result = c3d::KeyboardKey::eDelete;
 			}
 			else if ( code > 0xFF )
 			{
-				result = castor3d::KeyboardKey( code + int( castor3d::KeyboardKey::eStart ) - WXK_START );
+				result = c3d::KeyboardKey( code + int( c3d::KeyboardKey::eStart ) - WXK_START );
 			}
 			else
 			{
 				// ASCII or extended ASCII character
-				result = castor3d::KeyboardKey( code );
+				result = c3d::KeyboardKey( code );
 			}
 
 			return result;
 		}
 
-		static castor::Array< wxTimer *, size_t( eTIMER_ID::COUNT ) > createTimers( wxWindow * window )
+		static c3d::Array< wxTimer *, size_t( eTIMER_ID::COUNT ) > createTimers( wxWindow * window )
 		{
-			castor::Array< wxTimer *, size_t( eTIMER_ID::COUNT ) > result;
+			c3d::Array< wxTimer *, size_t( eTIMER_ID::COUNT ) > result;
 			result[0] = nullptr;
 
 			for ( int i = 1; i < int( eTIMER_ID::COUNT ); i++ )
@@ -89,15 +89,15 @@ namespace CastorViewer
 		, long style )
 		: wxPanel( parent, id, pos, size, style )
 		, m_timers{ panel::createTimers( this ) }
-		, m_camSpeed( panel::DEF_CAM_SPEED, castor::Range< float >{ panel::MIN_CAM_SPEED, panel::MAX_CAM_SPEED } )
+		, m_camSpeed( panel::DEF_CAM_SPEED, c3d::Range< float >{ panel::MIN_CAM_SPEED, panel::MAX_CAM_SPEED } )
 	{
-		m_renderWindow = castor::makeUnique< castor3d::RenderWindow >( cuT( "RenderPanel" )
+		m_renderWindow = c3d::makeUnique< c3d::RenderWindow >( cuT( "RenderPanel" )
 			, *wxGetApp().getCastor()
 			, GuiCommon::makeSize( GetClientSize() )
 			, GuiCommon::makeWindowHandle( this ) );
 		auto listener = wxGetApp().getCastor()->getUserInputListener();
 		listener->registerClipboardTextAction( [this]( bool set
-			, castor::U32String text )
+			, c3d::U32String text )
 			{
 				m_setClipboardText = set;
 				wxMenuEvent event{ wxEVT_MENU, int( eTIMER_ID::CLIPBOARD_CHANGE ) };
@@ -106,7 +106,7 @@ namespace CastorViewer
 				if ( set )
 				{
 					{
-						auto lock( castor::makeUniqueLock( m_mtxClipSet ) );
+						auto lock( c3d::makeUniqueLock( m_mtxClipSet ) );
 						m_clipSet = text;
 					}
 					ProcessThreadEvent( event );
@@ -122,7 +122,7 @@ namespace CastorViewer
 
 				return text;
 			} );
-		listener->registerCursorAction( [this]( castor3d::MouseCursor cursor )
+		listener->registerCursorAction( [this]( c3d::MouseCursor cursor )
 			{
 				if ( m_cursor != cursor )
 				{
@@ -130,29 +130,29 @@ namespace CastorViewer
 
 					switch ( cursor )
 					{
-					case castor3d::MouseCursor::eArrow:
+					case c3d::MouseCursor::eArrow:
 						SetCursor( wxCursor{ wxCURSOR_ARROW } );
 						break;
-					case castor3d::MouseCursor::eHand:
+					case c3d::MouseCursor::eHand:
 						SetCursor( wxCursor{ wxCURSOR_HAND } );
 						break;
-					case castor3d::MouseCursor::eText:
+					case c3d::MouseCursor::eText:
 						SetCursor( wxCursor{ wxCURSOR_IBEAM } );
 						break;
-					case castor3d::MouseCursor::eSizeWE:
+					case c3d::MouseCursor::eSizeWE:
 						SetCursor( wxCursor{ wxCURSOR_SIZEWE } );
 						break;
-					case castor3d::MouseCursor::eSizeNS:
+					case c3d::MouseCursor::eSizeNS:
 						SetCursor( wxCursor{ wxCURSOR_SIZENS } );
 						break;
-					case castor3d::MouseCursor::eSizeNWSE:
+					case c3d::MouseCursor::eSizeNWSE:
 						SetCursor( wxCursor{ wxCURSOR_SIZENWSE } );
 						break;
-					case castor3d::MouseCursor::eSizeNESW:
+					case c3d::MouseCursor::eSizeNESW:
 						SetCursor( wxCursor{ wxCURSOR_SIZENESW } );
 						break;
 					default:
-						castor3d::log::error << "Unsupported MouseCursor." << std::endl;
+						c3d::log::error << "Unsupported MouseCursor." << std::endl;
 						SetCursor( wxCursor{ wxCURSOR_ARROW } );
 						break;
 					}
@@ -177,7 +177,7 @@ namespace CastorViewer
 
 	void RenderPanel::reset()
 	{
-		castor::Logger::logInfo( cuT( "Cleaning up RenderPanel." ) );
+		c3d::Logger::logInfo( cuT( "Cleaning up RenderPanel." ) );
 		doStopMovement();
 		doUpdateSelectedGeometry( nullptr, nullptr, true );
 		m_selectedSubmesh = {};
@@ -203,10 +203,10 @@ namespace CastorViewer
 		m_listener = {};
 		m_debugMeshManager.reset();
 		wxGetApp().getCastor()->postEvent( makeCpuCleanupEvent( *m_renderWindow ) );
-		castor::Logger::logInfo( cuT( "RenderPanel cleaned up." ) );
+		c3d::Logger::logInfo( cuT( "RenderPanel cleaned up." ) );
 	}
 
-	void RenderPanel::select( castor3d::Geometry * geometry, castor3d::Submesh const * submesh )
+	void RenderPanel::select( c3d::Geometry * geometry, c3d::Submesh const * submesh )
 	{
 		if ( m_debugMeshManager )
 		{
@@ -214,7 +214,7 @@ namespace CastorViewer
 		}
 	}
 
-	void RenderPanel::select( castor3d::LightInstance * light )
+	void RenderPanel::select( c3d::LightInstance * light )
 	{
 		if ( m_debugMeshManager )
 		{
@@ -231,7 +231,7 @@ namespace CastorViewer
 		}
 	}
 
-	void RenderPanel::select( castor3d::SceneNode * node
+	void RenderPanel::select( c3d::SceneNode * node
 		, bool cameraNode )
 	{
 		m_currentNode = node;
@@ -252,7 +252,7 @@ namespace CastorViewer
 		}
 	}
 
-	void RenderPanel::select( castor3d::Camera * camera )
+	void RenderPanel::select( c3d::Camera * camera )
 	{
 		if ( m_camera )
 		{
@@ -274,7 +274,7 @@ namespace CastorViewer
 		doStartMovement();
 	}
 
-	void RenderPanel::updateWindow( castor3d::RenderWindowDesc const & window )
+	void RenderPanel::updateWindow( c3d::RenderWindowDesc const & window )
 	{
 		auto target = window.renderTarget;
 
@@ -282,7 +282,7 @@ namespace CastorViewer
 		{
 
 			CU_Failure( "RenderPanel - No render target" );
-			castor::Logger::logError( cuT( "RenderPanel - No render target" ) );
+			c3d::Logger::logError( cuT( "RenderPanel - No render target" ) );
 			return;
 		}
 
@@ -291,7 +291,7 @@ namespace CastorViewer
 
 		if ( auto scene = target->getScene() )
 		{
-			m_debugMeshManager = castor::make_unique< GuiCommon::DebugMeshManager >( *target );
+			m_debugMeshManager = c3d::makeRawUnique< GuiCommon::DebugMeshManager >( *target );
 
 			if ( scene->hasSceneNode( cuT( "PointLightsNode" ) ) )
 			{
@@ -314,7 +314,7 @@ namespace CastorViewer
 	void RenderPanel::doResetTimers()
 	{
 		doStopTimer( eTIMER_ID::COUNT );
-		m_camSpeed = castor::makeRangedValue( panel::DEF_CAM_SPEED
+		m_camSpeed = c3d::makeRangedValue( panel::DEF_CAM_SPEED
 			, panel::MIN_CAM_SPEED
 			, panel::MAX_CAM_SPEED );
 		m_x = 0.0f;
@@ -350,7 +350,7 @@ namespace CastorViewer
 	{
 		if ( !m_timers[size_t( id )]->Start( 10 ) )
 		{
-			castor3d::log::error << "Couldn't start timer: " << castor::system::getLastErrorText() << "\n";
+			c3d::log::error << "Couldn't start timer: " << c3d::system::getLastErrorText() << "\n";
 		}
 	}
 
@@ -418,7 +418,7 @@ namespace CastorViewer
 		if ( camera && scene )
 		{
 			auto & cache = scene->getCameraCache();
-			auto lock = castor::makeUniqueLock( cache );
+			auto lock = c3d::makeUniqueLock( cache );
 			auto it = std::find_if( cache.begin()
 				, cache.end()
 				, [camera]( auto const & lookup )
@@ -494,8 +494,8 @@ namespace CastorViewer
 		return result;
 	}
 
-	void RenderPanel::doUpdateSelectedGeometry( castor3d::Geometry const * geometry
-		, castor3d::Submesh const * submesh
+	void RenderPanel::doUpdateSelectedGeometry( c3d::Geometry const * geometry
+		, c3d::Submesh const * submesh
 		, bool forwardToMain )
 	{
 		auto oldSubmesh = m_selectedSubmesh;
@@ -551,7 +551,7 @@ namespace CastorViewer
 		}
 	}
 
-	GuiCommon::NodeState & RenderPanel::doAddNodeState( castor3d::SceneNodeRPtr node
+	GuiCommon::NodeState & RenderPanel::doAddNodeState( c3d::SceneNodeRPtr node
 		, bool camera )
 	{
 		auto it = m_nodesStates.find( node->getName() );
@@ -559,7 +559,7 @@ namespace CastorViewer
 		if ( it == m_nodesStates.end() )
 		{
 			it = m_nodesStates.try_emplace( node->getName()
-				, castor::make_unique< GuiCommon::NodeState >( *m_listener, node, camera ) ).first;
+				, c3d::makeRawUnique< GuiCommon::NodeState >( *m_listener, node, camera ) ).first;
 		}
 
 		doUpdateSpeed();
@@ -622,7 +622,7 @@ namespace CastorViewer
 		if ( m_currentState )
 		{
 			auto speed = doGetRealSpeed();
-			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, speed } );
+			m_currentState->addScalarVelocity( c3d::Point3f{ 0.0f, 0.0f, speed } );
 		}
 
 		event.Skip();
@@ -633,7 +633,7 @@ namespace CastorViewer
 		if ( m_currentState )
 		{
 			auto speed = doGetRealSpeed();
-			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, -speed } );
+			m_currentState->addScalarVelocity( c3d::Point3f{ 0.0f, 0.0f, -speed } );
 		}
 
 		event.Skip();
@@ -644,7 +644,7 @@ namespace CastorViewer
 		if ( m_currentState )
 		{
 			auto speed = doGetRealSpeed();
-			m_currentState->addScalarVelocity( castor::Point3f{ speed, 0.0f, 0.0f } );
+			m_currentState->addScalarVelocity( c3d::Point3f{ speed, 0.0f, 0.0f } );
 		}
 
 		event.Skip();
@@ -655,7 +655,7 @@ namespace CastorViewer
 		if ( m_currentState )
 		{
 			auto speed = doGetRealSpeed();
-			m_currentState->addScalarVelocity( castor::Point3f{ -speed, 0.0f, 0.0f } );
+			m_currentState->addScalarVelocity( c3d::Point3f{ -speed, 0.0f, 0.0f } );
 		}
 
 		event.Skip();
@@ -666,7 +666,7 @@ namespace CastorViewer
 		if ( m_currentState )
 		{
 			auto speed = doGetRealSpeed();
-			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, speed, 0.0f } );
+			m_currentState->addScalarVelocity( c3d::Point3f{ 0.0f, speed, 0.0f } );
 		}
 
 		event.Skip();
@@ -677,7 +677,7 @@ namespace CastorViewer
 		if ( m_currentState )
 		{
 			auto speed = doGetRealSpeed();
-			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, -speed, 0.0f } );
+			m_currentState->addScalarVelocity( c3d::Point3f{ 0.0f, -speed, 0.0f } );
 		}
 
 		event.Skip();
@@ -942,7 +942,7 @@ namespace CastorViewer
 
 		if ( m_listener )
 		{
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePreGpuStep
+			m_listener->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePreGpuStep
 				, [this]()
 				{
 					if ( m_renderWindow )
@@ -966,7 +966,7 @@ namespace CastorViewer
 
 		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener() )
 		{
-			inputListener->fireMouseButtonPushed( castor3d::MouseButton::eLeft
+			inputListener->fireMouseButtonPushed( c3d::MouseButton::eLeft
 				, event.ControlDown(), event.AltDown(), event.ShiftDown() );
 		}
 
@@ -983,7 +983,7 @@ namespace CastorViewer
 
 		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener() )
 		{
-			inputListener->fireMouseButtonReleased( castor3d::MouseButton::eLeft
+			inputListener->fireMouseButtonReleased( c3d::MouseButton::eLeft
 				, event.ControlDown(), event.AltDown(), event.ShiftDown() );
 		}
 
@@ -999,26 +999,26 @@ namespace CastorViewer
 		m_oldY = m_y;
 
 		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener();
-			!inputListener || !inputListener->fireMouseButtonPushed( castor3d::MouseButton::eMiddle
+			!inputListener || !inputListener->fireMouseButtonPushed( c3d::MouseButton::eMiddle
 				, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			auto x = m_oldX;
 			auto y = m_oldY;
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePreGpuStep
+			m_listener->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePreGpuStep
 				, [this, x, y]()
 				{
-					auto type = m_renderWindow->pick( castor::Position{ int( x ), int( y ) } );
+					auto type = m_renderWindow->pick( c3d::Position{ int( x ), int( y ) } );
 
-					if ( type != castor3d::PickNodeType::eNone
-						&& type != castor3d::PickNodeType::eBillboard )
+					if ( type != c3d::PickNodeType::eNone
+						&& type != c3d::PickNodeType::eBillboard )
 					{
 						doUpdateSelectedGeometry( m_renderWindow->getPickedGeometry(), m_renderWindow->getPickedSubmesh(), true );
 					}
 					else
 					{
 						doUpdateSelectedGeometry( nullptr, nullptr, true );
-						select( castor3d::LightInstanceRPtr{} );
-						select( castor3d::SceneNodeRPtr{} );
+						select( c3d::LightInstanceRPtr{} );
+						select( c3d::SceneNodeRPtr{} );
 					}
 				} ) );
 		}
@@ -1036,7 +1036,7 @@ namespace CastorViewer
 
 		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener() )
 		{
-			inputListener->fireMouseButtonReleased( castor3d::MouseButton::eMiddle
+			inputListener->fireMouseButtonReleased( c3d::MouseButton::eMiddle
 				, event.ControlDown(), event.AltDown(), event.ShiftDown() );
 		}
 
@@ -1053,7 +1053,7 @@ namespace CastorViewer
 
 		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener() )
 		{
-			inputListener->fireMouseButtonPushed( castor3d::MouseButton::eRight
+			inputListener->fireMouseButtonPushed( c3d::MouseButton::eRight
 				, event.ControlDown(), event.AltDown(), event.ShiftDown() );
 		}
 
@@ -1070,7 +1070,7 @@ namespace CastorViewer
 
 		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener() )
 		{
-			inputListener->fireMouseButtonReleased( castor3d::MouseButton::eRight
+			inputListener->fireMouseButtonReleased( c3d::MouseButton::eRight
 				, event.ControlDown(), event.AltDown(), event.ShiftDown() );
 		}
 
@@ -1082,7 +1082,7 @@ namespace CastorViewer
 		m_x = doTransformX( event.GetX() );
 		m_y = doTransformY( event.GetY() );
 
-		if ( !wxGetApp().getCastor()->fireMouseMove( castor::Position{ int32_t( m_x ), int32_t( m_y ) }
+		if ( !wxGetApp().getCastor()->fireMouseMove( c3d::Position{ int32_t( m_x ), int32_t( m_y ) }
 			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			if ( m_currentState )
@@ -1102,11 +1102,11 @@ namespace CastorViewer
 
 				if ( m_mouseLeftDown )
 				{
-					m_currentState->addAngularVelocity( castor::Point2f{ -deltaY, deltaX } );
+					m_currentState->addAngularVelocity( c3d::Point2f{ -deltaY, deltaX } );
 				}
 				else if ( m_mouseRightDown )
 				{
-					m_currentState->addScalarVelocity( castor::Point3f{ deltaX, -deltaY, 0.0f } );
+					m_currentState->addScalarVelocity( c3d::Point3f{ deltaX, -deltaY, 0.0f } );
 				}
 			}
 		}
@@ -1121,7 +1121,7 @@ namespace CastorViewer
 		int wheelRotation = event.GetWheelRotation();
 
 		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener();
-			!inputListener || !inputListener->fireMouseWheel( castor::Position( 0, wheelRotation )
+			!inputListener || !inputListener->fireMouseWheel( c3d::Position( 0, wheelRotation )
 				, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			if ( wheelRotation < 0 )
@@ -1149,9 +1149,9 @@ namespace CastorViewer
 		{
 			if ( m_setClipboardText )
 			{
-				castor::U32String text;
+				c3d::U32String text;
 				{
-					auto lock( castor::makeUniqueLock( m_mtxClipSet ) );
+					auto lock( c3d::makeUniqueLock( m_mtxClipSet ) );
 					text = m_clipSet;
 				}
 				wxTheClipboard->SetData( new wxTextDataObject{ GuiCommon::make_wxString( text ) } );

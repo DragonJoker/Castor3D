@@ -8,25 +8,25 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Log/LoggerStream.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class log
 	{
 		friend class Engine;
 
 	private:
-		static castor::LoggerInstance * initialise( castor::LoggerInstance & logger );
+		static LoggerInstance * initialise( LoggerInstance & logger );
 		static void cleanup();
 
 	private:
-		static castor::LoggerInstance * m_logger;
+		static LoggerInstance * m_logger;
 
 	public:
-		C3D_API static castor::LoggerStreamT< xchar, castor::TraceLoggerStreambufT > trace;
-		C3D_API static castor::LoggerStreamT< xchar, castor::DebugLoggerStreambufT > debug;
-		C3D_API static castor::LoggerStreamT< xchar, castor::InfoLoggerStreambufT > info;
-		C3D_API static castor::LoggerStreamT< xchar, castor::WarningLoggerStreambufT > warn;
-		C3D_API static castor::LoggerStreamT< xchar, castor::ErrorLoggerStreambufT > error;
+		C3D_API static LoggerStreamT< xchar, TraceLoggerStreambufT > trace;
+		C3D_API static LoggerStreamT< xchar, DebugLoggerStreambufT > debug;
+		C3D_API static LoggerStreamT< xchar, InfoLoggerStreambufT > info;
+		C3D_API static LoggerStreamT< xchar, WarningLoggerStreambufT > warn;
+		C3D_API static LoggerStreamT< xchar, ErrorLoggerStreambufT > error;
 	};
 }
 

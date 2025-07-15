@@ -18,7 +18,7 @@ See LICENSE file in root folder
 
 #include <unordered_map>
 
-namespace castor3d
+namespace c3d
 {
 	class MeshletComponent
 		: public SubmeshComponent
@@ -29,20 +29,20 @@ namespace castor3d
 		{
 			using SubmeshComponentData::SubmeshComponentData;
 			/**
-			 *\copydoc		castor3d::SubmeshComponentData::gather
+			 *\copydoc		SubmeshComponentData::gather
 			 */
 			void gather( PipelineFlags const & flags
 				, Pass const & pass
 				, ObjectBufferOffset const & bufferOffsets
 				, ashes::BufferCRefArray & buffers
-				, castor::Vector< uint64_t > & offsets
+				, Vector< uint64_t > & offsets
 				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 				, uint32_t & currentBinding
 				, uint32_t & currentLocation )override
 			{
 			}
 			/**
-			 *\copydoc		castor3d::SubmeshComponentData::copy
+			 *\copydoc		SubmeshComponentData::copy
 			 */
 			void copy( SubmeshComponentDataRPtr data )const override;
 
@@ -60,18 +60,18 @@ namespace castor3d
 				return *m_descriptorLayout;
 			}
 
-			castor::Vector< Meshlet > const & getMeshletsData()const
+			Vector< Meshlet > const & getMeshletsData()const
 			{
 				return m_meshlets;
 			}
 
-			castor::Vector< Meshlet > & getMeshletsData()
+			Vector< Meshlet > & getMeshletsData()
 			{
 				needsUpdate();
 				return m_meshlets;
 			}
 
-			castor::Vector< MeshletCullData > & getCullData()
+			Vector< MeshletCullData > & getCullData()
 			{
 				needsUpdate();
 				return m_cull;
@@ -100,12 +100,12 @@ namespace castor3d
 
 		private:
 			GpuBufferOffsetT< MeshletCullData > m_sourceCullBuffer;
-			castor::UnorderedMap< size_t, GpuBufferOffsetT< MeshletCullData > > m_finalCullBuffers;
-			castor::Vector< Meshlet > m_meshlets;
-			castor::Vector< MeshletCullData > m_cull;
+			HashMap< size_t, GpuBufferOffsetT< MeshletCullData > > m_finalCullBuffers;
+			Vector< Meshlet > m_meshlets;
+			Vector< MeshletCullData > m_cull;
 			ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 			ashes::DescriptorSetPoolPtr m_descriptorPool;
-			castor::UnorderedMap< size_t, ashes::DescriptorSetPtr > m_descriptorSets;
+			HashMap< size_t, ashes::DescriptorSetPtr > m_descriptorSets;
 		};
 
 		class Plugin
@@ -116,7 +116,7 @@ namespace castor3d
 
 			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
 			{
-				return castor::makeUniqueDerived< SubmeshComponent, MeshletComponent >( submesh );
+				return makeUniqueDerived< SubmeshComponent, MeshletComponent >( submesh );
 			}
 
 			SubmeshComponentFlag getMeshletFlag()const noexcept override
@@ -127,7 +127,7 @@ namespace castor3d
 
 		static SubmeshComponentPluginUPtr createPlugin( SubmeshComponentRegister const & submeshComponents )
 		{
-			return castor::makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
+			return makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
 		}
 		/**
 		 *\~english
@@ -139,11 +139,11 @@ namespace castor3d
 		 */
 		C3D_API explicit MeshletComponent( Submesh & submesh );
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::clone
+		 *\copydoc		SubmeshComponent::clone
 		 */
 		C3D_API SubmeshComponentUPtr clone( Submesh & submesh )const override;
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
+		 *\copydoc		SubmeshComponent::getProgramFlags
 		 */
 		C3D_API ProgramFlags getProgramFlags( Pass const & pass )const noexcept override;
 
@@ -153,7 +153,7 @@ namespace castor3d
 		}
 
 	public:
-		C3D_API static castor::String const TypeName;
+		C3D_API static String const TypeName;
 	};
 }
 

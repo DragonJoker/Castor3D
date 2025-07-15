@@ -10,10 +10,10 @@ See LICENSE file in root folder
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Graphics/RgbColour.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct SpecularComponent
-		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< castor::RgbColour > >
+		: public BaseDataPassComponentT< AtomicGroupChangeTracked< RgbColour > >
 	{
 		struct MaterialShader
 			: shader::PassMaterialShader
@@ -52,10 +52,10 @@ namespace castor3d
 
 			PassComponentUPtr createComponent( Pass & pass )const override
 			{
-				return castor::makeUniqueDerived< PassComponent, SpecularComponent >( pass );
+				return makeUniqueDerived< PassComponent, SpecularComponent >( pass );
 			}
 
-			void createParsers( castor::AttributeParsers & parsers
+			void createParsers( AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
 			void zeroBuffer( Pass const & pass
 				, shader::PassMaterialShader const & materialShader
@@ -65,61 +65,61 @@ namespace castor3d
 
 			shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
-				return castor::make_unique< ComponentsShader >( *this );
+				return makeRawUnique< ComponentsShader >( *this );
 			}
 
 			shader::PassMaterialShaderPtr createMaterialShader()const override
 			{
-				return castor::make_unique< MaterialShader >();
+				return makeRawUnique< MaterialShader >();
 			}
 		};
 
 		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )
 		{
-			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
+			return makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
 		C3D_API explicit SpecularComponent( Pass & pass
-			, castor::RgbColour defaultValue = DefaultColour );
+			, RgbColour defaultValue = DefaultColour );
 
 		C3D_API void accept( ConfigurationVisitorBase & vis )override;
 
-		castor::RgbColour const & getSpecular()const
+		RgbColour const & getSpecular()const
 		{
 			return m_value.value();
 		}
 
-		void setSpecular( castor::RgbColour const & v )
+		void setSpecular( RgbColour const & v )
 		{
-			m_value = castor::makeChangeTrackedT< std::atomic_bool >( v );
+			m_value = makeChangeTrackedT< std::atomic_bool >( v );
 		}
 
-		void setSpecular( castor::HdrRgbColour const & v
+		void setSpecular( HdrRgbColour const & v
 			, float gamma )
 		{
-			setSpecular( castor::RgbColour{ v, gamma } );
+			setSpecular( RgbColour{ v, gamma } );
 		}
 
-		void setSpecular( castor::Coords3f const & v )
+		void setSpecular( Coords3f const & v )
 		{
-			setSpecular( castor::RgbColour{ v[0u], v[1u], v[2u] } );
+			setSpecular( RgbColour{ v[0u], v[1u], v[2u] } );
 		}
 
-		void setSpecular( castor::Point3f const & v )
+		void setSpecular( Point3f const & v )
 		{
-			setSpecular( castor::RgbColour{ v[0u], v[1u], v[2u] } );
+			setSpecular( RgbColour{ v[0u], v[1u], v[2u] } );
 		}
 
-		C3D_API static castor::String const TypeName;
+		C3D_API static String const TypeName;
 		static float constexpr DefaultComponent = 1.0f;
-		C3D_API static castor::RgbColour constexpr DefaultColour{ DefaultComponent, DefaultComponent, DefaultComponent };
+		C3D_API static RgbColour constexpr DefaultColour{ DefaultComponent, DefaultComponent, DefaultComponent };
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;
-		bool doWriteText( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::String const & subfolder
-			, castor::StringStream & file )const override;
+		bool doWriteText( String const & tabs
+			, Path const & folder
+			, String const & subfolder
+			, StringStream & file )const override;
 		void doFillBuffer( PassBuffer & buffer )const override;
 	};
 }

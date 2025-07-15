@@ -28,15 +28,15 @@
 
 #include <RenderGraph/RunnableGraph.hpp>
 
-CU_ImplementSmartPtr( castor3d, VertexTransforming )
+CU_ImplementSmartPtr( c3d, VertexTransforming )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 #define DeclareSsbo( Name, Type, Binding, Enable )\
 	sdw::StorageBuffer Name##Buffer{ writer\
-		, #Name + castor::MbString{ "Buffer" }\
+		, #Name + MbString{ "Buffer" }\
 		, uint32_t( Binding )\
 		, 0u\
 		, ast::type::MemoryLayout::eStd430\
@@ -46,7 +46,7 @@ namespace castor3d
 
 #define DeclareSsboEx( Name, Type, Binding, Enable, Flags )\
 	sdw::StorageBuffer Name##Buffer{ writer\
-		, #Name + castor::MbString{ "Buffer" }\
+		, #Name + MbString{ "Buffer" }\
 		, uint32_t( Binding )\
 		, 0u\
 		, ast::type::MemoryLayout::eStd430\
@@ -64,7 +64,7 @@ namespace castor3d
 			Skin( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
-				: StructInstance{ writer, castor::move( expr ), enabled }
+				: StructInstance{ writer, c3d::move( expr ), enabled }
 				, boneIds0{ this->getMember< sdw::UVec4 >( "boneIds0", true ) }
 				, boneIds1{ this->getMember< sdw::UVec4 >( "boneIds1", true ) }
 				, boneWeights0{ this->getMember< sdw::Vec4 >( "boneWeights0", true ) }
@@ -238,8 +238,8 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_COMPUTE_BIT ) );
 
-			return device->createDescriptorSetLayout( castor::toUtf8( pipeline.getName( engine ) )
-				, castor::move( bindings ) );
+			return device->createDescriptorSetLayout( toUtf8( pipeline.getName( engine ) )
+				, c3d::move( bindings ) );
 		}
 
 		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device
@@ -263,23 +263,23 @@ namespace castor3d
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( MeshletBoundsTransformPass::eOutCullData
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_COMPUTE_BIT ) );
-			return device->createDescriptorSetLayout( castor::toUtf8( pipeline.getName() )
-				, castor::move( bindings ) );
+			return device->createDescriptorSetLayout( toUtf8( pipeline.getName() )
+				, c3d::move( bindings ) );
 		}
 
 		static ashes::PipelineLayoutPtr createPipelineLayout( RenderDevice const & device
 			, TransformPipeline const & pipeline )
 		{
 			auto const & engine = *device.renderSystem.getEngine();
-			return device->createPipelineLayout( castor::toUtf8( pipeline.getName( engine ) ) + "/PipelineLayout"
+			return device->createPipelineLayout( toUtf8( pipeline.getName( engine ) ) + "/PipelineLayout"
 				, *pipeline.descriptorSetLayout
-				, VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, sizeof( castor::Point4ui ) } );
+				, VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, sizeof( Point4ui ) } );
 		}
 
 		static ashes::PipelineLayoutPtr createPipelineLayout( RenderDevice const & device
 			, BoundsTransformPipeline const & pipeline )
 		{
-			return device->createPipelineLayout( castor::toUtf8( pipeline.getName() ) + "/PipelineLayout"
+			return device->createPipelineLayout( toUtf8( pipeline.getName() ) + "/PipelineLayout"
 				, *pipeline.descriptorSetLayout
 				, VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, sizeof( uint32_t ) } );
 		}
@@ -289,7 +289,7 @@ namespace castor3d
 		{
 			// Initialise the pipeline.
 			auto const & engine = *device.renderSystem.getEngine();
-			return device->createPipeline( castor::toUtf8( pipeline.getName( engine ) ) + "/Pipeline"
+			return device->createPipeline( toUtf8( pipeline.getName( engine ) ) + "/Pipeline"
 				, ashes::ComputePipelineCreateInfo( 0u
 					, makeShaderState( device, pipeline.shader )
 					, *pipeline.pipelineLayout ) );
@@ -299,7 +299,7 @@ namespace castor3d
 			, BoundsTransformPipeline & pipeline )
 		{
 			// Initialise the pipeline.
-			return device->createPipeline( castor::toUtf8( pipeline.getName() ) + "/Pipeline"
+			return device->createPipeline( toUtf8( pipeline.getName() ) + "/Pipeline"
 				, ashes::ComputePipelineCreateInfo( 0u
 					, makeShaderState( device, pipeline.shader )
 					, *pipeline.pipelineLayout ) );
@@ -735,7 +735,7 @@ namespace castor3d
 
 	VertexTransforming::VertexTransforming( Scene const & scene
 		, RenderDevice const & device )
-		: castor::OwnedBy< Scene const >{ scene }
+		: OwnedBy< Scene const >{ scene }
 		, m_device{ device }
 	{
 	}
@@ -754,13 +754,13 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				auto & modelsBuffer = getOwner()->getModelBuffer();
-				auto res = castor::make_unique< VertexTransformingPass >( framePass
+				auto res = makeRawUnique< VertexTransformingPass >( framePass
 					, context
 					, runnableGraph
 					, m_device
 					, modelsBuffer );
 				m_pass = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 
 				return res;
@@ -776,12 +776,12 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto res = castor::make_unique< MeshletBoundsTransformingPass >( framePass
+				auto res = makeRawUnique< MeshletBoundsTransformingPass >( framePass
 					, context
 					, runnableGraph
 					, m_device );
 				m_boundsPass = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				doProcessPending();
 
@@ -792,8 +792,8 @@ namespace castor3d
 	}
 
 	void VertexTransforming::registerNode( SubmeshRenderNode const & node
-		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-		, GpuBufferOffsetT< castor3d::MorphingWeightsConfiguration > const & morphingWeights
+		, GpuBufferOffsetT< Point4f > const & morphTargets
+		, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights
 		, GpuBufferOffsetT< SkinningTransformsConfiguration > const & skinTransforms )
 	{
 		if ( !m_pass || !node.data.isInitialised() )
@@ -805,7 +805,7 @@ namespace castor3d
 		}
 		else
 		{
-			static GpuBufferOffsetT< castor3d::MorphingWeightsConfiguration > const dummy{};
+			static GpuBufferOffsetT< MorphingWeightsConfiguration > const dummy{};
 			auto & pipeline = doGetPipeline( TransformPipeline::getIndex( node.getComponentCombineID()
 				, node.getMorphFlags()
 				, node.getProgramFlags()
@@ -848,7 +848,7 @@ namespace castor3d
 		if ( it->second.meshletsBounds
 			&& !m_boundsPipelines[combine.hasNormalFlag ? 1u : 0u] )
 		{
-			m_boundsPipelines[combine.hasNormalFlag ? 1u : 0u] = castor::make_unique< BoundsTransformPipeline >( combine.hasNormalFlag );
+			m_boundsPipelines[combine.hasNormalFlag ? 1u : 0u] = makeRawUnique< BoundsTransformPipeline >( combine.hasNormalFlag );
 			auto & pipeline = *m_boundsPipelines[combine.hasNormalFlag ? 1u : 0u];
 			pipeline.shader = { VK_SHADER_STAGE_COMPUTE_BIT
 				, pipeline.getName()
@@ -864,8 +864,8 @@ namespace castor3d
 
 	void VertexTransforming::doProcessPending()
 	{
-		castor::Vector< PendingNode > work;
-		castor::swap( work, m_pending );
+		Vector< PendingNode > work;
+		c3d::swap( work, m_pending );
 
 		for ( auto const & pending : work )
 		{

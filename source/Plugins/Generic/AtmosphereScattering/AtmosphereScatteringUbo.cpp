@@ -13,10 +13,10 @@ namespace atmosphere_scattering
 {
 	//*********************************************************************************************
 
-	castor::MbString const AtmosphereScatteringUbo::Buffer = "C3D_ATM_Atmosphere";
-	castor::MbString const AtmosphereScatteringUbo::Data = "d";
+	c3d::MbString const AtmosphereScatteringUbo::Buffer = "C3D_ATM_Atmosphere";
+	c3d::MbString const AtmosphereScatteringUbo::Data = "d";
 
-	AtmosphereScatteringUbo::AtmosphereScatteringUbo( castor3d::RenderDevice const & device
+	AtmosphereScatteringUbo::AtmosphereScatteringUbo( c3d::RenderDevice const & device
 		, bool & dirty )
 		: m_device{ device }
 		, m_ubo{ device.uboPool->getBuffer< Configuration >( 0u ) }
@@ -33,22 +33,22 @@ namespace atmosphere_scattering
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	castor::Pair< castor::Point3f, castor::Vector3f > AtmosphereScatteringUbo::cpuUpdate( Configuration const & config
-		, castor3d::SceneNode const & sunNode
-		, castor3d::SceneNode const & planetNode )
+	c3d::Pair< c3d::Point3f, c3d::Vector3f > AtmosphereScatteringUbo::cpuUpdate( Configuration const & config
+		, c3d::SceneNode const & sunNode
+		, c3d::SceneNode const & planetNode )
 	{
 		auto & engine = *sunNode.getScene()->getEngine();
 
-		auto sunDirection = castor::Point3f{ 0, 0, 1 };
+		auto sunDirection = c3d::Point3f{ 0, 0, 1 };
 		sunNode.getDerivedOrientation().transform( sunDirection, sunDirection );
-		sunDirection = -castor::point::getNormalised( sunDirection );
+		sunDirection = -c3d::point::getNormalised( sunDirection );
 		m_sunDirection = { sunDirection };
 
-		auto planetPosition = castor::Vector3f::fromUnit( planetNode.getDerivedPosition(), engine.getLengthUnit() );
+		auto planetPosition = c3d::Vector3f::fromUnit( planetNode.getDerivedPosition(), engine.getLengthUnit() );
 		m_planetPosition = planetPosition.kilometres();
 
 		auto mieAbsorption = config.mieExtinction - config.mieScattering;
-		m_mieAbsorption = castor::Point3f{ std::max( 0.0f, mieAbsorption->x )
+		m_mieAbsorption = c3d::Point3f{ std::max( 0.0f, mieAbsorption->x )
 			, std::max( 0.0f, mieAbsorption->y )
 			, std::max( 0.0f, mieAbsorption->z ) };
 

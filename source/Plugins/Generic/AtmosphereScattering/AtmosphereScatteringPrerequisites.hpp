@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 namespace atmosphere_scattering
 {
-	namespace c3d = castor3d::shader;
+	namespace c3ds = c3d::shader;
 
 	class AtmosphereBackground;
 	class AtmosphereBackgroundModel;
@@ -34,17 +34,17 @@ namespace atmosphere_scattering
 	template< template< typename DataT > typename WrapperT >
 	struct AtmosphereScatteringConfigT;
 	using AtmosphereScatteringConfig = AtmosphereScatteringConfigT< crg::RawTypeT >;
-	using CheckedAtmosphereScatteringConfig = AtmosphereScatteringConfigT< castor::GroupChangeTracked >;
+	using CheckedAtmosphereScatteringConfig = AtmosphereScatteringConfigT< c3d::GroupChangeTracked >;
 
 	template< template< typename DataT > typename WrapperT >
 	struct CloudsConfigT;
 	using CloudsConfig = CloudsConfigT< crg::RawTypeT >;
-	using CheckedCloudsConfig = CloudsConfigT< castor::GroupChangeTracked >;
+	using CheckedCloudsConfig = CloudsConfigT< c3d::GroupChangeTracked >;
 
 	template< template< typename DataT > typename WrapperT >
 	struct WeatherConfigT;
 	using WeatherConfig = WeatherConfigT< crg::RawTypeT >;
-	using CheckedWeatherConfig = WeatherConfigT< castor::GroupChangeTracked >;
+	using CheckedWeatherConfig = WeatherConfigT< c3d::GroupChangeTracked >;
 }
 
 #endif

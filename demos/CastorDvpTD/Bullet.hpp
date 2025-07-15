@@ -9,29 +9,29 @@ namespace castortd
 	public:
 		Bullet( float speed
 			, uint32_t damage
-			, castor3d::SceneNode & node
+			, c3d::SceneNode & node
 			, Enemy & enemy );
 
 		bool accept( Game & game );
 
 		void load( float speed
 			, uint32_t damage
-			, castor::Point3f const & node
+			, c3d::Point3f const & node
 			, Enemy & enemy );
 
-		castor3d::SceneNode & getNode()
+		c3d::SceneNode & getNode()
 		{
 			return m_node;
 		}
 
-		castor3d::SceneNode const & getNode()const
+		c3d::SceneNode const & getNode()const
 		{
 			return m_node;
 		}
 
 	private:
-		castor::ReferenceWrapper< castor3d::SceneNode > m_node;
-		castor::ReferenceWrapper< Enemy > m_target;
+		c3d::ReferenceWrapper< c3d::SceneNode > m_node;
+		c3d::ReferenceWrapper< Enemy > m_target;
 		float m_speed{ 0.0f };
 		uint32_t m_damage{ 0u };
 	};

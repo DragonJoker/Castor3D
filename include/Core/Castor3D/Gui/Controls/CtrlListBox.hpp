@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Gui/Controls/CtrlControl.hpp"
 #include "Castor3D/Gui/Theme/StyleListBox.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class ListBoxCtrl
 		: public Control
@@ -20,7 +20,7 @@ namespace castor3d
 		 *\param[in]	parent	The parent control, if any.
 		 */
 		C3D_API ListBoxCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, ListBoxStyle * style
 			, ControlRPtr parent );
 
@@ -37,13 +37,13 @@ namespace castor3d
 		 *\param[in]	visible		Initial visibility status.
 		 */
 		C3D_API ListBoxCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, ListBoxStyle * style
 			, ControlRPtr parent
-			, castor::StringArray const & values
+			, StringArray const & values
 			, int selected
-			, castor::Position const & position
-			, castor::Size const & size
+			, Position const & position
+			, Size const & size
 			, ControlFlagType flags = 0
 			, bool visible = true );
 
@@ -61,13 +61,13 @@ namespace castor3d
 		 */
 		template< size_t N >
 		ListBoxCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, ListBoxStyle * style
 			, ControlRPtr parent
-			, castor::String const( & values )[N]
+			, String const( & values )[N]
 			, int selected
-			, castor::Position const & position
-			, castor::Size const & size
+			, Position const & position
+			, Size const & size
 			, ControlFlagType flags = 0
 			, bool visible = true )
 			: Control{ ControlType::eListBox
@@ -79,7 +79,7 @@ namespace castor3d
 				, size
 				, flags
 				, visible }
-			, m_values{ castor::StringArray( &values[0], &values[N] ) }
+			, m_values{ StringArray( &values[0], &values[N] ) }
 			, m_selected{ selected }
 		{
 		}
@@ -89,7 +89,7 @@ namespace castor3d
 		/** Appends a new item
 		 *\param[in]	value		The item
 		 */
-		C3D_API void appendItem( castor::String  const & value );
+		C3D_API void appendItem( String  const & value );
 
 		/** Removes an item
 		 *\param[in]	index		The item index
@@ -100,13 +100,13 @@ namespace castor3d
 		 *\param[in]	index		The item index
 		 *\param[in]	text		The item text
 		 */
-		C3D_API void setItemText( int index, castor::String const & text );
+		C3D_API void setItemText( int index, String const & text );
 
 		/** Retrieves an item text
 		 *\param[in]	index		The item index
 		 *\return		The item text
 		 */
-		C3D_API castor::String getItemText( int index );
+		C3D_API String getItemText( int index );
 
 		/** Clears the items
 		 */
@@ -119,7 +119,7 @@ namespace castor3d
 
 		/** \return	The items.
 		 */
-		castor::StringArray const & getItems()const noexcept
+		StringArray const & getItems()const noexcept
 		{
 			return m_values;
 		}
@@ -145,7 +145,7 @@ namespace castor3d
 		 */
 		OnListEventConnection connect( ListBoxEvent event, OnListEventFunction function )
 		{
-			return m_signals[size_t( event )].connect( castor::move( function ) );
+			return m_signals[size_t( event )].connect( c3d::move( function ) );
 		}
 
 		/** \return	The listbox style.
@@ -168,14 +168,14 @@ namespace castor3d
 		 *\param[in]	itemIndex	The control index
 		 *\return		The static control.
 		 */
-		StaticCtrlRPtr doCreateItemCtrl( castor::String const & value
+		StaticCtrlRPtr doCreateItemCtrl( String const & value
 			, uint32_t itemIndex );
 
 		/** Creates a sub-control, and it's Castor3D counterpart.
 		 *\param[in]	value		The control label
 		 *\param[in]	itemIndex	The control index
 		 */
-		void doCreateItem( castor::String const & value
+		void doCreateItem( String const & value
 			, uint32_t itemIndex );
 
 		/** Recomputes the items positions, according to their position in the items array
@@ -192,11 +192,11 @@ namespace castor3d
 
 		/** @copydoc Control::doSetPosition
 		 */
-		void doSetPosition( castor::Position const & value )override;
+		void doSetPosition( Position const & value )override;
 
 		/** @copydoc Control::doSetSize
 		 */
-		void doSetSize( castor::Size const & value )override;
+		void doSetSize( Size const & value )override;
 
 		/** @copydoc Control::doUpdateStyle
 		*/
@@ -240,12 +240,12 @@ namespace castor3d
 		void doConstruct();
 
 	private:
-		castor::StringArray m_initialValues;
-		castor::StringArray m_values;
+		StringArray m_initialValues;
+		StringArray m_values;
 		int m_selected{};
 		StaticCtrlRPtr m_selectedItem{};
-		castor::Vector< StaticCtrlRPtr > m_items;
-		castor::Array< OnListEvent, size_t( ListBoxEvent::eCount ) > m_signals;
+		Vector< StaticCtrlRPtr > m_items;
+		Array< OnListEvent, size_t( ListBoxEvent::eCount ) > m_signals;
 	};
 }
 

@@ -34,7 +34,7 @@ namespace castortd
 		};
 
 	public:
-		Enemy( castor3d::SceneNode & node
+		Enemy( c3d::SceneNode & node
 			, Game const & game
 			, Path const & path
 			, Category const & category );
@@ -59,7 +59,7 @@ namespace castortd
 		void die()
 		{
 			m_state = State::Dead;
-			m_node.get().setPosition( castor::Point3f{ 0, -10, 0 } );
+			m_node.get().setPosition( c3d::Point3f{ 0, -10, 0 } );
 		}
 
 		bool isAlive()const
@@ -77,24 +77,24 @@ namespace castortd
 			return m_category.get().m_bounty.getValue();
 		}
 
-		castor3d::SceneNode & getNode()
+		c3d::SceneNode & getNode()
 		{
 			return m_node;
 		}
 
-		castor3d::SceneNode const & getNode()const
+		c3d::SceneNode const & getNode()const
 		{
 			return m_node;
 		}
 
 	private:
-		castor::ReferenceWrapper< Path const > m_path;
-		castor::ReferenceWrapper< castor3d::SceneNode > m_node;
-		castor::ReferenceWrapper< Category const > m_category;
+		c3d::ReferenceWrapper< Path const > m_path;
+		c3d::ReferenceWrapper< c3d::SceneNode > m_node;
+		c3d::ReferenceWrapper< Category const > m_category;
 		State m_state{ State::Walking };
 		float m_speed{ 0.0f };
 		uint32_t m_life{ 0 };
 		Path::const_iterator m_cur;
-		castor::Point3f m_destination;
+		c3d::Point3f m_destination;
 	};
 }

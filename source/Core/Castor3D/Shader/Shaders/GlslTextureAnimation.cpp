@@ -5,7 +5,7 @@
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	TextureAnimations::TextureAnimations( sdw::ShaderWriter & writer
 		, uint32_t binding

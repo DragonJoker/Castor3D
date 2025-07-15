@@ -10,7 +10,7 @@
 #include <ShaderWriter/Source.hpp>
 #include <ShaderAST/Type/TypeStruct.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//*********************************************************************************************
 
@@ -40,7 +40,7 @@ namespace castor3d::shader
 	BlendComponents::BlendComponents( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: sdw::StructInstance{ writer, castor::move( expr ), enabled }
+		: sdw::StructInstance{ writer, c3d::move( expr ), enabled }
 		, ior{ getMember( "ior", sdw::Float{ RefractionComponent::Default } ) }
 		, perceptualRoughness{ getMember( "roughness", 1.0_f ) }
 		, dielectricF0{ getMember( "dielectricF0", vec3( 0.04_f ) ) }
@@ -359,7 +359,7 @@ namespace castor3d::shader
 			BlendComponents::fillInit( *type, materials, initializers );
 		}
 
-		return sdw::makeAggrInit( type, castor::move( initializers ) );
+		return sdw::makeAggrInit( type, c3d::move( initializers ) );
 	}
 
 	sdw::expr::ExprPtr BlendComponents::makeInit( Materials const & materials
@@ -376,7 +376,7 @@ namespace castor3d::shader
 			BlendComponents::fillInit( *type, materials, material, surface, clrCot, initializers );
 		}
 
-		return sdw::makeAggrInit( type, castor::move( initializers ) );
+		return sdw::makeAggrInit( type, c3d::move( initializers ) );
 	}
 
 	//*********************************************************************************************

@@ -9,9 +9,9 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementDeleter( castor3d::shader, SheenBRDF )
+CU_ImplementDeleter( c3d::shader, SheenBRDF )
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	SheenBRDF::SheenBRDF( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdfHelpers )
@@ -40,7 +40,7 @@ namespace castor3d::shader
 	SheenBRDFPtr SheenBRDF::create( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdfHelpers )
 	{
-		return castor::makeUnique< SheenBRDF >( writer, brdfHelpers );
+		return makeUnique< SheenBRDF >( writer, brdfHelpers );
 	}
 
 	void SheenBRDF::doGenerate( Utils & utils

@@ -11,26 +11,26 @@ See LICENSE file in root folder
 namespace fireworks
 {
 	class ParticleSystem
-		: public castor3d::CpuParticleSystem
+		: public c3d::CpuParticleSystem
 	{
 	public:
-		explicit ParticleSystem( castor3d::ParticleSystem & parent );
+		explicit ParticleSystem( c3d::ParticleSystem & parent );
 
-		static castor3d::CpuParticleSystemUPtr create( castor3d::ParticleSystem & parent );
+		static c3d::CpuParticleSystemUPtr create( c3d::ParticleSystem & parent );
 
 	private:
 		/**
-		 *\copydoc		castor3d::CpuParticleSystem::doInitialise
+		 *\copydoc		c3d::CpuParticleSystem::doInitialise
 		 */
 		bool doInitialise()override;
 		/**
-		 *\copydoc		castor3d::CpuParticleSystem::doPackParticles
+		 *\copydoc		c3d::CpuParticleSystem::doPackParticles
 		 */
 		void doPackParticles()override;
 
 	public:
-		static castor::String const Type;
-		static castor::MbString const Name;
+		static c3d::String const Type;
+		static c3d::MbString const Name;
 	};
 }
 

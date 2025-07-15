@@ -2,7 +2,7 @@
 
 #include <ashes/ashes.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	Version::Version( int major, int minor, int build )
 		: m_major{ uint16_t( major ) }

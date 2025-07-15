@@ -8,16 +8,16 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::TextOverlay >
-		: public TextWriterT< castor3d::TextOverlay >
+	class TextWriter< TextOverlay >
+		: public TextWriterT< TextOverlay >
 	{
 	public:
-		explicit TextWriter( castor::String const & tabs );
-		bool operator()( castor3d::TextOverlay const & overlay
-			, castor::StringStream & file )override;
+		explicit TextWriter( String const & tabs );
+		bool operator()( TextOverlay const & overlay
+			, StringStream & file )override;
 	};
 }
 

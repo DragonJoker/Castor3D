@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/RequiredVersion.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class Version
 	{
@@ -90,7 +90,7 @@ namespace castor3d
 	 *\param[in]	a, b	Les versions à comparer.
 	 *\return		false si un numéro de version est différent entre a et b.
 	 */
-	C3D_API bool operator==( castor3d::Version const & a, castor3d::Version const & b );
+	C3D_API bool operator==( Version const & a, Version const & b );
 	/**
 	 *\~english
 	 *\brief		Difference operator.
@@ -101,7 +101,7 @@ namespace castor3d
 	 *\param[in]	a, b	Les versions à comparer.
 	 *\return		true si un numéro de version est différent entre a et b.
 	 */
-	C3D_API bool operator!=( castor3d::Version const & a, castor3d::Version const & b );
+	C3D_API bool operator!=( Version const & a, Version const & b );
 	/**
 	 *\~english
 	 *\brief		Less than operator.
@@ -112,7 +112,7 @@ namespace castor3d
 	 *\param[in]	a, b	Les versions à comparer.
 	 *\return		true si a.major est inférieur à b.major ou s'ils sont égaux et a.minor est inférieur à b.minor ou si majors et minors sont égaux et a.build est inférieur à b.build.
 	 */
-	C3D_API bool operator<( castor3d::Version const & a, castor3d::Version const & b );
+	C3D_API bool operator<( Version const & a, Version const & b );
 	/**
 	 *\~english
 	 *\brief		Less than operator.
@@ -123,7 +123,7 @@ namespace castor3d
 	 *\param[in]	a, b	Les versions à comparer.
 	 *\return		true si a.major est supérieur à b.major ou s'ils sont égaux et a.minor est supérieur à b.minor ou si majors et minors sont égaux et a.build est supérieur à b.build.
 	 */
-	C3D_API bool operator>( castor3d::Version const & a, castor3d::Version const & b );
+	C3D_API bool operator>( Version const & a, Version const & b );
 	/**
 	 *\~english
 	 *\brief		Less than operator.
@@ -134,7 +134,7 @@ namespace castor3d
 	 *\param[in]	a, b	Les versions à comparer.
 	 *\return		false si a.major est supérieur à b.major ou s'ils sont égaux et a.minor est supérieur à b.minor ou si majors et minors sont égaux et a.build est supérieur à b.build.
 	 */
-	C3D_API bool operator<=( castor3d::Version const & a, castor3d::Version const & b );
+	C3D_API bool operator<=( Version const & a, Version const & b );
 	/**
 	 *\~english
 	 *\brief		Less than operator.
@@ -145,10 +145,10 @@ namespace castor3d
 	 *\param[in]	a, b	Les versions à comparer.
 	 *\return		false si a.major est inférieur à b.major ou s'ils sont égaux et a.minor est inférieur à b.minor ou si majors et minors sont égaux et a.build est inférieur à b.build.
 	 */
-	C3D_API bool operator>=( castor3d::Version const & a, castor3d::Version const & b );
+	C3D_API bool operator>=( Version const & a, Version const & b );
 
 	template< typename CharT >
-	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, castor3d::Version const & version )
+	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, Version const & version )
 	{
 		stream << version.getMajor() << "." << version.getMinor() << "." << version.getBuild();
 		return stream;

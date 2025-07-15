@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "ClusteredModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	C3D_API crg::FramePass const & createFindUniqueClustersPass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass

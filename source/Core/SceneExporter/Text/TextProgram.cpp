@@ -2,10 +2,8 @@
 
 #include <Castor3D/Miscellaneous/Logger.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< ShaderProgram >::TextWriter( String const & tabs )
 		: TextWriterT< ShaderProgram >{ tabs }
 	{
@@ -26,7 +24,7 @@ namespace castor
 		{
 			if ( auto block{ beginBlock( file, cuT( "cs_shader_program" ) ) } )
 			{
-				// TODO : Implement castor3d::ShaderModule::TextWriter (to support at least SPIR-V external shaders).
+				// TODO : Implement ShaderModule::TextWriter (to support at least SPIR-V external shaders).
 
 				//for ( auto & module : shaderProgram.m_modules )
 				//{

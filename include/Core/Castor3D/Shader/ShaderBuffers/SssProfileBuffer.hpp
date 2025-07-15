@@ -20,7 +20,7 @@ See LICENSE file in root folder
 #include <mutex>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class SssProfileBuffer
 	{
@@ -38,9 +38,9 @@ namespace castor3d
 			float gaussianWidth{};
 			float subsurfaceScatteringStrength{};
 			float thicknessScale{};
-			castor::Array< Data, TransmittanceProfileSize > transmittanceProfile{};
+			Array< Data, TransmittanceProfileSize > transmittanceProfile{};
 		};
-		using SssProfilesData = castor::ArrayView< SssProfileData >;
+		using SssProfilesData = ArrayView< SssProfileData >;
 
 		struct SssProfileDataPtr
 		{
@@ -48,7 +48,7 @@ namespace castor3d
 			float * gaussianWidth{};
 			float * subsurfaceScatteringStrength{};
 			float * thicknessScale{};
-			castor::Array< Data, TransmittanceProfileSize > * transmittanceProfile{};
+			Array< Data, TransmittanceProfileSize > * transmittanceProfile{};
 		};
 
 		static constexpr uint32_t DataSize = sizeof( SssProfileData );
@@ -174,12 +174,12 @@ namespace castor3d
 	private:
 		ShaderBuffer m_buffer;
 		Texture m_diffusionProfiles;
-		castor::Vector< SubsurfaceScatteringComponent * > m_components;
-		castor::Vector< SubsurfaceScatteringComponent const * > m_dirty;
-		castor::Vector< OnSssProfileChangedConnection > m_connections;
+		Vector< SubsurfaceScatteringComponent * > m_components;
+		Vector< SubsurfaceScatteringComponent const * > m_dirty;
+		Vector< OnSssProfileChangedConnection > m_connections;
 		uint32_t m_profileID{ 1u };
 		SssProfilesData m_data;
-		castor::Mutex m_mutex;
+		Mutex m_mutex;
 	};
 }
 

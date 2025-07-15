@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include <deque>
 #include <limits>
 
-namespace castor
+namespace c3d
 {
 	struct ContextDeleter
 	{
@@ -22,7 +22,7 @@ namespace castor
 		CU_API virtual void destroy( void * data )noexcept = 0;
 	};
 
-	using ContextDeleterPtr = castor::RawUniquePtr< ContextDeleter >;
+	using ContextDeleterPtr = c3d::RawUniquePtr< ContextDeleter >;
 
 	template< typename ContextT >
 	struct ContextDeleterT
@@ -39,7 +39,7 @@ namespace castor
 	template< typename ContextT >
 	ContextDeleterPtr makeContextDeleter()
 	{
-		return castor::make_unique< ContextDeleterT< ContextT > >();
+		return c3d::makeRawUnique< ContextDeleterT< ContextT > >();
 	}
 
 	struct BlockContext
@@ -52,7 +52,7 @@ namespace castor
 		BlockContext( void * pcontext
 			, ContextDeleterPtr pdtor )
 			: context{ pcontext }
-			, dtor{ castor::move( pdtor ) }
+			, dtor{ c3d::move( pdtor ) }
 		{
 		}
 

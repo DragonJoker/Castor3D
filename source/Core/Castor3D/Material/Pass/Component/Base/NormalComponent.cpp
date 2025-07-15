@@ -13,7 +13,7 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -105,7 +105,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const NormalComponent::TypeName = C3D_MakePassBaseComponentName( "normal" );
+	String const NormalComponent::TypeName = C3D_MakePassBaseComponentName( "normal" );
 
 	NormalComponent::NormalComponent( Pass & pass )
 		: PassComponent{ pass, TypeName }
@@ -118,7 +118,7 @@ namespace castor3d
 
 	PassComponentUPtr NormalComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, NormalComponent >( pass );
+		return makeUniqueDerived< PassComponent, NormalComponent >( pass );
 	}
 
 	//*********************************************************************************************

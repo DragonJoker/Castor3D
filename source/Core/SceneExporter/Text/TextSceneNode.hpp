@@ -8,17 +8,17 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::SceneNode >
-		: public TextWriterT< castor3d::SceneNode >
+	class TextWriter< SceneNode >
+		: public TextWriterT< SceneNode >
 	{
 	public:
-		explicit TextWriter( castor::String const & tabs
+		explicit TextWriter( String const & tabs
 			, float scale = 1.0f );
-		bool operator()( castor3d::SceneNode const & node
-			, castor::StringStream & file )override;
+		bool operator()( SceneNode const & node
+			, StringStream & file )override;
 
 	private:
 		float m_scale;

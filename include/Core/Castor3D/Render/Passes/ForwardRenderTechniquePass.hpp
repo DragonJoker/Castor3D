@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderTechniquePass.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class ForwardRenderTechniquePass
 		: public RenderTechniqueNodesPass
@@ -58,8 +58,8 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, castor::String const & typeName
-			, castor::String const & groupName
+			, String const & typeName
+			, String const & groupName
 			, crg::ImageViewIdArray targetImage
 			, crg::ImageViewIdArray targetDepth
 			, RenderNodesPassDesc const & renderPassDesc
@@ -67,19 +67,19 @@ namespace castor3d
 			, Texture const * mippedColour = nullptr
 			, bool hasEnvMap = true );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 
 	public:
-		C3D_API static castor::String const Type;
+		C3D_API static String const Type;
 
 	private:
 		void doFillAdditionalBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, castor3d::ShadowMapLightTypeArray const & shadowMaps
+			, ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const * shadowBuffer )override;
 		void doGetPixelShaderSource( PipelineFlags const & flags
 			, ast::ShaderBuilder & builder )const override;
@@ -87,7 +87,7 @@ namespace castor3d
 	private:
 		Texture const * m_mippedColour;
 		bool m_hasEnvMap;
-		castor::String m_groupName;
+		String m_groupName;
 	};
 }
 

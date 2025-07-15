@@ -20,7 +20,7 @@ See LICENSE file in root folder
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 #include <ashespp/Sync/Fence.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ComputeParticleSystem
 		: public ParticleSystemImpl
@@ -36,27 +36,27 @@ namespace castor3d
 		 */
 		C3D_API explicit ComputeParticleSystem( ParticleSystem & parent );
 		/**
-		 *\copydoc		castor3d::ParticleSystemImpl::initialise
+		 *\copydoc		ParticleSystemImpl::initialise
 		 */
 		C3D_API bool initialise( RenderDevice const & device )override;
 		/**
-		 *\copydoc		castor3d::ParticleSystemImpl::cleanup
+		 *\copydoc		ParticleSystemImpl::cleanup
 		 */
 		C3D_API void cleanup( RenderDevice const & device )override;
 		/**
-		 *\copydoc		castor3d::ParticleSystemImpl::update
+		 *\copydoc		ParticleSystemImpl::update
 		 */
 		C3D_API void update( CpuUpdater & updater )override;
 		/**
-		 *\copydoc		castor3d::ParticleSystemImpl::update
+		 *\copydoc		ParticleSystemImpl::update
 		 */
 		C3D_API uint32_t update( GpuUpdater & updater )override;
 		/**
-		 *\copydoc		castor3d::ParticleSystemImpl::addParticleVariable
+		 *\copydoc		ParticleSystemImpl::addParticleVariable
 		 */
-		C3D_API void addParticleVariable( castor::String const & name
+		C3D_API void addParticleVariable( String const & name
 			, ParticleFormat type
-			, castor::String const & defaultValue )override;
+			, String const & defaultValue )override;
 		/**
 		 *\~english
 		 *\brief		Defines the program used to update the particles.
@@ -74,7 +74,7 @@ namespace castor3d
 		 *\brief		Définit les dimensions des groupes de travail, tels que définis dans le compute shader.
 		 *\param[in]	sizes	Les dimensions.
 		 */
-		void setGroupSizes( castor::Point3i sizes )
+		void setGroupSizes( Point3i sizes )
 		{
 			m_worgGroupSizes = sizes;
 		}
@@ -111,24 +111,24 @@ namespace castor3d
 			float time;
 			uint32_t maxParticleCount;
 			uint32_t currentParticleCount;
-			castor::Point3f emitterPosition;
+			Point3f emitterPosition;
 		};
 
 	protected:
 		ParticleDeclaration m_inputs;
 		ShaderProgramRPtr m_program{};
 		UniformBufferOffsetT< Configuration > m_ubo;
-		castor::Array< ashes::BufferPtr< uint8_t >, 2 > m_particlesStorages;
+		Array< ashes::BufferPtr< uint8_t >, 2 > m_particlesStorages;
 		ashes::BufferPtr< uint32_t > m_generatedCountBuffer;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::ComputePipelinePtr m_pipeline;
 		ashes::DescriptorSetPoolPtr m_descriptorPool;
-		castor::Array< ashes::DescriptorSetPtr, 2u > m_descriptorSets;
+		Array< ashes::DescriptorSetPtr, 2u > m_descriptorSets;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::FencePtr m_fence;
 		uint32_t m_particlesCount{ 0u };
-		castor::Point3i m_worgGroupSizes{ 128, 1, 1 };
+		Point3i m_worgGroupSizes{ 128, 1, 1 };
 		uint32_t m_in{ 0 };
 		uint32_t m_out{ 1 };
 	};

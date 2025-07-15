@@ -10,10 +10,10 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/Path.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class CameraImporter
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
 		virtual ~CameraImporter() = default;
@@ -28,7 +28,7 @@ namespace castor3d
 		 *\param[in]	prefix	Le préfixe utilisé pour le logging.
 		 */
 		C3D_API explicit CameraImporter( Engine & engine
-			, castor::String const & prefix );
+			, String const & prefix );
 		/**
 		 *\~english
 		 *\brief		Camera import Function.
@@ -45,7 +45,7 @@ namespace castor3d
 		 *\param[in]	parameters	Paramètres de configuration de l'import.
 		 *\return		La Camera importée, \p nullptr si un problème quelconque est survenu.
 		 */
-		C3D_API CameraRes importData( castor::String const & name
+		C3D_API CameraRes importData( String const & name
 			, CameraCreateInfo const & createInfo
 			, ImporterFile * file
 			, Parameters const & parameters );
@@ -81,21 +81,21 @@ namespace castor3d
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API static bool importData( Camera & camera
-			, castor::Path const & pathFile
+			, Path const & pathFile
 			, Parameters const & parameters );
 
-		castor::StringView getPrefix()const noexcept
+		String getPrefix()const noexcept
 		{
 			return m_prefix;
 		}
 
 	private:
-		C3D_API virtual CameraRes doCreateCamera( castor::String const & name
+		C3D_API virtual CameraRes doCreateCamera( String const & name
 			, CameraCreateInfo const & createInfo );
 		virtual bool doImportCamera( Camera & camera ) = 0;
 
 	protected:
-		castor::String m_prefix;
+		String m_prefix;
 		ImporterFile * m_file{};
 		Parameters m_parameters;
 	};

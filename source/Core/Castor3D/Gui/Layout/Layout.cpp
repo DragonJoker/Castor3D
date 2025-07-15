@@ -4,16 +4,16 @@
 #include "Castor3D/Gui/ControlsManager.hpp"
 #include "Castor3D/Gui/Controls/CtrlLayoutControl.hpp"
 
-CU_ImplementSmartPtr( castor3d, Layout )
-CU_ImplementSmartPtr( castor3d, Spacer )
+CU_ImplementSmartPtr( c3d, Layout )
+CU_ImplementSmartPtr( c3d, Spacer )
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************
 
-	castor::Size Layout::Item::getPaddedSize()const noexcept
+	Size Layout::Item::getPaddedSize()const noexcept
 	{
-		castor::Size result;
+		Size result;
 
 		if ( isControl() )
 		{
@@ -27,16 +27,16 @@ namespace castor3d
 
 	//*************************************************************************
 
-	Layout::Layout( castor::String const & typeName
+	Layout::Layout( String const & typeName
 		, ControlsManager & container )
-		: castor::Named{ typeName }
+		: Named{ typeName }
 		, m_manager{ &container }
 	{
 	}
 
-	Layout::Layout( castor::String const & typeName
+	Layout::Layout( String const & typeName
 		, LayoutControl & container )
-		: castor::Named{ typeName }
+		: Named{ typeName }
 		, m_manager{ container.getControlsManager() }
 		, m_container{ &container }
 	{
@@ -109,7 +109,7 @@ namespace castor3d
 		control.removeFlag( ControlFlag::eMovable );
 
 		m_items.emplace_back( control
-			, castor::move( flags )
+			, c3d::move( flags )
 			, control.onChanged.connect( [this]( Control const & )
 				{
 					if ( !m_updating )
@@ -122,7 +122,7 @@ namespace castor3d
 
 	void Layout::addSpacer( uint32_t size )
 	{
-		auto & spacer = *m_spacers.emplace_back( castor::makeUnique< Spacer >( size ) );
+		auto & spacer = *m_spacers.emplace_back( makeUnique< Spacer >( size ) );
 		m_items.emplace_back( spacer );
 		markDirty();
 	}

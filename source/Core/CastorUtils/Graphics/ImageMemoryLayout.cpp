@@ -9,7 +9,7 @@
 
 #include <ashes/common/Format.hpp>
 
-namespace castor
+namespace c3d
 {
 	ImageMemoryLayout::SubresourceRange ImageMemoryLayout::range()const noexcept
 	{

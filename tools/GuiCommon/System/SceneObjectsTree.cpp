@@ -78,9 +78,9 @@ namespace GuiCommon
 		SetImageList( &m_images );
 	}
 
-	void SceneObjectsTree::loadScene( castor3d::Engine * engine
-		, castor3d::RenderWindow & window
-		, castor3d::SceneRPtr scene )
+	void SceneObjectsTree::loadScene( c3d::Engine * engine
+		, c3d::RenderWindow & window
+		, c3d::SceneRPtr scene )
 	{
 		m_scene = scene;
 		m_engine = engine;
@@ -108,7 +108,7 @@ namespace GuiCommon
 				, _( "Render Targets" )
 				, eBMP_RENDER_TARGET
 				, eBMP_RENDER_TARGET_SEL );
-			scene->getEngine()->getRenderTargetCache().forEach( [this, catId]( castor3d::RenderTarget & elem )
+			scene->getEngine()->getRenderTargetCache().forEach( [this, catId]( c3d::RenderTarget & elem )
 				{
 					appendRenderTarget( this
 						, m_propertiesHolder->isEditable()
@@ -120,7 +120,7 @@ namespace GuiCommon
 				, _( "Cameras" )
 				, eBMP_CAMERA
 				, eBMP_CAMERA_SEL );
-			scene->getCameraCache().forEach( [this, catId]( castor3d::Camera & elem )
+			scene->getCameraCache().forEach( [this, catId]( c3d::Camera & elem )
 				{
 					doAddCamera( catId, elem );
 				} );
@@ -131,7 +131,7 @@ namespace GuiCommon
 				, eBMP_ANIMATED_OBJECTGROUP_SEL );
 			m_animatedObjectGroupProperties = std::make_unique< AnimatedObjectGroupTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
 			m_animationProperties = std::make_unique< AnimationTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
-			scene->getAnimatedObjectGroupCache().forEach( [this, catId]( castor3d::AnimatedObjectGroup & elem )
+			scene->getAnimatedObjectGroupCache().forEach( [this, catId]( c3d::AnimatedObjectGroup & elem )
 				{
 					doAddAnimatedObjectGroup( AppendItem( catId
 							, elem.getName()
@@ -147,8 +147,8 @@ namespace GuiCommon
 		}
 	}
 
-	void SceneObjectsTree::loadSceneMaterials( castor3d::Engine * engine
-		, castor3d::SceneRPtr scene )
+	void SceneObjectsTree::loadSceneMaterials( c3d::Engine * engine
+		, c3d::SceneRPtr scene )
 	{
 		m_scene = scene;
 		m_engine = engine;
@@ -174,8 +174,8 @@ namespace GuiCommon
 		}
 	}
 
-	void SceneObjectsTree::loadSceneOverlays( castor3d::Engine * engine
-		, castor3d::SceneRPtr scene )
+	void SceneObjectsTree::loadSceneOverlays( c3d::Engine * engine
+		, c3d::SceneRPtr scene )
 	{
 		m_scene = scene;
 		m_engine = engine;
@@ -191,7 +191,7 @@ namespace GuiCommon
 			{
 				switch ( overlay->getType() )
 				{
-				case castor3d::OverlayType::ePanel:
+				case c3d::OverlayType::ePanel:
 					doAddOverlay( AppendItem( rootId
 							, overlay->getOverlayName()
 							, eBMP_PANEL_OVERLAY
@@ -199,7 +199,7 @@ namespace GuiCommon
 							, new DataType{ ObjectType::eOverlay, overlay } )
 						, *overlay );
 					break;
-				case castor3d::OverlayType::eBorderPanel:
+				case c3d::OverlayType::eBorderPanel:
 					doAddOverlay( AppendItem( rootId
 							, overlay->getOverlayName()
 							, eBMP_BORDER_PANEL_OVERLAY
@@ -207,7 +207,7 @@ namespace GuiCommon
 							, new DataType{ ObjectType::eOverlay, overlay } )
 						, *overlay );
 					break;
-				case castor3d::OverlayType::eText:
+				case c3d::OverlayType::eText:
 					doAddOverlay( AppendItem( rootId
 							, overlay->getOverlayName()
 							, eBMP_TEXT_OVERLAY
@@ -226,8 +226,8 @@ namespace GuiCommon
 		}
 	}
 
-	void SceneObjectsTree::loadSceneGui( castor3d::Engine * engine
-		, castor3d::SceneRPtr scene )
+	void SceneObjectsTree::loadSceneGui( c3d::Engine * engine
+		, c3d::SceneRPtr scene )
 	{
 		m_scene = scene;
 		m_engine = engine;
@@ -236,7 +236,7 @@ namespace GuiCommon
 		{
 			m_styleProperties = std::make_unique< StyleTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
 			m_controlProperties = std::make_unique< ControlTreeItemProperty >( m_propertiesHolder->isEditable(), m_engine );
-			auto & controlsManager = static_cast< castor3d::ControlsManager const & >( *scene->getEngine()->getUserInputListener() );
+			auto & controlsManager = static_cast< c3d::ControlsManager const & >( *scene->getEngine()->getUserInputListener() );
 			auto rootId = AddRoot( _( "GUI" )
 				, eBMP_STYLES
 				, eBMP_STYLES_SEL );
@@ -285,7 +285,7 @@ namespace GuiCommon
 				, eBMP_CONTROLS
 				, eBMP_CONTROLS_SEL );
 
-			for ( auto const & control : static_cast< castor3d::ControlsManager const & >( *scene->getEngine()->getUserInputListener() ).getRootControls() )
+			for ( auto const & control : static_cast< c3d::ControlsManager const & >( *scene->getEngine()->getUserInputListener() ).getRootControls() )
 			{
 				if ( control
 					&& control->hasScene()
@@ -300,8 +300,8 @@ namespace GuiCommon
 		}
 	}
 
-	void SceneObjectsTree::loadSceneNodes( castor3d::Engine * engine
-		, castor3d::SceneRPtr scene )
+	void SceneObjectsTree::loadSceneNodes( c3d::Engine * engine
+		, c3d::SceneRPtr scene )
 	{
 		m_scene = scene;
 		m_engine = engine;
@@ -323,8 +323,8 @@ namespace GuiCommon
 		}
 	}
 
-	void SceneObjectsTree::loadSceneLights( castor3d::Engine * engine
-		, castor3d::SceneRPtr scene )
+	void SceneObjectsTree::loadSceneLights( c3d::Engine * engine
+		, c3d::SceneRPtr scene )
 	{
 		m_scene = scene;
 		m_engine = engine;
@@ -340,32 +340,32 @@ namespace GuiCommon
 				, eBMP_DIRECTIONAL_LIGHT_SEL );
 			doLoadSceneLights( rootId
 				, _( "Directional Lights" )
-				, castor3d::LightType::eDirectional
+				, c3d::LightType::eDirectional
 				, eBMP_DIRECTIONAL_LIGHT
 				, eBMP_DIRECTIONAL_LIGHT_SEL );
 			doLoadSceneLights( rootId
 				, _( "Point Lights" )
-				, castor3d::LightType::ePoint
+				, c3d::LightType::ePoint
 				, eBMP_POINT_LIGHT
 				, eBMP_POINT_LIGHT_SEL );
 			doLoadSceneLights( rootId
 				, _( "Spot Lights" )
-				, castor3d::LightType::eSpot
+				, c3d::LightType::eSpot
 				, eBMP_SPOT_LIGHT
 				, eBMP_SPOT_LIGHT_SEL );
 			doLoadSceneLightGroups( rootId
 				, _( "Directional LightGroups" )
-				, castor3d::LightType::eDirectional
+				, c3d::LightType::eDirectional
 				, eBMP_DIRECTIONAL_LIGHT
 				, eBMP_DIRECTIONAL_LIGHT_SEL );
 			doLoadSceneLightGroups( rootId
 				, _( "Point LightGroups" )
-				, castor3d::LightType::ePoint
+				, c3d::LightType::ePoint
 				, eBMP_POINT_LIGHT
 				, eBMP_POINT_LIGHT_SEL );
 			doLoadSceneLightGroups( rootId
 				, _( "Spot LightGroups" )
-				, castor3d::LightType::eSpot
+				, c3d::LightType::eSpot
 				, eBMP_SPOT_LIGHT
 				, eBMP_SPOT_LIGHT_SEL );
 			CollapseAll();
@@ -373,8 +373,8 @@ namespace GuiCommon
 		}
 	}
 
-	void SceneObjectsTree::loadSceneObjects( castor3d::Engine * engine
-		, castor3d::SceneRPtr scene )
+	void SceneObjectsTree::loadSceneObjects( c3d::Engine * engine
+		, c3d::SceneRPtr scene )
 	{
 		m_scene = scene;
 		m_engine = engine;
@@ -398,7 +398,7 @@ namespace GuiCommon
 				, _( "Geometries" )
 				, eBMP_GEOMETRY
 				, eBMP_GEOMETRY_SEL );
-			scene->getGeometryCache().forEach( [this, geometriesId]( castor3d::Geometry & elem )
+			scene->getGeometryCache().forEach( [this, geometriesId]( c3d::Geometry & elem )
 				{
 					doAddGeometry( geometriesId, elem );
 				} );
@@ -407,7 +407,7 @@ namespace GuiCommon
 				, _( "Billboards" )
 				, eBMP_BILLBOARD
 				, eBMP_BILLBOARD_SEL );
-			scene->getBillboardListCache().forEach( [this, billboardsId]( castor3d::BillboardList & elem )
+			scene->getBillboardListCache().forEach( [this, billboardsId]( c3d::BillboardList & elem )
 				{
 					doAddBillboard( billboardsId, elem );
 				} );
@@ -416,7 +416,7 @@ namespace GuiCommon
 				, _( "Particles" )
 				, eBMP_PARTICLE
 				, eBMP_PARTICLE_SEL );
-			scene->getParticleSystemCache().forEach( [this, particlesId]( castor3d::ParticleSystem & elem )
+			scene->getParticleSystemCache().forEach( [this, particlesId]( c3d::ParticleSystem & elem )
 				{
 					doAddParticleSystem( particlesId, elem );
 				} );
@@ -435,8 +435,8 @@ namespace GuiCommon
 		m_scene = {};
 	}
 
-	void SceneObjectsTree::select( castor3d::Geometry const * geometry
-		, castor3d::Submesh const * submesh )
+	void SceneObjectsTree::select( c3d::Geometry const * geometry
+		, c3d::Submesh const * submesh )
 	{
 		if ( auto itg = m_objects.find( geometry );
 			itg != m_objects.end() )
@@ -449,7 +449,7 @@ namespace GuiCommon
 		}
 	}
 
-	void SceneObjectsTree::select( castor3d::MaterialRPtr material )
+	void SceneObjectsTree::select( c3d::MaterialRPtr material )
 	{
 		if ( auto itm = m_materials.find( material );
 			itm != m_materials.end() )
@@ -459,15 +459,15 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsTree::doAddSubmesh( wxTreeItemId id
-		, castor3d::Geometry const * geometry
-		, castor3d::Submesh const * submesh )
+		, c3d::Geometry const * geometry
+		, c3d::Submesh const * submesh )
 	{
 		auto itg = m_objects.try_emplace( geometry ).first;
 		itg->second.try_emplace( submesh, id );
 	}
 
 	void SceneObjectsTree::doAddGeometry( wxTreeItemId id
-		, castor3d::Geometry & geometry )
+		, c3d::Geometry & geometry )
 	{
 		auto geometryId = AppendItem( id
 			, geometry.getName()
@@ -508,17 +508,17 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsTree::doAddSkeleton( wxTreeItemId idSkeleton
-		, castor3d::Skeleton const & skeleton )
+		, c3d::Skeleton const & skeleton )
 	{
 		for ( auto const & node : skeleton.getNodes() )
 		{
-			if ( node->getType() == castor3d::SkeletonNodeType::eBone )
+			if ( node->getType() == c3d::SkeletonNodeType::eBone )
 			{
 				AppendItem( idSkeleton
 					, node->getName()
 					, eBMP_SKELETON
 					, eBMP_SKELETON_SEL
-					, new DataType{ ObjectType::eSkeletonBone, &static_cast< castor3d::BoneNode & >( *node ) } );
+					, new DataType{ ObjectType::eSkeletonBone, &static_cast< c3d::BoneNode & >( *node ) } );
 			}
 			else
 			{
@@ -536,12 +536,12 @@ namespace GuiCommon
 				, name
 				, eBMP_ANIMATION
 				, eBMP_ANIMATION_SEL
-				, new DataType{ ObjectType::eSkeletonAnimation, &static_cast< castor3d::SkeletonAnimation & >( *anim ) } );
+				, new DataType{ ObjectType::eSkeletonAnimation, &static_cast< c3d::SkeletonAnimation & >( *anim ) } );
 		}
 	}
 
 	void SceneObjectsTree::doAddCamera( wxTreeItemId id
-		, castor3d::Camera & camera )
+		, c3d::Camera & camera )
 	{
 		auto cameraId = AppendItem( id
 			, camera.getName()
@@ -558,7 +558,7 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsTree::doAddBillboard( wxTreeItemId id
-		, castor3d::BillboardList & billboard )
+		, c3d::BillboardList & billboard )
 	{
 		AppendItem( id
 			, billboard.getName()
@@ -568,7 +568,7 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsTree::doAddParticleSystem( wxTreeItemId id
-		, castor3d::ParticleSystem & particleSystem )
+		, c3d::ParticleSystem & particleSystem )
 	{
 		AppendItem( id
 			, particleSystem.getName()
@@ -578,7 +578,7 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsTree::doAddNode( wxTreeItemId id
-		, castor3d::SceneNode const & node )
+		, c3d::SceneNode const & node )
 	{
 		for ( auto const & [name, child] : node.getChildren() )
 		{
@@ -592,7 +592,7 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsTree::doAddAnimatedObjectGroup( wxTreeItemId id
-		, castor3d::AnimatedObjectGroup & group )
+		, c3d::AnimatedObjectGroup & group )
 	{
 		for ( auto const & [name, anim] : group.getAnimations() )
 		{
@@ -605,13 +605,13 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsTree::doAddOverlay( wxTreeItemId id
-		, castor3d::OverlayCategory & category )
+		, c3d::OverlayCategory & category )
 	{
 		for ( auto overlay : category.getOverlay() )
 		{
 			switch ( overlay->getType() )
 			{
-			case castor3d::OverlayType::ePanel:
+			case c3d::OverlayType::ePanel:
 				doAddOverlay( AppendItem( id
 						, overlay->getName()
 						, eBMP_PANEL_OVERLAY
@@ -619,7 +619,7 @@ namespace GuiCommon
 						, new DataType{ ObjectType::eOverlay, &overlay->getCategory() } )
 					, overlay->getCategory() );
 				break;
-			case castor3d::OverlayType::eBorderPanel:
+			case c3d::OverlayType::eBorderPanel:
 				doAddOverlay( AppendItem( id
 						, overlay->getName()
 						, eBMP_BORDER_PANEL_OVERLAY
@@ -627,7 +627,7 @@ namespace GuiCommon
 						, new DataType{ ObjectType::eOverlay, &overlay->getCategory() } )
 					, overlay->getCategory() );
 				break;
-			case castor3d::OverlayType::eText:
+			case c3d::OverlayType::eText:
 				doAddOverlay( AppendItem( id
 						, overlay->getName()
 						, eBMP_TEXT_OVERLAY
@@ -643,8 +643,8 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsTree::doAddStyles( wxTreeItemId parentId
-		, castor3d::StylesHolder const & styles
-		, castor3d::SceneRPtr scene )
+		, c3d::StylesHolder const & styles
+		, c3d::SceneRPtr scene )
 	{
 		for ( auto const & [name, style] : styles.getButtonStyles() )
 		{
@@ -693,9 +693,9 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsTree::doAddStyle( wxTreeItemId id
-		, castor::String const & name
-		, castor3d::ControlStyle & style
-		, castor3d::SceneRPtr scene )
+		, c3d::String const & name
+		, c3d::ControlStyle & style
+		, c3d::SceneRPtr scene )
 	{
 		if ( ( scene && !style.hasScene() )
 			|| ( style.hasScene() && scene != &style.getScene() ) )
@@ -711,11 +711,11 @@ namespace GuiCommon
 
 		if ( isStylesHolder( style ) )
 		{
-			castor3d::StylesHolder const * holder{};
+			c3d::StylesHolder const * holder{};
 
-			if ( style.getType() == castor3d::ControlType::ePanel )
+			if ( style.getType() == c3d::ControlType::ePanel )
 			{
-				holder = &static_cast< castor3d::PanelStyle & >( style );
+				holder = &static_cast< c3d::PanelStyle & >( style );
 			}
 
 			if ( holder )
@@ -723,37 +723,37 @@ namespace GuiCommon
 				doAddStyles( parentId, *holder, scene );
 			}
 		}
-		else if ( style.getType() == castor3d::ControlType::eExpandablePanel )
+		else if ( style.getType() == c3d::ControlType::eExpandablePanel )
 		{
-			auto & expandable = static_cast< castor3d::ExpandablePanelStyle & >( style );
+			auto & expandable = static_cast< c3d::ExpandablePanelStyle & >( style );
 			doAddStyle( parentId, cuT( "Header" ), expandable.getHeaderStyle(), scene );
 			doAddStyle( parentId, cuT( "Expand" ), expandable.getExpandStyle(), scene );
 			doAddStyle( parentId, cuT( "Content" ), expandable.getContentStyle(), scene );
 		}
-		else if ( style.getType() == castor3d::ControlType::eComboBox )
+		else if ( style.getType() == c3d::ControlType::eComboBox )
 		{
-			auto & combo = static_cast< castor3d::ComboBoxStyle & >( style );
+			auto & combo = static_cast< c3d::ComboBoxStyle & >( style );
 			doAddStyle( parentId, cuT( "Expand" ), combo.getExpandStyle(), scene );
 			doAddStyle( parentId, cuT( "Elements" ), combo.getElementsStyle(), scene );
 		}
-		else if ( style.getType() == castor3d::ControlType::eListBox )
+		else if ( style.getType() == c3d::ControlType::eListBox )
 		{
-			auto & list = static_cast< castor3d::ListBoxStyle & >( style );
+			auto & list = static_cast< c3d::ListBoxStyle & >( style );
 			doAddStyle( parentId, cuT( "Item" ), list.getItemStyle(), scene );
 			doAddStyle( parentId, cuT( "Highlighted Item" ), list.getHighlightedItemStyle(), scene );
 			doAddStyle( parentId, cuT( "Selected Item" ), list.getSelectedItemStyle(), scene );
 		}
-		else if ( style.getType() == castor3d::ControlType::eSlider )
+		else if ( style.getType() == c3d::ControlType::eSlider )
 		{
-			auto & slider = static_cast< castor3d::SliderStyle & >( style );
+			auto & slider = static_cast< c3d::SliderStyle & >( style );
 			doAddStyle( parentId, cuT( "Line" ), slider.getLineStyle(), scene );
 			doAddStyle( parentId, cuT( "Tick" ), slider.getTickStyle(), scene );
 		}
 	}
 
 	void SceneObjectsTree::doAddControl( wxTreeItemId id
-		, castor::String const & name
-		, castor3d::Control & control
+		, c3d::String const & name
+		, c3d::Control & control
 		, bool full
 		, bool inLayout )
 	{
@@ -765,7 +765,7 @@ namespace GuiCommon
 
 		if ( isLayoutControl( control ) )
 		{
-			auto & layout = static_cast< castor3d::LayoutControl const & >( control );
+			auto & layout = static_cast< c3d::LayoutControl const & >( control );
 
 			for ( auto ctrl : layout.getChildren() )
 			{
@@ -775,22 +775,22 @@ namespace GuiCommon
 				}
 			}
 		}
-		else if ( control.getType() == castor3d::ControlType::eExpandablePanel )
+		else if ( control.getType() == c3d::ControlType::eExpandablePanel )
 		{
-			auto & expandable = static_cast< castor3d::ExpandablePanelCtrl const & >( control );
+			auto & expandable = static_cast< c3d::ExpandablePanelCtrl const & >( control );
 			doAddControl( parentId, cuT( "Header" ), *expandable.getHeader(), false, false );
 			doAddControl( parentId, cuT( "Expand" ), *expandable.getExpand(), false, false );
 			doAddControl( parentId, cuT( "Content" ), *expandable.getContent(), false, false );
 		}
-		else if ( control.getType() == castor3d::ControlType::eFrame )
+		else if ( control.getType() == c3d::ControlType::eFrame )
 		{
-			auto & frame = static_cast< castor3d::FrameCtrl const & >( control );
+			auto & frame = static_cast< c3d::FrameCtrl const & >( control );
 			doAddControl( parentId, cuT( "Content" ), *frame.getContent(), false, false );
 		}
 	}
 
 	void SceneObjectsTree::doAddMaterial( wxTreeItemId id
-		, castor3d::MaterialObs material )
+		, c3d::MaterialObs material )
 	{
 		auto materialId = AppendItem( id
 			, material->getName()
@@ -811,7 +811,7 @@ namespace GuiCommon
 
 	void SceneObjectsTree::doAddPass( wxTreeItemId id
 		, uint32_t index
-		, castor3d::Pass & pass )
+		, c3d::Pass & pass )
 	{
 		auto passId = AppendItem( id
 			, wxString( _( "Pass " ) ) << index
@@ -835,8 +835,8 @@ namespace GuiCommon
 
 	void SceneObjectsTree::doAddTexture( wxTreeItemId id
 		, uint32_t index
-		, castor3d::Pass & pass
-		, castor3d::TextureUnit & texture )
+		, c3d::Pass & pass
+		, c3d::TextureUnit & texture )
 	{
 		auto unitId = AppendItem( id
 			, wxString( _( "Texture Unit " ) ) << index
@@ -856,7 +856,7 @@ namespace GuiCommon
 
 	void SceneObjectsTree::doLoadSceneLights( wxTreeItemId id
 		, wxString const & name
-		, castor3d::LightType type
+		, c3d::LightType type
 		, int icon
 		, int iconSel )
 	{
@@ -881,7 +881,7 @@ namespace GuiCommon
 
 	void SceneObjectsTree::doLoadSceneLightGroups( wxTreeItemId id
 		, wxString const & name
-		, castor3d::LightType type
+		, c3d::LightType type
 		, int icon
 		, int iconSel )
 	{
@@ -941,70 +941,70 @@ namespace GuiCommon
 				m_propertiesHolder->setPropertyData( data->getProperties() );
 				break;
 			case ObjectType::eMaterial:
-				m_materialProperties->setData( data->getObject< castor3d::Material >() );
+				m_materialProperties->setData( data->getObject< c3d::Material >() );
 				m_propertiesHolder->setPropertyData( m_materialProperties.get() );
 				break;
 			case ObjectType::ePass:
-				m_passProperties->setData( data->getObject< castor3d::Pass >() );
+				m_passProperties->setData( data->getObject< c3d::Pass >() );
 				m_propertiesHolder->setPropertyData( m_passProperties.get() );
 				break;
 			case ObjectType::eSceneNode:
-				m_nodeProperties->setData( data->getObject< castor3d::SceneNode >() );
+				m_nodeProperties->setData( data->getObject< c3d::SceneNode >() );
 				m_propertiesHolder->setPropertyData( m_nodeProperties.get() );
-				onSelectNode( &data->getObject< castor3d::SceneNode >() );
+				onSelectNode( &data->getObject< c3d::SceneNode >() );
 				break;
 			case ObjectType::eLight:
-				m_lightProperties->setData( data->getObject< castor3d::Light >() );
+				m_lightProperties->setData( data->getObject< c3d::Light >() );
 				m_propertiesHolder->setPropertyData( m_lightProperties.get() );
-				onSelectLight( data->getObject< castor3d::Light >().getInstance() );
+				onSelectLight( data->getObject< c3d::Light >().getInstance() );
 				break;
 			case ObjectType::eLightGroup:
-				m_lightGroupProperties->setData( data->getObject< castor3d::LightGroup >() );
+				m_lightGroupProperties->setData( data->getObject< c3d::LightGroup >() );
 				m_propertiesHolder->setPropertyData( m_lightGroupProperties.get() );
 				break;
 			case ObjectType::eGroupLight:
-				m_nodeProperties->setData( data->getObject< castor3d::LightInstance >().getNode() );
+				m_nodeProperties->setData( data->getObject< c3d::LightInstance >().getNode() );
 				m_propertiesHolder->setPropertyData( m_nodeProperties.get() );
-				onSelectLight( &data->getObject< castor3d::LightInstance >() );
+				onSelectLight( &data->getObject< c3d::LightInstance >() );
 				break;
 			case ObjectType::eOverlay:
-				m_overlayProperties->setData( data->getObject< castor3d::OverlayCategory >() );
+				m_overlayProperties->setData( data->getObject< c3d::OverlayCategory >() );
 				m_propertiesHolder->setPropertyData( m_overlayProperties.get() );
 				break;
 			case ObjectType::eStyle:
-				m_styleProperties->setData( data->getObject< castor3d::ControlStyle >() );
+				m_styleProperties->setData( data->getObject< c3d::ControlStyle >() );
 				m_propertiesHolder->setPropertyData( m_styleProperties.get() );
 				break;
 			case ObjectType::eGeometry:
-				m_geometryProperties->setData( data->getObject< castor3d::Geometry >() );
+				m_geometryProperties->setData( data->getObject< c3d::Geometry >() );
 				m_propertiesHolder->setPropertyData( m_geometryProperties.get() );
 				break;
 			case ObjectType::eBillboards:
-				m_billboardsProperties->setData( data->getObject< castor3d::BillboardList >() );
+				m_billboardsProperties->setData( data->getObject< c3d::BillboardList >() );
 				m_propertiesHolder->setPropertyData( m_billboardsProperties.get() );
 				break;
 			case ObjectType::eParticleSystem:
-				m_particlesProperties->setData( data->getObject< castor3d::ParticleSystem >() );
+				m_particlesProperties->setData( data->getObject< c3d::ParticleSystem >() );
 				m_propertiesHolder->setPropertyData( m_particlesProperties.get() );
 				break;
 			case ObjectType::eSkeleton:
-				m_skeletonProperties->setData( data->getObject< castor3d::Skeleton >() );
+				m_skeletonProperties->setData( data->getObject< c3d::Skeleton >() );
 				m_propertiesHolder->setPropertyData( m_skeletonProperties.get() );
 				break;
 			case ObjectType::eSkeletonBone:
-				m_skeletonBoneProperties->setData( data->getObject< castor3d::BoneNode >() );
+				m_skeletonBoneProperties->setData( data->getObject< c3d::BoneNode >() );
 				m_propertiesHolder->setPropertyData( m_skeletonBoneProperties.get() );
 				break;
 			case ObjectType::eSkeletonNode:
-				m_skeletonNodeProperties->setData( data->getObject< castor3d::SkeletonNode >() );
+				m_skeletonNodeProperties->setData( data->getObject< c3d::SkeletonNode >() );
 				m_propertiesHolder->setPropertyData( m_skeletonNodeProperties.get() );
 				break;
 			case ObjectType::eSkeletonAnimation:
-				m_skeletonAnimationProperties->setData( data->getObject< castor3d::SkeletonAnimation >() );
+				m_skeletonAnimationProperties->setData( data->getObject< c3d::SkeletonAnimation >() );
 				m_propertiesHolder->setPropertyData( m_skeletonAnimationProperties.get() );
 				break;
 			case ObjectType::eAnimatedObjectGroup:
-				m_animatedObjectGroupProperties->setData( data->getObject< castor3d::AnimatedObjectGroup >() );
+				m_animatedObjectGroupProperties->setData( data->getObject< c3d::AnimatedObjectGroup >() );
 				m_propertiesHolder->setPropertyData( m_animatedObjectGroupProperties.get() );
 				break;
 			case ObjectType::eTexture:

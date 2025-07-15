@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Design/NonCopyable.hpp"
 
-namespace castor
+namespace c3d
 {
 	class ImageWriterImpl
 		: public NonMovable

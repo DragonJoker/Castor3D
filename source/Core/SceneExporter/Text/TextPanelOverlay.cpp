@@ -7,10 +7,8 @@
 
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< PanelOverlay >::TextWriter( String const & tabs )
 		: TextWriterT< PanelOverlay >{ tabs }
 	{

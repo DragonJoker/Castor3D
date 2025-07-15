@@ -11,23 +11,23 @@ namespace disney::shader
 	//*********************************************************************************************
 
 	DisneyDiffuseBRDF::DisneyDiffuseBRDF( sdw::ShaderWriter & writer
-		, c3d::BRDFHelpers & brdfHelpers )
-		: c3d::DiffuseBRDF{ writer, brdfHelpers }
+		, c3ds::BRDFHelpers & brdfHelpers )
+		: c3ds::DiffuseBRDF{ writer, brdfHelpers }
 	{
 	}
 
-	c3d::DiffuseBRDFPtr DisneyDiffuseBRDF::create( sdw::ShaderWriter & writer
-		, c3d::BRDFHelpers & brdfHelpers )
+	c3ds::DiffuseBRDFPtr DisneyDiffuseBRDF::create( sdw::ShaderWriter & writer
+		, c3ds::BRDFHelpers & brdfHelpers )
 	{
-		return castor::makeUniqueDerived< DiffuseBRDF, DisneyDiffuseBRDF >( writer, brdfHelpers );
+		return c3d::makeUniqueDerived< DiffuseBRDF, DisneyDiffuseBRDF >( writer, brdfHelpers );
 	}
 
-	void DisneyDiffuseBRDF::doGenerate( c3d::BlendComponents const & pcomponents
-		, c3d::LightSurface const & plightSurface )
+	void DisneyDiffuseBRDF::doGenerate( c3ds::BlendComponents const & pcomponents
+		, c3ds::LightSurface const & plightSurface )
 	{
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeDisneyDiffuse"
-			, [this]( c3d::BlendComponents const & components
-				, c3d::LightSurface const & lightSurface
+			, [this]( c3ds::BlendComponents const & components
+				, c3ds::LightSurface const & lightSurface
 				, sdw::Vec3 const & radiance
 				, sdw::Float const & intensity
 				, sdw::Float const & NdotL )
@@ -42,11 +42,11 @@ namespace disney::shader
 					, radiance * rr * ( fl + fv + fl * fv * ( rr - 1.0_f ) ) );
 
 				auto diffuseReflectance = m_writer.declLocale( "diffuseReflectance"
-					, ( radiance * ( 1.0_f - 0.5_f * fl ) * ( 1.0_f - 0.5_f * fv ) + retro ) / sdw::Float{ castor::Pi< float > } );
+					, ( radiance * ( 1.0_f - 0.5_f * fl ) * ( 1.0_f - 0.5_f * fv ) + retro ) / sdw::Float{ c3d::Pi< float > } );
 				m_writer.returnStmt( max( diffuseReflectance * intensity, vec3( 0.0_f ) ) );
 			}
-			, c3d::InBlendComponents{ m_writer, "components", pcomponents }
-			, c3d::InLightSurface{ m_writer, "lightSurface", plightSurface }
+			, c3ds::InBlendComponents{ m_writer, "components", pcomponents }
+			, c3ds::InLightSurface{ m_writer, "lightSurface", plightSurface }
 			, sdw::InVec3{ m_writer, "radiance" }
 			, sdw::InFloat{ m_writer, "intensity" }
 			, sdw::InFloat{ m_writer, "NdotL" } );
@@ -55,18 +55,18 @@ namespace disney::shader
 	//*********************************************************************************************
 
 	DisneySpecularBRDF::DisneySpecularBRDF( sdw::ShaderWriter & writer
-		, c3d::BRDFHelpers & brdfHelpers )
-		: c3d::SpecularBRDF{ writer, brdfHelpers }
+		, c3ds::BRDFHelpers & brdfHelpers )
+		: c3ds::SpecularBRDF{ writer, brdfHelpers }
 	{
 	}
 
-	c3d::SpecularBRDFPtr DisneySpecularBRDF::create( sdw::ShaderWriter & writer
-		, c3d::BRDFHelpers & brdfHelpers )
+	c3ds::SpecularBRDFPtr DisneySpecularBRDF::create( sdw::ShaderWriter & writer
+		, c3ds::BRDFHelpers & brdfHelpers )
 	{
-		return castor::makeUniqueDerived< SpecularBRDF, DisneySpecularBRDF >( writer, brdfHelpers );
+		return c3d::makeUniqueDerived< SpecularBRDF, DisneySpecularBRDF >( writer, brdfHelpers );
 	}
 
-	void DisneySpecularBRDF::doGenerate( c3d::BlendComponents const & pcomponents )
+	void DisneySpecularBRDF::doGenerate( c3ds::BlendComponents const & pcomponents )
 	{
 		auto sqr = []( auto v )
 			{
@@ -81,7 +81,7 @@ namespace disney::shader
 				, sdw::Float const & ab )
 			{
 				m_writer.returnStmt( 1.0_f
-					/ ( castor::Pi< float >
+					/ ( c3d::Pi< float >
 						* at * ab
 						* sqr( sqr( TdotH / at ) + sqr( BdotH / ab ) + sqr( NdotH ) ) ) );
 			}
@@ -107,7 +107,7 @@ namespace disney::shader
 			, sdw::InFloat{ m_writer, "ab" } );
 
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeDisneySpecular"
-			, [this]( c3d::BlendComponents const & components
+			, [this]( c3ds::BlendComponents const & components
 				, sdw::Vec3 const & N
 				, sdw::Vec3 const & L
 				, sdw::Vec3 const & H
@@ -120,11 +120,11 @@ namespace disney::shader
 
 				auto anisotropicT = components.getMember< sdw::Vec3 >( "anisotropicT"
 					, ( components.usesDerivativeValues()
-						? components.getMember< c3d::DerivVec4 >( "tangent" ).value()
+						? components.getMember< c3ds::DerivVec4 >( "tangent" ).value()
 						: components.getMember< sdw::Vec4 >( "tangent" ) ).xyz() );
 				auto anisotropicB = components.getMember< sdw::Vec3 >( "anisotropicB"
 					, ( components.usesDerivativeValues()
-						? components.getMember< c3d::DerivVec3 >( "bitangent" ).value()
+						? components.getMember< c3ds::DerivVec3 >( "bitangent" ).value()
 						: components.getMember< sdw::Vec3 >( "bitangent" ) ) );
 				auto anisotropyStrength = components.getMember< sdw::Float >( "anisotropyStrength", 0.0_f );
 
@@ -160,7 +160,7 @@ namespace disney::shader
 
 				m_writer.returnStmt( max( vec3( reflectance ), vec3( 0.0_f ) ) );
 			}
-			, c3d::InBlendComponents{ m_writer, "components", pcomponents }
+			, c3ds::InBlendComponents{ m_writer, "components", pcomponents }
 			, sdw::InVec3{ m_writer, "N" }
 			, sdw::InVec3{ m_writer, "L" }
 			, sdw::InVec3{ m_writer, "H" }
@@ -172,18 +172,18 @@ namespace disney::shader
 	//*********************************************************************************************
 
 	DisneyClearcoatBRDF::DisneyClearcoatBRDF( sdw::ShaderWriter & writer
-		, c3d::BRDFHelpers & brdfHelpers )
-		: c3d::ClearcoatBRDF{ writer, brdfHelpers }
+		, c3ds::BRDFHelpers & brdfHelpers )
+		: c3ds::ClearcoatBRDF{ writer, brdfHelpers }
 	{
 	}
 
-	c3d::ClearcoatBRDFPtr DisneyClearcoatBRDF::create( sdw::ShaderWriter & writer
-		, c3d::BRDFHelpers & brdfHelpers )
+	c3ds::ClearcoatBRDFPtr DisneyClearcoatBRDF::create( sdw::ShaderWriter & writer
+		, c3ds::BRDFHelpers & brdfHelpers )
 	{
-		return castor::makeUniqueDerived< ClearcoatBRDF, DisneyClearcoatBRDF >( writer, brdfHelpers );
+		return c3d::makeUniqueDerived< ClearcoatBRDF, DisneyClearcoatBRDF >( writer, brdfHelpers );
 	}
 
-	void DisneyClearcoatBRDF::doGenerate( c3d::BlendComponents const & pcomponents )
+	void DisneyClearcoatBRDF::doGenerate( c3ds::BlendComponents const & pcomponents )
 	{
 		m_distribution = m_writer.implementFunction< sdw::Float >( "c3d_disneyDistribution"
 			, [this]( sdw::Float const & NdotH
@@ -191,7 +191,7 @@ namespace disney::shader
 			{
 				sdwIF( m_writer, a >= 1.0_f )
 				{
-					m_writer.returnStmt( 1.0_f / castor::Pi< float > );
+					m_writer.returnStmt( 1.0_f / c3d::Pi< float > );
 				}
 				sdwFI
 
@@ -199,7 +199,7 @@ namespace disney::shader
 					, a * a );
 				auto t = m_writer.declLocale( "t"
 					, 1.0_f + ( a2 - 1.0_f ) * NdotH * NdotH );
-				m_writer.returnStmt( ( a2 - 1.0_f ) / ( log( a2 ) * t * castor::Pi< float > ) );
+				m_writer.returnStmt( ( a2 - 1.0_f ) / ( log( a2 ) * t * c3d::Pi< float > ) );
 			}
 			, sdw::InFloat{ m_writer, "NdotW" }
 			, sdw::InFloat{ m_writer, "alphaG" } );
@@ -216,7 +216,7 @@ namespace disney::shader
 			, sdw::InFloat{ m_writer, "alphaG" } );
 
 		m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeDisneyClearcoat"
-			, [this]( c3d::BlendComponents const & components
+			, [this]( c3ds::BlendComponents const & components
 				, sdw::Vec3 const & N
 				, sdw::Vec3 const & L
 				, sdw::Vec3 const & H
@@ -245,7 +245,7 @@ namespace disney::shader
 
 				m_writer.returnStmt( max( vec3( reflectance ), vec3( 0.0_f ) ) );
 			}
-			, c3d::InBlendComponents{ m_writer, "components", pcomponents }
+			, c3ds::InBlendComponents{ m_writer, "components", pcomponents }
 			, sdw::InVec3{ m_writer, "N" }
 			, sdw::InVec3{ m_writer, "L" }
 			, sdw::InVec3{ m_writer, "H" }
@@ -257,24 +257,24 @@ namespace disney::shader
 	//*********************************************************************************************
 
 	DisneySheenBRDF::DisneySheenBRDF( sdw::ShaderWriter & writer
-		, c3d::BRDFHelpers & brdfHelpers )
-		: c3d::SheenBRDF{ writer, brdfHelpers }
+		, c3ds::BRDFHelpers & brdfHelpers )
+		: c3ds::SheenBRDF{ writer, brdfHelpers }
 	{
 	}
 
-	c3d::SheenBRDFPtr DisneySheenBRDF::create( sdw::ShaderWriter & writer
-		, c3d::BRDFHelpers & brdfHelpers )
+	c3ds::SheenBRDFPtr DisneySheenBRDF::create( sdw::ShaderWriter & writer
+		, c3ds::BRDFHelpers & brdfHelpers )
 	{
-		return castor::makeUniqueDerived< SheenBRDF, DisneySheenBRDF >( writer, brdfHelpers );
+		return c3d::makeUniqueDerived< SheenBRDF, DisneySheenBRDF >( writer, brdfHelpers );
 	}
 
-	void DisneySheenBRDF::doGenerate( c3d::Utils & utils
-		, c3d::BlendComponents const & pcomponents
-		, c3d::LightSurface const & plightSurface )
+	void DisneySheenBRDF::doGenerate( c3ds::Utils & utils
+		, c3ds::BlendComponents const & pcomponents
+		, c3ds::LightSurface const & plightSurface )
 	{
 		m_compute = m_writer.implementFunction< sdw::Vec4 >( "c3d_computeDisneySheen"
-			, [this]( c3d::BlendComponents const & components
-				, c3d::LightSurface const & lightSurface
+			, [this]( c3ds::BlendComponents const & components
+				, c3ds::LightSurface const & lightSurface
 				, sdw::Float const & NdotL
 				, sdw::Float const & NdotH )
 			{
@@ -291,8 +291,8 @@ namespace disney::shader
 
 				m_writer.returnStmt( vec4( max( FH * Csheen, vec3( 0.0_f ) ), 1.0_f ) );
 			}
-			, c3d::InBlendComponents{ m_writer, "components", pcomponents }
-			, c3d::InLightSurface{ m_writer, "lightSurface", plightSurface }
+			, c3ds::InBlendComponents{ m_writer, "components", pcomponents }
+			, c3ds::InLightSurface{ m_writer, "lightSurface", plightSurface }
 			, sdw::InFloat{ m_writer, "NdotL" }
 			, sdw::InFloat{ m_writer, "NdotH" } );
 	}

@@ -2,7 +2,7 @@
 
 #include "CastorUtils/CastorUtils.hpp"
 
-namespace castor
+namespace c3d
 {
 	PreciseTimer::PreciseTimer()
 	{

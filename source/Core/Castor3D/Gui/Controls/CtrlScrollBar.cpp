@@ -14,33 +14,33 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementSmartPtr( castor3d, ScrollBarCtrl )
+CU_ImplementSmartPtr( c3d, ScrollBarCtrl )
 
-namespace castor3d
+namespace c3d
 {
 	ScrollBarCtrl::ScrollBarCtrl( SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, ScrollBarStyleRPtr style
 		, ControlRPtr parent )
 		: ScrollBarCtrl{ scene
 			, name
 			, style
 			, parent
-			, castor::makeRangedValue( 0.0f, 0.0f, 100.0f )
-			, castor::Position{}
-			, castor::Size{}
+			, makeRangedValue( 0.0f, 0.0f, 100.0f )
+			, Position{}
+			, Size{}
 			, 0u
 			, true }
 	{
 	}
 
 	ScrollBarCtrl::ScrollBarCtrl( SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, ScrollBarStyleRPtr style
 		, ControlRPtr parent
-		, castor::RangedValue< float > const & value
-		, castor::Position const & position
-		, castor::Size const & size
+		, RangedValue< float > const & value
+		, Position const & position
+		, Size const & size
 		, ControlFlagType flags
 		, bool visible )
 		: Control{ Type
@@ -56,20 +56,20 @@ namespace castor3d
 	{
 		CU_Require( isScrollableControl( *parent ) );
 		auto & manager = *getEngine().getControlsManager();
-		setBorderSize( castor::Point4ui{} );
+		setBorderSize( Point4ui{} );
 		EventHandler::connect( KeyboardEventType::ePushed
 			, [this]( KeyboardEvent const & event )
 			{
 				onKeyDown( event );
 			} );
 
-		m_begin = manager.registerControlT( castor::makeUnique< ButtonCtrl >( m_scene
+		m_begin = manager.registerControlT( makeUnique< ButtonCtrl >( m_scene
 			, cuT( "Begin" )
 			, &style->getBeginStyle()
 			, this
 			, U"-"
-			, castor::Position{}
-			, castor::Size{} ) );
+			, Position{}
+			, Size{} ) );
 		m_begin->setVisible( visible );
 		m_onBeginClick = m_begin->connect( ButtonEvent::eClicked
 			, [this]()
@@ -77,13 +77,13 @@ namespace castor3d
 				doScroll( -1 );
 			} );
 
-		m_end = manager.registerControlT( castor::makeUnique< ButtonCtrl >( m_scene
+		m_end = manager.registerControlT( makeUnique< ButtonCtrl >( m_scene
 			, cuT( "End" )
 			, &style->getEndStyle()
 			, this
 			, U"+"
-			, castor::Position{}
-			, castor::Size{} ) );
+			, Position{}
+			, Size{} ) );
 		m_end->setVisible( visible );
 		m_onEndClick = m_end->connect( ButtonEvent::eClicked
 			, [this]()
@@ -91,12 +91,12 @@ namespace castor3d
 				doScroll( 1 );
 			} );
 
-		m_bar = manager.registerControlT( castor::makeUnique< PanelCtrl >( m_scene
+		m_bar = manager.registerControlT( makeUnique< PanelCtrl >( m_scene
 			, cuT( "Line" )
 			, &style->getBarStyle()
 			, this
-			, castor::Position{}
-			, castor::Size{} ) );
+			, Position{}
+			, Size{} ) );
 		m_bar->setVisible( visible );
 		m_bar->connectNC( KeyboardEventType::ePushed
 			, [this]( ControlRPtr, KeyboardEvent const & event )
@@ -104,12 +104,12 @@ namespace castor3d
 				onNcKeyDown( event );
 			} );
 
-		m_thumb = manager.registerControlT( castor::makeUnique< PanelCtrl >( m_scene
+		m_thumb = manager.registerControlT( makeUnique< PanelCtrl >( m_scene
 			, cuT( "Thumb" )
 			, &style->getThumbStyle()
 			, m_bar
-			, castor::Position{}
-			, castor::Size{} ) );
+			, Position{}
+			, Size{} ) );
 		m_thumb->setBorderSize( { 1u, 1u, 1u, 1u } );
 		m_thumb->setVisible( visible );
 		m_thumb->setCatchesMouseEvents( true );
@@ -144,7 +144,7 @@ namespace castor3d
 		manager.unregisterControl( *m_bar );
 	}
 
-	void ScrollBarCtrl::setRange( castor::Range< uint32_t > const & value )
+	void ScrollBarCtrl::setRange( Range< uint32_t > const & value )
 	{
 		m_totalRange = value;
 		doUpdatePosSize();
@@ -201,17 +201,17 @@ namespace castor3d
 		manager.destroy( m_end );
 	}
 
-	void ScrollBarCtrl::doSetPosition( castor::Position const & value )
+	void ScrollBarCtrl::doSetPosition( Position const & value )
 	{
 		doUpdatePosSize();
 	}
 
-	void ScrollBarCtrl::doSetSize( castor::Size const & value )
+	void ScrollBarCtrl::doSetSize( Size const & value )
 	{
 		doUpdatePosSize();
 	}
 
-	void ScrollBarCtrl::doSetCaption( castor::U32String const & value )
+	void ScrollBarCtrl::doSetCaption( U32String const & value )
 	{
 	}
 
@@ -317,17 +317,17 @@ namespace castor3d
 		onKeyDown( event );
 	}
 
-	void ScrollBarCtrl::doMoveMouse( castor::Position const & mouse )
+	void ScrollBarCtrl::doMoveMouse( Position const & mouse )
 	{
-		castor::Point2i relativePosition = mouse - getAbsolutePosition();
-		castor::Point2i delta = relativePosition - m_mouse;
+		Point2i relativePosition = mouse - getAbsolutePosition();
+		Point2i delta = relativePosition - m_mouse;
 		m_mouse = relativePosition;
 		doUpdateThumb( { float( delta[0] ), float( delta[1] ) } );
 	}
 
-	void ScrollBarCtrl::doUpdateThumb( castor::Point2f const & delta )
+	void ScrollBarCtrl::doUpdateThumb( Point2f const & delta )
 	{
-		castor::Point2f realDelta = delta;
+		Point2f realDelta = delta;
 
 		if ( isVertical() )
 		{
@@ -340,7 +340,7 @@ namespace castor3d
 
 		if ( auto thumb = m_thumb )
 		{
-			castor::Point2f position = realDelta + castor::Point2f{ thumb->getPosition().x(), thumb->getPosition().y() };
+			Point2f position = realDelta + Point2f{ thumb->getPosition().x(), thumb->getPosition().y() };
 
 			if ( auto bar = m_bar )
 			{
@@ -374,7 +374,7 @@ namespace castor3d
 		auto endPosition{ offset };
 		auto percent = m_value.percent();
 		uint32_t minSize{};
-		castor::Size thumbSize{};
+		Size thumbSize{};
 
 		if ( isVertical() )
 		{
@@ -389,7 +389,7 @@ namespace castor3d
 			thumbSize->x = minSize;
 			thumbSize->y = std::max( minSize, uint32_t( double( barSize->y ) * rangeRatio ) );
 
-			m_value.updateRange( castor::makeRange( 0.0f, float( barSize->y - thumbSize->y ) ) );
+			m_value.updateRange( makeRange( 0.0f, float( barSize->y - thumbSize->y ) ) );
 			m_value = m_value.range().getMax() * percent;
 			thumbPosition.y() += int32_t( m_value.value() );
 		}
@@ -406,7 +406,7 @@ namespace castor3d
 			thumbSize->x = std::max( minSize, uint32_t( double( barSize->x ) * rangeRatio ) );
 			thumbSize->y = minSize;
 
-			m_value.updateRange( castor::makeRange( 0.0f, float( barSize->x - thumbSize->x ) ) );
+			m_value.updateRange( makeRange( 0.0f, float( barSize->x - thumbSize->x ) ) );
 			m_value = m_value.range().getMax() * percent;
 			thumbPosition.x() += int32_t( m_value.value() );
 		}

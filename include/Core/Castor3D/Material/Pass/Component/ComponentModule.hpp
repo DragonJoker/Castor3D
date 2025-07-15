@@ -33,7 +33,7 @@ See LICENSE file in root folder
 #define C3D_PluginMakePassOtherComponentName( p, x ) C3D_Join4Strings( cuT( p ), cuT( "pass" ), cuT( "other" ), cuT( x ) )
 #define C3D_MakePassOtherComponentName( x ) C3D_PluginMakePassOtherComponentName( "c3d", x )
 
-namespace castor3d
+namespace c3d
 {
 	struct TextureContext;
 	/**@name Material */
@@ -148,9 +148,9 @@ namespace castor3d
 	struct PickableComponent;
 	/**
 	\~english
-	\brief		Component declaring textures coordinates in castor3d::shader::BlendComponents.
+	\brief		Component declaring textures coordinates in shader::BlendComponents.
 	\~french
-	\brief		Composant déclarant les coordonnées de textures dans castor3d::shader::BlendComponents.
+	\brief		Composant déclarant les coordonnées de textures dans shader::BlendComponents.
 	*/
 	struct TexturesComponent;
 	/**
@@ -534,10 +534,10 @@ namespace castor3d
 		struct PassReflRefrShader;
 		/**
 		\~english
-		\brief		Shaders for components that need registration to castor3d::PassBuffer.
+		\brief		Shaders for components that need registration to PassBuffer.
 		\remarks	Those shaders are enabled whether the component is enabled or not (for consistency with the PassBuffer).
 		\~french
-		\brief		Shaders pour les composants ayant un enregistrement dans castor3d::PassBuffer.
+		\brief		Shaders pour les composants ayant un enregistrement dans PassBuffer.
 		\remarks	Ces shaders sont actifs que le composant soit actif ou pas (par soucis de cohérence avec le PassBuffer).
 		*/
 		struct PassMaterialShader;
@@ -549,9 +549,9 @@ namespace castor3d
 		*/
 		class PassShaders;
 
-		using PassComponentsShaderPtr = castor::RawUniquePtr< PassComponentsShader >;
-		using PassReflRefrShaderPtr = castor::RawUniquePtr< PassReflRefrShader >;
-		using PassMaterialShaderPtr = castor::RawUniquePtr< PassMaterialShader >;
+		using PassComponentsShaderPtr = RawUniquePtr< PassComponentsShader >;
+		using PassReflRefrShaderPtr = RawUniquePtr< PassReflRefrShader >;
+		using PassMaterialShaderPtr = RawUniquePtr< PassMaterialShader >;
 	}
 	//@}
 
@@ -573,7 +573,7 @@ namespace castor3d
 	C3D_API bool hasAny( PassComponentCombine const & lhs
 		, PassComponentFlag rhs )noexcept;
 	C3D_API bool hasAny( PassComponentCombine const & lhs
-		, castor::Vector< PassComponentFlag > const & rhs )noexcept;
+		, Vector< PassComponentFlag > const & rhs )noexcept;
 	C3D_API void remFlags( PassComponentCombine & lhs
 		, PassComponentFlag rhs )noexcept;
 	C3D_API void remFlags( PassComponentCombine & lhs
@@ -587,31 +587,31 @@ namespace castor3d
 	C3D_API bool contains( PassComponentCombine const & cont
 		, PassComponentCombine const & test )noexcept;
 
-	CU_DeclareSmartPtr( castor3d, PassComponentRegister, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PassComponentPlugin, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PassMapComponent, C3D_API );
+	CU_DeclareSmartPtr( c3d, PassComponentRegister, C3D_API );
+	CU_DeclareSmartPtr( c3d, PassComponentPlugin, C3D_API );
+	CU_DeclareSmartPtr( c3d, PassMapComponent, C3D_API );
 
-	using SssProfileChangedFunc = castor::Function< void( SubsurfaceScatteringComponent const & ) >;
-	using OnSssProfileChanged = castor::SignalT< SssProfileChangedFunc >;
-	using OnSssProfileChangedConnection = castor::ConnectionT< OnSssProfileChanged >;
+	using SssProfileChangedFunc = Function< void( SubsurfaceScatteringComponent const & ) >;
+	using OnSssProfileChanged = SignalT< SssProfileChangedFunc >;
+	using OnSssProfileChangedConnection = ConnectionT< OnSssProfileChanged >;
 
-	using PassComponentsBitset = castor::DynamicBitsetT< uint16_t >;
+	using PassComponentsBitset = DynamicBitsetT< uint16_t >;
 
-	using ComponentConfigFiller = castor::Function< void( TextureContext & context ) >;
-	using ChannelFiller = castor::Pair< PassComponentTextureFlag, ComponentConfigFiller >;
-	using ChannelFillers = castor::StringMap< ChannelFiller >;
+	using ComponentConfigFiller = Function< void( TextureContext & context ) >;
+	using ChannelFiller = Pair< PassComponentTextureFlag, ComponentConfigFiller >;
+	using ChannelFillers = StringMap< ChannelFiller >;
 
-	using UpdateComponent = castor::Function< void( PassComponentRegister const & passComponents
+	using UpdateComponent = Function< void( PassComponentRegister const & passComponents
 		, TextureCombine const & combine
 		, shader::BlendComponents & components
 		, bool isFrontCulled ) >;
-	using FinishComponent = castor::Function< void( shader::DerivSurfaceBase const & surface
+	using FinishComponent = Function< void( shader::DerivSurfaceBase const & surface
 		, shader::CameraData const & camera
 		, shader::ModelData const & model
 		, shader::Utils & utils
 		, shader::BlendComponents & components ) >;
 
-	using CreatePassComponentPlugin = castor::Function< PassComponentPluginUPtr( PassComponentRegister const & ) >;
+	using CreatePassComponentPlugin = Function< PassComponentPluginUPtr( PassComponentRegister const & ) >;
 	//@}
 	//@}
 	//@}

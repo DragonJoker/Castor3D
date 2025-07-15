@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/GBuffer.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class TransparentPassResult
 		: public GBufferT< WbTexture >
@@ -16,7 +16,7 @@ namespace castor3d
 	public:
 		C3D_API TransparentPassResult( crg::ResourcesCache & resources
 			, RenderDevice const & device
-			, castor::Size const & size );
+			, Size const & size );
 	};
 }
 

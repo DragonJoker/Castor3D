@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/RangedValue.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ScrollBarCtrl
 		: public Control
@@ -25,7 +25,7 @@ namespace castor3d
 		 *\param[in]	parent	The parent control, if any.
 		 */
 		C3D_API ScrollBarCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, ScrollBarStyleRPtr style
 			, ControlRPtr parent );
 
@@ -41,12 +41,12 @@ namespace castor3d
 		 *\param[in]	visible		Initial visibility status.
 		 */
 		C3D_API ScrollBarCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, ScrollBarStyleRPtr style
 			, ControlRPtr parent
-			, castor::RangedValue< float > const & value
-			, castor::Position const & position
-			, castor::Size const & size
+			, RangedValue< float > const & value
+			, Position const & position
+			, Size const & size
 			, ControlFlagType flags = 0
 			, bool visible = true );
 
@@ -55,7 +55,7 @@ namespace castor3d
 		/** Sets the range
 		*\param[in]	value		The new value
 		*/
-		C3D_API void setRange( castor::Range< uint32_t > const & value );
+		C3D_API void setRange( Range< uint32_t > const & value );
 
 		/** Sets the thumb position, from external control.
 		*\param[in]	value		The new value
@@ -70,7 +70,7 @@ namespace castor3d
 		OnScrollBarEventConnection connect( ScrollBarEvent event
 			, OnScrollBarEventFunction function )
 		{
-			return m_signals[size_t( event )].connect( castor::move( function ) );
+			return m_signals[size_t( event )].connect( c3d::move( function ) );
 		}
 
 		/**
@@ -90,12 +90,12 @@ namespace castor3d
 
 		bool isVertical()const noexcept
 		{
-			return castor::checkFlag( getFlags(), ScrollBarFlag::eVertical );
+			return checkFlag( getFlags(), ScrollBarFlag::eVertical );
 		}
 
 		bool isHorizontal()const noexcept
 		{
-			return castor::checkFlag( getFlags(), ScrollBarFlag::eHorizontal );
+			return checkFlag( getFlags(), ScrollBarFlag::eHorizontal );
 		}
 
 	private:
@@ -114,11 +114,11 @@ namespace castor3d
 
 		/** @copydoc Control::doSetPosition
 		*/
-		void doSetPosition( castor::Position const & value )override;
+		void doSetPosition( Position const & value )override;
 
 		/** @copydoc Control::doSetSize
 		*/
-		void doSetSize( castor::Size const & value )override;
+		void doSetSize( Size const & value )override;
 
 		/** @copydoc Control::doUpdateStyle
 		*/
@@ -126,7 +126,7 @@ namespace castor3d
 
 		/** @copydoc Control::doSetCaption
 		*/
-		void doSetCaption( castor::U32String const & caption )override;
+		void doSetCaption( U32String const & caption )override;
 
 		/** @copydoc Control::doSetVisible
 		*/
@@ -184,12 +184,12 @@ namespace castor3d
 		/** Updates the mouse position
 		 *\param[in]	mouse		The new mouse position
 		 */
-		void doMoveMouse( castor::Position const & mouse );
+		void doMoveMouse( Position const & mouse );
 
 		/** Updates the thumb position
 		 *\param[in]	delta		The position delta
 		 */
-		void doUpdateThumb( castor::Point2f const & delta );
+		void doUpdateThumb( Point2f const & delta );
 
 		/** Updates the position and size of sub-controls.
 		*/
@@ -200,15 +200,15 @@ namespace castor3d
 		void doScroll( int32_t v );
 
 	private:
-		castor::Array< OnScrollBarEvent, size_t( ScrollBarEvent::eCount ) > m_signals;
+		Array< OnScrollBarEvent, size_t( ScrollBarEvent::eCount ) > m_signals;
 		ButtonCtrlRPtr m_begin{};
 		PanelCtrlRPtr m_bar{};
 		PanelCtrlRPtr m_thumb{};
 		ButtonCtrlRPtr m_end{};
-		castor::RangedValue< float > m_value;
-		castor::Range< uint32_t > m_totalRange{ 0u, 100u };
+		RangedValue< float > m_value;
+		Range< uint32_t > m_totalRange{ 0u, 100u };
 		bool m_scrolling{};
-		castor::Point2i m_mouse{};
+		Point2i m_mouse{};
 		int32_t m_scrollPosition{};
 		OnButtonEventConnection m_onBeginClick;
 		OnButtonEventConnection m_onEndClick;

@@ -5,21 +5,21 @@
 #include "CastorUtils/Log/LoggerConsole.hpp"
 #include "CastorUtils/Log/LoggerStreambuf.hpp"
 
-namespace castor
+namespace c3d
 {
 	static const MbString ERROR_LOGGER_ALREADY_INITIALISED = "Logger instance already initialised";
 
-	castor::RawUniquePtr< Logger > Logger::m_singleton = nullptr;
+	c3d::RawUniquePtr< Logger > Logger::m_singleton = nullptr;
 
 	Logger::Logger( LogType level )
-		: m_console{ castor::make_unique< ProgramConsole >( level < LogType::eInfo ) }
-		, m_instance{ castor::make_unique< LoggerInstance >( *m_console, level ) }
-		, m_cout{ castor::make_unique< InfoLoggerStreambufT< char > >( *m_instance, std::cout ) }
-		, m_cerr{ castor::make_unique< ErrorLoggerStreambufT< char > >( *m_instance, std::cerr ) }
-		, m_clog{ castor::make_unique< DebugLoggerStreambufT< char > >( *m_instance, std::clog ) }
-		, m_wcout{ castor::make_unique< InfoLoggerStreambufT< wchar_t > >( *m_instance, std::wcout ) }
-		, m_wcerr{ castor::make_unique< ErrorLoggerStreambufT< wchar_t > >( *m_instance, std::wcerr ) }
-		, m_wclog{ castor::make_unique< DebugLoggerStreambufT< wchar_t > >( *m_instance, std::wclog ) }
+		: m_console{ c3d::makeRawUnique< ProgramConsole >( level < LogType::eInfo ) }
+		, m_instance{ c3d::makeRawUnique< LoggerInstance >( *m_console, level ) }
+		, m_cout{ c3d::makeRawUnique< InfoLoggerStreambufT< char > >( *m_instance, std::cout ) }
+		, m_cerr{ c3d::makeRawUnique< ErrorLoggerStreambufT< char > >( *m_instance, std::cerr ) }
+		, m_clog{ c3d::makeRawUnique< DebugLoggerStreambufT< char > >( *m_instance, std::clog ) }
+		, m_wcout{ c3d::makeRawUnique< InfoLoggerStreambufT< wchar_t > >( *m_instance, std::wcout ) }
+		, m_wcerr{ c3d::makeRawUnique< ErrorLoggerStreambufT< wchar_t > >( *m_instance, std::wcerr ) }
+		, m_wclog{ c3d::makeRawUnique< DebugLoggerStreambufT< wchar_t > >( *m_instance, std::wclog ) }
 	{
 	}
 
@@ -33,7 +33,7 @@ namespace castor
 		}
 		else
 		{
-			m_singleton = castor::make_unique< Logger >( level );
+			m_singleton = c3d::makeRawUnique< Logger >( level );
 			result = m_singleton->getInstance();
 		}
 
@@ -51,7 +51,7 @@ namespace castor
 	LoggerInstancePtr Logger::createInstance( LogType logLevel )
 	{
 		CU_Require( getSingleton().m_console );
-		return castor::make_unique< LoggerInstance >( *getSingleton().m_console, logLevel );
+		return c3d::makeRawUnique< LoggerInstance >( *getSingleton().m_console, logLevel );
 	}
 
 	void Logger::registerCallback( LogCallback const & pfnCallback, void * pCaller )

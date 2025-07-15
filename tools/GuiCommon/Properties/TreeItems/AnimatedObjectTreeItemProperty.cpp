@@ -7,9 +7,9 @@
 
 namespace GuiCommon
 {
-	AnimatedObjectTreeItemProperty::AnimatedObjectTreeItemProperty( castor3d::Engine * engine
+	AnimatedObjectTreeItemProperty::AnimatedObjectTreeItemProperty( c3d::Engine * engine
 		, bool editable
-		, castor3d::AnimatedObjectRPtr object )
+		, c3d::AnimatedObjectRPtr object )
 		: TreeItemProperty( engine, editable )
 		, m_object( object )
 	{

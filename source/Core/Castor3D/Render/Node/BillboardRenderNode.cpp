@@ -3,9 +3,9 @@
 #include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 
-CU_ImplementSmartPtr( castor3d, BillboardRenderNode )
+CU_ImplementSmartPtr( c3d, BillboardRenderNode )
 
-namespace castor3d
+namespace c3d
 {
 	BillboardRenderNode::BillboardRenderNode( Pass & pass
 		, BillboardBase & data
@@ -78,7 +78,7 @@ namespace castor3d
 		return data.getGeometryBuffers();
 	}
 
-	GpuBufferOffsetT< castor::Point4f > BillboardRenderNode::getMorphTargets()const
+	GpuBufferOffsetT< Point4f > BillboardRenderNode::getMorphTargets()const
 	{
 		return {};
 	}

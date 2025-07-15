@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/BaseTypes/Float.hpp>
 #include <ShaderWriter/MatTypes/Mat3.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace shader
 	{
@@ -158,7 +158,7 @@ namespace castor3d
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_colourGrading = colourGradingConfig.declMember< castor3d::shader::ColourGradingData >( "d" );\
+	auto c3d_colourGrading = colourGradingConfig.declMember< c3d::shader::ColourGradingData >( "d" );\
 	colourGradingConfig.end()
 
 #endif

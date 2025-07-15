@@ -15,7 +15,7 @@ See LICENSE file in root folder
 #	undef max
 #endif
 
-namespace castor
+namespace c3d
 {
 	template< typename T >
 	class Range

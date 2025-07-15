@@ -35,7 +35,7 @@ namespace GuiCommon
 		 *\param[in]	effect		L'objet cible.
 		 */
 		PostEffectTreeItemProperty( bool editable
-			, castor3d::PostEffect & effect
+			, c3d::PostEffect & effect
 			, wxWindow * parent );
 
 	private:
@@ -45,7 +45,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::PostEffect & m_effect;
+		c3d::PostEffect & m_effect;
 		wxWindow * m_parent;
 	};
 }

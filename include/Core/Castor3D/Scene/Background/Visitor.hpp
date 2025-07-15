@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "BackgroundModule.hpp"
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class BackgroundVisitor
 		: public ConfigurationVisitor

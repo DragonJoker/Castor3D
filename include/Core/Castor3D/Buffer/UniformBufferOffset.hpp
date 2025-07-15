@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #include <RenderGraph/FramePass.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	template< typename DataT >
 	struct UniformBufferOffsetT
@@ -125,7 +125,7 @@ namespace castor3d
 		}
 
 		void createPassBinding( crg::FramePass & pass
-			, castor::MbString const & name
+			, MbString const & name
 			, uint32_t binding )const
 		{
 			pass.addUniformBuffer( { getBuffer(), name }

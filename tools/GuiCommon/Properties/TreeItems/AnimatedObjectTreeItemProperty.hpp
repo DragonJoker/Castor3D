@@ -30,9 +30,9 @@ namespace GuiCommon
 		 *\param[in]	editable	Dit si les propriétés sont modifiables.
 		 *\param[in]	object		L"AnimatedObject cible.
 		 */
-		AnimatedObjectTreeItemProperty( castor3d::Engine * engine
+		AnimatedObjectTreeItemProperty( c3d::Engine * engine
 			, bool editable
-			, castor3d::AnimatedObjectRPtr object );
+			, c3d::AnimatedObjectRPtr object );
 		/**
 		 *\~english
 		 *\brief		Retrieves the AnimatedObject.
@@ -41,7 +41,7 @@ namespace GuiCommon
 		 *\brief		Récupère l'AnimatedObject.
 		 *\return		La valeur.
 		 */
-		inline castor3d::AnimatedObjectRPtr getObject()
+		inline c3d::AnimatedObjectRPtr getObject()
 		{
 			return m_object;
 		}
@@ -53,7 +53,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::AnimatedObjectRPtr m_object{};
+		c3d::AnimatedObjectRPtr m_object{};
 	};
 }
 

@@ -27,16 +27,16 @@ namespace Testing
 		void MtxMultCastor();
 		void MtxMultCL();
 
-		castor::Matrix4x4f m_mtx4x4CuA;
-		castor::Matrix4x4f m_mtx4x4CuB;
-		castor::Matrix4x4f m_mtx4x4CuC;
+		c3d::Matrix4x4f m_mtx4x4CuA;
+		c3d::Matrix4x4f m_mtx4x4CuB;
+		c3d::Matrix4x4f m_mtx4x4CuC;
 		float m_bufferMtx4x4A[16];
 		float m_bufferMtx4x4B[16];
 		float m_bufferMtx4x4C[16];
 		bool m_bClInitialised;
 		cl::Context m_context;
-		castor::Vector< cl::Device > m_arrayDevices;
-		castor::Vector< cl::Platform > m_arrayPlatforms;
+		c3d::Vector< cl::Device > m_arrayDevices;
+		c3d::Vector< cl::Platform > m_arrayPlatforms;
 		cl::Platform m_platform;
 		cl::Buffer m_clBufferMtx4x4A;
 		cl::Buffer m_clBufferMtx4x4B;

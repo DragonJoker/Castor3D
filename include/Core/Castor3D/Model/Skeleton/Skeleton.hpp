@@ -16,10 +16,10 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class Skeleton
-		: public castor::Named
+		: public Named
 		, public Animable
 	{
 	public:
@@ -45,7 +45,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom du squelette.
 		 *\param[in]	scene	La scène.
 		 */
-		C3D_API Skeleton( castor::String name
+		C3D_API Skeleton( String name
 			, Scene & scene );
 		/**
 		 *\~english
@@ -62,7 +62,7 @@ namespace castor3d
 		 *\brief		Crée un nodue.
 		 *\param[in]	name	Le nom du noeud.
 		 */
-		C3D_API SkeletonNode * createNode( castor::String name );
+		C3D_API SkeletonNode * createNode( String name );
 		/**
 		 *\~english
 		 *\brief		Creates a bone.
@@ -73,8 +73,8 @@ namespace castor3d
 		 *\param[in]	name				Le nom de l'os.
 		 *\param[in]	inverseTransform	La matrice de transformation de l'espace objet vers l'espace du bone.
 		 */
-		C3D_API BoneNode * createBone( castor::String name
-			, castor::Matrix4x4f const & inverseTransform );
+		C3D_API BoneNode * createBone( String name
+			, Matrix4x4f const & inverseTransform );
 		/**
 		 *\~english
 		 *\brief		Finds a bone from a name.
@@ -83,7 +83,7 @@ namespace castor3d
 		 *\brief		Trouve un os à partir de son nom.
 		 *\param[in]	name	Le nom de l'os.
 		 */
-		C3D_API SkeletonNode * findNode( castor::String const & name )const;
+		C3D_API SkeletonNode * findNode( String const & name )const;
 		/**
 		 *\~english
 		 *\return		The root skeleton node.
@@ -112,7 +112,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation
 		 *\return		l'animation
 		 */
-		C3D_API SkeletonAnimation & createAnimation( castor::String const & name );
+		C3D_API SkeletonAnimation & createAnimation( String const & name );
 		/**
 		 *\~english
 		 *\brief		Removes an animation
@@ -121,7 +121,7 @@ namespace castor3d
 		 *\brief		Retire une animation
 		 *\param[in]	name	Le nom de l'animation
 		 */
-		C3D_API void removeAnimation( castor::String const & name );
+		C3D_API void removeAnimation( String const & name );
 		/**
 		 *\~english
 		 *\brief		Computes the bounding box and sphere for each bone, for given mesh.
@@ -139,19 +139,19 @@ namespace castor3d
 		 */
 		C3D_API void cloneInto( Skeleton & output )const;
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 
-		castor::Matrix4x4f const & getGlobalInverseTransform()const
+		Matrix4x4f const & getGlobalInverseTransform()const
 		{
 			return m_globalInverse;
 		}
 
-		void setGlobalInverseTransform( castor::Matrix4x4f const & transform )
+		void setGlobalInverseTransform( Matrix4x4f const & transform )
 		{
 			m_globalInverse = transform;
 		}
 
-		castor::Vector< BoneNode * > const & getBones()const
+		Vector< BoneNode * > const & getBones()const
 		{
 			return m_bones;
 		}
@@ -171,7 +171,7 @@ namespace castor3d
 			return m_bones.size();
 		}
 
-		castor::Vector< castor::BoundingBox > const & getContainers( Mesh & mesh )const
+		Vector< BoundingBox > const & getContainers( Mesh & mesh )const
 		{
 			if ( auto it = m_boxes.find( &mesh );
 				it != m_boxes.end() )
@@ -179,7 +179,7 @@ namespace castor3d
 				return it->second;
 			}
 
-			static castor::Vector< castor::BoundingBox > const dummy;
+			static Vector< BoundingBox > const dummy;
 			return dummy;
 		}
 
@@ -191,9 +191,9 @@ namespace castor3d
 	private:
 		SceneRPtr m_scene{};
 		SkeletonNodePtrArray m_nodes;
-		castor::Vector< BoneNode * > m_bones;
-		castor::Matrix4x4f m_globalInverse{ 1.0f };
-		castor::Map< Mesh *, castor::Vector< castor::BoundingBox > > m_boxes;
+		Vector< BoneNode * > m_bones;
+		Matrix4x4f m_globalInverse{ 1.0f };
+		Map< Mesh *, Vector< BoundingBox > > m_boxes;
 
 		friend class BinaryWriter< Skeleton >;
 		friend class BinaryParser< Skeleton >;
@@ -207,7 +207,7 @@ namespace castor3d
 		SkeletonRPtr skeleton{};
 	};
 
-	C3D_API castor::String getPrefix( SkeletonContext const & context );
+	C3D_API String getPrefix( SkeletonContext const & context );
 	C3D_API Engine * getEngine( SkeletonContext const & context );
 }
 

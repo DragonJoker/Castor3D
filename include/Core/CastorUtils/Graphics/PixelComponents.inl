@@ -22,7 +22,7 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
 
-namespace castor
+namespace c3d
 {
 	//*************************************************************************************************
 

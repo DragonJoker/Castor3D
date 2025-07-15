@@ -19,9 +19,9 @@
 #include <ashespp/Pipeline/ComputePipeline.hpp>
 #include <ashespp/Pipeline/PipelineLayout.hpp>
 
-CU_ImplementSmartPtr( castor3d, VertexTransformPass )
+CU_ImplementSmartPtr( c3d, VertexTransformPass )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -32,7 +32,7 @@ namespace castor3d
 			, ObjectBufferOffset const & input
 			, ObjectBufferOffset const & output
 			, ashes::Buffer< ModelBufferConfiguration > const & modelsBuffer
-			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+			, GpuBufferOffsetT< Point4f > const & morphTargets
 			, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights
 			, GpuBufferOffsetT< SkinningTransformsConfiguration > const & skinTransforms )
 		{
@@ -140,7 +140,7 @@ namespace castor3d
 			writes.push_back( output.getStorageBinding( SubmeshData::eVelocity
 				, VertexTransformPass::eOutVelocity ) );
 
-			auto descriptorSet = pipeline.descriptorSetPool->createDescriptorSet( castor::toUtf8( pipeline.getName( engine ) ) );
+			auto descriptorSet = pipeline.descriptorSetPool->createDescriptorSet( toUtf8( pipeline.getName( engine ) ) );
 			descriptorSet->setBindings( writes );
 			descriptorSet->update();
 			return descriptorSet;
@@ -155,7 +155,7 @@ namespace castor3d
 		, ObjectBufferOffset const & input
 		, ObjectBufferOffset const & output
 		, ashes::Buffer< ModelBufferConfiguration > const & modelsBuffer
-		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+		, GpuBufferOffsetT< Point4f > const & morphTargets
 		, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights
 		, GpuBufferOffsetT< SkinningTransformsConfiguration > const & skinTransforms )
 		: m_device{ device }
@@ -247,7 +247,7 @@ namespace castor3d
 			, nullptr );
 		auto size = uint32_t( m_device.properties.limits.nonCoherentAtomSize );
 		context.getContext().vkCmdDispatch( commandBuffer
-			, uint32_t( ashes::getAlignedSize( m_input.getCount< castor::Point4f >( SubmeshData::ePositions ), size ) ) / size
+			, uint32_t( ashes::getAlignedSize( m_input.getCount< Point4f >( SubmeshData::ePositions ), size ) ) / size
 			, 1u
 			, 1u );
 

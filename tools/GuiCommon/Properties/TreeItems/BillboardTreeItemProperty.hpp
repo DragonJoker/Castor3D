@@ -29,9 +29,9 @@ namespace GuiCommon
 		 *\param[in]	engine		Le moteur.
 		 */
 		BillboardTreeItemProperty( bool editable
-			, castor3d::Engine * engine );
+			, c3d::Engine * engine );
 
-		void setData( castor3d::BillboardList & data )noexcept
+		void setData( c3d::BillboardList & data )noexcept
 		{
 			clearProperties();
 			m_billboard = &data;
@@ -44,7 +44,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::BillboardList * m_billboard{};
+		c3d::BillboardList * m_billboard{};
 		wxArrayString m_materials;
 	};
 }

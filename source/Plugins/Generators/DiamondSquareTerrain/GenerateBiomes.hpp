@@ -32,7 +32,7 @@ namespace diamond_square_terrain
 	}
 
 	template< typename DataT >
-	inline BlendRanges buildBlendRanges( castor::Vector< DataT > const & values )
+	inline BlendRanges buildBlendRanges( c3d::Vector< DataT > const & values )
 	{
 		BlendRanges result;
 		auto cur = values.begin();
@@ -50,14 +50,14 @@ namespace diamond_square_terrain
 				{
 					result.push_back( { 0u
 						, 0u
-						, castor::makeRange( 0.0f, 1.0f ) } );
+						, c3d::makeRange( 0.0f, 1.0f ) } );
 				}
 				else
 				{
 					auto rangeHi = getMaxHeight( *cur ) - curBlendRange;
 					result.push_back( { 0u
 						, 0u
-						, castor::makeRange( 0.0f, rangeHi ) } );
+						, c3d::makeRange( 0.0f, rangeHi ) } );
 				}
 			}
 			else
@@ -66,7 +66,7 @@ namespace diamond_square_terrain
 				auto rangeHi = getMinHeight( *cur ) + curBlendRange;
 				result.push_back( { index - 1u
 					, index
-					, castor::makeRange( rangeLo, rangeHi ) } );
+					, c3d::makeRange( rangeLo, rangeHi ) } );
 				rangeLo = rangeHi;
 
 				if ( index == values.size() - 1u )
@@ -80,7 +80,7 @@ namespace diamond_square_terrain
 
 				result.push_back( { index
 					, index
-					, castor::makeRange( rangeLo, rangeHi ) } );
+					, c3d::makeRange( rangeLo, rangeHi ) } );
 			}
 
 			prvBlendRange = curBlendRange;
@@ -99,9 +99,9 @@ namespace diamond_square_terrain
 		, float zeroPoint
 		, Matrix const & heightMap
 		, Biomes biomes
-		, castor3d::FaceArray const & faces
-		, castor::Map< uint32_t, uint32_t > const & vertexMap
-		, castor3d::SubmeshAnimationBuffer & submesh );
+		, c3d::FaceArray const & faces
+		, c3d::Map< uint32_t, uint32_t > const & vertexMap
+		, c3d::SubmeshAnimationBuffer & submesh );
 }
 
 #endif

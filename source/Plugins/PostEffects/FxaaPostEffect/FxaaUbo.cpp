@@ -12,7 +12,7 @@ namespace fxaa
 	FxaaData::FxaaData( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: sdw::StructInstance{ writer, castor::move( expr ), enabled }
+		: sdw::StructInstance{ writer, c3d::move( expr ), enabled }
 		, pixelSize{ getMember< sdw::Vec2 >( "pixelSize" ) }
 		, subpixShift{ getMember< sdw::Float >( "subpixShift" ) }
 		, spanMax{ getMember< sdw::Float >( "spanMax" ) }
@@ -38,16 +38,16 @@ namespace fxaa
 
 	//*********************************************************************************************
 
-	castor::MbString const FxaaUbo::Buffer = "Fxaa";
-	castor::MbString const FxaaUbo::Data = "c3d_fxaaData";
+	c3d::MbString const FxaaUbo::Buffer = "Fxaa";
+	c3d::MbString const FxaaUbo::Data = "c3d_fxaaData";
 
-	FxaaUbo::FxaaUbo( castor3d::RenderDevice const & device
-		, castor::Size const & size )
+	FxaaUbo::FxaaUbo( c3d::RenderDevice const & device
+		, c3d::Size const & size )
 		: m_device{ device }
 		, m_ubo{ device.uboPool->getBuffer< Configuration >( 0u ) }
 	{
 		auto & data = m_ubo.getData();
-		data.pixelSize = castor::Point2f{ 1.0f / float( size.getWidth() )
+		data.pixelSize = c3d::Point2f{ 1.0f / float( size.getWidth() )
 			, 1.0f / float( size.getHeight() ) };
 	}
 

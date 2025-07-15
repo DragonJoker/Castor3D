@@ -23,16 +23,16 @@ namespace GuiCommon
 	class LanguageInfo
 	{
 	private:
-		using WordArray = castor::Array< castor::String, 9u >;
+		using WordArray = c3d::Array< c3d::String, 9u >;
 
 	public:
 		LanguageInfo();
 
 		void setKeywords( uint32_t index
-			, castor::StringArray const & keywords );
+			, c3d::StringArray const & keywords );
 		void updateStyles();
 
-		castor::String const & getKeywords( uint32_t index )const
+		c3d::String const & getKeywords( uint32_t index )const
 		{
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wextra-semi-stmt"
@@ -57,12 +57,12 @@ namespace GuiCommon
 		}
 
 	public:
-		castor::String name{ DEFAULT_LANGUAGE };
-		castor::String filePattern;
+		c3d::String name{ DEFAULT_LANGUAGE };
+		c3d::String filePattern;
 		bool isCLike{ true };
 		int foldFlags{ 0 };
 		int32_t fontSize{ 10 };
-		castor::String fontName;
+		c3d::String fontName;
 
 	private:
 		WordArray m_keywords;

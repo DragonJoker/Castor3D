@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Data/TextWriter.hpp"
 
-namespace castor
+namespace c3d
 {
 	template<>
 	class TextWriter< Size >

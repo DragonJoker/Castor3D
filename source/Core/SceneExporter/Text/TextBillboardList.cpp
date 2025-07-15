@@ -6,17 +6,15 @@
 
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< BillboardList >::TextWriter( String const & tabs )
 		: TextWriterT< BillboardList >{ tabs }
 	{
 	}
 
 	bool TextWriter< BillboardList >::operator()( BillboardList const & obj
-		, castor::StringStream & file )
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing BillboardList " ) << obj.getName() << std::endl;
 		bool result = false;

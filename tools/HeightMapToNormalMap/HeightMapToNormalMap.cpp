@@ -13,7 +13,7 @@
 
 namespace
 {
-	using StringArray = castor::Vector< castor::MbString >;
+	using StringArray = c3d::Vector< c3d::MbString >;
 
 	void printUsage()
 	{
@@ -27,7 +27,7 @@ namespace
 	struct Options
 	{
 		float normalStrength{ 3.0f };
-		castor::PathArray paths;
+		c3d::PathArray paths;
 	};
 
 	bool parseArgs( int argc
@@ -75,7 +75,7 @@ namespace
 		if ( it != args.end() )
 		{
 			it = args.erase( it );
-			options.normalStrength = castor::string::toFloat( castor::makeString( *it ) );
+			options.normalStrength = c3d::string::toFloat( c3d::makeString( *it ) );
 			args.erase( it );
 		}
 
@@ -98,31 +98,31 @@ namespace
 
 		for ( auto & param : args )
 		{
-			options.paths.emplace_back( castor::makeString( param ) );
+			options.paths.emplace_back( c3d::makeString( param ) );
 		}
 
 		return true;
 	}
 
 	void convertToNormalMap( float strength
-		, castor::Path path
-		, castor::ImageLoader const & loader
-		, castor::ImageWriter const & writer )
+		, c3d::Path path
+		, c3d::ImageLoader const & loader
+		, c3d::ImageWriter const & writer )
 	{
-		auto mbPath = castor::toUtf8( path );
+		auto mbPath = c3d::toUtf8( path );
 		try
 		{
 			std::cout << "Converting " << mbPath << std::endl;
 			auto image = loader.load( path.getFileName(), path, {} );
 
-			if ( castor::convertToNormalMap( strength, image ) )
+			if ( c3d::convertToNormalMap( strength, image ) )
 			{
 				path = image.getPath();
 				path = path.getPath() / ( cuT( "N_" ) + path.getFileName() + cuT( ".png" ) );
 				writer.write( path, image.getPxBuffer() );
 			}
 		}
-		catch ( castor::Exception & exc )
+		catch ( c3d::Exception & exc )
 		{
 			std::cerr << "Error encountered while loading image file [" << mbPath << "]: " << exc.what() << std::endl;
 		}
@@ -147,20 +147,20 @@ int main( int argc, char * argv[] )
 		return -1;
 	}
 
-	castor::Logger::initialise( castor::LogType::eInfo );
-	castor::Logger::setFileName( castor::Path{ "HeightMapToNormalMap.log" } );
+	c3d::Logger::initialise( c3d::LogType::eInfo );
+	c3d::Logger::setFileName( c3d::Path{ "HeightMapToNormalMap.log" } );
 
-	castor::ImageLoader loader;
-	castor::ExrImageLoader::registerLoader( loader );
-	castor::FreeImageLoader::registerLoader( loader );
-	castor::GliImageLoader::registerLoader( loader );
-	castor::StbImageLoader::registerLoader( loader );
-	castor::XpmImageLoader::registerLoader( loader );
-	castor::ImageWriter writer;
-	castor::StbImageWriter::registerWriter( writer );
+	c3d::ImageLoader loader;
+	c3d::ExrImageLoader::registerLoader( loader );
+	c3d::FreeImageLoader::registerLoader( loader );
+	c3d::GliImageLoader::registerLoader( loader );
+	c3d::StbImageLoader::registerLoader( loader );
+	c3d::XpmImageLoader::registerLoader( loader );
+	c3d::ImageWriter writer;
+	c3d::StbImageWriter::registerWriter( writer );
 
-	castor::CpuInformations cpuInfos;
-	castor::ThreadPool pool{ cpuInfos.getCoreCount() };
+	c3d::CpuInformations cpuInfos;
+	c3d::ThreadPool pool{ cpuInfos.getCoreCount() };
 
 	for ( auto & path : options.paths )
 	{
@@ -170,13 +170,13 @@ int main( int argc, char * argv[] )
 			} );
 	}
 
-	pool.waitAll( castor::Milliseconds::max() );
-	castor::StbImageWriter::unregisterWriter( writer );
-	castor::ExrImageLoader::unregisterLoader( loader );
-	castor::FreeImageLoader::unregisterLoader( loader );
-	castor::GliImageLoader::unregisterLoader( loader );
-	castor::StbImageLoader::unregisterLoader( loader );
-	castor::XpmImageLoader::unregisterLoader( loader );
-	castor::Logger::cleanup();
+	pool.waitAll( c3d::Milliseconds::max() );
+	c3d::StbImageWriter::unregisterWriter( writer );
+	c3d::ExrImageLoader::unregisterLoader( loader );
+	c3d::FreeImageLoader::unregisterLoader( loader );
+	c3d::GliImageLoader::unregisterLoader( loader );
+	c3d::StbImageLoader::unregisterLoader( loader );
+	c3d::XpmImageLoader::unregisterLoader( loader );
+	c3d::Logger::cleanup();
 	return EXIT_SUCCESS;
 }

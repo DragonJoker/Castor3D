@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "StylePanel.hpp"
 #include "StyleStatic.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class ProgressStyle
 		: public ControlStyle
@@ -16,17 +16,17 @@ namespace castor3d
 	public:
 		static ControlType constexpr Type = ControlType::eProgress;
 
-		ProgressStyle( castor::String const & name
+		ProgressStyle( String const & name
 			, Engine & engine
-			, castor::String const & fontName )
+			, String const & fontName )
 			: ProgressStyle{ name, nullptr, engine, fontName }
 		{
 		}
 
-		ProgressStyle( castor::String const & name
+		ProgressStyle( String const & name
 			, Scene * scene
 			, Engine & engine
-			, castor::String const & fontName )
+			, String const & fontName )
 			: ControlStyle{ Type, name, scene, engine }
 			, m_titleFontName{ fontName }
 			, m_titleMaterial{ getEngine().findMaterial( cuT( "White" ) ) }
@@ -38,7 +38,7 @@ namespace castor3d
 			m_labelStyle.setBackgroundInvisible( true );
 		}
 
-		castor::String const & getTitleFontName()const
+		String const & getTitleFontName()const
 		{
 			return m_titleFontName;
 		}
@@ -58,7 +58,7 @@ namespace castor3d
 			return m_progressStyle;
 		}
 
-		castor::String const & getTextFontName()const
+		String const & getTextFontName()const
 		{
 			return m_labelStyle.getFontName();
 		}
@@ -68,9 +68,9 @@ namespace castor3d
 			return m_labelStyle.getForegroundMaterial();
 		}
 
-		void setTitleFontName( castor::String value )
+		void setTitleFontName( String value )
 		{
-			m_titleFontName = castor::move( value );
+			m_titleFontName = c3d::move( value );
 		}
 
 		void setTitleMaterial( MaterialObs value )
@@ -93,7 +93,7 @@ namespace castor3d
 			return m_labelStyle;
 		}
 
-		void setTextFontName( castor::StringView value )
+		void setTextFontName( String value )
 		{
 			m_labelStyle.setFont( value );
 		}
@@ -113,7 +113,7 @@ namespace castor3d
 		}
 
 	private:
-		castor::String m_titleFontName{};
+		String m_titleFontName{};
 		MaterialObs m_titleMaterial{};
 		PanelStyle m_containerStyle;
 		PanelStyle m_progressStyle;

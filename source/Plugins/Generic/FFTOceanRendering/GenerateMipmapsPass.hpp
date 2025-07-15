@@ -22,7 +22,7 @@ namespace ocean_fft
 		GenerateMipmapsPass( crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
-			, castor3d::RenderDevice const & device
+			, c3d::RenderDevice const & device
 			, crg::ru::Config ruConfig = {}
 			, crg::RunnablePass::GetPassIndexCallback passIndex = crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
@@ -35,18 +35,18 @@ namespace ocean_fft
 		bool doIsComputePass()const;
 
 	public:
-		static castor::MbString const Name;
+		static c3d::MbString const Name;
 
 	private:
-		castor3d::LayoutState m_outputLayout;
-		castor3d::RenderDevice const & m_device;
+		c3d::LayoutState m_outputLayout;
+		c3d::RenderDevice const & m_device;
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
-		castor3d::ShaderModule m_shader;
+		c3d::ShaderModule m_shader;
 		ashes::ComputePipelinePtr m_pipeline;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
-		castor::Vector< ashes::DescriptorSetPtr > m_descriptorSets;
-		castor::Vector< castor::Point2f > m_invSizes;
+		c3d::Vector< ashes::DescriptorSetPtr > m_descriptorSets;
+		c3d::Vector< c3d::Point2f > m_invSizes;
 	};
 }
 

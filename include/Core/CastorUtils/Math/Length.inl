@@ -2,7 +2,7 @@
 
 #include "CastorUtils/Math/Point.hpp"
 
-namespace castor
+namespace c3d
 {
 	//*********************************************************************************************
 

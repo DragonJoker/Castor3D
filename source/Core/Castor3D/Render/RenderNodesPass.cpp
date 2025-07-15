@@ -75,15 +75,15 @@
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/GraphContext.hpp>
 
-CU_ImplementSmartPtr( castor3d, RenderNodesPass )
+CU_ImplementSmartPtr( c3d, RenderNodesPass )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 	namespace rendndpass
 	{
-		static const castor::String Suffix = cuT( "/NodesPass" );
+		static const String Suffix = cuT( "/NodesPass" );
 
 		template< typename PipelineContT >
 		static auto findPipeline( PipelineFlags const & flags
@@ -100,12 +100,12 @@ namespace castor3d
 		static size_t makeHash( PipelineFlags const & flags )
 		{
 			auto result = size_t( getRenderNodeType( flags.m_programFlags ) );
-			castor::hashCombine( result, size_t( flags.m_sceneFlags ) );
-			castor::hashCombine( result, flags.pass.hasDeferredDiffuseLightingFlag );
+			hashCombine( result, size_t( flags.m_sceneFlags ) );
+			hashCombine( result, flags.pass.hasDeferredDiffuseLightingFlag );
 
 			if ( flags.submeshData )
 			{
-				castor::hashCombinePtr( result, *flags.submeshData );
+				hashCombinePtr( result, *flags.submeshData );
 			}
 
 			return result;
@@ -132,13 +132,13 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, castor::String const & typeName
+		, String const & typeName
 		, crg::ImageViewIdArray targetImage
 		, crg::ImageViewIdArray targetDepth
 		, RenderNodesPassDesc const & desc )
 		: NodesPass{ device, pass.group.getFullName(), typeName, pass.getFullName(), targetImage, targetDepth, desc.base() }
 		, SceneCullerHolder{ &desc.m_culler }
-		, RenderQueueHolder{ castor::makeUnique< RenderQueue >( *this, device, desc.m_culler, typeName, desc.m_meshShading, desc.m_ignored ) }
+		, RenderQueueHolder{ makeUnique< RenderQueue >( *this, device, desc.m_culler, typeName, desc.m_meshShading, desc.m_ignored ) }
 		, crg::RenderPass{ pass
 			, context
 			, graph
@@ -229,7 +229,7 @@ namespace castor3d
 		, VkPrimitiveTopology topology
 		, bool isFrontCulled
 		, uint32_t passLayerIndex
-		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+		, GpuBufferOffsetT< Point4f > const & morphTargets
 		, SubmeshRenderData const * submeshData
 		, uint32_t vertexStride )const noexcept
 	{
@@ -275,7 +275,7 @@ namespace castor3d
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
 		, bool isFrontCulled
-		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+		, GpuBufferOffsetT< Point4f > const & morphTargets
 		, SubmeshRenderData const * submeshData
 		, uint32_t vertexStride )const noexcept
 	{
@@ -527,7 +527,7 @@ namespace castor3d
 		if ( !descriptors.set )
 		{
 			auto const & scene = getCuller().getScene();
-			descriptors.set = descriptors.pool->createDescriptorSet( castor::toUtf8( getName() + rendndpass::Suffix )
+			descriptors.set = descriptors.pool->createDescriptorSet( toUtf8( getName() + rendndpass::Suffix )
 				, RenderPipeline::eBuffers );
 			auto & descriptorSet = *descriptors.set;
 			ashes::WriteDescriptorSetArray descriptorWrites;
@@ -770,7 +770,7 @@ namespace castor3d
 		return &node != getIgnoredNode();
 	}
 
-	void RenderNodesPass::doAccept( castor3d::RenderTechniqueVisitor & visitor )
+	void RenderNodesPass::doAccept( RenderTechniqueVisitor & visitor )
 	{
 		if ( visitor.getFlags().renderPassType == m_typeID
 			&& visitor.config.allowProgramsVisit )
@@ -901,22 +901,22 @@ namespace castor3d
 		return addBindings;
 	}
 
-	castor::Vector< RenderPipelineUPtr > & RenderNodesPass::doGetFrontPipelines()
+	Vector< RenderPipelineUPtr > & RenderNodesPass::doGetFrontPipelines()
 	{
 		return m_frontPipelines;
 	}
 
-	castor::Vector< RenderPipelineUPtr > & RenderNodesPass::doGetBackPipelines()
+	Vector< RenderPipelineUPtr > & RenderNodesPass::doGetBackPipelines()
 	{
 		return m_backPipelines;
 	}
 
-	castor::Vector< RenderPipelineUPtr > const & RenderNodesPass::doGetFrontPipelines()const
+	Vector< RenderPipelineUPtr > const & RenderNodesPass::doGetFrontPipelines()const
 	{
 		return m_frontPipelines;
 	}
 
-	castor::Vector< RenderPipelineUPtr > const & RenderNodesPass::doGetBackPipelines()const
+	Vector< RenderPipelineUPtr > const & RenderNodesPass::doGetBackPipelines()const
 	{
 		return m_backPipelines;
 	}
@@ -936,14 +936,14 @@ namespace castor3d
 		if ( !flags.isBillboard()
 			|| !flags.writeShadowMap() )
 		{
-			auto & pipelines = castor::checkFlag( cullMode, VK_CULL_MODE_FRONT_BIT )
+			auto & pipelines = checkFlag( cullMode, VK_CULL_MODE_FRONT_BIT )
 				? doGetFrontPipelines()
 				: doGetBackPipelines();
 			auto it = rendndpass::findPipeline( flags, pipelines );
 
 			if ( it == pipelines.end() )
 			{
-				auto pipeline = castor::makeUnique< RenderPipeline >( *this
+				auto pipeline = makeUnique< RenderPipeline >( *this
 					, renderSystem
 					, doCreateDepthStencilState( flags )
 					, doCreateRasterizationState( flags, cullMode )
@@ -964,8 +964,8 @@ namespace castor3d
 				if ( !addDescriptors.layout )
 				{
 					auto bindings = doCreateAdditionalBindings( flags );
-					addDescriptors.layout = device->createDescriptorSetLayout( castor::toUtf8( getName() + rendndpass::Suffix )
-						, castor::move( bindings ) );
+					addDescriptors.layout = device->createDescriptorSetLayout( toUtf8( getName() + rendndpass::Suffix )
+						, c3d::move( bindings ) );
 					addDescriptors.pool = addDescriptors.layout->createPool( 1u );
 				}
 
@@ -997,7 +997,7 @@ namespace castor3d
 
 				pipeline->initialise( device
 					, getRenderPass( 0u ) );
-				pipelines.emplace_back( castor::move( pipeline ) );
+				pipelines.emplace_back( c3d::move( pipeline ) );
 				it = std::next( pipelines.begin()
 					, ptrdiff_t( pipelines.size() - 1u ) );
 			}

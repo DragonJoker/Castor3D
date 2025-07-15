@@ -8,7 +8,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace rsmvpl
 	{

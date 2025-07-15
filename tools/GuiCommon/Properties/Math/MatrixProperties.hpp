@@ -8,9 +8,9 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix2x2f )
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix3x3f )
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix4x4f )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Matrix2x2f )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Matrix3x3f )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Matrix4x4f )
 
 namespace GuiCommon
 {
@@ -43,12 +43,12 @@ namespace GuiCommon
 	public:
 		MatrixProperty( wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
-			, castor::SquareMatrix< T, Count > const & value = castor::SquareMatrix< T, Count >() );
+			, c3d::SquareMatrix< T, Count > const & value = c3d::SquareMatrix< T, Count >() );
 		explicit MatrixProperty( wxString const( & rowNames )[Count]
 			, wxString const( & colNames )[Count]
 			, wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
-			, castor::SquareMatrix< T, Count > const & value = castor::SquareMatrix< T, Count >() );
+			, c3d::SquareMatrix< T, Count > const & value = c3d::SquareMatrix< T, Count >() );
 
 		wxVariant ChildChanged( wxVariant & thisValue
 			, int childIndex
@@ -57,13 +57,13 @@ namespace GuiCommon
 
 	protected:
 		// I stands for internal
-		inline void setValueI( castor::SquareMatrix< T, Count > const & value );
+		inline void setValueI( c3d::SquareMatrix< T, Count > const & value );
 	};
 
-	template< typename Type, uint32_t Count > castor::SquareMatrix< Type, Count > const & matrixRefFromVariant( wxVariant const & variant );
-	template< typename Type, uint32_t Count > castor::SquareMatrix< Type, Count > & matrixRefFromVariant( wxVariant & variant );
+	template< typename Type, uint32_t Count > c3d::SquareMatrix< Type, Count > const & matrixRefFromVariant( wxVariant const & variant );
+	template< typename Type, uint32_t Count > c3d::SquareMatrix< Type, Count > & matrixRefFromVariant( wxVariant & variant );
 	template< typename Type, uint32_t Count > void setVariantFromMatrix( wxVariant & variant
-		, castor::SquareMatrix< Type, Count > const & value );
+		, c3d::SquareMatrix< Type, Count > const & value );
 
 	template< uint32_t Count > using FloatMatrixProperty = MatrixProperty< float, Count >;
 

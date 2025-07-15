@@ -11,13 +11,13 @@ See LICENSE file in root folder
 namespace c3d_assimp
 {
 	class AssimpSkeletonImporter
-		: public castor3d::SkeletonImporter
+		: public c3d::SkeletonImporter
 	{
 	public:
-		explicit AssimpSkeletonImporter( castor3d::Engine & engine );
+		explicit AssimpSkeletonImporter( c3d::Engine & engine );
 
 	private:
-		bool doImportSkeleton( castor3d::Skeleton & node )override;
+		bool doImportSkeleton( c3d::Skeleton & node )override;
 	};
 }
 

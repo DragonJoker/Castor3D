@@ -19,7 +19,7 @@ See LICENSE file in root folder
 
 #include <array>
 
-namespace castor3d
+namespace c3d
 {
 	class RenderCube
 	{
@@ -191,12 +191,12 @@ namespace castor3d
 		};
 
 		ashes::CommandBufferPtr m_commandBuffer;
-		UniformBufferUPtrT< castor::Matrix4x4f > m_matrixUbo;
-		ashes::VertexBufferPtr< castor::Point4f > m_vertexBuffer;
+		UniformBufferUPtrT< Matrix4x4f > m_matrixUbo;
+		ashes::VertexBufferPtr< Point4f > m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorPool;
-		castor::Array< FacePipeline, 6u > m_faces;
+		Array< FacePipeline, 6u > m_faces;
 	};
 }
 

@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Buffer/BufferView.hpp>
 
-namespace castor
+namespace c3d
 {
 	/**
 	\~english
@@ -22,13 +22,13 @@ namespace castor
 	\brief		Cache de LightGroup.
 	*/
 	template<>
-	class ResourceCacheT< castor3d::LightGroup, String, castor3d::LightGroupCacheTraits > final
-		: public castor::ResourceCacheBaseT< castor3d::LightGroup, String, castor3d::LightGroupCacheTraits >
+	class ResourceCacheT< LightGroup, String, LightGroupCacheTraits > final
+		: public ResourceCacheBaseT< LightGroup, String, LightGroupCacheTraits >
 	{
 	public:
-		using ElementT = castor3d::LightGroup;
-		using ElementKeyT = castor::String;
-		using ElementCacheTraitsT = castor3d::LightGroupCacheTraits;
+		using ElementT = LightGroup;
+		using ElementKeyT = String;
+		using ElementCacheTraitsT = LightGroupCacheTraits;
 
 		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementCacheT::ElementPtrT;
@@ -44,7 +44,7 @@ namespace castor
 		 *\brief		Constructeur.
 		 *\param[in]	scene			La scène.
 		 */
-		C3D_API explicit ResourceCacheT( castor3d::Scene & scene );
+		C3D_API explicit ResourceCacheT( Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Intialises GPU buffer.
@@ -53,7 +53,7 @@ namespace castor
 		 *\brief		Initialise le buffer GPU.
 		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API void initialise( castor3d::RenderDevice const & device );
+		C3D_API void initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Sets all the elements to be cleaned up.
@@ -71,7 +71,7 @@ namespace castor
 		 *\param[in]	type	Le type de lumière.
 		 *\return		Les lumières.
 		 */
-		C3D_API castor::Vector< castor3d::LightGroup * > const & getLightGroups( castor3d::LightType type )const;
+		C3D_API Vector< LightGroup * > const & getLightGroups( LightType type )const;
 
 		bool isDirty()const noexcept
 		{
@@ -79,14 +79,14 @@ namespace castor
 		}
 
 	private:
-		void doRegisterLightGroup( castor3d::LightGroup & light );
-		void doUnregisterLightGroup( castor3d::LightGroup & light );
+		void doRegisterLightGroup( LightGroup & light );
+		void doUnregisterLightGroup( LightGroup & light );
 
 	private:
-		castor3d::Scene & m_scene;
-		castor3d::LightBufferRPtr m_lightBuffer{};
-		castor::Vector< castor3d::LightGroup * > m_pendingLights;
-		castor::Array< castor::Vector< castor3d::LightGroup * >, size_t( castor3d::LightType::eCount ) > m_lightsPerType;
+		Scene & m_scene;
+		LightBufferRPtr m_lightBuffer{};
+		Vector< LightGroup * > m_pendingLights;
+		Array< Vector< LightGroup * >, size_t( LightType::eCount ) > m_lightsPerType;
 		bool m_dirty{ true };
 	};
 }

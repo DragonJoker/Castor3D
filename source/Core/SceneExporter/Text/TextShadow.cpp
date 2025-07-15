@@ -4,10 +4,8 @@
 
 #include <Castor3D/Miscellaneous/Logger.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< ShadowConfig >::TextWriter( String const & tabs )
 		: TextWriterT< ShadowConfig >{ tabs }
 	{

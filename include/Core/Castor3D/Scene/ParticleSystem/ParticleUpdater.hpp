@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "ParticleModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class ParticleUpdater
 	{
@@ -25,7 +25,7 @@ namespace castor3d
 		 *\param[in]	time		Le temps écoulé depuis la denière mise à jour.
 		 *\param[in]	particle	La particule.
 		 */
-		C3D_API virtual void update( castor::Milliseconds const & time
+		C3D_API virtual void update( Milliseconds const & time
 			, Particle & particle );
 
 	protected:

@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "StyleButton.hpp"
 #include "StylePanel.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class ScrollBarStyle
 		: public ControlStyle
@@ -15,10 +15,10 @@ namespace castor3d
 	public:
 		static ControlType constexpr Type = ControlType::eScrollBar;
 
-		ScrollBarStyle( castor::String const & name
+		ScrollBarStyle( String const & name
 			, Scene * scene
 			, Engine & engine
-			, castor::String const & fontName )
+			, String const & fontName )
 			: ControlStyle{ Type
 				, name
 				, scene
@@ -31,9 +31,9 @@ namespace castor3d
 		{
 		}
 
-		ScrollBarStyle( castor::String const & name
+		ScrollBarStyle( String const & name
 			, Engine & engine
-			, castor::String const & fontName )
+			, String const & fontName )
 			: ScrollBarStyle{ name, nullptr, engine, fontName }
 		{
 		}

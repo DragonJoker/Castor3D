@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <mutex>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename CharT, typename TraitsT >
 	class LoggerStreambufT

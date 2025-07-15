@@ -42,14 +42,14 @@ namespace atmosphere_scattering
 			template< typename FuncT >
 			static void implementMain( Type & writer, FuncT func )
 			{
-				writer.implementEntryPointT< c3d::Position2FT, sdw::VoidT >( [&]( sdw::VertexInT< c3d::Position2FT > in
+				writer.implementEntryPointT< c3ds::Position2FT, sdw::VoidT >( [&]( sdw::VertexInT< c3ds::Position2FT > in
 						, sdw::VertexOut out )
 					{
 						out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 					} );
 
-				writer.implementEntryPointT< sdw::VoidT, c3d::Colour4FT >( [&]( sdw::FragmentIn in
-					, sdw::FragmentOutT< c3d::Colour4FT > out )
+				writer.implementEntryPointT< sdw::VoidT, c3ds::Colour4FT >( [&]( sdw::FragmentIn in
+					, sdw::FragmentOutT< c3ds::Colour4FT > out )
 					{
 						auto fragCoord = writer.declLocale( "fragCoord"
 							, ivec2( in.fragCoord.xy() ) );
@@ -80,7 +80,7 @@ namespace atmosphere_scattering
 			}
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
+		static c3d::ShaderPtr getProgram( c3d::Engine & engine
 			, uint32_t dimension )
 		{
 			ShaderWriter< useCompute >::Type writer{ &engine.getShaderAllocator() };
@@ -194,7 +194,7 @@ namespace atmosphere_scattering
 
 	CloudsWeatherPass::CloudsWeatherPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, WeatherUbo const & weatherUbo
 		, crg::ImageViewId const & resultView
 		, bool const & enabled )
@@ -211,7 +211,7 @@ namespace atmosphere_scattering
 
 				if constexpr ( weather::useCompute )
 				{
-					result = castor::make_unique< crg::ComputePass >( framePass
+					result = c3d::makeRawUnique< crg::ComputePass >( framePass
 						, context
 						, graph
 						, crg::ru::Config{}
@@ -230,7 +230,7 @@ namespace atmosphere_scattering
 						.build( framePass, context, graph );
 				}
 
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -251,7 +251,7 @@ namespace atmosphere_scattering
 		m_lastPass = &pass;
 	}
 
-	void CloudsWeatherPass::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void CloudsWeatherPass::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 	}

@@ -3,22 +3,22 @@
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp"
 
-CU_ImplementSmartPtr( castor3d, LightPropagationVolumes )
-CU_ImplementSmartPtr( castor3d, LightPropagationVolumesG )
-CU_ImplementSmartPtr( castor3d, LayeredLightPropagationVolumes )
-CU_ImplementSmartPtr( castor3d, LayeredLightPropagationVolumesG )
+CU_ImplementSmartPtr( c3d, LightPropagationVolumes )
+CU_ImplementSmartPtr( c3d, LightPropagationVolumesG )
+CU_ImplementSmartPtr( c3d, LayeredLightPropagationVolumes )
+CU_ImplementSmartPtr( c3d, LayeredLightPropagationVolumesG )
 
-namespace castor3d
+namespace c3d
 {
-	castor::String getTextureName( LpvTexture texture
-		, castor::String const & infix )
+	String getTextureName( LpvTexture texture
+		, String const & infix )
 	{
 		return cuT( "c3d_mapLpv" ) + infix + getTexName( texture );
 	}
 
-	castor::String getTexName( LpvTexture texture )
+	String getTexName( LpvTexture texture )
 	{
-		static castor::Array< castor::String, size_t( LpvTexture::eCount ) > Values
+		static Array< String, size_t( LpvTexture::eCount ) > Values
 		{
 			{
 				cuT( "R" ),
@@ -30,14 +30,14 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	castor::PixelFormat getFormat( RenderDevice const &, LpvTexture texture )
+	PixelFormat getFormat( RenderDevice const &, LpvTexture texture )
 	{
-		static castor::Array< castor::PixelFormat, size_t( LpvTexture::eCount ) > Values
+		static Array< PixelFormat, size_t( LpvTexture::eCount ) > Values
 		{
 			{
-				castor::PixelFormat::eR16G16B16A16_SFLOAT,
-				castor::PixelFormat::eR16G16B16A16_SFLOAT,
-				castor::PixelFormat::eR16G16B16A16_SFLOAT,
+				PixelFormat::eR16G16B16A16_SFLOAT,
+				PixelFormat::eR16G16B16A16_SFLOAT,
+				PixelFormat::eR16G16B16A16_SFLOAT,
 			}
 		};
 		return Values[size_t( texture )];
@@ -45,7 +45,7 @@ namespace castor3d
 
 	ClearValue getClearValue( LpvTexture texture )
 	{
-		static castor::Array< ClearValue, size_t( LpvTexture::eCount ) > Values
+		static Array< ClearValue, size_t( LpvTexture::eCount ) > Values
 		{
 			{
 				ClearValue{ transparentBlackClearColor },
@@ -58,7 +58,7 @@ namespace castor3d
 
 	ImageUsageFlags getUsageFlags( LpvTexture texture )
 	{
-		static castor::Array< ImageUsageFlags, size_t( LpvTexture::eCount ) > Values
+		static Array< ImageUsageFlags, size_t( LpvTexture::eCount ) > Values
 		{
 			{
 				ImageUsageFlags::eTransferDst | ImageUsageFlags::eStorage | ImageUsageFlags::eSampled | ImageUsageFlags::eColorAttachment,
@@ -71,7 +71,7 @@ namespace castor3d
 
 	BorderColour getBorderColor( LpvTexture texture )
 	{
-		static castor::Array< BorderColour, size_t( LpvTexture::eCount ) > Values
+		static Array< BorderColour, size_t( LpvTexture::eCount ) > Values
 		{
 			{
 				BorderColour::eFloatOpaqueBlack,

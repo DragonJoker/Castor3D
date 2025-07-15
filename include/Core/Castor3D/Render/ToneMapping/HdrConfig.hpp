@@ -9,13 +9,13 @@ See LICENSE file in root folder
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct HdrConfig
 	{
 		C3D_API void accept( ConfigurationVisitorBase & visitor );
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 
 		//!\~english	The exposure value.
 		//!\~french		La valeur d'exposition.

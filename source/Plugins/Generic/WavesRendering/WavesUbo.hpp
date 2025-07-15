@@ -19,7 +19,7 @@ namespace waves
 
 	struct WaveConfigurationData
 	{
-		explicit WaveConfigurationData( castor::Point3f pdirection = {}
+		explicit WaveConfigurationData( c3d::Point3f pdirection = {}
 			, float psteepness = {}
 			, float plength = {}
 			, float pamplitude = {}
@@ -33,7 +33,7 @@ namespace waves
 		{
 		}
 
-		castor::Point3f direction;
+		c3d::Point3f direction;
 		float pad0;
 		float steepness;
 		float length;
@@ -48,8 +48,8 @@ namespace waves
 		float time{ 0.0f };
 		float dampeningFactor{ 5.0f };
 
-		castor::Array< WaveConfigurationData, MaxWaves > waves{ WaveConfigurationData{ castor::Point3f{ 0.3f, 0.0f, -0.7f }, 1.79f, 3.75f, 0.85f, 1.21f }
-			, WaveConfigurationData{ castor::Point3f{ 0.5f, 0.0f, -0.2f }, 1.79f, 4.1f, 0.52f, 1.03f }
+		c3d::Array< WaveConfigurationData, MaxWaves > waves{ WaveConfigurationData{ c3d::Point3f{ 0.3f, 0.0f, -0.7f }, 1.79f, 3.75f, 0.85f, 1.21f }
+			, WaveConfigurationData{ c3d::Point3f{ 0.5f, 0.0f, -0.2f }, 1.79f, 4.1f, 0.52f, 1.03f }
 			, WaveConfigurationData{}
 			, WaveConfigurationData{}
 			, WaveConfigurationData{}
@@ -71,7 +71,7 @@ namespace waves
 		Wave( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled = true )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -96,7 +96,7 @@ namespace waves
 		WavesData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -113,7 +113,7 @@ namespace waves
 		using Configuration = WavesConfiguration;
 
 	public:
-		explicit WavesUbo( castor3d::RenderDevice const & device );
+		explicit WavesUbo( c3d::RenderDevice const & device );
 		~WavesUbo();
 		void cpuUpdate( WavesConfiguration const & config );
 
@@ -135,19 +135,19 @@ namespace waves
 			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
 		}
 
-		castor3d::UniformBufferOffsetT< Configuration > const & getUbo()const
+		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
 			return m_ubo;
 		}
 
-		castor3d::UniformBufferOffsetT< Configuration > & getUbo()
+		c3d::UniformBufferOffsetT< Configuration > & getUbo()
 		{
 			return m_ubo;
 		}
 
 	private:
-		castor3d::RenderDevice const & m_device;
-		castor3d::UniformBufferOffsetT< Configuration > m_ubo;
+		c3d::RenderDevice const & m_device;
+		c3d::UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

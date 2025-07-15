@@ -105,29 +105,29 @@ namespace c3d_assimp
 	{
 		static constexpr aiShadingMode ShadingMode_PBR_BRDF = aiShadingMode( 0xb );
 
-		static castor::String decodeUri( castor::String uri )
+		static c3d::String decodeUri( c3d::String uri )
 		{
-			castor::MbString escaped{ castor::toUtf8( uri ) };
+			c3d::MbString escaped{ c3d::toUtf8( uri ) };
 
 			for ( auto i = escaped.begin(); i != escaped.end(); i++ )
 			{
 				if ( *i == '%' )
 				{
-					castor::Array< char, 3 > chars = { *( i + 1 ), *( i + 2 ), 0 };
+					c3d::Array< char, 3 > chars = { *( i + 1 ), *( i + 2 ), 0 };
 					*i = static_cast< char >( std::strtoul( chars.data(), nullptr, 16 ) );
 					escaped.erase( i + 1, i + 3 );
 				}
 			}
 
-			return castor::makeString( escaped );
+			return c3d::makeString( escaped );
 		}
 
 		struct TextureInfo
 		{
-			castor::String name;
+			c3d::String name;
 			uint32_t texcoordSet{};
 			aiUVTransform transform{};
-			castor3d::SamplerObs sampler{};
+			c3d::SamplerObs sampler{};
 		};
 
 		class MaterialParser
@@ -136,12 +136,12 @@ namespace c3d_assimp
 			MaterialParser( aiMaterial const & material
 				, aiScene const & scene
 				, aiShadingMode shadingMode
-				, castor3d::SamplerObs sampler
+				, c3d::SamplerObs sampler
 				, AssimpMaterialImporter const & importer
 				, float emissiveMult
 				, bool disableImageCompression
-				, castor::Map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
-				, castor3d::Pass & result )
+				, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
+				, c3d::Pass & result )
 				: m_material{ material }
 				, m_scene{ scene }
 				, m_sampler{ sampler }
@@ -152,23 +152,23 @@ namespace c3d_assimp
 				, m_shadingModel{ shadingMode }
 				, m_isPbr{ detectPbr() }
 				, m_result{ result }
-				, m_colourMapPlugin{ m_result.getComponentPlugin< castor3d::ColourMapComponent >() }
-				, m_emissiveMapPlugin{ m_result.getComponentPlugin< castor3d::EmissiveMapComponent >() }
-				, m_heightMapPlugin{ m_result.getComponentPlugin< castor3d::HeightMapComponent >() }
-				, m_metalnessMapPlugin{ m_result.getComponentPlugin< castor3d::MetalnessMapComponent >() }
-				, m_normalMapPlugin{ m_result.getComponentPlugin< castor3d::NormalMapComponent >() }
-				, m_occlusionMapPlugin{ m_result.getComponentPlugin< castor3d::OcclusionMapComponent >() }
-				, m_opacityMapPlugin{ m_result.getComponentPlugin< castor3d::OpacityMapComponent >() }
-				, m_roughnessMapPlugin{ m_result.getComponentPlugin< castor3d::RoughnessMapComponent >() }
-				, m_specularMapPlugin{ m_result.getComponentPlugin< castor3d::SpecularMapComponent >() }
-				, m_transmissionMapPlugin{ m_result.getComponentPlugin< castor3d::TransmissionMapComponent >() }
-				, m_transmittanceMapPlugin{ m_result.getComponentPlugin< castor3d::TransmittanceMapComponent >() }
-				, m_thicknessMapPlugin{ m_result.getComponentPlugin< castor3d::ThicknessMapComponent >() }
-				, m_clearcoatMapPlugin{ m_result.getComponentPlugin< castor3d::ClearcoatMapComponent >() }
-				, m_clearcoatNormalMapPlugin{ m_result.getComponentPlugin< castor3d::ClearcoatNormalMapComponent >() }
-				, m_clearcoatRoughnessMapPlugin{ m_result.getComponentPlugin< castor3d::ClearcoatRoughnessMapComponent >() }
-				, m_sheenMapPlugin{ m_result.getComponentPlugin< castor3d::SheenMapComponent >() }
-				, m_sheenRoughnessMapPlugin{ m_result.getComponentPlugin< castor3d::SheenRoughnessMapComponent >() }
+				, m_colourMapPlugin{ m_result.getComponentPlugin< c3d::ColourMapComponent >() }
+				, m_emissiveMapPlugin{ m_result.getComponentPlugin< c3d::EmissiveMapComponent >() }
+				, m_heightMapPlugin{ m_result.getComponentPlugin< c3d::HeightMapComponent >() }
+				, m_metalnessMapPlugin{ m_result.getComponentPlugin< c3d::MetalnessMapComponent >() }
+				, m_normalMapPlugin{ m_result.getComponentPlugin< c3d::NormalMapComponent >() }
+				, m_occlusionMapPlugin{ m_result.getComponentPlugin< c3d::OcclusionMapComponent >() }
+				, m_opacityMapPlugin{ m_result.getComponentPlugin< c3d::OpacityMapComponent >() }
+				, m_roughnessMapPlugin{ m_result.getComponentPlugin< c3d::RoughnessMapComponent >() }
+				, m_specularMapPlugin{ m_result.getComponentPlugin< c3d::SpecularMapComponent >() }
+				, m_transmissionMapPlugin{ m_result.getComponentPlugin< c3d::TransmissionMapComponent >() }
+				, m_transmittanceMapPlugin{ m_result.getComponentPlugin< c3d::TransmittanceMapComponent >() }
+				, m_thicknessMapPlugin{ m_result.getComponentPlugin< c3d::ThicknessMapComponent >() }
+				, m_clearcoatMapPlugin{ m_result.getComponentPlugin< c3d::ClearcoatMapComponent >() }
+				, m_clearcoatNormalMapPlugin{ m_result.getComponentPlugin< c3d::ClearcoatNormalMapComponent >() }
+				, m_clearcoatRoughnessMapPlugin{ m_result.getComponentPlugin< c3d::ClearcoatRoughnessMapComponent >() }
+				, m_sheenMapPlugin{ m_result.getComponentPlugin< c3d::SheenMapComponent >() }
+				, m_sheenRoughnessMapPlugin{ m_result.getComponentPlugin< c3d::SheenRoughnessMapComponent >() }
 				, m_colourMapFlags{ m_colourMapPlugin.getTextureFlags() }
 				, m_emissiveMapFlags{ m_emissiveMapPlugin.getTextureFlags() }
 				, m_heightMapFlags{ m_heightMapPlugin.getTextureFlags() }
@@ -218,12 +218,12 @@ namespace c3d_assimp
 			static void parse( aiMaterial const & material
 				, aiScene const & scene
 				, aiShadingMode shadingMode
-				, castor3d::SamplerObs sampler
+				, c3d::SamplerObs sampler
 				, AssimpMaterialImporter const & importer
 				, float emissiveMult
 				, bool disableImageCompression
-				, castor::Map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
-				, castor3d::Pass & pass )
+				, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > const & textureRemaps
+				, c3d::Pass & pass )
 			{
 				MaterialParser parser{ material, scene, shadingMode, sampler, importer, emissiveMult, disableImageCompression, textureRemaps, pass };
 				parser.parseDatas();
@@ -234,7 +234,7 @@ namespace c3d_assimp
 		private:
 			void parseDatas()
 			{
-				parseComponentBoolData< castor3d::TwoSidedComponent >( AI_MATKEY_TWOSIDED );
+				parseComponentBoolData< c3d::TwoSidedComponent >( AI_MATKEY_TWOSIDED );
 
 				if ( !parseRoughness() )
 				{
@@ -244,11 +244,11 @@ namespace c3d_assimp
 					}
 				}
 
-				parseComponentDataT< castor3d::MetalnessComponent, float >( AI_MATKEY_METALLIC_FACTOR );
+				parseComponentDataT< c3d::MetalnessComponent, float >( AI_MATKEY_METALLIC_FACTOR );
 
-				if ( !parseComponentHdrRgbData< castor3d::ColourComponent >( AI_MATKEY_BASE_COLOR ) )
+				if ( !parseComponentHdrRgbData< c3d::ColourComponent >( AI_MATKEY_BASE_COLOR ) )
 				{
-					parseComponentHdrRgbData< castor3d::ColourComponent >( AI_MATKEY_COLOR_DIFFUSE );
+					parseComponentHdrRgbData< c3d::ColourComponent >( AI_MATKEY_COLOR_DIFFUSE );
 				}
 
 				parseSpecular();
@@ -257,13 +257,13 @@ namespace c3d_assimp
 				parseAttenuation();
 				parseClearcoat();
 				parseSheen();
-				parseComponentDataT< castor3d::ThicknessComponent, float >( AI_MATKEY_VOLUME_THICKNESS_FACTOR );
-				parseComponentDataT< castor3d::TransmissionComponent, float >( AI_MATKEY_TRANSMISSION_FACTOR );
+				parseComponentDataT< c3d::ThicknessComponent, float >( AI_MATKEY_VOLUME_THICKNESS_FACTOR );
+				parseComponentDataT< c3d::TransmissionComponent, float >( AI_MATKEY_TRANSMISSION_FACTOR );
 				m_hasRefr = parseRefractionRatio();
 
-				if ( !parseComponentOpaDataT< castor3d::OpacityComponent >( AI_MATKEY_OPACITY ) )
+				if ( !parseComponentOpaDataT< c3d::OpacityComponent >( AI_MATKEY_OPACITY ) )
 				{
-					parseComponentInvOpaDataT< castor3d::OpacityComponent >( AI_MATKEY_TRANSPARENCYFACTOR, 1.0f );
+					parseComponentInvOpaDataT< c3d::OpacityComponent >( AI_MATKEY_TRANSPARENCYFACTOR, 1.0f );
 				}
 
 				parseAlphaRefValue();
@@ -384,7 +384,7 @@ namespace c3d_assimp
 
 				if ( result )
 				{
-					auto component = m_result.createComponent< castor3d::RoughnessComponent >();
+					auto component = m_result.createComponent< c3d::RoughnessComponent >();
 					component->setRoughness( value );
 				}
 
@@ -398,7 +398,7 @@ namespace c3d_assimp
 
 				if ( result )
 				{
-					auto component = m_result.createComponent< castor3d::RoughnessComponent >();
+					auto component = m_result.createComponent< c3d::RoughnessComponent >();
 					component->setGlossiness( 1.0f - value );
 				}
 
@@ -414,7 +414,7 @@ namespace c3d_assimp
 				{
 					float factor{ 1.0f };
 					m_material.Get( AI_MATKEY_SHININESS_STRENGTH, factor );
-					auto component = m_result.createComponent< castor3d::RoughnessComponent >();
+					auto component = m_result.createComponent< c3d::RoughnessComponent >();
 					component->setShininess( value * factor );
 				}
 
@@ -537,7 +537,7 @@ namespace c3d_assimp
 				{
 					auto component = m_result.createComponent< ComponentT >();
 					auto data = component->getData();
-					*data = castor::HdrRgbColour::fromComponents( value.r
+					*data = c3d::HdrRgbColour::fromComponents( value.r
 						, value.g
 						, value.b );
 					component->setData( *data );
@@ -556,7 +556,7 @@ namespace c3d_assimp
 				{
 					auto component = m_result.createComponent< ComponentT >();
 					auto data = component->getData();
-					*data = castor::RgbColour::fromComponents( value.r
+					*data = c3d::RgbColour::fromComponents( value.r
 						, value.g
 						, value.b );
 					component->setData( *data );
@@ -575,7 +575,7 @@ namespace c3d_assimp
 				{
 					auto component = m_result.createComponent< ComponentT >();
 					auto data = component->getData();
-					*data = float( castor::point::length( castor::Point3f{ value.r
+					*data = float( c3d::point::length( c3d::Point3f{ value.r
 						, value.g
 						, value.b } ) );
 					component->setData( *data );
@@ -591,8 +591,8 @@ namespace c3d_assimp
 
 				if ( hasColour )
 				{
-					auto component = m_result.createComponent< castor3d::SpecularComponent >();
-					component->setSpecular( castor::RgbColour{ colour.r
+					auto component = m_result.createComponent< c3d::SpecularComponent >();
+					component->setSpecular( c3d::RgbColour{ colour.r
 						, colour.g
 						, colour.b } );
 				}
@@ -605,7 +605,7 @@ namespace c3d_assimp
 
 				if ( hasFactor )
 				{
-					auto component = m_result.createComponent< castor3d::SpecularFactorComponent >();
+					auto component = m_result.createComponent< c3d::SpecularFactorComponent >();
 					component->setFactor( factor );
 				}
 			}
@@ -618,8 +618,8 @@ namespace c3d_assimp
 				{
 					if ( emissive.r != 0 || emissive.g != 0 || emissive.b != 0 )
 					{
-						auto component = m_result.createComponent< castor3d::EmissiveComponent >();
-						component->setEmissive( castor::RgbColour{ m_emissiveMult * emissive.r
+						auto component = m_result.createComponent< c3d::EmissiveComponent >();
+						component->setEmissive( c3d::RgbColour{ m_emissiveMult * emissive.r
 							, m_emissiveMult * emissive.g
 							, m_emissiveMult * emissive.b } );
 						float emissiveIntensity = 1.0f;
@@ -638,8 +638,8 @@ namespace c3d_assimp
 
 				if ( hasColour || hasDistance )
 				{
-					auto component = m_result.createComponent< castor3d::AttenuationComponent >();
-					component->setAttenuationColour( castor::RgbColour{ colour.r
+					auto component = m_result.createComponent< c3d::AttenuationComponent >();
+					component->setAttenuationColour( c3d::RgbColour{ colour.r
 						, colour.g
 						, colour.b } );
 					component->setAttenuationDistance( distance );
@@ -655,7 +655,7 @@ namespace c3d_assimp
 
 				if ( hasClearcoat || hasRoughness )
 				{
-					auto component = m_result.createComponent< castor3d::ClearcoatComponent >();
+					auto component = m_result.createComponent< c3d::ClearcoatComponent >();
 					component->setClearcoatFactor( clearcoat );
 					component->setRoughnessFactor( roughness );
 				}
@@ -670,8 +670,8 @@ namespace c3d_assimp
 
 				if ( hasSheen || hasRoughness )
 				{
-					auto component = m_result.createComponent< castor3d::SheenComponent >();
-					component->setSheenColour( castor::HdrRgbColour{ sheen.r
+					auto component = m_result.createComponent< c3d::SheenComponent >();
+					component->setSheenColour( c3d::HdrRgbColour{ sheen.r
 						, sheen.g
 						, sheen.b } );
 					component->setRoughnessFactor( roughness );
@@ -691,10 +691,10 @@ namespace c3d_assimp
 
 						if ( mode == cuT( "MASK" ) )
 						{
-							auto alphaTest = m_result.createComponent< castor3d::AlphaTestComponent >();
+							auto alphaTest = m_result.createComponent< c3d::AlphaTestComponent >();
 							alphaTest->setAlphaRefValue( ref );
-							alphaTest->setAlphaFunc( castor3d::ComparisonFunc::eGreater );
-							alphaTest->setBlendAlphaFunc( castor3d::ComparisonFunc::eLessOrEqual );
+							alphaTest->setAlphaFunc( c3d::ComparisonFunc::eGreater );
+							alphaTest->setBlendAlphaFunc( c3d::ComparisonFunc::eLessOrEqual );
 						}
 					}
 				}
@@ -706,13 +706,13 @@ namespace c3d_assimp
 
 				if ( m_material.Get( AI_MATKEY_REFRACTI, ior ) == aiReturn_SUCCESS )
 				{
-					auto component = m_result.createComponent< castor3d::RefractionComponent >();
+					auto component = m_result.createComponent< c3d::RefractionComponent >();
 					component->setRefractionRatio( ior );
-					auto transmission = m_result.getComponent< castor3d::TransmissionComponent >();
+					auto transmission = m_result.getComponent< c3d::TransmissionComponent >();
 
 					if ( !transmission )
 					{
-						transmission = m_result.createComponent< castor3d::TransmissionComponent >();
+						transmission = m_result.createComponent< c3d::TransmissionComponent >();
 						transmission->setTransmission( 0.0f );
 						return true;
 					}
@@ -723,8 +723,8 @@ namespace c3d_assimp
 				return false;
 			}
 
-			castor3d::TextureConfiguration getRemap( castor3d::PassComponentTextureFlag flag
-				, castor3d::TextureConfiguration texConfig )
+			c3d::TextureConfiguration getRemap( c3d::PassComponentTextureFlag flag
+				, c3d::TextureConfiguration texConfig )
 			{
 				auto it = m_textureRemaps.find( flag );
 
@@ -736,73 +736,73 @@ namespace c3d_assimp
 				return it->second;
 			}
 
-			castor::Image const & loadImage( castor3d::TextureSourceInfo const & source )
+			c3d::Image const & loadImage( c3d::TextureSourceInfo const & source )
 			{
-				castor::ImageRPtr result{};
+				c3d::ImageRPtr result{};
 
 				if ( source.isBufferImage() )
 				{
 					result = m_importer.loadImage( source.name()
-						, castor::ImageCreateParams{ source.type(), source.buffer() } );
+						, c3d::ImageCreateParams{ source.type(), source.buffer() } );
 				}
 				else if ( source.isFileImage() )
 				{
 					result = m_importer.loadImage( source.name()
-						, castor::ImageCreateParams{ source.folder() / source.relative() } );
+						, c3d::ImageCreateParams{ source.folder() / source.relative() } );
 				}
 
 				if ( !result )
 				{
-					CU_LoaderError( "Couldn't load image" + castor::toUtf8( source.name() ) + "." );
+					CU_LoaderError( "Couldn't load image" + c3d::toUtf8( source.name() ) + "." );
 				}
 
 				return *result;
 			}
 
 			void loadTexture( TextureInfo const & info
-				, castor3d::TextureConfiguration texConfig
+				, c3d::TextureConfiguration texConfig
 				, bool hasOpacity )
 			{
 				if ( !info.name.empty() )
 				{
 					try
 					{
-						castor::RawUniquePtr< castor3d::TextureSourceInfo > sourceInfo;
-						texConfig.transform = castor3d::TextureTransform{ { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
-							, castor::Angle::fromRadians( info.transform.mRotation )
+						c3d::RawUniquePtr< c3d::TextureSourceInfo > sourceInfo;
+						texConfig.transform = c3d::TextureTransform{ { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
+							, c3d::Angle::fromRadians( info.transform.mRotation )
 							, { info.transform.mScaling.x, info.transform.mScaling.y, 1.0f } };
 
 						if ( info.name[0] == cuT( '*' ) )
 						{
-							auto id = uint32_t( castor::string::toInt( info.name.substr( 1u ) ) );
+							auto id = uint32_t( c3d::string::toInt( info.name.substr( 1u ) ) );
 
 							if ( id < m_scene.mNumTextures )
 							{
 								auto texture = m_scene.mTextures[id];
-								castor::ByteArray data;
+								c3d::ByteArray data;
 								data.resize( texture->mWidth );
 								std::memcpy( data.data(), texture->pcData, data.size() );
-								sourceInfo = castor::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( cuT( "Image" ) + castor::string::toString( id )
-									, castor::makeString( texture->achFormatHint )
-									, castor::move( data )
+								sourceInfo = c3d::makeRawUnique< c3d::TextureSourceInfo >( m_importer.loadTexture( cuT( "Image" ) + c3d::string::toString( id )
+									, c3d::makeString( texture->achFormatHint )
+									, c3d::move( data )
 									, texConfig
 									, m_loadConfig ) );
 							}
 						}
-						else if ( auto texture = m_scene.GetEmbeddedTexture( castor::toUtf8( info.name ).c_str() ) )
+						else if ( auto texture = m_scene.GetEmbeddedTexture( c3d::toUtf8( info.name ).c_str() ) )
 						{
-							castor::ByteArray data;
+							c3d::ByteArray data;
 							data.resize( texture->mWidth );
 							std::memcpy( data.data(), texture->pcData, data.size() );
-							sourceInfo = castor::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( info.name
-								, castor::makeString( texture->achFormatHint )
-								, castor::move( data )
+							sourceInfo = c3d::makeRawUnique< c3d::TextureSourceInfo >( m_importer.loadTexture( info.name
+								, c3d::makeString( texture->achFormatHint )
+								, c3d::move( data )
 								, texConfig ) );
 						}
 						else
 						{
 							auto name = decodeUri( info.name );
-							sourceInfo = castor::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( castor::Path{ name }
+							sourceInfo = c3d::makeRawUnique< c3d::TextureSourceInfo >( m_importer.loadTexture( c3d::Path{ name }
 								, texConfig ) );
 						}
 
@@ -812,7 +812,7 @@ namespace c3d_assimp
 							auto texFlags = getFlags( texConfig );
 
 							if ( getComponentsMask( texConfig, m_opacityMapFlags )
-								&& castor3d::hasAny( texFlags, m_opacityMapFlags ) )
+								&& c3d::hasAny( texFlags, m_opacityMapFlags ) )
 							{
 								aiString alphaMode;
 
@@ -824,7 +824,7 @@ namespace c3d_assimp
 								if ( !hasAlphaChannel( image ) )
 								{
 									addFlagConfiguration( texConfig, { m_opacityMapFlags, 0x00FF0000 } );
-									*sourceInfo = castor3d::TextureSourceInfo{ *sourceInfo, texConfig };
+									*sourceInfo = c3d::TextureSourceInfo{ *sourceInfo, texConfig };
 								}
 							}
 							else if ( !hasOpacity
@@ -839,18 +839,18 @@ namespace c3d_assimp
 								}
 
 								addFlagConfiguration( texConfig, { m_opacityMapFlags, 0xFF000000 } );
-								*sourceInfo = castor3d::TextureSourceInfo{ *sourceInfo, texConfig };
+								*sourceInfo = c3d::TextureSourceInfo{ *sourceInfo, texConfig };
 							}
 
-							m_result.registerTexture( castor::move( *sourceInfo )
+							m_result.registerTexture( c3d::move( *sourceInfo )
 								, { info.sampler, info.texcoordSet } );
 						}
 					}
 					catch ( std::exception & )
 					{
-						m_importer.loadTexture( castor::Path{ info.name }
+						m_importer.loadTexture( c3d::Path{ info.name }
 							, texConfig
-							, castor3d::PassTextureConfig{ info.sampler }
+							, c3d::PassTextureConfig{ info.sampler }
 						, m_result );
 					}
 				}
@@ -881,7 +881,7 @@ namespace c3d_assimp
 					switch ( type )
 					{
 					case aiTextureType_REFLECTION:
-						m_result.createComponent< castor3d::ReflectionComponent >()->enableReflections();
+						m_result.createComponent< c3d::ReflectionComponent >()->enableReflections();
 						break;
 					default:
 						break;
@@ -901,7 +901,7 @@ namespace c3d_assimp
 
 					if ( hasMinFilter || hasMagFilter || hasAddressModeU || hasAddressModeV )
 					{
-						castor::String samplerName;
+						c3d::String samplerName;
 						aiString mappingName;
 						m_material.Get( AI_MATKEY_GLTF_MAPPINGNAME( type, index ), mappingName );
 
@@ -912,7 +912,7 @@ namespace c3d_assimp
 						else
 						{
 							samplerName = m_result.getOwner()->getName()
-								+ cuT( "_" ) + castor::string::toString( m_result.getIndex() )
+								+ cuT( "_" ) + c3d::string::toString( m_result.getIndex() )
 								+ cuT( "_" ) + result.name;
 						}
 
@@ -944,7 +944,7 @@ namespace c3d_assimp
 				TextureInfo result;
 				uint32_t index{};
 
-				while ( result.name.empty() && index < castor3d::MaxTextureCoordinatesSets )
+				while ( result.name.empty() && index < c3d::MaxTextureCoordinatesSets )
 				{
 					auto tmp = getTextureInfo( type, index );
 
@@ -960,36 +960,36 @@ namespace c3d_assimp
 			}
 
 			void convertToNormalMap( TextureInfo & info
-				, castor3d::TextureConfiguration & pconfig )
+				, c3d::TextureConfiguration & pconfig )
 			{
-				auto path = castor::Path{ info.name };
+				auto path = c3d::Path{ info.name };
 
 				if ( m_importer.convertToNormalMap( path, pconfig ) )
 				{
-					m_result.createComponent< castor3d::NormalMapComponent >();
+					m_result.createComponent< c3d::NormalMapComponent >();
 					info.name = path;
 				}
 			}
 
 			void mixedInterpolative( bool blending )
 			{
-				m_result.createComponent< castor3d::OpacityComponent >();
+				m_result.createComponent< c3d::OpacityComponent >();
 
-				auto twoSided = m_result.createComponent< castor3d::TwoSidedComponent >();
+				auto twoSided = m_result.createComponent< c3d::TwoSidedComponent >();
 				twoSided->setTwoSided( true );
 
-				if ( !m_result.hasComponent< castor3d::AlphaTestComponent >() )
+				if ( !m_result.hasComponent< c3d::AlphaTestComponent >() )
 				{
-					auto alphaTest = m_result.createComponent< castor3d::AlphaTestComponent >();
+					auto alphaTest = m_result.createComponent< c3d::AlphaTestComponent >();
 					alphaTest->setAlphaRefValue( 0.95f );
-					alphaTest->setAlphaFunc( castor3d::ComparisonFunc::eGreater );
-					alphaTest->setBlendAlphaFunc( castor3d::ComparisonFunc::eLessOrEqual );
+					alphaTest->setAlphaFunc( c3d::ComparisonFunc::eGreater );
+					alphaTest->setBlendAlphaFunc( c3d::ComparisonFunc::eLessOrEqual );
 				}
 
 				if ( blending )
 				{
-					auto blend = m_result.createComponent< castor3d::BlendComponent >();
-					blend->setAlphaBlendMode( castor3d::BlendMode::eInterpolative );
+					auto blend = m_result.createComponent< c3d::BlendComponent >();
+					blend->setAlphaBlendMode( c3d::BlendMode::eInterpolative );
 				}
 			}
 
@@ -1050,22 +1050,22 @@ namespace c3d_assimp
 				{
 					colInfo = getTextureInfo( aiTextureType_DIFFUSE );
 					isCollada = !colInfo.name.empty()
-						&& colInfo.name.find( cuT( "_Cine_" ) ) != castor::String::npos
-						&& colInfo.name.find( cuT( "/MI_CH_" ) ) != castor::String::npos;
+						&& colInfo.name.find( cuT( "_Cine_" ) ) != c3d::String::npos
+						&& colInfo.name.find( cuT( "/MI_CH_" ) ) != c3d::String::npos;
 
 					if ( isCollada )
 					{
 						// Workaround for Collada textures.
-						castor::String strGlob = colInfo.name + cuT( ".tga" );
-						castor::string::replace( strGlob, cuT( "/MI_CH_" ), cuT( "TX_CH_" ) );
-						castor::String strDiff = strGlob;
-						castor::String strNorm = strGlob;
-						castor::String strSpec = strGlob;
-						castor::String strOpac = strGlob;
-						colInfo.name = castor::string::replace( strDiff, cuT( "_Cine_" ), cuT( "_D_" ) );
-						nmlInfo.name = castor::string::replace( strNorm, cuT( "_Cine_" ), cuT( "_N_" ) );
-						spcInfo.name = castor::string::replace( strSpec, cuT( "_Cine_" ), cuT( "_S_" ) );
-						opaInfo.name = castor::string::replace( strOpac, cuT( "_Cine_" ), cuT( "_A_" ) );
+						c3d::String strGlob = colInfo.name + cuT( ".tga" );
+						c3d::string::replace( strGlob, cuT( "/MI_CH_" ), cuT( "TX_CH_" ) );
+						c3d::String strDiff = strGlob;
+						c3d::String strNorm = strGlob;
+						c3d::String strSpec = strGlob;
+						c3d::String strOpac = strGlob;
+						colInfo.name = c3d::string::replace( strDiff, cuT( "_Cine_" ), cuT( "_D_" ) );
+						nmlInfo.name = c3d::string::replace( strNorm, cuT( "_Cine_" ), cuT( "_N_" ) );
+						spcInfo.name = c3d::string::replace( strSpec, cuT( "_Cine_" ), cuT( "_S_" ) );
+						opaInfo.name = c3d::string::replace( strOpac, cuT( "_Cine_" ), cuT( "_A_" ) );
 						nmlInfo.transform = colInfo.transform;
 						spcInfo.transform = colInfo.transform;
 						opaInfo.transform = colInfo.transform;
@@ -1101,7 +1101,7 @@ namespace c3d_assimp
 
 					if ( !spcInfo.name.empty() )
 					{
-						auto spcConfig{ getRemap( m_specularMapFlags, castor3d::TextureConfiguration{} ) };
+						auto spcConfig{ getRemap( m_specularMapFlags, c3d::TextureConfiguration{} ) };
 
 						if ( !getComponentsMask( spcConfig, m_metalnessMapFlags ) )
 						{
@@ -1145,7 +1145,7 @@ namespace c3d_assimp
 
 			bool finishOpacity( TextureInfo const & opaInfo )
 			{
-				auto opacity = m_result.getComponent< castor3d::OpacityComponent >();
+				auto opacity = m_result.getComponent< c3d::OpacityComponent >();
 				bool hasOpacityTex = !opaInfo.name.empty();
 
 				if ( hasOpacityTex )
@@ -1174,7 +1174,7 @@ namespace c3d_assimp
 
 				if ( hasOpacityTex && !opacity )
 				{
-					opacity = m_result.createComponent< castor3d::OpacityComponent >();
+					opacity = m_result.createComponent< c3d::OpacityComponent >();
 				}
 
 				// force non 0.0 opacity when an opacity map is set
@@ -1184,7 +1184,7 @@ namespace c3d_assimp
 				}
 
 				if ( hasOpacityTex
-					&& m_result.getAlphaFunc() == castor3d::ComparisonFunc::eAlways )
+					&& m_result.getAlphaFunc() == c3d::ComparisonFunc::eAlways )
 				{
 					mixedInterpolative( true );
 				}
@@ -1219,79 +1219,79 @@ namespace c3d_assimp
 		private:
 			aiMaterial const & m_material;
 			aiScene const & m_scene;
-			castor3d::SamplerObs m_sampler;
+			c3d::SamplerObs m_sampler;
 			AssimpMaterialImporter const & m_importer;
 			float m_emissiveMult;
-			castor::ImageLoaderConfig m_loadConfig;
-			castor::Map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > m_textureRemaps;
+			c3d::ImageLoaderConfig m_loadConfig;
+			c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration > m_textureRemaps;
 			aiShadingMode m_shadingModel{};
 			bool m_isPbr;
 			bool m_hasRefr{};
-			castor3d::Pass & m_result;
-			castor3d::PassComponentPlugin const & m_colourMapPlugin;
-			castor3d::PassComponentPlugin const & m_emissiveMapPlugin;
-			castor3d::PassComponentPlugin const & m_heightMapPlugin;
-			castor3d::PassComponentPlugin const & m_metalnessMapPlugin;
-			castor3d::PassComponentPlugin const & m_normalMapPlugin;
-			castor3d::PassComponentPlugin const & m_occlusionMapPlugin;
-			castor3d::PassComponentPlugin const & m_opacityMapPlugin;
-			castor3d::PassComponentPlugin const & m_roughnessMapPlugin;
-			castor3d::PassComponentPlugin const & m_specularMapPlugin;
-			castor3d::PassComponentPlugin const & m_transmissionMapPlugin;
-			castor3d::PassComponentPlugin const & m_transmittanceMapPlugin;
-			castor3d::PassComponentPlugin const & m_thicknessMapPlugin;
-			castor3d::PassComponentPlugin const & m_clearcoatMapPlugin;
-			castor3d::PassComponentPlugin const & m_clearcoatNormalMapPlugin;
-			castor3d::PassComponentPlugin const & m_clearcoatRoughnessMapPlugin;
-			castor3d::PassComponentPlugin const & m_sheenMapPlugin;
-			castor3d::PassComponentPlugin const & m_sheenRoughnessMapPlugin;
-			castor3d::PassComponentTextureFlag m_colourMapFlags;
-			castor3d::PassComponentTextureFlag m_emissiveMapFlags;
-			castor3d::PassComponentTextureFlag m_heightMapFlags;
-			castor3d::PassComponentTextureFlag m_metalnessMapFlags;
-			castor3d::PassComponentTextureFlag m_normalMapFlags;
-			castor3d::PassComponentTextureFlag m_occlusionMapFlags;
-			castor3d::PassComponentTextureFlag m_opacityMapFlags;
-			castor3d::PassComponentTextureFlag m_roughnessMapFlags;
-			castor3d::PassComponentTextureFlag m_specularMapFlags;
-			castor3d::PassComponentTextureFlag m_transmissionMapFlags;
-			castor3d::PassComponentTextureFlag m_transmittanceMapFlags;
-			castor3d::PassComponentTextureFlag m_thicknessMapFlags;
-			castor3d::PassComponentTextureFlag m_clearcoatMapFlags;
-			castor3d::PassComponentTextureFlag m_clearcoatNormalMapFlags;
-			castor3d::PassComponentTextureFlag m_clearcoatRoughnessMapFlags;
-			castor3d::PassComponentTextureFlag m_sheenMapFlags;
-			castor3d::PassComponentTextureFlag m_sheenRoughnessMapFlags;
-			castor3d::TextureConfiguration m_colourBaseConfiguration;
-			castor3d::TextureConfiguration m_emissiveBaseConfiguration;
-			castor3d::TextureConfiguration m_heightBaseConfiguration;
-			castor3d::TextureConfiguration m_metalnessBaseConfiguration;
-			castor3d::TextureConfiguration m_normalBaseConfiguration;
-			castor3d::TextureConfiguration m_occlusionBaseConfiguration;
-			castor3d::TextureConfiguration m_opacityBaseConfiguration;
-			castor3d::TextureConfiguration m_roughnessBaseConfiguration;
-			castor3d::TextureConfiguration m_specularBaseConfiguration;
-			castor3d::TextureConfiguration m_transmissionBaseConfiguration;
-			castor3d::TextureConfiguration m_transmittanceBaseConfiguration;
-			castor3d::TextureConfiguration m_thicknessBaseConfiguration;
-			castor3d::TextureConfiguration m_clearcoatBaseConfiguration;
-			castor3d::TextureConfiguration m_clearcoatNormalBaseConfiguration;
-			castor3d::TextureConfiguration m_clearcoatRoughnessBaseConfiguration;
-			castor3d::TextureConfiguration m_sheenBaseConfiguration;
-			castor3d::TextureConfiguration m_sheenRoughnessBaseConfiguration;
+			c3d::Pass & m_result;
+			c3d::PassComponentPlugin const & m_colourMapPlugin;
+			c3d::PassComponentPlugin const & m_emissiveMapPlugin;
+			c3d::PassComponentPlugin const & m_heightMapPlugin;
+			c3d::PassComponentPlugin const & m_metalnessMapPlugin;
+			c3d::PassComponentPlugin const & m_normalMapPlugin;
+			c3d::PassComponentPlugin const & m_occlusionMapPlugin;
+			c3d::PassComponentPlugin const & m_opacityMapPlugin;
+			c3d::PassComponentPlugin const & m_roughnessMapPlugin;
+			c3d::PassComponentPlugin const & m_specularMapPlugin;
+			c3d::PassComponentPlugin const & m_transmissionMapPlugin;
+			c3d::PassComponentPlugin const & m_transmittanceMapPlugin;
+			c3d::PassComponentPlugin const & m_thicknessMapPlugin;
+			c3d::PassComponentPlugin const & m_clearcoatMapPlugin;
+			c3d::PassComponentPlugin const & m_clearcoatNormalMapPlugin;
+			c3d::PassComponentPlugin const & m_clearcoatRoughnessMapPlugin;
+			c3d::PassComponentPlugin const & m_sheenMapPlugin;
+			c3d::PassComponentPlugin const & m_sheenRoughnessMapPlugin;
+			c3d::PassComponentTextureFlag m_colourMapFlags;
+			c3d::PassComponentTextureFlag m_emissiveMapFlags;
+			c3d::PassComponentTextureFlag m_heightMapFlags;
+			c3d::PassComponentTextureFlag m_metalnessMapFlags;
+			c3d::PassComponentTextureFlag m_normalMapFlags;
+			c3d::PassComponentTextureFlag m_occlusionMapFlags;
+			c3d::PassComponentTextureFlag m_opacityMapFlags;
+			c3d::PassComponentTextureFlag m_roughnessMapFlags;
+			c3d::PassComponentTextureFlag m_specularMapFlags;
+			c3d::PassComponentTextureFlag m_transmissionMapFlags;
+			c3d::PassComponentTextureFlag m_transmittanceMapFlags;
+			c3d::PassComponentTextureFlag m_thicknessMapFlags;
+			c3d::PassComponentTextureFlag m_clearcoatMapFlags;
+			c3d::PassComponentTextureFlag m_clearcoatNormalMapFlags;
+			c3d::PassComponentTextureFlag m_clearcoatRoughnessMapFlags;
+			c3d::PassComponentTextureFlag m_sheenMapFlags;
+			c3d::PassComponentTextureFlag m_sheenRoughnessMapFlags;
+			c3d::TextureConfiguration m_colourBaseConfiguration;
+			c3d::TextureConfiguration m_emissiveBaseConfiguration;
+			c3d::TextureConfiguration m_heightBaseConfiguration;
+			c3d::TextureConfiguration m_metalnessBaseConfiguration;
+			c3d::TextureConfiguration m_normalBaseConfiguration;
+			c3d::TextureConfiguration m_occlusionBaseConfiguration;
+			c3d::TextureConfiguration m_opacityBaseConfiguration;
+			c3d::TextureConfiguration m_roughnessBaseConfiguration;
+			c3d::TextureConfiguration m_specularBaseConfiguration;
+			c3d::TextureConfiguration m_transmissionBaseConfiguration;
+			c3d::TextureConfiguration m_transmittanceBaseConfiguration;
+			c3d::TextureConfiguration m_thicknessBaseConfiguration;
+			c3d::TextureConfiguration m_clearcoatBaseConfiguration;
+			c3d::TextureConfiguration m_clearcoatNormalBaseConfiguration;
+			c3d::TextureConfiguration m_clearcoatRoughnessBaseConfiguration;
+			c3d::TextureConfiguration m_sheenBaseConfiguration;
+			c3d::TextureConfiguration m_sheenRoughnessBaseConfiguration;
 		};
 
-		static castor3d::LightingModelID getLightingModel( castor3d::Engine const & engine
+		static c3d::LightingModelID getLightingModel( c3d::Engine const & engine
 			, aiShadingMode shadingMode )
 		{
 			auto & factory = engine.getLightingModelFactory();
 
-			if ( engine.getDefaultLightingModel() != factory.getLightingModelId( castor::String{ castor3d::PhongPass::LightingModel }
-				, { castor3d::PhongPass::DefaultDiffuseBrdf.name
-					, castor3d::PhongPass::DefaultSpecularBrdf.name
-					, castor3d::PhongPass::DefaultSheenBrdf.name
-					, castor3d::PhongPass::DefaultClearcoatBrdf.name
-					, castor3d::PhongPass::DefaultScatteringModel.name } ) )
+			if ( engine.getDefaultLightingModel() != factory.getLightingModelId( c3d::String{ c3d::PhongPass::LightingModel }
+				, { c3d::PhongPass::DefaultDiffuseBrdf.name
+					, c3d::PhongPass::DefaultSpecularBrdf.name
+					, c3d::PhongPass::DefaultSheenBrdf.name
+					, c3d::PhongPass::DefaultClearcoatBrdf.name
+					, c3d::PhongPass::DefaultScatteringModel.name } ) )
 			{
 				return engine.getDefaultLightingModel();
 			}
@@ -1302,19 +1302,19 @@ namespace c3d_assimp
 			case aiShadingMode_Gouraud:
 			case aiShadingMode_Phong:
 			case aiShadingMode_Blinn:
-				return factory.getLightingModelId( castor::String{ castor3d::PhongPass::LightingModel }
-					, { castor3d::PhongPass::DefaultDiffuseBrdf.name
-						, castor3d::PhongPass::DefaultSpecularBrdf.name
-						, castor3d::PhongPass::DefaultSheenBrdf.name
-						, castor3d::PhongPass::DefaultClearcoatBrdf.name
-						, castor3d::PhongPass::DefaultScatteringModel.name } );
+				return factory.getLightingModelId( c3d::String{ c3d::PhongPass::LightingModel }
+					, { c3d::PhongPass::DefaultDiffuseBrdf.name
+						, c3d::PhongPass::DefaultSpecularBrdf.name
+						, c3d::PhongPass::DefaultSheenBrdf.name
+						, c3d::PhongPass::DefaultClearcoatBrdf.name
+						, c3d::PhongPass::DefaultScatteringModel.name } );
 			case aiShadingMode_Toon:
 				return factory.getLightingModelId( toon::shader::ToonPhongLightingModel::getName()
-					, { castor3d::PhongPass::DefaultDiffuseBrdf.name
-						, castor3d::PhongPass::DefaultSpecularBrdf.name
-						, castor3d::PhongPass::DefaultSheenBrdf.name
-						, castor3d::PhongPass::DefaultClearcoatBrdf.name
-						, castor3d::PhongPass::DefaultScatteringModel.name } );
+					, { c3d::PhongPass::DefaultDiffuseBrdf.name
+						, c3d::PhongPass::DefaultSpecularBrdf.name
+						, c3d::PhongPass::DefaultSheenBrdf.name
+						, c3d::PhongPass::DefaultClearcoatBrdf.name
+						, c3d::PhongPass::DefaultScatteringModel.name } );
 			case aiShadingMode_OrenNayar:
 			case aiShadingMode_Minnaert:
 			case aiShadingMode_CookTorrance:
@@ -1322,39 +1322,39 @@ namespace c3d_assimp
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wswitch"
 			case aiShadingMode_PBR_BRDF:
-				return factory.getLightingModelId( castor::String{ castor3d::PbrPass::LightingModel }
-					, { castor3d::PbrPass::DefaultDiffuseBrdf.name
-						, castor3d::PbrPass::DefaultSpecularBrdf.name
-						, castor3d::PbrPass::DefaultSheenBrdf.name
-						, castor3d::PbrPass::DefaultClearcoatBrdf.name
-						, castor3d::PbrPass::DefaultScatteringModel.name } );
+				return factory.getLightingModelId( c3d::String{ c3d::PbrPass::LightingModel }
+					, { c3d::PbrPass::DefaultDiffuseBrdf.name
+						, c3d::PbrPass::DefaultSpecularBrdf.name
+						, c3d::PbrPass::DefaultSheenBrdf.name
+						, c3d::PbrPass::DefaultClearcoatBrdf.name
+						, c3d::PbrPass::DefaultScatteringModel.name } );
 #pragma GCC diagnostic pop
 			case aiShadingMode_Unlit:
-				return factory.getLightingModelId( castor::String{ castor3d::PbrPass::LightingModel }
-					, { castor3d::PbrPass::DefaultDiffuseBrdf.name
-						, castor3d::PbrPass::DefaultSpecularBrdf.name
-						, castor3d::PbrPass::DefaultSheenBrdf.name
-						, castor3d::PbrPass::DefaultClearcoatBrdf.name
-						, castor3d::PbrPass::DefaultScatteringModel.name } );
+				return factory.getLightingModelId( c3d::String{ c3d::PbrPass::LightingModel }
+					, { c3d::PbrPass::DefaultDiffuseBrdf.name
+						, c3d::PbrPass::DefaultSpecularBrdf.name
+						, c3d::PbrPass::DefaultSheenBrdf.name
+						, c3d::PbrPass::DefaultClearcoatBrdf.name
+						, c3d::PbrPass::DefaultScatteringModel.name } );
 			default:
-				return factory.getLightingModelId( castor::String{ castor3d::PhongPass::LightingModel }
-					, { castor3d::PbrPass::DefaultDiffuseBrdf.name
-						, castor3d::PbrPass::DefaultSpecularBrdf.name
-						, castor3d::PbrPass::DefaultSheenBrdf.name
-						, castor3d::PbrPass::DefaultClearcoatBrdf.name
-						, castor3d::PbrPass::DefaultScatteringModel.name } );
+				return factory.getLightingModelId( c3d::String{ c3d::PhongPass::LightingModel }
+					, { c3d::PbrPass::DefaultDiffuseBrdf.name
+						, c3d::PbrPass::DefaultSpecularBrdf.name
+						, c3d::PbrPass::DefaultSheenBrdf.name
+						, c3d::PbrPass::DefaultClearcoatBrdf.name
+						, c3d::PbrPass::DefaultScatteringModel.name } );
 			}
 		}
 	}
 
 	//*********************************************************************************************
 
-	AssimpMaterialImporter::AssimpMaterialImporter( castor3d::Engine & engine )
-		: castor3d::MaterialImporter{ engine, cuT( "Assimp" ) }
+	AssimpMaterialImporter::AssimpMaterialImporter( c3d::Engine & engine )
+		: c3d::MaterialImporter{ engine, cuT( "Assimp" ) }
 	{
 	}
 
-	bool AssimpMaterialImporter::doImportMaterial( castor3d::Material & material )
+	bool AssimpMaterialImporter::doImportMaterial( c3d::Material & material )
 	{
 		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
 		auto name = material.getName();

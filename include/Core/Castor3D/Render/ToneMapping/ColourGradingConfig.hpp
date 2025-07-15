@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #pragma warning( push )
 #pragma warning( disable: 4324 )
 
-namespace castor3d
+namespace c3d
 {
 	struct ColourGradingConfig
 	{
@@ -20,27 +20,27 @@ namespace castor3d
 
 		C3D_API void accept( ConfigurationVisitorBase & visitor );
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 
-		castor::Point3f whiteBalance{ 1.0f, 1.0f, 1.0f };
+		Point3f whiteBalance{ 1.0f, 1.0f, 1.0f };
 		float postExposure{ 1.0f };
-		castor::Point3f colourFilter{ 1.0f, 1.0f, 1.0f };
+		Point3f colourFilter{ 1.0f, 1.0f, 1.0f };
 		float midGray{ 0.4135884f };
-		castor::Point3f splitToningShadows{ 0.5f, 0.5f, 0.5f };
+		Point3f splitToningShadows{ 0.5f, 0.5f, 0.5f };
 		float contrast{ 1.0f };
-		castor::Point3f splitToningHighlights{ 0.5f, 0.5f, 0.5f };
+		Point3f splitToningHighlights{ 0.5f, 0.5f, 0.5f };
 		float splitToningBalance{ 1.0f };
-		castor::Point3f channelMixRed{ 1.0f, 0.0f, 0.0f };
+		Point3f channelMixRed{ 1.0f, 0.0f, 0.0f };
 		float saturation{ 1.0f };
-		castor::Point3f channelMixGreen{ 0.0f, 1.0f, 0.0f };
+		Point3f channelMixGreen{ 0.0f, 1.0f, 0.0f };
 		float shadowsStart{ 0.0f };
-		castor::Point3f channelMixBlue{ 0.0f, 0.0f, 1.0f };
+		Point3f channelMixBlue{ 0.0f, 0.0f, 1.0f };
 		float shadowsEnd{ 1.0f };
-		castor::Point3f shadows{ 1.0f, 1.0f, 1.0f };
+		Point3f shadows{ 1.0f, 1.0f, 1.0f };
 		float highlightsStart{ 0.0f };
-		castor::Point3f midtones{ 1.0f, 1.0f, 1.0f };
+		Point3f midtones{ 1.0f, 1.0f, 1.0f };
 		float highlightsEnd{ 1.0f };
-		castor::Point3f highlights{ 1.0f, 1.0f, 1.0f };
+		Point3f highlights{ 1.0f, 1.0f, 1.0f };
 		float hueShift{ 0.0f };
 		alignas( alignof( uint32_t ) ) bool enabled{ true };
 		alignas( alignof( uint32_t ) ) bool enableSplitToning{ true };

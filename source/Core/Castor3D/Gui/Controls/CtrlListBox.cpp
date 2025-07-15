@@ -16,37 +16,37 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementSmartPtr( castor3d, ListBoxCtrl )
+CU_ImplementSmartPtr( c3d, ListBoxCtrl )
 
-namespace castor3d
+namespace c3d
 {
 	static const uint32_t DefaultHeight = 25;
 
 	ListBoxCtrl::ListBoxCtrl( SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, ListBoxStyle * style
 		, ControlRPtr parent )
 		: ListBoxCtrl{ scene
 			, name
 			, style
 			, parent
-			, castor::StringArray{}
+			, StringArray{}
 			, -1
-			, castor::Position{}
-			, castor::Size{}
+			, Position{}
+			, Size{}
 			, 0
 			, true }
 	{
 	}
 
 	ListBoxCtrl::ListBoxCtrl( SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, ListBoxStyle * style
 		, ControlRPtr parent
-		, castor::StringArray const & values
+		, StringArray const & values
 		, int selected
-		, castor::Position const & position
-		, castor::Size const & size
+		, Position const & position
+		, Size const & size
 		, ControlFlagType flags
 		, bool visible )
 		: Control{ Type
@@ -62,7 +62,7 @@ namespace castor3d
 		, m_values{ values }
 		, m_selected{ selected }
 	{
-		setBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
+		setBorderSize( Point4ui{ 1, 1, 1, 1 } );
 		getBackgroundOverlay().getBorderPanelOverlay()->setBorderPosition( BorderPosition::eExternal );
 		setStyle( style );
 	}
@@ -77,7 +77,7 @@ namespace castor3d
 		}
 	}
 
-	void ListBoxCtrl::appendItem( castor::String const & value )
+	void ListBoxCtrl::appendItem( String const & value )
 	{
 		m_values.push_back( value );
 
@@ -136,7 +136,7 @@ namespace castor3d
 		}
 	}
 
-	void ListBoxCtrl::setItemText( int pindex, castor::String const & text )
+	void ListBoxCtrl::setItemText( int pindex, String const & text )
 	{
 		auto index = uint32_t( pindex );
 
@@ -150,16 +150,16 @@ namespace castor3d
 
 				if ( item )
 				{
-					item->setCaption( castor::toUtf8U32String( text ) );
+					item->setCaption( toUtf8U32String( text ) );
 				}
 			}
 		}
 	}
 
-	castor::String ListBoxCtrl::getItemText( int pindex )
+	String ListBoxCtrl::getItemText( int pindex )
 	{
 		auto index = uint32_t( pindex );
-		castor::String result;
+		String result;
 
 		if ( index < m_values.size() )
 		{
@@ -232,25 +232,25 @@ namespace castor3d
 		for ( auto item : m_items )
 		{
 			item->setPosition( position );
-			item->setSize( castor::Size( getClientSize()->x, DefaultHeight ) );
+			item->setSize( Size( getClientSize()->x, DefaultHeight ) );
 			position.y() += DefaultHeight;
 		}
 
-		setBackgroundSize( castor::Size( getSize()->x, uint32_t( m_items.size() * DefaultHeight ) ) );
+		setBackgroundSize( Size( getSize()->x, uint32_t( m_items.size() * DefaultHeight ) ) );
 	}
 
-	StaticCtrlRPtr ListBoxCtrl::doCreateItemCtrl( castor::String const & value
+	StaticCtrlRPtr ListBoxCtrl::doCreateItemCtrl( String const & value
 		, uint32_t itemIndex )
 	{
 		auto & style = getStyle();
 		auto & manager = *getEngine().getControlsManager();
-		auto item = manager.registerControlT( castor::makeUnique< StaticCtrl >( m_scene
-			, getName() + cuT( "_Item" ) + castor::string::toString( itemIndex )
+		auto item = manager.registerControlT( makeUnique< StaticCtrl >( m_scene
+			, getName() + cuT( "_Item" ) + string::toString( itemIndex )
 			, &style.getItemStyle()
 			, this
-			, castor::toUtf8U32String( value )
-			, castor::Position{}
-			, castor::Size{ getClientSize()->x, DefaultHeight }
+			, toUtf8U32String( value )
+			, Position{}
+			, Size{ getClientSize()->x, DefaultHeight }
 			, uint32_t( StaticFlag::eVAlignCenter ) ) );
 		item->setCatchesMouseEvents( true );
 
@@ -278,7 +278,7 @@ namespace castor3d
 		return item;
 	}
 
-	void ListBoxCtrl::doCreateItem( castor::String const & value
+	void ListBoxCtrl::doCreateItem( String const & value
 		, uint32_t itemIndex )
 	{
 		auto item = doCreateItemCtrl( value, itemIndex );
@@ -288,8 +288,8 @@ namespace castor3d
 
 	void ListBoxCtrl::doCreate()
 	{
-		setBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
-		setSize( castor::Size( getSize()->x, uint32_t( m_values.size() * DefaultHeight ) ) );
+		setBorderSize( Point4ui{ 1, 1, 1, 1 } );
+		setSize( Size( getSize()->x, uint32_t( m_values.size() * DefaultHeight ) ) );
 
 		EventHandler::connect( KeyboardEventType::ePushed
 			, [this]( KeyboardEvent const & event )
@@ -325,12 +325,12 @@ namespace castor3d
 		m_selectedItem = {};
 	}
 
-	void ListBoxCtrl::doSetPosition( castor::Position const & value )
+	void ListBoxCtrl::doSetPosition( Position const & value )
 	{
 		doUpdateItems();
 	}
 
-	void ListBoxCtrl::doSetSize( castor::Size const & value )
+	void ListBoxCtrl::doSetSize( Size const & value )
 	{
 		doUpdateItems();
 	}

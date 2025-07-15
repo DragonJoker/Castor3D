@@ -11,21 +11,21 @@ See LICENSE file in root folder
 
 namespace light_streaks
 {
-	using UboOffset = castor3d::UniformBufferOffsetT< castor3d::GaussianBlur::Configuration >;
-	using UboOffsetArray = castor::Vector< UboOffset >;
+	using UboOffset = c3d::UniformBufferOffsetT< c3d::GaussianBlur::Configuration >;
+	using UboOffsetArray = c3d::Vector< UboOffset >;
 
 	class KawasePass
 	{
 	public:
 		KawasePass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
-			, castor3d::RenderDevice const & device
+			, c3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & hiViews
 			, crg::ImageViewIdArray const & kawaseViews
 			, KawaseUbo & kawaseUbo
-			, castor3d::Extent2D dimensions
+			, c3d::Extent2D dimensions
 			, bool const * enabled );
-		void accept( castor3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor );
 
 		crg::FramePassArray const & getLastPasses()const
 		{
@@ -39,10 +39,10 @@ namespace light_streaks
 		{
 			Subpass( crg::FramePassGroup & graph
 				, crg::FramePass const & previousPass
-				, castor3d::RenderDevice const & device
+				, c3d::RenderDevice const & device
 				, crg::ImageViewId const & srcView
 				, crg::ImageViewId const & dstView
-				, castor3d::Extent2D dimensions
+				, c3d::Extent2D dimensions
 				, ashes::PipelineShaderStageCreateInfoArray const & stages
 				, KawaseUbo const & kawaseUbo
 				, uint32_t index
@@ -52,12 +52,12 @@ namespace light_streaks
 		};
 
 	private:
-		castor3d::RenderDevice const & m_device;
+		c3d::RenderDevice const & m_device;
 		KawaseUbo & m_kawaseUbo;
-		castor3d::ProgramModule m_shader;
+		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePassArray m_lastPasses;
-		castor::Vector< Subpass > m_subpasses;
+		c3d::Vector< Subpass > m_subpasses;
 	};
 }
 

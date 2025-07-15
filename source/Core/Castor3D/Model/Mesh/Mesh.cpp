@@ -19,10 +19,10 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, MeshCache )
-CU_ImplementSmartPtr( castor3d, Mesh )
+CU_ImplementSmartPtr( c3d, MeshCache )
+CU_ImplementSmartPtr( c3d, Mesh )
 
-namespace castor3d
+namespace c3d
 {
 	namespace mesh
 	{
@@ -38,11 +38,11 @@ namespace castor3d
 
 				if ( params.size() > 1 )
 				{
-					parameters.parse( params[1]->get< castor::String >() );
+					parameters.parse( params[1]->get< String >() );
 				}
 
 				auto const & factory = getEngine( *blockContext )->getMeshFactory();
-				factory.create( params[0]->get< castor::String >() )->generate( *blockContext->mesh, parameters );
+				factory.create( params[0]->get< String >() )->generate( *blockContext->mesh, parameters );
 			}
 		}
 		CU_EndAttribute()
@@ -66,13 +66,13 @@ namespace castor3d
 		{
 			if ( auto mesh = blockContext->mesh )
 			{
-				castor::Path path;
-				castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+				Path path;
+				Path pathFile = context.file.getPath() / params[0]->get( path );
 				Parameters parameters;
 
 				if ( params.size() > 1 )
 				{
-					fillMeshImportParameters( context, params[1]->get< castor::String >(), parameters );
+					fillMeshImportParameters( context, params[1]->get< String >(), parameters );
 				}
 
 				if ( !MeshImporter::importData( *mesh
@@ -99,16 +99,16 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Path path;
-				castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+				Path path;
+				Path pathFile = context.file.getPath() / params[0]->get( path );
 				Parameters parameters;
 
 				if ( params.size() > 1 )
 				{
-					fillMeshImportParameters( context, params[1]->get< castor::String >(), parameters );
+					fillMeshImportParameters( context, params[1]->get< String >(), parameters );
 				}
 
-				auto animation = castor::makeUnique< MeshAnimation >( *blockContext->mesh
+				auto animation = makeUnique< MeshAnimation >( *blockContext->mesh
 					, pathFile.getFileName() );
 
 				if ( !AnimationImporter::importData( *animation
@@ -119,7 +119,7 @@ namespace castor3d
 				}
 				else
 				{
-					blockContext->mesh->addAnimation( castor::ptrRefCast< Animation >( animation ) );
+					blockContext->mesh->addAnimation( ptrRefCast< Animation >( animation ) );
 				}
 			}
 		}
@@ -133,17 +133,17 @@ namespace castor3d
 			}
 			else
 			{
-				auto animName = params[0]->get< castor::String >();
-				auto path = params[1]->get< castor::Path >();
-				castor::Path pathFile = context.file.getPath() / path;
+				auto animName = params[0]->get< String >();
+				auto path = params[1]->get< Path >();
+				Path pathFile = context.file.getPath() / path;
 				Parameters parameters;
 
 				if ( params.size() > 2 )
 				{
-					fillMeshImportParameters( context, params[2]->get< castor::String >(), parameters );
+					fillMeshImportParameters( context, params[2]->get< String >(), parameters );
 				}
 
-				auto animation = castor::makeUnique< MeshAnimation >( *blockContext->mesh
+				auto animation = makeUnique< MeshAnimation >( *blockContext->mesh
 					, animName );
 
 				if ( !AnimationImporter::importData( *animation
@@ -154,7 +154,7 @@ namespace castor3d
 				}
 				else
 				{
-					blockContext->mesh->addAnimation( castor::ptrRefCast< Animation >( animation ) );
+					blockContext->mesh->addAnimation( ptrRefCast< Animation >( animation ) );
 				}
 			}
 		}
@@ -168,13 +168,13 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Path path;
-				castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+				Path path;
+				Path pathFile = context.file.getPath() / params[0]->get( path );
 				Parameters parameters;
 
 				if ( params.size() > 1 )
 				{
-					fillMeshImportParameters( context, params[1]->get< castor::String >(), parameters );
+					fillMeshImportParameters( context, params[1]->get< String >(), parameters );
 				}
 
 				Mesh mesh{ cuT( "MorphImport" ), *blockContext->mesh->getScene() };
@@ -195,7 +195,7 @@ namespace castor3d
 						auto component = submesh->hasComponent( MorphComponent::TypeName )
 							? submesh->getComponent< MorphComponent >()
 							: submesh->createComponent< MorphComponent >();
-						castor3d::SubmeshAnimationBuffer buffer;
+						SubmeshAnimationBuffer buffer;
 					
 						if ( morphSubmesh->hasComponent( PositionsComponent::TypeName ) )
 						{
@@ -296,7 +296,7 @@ namespace castor3d
 							}
 						}
 
-						component->getData().addMorphTarget( castor::move( buffer ) );
+						component->getData().addMorphTarget( c3d::move( buffer ) );
 					}
 
 					mesh.cleanup();
@@ -321,7 +321,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 
 				if ( auto material = getEngine( *blockContext )->findMaterial( name ) )
 				{
@@ -352,7 +352,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 
 				if ( auto skeleton = blockContext->mesh->getScene()->findSkeleton( name ) )
 				{
@@ -374,7 +374,7 @@ namespace castor3d
 			}
 			else
 			{
-				blockContext->morphAnimation = castor::makeUnique< MeshAnimation >( *blockContext->mesh, params[0]->get< castor::String >() );
+				blockContext->morphAnimation = makeUnique< MeshAnimation >( *blockContext->mesh, params[0]->get< String >() );
 			}
 		}
 		CU_EndAttributePushBlock( CSCNSection::eMorphAnimation, blockContext )
@@ -426,7 +426,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[1]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[1]->get< String >(), *blockContext );
 				uint16_t index;
 
 				if ( auto material = getEngine( *blockContext )->findMaterial( name ) )
@@ -456,10 +456,10 @@ namespace castor3d
 		CU_EndAttributePop()
 	}
 
-	const castor::String ResourceCacheTraitsT< castor3d::Mesh, castor::String >::Name = cuT( "Mesh" );
+	const String ResourceCacheTraitsT< Mesh, String >::Name = cuT( "Mesh" );
 
-	Mesh::Mesh( castor::String const & name, Scene & scene )
-		: castor::Named{ name }
+	Mesh::Mesh( String const & name, Scene & scene )
+		: Named{ name }
 		, Animable{ *scene.getEngine() }
 		, m_scene{ &scene }
 	{
@@ -510,7 +510,7 @@ namespace castor3d
 	{
 		for ( auto & submesh : *this )
 		{
-			previousPasses = submesh->record( resources, graph, castor::move( previousPasses ) );
+			previousPasses = submesh->record( resources, graph, c3d::move( previousPasses ) );
 		}
 
 		return previousPasses;
@@ -602,7 +602,7 @@ namespace castor3d
 
 	SubmeshRPtr Mesh::createSubmesh()
 	{
-		return m_submeshes.emplace_back( castor::makeUnique< Submesh >( *this
+		return m_submeshes.emplace_back( makeUnique< Submesh >( *this
 			, getSubmeshCount() ) ).get();
 	}
 
@@ -646,17 +646,17 @@ namespace castor3d
 		m_skeleton->computeContainers( *this );
 	}
 
-	MeshAnimation & Mesh::createAnimation( castor::String const & name )
+	MeshAnimation & Mesh::createAnimation( String const & name )
 	{
 		if ( !hasAnimation( name ) )
 		{
-			addAnimation( castor::makeUniqueDerived< Animation, MeshAnimation >( *this, name ) );
+			addAnimation( makeUniqueDerived< Animation, MeshAnimation >( *this, name ) );
 		}
 
 		return doGetAnimation< MeshAnimation >( name );
 	}
 
-	void Mesh::removeAnimation( castor::String const & name )
+	void Mesh::removeAnimation( String const & name )
 	{
 		if ( hasAnimation( name ) )
 		{
@@ -676,9 +676,8 @@ namespace castor3d
 		}
 	}
 
-	void Mesh::addParsers( castor::AttributeParsers & result )
+	void Mesh::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< MeshContext > meshCtx{ result, CSCNSection::eMesh };
 		BlockParserContextT< MeshContext > materialsCtx{ result, CSCNSection::eMeshDefaultMaterials, CSCNSection::eMesh };
 
@@ -701,7 +700,7 @@ namespace castor3d
 		MeshAnimation::addParsers( result );
 	}
 
-	castor::String getPrefix( MeshContext const & context )
+	String getPrefix( MeshContext const & context )
 	{
 		return getPrefix( *context.scene );
 	}

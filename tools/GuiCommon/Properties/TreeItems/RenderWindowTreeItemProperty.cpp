@@ -11,7 +11,7 @@
 namespace GuiCommon
 {
 	RenderWindowTreeItemProperty::RenderWindowTreeItemProperty( bool editable
-		, castor3d::RenderWindow & window )
+		, c3d::RenderWindow & window )
 		: TreeItemProperty( window.getEngine(), editable )
 		, m_window( window )
 	{
@@ -38,6 +38,6 @@ namespace GuiCommon
 			, PROPERTY_SCENE_DEBUG_OVERLAYS
 			, m_window.getEngine()->getRenderLoop().hasDebugOverlays()
 			, &m_window.getEngine()->getRenderLoop()
-			, &castor3d::RenderLoop::showDebugOverlays );
+			, &c3d::RenderLoop::showDebugOverlays );
 	}
 }

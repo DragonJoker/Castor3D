@@ -29,7 +29,7 @@ namespace GuiCommon
 		 *\param[in]	engine		Le moteur.
 		 */
 		GeometryTreeItemProperty( bool editable
-			, castor3d::Engine * engine );
+			, c3d::Engine * engine );
 		/**
 		 *\~english
 		 *\brief		Retrieves the geometry
@@ -38,7 +38,7 @@ namespace GuiCommon
 		 *\brief		Récupère la géométrie
 		 *\return		La valeur
 		 */
-		void setData( castor3d::Geometry & data )noexcept
+		void setData( c3d::Geometry & data )noexcept
 		{
 			clearProperties();
 			m_geometry = &data;
@@ -51,7 +51,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::Geometry * m_geometry{};
+		c3d::Geometry * m_geometry{};
 	};
 }
 

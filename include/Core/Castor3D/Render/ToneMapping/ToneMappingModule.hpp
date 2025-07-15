@@ -12,7 +12,7 @@ See LICENSE file in root folder
 
 #include <RenderGraph/FrameGraphPrerequisites.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Render */
 	//@{
@@ -60,13 +60,13 @@ namespace castor3d
 	*\brief
 	*	Fabrique de mappage de tons.
 	*/
-	using ToneMappingFactory = castor::Factory< ToneMapping
-		, castor::String
+	using ToneMappingFactory = Factory< ToneMapping
+		, String
 		, void
-		, castor::Function< void( ast::ShaderBuilder & ) > >;
+		, Function< void( ast::ShaderBuilder & ) > >;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, ToneMapping, C3D_API );
+	CU_DeclareSmartPtr( c3d, ToneMapping, C3D_API );
 	/** @endcond */
 
 	//@}

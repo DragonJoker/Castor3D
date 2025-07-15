@@ -3,18 +3,18 @@
 #include <CastorUtils/Math/SquareMatrix.hpp>
 #include <CastorUtils/Math/Point.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	template< typename T, size_t Count >
-	void ParseArray( castor::String const & src, T * dst )
+	void ParseArray( String const & src, T * dst )
 	{
-		auto array = castor::string::split( src, cuT( " \t" ), Count - 1, false );
+		auto array = string::split( src, cuT( " \t" ), Count - 1, false );
 
 		if ( array.size() >= Count )
 		{
 			for ( size_t i = 0; i < Count; ++i )
 			{
-				castor::string::parse( array[i], dst[i] );
+				string::parse( array[i], dst[i] );
 			}
 		}
 	}
@@ -24,10 +24,10 @@ namespace castor3d
 	{
 		using Type = float;
 
-		static inline Type parse( castor::String const & value )
+		static inline Type parse( String const & value )
 		{
 			Type result;
-			castor::string::parse( value, result );
+			string::parse( value, result );
 			return result;
 		}
 
@@ -45,9 +45,9 @@ namespace castor3d
 	template<>
 	struct ElementTyper< ParticleFormat::eVec2f >
 	{
-		using Type = castor::Point2f;
+		using Type = Point2f;
 
-		static inline Type parse( castor::String const & value )
+		static inline Type parse( String const & value )
 		{
 			Type result;
 			ParseArray< float, 2 >( value, result.ptr() );
@@ -68,9 +68,9 @@ namespace castor3d
 	template<>
 	struct ElementTyper< ParticleFormat::eVec3f >
 	{
-		using Type = castor::Point3f;
+		using Type = Point3f;
 
-		static inline Type parse( castor::String const & value )
+		static inline Type parse( String const & value )
 		{
 			Type result;
 			ParseArray< float, 3 >( value, result.ptr() );
@@ -91,9 +91,9 @@ namespace castor3d
 	template<>
 	struct ElementTyper< ParticleFormat::eVec4f >
 	{
-		using Type = castor::Point4f;
+		using Type = Point4f;
 
-		static inline Type parse( castor::String const & value )
+		static inline Type parse( String const & value )
 		{
 			Type result;
 			ParseArray< float, 4 >( value, result.ptr() );
@@ -116,10 +116,10 @@ namespace castor3d
 	{
 		using Type = int;
 
-		static inline Type parse( castor::String const & value )
+		static inline Type parse( String const & value )
 		{
 			Type result;
-			castor::string::parse( value, result );
+			string::parse( value, result );
 			return result;
 		}
 
@@ -137,9 +137,9 @@ namespace castor3d
 	template<>
 	struct ElementTyper< ParticleFormat::eVec2i >
 	{
-		using Type = castor::Point2i;
+		using Type = Point2i;
 
-		static inline Type parse( castor::String const & value )
+		static inline Type parse( String const & value )
 		{
 			Type result;
 			ParseArray< int, 2 >( value, result.ptr() );
@@ -160,9 +160,9 @@ namespace castor3d
 	template<>
 	struct ElementTyper< ParticleFormat::eVec3i >
 	{
-		using Type = castor::Point3i;
+		using Type = Point3i;
 
-		static inline Type parse( castor::String const & value )
+		static inline Type parse( String const & value )
 		{
 			Type result;
 			ParseArray< int, 3 >( value, result.ptr() );
@@ -183,9 +183,9 @@ namespace castor3d
 	template<>
 	struct ElementTyper< ParticleFormat::eVec4i >
 	{
-		using Type = castor::Point4i;
+		using Type = Point4i;
 
-		static inline Type parse( castor::String const & value )
+		static inline Type parse( String const & value )
 		{
 			Type result;
 			ParseArray< int, 4 >( value, result.ptr() );
@@ -208,10 +208,10 @@ namespace castor3d
 	{
 		using Type = uint32_t;
 
-		static inline Type parse( castor::String const & value )
+		static inline Type parse( String const & value )
 		{
 			Type result;
-			castor::string::parse( value, result );
+			string::parse( value, result );
 			return result;
 		}
 
@@ -229,9 +229,9 @@ namespace castor3d
 	template<>
 	struct ElementTyper< ParticleFormat::eVec2ui >
 	{
-		using Type = castor::Point2ui;
+		using Type = Point2ui;
 
-		static inline Type parse( castor::String const & value )
+		static inline Type parse( String const & value )
 		{
 			Type result;
 			ParseArray< uint32_t, 2 >( value, result.ptr() );
@@ -252,9 +252,9 @@ namespace castor3d
 	template<>
 	struct ElementTyper< ParticleFormat::eVec3ui >
 	{
-		using Type = castor::Point3ui;
+		using Type = Point3ui;
 
-		static inline Type parse( castor::String const & value )
+		static inline Type parse( String const & value )
 		{
 			Type result;
 			ParseArray< uint32_t, 3 >( value, result.ptr() );
@@ -275,9 +275,9 @@ namespace castor3d
 	template<>
 	struct ElementTyper< ParticleFormat::eVec4ui >
 	{
-		using Type = castor::Point4ui;
+		using Type = Point4ui;
 
-		static inline Type parse( castor::String const & value )
+		static inline Type parse( String const & value )
 		{
 			Type result;
 			ParseArray< uint32_t, 4 >( value, result.ptr() );
@@ -298,9 +298,9 @@ namespace castor3d
 	template<>
 	struct ElementTyper< ParticleFormat::eMat2f >
 	{
-		using Type = castor::Matrix2x2f;
+		using Type = Matrix2x2f;
 
-		static inline Type parse( castor::String const & value )
+		static inline Type parse( String const & value )
 		{
 			Type result;
 			ParseArray< float, 4 >( value, result.ptr() );
@@ -321,9 +321,9 @@ namespace castor3d
 	template<>
 	struct ElementTyper< ParticleFormat::eMat3f >
 	{
-		using Type = castor::Matrix3x3f;
+		using Type = Matrix3x3f;
 
-		static inline Type parse( castor::String const & value )
+		static inline Type parse( String const & value )
 		{
 			Type result;
 			ParseArray< float, 9 >( value, result.ptr() );
@@ -344,9 +344,9 @@ namespace castor3d
 	template<>
 	struct ElementTyper< ParticleFormat::eMat4f >
 	{
-		using Type = castor::Matrix4x4f;
+		using Type = Matrix4x4f;
 
-		static inline Type parse( castor::String const & value )
+		static inline Type parse( String const & value )
 		{
 			Type result;
 			ParseArray< float, 16 >( value, result.ptr() );
@@ -368,12 +368,12 @@ namespace castor3d
 	using ParticleElementTypeT = typename ElementTyper< TypeT >::Type;
 
 	template< ParticleFormat Type >
-	inline ParticleElementTypeT< Type > parseValue( castor::String const & value )
+	inline ParticleElementTypeT< Type > parseValue( String const & value )
 	{
 		return ElementTyper< Type >::parse( value );
 	}
 
-	inline void parseValue( castor::String const & textValue
+	inline void parseValue( String const & textValue
 		, ParticleFormat type
 		, Particle & particle
 		, uint32_t index )

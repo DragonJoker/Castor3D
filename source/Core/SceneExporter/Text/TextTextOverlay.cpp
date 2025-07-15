@@ -7,17 +7,15 @@
 
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
-	TextWriter< TextOverlay >::TextWriter( castor::String const & tabs )
+	TextWriter< TextOverlay >::TextWriter( String const & tabs )
 		: TextWriterT< TextOverlay >{ tabs }
 	{
 	}
 
 	bool TextWriter< TextOverlay >::operator()( TextOverlay const & overlay
-		, castor::StringStream & file )
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing TextOverlay " ) << overlay.getOverlayName() << std::endl;
 		bool result = false;

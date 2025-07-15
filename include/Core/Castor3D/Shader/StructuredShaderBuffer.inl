@@ -1,4 +1,4 @@
-namespace castor3d
+namespace c3d
 {
 	template< typename ElementTypeTraits >
 	StructuredShaderBuffer< ElementTypeTraits >::StructuredShaderBuffer( Engine & engine
@@ -51,8 +51,8 @@ namespace castor3d
 	{
 		if ( !m_dirty.empty() )
 		{
-			castor::Vector< ElementType const * > dirty;
-			castor::swap( m_dirty, dirty );
+			Vector< ElementType const * > dirty;
+			c3d::swap( m_dirty, dirty );
 			auto end = std::unique( dirty.begin(), dirty.end() );
 
 			std::for_each( dirty.begin(), end, [this]( ElementType const * element )

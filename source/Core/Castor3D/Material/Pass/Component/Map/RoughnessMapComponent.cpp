@@ -17,16 +17,16 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::RoughnessMapComponent >
-		: public TextWriterT< castor3d::RoughnessMapComponent >
+	class TextWriter< RoughnessMapComponent >
+		: public TextWriterT< RoughnessMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, uint32_t mask )
-			: TextWriterT< castor3d::RoughnessMapComponent >{ tabs }
+			: TextWriterT< RoughnessMapComponent >{ tabs }
 			, m_mask{ mask }
 		{
 		}
@@ -36,7 +36,7 @@ namespace castor
 			return writeMask( file, cuT( "roughness_mask" ), m_mask );
 		}
 
-		bool operator()( castor3d::RoughnessMapComponent const & object
+		bool operator()( RoughnessMapComponent const & object
 			, StringStream & file )override
 		{
 			return writeMask( file, cuT( "roughness_mask" ), m_mask );
@@ -45,10 +45,7 @@ namespace castor
 	private:
 		uint32_t m_mask;
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace rghcmp
@@ -108,8 +105,8 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		auto mbMapName = castor::toUtf8( cuT( "roughness" ) );
-		auto mbValueName = castor::toUtf8( cuT( "roughness" ) );
+		auto mbMapName = toUtf8( cuT( "roughness" ) );
+		auto mbValueName = toUtf8( cuT( "roughness" ) );
 		auto textureName = mbMapName + "MapAndMask";
 
 		if ( !material.hasMember( textureName )
@@ -150,7 +147,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void RoughnessMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void RoughnessMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "roughness" )
@@ -162,69 +159,69 @@ namespace castor3d
 					, 0x00FF0000 );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "roughness_mask" )
 			, rghcmp::parserUnitRoughnessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eUInt32 >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "glossiness_mask" )
 			, rghcmp::parserUnitRoughnessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eUInt32 >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "shininess_mask" )
 			, rghcmp::parserUnitRoughnessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "roughness_mask" )
 			, rghcmp::parserUnitRoughnessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eUInt32 >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "glossiness_mask" )
 			, rghcmp::parserUnitRoughnessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eUInt32 >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "shininess_mask" )
 			, rghcmp::parserUnitRoughnessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "roughness" )
 			, rghcmp::parserTexRemapRoughness );
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "glossiness" )
 			, rghcmp::parserTexRemapRoughness );
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "shininess" )
 			, rghcmp::parserTexRemapRoughness );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "roughness_mask" )
 			, rghcmp::parserTexRemapRoughnessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eUInt32 >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "glossiness_mask" )
 			, rghcmp::parserTexRemapRoughnessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eUInt32 >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "shininess_mask" )
 			, rghcmp::parserTexRemapRoughnessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 
 	bool RoughnessMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -236,22 +233,22 @@ namespace castor3d
 	}
 
 	void RoughnessMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, RoughnessMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, RoughnessMapComponent >( pass ) );
 	}
 
 	bool RoughnessMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< RoughnessMapComponent >{ tabs, mask }( file );
+		return TextWriter< RoughnessMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const RoughnessMapComponent::TypeName = C3D_MakePassMapComponentName( "roughness" );
+	String const RoughnessMapComponent::TypeName = C3D_MakePassMapComponentName( "roughness" );
 
 	RoughnessMapComponent::RoughnessMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -263,7 +260,7 @@ namespace castor3d
 
 	PassComponentUPtr RoughnessMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, RoughnessMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, RoughnessMapComponent >( pass );
 	}
 
 	void RoughnessMapComponent::doFillConfig( TextureConfiguration & configuration
@@ -275,13 +272,13 @@ namespace castor3d
 
 	PassMapDefaultImageParams RoughnessMapComponent::createDefaultImage()const
 	{
-		castor::String name{ cuT( "DefaultRoughness" ) };
-		castor::ByteArray data;
+		String name{ cuT( "DefaultRoughness" ) };
+		ByteArray data;
 		data.resize( sizeof( float ) );
 		float value{ 1.0f };
 		std::memcpy( data.data(), &value, data.size() );
 		return { name
-			, castor::ImageCreateParams{ castor::getFormatName( castor::PixelFormat::eR32_SFLOAT ), data } };
+			, ImageCreateParams{ getFormatName( PixelFormat::eR32_SFLOAT ), data } };
 	}
 
 	//*********************************************************************************************

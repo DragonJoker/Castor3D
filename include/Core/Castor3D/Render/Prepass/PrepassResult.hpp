@@ -12,18 +12,18 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/DataHolder.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class PrepassResult
-		: private castor::DataHolderT< TextureUPtr >
+		: private DataHolderT< TextureUPtr >
 		, public GBufferT< PpTexture >
 	{
-		using TextureHolder = castor::DataHolderT< TextureUPtr >;
+		using TextureHolder = DataHolderT< TextureUPtr >;
 
 	public:
 		C3D_API PrepassResult( crg::ResourcesCache & resources
 			, RenderDevice const & device
-			, castor::Size const & size
+			, Size const & size
 			, bool needsVisibility );
 	};
 }

@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Render */
 	//@{
@@ -28,15 +28,15 @@ namespace castor3d
 		eVisibility = 1, // R => node ID + pipeline ID, G => primitive ID
 		CU_ScopedEnumBounds( eDepthObj, eVisibility ),
 	};
-	C3D_API castor::String getTextureName( PpTexture texture );
-	C3D_API castor::String getTexName( PpTexture texture );
-	C3D_API castor::PixelFormat getFormat( RenderDevice const & device, PpTexture texture );
+	C3D_API String getTextureName( PpTexture texture );
+	C3D_API String getTexName( PpTexture texture );
+	C3D_API PixelFormat getFormat( RenderDevice const & device, PpTexture texture );
 	C3D_API ClearValue getClearValue( PpTexture texture );
 	C3D_API ImageUsageFlags getUsageFlags( PpTexture texture );
 	C3D_API BorderColour getBorderColor( PpTexture texture );
 	inline uint32_t getMipLevels( RenderDevice const & /*device*/
 		, PpTexture /*texture*/
-		, castor::Size const & /*size*/ )
+		, Size const & /*size*/ )
 	{
 		return 1u;
 	}
@@ -82,10 +82,10 @@ namespace castor3d
 	class VisibilityPass;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, DepthPass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PrepassRendering, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PrepassResult, C3D_API );
-	CU_DeclareSmartPtr( castor3d, VisibilityPass, C3D_API );
+	CU_DeclareSmartPtr( c3d, DepthPass, C3D_API );
+	CU_DeclareSmartPtr( c3d, PrepassRendering, C3D_API );
+	CU_DeclareSmartPtr( c3d, PrepassResult, C3D_API );
+	CU_DeclareSmartPtr( c3d, VisibilityPass, C3D_API );
 	/** @endcond */
 
 	//@}

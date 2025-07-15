@@ -14,19 +14,19 @@
 
 #include <ShaderWriter/Intrinsics/IntrinsicFunctions.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::SubsurfaceScatteringComponent >
-		: public TextWriterT< castor3d::SubsurfaceScatteringComponent >
+	class TextWriter< SubsurfaceScatteringComponent >
+		: public TextWriterT< SubsurfaceScatteringComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::SubsurfaceScatteringComponent >{ tabs }
+			: TextWriterT< SubsurfaceScatteringComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::SubsurfaceScatteringComponent const & object
+		bool operator()( SubsurfaceScatteringComponent const & object
 			, StringStream & file )override
 		{
 			auto result = true;
@@ -54,10 +54,7 @@ namespace castor
 			return result;
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace sss
@@ -84,7 +81,7 @@ namespace castor3d
 			else
 			{
 				newBlockContext->pass = blockContext;
-				newBlockContext->subsurfaceScattering = castor::makeUnique< SubsurfaceScattering >();
+				newBlockContext->subsurfaceScattering = makeUnique< SubsurfaceScattering >();
 			}
 		}
 		CU_EndAttributePushNewBlock( Section::eSubsurfaceScattering )
@@ -158,7 +155,7 @@ namespace castor3d
 			else
 			{
 				auto & component = getPassComponent< SubsurfaceScatteringComponent >( *blockContext->pass );
-				component.setSubsurfaceScattering( castor::move( blockContext->subsurfaceScattering ) );
+				component.setSubsurfaceScattering( c3d::move( blockContext->subsurfaceScattering ) );
 			}
 		}
 		CU_EndAttributePop()
@@ -175,7 +172,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Point4f value;
+				Point4f value;
 				params[0]->get( value );
 				blockContext->subsurfaceScattering->addProfileFactor( value );
 			}
@@ -255,49 +252,49 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void SubsurfaceScatteringComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void SubsurfaceScatteringComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, sss::Section::eSubsurfaceScattering
 			, cuT( "subsurface_scattering" )
 			, sss::parserPassSubsurfaceScattering );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, sss::Section::eSubsurfaceScattering
 			, cuT( "strength" )
 			, sss::parserSubsurfaceScatteringStrength
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, sss::Section::eSubsurfaceScattering
 			, cuT( "gaussian_width" )
 			, sss::parserSubsurfaceScatteringGaussianWidth
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, sss::Section::eSubsurfaceScattering
 			, cuT( "thickness_scale" )
 			, sss::parserSubsurfaceScatteringThicknessScale
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, sss::Section::eSubsurfaceScattering
 			, sss::Section::eTransmittanceProfile
 			, cuT( "transmittance_profile" )
 			, sss::parserSubsurfaceScatteringTransmittanceProfile );
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, sss::Section::eSubsurfaceScattering
 			, CSCNSection::ePass
 			, cuT( "}" )
 			, sss::parserSubsurfaceScatteringEnd );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, sss::Section::eTransmittanceProfile
 			, cuT( "factor" )
 			, sss::parserTransmittanceProfileFactor
-			, { castor::makeParameter< castor::ParameterType::ePoint4F >() } );
+			, { makeParameter< ParameterType::ePoint4F >() } );
 	}
 
-	void SubsurfaceScatteringComponent::Plugin::createSections( castor::StrUInt32Map & sections )const
+	void SubsurfaceScatteringComponent::Plugin::createSections( StrUInt32Map & sections )const
 	{
 		sections.try_emplace( uint32_t( sss::Section::eSubsurfaceScattering )
 			, cuT( "subsurface_scattering" ) );
@@ -321,10 +318,10 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const SubsurfaceScatteringComponent::TypeName = C3D_MakePassLightingComponentName( "subsurf_scatter" );
+	String const SubsurfaceScatteringComponent::TypeName = C3D_MakePassLightingComponentName( "subsurf_scatter" );
 
 	SubsurfaceScatteringComponent::SubsurfaceScatteringComponent( Pass & pass )
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< SubsurfaceScatteringUPtr > >{ pass, TypeName }
+		: BaseDataPassComponentT< AtomicGroupChangeTracked< SubsurfaceScatteringUPtr > >{ pass, TypeName }
 	{
 	}
 
@@ -349,7 +346,7 @@ namespace castor3d
 
 	void SubsurfaceScatteringComponent::setSubsurfaceScattering( SubsurfaceScatteringUPtr value )
 	{
-		( *m_value ) = castor::move( value );
+		( *m_value ) = c3d::move( value );
 		m_sssConnection = ( *m_value )->onChanged.connect( [this]( SubsurfaceScattering const & )
 			{
 				m_sssDirty = true;
@@ -393,23 +390,23 @@ namespace castor3d
 	PassComponentUPtr SubsurfaceScatteringComponent::doClone( Pass & pass )const
 	{
 		auto & subsurfaceScattering = getSubsurfaceScattering();
-		auto sss = castor::makeUnique< SubsurfaceScattering >();
+		auto sss = makeUnique< SubsurfaceScattering >();
 		sss->setGaussianWidth( subsurfaceScattering.getGaussianWidth() );
 		sss->setStrength( subsurfaceScattering.getStrength() );
 		sss->setSubsurfaceRadius( subsurfaceScattering.getSubsurfaceRadius() );
 		sss->setThicknessScale( subsurfaceScattering.getThicknessScale() );
 
-		auto result = castor::make_unique< SubsurfaceScatteringComponent >( pass );
-		result->setSubsurfaceScattering( castor::move( sss ) );
+		auto result = makeRawUnique< SubsurfaceScatteringComponent >( pass );
+		result->setSubsurfaceScattering( c3d::move( sss ) );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool SubsurfaceScatteringComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool SubsurfaceScatteringComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< SubsurfaceScatteringComponent >{ tabs }( *this, file );
+		return TextWriter< SubsurfaceScatteringComponent >{ tabs }( *this, file );
 	}
 
 	void SubsurfaceScatteringComponent::doFillBuffer( PassBuffer & buffer )const

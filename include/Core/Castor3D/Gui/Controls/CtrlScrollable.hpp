@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Gui/Theme/StyleScrollBar.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	C3D_API bool isScrollableControl( ControlType type );
 	C3D_API bool isScrollableControl( Control const & control );
@@ -15,7 +15,7 @@ namespace castor3d
 	{
 	public:
 		C3D_API virtual ~ScrollableCtrl()noexcept;
-		C3D_API castor::Position getScrollPosition()const;
+		C3D_API Position getScrollPosition()const;
 
 		ScrollableStyle & getStyle()const noexcept
 		{
@@ -52,11 +52,11 @@ namespace castor3d
 
 		/** Updates the given client rect regarding scrollbars dimensions and visibility.
 		*/
-		C3D_API castor::Point4ui updateScrollableClientRect( castor::Point4ui const & clientRect )const;
+		C3D_API Point4ui updateScrollableClientRect( Point4ui const & clientRect )const;
 
 		/** Updates scrollbars thumb from external event.
 		*/
-		C3D_API void updateScrollBarsThumb( castor::Position const & pos );
+		C3D_API void updateScrollBarsThumb( Position const & pos );
 
 		/** Updates scrollbars visibility.
 		*/
@@ -72,7 +72,7 @@ namespace castor3d
 
 		/** Updates total scrollable content dimensions.
 		*/
-		C3D_API void updateTotalSize( castor::Size const & size );
+		C3D_API void updateTotalSize( Size const & size );
 
 		/** @copydoc Control::doUpdateZIndex
 		*/
@@ -96,18 +96,18 @@ namespace castor3d
 		struct ScrolledControl
 		{
 			ScrolledControl( OnControlChangedConnection connection
-				, castor::Position originalPosition )
-				: connection{ castor::move( connection ) }
-				, originalPosition{ castor::move( originalPosition ) }
+				, Position originalPosition )
+				: connection{ c3d::move( connection ) }
+				, originalPosition{ c3d::move( originalPosition ) }
 			{
 			}
 
 			OnControlChangedConnection connection;
-			castor::Position originalPosition;
+			Position originalPosition;
 		};
 
-		using OnScrollContentFunction = castor::Function< void( castor::Position const & ) >;
-		using OnScrollContent = castor::SignalT< OnScrollContentFunction >;
+		using OnScrollContentFunction = Function< void( Position const & ) >;
+		using OnScrollContent = SignalT< OnScrollContentFunction >;
 		using OnScrollContentConnection = OnScrollContent::connection;
 
 		OnScrollContent onScrollContent;
@@ -124,7 +124,7 @@ namespace castor3d
 		ScrollBarCtrlRPtr m_verticalScrollBar{};
 		ScrollBarCtrlRPtr m_horizontalScrollBar{};
 		PanelOverlayRPtr m_corner{};
-		castor::Map< ControlRPtr, ScrolledControl > m_controls{};
+		Map< ControlRPtr, ScrolledControl > m_controls{};
 		OnScrollBarEventConnection m_onVerticalThumbRelease{};
 		OnScrollBarEventConnection m_onHorizontalThumbRelease{};
 		OnScrollBarEventConnection m_onVerticalThumbTrack{};

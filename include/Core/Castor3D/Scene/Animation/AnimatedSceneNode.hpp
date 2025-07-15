@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Animation/SceneNode/SceneNodeAnimationModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class AnimatedSceneNode
 		: public AnimatedObject
@@ -29,14 +29,14 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'objet.
 		 *\param[in]	node	Le noeud de scène.
 		 */
-		C3D_API AnimatedSceneNode( castor::String const & name
+		C3D_API AnimatedSceneNode( String const & name
 			, SceneNode & node );
 		/**
-		 *\copydoc		castor3d::AnimatedObject::update
+		 *\copydoc		AnimatedObject::update
 		 */
-		C3D_API void update( castor::Milliseconds const & elapsed )override;
+		C3D_API void update( Milliseconds const & elapsed )override;
 		/**
-		 *\copydoc		castor3d::AnimatedObject::isPlayingAnimation
+		 *\copydoc		AnimatedObject::isPlayingAnimation
 		 */
 		C3D_API bool isPlayingAnimation()const override
 		{
@@ -59,7 +59,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doAddAnimation( castor::String const & name )override;
+		void doAddAnimation( String const & name )override;
 		void doStartAnimation( AnimationInstance & animation )override;
 		void doStopAnimation( AnimationInstance & animation )override;
 		void doClearAnimations()override;

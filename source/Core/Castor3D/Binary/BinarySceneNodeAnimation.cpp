@@ -4,7 +4,7 @@
 #include "Castor3D/Scene/Animation/SceneNodeAnimationKeyFrame.hpp"
 #include "Castor3D/Binary/BinarySceneNodeAnimationKeyFrame.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
@@ -23,13 +23,13 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template<>
-	castor::String BinaryParserBase< SceneNodeAnimation >::Name = cuT( "SceneNodeAnimation" );
+	String BinaryParserBase< SceneNodeAnimation >::Name = cuT( "SceneNodeAnimation" );
 
 	bool BinaryParser< SceneNodeAnimation >::doParse( SceneNodeAnimation & obj )
 	{
 		bool result = true;
 		SceneNodeAnimationKeyFrameUPtr keyFrame;
-		castor::String name;
+		String name;
 		BinaryChunk chunk{ doIsLittleEndian() };
 
 		while ( result && doGetSubChunk( chunk ) )
@@ -48,13 +48,13 @@ namespace castor3d
 				break;
 
 			case ChunkType::eSceneNodeAnimationKeyFrame:
-				keyFrame = castor::makeUnique< SceneNodeAnimationKeyFrame >( obj, 0_ms );
+				keyFrame = makeUnique< SceneNodeAnimationKeyFrame >( obj, 0_ms );
 				result = createBinaryParser< SceneNodeAnimationKeyFrame >().parse( *keyFrame, chunk );
 				checkError( result, cuT( "Couldn't parse keyframe." ) );
 
 				if ( result )
 				{
-					obj.addKeyFrame( castor::ptrRefCast< AnimationKeyFrame >( keyFrame ) );
+					obj.addKeyFrame( ptrRefCast< AnimationKeyFrame >( keyFrame ) );
 				}
 
 				break;

@@ -35,7 +35,7 @@ namespace GuiCommon
 		 *\param[in]	target	L'objet cible
 		 */
 		RenderTargetTreeItemProperty( bool editable
-			, castor3d::RenderTarget & target );
+			, c3d::RenderTarget & target );
 		/**
 		 *\~english
 		 *\brief		Retrieves the object
@@ -44,7 +44,7 @@ namespace GuiCommon
 		 *\brief		Récupère l'objet
 		 *\return		La valeur
 		 */
-		inline castor3d::RenderTarget & getRenderTarget()
+		inline c3d::RenderTarget & getRenderTarget()
 		{
 			return m_target;
 		}
@@ -56,13 +56,13 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::RenderTarget & m_target;
+		c3d::RenderTarget & m_target;
 	};
 
 	void appendRenderTarget( SceneObjectsTree * list
 		, bool editable
 		, wxTreeItemId id
-		, castor3d::RenderTarget & target );
+		, c3d::RenderTarget & target );
 }
 
 #endif

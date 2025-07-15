@@ -26,10 +26,10 @@ namespace crg::ru
 	struct Config;
 }
 
-namespace castor3d
+namespace c3d
 {
 	class RenderQueue
-		: public castor::OwnedBy< RenderNodesPass >
+		: public OwnedBy< RenderNodesPass >
 	{
 	public:
 		/**
@@ -53,7 +53,7 @@ namespace castor3d
 		C3D_API RenderQueue( RenderNodesPass & renderPass
 			, RenderDevice const & device
 			, SceneCuller & culler
-			, castor::String const & typeName
+			, String const & typeName
 			, bool meshShading
 			, SceneNode const * ignored );
 		/**
@@ -193,10 +193,10 @@ namespace castor3d
 			PassData & operator=( PassData const & ) = delete;
 
 			PassData( PassData && rhs )noexcept
-				: initEvent{ castor::move( rhs.initEvent ) }
+				: initEvent{ c3d::move( rhs.initEvent ) }
 				, initialised{ rhs.initialised }
-				, commandBuffer{ castor::move( rhs.commandBuffer ) }
-				, renderPassAtInit{ castor::move( rhs.renderPassAtInit ) }
+				, commandBuffer{ c3d::move( rhs.commandBuffer ) }
+				, renderPassAtInit{ c3d::move( rhs.renderPassAtInit ) }
 			{
 				rhs.initEvent = {};
 				rhs.initialised = {};
@@ -205,10 +205,10 @@ namespace castor3d
 
 			~PassData()noexcept;
 			void initialise( QueueData const & queueData
-				, castor::String const & name
+				, String const & name
 				, VkRenderPass renderPass );
 
-			mutable castor::SpinMutex eventMutex;
+			mutable SpinMutex eventMutex;
 			GpuFrameEvent * initEvent{};
 			bool initialised{};
 			ashes::CommandBufferPtr commandBuffer;
@@ -225,15 +225,15 @@ namespace castor3d
 		SceneCullerSignalConnection m_onCullerCompute;
 		SceneNode const * m_ignoredNode{ nullptr };
 		QueueRenderNodesUPtr m_renderNodes;
-		castor::RawUniquePtr< PassData > m_pass;
+		RawUniquePtr< PassData > m_pass;
 		PassData * m_currentPass;
-		castor::RawUniquePtr< PassData > m_toDelete;
+		RawUniquePtr< PassData > m_toDelete;
 		bool m_culledChanged{};
 		bool m_fullSort{ true };
 		bool m_commandsChanged{};
 		std::atomic_bool m_invalidated{};
-		castor::GroupChangeTracked< ashes::Optional< VkViewport > > m_viewport;
-		castor::GroupChangeTracked< ashes::Optional< VkRect2D > > m_scissor;
+		GroupChangeTracked< ashes::Optional< VkViewport > > m_viewport;
+		GroupChangeTracked< ashes::Optional< VkRect2D > > m_scissor;
 		uint32_t m_drawCalls{};
 	};
 }

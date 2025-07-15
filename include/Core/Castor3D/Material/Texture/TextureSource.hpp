@@ -11,10 +11,10 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Graphics/ImageMemoryLayout.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class TextureSource
-		: public castor::Named
+		: public Named
 	{
 	public:
 		/**
@@ -29,24 +29,24 @@ namespace castor3d
 		 *\param[in]	name	Le nom de la source.
 		 *\param[in]	layout	Le layout CPU de l'image.
 		 */
-		explicit TextureSource( castor::Image & image
-			, castor::String name
-			, castor::ImageMemoryLayout layout )
-			: castor::Named{ castor::move( name ) }
+		explicit TextureSource( Image & image
+			, String name
+			, ImageMemoryLayout layout )
+			: Named{ c3d::move( name ) }
 			, m_image{ &image }
-			, m_layout{ castor::move( layout ) }
+			, m_layout{ c3d::move( layout ) }
 		{
 		}
 
 		void update( Extent3D const & extent
-			, castor::PixelFormat format
+			, PixelFormat format
 			, uint32_t mipLevels
 			, uint32_t arrayLayers )
 		{
 			m_layout.extent->x = extent.width;
 			m_layout.extent->y = extent.height;
 			m_layout.extent->z = extent.depth;
-			m_layout.format = castor::PixelFormat( format );
+			m_layout.format = PixelFormat( format );
 			m_layout.layers = arrayLayers;
 			m_layout.levels = mipLevels;
 		}
@@ -57,7 +57,7 @@ namespace castor3d
 		 *\name		Accesseurs.
 		 */
 		//@{
-		castor::String const & toString()const noexcept
+		String const & toString()const noexcept
 		{
 			return getName();
 		}
@@ -92,20 +92,20 @@ namespace castor3d
 			return m_layout.hasBuffer( m_image->getPxBuffer() );
 		}
 
-		castor::ImageMemoryLayout::ConstBuffer getBuffer()const noexcept
+		ImageMemoryLayout::ConstBuffer getBuffer()const noexcept
 		{
-			return m_layout.buffer( const_cast< castor::Image const & >( *m_image ).getPxBuffer() );
+			return m_layout.buffer( const_cast< Image const & >( *m_image ).getPxBuffer() );
 		}
 
-		castor::ImageMemoryLayout::Buffer getBuffer()noexcept
+		ImageMemoryLayout::Buffer getBuffer()noexcept
 		{
 			return m_layout.buffer( m_image->getPxBuffer() );
 		}
 		//@}
 
 	private:
-		castor::Image * m_image;
-		castor::ImageMemoryLayout m_layout;
+		Image * m_image;
+		ImageMemoryLayout m_layout;
 	};
 }
 

@@ -13,17 +13,17 @@ See LICENSE file in root folder
 
 #include <unordered_map>
 
-namespace castor
+namespace c3d
 {
 	/**
 	*\~english
 	*	Base class for an element cache.
 	*\remarks
-	*	Specialisation for castor::Font.
+	*	Specialisation for c3d::Font.
 	*\~french
 	*	Classe de base pour un cache d'éléments.
 	*\remarks
-	*	Spécialisation pour castor::Font.
+	*	Spécialisation pour c3d::Font.
 	*/
 	template<>
 	class ResourceCacheT< Font, String, FontCacheTraits > final
@@ -123,7 +123,7 @@ namespace castor
 			if ( ires.second )
 			{
 				ires.first->second = this->create( name
-					, castor::forward< ParametersT >( parameters )... );
+					, c3d::forward< ParametersT >( parameters )... );
 				created = ElementCacheTraitsT::makeElementObs( ires.first->second );
 
 				if ( initialise
@@ -138,7 +138,7 @@ namespace castor
 		}
 
 	private:
-		using PathNameMap = UnorderedStringMap< Path >;
+		using PathNameMap = HashStringMap< Path >;
 		//!\~english	The font files paths sorted by file_name.file_extension.
 		//!\~french		Les fichiers des polices, triés par file_name.file_extension.
 		PathNameMap m_paths;

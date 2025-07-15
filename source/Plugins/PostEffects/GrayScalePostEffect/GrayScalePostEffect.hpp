@@ -15,24 +15,24 @@ See LICENSE file in root folder
 namespace grayscale
 {
 	class PostEffect
-		: public castor3d::PostEffect
+		: public c3d::PostEffect
 	{
 	public:
-		PostEffect( castor3d::RenderTarget & renderTarget
-			, castor3d::RenderSystem & renderSystem
-			, castor3d::Parameters const & params );
+		PostEffect( c3d::RenderTarget & renderTarget
+			, c3d::RenderSystem & renderSystem
+			, c3d::Parameters const & params );
 		~PostEffect()override;
-		static castor3d::PostEffectUPtr create( castor3d::RenderTarget & renderTarget
-			, castor3d::RenderSystem & renderSystem
-			, castor3d::Parameters const & params );
+		static c3d::PostEffectUPtr create( c3d::RenderTarget & renderTarget
+			, c3d::RenderSystem & renderSystem
+			, c3d::Parameters const & params );
 		/**
-		 *\copydoc		castor3d::PostEffect::accept
+		 *\copydoc		c3d::PostEffect::accept
 		 */
-		void accept( castor3d::ConfigurationVisitorBase & visitor )override;
+		void accept( c3d::ConfigurationVisitorBase & visitor )override;
 		/**
-		 *\copydoc		castor3d::PostEffect::setParameters
+		 *\copydoc		c3d::PostEffect::setParameters
 		 */
-		void setParameters( castor3d::Parameters parameters )override;
+		void setParameters( c3d::Parameters parameters )override;
 
 		crg::FramePass const & getPass()const override
 		{
@@ -42,33 +42,33 @@ namespace grayscale
 
 	private:
 		/**
-		*\copydoc		castor3d::PostEffect::doInitialise
+		*\copydoc		c3d::PostEffect::doInitialise
 		*/
-		bool doInitialise( castor3d::RenderDevice const & device
-			, castor3d::Texture const & source
-			, castor3d::Texture const & target
+		bool doInitialise( c3d::RenderDevice const & device
+			, c3d::Texture const & source
+			, c3d::Texture const & target
 			, crg::FramePass const & previousPass )override;
 		/**
-		*\copydoc		castor3d::PostEffect::doCleanup
+		*\copydoc		c3d::PostEffect::doCleanup
 		*/
-		void doCleanup( castor3d::RenderDevice const & device ) override;
+		void doCleanup( c3d::RenderDevice const & device ) override;
 		/**
-		 *\copydoc		castor3d::PostEffect::doCpuUpdate
+		 *\copydoc		c3d::PostEffect::doCpuUpdate
 		 */
-		void doCpuUpdate( castor3d::CpuUpdater & updater )override;
+		void doCpuUpdate( c3d::CpuUpdater & updater )override;
 		/**
-		 *\copydoc		castor3d::PostEffect::doWriteInto
+		 *\copydoc		c3d::PostEffect::doWriteInto
 		 */
-		bool doWriteInto( castor::StringStream & file, castor::String const & tabs ) override;
+		bool doWriteInto( c3d::StringStream & file, c3d::String const & tabs ) override;
 
 	public:
-		static castor::String Type;
-		static castor::MbString Name;
+		static c3d::String Type;
+		static c3d::MbString Name;
 
 	private:
-		castor3d::UniformBufferOffsetT< castor::Point3f > m_configUbo;
-		castor::ChangeTracked< castor::Point3f > m_factors{ castor::Point3f{ 0.2126f, 0.7152f, 0.0722f } };
-		castor3d::ProgramModule m_shader;
+		c3d::UniformBufferOffsetT< c3d::Point3f > m_configUbo;
+		c3d::ChangeTracked< c3d::Point3f > m_factors{ c3d::Point3f{ 0.2126f, 0.7152f, 0.0722f } };
+		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass * m_pass{};
 	};

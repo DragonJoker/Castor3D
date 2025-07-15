@@ -9,31 +9,31 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::PanelCtrl >
-		: public TextWriterT< castor3d::PanelCtrl >
+	class TextWriter< PanelCtrl >
+		: public TextWriterT< PanelCtrl >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, bool customStyle = false );
-		bool operator()( castor3d::PanelCtrl const & object
-			, castor::StringStream & file )override;
+		bool operator()( PanelCtrl const & object
+			, StringStream & file )override;
 
 	private:
 		bool m_customStyle;
 	};
 
 	template<>
-	class TextWriter< castor3d::PanelStyle >
-		: public TextWriterT< castor3d::PanelStyle >
+	class TextWriter< PanelStyle >
+		: public TextWriterT< PanelStyle >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, String const & fontName );
-		bool operator()( castor3d::PanelStyle const & object
-			, castor::StringStream & file )override;
+		bool operator()( PanelStyle const & object
+			, StringStream & file )override;
 
 	private:
 		String m_fontName;

@@ -15,7 +15,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/BaseTypes/Array.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace shader
 	{
@@ -28,7 +28,7 @@ namespace castor3d
 			SDW_DeclStructInstance( C3D_API, LayeredLpvGridData );
 
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static castor::RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+			C3D_API static RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 			// Raw values
 			sdw::Array< sdw::Vec4 > allMinVolumeCorners;
@@ -57,7 +57,7 @@ namespace castor3d
 		C3D_API explicit LayeredLpvGridConfigUbo( RenderDevice const & device );
 		C3D_API ~LayeredLpvGridConfigUbo()noexcept;
 
-		C3D_API void cpuUpdate( castor::Array< castor::Grid const *, LpvMaxCascadesCount > const & grids
+		C3D_API void cpuUpdate( Array< Grid const *, LpvMaxCascadesCount > const & grids
 			, float indirectAttenuation );
 
 		void createPassBinding( crg::FramePass & pass
@@ -104,7 +104,7 @@ namespace castor3d
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_llpvGridData = layeredLpvConfig.declMember< castor3d::shader::LayeredLpvGridData >( "c3d_llpvGridData", enabled );\
+	auto c3d_llpvGridData = layeredLpvConfig.declMember< c3d::shader::LayeredLpvGridData >( "c3d_llpvGridData", enabled );\
 	layeredLpvConfig.end()
 
 #endif

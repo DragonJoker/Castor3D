@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/Position.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class OverlayCategory
 	{
@@ -25,8 +25,8 @@ namespace castor3d
 		*/
 		struct Vertex
 		{
-			castor::Point2f coords;
-			castor::Point2f texture;
+			Point2f coords;
+			Point2f texture;
 
 			Vertex * data()
 			{
@@ -90,7 +90,7 @@ namespace castor3d
 		 *\brief		Récupère le nom de l'incrustation
 		 *\return		La valeur
 		 */
-		C3D_API castor::String const & getOverlayName()const;
+		C3D_API String const & getOverlayName()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay position, in pixels
@@ -101,7 +101,7 @@ namespace castor3d
 		 *\param[in]	size	La taille de l'écran
 		 *\return		La position
 		 */
-		C3D_API castor::Position getAbsolutePosition( castor::Size const & size )const;
+		C3D_API Position getAbsolutePosition( Size const & size )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay size, in pixels
@@ -112,7 +112,7 @@ namespace castor3d
 		 *\param[in]	size	La taille de l'écran
 		 *\return		La taille
 		 */
-		C3D_API castor::Size getAbsoluteSize( castor::Size const & size )const;
+		C3D_API Size getAbsoluteSize( Size const & size )const;
 		/**
 		 *\~english
 		 *\param[in]	size	The render size
@@ -121,7 +121,7 @@ namespace castor3d
 		 *\param[in]	size	La taille du rendu
 		 *\return		Le ratio entre les dimensions données et les dimensions utilisées lors du calcul de la position relative depuis la position en pixels.
 		 */
-		C3D_API castor::Point2d getRenderRatio( castor::Size const & size )const;
+		C3D_API Point2d getRenderRatio( Size const & size )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay position
@@ -130,7 +130,7 @@ namespace castor3d
 		 *\brief		Récupère la position absolue de l'incrustation
 		 *\return		La position
 		 */
-		C3D_API castor::Point2d getAbsolutePosition()const;
+		C3D_API Point2d getAbsolutePosition()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay size
@@ -139,7 +139,7 @@ namespace castor3d
 		 *\brief		Récupère la taille absolue de l'incrustation
 		 *\return		La taille
 		 */
-		C3D_API castor::Point2d getAbsoluteSize()const;
+		C3D_API Point2d getAbsoluteSize()const;
 		/**
 		 *\~english
 		 *\return		\p true if this overlay's or one of its parents' size has changed.
@@ -162,7 +162,7 @@ namespace castor3d
 		 *\brief		Récupère la taille de l'incrustation
 		 *\return		La valeur
 		 */
-		C3D_API castor::Size computePixelSize()const;
+		C3D_API Size computePixelSize()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the overlay position
@@ -171,14 +171,14 @@ namespace castor3d
 		 *\brief		Récupère la position de l'incrustation
 		 *\return		La valeur
 		 */
-		C3D_API castor::Position computePixelPosition()const;
+		C3D_API Position computePixelPosition()const;
 		/**
 		 *\~english
 		 *\brief		Updates the scissor for this overlay
 		 *\~french
 		 *\brief		Met à jour le scissor pour cette incrustation
 		 */
-		C3D_API castor::Point4d computeScissorRect()const;
+		C3D_API Point4d computeScissorRect()const;
 		/**
 		*\~english
 		*\name
@@ -200,17 +200,17 @@ namespace castor3d
 				|| isPositionChanged();
 		}
 
-		castor::Point4d const & getDisplayRect()const noexcept
+		Point4d const & getDisplayRect()const noexcept
 		{
 			return m_displayRect;
 		}
 
-		castor::Point2d const & getRelativeSize()const noexcept
+		Point2d const & getRelativeSize()const noexcept
 		{
 			return m_relSize;
 		}
 
-		castor::Point2d const & getRelativePosition()const noexcept
+		Point2d const & getRelativePosition()const noexcept
 		{
 			return m_relPosition;
 		}
@@ -256,7 +256,7 @@ namespace castor3d
 			return *m_overlay;
 		}
 
-		castor::Point4d const & getUV()const noexcept
+		Point4d const & getUV()const noexcept
 		{
 			return m_uv;
 		}
@@ -271,13 +271,13 @@ namespace castor3d
 			return m_pxSize != std::nullopt;
 		}
 
-		castor::Position const & getPixelPosition()const noexcept
+		Position const & getPixelPosition()const noexcept
 		{
 			CU_Require( hasPixelPosition() );
 			return *m_pxPosition;
 		}
 
-		castor::Size const & getPixelSize()const noexcept
+		Size const & getPixelSize()const noexcept
 		{
 			CU_Require( hasPixelSize() );
 			return *m_pxSize;
@@ -292,13 +292,13 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setRelativePosition( castor::Point2d const & value )noexcept
+		void setRelativePosition( Point2d const & value )noexcept
 		{
 			m_relPosition = value;
 			m_positionChanged = true;
 		}
 
-		void setRelativeSize( castor::Point2d const & value )noexcept
+		void setRelativeSize( Point2d const & value )noexcept
 		{
 			m_relSize = value;
 			m_relSize->x = std::max( 0.0, m_relSize->x );
@@ -306,13 +306,13 @@ namespace castor3d
 			m_sizeChanged = true;
 		}
 
-		void setPixelPosition( castor::Position const & value )noexcept
+		void setPixelPosition( Position const & value )noexcept
 		{
 			m_pxPosition = value;
 			m_positionChanged = true;
 		}
 
-		void setPixelSize( castor::Size const & value )noexcept
+		void setPixelSize( Size const & value )noexcept
 		{
 			m_pxSize = value;
 			m_sizeChanged = true;
@@ -334,7 +334,7 @@ namespace castor3d
 			m_level = level;
 		}
 
-		void setUV( castor::Point4d const & value )noexcept
+		void setUV( Point4d const & value )noexcept
 		{
 			m_uv = value;
 		}
@@ -368,7 +368,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La taille de l'écran ou du parent.
 		 */
-		C3D_API castor::Point2d getParentSize()const;
+		C3D_API Point2d getParentSize()const;
 		/**
 		 *\~english
 		 *\return		\p true if the overlay is fully cropped out.
@@ -402,7 +402,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour le scissor pour cette incrustation
 		 */
-		virtual void doUpdateClientArea( castor::Point4d & clientArea )const
+		virtual void doUpdateClientArea( Point4d & clientArea )const
 		{
 		}
 		/**
@@ -430,19 +430,19 @@ namespace castor3d
 		Overlay * m_overlay{ nullptr };
 		//!\~english	The relative position (to parent or screen).
 		//!\~french		La position relative (au parent ou à l'écran).
-		castor::Point2d m_relPosition;
+		Point2d m_relPosition;
 		//!\~english	The relative size (to parent or screen).
 		//!\~french		La taille relative (à l'écran ou au parent).
-		castor::Point2d m_relSize;
+		Point2d m_relSize;
 		//!\~english	The relative position (to parent or screen), in pixels.
 		//!\~french		La position relative (à l'écran ou au parent), en pixels.
-		std::optional< castor::Position > m_pxPosition;
+		std::optional< Position > m_pxPosition;
 		//!\~english	The absolute size in pixels.
 		//!\~french		La taille absolue en pixels.
-		std::optional< castor::Size > m_pxSize;
+		std::optional< Size > m_pxSize;
 		//!\~english	The size used to compute relative position from pixel position.
 		//!\~french		La taille utilisée pour calculer la position relative depuis la position en pixels.
-		castor::Size m_computeSize;
+		Size m_computeSize;
 		//!\~english	The visibility.
 		//!\~french		La visibilité.
 		bool m_visible{ true };
@@ -469,10 +469,10 @@ namespace castor3d
 		bool m_positionChanged{ true };
 		//!\~english	The UV for the panel.
 		//!\~french		Les UV du panneau.
-		castor::Point4d m_uv{ 0.0, 0.0, 1.0, 1.0 };
+		Point4d m_uv{ 0.0, 0.0, 1.0, 1.0 };
 		//!\~english	The area where children can be drawn.
 		//!\~french		La zone où les enfants peuvent se dessiner.
-		castor::Point4d m_displayRect{};
+		Point4d m_displayRect{};
 	};
 }
 

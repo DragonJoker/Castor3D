@@ -62,7 +62,7 @@ namespace GuiCommon
 			DebugMeshData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
-				: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+				: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 			{
 			}
 
@@ -76,9 +76,9 @@ namespace GuiCommon
 
 		};
 
-		static sdw::ShaderPtr createDisplayCubeProgram( castor3d::RenderDevice const & device )
+		static sdw::ShaderPtr createDisplayCubeProgram( c3d::RenderDevice const & device )
 		{
-			namespace c3d = castor3d::shader;
+			namespace c3ds = c3d::shader;
 
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
@@ -109,8 +109,8 @@ namespace GuiCommon
 					, vec4( +0.5_f, +0.5_f, -0.5_f, 1.0_f ), vec4( +0.5_f, +0.5_f, +0.5_f, 1.0_f )
 					, vec4( -0.5_f, +0.5_f, -0.5_f, 1.0_f ), vec4( -0.5_f, +0.5_f, +0.5_f, 1.0_f ) } );
 
-			writer.implementEntryPointT< sdw::VoidT, c3d::Colour4FT >( [&writer, &positions, &c3d_cameraData, &gc_debugMeshData]( sdw::VertexIn const & in
-				, sdw::VertexOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< sdw::VoidT, c3ds::Colour4FT >( [&writer, &positions, &c3d_cameraData, &gc_debugMeshData]( sdw::VertexIn const & in
+				, sdw::VertexOutT< c3ds::Colour4FT > out )
 				{
 					auto index = writer.declLocale( "index"
 						, in.vertexIndex );
@@ -121,8 +121,8 @@ namespace GuiCommon
 					out.colour() = gc_debugMeshData[in.instanceIndex].colour();
 				} );
 
-			writer.implementEntryPointT< c3d::Colour4FT, c3d::Colour4FT >( []( sdw::FragmentInT< c3d::Colour4FT > const & in
-				, sdw::FragmentOutT< c3d::Colour4FT > const & out )
+			writer.implementEntryPointT< c3ds::Colour4FT, c3ds::Colour4FT >( []( sdw::FragmentInT< c3ds::Colour4FT > const & in
+				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					out.colour() = in.colour();
 				} );
@@ -130,9 +130,9 @@ namespace GuiCommon
 			return writer.getBuilder().releaseShader();
 		}
 
-		static sdw::ShaderPtr createDisplayLinesProgram( castor3d::RenderDevice const & device )
+		static sdw::ShaderPtr createDisplayLinesProgram( c3d::RenderDevice const & device )
 		{
-			namespace c3d = castor3d::shader;
+			namespace c3ds = c3d::shader;
 
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
@@ -148,8 +148,8 @@ namespace GuiCommon
 			auto gc_debugMeshData = cubeBox.declMemberArray< DebugMeshData >( "c" );
 			cubeBox.end();
 
-			writer.implementEntryPointT< c3d::Position4FT, c3d::Colour4FT >( [&writer, &c3d_cameraData, &gc_debugMeshData]( sdw::VertexInT< c3d::Position4FT > const & in
-				, sdw::VertexOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< c3ds::Position4FT, c3ds::Colour4FT >( [&writer, &c3d_cameraData, &gc_debugMeshData]( sdw::VertexInT< c3ds::Position4FT > const & in
+				, sdw::VertexOutT< c3ds::Colour4FT > out )
 				{
 					auto position = writer.declLocale< sdw::Vec4 >( "position"
 						, in.position() );
@@ -158,8 +158,8 @@ namespace GuiCommon
 					out.colour() = gc_debugMeshData[in.instanceIndex].colour();
 				} );
 
-			writer.implementEntryPointT< c3d::Colour4FT, c3d::Colour4FT >( []( sdw::FragmentInT< c3d::Colour4FT > const & in
-				, sdw::FragmentOutT< c3d::Colour4FT > const & out )
+			writer.implementEntryPointT< c3ds::Colour4FT, c3ds::Colour4FT >( []( sdw::FragmentInT< c3ds::Colour4FT > const & in
+				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					out.colour() = in.colour();
 				} );
@@ -167,8 +167,8 @@ namespace GuiCommon
 			return writer.getBuilder().releaseShader();
 		}
 
-		static void createBindings( castor3d::CameraUbo const & cameraUbo
-			, castor3d::GpuBufferOffsetT< DebugMeshConfig > const & cubeBoxUbo
+		static void createBindings( c3d::CameraUbo const & cameraUbo
+			, c3d::GpuBufferOffsetT< DebugMeshConfig > const & cubeBoxUbo
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, ashes::WriteDescriptorSetArray & writes )
 		{
@@ -181,9 +181,9 @@ namespace GuiCommon
 				, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ cubeBoxUbo.getBuffer().getBuffer(), cubeBoxUbo.getOffset(), cubeBoxUbo.getSize() } } );
 		}
 
-		static castor::Point4fArray generateLinesFromTriangles( castor::Point3fArray const & vertices )
+		static c3d::Point4fArray generateLinesFromTriangles( c3d::Point3fArray const & vertices )
 		{
-			castor::Point4fArray result;
+			c3d::Point4fArray result;
 			result.reserve( vertices.size() * 2u );
 
 			for ( uint32_t i = 0; i < vertices.size(); i += 3u )
@@ -204,7 +204,7 @@ namespace GuiCommon
 		}
 	}
 
-	DebugMeshManager::DebugMeshManager( castor3d::RenderTarget const & renderTarget )
+	DebugMeshManager::DebugMeshManager( c3d::RenderTarget const & renderTarget )
 		: m_device{ *renderTarget.getEngine()->getRenderDevice() }
 		, m_renderTarget{ renderTarget }
 		, m_aabbMeshColour{ 0.0f, 1.0f, 0.0f, 1.0f }
@@ -214,10 +214,10 @@ namespace GuiCommon
 		, m_obbBoneColour{ 0.0f, 0.0f, 0.5f, 1.0f }
 		, m_meshConfigBuffer{ m_device.bufferPool->getBuffer< DebugMeshConfig >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, 1000u, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ) }
 	{
-		castor3d::ProgramModule cubeModule{ cuT( "BoundingBox" )
+		c3d::ProgramModule cubeModule{ cuT( "BoundingBox" )
 			, dbgmsh::createDisplayCubeProgram( m_device ) };
 		m_cubeProgram = makeProgramStates( m_device, cubeModule );
-		castor3d::ProgramModule meshModule{ cuT( "Mesh" )
+		c3d::ProgramModule meshModule{ cuT( "Mesh" )
 			, dbgmsh::createDisplayLinesProgram( m_device ) };
 		m_meshProgram = makeProgramStates( m_device, meshModule );
 		dbgmsh::createBindings( m_renderTarget.getCameraUbo()
@@ -244,84 +244,84 @@ namespace GuiCommon
 		}
 	}
 
-	void DebugMeshManager::select( castor3d::LightInstance const & light )
+	void DebugMeshManager::select( c3d::LightInstance const & light )
 	{
-		if ( light.getLightType() == castor3d::LightType::eDirectional )
+		if ( light.getLightType() == c3d::LightType::eDirectional )
 		{
 			return;
 		}
 
-		castor3d::Engine const * engine = m_renderTarget.getEngine();
+		c3d::Engine const * engine = m_renderTarget.getEngine();
 
-		if ( light.getLightType() == castor3d::LightType::ePoint )
+		if ( light.getLightType() == c3d::LightType::ePoint )
 		{
 			if ( !m_pointLightVertexBuffer )
 			{
-				auto vertices = dbgmsh::generateLinesFromTriangles( castor3d::PointLight::generateVertices() );
-				m_pointLightVertexBuffer = m_device.bufferPool->getBuffer< castor::Point4f >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				auto vertices = dbgmsh::generateLinesFromTriangles( c3d::PointLight::generateVertices() );
+				m_pointLightVertexBuffer = m_device.bufferPool->getBuffer< c3d::Point4f >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 					, vertices.size()
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
 				auto queue = m_device.graphicsData();
-				castor3d::InstantDirectUploadData uploader{ *queue->queue
+				c3d::InstantDirectUploadData uploader{ *queue->queue
 					, m_device
 					, cuT( "PointLight" )
 					, *queue->commandPool };
 				uploader->pushUpload( vertices.data()->constPtr()
-					, vertices.size() * sizeof( castor::Point4f )
+					, vertices.size() * sizeof( c3d::Point4f )
 					, m_pointLightVertexBuffer.getBuffer().getBuffer()
 					, m_pointLightVertexBuffer.getOffset()
-					, castor3d::VertexAttributeInputState );
+					, c3d::VertexAttributeInputState );
 			}
 		}
-		else if ( light.getLightType() == castor3d::LightType::eSpot )
+		else if ( light.getLightType() == c3d::LightType::eSpot )
 		{
-			castor3d::SpotLight const & spot = *light.getSpotLight();
+			c3d::SpotLight const & spot = *light.getSpotLight();
 			auto [it, res] = m_spotLightVertexBuffers.try_emplace( uint32_t( std::ceil( spot.getOuterCutOff().degrees() ) ) );
 
 			if ( res )
 			{
-				auto vertices = dbgmsh::generateLinesFromTriangles( castor3d::SpotLight::generateVertices( it->first ) );
-				it->second = m_device.bufferPool->getBuffer< castor::Point4f >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				auto vertices = dbgmsh::generateLinesFromTriangles( c3d::SpotLight::generateVertices( it->first ) );
+				it->second = m_device.bufferPool->getBuffer< c3d::Point4f >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 					, vertices.size()
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
 				auto queue = m_device.graphicsData();
-				castor3d::InstantDirectUploadData uploader{ *queue->queue
+				c3d::InstantDirectUploadData uploader{ *queue->queue
 					, m_device
-					, cuT( "SpotLight_" ) + castor::string::toString( it->first )
+					, cuT( "SpotLight_" ) + c3d::string::toString( it->first )
 					, *queue->commandPool };
 				uploader->pushUpload( vertices.data()->constPtr()
-					, vertices.size() * sizeof( castor::Point4f )
+					, vertices.size() * sizeof( c3d::Point4f )
 					, it->second.getBuffer().getBuffer()
 					, it->second.getOffset()
-					, castor3d::VertexAttributeInputState );
+					, c3d::VertexAttributeInputState );
 			}
 		}
 
-		engine->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+		engine->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 			, [this, &light]()
 			{
 				m_light = &light;
 				auto scene = m_renderTarget.getScene();
 
-				m_sceneConnection = scene->onUpdate.connect( [this]( castor3d::Scene const & )
+				m_sceneConnection = scene->onUpdate.connect( [this]( c3d::Scene const & )
 					{
 						onDisplayLight();
 					} );
 			} ) );
 	}
 
-	void DebugMeshManager::select( castor3d::Geometry const & object
-		, castor3d::Submesh const & submesh )
+	void DebugMeshManager::select( c3d::Geometry const & object
+		, c3d::Submesh const & submesh )
 	{
-		castor3d::Engine const * engine = m_renderTarget.getEngine();
-		engine->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+		c3d::Engine const * engine = m_renderTarget.getEngine();
+		engine->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 			, [this, &object, &submesh]()
 			{
 				m_object = &object;
 				m_submesh = &submesh;
 				auto scene = m_renderTarget.getScene();
 
-				m_sceneConnection = scene->onUpdate.connect( [this]( castor3d::Scene const & )
+				m_sceneConnection = scene->onUpdate.connect( [this]( c3d::Scene const & )
 					{
 						onDisplayObject();
 					} );
@@ -332,8 +332,8 @@ namespace GuiCommon
 	{
 		if ( m_sceneConnection )
 		{
-			castor3d::Engine const * engine = m_renderTarget.getEngine();
-			engine->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+			c3d::Engine const * engine = m_renderTarget.getEngine();
+			engine->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					m_sceneConnection.disconnect();
@@ -355,18 +355,18 @@ namespace GuiCommon
 			auto & obb = m_object->getBoundingBox();
 			debugMeshData[index].colour = m_obbMeshColour;
 			debugMeshData[index].world = baseTransform;
-			castor::matrix::transform( debugMeshData[index].world
+			c3d::matrix::transform( debugMeshData[index].world
 				, obb.getCenter()
 				, obb.getDimensions()
-				, castor::Quaternion::identity() );
+				, c3d::Quaternion::identity() );
 			++index;
 
 			auto aabb = obb.getAxisAligned( baseTransform );
 			debugMeshData[index].colour = m_aabbMeshColour;
-			castor::matrix::setTransform( debugMeshData[index].world
+			c3d::matrix::setTransform( debugMeshData[index].world
 				, aabb.getCenter()
 				, aabb.getDimensions()
-				, castor::Quaternion::identity() );
+				, c3d::Quaternion::identity() );
 			++index;
 
 			for ( auto const & submesh : *m_object->getMesh() )
@@ -376,18 +376,18 @@ namespace GuiCommon
 					: m_obbSubmeshColour;
 				debugMeshData[index].world = baseTransform;
 				auto sbb = m_object->getBoundingBox( *submesh );
-				castor::matrix::transform( debugMeshData[index].world
+				c3d::matrix::transform( debugMeshData[index].world
 					, sbb.getCenter()
 					, sbb.getDimensions()
-					, castor::Quaternion::identity() );
+					, c3d::Quaternion::identity() );
 				++index;
 			}
 
-			m_meshConfigBuffer.markDirty( castor3d::VertexShaderReadState );
+			m_meshConfigBuffer.markDirty( c3d::VertexShaderReadState );
 
-			castor3d::addDebugDrawable( m_renderTarget
-				, castor3d::DebugVertexBuffers{ {}, {}, 24u }
-				, castor3d::DebugIndexBuffer{ {}, 0u, 0u }
+			c3d::addDebugDrawable( m_renderTarget
+				, c3d::DebugVertexBuffers{ {}, {}, 24u }
+				, c3d::DebugIndexBuffer{ {}, 0u, 0u }
 				, ashes::VkVertexInputAttributeDescriptionArray{}
 				, ashes::VkVertexInputBindingDescriptionArray{}
 				, m_bindings
@@ -402,38 +402,38 @@ namespace GuiCommon
 	{
 		if ( m_light )
 		{
-			castor3d::GpuBufferOffsetT< castor::Point4f > const * buffer{};
-			castor::Point3f scale;
+			c3d::GpuBufferOffsetT< c3d::Point4f > const * buffer{};
+			c3d::Point3f scale;
 
-			if ( m_light->getLightType() == castor3d::LightType::ePoint )
+			if ( m_light->getLightType() == c3d::LightType::ePoint )
 			{
-				castor3d::PointLight const & point = *m_light->getPointLight();
+				c3d::PointLight const & point = *m_light->getPointLight();
 				buffer = &m_pointLightVertexBuffer;
 				scale->x = point.getRange();
 				scale->y = point.getRange();
 				scale->z = point.getRange();
 			}
-			else if ( m_light->getLightType() == castor3d::LightType::eSpot )
+			else if ( m_light->getLightType() == c3d::LightType::eSpot )
 			{
-				castor3d::SpotLight const & spot = *m_light->getSpotLight();
+				c3d::SpotLight const & spot = *m_light->getSpotLight();
 				auto [it, res] = m_spotLightVertexBuffers.try_emplace( uint32_t( std::ceil( spot.getOuterCutOff().degrees() ) ) );
 
 				if ( res )
 				{
-					auto vertices = dbgmsh::generateLinesFromTriangles( castor3d::SpotLight::generateVertices( it->first ) );
-					it->second = m_device.bufferPool->getBuffer< castor::Point4f >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+					auto vertices = dbgmsh::generateLinesFromTriangles( c3d::SpotLight::generateVertices( it->first ) );
+					it->second = m_device.bufferPool->getBuffer< c3d::Point4f >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 						, vertices.size()
 						, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
 					auto queue = m_device.graphicsData();
-					castor3d::InstantDirectUploadData uploader{ *queue->queue
+					c3d::InstantDirectUploadData uploader{ *queue->queue
 						, m_device
-						, cuT( "SpotLight_" ) + castor::string::toString( it->first )
+						, cuT( "SpotLight_" ) + c3d::string::toString( it->first )
 						, *queue->commandPool };
 					uploader->pushUpload( vertices.data()->constPtr()
-						, vertices.size() * sizeof( castor::Point4f )
+						, vertices.size() * sizeof( c3d::Point4f )
 						, it->second.getBuffer().getBuffer()
 						, it->second.getOffset()
-						, castor3d::VertexAttributeInputState );
+						, c3d::VertexAttributeInputState );
 				}
 
 				buffer = &it->second;
@@ -447,18 +447,18 @@ namespace GuiCommon
 				auto & debugMeshData = m_meshConfigBuffer.getData()[0u];
 				debugMeshData.world = m_light->getNode().getDerivedTransformationMatrix();
 				debugMeshData.colour = m_aabbMeshColour;
-				castor::matrix::transform( debugMeshData.world
-					, castor::Point3f{}
+				c3d::matrix::transform( debugMeshData.world
+					, c3d::Point3f{}
 					, scale
-					, castor::Quaternion::identity() );
+					, c3d::Quaternion::identity() );
 
-				m_meshConfigBuffer.markDirty( castor3d::VertexShaderReadState );
+				m_meshConfigBuffer.markDirty( c3d::VertexShaderReadState );
 
-				castor3d::addDebugDrawable( m_renderTarget
-					, castor3d::DebugVertexBuffers{ { VkBuffer( buffer->getBuffer().getBuffer() ) }
+				c3d::addDebugDrawable( m_renderTarget
+					, c3d::DebugVertexBuffers{ { VkBuffer( buffer->getBuffer().getBuffer() ) }
 						, { buffer->getOffset() }
 						, buffer->getCount() }
-					, castor3d::DebugIndexBuffer{ {}, 0u, 0u }
+					, c3d::DebugIndexBuffer{ {}, 0u, 0u }
 					, ashes::VkVertexInputAttributeDescriptionArray{ VkVertexInputAttributeDescription{ 0u, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, 0u } }
 					, ashes::VkVertexInputBindingDescriptionArray{ VkVertexInputBindingDescription{ 0u, 16u, VK_VERTEX_INPUT_RATE_VERTEX } }
 					, m_bindings

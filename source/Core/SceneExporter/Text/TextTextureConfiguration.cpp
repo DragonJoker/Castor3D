@@ -4,19 +4,17 @@
 #include <Castor3D/Material/Pass/Component/PassComponentRegister.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< TextureConfiguration >::TextWriter( String const & tabs
-		, castor3d::Engine const & engine )
+		, Engine const & engine )
 		: TextWriterT< TextureConfiguration >{ tabs, cuT( "TextureConfiguration" ) }
 		, m_engine{ engine }
 	{
 	}
 
 	bool TextWriter< TextureConfiguration >::operator()( TextureConfiguration const & configuration
-		, castor::StringStream & file )
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing TextureConfiguration" ) << std::endl;
 		auto result = m_engine.getPassComponentsRegister().writeTextureConfig( configuration

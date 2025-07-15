@@ -40,7 +40,7 @@ namespace motion_blur
 {
 	namespace postfx
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
 		enum Idx : uint32_t
 		{
@@ -49,7 +49,7 @@ namespace motion_blur
 			ColorTexIdx,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
@@ -61,15 +61,15 @@ namespace motion_blur
 			auto c3d_mapVelocity = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapVelocity", VelocityTexIdx, 0u );
 			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", ColorTexIdx, 0u );
 
-			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
-				, sdw::VertexOutT< c3d::Uv2FT > out )
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
+				, sdw::FragmentOutT< c3ds::Colour4FT > out )
 				{
 					auto blurVector = writer.declLocale( "blurVector"
 						, ( c3d_mapVelocity.sample( in.uv() ) / c3d_vectorDivider ) * c3d_blurScale );
@@ -92,15 +92,15 @@ namespace motion_blur
 
 	//*********************************************************************************************
 
-	castor::String PostEffect::Type = cuT( "linear_motion_blur" );
-	castor::MbString PostEffect::Name = "LinearMotionBlur PostEffect";
+	c3d::String PostEffect::Type = cuT( "linear_motion_blur" );
+	c3d::MbString PostEffect::Name = "LinearMotionBlur PostEffect";
 
-	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
-		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & parameters )
-		: castor3d::PostEffect{ PostEffect::Type
+	PostEffect::PostEffect( c3d::RenderTarget & renderTarget
+		, c3d::RenderSystem & renderSystem
+		, c3d::Parameters const & parameters )
+		: c3d::PostEffect{ PostEffect::Type
 			, cuT( "LinearMotionBlur" )
-			, castor::makeString( PostEffect::Name )
+			, c3d::makeString( PostEffect::Name )
 			, renderTarget
 			, renderSystem
 			, parameters
@@ -117,31 +117,31 @@ namespace motion_blur
 		getRenderSystem()->getRenderDevice().uboPool->putBuffer( m_ubo );
 	}
 
-	castor3d::PostEffectUPtr PostEffect::create( castor3d::RenderTarget & renderTarget
-		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & params )
+	c3d::PostEffectUPtr PostEffect::create( c3d::RenderTarget & renderTarget
+		, c3d::RenderSystem & renderSystem
+		, c3d::Parameters const & params )
 	{
-		return castor::makeUniqueDerived< castor3d::PostEffect, PostEffect >( renderTarget, renderSystem, params );
+		return c3d::makeUniqueDerived< c3d::PostEffect, PostEffect >( renderTarget, renderSystem, params );
 	}
 
-	void PostEffect::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void PostEffect::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 	}
 
-	void PostEffect::setParameters( castor3d::Parameters parameters )
+	void PostEffect::setParameters( c3d::Parameters parameters )
 	{
 		parameters.get( cuT( "vectorDivider" ), m_configuration.vectorDivider );
 		parameters.get( cuT( "samplesCount" ), m_configuration.samplesCount );
 		parameters.get( cuT( "fpsScale" ), m_fpsScale );
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
-		, castor3d::Texture const & source
-		, castor3d::Texture const & target
+	bool PostEffect::doInitialise( c3d::RenderDevice const & device
+		, c3d::Texture const & source
+		, c3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
-		auto extent = castor3d::makeExtent2D( target.getExtent() );
+		auto extent = c3d::makeExtent2D( target.getExtent() );
 		m_pass = &m_graph.createPass( "LinearMotionBlur"
 			, [this, &device, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -158,7 +158,7 @@ namespace motion_blur
 						, context
 						, graph
 						, crg::ru::Config{ 2u } );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -175,11 +175,11 @@ namespace motion_blur
 		return true;
 	}
 
-	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
+	void PostEffect::doCleanup( c3d::RenderDevice const & device )
 	{
 	}
 
-	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
+	void PostEffect::doCpuUpdate( c3d::CpuUpdater & updater )
 	{
 		if ( m_fpsScale )
 		{
@@ -189,14 +189,14 @@ namespace motion_blur
 			auto & configuration = m_ubo.getData();
 			configuration.samplesCount = m_configuration.samplesCount;
 			configuration.vectorDivider = m_configuration.vectorDivider;
-			configuration.blurScale = ( getRenderSystem()->getEngine()->getRenderLoop().getWantedFps() != castor3d::RenderLoop::UnlimitedFPS )
+			configuration.blurScale = ( getRenderSystem()->getEngine()->getRenderLoop().getWantedFps() != c3d::RenderLoop::UnlimitedFPS )
 				? fps / float( getRenderSystem()->getEngine()->getRenderLoop().getWantedFps() )
 				: 1.0f;
 			m_saved = current;
 		}
 	}
 
-	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )
+	bool PostEffect::doWriteInto( c3d::StringStream & file, c3d::String const & tabs )
 	{
 		static Configuration const ref;
 		file << ( cuT( "\n" ) + tabs + Type + cuT( "\n" ) );
@@ -204,12 +204,12 @@ namespace motion_blur
 
 		if ( m_configuration.vectorDivider != ref.vectorDivider )
 		{
-			file << ( tabs + cuT( "\tvectorDivider " ) + castor::string::toString( m_configuration.vectorDivider ) + cuT( "\n" ) );
+			file << ( tabs + cuT( "\tvectorDivider " ) + c3d::string::toString( m_configuration.vectorDivider ) + cuT( "\n" ) );
 		}
 
 		if ( m_configuration.samplesCount != ref.samplesCount )
 		{
-			file << ( tabs + cuT( "\tsamples " ) + castor::string::toString( m_configuration.samplesCount ) + cuT( "\n" ) );
+			file << ( tabs + cuT( "\tsamples " ) + c3d::string::toString( m_configuration.samplesCount ) + cuT( "\n" ) );
 		}
 
 		if ( !m_fpsScale )

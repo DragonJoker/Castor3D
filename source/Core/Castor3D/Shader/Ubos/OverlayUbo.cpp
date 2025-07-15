@@ -2,7 +2,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	void OverlayData::cropMinValue( sdw::Float const & pssAbsOvPosition
 		, sdw::Float const & pssAbsParentSize

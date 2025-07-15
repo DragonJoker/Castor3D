@@ -6,11 +6,11 @@
 #include "Castor3D/Event/UserInput/MouseEvent.hpp"
 #include "Castor3D/Event/UserInput/UserInputEvent.hpp"
 
-CU_ImplementSmartPtr( castor3d, EventHandler )
+CU_ImplementSmartPtr( c3d, EventHandler )
 
-namespace castor3d
+namespace c3d
 {
-	castor::String getName( UserInputEventType value )
+	String getName( UserInputEventType value )
 	{
 		switch ( value )
 		{
@@ -22,11 +22,11 @@ namespace castor3d
 			return cuT( "handler" );
 		default:
 			CU_Failure( "Unsupported UserInputEventType" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( MouseEventType value )
+	String getName( MouseEventType value )
 	{
 		switch ( value )
 		{
@@ -46,11 +46,11 @@ namespace castor3d
 			return cuT( "wheel" );
 		default:
 			CU_Failure( "Unsupported MouseEventType" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( KeyboardEventType value )
+	String getName( KeyboardEventType value )
 	{
 		switch ( value )
 		{
@@ -62,11 +62,11 @@ namespace castor3d
 			return cuT( "char" );
 		default:
 			CU_Failure( "Unsupported KeyboardEventType" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( HandlerEventType value )
+	String getName( HandlerEventType value )
 	{
 		switch ( value )
 		{
@@ -76,11 +76,11 @@ namespace castor3d
 			return cuT( "deactivate" );
 		default:
 			CU_Failure( "Unsupported HandlerEventType" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( MouseButton value )
+	String getName( MouseButton value )
 	{
 		switch ( value )
 		{
@@ -92,7 +92,7 @@ namespace castor3d
 			return cuT( "right" );
 		default:
 			CU_Failure( "Unsupported MouseButton" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 }

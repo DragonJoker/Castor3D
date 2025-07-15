@@ -6,10 +6,8 @@
 
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	//*********************************************************************************************
 
 	namespace btnwrtr

@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	class NoIblBackgroundModel
 		: public BackgroundModel
@@ -41,7 +41,7 @@ namespace castor3d::shader
 			, BlendComponents & components )override;
 
 	public:
-		static castor::String const Name;
+		static String const Name;
 
 	private:
 		sdw::Function< sdw::Void

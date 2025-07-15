@@ -54,7 +54,7 @@ namespace water
 
 namespace water::shader
 {
-	namespace c3d = castor3d::shader;
+	namespace c3ds = c3d::shader;
 
 	struct WaterProfile
 		: public sdw::StructInstanceHelperT< "WaterProfile"
@@ -79,11 +79,11 @@ namespace water::shader
 		WaterProfile( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
-		static castor::StringView constexpr getName()noexcept
+		static c3d::StringView constexpr getName()noexcept
 		{
 			return cuT( "WaterProfile" );
 		}
@@ -108,7 +108,7 @@ namespace water::shader
 	};
 
 	class WaterProfiles
-		: public c3d::BufferT< WaterProfile >
+		: public c3ds::BufferT< WaterProfile >
 	{
 	public:
 		explicit WaterProfiles( sdw::ShaderWriter & writer
@@ -116,10 +116,10 @@ namespace water::shader
 			, uint32_t set
 			, bool enable = true );
 
-		static castor3d::ShaderBufferUPtr create( castor3d::RenderDevice const & device );
-		static void update( castor3d::ShaderBuffer & buffer
-			, castor3d::Pass const & pass );
-		static c3d::BufferBaseUPtr declare( sdw::ShaderWriter & writer
+		static c3d::ShaderBufferUPtr create( c3d::RenderDevice const & device );
+		static void update( c3d::ShaderBuffer & buffer
+			, c3d::Pass const & pass );
+		static c3ds::BufferBaseUPtr declare( sdw::ShaderWriter & writer
 			, uint32_t binding
 			, uint32_t set );
 	};

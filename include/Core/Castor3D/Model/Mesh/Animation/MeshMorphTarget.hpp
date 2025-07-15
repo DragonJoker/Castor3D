@@ -11,11 +11,11 @@ See LICENSE file in root folder
 #include "Castor3D/Animation/AnimationKeyFrame.hpp"
 #include "Castor3D/Binary/BinaryParser.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class MeshMorphTarget
 		: public AnimationKeyFrame
-		, public castor::OwnedBy< MeshAnimation >
+		, public OwnedBy< MeshAnimation >
 	{
 	public:
 		/**
@@ -29,7 +29,7 @@ namespace castor3d
 		 *\param[in]	timeIndex	Quand la key frame commence.
 		 */
 		C3D_API MeshMorphTarget( MeshAnimation & parent
-			, castor::Milliseconds const & timeIndex );
+			, Milliseconds const & timeIndex );
 		/**
 		 *\~english
 		 *\brief		Adds a submesh buffer.
@@ -37,7 +37,7 @@ namespace castor3d
 		 *\brief		Ajoute un tampon de sous-maillage.
 		 */
 		C3D_API void setTargetsWeights( Submesh const & submesh
-			, castor::Vector< float > weights );
+			, Vector< float > weights );
 		/**
 		 *\~english
 		 *\brief		Adds a submesh buffer.
@@ -103,7 +103,7 @@ namespace castor3d
 		}
 
 	private:
-		void doSetTimeIndex( castor::Milliseconds const & time )
+		void doSetTimeIndex( Milliseconds const & time )
 		{
 			m_timeIndex = time;
 		}

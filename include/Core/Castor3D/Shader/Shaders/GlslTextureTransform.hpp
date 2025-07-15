@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	struct TextureTransformData
 		: public sdw::StructInstanceHelperT< "C3D_TextureTransformData"
@@ -24,7 +24,7 @@ namespace castor3d::shader
 		TextureTransformData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 

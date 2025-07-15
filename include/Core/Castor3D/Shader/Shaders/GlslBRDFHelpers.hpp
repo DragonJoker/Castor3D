@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	struct MicrofacetDistributionSample
 		: public sdw::StructInstanceHelperT< "C3D_MicrofacetDistributionSample"
@@ -21,7 +21,7 @@ namespace castor3d::shader
 		MicrofacetDistributionSample( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled = true )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 

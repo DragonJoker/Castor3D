@@ -21,13 +21,13 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementSmartPtr( castor3d, RenderPipeline )
+CU_ImplementSmartPtr( c3d, RenderPipeline )
 
-namespace castor3d
+namespace c3d
 {
 	namespace rendpipl
 	{
-		static const castor::String Suffix = cuT( "/RenderPipeline" );
+		static const String Suffix = cuT( "/RenderPipeline" );
 	}
 
 	RenderPipeline::RenderPipeline( RenderNodesPass & owner
@@ -38,13 +38,13 @@ namespace castor3d
 		, ashes::PipelineMultisampleStateCreateInfo msState
 		, ShaderProgramRPtr program
 		, PipelineFlags const & flags )
-		: castor::OwnedBy< RenderNodesPass >{ owner }
+		: OwnedBy< RenderNodesPass >{ owner }
 		, m_renderSystem{ renderSystem }
-		, m_dsState{ castor::move( dsState ) }
-		, m_rsState{ castor::move( rsState ) }
-		, m_blState{ castor::move( blState ) }
-		, m_msState{ castor::move( msState ) }
-		, m_program{ castor::move( program ) }
+		, m_dsState{ c3d::move( dsState ) }
+		, m_rsState{ c3d::move( rsState ) }
+		, m_blState{ c3d::move( blState ) }
+		, m_msState{ c3d::move( msState ) }
+		, m_program{ c3d::move( program ) }
 		, m_flags{ flags }
 		, m_flagsHash{ getPipelineBaseHash( owner.getEngine()->getPassComponentsRegister()
 			, owner.getEngine()->getSubmeshComponentsRegister()
@@ -116,7 +116,7 @@ namespace castor3d
 
 		if ( !dynamicStates.empty() )
 		{
-			dynamicState = ashes::PipelineDynamicStateCreateInfo{ 0u, castor::move( dynamicStates ) };
+			dynamicState = ashes::PipelineDynamicStateCreateInfo{ 0u, c3d::move( dynamicStates ) };
 		}
 
 		ashes::Optional< ashes::PipelineTessellationStateCreateInfo > tessellationState = ashes::nullopt;
@@ -127,7 +127,7 @@ namespace castor3d
 			tessellationState = ashes::PipelineTessellationStateCreateInfo{ 0u, m_flags.patchVertices };
 		}
 
-		auto mbName = castor::toUtf8( getOwner()->getName() + rendpipl::Suffix );
+		auto mbName = toUtf8( getOwner()->getName() + rendpipl::Suffix );
 		m_pipelineLayout = device->createPipelineLayout( mbName
 			, descriptorLayouts
 			, m_pushConstantRanges );
@@ -135,20 +135,20 @@ namespace castor3d
 		(
 			0u,
 			m_program->getStates(),
-			ashes::PipelineVertexInputStateCreateInfo{ 0u, castor::move( bindings ), castor::move( attributes ) },
+			ashes::PipelineVertexInputStateCreateInfo{ 0u, c3d::move( bindings ), c3d::move( attributes ) },
 			ashes::PipelineInputAssemblyStateCreateInfo{ 0u, m_flags.topology },
-			castor::move( tessellationState ),
-			ashes::PipelineViewportStateCreateInfo{ 0u, 1u, castor::move( viewports ), 1u, castor::move( scissors ) },
+			c3d::move( tessellationState ),
+			ashes::PipelineViewportStateCreateInfo{ 0u, 1u, c3d::move( viewports ), 1u, c3d::move( scissors ) },
 			m_rsState,
 			m_msState,
 			m_dsState,
 			m_blState,
-			castor::move( dynamicState ),
+			c3d::move( dynamicState ),
 			*m_pipelineLayout,
 			renderPass
 		);
 		m_pipeline = device->createPipeline( mbName
-			, castor::move( createInfo ) );
+			, c3d::move( createInfo ) );
 	}
 
 	void RenderPipeline::cleanup()

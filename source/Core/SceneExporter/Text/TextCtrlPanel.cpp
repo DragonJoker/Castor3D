@@ -6,10 +6,8 @@
 
 #include <Castor3D/Miscellaneous/Logger.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	//*********************************************************************************************
 
 	TextWriter< PanelCtrl >::TextWriter( String const & tabs

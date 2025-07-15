@@ -14,17 +14,17 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/SquareMatrix.hpp>
 #include <CastorUtils/Math/PlaneEquation.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class Viewport
 	{
 	public:
-		C3D_API static const castor::Array< castor::String, size_t( ViewportType::eCount ) > TypeName;
+		C3D_API static const Array< String, size_t( ViewportType::eCount ) > TypeName;
 
 	private:
 		C3D_API Viewport( Engine const & engine
 			, ViewportType type
-			, castor::Angle const & fovy
+			, Angle const & fovy
 			, float aspect
 			, float left
 			, float right
@@ -80,7 +80,7 @@ namespace castor3d
 		 *\param[in]	nearZ	Position du plan proche.
 		 *\param[in]	farZ	Position du plan éloigné.
 		 */
-		C3D_API void setPerspective( castor::Angle const & fovy
+		C3D_API void setPerspective( Angle const & fovy
 			, float aspect
 			, float nearZ
 			, float farZ );
@@ -96,7 +96,7 @@ namespace castor3d
 		 *\param[in]	aspect	Ratio Largeur / Hauteur.
 		 *\param[in]	nearZ	Position du plan proche.
 		 */
-		C3D_API void setInfinitePerspective( castor::Angle const & fovy
+		C3D_API void setInfinitePerspective( Angle const & fovy
 			, float aspect
 			, float nearZ );
 		/**
@@ -155,7 +155,7 @@ namespace castor3d
 		 *\brief		Définit les dimensions de rendu du viewport
 		 *\param[in]	value	La nouvelle valeur
 		 */
-		C3D_API void resize( const castor::Size & value );
+		C3D_API void resize( const Size & value );
 		/**
 		 *\~english
 		 *\return		The number of pixels per meter at z = -1.
@@ -172,15 +172,15 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API castor::Matrix4x4f getRescaledProjection( float scale )const;
-		C3D_API castor::Matrix4x4f getRescaledSafeBandedProjection( float scale )const;
+		C3D_API Matrix4x4f getRescaledProjection( float scale )const;
+		C3D_API Matrix4x4f getRescaledSafeBandedProjection( float scale )const;
 
-		castor::Size const & getSize()const noexcept
+		Size const & getSize()const noexcept
 		{
 			return m_size.value();
 		}
 
-		castor::Position const & getPosition()const noexcept
+		Position const & getPosition()const noexcept
 		{
 			return m_position.value();
 		}
@@ -205,7 +205,7 @@ namespace castor3d
 			return m_far.value();
 		}
 
-		castor::Angle const & getFovY()const noexcept
+		Angle const & getFovY()const noexcept
 		{
 			return m_fovY.value();
 		}
@@ -245,12 +245,12 @@ namespace castor3d
 			return m_modified;
 		}
 
-		castor::Matrix4x4f const & getProjection()const noexcept
+		Matrix4x4f const & getProjection()const noexcept
 		{
 			return m_projection;
 		}
 
-		castor::Matrix4x4f const & getSafeBandedProjection()const noexcept
+		Matrix4x4f const & getSafeBandedProjection()const noexcept
 		{
 			return m_safeBandedProjection;
 		}
@@ -279,7 +279,7 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setPosition( castor::Position const & value )noexcept
+		void setPosition( Position const & value )noexcept
 		{
 			m_position = value;
 		}
@@ -304,7 +304,7 @@ namespace castor3d
 			m_far = value;
 		}
 
-		void updateFovY( castor::Angle const & value )noexcept
+		void updateFovY( Angle const & value )noexcept
 		{
 			m_fovY = value;
 		}
@@ -333,21 +333,21 @@ namespace castor3d
 	private:
 		Engine const & m_engine;
 		bool m_modified{ true };
-		castor::GroupChangeTracked< float > m_left;
-		castor::GroupChangeTracked< float > m_right;
-		castor::GroupChangeTracked< float > m_top;
-		castor::GroupChangeTracked< float > m_bottom;
-		castor::GroupChangeTracked< float > m_far;
-		castor::GroupChangeTracked< float > m_near;
-		castor::GroupChangeTracked< castor::Angle > m_fovY;
-		castor::GroupChangeTracked< float > m_ratio;
-		castor::GroupChangeTracked< ViewportType > m_type;
-		castor::GroupChangeTracked< castor::Size > m_size;
-		castor::GroupChangeTracked< castor::Position > m_position;
+		GroupChangeTracked< float > m_left;
+		GroupChangeTracked< float > m_right;
+		GroupChangeTracked< float > m_top;
+		GroupChangeTracked< float > m_bottom;
+		GroupChangeTracked< float > m_far;
+		GroupChangeTracked< float > m_near;
+		GroupChangeTracked< Angle > m_fovY;
+		GroupChangeTracked< float > m_ratio;
+		GroupChangeTracked< ViewportType > m_type;
+		GroupChangeTracked< Size > m_size;
+		GroupChangeTracked< Position > m_position;
 		VkViewport m_viewport{ 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f };
 		VkRect2D m_scissor{ { 0, 0 }, { 1u, 1u } };
-		castor::Matrix4x4f m_projection;
-		castor::Matrix4x4f m_safeBandedProjection;
+		Matrix4x4f m_projection;
+		Matrix4x4f m_safeBandedProjection;
 	};
 }
 

@@ -13,22 +13,22 @@
 
 namespace
 {
-	castor::PathArray listPluginsFiles( castor::Path const & folder )
+	c3d::PathArray listPluginsFiles( c3d::Path const & folder )
 	{
-		static castor::String castor3DLibPrefix{ CU_LibPrefix + castor::String{ cuT( "castor3d" ) } };
-		castor::PathArray files;
-		castor::File::listDirectoryFiles( folder, files );
-		castor::PathArray result;
-		castor::String endRel = cuT( "." ) + castor::String{ CU_SharedLibExt };
-		castor::String endDbg = cuT( "d" ) + endRel;
+		static c3d::String castor3DLibPrefix{ CU_LibPrefix + c3d::String{ cuT( "castor3d" ) } };
+		c3d::PathArray files;
+		c3d::File::listDirectoryFiles( folder, files );
+		c3d::PathArray result;
+		c3d::String endRel = cuT( "." ) + c3d::String{ CU_SharedLibExt };
+		c3d::String endDbg = cuT( "d" ) + endRel;
 
 		// Exclude debug plug-in in release builds, and release plug-ins in debug builds
 		for ( auto const & file : files )
 		{
 			auto fileName = file.getFileName( true );
-			bool res = castor::string::endsWith( fileName, endDbg );
+			bool res = c3d::string::endsWith( fileName, endDbg );
 #if defined( NDEBUG )
-			res = castor::string::endsWith( fileName, endRel ) && !res;
+			res = c3d::string::endsWith( fileName, endRel ) && !res;
 #endif
 			if ( res && fileName.find( castor3DLibPrefix ) == 0u )
 			{
@@ -39,16 +39,16 @@ namespace
 		return result;
 	}
 
-	void loadPlugins( castor3d::Engine & engine )
+	void loadPlugins( c3d::Engine & engine )
 	{
-		auto arrayKept = listPluginsFiles( castor3d::Engine::getPluginsDirectory() );
+		auto arrayKept = listPluginsFiles( c3d::Engine::getPluginsDirectory() );
 
 #if !defined( NDEBUG )
 
 		// When debug is installed, plugins are installed in lib/Debug/Castor3D
 		if ( arrayKept.empty() )
 		{
-			auto pathBin = castor::File::getExecutableDirectory();
+			auto pathBin = c3d::File::getExecutableDirectory();
 
 			while ( pathBin.getFileName() != cuT( "bin" ) )
 			{
@@ -63,7 +63,7 @@ namespace
 
 		if ( !arrayKept.empty() )
 		{
-			castor::PathArray arrayFailed;
+			c3d::PathArray arrayFailed;
 
 			for ( auto const & file : arrayKept )
 			{
@@ -75,30 +75,30 @@ namespace
 
 			if ( !arrayFailed.empty() )
 			{
-				castor::Logger::logWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
+				c3d::Logger::logWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
 
 				for ( auto const & file : arrayFailed )
 				{
-					castor::Logger::logWarning( file.getFileName() );
+					c3d::Logger::logWarning( file.getFileName() );
 				}
 
 				arrayFailed.clear();
 			}
 		}
 
-		castor::Logger::logInfo( cuT( "Plugins loaded" ) );
+		c3d::Logger::logInfo( cuT( "Plugins loaded" ) );
 	}
 
-	castor::RawUniquePtr< castor3d::Engine > initialiseCastor()
+	c3d::RawUniquePtr< c3d::Engine > initialiseCastor()
 	{
-		if ( !castor::File::directoryExists( castor3d::Engine::getEngineDirectory() ) )
+		if ( !c3d::File::directoryExists( c3d::Engine::getEngineDirectory() ) )
 		{
-			castor::File::directoryCreate( castor3d::Engine::getEngineDirectory() );
+			c3d::File::directoryCreate( c3d::Engine::getEngineDirectory() );
 		}
 
-		castor3d::EngineConfig config{ cuT( "Castor3DTest" )
-			, castor3d::Version{ Castor3DTest_VERSION_MAJOR, Castor3DTest_VERSION_MINOR, Castor3DTest_VERSION_BUILD } };
-		auto result = castor::make_unique< castor3d::Engine >( castor::move( config ) );
+		c3d::EngineConfig config{ cuT( "Castor3DTest" )
+			, c3d::Version{ Castor3DTest_VERSION_MAJOR, Castor3DTest_VERSION_MINOR, Castor3DTest_VERSION_BUILD } };
+		auto result = c3d::makeRawUnique< c3d::Engine >( c3d::move( config ) );
 		loadPlugins( *result );
 
 		if ( auto & renderers = result->getRenderersList();
@@ -127,22 +127,22 @@ int main( int argc, char const * argv[] )
 	}
 
 #if defined( NDEBUG )
-	castor::Logger::initialise( castor::LogType::eInfo );
+	c3d::Logger::initialise( c3d::LogType::eInfo );
 #else
-	castor::Logger::initialise( castor::LogType::eDebug );
+	c3d::Logger::initialise( c3d::LogType::eDebug );
 #endif
 
-	castor::Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "Castor3DTests.log" ) );
+	c3d::Logger::setFileName( c3d::File::getExecutableDirectory() / cuT( "Castor3DTests.log" ) );
 	{
-		castor::RawUniquePtr< castor3d::Engine > engine = initialiseCastor();
+		c3d::RawUniquePtr< c3d::Engine > engine = initialiseCastor();
 
 		// Test cases.
-		Testing::registerType( castor::make_unique< Testing::BinaryExportTest >( *engine ) );
-		Testing::registerType( castor::make_unique< Testing::SceneExportTest >( *engine ) );
+		Testing::registerType( c3d::makeRawUnique< Testing::BinaryExportTest >( *engine ) );
+		Testing::registerType( c3d::makeRawUnique< Testing::SceneExportTest >( *engine ) );
 
 		// Tests loop.
 		BENCHLOOP( count, result )
 	}
-	castor::Logger::cleanup();
+	c3d::Logger::cleanup();
 	return int( result );
 }

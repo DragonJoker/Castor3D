@@ -6,10 +6,10 @@ See LICENSE file in root folder
 
 #include "AnimationModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class AnimationInstance
-		: public castor::OwnedBy< AnimatedObject >
+		: public OwnedBy< AnimatedObject >
 	{
 	public:
 		/**
@@ -54,7 +54,7 @@ namespace castor3d
 		 *\brief		Met l'animation à jour, met à jour les key frames aux bons index de temps.
 		 *\param[in]	elapsed	Le temps écoulé depuis la dernière frame.
 		 */
-		C3D_API void update( castor::Milliseconds const & elapsed );
+		C3D_API void update( Milliseconds const & elapsed );
 		/**
 		 *\~english
 		 *\brief		Plays the animation.
@@ -82,7 +82,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Définit le temps effectif de l'animation.
 		 */
-		C3D_API void setTotalLength( castor::Milliseconds const & time );
+		C3D_API void setTotalLength( Milliseconds const & time );
 		/**
 		 *\~english
 		 *\return		The animation state.
@@ -121,7 +121,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le point de départ de l'animation.
 		 */
-		castor::Milliseconds getStartingPoint()const
+		Milliseconds getStartingPoint()const
 		{
 			return m_startingPoint;
 		}
@@ -133,7 +133,7 @@ namespace castor3d
 		 *\brief		Définit le point de départ de l'animation.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		void setStartingPoint( castor::Milliseconds value )
+		void setStartingPoint( Milliseconds value )
 		{
 			m_startingPoint = value;
 
@@ -148,7 +148,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le point d'arrêt de l'animation.
 		 */
-		castor::Milliseconds getStoppingPoint()const
+		Milliseconds getStoppingPoint()const
 		{
 			return m_stoppingPoint;
 		}
@@ -160,7 +160,7 @@ namespace castor3d
 		 *\brief		Définit le point d'arrêt de l'animation.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		void setStoppingPoint( castor::Milliseconds value )
+		void setStoppingPoint( Milliseconds value )
 		{
 			m_stoppingPoint = value;
 
@@ -245,16 +245,16 @@ namespace castor3d
 		std::atomic_bool m_looped;
 		//!\~english	The starting point.
 		//!\~french		Le point de départ.
-		castor::Milliseconds m_startingPoint{ 0 };
+		Milliseconds m_startingPoint{ 0 };
 		//!\~english	The stopping point.
 		//!\~french		Le point d'arrêt.
-		castor::Milliseconds m_stoppingPoint{ 0 };
+		Milliseconds m_stoppingPoint{ 0 };
 		//!\~english	The current playing time.
 		//!\~french		L'index de temps courant.
-		castor::Milliseconds m_currentTime{ 0 };
+		Milliseconds m_currentTime{ 0 };
 		//!\~english	The animation total time.
 		//!\~french		La durée totale de l'animation.
-		castor::Milliseconds m_totalTime{ 0 };
+		Milliseconds m_totalTime{ 0 };
 		//!\~english	The current state of the animation.
 		//!\~french		L'état actuel de l'animation.
 		AnimationState m_state{ AnimationState::eStopped };

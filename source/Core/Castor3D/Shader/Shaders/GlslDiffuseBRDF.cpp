@@ -3,9 +3,9 @@
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 
-CU_ImplementDeleter( castor3d::shader, DiffuseBRDF )
+CU_ImplementDeleter( c3d::shader, DiffuseBRDF )
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	DiffuseBRDF::DiffuseBRDF( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdfHelpers )

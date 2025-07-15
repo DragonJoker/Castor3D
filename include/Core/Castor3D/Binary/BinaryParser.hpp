@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Miscellaneous/Version.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	template< class TParsed >
 	class BinaryParserBase
@@ -51,7 +51,7 @@ namespace castor3d
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		bool parse( TParsed & obj
-			, castor::BinaryFile & file )
+			, BinaryFile & file )
 		{
 			BinaryChunk header{ true };
 			bool result = header.read( file );
@@ -168,7 +168,7 @@ namespace castor3d
 	protected:
 		bool doIsLittleEndian()const noexcept
 		{
-			return m_chunk ? isLittleEndian( *m_chunk ) : castor::isLittleEndian();
+			return m_chunk ? isLittleEndian( *m_chunk ) : isLittleEndian();
 		}
 		/**
 		 *\~english
@@ -191,7 +191,7 @@ namespace castor3d
 				checkError( result, cuT( "Missing header chunk." ) );
 			}
 
-			castor::String name;
+			String name;
 			uint32_t version{ 0 };
 
 			while ( result && schunk.checkAvailable( 1 ) )
@@ -296,7 +296,7 @@ namespace castor3d
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T, size_t Count >
-		bool doParseChunk( castor::Array< T, Count > & values
+		bool doParseChunk( Array< T, Count > & values
 			, BinaryChunk & chunk )const
 		{
 			return ChunkParser< T >::parse( values.data(), Count, chunk );
@@ -314,7 +314,7 @@ namespace castor3d
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		bool doParseChunk( castor::Vector< T > & values
+		bool doParseChunk( Vector< T > & values
 			, BinaryChunk & chunk )const
 		{
 			return ChunkParser< T >::parse( values.data(), values.size(), chunk );
@@ -458,10 +458,10 @@ namespace castor3d
 		}
 
 	protected:
-		C3D_API static castor::String Name;
+		C3D_API static String Name;
 
 		void checkError( bool result
-			, castor::String const & text )const
+			, String const & text )const
 		{
 			if ( !result )
 			{

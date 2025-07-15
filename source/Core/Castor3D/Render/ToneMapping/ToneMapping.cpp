@@ -17,9 +17,9 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementSmartPtr( castor3d, ToneMapping )
+CU_ImplementSmartPtr( c3d, ToneMapping )
 
-namespace castor3d
+namespace c3d
 {
 	namespace rendtonmap
 	{
@@ -44,7 +44,7 @@ namespace castor3d
 	{
 	}
 
-	void ToneMapping::initialise( castor::String const & name
+	void ToneMapping::initialise( String const & name
 		, crg::ImageViewId const & source )
 	{
 		doCreate( name );
@@ -57,12 +57,12 @@ namespace castor3d
 		doUpdatePassIndex( source );
 	}
 
-	castor::String const & ToneMapping::getFullName()const
+	String const & ToneMapping::getFullName()const
 	{
 		return getEngine()->getRenderTargetCache().getToneMappingName( m_name );
 	}
 
-	void ToneMapping::updatePipeline( castor::String const & name )
+	void ToneMapping::updatePipeline( String const & name )
 	{
 		if ( name != m_name
 			&& m_quad )
@@ -97,7 +97,7 @@ namespace castor3d
 					.passIndex( &m_passIndex )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_program ) )
 					.build( framePass, context, graph, crg::ru::Config{ 2u } );
-				getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				m_quad = result.get();
 				return result;
@@ -124,12 +124,12 @@ namespace castor3d
 			} );
 	}
 
-	void ToneMapping::doCreate( castor::String const & name )
+	void ToneMapping::doCreate( String const & name )
 	{
 		m_name = name;
 		ast::ShaderBuilder builder{ ast::ShaderStage::eTraditionalGraphics
 			, &getEngine()->getShaderAllocator() };
-		castor3d::ToneMapping::getVertexProgram( builder );
+		ToneMapping::getVertexProgram( builder );
 		getEngine()->getToneMappingFactory().create( name, builder );
 		m_shader.shader = builder.releaseShader();
 		auto const & device = getEngine()->getRenderSystem()->getRenderDevice();

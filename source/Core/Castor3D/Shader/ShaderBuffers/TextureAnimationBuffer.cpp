@@ -10,9 +10,9 @@
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
-CU_ImplementSmartPtr( castor3d, TextureAnimationBuffer )
+CU_ImplementSmartPtr( c3d, TextureAnimationBuffer )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -23,7 +23,7 @@ namespace castor3d
 			, uint32_t count )
 		{
 			CU_Require( ( count * sizeof( TextureAnimationData ) ) <= size );
-			return castor::makeArrayView( reinterpret_cast< TextureAnimationData * >( buffer )
+			return makeArrayView( reinterpret_cast< TextureAnimationData * >( buffer )
 				, reinterpret_cast< TextureAnimationData * >( buffer ) + count );
 		}
 	}
@@ -44,7 +44,7 @@ namespace castor3d
 		CU_Require( texture.hasTextureUnit() );
 		auto & unit = texture.getTextureUnit();
 		CU_Require( unit.getId() != 0u );
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 		m_animations[unit.getId()] = &texture;
 		++m_count;
 	}
@@ -55,7 +55,7 @@ namespace castor3d
 		{
 			auto & unit = texture.getTextureUnit();
 			--m_count;
-			auto lock( castor::makeUniqueLock( m_mutex ) );
+			auto lock( makeUniqueLock( m_mutex ) );
 			m_animations[unit.getId()] = nullptr;
 		}
 	}
@@ -64,11 +64,11 @@ namespace castor3d
 	{
 		if ( m_count )
 		{
-			auto lock( castor::makeUniqueLock( m_mutex ) );
+			auto lock( makeUniqueLock( m_mutex ) );
 			auto buffer = m_data.begin();
 			uint32_t count = 0u;
 
-			for ( auto anim : castor::makeArrayView( std::next( m_animations.begin() ), m_animations.end() ) )
+			for ( auto anim : makeArrayView( std::next( m_animations.begin() ), m_animations.end() ) )
 			{
 				if ( buffer == m_data.end() )
 				{

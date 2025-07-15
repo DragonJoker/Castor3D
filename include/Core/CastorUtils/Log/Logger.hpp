@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Design/NonCopyable.hpp"
 #include "CastorUtils/Log/LoggerInstance.hpp"
 
-namespace castor
+namespace c3d
 {
 	class Logger
 		: public NonMovable
@@ -708,16 +708,16 @@ namespace castor
 		static void CU_API doLogMessage( LogType type, MbString const & msg, bool addNL );
 
 	private:
-		static castor::RawUniquePtr< Logger > m_singleton;
+		static c3d::RawUniquePtr< Logger > m_singleton;
 
-		castor::RawUniquePtr< ProgramConsole > m_console;
-		castor::RawUniquePtr< LoggerInstance > m_instance;
-		castor::RawUniquePtr< std::streambuf > m_cout{};
-		castor::RawUniquePtr< std::streambuf > m_cerr{};
-		castor::RawUniquePtr< std::streambuf > m_clog{};
-		castor::RawUniquePtr< std::wstreambuf > m_wcout{};
-		castor::RawUniquePtr< std::wstreambuf > m_wcerr{};
-		castor::RawUniquePtr< std::wstreambuf > m_wclog{};
+		c3d::RawUniquePtr< ProgramConsole > m_console;
+		c3d::RawUniquePtr< LoggerInstance > m_instance;
+		c3d::RawUniquePtr< std::streambuf > m_cout{};
+		c3d::RawUniquePtr< std::streambuf > m_cerr{};
+		c3d::RawUniquePtr< std::streambuf > m_clog{};
+		c3d::RawUniquePtr< std::wstreambuf > m_wcout{};
+		c3d::RawUniquePtr< std::wstreambuf > m_wcerr{};
+		c3d::RawUniquePtr< std::wstreambuf > m_wclog{};
 	};
 }
 

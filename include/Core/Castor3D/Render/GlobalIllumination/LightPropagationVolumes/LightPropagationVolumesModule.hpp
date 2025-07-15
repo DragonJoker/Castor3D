@@ -12,7 +12,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/Size.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Render */
 	//@{
@@ -37,16 +37,16 @@ namespace castor3d
 		eB = 2,
 		CU_ScopedEnumBounds( eR, eB ),
 	};
-	C3D_API castor::String getTextureName( LpvTexture texture
-		, castor::String const & infix );
-	C3D_API castor::String getTexName( LpvTexture texture );
-	C3D_API castor::PixelFormat getFormat( RenderDevice const & device, LpvTexture texture );
+	C3D_API String getTextureName( LpvTexture texture
+		, String const & infix );
+	C3D_API String getTexName( LpvTexture texture );
+	C3D_API PixelFormat getFormat( RenderDevice const & device, LpvTexture texture );
 	C3D_API ClearValue getClearValue( LpvTexture texture );
 	C3D_API ImageUsageFlags getUsageFlags( LpvTexture texture );
 	C3D_API BorderColour getBorderColor( LpvTexture texture );
 	inline uint32_t getMipLevels( RenderDevice const & /*device*/
 		, LpvTexture /*texture*/
-		, castor::Size const & /*size*/ )
+		, Size const & /*size*/ )
 	{
 		return 1u;
 	}
@@ -56,7 +56,7 @@ namespace castor3d
 	{
 		return getMipLevels( device
 			, texture
-			, castor::Size{ size.width, size.height } );
+			, Size{ size.width, size.height } );
 	}
 	inline ComparisonFunc getCompareOp( LpvTexture /*texture*/ )
 	{
@@ -125,22 +125,22 @@ namespace castor3d
 	using LightPropagationVolumesG = LightPropagationVolumesT< true >;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, GeometryInjectionPass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LayeredLightPropagationVolumes, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LayeredLightPropagationVolumesG, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LightInjectionPass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LightPropagationPass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LightPropagationVolumes, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LightPropagationVolumesG, C3D_API );
+	CU_DeclareSmartPtr( c3d, GeometryInjectionPass, C3D_API );
+	CU_DeclareSmartPtr( c3d, LayeredLightPropagationVolumes, C3D_API );
+	CU_DeclareSmartPtr( c3d, LayeredLightPropagationVolumesG, C3D_API );
+	CU_DeclareSmartPtr( c3d, LightInjectionPass, C3D_API );
+	CU_DeclareSmartPtr( c3d, LightPropagationPass, C3D_API );
+	CU_DeclareSmartPtr( c3d, LightPropagationVolumes, C3D_API );
+	CU_DeclareSmartPtr( c3d, LightPropagationVolumesG, C3D_API );
 
 	CU_DeclareVector( GeometryInjectionPass, GeometryInjectionPass );
 	CU_DeclareVector( LightInjectionPass, LightInjectionPass );
 	/** @endcond */
 
-	using LightPropagationVolumesLightType = castor::Array< LightPropagationVolumesUPtr, size_t( LightType::eCount ) >;
-	using LayeredLightPropagationVolumesLightType = castor::Array< LayeredLightPropagationVolumesUPtr, size_t( LightType::eCount ) >;
-	using LightPropagationVolumesGLightType = castor::Array< LightPropagationVolumesGUPtr, size_t( LightType::eCount ) >;
-	using LayeredLightPropagationVolumesGLightType = castor::Array< LayeredLightPropagationVolumesGUPtr, size_t( LightType::eCount ) >;
+	using LightPropagationVolumesLightType = Array< LightPropagationVolumesUPtr, size_t( LightType::eCount ) >;
+	using LayeredLightPropagationVolumesLightType = Array< LayeredLightPropagationVolumesUPtr, size_t( LightType::eCount ) >;
+	using LightPropagationVolumesGLightType = Array< LightPropagationVolumesGUPtr, size_t( LightType::eCount ) >;
+	using LayeredLightPropagationVolumesGLightType = Array< LayeredLightPropagationVolumesGUPtr, size_t( LightType::eCount ) >;
 
 	//@}
 	//@}

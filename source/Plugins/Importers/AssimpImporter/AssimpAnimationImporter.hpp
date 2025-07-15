@@ -10,26 +10,26 @@ See LICENSE file in root folder
 
 namespace c3d_assimp
 {
-	using SkeletonAnimationKeyFrameMap = castor::Map< castor::Milliseconds, castor3d::SkeletonAnimationKeyFrameUPtr >;
-	using SkeletonAnimationObjectSet = castor::Set< castor3d::SkeletonAnimationObjectRPtr >;
+	using SkeletonAnimationKeyFrameMap = c3d::Map< c3d::Milliseconds, c3d::SkeletonAnimationKeyFrameUPtr >;
+	using SkeletonAnimationObjectSet = c3d::Set< c3d::SkeletonAnimationObjectRPtr >;
 
 	class AssimpAnimationImporter
-		: public castor3d::AnimationImporter
+		: public c3d::AnimationImporter
 	{
 	public:
-		explicit AssimpAnimationImporter( castor3d::Engine & engine );
+		explicit AssimpAnimationImporter( c3d::Engine & engine );
 
 	private:
-		bool doImportSkeleton( castor3d::SkeletonAnimation & animation )override;
-		bool doImportMesh( castor3d::MeshAnimation & animation )override;
-		bool doImportNode( castor3d::SceneNodeAnimation & animation )override;
-		bool doImportTexture( castor3d::TextureAnimation & animation )override;
+		bool doImportSkeleton( c3d::SkeletonAnimation & animation )override;
+		bool doImportMesh( c3d::MeshAnimation & animation )override;
+		bool doImportNode( c3d::SceneNodeAnimation & animation )override;
+		bool doImportTexture( c3d::TextureAnimation & animation )override;
 
-		void doProcessSkeletonAnimationNodes( castor3d::SkeletonAnimation & animation
-			, castor::Milliseconds minTime
-			, castor::Milliseconds maxTime
+		void doProcessSkeletonAnimationNodes( c3d::SkeletonAnimation & animation
+			, c3d::Milliseconds minTime
+			, c3d::Milliseconds maxTime
 			, int64_t ticksPerSecond
-			, castor3d::Skeleton const & skeleton
+			, c3d::Skeleton const & skeleton
 			, aiNode const & aiNode
 			, aiAnimation const & aiAnimation
 			, SkeletonAnimationKeyFrameMap & keyFrames

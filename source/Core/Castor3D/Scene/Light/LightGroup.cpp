@@ -12,9 +12,9 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, LightGroup )
+CU_ImplementSmartPtr( c3d, LightGroup )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -33,7 +33,7 @@ namespace castor3d
 			else
 			{
 				newBlockContext->scene = blockContext;
-				newBlockContext->name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				newBlockContext->name = getPrefixedName( params[0]->get< String >(), *blockContext );
 			}
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eLightGroup )
@@ -77,7 +77,7 @@ namespace castor3d
 			}
 			else
 			{
-				blockContext->light->setColour( params[0]->get< castor::Point3f >() );
+				blockContext->light->setColour( params[0]->get< Point3f >() );
 			}
 		}
 		CU_EndAttribute()
@@ -96,16 +96,16 @@ namespace castor3d
 			{
 				if ( blockContext->lightType == LightType::ePoint )
 				{
-					blockContext->light->getPointLight()->setIntensity( castor::LuminousIntensity{ params[0]->get< float >() } );
+					blockContext->light->getPointLight()->setIntensity( LuminousIntensity{ params[0]->get< float >() } );
 				}
 				else if ( blockContext->lightType == LightType::eSpot )
 				{
-					blockContext->light->getSpotLight()->setIntensity( castor::LuminousIntensity{ params[0]->get< float >() } );
+					blockContext->light->getSpotLight()->setIntensity( LuminousIntensity{ params[0]->get< float >() } );
 				}
 				else if ( blockContext->lightType == LightType::eDirectional )
 				{
 					CU_ParsingDeprecated();
-					blockContext->light->getDirectionalLight()->setIllumination( castor::Illumination{ params[0]->get< float >() } );
+					blockContext->light->getDirectionalLight()->setIllumination( Illumination{ params[0]->get< float >() } );
 				}
 				else
 				{
@@ -129,7 +129,7 @@ namespace castor3d
 			{
 				if ( blockContext->lightType == LightType::eDirectional )
 				{
-					blockContext->light->getDirectionalLight()->setIllumination( castor::Illumination{ params[0]->get< float >() } );
+					blockContext->light->getDirectionalLight()->setIllumination( Illumination{ params[0]->get< float >() } );
 				}
 				else
 				{
@@ -153,11 +153,11 @@ namespace castor3d
 			{
 				if ( blockContext->lightType == LightType::ePoint )
 				{
-					blockContext->light->getPointLight()->setAttenuation( params[0]->get< castor::Point3f >() );
+					blockContext->light->getPointLight()->setAttenuation( params[0]->get< Point3f >() );
 				}
 				else if ( blockContext->lightType == LightType::eSpot )
 				{
-					blockContext->light->getSpotLight()->setAttenuation( params[0]->get< castor::Point3f >() );
+					blockContext->light->getSpotLight()->setAttenuation( params[0]->get< Point3f >() );
 				}
 				else
 				{
@@ -211,8 +211,8 @@ namespace castor3d
 
 				if ( blockContext->lightType == LightType::eSpot )
 				{
-					blockContext->light->getSpotLight()->setInnerCutOff( castor::Angle::fromDegrees( angle / 2.0f ) );
-					blockContext->light->getSpotLight()->setOuterCutOff( castor::Angle::fromDegrees( angle ) );
+					blockContext->light->getSpotLight()->setInnerCutOff( Angle::fromDegrees( angle / 2.0f ) );
+					blockContext->light->getSpotLight()->setOuterCutOff( Angle::fromDegrees( angle ) );
 				}
 				else
 				{
@@ -236,7 +236,7 @@ namespace castor3d
 			{
 				if ( blockContext->lightType == LightType::eSpot )
 				{
-					blockContext->light->getSpotLight()->setInnerCutOff( castor::Angle::fromDegrees( params[0]->get< float >() ) );
+					blockContext->light->getSpotLight()->setInnerCutOff( Angle::fromDegrees( params[0]->get< float >() ) );
 				}
 				else
 				{
@@ -260,7 +260,7 @@ namespace castor3d
 			{
 				if ( blockContext->lightType == LightType::eSpot )
 				{
-					blockContext->light->getSpotLight()->setOuterCutOff( castor::Angle::fromDegrees( params[0]->get< float >() ) );
+					blockContext->light->getSpotLight()->setOuterCutOff( Angle::fromDegrees( params[0]->get< float >() ) );
 				}
 				else
 				{
@@ -334,7 +334,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 
 				if ( auto parent = blockContext->scene->scene->findSceneNode( name ) )
 				{
@@ -364,7 +364,7 @@ namespace castor3d
 			{
 				if ( !blockContext->shadowConfig )
 				{
-					blockContext->shadowConfig = castor::makeUnique< ShadowConfig >();
+					blockContext->shadowConfig = makeUnique< ShadowConfig >();
 				}
 
 				newBlockContext->lightGroup = blockContext;
@@ -381,7 +381,7 @@ namespace castor3d
 			}
 			else if ( !params.empty() )
 			{
-				blockContext->shadowConfig = castor::makeUnique< ShadowConfig >();
+				blockContext->shadowConfig = makeUnique< ShadowConfig >();
 				params[0]->get( blockContext->shadowConfig->enabled );
 				blockContext->light->setShadowConfig( *blockContext->shadowConfig );
 			}
@@ -436,7 +436,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	LightGroup::LightGroup( castor::String const & name
+	LightGroup::LightGroup( String const & name
 		, LightGroupCreateInfo const & createInfo )
 		: LightGroup{ name
 			, *createInfo.scene
@@ -445,12 +445,12 @@ namespace castor3d
 	{
 	}
 
-	LightGroup::LightGroup( castor::String const & name
+	LightGroup::LightGroup( String const & name
 		, Scene & scene
 		, LightFactory const& factory
 		, LightType lightType )
-		: castor::OwnedBy< Scene >{ scene }
-		, castor::Named{ name }
+		: OwnedBy< Scene >{ scene }
+		, Named{ name }
 		, m_enabled{ m_dirty, true, [this](){ markDirty(); } }
 	{
 		m_category = factory.create( lightType, m_dirty, [this](){ markDirty(); } );
@@ -479,9 +479,8 @@ namespace castor3d
 		m_category->cloneInto( *output.m_category );
 	}
 
-	void LightGroup::addParsers( castor::AttributeParsers & result )
+	void LightGroup::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< SceneContext > sceneCtx{ result, CSCNSection::eScene, CSCNSection::eRoot };
 		BlockParserContextT< LightGroupContext > groupCtx{ result, CSCNSection::eLightGroup, CSCNSection::eScene };
 		BlockParserContextT< LightGroupContext > instancesCtx{ result, CSCNSection::eLightGroupInstances, CSCNSection::eLightGroup };
@@ -537,11 +536,11 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String getPrefix( LightGroupContext const & context )
+	String getPrefix( LightGroupContext const & context )
 	{
 		return context.scene
 			? getPrefix( *context.scene )
-			: castor::String{};
+			: String{};
 	}
 
 	//*********************************************************************************************

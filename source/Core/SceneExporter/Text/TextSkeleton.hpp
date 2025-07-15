@@ -8,17 +8,17 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::Skeleton >
-		: public TextWriterT< castor3d::Skeleton >
+	class TextWriter< Skeleton >
+		: public TextWriterT< Skeleton >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, String const & subfolder );
-		bool operator()( castor3d::Skeleton const & material
-			, castor::StringStream & file )override;
+		bool operator()( Skeleton const & material
+			, StringStream & file )override;
 
 	private:
 		String m_subfolder;

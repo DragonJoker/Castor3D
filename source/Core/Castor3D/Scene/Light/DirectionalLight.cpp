@@ -19,26 +19,26 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
 	namespace lgtdirectional
 	{
-		static castor::Vector< DirectionalLightCascade > doComputeCascades( Camera const & camera
+		static Vector< DirectionalLightCascade > doComputeCascades( Camera const & camera
 			, DirectionalLightInstance const & light
 			, uint32_t cascades )
 		{
 			auto const & scene = *camera.getScene();
 			auto const & renderSystem = *scene.getEngine()->getRenderSystem();
-			castor::Vector< DirectionalLightCascade > result( cascades );
-			castor::Point3f lightDirection = light.getDirection();
+			Vector< DirectionalLightCascade > result( cascades );
+			Point3f lightDirection = light.getDirection();
 
-			castor::Point3f up{ 0.0f, 1.0f, 0.0f };
-			castor::Point3f right( castor::point::getNormalised( castor::point::cross( up, lightDirection ) ) );
-			up = castor::point::getNormalised( castor::point::cross( lightDirection, right ) );
-			auto const lightViewMatrix = castor::matrix::lookAt( castor::Point3f{}, lightDirection, up );
-			auto const cameraVP = castor::matrix::reverseDepth( camera.getProjection( false ) ) * camera.getView();
+			Point3f up{ 0.0f, 1.0f, 0.0f };
+			Point3f right( point::getNormalised( point::cross( up, lightDirection ) ) );
+			up = point::getNormalised( point::cross( lightDirection, right ) );
+			auto const lightViewMatrix = matrix::lookAt( Point3f{}, lightDirection, up );
+			auto const cameraVP = matrix::reverseDepth( camera.getProjection( false ) ) * camera.getView();
 			auto const invCameraVP = cameraVP.getInverse();
 
 			auto nearClip = camera.getNear();
@@ -52,7 +52,7 @@ namespace castor3d
 
 			// Calculate split depths based on view camera frustum
 			// Based on method presented in https://developer.nvidia.com/gpugems/GPUGems3/gpugems3_ch10.html
-			castor::Vector< float > cascadeSplits( cascades, 0.0f );
+			Vector< float > cascadeSplits( cascades, 0.0f );
 			float constexpr lambda = 0.95f;
 
 			for ( uint32_t i = 0; i < cascades; i++ )
@@ -64,23 +64,23 @@ namespace castor3d
 				cascadeSplits[i] = ( d - nearClip ) / clipRange;
 			}
 
-			castor::Array< castor::Point3f, 8u > frustumCorners
+			Array< Point3f, 8u > frustumCorners
 			{
-				castor::Point3f( -1.0f, +1.0f, -1.0f ),
-				castor::Point3f( +1.0f, +1.0f, -1.0f ),
-				castor::Point3f( +1.0f, -1.0f, -1.0f ),
-				castor::Point3f( -1.0f, -1.0f, -1.0f ),
-				castor::Point3f( -1.0f, +1.0f, +1.0f ),
-				castor::Point3f( +1.0f, +1.0f, +1.0f ),
-				castor::Point3f( +1.0f, -1.0f, +1.0f ),
-				castor::Point3f( -1.0f, -1.0f, +1.0f ),
+				Point3f( -1.0f, +1.0f, -1.0f ),
+				Point3f( +1.0f, +1.0f, -1.0f ),
+				Point3f( +1.0f, -1.0f, -1.0f ),
+				Point3f( -1.0f, -1.0f, -1.0f ),
+				Point3f( -1.0f, +1.0f, +1.0f ),
+				Point3f( +1.0f, +1.0f, +1.0f ),
+				Point3f( +1.0f, -1.0f, +1.0f ),
+				Point3f( -1.0f, -1.0f, +1.0f ),
 			};
 
 			// Project main frustum corners into world space
 			for ( auto & frustumCorner : frustumCorners )
 			{
-				auto invCorner = invCameraVP * castor::Point4f{ frustumCorner->x, frustumCorner->y, frustumCorner->z, 1.0f };
-				frustumCorner = castor::Point3f{ invCorner / invCorner->w };
+				auto invCorner = invCameraVP * Point4f{ frustumCorner->x, frustumCorner->y, frustumCorner->z, 1.0f };
+				frustumCorner = Point3f{ invCorner / invCorner->w };
 			}
 
 			float prevSplitDist = 0.0;
@@ -101,7 +101,7 @@ namespace castor3d
 				}
 
 				// Get cascade bounding sphere center
-				castor::Point3f frustumCenter{ 0, 0, 0 };
+				Point3f frustumCenter{ 0, 0, 0 };
 				for ( auto frustumCorner : cascadeFrustum )
 				{
 					frustumCenter += frustumCorner;
@@ -112,21 +112,21 @@ namespace castor3d
 				float radius = 0.0f;
 				for ( auto frustumCorner : cascadeFrustum )
 				{
-					auto distance = float( castor::point::length( frustumCorner - frustumCenter ) );
+					auto distance = float( point::length( frustumCorner - frustumCenter ) );
 					radius = std::max( radius, distance );
 				}
 				radius = std::ceil( radius * 16.0f ) / 16.0f;
 
 				// Compute AABB
-				castor::Point3f frustumRadius{ radius, radius, radius };
-				castor::Point3f maxExtents = frustumCenter + frustumRadius;
-				castor::Point3f minExtents = frustumCenter - frustumRadius;
+				Point3f frustumRadius{ radius, radius, radius };
+				Point3f maxExtents = frustumCenter + frustumRadius;
+				Point3f minExtents = frustumCenter - frustumRadius;
 
 				// Snap cascade to texel grid:
 				auto extent = maxExtents - minExtents;
 				auto texelSize = extent / float( ShadowMapDirectionalTextureSize );
-				minExtents = castor::point::getFloored( minExtents / texelSize ) * texelSize;
-				maxExtents = castor::point::getFloored( maxExtents / texelSize ) * texelSize;
+				minExtents = point::getFloored( minExtents / texelSize ) * texelSize;
+				maxExtents = point::getFloored( maxExtents / texelSize ) * texelSize;
 
 				// Extrude bounds to avoid early shadow clipping:
 				auto ext = float( fabs( frustumCenter->z - minExtents->z ) );
@@ -164,20 +164,20 @@ namespace castor3d
 	//*************************************************************************************************
 
 	DirectionalLight::DirectionalLight( bool & dirty
-		, castor::Function< void() > const & markParentDirty )
+		, Function< void() > const & markParentDirty )
 		: LightCategory{ LightType::eDirectional, dirty, markParentDirty }
-		, m_illumination{ m_dirty, castor::Illumination{ 1.0f }, markParentDirty }
+		, m_illumination{ m_dirty, Illumination{ 1.0f }, markParentDirty }
 	{
 	}
 
 	LightInstanceUPtr DirectionalLight::instantiate( SceneNode & node
-		, castor::Function< bool() > isParentEnabled )
+		, Function< bool() > isParentEnabled )
 	{
-		return LightInstanceUPtr( new DirectionalLightInstance{ node, *this, m_markParentDirty, castor::move( isParentEnabled ) } );
+		return LightInstanceUPtr( new DirectionalLightInstance{ node, *this, m_markParentDirty, c3d::move( isParentEnabled ) } );
 	}
 
 	LightCategoryUPtr DirectionalLight::create( bool & dirty
-		, castor::Function< void() > const & markParentDirty )
+		, Function< void() > const & markParentDirty )
 	{
 		return LightCategoryUPtr( new DirectionalLight{ dirty, markParentDirty } );
 	}
@@ -201,9 +201,9 @@ namespace castor3d
 
 	DirectionalLightInstance::DirectionalLightInstance( SceneNode & node
 		, DirectionalLight & category
-		, castor::Function< void() > markParentDirty
-		, castor::Function< bool() > isParentEnabled )
-		: LightInstance{ node, category, castor::move( markParentDirty ), castor::move( isParentEnabled ) }
+		, Function< void() > markParentDirty
+		, Function< bool() > isParentEnabled )
+		: LightInstance{ node, category, c3d::move( markParentDirty ), c3d::move( isParentEnabled ) }
 		, m_cascades( node.getScene()->getDirectionalShadowCascades() )
 		, m_prvCascades( node.getScene()->getDirectionalShadowCascades() )
 	{
@@ -234,15 +234,15 @@ namespace castor3d
 
 		for ( auto i = uint32_t( m_cascades.size() ); i < MaxDirectionalCascadesCount; ++i )
 		{
-			directional.transforms[i] = castor::Matrix4x4f{ 0.0f };
+			directional.transforms[i] = Matrix4x4f{ 0.0f };
 		}
 	}
 
 	void DirectionalLightInstance::doUpdate()
 	{
-		m_direction = castor::Point3f{ 0, 0, 1 };
+		m_direction = Point3f{ 0, 0, 1 };
 		m_node->getDerivedOrientation().transform( m_direction, m_direction );
-		m_direction = castor::point::getNormalised( m_direction );
+		m_direction = point::getNormalised( m_direction );
 	}
 
 	void DirectionalLightInstance::doUpdateShadow( Camera const & viewCamera
@@ -261,7 +261,7 @@ namespace castor3d
 		}
 	}
 
-	void DirectionalLightInstance::doFillLightBuffer( castor::Point4f * data )const
+	void DirectionalLightInstance::doFillLightBuffer( Point4f * data )const
 	{
 		auto & directional = *reinterpret_cast< LightData * >( data->ptr() );
 		auto & directionalLight = static_cast< DirectionalLight const & >( getCategory() );

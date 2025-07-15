@@ -50,8 +50,8 @@ namespace castortd
 		, m_game{ game }
 	{
 		auto & engine = *wxGetApp().getCastor();
-		castor::Size sizeWnd = GuiCommon::makeSize( GetClientSize() );
-		m_renderWindow = castor::makeUnique< castor3d::RenderWindow >( cuT( "CastorTD" )
+		c3d::Size sizeWnd = GuiCommon::makeSize( GetClientSize() );
+		m_renderWindow = c3d::makeUnique< c3d::RenderWindow >( cuT( "CastorTD" )
 			, engine
 			, sizeWnd
 			, GuiCommon::makeWindowHandle( this ) );
@@ -70,19 +70,19 @@ namespace castortd
 		m_renderWindow->cleanup();
 	}
 
-	void RenderPanel::updateRenderWindow( castor3d::RenderWindowDesc const & window )
+	void RenderPanel::updateRenderWindow( c3d::RenderWindowDesc const & window )
 	{
 		if ( auto target = window.renderTarget )
 		{
 			m_renderWindow->initialise( window );
 
 			auto sizeWnd = FromDIP( GetClientSize() );
-			castor::Size sizeScreen;
-			castor::system::getScreenSize( 0, sizeScreen );
+			c3d::Size sizeScreen;
+			c3d::system::getScreenSize( 0, sizeScreen );
 			GetParent()->SetClientSize( sizeWnd );
 			GetParent()->SetPosition( FromDIP( wxPoint( std::max( 0, int( sizeScreen.getWidth() ) - sizeWnd.GetWidth() ) / 2
 				, std::max( 0, int( sizeScreen.getHeight() ) - sizeWnd.GetHeight() ) / 2 ) ) );
-			castor3d::SceneRPtr scene = target->getScene();
+			c3d::SceneRPtr scene = target->getScene();
 
 			if ( scene )
 			{
@@ -91,10 +91,10 @@ namespace castortd
 
 				m_listener = m_renderWindow->getListener();
 
-				using LockType = castor::UniqueLock< castor3d::CameraCache >;
-				LockType lock{ castor::makeUniqueLock( scene->getCameraCache() ) };
+				using LockType = c3d::UniqueLock< c3d::CameraCache >;
+				LockType lock{ c3d::makeUniqueLock( scene->getCameraCache() ) };
 				auto camera = scene->getCameraCache().begin()->second.get();
-				m_cameraState = castor::make_unique< GuiCommon::NodeState >( scene->getListener(), camera->getParent(), true );
+				m_cameraState = c3d::makeRawUnique< GuiCommon::NodeState >( scene->getListener(), camera->getParent(), true );
 				m_cameraState->start();
 			}
 		}
@@ -140,7 +140,7 @@ namespace castortd
 		return result;
 	}
 
-	void RenderPanel::doUpdateSelectedGeometry( castor3d::GeometryRPtr geometry )
+	void RenderPanel::doUpdateSelectedGeometry( c3d::GeometryRPtr geometry )
 	{
 		auto curGeometry = m_selectedGeometry;
 
@@ -156,7 +156,7 @@ namespace castortd
 			{
 				Cell cell{ 0u, 0u, Cell::State::Invalid };
 
-				if ( geometry->getName().find( cuT( "Tower" ) ) == castor::String::npos )
+				if ( geometry->getName().find( cuT( "Tower" ) ) == c3d::String::npos )
 				{
 					cell = m_game.getCell( geometry->getParent()->getPosition() );
 				}
@@ -171,19 +171,19 @@ namespace castortd
 					{
 					case Cell::State::Empty:
 						freeCell = true;
-						m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+						m_listener->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 							, [this, geometry]()
 							{
 								if ( geometry && m_marker )
 								{
 									if ( auto node = geometry->getParent() )
 									{
-										castor::Point3f position = node->getPosition();
+										c3d::Point3f position = node->getPosition();
 
 										if ( auto mesh = geometry->getMesh() )
 										{
 											auto height = mesh->getBoundingBox().getMax()[1] - mesh->getBoundingBox().getMin()[1];
-											m_marker->setPosition( castor::Point3f{ position[0], height + 1, position[2] } );
+											m_marker->setPosition( c3d::Point3f{ position[0], height + 1, position[2] } );
 										}
 									}
 								}
@@ -206,9 +206,9 @@ namespace castortd
 				}
 			}
 
-			m_listener->postEvent( castor3d::makeGpuFunctorEvent( castor3d::GpuEventType::ePreUpload
-				, [this, freeCell]( castor3d::RenderDevice const & device
-					, castor3d::QueueData const & queueData )
+			m_listener->postEvent( c3d::makeGpuFunctorEvent( c3d::GpuEventType::ePreUpload
+				, [this, freeCell]( c3d::RenderDevice const & device
+					, c3d::QueueData const & queueData )
 				{
 					if ( m_marker )
 					{
@@ -222,7 +222,7 @@ namespace castortd
 	{
 		if ( m_game.isRunning() && m_selectedTower && m_selectedTower->canUpgradeDamage() && m_game.canAfford( m_selectedTower->getDamageUpgradeCost() ) )
 		{
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+			m_listener->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					m_game.upgradeTowerDamage( *m_selectedTower );
@@ -234,7 +234,7 @@ namespace castortd
 	{
 		if ( m_game.isRunning() && m_selectedTower && m_selectedTower->canUpgradeSpeed() && m_game.canAfford( m_selectedTower->getSpeedUpgradeCost() ) )
 		{
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+			m_listener->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					m_game.upgradeTowerSpeed( *m_selectedTower );
@@ -246,7 +246,7 @@ namespace castortd
 	{
 		if ( m_game.isRunning() && m_selectedTower && m_selectedTower->canUpgradeRange() && m_game.canAfford( m_selectedTower->getRangeUpgradeCost() ) )
 		{
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+			m_listener->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					m_game.upgradeTowerRange( *m_selectedTower );
@@ -378,7 +378,7 @@ namespace castortd
 			break;
 
 		case WXK_F1:
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+			m_listener->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					if ( m_game.isRunning() )
@@ -390,7 +390,7 @@ namespace castortd
 
 		case WXK_RETURN:
 		case WXK_NUMPAD_ENTER:
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+			m_listener->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					if ( m_game.isEnded() )
@@ -406,7 +406,7 @@ namespace castortd
 			break;
 
 		case WXK_SPACE:
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+			m_listener->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					if ( m_game.isStarted() )
@@ -470,16 +470,16 @@ namespace castortd
 			m_y = doTransformY( event.GetY() );
 			m_oldX = m_x;
 			m_oldY = m_y;
-			m_listener->postEvent( castor3d::makeGpuFunctorEvent( castor3d::GpuEventType::ePreUpload
-				, [this]( castor3d::RenderDevice const & device
-					, castor3d::QueueData const & queueData )
+			m_listener->postEvent( c3d::makeGpuFunctorEvent( c3d::GpuEventType::ePreUpload
+				, [this]( c3d::RenderDevice const & device
+					, c3d::QueueData const & queueData )
 				{
-					castor3d::Camera & camera = *m_renderWindow->getCamera();
+					c3d::Camera & camera = *m_renderWindow->getCamera();
 					camera.update();
-					auto type = m_renderWindow->pick( castor::Position{ int( m_x ), int( m_y ) } );
+					auto type = m_renderWindow->pick( c3d::Position{ int( m_x ), int( m_y ) } );
 
-					if ( type != castor3d::PickNodeType::eNone
-						&& type != castor3d::PickNodeType::eBillboard )
+					if ( type != c3d::PickNodeType::eNone
+						&& type != c3d::PickNodeType::eBillboard )
 					{
 						doUpdateSelectedGeometry( m_renderWindow->getPickedGeometry() );
 					}
@@ -560,7 +560,7 @@ namespace castortd
 
 			if ( m_mouseLeftDown )
 			{
-				m_cameraState->addAngularVelocity( castor::Point2f{ -deltaY, deltaX } );
+				m_cameraState->addAngularVelocity( c3d::Point2f{ -deltaY, deltaX } );
 			}
 		}
 
@@ -575,16 +575,16 @@ namespace castortd
 
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->fireMouseWheel( castor::Position( 0, wheelRotation )
+		if ( !inputListener || !inputListener->fireMouseWheel( c3d::Position( 0, wheelRotation )
 			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			if ( wheelRotation < 0 )
 			{
-				m_cameraState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, -panel::g_camSpeed } );
+				m_cameraState->addScalarVelocity( c3d::Point3f{ 0.0f, 0.0f, -panel::g_camSpeed } );
 			}
 			else
 			{
-				m_cameraState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, panel::g_camSpeed } );
+				m_cameraState->addScalarVelocity( c3d::Point3f{ 0.0f, 0.0f, panel::g_camSpeed } );
 			}
 		}
 
@@ -593,25 +593,25 @@ namespace castortd
 
 	void RenderPanel::OnTimerUp( wxTimerEvent & event )
 	{
-		m_cameraState->addScalarVelocity( castor::Point3f{ 0.0f, panel::g_camSpeed, 0.0f } );
+		m_cameraState->addScalarVelocity( c3d::Point3f{ 0.0f, panel::g_camSpeed, 0.0f } );
 		event.Skip();
 	}
 
 	void RenderPanel::OnTimerDown( wxTimerEvent & event )
 	{
-		m_cameraState->addScalarVelocity( castor::Point3f{ 0.0f, -panel::g_camSpeed, 0.0f } );
+		m_cameraState->addScalarVelocity( c3d::Point3f{ 0.0f, -panel::g_camSpeed, 0.0f } );
 		event.Skip();
 	}
 
 	void RenderPanel::OnTimerLeft( wxTimerEvent & event )
 	{
-		m_cameraState->addScalarVelocity( castor::Point3f{ panel::g_camSpeed, 0.0f, 0.0f } );
+		m_cameraState->addScalarVelocity( c3d::Point3f{ panel::g_camSpeed, 0.0f, 0.0f } );
 		event.Skip();
 	}
 
 	void RenderPanel::OnTimerRight( wxTimerEvent & event )
 	{
-		m_cameraState->addScalarVelocity( castor::Point3f{ -panel::g_camSpeed, 0.0f, 0.0f } );
+		m_cameraState->addScalarVelocity( c3d::Point3f{ -panel::g_camSpeed, 0.0f, 0.0f } );
 		event.Skip();
 	}
 
@@ -619,10 +619,10 @@ namespace castortd
 	{
 		if ( m_game.isRunning() )
 		{
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+			m_listener->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 				, [this]()
 				{
-					if ( m_game.buildTower( m_marker->getPosition(), castor::make_unique< LongRangeTower >( m_longRange ) ) )
+					if ( m_game.buildTower( m_marker->getPosition(), c3d::makeRawUnique< LongRangeTower >( m_longRange ) ) )
 					{
 						doUpdateSelectedGeometry( nullptr );
 					}
@@ -634,10 +634,10 @@ namespace castortd
 	{
 		if ( m_game.isRunning() )
 		{
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+			m_listener->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 				, [this]()
 				{
-					if ( m_game.buildTower( m_marker->getPosition(), castor::make_unique< ShortRangeTower >( m_shortRange ) ) )
+					if ( m_game.buildTower( m_marker->getPosition(), c3d::makeRawUnique< ShortRangeTower >( m_shortRange ) ) )
 					{
 						doUpdateSelectedGeometry( nullptr );
 					}

@@ -2,22 +2,22 @@
 
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 
-CU_ImplementSmartPtr( castor3d, SkeletonNode )
+CU_ImplementSmartPtr( c3d, SkeletonNode )
 
-namespace castor3d
+namespace c3d
 {
 	SkeletonNode::SkeletonNode( SkeletonNodeType type
-		, castor::String name
+		, String name
 		, Skeleton & skeleton )
-		: castor::Named{ castor::move( name ) }
+		: Named{ c3d::move( name ) }
 		, m_type{ type }
 		, m_skeleton{ skeleton }
 	{
 	}
 
-	SkeletonNode::SkeletonNode( castor::String name
+	SkeletonNode::SkeletonNode( String name
 		, Skeleton & skeleton )
-		: SkeletonNode{ SkeletonNodeType::eNode, castor::move( name ), skeleton }
+		: SkeletonNode{ SkeletonNodeType::eNode, c3d::move( name ), skeleton }
 	{
 	}
 
@@ -36,7 +36,7 @@ namespace castor3d
 
 	SkeletonNodeUPtr SkeletonNode::clone( Skeleton & parent )const
 	{
-		auto result = castor::makeUnique< SkeletonNode >( getName(), parent );
+		auto result = makeUnique< SkeletonNode >( getName(), parent );
 		doCloneInto( *result );
 		return result;
 	}

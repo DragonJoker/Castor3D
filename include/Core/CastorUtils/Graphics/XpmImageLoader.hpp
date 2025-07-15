@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Graphics/ImageLoader.hpp"
 
-namespace castor
+namespace c3d
 {
 	class XpmImageLoader
 		: public ImageLoaderImpl
@@ -15,7 +15,7 @@ namespace castor
 		CU_API static void registerLoader( ImageLoader & reg );
 		CU_API static void unregisterLoader( ImageLoader & reg );
 		/**
-		 *\copydoc castor::ImageLoaderImpl::load
+		 *\copydoc c3d::ImageLoaderImpl::load
 		 */
 		CU_API ImageMemoryLayout load( String const & imageFormat
 			, uint8_t const * data

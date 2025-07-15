@@ -14,10 +14,10 @@ See LICENSE file in root folder
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/Image/ImageViewCreateInfo.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class TextureView
-		: public castor::OwnedBy< TextureLayout >
+		: public OwnedBy< TextureLayout >
 	{
 		friend class TextureLayout;
 
@@ -39,7 +39,7 @@ namespace castor3d
 		C3D_API TextureView( TextureLayout & layout
 			, ImageViewCreateInfo info
 			, uint32_t index
-			, castor::String debugName );
+			, String debugName );
 		/**
 		 *\~english
 		 *\brief		Initialises the view.
@@ -85,7 +85,7 @@ namespace castor3d
 		 *\param[in]	arrayLayers		Le nombre de layers.
 		 */
 		C3D_API void update( Extent3D const & extent
-			, castor::PixelFormat format
+			, PixelFormat format
 			, uint32_t mipLevels
 			, uint32_t arrayLayers );
 		/**
@@ -104,10 +104,10 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		C3D_API castor::String toString()const;
+		C3D_API String toString()const;
 		C3D_API bool hasBuffer()const;
-		C3D_API castor::ImageMemoryLayout::ConstBuffer getBuffer()const;
-		C3D_API castor::ImageMemoryLayout::Buffer getBuffer();
+		C3D_API ImageMemoryLayout::ConstBuffer getBuffer()const;
+		C3D_API ImageMemoryLayout::Buffer getBuffer();
 		C3D_API uint32_t getLevelCount()const;
 		C3D_API ashes::ImageView const & getSampledView()const;
 		C3D_API ashes::ImageView const & getTargetView()const;
@@ -163,7 +163,7 @@ namespace castor3d
 	private:
 		uint32_t m_index;
 		ImageViewCreateInfo m_info;
-		castor::String m_debugName;
+		String m_debugName;
 		TextureSource m_source;
 		mutable ashes::ImageView m_sampledView;
 		mutable ashes::ImageView m_targetView;

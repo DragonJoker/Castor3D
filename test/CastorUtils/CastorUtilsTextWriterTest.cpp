@@ -28,8 +28,8 @@ namespace Testing
 
 	void CastorUtilsTextWriterTest::BaseTypes()
 	{
-		auto file = castor::makeStringStream();
-		castor::TextWriterBase writer;
+		auto file = c3d::makeStringStream();
+		c3d::TextWriterBase writer;
 		CT_CHECK( writer.write( file, cuT( "bool" ), true ) );
 		CT_CHECK( writer.write( file, cuT( "int16_t" ), int16_t( 1 ) ) );
 		CT_CHECK( writer.write( file, cuT( "uint16_t" ), uint16_t( 2u ) ) );
@@ -43,63 +43,63 @@ namespace Testing
 
 	void CastorUtilsTextWriterTest::Point()
 	{
-		auto file = castor::makeStringStream();
-		castor::TextWriterBase writer;
-		CT_CHECK( writer.writeNamedSub( file, cuT( "Point2f" ), castor::Point2f{ 0.0f, 1.0f } ) );
-		CT_CHECK( writer.writeNamedSub( file, cuT( "Point3f" ), castor::Point3f{ 2.0f, 3.0f, 4.0f } ) );
-		CT_CHECK( writer.writeNamedSub( file, cuT( "Point4f" ), castor::Point4f{ 5.0f, 6.0f, 7.0f, 8.0f } ) );
+		auto file = c3d::makeStringStream();
+		c3d::TextWriterBase writer;
+		CT_CHECK( writer.writeNamedSub( file, cuT( "Point2f" ), c3d::Point2f{ 0.0f, 1.0f } ) );
+		CT_CHECK( writer.writeNamedSub( file, cuT( "Point3f" ), c3d::Point3f{ 2.0f, 3.0f, 4.0f } ) );
+		CT_CHECK( writer.writeNamedSub( file, cuT( "Point4f" ), c3d::Point4f{ 5.0f, 6.0f, 7.0f, 8.0f } ) );
 	}
 
 	void CastorUtilsTextWriterTest::Quaternion()
 	{
-		auto file = castor::makeStringStream();
-		castor::TextWriterBase writer;
-		CT_CHECK( writer.writeNamedSub( file, cuT( "Quaternion" ), castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 1.0f, 0.5f }, castor::Angle::fromDegrees( 90.0f ) ) ) );
+		auto file = c3d::makeStringStream();
+		c3d::TextWriterBase writer;
+		CT_CHECK( writer.writeNamedSub( file, cuT( "Quaternion" ), c3d::Quaternion::fromAxisAngle( c3d::Point3f{ 0.0f, 1.0f, 0.5f }, c3d::Angle::fromDegrees( 90.0f ) ) ) );
 	}
 
 	void CastorUtilsTextWriterTest::RgbColour()
 	{
-		auto file = castor::makeStringStream();
-		castor::TextWriterBase writer;
-		CT_CHECK( writer.writeNamedSub( file, cuT( "RgbColour" ), castor::RgbColour{ 0.0f, 0.5f, 1.0f } ) );
-		CT_CHECK( writer.writeNamedSub( file, cuT( "HdrRgbColour" ), castor::HdrRgbColour{ 1.5f, 2.0f, 2.5f } ) );
+		auto file = c3d::makeStringStream();
+		c3d::TextWriterBase writer;
+		CT_CHECK( writer.writeNamedSub( file, cuT( "RgbColour" ), c3d::RgbColour{ 0.0f, 0.5f, 1.0f } ) );
+		CT_CHECK( writer.writeNamedSub( file, cuT( "HdrRgbColour" ), c3d::HdrRgbColour{ 1.5f, 2.0f, 2.5f } ) );
 	}
 
 	void CastorUtilsTextWriterTest::RgbaColour()
 	{
-		auto file = castor::makeStringStream();
-		castor::TextWriterBase writer;
-		CT_CHECK( writer.writeNamedSub( file, cuT( "RgbaColour" ), castor::RgbaColour{ 0.0f, 0.25f, 0.75f, 1.0f } ) );
-		CT_CHECK( writer.writeNamedSub( file, cuT( "HdrRgbaColour" ), castor::HdrRgbaColour{ 1.25f, 1.5f, 1.75f, 2.0f } ) );
+		auto file = c3d::makeStringStream();
+		c3d::TextWriterBase writer;
+		CT_CHECK( writer.writeNamedSub( file, cuT( "RgbaColour" ), c3d::RgbaColour{ 0.0f, 0.25f, 0.75f, 1.0f } ) );
+		CT_CHECK( writer.writeNamedSub( file, cuT( "HdrRgbaColour" ), c3d::HdrRgbaColour{ 1.25f, 1.5f, 1.75f, 2.0f } ) );
 	}
 
 	void CastorUtilsTextWriterTest::UnnamedBlock()
 	{
-		auto file = castor::makeStringStream();
-		castor::TextWriterBase writer;
+		auto file = c3d::makeStringStream();
+		c3d::TextWriterBase writer;
 		auto block = writer.beginBlock( file );
 		CT_CHECK( bool( block ) );
-		CT_CHECK( writer.writeNamedSub( file, cuT( "RgbaColour" ), castor::RgbaColour{ 0.0f, 0.25f, 0.75f, 1.0f } ) );
-		CT_CHECK( writer.writeNamedSub( file, cuT( "HdrRgbaColour" ), castor::HdrRgbaColour{ 1.25f, 1.5f, 1.75f, 2.0f } ) );
+		CT_CHECK( writer.writeNamedSub( file, cuT( "RgbaColour" ), c3d::RgbaColour{ 0.0f, 0.25f, 0.75f, 1.0f } ) );
+		CT_CHECK( writer.writeNamedSub( file, cuT( "HdrRgbaColour" ), c3d::HdrRgbaColour{ 1.25f, 1.5f, 1.75f, 2.0f } ) );
 	}
 
 	void CastorUtilsTextWriterTest::NamedBlock()
 	{
-		auto file = castor::makeStringStream();
-		castor::TextWriterBase writer;
+		auto file = c3d::makeStringStream();
+		c3d::TextWriterBase writer;
 		auto block = writer.beginBlock( file, cuT( "colours" ) );
 		CT_CHECK( bool( block ) );
-		CT_CHECK( writer.writeNamedSub( file, cuT( "RgbaColour" ), castor::RgbaColour{ 0.0f, 0.25f, 0.75f, 1.0f } ) );
-		CT_CHECK( writer.writeNamedSub( file, cuT( "HdrRgbaColour" ), castor::HdrRgbaColour{ 1.25f, 1.5f, 1.75f, 2.0f } ) );
+		CT_CHECK( writer.writeNamedSub( file, cuT( "RgbaColour" ), c3d::RgbaColour{ 0.0f, 0.25f, 0.75f, 1.0f } ) );
+		CT_CHECK( writer.writeNamedSub( file, cuT( "HdrRgbaColour" ), c3d::HdrRgbaColour{ 1.25f, 1.5f, 1.75f, 2.0f } ) );
 	}
 
 	void CastorUtilsTextWriterTest::TypedBlock()
 	{
-		auto file = castor::makeStringStream();
-		castor::TextWriterBase writer;
+		auto file = c3d::makeStringStream();
+		c3d::TextWriterBase writer;
 		auto block = writer.beginBlock( file, cuT( "colours" ), cuT( "named" ) );
 		CT_CHECK( bool( block ) );
-		CT_CHECK( writer.writeNamedSub( file, cuT( "RgbaColour" ), castor::RgbaColour{ 0.0f, 0.25f, 0.75f, 1.0f } ) );
-		CT_CHECK( writer.writeNamedSub( file, cuT( "HdrRgbaColour" ), castor::HdrRgbaColour{ 1.25f, 1.5f, 1.75f, 2.0f } ) );
+		CT_CHECK( writer.writeNamedSub( file, cuT( "RgbaColour" ), c3d::RgbaColour{ 0.0f, 0.25f, 0.75f, 1.0f } ) );
+		CT_CHECK( writer.writeNamedSub( file, cuT( "HdrRgbaColour" ), c3d::HdrRgbaColour{ 1.25f, 1.5f, 1.75f, 2.0f } ) );
 	}
 }

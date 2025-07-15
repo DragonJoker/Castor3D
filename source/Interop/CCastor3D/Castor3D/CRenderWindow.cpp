@@ -47,7 +47,7 @@ extern "C"
 
 		try
 		{
-			object->internal->initialise( castor3d::RenderWindowDesc{ castor::String{}
+			object->internal->initialise( c3d::RenderWindowDesc{ c3d::String{}
 				, target->internal } );
 		}
 		C3D_CatchCommonExceptions()
@@ -98,7 +98,7 @@ extern "C"
 		{
 			if ( auto inputListener = object->internal->getEngine()->getUserInputListener() )
 			{
-				*result = inputListener->fireMouseMove( castor::Position{ pos->x, pos->y }, isCtrlDown, isAltDown, isShiftDown );
+				*result = inputListener->fireMouseMove( c3d::Position{ pos->x, pos->y }, isCtrlDown, isAltDown, isShiftDown );
 			}
 		}
 		C3D_CatchCommonExceptions()
@@ -117,7 +117,7 @@ extern "C"
 		{
 			if ( auto inputListener = object->internal->getEngine()->getUserInputListener() )
 			{
-				*result = inputListener->fireMouseButtonPushed( castor3d::MouseButton::eLeft, isCtrlDown, isAltDown, isShiftDown );
+				*result = inputListener->fireMouseButtonPushed( c3d::MouseButton::eLeft, isCtrlDown, isAltDown, isShiftDown );
 			}
 		}
 		C3D_CatchCommonExceptions()
@@ -136,7 +136,7 @@ extern "C"
 		{
 			if ( auto inputListener = object->internal->getEngine()->getUserInputListener() )
 			{
-				*result = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eLeft, isCtrlDown, isAltDown, isShiftDown );
+				*result = inputListener->fireMouseButtonReleased( c3d::MouseButton::eLeft, isCtrlDown, isAltDown, isShiftDown );
 			}
 		}
 		C3D_CatchCommonExceptions()
@@ -155,7 +155,7 @@ extern "C"
 		{
 			if ( auto inputListener = object->internal->getEngine()->getUserInputListener() )
 			{
-				*result = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eMiddle, isCtrlDown, isAltDown, isShiftDown );
+				*result = inputListener->fireMouseButtonReleased( c3d::MouseButton::eMiddle, isCtrlDown, isAltDown, isShiftDown );
 			}
 		}
 		C3D_CatchCommonExceptions()
@@ -174,7 +174,7 @@ extern "C"
 		{
 			if ( auto inputListener = object->internal->getEngine()->getUserInputListener() )
 			{
-				*result = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eMiddle, isCtrlDown, isAltDown, isShiftDown );
+				*result = inputListener->fireMouseButtonReleased( c3d::MouseButton::eMiddle, isCtrlDown, isAltDown, isShiftDown );
 			}
 		}
 		C3D_CatchCommonExceptions()
@@ -193,7 +193,7 @@ extern "C"
 		{
 			if ( auto inputListener = object->internal->getEngine()->getUserInputListener() )
 			{
-				*result = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eRight, isCtrlDown, isAltDown, isShiftDown );
+				*result = inputListener->fireMouseButtonReleased( c3d::MouseButton::eRight, isCtrlDown, isAltDown, isShiftDown );
 			}
 		}
 		C3D_CatchCommonExceptions()
@@ -212,7 +212,7 @@ extern "C"
 		{
 			if ( auto inputListener = object->internal->getEngine()->getUserInputListener() )
 			{
-				*result = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eRight, isCtrlDown, isAltDown, isShiftDown );
+				*result = inputListener->fireMouseButtonReleased( c3d::MouseButton::eRight, isCtrlDown, isAltDown, isShiftDown );
 			}
 		}
 		C3D_CatchCommonExceptions()
@@ -231,7 +231,7 @@ extern "C"
 		{
 			if ( auto inputListener = object->internal->getEngine()->getUserInputListener() )
 			{
-				*result = inputListener->fireKeyDown( castor3d::KeyboardKey( key ), isCtrlDown, isAltDown, isShiftDown );
+				*result = inputListener->fireKeyDown( c3d::KeyboardKey( key ), isCtrlDown, isAltDown, isShiftDown );
 			}
 		}
 		C3D_CatchCommonExceptions()
@@ -250,7 +250,7 @@ extern "C"
 		{
 			if ( auto inputListener = object->internal->getEngine()->getUserInputListener() )
 			{
-				*result = inputListener->fireKeyUp( castor3d::KeyboardKey( key ), isCtrlDown, isAltDown, isShiftDown );
+				*result = inputListener->fireKeyUp( c3d::KeyboardKey( key ), isCtrlDown, isAltDown, isShiftDown );
 			}
 		}
 		C3D_CatchCommonExceptions()
@@ -269,7 +269,7 @@ extern "C"
 		{
 			if ( auto inputListener = object->internal->getEngine()->getUserInputListener() )
 			{
-				*result = inputListener->fireChar( castor3d::KeyboardKey( key ), castor::String{ c } );
+				*result = inputListener->fireChar( c3d::KeyboardKey( key ), c3d::String{ c } );
 			}
 		}
 		C3D_CatchCommonExceptions()

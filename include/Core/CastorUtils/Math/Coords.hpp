@@ -15,7 +15,7 @@ See LICENSE file in root folder
 #include <iostream>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename T, uint32_t Count >
 	class Coords

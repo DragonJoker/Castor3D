@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Transparent/TransparentPass.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class WeightedBlendRendering
 	{
@@ -51,12 +51,12 @@ namespace castor3d
 			, Texture const & depthObj
 			, TransparentPassResult const & transparentPassResult
 			, crg::ImageViewIdArray const & targetColourView
-			, castor::Size const & size
+			, Size const & size
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		RenderTechniquePass::accept
 		 */
 		void accept( RenderTechniqueVisitor & visitor );
 		/**
@@ -91,7 +91,7 @@ namespace castor3d
 		crg::FramePassGroup & m_graph;
 		bool & m_enabled;
 		TransparentPassResult const & m_transparentPassResult;
-		castor::Size m_size;
+		Size m_size;
 		ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass & m_finalCombinePassDesc;

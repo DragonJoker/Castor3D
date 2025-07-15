@@ -16,15 +16,15 @@
 #include "Castor3D/Scene/SceneImporter.hpp"
 #include "Castor3D/Scene/Animation/SceneNodeAnimation.hpp"
 
-CU_ImplementSmartPtr( castor3d, AnimationImporter )
+CU_ImplementSmartPtr( c3d, AnimationImporter )
 
-namespace castor3d
+namespace c3d
 {
 	namespace animimp
 	{
 		static bool constexpr displaySkeletonAnimationDetail = false;
 
-		static void transformMeshAnimation( castor::Matrix4x4f const & transform
+		static void transformMeshAnimation( Matrix4x4f const & transform
 			, MeshAnimation & animation )
 		{
 			auto mesh = static_cast< Mesh * >( animation.getAnimable() );
@@ -53,18 +53,18 @@ namespace castor3d
 			}
 		}
 
-		static void transformPosition( castor::Point3f const & translate
-			, castor::Point3f const & scale
-			, castor::Quaternion const & rotation
-			, castor::Point3f & result )
+		static void transformPosition( Point3f const & translate
+			, Point3f const & scale
+			, Quaternion const & rotation
+			, Point3f & result )
 		{
 			rotation.transform( scale * result, result );
 			result += translate;
 		}
 
-		static void transformRotation( castor::Point3f const & scale
-			, castor::Quaternion const & rotation
-			, castor::Quaternion & result )
+		static void transformRotation( Point3f const & scale
+			, Quaternion const & rotation
+			, Quaternion & result )
 		{
 			float x = std::copysign( 1.0f, scale->x );
 			float y = std::copysign( 1.0f, scale->y );
@@ -77,11 +77,11 @@ namespace castor3d
 			result *= rotation;
 		}
 
-		static void transformSkeletonAnimation( castor::Point3f const & scale
-			, castor::Quaternion const & rotation
+		static void transformSkeletonAnimation( Point3f const & scale
+			, Quaternion const & rotation
 			, SkeletonAnimation & animation )
 		{
-			auto ident = castor::Quaternion::identity();
+			auto ident = Quaternion::identity();
 
 			for ( auto & keyFrame : animation )
 			{
@@ -104,7 +104,7 @@ namespace castor3d
 	}
 
 	AnimationImporter::AnimationImporter( Engine & engine
-		, castor::String const & prefix )
+		, String const & prefix )
 		: OwnedBy< Engine >{ engine }
 		, m_prefix{ prefix + cuT( " - " ) }
 	{
@@ -121,8 +121,8 @@ namespace castor3d
 
 		if ( result )
 		{
-			castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
-			castor::Quaternion orientation{ castor::Quaternion::identity() };
+			Point3f scale{ 1.0f, 1.0f, 1.0f };
+			Quaternion orientation{ Quaternion::identity() };
 
 			if ( parseImportParameters( m_parameters, scale, orientation ) )
 			{
@@ -164,11 +164,11 @@ namespace castor3d
 	}
 
 	bool AnimationImporter::importData( SkeletonAnimation & animation
-		, castor::Path const & path
+		, Path const & path
 		, Parameters const & parameters )
 	{
 		auto & engine = *animation.getEngine();
-		auto extension = castor::string::lowerCase( path.getExtension() );
+		auto extension = string::lowerCase( path.getExtension() );
 
 		if ( !engine.getImporterFileFactory().isTypeRegistered( extension ) )
 		{
@@ -202,14 +202,14 @@ namespace castor3d
 
 		if ( result )
 		{
-			castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
-			castor::Quaternion orientation{ castor::Quaternion::identity() };
+			Point3f scale{ 1.0f, 1.0f, 1.0f };
+			Quaternion orientation{ Quaternion::identity() };
 
 			if ( parseImportParameters( m_parameters, scale, orientation ) )
 			{
-				castor::Matrix4x4f transform;
-				castor::matrix::setRotate( transform, orientation );
-				castor::matrix::scale( transform, scale );
+				Matrix4x4f transform;
+				matrix::setRotate( transform, orientation );
+				matrix::scale( transform, scale );
 				animimp::transformMeshAnimation( transform, animation );
 			}
 
@@ -226,11 +226,11 @@ namespace castor3d
 	}
 
 	bool AnimationImporter::importData( MeshAnimation & animation
-		, castor::Path const & path
+		, Path const & path
 		, Parameters const & parameters )
 	{
 		auto & engine = *animation.getEngine();
-		auto extension = castor::string::lowerCase( path.getExtension() );
+		auto extension = string::lowerCase( path.getExtension() );
 
 		if ( !engine.getImporterFileFactory().isTypeRegistered( extension ) )
 		{
@@ -238,7 +238,7 @@ namespace castor3d
 			return false;
 		}
 
-		castor::String preferredImporter = cuT( "any" );
+		String preferredImporter = cuT( "any" );
 		parameters.get( cuT( "preferred_importer" ), preferredImporter );
 		auto file = engine.getImporterFileFactory().create( extension
 			, preferredImporter
@@ -278,11 +278,11 @@ namespace castor3d
 	}
 
 	bool AnimationImporter::importData( SceneNodeAnimation & animation
-		, castor::Path const & path
+		, Path const & path
 		, Parameters const & parameters )
 	{
 		auto & engine = *animation.getEngine();
-		auto extension = castor::string::lowerCase( path.getExtension() );
+		auto extension = string::lowerCase( path.getExtension() );
 
 		if ( !engine.getImporterFileFactory().isTypeRegistered( extension ) )
 		{
@@ -327,11 +327,11 @@ namespace castor3d
 	}
 
 	bool AnimationImporter::importData( TextureAnimation & animation
-		, castor::Path const & path
+		, Path const & path
 		, Parameters const & parameters )
 	{
 		auto & engine = *animation.getEngine();
-		auto extension = castor::string::lowerCase( path.getExtension() );
+		auto extension = string::lowerCase( path.getExtension() );
 
 		if ( !engine.getImporterFileFactory().isTypeRegistered( extension ) )
 		{

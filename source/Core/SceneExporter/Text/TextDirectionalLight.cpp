@@ -1,9 +1,7 @@
 #include "TextDirectionalLight.hpp"
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< DirectionalLight >::TextWriter( String const & tabs )
 		: TextWriterT< DirectionalLight >{ tabs }
 	{

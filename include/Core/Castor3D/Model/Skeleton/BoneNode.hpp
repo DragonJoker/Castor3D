@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "SkeletonNode.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class BoneNode
 		: public SkeletonNode
@@ -31,9 +31,9 @@ namespace castor3d
 		 *\param[in]	inverseTransform	La matrice de transformation de l'espace objet vers l'espace du noeud.
 		 *\param[in]	id					L'ID de l'os.
 		 */
-		C3D_API BoneNode( castor::String name
+		C3D_API BoneNode( String name
 			, Skeleton & skeleton
-			, castor::Matrix4x4f inverseTransform
+			, Matrix4x4f inverseTransform
 			, uint32_t id );
 		/**
 		 *\~english
@@ -41,7 +41,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Calcule les bounding box et sphere, pour l'os, pour le maillage donné.
 		 */
-		C3D_API castor::BoundingBox computeBoundingBox( Mesh const & mesh
+		C3D_API BoundingBox computeBoundingBox( Mesh const & mesh
 			, uint32_t boneIndex )const;
 		/**
 		 *\~english
@@ -56,19 +56,19 @@ namespace castor3d
 			return m_id;
 		}
 
-		castor::Matrix4x4f const & getInverseTransform()const noexcept
+		Matrix4x4f const & getInverseTransform()const noexcept
 		{
 			return m_inverseTransform;
 		}
 
-		void setInverseTransform( castor::Matrix4x4f value )noexcept
+		void setInverseTransform( Matrix4x4f value )noexcept
 		{
-			m_inverseTransform = castor::move( value );
+			m_inverseTransform = c3d::move( value );
 		}
 
 	private:
 		uint32_t m_id;
-		castor::Matrix4x4f m_inverseTransform;
+		Matrix4x4f m_inverseTransform;
 	};
 }
 

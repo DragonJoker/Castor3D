@@ -30,7 +30,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SKYBOX );
 
-		auto path = castor::Path{ castor::makeString( filePath ) };
+		auto path = c3d::Path{ c3d::makeString( filePath ) };
 		object->internal->setLeftImage( path.getPath(), path.getFileName( true ) );
 
 		return C3D_OK;
@@ -43,7 +43,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SKYBOX );
 
-		auto path = castor::Path{ castor::makeString( filePath ) };
+		auto path = c3d::Path{ c3d::makeString( filePath ) };
 		object->internal->setRightImage( path.getPath(), path.getFileName( true ) );
 
 		return C3D_OK;
@@ -56,7 +56,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SKYBOX );
 
-		auto path = castor::Path{ castor::makeString( filePath ) };
+		auto path = c3d::Path{ c3d::makeString( filePath ) };
 		object->internal->setTopImage( path.getPath(), path.getFileName( true ) );
 
 		return C3D_OK;
@@ -69,7 +69,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SKYBOX );
 
-		auto path = castor::Path{ castor::makeString( filePath ) };
+		auto path = c3d::Path{ c3d::makeString( filePath ) };
 		object->internal->setBottomImage( path.getPath(), path.getFileName( true ) );
 
 		return C3D_OK;
@@ -82,7 +82,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SKYBOX );
 
-		auto path = castor::Path{ castor::makeString( filePath ) };
+		auto path = c3d::Path{ c3d::makeString( filePath ) };
 		object->internal->setFrontImage( path.getPath(), path.getFileName( true ) );
 
 		return C3D_OK;
@@ -95,7 +95,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SKYBOX );
 
-		auto path = castor::Path{ castor::makeString( filePath ) };
+		auto path = c3d::Path{ c3d::makeString( filePath ) };
 		object->internal->setBackImage( path.getPath(), path.getFileName( true ) );
 
 		return C3D_OK;
@@ -108,7 +108,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SKYBOX );
 
-		auto path = castor::Path{ castor::makeString( filePath ) };
+		auto path = c3d::Path{ c3d::makeString( filePath ) };
 		object->internal->setCrossTexture( path.getPath(), path.getFileName( true ) );
 
 		return C3D_OK;
@@ -121,7 +121,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SKYBOX );
 
-		auto path = castor::Path{ castor::makeString( filePath ) };
+		auto path = c3d::Path{ c3d::makeString( filePath ) };
 		object->internal->setEquiTexture( path.getPath(), path.getFileName( true ), size );
 
 		return C3D_OK;

@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <map>
 #include <set>
 
-namespace castor
+namespace c3d
 {
 	template< typename MySignalT >
 	class ConnectionT
@@ -53,7 +53,7 @@ namespace castor
 
 #if !defined( NDEBUG )
 
-			StringStream stream{ castor::makeStringStream() };
+			StringStream stream{ c3d::makeStringStream() };
 			stream << debug::Backtrace{};
 			m_stack = stream.str();
 
@@ -71,7 +71,7 @@ namespace castor
 			: m_connection{ rhs.m_connection }
 			, m_signal{ rhs.m_signal }
 #if !defined( NDEBUG )
-			, m_stack{ castor::move( rhs.m_stack ) }
+			, m_stack{ c3d::move( rhs.m_stack ) }
 #endif
 		{
 			if ( m_signal )
@@ -98,7 +98,7 @@ namespace castor
 				m_connection = rhs.m_connection;
 				m_signal = rhs.m_signal;
 #if !defined( NDEBUG )
-				m_stack = castor::move( rhs.m_stack );
+				m_stack = c3d::move( rhs.m_stack );
 #endif
 
 				if ( m_signal )
@@ -162,12 +162,12 @@ namespace castor
 		{
 			if ( &rhs != &lhs )
 			{
-				castor::swap( lhs.m_signal, rhs.m_signal );
-				castor::swap( lhs.m_connection, rhs.m_connection );
+				c3d::swap( lhs.m_signal, rhs.m_signal );
+				c3d::swap( lhs.m_connection, rhs.m_connection );
 
 #if !defined( NDEBUG )
 
-				castor::swap( lhs.m_stack, rhs.m_stack );
+				c3d::swap( lhs.m_stack, rhs.m_stack );
 
 #endif
 			}
@@ -248,7 +248,7 @@ namespace castor
 				index = m_slots.rbegin()->first + 1u;
 			}
 
-			m_slots.emplace( index, castor::move( function ) );
+			m_slots.emplace( index, c3d::move( function ) );
 			return my_connection{ index, *this };
 		}
 		/**
@@ -277,7 +277,7 @@ namespace castor
 		{
 			for ( auto it : m_slots )
 			{
-				it.second( castor::forward< Params >( params )... );
+				it.second( c3d::forward< Params >( params )... );
 			}
 		}
 

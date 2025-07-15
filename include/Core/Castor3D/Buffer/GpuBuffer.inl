@@ -1,4 +1,4 @@
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -6,16 +6,16 @@ namespace castor3d
 	GpuBufferT< AllocatorT >::GpuBufferT( RenderSystem const & renderSystem
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags memoryFlags
-		, castor::String const & debugName
+		, String const & debugName
 		, ashes::QueueShare sharingMode
 		, AllocatorT allocator )
 		: GpuBufferBase{ renderSystem
 			, usage
 			, memoryFlags
 			, debugName
-			, castor::move( sharingMode )
+			, c3d::move( sharingMode )
 			, allocator.getTotalSize() }
-		, m_allocator{ castor::move( allocator ) }
+		, m_allocator{ c3d::move( allocator ) }
 	{
 	}
 
@@ -62,13 +62,13 @@ namespace castor3d
 	GpuBaseBufferT< AllocatorT >::GpuBaseBufferT( RenderDevice const & device
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags memoryFlags
-		, castor::String const & debugName
+		, String const & debugName
 		, ashes::QueueShare sharingMode
 		, AllocatorT allocator )
 		: m_device{ device }
 		, m_usage{ usage }
 		, m_memoryFlags{ memoryFlags }
-		, m_sharingMode{ castor::move( sharingMode ) }
+		, m_sharingMode{ c3d::move( sharingMode ) }
 		, m_allocatedSize{ allocator.getTotalSize() }
 		, m_buffer{ makeBufferBase( device
 			, uint32_t( m_allocatedSize )
@@ -76,7 +76,7 @@ namespace castor3d
 			, m_memoryFlags
 			, debugName
 			, m_sharingMode ) }
-		, m_allocator{ castor::move( allocator ) }
+		, m_allocator{ c3d::move( allocator ) }
 	{
 	}
 

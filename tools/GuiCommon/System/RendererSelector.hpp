@@ -18,16 +18,16 @@ namespace GuiCommon
 		:	public wxDialog
 	{
 	public:
-		RendererSelector( castor3d::Engine & engine
+		RendererSelector( c3d::Engine & engine
 			, wxWindow * parent
 			, wxString const & title );
 
-		castor3d::Renderer getSelected();
+		c3d::Renderer getSelected();
 
 	private:
 		wxListBox * doFillRenderers();
 		wxListBox * doInitialiseDevices();
-		void doFillDevices( castor3d::Renderer const & renderer );
+		void doFillDevices( c3d::Renderer const & renderer );
 		void doDraw( wxDC * dc );
 		void doSelectRenderer( bool next );
 		void doSelectDevice( bool next);
@@ -49,9 +49,9 @@ namespace GuiCommon
 		wxImage * m_castorImg;
 		wxListBox * m_renderersList;
 		wxListBox * m_devicesList;
-		castor3d::Engine & m_engine;
-		castor::Vector< castor3d::Renderer > m_renderers;
-		castor3d::Renderer * m_currentRenderer{};
+		c3d::Engine & m_engine;
+		c3d::Vector< c3d::Renderer > m_renderers;
+		c3d::Renderer * m_currentRenderer{};
 	};
 }
 

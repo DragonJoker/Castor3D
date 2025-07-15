@@ -9,7 +9,7 @@
 #include <ktx.h>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	//************************************************************************************************
 
@@ -31,7 +31,7 @@ namespace castor
 	void Ktx2ImageLoader::registerLoader( ImageLoader & reg )
 	{
 		reg.registerLoader( ktx2::listExtensions()
-			, castor::make_unique< Ktx2ImageLoader >() );
+			, c3d::makeRawUnique< Ktx2ImageLoader >() );
 	}
 
 	void Ktx2ImageLoader::unregisterLoader( ImageLoader & reg )

@@ -27,9 +27,9 @@ namespace dof
 {
 	namespace comb
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
@@ -38,15 +38,15 @@ namespace dof
 			auto c3d_mapFar = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapFar", 2u, 0u );
 			C3D_DepthOfField( writer, 3u, 0u );
 
-			writer.implementEntryPointT< c3d::Position2FT, c3d::Uv2FT >( []( sdw::VertexInT< c3d::Position2FT > const & in
-				, sdw::VertexOutT< c3d::Uv2FT > out )
+			writer.implementEntryPointT< c3ds::Position2FT, c3ds::Uv2FT >( []( sdw::VertexInT< c3ds::Position2FT > const & in
+				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = ( in.position() + 1.0_f ) / 2.0_f;
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > const & in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > const & in
+				, sdw::FragmentOutT< c3ds::Colour4FT > out )
 				{
 					auto near = writer.declLocale( "near"
 						, c3d_mapNear.lod( in.uv(), 0.0_f ) );
@@ -88,7 +88,7 @@ namespace dof
 			FramePass( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
-				, castor3d::RenderDevice const & device
+				, c3d::RenderDevice const & device
 				, crg::rq::Config config )
 				: crg::RenderQuad{ framePass, context, graph
 					, crg::ru::Config{ 2u }
@@ -101,7 +101,7 @@ namespace dof
 		private:
 			struct ProgramData
 			{
-				castor3d::ProgramModule programModule;
+				c3d::ProgramModule programModule;
 				ashes::PipelineShaderStageCreateInfoArray stages;
 			};
 
@@ -110,7 +110,7 @@ namespace dof
 			{
 				if ( m_program.stages.empty() )
 				{
-					m_program.programModule = castor3d::ProgramModule{ cuT( "DoF/Combine" ), getProgram( m_device ) };
+					m_program.programModule = c3d::ProgramModule{ cuT( "DoF/Combine" ), getProgram( m_device ) };
 					m_program.stages = makeProgramStates( m_device, m_program.programModule );
 				}
 
@@ -118,20 +118,20 @@ namespace dof
 			}
 
 		private:
-			castor3d::RenderDevice const & m_device;
+			c3d::RenderDevice const & m_device;
 			ProgramData m_program;
 		};
 	}
 
 	//*********************************************************************************************
 
-	crg::FramePass const & createCombinePass( castor3d::RenderDevice const & device
+	crg::FramePass const & createCombinePass( c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, DepthOfFieldUbo const & configurationUbo
 		, crg::ImageViewIdArray const & colour
-		, castor3d::Texture const & nearBlur
-		, castor3d::Texture const & farBlur
+		, c3d::Texture const & nearBlur
+		, c3d::Texture const & farBlur
 		, crg::ImageViewIdArray const & target
 		, bool const * enabled
 		, uint32_t const * passIndex )
@@ -142,23 +142,23 @@ namespace dof
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< comb::FramePass >( framePass
+				auto result = c3d::makeRawUnique< comb::FramePass >( framePass
 					, context
 					, graph
 					, device
 					, crg::rq::Config{}
-						.renderSize( castor3d::makeExtent2D( extent ) )
+						.renderSize( c3d::makeExtent2D( extent ) )
 						.enabled( enabled )
 						.passIndex( passIndex ) );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
 		pass.addDependencies( previousPasses );
 
-		pass.addSampledView( colour, 0u, crg::SamplerDesc{ castor3d::FilterMode::eLinear, castor3d::FilterMode::eLinear } );
-		pass.addSampledView( nearBlur.sampledViewId, 1u, crg::SamplerDesc{ castor3d::FilterMode::eLinear, castor3d::FilterMode::eLinear } );
-		pass.addSampledView( farBlur.sampledViewId, 2u, crg::SamplerDesc{ castor3d::FilterMode::eLinear, castor3d::FilterMode::eLinear } );
+		pass.addSampledView( colour, 0u, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear } );
+		pass.addSampledView( nearBlur.sampledViewId, 1u, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear } );
+		pass.addSampledView( farBlur.sampledViewId, 2u, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear } );
 		configurationUbo.createPassBinding( pass, 3u );
 
 		pass.addOutputColourView( target );

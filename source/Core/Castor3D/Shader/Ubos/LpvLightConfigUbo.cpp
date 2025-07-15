@@ -13,16 +13,16 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
-CU_ImplementSmartPtr( castor3d, LpvLightConfigUbo )
+CU_ImplementSmartPtr( c3d, LpvLightConfigUbo )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 	namespace lpvlubo
 	{
-		static castor::Matrix4x4f snapMatrix( float lpvCellSize
-			, castor::Matrix4x4f mtx )
+		static Matrix4x4f snapMatrix( float lpvCellSize
+			, Matrix4x4f mtx )
 		{
 			mtx[0][3] = float( mtx[0][3] - fmod( mtx[0][3], lpvCellSize ) );
 			mtx[1][3] = float( mtx[1][3] - fmod( mtx[1][3], lpvCellSize ) );
@@ -69,7 +69,7 @@ namespace castor3d
 		case LightType::ePoint:
 			{
 				CU_Require( faceIndex < 6u );
-				castor::Angle const lightFov = 90.0_degrees;
+				Angle const lightFov = 90.0_degrees;
 				configuration.lightView = lpvlubo::snapMatrix( lpvCellSize
 					, static_cast< PointLightInstance const & >( light ).getViewMatrix( CubeMapFace( faceIndex ) ) );
 				configuration.tanFovXHalf = ( lightFov * 0.5 ).tan();
@@ -82,7 +82,7 @@ namespace castor3d
 				CU_Require( faceIndex == 0u );
 				configuration.lightView = lpvlubo::snapMatrix( lpvCellSize
 					, static_cast< SpotLightInstance const & >( light ).getViewMatrix() );
-				castor::Angle const & lightFov = static_cast< SpotLight const & >( light.getCategory() ).getOuterCutOff();
+				Angle const & lightFov = static_cast< SpotLight const & >( light.getCategory() ).getOuterCutOff();
 				configuration.tanFovXHalf = ( lightFov * 0.5 ).tan();
 				configuration.tanFovYHalf = ( lightFov * 0.5 ).tan();
 			}

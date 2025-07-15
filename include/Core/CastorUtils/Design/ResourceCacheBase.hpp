@@ -17,7 +17,7 @@ See LICENSE file in root folder
 
 #include <unordered_map>
 
-namespace castor
+namespace c3d
 {
 	template< typename ResT, typename KeyT, typename TraitsT >
 	class ResourceCacheBaseT
@@ -54,9 +54,9 @@ namespace castor
 			, ElementCleanerT clean = ElementCleanerT{}
 			, ElementMergerT merge = ElementMergerT{} )
 			: m_logger{ logger }
-			, m_initialise{ castor::move( initialise ) }
-			, m_clean{ castor::move( clean ) }
-			, m_merge{ castor::move( merge ) }
+			, m_initialise{ c3d::move( initialise ) }
+			, m_clean{ c3d::move( clean ) }
+			, m_merge{ c3d::move( merge ) }
 		{
 		}
 
@@ -72,7 +72,7 @@ namespace castor
 		 */
 		void cleanup()noexcept
 		{
-			auto lock( castor::makeUniqueLock( *this ) );
+			auto lock( c3d::makeUniqueLock( *this ) );
 			this->doCleanupNoLock();
 		}
 		/**
@@ -83,7 +83,7 @@ namespace castor
 		 */
 		void clear()noexcept
 		{
-			auto lock( castor::makeUniqueLock( *this ) );
+			auto lock( c3d::makeUniqueLock( *this ) );
 			this->doClearNoLock();
 		}
 		/**
@@ -104,7 +104,7 @@ namespace castor
 		{
 			this->reportCreation( name );
 			return this->doCreateT( name
-					, castor::forward< ParametersT >( parameters )... );
+					, c3d::forward< ParametersT >( parameters )... );
 		}
 		/**
 		 *\~english
@@ -124,7 +124,7 @@ namespace castor
 			, ElementPtrT & element
 			, bool initialise = false )
 		{
-			auto lock( castor::makeUniqueLock( *this ) );
+			auto lock( c3d::makeUniqueLock( *this ) );
 			return this->doTryAddNoLock( name
 				, element
 				, initialise );
@@ -147,7 +147,7 @@ namespace castor
 			, ElementPtrT & element
 			, bool initialise = true )
 		{
-			auto lock( castor::makeUniqueLock( *this ) );
+			auto lock( c3d::makeUniqueLock( *this ) );
 			return this->doAddNoLock( name
 				, element
 				, initialise );
@@ -168,9 +168,9 @@ namespace castor
 		ElementObsT addNew( ElementKeyT const & name
 			, ParametersT && ... parameters )
 		{
-			auto lock( castor::makeUniqueLock( *this ) );
+			auto lock( c3d::makeUniqueLock( *this ) );
 			return this->doAddNewNoLockT( name
-				, castor::forward< ParametersT >( parameters )... );
+				, c3d::forward< ParametersT >( parameters )... );
 		}
 		/**
 		 *\~english
@@ -185,7 +185,7 @@ namespace castor
 		ElementPtrT tryRemove( ElementKeyT const & name
 			, bool cleanup = false )noexcept
 		{
-			auto lock( castor::makeUniqueLock( *this ) );
+			auto lock( c3d::makeUniqueLock( *this ) );
 			return this->doTryRemoveNoLock( name, cleanup );
 		}
 		/**
@@ -201,7 +201,7 @@ namespace castor
 		ElementPtrT remove( ElementKeyT const & name
 			, bool cleanup = false )noexcept
 		{
-			auto lock( castor::makeUniqueLock( *this ) );
+			auto lock( c3d::makeUniqueLock( *this ) );
 			auto result = this->doTryRemoveNoLock( name, cleanup );
 
 			if ( !result )
@@ -224,7 +224,7 @@ namespace castor
 		void rename( ElementKeyT const & oldName
 			, ElementKeyT const & newName )
 		{
-			auto lock( castor::makeUniqueLock( *this ) );
+			auto lock( c3d::makeUniqueLock( *this ) );
 
 			if ( auto newIt = m_resources.find( newName );
 				newIt != m_resources.end() )
@@ -241,10 +241,10 @@ namespace castor
 				return;
 			}
 
-			ElementPtrT element = castor::move( oldIt->second );
+			ElementPtrT element = c3d::move( oldIt->second );
 			m_resources.erase( oldIt );
 			element->rename( newName );
-			m_resources.emplace( newName, castor::move( element ) );
+			m_resources.emplace( newName, c3d::move( element ) );
 		}
 		/**
 		 *\~english
@@ -258,7 +258,7 @@ namespace castor
 		 */
 		ElementObsT tryFind( ElementKeyT const & name )const noexcept
 		{
-			auto lock( castor::makeUniqueLock( *this ) );
+			auto lock( c3d::makeUniqueLock( *this ) );
 			return this->doTryFindNoLock( name );
 		}
 		/**
@@ -273,7 +273,7 @@ namespace castor
 		 */
 		ElementObsT find( ElementKeyT const & name )const
 		{
-			auto lock( castor::makeUniqueLock( *this ) );
+			auto lock( c3d::makeUniqueLock( *this ) );
 			auto result = this->doTryFindNoLock( name );
 
 			if ( ElementCacheTraitsT::isElementObsNull( result ) )
@@ -314,14 +314,14 @@ namespace castor
 		 */
 		void mergeInto( ElementCacheBaseT & destination )
 		{
-			auto lock( castor::makeUniqueLock( *this ) );
-			auto lockOther( castor::makeUniqueLock( destination ) );
+			auto lock( c3d::makeUniqueLock( *this ) );
+			auto lockOther( c3d::makeUniqueLock( destination ) );
 
 			if ( m_merge )
 			{
 				for ( auto & it : *this )
 				{
-					m_merge( *this, destination.m_resources, castor::move( it.second ) );
+					m_merge( *this, destination.m_resources, c3d::move( it.second ) );
 				}
 			}
 
@@ -336,7 +336,7 @@ namespace castor
 		template< typename FuncType >
 		void forEach( FuncType func )const
 		{
-			auto lock( castor::makeUniqueLock( *this ) );
+			auto lock( c3d::makeUniqueLock( *this ) );
 
 			for ( auto const & it : *this )
 			{
@@ -347,7 +347,7 @@ namespace castor
 		template< typename FuncType >
 		void forEach( FuncType func )
 		{
-			auto lock( castor::makeUniqueLock( *this ) );
+			auto lock( c3d::makeUniqueLock( *this ) );
 
 			for ( auto & element : *this )
 			{
@@ -363,7 +363,7 @@ namespace castor
 		/**@{*/
 		uint32_t getObjectCount()const noexcept
 		{
-			auto lock( castor::makeUniqueLock( *this ) );
+			auto lock( c3d::makeUniqueLock( *this ) );
 			return uint32_t( m_resources.size() );
 		}
 
@@ -384,7 +384,7 @@ namespace castor
 
 		bool isEmpty()const noexcept
 		{
-			auto lock( castor::makeUniqueLock( *this ) );
+			auto lock( c3d::makeUniqueLock( *this ) );
 			return m_resources.empty();
 		}
 
@@ -508,7 +508,7 @@ namespace castor
 		{
 			return ElementCacheTraitsT::makeElement( *static_cast< ElementCacheT const * >( this )
 				, name
-				, castor::forward< ParametersT >( parameters )... );
+				, c3d::forward< ParametersT >( parameters )... );
 		}
 
 		virtual ElementObsT doTryAddNoLock( ElementKeyT const & name
@@ -519,7 +519,7 @@ namespace castor
 
 			if ( ires.second )
 			{
-				ires.first->second = castor::move( element );
+				ires.first->second = c3d::move( element );
 				auto & elem = ires.first->second;
 
 				if ( initialise && elem && m_initialise )
@@ -570,7 +570,7 @@ namespace castor
 			if ( inserted )
 			{
 				it->second = create( name
-					, castor::forward< ParametersT >( parameters )... );
+					, c3d::forward< ParametersT >( parameters )... );
 
 				if ( m_initialise )
 				{
@@ -593,7 +593,7 @@ namespace castor
 			if ( auto it = m_resources.find( name );
 				it != m_resources.end() )
 			{
-				result = castor::move( it->second );
+				result = c3d::move( it->second );
 
 				if ( cleanup && m_clean )
 				{
@@ -621,7 +621,7 @@ namespace castor
 		}
 
 	protected:
-		using MutexT = castor::RecursiveMutex;
+		using MutexT = c3d::RecursiveMutex;
 
 		LoggerInstance & m_logger;
 		CheckedMutexT< MutexT > m_mutex;

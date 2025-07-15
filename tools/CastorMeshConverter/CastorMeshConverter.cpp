@@ -30,15 +30,15 @@
 
 namespace convert
 {
-	using StringArray = castor::Vector< castor::MbString >;
+	using StringArray = c3d::Vector< c3d::MbString >;
 
 	struct Options
 	{
-		castor::Path input;
-		castor::String output;
-		castor::String passType{ castor3d::PbrPass::LightingModel };
-		castor3d::exporter::ExportOptions options;
-		castor3d::Parameters params;
+		c3d::Path input;
+		c3d::String output;
+		c3d::String passType{ c3d::PbrPass::LightingModel };
+		c3d::exporter::ExportOptions options;
+		c3d::Parameters params;
 	};
 
 	static void printUsage()
@@ -63,7 +63,7 @@ namespace convert
 		std::cout << "              - pbr : PBR (default value)" << std::endl;
 	}
 
-	static bool parseSwitchOption( castor::MbString const & option
+	static bool parseSwitchOption( c3d::MbString const & option
 		, StringArray & args )
 	{
 		auto it = std::find( args.begin(), args.end(), "-" + option );
@@ -77,9 +77,9 @@ namespace convert
 		return result;
 	}
 
-	static bool parseValueOption( castor::MbString const & option
+	static bool parseValueOption( c3d::MbString const & option
 		, StringArray & args
-		, castor::String & value )
+		, c3d::String & value )
 	{
 		auto it = std::find( args.begin(), args.end(), "-" + option );
 		auto result = it != args.end();
@@ -94,7 +94,7 @@ namespace convert
 			}
 
 			it = args.erase( it );
-			value = castor::makeString( *it );
+			value = c3d::makeString( *it );
 			args.erase( it );
 		}
 
@@ -128,12 +128,12 @@ namespace convert
 			return false;
 		}
 
-		castor::String value;
+		c3d::String value;
 		bool overridePassType{ false };
 
 		if ( parseValueOption( "o", args, value ) )
 		{
-			options.output = castor::Path{ value }.getFileName();
+			options.output = c3d::Path{ value }.getFileName();
 		}
 
 		if ( parseValueOption( "m", args, value ) )
@@ -142,11 +142,11 @@ namespace convert
 
 			if ( value == cuT( "blinn_phong" ) || value == cuT( "phong" ) )
 			{
-				options.passType = castor3d::PhongPass::LightingModel;
+				options.passType = c3d::PhongPass::LightingModel;
 			}
 			else if ( value == cuT( "pbr" ) )
 			{
-				options.passType = castor3d::PbrPass::LightingModel;
+				options.passType = c3d::PbrPass::LightingModel;
 			}
 			else
 			{
@@ -158,22 +158,22 @@ namespace convert
 
 		if ( parseValueOption( "p", args, value ) )
 		{
-			options.params.add( cuT( "pitch" ),  castor::string::toFloat( value ) );
+			options.params.add( cuT( "pitch" ),  c3d::string::toFloat( value ) );
 		}
 
 		if ( parseValueOption( "y", args, value ) )
 		{
-			options.params.add( cuT( "yaw" ), castor::string::toFloat( value ) );
+			options.params.add( cuT( "yaw" ), c3d::string::toFloat( value ) );
 		}
 
 		if ( parseValueOption( "r", args, value ) )
 		{
-			options.params.add( cuT( "roll" ), castor::string::toFloat( value ) );
+			options.params.add( cuT( "roll" ), c3d::string::toFloat( value ) );
 		}
 
 		if ( parseValueOption( "a", args, value ) )
 		{
-			options.params.add( cuT( "rescale" ), castor::string::toFloat( value ) );
+			options.params.add( cuT( "rescale" ), c3d::string::toFloat( value ) );
 		}
 
 		options.options.splitPerMaterial = parseSwitchOption( "s", args );
@@ -187,32 +187,32 @@ namespace convert
 			return false;
 		}
 
-		options.input = castor::Path{ castor::makeString( args.front() ) };
+		options.input = c3d::Path{ c3d::makeString( args.front() ) };
 
 		if ( options.output.empty() )
 		{
 			options.output = options.input.getFileName();
 		}
 
-		if ( auto extension = castor::string::lowerCase( options.input.getExtension() );
+		if ( auto extension = c3d::string::lowerCase( options.input.getExtension() );
 			!overridePassType && ( extension == cuT( "gltf" ) || extension == cuT( "glb" ) ) )
 		{
-			options.passType = castor3d::PbrPass::LightingModel;
+			options.passType = c3d::PbrPass::LightingModel;
 		}
 
 		return true;
 	}
 
-	static castor::PathArray listPluginsFiles( castor::Path const & folder )
+	static c3d::PathArray listPluginsFiles( c3d::Path const & folder )
 	{
-		castor::PathArray files;
-		castor::File::listDirectoryFiles( folder, files );
-		castor::PathArray result;
+		c3d::PathArray files;
+		c3d::File::listDirectoryFiles( folder, files );
+		c3d::PathArray result;
 
 		// Exclude debug plug-in in release builds, and release plug-ins in debug builds
 		for ( auto const & file : files )
 		{
-			if ( file.find( CU_SharedLibExt ) != castor::String::npos
+			if ( file.find( CU_SharedLibExt ) != c3d::String::npos
 				&& file.getFileName().find( cuT( "castor3d" ) ) == 0u )
 			{
 				result.emplace_back( file );
@@ -222,23 +222,23 @@ namespace convert
 		return result;
 	}
 
-	static void loadPlugins( castor3d::Engine & engine )
+	static void loadPlugins( c3d::Engine & engine )
 	{
-		castor::PathArray arrayKept = listPluginsFiles( castor3d::Engine::getPluginsDirectory() );
+		c3d::PathArray arrayKept = listPluginsFiles( c3d::Engine::getPluginsDirectory() );
 
 #if !defined( NDEBUG )
 
 		// When debug is installed, plugins are installed in lib/Debug/Castor3D
 		if ( arrayKept.empty() )
 		{
-			castor::Path pathBin = castor::File::getExecutableDirectory();
+			c3d::Path pathBin = c3d::File::getExecutableDirectory();
 
 			while ( pathBin.getFileName() != cuT( "bin" ) )
 			{
 				pathBin = pathBin.getPath();
 			}
 
-			castor::Path pathUsr = pathBin.getPath();
+			c3d::Path pathUsr = pathBin.getPath();
 			arrayKept = listPluginsFiles( pathUsr / cuT( "lib" ) / cuT( "Debug" ) / cuT( "Castor3D" ) );
 		}
 
@@ -246,14 +246,14 @@ namespace convert
 
 		if ( !arrayKept.empty() )
 		{
-			castor::PathArray arrayFailed;
-			castor::PathArray otherPlugins;
+			c3d::PathArray arrayFailed;
+			c3d::PathArray otherPlugins;
 
 			for ( auto const & file : arrayKept )
 			{
 				if ( file.getExtension() == CU_SharedLibExt
 					// Only load importer and material plugins.
-					&& ( file.find( cuT( "Importer" ) ) != castor::String::npos || file.find( cuT( "Material" ) ) != castor::String::npos )
+					&& ( file.find( cuT( "Importer" ) ) != c3d::String::npos || file.find( cuT( "Material" ) ) != c3d::String::npos )
 					&& !engine.getPluginCache().loadPlugin( file ) )
 				{
 					arrayFailed.emplace_back( file );
@@ -262,25 +262,25 @@ namespace convert
 
 			if ( !arrayFailed.empty() )
 			{
-				castor::Logger::logWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
+				c3d::Logger::logWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
 
 				for ( auto const & file : arrayFailed )
 				{
-					castor::Logger::logWarning( file.getFileName() );
+					c3d::Logger::logWarning( file.getFileName() );
 				}
 
 				arrayFailed.clear();
 			}
 		}
 
-		castor::Logger::logInfo( cuT( "Plugins loaded" ) );
+		c3d::Logger::logInfo( cuT( "Plugins loaded" ) );
 	}
 
-	static bool initialiseEngine( castor3d::Engine & engine )
+	static bool initialiseEngine( c3d::Engine & engine )
 	{
-		if ( !castor::File::directoryExists( castor3d::Engine::getEngineDirectory() ) )
+		if ( !c3d::File::directoryExists( c3d::Engine::getEngineDirectory() ) )
 		{
-			castor::File::directoryCreate( castor3d::Engine::getEngineDirectory() );
+			c3d::File::directoryCreate( c3d::Engine::getEngineDirectory() );
 		}
 
 		auto & renderers = engine.getRenderersList();
@@ -302,7 +302,7 @@ namespace convert
 
 			if ( renderer != renderers.end() )
 			{
-				if ( engine.loadRenderer( castor::makeString( renderer->name ) ) )
+				if ( engine.loadRenderer( c3d::makeString( renderer->name ) ) )
 				{
 					engine.initialise( 100, false );
 					loadPlugins( engine );
@@ -322,7 +322,7 @@ namespace convert
 		return result;
 	}
 
-	static castor::Point3f getCameraPosition( castor::BoundingBox const & aabb
+	static c3d::Point3f getCameraPosition( c3d::BoundingBox const & aabb
 		, float & farPlane )
 	{
 		auto height = aabb.getDimensions()->y;
@@ -342,42 +342,42 @@ int main( int argc, char * argv[] )
 	{
 		auto path = options.input;
 
-		if ( !castor::File::fileExists( path ) )
+		if ( !c3d::File::fileExists( path ) )
 		{
-			path = castor::File::getExecutableDirectory() / path;
+			path = c3d::File::getExecutableDirectory() / path;
 		}
 
-		if ( !castor::File::fileExists( path ) )
+		if ( !c3d::File::fileExists( path ) )
 		{
-			std::cerr << "File [" << castor::toUtf8( path ) << "] does not exist." << std::endl << std::endl;
+			std::cerr << "File [" << c3d::toUtf8( path ) << "] does not exist." << std::endl << std::endl;
 			convert::printUsage();
 			return EXIT_SUCCESS;
 		}
 
 #if defined( NDEBUG )
-		castor::Logger::initialise( castor::LogType::eInfo );
+		c3d::Logger::initialise( c3d::LogType::eInfo );
 #else
-		castor::Logger::initialise( castor::LogType::eDebug );
+		c3d::Logger::initialise( c3d::LogType::eDebug );
 #endif
 
-		castor::Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "CastorMeshConverter.log" ) );
+		c3d::Logger::setFileName( c3d::File::getExecutableDirectory() / cuT( "CastorMeshConverter.log" ) );
 		{
-			castor3d::EngineConfig config{ cuT( "CastorMeshConverter" )
-				, castor3d::Version{ CastorMeshConverter_VERSION_MAJOR, CastorMeshConverter_VERSION_MINOR, CastorMeshConverter_VERSION_BUILD }
+			c3d::EngineConfig config{ cuT( "CastorMeshConverter" )
+				, c3d::Version{ CastorMeshConverter_VERSION_MAJOR, CastorMeshConverter_VERSION_MINOR, CastorMeshConverter_VERSION_BUILD }
 				, false
 				, false };
-			castor3d::Engine engine{ castor::move( config ) };
+			c3d::Engine engine{ c3d::move( config ) };
 
 			if ( convert::initialiseEngine( engine ) )
 			{
 				auto name = path.getFileName();
-				auto extension = castor::string::lowerCase( path.getExtension() );
+				auto extension = c3d::string::lowerCase( path.getExtension() );
 
 				if ( extension == cuT( "cscn" ) )
 				{
 					try
 					{
-						castor3d::SceneFileParser parser{ engine };
+						c3d::SceneFileParser parser{ engine };
 						auto preprocessed = parser.processFile( path );
 
 						if ( preprocessed.parse() )
@@ -389,53 +389,53 @@ int main( int argc, char * argv[] )
 								auto scene = parser.scenesBegin()->second;
 								auto rootFolder = path.getPath() / name;
 
-								if ( !castor::File::directoryExists( rootFolder ) )
+								if ( !c3d::File::directoryExists( rootFolder ) )
 								{
-									castor::File::directoryCreate( rootFolder );
+									c3d::File::directoryCreate( rootFolder );
 								}
 
-								castor3d::exporter::CscnSceneExporter exporter{ options.options };
+								c3d::exporter::CscnSceneExporter exporter{ options.options };
 								exporter.exportScene( *scene, rootFolder / ( scene->getName() + cuT( ".cscn" ) ) );
 								scene->cleanup();
 							}
 							else
 							{
-								castor::Logger::logError( castor::makeStringStream() << cuT( "No scene was imported" ) );
+								c3d::Logger::logError( c3d::makeStringStream() << cuT( "No scene was imported" ) );
 							}
 						}
 						else
 						{
-							castor::Logger::logError( castor::makeStringStream() << cuT( "Can't read scene file" ) );
+							c3d::Logger::logError( c3d::makeStringStream() << cuT( "Can't read scene file" ) );
 						}
 					}
 					catch ( std::exception & exc )
 					{
-						castor::Logger::logError( castor::makeStringStream() << "Failed to parse the scene file, with following error:\n" << exc.what() );
+						c3d::Logger::logError( c3d::makeStringStream() << "Failed to parse the scene file, with following error:\n" << exc.what() );
 					}
 				}
 				else
 				{
-					castor3d::Scene scene{ name, engine };
-					scene.setAmbientLight( castor::RgbColour::fromComponents( 1.0f, 1.0f, 1.0f ) );
-					scene.setBackgroundColour( castor::RgbColour::fromComponents( 0.5f, 0.5f, 0.5f ) );
+					c3d::Scene scene{ name, engine };
+					scene.setAmbientLight( c3d::RgbColour::fromComponents( 1.0f, 1.0f, 1.0f ) );
+					scene.setBackgroundColour( c3d::RgbColour::fromComponents( 0.5f, 0.5f, 0.5f ) );
 					scene.setDefaultLightingModel( scene.getEngine()->getLightingModelFactory().getLightingModelId( options.passType ) );
-					castor3d::SceneImporter importer{ *scene.getEngine() };
+					c3d::SceneImporter importer{ *scene.getEngine() };
 
 					if ( !importer.importData( scene
 						, path
 						, options.params
 						, {} ) )
 					{
-						castor::Logger::logError( castor::makeStringStream() << "Import failed" );
+						c3d::Logger::logError( c3d::makeStringStream() << "Import failed" );
 					}
 					else
 					{
 						scene.initialise();
 						auto rootFolder = path.getPath() / name;
 
-						if ( !castor::File::directoryExists( rootFolder ) )
+						if ( !c3d::File::directoryExists( rootFolder ) )
 						{
-							castor::File::directoryCreate( rootFolder );
+							c3d::File::directoryCreate( rootFolder );
 						}
 
 						if ( scene.getCameraCache().isEmpty() )
@@ -447,7 +447,7 @@ int main( int argc, char * argv[] )
 
 							if ( auto camNode = scene.addSceneNode( cuT( "MainCameraNode" ), cameraNode ) )
 							{
-								castor3d::Viewport viewport{ *scene.getEngine() };
+								c3d::Viewport viewport{ *scene.getEngine() };
 								viewport.setPerspective( 45.0_degrees
 									, 1.7778f
 									, std::max( 0.1f, farPlane / 1000.0f )
@@ -464,7 +464,7 @@ int main( int argc, char * argv[] )
 						if ( scene.getLightCache().isEmpty() )
 						{
 							auto lightNode = scene.createSceneNode( cuT( "LightNode" ), scene );
-							lightNode->setOrientation( castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0, 0.0, 0.0 }, 90.0_degrees ) );
+							lightNode->setOrientation( c3d::Quaternion::fromAxisAngle( c3d::Point3f{ 1.0, 0.0, 0.0 }, 90.0_degrees ) );
 							lightNode->attachTo( *scene.getObjectRootNode() );
 
 							if ( auto lgtNode = scene.addSceneNode( cuT( "LightNode" ), lightNode ) )
@@ -473,15 +473,15 @@ int main( int argc, char * argv[] )
 									, scene
 									, *lgtNode
 									, scene.getLightsFactory()
-									, castor3d::LightType::eDirectional );
-								light->setColour( castor::RgbColour::fromComponents( 1.0f, 1.0f, 1.0f ) );
-								light->getDirectionalLight()->setIllumination( castor::Illumination{ 8.0f } );
+									, c3d::LightType::eDirectional );
+								light->setColour( c3d::RgbColour::fromComponents( 1.0f, 1.0f, 1.0f ) );
+								light->getDirectionalLight()->setIllumination( c3d::Illumination{ 8.0f } );
 								light->attachTo( *lgtNode );
 								scene.addLight( cuT( "SunLight" ), light, false );
 							}
 						}
 
-						castor3d::exporter::CscnSceneExporter exporter{ options.options };
+						c3d::exporter::CscnSceneExporter exporter{ options.options };
 						engine.getRenderLoop().renderSyncFrame();
 						exporter.exportScene( scene, rootFolder / options.output );
 						scene.cleanup();
@@ -493,7 +493,7 @@ int main( int argc, char * argv[] )
 			}
 		}
 
-		castor::Logger::cleanup();
+		c3d::Logger::cleanup();
 	}
 
 	return EXIT_SUCCESS;

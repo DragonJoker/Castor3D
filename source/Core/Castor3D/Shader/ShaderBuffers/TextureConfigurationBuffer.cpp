@@ -10,9 +10,9 @@
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
-CU_ImplementSmartPtr( castor3d, TextureConfigurationBuffer )
+CU_ImplementSmartPtr( c3d, TextureConfigurationBuffer )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -23,7 +23,7 @@ namespace castor3d
 			, uint32_t count )
 		{
 			CU_Require( ( count * sizeof( TextureConfigurationBuffer::Data ) ) <= size );
-			return castor::makeArrayView( reinterpret_cast< TextureConfigurationBuffer::Data * >( buffer )
+			return makeArrayView( reinterpret_cast< TextureConfigurationBuffer::Data * >( buffer )
 				, reinterpret_cast< TextureConfigurationBuffer::Data * >( buffer ) + count );
 		}
 	}
@@ -42,7 +42,7 @@ namespace castor3d
 	{
 		if ( unit.getId() == 0u )
 		{
-			auto lock( castor::makeUniqueLock( m_mutex ) );
+			auto lock( makeUniqueLock( m_mutex ) );
 			auto & device = getDevice();
 
 			if ( device.hasBindless() )
@@ -80,7 +80,7 @@ namespace castor3d
 
 	void TextureConfigurationBuffer::removeTextureConfiguration( TextureUnit & unit )noexcept
 	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 		unit.setId( 0u );
 		auto it = std::remove_if( m_dirty.begin()
 			, m_dirty.end()
@@ -93,15 +93,15 @@ namespace castor3d
 
 	void TextureConfigurationBuffer::update( UploadData & uploader )
 	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 
 		if ( !m_dirty.empty() )
 		{
-			castor::Vector< TextureUnit const * > dirty;
-			castor::swap( m_dirty, dirty );
+			Vector< TextureUnit const * > dirty;
+			c3d::swap( m_dirty, dirty );
 			auto end = std::unique( dirty.begin(), dirty.end() );
 
-			for ( auto unit : castor::makeArrayView( dirty.begin(), end ) )
+			for ( auto unit : makeArrayView( dirty.begin(), end ) )
 			{
 				CU_Require( unit->getId() > 0 );
 				auto & config = unit->getConfiguration();
@@ -118,7 +118,7 @@ namespace castor3d
 					data.rotateU = config.transform.rotate.cos();
 					data.rotateV = config.transform.rotate.sin();
 					data.scale = config.transform.scale;
-					data.tileSet = castor::Point4f{ config.tileSet };
+					data.tileSet = Point4f{ config.tileSet };
 					data.normalFactor = config.normalFactor;
 					data.normalGMult = config.normalDirectX ? -1.0f : 1.0f;
 					data.normal2Chan = config.normal2Channels ? 1u : 0u;

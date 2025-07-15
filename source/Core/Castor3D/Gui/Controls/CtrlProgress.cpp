@@ -12,12 +12,12 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementSmartPtr( castor3d, ProgressCtrl )
+CU_ImplementSmartPtr( c3d, ProgressCtrl )
 
-namespace castor3d
+namespace c3d
 {
 	ProgressCtrl::ProgressCtrl( SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, ProgressStyle * style
 		, ControlRPtr parent )
 		: Control{ Type
@@ -25,12 +25,12 @@ namespace castor3d
 			, name
 			, style
 			, parent
-			, castor::Position{}
-			, castor::Size{}
+			, Position{}
+			, Size{}
 			, ControlFlagType( ProgressFlag::eLeftRight | ProgressFlag::eHasTitle )
 			, true }
 	{
-		setBorderSize( castor::Point4ui{} );
+		setBorderSize( Point4ui{} );
 		auto title = m_scene
 			? m_scene->addNewOverlay( getName() + cuT( "/Title" )
 				, getEngine()
@@ -46,19 +46,19 @@ namespace castor3d
 		title->setVisible( true );
 
 		auto & manager = *getEngine().getControlsManager();
-		m_container = manager.registerControlT( castor::makeUnique< PanelCtrl >( m_scene
+		m_container = manager.registerControlT( makeUnique< PanelCtrl >( m_scene
 			, cuT( "Container" )
 			, &style->getContainerStyle()
 			, this ) );
 		m_container->setVisible( true );
 
-		m_progress = manager.registerControlT( castor::makeUnique< PanelCtrl >( m_scene
+		m_progress = manager.registerControlT( makeUnique< PanelCtrl >( m_scene
 			, cuT( "Progress" )
 			, &style->getProgressStyle()
 			, m_container ) );
 		m_progress->setVisible( true );
 
-		m_text = manager.registerControlT( castor::makeUnique< StaticCtrl >( m_scene
+		m_text = manager.registerControlT( makeUnique< StaticCtrl >( m_scene
 			, cuT( "Label" )
 			, &style->getLabelStyle()
 			, m_container ) );
@@ -89,18 +89,18 @@ namespace castor3d
 		}
 	}
 
-	void ProgressCtrl::setTitle( castor::U32String value )
+	void ProgressCtrl::setTitle( U32String value )
 	{
 		if ( hasTitle() )
 		{
 			if ( auto title = m_title )
 			{
-				title->setCaption( castor::move( value ) );
+				title->setCaption( c3d::move( value ) );
 			}
 		}
 	}
 
-	void ProgressCtrl::setRange( castor::Range< int32_t > const & range )
+	void ProgressCtrl::setRange( Range< int32_t > const & range )
 	{
 		m_value.updateRange( range );
 		doUpdateProgress();
@@ -112,7 +112,7 @@ namespace castor3d
 		doUpdateProgress();
 	}
 
-	void ProgressCtrl::setContainerBorderSize( castor::Point4ui const & value )
+	void ProgressCtrl::setContainerBorderSize( Point4ui const & value )
 	{
 		if ( m_container )
 		{
@@ -120,7 +120,7 @@ namespace castor3d
 		}
 	}
 
-	void ProgressCtrl::setBarBorderSize( castor::Point4ui const & value )
+	void ProgressCtrl::setBarBorderSize( Point4ui const & value )
 	{
 		if ( m_progress )
 		{
@@ -296,21 +296,21 @@ namespace castor3d
 		}
 	}
 
-	void ProgressCtrl::doSetBorderSize( castor::Point4ui const & value )
+	void ProgressCtrl::doSetBorderSize( Point4ui const & value )
 	{
 		doUpdatePosSize();
 	}
 
-	void ProgressCtrl::doSetPosition( castor::Position const & value )
+	void ProgressCtrl::doSetPosition( Position const & value )
 	{
 	}
 
-	void ProgressCtrl::doSetSize( castor::Size const & value )
+	void ProgressCtrl::doSetSize( Size const & value )
 	{
 		doUpdatePosSize();
 	}
 
-	void ProgressCtrl::doSetCaption( castor::U32String const & caption )
+	void ProgressCtrl::doSetCaption( U32String const & caption )
 	{
 		if ( auto text = m_text )
 		{

@@ -20,13 +20,13 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/FontCache.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class Theme
 		: public StylesHolder
 	{
 	public:
-		Theme( castor::String const & name
+		Theme( String const & name
 			, Scene * scene
 			, Engine & engine )
 			: StylesHolder{ name, engine }
@@ -34,7 +34,7 @@ namespace castor3d
 		{
 		}
 
-		Theme( castor::String const & name
+		Theme( String const & name
 			, Engine & engine )
 			: Theme{ name, nullptr, engine }
 		{

@@ -6,42 +6,42 @@ See LICENSE file in root folder
 
 #include "ModelModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	struct InterleavedVertex
 	{
 		InterleavedVertex()= default;
 
-		explicit InterleavedVertex( castor::Point3f pos
-			, castor::Point3f nml = {}
-			, castor::Point4f tan = {}
-			, castor::Point3f tex = {} )
-			: pos{ castor::move( pos ) }
-			, nml{ castor::move( nml ) }
-			, tan{ castor::move( tan ) }
-			, tex{ castor::move( tex ) }
+		explicit InterleavedVertex( Point3f pos
+			, Point3f nml = {}
+			, Point4f tan = {}
+			, Point3f tex = {} )
+			: pos{ c3d::move( pos ) }
+			, nml{ c3d::move( nml ) }
+			, tan{ c3d::move( tan ) }
+			, tex{ c3d::move( tex ) }
 		{
 		}
 
-		InterleavedVertex & position( castor::Point3f const & val )
+		InterleavedVertex & position( Point3f const & val )
 		{
 			pos = val;
 			return *this;
 		}
 
-		InterleavedVertex & normal( castor::Point3f const & val )
+		InterleavedVertex & normal( Point3f const & val )
 		{
 			nml = val;
 			return *this;
 		}
 
-		InterleavedVertex & texcoord( castor::Point2f const & val )
+		InterleavedVertex & texcoord( Point2f const & val )
 		{
-			tex = castor::Point3f{ val };
+			tex = Point3f{ val };
 			return *this;
 		}
 
-		InterleavedVertex & texcoord( castor::Point3f const & val )
+		InterleavedVertex & texcoord( Point3f const & val )
 		{
 			tex = val;
 			return *this;
@@ -49,16 +49,16 @@ namespace castor3d
 
 		//!\~english	The vertex coordinates.
 		//!\~french		La position du sommet.
-		castor::Point3f pos{};
+		Point3f pos{};
 		//!\~english	The vertex normal.
 		//!\~french		La normale du sommet.
-		castor::Point3f nml{};
+		Point3f nml{};
 		//!\~english	The vertex tangent.
 		//!\~french		La tangente du sommet.
-		castor::Point4f tan{};
+		Point4f tan{};
 		//!\~english	The vertex texture coordinates.
 		//!\~french		La coordonnées de texture du sommet.
-		castor::Point3f tex{};
+		Point3f tex{};
 	};
 }
 

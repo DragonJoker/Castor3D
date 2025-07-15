@@ -3,7 +3,7 @@
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -13,7 +13,7 @@ namespace castor3d
 		GpuPackedBufferUPtr createBuffer( RenderDevice const & device
 			, VkDeviceSize count
 			, VkBufferUsageFlags usage
-			, castor::String debugName
+			, String debugName
 			, bool smallData
 			, uint32_t alignSize )
 		{
@@ -24,7 +24,7 @@ namespace castor3d
 				maxCount *= 2u;
 			}
 
-			return castor::makeUnique< GpuPackedBuffer >( device.renderSystem
+			return makeUnique< GpuPackedBuffer >( device.renderSystem
 				, usage
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, debugName
@@ -38,7 +38,7 @@ namespace castor3d
 			, VkDeviceSize count
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags memory
-			, castor::String debugName
+			, String debugName
 			, uint32_t alignSize )
 		{
 			VkDeviceSize maxCount = BaseObjectPoolBufferCount;
@@ -48,7 +48,7 @@ namespace castor3d
 				maxCount *= 2u;
 			}
 
-			return castor::makeUnique< GpuPackedBaseBuffer >( device
+			return makeUnique< GpuPackedBaseBuffer >( device
 				, usage
 				, memory
 				, debugName
@@ -73,9 +73,9 @@ namespace castor3d
 				, std::max( size, VkDeviceSize( 65536U ) )
 				, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, m_debugName + cuT( "Vertex" ) + castor::string::toString( ait->second.size() )
+				, m_debugName + cuT( "Vertex" ) + string::toString( ait->second.size() )
 				, uint32_t( ait->first ) ) };
-			ait->second.emplace_back( castor::move( buffers ) );
+			ait->second.emplace_back( c3d::move( buffers ) );
 			it = std::next( ait->second.begin()
 				, ptrdiff_t( ait->second.size() - 1u ) );
 		}
@@ -115,9 +115,9 @@ namespace castor3d
 				, std::max( size, VkDeviceSize( 65536U ) )
 				, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, m_debugName + cuT( "Index" ) + castor::string::toString( m_buffers.size() )
+				, m_debugName + cuT( "Index" ) + string::toString( m_buffers.size() )
 				, uint32_t( m_device.properties.limits.minMemoryMapAlignment ) ) };
-			m_buffers.emplace_back( castor::move( buffers ) );
+			m_buffers.emplace_back( c3d::move( buffers ) );
 			it = std::next( m_buffers.begin()
 				, ptrdiff_t( m_buffers.size() - 1u ) );
 		}

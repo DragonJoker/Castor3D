@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationObject.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class SkeletonAnimationNode
 		: public SkeletonAnimationObject
@@ -36,7 +36,7 @@ namespace castor3d
 		 *\brief		Récupère le nom de l'objet
 		 *\return		Le nom
 		 */
-		C3D_API castor::String const & getName()const override;
+		C3D_API String const & getName()const override;
 		/**
 		 *\~english
 		 *\return		The object's node transform.

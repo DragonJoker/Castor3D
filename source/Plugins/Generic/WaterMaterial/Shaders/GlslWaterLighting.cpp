@@ -15,14 +15,14 @@ namespace water::shader
 {
 	//*********************************************************************************************
 
-	WaterLightingModel::WaterLightingModel( castor3d::LightingModelID lightingModelId
+	WaterLightingModel::WaterLightingModel( c3d::LightingModelID lightingModelId
 		, sdw::ShaderWriter & writer
-		, c3d::Materials const & materials
-		, c3d::Utils & utils
-		, c3d::BRDFHelpers & brdfHelpers
-		, c3d::LightingModelSpec spec
-		, c3d::Shadow & shadowModel
-		, c3d::Lights & lights
+		, c3ds::Materials const & materials
+		, c3ds::Utils & utils
+		, c3ds::BRDFHelpers & brdfHelpers
+		, c3ds::LightingModelSpec spec
+		, c3ds::Shadow & shadowModel
+		, c3ds::Lights & lights
 		, bool enableVolumetric )
 		: LightingModel{ lightingModelId
 			, writer
@@ -36,60 +36,60 @@ namespace water::shader
 			, true
 			, true
 			, enableVolumetric
-			, castor::String{ cuT( "c3d_water_" ) } }
+			, c3d::String{ cuT( "c3d_water_" ) } }
 	{
 	}
 
-	castor::StringView WaterLightingModel::getName()
+	c3d::StringView WaterLightingModel::getName()
 	{
 		return cuT( "c3d.water" );
 	}
 
-	c3d::LightingModelPtr WaterLightingModel::create( castor3d::LightingModelID lightingModelId
-		, c3d::LightingModelDesc const & desc
+	c3ds::LightingModelPtr WaterLightingModel::create( c3d::LightingModelID lightingModelId
+		, c3ds::LightingModelDesc const & desc
 		, sdw::ShaderWriter & writer
-		, c3d::Materials const & materials
-		, c3d::Utils & utils
-		, c3d::BRDFHelpers & brdfHelpers
-		, c3d::Shadow & shadowModel
-		, c3d::Lights & lights
+		, c3ds::Materials const & materials
+		, c3ds::Utils & utils
+		, c3ds::BRDFHelpers & brdfHelpers
+		, c3ds::Shadow & shadowModel
+		, c3ds::Lights & lights
 		, bool enableVolumetric )
 	{
-		return castor::makeUniqueDerived< LightingModel, WaterLightingModel >( lightingModelId
+		return c3d::makeUniqueDerived< LightingModel, WaterLightingModel >( lightingModelId
 			, writer
 			, materials
 			, utils
 			, brdfHelpers
-			, c3d::LightingModelSpec{ ( desc.diffuse.create
+			, c3ds::LightingModelSpec{ ( desc.diffuse.create
 					? desc.diffuse.create( writer, brdfHelpers )
-					: castor3d::PbrPass::DefaultDiffuseBrdf.create( writer, brdfHelpers ) )
+					: c3d::PbrPass::DefaultDiffuseBrdf.create( writer, brdfHelpers ) )
 				, ( desc.specular.create
 					? desc.specular.create( writer, brdfHelpers )
-					: castor3d::PbrPass::DefaultSpecularBrdf.create( writer, brdfHelpers ) )
+					: c3d::PbrPass::DefaultSpecularBrdf.create( writer, brdfHelpers ) )
 				, ( desc.sheen.create
 					? desc.sheen.create( writer, brdfHelpers )
-					: castor3d::PbrPass::DefaultSheenBrdf.create( writer, brdfHelpers ) )
+					: c3d::PbrPass::DefaultSheenBrdf.create( writer, brdfHelpers ) )
 				, ( desc.clearcoat.create
 					? desc.clearcoat.create( writer, brdfHelpers )
-					: castor3d::PbrPass::DefaultClearcoatBrdf.create( writer, brdfHelpers ) )
+					: c3d::PbrPass::DefaultClearcoatBrdf.create( writer, brdfHelpers ) )
 				, ( desc.scattering.create
 					? desc.scattering.create( writer )
-					: castor3d::PbrPass::DefaultScatteringModel.create( writer ) ) }
+					: c3d::PbrPass::DefaultScatteringModel.create( writer ) ) }
 			, shadowModel
 			, lights
 			, enableVolumetric );
 	}
 
-	void WaterLightingModel::doCombine( c3d::DebugOutputCategory const & debugOutput
-		, c3d::ReflectionModel & reflections
+	void WaterLightingModel::doCombine( c3ds::DebugOutputCategory const & debugOutput
+		, c3ds::ReflectionModel & reflections
 		, sdw::CombinedImage2DRgba32 const & brdf
-		, c3d::BlendComponents const & components
-		, c3d::LightSurface const & lightSurface
+		, c3ds::BlendComponents const & components
+		, c3ds::LightSurface const & lightSurface
 		, sdw::Vec3 const & incident
 		, sdw::Float const & ambientOcclusion
-		, c3d::DirectLighting const & directLighting
-		, c3d::IndirectLighting const & indirectLighting
-		, c3d::ReflectionRefraction const & reflRefr
+		, c3ds::DirectLighting const & directLighting
+		, c3ds::IndirectLighting const & indirectLighting
+		, c3ds::ReflectionRefraction const & reflRefr
 		, sdw::Vec3 & combineResult )
 	{
 		auto fresnelFactor = m_writer.hasVariable( "fresnelFactor", true )
@@ -150,9 +150,9 @@ namespace water::shader
 			+ emissiveResult;
 	}
 
-	void WaterLightingModel::processBackground( c3d::DebugOutputCategory const & debugOutput
-		, c3d::BlendComponents const & components
-		, c3d::ReflectionRefraction reflRefr
+	void WaterLightingModel::processBackground( c3ds::DebugOutputCategory const & debugOutput
+		, c3ds::BlendComponents const & components
+		, c3ds::ReflectionRefraction reflRefr
 		, sdw::Vec3 const & metalFresnel
 		, sdw::Vec3 const & dielectricFresnel
 		, sdw::Vec3 const & clearcoatFresnel
@@ -200,9 +200,9 @@ namespace water::shader
 			, backgroundResult );
 	}
 
-	void WaterLightingModel::processDirectLighting( c3d::DebugOutputCategory const & debugOutput
-		, c3d::BlendComponents const & components
-		, c3d::DirectLighting const & directLighting
+	void WaterLightingModel::processDirectLighting( c3ds::DebugOutputCategory const & debugOutput
+		, c3ds::BlendComponents const & components
+		, c3ds::DirectLighting const & directLighting
 		, sdw::Float const & fresnelFactor
 		, sdw::Vec3 & directLightingResult )
 	{
@@ -229,9 +229,9 @@ namespace water::shader
 		debugOutputBlock.registerOutput( cuT( "Result" ), directLightingResult );
 	}
 
-	void WaterLightingModel::processIndirectLighting( c3d::DebugOutputCategory const & debugOutput
-		, c3d::BlendComponents const & components
-		, c3d::IndirectLighting const & indirectLighting
+	void WaterLightingModel::processIndirectLighting( c3ds::DebugOutputCategory const & debugOutput
+		, c3ds::BlendComponents const & components
+		, c3ds::IndirectLighting const & indirectLighting
 		, sdw::Vec3 const & metalFresnel
 		, sdw::Vec3 const & dielectricFresnel
 		, sdw::Vec3 & indirectLightingResult )

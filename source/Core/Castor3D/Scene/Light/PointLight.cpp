@@ -5,7 +5,7 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
@@ -13,50 +13,50 @@ namespace castor3d
 	{
 		uint32_t constexpr FaceCount = 20u;
 
-		static void doUpdateShadowMatrices( castor::Point3f const & position
-			, castor::Array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) > & matrices )
+		static void doUpdateShadowMatrices( Point3f const & position
+			, Array< Matrix4x4f, size_t( CubeMapFace::eCount ) > & matrices )
 		{
-			matrices[0] = castor::matrix::lookAt( position, position + castor::Point3f{ +1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ); /* Positive X */
-			matrices[1] = castor::matrix::lookAt( position, position + castor::Point3f{ -1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ); /* Negative X */
-			matrices[2] = castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, +1.0f, +0.0f }, castor::Point3f{ +0.0f, +0.0f, +1.0f } ); /* Positive Y */
-			matrices[3] = castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, -1.0f, +0.0f }, castor::Point3f{ +0.0f, +0.0f, -1.0f } ); /* Negative Y */
-			matrices[4] = castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, +0.0f, +1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ); /* Positive Z */
-			matrices[5] = castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, +0.0f, -1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ); /* Negative Z */
+			matrices[0] = matrix::lookAt( position, position + Point3f{ +1.0f, +0.0f, +0.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ); /* Positive X */
+			matrices[1] = matrix::lookAt( position, position + Point3f{ -1.0f, +0.0f, +0.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ); /* Negative X */
+			matrices[2] = matrix::lookAt( position, position + Point3f{ +0.0f, +1.0f, +0.0f }, Point3f{ +0.0f, +0.0f, +1.0f } ); /* Positive Y */
+			matrices[3] = matrix::lookAt( position, position + Point3f{ +0.0f, -1.0f, +0.0f }, Point3f{ +0.0f, +0.0f, -1.0f } ); /* Negative Y */
+			matrices[4] = matrix::lookAt( position, position + Point3f{ +0.0f, +0.0f, +1.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ); /* Positive Z */
+			matrices[5] = matrix::lookAt( position, position + Point3f{ +0.0f, +0.0f, -1.0f }, Point3f{ +0.0f, -1.0f, +0.0f } ); /* Negative Z */
 		}
 	}
 
 	//*************************************************************************************************
 
 	PointLight::PointLight( bool & dirty
-		, castor::Function< void() > const & markParentDirty )
+		, Function< void() > const & markParentDirty )
 		: LightCategory{ LightType::ePoint, dirty, markParentDirty }
 		, m_range{ m_dirty, 10.0f, markParentDirty }
-		, m_intensity{ m_dirty, castor::LuminousIntensity{ 1.0f }, markParentDirty }
+		, m_intensity{ m_dirty, LuminousIntensity{ 1.0f }, markParentDirty }
 	{
 	}
 
 	LightInstanceUPtr PointLight::instantiate( SceneNode & node
-		, castor::Function< bool() > isParentEnabled )
+		, Function< bool() > isParentEnabled )
 	{
-		return LightInstanceUPtr( new PointLightInstance{ node, *this, m_markParentDirty, castor::move( isParentEnabled ) } );
+		return LightInstanceUPtr( new PointLightInstance{ node, *this, m_markParentDirty, c3d::move( isParentEnabled ) } );
 	}
 
 	LightCategoryUPtr PointLight::create( bool & dirty
-		, castor::Function< void() > const & changedCallback )
+		, Function< void() > const & changedCallback )
 	{
 		return LightCategoryUPtr( new PointLight{ dirty, changedCallback } );
 	}
 
-	castor::Point3fArray const & PointLight::generateVertices()
+	Point3fArray const & PointLight::generateVertices()
 	{
-		static castor::Point3fArray result;
+		static Point3fArray result;
 
 		if ( result.empty() )
 		{
-			castor::Angle const angle = castor::Angle::fromDegrees( 360.0f / lgtpoint::FaceCount );
-			castor::Vector< castor::Point2f > arc{ lgtpoint::FaceCount + 1 };
-			castor::Angle alpha;
-			castor::Point3fArray data;
+			Angle const angle = Angle::fromDegrees( 360.0f / lgtpoint::FaceCount );
+			Vector< Point2f > arc{ lgtpoint::FaceCount + 1 };
+			Angle alpha;
+			Point3fArray data;
 
 			data.reserve( lgtpoint::FaceCount * lgtpoint::FaceCount * 4 );
 
@@ -69,7 +69,7 @@ namespace castor3d
 				alpha += angle / 2;
 			}
 
-			castor::Angle iAlpha;
+			Angle iAlpha;
 
 			for ( uint32_t k = 0; k < lgtpoint::FaceCount; ++k )
 			{
@@ -135,8 +135,8 @@ namespace castor3d
 	void PointLight::doUpdate()
 	{
 		auto range = computeRange( getIntensity(), m_range.value() );
-		m_cubeBox.load( castor::Point3f{ -range, -range, -range }
-		, castor::Point3f{ range, range, range } );
+		m_cubeBox.load( Point3f{ -range, -range, -range }
+		, Point3f{ range, range, range } );
 		m_farPlane = m_range.value();
 	}
 
@@ -157,9 +157,9 @@ namespace castor3d
 
 	PointLightInstance::PointLightInstance( SceneNode & node
 		, PointLight & category
-		, castor::Function< void() > markParentDirty
-		, castor::Function< bool() > isParentEnabled )
-		: LightInstance{ node, category, castor::move( markParentDirty ), castor::move( isParentEnabled ) }
+		, Function< void() > markParentDirty
+		, Function< bool() > isParentEnabled )
+		: LightInstance{ node, category, c3d::move( markParentDirty ), c3d::move( isParentEnabled ) }
 		, m_position{ m_dirty, m_markParentDirty }
 	{
 	}
@@ -189,7 +189,7 @@ namespace castor3d
 		}
 	}
 
-	void PointLightInstance::doFillLightBuffer( castor::Point4f * data )const
+	void PointLightInstance::doFillLightBuffer( Point4f * data )const
 	{
 		auto & point = *reinterpret_cast< LightData * >( data->ptr() );
 		auto position = m_node->getDerivedPosition();

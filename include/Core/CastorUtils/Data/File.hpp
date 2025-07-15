@@ -15,7 +15,7 @@ See LICENSE file in root folder
 #include <fstream>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	/**
 	 *\~english
@@ -235,9 +235,9 @@ namespace castor
 		 */
 		CU_API int seek( long long offset
 			, OffsetMode origin = OffsetMode::eBeginning );
-		using TraverseDirFunction = castor::Function< bool( Path const & path ) >;
-		using HitFileFunction = castor::Function< void( Path const & folder, String const & name ) >;
-		using FilterFunction = castor::Function< bool( Path const & folder, String const & name ) >;
+		using TraverseDirFunction = c3d::Function< bool( Path const & path ) >;
+		using HitFileFunction = c3d::Function< void( Path const & folder, String const & name ) >;
+		using FilterFunction = c3d::Function< bool( Path const & folder, String const & name ) >;
 		/**
 		*\brief
 		*	Traverses the files and directories of a directory.
@@ -395,7 +395,7 @@ namespace castor
 		 *\~french
 		 *\brief		Remplace les caractères non valides pour un nim de fichier par le caractère de remplacement donné
 		 */
-		CU_API static String normaliseFileName( String const & name, castor::StringView repl = cuT( "_" ) );
+		CU_API static String normaliseFileName( String const & name, c3d::StringView repl = cuT( "_" ) );
 		/**
 		 *\~english
 		 *\brief		Retrieves the file size

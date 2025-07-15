@@ -29,8 +29,8 @@ namespace c3d_assimp
 	namespace file
 	{
 		static aiScene const * loadScene( Assimp::Importer & importer
-			, castor::Path const & filePath
-			, castor3d::Parameters const & parameters )
+			, c3d::Path const & filePath
+			, c3d::Parameters const & parameters )
 		{
 			bool noOptimisation = parameters.get< bool >( cuT( "no_optimisations" ) );
 			bool noValidation = parameters.get< bool >( cuT( "no_validation" ) );
@@ -57,7 +57,7 @@ namespace c3d_assimp
 
 			bool tangentSpace = false;
 
-			if ( castor::String normals;
+			if ( c3d::String normals;
 				parameters.get( cuT( "normals" ), normals )
 					&& normals == cuT( "smooth" ) )
 			{
@@ -71,27 +71,27 @@ namespace c3d_assimp
 
 			try
 			{
-				auto result = importer.ReadFile( castor::toUtf8( filePath ), importFlags );
+				auto result = importer.ReadFile( c3d::toUtf8( filePath ), importFlags );
 
 				if ( !result )
 				{
-					castor3d::log::error << "Scene loading failed : " << importer.GetErrorString() << std::endl;
+					c3d::log::error << "Scene loading failed : " << importer.GetErrorString() << std::endl;
 				}
 
 				return result;
 			}
 			catch ( std::exception & exc )
 			{
-				castor3d::log::error << "Scene loading failed : " << exc.what() << std::endl;
+				c3d::log::error << "Scene loading failed : " << exc.what() << std::endl;
 			}
 
 			return nullptr;
 		}
 
 		template< typename IterT, typename TypeT >
-		static castor::Pair< IterT, castor::String > replaceIter( castor::String const & name
+		static c3d::Pair< IterT, c3d::String > replaceIter( c3d::String const & name
 			, IterT iter
-			, castor::StringMap< TypeT > & map )
+			, c3d::StringMap< TypeT > & map )
 		{
 			auto common = getLongestCommonSubstring( name, iter->first );
 
@@ -105,51 +105,51 @@ namespace c3d_assimp
 			return { iter, common };
 		}
 
-		static castor::String getMaterialName( AssimpImporterFile const & file
+		static c3d::String getMaterialName( AssimpImporterFile const & file
 			, aiMaterial const & aiMaterial
 			, uint32_t materialIndex )
 		{
-			castor::String result = file.getExtension() + cuT( "-" );
+			c3d::String result = file.getExtension() + cuT( "-" );
 
 			if ( aiString name;
 				aiMaterial.Get( AI_MATKEY_NAME, name ) == aiReturn_SUCCESS )
 			{
-				result += makeString( name ) + cuT( "-" ) + castor::string::toString( materialIndex );
+				result += makeString( name ) + cuT( "-" ) + c3d::string::toString( materialIndex );
 			}
 			else
 			{
-				result += file.getName() + cuT( "-" ) + castor::string::toString( materialIndex );
+				result += file.getName() + cuT( "-" ) + c3d::string::toString( materialIndex );
 			}
 
 			return result;
 		}
 
-		static bool isSkeletonNode( castor::String const & aiNodeName
-			, castor::StringMap< castor::Matrix4x4f > const & bonesNodes
-			, castor::StringMap< AssimpSkeletonData > const & skeletons )
+		static bool isSkeletonNode( c3d::String const & aiNodeName
+			, c3d::StringMap< c3d::Matrix4x4f > const & bonesNodes
+			, c3d::StringMap< AssimpSkeletonData > const & skeletons )
 		{
 			if ( bonesNodes.find( aiNodeName ) != bonesNodes.end() )
 			{
 				return true;
 			}
 
-			auto mbName = castor::toUtf8( aiNodeName );
+			auto mbName = c3d::toUtf8( aiNodeName );
 			return skeletons.end() != std::find_if( skeletons.begin()
 				, skeletons.end()
-				, [&mbName]( castor::StringMap< AssimpSkeletonData >::value_type const & lookup )
+				, [&mbName]( c3d::StringMap< AssimpSkeletonData >::value_type const & lookup )
 				{
 					return lookup.second.rootNode->FindNode( mbName.c_str() ) != nullptr;
 				} );
 		}
 
-		static castor::Map< aiAnimation const *, aiNodeAnim const * > findNodeAnims( aiNode const & aiNode
-			, castor::ArrayView< aiAnimation * > const & animations )
+		static c3d::Map< aiAnimation const *, aiNodeAnim const * > findNodeAnims( aiNode const & aiNode
+			, c3d::ArrayView< aiAnimation * > const & animations )
 		{
-			castor::Map< aiAnimation const *, aiNodeAnim const * > result;
+			c3d::Map< aiAnimation const *, aiNodeAnim const * > result;
 
 			for ( auto aiAnimation : animations )
 			{
-				auto channels = castor::makeArrayView( aiAnimation->mChannels, aiAnimation->mNumChannels );
+				auto channels = c3d::makeArrayView( aiAnimation->mChannels, aiAnimation->mNumChannels );
 				auto it = std::find_if( channels.begin()
 					, channels.end()
 					, [&aiNode]( aiNodeAnim const * lookup )
@@ -169,7 +169,7 @@ namespace c3d_assimp
 		static bool isAnimForSkeleton( aiAnimation const & animation
 			, AssimpSkeletonData const & skeleton )
 		{
-			auto channels = castor::makeArrayView( animation.mChannels, animation.mNumChannels );
+			auto channels = c3d::makeArrayView( animation.mChannels, animation.mNumChannels );
 			return // The skeleton root node is in the animated channels
 				( channels.end() != std::find_if( channels.begin()
 					, channels.end()
@@ -179,7 +179,7 @@ namespace c3d_assimp
 					} ) );
 		}
 
-		static castor::Pair< AssimpSkeletonData *, castor3d::SkeletonRPtr > findSkeletonForAnim( castor3d::Scene * scene
+		static c3d::Pair< AssimpSkeletonData *, c3d::SkeletonRPtr > findSkeletonForAnim( c3d::Scene * scene
 			, aiNode const & rootNode
 			, aiAnimation const & animation
 			, AssimpSceneData & sceneData )
@@ -196,7 +196,7 @@ namespace c3d_assimp
 			{
 				for ( auto const & [name, skeleton] : scene->getSkeletonCache() )
 				{
-					if ( auto node = rootNode.FindNode( castor::toUtf8( skeleton->getRootNode()->getName() ).c_str() ) )
+					if ( auto node = rootNode.FindNode( c3d::toUtf8( skeleton->getRootNode()->getName() ).c_str() ) )
 					{
 						auto & data = sceneData.skeletons.try_emplace( name, node ).first->second;
 
@@ -211,16 +211,16 @@ namespace c3d_assimp
 			return { nullptr, nullptr };
 		}
 
-		static castor::StringMap< aiMeshMorphAnim const * > findMorphAnims( uint32_t aiMeshIndex
+		static c3d::StringMap< aiMeshMorphAnim const * > findMorphAnims( uint32_t aiMeshIndex
 			, uint32_t aiNumAnimMeshes
 			, aiNode const & rootNode
-			, castor::ArrayView< aiAnimation * > animations )
+			, c3d::ArrayView< aiAnimation * > animations )
 		{
-			castor::StringMap< aiMeshMorphAnim const * > result;
+			c3d::StringMap< aiMeshMorphAnim const * > result;
 
 			for ( auto anim : animations )
 			{
-				auto morphChannels = castor::makeArrayView( anim->mMorphMeshChannels, anim->mNumMorphMeshChannels );
+				auto morphChannels = c3d::makeArrayView( anim->mMorphMeshChannels, anim->mNumMorphMeshChannels );
 				auto morphIt = std::find_if( morphChannels.begin()
 					, morphChannels.end()
 					, [aiNumAnimMeshes, aiMeshIndex, &rootNode]( aiMeshMorphAnim const * morphChannel )
@@ -233,7 +233,7 @@ namespace c3d_assimp
 
 						if ( res )
 						{
-							auto meshes = castor::makeArrayView( node->mMeshes, node->mNumMeshes );
+							auto meshes = c3d::makeArrayView( node->mMeshes, node->mNumMeshes );
 							res = meshes.end() != std::find( meshes.begin()
 								, meshes.end()
 								, aiMeshIndex );
@@ -252,11 +252,11 @@ namespace c3d_assimp
 		}
 
 		static auto findNodeMesh( uint32_t meshIndex
-			, castor::StringMap< AssimpMeshData > const & meshes )
+			, c3d::StringMap< AssimpMeshData > const & meshes )
 		{
 			return std::find_if( meshes.begin()
 				, meshes.end()
-				, [&meshIndex]( castor::StringMap< AssimpMeshData >::value_type const & lookup )
+				, [&meshIndex]( c3d::StringMap< AssimpMeshData >::value_type const & lookup )
 				{
 					return lookup.second.submeshes.end() != std::find_if( lookup.second.submeshes.begin()
 						, lookup.second.submeshes.end()
@@ -274,7 +274,7 @@ namespace c3d_assimp
 			CU_Require( node );
 			return node
 				&& !findNodeAnims( *node
-					, castor::makeArrayView( scene.mAnimations, scene.mNumAnimations ) ).empty();
+					, c3d::makeArrayView( scene.mAnimations, scene.mNumAnimations ) ).empty();
 		}
 
 		static bool isValidMesh( aiScene const & scene
@@ -284,23 +284,23 @@ namespace c3d_assimp
 				&& c3d_assimp::isValidMesh( *scene.mMeshes[meshIndex] );
 		}
 
-		static castor::String reworkMeshName( castor::String const & name
+		static c3d::String reworkMeshName( c3d::String const & name
 			, uint32_t meshIndex )
 		{
-			castor::StringView separators = cuT( " \t\r_$|/:\\*!?&#\"()[]{}@+." );
-			auto split = castor::string::split( name, separators, ~0u, false );
-			castor::Set< int > numbers;
-			castor::Set< castor::String > names;
+			c3d::StringView separators = cuT( " \t\r_$|/:\\*!?&#\"()[]{}@+." );
+			auto split = c3d::string::split( name, separators, ~0u, false );
+			c3d::Set< int > numbers;
+			c3d::Set< c3d::String > names;
 
 			for ( auto s : split )
 			{
-				castor::string::trim( s, true, true, separators );
+				c3d::string::trim( s, true, true, separators );
 
 				if ( !s.empty() )
 				{
-					if ( castor::string::isInteger( s ) )
+					if ( c3d::string::isInteger( s ) )
 					{
-						numbers.emplace( castor::string::toInt( s ) );
+						numbers.emplace( c3d::string::toInt( s ) );
 					}
 					else
 					{
@@ -309,8 +309,8 @@ namespace c3d_assimp
 				}
 			}
 
-			castor::String result;
-			castor::String sep;
+			c3d::String result;
+			c3d::String sep;
 
 			for ( auto & s : names )
 			{
@@ -320,21 +320,21 @@ namespace c3d_assimp
 
 			for ( auto i : numbers )
 			{
-				result += sep + castor::string::toString( i );
+				result += sep + c3d::string::toString( i );
 				sep = cuT( "_" );
 			}
 
 			if ( result.empty() )
 			{
-				result = castor::string::toString( meshIndex );
+				result = c3d::string::toString( meshIndex );
 			}
 
 			return result;
 		}
 
 		static void accumulateTransformsRec( aiNode const * node
-			, castor::Vector< AssimpNodeData > const & nodes
-			, castor::Vector< castor::Matrix4x4f > & transforms )
+			, c3d::Vector< AssimpNodeData > const & nodes
+			, c3d::Vector< c3d::Matrix4x4f > & transforms )
 		{
 			if ( !node )
 			{
@@ -355,24 +355,24 @@ namespace c3d_assimp
 			}
 			else
 			{
-				castor::Matrix4x4f matrix;
-				castor::matrix::setTransform( matrix, it->translate, it->scale, it->rotate );
+				c3d::Matrix4x4f matrix;
+				c3d::matrix::setTransform( matrix, it->translate, it->scale, it->rotate );
 				transforms.push_back( matrix );
 			}
 		}
 
-		static castor::Matrix4x4f accumulateTransforms( AssimpImporterFile const & file
-			, castor::String const & name
+		static c3d::Matrix4x4f accumulateTransforms( AssimpImporterFile const & file
+			, c3d::String const & name
 			, aiNode const & rootNode
-			, castor::Vector< AssimpNodeData > const & nodes
-			, castor::Matrix4x4f transform )
+			, c3d::Vector< AssimpNodeData > const & nodes
+			, c3d::Matrix4x4f transform )
 		{
-			if ( auto node = rootNode.FindNode( castor::toUtf8( file.getExternalName( name ) ).c_str() ) )
+			if ( auto node = rootNode.FindNode( c3d::toUtf8( file.getExternalName( name ) ).c_str() ) )
 			{
-				castor::Vector< castor::Matrix4x4f > transforms;
+				c3d::Vector< c3d::Matrix4x4f > transforms;
 				accumulateTransformsRec( node->mParent, nodes, transforms );
 				std::reverse( transforms.begin(), transforms.end() );
-				castor::Matrix4x4f cumulative{ 1.0f };
+				c3d::Matrix4x4f cumulative{ 1.0f };
 
 				for ( auto const & t : transforms )
 				{
@@ -388,21 +388,21 @@ namespace c3d_assimp
 
 	//*********************************************************************************************
 
-	castor::MbString const AssimpImporterFile::Name = "ASSIMP Importer";
+	c3d::MbString const AssimpImporterFile::Name = "ASSIMP Importer";
 
-	AssimpImporterFile::AssimpImporterFile( castor3d::Engine & engine
-		, castor3d::Scene * scene
-		, castor::Path const & path
-		, castor3d::Parameters const & parameters
-		, castor3d::ProgressBar * progress )
-		: castor3d::ImporterFile{ engine, scene, path, parameters, progress }
+	AssimpImporterFile::AssimpImporterFile( c3d::Engine & engine
+		, c3d::Scene * scene
+		, c3d::Path const & path
+		, c3d::Parameters const & parameters
+		, c3d::ProgressBar * progress )
+		: c3d::ImporterFile{ engine, scene, path, parameters, progress }
 		, m_aiScene{ file::loadScene( m_importer, getFileName(), getParameters() ) }
 	{
 		if ( m_aiScene )
 		{
-			for ( auto aiMesh : castor::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
+			for ( auto aiMesh : c3d::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
 			{
-				for ( auto aiBone : castor::makeArrayView( aiMesh->mBones, aiMesh->mNumBones ) )
+				for ( auto aiBone : c3d::makeArrayView( aiMesh->mBones, aiMesh->mNumBones ) )
 				{
 					m_bonesNodes.try_emplace( makeString( aiBone->mName )
 						, fromAssimp( aiBone->mOffsetMatrix ) );
@@ -411,22 +411,22 @@ namespace c3d_assimp
 
 			doPrelistMaterials();
 			doPrelistMeshes( doPrelistSkeletons() );
-			castor::Map< AssimpMeshData const *, aiNodeArray > processed;
-			castor::Map< aiNode const *, castor::Matrix4x4f > cumulativeTransforms;
+			c3d::Map< AssimpMeshData const *, aiNodeArray > processed;
+			c3d::Map< aiNode const *, c3d::Matrix4x4f > cumulativeTransforms;
 			doPrelistSceneNodes( *m_aiScene->mRootNode, processed, cumulativeTransforms );
 			doPrelistLights();
 			doPrelistCameras();
 		}
 	}
 
-	castor::String AssimpImporterFile::getMaterialName( uint32_t materialIndex )const
+	c3d::String AssimpImporterFile::getMaterialName( uint32_t materialIndex )const
 	{
 		return file::getMaterialName( *this
 			, *m_aiScene->mMaterials[materialIndex]
 			, materialIndex );
 	}
 
-	NodeAnimations const & AssimpImporterFile::getNodesAnimations( castor3d::SceneNode const & node )const
+	NodeAnimations const & AssimpImporterFile::getNodesAnimations( c3d::SceneNode const & node )const
 	{
 		if ( auto it = std::find_if( m_sceneData.nodes.begin()
 			, m_sceneData.nodes.end()
@@ -443,7 +443,7 @@ namespace c3d_assimp
 		return dummy;
 	}
 
-	SkeletonAnimations const & AssimpImporterFile::getSkeletonsAnimations( castor3d::Skeleton const & skeleton )const
+	SkeletonAnimations const & AssimpImporterFile::getSkeletonsAnimations( c3d::Skeleton const & skeleton )const
 	{
 		auto name = skeleton.getName();
 
@@ -463,7 +463,7 @@ namespace c3d_assimp
 		return dummy;
 	}
 
-	MeshAnimations const & AssimpImporterFile::getMeshesAnimations( castor3d::Mesh const & mesh
+	MeshAnimations const & AssimpImporterFile::getMeshesAnimations( c3d::Mesh const & mesh
 		, uint32_t submeshIndex )const
 	{
 		if ( auto it = m_sceneData.meshes.find( mesh.getName() );
@@ -477,9 +477,9 @@ namespace c3d_assimp
 		return dummy;
 	}
 
-	castor::StringArray AssimpImporterFile::listMaterials()
+	c3d::StringArray AssimpImporterFile::listMaterials()
 	{
-		castor::StringArray result;
+		c3d::StringArray result;
 
 		for ( auto const & [name, _] : m_sceneData.materials )
 		{
@@ -489,10 +489,10 @@ namespace c3d_assimp
 		return result;
 	}
 
-	castor::Vector< castor3d::ImporterFile::MeshData > AssimpImporterFile::listMeshes()
+	c3d::Vector< c3d::ImporterFile::MeshData > AssimpImporterFile::listMeshes()
 	{
 		m_listedMeshes.clear();
-		castor::Vector< MeshData > result;
+		c3d::Vector< MeshData > result;
 
 		for ( auto const & [name, meshData] : m_sceneData.meshes )
 		{
@@ -500,15 +500,15 @@ namespace c3d_assimp
 			result.emplace_back( name
 				, ( meshData.skelNode
 					? getInternalName( findSkeletonName( m_bonesNodes, *meshData.skelNode ) )
-					: castor::String{} ) );
+					: c3d::String{} ) );
 		}
 
 		return result;
 	}
 
-	castor::StringArray AssimpImporterFile::listSkeletons()
+	c3d::StringArray AssimpImporterFile::listSkeletons()
 	{
-		castor::StringArray result;
+		c3d::StringArray result;
 
 		for ( auto const & [name, _] : m_sceneData.skeletons )
 		{
@@ -519,9 +519,9 @@ namespace c3d_assimp
 		return result;
 	}
 
-	castor::Vector< castor3d::ImporterFile::NodeData > AssimpImporterFile::listSceneNodes()
+	c3d::Vector< c3d::ImporterFile::NodeData > AssimpImporterFile::listSceneNodes()
 	{
-		castor::Vector< NodeData > result;
+		c3d::Vector< NodeData > result;
 
 		for ( auto const & node : m_sceneData.nodes )
 		{
@@ -531,31 +531,31 @@ namespace c3d_assimp
 		return result;
 	}
 
-	castor::Vector< castor3d::ImporterFile::LightData > AssimpImporterFile::listLights()
+	c3d::Vector< c3d::ImporterFile::LightData > AssimpImporterFile::listLights()
 	{
-		castor::Vector< LightData > result;
+		c3d::Vector< LightData > result;
 
 		for ( auto const & [name, lightData] : m_sceneData.lights )
 		{
 			result.emplace_back( name
 				, ( lightData->mType == aiLightSource_DIRECTIONAL
-					? castor3d::LightType::eDirectional
+					? c3d::LightType::eDirectional
 					: ( lightData->mType == aiLightSource_POINT
-						? castor3d::LightType::ePoint
-						: castor3d::LightType::eSpot ) ) );
+						? c3d::LightType::ePoint
+						: c3d::LightType::eSpot ) ) );
 		}
 
 		return result;
 	}
 
-	castor::Vector< castor3d::ImporterFile::LightGroupData > AssimpImporterFile::listLightGroups()
+	c3d::Vector< c3d::ImporterFile::LightGroupData > AssimpImporterFile::listLightGroups()
 	{
-		return castor::Vector< castor3d::ImporterFile::LightGroupData >{};
+		return c3d::Vector< c3d::ImporterFile::LightGroupData >{};
 	}
 
-	castor::Vector< castor3d::ImporterFile::GeometryData > AssimpImporterFile::listGeometries()
+	c3d::Vector< c3d::ImporterFile::GeometryData > AssimpImporterFile::listGeometries()
 	{
-		castor::Vector< GeometryData > result;
+		c3d::Vector< GeometryData > result;
 
 		for ( auto & node : m_sceneData.nodes )
 		{
@@ -563,7 +563,7 @@ namespace c3d_assimp
 			{
 				auto it = std::find_if( m_sceneData.meshes.begin()
 					, m_sceneData.meshes.end()
-					, [mesh]( castor::StringMap< AssimpMeshData >::value_type const & lookup )
+					, [mesh]( c3d::StringMap< AssimpMeshData >::value_type const & lookup )
 					{
 						return mesh == &lookup.second;
 					} );
@@ -579,24 +579,24 @@ namespace c3d_assimp
 		return result;
 	}
 
-	castor::Vector< castor3d::ImporterFile::CameraData > AssimpImporterFile::listCameras()
+	c3d::Vector< c3d::ImporterFile::CameraData > AssimpImporterFile::listCameras()
 	{
-		castor::Vector< CameraData > result;
+		c3d::Vector< CameraData > result;
 
 		for ( auto const & [name, cameraData] : m_sceneData.cameras )
 		{
 			result.emplace_back( name
 				, ( cameraData->mOrthographicWidth != 0.0f
-					? castor3d::ViewportType::eOrtho
-					: castor3d::ViewportType::ePerspective ) );
+					? c3d::ViewportType::eOrtho
+					: c3d::ViewportType::ePerspective ) );
 		}
 
 		return result;
 	}
 
-	castor::StringArray AssimpImporterFile::listMeshAnimations( castor3d::Mesh const & mesh )
+	c3d::StringArray AssimpImporterFile::listMeshAnimations( c3d::Mesh const & mesh )
 	{
-		castor::Set< castor::String > result;
+		c3d::Set< c3d::String > result;
 
 		if ( auto it = m_sceneData.meshes.find( mesh.getName() );
 			it != m_sceneData.meshes.end() )
@@ -610,11 +610,11 @@ namespace c3d_assimp
 			}
 		}
 
-		return castor::StringArray{ result.begin()
+		return c3d::StringArray{ result.begin()
 			, result.end() };
 	}
 
-	castor::StringArray AssimpImporterFile::listSkeletonAnimations( castor3d::Skeleton const & skeleton )
+	c3d::StringArray AssimpImporterFile::listSkeletonAnimations( c3d::Skeleton const & skeleton )
 	{
 		auto name = skeleton.getName();
 
@@ -624,7 +624,7 @@ namespace c3d_assimp
 			name = getSkeletons().begin()->first;
 		}
 
-		castor::StringArray result;
+		c3d::StringArray result;
 
 		if ( auto it = m_sceneData.skeletons.find( name );
 			it != m_sceneData.skeletons.end() )
@@ -638,9 +638,9 @@ namespace c3d_assimp
 		return result;
 	}
 
-	castor::StringArray AssimpImporterFile::listSceneNodeAnimations( castor3d::SceneNode const & node )
+	c3d::StringArray AssimpImporterFile::listSceneNodeAnimations( c3d::SceneNode const & node )
 	{
-		castor::StringArray result;
+		c3d::StringArray result;
 
 		if ( auto it = std::find_if( m_sceneData.nodes.begin()
 			, m_sceneData.nodes.end()
@@ -659,10 +659,10 @@ namespace c3d_assimp
 		return result;
 	}
 
-	castor::Vector< uint32_t > AssimpImporterFile::listTextureAnimations( castor3d::Material const & material
+	c3d::Vector< uint32_t > AssimpImporterFile::listTextureAnimations( c3d::Material const & material
 		, uint32_t pass )
 	{
-		castor::Vector< uint32_t > result;
+		c3d::Vector< uint32_t > result;
 		return result;
 	}
 
@@ -710,55 +710,55 @@ namespace c3d_assimp
 		return 0u;
 	}
 
-	castor3d::MaterialImporterUPtr AssimpImporterFile::createMaterialImporter()
+	c3d::MaterialImporterUPtr AssimpImporterFile::createMaterialImporter()
 	{
-		return castor::makeUniqueDerived< castor3d::MaterialImporter, AssimpMaterialImporter >( *getOwner() );
+		return c3d::makeUniqueDerived< c3d::MaterialImporter, AssimpMaterialImporter >( *getOwner() );
 	}
 
-	castor3d::AnimationImporterUPtr AssimpImporterFile::createAnimationImporter()
+	c3d::AnimationImporterUPtr AssimpImporterFile::createAnimationImporter()
 	{
-		return castor::makeUniqueDerived< castor3d::AnimationImporter, AssimpAnimationImporter >( *getOwner() );
+		return c3d::makeUniqueDerived< c3d::AnimationImporter, AssimpAnimationImporter >( *getOwner() );
 	}
 
-	castor3d::SkeletonImporterUPtr AssimpImporterFile::createSkeletonImporter()
+	c3d::SkeletonImporterUPtr AssimpImporterFile::createSkeletonImporter()
 	{
-		return castor::makeUniqueDerived< castor3d::SkeletonImporter, AssimpSkeletonImporter >( *getOwner() );
+		return c3d::makeUniqueDerived< c3d::SkeletonImporter, AssimpSkeletonImporter >( *getOwner() );
 	}
 
-	castor3d::MeshImporterUPtr AssimpImporterFile::createMeshImporter()
+	c3d::MeshImporterUPtr AssimpImporterFile::createMeshImporter()
 	{
-		return castor::makeUniqueDerived< castor3d::MeshImporter, AssimpMeshImporter >( *getOwner() );
+		return c3d::makeUniqueDerived< c3d::MeshImporter, AssimpMeshImporter >( *getOwner() );
 	}
 
-	castor3d::SceneNodeImporterUPtr AssimpImporterFile::createSceneNodeImporter()
+	c3d::SceneNodeImporterUPtr AssimpImporterFile::createSceneNodeImporter()
 	{
-		return castor::makeUniqueDerived< castor3d::SceneNodeImporter, AssimpSceneNodeImporter >( *getOwner() );
+		return c3d::makeUniqueDerived< c3d::SceneNodeImporter, AssimpSceneNodeImporter >( *getOwner() );
 	}
 
-	castor3d::LightImporterUPtr AssimpImporterFile::createLightImporter()
+	c3d::LightImporterUPtr AssimpImporterFile::createLightImporter()
 	{
-		return castor::makeUniqueDerived< castor3d::LightImporter, AssimpLightImporter >( *getOwner() );
+		return c3d::makeUniqueDerived< c3d::LightImporter, AssimpLightImporter >( *getOwner() );
 	}
 
-	castor3d::CameraImporterUPtr AssimpImporterFile::createCameraImporter()
+	c3d::CameraImporterUPtr AssimpImporterFile::createCameraImporter()
 	{
-		return castor::makeUniqueDerived< castor3d::CameraImporter, AssimpCameraImporter >( *getOwner() );
+		return c3d::makeUniqueDerived< c3d::CameraImporter, AssimpCameraImporter >( *getOwner() );
 	}
 
-	castor3d::ImporterFileUPtr AssimpImporterFile::create( castor3d::Engine & engine
-		, castor3d::Scene * scene
-		, castor::Path const & path
-		, castor3d::Parameters const & parameters
-		, castor3d::ProgressBar * progress )
+	c3d::ImporterFileUPtr AssimpImporterFile::create( c3d::Engine & engine
+		, c3d::Scene * scene
+		, c3d::Path const & path
+		, c3d::Parameters const & parameters
+		, c3d::ProgressBar * progress )
 	{
-		return castor::makeUniqueDerived< castor3d::ImporterFile, AssimpImporterFile >( engine, scene, path, parameters, progress );
+		return c3d::makeUniqueDerived< c3d::ImporterFile, AssimpImporterFile >( engine, scene, path, parameters, progress );
 	}
 
 	void AssimpImporterFile::doPrelistMaterials()
 	{
 		uint32_t materialIndex = 0u;
 
-		for ( auto aiMaterial : castor::makeArrayView( m_aiScene->mMaterials, m_aiScene->mNumMaterials ) )
+		for ( auto aiMaterial : c3d::makeArrayView( m_aiScene->mMaterials, m_aiScene->mNumMaterials ) )
 		{
 			auto name = file::getMaterialName( *this, *aiMaterial, materialIndex );
 			m_sceneData.materials.try_emplace( name, aiMaterial );
@@ -766,12 +766,12 @@ namespace c3d_assimp
 		}
 	}
 
-	castor::Map< aiMesh const *, aiNode const * > AssimpImporterFile::doPrelistSkeletons()
+	c3d::Map< aiMesh const *, aiNode const * > AssimpImporterFile::doPrelistSkeletons()
 	{
-		castor::Map< aiMesh const *, aiNode const * > result;
+		c3d::Map< aiMesh const *, aiNode const * > result;
 		uint32_t meshIndex = 0u;
 
-		for ( auto aiMesh : castor::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
+		for ( auto aiMesh : c3d::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
 		{
 			if ( aiMesh->HasBones() )
 			{
@@ -784,7 +784,7 @@ namespace c3d_assimp
 				else
 				{
 					auto rootNode = findRootSkeletonNode( *m_aiScene->mRootNode
-						, castor::makeArrayView( aiMesh->mBones, aiMesh->mNumBones )
+						, c3d::makeArrayView( aiMesh->mBones, aiMesh->mNumBones )
 						, meshNode );
 					auto skelName = getInternalName( findSkeletonName( m_bonesNodes
 						, *rootNode ) );
@@ -796,7 +796,7 @@ namespace c3d_assimp
 			++meshIndex;
 		}
 
-		for ( auto aiAnimation : castor::makeArrayView( m_aiScene->mAnimations, m_aiScene->mNumAnimations ) )
+		for ( auto aiAnimation : c3d::makeArrayView( m_aiScene->mAnimations, m_aiScene->mNumAnimations ) )
 		{
 			if ( auto [skeletonData, skeleton] = file::findSkeletonForAnim( getScene(), *m_aiScene->mRootNode, *aiAnimation, m_sceneData );
 				skeletonData )
@@ -805,7 +805,7 @@ namespace c3d_assimp
 
 				if ( frameCount > 1 )
 				{
-					castor::String animName{ normalizeName( makeString( aiAnimation->mName ) ) };
+					c3d::String animName{ normalizeName( makeString( aiAnimation->mName ) ) };
 
 					if ( animName.empty() )
 					{
@@ -825,11 +825,11 @@ namespace c3d_assimp
 		return result;
 	}
 
-	void AssimpImporterFile::doPrelistMeshes( castor::Map< aiMesh const *, aiNode const * > const & meshSkeletons )
+	void AssimpImporterFile::doPrelistMeshes( c3d::Map< aiMesh const *, aiNode const * > const & meshSkeletons )
 	{
 		uint32_t meshIndex = 0u;
 
-		for ( auto aiMesh : castor::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
+		for ( auto aiMesh : c3d::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
 		{
 			if ( isValidMesh( *aiMesh ) )
 			{
@@ -837,12 +837,12 @@ namespace c3d_assimp
 
 				if ( meshName.size() > 150u )
 				{
-					meshName = getInternalName( getName() ) + castor::string::toString( meshIndex );
+					meshName = getInternalName( getName() ) + c3d::string::toString( meshIndex );
 				}
 				
 				if ( file::hasNodeAnim( *m_aiScene, meshIndex ) )
 				{
-					meshName += castor::string::toString( meshIndex );
+					meshName += c3d::string::toString( meshIndex );
 				}
 
 				auto regIt = m_sceneData.meshes.find( meshName );
@@ -850,7 +850,7 @@ namespace c3d_assimp
 
 				if ( regIt != m_sceneData.meshes.end() )
 				{
-					meshName += castor::string::toString( meshIndex );
+					meshName += c3d::string::toString( meshIndex );
 					regIt = m_sceneData.meshes.find( meshName );
 				}
 
@@ -864,7 +864,7 @@ namespace c3d_assimp
 						skelNode = it->second;
 						regIt = std::find_if( m_sceneData.meshes.begin()
 							, m_sceneData.meshes.end()
-							, [&skelNode]( castor::StringMap< AssimpMeshData >::value_type const & lookup )
+							, [&skelNode]( c3d::StringMap< AssimpMeshData >::value_type const & lookup )
 							{
 								return skelNode == lookup.second.skelNode;
 							} );
@@ -889,11 +889,11 @@ namespace c3d_assimp
 					auto anims = file::findMorphAnims( meshIndex
 						, aiMesh->mNumAnimMeshes
 						, *m_aiScene->mRootNode
-						, castor::makeArrayView( m_aiScene->mAnimations, m_aiScene->mNumAnimations ) );
+						, c3d::makeArrayView( m_aiScene->mAnimations, m_aiScene->mNumAnimations ) );
 
 					for ( auto const & [name, animData] : anims )
 					{
-						castor::String animName{ normalizeName( name ) };
+						c3d::String animName{ normalizeName( name ) };
 						submeshData.anims.try_emplace( animName, aiMesh, animData );
 					}
 				}
@@ -904,10 +904,10 @@ namespace c3d_assimp
 	}
 
 	void AssimpImporterFile::doPrelistSceneNodes( aiNode const & node
-		, castor::Map< AssimpMeshData const *, aiNodeArray > & processedMeshes
-		, castor::Map< aiNode const *, castor::Matrix4x4f > & cumulativeTransforms
-		, castor::String parentName
-		, castor::Matrix4x4f transform )
+		, c3d::Map< AssimpMeshData const *, aiNodeArray > & processedMeshes
+		, c3d::Map< aiNode const *, c3d::Matrix4x4f > & cumulativeTransforms
+		, c3d::String parentName
+		, c3d::Matrix4x4f transform )
 	{
 		auto aiNodeName = makeString( node.mName );
 
@@ -935,7 +935,7 @@ namespace c3d_assimp
 		if ( !isSkeletonNode )
 		{
 			auto anims = file::findNodeAnims( node
-				, castor::makeArrayView( m_aiScene->mAnimations, m_aiScene->mNumAnimations ) );
+				, c3d::makeArrayView( m_aiScene->mAnimations, m_aiScene->mNumAnimations ) );
 
 			for ( auto anim : anims )
 			{
@@ -943,7 +943,7 @@ namespace c3d_assimp
 
 				if ( frameCount > 1 )
 				{
-					castor::String animName{ normalizeName( makeString( anim.first->mName ) ) };
+					c3d::String animName{ normalizeName( makeString( anim.first->mName ) ) };
 
 					if ( animName.empty() )
 					{
@@ -955,7 +955,7 @@ namespace c3d_assimp
 			}
 		}
 
-		for ( auto meshIndex : castor::makeArrayView( node.mMeshes, node.mNumMeshes ) )
+		for ( auto meshIndex : c3d::makeArrayView( node.mMeshes, node.mNumMeshes ) )
 		{
 			if ( !file::isValidMesh( *m_aiScene, meshIndex ) )
 			{
@@ -993,11 +993,11 @@ namespace c3d_assimp
 			}
 		}
 
-		m_sceneData.nodes.emplace_back( castor::move( nodeData ) );
+		m_sceneData.nodes.emplace_back( c3d::move( nodeData ) );
 		parentName = nodeName;
 
 		// continue for all child nodes
-		for ( auto aiChild : castor::makeArrayView( node.mChildren, node.mNumChildren ) )
+		for ( auto aiChild : c3d::makeArrayView( node.mChildren, node.mNumChildren ) )
 		{
 			doPrelistSceneNodes( *aiChild
 				, processedMeshes
@@ -1009,24 +1009,24 @@ namespace c3d_assimp
 
 	void AssimpImporterFile::doPrelistLights()
 	{
-		for ( auto aiLight : castor::makeArrayView( m_aiScene->mLights, m_aiScene->mNumLights ) )
+		for ( auto aiLight : c3d::makeArrayView( m_aiScene->mLights, m_aiScene->mNumLights ) )
 		{
 			if ( aiLight->mType == aiLightSource_DIRECTIONAL
 				|| aiLight->mType == aiLightSource_POINT
 				|| aiLight->mType == aiLightSource_SPOT )
 			{
-				castor::String name = getInternalName( aiLight->mName );
+				c3d::String name = getInternalName( aiLight->mName );
 				m_sceneData.lights.try_emplace( name, aiLight );
 
-				auto position = castor::Point3f{};
-				auto orientation = castor::Quaternion::identity();
+				auto position = c3d::Point3f{};
+				auto orientation = c3d::Quaternion::identity();
 
 				if ( aiLight->mType == aiLightSource_DIRECTIONAL
 					|| aiLight->mType == aiLightSource_SPOT )
 				{
-					auto direction = castor::point::getNormalised( fromAssimp( aiLight->mDirection ) );
-					auto up = castor::point::getNormalised( fromAssimp( aiLight->mUp ) );
-					orientation = castor::Quaternion::fromMatrix( fromAssimp( direction, up ) );
+					auto direction = c3d::point::getNormalised( fromAssimp( aiLight->mDirection ) );
+					auto up = c3d::point::getNormalised( fromAssimp( aiLight->mUp ) );
+					orientation = c3d::Quaternion::fromMatrix( fromAssimp( direction, up ) );
 				}
 
 				if ( aiLight->mType != aiLightSource_DIRECTIONAL )
@@ -1034,10 +1034,10 @@ namespace c3d_assimp
 					position = fromAssimp( aiLight->mPosition );
 				}
 
-				auto transform = castor::Matrix4x4f{ 1.0f };
-				castor::matrix::setTransform( transform
+				auto transform = c3d::Matrix4x4f{ 1.0f };
+				c3d::matrix::setTransform( transform
 					, position
-					, castor::Point3f{ 1.0, 1.0, 1.0 }
+					, c3d::Point3f{ 1.0, 1.0, 1.0 }
 					, orientation );
 				auto it = std::find_if( m_sceneData.nodes.begin()
 					, m_sceneData.nodes.end()
@@ -1053,11 +1053,11 @@ namespace c3d_assimp
 						, *m_aiScene->mRootNode
 						, m_sceneData.nodes
 						, transform );
-					castor::Point3f translate;
-					castor::Point3f scale;
-					castor::Quaternion rotate;
-					castor::matrix::decompose( transform, translate, scale, rotate );
-					m_sceneData.nodes.emplace_back( castor::String{}
+					c3d::Point3f translate;
+					c3d::Point3f scale;
+					c3d::Quaternion rotate;
+					c3d::matrix::decompose( transform, translate, scale, rotate );
+					m_sceneData.nodes.emplace_back( c3d::String{}
 						, name
 						, false
 						, nullptr
@@ -1067,10 +1067,10 @@ namespace c3d_assimp
 				}
 				else
 				{
-					castor::Matrix4x4f matrix;
-					castor::matrix::setTransform( matrix, it->translate, it->scale, it->rotate );
+					c3d::Matrix4x4f matrix;
+					c3d::matrix::setTransform( matrix, it->translate, it->scale, it->rotate );
 					matrix *= transform;
-					castor::matrix::decompose( matrix, it->translate, it->scale, it->rotate );
+					c3d::matrix::decompose( matrix, it->translate, it->scale, it->rotate );
 				}
 			}
 		}
@@ -1078,22 +1078,22 @@ namespace c3d_assimp
 
 	void AssimpImporterFile::doPrelistCameras()
 	{
-		for ( auto aiCamera : castor::makeArrayView( m_aiScene->mCameras, m_aiScene->mNumCameras ) )
+		for ( auto aiCamera : c3d::makeArrayView( m_aiScene->mCameras, m_aiScene->mNumCameras ) )
 		{
-			castor::String name = getInternalName( aiCamera->mName );
+			c3d::String name = getInternalName( aiCamera->mName );
 			m_sceneData.cameras.try_emplace( name, aiCamera );
 
-			auto position = castor::Point3f{};
-			auto orientation = castor::Quaternion::identity();
-			auto direction = castor::point::getNormalised( fromAssimp( aiCamera->mLookAt ) );
-			auto up = castor::point::getNormalised( fromAssimp( aiCamera->mUp ) );
+			auto position = c3d::Point3f{};
+			auto orientation = c3d::Quaternion::identity();
+			auto direction = c3d::point::getNormalised( fromAssimp( aiCamera->mLookAt ) );
+			auto up = c3d::point::getNormalised( fromAssimp( aiCamera->mUp ) );
 			position = fromAssimp( aiCamera->mPosition );
-			orientation = castor::Quaternion::fromMatrix( fromAssimp( direction, up ) );
+			orientation = c3d::Quaternion::fromMatrix( fromAssimp( direction, up ) );
 
-			auto transform = castor::Matrix4x4f{ 1.0f };
-			castor::matrix::setTransform( transform
+			auto transform = c3d::Matrix4x4f{ 1.0f };
+			c3d::matrix::setTransform( transform
 				, position
-				, castor::Point3f{ 1.0, 1.0, 1.0 }
+				, c3d::Point3f{ 1.0, 1.0, 1.0 }
 				, orientation );
 			auto it = std::find_if( m_sceneData.nodes.begin()
 				, m_sceneData.nodes.end()
@@ -1109,11 +1109,11 @@ namespace c3d_assimp
 					, *m_aiScene->mRootNode
 					, m_sceneData.nodes
 					, transform );
-				castor::Point3f translate;
-				castor::Point3f scale;
-				castor::Quaternion rotate;
-				castor::matrix::decompose( transform, translate, scale, rotate );
-				m_sceneData.nodes.emplace_back( castor::String{}
+				c3d::Point3f translate;
+				c3d::Point3f scale;
+				c3d::Quaternion rotate;
+				c3d::matrix::decompose( transform, translate, scale, rotate );
+				m_sceneData.nodes.emplace_back( c3d::String{}
 					, name
 					, false
 					, nullptr
@@ -1123,10 +1123,10 @@ namespace c3d_assimp
 			}
 			else
 			{
-				castor::Matrix4x4f matrix;
-				castor::matrix::setTransform( matrix, it->translate, it->scale, it->rotate );
+				c3d::Matrix4x4f matrix;
+				c3d::matrix::setTransform( matrix, it->translate, it->scale, it->rotate );
 				matrix *= transform;
-				castor::matrix::decompose( matrix, it->translate, it->scale, it->rotate );
+				c3d::matrix::decompose( matrix, it->translate, it->scale, it->rotate );
 			}
 		}
 	}

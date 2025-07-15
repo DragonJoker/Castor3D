@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class Particle
 	{
@@ -31,7 +31,7 @@ namespace castor3d
 		 *\param[in]	defaultValues	Les valeurs par défaut des éléments de la particule.
 		 */
 		C3D_API Particle( ParticleDeclaration const & description
-			, castor::StrStrMap const & defaultValues );
+			, StrStrMap const & defaultValues );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -89,7 +89,7 @@ namespace castor3d
 
 	private:
 		ParticleDeclaration const & m_description;
-		castor::Vector< uint8_t > m_data;
+		Vector< uint8_t > m_data;
 	};
 }
 

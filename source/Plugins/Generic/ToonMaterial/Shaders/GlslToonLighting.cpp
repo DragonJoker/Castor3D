@@ -20,12 +20,12 @@ namespace toon::shader
 {
 	//*********************************************************************************************
 
-	void ToonLightingModel::initLightSpecifics( c3d::LightSurface const & lightSurface
-		, c3d::BlendComponents const & components )
+	void ToonLightingModel::initLightSpecifics( c3ds::LightSurface const & lightSurface
+		, c3ds::BlendComponents const & components )
 	{
 		auto & writer = *lightSurface.getWriter();
 		auto smoothBand = components.getMember< sdw::Float >( "smoothBand", true );
-		auto ndotl = c3d::DerivFloat{ smoothStep( 0.0_f
+		auto ndotl = c3ds::DerivFloat{ smoothStep( 0.0_f
 				, fwidth( lightSurface.NdotL() ) * smoothBand
 				, lightSurface.NdotL().value() )
 			, lightSurface.NdotL().dPdx()
@@ -33,15 +33,15 @@ namespace toon::shader
 
 		if ( !m_NdotL )
 		{
-			m_NdotL = castor::make_unique< c3d::DerivFloat >( writer.declLocale( "toonNdotL"
-				, castor::move( ndotl ) ) );
+			m_NdotL = c3d::makeRawUnique< c3ds::DerivFloat >( writer.declLocale( "toonNdotL"
+				, c3d::move( ndotl ) ) );
 		}
 		else
 		{
 			*m_NdotL = ndotl;
 		}
 
-		auto ndoth = c3d::DerivFloat{ smoothStep( 0.0_f
+		auto ndoth = c3ds::DerivFloat{ smoothStep( 0.0_f
 				, 0.01_f * smoothBand
 				, ( lightSurface.NdotH() * getNdotL( lightSurface, components ) ).value() )
 			, lightSurface.NdotH().dPdx()
@@ -49,8 +49,8 @@ namespace toon::shader
 
 		if ( !m_NdotH )
 		{
-			m_NdotH = castor::make_unique< c3d::DerivFloat >( writer.declLocale( "toonNdotH"
-				, castor::move( ndoth ) ) );
+			m_NdotH = c3d::makeRawUnique< c3ds::DerivFloat >( writer.declLocale( "toonNdotH"
+				, c3d::move( ndoth ) ) );
 		}
 		else
 		{
@@ -58,30 +58,30 @@ namespace toon::shader
 		}
 	}
 
-	c3d::DerivFloat ToonLightingModel::getNdotL( c3d::LightSurface const & lightSurface
-		, c3d::BlendComponents const & components )
+	c3ds::DerivFloat ToonLightingModel::getNdotL( c3ds::LightSurface const & lightSurface
+		, c3ds::BlendComponents const & components )
 	{
 		return *m_NdotL;
 	}
 
-	c3d::DerivFloat ToonLightingModel::getNdotH( c3d::LightSurface const & lightSurface
-		, c3d::BlendComponents const & components )
+	c3ds::DerivFloat ToonLightingModel::getNdotH( c3ds::LightSurface const & lightSurface
+		, c3ds::BlendComponents const & components )
 	{
 		return *m_NdotH;
 	}
 
 	//*********************************************************************************************
 
-	ToonPhongLightingModel::ToonPhongLightingModel( castor3d::LightingModelID lightingModelId
+	ToonPhongLightingModel::ToonPhongLightingModel( c3d::LightingModelID lightingModelId
 		, sdw::ShaderWriter & writer
-		, c3d::Materials const & materials
-		, c3d::Utils & utils
-		, c3d::BRDFHelpers & brdfHelpers
-		, c3d::LightingModelSpec spec
-		, c3d::Shadow & shadowModel
-		, c3d::Lights & lights
+		, c3ds::Materials const & materials
+		, c3ds::Utils & utils
+		, c3ds::BRDFHelpers & brdfHelpers
+		, c3ds::LightingModelSpec spec
+		, c3ds::Shadow & shadowModel
+		, c3ds::Lights & lights
 		, bool enableVolumetric )
-		: c3d::PhongLightingModel{ lightingModelId
+		: c3ds::PhongLightingModel{ lightingModelId
 			, writer
 			, materials
 			, utils
@@ -94,48 +94,48 @@ namespace toon::shader
 		m_prefix = cuT( "toon_phong_" );
 	}
 
-	const castor::String ToonPhongLightingModel::getName()
+	const c3d::String ToonPhongLightingModel::getName()
 	{
 		return cuT( "toon.phong" );
 	}
 
-	c3d::LightingModelPtr ToonPhongLightingModel::create( castor3d::LightingModelID lightingModelId
-		, c3d::LightingModelDesc const & desc
+	c3ds::LightingModelPtr ToonPhongLightingModel::create( c3d::LightingModelID lightingModelId
+		, c3ds::LightingModelDesc const & desc
 		, sdw::ShaderWriter & writer
-		, c3d::Materials const & materials
-		, c3d::Utils & utils
-		, c3d::BRDFHelpers & brdfHelpers
-		, c3d::Shadow & shadowModel
-		, c3d::Lights & lights
+		, c3ds::Materials const & materials
+		, c3ds::Utils & utils
+		, c3ds::BRDFHelpers & brdfHelpers
+		, c3ds::Shadow & shadowModel
+		, c3ds::Lights & lights
 		, bool enableVolumetric )
 	{
-		return castor::makeUniqueDerived< c3d::LightingModel, ToonPhongLightingModel >( lightingModelId
+		return c3d::makeUniqueDerived< c3ds::LightingModel, ToonPhongLightingModel >( lightingModelId
 			, writer
 			, materials
 			, utils
 			, brdfHelpers
-			, c3d::LightingModelSpec{ ( desc.diffuse.create
+			, c3ds::LightingModelSpec{ ( desc.diffuse.create
 					? desc.diffuse.create( writer, brdfHelpers )
-					: castor3d::PhongPass::DefaultDiffuseBrdf.create( writer, brdfHelpers ) )
+					: c3d::PhongPass::DefaultDiffuseBrdf.create( writer, brdfHelpers ) )
 				, ( desc.specular.create
 					? desc.specular.create( writer, brdfHelpers )
-					: castor3d::PhongPass::DefaultSpecularBrdf.create( writer, brdfHelpers ) )
+					: c3d::PhongPass::DefaultSpecularBrdf.create( writer, brdfHelpers ) )
 				, ( desc.sheen.create
 					? desc.sheen.create( writer, brdfHelpers )
-					: castor3d::PhongPass::DefaultSheenBrdf.create( writer, brdfHelpers ) )
+					: c3d::PhongPass::DefaultSheenBrdf.create( writer, brdfHelpers ) )
 				, ( desc.clearcoat.create
 					? desc.clearcoat.create( writer, brdfHelpers )
-					: castor3d::PhongPass::DefaultClearcoatBrdf.create( writer, brdfHelpers ) )
+					: c3d::PhongPass::DefaultClearcoatBrdf.create( writer, brdfHelpers ) )
 				, ( desc.scattering.create
 					? desc.scattering.create( writer )
-					: castor3d::PhongPass::DefaultScatteringModel.create( writer ) ) }
+					: c3d::PhongPass::DefaultScatteringModel.create( writer ) ) }
 			, shadowModel
 			, lights
 			, enableVolumetric );
 	}
 
-	void ToonPhongLightingModel::doInitLightSpecifics( c3d::LightSurface const & lightSurface
-		, c3d::BlendComponents const & components )
+	void ToonPhongLightingModel::doInitLightSpecifics( c3ds::LightSurface const & lightSurface
+		, c3ds::BlendComponents const & components )
 	{
 		if ( components.hasMember( "smoothBand" ) )
 		{
@@ -143,44 +143,44 @@ namespace toon::shader
 		}
 		else
 		{
-			c3d::PhongLightingModel::doInitLightSpecifics( lightSurface, components );
+			c3ds::PhongLightingModel::doInitLightSpecifics( lightSurface, components );
 		}
 	}
 
-	c3d::DerivFloat ToonPhongLightingModel::doGetNdotL( c3d::LightSurface const & lightSurface
-		, c3d::BlendComponents const & components )
+	c3ds::DerivFloat ToonPhongLightingModel::doGetNdotL( c3ds::LightSurface const & lightSurface
+		, c3ds::BlendComponents const & components )
 	{
 		if ( components.hasMember( "smoothBand" ) )
 		{
 			return getNdotL( lightSurface, components );
 		}
 
-		return c3d::PhongLightingModel::doGetNdotL( lightSurface, components );
+		return c3ds::PhongLightingModel::doGetNdotL( lightSurface, components );
 	}
 
-	c3d::DerivFloat ToonPhongLightingModel::doGetNdotH( c3d::LightSurface const & lightSurface
-		, c3d::BlendComponents const & components )
+	c3ds::DerivFloat ToonPhongLightingModel::doGetNdotH( c3ds::LightSurface const & lightSurface
+		, c3ds::BlendComponents const & components )
 	{
 		if ( components.hasMember( "smoothBand" ) )
 		{
 			return getNdotH( lightSurface, components );
 		}
 
-		return c3d::PhongLightingModel::doGetNdotH( lightSurface, components );
+		return c3ds::PhongLightingModel::doGetNdotH( lightSurface, components );
 	}
 
 	//*********************************************************************************************
 
-	ToonPbrLightingModel::ToonPbrLightingModel( castor3d::LightingModelID lightingModelId
+	ToonPbrLightingModel::ToonPbrLightingModel( c3d::LightingModelID lightingModelId
 		, sdw::ShaderWriter & writer
-		, c3d::Materials const & materials
-		, c3d::Utils & utils
-		, c3d::BRDFHelpers & brdfHelpers
-		, c3d::LightingModelSpec spec
-		, c3d::Shadow & shadowModel
-		, c3d::Lights & lights
+		, c3ds::Materials const & materials
+		, c3ds::Utils & utils
+		, c3ds::BRDFHelpers & brdfHelpers
+		, c3ds::LightingModelSpec spec
+		, c3ds::Shadow & shadowModel
+		, c3ds::Lights & lights
 		, bool enableVolumetric )
-		: c3d::PbrLightingModel{ lightingModelId
+		: c3ds::PbrLightingModel{ lightingModelId
 			, writer
 			, materials
 			, utils
@@ -193,48 +193,48 @@ namespace toon::shader
 		m_prefix = cuT( "toon_pbr_" );
 	}
 
-	const castor::String ToonPbrLightingModel::getName()
+	const c3d::String ToonPbrLightingModel::getName()
 	{
 		return cuT( "toon.pbr" );
 	}
 
-	c3d::LightingModelPtr ToonPbrLightingModel::create( castor3d::LightingModelID lightingModelId
-		, c3d::LightingModelDesc const & desc
+	c3ds::LightingModelPtr ToonPbrLightingModel::create( c3d::LightingModelID lightingModelId
+		, c3ds::LightingModelDesc const & desc
 		, sdw::ShaderWriter & writer
-		, c3d::Materials const & materials
-		, c3d::Utils & utils
-		, c3d::BRDFHelpers & brdfHelpers
-		, c3d::Shadow & shadowModel
-		, c3d::Lights & lights
+		, c3ds::Materials const & materials
+		, c3ds::Utils & utils
+		, c3ds::BRDFHelpers & brdfHelpers
+		, c3ds::Shadow & shadowModel
+		, c3ds::Lights & lights
 		, bool enableVolumetric )
 	{
-		return castor::makeUniqueDerived< c3d::LightingModel, ToonPbrLightingModel >( lightingModelId
+		return c3d::makeUniqueDerived< c3ds::LightingModel, ToonPbrLightingModel >( lightingModelId
 			, writer
 			, materials
 			, utils
 			, brdfHelpers
-			, c3d::LightingModelSpec{ ( desc.diffuse.create
+			, c3ds::LightingModelSpec{ ( desc.diffuse.create
 					? desc.diffuse.create( writer, brdfHelpers )
-					: castor3d::PbrPass::DefaultDiffuseBrdf.create( writer, brdfHelpers ) )
+					: c3d::PbrPass::DefaultDiffuseBrdf.create( writer, brdfHelpers ) )
 				, ( desc.specular.create
 					? desc.specular.create( writer, brdfHelpers )
-					: castor3d::PbrPass::DefaultSpecularBrdf.create( writer, brdfHelpers ) )
+					: c3d::PbrPass::DefaultSpecularBrdf.create( writer, brdfHelpers ) )
 				, ( desc.sheen.create
 					? desc.sheen.create( writer, brdfHelpers )
-					: castor3d::PbrPass::DefaultSheenBrdf.create( writer, brdfHelpers ) )
+					: c3d::PbrPass::DefaultSheenBrdf.create( writer, brdfHelpers ) )
 				, ( desc.clearcoat.create
 					? desc.clearcoat.create( writer, brdfHelpers )
-					: castor3d::PbrPass::DefaultClearcoatBrdf.create( writer, brdfHelpers ) )
+					: c3d::PbrPass::DefaultClearcoatBrdf.create( writer, brdfHelpers ) )
 				, ( desc.scattering.create
 					? desc.scattering.create( writer )
-					: castor3d::PbrPass::DefaultScatteringModel.create( writer ) )}
+					: c3d::PbrPass::DefaultScatteringModel.create( writer ) )}
 			, shadowModel
 			, lights
 			, enableVolumetric );
 	}
 
-	void ToonPbrLightingModel::doInitLightSpecifics( c3d::LightSurface const & lightSurface
-		, c3d::BlendComponents const & components )
+	void ToonPbrLightingModel::doInitLightSpecifics( c3ds::LightSurface const & lightSurface
+		, c3ds::BlendComponents const & components )
 	{
 		if ( components.hasMember( "smoothBand" ) )
 		{
@@ -242,30 +242,30 @@ namespace toon::shader
 		}
 		else
 		{
-			c3d::PbrLightingModel::doInitLightSpecifics( lightSurface, components );
+			c3ds::PbrLightingModel::doInitLightSpecifics( lightSurface, components );
 		}
 	}
 
-	c3d::DerivFloat ToonPbrLightingModel::doGetNdotL( c3d::LightSurface const & lightSurface
-		, c3d::BlendComponents const & components )
+	c3ds::DerivFloat ToonPbrLightingModel::doGetNdotL( c3ds::LightSurface const & lightSurface
+		, c3ds::BlendComponents const & components )
 	{
 		if ( components.hasMember( "smoothBand" ) )
 		{
 			return getNdotL( lightSurface, components );
 		}
 
-		return c3d::PbrLightingModel::doGetNdotL( lightSurface, components );
+		return c3ds::PbrLightingModel::doGetNdotL( lightSurface, components );
 	}
 
-	c3d::DerivFloat ToonPbrLightingModel::doGetNdotH( c3d::LightSurface const & lightSurface
-		, c3d::BlendComponents const & components )
+	c3ds::DerivFloat ToonPbrLightingModel::doGetNdotH( c3ds::LightSurface const & lightSurface
+		, c3ds::BlendComponents const & components )
 	{
 		if ( components.hasMember( "smoothBand" ) )
 		{
 			return getNdotH( lightSurface, components );
 		}
 
-		return c3d::PbrLightingModel::doGetNdotH( lightSurface, components );
+		return c3ds::PbrLightingModel::doGetNdotH( lightSurface, components );
 	}
 
 	//*********************************************************************************************

@@ -10,7 +10,7 @@
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//*****************************************************************************************
 
@@ -18,7 +18,7 @@ namespace castor3d::shader
 	BillboardSurfaceT< FlagT >::BillboardSurfaceT( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: StructInstance{ writer, castor::move( expr ), enabled }
+		: StructInstance{ writer, c3d::move( expr ), enabled }
 		, position{ this->getMember< sdw::Vec4 >( "position" ) }
 		, texture0{ this->getMember< sdw::Vec2 >( "texture0", true ) }
 		, center{ this->getMember< sdw::Vec3 >( "center" ) }
@@ -76,7 +76,7 @@ namespace castor3d::shader
 	SurfaceBaseT< Position3T, Position4T, NormalT >::SurfaceBaseT( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: StructInstance{ writer, castor::move( expr ), enabled }
+		: StructInstance{ writer, c3d::move( expr ), enabled }
 		, clipPosition{ this->template getMember< sdw::Vec3 >( "clipPosition", true ) }
 		, viewPosition{ this->template getMember< Position4T >( "viewPosition", true ) }
 		, worldPosition{ this->template getMember< Position4T >( "worldPosition", true ) }
@@ -203,7 +203,7 @@ namespace castor3d::shader
 	SurfaceT< Position3T, Position4T, NormalT >::SurfaceT( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: SurfaceBaseT< Position3T, Position4T, NormalT >{ writer, castor::move( expr ), enabled }
+		: SurfaceBaseT< Position3T, Position4T, NormalT >{ writer, c3d::move( expr ), enabled }
 		, texCoord{ this->template getMember< sdw::Vec3 >( "texture0" ) }
 	{
 	}
@@ -232,10 +232,10 @@ namespace castor3d::shader
 		, Position3T world
 		, NormalT normal
 		, sdw::Vec3 coord )
-		: SurfaceT{ castor::move( clip )
+		: SurfaceT{ c3d::move( clip )
 			, SurfaceBaseT< Position3T, Position4T, NormalT >::makePosition4( view )
 			, SurfaceBaseT< Position3T, Position4T, NormalT >::makePosition4( world )
-			, castor::move( normal )
+			, c3d::move( normal )
 			, coord }
 	{
 	}
@@ -245,10 +245,10 @@ namespace castor3d::shader
 		, Position4T view
 		, Position4T world
 		, NormalT normal )
-		: SurfaceT{ castor::move( clip )
-			, castor::move( view )
-			, castor::move( world )
-			, castor::move( normal )
+		: SurfaceT{ c3d::move( clip )
+			, c3d::move( view )
+			, c3d::move( world )
+			, c3d::move( normal )
 			, vec3( 0.0_f ) }
 	{
 	}
@@ -258,10 +258,10 @@ namespace castor3d::shader
 		, Position3T view
 		, Position3T world
 		, NormalT normal )
-		: SurfaceT{ castor::move( clip )
-			, castor::move( view )
-			, castor::move( world )
-			, castor::move( normal )
+		: SurfaceT{ c3d::move( clip )
+			, c3d::move( view )
+			, c3d::move( world )
+			, c3d::move( normal )
 			, vec3( 0.0_f ) }
 	{
 	}
@@ -272,7 +272,7 @@ namespace castor3d::shader
 		: SurfaceT{ vec3( 0.0_f )
 			, SurfaceBaseT< Position3T, Position4T, NormalT >::makePosition4( 0.0_f )
 			, SurfaceBaseT< Position3T, Position4T, NormalT >::makePosition4( world )
-			, castor::move( normal )
+			, c3d::move( normal )
 			, vec3( 0.0_f ) }
 	{
 	}
@@ -344,7 +344,7 @@ namespace castor3d::shader
 	RasterizerSurfaceBaseT< Position3T, Position4T, Normal3T, Normal4T >::RasterizerSurfaceBaseT( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: SurfaceBaseT< Position3T, Position4T, Normal3T >{ writer, castor::move( expr ), enabled }
+		: SurfaceBaseT< Position3T, Position4T, Normal3T >{ writer, c3d::move( expr ), enabled }
 		, curPosition{ this->template getMember< Position4T >( "curPosition", true ) }
 		, prvPosition{ this->template getMember< Position4T >( "prvPosition", true ) }
 		, tangentSpaceFragPosition{ this->template getMember< Position3T >( "tangentSpaceFragPosition", true ) }
@@ -706,7 +706,7 @@ namespace castor3d::shader
 	RasterizerSurfaceT< Position3T, Position4T, Normal3T, Normal4T, TexcoordT, FlagT >::RasterizerSurfaceT( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: RasterizerSurfaceBaseT< Position3T, Position4T, Normal3T, Normal4T >{ writer, castor::move( expr ), enabled }
+		: RasterizerSurfaceBaseT< Position3T, Position4T, Normal3T, Normal4T >{ writer, c3d::move( expr ), enabled }
 		, texture0{ this->template getMember< TexcoordT >( "texture0", true ) }
 		, texture1{ this->template getMember< TexcoordT >( "texture1", true ) }
 		, texture2{ this->template getMember< TexcoordT >( "texture2", true ) }
@@ -842,7 +842,7 @@ namespace castor3d::shader
 	VoxelSurfaceT< FlagT >::VoxelSurfaceT( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: SurfaceBase{ writer, castor::move( expr ), enabled }
+		: SurfaceBase{ writer, c3d::move( expr ), enabled }
 		, texture0{ getMember< sdw::Vec3 >( "texture0", true ) }
 		, texture1{ getMember< sdw::Vec3 >( "texture1", true ) }
 		, texture2{ getMember< sdw::Vec3 >( "texture2", true ) }

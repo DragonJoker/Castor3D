@@ -27,7 +27,7 @@ namespace draw_edges
 {
 	namespace px
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
 		enum Idx : uint32_t
 		{
@@ -42,19 +42,19 @@ namespace draw_edges
 			eSpecifics,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
-			, castor3d::Extent3D const & extent )
+		static c3d::ShaderPtr getProgram( c3d::Engine & engine
+			, c3d::Extent3D const & extent )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
-			castor3d::shader::Utils utils{ writer };
-			castor3d::shader::PassShaders passShaders{ engine.getPassComponentsRegister()
-				, castor3d::TextureCombine{}
-				, castor3d::ComponentModeFlag::eNone
+			c3d::shader::Utils utils{ writer };
+			c3d::shader::PassShaders passShaders{ engine.getPassComponentsRegister()
+				, c3d::TextureCombine{}
+				, c3d::ComponentModeFlag::eNone
 				, utils };
 
 			auto specifics = uint32_t( eSpecifics );
-			castor3d::shader::Materials materials{ engine, writer, passShaders, eMaterials, 0u, specifics };
+			c3d::shader::Materials materials{ engine, writer, passShaders, eMaterials, 0u, specifics };
 			C3D_ModelsData( writer, eModels, 0u );
 			auto c3d_depthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthObj", eDepthObj, 0u );
 			auto c3d_source = writer.declCombinedImg< FImg2DRgba32 >( "c3d_source", eSource, 0u );
@@ -98,15 +98,15 @@ namespace draw_edges
 				, sdw::InIVec2{ writer, "texCoord" }
 				, sdw::InInt{ writer, "width" } );
 
-			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
-				, sdw::VertexOutT< c3d::Uv2FT > out )
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position().xy(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
+				, sdw::FragmentOutT< c3ds::Colour4FT > out )
 				{
 					auto colour = writer.declLocale( "colour"
 						, c3d_source.sample( in.uv() ) );
@@ -162,23 +162,23 @@ namespace draw_edges
 
 	//*********************************************************************************************
 
-	const castor::MbString PostEffect::Name = "Draw Edges PostEffect";
-	const castor::String PostEffect::Type = cuT( "draw_edges" );
-	const castor::String PostEffect::NormalDepthWidth = cuT( "normalDepthWidth" );
-	const castor::String PostEffect::ObjectWidth = cuT( "objectWidth" );
+	const c3d::MbString PostEffect::Name = "Draw Edges PostEffect";
+	const c3d::String PostEffect::Type = cuT( "draw_edges" );
+	const c3d::String PostEffect::NormalDepthWidth = cuT( "normalDepthWidth" );
+	const c3d::String PostEffect::ObjectWidth = cuT( "objectWidth" );
 
-	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
-		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & parameters )
-		: castor3d::PostEffect{ PostEffect::Type
+	PostEffect::PostEffect( c3d::RenderTarget & renderTarget
+		, c3d::RenderSystem & renderSystem
+		, c3d::Parameters const & parameters )
+		: c3d::PostEffect{ PostEffect::Type
 			, cuT( "DrawEdges" )
-			, castor::makeString( PostEffect::Name )
+			, c3d::makeString( PostEffect::Name )
 			, renderTarget
 			, renderSystem
 			, parameters
 			, 1u }
 		, m_shader{ cuT( "DECombine" ), px::getProgram( *renderTarget.getEngine()
-			, castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() ) ) }
+			, c3d::getSafeBandedExtent3D( m_renderTarget.getSize() ) ) }
 		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 		, m_ubo{ renderSystem.getRenderDevice() }
 	{
@@ -189,16 +189,16 @@ namespace draw_edges
 	{
 	}
 
-	castor3d::PostEffectUPtr PostEffect::create( castor3d::RenderTarget & renderTarget
-		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & params )
+	c3d::PostEffectUPtr PostEffect::create( c3d::RenderTarget & renderTarget
+		, c3d::RenderSystem & renderSystem
+		, c3d::Parameters const & params )
 	{
-		return castor::makeUniqueDerived< castor3d::PostEffect, PostEffect >( renderTarget
+		return c3d::makeUniqueDerived< c3d::PostEffect, PostEffect >( renderTarget
 			, renderSystem
 			, params );
 	}
 
-	void PostEffect::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void PostEffect::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		if ( m_depthNormal )
 		{
@@ -217,24 +217,24 @@ namespace draw_edges
 			, m_config.objectWidth );
 	}
 
-	void PostEffect::setParameters( castor3d::Parameters parameters )
+	void PostEffect::setParameters( c3d::Parameters parameters )
 	{
-		castor::String param;
+		c3d::String param;
 
 		if ( parameters.get( NormalDepthWidth, param ) )
 		{
-			m_config.normalDepthWidth = castor::string::toInt( param );
+			m_config.normalDepthWidth = c3d::string::toInt( param );
 		}
 
 		if ( parameters.get( ObjectWidth, param ) )
 		{
-			m_config.objectWidth = castor::string::toInt( param );
+			m_config.objectWidth = c3d::string::toInt( param );
 		}
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
-		, castor3d::Texture const & source
-		, castor3d::Texture const & target
+	bool PostEffect::doInitialise( c3d::RenderDevice const & device
+		, c3d::Texture const & source
+		, c3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
 		auto & engine = *device.renderSystem.getEngine();
@@ -245,7 +245,7 @@ namespace draw_edges
 		auto & depthRange = technique.getDepthRange();
 		auto previous = &previousPass;
 
-		m_depthNormal = castor::make_unique< DepthNormalEdgeDetection >( m_graph
+		m_depthNormal = c3d::makeRawUnique< DepthNormalEdgeDetection >( m_graph
 			, crg::FramePassArray{ previous, &m_renderTarget.getTechnique().getDepthRangePass() }
 			, m_renderTarget
 			, device
@@ -254,7 +254,7 @@ namespace draw_edges
 			, nmlOcc
 			, depthRange
 			, &isEnabled() );
-		m_objectID = castor::make_unique< ObjectIDEdgeDetection >( m_graph
+		m_objectID = c3d::makeRawUnique< ObjectIDEdgeDetection >( m_graph
 			, *previous
 			, m_renderTarget
 			, device
@@ -263,7 +263,7 @@ namespace draw_edges
 			, &isEnabled() );
 		previous = &m_objectID->getPass();
 
-		auto extent = castor3d::makeExtent2D( target.getExtent() );
+		auto extent = c3d::makeExtent2D( target.getExtent() );
 		auto & pass = m_graph.createPass( "Combine"
 			, [this, &device, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -280,7 +280,7 @@ namespace draw_edges
 						, context
 						, graph
 						, crg::ru::Config{ 2u } );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -306,13 +306,13 @@ namespace draw_edges
 		return true;
 	}
 
-	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
+	void PostEffect::doCleanup( c3d::RenderDevice const & device )
 	{
 		m_objectID.reset();
 		m_depthNormal.reset();
 	}
 
-	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
+	void PostEffect::doCpuUpdate( c3d::CpuUpdater & updater )
 	{
 		m_ubo.cpuUpdate( m_config.normalDepthWidth
 			, m_config.objectWidth );
@@ -320,12 +320,12 @@ namespace draw_edges
 		technique.setNeedsDepthRange( isEnabled() );
 	}
 
-	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )
+	bool PostEffect::doWriteInto( c3d::StringStream & file, c3d::String const & tabs )
 	{
 		file << ( cuT( "\n" ) + tabs + Type + cuT( "\n" ) );
 		file << ( tabs + cuT( "{\n" ) );
-		file << ( tabs + cuT( "\t" ) + NormalDepthWidth + cuT( " " ) + castor::string::toString( m_config.normalDepthWidth ) + cuT( "\n" ) );
-		file << ( tabs + cuT( "\t" ) + ObjectWidth + cuT( " " ) + castor::string::toString( m_config.objectWidth ) + cuT( "\n" ) );
+		file << ( tabs + cuT( "\t" ) + NormalDepthWidth + cuT( " " ) + c3d::string::toString( m_config.normalDepthWidth ) + cuT( "\n" ) );
+		file << ( tabs + cuT( "\t" ) + ObjectWidth + cuT( " " ) + c3d::string::toString( m_config.objectWidth ) + cuT( "\n" ) );
 		file << ( tabs + cuT( "}\n" ) );
 		return true;
 	}

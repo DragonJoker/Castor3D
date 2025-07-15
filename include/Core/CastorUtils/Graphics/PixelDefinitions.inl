@@ -19,7 +19,7 @@
 #	undef min
 #endif
 
-namespace castor
+namespace c3d
 {
 	namespace details
 	{
@@ -710,8 +710,8 @@ namespace castor
 			}
 		}
 		static void convert( PxBufferConvertOptions const * options
-			, castor::Size const & srcDimensions
-			, castor::Size const & dstDimensions
+			, c3d::Size const & srcDimensions
+			, c3d::Size const & dstDimensions
 			, uint8_t const *& srcBuffer
 			, uint32_t srcSize
 			, PixelFormat dstFormat

@@ -9,27 +9,27 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::ExpandablePanelCtrl >
-		: public TextWriterT< castor3d::ExpandablePanelCtrl >
+	class TextWriter< ExpandablePanelCtrl >
+		: public TextWriterT< ExpandablePanelCtrl >
 	{
 	public:
 		explicit TextWriter( String const & tabs );
-		bool operator()( castor3d::ExpandablePanelCtrl const & overlay
-			, castor::StringStream & file )override;
+		bool operator()( ExpandablePanelCtrl const & overlay
+			, StringStream & file )override;
 	};
 
 	template<>
-	class TextWriter< castor3d::ExpandablePanelStyle >
-		: public TextWriterT< castor3d::ExpandablePanelStyle >
+	class TextWriter< ExpandablePanelStyle >
+		: public TextWriterT< ExpandablePanelStyle >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, String const & fontName );
-		bool operator()( castor3d::ExpandablePanelStyle const & overlay
-			, castor::StringStream & file )override;
+		bool operator()( ExpandablePanelStyle const & overlay
+			, StringStream & file )override;
 
 	private:
 		String m_fontName;

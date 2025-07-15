@@ -1,4 +1,4 @@
-namespace castor
+namespace c3d
 {
 	template< typename T >
 	TextFile & operator<<( TextFile & file, T const & toWrite )

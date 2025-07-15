@@ -29,7 +29,7 @@ namespace castortd
 			if ( !engine.isCleaned() )
 			{
 				game.update();
-				engine.postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+				engine.postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 					, [&game]()
 					{
 						doUpdate( game );
@@ -63,13 +63,13 @@ namespace castortd
 		auto & engine = *wxGetApp().getCastor();
 		auto window = GuiCommon::loadScene( engine
 			, cuT( "CastorDvpTD" )
-			, castor::File::getExecutableDirectory().getPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "Data.zip" )
+			, c3d::File::getExecutableDirectory().getPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "Data.zip" )
 			, nullptr );
-		castor::Logger::logInfo( cuT( "Scene file read" ) );
+		c3d::Logger::logInfo( cuT( "Scene file read" ) );
 
 		if ( auto target = window.renderTarget )
 		{
-			m_game = castor::make_unique< Game >( *target->getScene() );
+			m_game = c3d::makeRawUnique< Game >( *target->getScene() );
 			m_panel = wxMakeWindowPtr< RenderPanel >( this, main::MainFrameSize, *m_game );
 			m_panel->updateRenderWindow( window );
 			auto & renderWindow = m_panel->getRenderWindow();
@@ -98,7 +98,7 @@ namespace castortd
 			if ( engine.isThreaded() )
 			{
 				engine.getRenderLoop().beginRendering();
-				engine.postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+				engine.postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 					, [this]()
 					{
 						main::doUpdate( *m_game );
@@ -110,11 +110,11 @@ namespace castortd
 				m_timer->Start( 1000 / int( engine.getRenderLoop().getWantedFps() ), true );
 			}
 
-			castor::Logger::logInfo( cuT( "Initialised render panel." ) );
+			c3d::Logger::logInfo( cuT( "Initialised render panel." ) );
 		}
 		else
 		{
-			castor::Logger::logWarning( cuT( "No render target found in the scene" ) );
+			c3d::Logger::logWarning( cuT( "No render target found in the scene" ) );
 		}
 	}
 

@@ -15,7 +15,7 @@ See LICENSE file in root folder
 
 #include <RenderGraph/RunnablePass.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ComputeDepthRange
 		: public crg::RunnablePass
@@ -46,7 +46,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, bool const & enabled );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 

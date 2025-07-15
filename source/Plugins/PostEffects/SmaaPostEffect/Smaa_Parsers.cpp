@@ -18,7 +18,7 @@ namespace smaa
 	{
 		struct SmaaContext
 		{
-			castor3d::RenderTargetRPtr renderTarget{};
+			c3d::RenderTargetRPtr renderTarget{};
 			Preset preset{};
 			SmaaConfig::Data data{};
 		};
@@ -29,7 +29,7 @@ namespace smaa
 			eRoot = CU_MakeSectionName( 'S', 'M', 'A', 'A' ),
 		};
 
-		static CU_ImplementAttributeParserNewBlock( parserSmaa, castor3d::TargetContext, SmaaContext )
+		static CU_ImplementAttributeParserNewBlock( parserSmaa, c3d::TargetContext, SmaaContext )
 		{
 			newBlockContext->renderTarget = blockContext->renderTarget;
 		}
@@ -249,7 +249,7 @@ namespace smaa
 
 		static CU_ImplementAttributeParserBlock( parserSmaaEnd, SmaaContext )
 		{
-			castor3d::Parameters parameters;
+			c3d::Parameters parameters;
 			parameters.add( cuT( "mode" ), getName( blockContext->data.mode ) );
 			parameters.add( cuT( "preset" ), getName( blockContext->preset ) );
 			parameters.add( cuT( "edgeDetection" ), getName( blockContext->data.edgeDetection ) );
@@ -282,16 +282,16 @@ namespace smaa
 		CU_EndAttributePop()
 	}
 
-	castor::AttributeParsers createParsers()
+	c3d::AttributeParsers createParsers()
 	{
-		static castor::UInt32StrMap modes
+		static c3d::UInt32StrMap modes
 		{
 			{ cuT( "1X" ), uint32_t( smaa::Mode::e1X ) },
 			{ cuT( "T2X" ), uint32_t( smaa::Mode::eT2X ) },
 			{ cuT( "S2X" ), uint32_t( smaa::Mode::eS2X ) },
 			{ cuT( "4X" ), uint32_t( smaa::Mode::e4X ) }
 		};
-		static castor::UInt32StrMap presets
+		static c3d::UInt32StrMap presets
 		{
 			{ cuT( "low" ), uint32_t( smaa::Preset::eLow ) },
 			{ cuT( "medium" ), uint32_t( smaa::Preset::eMedium ) },
@@ -299,16 +299,16 @@ namespace smaa
 			{ cuT( "ultra" ), uint32_t( smaa::Preset::eUltra ) },
 			{ cuT( "custom" ), uint32_t( smaa::Preset::eCustom ) }
 		};
-		static castor::UInt32StrMap detections
+		static c3d::UInt32StrMap detections
 		{
 			{ cuT( "depth" ), uint32_t( smaa::EdgeDetectionType::eDepth ) },
 			{ cuT( "colour" ), uint32_t( smaa::EdgeDetectionType::eColour ) },
 			{ cuT( "luma" ), uint32_t( smaa::EdgeDetectionType::eLuma ) }
 		};
-		castor::AttributeParsers result;
+		c3d::AttributeParsers result;
 
 		addParserT( result
-			, castor3d::CSCNSection::eRenderTarget
+			, c3d::CSCNSection::eRenderTarget
 			, parse::SmaaSection::eRoot
 			, cuT( "smaa" )
 			, &parse::parserSmaa );
@@ -316,92 +316,92 @@ namespace smaa
 			, parse::SmaaSection::eRoot
 			, cuT( "mode" )
 			, &parse::parserMode
-			, { castor::makeParameter< castor::ParameterType::eCheckedText >( cuT( "SMAAMode" ), modes ) } );
+			, { c3d::makeParameter< c3d::ParameterType::eCheckedText >( cuT( "SMAAMode" ), modes ) } );
 		addParserT( result
 			, parse::SmaaSection::eRoot
 			, cuT( "preset" )
 			, &parse::parserPreset
-			, { castor::makeParameter< castor::ParameterType::eCheckedText >( cuT( "SMAAPreset" ), presets ) } );
+			, { c3d::makeParameter< c3d::ParameterType::eCheckedText >( cuT( "SMAAPreset" ), presets ) } );
 		addParserT( result
 			, parse::SmaaSection::eRoot
 			, cuT( "edgeDetection" )
 			, &parse::parserEdgeDetection
-			, { castor::makeParameter< castor::ParameterType::eCheckedText >( cuT( "SMAADepthDetection" ), detections ) } );
+			, { c3d::makeParameter< c3d::ParameterType::eCheckedText >( cuT( "SMAADepthDetection" ), detections ) } );
 		addParserT( result
 			, parse::SmaaSection::eRoot
 			, cuT( "disableDiagonalDetection" )
 			, &parse::parserDisableDiagonalDetection
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eBool >() } );
 		addParserT( result
 			, parse::SmaaSection::eRoot
 			, cuT( "disableCornerDetection" )
 			, &parse::parserDisableCornerDetection
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eBool >() } );
 		addParserT( result
 			, parse::SmaaSection::eRoot
 			, cuT( "threshold" )
 			, &parse::parserThreshold
-			, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 0.0f, 0.5f ) ) } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >( c3d::makeRange( 0.0f, 0.5f ) ) } );
 		addParserT( result
 			, parse::SmaaSection::eRoot
 			, cuT( "maxSearchSteps" )
 			, &parse::parserMaxSearchSteps
-			, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 112 ) ) } );
+			, { c3d::makeParameter< c3d::ParameterType::eInt32 >( c3d::makeRange( 0, 112 ) ) } );
 		addParserT( result
 			, parse::SmaaSection::eRoot
 			, cuT( "maxSearchStepsDiag" )
 			, &parse::parserMaxSearchStepsDiag
-			, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 20 ) ) } );
+			, { c3d::makeParameter< c3d::ParameterType::eInt32 >( c3d::makeRange( 0, 20 ) ) } );
 		addParserT( result
 			, parse::SmaaSection::eRoot
 			, cuT( "cornerRounding" )
 			, &parse::parserCornerRounding
-			, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 100 ) ) } );
+			, { c3d::makeParameter< c3d::ParameterType::eInt32 >( c3d::makeRange( 0, 100 ) ) } );
 		addParserT( result
 			, parse::SmaaSection::eRoot
 			, cuT( "enablePredication" )
 			, &parse::parserPredication
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eBool >() } );
 		addParserT( result
 			, parse::SmaaSection::eRoot
 			, cuT( "enableReprojection" )
 			, &parse::parserReprojection
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eBool >() } );
 		addParserT( result
 			, parse::SmaaSection::eRoot
 			, cuT( "predicationScale" )
 			, &parse::parserPredicationScale
-			, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 1.0f, 5.0f ) ) } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >( c3d::makeRange( 1.0f, 5.0f ) ) } );
 		addParserT( result
 			, parse::SmaaSection::eRoot
 			, cuT( "predicationStrength" )
 			, &parse::parserPredicationStrength
-			, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 0.0f, 1.0f ) ) } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >( c3d::makeRange( 0.0f, 1.0f ) ) } );
 		addParserT( result
 			, parse::SmaaSection::eRoot
 			, cuT( "reprojectionWeightScale" )
 			, &parse::parserReprojectionWeightScale
-			, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 0.0f, 80.0f ) ) } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >( c3d::makeRange( 0.0f, 80.0f ) ) } );
 		addParserT( result
 			, parse::SmaaSection::eRoot
 			, cuT( "localContrastAdaptationFactor" )
 			, &parse::parserLocalContrastAdaptationFactor
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::SmaaSection::eRoot
 			, cuT( "predicationThreshold" )
 			, &parse::parserPredicationThreshold
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::SmaaSection::eRoot
-			, castor3d::CSCNSection::eRenderTarget
+			, c3d::CSCNSection::eRenderTarget
 			, cuT( "}" )
 			, &parse::parserSmaaEnd );
 
 		return result;
 	}
 
-	castor::StrUInt32Map createSections()
+	c3d::StrUInt32Map createSections()
 	{
 		return
 		{

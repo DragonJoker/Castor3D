@@ -3,15 +3,15 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-CU_ImplementSmartPtr( castor3d, SceneNodeCache )
+CU_ImplementSmartPtr( c3d, SceneNodeCache )
 
-namespace castor3d
+namespace c3d
 {
-	const castor::String ObjectCacheTraitsT< SceneNode, castor::String >::Name = cuT( "SceneNode" );
+	const String ObjectCacheTraitsT< SceneNode, String >::Name = cuT( "SceneNode" );
 
 	//*********************************************************************************************
 
-	ObjectCacheT< SceneNode, castor::String, SceneNodeCacheTraits >::ObjectCacheT( Scene & scene
+	ObjectCacheT< SceneNode, String, SceneNodeCacheTraits >::ObjectCacheT( Scene & scene
 		, ElementInitialiserT initialise
 		, ElementCleanerT clean
 		, ElementMergerT merge
@@ -21,37 +21,37 @@ namespace castor3d
 			, nullptr
 			, nullptr
 			, nullptr
-			, castor::move( initialise )
-			, castor::move( clean )
-			, castor::move( merge )
-			, castor::move( attach )
-			, castor::move( detach ) }
+			, c3d::move( initialise )
+			, c3d::move( clean )
+			, c3d::move( merge )
+			, c3d::move( attach )
+			, c3d::move( detach ) }
 	{
-		auto node = castor::makeUnique< SceneNode >( Scene::RootNode, scene );
+		auto node = makeUnique< SceneNode >( Scene::RootNode, scene );
 		m_rootNode = add( Scene::RootNode, node, false );
-		node = castor::makeUnique< SceneNode >( Scene::ObjectRootNode, scene );
+		node = makeUnique< SceneNode >( Scene::ObjectRootNode, scene );
 		m_rootObjectNode = add( Scene::ObjectRootNode, node, false );
-		node = castor::makeUnique< SceneNode >( Scene::CameraRootNode, scene );
+		node = makeUnique< SceneNode >( Scene::CameraRootNode, scene );
 		m_rootCameraNode = add( Scene::CameraRootNode, node, false );
 
 		m_rootCameraNode->attachTo( *m_rootNode );
 		m_rootObjectNode->attachTo( *m_rootNode );
 	}
 
-	SceneNodeCache::ElementObsT ObjectCacheT< SceneNode, castor::String, SceneNodeCacheTraits >::add( ElementKeyT const & name
+	SceneNodeCache::ElementObsT ObjectCacheT< SceneNode, String, SceneNodeCacheTraits >::add( ElementKeyT const & name
 		, ElementPtrT & element
 		, bool initialise )
 	{
-		auto lock( castor::makeUniqueLock( *this ) );
+		auto lock( makeUniqueLock( *this ) );
 		auto result = this->doAddNoLock( name
 			, element
 			, initialise );
 		return result;
 	}
 
-	SceneNodeCache::ElementObsT ObjectCacheT< SceneNode, castor::String, SceneNodeCacheTraits >::addNew( ElementKeyT const & name )
+	SceneNodeCache::ElementObsT ObjectCacheT< SceneNode, String, SceneNodeCacheTraits >::addNew( ElementKeyT const & name )
 	{
-		auto lock( castor::makeUniqueLock( *this ) );
+		auto lock( makeUniqueLock( *this ) );
 		auto result = this->doAddNewNoLockT( name
 			, *getScene() );
 		return result;

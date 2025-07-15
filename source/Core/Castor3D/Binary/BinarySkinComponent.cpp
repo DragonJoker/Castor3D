@@ -2,7 +2,7 @@
 
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
@@ -25,13 +25,13 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template<>
-	castor::String BinaryParserBase< SkinComponent >::Name = cuT( "SkinComponent" );
+	String BinaryParserBase< SkinComponent >::Name = cuT( "SkinComponent" );
 
 	bool BinaryParser< SkinComponent >::doParse( SkinComponent & obj )
 	{
 		bool result = true;
-		castor::String name;
-		castor::Vector< VertexBoneData > bones;
+		String name;
+		Vector< VertexBoneData > bones;
 		uint32_t count{ 0u };
 		uint32_t boneCount{ 0u };
 		BinaryChunk chunk{ doIsLittleEndian() };

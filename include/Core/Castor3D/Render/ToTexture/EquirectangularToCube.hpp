@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_EquirectangularToCube_H___
 #pragma once
 
-namespace castor3d
+namespace c3d
 {
 	class TextureLayout;
 	struct QueueData;

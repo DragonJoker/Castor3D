@@ -8,7 +8,7 @@
 
 #pragma GCC diagnostic ignored "-Wrestrict"
 
-namespace castor
+namespace c3d
 {
 	//*****************************************************************************************
 

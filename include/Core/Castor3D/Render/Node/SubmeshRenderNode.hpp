@@ -20,7 +20,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct SubmeshRenderNode
 	{
@@ -56,7 +56,7 @@ namespace castor3d
 		C3D_API ashes::DescriptorSet const & getMeshletDescriptorSet()const;
 		C3D_API GpuBufferOffsetT< MeshletCullData > const & getSourceMeshletsBounds()const;
 		C3D_API GpuBufferOffsetT< MeshletCullData > const & getFinalMeshletsBounds()const;
-		C3D_API GpuBufferOffsetT< castor::Point4f > const & getMorphTargets()const;
+		C3D_API GpuBufferOffsetT< Point4f > const & getMorphTargets()const;
 		C3D_API SceneNode & getSceneNode()const;
 		C3D_API SubmeshRenderData * getRenderData()const;
 		C3D_API bool isInstanced()const;

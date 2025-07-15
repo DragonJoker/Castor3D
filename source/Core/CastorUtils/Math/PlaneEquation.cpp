@@ -1,6 +1,6 @@
 #include "CastorUtils/Math/PlaneEquation.hpp"
 
-namespace castor
+namespace c3d
 {
 	PlaneEquation::PlaneEquation( Point3f const & p1
 		, Point3f const & p2

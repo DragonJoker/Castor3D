@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Graphics/PixelFormat.hpp"
 #include "CastorUtils/Math/Point.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< PixelFormat FT >
 	class Pixel

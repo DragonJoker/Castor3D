@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct TexturesComponent
 		: public PassComponent
@@ -44,7 +44,7 @@ namespace castor3d
 
 			PassComponentUPtr createComponent( Pass & pass )const override
 			{
-				return castor::makeUniqueDerived< PassComponent, TexturesComponent >( pass );
+				return makeUniqueDerived< PassComponent, TexturesComponent >( pass );
 			}
 
 			bool isComponentNeeded( TextureCombine const & textures
@@ -52,18 +52,18 @@ namespace castor3d
 
 			shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
-				return castor::make_unique< ComponentsShader >( *this );
+				return makeRawUnique< ComponentsShader >( *this );
 			}
 		};
 
 		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )
 		{
-			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
+			return makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
 		C3D_API explicit TexturesComponent( Pass & pass );
 
-		C3D_API static castor::String const TypeName;
+		C3D_API static String const TypeName;
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;

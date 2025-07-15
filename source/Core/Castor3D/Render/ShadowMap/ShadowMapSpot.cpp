@@ -31,16 +31,16 @@
 #include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/RunnablePasses/ImageCopy.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace shdmapspot
 	{
-		static castor::String getPassName( uint32_t index
+		static String getPassName( uint32_t index
 			, bool needsVsm
 			, bool needsRsm
 			, bool isStatic )
 		{
-			auto result = cuT( "SpotSM" ) + castor::string::toString( index );
+			auto result = cuT( "SpotSM" ) + string::toString( index );
 
 			if ( needsVsm )
 			{
@@ -70,7 +70,7 @@ namespace castor3d
 			, scene
 			, LightType::eSpot
 			, ImageCreateFlags::eNone
-			, castor::Size{ ShadowMapSpotTextureSize, ShadowMapSpotTextureSize }
+			, Size{ ShadowMapSpotTextureSize, ShadowMapSpotTextureSize }
 			, shader::getSpotShadowMapCount()
 			, shader::getSpotShadowMapCount() }
 		, m_blurIntermediate{ resources.getHandler().createImageId( crg::ImageData{ "SpotGB"
@@ -102,7 +102,7 @@ namespace castor3d
 	{
 		Engine const & engine = *m_scene.getEngine();
 		Viewport viewport{ engine };
-		viewport.resize( castor::Size{ ShadowMapSpotTextureSize, ShadowMapSpotTextureSize } );
+		viewport.resize( Size{ ShadowMapSpotTextureSize, ShadowMapSpotTextureSize } );
 		ShadowMapResult const & smResult = getShadowPassResult( isStatic );
 		auto & depth = smResult[SmTexture::eDepth];
 		auto & linear = smResult[SmTexture::eLinearDepth];
@@ -111,32 +111,32 @@ namespace castor3d
 		auto & position = smResult[SmTexture::ePosition];
 		auto & flux = smResult[SmTexture::eFlux];
 
-		auto debugName = castor::toUtf8( shdmapspot::getPassName( index, vsm, rsm, isStatic ) );
+		auto debugName = toUtf8( shdmapspot::getPassName( index, vsm, rsm, isStatic ) );
 		doRegisterGraphIO( graph, vsm, rsm, isStatic );
 
 		if ( m_passes[m_passesIndex].cameras.size() <= index )
 		{
-			m_passes[m_passesIndex].cameraUbos.push_back( castor::make_unique< CameraUbo >( m_device ) );
+			m_passes[m_passesIndex].cameraUbos.push_back( makeRawUnique< CameraUbo >( m_device ) );
 			m_passes[m_passesIndex].cameras.push_back( m_scene.createCamera( shdmapspot::getPassName( index, false, false, false )
 				, m_scene
 				, *m_scene.getCameraRootNode()
-				, castor::move( viewport ) ) );
+				, c3d::move( viewport ) ) );
 			CU_Require( m_passes[m_passesIndex].cameras.size() > index );
 		}
 
 		auto & group = graph.createPassGroup( debugName );
 		auto & camera = *m_passes[m_passesIndex].cameras[index];
 		auto & cameraUbo = *m_passes[m_passesIndex].cameraUbos[index];
-		passes.passes.emplace_back( castor::make_unique< ShadowMap::PassData >( nullptr ) );
+		passes.passes.emplace_back( makeRawUnique< ShadowMap::PassData >( nullptr ) );
 		auto & passData = *passes.passes.back();
-		passData.ownCuller = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( m_scene, camera, isStatic );
+		passData.ownCuller = makeUniqueDerived< SceneCuller, FrustumCuller >( m_scene, camera, isStatic );
 		passData.culler = passData.ownCuller.get();
 		auto & pass = group.createPass( "Nodes"
 			, [&passData, this, vsm, rsm, isStatic, &cameraUbo]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto res = castor::make_unique< ShadowMapPassSpot >( framePass
+				auto res = makeRawUnique< ShadowMapPassSpot >( framePass
 					, context
 					, runnableGraph
 					, m_device
@@ -147,7 +147,7 @@ namespace castor3d
 					, rsm
 					, isStatic );
 				passData.pass = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -204,7 +204,7 @@ namespace castor3d
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
 				{
-					auto result = castor::make_unique< crg::ImageCopy >( framePass
+					auto result = makeRawUnique< crg::ImageCopy >( framePass
 						, context
 						, runnableGraph
 						, getShadowPassResult( isStatic )[SmTexture::eDepth].getExtent()
@@ -212,7 +212,7 @@ namespace castor3d
 						, crg::ru::Config{}
 						, crg::ImageCopy::GetPassIndexCallback( [](){ return 0u; } )
 						, crg::ImageCopy::IsEnabledCallback( [this, index](){ return doEnableCopyStatic( index ); } ) );
-					getOwner()->registerTimer( castor::makeString( framePass.getFullName() )
+					getOwner()->registerTimer( makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );
@@ -243,7 +243,7 @@ namespace castor3d
 		}
 		else if ( vsm )
 		{
-			passes.blurs.push_back( castor::makeUnique< GaussianBlur >( group
+			passes.blurs.push_back( makeUnique< GaussianBlur >( group
 				, *previousPass
 				, m_device
 				, cuT( "ShadowMapSpot" )

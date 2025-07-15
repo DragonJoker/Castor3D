@@ -24,28 +24,28 @@ namespace test_launcher
 	struct FrameTimes
 	{
 		Clock::time_point start{};
-		castor3d::Parameters params{};
+		c3d::Parameters params{};
 	};
 
 	class MainFrame
 		: public wxFrame
 	{
 	public:
-		explicit MainFrame( castor3d::Engine & engine
+		explicit MainFrame( c3d::Engine & engine
 			, uint32_t maxFrameCount );
 
 		bool initialise();
 		bool loadScene( wxString const & fileName );
-		void saveFrame( castor::String const & suffix
+		void saveFrame( c3d::String const & suffix
 			, FrameTimes & times );
-		void cleanup( castor::String const & suffix
+		void cleanup( c3d::String const & suffix
 			, FrameTimes const & times );
 
 	private:
-		castor3d::Engine & m_engine;
+		c3d::Engine & m_engine;
 		uint32_t m_maxFrameCount;
-		castor::Path m_filePath;
-		castor3d::RenderWindowUPtr m_renderWindow;
+		c3d::Path m_filePath;
+		c3d::RenderWindowUPtr m_renderWindow;
 	};
 }
 

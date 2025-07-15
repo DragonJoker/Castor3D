@@ -8,10 +8,10 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/Factory.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class MeshFactory
-		: public castor::Factory< MeshGenerator, castor::String, castor::UniquePtr< MeshGenerator > >
+		: public Factory< MeshGenerator, String, UniquePtr< MeshGenerator > >
 	{
 	public:
 		/**

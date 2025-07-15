@@ -26,7 +26,7 @@ See LICENSE file in root folder
 #include <vector>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor
+namespace c3d
 {
 	/**
 	\see		QuaternionT

@@ -17,13 +17,13 @@ namespace atmosphere_scattering
 {
 	struct Shaders
 	{
-		castor3d::ProgramModule shader;
+		c3d::ProgramModule shader;
 		ashes::PipelineShaderStageCreateInfoArray stages;
 	};
 
 	class AtmosphereBackgroundPass
-		: public castor::DataHolderT< Shaders >
-		, public castor3d::BackgroundPassBase
+		: public c3d::DataHolderT< Shaders >
+		, public c3d::BackgroundPassBase
 		, public crg::RenderQuad
 	{
 	public:
@@ -39,18 +39,18 @@ namespace atmosphere_scattering
 		AtmosphereBackgroundPass( crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
-			, castor3d::RenderDevice const & device
+			, c3d::RenderDevice const & device
 			, AtmosphereBackground & background
-			, castor3d::Extent2D const & size
+			, c3d::Extent2D const & size
 			, crg::ImageViewIdArray const & colour
 			, bool forceVisible );
 
 	private:
 		void doResetPipeline( uint32_t index )override;
 
-		crg::VkPipelineShaderStageCreateInfoArray doInitialiseShader( castor3d::RenderDevice const & device
+		crg::VkPipelineShaderStageCreateInfoArray doInitialiseShader( c3d::RenderDevice const & device
 			, AtmosphereBackground & background
-			, castor3d::Extent2D const & size
+			, c3d::Extent2D const & size
 			, uint32_t passIndex );
 	};
 }

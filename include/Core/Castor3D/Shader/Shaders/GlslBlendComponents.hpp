@@ -17,13 +17,13 @@ See LICENSE file in root folder
 #pragma warning( disable:4251 )
 #pragma warning( disable:4275 )
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	template< typename T >
 	struct BlendComponentT
 	{
 		BlendComponentT( T v, bool e = true )
-			: value{ castor::move( v ) }
+			: value{ c3d::move( v ) }
 			, enabled{ e }
 		{
 		}

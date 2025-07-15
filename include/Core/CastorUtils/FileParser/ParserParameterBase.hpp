@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Log/LogModule.hpp"
 #include "CastorUtils/Math/MathModule.hpp"
 
-namespace castor
+namespace c3d
 {
 	class ParserParameterBase
 	{

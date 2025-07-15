@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Gui/Controls/CtrlScrollable.hpp"
 #include "Castor3D/Gui/Theme/StyleEdit.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class EditCtrl
 		: public Control
@@ -22,7 +22,7 @@ namespace castor3d
 		 *\param[in]	parent	The parent control, if any
 		 */
 		C3D_API EditCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, EditStyleRPtr style
 			, ControlRPtr parent );
 
@@ -38,12 +38,12 @@ namespace castor3d
 		 *\param[in]	visible		Initial visibility status
 		 */
 		C3D_API EditCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, EditStyleRPtr style
 			, ControlRPtr parent
-			, castor::String const & caption
-			, castor::Position const & position
-			, castor::Size const & size
+			, String const & caption
+			, Position const & position
+			, Size const & size
 			, ControlFlagType flags = 0
 			, bool visible = true );
 		C3D_API ~EditCtrl()noexcept override;
@@ -51,12 +51,12 @@ namespace castor3d
 		/** Updates the caption
 		 *\param[in]	value		The new value
 		 */
-		C3D_API void updateCaption( castor::String const & value );
+		C3D_API void updateCaption( String const & value );
 
 		/** Retrieves the caption
 		 *\return		The value
 		 */
-		castor::U32String const & getCaption()const
+		U32String const & getCaption()const
 		{
 			return m_caption;
 		}
@@ -69,7 +69,7 @@ namespace castor3d
 		OnEditEventConnection connect( EditEvent event
 			, OnEditEventFunction function )
 		{
-			return m_signals[size_t( event )].connect( castor::move( function ) );
+			return m_signals[size_t( event )].connect( c3d::move( function ) );
 		}
 
 		/** Retreves the multiline status of the edit.
@@ -77,7 +77,7 @@ namespace castor3d
 		 */
 		bool isMultiLine()const
 		{
-			return castor::checkFlag( getFlags(), EditFlag::eMultiline );
+			return checkFlag( getFlags(), EditFlag::eMultiline );
 		}
 
 		/**
@@ -96,11 +96,11 @@ namespace castor3d
 			uint32_t lineIndex{};
 			uint32_t charIndex{};
 			uint32_t captionIndex{};
-			castor::U32String::const_iterator captionIt{};
+			U32String::const_iterator captionIt{};
 
 			template< typename SizeT >
 			void updateIndex( SizeT index
-				, castor::U32String const & caption )
+				, U32String const & caption )
 			{
 				captionIndex = std::min( uint32_t( index ), uint32_t( caption.size() ) );
 				captionIt = std::next( caption.begin(), captionIndex );
@@ -146,19 +146,19 @@ namespace castor3d
 
 		/** @copydoc Control::doUpdateClientRect
 		*/
-		castor::Point4ui doUpdateClientRect( castor::Point4ui const & clientRect )override;
+		Point4ui doUpdateClientRect( Point4ui const & clientRect )override;
 
 		/** @copydoc Control::doSetPosition
 		*/
-		void doSetPosition( castor::Position const & value )override;
+		void doSetPosition( Position const & value )override;
 
 		/** @copydoc Control::doSetSize
 		*/
-		void doSetSize( castor::Size const & value )override;
+		void doSetSize( Size const & value )override;
 
 		/** @copydoc Control::doSetBorderSize
 		*/
-		void doSetBorderSize( castor::Point4ui const & value )override;
+		void doSetBorderSize( Point4ui const & value )override;
 
 		/** @copydoc Control::doUpdateStyle
 		*/
@@ -166,7 +166,7 @@ namespace castor3d
 
 		/** @copydoc Control::doSetCaption
 		*/
-		void doSetCaption( castor::U32String const & caption )override;
+		void doSetCaption( U32String const & caption )override;
 
 		/** @copydoc Control::doSetVisible
 		*/
@@ -221,7 +221,7 @@ namespace castor3d
 
 		/** adds a character at caret index
 		 */
-		void doAddCharAtCaret( castor::String const & c );
+		void doAddCharAtCaret( String const & c );
 
 		/** Removes a character at caret index
 		 */
@@ -263,7 +263,7 @@ namespace castor3d
 
 		/** Updates the input caret from given position.
 		 */
-		void doUpdateCaretPosition( castor::Position const & position
+		void doUpdateCaretPosition( Position const & position
 			, CaretIndices & indices );
 
 		/** Updates the input caret indices.
@@ -326,7 +326,7 @@ namespace castor3d
 		 */
 		void doAdjustTextPosition();
 
-		void doScrollContent( castor::Position const & position );
+		void doScrollContent( Position const & position );
 
 		bool hasSelection()const noexcept
 		{
@@ -341,16 +341,16 @@ namespace castor3d
 			PanelOverlayRPtr overlay{};
 		};
 
-		castor::U32String m_caption{};
-		castor::TextMetrics m_metrics{};
+		U32String m_caption{};
+		TextMetrics m_metrics{};
 		bool m_active{};
 		TextOverlayRPtr m_text{};
 		Caret m_caret{};
-		castor::Array< OnEditEvent, size_t( EditEvent::eCount ) > m_signals;
+		Array< OnEditEvent, size_t( EditEvent::eCount ) > m_signals;
 		bool m_hasSelection{};
 		bool m_isMouseSelecting{};
 		Selection m_selection{};
-		castor::Vector< PanelOverlayRPtr > m_selections{};
+		Vector< PanelOverlayRPtr > m_selections{};
 		OnScrollContentConnection m_onScrollContent;
 		uint32_t m_panelsZIndex{};
 	};

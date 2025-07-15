@@ -17,23 +17,23 @@ namespace PbrBloom
 	static uint32_t constexpr BaseFilterCount = 5u;
 
 	class PostEffect
-		: public castor3d::PostEffect
+		: public c3d::PostEffect
 	{
 	public:
-		PostEffect( castor3d::RenderTarget & renderTarget
-			, castor3d::RenderSystem & renderSystem
-			, castor3d::Parameters const & param );
-		static castor3d::PostEffectUPtr create( castor3d::RenderTarget & renderTarget
-			, castor3d::RenderSystem & renderSystem
-			, castor3d::Parameters const & param );
+		PostEffect( c3d::RenderTarget & renderTarget
+			, c3d::RenderSystem & renderSystem
+			, c3d::Parameters const & param );
+		static c3d::PostEffectUPtr create( c3d::RenderTarget & renderTarget
+			, c3d::RenderSystem & renderSystem
+			, c3d::Parameters const & param );
 		/**
-		 *\copydoc		castor3d::PostEffect::accept
+		 *\copydoc		c3d::PostEffect::accept
 		 */
-		void accept( castor3d::ConfigurationVisitorBase & visitor )override;
+		void accept( c3d::ConfigurationVisitorBase & visitor )override;
 		/**
-		 *\copydoc		castor3d::PostEffect::setParameters
+		 *\copydoc		c3d::PostEffect::setParameters
 		 */
-		void setParameters( castor3d::Parameters parameters )override;
+		void setParameters( c3d::Parameters parameters )override;
 
 		crg::FramePass const & getPass()const override
 		{
@@ -43,40 +43,40 @@ namespace PbrBloom
 
 	private:
 		/**
-		*\copydoc		castor3d::PostEffect::doInitialise
+		*\copydoc		c3d::PostEffect::doInitialise
 		*/
-		bool doInitialise( castor3d::RenderDevice const & device
-			, castor3d::Texture const & source
-			, castor3d::Texture const & target
+		bool doInitialise( c3d::RenderDevice const & device
+			, c3d::Texture const & source
+			, c3d::Texture const & target
 			, crg::FramePass const & previousPass )override;
 		/**
-		*\copydoc		castor3d::PostEffect::doCleanup
+		*\copydoc		c3d::PostEffect::doCleanup
 		*/
-		void doCleanup( castor3d::RenderDevice const & device )override;
+		void doCleanup( c3d::RenderDevice const & device )override;
 		/**
-		 *\copydoc		castor3d::PostEffect::doCpuUpdate
+		 *\copydoc		c3d::PostEffect::doCpuUpdate
 		 */
-		void doCpuUpdate( castor3d::CpuUpdater & updater )override;
+		void doCpuUpdate( c3d::CpuUpdater & updater )override;
 		/**
-		 *\copydoc		castor3d::PostEffect::doWriteInto
+		 *\copydoc		c3d::PostEffect::doWriteInto
 		 */
-		bool doWriteInto( castor::StringStream & file, castor::String const & tabs )override;
+		bool doWriteInto( c3d::StringStream & file, c3d::String const & tabs )override;
 
 	public:
-		static castor::String const Type;
-		static castor::MbString const Name;
+		static c3d::String const Type;
+		static c3d::MbString const Name;
 
 	private:
 		crg::ImageId m_intermediateImg;
 		crg::FramePass const * m_pass{};
-		castor::RawUniquePtr< DownsamplePass > m_downsamplePass;
-		castor::RawUniquePtr< UpsamplePass > m_upsamplePass;
-		castor::RawUniquePtr< CombinePass > m_combinePass;
-		castor3d::UniformBufferOffsetT< castor::Point2f > m_ubo;
+		c3d::RawUniquePtr< DownsamplePass > m_downsamplePass;
+		c3d::RawUniquePtr< UpsamplePass > m_upsamplePass;
+		c3d::RawUniquePtr< CombinePass > m_combinePass;
+		c3d::UniformBufferOffsetT< c3d::Point2f > m_ubo;
 		uint32_t m_blurRadius;
 		float m_bloomStrength;
 		uint32_t m_duPassesCount;
-		castor3d::Extent3D m_extent{};
+		c3d::Extent3D m_extent{};
 	};
 }
 

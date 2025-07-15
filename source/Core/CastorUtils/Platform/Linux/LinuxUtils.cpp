@@ -11,7 +11,7 @@
 #	include <X11/extensions/Xinerama.h>
 #endif
 
-namespace castor
+namespace c3d
 {
 	namespace system
 	{

@@ -14,36 +14,33 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::OpacityComponent >
-		: public TextWriterT< castor3d::OpacityComponent >
+	class TextWriter< OpacityComponent >
+		: public TextWriterT< OpacityComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::OpacityComponent >{ tabs }
+			: TextWriterT< OpacityComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::OpacityComponent const & object
+		bool operator()( OpacityComponent const & object
 			, StringStream & file )override
 		{
 			bool result = true;
 
 			if ( object.getOpacity() < 1 )
 			{
-				result = writeOpt( file, cuT( "opacity" ), object.getOpacity(), castor3d::OpacityComponent::DefaultOpacity )
-					&& writeOpt( file, cuT( "bw_accumulation" ), object.getBWAccumulationOperator(), castor3d::OpacityComponent::DefaultBwAccumulationOperator );
+				result = writeOpt( file, cuT( "opacity" ), object.getOpacity(), OpacityComponent::DefaultOpacity )
+					&& writeOpt( file, cuT( "bw_accumulation" ), object.getBWAccumulationOperator(), OpacityComponent::DefaultBwAccumulationOperator );
 			}
 
 			return result;
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace opacmp
@@ -187,29 +184,29 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void OpacityComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void OpacityComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "alpha" )
 			, opacmp::parserPassAlpha
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "opacity" )
 			, opacmp::parserPassAlpha
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "mixed_interpolation" )
 			, opacmp::parserPassMixedInterpolative
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eBool >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "bw_accumulation" )
 			, opacmp::parserPassBWAccumulationOperator
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >( castor::makeRange( MinBwAccumulationOperator, MaxBwAccumulationOperator ) ) } );
+			, { makeParameter< ParameterType::eUInt32 >( makeRange( MinBwAccumulationOperator, MaxBwAccumulationOperator ) ) } );
 	}
 
 	void OpacityComponent::Plugin::zeroBuffer( Pass const & pass
@@ -230,12 +227,12 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const OpacityComponent::TypeName = C3D_MakePassOtherComponentName( "opacity" );
+	String const OpacityComponent::TypeName = C3D_MakePassOtherComponentName( "opacity" );
 
 	OpacityComponent::OpacityComponent( Pass & pass )
 		: BaseDataPassComponentT< OpacityData >{ pass, TypeName, {}
 			, OpacityComponent::DefaultOpacity
-			, castor::makeRangedValue( OpacityComponent::DefaultBwAccumulationOperator
+			, makeRangedValue( OpacityComponent::DefaultBwAccumulationOperator
 				, OpacityComponent::MinBwAccumulationOperator
 				, OpacityComponent::MaxBwAccumulationOperator ) }
 	{
@@ -255,17 +252,17 @@ namespace castor3d
 
 	PassComponentUPtr OpacityComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< OpacityComponent >( pass );
+		auto result = makeRawUnique< OpacityComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool OpacityComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool OpacityComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< OpacityComponent >{ tabs }( *this, file );
+		return TextWriter< OpacityComponent >{ tabs }( *this, file );
 	}
 
 	void OpacityComponent::doFillBuffer( PassBuffer & buffer )const

@@ -14,7 +14,7 @@
 #	include <FreeImage.h>
 #endif
 
-namespace castor
+namespace c3d
 {
 	//************************************************************************************************
 
@@ -42,7 +42,7 @@ namespace castor
 
 			for ( uint32_t i = 0; i < count; i++ )
 			{
-				castor::swap( *r, *b );
+				c3d::swap( *r, *b );
 				r += bpp;
 				b += bpp;
 			}
@@ -113,7 +113,7 @@ namespace castor
 	void FreeImageLoader::registerLoader( ImageLoader & reg )
 	{
 		reg.registerLoader( freeimgl::listExtensions()
-			, castor::make_unique< FreeImageLoader >() );
+			, c3d::makeRawUnique< FreeImageLoader >() );
 	}
 
 	void FreeImageLoader::unregisterLoader( ImageLoader & reg )

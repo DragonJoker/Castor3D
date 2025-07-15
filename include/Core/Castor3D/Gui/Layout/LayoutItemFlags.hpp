@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Gui/GuiModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	struct LayoutItemFlags
 	{
@@ -64,9 +64,9 @@ namespace castor3d
 			return *this;
 		}
 
-		LayoutItemFlags & padding( castor::Point4ui v )noexcept
+		LayoutItemFlags & padding( Point4ui v )noexcept
 		{
-			m_padding = castor::move( v );
+			m_padding = c3d::move( v );
 			return *this;
 		}
 
@@ -114,7 +114,7 @@ namespace castor3d
 			return m_reserveSpaceIfHidden;
 		}
 
-		castor::Point4ui padding()const noexcept
+		Point4ui padding()const noexcept
 		{
 			return m_padding;
 		}
@@ -134,7 +134,7 @@ namespace castor3d
 		VAlign m_vAlign{};
 		bool m_expand{};
 		bool m_reserveSpaceIfHidden{};
-		castor::Point4ui m_padding{};
+		Point4ui m_padding{};
 	};
 }
 

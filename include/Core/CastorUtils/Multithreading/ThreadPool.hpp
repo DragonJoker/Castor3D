@@ -7,12 +7,12 @@ See LICENSE file in root folder
 #include "CastorUtils/Design/NonCopyable.hpp"
 #include "CastorUtils/Multithreading/WorkerThread.hpp"
 
-namespace castor
+namespace c3d
 {
 	class ThreadPool
 		: public NonMovable
 	{
-		using WorkerPtr = castor::RawUniquePtr< WorkerThread >;
+		using WorkerPtr = c3d::RawUniquePtr< WorkerThread >;
 		using WorkerArray = Vector< WorkerPtr >;
 
 	public:
@@ -87,7 +87,7 @@ namespace castor
 		size_t const m_count;
 		WorkerArray m_available;
 		WorkerArray m_busy;
-		mutable castor::Mutex m_mutex;
+		mutable c3d::Mutex m_mutex;
 		Vector< WorkerThread::OnEnded::connection > m_endConnections;
 	};
 }

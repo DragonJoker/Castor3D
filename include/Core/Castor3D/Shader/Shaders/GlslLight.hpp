@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StorageBuffer.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	struct Light
 		: public sdw::StructInstanceHelperT< "C3D_Light"
@@ -36,7 +36,7 @@ namespace castor3d::shader
 		Light( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -60,7 +60,7 @@ namespace castor3d::shader
 		DirectionalLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -86,7 +86,7 @@ namespace castor3d::shader
 		PointLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -121,7 +121,7 @@ namespace castor3d::shader
 		C3D_API SpotLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 

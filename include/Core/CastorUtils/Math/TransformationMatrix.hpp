@@ -16,7 +16,7 @@ See LICENSE file in root folder
 \remark		Contient des fonctions de rotation, translation, scale et multiplication (optimisées pour des matrices 4x4)
 			<br />Permet aussi de calculer les frustum, persperctive, ortho, le passage main gauche main droite et inversement
 */
-namespace castor::matrix
+namespace c3d::matrix
 {
 	/**
 	 *\~english

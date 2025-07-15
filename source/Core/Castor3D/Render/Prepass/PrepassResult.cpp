@@ -2,20 +2,20 @@
 
 #include "Castor3D/Render/RenderDevice.hpp"
 
-CU_ImplementSmartPtr( castor3d, PrepassResult )
+CU_ImplementSmartPtr( c3d, PrepassResult )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
-	castor::String getTextureName( PpTexture texture )
+	String getTextureName( PpTexture texture )
 	{
 		return cuT( "c3d_map" ) + getTexName( texture );
 	}
 
-	castor::String getTexName( PpTexture texture )
+	String getTexName( PpTexture texture )
 	{
-		static castor::Array< castor::String, size_t( PpTexture::eCount ) > Values
+		static Array< String, size_t( PpTexture::eCount ) > Values
 		{
 			{
 				cuT( "DepthObj" ),
@@ -26,13 +26,13 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 	
-	castor::PixelFormat getFormat( RenderDevice const &, PpTexture texture )
+	PixelFormat getFormat( RenderDevice const &, PpTexture texture )
 	{
-		static castor::Array< castor::PixelFormat, size_t( PpTexture::eCount ) > Values
+		static Array< PixelFormat, size_t( PpTexture::eCount ) > Values
 		{
 			{
-				castor::PixelFormat::eR32G32B32A32_SFLOAT,
-				castor::PixelFormat::eR32G32_UINT,
+				PixelFormat::eR32G32B32A32_SFLOAT,
+				PixelFormat::eR32G32_UINT,
 			}
 		};
 		return Values[size_t( texture )];
@@ -40,7 +40,7 @@ namespace castor3d
 
 	ClearValue getClearValue( PpTexture texture )
 	{
-		static castor::Array< ClearValue, size_t( PpTexture::eCount ) > Values
+		static Array< ClearValue, size_t( PpTexture::eCount ) > Values
 		{
 			{
 				ClearValue{ transparentBlackClearColor },
@@ -52,7 +52,7 @@ namespace castor3d
 
 	ImageUsageFlags getUsageFlags( PpTexture texture )
 	{
-		static castor::Array< ImageUsageFlags, size_t( PpTexture::eCount ) > Values
+		static Array< ImageUsageFlags, size_t( PpTexture::eCount ) > Values
 		{
 			{
 				ImageUsageFlags::eSampled | ImageUsageFlags::eColorAttachment | ImageUsageFlags::eStorage | ImageUsageFlags::eTransferDst | ImageUsageFlags::eTransferSrc,
@@ -64,7 +64,7 @@ namespace castor3d
 
 	BorderColour getBorderColor( PpTexture texture )
 	{
-		static castor::Array< BorderColour, size_t( PpTexture::eCount ) > Values
+		static Array< BorderColour, size_t( PpTexture::eCount ) > Values
 		{
 			{
 				BorderColour::eFloatOpaqueWhite,
@@ -78,9 +78,9 @@ namespace castor3d
 
 	PrepassResult::PrepassResult( crg::ResourcesCache & resources
 		, RenderDevice const & device
-		, castor::Size const & size
+		, Size const & size
 		, bool needsVisibility )
-		: TextureHolder{ needsVisibility ? nullptr : castor::makeUnique< Texture >() }
+		: TextureHolder{ needsVisibility ? nullptr : makeUnique< Texture >() }
 		, GBufferT< PpTexture >{ resources
 			, device
 			, cuT( "PPResult" )

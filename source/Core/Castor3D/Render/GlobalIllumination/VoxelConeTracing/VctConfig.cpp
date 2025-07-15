@@ -6,7 +6,7 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace vctcfg
 	{
@@ -218,16 +218,15 @@ namespace castor3d
 		visitor.visit( cuT( "Voxel Size" ), voxelSizeFactor );
 	}
 
-	void VctConfig::addParsers( castor::AttributeParsers & result )
+	void VctConfig::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< SceneContext > sceneContext{ result, CSCNSection::eScene, CSCNSection::eRoot };
 		BlockParserContextT< SceneContext > vctContext{ result, CSCNSection::eVoxelConeTracing, CSCNSection::eScene };
 
 		sceneContext.addPushParser( cuT( "voxel_cone_tracing" ), CSCNSection::eVoxelConeTracing, vctcfg::parserVoxelConeTracing );
 		vctContext.addParser( cuT( "enabled" ), vctcfg::parserEnabled, { makeParameter< ParameterType::eBool >() } );
-		vctContext.addParser( cuT( "grid_size" ), vctcfg::parserGridSize, { makeParameter< ParameterType::eUInt32 >( castor::Range< uint32_t >( 2u, VctMaxTextureSize ) ) } );
-		vctContext.addParser( cuT( "num_cones" ), vctcfg::parserNumCones, { makeParameter< ParameterType::eUInt32 >( castor::Range< uint32_t >( 1u, VctMaxDiffuseCones ) ) } );
+		vctContext.addParser( cuT( "grid_size" ), vctcfg::parserGridSize, { makeParameter< ParameterType::eUInt32 >( Range< uint32_t >( 2u, VctMaxTextureSize ) ) } );
+		vctContext.addParser( cuT( "num_cones" ), vctcfg::parserNumCones, { makeParameter< ParameterType::eUInt32 >( Range< uint32_t >( 1u, VctMaxDiffuseCones ) ) } );
 		vctContext.addParser( cuT( "max_distance" ), vctcfg::parserMaxDistance, { makeParameter< ParameterType::eFloat >() } );
 		vctContext.addParser( cuT( "ray_step_size" ), vctcfg::parserRayStepSize, { makeParameter< ParameterType::eFloat >() } );
 		vctContext.addParser( cuT( "voxel_size" ), vctcfg::parserVoxelSize, { makeParameter< ParameterType::eFloat >() } );

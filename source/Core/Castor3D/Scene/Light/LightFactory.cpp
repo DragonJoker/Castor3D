@@ -4,12 +4,12 @@
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 
-CU_ImplementSmartPtr( castor3d, LightFactory )
+CU_ImplementSmartPtr( c3d, LightFactory )
 
-namespace castor3d
+namespace c3d
 {
 	LightFactory::LightFactory()
-		: Factory< LightCategory, LightType, LightCategoryUPtr, castor::Function< LightCategoryUPtr( bool &, castor::Function< void() > const & ) > >()
+		: Factory< LightCategory, LightType, LightCategoryUPtr, Function< LightCategoryUPtr( bool &, Function< void() > const & ) > >()
 	{
 		registerType( LightType::eDirectional, DirectionalLight::create );
 		registerType( LightType::ePoint, PointLight::create );

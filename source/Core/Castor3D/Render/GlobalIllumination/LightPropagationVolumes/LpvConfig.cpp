@@ -8,7 +8,7 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace lpvcfg
 	{
@@ -46,15 +46,14 @@ namespace castor3d
 		block.visit( cuT( "Texel Area Modifier" ), texelAreaModifier );
 	}
 
-	void LpvConfig::addParsers( castor::AttributeParsers & result
+	void LpvConfig::addParsers( AttributeParsers & result
 		, CSCNSection shadows, CSCNSection lightLpv
-		, castor::RawParserFunctionT< ShadowContext > parserConfig )
+		, RawParserFunctionT< ShadowContext > parserConfig )
 	{
-		using namespace castor;
 		BlockParserContextT< ShadowContext > shadowContext{ result, shadows };
 		BlockParserContextT< ShadowContext > lpvContext{ result, lightLpv, shadows };
 
-		shadowContext.addPushParser( cuT( "lpv_config" ), lightLpv, castor::move( parserConfig ) );
+		shadowContext.addPushParser( cuT( "lpv_config" ), lightLpv, c3d::move( parserConfig ) );
 		lpvContext.addParser( cuT( "indirect_attenuation" ), lpvcfg::parserIndirectAttenuation, { makeParameter< ParameterType::eFloat >() } );
 		lpvContext.addParser( cuT( "texel_area_modifier" ), lpvcfg::parserTexelAreaModifier, { makeParameter< ParameterType::eFloat >() } );
 		lpvContext.addDefaultPopParser();

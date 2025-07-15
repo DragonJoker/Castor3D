@@ -2,16 +2,16 @@
 
 #include "Castor3D/Model/Skeleton/SkeletonNode.hpp"
 
-CU_ImplementSmartPtr( castor3d, SkeletonAnimationNode )
+CU_ImplementSmartPtr( c3d, SkeletonAnimationNode )
 
-namespace castor3d
+namespace c3d
 {
 	SkeletonAnimationNode::SkeletonAnimationNode( SkeletonAnimation & animation )
 		: SkeletonAnimationObject{ animation, SkeletonNodeType::eNode }
 	{
 	}
 
-	castor::String const & SkeletonAnimationNode::getName()const
+	String const & SkeletonAnimationNode::getName()const
 	{
 		return getNode()->getName();
 	}

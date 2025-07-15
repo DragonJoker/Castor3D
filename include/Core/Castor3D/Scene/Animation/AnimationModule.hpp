@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Animation/AnimationModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Scene */
 	//@{
@@ -93,27 +93,27 @@ namespace castor3d
 	class SceneNodeAnimationKeyFrame;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, SceneNodeAnimation, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SceneNodeAnimationKeyFrame, C3D_API );
+	CU_DeclareSmartPtr( c3d, SceneNodeAnimation, C3D_API );
+	CU_DeclareSmartPtr( c3d, SceneNodeAnimationKeyFrame, C3D_API );
 	/** @endcond */
 
 	//@}
 
 	struct GroupAnimation
 	{
-		explicit GroupAnimation( castor::String name )
-			: name{ castor::move( name ) }
+		explicit GroupAnimation( String name )
+			: name{ c3d::move( name ) }
 		{
 		}
 
-		GroupAnimation( castor::String name
+		GroupAnimation( String name
 			, AnimationState state
 			, bool looped = {}
 			, float scale = {}
-			, castor::Milliseconds startingPoint = {}
-			, castor::Milliseconds stoppingPoint = {}
+			, Milliseconds startingPoint = {}
+			, Milliseconds stoppingPoint = {}
 			, InterpolatorType interpolation = InterpolatorType::eLinear )
-			: name{ castor::move( name ) }
+			: name{ c3d::move( name ) }
 			, state{ state }
 			, looped{ looped }
 			, scale{ scale }
@@ -123,31 +123,31 @@ namespace castor3d
 		{
 		}
 
-		castor::String name;
+		String name;
 		AnimationState state{};
 		bool looped{};
 		float scale{};
-		castor::Milliseconds startingPoint{};
-		castor::Milliseconds stoppingPoint{};
+		Milliseconds startingPoint{};
+		Milliseconds stoppingPoint{};
 		InterpolatorType interpolation{ InterpolatorType::eLinear };
-		castor::Milliseconds totalTime{};
+		Milliseconds totalTime{};
 	};
-	using GroupAnimationMap = castor::StringMap< GroupAnimation >;
+	using GroupAnimationMap = StringMap< GroupAnimation >;
 
-	using OnAnimatedSkeletonChangeFunction = castor::Function< void( AnimatedObjectGroup const &, AnimatedSkeleton & ) >;
-	using OnAnimatedSkeletonChange = castor::SignalT< OnAnimatedSkeletonChangeFunction >;
+	using OnAnimatedSkeletonChangeFunction = Function< void( AnimatedObjectGroup const &, AnimatedSkeleton & ) >;
+	using OnAnimatedSkeletonChange = SignalT< OnAnimatedSkeletonChangeFunction >;
 	using OnAnimatedSkeletonChangeConnection = OnAnimatedSkeletonChange::connection;
 
-	using OnAnimatedMeshChangeFunction = castor::Function< void( AnimatedObjectGroup const &, AnimatedMesh & ) >;
-	using OnAnimatedMeshChange = castor::SignalT< OnAnimatedMeshChangeFunction >;
+	using OnAnimatedMeshChangeFunction = Function< void( AnimatedObjectGroup const &, AnimatedMesh & ) >;
+	using OnAnimatedMeshChange = SignalT< OnAnimatedMeshChangeFunction >;
 	using OnAnimatedMeshChangeConnection = OnAnimatedMeshChange::connection;
 
-	using OnAnimatedTextureChangeFunction = castor::Function< void( AnimatedObjectGroup const &, AnimatedTexture & ) >;
-	using OnAnimatedTextureChange = castor::SignalT< OnAnimatedTextureChangeFunction >;
+	using OnAnimatedTextureChangeFunction = Function< void( AnimatedObjectGroup const &, AnimatedTexture & ) >;
+	using OnAnimatedTextureChange = SignalT< OnAnimatedTextureChangeFunction >;
 	using OnAnimatedTextureChangeConnection = OnAnimatedTextureChange::connection;
 
-	using OnAnimatedSceneNodeChangeFunction = castor::Function< void( AnimatedObjectGroup const &, AnimatedSceneNode & ) >;
-	using OnAnimatedSceneNodeChange = castor::SignalT< OnAnimatedSceneNodeChangeFunction >;
+	using OnAnimatedSceneNodeChangeFunction = Function< void( AnimatedObjectGroup const &, AnimatedSceneNode & ) >;
+	using OnAnimatedSceneNodeChange = SignalT< OnAnimatedSceneNodeChangeFunction >;
 	using OnAnimatedSceneNodeChangeConnection = OnAnimatedSceneNodeChange::connection;
 	/**
 	*\~english
@@ -160,47 +160,47 @@ namespace castor3d
 	*	Spécialisation pour AnimatedObjectGroup.
 	*/
 	template<>
-	struct PtrCacheTraitsT< AnimatedObjectGroup, castor::String >
-		: PtrCacheTraitsBaseT< AnimatedObjectGroup, castor::String >
+	struct PtrCacheTraitsT< AnimatedObjectGroup, String >
+		: PtrCacheTraitsBaseT< AnimatedObjectGroup, String >
 	{
 		using ResT = AnimatedObjectGroup;
-		using KeyT = castor::String;
+		using KeyT = String;
 		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
 		using ElementT = typename Base::ElementT;
 		using ElementPtrT = typename Base::ElementPtrT;
 
-		C3D_API static const castor::String Name;
+		C3D_API static const String Name;
 	};
 
-	using AnimatedObjectGroupCacheTraits = PtrCacheTraitsT< AnimatedObjectGroup, castor::String >;
-	using AnimatedObjectGroupCache = castor::ResourceCacheT< AnimatedObjectGroup
-		, castor::String
+	using AnimatedObjectGroupCacheTraits = PtrCacheTraitsT< AnimatedObjectGroup, String >;
+	using AnimatedObjectGroupCache = ResourceCacheT< AnimatedObjectGroup
+		, String
 		, AnimatedObjectGroupCacheTraits >;
 
 	using AnimatedObjectGroupRes = AnimatedObjectGroupCacheTraits::ElementPtrT;
 	using AnimatedObjectGroupResPtr = AnimatedObjectGroupCacheTraits::ElementObsT;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, AnimatedObjectGroup, C3D_API );
-	CU_DeclareSmartPtr( castor3d, AnimatedObjectGroupCache, C3D_API );
-	CU_DeclareSmartPtr( castor3d, AnimatedMesh, C3D_API );
-	CU_DeclareSmartPtr( castor3d, AnimatedObject, C3D_API );
-	CU_DeclareSmartPtr( castor3d, AnimatedSceneNode, C3D_API );
-	CU_DeclareSmartPtr( castor3d, AnimatedSkeleton, C3D_API );
-	CU_DeclareSmartPtr( castor3d, AnimatedTexture, C3D_API );
-	CU_DeclareSmartPtr( castor3d, AnimationInstance, C3D_API );
+	CU_DeclareSmartPtr( c3d, AnimatedObjectGroup, C3D_API );
+	CU_DeclareSmartPtr( c3d, AnimatedObjectGroupCache, C3D_API );
+	CU_DeclareSmartPtr( c3d, AnimatedMesh, C3D_API );
+	CU_DeclareSmartPtr( c3d, AnimatedObject, C3D_API );
+	CU_DeclareSmartPtr( c3d, AnimatedSceneNode, C3D_API );
+	CU_DeclareSmartPtr( c3d, AnimatedSkeleton, C3D_API );
+	CU_DeclareSmartPtr( c3d, AnimatedTexture, C3D_API );
+	CU_DeclareSmartPtr( c3d, AnimationInstance, C3D_API );
 	/** @endcond */
 
 	//@}
 	//@}
 }
 
-namespace castor
+namespace c3d
 {
 	template<>
-	struct ResourceCacheT< castor3d::AnimatedObjectGroup
+	struct ResourceCacheT< AnimatedObjectGroup
 		, String
-		, castor3d::AnimatedObjectGroupCacheTraits >;
+		, AnimatedObjectGroupCacheTraits >;
 }
 
 #endif

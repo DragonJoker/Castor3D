@@ -13,8 +13,8 @@ namespace diamond_square_terrain
 	{
 		struct TerrainContext
 		{
-			castor3d::MeshContext * mesh{};
-			castor3d::Parameters parameters{};
+			c3d::MeshContext * mesh{};
+			c3d::Parameters parameters{};
 			Biomes biomes{};
 			Biome biome{};
 		};
@@ -26,7 +26,7 @@ namespace diamond_square_terrain
 			eBiome = CU_MakeSectionName( 'D', 'S', 'B', 'M' ),
 		};
 
-		static CU_ImplementAttributeParserNewBlock( parserDiamondSquareTerrain, castor3d::MeshContext, TerrainContext )
+		static CU_ImplementAttributeParserNewBlock( parserDiamondSquareTerrain, c3d::MeshContext, TerrainContext )
 		{
 			newBlockContext->mesh = blockContext;
 		}
@@ -57,7 +57,7 @@ namespace diamond_square_terrain
 			}
 			else if ( auto value = params[0]->get< bool >() )
 			{
-				blockContext->parameters.add( Generator::ParamRandomSeed, castor::string::toString( value ) );
+				blockContext->parameters.add( Generator::ParamRandomSeed, c3d::string::toString( value ) );
 			}
 		}
 		CU_EndAttribute()
@@ -70,7 +70,7 @@ namespace diamond_square_terrain
 			}
 			else if ( auto value = params[0]->get< bool >() )
 			{
-				blockContext->parameters.add( Generator::ParamIsland, castor::string::toString( value ) );
+				blockContext->parameters.add( Generator::ParamIsland, c3d::string::toString( value ) );
 			}
 		}
 		CU_EndAttribute()
@@ -83,9 +83,9 @@ namespace diamond_square_terrain
 			}
 			else
 			{
-				auto value = params[0]->get< castor::Point2f >();
-				blockContext->parameters.add( Generator::ParamXScale, castor::string::toString( value->x ) );
-				blockContext->parameters.add( Generator::ParamZScale, castor::string::toString( value->y ) );
+				auto value = params[0]->get< c3d::Point2f >();
+				blockContext->parameters.add( Generator::ParamXScale, c3d::string::toString( value->x ) );
+				blockContext->parameters.add( Generator::ParamZScale, c3d::string::toString( value->y ) );
 			}
 		}
 		CU_EndAttribute()
@@ -98,9 +98,9 @@ namespace diamond_square_terrain
 			}
 			else
 			{
-				auto value = params[0]->get< castor::Point2f >();
-				blockContext->parameters.add( Generator::ParamUScale, castor::string::toString( value->x ) );
-				blockContext->parameters.add( Generator::ParamVScale, castor::string::toString( value->y ) );
+				auto value = params[0]->get< c3d::Point2f >();
+				blockContext->parameters.add( Generator::ParamUScale, c3d::string::toString( value->x ) );
+				blockContext->parameters.add( Generator::ParamVScale, c3d::string::toString( value->y ) );
 			}
 		}
 		CU_EndAttribute()
@@ -113,9 +113,9 @@ namespace diamond_square_terrain
 			}
 			else
 			{
-				auto value = params[0]->get< castor::Point2f >();
-				blockContext->parameters.add( Generator::ParamYMin, castor::string::toString( value->x ) );
-				blockContext->parameters.add( Generator::ParamYMax, castor::string::toString( value->y ) );
+				auto value = params[0]->get< c3d::Point2f >();
+				blockContext->parameters.add( Generator::ParamYMin, c3d::string::toString( value->x ) );
+				blockContext->parameters.add( Generator::ParamYMax, c3d::string::toString( value->y ) );
 			}
 		}
 		CU_EndAttribute()
@@ -129,7 +129,7 @@ namespace diamond_square_terrain
 			else
 			{
 				auto value = params[0]->get< uint32_t >();
-				blockContext->parameters.add( Generator::ParamDetail, castor::string::toString( value ) );
+				blockContext->parameters.add( Generator::ParamDetail, c3d::string::toString( value ) );
 			}
 		}
 		CU_EndAttribute()
@@ -143,7 +143,7 @@ namespace diamond_square_terrain
 			else
 			{
 				auto value = params[0]->get< float >();
-				blockContext->parameters.add( Generator::ParamHeatOffset, castor::string::toString( value ) );
+				blockContext->parameters.add( Generator::ParamHeatOffset, c3d::string::toString( value ) );
 			}
 		}
 		CU_EndAttribute()
@@ -182,7 +182,7 @@ namespace diamond_square_terrain
 			}
 			else
 			{
-				auto value = params[0]->get< castor::Point2f >();
+				auto value = params[0]->get< c3d::Point2f >();
 				blockContext->biome.heightRange = { value->x, value->y };
 			}
 		}
@@ -197,7 +197,7 @@ namespace diamond_square_terrain
 			else
 			{
 				auto pass = params[0]->get< uint32_t >();
-				auto range= params[1]->get< castor::Point2f >();
+				auto range= params[1]->get< c3d::Point2f >();
 				blockContext->biome.steepnessBiomes[0].passIndex = pass;
 				blockContext->biome.steepnessBiomes[0].steepnessRange = { range->x, range->y };
 			}
@@ -213,7 +213,7 @@ namespace diamond_square_terrain
 			else
 			{
 				auto pass = params[0]->get< uint32_t >();
-				auto range = params[1]->get< castor::Point2f >();
+				auto range = params[1]->get< c3d::Point2f >();
 				blockContext->biome.steepnessBiomes[1].passIndex = pass;
 				blockContext->biome.steepnessBiomes[1].steepnessRange = { range->x, range->y };
 			}
@@ -229,7 +229,7 @@ namespace diamond_square_terrain
 			else
 			{
 				auto pass = params[0]->get< uint32_t >();
-				auto range = params[1]->get< castor::Point2f >();
+				auto range = params[1]->get< c3d::Point2f >();
 				blockContext->biome.steepnessBiomes[2].passIndex = pass;
 				blockContext->biome.steepnessBiomes[2].steepnessRange = { range->x, range->y };
 			}
@@ -237,61 +237,61 @@ namespace diamond_square_terrain
 		CU_EndAttribute()
 	}
 
-	castor::AttributeParsers createParsers()
+	c3d::AttributeParsers createParsers()
 	{
-		castor::AttributeParsers result;
+		c3d::AttributeParsers result;
 
 		addParserT( result
-			, castor3d::CSCNSection::eMesh
+			, c3d::CSCNSection::eMesh
 			, parse::DiamondSquareSection::eRoot
 			, Generator::Type
 			, &parse::parserDiamondSquareTerrain );
 		addParserT( result
 			, parse::DiamondSquareSection::eRoot
-			, castor3d::CSCNSection::eMesh
+			, c3d::CSCNSection::eMesh
 			, cuT( "}" )
 			, &parse::parserDiamondSquareTerrainEnd );
 		addParserT( result
 			, parse::DiamondSquareSection::eRoot
 			, Generator::ParamRandomSeed
 			, &parse::parserRandomSeed
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eBool >() } );
 		addParserT( result
 			, parse::DiamondSquareSection::eRoot
 			, Generator::ParamIsland
 			, &parse::parserIsland
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eBool >() } );
 		addParserT( result
 			, parse::DiamondSquareSection::eRoot
 			, Generator::ParamXzScale
 			, &parse::parserXzScale
-			, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
+			, { c3d::makeParameter< c3d::ParameterType::ePoint2F >() } );
 		addParserT( result
 			, parse::DiamondSquareSection::eRoot
 			, Generator::ParamUvScale
 			, &parse::parserUvScale
-			, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
+			, { c3d::makeParameter< c3d::ParameterType::ePoint2F >() } );
 		addParserT( result
 			, parse::DiamondSquareSection::eRoot
 			, Generator::ParamHeightRange
 			, &parse::parserHeightRange
-			, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
+			, { c3d::makeParameter< c3d::ParameterType::ePoint2F >() } );
 		addParserT( result
 			, parse::DiamondSquareSection::eRoot
 			, Generator::ParamDetail
 			, &parse::parserDetail
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 		addParserT( result
 			, parse::DiamondSquareSection::eRoot
 			, Generator::ParamHeatOffset
 			, &parse::parserHeatOffset
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		addParserT( result
 			, parse::DiamondSquareSection::eRoot
 			, parse::DiamondSquareSection::eBiome
 			, Generator::Biome
 			, &parse::parserBiome
-			, { castor::makeParameter< castor::ParameterType::eName >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eName >() } );
 		addParserT( result
 			, parse::DiamondSquareSection::eBiome
 			, parse::DiamondSquareSection::eRoot
@@ -301,30 +301,30 @@ namespace diamond_square_terrain
 			, parse::DiamondSquareSection::eBiome
 			, Generator::BiomeRange
 			, &parse::parserBiomeRange
-			, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
+			, { c3d::makeParameter< c3d::ParameterType::ePoint2F >() } );
 		addParserT( result
 			, parse::DiamondSquareSection::eBiome
 			, Generator::BiomeLowSteepness
 			, &parse::parserBiomeLowSteepness
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >()
-				, castor::makeParameter< castor::ParameterType::ePoint2F >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >()
+				, c3d::makeParameter< c3d::ParameterType::ePoint2F >() } );
 		addParserT( result
 			, parse::DiamondSquareSection::eBiome
 			, Generator::BiomeMediumSteepness
 			, &parse::parserBiomeMedSteepness
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >()
-				, castor::makeParameter< castor::ParameterType::ePoint2F >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >()
+				, c3d::makeParameter< c3d::ParameterType::ePoint2F >() } );
 		addParserT( result
 			, parse::DiamondSquareSection::eBiome
 			, Generator::BiomeHighSteepness
 			, &parse::parserBiomeHigSteepness
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >()
-				, castor::makeParameter< castor::ParameterType::ePoint2F >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >()
+				, c3d::makeParameter< c3d::ParameterType::ePoint2F >() } );
 
 		return result;
 	}
 
-	castor::StrUInt32Map createSections()
+	c3d::StrUInt32Map createSections()
 	{
 		return
 		{

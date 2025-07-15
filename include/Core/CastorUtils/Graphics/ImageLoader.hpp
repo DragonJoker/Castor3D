@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Graphics/Image.hpp"
 #include "CastorUtils/Math/Point.hpp"
 
-namespace castor
+namespace c3d
 {
 	class ImageLoaderImpl
 		: public NonMovable
@@ -214,7 +214,7 @@ namespace castor
 
 		void setCompressionSupport( PxCompressionSupport support )
 		{
-			m_options.support = castor::move( support );
+			m_options.support = c3d::move( support );
 		}
 
 		PxBufferConvertOptions const & getOptions()const

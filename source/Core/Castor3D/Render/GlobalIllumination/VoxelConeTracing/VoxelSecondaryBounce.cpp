@@ -24,9 +24,9 @@
 #include <RenderGraph/GraphContext.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 
-CU_ImplementSmartPtr( castor3d, VoxelSecondaryBounce )
+CU_ImplementSmartPtr( c3d, VoxelSecondaryBounce )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -56,7 +56,7 @@ namespace castor3d
 					, VK_SHADER_STAGE_COMPUTE_BIT ) };
 
 			return device->createDescriptorSetLayout( "VoxelSecondaryBounce"
-				, castor::move( bindings ) );
+				, c3d::move( bindings ) );
 		}
 
 		static ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
@@ -199,7 +199,7 @@ namespace castor3d
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eComputeShader ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
-				, castor::move( isEnabled )
+				, c3d::move( isEnabled )
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, crg::ru::Config{ 1u, false }.implicitAction( pass.images.back().view()
 				, crg::RecordContext::clearAttachment( pass.images.back().view(), transparentBlackClearColor ) ) }

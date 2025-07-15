@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 #include <string>
 
-namespace castor::format
+namespace c3d::format
 {
 	template< typename PrefixT, typename CharT, typename TraitsT >
 	struct BasicPrefixBufferT

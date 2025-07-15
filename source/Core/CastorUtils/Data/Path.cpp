@@ -6,7 +6,7 @@
 #pragma warning( disable: 4996 )
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
-namespace castor
+namespace c3d
 {
 	const xchar Path::GenericSeparator = cuT( '/' );
 #if defined( CU_PlatformWindows )
@@ -16,7 +16,7 @@ namespace castor
 #endif
 
 	Path::Path( String data, bool normalise )
-		: String{ castor::move( data ) }
+		: String{ c3d::move( data ) }
 	{
 		if ( normalise )
 		{
@@ -61,7 +61,7 @@ namespace castor
 	Path & Path::operator=( Path const & rhs )
 	{
 		Path path( rhs );
-		castor::swap( *this, path );
+		c3d::swap( *this, path );
 		return *this;
 	}
 

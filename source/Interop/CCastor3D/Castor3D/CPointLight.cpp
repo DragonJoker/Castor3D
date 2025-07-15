@@ -107,7 +107,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_PNTLGT );
 
-		object->internal->setIntensity( castor::LuminousIntensity{ val } );
+		object->internal->setIntensity( c3d::LuminousIntensity{ val } );
 
 		return C3D_OK;
 	}

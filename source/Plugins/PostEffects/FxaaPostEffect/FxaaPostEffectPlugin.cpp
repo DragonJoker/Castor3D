@@ -19,26 +19,26 @@
 
 extern "C"
 {
-	C3D_Fxaa_API void getRequiredVersion( castor3d::Version * version );
+	C3D_Fxaa_API void getRequiredVersion( c3d::Version * version );
 	C3D_Fxaa_API void isDebug( int * value );
-	C3D_Fxaa_API void getType( castor3d::PluginType * type );
+	C3D_Fxaa_API void getType( c3d::PluginType * type );
 	C3D_Fxaa_API void getName( char const ** name );
-	C3D_Fxaa_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
-	C3D_Fxaa_API void onUnload( castor3d::Engine * engine );
+	C3D_Fxaa_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin );
+	C3D_Fxaa_API void onUnload( c3d::Engine * engine );
 
-	C3D_Fxaa_API void getRequiredVersion( castor3d::Version * version )
+	C3D_Fxaa_API void getRequiredVersion( c3d::Version * version )
 	{
-		*version = castor3d::Version();
+		*version = c3d::Version();
 	}
 
 	C3D_Fxaa_API void isDebug( int * value )
 	{
-		*value = castor::system::isDebug() ? 1 : 0;
+		*value = c3d::system::isDebug() ? 1 : 0;
 	}
 
-	C3D_Fxaa_API void getType( castor3d::PluginType * type )
+	C3D_Fxaa_API void getType( c3d::PluginType * type )
 	{
-		*type = castor3d::PluginType::ePostEffect;
+		*type = c3d::PluginType::ePostEffect;
 	}
 
 	C3D_Fxaa_API void getName( char const ** name )
@@ -46,13 +46,13 @@ extern "C"
 		*name = fxaa::PostEffect::Name.c_str();
 	}
 
-	C3D_Fxaa_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
+	C3D_Fxaa_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin )
 	{
 		engine->getPostEffectFactory().registerType( fxaa::PostEffect::Type
 			, &fxaa::PostEffect::create );
 	}
 
-	C3D_Fxaa_API void onUnload( castor3d::Engine * engine )
+	C3D_Fxaa_API void onUnload( c3d::Engine * engine )
 	{
 		engine->getPostEffectFactory().unregisterType( fxaa::PostEffect::Type );
 	}

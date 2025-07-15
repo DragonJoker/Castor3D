@@ -9,20 +9,20 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::TextureConfiguration >
-		: public TextWriterT< castor3d::TextureConfiguration >
+	class TextWriter< TextureConfiguration >
+		: public TextWriterT< TextureConfiguration >
 	{
 	public:
 		explicit TextWriter( String const & tabs
-			, castor3d::Engine const & engine );
-		bool operator()( castor3d::TextureConfiguration const & object
+			, Engine const & engine );
+		bool operator()( TextureConfiguration const & object
 			, StringStream & file )override;
 
 	private:
-		castor3d::Engine const & m_engine;
+		Engine const & m_engine;
 	};
 }
 

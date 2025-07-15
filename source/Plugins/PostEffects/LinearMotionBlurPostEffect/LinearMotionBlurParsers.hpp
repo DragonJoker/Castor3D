@@ -15,8 +15,8 @@ namespace motion_blur
 		float blurScale = 1.0f;
 	};
 
-	castor::AttributeParsers createParsers();
-	castor::StrUInt32Map createSections();
+	c3d::AttributeParsers createParsers();
+	c3d::StrUInt32Map createSections();
 }
 
 #endif

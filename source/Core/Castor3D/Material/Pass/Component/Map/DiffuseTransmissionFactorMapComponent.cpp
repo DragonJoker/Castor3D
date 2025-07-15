@@ -16,16 +16,16 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::DiffuseTransmissionFactorMapComponent >
-		: public TextWriterT< castor3d::DiffuseTransmissionFactorMapComponent >
+	class TextWriter< DiffuseTransmissionFactorMapComponent >
+		: public TextWriterT< DiffuseTransmissionFactorMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, uint32_t mask = 0u )
-			: TextWriterT< castor3d::DiffuseTransmissionFactorMapComponent >{ tabs }
+			: TextWriterT< DiffuseTransmissionFactorMapComponent >{ tabs }
 			, m_mask{ mask }
 		{
 		}
@@ -35,7 +35,7 @@ namespace castor
 			return writeMask( file, cuT( "diffuse_transmission_factor_mask" ), m_mask );
 		}
 
-		bool operator()( castor3d::DiffuseTransmissionFactorMapComponent const & object
+		bool operator()( DiffuseTransmissionFactorMapComponent const & object
 			, StringStream & file )override
 		{
 			return true;
@@ -44,10 +44,7 @@ namespace castor
 	private:
 		uint32_t m_mask;
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace dftrftmk
@@ -118,7 +115,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void DiffuseTransmissionFactorMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void DiffuseTransmissionFactorMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "diffuse_transmission_factor" )
@@ -130,29 +127,29 @@ namespace castor3d
 					, 0xFF000000 );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "diffuse_transmission_factor_mask" )
 			, dftrftmk::parserUnitTransmissionMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "diffuse_transmission_factor_mask" )
 			, dftrftmk::parserUnitTransmissionMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "diffuse_transmission_factor" )
 			, dftrftmk::parserTexRemapTransmission );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "diffuse_transmission_factor_mask" )
 			, dftrftmk::parserTexRemapTransmissionMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 
 	bool DiffuseTransmissionFactorMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -163,22 +160,22 @@ namespace castor3d
 	}
 
 	void DiffuseTransmissionFactorMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, DiffuseTransmissionFactorMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, DiffuseTransmissionFactorMapComponent >( pass ) );
 	}
 
 	bool DiffuseTransmissionFactorMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< DiffuseTransmissionFactorMapComponent >{ tabs, mask }( file );
+		return TextWriter< DiffuseTransmissionFactorMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const DiffuseTransmissionFactorMapComponent::TypeName = C3D_MakePassMapComponentName( "diffuse_transmission_factor" );
+	String const DiffuseTransmissionFactorMapComponent::TypeName = C3D_MakePassMapComponentName( "diffuse_transmission_factor" );
 
 	DiffuseTransmissionFactorMapComponent::DiffuseTransmissionFactorMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -190,7 +187,7 @@ namespace castor3d
 
 	PassComponentUPtr DiffuseTransmissionFactorMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, DiffuseTransmissionFactorMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, DiffuseTransmissionFactorMapComponent >( pass );
 	}
 
 	void DiffuseTransmissionFactorMapComponent::doFillConfig( TextureConfiguration & configuration

@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ChunkWriterBase
 	{
@@ -82,7 +82,7 @@ namespace castor3d
 			, ChunkType type
 			, BinaryChunk & chunk )
 		{
-			castor::Vector< T > values{ begin, end };
+			Vector< T > values{ begin, end };
 
 			for ( auto & value : values )
 			{
@@ -121,12 +121,12 @@ namespace castor3d
 	};
 	/**
 	\~english
-	\brief		ChunkWriter specialisation for castor::String.
+	\brief		ChunkWriter specialisation for String.
 	\~french
-	\brief		Spécialisation de ChunkWriter pour castor::String.
+	\brief		Spécialisation de ChunkWriter pour String.
 	*/
 	template<>
-	class ChunkWriter< castor::String >
+	class ChunkWriter< String >
 		: public ChunkWriterBase
 	{
 	public:
@@ -144,7 +144,7 @@ namespace castor3d
 		 *\param[in]	chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool write( castor::String const & value
+		static inline bool write( String const & value
 			, ChunkType type
 			, BinaryChunk & chunk )
 		{
@@ -152,7 +152,7 @@ namespace castor3d
 
 			try
 			{
-				auto svalue = castor::toUtf8( value );
+				auto svalue = toUtf8( value );
 				auto buffer = ByteCPtr( svalue.data() );
 				ChunkWriterBase::write( buffer, buffer + svalue.size(), type, chunk );
 			}
@@ -166,12 +166,12 @@ namespace castor3d
 	};
 	/**
 	\~english
-	\brief		ChunkWriter specialisation for castor::Path.
+	\brief		ChunkWriter specialisation for Path.
 	\~french
-	\brief		Spécialisation de ChunkWriter pour castor::Path.
+	\brief		Spécialisation de ChunkWriter pour Path.
 	*/
 	template<>
-	class ChunkWriter< castor::Path >
+	class ChunkWriter< Path >
 		: public ChunkWriterBase
 	{
 	public:
@@ -189,7 +189,7 @@ namespace castor3d
 		 *\param[in]	chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool write( castor::Path const & value
+		static inline bool write( Path const & value
 			, ChunkType type
 			, BinaryChunk & chunk )
 		{
@@ -197,7 +197,7 @@ namespace castor3d
 
 			try
 			{
-				auto svalue = castor::toUtf8( value );
+				auto svalue = toUtf8( value );
 				auto buffer = ByteCPtr( svalue.data() );
 				ChunkWriterBase::write( buffer, buffer + svalue.size(), type, chunk );
 			}

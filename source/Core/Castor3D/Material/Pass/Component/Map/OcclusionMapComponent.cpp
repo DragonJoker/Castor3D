@@ -15,16 +15,16 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::OcclusionMapComponent >
-		: public TextWriterT< castor3d::OcclusionMapComponent >
+	class TextWriter< OcclusionMapComponent >
+		: public TextWriterT< OcclusionMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, uint32_t mask )
-			: TextWriterT< castor3d::OcclusionMapComponent >{ tabs }
+			: TextWriterT< OcclusionMapComponent >{ tabs }
 			, m_mask{ mask }
 		{
 		}
@@ -34,7 +34,7 @@ namespace castor
 			return writeMask( file, cuT( "occlusion_mask" ), m_mask );
 		}
 
-		bool operator()( castor3d::OcclusionMapComponent const & object
+		bool operator()( OcclusionMapComponent const & object
 			, StringStream & file )override
 		{
 			return writeMask( file, cuT( "occlusion_mask" ), m_mask );
@@ -43,10 +43,7 @@ namespace castor
 	private:
 		uint32_t m_mask;
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace occcmp
@@ -160,7 +157,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void OcclusionMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void OcclusionMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "occlusion" )
@@ -172,29 +169,29 @@ namespace castor3d
 					, 0x00FF0000 );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "occlusion_mask" )
 			, occcmp::parserUnitOcclusionMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "occlusion_mask" )
 			, occcmp::parserUnitOcclusionMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "occlusion" )
 			, occcmp::parserTexRemapOcclusion );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "occlusion_mask" )
 			, occcmp::parserTexRemapOcclusionMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 
 	bool OcclusionMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -205,22 +202,22 @@ namespace castor3d
 	}
 
 	void OcclusionMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, OcclusionMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, OcclusionMapComponent >( pass ) );
 	}
 
 	bool OcclusionMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< OcclusionMapComponent >{ tabs, mask }( file );
+		return TextWriter< OcclusionMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const OcclusionMapComponent::TypeName = C3D_MakePassMapComponentName( "occlusion" );
+	String const OcclusionMapComponent::TypeName = C3D_MakePassMapComponentName( "occlusion" );
 
 	OcclusionMapComponent::OcclusionMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -231,7 +228,7 @@ namespace castor3d
 
 	PassComponentUPtr OcclusionMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, OcclusionMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, OcclusionMapComponent >( pass );
 	}
 
 	void OcclusionMapComponent::doFillConfig( TextureConfiguration & configuration
@@ -243,10 +240,10 @@ namespace castor3d
 
 	PassMapDefaultImageParams OcclusionMapComponent::createDefaultImage()const
 	{
-		castor::String name{ cuT( "DefaultOcclusion" ) };
-		castor::ByteArray data{ 255u };
+		String name{ cuT( "DefaultOcclusion" ) };
+		ByteArray data{ 255u };
 		return { name
-			, castor::ImageCreateParams{ castor::getFormatName( castor::PixelFormat::eR8_UNORM ), data } };
+			, ImageCreateParams{ getFormatName( PixelFormat::eR8_UNORM ), data } };
 	}
 
 	//*********************************************************************************************

@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Design/UnicityException.hpp"
 #include "CastorUtils/Design/NonCopyable.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< class T >
 	class Unique

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_LogType_H___
 #define ___CU_LogType_H___
 
-namespace castor
+namespace c3d
 {
 	/**
 	\~english

@@ -4,9 +4,9 @@
 
 #if C3D_TRACE_OBJECTS
 
-namespace castor3d
+namespace c3d
 {
-	bool GpuObjectTracker::track( void * object, castor::String const & type, castor::String const & file, int line, castor::String & name )
+	bool GpuObjectTracker::track( void * object, String const & type, String const & file, int line, String & name )
 	{
 		auto it = std::find_if( m_allocated.begin()
 			, m_allocated.end()
@@ -17,28 +17,28 @@ namespace castor3d
 
 		bool result = it == m_allocated.end();
 
-		castor::StringStream ptrStream;
+		StringStream ptrStream;
 		ptrStream.width( 16 );
 		ptrStream.fill( '0' );
 		ptrStream << std::hex << std::right << uint64_t( object );
-		castor::StringStream typeStream;
+		StringStream typeStream;
 		typeStream.width( 20 );
 		typeStream << std::left << type;
 
 		if ( result )
 		{
-			castor::StringStream stream;
-			stream << castor::debug::Backtrace();
+			StringStream stream;
+			stream << debug::Backtrace();
 			++m_id;
 			m_allocated.emplace_back( m_id, type, object, file, line, stream.str() );
-			castor::StringStream nameStream;
+			StringStream nameStream;
 			nameStream << "(" << m_id << ") " << typeStream.str() << " [0x" << ptrStream.str() << "]";
 			log::debug << nameStream.str() << std::endl;
 			name = nameStream.str();
 		}
 		else
 		{
-			castor::StringStream nameStream;
+			StringStream nameStream;
 			nameStream << "(" << it->m_id << ") " << typeStream.str() << " [0x" << ptrStream.str() << "]";
 			log::debug << "Rereferencing object: " << nameStream.str() << std::endl;
 		}
@@ -46,7 +46,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool GpuObjectTracker::track( castor::Named * object, castor::String const & type, castor::String const & file, int line, castor::String & name )
+	bool GpuObjectTracker::track( Named * object, String const & type, String const & file, int line, String & name )
 	{
 		return track( reinterpret_cast< void * >( object ), type + cuT( ": " ) + object->getName(), file, line, name );
 	}
@@ -61,14 +61,14 @@ namespace castor3d
 			} );
 
 		bool result = false;
-		castor::StringStream ptrStream;
+		StringStream ptrStream;
 		ptrStream.width( 16 );
 		ptrStream.fill( '0' );
 		ptrStream << std::hex << std::right << uint64_t( object );
 
 		if ( it != m_allocated.end() )
 		{
-			castor::StringStream typeStream;
+			StringStream typeStream;
 			typeStream.width( 20 );
 			typeStream << std::left << it->m_name;
 			declaration = *it;
@@ -88,7 +88,7 @@ namespace castor3d
 	{
 		for ( auto const & decl : m_allocated )
 		{
-			castor::StringStream stream;
+			StringStream stream;
 			stream << "Leaked 0x" << std::hex << decl.m_object << std::dec << " (" << decl.m_name << "), from file " << decl.m_file << ", line " << decl.m_line << std::endl;
 			stream << decl.m_stack << std::endl;
 			log::error << stream.str() << std::endl;

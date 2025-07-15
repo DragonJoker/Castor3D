@@ -22,8 +22,8 @@ namespace light_streaks
 
 	struct KawaseUboConfiguration
 	{
-		castor::Point2f pixelSize{};
-		castor::Point2f direction{};
+		c3d::Point2f pixelSize{};
+		c3d::Point2f direction{};
 		int samples{ 4 };
 		float attenuation{ 0.9f };
 		int pass{};
@@ -58,20 +58,20 @@ namespace light_streaks
 		using Configuration = KawaseUboConfiguration;
 
 	public:
-		explicit KawaseUbo( castor3d::RenderDevice const & device );
+		explicit KawaseUbo( c3d::RenderDevice const & device );
 		~KawaseUbo();
 		void update( uint32_t index
-			, castor3d::Extent2D const & size
-			, castor::Point2f const & direction
+			, c3d::Extent2D const & size
+			, c3d::Point2f const & direction
 			, uint32_t pass );
 		void update( KawaseConfig const & config );
 
-		castor3d::UniformBufferOffsetT< Configuration > const & getUbo( uint32_t index )const
+		c3d::UniformBufferOffsetT< Configuration > const & getUbo( uint32_t index )const
 		{
 			return m_ubo[index];
 		}
 
-		castor3d::UniformBufferOffsetT< Configuration > & getUbo( uint32_t index )
+		c3d::UniformBufferOffsetT< Configuration > & getUbo( uint32_t index )
 		{
 			return m_ubo[index];
 		}
@@ -87,16 +87,16 @@ namespace light_streaks
 			, uint32_t binding
 			, uint32_t index )const
 		{
-			return m_ubo[index].createPassBinding( pass, "KawaseCfg" + castor::string::toMbString( index ), binding );
+			return m_ubo[index].createPassBinding( pass, "KawaseCfg" + c3d::string::toMbString( index ), binding );
 		}
 
 	public:
-		static castor::MbString const Buffer;
-		static castor::MbString const Data;
+		static c3d::MbString const Buffer;
+		static c3d::MbString const Data;
 
 	private:
-		castor3d::RenderDevice const & m_device;
-		castor::Vector< castor3d::UniformBufferOffsetT< Configuration > > m_ubo;
+		c3d::RenderDevice const & m_device;
+		c3d::Vector< c3d::UniformBufferOffsetT< Configuration > > m_ubo;
 	};
 }
 

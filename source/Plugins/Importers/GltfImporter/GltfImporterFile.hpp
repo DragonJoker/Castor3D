@@ -29,52 +29,52 @@ See LICENSE file in root folder
 namespace fastgltf
 {
 	template<>
-	struct ElementTraits< castor::Point2ub > : ElementTraitsBase< uint8_t, AccessorType::Vec2 > {};
+	struct ElementTraits< c3d::Point2ub > : ElementTraitsBase< uint8_t, AccessorType::Vec2 > {};
 	template<>
-	struct ElementTraits< castor::Point3ub > : ElementTraitsBase< uint8_t, AccessorType::Vec3 > {};
+	struct ElementTraits< c3d::Point3ub > : ElementTraitsBase< uint8_t, AccessorType::Vec3 > {};
 	template<>
-	struct ElementTraits< castor::Point4ub > : ElementTraitsBase< uint8_t, AccessorType::Vec4 > {};
+	struct ElementTraits< c3d::Point4ub > : ElementTraitsBase< uint8_t, AccessorType::Vec4 > {};
 	template<>
-	struct ElementTraits< castor::Point2us > : ElementTraitsBase< uint16_t, AccessorType::Vec2 > {};
+	struct ElementTraits< c3d::Point2us > : ElementTraitsBase< uint16_t, AccessorType::Vec2 > {};
 	template<>
-	struct ElementTraits< castor::Point3us > : ElementTraitsBase< uint16_t, AccessorType::Vec3 > {};
+	struct ElementTraits< c3d::Point3us > : ElementTraitsBase< uint16_t, AccessorType::Vec3 > {};
 	template<>
-	struct ElementTraits< castor::Point4us > : ElementTraitsBase< uint16_t, AccessorType::Vec4 > {};
+	struct ElementTraits< c3d::Point4us > : ElementTraitsBase< uint16_t, AccessorType::Vec4 > {};
 	template<>
-	struct ElementTraits< castor::Point2ui > : ElementTraitsBase< uint32_t, AccessorType::Vec2 > {};
+	struct ElementTraits< c3d::Point2ui > : ElementTraitsBase< uint32_t, AccessorType::Vec2 > {};
 	template<>
-	struct ElementTraits< castor::Point3ui > : ElementTraitsBase< uint32_t, AccessorType::Vec3 > {};
+	struct ElementTraits< c3d::Point3ui > : ElementTraitsBase< uint32_t, AccessorType::Vec3 > {};
 	template<>
-	struct ElementTraits< castor::Point4ui > : ElementTraitsBase< uint32_t, AccessorType::Vec4 > {};
+	struct ElementTraits< c3d::Point4ui > : ElementTraitsBase< uint32_t, AccessorType::Vec4 > {};
 	template<>
-	struct ElementTraits< castor::Point2f > : ElementTraitsBase< float, AccessorType::Vec2 > {};
+	struct ElementTraits< c3d::Point2f > : ElementTraitsBase< float, AccessorType::Vec2 > {};
 	template<>
-	struct ElementTraits< castor::Point3f > : ElementTraitsBase< float, AccessorType::Vec3 > {};
+	struct ElementTraits< c3d::Point3f > : ElementTraitsBase< float, AccessorType::Vec3 > {};
 	template<>
-	struct ElementTraits< castor::Point4f > : ElementTraitsBase< float, AccessorType::Vec4 > {};
+	struct ElementTraits< c3d::Point4f > : ElementTraitsBase< float, AccessorType::Vec4 > {};
 	template<>
-	struct ElementTraits< castor::Quaternion > : ElementTraitsBase< float, AccessorType::Vec4 > {};
+	struct ElementTraits< c3d::Quaternion > : ElementTraitsBase< float, AccessorType::Vec4 > {};
 	template<>
-	struct ElementTraits< castor::Matrix4x4f > : ElementTraitsBase< float, AccessorType::Mat4 > {};
+	struct ElementTraits< c3d::Matrix4x4f > : ElementTraitsBase< float, AccessorType::Mat4 > {};
 }
 
 namespace c3d_gltf
 {
-	inline const castor::String DefaultMaterial = cuT( "GLTF_DefaultMaterial" );
+	inline const c3d::String DefaultMaterial = cuT( "GLTF_DefaultMaterial" );
 
-	castor3d::NodeTransform convert( std::variant< fastgltf::TRS, fastgltf::math::fmat4x4> const & transform );
-	castor::Point3f convert( fastgltf::math::fvec3 const & value );
-	castor::Quaternion convert( fastgltf::math::fquat const & value );
+	c3d::NodeTransform convert( std::variant< fastgltf::TRS, fastgltf::math::fmat4x4> const & transform );
+	c3d::Point3f convert( fastgltf::math::fvec3 const & value );
+	c3d::Quaternion convert( fastgltf::math::fquat const & value );
 
-	using AnimationChannelSampler = castor::Pair< fastgltf::AnimationChannel, fastgltf::AnimationSampler >;
-	using NodeAnimationChannelSampler = castor::Vector< AnimationChannelSampler >;
-	using AnimationChannelSamplers = castor::Map< fastgltf::AnimationPath, NodeAnimationChannelSampler >;
-	using Animations = castor::StringMap< AnimationChannelSamplers >;
+	using AnimationChannelSampler = c3d::Pair< fastgltf::AnimationChannel, fastgltf::AnimationSampler >;
+	using NodeAnimationChannelSampler = c3d::Vector< AnimationChannelSampler >;
+	using AnimationChannelSamplers = c3d::Map< fastgltf::AnimationPath, NodeAnimationChannelSampler >;
+	using Animations = c3d::StringMap< AnimationChannelSamplers >;
 
 	struct NameContainer
 	{
-		castor::UnorderedMap< size_t, castor::String > namesByIndex;
-		castor::UnorderedSet< castor::String > names;
+		c3d::HashMap< size_t, c3d::String > namesByIndex;
+		c3d::HashSet< c3d::String > names;
 	};
 
 	struct GltfSubmeshData
@@ -99,7 +99,7 @@ namespace c3d_gltf
 			, skinIndex{ pskinIndex }
 		{
 		}
-		castor::Vector< GltfSubmeshData > submeshes;
+		c3d::Vector< GltfSubmeshData > submeshes;
 		fastgltf::Skin const * skin{};
 		size_t skinIndex{};
 	};
@@ -121,41 +121,41 @@ namespace c3d_gltf
 		bool isSkeleton;
 		size_t index;
 		fastgltf::Node const * node;
-		castor::Vector< GltfMeshData const * > meshes{};
+		c3d::Vector< GltfMeshData const * > meshes{};
 		Animations anims;
-		castor::Vector< std::pair< castor3d::ImporterFile::NodeData, castor3d::NodeTransform > > instances{};
+		c3d::Vector< std::pair< c3d::ImporterFile::NodeData, c3d::NodeTransform > > instances{};
 	};
 
 	struct GltfLightData
-		: castor3d::ImporterFile::LightData
+		: c3d::ImporterFile::LightData
 	{
-		GltfLightData( castor::String pname
-			, castor3d::LightType ptype
+		GltfLightData( c3d::String pname
+			, c3d::LightType ptype
 			, uint32_t plightIndex
-			, castor::String pnodeName )
-			: LightData{ castor::move( pname ), ptype }
+			, c3d::String pnodeName )
+			: LightData{ c3d::move( pname ), ptype }
 			, lightIndex{ plightIndex }
-			, nodeName{ castor::move( pnodeName ) }
+			, nodeName{ c3d::move( pnodeName ) }
 		{
 		}
 
 		uint32_t lightIndex{};
-		castor::String nodeName{};
+		c3d::String nodeName{};
 	};
 
 	struct GltfLightGroupData
-		: castor3d::ImporterFile::LightGroupData
+		: c3d::ImporterFile::LightGroupData
 	{
-		GltfLightGroupData( castor::String pname
-			, castor3d::LightType ptype
+		GltfLightGroupData( c3d::String pname
+			, c3d::LightType ptype
 			, uint32_t plightIndex )
-			: LightGroupData{ castor::move( pname ), ptype }
+			: LightGroupData{ c3d::move( pname ), ptype }
 			, lightIndex{ plightIndex }
 		{
 		}
 
 		uint32_t lightIndex{};
-		castor::StringArray nodeNames{};
+		c3d::StringArray nodeNames{};
 	};
 
 	struct GlSkeletonData
@@ -165,13 +165,13 @@ namespace c3d_gltf
 
 	struct GltfSceneData
 	{
-		castor::Vector< GltfNodeData > nodes;
-		castor::Vector< GltfNodeData * > sortedNodes;
-		castor::Vector< GltfNodeData const * > skeletonNodes;
-		castor::StringMap< GltfMeshData > meshes;
-		castor::StringMap< GlSkeletonData > skeletons;
-		castor::Vector< GltfLightData > lights;
-		castor::StringMap< GltfLightGroupData > lightGroups;
+		c3d::Vector< GltfNodeData > nodes;
+		c3d::Vector< GltfNodeData * > sortedNodes;
+		c3d::Vector< GltfNodeData const * > skeletonNodes;
+		c3d::StringMap< GltfMeshData > meshes;
+		c3d::StringMap< GlSkeletonData > skeletons;
+		c3d::Vector< GltfLightData > lights;
+		c3d::StringMap< GltfLightGroupData > lightGroups;
 	};
 
 	/** Replacement buffer data adapter for fastgltf which supports decompressing with EXT_meshopt_compression */
@@ -193,80 +193,80 @@ namespace c3d_gltf
 	};
 
 	class GltfImporterFile
-		: public castor3d::ImporterFile
+		: public c3d::ImporterFile
 	{
 	public:
-		C3D_Gltf_API GltfImporterFile( castor3d::Engine & engine
-			, castor3d::Scene * scene
-			, castor::Path const & path
-			, castor3d::Parameters const & parameters
-			, castor3d::ProgressBar * progress );
+		C3D_Gltf_API GltfImporterFile( c3d::Engine & engine
+			, c3d::Scene * scene
+			, c3d::Path const & path
+			, c3d::Parameters const & parameters
+			, c3d::ProgressBar * progress );
 
-		static castor3d::ImporterFileUPtr create( castor3d::Engine & engine
-			, castor3d::Scene * scene
-			, castor::Path const & path
-			, castor3d::Parameters const & parameters
-			, castor3d::ProgressBar * progress );
+		static c3d::ImporterFileUPtr create( c3d::Engine & engine
+			, c3d::Scene * scene
+			, c3d::Path const & path
+			, c3d::Parameters const & parameters
+			, c3d::ProgressBar * progress );
 
-		using castor3d::ImporterFile::getInternalName;
+		using c3d::ImporterFile::getInternalName;
 
-		castor::String getMaterialName( size_t index )const;
-		castor::String getMeshName( size_t index )const;
-		castor::String getNodeName( size_t index, size_t instance )const;
-		castor::String getSkinName( size_t index )const;
-		castor::String getLightName( size_t index )const;
-		castor::String getCameraName( size_t index )const;
-		castor::String getSamplerName( fastgltf::Sampler const & impSampler )const;
-		castor::String getGeometryName( size_t nodeIndex, size_t meshIndex, size_t instance )const;
-		castor::String getAnimationName( size_t index )const;
+		c3d::String getMaterialName( size_t index )const;
+		c3d::String getMeshName( size_t index )const;
+		c3d::String getNodeName( size_t index, size_t instance )const;
+		c3d::String getSkinName( size_t index )const;
+		c3d::String getLightName( size_t index )const;
+		c3d::String getCameraName( size_t index )const;
+		c3d::String getSamplerName( fastgltf::Sampler const & impSampler )const;
+		c3d::String getGeometryName( size_t nodeIndex, size_t meshIndex, size_t instance )const;
+		c3d::String getAnimationName( size_t index )const;
 
-		size_t getNodeIndex( castor::String const & name )const;
-		size_t getSkeletonNodeIndex( castor::String const & name )const;
-		size_t getMeshIndex( castor::String const & name, uint32_t submeshIndex )const;
+		size_t getNodeIndex( c3d::String const & name )const;
+		size_t getSkeletonNodeIndex( c3d::String const & name )const;
+		size_t getMeshIndex( c3d::String const & name, uint32_t submeshIndex )const;
 
-		Animations getMeshAnimations( castor3d::Mesh const & mesh, uint32_t submeshIndex )const;
-		Animations getSkinAnimations( castor3d::Skeleton const & skeleton )const;
-		Animations getNodeAnimations( castor3d::SceneNode const & node )const;
+		Animations getMeshAnimations( c3d::Mesh const & mesh, uint32_t submeshIndex )const;
+		Animations getSkinAnimations( c3d::Skeleton const & skeleton )const;
+		Animations getNodeAnimations( c3d::SceneNode const & node )const;
 
 		bool isSkeletonNode( size_t nodeIndex )const;
 
-		castor::StringArray listMaterials()override;
-		castor::Vector< MeshData > listMeshes()override;
-		castor::StringArray listSkeletons()override;
-		castor::Vector< NodeData > listSceneNodes()override;
-		castor::Vector< LightData > listLights()override;
-		castor::Vector< LightGroupData > listLightGroups()override;
-		castor::Vector< GeometryData > listGeometries()override;
-		castor::Vector< CameraData > listCameras()override;
-		castor::StringArray listMeshAnimations( castor3d::Mesh const & mesh )override;
-		castor::StringArray listSkeletonAnimations( castor3d::Skeleton const & skeleton )override;
-		castor::StringArray listSceneNodeAnimations( castor3d::SceneNode const & node )override;
-		castor::Vector< uint32_t > listTextureAnimations( castor3d::Material const & material
+		c3d::StringArray listMaterials()override;
+		c3d::Vector< MeshData > listMeshes()override;
+		c3d::StringArray listSkeletons()override;
+		c3d::Vector< NodeData > listSceneNodes()override;
+		c3d::Vector< LightData > listLights()override;
+		c3d::Vector< LightGroupData > listLightGroups()override;
+		c3d::Vector< GeometryData > listGeometries()override;
+		c3d::Vector< CameraData > listCameras()override;
+		c3d::StringArray listMeshAnimations( c3d::Mesh const & mesh )override;
+		c3d::StringArray listSkeletonAnimations( c3d::Skeleton const & skeleton )override;
+		c3d::StringArray listSceneNodeAnimations( c3d::SceneNode const & node )override;
+		c3d::Vector< uint32_t > listTextureAnimations( c3d::Material const & material
 			, uint32_t pass )override;
 		uint32_t countAllMeshAnimations()const override;
 		uint32_t countAllSkeletonAnimations()const override;
 		uint32_t countAllSceneNodeAnimations()const override;
 		uint32_t countAllTextureAnimations()const override;
 
-		castor3d::MaterialImporterUPtr createMaterialImporter()override;
-		castor3d::AnimationImporterUPtr createAnimationImporter()override;
-		castor3d::SkeletonImporterUPtr createSkeletonImporter()override;
-		castor3d::MeshImporterUPtr createMeshImporter()override;
-		castor3d::SceneNodeImporterUPtr createSceneNodeImporter()override;
-		castor3d::LightImporterUPtr createLightImporter()override;
-		castor3d::CameraImporterUPtr createCameraImporter()override;
+		c3d::MaterialImporterUPtr createMaterialImporter()override;
+		c3d::AnimationImporterUPtr createAnimationImporter()override;
+		c3d::SkeletonImporterUPtr createSkeletonImporter()override;
+		c3d::MeshImporterUPtr createMeshImporter()override;
+		c3d::SceneNodeImporterUPtr createSceneNodeImporter()override;
+		c3d::LightImporterUPtr createLightImporter()override;
+		c3d::CameraImporterUPtr createCameraImporter()override;
 
-		castor::StringMap< castor3d::NodeTransform const * > const & getNodes()const noexcept
+		c3d::StringMap< c3d::NodeTransform const * > const & getNodes()const noexcept
 		{
 			return m_nodes;
 		}
 
-		castor::Vector< GltfLightData > const & getLights()const noexcept
+		c3d::Vector< GltfLightData > const & getLights()const noexcept
 		{
 			return m_sceneData.lights;
 		}
 
-		castor::StringMap< GltfLightGroupData > const & getLightGroups()const noexcept
+		c3d::StringMap< GltfLightGroupData > const & getLightGroups()const noexcept
 		{
 			return m_sceneData.lightGroups;
 		}
@@ -292,7 +292,7 @@ namespace c3d_gltf
 		}
 
 	public:
-		static castor::MbString const Name;
+		static c3d::MbString const Name;
 
 	private:
 		void doPrelistNodes();
@@ -305,8 +305,8 @@ namespace c3d_gltf
 	private:
 		fastgltf::Expected< fastgltf::Asset > m_expAsset;
 		fastgltf::Asset const * m_asset{};
-		castor::Vector< size_t > m_sceneIndices{};
-		castor::StringMap< castor3d::NodeTransform const * > m_nodes{};
+		c3d::Vector< size_t > m_sceneIndices{};
+		c3d::StringMap< c3d::NodeTransform const * > m_nodes{};
 		CompressedBufferDataAdapter m_adapter;
 		GltfSceneData m_sceneData;
 		mutable NameContainer m_materialNames;

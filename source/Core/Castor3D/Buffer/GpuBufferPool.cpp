@@ -8,15 +8,15 @@
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Sync/Fence.hpp>
 
-CU_ImplementSmartPtr( castor3d, GpuBufferPool )
+CU_ImplementSmartPtr( c3d, GpuBufferPool )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 	namespace gpupol
 	{
-		static crg::VkBufferArray makeVkArray( castor::Vector< ashes::BufferBase const * > const & buffers )
+		static crg::VkBufferArray makeVkArray( Vector< ashes::BufferBase const * > const & buffers )
 		{
 			crg::VkBufferArray result;
 
@@ -33,13 +33,13 @@ namespace castor3d
 
 	void createUniformPassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
-		, castor::Vector< ashes::BufferBase const * > const & buffers
+		, String const & name
+		, Vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
 		crg::VkBufferArray vkBuffers = gpupol::makeVkArray( buffers );
-		pass.addUniformBuffer( { vkBuffers, castor::toUtf8( name ) }
+		pass.addUniformBuffer( { vkBuffers, toUtf8( name ) }
 			, binding
 			, offset
 			, size );
@@ -47,13 +47,13 @@ namespace castor3d
 
 	void createInputStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
-		, castor::Vector< ashes::BufferBase const * > const & buffers
+		, String const & name
+		, Vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
 		crg::VkBufferArray vkBuffers = gpupol::makeVkArray( buffers );
-		pass.addInputStorageBuffer( { vkBuffers, castor::toUtf8( name ) }
+		pass.addInputStorageBuffer( { vkBuffers, toUtf8( name ) }
 			, binding
 			, offset
 			, size );
@@ -61,13 +61,13 @@ namespace castor3d
 
 	void createInOutStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
-		, castor::Vector< ashes::BufferBase const * > const & buffers
+		, String const & name
+		, Vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
 		crg::VkBufferArray vkBuffers = gpupol::makeVkArray( buffers );
-		pass.addInOutStorageBuffer( { vkBuffers, castor::toUtf8( name ) }
+		pass.addInOutStorageBuffer( { vkBuffers, toUtf8( name ) }
 			, binding
 			, offset
 			, size );
@@ -75,13 +75,13 @@ namespace castor3d
 
 	void createOutputStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
-		, castor::Vector< ashes::BufferBase const * > const & buffers
+		, String const & name
+		, Vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
 		crg::VkBufferArray vkBuffers = gpupol::makeVkArray( buffers );
-		pass.addOutputStorageBuffer( { vkBuffers, castor::toUtf8( name ) }
+		pass.addOutputStorageBuffer( { vkBuffers, toUtf8( name ) }
 			, binding
 			, offset
 			, size );
@@ -89,13 +89,13 @@ namespace castor3d
 
 	void createClearableOutputStorageBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
-		, castor::Vector< ashes::BufferBase const * > const & buffers
+		, String const & name
+		, Vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
 		crg::VkBufferArray vkBuffers = gpupol::makeVkArray( buffers );
-		pass.addClearableOutputStorageBuffer( { vkBuffers, castor::toUtf8( name ) }
+		pass.addClearableOutputStorageBuffer( { vkBuffers, toUtf8( name ) }
 			, binding
 			, offset
 			, size );
@@ -103,7 +103,7 @@ namespace castor3d
 
 	void createUniformPassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::BufferBase const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size )
@@ -118,7 +118,7 @@ namespace castor3d
 
 	void createInputStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::BufferBase const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size )
@@ -133,7 +133,7 @@ namespace castor3d
 
 	void createInOutStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::BufferBase const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size )
@@ -148,7 +148,7 @@ namespace castor3d
 
 	void createOutputStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::BufferBase const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size )
@@ -163,7 +163,7 @@ namespace castor3d
 
 	void createClearableOutputStorageBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::BufferBase const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size )
@@ -178,12 +178,12 @@ namespace castor3d
 
 	void createUniformPassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::Buffer< uint8_t > const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
-		pass.addUniformBuffer( { buffer, castor::toUtf8( name ) }
+		pass.addUniformBuffer( { buffer, toUtf8( name ) }
 			, binding
 			, offset
 			, size );
@@ -191,12 +191,12 @@ namespace castor3d
 
 	void createInputStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::Buffer< uint8_t > const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
-		pass.addInputStorageBuffer( { buffer, castor::toUtf8( name ) }
+		pass.addInputStorageBuffer( { buffer, toUtf8( name ) }
 			, binding
 			, offset
 			, size );
@@ -204,12 +204,12 @@ namespace castor3d
 
 	void createInOutStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::Buffer< uint8_t > const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
-		pass.addInOutStorageBuffer( { buffer, castor::toUtf8( name ) }
+		pass.addInOutStorageBuffer( { buffer, toUtf8( name ) }
 			, binding
 			, offset
 			, size );
@@ -217,12 +217,12 @@ namespace castor3d
 
 	void createOutputStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::Buffer< uint8_t > const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
-		pass.addOutputStorageBuffer( { buffer, castor::toUtf8( name ) }
+		pass.addOutputStorageBuffer( { buffer, toUtf8( name ) }
 			, binding
 			, offset
 			, size );
@@ -230,12 +230,12 @@ namespace castor3d
 
 	void createClearableOutputStorageBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::Buffer< uint8_t > const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
-		pass.addClearableOutputStorageBuffer( { buffer, castor::toUtf8( name ) }
+		pass.addClearableOutputStorageBuffer( { buffer, toUtf8( name ) }
 			, binding
 			, offset
 			, size );
@@ -244,9 +244,9 @@ namespace castor3d
 	//*********************************************************************************************
 
 	GpuBufferPool::GpuBufferPool( RenderDevice const & device
-		, castor::String debugName )
+		, String debugName )
 		: OwnedBy< RenderSystem >{ device.renderSystem }
-		, m_debugName{ castor::move( debugName ) }
+		, m_debugName{ c3d::move( debugName ) }
 		, m_minBlockSize{ uint32_t( device.renderSystem.getProperties().limits.minMemoryMapAlignment ) }
 	{
 	}
@@ -312,13 +312,13 @@ namespace castor3d
 			CU_Require( maxSize < std::numeric_limits< uint32_t >::max() );
 			CU_Require( maxSize >= size );
 
-			auto buffer = castor::make_unique< GpuBuddyBuffer >( *getRenderSystem()
+			auto buffer = makeRawUnique< GpuBuddyBuffer >( *getRenderSystem()
 				, target
 				, memory
 				, m_debugName
 				, ashes::QueueShare{}
 				, GpuBufferBuddyAllocator{ uint32_t( level ), m_minBlockSize } );
-			it->second.emplace_back( castor::move( buffer ) );
+			it->second.emplace_back( c3d::move( buffer ) );
 			itB = std::next( it->second.begin()
 				, ptrdiff_t( it->second.size() - 1u ) );
 		}
@@ -339,7 +339,7 @@ namespace castor3d
 		{
 			auto itB = std::find_if( it->second.begin()
 				, it->second.end()
-				, [&buffer]( castor::RawUniquePtr< GpuBuddyBuffer > const & lookup )
+				, [&buffer]( RawUniquePtr< GpuBuddyBuffer > const & lookup )
 				{
 						return &lookup->getBuffer().getBuffer() == &buffer.getBuffer().getBuffer();
 				} );

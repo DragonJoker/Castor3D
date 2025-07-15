@@ -156,10 +156,10 @@ extern "C"
 		if ( !object->getInternal() )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_NODE );
 
-		object->getInternal()->getScene()->getEngine()->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+		object->getInternal()->getScene()->getEngine()->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 			, [object, val]()
 			{
-				object->getInternal()->yaw( castor::Angle::fromRadians( val ) );
+				object->getInternal()->yaw( c3d::Angle::fromRadians( val ) );
 			} ) );
 
 		return C3D_OK;
@@ -172,10 +172,10 @@ extern "C"
 		if ( !object->getInternal() )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_NODE );
 
-		object->getInternal()->getScene()->getEngine()->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+		object->getInternal()->getScene()->getEngine()->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 			, [object, val]()
 			{
-				object->getInternal()->pitch( castor::Angle::fromRadians( val ) );
+				object->getInternal()->pitch( c3d::Angle::fromRadians( val ) );
 			} ) );
 
 		return C3D_OK;
@@ -188,10 +188,10 @@ extern "C"
 		if ( !object->getInternal() )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_NODE );
 
-		object->getInternal()->getScene()->getEngine()->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+		object->getInternal()->getScene()->getEngine()->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 			, [object, val]()
 			{
-				object->getInternal()->roll( castor::Angle::fromRadians( val ) );
+				object->getInternal()->roll( c3d::Angle::fromRadians( val ) );
 			} ) );
 
 		return C3D_OK;
@@ -205,7 +205,7 @@ extern "C"
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_NODE );
 
 		auto value = cc3d::convert( *val );
-		object->getInternal()->getScene()->getEngine()->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+		object->getInternal()->getScene()->getEngine()->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 			, [object, value]()
 			{
 				object->getInternal()->rotate( value );
@@ -222,7 +222,7 @@ extern "C"
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_NODE );
 
 		auto value = cc3d::convert( *val );
-		object->getInternal()->getScene()->getEngine()->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+		object->getInternal()->getScene()->getEngine()->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 			, [object, value]()
 			{
 				object->getInternal()->translate( value );
@@ -239,7 +239,7 @@ extern "C"
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_NODE );
 
 		auto value = cc3d::convert( *val );
-		object->getInternal()->getScene()->getEngine()->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+		object->getInternal()->getScene()->getEngine()->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 			, [object, value]()
 			{
 				object->getInternal()->scale( value );

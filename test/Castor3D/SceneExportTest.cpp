@@ -29,9 +29,9 @@ namespace Testing
 {
 	namespace
 	{
-		bool exportScene( castor3d::Scene const & scene, castor::Path const & fileName )
+		bool exportScene( c3d::Scene const & scene, c3d::Path const & fileName )
 		{
-			castor3d::exporter::CscnSceneExporter exporter{ castor3d::exporter::ExportOptions{} };
+			c3d::exporter::CscnSceneExporter exporter{ c3d::exporter::ExportOptions{} };
 			return exporter.exportScene( scene, fileName );
 		}
 
@@ -44,7 +44,7 @@ namespace Testing
 			cache.add( object->getName(), object );
 		}
 
-		void cleanup( castor3d::SceneRPtr scene )
+		void cleanup( c3d::SceneRPtr scene )
 		{
 			auto & engine = *scene->getEngine();
 			engine.getRenderLoop().renderSyncFrame();
@@ -56,7 +56,7 @@ namespace Testing
 		}
 	}
 
-	SceneExportTest::SceneExportTest( castor3d::Engine & engine )
+	SceneExportTest::SceneExportTest( c3d::Engine & engine )
 		: C3DTestCase{ "SceneExportTest", engine }
 	{
 	}
@@ -113,10 +113,10 @@ namespace Testing
 		cleanup( doParseScene( m_testDataFolder / cuT( "Anim.zip" ), true ) );
 	}
 
-	castor3d::SceneRPtr SceneExportTest::doParseScene( castor::Path const & path
+	c3d::SceneRPtr SceneExportTest::doParseScene( c3d::Path const & path
 		, bool initialise )
 	{
-		castor3d::SceneFileParser dstParser{ m_engine };
+		c3d::SceneFileParser dstParser{ m_engine };
 		CT_REQUIRE( dstParser.parseFile( path ) );
 		CT_REQUIRE( dstParser.scenesBegin() != dstParser.scenesEnd() );
 		auto result = dstParser.scenesBegin()->second;
@@ -129,31 +129,31 @@ namespace Testing
 		return result;
 	}
 
-	void SceneExportTest::doTestScene( castor::String const & name )
+	void SceneExportTest::doTestScene( c3d::String const & name )
 	{
-		castor3d::SceneRPtr src{ doParseScene( m_testDataFolder / name ) };
-		castor::Path path = castor::Path{ cuT( "TestScene" ) } / cuT( "TestScene.cscn" );
+		c3d::SceneRPtr src{ doParseScene( m_testDataFolder / name ) };
+		c3d::Path path = c3d::Path{ cuT( "TestScene" ) } / cuT( "TestScene.cscn" );
 		CT_CHECK( exportScene( *src, path ) );
 		m_engine.getSceneCache().rename( src->getName()
 			, src->getName() + cuT( "_ren" ) );
-		castor3d::SceneRPtr dst{ doParseScene( path ) };
+		c3d::SceneRPtr dst{ doParseScene( path ) };
 		CT_EQUAL( *src, *dst );
-		castor::File::directoryDelete( castor::Path{ cuT( "TestScene" ) } );
+		c3d::File::directoryDelete( c3d::Path{ cuT( "TestScene" ) } );
 		cleanup( dst );
 		cleanup( src );
 	}
 
-	void SceneExportTest::doTestCleanReloadScene( castor::String const & name )
+	void SceneExportTest::doTestCleanReloadScene( c3d::String const & name )
 	{
-		castor3d::EngineCounts before{ m_engine };
+		c3d::EngineCounts before{ m_engine };
 		{
 			cleanup( doParseScene( m_testDataFolder / name, true ) );
-			castor3d::EngineCounts after{ m_engine };
+			c3d::EngineCounts after{ m_engine };
 			CT_EQUAL( before, after );
 		}
 		{
 			cleanup( doParseScene( m_testDataFolder / name, true ) );
-			castor3d::EngineCounts after{ m_engine };
+			c3d::EngineCounts after{ m_engine };
 			CT_EQUAL( before, after );
 		}
 		m_engine.cleanup();

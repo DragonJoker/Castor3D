@@ -27,10 +27,10 @@ See LICENSE file in root folder
 #include <RenderGraph/RunnablePasses/RenderPass.hpp>
 #include <RenderGraph/RunnablePasses/PipelineHolder.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class LightPropagationPass
-		: public castor::Named
+		: public Named
 		, public crg::RenderPass
 	{
 	public:
@@ -82,7 +82,7 @@ namespace castor3d
 			, uint32_t gridSize
 			, BlendMode blendMode );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		RenderTechniquePass::accept
 		 */
 		C3D_API void accept( ConfigurationVisitorBase & visitor );
 
@@ -121,7 +121,7 @@ namespace castor3d
 
 	private:
 		uint32_t m_gridSize;
-		GpuBufferOffsetT< castor::Point3f > m_vertexBuffer;
+		GpuBufferOffsetT< Point3f > m_vertexBuffer;
 		ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		PipelineHolder m_holder;

@@ -1,12 +1,12 @@
 /*
 See LICENSE file in root folder
 */
-namespace castor3d
+namespace c3d
 {
 	template< typename StyleT >
-	StyleT * StylesHolder::createControlStyle( castor::String name
+	StyleT * StylesHolder::createControlStyle( String name
 		, Scene * scene
-		, castor::StringMap< castor::UniquePtr< StyleT > > & controls )
+		, StringMap< UniquePtr< StyleT > > & controls )
 	{
 		auto fullName{ name };
 
@@ -26,14 +26,14 @@ namespace castor3d
 			if constexpr ( std::is_same_v< StyleT, PanelStyle > )
 			{
 				it = controls.emplace( name
-					, castor::makeUnique< StyleT >( fullName
+					, makeUnique< StyleT >( fullName
 						, scene
 						, m_engine ) ).first;
 			}
 			else
 			{
 				it = controls.emplace( name
-					, castor::makeUnique< StyleT >( fullName
+					, makeUnique< StyleT >( fullName
 						, scene
 						, m_engine
 						, getDefaultFont()->getName() ) ).first;
@@ -44,8 +44,8 @@ namespace castor3d
 	}
 
 	template< typename StyleT >
-	StyleT * StylesHolder::getControlStyle( castor::String name
-		, castor::StringMap< castor::UniquePtr< StyleT > > const & controls )const
+	StyleT * StylesHolder::getControlStyle( String name
+		, StringMap< UniquePtr< StyleT > > const & controls )const
 	{
 		auto it = controls.find( name );
 

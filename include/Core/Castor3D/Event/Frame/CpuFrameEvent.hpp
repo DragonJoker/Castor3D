@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "FrameListener.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class CpuFrameEvent
 	{
@@ -80,7 +80,7 @@ namespace castor3d
 
 		//!\~english	The event creation stack trace.
 		//!\~french		La pile d'appels lors de la création de l'évènement.
-		castor::String m_stackTrace;
+		String m_stackTrace;
 
 #endif
 	};
@@ -88,7 +88,7 @@ namespace castor3d
 	template< typename EventT, typename ... ParamsT >
 	inline CpuFrameEventUPtr makeCpuFrameEvent( ParamsT && ... params )
 	{
-		return castor::makeUniqueDerived< CpuFrameEvent, EventT >( castor::forward< ParamsT >( params )... );
+		return makeUniqueDerived< CpuFrameEvent, EventT >( c3d::forward< ParamsT >( params )... );
 	}
 }
 

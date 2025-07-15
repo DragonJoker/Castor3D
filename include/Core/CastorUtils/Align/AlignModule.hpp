@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #	define CU_Alignas( a )
 #endif
 
-namespace castor
+namespace c3d
 {
 	/**@name Align */
 	//@{

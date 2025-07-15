@@ -11,24 +11,24 @@ namespace castortd
 
 	namespace
 	{
-		static castor::Milliseconds constexpr zeroTime{ 0_ms };
+		static c3d::Milliseconds constexpr zeroTime{ 0_ms };
 
 		// Nearest enemy
-		EnemyArray doSortNearest( EnemyArray const & enemies, castor::Point3f const & position )
+		EnemyArray doSortNearest( EnemyArray const & enemies, c3d::Point3f const & position )
 		{
 			EnemyArray result{ enemies };
 			std::sort( std::begin( result )
 				, std::end( result )
 				, [&position]( EnemyPtr a, EnemyPtr b )
 				{
-					return castor::point::distanceSquared( a->getNode().getPosition(), position )
-						< castor::point::distanceSquared( b->getNode().getPosition(), position );
+					return c3d::point::distanceSquared( a->getNode().getPosition(), position )
+						< c3d::point::distanceSquared( b->getNode().getPosition(), position );
 				} );
 			return result;
 		}
 
 		//// First enemy
-		//EnemyArray doSortFirst( EnemyArray const & enemies, castor::Point3f const & position )
+		//EnemyArray doSortFirst( EnemyArray const & enemies, c3d::Point3f const & position )
 		//{
 		//	return enemies;
 		//}
@@ -37,13 +37,13 @@ namespace castortd
 	//*********************************************************************************************
 
 	Tower::Tower( CategoryPtr && category
-		, castor3d::SceneNode & node
-		, castor3d::AnimatedObjectGroup & anim
+		, c3d::SceneNode & node
+		, c3d::AnimatedObjectGroup & anim
 		, Cell const & cell )
 		: m_node{ node }
 		, m_anim{ anim }
 		, m_cell{ cell }
-		, m_category( castor::move( category ) )
+		, m_category( c3d::move( category ) )
 	{
 	}
 
@@ -114,7 +114,7 @@ namespace castortd
 
 	void Tower::doStartAttack()
 	{
-		m_animRemain = castor::Milliseconds{ int64_t( float( m_category->getAttackAnimationTime().count() ) / m_category->getSpeed() ) };
+		m_animRemain = c3d::Milliseconds{ int64_t( float( m_category->getAttackAnimationTime().count() ) / m_category->getSpeed() ) };
 		m_anim.startAnimation( m_category->getAttackAnimationName() );
 		m_state = State::Shooting;
 	}
@@ -141,7 +141,7 @@ namespace castortd
 		return result;
 	}
 
-	void Tower::doUpdateTimes( castor::Milliseconds const & elapsed )
+	void Tower::doUpdateTimes( c3d::Milliseconds const & elapsed )
 	{
 		m_remaining -= elapsed;
 
@@ -187,7 +187,7 @@ namespace castortd
 
 	bool Tower::doIsInRange( Enemy const & enemy )const
 	{
-		return castor::point::length( m_node.getPosition() - enemy.getNode().getPosition() ) <= m_category->getRange();
+		return c3d::point::length( m_node.getPosition() - enemy.getNode().getPosition() ) <= m_category->getRange();
 	}
 
 	void Tower::doTurnToTarget()
@@ -195,9 +195,9 @@ namespace castortd
 		auto targetPosition = m_target->getNode().getDerivedPosition();
 		targetPosition[1] = m_node.getPosition()[1];
 		auto direction = targetPosition - m_node.getDerivedPosition();
-		direction = castor::point::getNormalised( direction );
-		castor::Point3f up{ 0, 1, 0 };
-		auto transform = castor::matrix::lookAt( m_node.getDerivedPosition(), m_node.getDerivedPosition() - direction, up );
-		m_node.setOrientation( castor::Quaternion::fromMatrix( transform ) );
+		direction = c3d::point::getNormalised( direction );
+		c3d::Point3f up{ 0, 1, 0 };
+		auto transform = c3d::matrix::lookAt( m_node.getDerivedPosition(), m_node.getDerivedPosition() - direction, up );
+		m_node.setOrientation( c3d::Quaternion::fromMatrix( transform ) );
 	}
 }

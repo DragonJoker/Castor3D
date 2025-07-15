@@ -7,7 +7,7 @@
 #include "Castor3D/Model/Skeleton/BoneNode.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
@@ -36,7 +36,7 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template<>
-	castor::String BinaryParserBase< Skeleton >::Name = cuT( "Skeleton" );
+	String BinaryParserBase< Skeleton >::Name = cuT( "Skeleton" );
 
 	bool BinaryParser< Skeleton >::doParse( Skeleton & obj )
 	{
@@ -44,7 +44,7 @@ namespace castor3d
 		SkeletonNodeUPtr node;
 		BinaryChunk chunk{ doIsLittleEndian() };
 		SkeletonAnimationUPtr animation;
-		castor::Map< SkeletonNode *, castor::String > hierarchy;
+		Map< SkeletonNode *, String > hierarchy;
 
 		while ( result && doGetSubChunk( chunk ) )
 		{
@@ -56,7 +56,7 @@ namespace castor3d
 				break;
 			case ChunkType::eSkeletonBone:
 				{
-					node = castor::makeUniqueDerived< SkeletonNode, BoneNode >( castor::cuEmptyString, obj, castor::Matrix4x4f{ 1.0f }, 0u );
+					node = makeUniqueDerived< SkeletonNode, BoneNode >( cuEmptyString, obj, Matrix4x4f{ 1.0f }, 0u );
 					auto & bone = static_cast< BoneNode & >( *node );
 					auto parser = createBinaryParser< BoneNode >();
 					result = parser.parse( bone, chunk );
@@ -77,13 +77,13 @@ namespace castor3d
 						}
 
 						obj.m_bones.emplace_back( &bone );
-						obj.m_nodes.emplace_back( castor::move( node ) );
+						obj.m_nodes.emplace_back( c3d::move( node ) );
 					}
 				}
 				break;
 			case ChunkType::eSkeletonNode:
 				{
-					node = castor::makeUnique< SkeletonNode >( castor::cuEmptyString, obj );
+					node = makeUnique< SkeletonNode >( cuEmptyString, obj );
 					auto parser = createBinaryParser< SkeletonNode >();
 					result = parser.parse( *node, chunk );
 					checkError( result, cuT( "Couldn't parse bone." ) );
@@ -96,19 +96,19 @@ namespace castor3d
 							hierarchy.try_emplace( node.get(), parser.parentName );
 						}
 
-						obj.m_nodes.emplace_back( castor::move( node ) );
+						obj.m_nodes.emplace_back( c3d::move( node ) );
 					}
 				}
 				break;
 			case ChunkType::eAnimation:
-				animation = castor::makeUnique< SkeletonAnimation >( obj );
+				animation = makeUnique< SkeletonAnimation >( obj );
 				result = createBinaryParser< Animation >().parse( *animation, chunk );
 				checkError( result, cuT( "Couldn't parse animation." ) );
 				if ( result )
 				{
 					auto name = animation->getName();
 					obj.m_animations.try_emplace( name
-						, castor::ptrRefCast< Animation >( animation ) );
+						, ptrRefCast< Animation >( animation ) );
 				}
 				break;
 

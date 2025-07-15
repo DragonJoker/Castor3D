@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Graphics/Glyph.hpp"
 #include "CastorUtils/Math/Point.hpp"
 
-namespace castor
+namespace c3d
 {
 	class Font
 		: public Named
@@ -28,7 +28,7 @@ namespace castor
 		\remark		Utilise FreeType pour charger la police
 		*/
 		class BinaryLoader
-			: public castor::BinaryLoader< Font >
+			: public c3d::BinaryLoader< Font >
 		{
 		public:
 			/**
@@ -64,7 +64,7 @@ namespace castor
 			CU_API bool operator()( Font & font, Path const & path );
 
 		private:
-			using castor::BinaryLoader< Font >::operator();
+			using c3d::BinaryLoader< Font >::operator();
 			bool doLoad( Font & font, Path const & path );
 
 		private:
@@ -453,14 +453,14 @@ namespace castor
 		 *\name		Mutators.
 		 */
 		/*@{*/
-		void setGlyphLoader( castor::RawUniquePtr< GlyphLoader > loader )noexcept
+		void setGlyphLoader( c3d::RawUniquePtr< GlyphLoader > loader )noexcept
 		{
-			m_glyphLoader = castor::move( loader );
+			m_glyphLoader = c3d::move( loader );
 		}
 
 		void setFaceName( String name )noexcept
 		{
-			m_faceName = castor::move( name );
+			m_faceName = c3d::move( name );
 		}
 
 		void setSerialisable( bool v )noexcept
@@ -491,7 +491,7 @@ namespace castor
 		Point2i m_maxImageSize{};
 		Point2f m_maxBearing{ 100, 0 };
 		String m_faceName{};
-		castor::RawUniquePtr< GlyphLoader > m_glyphLoader{};
+		c3d::RawUniquePtr< GlyphLoader > m_glyphLoader{};
 		bool m_serialisable{ true };
 		bool m_sdf{ false };
 		GlyphKerningMap m_kerningTable;

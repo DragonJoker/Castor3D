@@ -32,10 +32,10 @@ namespace ocean_fft
 
 	struct VkFFTConfig
 	{
-		VkFFTConfig( castor3d::RenderDevice const & device
-			, castor3d::Extent2D const & dimensions );
+		VkFFTConfig( c3d::RenderDevice const & device
+			, c3d::Extent2D const & dimensions );
 
-		castor3d::RenderDevice const & device;
+		c3d::RenderDevice const & device;
 		ashes::FencePtr fence;
 		mutable VkPhysicalDevice vkPhysicalDevice{};
 		mutable VkDevice vkDevice{};
@@ -46,11 +46,11 @@ namespace ocean_fft
 
 	struct OceanFFTConfig
 	{
-		castor::Point2f size{ 200.0f, 200.0f };
-		castor::Point2f normalFreqMod{ 7.3f, 7.3f };
-		castor::Point2f windDirection{ 0.76339f, -0.64594f };
-		castor::Point2f patchSize{ 32.0f, 32.0f };
-		castor::Point2ui blocksCount{ 64u, 64u };
+		c3d::Point2f size{ 200.0f, 200.0f };
+		c3d::Point2f normalFreqMod{ 7.3f, 7.3f };
+		c3d::Point2f windDirection{ 0.76339f, -0.64594f };
+		c3d::Point2f patchSize{ 32.0f, 32.0f };
+		c3d::Point2ui blocksCount{ 64u, 64u };
 		uint32_t heightMapSamples{ 256u };
 		uint32_t displacementDownsample{ 1u };
 		float amplitude{ 1.0f };
@@ -66,22 +66,22 @@ namespace ocean_fft
 		float amplitude{};
 		float maxWaveLength{};
 
-		castor::Point2f otherMod{};
-		castor::Point2f normalMod{};
+		c3d::Point2f otherMod{};
+		c3d::Point2f normalMod{};
 
-		castor::Point2f tileScale{};
-		castor::Point2f normalScale{};
+		c3d::Point2f tileScale{};
+		c3d::Point2f normalScale{};
 
-		castor::Point2f blockOffset{};
-		castor::Point2f fftScale{};
+		c3d::Point2f blockOffset{};
+		c3d::Point2f fftScale{};
 
-		castor::Point2f patchSize{};
-		castor::Point2f maxTessLevel{};
+		c3d::Point2f patchSize{};
+		c3d::Point2f maxTessLevel{};
 
-		castor::Point2f invHeightmapSize{};
-		castor::Point2f windDirection{};
+		c3d::Point2f invHeightmapSize{};
+		c3d::Point2f windDirection{};
 
-		castor::Point2ui heightMapSamples{};
+		c3d::Point2ui heightMapSamples{};
 		int32_t displacementDownsample{};
 		float L{};
 	};
@@ -94,9 +94,9 @@ namespace ocean_fft
 		eR2R
 	};
 
-	bool checkFFTResult( castor::xchar const * action
+	bool checkFFTResult( c3d::xchar const * action
 		, VkFFTResult result );
-	void checkFFTResultMandat( castor::xchar const * action
+	void checkFFTResultMandat( c3d::xchar const * action
 		, VkFFTResult result );
 }
 

@@ -14,10 +14,10 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/Path.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class AnimationImporter
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
 		virtual ~AnimationImporter() = default;
@@ -32,7 +32,7 @@ namespace castor3d
 		 *\param[in]	prefix	Le préfixe utilisé pour le logging.
 		 */
 		C3D_API explicit AnimationImporter( Engine & engine
-			, castor::String const & prefix );
+			, String const & prefix );
 		/**
 		 *\~english
 		 *\brief		SkeletonAnimation import function.
@@ -65,7 +65,7 @@ namespace castor3d
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API static bool importData( SkeletonAnimation & animation
-			, castor::Path const & pathFile
+			, Path const & pathFile
 			, Parameters const & parameters );
 		/**
 		 *\~english
@@ -99,7 +99,7 @@ namespace castor3d
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API static bool importData( MeshAnimation & animation
-			, castor::Path const & pathFile
+			, Path const & pathFile
 			, Parameters const & parameters );
 		/**
 		 *\~english
@@ -133,7 +133,7 @@ namespace castor3d
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API bool importData( SceneNodeAnimation & animation
-			, castor::Path const & pathFile
+			, Path const & pathFile
 			, Parameters const & parameters );
 		/**
 		 *\~english
@@ -167,10 +167,10 @@ namespace castor3d
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API bool importData( TextureAnimation & animation
-			, castor::Path const & pathFile
+			, Path const & pathFile
 			, Parameters const & parameters );
 
-		castor::StringView getPrefix()const noexcept
+		String getPrefix()const noexcept
 		{
 			return m_prefix;
 		}
@@ -222,7 +222,7 @@ namespace castor3d
 		C3D_API virtual bool doImportTexture( TextureAnimation & texture ) = 0;
 
 	protected:
-		castor::String m_prefix;
+		String m_prefix;
 		ImporterFile * m_file{};
 		//!\~english Import configuration parameters.
 		//!\~french Paramètres de configuration de l'import.

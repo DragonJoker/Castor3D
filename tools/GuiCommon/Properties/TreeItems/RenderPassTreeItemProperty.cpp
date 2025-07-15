@@ -19,14 +19,14 @@ namespace GuiCommon
 	namespace
 	{
 		struct RenderPassConfigurationBuilder
-			: public castor3d::RenderTechniqueVisitor
+			: public c3d::RenderTechniqueVisitor
 		{
 		private:
-			explicit RenderPassConfigurationBuilder( castor3d::PipelineFlags flags
-				, castor3d::Scene const & scene
+			explicit RenderPassConfigurationBuilder( c3d::PipelineFlags flags
+				, c3d::Scene const & scene
 				, wxPropertyGrid * grid
 				, TreeItemProperty & prop )
-				: castor3d::RenderTechniqueVisitor{ castor::move( flags ), scene, { false } }
+				: c3d::RenderTechniqueVisitor{ c3d::move( flags ), scene, { false } }
 				, m_grid{ grid }
 				, m_prop{ prop }
 			{
@@ -35,22 +35,22 @@ namespace GuiCommon
 		public:
 			static void submit( wxPropertyGrid * grid
 				, TreeItemProperty & prop
-				, castor3d::RenderTechniqueNodesPass & renderPass )
+				, c3d::RenderTechniqueNodesPass & renderPass )
 			{
 				auto & scene = renderPass.getScene();
 				auto & engine = *renderPass.getEngine();
-				RenderPassConfigurationBuilder vis{ renderPass.createPipelineFlags( castor3d::PassComponentCombine{}
-						, castor3d::SubmeshComponentCombine{}
-						, castor3d::BlendMode::eNoBlend
-						, castor3d::BlendMode::eNoBlend
+				RenderPassConfigurationBuilder vis{ renderPass.createPipelineFlags( c3d::PassComponentCombine{}
+						, c3d::SubmeshComponentCombine{}
+						, c3d::BlendMode::eNoBlend
+						, c3d::BlendMode::eNoBlend
 						, engine.getRenderPassTypeID( renderPass.getTypeName() )
 						, scene.getDefaultLightingModel()
 						, scene.getBackgroundModelId()
-						, castor3d::ComparisonFunc::eAlways
-						, castor3d::ComparisonFunc::eAlways
-						, castor3d::TextureCombine{}
-						, castor3d::ProgramFlag::eNone
-						, castor3d::SceneFlag::eNone
+						, c3d::ComparisonFunc::eAlways
+						, c3d::ComparisonFunc::eAlways
+						, c3d::TextureCombine{}
+						, c3d::ProgramFlag::eNone
+						, c3d::SceneFlag::eNone
 						, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 						, false
 						, 0u
@@ -64,140 +64,140 @@ namespace GuiCommon
 			}
 
 		private:
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, float & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, c3d::move( controls ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, int32_t & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, c3d::move( controls ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, uint32_t & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, c3d::move( controls ) );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, int32_t & enumValue
-				, castor::StringArray const & enumNames
+				, c3d::StringArray const & enumNames
 				, OnSEnumValueChange onChange
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, castor::move( controls ), onChange );
+				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, c3d::move( controls ), onChange );
 			}
 
-			void visit( castor::String const & name
+			void visit( c3d::String const & name
 				, uint32_t & enumValue
-				, castor::StringArray const & enumNames
+				, c3d::StringArray const & enumNames
 				, OnUEnumValueChange onChange
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, castor::move( controls ), onChange );
+				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, c3d::move( controls ), onChange );
 			}
 
-			void visit( castor::String const & name
-				, castor::Point2f & value
+			void visit( c3d::String const & name
+				, c3d::Point2f & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, c3d::move( controls ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::Point2i & value
+			void visit( c3d::String const & name
+				, c3d::Point2i & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, c3d::move( controls ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::Point2ui & value
+			void visit( c3d::String const & name
+				, c3d::Point2ui & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, c3d::move( controls ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::Point3f & value
+			void visit( c3d::String const & name
+				, c3d::Point3f & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, c3d::move( controls ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::Point3i & value
+			void visit( c3d::String const & name
+				, c3d::Point3i & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, c3d::move( controls ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::Point3ui & value
+			void visit( c3d::String const & name
+				, c3d::Point3ui & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, c3d::move( controls ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::Point4f & value
+			void visit( c3d::String const & name
+				, c3d::Point4f & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, c3d::move( controls ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::Point4i & value
+			void visit( c3d::String const & name
+				, c3d::Point4i & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, c3d::move( controls ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::Point4ui & value
+			void visit( c3d::String const & name
+				, c3d::Point4ui & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, c3d::move( controls ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::Matrix4x4f & value
+			void visit( c3d::String const & name
+				, c3d::Matrix4x4f & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, c3d::move( controls ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::RangedValue< float > & value
+			void visit( c3d::String const & name
+				, c3d::RangedValue< float > & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, c3d::move( controls ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::RangedValue< int32_t > & value
+			void visit( c3d::String const & name
+				, c3d::RangedValue< int32_t > & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, c3d::move( controls ) );
 			}
 
-			void visit( castor::String const & name
-				, castor::RangedValue< uint32_t > & value
+			void visit( c3d::String const & name
+				, c3d::RangedValue< uint32_t > & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, c3d::move( controls ) );
 			}
 
 		private:
-			castor::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
+			c3d::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( c3d::String const & category )override
 			{
-				return castor::RawUniquePtr< ConfigurationVisitorBase >( new RenderPassConfigurationBuilder{ getFlags(), getScene(), m_grid, m_prop } );
+				return c3d::RawUniquePtr< ConfigurationVisitorBase >( new RenderPassConfigurationBuilder{ getFlags(), getScene(), m_grid, m_prop } );
 			}
 
 		private:
@@ -208,7 +208,7 @@ namespace GuiCommon
 
 	void fillRenderPassConfiguration( wxPropertyGrid * grid
 		, TreeItemProperty & properties
-		, castor3d::RenderTechniqueNodesPass & renderPass )
+		, c3d::RenderTechniqueNodesPass & renderPass )
 	{
 		RenderPassConfigurationBuilder::submit( grid, properties, renderPass );
 	}

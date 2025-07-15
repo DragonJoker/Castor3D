@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_MATH_H___
 #define ___CASTOR_MATH_H___
 
-namespace castor
+namespace c3d
 {
 	//************************************************************************************************
 	/**

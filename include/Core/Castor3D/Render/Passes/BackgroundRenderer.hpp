@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "BackgroundPassBase.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class BackgroundRenderer
 	{

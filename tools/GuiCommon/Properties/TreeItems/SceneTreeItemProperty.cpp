@@ -12,7 +12,7 @@
 namespace GuiCommon
 {
 	SceneTreeItemProperty::SceneTreeItemProperty( bool editable
-		, castor3d::Scene & scene )
+		, c3d::Scene & scene )
 		: TreeItemProperty{ scene.getEngine(), editable }
 		, m_scene( scene )
 	{
@@ -26,8 +26,8 @@ namespace GuiCommon
 		static wxString PROPERTY_SHADOW_LPV_INDIRECT_ATT = _( "Indirect Attenuation" );
 
 		addProperty( grid, PROPERTY_CATEGORY_SCENE + m_scene.getName() );
-		addPropertyT( grid, PROPERTY_SCENE_AMBIENT_LIGHT, m_scene.getAmbientLight(), &m_scene, &castor3d::Scene::setAmbientLight );
-		addPropertyT( grid, PROPERTY_SHADOW_LPV_INDIRECT_ATT, m_scene.getLpvIndirectAttenuation(), &m_scene, &castor3d::Scene::setLpvIndirectAttenuation );
+		addPropertyT( grid, PROPERTY_SCENE_AMBIENT_LIGHT, m_scene.getAmbientLight(), &m_scene, &c3d::Scene::setAmbientLight );
+		addPropertyT( grid, PROPERTY_SHADOW_LPV_INDIRECT_ATT, m_scene.getLpvIndirectAttenuation(), &m_scene, &c3d::Scene::setLpvIndirectAttenuation );
 
 		doCreateFogProperties( grid );
 	}
@@ -51,8 +51,8 @@ namespace GuiCommon
 		auto & fogConfig = m_scene.getFog();
 		addProperty( grid, PROPERTY_FOG );
 		addPropertyE( grid, PROPERTY_FOG_TYPE, choices, fogConfig.getType()
-			, [&fogConfig]( castor3d::FogType value ){ fogConfig.setType( value ); } );
-		addPropertyT( grid, PROPERTY_FOG_DENSITY, fogConfig.getDensity(), &fogConfig, &castor3d::Fog::setDensity );
+			, [&fogConfig]( c3d::FogType value ){ fogConfig.setType( value ); } );
+		addPropertyT( grid, PROPERTY_FOG_DENSITY, fogConfig.getDensity(), &fogConfig, &c3d::Fog::setDensity );
 	}
 
 	void SceneTreeItemProperty::onDebugOverlaysChange( wxVariant const & var )
@@ -64,6 +64,6 @@ namespace GuiCommon
 	{
 		wxColour colour;
 		colour << var;
-		m_scene.setAmbientLight( castor::RgbColour::fromBGR( colour.GetRGB() ) );
+		m_scene.setAmbientLight( c3d::RgbColour::fromBGR( colour.GetRGB() ) );
 	}
 }

@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	struct Intersection
 		: public sdw::StructInstanceHelperT < "Intersection"
@@ -21,7 +21,7 @@ namespace castor3d::shader
 		C3D_API Intersection( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -63,7 +63,7 @@ namespace castor3d::shader
 		C3D_API Ray( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 			, origin{ getMember< "origin" >() }
 			, direction{ getMember< "direction" >() }
 		{

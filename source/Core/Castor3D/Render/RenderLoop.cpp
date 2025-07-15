@@ -24,23 +24,23 @@
 #include <CastorUtils/Design/BlockGuard.hpp>
 #include <CastorUtils/Design/ResourceCache.hpp>
 
-CU_ImplementSmartPtr( castor3d, RenderLoop )
+CU_ImplementSmartPtr( c3d, RenderLoop )
 
-namespace castor3d
+namespace c3d
 {
 	RenderLoop::RenderLoop( Engine & engine
 		, uint32_t wantedFPS )
-		: castor::OwnedBy< Engine >( engine )
+		: OwnedBy< Engine >( engine )
 		, m_renderSystem{ *engine.getRenderSystem() }
 		, m_wantedFPS{ wantedFPS }
 		, m_frameTime{ 1000ULL / wantedFPS }
-		, m_debugOverlays{ castor::make_unique< DebugOverlays >( engine ) }
-		, m_timerCpuEvents{ castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/PreRender", crg::TimerScope::eUpdate )
-			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/QueueRender", crg::TimerScope::eUpdate )
-			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/PostRender", crg::TimerScope::eUpdate ) }
-		, m_timerGpuEvents{ castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/GPU/PreRender", crg::TimerScope::eUpdate )
-			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/GPU/QueueRender", crg::TimerScope::eUpdate )
-			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/GPU/PostRender", crg::TimerScope::eUpdate ) }
+		, m_debugOverlays{ makeRawUnique< DebugOverlays >( engine ) }
+		, m_timerCpuEvents{ makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/PreRender", crg::TimerScope::eUpdate )
+			, makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/QueueRender", crg::TimerScope::eUpdate )
+			, makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/PostRender", crg::TimerScope::eUpdate ) }
+		, m_timerGpuEvents{ makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/GPU/PreRender", crg::TimerScope::eUpdate )
+			, makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/GPU/QueueRender", crg::TimerScope::eUpdate )
+			, makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/GPU/PostRender", crg::TimerScope::eUpdate ) }
 	{
 	}
 
@@ -54,7 +54,7 @@ namespace castor3d
 		m_timerGpuEvents[1].reset();
 		m_timerGpuEvents[2].reset();
 
-		auto lock( castor::makeUniqueLock( m_debugOverlaysMtx ) );
+		auto lock( makeUniqueLock( m_debugOverlaysMtx ) );
 		m_debugOverlays->cleanup();
 		m_debugOverlays.reset();
 	}
@@ -62,7 +62,7 @@ namespace castor3d
 	void RenderLoop::initialise()
 	{
 		auto & device = m_renderSystem.getRenderDevice();
-		m_uploadData = castor::makeUniqueDerived< UploadData, StagedUploadData >( device
+		m_uploadData = makeUniqueDerived< UploadData, StagedUploadData >( device
 			, cuT( "RenderLoop" )
 			, device.graphicsData()->commandPool->createCommandBuffer( "RenderLoopUpload" ) );
 		m_uploadFence = device->createFence( "RenderLoopUpload" );
@@ -158,29 +158,29 @@ namespace castor3d
 			} );
 	}
 
-	void RenderLoop::registerTimer( castor::String const & category
+	void RenderLoop::registerTimer( String const & category
 		, crg::FramePassTimer & timer )
 	{
-		auto lock( castor::makeUniqueLock( m_debugOverlaysMtx ) );
+		auto lock( makeUniqueLock( m_debugOverlaysMtx ) );
 		m_debugOverlays->registerTimer( category, timer );
 	}
 
-	void RenderLoop::unregisterTimer( castor::String const & category
+	void RenderLoop::unregisterTimer( String const & category
 		, crg::FramePassTimer & timer )
 	{
-		auto lock( castor::makeUniqueLock( m_debugOverlaysMtx ) );
+		auto lock( makeUniqueLock( m_debugOverlaysMtx ) );
 		m_debugOverlays->unregisterTimer( category, timer );
 	}
 
 	void RenderLoop::registerBuffer( ShaderBuffer const & buffer )
 	{
-		auto lock( castor::makeUniqueLock( m_shaderBuffersMtx ) );
+		auto lock( makeUniqueLock( m_shaderBuffersMtx ) );
 		m_shaderBuffers.insert( &buffer );
 	}
 
 	void RenderLoop::unregisterBuffer( ShaderBuffer const & buffer )
 	{
-		auto lock( castor::makeUniqueLock( m_shaderBuffersMtx ) );
+		auto lock( makeUniqueLock( m_shaderBuffersMtx ) );
 		m_shaderBuffers.erase( &buffer );
 	}
 
@@ -191,16 +191,16 @@ namespace castor3d
 
 	void RenderLoop::dumpFrameTimes( Parameters & params )const
 	{
-		params.add( cuT( "Last" ), std::chrono::duration_cast< castor::Nanoseconds >( getLastFrameTime() ) );
+		params.add( cuT( "Last" ), std::chrono::duration_cast< Nanoseconds >( getLastFrameTime() ) );
 		m_debugOverlays->dumpFrameTimes( params );
 	}
 
-	castor::Nanoseconds RenderLoop::getAvgFrameTime()const
+	Nanoseconds RenderLoop::getAvgFrameTime()const
 	{
 		return m_debugOverlays->getAvgFrameTime();
 	}
 
-	void RenderLoop::doRenderFrame( castor::Milliseconds tslf )
+	void RenderLoop::doRenderFrame( Milliseconds tslf )
 	{
 		if ( m_renderSystem.hasDevice() )
 		{
@@ -265,7 +265,7 @@ namespace castor3d
 				data = m_reservedQueue;
 			}
 
-			m_uploadData = castor::makeUniqueDerived< UploadData, StagedUploadData >( device
+			m_uploadData = makeUniqueDerived< UploadData, StagedUploadData >( device
 				, cuT( "RenderLoop" )
 				, data->commandPool->createCommandBuffer( "RenderLoopUpload" ) );
 		}
@@ -333,7 +333,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderLoop::doCpuStep( castor::Milliseconds tslf )
+	void RenderLoop::doCpuStep( Milliseconds tslf )
 	{
 		CpuUpdater updater;
 		updater.tslf = tslf;

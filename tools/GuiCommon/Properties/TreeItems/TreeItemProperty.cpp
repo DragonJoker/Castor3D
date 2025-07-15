@@ -18,7 +18,7 @@ namespace GuiCommon
 
 	TreeItemProperty::PropertyChangeHandler const TreeItemProperty::EmptyHandler = []( wxVariant const & ){};
 
-	TreeItemProperty::TreeItemProperty( castor3d::Engine * engine
+	TreeItemProperty::TreeItemProperty( c3d::Engine * engine
 		, bool editable )
 		: wxTreeItemData()
 		, m_menu( nullptr )
@@ -66,7 +66,7 @@ namespace GuiCommon
 
 			if ( m_engine )
 			{
-				m_engine->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePreGpuStep
+				m_engine->postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePreGpuStep
 					, [value, handler]()
 					{
 						handler( value );
@@ -86,8 +86,8 @@ namespace GuiCommon
 		if ( m_engine )
 		{
 			auto & cache = m_engine->getMaterialCache();
-			using LockType = castor::UniqueLock< castor3d::MaterialCache >;
-			LockType lock{ castor::makeUniqueLock( cache ) };
+			using LockType = c3d::UniqueLock< c3d::MaterialCache >;
+			LockType lock{ c3d::makeUniqueLock( cache ) };
 
 			for ( auto & pair : cache )
 			{
@@ -104,7 +104,7 @@ namespace GuiCommon
 
 		if ( m_engine )
 		{
-			m_engine->forEachFont( [&choices]( castor::String const & name, castor::Font const & )
+			m_engine->forEachFont( [&choices]( c3d::String const & name, c3d::Font const & )
 				{
 					choices.push_back( name );
 				} );
@@ -170,7 +170,7 @@ namespace GuiCommon
 	{
 		auto prop = grid->Append( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
 		prop->SetEditor( wxPGConstructButtonCtrlEditorClass() );
-		prop->SetClientObject( new ButtonData{ doGetHandler( handler, castor3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
+		prop->SetClientObject( new ButtonData{ doGetHandler( handler, c3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
 		return prop;
 	}
 
@@ -181,7 +181,7 @@ namespace GuiCommon
 	{
 		auto prop = grid->AppendChild( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
 		prop->SetEditor( wxPGConstructButtonCtrlEditorClass() );
-		prop->SetClientObject( new ButtonData{ doGetHandler( handler, castor3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
+		prop->SetClientObject( new ButtonData{ doGetHandler( handler, c3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
 		return prop;
 	}
 
@@ -216,7 +216,7 @@ namespace GuiCommon
 	{
 		auto prop = grid->Append( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
 		prop->SetEditor( wxPGConstructButtonCtrlEditorClass() );
-		prop->SetClientObject( new ButtonData{ doGetHandler( handler, castor3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
+		prop->SetClientObject( new ButtonData{ doGetHandler( handler, c3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
 		return prop;
 	}
 
@@ -227,16 +227,16 @@ namespace GuiCommon
 	{
 		auto prop = grid->AppendChild( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
 		prop->SetEditor( wxPGConstructButtonCtrlEditorClass() );
-		prop->SetClientObject( new ButtonData{ doGetHandler( handler, castor3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
+		prop->SetClientObject( new ButtonData{ doGetHandler( handler, c3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
 		return prop;
 	}
 	
 	wxPGProperty * TreeItemProperty::addMaterial( wxPropertyGrid * parent
-		, castor3d::Engine & engine
+		, c3d::Engine & engine
 		, wxString const & name
 		, wxArrayString const & choices
-		, castor3d::MaterialObs selected
-		, castor::Function< void( castor3d::MaterialObs ) > setter )
+		, c3d::MaterialObs selected
+		, c3d::Function< void( c3d::MaterialObs ) > setter )
 	{
 		if ( selected )
 		{
@@ -270,14 +270,14 @@ namespace GuiCommon
 	}
 
 	TreeItemProperty::PropertyChangeHandler TreeItemProperty::doGetHandler( TreeItemProperty::PropertyChangeHandler handler
-		, castor3d::ConfigurationVisitorBase::ControlsList controls )
+		, c3d::ConfigurationVisitorBase::ControlsList controls )
 	{
 		if ( controls.empty() )
 		{
 			return handler;
 		}
 
-		return [controls = castor::move( controls ), handler]( wxVariant const & var )
+		return [controls = c3d::move( controls ), handler]( wxVariant const & var )
 		{
 			for ( auto control : controls )
 			{
@@ -294,14 +294,14 @@ namespace GuiCommon
 	}
 
 	TreeItemProperty::PropertyChangeHandler TreeItemProperty::doGetHandler( TreeItemProperty::PropertyChangeHandler handler
-		, castor3d::ConfigurationVisitorBase::AtomicControlsList controls )
+		, c3d::ConfigurationVisitorBase::AtomicControlsList controls )
 	{
 		if ( controls.empty() )
 		{
 			return handler;
 		}
 
-		return [controls=castor::move( controls ), handler]( wxVariant const & var )
+		return [controls=c3d::move( controls ), handler]( wxVariant const & var )
 		{
 			for ( auto control : controls )
 			{

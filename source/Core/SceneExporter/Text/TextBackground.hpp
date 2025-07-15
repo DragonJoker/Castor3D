@@ -8,17 +8,17 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::SceneBackground >
-		: public TextWriterT< castor3d::SceneBackground >
+	class TextWriter< SceneBackground >
+		: public TextWriterT< SceneBackground >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, Path const & folder );
-		bool operator()( castor3d::SceneBackground const & overlay
-			, castor::StringStream & file )override;
+		bool operator()( SceneBackground const & overlay
+			, StringStream & file )override;
 
 	private:
 		Path m_folder;

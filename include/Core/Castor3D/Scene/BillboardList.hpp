@@ -24,13 +24,13 @@ See LICENSE file in root folder
 #include <ashespp/Descriptor/DescriptorSetPool.hpp>
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class BillboardBase
 		: public RenderedObject
 	{
 	public:
-		using IdRenderNode = castor::Pair< uint32_t, BillboardRenderNode const * >;
+		using IdRenderNode = Pair< uint32_t, BillboardRenderNode const * >;
 
 	public:
 		/**
@@ -156,7 +156,7 @@ namespace castor3d
 			return m_material;
 		}
 
-		castor::Point2f const & getDimensions()const
+		Point2f const & getDimensions()const
 		{
 			return m_dimensions;
 		}
@@ -221,7 +221,7 @@ namespace castor3d
 			return m_billboardSize;
 		}
 
-		castor::UnorderedMap< Pass const *, IdRenderNode > const & getIds()const
+		HashMap< Pass const *, IdRenderNode > const & getIds()const
 		{
 			return m_ids;
 		}
@@ -245,7 +245,7 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setDimensions( castor::Point2f const & value )
+		void setDimensions( Point2f const & value )
 		{
 			m_dimensions = value;
 		}
@@ -281,18 +281,18 @@ namespace castor3d
 
 	private:
 		void doGatherBuffers( ashes::BufferCRefArray & buffers
-			, castor::Vector< uint64_t > & offsets
+			, Vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts );
 
 	public:
-		using Quad = castor::Array< BillboardVertex, 4u >;
+		using Quad = Array< BillboardVertex, 4u >;
 
 	protected:
 		Scene & m_scene;
 		SceneNode * m_node{};
 		MaterialObs m_material{};
-		castor::Point2f m_dimensions;
-		castor::Point3f m_cameraPosition;
+		Point2f m_dimensions;
+		Point3f m_cameraPosition;
 		GpuBufferOffsetT< uint8_t > m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		uint32_t m_vertexStride;
@@ -306,7 +306,7 @@ namespace castor3d
 		uint32_t m_centerOffset{ 0u };
 		BillboardType m_billboardType{ BillboardType::eCylindrical };
 		BillboardSize m_billboardSize{ BillboardSize::eDynamic };
-		castor::UnorderedMap< Pass const *, IdRenderNode > m_ids{};
+		HashMap< Pass const *, IdRenderNode > m_ids{};
 		SubmeshComponentCombine m_proxyCombine;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorPool;
@@ -330,7 +330,7 @@ namespace castor3d
 		 *\param[in]	scene	La scene parente.
 		 *\param[in]	parent	Le noeud de scène parent.
 		 */
-		C3D_API BillboardList( castor::String const & name
+		C3D_API BillboardList( String const & name
 			, Scene & scene
 			, SceneNode & parent );
 		/**
@@ -343,7 +343,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom.
 		 *\param[in]	scene	La scene parente.
 		 */
-		C3D_API BillboardList( castor::String const & name
+		C3D_API BillboardList( String const & name
 			, Scene & scene );
 		/**
 		 *\~english
@@ -373,7 +373,7 @@ namespace castor3d
 		 *\brief		Ajoute un point a la liste
 		 *\param[in]	position	Le point
 		 */
-		C3D_API void addPoint( castor::Point3f const & position );
+		C3D_API void addPoint( Point3f const & position );
 		/**
 		 *\~english
 		 *\brief		adds a points list to the list
@@ -382,7 +382,7 @@ namespace castor3d
 		 *\brief		Ajoute une liste de points a la liste
 		 *\param[in]	positions	La liste de points
 		 */
-		C3D_API void addPoints( castor::Point3fArray const & positions );
+		C3D_API void addPoints( Point3fArray const & positions );
 		/**
 		 *\~english
 		 *\brief		Attaches the movable object to a node
@@ -393,7 +393,7 @@ namespace castor3d
 		 */
 		C3D_API void attachTo( SceneNode & node )override;
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 		/**
 		*\~english
 		*name
@@ -403,27 +403,27 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		castor::Point3f const & getAt( uint32_t index )const
+		Point3f const & getAt( uint32_t index )const
 		{
 			return m_arrayPositions[index];
 		}
 
-		castor::Point3fArrayIt begin()
+		Point3fArrayIt begin()
 		{
 			return m_arrayPositions.begin();
 		}
 
-		castor::Point3fArrayConstIt begin()const
+		Point3fArrayConstIt begin()const
 		{
 			return m_arrayPositions.begin();
 		}
 
-		castor::Point3fArrayIt end()
+		Point3fArrayIt end()
 		{
 			return m_arrayPositions.end();
 		}
 
-		castor::Point3fArrayConstIt end()const
+		Point3fArrayConstIt end()const
 		{
 			return m_arrayPositions.end();
 		}
@@ -437,7 +437,7 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setAt( uint32_t index, castor::Point3f const & position )
+		void setAt( uint32_t index, Point3f const & position )
 		{
 			m_needUpdate = true;
 			m_arrayPositions[index] = position;
@@ -445,7 +445,7 @@ namespace castor3d
 		/**@}*/
 
 	protected:
-		castor::Point3fArray m_arrayPositions;
+		Point3fArray m_arrayPositions;
 	};
 
 	struct BillboardsContext
@@ -454,30 +454,27 @@ namespace castor3d
 		BillboardListUPtr ownBillboards{};
 		BillboardListRPtr billboards{};
 	};
-}
 
-namespace castor
-{
 	template<>
-	struct ParserEnumTraits< castor3d::BillboardType >
+	struct ParserEnumTraits< BillboardType >
 	{
 		static inline xchar const * const Name = cuT( "BillboardType" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT< castor3d::BillboardType >();
+				result = getEnumMapT< BillboardType >();
 				return result;
 			}( );
 	};
 
 	template<>
-	struct ParserEnumTraits< castor3d::BillboardSize >
+	struct ParserEnumTraits< BillboardSize >
 	{
 		static inline xchar const * const Name = cuT( "BillboardSize" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT< castor3d::BillboardSize >();
+				result = getEnumMapT< BillboardSize >();
 				return result;
 			}( );
 	};

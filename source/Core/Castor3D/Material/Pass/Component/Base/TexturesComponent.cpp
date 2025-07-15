@@ -13,7 +13,7 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -250,7 +250,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const TexturesComponent::TypeName = C3D_MakePassBaseComponentName( "textures" );
+	String const TexturesComponent::TypeName = C3D_MakePassBaseComponentName( "textures" );
 
 	TexturesComponent::TexturesComponent( Pass & pass )
 		: PassComponent{ pass, TypeName }
@@ -259,7 +259,7 @@ namespace castor3d
 
 	PassComponentUPtr TexturesComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, TexturesComponent >( pass );
+		return makeUniqueDerived< PassComponent, TexturesComponent >( pass );
 	}
 
 	//*********************************************************************************************

@@ -7,7 +7,7 @@
 #include <CastorUtils/Design/ScopeGuard.hpp>
 #include <CastorUtils/Design/BlockGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace rendlpasnc
 	{
@@ -19,7 +19,7 @@ namespace castor3d
 	RenderLoopAsync::RenderLoopAsync( Engine & engine, uint32_t wantedFPS )
 		: RenderLoop{ engine, wantedFPS }
 	{
-		m_mainLoopThread = castor::make_unique< std::thread >( [this]()
+		m_mainLoopThread = makeRawUnique< std::thread >( [this]()
 		{
 			doMainLoop();
 		} );
@@ -75,7 +75,7 @@ namespace castor3d
 		m_rendering = true;
 	}
 
-	void RenderLoopAsync::renderSyncFrame( castor::Milliseconds tslf )
+	void RenderLoopAsync::renderSyncFrame( Milliseconds tslf )
 	{
 		if ( !m_paused )
 		{
@@ -99,7 +99,7 @@ namespace castor3d
 
 		while ( !m_frameEnded )
 		{
-			castor::system::sleep( 5 );
+			system::sleep( 5 );
 		}
 	}
 
@@ -119,15 +119,15 @@ namespace castor3d
 
 		while ( !isEnded() )
 		{
-			castor::system::sleep( 5 );
+			system::sleep( 5 );
 		}
 	}
 
 	void RenderLoopAsync::doMainLoop()
 	{
-		castor::PreciseTimer timer;
+		PreciseTimer timer;
 		m_frameEnded = true;
-		auto scopeGuard{ castor::makeScopeGuard( [this]()
+		auto scopeGuard{ makeScopeGuard( [this]()
 		{
 			cleanup();
 		} ) };
@@ -150,7 +150,7 @@ namespace castor3d
 				// Tant qu'on n'a pas demandé le début du rendu, on attend.
 				while ( !isInterrupted() && !isRendering() )
 				{
-					castor::system::sleep( 10 );
+					system::sleep( 10 );
 				}
 
 				// Le rendu est en cours
@@ -165,22 +165,22 @@ namespace castor3d
 						m_frameEnded = true;
 					}
 
-					auto endTime = std::chrono::duration_cast< castor::Milliseconds >( timer.getElapsed() );
+					auto endTime = std::chrono::duration_cast< Milliseconds >( timer.getElapsed() );
 					std::this_thread::sleep_for( std::max( 0_ms, getFrameTime() - endTime ) );
 				}
 
 				m_ended = true;
 			}
 		}
-		catch ( castor::Exception & exc )
+		catch ( Exception & exc )
 		{
-			log::error << cuT( "RenderLoop - " ) << castor::makeString( exc.getFullDescription() ) << std::endl;
+			log::error << cuT( "RenderLoop - " ) << makeString( exc.getFullDescription() ) << std::endl;
 			m_frameEnded = true;
 			m_ended = true;
 		}
 		catch ( std::exception & exc )
 		{
-			log::error << cuT( "RenderLoop - " ) << castor::makeString( exc.what() ) << std::endl;
+			log::error << cuT( "RenderLoop - " ) << makeString( exc.what() ) << std::endl;
 			m_frameEnded = true;
 			m_ended = true;
 		}

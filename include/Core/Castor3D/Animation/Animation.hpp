@@ -10,11 +10,11 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/Named.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class Animation
-		: public castor::Named
-		, public castor::OwnedBy< Engine >
+		: public Named
+		, public OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -47,7 +47,7 @@ namespace castor3d
 		C3D_API Animation( Engine & handler
 			, AnimationType type
 			, Animable & animable
-			, castor::String const & name = castor::cuEmptyString );
+			, String const & name = cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -62,7 +62,7 @@ namespace castor3d
 		 */
 		C3D_API Animation( Engine & handler
 			, AnimationType type
-			, castor::String const & name = castor::cuEmptyString );
+			, String const & name = cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Adds a keyframe to the animation.
@@ -80,7 +80,7 @@ namespace castor3d
 		 *\brief			Trouve une keyframe à l'index de temps donné.
 		 *\param[in]		time	L'index de temps.
 		 */
-		C3D_API AnimationKeyFrameArray::iterator find( castor::Milliseconds const & time );
+		C3D_API AnimationKeyFrameArray::iterator find( Milliseconds const & time );
 		/**
 		 *\~english
 		 *\brief			Finds a keyframe given a time index.
@@ -93,7 +93,7 @@ namespace castor3d
 		 *\param[in,out]	prv		La keyframe précédente, reçoit la nouvelle s'il y a eu un changement.
 		 *\param[in,out]	cur		La keyframe courante, reçoit la nouvelle s'il y a eu un changement.
 		 */
-		C3D_API void findKeyFrame( castor::Milliseconds const & time
+		C3D_API void findKeyFrame( Milliseconds const & time
 			, AnimationKeyFrameArray::iterator & prv
 			, AnimationKeyFrameArray::iterator & cur )const;
 		/**
@@ -188,7 +188,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La longueur de l'animation.
 		 */
-		castor::Milliseconds const & getLength()const
+		Milliseconds const & getLength()const
 		{
 			return m_length;
 		}
@@ -205,7 +205,7 @@ namespace castor3d
 		AnimationType m_type{ AnimationType::eCount };
 		//!\~english	The animation length.
 		//!\~french		La durée de l'animation.
-		castor::Milliseconds m_length{ 0 };
+		Milliseconds m_length{ 0 };
 		//!\~english	The key frames.
 		//!\~french		Les keyframes.
 		AnimationKeyFrameArray m_keyframes;

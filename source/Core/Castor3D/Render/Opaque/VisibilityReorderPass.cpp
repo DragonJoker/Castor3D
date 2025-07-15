@@ -17,9 +17,9 @@
 
 #include <ashespp/Buffer/Buffer.hpp>
 
-CU_ImplementSmartPtr( castor3d, VisibilityReorderPass )
+CU_ImplementSmartPtr( c3d, VisibilityReorderPass )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -36,7 +36,7 @@ namespace castor3d
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			auto dataMap = writer.declStorageImg< sdw::RUImage2DRg32 >( "dataMap", Bindings::eData, 0u );
-			auto constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
+			auto constexpr maxPipelinesSize = uint32_t( getBitSize( MaxPipelines ) );
 			auto constexpr maxPipelinesMask = ( 0x000000001u << maxPipelinesSize ) - 1u;
 
 			auto MaterialsCounts = writer.declStorageBuffer<>( "C3D_MaterialsCounts", Bindings::eMaterialsCounts, 0u );
@@ -67,7 +67,7 @@ namespace castor3d
 			return writer.getBuilder().releaseShader();
 		}
 
-		static crg::FramePass const & createPass( castor::String const & name
+		static crg::FramePass const & createPass( String const & name
 			, crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, crg::FramePass const *& previousPass
@@ -78,21 +78,21 @@ namespace castor3d
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
 			auto renderSize = getExtent( data );
-			auto & pass = graph.createPass( castor::toUtf8( name ) + "/MaterialsCount"
-				, [&stages, &device, enable = castor::move( isEnabled ), renderSize]( crg::FramePass const & framePass
+			auto & pass = graph.createPass( toUtf8( name ) + "/MaterialsCount"
+				, [&stages, &device, enable = c3d::move( isEnabled ), renderSize]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					auto result = castor::make_unique< crg::ComputePass >( framePass
+					auto result = makeRawUnique< crg::ComputePass >( framePass
 						, context
 						, graph
 						, crg::ru::Config{}
 						, crg::cp::Config{}
 							.isEnabled( enable )
-							.groupCountX( castor::divRoundUp( renderSize.width, 16u ) )
-							.groupCountY( castor::divRoundUp( renderSize.height, 16u ) )
+							.groupCountX( divRoundUp( renderSize.width, 16u ) )
+							.groupCountY( divRoundUp( renderSize.height, 16u ) )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) ) );
-					device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );
@@ -167,23 +167,23 @@ namespace castor3d
 			return writer.getBuilder().releaseShader();
 		}
 
-		static crg::FramePass const & createPass( castor::String const & name
+		static crg::FramePass const & createPass( String const & name
 			, crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, crg::RunnablePass::IsEnabledCallback isEnabled
 			, ashes::Buffer< uint32_t > const & materialsCounts
-			, ashes::Buffer< castor::Point3ui > const & indirectCounts
+			, ashes::Buffer< Point3ui > const & indirectCounts
 			, ashes::Buffer< uint32_t > const & starts
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
-			auto & pass = graph.createPass( castor::toUtf8( name ) + "/MaterialsStart"
-				, [&stages, &device, enable = castor::move( isEnabled )]( crg::FramePass const & framePass
+			auto & pass = graph.createPass( toUtf8( name ) + "/MaterialsStart"
+				, [&stages, &device, enable = c3d::move( isEnabled )]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					auto result = castor::make_unique< crg::ComputePass >( framePass
+					auto result = makeRawUnique< crg::ComputePass >( framePass
 						, context
 						, graph
 						, crg::ru::Config{}
@@ -191,7 +191,7 @@ namespace castor3d
 							.isEnabled( enable )
 							.groupCountX( device.renderSystem.getEngine()->getMaxPassTypeCount() / 64u )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) ) );
-					device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );
@@ -236,7 +236,7 @@ namespace castor3d
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			auto dataMap = writer.declStorageImg< sdw::RUImage2DRg32 >( "dataMap", Bindings::eData, 0u );
-			auto constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
+			auto constexpr maxPipelinesSize = uint32_t( getBitSize( MaxPipelines ) );
 			auto constexpr maxPipelinesMask = ( 0x000000001u << maxPipelinesSize ) - 1u;
 
 			auto MaterialsStarts = writer.declStorageBuffer<>( "MaterialsStarts", Bindings::eMaterialsStarts, 0u );
@@ -277,7 +277,7 @@ namespace castor3d
 			return writer.getBuilder().releaseShader();
 		}
 
-		static crg::FramePass const & createPass( castor::String const & name
+		static crg::FramePass const & createPass( String const & name
 			, crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, crg::FramePass const *& previousPass
@@ -286,25 +286,25 @@ namespace castor3d
 			, crg::ImageViewId const & data
 			, ashes::Buffer< uint32_t > const & materialsCounts
 			, ashes::Buffer< uint32_t > const & materialsStarts
-			, ashes::Buffer< castor::Point2ui > const & pixels
+			, ashes::Buffer< Point2ui > const & pixels
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
 			auto renderSize = getExtent( data );
-			auto & pass = graph.createPass( castor::toUtf8( name ) + "/PixelsXY"
-				, [&stages, &device, enable = castor::move( isEnabled ), renderSize]( crg::FramePass const & framePass
+			auto & pass = graph.createPass( toUtf8( name ) + "/PixelsXY"
+				, [&stages, &device, enable = c3d::move( isEnabled ), renderSize]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					auto result = castor::make_unique< crg::ComputePass >( framePass
+					auto result = makeRawUnique< crg::ComputePass >( framePass
 						, context
 						, graph
 						, crg::ru::Config{}
 						, crg::cp::Config{}
 							.isEnabled( enable )
-							.groupCountX( castor::divRoundUp( renderSize.width, 16u ) )
-							.groupCountY( castor::divRoundUp( renderSize.height, 16u ) )
+							.groupCountX( divRoundUp( renderSize.width, 16u ) )
+							.groupCountY( divRoundUp( renderSize.height, 16u ) )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) ) );
-					device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );
@@ -340,11 +340,11 @@ namespace castor3d
 		, RenderDevice const & device
 		, crg::ImageViewId const & data
 		, ashes::Buffer< uint32_t > const & materialsCounts
-		, ashes::Buffer< castor::Point3ui > const & indirectCounts
+		, ashes::Buffer< Point3ui > const & indirectCounts
 		, ashes::Buffer< uint32_t > const & materialsStarts
-		, ashes::Buffer< castor::Point2ui > const & pixels
+		, ashes::Buffer< Point2ui > const & pixels
 		, crg::RunnablePass::IsEnabledCallback isEnabled )
-		: castor::Named{ cuT( "VisibilityReorder" ) }
+		: Named{ cuT( "VisibilityReorder" ) }
 		, m_computeCountsShader{ VK_SHADER_STAGE_COMPUTE_BIT
 			, getName()
 			, matcount::getProgram( device ) }
@@ -383,7 +383,7 @@ namespace castor3d
 			, previousPasses
 			, previousPass
 			, device
-			, castor::move( isEnabled )
+			, c3d::move( isEnabled )
 			, data
 			, materialsCounts
 			, materialsStarts

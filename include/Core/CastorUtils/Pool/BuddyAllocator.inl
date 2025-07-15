@@ -1,6 +1,6 @@
 #include "CastorUtils/Exception/Assertion.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename Traits >
 	inline BuddyAllocatorT< Traits >::BuddyAllocatorT( uint32_t numLevels

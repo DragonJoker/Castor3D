@@ -4,7 +4,7 @@
 #include <locale>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor::string
+namespace c3d::string
 {
 	//*************************************************************************************************
 

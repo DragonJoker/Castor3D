@@ -19,7 +19,7 @@
 #	include <errno.h>
 #	include <pwd.h>
 
-namespace castor
+namespace c3d
 {
 	bool File::traverseDirectory( Path const & folderPath
 		, TraverseDirFunction const & directoryFunction

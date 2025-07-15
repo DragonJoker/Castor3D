@@ -10,7 +10,7 @@
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Sync/Queue.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace upload
 	{
@@ -18,15 +18,15 @@ namespace castor3d
 	}
 
 	StagedUploadData::StagedUploadData( RenderDevice const & device
-		, castor::String debugName
+		, String debugName
 		, ashes::CommandBufferPtr commandBuffer )
-		: CommandBufferHolder{ castor::move( commandBuffer ) }
-		, UploadData{ device, castor::move( debugName ), CommandBufferHolder::getData().get() }
-		, m_buffers{ FrameBuffers{ device->createSemaphore( castor::toUtf8( m_debugName ) ) }
-			, FrameBuffers{ device->createSemaphore( castor::toUtf8( m_debugName ) ) } }
+		: CommandBufferHolder{ c3d::move( commandBuffer ) }
+		, UploadData{ device, c3d::move( debugName ), CommandBufferHolder::getData().get() }
+		, m_buffers{ FrameBuffers{ device->createSemaphore( toUtf8( m_debugName ) ) }
+			, FrameBuffers{ device->createSemaphore( toUtf8( m_debugName ) ) } }
 		, m_cpuBuffers{ &m_buffers[0] }
 		, m_gpuBuffers{ &m_buffers[0] }
-		, m_timer{ castor::makeUnique< crg::FramePassTimer >( device.makeContext(), "Upload", crg::TimerScope::eUpdate ) }
+		, m_timer{ makeUnique< crg::FramePassTimer >( device.makeContext(), "Upload", crg::TimerScope::eUpdate ) }
 	{
 		m_device.renderSystem.getEngine()->registerTimer( cuT( "Upload" ), *m_timer );
 	}
@@ -48,12 +48,12 @@ namespace castor3d
 
 	void StagedUploadData::doBegin()
 	{
-		m_cpuBlock = castor::make_unique< crg::FramePassTimerBlock >( m_timer->start() );
+		m_cpuBlock = makeRawUnique< crg::FramePassTimerBlock >( m_timer->start() );
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 	}
 
-	void StagedUploadData::doPreprocess( castor::Vector< BufferDataRange > *& pendingBuffers
-		, castor::Vector< ImageDataRange > *& pendingImages )
+	void StagedUploadData::doPreprocess( Vector< BufferDataRange > *& pendingBuffers
+		, Vector< ImageDataRange > *& pendingImages )
 	{
 		auto const & engine = *m_device.renderSystem.getEngine();
 		m_commandBuffer->beginDebugBlock( { "Buffers Upload"
@@ -208,7 +208,7 @@ namespace castor3d
 
 		if ( offset.getOffset() + data.srcSize > offset.buffer->getSize() )
 		{
-			log::error << "StagedUploadBuffer: Trying to copy more than there can be in staging [" << castor::makeString( offset.buffer->getName() )
+			log::error << "StagedUploadBuffer: Trying to copy more than there can be in staging [" << makeString( offset.buffer->getName() )
 				<< "] buffer: offset = " << offset.getOffset()
 				<< ", size = " << data.srcSize << std::endl;
 			CU_Failure( "Trying to copy more than there can be in staging buffer" );
@@ -234,7 +234,7 @@ namespace castor3d
 
 		if ( offset.getOffset() + data.srcSize > offset.buffer->getSize() )
 		{
-			log::error << "StagedUploadImage: Trying to copy more than there can be in staging [" << castor::makeString( offset.buffer->getName() )
+			log::error << "StagedUploadImage: Trying to copy more than there can be in staging [" << makeString( offset.buffer->getName() )
 				<< "] buffer: offset = " << offset.getOffset()
 				<< ", size = " << data.srcSize << std::endl;
 			CU_Failure( "Trying to copy more than there can be in staging buffer" );
@@ -287,7 +287,7 @@ namespace castor3d
 
 	UploadData::SemaphoreUsed StagedUploadData::doEnd( ashes::Queue const & queue
 		, ashes::Fence const * fence
-		, castor::Milliseconds timeout )
+		, Milliseconds timeout )
 	{
 		m_commandBuffer->end();
 		m_cpuBlock = {};
@@ -306,7 +306,7 @@ namespace castor3d
 			, m_gpuBuffers->currentSize
 			, m_gpuBuffers->buffersCount };
 
-		castor::swap( m_cpuBuffers, m_gpuBuffers );
+		c3d::swap( m_cpuBuffers, m_gpuBuffers );
 		m_frameIndex = 1u - m_frameIndex;
 
 		if ( fence )
@@ -335,7 +335,7 @@ namespace castor3d
 					CU_Failure( "StagedUpload: Unexpected unmapped buffer" );
 				}
 
-				log::debug << cuT( "Releasing staging buffer [" ) << castor::makeString( it->buffer->getBuffer().getName() ) << cuT( "]" ) << std::endl;
+				log::debug << cuT( "Releasing staging buffer [" ) << makeString( it->buffer->getBuffer().getName() ) << cuT( "]" ) << std::endl;
 				it = m_gpuBuffers->pool.erase( it );
 			}
 			else
@@ -368,14 +368,14 @@ namespace castor3d
 				maxCount *= 2u;
 			}
 
-			StagingBuffer buffer{ castor::makeUnique< GpuPackedBaseBuffer >( m_device
+			StagingBuffer buffer{ makeUnique< GpuPackedBaseBuffer >( m_device
 				, VkBufferUsageFlags{ VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT }
 				, VkMemoryPropertyFlags{ VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT }
-				, m_debugName + cuT( "Staging" ) + castor::string::toString( pool.size() )
+				, m_debugName + cuT( "Staging" ) + string::toString( pool.size() )
 				, ashes::QueueShare{}
 				, GpuBufferPackedAllocator{ uint32_t( maxCount )
 				, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) } ) };
-			pool.emplace_back( castor::move( buffer ) );
+			pool.emplace_back( c3d::move( buffer ) );
 			it = std::next( pool.begin()
 				, ptrdiff_t( pool.size() - 1u ) );
 		}
@@ -386,7 +386,7 @@ namespace castor3d
 
 		if ( result.getOffset() + size > result.buffer->getSize() )
 		{
-			log::error << "StagedUploadBuffer: Retrieved invalid offset from [" << castor::makeString( result.buffer->getName() )
+			log::error << "StagedUploadBuffer: Retrieved invalid offset from [" << makeString( result.buffer->getName() )
 				<< "] buffer: offset = " << result.getOffset()
 				<< ", size = " << size << std::endl;
 			CU_Failure( "Retrieved invalid offset from buffer" );

@@ -23,14 +23,14 @@ See LICENSE file in root folder
 
 #include <functional>
 
-namespace castor3d
+namespace c3d
 {
 	class CameraUbo;
 
 	/**@name Render */
 	//@{
 
-	castor::String const RenderTypeUndefined = cuT( "Undefined" );
+	String const RenderTypeUndefined = cuT( "Undefined" );
 
 	using RenderPassTypeID = uint16_t;
 
@@ -46,10 +46,10 @@ namespace castor3d
 	{
 		struct Vertex
 		{
-			castor::Point2f position;
+			Point2f position;
 		};
 
-		castor::Array< Vertex, 6u > vertex;
+		Array< Vertex, 6u > vertex;
 	};
 	/**
 	*\~english
@@ -63,11 +63,11 @@ namespace castor3d
 	{
 		struct Vertex
 		{
-			castor::Point2f position;
-			castor::Point2f texture;
+			Point2f position;
+			Point2f texture;
 		};
 
-		castor::Array< Vertex, 6u > vertex;
+		Array< Vertex, 6u > vertex;
 	};
 	/**
 	*\~english
@@ -83,13 +83,13 @@ namespace castor3d
 		{
 			struct Vertex
 			{
-				castor::Point3f position;
+				Point3f position;
 			};
 
-			castor::Array< Vertex, 6u > vertex;
+			Array< Vertex, 6u > vertex;
 		};
 
-		castor::Array< Quad, 6u > faces;
+		Array< Quad, 6u > faces;
 	};
 	/**
 	*\~english
@@ -105,14 +105,14 @@ namespace castor3d
 		{
 			struct Vertex
 			{
-				castor::Point3f position;
-				castor::Point2f texture;
+				Point3f position;
+				Point2f texture;
 			};
 
-			castor::Array< Vertex, 6u > vertex;
+			Array< Vertex, 6u > vertex;
 		};
 
-		castor::Array< Quad, 6u > faces;
+		Array< Quad, 6u > faces;
 	};
 	/**
 	*\~english
@@ -244,7 +244,7 @@ namespace castor3d
 		eNearRightBottom = 7,
 		CU_ScopedEnumBounds( eFarLeftBottom, eNearRightBottom )
 	};
-	C3D_API castor::String getName( Corner value );
+	C3D_API String getName( Corner value );
 	/**
 	*\~english
 	*\brief
@@ -275,7 +275,7 @@ namespace castor3d
 		eBottom = 5,
 		CU_ScopedEnumBounds( eNear, eBottom )
 	};
-	C3D_API castor::String getName( FrustumPlane value );
+	C3D_API String getName( FrustumPlane value );
 	/**
 	*\~english
 	*\brief
@@ -292,7 +292,7 @@ namespace castor3d
 		eBillboard = 2,
 		CU_ScopedEnumBounds( eNone, eBillboard )
 	};
-	C3D_API castor::String getName( PickNodeType value );
+	C3D_API String getName( PickNodeType value );
 	/**
 	*\~english
 	*\brief
@@ -308,7 +308,7 @@ namespace castor3d
 		eTexture = 1,
 		CU_ScopedEnumBounds( eWindow, eTexture )
 	};
-	C3D_API castor::String getName( TargetType value );
+	C3D_API String getName( TargetType value );
 	/**
 	*\~english
 	*\brief
@@ -327,7 +327,7 @@ namespace castor3d
 		eFrustum = 4,
 		CU_ScopedEnumBounds( eUndefined, eFrustum )
 	};
-	C3D_API castor::String getName( ViewportType value );
+	C3D_API String getName( ViewportType value );
 	/**
 	*\~english
 	*\brief
@@ -475,7 +475,7 @@ namespace castor3d
 	};
 	CU_ImplementFlags( RenderFilter )
 
-	C3D_API castor::String getName( RenderFilter value );
+	C3D_API String getName( RenderFilter value );
 	/**
 	*\~english
 	*\brief
@@ -790,18 +790,18 @@ namespace castor3d
 		AllocationStats indexAllocated;
 		AllocationStats geometryAllocated;
 		AllocationStats uboAllocated;
-		castor::Vector< castor::Pair< MemChunk, castor::String > > uboAllocations;
+		Vector< Pair< MemChunk, String > > uboAllocations;
 
 		C3D_API explicit DeviceCounts( RenderDevice const & device );
 	};
 
-	using RenderQueueArray = castor::Vector< castor::ReferenceWrapper< RenderQueue > >;
-	using TextureArray = castor::Vector< Texture >;
+	using RenderQueueArray = Vector< ReferenceWrapper< RenderQueue > >;
+	using TextureArray = Vector< Texture >;
 
-	using ShadowMapRefIds = castor::Pair< castor::ReferenceWrapper< ShadowMap >, UInt32Array >;
-	using ShadowMapRefArray = castor::Vector< ShadowMapRefIds >;
-	using ShadowMapLightTypeArray = castor::Array< ShadowMapRefArray, size_t( LightType::eCount ) >;
-	using LightIdArray = castor::Vector< castor::Pair< LightInstance *, uint32_t > >;
+	using ShadowMapRefIds = Pair< ReferenceWrapper< ShadowMap >, UInt32Array >;
+	using ShadowMapRefArray = Vector< ShadowMapRefIds >;
+	using ShadowMapLightTypeArray = Array< ShadowMapRefArray, size_t( LightType::eCount ) >;
+	using LightIdArray = Vector< Pair< LightInstance *, uint32_t > >;
 
 	template< typename NodeT >
 	struct CulledNodeT
@@ -824,10 +824,10 @@ namespace castor3d
 	};
 
 	template< typename NodeT >
-	using CulledNodePtrT = castor::RawUniquePtr< CulledNodeT< NodeT > >;
+	using CulledNodePtrT = RawUniquePtr< CulledNodeT< NodeT > >;
 
 	template< typename NodeT, template< typename NodeU > typename NodeWrapperT = CulledNodeT >
-	using NodeArrayT = castor::Vector< NodeWrapperT< NodeT > >;
+	using NodeArrayT = Vector< NodeWrapperT< NodeT > >;
 
 	struct PipelineAndID
 	{
@@ -837,18 +837,18 @@ namespace castor3d
 
 	struct ShadowMapLightIds
 	{
-		explicit ShadowMapLightIds( castor::ReferenceWrapper< ShadowMap > shadowMap
+		explicit ShadowMapLightIds( ReferenceWrapper< ShadowMap > shadowMap
 			, LightIdArray ids = {} )
-			: shadowMap{ castor::move( shadowMap ) }
-			, ids{ castor::move( ids ) }
+			: shadowMap{ c3d::move( shadowMap ) }
+			, ids{ c3d::move( ids ) }
 		{
 		}
 
-		castor::ReferenceWrapper< ShadowMap > shadowMap;
+		ReferenceWrapper< ShadowMap > shadowMap;
 		LightIdArray ids;
 	};
-	using ShadowMapLightIdArray = castor::Vector< ShadowMapLightIds >;
-	using ShadowMapLightArray = castor::Array< ShadowMapLightIdArray, size_t( LightType::eCount ) >;
+	using ShadowMapLightIdArray = Vector< ShadowMapLightIds >;
+	using ShadowMapLightArray = Array< ShadowMapLightIdArray, size_t( LightType::eCount ) >;
 
 	struct TechniqueQueues
 	{
@@ -867,33 +867,33 @@ namespace castor3d
 		CU_ScopedEnumBounds( eBeforeDepth, eBeforePostEffects )
 	};
 
-	using NodesPassChangeSignalFunction = castor::Function< void( NodesPass const & ) >;
-	using NodesPassChangeSignal = castor::SignalT< NodesPassChangeSignalFunction >;
-	using NodesPassChangeSignalConnection = castor::ConnectionT< NodesPassChangeSignal >;
+	using NodesPassChangeSignalFunction = Function< void( NodesPass const & ) >;
+	using NodesPassChangeSignal = SignalT< NodesPassChangeSignalFunction >;
+	using NodesPassChangeSignalConnection = ConnectionT< NodesPassChangeSignal >;
 
-	using TechniquePassVector = castor::Vector< RenderTechniqueNodesPass * >;
-	using TechniquePasses = castor::Array< TechniquePassVector, size_t( TechniquePassEvent::eCount ) >;
+	using TechniquePassVector = Vector< RenderTechniqueNodesPass * >;
+	using TechniquePasses = Array< TechniquePassVector, size_t( TechniquePassEvent::eCount ) >;
 
 	struct RenderPassRegisterInfo
 	{
-		using Creator = castor::Function< crg::FramePassArray( RenderDevice const &
+		using Creator = Function< crg::FramePassArray( RenderDevice const &
 			, RenderTechnique &
 			, TechniquePasses &
 			, crg::ResourcesCache &
 			, crg::FramePassArray ) >;
 
-		RenderPassRegisterInfo( castor::String pname
+		RenderPassRegisterInfo( String pname
 			, Creator pcreate
 			, TechniquePassEvent pevent
 			, RenderPassTypeID pid = {} )
-			: name{ castor::move( pname ) }
-			, create{ castor::move( pcreate ) }
-			, event{ castor::move( pevent ) }
+			: name{ c3d::move( pname ) }
+			, create{ c3d::move( pcreate ) }
+			, event{ c3d::move( pevent ) }
 			, id{ pid }
 		{
 		}
 
-		castor::String name;
+		String name;
 		Creator create;
 		TechniquePassEvent event;
 		RenderPassTypeID id;
@@ -912,18 +912,18 @@ namespace castor3d
 		uint32_t index{ 0u };
 		uint32_t combineIndex{ 0u };
 		uint32_t debugIndex{ 0u };
-		castor::Point2f jitter;
+		Point2f jitter;
 		bool voxelConeTracing{ false };
-		castor::Point3f gridCenter{};
+		Point3f gridCenter{};
 		float cellSize{ 0.0f };
-		castor::Milliseconds tslf{};
-		castor::Milliseconds time{};
-		castor::Milliseconds total{};
-		castor::Vector< TechniqueQueues > techniquesQueues{};
-		castor::Point2f bandRatio{};
-		castor::Matrix4x4f bgMtxModl{};
-		castor::Matrix4x4f bgMtxView{};
-		castor::Matrix4x4f bgMtxProj{};
+		Milliseconds tslf{};
+		Milliseconds time{};
+		Milliseconds total{};
+		Vector< TechniqueQueues > techniquesQueues{};
+		Point2f bandRatio{};
+		Matrix4x4f bgMtxModl{};
+		Matrix4x4f bgMtxView{};
+		Matrix4x4f bgMtxProj{};
 		bool isSafeBanded{ true };
 		crg::ImageViewIdArray targetImage{};
 		struct DirtyObjects
@@ -939,13 +939,13 @@ namespace castor3d
 					&& dirtyCameras.empty();
 			}
 
-			castor::Vector< SceneNode * > dirtyNodes{};
-			castor::Vector< Geometry * > dirtyGeometries{};
-			castor::Vector< BillboardBase * > dirtyBillboards{};
-			castor::Vector< LightInstance * > dirtyLights{};
-			castor::Vector< Camera * > dirtyCameras{};
+			Vector< SceneNode * > dirtyNodes{};
+			Vector< Geometry * > dirtyGeometries{};
+			Vector< BillboardBase * > dirtyBillboards{};
+			Vector< LightInstance * > dirtyLights{};
+			Vector< Camera * > dirtyCameras{};
 		};
-		castor::Map< Scene const *, DirtyObjects > dirtyScenes;
+		Map< Scene const *, DirtyObjects > dirtyScenes;
 	};
 
 	struct GpuUpdater
@@ -959,15 +959,15 @@ namespace castor3d
 
 		RenderDevice const & device;
 		RenderInfo & info;
-		castor::Point2f jitter{};
+		Point2f jitter{};
 		Scene * scene{ nullptr };
 		Camera * camera{ nullptr };
 		LightInstance * light{ nullptr };
 		uint32_t index{ 0u };
 		bool voxelConeTracing{ false };
 		FramePassTimer * timer{ nullptr };
-		castor::Milliseconds time{};
-		castor::Milliseconds total{};
+		Milliseconds time{};
+		Milliseconds total{};
 	};
 
 	struct TargetDebugConfig
@@ -980,7 +980,7 @@ namespace castor3d
 			m_intermediateImageNames.clear();
 		}
 
-		uint32_t registerImage( castor::String name )
+		uint32_t registerImage( String name )
 		{
 			auto it = std::find( m_intermediateImageNames.begin()
 				, m_intermediateImageNames.end()
@@ -995,53 +995,53 @@ namespace castor3d
 			return uint32_t( std::distance( m_intermediateImageNames.begin(), it ) );
 		}
 
-		castor::StringArray const & getIntermediateImages()const noexcept
+		StringArray const & getIntermediateImages()const noexcept
 		{
 			return m_intermediateImageNames;
 		}
 
 	private:
-		castor::StringArray m_intermediateImageNames;
+		StringArray m_intermediateImageNames;
 	};
 	//@}
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, Frustum, C3D_API );
-	CU_DeclareSmartPtr( castor3d, NodesPass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Picking, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderDevice, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderLoop, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderNodesPass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderPipeline, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderQueue, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderSystem, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderTarget, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderTechnique, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderTechniquePass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RenderWindow, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Viewport, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Texture, C3D_API );
+	CU_DeclareSmartPtr( c3d, Frustum, C3D_API );
+	CU_DeclareSmartPtr( c3d, NodesPass, C3D_API );
+	CU_DeclareSmartPtr( c3d, Picking, C3D_API );
+	CU_DeclareSmartPtr( c3d, RenderDevice, C3D_API );
+	CU_DeclareSmartPtr( c3d, RenderLoop, C3D_API );
+	CU_DeclareSmartPtr( c3d, RenderNodesPass, C3D_API );
+	CU_DeclareSmartPtr( c3d, RenderPipeline, C3D_API );
+	CU_DeclareSmartPtr( c3d, RenderQueue, C3D_API );
+	CU_DeclareSmartPtr( c3d, RenderSystem, C3D_API );
+	CU_DeclareSmartPtr( c3d, RenderTarget, C3D_API );
+	CU_DeclareSmartPtr( c3d, RenderTechnique, C3D_API );
+	CU_DeclareSmartPtr( c3d, RenderTechniquePass, C3D_API );
+	CU_DeclareSmartPtr( c3d, RenderWindow, C3D_API );
+	CU_DeclareSmartPtr( c3d, Viewport, C3D_API );
+	CU_DeclareSmartPtr( c3d, Texture, C3D_API );
 
 	CU_DeclareVector( IntermediateView, IntermediateView );
 	/** @endcond */
 
 	struct RenderWindowDesc
 	{
-		castor::String name;
+		String name;
 		RenderTargetRPtr renderTarget{};
 		bool enableVSync{};
 		bool fullscreen{};
 		bool allowHdr{};
 	};
 
-	C3D_API uint32_t getSafeBandsSize( castor::Size const & size );
-	C3D_API uint32_t getSafeBandSize( castor::Size const & size );
-	C3D_API castor::Size getSafeBandedSize( castor::Size const & size );
-	C3D_API Extent3D getSafeBandedExtent3D( castor::Size const & size );
-	C3D_API castor::Angle getSafeBandedFovY( castor::Angle const & fovY
-		, castor::Size const & size );
+	C3D_API uint32_t getSafeBandsSize( Size const & size );
+	C3D_API uint32_t getSafeBandSize( Size const & size );
+	C3D_API Size getSafeBandedSize( Size const & size );
+	C3D_API Extent3D getSafeBandedExtent3D( Size const & size );
+	C3D_API Angle getSafeBandedFovY( Angle const & fovY
+		, Size const & size );
 	C3D_API float getSafeBandedAspect( float aspect
-		, castor::Size const & size );
+		, Size const & size );
 	C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImage image
 		, ImageSubresourceRange const & range
 		, ImageLayout sourceLayout
@@ -1408,8 +1408,8 @@ namespace castor3d
 	}
 }
 
-CU_DeclareExportedOwnedBy( C3D_API, castor3d::RenderSystem, RenderSystem )
-CU_DeclareExportedOwnedBy( C3D_API, castor3d::RenderDevice, RenderDevice )
+CU_DeclareExportedOwnedBy( C3D_API, RenderSystem, RenderSystem )
+CU_DeclareExportedOwnedBy( C3D_API, RenderDevice, RenderDevice )
 
 #include "PipelineFlags.hpp"
 #include "Texture.hpp"

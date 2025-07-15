@@ -25,91 +25,91 @@ See LICENSE file in root folder
 
 namespace toon::shader
 {
-	namespace c3d = castor3d::shader;
+	namespace c3ds = c3d::shader;
 
 	class ToonLightingModel
 	{
 	protected:
-		void initLightSpecifics( c3d::LightSurface const & lightSurface
-			, c3d::BlendComponents const & components );
-		c3d::DerivFloat getNdotL( c3d::LightSurface const & lightSurface
-			, c3d::BlendComponents const & components );
-		c3d::DerivFloat getNdotH( c3d::LightSurface const & lightSurface
-			, c3d::BlendComponents const & components );
+		void initLightSpecifics( c3ds::LightSurface const & lightSurface
+			, c3ds::BlendComponents const & components );
+		c3ds::DerivFloat getNdotL( c3ds::LightSurface const & lightSurface
+			, c3ds::BlendComponents const & components );
+		c3ds::DerivFloat getNdotH( c3ds::LightSurface const & lightSurface
+			, c3ds::BlendComponents const & components );
 
 	private:
-		castor::RawUniquePtr< c3d::DerivFloat > m_NdotL;
-		castor::RawUniquePtr< c3d::DerivFloat > m_NdotH;
+		c3d::RawUniquePtr< c3ds::DerivFloat > m_NdotL;
+		c3d::RawUniquePtr< c3ds::DerivFloat > m_NdotH;
 	};
 
 	class ToonPhongLightingModel
-		: public c3d::PhongLightingModel
+		: public c3ds::PhongLightingModel
 		, public ToonLightingModel
 	{
 	public:
-		ToonPhongLightingModel( castor3d::LightingModelID lightingModelId
+		ToonPhongLightingModel( c3d::LightingModelID lightingModelId
 			, sdw::ShaderWriter & writer
-			, c3d::Materials const & materials
-			, c3d::Utils & utils
-			, c3d::BRDFHelpers & brdfHelpers
-			, c3d::LightingModelSpec spec
-			, c3d::Shadow & shadowModel
-			, c3d::Lights & lights
+			, c3ds::Materials const & materials
+			, c3ds::Utils & utils
+			, c3ds::BRDFHelpers & brdfHelpers
+			, c3ds::LightingModelSpec spec
+			, c3ds::Shadow & shadowModel
+			, c3ds::Lights & lights
 			, bool enableVolumetric );
 
-		C3D_ToonMaterial_API static const castor::String getName();
-		static c3d::LightingModelPtr create( castor3d::LightingModelID lightingModelId
-			, c3d::LightingModelDesc const & desc
+		C3D_ToonMaterial_API static const c3d::String getName();
+		static c3ds::LightingModelPtr create( c3d::LightingModelID lightingModelId
+			, c3ds::LightingModelDesc const & desc
 			, sdw::ShaderWriter & writer
-			, c3d::Materials const & materials
-			, c3d::Utils & utils
-			, c3d::BRDFHelpers & brdfHelpers
-			, c3d::Shadow & shadowModel
-			, c3d::Lights & lights
+			, c3ds::Materials const & materials
+			, c3ds::Utils & utils
+			, c3ds::BRDFHelpers & brdfHelpers
+			, c3ds::Shadow & shadowModel
+			, c3ds::Lights & lights
 			, bool enableVolumetric );
 
 	protected:
-		void doInitLightSpecifics( c3d::LightSurface const & lightSurface
-			, c3d::BlendComponents const & components )override;
-		c3d::DerivFloat doGetNdotL( c3d::LightSurface const & lightSurface
-			, c3d::BlendComponents const & components )override;
-		c3d::DerivFloat doGetNdotH( c3d::LightSurface const & lightSurface
-			, c3d::BlendComponents const & components )override;
+		void doInitLightSpecifics( c3ds::LightSurface const & lightSurface
+			, c3ds::BlendComponents const & components )override;
+		c3ds::DerivFloat doGetNdotL( c3ds::LightSurface const & lightSurface
+			, c3ds::BlendComponents const & components )override;
+		c3ds::DerivFloat doGetNdotH( c3ds::LightSurface const & lightSurface
+			, c3ds::BlendComponents const & components )override;
 	};
 
 	class ToonPbrLightingModel
-		: public c3d::PbrLightingModel
+		: public c3ds::PbrLightingModel
 		, public ToonLightingModel
 	{
 	public:
-		explicit ToonPbrLightingModel( castor3d::LightingModelID lightingModelId
+		explicit ToonPbrLightingModel( c3d::LightingModelID lightingModelId
 			, sdw::ShaderWriter & writer
-			, c3d::Materials const & materials
-			, c3d::Utils & utils
-			, c3d::BRDFHelpers & brdfHelpers
-			, c3d::LightingModelSpec spec
-			, c3d::Shadow & shadowModel
-			, c3d::Lights & lights
+			, c3ds::Materials const & materials
+			, c3ds::Utils & utils
+			, c3ds::BRDFHelpers & brdfHelpers
+			, c3ds::LightingModelSpec spec
+			, c3ds::Shadow & shadowModel
+			, c3ds::Lights & lights
 			, bool enableVolumetric );
 
-		C3D_ToonMaterial_API static const castor::String getName();
-		static c3d::LightingModelPtr create( castor3d::LightingModelID lightingModelId
-			, c3d::LightingModelDesc const & desc
+		C3D_ToonMaterial_API static const c3d::String getName();
+		static c3ds::LightingModelPtr create( c3d::LightingModelID lightingModelId
+			, c3ds::LightingModelDesc const & desc
 			, sdw::ShaderWriter & writer
-			, c3d::Materials const & materials
-			, c3d::Utils & utils
-			, c3d::BRDFHelpers & brdfHelpers
-			, c3d::Shadow & shadowModel
-			, c3d::Lights & lights
+			, c3ds::Materials const & materials
+			, c3ds::Utils & utils
+			, c3ds::BRDFHelpers & brdfHelpers
+			, c3ds::Shadow & shadowModel
+			, c3ds::Lights & lights
 			, bool enableVolumetric );
 
 	protected:
-		void doInitLightSpecifics( c3d::LightSurface const & lightSurface
-			, c3d::BlendComponents const & components )override;
-		c3d::DerivFloat doGetNdotL( c3d::LightSurface const & lightSurface
-			, c3d::BlendComponents const & components )override;
-		c3d::DerivFloat doGetNdotH( c3d::LightSurface const & lightSurface
-			, c3d::BlendComponents const & components )override;
+		void doInitLightSpecifics( c3ds::LightSurface const & lightSurface
+			, c3ds::BlendComponents const & components )override;
+		c3ds::DerivFloat doGetNdotL( c3ds::LightSurface const & lightSurface
+			, c3ds::BlendComponents const & components )override;
+		c3ds::DerivFloat doGetNdotH( c3ds::LightSurface const & lightSurface
+			, c3ds::BlendComponents const & components )override;
 	};
  }
 

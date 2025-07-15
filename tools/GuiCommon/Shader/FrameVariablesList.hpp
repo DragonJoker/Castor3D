@@ -14,7 +14,7 @@ namespace GuiCommon
 		: public wxTreeCtrl
 	{
 	public:
-		FrameVariablesList( castor3d::Engine * engine
+		FrameVariablesList( c3d::Engine * engine
 			, PropertiesContainer * propertiesHolder
 			, wxWindow * parent
 			, wxPoint const & ptPos = wxDefaultPosition
@@ -22,7 +22,7 @@ namespace GuiCommon
 		~FrameVariablesList()override;
 
 		void loadVariables( VkShaderStageFlagBits stage
-			, castor::Vector< UniformBufferValues > & ubos );
+			, c3d::Vector< UniformBufferValues > & ubos );
 		void unloadVariables();
 
 	private:
@@ -40,7 +40,7 @@ namespace GuiCommon
 		void onMouseRButtonUp( wxTreeEvent & event );
 
 	private:
-		castor3d::Engine * m_engine;
+		c3d::Engine * m_engine;
 		PropertiesContainer * m_propertiesHolder;
 	};
 }

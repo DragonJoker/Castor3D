@@ -22,7 +22,7 @@ namespace light_streaks
 {
 	namespace hipass
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
 		template< typename T >
 		inline constexpr T getSubresourceDimension( T const & extent
@@ -31,21 +31,21 @@ namespace light_streaks
 			return std::max( T( 1 ), T( extent >> mipLevel ) );
 		}
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", 0u, 0u );
 
-			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
-				, sdw::VertexOutT< c3d::Uv2FT > out )
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
+				, sdw::FragmentOutT< c3ds::Colour4FT > out )
 				{
 					out.colour() = vec4( c3d_mapColor.sample( in.uv(), 0.0_f ).xyz(), 1.0_f );
 					auto maxComponent = writer.declLocale( "maxComponent"
@@ -70,10 +70,10 @@ namespace light_streaks
 
 	HiPass::HiPass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & sceneView
 		, crg::ImageViewIdArray const & resultViews
-		, castor3d::Extent2D size
+		, c3d::Extent2D size
 		, bool const * enabled
 		, uint32_t const * passIndex )
 		: m_shader{ cuT( "LightStreaksHiPass" ), hipass::getProgram( device ) }
@@ -95,16 +95,16 @@ namespace light_streaks
 						, context
 						, graph
 						, crg::ru::Config{ 2u } );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
-		crg::SamplerDesc linearSampler{ castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest
-			, castor3d::WrapMode::eClampToEdge
-			, castor3d::WrapMode::eClampToEdge
-			, castor3d::WrapMode::eClampToEdge };
+		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
+			, c3d::FilterMode::eLinear
+			, c3d::MipmapMode::eNearest
+			, c3d::WrapMode::eClampToEdge
+			, c3d::WrapMode::eClampToEdge
+			, c3d::WrapMode::eClampToEdge };
 		hiPass.addDependency( *previous );
 		hiPass.addSampledView( sceneView
 			, 0u
@@ -113,19 +113,19 @@ namespace light_streaks
 
 		for ( uint32_t i = 1u; i < resultViews.size(); ++i )
 		{
-			auto & pass = graph.createPass( "Copy" + castor::string::toMbString( i )
+			auto & pass = graph.createPass( "Copy" + c3d::string::toMbString( i )
 				, [&device, size, enabled]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					auto result = castor::make_unique< crg::ImageCopy >( framePass
+					auto result = c3d::makeRawUnique< crg::ImageCopy >( framePass
 						, context
 						, graph
-						, castor3d::Extent3D{ size.width, size.height, 1u }
+						, c3d::Extent3D{ size.width, size.height, 1u }
 						, crg::ru::Config{}
 						, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 						, crg::RunnablePass::IsEnabledCallback( [enabled](){ return ( enabled ? *enabled : true ); } ) );
-					device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+					device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );
@@ -136,7 +136,7 @@ namespace light_streaks
 		}
 	}
 
-	void HiPass::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void HiPass::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 	}

@@ -77,7 +77,7 @@ namespace atmosphere_scattering
 		AtmosphereData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -139,12 +139,12 @@ namespace atmosphere_scattering
 		using Configuration = AtmosphereScatteringConfig;
 
 	public:
-		AtmosphereScatteringUbo( castor3d::RenderDevice const & device
+		AtmosphereScatteringUbo( c3d::RenderDevice const & device
 			, bool & dirty );
 		~AtmosphereScatteringUbo();
-		castor::Pair< castor::Point3f, castor::Vector3f > cpuUpdate( Configuration const & config
-			, castor3d::SceneNode const & sunNode
-			, castor3d::SceneNode const & planetNode );
+		c3d::Pair< c3d::Point3f, c3d::Vector3f > cpuUpdate( Configuration const & config
+			, c3d::SceneNode const & sunNode
+			, c3d::SceneNode const & planetNode );
 
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const
@@ -164,38 +164,38 @@ namespace atmosphere_scattering
 			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
 		}
 
-		castor3d::UniformBufferOffsetT< Configuration > const & getUbo()const
+		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
 			return m_ubo;
 		}
 
-		castor3d::UniformBufferOffsetT< Configuration > & getUbo()
+		c3d::UniformBufferOffsetT< Configuration > & getUbo()
 		{
 			return m_ubo;
 		}
 
-		castor::Point3f const & getSunDirection()const
+		c3d::Point3f const & getSunDirection()const
 		{
 			return m_sunDirection;
 		}
 
-		castor::Point3f const & getPlanetPosition()const
+		c3d::Point3f const & getPlanetPosition()const
 		{
 			return m_planetPosition;
 		}
 
 	public:
-		static const castor::MbString Buffer;
-		static const castor::MbString Data;
+		static const c3d::MbString Buffer;
+		static const c3d::MbString Data;
 
 	private:
-		castor3d::RenderDevice const & m_device;
-		castor3d::UniformBufferOffsetT< Configuration > m_ubo;
+		c3d::RenderDevice const & m_device;
+		c3d::UniformBufferOffsetT< Configuration > m_ubo;
 		bool & m_dirty;
 		CheckedAtmosphereScatteringConfig m_config;
-		castor::GroupChangeTracked< castor::Point3f > m_sunDirection;
-		castor::GroupChangeTracked< castor::Point3f > m_planetPosition;
-		castor::GroupChangeTracked< castor::Point3f > m_mieAbsorption;
+		c3d::GroupChangeTracked< c3d::Point3f > m_sunDirection;
+		c3d::GroupChangeTracked< c3d::Point3f > m_planetPosition;
+		c3d::GroupChangeTracked< c3d::Point3f > m_mieAbsorption;
 	};
 }
 

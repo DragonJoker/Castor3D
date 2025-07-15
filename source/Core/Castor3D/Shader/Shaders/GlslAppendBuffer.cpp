@@ -2,11 +2,11 @@
 
 #include <ShaderWriter/Intrinsics/IntrinsicFunctions.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	AppendBufferBase::AppendBufferBase( sdw::ShaderWriter & writer
-		, castor::MbString blockName
-		, castor::MbString variableName
+		, MbString blockName
+		, MbString variableName
 		, uint32_t binding
 		, uint32_t set
 		, bool enabled )
@@ -15,19 +15,19 @@ namespace castor3d::shader
 	{
 		if ( enabled )
 		{
-			m_ssbo = castor::make_unique< sdw::StorageBuffer >( m_writer
-				, castor::move( blockName )
-				, castor::move( variableName )
+			m_ssbo = makeRawUnique< sdw::StorageBuffer >( m_writer
+				, c3d::move( blockName )
+				, c3d::move( variableName )
 				, binding
 				, set );
-			m_count = castor::make_unique< sdw::UInt32 >( m_ssbo->declMember< sdw::UInt32 >( "count" ) );
+			m_count = makeRawUnique< sdw::UInt32 >( m_ssbo->declMember< sdw::UInt32 >( "count" ) );
 			m_ssbo->declMember< sdw::UInt32 >( "pad0" );
 			m_ssbo->declMember< sdw::UInt32 >( "pad1" );
 			m_ssbo->declMember< sdw::UInt32 >( "pad2" );
 		}
 		else
 		{
-			m_count = castor::make_unique< sdw::UInt32 >( m_writer.declLocale( "disabled_" + m_variableName + "_cnt", 0_u32, false ) );
+			m_count = makeRawUnique< sdw::UInt32 >( m_writer.declLocale( "disabled_" + m_variableName + "_cnt", 0_u32, false ) );
 		}
 	}
 

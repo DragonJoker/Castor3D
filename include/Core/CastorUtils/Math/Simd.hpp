@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #	include <xmmintrin.h>
 
-namespace castor
+namespace c3d
 {
 	/**
 	\author		Sylvain DOREMUS

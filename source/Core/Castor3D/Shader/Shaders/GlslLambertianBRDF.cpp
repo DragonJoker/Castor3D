@@ -5,7 +5,7 @@
 
 #include <ShaderWriter/Writer.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	LambertianBRDF::LambertianBRDF( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdfHelpers )
@@ -24,7 +24,7 @@ namespace castor3d::shader
 				, sdw::Float const & NdotL )
 			{
 				auto diffuseReflectance = m_writer.declLocale( "diffuseReflectance"
-					, radiance / sdw::Float{ castor::Pi< float > } );
+					, radiance / sdw::Float{ Pi< float > } );
 				m_writer.returnStmt( max( diffuseReflectance * intensity, vec3( 0.0_f ) ) );
 			}
 			, InBlendComponents{ m_writer, "components", pcomponents }
@@ -37,6 +37,6 @@ namespace castor3d::shader
 	DiffuseBRDFPtr LambertianBRDF::create( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdfHelpers )
 	{
-		return castor::makeUniqueDerived< DiffuseBRDF, LambertianBRDF >( writer, brdfHelpers );
+		return makeUniqueDerived< DiffuseBRDF, LambertianBRDF >( writer, brdfHelpers );
 	}
 }

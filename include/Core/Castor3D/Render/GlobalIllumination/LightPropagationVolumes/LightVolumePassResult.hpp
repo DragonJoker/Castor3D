@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/GBuffer.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class LightVolumePassResult
 		: public GBufferT< LpvTexture >
@@ -16,7 +16,7 @@ namespace castor3d
 	public:
 		C3D_API LightVolumePassResult( crg::ResourcesCache & resources
 			, RenderDevice const & device
-			, castor::String const & prefix
+			, String const & prefix
 			, uint32_t size );
 	};
 }

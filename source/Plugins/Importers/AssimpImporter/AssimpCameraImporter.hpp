@@ -11,13 +11,13 @@ See LICENSE file in root folder
 namespace c3d_assimp
 {
 	class AssimpCameraImporter
-		: public castor3d::CameraImporter
+		: public c3d::CameraImporter
 	{
 	public:
-		explicit AssimpCameraImporter( castor3d::Engine & engine );
+		explicit AssimpCameraImporter( c3d::Engine & engine );
 
 	private:
-		bool doImportCamera( castor3d::Camera & camera )override;
+		bool doImportCamera( c3d::Camera & camera )override;
 	};
 }
 

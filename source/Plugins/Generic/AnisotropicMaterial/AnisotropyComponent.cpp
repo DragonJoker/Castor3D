@@ -26,18 +26,18 @@ namespace anisotropy
 
 	template< typename TypeT >
 	class TextWriter
-		: public castor::TextWriterT< AnisotropyComponent >
+		: public c3d::TextWriterT< AnisotropyComponent >
 	{
 	public:
-		explicit TextWriter( castor::String const & tabs )
-			: castor::TextWriterT< AnisotropyComponent >{ tabs }
+		explicit TextWriter( c3d::String const & tabs )
+			: c3d::TextWriterT< AnisotropyComponent >{ tabs }
 		{
 		}
 
 		bool operator()( AnisotropyComponent const & pass
-			, castor::StringStream & file )override
+			, c3d::StringStream & file )override
 		{
-			castor3d::log::info << this->tabs() << cuT( "Writing Anisotropy data " ) << std::endl;
+			c3d::log::info << this->tabs() << cuT( "Writing Anisotropy data " ) << std::endl;
 			return this->writeOpt( file, cuT( "anisotropy_strength" ), pass.getStrength(), AnisotropyComponent::DefaultStrength )
 				&& this->writeOpt( file, cuT( "anisotropy_rotation" ), pass.getRotation().degrees(), AnisotropyComponent::DefaultRotation );
 		}
@@ -47,7 +47,7 @@ namespace anisotropy
 
 	namespace toonpass
 	{
-		static CU_ImplementAttributeParserBlock( parserPassAnisotropyStrength, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserPassAnisotropyStrength, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -55,13 +55,13 @@ namespace anisotropy
 			}
 			else if ( !params.empty() )
 			{
-				auto & component = castor3d::getPassComponent< AnisotropyComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< AnisotropyComponent >( *blockContext );
 				component.setStrength( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserPassAnisotropyRotation, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserPassAnisotropyRotation, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -69,9 +69,9 @@ namespace anisotropy
 			}
 			else if ( !params.empty() )
 			{
-				auto & component = castor3d::getPassComponent< AnisotropyComponent >( *blockContext );
+				auto & component = c3d::getPassComponent< AnisotropyComponent >( *blockContext );
 				float v = params[0]->get< float >();
-				component.setRotation( castor::Angle::fromDegrees( v ) );
+				component.setRotation( c3d::Angle::fromDegrees( v ) );
 			}
 		}
 		CU_EndAttribute()
@@ -79,19 +79,19 @@ namespace anisotropy
 
 	//*********************************************************************************************
 
-	void AnisotropyComponent::ReflRefrShader::computeWithTransmission( c3d::ReflectionModel & reflections
-		, c3d::BlendComponents & components
-		, c3d::LightSurface const & lightSurface
-		, c3d::BackgroundModel & backgroundModel
+	void AnisotropyComponent::ReflRefrShader::computeWithTransmission( c3ds::ReflectionModel & reflections
+		, c3ds::BlendComponents & components
+		, c3ds::LightSurface const & lightSurface
+		, c3ds::BackgroundModel & backgroundModel
 		, sdw::CombinedImage2DRgba32 const & mippedScene
-		, c3d::CameraData const & camera
-		, c3d::DirectLighting & lighting
-		, c3d::IndirectLighting & indirect
+		, c3ds::CameraData const & camera
+		, c3ds::DirectLighting & lighting
+		, c3ds::IndirectLighting & indirect
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
-		, c3d::ReflectionRefraction & output
-		, c3d::DebugOutputCategory const & debugOutput )const
+		, c3ds::ReflectionRefraction & output
+		, c3ds::DebugOutputCategory const & debugOutput )const
 	{
 		if ( mippedScene.isEnabled() )
 		{
@@ -138,18 +138,18 @@ namespace anisotropy
 		}
 	}
 
-	void AnisotropyComponent::ReflRefrShader::computeWithoutTransmission( c3d::ReflectionModel & reflections
-		, c3d::BlendComponents & components
-		, c3d::LightSurface const & lightSurface
-		, c3d::BackgroundModel & backgroundModel
-		, c3d::CameraData const & camera
-		, c3d::DirectLighting & lighting
-		, c3d::IndirectLighting & indirect
+	void AnisotropyComponent::ReflRefrShader::computeWithoutTransmission( c3ds::ReflectionModel & reflections
+		, c3ds::BlendComponents & components
+		, c3ds::LightSurface const & lightSurface
+		, c3ds::BackgroundModel & backgroundModel
+		, c3ds::CameraData const & camera
+		, c3ds::DirectLighting & lighting
+		, c3ds::IndirectLighting & indirect
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
-		, c3d::ReflectionRefraction & output
-		, c3d::DebugOutputCategory const & debugOutput )const
+		, c3ds::ReflectionRefraction & output
+		, c3ds::DebugOutputCategory const & debugOutput )const
 	{
 		auto & writer = *components.getWriter();
 		auto anisotropicT = components.getMember< sdw::Vec3 >( "anisotropicT" );
@@ -178,7 +178,7 @@ namespace anisotropy
 	//*********************************************************************************************
 
 	AnisotropyComponent::MaterialShader::MaterialShader()
-		: c3d::PassMaterialShader{ 12u }
+		: c3ds::PassMaterialShader{ 12u }
 	{
 	}
 
@@ -196,13 +196,13 @@ namespace anisotropy
 
 	//*********************************************************************************************
 
-	void AnisotropyComponent::ComponentsShader::fillComponents( castor3d::ComponentModeFlags componentsMask
+	void AnisotropyComponent::ComponentsShader::fillComponents( c3d::ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
-		, c3d::Materials const & materials
+		, c3ds::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( ( !checkFlag( componentsMask, castor3d::ComponentModeFlag::eSpecularLighting ) )
-			|| ( !checkFlag( materials.getFilter(), castor3d::ComponentModeFlag::eSpecularLighting ) ) )
+		if ( ( !checkFlag( componentsMask, c3d::ComponentModeFlag::eSpecularLighting ) )
+			|| ( !checkFlag( materials.getFilter(), c3d::ComponentModeFlag::eSpecularLighting ) ) )
 		{
 			return;
 		}
@@ -217,8 +217,8 @@ namespace anisotropy
 	}
 
 	void AnisotropyComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
-		, c3d::Materials const & materials
-		, c3d::Material const * material
+		, c3ds::Materials const & materials
+		, c3ds::Material const * material
 		, sdw::StructInstance const * surface
 		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )const
@@ -243,10 +243,10 @@ namespace anisotropy
 		inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 	}
 
-	void AnisotropyComponent::ComponentsShader::blendComponents( c3d::Materials const & materials
+	void AnisotropyComponent::ComponentsShader::blendComponents( c3ds::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, c3d::BlendComponents & res
-		, c3d::BlendComponents const & src )const
+		, c3ds::BlendComponents & res
+		, c3ds::BlendComponents const & src )const
 	{
 		if ( res.hasMember( "anisotropyStrength" ) )
 		{
@@ -258,8 +258,8 @@ namespace anisotropy
 	}
 
 	void AnisotropyComponent::ComponentsShader::updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, c3d::Material const & material
-		, c3d::BlendComponents & components
+		, c3ds::Material const & material
+		, c3ds::BlendComponents & components
 		, bool isFrontCulled )const
 	{
 		if ( !components.hasMember( "anisotropyStrength" ) )
@@ -268,15 +268,15 @@ namespace anisotropy
 		}
 
 		auto normal = components.usesDerivativeValues()
-			? components.getMember< c3d::DerivVec3 >( "normal" ).value()
+			? components.getMember< c3ds::DerivVec3 >( "normal" ).value()
 			: components.getMember< sdw::Vec3 >( "normal" );
 		auto tangent = components.usesDerivativeValues()
-			? components.getMember< c3d::DerivVec4 >( "tangent" ).value()
+			? components.getMember< c3ds::DerivVec4 >( "tangent" ).value()
 			: components.getMember< sdw::Vec4 >( "tangent" );
 		auto bitangent = components.usesDerivativeValues()
-			? components.getMember< c3d::DerivVec3 >( "bitangent" ).value()
+			? components.getMember< c3ds::DerivVec3 >( "bitangent" ).value()
 			: components.getMember< sdw::Vec3 >( "bitangent" );
-		auto tbn = c3d::Utils::getTBN( normal, tangent.xyz(), bitangent );
+		auto tbn = c3ds::Utils::getTBN( normal, tangent.xyz(), bitangent );
 
 		auto anisotropicT = components.getMember< sdw::Vec3 >( "anisotropicT" );
 		auto anisotropicB = components.getMember< sdw::Vec3 >( "anisotropicB" );
@@ -286,24 +286,24 @@ namespace anisotropy
 
 	//*********************************************************************************************
 
-	void AnisotropyComponent::Plugin::createParsers( castor::AttributeParsers & parsers
-		, castor3d::ChannelFillers & channelFillers )const
+	void AnisotropyComponent::Plugin::createParsers( c3d::AttributeParsers & parsers
+		, c3d::ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
-			, castor3d::CSCNSection::ePass
+		c3d::addParserT( parsers
+			, c3d::CSCNSection::ePass
 			, cuT( "anisotropy_strength" )
 			, toonpass::parserPassAnisotropyStrength
-			, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 0.0f, 1.0f ) ) } );
-		castor::addParserT( parsers
-			, castor3d::CSCNSection::ePass
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >( c3d::makeRange( 0.0f, 1.0f ) ) } );
+		c3d::addParserT( parsers
+			, c3d::CSCNSection::ePass
 			, cuT( "anisotropy_rotation" )
 			, toonpass::parserPassAnisotropyRotation
-			, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 0.0f, 360.0f ) ) } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >( c3d::makeRange( 0.0f, 360.0f ) ) } );
 	}
 
-	void AnisotropyComponent::Plugin::zeroBuffer( castor3d::Pass const & pass
-		, c3d::PassMaterialShader const & materialShader
-		, castor3d::PassBuffer & buffer )const
+	void AnisotropyComponent::Plugin::zeroBuffer( c3d::Pass const & pass
+		, c3ds::PassMaterialShader const & materialShader
+		, c3d::PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( pass.getId() );
 		VkDeviceSize offset{};
@@ -312,45 +312,45 @@ namespace anisotropy
 		data.write( materialShader.getMaterialChunk(), AnisotropyComponent::DefaultStrength, offset );
 	}
 
-	bool AnisotropyComponent::Plugin::isComponentNeeded( castor3d::TextureCombine const & textures
-		, castor3d::ComponentModeFlags const & filter )const
+	bool AnisotropyComponent::Plugin::isComponentNeeded( c3d::TextureCombine const & textures
+		, c3d::ComponentModeFlags const & filter )const
 	{
-		return checkFlag( filter, castor3d::ComponentModeFlag::eSpecularLighting );
+		return checkFlag( filter, c3d::ComponentModeFlag::eSpecularLighting );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const AnisotropyComponent::TypeName = C3D_PluginMakePassOtherComponentName( "anisotropy", "anisotropy" );
+	c3d::String const AnisotropyComponent::TypeName = C3D_PluginMakePassOtherComponentName( "anisotropy", "anisotropy" );
 
-	AnisotropyComponent::AnisotropyComponent( castor3d::Pass & pass )
-		: BaseDataPassComponentT< AnisotropyData >{ pass, TypeName, { castor3d::NormalComponent::TypeName }
+	AnisotropyComponent::AnisotropyComponent( c3d::Pass & pass )
+		: BaseDataPassComponentT< AnisotropyData >{ pass, TypeName, { c3d::NormalComponent::TypeName }
 			, AnisotropyComponent::DefaultStrength, AnisotropyComponent::DefaultRotation }
 	{
 	}
 
-	void AnisotropyComponent::accept( castor3d::ConfigurationVisitorBase & vis )
+	void AnisotropyComponent::accept( c3d::ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Anisotropy" ) );
 		vis.visit( cuT( "Strength" ), m_value.strength );
 		vis.visit( cuT( "Rotation" ), m_value.rotation );
 	}
 
-	castor3d::PassComponentUPtr AnisotropyComponent::doClone( castor3d::Pass & pass )const
+	c3d::PassComponentUPtr AnisotropyComponent::doClone( c3d::Pass & pass )const
 	{
-		auto result = castor::make_unique< AnisotropyComponent >( pass );
+		auto result = c3d::makeRawUnique< AnisotropyComponent >( pass );
 		result->setData( getData() );
-		return castor3d::PassComponentUPtr{ result.release() };
+		return c3d::PassComponentUPtr{ result.release() };
 	}
 
-	bool AnisotropyComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool AnisotropyComponent::doWriteText( c3d::String const & tabs
+		, c3d::Path const & folder
+		, c3d::String const & subfolder
+		, c3d::StringStream & file )const
 	{
 		return TextWriter< AnisotropyComponent >{ tabs }( *this, file );
 	}
 
-	void AnisotropyComponent::doFillBuffer( castor3d::PassBuffer & buffer )const
+	void AnisotropyComponent::doFillBuffer( c3d::PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( getOwner()->getId() );
 		VkDeviceSize offset{};

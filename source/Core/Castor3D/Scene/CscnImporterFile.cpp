@@ -18,39 +18,39 @@
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace import
 	{
 		class FilteredPreprocessedFile
-			: public castor::PreprocessedFile
+			: public PreprocessedFile
 		{
 		public:
-			explicit FilteredPreprocessedFile( castor::FileParser & parser )
+			explicit FilteredPreprocessedFile( FileParser & parser )
 				: PreprocessedFile{ parser }
 			{
-				m_curSections.emplace_back( castor::SectionId( CSCNSection::eRoot ), false );
+				m_curSections.emplace_back( SectionId( CSCNSection::eRoot ), false );
 			}
 
-			FilteredPreprocessedFile( castor::FileParser & parser
-				, castor::FileParserContextUPtr context )
-				: PreprocessedFile{ parser, castor::move( context ) }
+			FilteredPreprocessedFile( FileParser & parser
+				, FileParserContextUPtr context )
+				: PreprocessedFile{ parser, c3d::move( context ) }
 			{
-				m_curSections.emplace_back( castor::SectionId( CSCNSection::eRoot ), false );
+				m_curSections.emplace_back( SectionId( CSCNSection::eRoot ), false );
 			}
 
-			castor::SectionId getCurrentSection()const noexcept
+			SectionId getCurrentSection()const noexcept
 			{
 				return m_curSections.back().first;
 			}
 
 		protected:
-			void doAddParserAction( castor::Path file
+			void doAddParserAction( Path file
 				, uint64_t line
-				, castor::String name
-				, castor::SectionId section
-				, castor::ParserFunctionAndParams function
-				, castor::String params
+				, String name
+				, SectionId section
+				, ParserFunctionAndParams function
+				, String params
 				, bool implicit )final
 			{
 				if ( auto nextSection = function.resultSection;
@@ -63,12 +63,12 @@ namespace castor3d
 
 				if ( !m_curSections.back().second )
 				{
-					doAddAllowedParserAction( castor::move( file )
+					doAddAllowedParserAction( c3d::move( file )
 						, line
 						, name
 						, section
-						, castor::move( function )
-						, castor::move( params )
+						, c3d::move( function )
+						, c3d::move( params )
 						, implicit );
 				}
 
@@ -79,60 +79,60 @@ namespace castor3d
 			}
 
 		private:
-			virtual bool doFilterSectionOut( castor::SectionId section )const noexcept = 0;
-			virtual void doAddAllowedParserAction( castor::Path file
+			virtual bool doFilterSectionOut( SectionId section )const noexcept = 0;
+			virtual void doAddAllowedParserAction( Path file
 				, uint64_t line
-				, castor::String name
-				, castor::SectionId section
-				, castor::ParserFunctionAndParams function
-				, castor::String params
+				, String name
+				, SectionId section
+				, ParserFunctionAndParams function
+				, String params
 				, bool implicit ) = 0;
 
-			castor::Vector< castor::Pair< castor::SectionId, bool > > m_curSections;
+			Vector< Pair< SectionId, bool > > m_curSections;
 		};
 
 		class FinalSceneFinder
 			: public FilteredPreprocessedFile
 		{
 		public:
-			explicit FinalSceneFinder( castor::FileParser & parser )
+			explicit FinalSceneFinder( FileParser & parser )
 				: FilteredPreprocessedFile{ parser }
 			{
 			}
 
-			FinalSceneFinder( castor::FileParser & parser
-				, castor::FileParserContextUPtr context )
-				: FilteredPreprocessedFile{ parser, castor::move( context ) }
+			FinalSceneFinder( FileParser & parser
+				, FileParserContextUPtr context )
+				: FilteredPreprocessedFile{ parser, c3d::move( context ) }
 			{
 			}
 
-			castor::String const & getMainScene()const noexcept
+			String const & getMainScene()const noexcept
 			{
 				return m_mainScene;
 			}
 
 		private:
-			bool doFilterSectionOut( castor::SectionId section )const noexcept override
+			bool doFilterSectionOut( SectionId section )const noexcept override
 			{
-				return section != castor::SectionId( CSCNSection::eWindow )
-					&& section != castor::SectionId( CSCNSection::eRenderTarget );
+				return section != SectionId( CSCNSection::eWindow )
+					&& section != SectionId( CSCNSection::eRenderTarget );
 			}
 
-			void doAddAllowedParserAction( castor::Path
+			void doAddAllowedParserAction( Path
 				, uint64_t
-				, castor::String name
-				, castor::SectionId
-				, castor::ParserFunctionAndParams function
-				, castor::String params
+				, String name
+				, SectionId
+				, ParserFunctionAndParams function
+				, String params
 				, bool implicit )override
 			{
 				if ( name == cuT( "scene" ) )
 				{
-					m_mainScene = castor::move( params );
+					m_mainScene = c3d::move( params );
 				}
 			}
 
-			castor::String m_mainScene;
+			String m_mainScene;
 		};
 
 		class PreprocessedSceneFile
@@ -156,24 +156,24 @@ namespace castor3d
 			};
 
 		public:
-			PreprocessedSceneFile( castor::FileParser & parser
-				, castor::FileParserContextUPtr context
-				, castor::String mainSceneName
-				, castor::String prefix
+			PreprocessedSceneFile( FileParser & parser
+				, FileParserContextUPtr context
+				, String mainSceneName
+				, String prefix
 				, Scene & scene )
-				: FilteredPreprocessedFile{ parser, castor::move( context ) }
-				, m_mainSceneName{ castor::move( mainSceneName ) }
+				: FilteredPreprocessedFile{ parser, c3d::move( context ) }
+				, m_mainSceneName{ c3d::move( mainSceneName ) }
 				, m_scene{ &scene }
-				, m_prefix{ castor::move( prefix ) }
+				, m_prefix{ c3d::move( prefix ) }
 			{
 			}
 
-			castor::SectionId getCategory( castor::String const & name
-				, castor::SectionId curSection
-				, castor::SectionId nextSection
+			SectionId getCategory( String const & name
+				, SectionId curSection
+				, SectionId nextSection
 				, bool implicit )
 			{
-				castor::SectionId result{};
+				SectionId result{};
 
 				switch ( getCurrentSection() )
 				{
@@ -272,12 +272,12 @@ namespace castor3d
 				return result;
 			}
 
-			uint32_t getCategoryActionsCount( castor::SectionId section )const
+			uint32_t getCategoryActionsCount( SectionId section )const
 			{
 				return m_totalCat[section];
 			}
 
-			uint32_t incCategoryActions( castor::SectionId section, uint32_t count = 1u )
+			uint32_t incCategoryActions( SectionId section, uint32_t count = 1u )
 			{
 				return m_currentCat[section] += count;
 			}
@@ -291,9 +291,8 @@ namespace castor3d
 					} ) );
 			}
 
-			castor::xchar const * getCategoryName( castor::SectionId section )const
+			xchar const * getCategoryName( SectionId section )const
 			{
-				using namespace castor3d;
 				switch ( section )
 				{
 				case uint32_t( Category::eSampler ):
@@ -322,28 +321,28 @@ namespace castor3d
 			}
 
 		private:
-			bool doFilterSectionOut( castor::SectionId section )const noexcept override
+			bool doFilterSectionOut( SectionId section )const noexcept override
 			{
-				return section == castor::SectionId( CSCNSection::eWindow )
-					|| section == castor::SectionId( CSCNSection::eFont )
-					|| section == castor::SectionId( CSCNSection::ePanelOverlay )
-					|| section == castor::SectionId( CSCNSection::eBorderPanelOverlay )
-					|| section == castor::SectionId( CSCNSection::eTextOverlay )
-					|| section == castor::SectionId( CSCNSection::eSkybox )
-					|| section == castor::SectionId( CSCNSection::eSsao )
-					|| section == castor::SectionId( CSCNSection::eHdrConfig )
-					|| section == castor::SectionId( CSCNSection::eVoxelConeTracing )
-					|| section == castor::SectionId( CSCNSection::eClusters )
-					|| section == castor::SectionId( CSCNSection::eColourGrading )
-					|| section == castor::SectionId( CSCNSection::eSdfFont );
+				return section == SectionId( CSCNSection::eWindow )
+					|| section == SectionId( CSCNSection::eFont )
+					|| section == SectionId( CSCNSection::ePanelOverlay )
+					|| section == SectionId( CSCNSection::eBorderPanelOverlay )
+					|| section == SectionId( CSCNSection::eTextOverlay )
+					|| section == SectionId( CSCNSection::eSkybox )
+					|| section == SectionId( CSCNSection::eSsao )
+					|| section == SectionId( CSCNSection::eHdrConfig )
+					|| section == SectionId( CSCNSection::eVoxelConeTracing )
+					|| section == SectionId( CSCNSection::eClusters )
+					|| section == SectionId( CSCNSection::eColourGrading )
+					|| section == SectionId( CSCNSection::eSdfFont );
 			}
 
-			void doAddAllowedParserAction( castor::Path file
+			void doAddAllowedParserAction( Path file
 				, uint64_t line
-				, castor::String name
-				, castor::SectionId section
-				, castor::ParserFunctionAndParams function
-				, castor::String params
+				, String name
+				, SectionId section
+				, ParserFunctionAndParams function
+				, String params
 				, bool implicit )override
 			{
 				auto nextSection = function.resultSection;
@@ -355,66 +354,66 @@ namespace castor3d
 
 				// If we are parsing the main imported scene, we replace it with the current scene
 				if ( function.resultSection != section
-					&& function.resultSection == castor::SectionId( CSCNSection::eScene )
+					&& function.resultSection == SectionId( CSCNSection::eScene )
 					&& name == cuT( "scene" )
 					&& params == m_mainSceneName )
 				{
 					function.params = {};
 					auto currentScene = m_scene;
 					auto prefix = m_prefix;
-					function.function = [currentScene, prefix]( castor::FileParserContext & context
+					function.function = [currentScene, prefix]( FileParserContext & context
 						, void * blockContext
-						, castor::ParserParameterArray const & )
+						, ParserParameterArray const & )
 						{
 							auto rootContext = reinterpret_cast< RootContext * >( blockContext );
 							auto newBlockContext = new SceneContext{};
 							context.allocatedBlocks.emplace_back( newBlockContext
-								, castor::makeContextDeleter< SceneContext >() );
+								, makeContextDeleter< SceneContext >() );
 
 							newBlockContext->root = rootContext;
 							newBlockContext->scene = currentScene;
 							newBlockContext->prefix = getPrefix( *rootContext ) + prefix;
 							newBlockContext->root->mapScenes.try_emplace( currentScene->getName(), newBlockContext->scene );
-							newBlockContext->overlays = castor::makeUnique< OverlayContext >();
+							newBlockContext->overlays = makeUnique< OverlayContext >();
 							newBlockContext->overlays->root = rootContext;
 							newBlockContext->overlays->scene = newBlockContext;
 
-							context.pendingSection = castor::SectionId( CSCNSection::eScene );
+							context.pendingSection = SectionId( CSCNSection::eScene );
 							context.pendingBlock = newBlockContext;
 							return true;
 						};
 				}
 
-				castor::PreprocessedFile::doAddParserAction( castor::move( file )
+				PreprocessedFile::doAddParserAction( c3d::move( file )
 					, line
-					, castor::move( name )
+					, c3d::move( name )
 					, section
-					, castor::move( function )
-					, castor::move( params )
+					, c3d::move( function )
+					, c3d::move( params )
 					, implicit );
 			}
 
 		private:
-			castor::String m_mainSceneName;
+			String m_mainSceneName;
 			SceneRPtr m_scene;
-			castor::String m_prefix;
-			castor::Array< uint32_t, Category::eCount > m_totalCat{};
-			castor::Array< uint32_t, Category::eCount > m_currentCat{};
+			String m_prefix;
+			Array< uint32_t, Category::eCount > m_totalCat{};
+			Array< uint32_t, Category::eCount > m_currentCat{};
 		};
 	}
 
-	castor::MbString const CscnImporterFile::Name = "CSCN Importer";
+	MbString const CscnImporterFile::Name = "CSCN Importer";
 
 	CscnImporterFile::CscnImporterFile( Engine & engine
 		, Scene * scene
-		, castor::Path const & path
+		, Path const & path
 		, Parameters const & parameters
 		, ProgressBar * progress )
 		: ImporterFile{ engine, scene, path, parameters, progress }
 		, m_parser{ engine, progress }
 	{
 		// Find the main scene
-		castor::String mainSceneName;
+		String mainSceneName;
 		{
 			SceneFileParser parser{ engine };
 			import::FinalSceneFinder finder{ parser, parser.initialiseParser( path ) };
@@ -437,8 +436,8 @@ namespace castor3d
 
 			auto index = incProgressBarGlobalRange( progress
 				, uint32_t( import::PreprocessedSceneFile::Category::eCount ) );
-			auto actionConnection = preprocessed.onAction.connect( [progress, index, &preprocessed]( castor::SectionId section
-				, castor::PreprocessedFile::Action const & action )
+			auto actionConnection = preprocessed.onAction.connect( [progress, index, &preprocessed]( SectionId section
+				, PreprocessedFile::Action const & action )
 				{
 					section = preprocessed.getCategory( action.name, section, action.function.resultSection, action.implicit );
 					auto status = preprocessed.incCategoryActions( section );
@@ -448,7 +447,7 @@ namespace castor3d
 						, index + section );
 					setProgressBarLocal( progress
 						, preprocessed.getCategoryName( section )
-						, castor::string::toString( status ) + cuT( " / " ) + castor::string::toString( total )
+						, string::toString( status ) + cuT( " / " ) + string::toString( total )
 						, total
 						, status );
 				} );
@@ -456,7 +455,7 @@ namespace castor3d
 
 		if ( !preprocessed.parse() )
 		{
-			castor::Logger::logError( cuT( "Can't import scene" ) );
+			Logger::logError( cuT( "Can't import scene" ) );
 		}
 	}
 
@@ -473,11 +472,11 @@ namespace castor3d
 
 	ImporterFileUPtr CscnImporterFile::create( Engine & engine
 		, Scene * scene
-		, castor::Path const & path
+		, Path const & path
 		, Parameters const & parameters
 		, ProgressBar * progress )
 	{
-		return castor::makeUniqueDerived< ImporterFile, CscnImporterFile >( engine, scene, path, parameters, progress );
+		return makeUniqueDerived< ImporterFile, CscnImporterFile >( engine, scene, path, parameters, progress );
 	}
 
 	//*********************************************************************************************

@@ -14,7 +14,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//*********************************************************************************************
 
@@ -72,8 +72,8 @@ namespace castor3d::shader
 			, LightSurface const & lightSurface
 			, sdw::UInt const receivesShadows
 			, DebugOutputCategory const & debugOutput
-			, castor::Function< void( PointLight const & ) > computePointLight
-			, castor::Function< void( SpotLight const & ) > computeSpotLight )
+			, Function< void( PointLight const & ) > computePointLight
+			, Function< void( SpotLight const & ) > computeSpotLight )
 		{
 			auto pointClusterLights = writer.declLocale( "pointClusterLights"
 				, pointLightClusters[clusterIndex1D] );
@@ -123,8 +123,8 @@ namespace castor3d::shader
 			, LightSurface const & lightSurface
 			, sdw::UInt const receivesShadows
 			, DebugOutputCategory const & debugOutput
-			, castor::Function< void( PointLight const & ) > computePointLight
-			, castor::Function< void( SpotLight const & ) > computeSpotLight )
+			, Function< void( PointLight const & ) > computePointLight
+			, Function< void( SpotLight const & ) > computeSpotLight )
 		{
 			auto pointClusterLights = writer.declLocale( "pointClusterLights"
 				, pointLightClusters[clusterIndex1D] );
@@ -206,8 +206,8 @@ namespace castor3d::shader
 			, LightSurface const & lightSurface
 			, sdw::UInt const receivesShadows
 			, DebugOutputCategory const & debugOutput
-			, castor::Function< void( PointLight const & ) > computePointLight
-			, castor::Function< void( SpotLight const & ) > computeSpotLight )
+			, Function< void( PointLight const & ) > computePointLight
+			, Function< void( SpotLight const & ) > computeSpotLight )
 		{
 			if constexpr ( C3D_UseWaveIntrinsics )
 			{
@@ -339,12 +339,12 @@ namespace castor3d::shader
 			, set
 			, m_enabled );
 
-		m_clusterData = castor::makeUnique< shader::ClustersData >( c3d_clustersData );
-		m_clustersLightsData = castor::make_unique< sdw::Vec4 >( c3d_clustersLightsData );
-		m_pointLightIndices = castor::make_unique< sdw::UInt32Array >( c3d_pointLightClusterIndex );
-		m_pointLightClusters = castor::make_unique< sdw::U32Vec2Array >( c3d_pointLightClusterGrid );
-		m_spotLightIndices = castor::make_unique< sdw::UInt32Array >( c3d_spotLightClusterIndex );
-		m_spotLightClusters = castor::make_unique< sdw::U32Vec2Array >( c3d_spotLightClusterGrid );
+		m_clusterData = makeUnique< shader::ClustersData >( c3d_clustersData );
+		m_clustersLightsData = makeRawUnique< sdw::Vec4 >( c3d_clustersLightsData );
+		m_pointLightIndices = makeRawUnique< sdw::UInt32Array >( c3d_pointLightClusterIndex );
+		m_pointLightClusters = makeRawUnique< sdw::U32Vec2Array >( c3d_pointLightClusterGrid );
+		m_spotLightIndices = makeRawUnique< sdw::UInt32Array >( c3d_spotLightClusterIndex );
+		m_spotLightClusters = makeRawUnique< sdw::U32Vec2Array >( c3d_spotLightClusterGrid );
 	}
 
 	void ClusteredLights::computeCombinedDifSpec( shader::Lights & lights

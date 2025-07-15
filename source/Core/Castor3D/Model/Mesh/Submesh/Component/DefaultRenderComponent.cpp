@@ -22,9 +22,9 @@
 #include <ShaderWriter/ModernGraphicsWriterEXT.hpp>
 #include <ShaderWriter/ModernGraphicsWriterNV.hpp>
 
-CU_ImplementSmartPtr( castor3d, DefaultRenderComponent )
+CU_ImplementSmartPtr( c3d, DefaultRenderComponent )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -98,12 +98,12 @@ namespace castor3d
 				, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 			{
 				auto bbPositions = writer.declConstantArray( "bbPositions"
-					, castor::Vector< sdw::Vec3 >{ vec3( -0.5_f, -0.5_f, 1.0_f )
+					, Vector< sdw::Vec3 >{ vec3( -0.5_f, -0.5_f, 1.0_f )
 					, vec3( -0.5_f, +0.5_f, 1.0_f )
 					, vec3( +0.5_f, -0.5_f, 1.0_f )
 					, vec3( +0.5_f, +0.5_f, 1.0_f ) } );
 				auto bbTexcoords = writer.declConstantArray( "bbTexcoords"
-					, castor::Vector< sdw::Vec2 >{ vec2( 0.0_f, 0.0_f )
+					, Vector< sdw::Vec2 >{ vec2( 0.0_f, 0.0_f )
 					, vec2( 0.0_f, 1.0_f )
 					, vec2( 1.0_f, 0.0_f )
 					, vec2( 1.0_f, 1.0_f ) } );
@@ -114,7 +114,7 @@ namespace castor3d
 						, writer.cast< sdw::UInt >( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID ) ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
-				auto passMultipliers = castor::Vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
+				auto passMultipliers = Vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
 					, vec4( 0.0_f )
 					, vec4( 0.0_f )
 					, vec4( 0.0_f ) };
@@ -407,7 +407,7 @@ namespace castor3d
 					, flags.enablePassMasks() );
 				auto passMultipliers = writer.declLocaleArray( "passMultipliers"
 					, 4u
-					, castor::Vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
+					, Vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
 						, vec4( 0.0_f )
 						, vec4( 0.0_f )
 						, vec4( 0.0_f ) }
@@ -739,7 +739,7 @@ namespace castor3d
 					, flags.enablePassMasks() );
 				auto passMultipliers = writer.declLocaleArray( "passMultipliers"
 					, 4u
-					, castor::Vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
+					, Vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
 						, vec4( 0.0_f )
 						, vec4( 0.0_f )
 						, vec4( 0.0_f ) }
@@ -966,7 +966,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const DefaultRenderComponent::TypeName = C3D_MakeSubmeshRenderComponentName( "default" );
+	String const DefaultRenderComponent::TypeName = C3D_MakeSubmeshRenderComponentName( "default" );
 
 	DefaultRenderComponent::DefaultRenderComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, TypeName }
@@ -975,8 +975,8 @@ namespace castor3d
 
 	SubmeshComponentUPtr DefaultRenderComponent::clone( Submesh & submesh )const
 	{
-		auto result = castor::makeUnique< DefaultRenderComponent >( submesh );
-		return castor::ptrRefCast< SubmeshComponent >( result );
+		auto result = makeUnique< DefaultRenderComponent >( submesh );
+		return ptrRefCast< SubmeshComponent >( result );
 	}
 
 	//*********************************************************************************************

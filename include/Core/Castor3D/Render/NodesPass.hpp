@@ -19,7 +19,7 @@ See LICENSE file in root folder
 
 #include <optional>
 
-namespace castor3d
+namespace c3d
 {
 	struct NodesPassDesc
 	{
@@ -28,7 +28,7 @@ namespace castor3d
 			, CameraUbo const & cameraUbo
 			, SceneUbo const * sceneUbo
 			, RenderFilters filters )
-			: m_size{ castor::move( size ) }
+			: m_size{ c3d::move( size ) }
 			, m_cameraUbo{ cameraUbo }
 			, m_sceneUbo{ sceneUbo }
 			, m_filters{ filters }
@@ -64,7 +64,7 @@ namespace castor3d
 		 */
 		NodesPassDesc & componentModeFlags( ComponentModeFlags value )
 		{
-			m_componentModeFlags = castor::move( value );
+			m_componentModeFlags = c3d::move( value );
 			return *this;
 		}
 
@@ -79,8 +79,8 @@ namespace castor3d
 	};
 
 	class NodesPass
-		: public castor::OwnedBy< Engine >
-		, public castor::Named
+		: public OwnedBy< Engine >
+		, public Named
 	{
 	protected:
 		/**
@@ -104,9 +104,9 @@ namespace castor3d
 		 *\param[in]	desc			Les données de construction.
 		 */
 		C3D_API NodesPass( RenderDevice const & device
-			, castor::String const & categoryName
-			, castor::String const & typeName
-			, castor::String const & fullName
+			, String const & categoryName
+			, String const & typeName
+			, String const & fullName
 			, crg::ImageViewIdArray targetImage
 			, crg::ImageViewIdArray targetDepth
 			, NodesPassDesc const & desc );
@@ -304,7 +304,7 @@ namespace castor3d
 			return m_filters;
 		}
 
-		castor::String const & getTypeName()const noexcept
+		String const & getTypeName()const noexcept
 		{
 			return m_typeName;
 		}
@@ -373,11 +373,11 @@ namespace castor3d
 		CameraUbo const & m_cameraUbo;
 		crg::ImageViewIdArray m_targetImage;
 		crg::ImageViewIdArray m_targetDepth;
-		castor::String m_typeName;
+		String m_typeName;
 		RenderPassTypeID m_typeID{};
 		RenderFilters m_filters{ RenderFilter::eNone };
-		castor::String m_category;
-		castor::Size m_size;
+		String m_category;
+		Size m_size;
 		bool m_safeBand{ false };
 		bool m_isDirty{ true };
 		SceneUbo const * m_sceneUbo{};
@@ -413,7 +413,7 @@ namespace castor3d
 	};
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, IsNodesPassEnabled, C3D_API );
+	CU_DeclareSmartPtr( c3d, IsNodesPassEnabled, C3D_API );
 	/** @endcond */
 }
 

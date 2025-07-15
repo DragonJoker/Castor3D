@@ -13,38 +13,35 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::RoughnessComponent >
-		: public TextWriterT< castor3d::RoughnessComponent >
+	class TextWriter< RoughnessComponent >
+		: public TextWriterT< RoughnessComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::RoughnessComponent >{ tabs }
+			: TextWriterT< RoughnessComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::RoughnessComponent const & object
+		bool operator()( RoughnessComponent const & object
 			, StringStream & file )override
 		{
 			if ( object.isShininess() )
 			{
-				return writeOpt( file, cuT( "shininess" ), object.getShininess(), ( 1.0f - castor3d::RoughnessComponent::Default ) * castor3d::MaxPhongShininess );
+				return writeOpt( file, cuT( "shininess" ), object.getShininess(), ( 1.0f - RoughnessComponent::Default ) * MaxPhongShininess );
 			}
 
 			if ( object.isGlossiness() )
 			{
-				return writeOpt( file, cuT( "glossiness" ), object.getGlossiness(), 1.0f - castor3d::RoughnessComponent::Default );
+				return writeOpt( file, cuT( "glossiness" ), object.getGlossiness(), 1.0f - RoughnessComponent::Default );
 			}
 
-			return writeOpt( file, cuT( "roughness" ), object.getRoughness(), castor3d::RoughnessComponent::Default );
+			return writeOpt( file, cuT( "roughness" ), object.getRoughness(), RoughnessComponent::Default );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace rghcmp
@@ -192,24 +189,24 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void RoughnessComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void RoughnessComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "roughness" )
 			, rghcmp::parserPassRoughness
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "glossiness" )
 			, rghcmp::parserPassGlossiness
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "shininess" )
 			, rghcmp::parserPassShininess
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { makeParameter< ParameterType::eFloat >() } );
 	}
 
 	void RoughnessComponent::Plugin::zeroBuffer( Pass const & pass
@@ -230,7 +227,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const RoughnessComponent::TypeName = C3D_MakePassLightingComponentName( "roughness" );
+	String const RoughnessComponent::TypeName = C3D_MakePassLightingComponentName( "roughness" );
 
 	RoughnessComponent::RoughnessComponent( Pass & pass
 		, float defaultValue )
@@ -241,7 +238,7 @@ namespace castor3d
 
 	void RoughnessComponent::accept( ConfigurationVisitorBase & vis )
 	{
-		static castor::StringArray const Names{ cuT( "Roughness" ), cuT( "Glossiness" ), cuT( "Shininess" ) };
+		static StringArray const Names{ cuT( "Roughness" ), cuT( "Glossiness" ), cuT( "Shininess" ) };
 		vis.visit( cuT( "Roughness" ) );
 		vis.visit( cuT( "Factor" ), m_value.factor );
 		vis.visit( cuT( "Mode" ), m_value.mode, Names
@@ -250,17 +247,17 @@ namespace castor3d
 
 	PassComponentUPtr RoughnessComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< RoughnessComponent >( pass );
+		auto result = makeRawUnique< RoughnessComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool RoughnessComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool RoughnessComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< RoughnessComponent >{ tabs }( *this, file );
+		return TextWriter< RoughnessComponent >{ tabs }( *this, file );
 	}
 
 	void RoughnessComponent::doFillBuffer( PassBuffer & buffer )const

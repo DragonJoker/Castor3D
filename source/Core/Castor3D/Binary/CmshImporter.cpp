@@ -15,24 +15,24 @@
 
 #include <CastorUtils/Data/BinaryFile.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 	namespace cmshimp
 	{
-		static castor::String cleanName( castor::String name )
+		static String cleanName( String name )
 		{
-			static castor::String const seps = cuT( ",?;.:/\\!§*$£¤^¨&\"'([-|_@)°]=+} \t" );
+			static String const seps = cuT( ",?;.:/\\!§*$£¤^¨&\"'([-|_@)°]=+} \t" );
 
 			while ( !name.empty()
-				&& seps.find( name[0] ) != castor::String::npos )
+				&& seps.find( name[0] ) != String::npos )
 			{
 				name = name.substr( 1 );
 			}
 
 			while ( !name.empty()
-				&& seps.find( name[name.size() - 1u] ) != castor::String::npos )
+				&& seps.find( name[name.size() - 1u] ) != String::npos )
 			{
 				name = name.substr( 1 );
 			}
@@ -45,33 +45,33 @@ namespace castor3d
 
 	CmshImporterFile::CmshImporterFile( Engine & engine
 		, Scene * scene
-		, castor::Path const & path
+		, Path const & path
 		, Parameters const & parameters
 		, ProgressBar * progress )
 		: ImporterFile{ engine, scene, path, parameters, progress }
 	{
 	}
 
-	castor::StringArray CmshImporterFile::listMaterials()
+	StringArray CmshImporterFile::listMaterials()
 	{
-		return castor::StringArray{};
+		return StringArray{};
 	}
 
-	castor::Vector< ImporterFile::MeshData > CmshImporterFile::listMeshes()
+	Vector< ImporterFile::MeshData > CmshImporterFile::listMeshes()
 	{
-		castor::Vector< MeshData > result;
+		Vector< MeshData > result;
 
 		if ( getExtension() == CmshMeshImporter::Type )
 		{
-			result.emplace_back( getInternalName( getName() ), castor::String{} );
+			result.emplace_back( getInternalName( getName() ), String{} );
 		}
 
 		return result;
 	}
 
-	castor::StringArray CmshImporterFile::listSkeletons()
+	StringArray CmshImporterFile::listSkeletons()
 	{
-		castor::StringArray result;
+		StringArray result;
 
 		if ( getExtension() == CmshSkeletonImporter::Type )
 		{
@@ -81,38 +81,38 @@ namespace castor3d
 		return result;
 	}
 
-	castor::Vector< ImporterFile::NodeData > CmshImporterFile::listSceneNodes()
+	Vector< ImporterFile::NodeData > CmshImporterFile::listSceneNodes()
 	{
-		return castor::Vector< NodeData >{};
+		return Vector< NodeData >{};
 	}
 
-	castor::Vector< ImporterFile::LightData > CmshImporterFile::listLights()
+	Vector< ImporterFile::LightData > CmshImporterFile::listLights()
 	{
-		return castor::Vector< LightData >{};
+		return Vector< LightData >{};
 	}
 
-	castor::Vector< ImporterFile::LightGroupData > CmshImporterFile::listLightGroups()
+	Vector< ImporterFile::LightGroupData > CmshImporterFile::listLightGroups()
 	{
-		return castor::Vector< LightGroupData >{};
+		return Vector< LightGroupData >{};
 	}
 
-	castor::Vector< CmshImporterFile::GeometryData > CmshImporterFile::listGeometries()
+	Vector< CmshImporterFile::GeometryData > CmshImporterFile::listGeometries()
 	{
-		return castor::Vector< GeometryData >{};
+		return Vector< GeometryData >{};
 	}
 
-	castor::Vector< ImporterFile::CameraData > CmshImporterFile::listCameras()
+	Vector< ImporterFile::CameraData > CmshImporterFile::listCameras()
 	{
-		return castor::Vector< CameraData >{};
+		return Vector< CameraData >{};
 	}
 
-	castor::StringArray CmshImporterFile::listMeshAnimations( Mesh const & mesh )
+	StringArray CmshImporterFile::listMeshAnimations( Mesh const & mesh )
 	{
-		castor::StringArray result;
+		StringArray result;
 
 		if ( getExtension() == CmshAnimationImporter::MeshAnimType )
 		{
-			castor::String const & meshName = mesh.getName();
+			String const & meshName = mesh.getName();
 			auto animName = getInternalName( getName() );
 
 			if ( animName.find( meshName ) == 0u )
@@ -125,13 +125,13 @@ namespace castor3d
 		return result;
 	}
 
-	castor::StringArray CmshImporterFile::listSkeletonAnimations( Skeleton const & skeleton )
+	StringArray CmshImporterFile::listSkeletonAnimations( Skeleton const & skeleton )
 	{
-		castor::StringArray result;
+		StringArray result;
 
 		if ( getExtension() == CmshAnimationImporter::SkeletonAnimType )
 		{
-			castor::String const & skeletonName = skeleton.getName();
+			String const & skeletonName = skeleton.getName();
 			auto animName = getInternalName( getName() );
 
 			if ( animName.find( skeletonName ) == 0u )
@@ -144,13 +144,13 @@ namespace castor3d
 		return result;
 	}
 
-	castor::StringArray CmshImporterFile::listSceneNodeAnimations( castor3d::SceneNode const & node )
+	StringArray CmshImporterFile::listSceneNodeAnimations( SceneNode const & node )
 	{
-		castor::StringArray result;
+		StringArray result;
 
 		if ( getExtension() == CmshAnimationImporter::NodeAnimType )
 		{
-			castor::String const & nodeName = node.getName();
+			String const & nodeName = node.getName();
 			auto animName = getInternalName( getName() );
 
 			if ( animName.find( nodeName ) == 0u )
@@ -163,10 +163,10 @@ namespace castor3d
 		return result;
 	}
 
-	castor::Vector< uint32_t > CmshImporterFile::listTextureAnimations( Material const & material
+	Vector< uint32_t > CmshImporterFile::listTextureAnimations( Material const & material
 		, uint32_t pass )
 	{
-		castor::Vector< uint32_t > result;
+		Vector< uint32_t > result;
 		return result;
 	}
 
@@ -218,17 +218,17 @@ namespace castor3d
 
 	AnimationImporterUPtr CmshImporterFile::createAnimationImporter()
 	{
-		return castor::makeUniqueDerived< AnimationImporter, CmshAnimationImporter >( *getOwner() );
+		return makeUniqueDerived< AnimationImporter, CmshAnimationImporter >( *getOwner() );
 	}
 
 	SkeletonImporterUPtr CmshImporterFile::createSkeletonImporter()
 	{
-		return castor::makeUniqueDerived< SkeletonImporter, CmshSkeletonImporter >( *getOwner() );
+		return makeUniqueDerived< SkeletonImporter, CmshSkeletonImporter >( *getOwner() );
 	}
 
 	MeshImporterUPtr CmshImporterFile::createMeshImporter()
 	{
-		return castor::makeUniqueDerived< MeshImporter, CmshMeshImporter >( *getOwner() );
+		return makeUniqueDerived< MeshImporter, CmshMeshImporter >( *getOwner() );
 	}
 
 	SceneNodeImporterUPtr CmshImporterFile::createSceneNodeImporter()
@@ -248,7 +248,7 @@ namespace castor3d
 
 	ImporterFileUPtr CmshImporterFile::create( Engine & engine
 		, Scene * scene
-		, castor::Path const & path
+		, Path const & path
 		, Parameters const & parameters
 		, ProgressBar * progress )
 	{
@@ -257,7 +257,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const CmshMeshImporter::Type = cuT( "cmsh" );
+	String const CmshMeshImporter::Type = cuT( "cmsh" );
 
 	CmshMeshImporter::CmshMeshImporter( Engine & engine )
 		: MeshImporter{ engine, "Castor" }
@@ -266,18 +266,18 @@ namespace castor3d
 
 	MeshImporterUPtr CmshMeshImporter::create( Engine & engine )
 	{
-		return castor::makeUniqueDerived< MeshImporter, CmshMeshImporter >( engine );
+		return makeUniqueDerived< MeshImporter, CmshMeshImporter >( engine );
 	}
 
 	bool CmshMeshImporter::doImportMesh( Mesh & mesh, uint32_t submeshIndex )
 	{
-		castor::BinaryFile meshFile{ m_file->getFileName(), castor::File::OpenMode::eRead };
+		BinaryFile meshFile{ m_file->getFileName(), File::OpenMode::eRead };
 		return BinaryParser< Mesh >{ submeshIndex }.parse( mesh, meshFile );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const CmshSkeletonImporter::Type = cuT( "cskl" );
+	String const CmshSkeletonImporter::Type = cuT( "cskl" );
 
 	CmshSkeletonImporter::CmshSkeletonImporter( Engine & engine )
 		: SkeletonImporter{ engine, "Castor" }
@@ -286,20 +286,20 @@ namespace castor3d
 
 	SkeletonImporterUPtr CmshSkeletonImporter::create( Engine & engine )
 	{
-		return castor::makeUniqueDerived< SkeletonImporter, CmshSkeletonImporter >( engine );
+		return makeUniqueDerived< SkeletonImporter, CmshSkeletonImporter >( engine );
 	}
 
 	bool CmshSkeletonImporter::doImportSkeleton( Skeleton & skeleton )
 	{
-		castor::BinaryFile skelFile{ m_file->getFileName(), castor::File::OpenMode::eRead };
+		BinaryFile skelFile{ m_file->getFileName(), File::OpenMode::eRead };
 		return BinaryParser< Skeleton >{}.parse( skeleton, skelFile );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const CmshAnimationImporter::MeshAnimType = cuT( "cmsa" );
-	castor::String const CmshAnimationImporter::SkeletonAnimType = cuT( "cska" );
-	castor::String const CmshAnimationImporter::NodeAnimType = cuT( "csna" );
+	String const CmshAnimationImporter::MeshAnimType = cuT( "cmsa" );
+	String const CmshAnimationImporter::SkeletonAnimType = cuT( "cska" );
+	String const CmshAnimationImporter::NodeAnimType = cuT( "csna" );
 
 	CmshAnimationImporter::CmshAnimationImporter( Engine & engine )
 		: AnimationImporter{ engine, "Castor" }
@@ -308,28 +308,28 @@ namespace castor3d
 
 	AnimationImporterUPtr CmshAnimationImporter::create( Engine & engine )
 	{
-		return castor::makeUniqueDerived< AnimationImporter, CmshAnimationImporter >( engine );
+		return makeUniqueDerived< AnimationImporter, CmshAnimationImporter >( engine );
 	}
 
 	bool CmshAnimationImporter::doImportSkeleton( SkeletonAnimation & animation )
 	{
-		castor::BinaryFile animFile{ m_file->getFileName(), castor::File::OpenMode::eRead };
+		BinaryFile animFile{ m_file->getFileName(), File::OpenMode::eRead };
 		return BinaryParser< SkeletonAnimation >{}.parse( animation, animFile );
 	}
 
 	bool CmshAnimationImporter::doImportMesh( MeshAnimation & animation )
 	{
-		castor::BinaryFile animFile{ m_file->getFileName(), castor::File::OpenMode::eRead };
+		BinaryFile animFile{ m_file->getFileName(), File::OpenMode::eRead };
 		return BinaryParser< MeshAnimation >{}.parse( animation, animFile );
 	}
 
 	bool CmshAnimationImporter::doImportNode( SceneNodeAnimation & animation )
 	{
-		castor::BinaryFile animFile{ m_file->getFileName(), castor::File::OpenMode::eRead };
+		BinaryFile animFile{ m_file->getFileName(), File::OpenMode::eRead };
 		return BinaryParser< SceneNodeAnimation >{}.parse( animation, animFile );
 	}
 
-	bool CmshAnimationImporter::doImportTexture( castor3d::TextureAnimation & animation )
+	bool CmshAnimationImporter::doImportTexture( TextureAnimation & animation )
 	{
 		return true;
 	}

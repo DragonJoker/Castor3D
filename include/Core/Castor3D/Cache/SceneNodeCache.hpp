@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**
 	\~english
@@ -16,12 +16,12 @@ namespace castor3d
 	\brief		Cache de SceneNode.
 	*/
 	template<>
-	class ObjectCacheT< SceneNode, castor::String, SceneNodeCacheTraits >
-		: public ObjectCacheBaseT< SceneNode, castor::String, SceneNodeCacheTraits >
+	class ObjectCacheT< SceneNode, String, SceneNodeCacheTraits >
+		: public ObjectCacheBaseT< SceneNode, String, SceneNodeCacheTraits >
 	{
 	public:
 		using ElementT = SceneNode;
-		using ElementKeyT = castor::String;
+		using ElementKeyT = String;
 		using ElementCacheTraitsT = SceneNodeCacheTraits;
 		using ElementObjectCacheT = ObjectCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementObjectCacheT::ElementPtrT;
@@ -91,8 +91,8 @@ namespace castor3d
 		using ElementObjectCacheT::add;
 
 	private:
-		castor::Vector< SceneNode * > m_linearNodes;
-		castor::Map< SceneNode * , OnSceneNodeReparentConnection > m_connections;
+		Vector< SceneNode * > m_linearNodes;
+		Map< SceneNode * , OnSceneNodeReparentConnection > m_connections;
 	};
 }
 

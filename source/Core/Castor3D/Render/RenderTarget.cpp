@@ -48,9 +48,9 @@
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
-CU_ImplementSmartPtr( castor3d, RenderTarget )
+CU_ImplementSmartPtr( c3d, RenderTarget )
 
-namespace castor3d
+namespace c3d
 {
 	namespace rendtgt
 	{
@@ -68,7 +68,7 @@ namespace castor3d
 			{
 				ImageViewSlice( crg::ImageViewId info
 					, uint32_t slice )
-					: info{ castor::move( info ) }
+					: info{ c3d::move( info ) }
 					, slice{ slice }
 				{
 				}
@@ -87,7 +87,7 @@ namespace castor3d
 
 				}
 			};
-			using ImageViewCache = castor::Set< ImageViewSlice, ImageViewSliceComp >;
+			using ImageViewCache = Set< ImageViewSlice, ImageViewSliceComp >;
 
 		public:
 			static void submit( Scene const & scene
@@ -134,9 +134,9 @@ namespace castor3d
 			}
 
 		protected:
-			castor::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
+			RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( String const & category )override
 			{
-				return castor::RawUniquePtr< ConfigurationVisitorBase >( new IntermediatesLister{ getFlags(), getScene(), m_cache, m_result } );
+				return RawUniquePtr< ConfigurationVisitorBase >( new IntermediatesLister{ getFlags(), getScene(), m_cache, m_result } );
 			}
 
 		private:
@@ -151,7 +151,7 @@ namespace castor3d
 			{
 			}
 
-			void doVisit3D( castor::String const & name
+			void doVisit3D( String const & name
 				, crg::ImageViewId viewId
 				, ImageLayout layout
 				, TextureFactors const & factors )
@@ -174,7 +174,7 @@ namespace castor3d
 				}
 			}
 
-			void doVisit2DArray( castor::String const & name
+			void doVisit2DArray( String const & name
 				, crg::ImageViewId viewId
 				, ImageLayout layout
 				, TextureFactors const & factors )
@@ -193,7 +193,7 @@ namespace castor3d
 					{
 						auto layer = layerIdx + info.subresourceRange.baseArrayLayer;
 
-						if ( auto layerViewId = m_handler.createViewId( crg::ImageViewData{ viewId.data->name + castor::string::toMbString( layer )
+						if ( auto layerViewId = m_handler.createViewId( crg::ImageViewData{ viewId.data->name + string::toMbString( layer )
 								, viewId.data->image
 								, layerInfo.flags
 								, layerInfo.viewType
@@ -201,7 +201,7 @@ namespace castor3d
 								, layerInfo.subresourceRange } );
 							doFilter( layerViewId, {} ) )
 						{
-							doVisit( name + castor::string::toString( layer )
+							doVisit( name + string::toString( layer )
 								, layerViewId
 								, layout
 								, factors );
@@ -212,7 +212,7 @@ namespace castor3d
 				}
 			}
 
-			void doVisit( castor::String const & name
+			void doVisit( String const & name
 				, crg::ImageViewId viewId
 				, ImageLayout layout
 				, TextureFactors const & factors )override
@@ -255,7 +255,7 @@ namespace castor3d
 					for ( uint32_t layerIdx = 0u; layerIdx < info.subresourceRange.layerCount; ++layerIdx )
 					{
 						auto layer = layerIdx + info.subresourceRange.baseArrayLayer;
-						result = doFilter( m_handler.createViewId( crg::ImageViewData{ viewId.data->name + castor::string::toMbString( layer )
+						result = doFilter( m_handler.createViewId( crg::ImageViewData{ viewId.data->name + string::toMbString( layer )
 								, viewId.data->image
 								, layerInfo.flags
 								, layerInfo.viewType
@@ -311,7 +311,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				ScenePtrStrMap::iterator it = getRootContext( *blockContext )->mapScenes.find( name );
 
 				if ( it != getRootContext( *blockContext )->mapScenes.end() )
@@ -340,7 +340,7 @@ namespace castor3d
 			{
 				if ( blockContext->renderTarget->getScene() )
 				{
-					auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+					auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 
 					if ( auto camera = blockContext->renderTarget->getScene()->findCamera( name ) )
 					{
@@ -369,8 +369,8 @@ namespace castor3d
 			{
 				params[0]->get( blockContext->size );
 
-				if ( blockContext->srgbPixelFormat != castor::PixelFormat::eUNDEFINED
-					&& blockContext->hdrPixelFormat != castor::PixelFormat::eUNDEFINED )
+				if ( blockContext->srgbPixelFormat != PixelFormat::eUNDEFINED
+					&& blockContext->hdrPixelFormat != PixelFormat::eUNDEFINED )
 				{
 					bool allowHdr = blockContext->window
 						? blockContext->window->window.allowHdr
@@ -395,10 +395,10 @@ namespace castor3d
 				params[0]->get( blockContext->srgbPixelFormat );
 				blockContext->hdrPixelFormat = blockContext->srgbPixelFormat;
 
-				if ( blockContext->srgbPixelFormat < castor::PixelFormat::eD16_UNORM )
+				if ( blockContext->srgbPixelFormat < PixelFormat::eD16_UNORM )
 				{
-					if ( blockContext->size != castor::Size{ 1u, 1u }
-						&& blockContext->size != castor::Size{} )
+					if ( blockContext->size != Size{ 1u, 1u }
+						&& blockContext->size != Size{} )
 					{
 						bool allowHdr = blockContext->window
 							? blockContext->window->window.allowHdr
@@ -427,11 +427,11 @@ namespace castor3d
 			{
 				params[0]->get( blockContext->srgbPixelFormat );
 
-				if ( blockContext->srgbPixelFormat < castor::PixelFormat::eD16_UNORM )
+				if ( blockContext->srgbPixelFormat < PixelFormat::eD16_UNORM )
 				{
-					if ( blockContext->size != castor::Size{ 1u, 1u }
-						&& blockContext->size != castor::Size{}
-						&& blockContext->hdrPixelFormat != castor::PixelFormat::eUNDEFINED )
+					if ( blockContext->size != Size{ 1u, 1u }
+						&& blockContext->size != Size{}
+						&& blockContext->hdrPixelFormat != PixelFormat::eUNDEFINED )
 					{
 						bool allowHdr = blockContext->window
 							? blockContext->window->window.allowHdr
@@ -460,11 +460,11 @@ namespace castor3d
 			{
 				params[0]->get( blockContext->hdrPixelFormat );
 
-				if ( blockContext->hdrPixelFormat < castor::PixelFormat::eD16_UNORM )
+				if ( blockContext->hdrPixelFormat < PixelFormat::eD16_UNORM )
 				{
-					if ( blockContext->size != castor::Size{ 1u, 1u }
-						&& blockContext->size != castor::Size{}
-						&& blockContext->srgbPixelFormat != castor::PixelFormat::eUNDEFINED )
+					if ( blockContext->size != Size{ 1u, 1u }
+						&& blockContext->size != Size{}
+						&& blockContext->srgbPixelFormat != PixelFormat::eUNDEFINED )
 					{
 						bool allowHdr = blockContext->window
 							? blockContext->window->window.allowHdr
@@ -523,10 +523,10 @@ namespace castor3d
 
 				if ( params.size() > 1 )
 				{
-					parameters.parse( params[1]->get< castor::String >() );
+					parameters.parse( params[1]->get< String >() );
 				}
 
-				castor::String name;
+				String name;
 				auto effect = blockContext->renderTarget->getPostEffect( params[0]->get( name ) );
 
 				if ( !effect )
@@ -536,7 +536,7 @@ namespace castor3d
 				else
 				{
 					effect->enable( true );
-					effect->setParameters( castor::move( parameters ) );
+					effect->setParameters( c3d::move( parameters ) );
 				}
 			}
 		}
@@ -554,7 +554,7 @@ namespace castor3d
 			}
 			else
 			{
-				blockContext->renderTarget->setToneMappingType( params[0]->get< castor::String >() );
+				blockContext->renderTarget->setToneMappingType( params[0]->get< String >() );
 			}
 		}
 		CU_EndAttribute()
@@ -582,16 +582,16 @@ namespace castor3d
 			{
 				auto target = blockContext->renderTarget;
 				log::info << "Loaded target [" << target->getName()
-					<< ", FMT(" << castor::getFormatName( target->getPixelFormat() ) << ")"
+					<< ", FMT(" << getFormatName( target->getPixelFormat() ) << ")"
 					<< ", DIM(" << target->getSize() << ")]" << std::endl;
 
 				if ( blockContext->window )
 				{
-					blockContext->window->window.renderTarget = castor::move( blockContext->renderTarget );
+					blockContext->window->window.renderTarget = c3d::move( blockContext->renderTarget );
 				}
 				else
 				{
-					blockContext->texture->renderTarget = castor::move( blockContext->renderTarget );
+					blockContext->texture->renderTarget = c3d::move( blockContext->renderTarget );
 				}
 			}
 		}
@@ -604,8 +604,8 @@ namespace castor3d
 
 	RenderTarget::RenderTarget( Engine & engine
 		, TargetType type
-		, castor::Size const & size
-		, castor::PixelFormat pixelFormat )
+		, Size const & size
+		, PixelFormat pixelFormat )
 		: OwnedBy< Engine >{ engine }
 		, m_device{ getOwner()->getRenderSystem()->getRenderDevice() }
 		, m_type{ type }
@@ -615,17 +615,17 @@ namespace castor3d
 		, m_initialised{ false }
 		, m_resources{ getOwner()->getGraphResourceHandler() }
 		, m_index{ ++sm_uiCount }
-		, m_name{ cuT( "Target" ) + castor::string::toString( m_index ) }
-		, m_toneMappingName{ ( castor::isFloatingPoint( m_pixelFormat )
-			? castor::String{ cuT( "none" ) }
-			: castor::String{ cuT( "linear" ) } ) }
-		, m_graph{ m_resources.getHandler(), castor::toUtf8( m_name ) }
+		, m_name{ cuT( "Target" ) + string::toString( m_index ) }
+		, m_toneMappingName{ ( isFloatingPoint( m_pixelFormat )
+			? String{ cuT( "none" ) }
+			: String{ cuT( "linear" ) } ) }
+		, m_graph{ m_resources.getHandler(), toUtf8( m_name ) }
 		, m_velocity{ m_device
 			, m_resources
 			, cuT( "Velocity" )
 			, { ImageCreateFlags::eNone
 				, makeExtent3D( m_safeBandedSize ), 1u, 1u
-				, castor::PixelFormat::eR16G16_SFLOAT
+				, PixelFormat::eR16G16_SFLOAT
 				, ( ImageUsageFlags::eColorAttachment
 					| ImageUsageFlags::eSampled
 					| ImageUsageFlags::eTransferSrc
@@ -653,7 +653,7 @@ namespace castor3d
 				, cuT( "HDRResult0" )
 				, { ImageCreateFlags::eNone
 					, makeExtent3D( m_safeBandedSize ), 1u, 1u
-					, castor::PixelFormat::eR16G16B16A16_SFLOAT
+					, PixelFormat::eR16G16B16A16_SFLOAT
 					, rendtgt::objectsUsageFlags }
 				, { BorderColour::eFloatOpaqueBlack } }
 			, Texture{ m_device
@@ -661,7 +661,7 @@ namespace castor3d
 				, cuT( "HDRResult1" )
 				, { ImageCreateFlags::eNone
 					, makeExtent3D( m_safeBandedSize ), 1u, 1u
-					, castor::PixelFormat::eR16G16B16A16_SFLOAT
+					, PixelFormat::eR16G16B16A16_SFLOAT
 					, rendtgt::objectsUsageFlags }
 				, { BorderColour::eFloatOpaqueBlack } } }
 		, m_overlays{ m_device
@@ -669,7 +669,7 @@ namespace castor3d
 			, cuT( "Overlays" )
 			, { ImageCreateFlags::eNone
 				, makeExtent3D( m_size ), 1u, 1u
-				, castor::PixelFormat::eR8G8B8A8_UNORM
+				, PixelFormat::eR8G8B8A8_UNORM
 				, ( ImageUsageFlags::eColorAttachment
 					| ImageUsageFlags::eSampled
 					| ImageUsageFlags::eTransferSrc ) }
@@ -702,11 +702,11 @@ namespace castor3d
 
 			if ( effect->isAfterToneMapping() )
 			{
-				m_srgbPostEffects.push_back( castor::move( effect ) );
+				m_srgbPostEffects.push_back( c3d::move( effect ) );
 			}
 			else
 			{
-				m_hdrPostEffects.push_back( castor::move( effect ) );
+				m_hdrPostEffects.push_back( c3d::move( effect ) );
 			}
 		}
 
@@ -824,7 +824,7 @@ namespace castor3d
 			getEngine()->unregisterTimer( getName() + cuT( "/Overlays" ), *m_overlaysTimer );
 			m_overlaysTimer.reset();
 			m_intermediates.clear();
-			getEngine()->unregisterTimer( castor::makeString( m_runnable->getName() + "/Graph" )
+			getEngine()->unregisterTimer( makeString( m_runnable->getName() + "/Graph" )
 				, m_runnable->getTimer() );
 			m_runnable.reset();
 			m_debugDrawer.reset();
@@ -876,7 +876,7 @@ namespace castor3d
 
 		auto & cache = scene.getMeshCache();
 		{
-			auto lock( castor::makeUniqueLock( cache ) );
+			auto lock( makeUniqueLock( cache ) );
 
 			for ( auto const & [_, mesh] : cache )
 			{
@@ -1020,7 +1020,7 @@ namespace castor3d
 			}
 			else
 			{
-				m_culler = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *getScene(), *getCamera() );
+				m_culler = makeUniqueDerived< SceneCuller, FrustumCuller >( *getScene(), *getCamera() );
 			}
 		}
 	}
@@ -1038,9 +1038,9 @@ namespace castor3d
 		}
 	}
 
-	void RenderTarget::setToneMappingType( castor::StringView name )
+	void RenderTarget::setToneMappingType( String name )
 	{
-		if ( !castor::isFloatingPoint( getPixelFormat() ) )
+		if ( !isFloatingPoint( getPixelFormat() ) )
 		{
 			m_toneMappingName = name;
 
@@ -1064,7 +1064,7 @@ namespace castor3d
 		}
 	}
 
-	PostEffectRPtr RenderTarget::getPostEffect( castor::String const & name )const
+	PostEffectRPtr RenderTarget::getPostEffect( String const & name )const
 	{
 		auto it = std::find_if( m_srgbPostEffects.begin()
 			, m_srgbPostEffects.end()
@@ -1175,9 +1175,8 @@ namespace castor3d
 		return getScene()->getRenderNodes().createVertexTransformPass( graph );
 	}
 
-	void RenderTarget::addParsers( castor::AttributeParsers & result )
+	void RenderTarget::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< TargetContext > targetCtx{ result, CSCNSection::eRenderTarget };
 
 		targetCtx.addParser( cuT( "scene" ), rendtgt::parserScene, { makeParameter< ParameterType::eName >() } );
@@ -1198,13 +1197,13 @@ namespace castor3d
 	{
 		setProgressBarGlobalTitle( progress
 			, cuT( "Initialising: Render Target" ) );
-		m_hdrConfigUbo = castor::make_unique< HdrConfigUbo >( device );
-		m_colourGradingUbo = castor::make_unique< ColourGradingUbo >( device );
-		m_culler = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *getScene(), *getCamera() );
+		m_hdrConfigUbo = makeRawUnique< HdrConfigUbo >( device );
+		m_colourGradingUbo = makeRawUnique< ColourGradingUbo >( device );
+		m_culler = makeUniqueDerived< SceneCuller, FrustumCuller >( *getScene(), *getCamera() );
 
 		if ( m_clustersConfig.enabled || isFullLoadingEnabled() )
 		{
-			m_frustumClusters = castor::makeUnique< FrustumClusters >( device, *getCamera(), m_clustersConfig );
+			m_frustumClusters = makeUnique< FrustumClusters >( device, *getCamera(), m_clustersConfig );
 		}
 
 		doInitCombineProgram();
@@ -1223,7 +1222,7 @@ namespace castor3d
 				, passes );
 		}
 
-		auto result = doInitialiseTechnique( device, progress, castor::move( passes ) );
+		auto result = doInitialiseTechnique( device, progress, c3d::move( passes ) );
 
 		if ( !result )
 		{
@@ -1250,7 +1249,7 @@ namespace castor3d
 						, *hdrSource
 						, *hdrTarget
 						, *previousPass );
-					castor::swap( hdrSource, hdrTarget );
+					c3d::swap( hdrSource, hdrTarget );
 					previousPass = &effect->getPass();
 				}
 			}
@@ -1262,7 +1261,7 @@ namespace castor3d
 			stepProgressBarGlobalStartLocal( progress
 				, cuT( "Creating: Tone Mapping" )
 				, uint32_t( m_hdrPostEffects.size() ) );
-			m_toneMapping = castor::makeUnique< ToneMapping >( *getEngine()
+			m_toneMapping = makeUnique< ToneMapping >( *getEngine()
 				, m_graph.getDefaultGroup()
 				, crg::ImageViewIdArray{ hdrSource->sampledViewId, hdrTarget->sampledViewId }
 				, m_srgbObjects.front().wholeViewId
@@ -1293,7 +1292,7 @@ namespace castor3d
 						, *srgbSource
 						, *srgbTarget
 						, *previousPass );
-					castor::swap( srgbSource, srgbTarget );
+					c3d::swap( srgbSource, srgbTarget );
 					previousPass = &effect->getPass();
 				}
 			}
@@ -1306,7 +1305,7 @@ namespace castor3d
 		if ( result )
 		{
 			m_combinePassSource = srgbSource;
-			m_debugDrawer = castor::makeUnique< DebugDrawer >( m_graph.getDefaultGroup()
+			m_debugDrawer = makeUnique< DebugDrawer >( m_graph.getDefaultGroup()
 				, previousPass
 				, device
 				, *this
@@ -1322,7 +1321,7 @@ namespace castor3d
 				, cuT( "Compiling render graph" )
 				, RenderTechnique::countInitialisationSteps() );
 			m_runnable = m_graph.compile( device.makeContext() );
-			getEngine()->registerTimer( castor::makeString( m_runnable->getName() + "/Graph" )
+			getEngine()->registerTimer( makeString( m_runnable->getName() + "/Graph" )
 				, m_runnable->getTimer() );
 			printGraph( *m_runnable );
 			doListIntermediateViews( m_intermediates );
@@ -1346,16 +1345,16 @@ namespace castor3d
 				} ) );
 		}
 
-		auto mbName = castor::toUtf8( getName() );
-		m_overlaysTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), mbName + "/Overlays", crg::TimerScope::eUpdate );
+		auto mbName = toUtf8( getName() );
+		m_overlaysTimer = makeUnique< FramePassTimer >( device.makeContext(), mbName + "/Overlays", crg::TimerScope::eUpdate );
 		getEngine()->registerTimer( getName() + cuT( "/Overlays" ), *m_overlaysTimer );
 #if C3D_DebugTimers
-		m_cpuUpdateTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), mbName + "/CPU Update", crg::TimerScope::eUpdate );
+		m_cpuUpdateTimer = makeUnique< FramePassTimer >( device.makeContext(), mbName + "/CPU Update", crg::TimerScope::eUpdate );
 		getEngine()->registerTimer( getName() + cuT( "/CPU Update" ), *m_cpuUpdateTimer );
-		m_gpuUpdateTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), mbName + "/GPU Update", crg::TimerScope::eUpdate );
+		m_gpuUpdateTimer = makeUnique< FramePassTimer >( device.makeContext(), mbName + "/GPU Update", crg::TimerScope::eUpdate );
 		getEngine()->registerTimer( getName() + cuT( "/GPU Update" ), *m_gpuUpdateTimer );
 #endif
-		m_signalReady = device->createSemaphore( castor::toUtf8( getName() ) + "Ready" );
+		m_signalReady = device->createSemaphore( toUtf8( getName() ) + "Ready" );
 		m_initialising = false;
 	}
 
@@ -1370,7 +1369,7 @@ namespace castor3d
 				, crg::RunnableGraph & graph )
 			{
 				stepProgressBarLocal( progress, cuT( "Initialising overlays pass" ) );
-				auto result = castor::make_unique< OverlayPass >( framePass
+				auto result = makeRawUnique< OverlayPass >( framePass
 					, context
 					, graph
 					, device
@@ -1380,7 +1379,7 @@ namespace castor3d
 					, *m_hdrConfigUbo
 					, true );
 				m_overlayPass = result.get();
-				getOwner()->registerTimer( castor::makeString( framePass.getFullName() )
+				getOwner()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -1406,12 +1405,12 @@ namespace castor3d
 					.passIndex( &m_combinePassIndex )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_combineStages ) )
 					.build( framePass, context, graph, crg::ru::Config{ 2u } );
-				getOwner()->registerTimer( castor::makeString( framePass.getFullName() )
+				getOwner()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
 		pass.addDependency( m_overlayPassDesc );
-		pass.addSampledView( castor::move( source )
+		pass.addSampledView( c3d::move( source )
 			, uint32_t( rendtgt::CombineIdx::Scene ) );
 		pass.addSampledView( m_overlays.sampledViewId
 			, uint32_t( rendtgt::CombineIdx::Overlays ) );
@@ -1432,19 +1431,19 @@ namespace castor3d
 				stepProgressBarGlobalStartLocal( progress
 					, cuT( "Initialising: Render Technique" )
 					, RenderTechnique::countInitialisationSteps() );
-				m_renderTechnique = castor::makeUnique< RenderTechnique >( getName()
+				m_renderTechnique = makeUnique< RenderTechnique >( getName()
 					, *this
 					, device
 					, m_hdrObjects.front()
 					, m_hdrObjects.back()
-					, castor::move( previousPasses )
+					, c3d::move( previousPasses )
 					, progress
 					, C3D_UseVisibilityBuffer != 0
 					, C3D_UseWeightedBlendedRendering != 0 );
 			}
-			catch ( castor::Exception & exc )
+			catch ( Exception & exc )
 			{
-				log::error << cuT( "Couldn't load render technique: " ) << castor::makeString( exc.getFullDescription() ) << std::endl;
+				log::error << cuT( "Couldn't load render technique: " ) << makeString( exc.getFullDescription() ) << std::endl;
 				throw;
 			}
 		}
@@ -1460,11 +1459,11 @@ namespace castor3d
 	void RenderTarget::doInitCombineProgram()
 	{
 		auto const & renderSystem = *getEngine()->getRenderSystem();
-		auto bandSize = double( castor3d::getSafeBandSize(m_size ) );
-		auto bandedSize = castor3d::getSafeBandedExtent3D(m_size );
+		auto bandSize = double( getSafeBandSize(m_size ) );
+		auto bandedSize = getSafeBandedExtent3D(m_size );
 		auto bandRatioU = bandSize / bandedSize.width;
 		auto bandRatioV = bandSize / bandedSize.height;
-		castor::Point4f velocityMetrics{ bandRatioU
+		Point4f velocityMetrics{ bandRatioU
 			, bandRatioV
 			, float( 1.0 - 2.0 * bandRatioU )
 			, float( 1.0 - 2.0 * bandRatioV ) };
@@ -1525,7 +1524,7 @@ namespace castor3d
 
 	Texture const & RenderTarget::doUpdatePostEffects( CpuUpdater & updater
 		, PostEffectArray const & effects
-		, castor::Vector< Texture const * > const & images )const
+		, Vector< Texture const * > const & images )const
 	{
 		Texture const * src = images.front();
 		Texture const * dst = images.back();
@@ -1535,7 +1534,7 @@ namespace castor3d
 			if ( ( isFullLoadingEnabled() || effect->isEnabled() )
 				&& effect->update( updater, *src ) )
 			{
-				castor::swap( src, dst );
+				c3d::swap( src, dst );
 			}
 		}
 
@@ -1612,7 +1611,7 @@ namespace castor3d
 		rendtgt::IntermediatesLister::submit( *getScene(), *getScene()->getBackground(), result );
 	}
 
-	castor::String getPrefix( TargetContext const & context )
+	String getPrefix( TargetContext const & context )
 	{
 		return context.texture
 			? getPrefix( *context.texture )

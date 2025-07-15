@@ -16,21 +16,21 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::EmissiveMapComponent >
-		: public TextWriterT< castor3d::EmissiveMapComponent >
+	class TextWriter< EmissiveMapComponent >
+		: public TextWriterT< EmissiveMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, uint32_t mask )
-			: TextWriterT< castor3d::EmissiveMapComponent >{ tabs }
+			: TextWriterT< EmissiveMapComponent >{ tabs }
 			, m_mask{ mask }
 		{
 		}
 
-		bool operator()( castor3d::EmissiveMapComponent const & object
+		bool operator()( EmissiveMapComponent const & object
 			, StringStream & file )override
 		{
 			return writeMask( file, cuT( "emissive_mask" ), m_mask );
@@ -44,10 +44,7 @@ namespace castor
 	private:
 		uint32_t m_mask;
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace emscmp
@@ -118,7 +115,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void EmissiveMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void EmissiveMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "emissive" )
@@ -130,29 +127,29 @@ namespace castor3d
 					, 0x00FFFFFF );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "emissive_mask" )
 			, emscmp::parserUnitEmissiveMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "emissive_mask" )
 			, emscmp::parserUnitEmissiveMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "emissive" )
 			, emscmp::parserTexRemapEmissive );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "emissive_mask" )
 			, emscmp::parserTexRemapEmissiveMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 
 	bool EmissiveMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -164,22 +161,22 @@ namespace castor3d
 	}
 
 	void EmissiveMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, EmissiveMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, EmissiveMapComponent >( pass ) );
 	}
 
 	bool EmissiveMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< EmissiveMapComponent >{ tabs, mask }( file );
+		return TextWriter< EmissiveMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const EmissiveMapComponent::TypeName = C3D_MakePassMapComponentName( "emissive" );
+	String const EmissiveMapComponent::TypeName = C3D_MakePassMapComponentName( "emissive" );
 
 	EmissiveMapComponent::EmissiveMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -191,7 +188,7 @@ namespace castor3d
 
 	PassComponentUPtr EmissiveMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, EmissiveMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, EmissiveMapComponent >( pass );
 	}
 
 	void EmissiveMapComponent::doFillConfig( TextureConfiguration & configuration
@@ -203,10 +200,10 @@ namespace castor3d
 
 	PassMapDefaultImageParams EmissiveMapComponent::createDefaultImage()const
 	{
-		castor::String name{ cuT( "DefaultEmissive" ) };
-		castor::ByteArray data{ 255u, 255u, 255u, 0u };
+		String name{ cuT( "DefaultEmissive" ) };
+		ByteArray data{ 255u, 255u, 255u, 0u };
 		return { name
-			, castor::ImageCreateParams{ castor::getFormatName( castor::PixelFormat::eR8G8B8A8_UNORM ), data } };
+			, ImageCreateParams{ getFormatName( PixelFormat::eR8G8B8A8_UNORM ), data } };
 	}
 
 	//*********************************************************************************************

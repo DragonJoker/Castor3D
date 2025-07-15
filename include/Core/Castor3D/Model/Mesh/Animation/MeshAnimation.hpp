@@ -14,7 +14,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class MeshAnimation
 		: public Animation
@@ -36,7 +36,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation.
 		 */
 		C3D_API explicit MeshAnimation( Mesh & mesh
-			, castor::String const & name = castor::cuEmptyString );
+			, String const & name = cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		adds a child to this object.
@@ -71,7 +71,7 @@ namespace castor3d
 			return m_submeshes[index];
 		}
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 
 	private:
 		void doCloneInto( Animation & output )const override;

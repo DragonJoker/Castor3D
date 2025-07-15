@@ -8,15 +8,15 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::ColourGradingConfig >
-		: public TextWriterT< castor3d::ColourGradingConfig >
+	class TextWriter< ColourGradingConfig >
+		: public TextWriterT< ColourGradingConfig >
 	{
 	public:
 		explicit TextWriter( String const & tabs );
-		bool operator()( castor3d::ColourGradingConfig const & config
+		bool operator()( ColourGradingConfig const & config
 			, StringStream & file )override;
 	};
 }

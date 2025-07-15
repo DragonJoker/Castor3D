@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Align/AlignModule.hpp"
 
-namespace castor
+namespace c3d
 {
 	class NonAlignedMemoryAllocator
 	{

@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/Factory.hpp>
 #include <CastorUtils/Design/Signal.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Model */
 	//@{
@@ -90,9 +90,9 @@ namespace castor3d
 	struct Meshlet
 	{
 		// Meshlets vertices indices.
-		castor::Array< uint32_t, MaxMeshletVertexCount > vertices;
+		Array< uint32_t, MaxMeshletVertexCount > vertices;
 		// Meshlets triangles indices.
-		castor::Array< uint8_t, MaxMeshletTriangleCount * 3u > primitives;
+		Array< uint8_t, MaxMeshletTriangleCount * 3u > primitives;
 		// Number of vertices used in the meshlet.
 		uint32_t vertexCount;
 		// Number of triangles used in the meshlet.
@@ -111,8 +111,8 @@ namespace castor3d
 	*/
 	struct MeshletCullData
 	{
-		castor::Point4f sphere;
-		castor::Point4f cone;
+		Point4f sphere;
+		Point4f cone;
 	};
 	/**
 	*\~english
@@ -140,41 +140,41 @@ namespace castor3d
 	*	Spécialisation pour Mesh.
 	*/
 	template<>
-	struct ResourceCacheTraitsT< Mesh, castor::String >
-		: castor::ResourceCacheTraitsBaseT< Mesh, castor::String, ResourceCacheTraitsT< Mesh, castor::String > >
+	struct ResourceCacheTraitsT< Mesh, String >
+		: ResourceCacheTraitsBaseT< Mesh, String, ResourceCacheTraitsT< Mesh, String > >
 	{
 		using ResT = Mesh;
-		using KeyT = castor::String;
+		using KeyT = String;
 		using TraitsT = ResourceCacheTraitsT< ResT, KeyT >;
-		using Base = castor::ResourceCacheTraitsBaseT< ResT, KeyT, TraitsT >;
+		using Base = ResourceCacheTraitsBaseT< ResT, KeyT, TraitsT >;
 		using ElementT = typename Base::ElementT;
 		using ElementPtrT = typename Base::ElementPtrT;
 
-		C3D_API static const castor::String Name;
+		C3D_API static const String Name;
 	};
 
-	using MeshCacheTraits = ResourceCacheTraitsT< Mesh, castor::String >;
-	using MeshCache = castor::ResourceCacheT< Mesh
-		, castor::String
+	using MeshCacheTraits = ResourceCacheTraitsT< Mesh, String >;
+	using MeshCache = ResourceCacheT< Mesh
+		, String
 		, MeshCacheTraits >;
 
 	using MeshRes = MeshCacheTraits::ElementPtrT;
 	using MeshResPtr = MeshCacheTraits::ElementObsT;
 
 	using MeshChangeFunc = std::function< void( Mesh const & ) >;
-	using MeshChangeSignal = castor::SignalT< MeshChangeFunc >;
-	using MeshChangeConnection = castor::ConnectionT< MeshChangeSignal >;
+	using MeshChangeSignal = SignalT< MeshChangeFunc >;
+	using MeshChangeConnection = ConnectionT< MeshChangeSignal >;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, Mesh, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MeshCache, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MeshFactory, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MeshGenerator, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MeshImporter, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MeshImporterFactory, C3D_API );
+	CU_DeclareSmartPtr( c3d, Mesh, C3D_API );
+	CU_DeclareSmartPtr( c3d, MeshCache, C3D_API );
+	CU_DeclareSmartPtr( c3d, MeshFactory, C3D_API );
+	CU_DeclareSmartPtr( c3d, MeshGenerator, C3D_API );
+	CU_DeclareSmartPtr( c3d, MeshImporter, C3D_API );
+	CU_DeclareSmartPtr( c3d, MeshImporterFactory, C3D_API );
 
 	//! Mesh pointer array
-	CU_DeclareMap( castor::String, MeshResPtr, MeshPtrStr );
+	CU_DeclareMap( String, MeshResPtr, MeshPtrStr );
 	/** @endcond */
 
 	//@}

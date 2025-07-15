@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace shader
 	{
@@ -27,7 +27,7 @@ namespace castor3d
 			SDW_DeclStructInstance( C3D_API, SsaoConfigData );
 
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static castor::RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+			C3D_API static RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 			sdw::Vec4 projInfo;
 			sdw::Int numSamples;
@@ -71,7 +71,7 @@ namespace castor3d
 			//
 			//	where P is the projection matrix that maps camera space points
 			//	to [-1, 1] x [-1, 1].  That is, SsaoConfigUbo::getProjectUnitMatrix().
-			castor::Point4f projInfo;
+			Point4f projInfo;
 			// Integer number of samples to take at each pixel.
 			int32_t numSamples;
 			// This is the number of turns around the circle that the spiral pattern makes.
@@ -180,7 +180,7 @@ namespace castor3d
 		, uint32_t( Set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_ssaoConfigData = ssaoConfig.declMember< castor3d::shader::SsaoConfigData >( "d" );\
+	auto c3d_ssaoConfigData = ssaoConfig.declMember< c3d::shader::SsaoConfigData >( "d" );\
 	ssaoConfig.end()
 
 #endif

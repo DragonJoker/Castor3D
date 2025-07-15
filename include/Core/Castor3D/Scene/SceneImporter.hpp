@@ -12,10 +12,10 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Mesh/MeshImporter.hpp"
 #include "Castor3D/Model/Skeleton/SkeletonImporter.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class SceneImporter
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -46,7 +46,7 @@ namespace castor3d
 		C3D_API bool importData( Scene & scene
 			, ImporterFile * file
 			, Parameters const & parameters
-			, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
+			, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
 		/**
 		 *\~english
 		 *\brief			Scene import Function.
@@ -66,9 +66,9 @@ namespace castor3d
 		 *\return			\p false si un problème quelconque est survenu.
 		 */
 		C3D_API bool importData( Scene & scene
-			, castor::Path const & pathFile
+			, Path const & pathFile
 			, Parameters const & parameters
-			, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps
+			, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps
 			, ProgressBar * progress = nullptr );
 		/**
 		 *\~english
@@ -104,50 +104,50 @@ namespace castor3d
 		 *\return			\p false si un problème quelconque est survenu.
 		 */
 		C3D_API bool importAnimationsData( Scene & scene
-			, castor::Path const & pathFile
+			, Path const & pathFile
 			, Parameters const & parameters
 			, ProgressBar * progress = nullptr );
 
 	private:
 		void doImportMaterials( Scene & scene
 			, Parameters const & parameters
-			, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
-		castor::StringMap< SkeletonRPtr > doImportSkeletons( Scene & scene );
-		castor::StringMap< MeshResPtr > doImportMeshes( Scene & scene
-			, castor::StringMap< SkeletonRPtr > const & skeletons );
-		castor::StringMap< SceneNodeRPtr > doImportNodes( Scene & scene );
+			, Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
+		StringMap< SkeletonRPtr > doImportSkeletons( Scene & scene );
+		StringMap< MeshResPtr > doImportMeshes( Scene & scene
+			, StringMap< SkeletonRPtr > const & skeletons );
+		StringMap< SceneNodeRPtr > doImportNodes( Scene & scene );
 		void doImportLights( Scene & scene );
 		void doImportLightGroups( Scene & scene );
 		void doImportCameras( Scene & scene );
 		void doCreateGeometries( Scene & scene
-			, castor::StringMap< MeshResPtr > const & meshes
-			, castor::StringMap< SceneNodeRPtr > const & nodes );
+			, StringMap< MeshResPtr > const & meshes
+			, StringMap< SceneNodeRPtr > const & nodes );
 
 		struct AnimObjects
 		{
 			AnimObjects() = default;
-			castor::Vector< SkeletonRPtr > skeletons;
-			castor::Vector< MeshRPtr > meshes;
-			castor::Vector< SceneNodeRPtr > nodes;
+			Vector< SkeletonRPtr > skeletons;
+			Vector< MeshRPtr > meshes;
+			Vector< SceneNodeRPtr > nodes;
 		};
 
 		void doImportSkeletonsAnims( Scene & scene
 			, AnimationImporter & importer
-			, castor::StringMap< AnimObjects > & anims );
+			, StringMap< AnimObjects > & anims );
 		void doImportMeshesAnims( Scene & scene
 			, AnimationImporter & importer
-			, castor::StringMap< AnimObjects > & anims );
+			, StringMap< AnimObjects > & anims );
 		void doImportNodesAnims( Scene & scene
 			, AnimationImporter & importer
-			, castor::StringMap< AnimObjects > & anims );
+			, StringMap< AnimObjects > & anims );
 		void doImportTexturesAnims( Scene & scene
 			, AnimationImporter & importer );
 		void doCreateAnimationGroups( Scene & scene
-			, castor::StringMap< AnimObjects > & anims )const;
+			, StringMap< AnimObjects > & anims )const;
 
 		void doTransformScene( Scene & scene
 			, Parameters const & parameters
-			, castor::StringMap< SceneNodeRPtr > const & nodes )const;
+			, StringMap< SceneNodeRPtr > const & nodes )const;
 		void doAddAnimationGroup( Geometry & geometry );
 
 		void doCenterCamera( Scene & scene
@@ -163,10 +163,10 @@ namespace castor3d
 	struct SceneImportContext
 	{
 		SceneContext * scene{};
-		castor::PathArray files{};
-		castor::PathArray animFiles{};
-		castor::String prefix{};
-		castor::Map< PassComponentTextureFlag, TextureConfiguration > textureRemaps;
+		PathArray files{};
+		PathArray animFiles{};
+		String prefix{};
+		Map< PassComponentTextureFlag, TextureConfiguration > textureRemaps;
 		float rescale{ 1.0f };
 		float pitch{ 0.0f };
 		float yaw{ 0.0f };
@@ -176,12 +176,12 @@ namespace castor3d
 		bool ignoreVertexColour{ false };
 		bool disableImageCompression{ false };
 		float emissiveMult{ 1.0f };
-		castor::Map< PassComponentTextureFlag, TextureConfiguration >::iterator textureRemapIt;
-		castor::String centerCamera{};
-		castor::String preferredImporter{ cuT( "any" ) };
+		Map< PassComponentTextureFlag, TextureConfiguration >::iterator textureRemapIt;
+		String centerCamera{};
+		String preferredImporter{ cuT( "any" ) };
 	};
 
-	C3D_API castor::String getPrefix( SceneImportContext const & context );
+	C3D_API String getPrefix( SceneImportContext const & context );
 	C3D_API Engine * getEngine( SceneImportContext const & context );
 }
 

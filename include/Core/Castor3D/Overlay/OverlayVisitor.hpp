@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "OverlayModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class OverlayVisitor
 	{

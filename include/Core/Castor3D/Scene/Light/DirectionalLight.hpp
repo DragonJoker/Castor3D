@@ -9,14 +9,14 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/Illumination.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct DirectionalLightCascade
 	{
-		castor::Matrix4x4f viewMatrix;
-		castor::Matrix4x4f projMatrix;
-		castor::Matrix4x4f viewProjMatrix;
-		castor::Point2f splitDepthScale;
+		Matrix4x4f viewMatrix;
+		Matrix4x4f projMatrix;
+		Matrix4x4f viewProjMatrix;
+		Point2f splitDepthScale;
 	};
 
 	C3D_API bool operator==( DirectionalLightCascade const & lhs
@@ -36,14 +36,14 @@ namespace castor3d
 
 	private:
 		DirectionalLight( bool & dirty
-			, castor::Function< void() > const & markParentDirty );
+			, Function< void() > const & markParentDirty );
 
 	public:
 		/**
 		 *\copydoc		LightCategory::instantiate
 		 */
 		C3D_API LightInstanceUPtr instantiate( SceneNode & node
-			, castor::Function< bool() > isParentEnabled )override;
+			, Function< bool() > isParentEnabled )override;
 		/**
 		 *\~english
 		 *\brief		Creation function, used by Factory.
@@ -57,7 +57,7 @@ namespace castor3d
 		 *\return		Une source lumineuse.
 		 */
 		C3D_API static LightCategoryUPtr create( bool & dirty
-			, castor::Function< void() > const & markParentDirty );
+			, Function< void() > const & markParentDirty );
 		/**
 		 *\~english
 		 *\name Mutators.
@@ -65,7 +65,7 @@ namespace castor3d
 		 *\name Mutateurs.
 		 **/
 		/**@{*/
-		void setIllumination( castor::Illumination const & value )
+		void setIllumination( Illumination const & value )
 		{
 			m_illumination = value;
 		}
@@ -79,7 +79,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		castor::Illumination const & getIllumination()const noexcept
+		Illumination const & getIllumination()const noexcept
 		{
 			return m_illumination;
 		}
@@ -91,7 +91,7 @@ namespace castor3d
 		void doCloneInto( LightCategory & output )const override;
 
 	private:
-		castor::GroupChangeTracked< castor::Illumination > m_illumination;
+		GroupChangeTracked< Illumination > m_illumination;
 	};
 
 	class DirectionalLightInstance
@@ -111,8 +111,8 @@ namespace castor3d
 	public:
 		C3D_API DirectionalLightInstance( SceneNode & node
 			, DirectionalLight & category
-			, castor::Function< void() > markParentDirty
-			, castor::Function< bool() > isParentEnabled );
+			, Function< void() > markParentDirty
+			, Function< bool() > isParentEnabled );
 		/**
 		 *\~english
 		 *\brief		Puts the shadow data into the given buffer.
@@ -131,7 +131,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		castor::Point3f const & getDirection()const
+		Point3f const & getDirection()const
 		{
 			return m_direction;
 		}
@@ -146,17 +146,17 @@ namespace castor3d
 			return m_cascades[cascadeIndex].splitDepthScale->y;
 		}
 
-		castor::Matrix4x4f const & getProjMatrix( uint32_t cascadeIndex )const
+		Matrix4x4f const & getProjMatrix( uint32_t cascadeIndex )const
 		{
 			return m_cascades[cascadeIndex].projMatrix;
 		}
 
-		castor::Matrix4x4f const & getViewMatrix( uint32_t cascadeIndex )const
+		Matrix4x4f const & getViewMatrix( uint32_t cascadeIndex )const
 		{
 			return m_cascades[cascadeIndex].viewMatrix;
 		}
 
-		castor::Matrix4x4f const & getLightSpaceTransform( uint32_t cascadeIndex )const
+		Matrix4x4f const & getLightSpaceTransform( uint32_t cascadeIndex )const
 		{
 			return m_cascades[cascadeIndex].viewProjMatrix;
 		}
@@ -167,13 +167,13 @@ namespace castor3d
 		void doUpdateShadow( Camera const & viewCamera
 			, Camera * lightCamera
 			, int32_t index )override;
-		void doFillLightBuffer( castor::Point4f * data )const override;
+		void doFillLightBuffer( Point4f * data )const override;
 		void doCloneInto( LightInstance & output )const override;
 
 	private:
-		castor::Point3f m_direction;
-		castor::Vector< Cascade > m_cascades;
-		castor::Vector< Cascade > m_prvCascades;
+		Point3f m_direction;
+		Vector< Cascade > m_cascades;
+		Vector< Cascade > m_prvCascades;
 	};
 }
 

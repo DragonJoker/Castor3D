@@ -2,7 +2,7 @@
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	VersionException::VersionException( Version const & given
 		, Version const & expected
@@ -11,13 +11,13 @@ namespace castor3d
 		, uint32_t uiLine )
 		: Exception{ "", strFile, strFunction, uiLine }
 	{
-		auto stream = castor::makeStringStreamT< char >();
+		auto stream = makeStringStreamT< char >();
 		stream << "Expected version [";
 		stream << expected;
 		stream << "] but got version [";
 		stream << given;
 		stream << "] - Incompatible versions";
 		m_description = stream.str();
-		log::debug << castor::makeString( m_description ) << std::endl;
+		log::debug << makeString( m_description ) << std::endl;
 	}
 }

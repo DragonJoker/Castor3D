@@ -16,15 +16,15 @@ namespace PbrBloom
 {
 	//*********************************************************************************************
 
-	castor::String const PostEffect::Type = cuT( "pbr_bloom" );
-	castor::MbString const PostEffect::Name = "PBR Bloom PostEffect";
+	c3d::String const PostEffect::Type = cuT( "pbr_bloom" );
+	c3d::MbString const PostEffect::Name = "PBR Bloom PostEffect";
 
-	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
-		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & params )
-		: castor3d::PostEffect{ PostEffect::Type
+	PostEffect::PostEffect( c3d::RenderTarget & renderTarget
+		, c3d::RenderSystem & renderSystem
+		, c3d::Parameters const & params )
+		: c3d::PostEffect{ PostEffect::Type
 			, cuT( "PbrBloom" )
-			, castor::makeString( PostEffect::Name )
+			, c3d::makeString( PostEffect::Name )
 			, renderTarget
 			, renderSystem
 			, params }
@@ -35,16 +35,16 @@ namespace PbrBloom
 		PostEffect::setParameters( params );
 	}
 
-	castor3d::PostEffectUPtr PostEffect::create( castor3d::RenderTarget & renderTarget
-		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & params )
+	c3d::PostEffectUPtr PostEffect::create( c3d::RenderTarget & renderTarget
+		, c3d::RenderSystem & renderSystem
+		, c3d::Parameters const & params )
 	{
-		return castor::makeUniqueDerived< castor3d::PostEffect, PostEffect >( renderTarget
+		return c3d::makeUniqueDerived< c3d::PostEffect, PostEffect >( renderTarget
 			, renderSystem
 			, params );
 	}
 
-	void PostEffect::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void PostEffect::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		if ( m_downsamplePass )
 		{
@@ -67,34 +67,34 @@ namespace PbrBloom
 			, m_bloomStrength );
 	}
 
-	void PostEffect::setParameters( castor3d::Parameters parameters )
+	void PostEffect::setParameters( c3d::Parameters parameters )
 	{
-		castor::String count;
+		c3d::String count;
 
 		if ( parameters.get( cuT( "bloomStrength" ), count ) )
 		{
-			m_bloomStrength = castor::string::toFloat( count );
+			m_bloomStrength = c3d::string::toFloat( count );
 		}
 
 		if ( parameters.get( cuT( "blurRadius" ), count ) )
 		{
-			m_blurRadius = uint32_t( castor::string::toULong( count ) );
+			m_blurRadius = uint32_t( c3d::string::toULong( count ) );
 		}
 
 		if ( parameters.get( cuT( "passes" ), count ) )
 		{
-			m_duPassesCount = uint32_t( castor::string::toLong( count ) );
+			m_duPassesCount = uint32_t( c3d::string::toLong( count ) );
 		}
 
 		m_passesCount = m_duPassesCount * 2u + 1u;
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
-		, castor3d::Texture const & source
-		, castor3d::Texture const & target
+	bool PostEffect::doInitialise( c3d::RenderDevice const & device
+		, c3d::Texture const & source
+		, c3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
-		m_ubo = device.uboPool->getBuffer< castor::Point2f >( 0u );
+		m_ubo = device.uboPool->getBuffer< c3d::Point2f >( 0u );
 		auto & data = m_ubo.getData();
 		m_extent = target.getExtent();
 		data->x = float( m_blurRadius ) / float( std::max( m_extent.width, m_extent.height ) );
@@ -102,18 +102,18 @@ namespace PbrBloom
 		auto extent = ashes::getSubresourceDimensions( convert( m_extent ), 1u );
 		auto mipCount = ashes::getMaxMipCount( extent );
 		m_intermediateImg = m_graph.createImage( crg::ImageData{ "PBLInt"
-			, castor3d::ImageCreateFlags::eNone
-			, castor3d::ImageType::e2D
+			, c3d::ImageCreateFlags::eNone
+			, c3d::ImageType::e2D
 			, target.getFormat()
-			, castor::convert( extent )
-			, ( castor3d::ImageUsageFlags::eColorAttachment
-				| castor3d::ImageUsageFlags::eSampled
-				| castor3d::ImageUsageFlags::eTransferSrc
-				| castor3d::ImageUsageFlags::eTransferDst )
+			, c3d::convert( extent )
+			, ( c3d::ImageUsageFlags::eColorAttachment
+				| c3d::ImageUsageFlags::eSampled
+				| c3d::ImageUsageFlags::eTransferSrc
+				| c3d::ImageUsageFlags::eTransferDst )
 			, mipCount } );
 
 		m_duPassesCount = std::min( m_duPassesCount, mipCount );
-		m_downsamplePass = castor::make_unique< DownsamplePass >( m_graph
+		m_downsamplePass = c3d::makeRawUnique< DownsamplePass >( m_graph
 			, previousPass
 			, device
 			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
@@ -121,14 +121,14 @@ namespace PbrBloom
 			, m_duPassesCount
 			, &isEnabled()
 			, &m_passIndex );
-		m_upsamplePass = castor::make_unique< UpsamplePass >( m_graph
+		m_upsamplePass = c3d::makeRawUnique< UpsamplePass >( m_graph
 			, m_downsamplePass->getPass()
 			, device
 			, m_intermediateImg
 			, m_ubo
 			, m_duPassesCount
 			, &isEnabled() );
-		m_combinePass = castor::make_unique< CombinePass >( m_graph
+		m_combinePass = c3d::makeRawUnique< CombinePass >( m_graph
 			, m_upsamplePass->getPass()
 			, device
 			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
@@ -142,7 +142,7 @@ namespace PbrBloom
 		return true;
 	}
 
-	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
+	void PostEffect::doCleanup( c3d::RenderDevice const & device )
 	{
 		m_combinePass.reset();
 		m_upsamplePass.reset();
@@ -150,21 +150,21 @@ namespace PbrBloom
 		device.uboPool->putBuffer( m_ubo );
 	}
 
-	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
+	void PostEffect::doCpuUpdate( c3d::CpuUpdater & updater )
 	{
 		auto & data = m_ubo.getData();
 		data->x = float( m_blurRadius ) / float( std::max( m_extent.width, m_extent.height ) );
 		data->y = m_bloomStrength;
 	}
 
-	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )
+	bool PostEffect::doWriteInto( c3d::StringStream & file, c3d::String const & tabs )
 	{
 		file << cuT( "\n" )
 			<< ( tabs + cuT( "pbr_bloom\n" ) )
 			<< ( tabs + cuT( "{\n" ) )
-			<< ( tabs + cuT( "\t" ) ) << cuT( "blurRadius " ) << castor::string::toString( m_blurRadius ) << cuT( "\n" )
-			<< ( tabs + cuT( "\t" ) ) << cuT( "bloomStrength " ) << castor::string::toString( m_bloomStrength ) << cuT( "\n" )
-			<< ( tabs + cuT( "\t" ) ) << cuT( "passes " ) << castor::string::toString( m_duPassesCount ) << cuT( "\n" )
+			<< ( tabs + cuT( "\t" ) ) << cuT( "blurRadius " ) << c3d::string::toString( m_blurRadius ) << cuT( "\n" )
+			<< ( tabs + cuT( "\t" ) ) << cuT( "bloomStrength " ) << c3d::string::toString( m_bloomStrength ) << cuT( "\n" )
+			<< ( tabs + cuT( "\t" ) ) << cuT( "passes " ) << c3d::string::toString( m_duPassesCount ) << cuT( "\n" )
 			<< ( tabs + cuT( "}\n" ) );
 		return true;
 	}

@@ -10,28 +10,25 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::UntileMappingComponent >
-		: public TextWriterT< castor3d::UntileMappingComponent >
+	class TextWriter< UntileMappingComponent >
+		: public TextWriterT< UntileMappingComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::UntileMappingComponent >{ tabs }
+			: TextWriterT< UntileMappingComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::UntileMappingComponent const & object
+		bool operator()( UntileMappingComponent const & object
 			, StringStream & file )override
 		{
 			return writeOpt( file, cuT( "untile" ), object.isUntiling(), false );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace unt
@@ -154,22 +151,22 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void UntileMappingComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void UntileMappingComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "untile" )
 			, unt::parserPassUntile
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			, { makeParameter< ParameterType::eBool >() } );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const UntileMappingComponent::TypeName = C3D_MakePassBaseComponentName( "untile" );
+	String const UntileMappingComponent::TypeName = C3D_MakePassBaseComponentName( "untile" );
 
 	UntileMappingComponent::UntileMappingComponent( Pass & pass )
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName }
+		: BaseDataPassComponentT< AtomicGroupChangeTracked< bool > >{ pass, TypeName }
 	{
 	}
 
@@ -181,17 +178,17 @@ namespace castor3d
 
 	PassComponentUPtr UntileMappingComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< UntileMappingComponent >( pass );
+		auto result = makeRawUnique< UntileMappingComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool UntileMappingComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool UntileMappingComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< UntileMappingComponent >{ tabs }( *this, file );
+		return TextWriter< UntileMappingComponent >{ tabs }( *this, file );
 	}
 
 	//*********************************************************************************************

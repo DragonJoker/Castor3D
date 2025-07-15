@@ -2,12 +2,12 @@
 
 #include "Castor3D/Scene/SceneNode.hpp"
 
-CU_ImplementSmartPtr( castor3d, SceneNodeAnimation )
+CU_ImplementSmartPtr( c3d, SceneNodeAnimation )
 
-namespace castor3d
+namespace c3d
 {
 	SceneNodeAnimation::SceneNodeAnimation( SceneNode & node
-		, castor::String const & name )
+		, String const & name )
 		: Animation{ *node.getEngine()
 			, AnimationType::eSceneNode
 			, node

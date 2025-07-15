@@ -13,23 +13,23 @@
 namespace
 {
 #if defined( VK_USE_PLATFORM_ANDROID_KHR )
-		castor::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_android_surface";
+		c3d::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_android_surface";
 #elif defined( VK_USE_PLATFORM_FUCHSIA )
-		castor::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_FUCHSIA_imagepipe_surface";
+		c3d::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_FUCHSIA_imagepipe_surface";
 #elif defined( VK_USE_PLATFORM_IOS_MVK )
-		castor::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_MVK_ios_surface";
+		c3d::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_MVK_ios_surface";
 #elif defined( VK_USE_PLATFORM_MACOS_MVK )
-		castor::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_MVK_macos_surface";
+		c3d::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_MVK_macos_surface";
 #elif defined( VK_USE_PLATFORM_VI_NN )
-		castor::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_NN_vi_surface";
+		c3d::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_NN_vi_surface";
 #elif defined( VK_USE_PLATFORM_XLIB_KHR )
-		castor::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_xlib_surface";
+		c3d::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_xlib_surface";
 #elif defined( VK_USE_PLATFORM_XCB_KHR )
-		castor::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_xcb_surface";
+		c3d::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_xcb_surface";
 #elif defined( VK_USE_PLATFORM_WAYLAND_KHR )
-		castor::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_wayland_surface";
+		c3d::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_wayland_surface";
 #elif defined( VK_USE_PLATFORM_WIN32_KHR )
-		castor::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_win32_surface";
+		c3d::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_win32_surface";
 #endif
 	class DummyWindowHandle
 		: public ashes::IWindowHandle
@@ -45,12 +45,12 @@ namespace
 			return true;
 		}
 	};
-	using StringArray = castor::Vector< castor::MbString >;
+	using StringArray = c3d::Vector< c3d::MbString >;
 
 	struct Options
 	{
-		castor::Path input;
-		castor::Path output;
+		c3d::Path input;
+		c3d::Path output;
 	};
 
 	void printUsage()
@@ -94,7 +94,7 @@ namespace
 		}
 
 		it = std::find( args.begin(), args.end(), "-o" );
-		options.input = castor::Path{ castor::makeString( args[0] ) };
+		options.input = c3d::Path{ c3d::makeString( args[0] ) };
 
 		if ( it == args.end() )
 		{
@@ -108,7 +108,7 @@ namespace
 		}
 		else
 		{
-			options.output = castor::Path{ castor::makeString( *it ) };
+			options.output = c3d::Path{ c3d::makeString( *it ) };
 
 			if ( options.output.getExtension().empty() )
 			{
@@ -119,11 +119,11 @@ namespace
 		return true;
 	}
 
-	bool doInitialiseEngine( castor3d::Engine & engine )
+	bool doInitialiseEngine( c3d::Engine & engine )
 	{
-		if ( !castor::File::directoryExists( castor3d::Engine::getEngineDirectory() ) )
+		if ( !c3d::File::directoryExists( c3d::Engine::getEngineDirectory() ) )
 		{
-			castor::File::directoryCreate( castor3d::Engine::getEngineDirectory() );
+			c3d::File::directoryCreate( c3d::Engine::getEngineDirectory() );
 		}
 
 		auto & renderers = engine.getRenderersList();
@@ -139,7 +139,7 @@ namespace
 
 			if ( renderer != renderers.end() )
 			{
-				if ( engine.loadRenderer( castor::makeString( renderer->name ) ) )
+				if ( engine.loadRenderer( c3d::makeString( renderer->name ) ) )
 				{
 					engine.initialise( 1, false );
 					result = true;
@@ -158,8 +158,8 @@ namespace
 		return result;
 	}
 
-	void doInitialise( castor3d::RenderDevice const & device
-		, castor3d::Mesh & mesh )
+	void doInitialise( c3d::RenderDevice const & device
+		, c3d::Mesh & mesh )
 	{
 		for ( auto & submesh : mesh )
 		{
@@ -167,25 +167,25 @@ namespace
 		}
 	}
 
-	void doInitialise( castor3d::RenderDevice const & device
-		, castor3d::Skeleton & skeleton )
+	void doInitialise( c3d::RenderDevice const & device
+		, c3d::Skeleton & skeleton )
 	{
 	}
 
 	template< typename T >
-	bool doParseObject( castor3d::RenderDevice const & device
-		, castor::Path const & path
+	bool doParseObject( c3d::RenderDevice const & device
+		, c3d::Path const & path
 		, T & object )
 	{
 		bool result = false;
 
 		try
 		{
-			castor::BinaryFile file{ path, castor::File::OpenMode::eRead };
-			castor3d::BinaryParser< T > parser;
+			c3d::BinaryFile file{ path, c3d::File::OpenMode::eRead };
+			c3d::BinaryParser< T > parser;
 			result = parser.parse( object, file );
 		}
-		catch ( castor::Exception & exc )
+		catch ( c3d::Exception & exc )
 		{
 			std::cerr << "Error encountered while parsing file : " << exc.what() << std::endl;
 		}
@@ -207,11 +207,11 @@ namespace
 	}
 
 	template< typename T >
-	bool doWriteObject( castor::Path const & path
+	bool doWriteObject( c3d::Path const & path
 		, T & object );
 
-	bool doPostWrite( castor::Path const & path
-		, castor3d::Mesh & mesh )
+	bool doPostWrite( c3d::Path const & path
+		, c3d::Mesh & mesh )
 	{
 		auto skeleton = mesh.getSkeleton();
 		bool result = true;
@@ -226,14 +226,14 @@ namespace
 		return result;
 	}
 
-	bool doPostWrite( castor::Path const & path
-		, castor3d::Skeleton & skeleton )
+	bool doPostWrite( c3d::Path const & path
+		, c3d::Skeleton & skeleton )
 	{
 		return true;
 	}
 
 	template< typename T >
-	bool doWriteObject( castor::Path const & path
+	bool doWriteObject( c3d::Path const & path
 		, T & object )
 	{
 		bool result = false;
@@ -241,8 +241,8 @@ namespace
 		try
 		{
 			auto newPath = path.getPath() / ( path.getFileName() + cuT( "Upgraded." ) + path.getExtension() );
-			castor::BinaryFile file{ newPath, castor::File::OpenMode::eWrite };
-			castor3d::BinaryWriter< T > writer;
+			c3d::BinaryFile file{ newPath, c3d::File::OpenMode::eWrite };
+			c3d::BinaryWriter< T > writer;
 			result = writer.write( object, file );
 
 			if ( result )
@@ -250,7 +250,7 @@ namespace
 				result = doPostWrite( path, object );
 			}
 		}
-		catch ( castor::Exception & exc )
+		catch ( c3d::Exception & exc )
 		{
 			std::cerr << "Error encountered while writing file : " << exc.what() << std::endl;
 		}
@@ -275,26 +275,26 @@ int main( int argc, char * argv[] )
 	{
 		auto inputPath = options.input;
 
-		if ( !castor::File::fileExists( inputPath ) )
+		if ( !c3d::File::fileExists( inputPath ) )
 		{
-			inputPath = castor::File::getExecutableDirectory() / inputPath;
+			inputPath = c3d::File::getExecutableDirectory() / inputPath;
 		}
 
 		auto outputPath = options.output;
 
-		if ( !castor::File::fileExists( outputPath ) )
+		if ( !c3d::File::fileExists( outputPath ) )
 		{
-			outputPath = castor::File::getExecutableDirectory() / outputPath;
+			outputPath = c3d::File::getExecutableDirectory() / outputPath;
 		}
 
-		if ( !castor::File::fileExists( inputPath ) )
+		if ( !c3d::File::fileExists( inputPath ) )
 		{
-			std::cerr << "File [" << castor::toUtf8( inputPath ) << "] does not exist." << std::endl << std::endl;
+			std::cerr << "File [" << c3d::toUtf8( inputPath ) << "] does not exist." << std::endl << std::endl;
 			printUsage();
 			return EXIT_SUCCESS;
 		}
 
-		auto extension = castor::string::lowerCase( inputPath.getExtension() );
+		auto extension = c3d::string::lowerCase( inputPath.getExtension() );
 
 		if ( extension != cuT( "cmsh" ) && extension != cuT( "cskl" ) )
 		{
@@ -304,30 +304,30 @@ int main( int argc, char * argv[] )
 		}
 
 #if defined( NDEBUG )
-		castor::Logger::initialise( castor::LogType::eInfo );
+		c3d::Logger::initialise( c3d::LogType::eInfo );
 #else
-		castor::Logger::initialise( castor::LogType::eDebug );
+		c3d::Logger::initialise( c3d::LogType::eDebug );
 #endif
 
-		castor::Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "CastorMeshUpgrader.log" ) );
-		castor3d::EngineConfig config{ cuT( "CastorMeshUpgrader" )
-			, castor3d::Version{ CastorMeshUpgrader_VERSION_MAJOR, CastorMeshUpgrader_VERSION_MINOR, CastorMeshUpgrader_VERSION_BUILD }
+		c3d::Logger::setFileName( c3d::File::getExecutableDirectory() / cuT( "CastorMeshUpgrader.log" ) );
+		c3d::EngineConfig config{ cuT( "CastorMeshUpgrader" )
+			, c3d::Version{ CastorMeshUpgrader_VERSION_MAJOR, CastorMeshUpgrader_VERSION_MINOR, CastorMeshUpgrader_VERSION_BUILD }
 			, false
 			, false };
-		castor3d::Engine engine{ castor::move( config ) };
+		c3d::Engine engine{ c3d::move( config ) };
 
 		if ( doInitialiseEngine( engine ) )
 		{
-			castor3d::Scene scene{ cuT( "DummyScene" ), engine };
+			c3d::Scene scene{ cuT( "DummyScene" ), engine };
 			auto name = inputPath.getFileName();
 			auto & renderSystem = *engine.getRenderSystem();
 			auto surface( renderSystem.getInstance().createSurface( renderSystem.getPhysicalDevice()
-				, ashes::WindowHandle{ castor::make_unique< DummyWindowHandle >() } ) );
+				, ashes::WindowHandle{ c3d::makeRawUnique< DummyWindowHandle >() } ) );
 			auto & device = renderSystem.getRenderDevice();
 
 			if ( extension == cuT( "cmsh" ) )
 			{
-				castor3d::Mesh mesh{ name, scene };
+				c3d::Mesh mesh{ name, scene };
 
 				if ( doParseObject( device, inputPath, mesh ) )
 				{
@@ -336,7 +336,7 @@ int main( int argc, char * argv[] )
 			}
 			else if ( extension == cuT( "cskl" ) )
 			{
-				castor3d::Skeleton skeleton{ name, scene };
+				c3d::Skeleton skeleton{ name, scene };
 
 				if ( doParseObject( device, inputPath, skeleton ) )
 				{
@@ -347,7 +347,7 @@ int main( int argc, char * argv[] )
 			engine.cleanup();
 		}
 
-		castor::Logger::cleanup();
+		c3d::Logger::cleanup();
 	}
 
 	return EXIT_SUCCESS;

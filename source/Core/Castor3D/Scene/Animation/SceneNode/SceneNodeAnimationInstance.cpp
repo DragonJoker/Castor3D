@@ -6,9 +6,9 @@
 #include "Castor3D/Scene/Animation/SceneNodeAnimation.hpp"
 #include "Castor3D/Scene/Animation/SceneNodeAnimationKeyFrame.hpp"
 
-CU_ImplementSmartPtr( castor3d, SceneNodeAnimationInstance )
+CU_ImplementSmartPtr( c3d, SceneNodeAnimationInstance )
 
-namespace castor3d
+namespace c3d
 {
 	SceneNodeAnimationInstance::SceneNodeAnimationInstance( AnimatedSceneNode & object
 		, SceneNodeAnimation & animation )
@@ -30,8 +30,8 @@ namespace castor3d
 			if ( !m_vecInterpolator
 				|| m_vecInterpolator->getType() != getInterpolation() )
 			{
-				m_vecInterpolator = makeInterpolator< castor::Point3f >( getInterpolation() );
-				m_quatInterpolator = makeInterpolator< castor::Quaternion >( getInterpolation() );
+				m_vecInterpolator = makeInterpolator< Point3f >( getInterpolation() );
+				m_quatInterpolator = makeInterpolator< Quaternion >( getInterpolation() );
 			}
 
 			m_sceneNodeAnimation.findKeyFrame( m_currentTime

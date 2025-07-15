@@ -16,16 +16,16 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::SheenMapComponent >
-		: public TextWriterT< castor3d::SheenMapComponent >
+	class TextWriter< SheenMapComponent >
+		: public TextWriterT< SheenMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, uint32_t mask = 0u )
-			: TextWriterT< castor3d::SheenMapComponent >{ tabs }
+			: TextWriterT< SheenMapComponent >{ tabs }
 			, m_mask{ mask }
 		{
 		}
@@ -35,7 +35,7 @@ namespace castor
 			return writeMask( file, cuT( "sheen_mask" ), m_mask );
 		}
 
-		bool operator()( castor3d::SheenMapComponent const & object
+		bool operator()( SheenMapComponent const & object
 			, StringStream & file )override
 		{
 			return true;
@@ -44,10 +44,7 @@ namespace castor
 	private:
 		uint32_t m_mask;
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace trscmp
@@ -118,7 +115,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void SheenMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void SheenMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "sheen" )
@@ -130,29 +127,29 @@ namespace castor3d
 					, 0x00FFFFFFu );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "sheen_mask" )
 			, trscmp::parserUnitSheenMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "sheen_mask" )
 			, trscmp::parserUnitSheenMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "sheen" )
 			, trscmp::parserTexRemapSheen );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "sheen_mask" )
 			, trscmp::parserTexRemapSheenMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 
 	bool SheenMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -163,22 +160,22 @@ namespace castor3d
 	}
 
 	void SheenMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, SheenMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, SheenMapComponent >( pass ) );
 	}
 
 	bool SheenMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< SheenMapComponent >{ tabs, mask }( file );
+		return TextWriter< SheenMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const SheenMapComponent::TypeName = C3D_MakePassMapComponentName( "sheen" );
+	String const SheenMapComponent::TypeName = C3D_MakePassMapComponentName( "sheen" );
 
 	SheenMapComponent::SheenMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -190,7 +187,7 @@ namespace castor3d
 
 	PassComponentUPtr SheenMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, SheenMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, SheenMapComponent >( pass );
 	}
 
 	void SheenMapComponent::doFillConfig( TextureConfiguration & configuration

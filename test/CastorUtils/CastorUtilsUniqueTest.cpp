@@ -9,11 +9,11 @@ namespace Testing
 	namespace
 	{
 		class TestUnique
-			: public castor::Unique< TestUnique >
+			: public c3d::Unique< TestUnique >
 		{
 		public:
 			TestUnique()
-				: castor::Unique< TestUnique >( this )
+				: c3d::Unique< TestUnique >( this )
 			{
 			}
 		};
@@ -29,25 +29,25 @@ namespace Testing
 		};
 
 		class TestUniqueFirst
-			: public castor::Unique< TestUniqueFirst >
+			: public c3d::Unique< TestUniqueFirst >
 			, public IntVal
 			, public PtrVal
 		{
 		public:
 			TestUniqueFirst()
-				: castor::Unique< TestUniqueFirst >( this )
+				: c3d::Unique< TestUniqueFirst >( this )
 			{
 			}
 		};
 
 		class TestUniqueMiddle
 			: public IntVal
-			, public castor::Unique< TestUniqueMiddle >
+			, public c3d::Unique< TestUniqueMiddle >
 			, public PtrVal
 		{
 		public:
 			TestUniqueMiddle()
-				: castor::Unique< TestUniqueMiddle >( this )
+				: c3d::Unique< TestUniqueMiddle >( this )
 			{
 			}
 		};
@@ -55,11 +55,11 @@ namespace Testing
 		class TestUniqueLast
 			: public IntVal
 			, public PtrVal
-			, public castor::Unique< TestUniqueLast >
+			, public c3d::Unique< TestUniqueLast >
 		{
 		public:
 			TestUniqueLast()
-				: castor::Unique< TestUniqueLast >( this )
+				: c3d::Unique< TestUniqueLast >( this )
 			{
 			}
 		};
@@ -97,7 +97,7 @@ namespace Testing
 	void CastorUtilsUniqueTest::MultipleInstanceTest()
 	{
 		TestUnique tmp1;
-		CT_CHECK_THROW( castor::make_unique< TestUnique >() );
+		CT_CHECK_THROW( c3d::makeRawUnique< TestUnique >() );
 	}
 
 	void CastorUtilsUniqueTest::MemoryTest()

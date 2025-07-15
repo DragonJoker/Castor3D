@@ -1,8 +1,8 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
-	castor::String getName( SkeletonNodeType value )
+	String getName( SkeletonNodeType value )
 	{
 		switch ( value )
 		{
@@ -12,7 +12,7 @@ namespace castor3d
 			return cuT( "bone" );
 		default:
 			CU_Failure( "Unsupported SkeletonNodeType" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 }

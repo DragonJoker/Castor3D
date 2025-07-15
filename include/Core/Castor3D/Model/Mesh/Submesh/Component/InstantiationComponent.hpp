@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct InstantiationData
 	{
@@ -30,7 +30,7 @@ namespace castor3d
 
 			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
 			{
-				return castor::makeUniqueDerived< SubmeshComponent, InstantiationComponent >( submesh );
+				return makeUniqueDerived< SubmeshComponent, InstantiationComponent >( submesh );
 			}
 
 			SubmeshComponentFlag getInstantiationFlag()const noexcept override
@@ -41,24 +41,24 @@ namespace castor3d
 
 		static SubmeshComponentPluginUPtr createPlugin( SubmeshComponentRegister const & submeshComponents )
 		{
-			return castor::makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
+			return makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
 		}
 
 		struct Data
 		{
 			Data( uint32_t count
 				, GpuBufferOffsetT< InstantiationData > buffer
-				, castor::Vector< InstantiationData > data = {} )
+				, Vector< InstantiationData > data = {} )
 				: count{ count }
-				, buffer{ castor::move( buffer ) }
-				, data{ castor::move( data ) }
+				, buffer{ c3d::move( buffer ) }
+				, data{ c3d::move( data ) }
 			{
 			}
 			uint32_t count;
 			GpuBufferOffsetT< InstantiationData > buffer;
-			castor::Vector< InstantiationData > data;
+			Vector< InstantiationData > data;
 		};
-		using InstanceDataMap = castor::Map< uint32_t, Data >;
+		using InstanceDataMap = Map< uint32_t, Data >;
 
 		struct ComponentData
 			: public SubmeshComponentData
@@ -66,18 +66,18 @@ namespace castor3d
 			explicit ComponentData( Submesh & submesh
 				, uint32_t threshold );
 			/**
-			 *\copydoc		castor3d::SubmeshComponentData::gather
+			 *\copydoc		SubmeshComponentData::gather
 			 */
 			void gather( PipelineFlags const & flags
 				, Pass const & pass
 				, ObjectBufferOffset const & bufferOffsets
 				, ashes::BufferCRefArray & buffers
-				, castor::Vector< uint64_t > & offsets
+				, Vector< uint64_t > & offsets
 				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 				, uint32_t & currentBinding
 				, uint32_t & currentLocation )override;
 			/**
-			 *\copydoc		castor3d::SubmeshComponentData::copy
+			 *\copydoc		SubmeshComponentData::copy
 			 */
 			void copy( SubmeshComponentDataRPtr data )const override;
 			/**
@@ -158,7 +158,7 @@ namespace castor3d
 
 		private:
 			InstanceDataMap m_instances;
-			castor::UnorderedMap< size_t, ashes::PipelineVertexInputStateCreateInfo > m_mtxLayouts;
+			HashMap< size_t, ashes::PipelineVertexInputStateCreateInfo > m_mtxLayouts;
 			uint32_t m_threshold;
 		};
 
@@ -176,11 +176,11 @@ namespace castor3d
 		C3D_API explicit InstantiationComponent( Submesh & submesh
 			, uint32_t threshold = 1u );
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::clone
+		 *\copydoc		SubmeshComponent::clone
 		 */
 		C3D_API SubmeshComponentUPtr clone( Submesh & submesh )const override;
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
+		 *\copydoc		SubmeshComponent::getProgramFlags
 		 */
 		C3D_API ProgramFlags getProgramFlags( Pass const & pass )const noexcept override;
 		/**
@@ -206,7 +206,7 @@ namespace castor3d
 		}
 
 	public:
-		C3D_API static castor::String const TypeName;
+		C3D_API static String const TypeName;
 	};
 }
 

@@ -21,21 +21,21 @@ See LICENSE file in root folder
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Image/Image.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct TextureData
 	{
 		explicit TextureData( TextureSourceInfo psourceInfo
-			, castor::ImageRPtr pimage = {}
+			, ImageRPtr pimage = {}
 			, ImageUsageFlags pusage = ImageUsageFlags::eSampled | ImageUsageFlags::eTransferDst )
-			: sourceInfo{ castor::move( psourceInfo ) }
-			, image{ castor::move( pimage ) }
+			: sourceInfo{ c3d::move( psourceInfo ) }
+			, image{ c3d::move( pimage ) }
 			, usage{ pusage }
 		{
 		}
 
 		TextureSourceInfo sourceInfo;
-		castor::ImageRPtr image;
+		ImageRPtr image;
 		ImageUsageFlags usage;
 	};
 
@@ -44,9 +44,9 @@ namespace castor3d
 		explicit TextureUnitData( TextureData * pbase = {}
 			, PassTextureConfig ppassConfig = {}
 			, TextureAnimationUPtr panimation = {} )
-			: base{ castor::move( pbase ) }
-			, passConfig{ castor::move( ppassConfig ) }
-			, animation{ castor::move( panimation ) }
+			: base{ c3d::move( pbase ) }
+			, passConfig{ c3d::move( ppassConfig ) }
+			, animation{ c3d::move( panimation ) }
 		{
 		}
 
@@ -159,8 +159,8 @@ namespace castor3d
 		*	Parsers.
 		*/
 		/**@{*/
-		C3D_API static void addParsers( castor::AttributeParsers & result
-			, castor::UInt32StrMap const & textureChannels );
+		C3D_API static void addParsers( AttributeParsers & result
+			, UInt32StrMap const & textureChannels );
 		/**@}*/
 		/**
 		*\~english
@@ -172,7 +172,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API ImageType getType()const;
-		C3D_API castor::String toString()const;
+		C3D_API String toString()const;
 		C3D_API TextureFlagsSet getFlags()const;
 		C3D_API bool isInitialised()const;
 		C3D_API bool isTransformAnimated()const;
@@ -180,13 +180,13 @@ namespace castor3d
 		C3D_API Sampler const & getSampler()const;
 		C3D_API RenderTargetRPtr getRenderTarget()const;
 
-		C3D_API castor::String getTextureName()const;
-		C3D_API castor::Path getTexturePath()const;
+		C3D_API String getTextureName()const;
+		C3D_API Path getTexturePath()const;
 		C3D_API bool isTextureStatic()const;
-		C3D_API castor::PixelFormat getTexturePixelFormat()const;
-		C3D_API castor::Point3ui getTextureImageTiles()const;
+		C3D_API PixelFormat getTexturePixelFormat()const;
+		C3D_API Point3ui getTextureImageTiles()const;
 		C3D_API bool hasTextureImageBuffer()const;
-		C3D_API castor::PxBufferBase const & getTextureImageBuffer()const;
+		C3D_API PxBufferBase const & getTextureImageBuffer()const;
 		C3D_API Extent3D getTextureDimensions()const;
 		C3D_API uint32_t getTextureMipmapCount()const;
 
@@ -251,7 +251,7 @@ namespace castor3d
 			return m_data;
 		}
 
-		castor::Image const & getCPUImage()const noexcept
+		Image const & getCPUImage()const noexcept
 		{
 			CU_Require( m_data.base->image );
 			return *m_data.base->image;
@@ -278,13 +278,13 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API void setConfiguration( TextureConfiguration value );
-		C3D_API void setTransform( castor::Point3f const & translate
-			, castor::Angle const & rotate
-			, castor::Point3f const & scale );
+		C3D_API void setTransform( Point3f const & translate
+			, Angle const & rotate
+			, Point3f const & scale );
 		C3D_API void setTransform( TextureTransform const & transform );
-		C3D_API void setAnimationTransform( castor::Point3f const & translate
-			, castor::Angle const & rotate
-			, castor::Point3f const & scale );
+		C3D_API void setAnimationTransform( Point3f const & translate
+			, Angle const & rotate
+			, Point3f const & scale );
 		C3D_API void setTexcoordSet( uint32_t value );
 
 		void setId( uint32_t value )
@@ -307,9 +307,9 @@ namespace castor3d
 		using Animable::hasAnimation;
 		using Animable::getAnimation;
 
-		void doUpdateTransform( castor::Point3f const & translate
-			, castor::Angle const & rotate
-			, castor::Point3f const & scale );
+		void doUpdateTransform( Point3f const & translate
+			, Angle const & rotate
+			, Point3f const & scale );
 
 	private:
 		friend class TextureRenderer;
@@ -317,13 +317,13 @@ namespace castor3d
 		RenderDevice const * m_device{ nullptr };
 		TextureConfiguration m_configuration{};
 		TextureTransform m_transform{};
-		castor::Matrix4x4f m_transformations;
+		Matrix4x4f m_transformations;
 		ashes::Image * m_gpuImage{};
 		SamplerObs m_sampler{};
 		Texture const * m_texture{};
 		ashes::WriteDescriptorSet m_descriptor{ 0u, 0u, 1u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER };
 		uint32_t m_id{ 0u };
-		castor::String m_name{};
+		String m_name{};
 		bool m_initialised{ false };
 		bool m_failed{ false };
 		bool m_animated{ false };
@@ -343,10 +343,10 @@ namespace castor3d
 		RootContext * root{};
 		PassContext * pass{};
 
-		castor::String name{};
-		castor::Path folder{};
-		castor::Path relative{};
-		castor::ImageRPtr image{};
+		String name{};
+		Path folder{};
+		Path relative{};
+		ImageRPtr image{};
 		TextureConfiguration configuration{};
 		RenderTarget * renderTarget{};
 
@@ -357,7 +357,7 @@ namespace castor3d
 		TextureTransform textureTransform{};
 	};
 
-	C3D_API castor::String getPrefix( TextureContext const & context );
+	C3D_API String getPrefix( TextureContext const & context );
 	C3D_API Engine * getEngine( TextureContext const & context );
 
 	template< typename ComponentT >

@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 #include <unordered_map>
 
-namespace castor3d
+namespace c3d
 {
 	class MorphComponent
 		: public SubmeshComponent
@@ -24,20 +24,20 @@ namespace castor3d
 		{
 			using SubmeshComponentData::SubmeshComponentData;
 			/**
-			 *\copydoc		castor3d::SubmeshComponentData::gather
+			 *\copydoc		SubmeshComponentData::gather
 			 */
 			void gather( PipelineFlags const & flags
 				, Pass const & pass
 				, ObjectBufferOffset const & bufferOffsets
 				, ashes::BufferCRefArray & buffers
-				, castor::Vector< uint64_t > & offsets
+				, Vector< uint64_t > & offsets
 				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 				, uint32_t & currentBinding
 				, uint32_t & currentLocation )override
 			{
 			}
 			/**
-			 *\copydoc		castor3d::SubmeshComponentData::copy
+			 *\copydoc		SubmeshComponentData::copy
 			 */
 			void copy( SubmeshComponentDataRPtr data )const override;
 			/**
@@ -65,7 +65,7 @@ namespace castor3d
 			 *\~french
 			 *\return		Le buffer de cibles de morph.
 			 */
-			GpuBufferOffsetT< castor::Point4f > const & getMorphTargets()const noexcept
+			GpuBufferOffsetT< Point4f > const & getMorphTargets()const noexcept
 			{
 				return m_buffer;
 			}
@@ -75,7 +75,7 @@ namespace castor3d
 			 *\~french
 			 *\return		Les données de cibles de morph.
 			 */
-			castor::Vector< SubmeshAnimationBuffer > const & getMorphTargetsBuffers()const noexcept
+			Vector< SubmeshAnimationBuffer > const & getMorphTargetsBuffers()const noexcept
 			{
 				return m_targets;
 			}
@@ -85,7 +85,7 @@ namespace castor3d
 			 *\~french
 			 *\return		Les données de cibles de morph.
 			 */
-			castor::Vector< SubmeshAnimationBuffer > & getMorphTargetsBuffers()noexcept
+			Vector< SubmeshAnimationBuffer > & getMorphTargetsBuffers()noexcept
 			{
 				return m_targets;
 			}
@@ -108,8 +108,8 @@ namespace castor3d
 		private:
 			MorphFlags m_flags{};
 			uint32_t m_targetDataCount{};
-			GpuBufferOffsetT< castor::Point4f > m_buffer;
-			castor::Vector< SubmeshAnimationBuffer > m_targets;
+			GpuBufferOffsetT< Point4f > m_buffer;
+			Vector< SubmeshAnimationBuffer > m_targets;
 
 		private:
 			friend class BinaryWriter< MorphComponent >;
@@ -124,7 +124,7 @@ namespace castor3d
 
 			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
 			{
-				return castor::makeUniqueDerived< SubmeshComponent, MorphComponent >( submesh );
+				return makeUniqueDerived< SubmeshComponent, MorphComponent >( submesh );
 			}
 
 			SubmeshComponentFlag getMorphFlag()const noexcept override
@@ -135,7 +135,7 @@ namespace castor3d
 
 		static SubmeshComponentPluginUPtr createPlugin( SubmeshComponentRegister const & submeshComponents )
 		{
-			return castor::makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
+			return makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
 		}
 		/**
 		 *\~english
@@ -147,7 +147,7 @@ namespace castor3d
 		 */
 		C3D_API explicit MorphComponent( Submesh & submesh );
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::clone
+		 *\copydoc		SubmeshComponent::clone
 		 */
 		C3D_API SubmeshComponentUPtr clone( Submesh & submesh )const override;
 
@@ -157,7 +157,7 @@ namespace castor3d
 		}
 
 	public:
-		C3D_API static castor::String const TypeName;
+		C3D_API static String const TypeName;
 	};
 }
 

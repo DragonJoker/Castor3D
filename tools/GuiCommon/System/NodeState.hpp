@@ -14,7 +14,7 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
-	using Angles = castor::Array< castor::Angle, 3u >;
+	using Angles = c3d::Array< c3d::Angle, 3u >;
 	static float constexpr MaxAngularSpeed = 0.2f;
 	static float constexpr MaxScalarSpeed = 2.0f;
 	/**
@@ -34,8 +34,8 @@ namespace GuiCommon
 		*\param[in] camera
 		*	Dit si l'état est pour une caméra (pour désactiver le roll)
 		*/
-		NodeState( castor3d::FrameListener & listener
-			, castor3d::SceneNodeRPtr node
+		NodeState( c3d::FrameListener & listener
+			, c3d::SceneNodeRPtr node
 			, bool camera );
 		/**
 		*\brief
@@ -63,42 +63,42 @@ namespace GuiCommon
 		*param[in] value
 		*	La nouvelle valeur.
 		*/
-		void setAngularVelocity( castor::Point2f const & value )noexcept;
+		void setAngularVelocity( c3d::Point2f const & value )noexcept;
 		/**
 		*\brief
 		*	Définit la vitesse de translation du noeud.
 		*param[in] value
 		*	La nouvelle valeur.
 		*/
-		void setScalarVelocity( castor::Point3f const & value )noexcept;
+		void setScalarVelocity( c3d::Point3f const & value )noexcept;
 		/**
 		*\brief
 		*	Définit la vitesse de rotation du noeud.
 		*param[in] value
 		*	La nouvelle valeur.
 		*/
-		void addAngularVelocity( castor::Point2f const & value )noexcept;
+		void addAngularVelocity( c3d::Point2f const & value )noexcept;
 		/**
 		*\brief
 		*	Définit la vitesse de translation du noeud.
 		*param[in] value
 		*	La nouvelle valeur.
 		*/
-		void addScalarVelocity( castor::Point3f const & value )noexcept;
+		void addScalarVelocity( c3d::Point3f const & value )noexcept;
 		/**
 		*\brief
 		*	Tourne le noeud autour de l'axe X de l'angle donné.
 		*param[in] value
 		*	La valeur de l'angle.
 		*/
-		void pitch( castor::Angle const & value )noexcept;
+		void pitch( c3d::Angle const & value )noexcept;
 		/**
 		*\brief
 		*	Tourne le noeud autour de l'axe Y de l'angle donné.
 		*param[in] value
 		*	La valeur de l'angle.
 		*/
-		void yaw( castor::Angle const & value )noexcept;
+		void yaw( c3d::Angle const & value )noexcept;
 
 		bool isCamera()const noexcept
 		{
@@ -112,60 +112,60 @@ namespace GuiCommon
 
 	private:
 		void doUpdate();
-		bool doUpdateVelocities( castor::Point3f & translate
+		bool doUpdateVelocities( c3d::Point3f & translate
 		, Angles & angles );
 
 		//! Le listener qui recevra les évènements de déplacement / rotation.
-		castor3d::FrameListener & m_listener;
+		c3d::FrameListener & m_listener;
 		//! Le noeud de scène affecté par les évènements.
-		castor3d::SceneNodeRPtr const m_node;
+		c3d::SceneNodeRPtr const m_node;
 		//! La position originelle du noeud.
-		castor::Point3f const m_originalPosition;
+		c3d::Point3f const m_originalPosition;
 		//! L'orientation originelle du noeud.
-		castor::Quaternion const m_originalOrientation;
+		c3d::Quaternion const m_originalOrientation;
 		//! La rotation initiale sur les axes X et Y.
 		Angles const m_originalAngles;
 		//! La rotation sur les axes X et Y.
 		Angles m_angles;
 		//! La vitesse de rotation sur l'axe X.
-		castor::RangedValue< castor::Angle > m_angularVelocityX
+		c3d::RangedValue< c3d::Angle > m_angularVelocityX
 		{
 			0.0_degrees,
-			castor::makeRange( castor::Angle::fromDegrees( -MaxAngularSpeed )
-				, castor::Angle::fromDegrees( MaxAngularSpeed ) )
+			c3d::makeRange( c3d::Angle::fromDegrees( -MaxAngularSpeed )
+				, c3d::Angle::fromDegrees( MaxAngularSpeed ) )
 		};
 		//! La vitesse de rotation sur l'axe Y.
-		castor::RangedValue< castor::Angle > m_angularVelocityY
+		c3d::RangedValue< c3d::Angle > m_angularVelocityY
 		{
 			0.0_degrees,
-			castor::makeRange( castor::Angle::fromDegrees( -MaxAngularSpeed )
-				, castor::Angle::fromDegrees( MaxAngularSpeed ) )
+			c3d::makeRange( c3d::Angle::fromDegrees( -MaxAngularSpeed )
+				, c3d::Angle::fromDegrees( MaxAngularSpeed ) )
 		};
 		//! La vitesse de translation sur l'axe X.
-		castor::RangedValue< float > m_scalarVelocityX
+		c3d::RangedValue< float > m_scalarVelocityX
 		{
 			0.0f,
-			castor::makeRange( -MaxScalarSpeed, MaxScalarSpeed )
+			c3d::makeRange( -MaxScalarSpeed, MaxScalarSpeed )
 		};
 		//! La vitesse de translation sur l'axe Y.
-		castor::RangedValue< float > m_scalarVelocityY
+		c3d::RangedValue< float > m_scalarVelocityY
 		{
 			0.0f,
-			castor::makeRange( -MaxScalarSpeed, MaxScalarSpeed )
+			c3d::makeRange( -MaxScalarSpeed, MaxScalarSpeed )
 		};
 		//! La vitesse de translation sur l'axe Z.
-		castor::RangedValue< float > m_scalarVelocityZ
+		c3d::RangedValue< float > m_scalarVelocityZ
 		{
 			0.0f,
-			castor::makeRange( -MaxScalarSpeed, MaxScalarSpeed )
+			c3d::makeRange( -MaxScalarSpeed, MaxScalarSpeed )
 		};
 		//! Si l'état est pour le noeud d'une caméra.
 		bool m_isCamera{};
-		castor::PreciseTimer m_timer;
-		castor::Mutex m_mutex;
+		c3d::PreciseTimer m_timer;
+		c3d::Mutex m_mutex;
 		std::atomic_bool m_running;
 	};
-	using NodeStatePtr = castor::RawUniquePtr< NodeState >;
+	using NodeStatePtr = c3d::RawUniquePtr< NodeState >;
 }
 
 #endif

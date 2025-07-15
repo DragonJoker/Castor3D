@@ -34,8 +34,8 @@ namespace CastorViewer
 
 	struct LogContainer
 	{
-		castor::Vector< castor::Pair< wxString, bool > > queue;
-		castor::Mutex mutex;
+		c3d::Vector< c3d::Pair< wxString, bool > > queue;
+		c3d::Mutex mutex;
 		wxListBox * listBox{ nullptr };
 	};
 
@@ -59,7 +59,7 @@ namespace CastorViewer
 		bool initialise( GuiCommon::SplashScreen & splashScreen );
 		void loadScene( wxString const & fileName = wxEmptyString );
 		void toggleFullScreen( bool fullscreen );
-		void select( castor3d::Geometry const * geometry, castor3d::Submesh const * submesh )const;
+		void select( c3d::Geometry const * geometry, c3d::Submesh const * submesh )const;
 
 	private:
 		void doInitialiseTimers();
@@ -68,13 +68,13 @@ namespace CastorViewer
 		void doPopulateStatusBar();
 		void doPopulateToolBar( GuiCommon::SplashScreen & splashScreen );
 		void doInitialisePerspectives();
-		void doLogCallback( castor::MbString const & log, castor::LogType type, bool newLine );
+		void doLogCallback( c3d::MbString const & log, c3d::LogType type, bool newLine );
 		void doCleanupScene();
 		void doSaveFrame();
 		bool doStartRecord();
 		void doRecordFrame();
 		void doStopRecord();
-		void doSceneLoadEnd( castor3d::RenderWindowDesc const & window );
+		void doSceneLoadEnd( c3d::RenderWindowDesc const & window );
 
 	private:
 #pragma clang diagnostic push
@@ -130,10 +130,10 @@ namespace CastorViewer
 		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_materialsTree{ nullptr };
 		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_overlaysTree{ nullptr };
 		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_guiTree{ nullptr };
-		castor3d::SceneRPtr m_mainScene{};
-		castor3d::CameraRPtr m_mainCamera{};
-		castor3d::SceneNodeRPtr m_sceneNode{};
-		castor::Path m_filePath;
+		c3d::SceneRPtr m_mainScene{};
+		c3d::CameraRPtr m_mainCamera{};
+		c3d::SceneNodeRPtr m_sceneNode{};
+		c3d::Path m_filePath;
 		wxString m_currentPerspective;
 		wxString m_fullScreenPerspective;
 		wxString m_debugPerspective;

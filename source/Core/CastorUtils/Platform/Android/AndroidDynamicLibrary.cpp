@@ -9,7 +9,7 @@
 #include "CastorUtils/Log/Logger.hpp"
 #include "CastorUtils/Miscellaneous/Utils.hpp"
 
-namespace castor
+namespace c3d
 {
 	void DynamicLibrary::doOpen()noexcept
 	{

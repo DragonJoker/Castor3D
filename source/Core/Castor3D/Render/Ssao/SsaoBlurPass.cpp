@@ -25,9 +25,9 @@
 
 #include <RenderGraph/FrameGraph.hpp>
 
-CU_ImplementSmartPtr( castor3d, SsaoBlurPass )
+CU_ImplementSmartPtr( c3d, SsaoBlurPass )
 
-namespace castor3d
+namespace c3d
 {
 	namespace ssaoblr
 	{
@@ -336,8 +336,8 @@ namespace castor3d
 
 		static Texture doCreateTexture( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, castor::String const & name
-			, castor::PixelFormat format
+			, String const & name
+			, PixelFormat format
 			, Extent2D const & size
 			, bool transferDst )
 		{
@@ -354,9 +354,9 @@ namespace castor3d
 				, {} };
 		}
 
-		static castor::String getName( bool useNormalsBuffer )
+		static String getName( bool useNormalsBuffer )
 		{
-			return cuT( "SsaoBlur" ) + ( useNormalsBuffer ? castor::String{ cuT( "Nml" ) } : castor::String{} );
+			return cuT( "SsaoBlur" ) + ( useNormalsBuffer ? String{ cuT( "Nml" ) } : String{} );
 		}
 
 		static crg::rq::Config getRqConfig( Extent2D const & renderSize
@@ -404,7 +404,7 @@ namespace castor3d
 			, context
 			, graph
 			, ruConfig
-			, castor::move( rqConfig ) }
+			, c3d::move( rqConfig ) }
 		, ssaoConfig{ ssaoConfig }
 	{
 	}
@@ -418,7 +418,7 @@ namespace castor3d
 
 	SsaoBlurPass::Program::Program( RenderDevice const & device
 		, bool useNormalsBuffer
-		, castor::String const & prefix )
+		, String const & prefix )
 		: shader{ prefix + ssaoblr::getName( useNormalsBuffer ), ssaoblr::getProgram( device, useNormalsBuffer ) }
 		, stages{ makeProgramStates( device, shader ) }
 	{
@@ -430,12 +430,12 @@ namespace castor3d
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, crg::FramePass const & previousPass
-		, castor::String const & prefix
+		, String const & prefix
 		, Extent2D const & size
 		, SsaoConfig const & config
 		, SsaoConfigUbo & ssaoConfigUbo
 		, CameraUbo const & cameraUbo
-		, castor::Point2i const & axis
+		, Point2i const & axis
 		, Texture const & input
 		, Texture const & bentInput
 		, Texture const & normals
@@ -447,16 +447,16 @@ namespace castor3d
 		, m_bentInput{ bentInput }
 		, m_config{ config }
 		, m_size{ size }
-		, m_result{ ssaoblr::doCreateTexture( m_device, *input.resources, castor::makeString( m_graph.getName() ) + cuT( "SsaoBlur" ) + prefix, input.getFormat(), m_size, axis->y != 0 ) }
-		, m_bentResult{ ssaoblr::doCreateTexture( m_device, *input.resources, castor::makeString( m_graph.getName() ) + cuT( "SsaoBentNormals" ) + prefix, m_bentInput.getFormat(), m_size, axis->y != 0 ) }
+		, m_result{ ssaoblr::doCreateTexture( m_device, *input.resources, makeString( m_graph.getName() ) + cuT( "SsaoBlur" ) + prefix, input.getFormat(), m_size, axis->y != 0 ) }
+		, m_bentResult{ ssaoblr::doCreateTexture( m_device, *input.resources, makeString( m_graph.getName() ) + cuT( "SsaoBentNormals" ) + prefix, m_bentInput.getFormat(), m_size, axis->y != 0 ) }
 		, m_configurationUbo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
-		, m_programs{ Program{ device, false, castor::makeString( m_graph.getName() ) }
-			, Program{ device, true, castor::makeString( m_graph.getName() ) } }
+		, m_programs{ Program{ device, false, makeString( m_graph.getName() ) }
+			, Program{ device, true, makeString( m_graph.getName() ) } }
 	{
-		stepProgressBarLocal( progress, cuT( "Creating " ) + castor::makeString( m_graph.getName() ) + cuT( " SSAO " ) + prefix + cuT( " blur pass" ) );
+		stepProgressBarLocal( progress, cuT( "Creating " ) + makeString( m_graph.getName() ) + cuT( " SSAO " ) + prefix + cuT( " blur pass" ) );
 		auto & configuration = m_configurationUbo.getData();
 		configuration.axis = axis;
-		auto & pass = m_graph.createPass( "Blur" + castor::toUtf8( prefix )
+		auto & pass = m_graph.createPass( "Blur" + toUtf8( prefix )
 			, [this, &passIndex, progress, prefix, config, axis]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnable )
@@ -464,7 +464,7 @@ namespace castor3d
 				stepProgressBarLocal( progress, cuT( "Initialising SSAO " ) + prefix + cuT( " blur pass" ) );
 				auto bentResIt = pass.images.rbegin();
 				auto resIt = std::next( bentResIt );
-				auto result = castor::make_unique< RenderQuad >( pass
+				auto result = makeRawUnique< RenderQuad >( pass
 					, context
 					, runnable
 					, ssaoblr::getRqConfig( m_size
@@ -476,7 +476,7 @@ namespace castor3d
 						, *resIt
 						, *bentResIt )
 					, m_config );
-				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( pass.getFullName() )
+				m_device.renderSystem.getEngine()->registerTimer( makeString( pass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

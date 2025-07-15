@@ -15,11 +15,11 @@ namespace GuiCommon
 		: public wxPanel
 	{
 	public:
-		ShaderEditor( castor3d::Engine * engine
+		ShaderEditor( c3d::Engine * engine
 			, bool canEdit
 			, StcContext & stcContext
 			, ShaderEntryPoint const & shader
-			, castor::Vector< UniformBufferValues > & ubos
+			, c3d::Vector< UniformBufferValues > & ubos
 			, ShaderLanguage language
 			, wxWindow * parent
 			, wxPoint const & position = wxDefaultPosition
@@ -29,7 +29,7 @@ namespace GuiCommon
 		void loadLanguage( ShaderLanguage language );
 
 	private:
-		void doInitialiseLayout( castor3d::Engine * engine );
+		void doInitialiseLayout( c3d::Engine * engine );
 		void doCleanup();
 		void doListAvailableLanguages();
 
@@ -46,8 +46,8 @@ namespace GuiCommon
 		wxWindowPtr< FrameVariablesList > m_frameVariablesList;
 		wxWindowPtr< PropertiesContainer > m_frameVariablesProperties;
 		ShaderEntryPoint const & m_shader;
-		castor::Vector< UniformBufferValues > & m_ubos;
-		castor::Map< ShaderLanguage, wxString > m_sources;
+		c3d::Vector< UniformBufferValues > & m_ubos;
+		c3d::Map< ShaderLanguage, wxString > m_sources;
 		bool m_canEdit;
 	};
 }

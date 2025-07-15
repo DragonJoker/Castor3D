@@ -20,7 +20,7 @@
 
 CU_ImplementSmartPtr( water, WaterNormal2MapComponent )
 
-namespace castor
+namespace c3d
 {
 	template<>
 	class TextWriter< water::WaterNormal2MapComponent >
@@ -52,8 +52,8 @@ namespace castor
 
 namespace water
 {
-	using namespace castor3d;
-	namespace c3d = castor3d::shader;
+	using namespace c3d;
+	namespace c3ds = c3d::shader;
 
 	//*********************************************************************************************
 
@@ -106,9 +106,9 @@ namespace water
 
 	//*********************************************************************************************
 
-	void WaterNormal2MapComponent::ComponentsShader::fillComponents( castor3d::ComponentModeFlags componentsMask
+	void WaterNormal2MapComponent::ComponentsShader::fillComponents( c3d::ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
-		, castor3d::shader::Materials const & materials
+		, c3d::shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
 		if ( !WaterComponent::isComponentAvailable( componentsMask, materials ) )
@@ -124,8 +124,8 @@ namespace water
 	}
 
 	void WaterNormal2MapComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
-		, castor3d::shader::Materials const & materials
-		, castor3d::shader::Material const * material
+		, c3d::shader::Materials const & materials
+		, c3d::shader::Material const * material
 		, sdw::StructInstance const * surface
 		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )const
@@ -139,10 +139,10 @@ namespace water
 		inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 	}
 
-	void WaterNormal2MapComponent::ComponentsShader::blendComponents( castor3d::shader::Materials const & materials
+	void WaterNormal2MapComponent::ComponentsShader::blendComponents( c3d::shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, castor3d::shader::BlendComponents & res
-		, castor3d::shader::BlendComponents const & src )const
+		, c3d::shader::BlendComponents & res
+		, c3d::shader::BlendComponents const & src )const
 	{
 		if ( res.hasMember( "waterNormals2" ) )
 		{
@@ -150,16 +150,16 @@ namespace water
 		}
 	}
 
-	void WaterNormal2MapComponent::ComponentsShader::applyTexture( castor3d::shader::PassShaders const & passShaders
-		, castor3d::shader::TextureConfigurations const & textureConfigs
-		, castor3d::shader::TextureAnimations const & textureAnims
+	void WaterNormal2MapComponent::ComponentsShader::applyTexture( c3d::shader::PassShaders const & passShaders
+		, c3d::shader::TextureConfigurations const & textureConfigs
+		, c3d::shader::TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, castor3d::shader::Material const & material
-		, castor3d::shader::BlendComponents & components
-		, castor3d::shader::SampleTexture const & sampleTexture )const
+		, c3d::shader::Material const & material
+		, c3d::shader::BlendComponents & components
+		, c3d::shader::SampleTexture const & sampleTexture )const
 	{
-		castor::MbString valueName = "waterNormals2";
-		castor::MbString mapName = "waterNormal2";
+		c3d::MbString valueName = "waterNormals2";
+		c3d::MbString mapName = "waterNormal2";
 		auto textureName = mapName + "MapAndMask";
 
 		if ( !material.hasMember( textureName )
@@ -187,7 +187,7 @@ namespace water
 
 		if ( checkFlag( passShaders.getFilter(), ComponentModeFlag::eDerivTex ) )
 		{
-			auto texCoords = components.getMember< castor3d::shader::DerivTex >( "texCoords" );
+			auto texCoords = components.getMember< c3d::shader::DerivTex >( "texCoords" );
 			uv = config.getUv( texCoords );
 		}
 		else if ( passShaders.getPassCombine().baseId == 0u )
@@ -203,12 +203,12 @@ namespace water
 
 		auto sampled = writer.declLocale( valueName + "Sampled"
 			, sampleTexture( map, config, components ) );
-		value = castor3d::shader::TextureConfigData::getVec3( sampled, mask ) * 2.0_f - 1.0_f;
+		value = c3d::shader::TextureConfigData::getVec3( sampled, mask ) * 2.0_f - 1.0_f;
 	}
 
 	//*********************************************************************************************
 
-	void WaterNormal2MapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void WaterNormal2MapComponent::Plugin::createParsers( c3d::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "water_normal2" )
@@ -220,29 +220,29 @@ namespace water
 					, 0x00FFFFFFu );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "water_normal2_mask" )
 			, trscmp::parserUnitWaterNormal2Mask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "water_normal2_mask" )
 			, trscmp::parserUnitWaterNormal2Mask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "water_normal2" )
 			, trscmp::parserTexRemapWaterNormal2 );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "water_normal2_mask" )
 			, trscmp::parserTexRemapWaterNormal2Mask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 	}
 
 	bool WaterNormal2MapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -253,22 +253,22 @@ namespace water
 	}
 
 	void WaterNormal2MapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, c3d::Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, WaterNormal2MapComponent >( pass ) );
+		result.push_back( c3d::makeUniqueDerived< PassComponent, WaterNormal2MapComponent >( pass ) );
 	}
 
 	bool WaterNormal2MapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, c3d::String const & tabs
+		, c3d::StringStream & file )const
 	{
-		return castor::TextWriter< WaterNormal2MapComponent >{ tabs, mask }( file );
+		return c3d::TextWriter< WaterNormal2MapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const WaterNormal2MapComponent::TypeName = C3D_PluginMakePassMapComponentName( "water", "normal2" );
+	c3d::String const WaterNormal2MapComponent::TypeName = C3D_PluginMakePassMapComponentName( "water", "normal2" );
 
 	WaterNormal2MapComponent::WaterNormal2MapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -280,7 +280,7 @@ namespace water
 
 	PassComponentUPtr WaterNormal2MapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, WaterNormal2MapComponent >( pass );
+		return c3d::makeUniqueDerived< PassComponent, WaterNormal2MapComponent >( pass );
 	}
 
 	void WaterNormal2MapComponent::doFillConfig( TextureConfiguration & configuration

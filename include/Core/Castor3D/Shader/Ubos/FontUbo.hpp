@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/BaseTypes/Float.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace shader
 	{
@@ -57,7 +57,7 @@ namespace castor3d
 		 *\param[in]	sdfFont		\p true si la texture de police stocke des SDF.
 		 *\param[in]	pixelRange	L'épaisseur du distance field.
 		 */
-		C3D_API void cpuUpdate( castor::Size const & imgSize
+		C3D_API void cpuUpdate( Size const & imgSize
 			, bool sdfFont
 			, float pixelRange );
 
@@ -98,7 +98,7 @@ namespace castor3d
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, enable };\
-	auto c3d_fontData = font.declMember< castor3d::shader::FontData >( "f", enable );\
+	auto c3d_fontData = font.declMember< c3d::shader::FontData >( "f", enable );\
 	font.end()
 
 #define C3D_Font( writer, binding, set )\

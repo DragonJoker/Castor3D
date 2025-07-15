@@ -18,7 +18,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Design/ResourceCacheBase.hpp>
 
-namespace castor
+namespace c3d
 {
 	/**
 	\~english
@@ -27,26 +27,26 @@ namespace castor
 	\brief		Cache de AnimatedObjectGroup.
 	*/
 	template<>
-	class ResourceCacheT< castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits >
-		: public OwnedBy< castor3d::Scene >
-		, public ResourceCacheBaseT< castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits >
+	class ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >
+		: public OwnedBy< Scene >
+		, public ResourceCacheBaseT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >
 	{
 	public:
 		struct SkeletonPoolsEntry
 		{
-			castor3d::AnimatedObjectGroup const & group;
-			castor3d::AnimatedSkeleton const & skeleton;
+			AnimatedObjectGroup const & group;
+			AnimatedSkeleton const & skeleton;
 		};
 		struct MeshPoolsEntry
 		{
-			castor3d::AnimatedObjectGroup const & group;
-			castor3d::AnimatedMesh const & mesh;
-			castor3d::Submesh const & submesh;
+			AnimatedObjectGroup const & group;
+			AnimatedMesh const & mesh;
+			Submesh const & submesh;
 		};
 
-		using ElementT = castor3d::AnimatedObjectGroup;
+		using ElementT = AnimatedObjectGroup;
 		using ElementKeyT = String;
-		using ElementCacheTraitsT = castor3d::AnimatedObjectGroupCacheTraits;
+		using ElementCacheTraitsT = AnimatedObjectGroupCacheTraits;
 		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementCacheT::ElementPtrT;
 		using ElementObsT = typename ElementCacheT::ElementObsT;
@@ -62,7 +62,7 @@ namespace castor
 		 *\brief		Constructeur.
 		 *\param[in]	scene	La scène parent.
 		 */
-		C3D_API explicit ResourceCacheT( castor3d::Scene & scene );
+		C3D_API explicit ResourceCacheT( Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -76,7 +76,7 @@ namespace castor
 		 *\~french
 		 *\brief		Initialise les buffers du cache.
 		 */
-		C3D_API void initialise( castor3d::RenderDevice const & device );
+		C3D_API void initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Sets all the elements to be cleaned up.
@@ -92,7 +92,7 @@ namespace castor
 		 *\brief			Met à jour la passe de rendu, au niveau CPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API void update( castor3d::CpuUpdater & updater );
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.
@@ -101,16 +101,16 @@ namespace castor
 		 *\brief		Vide la collection.
 		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API void clear( castor3d::RenderDevice const & device );
+		C3D_API void clear( RenderDevice const & device );
 
-		C3D_API castor::Vector< castor3d::AnimatedObject * > findObject( castor::String const & name )const;
+		C3D_API Vector< AnimatedObject * > findObject( String const & name )const;
 
-		castor3d::GpuBufferOffsetT< castor3d::MorphingWeightsConfiguration > const & getMorphingWeights()const
+		GpuBufferOffsetT< MorphingWeightsConfiguration > const & getMorphingWeights()const
 		{
 			return m_morphingWeights;
 		}
 
-		castor3d::GpuBufferOffsetT< castor3d::SkinningTransformsConfiguration > const & getSkinningTransformsBuffer()const
+		GpuBufferOffsetT< SkinningTransformsConfiguration > const & getSkinningTransformsBuffer()const
 		{
 			return m_skinningTransformsData;
 		}
@@ -119,36 +119,36 @@ namespace castor
 		using ElementCacheT::clear;
 
 	private:
-		SkeletonPoolsEntry doCreateEntry( castor3d::RenderDevice const & device
-			, castor3d::AnimatedObjectGroup const & group
-			, castor3d::AnimatedSkeleton const & skeleton )const;
-		MeshPoolsEntry doCreateEntry( castor3d::RenderDevice const & device
-			, castor3d::AnimatedObjectGroup const & group
-			, castor3d::AnimatedMesh const & mesh
-			, castor3d::Submesh const & submesh )const;
-		void doRemoveEntry( castor3d::RenderDevice const & device
-			, castor3d::AnimatedSkeleton const & skeleton );
-		void doRemoveEntry( castor3d::RenderDevice const & device
-			, castor3d::AnimatedMesh const & mesh
-			, castor3d::Submesh const & submesh );
-		void doRemoveEntry( castor3d::RenderDevice const & device
-			, castor3d::AnimatedTexture const & texture )const;
-		void doRegister( castor3d::AnimatedObjectGroup & group );
-		void doUnregister( castor3d::AnimatedObjectGroup & group );
+		SkeletonPoolsEntry doCreateEntry( RenderDevice const & device
+			, AnimatedObjectGroup const & group
+			, AnimatedSkeleton const & skeleton )const;
+		MeshPoolsEntry doCreateEntry( RenderDevice const & device
+			, AnimatedObjectGroup const & group
+			, AnimatedMesh const & mesh
+			, Submesh const & submesh )const;
+		void doRemoveEntry( RenderDevice const & device
+			, AnimatedSkeleton const & skeleton );
+		void doRemoveEntry( RenderDevice const & device
+			, AnimatedMesh const & mesh
+			, Submesh const & submesh );
+		void doRemoveEntry( RenderDevice const & device
+			, AnimatedTexture const & texture )const;
+		void doRegister( AnimatedObjectGroup & group );
+		void doUnregister( AnimatedObjectGroup & group );
 
 	private:
-		castor3d::Engine & m_engine;
-		castor3d::RenderDevice const & m_device;
-		castor::Map< castor3d::AnimatedSkeleton const *, SkeletonPoolsEntry > m_skeletonEntries;
-		castor::Map< size_t, MeshPoolsEntry > m_meshEntries;
-		castor::Map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedSkeletonChangeConnection > m_skeletonAddedConnections;
-		castor::Map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedSkeletonChangeConnection > m_skeletonRemovedConnections;
-		castor::Map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedMeshChangeConnection > m_meshAddedConnections;
-		castor::Map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedMeshChangeConnection > m_meshRemovedConnections;
-		castor::Map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedTextureChangeConnection > m_textureRemovedConnections;
-		castor3d::GpuBufferOffsetT< castor3d::MorphingWeightsConfiguration > m_morphingWeights;
-		castor3d::GpuBufferOffsetT< castor3d::SkinningTransformsConfiguration > m_skinningTransformsData;
-		castor3d::FramePassTimerUPtr m_timerAnimations;
+		Engine & m_engine;
+		RenderDevice const & m_device;
+		Map< AnimatedSkeleton const *, SkeletonPoolsEntry > m_skeletonEntries;
+		Map< size_t, MeshPoolsEntry > m_meshEntries;
+		Map< AnimatedObjectGroup *, OnAnimatedSkeletonChangeConnection > m_skeletonAddedConnections;
+		Map< AnimatedObjectGroup *, OnAnimatedSkeletonChangeConnection > m_skeletonRemovedConnections;
+		Map< AnimatedObjectGroup *, OnAnimatedMeshChangeConnection > m_meshAddedConnections;
+		Map< AnimatedObjectGroup *, OnAnimatedMeshChangeConnection > m_meshRemovedConnections;
+		Map< AnimatedObjectGroup *, OnAnimatedTextureChangeConnection > m_textureRemovedConnections;
+		GpuBufferOffsetT< MorphingWeightsConfiguration > m_morphingWeights;
+		GpuBufferOffsetT< SkinningTransformsConfiguration > m_skinningTransformsData;
+		FramePassTimerUPtr m_timerAnimations;
 	};
 }
 

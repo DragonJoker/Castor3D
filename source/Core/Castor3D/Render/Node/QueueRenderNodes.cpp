@@ -39,14 +39,14 @@
 
 #include <ashespp/Command/CommandBuffer.hpp>
 
-CU_ImplementSmartPtr( castor3d, QueueRenderNodes )
+CU_ImplementSmartPtr( c3d, QueueRenderNodes )
 
 using ashes::operator==;
 using ashes::operator!=;
 
 #pragma warning( disable:4189 )
 
-namespace castor3d
+namespace c3d
 {
 	namespace queuerndnd
 	{
@@ -71,7 +71,7 @@ namespace castor3d
 			return VkDrawIndexedIndirectCommand{ .indexCount = indexOffset.hasData() ? culled.indexCount : culled.vertexCount
 				, .instanceCount = culled.instanceCount
 				, .firstIndex = indexOffset.hasData() ? indexOffset.getFirst< uint32_t >() : 0u
-				, .vertexOffset = int32_t( bufferChunk.getFirst< castor::Point4f >() )
+				, .vertexOffset = int32_t( bufferChunk.getFirst< Point4f >() )
 				, .firstInstance = 0u };
 		}
 
@@ -133,7 +133,7 @@ namespace castor3d
 			return it != nodes.end() ? &( *it ) : nullptr;
 		}
 
-		static bool hasVisibleInstance( castor::UnorderedSet< Geometry const * > const & instances )
+		static bool hasVisibleInstance( HashSet< Geometry const * > const & instances )
 		{
 			return std::any_of( instances.begin()
 				, instances.end()
@@ -294,7 +294,7 @@ namespace castor3d
 				commandBuffer.drawIndexed( node.command.indexCount
 					, instanceCount
 					, geometryBuffers.indexOffset.getFirst< uint32_t >()
-					, node.node->getFinalBufferOffsets().getBufferChunk( SubmeshData::ePositions ).getFirst< castor::Point4f >()
+					, node.node->getFinalBufferOffsets().getBufferChunk( SubmeshData::ePositions ).getFirst< Point4f >()
 					, 0u );
 				++idxIndex;
 			}
@@ -302,7 +302,7 @@ namespace castor3d
 			{
 				commandBuffer.draw( node.command.indexCount
 					, instanceCount
-					, node.node->getFinalBufferOffsets().getBufferChunk( SubmeshData::ePositions ).getFirst< castor::Point4f >()
+					, node.node->getFinalBufferOffsets().getBufferChunk( SubmeshData::ePositions ).getFirst< Point4f >()
 					, 0u );
 				++nidxIndex;
 			}
@@ -602,9 +602,9 @@ namespace castor3d
 			auto const & submesh = node.data;
 			auto const & pass = *node.pass;
 			size_t hash = std::hash< Submesh const * >{}( &submesh );
-			hash = castor::hashCombine( hash, pass.getHash() );
-			hash = castor::hashCombine( hash, node.isInstanced() );
-			hash = castor::hashCombine( hash, frontCulled );
+			hash = hashCombine( hash, pass.getHash() );
+			hash = hashCombine( hash, node.isInstanced() );
+			hash = hashCombine( hash, frontCulled );
 			return hash;
 		}
 
@@ -614,7 +614,7 @@ namespace castor3d
 			auto const & billboard = node.data;
 			auto const & pass = *node.pass;
 			size_t hash = std::hash< BillboardBase const * >{}( &billboard );
-			hash = castor::hashCombine( hash, pass.getHash() );
+			hash = hashCombine( hash, pass.getHash() );
 			return hash;
 		}
 
@@ -663,22 +663,22 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template< typename NodeT >
-	inline castor::String getNodesTypeName();
+	inline String getNodesTypeName();
 
 	template<>
-	inline castor::String getNodesTypeName< SubmeshRenderNode >()
+	inline String getNodesTypeName< SubmeshRenderNode >()
 	{
 		return cuT( "Submeshes" );
 	}
 
 	template<>
-	inline castor::String getNodesTypeName< BillboardRenderNode >()
+	inline String getNodesTypeName< BillboardRenderNode >()
 	{
 		return cuT( "Billboards" );
 	}
 
 	template< typename NodeT >
-	static castor::OutputStream & operator<<( castor::OutputStream & stream, PipelinesNodesT< NodeT > const & rhs )
+	static OutputStream & operator<<( OutputStream & stream, PipelinesNodesT< NodeT > const & rhs )
 	{
 		if constexpr ( queuerndnd::C3D_PrintNodesFullCounts )
 		{
@@ -747,7 +747,7 @@ namespace castor3d
 	}
 
 	template< typename NodeT >
-	static castor::OutputStream & operator<<( castor::OutputStream & stream, InstantiatedPipelinesNodesT< NodeT > const & rhs )
+	static OutputStream & operator<<( OutputStream & stream, InstantiatedPipelinesNodesT< NodeT > const & rhs )
 	{
 		if constexpr ( queuerndnd::C3D_PrintNodesFullCounts )
 		{
@@ -834,9 +834,9 @@ namespace castor3d
 
 	QueueRenderNodes::QueueRenderNodes( RenderQueue const & queue
 		, RenderDevice const & device
-		, castor::String const & typeName
+		, String const & typeName
 		, bool meshShading )
-		: castor::OwnedBy< RenderQueue const >{ queue }
+		: OwnedBy< RenderQueue const >{ queue }
 		, m_onSubmeshChanged{ queue.getCuller().onSubmeshChanged.connect( [this]( SceneCuller const &
 				, CulledNodeT< SubmeshRenderNode > const & node
 				, bool )
@@ -1105,8 +1105,8 @@ namespace castor3d
 		auto & renderPass = *queue.getOwner();
 		{
 			C3D_DebugTime( renderPass.getTypeName() );
-			auto pendingSubmeshes = castor::move( m_pendingSubmeshes );
-			auto pendingBillboards = castor::move( m_pendingBillboards );
+			auto pendingSubmeshes = c3d::move( m_pendingSubmeshes );
+			auto pendingBillboards = c3d::move( m_pendingBillboards );
 
 			for ( auto culled : pendingSubmeshes )
 			{

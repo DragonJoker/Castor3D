@@ -1,15 +1,15 @@
 #include "Castor3D/Animation/Animation.hpp"
 
-CU_ImplementSmartPtr( castor3d, Animation )
+CU_ImplementSmartPtr( c3d, Animation )
 
-namespace castor3d
+namespace c3d
 {
 	Animation::Animation( Engine & handler
 		, AnimationType type
 		, Animable & animable
-		, castor::String const & name )
-		: castor::Named{ name }
-		, castor::OwnedBy< Engine >{ handler}
+		, String const & name )
+		: Named{ name }
+		, OwnedBy< Engine >{ handler}
 		, m_animable{ &animable }
 		, m_type{ type }
 	{
@@ -17,9 +17,9 @@ namespace castor3d
 
 	Animation::Animation( Engine & handler
 		, AnimationType type
-		, castor::String const & name )
-		: castor::Named{ name }
-		, castor::OwnedBy< Engine >{ handler }
+		, String const & name )
+		: Named{ name }
+		, OwnedBy< Engine >{ handler }
 		, m_type{ type }
 	{
 	}
@@ -34,11 +34,11 @@ namespace castor3d
 				return lhs->getTimeIndex() < rhs->getTimeIndex();
 			} );
 		keyFrame->initialise();
-		m_keyframes.insert( it, castor::move( keyFrame ) );
+		m_keyframes.insert( it, c3d::move( keyFrame ) );
 		updateLength();
 	}
 
-	AnimationKeyFrameArray::iterator Animation::find( castor::Milliseconds const & time )
+	AnimationKeyFrameArray::iterator Animation::find( Milliseconds const & time )
 	{
 		return std::find_if( m_keyframes.begin()
 			, m_keyframes.end()
@@ -48,7 +48,7 @@ namespace castor3d
 			} );
 	}
 
-	void Animation::findKeyFrame( castor::Milliseconds const & time
+	void Animation::findKeyFrame( Milliseconds const & time
 		, AnimationKeyFrameArray::iterator & prv
 		, AnimationKeyFrameArray::iterator & cur )const
 	{

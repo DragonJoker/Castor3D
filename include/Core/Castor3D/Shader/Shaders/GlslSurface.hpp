@@ -15,7 +15,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	template< typename Position3T, typename Position4T, typename NormalT >
 	struct SurfaceBaseT

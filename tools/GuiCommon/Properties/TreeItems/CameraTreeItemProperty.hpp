@@ -31,7 +31,7 @@ namespace GuiCommon
 		 *\param[in]	editable	Dit si les propriétés sont modifiables
 		 *\param[in]	camera	La caméra cible
 		 */
-		CameraTreeItemProperty( bool editable, castor3d::Camera & camera );
+		CameraTreeItemProperty( bool editable, c3d::Camera & camera );
 		/**
 		 *\~english
 		 *\brief		Retrieves the camera
@@ -40,7 +40,7 @@ namespace GuiCommon
 		 *\brief		Récupère la caméra
 		 *\return		La valeur
 		 */
-		inline castor3d::Camera & getCamera()
+		inline c3d::Camera & getCamera()
 		{
 			return m_camera;
 		}
@@ -52,7 +52,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::Camera & m_camera;
+		c3d::Camera & m_camera;
 	};
 }
 

@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Math/MathModule.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	struct PtOperators

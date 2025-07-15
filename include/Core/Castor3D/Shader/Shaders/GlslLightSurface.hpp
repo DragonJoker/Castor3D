@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/VecTypes/Vec3.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	struct LightSurface
 		: public sdw::StructInstance
@@ -34,7 +34,7 @@ namespace castor3d::shader
 			, LightSurface const & rhs );
 
 		C3D_API static LightSurface create( sdw::ShaderWriter & writer
-			, castor::MbString const & name
+			, MbString const & name
 			, sdw::Vec3 const eye
 			, DerivVec4 const world
 			, DerivVec3 const view
@@ -42,14 +42,14 @@ namespace castor3d::shader
 			, DerivVec3 const normal
 			, bool enableDotProducts = true );
 		C3D_API static LightSurface create( sdw::ShaderWriter & writer
-			, castor::MbString const & name
+			, MbString const & name
 			, DerivVec4 const world
 			, sdw::Vec3 const clip
 			, DerivVec3 const normal
 			, bool enableDotProducts = false );
 		C3D_API static LightSurface create( sdw::ShaderWriter & writer
 			, Utils & utils
-			, castor::MbString const & name
+			, MbString const & name
 			, sdw::Vec3 const eye
 			, DerivVec4 const world
 			, DerivVec3 const view

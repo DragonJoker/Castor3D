@@ -42,20 +42,20 @@ namespace test_launcher
 {
 	namespace
 	{
-		castor3d::RenderWindowDesc doLoadScene( castor3d::Engine & engine
-			, castor::Path const & fileName )
+		c3d::RenderWindowDesc doLoadScene( c3d::Engine & engine
+			, c3d::Path const & fileName )
 		{
-			castor3d::RenderWindowDesc result{};
+			c3d::RenderWindowDesc result{};
 
-			if ( castor::File::fileExists( fileName ) )
+			if ( c3d::File::fileExists( fileName ) )
 			{
-				castor::Logger::logInfo( cuT( "Loading scene file : " ) + fileName );
+				c3d::Logger::logInfo( cuT( "Loading scene file : " ) + fileName );
 
 				if ( fileName.getExtension() == cuT( "cscn" ) || fileName.getExtension() == cuT( "zip" ) )
 				{
 					try
 					{
-						castor3d::SceneFileParser parser( engine );
+						c3d::SceneFileParser parser( engine );
 
 						if ( parser.parseFile( fileName ) )
 						{
@@ -63,22 +63,22 @@ namespace test_launcher
 						}
 						else
 						{
-							castor::Logger::logWarning( cuT( "Can't read scene file" ) );
+							c3d::Logger::logWarning( cuT( "Can't read scene file" ) );
 						}
 					}
 					catch ( std::exception & exc )
 					{
-						castor::Logger::logError( castor::makeStringStream() << cuT( "Failed to parse the scene file, with following error: " ) << exc.what() );
+						c3d::Logger::logError( c3d::makeStringStream() << cuT( "Failed to parse the scene file, with following error: " ) << exc.what() );
 					}
 				}
 				else
 				{
-					castor::Logger::logError( cuT( "Unsupported scene file type: " ) + fileName.getFileName() );
+					c3d::Logger::logError( cuT( "Unsupported scene file type: " ) + fileName.getFileName() );
 				}
 			}
 			else
 			{
-				castor::Logger::logError( cuT( "Scene file doesn't exist: " ) + fileName );
+				c3d::Logger::logError( cuT( "Scene file doesn't exist: " ) + fileName );
 			}
 
 			return result;
@@ -166,21 +166,21 @@ namespace test_launcher
 				}
 				catch ( ... )
 				{
-					castor::Logger::logWarning( cuT( "doCreateBitmapFromBuffer encountered an exception" ) );
+					c3d::Logger::logWarning( cuT( "doCreateBitmapFromBuffer encountered an exception" ) );
 				}
 			}
 		}
 
-		void doCreateBitmapFromBuffer( castor::PxBufferBaseRPtr input
+		void doCreateBitmapFromBuffer( c3d::PxBufferBaseRPtr input
 			, bool flip
 			, wxBitmap & output )
 		{
-			castor::PxBufferBaseUPtr buffer{};
+			c3d::PxBufferBaseUPtr buffer{};
 
-			if ( input->getFormat() != castor::PixelFormat::eR8G8B8A8_UNORM )
+			if ( input->getFormat() != c3d::PixelFormat::eR8G8B8A8_UNORM )
 			{
-				buffer = castor::PxBufferBase::create( castor::Size( input->getWidth(), input->getHeight() )
-					, castor::PixelFormat::eR8G8B8A8_UNORM
+				buffer = c3d::PxBufferBase::create( c3d::Size( input->getWidth(), input->getHeight() )
+					, c3d::PixelFormat::eR8G8B8A8_UNORM
 					, input->getConstPtr()
 					, input->getFormat() );
 			}
@@ -200,14 +200,14 @@ namespace test_launcher
 		{
 #if defined( CU_PlatformWindows )
 
-			return ashes::WindowHandle( castor::make_unique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr )
+			return ashes::WindowHandle( c3d::makeRawUnique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr )
 				, window->GetHandle() ) );
 
 #elif defined( CU_PlatformApple )
 
 			auto handle = window->GetHandle();
 			makeViewMetalCompatible( handle );
-			return ashes::WindowHandle( castor::make_unique< ashes::IMacOsWindowHandle >( handle ) );
+			return ashes::WindowHandle( c3d::makeRawUnique< ashes::IMacOsWindowHandle >( handle ) );
 
 #elif defined( CU_PlatformLinux )
 
@@ -229,7 +229,7 @@ namespace test_launcher
 						auto surface = gdkWindow
 							? gdk_wayland_window_get_wl_surface( gdkWindow )
 							: nullptr;
-						return ashes::WindowHandle( castor::make_unique< ashes::IWaylandWindowHandle >( display, surface ) );
+						return ashes::WindowHandle( c3d::makeRawUnique< ashes::IWaylandWindowHandle >( display, surface ) );
 					}
 #	endif
 #endif
@@ -242,7 +242,7 @@ namespace test_launcher
 						GLXDrawable drawable = gdkWindow
 							? gdk_x11_window_get_xid( gdkWindow )
 							: 0;
-						return ashes::WindowHandle( castor::make_unique< ashes::IXWindowHandle >( drawable, display ) );
+						return ashes::WindowHandle( c3d::makeRawUnique< ashes::IXWindowHandle >( drawable, display ) );
 					}
 #	endif
 #endif
@@ -256,7 +256,7 @@ namespace test_launcher
 		}
 	}
 
-	MainFrame::MainFrame( castor3d::Engine & engine
+	MainFrame::MainFrame( c3d::Engine & engine
 		, uint32_t maxFrameCount )
 		: wxFrame{ nullptr, wxID_ANY, wxT( "Castor3D Test Launcher" ), wxDefaultPosition, wxSize( 800, 700 ) }
 		, m_engine{ engine }
@@ -270,21 +270,21 @@ namespace test_launcher
 		wxIcon icon = wxIcon( castor_xpm );
 		SetIcon( icon );
 		bool result = true;
-		castor::Logger::logInfo( cuT( "Initialising Castor3D" ) );
+		c3d::Logger::logInfo( cuT( "Initialising Castor3D" ) );
 
 		try
 		{
 			m_engine.initialise( 60, false );
-			castor::Logger::logInfo( cuT( "Castor3D Initialised" ) );
+			c3d::Logger::logInfo( cuT( "Castor3D Initialised" ) );
 		}
 		catch ( std::exception & exc )
 		{
-			castor::Logger::logError( castor::makeStringStream() << cuT( "Problem occured while initialising Castor3D: " ) << exc.what() );
+			c3d::Logger::logError( c3d::makeStringStream() << cuT( "Problem occured while initialising Castor3D: " ) << exc.what() );
 			result = false;
 		}
 		catch ( ... )
 		{
-			castor::Logger::logError( cuT( "Problem occured while initialising Castor3D." ) );
+			c3d::Logger::logError( cuT( "Problem occured while initialising Castor3D." ) );
 			result = false;
 		}
 
@@ -295,14 +295,14 @@ namespace test_launcher
 	{
 		if ( !fileName.empty() )
 		{
-			m_filePath = castor::Path{ static_cast< wxChar const * >( fileName.c_str() ) };
+			m_filePath = c3d::Path{ static_cast< wxChar const * >( fileName.c_str() ) };
 		}
 
 		if ( !m_filePath.empty() )
 		{
 			auto sizewx = GetClientSize();
-			castor::Size sizeWnd{ uint32_t( sizewx.GetWidth() ), uint32_t( sizewx.GetHeight() ) };
-			m_renderWindow = castor::makeUnique< castor3d::RenderWindow >( cuT( "CastorTest" )
+			c3d::Size sizeWnd{ uint32_t( sizewx.GetWidth() ), uint32_t( sizewx.GetHeight() ) };
+			m_renderWindow = c3d::makeUnique< c3d::RenderWindow >( cuT( "CastorTest" )
 				, m_engine
 				, sizeWnd
 				, makeWindowHandle( this ) );
@@ -310,7 +310,7 @@ namespace test_launcher
 
 			if ( !window.renderTarget )
 			{
-				castor::Logger::logError( cuT( "Can't initialise the render window." ) );
+				c3d::Logger::logError( cuT( "Can't initialise the render window." ) );
 			}
 			else
 			{
@@ -319,13 +319,13 @@ namespace test_launcher
 		}
 		else
 		{
-			castor::Logger::logError( cuT( "Can't open a scene file : empty file name." ) );
+			c3d::Logger::logError( cuT( "Can't open a scene file : empty file name." ) );
 		}
 
 		return m_renderWindow != nullptr;
 	}
 
-	void MainFrame::saveFrame( castor::String const & suffix
+	void MainFrame::saveFrame( c3d::String const & suffix
 		, FrameTimes & times )
 	{
 		if ( m_renderWindow )
@@ -347,18 +347,18 @@ namespace test_launcher
 			auto image = bitmap.ConvertToImage();
 			auto folder = m_filePath.getPath() / cuT( "Compare" );
 
-			if ( !castor::File::directoryExists( folder ) )
+			if ( !c3d::File::directoryExists( folder ) )
 			{
-				castor::File::directoryCreate( folder );
+				c3d::File::directoryCreate( folder );
 			}
 
-			castor::Path outputPath = folder / ( m_filePath.getFileName() + cuT( "_" ) + suffix + cuT( ".png" ) );
+			c3d::Path outputPath = folder / ( m_filePath.getFileName() + cuT( "_" ) + suffix + cuT( ".png" ) );
 
 			image.SaveFile( wxString( outputPath ) );
 		}
 	}
 
-	void MainFrame::cleanup( castor::String const & suffix
+	void MainFrame::cleanup( c3d::String const & suffix
 		, FrameTimes const & times )
 	{
 		try
@@ -371,10 +371,10 @@ namespace test_launcher
 
 		m_renderWindow.reset();
 		auto stop = Clock::now();
-		auto totalTime = std::chrono::duration_cast< castor::Microseconds >( stop - times.start );
-		castor::Nanoseconds avg{};
+		auto totalTime = std::chrono::duration_cast< c3d::Microseconds >( stop - times.start );
+		c3d::Nanoseconds avg{};
 
-		if ( castor::Nanoseconds last{};
+		if ( c3d::Nanoseconds last{};
 			times.params.get( cuT( "Average" ), avg )
 				&& times.params.get( cuT( "Last" ), last ) )
 		{
@@ -382,20 +382,20 @@ namespace test_launcher
 
 			if ( stream.is_open() )
 			{
-				stream << castor::system::getOSName() << "\n";
+				stream << c3d::system::getOSName() << "\n";
 				stream << m_engine.getCpuInformations().getModel() << "\n";
 				stream << m_engine.getRenderSystem()->getGpuInformations().getRenderer() << "\n";
 				stream << totalTime.count()
-					<< " " << std::chrono::duration_cast< castor::Microseconds >( avg ).count()
-					<< " " << std::chrono::duration_cast< castor::Microseconds >( last ).count()
+					<< " " << std::chrono::duration_cast< c3d::Microseconds >( avg ).count()
+					<< " " << std::chrono::duration_cast< c3d::Microseconds >( last ).count()
 					<< "\n"
 					<< "\n";
 
 				for ( auto & param : times.params )
 				{
-					castor::Nanoseconds time{};
+					c3d::Nanoseconds time{};
 					times.params.get( param.first, time );
-					stream << param.first << " " << std::chrono::duration_cast< castor::Microseconds >( time ).count() << "\n";
+					stream << param.first << " " << std::chrono::duration_cast< c3d::Microseconds >( time ).count() << "\n";
 				}
 			}
 		}

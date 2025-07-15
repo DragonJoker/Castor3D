@@ -25,9 +25,9 @@
 #include <ashespp/Pipeline/PipelineViewportStateCreateInfo.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 
-CU_ImplementSmartPtr( castor3d, RenderCube )
+CU_ImplementSmartPtr( c3d, RenderCube )
 
-namespace castor3d
+namespace c3d
 {
 	namespace rendcube
 	{
@@ -37,9 +37,9 @@ namespace castor3d
 		static SamplerObs doCreateSampler( RenderSystem const & renderSystem
 			, bool nearest )
 		{
-			castor::String const name = nearest
-				? castor::String{ cuT( "RenderCube_Nearest" ) }
-				: castor::String{ cuT( "RenderCube_Linear" ) };
+			String const name = nearest
+				? String{ cuT( "RenderCube_Nearest" ) }
+				: String{ cuT( "RenderCube_Linear" ) };
 			FilterMode const minMagFilter = nearest
 				? FilterMode::eNearest
 				: FilterMode::eLinear;
@@ -67,24 +67,24 @@ namespace castor3d
 			return result;
 		}
 
-		static UniformBufferUPtrT< castor::Matrix4x4f > doCreateMatrixUbo( RenderDevice const & device )
+		static UniformBufferUPtrT< Matrix4x4f > doCreateMatrixUbo( RenderDevice const & device )
 		{
-			static castor::Matrix4x4f const projection = device.renderSystem.getPerspective( 90.0_degrees, 1.0f, 0.1f, 10.0f );
+			static Matrix4x4f const projection = device.renderSystem.getPerspective( 90.0_degrees, 1.0f, 0.1f, 10.0f );
 
-			static castor::Array< castor::Matrix4x4f, 6u > const views = []()
+			static Array< Matrix4x4f, 6u > const views = []()
 			{
-				castor::Array< castor::Matrix4x4f, 6u > result
+				Array< Matrix4x4f, 6u > result
 				{
-					castor::matrix::lookAt( castor::Point3f{ 0.0f, 0.0f, 0.0f }, castor::Point3f{ +1.0f, +0.0f, +0.0f }, castor::Point3f{ 0.0f, -1.0f, +0.0f } ),
-					castor::matrix::lookAt( castor::Point3f{ 0.0f, 0.0f, 0.0f }, castor::Point3f{ -1.0f, +0.0f, +0.0f }, castor::Point3f{ 0.0f, -1.0f, +0.0f } ),
-					castor::matrix::lookAt( castor::Point3f{ 0.0f, 0.0f, 0.0f }, castor::Point3f{ +0.0f, +1.0f, +0.0f }, castor::Point3f{ 0.0f, +0.0f, +1.0f } ),
-					castor::matrix::lookAt( castor::Point3f{ 0.0f, 0.0f, 0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f }, castor::Point3f{ 0.0f, +0.0f, -1.0f } ),
-					castor::matrix::lookAt( castor::Point3f{ 0.0f, 0.0f, 0.0f }, castor::Point3f{ +0.0f, +0.0f, +1.0f }, castor::Point3f{ 0.0f, -1.0f, +0.0f } ),
-					castor::matrix::lookAt( castor::Point3f{ 0.0f, 0.0f, 0.0f }, castor::Point3f{ +0.0f, +0.0f, -1.0f }, castor::Point3f{ 0.0f, -1.0f, +0.0f } )
+					matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +1.0f, +0.0f, +0.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ),
+					matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ -1.0f, +0.0f, +0.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ),
+					matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +1.0f, +0.0f }, Point3f{ 0.0f, +0.0f, +1.0f } ),
+					matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, -1.0f, +0.0f }, Point3f{ 0.0f, +0.0f, -1.0f } ),
+					matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, +1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ),
+					matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, -1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } )
 				};
 				return result;
 			}();
-			auto result = makeUniformBuffer< castor::Matrix4x4f >( device.renderSystem
+			auto result = makeUniformBuffer< Matrix4x4f >( device.renderSystem
 				, 6u
 				, ( VK_BUFFER_USAGE_TRANSFER_DST_BIT
 					| VK_BUFFER_USAGE_TRANSFER_SRC_BIT )
@@ -101,20 +101,20 @@ namespace castor3d
 			return result;
 		}
 
-		static ashes::VertexBufferPtr< castor::Point4f > doCreateVertexBuffer( RenderDevice const & device
+		static ashes::VertexBufferPtr< Point4f > doCreateVertexBuffer( RenderDevice const & device
 			, ashes::Queue const & queue
 			, ashes::CommandPool const & commandPool )
 		{
-			castor::Vector< castor::Point4f > vertexData
+			Vector< Point4f > vertexData
 			{
-				castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ +1, -1, -1, +1 }, castor::Point4f{ -1, -1, -1, +1 }, castor::Point4f{ +1, -1, -1, +1 }, castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ +1, +1, -1, +1 },// Back
-				castor::Point4f{ -1, -1, +1, +1 }, castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ -1, -1, -1, +1 }, castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ -1, -1, +1, +1 }, castor::Point4f{ -1, +1, +1, +1 },// Left
-				castor::Point4f{ +1, -1, -1, +1 }, castor::Point4f{ +1, +1, +1, +1 }, castor::Point4f{ +1, -1, +1, +1 }, castor::Point4f{ +1, +1, +1, +1 }, castor::Point4f{ +1, -1, -1, +1 }, castor::Point4f{ +1, +1, -1, +1 },// Right
-				castor::Point4f{ -1, -1, +1, +1 }, castor::Point4f{ +1, +1, +1, +1 }, castor::Point4f{ -1, +1, +1, +1 }, castor::Point4f{ +1, +1, +1, +1 }, castor::Point4f{ -1, -1, +1, +1 }, castor::Point4f{ +1, -1, +1, +1 },// Front
-				castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ +1, +1, +1, +1 }, castor::Point4f{ +1, +1, -1, +1 }, castor::Point4f{ +1, +1, +1, +1 }, castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ -1, +1, +1, +1 },// Top
-				castor::Point4f{ -1, -1, -1, +1 }, castor::Point4f{ +1, -1, -1, +1 }, castor::Point4f{ -1, -1, +1, +1 }, castor::Point4f{ +1, -1, -1, +1 }, castor::Point4f{ +1, -1, +1, +1 }, castor::Point4f{ -1, -1, +1, +1 },// Bottom
+				Point4f{ -1, +1, -1, +1 }, Point4f{ +1, -1, -1, +1 }, Point4f{ -1, -1, -1, +1 }, Point4f{ +1, -1, -1, +1 }, Point4f{ -1, +1, -1, +1 }, Point4f{ +1, +1, -1, +1 },// Back
+				Point4f{ -1, -1, +1, +1 }, Point4f{ -1, +1, -1, +1 }, Point4f{ -1, -1, -1, +1 }, Point4f{ -1, +1, -1, +1 }, Point4f{ -1, -1, +1, +1 }, Point4f{ -1, +1, +1, +1 },// Left
+				Point4f{ +1, -1, -1, +1 }, Point4f{ +1, +1, +1, +1 }, Point4f{ +1, -1, +1, +1 }, Point4f{ +1, +1, +1, +1 }, Point4f{ +1, -1, -1, +1 }, Point4f{ +1, +1, -1, +1 },// Right
+				Point4f{ -1, -1, +1, +1 }, Point4f{ +1, +1, +1, +1 }, Point4f{ -1, +1, +1, +1 }, Point4f{ +1, +1, +1, +1 }, Point4f{ -1, -1, +1, +1 }, Point4f{ +1, -1, +1, +1 },// Front
+				Point4f{ -1, +1, -1, +1 }, Point4f{ +1, +1, +1, +1 }, Point4f{ +1, +1, -1, +1 }, Point4f{ +1, +1, +1, +1 }, Point4f{ -1, +1, -1, +1 }, Point4f{ -1, +1, +1, +1 },// Top
+				Point4f{ -1, -1, -1, +1 }, Point4f{ +1, -1, -1, +1 }, Point4f{ -1, -1, +1, +1 }, Point4f{ +1, -1, -1, +1 }, Point4f{ +1, -1, +1, +1 }, Point4f{ -1, -1, +1, +1 },// Bottom
 			};
-			auto result = makeVertexBuffer< castor::Point4f >( device
+			auto result = makeVertexBuffer< Point4f >( device
 				, uint32_t( vertexData.size() )
 				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -139,7 +139,7 @@ namespace castor3d
 			{
 				0u,
 				{
-					{ 0u, uint32_t( sizeof( castor::Point4f ) ), VK_VERTEX_INPUT_RATE_VERTEX },
+					{ 0u, uint32_t( sizeof( Point4f ) ), VK_VERTEX_INPUT_RATE_VERTEX },
 				},
 				{
 					{ 0u, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, 0u }
@@ -153,7 +153,7 @@ namespace castor3d
 		, SamplerObs sampler )
 		: m_device{ device }
 		, m_sampler{ ( sampler
-			? castor::move( sampler )
+			? c3d::move( sampler )
 			: rendcube::doCreateSampler( m_device.renderSystem, nearest ) ) }
 	{
 	}
@@ -204,7 +204,7 @@ namespace castor3d
 		};
 		doFillDescriptorLayoutBindings( bindings );
 		m_descriptorLayout = m_device->createDescriptorSetLayout( "RenderCube"
-			, castor::move( bindings ) );
+			, c3d::move( bindings ) );
 		m_pipelineLayout = m_device->createPipelineLayout( "RenderCube"
 			, { *m_descriptorLayout }, pushRanges );
 		m_descriptorPool = m_descriptorLayout->createPool( "RenderCube", 6u );
@@ -212,7 +212,7 @@ namespace castor3d
 
 		for ( auto & facePipeline : m_faces )
 		{
-			facePipeline.pipeline = m_device->createPipeline( "RenderCubeFace" + castor::string::toMbString( face )
+			facePipeline.pipeline = m_device->createPipeline( "RenderCubeFace" + string::toMbString( face )
 				, ashes::GraphicsPipelineCreateInfo
 				{
 					0u,
@@ -229,7 +229,7 @@ namespace castor3d
 					*m_pipelineLayout,
 					renderPass,
 				} );
-			facePipeline.descriptorSet = m_descriptorPool->createDescriptorSet( "RenderCubeFace" + castor::string::toMbString( face ) );
+			facePipeline.descriptorSet = m_descriptorPool->createDescriptorSet( "RenderCubeFace" + string::toMbString( face ) );
 			facePipeline.descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 0u )
 				, m_matrixUbo->getBuffer()
 				, face

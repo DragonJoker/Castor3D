@@ -8,7 +8,7 @@ namespace diamond_square_terrain
 		, uint32_t size
 		, Matrix & heightMap )
 	{
-		castor::Function< void( uint32_t, uint32_t, uint32_t, uint32_t, float, uint32_t ) > divide = [&heightMap
+		c3d::Function< void( uint32_t, uint32_t, uint32_t, uint32_t, float, uint32_t ) > divide = [&heightMap
 			, &engine
 			, &divide]( uint32_t x1
 				, uint32_t y1
@@ -68,7 +68,7 @@ namespace diamond_square_terrain
 				}
 			}
 
-			auto range = castor::makeRange( yMin, yMax );
+			auto range = c3d::makeRange( yMin, yMax );
 
 			for ( auto z = 0u; z <= max; z++ )
 			{

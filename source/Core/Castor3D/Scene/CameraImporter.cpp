@@ -5,18 +5,18 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 
-CU_ImplementSmartPtr( castor3d, CameraImporter )
+CU_ImplementSmartPtr( c3d, CameraImporter )
 
-namespace castor3d
+namespace c3d
 {
 	CameraImporter::CameraImporter( Engine & engine
-		, castor::String const & prefix )
+		, String const & prefix )
 		: OwnedBy< Engine >{ engine }
 		, m_prefix{ prefix + cuT( " - " ) }
 	{
 	}
 
-	CameraRes CameraImporter::importData( castor::String const & name
+	CameraRes CameraImporter::importData( String const & name
 		, CameraCreateInfo const & createInfo
 		, ImporterFile * file
 		, Parameters const & parameters )
@@ -59,10 +59,10 @@ namespace castor3d
 	}
 
 	bool CameraImporter::importData( Camera & camera
-		, castor::Path const & pathFile
+		, Path const & pathFile
 		, Parameters const & parameters )
 	{
-		auto extension = castor::string::lowerCase( pathFile.getExtension() );
+		auto extension = string::lowerCase( pathFile.getExtension() );
 		auto file = camera.getEngine()->getImporterFileFactory().create( extension
 			, *camera.getEngine()
 			, pathFile
@@ -76,7 +76,7 @@ namespace castor3d
 		return false;
 	}
 
-	CameraRes CameraImporter::doCreateCamera( castor::String const & name
+	CameraRes CameraImporter::doCreateCamera( String const & name
 		, CameraCreateInfo const & createInfo )
 	{
 		return createInfo.scene->createCamera( name, createInfo );

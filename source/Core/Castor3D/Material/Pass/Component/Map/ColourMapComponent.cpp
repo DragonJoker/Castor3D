@@ -17,21 +17,21 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::ColourMapComponent >
-		: public TextWriterT< castor3d::ColourMapComponent >
+	class TextWriter< ColourMapComponent >
+		: public TextWriterT< ColourMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, uint32_t mask )
-			: TextWriterT< castor3d::ColourMapComponent >{ tabs }
+			: TextWriterT< ColourMapComponent >{ tabs }
 			, m_mask{ mask }
 		{
 		}
 
-		bool operator()( castor3d::ColourMapComponent const & object
+		bool operator()( ColourMapComponent const & object
 			, StringStream & file )override
 		{
 			return writeMask( file, cuT( "colour_mask" ), m_mask );
@@ -47,7 +47,7 @@ namespace castor
 	};
 }
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -119,7 +119,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void ColourMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void ColourMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "diffuse" )
@@ -147,77 +147,77 @@ namespace castor3d
 					, 0x00FFFFFF );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "colour_mask" )
 			, colcmp::parserUnitColourMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eUInt32 >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "albedo_mask" )
 			, colcmp::parserUnitColourMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eUInt32 >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "diffuse_mask" )
 			, colcmp::parserUnitColourMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "colour_mask" )
 			, colcmp::parserUnitColourMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eUInt32 >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "albedo_mask" )
 			, colcmp::parserUnitColourMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eUInt32 >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "diffuse_mask" )
 			, colcmp::parserUnitColourMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "colour" )
 			, colcmp::parserTexRemapColour );
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "albedo" )
 			, colcmp::parserTexRemapColour );
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "diffuse" )
 			, colcmp::parserTexRemapColour );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "colour_mask" )
 			, colcmp::parserTexRemapColourMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eUInt32 >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "albedo_mask" )
 			, colcmp::parserTexRemapColourMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eUInt32 >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "diffuse_mask" )
 			, colcmp::parserTexRemapColourMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 
 	bool ColourMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< ColourMapComponent >{ tabs, mask }( file );
+		return TextWriter< ColourMapComponent >{ tabs, mask }( file );
 	}
 
 	bool ColourMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -228,14 +228,14 @@ namespace castor3d
 	}
 
 	void ColourMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, ColourMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, ColourMapComponent >( pass ) );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const ColourMapComponent::TypeName = C3D_MakePassMapComponentName( "colour" );
+	String const ColourMapComponent::TypeName = C3D_MakePassMapComponentName( "colour" );
 
 	ColourMapComponent::ColourMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -247,7 +247,7 @@ namespace castor3d
 
 	PassComponentUPtr ColourMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, ColourMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, ColourMapComponent >( pass );
 	}
 
 	void ColourMapComponent::doFillConfig( TextureConfiguration & configuration
@@ -259,10 +259,10 @@ namespace castor3d
 
 	PassMapDefaultImageParams ColourMapComponent::createDefaultImage()const
 	{
-		castor::String name{ cuT( "DefaultColour" ) };
-		castor::ByteArray data{ 255u, 255u, 255u, 0u };
+		String name{ cuT( "DefaultColour" ) };
+		ByteArray data{ 255u, 255u, 255u, 0u };
 		return { name
-			, castor::ImageCreateParams{ castor::getFormatName( castor::PixelFormat::eR8G8B8A8_UNORM ), data } };
+			, ImageCreateParams{ getFormatName( PixelFormat::eR8G8B8A8_UNORM ), data } };
 	}
 
 	//*********************************************************************************************

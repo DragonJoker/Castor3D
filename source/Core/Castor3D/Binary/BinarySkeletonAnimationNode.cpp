@@ -6,7 +6,7 @@
 #include "Castor3D/Model/Skeleton/SkeletonNode.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
@@ -25,12 +25,12 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template<>
-	castor::String BinaryParserBase< SkeletonAnimationNode >::Name = cuT( "SkeletonAnimationNode" );
+	String BinaryParserBase< SkeletonAnimationNode >::Name = cuT( "SkeletonAnimationNode" );
 
 	bool BinaryParser< SkeletonAnimationNode >::doParse( SkeletonAnimationNode & obj )
 	{
 		bool result = true;
-		castor::String name;
+		String name;
 		BinaryChunk chunk{ doIsLittleEndian() };
 
 		while ( result && doGetSubChunk( chunk ) )
@@ -82,7 +82,7 @@ namespace castor3d
 	bool BinaryParser< SkeletonAnimationNode >::doParse_v1_5( SkeletonAnimationNode & obj )
 	{
 		bool result = true;
-		castor::String name;
+		String name;
 		BinaryChunk chunk{ doIsLittleEndian() };
 
 		while ( result && doGetSubChunk( chunk ) )

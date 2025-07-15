@@ -8,18 +8,18 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::Pass >
-		: public TextWriterT< castor3d::Pass >
+	class TextWriter< Pass >
+		: public TextWriterT< Pass >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, Path const & folder
 			, String const & subfolder );
-		bool operator()( castor3d::Pass const & pass
-			, castor::StringStream & file )override;
+		bool operator()( Pass const & pass
+			, StringStream & file )override;
 
 	private:
 		Path m_folder;

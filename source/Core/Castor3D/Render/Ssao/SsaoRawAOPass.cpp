@@ -40,9 +40,9 @@
 
 #include <random>
 
-CU_ImplementSmartPtr( castor3d, SsaoRawAOPass )
+CU_ImplementSmartPtr( c3d, SsaoRawAOPass )
 
-namespace castor3d
+namespace c3d
 {
 	namespace ssaoraw
 	{
@@ -484,8 +484,8 @@ namespace castor3d
 
 		static Texture doCreateTexture( crg::ResourcesCache & resources
 			, RenderDevice const & device
-			, castor::String const & name
-			, castor::PixelFormat format
+			, String const & name
+			, PixelFormat format
 			, Extent2D const & size )
 		{
 			return Texture{ device
@@ -528,7 +528,7 @@ namespace castor3d
 			, context
 			, graph
 			, ruConfig
-			, castor::move( rqConfig ) }
+			, c3d::move( rqConfig ) }
 		, ssaoConfig{ ssaoConfig }
 	{
 	}
@@ -542,8 +542,8 @@ namespace castor3d
 
 	SsaoRawAOPass::Program::Program( RenderDevice const & device
 		, bool useNormalsBuffer
-		, castor::String const & prefix )
-		: shader{ prefix + cuT( "SsaoRawAO" ) + ( useNormalsBuffer ? castor::String{ cuT( "Normals" ) } : castor::String{} )
+		, String const & prefix )
+		: shader{ prefix + cuT( "SsaoRawAO" ) + ( useNormalsBuffer ? String{ cuT( "Normals" ) } : String{} )
 			, ssaoraw::getProgram( device, useNormalsBuffer ) }
 		, stages{ makeProgramStates( device, shader ) }
 	{
@@ -570,20 +570,20 @@ namespace castor3d
 		, m_size{ size }
 		, m_result{ ssaoraw::doCreateTexture( *normals.resources
 			, m_device
-			, castor::makeString( m_graph.getName() + "SsaoRawAOResult" )
+			, makeString( m_graph.getName() + "SsaoRawAOResult" )
 			, device.selectSmallestFormatRSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
 				| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT
 				| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
 			, m_size ) }
 		, m_bentNormals{ ssaoraw::doCreateTexture( *normals.resources
 			, m_device
-			, castor::makeString( m_graph.getName() + "BentNormals" )
+			, makeString( m_graph.getName() + "BentNormals" )
 			, device.selectSmallestFormatRGBSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
 				| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT
 				| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
 			, m_size ) }
-		, m_programs{ Program{ device, false, castor::makeString( m_graph.getName() ) }
-			, Program{ device, true, castor::makeString( m_graph.getName() ) } }
+		, m_programs{ Program{ device, false, makeString( m_graph.getName() ) }
+			, Program{ device, true, makeString( m_graph.getName() ) } }
 	{
 		stepProgressBarLocal( progress, cuT( "Creating SSAO raw AO pass" ) );
 		auto & pass = m_graph.createPass( "RawAO"
@@ -599,7 +599,7 @@ namespace castor3d
 				ruConfig.implicitAction( resultIt->view(), crg::RecordContext::clearAttachment( *resultIt ) );
 				ruConfig.implicitAction( bentIt->view(), crg::RecordContext::clearAttachment( *bentIt ) );
 				stepProgressBarLocal( progress, cuT( "Initialising SSAO raw AO pass" ) );
-				auto result = castor::make_unique< RenderQuad >( framePass
+				auto result = makeRawUnique< RenderQuad >( framePass
 					, context
 					, graph
 					, ruConfig
@@ -609,7 +609,7 @@ namespace castor3d
 						, m_programs[0].stages
 						, m_programs[1].stages )
 					, m_ssaoConfig );
-				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

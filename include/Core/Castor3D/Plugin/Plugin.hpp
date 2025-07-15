@@ -7,10 +7,10 @@ See LICENSE file in root folder
 #include "PluginModule.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class Plugin
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
 		//!< Signature for the plug-in's loading function
@@ -26,7 +26,7 @@ namespace castor3d
 		//!< Signature for the plug-in's name retrieval function
 		using GetNameFunction = void ( * )( char const ** );
 
-		using Extension = castor::Pair< castor::String, castor::String >;
+		using Extension = Pair< String, String >;
 		CU_DeclareVector( Extension, Extension );
 
 	public:
@@ -43,7 +43,7 @@ namespace castor3d
 		 *\param[in]	engine	Le moteur
 		 */
 		C3D_API Plugin( PluginType type
-			, castor::DynamicLibraryUPtr library
+			, DynamicLibraryUPtr library
 			, Engine & engine );
 		/**
 		 *\~english
@@ -69,7 +69,7 @@ namespace castor3d
 		 *\brief		Récupère le nom du plug-in
 		 *\return		Le nom
 		 */
-		C3D_API castor::String getName()const;
+		C3D_API String getName()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the plug-in type
@@ -100,7 +100,7 @@ namespace castor3d
 		void unload()const noexcept;
 
 	private:
-		castor::DynamicLibraryUPtr m_library{};
+		DynamicLibraryUPtr m_library{};
 		GetRequiredVersionFunction m_pfnGetRequiredVersion{};
 		GetNameFunction m_pfnGetName{};
 		OnLoadFunction m_pfnOnLoad{};

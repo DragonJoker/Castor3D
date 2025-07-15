@@ -107,7 +107,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SPTLGT );
 
-		object->internal->setIntensity( castor::LuminousIntensity{ val } );
+		object->internal->setIntensity( c3d::LuminousIntensity{ val } );
 
 		return C3D_OK;
 	}
@@ -155,7 +155,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SPTLGT );
 
-		object->internal->setInnerCutOff( castor::Angle::fromRadians( val ) );
+		object->internal->setInnerCutOff( c3d::Angle::fromRadians( val ) );
 
 		return C3D_OK;
 	}
@@ -179,7 +179,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SPTLGT );
 
-		object->internal->setOuterCutOff( castor::Angle::fromRadians( val ) );
+		object->internal->setOuterCutOff( c3d::Angle::fromRadians( val ) );
 
 		return C3D_OK;
 	}

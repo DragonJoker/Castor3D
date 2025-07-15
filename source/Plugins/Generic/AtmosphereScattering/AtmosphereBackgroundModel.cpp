@@ -14,7 +14,7 @@ namespace atmosphere_scattering
 	{
 		template< typename DataT >
 		DataT getData( sdw::UniformBuffer & ubo
-			, castor::MbString const & name
+			, c3d::MbString const & name
 			, bool enabled = true )
 		{
 			auto result = ubo.declMember< DataT >( name, enabled );
@@ -23,18 +23,18 @@ namespace atmosphere_scattering
 		}
 	}
 
-	castor::String const AtmosphereBackgroundModel::Name = cuT( "c3d.atmosphere" );
-	castor::String const AtmosphereBackgroundModel::PluginType = cuT( "atmospheric_scattering" );
-	castor::MbString const AtmosphereBackgroundModel::PluginName = "Atmospheric Scattering";
+	c3d::String const AtmosphereBackgroundModel::Name = cuT( "c3d.atmosphere" );
+	c3d::String const AtmosphereBackgroundModel::PluginType = cuT( "atmospheric_scattering" );
+	c3d::MbString const AtmosphereBackgroundModel::PluginName = "Atmospheric Scattering";
 
-	AtmosphereBackgroundModel::AtmosphereBackgroundModel( castor3d::Engine const & engine
+	AtmosphereBackgroundModel::AtmosphereBackgroundModel( c3d::Engine const & engine
 		, sdw::ShaderWriter & writer
-		, castor3d::shader::Utils & utils
-		, castor3d::Extent2D targetSize
+		, c3d::shader::Utils & utils
+		, c3d::Extent2D targetSize
 		, bool needsForeground
 		, uint32_t & binding
 		, uint32_t set )
-		: castor3d::shader::BackgroundModel{ writer, utils, castor::move( targetSize ), true, false, false }
+		: c3d::shader::BackgroundModel{ writer, utils, c3d::move( targetSize ), true, false, false }
 		, cameraBuffer{ writer.declUniformBuffer<>( CameraUbo::Buffer
 			, binding++
 			, set ) }
@@ -51,7 +51,7 @@ namespace atmosphere_scattering
 		, cloudsData{ model::getData< CloudsData >( cloudsBuffer, CloudsUbo::Data, needsForeground ) }
 		, atmosphere{ m_writer
 			, atmosphereData
-			, AtmosphereModel::Settings{ castor::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
+			, AtmosphereModel::Settings{ c3d::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
 				.setCameraData( &cameraData )
 				.setVariableSampleCount( true )
 				.setMieRayPhase( true )
@@ -71,18 +71,18 @@ namespace atmosphere_scattering
 	{
 	}
 
-	castor3d::shader::BackgroundModelPtr AtmosphereBackgroundModel::create( castor3d::Engine const & engine
+	c3d::shader::BackgroundModelPtr AtmosphereBackgroundModel::create( c3d::Engine const & engine
 		, sdw::ShaderWriter & writer
-		, castor3d::shader::Utils & utils
-		, castor3d::Extent2D targetSize
+		, c3d::shader::Utils & utils
+		, c3d::Extent2D targetSize
 		, bool needsForeground
 		, uint32_t & binding
 		, uint32_t set )
 	{
-		return castor::make_unique< AtmosphereBackgroundModel >( engine
+		return c3d::makeRawUnique< AtmosphereBackgroundModel >( engine
 			, writer
 			, utils
-			, castor::move( targetSize )
+			, c3d::move( targetSize )
 			, needsForeground
 			, binding
 			, set );

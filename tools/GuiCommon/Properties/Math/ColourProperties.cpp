@@ -3,16 +3,16 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
 
-GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( castor, HdrRgbColour )
-GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( castor, HdrRgbaColour )
+GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( c3d, HdrRgbColour )
+GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( c3d, HdrRgbaColour )
 
 namespace GuiCommon
 {
 	//*********************************************************************************************
 
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( HdrRgbColourProperty, wxPGProperty, castor::HdrRgbColour, castor::HdrRgbColour const &, TextCtrl )
+	WX_PG_IMPLEMENT_PROPERTY_CLASS( HdrRgbColourProperty, wxPGProperty, c3d::HdrRgbColour, c3d::HdrRgbColour const &, TextCtrl )
 
-		HdrRgbColourProperty::HdrRgbColourProperty( wxString const & label, wxString const & name, castor::HdrRgbColour const & value )
+		HdrRgbColourProperty::HdrRgbColourProperty( wxString const & label, wxString const & name, c3d::HdrRgbColour const & value )
 		: wxPGProperty( label, name )
 	{
 		setValueI( value );
@@ -58,16 +58,16 @@ namespace GuiCommon
 		return newVariant;
 	}
 
-	void HdrRgbColourProperty::setValueI( castor::HdrRgbColour const & value )
+	void HdrRgbColourProperty::setValueI( c3d::HdrRgbColour const & value )
 	{
 		m_value = WXVARIANT( value );
 	}
 
 	//*********************************************************************************************
 
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( HdrRgbaColourProperty, wxPGProperty, castor::HdrRgbaColour, castor::HdrRgbaColour const &, TextCtrl )
+	WX_PG_IMPLEMENT_PROPERTY_CLASS( HdrRgbaColourProperty, wxPGProperty, c3d::HdrRgbaColour, c3d::HdrRgbaColour const &, TextCtrl )
 
-	HdrRgbaColourProperty::HdrRgbaColourProperty( wxString const & label, wxString const & name, castor::HdrRgbaColour const & value )
+	HdrRgbaColourProperty::HdrRgbaColourProperty( wxString const & label, wxString const & name, c3d::HdrRgbaColour const & value )
 		: wxPGProperty( label, name )
 	{
 		setValueI( value );
@@ -119,7 +119,7 @@ namespace GuiCommon
 		return newVariant;
 	}
 
-	void HdrRgbaColourProperty::setValueI( castor::HdrRgbaColour const & value )
+	void HdrRgbaColourProperty::setValueI( c3d::HdrRgbaColour const & value )
 	{
 		m_value = WXVARIANT( value );
 	}

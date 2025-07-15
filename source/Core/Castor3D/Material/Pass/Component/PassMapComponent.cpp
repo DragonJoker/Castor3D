@@ -10,9 +10,9 @@
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 
-CU_ImplementSmartPtr( castor3d, PassMapComponent )
+CU_ImplementSmartPtr( c3d, PassMapComponent )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -30,8 +30,8 @@ namespace castor3d
 
 		//*********************************************************************************************
 
-		sdw::Float PassMapComponentsShader::loadFloatComponent( castor::String const & mapName
-			, castor::String const & valueName
+		sdw::Float PassMapComponentsShader::loadFloatComponent( String const & mapName
+			, String const & valueName
 			, PassShaders const & passShaders
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
@@ -39,8 +39,8 @@ namespace castor3d
 			, BlendComponents & components
 			, SampleTexture const & sampleTexture )const
 		{
-			auto mbMapName = castor::toUtf8( mapName );
-			auto mbValueName = castor::toUtf8( valueName );
+			auto mbMapName = toUtf8( mapName );
+			auto mbValueName = toUtf8( valueName );
 			auto textureName = mbMapName + "MapAndMask";
 
 			if ( !material.hasMember( textureName ) )
@@ -53,8 +53,8 @@ namespace castor3d
 				, material, components, sampleTexture );
 		}
 
-		sdw::Vec2 PassMapComponentsShader::loadVec2Component( castor::String const & mapName
-			, castor::String const & valueName
+		sdw::Vec2 PassMapComponentsShader::loadVec2Component( String const & mapName
+			, String const & valueName
 			, PassShaders const & passShaders
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
@@ -62,8 +62,8 @@ namespace castor3d
 			, BlendComponents & components
 			, SampleTexture const & sampleTexture )const
 		{
-			auto mbMapName = castor::toUtf8( mapName );
-			auto mbValueName = castor::toUtf8( valueName );
+			auto mbMapName = toUtf8( mapName );
+			auto mbValueName = toUtf8( valueName );
 			auto textureName = mbMapName + "MapAndMask";
 
 			if ( !material.hasMember( textureName ) )
@@ -76,8 +76,8 @@ namespace castor3d
 				, material, components, sampleTexture );
 		}
 
-		sdw::Vec3 PassMapComponentsShader::loadVec3Component( castor::String const & mapName
-			, castor::String const & valueName
+		sdw::Vec3 PassMapComponentsShader::loadVec3Component( String const & mapName
+			, String const & valueName
 			, PassShaders const & passShaders
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
@@ -85,8 +85,8 @@ namespace castor3d
 			, BlendComponents & components
 			, SampleTexture const & sampleTexture )const
 		{
-			auto mbMapName = castor::toUtf8( mapName );
-			auto mbValueName = castor::toUtf8( valueName );
+			auto mbMapName = toUtf8( mapName );
+			auto mbValueName = toUtf8( valueName );
 			auto textureName = mbMapName + "MapAndMask";
 
 			if ( !material.hasMember( textureName ) )
@@ -99,8 +99,8 @@ namespace castor3d
 				, material, components, sampleTexture );
 		}
 
-		sdw::Vec4 PassMapComponentsShader::loadVec4Component( castor::String const & mapName
-			, castor::String const & valueName
+		sdw::Vec4 PassMapComponentsShader::loadVec4Component( String const & mapName
+			, String const & valueName
 			, PassShaders const & passShaders
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
@@ -108,8 +108,8 @@ namespace castor3d
 			, BlendComponents & components
 			, SampleTexture const & sampleTexture )const
 		{
-			auto mbMapName = castor::toUtf8( mapName );
-			auto mbValueName = castor::toUtf8( valueName );
+			auto mbMapName = toUtf8( mapName );
+			auto mbValueName = toUtf8( valueName );
 			auto textureName = mbMapName + "MapAndMask";
 
 			if ( !material.hasMember( textureName ) )
@@ -122,8 +122,8 @@ namespace castor3d
 				, material, components, sampleTexture );
 		}
 
-		void PassMapComponentsShader::applyFloatComponent( castor::String const & mapName
-			, castor::String const & valueName
+		void PassMapComponentsShader::applyFloatComponent( String const & mapName
+			, String const & valueName
 			, PassShaders const & passShaders
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
@@ -131,9 +131,9 @@ namespace castor3d
 			, BlendComponents & components
 			, SampleTexture const & sampleTexture )const
 		{
-			auto mbMapName = castor::toUtf8( mapName );
-			auto mbValueName = castor::toUtf8( valueName );
-			auto textureName = castor::toUtf8( mapName ) + "MapAndMask";
+			auto mbMapName = toUtf8( mapName );
+			auto mbValueName = toUtf8( valueName );
+			auto textureName = toUtf8( mapName ) + "MapAndMask";
 
 			if ( !material.hasMember( textureName )
 				|| !components.hasMember( mbValueName ) )
@@ -147,8 +147,8 @@ namespace castor3d
 				, material, components, sampleTexture );
 		}
 
-		void PassMapComponentsShader::applyVec2Component( castor::String const & mapName
-			, castor::String const & valueName
+		void PassMapComponentsShader::applyVec2Component( String const & mapName
+			, String const & valueName
 			, PassShaders const & passShaders
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
@@ -156,9 +156,9 @@ namespace castor3d
 			, BlendComponents & components
 			, SampleTexture const & sampleTexture )const
 		{
-			auto mbMapName = castor::toUtf8( mapName );
-			auto mbValueName = castor::toUtf8( valueName );
-			auto textureName = castor::toUtf8( mapName ) + "MapAndMask";
+			auto mbMapName = toUtf8( mapName );
+			auto mbValueName = toUtf8( valueName );
+			auto textureName = toUtf8( mapName ) + "MapAndMask";
 
 			if ( !material.hasMember( textureName )
 				|| !components.hasMember( mbValueName ) )
@@ -172,8 +172,8 @@ namespace castor3d
 				, material, components, sampleTexture );
 		}
 
-		void PassMapComponentsShader::applyVec3Component( castor::String const & mapName
-			, castor::String const & valueName
+		void PassMapComponentsShader::applyVec3Component( String const & mapName
+			, String const & valueName
 			, PassShaders const & passShaders
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
@@ -181,9 +181,9 @@ namespace castor3d
 			, BlendComponents & components
 			, SampleTexture const & sampleTexture )const
 		{
-			auto mbMapName = castor::toUtf8( mapName );
-			auto mbValueName = castor::toUtf8( valueName );
-			auto textureName = castor::toUtf8( mapName ) + "MapAndMask";
+			auto mbMapName = toUtf8( mapName );
+			auto mbValueName = toUtf8( valueName );
+			auto textureName = toUtf8( mapName ) + "MapAndMask";
 
 			if ( !material.hasMember( textureName )
 				|| !components.hasMember( mbValueName ) )
@@ -197,8 +197,8 @@ namespace castor3d
 				, material, components, sampleTexture );
 		}
 
-		void PassMapComponentsShader::applyVec4Component( castor::String const & mapName
-			, castor::String const & valueName
+		void PassMapComponentsShader::applyVec4Component( String const & mapName
+			, String const & valueName
 			, PassShaders const & passShaders
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
@@ -206,9 +206,9 @@ namespace castor3d
 			, BlendComponents & components
 			, SampleTexture const & sampleTexture )const
 		{
-			auto mbMapName = castor::toUtf8( mapName );
-			auto mbValueName = castor::toUtf8( valueName );
-			auto textureName = castor::toUtf8( mapName ) + "MapAndMask";
+			auto mbMapName = toUtf8( mapName );
+			auto mbValueName = toUtf8( valueName );
+			auto textureName = toUtf8( mapName ) + "MapAndMask";
 
 			if ( !material.hasMember( textureName )
 				|| !components.hasMember( mbValueName ) )
@@ -222,9 +222,9 @@ namespace castor3d
 				, material, components, sampleTexture );
 		}
 
-		sdw::Float PassMapComponentsShader::doLoadFloatComponent( castor::MbString const & mbMapName
-			, castor::MbString const & mbValueName
-			, castor::MbString const & textureName
+		sdw::Float PassMapComponentsShader::doLoadFloatComponent( MbString const & mbMapName
+			, MbString const & mbValueName
+			, MbString const & textureName
 			, PassShaders const & passShaders
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
@@ -241,9 +241,9 @@ namespace castor3d
 				, mask );
 		}
 
-		sdw::Vec2 PassMapComponentsShader::doLoadVec2Component( castor::MbString const & mbMapName
-			, castor::MbString const & mbValueName
-			, castor::MbString const & textureName
+		sdw::Vec2 PassMapComponentsShader::doLoadVec2Component( MbString const & mbMapName
+			, MbString const & mbValueName
+			, MbString const & textureName
 			, PassShaders const & passShaders
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
@@ -260,9 +260,9 @@ namespace castor3d
 				, mask );
 		}
 
-		sdw::Vec3 PassMapComponentsShader::doLoadVec3Component( castor::MbString const & mbMapName
-			, castor::MbString const & mbValueName
-			, castor::MbString const & textureName
+		sdw::Vec3 PassMapComponentsShader::doLoadVec3Component( MbString const & mbMapName
+			, MbString const & mbValueName
+			, MbString const & textureName
 			, PassShaders const & passShaders
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
@@ -279,9 +279,9 @@ namespace castor3d
 				, mask );
 		}
 
-		sdw::Vec4 PassMapComponentsShader::doLoadVec4Component( castor::MbString const & mbMapName
-			, castor::MbString const & mbValueName
-			, castor::MbString const & textureName
+		sdw::Vec4 PassMapComponentsShader::doLoadVec4Component( MbString const & mbMapName
+			, MbString const & mbValueName
+			, MbString const & textureName
 			, PassShaders const & passShaders
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
@@ -319,8 +319,8 @@ namespace castor3d
 	}
 
 	bool PassMapComponentPlugin::writeTextureConfig( TextureConfiguration const & configuration
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
 		bool result = true;
 
@@ -336,10 +336,10 @@ namespace castor3d
 	//*********************************************************************************************
 
 	PassMapComponent::PassMapComponent( Pass & pass
-		, castor::String type
+		, String type
 		, TextureFlags textureFlags
-		, castor::StringArray deps )
-		: PassComponent{ pass, castor::move( type ), castor::move( deps ) }
+		, StringArray deps )
+		: PassComponent{ pass, c3d::move( type ), c3d::move( deps ) }
 		, m_textureFlags{ makeTextureFlag( getId(), textureFlags ) }
 	{
 	}
@@ -354,9 +354,9 @@ namespace castor3d
 	}
 
 	void PassMapComponent::createDefaultTexture( Pass & pass
-		, castor::String name
+		, String name
 		, TextureConfiguration config
-		, castor::ImageCreateParams imageParams )
+		, ImageCreateParams imageParams )
 	{
 		TextureSourceInfo sourceInfo{ std::move( name ), std::move( config ), std::move( imageParams ) };
 		PassTextureConfig passConfig{ getEngine( pass )->getDefaultSampler() };

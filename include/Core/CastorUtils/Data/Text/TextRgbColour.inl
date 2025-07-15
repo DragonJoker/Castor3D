@@ -1,4 +1,4 @@
-namespace castor
+namespace c3d
 {
 	template< typename ComponentT >
 	TextWriter< RgbColourT< ComponentT > >::TextWriter( String const & tabs )

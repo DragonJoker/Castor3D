@@ -1,4 +1,4 @@
-namespace castor
+namespace c3d
 {
 	template< PixelFormat FT >
 	PxBuffer< FT >::PxBuffer( Size const & size

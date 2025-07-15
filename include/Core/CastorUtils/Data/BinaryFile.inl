@@ -1,4 +1,4 @@
-namespace castor
+namespace c3d
 {
 	template< typename T >
 	uint64_t BinaryFile::write( T const & toWrite )
@@ -38,14 +38,14 @@ namespace castor
 }
 
 template< typename T >
-castor::BinaryFile & castor::operator<<( castor::BinaryFile & file, T const & toWrite )
+c3d::BinaryFile & c3d::operator<<( c3d::BinaryFile & file, T const & toWrite )
 {
 	file.write( toWrite );
 	return file;
 }
 
 template< typename T >
-castor::BinaryFile & castor::operator>>( castor::BinaryFile & file, T & toRead )
+c3d::BinaryFile & c3d::operator>>( c3d::BinaryFile & file, T & toRead )
 {
 	file.read( toRead );
 	return file;

@@ -15,19 +15,19 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementSmartPtr( castor3d, MeshletComponent )
+CU_ImplementSmartPtr( c3d, MeshletComponent )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
 	namespace mshletcomp
 	{
-		static castor::MbString getName( Submesh const & submesh )
+		static MbString getName( Submesh const & submesh )
 		{
-			return castor::toUtf8( submesh.getOwner()->getName() )
-				+ castor::string::toMbString( submesh.getId() )
+			return toUtf8( submesh.getOwner()->getName() )
+				+ string::toMbString( submesh.getId() )
 				+ "Meshlet";
 		}
 	}
@@ -136,7 +136,7 @@ namespace castor3d
 				writes.push_back( bufferIt->second.buffer.getStorageBinding( uint32_t( MeshBuffersIdx::eInstances ) ) );
 			}
 
-			descSetIt->second->setBindings( castor::move( writes ) );
+			descSetIt->second->setBindings( c3d::move( writes ) );
 			descSetIt->second->update();
 		}
 #endif
@@ -359,7 +359,7 @@ namespace castor3d
 			, VK_SHADER_STAGE_TASK_BIT_NV | VK_SHADER_STAGE_MESH_BIT_NV ) );
 
 		m_descriptorLayout = device->createDescriptorSetLayout( mshletcomp::getName( m_submesh )
-			, castor::move( bindings ) );
+			, c3d::move( bindings ) );
 		m_descriptorPool = m_descriptorLayout->createPool( mshletcomp::getName( m_submesh )
 			, MaxNodesPerPipeline );
 #endif
@@ -367,19 +367,19 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const MeshletComponent::TypeName = C3D_MakeSubmeshComponentName( "meshlet" );
+	String const MeshletComponent::TypeName = C3D_MakeSubmeshComponentName( "meshlet" );
 
 	MeshletComponent::MeshletComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, TypeName
-			, castor::make_unique< ComponentData >( submesh ) }
+			, makeRawUnique< ComponentData >( submesh ) }
 	{
 	}
 
 	SubmeshComponentUPtr MeshletComponent::clone( Submesh & submesh )const
 	{
-		auto result = castor::makeUnique< MeshletComponent >( submesh );
+		auto result = makeUnique< MeshletComponent >( submesh );
 		getData().copy( &result->getData() );
-		return castor::ptrRefCast< SubmeshComponent >( result );
+		return ptrRefCast< SubmeshComponent >( result );
 	}
 
 	ProgramFlags MeshletComponent::getProgramFlags( Pass const & pass )const noexcept

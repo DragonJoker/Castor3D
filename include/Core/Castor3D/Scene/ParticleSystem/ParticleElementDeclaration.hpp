@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "ParticleModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	struct ParticleElementDeclaration
 	{
@@ -27,7 +27,7 @@ namespace castor3d
 		 *\param[in]	offset	Offset dans le tampon.
 		 *\param[in]	divisor	Incrément d'attribut d'instanciation.
 		 */
-		inline ParticleElementDeclaration( castor::String const & name
+		inline ParticleElementDeclaration( String const & name
 			, ElementUsages const & usages
 			, ParticleFormat type
 			, uint32_t offset = 0u
@@ -42,7 +42,7 @@ namespace castor3d
 
 		//!\~english	The associated variable name.
 		//!\~french		Le nom de la variable associée.
-		castor::String m_name{};
+		String m_name{};
 		//!\~english	Element usage.
 		//!\~french		Utilisation de l'élément.
 		ElementUsages m_usages{};

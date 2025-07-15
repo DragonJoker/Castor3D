@@ -9,10 +9,8 @@
 
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	namespace txtpass
 	{
 		static bool isSerialisable( TextureUnit const & unit )

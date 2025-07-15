@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class AnimatedSkeleton
 		: public AnimatedObject
@@ -43,7 +43,7 @@ namespace castor3d
 		 *\param[in]	mesh		Le maillage auquel le squelette est lié.
 		 *\param[in]	geometry	La géométrie instanciant le maillage.
 		 */
-		C3D_API AnimatedSkeleton( castor::String const & name
+		C3D_API AnimatedSkeleton( String const & name
 			, Skeleton & skeleton
 			, Mesh & mesh
 			, Geometry & geometry );
@@ -57,9 +57,9 @@ namespace castor3d
 		 */
 		C3D_API uint32_t fillBuffer( SkinningTransformsConfiguration * buffer )const;
 		/**
-		 *\copydoc		castor3d::AnimatedObject::update
+		 *\copydoc		AnimatedObject::update
 		 */
-		C3D_API void update( castor::Milliseconds const & elapsed )override;
+		C3D_API void update( Milliseconds const & elapsed )override;
 
 		bool isPlayingAnimation()const override
 		{
@@ -92,13 +92,13 @@ namespace castor3d
 		}
 
 	private:
-		void doAddAnimation( castor::String const & name )override;
+		void doAddAnimation( String const & name )override;
 		void doStartAnimation( AnimationInstance & animation )override;
 		void doStopAnimation( AnimationInstance & animation )override;
 		void doClearAnimations()override;
 
 	protected:
-		using InstanceArray = castor::Vector< SkeletonAnimationInstance * >;
+		using InstanceArray = Vector< SkeletonAnimationInstance * >;
 
 		Skeleton & m_skeleton;
 		Mesh & m_mesh;

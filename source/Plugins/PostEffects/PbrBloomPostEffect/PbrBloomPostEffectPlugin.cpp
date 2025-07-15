@@ -22,7 +22,7 @@ namespace PbrBloom
 {
 	struct BloomContext
 	{
-		castor3d::RenderTargetRPtr renderTarget{};
+		c3d::RenderTargetRPtr renderTarget{};
 		float bloomStrength{ BaseBloomStrength };
 		uint32_t blurRadius{ BaseBlurRadius };
 		uint32_t passes{ BaseFilterCount };
@@ -34,7 +34,7 @@ namespace PbrBloom
 		eRoot = CU_MakeSectionName( 'P', 'B', 'B', 'M' ),
 	};
 
-	static CU_ImplementAttributeParserNewBlock( parserPbrBloom, castor3d::TargetContext, BloomContext )
+	static CU_ImplementAttributeParserNewBlock( parserPbrBloom, c3d::TargetContext, BloomContext )
 	{
 		newBlockContext->renderTarget = blockContext->renderTarget;
 	}
@@ -81,13 +81,13 @@ namespace PbrBloom
 
 	static CU_ImplementAttributeParserBlock( parserBloomEnd, BloomContext )
 	{
-		castor3d::Parameters parameters;
+		c3d::Parameters parameters;
 		parameters.add( cuT( "bloomStrength" )
-			, castor::string::toString( blockContext->bloomStrength ) );
+			, c3d::string::toString( blockContext->bloomStrength ) );
 		parameters.add( cuT( "blurRadius" )
-			, castor::string::toString( blockContext->blurRadius ) );
+			, c3d::string::toString( blockContext->blurRadius ) );
 		parameters.add( cuT( "passes" )
-			, castor::string::toString( blockContext->passes ) );
+			, c3d::string::toString( blockContext->passes ) );
 
 		auto effect = blockContext->renderTarget->getPostEffect( PostEffect::Type );
 		effect->enable( true );
@@ -95,11 +95,11 @@ namespace PbrBloom
 	}
 	CU_EndAttributePop()
 
-	static castor::AttributeParsers createParsers()
+	static c3d::AttributeParsers createParsers()
 	{
-		castor::AttributeParsers result;
+		c3d::AttributeParsers result;
 		addParserT( result
-			, castor3d::CSCNSection::eRenderTarget
+			, c3d::CSCNSection::eRenderTarget
 			, PbrBloomSection::eRoot
 			, cuT( "pbr_bloom" )
 			, &parserPbrBloom );
@@ -107,26 +107,26 @@ namespace PbrBloom
 			, PbrBloomSection::eRoot
 			, cuT( "bloomStrength" )
 			, &parserBloomStrength
-			, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 0.0f, 1.0f ) ) } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >( c3d::makeRange( 0.0f, 1.0f ) ) } );
 		addParserT( result
 			, PbrBloomSection::eRoot
 			, cuT( "blurRadius" )
 			, &parserBlurRadius
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >( castor::makeRange( 1u, 10u ) ) } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >( c3d::makeRange( 1u, 10u ) ) } );
 		addParserT( result
 			, PbrBloomSection::eRoot
 			, cuT( "passes" )
 			, &parserPasses
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >( castor::makeRange( 1u, 10u ) ) } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >( c3d::makeRange( 1u, 10u ) ) } );
 		addParserT( result
 			, PbrBloomSection::eRoot
-			, castor3d::CSCNSection::eRenderTarget
+			, c3d::CSCNSection::eRenderTarget
 			, cuT( "}" )
 			, &parserBloomEnd );
 		return result;
 	}
 
-	static castor::StrUInt32Map createSections()
+	static c3d::StrUInt32Map createSections()
 	{
 		return
 		{
@@ -137,26 +137,26 @@ namespace PbrBloom
 
 extern "C"
 {
-	C3D_PbrBloom_API void getRequiredVersion( castor3d::Version * version );
+	C3D_PbrBloom_API void getRequiredVersion( c3d::Version * version );
 	C3D_PbrBloom_API void isDebug( int * value );
-	C3D_PbrBloom_API void getType( castor3d::PluginType * type );
+	C3D_PbrBloom_API void getType( c3d::PluginType * type );
 	C3D_PbrBloom_API void getName( char const ** name );
-	C3D_PbrBloom_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
-	C3D_PbrBloom_API void onUnload( castor3d::Engine * engine );
+	C3D_PbrBloom_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin );
+	C3D_PbrBloom_API void onUnload( c3d::Engine * engine );
 
-	C3D_PbrBloom_API void getRequiredVersion( castor3d::Version * version )
+	C3D_PbrBloom_API void getRequiredVersion( c3d::Version * version )
 	{
-		*version = castor3d::Version();
+		*version = c3d::Version();
 	}
 
 	C3D_PbrBloom_API void isDebug( int * value )
 	{
-		*value = castor::system::isDebug() ? 1 : 0;
+		*value = c3d::system::isDebug() ? 1 : 0;
 	}
 
-	C3D_PbrBloom_API void getType( castor3d::PluginType * type )
+	C3D_PbrBloom_API void getType( c3d::PluginType * type )
 	{
-		*type = castor3d::PluginType::ePostEffect;
+		*type = c3d::PluginType::ePostEffect;
 	}
 
 	C3D_PbrBloom_API void getName( char const ** name )
@@ -164,7 +164,7 @@ extern "C"
 		*name = PbrBloom::PostEffect::Name.c_str();
 	}
 
-	C3D_PbrBloom_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
+	C3D_PbrBloom_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin )
 	{
 		engine->getPostEffectFactory().registerType( PbrBloom::PostEffect::Type
 			, &PbrBloom::PostEffect::create );
@@ -174,7 +174,7 @@ extern "C"
 			, nullptr );
 	}
 
-	C3D_PbrBloom_API void onUnload( castor3d::Engine * engine )
+	C3D_PbrBloom_API void onUnload( c3d::Engine * engine )
 	{
 		engine->unregisterParsers( PbrBloom::PostEffect::Type );
 		engine->getPostEffectFactory().unregisterType( PbrBloom::PostEffect::Type );

@@ -3,22 +3,22 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 
-CU_ImplementSmartPtr( castor3d, MovableObject )
+CU_ImplementSmartPtr( c3d, MovableObject )
 
-namespace castor3d
+namespace c3d
 {
-	MovableObject::MovableObject( castor::String const & name
+	MovableObject::MovableObject( String const & name
 		, Scene & scene
 		, MovableType type
 		, SceneNode & node )
-		: castor::OwnedBy< Scene >{ scene }
-		, castor::Named( name )
+		: OwnedBy< Scene >{ scene }
+		, Named( name )
 		, m_type{ type }
 	{
 		node.attachObject( *this );
 	}
 	
-	MovableObject::MovableObject( castor::String const & name
+	MovableObject::MovableObject( String const & name
 		, Scene & scene
 		, MovableType type )
 		: MovableObject
@@ -77,7 +77,7 @@ namespace castor3d
 		return getScene()->getEngine();
 	}
 
-	castor::String getPrefix( MovableContext const & context )
+	String getPrefix( MovableContext const & context )
 	{
 		return getPrefix( *context.scene );
 	}

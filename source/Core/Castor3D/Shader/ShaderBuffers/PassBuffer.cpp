@@ -9,9 +9,9 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementSmartPtr( castor3d, PassBuffer )
+CU_ImplementSmartPtr( c3d, PassBuffer )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -90,7 +90,7 @@ namespace castor3d
 		: m_stride{ uint32_t( engine.getPassComponentsRegister().getPassBufferStride() ) }
 		, m_maxCount{ count }
 		, m_buffer{ device, count * VkDeviceSize( m_stride ), cuT( "PassBuffer" ) }
-		, m_data{ castor::makeArrayView( m_buffer.getPtr(), count * m_stride ) }
+		, m_data{ makeArrayView( m_buffer.getPtr(), count * m_stride ) }
 	{
 	}
 
@@ -98,7 +98,7 @@ namespace castor3d
 	{
 		if ( pass.getId() == 0u )
 		{
-			auto lock( castor::makeUniqueLock( m_mutex ) );
+			auto lock( makeUniqueLock( m_mutex ) );
 
 			CU_Require( m_passes.size() < m_maxCount );
 			m_passes.emplace_back( &pass );
@@ -118,7 +118,7 @@ namespace castor3d
 
 	void PassBuffer::removePass( Pass & pass )noexcept
 	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 
 		auto id = pass.getId() - 1u;
 		CU_Require( id < m_passes.size() );
@@ -141,15 +141,15 @@ namespace castor3d
 	void PassBuffer::update( SpecificsBuffers const & specifics
 		, UploadData & uploader )
 	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 
 		if ( !m_dirty.empty() )
 		{
-			castor::Vector< Pass const * > dirty;
-			castor::swap( m_dirty, dirty );
+			Vector< Pass const * > dirty;
+			c3d::swap( m_dirty, dirty );
 			auto end = std::unique( dirty.begin(), dirty.end() );
 
-			for ( auto pass : castor::makeArrayView( dirty.begin(), end ) )
+			for ( auto pass : makeArrayView( dirty.begin(), end ) )
 			{
 				if ( auto it = m_passTypeIndices.emplace( passbuf::hash( *pass )
 						, PassTypeData{ uint16_t( m_passTypeIndices.size() )
@@ -190,7 +190,7 @@ namespace castor3d
 
 	void PassBuffer::cleanup()
 	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 		m_dirty.clear();
 	}
 
@@ -223,17 +223,17 @@ namespace castor3d
 		if ( auto index = passID - 1;
 			index < m_maxCount )
 		{
-			return PassBuffer::PassDataPtr{ castor::makeArrayView( m_data.data() + ptrdiff_t( m_stride ) * index, m_stride ) };
+			return PassBuffer::PassDataPtr{ makeArrayView( m_data.data() + ptrdiff_t( m_stride ) * index, m_stride ) };
 		}
 
 		CU_Failure( "Pass ID is out of buffer bounds." );
-		static castor::ByteArray dummy{ [this]()
+		static ByteArray dummy{ [this]()
 			{
-				castor::ByteArray result;
+				ByteArray result;
 				result.resize( m_stride );
 				return result;
 			}() };
-		return PassBuffer::PassDataPtr{ castor::makeArrayView( dummy.data(), m_stride ) };
+		return PassBuffer::PassDataPtr{ makeArrayView( dummy.data(), m_stride ) };
 	}
 
 	uint32_t PassBuffer::getMaxPassTypeCount()const
@@ -259,7 +259,7 @@ namespace castor3d
 	{
 		auto it = std::find_if( m_passTypeIndices.begin()
 			, m_passTypeIndices.end()
-			, [&passTypeIndex]( castor::UnorderedMap< uint32_t, PassTypeData >::value_type const & lookup )
+			, [&passTypeIndex]( HashMap< uint32_t, PassTypeData >::value_type const & lookup )
 			{
 				return lookup.second.index == passTypeIndex;
 			} );

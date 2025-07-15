@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderTechniquePass.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class VisibilityPass
 		: public RenderTechniqueNodesPass
@@ -45,11 +45,11 @@ namespace castor3d
 			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 		/**
-		 *\copydoc		castor3d::RenderNodesPass::getShaderFlags
+		 *\copydoc		RenderNodesPass::getShaderFlags
 		 */
 		C3D_API ShaderFlags getShaderFlags()const noexcept override;
 
@@ -66,7 +66,7 @@ namespace castor3d
 			, ast::ShaderBuilder & builder )const override;
 
 	public:
-		C3D_API static castor::String const Type;
+		C3D_API static String const Type;
 	};
 }
 

@@ -4,7 +4,7 @@
 
 #include <iomanip>
 
-namespace castor
+namespace c3d
 {
 	class LinuxConsole
 		: public ConsoleImpl
@@ -54,7 +54,7 @@ namespace castor
 	ProgramConsole::ProgramConsole( CU_UnusedParam( bool, showConsole ) )
 	{
 		std::ios::sync_with_stdio( false );
-		m_console = castor::make_unique< LinuxConsole >();
+		m_console = c3d::makeRawUnique< LinuxConsole >();
 	}
 
 	void ProgramConsole::beginLog( LogType logLevel )

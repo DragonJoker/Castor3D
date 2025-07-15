@@ -10,9 +10,9 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementSmartPtr( castor3d, PanelOverlay )
+CU_ImplementSmartPtr( c3d, PanelOverlay )
 
-namespace castor3d
+namespace c3d
 {
 	PanelOverlay::PanelOverlay()
 		: OverlayCategory( OverlayType::ePanel )
@@ -21,7 +21,7 @@ namespace castor3d
 
 	OverlayCategoryUPtr PanelOverlay::create()
 	{
-		return castor::makeUniqueDerived< OverlayCategory, PanelOverlay >();
+		return makeUniqueDerived< OverlayCategory, PanelOverlay >();
 	}
 
 	void PanelOverlay::accept( OverlayVisitor & visitor )const

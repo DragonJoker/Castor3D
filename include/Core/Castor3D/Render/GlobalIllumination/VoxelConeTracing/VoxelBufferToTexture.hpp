@@ -16,7 +16,7 @@ See LICENSE file in root folder
 
 #include <RenderGraph/RunnablePass.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class VoxelBufferToTexture
 		: public crg::RunnablePass
@@ -52,7 +52,7 @@ namespace castor3d
 			, VctConfig const & vctConfig
 			, crg::RunnablePass::IsEnabledCallback isEnabled );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 
@@ -68,7 +68,7 @@ namespace castor3d
 		VctConfig const & m_vctConfig;
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
-		castor::Array< Pipeline, 4u > m_pipelines;
+		Array< Pipeline, 4u > m_pipelines;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
 		ashes::DescriptorSetPtr m_descriptorSet;
 	};

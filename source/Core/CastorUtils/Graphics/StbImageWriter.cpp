@@ -14,7 +14,7 @@
 #include "stb_image_write.h"
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	//************************************************************************************************
 
@@ -144,7 +144,7 @@ namespace castor
 	void StbImageWriter::registerWriter( ImageWriter & reg )
 	{
 		reg.registerWriter( stbiw::listExtensions()
-			, castor::make_unique< StbImageWriter >() );
+			, c3d::makeRawUnique< StbImageWriter >() );
 	}
 
 	void StbImageWriter::unregisterWriter( ImageWriter & reg )

@@ -11,11 +11,11 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	C3D_API size_t hash( BillboardBase const & billboard
 		, Pass const & pass );
-	using BillboardCacheTraits = ObjectCacheTraitsT< BillboardList, castor::String >;
+	using BillboardCacheTraits = ObjectCacheTraitsT< BillboardList, String >;
 	/**
 	\~english
 	\brief		BillboardList cache.
@@ -23,12 +23,12 @@ namespace castor3d
 	\brief		Cache de BillboardList.
 	*/
 	template<>
-	class ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits > final
-		: public ObjectCacheBaseT< BillboardList, castor::String, BillboardCacheTraits >
+	class ObjectCacheT< BillboardList, String, BillboardCacheTraits > final
+		: public ObjectCacheBaseT< BillboardList, String, BillboardCacheTraits >
 	{
 	public:
 		using ElementT = BillboardList;
-		using ElementKeyT = castor::String;
+		using ElementKeyT = String;
 		using ElementCacheTraitsT = BillboardCacheTraits;
 		using ElementObjectCacheT = ObjectCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementObjectCacheT::ElementPtrT;

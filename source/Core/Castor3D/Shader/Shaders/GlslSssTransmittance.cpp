@@ -12,9 +12,9 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementSmartPtr( castor3d::shader, SssTransmittance )
+CU_ImplementSmartPtr( c3d::shader, SssTransmittance )
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	SssTransmittance::SssTransmittance( sdw::ShaderWriter & writer
 		, Shadow & shadows

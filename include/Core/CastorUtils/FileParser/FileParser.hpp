@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Log/LogModule.hpp"
 
-namespace castor
+namespace c3d
 {
 	class PreprocessedFile
 	{
@@ -26,12 +26,12 @@ namespace castor
 				, ParserFunctionAndParams function = {}
 				, String params = {}
 				, bool implicit = {} )
-				: file{ castor::move( file ) }
+				: file{ c3d::move( file ) }
 				, line{ line }
-				, name{ castor::move( name ) }
+				, name{ c3d::move( name ) }
 				, section{ section }
-				, function{ castor::move( function ) }
-				, params{ castor::move( params ) }
+				, function{ c3d::move( function ) }
+				, params{ c3d::move( params ) }
 				, implicit{ implicit }
 			{
 			}
@@ -78,7 +78,7 @@ namespace castor
 			return uint32_t( m_actions.size() );
 		}
 
-		using ActionFunc = castor::Function< void( SectionId, Action const & ) >;
+		using ActionFunc = c3d::Function< void( SectionId, Action const & ) >;
 		using ActionSignal = SignalT< ActionFunc >;
 		using ActionConnection = ConnectionT< ActionSignal >;
 
@@ -454,7 +454,7 @@ namespace castor
 		 *\return		Le nom.
 		 */
 		CU_API virtual String doGetSectionName( SectionId section )const = 0;
-		CU_API virtual castor::RawUniquePtr< FileParser > doCreateParser()const = 0;
+		CU_API virtual c3d::RawUniquePtr< FileParser > doCreateParser()const = 0;
 
 	private:
 		void doProcessNoBlockLine( StringView curLine

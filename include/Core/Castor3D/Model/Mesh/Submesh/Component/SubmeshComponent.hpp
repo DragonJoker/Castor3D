@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/GpuBufferOffset.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	struct SubmeshSubComponent
 	{
@@ -193,7 +193,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les données du shader de rendu.
 		 */
-		C3D_API virtual SubmeshRenderDataPtr createData( castor3d::SubmeshComponent const & component ) = 0;
+		C3D_API virtual SubmeshRenderDataPtr createData( SubmeshComponent const & component ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader source matching the given flags.
@@ -273,7 +273,7 @@ namespace castor3d
 			, Pass const & pass
 			, ObjectBufferOffset const & bufferOffsets
 			, ashes::BufferCRefArray & buffers
-			, castor::Vector< uint64_t > & offsets
+			, Vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 			, uint32_t & currentBinding
 			, uint32_t & currentLocation ) = 0;
@@ -351,7 +351,7 @@ namespace castor3d
 		 *\param[in]	pcreateParserContext	La fonction de création d'un contexte défini par l'utilisateur.
 		 */
 		C3D_API explicit SubmeshComponentPlugin( SubmeshComponentRegister const & submeshComponents
-			, castor::UserContextCreator const & pcreateParserContext = {} )
+			, UserContextCreator const & pcreateParserContext = {} )
 			: createParserContext{ pcreateParserContext }
 			, m_submeshComponents{ submeshComponents }
 		{
@@ -370,7 +370,7 @@ namespace castor3d
 		 *\brief			Remplit les listes données avec les parsers de ce composant.
 		 *\param[in,out]	parsers	Reçoit les parsers.
 		 */
-		C3D_API virtual void createParsers( castor::AttributeParsers & parsers )const
+		C3D_API virtual void createParsers( AttributeParsers & parsers )const
 		{
 		}
 		/**
@@ -381,11 +381,11 @@ namespace castor3d
 		 *\brief			Remplit la liste de sections donnée avec les sections créées par ce composant.
 		 *\param[in,out]	sections	Reçoit les sections.
 		 */
-		C3D_API virtual void createSections( castor::StrUInt32Map & sections )const
+		C3D_API virtual void createSections( StrUInt32Map & sections )const
 		{
 		}
 
-		castor::UserContextCreator createParserContext;
+		UserContextCreator createParserContext;
 		/**@}*/
 		/**
 		 *\~english
@@ -574,7 +574,7 @@ namespace castor3d
 	};
 
 	class SubmeshComponent
-		: public castor::OwnedBy< Submesh >
+		: public OwnedBy< Submesh >
 	{
 	public:
 		/**
@@ -592,9 +592,9 @@ namespace castor3d
 		 *\param[in]	deps	Les composants dont celui-ci dépend.
 		 */
 		C3D_API SubmeshComponent( Submesh & submesh
-			, castor::String const & type
+			, String const & type
 			, SubmeshComponentDataUPtr data = {}
-			, castor::StringArray deps = {} );
+			, StringArray deps = {} );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -616,10 +616,10 @@ namespace castor3d
 		 *\param[in]		subfolder	Le sous-dossier de ressources.
 		 *\param[in,out]	file		Le fichier de sortie.
 		 */
-		C3D_API virtual bool writeText( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::String const & subfolder
-			, castor::StringStream & file )const
+		C3D_API virtual bool writeText( String const & tabs
+			, Path const & folder
+			, String const & subfolder
+			, StringStream & file )const
 		{
 			return true;
 		}
@@ -681,12 +681,12 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		castor::String const & getType()const noexcept
+		String const & getType()const noexcept
 		{
 			return m_type;
 		}
 
-		castor::StringArray const & getDependencies()const noexcept
+		StringArray const & getDependencies()const noexcept
 		{
 			return m_dependencies;
 		}
@@ -729,8 +729,8 @@ namespace castor3d
 		SubmeshRenderDataPtr m_renderData;
 
 	private:
-		castor::String m_type;
-		castor::StringArray m_dependencies;
+		String m_type;
+		StringArray m_dependencies;
 		SubmeshComponentID m_id;
 		SubmeshComponentPlugin const & m_plugin;
 	};

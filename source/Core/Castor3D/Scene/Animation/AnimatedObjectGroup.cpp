@@ -18,16 +18,16 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, AnimatedObjectGroup )
+CU_ImplementSmartPtr( c3d, AnimatedObjectGroup )
 
-namespace castor3d
+namespace c3d
 {
 	namespace anmobjgrp
 	{
 		template< typename FuncT, typename ParamT >
 		static bool applyAnimationFunc( GroupAnimationMap & animations
 			, AnimatedObjectGroup::AnimatedObjectMap & objects
-			, castor::String const & name
+			, String const & name
 			, FuncT func
 			, ParamT const & value
 			, size_t outputOffset )
@@ -66,7 +66,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 
 				if ( auto geometry = blockContext->scene->scene->findGeometry( name ) )
 				{
@@ -129,7 +129,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 
 				if ( auto geometry = blockContext->scene->scene->findGeometry( name ) )
 				{
@@ -167,7 +167,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 
 				if ( auto geometry = blockContext->scene->scene->findGeometry( name ) )
 				{
@@ -213,7 +213,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 
 				if ( auto node = blockContext->scene->scene->findSceneNode( name ) )
 				{
@@ -257,7 +257,7 @@ namespace castor3d
 			}
 			else if ( blockContext->animGroup )
 			{
-				blockContext->animGroup->startAnimation( params[0]->get< castor::String >() );
+				blockContext->animGroup->startAnimation( params[0]->get< String >() );
 			}
 			else
 			{
@@ -274,7 +274,7 @@ namespace castor3d
 			}
 			else if ( blockContext->animGroup )
 			{
-				blockContext->animGroup->pauseAnimation( params[0]->get< castor::String >() );
+				blockContext->animGroup->pauseAnimation( params[0]->get< String >() );
 			}
 			else
 			{
@@ -339,7 +339,7 @@ namespace castor3d
 			else if ( blockContext->animGroup )
 			{
 				blockContext->animGroup->setAnimationStartingPoint( blockContext->animName
-					, castor::Milliseconds{ uint64_t( params[0]->get< float >() * 1000.0f ) } );
+					, Milliseconds{ uint64_t( params[0]->get< float >() * 1000.0f ) } );
 			}
 			else
 			{
@@ -357,7 +357,7 @@ namespace castor3d
 			else if ( blockContext->animGroup )
 			{
 				blockContext->animGroup->setAnimationStoppingPoint( blockContext->animName
-					, castor::Milliseconds{ uint64_t( params[0]->get< float >() * 1000.0f ) } );
+					, Milliseconds{ uint64_t( params[0]->get< float >() * 1000.0f ) } );
 			}
 			else
 			{
@@ -393,9 +393,9 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	AnimatedObjectGroup::AnimatedObjectGroup( castor::String const & name, Scene & scene )
-		: castor::Named( name )
-		, castor::OwnedBy< Scene >( scene )
+	AnimatedObjectGroup::AnimatedObjectGroup( String const & name, Scene & scene )
+		: Named( name )
+		, OwnedBy< Scene >( scene )
 	{
 		m_timer.getElapsed();
 	}
@@ -407,12 +407,12 @@ namespace castor3d
 	}
 
 	AnimatedObjectRPtr AnimatedObjectGroup::addObject( SceneNode & node
-		, castor::String const & name )
+		, String const & name )
 	{
-		auto object = castor::makeUniqueDerived< AnimatedObject, AnimatedSceneNode >( name + cuT( "_Node" ), node );
+		auto object = makeUniqueDerived< AnimatedObject, AnimatedSceneNode >( name + cuT( "_Node" ), node );
 		auto result = object.get();
 
-		if ( !addObject( castor::move( object ) ) )
+		if ( !addObject( c3d::move( object ) ) )
 		{
 			result = {};
 		}
@@ -422,12 +422,12 @@ namespace castor3d
 
 	AnimatedObjectRPtr AnimatedObjectGroup::addObject( Mesh & mesh
 		, Geometry & geometry
-		, castor::String const & name )
+		, String const & name )
 	{
-		auto object = castor::makeUniqueDerived< AnimatedObject, AnimatedMesh >( name + cuT( "_Mesh" ), mesh, geometry );
+		auto object = makeUniqueDerived< AnimatedObject, AnimatedMesh >( name + cuT( "_Mesh" ), mesh, geometry );
 		auto result = object.get();
 
-		if ( !addObject( castor::move( object ) ) )
+		if ( !addObject( c3d::move( object ) ) )
 		{
 			result = {};
 		}
@@ -438,12 +438,12 @@ namespace castor3d
 	AnimatedObjectRPtr AnimatedObjectGroup::addObject( Skeleton & skeleton
 		, Mesh & mesh
 		, Geometry & geometry
-		, castor::String const & name )
+		, String const & name )
 	{
-		auto object = castor::makeUniqueDerived< AnimatedObject, AnimatedSkeleton >( name + cuT( "_Skeleton" ), skeleton, mesh, geometry );
+		auto object = makeUniqueDerived< AnimatedObject, AnimatedSkeleton >( name + cuT( "_Skeleton" ), skeleton, mesh, geometry );
 		auto result = object.get();
 
-		if ( !addObject( castor::move( object ) ) )
+		if ( !addObject( c3d::move( object ) ) )
 		{
 			result = {};
 		}
@@ -455,10 +455,10 @@ namespace castor3d
 		, TextureConfiguration const & config
 		, Pass & pass )
 	{
-		auto object = castor::makeUniqueDerived< AnimatedObject, AnimatedTexture >( sourceInfo, config , pass );
+		auto object = makeUniqueDerived< AnimatedObject, AnimatedTexture >( sourceInfo, config , pass );
 		auto result = object.get();
 
-		if ( !addObject( castor::move( object ) ) )
+		if ( !addObject( c3d::move( object ) ) )
 		{
 			result = {};
 		}
@@ -475,7 +475,7 @@ namespace castor3d
 		{
 			if ( result )
 			{
-				m_objects.try_emplace( name, castor::move( object ) );
+				m_objects.try_emplace( name, c3d::move( object ) );
 
 				switch ( obj->getKind() )
 				{
@@ -520,7 +520,7 @@ namespace castor3d
 		return result;
 	}
 
-	AnimatedObject * AnimatedObjectGroup::findObject( castor::String const & name )const
+	AnimatedObject * AnimatedObjectGroup::findObject( String const & name )const
 	{
 		for ( auto const & [nm, obj] : m_objects )
 		{
@@ -533,7 +533,7 @@ namespace castor3d
 		return nullptr;
 	}
 
-	bool AnimatedObjectGroup::addAnimation( castor::String const & name )
+	bool AnimatedObjectGroup::addAnimation( String const & name )
 	{
 		bool result = false;
 
@@ -551,7 +551,7 @@ namespace castor3d
 		return result;
 	}
 
-	void AnimatedObjectGroup::setAnimationLooped( castor::String const & name
+	void AnimatedObjectGroup::setAnimationLooped( String const & name
 		, bool looped )
 	{
 		anmobjgrp::applyAnimationFunc( m_animations
@@ -562,7 +562,7 @@ namespace castor3d
 			, offsetof( GroupAnimation, looped ) );
 	}
 
-	void AnimatedObjectGroup::setAnimationScale( castor::String const & name
+	void AnimatedObjectGroup::setAnimationScale( String const & name
 		, float scale )
 	{
 		anmobjgrp::applyAnimationFunc( m_animations
@@ -573,8 +573,8 @@ namespace castor3d
 			, offsetof( GroupAnimation, scale ) );
 	}
 
-	void AnimatedObjectGroup::setAnimationStartingPoint( castor::String const & name
-		, castor::Milliseconds value )
+	void AnimatedObjectGroup::setAnimationStartingPoint( String const & name
+		, Milliseconds value )
 	{
 		anmobjgrp::applyAnimationFunc( m_animations
 			, m_objects
@@ -584,8 +584,8 @@ namespace castor3d
 			, offsetof( GroupAnimation, startingPoint ) );
 	}
 
-	void AnimatedObjectGroup::setAnimationStoppingPoint( castor::String const & name
-		, castor::Milliseconds value )
+	void AnimatedObjectGroup::setAnimationStoppingPoint( String const & name
+		, Milliseconds value )
 	{
 		anmobjgrp::applyAnimationFunc( m_animations
 			, m_objects
@@ -595,7 +595,7 @@ namespace castor3d
 			, offsetof( GroupAnimation, stoppingPoint ) );
 	}
 
-	void AnimatedObjectGroup::setAnimationInterpolation( castor::String const & name
+	void AnimatedObjectGroup::setAnimationInterpolation( String const & name
 		, InterpolatorType mode )
 	{
 		anmobjgrp::applyAnimationFunc( m_animations
@@ -612,7 +612,7 @@ namespace castor3d
 
 		auto tslf = updater.tslf > 0_ms
 			? updater.tslf
-			: std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );
+			: std::chrono::duration_cast< Milliseconds >( m_timer.getElapsed() );
 
 #else
 
@@ -626,7 +626,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedObjectGroup::startAnimation( castor::String const & name )
+	void AnimatedObjectGroup::startAnimation( String const & name )
 	{
 		if ( auto itAnim = m_animations.find( name );
 			itAnim != m_animations.end() )
@@ -640,7 +640,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedObjectGroup::stopAnimation( castor::String const & name )
+	void AnimatedObjectGroup::stopAnimation( String const & name )
 	{
 		if ( auto itAnim = m_animations.find( name );
 			itAnim != m_animations.end() )
@@ -654,7 +654,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedObjectGroup::pauseAnimation( castor::String const & name )
+	void AnimatedObjectGroup::pauseAnimation( String const & name )
 	{
 		if ( auto itAnim = m_animations.find( name );
 			itAnim != m_animations.end() )
@@ -707,9 +707,8 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedObjectGroup::addParsers( castor::AttributeParsers & result )
+	void AnimatedObjectGroup::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< AnimGroupContext > groupCtx{ result, CSCNSection::eAnimGroup, CSCNSection::eScene };
 		BlockParserContextT< AnimGroupContext > animCtx{ result, CSCNSection::eAnimation, CSCNSection::eAnimGroup };
 
@@ -730,7 +729,7 @@ namespace castor3d
 		animCtx.addPopParser( cuT( "}" ), anmobjgrp::parserAnimationEnd );
 	}
 
-	castor::String getPrefix( AnimGroupContext const & context )
+	String getPrefix( AnimGroupContext const & context )
 	{
 		return getPrefix( *context.scene );
 	}

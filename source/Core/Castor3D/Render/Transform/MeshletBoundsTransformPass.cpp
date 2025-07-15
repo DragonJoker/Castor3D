@@ -17,9 +17,9 @@
 #include <ashespp/Pipeline/ComputePipeline.hpp>
 #include <ashespp/Pipeline/PipelineLayout.hpp>
 
-CU_ImplementSmartPtr( castor3d, MeshletBoundsTransformPass )
+CU_ImplementSmartPtr( c3d, MeshletBoundsTransformPass )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -44,7 +44,7 @@ namespace castor3d
 				, MeshletBoundsTransformPass::eMeshlets ) );
 			writes.push_back( output.getStorageBinding( MeshletBoundsTransformPass::eOutCullData ) );
 
-			auto descriptorSet = pipeline.descriptorSetPool->createDescriptorSet( castor::toUtf8(  pipeline.getName() ) );
+			auto descriptorSet = pipeline.descriptorSetPool->createDescriptorSet( toUtf8(  pipeline.getName() ) );
 			descriptorSet->setBindings( writes );
 			descriptorSet->update();
 			return descriptorSet;

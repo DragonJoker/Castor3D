@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include <deque>
 
-namespace castor
+namespace c3d
 {
 	/**@name Log */
 	//@{
@@ -27,7 +27,7 @@ namespace castor
 			, MbString message
 			, bool newLine )
 			: m_type{ type }
-			, m_message{ castor::move( message ) }
+			, m_message{ c3d::move( message ) }
 			, m_newLine{ newLine }
 		{
 		}
@@ -97,9 +97,9 @@ namespace castor
 	 *\param[in]	type	Le type de log.
 	 *\param[in]	newLine	Dit si on ajoute le caractère de fin de ligne.
 	 */
-	using LogCallback = castor::Function< void( MbString const & text, LogType type, bool newLine ) >;
+	using LogCallback = c3d::Function< void( MbString const & text, LogType type, bool newLine ) >;
 
-	using LoggerInstancePtr = castor::RawUniquePtr< LoggerInstance >;
+	using LoggerInstancePtr = c3d::RawUniquePtr< LoggerInstance >;
 	//@}
 }
 

@@ -9,12 +9,12 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/PlaneEquation.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class Frustum
 	{
 	public:
-		using Planes = castor::Array< castor::PlaneEquation, size_t( FrustumPlane::eCount ) >;
+		using Planes = Array< PlaneEquation, size_t( FrustumPlane::eCount ) >;
 
 	public:
 		/**
@@ -34,7 +34,7 @@ namespace castor3d
 		 *\brief		Met à jour les plans du frustum.
 		 *\param[in]	view		Le matrice de vue.
 		 */
-		C3D_API void update( castor::Matrix4x4f const & view );
+		C3D_API void update( Matrix4x4f const & view );
 		/**
 		 *\~english
 		 *\brief		Updates the frustum planes.
@@ -45,8 +45,8 @@ namespace castor3d
 		 *\param[in]	projection	La matrice de projection.
 		 *\param[in]	view		Le matrice de vue.
 		 */
-		C3D_API void update( castor::Matrix4x4f const & projection
-			, castor::Matrix4x4f const & view );
+		C3D_API void update( Matrix4x4f const & projection
+			, Matrix4x4f const & view );
 		/**
 		 *\~english
 		 *\brief		Checks if given BoundingBox is in the view frustum.
@@ -60,8 +60,8 @@ namespace castor3d
 		 *\param[in]	transformations	La matrice de transformations de la BoundingBox.
 		 *\return		\p false si la BoundingBox est complètement en dehors du frustum de vue.
 		 */
-		C3D_API bool isVisible( castor::BoundingBox const & box
-			, castor::Matrix4x4f const & transformations )const;
+		C3D_API bool isVisible( BoundingBox const & box
+			, Matrix4x4f const & transformations )const;
 		/**
 		 *\~english
 		 *\brief		Checks if given BoundingSphere is in the view frustum.
@@ -77,9 +77,9 @@ namespace castor3d
 		 *\param[in]	scale			L'échelle de la BoundingSphere.
 		 *\return		\p false si la BoundingSphere est complètement en dehors du frustum de vue.
 		 */
-		C3D_API bool isVisible( castor::BoundingSphere const & sphere
-			, castor::Matrix4x4f const & transformations
-			, castor::Point3f const & scale )const;
+		C3D_API bool isVisible( BoundingSphere const & sphere
+			, Matrix4x4f const & transformations
+			, Point3f const & scale )const;
 		/**
 		 *\~english
 		 *\brief		Checks if given point is in the view frustum.
@@ -90,9 +90,9 @@ namespace castor3d
 		 *\param[in]	point	Le point.
 		 *\return		\p false si le point en dehors du frustum de vue.
 		 */
-		C3D_API bool isVisible( castor::Point3f const & point )const;
+		C3D_API bool isVisible( Point3f const & point )const;
 
-		castor::Array< InterleavedVertex, 8u > const & getPoints()const noexcept
+		Array< InterleavedVertex, 8u > const & getPoints()const noexcept
 		{
 			return m_points;
 		}
@@ -102,7 +102,7 @@ namespace castor3d
 			return m_planes;
 		}
 
-		castor::BoundingBox const & getBoundingBox()const noexcept
+		BoundingBox const & getBoundingBox()const noexcept
 		{
 			return m_boundingBox;
 		}
@@ -110,8 +110,8 @@ namespace castor3d
 	private:
 		Viewport * m_viewport;
 		Planes m_planes;
-		castor::Array< InterleavedVertex, 8u > m_points;
-		castor::BoundingBox m_boundingBox;
+		Array< InterleavedVertex, 8u > m_points;
+		BoundingBox m_boundingBox;
 	};
 }
 

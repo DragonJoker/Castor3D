@@ -20,7 +20,7 @@ namespace Testing
 	{
 		{
 			CT_ON( "	Block size of 1, 4 levels" );
-			castor::BuddyAllocator allocator{ 4, 1 };
+			c3d::BuddyAllocator allocator{ 4, 1 };
 			CT_EQUAL( allocator.getSize(), 16u );
 			for ( auto i = 1u; i < allocator.getSize(); ++i )
 			{
@@ -29,7 +29,7 @@ namespace Testing
 		}
 		{
 			CT_ON( "	Block size of 2, 4 levels" );
-			castor::BuddyAllocator allocator{ 4, 2 };
+			c3d::BuddyAllocator allocator{ 4, 2 };
 			CT_EQUAL( allocator.getSize(), 32u );
 			for ( auto i = 1u; i < allocator.getSize(); ++i )
 			{
@@ -38,7 +38,7 @@ namespace Testing
 		}
 		{
 			CT_ON("	Block size of 2, 5 levels" );
-			castor::BuddyAllocator allocator{ 5, 2 };
+			c3d::BuddyAllocator allocator{ 5, 2 };
 			CT_EQUAL( allocator.getSize(), 64u );
 			for ( auto i = 1u; i < allocator.getSize(); ++i )
 			{
@@ -47,7 +47,7 @@ namespace Testing
 		}
 		{
 			CT_ON("	Block size of 3, 5 levels" );
-			castor::BuddyAllocator allocator{ 5, 3 };
+			c3d::BuddyAllocator allocator{ 5, 3 };
 			CT_EQUAL( allocator.getSize(), 96u );
 			for ( auto i = 1u; i < allocator.getSize(); ++i )
 			{
@@ -56,17 +56,17 @@ namespace Testing
 		}
 		{
 			CT_ON("	Block size of 8, 16 levels" );
-			castor::BuddyAllocator allocator{ 16, 8 };
+			c3d::BuddyAllocator allocator{ 16, 8 };
 			CT_EQUAL( allocator.getSize(), 524288u );
 		}
 		{
 			CT_ON("	Block size of 128, 16 levels" );
-			castor::BuddyAllocator allocator{ 16, 128 };
+			c3d::BuddyAllocator allocator{ 16, 128 };
 			CT_EQUAL( allocator.getSize(), 8388608u );
 		}
 		{
 			CT_ON("	Block size of 96, 20 levels" );
-			castor::BuddyAllocator allocator{ 20, 96 };
+			c3d::BuddyAllocator allocator{ 20, 96 };
 			CT_EQUAL( allocator.getSize(), 100663296u );
 		}
 	}
@@ -74,14 +74,14 @@ namespace Testing
 	void CastorUtilsBuddyAllocatorTest::AllocationTest()
 	{
 		{
-			castor::BuddyAllocator allocator{ 4, 1 };
+			c3d::BuddyAllocator allocator{ 4, 1 };
 			auto buf1 = allocator.allocate( 16 );
 			CT_NEQUAL( buf1, nullptr );
 			CT_CHECK( !allocator.hasAvailable( 1 ) );
 			CT_EQUAL( allocator.allocate( 1 ), nullptr );
 		}
 		{
-			castor::BuddyAllocator allocator{ 4, 1 };
+			c3d::BuddyAllocator allocator{ 4, 1 };
 			auto buf1 = allocator.allocate( 8 );
 			CT_NEQUAL( buf1, nullptr );
 			CT_CHECK( allocator.hasAvailable( 4 ) );
@@ -94,7 +94,7 @@ namespace Testing
 			CT_EQUAL( allocator.allocate( 2 ), nullptr );
 		}
 		{
-			castor::BuddyAllocator allocator{ 4, 1 };
+			c3d::BuddyAllocator allocator{ 4, 1 };
 			auto buf1 = allocator.allocate( 1 );
 			CT_NEQUAL( buf1, nullptr );
 			auto buf2 = allocator.allocate( 1 );
@@ -130,7 +130,7 @@ namespace Testing
 			CT_EQUAL( allocator.allocate( 1 ), nullptr );
 		}
 		{
-			castor::BuddyAllocator allocator{ 4, 1 };
+			c3d::BuddyAllocator allocator{ 4, 1 };
 			CT_CHECK( allocator.hasAvailable( 8 ) );
 			auto buf1 = allocator.allocate( 8 );
 			CT_NEQUAL( buf1, nullptr );
@@ -147,14 +147,14 @@ namespace Testing
 	void CastorUtilsBuddyAllocatorTest::DeallocationTest()
 	{
 		{
-			castor::BuddyAllocator allocator{ 4, 1 };
+			c3d::BuddyAllocator allocator{ 4, 1 };
 			auto buf1 = allocator.allocate( 16 );
 			CT_NEQUAL( buf1, nullptr );
 			allocator.deallocate( buf1 );
 			CT_NEQUAL( buf1 = allocator.allocate( 1 ), nullptr );
 		}
 		{
-			castor::BuddyAllocator allocator{ 4, 1 };
+			c3d::BuddyAllocator allocator{ 4, 1 };
 			auto buf1 = allocator.allocate( 8 );
 			CT_NEQUAL( buf1, nullptr );
 			auto buf2 = allocator.allocate( 4 );

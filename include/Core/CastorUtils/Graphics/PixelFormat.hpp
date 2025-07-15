@@ -18,7 +18,7 @@ See LICENSE file in root folder
 #include <atomic>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	/**
 	 *\~english
@@ -384,12 +384,12 @@ namespace castor
 	 *\brief		Extracts pixel component values from a source buffer holding alpha and puts it in a destination buffer.
 	 *\param[in]	src			The source buffer.
 	 *\param[in]	component	The component to extract.
-	 *\return		A castor::PixelFormat::eR8 buffer containing the extracted component, \p nullptr if source didn't have the wanted component.
+	 *\return		A c3d::PixelFormat::eR8 buffer containing the extracted component, \p nullptr if source didn't have the wanted component.
 	 *\~french
 	 *\brief		Extrait les valeurs d'une composante de pixel d'un tampon source pour les mettre dans un tampon à part.
 	 *\param[in]	src			Le tampon source
 	 *\param[in]	component	La composante à extraire
-	 *\return		Le tampon contenant la composante extraite, au format castor::PixelFormat::eR8, \p nullptr si la source n'avait pas la coposante voulue.
+	 *\return		Le tampon contenant la composante extraite, au format c3d::PixelFormat::eR8, \p nullptr si la source n'avait pas la coposante voulue.
 	 */
 	CU_API PxBufferBaseUPtr extractComponent( PxBufferBaseRPtr src
 		, PixelComponent component );
@@ -398,12 +398,12 @@ namespace castor
 	 *\brief		Extracts pixel component values from a source buffer holding alpha and puts it in a destination buffer.
 	 *\param[in]	src			The source buffer.
 	 *\param[in]	component	The component to extract.
-	 *\return		A castor::PixelFormat::eR8 buffer containing the extracted component, \p nullptr if source didn't have the wanted component.
+	 *\return		A c3d::PixelFormat::eR8 buffer containing the extracted component, \p nullptr if source didn't have the wanted component.
 	 *\~french
 	 *\brief		Extrait les valeurs d'une composante de pixel d'un tampon source pour les mettre dans un tampon à part.
 	 *\param[in]	src			Le tampon source
 	 *\param[in]	component	La composante à extraire
-	 *\return		Le tampon contenant la composante extraite, au format castor::PixelFormat::eR8, \p nullptr si la source n'avait pas la coposante voulue.
+	 *\return		Le tampon contenant la composante extraite, au format c3d::PixelFormat::eR8, \p nullptr si la source n'avait pas la coposante voulue.
 	 */
 	CU_API PxBufferBaseUPtr extractComponents( PxBufferBaseRPtr src
 		, PixelComponents component );

@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	class SpecularBRDF
 	{
@@ -29,7 +29,7 @@ namespace castor3d::shader
 
 		C3D_API static SpecularBRDFPtr create( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdfHelpers );
-		C3D_API static castor::StringView constexpr Name{ cuT( "default" ) };
+		C3D_API static StringView constexpr Name{ cuT( "default" ) };
 
 	private:
 		virtual void doGenerate( BlendComponents const & components );

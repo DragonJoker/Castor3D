@@ -16,7 +16,7 @@ See LICENSE file in root folder
 #include <mutex>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class TextureAnimationBuffer
 	{
@@ -104,14 +104,14 @@ namespace castor3d
 		}
 
 	public:
-		using TextureAnimationsData = castor::ArrayView< TextureAnimationData >;
+		using TextureAnimationsData = ArrayView< TextureAnimationData >;
 		static uint32_t constexpr DataSize = uint32_t( sizeof( TextureAnimationData ) );
 
 	private:
 		ShaderBuffer m_buffer;
 		TextureAnimationsData m_data;
-		castor::Vector< AnimatedTexture const * > m_animations;
-		castor::Mutex m_mutex;
+		Vector< AnimatedTexture const * > m_animations;
+		Mutex m_mutex;
 		std::atomic_uint32_t m_count{ 0u };
 	};
 }

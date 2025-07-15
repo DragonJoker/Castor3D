@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <streambuf>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor::format
+namespace c3d::format
 {
 	template < typename CharT, CharT fill_char, typename traits >
 	struct BasicIndentBufferT

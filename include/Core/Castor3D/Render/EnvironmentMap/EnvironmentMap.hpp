@@ -23,13 +23,13 @@ See LICENSE file in root folder
 
 #include <RenderGraph/FrameGraph.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class EnvironmentMap
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
-		using EnvironmentMapPasses = castor::Array< EnvironmentMapPassUPtr, size_t( CubeMapFace::eCount ) >;
+		using EnvironmentMapPasses = Array< EnvironmentMapPassUPtr, size_t( CubeMapFace::eCount ) >;
 
 	public:
 		/**
@@ -185,16 +185,16 @@ namespace castor3d
 		Texture m_depthBuffer;
 		Texture m_tmpImage;
 		Extent3D m_extent;
-		castor::Set< SceneNode * > m_reflectionNodes;
-		castor::Set< SceneNode * > m_savedReflectionNodes;
-		castor::Map< SceneNode const *, uint32_t > m_sortedNodes;
-		castor::Vector< EnvironmentMapPasses > m_passes;
+		Set< SceneNode * > m_reflectionNodes;
+		Set< SceneNode * > m_savedReflectionNodes;
+		Map< SceneNode const *, uint32_t > m_sortedNodes;
+		Vector< EnvironmentMapPasses > m_passes;
 		bool m_first{ true };
 		uint32_t m_render{ 0u };
 		uint32_t m_count{ 0u };
 		OnSceneNodeChangedConnection m_onNodeChanged;
 		ashes::Image * m_image;
-		castor::Vector< ashes::ImageView > m_environmentMapViews;
+		Vector< ashes::ImageView > m_environmentMapViews;
 		OnBackgroundChangedConnection m_onSetBackground;
 	};
 }

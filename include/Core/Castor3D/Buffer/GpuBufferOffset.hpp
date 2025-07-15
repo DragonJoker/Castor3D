@@ -8,95 +8,95 @@ See LICENSE file in root folder
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	C3D_API void createUniformPassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
-		, castor::Vector< ashes::BufferBase const * > const & buffers
+		, String const & name
+		, Vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createInputStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
-		, castor::Vector< ashes::BufferBase const * > const & buffers
+		, String const & name
+		, Vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createInOutStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
-		, castor::Vector< ashes::BufferBase const * > const & buffers
+		, String const & name
+		, Vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createOutputStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
-		, castor::Vector< ashes::BufferBase const * > const & buffers
+		, String const & name
+		, Vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createClearableOutputStorageBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
-		, castor::Vector< ashes::BufferBase const * > const & buffers
+		, String const & name
+		, Vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createUniformPassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::BufferBase const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createInputStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::BufferBase const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createInOutStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::BufferBase const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createOutputStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::BufferBase const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createClearableOutputStorageBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::BufferBase const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createUniformPassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::Buffer< uint8_t > const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createInputStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::Buffer< uint8_t > const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createInOutStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::Buffer< uint8_t > const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createOutputStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::Buffer< uint8_t > const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createClearableOutputStorageBinding( crg::FramePass & pass
 		, uint32_t binding
-		, castor::String const & name
+		, String const & name
 		, ashes::Buffer< uint8_t > const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size );
@@ -158,10 +158,10 @@ namespace castor3d
 			return chunk.offset;
 		}
 
-		castor::ArrayView< DataT > getData()
+		ArrayView< DataT > getData()
 		{
 			using DataPtr = DataT *;
-			return castor::makeArrayView( reinterpret_cast< DataPtr >( buffer->getDatas().data() + getOffset() )
+			return makeArrayView( reinterpret_cast< DataPtr >( buffer->getDatas().data() + getOffset() )
 				, getCount() );
 		}
 
@@ -199,16 +199,16 @@ namespace castor3d
 		VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t index
 			, VkShaderStageFlags stages )const
 		{
-			return castor3d::makeDescriptorSetLayoutBinding( index
+			return makeDescriptorSetLayoutBinding( index
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, stages );
 		}
 
 		void createUniformPassBinding( crg::FramePass & pass
 			, uint32_t binding
-			, castor::String const & name )const
+			, String const & name )const
 		{
-			castor3d::createUniformPassBinding( pass
+			c3d::createUniformPassBinding( pass
 				, binding
 				, name
 				, getBuffer()
@@ -218,9 +218,9 @@ namespace castor3d
 
 		void createInputStoragePassBinding( crg::FramePass & pass
 			, uint32_t binding
-			, castor::String const & name )const
+			, String const & name )const
 		{
-			castor3d::createInputStoragePassBinding( pass
+			c3d::createInputStoragePassBinding( pass
 				, binding
 				, name
 				, getBuffer()
@@ -230,9 +230,9 @@ namespace castor3d
 
 		void createInOutStoragePassBinding( crg::FramePass & pass
 			, uint32_t binding
-			, castor::String const & name )const
+			, String const & name )const
 		{
-			castor3d::createInOutStoragePassBinding( pass
+			c3d::createInOutStoragePassBinding( pass
 				, binding
 				, name
 				, getBuffer()
@@ -242,9 +242,9 @@ namespace castor3d
 
 		void createOutputStoragePassBinding( crg::FramePass & pass
 			, uint32_t binding
-			, castor::String const & name )const
+			, String const & name )const
 		{
-			castor3d::createOutputStoragePassBinding( pass
+			c3d::createOutputStoragePassBinding( pass
 				, binding
 				, name
 				, getBuffer()
@@ -254,9 +254,9 @@ namespace castor3d
 
 		void createClearableOutputStorageBinding( crg::FramePass & pass
 			, uint32_t binding
-			, castor::String const & name )const
+			, String const & name )const
 		{
-			castor3d::createClearableOutputStorageBinding( pass
+			c3d::createClearableOutputStorageBinding( pass
 				, binding
 				, name
 				, getBuffer()

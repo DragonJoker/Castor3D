@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Stream/StreamIndentBuffer.hpp"
 #include "CastorUtils/Stream/StreamIndentBufferManager.hpp"
 
-namespace castor
+namespace c3d
 {
 	namespace format
 	{

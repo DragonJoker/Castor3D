@@ -903,7 +903,7 @@ namespace Testing
 	Coords< T, Count >::Coords( Coords< T, Count > && rhs )
 		:	m_coords( NULL	)
 	{
-		m_coords		= castor::move( rhs.m_coords );
+		m_coords		= c3d::move( rhs.m_coords );
 		rhs.m_coords	= NULL;
 	}
 
@@ -924,7 +924,7 @@ namespace Testing
 	{
 		if ( this != &rhs )
 		{
-			m_coords		= castor::move( rhs.m_coords );
+			m_coords		= c3d::move( rhs.m_coords );
 			rhs.m_coords	= NULL;
 		}
 
@@ -1058,7 +1058,7 @@ namespace Testing
 	template< typename T, uint32_t Count >
 	void Coords< T, Count >::swap( Coords< T, Count > & rhs )
 	{
-		castor::swap( m_coords, rhs.m_coords );
+		c3d::swap( m_coords, rhs.m_coords );
 	}
 
 //*************************************************************************************************
@@ -1070,7 +1070,7 @@ namespace Testing
 
 		for ( uint32_t i = 0; i < Count && result; i++ )
 		{
-			result = castor::Policy< T >::equals( lhs[i], rhs[i] );
+			result = c3d::Policy< T >::equals( lhs[i], rhs[i] );
 		}
 
 		return result;
@@ -1411,7 +1411,7 @@ namespace Testing
 	{
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
-			castor::swap( m_coords[i], rhs.m_coords[i] );
+			c3d::swap( m_coords[i], rhs.m_coords[i] );
 		}
 	}
 
@@ -1424,7 +1424,7 @@ namespace Testing
 
 		for ( uint32_t i = 0; i < Count && result; i++ )
 		{
-			result = castor::Policy< T >::equals( lhs[i], rhs[i] );
+			result = c3d::Policy< T >::equals( lhs[i], rhs[i] );
 		}
 
 		return result;
@@ -1501,7 +1501,7 @@ namespace Testing
 
 		for ( uint32_t i = 0; i < Count && result; i++ )
 		{
-			result = castor::Policy< T >::equals( lhs[i], rhs[i] );
+			result = c3d::Policy< T >::equals( lhs[i], rhs[i] );
 		}
 
 		return result;
@@ -1548,7 +1548,7 @@ namespace Testing
 
 		for ( uint32_t i = 0; i < Count && result; i++ )
 		{
-			result = castor::Policy< T >::equals( lhs[i], rhs[i] );
+			result = c3d::Policy< T >::equals( lhs[i], rhs[i] );
 		}
 
 		return result;
@@ -1616,7 +1616,7 @@ namespace Testing
 	{
 		T tLength = T( distance( rhs ) );
 
-		if ( !castor::Policy< T >::isNull( tLength ) )
+		if ( !c3d::Policy< T >::isNull( tLength ) )
 		{
 			rhs /= tLength;
 		}
@@ -1634,7 +1634,7 @@ namespace Testing
 	T point::dot( Point< T, Count > const & lhs, Point< T, Count > const & rhs )
 	{
 		T tReturn;
-		castor::Policy< T >::initialise( tReturn );
+		c3d::Policy< T >::initialise( tReturn );
 
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
@@ -1754,7 +1754,7 @@ namespace Testing
 	T point::dot( Coords< T, Count > const & lhs, Point< T, Count > const & rhs )
 	{
 		T tReturn;
-		castor::Policy< T >::initialise( tReturn );
+		c3d::Policy< T >::initialise( tReturn );
 
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
@@ -1785,7 +1785,7 @@ namespace Testing
 	T point::dot( Coords< T, Count > const & lhs, Coords< T, Count > const & rhs )
 	{
 		T tReturn;
-		castor::Policy< T >::initialise( tReturn );
+		c3d::Policy< T >::initialise( tReturn );
 
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
@@ -1826,7 +1826,7 @@ namespace Testing
 	{
 		T tLength = T( distance( rhs ) );
 
-		if ( !castor::Policy< T >::isNull( tLength ) )
+		if ( !c3d::Policy< T >::isNull( tLength ) )
 		{
 			rhs /= tLength;
 		}

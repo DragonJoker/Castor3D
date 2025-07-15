@@ -8,7 +8,7 @@ namespace GuiCommon
 {
 	namespace
 	{
-		float getValue( castor::Angle const & value )
+		float getValue( c3d::Angle const & value )
 		{
 			return value.degrees();
 		}
@@ -19,11 +19,11 @@ namespace GuiCommon
 		}
 
 		template< typename T >
-		castor::RangedValue< T > doUpdateVelocity( castor::RangedValue< T > velocity
-			, castor::Nanoseconds const & tslf )
+		c3d::RangedValue< T > doUpdateVelocity( c3d::RangedValue< T > velocity
+			, c3d::Nanoseconds const & tslf )
 		{
 			static T const zero{};
-			static castor::Nanoseconds const tick{ 25_ms };
+			static c3d::Nanoseconds const tick{ 25_ms };
 			auto ret = velocity.value() / ( 1.0f + ( 0.2f * float( tslf.count() ) / float( tick.count() ) ) );
 
 			if ( std::abs( getValue( ret ) ) < 0.002f )
@@ -31,12 +31,12 @@ namespace GuiCommon
 				ret = zero;
 			}
 
-			return castor::RangedValue< T >( ret, velocity.range() );
+			return c3d::RangedValue< T >( ret, velocity.range() );
 		}
 	}
 
-	NodeState::NodeState( castor3d::FrameListener & listener
-		, castor3d::SceneNodeRPtr node
+	NodeState::NodeState( c3d::FrameListener & listener
+		, c3d::SceneNodeRPtr node
 		, bool camera )
 		: m_listener{ listener }
 		, m_node{ node }
@@ -46,7 +46,7 @@ namespace GuiCommon
 		{
 			m_originalOrientation.getPitch(),
 			m_originalOrientation.getYaw(),
-			camera ? castor::Angle{} : m_originalOrientation.getRoll(),
+			camera ? c3d::Angle{} : m_originalOrientation.getRoll(),
 		}
 		, m_angles{ m_originalAngles }
 		, m_isCamera{ camera }
@@ -76,7 +76,7 @@ namespace GuiCommon
 		m_scalarVelocityY = 0.0f;
 		m_scalarVelocityZ = 0.0f;
 
-		m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+		m_listener.postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 			, [this]()
 			{
 				m_node->setOrientation( m_originalOrientation );
@@ -86,17 +86,17 @@ namespace GuiCommon
 
 	void NodeState::setMaxSpeed( float speed )
 	{
-		m_scalarVelocityX.updateRange( castor::makeRange( -speed, speed ) );
-		m_scalarVelocityY.updateRange( castor::makeRange( -speed, speed ) );
-		m_scalarVelocityZ.updateRange( castor::makeRange( -speed, speed ) );
+		m_scalarVelocityX.updateRange( c3d::makeRange( -speed, speed ) );
+		m_scalarVelocityY.updateRange( c3d::makeRange( -speed, speed ) );
+		m_scalarVelocityZ.updateRange( c3d::makeRange( -speed, speed ) );
 	}
 
-	bool NodeState::doUpdateVelocities( castor::Point3f & translate
+	bool NodeState::doUpdateVelocities( c3d::Point3f & translate
 		, Angles & angles )
 	{
-		static castor::Nanoseconds const tick{ 2_ms };
+		static c3d::Nanoseconds const tick{ 2_ms };
 
-		auto lock = castor::makeUniqueLock( m_mutex );
+		auto lock = c3d::makeUniqueLock( m_mutex );
 		auto tslf = m_timer.getElapsed();
 		auto ratio = float( tslf.count() ) / float( tick.count() );
 
@@ -115,12 +115,12 @@ namespace GuiCommon
 
 		bool result{ angles[0] != m_angles[0] || angles[1] != m_angles[1] };
 
-		if ( translate != castor::Point3f{} )
+		if ( translate != c3d::Point3f{} )
 		{
 			auto orientation = m_node->getOrientation();
-			castor::Point3f right{ 1.0f, 0.0f, 0.0f };
-			castor::Point3f up{ 0.0f, 1.0f, 0.0f };
-			castor::Point3f front{ 0.0f, 0.0f, 1.0f };
+			c3d::Point3f right{ 1.0f, 0.0f, 0.0f };
+			c3d::Point3f up{ 0.0f, 1.0f, 0.0f };
+			c3d::Point3f front{ 0.0f, 0.0f, 1.0f };
 			orientation.transform( right, right );
 			orientation.transform( up, up );
 			orientation.transform( front, front );
@@ -138,19 +138,19 @@ namespace GuiCommon
 
 	void NodeState::doUpdate()
 	{
-		m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+		m_listener.postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 			, [this]()
 			{
-				castor::Point3f translate;
+				c3d::Point3f translate;
 				Angles angles;
 
 				if ( doUpdateVelocities( translate, angles ) )
 				{
 					m_node->translate( translate );
 
-					castor::Quaternion pitch{ castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0, 0.0, 0.0 }, angles[0] ) };
-					castor::Quaternion yaw{ castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0, 1.0, 0.0 }, angles[1] ) };
-					castor::Quaternion roll{ castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0, 0.0, 1.0 }, angles[2] ) };
+					c3d::Quaternion pitch{ c3d::Quaternion::fromAxisAngle( c3d::Point3f{ 1.0, 0.0, 0.0 }, angles[0] ) };
+					c3d::Quaternion yaw{ c3d::Quaternion::fromAxisAngle( c3d::Point3f{ 0.0, 1.0, 0.0 }, angles[1] ) };
+					c3d::Quaternion roll{ c3d::Quaternion::fromAxisAngle( c3d::Point3f{ 0.0, 0.0, 1.0 }, angles[2] ) };
 					m_node->setOrientation( roll * yaw * pitch );
 				}
 
@@ -161,60 +161,60 @@ namespace GuiCommon
 			} ) );
 	}
 
-	void NodeState::setAngularVelocity( castor::Point2f const & value )noexcept
+	void NodeState::setAngularVelocity( c3d::Point2f const & value )noexcept
 	{
-		auto lock = castor::makeUniqueLock( m_mutex );
-		m_angularVelocityX = castor::Angle::fromDegrees( value[0] );
-		m_angularVelocityY = castor::Angle::fromDegrees( value[1] );
+		auto lock = c3d::makeUniqueLock( m_mutex );
+		m_angularVelocityX = c3d::Angle::fromDegrees( value[0] );
+		m_angularVelocityY = c3d::Angle::fromDegrees( value[1] );
 	}
 
-	 void NodeState::setScalarVelocity( castor::Point3f const & value )noexcept
+	 void NodeState::setScalarVelocity( c3d::Point3f const & value )noexcept
 	{
-		 auto lock = castor::makeUniqueLock( m_mutex );
+		 auto lock = c3d::makeUniqueLock( m_mutex );
 		m_scalarVelocityX = value[0];
 		m_scalarVelocityY = value[1];
 		m_scalarVelocityZ = value[2];
 	}
 
-	void NodeState::addAngularVelocity( castor::Point2f const & value )noexcept
+	void NodeState::addAngularVelocity( c3d::Point2f const & value )noexcept
 	{
-		auto lock = castor::makeUniqueLock( m_mutex );
-		m_angularVelocityX += castor::Angle::fromDegrees( value[0] );
-		m_angularVelocityY += castor::Angle::fromDegrees( value[1] );
+		auto lock = c3d::makeUniqueLock( m_mutex );
+		m_angularVelocityX += c3d::Angle::fromDegrees( value[0] );
+		m_angularVelocityY += c3d::Angle::fromDegrees( value[1] );
 	}
 
-	void NodeState::addScalarVelocity( castor::Point3f const & value )noexcept
+	void NodeState::addScalarVelocity( c3d::Point3f const & value )noexcept
 	{
-		auto lock = castor::makeUniqueLock( m_mutex );
+		auto lock = c3d::makeUniqueLock( m_mutex );
 		m_scalarVelocityX += value[0];
 		m_scalarVelocityY += value[1];
 		m_scalarVelocityZ += value[2];
 	}
 
-	void NodeState::pitch( castor::Angle const & value )noexcept
+	void NodeState::pitch( c3d::Angle const & value )noexcept
 	{
-		auto lock = castor::makeUniqueLock( m_mutex );
+		auto lock = c3d::makeUniqueLock( m_mutex );
 		m_angles[0] += value;
 		m_angularVelocityX = 0.00_degrees;
-		m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+		m_listener.postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 			, [this, value]()
 			{
-				castor::Quaternion orientation{ m_node->getOrientation() };
-				orientation *= castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0f, 0.0f, 0.0f }, value );
+				c3d::Quaternion orientation{ m_node->getOrientation() };
+				orientation *= c3d::Quaternion::fromAxisAngle( c3d::Point3f{ 1.0f, 0.0f, 0.0f }, value );
 				m_node->setOrientation( orientation );
 			} ) );
 	}
 
-	void NodeState::yaw( castor::Angle const & value )noexcept
+	void NodeState::yaw( c3d::Angle const & value )noexcept
 	{
-		auto lock = castor::makeUniqueLock( m_mutex );
+		auto lock = c3d::makeUniqueLock( m_mutex );
 		m_angles[1] += value;
 		m_angularVelocityY = 0.00_degrees;
-		m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
+		m_listener.postEvent( c3d::makeCpuFunctorEvent( c3d::CpuEventType::ePostCpuStep
 			, [this, value]()
 			{
-				castor::Quaternion orientation{ m_node->getOrientation() };
-				orientation *= castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 1.0f, 0.0f }, value );
+				c3d::Quaternion orientation{ m_node->getOrientation() };
+				orientation *= c3d::Quaternion::fromAxisAngle( c3d::Point3f{ 0.0f, 1.0f, 0.0f }, value );
 				m_node->setOrientation( orientation );
 			} ) );
 	}

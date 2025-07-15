@@ -12,7 +12,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Animation/AnimationInstance.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class TextureAnimationInstance
 		: public AnimationInstance
@@ -53,7 +53,7 @@ namespace castor3d
 			return m_transform;
 		}
 
-		castor::Point2ui const & getTile()const
+		Point2ui const & getTile()const
 		{
 			return m_tile;
 		}
@@ -66,7 +66,7 @@ namespace castor3d
 		AnimatedTexture & m_animatedTexture;
 		TextureAnimation & m_textureAnimation;
 		TextureTransform m_transform;
-		castor::Point2ui m_tile;
+		Point2ui m_tile;
 		AnimationKeyFrameArray::iterator m_prev;
 		AnimationKeyFrameArray::iterator m_curr;
 		float m_ratio{ 0.0f };

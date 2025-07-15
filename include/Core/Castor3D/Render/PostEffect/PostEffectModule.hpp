@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/Factory.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Render */
 	//@{
@@ -33,7 +33,7 @@ namespace castor3d
 	class PostEffect;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, PostEffect, C3D_API );
+	CU_DeclareSmartPtr( c3d, PostEffect, C3D_API );
 	/** @endcond */
 
 	/**
@@ -44,10 +44,10 @@ namespace castor3d
 	*\brief
 	*	La fabrique d'effets post rendu.
 	*/
-	using PostEffectFactory = castor::Factory< PostEffect
-		, castor::String
+	using PostEffectFactory = Factory< PostEffect
+		, String
 		, PostEffectUPtr
-		, castor::Function< PostEffectUPtr( RenderTarget &, RenderSystem &, Parameters const & ) > >;
+		, Function< PostEffectUPtr( RenderTarget &, RenderSystem &, Parameters const & ) > >;
 
 	//@}
 	//@}

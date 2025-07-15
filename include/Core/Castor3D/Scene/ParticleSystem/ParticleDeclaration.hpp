@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/ParticleSystem/ParticleElementDeclaration.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**
 	*\~english
@@ -24,31 +24,31 @@ namespace castor3d
 	{
 		switch ( format )
 		{
-		case castor3d::ParticleFormat::eInt:
-		case castor3d::ParticleFormat::eUInt:
-		case castor3d::ParticleFormat::eFloat:
+		case ParticleFormat::eInt:
+		case ParticleFormat::eUInt:
+		case ParticleFormat::eFloat:
 			return 4u;
 
-		case castor3d::ParticleFormat::eVec2i:
-		case castor3d::ParticleFormat::eVec2ui:
-		case castor3d::ParticleFormat::eVec2f:
+		case ParticleFormat::eVec2i:
+		case ParticleFormat::eVec2ui:
+		case ParticleFormat::eVec2f:
 			return 8u;
 
-		case castor3d::ParticleFormat::eVec3i:
-		case castor3d::ParticleFormat::eVec3ui:
-		case castor3d::ParticleFormat::eVec3f:
+		case ParticleFormat::eVec3i:
+		case ParticleFormat::eVec3ui:
+		case ParticleFormat::eVec3f:
 			return 12u;
 
-		case castor3d::ParticleFormat::eVec4i:
-		case castor3d::ParticleFormat::eVec4ui:
-		case castor3d::ParticleFormat::eVec4f:
-		case castor3d::ParticleFormat::eMat2f:
+		case ParticleFormat::eVec4i:
+		case ParticleFormat::eVec4ui:
+		case ParticleFormat::eVec4f:
+		case ParticleFormat::eMat2f:
 			return 16u;
 
-		case castor3d::ParticleFormat::eMat3f:
+		case ParticleFormat::eMat3f:
 			return 36u;
 
-		case castor3d::ParticleFormat::eMat4f:
+		case ParticleFormat::eMat4f:
 			return 64u;
 
 		default:
@@ -105,7 +105,7 @@ namespace castor3d
 		 *\brief		Constructeur
 		 *\param[in]	elements	Tableau d'éléments
 		 */
-		explicit ParticleDeclaration( castor::Vector< ParticleElementDeclaration > const & elements )
+		explicit ParticleDeclaration( Vector< ParticleElementDeclaration > const & elements )
 			: ParticleDeclaration( elements.data(), uint32_t( elements.size() ) )
 		{
 		}
@@ -193,7 +193,7 @@ namespace castor3d
 		template< typename ... Params >
 		void emplace_back( Params && ... params )
 		{
-			m_elements.emplace_back( castor::forward< Params >( params )... );
+			m_elements.emplace_back( c3d::forward< Params >( params )... );
 			m_stride += uint32_t( getSize( m_elements.back().m_dataType ) );
 		}
 

@@ -11,13 +11,13 @@ See LICENSE file in root folder
 namespace c3d_assimp
 {
 	class AssimpSceneNodeImporter
-		: public castor3d::SceneNodeImporter
+		: public c3d::SceneNodeImporter
 	{
 	public:
-		explicit AssimpSceneNodeImporter( castor3d::Engine & engine );
+		explicit AssimpSceneNodeImporter( c3d::Engine & engine );
 
 	private:
-		bool doImportSceneNode( castor3d::SceneNode & node )override;
+		bool doImportSceneNode( c3d::SceneNode & node )override;
 	};
 }
 

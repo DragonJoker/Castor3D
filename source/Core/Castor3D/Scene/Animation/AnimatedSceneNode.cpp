@@ -7,18 +7,18 @@
 #include "Castor3D/Scene/Animation/SceneNode/SceneNodeAnimationInstance.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
-CU_ImplementSmartPtr( castor3d, AnimatedSceneNode )
+CU_ImplementSmartPtr( c3d, AnimatedSceneNode )
 
-namespace castor3d
+namespace c3d
 {
-	AnimatedSceneNode::AnimatedSceneNode( castor::String const & name
+	AnimatedSceneNode::AnimatedSceneNode( String const & name
 		, SceneNode & node )
 		: AnimatedObject{ AnimationType::eSceneNode, name }
 		, m_node{ node }
 	{
 	}
 
-	void AnimatedSceneNode::update( castor::Milliseconds const & elpased )
+	void AnimatedSceneNode::update( Milliseconds const & elpased )
 	{
 		if ( m_playingAnimation )
 		{
@@ -26,14 +26,14 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedSceneNode::doAddAnimation( castor::String const & name )
+	void AnimatedSceneNode::doAddAnimation( String const & name )
 	{
 		if ( auto it = m_animations.find( name );
 			it == m_animations.end() && m_node.hasAnimation( name ) )
 		{
 			auto & animation = static_cast< SceneNodeAnimation & >( m_node.getAnimation( name ) );
-			auto instance = castor::makeUniqueDerived< AnimationInstance, SceneNodeAnimationInstance >( *this, animation );
-			m_animations.try_emplace( name, castor::move( instance ) );
+			auto instance = makeUniqueDerived< AnimationInstance, SceneNodeAnimationInstance >( *this, animation );
+			m_animations.try_emplace( name, c3d::move( instance ) );
 		}
 	}
 

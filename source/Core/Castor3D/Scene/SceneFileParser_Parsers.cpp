@@ -24,9 +24,9 @@
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-using castor::operator<<;
+using c3d::operator<<;
 
-namespace castor3d
+namespace c3d
 {
 	namespace scnprs
 	{
@@ -90,9 +90,8 @@ namespace castor3d
 		}
 		CU_EndAttributePop()
 
-		static void addFontParsers( castor::AttributeParsers & result )
+		static void addFontParsers( AttributeParsers & result )
 		{
-			using namespace castor;
 			BlockParserContextT< FontContext > context{ result, CSCNSection::eFont };
 
 			context.addParser( cuT( "file" ), parserFontFile, { makeParameter< ParameterType::ePath >() } );
@@ -100,9 +99,8 @@ namespace castor3d
 			context.addPopParser( cuT( "}" ), parserFontEnd );
 		}
 
-		static void addSdfFontParsers( castor::AttributeParsers & result )
+		static void addSdfFontParsers( AttributeParsers & result )
 		{
-			using namespace castor;
 			BlockParserContextT< FontContext > context{ result, CSCNSection::eSdfFont };
 
 			context.addParser( cuT( "file" ), parserSdfFontFile, { makeParameter< ParameterType::ePath >() } );
@@ -110,20 +108,20 @@ namespace castor3d
 		}
 	}
 
-	void fillMeshImportParameters( castor::FileParserContext & context
-		, castor::String const & meshParams
+	void fillMeshImportParameters( FileParserContext & context
+		, String const & meshParams
 		, Parameters & parameters )
 	{
-		for ( auto const & param : castor::string::split( meshParams, cuT( "-" ), 20, false ) )
+		for ( auto const & param : string::split( meshParams, cuT( "-" ), 20, false ) )
 		{
 			if ( param.find( cuT( "smooth_normals" ) ) == 0 )
 			{
-				castor::String strNml = cuT( "smooth" );
+				String strNml = cuT( "smooth" );
 				parameters.add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
 			}
 			else if ( param.find( cuT( "flat_normals" ) ) == 0 )
 			{
-				castor::String strNml = cuT( "flat" );
+				String strNml = cuT( "flat" );
 				parameters.add( cuT( "normals" ), strNml.c_str(), uint32_t( strNml.size() ) );
 			}
 			else if ( param.find( cuT( "tangent_space" ) ) == 0 )
@@ -133,10 +131,10 @@ namespace castor3d
 			else if ( param.find( cuT( "pitch" ) ) == 0 )
 			{
 				if ( auto eqIndex = param.find( cuT( '=' ) );
-					eqIndex != castor::String::npos )
+					eqIndex != String::npos )
 				{
 					float value;
-					castor::string::parse< float >( param.substr( eqIndex + 1 ), value );
+					string::parse< float >( param.substr( eqIndex + 1 ), value );
 					parameters.add( cuT( "pitch" ), value );
 				}
 				else
@@ -147,10 +145,10 @@ namespace castor3d
 			else if ( param.find( cuT( "yaw" ) ) == 0 )
 			{
 				if ( auto eqIndex = param.find( cuT( '=' ) );
-					eqIndex != castor::String::npos )
+					eqIndex != String::npos )
 				{
 					float value;
-					castor::string::parse< float >( param.substr( eqIndex + 1 ), value );
+					string::parse< float >( param.substr( eqIndex + 1 ), value );
 					parameters.add( cuT( "yaw" ), value );
 				}
 				else
@@ -161,10 +159,10 @@ namespace castor3d
 			else if ( param.find( cuT( "roll" ) ) == 0 )
 			{
 				if ( auto eqIndex = param.find( cuT( '=' ) );
-					eqIndex != castor::String::npos )
+					eqIndex != String::npos )
 				{
 					float value;
-					castor::string::parse< float >( param.substr( eqIndex + 1 ), value );
+					string::parse< float >( param.substr( eqIndex + 1 ), value );
 					parameters.add( cuT( "roll" ), value );
 				}
 				else
@@ -175,10 +173,10 @@ namespace castor3d
 			else if ( param.find( cuT( "emissive_mult" ) ) == 0 )
 			{
 				if ( auto eqIndex = param.find( cuT( '=' ) );
-					eqIndex != castor::String::npos )
+					eqIndex != String::npos )
 				{
 					float value;
-					castor::string::parse< float >( param.substr( eqIndex + 1 ), value );
+					string::parse< float >( param.substr( eqIndex + 1 ), value );
 					parameters.add( cuT( "emissive_mult" ), value );
 				}
 				else
@@ -193,10 +191,10 @@ namespace castor3d
 			else if ( param.find( cuT( "rescale" ) ) == 0 )
 			{
 				if ( auto eqIndex = param.find( cuT( '=' ) );
-					eqIndex != castor::String::npos )
+					eqIndex != String::npos )
 				{
 					float value;
-					castor::string::parse< float >( param.substr( eqIndex + 1 ), value );
+					string::parse< float >( param.substr( eqIndex + 1 ), value );
 					parameters.add( cuT( "rescale" ), value );
 				}
 				else
@@ -207,12 +205,12 @@ namespace castor3d
 			else if ( param.find( cuT( "prefix" ) ) == 0 )
 			{
 				if ( auto eqIndex = param.find( cuT( '=' ) );
-					eqIndex != castor::String::npos )
+					eqIndex != String::npos )
 				{
-					if ( castor::String value = param.substr( eqIndex + 1 );
+					if ( String value = param.substr( eqIndex + 1 );
 						value.size() > 2 && value.front() == '\"' && value.back() == '\"' )
 					{
-						castor::String prefix;
+						String prefix;
 						if ( parameters.get( cuT( "prefix" ), prefix ) )
 						{
 							parameters.add( cuT( "prefix" ), prefix + value.substr( 1, value.size() - 2 ) );
@@ -247,9 +245,9 @@ namespace castor3d
 			else if ( param.find( cuT( "preferred_importer" ) ) == 0 )
 			{
 				if ( auto eqIndex = param.find( cuT( '=' ) );
-					eqIndex != castor::String::npos )
+					eqIndex != String::npos )
 				{
-					if ( castor::String value = param.substr( eqIndex + 1 );
+					if ( String value = param.substr( eqIndex + 1 );
 						value.size() > 2 && value.front() == '\"' && value.back() == '\"' )
 					{
 						parameters.add( cuT( "preferred_importer" ), value.substr( 1, value.size() - 2 ) );
@@ -267,10 +265,10 @@ namespace castor3d
 			else if ( param.find( cuT( "submesh" ) ) == 0 )
 			{
 				if ( auto eqIndex = param.find( cuT( '=' ) );
-					eqIndex != castor::String::npos )
+					eqIndex != String::npos )
 				{
 					uint32_t value;
-					castor::string::parse< uint32_t >( param.substr( eqIndex + 1 ), value );
+					string::parse< uint32_t >( param.substr( eqIndex + 1 ), value );
 					parameters.add( cuT( "submesh" ), value );
 				}
 				else
@@ -281,9 +279,9 @@ namespace castor3d
 		}
 	}
 
-	castor::AdditionalParsers createSceneFileParsers( Engine const & engine )
+	AdditionalParsers createSceneFileParsers( Engine const & engine )
 	{
-		castor::AttributeParsers parsers;
+		AttributeParsers parsers;
 		scnprs::addFontParsers( parsers );
 		scnprs::addSdfFontParsers( parsers );
 		Engine::addParsers( parsers );
@@ -315,9 +313,9 @@ namespace castor3d
 			, nullptr };
 	}
 
-	castor::StrUInt32Map registerSceneFileSections()
+	StrUInt32Map registerSceneFileSections()
 	{
-		return { { uint32_t( CSCNSection::eRoot ), castor::String{} }
+		return { { uint32_t( CSCNSection::eRoot ), String{} }
 			, { uint32_t( CSCNSection::eScene ), cuT( "scene" ) }
 			, { uint32_t( CSCNSection::eWindow ), cuT( "window" ) }
 			, { uint32_t( CSCNSection::eSampler ), cuT( "sampler" ) }

@@ -10,11 +10,11 @@ See LICENSE file in root folder
 
 #include "Castor3D/Animation/AnimationKeyFrame.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class SkeletonAnimationKeyFrame
 		: public AnimationKeyFrame
-		, public castor::OwnedBy< SkeletonAnimation >
+		, public OwnedBy< SkeletonAnimation >
 	{
 	public:
 		/**
@@ -28,7 +28,7 @@ namespace castor3d
 		 *\param[in]	timeIndex			Quand la key frame commence.
 		 */
 		C3D_API SkeletonAnimationKeyFrame( SkeletonAnimation & skeletonAnimation
-			, castor::Milliseconds const & timeIndex );
+			, Milliseconds const & timeIndex );
 		/**
 		 *\~english
 		 *\brief		Adds an animation object.
@@ -44,9 +44,9 @@ namespace castor3d
 		 *\param[in]	scale		L'échelle au temps de début.
 		*/
 		C3D_API void addAnimationObject( SkeletonAnimationObject & object
-			, castor::Point3f const & translate
-			, castor::Quaternion const & rotate
-			, castor::Point3f const & scale );
+			, Point3f const & translate
+			, Quaternion const & rotate
+			, Point3f const & scale );
 		/**
 		*\~english
 		*\return		\p true if the given object is into the transforms map (not the cumulative one).
@@ -146,15 +146,15 @@ namespace castor3d
 		}
 
 	private:
-		void doSetTimeIndex( castor::Milliseconds const & time )
+		void doSetTimeIndex( Milliseconds const & time )
 		{
 			m_timeIndex = time;
 		}
 
 	private:
 		TransformArray m_transforms;
-		castor::Vector< castor::Matrix4x4f > m_boneTransforms;
-		mutable std::unordered_map< size_t, SubmeshBoundingBoxList > m_boxes;
+		Vector< Matrix4x4f > m_boneTransforms;
+		mutable HashMap< size_t, SubmeshBoundingBoxList > m_boxes;
 
 		friend class BinaryParser< SkeletonAnimationKeyFrame >;
 		friend class BinaryWriter< SkeletonAnimationKeyFrame >;

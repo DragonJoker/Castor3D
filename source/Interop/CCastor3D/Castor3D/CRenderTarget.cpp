@@ -30,7 +30,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_TARGET );
 
-		castor3d::RenderDevice const & device = *object->internal->getOwner()->getRenderDevice();
+		c3d::RenderDevice const & device = *object->internal->getOwner()->getRenderDevice();
 		object->internal->initialise( device );
 
 		return C3D_OK;
@@ -43,7 +43,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_TARGET );
 
-		castor3d::RenderDevice const & device = *object->internal->getOwner()->getRenderDevice();
+		c3d::RenderDevice const & device = *object->internal->getOwner()->getRenderDevice();
 		object->internal->cleanup( device );
 
 		return C3D_OK;
@@ -100,7 +100,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_TARGET );
 
-		object->internal->setViewportType( castor3d::ViewportType( val ) );
+		object->internal->setViewportType( c3d::ViewportType( val ) );
 
 		return C3D_OK;
 	}

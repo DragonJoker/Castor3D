@@ -16,9 +16,9 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementSmartPtr( castor3d, InstantiationComponent )
+CU_ImplementSmartPtr( c3d, InstantiationComponent )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -82,7 +82,7 @@ namespace castor3d
 		, Pass const & pass
 		, ObjectBufferOffset const & bufferOffsets
 		, ashes::BufferCRefArray & buffers
-		, castor::Vector< uint64_t > & offsets
+		, Vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding
 		, uint32_t & currentLocation )
@@ -93,7 +93,7 @@ namespace castor3d
 				it != m_instances.end() && it->second.buffer )
 			{
 				auto hash = std::hash< uint32_t >{}( currentBinding );
-				hash = castor::hashCombine( hash, currentLocation );
+				hash = hashCombine( hash, currentLocation );
 				auto layoutIt = m_mtxLayouts.find( hash );
 
 				if ( layoutIt == m_mtxLayouts.end() )
@@ -272,21 +272,21 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const InstantiationComponent::TypeName = C3D_MakeSubmeshComponentName( "instantiation" );
+	String const InstantiationComponent::TypeName = C3D_MakeSubmeshComponentName( "instantiation" );
 
 	InstantiationComponent::InstantiationComponent( Submesh & submesh
 		, uint32_t threshold )
 		: SubmeshComponent{ submesh, TypeName
-			, castor::make_unique< ComponentData >( submesh, threshold ) }
+			, makeRawUnique< ComponentData >( submesh, threshold ) }
 	{
 	}
 
 	SubmeshComponentUPtr InstantiationComponent::clone( Submesh & submesh )const
 	{
 		ComponentData const * data = getDataT< ComponentData >();
-		auto result = castor::makeUnique< InstantiationComponent >( submesh
+		auto result = makeUnique< InstantiationComponent >( submesh
 			, data->getThreshold() );
-		return castor::ptrRefCast< SubmeshComponent >( result );
+		return ptrRefCast< SubmeshComponent >( result );
 	}
 
 	ProgramFlags InstantiationComponent::getProgramFlags( Pass const & pass )const noexcept

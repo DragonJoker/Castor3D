@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Image/StagingTexture.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ColourBackground
 		: public SceneBackground
@@ -41,21 +41,21 @@ namespace castor3d
 		*/
 		C3D_API ColourBackground( Engine & engine
 			, Scene & scene
-			, castor::String const & name = castor::String{} );
+			, String const & name = String{} );
 		/**
-		*\copydoc	castor3d::SceneBackground::accept
+		*\copydoc	SceneBackground::accept
 		*/
 		C3D_API void accept( BackgroundVisitor & visitor )override;
 		/**
-		*\copydoc	castor3d::SceneBackground::accept
+		*\copydoc	SceneBackground::accept
 		*/
 		C3D_API void accept( ConfigurationVisitorBase & visitor )override;
 		/**
-		*\copydoc	castor3d::SceneBackground::write
+		*\copydoc	SceneBackground::write
 		*/
-		C3D_API bool write( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::StringStream & stream )const override;
+		C3D_API bool write( String const & tabs
+			, Path const & folder
+			, StringStream & stream )const override;
 		/**
 		*\~english
 		*name
@@ -65,7 +65,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline castor::HdrRgbColour const & getColour()const
+		inline HdrRgbColour const & getColour()const
 		{
 			return m_colour.value();
 		}
@@ -88,8 +88,8 @@ namespace castor3d
 			, uint32_t & index )const override;
 
 	private:
-		mutable castor::GroupChangeTracked< castor::HdrRgbColour > m_colour;
-		castor::PxBufferBaseUPtr m_buffer;
+		mutable GroupChangeTracked< HdrRgbColour > m_colour;
+		PxBufferBaseUPtr m_buffer;
 	};
 }
 

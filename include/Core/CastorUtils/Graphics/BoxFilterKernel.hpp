@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Graphics/PixelFormat.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< PixelFormat PFT >
 	struct KernelBoxFilterT

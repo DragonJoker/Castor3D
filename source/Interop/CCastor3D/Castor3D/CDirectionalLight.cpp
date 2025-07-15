@@ -83,7 +83,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_DIRLGT );
 
-		object->internal->setIllumination( castor::Illumination{ val } );
+		object->internal->setIllumination( c3d::Illumination{ val } );
 
 		return C3D_OK;
 	}

@@ -3,12 +3,12 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 
-CU_ImplementSmartPtr( castor3d, MeshAnimationSubmesh )
+CU_ImplementSmartPtr( c3d, MeshAnimationSubmesh )
 
-namespace castor3d
+namespace c3d
 {
 	MeshAnimationSubmesh::MeshAnimationSubmesh( MeshAnimation & animation, Submesh & submesh )
-		: castor::OwnedBy< MeshAnimation >{ animation }
+		: OwnedBy< MeshAnimation >{ animation }
 		, m_submesh{ submesh }
 	{
 		CU_Require( m_submesh.hasComponent( MorphComponent::TypeName ) );

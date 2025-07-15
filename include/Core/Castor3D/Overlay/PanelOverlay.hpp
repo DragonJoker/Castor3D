@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class PanelOverlay
 		: public OverlayCategory
@@ -39,7 +39,7 @@ namespace castor3d
 		 */
 		C3D_API static OverlayCategoryUPtr create();
 		/**
-		 *\copydoc	castor3d::OverlayCategory::accept
+		 *\copydoc	OverlayCategory::accept
 		 */
 		C3D_API void accept( OverlayVisitor & visitor )const override;
 		/**

@@ -13,13 +13,13 @@ namespace light_streaks
 	public:
 		HiPass( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
-			, castor3d::RenderDevice const & device
+			, c3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & sceneView
 			, crg::ImageViewIdArray const & resultViews
-			, castor3d::Extent2D size
+			, c3d::Extent2D size
 			, bool const * enabled
 			, uint32_t const * passIndex );
-		void accept( castor3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor );
 
 		crg::FramePassArray const & getLastPasses()const
 		{
@@ -27,7 +27,7 @@ namespace light_streaks
 		}
 
 	private:
-		castor3d::ProgramModule m_shader;
+		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePassArray m_lastPasses;
 	};

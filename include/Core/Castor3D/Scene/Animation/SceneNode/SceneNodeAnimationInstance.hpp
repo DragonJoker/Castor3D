@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Animation/AnimationInstance.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class SceneNodeAnimationInstance
 		: public AnimationInstance
@@ -48,17 +48,17 @@ namespace castor3d
 			return m_animatedSceneNode;
 		}
 
-		castor::Point3f const & getInitialPosition()const
+		Point3f const & getInitialPosition()const
 		{
 			return m_initialTranslate;
 		}
 
-		castor::Quaternion const & getInitialOrientation()const
+		Quaternion const & getInitialOrientation()const
 		{
 			return m_initialRotate;
 		}
 
-		castor::Point3f const & getInitialScale()const
+		Point3f const & getInitialScale()const
 		{
 			return m_initialScale;
 		}
@@ -72,11 +72,11 @@ namespace castor3d
 		SceneNodeAnimation & m_sceneNodeAnimation;
 		AnimationKeyFrameArray::iterator m_prev;
 		AnimationKeyFrameArray::iterator m_curr;
-		InterpolatorPtr< castor::Point3f > m_vecInterpolator;
-		InterpolatorPtr< castor::Quaternion > m_quatInterpolator;
-		castor::Point3f m_initialTranslate;
-		castor::Quaternion m_initialRotate;
-		castor::Point3f m_initialScale;
+		InterpolatorPtr< Point3f > m_vecInterpolator;
+		InterpolatorPtr< Quaternion > m_quatInterpolator;
+		Point3f m_initialTranslate;
+		Quaternion m_initialRotate;
+		Point3f m_initialScale;
 
 		friend class BinaryWriter< SceneNodeAnimation >;
 		friend class BinaryParser< SceneNodeAnimation >;

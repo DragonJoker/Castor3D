@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/GBuffer.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class ShadowMapResult
 		: public GBufferT< SmTexture >
@@ -16,9 +16,9 @@ namespace castor3d
 	public:
 		C3D_API ShadowMapResult( crg::ResourcesCache & resources
 			, RenderDevice const & device
-			, castor::String const & prefix
+			, String const & prefix
 			, ImageCreateFlags createFlags
-			, castor::Size const & size
+			, Size const & size
 			, uint32_t layerCount );
 	};
 }

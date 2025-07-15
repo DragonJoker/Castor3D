@@ -17,22 +17,22 @@ namespace c3d_assimp
 {
 	namespace meshes
 	{
-		static castor::Matrix4x4f getTranslation( aiMatrix4x4 const & transform )
+		static c3d::Matrix4x4f getTranslation( aiMatrix4x4 const & transform )
 		{
 			aiQuaternion quat;
 			aiVector3D tran;
 			transform.DecomposeNoScaling( quat, tran );
 
-			castor::Matrix4x4f result;
-			castor::matrix::setTranslate( result, fromAssimp( tran ) );
+			c3d::Matrix4x4f result;
+			c3d::matrix::setTranslate( result, fromAssimp( tran ) );
 			return result;
 		}
 
-		static castor3d::SkeletonRPtr findSkeletonForMesh( AssimpImporterFile const & file
-			, castor3d::Scene & scene
+		static c3d::SkeletonRPtr findSkeletonForMesh( AssimpImporterFile const & file
+			, c3d::Scene & scene
 			, aiNode const & sceneRootNode
 			, aiNode const & skelRootNode
-			, castor::String skelName )
+			, c3d::String skelName )
 		{
 			auto skelIt = std::find_if( scene.getSkeletonCache().begin()
 				, scene.getSkeletonCache().end()
@@ -48,11 +48,11 @@ namespace c3d_assimp
 
 			for ( auto & skeleton : scene.getSkeletonCache() )
 			{
-				auto skelRootNodeName = castor::toUtf8( file.getExternalName( skeleton.second->getRootNode()->getName() ) );
+				auto skelRootNodeName = c3d::toUtf8( file.getExternalName( skeleton.second->getRootNode()->getName() ) );
 
 				if ( toUtf8( sceneRootNode.mName ) == skelRootNodeName )
 				{
-					auto children = castor::makeArrayView( sceneRootNode.mChildren
+					auto children = c3d::makeArrayView( sceneRootNode.mChildren
 						, sceneRootNode.mNumChildren );
 					auto it = std::find_if( children.begin()
 						, children.end()
@@ -78,12 +78,12 @@ namespace c3d_assimp
 		}
 	}
 
-	AssimpMeshImporter::AssimpMeshImporter( castor3d::Engine & engine )
-		: castor3d::MeshImporter{ engine, cuT( "Assimp" ) }
+	AssimpMeshImporter::AssimpMeshImporter( c3d::Engine & engine )
+		: c3d::MeshImporter{ engine, cuT( "Assimp" ) }
 	{
 	}
 
-	bool AssimpMeshImporter::doImportMesh( castor3d::Mesh & mesh, uint32_t submeshIndex )
+	bool AssimpMeshImporter::doImportMesh( c3d::Mesh & mesh, uint32_t submeshIndex )
 	{
 		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
 
@@ -96,14 +96,14 @@ namespace c3d_assimp
 		return doImportSceneMesh( mesh, submeshIndex );
 	}
 
-	void AssimpMeshImporter::doImportSingleMesh( castor3d::Mesh & mesh, uint32_t submeshIndex )
+	void AssimpMeshImporter::doImportSingleMesh( c3d::Mesh & mesh, uint32_t submeshIndex )
 	{
 		auto & file = static_cast< AssimpImporterFile & >( *m_file );
 		auto & aiScene = file.getAiScene();
 		auto & scene = *mesh.getScene();
 		uint32_t meshIndex{};
 
-		for ( auto aiMesh : castor::makeArrayView( aiScene.mMeshes, aiScene.mNumMeshes ) )
+		for ( auto aiMesh : c3d::makeArrayView( aiScene.mMeshes, aiScene.mNumMeshes ) )
 		{
 			if ( isValidMesh( *aiMesh )
 				&& ( submeshIndex == meshIndex || submeshIndex == 0xFFFFFFFFu ) )
@@ -121,8 +121,8 @@ namespace c3d_assimp
 
 						if ( importer->importData( *mat
 								, &file
-								, castor3d::Parameters{}
-							, castor::Map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration >{} ) )
+								, c3d::Parameters{}
+							, c3d::Map< c3d::PassComponentTextureFlag, c3d::TextureConfiguration >{} ) )
 						{
 							scene.getMaterialView().add( matName, mat, true );
 						}
@@ -143,7 +143,7 @@ namespace c3d_assimp
 			, mesh );
 	}
 
-	bool AssimpMeshImporter::doImportSceneMesh( castor3d::Mesh & mesh, uint32_t submeshIndex )
+	bool AssimpMeshImporter::doImportSceneMesh( c3d::Mesh & mesh, uint32_t submeshIndex )
 	{
 		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
 		auto name = mesh.getName();
@@ -174,13 +174,13 @@ namespace c3d_assimp
 	void AssimpMeshImporter::doProcessMesh( aiScene const & aiScene
 		, aiMesh const & aiMesh
 		, uint32_t aiMeshIndex
-		, castor3d::Mesh & mesh
-		, castor3d::Submesh & submesh )
+		, c3d::Mesh & mesh
+		, c3d::Submesh & submesh )
 	{
 		auto & file = static_cast< AssimpImporterFile & >( *m_file );
 		auto & scene = *mesh.getScene();
 		auto materialRes = scene.tryFindMaterial( file.getMaterialName( aiMesh.mMaterialIndex ) );
-		castor3d::MaterialObs material{};
+		c3d::MaterialObs material{};
 
 		if ( !materialRes )
 		{
@@ -192,61 +192,61 @@ namespace c3d_assimp
 		}
 
 		submesh.setDefaultMaterial( material );
-		submesh.createComponent< castor3d::DefaultRenderComponent >();
+		submesh.createComponent< c3d::DefaultRenderComponent >();
 
-		auto positions = submesh.createComponent< castor3d::PositionsComponent >();
-		auto normals = submesh.createComponent< castor3d::NormalsComponent >();
-		castor::Point4fArray tan;
-		castor::Point3fArray bit;
-		castor::Point3fArray tex0;
-		castor::Point3fArray tex1;
-		castor::Point3fArray tex2;
-		castor::Point3fArray tex3;
-		castor::Point3fArray col;
-		castor::Point4fArray * tangents = &tan;
-		castor::Point3fArray * bitangents = &bit;
-		castor::Point3fArray * texcoords0 = &tex0;
-		castor::Point3fArray * texcoords1 = &tex1;
-		castor::Point3fArray * texcoords2 = &tex2;
-		castor::Point3fArray * texcoords3 = &tex3;
-		castor::Point3fArray * colours = &col;
+		auto positions = submesh.createComponent< c3d::PositionsComponent >();
+		auto normals = submesh.createComponent< c3d::NormalsComponent >();
+		c3d::Point4fArray tan;
+		c3d::Point3fArray bit;
+		c3d::Point3fArray tex0;
+		c3d::Point3fArray tex1;
+		c3d::Point3fArray tex2;
+		c3d::Point3fArray tex3;
+		c3d::Point3fArray col;
+		c3d::Point4fArray * tangents = &tan;
+		c3d::Point3fArray * bitangents = &bit;
+		c3d::Point3fArray * texcoords0 = &tex0;
+		c3d::Point3fArray * texcoords1 = &tex1;
+		c3d::Point3fArray * texcoords2 = &tex2;
+		c3d::Point3fArray * texcoords3 = &tex3;
+		c3d::Point3fArray * colours = &col;
 
 		if ( aiMesh.HasTextureCoords( 0u ) )
 		{
-			auto tanComp = submesh.createComponent< castor3d::TangentsComponent >();
-			auto texComp = submesh.createComponent< castor3d::Texcoords0Component >();
+			auto tanComp = submesh.createComponent< c3d::TangentsComponent >();
+			auto texComp = submesh.createComponent< c3d::Texcoords0Component >();
 			tangents = &tanComp->getData().getData();
 			texcoords0 = &texComp->getData().getData();
 		}
 
 		if ( aiMesh.HasTextureCoords( 1u ) )
 		{
-			auto texComp = submesh.createComponent< castor3d::Texcoords1Component >();
+			auto texComp = submesh.createComponent< c3d::Texcoords1Component >();
 			texcoords1 = &texComp->getData().getData();
 		}
 
 		if ( aiMesh.HasTextureCoords( 2u ) )
 		{
-			auto texComp = submesh.createComponent< castor3d::Texcoords2Component >();
+			auto texComp = submesh.createComponent< c3d::Texcoords2Component >();
 			texcoords2 = &texComp->getData().getData();
 		}
 
 		if ( aiMesh.HasTextureCoords( 3u ) )
 		{
-			auto texComp = submesh.createComponent< castor3d::Texcoords3Component >();
+			auto texComp = submesh.createComponent< c3d::Texcoords3Component >();
 			texcoords3 = &texComp->getData().getData();
 		}
 
 		if ( aiMesh.HasVertexColors( 0u )
 			&& !file.getParameters().get< bool >( "ignore_vertex_colour" ) )
 		{
-			auto colComp = submesh.createComponent< castor3d::ColoursComponent >();
+			auto colComp = submesh.createComponent< c3d::ColoursComponent >();
 			colours = &colComp->getData().getData();
 		}
 
 		if ( aiMesh.HasTangentsAndBitangents() )
 		{
-			auto bitComp = submesh.createComponent< castor3d::BitangentsComponent >();
+			auto bitComp = submesh.createComponent< c3d::BitangentsComponent >();
 			bitangents = &bitComp->getData().getData();
 		}
 
@@ -269,14 +269,14 @@ namespace c3d_assimp
 			, *texcoords2
 			, *texcoords3
 			, *colours
-			, castor::makeArrayView( aiMesh.mAnimMeshes, aiMesh.mNumAnimMeshes ) );
+			, c3d::makeArrayView( aiMesh.mAnimMeshes, aiMesh.mNumAnimMeshes ) );
 
 		if ( !animBuffers.empty() )
 		{
-			castor3d::log::debug << cuT( "    Morph targets found: [" ) << uint32_t( animBuffers.size() ) << cuT( "]" ) << std::endl;
-			auto component = submesh.hasComponent( castor3d::MorphComponent::TypeName )
-				? submesh.getComponent< castor3d::MorphComponent >()
-				: submesh.createComponent< castor3d::MorphComponent >();
+			c3d::log::debug << cuT( "    Morph targets found: [" ) << uint32_t( animBuffers.size() ) << cuT( "]" ) << std::endl;
+			auto component = submesh.hasComponent( c3d::MorphComponent::TypeName )
+				? submesh.getComponent< c3d::MorphComponent >()
+				: submesh.createComponent< c3d::MorphComponent >();
 
 			for ( auto & animBuffer : animBuffers )
 			{
@@ -286,10 +286,10 @@ namespace c3d_assimp
 
 		if ( aiMesh.HasBones() )
 		{
-			castor::Vector< castor3d::VertexBoneData > bonesData( aiMesh.mNumVertices );
+			c3d::Vector< c3d::VertexBoneData > bonesData( aiMesh.mNumVertices );
 			auto meshNode = findMeshNode( aiMeshIndex, *aiScene.mRootNode );
 			auto rootNode = findRootSkeletonNode( *aiScene.mRootNode
-				, castor::makeArrayView( aiMesh.mBones, aiMesh.mNumBones )
+				, c3d::makeArrayView( aiMesh.mBones, aiMesh.mNumBones )
 				, meshNode );
 			auto skelName = file.getInternalName( findSkeletonName( file.getBonesNodes(), *rootNode ) );
 			auto skeleton = meshes::findSkeletonForMesh( file
@@ -300,26 +300,26 @@ namespace c3d_assimp
 
 			if ( skeleton )
 			{
-				for ( auto aiBone : castor::makeArrayView( aiMesh.mBones, aiMesh.mNumBones ) )
+				for ( auto aiBone : c3d::makeArrayView( aiMesh.mBones, aiMesh.mNumBones ) )
 				{
-					castor::String boneName = file.getInternalName( aiBone->mName );
+					c3d::String boneName = file.getInternalName( aiBone->mName );
 					auto node = skeleton->findNode( boneName );
-					CU_Require( node && node->getType() == castor3d::SkeletonNodeType::eBone );
-					auto bone = &static_cast< castor3d::BoneNode & >( *node );
+					CU_Require( node && node->getType() == c3d::SkeletonNodeType::eBone );
+					auto bone = &static_cast< c3d::BoneNode & >( *node );
 
-					for ( auto weight : castor::makeArrayView( aiBone->mWeights, aiBone->mNumWeights ) )
+					for ( auto weight : c3d::makeArrayView( aiBone->mWeights, aiBone->mNumWeights ) )
 					{
 						bonesData[weight.mVertexId].addBoneData( bone->getId(), weight.mWeight );
 					}
 				}
 
-				auto bones = submesh.createComponent< castor3d::SkinComponent >();
+				auto bones = submesh.createComponent< c3d::SkinComponent >();
 				bones->getData().addDatas( bonesData );
 			}
 		}
 
-		auto mapping = submesh.createComponent< castor3d::TriFaceMapping >();
-		auto faces = castor::makeArrayView( aiMesh.mFaces, aiMesh.mNumFaces );
+		auto mapping = submesh.createComponent< c3d::TriFaceMapping >();
+		auto faces = c3d::makeArrayView( aiMesh.mFaces, aiMesh.mNumFaces );
 
 		for ( auto face : faces )
 		{
@@ -345,17 +345,17 @@ namespace c3d_assimp
 	}
 
 	void AssimpMeshImporter::doTransformMesh( aiNode const & aiNode
-		, castor3d::Mesh & mesh
+		, c3d::Mesh & mesh
 		, aiMatrix4x4 transformAcc )
 	{
 		transformAcc = transformAcc * aiNode.mTransformation;
 
-		for ( auto aiMeshIndex : castor::makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes ) )
+		for ( auto aiMeshIndex : c3d::makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes ) )
 		{
 			if ( aiMeshIndex < mesh.getSubmeshCount() )
 			{
 				auto submesh = mesh.getSubmesh( aiMeshIndex );
-				auto transform = ( submesh->hasComponent( castor3d::SkinComponent::TypeName )
+				auto transform = ( submesh->hasComponent( c3d::SkinComponent::TypeName )
 					? meshes::getTranslation( transformAcc )
 					: fromAssimp( transformAcc ) );
 
@@ -370,7 +370,7 @@ namespace c3d_assimp
 			}
 		}
 
-		for ( auto child : castor::makeArrayView( aiNode.mChildren, aiNode.mNumChildren ) )
+		for ( auto child : c3d::makeArrayView( aiNode.mChildren, aiNode.mNumChildren ) )
 		{
 			doTransformMesh( *child, mesh, transformAcc );
 		}

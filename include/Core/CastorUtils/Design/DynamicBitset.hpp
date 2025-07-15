@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Design/DesignModule.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename BlockTypeT >
 	class DynamicBitsetT

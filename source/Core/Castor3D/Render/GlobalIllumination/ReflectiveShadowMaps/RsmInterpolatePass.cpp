@@ -29,9 +29,9 @@
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
-CU_ImplementSmartPtr( castor3d, RsmInterpolatePass )
+CU_ImplementSmartPtr( c3d, RsmInterpolatePass )
 
-namespace castor3d
+namespace c3d
 {
 	namespace rsminterp
 	{
@@ -67,7 +67,7 @@ namespace castor3d
 					vtx_texture = uv;
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return makeRawUnique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		static ShaderPtr getDirectionalPixelShaderSource( LightType lightType
@@ -160,7 +160,7 @@ namespace castor3d
 					sdwFI
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return makeRawUnique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		static ShaderPtr getSpotPixelShaderSource( LightType lightType
@@ -255,7 +255,7 @@ namespace castor3d
 					sdwFI
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return makeRawUnique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		static ShaderPtr getPointPixelShaderSource( LightType lightType
@@ -340,7 +340,7 @@ namespace castor3d
 					sdwFI
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return makeRawUnique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		static std::unique_ptr< ast::Shader > getPixelProgram( LightType lightType
@@ -386,11 +386,11 @@ namespace castor3d
 		, crg::ImageViewId const & nmlOcc
 		, ShadowMapResult const & smResult
 		, RsmConfigUbo const & rsmConfigUbo
-		, GpuBufferOffsetT< castor::Point4f > const & rsmSamplesSsbo
+		, GpuBufferOffsetT< Point4f > const & rsmSamplesSsbo
 		, Texture const & gi
 		, Texture const & nml
 		, Texture const & dst )
-		: castor::Named{ "RsmInterpolate" }
+		: Named{ "RsmInterpolate" }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), rsminterp::getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), rsminterp::getPixelProgram( lightType, gi.getExtent().width, gi.getExtent().height , device.renderSystem) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
@@ -401,7 +401,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< crg::RenderQuad >( pass
+				auto result = makeRawUnique< crg::RenderQuad >( pass
 					, context
 					, graph
 					, crg::ru::Config{ 1u, false }

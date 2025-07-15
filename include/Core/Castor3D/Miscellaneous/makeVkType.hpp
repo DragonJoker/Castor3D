@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 
-namespace castor3d
+namespace c3d
 {
 	template< typename AshesType >
 	struct VkStructTraits;
@@ -900,7 +900,7 @@ namespace castor3d
 	{
 		return VkStructT{ vkStructureTypeV< VkStructT >
 			, next
-			, castor::forward< ParamsT >( params )... };
+			, c3d::forward< ParamsT >( params )... };
 	}
 
 	template< typename VkStructT, typename ... ParamsT >
@@ -908,7 +908,7 @@ namespace castor3d
 	{
 		return VkStructT{ vkStructureTypeV< VkStructT >
 			, nullptr
-			, castor::forward< ParamsT >( params )... };
+			, c3d::forward< ParamsT >( params )... };
 	}
 }
 

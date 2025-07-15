@@ -14,60 +14,60 @@ See LICENSE file in root folder
 
 namespace water
 {
-	namespace c3d = castor3d::shader;
+	namespace c3ds = c3d::shader;
 
 	struct WaterReflRefrComponent
-		: public castor3d::PassComponent
+		: public c3d::PassComponent
 	{
 		struct ReflRefrShader
-			: public c3d::PassReflRefrShader
+			: public c3ds::PassReflRefrShader
 		{
-			using c3d::PassReflRefrShader::PassReflRefrShader;
+			using c3ds::PassReflRefrShader::PassReflRefrShader;
 
-			void computeWithTransmission( c3d::ReflectionModel & reflections
-				, c3d::BlendComponents & components
-				, c3d::LightSurface const & lightSurface
-				, c3d::BackgroundModel & background
+			void computeWithTransmission( c3ds::ReflectionModel & reflections
+				, c3ds::BlendComponents & components
+				, c3ds::LightSurface const & lightSurface
+				, c3ds::BackgroundModel & background
 				, sdw::CombinedImage2DRgba32 const & mippedScene
-				, c3d::CameraData const & camera
-				, c3d::DirectLighting & lighting
-				, c3d::IndirectLighting & indirect
+				, c3ds::CameraData const & camera
+				, c3ds::DirectLighting & lighting
+				, c3ds::IndirectLighting & indirect
 				, sdw::Vec2 const & sceneUv
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
-				, c3d::ReflectionRefraction & output
-				, c3d::DebugOutputCategory const & debugOutput )const override;
-			void computeWithoutTransmission( c3d::ReflectionModel & reflections
-				, c3d::BlendComponents & components
-				, c3d::LightSurface const & lightSurface
-				, c3d::BackgroundModel & background
-				, c3d::CameraData const & camera
-				, c3d::DirectLighting & lighting
-				, c3d::IndirectLighting & indirect
+				, c3ds::ReflectionRefraction & output
+				, c3ds::DebugOutputCategory const & debugOutput )const override;
+			void computeWithoutTransmission( c3ds::ReflectionModel & reflections
+				, c3ds::BlendComponents & components
+				, c3ds::LightSurface const & lightSurface
+				, c3ds::BackgroundModel & background
+				, c3ds::CameraData const & camera
+				, c3ds::DirectLighting & lighting
+				, c3ds::IndirectLighting & indirect
 				, sdw::Vec2 const & sceneUv
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
-				, c3d::ReflectionRefraction & output
-				, c3d::DebugOutputCategory const & debugOutput )const override;
+				, c3ds::ReflectionRefraction & output
+				, c3ds::DebugOutputCategory const & debugOutput )const override;
 		};
 
 		class Plugin
-			: public castor3d::PassComponentPlugin
+			: public c3d::PassComponentPlugin
 		{
 		public:
-			explicit Plugin( castor3d::PassComponentRegister const & passComponents )
+			explicit Plugin( c3d::PassComponentRegister const & passComponents )
 				: PassComponentPlugin{ passComponents }
 			{
 			}
 
-			castor3d::PassComponentUPtr createComponent( castor3d::Pass & pass )const override
+			c3d::PassComponentUPtr createComponent( c3d::Pass & pass )const override
 			{
-				return castor::makeUniqueDerived< castor3d::PassComponent, WaterReflRefrComponent >( pass );
+				return c3d::makeUniqueDerived< c3d::PassComponent, WaterReflRefrComponent >( pass );
 			}
 
-			c3d::PassReflRefrShaderPtr createReflRefrShader()const override
+			c3ds::PassReflRefrShaderPtr createReflRefrShader()const override
 			{
-				return castor::make_unique< ReflRefrShader >( *this );
+				return c3d::makeRawUnique< ReflRefrShader >( *this );
 			}
 
 			bool isReflRefrComponent()const override
@@ -75,28 +75,28 @@ namespace water
 				return true;
 			}
 
-			void filterComponentFlags( castor3d::ComponentModeFlags filter
-				, castor3d::PassComponentCombine & componentsFlags )const override
+			void filterComponentFlags( c3d::ComponentModeFlags filter
+				, c3d::PassComponentCombine & componentsFlags )const override
 			{
-				if ( !checkFlag( filter, castor3d::ComponentModeFlag::eDiffuseLighting )
-					&& !checkFlag( filter, castor3d::ComponentModeFlag::eSpecularLighting ) )
+				if ( !checkFlag( filter, c3d::ComponentModeFlag::eDiffuseLighting )
+					&& !checkFlag( filter, c3d::ComponentModeFlag::eSpecularLighting ) )
 				{
 					remFlags( componentsFlags, getComponentFlags() );
 				}
 			}
 		};
 
-		static castor3d::PassComponentPluginUPtr createPlugin( castor3d::PassComponentRegister const & passComponent )
+		static c3d::PassComponentPluginUPtr createPlugin( c3d::PassComponentRegister const & passComponent )
 		{
-			return castor::makeUniqueDerived< castor3d::PassComponentPlugin, Plugin >( passComponent );
+			return c3d::makeUniqueDerived< c3d::PassComponentPlugin, Plugin >( passComponent );
 		}
 
-		explicit WaterReflRefrComponent( castor3d::Pass & pass );
+		explicit WaterReflRefrComponent( c3d::Pass & pass );
 
-		static castor::String const TypeName;
+		static c3d::String const TypeName;
 
 	private:
-		castor3d::PassComponentUPtr doClone( castor3d::Pass & pass )const override;
+		c3d::PassComponentUPtr doClone( c3d::Pass & pass )const override;
 	};
 
 	CU_DeclareSmartPtr( water, WaterReflRefrComponent, );

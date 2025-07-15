@@ -30,18 +30,18 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/FontCache.hpp>
 
-CU_ImplementSmartPtr( castor3d, ControlsManager )
-CU_ImplementSmartPtr( castor3d, GuiContext )
+CU_ImplementSmartPtr( c3d, ControlsManager )
+CU_ImplementSmartPtr( c3d, GuiContext )
 
-namespace castor3d
+namespace c3d
 {
 	namespace ctrlmgr
 	{
-		using LockType = castor::UniqueLock< castor::Mutex >;
+		using LockType = UniqueLock< Mutex >;
 
 		template< typename StyleT >
-		StyleT * getThemeStyle( castor::String const & name
-			, castor::StringMap< ThemeUPtr > const & themes )
+		StyleT * getThemeStyle( String const & name
+			, StringMap< ThemeUPtr > const & themes )
 		{
 			StyleT * style{};
 			auto themeIt = std::find_if( themes.begin()
@@ -62,7 +62,7 @@ namespace castor3d
 
 		template< typename ConnectionT >
 		void removeElem( Control const & control
-			, castor::Map< Control const *, ConnectionT > & map )
+			, Map< Control const *, ConnectionT > & map )
 		{
 			if ( auto it = map.find( &control );
 				it != map.end() )
@@ -72,15 +72,15 @@ namespace castor3d
 		}
 	}
 
-	castor::String ControlsManager::Name = cuT( "c3d.gui" );
+	String ControlsManager::Name = cuT( "c3d.gui" );
 
 	ControlsManager::ControlsManager( Engine & engine )
 		: UserInputListener{ engine, Name }
-		, StylesHolder{ castor::String{}, engine }
+		, StylesHolder{ String{}, engine }
 	{
 	}
 	
-	void ControlsManager::setSize( castor::Size const & size )
+	void ControlsManager::setSize( Size const & size )
 	{
 		if ( m_layout )
 		{
@@ -92,23 +92,23 @@ namespace castor3d
 
 	void ControlsManager::setLayout( LayoutUPtr layout )
 	{
-		m_layout = castor::move( layout );
+		m_layout = c3d::move( layout );
 	}
 
-	ThemeRPtr ControlsManager::createTheme( castor::String const & name
+	ThemeRPtr ControlsManager::createTheme( String const & name
 		, Scene * scene )
 	{
 		auto [it, res] = m_themes.try_emplace( name );
 
 		if ( res )
 		{
-			it->second = castor::makeUnique< Theme >( name, scene, *getEngine() );
+			it->second = makeUnique< Theme >( name, scene, *getEngine() );
 		}
 
 		return it->second.get();
 	}
 
-	ThemeRPtr ControlsManager::getTheme( castor::String const & name )const
+	ThemeRPtr ControlsManager::getTheme( String const & name )const
 	{
 		if ( auto it = m_themes.find( name );
 			it != m_themes.end() )
@@ -119,7 +119,7 @@ namespace castor3d
 		return nullptr;
 	}
 
-	ButtonStyleRPtr ControlsManager::getButtonStyle( castor::String const & name )const
+	ButtonStyleRPtr ControlsManager::getButtonStyle( String const & name )const
 	{
 		if ( auto style = ctrlmgr::getThemeStyle< ButtonStyle >( name, m_themes ) )
 		{
@@ -129,7 +129,7 @@ namespace castor3d
 		return StylesHolder::getButtonStyle( name );
 	}
 
-	ComboBoxStyleRPtr ControlsManager::getComboBoxStyle( castor::String const & name )const
+	ComboBoxStyleRPtr ControlsManager::getComboBoxStyle( String const & name )const
 	{
 		if ( auto style = ctrlmgr::getThemeStyle< ComboBoxStyle >( name, m_themes ) )
 		{
@@ -139,7 +139,7 @@ namespace castor3d
 		return StylesHolder::getComboBoxStyle( name );
 	}
 
-	EditStyleRPtr ControlsManager::getEditStyle( castor::String const & name )const
+	EditStyleRPtr ControlsManager::getEditStyle( String const & name )const
 	{
 		if ( auto style = ctrlmgr::getThemeStyle< EditStyle >( name, m_themes ) )
 		{
@@ -149,7 +149,7 @@ namespace castor3d
 		return StylesHolder::getEditStyle( name );
 	}
 
-	ExpandablePanelStyleRPtr ControlsManager::getExpandablePanelStyle( castor::String const & name )const
+	ExpandablePanelStyleRPtr ControlsManager::getExpandablePanelStyle( String const & name )const
 	{
 		if ( auto style = ctrlmgr::getThemeStyle< ExpandablePanelStyle >( name, m_themes ) )
 		{
@@ -159,7 +159,7 @@ namespace castor3d
 		return StylesHolder::getExpandablePanelStyle( name );
 	}
 
-	FrameStyleRPtr ControlsManager::getFrameStyle( castor::String const & name )const
+	FrameStyleRPtr ControlsManager::getFrameStyle( String const & name )const
 	{
 		if ( auto style = ctrlmgr::getThemeStyle< FrameStyle >( name, m_themes ) )
 		{
@@ -169,7 +169,7 @@ namespace castor3d
 		return StylesHolder::getFrameStyle( name );
 	}
 
-	ListBoxStyleRPtr ControlsManager::getListBoxStyle( castor::String const & name )const
+	ListBoxStyleRPtr ControlsManager::getListBoxStyle( String const & name )const
 	{
 		if ( auto style = ctrlmgr::getThemeStyle< ListBoxStyle >( name, m_themes ) )
 		{
@@ -179,7 +179,7 @@ namespace castor3d
 		return StylesHolder::getListBoxStyle( name );
 	}
 
-	PanelStyleRPtr ControlsManager::getPanelStyle( castor::String const & name )const
+	PanelStyleRPtr ControlsManager::getPanelStyle( String const & name )const
 	{
 		if ( auto style = ctrlmgr::getThemeStyle< PanelStyle >( name, m_themes ) )
 		{
@@ -189,7 +189,7 @@ namespace castor3d
 		return StylesHolder::getPanelStyle( name );
 	}
 
-	ProgressStyleRPtr ControlsManager::getProgressStyle( castor::String const & name )const
+	ProgressStyleRPtr ControlsManager::getProgressStyle( String const & name )const
 	{
 		if ( auto style = ctrlmgr::getThemeStyle< ProgressStyle >( name, m_themes ) )
 		{
@@ -199,7 +199,7 @@ namespace castor3d
 		return StylesHolder::getProgressStyle( name );
 	}
 
-	ScrollBarStyleRPtr ControlsManager::getScrollBarStyle( castor::String const & name )const
+	ScrollBarStyleRPtr ControlsManager::getScrollBarStyle( String const & name )const
 	{
 		if ( auto style = ctrlmgr::getThemeStyle< ScrollBarStyle >( name, m_themes ) )
 		{
@@ -209,7 +209,7 @@ namespace castor3d
 		return StylesHolder::getScrollBarStyle( name );
 	}
 
-	SliderStyleRPtr ControlsManager::getSliderStyle( castor::String const & name )const
+	SliderStyleRPtr ControlsManager::getSliderStyle( String const & name )const
 	{
 		if ( auto style = ctrlmgr::getThemeStyle< SliderStyle >( name, m_themes ) )
 		{
@@ -219,7 +219,7 @@ namespace castor3d
 		return StylesHolder::getSliderStyle( name );
 	}
 
-	StaticStyleRPtr ControlsManager::getStaticStyle( castor::String const & name )const
+	StaticStyleRPtr ControlsManager::getStaticStyle( String const & name )const
 	{
 		if ( auto style = ctrlmgr::getThemeStyle< StaticStyle >( name, m_themes ) )
 		{
@@ -264,7 +264,7 @@ namespace castor3d
 
 	ControlRPtr ControlsManager::registerControl( ControlUPtr control )
 	{
-		return &static_cast< Control & >( *doAddHandler( castor::ptrRefCast< EventHandler >( control ) ) );
+		return &static_cast< Control & >( *doAddHandler( ptrRefCast< EventHandler >( control ) ) );
 	}
 
 	void ControlsManager::unregisterControl( Control const & control )
@@ -275,11 +275,11 @@ namespace castor3d
 	void ControlsManager::addControl( ControlRPtr control )
 	{
 		{
-			ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
+			ctrlmgr::LockType lock{ makeUniqueLock( m_mutexControlsById ) };
 
 			if ( m_controlsById.find( control->getId() ) != m_controlsById.end() )
 			{
-				CU_Exception( "A control with ID " + castor::string::toMbString( control->getId() ) + " [" + castor::toUtf8( control->getName() ) + "] already exists in the manager" );
+				CU_Exception( "A control with ID " + string::toMbString( control->getId() ) + " [" + toUtf8( control->getName() ) + "] already exists in the manager" );
 			}
 
 			m_controlsById.insert( std::make_pair( control->getId(), control ) );
@@ -295,7 +295,7 @@ namespace castor3d
 	void ControlsManager::removeControl( ControlID id )
 	{
 		{
-			ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
+			ctrlmgr::LockType lock{ makeUniqueLock( m_mutexControlsById ) };
 			doRemoveControlNL( id );
 		}
 		doMarkDirty();
@@ -353,7 +353,7 @@ namespace castor3d
 		return it->second;
 	}
 
-	ControlRPtr ControlsManager::findControl( castor::String const & name, SceneRPtr scene )const
+	ControlRPtr ControlsManager::findControl( String const & name, SceneRPtr scene )const
 	{
 		auto controls = doGetHandlers();
 		auto it = std::find_if( controls.begin()
@@ -415,18 +415,18 @@ namespace castor3d
 		return true;
 	}
 
-	castor::Vector< ControlRPtr > ControlsManager::getRootControls()const
+	Vector< ControlRPtr > ControlsManager::getRootControls()const
 	{
-		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
+		ctrlmgr::LockType lock{ makeUniqueLock( m_mutexControlsById ) };
 		return m_rootControls;
 	}
 
-	castor::AttributeParsers ControlsManager::createParsers()
+	AttributeParsers ControlsManager::createParsers()
 	{
 		return createGuiParsers();
 	}
 
-	castor::StrUInt32Map ControlsManager::createSections()
+	StrUInt32Map ControlsManager::createSections()
 	{
 		return createGuiSections();
 	}
@@ -455,7 +455,7 @@ namespace castor3d
 	{
 		m_onEditUpdates.try_emplace( &control
 			, control.connect( EditEvent::eUpdated
-				, [this, &control]( castor::U32String const & text )
+				, [this, &control]( U32String const & text )
 				{
 					onTextAction( control.getName(), text );
 				} ) );
@@ -572,7 +572,7 @@ namespace castor3d
 			}
 		}
 
-		auto lock( castor::makeUniqueLock( m_mutexControlsById ) );
+		auto lock( makeUniqueLock( m_mutexControlsById ) );
 
 		m_onButtonClicks.clear();
 		m_onComboSelects.clear();
@@ -599,7 +599,7 @@ namespace castor3d
 		cleanupStyles();
 	}
 
-	EventHandlerRPtr ControlsManager::doGetMouseTargetableHandler( castor::Position const & position )const
+	EventHandlerRPtr ControlsManager::doGetMouseTargetableHandler( Position const & position )const
 	{
 		if ( m_movedControl
 			&& m_movedControl->isMoving() )
@@ -671,8 +671,8 @@ namespace castor3d
 
 	void ControlsManager::doUpdate()
 	{
-		castor::Vector< ControlRPtr > result;
-		castor::Vector< ControlRPtr > top;
+		Vector< ControlRPtr > result;
+		Vector< ControlRPtr > top;
 		auto controls = getRootControls();
 		result.reserve( controls.size() );
 		top.reserve( controls.size() );
@@ -694,24 +694,24 @@ namespace castor3d
 		result.insert( result.end()
 			, top.begin()
 			, top.end() );
-		doSetControlsByZIndex( castor::move( result ) );
+		doSetControlsByZIndex( c3d::move( result ) );
 	}
 
-	void ControlsManager::doSetControlsByZIndex( castor::Vector< ControlRPtr > v )
+	void ControlsManager::doSetControlsByZIndex( Vector< ControlRPtr > v )
 	{
-		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsByZIndex ) };
-		m_controlsByZIndex = castor::move( v );
+		ctrlmgr::LockType lock{ makeUniqueLock( m_mutexControlsByZIndex ) };
+		m_controlsByZIndex = c3d::move( v );
 	}
 
-	castor::Vector< ControlRPtr > ControlsManager::doGetControlsByZIndex()const
+	Vector< ControlRPtr > ControlsManager::doGetControlsByZIndex()const
 	{
-		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsByZIndex ) };
+		ctrlmgr::LockType lock{ makeUniqueLock( m_mutexControlsByZIndex ) };
 		return m_controlsByZIndex;
 	}
 
-	castor::Map< ControlID, ControlRPtr > ControlsManager::doGetControlsById()const
+	Map< ControlID, ControlRPtr > ControlsManager::doGetControlsById()const
 	{
-		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
+		ctrlmgr::LockType lock{ makeUniqueLock( m_mutexControlsById ) };
 		return m_controlsById;
 	}
 
@@ -730,7 +730,7 @@ namespace castor3d
 		}
 	}
 
-	castor::String getPrefix( GuiContext const & context )
+	String getPrefix( GuiContext const & context )
 	{
 		return context.scene
 			? getPrefix( *context.scene )

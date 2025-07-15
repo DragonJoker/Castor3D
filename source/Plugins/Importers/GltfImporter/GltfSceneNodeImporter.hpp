@@ -11,13 +11,13 @@ See LICENSE file in root folder
 namespace c3d_gltf
 {
 	class GltfSceneNodeImporter
-		: public castor3d::SceneNodeImporter
+		: public c3d::SceneNodeImporter
 	{
 	public:
-		explicit GltfSceneNodeImporter( castor3d::Engine & engine );
+		explicit GltfSceneNodeImporter( c3d::Engine & engine );
 
 	private:
-		bool doImportSceneNode( castor3d::SceneNode & node )override;
+		bool doImportSceneNode( c3d::SceneNode & node )override;
 	};
 }
 

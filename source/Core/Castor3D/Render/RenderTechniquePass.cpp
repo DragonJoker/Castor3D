@@ -39,9 +39,9 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementSmartPtr( castor3d, RenderTechniquePass )
+CU_ImplementSmartPtr( c3d, RenderTechniquePass )
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
@@ -184,7 +184,7 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, castor::String const & typeName
+		, String const & typeName
 		, crg::ImageViewIdArray targetImage
 		, crg::ImageViewIdArray targetDepth
 		, RenderNodesPassDesc const & renderPassDesc
@@ -194,8 +194,8 @@ namespace castor3d
 			, graph
 			, device
 			, typeName
-			, castor::move( targetImage )
-			, castor::move( targetDepth )
+			, c3d::move( targetImage )
+			, c3d::move( targetDepth )
 			, renderPassDesc }
 		, RenderTechniquePass{ parent, renderPassDesc.m_culler.getScene(), techniquePassDesc.m_outputScattering }
 		, m_camera{ renderPassDesc.m_culler.hasCamera() ? &renderPassDesc.m_culler.getCamera() : nullptr }
@@ -232,7 +232,7 @@ namespace castor3d
 		, VkPrimitiveTopology topology
 		, bool isFrontCulled
 		, uint32_t passLayerIndex
-		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+		, GpuBufferOffsetT< Point4f > const & morphTargets
 		, SubmeshRenderData * submeshData
 		, uint32_t vertexStride )const
 	{

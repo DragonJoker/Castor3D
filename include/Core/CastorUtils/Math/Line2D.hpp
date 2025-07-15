@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Math/MathModule.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename T >
 	class Line2D

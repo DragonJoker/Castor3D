@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/MathModule.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Material */
 	//@{
@@ -19,24 +19,24 @@ namespace castor3d
 
 	struct TextureAnimationData
 	{
-		castor::Point3f translate{};
+		Point3f translate{};
 		float rotateU{};
-		castor::Point3f scale{};
+		Point3f scale{};
 		float rotateV{};
-		castor::Point4f tileSet{};
+		Point4f tileSet{};
 	};
 
 	class TextureAnimation;
 	class TextureAnimationKeyFrame;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, TextureAnimation, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureAnimationKeyFrame, C3D_API );
+	CU_DeclareSmartPtr( c3d, TextureAnimation, C3D_API );
+	CU_DeclareSmartPtr( c3d, TextureAnimationKeyFrame, C3D_API );
 	/** @endcond */
 
-	using TextureRotateSpeed = castor::SpeedT< castor::Angle, castor::Seconds >;
-	using TextureTranslateSpeed = castor::SpeedT< castor::Point2f, castor::Seconds >;
-	using TextureScaleSpeed = castor::SpeedT< castor::Point2f, castor::Seconds >;
+	using TextureRotateSpeed = SpeedT< Angle, Seconds >;
+	using TextureTranslateSpeed = SpeedT< Point2f, Seconds >;
+	using TextureScaleSpeed = SpeedT< Point2f, Seconds >;
 
 	//@}
 	//@}

@@ -30,7 +30,7 @@ namespace smaa
 {
 	namespace bwcalc
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
 		enum Idx : uint32_t
 		{
@@ -53,7 +53,7 @@ namespace smaa
 			VertexT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled )
-				: VertexStructT< FlagT >{ writer, castor::move( expr ), enabled }
+				: VertexStructT< FlagT >{ writer, c3d::move( expr ), enabled }
 			{
 			}
 
@@ -62,7 +62,7 @@ namespace smaa
 			auto offset()const { return this->template getMember< "offset" >(); }
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
@@ -781,7 +781,7 @@ namespace smaa
 				, sdw::InCombinedImage2DRgba32{ writer, "searchTex" }
 				, sdw::InVec4{ writer, "subsampleIndices" } );
 
-			writer.implementEntryPointT< c3d::PosUv2FT, VertexT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+			writer.implementEntryPointT< c3ds::PosUv2FT, VertexT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
 				, sdw::VertexOutT< VertexT > out )
 				{
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
@@ -792,8 +792,8 @@ namespace smaa
 					SMAABlendingWeightCalculationVS( out.texcoord(), out.pixcoord(), out.offset() );
 				} );
 
-			writer.implementEntryPointT< VertexT, c3d::Colour4FT >( [&]( sdw::FragmentInT< VertexT > in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< VertexT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< VertexT > in
+				, sdw::FragmentOutT< c3ds::Colour4FT > out )
 				{
 					out.colour() = SMAABlendingWeightCalculationPS( in.texcoord()
 						, in.pixcoord()
@@ -808,29 +808,29 @@ namespace smaa
 
 		static crg::ImageViewId createImage( crg::FramePassGroup & graph
 			, crg::ResourcesCache & resources
-			, castor3d::RenderDevice const & device
-			, castor::String const & name
-			, castor::PixelFormat format
-			, castor3d::Extent3D const & dimensions
-			, castor::ArrayView< const unsigned char > const & bytes )
+			, c3d::RenderDevice const & device
+			, c3d::String const & name
+			, c3d::PixelFormat format
+			, c3d::Extent3D const & dimensions
+			, c3d::ArrayView< const unsigned char > const & bytes )
 		{
 			auto & context = device.makeContext();
-			auto mbName = castor::toUtf8( name );
+			auto mbName = c3d::toUtf8( name );
 			auto imageId = graph.createImage( crg::ImageData{ mbName
-				, castor3d::ImageCreateFlags::eNone
-				, castor3d::ImageType::e2D
+				, c3d::ImageCreateFlags::eNone
+				, c3d::ImageType::e2D
 				, format
 				, dimensions
-				, ( castor3d::ImageUsageFlags::eSampled
-					| castor3d::ImageUsageFlags::eTransferDst ) } );
+				, ( c3d::ImageUsageFlags::eSampled
+					| c3d::ImageUsageFlags::eTransferDst ) } );
 			auto result = graph.createView( crg::ImageViewData{ mbName
 				, imageId
-				, castor3d::ImageViewCreateFlags::eNone
-				, castor3d::ImageViewType::e2D
+				, c3d::ImageViewCreateFlags::eNone
+				, c3d::ImageViewType::e2D
 				, getFormat( imageId )
-				, { castor3d::ImageAspectFlags::eColor, 0u, 1u, 0u, 1u } } );
+				, { c3d::ImageAspectFlags::eColor, 0u, 1u, 0u, 1u } } );
 			auto staging = device->createStagingTexture( convert( format ), convert( dimensions ) );
-			auto image = castor::make_unique< ashes::Image >( *device
+			auto image = c3d::makeRawUnique< ashes::Image >( *device
 				, resources.createImage( context, imageId )
 				, ashes::ImageCreateInfo{ convert( imageId.data->info ) } );
 			ashes::ImageView view{ ashes::ImageViewCreateInfo{ convert( result.data->info ) }
@@ -856,8 +856,8 @@ namespace smaa
 
 	BlendingWeightCalculation::BlendingWeightCalculation( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
-		, castor3d::RenderTarget & renderTarget
-		, castor3d::RenderDevice const & device
+		, c3d::RenderTarget & renderTarget
+		, c3d::RenderDevice const & device
 		, SmaaUbo const & ubo
 		, crg::ImageViewId const & edgeDetectionView
 		, crg::ImageViewId const & stencilView
@@ -866,30 +866,30 @@ namespace smaa
 		: m_device{ device }
 		, m_graph{ graph }
 		, m_resources{ renderTarget.getResources() }
-		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
+		, m_extent{ c3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
 		, m_areaView{ bwcalc::createImage( m_graph
 			, m_resources
 			, m_device
 			, cuT( "SMBWArea" )
-			, castor::PixelFormat::eR8G8_UNORM
+			, c3d::PixelFormat::eR8G8_UNORM
 			, { AREATEX_WIDTH, AREATEX_HEIGHT, 1u }
-			, castor::makeArrayView( std::begin( areaTexBytes ), std::end( areaTexBytes ) ) ) }
+			, c3d::makeArrayView( std::begin( areaTexBytes ), std::end( areaTexBytes ) ) ) }
 		, m_searchView{ bwcalc::createImage( m_graph
 			, m_resources
 			, m_device
 			, cuT( "SMBWSearch" )
-			, castor::PixelFormat::eR8_UNORM
+			, c3d::PixelFormat::eR8_UNORM
 			, { SEARCHTEX_WIDTH, SEARCHTEX_HEIGHT, 1u }
-			, castor::makeArrayView( std::begin( searchTexBytes ), std::end( searchTexBytes ) ) ) }
+			, c3d::makeArrayView( std::begin( searchTexBytes ), std::end( searchTexBytes ) ) ) }
 		, m_result{ m_device
 			, m_resources
 			, cuT( "SMBWRes" )
-			, { castor3d::ImageCreateFlags::eNone
+			, { c3d::ImageCreateFlags::eNone
 				, m_extent, 1u, 1u
-				, castor::PixelFormat::eR8G8B8A8_UNORM
-				, ( castor3d::ImageUsageFlags::eSampled
-					| castor3d::ImageUsageFlags::eColorAttachment
-					| castor3d::ImageUsageFlags::eTransferSrc ) }
+				, c3d::PixelFormat::eR8G8B8A8_UNORM
+				, ( c3d::ImageUsageFlags::eSampled
+					| c3d::ImageUsageFlags::eColorAttachment
+					| c3d::ImageUsageFlags::eTransferSrc ) }
 			, {} }
 		, m_shader{ cuT( "SmaaBlendingWeight" ), bwcalc::getProgram( device ) }
 		, m_stages{ makeProgramStates( m_device, m_shader ) }
@@ -905,27 +905,27 @@ namespace smaa
 				dsState->back = dsState->front;
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
-					.renderSize( castor3d::makeExtent2D( m_extent ) )
+					.renderSize( c3d::makeExtent2D( m_extent ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.depthStencilState( dsState )
 					.enabled( enabled )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }
 	{
 		m_graph.addInput( m_areaView
-			, crg::makeLayoutState( castor3d::ImageLayout::eShaderReadOnly ) );
+			, crg::makeLayoutState( c3d::ImageLayout::eShaderReadOnly ) );
 		m_graph.addInput( m_searchView
-			, crg::makeLayoutState( castor3d::ImageLayout::eShaderReadOnly ) );
-		crg::SamplerDesc linearSampler{ castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest
-			, castor3d::WrapMode::eClampToEdge
-			, castor3d::WrapMode::eClampToEdge
-			, castor3d::WrapMode::eClampToEdge };
+			, crg::makeLayoutState( c3d::ImageLayout::eShaderReadOnly ) );
+		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
+			, c3d::FilterMode::eLinear
+			, c3d::MipmapMode::eNearest
+			, c3d::WrapMode::eClampToEdge
+			, c3d::WrapMode::eClampToEdge
+			, c3d::WrapMode::eClampToEdge };
 		m_pass.addDependency( previousPass );
 		ubo.createPassBinding( m_pass
 			, SmaaUboIdx );
@@ -939,7 +939,7 @@ namespace smaa
 			, linearSampler );
 		m_pass.addInputStencilView( stencilView );
 		m_pass.addOutputColourView( m_result.targetViewId
-			, castor3d::transparentBlackClearColor );
+			, c3d::transparentBlackClearColor );
 		m_result.create();
 	}
 
@@ -952,13 +952,13 @@ namespace smaa
 		m_result.destroy();
 	}
 
-	void BlendingWeightCalculation::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void BlendingWeightCalculation::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 		visitor.visit( cuT( "SMAA BlendingWeight Result" )
 			, m_result
 			, m_graph.getFinalLayoutState( m_result.sampledViewId ).layout
-			, castor3d::TextureFactors{}.invert( true ) );
+			, c3d::TextureFactors{}.invert( true ) );
 	}
 
 	//*********************************************************************************************

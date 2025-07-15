@@ -15,7 +15,7 @@ namespace Testing
 		, std::string text
 		, bool indent )
 		: testCase{ testCase }
-		, text{ castor::move( text ) }
+		, text{ c3d::move( text ) }
 		, indent{ indent }
 	{
 	}
@@ -24,7 +24,7 @@ namespace Testing
 		, std::wstring text
 		, bool indent )
 		: testCase{ testCase }
-		, wtext{ castor::move( text ) }
+		, wtext{ c3d::move( text ) }
 		, indent{ indent }
 	{
 	}
@@ -33,7 +33,7 @@ namespace Testing
 		, std::u32string text
 		, bool indent )
 		: testCase{ testCase }
-		, u32text{ castor::move( text ) }
+		, u32text{ c3d::move( text ) }
 		, indent{ indent }
 	{
 	}
@@ -99,26 +99,26 @@ namespace Testing
 	void TestCase::doRegisterTest( std::string const & name
 		, TestFunction test )
 	{
-		m_tests.emplace_back( name, castor::move( test ) );
+		m_tests.emplace_back( name, c3d::move( test ) );
 	}
 
 	TestBlockPtr TestCase::doPushBlock( std::string const & text, bool indent )
 	{
-		auto result = castor::make_unique< TestBlock >( *this, text, indent );
+		auto result = c3d::makeRawUnique< TestBlock >( *this, text, indent );
 		m_blocks.emplace_back( result.get() );
 		return result;
 	}
 
 	TestBlockPtr TestCase::doPushBlock( std::wstring const & text, bool indent )
 	{
-		auto result = castor::make_unique< TestBlock >( *this, text, indent );
+		auto result = c3d::makeRawUnique< TestBlock >( *this, text, indent );
 		m_blocks.emplace_back( result.get() );
 		return result;
 	}
 
 	TestBlockPtr TestCase::doPushBlock( std::u32string const & text, bool indent )
 	{
-		auto result = castor::make_unique< TestBlock >( *this, text, indent );
+		auto result = c3d::makeRawUnique< TestBlock >( *this, text, indent );
 		m_blocks.emplace_back( result.get() );
 		return result;
 	}
@@ -148,7 +148,7 @@ namespace Testing
 
 				for ( auto c : block->u32text )
 				{
-					auto buffer = castor::string::utf8::fromUtf8( c );
+					auto buffer = c3d::string::utf8::fromUtf8( c );
 					std::cerr << buffer.data();
 				}
 

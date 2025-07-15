@@ -4,12 +4,12 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Shader/LightingModelFactory.hpp"
 
-CU_ImplementSmartPtr( castor3d, PassFactory )
+CU_ImplementSmartPtr( c3d, PassFactory )
 
-namespace castor3d
+namespace c3d
 {
 	PassFactory::PassFactory( Engine & engine )
-		: castor::OwnedBy< Engine >{ engine }
+		: OwnedBy< Engine >{ engine }
 		, PassFactoryBase{}
 	{
 	}
@@ -36,6 +36,6 @@ namespace castor3d
 	PassUPtr PassFactory::create( Material & parent
 		, Pass const & rhs )const
 	{
-		return castor::makeUnique< Pass >( parent, rhs );
+		return makeUnique< Pass >( parent, rhs );
 	}
 }

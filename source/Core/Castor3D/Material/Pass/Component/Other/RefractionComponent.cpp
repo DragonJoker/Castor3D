@@ -13,28 +13,25 @@
 #include <ShaderWriter/Intrinsics/IntrinsicFunctions.hpp>
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::RefractionComponent >
-		: public TextWriterT< castor3d::RefractionComponent >
+	class TextWriter< RefractionComponent >
+		: public TextWriterT< RefractionComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::RefractionComponent >{ tabs }
+			: TextWriterT< RefractionComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::RefractionComponent const & object
+		bool operator()( RefractionComponent const & object
 			, StringStream & file )override
 		{
-			return writeOpt( file, cuT( "refraction_ratio" ), object.getRefractionRatio(), castor3d::RefractionComponent::Default );
+			return writeOpt( file, cuT( "refraction_ratio" ), object.getRefractionRatio(), RefractionComponent::Default );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace refrcmp
@@ -153,19 +150,19 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void RefractionComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void RefractionComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "refraction_ratio" )
 			, refrcmp::parserPassRefractionRatio
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eFloat >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "has_refraction" )
 			, refrcmp::parserPassHasRefraction
-			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+			, { makeParameter< ParameterType::eBool >() } );
 	}
 
 	void RefractionComponent::Plugin::zeroBuffer( Pass const & pass
@@ -185,10 +182,10 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const RefractionComponent::TypeName = C3D_MakePassOtherComponentName( "refraction" );
+	String const RefractionComponent::TypeName = C3D_MakePassOtherComponentName( "refraction" );
 
 	RefractionComponent::RefractionComponent( Pass & pass )
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< float > >{ pass, TypeName, {}
+		: BaseDataPassComponentT< AtomicGroupChangeTracked< float > >{ pass, TypeName, {}
 			, RefractionComponent::Default }
 	{
 	}
@@ -201,17 +198,17 @@ namespace castor3d
 
 	PassComponentUPtr RefractionComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< RefractionComponent >( pass );
+		auto result = makeRawUnique< RefractionComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool RefractionComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool RefractionComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< RefractionComponent >{ tabs }( *this, file );
+		return TextWriter< RefractionComponent >{ tabs }( *this, file );
 	}
 
 	void RefractionComponent::doFillBuffer( PassBuffer & buffer )const

@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	class PassShaders;
 

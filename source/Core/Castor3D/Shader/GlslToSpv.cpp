@@ -24,7 +24,7 @@ See LICENSE file in root folder.
 #include <locale>
 #include <regex>
 
-namespace castor3d
+namespace c3d
 {
 	namespace glspv
 	{
@@ -202,7 +202,7 @@ namespace castor3d
 
 	UInt32Array compileGlslToSpv( RenderDevice const & device
 		, VkShaderStageFlagBits stage
-		, castor::MbString const & shader )
+		, MbString const & shader )
 	{
 		glspv::BlockLocale guard;
 		TBuiltInResource resources;
@@ -212,7 +212,7 @@ namespace castor3d
 		auto messages = EShMessages( EShMsgSpvRules | EShMsgVulkanRules );
 		auto glstage = glspv::doGetLanguage( stage );
 
-		castor::MbString source = shader;
+		MbString source = shader;
 		glslang::TShader glshader{ glstage };
 		char const * const str = source.c_str();
 		glshader.setStrings( &str, 1 );
@@ -221,7 +221,7 @@ namespace castor3d
 		{
 			log::error << glshader.getInfoLog() << std::endl;
 			log::error << glshader.getInfoDebugLog() << std::endl;
-			log::error << castor::makeString( source ) << std::endl;
+			log::error << makeString( source ) << std::endl;
 			CU_Exception( "Shader compilation failed." );
 		}
 
@@ -232,7 +232,7 @@ namespace castor3d
 		{
 			log::error << glprogram.getInfoLog() << std::endl;
 			log::error << glprogram.getInfoDebugLog() << std::endl;
-			log::error << castor::makeString( source ) << std::endl;
+			log::error << makeString( source ) << std::endl;
 			CU_Exception( "Shader linkage failed." );
 		}
 
@@ -247,7 +247,7 @@ namespace castor3d
 
 #include <CastorUtils/Exception/Exception.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	void initialiseGlslang()
 	{
@@ -259,7 +259,7 @@ namespace castor3d
 
 	UInt32Array compileGlslToSpv( RenderDevice const & device
 		, VkShaderStageFlagBits stage
-		, castor::String const & shader )
+		, String const & shader )
 	{
 		CU_Exception( "glslang is unavailable." );
 	}

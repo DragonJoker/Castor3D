@@ -5,14 +5,14 @@
 #include "CastorUtils/Config/MultiThreadConfig.hpp"
 #include "CastorUtils/Data/File.hpp"
 
-namespace castor
+namespace c3d
 {
 	LoggerInstance::LoggerInstance( LoggerInstance && rhs )noexcept
-		: m_logLevel{ castor::move( rhs.m_logLevel ) }
-		, m_impl{ castor::move( rhs.m_impl ) }
-		, m_headers{ castor::move( rhs.m_headers ) }
-		, m_queue{ castor::move( rhs.m_queue ) }
-		, m_logThread{ castor::move( rhs.m_logThread ) }
+		: m_logLevel{ c3d::move( rhs.m_logLevel ) }
+		, m_impl{ c3d::move( rhs.m_impl ) }
+		, m_headers{ c3d::move( rhs.m_headers ) }
+		, m_queue{ c3d::move( rhs.m_queue ) }
+		, m_logThread{ c3d::move( rhs.m_logThread ) }
 		, m_initialised{ rhs.m_initialised.load() }
 		, m_stopped{ rhs.m_stopped.load() }
 		, m_threadEnded{ rhs.m_threadEnded.load() }
@@ -24,11 +24,11 @@ namespace castor
 
 	LoggerInstance & LoggerInstance::operator=( LoggerInstance && rhs )noexcept
 	{
-		m_logLevel = castor::move( rhs.m_logLevel );
-		m_impl = castor::move( rhs.m_impl );
-		m_headers = castor::move( rhs.m_headers );
-		m_queue = castor::move( rhs.m_queue );
-		m_logThread = castor::move( rhs.m_logThread );
+		m_logLevel = c3d::move( rhs.m_logLevel );
+		m_impl = c3d::move( rhs.m_impl );
+		m_headers = c3d::move( rhs.m_headers );
+		m_queue = c3d::move( rhs.m_queue );
+		m_logThread = c3d::move( rhs.m_logThread );
 		m_initialised = rhs.m_initialised.load();
 		m_stopped = rhs.m_stopped.load();
 		m_threadEnded = rhs.m_threadEnded.load();
@@ -79,7 +79,7 @@ namespace castor
 		[&queue, this]()
 		{
 			auto lock( makeUniqueLock( m_mutexQueue ) );
-			castor::swap( queue, m_queue );
+			c3d::swap( queue, m_queue );
 		}();
 
 		if ( !queue.empty() )

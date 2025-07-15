@@ -1,6 +1,6 @@
 #include "CastorUtils/Math/Simd.hpp"
 
-namespace castor
+namespace c3d
 {
 	namespace sqmtx
 	{
@@ -397,7 +397,7 @@ namespace castor
 
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count >::SquareMatrix( SquareMatrix< T, Count > && rhs )noexcept
-		: matrix_type( castor::move( rhs ) )
+		: matrix_type( c3d::move( rhs ) )
 	{
 	}
 
@@ -452,7 +452,7 @@ namespace castor
 
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count >::SquareMatrix( std::initializer_list< T > rhs )
-		: matrix_type( castor::move( rhs ) )
+		: matrix_type( c3d::move( rhs ) )
 	{
 	}
 
@@ -587,7 +587,7 @@ namespace castor
 		{
 			for ( uint32_t j = 0; j < i; j++ )
 			{
-				castor::swap( ( *this )[j][i], ( *this )[i][j] );
+				c3d::swap( ( *this )[j][i], ( *this )[i][j] );
 			}
 		}
 
@@ -612,7 +612,7 @@ namespace castor
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator=( SquareMatrix< T, Count > && rhs )noexcept
 	{
-		matrix_type::operator=( castor::move( rhs ) );
+		matrix_type::operator=( c3d::move( rhs ) );
 		return * this;
 	}
 

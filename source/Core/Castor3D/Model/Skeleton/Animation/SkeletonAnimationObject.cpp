@@ -1,12 +1,12 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationObject.hpp"
 
-CU_ImplementSmartPtr( castor3d, SkeletonAnimationObject )
+CU_ImplementSmartPtr( c3d, SkeletonAnimationObject )
 
-namespace castor3d
+namespace c3d
 {
 	SkeletonAnimationObject::SkeletonAnimationObject( SkeletonAnimation & animation
 		, SkeletonNodeType type )
-		:castor::OwnedBy< SkeletonAnimation >{ animation }
+		:OwnedBy< SkeletonAnimation >{ animation }
 		, m_type{ type }
 	{
 	}

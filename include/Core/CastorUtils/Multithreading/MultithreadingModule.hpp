@@ -7,7 +7,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/CastorUtils.hpp"
 
-namespace castor
+namespace c3d
 {
 	/**@name Multithreading */
 	//@{
@@ -16,12 +16,12 @@ namespace castor
 	*\brief
 	*	Atomic operators based spin lock implementation.
 	*\remarks
-	*	Uses the same interface as castor::Mutex.
+	*	Uses the same interface as c3d::Mutex.
 	*\~french
 	*\brief
 	*	Implémentation de spin lock basée sur les opérations atomiques.
 	*\remarks
-	*	Utilise la même interface que castor::Mutex.
+	*	Utilise la même interface que c3d::Mutex.
 	*/
 	class SpinMutex;
 	/**

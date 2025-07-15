@@ -10,13 +10,13 @@ namespace dof
 {
 	class DepthOfFieldUbo;
 
-	crg::FramePassArray createFirstBlurPass( castor3d::RenderDevice const & device
+	crg::FramePassArray createFirstBlurPass( c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, DepthOfFieldUbo const & configurationUbo
 		, crg::ImageViewIdArray const & colour
-		, castor3d::Texture const & cocResult
-		, castor3d::Texture const & blurResult
+		, c3d::Texture const & cocResult
+		, c3d::Texture const & blurResult
 		, crg::RunnablePass::IsEnabledCallback isEnabled
 		, uint32_t const * passIndex );
 }

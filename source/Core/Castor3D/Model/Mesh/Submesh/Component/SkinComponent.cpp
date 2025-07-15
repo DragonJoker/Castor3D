@@ -15,9 +15,9 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementSmartPtr( castor3d, SkinComponent )
+CU_ImplementSmartPtr( c3d, SkinComponent )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -32,7 +32,7 @@ namespace castor3d
 		m_bones.insert( m_bones.end(), begin, end );
 	}
 
-	void SkinComponent::ComponentData::addDatas( castor::Vector< VertexBoneData > const & boneData )
+	void SkinComponent::ComponentData::addDatas( Vector< VertexBoneData > const & boneData )
 	{
 		addDatas( boneData.data(), boneData.data() + boneData.size() );
 	}
@@ -64,11 +64,11 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const SkinComponent::TypeName = C3D_MakeSubmeshComponentName( "skin" );
+	String const SkinComponent::TypeName = C3D_MakeSubmeshComponentName( "skin" );
 
 	SkinComponent::SkinComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, TypeName
-			, castor::make_unique< ComponentData >( submesh ) }
+			, makeRawUnique< ComponentData >( submesh ) }
 	{
 	}
 
@@ -79,9 +79,9 @@ namespace castor3d
 
 	SubmeshComponentUPtr SkinComponent::clone( Submesh & submesh )const
 	{
-		auto result = castor::makeUnique< SkinComponent >( submesh );
+		auto result = makeUnique< SkinComponent >( submesh );
 		getData().copy( &result->getData() );
-		return castor::ptrRefCast< SubmeshComponent >( result );
+		return ptrRefCast< SubmeshComponent >( result );
 	}
 
 	//*********************************************************************************************

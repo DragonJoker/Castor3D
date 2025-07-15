@@ -13,7 +13,7 @@ namespace castortd
 	class Game
 	{
 	public:
-		explicit Game( castor3d::Scene & scene );
+		explicit Game( c3d::Scene & scene );
 		~Game();
 
 		void reset();
@@ -22,21 +22,21 @@ namespace castortd
 		void resume();
 		void help();
 		void update();
-		Cell & getCell( castor::Point3f const & position );
-		Cell & getCell( castor::Point2i const & position );
+		Cell & getCell( c3d::Point3f const & position );
+		Cell & getCell( c3d::Point2i const & position );
 		Cell & getCell( int x, int y );
-		Cell const & getCell( castor::Point3f const & position )const;
-		Cell const & getCell( castor::Point2i const & position )const;
+		Cell const & getCell( c3d::Point3f const & position )const;
+		Cell const & getCell( c3d::Point2i const & position )const;
 		Cell const & getCell( int x, int y )const;
-		castor::Point3f convert( castor::Point2i const & position )const;
-		castor::Point2i convert( castor::Point3f const & position )const;
-		void emitBullet( float speed, uint32_t damage, castor::Point3f const & origin, Enemy & target );
-		void emitBoulder( float speed, uint32_t damage, castor::Point3f const & origin, castor::Point3f const & target );
-		bool buildTower( castor::Point3f const & position, Tower::CategoryPtr && category );
+		c3d::Point3f convert( c3d::Point2i const & position )const;
+		c3d::Point2i convert( c3d::Point3f const & position )const;
+		void emitBullet( float speed, uint32_t damage, c3d::Point3f const & origin, Enemy & target );
+		void emitBoulder( float speed, uint32_t damage, c3d::Point3f const & origin, c3d::Point3f const & target );
+		bool buildTower( c3d::Point3f const & position, Tower::CategoryPtr && category );
 		void spend( uint32_t value );
 		void earn( uint32_t value );
 		void loseLife( uint32_t value );
-		void areaDamage( castor::Point3f const & position, uint32_t damage );
+		void areaDamage( c3d::Point3f const & position, uint32_t damage );
 
 		TowerPtr selectTower( Cell const & cell );
 		void upgradeTowerSpeed( Tower & tower );
@@ -94,22 +94,22 @@ namespace castortd
 			return m_paused;
 		}
 
-		castor3d::Scene & getScene()const
+		c3d::Scene & getScene()const
 		{
 			return m_scene;
 		}
 
-		castor3d::SceneNodeRPtr getMapNode()const
+		c3d::SceneNodeRPtr getMapNode()const
 		{
 			return m_mapNode;
 		}
 
-		castor3d::MaterialObs getEnemyMaterial()const
+		c3d::MaterialObs getEnemyMaterial()const
 		{
 			return m_enemyCubeMaterial;
 		}
 
-		castor3d::MeshResPtr getEnemyMesh()const
+		c3d::MeshResPtr getEnemyMesh()const
 		{
 			return m_enemyCubeMesh;
 		}
@@ -124,7 +124,7 @@ namespace castortd
 			return m_spawner.getEnemiesBounty();
 		}
 
-		castor::Milliseconds getElapsed()const
+		c3d::Milliseconds getElapsed()const
 		{
 			return m_elapsed;
 		}
@@ -143,7 +143,7 @@ namespace castortd
 		void doPrepareGrid();
 		void doAddMapCube( Cell & cell );
 		void doAddTarget( Cell & cell );
-		castor3d::MeshResPtr doSelectMesh( Tower::Category & category );
+		c3d::MeshResPtr doSelectMesh( Tower::Category & category );
 		void doAddTower( Cell & cell, Tower::CategoryPtr && category );
 		void doUpdateTowers();
 		void doUpdateEnemies();
@@ -153,26 +153,26 @@ namespace castortd
 
 	private:
 		// Persistent data
-		castor3d::Scene & m_scene;
+		c3d::Scene & m_scene;
 		Hud m_hud;
 		Path m_path;
-		castor::Point3f m_cellDimensions;
-		castor3d::SceneNodeRPtr m_mapNode{};
-		castor3d::SceneNodeRPtr m_targetNode{};
-		castor3d::MeshResPtr m_mapCubeMesh{};
-		castor3d::MaterialObs m_mapCubeMaterial{};
-		castor3d::MeshResPtr m_shortRangeTowerMesh{};
-		castor3d::MeshResPtr m_longRangeTowerMesh{};
-		castor3d::MeshResPtr m_enemyCubeMesh{};
-		castor3d::MaterialObs m_enemyCubeMaterial{};
-		castor3d::MeshResPtr m_bulletMesh{};
-		castor3d::MaterialObs m_bulletMaterial{};
-		castor3d::MeshResPtr m_boulderMesh{};
-		castor3d::MaterialObs m_boulderMaterial{};
-		castor3d::FramePassTimerUPtr m_updateTimer;
+		c3d::Point3f m_cellDimensions;
+		c3d::SceneNodeRPtr m_mapNode{};
+		c3d::SceneNodeRPtr m_targetNode{};
+		c3d::MeshResPtr m_mapCubeMesh{};
+		c3d::MaterialObs m_mapCubeMaterial{};
+		c3d::MeshResPtr m_shortRangeTowerMesh{};
+		c3d::MeshResPtr m_longRangeTowerMesh{};
+		c3d::MeshResPtr m_enemyCubeMesh{};
+		c3d::MaterialObs m_enemyCubeMaterial{};
+		c3d::MeshResPtr m_bulletMesh{};
+		c3d::MaterialObs m_bulletMaterial{};
+		c3d::MeshResPtr m_boulderMesh{};
+		c3d::MaterialObs m_boulderMaterial{};
+		c3d::FramePassTimerUPtr m_updateTimer;
 		// Varying data
 		Clock::time_point m_saved;
-		castor::Milliseconds m_elapsed;
+		c3d::Milliseconds m_elapsed;
 		EnemySpawner m_spawner;
 		Grid m_grid;
 		TowerArray m_towers;
@@ -190,6 +190,6 @@ namespace castortd
 		bool m_paused{ false };
 		bool m_ended{ false };
 		TowerRPtr m_selectedTower{};
-		castor3d::GeometryRPtr m_lastMapCube{};
+		c3d::GeometryRPtr m_lastMapCube{};
 	};
 }

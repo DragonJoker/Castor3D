@@ -10,9 +10,9 @@ See LICENSE file in root folder
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 
-CU_ImplementSmartPtr( castor3d, OverlayTextBufferPool )
+CU_ImplementSmartPtr( c3d, OverlayTextBufferPool )
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************
 
@@ -21,23 +21,23 @@ namespace castor3d
 		template< typename DataT >
 		OverlayTextBuffer::DataBufferT< DataT > makeDataBuffer( RenderDevice const & device
 			, uint32_t count
-			, castor::String const & name )
+			, String const & name )
 		{
 			auto buffer = makeBuffer< DataT >( device
 				, count
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, name );
-			auto data = castor::makeArrayView( buffer->lock( 0u, ashes::WholeSize, 0u )
+			auto data = makeArrayView( buffer->lock( 0u, ashes::WholeSize, 0u )
 				, buffer->getCount() );
-			return { castor::move( buffer ), data };
+			return { c3d::move( buffer ), data };
 		}
 	}
 
 	//*************************************************************************
 
 	OverlayTextBuffer::OverlayTextBuffer( Engine & engine
-		, castor::String const & debugName
+		, String const & debugName
 		, RenderDevice const & device )
 		: engine{ engine }
 		, device{ device }
@@ -79,9 +79,9 @@ namespace castor3d
 		}
 
 		result.top = overlay.fillBuffer( overlayIndex
-			, castor::makeArrayView( charsBuffer.data.begin() + charsBuffer.allocated, chars )
-			, castor::makeArrayView( wordsBuffer.data.begin() + wordsBuffer.allocated, words )
-			, castor::makeArrayView( linesBuffer.data.begin() + linesBuffer.allocated, lines ) );
+			, makeArrayView( charsBuffer.data.begin() + charsBuffer.allocated, chars )
+			, makeArrayView( wordsBuffer.data.begin() + wordsBuffer.allocated, words )
+			, makeArrayView( linesBuffer.data.begin() + linesBuffer.allocated, lines ) );
 		charsBuffer.allocated += chars;
 		wordsBuffer.allocated += words;
 		linesBuffer.allocated += lines;
@@ -116,7 +116,7 @@ namespace castor3d
 	//*************************************************************************
 
 	OverlayTextBufferPool::OverlayTextBufferPool( Engine & engine
-		, castor::String const & debugName
+		, String const & debugName
 		, RenderDevice const & device )
 		: m_engine{ engine }
 		, m_device{ device }
@@ -132,8 +132,8 @@ namespace castor3d
 
 		if ( !it->second )
 		{
-			it->second = castor::make_unique< OverlayTextBuffer >( m_engine
-				, m_name + ( fontTexture ? cuT( "-" ) + fontTexture->getFontName() : castor::String{} )
+			it->second = makeRawUnique< OverlayTextBuffer >( m_engine
+				, m_name + ( fontTexture ? cuT( "-" ) + fontTexture->getFontName() : String{} )
 				, m_device );
 		}
 
@@ -154,8 +154,8 @@ namespace castor3d
 
 			if ( !it->second )
 			{
-				it->second = castor::make_unique< OverlayTextBuffer >( m_engine
-					, m_name + ( fontTexture ? cuT( "-" ) + fontTexture->getFontName() : castor::String{} )
+				it->second = makeRawUnique< OverlayTextBuffer >( m_engine
+					, m_name + ( fontTexture ? cuT( "-" ) + fontTexture->getFontName() : String{} )
 					, m_device );
 			}
 
@@ -184,7 +184,7 @@ namespace castor3d
 
 		if ( !it->second )
 		{
-			it->second = castor::make_unique< OverlayTextBuffer >( m_engine
+			it->second = makeRawUnique< OverlayTextBuffer >( m_engine
 				, m_name + cuT( "-" ) + fontTexture.getFontName()
 				, m_device );
 		}

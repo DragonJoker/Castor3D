@@ -14,26 +14,26 @@ See LICENSE file in root folder
 #include <RenderGraph/ImageData.hpp>
 #include <RenderGraph/ImageViewData.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	C3D_API VkFormatFeatureFlags getFeatureFlags( ImageUsageFlags flags );
 
 	class GBufferBase
-		: public castor::Named
+		: public Named
 	{
 	public:
 		C3D_API explicit GBufferBase( RenderDevice const & device
-			, castor::String name );
+			, String name );
 
 	protected:
 		C3D_API TextureUPtr doCreateTexture( crg::ResourcesCache & resources
-			, castor::String const & name
+			, String const & name
 			, ImageCreateFlags createFlags
 			, Extent3D const & size
 			, uint32_t layerCount
 			, SampleCount sampleCount
 			, uint32_t mipLevels
-			, castor::PixelFormat format
+			, PixelFormat format
 			, ImageUsageFlags usageFlags
 			, BorderColour borderColor
 			, ComparisonFunc compareOp )const;
@@ -78,16 +78,16 @@ namespace castor3d
 		*	Les images dont le g-buffer a la responsabilité.
 		*/
 		template< typename TextureEnumT >
-		castor::Vector< Texture const * > doCreateTextures( crg::ResourcesCache & resources
-			, castor::Array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
-			, castor::String const & prefix
+		Vector< Texture const * > doCreateTextures( crg::ResourcesCache & resources
+			, Array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, String const & prefix
 			, ImageCreateFlags createFlags
-			, castor::Size const & size
+			, Size const & size
 			, uint32_t layerCount
 			, SampleCount sampleCount
-			, castor::Vector< TextureUPtr > & owned )const
+			, Vector< TextureUPtr > & owned )const
 		{
-			castor::Vector< Texture const * > result;
+			Vector< Texture const * > result;
 
 			for ( uint32_t i = 0u; i < inputs.size(); ++i )
 			{
@@ -152,15 +152,15 @@ namespace castor3d
 		*	Les images dont le g-buffer a la responsabilité.
 		*/
 		template< typename TextureEnumT >
-		castor::Vector< Texture const * > doCreateTextures( crg::ResourcesCache & resources
-			, castor::Array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
-			, castor::String const & prefix
+		Vector< Texture const * > doCreateTextures( crg::ResourcesCache & resources
+			, Array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, String const & prefix
 			, ImageCreateFlags createFlags
 			, Extent3D const & size
 			, SampleCount sampleCount
-			, castor::Vector< TextureUPtr > & owned )const
+			, Vector< TextureUPtr > & owned )const
 		{
-			castor::Vector< Texture const * > result;
+			Vector< Texture const * > result;
 
 			for ( uint32_t i = 0u; i < inputs.size(); ++i )
 			{
@@ -253,13 +253,13 @@ namespace castor3d
 		*/
 		GBufferT( crg::ResourcesCache & resources
 			, RenderDevice const & device
-			, castor::String name
-			, castor::Array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, String name
+			, Array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, ImageCreateFlags createFlags
-			, castor::Size const & size
+			, Size const & size
 			, uint32_t layerCount = 1u
 			, SampleCount sampleCount = SampleCount::e1 )
-			: GBufferBase{ device, castor::move( name ) }
+			: GBufferBase{ device, c3d::move( name ) }
 			, m_result{ doCreateTextures< TextureEnumT >( resources
 				, inputs
 				, getName()
@@ -308,12 +308,12 @@ namespace castor3d
 		*/
 		GBufferT( crg::ResourcesCache & resources
 			, RenderDevice const & device
-			, castor::String name
-			, castor::Array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, String name
+			, Array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, ImageCreateFlags createFlags
 			, Extent3D const & size
 			, SampleCount sampleCount = SampleCount::e1 )
-			: GBufferBase{ device, castor::move( name ) }
+			: GBufferBase{ device, c3d::move( name ) }
 			, m_result{ doCreateTextures< TextureEnumT >( resources
 				, inputs
 				, getName()
@@ -382,8 +382,8 @@ namespace castor3d
 		/**@}*/
 
 	protected:
-		castor::Vector< TextureUPtr > m_owned;
-		castor::Vector< Texture const * > m_result;
+		Vector< TextureUPtr > m_owned;
+		Vector< Texture const * > m_result;
 	};
 }
 

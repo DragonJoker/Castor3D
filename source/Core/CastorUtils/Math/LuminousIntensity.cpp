@@ -2,7 +2,7 @@
 
 #include "CastorUtils/Math/Illumination.hpp"
 
-namespace castor
+namespace c3d
 {
 	LuminousIntensity::LuminousIntensity( Illumination const & illumination, float metres )noexcept
 		: LuminousIntensity{ illumination.lux() * metres * metres }

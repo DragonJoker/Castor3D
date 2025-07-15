@@ -3,7 +3,7 @@
 #include "CastorUtils/Log/Logger.hpp"
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
-namespace castor
+namespace c3d
 {
 	BlockTracker::BlockTracker( char const * szFunction, char const * szFile, uint32_t uiLine )
 		: m_strFile( makeString( szFile ) )

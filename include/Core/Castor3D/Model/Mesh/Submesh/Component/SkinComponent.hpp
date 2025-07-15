@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Skeleton/VertexBoneData.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class SkinComponent
 		: public SubmeshComponent
@@ -21,20 +21,20 @@ namespace castor3d
 		{
 			using SubmeshComponentData::SubmeshComponentData;
 			/**
-			 *\copydoc		castor3d::SubmeshComponentData::gather
+			 *\copydoc		SubmeshComponentData::gather
 			 */
 			void gather( PipelineFlags const & flags
 				, Pass const & pass
 				, ObjectBufferOffset const & bufferOffsets
 				, ashes::BufferCRefArray & buffers
-				, castor::Vector< uint64_t > & offsets
+				, Vector< uint64_t > & offsets
 				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 				, uint32_t & currentBinding
 				, uint32_t & currentLocation )override
 			{
 			}
 			/**
-			 *\copydoc		castor3d::SubmeshComponentData::copy
+			 *\copydoc		SubmeshComponentData::copy
 			 */
 			void copy( SubmeshComponentDataRPtr data )const override;
 			/**
@@ -57,7 +57,7 @@ namespace castor3d
 			 *\brief		Ajoute des données de bones.
 			 *\param[in]	boneData	Les données de bones.
 			 */
-			C3D_API void addDatas( castor::Vector< VertexBoneData > const & boneData );
+			C3D_API void addDatas( Vector< VertexBoneData > const & boneData );
 			/**
 			 *\~english
 			 *\brief		adds bone datas.
@@ -67,7 +67,7 @@ namespace castor3d
 			 *\param[in]	boneData	Les données de bones.
 			 */
 			template< size_t Count >
-			void addDatas( castor::Array< VertexBoneData, Count > const & boneData )
+			void addDatas( Array< VertexBoneData, Count > const & boneData )
 			{
 				addDatas( boneData.data(), boneData.data() + boneData.size() );
 			}
@@ -93,7 +93,7 @@ namespace castor3d
 			void doUpload( UploadData & uploader )override;
 
 		private:
-			castor::UnorderedMap< size_t, ashes::PipelineVertexInputStateCreateInfo > m_bonesLayouts;
+			HashMap< size_t, ashes::PipelineVertexInputStateCreateInfo > m_bonesLayouts;
 			VertexBoneDataArray m_bones;
 
 		private:
@@ -109,7 +109,7 @@ namespace castor3d
 
 			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
 			{
-				return castor::makeUniqueDerived< SubmeshComponent, SkinComponent >( submesh );
+				return makeUniqueDerived< SubmeshComponent, SkinComponent >( submesh );
 			}
 
 			SubmeshComponentFlag getSkinFlag()const noexcept override
@@ -120,7 +120,7 @@ namespace castor3d
 
 		static SubmeshComponentPluginUPtr createPlugin( SubmeshComponentRegister const & submeshComponents )
 		{
-			return castor::makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
+			return makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
 		}
 		/**
 		 *\~english
@@ -139,11 +139,11 @@ namespace castor3d
 		 */
 		C3D_API SkeletonRPtr getSkeleton()const;
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::clone
+		 *\copydoc		SubmeshComponent::clone
 		 */
 		C3D_API SubmeshComponentUPtr clone( Submesh & submesh )const override;
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags
+		 *\copydoc		SubmeshComponent::getSubmeshFlags
 		 */
 		SubmeshComponentFlag getSubmeshFlags()const noexcept override
 		{
@@ -156,7 +156,7 @@ namespace castor3d
 		}
 
 	public:
-		C3D_API static castor::String const TypeName;
+		C3D_API static String const TypeName;
 	};
 }
 

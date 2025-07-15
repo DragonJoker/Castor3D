@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/BaseTypes/UInt.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	struct Voxel
 		: public sdw::StructInstanceHelperT< "C3D_Voxel"
@@ -20,7 +20,7 @@ namespace castor3d::shader
 		Voxel( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), isEnabled() }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), isEnabled() }
 		{
 		}
 

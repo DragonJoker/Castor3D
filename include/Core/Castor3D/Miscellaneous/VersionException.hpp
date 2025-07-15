@@ -8,10 +8,10 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Exception/Exception.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class VersionException
-		: public castor::Exception
+		: public Exception
 	{
 	public:
 		/**
@@ -38,6 +38,6 @@ namespace castor3d
 	};
 }
 
-#define C3D_VersionException( given, expected ) throw castor3d::VersionException{ given, expected, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
+#define C3D_VersionException( given, expected ) throw VersionException{ given, expected, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 
 #endif

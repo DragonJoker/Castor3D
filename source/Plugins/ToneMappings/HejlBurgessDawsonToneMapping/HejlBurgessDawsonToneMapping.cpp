@@ -12,9 +12,9 @@
 
 namespace HejlBurgessDawson
 {
-	namespace c3d = castor3d::shader;
-	castor::String ToneMapping::Type = cuT( "hejl" );
-	castor::MbString ToneMapping::Name = "Hejl Burgess Dawson Tone Mapping";
+	namespace c3ds = c3d::shader;
+	c3d::String ToneMapping::Type = cuT( "hejl" );
+	c3d::MbString ToneMapping::Name = "Hejl Burgess Dawson Tone Mapping";
 
 	void ToneMapping::create( ast::ShaderBuilder & builder )
 	{
@@ -24,8 +24,8 @@ namespace HejlBurgessDawson
 		C3D_ColourGrading( writer, 1u, 0u );
 		auto c3d_mapHdr = writer.declCombinedImg< FImg2DRgba16 >( "c3d_mapHdr", 2u, 0u );
 
-		writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
-			, sdw::FragmentOutT< c3d::Colour4FT > out )
+		writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
+			, sdw::FragmentOutT< c3ds::Colour4FT > out )
 			{
 				auto hdrColor = writer.declLocale( "hdrColor"
 					, c3d_colourGrading.colourGrade( c3d_mapHdr.sample( in.uv() ).rgb() ) );

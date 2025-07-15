@@ -12,52 +12,52 @@ See LICENSE file in root folder
 namespace c3d_gltf
 {
 	class GltfMeshImporter
-		: public castor3d::MeshImporter
+		: public c3d::MeshImporter
 	{
 	public:
-		explicit GltfMeshImporter( castor3d::Engine & engine );
+		explicit GltfMeshImporter( c3d::Engine & engine );
 
 	private:
-		using PrimitiveArray = castor::Vector< fastgltf::Primitive const * >;
+		using PrimitiveArray = c3d::Vector< fastgltf::Primitive const * >;
 
-		bool doImportMesh( castor3d::Mesh & mesh, uint32_t submeshIndex )override;
-		void doProcessPointsSubmesh( castor3d::Mesh & mesh
-			, castor3d::Material * material
+		bool doImportMesh( c3d::Mesh & mesh, uint32_t submeshIndex )override;
+		void doProcessPointsSubmesh( c3d::Mesh & mesh
+			, c3d::Material * material
 			, fastgltf::Mesh const & impMesh
 			, fastgltf::Primitive const & impPrimitive );
-		void doProcessLinesSubmesh( castor3d::Mesh & mesh
-			, castor3d::Material * material
+		void doProcessLinesSubmesh( c3d::Mesh & mesh
+			, c3d::Material * material
 			, fastgltf::Mesh const & impMesh
 			, fastgltf::Primitive const & impPrimitive );
-		void doProcessLineStripSubmesh( castor3d::Mesh & mesh
-			, castor3d::Material * material
+		void doProcessLineStripSubmesh( c3d::Mesh & mesh
+			, c3d::Material * material
 			, fastgltf::Mesh const & impMesh
 			, fastgltf::Primitive const & impPrimitive
 			, bool loop );
-		void doProcessTrianglesSubmesh( castor3d::Mesh & mesh
-			, castor3d::Material * material
+		void doProcessTrianglesSubmesh( c3d::Mesh & mesh
+			, c3d::Material * material
 			, fastgltf::Mesh const & impMesh
 			, fastgltf::Primitive const & impPrimitive );
-		void doProcessTriangleStripSubmesh( castor3d::Mesh & mesh
-			, castor3d::Material * material
+		void doProcessTriangleStripSubmesh( c3d::Mesh & mesh
+			, c3d::Material * material
 			, fastgltf::Mesh const & impMesh
 			, fastgltf::Primitive const & impPrimitive );
-		void doProcessTriangleFanSubmesh( castor3d::Mesh & mesh
-			, castor3d::Material * material
+		void doProcessTriangleFanSubmesh( c3d::Mesh & mesh
+			, c3d::Material * material
 			, fastgltf::Mesh const & impMesh
 			, fastgltf::Primitive const & impPrimitive );
 		bool doProcessMeshVertices( fastgltf::Asset const & impAsset
 			, fastgltf::Mesh const & impMesh
 			, fastgltf::Primitive const & impPrimitive
-			, castor3d::Mesh & mesh
-			, castor3d::Submesh & submesh
-			, castor3d::Material * material );
-		void doCheckNmlTan( castor3d::Submesh & submesh
-			, castor3d::IndexMappingUPtr mapping );
+			, c3d::Mesh & mesh
+			, c3d::Submesh & submesh
+			, c3d::Material * material );
+		void doCheckNmlTan( c3d::Submesh & submesh
+			, c3d::IndexMappingUPtr mapping );
 		void doTransformMesh( fastgltf::Node const & impNode
-			, castor::Vector< fastgltf::Node > const & impNodes
-			, castor3d::Mesh & mesh
-			, castor::Matrix4x4f transformAcc = castor::Matrix4x4f{ 1.0f } );
+			, c3d::Vector< fastgltf::Node > const & impNodes
+			, c3d::Mesh & mesh
+			, c3d::Matrix4x4f transformAcc = c3d::Matrix4x4f{ 1.0f } );
 	};
 }
 

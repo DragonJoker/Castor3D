@@ -6,7 +6,7 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace saocfg
 	{
@@ -306,7 +306,7 @@ namespace castor3d
 		{
 			if ( blockContext->renderTarget )
 			{
-				blockContext->renderTarget->setSsaoConfig( castor::move( blockContext->ssaoConfig ) );
+				blockContext->renderTarget->setSsaoConfig( c3d::move( blockContext->ssaoConfig ) );
 				blockContext->ssaoConfig = {};
 			}
 			else
@@ -335,9 +335,8 @@ namespace castor3d
 		visitor.visit( cuT( "Bend Step Size" ), bendStepSize );
 	}
 
-	void SsaoConfig::addParsers( castor::AttributeParsers & result )
+	void SsaoConfig::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		addParserT( result, CSCNSection::eRenderTarget, CSCNSection::eSsao, cuT( "ssao" ), saocfg::parserSsao );
 		addParserT( result, CSCNSection::eSsao, cuT( "enabled" ), saocfg::parserEnabled, { makeParameter< ParameterType::eBool >() } );
 		addParserT( result, CSCNSection::eSsao, cuT( "high_quality" ), saocfg::parserHighQuality, { makeParameter< ParameterType::eBool >() } );

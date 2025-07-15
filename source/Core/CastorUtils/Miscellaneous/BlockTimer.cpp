@@ -3,7 +3,7 @@
 #include "CastorUtils/Log/Logger.hpp"
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
-namespace castor
+namespace c3d
 {
 	BlockTimer::BlockTimer( char const * file
 		, char const * function
@@ -11,7 +11,7 @@ namespace castor
 		, uint32_t line )
 		: m_file{ file }
 		, m_function{ function }
-		, m_name{ castor::move( name ) }
+		, m_name{ c3d::move( name ) }
 		, m_line{ line }
 	{
 	}

@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include <RenderGraph/FrameGraphPrerequisites.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Render */
 	//@{
@@ -36,24 +36,24 @@ namespace castor3d
 		eFlux = 5,			// R16G16B16A16F, RGB => Light flux, used by RSM.
 		CU_ScopedEnumBounds( eDepth, eFlux ),
 	};
-	C3D_API castor::String getTextureName( LightType light
+	C3D_API String getTextureName( LightType light
 		, SmTexture texture );
-	C3D_API castor::String getTexName( SmTexture texture );
-	C3D_API castor::PixelFormat getFormat( RenderDevice const & device, SmTexture texture );
+	C3D_API String getTexName( SmTexture texture );
+	C3D_API PixelFormat getFormat( RenderDevice const & device, SmTexture texture );
 	C3D_API ClearValue getClearValue( SmTexture texture );
 	C3D_API ImageUsageFlags getUsageFlags( SmTexture texture );
 	C3D_API BorderColour getBorderColor( SmTexture texture );
 	C3D_API ComparisonFunc getCompareOp( SmTexture texture );
 	C3D_API uint32_t getMipLevels( RenderDevice const & device
 		, SmTexture texture
-		, castor::Size const & size );
+		, Size const & size );
 	inline uint32_t getMipLevels( RenderDevice const & device
 		, SmTexture texture
 		, Extent3D const & size )
 	{
 		return getMipLevels( device
 			, texture
-			, castor::Size{ size.width, size.height } );
+			, Size{ size.width, size.height } );
 	}
 	/**
 	*\~english
@@ -129,8 +129,8 @@ namespace castor3d
 	class ShadowMapPassSpot;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, ShadowMap, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ShadowMapPass, C3D_API );
+	CU_DeclareSmartPtr( c3d, ShadowMap, C3D_API );
+	CU_DeclareSmartPtr( c3d, ShadowMapPass, C3D_API );
 	/** @endcond */
 
 	//@}

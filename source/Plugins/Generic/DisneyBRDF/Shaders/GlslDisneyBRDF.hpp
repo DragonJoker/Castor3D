@@ -11,37 +11,37 @@ See LICENSE file in root folder
 
 namespace disney::shader
 {
-	namespace c3d = castor3d::shader;
+	namespace c3ds = c3d::shader;
 
 	class DisneyDiffuseBRDF
-		: public c3d::DiffuseBRDF
+		: public c3ds::DiffuseBRDF
 	{
 	public:
 		DisneyDiffuseBRDF( sdw::ShaderWriter & writer
-			, c3d::BRDFHelpers & brdfHelpers );
+			, c3ds::BRDFHelpers & brdfHelpers );
 
-		static c3d::DiffuseBRDFPtr create( sdw::ShaderWriter & writer
-			, c3d::BRDFHelpers & brdfHelpers );
-		static castor::StringView constexpr Name{ cuT( "disney" ) };
+		static c3ds::DiffuseBRDFPtr create( sdw::ShaderWriter & writer
+			, c3ds::BRDFHelpers & brdfHelpers );
+		static c3d::StringView constexpr Name{ cuT( "disney" ) };
 
 	private:
-		void doGenerate( c3d::BlendComponents const & components
-			, c3d::LightSurface const & lightSurface )override;
+		void doGenerate( c3ds::BlendComponents const & components
+			, c3ds::LightSurface const & lightSurface )override;
 	};
 
 	class DisneySpecularBRDF
-		: public c3d::SpecularBRDF
+		: public c3ds::SpecularBRDF
 	{
 	public:
 		DisneySpecularBRDF( sdw::ShaderWriter & writer
-			, c3d::BRDFHelpers & brdfHelpers );
+			, c3ds::BRDFHelpers & brdfHelpers );
 
-		static c3d::SpecularBRDFPtr create( sdw::ShaderWriter & writer
-			, c3d::BRDFHelpers & brdfHelpers );
-		static castor::StringView constexpr Name{ cuT( "disney" ) };
+		static c3ds::SpecularBRDFPtr create( sdw::ShaderWriter & writer
+			, c3ds::BRDFHelpers & brdfHelpers );
+		static c3d::StringView constexpr Name{ cuT( "disney" ) };
 
 	private:
-		void doGenerate( c3d::BlendComponents const & components )override;
+		void doGenerate( c3ds::BlendComponents const & components )override;
 
 		sdw::Function< sdw::Float
 			, sdw::InFloat
@@ -58,18 +58,18 @@ namespace disney::shader
 	};
 
 	class DisneyClearcoatBRDF
-		: public c3d::ClearcoatBRDF
+		: public c3ds::ClearcoatBRDF
 	{
 	public:
 		DisneyClearcoatBRDF( sdw::ShaderWriter & writer
-			, c3d::BRDFHelpers & brdfHelpers );
+			, c3ds::BRDFHelpers & brdfHelpers );
 
-		static c3d::ClearcoatBRDFPtr create( sdw::ShaderWriter & writer
-			, c3d::BRDFHelpers & brdfHelpers );
-		static castor::StringView constexpr Name{ cuT( "disney" ) };
+		static c3ds::ClearcoatBRDFPtr create( sdw::ShaderWriter & writer
+			, c3ds::BRDFHelpers & brdfHelpers );
+		static c3d::StringView constexpr Name{ cuT( "disney" ) };
 
 	private:
-		void doGenerate( c3d::BlendComponents const & components )override;
+		void doGenerate( c3ds::BlendComponents const & components )override;
 
 		sdw::Function< sdw::Float
 			, sdw::InFloat
@@ -80,20 +80,20 @@ namespace disney::shader
 	};
 
 	class DisneySheenBRDF
-		: public c3d::SheenBRDF
+		: public c3ds::SheenBRDF
 	{
 	public:
 		DisneySheenBRDF( sdw::ShaderWriter & writer
-			, c3d::BRDFHelpers & brdfHelpers );
+			, c3ds::BRDFHelpers & brdfHelpers );
 
-		static c3d::SheenBRDFPtr create( sdw::ShaderWriter & writer
-			, c3d::BRDFHelpers & brdfHelpers );
-		static castor::StringView constexpr Name{ cuT( "disney" ) };
+		static c3ds::SheenBRDFPtr create( sdw::ShaderWriter & writer
+			, c3ds::BRDFHelpers & brdfHelpers );
+		static c3d::StringView constexpr Name{ cuT( "disney" ) };
 
 	private:
-		void doGenerate( c3d::Utils & utils
-			, c3d::BlendComponents const & components
-			, c3d::LightSurface const & lightSurface )override;
+		void doGenerate( c3ds::Utils & utils
+			, c3ds::BlendComponents const & components
+			, c3ds::LightSurface const & lightSurface )override;
 	};
 }
 

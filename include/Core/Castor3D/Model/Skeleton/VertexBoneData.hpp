@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Limits.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	struct VertexBoneData
 	{
@@ -32,10 +32,10 @@ namespace castor3d
 		{
 			struct ids
 			{
-				castor::Point4ui id0;
-				castor::Point4ui id1;
+				Point4ui id0;
+				Point4ui id1;
 			};
-			castor::Array< uint32_t, MaxBonesPerVertex > data{};
+			Array< uint32_t, MaxBonesPerVertex > data{};
 
 			Ids() = default;
 
@@ -75,10 +75,10 @@ namespace castor3d
 		{
 			struct weights
 			{
-				castor::Point4f weight0;
-				castor::Point4f weight1;
+				Point4f weight0;
+				Point4f weight1;
 			};
-			castor::Array< float, MaxBonesPerVertex > data{};
+			Array< float, MaxBonesPerVertex > data{};
 
 			Weights() = default;
 

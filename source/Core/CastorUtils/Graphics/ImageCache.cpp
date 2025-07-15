@@ -3,9 +3,9 @@
 #include "CastorUtils/Graphics/Image.hpp"
 #include "CastorUtils/Graphics/ImageLoader.hpp"
 
-CU_ImplementSmartPtr( castor, ImageCache )
+CU_ImplementSmartPtr( c3d, ImageCache )
 
-namespace castor
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -47,8 +47,8 @@ namespace castor
 	{
 		return makeResource< Image, String >( name
 			, path
-			, castor::move( layout )
-			, castor::move( buffer ) );
+			, c3d::move( layout )
+			, c3d::move( buffer ) );
 	}
 
 	//*********************************************************************************************

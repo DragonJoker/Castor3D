@@ -18,15 +18,15 @@ namespace fireworks
 	namespace
 	{
 		class ParticleEmitter
-			: public castor3d::ParticleEmitter
+			: public c3d::ParticleEmitter
 		{
 		protected:
-			ParticleEmitter( castor3d::ParticleDeclaration const & decl
+			ParticleEmitter( c3d::ParticleDeclaration const & decl
 				, float type );
 
 		public:
-			castor3d::Particle emit( castor::Point3f const & position
-				, castor::Point3f const & velocity
+			c3d::Particle emit( c3d::Point3f const & position
+				, c3d::Point3f const & velocity
 				, float age );
 
 		private:
@@ -37,31 +37,31 @@ namespace fireworks
 			: public ParticleEmitter
 		{
 		public:
-			explicit PrimaryParticleEmitter( castor3d::ParticleDeclaration const & decl );
+			explicit PrimaryParticleEmitter( c3d::ParticleDeclaration const & decl );
 		};
 
 		class SecondaryParticleEmitter
 			: public ParticleEmitter
 		{
 		public:
-			explicit SecondaryParticleEmitter( castor3d::ParticleDeclaration const & decl );
+			explicit SecondaryParticleEmitter( c3d::ParticleDeclaration const & decl );
 		};
 
 		class ParticleUpdater
-			: public castor3d::ParticleUpdater
+			: public c3d::ParticleUpdater
 		{
 		public:
-			ParticleUpdater( castor3d::ParticleSystem const & system
-				, castor3d::ParticleDeclaration const & inputs
-				, castor3d::ParticleEmitterArray & emitters );
-			void update( castor::Milliseconds const & time
-				, castor3d::Particle & particle )override;
+			ParticleUpdater( c3d::ParticleSystem const & system
+				, c3d::ParticleDeclaration const & inputs
+				, c3d::ParticleEmitterArray & emitters );
+			void update( c3d::Milliseconds const & time
+				, c3d::Particle & particle )override;
 
 		private:
-			castor3d::ParticleDeclaration::const_iterator m_type;
-			castor3d::ParticleDeclaration::const_iterator m_position;
-			castor3d::ParticleDeclaration::const_iterator m_velocity;
-			castor3d::ParticleDeclaration::const_iterator m_age;
+			c3d::ParticleDeclaration::const_iterator m_type;
+			c3d::ParticleDeclaration::const_iterator m_position;
+			c3d::ParticleDeclaration::const_iterator m_velocity;
+			c3d::ParticleDeclaration::const_iterator m_age;
 		};
 
 		//*****************************************************************************************
@@ -78,9 +78,9 @@ namespace fireworks
 			eAge,
 		};
 
-		constexpr castor::Milliseconds g_launcherCooldown = 100_ms;
-		constexpr castor::Milliseconds g_shellLifetime = 10000_ms;
-		constexpr castor::Milliseconds g_secondaryShellLifetime = 2500_ms;
+		constexpr c3d::Milliseconds g_launcherCooldown = 100_ms;
+		constexpr c3d::Milliseconds g_shellLifetime = 10000_ms;
+		constexpr c3d::Milliseconds g_secondaryShellLifetime = 2500_ms;
 
 		inline float getRandomFloat()
 		{
@@ -89,20 +89,20 @@ namespace fireworks
 			return distribution( device );
 		}
 
-		inline castor::Point3f doGetRandomDirection()
+		inline c3d::Point3f doGetRandomDirection()
 		{
-			return castor::Point3f{ getRandomFloat(), getRandomFloat(), getRandomFloat() };
+			return c3d::Point3f{ getRandomFloat(), getRandomFloat(), getRandomFloat() };
 		}
 
 		inline void doUpdateLauncher( ParticleEmitter & emitter
-			, castor::Coords3f & position
+			, c3d::Coords3f & position
 			, float & age )
 		{
 			if ( age >= float( g_launcherCooldown.count() ) )
 			{
-				castor::Point3f velocity{ doGetRandomDirection() * 5.0f };
+				c3d::Point3f velocity{ doGetRandomDirection() * 5.0f };
 				velocity[1] = std::max( velocity[1] * 7.0f, 10.0f );
-				emitter.emit( castor::Point3f{ position }
+				emitter.emit( c3d::Point3f{ position }
 					, velocity
 					, 0.0f );
 				age = 0.0f;
@@ -110,16 +110,16 @@ namespace fireworks
 		}
 
 		inline void doUpdateShell( ParticleEmitter & emitter
-			, castor::Milliseconds const & time
+			, c3d::Milliseconds const & time
 			, float & type
-			, castor::Coords3f & position
-			, castor::Coords3f & velocity
+			, c3d::Coords3f & position
+			, c3d::Coords3f & velocity
 			, float & age )
 		{
 			auto deltaS = float( time.count() ) / 1000.0f;
-			castor::Point3f delta{ deltaS, deltaS, deltaS };
-			castor::Point3f deltaP = delta * velocity;
-			castor::Point3f deltaV = delta * castor::Point3f{ 0.0f, -0.981f, 0.0f };
+			c3d::Point3f delta{ deltaS, deltaS, deltaS };
+			c3d::Point3f deltaP = delta * velocity;
+			c3d::Point3f deltaV = delta * c3d::Point3f{ 0.0f, -0.981f, 0.0f };
 
 			if ( age < float( g_shellLifetime.count() ) )
 			{
@@ -130,7 +130,7 @@ namespace fireworks
 			{
 				for ( int i = 1; i < 10; ++i )
 				{
-					emitter.emit( castor::Point3f{ position }
+					emitter.emit( c3d::Point3f{ position }
 						, ( doGetRandomDirection() * 5.0f ) + velocity / 2.0f
 						, 0.0f );
 				}
@@ -142,18 +142,18 @@ namespace fireworks
 			}
 		}
 
-		inline void doUpdateSecondaryShell( castor::Milliseconds const & time
+		inline void doUpdateSecondaryShell( c3d::Milliseconds const & time
 			, float & type
-			, castor::Coords3f & position
-			, castor::Coords3f & velocity
+			, c3d::Coords3f & position
+			, c3d::Coords3f & velocity
 			, float & age )
 		{
 			if ( age < float( g_secondaryShellLifetime.count() ) )
 			{
 				auto deltaS = float( time.count() ) / 1000.0f;
-				castor::Point3f delta{ deltaS, deltaS, deltaS };
-				castor::Point3f deltaP = delta * velocity;
-				castor::Point3f deltaV = delta * castor::Point3f{ 0.0f, -0.981f, 0.0f };
+				c3d::Point3f delta{ deltaS, deltaS, deltaS };
+				c3d::Point3f deltaP = delta * velocity;
+				c3d::Point3f deltaV = delta * c3d::Point3f{ 0.0f, -0.981f, 0.0f };
 				position += deltaP;
 				velocity += deltaV;
 			}
@@ -165,66 +165,66 @@ namespace fireworks
 
 		//*****************************************************************************************
 
-		ParticleEmitter::ParticleEmitter( castor3d::ParticleDeclaration const & decl
+		ParticleEmitter::ParticleEmitter( c3d::ParticleDeclaration const & decl
 			, float type )
-			: castor3d::ParticleEmitter{ decl }
+			: c3d::ParticleEmitter{ decl }
 			, m_type{ type }
 		{
 		}
 
-		castor3d::Particle ParticleEmitter::emit( castor::Point3f const & position
-			, castor::Point3f const & velocity
+		c3d::Particle ParticleEmitter::emit( c3d::Point3f const & position
+			, c3d::Point3f const & velocity
 			, float age )
 		{
-			castor3d::ParticleValues particle;
+			c3d::ParticleValues particle;
 			particle.add( size_t( ePosition ), position );
 			particle.add( size_t( eType ), m_type );
 			particle.add( size_t( eVelocity ), velocity );
 			particle.add( size_t( eAge ), age );
-			return castor3d::ParticleEmitter::emit( particle );
+			return c3d::ParticleEmitter::emit( particle );
 		}
 
 		//*****************************************************************************************
 
-		PrimaryParticleEmitter::PrimaryParticleEmitter( castor3d::ParticleDeclaration const & decl )
+		PrimaryParticleEmitter::PrimaryParticleEmitter( c3d::ParticleDeclaration const & decl )
 			: ParticleEmitter{ decl, g_shell }
 		{
 		}
 
 		//*****************************************************************************************
 
-		SecondaryParticleEmitter::SecondaryParticleEmitter( castor3d::ParticleDeclaration const & decl )
+		SecondaryParticleEmitter::SecondaryParticleEmitter( c3d::ParticleDeclaration const & decl )
 			: ParticleEmitter{ decl, g_secondaryShell }
 		{
 		}
 
 		//*****************************************************************************************
 
-		ParticleUpdater::ParticleUpdater( castor3d::ParticleSystem const & system
-			, castor3d::ParticleDeclaration const & inputs
-			, castor3d::ParticleEmitterArray & emitters )
-			: castor3d::ParticleUpdater{ system, inputs, emitters }
+		ParticleUpdater::ParticleUpdater( c3d::ParticleSystem const & system
+			, c3d::ParticleDeclaration const & inputs
+			, c3d::ParticleEmitterArray & emitters )
+			: c3d::ParticleUpdater{ system, inputs, emitters }
 			, m_type{ std::find_if( inputs.begin()
 				, inputs.end()
-				, []( castor3d::ParticleElementDeclaration const & element )
+				, []( c3d::ParticleElementDeclaration const & element )
 				{
 					return element.m_name == cuT( "type" );
 				} ) }
 			, m_position{ std::find_if( inputs.begin()
 				, inputs.end()
-				, []( castor3d::ParticleElementDeclaration const & element )
+				, []( c3d::ParticleElementDeclaration const & element )
 				{
 					return element.m_name == cuT( "position" );
 				} ) }
 			, m_velocity{ std::find_if( inputs.begin()
 				, inputs.end()
-				, []( castor3d::ParticleElementDeclaration const & element )
+				, []( c3d::ParticleElementDeclaration const & element )
 				{
 					return element.m_name == cuT( "velocity" );
 				} ) }
 			, m_age{ std::find_if( inputs.begin()
 				, inputs.end()
-				, []( castor3d::ParticleElementDeclaration const & element )
+				, []( c3d::ParticleElementDeclaration const & element )
 				{
 					return element.m_name == cuT( "age" );
 				} ) }
@@ -238,11 +238,11 @@ namespace fireworks
 			}
 		}
 
-		void ParticleUpdater::update( castor::Milliseconds const & time
-			, castor3d::Particle & particle )
+		void ParticleUpdater::update( c3d::Milliseconds const & time
+			, c3d::Particle & particle )
 		{
-			castor::Coords3f pos{ reinterpret_cast< float * >( particle.getData() + m_position->m_offset ) };
-			castor::Coords3f vel{ reinterpret_cast< float * >( particle.getData() + m_velocity->m_offset ) };
+			c3d::Coords3f pos{ reinterpret_cast< float * >( particle.getData() + m_position->m_offset ) };
+			c3d::Coords3f vel{ reinterpret_cast< float * >( particle.getData() + m_velocity->m_offset ) };
 			float * age{ reinterpret_cast< float * >( particle.getData() + m_age->m_offset ) };
 			float * type{ reinterpret_cast< float * >( particle.getData() + m_type->m_offset ) };
 			*age += float( time.count() );
@@ -279,25 +279,25 @@ namespace fireworks
 
 	//*********************************************************************************************
 
-	castor::String const ParticleSystem::Type = cuT( "fireworks" );
-	castor::MbString const ParticleSystem::Name = "Fireworks Particle";
+	c3d::String const ParticleSystem::Type = cuT( "fireworks" );
+	c3d::MbString const ParticleSystem::Name = "Fireworks Particle";
 
-	ParticleSystem::ParticleSystem( castor3d::ParticleSystem & parent )
+	ParticleSystem::ParticleSystem( c3d::ParticleSystem & parent )
 		: CpuParticleSystem( parent )
 	{
 	}
 
-	castor3d::CpuParticleSystemUPtr ParticleSystem::create( castor3d::ParticleSystem & parent )
+	c3d::CpuParticleSystemUPtr ParticleSystem::create( c3d::ParticleSystem & parent )
 	{
-		return castor::makeUniqueDerived< castor3d::CpuParticleSystem, ParticleSystem >( parent );
+		return c3d::makeUniqueDerived< c3d::CpuParticleSystem, ParticleSystem >( parent );
 	}
 
 	bool ParticleSystem::doInitialise()
 	{
 		addEmitter( nullptr );
-		addEmitter( castor::makeUniqueDerived< castor3d::ParticleEmitter, PrimaryParticleEmitter >( getParent().getParticleVariables() ) );
-		addEmitter( castor::makeUniqueDerived< castor3d::ParticleEmitter, SecondaryParticleEmitter >( getParent().getParticleVariables() ) );
-		addUpdater( castor::makeUniqueDerived< castor3d::ParticleUpdater, ParticleUpdater >( getParent(), m_inputs, m_emitters ) );
+		addEmitter( c3d::makeUniqueDerived< c3d::ParticleEmitter, PrimaryParticleEmitter >( getParent().getParticleVariables() ) );
+		addEmitter( c3d::makeUniqueDerived< c3d::ParticleEmitter, SecondaryParticleEmitter >( getParent().getParticleVariables() ) );
+		addUpdater( c3d::makeUniqueDerived< c3d::ParticleUpdater, ParticleUpdater >( getParent(), m_inputs, m_emitters ) );
 		return true;
 	}
 
@@ -307,9 +307,9 @@ namespace fireworks
 		{
 			auto & particle = m_particles[i];
 
-			if ( particle.getValue< castor3d::ParticleFormat::eFloat >( eType ) == 0.0f )
+			if ( particle.getValue< c3d::ParticleFormat::eFloat >( eType ) == 0.0f )
 			{
-				particle = castor::move( m_particles[m_firstUnused - 1] );
+				particle = c3d::move( m_particles[m_firstUnused - 1] );
 				--m_firstUnused;
 			}
 		}

@@ -10,10 +10,10 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, Overlay )
-CU_ImplementSmartPtr( castor3d, OverlayContext )
+CU_ImplementSmartPtr( c3d, Overlay )
+CU_ImplementSmartPtr( c3d, OverlayContext )
 
-namespace castor3d
+namespace c3d
 {
 	namespace overlay
 	{
@@ -21,7 +21,7 @@ namespace castor3d
 		{
 			if ( blockContext->overlay.rptr )
 			{
-				blockContext->overlay.rptr->setRelativePosition( params[0]->get< castor::Point2d >() );
+				blockContext->overlay.rptr->setRelativePosition( params[0]->get< Point2d >() );
 			}
 			else
 			{
@@ -34,7 +34,7 @@ namespace castor3d
 		{
 			if ( blockContext->overlay.rptr )
 			{
-				blockContext->overlay.rptr->setRelativeSize( params[0]->get< castor::Point2d >() );
+				blockContext->overlay.rptr->setRelativeSize( params[0]->get< Point2d >() );
 			}
 			else
 			{
@@ -47,7 +47,7 @@ namespace castor3d
 		{
 			if ( blockContext->overlay.rptr )
 			{
-				blockContext->overlay.rptr->setPixelSize( params[0]->get< castor::Size >() );
+				blockContext->overlay.rptr->setPixelSize( params[0]->get< Size >() );
 			}
 			else
 			{
@@ -60,7 +60,7 @@ namespace castor3d
 		{
 			if ( blockContext->overlay.rptr )
 			{
-				blockContext->overlay.rptr->setPixelPosition( params[0]->get< castor::Position >() );
+				blockContext->overlay.rptr->setPixelPosition( params[0]->get< Position >() );
 			}
 			else
 			{
@@ -73,7 +73,7 @@ namespace castor3d
 		{
 			if ( blockContext->overlay.rptr )
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				blockContext->overlay.rptr->setMaterial( getEngine( *blockContext )->findMaterial( name ) );
 			}
 			else
@@ -86,8 +86,8 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserPanelOverlay, OverlayContext )
 		{
 			auto engine = getEngine( *blockContext );
-			auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
-			blockContext->parentOverlays.push_back( castor::move( blockContext->overlay ) );
+			auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
+			blockContext->parentOverlays.push_back( c3d::move( blockContext->overlay ) );
 			auto & parent = blockContext->parentOverlays.back();
 			blockContext->overlay.rptr = blockContext->scene
 				? blockContext->scene->scene->tryFindOverlay( name )
@@ -95,7 +95,7 @@ namespace castor3d
 
 			if ( !blockContext->overlay.rptr )
 			{
-				blockContext->overlay.uptr = castor::makeUnique< Overlay >( *engine
+				blockContext->overlay.uptr = makeUnique< Overlay >( *engine
 					, OverlayType::ePanel
 					, parent.rptr );
 				blockContext->overlay.rptr = blockContext->overlay.uptr.get();
@@ -109,8 +109,8 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserBorderPanelOverlay, OverlayContext )
 		{
 			auto engine = getEngine( *blockContext );
-			auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
-			blockContext->parentOverlays.push_back( castor::move( blockContext->overlay ) );
+			auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
+			blockContext->parentOverlays.push_back( c3d::move( blockContext->overlay ) );
 			auto & parent = blockContext->parentOverlays.back();
 			blockContext->overlay.rptr = blockContext->scene
 				? blockContext->scene->scene->tryFindOverlay( name )
@@ -118,7 +118,7 @@ namespace castor3d
 
 			if ( !blockContext->overlay.rptr )
 			{
-				blockContext->overlay.uptr = castor::makeUnique< Overlay >( *engine
+				blockContext->overlay.uptr = makeUnique< Overlay >( *engine
 					, OverlayType::eBorderPanel
 					, parent.rptr );
 				blockContext->overlay.rptr = blockContext->overlay.uptr.get();
@@ -132,8 +132,8 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserTextOverlay, OverlayContext )
 		{
 			auto engine = getEngine( *blockContext );
-			auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
-			blockContext->parentOverlays.push_back( castor::move( blockContext->overlay ) );
+			auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
+			blockContext->parentOverlays.push_back( c3d::move( blockContext->overlay ) );
 			auto & parent = blockContext->parentOverlays.back();
 			blockContext->overlay.rptr = blockContext->scene
 				? blockContext->scene->scene->tryFindOverlay( name )
@@ -141,7 +141,7 @@ namespace castor3d
 
 			if ( !blockContext->overlay.rptr )
 			{
-				blockContext->overlay.uptr = castor::makeUnique< Overlay >( *engine
+				blockContext->overlay.uptr = makeUnique< Overlay >( *engine
 					, OverlayType::eText
 					, parent.rptr );
 				blockContext->overlay.rptr = blockContext->overlay.uptr.get();
@@ -201,7 +201,7 @@ namespace castor3d
 			}
 
 			CU_Require( !blockContext->parentOverlays.empty() );
-			blockContext->overlay = castor::move( blockContext->parentOverlays.back() );
+			blockContext->overlay = c3d::move( blockContext->parentOverlays.back() );
 			blockContext->parentOverlays.pop_back();
 		}
 		CU_EndAttributePop()
@@ -212,7 +212,7 @@ namespace castor3d
 
 			if ( overlay && overlay->getType() == OverlayType::ePanel )
 			{
-				overlay->getPanelOverlay()->setUV( params[0]->get< castor::Point4d >() );
+				overlay->getPanelOverlay()->setUV( params[0]->get< Point4d >() );
 			}
 			else
 			{
@@ -227,7 +227,7 @@ namespace castor3d
 
 			if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 			{
-				overlay->getBorderPanelOverlay()->setRelativeBorderSize( params[0]->get< castor::Point4d >() );
+				overlay->getBorderPanelOverlay()->setRelativeBorderSize( params[0]->get< Point4d >() );
 			}
 			else
 			{
@@ -242,7 +242,7 @@ namespace castor3d
 
 			if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 			{
-				overlay->getBorderPanelOverlay()->setPixelBorderSize( params[0]->get< castor::Point4ui >() );
+				overlay->getBorderPanelOverlay()->setPixelBorderSize( params[0]->get< Point4ui >() );
 			}
 			else
 			{
@@ -257,7 +257,7 @@ namespace castor3d
 
 			if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 			{
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				overlay->getBorderPanelOverlay()->setBorderMaterial( getEngine( *blockContext )->findMaterial( name ) );
 			}
 			else
@@ -288,7 +288,7 @@ namespace castor3d
 
 			if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 			{
-				overlay->getBorderPanelOverlay()->setUV( params[0]->get< castor::Point4d >() );
+				overlay->getBorderPanelOverlay()->setUV( params[0]->get< Point4d >() );
 			}
 			else
 			{
@@ -303,7 +303,7 @@ namespace castor3d
 
 			if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 			{
-				overlay->getBorderPanelOverlay()->setBorderOuterUV( params[0]->get< castor::Point4d >() );
+				overlay->getBorderPanelOverlay()->setBorderOuterUV( params[0]->get< Point4d >() );
 			}
 			else
 			{
@@ -318,7 +318,7 @@ namespace castor3d
 
 			if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 			{
-				overlay->getBorderPanelOverlay()->setBorderInnerUV( params[0]->get< castor::Point4d >() );
+				overlay->getBorderPanelOverlay()->setBorderInnerUV( params[0]->get< Point4d >() );
 			}
 			else
 			{
@@ -333,7 +333,7 @@ namespace castor3d
 
 			if ( overlay && overlay->getType() == OverlayType::eText )
 			{
-				castor::String name;
+				String name;
 
 				if ( getEngine( *blockContext )->hasFont( params[0]->get( name ) ) )
 				{
@@ -447,15 +447,15 @@ namespace castor3d
 
 			if ( overlay && overlay->getType() == OverlayType::eText )
 			{
-				auto strParams = params[0]->get< castor::String >();
-				castor::string::replace( strParams, cuT( "\\a" ), cuT( "\a" ) );
-				castor::string::replace( strParams, cuT( "\\b" ), cuT( "\b" ) );
-				castor::string::replace( strParams, cuT( "\\f" ), cuT( "\f" ) );
-				castor::string::replace( strParams, cuT( "\\n" ), cuT( "\n" ) );
-				castor::string::replace( strParams, cuT( "\\r" ), cuT( "\r" ) );
-				castor::string::replace( strParams, cuT( "\\t" ), cuT( "\t" ) );
-				castor::string::replace( strParams, cuT( "\\v" ), cuT( "\v" ) );
-				overlay->getTextOverlay()->setCaption( castor::toUtf8U32String( strParams ) );
+				auto strParams = params[0]->get< String >();
+				string::replace( strParams, cuT( "\\a" ), cuT( "\a" ) );
+				string::replace( strParams, cuT( "\\b" ), cuT( "\b" ) );
+				string::replace( strParams, cuT( "\\f" ), cuT( "\f" ) );
+				string::replace( strParams, cuT( "\\n" ), cuT( "\n" ) );
+				string::replace( strParams, cuT( "\\r" ), cuT( "\r" ) );
+				string::replace( strParams, cuT( "\\t" ), cuT( "\t" ) );
+				string::replace( strParams, cuT( "\\v" ), cuT( "\v" ) );
+				overlay->getTextOverlay()->setCaption( toUtf8U32String( strParams ) );
 			}
 			else
 			{
@@ -465,7 +465,7 @@ namespace castor3d
 		CU_EndAttribute()
 	}
 
-	Overlay::Overlay( castor::String const & name
+	Overlay::Overlay( String const & name
 		, Engine & engine
 		, OverlayType type
 		, OverlayRPtr parent
@@ -483,7 +483,7 @@ namespace castor3d
 		, OverlayType type
 		, OverlayRPtr parent
 		, uint32_t level )
-		: Overlay{ castor::String{}
+		: Overlay{ String{}
 			, engine
 			, type
 			, parent
@@ -591,9 +591,8 @@ namespace castor3d
 		return 1u + m_parent->computeLevel();
 	}
 
-	void Overlay::addParsers( castor::AttributeParsers & result )
+	void Overlay::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< OverlayContext > panelCtx{ result, CSCNSection::ePanelOverlay };
 		BlockParserContextT< OverlayContext > borderCtx{ result, CSCNSection::eBorderPanelOverlay };
 		BlockParserContextT< OverlayContext > textCtx{ result, CSCNSection::eTextOverlay };
@@ -673,7 +672,7 @@ namespace castor3d
 		m_children.clear();
 	}
 
-	castor::String getPrefix( OverlayContext const & context )
+	String getPrefix( OverlayContext const & context )
 	{
 		return context.scene
 			? getPrefix( *context.scene )

@@ -7,9 +7,9 @@
 
 #include <CastorUtils/Math/LuminousIntensity.hpp>
 
-namespace castor3d
+namespace c3d
 {
-	castor::String getName( LightType value )
+	String getName( LightType value )
 	{
 		switch ( value )
 		{
@@ -21,13 +21,13 @@ namespace castor3d
 			return cuT( "spot" );
 		default:
 			CU_Failure( "Unsupported LightType" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	float getMaxDistance( castor::Point3f const & colour
-		, castor::LuminousIntensity const & intensity
-		, castor::Point3f const & attenuation )
+	float getMaxDistance( Point3f const & colour
+		, LuminousIntensity const & intensity
+		, Point3f const & attenuation )
 	{
 		constexpr float threshold = 0.000001f;
 		auto constant = std::abs( attenuation[0] );
@@ -75,7 +75,7 @@ namespace castor3d
 		return result;
 	}
 
-	float computeRange( castor::LuminousIntensity const & intensity
+	float computeRange( LuminousIntensity const & intensity
 		, float range )
 	{
 		return range <= 0.0f

@@ -3,14 +3,14 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
-CU_ImplementSmartPtr( castor3d, Viewport )
+CU_ImplementSmartPtr( c3d, Viewport )
 
-namespace castor3d
+namespace c3d
 {
 	namespace viewport
 	{
-		static castor::Matrix4x4f getSafeBandedOrtho( RenderSystem const & renderSystem
-			, castor::Size const & size
+		static Matrix4x4f getSafeBandedOrtho( RenderSystem const & renderSystem
+			, Size const & size
 			, float left
 			, float right
 			, float bottom
@@ -21,7 +21,7 @@ namespace castor3d
 			auto bandsSize = double( getSafeBandsSize( size ) );
 			auto width = size.getWidth() + bandsSize;
 			auto height = size.getHeight() + bandsSize;
-			castor::Point2d bandRatio{ width / size.getWidth(), height / size.getHeight() };
+			Point2d bandRatio{ width / size.getWidth(), height / size.getHeight() };
 			return renderSystem.getOrtho( float( left * bandRatio->x )
 				, float( right * bandRatio->x )
 				, float( bottom * bandRatio->y )
@@ -30,8 +30,8 @@ namespace castor3d
 				, farZ );
 		}
 
-		static castor::Matrix4x4f getSafeBandedFrustum( RenderSystem const & renderSystem
-			, castor::Size const & size
+		static Matrix4x4f getSafeBandedFrustum( RenderSystem const & renderSystem
+			, Size const & size
 			, float left
 			, float right
 			, float bottom
@@ -42,7 +42,7 @@ namespace castor3d
 			auto bandsSize = double( getSafeBandsSize( size ) );
 			auto width = size.getWidth() + bandsSize;
 			auto height = size.getHeight() + bandsSize;
-			castor::Point2d bandRatio{ width / size.getWidth(), height / size.getHeight() };
+			Point2d bandRatio{ width / size.getWidth(), height / size.getHeight() };
 			return renderSystem.getFrustum( float( left * bandRatio->x )
 				, float( right * bandRatio->x )
 				, float( bottom * bandRatio->y )
@@ -51,9 +51,9 @@ namespace castor3d
 				, farZ );
 		}
 
-		static castor::Matrix4x4f getSafeBandedPerspective( RenderSystem const & renderSystem
-			, castor::Size const & size
-			, castor::Angle fovY
+		static Matrix4x4f getSafeBandedPerspective( RenderSystem const & renderSystem
+			, Size const & size
+			, Angle fovY
 			, float aspect
 			, float nearZ
 			, float farZ )
@@ -64,15 +64,15 @@ namespace castor3d
 			auto bandSize = double( getSafeBandSize( size ) );
 			auto halfHeight = halfOpp + bandSize;
 			auto halfWidth = std::ceil( aspect * float( halfOpp ) ) + bandSize;
-			return renderSystem.getPerspective( fovY + ( castor::atanf( ( bandSize * 2.85f / 4.0f ) / adj ) )
+			return renderSystem.getPerspective( fovY + ( c3d::atanf( ( bandSize * 2.85f / 4.0f ) / adj ) )
 				, float( halfWidth / halfHeight )
 				, nearZ
 				, farZ );
 		}
 
-		static castor::Matrix4x4f getSafeBandedInfinitePerspective( RenderSystem const & renderSystem
-			, castor::Size const & size
-			, castor::Angle fovY
+		static Matrix4x4f getSafeBandedInfinitePerspective( RenderSystem const & renderSystem
+			, Size const & size
+			, Angle fovY
 			, float aspect
 			, float nearZ )
 		{
@@ -82,13 +82,13 @@ namespace castor3d
 			auto bandSize = double( getSafeBandSize( size ) );
 			auto halfHeight = halfOpp + bandSize;
 			auto halfWidth = std::ceil( aspect * float( halfOpp ) ) + bandSize;
-			return renderSystem.getInfinitePerspective( fovY + ( castor::atanf( ( bandSize * 2.85f / 4.0f ) / adj ) )
+			return renderSystem.getInfinitePerspective( fovY + ( c3d::atanf( ( bandSize * 2.85f / 4.0f ) / adj ) )
 				, float( halfWidth / halfHeight )
 				, nearZ );
 		}
 	}
 
-	const castor::Array< castor::String, size_t( ViewportType::eCount ) > Viewport::TypeName
+	const Array< String, size_t( ViewportType::eCount ) > Viewport::TypeName
 	{
 		cuT( "undefined" ),
 		cuT( "ortho" ),
@@ -98,7 +98,7 @@ namespace castor3d
 
 	Viewport::Viewport( Engine const & engine
 		, ViewportType type
-		, castor::Angle const & fovY
+		, Angle const & fovY
 		, float aspect
 		, float left
 		, float right
@@ -160,15 +160,15 @@ namespace castor3d
 		, m_type{ m_modified, rhs.m_type.value() }
 		, m_size{ m_modified, rhs.m_size.value() }
 		, m_position{ m_modified, rhs.m_position.value() }
-		, m_viewport{ castor::move( rhs.m_viewport ) }
-		, m_scissor{ castor::move( rhs.m_scissor ) }
-		, m_projection{ castor::move( rhs.m_projection ) }
-		, m_safeBandedProjection{ castor::move( rhs.m_safeBandedProjection ) }
+		, m_viewport{ c3d::move( rhs.m_viewport ) }
+		, m_scissor{ c3d::move( rhs.m_scissor ) }
+		, m_projection{ c3d::move( rhs.m_projection ) }
+		, m_safeBandedProjection{ c3d::move( rhs.m_safeBandedProjection ) }
 	{
 	}
 
 	Viewport::Viewport( Engine const & engine )
-		: Viewport{ engine, ViewportType::eOrtho, castor::Angle{}, 1, 0, 1, 0, 1, 0, 1 }
+		: Viewport{ engine, ViewportType::eOrtho, Angle{}, 1, 0, 1, 0, 1, 0, 1 }
 	{
 	}
 
@@ -207,7 +207,7 @@ namespace castor3d
 		output.m_modified = true;
 	}
 
-	void Viewport::setPerspective( castor::Angle const & fovY
+	void Viewport::setPerspective( Angle const & fovY
 		, float aspect
 		, float nearZ
 		, float farZ )
@@ -224,7 +224,7 @@ namespace castor3d
 		m_modified = true;
 	}
 
-	void Viewport::setInfinitePerspective( castor::Angle const & fovY
+	void Viewport::setInfinitePerspective( Angle const & fovY
 		, float aspect
 		, float nearZ )
 	{
@@ -248,7 +248,7 @@ namespace castor3d
 		, float farZ )
 	{
 		m_type = ViewportType::eFrustum;
-		m_fovY = castor::Angle{};
+		m_fovY = Angle{};
 		m_ratio = 0;
 		m_left = left;
 		m_right = right;
@@ -267,7 +267,7 @@ namespace castor3d
 		, float farZ )
 	{
 		m_type = ViewportType::eOrtho;
-		m_fovY = castor::Angle{};
+		m_fovY = Angle{};
 		m_ratio = 0;
 		m_left = left;
 		m_right = right;
@@ -278,7 +278,7 @@ namespace castor3d
 		m_modified = true;
 	}
 
-	void Viewport::resize( const castor::Size & value )
+	void Viewport::resize( const Size & value )
 	{
 		m_size = value;
 		m_viewport = VkViewport{ 0.0f, 0.0f, float( ( *m_size )[0] ), float( ( *m_size )[1] ), 0.0f, 1.0f };
@@ -291,23 +291,23 @@ namespace castor3d
 		return std::abs( float( getHeight() ) / scale );
 	}
 
-	castor::Matrix4x4f Viewport::getRescaledProjection( float scale )const
+	Matrix4x4f Viewport::getRescaledProjection( float scale )const
 	{
 		switch ( m_type )
 		{
-		case castor3d::ViewportType::eOrtho:
+		case ViewportType::eOrtho:
 			return m_engine.getRenderSystem()->getOrtho( m_left
 				, m_right
 				, m_bottom * scale
 				, m_top * scale
 				, m_near * scale
 				, m_far * scale );
-		case castor3d::ViewportType::ePerspective:
+		case ViewportType::ePerspective:
 			return m_engine.getRenderSystem()->getPerspective( m_fovY
 				, m_ratio
 				, m_near * scale
 				, m_far * scale );
-		case castor3d::ViewportType::eInfinitePerspective:
+		case ViewportType::eInfinitePerspective:
 			return m_engine.getRenderSystem()->getInfinitePerspective( m_fovY
 				, m_ratio
 				, m_near * scale );
@@ -321,11 +321,11 @@ namespace castor3d
 		}
 	}
 
-	castor::Matrix4x4f Viewport::getRescaledSafeBandedProjection( float scale )const
+	Matrix4x4f Viewport::getRescaledSafeBandedProjection( float scale )const
 	{
 		switch ( m_type )
 		{
-		case castor3d::ViewportType::eOrtho:
+		case ViewportType::eOrtho:
 			return viewport::getSafeBandedOrtho( *m_engine.getRenderSystem()
 				, m_size
 				, m_left * scale
@@ -334,14 +334,14 @@ namespace castor3d
 				, m_top * scale
 				, m_near * scale
 				, m_far * scale );
-		case castor3d::ViewportType::ePerspective:
+		case ViewportType::ePerspective:
 			return viewport::getSafeBandedPerspective( *m_engine.getRenderSystem()
 				, m_size
 				, m_fovY
 				, m_ratio
 				, m_near * scale
 				, m_far * scale );
-		case castor3d::ViewportType::eInfinitePerspective:
+		case ViewportType::eInfinitePerspective:
 			return viewport::getSafeBandedInfinitePerspective( *m_engine.getRenderSystem()
 				, m_size
 				, m_fovY

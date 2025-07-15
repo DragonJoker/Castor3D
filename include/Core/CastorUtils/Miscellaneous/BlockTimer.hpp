@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Miscellaneous/PreciseTimer.hpp"
 #include "CastorUtils/Design/NonCopyable.hpp"
 
-namespace castor
+namespace c3d
 {
 	class BlockTimer
 		: public NonMovable
@@ -40,8 +40,8 @@ namespace castor
 	};
 }
 
-#define CU_TimeNoFile( Name ) castor::BlockTimer CU_Join( timer, __LINE__ ){ "", __FUNCTION__, Name, uint32_t( __LINE__ ) }
-#define CU_TimeEx( Name ) castor::BlockTimer CU_Join( timer, __LINE__ ){ __FILE__, __FUNCTION__, Name, uint32_t( __LINE__ ) }
-#define CU_Time() castor::BlockTimer CU_Join( timer, __LINE__ ){ __FILE__, __FUNCTION__, "", uint32_t( __LINE__ ) }
+#define CU_TimeNoFile( Name ) c3d::BlockTimer CU_Join( timer, __LINE__ ){ "", __FUNCTION__, Name, uint32_t( __LINE__ ) }
+#define CU_TimeEx( Name ) c3d::BlockTimer CU_Join( timer, __LINE__ ){ __FILE__, __FUNCTION__, Name, uint32_t( __LINE__ ) }
+#define CU_Time() c3d::BlockTimer CU_Join( timer, __LINE__ ){ __FILE__, __FUNCTION__, "", uint32_t( __LINE__ ) }
 
 #endif

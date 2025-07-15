@@ -9,30 +9,30 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::ComboBoxCtrl >
-		: public TextWriterT< castor3d::ComboBoxCtrl >
+	class TextWriter< ComboBoxCtrl >
+		: public TextWriterT< ComboBoxCtrl >
 	{
 	public:
 		explicit TextWriter( String const & tabs );
-		bool operator()( castor3d::ComboBoxCtrl const & overlay
-			, castor::StringStream & file )override;
+		bool operator()( ComboBoxCtrl const & overlay
+			, StringStream & file )override;
 
 	private:
 		String m_prefix;
 	};
 
 	template<>
-	class TextWriter< castor3d::ComboBoxStyle >
-		: public TextWriterT< castor3d::ComboBoxStyle >
+	class TextWriter< ComboBoxStyle >
+		: public TextWriterT< ComboBoxStyle >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, String const & fontName );
-		bool operator()( castor3d::ComboBoxStyle const & overlay
-			, castor::StringStream & file )override;
+		bool operator()( ComboBoxStyle const & overlay
+			, StringStream & file )override;
 
 	private:
 		String m_fontName;

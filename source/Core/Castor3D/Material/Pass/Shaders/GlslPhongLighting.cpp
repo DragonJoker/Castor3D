@@ -14,7 +14,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//*********************************************************************************************
 
@@ -39,11 +39,11 @@ namespace castor3d::shader
 			, false
 			, false
 			, enableVolumetric
-			, castor::String{ cuT( "c3d_phong_" ) } }
+			, String{ cuT( "c3d_phong_" ) } }
 	{
 	}
 
-	castor::StringView PhongLightingModel::getName()
+	String PhongLightingModel::getName()
 	{
 		return cuT( "c3d.phong" );
 	}
@@ -58,7 +58,7 @@ namespace castor3d::shader
 		, Lights & lights
 		, bool enableVolumetric )
 	{
-		return castor::makeUniqueDerived< LightingModel, PhongLightingModel >( lightingModelId
+		return makeUniqueDerived< LightingModel, PhongLightingModel >( lightingModelId
 			, writer
 			, materials
 			, utils

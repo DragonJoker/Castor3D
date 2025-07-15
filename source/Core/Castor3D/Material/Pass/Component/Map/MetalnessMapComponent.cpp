@@ -18,21 +18,21 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::MetalnessMapComponent >
-		: public TextWriterT< castor3d::MetalnessMapComponent >
+	class TextWriter< MetalnessMapComponent >
+		: public TextWriterT< MetalnessMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, uint32_t mask )
-			: TextWriterT< castor3d::MetalnessMapComponent >{ tabs }
+			: TextWriterT< MetalnessMapComponent >{ tabs }
 			, m_mask{ mask }
 		{
 		}
 
-		bool operator()( castor3d::MetalnessMapComponent const & object
+		bool operator()( MetalnessMapComponent const & object
 			, StringStream & file )override
 		{
 			return writeMask( file, cuT( "metalness_mask" ), m_mask );
@@ -46,10 +46,7 @@ namespace castor
 	private:
 		uint32_t m_mask;
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace mtlcmp
@@ -120,7 +117,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void MetalnessMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void MetalnessMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "metalness" )
@@ -132,29 +129,29 @@ namespace castor3d
 					, 0x00FF0000 );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "metalness_mask" )
 			, mtlcmp::parserUnitMetalnessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "metalness_mask" )
 			, mtlcmp::parserUnitMetalnessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "metalness" )
 			, mtlcmp::parserTexRemapMetalness );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "metalness_mask" )
 			, mtlcmp::parserTexRemapMetalnessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 
 	bool MetalnessMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -166,17 +163,17 @@ namespace castor3d
 	}
 
 	void MetalnessMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, MetalnessMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, MetalnessMapComponent >( pass ) );
 	}
 
 	bool MetalnessMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< MetalnessMapComponent >{ tabs, mask }( file );
+		return TextWriter< MetalnessMapComponent >{ tabs, mask }( file );
 	}
 
 	void MetalnessMapComponent::Plugin::doUpdateComponent( PassComponentRegister const & passComponents
@@ -196,7 +193,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const MetalnessMapComponent::TypeName = C3D_MakePassMapComponentName( "metalness" );
+	String const MetalnessMapComponent::TypeName = C3D_MakePassMapComponentName( "metalness" );
 
 	MetalnessMapComponent::MetalnessMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -208,7 +205,7 @@ namespace castor3d
 
 	PassComponentUPtr MetalnessMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, MetalnessMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, MetalnessMapComponent >( pass );
 	}
 
 	void MetalnessMapComponent::doFillConfig( TextureConfiguration & configuration
@@ -220,13 +217,13 @@ namespace castor3d
 
 	PassMapDefaultImageParams MetalnessMapComponent::createDefaultImage()const
 	{
-		castor::String name{ cuT( "DefaultMetalness" ) };
-		castor::ByteArray data;
+		String name{ cuT( "DefaultMetalness" ) };
+		ByteArray data;
 		data.resize( sizeof( float ) );
 		float value = 1.0f;
 		std::memcpy( data.data(), &value, data.size() );
 		return { name
-			, castor::ImageCreateParams{ castor::getFormatName( castor::PixelFormat::eR32_SFLOAT ), data } };
+			, ImageCreateParams{ getFormatName( PixelFormat::eR32_SFLOAT ), data } };
 	}
 
 	//*********************************************************************************************

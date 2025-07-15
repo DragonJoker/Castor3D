@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	struct OverlayData
 		: public sdw::StructInstanceHelperT < "C3D_OverlayData"
@@ -37,7 +37,7 @@ namespace castor3d::shader
 		OverlayData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -220,7 +220,7 @@ namespace castor3d::shader
 		OverlaysIDs( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -239,7 +239,7 @@ namespace castor3d::shader
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd430\
 		, true };\
-	auto c3d_overlaysData = c3d_overlaysDataBuffer.declMemberArray< castor3d::shader::OverlayData >( "d" );\
+	auto c3d_overlaysData = c3d_overlaysDataBuffer.declMemberArray< c3d::shader::OverlayData >( "d" );\
 	c3d_overlaysDataBuffer.end()
 
 #define C3D_OverlaysIDs( writer, binding, set )\
@@ -250,7 +250,7 @@ namespace castor3d::shader
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd430\
 		, true };\
-	auto c3d_overlaysIDs = c3d_overlaysIDsBuffer.declMember< castor3d::shader::OverlaysIDs >( "d" );\
+	auto c3d_overlaysIDs = c3d_overlaysIDsBuffer.declMember< c3d::shader::OverlaysIDs >( "d" );\
 	c3d_overlaysIDsBuffer.end()
 
 #endif

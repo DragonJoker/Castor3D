@@ -7,7 +7,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -16,10 +16,10 @@ namespace castor3d
 		ColourGradingData::ColourGradingData( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 			, m_paramsLogC{ writer.declGlobalArray( "c3d_paramsLogC"
 				, 7u
-				, castor::Vector< sdw::Float >{ 0.011361_f /* cut */
+				, Vector< sdw::Float >{ 0.011361_f /* cut */
 					, 5.555556_f /* a */
 					, 0.047996_f /* b */
 					, 0.244161_f /* c */

@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #include <cstddef>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Buffer */
 	//@{
@@ -231,8 +231,8 @@ namespace castor3d
 	template< typename DataT >
 	class GpuLinearAllocatorT;
 
-	using GpuBufferBuddyAllocator = castor::BuddyAllocatorT< GpuBufferBuddyAllocatorTraits >;
-	using GpuBufferBuddyAllocatorUPtr = castor::RawUniquePtr< GpuBufferBuddyAllocator >;
+	using GpuBufferBuddyAllocator = BuddyAllocatorT< GpuBufferBuddyAllocatorTraits >;
+	using GpuBufferBuddyAllocatorUPtr = RawUniquePtr< GpuBufferBuddyAllocator >;
 	using GpuBuddyBuffer = GpuBufferT< GpuBufferBuddyAllocator >;
 	using GpuLinearBuffer = GpuBufferT< GpuBufferLinearAllocator >;
 	using GpuPackedBuffer = GpuBufferT< GpuBufferPackedAllocator >;
@@ -245,21 +245,21 @@ namespace castor3d
 	class InstantUploadDataT;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, GpuBufferPool, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ObjectBufferPool, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PoolUniformBuffer, C3D_API );
-	CU_DeclareSmartPtr( castor3d, UniformBufferBase, C3D_API );
-	CU_DeclareSmartPtr( castor3d, UniformBufferPool, C3D_API );
-	CU_DeclareSmartPtr( castor3d, VertexBufferPool, C3D_API );
-	CU_DeclareSmartPtr( castor3d, IndexBufferPool, C3D_API );
-	CU_DeclareSmartPtr( castor3d, GpuBuddyBuffer, C3D_API );
-	CU_DeclareSmartPtr( castor3d, GpuLinearBuffer, C3D_API );
-	CU_DeclareSmartPtr( castor3d, GpuPackedBuffer, C3D_API );
-	CU_DeclareSmartPtr( castor3d, GpuPackedBaseBuffer, C3D_API );
-	CU_DeclareSmartPtr( castor3d, GpuBufferBase, C3D_API );
-	CU_DeclareSmartPtr( castor3d, UploadData, C3D_API );
+	CU_DeclareSmartPtr( c3d, GpuBufferPool, C3D_API );
+	CU_DeclareSmartPtr( c3d, ObjectBufferPool, C3D_API );
+	CU_DeclareSmartPtr( c3d, PoolUniformBuffer, C3D_API );
+	CU_DeclareSmartPtr( c3d, UniformBufferBase, C3D_API );
+	CU_DeclareSmartPtr( c3d, UniformBufferPool, C3D_API );
+	CU_DeclareSmartPtr( c3d, VertexBufferPool, C3D_API );
+	CU_DeclareSmartPtr( c3d, IndexBufferPool, C3D_API );
+	CU_DeclareSmartPtr( c3d, GpuBuddyBuffer, C3D_API );
+	CU_DeclareSmartPtr( c3d, GpuLinearBuffer, C3D_API );
+	CU_DeclareSmartPtr( c3d, GpuPackedBuffer, C3D_API );
+	CU_DeclareSmartPtr( c3d, GpuPackedBaseBuffer, C3D_API );
+	CU_DeclareSmartPtr( c3d, GpuBufferBase, C3D_API );
+	CU_DeclareSmartPtr( c3d, UploadData, C3D_API );
 
-	CU_DeclareTemplateSmartPtr( castor3d, UniformBuffer );
+	CU_DeclareTemplateSmartPtr( c3d, UniformBuffer );
 	/** @endcond */
 
 	/**
@@ -302,13 +302,13 @@ namespace castor3d
 	C3D_API void copyBuffer( ashes::CommandBuffer const & commandBuffer
 		, ashes::BufferBase const & src
 		, ashes::BufferBase const & dst
-		, castor::Vector< VkBufferCopy > const & regions
+		, Vector< VkBufferCopy > const & regions
 		, AccessFlags dstAccessFlags
 		, PipelineStageFlags dstPipelineFlags );
 	C3D_API void updateBuffer( ashes::CommandBuffer const & commandBuffer
-		, castor::ByteArray data
+		, ByteArray data
 		, ashes::BufferBase const & dst
-		, castor::Vector< VkBufferCopy > const & regions
+		, Vector< VkBufferCopy > const & regions
 		, AccessFlags dstAccessFlags
 		, PipelineStageFlags dstPipelineFlags );
 	//@}

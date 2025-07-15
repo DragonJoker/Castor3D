@@ -1,7 +1,7 @@
 /*
 See LICENSE file in root folder
 */
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//*********************************************************************************************
 
@@ -9,7 +9,7 @@ namespace castor3d::shader
 	PrepassOutputT< FlagT >::PrepassOutputT( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: sdw::StructInstance{ writer, castor::move( expr ), enabled }
+		: sdw::StructInstance{ writer, c3d::move( expr ), enabled }
 		, depthObj{ this->getMember< sdw::Vec4 >( "depthObj" ) }
 		, visibility{ this->getMember< sdw::UVec2 >( "visibility", true ) }
 		, velocity{ this->getMember< sdw::Vec2 >( "velocity", true ) }
@@ -74,7 +74,7 @@ namespace castor3d::shader
 	ShadowsOutputT< FlagT >::ShadowsOutputT( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: sdw::StructInstance{ writer, castor::move( expr ), enabled }
+		: sdw::StructInstance{ writer, c3d::move( expr ), enabled }
 		, linear{ this->getMember< sdw::Float >( "linear" ) }
 		, variance{ this->getMember< sdw::Vec2 >( "variance", true ) }
 		, normal{ this->getMember< sdw::Vec4 >( "normal", true ) }

@@ -23,11 +23,11 @@
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
-CU_ImplementSmartPtr( castor3d, GaussianBlur )
+CU_ImplementSmartPtr( c3d, GaussianBlur )
 
 #pragma GCC diagnostic ignored "-Wrestrict"
 
-namespace castor3d
+namespace c3d
 {
 	namespace passgauss
 	{
@@ -49,7 +49,7 @@ namespace castor3d
 			TexcoordT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
-				: TexcoordStructT< FlagT >{ writer, castor::move( expr ), enabled }
+				: TexcoordStructT< FlagT >{ writer, c3d::move( expr ), enabled }
 			{
 			}
 
@@ -100,9 +100,9 @@ namespace castor3d
 			return writer.getBuilder().releaseShader();
 		}
 
-		static castor::Vector< float > getHalfPascal( uint32_t height )
+		static Vector< float > getHalfPascal( uint32_t height )
 		{
-			castor::Vector< float > result;
+			Vector< float > result;
 			result.resize( height );
 			auto x = 1.0f;
 			auto max = 1 + height;
@@ -159,18 +159,18 @@ namespace castor3d
 			}
 
 			result.name = source.data->name;
-			result.name += "L" + castor::string::toMbString( layer );
-			result.name += "M" + castor::string::toMbString( level );
+			result.name += "L" + string::toMbString( layer );
+			result.name += "M" + string::toMbString( level );
 			return result;
 		}
 
 		static crg::ImageViewId createIntermediate( crg::FramePassGroup const & graph
-			, castor::String const & prefix
-			, castor::PixelFormat format
+			, String const & prefix
+			, PixelFormat format
 			, Extent3D const & size
 			, uint32_t mipLevels )
 		{
-			auto mbPrefix = castor::toUtf8( prefix );
+			auto mbPrefix = toUtf8( prefix );
 			auto intermediate = graph.createImage( crg::ImageData{ mbPrefix + "GB"
 				, ImageCreateFlags::eNone
 				, ImageType::e2D
@@ -214,10 +214,10 @@ namespace castor3d
 
 	//*********************************************************************************************
 	
-	castor::MbString const GaussianBlur::Config = "Config";
-	castor::MbString const GaussianBlur::Coefficients = "c3d_coefficients";
-	castor::MbString const GaussianBlur::CoefficientsCount = "c3d_coefficientsCount";
-	castor::MbString const GaussianBlur::TextureSize = "c3d_textureSize";
+	MbString const GaussianBlur::Config = "Config";
+	MbString const GaussianBlur::Coefficients = "c3d_coefficients";
+	MbString const GaussianBlur::CoefficientsCount = "c3d_coefficientsCount";
+	MbString const GaussianBlur::TextureSize = "c3d_textureSize";
 
 	GaussianBlur::~GaussianBlur()noexcept
 	{
@@ -227,7 +227,7 @@ namespace castor3d
 	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
-		, castor::String const & prefix
+		, String const & prefix
 		, crg::ImageViewIdArray const & views
 		, crg::ImageViewId const & intermediateView
 		, uint32_t kernelSize
@@ -274,7 +274,7 @@ namespace castor3d
 							.isEnabled( isEnabled )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesX ) )
 							.build( framePass, context, runnable );
-						m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+						m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 							, result->getTimer() );
 						return result;
 					} );
@@ -299,7 +299,7 @@ namespace castor3d
 							.isEnabled( isEnabled )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesY ) )
 							.build( framePass, context, runnable );
-						m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+						m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 							, result->getTimer() );
 						return result;
 					} );
@@ -315,7 +315,7 @@ namespace castor3d
 	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
-		, castor::String const & prefix
+		, String const & prefix
 		, crg::ImageViewIdArray const & views
 		, uint32_t kernelSize
 		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
@@ -333,7 +333,7 @@ namespace castor3d
 	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
-		, castor::String const & prefix
+		, String const & prefix
 		, crg::ImageViewId const & view
 		, uint32_t kernelSize
 		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
@@ -351,7 +351,7 @@ namespace castor3d
 	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
-		, castor::String const & prefix
+		, String const & prefix
 		, crg::ImageViewId const & view
 		, crg::ImageViewId const & intermediateView
 		, uint32_t kernelSize

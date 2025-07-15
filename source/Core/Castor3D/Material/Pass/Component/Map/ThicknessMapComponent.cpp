@@ -17,16 +17,16 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::ThicknessMapComponent >
-		: public TextWriterT< castor3d::ThicknessMapComponent >
+	class TextWriter< ThicknessMapComponent >
+		: public TextWriterT< ThicknessMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, uint32_t mask = 0u )
-			: TextWriterT< castor3d::ThicknessMapComponent >{ tabs }
+			: TextWriterT< ThicknessMapComponent >{ tabs }
 			, m_mask{ mask }
 		{
 		}
@@ -36,7 +36,7 @@ namespace castor
 			return writeMask( file, cuT( "thickness_mask" ), m_mask );
 		}
 
-		bool operator()( castor3d::ThicknessMapComponent const & object
+		bool operator()( ThicknessMapComponent const & object
 			, StringStream & file )override
 		{
 			return true;
@@ -45,10 +45,7 @@ namespace castor
 	private:
 		uint32_t m_mask;
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace trscmp
@@ -119,7 +116,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void ThicknessMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void ThicknessMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "thickness" )
@@ -131,29 +128,29 @@ namespace castor3d
 					, 0x0000FF00u );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "thickness_mask" )
 			, trscmp::parserUnitAttenuationMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "thickness_mask" )
 			, trscmp::parserUnitAttenuationMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "thickness" )
 			, trscmp::parserTexRemapAttenuation );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "thickness_mask" )
 			, trscmp::parserTexRemapAttenuationMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 
 	bool ThicknessMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -165,22 +162,22 @@ namespace castor3d
 	}
 
 	void ThicknessMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, ThicknessMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, ThicknessMapComponent >( pass ) );
 	}
 
 	bool ThicknessMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< ThicknessMapComponent >{ tabs, mask }( file );
+		return TextWriter< ThicknessMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const ThicknessMapComponent::TypeName = C3D_MakePassMapComponentName( "thickness" );
+	String const ThicknessMapComponent::TypeName = C3D_MakePassMapComponentName( "thickness" );
 
 	ThicknessMapComponent::ThicknessMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -192,7 +189,7 @@ namespace castor3d
 
 	PassComponentUPtr ThicknessMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, ThicknessMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, ThicknessMapComponent >( pass );
 	}
 
 	void ThicknessMapComponent::doFillConfig( TextureConfiguration & configuration

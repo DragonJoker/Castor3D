@@ -3,7 +3,7 @@
 #include "Castor3D/Material/Pass/Component/PassComponent.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	bool operator==( PassComponentCombine const & lhs, PassComponentCombine const & rhs )noexcept
 	{
@@ -18,7 +18,7 @@ namespace castor3d
 	}
 
 	bool hasAny( PassComponentCombine const & lhs
-		, castor::Vector< PassComponentFlag > const & rhs )noexcept
+		, Vector< PassComponentFlag > const & rhs )noexcept
 	{
 		return std::any_of( rhs.begin()
 			, rhs.end()
@@ -98,7 +98,7 @@ namespace castor3d
 				auto [lookupComponentId, lookupComponentFlag] = splitPassComponentFlag( lookup );
 				return lookupComponentId == testComponentId
 					&& ( testComponentFlag == 0u
-						|| castor::hasAll( lookupComponentFlag, testComponentFlag ) );
+						|| hasAll( lookupComponentFlag, testComponentFlag ) );
 			} );
 	}
 

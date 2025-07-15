@@ -32,7 +32,7 @@ namespace GuiCommon
 		*\param[in]	toneMapping	L'objet cible.
 		*/
 		ExportOptionsTreeItemProperty( bool editable
-			, castor3d::exporter::ExportOptions & options );
+			, c3d::exporter::ExportOptions & options );
 
 	private:
 		/**
@@ -41,7 +41,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::exporter::ExportOptions & m_options;
+		c3d::exporter::ExportOptions & m_options;
 	};
 }
 

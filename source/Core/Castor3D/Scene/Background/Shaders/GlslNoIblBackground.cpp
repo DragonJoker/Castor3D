@@ -8,16 +8,16 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
-	castor::String const NoIblBackgroundModel::Name = cuT( "c3d.no_ibl" );
+	String const NoIblBackgroundModel::Name = cuT( "c3d.no_ibl" );
 
 	NoIblBackgroundModel::NoIblBackgroundModel( sdw::ShaderWriter & writer
 		, Utils & utils
 		, Extent2D targetSize
 		, uint32_t & binding
 		, uint32_t set )
-		: BackgroundModel{ writer, utils, castor::move( targetSize ), false, false, false }
+		: BackgroundModel{ writer, utils, c3d::move( targetSize ), false, false, false }
 	{
 		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapBackground"
 			, binding
@@ -33,9 +33,9 @@ namespace castor3d::shader
 		, uint32_t & binding
 		, uint32_t set )
 	{
-		return castor::make_unique< NoIblBackgroundModel >( writer
+		return makeRawUnique< NoIblBackgroundModel >( writer
 			, utils
-			, castor::move( targetSize )
+			, c3d::move( targetSize )
 			, binding
 			, set );
 	}

@@ -12,19 +12,19 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
 	namespace binsmsh
 	{
-		static bool check( castor::Point4f & value )
+		static bool check( Point4f & value )
 		{
 			return !std::isnan( value->x )
 				&& !std::isnan( value->y )
 				&& !std::isnan( value->z )
 				&& !std::isnan( value->w )
-				&& value != castor::Point4f{};
+				&& value != Point4f{};
 		}
 
 		static void validate( Version const & fileVersion
@@ -99,9 +99,9 @@ namespace castor3d
 	namespace v1_5
 	{
 		inline void dispatchVertices( InterleavedVertexNoMikkArray const & src
-			, castor::Point3fArray & pos
-			, castor::Point3fArray & nml
-			, castor::Point3fArray & tex )
+			, Point3fArray & pos
+			, Point3fArray & nml
+			, Point3fArray & tex )
 		{
 			pos.reserve( src.size() );
 			nml.reserve( src.size() );
@@ -245,15 +245,15 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template<>
-	castor::String BinaryParserBase< Submesh >::Name = cuT( "Submesh" );
+	String BinaryParserBase< Submesh >::Name = cuT( "Submesh" );
 
 	bool BinaryParser< Submesh >::doParse( Submesh & obj )
 	{
 		bool result = true;
-		castor::String name;
-		castor::Vector< FaceIndices > faces;
-		castor::Vector< LineIndices > lines;
-		castor::Point3fArray values;
+		String name;
+		Vector< FaceIndices > faces;
+		Vector< LineIndices > lines;
+		Point3fArray values;
 		uint32_t count{ 0u };
 		uint32_t components{ 0u };
 		uint32_t faceCount{ 0u };
@@ -276,7 +276,7 @@ namespace castor3d
 				}
 				break;
 			case ChunkType::eSubmeshPositions:
-				if ( auto component = castor::makeUnique< PositionsComponent >( obj ) )
+				if ( auto component = makeUnique< PositionsComponent >( obj ) )
 				{
 					result = doParseChunk( values, chunk );
 					checkError( result, cuT( "Couldn't parse vertex positions." ) );
@@ -284,12 +284,12 @@ namespace castor3d
 					if ( result )
 					{
 						component->getData().setData( values );
-						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
+						obj.addComponent( ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
 			case ChunkType::eSubmeshNormals:
-				if ( auto component = castor::makeUnique< NormalsComponent >( obj ) )
+				if ( auto component = makeUnique< NormalsComponent >( obj ) )
 				{
 					result = doParseChunk( values, chunk );
 					checkError( result, cuT( "Couldn't parse vertex normals." ) );
@@ -297,14 +297,14 @@ namespace castor3d
 					if ( result )
 					{
 						component->getData().setData( values );
-						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
+						obj.addComponent( ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
 			case ChunkType::eSubmeshTangentsMikkt:
-				if ( auto component = castor::makeUnique< TangentsComponent >( obj ) )
+				if ( auto component = makeUnique< TangentsComponent >( obj ) )
 				{
-					castor::Point4fArray tangents;
+					Point4fArray tangents;
 					tangents.resize( count );
 					result = doParseChunk( tangents, chunk );
 					checkError( result, cuT( "Couldn't parse vertex tangents." ) );
@@ -312,12 +312,12 @@ namespace castor3d
 					if ( result )
 					{
 						component->getData().setData( tangents );
-						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
+						obj.addComponent( ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
 			case ChunkType::eSubmeshBitangents:
-				if ( auto component = castor::makeUnique< BitangentsComponent >( obj ) )
+				if ( auto component = makeUnique< BitangentsComponent >( obj ) )
 				{
 					result = doParseChunk( values, chunk );
 					checkError( result, cuT( "Couldn't parse vertex bitangents." ) );
@@ -325,12 +325,12 @@ namespace castor3d
 					if ( result )
 					{
 						component->getData().setData( values );
-						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
+						obj.addComponent( ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
 			case ChunkType::eSubmeshTexcoords0:
-				if ( auto component = castor::makeUnique< Texcoords0Component >( obj ) )
+				if ( auto component = makeUnique< Texcoords0Component >( obj ) )
 				{
 					result = doParseChunk( values, chunk );
 					checkError( result, cuT( "Couldn't parse vertex texcoords0." ) );
@@ -338,12 +338,12 @@ namespace castor3d
 					if ( result )
 					{
 						component->getData().setData( values );
-						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
+						obj.addComponent( ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
 			case ChunkType::eSubmeshTexcoords1:
-				if ( auto component = castor::makeUnique< Texcoords1Component >( obj ) )
+				if ( auto component = makeUnique< Texcoords1Component >( obj ) )
 				{
 					result = doParseChunk( values, chunk );
 					checkError( result, cuT( "Couldn't parse vertex texcoords1." ) );
@@ -351,12 +351,12 @@ namespace castor3d
 					if ( result )
 					{
 						component->getData().setData( values );
-						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
+						obj.addComponent( ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
 			case ChunkType::eSubmeshTexcoords2:
-				if ( auto component = castor::makeUnique< Texcoords2Component >( obj ) )
+				if ( auto component = makeUnique< Texcoords2Component >( obj ) )
 				{
 					result = doParseChunk( values, chunk );
 					checkError( result, cuT( "Couldn't parse vertex texcoords2." ) );
@@ -364,12 +364,12 @@ namespace castor3d
 					if ( result )
 					{
 						component->getData().setData( values );
-						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
+						obj.addComponent( ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
 			case ChunkType::eSubmeshTexcoords3:
-				if ( auto component = castor::makeUnique< Texcoords3Component >( obj ) )
+				if ( auto component = makeUnique< Texcoords3Component >( obj ) )
 				{
 					result = doParseChunk( values, chunk );
 					checkError( result, cuT( "Couldn't parse vertex texcoords3." ) );
@@ -377,12 +377,12 @@ namespace castor3d
 					if ( result )
 					{
 						component->getData().setData( values );
-						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
+						obj.addComponent( ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
 			case ChunkType::eSubmeshColours:
-				if ( auto component = castor::makeUnique< ColoursComponent >( obj ) )
+				if ( auto component = makeUnique< ColoursComponent >( obj ) )
 				{
 					result = doParseChunk( values, chunk );
 					checkError( result, cuT( "Couldn't parse vertex colours." ) );
@@ -390,31 +390,31 @@ namespace castor3d
 					if ( result )
 					{
 						component->getData().setData( values );
-						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
+						obj.addComponent( ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
 			case ChunkType::eBonesComponent:
-				if ( auto component = castor::makeUnique< SkinComponent >( obj ) )
+				if ( auto component = makeUnique< SkinComponent >( obj ) )
 				{
 					result = createBinaryParser< SkinComponent >().parse( *component, chunk );
 					checkError( result, cuT( "Couldn't parse bones component." ) );
 
 					if ( result )
 					{
-						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
+						obj.addComponent( ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
 			case ChunkType::eMorphComponent:
-				if ( auto component = castor::makeUnique< MorphComponent >( obj ) )
+				if ( auto component = makeUnique< MorphComponent >( obj ) )
 				{
 					result = createBinaryParser< MorphComponent >().parse( *component, chunk );
 					checkError( result, cuT( "Couldn't parse morph component." ) );
 
 					if ( result )
 					{
-						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
+						obj.addComponent( ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
@@ -481,9 +481,9 @@ namespace castor3d
 			{
 				if ( indexMapping->getType() == TriFaceMapping::TypeName )
 				{
-					auto component = castor::makeUnique< TangentsComponent >( obj );
+					auto component = makeUnique< TangentsComponent >( obj );
 					component->getData().getData().resize( count );
-					obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
+					obj.addComponent( ptrRefCast< SubmeshComponent >( component ) );
 					indexMapping->computeTangents();
 				}
 			}
@@ -504,13 +504,13 @@ namespace castor3d
 
 		if ( m_fileVersion <= Version{ 1, 3, 0 } )
 		{
-			castor::Vector< FaceIndices > faces;
-			castor::Vector< OldInterleavedVertexT< double > > srcbuf;
+			Vector< FaceIndices > faces;
+			Vector< OldInterleavedVertexT< double > > srcbuf;
 			uint32_t count{ 0u };
 			uint32_t faceCount{ 0u };
 			BinaryChunk chunk{ doIsLittleEndian() };
 			uint32_t boneCount{ 0u };
-			castor::Vector< VertexBoneData > bones;
+			Vector< VertexBoneData > bones;
 
 			while ( result && doGetSubChunk( chunk ) )
 			{
@@ -577,7 +577,7 @@ namespace castor3d
 
 						for ( auto & face : faces )
 						{
-							castor::swap( face.m_index[1], face.m_index[2] );
+							c3d::swap( face.m_index[1], face.m_index[2] );
 						}
 
 						indexMapping->getData().addFaceGroup( faces );

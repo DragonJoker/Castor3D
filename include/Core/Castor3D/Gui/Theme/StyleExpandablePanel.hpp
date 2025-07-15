@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "StylePanel.hpp"
 #include "StyleStatic.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class ExpandablePanelStyle
 		: public ControlStyle
@@ -16,10 +16,10 @@ namespace castor3d
 	public:
 		static ControlType constexpr Type = ControlType::eExpandablePanel;
 
-		ExpandablePanelStyle( castor::String const & name
+		ExpandablePanelStyle( String const & name
 			, Scene * scene
 			, Engine & engine
-			, castor::String const & fontName )
+			, String const & fontName )
 			: ControlStyle{ Type
 				, name
 				, scene
@@ -30,9 +30,9 @@ namespace castor3d
 		{
 		}
 
-		ExpandablePanelStyle( castor::String const & name
+		ExpandablePanelStyle( String const & name
 			, Engine & engine
-			, castor::String const & fontName )
+			, String const & fontName )
 			: ExpandablePanelStyle{ name, nullptr, engine, fontName }
 		{
 		}

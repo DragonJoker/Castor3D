@@ -2,7 +2,7 @@
 
 #include "CastorUtils/Config/MultiThreadConfig.hpp"
 
-namespace castor
+namespace c3d
 {
 	WorkerThread::WorkerThread()
 		: m_thread{ [this]()
@@ -22,7 +22,7 @@ namespace castor
 	void WorkerThread::feed( Job job )
 	{
 		CU_Require( m_start == false );
-		m_currentJob = castor::move( job );
+		m_currentJob = c3d::move( job );
 		m_start = true;
 	}
 

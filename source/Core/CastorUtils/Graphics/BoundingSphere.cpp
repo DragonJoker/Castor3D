@@ -1,9 +1,9 @@
 #include "CastorUtils/Graphics/BoundingSphere.hpp"
 #include "CastorUtils/Graphics/BoundingBox.hpp"
 
-CU_ImplementSmartPtr( castor, BoundingSphere )
+CU_ImplementSmartPtr( c3d, BoundingSphere )
 
-namespace castor
+namespace c3d
 {
 	BoundingSphere::BoundingSphere( Point3f const & center, float radius )
 		: BoundingContainer3D{ center }

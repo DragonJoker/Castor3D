@@ -2,7 +2,7 @@
 
 #include "CastorUtils/Miscellaneous/Utils.hpp"
 
-namespace castor
+namespace c3d
 {
 	TextFile::TextFile( Path const & fileName
 		, FlagCombination< OpenMode > const & mode

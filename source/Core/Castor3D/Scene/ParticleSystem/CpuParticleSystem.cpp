@@ -8,9 +8,9 @@
 #include "Castor3D/Scene/ParticleSystem/ParticleUpdater.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
-CU_ImplementSmartPtr( castor3d, CpuParticleSystem )
+CU_ImplementSmartPtr( c3d, CpuParticleSystem )
 
-namespace castor3d
+namespace c3d
 {
 	CpuParticleSystem::CpuParticleSystem( ParticleSystem & parent )
 		: ParticleSystemImpl{ ParticleSystemImpl::Type::eCpu, parent }
@@ -40,7 +40,7 @@ namespace castor3d
 		m_firstUnused = 1u;
 	}
 
-	void CpuParticleSystem::update( castor3d::CpuUpdater & updater )
+	void CpuParticleSystem::update( CpuUpdater & updater )
 	{
 		auto firstUnused = m_firstUnused;
 
@@ -53,7 +53,7 @@ namespace castor3d
 		doPackParticles();
 	}
 
-	uint32_t CpuParticleSystem::update( castor3d::GpuUpdater & updater )
+	uint32_t CpuParticleSystem::update( GpuUpdater & updater )
 	{
 		auto & vbo = m_parent.getBillboards()->getVertexBuffer();
 		auto stride = m_inputs.stride();
@@ -69,7 +69,7 @@ namespace castor3d
 		return m_firstUnused;
 	}
 
-	void CpuParticleSystem::addParticleVariable( castor::String const & name, ParticleFormat type, castor::String const & defaultValue )
+	void CpuParticleSystem::addParticleVariable( String const & name, ParticleFormat type, String const & defaultValue )
 	{
 		m_inputs.push_back( ParticleElementDeclaration{ name, ElementUsage::eUnknown, type, m_inputs.stride() } );
 	}
@@ -86,12 +86,12 @@ namespace castor3d
 
 	ParticleEmitter * CpuParticleSystem::addEmitter( ParticleEmitterUPtr emitter )
 	{
-		m_emitters.emplace_back( castor::move( emitter ) );
+		m_emitters.emplace_back( c3d::move( emitter ) );
 		auto result = m_emitters.back().get();
 
 		if ( result )
 		{
-			m_onEmits.emplace_back( result->onEmit.connect( [this]( castor3d::Particle const & particle )
+			m_onEmits.emplace_back( result->onEmit.connect( [this]( Particle const & particle )
 				{
 					onEmit( particle );
 				} ) );
@@ -102,7 +102,7 @@ namespace castor3d
 
 	ParticleUpdater * CpuParticleSystem::addUpdater( ParticleUpdaterUPtr updater )
 	{
-		m_updaters.emplace_back( castor::move( updater ) );
+		m_updaters.emplace_back( c3d::move( updater ) );
 		return m_updaters.back().get();
 	}
 }

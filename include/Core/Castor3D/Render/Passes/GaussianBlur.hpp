@@ -18,13 +18,13 @@ See LICENSE file in root folder
 
 #include <ShaderAST/Shader.hpp>
 
-namespace castor3d
+namespace c3d
 {
-	using TextureViewCRef = castor::ReferenceWrapper< TextureView const >;
-	using TextureViewCRefArray = castor::Vector< TextureViewCRef >;
+	using TextureViewCRef = ReferenceWrapper< TextureView const >;
+	using TextureViewCRefArray = Vector< TextureViewCRef >;
 
 	class GaussianBlur
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
 		C3D_API ~GaussianBlur()noexcept;
@@ -53,7 +53,7 @@ namespace castor3d
 		C3D_API GaussianBlur( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
-			, castor::String const & prefix
+			, String const & prefix
 			, crg::ImageViewIdArray const & views
 			, crg::ImageViewId const & intermediateView
 			, uint32_t kernelSize
@@ -81,7 +81,7 @@ namespace castor3d
 		C3D_API GaussianBlur( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
-			, castor::String const & prefix
+			, String const & prefix
 			, crg::ImageViewIdArray const & views
 			, uint32_t kernelSize
 			, crg::RunnablePass::IsEnabledCallback const & isEnabled = crg::RunnablePass::IsEnabledCallback( []() { return true; } ) );
@@ -108,7 +108,7 @@ namespace castor3d
 		C3D_API GaussianBlur( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
-			, castor::String const & prefix
+			, String const & prefix
 			, crg::ImageViewId const & view
 			, uint32_t kernelSize
 			, crg::RunnablePass::IsEnabledCallback const & isEnabled = crg::RunnablePass::IsEnabledCallback( []() { return true; } ) );
@@ -137,13 +137,13 @@ namespace castor3d
 		C3D_API GaussianBlur( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
-			, castor::String const & prefix
+			, String const & prefix
 			, crg::ImageViewId const & view
 			, crg::ImageViewId const & intermediateView
 			, uint32_t kernelSize
 			, crg::RunnablePass::IsEnabledCallback const & isEnabled = crg::RunnablePass::IsEnabledCallback( []() { return true; } ) );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		RenderTechniquePass::accept
 		 */
 		C3D_API void accept( ConfigurationVisitorBase & visitor )const;
 		/**
@@ -163,30 +163,30 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		C3D_API static castor::MbString const Config;
-		C3D_API static castor::MbString const Coefficients;
-		C3D_API static castor::MbString const CoefficientsCount;
-		C3D_API static castor::MbString const TextureSize;
+		C3D_API static MbString const Config;
+		C3D_API static MbString const Coefficients;
+		C3D_API static MbString const CoefficientsCount;
+		C3D_API static MbString const TextureSize;
 		C3D_API static constexpr uint32_t MaxCoefficients{ 60u };
 
 		struct Configuration
 		{
-			castor::Point2f textureSize;
+			Point2f textureSize;
 			uint32_t blurCoeffsCount;
 			uint32_t dump; // to keep a 16 byte alignment.
-			castor::Array< castor::Point4f, GaussianBlur::MaxCoefficients / 4u > blurCoeffs; // We then allow for 60 coeffs max, to have a 256 bytes struct.
+			Array< Point4f, GaussianBlur::MaxCoefficients / 4u > blurCoeffs; // We then allow for 60 coeffs max, to have a 256 bytes struct.
 		};
 
 	private:
 		crg::ImageViewIdArray m_sources;
 		RenderDevice const & m_device;
 		crg::FramePass const * m_lastPass;
-		castor::String m_prefix;
+		String m_prefix;
 		Extent2D m_size;
-		castor::PixelFormat m_format;
+		PixelFormat m_format;
 		crg::ImageViewId m_intermediateView;
 		UniformBufferOffsetT< Configuration > m_blurUbo;
-		castor::Vector< float > m_kernel;
+		Vector< float > m_kernel;
 		ProgramModule m_shaderX;
 		ProgramModule m_shaderY;
 		ashes::PipelineShaderStageCreateInfoArray m_stagesX;

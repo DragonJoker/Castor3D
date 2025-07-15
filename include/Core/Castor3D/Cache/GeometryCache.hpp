@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 #include <set>
 
-namespace castor3d
+namespace c3d
 {
 	C3D_API size_t hash( Geometry const & geometry
 		, Submesh const & submesh
@@ -25,8 +25,8 @@ namespace castor3d
 	\brief		Cache de Geometry.
 	*/
 	template<>
-	class ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >
-		: public ObjectCacheBaseT< Geometry, castor::String, GeometryCacheTraits >
+	class ObjectCacheT< Geometry, String, GeometryCacheTraits >
+		: public ObjectCacheBaseT< Geometry, String, GeometryCacheTraits >
 	{
 	public:
 		struct PoolsEntry
@@ -37,7 +37,7 @@ namespace castor3d
 			Pass const & pass;
 		};
 		using ElementT = Geometry;
-		using ElementKeyT = castor::String;
+		using ElementKeyT = String;
 		using ElementCacheTraitsT = GeometryCacheTraits;
 		using ElementObjectCacheT = ObjectCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementObjectCacheT::ElementPtrT;

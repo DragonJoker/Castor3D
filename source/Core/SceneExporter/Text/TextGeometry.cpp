@@ -6,10 +6,8 @@
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< Geometry >::TextWriter( String const & tabs )
 		: TextWriterT< Geometry >{ tabs }
 	{

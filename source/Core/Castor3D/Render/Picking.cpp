@@ -22,9 +22,9 @@
 #include <ashespp/Sync/Fence.hpp>
 #include <ashespp/Sync/Queue.hpp>
 
-CU_ImplementSmartPtr( castor3d, Picking )
+CU_ImplementSmartPtr( c3d, Picking )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -33,8 +33,8 @@ namespace castor3d
 		static int constexpr PickingOffset = int( PickingAreaWidth / 2 );
 		static int constexpr BufferOffset = ( PickingOffset * PickingAreaWidth ) + PickingOffset - 1;
 
-		inline castor::Position convertToTopDown( castor::Position const & position
-			, castor::Size const & size )
+		inline Position convertToTopDown( Position const & position
+			, Size const & size )
 		{
 			return
 			{
@@ -75,9 +75,9 @@ namespace castor3d
 			}
 		}
 
-		inline castor::Vector< VkBufferImageCopy > createPickDisplayRegions()
+		inline Vector< VkBufferImageCopy > createPickDisplayRegions()
 		{
-			castor::Vector< VkBufferImageCopy > result;
+			Vector< VkBufferImageCopy > result;
 
 			for ( int i = 0; i < int( PickingAreaWidth ); ++i )
 			{
@@ -103,11 +103,11 @@ namespace castor3d
 	Picking::Picking( crg::ResourcesCache const & resources
 		, RenderDevice const & device
 		, QueueData const & queueData
-		, castor::Size const & size
+		, Size const & size
 		, CameraUbo const & cameraUbo
 		, SceneUbo const & sceneUbo
 		, SceneCuller & culler )
-		: castor::OwnedBy< Engine >{ *device.renderSystem.getEngine() }
+		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, m_device{ device }
 		, m_bandSize{ getSafeBandSize( size ) }
 		, m_realSize{ getSafeBandedSize( size ) }
@@ -115,7 +115,7 @@ namespace castor3d
 		, m_colourImage{ m_graph.createImage( crg::ImageData{ "PickingColour"
 			, ImageCreateFlags::eNone
 			, ImageType::e2D
-			, castor::PixelFormat::eR32G32B32A32_UINT
+			, PixelFormat::eR32G32B32A32_UINT
 			, makeExtent3D( m_realSize )
 			, ( ImageUsageFlags::eColorAttachment
 				| ImageUsageFlags::eTransferSrc
@@ -130,7 +130,7 @@ namespace castor3d
 		, m_depthImage{ m_graph.createImage( crg::ImageData{ "PickingDepth"
 			, ImageCreateFlags::eNone
 			, ImageType::e2D
-			, castor::PixelFormat::eD32_SFLOAT
+			, PixelFormat::eD32_SFLOAT
 			, makeExtent3D( m_realSize )
 			, ( ImageUsageFlags::eDepthStencilAttachment
 				| ImageUsageFlags::eSampled ) } ) }
@@ -149,21 +149,21 @@ namespace castor3d
 			, { PickingAreaWidth, PickingAreaWidth, 1u } }
 		, m_pickDisplayRegions{ rendpick::createPickDisplayRegions() }
 		, m_commandBuffer{ queueData.commandPool->createCommandBuffer( "PickingPass" ) }
-		, m_pickBuffer{ makeBuffer< castor::Point4ui >( m_device
+		, m_pickBuffer{ makeBuffer< Point4ui >( m_device
 			, PickingAreaWidth * PickingAreaWidth
 			, ( VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				| VK_BUFFER_USAGE_TRANSFER_SRC_BIT )
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, cuT( "PickingBuffer" ) ) }
-		, m_pickData{ castor::makeArrayView( m_pickBuffer->lock( 0u, ashes::WholeSize, 0u ), PickingAreaWidth * PickingAreaWidth ) }
+		, m_pickData{ makeArrayView( m_pickBuffer->lock( 0u, ashes::WholeSize, 0u ), PickingAreaWidth * PickingAreaWidth ) }
 		, m_buffer{ PickingAreaWidth * PickingAreaWidth }
 		, m_transferFence{ m_device->createFence( "PickingPass" ) }
 	{
 		m_runnable = m_graph.compile( device.makeContext() );
-		getEngine()->registerTimer( castor::makeString( m_runnable->getName() + "/Graph" )
+		getEngine()->registerTimer( makeString( m_runnable->getName() + "/Graph" )
 			, m_runnable->getTimer() );
 		printGraph( *m_runnable );
-		m_colourTexture = castor::make_unique< ashes::Image >( *m_device
+		m_colourTexture = makeRawUnique< ashes::Image >( *m_device
 			, m_runnable->createImage( m_colourImage )
 			, ashes::ImageCreateInfo{ convert( m_colourImage.data->info ) } );
 		m_colourView = ashes::ImageView{ convert( m_colourImageView.data->info )
@@ -173,7 +173,7 @@ namespace castor3d
 
 	Picking::~Picking()noexcept
 	{
-		getEngine()->unregisterTimer( castor::makeString( m_runnable->getName() + "/Graph" )
+		getEngine()->unregisterTimer( makeString( m_runnable->getName() + "/Graph" )
 			, m_runnable->getTimer() );
 		m_commandBuffer.reset();
 		m_pickBuffer->unlock();
@@ -181,7 +181,7 @@ namespace castor3d
 		m_colourTexture.reset();
 	}
 
-	PickNodeType Picking::pick( castor::Position position )
+	PickNodeType Picking::pick( Position position )
 	{
 		if ( !m_picking.exchange( true ) )
 		{
@@ -228,7 +228,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto res = castor::make_unique< PickingPass >( pass
+				auto res = makeRawUnique< PickingPass >( pass
 					, context
 					, graph
 					, m_device
@@ -251,7 +251,7 @@ namespace castor3d
 		return result;
 	}
 
-	castor::Point4ui Picking::doFboPick( castor::Position const & position )
+	Point4ui Picking::doFboPick( Position const & position )
 	{
 		auto queueData = m_device.graphicsData();
 		m_toWait = m_runnable->run( SemaphoreWaitArray{}, *queueData->queue );
@@ -316,8 +316,8 @@ namespace castor3d
 		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
 
-		castor::Vector< VkSemaphore > semaphores;
-		castor::Vector< VkPipelineStageFlags > dstStageMasks;
+		Vector< VkSemaphore > semaphores;
+		Vector< VkPipelineStageFlags > dstStageMasks;
 		convert( m_toWait, semaphores, dstStageMasks );
 		queueData->queue->submit( { *m_commandBuffer }
 			, semaphores
@@ -346,7 +346,7 @@ namespace castor3d
 		return result;
 	}
 
-	PickNodeType Picking::doPick( castor::Point4ui const & pixel
+	PickNodeType Picking::doPick( Point4ui const & pixel
 		, Scene const & scene )
 	{
 		auto result{ PickNodeType( pixel->x ) };

@@ -13,18 +13,18 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/ImageCache.hpp>
 
-namespace castor3d
+namespace c3d
 {
-	using TextureSourceSet = castor::UnorderedSet< TextureSourceInfo, TextureSourceInfoHasher >;
+	using TextureSourceSet = HashSet< TextureSourceInfo, TextureSourceInfoHasher >;
 
 	namespace shader
 	{
 		struct PassMapMaterialShader
 			: shader::PassMaterialShader
 		{
-			C3D_API explicit PassMapMaterialShader( castor::String const & mapMemberName )
+			C3D_API explicit PassMapMaterialShader( String const & mapMemberName )
 				: shader::PassMaterialShader{ sizeof( uint32_t ) }
-				, m_mapMemberName{ castor::toUtf8( mapMemberName + cuT( "MapAndMask" ) ) }
+				, m_mapMemberName{ toUtf8( mapMemberName + cuT( "MapAndMask" ) ) }
 			{
 			}
 
@@ -32,7 +32,7 @@ namespace castor3d
 				, sdw::expr::ExprList & inits )const override;
 
 		private:
-			castor::MbString m_mapMemberName;
+			MbString m_mapMemberName;
 		};
 
 		struct PassMapComponentsShader
@@ -50,32 +50,32 @@ namespace castor3d
 				, SampleTexture const & sampleTexture )const = 0;
 
 		protected:
-			C3D_API sdw::Float loadFloatComponent( castor::String const & mapName
-				, castor::String const & valueName
+			C3D_API sdw::Float loadFloatComponent( String const & mapName
+				, String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
 				, Material const & material
 				, BlendComponents & components
 				, SampleTexture const & sampleTexture )const;
-			C3D_API sdw::Vec2 loadVec2Component( castor::String const & mapName
-				, castor::String const & valueName
+			C3D_API sdw::Vec2 loadVec2Component( String const & mapName
+				, String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
 				, Material const & material
 				, BlendComponents & components
 				, SampleTexture const & sampleTexture )const;
-			C3D_API sdw::Vec3 loadVec3Component( castor::String const & mapName
-				, castor::String const & valueName
+			C3D_API sdw::Vec3 loadVec3Component( String const & mapName
+				, String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
 				, Material const & material
 				, BlendComponents & components
 				, SampleTexture const & sampleTexture )const;
-			C3D_API sdw::Vec4 loadVec4Component( castor::String const & mapName
-				, castor::String const & valueName
+			C3D_API sdw::Vec4 loadVec4Component( String const & mapName
+				, String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
@@ -83,7 +83,7 @@ namespace castor3d
 				, BlendComponents & components
 				, SampleTexture const & sampleTexture )const;
 
-			sdw::Float loadFloatComponent( castor::String const & valueName
+			sdw::Float loadFloatComponent( String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
@@ -101,7 +101,7 @@ namespace castor3d
 					, sampleTexture );
 			}
 
-			sdw::Vec2 loadVec2Component( castor::String const & valueName
+			sdw::Vec2 loadVec2Component( String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
@@ -119,7 +119,7 @@ namespace castor3d
 					, sampleTexture );
 			}
 
-			sdw::Vec3 loadVec3Component( castor::String const & valueName
+			sdw::Vec3 loadVec3Component( String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
@@ -137,7 +137,7 @@ namespace castor3d
 					, sampleTexture );
 			}
 
-			sdw::Vec4 loadVec4Component( castor::String const & valueName
+			sdw::Vec4 loadVec4Component( String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
@@ -155,32 +155,32 @@ namespace castor3d
 					, sampleTexture );
 			}
 
-			C3D_API void applyFloatComponent( castor::String const & mapName
-				, castor::String const & valueName
+			C3D_API void applyFloatComponent( String const & mapName
+				, String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
 				, Material const & material
 				, BlendComponents & components
 				, SampleTexture const & sampleTexture )const;
-			C3D_API void applyVec2Component( castor::String const & mapName
-				, castor::String const & valueName
+			C3D_API void applyVec2Component( String const & mapName
+				, String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
 				, Material const & material
 				, BlendComponents & components
 				, SampleTexture const & sampleTexture )const;
-			C3D_API void applyVec3Component( castor::String const & mapName
-				, castor::String const & valueName
+			C3D_API void applyVec3Component( String const & mapName
+				, String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
 				, Material const & material
 				, BlendComponents & components
 				, SampleTexture const & sampleTexture )const;
-			C3D_API void applyVec4Component( castor::String const & mapName
-				, castor::String const & valueName
+			C3D_API void applyVec4Component( String const & mapName
+				, String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
@@ -188,7 +188,7 @@ namespace castor3d
 				, BlendComponents & components
 				, SampleTexture const & sampleTexture )const;
 
-			void applyFloatComponent( castor::String const & valueName
+			void applyFloatComponent( String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
@@ -206,7 +206,7 @@ namespace castor3d
 					, sampleTexture );
 			}
 
-			void applyVec2Component( castor::String const & valueName
+			void applyVec2Component( String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
@@ -224,7 +224,7 @@ namespace castor3d
 					, sampleTexture );
 			}
 
-			void applyVec3Component( castor::String const & valueName
+			void applyVec3Component( String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
@@ -242,7 +242,7 @@ namespace castor3d
 					, sampleTexture );
 			}
 
-			void applyVec4Component( castor::String const & valueName
+			void applyVec4Component( String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
@@ -260,36 +260,36 @@ namespace castor3d
 					, sampleTexture );
 			}
 
-			sdw::Float doLoadFloatComponent( castor::MbString const & mbMapName
-				, castor::MbString const & mbValueName
-				, castor::MbString const & textureName
+			sdw::Float doLoadFloatComponent( MbString const & mbMapName
+				, MbString const & mbValueName
+				, MbString const & textureName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
 				, Material const & material
 				, BlendComponents & components
 				, SampleTexture const & sampleTexture )const;
-			sdw::Vec2 doLoadVec2Component( castor::MbString const & mbMapName
-				, castor::MbString const & mbValueName
-				, castor::MbString const & textureName
+			sdw::Vec2 doLoadVec2Component( MbString const & mbMapName
+				, MbString const & mbValueName
+				, MbString const & textureName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
 				, Material const & material
 				, BlendComponents & components
 				, SampleTexture const & sampleTexture )const;
-			sdw::Vec3 doLoadVec3Component( castor::MbString const & mbMapName
-				, castor::MbString const & mbValueName
-				, castor::MbString const & textureName
+			sdw::Vec3 doLoadVec3Component( MbString const & mbMapName
+				, MbString const & mbValueName
+				, MbString const & textureName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
 				, Material const & material
 				, BlendComponents & components
 				, SampleTexture const & sampleTexture )const;
-			sdw::Vec4 doLoadVec4Component( castor::MbString const & mbMapName
-				, castor::MbString const & mbValueName
-				, castor::MbString const & textureName
+			sdw::Vec4 doLoadVec4Component( MbString const & mbMapName
+				, MbString const & mbValueName
+				, MbString const & textureName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
@@ -313,14 +313,14 @@ namespace castor3d
 			, shader::PassMaterialShader const & materialShader
 			, PassBuffer & buffer )const override;
 		C3D_API bool writeTextureConfig( TextureConfiguration const & configuration
-			, castor::String const & tabs
-			, castor::StringStream & file )const override;
+			, String const & tabs
+			, StringStream & file )const override;
 
 	private:
 		virtual bool doWriteTextureConfig( TextureConfiguration const & configuration
 			, uint32_t mask
-			, castor::String const & tabs
-			, castor::StringStream & file )const
+			, String const & tabs
+			, StringStream & file )const
 		{
 			return true;
 		}
@@ -349,9 +349,9 @@ namespace castor3d
 		 *\param[in]	deps			Les composants dont celui-ci dépend.
 		 */
 		C3D_API PassMapComponent( Pass & pass
-			, castor::String type
+			, String type
 			, TextureFlags textureFlags
-			, castor::StringArray deps = {} );
+			, StringArray deps = {} );
 		/**@}*/
 		/**
 		*\~english
@@ -370,9 +370,9 @@ namespace castor3d
 		C3D_API void fillConfig( TextureConfiguration & config
 			, ConfigurationVisitorBase & vis )const override;
 		C3D_API void createDefaultTexture( Pass & pass
-			, castor::String name
+			, String name
 			, TextureConfiguration config
-			, castor::ImageCreateParams imageParams );
+			, ImageCreateParams imageParams );
 		/**@}*/
 
 	private:
@@ -388,8 +388,8 @@ namespace castor3d
 
 	struct PassMapDefaultImageParams
 	{
-		castor::String name;
-		castor::ImageCreateParams image;
+		String name;
+		ImageCreateParams image;
 	};
 
 	template< typename ComponentT >

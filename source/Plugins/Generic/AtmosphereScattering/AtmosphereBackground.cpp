@@ -28,9 +28,8 @@
 
 CU_ImplementSmartPtr( atmosphere_scattering, AtmosphereBackground )
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
 	using namespace atmosphere_scattering;
 
 	template<>
@@ -127,8 +126,8 @@ namespace castor
 		}
 
 	private:
-		bool writeDensity( castor::StringStream & file
-			, castor::String const & name
+		bool writeDensity( c3d::StringStream & file
+			, c3d::String const & name
 			, DensityProfileLayer const & config )
 		{
 			auto result = false;
@@ -155,7 +154,7 @@ namespace castor
 namespace atmosphere_scattering
 {
 	AtmosphereBackground::CameraPasses::CameraPasses( crg::FramePassGroup & graph
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, AtmosphereBackground & background
 		, crg::FramePass const & transmittancePass
 		, crg::FramePass const & multiscatterPass
@@ -168,70 +167,70 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const & weather
 		, crg::ImageViewIdArray const & colour
 		, crg::ImageViewId const * depthObj
-		, castor3d::HdrConfigUbo const & hdrConfigUbo
-		, castor3d::SceneUbo const & sceneUbo
+		, c3d::HdrConfigUbo const & hdrConfigUbo
+		, c3d::SceneUbo const & sceneUbo
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, CloudsUbo const & cloudsUbo
-		, castor3d::Extent2D const & size
-		, castor::Point2ui const & skyViewResolution
+		, c3d::Extent2D const & size
+		, c3d::Point2ui const & skyViewResolution
 		, uint32_t volumeResolution
 		, uint32_t index
 		, bool forceVisible
-		, castor3d::BackgroundPassBase *& backgroundPass )
+		, c3d::BackgroundPassBase *& backgroundPass )
 		: skyView{ device
 			, background.getScene().getResources()
-			, cuT( "AtmosphereSkyView" ) + castor::string::toString( index )
-			, {castor3d::ImageCreateFlags::eNone
+			, cuT( "AtmosphereSkyView" ) + c3d::string::toString( index )
+			, {c3d::ImageCreateFlags::eNone
 				, { skyViewResolution->x, skyViewResolution->y, 1u }, 1u, 1u
-				, castor::PixelFormat::eB10G11R11_UFLOAT
-				, castor3d::ImageUsageFlags::eColorAttachment | castor3d::ImageUsageFlags::eSampled }
-			, { { .mipFilter = castor3d::MipmapMode::eNearest } } }
+				, c3d::PixelFormat::eB10G11R11_UFLOAT
+				, c3d::ImageUsageFlags::eColorAttachment | c3d::ImageUsageFlags::eSampled }
+			, { { .mipFilter = c3d::MipmapMode::eNearest } } }
 		, volume{ device
 			, background.getScene().getResources()
-			, cuT( "AtmosphereVolume" ) + castor::string::toString( index )
-			, { castor3d::ImageCreateFlags::eNone
+			, cuT( "AtmosphereVolume" ) + c3d::string::toString( index )
+			, { c3d::ImageCreateFlags::eNone
 				, { volumeResolution, volumeResolution, volumeResolution }, 1u, 1u
-				, castor::PixelFormat::eR16G16B16A16_SFLOAT
-				, castor3d::ImageUsageFlags::eColorAttachment | castor3d::ImageUsageFlags::eSampled }
-			, { { .mipFilter = castor3d::MipmapMode::eNearest } } }
+				, c3d::PixelFormat::eR16G16B16A16_SFLOAT
+				, c3d::ImageUsageFlags::eColorAttachment | c3d::ImageUsageFlags::eSampled }
+			, { { .mipFilter = c3d::MipmapMode::eNearest } } }
 		, skyColour{ device
 			, background.getScene().getResources()
-			, cuT( "SkyColour" ) + castor::string::toString( index )
-			, { castor3d::ImageCreateFlags::eNone
+			, cuT( "SkyColour" ) + c3d::string::toString( index )
+			, { c3d::ImageCreateFlags::eNone
 				, { size.width, size.height, 1u }, 1u, 1u
-				, castor::PixelFormat::eR16G16B16A16_SFLOAT
-				, castor3d::ImageUsageFlags::eStorage | castor3d::ImageUsageFlags::eSampled | castor3d::ImageUsageFlags::eColorAttachment }
-			, { { .addressMode = castor3d::WrapMode::eRepeat
-				, .mipFilter = castor3d::MipmapMode::eNearest } } }
+				, c3d::PixelFormat::eR16G16B16A16_SFLOAT
+				, c3d::ImageUsageFlags::eStorage | c3d::ImageUsageFlags::eSampled | c3d::ImageUsageFlags::eColorAttachment }
+			, { { .addressMode = c3d::WrapMode::eRepeat
+				, .mipFilter = c3d::MipmapMode::eNearest } } }
 		, sunColour{ device
 			, background.getScene().getResources()
-			, cuT( "SunColour" ) + castor::string::toString( index )
-			, { castor3d::ImageCreateFlags::eNone
+			, cuT( "SunColour" ) + c3d::string::toString( index )
+			, { c3d::ImageCreateFlags::eNone
 				, { size.width, size.height, 1u }, 1u, 1u
-				, castor::PixelFormat::eR16G16B16A16_SFLOAT
-				, castor3d::ImageUsageFlags::eStorage | castor3d::ImageUsageFlags::eSampled | castor3d::ImageUsageFlags::eColorAttachment }
-			, { { .addressMode = castor3d::WrapMode::eRepeat
-				, .mipFilter = castor3d::MipmapMode::eNearest } } }
+				, c3d::PixelFormat::eR16G16B16A16_SFLOAT
+				, c3d::ImageUsageFlags::eStorage | c3d::ImageUsageFlags::eSampled | c3d::ImageUsageFlags::eColorAttachment }
+			, { { .addressMode = c3d::WrapMode::eRepeat
+				, .mipFilter = c3d::MipmapMode::eNearest } } }
 		, cloudsColour{ device
 			, background.getScene().getResources()
-			, cuT( "CloudsColour" ) + castor::string::toString( index )
-			, { castor3d::ImageCreateFlags::eNone
+			, cuT( "CloudsColour" ) + c3d::string::toString( index )
+			, { c3d::ImageCreateFlags::eNone
 				, { size.width, size.height, 1u }, 1u, 1u
-				, castor::PixelFormat::eR16G16B16A16_SFLOAT
-				, castor3d::ImageUsageFlags::eStorage | castor3d::ImageUsageFlags::eSampled | castor3d::ImageUsageFlags::eColorAttachment }
-			, { { .addressMode = castor3d::WrapMode::eRepeat
-				, .mipFilter = castor3d::MipmapMode::eNearest } } }
+				, c3d::PixelFormat::eR16G16B16A16_SFLOAT
+				, c3d::ImageUsageFlags::eStorage | c3d::ImageUsageFlags::eSampled | c3d::ImageUsageFlags::eColorAttachment }
+			, { { .addressMode = c3d::WrapMode::eRepeat
+				, .mipFilter = c3d::MipmapMode::eNearest } } }
 		, cloudsResult{ device
 			, background.getScene().getResources()
-			, cuT( "CloudsResult" ) + castor::string::toString( index )
-			, { castor3d::ImageCreateFlags::eNone
+			, cuT( "CloudsResult" ) + c3d::string::toString( index )
+			, { c3d::ImageCreateFlags::eNone
 				, { size.width, size.height, 1u }, 1u, 1u
-				, castor::PixelFormat::eR16G16B16A16_SFLOAT
-				, castor3d::ImageUsageFlags::eColorAttachment | castor3d::ImageUsageFlags::eSampled }
-			, { { .addressMode = castor3d::WrapMode::eRepeat
-				, .mipFilter = castor3d::MipmapMode::eNearest } } }
+				, c3d::PixelFormat::eR16G16B16A16_SFLOAT
+				, c3d::ImageUsageFlags::eColorAttachment | c3d::ImageUsageFlags::eSampled }
+			, { { .addressMode = c3d::WrapMode::eRepeat
+				, .mipFilter = c3d::MipmapMode::eNearest } } }
 		, cameraUbo{ device, camAtmoChanged }
-		, skyViewPass{ castor::make_unique< AtmosphereSkyViewPass >( graph
+		, skyViewPass{ c3d::makeRawUnique< AtmosphereSkyViewPass >( graph
 			, crg::FramePassArray{ &transmittancePass }
 			, device
 			, cameraUbo
@@ -240,7 +239,7 @@ namespace atmosphere_scattering
 			, skyView.targetViewId
 			, index
 			, camAtmoChanged ) }
-		, volumePass{ castor::make_unique< AtmosphereVolumePass >( graph
+		, volumePass{ c3d::makeRawUnique< AtmosphereVolumePass >( graph
 			, crg::FramePassArray{ &transmittancePass }
 			, device
 			, cameraUbo
@@ -249,7 +248,7 @@ namespace atmosphere_scattering
 			, volume.targetViewId
 			, index
 			, camAtmoChanged ) }
-		, volumetricCloudsPass{ castor::make_unique< CloudsVolumePass >( graph
+		, volumetricCloudsPass{ c3d::makeRawUnique< CloudsVolumePass >( graph
 			, crg::FramePassArray{ &transmittancePass , &weatherPass, &skyViewPass->getLastPass(), &multiscatterPass }
 			, device
 			, atmosphereUbo
@@ -268,7 +267,7 @@ namespace atmosphere_scattering
 			, sunColour.targetViewId
 			, cloudsColour.targetViewId
 			, index ) }
-		, cloudsResolvePass{ castor::make_unique< CloudsResolvePass >( graph
+		, cloudsResolvePass{ c3d::makeRawUnique< CloudsResolvePass >( graph
 			, crg::FramePassArray{ &volumetricCloudsPass->getLastPass() }
 			, device
 			, cameraUbo
@@ -291,7 +290,7 @@ namespace atmosphere_scattering
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto res = castor::make_unique< AtmosphereBackgroundPass >( framePass
+				auto res = c3d::makeRawUnique< AtmosphereBackgroundPass >( framePass
 					, context
 					, runnableGraph
 					, device
@@ -300,13 +299,13 @@ namespace atmosphere_scattering
 					, colour
 					, forceVisible );
 				backgroundPass = res.get();
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
 		pass.addDependency( cloudsResolvePass->getLastPass() );
-		crg::SamplerDesc linearSampler{ castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear };
+		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
+			, c3d::FilterMode::eLinear };
 		hdrConfigUbo.createPassBinding( pass
 			, AtmosphereBackgroundPass::eHdrConfig );
 		sceneUbo.createPassBinding( pass
@@ -327,33 +326,33 @@ namespace atmosphere_scattering
 		cloudsResult.destroy();
 	}
 
-	void AtmosphereBackground::CameraPasses::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void AtmosphereBackground::CameraPasses::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "Atmosphere SkyView" )
 			, skyView.sampledViewId
-			, castor3d::ImageLayout::eShaderReadOnly
-			, castor3d::TextureFactors{}.invert( true ) );
+			, c3d::ImageLayout::eShaderReadOnly
+			, c3d::TextureFactors{}.invert( true ) );
 		visitor.visit( cuT( "Sky Colour" )
 			, skyColour
-			, castor3d::ImageLayout::eShaderReadOnly
-			, castor3d::TextureFactors{}.invert( true ) );
+			, c3d::ImageLayout::eShaderReadOnly
+			, c3d::TextureFactors{}.invert( true ) );
 		visitor.visit( cuT( "Sun Colour" )
 			, sunColour
-			, castor3d::ImageLayout::eShaderReadOnly
-			, castor3d::TextureFactors{}.invert( true ) );
+			, c3d::ImageLayout::eShaderReadOnly
+			, c3d::TextureFactors{}.invert( true ) );
 		visitor.visit( cuT( "Clouds Colour" )
 			, cloudsColour
-			, castor3d::ImageLayout::eShaderReadOnly
-			, castor3d::TextureFactors{}.invert( true ) );
+			, c3d::ImageLayout::eShaderReadOnly
+			, c3d::TextureFactors{}.invert( true ) );
 		visitor.visit( cuT( "Clouds Result" )
 			, cloudsResult
-			, castor3d::ImageLayout::eShaderReadOnly
-			, castor3d::TextureFactors{}.invert( true ) );
+			, c3d::ImageLayout::eShaderReadOnly
+			, c3d::TextureFactors{}.invert( true ) );
 	}
 
-	void AtmosphereBackground::CameraPasses::update( castor3d::CpuUpdater & updater
-		, castor::Point3f const & sunDirection
-		, castor::Vector3f const & planetPosition )const
+	void AtmosphereBackground::CameraPasses::update( c3d::CpuUpdater & updater
+		, c3d::Point3f const & sunDirection
+		, c3d::Vector3f const & planetPosition )const
 	{
 		update( *updater.camera
 			, updater.isSafeBanded
@@ -361,10 +360,10 @@ namespace atmosphere_scattering
 			, planetPosition );
 	}
 
-	void AtmosphereBackground::CameraPasses::update( castor3d::Camera const & camera
+	void AtmosphereBackground::CameraPasses::update( c3d::Camera const & camera
 		, bool safeBanded
-		, castor::Point3f const & sunDirection
-		, castor::Vector3f const & planetPosition )const
+		, c3d::Point3f const & sunDirection
+		, c3d::Vector3f const & planetPosition )const
 	{
 		cameraUbo.cpuUpdate( camera
 			, safeBanded
@@ -376,14 +375,14 @@ namespace atmosphere_scattering
 
 	static uint32_t constexpr SkyTexSize = 16u;
 
-	AtmosphereBackground::AtmosphereBackground( castor3d::Engine & engine
-		, castor3d::Scene & scene )
+	AtmosphereBackground::AtmosphereBackground( c3d::Engine & engine
+		, c3d::Scene & scene )
 		: SceneBackground{ engine, scene, cuT( "Atmosphere" ), cuT( "atmosphere" ), false }
-		, m_weatherUbo{ castor::make_unique< WeatherUbo >( engine.getRenderSystem()->getRenderDevice()
+		, m_weatherUbo{ c3d::makeRawUnique< WeatherUbo >( engine.getRenderSystem()->getRenderDevice()
 			, m_weatherChanged ) }
-		, m_cloudsUbo{ castor::make_unique< CloudsUbo >( engine.getRenderSystem()->getRenderDevice()
+		, m_cloudsUbo{ c3d::makeRawUnique< CloudsUbo >( engine.getRenderSystem()->getRenderDevice()
 			, m_cloudsChanged ) }
-		, m_atmosphereUbo{ castor::make_unique< AtmosphereScatteringUbo >( engine.getRenderSystem()->getRenderDevice()
+		, m_atmosphereUbo{ c3d::makeRawUnique< AtmosphereScatteringUbo >( engine.getRenderSystem()->getRenderDevice()
 			, m_atmosphereChanged ) }
 	{
 	}
@@ -398,12 +397,12 @@ namespace atmosphere_scattering
 		m_multiScatter.destroy();
 	}
 
-	void AtmosphereBackground::accept( castor3d::BackgroundVisitor & visitor )
+	void AtmosphereBackground::accept( c3d::BackgroundVisitor & visitor )
 	{
-		accept( static_cast< castor3d::ConfigurationVisitorBase & >( visitor ) );
+		accept( static_cast< c3d::ConfigurationVisitorBase & >( visitor ) );
 	}
 
-	void AtmosphereBackground::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void AtmosphereBackground::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "Atmosphere Configuration" ) );
 		visitor.visit( cuT( "Solar Irradiance" )
@@ -458,7 +457,7 @@ namespace atmosphere_scattering
 			, &m_cloudsChanged );
 		visitor.visit( cuT( "Clouds Coverage" )
 			, m_cloudsCfg.coverage
-			, castor::makeRange( 0.0f, 1.0f )
+			, c3d::makeRange( 0.0f, 1.0f )
 			, &m_cloudsChanged );
 		visitor.visit( cuT( "Clouds Crispiness" )
 			, m_cloudsCfg.crispiness
@@ -468,11 +467,11 @@ namespace atmosphere_scattering
 			, &m_cloudsChanged );
 		visitor.visit( cuT( "Clouds Density" )
 			, m_cloudsCfg.density
-			, castor::makeRange( 0.0f, 1.0f )
+			, c3d::makeRange( 0.0f, 1.0f )
 			, &m_cloudsChanged );
 		visitor.visit( cuT( "Clouds Absorption" )
 			, m_cloudsCfg.absorption
-			, castor::makeRange( 0.0f, 1.0f )
+			, c3d::makeRange( 0.0f, 1.0f )
 			, &m_cloudsChanged );
 		visitor.visit( cuT( "Clouds Top Offset" )
 			, m_cloudsCfg.topOffset
@@ -506,12 +505,12 @@ namespace atmosphere_scattering
 
 		visitor.visit( cuT( "Atmosphere Transmittance" )
 			, m_transmittance
-			, castor3d::ImageLayout::eShaderReadOnly
-			, castor3d::TextureFactors{}.invert( true ) );
+			, c3d::ImageLayout::eShaderReadOnly
+			, c3d::TextureFactors{}.invert( true ) );
 		visitor.visit( cuT( "Atmosphere Multiscatter" )
 			, m_multiScatter
-			, castor3d::ImageLayout::eShaderReadOnly
-			, castor3d::TextureFactors{}.invert( true ) );
+			, c3d::ImageLayout::eShaderReadOnly
+			, c3d::TextureFactors{}.invert( true ) );
 
 		for ( auto & cameraPass : m_cameraPasses )
 		{
@@ -520,64 +519,64 @@ namespace atmosphere_scattering
 
 		visitor.visit( cuT( "Weather Result" )
 			, m_weather
-			, castor3d::ImageLayout::eShaderReadOnly
-			, castor3d::TextureFactors{}.invert( true ) );
+			, c3d::ImageLayout::eShaderReadOnly
+			, c3d::TextureFactors{}.invert( true ) );
 		visitor.visit( cuT( "Curl Noise" )
 			, m_curl
-			, castor3d::ImageLayout::eShaderReadOnly
-			, castor3d::TextureFactors{}.invert( true ) );
+			, c3d::ImageLayout::eShaderReadOnly
+			, c3d::TextureFactors{}.invert( true ) );
 
 		for ( uint32_t index = 0u; index < m_worley.subViewsId.size(); ++index )
 		{
-			visitor.visit( cuT( "Worley Noise Slice " ) + castor::string::toString( index )
+			visitor.visit( cuT( "Worley Noise Slice " ) + c3d::string::toString( index )
 				, m_worley.sampledViewId
-				, castor3d::ImageLayout::eShaderReadOnly
-				, castor3d::TextureFactors::tex3DSlice( index ).invert( true ) );
+				, c3d::ImageLayout::eShaderReadOnly
+				, c3d::TextureFactors::tex3DSlice( index ).invert( true ) );
 		}
 
 		for ( uint32_t index = 0u; index < m_perlinWorley.subViewsId.size(); ++index )
 		{
-			visitor.visit( cuT( "Perlin Worley Noise Slice " )+ castor::string::toString( index )
+			visitor.visit( cuT( "Perlin Worley Noise Slice " )+ c3d::string::toString( index )
 				, m_perlinWorley.sampledViewId
-				, castor3d::ImageLayout::eShaderReadOnly
-				, castor3d::TextureFactors::tex3DSlice( index ).invert( true ) );
+				, c3d::ImageLayout::eShaderReadOnly
+				, c3d::TextureFactors::tex3DSlice( index ).invert( true ) );
 		}
 	}
 
 	crg::FramePass & AtmosphereBackground::createBackgroundPass( crg::FramePassGroup & graph
-		, castor3d::RenderDevice const & device
-		, castor3d::ProgressBar * progress
-		, castor3d::Extent2D const & size
+		, c3d::RenderDevice const & device
+		, c3d::ProgressBar * progress
+		, c3d::Extent2D const & size
 		, crg::ImageViewIdArray const & colour
 		, crg::ImageViewIdArray const & depth
 		, crg::ImageViewId const * depthObj
-		, castor3d::UniformBufferOffsetT< castor3d::ModelBufferConfiguration > const & modelUbo
-		, castor3d::CameraUbo const & cameraUbo
-		, castor3d::HdrConfigUbo const & hdrConfigUbo
-		, castor3d::SceneUbo const & sceneUbo
+		, c3d::UniformBufferOffsetT< c3d::ModelBufferConfiguration > const & modelUbo
+		, c3d::CameraUbo const & cameraUbo
+		, c3d::HdrConfigUbo const & hdrConfigUbo
+		, c3d::SceneUbo const & sceneUbo
 		, bool clearColour
 		, bool clearDepth
 		, bool forceVisible
-		, castor3d::BackgroundPassBase *& backgroundPass )
+		, c3d::BackgroundPassBase *& backgroundPass )
 	{
 		if ( !m_transmittancePass )
 		{
-			m_worleyPass = castor::make_unique< CloudsWorleyPass >( graph
+			m_worleyPass = c3d::makeRawUnique< CloudsWorleyPass >( graph
 				, crg::FramePassArray{}
 				, device
 				, m_worley.sampledViewId
 				, m_generateWorley );
-			m_perlinWorleyPass = castor::make_unique< CloudsPerlinPass >( graph
+			m_perlinWorleyPass = c3d::makeRawUnique< CloudsPerlinPass >( graph
 				, crg::FramePassArray{}
 				, device
 				, m_perlinWorley.sampledViewId
 				, m_generatePerlinWorley );
-			m_curlPass = castor::make_unique< CloudsCurlPass >( graph
+			m_curlPass = c3d::makeRawUnique< CloudsCurlPass >( graph
 				, crg::FramePassArray{}
 				, device
 				, m_curl.targetViewId
 				, m_generateCurl );
-			m_weatherPass = castor::make_unique< CloudsWeatherPass >( graph
+			m_weatherPass = c3d::makeRawUnique< CloudsWeatherPass >( graph
 				, crg::FramePassArray{ &m_worleyPass->getLastPass()
 					, &m_perlinWorleyPass->getLastPass()
 					, &m_curlPass->getLastPass() }
@@ -585,13 +584,13 @@ namespace atmosphere_scattering
 				, *m_weatherUbo
 				, m_weather.targetViewId
 				, m_weatherChanged );
-			m_transmittancePass = castor::make_unique< AtmosphereTransmittancePass >( graph
+			m_transmittancePass = c3d::makeRawUnique< AtmosphereTransmittancePass >( graph
 				, crg::FramePassArray{}
 				, device
 				, *m_atmosphereUbo
 				, m_transmittance.targetViewId
 				, m_atmosphereChanged );
-			m_multiScatteringPass = castor::make_unique< AtmosphereMultiScatteringPass >( graph
+			m_multiScatteringPass = c3d::makeRawUnique< AtmosphereMultiScatteringPass >( graph
 				, crg::FramePassArray{ &m_transmittancePass->getLastPass() }
 				, device
 				, *m_atmosphereUbo
@@ -605,7 +604,7 @@ namespace atmosphere_scattering
 		if ( it == m_cameraPasses.end() )
 		{
 			it = m_cameraPasses.emplace( colour.front().data->image.data
-				, castor::make_unique< CameraPasses >( graph
+				, c3d::makeRawUnique< CameraPasses >( graph
 					, device
 					, *this
 					, m_transmittancePass->getLastPass()
@@ -633,14 +632,14 @@ namespace atmosphere_scattering
 			pass.addDependency( m_multiScatteringPass->getLastPass() );
 			pass.addDependency( m_weatherPass->getLastPass() );
 			pass.addImplicitDepthStencilView( depth
-				, castor3d::ImageLayout::eDepthStencilAttachment );
+				, c3d::ImageLayout::eDepthStencilAttachment );
 
 			if ( !depth.empty() )
 			{
 				if ( clearDepth )
 				{
 					pass.addOutputDepthStencilView( depth
-						, castor3d::defaultClearDepthStencil );
+						, c3d::defaultClearDepthStencil );
 				}
 				else
 				{
@@ -651,7 +650,7 @@ namespace atmosphere_scattering
 			if ( clearColour )
 			{
 				pass.addOutputColourView( colour
-					, castor3d::transparentBlackClearColor );
+					, c3d::transparentBlackClearColor );
 			}
 			else
 			{
@@ -662,14 +661,14 @@ namespace atmosphere_scattering
 		return *it->second->lastPass;
 	}
 
-	bool AtmosphereBackground::write( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::StringStream & stream )const
+	bool AtmosphereBackground::write( c3d::String const & tabs
+		, c3d::Path const & folder
+		, c3d::StringStream & stream )const
 	{
-		return castor::TextWriter< AtmosphereBackground >{ tabs, folder }( *this, stream );
+		return c3d::TextWriter< AtmosphereBackground >{ tabs, folder }( *this, stream );
 	}
 
-	castor::String const & AtmosphereBackground::getModelName()const
+	c3d::String const & AtmosphereBackground::getModelName()const
 	{
 		return AtmosphereBackgroundModel::Name;
 	}
@@ -679,15 +678,15 @@ namespace atmosphere_scattering
 		auto & resources = getScene().getResources();
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
 		m_worleyResolution = dimension;
-		m_worley = castor3d::Texture{ device
+		m_worley = c3d::Texture{ device
 			, resources
 			, cuT( "WorleyNoise" )
-			, { castor3d::ImageCreateFlags::eNone
+			, { c3d::ImageCreateFlags::eNone
 				, { dimension, dimension, dimension }, 1u
-				, castor3d::getMipLevels( castor3d::Extent3D{ dimension, dimension, dimension }, castor::PixelFormat::eR8G8B8A8_UNORM )
-				, castor::PixelFormat::eR8G8B8A8_UNORM
-				, castor3d::ImageUsageFlags::eSampled | castor3d::ImageUsageFlags::eTransferSrc | castor3d::ImageUsageFlags::eTransferDst | castor3d::ImageUsageFlags::eStorage }
-			, { { .addressMode = castor3d::WrapMode::eRepeat } } };
+				, c3d::getMipLevels( c3d::Extent3D{ dimension, dimension, dimension }, c3d::PixelFormat::eR8G8B8A8_UNORM )
+				, c3d::PixelFormat::eR8G8B8A8_UNORM
+				, c3d::ImageUsageFlags::eSampled | c3d::ImageUsageFlags::eTransferSrc | c3d::ImageUsageFlags::eTransferDst | c3d::ImageUsageFlags::eStorage }
+			, { { .addressMode = c3d::WrapMode::eRepeat } } };
 		notifyChanged();
 	}
 
@@ -696,15 +695,15 @@ namespace atmosphere_scattering
 		auto & resources = getScene().getResources();
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
 		m_perlinWorleyResolution = dimension;
-		m_perlinWorley = castor3d::Texture{ device
+		m_perlinWorley = c3d::Texture{ device
 			, resources
 			, cuT( "PerlinWorleyNoise" )
-			, { castor3d::ImageCreateFlags::eNone
+			, { c3d::ImageCreateFlags::eNone
 				, { dimension, dimension, dimension }, 1u
-				, castor3d::getMipLevels( castor3d::Extent3D{ dimension, dimension , dimension }, castor::PixelFormat::eR8G8B8A8_UNORM )
-				, castor::PixelFormat::eR8G8B8A8_UNORM
-				, castor3d::ImageUsageFlags::eSampled | castor3d::ImageUsageFlags::eTransferSrc | castor3d::ImageUsageFlags::eTransferDst | castor3d::ImageUsageFlags::eStorage }
-			, { { .addressMode = castor3d::WrapMode::eRepeat } } };
+				, c3d::getMipLevels( c3d::Extent3D{ dimension, dimension , dimension }, c3d::PixelFormat::eR8G8B8A8_UNORM )
+				, c3d::PixelFormat::eR8G8B8A8_UNORM
+				, c3d::ImageUsageFlags::eSampled | c3d::ImageUsageFlags::eTransferSrc | c3d::ImageUsageFlags::eTransferDst | c3d::ImageUsageFlags::eStorage }
+			, { { .addressMode = c3d::WrapMode::eRepeat } } };
 		notifyChanged();
 	}
 
@@ -713,15 +712,15 @@ namespace atmosphere_scattering
 		auto & resources = getScene().getResources();
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
 		m_curlResolution = dimension;
-		m_curl = castor3d::Texture{ device
+		m_curl = c3d::Texture{ device
 			, resources
 			, cuT( "CurlNoise" )
-			, { castor3d::ImageCreateFlags::eNone
+			, { c3d::ImageCreateFlags::eNone
 				, { dimension, dimension, 1u }, 1u, 1u
-				, castor::PixelFormat::eR8G8_UNORM
-				, castor3d::ImageUsageFlags::eSampled | castor3d::ImageUsageFlags::eTransferSrc | castor3d::ImageUsageFlags::eTransferDst | castor3d::ImageUsageFlags::eStorage }
-			, { { .addressMode = castor3d::WrapMode::eRepeat
-				, .mipFilter = castor3d::MipmapMode::eNearest } } };
+				, c3d::PixelFormat::eR8G8_UNORM
+				, c3d::ImageUsageFlags::eSampled | c3d::ImageUsageFlags::eTransferSrc | c3d::ImageUsageFlags::eTransferDst | c3d::ImageUsageFlags::eStorage }
+			, { { .addressMode = c3d::WrapMode::eRepeat
+				, .mipFilter = c3d::MipmapMode::eNearest } } };
 		notifyChanged();
 	}
 
@@ -730,30 +729,30 @@ namespace atmosphere_scattering
 		auto & resources = getScene().getResources();
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
 		m_weatherResolution = dimension;
-		m_weather = castor3d::Texture{ device
+		m_weather = c3d::Texture{ device
 			, resources
 			, cuT( "Weather" )
-			, { castor3d::ImageCreateFlags::eNone
+			, { c3d::ImageCreateFlags::eNone
 				, { dimension, dimension, 1u }, 1u, 1u
-				, castor::PixelFormat::eR32G32_SFLOAT
-				, castor3d::ImageUsageFlags::eSampled | castor3d::ImageUsageFlags::eStorage | castor3d::ImageUsageFlags::eColorAttachment }
-			, { { .addressMode = castor3d::WrapMode::eRepeat
-				, .mipFilter = castor3d::MipmapMode::eNearest } } };
+				, c3d::PixelFormat::eR32G32_SFLOAT
+				, c3d::ImageUsageFlags::eSampled | c3d::ImageUsageFlags::eStorage | c3d::ImageUsageFlags::eColorAttachment }
+			, { { .addressMode = c3d::WrapMode::eRepeat
+				, .mipFilter = c3d::MipmapMode::eNearest } } };
 		notifyChanged();
 	}
 
-	void AtmosphereBackground::loadTransmittance( castor::Point2ui const & dimensions )
+	void AtmosphereBackground::loadTransmittance( c3d::Point2ui const & dimensions )
 	{
 		auto & resources = getScene().getResources();
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
-		m_transmittance = castor3d::Texture{ device
+		m_transmittance = c3d::Texture{ device
 			, resources
 			, cuT( "Transmittance" )
-			, { castor3d::ImageCreateFlags::eNone
+			, { c3d::ImageCreateFlags::eNone
 			, { dimensions->x, dimensions->y, 1u }, 1u, 1u
-			, castor::PixelFormat::eR16G16B16A16_SFLOAT
-			, castor3d::ImageUsageFlags::eColorAttachment | castor3d::ImageUsageFlags::eSampled }
-			, { { .mipFilter = castor3d::MipmapMode::eNearest } } };
+			, c3d::PixelFormat::eR16G16B16A16_SFLOAT
+			, c3d::ImageUsageFlags::eColorAttachment | c3d::ImageUsageFlags::eSampled }
+			, { { .mipFilter = c3d::MipmapMode::eNearest } } };
 		notifyChanged();
 	}
 
@@ -761,14 +760,14 @@ namespace atmosphere_scattering
 	{
 		auto & resources = getScene().getResources();
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
-		m_multiScatter = castor3d::Texture{ device
+		m_multiScatter = c3d::Texture{ device
 			, resources
 			, cuT( "MultiScatter" )
-			, { castor3d::ImageCreateFlags::eNone
+			, { c3d::ImageCreateFlags::eNone
 				, { dimension, dimension, 1u }, 1u, 1u
-				, castor::PixelFormat::eR16G16B16A16_SFLOAT
-				, castor3d::ImageUsageFlags::eColorAttachment | castor3d::ImageUsageFlags::eSampled | castor3d::ImageUsageFlags::eStorage }
-			, { { .mipFilter = castor3d::MipmapMode::eNearest } } };;
+				, c3d::PixelFormat::eR16G16B16A16_SFLOAT
+				, c3d::ImageUsageFlags::eColorAttachment | c3d::ImageUsageFlags::eSampled | c3d::ImageUsageFlags::eStorage }
+			, { { .mipFilter = c3d::MipmapMode::eNearest } } };;
 		notifyChanged();
 	}
 
@@ -778,28 +777,28 @@ namespace atmosphere_scattering
 		notifyChanged();
 	}
 
-	void AtmosphereBackground::loadSkyView( castor::Point2ui const & dimensions )
+	void AtmosphereBackground::loadSkyView( c3d::Point2ui const & dimensions )
 	{
 		m_skyViewResolution = dimensions;
 		notifyChanged();
 	}
 
-	bool AtmosphereBackground::doInitialise( castor3d::RenderDevice const & device )
+	bool AtmosphereBackground::doInitialise( c3d::RenderDevice const & device )
 	{
 		auto data = device.graphicsData();
 		auto & resources = getScene().getResources();
-		m_textureId = castor3d::Texture{ device
+		m_textureId = c3d::Texture{ device
 			, resources
 			, cuT( "Dummy" )
-			, { castor3d::ImageCreateFlags::eNone
+			, { c3d::ImageCreateFlags::eNone
 				, { SkyTexSize, SkyTexSize, 1u }, 1u, 1u
-				, castor::PixelFormat::eB10G11R11_UFLOAT
-				, castor3d::ImageUsageFlags::eColorAttachment | castor3d::ImageUsageFlags::eSampled }
-			, { { .mipFilter = castor3d::MipmapMode::eNearest } } };
+				, c3d::PixelFormat::eB10G11R11_UFLOAT
+				, c3d::ImageUsageFlags::eColorAttachment | c3d::ImageUsageFlags::eSampled }
+			, { { .mipFilter = c3d::MipmapMode::eNearest } } };
 		m_transmittance.create();
 		m_multiScatter.create();
 		m_textureId.create();
-		m_texture = castor::makeUnique< castor3d::TextureLayout >( device.renderSystem
+		m_texture = c3d::makeUnique< c3d::TextureLayout >( device.renderSystem
 			, cuT( "AtmosphereBackground/Dummy" )
 			, *m_textureId.image
 			, m_textureId.wholeViewId );
@@ -823,7 +822,7 @@ namespace atmosphere_scattering
 	{
 	}
 
-	void AtmosphereBackground::doCpuUpdate( castor3d::CpuUpdater & updater )const
+	void AtmosphereBackground::doCpuUpdate( c3d::CpuUpdater & updater )const
 	{
 		m_generateWorley = m_generateWorley && m_first;
 		m_generatePerlinWorley = m_generatePerlinWorley && m_first;
@@ -842,7 +841,7 @@ namespace atmosphere_scattering
 		auto [sunDirection, planetPosition] = m_atmosphereUbo->cpuUpdate( m_atmosphereCfg, *m_sunNode, *m_planetNode );
 		auto time = updater.tslf > 0_ms
 			? updater.tslf
-			: std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );
+			: std::chrono::duration_cast< c3d::Milliseconds >( m_timer.getElapsed() );
 		m_time += float( time.count() ) / 1000.0f;
 		m_weatherUbo->cpuUpdate( m_weatherCfg );
 		m_cloudsUbo->cpuUpdate( m_cloudsCfg, m_time );
@@ -855,11 +854,11 @@ namespace atmosphere_scattering
 		}
 	}
 
-	void AtmosphereBackground::doGpuUpdate( castor3d::GpuUpdater & updater )const
+	void AtmosphereBackground::doGpuUpdate( c3d::GpuUpdater & updater )const
 	{
 	}
 
-	void AtmosphereBackground::doUpload( castor3d::UploadData & uploader )
+	void AtmosphereBackground::doUpload( c3d::UploadData & uploader )
 	{
 	}
 
@@ -877,8 +876,8 @@ namespace atmosphere_scattering
 				, index++ );
 			m_cloudsUbo->createPassBinding( pass
 				, index++ );
-			crg::SamplerDesc linearClampSampler{ castor3d::FilterMode::eLinear
-				, castor3d::FilterMode::eLinear };
+			crg::SamplerDesc linearClampSampler{ c3d::FilterMode::eLinear
+				, c3d::FilterMode::eLinear };
 			pass.addSampledView( m_transmittance.wholeViewId
 				, index++
 				, linearClampSampler );
@@ -901,28 +900,28 @@ namespace atmosphere_scattering
 		, VkShaderStageFlags shaderStages
 		, uint32_t & index )const
 	{
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
+		bindings.emplace_back( c3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, shaderStages ) );	// CameraBuffer
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
+		bindings.emplace_back( c3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, shaderStages ) );	// AtmosphereBuffer
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
+		bindings.emplace_back( c3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, shaderStages ) );	// CloudsBuffer
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
+		bindings.emplace_back( c3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, shaderStages ) );	// c3d_mapTransmittance
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
+		bindings.emplace_back( c3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, shaderStages ) );	// c3d_mapMultiScatter
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
+		bindings.emplace_back( c3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, shaderStages ) );	// c3d_mapSkyView
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
+		bindings.emplace_back( c3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, shaderStages ) );	// c3d_mapVolume
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
+		bindings.emplace_back( c3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, shaderStages ) );	// c3d_mapClouds
 	}
@@ -938,23 +937,23 @@ namespace atmosphere_scattering
 			descriptorWrites.push_back( it->second->cameraUbo.getDescriptorWrite( index++ ) );
 			descriptorWrites.push_back( m_atmosphereUbo->getDescriptorWrite( index++ ) );
 			descriptorWrites.push_back( m_cloudsUbo->getDescriptorWrite( index++ ) );
-			castor3d::bindTexture( m_transmittance.sampledView
+			c3d::bindTexture( m_transmittance.sampledView
 				, *m_transmittance.sampler
 				, descriptorWrites
 				, index );
-			castor3d::bindTexture( m_multiScatter.sampledView
+			c3d::bindTexture( m_multiScatter.sampledView
 				, *m_multiScatter.sampler
 				, descriptorWrites
 				, index );
-			castor3d::bindTexture( it->second->skyView.sampledView
+			c3d::bindTexture( it->second->skyView.sampledView
 				, *it->second->skyView.sampler
 				, descriptorWrites
 				, index );
-			castor3d::bindTexture( it->second->volume.sampledView
+			c3d::bindTexture( it->second->volume.sampledView
 				, *it->second->volume.sampler
 				, descriptorWrites
 				, index );
-			castor3d::bindTexture( it->second->cloudsResult.sampledView
+			c3d::bindTexture( it->second->cloudsResult.sampledView
 				, *it->second->volume.sampler
 				, descriptorWrites
 				, index );

@@ -6,12 +6,12 @@
 
 namespace c3d_gltf
 {
-	GltfSceneNodeImporter::GltfSceneNodeImporter( castor3d::Engine & engine )
-		: castor3d::SceneNodeImporter{ engine, cuT( "Gltf" ) }
+	GltfSceneNodeImporter::GltfSceneNodeImporter( c3d::Engine & engine )
+		: c3d::SceneNodeImporter{ engine, cuT( "Gltf" ) }
 	{
 	}
 
-	bool GltfSceneNodeImporter::doImportSceneNode( castor3d::SceneNode & node )
+	bool GltfSceneNodeImporter::doImportSceneNode( c3d::SceneNode & node )
 	{
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto name = node.getName();

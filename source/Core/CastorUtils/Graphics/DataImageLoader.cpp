@@ -4,7 +4,7 @@
 #include "CastorUtils/Data/Path.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 
-namespace castor
+namespace c3d
 {
 	namespace datal
 	{
@@ -26,7 +26,7 @@ namespace castor
 	void DataImageLoader::registerLoader( ImageLoader & reg )
 	{
 		reg.registerLoader( datal::listExtensions()
-			, castor::make_unique< DataImageLoader >() );
+			, c3d::makeRawUnique< DataImageLoader >() );
 	}
 
 	void DataImageLoader::unregisterLoader( ImageLoader & reg )

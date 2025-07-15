@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include "Math.hpp"
 
-namespace castor
+namespace c3d
 {
 	/**@name Math */
 	//@{
@@ -110,7 +110,7 @@ namespace castor
 	\remark		Can hold any type which has a defined Policy.
 	\~french
 	\brief		Représentation d'une matrice column major, le type des éléments et les dimensions de la matrice sont en template.
-	\remark		Peut contenir n'importe quel élément qui a une castor::Policy.
+	\remark		Peut contenir n'importe quel élément qui a une c3d::Policy.
 	*/
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	class Matrix;

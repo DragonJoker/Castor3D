@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include <atomic>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor
+namespace c3d
 {
 	struct PxCompressionSupport
 	{
@@ -276,7 +276,7 @@ namespace castor
 		 */
 		PxBufferBaseUPtr clone()const
 		{
-			return castor::makeUnique< PxBufferBase >( *this );
+			return c3d::makeUnique< PxBufferBase >( *this );
 		}
 		/**
 		*\~english

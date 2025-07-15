@@ -31,10 +31,10 @@ See LICENSE file in root folder
 #include <unordered_set>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class Pass
-		: public castor::OwnedBy< Material >
+		: public OwnedBy< Material >
 	{
 	private:
 		friend struct PassComponent;
@@ -46,10 +46,10 @@ namespace castor3d
 			, bool automaticShader = true );
 
 	public:
-		using UnitArray = castor::Vector< TextureUnitRPtr >;
-		using PassTextureSource = castor::Pair< TextureSourceInfo, PassTextureConfig >;
-		using TextureSourceArray = castor::Vector< PassTextureSource >;
-		using UnitDataSources = castor::Map< TextureUnitDataRPtr, castor::Vector< TextureSourceInfo > >;
+		using UnitArray = Vector< TextureUnitRPtr >;
+		using PassTextureSource = Pair< TextureSourceInfo, PassTextureConfig >;
+		using TextureSourceArray = Vector< PassTextureSource >;
+		using UnitDataSources = Map< TextureUnitDataRPtr, Vector< TextureSourceInfo > >;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -112,18 +112,18 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API void addComponent( PassComponentUPtr component );
-		C3D_API bool hasComponent( castor::String const & name )const noexcept;
-		C3D_API PassComponent * getComponent( castor::String const & name )const;
-		C3D_API castor::Vector< PassComponentUPtr > removeComponent( castor::String const & name );
-		C3D_API shader::PassMaterialShader * getMaterialShader( castor::String const & componentType )const;
-		C3D_API PassComponentID getComponentId( castor::String const & componentType )const;
+		C3D_API bool hasComponent( String const & name )const noexcept;
+		C3D_API PassComponent * getComponent( String const & name )const;
+		C3D_API Vector< PassComponentUPtr > removeComponent( String const & name );
+		C3D_API shader::PassMaterialShader * getMaterialShader( String const & componentType )const;
+		C3D_API PassComponentID getComponentId( String const & componentType )const;
 		C3D_API PassComponentPlugin const & getComponentPlugin( PassComponentID componentId )const;
 		C3D_API PassComponentCombineID getComponentCombineID()const;
 		C3D_API TextureCombineID getTextureCombineID()const;
 		C3D_API uint32_t getHash()const noexcept;
 		C3D_API bool isVisible()const noexcept;
 
-		PassComponentPlugin const & getComponentPlugin( castor::String const & componentType )const
+		PassComponentPlugin const & getComponentPlugin( String const & componentType )const
 		{
 			return getComponentPlugin( getComponentId( componentType ) );
 		}
@@ -147,7 +147,7 @@ namespace castor3d
 
 			if ( !result )
 			{
-				result = new ComponentT{ *this, castor::forward< ParamsT >( params )... };
+				result = new ComponentT{ *this, c3d::forward< ParamsT >( params )... };
 				this->addComponent( PassComponentUPtr{ result } );
 			}
 
@@ -259,14 +259,14 @@ namespace castor3d
 		 *\brief		Définit la couleur basique de la passe.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		C3D_API void setColour( castor::HdrRgbColour const & value )const;
+		C3D_API void setColour( HdrRgbColour const & value )const;
 		/**
 		 *\~english
 		 *\return		The basic pass colour.
 		 *\~french
 		 *\return		La couleur basique de la passe.
 		 */
-		C3D_API castor::HdrRgbColour const & getColour()const;
+		C3D_API HdrRgbColour const & getColour()const;
 		/**
 		 *\~english
 		 *\return		The pass flags combination.
@@ -310,10 +310,10 @@ namespace castor3d
 		 *\param[in]		subfolder	Le sous-dossier de ressources.
 		 *\param[in,out]	file		Le fichier de sortie.
 		 */
-		C3D_API bool writeText( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::String const & subfolder
-			, castor::StringStream & file )const;
+		C3D_API bool writeText( String const & tabs
+			, Path const & folder
+			, String const & subfolder
+			, StringStream & file )const;
 		/**
 		*\~english
 		*\brief
@@ -333,8 +333,8 @@ namespace castor3d
 		C3D_API void fillConfig( TextureConfiguration & config
 			, ConfigurationVisitorBase & vis )const;
 
-		C3D_API static void addParsers( castor::AttributeParsers & result
-			, castor::UInt32StrMap const & textureChannels );
+		C3D_API static void addParsers( AttributeParsers & result
+			, UInt32StrMap const & textureChannels );
 
 		C3D_API static float computeRoughnessFromGlossiness( float glossiness );
 		C3D_API static float computeGlossinessFromRoughness( float roughness );
@@ -377,7 +377,7 @@ namespace castor3d
 		C3D_API TextureCombine getTexturesMask()const noexcept;
 		C3D_API bool hasLighting()const;
 		C3D_API PassComponentRegister & getPassComponentsRegister()const;
-		C3D_API castor::String getTextureFlagsName( PassComponentTextureFlag flags )const;
+		C3D_API String getTextureFlagsName( PassComponentTextureFlag flags )const;
 		C3D_API LightingModelID getLightingModelId()const;
 
 		bool isInitialised()const noexcept
@@ -501,20 +501,20 @@ namespace castor3d
 			m_implicit = value;
 		}
 
-		void setColour( castor::RgbColour const & v
+		void setColour( RgbColour const & v
 			, float gamma = 2.2f )const
 		{
-			setColour( castor::HdrRgbColour{ v, gamma } );
+			setColour( HdrRgbColour{ v, gamma } );
 		}
 
-		void setColour( castor::Coords3f const & v )const
+		void setColour( Coords3f const & v )const
 		{
-			setColour( castor::HdrRgbColour{ v[0u], v[1u], v[2u] } );
+			setColour( HdrRgbColour{ v[0u], v[1u], v[2u] } );
 		}
 
-		void setColour( castor::Point3f const & v )const
+		void setColour( Point3f const & v )const
 		{
-			setColour( castor::HdrRgbColour{ v[0u], v[1u], v[2u] } );
+			setColour( HdrRgbColour{ v[0u], v[1u], v[2u] } );
 		}
 
 		void reset()const noexcept
@@ -537,7 +537,7 @@ namespace castor3d
 		void onSssChanged( SubsurfaceScattering const & sss );
 		void doPrepareImage( PassTextureSource const & cfg );
 		void doUpdateTextureFlags();
-		castor::Vector< PassComponentUPtr > doRemoveDependencies( castor::String const & name );
+		Vector< PassComponentUPtr > doRemoveDependencies( String const & name );
 		void doRemoveConfiguration( PassComponentTextureFlag flag );
 
 	private:
@@ -547,7 +547,7 @@ namespace castor3d
 		PassComponentMap m_components;
 		TextureSourceArray m_sources;
 		TextureUnitDataRefs m_prepared;
-		castor::UnorderedMap< TextureSourceInfo, TextureAnimationUPtr, TextureSourceInfoHasher > m_animations;
+		HashMap< TextureSourceInfo, TextureAnimationUPtr, TextureSourceInfoHasher > m_animations;
 		uint32_t m_maxTexcoordSet{};
 		std::atomic_bool m_texturesReduced{ false };
 		UnitArray m_textureUnits;
@@ -577,7 +577,7 @@ namespace castor3d
 		uint32_t unitIndex{};
 	};
 
-	C3D_API castor::String getPrefix( PassContext const & context );
+	C3D_API String getPrefix( PassContext const & context );
 	C3D_API Engine * getEngine( PassContext const & context );
 
 	template< typename ComponentT, typename ... ParamsT >
@@ -607,28 +607,28 @@ namespace castor3d
 	}
 }
 
-namespace castor
+namespace c3d
 {
 	template<>
-	struct ParserEnumTraits< castor3d::BlendMode >
+	struct ParserEnumTraits< BlendMode >
 	{
 		static inline xchar const * const Name = cuT( "BlendMode" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT< castor3d::BlendMode >();
+				result = getEnumMapT< BlendMode >();
 				return result;
 			}( );
 	};
 
 	template<>
-	struct ParserEnumTraits< castor3d::ParallaxOcclusionMode >
+	struct ParserEnumTraits< ParallaxOcclusionMode >
 	{
 		static inline xchar const * const Name = cuT( "ParallaxOcclusionMode" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT< castor3d::ParallaxOcclusionMode >();
+				result = getEnumMapT< ParallaxOcclusionMode >();
 				return result;
 			}( );
 	};

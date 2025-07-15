@@ -32,32 +32,32 @@ int main( int argc, char const * argv[] )
 	}
 
 #if defined( NDEBUG )
-	castor::Logger::initialise( castor::LogType::eInfo );
+	c3d::Logger::initialise( c3d::LogType::eInfo );
 #else
-	castor::Logger::initialise( castor::LogType::eDebug );
+	c3d::Logger::initialise( c3d::LogType::eDebug );
 #endif
 
-	castor::Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "Tests.log" ) );
+	c3d::Logger::setFileName( c3d::File::getExecutableDirectory() / cuT( "Tests.log" ) );
 #if defined( CASTOR_USE_OCL )
-	Testing::registerType( castor::make_unique< Testing::OpenCLBench >() );
+	Testing::registerType( c3d::makeRawUnique< Testing::OpenCLBench >() );
 #endif
-	Testing::registerType( castor::make_unique< Testing::CastorUtilsDynamicBitsetTest >() );
-	Testing::registerType( castor::make_unique< Testing::CastorUtilsBuddyAllocatorTest >() );
-	Testing::registerType( castor::make_unique< Testing::CastorUtilsSignalTest >() );
-	Testing::registerType( castor::make_unique< Testing::CastorUtilsWorkerThreadTest >() );
-	Testing::registerType( castor::make_unique< Testing::CastorUtilsThreadPoolTest >() );
-	Testing::registerType( castor::make_unique< Testing::CastorUtilsArrayViewTest >() );
-	Testing::registerType( castor::make_unique< Testing::CastorUtilsUniqueTest >() );
-	Testing::registerType( castor::make_unique< Testing::CastorUtilsMatrixTest >() );
-	Testing::registerType( castor::make_unique< Testing::CastorUtilsMatrixBench >() );
-	Testing::registerType( castor::make_unique< Testing::CastorUtilsPixelFormatTest >() );
-	Testing::registerType( castor::make_unique< Testing::CastorUtilsStringTest >() );
-	Testing::registerType( castor::make_unique< Testing::CastorUtilsZipTest >() );
-	Testing::registerType( castor::make_unique< Testing::CastorUtilsQuaternionTest >() );
-	Testing::registerType( castor::make_unique< Testing::CastorUtilsSpeedTest >() );
-	Testing::registerType( castor::make_unique< Testing::CastorUtilsTextWriterTest >() );
-	Testing::registerType( castor::make_unique< Testing::CastorUtilsPixelBufferExtractTest >() );
+	Testing::registerType( c3d::makeRawUnique< Testing::CastorUtilsDynamicBitsetTest >() );
+	Testing::registerType( c3d::makeRawUnique< Testing::CastorUtilsBuddyAllocatorTest >() );
+	Testing::registerType( c3d::makeRawUnique< Testing::CastorUtilsSignalTest >() );
+	Testing::registerType( c3d::makeRawUnique< Testing::CastorUtilsWorkerThreadTest >() );
+	Testing::registerType( c3d::makeRawUnique< Testing::CastorUtilsThreadPoolTest >() );
+	Testing::registerType( c3d::makeRawUnique< Testing::CastorUtilsArrayViewTest >() );
+	Testing::registerType( c3d::makeRawUnique< Testing::CastorUtilsUniqueTest >() );
+	Testing::registerType( c3d::makeRawUnique< Testing::CastorUtilsMatrixTest >() );
+	Testing::registerType( c3d::makeRawUnique< Testing::CastorUtilsMatrixBench >() );
+	Testing::registerType( c3d::makeRawUnique< Testing::CastorUtilsPixelFormatTest >() );
+	Testing::registerType( c3d::makeRawUnique< Testing::CastorUtilsStringTest >() );
+	Testing::registerType( c3d::makeRawUnique< Testing::CastorUtilsZipTest >() );
+	Testing::registerType( c3d::makeRawUnique< Testing::CastorUtilsQuaternionTest >() );
+	Testing::registerType( c3d::makeRawUnique< Testing::CastorUtilsSpeedTest >() );
+	Testing::registerType( c3d::makeRawUnique< Testing::CastorUtilsTextWriterTest >() );
+	Testing::registerType( c3d::makeRawUnique< Testing::CastorUtilsPixelBufferExtractTest >() );
 	BENCHLOOP( iCount, iReturn );
-	castor::Logger::cleanup();
+	c3d::Logger::cleanup();
 	return int( iReturn );
 }

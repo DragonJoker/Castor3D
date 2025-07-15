@@ -16,16 +16,16 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::DiffuseTransmissionColourMapComponent >
-		: public TextWriterT< castor3d::DiffuseTransmissionColourMapComponent >
+	class TextWriter< DiffuseTransmissionColourMapComponent >
+		: public TextWriterT< DiffuseTransmissionColourMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, uint32_t mask = 0u )
-			: TextWriterT< castor3d::DiffuseTransmissionColourMapComponent >{ tabs }
+			: TextWriterT< DiffuseTransmissionColourMapComponent >{ tabs }
 			, m_mask{ mask }
 		{
 		}
@@ -35,7 +35,7 @@ namespace castor
 			return writeMask( file, cuT( "diffuse_transmission_colour_mask" ), m_mask );
 		}
 
-		bool operator()( castor3d::DiffuseTransmissionColourMapComponent const & object
+		bool operator()( DiffuseTransmissionColourMapComponent const & object
 			, StringStream & file )override
 		{
 			return true;
@@ -44,10 +44,7 @@ namespace castor
 	private:
 		uint32_t m_mask;
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace dftrclmk
@@ -118,7 +115,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void DiffuseTransmissionColourMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void DiffuseTransmissionColourMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "diffuse_transmission_colour" )
@@ -130,29 +127,29 @@ namespace castor3d
 					, 0x00FFFFFF );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "diffuse_transmission_colour_mask" )
 			, dftrclmk::parserUnitTransmissionMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "diffuse_transmission_colour_mask" )
 			, dftrclmk::parserUnitTransmissionMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "diffuse_transmission_colour" )
 			, dftrclmk::parserTexRemapTransmission );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "diffuse_transmission_colour_mask" )
 			, dftrclmk::parserTexRemapTransmissionMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 
 	bool DiffuseTransmissionColourMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -163,22 +160,22 @@ namespace castor3d
 	}
 
 	void DiffuseTransmissionColourMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, DiffuseTransmissionColourMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, DiffuseTransmissionColourMapComponent >( pass ) );
 	}
 
 	bool DiffuseTransmissionColourMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< DiffuseTransmissionColourMapComponent >{ tabs, mask }( file );
+		return TextWriter< DiffuseTransmissionColourMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const DiffuseTransmissionColourMapComponent::TypeName = C3D_MakePassMapComponentName( "diffuse_transmission_colour" );
+	String const DiffuseTransmissionColourMapComponent::TypeName = C3D_MakePassMapComponentName( "diffuse_transmission_colour" );
 
 	DiffuseTransmissionColourMapComponent::DiffuseTransmissionColourMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -190,7 +187,7 @@ namespace castor3d
 
 	PassComponentUPtr DiffuseTransmissionColourMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, DiffuseTransmissionColourMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, DiffuseTransmissionColourMapComponent >( pass );
 	}
 
 	void DiffuseTransmissionColourMapComponent::doFillConfig( TextureConfiguration & configuration

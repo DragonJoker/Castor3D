@@ -15,7 +15,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class SkyboxBackground
 		: public SceneBackground
@@ -43,21 +43,21 @@ namespace castor3d
 		*/
 		C3D_API explicit SkyboxBackground( Engine & engine
 			, Scene & scene
-			, castor::String const & name = castor::String{} );
+			, String const & name = String{} );
 		/**
-		*\copydoc	castor3d::SceneBackground::accept
+		*\copydoc	SceneBackground::accept
 		*/
 		C3D_API void accept( BackgroundVisitor & visitor )override;
 		/**
-		*\copydoc	castor3d::SceneBackground::accept
+		*\copydoc	SceneBackground::accept
 		*/
 		C3D_API void accept( ConfigurationVisitorBase & visitor )override;
 		/**
-		*\copydoc	castor3d::SceneBackground::write
+		*\copydoc	SceneBackground::write
 		*/
-		C3D_API bool write( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::StringStream & stream )const override;
+		C3D_API bool write( String const & tabs
+			, Path const & folder
+			, StringStream & stream )const override;
 		/**
 		*\~english
 		*\brief
@@ -74,8 +74,8 @@ namespace castor3d
 		*\param[in] relative
 		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
-		C3D_API void setLeftImage( castor::Path const & folder
-			, castor::Path const & relative );
+		C3D_API void setLeftImage( Path const & folder
+			, Path const & relative );
 		/**
 		*\~english
 		*\brief
@@ -92,8 +92,8 @@ namespace castor3d
 		*\param[in] relative
 		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
-		C3D_API void setRightImage( castor::Path const & folder
-			, castor::Path const & relative );
+		C3D_API void setRightImage( Path const & folder
+			, Path const & relative );
 		/**
 		*\~english
 		*\brief
@@ -110,8 +110,8 @@ namespace castor3d
 		*\param[in] relative
 		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
-		C3D_API void setTopImage( castor::Path const & folder
-			, castor::Path const & relative );
+		C3D_API void setTopImage( Path const & folder
+			, Path const & relative );
 		/**
 		*\~english
 		*\brief
@@ -128,8 +128,8 @@ namespace castor3d
 		*\param[in] relative
 		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
-		C3D_API void setBottomImage( castor::Path const & folder
-			, castor::Path const & relative );
+		C3D_API void setBottomImage( Path const & folder
+			, Path const & relative );
 		/**
 		*\~english
 		*\brief
@@ -146,8 +146,8 @@ namespace castor3d
 		*\param[in] relative
 		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
-		C3D_API void setFrontImage( castor::Path const & folder
-			, castor::Path const & relative );
+		C3D_API void setFrontImage( Path const & folder
+			, Path const & relative );
 		/**
 		*\~english
 		*\brief
@@ -164,8 +164,8 @@ namespace castor3d
 		*\param[in] relative
 		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
-		C3D_API void setBackImage( castor::Path const & folder
-			, castor::Path const & relative );
+		C3D_API void setBackImage( Path const & folder
+			, Path const & relative );
 		/**
 		*\~english
 		*\brief
@@ -186,8 +186,8 @@ namespace castor3d
 		*\param[in] face
 		*	La face dans laquelle l'image sera chargée.
 		*/
-		C3D_API void setFaceTexture( castor::Path const & folder
-			, castor::Path const & relative
+		C3D_API void setFaceTexture( Path const & folder
+			, Path const & relative
 			, SkyboxFace face );
 		/**
 		*\~english
@@ -209,8 +209,8 @@ namespace castor3d
 		*\param[in] size
 		*	Les dimensions voulues pour la skybox.
 		*/
-		C3D_API void setEquiTexture( castor::Path const & folder
-			, castor::Path const & relative
+		C3D_API void setEquiTexture( Path const & folder
+			, Path const & relative
 			, uint32_t size );
 		/**
 		*\~english
@@ -241,10 +241,10 @@ namespace castor3d
 		*\param[in] relative
 		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
-		C3D_API void setCrossTexture( castor::Path const & folder
-			, castor::Path const & relative );
+		C3D_API void setCrossTexture( Path const & folder
+			, Path const & relative );
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 		/**
 		*\~english
 		*name
@@ -254,22 +254,22 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		castor::Path const & getEquiTexturePath()const
+		Path const & getEquiTexturePath()const
 		{
 			return m_equiTexturePath;
 		}
 
-		castor::Size const & getEquiSize()const
+		Size const & getEquiSize()const
 		{
 			return m_equiSize;
 		}
 
-		castor::Path const & getCrossTexturePath()const
+		Path const & getCrossTexturePath()const
 		{
 			return m_crossTexturePath;
 		}
 
-		castor::Array< castor::Path, 6u > const & getLayerTexturePath()const
+		Array< Path, 6u > const & getLayerTexturePath()const
 		{
 			return m_layerTexturePath;
 		}
@@ -295,19 +295,19 @@ namespace castor3d
 		void doInitialiseEquiTexture( RenderDevice const & device );
 
 	private:
-		castor::Array< castor::ImageUPtr, 6u > m_layerTexture;
-		castor::Array< castor::Path, 6u > m_layerTexturePath;
+		Array< ImageUPtr, 6u > m_layerTexture;
+		Array< Path, 6u > m_layerTexturePath;
 		TextureLayoutUPtr m_equiTexture;
-		castor::Path m_equiTexturePath;
-		castor::Size m_equiSize;
-		castor::Path m_crossTexturePath;
+		Path m_equiTexturePath;
+		Size m_equiSize;
+		Path m_crossTexturePath;
 
-		static castor::ImageUPtr copyCrossImageFace( Engine & engine
-			, castor::StringView faceName
-			, castor::Image const & lines
+		static ImageUPtr copyCrossImageFace( Engine & engine
+			, String faceName
+			, Image const & lines
 			, uint32_t index );
-		static castor::Array< castor::ImageUPtr, 6u > splitCrossImageBuffer( Engine & engine
-			, castor::Image const & cross );
+		static Array< ImageUPtr, 6u > splitCrossImageBuffer( Engine & engine
+			, Image const & cross );
 	};
 
 	struct SkyboxContext

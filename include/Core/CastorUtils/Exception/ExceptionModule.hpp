@@ -17,7 +17,7 @@ See LICENSE file in root folder
 #	endif
 #endif
 
-namespace castor
+namespace c3d
 {
 	/**@name Exception */
 	//@{

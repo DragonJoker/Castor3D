@@ -3,7 +3,7 @@
 #include "CastorUtils/FileParser/ParserParameter.hpp"
 #include "CastorUtils/Data/ZipArchive.hpp"
 
-namespace castor
+namespace c3d
 {
 	namespace fileprs
 	{
@@ -248,9 +248,9 @@ namespace castor
 		}
 		else
 		{
-			parsers[name][oldSection] = { castor::move( function )
+			parsers[name][oldSection] = { c3d::move( function )
 				, newSection
-				, castor::move( params ) };
+				, c3d::move( params ) };
 		}
 	}
 
@@ -264,26 +264,26 @@ namespace castor
 	PreprocessedFile::PreprocessedFile( FileParser & parser
 		, FileParserContextUPtr context )
 		: m_parser{ parser }
-		, m_context{ castor::move( context ) }
+		, m_context{ c3d::move( context ) }
 	{
 		m_context->preprocessed = this;
 	}
 
 	PreprocessedFile::PreprocessedFile( PreprocessedFile && rhs )noexcept
 		: m_parser{ rhs.m_parser }
-		, m_context{ castor::move( rhs.m_context ) }
-		, m_actions{ castor::move( rhs.m_actions ) }
-		, m_current{ castor::move( rhs.m_current ) }
-		, m_popAction{ castor::move( rhs.m_popAction ) }
+		, m_context{ c3d::move( rhs.m_context ) }
+		, m_actions{ c3d::move( rhs.m_actions ) }
+		, m_current{ c3d::move( rhs.m_current ) }
+		, m_popAction{ c3d::move( rhs.m_popAction ) }
 	{
 	}
 
 	PreprocessedFile & PreprocessedFile::operator=( PreprocessedFile && rhs )noexcept
 	{
-		m_context = castor::move( rhs.m_context );
-		m_actions = castor::move( rhs.m_actions );
-		m_current = castor::move( rhs.m_current );
-		m_popAction = castor::move( rhs.m_popAction );
+		m_context = c3d::move( rhs.m_context );
+		m_actions = c3d::move( rhs.m_actions );
+		m_current = c3d::move( rhs.m_current );
+		m_popAction = c3d::move( rhs.m_popAction );
 
 		return *this;
 	}
@@ -296,12 +296,12 @@ namespace castor
 		, String params
 		, bool implicit )
 	{
-		doAddParserAction( castor::move( file )
+		doAddParserAction( c3d::move( file )
 			, line
-			, castor::move( name )
+			, c3d::move( name )
 			, section
-			, castor::move( function )
-			, castor::move( params )
+			, c3d::move( function )
+			, c3d::move( params )
 			, implicit );
 	}
 
@@ -415,7 +415,7 @@ namespace castor
 			{
 				auto filled = param->clone();
 				result = filled->parse( m_parser.getLogger(), params );
-				castor::string::trim( params, true, false );
+				c3d::string::trim( params, true, false );
 
 				if ( !result && !param->isSet() )
 				{
@@ -430,7 +430,7 @@ namespace castor
 
 		if ( !params.empty() )
 		{
-			auto param = castor::make_shared< ParserParameter< ParameterType::eText > >();
+			auto param = c3d::makeShared< ParserParameter< ParameterType::eText > >();
 			param->m_value = params;
 			received.push_back( param );
 		}
@@ -493,12 +493,12 @@ namespace castor
 		, String params
 		, bool implicit )
 	{
-		m_actions.emplace_back( castor::move( file )
+		m_actions.emplace_back( c3d::move( file )
 			, line
-			, castor::move( name )
+			, c3d::move( name )
 			, section
-			, castor::move( function )
-			, castor::move( params )
+			, c3d::move( function )
+			, c3d::move( params )
 			, implicit );
 	}
 
@@ -606,7 +606,7 @@ namespace castor
 			if ( work.empty() )
 			{
 				++lineIndex;
-				castor::swap( work, nextWork );
+				c3d::swap( work, nextWork );
 				nxtLine = fileprs::getLine( m_logger, content, lineIndex, offset );
 				fileprs::splitLine( nxtLine, nextWork );
 			}
@@ -1038,7 +1038,7 @@ namespace castor
 			}
 		}
 
-		return castor::makeUnique< FileParserContext >( *this, path );
+		return c3d::makeUnique< FileParserContext >( *this, path );
 	}
 
 	void FileParser::doCheckDefines( String & text )const

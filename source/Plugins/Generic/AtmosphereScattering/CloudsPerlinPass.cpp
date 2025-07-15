@@ -26,7 +26,7 @@ namespace atmosphere_scattering
 			eCount,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device
 			, uint32_t dimension )
 		{
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
@@ -38,7 +38,7 @@ namespace atmosphere_scattering
 			// =====================================================================================
 			// Code from Sebastien Hillarie 3d noise generator https://github.com/sebh/TileableVolumeNoise
 			auto frequenceMul = writer.declConstantArray( "frequenceMul"
-				, castor::Vector< sdw::Float >{ 2.0_f, 8.0_f, 14.0_f, 20.0_f, 26.0_f, 32.0_f } );
+				, c3d::Vector< sdw::Float >{ 2.0_f, 8.0_f, 14.0_f, 20.0_f, 26.0_f, 32.0_f } );
 
 			//Code from https://github.com/NadirRoGue
 			//Special thanks https://github.com/NadirRoGue
@@ -424,7 +424,7 @@ namespace atmosphere_scattering
 
 	CloudsPerlinPass::CloudsPerlinPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, crg::ImageViewId const & resultView
 		, bool & enabled )
 		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "Clouds/PerlinWorleyPass" ), perwor::getProgram( device, getExtent( resultView ).width ) }
@@ -436,7 +436,7 @@ namespace atmosphere_scattering
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< crg::ComputePass >( framePass
+				auto result = c3d::makeRawUnique< crg::ComputePass >( framePass
 					, context
 					, graph
 					, crg::ru::Config{}
@@ -446,7 +446,7 @@ namespace atmosphere_scattering
 						.groupCountZ( renderSize.depth / 4u )
 						.enabled( &enabled )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) ) );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -458,14 +458,14 @@ namespace atmosphere_scattering
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< crg::GenerateMipmaps >( framePass
+				auto result = c3d::makeRawUnique< crg::GenerateMipmaps >( framePass
 					, context
 					, graph
-					, castor3d::ImageLayout::eShaderReadOnly
+					, c3d::ImageLayout::eShaderReadOnly
 					, crg::ru::Config{}
 					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 					, crg::RunnablePass::IsEnabledCallback( [&enabled](){ return enabled; } ) );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -474,7 +474,7 @@ namespace atmosphere_scattering
 		m_lastPass = &mipsPass;
 	}
 
-	void CloudsPerlinPass::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void CloudsPerlinPass::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_computeShader );
 	}

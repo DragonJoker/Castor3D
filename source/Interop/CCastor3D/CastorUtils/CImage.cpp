@@ -32,9 +32,9 @@ extern "C"
 		try
 		{
 			auto const & src = object->internal->getPxBuffer();
-			auto buffer = castor::PxBufferBase::create( src.getDimensions(), src.getFormat(), src.getConstPtr(), src.getFormat() );
+			auto buffer = c3d::PxBufferBase::create( src.getDimensions(), src.getFormat(), src.getConstPtr(), src.getFormat() );
 			C3D_SafeAlloc( *result, C3DPixelBuffer );
-			( *result )->internal = castor::move( buffer );
+			( *result )->internal = c3d::move( buffer );
 		}
 		C3D_CatchCommonExceptions()
 
@@ -60,7 +60,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_IMAGE );
 
-		object->internal->fill( castor::RgbaColour::fromComponents( colour->r, colour->g, colour->b, colour->a ) );
+		object->internal->fill( c3d::RgbaColour::fromComponents( colour->r, colour->g, colour->b, colour->a ) );
 
 		return C3D_OK;
 	}

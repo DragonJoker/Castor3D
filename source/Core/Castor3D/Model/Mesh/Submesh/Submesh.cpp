@@ -27,9 +27,9 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementSmartPtr( castor3d, Submesh )
+CU_ImplementSmartPtr( c3d, Submesh )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -41,14 +41,14 @@ namespace castor3d
 			, PipelineFlags const & flags )
 		{
 			size_t result = geometry.getHash( pass, submesh );
-			result = castor::hashCombine( result, flags.m_shaderFlags.value() );
-			result = castor::hashCombine( result, flags.m_programFlags.value() );
-			result = castor::hashCombine( result, flags.submesh.baseId );
+			result = hashCombine( result, flags.m_shaderFlags.value() );
+			result = hashCombine( result, flags.m_programFlags.value() );
+			result = hashCombine( result, flags.submesh.baseId );
 			return result;
 		}
 
-		static bool fix( castor::Point3f & value
-			, castor::Point3f const & defaultValue )
+		static bool fix( Point3f & value
+			, Point3f const & defaultValue )
 		{
 			bool result = false;
 
@@ -73,12 +73,12 @@ namespace castor3d
 			return result;
 		}
 
-		static bool fixNml( castor::Point3f & value )
+		static bool fixNml( Point3f & value )
 		{
-			static castor::Point3f const defaultValue{ 0.0f, 1.0f, 0.0f };
+			static Point3f const defaultValue{ 0.0f, 1.0f, 0.0f };
 			auto result = fix( value, defaultValue );
 
-			if ( castor::point::length( value ) < std::numeric_limits< float >::epsilon() )
+			if ( point::length( value ) < std::numeric_limits< float >::epsilon() )
 			{
 				value = defaultValue;
 				result = true;
@@ -87,15 +87,15 @@ namespace castor3d
 			return result;
 		}
 
-		static bool fixPos( castor::Point3f & value )
+		static bool fixPos( Point3f & value )
 		{
-			static castor::Point3f const defaultValue{ 0.0f, 0.0f, 0.0f };
+			static Point3f const defaultValue{ 0.0f, 0.0f, 0.0f };
 			return fix( value, defaultValue );
 		}
 
-		static bool fixTex( castor::Point3f & value )
+		static bool fixTex( Point3f & value )
 		{
-			static castor::Point3f const defaultValue{ 0.0f, 0.0f, 0.0f };
+			static Point3f const defaultValue{ 0.0f, 0.0f, 0.0f };
 			return fix( value, defaultValue );
 		}
 
@@ -141,10 +141,10 @@ namespace castor3d
 			}
 		}
 
-		static castor::MbString getDescriptorName( Submesh const & submesh )
+		static MbString getDescriptorName( Submesh const & submesh )
 		{
-			return castor::toUtf8( submesh.getOwner()->getName() )
-				+ castor::string::toMbString( submesh.getId() )
+			return toUtf8( submesh.getOwner()->getName() )
+				+ string::toMbString( submesh.getId() )
 				+ "Mesh";
 		}
 
@@ -160,7 +160,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Point3f value;
+				Point3f value;
 				params[0]->get( value );
 				blockContext->vertexPos.push_back( value[0] );
 				blockContext->vertexPos.push_back( value[1] );
@@ -181,7 +181,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Point2f value;
+				Point2f value;
 				params[0]->get( value );
 				blockContext->vertexTex.push_back( value[0] );
 				blockContext->vertexTex.push_back( value[1] );
@@ -202,7 +202,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Point3f value;
+				Point3f value;
 				params[0]->get( value );
 				blockContext->vertexTex.push_back( value[0] );
 				blockContext->vertexTex.push_back( value[1] );
@@ -223,7 +223,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Point3f value;
+				Point3f value;
 				params[0]->get( value );
 				blockContext->vertexNml.push_back( value[0] );
 				blockContext->vertexNml.push_back( value[1] );
@@ -244,7 +244,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Point4f value;
+				Point4f value;
 				params[0]->get( value );
 				blockContext->vertexTan.push_back( value[0] );
 				blockContext->vertexTan.push_back( value[1] );
@@ -266,17 +266,17 @@ namespace castor3d
 			}
 			else
 			{
-				auto strParams = params[0]->get< castor::String >();
-				castor::Point3i pt3Indices;
-				auto arrayValues = castor::string::split( strParams, cuT( " " ) );
+				auto strParams = params[0]->get< String >();
+				Point3i pt3Indices;
+				auto arrayValues = string::split( strParams, cuT( " " ) );
 				blockContext->face1 = -1;
 				blockContext->face2 = -1;
 
 				if ( arrayValues.size() >= 4 )
 				{
-					castor::Point4i pt4Indices;
+					Point4i pt4Indices;
 
-					if ( castor::parseValues( *blockContext->mesh->root->logger, strParams, pt4Indices ) )
+					if ( parseValues( *blockContext->mesh->root->logger, strParams, pt4Indices ) )
 					{
 						blockContext->face1 = int( blockContext->faces.size() );
 						blockContext->faces.push_back( uint32_t( pt4Indices[0] ) );
@@ -288,7 +288,7 @@ namespace castor3d
 						blockContext->faces.push_back( uint32_t( pt4Indices[3] ) );
 					}
 				}
-				else if ( castor::parseValues( *blockContext->mesh->root->logger, strParams, pt3Indices ) )
+				else if ( parseValues( *blockContext->mesh->root->logger, strParams, pt3Indices ) )
 				{
 					blockContext->face1 = int( blockContext->faces.size() );
 					blockContext->faces.push_back( uint32_t( pt3Indices[0] ) );
@@ -316,26 +316,26 @@ namespace castor3d
 					blockContext->vertexTex.resize( blockContext->vertexPos.size() );
 				}
 
-				auto arrayValues = castor::string::split( params[0]->get< castor::String >(), cuT( " " ), 20 );
+				auto arrayValues = string::split( params[0]->get< String >(), cuT( " " ), 20 );
 
 				if ( arrayValues.size() >= 6 && blockContext->face1 != -1 )
 				{
-					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
-					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
-					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[2] );
-					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[3] );
-					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[4] );
-					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[5] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = string::toFloat( arrayValues[0] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = string::toFloat( arrayValues[1] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = string::toFloat( arrayValues[2] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = string::toFloat( arrayValues[3] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = string::toFloat( arrayValues[4] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = string::toFloat( arrayValues[5] );
 				}
 
 				if ( arrayValues.size() >= 8 && blockContext->face2 != -1 )
 				{
-					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
-					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
-					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[4] );
-					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[5] );
-					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[6] );
-					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[7] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = string::toFloat( arrayValues[0] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = string::toFloat( arrayValues[1] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = string::toFloat( arrayValues[4] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = string::toFloat( arrayValues[5] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = string::toFloat( arrayValues[6] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = string::toFloat( arrayValues[7] );
 				}
 			}
 		}
@@ -358,32 +358,32 @@ namespace castor3d
 					blockContext->vertexTex.resize( blockContext->vertexPos.size() );
 				}
 
-				auto arrayValues = castor::string::split( params[0]->get< castor::String >(), cuT( " " ), 20 );
+				auto arrayValues = string::split( params[0]->get< String >(), cuT( " " ), 20 );
 
 				if ( arrayValues.size() >= 9 && blockContext->face1 != -1 )
 				{
-					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
-					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
-					blockContext->vertexTex[2 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[2] );
-					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[3] );
-					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[4] );
-					blockContext->vertexTex[2 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[5] );
-					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[6] );
-					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[7] );
-					blockContext->vertexTex[2 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[8] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = string::toFloat( arrayValues[0] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = string::toFloat( arrayValues[1] );
+					blockContext->vertexTex[2 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = string::toFloat( arrayValues[2] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = string::toFloat( arrayValues[3] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = string::toFloat( arrayValues[4] );
+					blockContext->vertexTex[2 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = string::toFloat( arrayValues[5] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = string::toFloat( arrayValues[6] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = string::toFloat( arrayValues[7] );
+					blockContext->vertexTex[2 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = string::toFloat( arrayValues[8] );
 				}
 
 				if ( arrayValues.size() >= 12 && blockContext->face2 != -1 )
 				{
-					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 0] );
-					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 1] );
-					blockContext->vertexTex[2 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 2] );
-					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 6] );
-					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 7] );
-					blockContext->vertexTex[2 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 8] );
-					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 9] );
-					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[10] );
-					blockContext->vertexTex[2 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[11] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = string::toFloat( arrayValues[ 0] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = string::toFloat( arrayValues[ 1] );
+					blockContext->vertexTex[2 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = string::toFloat( arrayValues[ 2] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = string::toFloat( arrayValues[ 6] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = string::toFloat( arrayValues[ 7] );
+					blockContext->vertexTex[2 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = string::toFloat( arrayValues[ 8] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = string::toFloat( arrayValues[ 9] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = string::toFloat( arrayValues[10] );
+					blockContext->vertexTex[2 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = string::toFloat( arrayValues[11] );
 				}
 			}
 		}
@@ -406,32 +406,32 @@ namespace castor3d
 					blockContext->vertexNml.resize( blockContext->vertexPos.size() );
 				}
 
-				auto arrayValues = castor::string::split( params[0]->get< castor::String >(), cuT( " " ), 20 );
+				auto arrayValues = string::split( params[0]->get< String >(), cuT( " " ), 20 );
 
 				if ( arrayValues.size() >= 9 && blockContext->face1 != -1 )
 				{
-					blockContext->vertexNml[0 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
-					blockContext->vertexNml[1 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
-					blockContext->vertexNml[2 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[2] );
-					blockContext->vertexNml[0 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[3] );
-					blockContext->vertexNml[1 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[4] );
-					blockContext->vertexNml[2 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[5] );
-					blockContext->vertexNml[0 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[6] );
-					blockContext->vertexNml[1 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[7] );
-					blockContext->vertexNml[2 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[8] );
+					blockContext->vertexNml[0 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = string::toFloat( arrayValues[0] );
+					blockContext->vertexNml[1 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = string::toFloat( arrayValues[1] );
+					blockContext->vertexNml[2 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = string::toFloat( arrayValues[2] );
+					blockContext->vertexNml[0 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = string::toFloat( arrayValues[3] );
+					blockContext->vertexNml[1 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = string::toFloat( arrayValues[4] );
+					blockContext->vertexNml[2 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = string::toFloat( arrayValues[5] );
+					blockContext->vertexNml[0 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = string::toFloat( arrayValues[6] );
+					blockContext->vertexNml[1 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = string::toFloat( arrayValues[7] );
+					blockContext->vertexNml[2 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = string::toFloat( arrayValues[8] );
 				}
 
 				if ( arrayValues.size() >= 12 && blockContext->face2 != -1 )
 				{
-					blockContext->vertexNml[0 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 0] );
-					blockContext->vertexNml[1 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 1] );
-					blockContext->vertexNml[2 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 2] );
-					blockContext->vertexNml[0 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 6] );
-					blockContext->vertexNml[1 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 7] );
-					blockContext->vertexNml[2 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 8] );
-					blockContext->vertexNml[0 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 9] );
-					blockContext->vertexNml[1 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[10] );
-					blockContext->vertexNml[2 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[11] );
+					blockContext->vertexNml[0 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = string::toFloat( arrayValues[ 0] );
+					blockContext->vertexNml[1 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = string::toFloat( arrayValues[ 1] );
+					blockContext->vertexNml[2 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = string::toFloat( arrayValues[ 2] );
+					blockContext->vertexNml[0 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = string::toFloat( arrayValues[ 6] );
+					blockContext->vertexNml[1 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = string::toFloat( arrayValues[ 7] );
+					blockContext->vertexNml[2 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = string::toFloat( arrayValues[ 8] );
+					blockContext->vertexNml[0 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = string::toFloat( arrayValues[ 9] );
+					blockContext->vertexNml[1 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = string::toFloat( arrayValues[10] );
+					blockContext->vertexNml[2 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = string::toFloat( arrayValues[11] );
 				}
 			}
 		}
@@ -454,38 +454,38 @@ namespace castor3d
 					blockContext->vertexTan.resize( blockContext->vertexPos.size() );
 				}
 
-				auto arrayValues = castor::string::split( params[0]->get< castor::String >(), cuT( " " ), 20 );
+				auto arrayValues = string::split( params[0]->get< String >(), cuT( " " ), 20 );
 
 				if ( arrayValues.size() >= 12 && blockContext->face1 != -1 )
 				{
-					blockContext->vertexTan[0 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 0] );
-					blockContext->vertexTan[1 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 1] );
-					blockContext->vertexTan[2 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 2] );
-					blockContext->vertexTan[3 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 3] );
-					blockContext->vertexTan[0 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 4] );
-					blockContext->vertexTan[1 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 5] );
-					blockContext->vertexTan[2 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 6] );
-					blockContext->vertexTan[3 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 7] );
-					blockContext->vertexTan[0 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 8] );
-					blockContext->vertexTan[1 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 9] );
-					blockContext->vertexTan[2 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[10] );
-					blockContext->vertexTan[3 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[11] );
+					blockContext->vertexTan[0 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = string::toFloat( arrayValues[ 0] );
+					blockContext->vertexTan[1 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = string::toFloat( arrayValues[ 1] );
+					blockContext->vertexTan[2 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = string::toFloat( arrayValues[ 2] );
+					blockContext->vertexTan[3 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = string::toFloat( arrayValues[ 3] );
+					blockContext->vertexTan[0 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = string::toFloat( arrayValues[ 4] );
+					blockContext->vertexTan[1 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = string::toFloat( arrayValues[ 5] );
+					blockContext->vertexTan[2 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = string::toFloat( arrayValues[ 6] );
+					blockContext->vertexTan[3 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = string::toFloat( arrayValues[ 7] );
+					blockContext->vertexTan[0 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = string::toFloat( arrayValues[ 8] );
+					blockContext->vertexTan[1 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = string::toFloat( arrayValues[ 9] );
+					blockContext->vertexTan[2 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = string::toFloat( arrayValues[10] );
+					blockContext->vertexTan[3 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = string::toFloat( arrayValues[11] );
 				}
 
 				if ( arrayValues.size() >= 16 && blockContext->face2 != -1 )
 				{
-					blockContext->vertexTan[0 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 0] );
-					blockContext->vertexTan[1 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 1] );
-					blockContext->vertexTan[2 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 2] );
-					blockContext->vertexTan[3 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 3] );
-					blockContext->vertexTan[0 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 8] );
-					blockContext->vertexTan[1 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 9] );
-					blockContext->vertexTan[2 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[10] );
-					blockContext->vertexTan[3 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[11] );
-					blockContext->vertexTan[0 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[12] );
-					blockContext->vertexTan[1 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[13] );
-					blockContext->vertexTan[2 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[14] );
-					blockContext->vertexTan[3 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[15] );
+					blockContext->vertexTan[0 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = string::toFloat( arrayValues[ 0] );
+					blockContext->vertexTan[1 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = string::toFloat( arrayValues[ 1] );
+					blockContext->vertexTan[2 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = string::toFloat( arrayValues[ 2] );
+					blockContext->vertexTan[3 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = string::toFloat( arrayValues[ 3] );
+					blockContext->vertexTan[0 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = string::toFloat( arrayValues[ 8] );
+					blockContext->vertexTan[1 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = string::toFloat( arrayValues[ 9] );
+					blockContext->vertexTan[2 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = string::toFloat( arrayValues[10] );
+					blockContext->vertexTan[3 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = string::toFloat( arrayValues[11] );
+					blockContext->vertexTan[0 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = string::toFloat( arrayValues[12] );
+					blockContext->vertexTan[1 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = string::toFloat( arrayValues[13] );
+					blockContext->vertexTan[2 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = string::toFloat( arrayValues[14] );
+					blockContext->vertexTan[3 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = string::toFloat( arrayValues[15] );
 				}
 			}
 		}
@@ -518,7 +518,7 @@ namespace castor3d
 					blockContext->submesh->createComponent< Texcoords0Component >();
 				}
 
-				castor::Vector< InterleavedVertex > vertices{ blockContext->vertexPos.size() / 3 };
+				Vector< InterleavedVertex > vertices{ blockContext->vertexPos.size() / 3 };
 				uint32_t index{ 0u };
 
 				for ( auto & vertex : vertices )
@@ -601,7 +601,7 @@ namespace castor3d
 		if ( !m_generated )
 		{
 			if ( !m_sourceBufferOffset
-				|| getPointsCount() != m_sourceBufferOffset.getCount< castor::Point4f >( SubmeshData::ePositions ) )
+				|| getPointsCount() != m_sourceBufferOffset.getCount< Point4f >( SubmeshData::ePositions ) )
 			{
 				for ( auto & [_, finalBufferOffset] : m_finalBufferOffsets )
 				{
@@ -781,7 +781,7 @@ namespace castor3d
 		{
 			if( auto data = component->getRenderData() )
 			{
-				previousPasses = data->record( device, resources, graph, castor::move( previousPasses ) );
+				previousPasses = data->record( device, resources, graph, c3d::move( previousPasses ) );
 			}
 		}
 
@@ -801,7 +801,7 @@ namespace castor3d
 
 	void Submesh::accept( ConfigurationVisitorBase & vis )
 	{
-		castor::StringArray topologies;
+		StringArray topologies;
 		topologies.emplace_back( cuT( "Point List" ) );
 		topologies.emplace_back( cuT( "Line List" ) );
 		topologies.emplace_back( cuT( "Line Strip" ) );
@@ -838,13 +838,13 @@ namespace castor3d
 		{
 			auto const & data = positions->getData();
 			auto & points = data.getData();
-			castor::Point3f min{ points[0] };
-			castor::Point3f max{ points[0] };
+			Point3f min{ points[0] };
+			Point3f max{ points[0] };
 			uint32_t nbVertex = getPointsCount();
 
 			for ( uint32_t i = 1; i < nbVertex; i++ )
 			{
-				castor::Point3f cur{ points[i] };
+				Point3f cur{ points[i] };
 				max->x = std::max( cur->x, max->x );
 				max->y = std::max( cur->y, max->y );
 				max->z = std::max( cur->z, max->z );
@@ -916,10 +916,10 @@ namespace castor3d
 			, smsh::getComponentCount< Texcoords2Component >( *this )
 			, smsh::getComponentCount< Texcoords3Component >( *this )
 			, smsh::getComponentCount< ColoursComponent >( *this )
-			, uint32_t( m_sourceBufferOffset ? m_sourceBufferOffset.getCount< castor::Point4f >( SubmeshData::ePositions ) : 0u ) } );
+			, uint32_t( m_sourceBufferOffset ? m_sourceBufferOffset.getCount< Point4f >( SubmeshData::ePositions ) : 0u ) } );
 	}
 
-	int Submesh::isInMyPoints( castor::Point3f const & vertex
+	int Submesh::isInMyPoints( Point3f const & vertex
 		, double precision )
 	{
 		int result = -1;
@@ -931,7 +931,7 @@ namespace castor3d
 
 			for ( auto it = points.begin(); it != points.end() && result == -1; ++it )
 			{
-				if ( castor::point::distanceSquared( vertex, castor::Point3f{ *it } ) < precision )
+				if ( point::distanceSquared( vertex, Point3f{ *it } ) < precision )
 				{
 					result = index;
 				}
@@ -946,12 +946,12 @@ namespace castor3d
 	InterleavedVertex Submesh::addPoint( float x, float y, float z )
 	{
 		InterleavedVertex result;
-		result.pos = castor::Point3f{ x, y, z };
+		result.pos = Point3f{ x, y, z };
 		addPoint( result );
 		return result;
 	}
 
-	InterleavedVertex Submesh::addPoint( castor::Point3f const & value )
+	InterleavedVertex Submesh::addPoint( Point3f const & value )
 	{
 		return addPoint( value[0], value[1], value[2] );
 	}
@@ -982,7 +982,7 @@ namespace castor3d
 		smsh::reserveComponentData< TangentsComponent >( *this, size );
 		smsh::reserveComponentData< Texcoords0Component >( *this, size );
 
-		for ( auto & point : castor::makeArrayView( begin, end ) )
+		for ( auto & point : makeArrayView( begin, end ) )
 		{
 			addPoint( point );
 		}
@@ -1166,7 +1166,7 @@ namespace castor3d
 				writes.push_back( bufferIt->second.buffer.getStorageBinding( uint32_t( MeshBuffersIdx::eInstances ) ) );
 			}
 
-			descSetIt->second->setBindings( castor::move( writes ) );
+			descSetIt->second->setBindings( c3d::move( writes ) );
 			descSetIt->second->update();
 		}
 	}
@@ -1193,9 +1193,8 @@ namespace castor3d
 		}
 	}
 
-	void Submesh::addParsers( castor::AttributeParsers & result )
+	void Submesh::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< SubmeshContext > context{ result, CSCNSection::eSubmesh, CSCNSection::eMesh };
 
 		context.addParser( cuT( "vertex" ), smsh::parserSubmeshVertex, { makeParameter< ParameterType::ePoint3F >() } );
@@ -1216,50 +1215,50 @@ namespace castor3d
 		m_disableSceneUpdate = false;
 	}
 
-	void Submesh::setBaseData( SubmeshData submeshData, castor::Point3fArray data )
+	void Submesh::setBaseData( SubmeshData submeshData, Point3fArray data )
 	{
 		switch ( submeshData )
 		{
-		case castor3d::SubmeshData::ePositions:
-			getPositions() = castor::move( data );
+		case SubmeshData::ePositions:
+			getPositions() = c3d::move( data );
 			break;
-		case castor3d::SubmeshData::eNormals:
-			getNormals() = castor::move( data );
+		case SubmeshData::eNormals:
+			getNormals() = c3d::move( data );
 			break;
-		case castor3d::SubmeshData::eTexcoords0:
-			getTexcoords0() = castor::move( data );
+		case SubmeshData::eTexcoords0:
+			getTexcoords0() = c3d::move( data );
 			break;
-		case castor3d::SubmeshData::eTexcoords1:
-			getTexcoords1() = castor::move( data );
+		case SubmeshData::eTexcoords1:
+			getTexcoords1() = c3d::move( data );
 			break;
-		case castor3d::SubmeshData::eTexcoords2:
-			getTexcoords2() = castor::move( data );
+		case SubmeshData::eTexcoords2:
+			getTexcoords2() = c3d::move( data );
 			break;
-		case castor3d::SubmeshData::eTexcoords3:
-			getTexcoords3() = castor::move( data );
+		case SubmeshData::eTexcoords3:
+			getTexcoords3() = c3d::move( data );
 			break;
-		case castor3d::SubmeshData::eColours:
-			getColours() = castor::move( data );
+		case SubmeshData::eColours:
+			getColours() = c3d::move( data );
 			break;
-		case castor3d::SubmeshData::eBitangents:
-			getBitangents() = castor::move( data );
+		case SubmeshData::eBitangents:
+			getBitangents() = c3d::move( data );
 			break;
-		case castor3d::SubmeshData::eTangents:
+		case SubmeshData::eTangents:
 			CU_Failure( "setBaseData: Can't set tangent data this way, use the Point4f variant" );
 			break;
-		case castor3d::SubmeshData::eIndex:
+		case SubmeshData::eIndex:
 			CU_Failure( "setBaseData: Can't set index data this way" );
 			break;
-		case castor3d::SubmeshData::eSkin:
+		case SubmeshData::eSkin:
 			CU_Failure( "setBaseData: Can't set skin data this way" );
 			break;
-		case castor3d::SubmeshData::ePassMasks:
+		case SubmeshData::ePassMasks:
 			CU_Failure( "setBaseData: Can't set skin data this way" );
 			break;
-		case castor3d::SubmeshData::eVelocity:
+		case SubmeshData::eVelocity:
 			CU_Failure( "setBaseData: Can't set velocity data this way" );
 			break;
-		case castor3d::SubmeshData::eMeshlets:
+		case SubmeshData::eMeshlets:
 			CU_Failure( "setBaseData: Can't set meshlets data this way" );
 			break;
 		default:
@@ -1268,50 +1267,50 @@ namespace castor3d
 		}
 	}
 
-	void Submesh::setBaseData( SubmeshData submeshData, castor::Point4fArray data )
+	void Submesh::setBaseData( SubmeshData submeshData, Point4fArray data )
 	{
 		switch ( submeshData )
 		{
-		case castor3d::SubmeshData::ePositions:
+		case SubmeshData::ePositions:
 			CU_Failure( "setBaseData: Can't set positions data this way, use the Point3f variant" );
 			break;
-		case castor3d::SubmeshData::eNormals:
+		case SubmeshData::eNormals:
 			CU_Failure( "setBaseData: Can't set normals data this way, use the Point3f variant" );
 			break;
-		case castor3d::SubmeshData::eTangents:
-			getTangents() = castor::move( data );
+		case SubmeshData::eTangents:
+			getTangents() = c3d::move( data );
 			break;
-		case castor3d::SubmeshData::eBitangents:
+		case SubmeshData::eBitangents:
 			CU_Failure( "setBaseData: Can't set bitangents data this way, use the Point3f variant" );
 			break;
-		case castor3d::SubmeshData::eTexcoords0:
+		case SubmeshData::eTexcoords0:
 			CU_Failure( "setBaseData: Can't set texcoords0 data this way, use the Point3f variant" );
 			break;
-		case castor3d::SubmeshData::eTexcoords1:
+		case SubmeshData::eTexcoords1:
 			CU_Failure( "setBaseData: Can't set texcoords1 data this way, use the Point3f variant" );
 			break;
-		case castor3d::SubmeshData::eTexcoords2:
+		case SubmeshData::eTexcoords2:
 			CU_Failure( "setBaseData: Can't set texcoords2 data this way, use the Point3f variant" );
 			break;
-		case castor3d::SubmeshData::eTexcoords3:
+		case SubmeshData::eTexcoords3:
 			CU_Failure( "setBaseData: Can't set texcoords3 data this way, use the Point3f variant" );
 			break;
-		case castor3d::SubmeshData::eColours:
+		case SubmeshData::eColours:
 			CU_Failure( "setBaseData: Can't set colours data this way, use the Point3f variant" );
 			break;
-		case castor3d::SubmeshData::eIndex:
+		case SubmeshData::eIndex:
 			CU_Failure( "setBaseData: Can't set index data this way" );
 			break;
-		case castor3d::SubmeshData::eSkin:
+		case SubmeshData::eSkin:
 			CU_Failure( "setBaseData: Can't set skin data this way" );
 			break;
-		case castor3d::SubmeshData::ePassMasks:
+		case SubmeshData::ePassMasks:
 			CU_Failure( "setBaseData: Can't set skin data this way" );
 			break;
-		case castor3d::SubmeshData::eVelocity:
+		case SubmeshData::eVelocity:
 			CU_Failure( "setBaseData: Can't set velocity data this way" );
 			break;
-		case castor3d::SubmeshData::eMeshlets:
+		case SubmeshData::eMeshlets:
 			CU_Failure( "setBaseData: Can't set meshlets data this way" );
 			break;
 		default:
@@ -1355,7 +1354,7 @@ namespace castor3d
 		}
 
 		auto id = component->getId();
-		m_components.emplace( id, castor::move( component ) );
+		m_components.emplace( id, c3d::move( component ) );
 	}
 
 	void Submesh::setIndexCount( uint32_t value )
@@ -1394,18 +1393,18 @@ namespace castor3d
 		return result;
 	}
 
-	castor::Point3fArray const & Submesh::getPositions()const
+	Point3fArray const & Submesh::getPositions()const
 	{
 		if ( auto component = getComponent< PositionsComponent >() )
 		{
 			return component->getData().getData();
 		}
 
-		static castor::Point3fArray const dummy;
+		static Point3fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point3fArray & Submesh::getPositions()
+	Point3fArray & Submesh::getPositions()
 	{
 		m_dirty = true;
 		auto component = getComponent< PositionsComponent >();
@@ -1413,18 +1412,18 @@ namespace castor3d
 		return component->getData().getData();
 	}
 
-	castor::Point3fArray const & Submesh::getNormals()const
+	Point3fArray const & Submesh::getNormals()const
 	{
 		if ( auto component = getComponent< NormalsComponent >() )
 		{
 			return component->getData().getData();
 		}
 
-		static castor::Point3fArray const dummy;
+		static Point3fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point3fArray & Submesh::getNormals()
+	Point3fArray & Submesh::getNormals()
 	{
 		m_dirty = true;
 		auto component = getComponent< NormalsComponent >();
@@ -1432,18 +1431,18 @@ namespace castor3d
 		return component->getData().getData();
 	}
 
-	castor::Point4fArray const & Submesh::getTangents()const
+	Point4fArray const & Submesh::getTangents()const
 	{
 		if ( auto component = getComponent< TangentsComponent >() )
 		{
 			return component->getData().getData();
 		}
 
-		static castor::Point4fArray const dummy;
+		static Point4fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point4fArray & Submesh::getTangents()
+	Point4fArray & Submesh::getTangents()
 	{
 		m_dirty = true;
 		auto component = getComponent< TangentsComponent >();
@@ -1451,18 +1450,18 @@ namespace castor3d
 		return component->getData().getData();
 	}
 
-	castor::Point3fArray const & Submesh::getBitangents()const
+	Point3fArray const & Submesh::getBitangents()const
 	{
 		if ( auto component = getComponent< BitangentsComponent >() )
 		{
 			return component->getData().getData();
 		}
 
-		static castor::Point3fArray const dummy;
+		static Point3fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point3fArray & Submesh::getBitangents()
+	Point3fArray & Submesh::getBitangents()
 	{
 		m_dirty = true;
 		auto component = getComponent< BitangentsComponent >();
@@ -1470,18 +1469,18 @@ namespace castor3d
 		return component->getData().getData();
 	}
 
-	castor::Point3fArray const & Submesh::getTexcoords0()const
+	Point3fArray const & Submesh::getTexcoords0()const
 	{
 		if ( auto component = getComponent< Texcoords0Component >() )
 		{
 			return component->getData().getData();
 		}
 
-		static castor::Point3fArray const dummy;
+		static Point3fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point3fArray & Submesh::getTexcoords0()
+	Point3fArray & Submesh::getTexcoords0()
 	{
 		m_dirty = true;
 		auto component = getComponent< Texcoords0Component >();
@@ -1489,18 +1488,18 @@ namespace castor3d
 		return component->getData().getData();
 	}
 
-	castor::Point3fArray const & Submesh::getTexcoords1()const
+	Point3fArray const & Submesh::getTexcoords1()const
 	{
 		if ( auto component = getComponent< Texcoords1Component >() )
 		{
 			return component->getData().getData();
 		}
 
-		static castor::Point3fArray const dummy;
+		static Point3fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point3fArray & Submesh::getTexcoords1()
+	Point3fArray & Submesh::getTexcoords1()
 	{
 		m_dirty = true;
 		auto component = getComponent< Texcoords1Component >();
@@ -1508,18 +1507,18 @@ namespace castor3d
 		return component->getData().getData();
 	}
 
-	castor::Point3fArray const & Submesh::getTexcoords2()const
+	Point3fArray const & Submesh::getTexcoords2()const
 	{
 		if ( auto component = getComponent< Texcoords2Component >() )
 		{
 			return component->getData().getData();
 		}
 
-		static castor::Point3fArray const dummy;
+		static Point3fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point3fArray & Submesh::getTexcoords2()
+	Point3fArray & Submesh::getTexcoords2()
 	{
 		m_dirty = true;
 		auto component = getComponent< Texcoords2Component >();
@@ -1527,18 +1526,18 @@ namespace castor3d
 		return component->getData().getData();
 	}
 
-	castor::Point3fArray const & Submesh::getTexcoords3()const
+	Point3fArray const & Submesh::getTexcoords3()const
 	{
 		if ( auto component = getComponent< Texcoords3Component >() )
 		{
 			return component->getData().getData();
 		}
 
-		static castor::Point3fArray const dummy;
+		static Point3fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point3fArray & Submesh::getTexcoords3()
+	Point3fArray & Submesh::getTexcoords3()
 	{
 		m_dirty = true;
 		auto component = getComponent< Texcoords3Component >();
@@ -1546,18 +1545,18 @@ namespace castor3d
 		return component->getData().getData();
 	}
 
-	castor::Point3fArray const & Submesh::getColours()const
+	Point3fArray const & Submesh::getColours()const
 	{
 		if ( auto component = getComponent< ColoursComponent >() )
 		{
 			return component->getData().getData();
 		}
 
-		static castor::Point3fArray const dummy;
+		static Point3fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point3fArray & Submesh::getColours()
+	Point3fArray & Submesh::getColours()
 	{
 		m_dirty = true;
 		auto component = getComponent< ColoursComponent >();
@@ -1565,39 +1564,39 @@ namespace castor3d
 		return component->getData().getData();
 	}
 
-	castor::Point3fArray const & Submesh::getBaseData( SubmeshData submeshData )const
+	Point3fArray const & Submesh::getBaseData( SubmeshData submeshData )const
 	{
 		switch ( submeshData )
 		{
-		case castor3d::SubmeshData::ePositions:
+		case SubmeshData::ePositions:
 			return getPositions();
-		case castor3d::SubmeshData::eNormals:
+		case SubmeshData::eNormals:
 			return getNormals();
-		case castor3d::SubmeshData::eBitangents:
+		case SubmeshData::eBitangents:
 			return getBitangents();
-		case castor3d::SubmeshData::eTexcoords0:
+		case SubmeshData::eTexcoords0:
 			return getTexcoords0();
-		case castor3d::SubmeshData::eTexcoords1:
+		case SubmeshData::eTexcoords1:
 			return getTexcoords1();
-		case castor3d::SubmeshData::eTexcoords2:
+		case SubmeshData::eTexcoords2:
 			return getTexcoords2();
-		case castor3d::SubmeshData::eTexcoords3:
+		case SubmeshData::eTexcoords3:
 			return getTexcoords3();
-		case castor3d::SubmeshData::eColours:
+		case SubmeshData::eColours:
 			return getColours();
-		case castor3d::SubmeshData::eTangents:
+		case SubmeshData::eTangents:
 			CU_Failure( "getBaseData: Can't retrieve tangent data this way" );
 			break;
-		case castor3d::SubmeshData::eIndex:
+		case SubmeshData::eIndex:
 			CU_Failure( "getBaseData: Can't retrieve index data this way" );
 			break;
-		case castor3d::SubmeshData::eSkin:
+		case SubmeshData::eSkin:
 			CU_Failure( "getBaseData: Can't retrieve skin data this way" );
 			break;
-		case castor3d::SubmeshData::eVelocity:
+		case SubmeshData::eVelocity:
 			CU_Failure( "getBaseData: Can't retrieve velocity data this way" );
 			break;
-		case castor3d::SubmeshData::eMeshlets:
+		case SubmeshData::eMeshlets:
 			CU_Failure( "getBaseData: Can't retrieve meshlets data this way" );
 			break;
 		default:
@@ -1605,43 +1604,43 @@ namespace castor3d
 			break;
 		}
 
-		static castor::Point3fArray const dummy{};
+		static Point3fArray const dummy{};
 		return dummy;
 	}
 
-	castor::Point3fArray & Submesh::getBaseData( SubmeshData submeshData )
+	Point3fArray & Submesh::getBaseData( SubmeshData submeshData )
 	{
 		switch ( submeshData )
 		{
-		case castor3d::SubmeshData::ePositions:
+		case SubmeshData::ePositions:
 			return getPositions();
-		case castor3d::SubmeshData::eNormals:
+		case SubmeshData::eNormals:
 			return getNormals();
-		case castor3d::SubmeshData::eBitangents:
+		case SubmeshData::eBitangents:
 			return getBitangents();
-		case castor3d::SubmeshData::eTexcoords0:
+		case SubmeshData::eTexcoords0:
 			return getTexcoords0();
-		case castor3d::SubmeshData::eTexcoords1:
+		case SubmeshData::eTexcoords1:
 			return getTexcoords1();
-		case castor3d::SubmeshData::eTexcoords2:
+		case SubmeshData::eTexcoords2:
 			return getTexcoords2();
-		case castor3d::SubmeshData::eTexcoords3:
+		case SubmeshData::eTexcoords3:
 			return getTexcoords3();
-		case castor3d::SubmeshData::eColours:
+		case SubmeshData::eColours:
 			return getColours();
-		case castor3d::SubmeshData::eTangents:
+		case SubmeshData::eTangents:
 			CU_Failure( "getBaseData: Can't retrieve tangent data this way" );
 			break;
-		case castor3d::SubmeshData::eIndex:
+		case SubmeshData::eIndex:
 			CU_Failure( "getBaseData: Can't retrieve index data this way" );
 			break;
-		case castor3d::SubmeshData::eSkin:
+		case SubmeshData::eSkin:
 			CU_Failure( "getBaseData: Can't retrieve skin data this way" );
 			break;
-		case castor3d::SubmeshData::eVelocity:
+		case SubmeshData::eVelocity:
 			CU_Failure( "getBaseData: Can't retrieve velocity data this way" );
 			break;
-		case castor3d::SubmeshData::eMeshlets:
+		case SubmeshData::eMeshlets:
 			CU_Failure( "getBaseData: Can't retrieve meshlets data this way" );
 			break;
 		default:
@@ -1649,18 +1648,18 @@ namespace castor3d
 			break;
 		}
 
-		static castor::Point3fArray dummy{};
+		static Point3fArray dummy{};
 		return dummy;
 	}
 
-	GpuBufferOffsetT< castor::Point4f > const & Submesh::getMorphTargets()const
+	GpuBufferOffsetT< Point4f > const & Submesh::getMorphTargets()const
 	{
 		if ( auto component = getComponent< MorphComponent >() )
 		{
 			return component->getData().getMorphTargets();
 		}
 
-		static GpuBufferOffsetT< castor::Point4f > const dummy{};
+		static GpuBufferOffsetT< Point4f > const dummy{};
 		return dummy;
 	}
 
@@ -1674,18 +1673,18 @@ namespace castor3d
 		return 0u;
 	}
 
-	castor::Vector< Meshlet > const & Submesh::getMeshlets()const
+	Vector< Meshlet > const & Submesh::getMeshlets()const
 	{
 		if ( auto component = getComponent< MeshletComponent >() )
 		{
 			return component->getData().getMeshletsData();
 		}
 
-		static castor::Vector< Meshlet > const dummy{};
+		static Vector< Meshlet > const dummy{};
 		return dummy;
 	}
 
-	castor::Vector< Meshlet > & Submesh::getMeshlets()
+	Vector< Meshlet > & Submesh::getMeshlets()
 	{
 		m_dirty = true;
 		auto component = getComponent< MeshletComponent >();
@@ -1795,7 +1794,7 @@ namespace castor3d
 	VkDeviceSize Submesh::getVertexOffset( Geometry const & geometry
 		, Pass const & pass )const
 	{
-		return getFinalBufferOffsets( geometry, pass ).getFirstVertex< castor::Point4f >();
+		return getFinalBufferOffsets( geometry, pass ).getFirstVertex< Point4f >();
 	}
 
 	VkDeviceSize Submesh::getIndexOffset()const
@@ -1817,7 +1816,7 @@ namespace castor3d
 		return getOwner()->getEngine()->getSubmeshComponentsRegister();
 	}
 
-	SubmeshComponentID Submesh::getComponentId( castor::String const & componentType )const
+	SubmeshComponentID Submesh::getComponentId( String const & componentType )const
 	{
 		return getSubmeshComponentsRegister().getNameId( componentType );
 	}
@@ -2002,12 +2001,12 @@ namespace castor3d
 			, VK_SHADER_STAGE_VERTEX_BIT ) );
 
 		m_descriptorLayout = device->createDescriptorSetLayout( smsh::getDescriptorName( *this )
-			, castor::move( bindings ) );
+			, c3d::move( bindings ) );
 		m_descriptorPool = m_descriptorLayout->createPool( smsh::getDescriptorName( *this )
 			, MaxNodesPerPipeline );
 	}
 
-	castor::String getPrefix( SubmeshContext const & context )
+	String getPrefix( SubmeshContext const & context )
 	{
 		return getPrefix( *context.mesh );
 	}

@@ -21,18 +21,18 @@
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 
-CU_ImplementSmartPtr( castor3d, LightCache )
+CU_ImplementSmartPtr( c3d, LightCache )
 
-namespace castor3d
+namespace c3d
 {
 	namespace cachelgt
 	{
-		static castor::String const C3D_UniqueDirectionalLight = cuT( "Only one directional light is allowed." );
+		static String const C3D_UniqueDirectionalLight = cuT( "Only one directional light is allowed." );
 	}
 
-	const castor::String ObjectCacheTraitsT< Light, castor::String >::Name = cuT( "Light" );
+	const String ObjectCacheTraitsT< Light, String >::Name = cuT( "Light" );
 
-	ObjectCacheT< Light, castor::String, LightCacheTraits >::ObjectCacheT( Scene & scene
+	ObjectCacheT< Light, String, LightCacheTraits >::ObjectCacheT( Scene & scene
 		, SceneNodeRPtr rootNode
 		, SceneNodeRPtr rootCameraNode
 		, SceneNodeRPtr rootObjectNode )
@@ -54,14 +54,14 @@ namespace castor3d
 	{
 	}
 
-	void ObjectCacheT< Light, castor::String, LightCacheTraits >::initialise( RenderDevice const & device )
+	void ObjectCacheT< Light, String, LightCacheTraits >::initialise( RenderDevice const & device )
 	{
 		if ( !m_lightBuffer )
 		{
 			auto lock( makeUniqueLock( *this ) );
-			m_lightBuffer = castor::makeUnique< LightBuffer >( device, MaxLightsCount );
-			castor::Vector< Light * > pending;
-			castor::swap( pending, m_pendingLights );
+			m_lightBuffer = makeUnique< LightBuffer >( device, MaxLightsCount );
+			Vector< Light * > pending;
+			c3d::swap( pending, m_pendingLights );
 
 			for ( auto light : pending )
 			{
@@ -70,7 +70,7 @@ namespace castor3d
 		}
 	}
 
-	void ObjectCacheT< Light, castor::String, LightCacheTraits >::cleanup()
+	void ObjectCacheT< Light, String, LightCacheTraits >::cleanup()
 	{
 		{
 			auto lock( makeUniqueLock( *this ) );
@@ -83,11 +83,11 @@ namespace castor3d
 			} ) );
 	}
 
-	void ObjectCacheT< Light, castor::String, LightCacheTraits >::update( CpuUpdater & updater )
+	void ObjectCacheT< Light, String, LightCacheTraits >::update( CpuUpdater & updater )
 	{
-		auto lock( castor::makeUniqueLock( *this ) );
+		auto lock( makeUniqueLock( *this ) );
 		auto & sceneObjs = updater.dirtyScenes[getScene()];
-		castor::Vector< LightInstance * > dirty;
+		Vector< LightInstance * > dirty;
 		dirty.insert( dirty.end()
 			, sceneObjs.dirtyLights.begin()
 			, sceneObjs.dirtyLights.end() );
@@ -111,7 +111,7 @@ namespace castor3d
 		}
 	}
 
-	void ObjectCacheT< Light, castor::String, LightCacheTraits >::upload( UploadData & uploader )const
+	void ObjectCacheT< Light, String, LightCacheTraits >::upload( UploadData & uploader )const
 	{
 		if ( m_lightBuffer )
 		{
@@ -119,33 +119,33 @@ namespace castor3d
 		}
 	}
 
-	castor::Vector< Light * > const & ObjectCacheT< Light, castor::String, LightCacheTraits >::getLights( LightType type )const
+	Vector< Light * > const & ObjectCacheT< Light, String, LightCacheTraits >::getLights( LightType type )const
 	{
 		return m_lightsPerType[size_t( type )];
 	}
 
-	LightInstancesArray ObjectCacheT< Light, castor::String, LightCacheTraits >::getLightInstances( LightType type )const
+	LightInstancesArray ObjectCacheT< Light, String, LightCacheTraits >::getLightInstances( LightType type )const
 	{
 		return ( m_lightBuffer
 			? m_lightBuffer->getLightInstances( type )
 			: LightInstancesArray{} );
 	}
 
-	void ObjectCacheT< Light, castor::String, LightCacheTraits >::createPassBinding( crg::FramePass & pass
+	void ObjectCacheT< Light, String, LightCacheTraits >::createPassBinding( crg::FramePass & pass
 		, uint32_t binding )const
 	{
 		CU_Require( m_lightBuffer );
 		m_lightBuffer->createPassBinding( pass, binding );
 	}
 
-	VkDescriptorSetLayoutBinding ObjectCacheT< Light, castor::String, LightCacheTraits >::createLayoutBinding( VkShaderStageFlags stages
+	VkDescriptorSetLayoutBinding ObjectCacheT< Light, String, LightCacheTraits >::createLayoutBinding( VkShaderStageFlags stages
 		, uint32_t index )const
 	{
 		CU_Require( m_lightBuffer );
 		return m_lightBuffer->createLayoutBinding( stages, index );
 	}
 
-	void ObjectCacheT< Light, castor::String, LightCacheTraits >::addLayoutBinding( ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void ObjectCacheT< Light, String, LightCacheTraits >::addLayoutBinding( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, VkShaderStageFlags stages
 			, uint32_t & index )const
 	{
@@ -153,20 +153,20 @@ namespace castor3d
 		++index;
 	}
 
-	ashes::WriteDescriptorSet ObjectCacheT< Light, castor::String, LightCacheTraits >::getBinding( uint32_t binding )const
+	ashes::WriteDescriptorSet ObjectCacheT< Light, String, LightCacheTraits >::getBinding( uint32_t binding )const
 	{
 		CU_Require( m_lightBuffer );
 		return m_lightBuffer->getBinding( binding );
 	}
 
-	void ObjectCacheT< Light, castor::String, LightCacheTraits >::addBinding( ashes::WriteDescriptorSetArray & writes
+	void ObjectCacheT< Light, String, LightCacheTraits >::addBinding( ashes::WriteDescriptorSetArray & writes
 		, uint32_t & binding )const
 	{
 		writes.emplace_back( getBinding( binding ) );
 		++binding;
 	}
 
-	ashes::WriteDescriptorSet ObjectCacheT< Light, castor::String, LightCacheTraits >::getBinding( uint32_t binding
+	ashes::WriteDescriptorSet ObjectCacheT< Light, String, LightCacheTraits >::getBinding( uint32_t binding
 		, VkDeviceSize offset
 		, VkDeviceSize size )const
 	{
@@ -174,7 +174,7 @@ namespace castor3d
 		return m_lightBuffer->getSingleBinding( binding, offset, size );
 	}
 
-	uint32_t ObjectCacheT< Light, castor::String, LightCacheTraits >::getLightsBufferCount( LightType type )const noexcept
+	uint32_t ObjectCacheT< Light, String, LightCacheTraits >::getLightsBufferCount( LightType type )const noexcept
 	{
 		if ( m_lightBuffer )
 		{
@@ -184,7 +184,7 @@ namespace castor3d
 		return 0u;
 	}
 
-	bool ObjectCacheT< Light, castor::String, LightCacheTraits >::doCheckUniqueDirectionalLight( LightType toAdd )const noexcept
+	bool ObjectCacheT< Light, String, LightCacheTraits >::doCheckUniqueDirectionalLight( LightType toAdd )const noexcept
 	{
 		bool result = toAdd != LightType::eDirectional
 			|| getLightsBufferCount( LightType::eDirectional ) == 0u;
@@ -197,7 +197,7 @@ namespace castor3d
 		return result;
 	}
 
-	void ObjectCacheT< Light, castor::String, LightCacheTraits >::doRegisterLight( Light & light )
+	void ObjectCacheT< Light, String, LightCacheTraits >::doRegisterLight( Light & light )
 	{
 		if ( m_lightBuffer )
 		{
@@ -220,7 +220,7 @@ namespace castor3d
 		}
 	}
 
-	void ObjectCacheT< Light, castor::String, LightCacheTraits >::doUnregisterLight( Light const & light )
+	void ObjectCacheT< Light, String, LightCacheTraits >::doUnregisterLight( Light const & light )
 	{
 		auto & typeLights = m_lightsPerType[size_t( light.getLightType() )];
 		auto it = std::find_if( typeLights.begin(), typeLights.end()

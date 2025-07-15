@@ -14,13 +14,13 @@ See LICENSE file in root folder
 namespace GuiCommon
 {
 	struct TreeItemConfigurationBuilder
-		: public castor3d::ConfigurationVisitor
+		: public c3d::ConfigurationVisitor
 	{
 	private:
 		explicit TreeItemConfigurationBuilder( wxPropertyGrid * grid
 			, TreeItemProperty & prop
 			, wxPGProperty * subgrid = nullptr )
-			: castor3d::ConfigurationVisitor{}
+			: c3d::ConfigurationVisitor{}
 			, m_grid{ grid }
 			, m_subgrid{ subgrid }
 			, m_prop{ prop }
@@ -35,461 +35,461 @@ namespace GuiCommon
 			, ParamsT && ... params )
 		{
 			TreeItemConfigurationBuilder vis{ grid, prop };
-			config.accept( vis, castor::forward< ParamsT >( params )... );
+			config.accept( vis, c3d::forward< ParamsT >( params )... );
 		}
 
 	private:
 		template< typename ValueT, typename ControlT >
-		void doVisit( castor::String const & name
+		void doVisit( c3d::String const & name
 			, ValueT & value
 			, ControlT controls )
 		{
 			if ( m_subgrid )
 			{
-				m_prop.addPropertyT( m_subgrid, name, &value, castor::move( controls ) );
+				m_prop.addPropertyT( m_subgrid, name, &value, c3d::move( controls ) );
 			}
 			else
 			{
-				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, c3d::move( controls ) );
 			}
 		}
 
 		template< typename ControlT >
-		void doVisit( castor::String const & name
-			, castor3d::ColourWrapper value
+		void doVisit( c3d::String const & name
+			, c3d::ColourWrapper value
 			, ControlT controls )
 		{
 			if ( m_subgrid )
 			{
-				m_prop.addProperty( m_subgrid, name, value, castor::move( controls ) );
+				m_prop.addProperty( m_subgrid, name, value, c3d::move( controls ) );
 			}
 			else
 			{
-				m_prop.addProperty( m_grid, name, value, castor::move( controls ) );
+				m_prop.addProperty( m_grid, name, value, c3d::move( controls ) );
 			}
 		}
 
 		template< typename ValueT, typename ControlT >
-		void doVisit( castor::String const & name
+		void doVisit( c3d::String const & name
 			, ValueT & enumValue
-			, castor::StringArray const & enumNames
+			, c3d::StringArray const & enumNames
 			, OnEnumValueChangeT< ValueT > onChange
 			, ControlT controls )
 		{
 			if ( m_subgrid )
 			{
-				m_prop.addPropertyET( m_subgrid, name, make_wxArrayString( enumNames ), &enumValue, castor::move( controls ), onChange );
+				m_prop.addPropertyET( m_subgrid, name, make_wxArrayString( enumNames ), &enumValue, c3d::move( controls ), onChange );
 			}
 			else
 			{
-				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, castor::move( controls ), onChange );
+				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, c3d::move( controls ), onChange );
 			}
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, bool & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, int16_t & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, uint16_t & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, int32_t & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, uint32_t & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, int64_t & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, uint64_t & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, float & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, double & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Angle & value
+		void visit( c3d::String const & name
+			, c3d::Angle & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::LuminousIntensity & value
+		void visit( c3d::String const & name
+			, c3d::LuminousIntensity & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Illumination & value
+		void visit( c3d::String const & name
+			, c3d::Illumination & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor3d::ColourWrapper value
+		void visit( c3d::String const & name
+			, c3d::ColourWrapper value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Point2f & value
+		void visit( c3d::String const & name
+			, c3d::Point2f & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Point2i & value
+		void visit( c3d::String const & name
+			, c3d::Point2i & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Point2ui & value
+		void visit( c3d::String const & name
+			, c3d::Point2ui & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Point3f & value
+		void visit( c3d::String const & name
+			, c3d::Point3f & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Point3i & value
+		void visit( c3d::String const & name
+			, c3d::Point3i & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Point3ui & value
+		void visit( c3d::String const & name
+			, c3d::Point3ui & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Point4f & value
+		void visit( c3d::String const & name
+			, c3d::Point4f & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Point4i & value
+		void visit( c3d::String const & name
+			, c3d::Point4i & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Point4ui & value
+		void visit( c3d::String const & name
+			, c3d::Point4ui & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Matrix4x4f & value
+		void visit( c3d::String const & name
+			, c3d::Matrix4x4f & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::RangedValue< float > & value
+		void visit( c3d::String const & name
+			, c3d::RangedValue< float > & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::RangedValue< int32_t > & value
+		void visit( c3d::String const & name
+			, c3d::RangedValue< int32_t > & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::RangedValue< uint32_t > & value
+		void visit( c3d::String const & name
+			, c3d::RangedValue< uint32_t > & value
 			, ControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, int32_t & enumValue
-			, castor::StringArray const & enumNames
+			, c3d::StringArray const & enumNames
 			, OnSEnumValueChange onChange
 			, ControlsList controls )override
 		{
-			doVisit( name, enumValue, enumNames, onChange, castor::move( controls ) );
+			doVisit( name, enumValue, enumNames, onChange, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, uint32_t & enumValue
-			, castor::StringArray const & enumNames
+			, c3d::StringArray const & enumNames
 			, OnUEnumValueChange onChange
 			, ControlsList controls )override
 		{
-			doVisit( name, enumValue, enumNames, onChange, castor::move( controls ) );
+			doVisit( name, enumValue, enumNames, onChange, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, bool & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, int16_t & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, uint16_t & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, int32_t & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, uint32_t & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, int64_t & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, uint64_t & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, float & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, double & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Angle & value
+		void visit( c3d::String const & name
+			, c3d::Angle & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::LuminousIntensity & value
+		void visit( c3d::String const & name
+			, c3d::LuminousIntensity & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Illumination & value
+		void visit( c3d::String const & name
+			, c3d::Illumination & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor3d::ColourWrapper value
+		void visit( c3d::String const & name
+			, c3d::ColourWrapper value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Point2f & value
+		void visit( c3d::String const & name
+			, c3d::Point2f & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Point2i & value
+		void visit( c3d::String const & name
+			, c3d::Point2i & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Point2ui & value
+		void visit( c3d::String const & name
+			, c3d::Point2ui & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Point3f & value
+		void visit( c3d::String const & name
+			, c3d::Point3f & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Point3i & value
+		void visit( c3d::String const & name
+			, c3d::Point3i & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Point3ui & value
+		void visit( c3d::String const & name
+			, c3d::Point3ui & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Point4f & value
+		void visit( c3d::String const & name
+			, c3d::Point4f & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Point4i & value
+		void visit( c3d::String const & name
+			, c3d::Point4i & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Point4ui & value
+		void visit( c3d::String const & name
+			, c3d::Point4ui & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::Matrix4x4f & value
+		void visit( c3d::String const & name
+			, c3d::Matrix4x4f & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::RangedValue< float > & value
+		void visit( c3d::String const & name
+			, c3d::RangedValue< float > & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::RangedValue< int32_t > & value
+		void visit( c3d::String const & name
+			, c3d::RangedValue< int32_t > & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
-			, castor::RangedValue< uint32_t > & value
+		void visit( c3d::String const & name
+			, c3d::RangedValue< uint32_t > & value
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, value, castor::move( controls ) );
+			doVisit( name, value, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, int32_t & enumValue
-			, castor::StringArray const & enumNames
+			, c3d::StringArray const & enumNames
 			, OnSEnumValueChange onChange
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, enumValue, enumNames, onChange, castor::move( controls ) );
+			doVisit( name, enumValue, enumNames, onChange, c3d::move( controls ) );
 		}
 
-		void visit( castor::String const & name
+		void visit( c3d::String const & name
 			, uint32_t & enumValue
-			, castor::StringArray const & enumNames
+			, c3d::StringArray const & enumNames
 			, OnUEnumValueChange onChange
 			, AtomicControlsList controls )override
 		{
-			doVisit( name, enumValue, enumNames, onChange, castor::move( controls ) );
+			doVisit( name, enumValue, enumNames, onChange, c3d::move( controls ) );
 		}
 
 	private:
-		castor::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
+		c3d::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( c3d::String const & category )override
 		{
-			return castor::RawUniquePtr< ConfigurationVisitorBase >( new TreeItemConfigurationBuilder{ m_grid
+			return c3d::RawUniquePtr< ConfigurationVisitorBase >( new TreeItemConfigurationBuilder{ m_grid
 				, m_prop
 				, ( m_subgrid
 					? m_prop.addProperty( m_subgrid, category )

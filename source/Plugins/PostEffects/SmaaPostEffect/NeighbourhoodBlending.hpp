@@ -21,8 +21,8 @@ namespace smaa
 	public:
 		NeighbourhoodBlending( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
-			, castor3d::RenderTarget & renderTarget
-			, castor3d::RenderDevice const & device
+			, c3d::RenderTarget & renderTarget
+			, c3d::RenderDevice const & device
 			, SmaaUbo const & ubo
 			, crg::ImageViewIdArray const & sourceView
 			, crg::ImageViewId const & blendView
@@ -32,7 +32,7 @@ namespace smaa
 			, uint32_t const * passIndex );
 		~NeighbourhoodBlending();
 
-		void accept( castor3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor );
 
 		crg::ImageViewIdArray const & getResult()const
 		{
@@ -45,14 +45,14 @@ namespace smaa
 		}
 
 	private:
-		castor3d::RenderDevice const & m_device;
+		c3d::RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;
 		crg::ImageViewId const & m_blendView;
 		crg::ImageViewId const * m_velocityView;
-		castor3d::Extent3D m_extent;
-		castor3d::ProgramModule m_shader;
+		c3d::Extent3D m_extent;
+		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		castor3d::TextureArray m_images;
+		c3d::TextureArray m_images;
 		crg::ImageViewIdArray m_imageViews;
 		crg::FramePass & m_pass;
 	};

@@ -3,14 +3,14 @@
 #include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
-CU_ImplementSmartPtr( castor3d, ParticleFactory )
-CU_ImplementSmartPtr( castor3d, ParticleSystemCache )
+CU_ImplementSmartPtr( c3d, ParticleFactory )
+CU_ImplementSmartPtr( c3d, ParticleSystemCache )
 
-namespace castor3d
+namespace c3d
 {
-	const castor::String ObjectCacheTraitsT< ParticleSystem, castor::String >::Name = cuT( "ParticleSystem" );
+	const String ObjectCacheTraitsT< ParticleSystem, String >::Name = cuT( "ParticleSystem" );
 
-	castor::String getName( ElementUsage value )
+	String getName( ElementUsage value )
 	{
 		switch ( value )
 		{
@@ -42,11 +42,11 @@ namespace castor3d
 			return cuT( "mat_index" );
 		default:
 			CU_Failure( "Unsupported ElementUsage" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( ParticleFormat value )
+	String getName( ParticleFormat value )
 	{
 		switch ( value )
 		{
@@ -82,7 +82,7 @@ namespace castor3d
 			return cuT( "mat4x4f" );
 		default:
 			CU_Failure( "Unsupported ParticleFormat" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 }

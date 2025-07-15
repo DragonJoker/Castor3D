@@ -19,7 +19,7 @@
 #include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Graphics/Rectangle.hpp>
 
-CU_ImplementSmartPtr( castor3d, TextOverlay )
+CU_ImplementSmartPtr( c3d, TextOverlay )
 
 #if defined( drawText )
 #	undef drawText
@@ -46,7 +46,7 @@ CU_ImplementSmartPtr( castor3d, TextOverlay )
 	auto c3d_lines = linesBuffer.declMember< ovrltxt::TextLine >( "c3d_lines", MaxLinesPerBuffer ); \
 	linesBuffer.end()
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -68,7 +68,7 @@ namespace castor3d
 			TextChar( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled )
-				: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+				: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 			{
 			}
 
@@ -97,7 +97,7 @@ namespace castor3d
 			TextWord( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled )
-				: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+				: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 			{
 			}
 
@@ -123,7 +123,7 @@ namespace castor3d
 			TextLine( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled )
-				: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+				: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 			{
 			}
 
@@ -132,14 +132,14 @@ namespace castor3d
 			auto width()const { return this->template getMember< "width" >(); }
 		};
 
-		static castor::Font & getFont( TextOverlay const & overlay )
+		static Font & getFont( TextOverlay const & overlay )
 		{
 			auto fontTexture = overlay.getFontTexture();
 
 			if ( !fontTexture )
 			{
 				CU_Failure( cuT( "The TextOverlay has no FontTexture. Did you set its font?" ) );
-				CU_Exception( "The TextOverlay [" + castor::toUtf8( overlay.getOverlayName() ) + "] has no FontTexture. Did you set its font?" );
+				CU_Exception( "The TextOverlay [" + toUtf8( overlay.getOverlayName() ) + "] has no FontTexture. Did you set its font?" );
 			}
 
 			auto pfont = fontTexture->getFont();
@@ -147,7 +147,7 @@ namespace castor3d
 			if ( !pfont )
 			{
 				CU_Failure( cuT( "The TextOverlay has no Font. Did you set its font?" ) );
-				CU_Exception( "The TextOverlay [" + castor::toUtf8( overlay.getOverlayName() ) + "] has no Font. Did you set its font?" );
+				CU_Exception( "The TextOverlay [" + toUtf8( overlay.getOverlayName() ) + "] has no Font. Did you set its font?" );
 			}
 
 			return *pfont;
@@ -170,7 +170,7 @@ namespace castor3d
 
 	OverlayCategoryUPtr TextOverlay::create()
 	{
-		return castor::makeUniqueDerived< OverlayCategory, TextOverlay >();
+		return makeUniqueDerived< OverlayCategory, TextOverlay >();
 	}
 
 	void TextOverlay::accept( OverlayVisitor & visitor )const
@@ -184,9 +184,9 @@ namespace castor3d
 	}
 
 	float TextOverlay::fillBuffer( uint32_t overlayIndex
-		, castor::ArrayView< TextChar > texts
-		, castor::ArrayView< TextWord > words
-		, castor::ArrayView< TextLine > lines )const noexcept
+		, ArrayView< TextChar > texts
+		, ArrayView< TextWord > words
+		, ArrayView< TextLine > lines )const noexcept
 	{
 		std::copy( m_text.begin()
 			, m_text.begin() + m_charsCount
@@ -369,7 +369,7 @@ namespace castor3d
 		return makeShaderState( device, comp );
 	}
 
-	void TextOverlay::setFont( castor::String const & name )
+	void TextOverlay::setFont( String const & name )
 	{
 		// Récupération / Création de la police
 		Engine * engine = m_overlay->getEngine();
@@ -394,7 +394,7 @@ namespace castor3d
 		else
 		{
 			CU_Failure( cuT( "Font not found" ) );
-			CU_Exception( "Font " + castor::toUtf8( name ) + "not found" );
+			CU_Exception( "Font " + toUtf8( name ) + "not found" );
 		}
 
 		m_textChanged = true;
@@ -412,7 +412,7 @@ namespace castor3d
 		if ( !fontTexture )
 		{
 			CU_Failure( cuT( "The TextOverlay has no FontTexture. Did you set its font?" ) );
-			CU_Exception( "The TextOverlay [" + castor::toUtf8( getOverlayName() ) + "] has no FontTexture. Did you set its font?" );
+			CU_Exception( "The TextOverlay [" + toUtf8( getOverlayName() ) + "] has no FontTexture. Did you set its font?" );
 		}
 
 		auto font = fontTexture->getFont();
@@ -421,10 +421,10 @@ namespace castor3d
 		{
 			setVisible( false );
 			CU_Failure( cuT( "The TextOverlay has no Font. Did you set its font?" ) );
-			CU_Exception( "The TextOverlay [" + castor::toUtf8( getOverlayName() ) + "] has no Font. Did you set its font?" );
+			CU_Exception( "The TextOverlay [" + toUtf8( getOverlayName() ) + "] has no Font. Did you set its font?" );
 		}
 
-		castor::Vector< char32_t > newCaption;
+		Vector< char32_t > newCaption;
 
 		for ( auto c : m_currentCaption )
 		{
@@ -458,11 +458,11 @@ namespace castor3d
 			&& !m_currentCaption.empty();
 	}
 
-	void TextOverlay::doPrepareText( castor::Size const & rndSize )
+	void TextOverlay::doPrepareText( Size const & rndSize )
 	{
-		castor::Point2f renderSize{ castor::Point2f{ rndSize.getWidth(), rndSize.getHeight() }
+		Point2f renderSize{ Point2f{ rndSize.getWidth(), rndSize.getHeight() }
 			* getRenderRatio( rndSize ) };
-		castor::Point2f overlaySize( renderSize * getOverlay().getAbsoluteSize() );
+		Point2f overlaySize( renderSize * getOverlay().getAbsoluteSize() );
 
 		m_words.count = 0u;
 		m_lines.count = 0u;
@@ -525,7 +525,7 @@ namespace castor3d
 					{
 						if ( m_lineSpacingMode == TextLineSpacingMode::eMaxFontHeight )
 						{
-							line->range = castor::Point2f{ advanceY };
+							line->range = Point2f{ advanceY };
 						}
 
 						// Move line according to halign
@@ -564,9 +564,9 @@ namespace castor3d
 					wordLeft = totalLeft;
 				};
 
-			auto addChar = [&]( castor::Point2f charSize
-					, castor::Point2f const & bearing
-					, castor::Point2f const & advance )
+			auto addChar = [&]( Point2f charSize
+					, Point2f const & bearing
+					, Point2f const & advance )
 				{
 					auto xMin = bearing->x * ratio;
 					auto xMax = xMin + advance->x;
@@ -631,7 +631,7 @@ namespace castor3d
 				}
 				else
 				{
-					castor::Glyph const & glyph{ font.getGlyphAt( *cit ) };
+					Glyph const & glyph{ font.getGlyphAt( *cit ) };
 					auto advance = glyph.getAdvance() * ratio;
 
 					if ( *cit == U' ' || *cit == U'\t' )

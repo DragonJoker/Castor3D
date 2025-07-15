@@ -33,14 +33,14 @@ namespace atmosphere_scattering
 			&& lhs.constantTerm == rhs.constantTerm;
 	}
 
-	using DensityProfileLayers = castor::Array< DensityProfileLayer, 2u >;
+	using DensityProfileLayers = c3d::Array< DensityProfileLayer, 2u >;
 
 	// All units in kilometers
 	static constexpr float EarthBottomRadius = 6360.0f;
 	static constexpr float EarthTopRadius = 6460.0f;   // 100km atmosphere radius, less edge visible and it contain 99.99% of the atmosphere medium https://en.wikipedia.org/wiki/K%C3%A1rm%C3%A1n_line
 	static constexpr float EarthRayleighScaleHeight = 8.0f;
 	static constexpr float EarthMieScaleHeight = 1.2f;
-	static constexpr double MaxSunZenithAngle = castor::Pi< double > * 120.0 / 180.0;
+	static constexpr double MaxSunZenithAngle = c3d::Pi< double > * 120.0 / 180.0;
 
 	template< template< typename DataT > typename WrapperT >
 	struct AtmosphereScatteringConfigT
@@ -49,22 +49,22 @@ namespace atmosphere_scattering
 		explicit AtmosphereScatteringConfigT( ParamsT & ... params )
 			: sunDirection{ 1.0f, 0.0f, 0.0f, -20.0_degrees }
 			, planetPosition{ 0.0f, 0.0f, 0.0f }
-			, solarIrradiance{ params..., castor::Point3f{ 1.0f, 1.0f, 1.0f } }
+			, solarIrradiance{ params..., c3d::Point3f{ 1.0f, 1.0f, 1.0f } }
 			, sunAngularRadius{ params..., 0.004675f }
-			, sunIlluminance{ params..., castor::Point3f{ 1.0f, 1.0f, 1.0f } }
+			, sunIlluminance{ params..., c3d::Point3f{ 1.0f, 1.0f, 1.0f } }
 			, sunIlluminanceScale{ params..., 1.0f }
-			, rayMarchMinMaxSPP{ params..., castor::Point2f{ 4.0f, 14.0f } }
-			, absorptionExtinction{ params..., castor::Point3f{ 0.000650f, 0.001881f, 0.000085f } }
+			, rayMarchMinMaxSPP{ params..., c3d::Point2f{ 4.0f, 14.0f } }
+			, absorptionExtinction{ params..., c3d::Point3f{ 0.000650f, 0.001881f, 0.000085f } }
 			, muSMin{ params..., float( cos( MaxSunZenithAngle ) ) }
-			, rayleighScattering{ params..., castor::Point3f{ 0.005802f, 0.013558f, 0.033100f } }
+			, rayleighScattering{ params..., c3d::Point3f{ 0.005802f, 0.013558f, 0.033100f } }
 			, miePhaseFunctionG{ params..., 0.8f }
-			, mieScattering{ params..., castor::Point3f{ 0.003996f, 0.003996f, 0.003996f } }
+			, mieScattering{ params..., c3d::Point3f{ 0.003996f, 0.003996f, 0.003996f } }
 			, bottomRadius{ params..., EarthBottomRadius }
-			, mieExtinction{ params..., castor::Point3f{ 0.004440f, 0.004440f, 0.004440f } }
+			, mieExtinction{ params..., c3d::Point3f{ 0.004440f, 0.004440f, 0.004440f } }
 			, topRadius{ params..., EarthTopRadius }
 			, mieAbsorption{}
 			, multipleScatteringFactor{ params..., 1.0f }
-			, groundAlbedo{ params..., castor::Point3f{ 0.0f, 0.0f, 0.0f } }
+			, groundAlbedo{ params..., c3d::Point3f{ 0.0f, 0.0f, 0.0f } }
 			, multiScatteringLUTRes{ params..., 32.0f }
 			, rayleighDensity{ params..., DensityProfileLayers{ DensityProfileLayer{ 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }
 				, DensityProfileLayer{ 0.0f, 1.0f, -1.0f / EarthRayleighScaleHeight, 0.0f, 0.0f } } }
@@ -104,26 +104,26 @@ namespace atmosphere_scattering
 			return *this;
 		}
 
-		castor::Point4f sunDirection;
-		castor::Point4f planetPosition;
+		c3d::Point4f sunDirection;
+		c3d::Point4f planetPosition;
 
 		// The solar irradiance at the top of the atmosphere.
-		WrapperT< castor::Point3f > solarIrradiance;
+		WrapperT< c3d::Point3f > solarIrradiance;
 		// The sun's angular radius. Warning: the implementation uses approximations
 		// that are valid only if this angle is smaller than 0.1 radians.
 		WrapperT< float > sunAngularRadius;
 
-		WrapperT< castor::Point3f > sunIlluminance;
+		WrapperT< c3d::Point3f > sunIlluminance;
 		WrapperT< float > sunIlluminanceScale;
 
-		WrapperT< castor::Point2f > rayMarchMinMaxSPP;
-		castor::Point2f pad0;
+		WrapperT< c3d::Point2f > rayMarchMinMaxSPP;
+		c3d::Point2f pad0;
 
 		// The extinction coefficient of molecules that absorb light (e.g. ozone) at
 		// the altitude where their density is maximum, as a function of wavelength.
 		// The extinction coefficient at altitude h is equal to
 		// 'absorption_extinction' times 'absorption_density' at this altitude.
-		WrapperT< castor::Point3f > absorptionExtinction;
+		WrapperT< c3d::Point3f > absorptionExtinction;
 		// The cosine of the maximum Sun zenith angle for which atmospheric scattering
 		// must be precomputed (for maximum precision, use the smallest Sun zenith
 		// angle yielding negligible sky light radiance values. For instance, for the
@@ -134,7 +134,7 @@ namespace atmosphere_scattering
 		// density is maximum (usually the bottom of the atmosphere), as a function of
 		// wavelength. The scattering coefficient at altitude h is equal to
 		// 'rayleigh_scattering' times 'rayleigh_density' at this altitude.
-		WrapperT< castor::Point3f > rayleighScattering;
+		WrapperT< c3d::Point3f > rayleighScattering;
 		// The asymetry parameter for the Cornette-Shanks phase function for the
 		// aerosols.
 		WrapperT< float > miePhaseFunctionG;
@@ -143,7 +143,7 @@ namespace atmosphere_scattering
 		// is maximum (usually the bottom of the atmosphere), as a function of
 		// wavelength. The scattering coefficient at altitude h is equal to
 		// 'mie_scattering' times 'mie_density' at this altitude.
-		WrapperT< castor::Point3f > mieScattering;
+		WrapperT< c3d::Point3f > mieScattering;
 		// The distance between the planet center and the bottom of the atmosphere.
 		WrapperT< float > bottomRadius;
 
@@ -151,15 +151,15 @@ namespace atmosphere_scattering
 		// is maximum (usually the bottom of the atmosphere), as a function of
 		// wavelength. The extinction coefficient at altitude h is equal to
 		// 'mie_extinction' times 'mie_density' at this altitude.
-		WrapperT< castor::Point3f > mieExtinction;
+		WrapperT< c3d::Point3f > mieExtinction;
 		// The distance between the planet center and the top of the atmosphere.
 		WrapperT< float > topRadius{ EarthTopRadius };
 
-		castor::Point3f mieAbsorption;
+		c3d::Point3f mieAbsorption;
 		WrapperT< float > multipleScatteringFactor;
 
 		// The average albedo of the ground.
-		WrapperT< castor::Point3f > groundAlbedo;
+		WrapperT< c3d::Point3f > groundAlbedo;
 		WrapperT< float > multiScatteringLUTRes;
 
 		// The density profile of air molecules, i.e. a function from altitude to

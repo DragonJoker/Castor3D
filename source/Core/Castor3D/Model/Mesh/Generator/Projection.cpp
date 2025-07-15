@@ -3,7 +3,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	Projection::Projection()
 		: MeshGenerator( cuT( "projection" ) )
@@ -12,17 +12,17 @@ namespace castor3d
 
 	MeshGeneratorUPtr Projection::create()
 	{
-		return castor::makeUniqueDerived< MeshGenerator, Projection >();
+		return makeUniqueDerived< MeshGenerator, Projection >();
 	}
 
-	void Projection::setPoints( [[maybe_unused]] Pattern< castor::Point3f > const & pattern
-		, [[maybe_unused]] castor::Point3f const & axis
+	void Projection::setPoints( [[maybe_unused]] Pattern< Point3f > const & pattern
+		, [[maybe_unused]] Point3f const & axis
 		, [[maybe_unused]] bool closed )
 	{
 		//m_pattern = pattern;
 		//m_closed = closed;
 		//m_axis = axis;
-		//castor::point::normalise( m_axis );
+		//point::normalise( m_axis );
 		//m_axis = m_axis * m_depth;
 	}
 
@@ -66,7 +66,7 @@ namespace castor3d
 	//		// Construction des faces
 	//		for (uint32_t j = 0; j < m_nbFaces; j++)
 	//		{
-	//			Pattern< castor::Point3f > pattern;
+	//			Pattern< Point3f > pattern;
 
 	//			currentUV[1] = 0;
 	//			previousUV[1] = 0;

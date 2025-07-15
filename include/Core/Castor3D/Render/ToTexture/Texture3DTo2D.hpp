@@ -19,11 +19,11 @@ See LICENSE file in root folder
 
 #include <RenderGraph/FrameGraphPrerequisites.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct Texture3DTo2DData
 	{
-		castor::Point4f gridCenterCellSize;
+		Point4f gridCenterCellSize;
 		uint32_t gridSize;
 	};
 
@@ -69,7 +69,7 @@ namespace castor3d
 		};
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayoutVolume;
 		ashes::PipelineLayoutPtr m_pipelineLayoutVolume;
-		castor::Map< ast::type::ImageFormat, PipelineProgram > m_pipelineVolume;
+		Map< ast::type::ImageFormat, PipelineProgram > m_pipelineVolume;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPoolVolume;
 
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayoutSlice;
@@ -99,7 +99,7 @@ namespace castor3d
 		};
 
 		IntermediateViewArray m_textures;
-		castor::Vector< Texture3DToScreen > m_texture3DToScreen;
+		Vector< Texture3DToScreen > m_texture3DToScreen;
 		uint32_t m_index{ 0u };
 	};
 }

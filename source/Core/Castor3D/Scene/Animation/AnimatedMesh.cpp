@@ -8,11 +8,11 @@
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 
-CU_ImplementSmartPtr( castor3d, AnimatedMesh )
+CU_ImplementSmartPtr( c3d, AnimatedMesh )
 
-namespace castor3d
+namespace c3d
 {
-	AnimatedMesh::AnimatedMesh( castor::String const & name
+	AnimatedMesh::AnimatedMesh( String const & name
 		, Mesh & mesh
 		, Geometry & geometry )
 		: AnimatedObject{ AnimationType::eMesh, name }
@@ -51,7 +51,7 @@ namespace castor3d
 		return result;
 	}
 
-	void AnimatedMesh::update( castor::Milliseconds const & elapsed )
+	void AnimatedMesh::update( Milliseconds const & elapsed )
 	{
 		if ( m_playingAnimation )
 		{
@@ -85,14 +85,14 @@ namespace castor3d
 		m_ids[submesh.getId()] = id;
 	}
 
-	void AnimatedMesh::doAddAnimation( castor::String const & name )
+	void AnimatedMesh::doAddAnimation( String const & name )
 	{
 		if ( auto it = m_animations.find( name );
 			it == m_animations.end() && m_mesh.hasAnimation( name ) )
 		{
 			auto & animation = static_cast< MeshAnimation & >( m_mesh.getAnimation( name ) );
-			auto instance = castor::makeUniqueDerived< AnimationInstance, MeshAnimationInstance >( *this, animation );
-			m_animations.try_emplace( name, castor::move( instance ) );
+			auto instance = makeUniqueDerived< AnimationInstance, MeshAnimationInstance >( *this, animation );
+			m_animations.try_emplace( name, c3d::move( instance ) );
 		}
 	}
 

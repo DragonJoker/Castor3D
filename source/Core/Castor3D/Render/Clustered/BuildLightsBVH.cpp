@@ -28,7 +28,7 @@
 
 #include <limits>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -319,7 +319,7 @@ namespace castor3d
 				};
 				crg::cp::ConfigData cpConfig;
 				crg::PipelineHolder pipeline;
-				castor::Map< uint32_t, ProgramData > programs;
+				Map< uint32_t, ProgramData > programs;
 
 				Pipeline( crg::FramePass const & framePass
 					, crg::GraphContext & context
@@ -362,7 +362,7 @@ namespace castor3d
 					{
 						auto & program = it->second;
 						program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT
-							, cuT( "BuildLightsBVH/" ) + ( bottomLevel ? castor::String{ cuT( "Bottom/" ) } : castor::String{ cuT( "Top/" ) } ) + getName( lightType )
+							, cuT( "BuildLightsBVH/" ) + ( bottomLevel ? String{ cuT( "Bottom/" ) } : String{ cuT( "Top/" ) } ) + getName( lightType )
 							, createShader( device, config, lightType, bottomLevel ) };
 						program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, program.shaderModule ) };
 					}
@@ -426,7 +426,7 @@ namespace castor3d
 			{
 				// Build bottom level of the BVH.
 				auto maxLeaves = m_lightCache.getLightsBufferCount( m_lightType );
-				auto numThreadGroups = castor::divRoundUp( maxLeaves, NumThreads );
+				auto numThreadGroups = divRoundUp( maxLeaves, NumThreads );
 				m_bottom.pipeline.recordInto( context, commandBuffer, index );
 				m_context.vkCmdDispatch( commandBuffer, numThreadGroups, 1u, 1u );
 				uint32_t maxLevels = FrustumClusters::getNumLevels( maxLeaves );
@@ -442,7 +442,7 @@ namespace castor3d
 						doBarriers( context, commandBuffer, index, 1 );
 						m_context.vkCmdPushConstants( commandBuffer, m_top.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 4u, &level );
 						uint32_t numChildNodes = FrustumClusters::getNumLevelNodes( level );
-						numThreadGroups = castor::divRoundUp( numChildNodes, NumThreads );
+						numThreadGroups = divRoundUp( numChildNodes, NumThreads );
 						m_context.vkCmdDispatch( commandBuffer, numThreadGroups, 1u, 1u );
 					}
 				}
@@ -596,13 +596,13 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< lgtbvh::FramePass >( framePass
+				auto result = makeRawUnique< lgtbvh::FramePass >( framePass
 					, context
 					, graph
 					, device
 					, clusters
 					, LightType::ePoint );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -621,13 +621,13 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = castor::make_unique< lgtbvh::FramePass >( framePass
+				auto result = makeRawUnique< lgtbvh::FramePass >( framePass
 					, context
 					, graph
 					, device
 					, clusters
 					, LightType::eSpot );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

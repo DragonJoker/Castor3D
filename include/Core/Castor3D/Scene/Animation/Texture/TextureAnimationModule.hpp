@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Scene */
 	//@{
@@ -26,7 +26,7 @@ namespace castor3d
 	class TextureAnimationInstance;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, TextureAnimationInstance, C3D_API );
+	CU_DeclareSmartPtr( c3d, TextureAnimationInstance, C3D_API );
 	/** @endcond */
 
 	//@}

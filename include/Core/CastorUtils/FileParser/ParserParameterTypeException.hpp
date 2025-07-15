@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/FileParser/ParserParameterHelpers.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< ParameterType ExpectedT >
 	class ParserParameterTypeException
@@ -44,6 +44,6 @@ namespace castor
 }
 
 #define CU_ParserParameterException( expected, given )\
-	throw castor::ParserParameterTypeException< expected >{ given, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
+	throw c3d::ParserParameterTypeException< expected >{ given, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 
 #endif

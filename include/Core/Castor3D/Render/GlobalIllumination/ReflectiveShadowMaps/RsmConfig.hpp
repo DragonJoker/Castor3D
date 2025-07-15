@@ -15,18 +15,18 @@ See LICENSE file in root folder
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct RsmConfig
 	{
 		C3D_API void accept( ConfigurationVisitorBase & visitor );
-		C3D_API static void addParsers( castor::AttributeParsers & result
+		C3D_API static void addParsers( AttributeParsers & result
 			, CSCNSection shadows, CSCNSection lightLpv
-			, castor::RawParserFunctionT< ShadowContext > parserConfig );
+			, RawParserFunctionT< ShadowContext > parserConfig );
 
-		castor::ChangeTracked< float > intensity;
-		castor::ChangeTracked< float > maxRadius;
-		castor::ChangeTracked< castor::RangedValue< uint32_t > > sampleCount{ castor::makeRangedValue( 100u, 20u, MaxRsmRange ) };
+		ChangeTracked< float > intensity;
+		ChangeTracked< float > maxRadius;
+		ChangeTracked< RangedValue< uint32_t > > sampleCount{ makeRangedValue( 100u, 20u, MaxRsmRange ) };
 	};
 
 	inline bool operator==( RsmConfig const & lhs, RsmConfig const & rhs )noexcept

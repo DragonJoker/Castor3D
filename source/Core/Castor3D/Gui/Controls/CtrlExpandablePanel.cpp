@@ -13,20 +13,20 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementSmartPtr( castor3d, ExpandablePanelCtrl )
+CU_ImplementSmartPtr( c3d, ExpandablePanelCtrl )
 
-namespace castor3d
+namespace c3d
 {
 	ExpandablePanelCtrl::ExpandablePanelCtrl( SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, ExpandablePanelStyle * style
 		, ControlRPtr parent )
 		: ExpandablePanelCtrl{ scene
 			, name
 			, style
 			, parent
-			, castor::Position{}
-			, castor::Size{}
+			, Position{}
+			, Size{}
 			, 25u
 			, true
 			, 0u
@@ -35,11 +35,11 @@ namespace castor3d
 	}
 
 	ExpandablePanelCtrl::ExpandablePanelCtrl( SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, ExpandablePanelStyle * style
 		, ControlRPtr parent
-		, castor::Position const & position
-		, castor::Size const & size
+		, Position const & position
+		, Size const & size
 		, uint32_t headerHeight
 		, bool expanded
 		, ControlFlagType flags
@@ -54,25 +54,25 @@ namespace castor3d
 			, flags
 			, visible }
 		, m_headerHeight{ headerHeight }
-		, m_header{ getEngine().getControlsManager()->registerControlT( castor::makeUnique< PanelCtrl >( m_scene
+		, m_header{ getEngine().getControlsManager()->registerControlT( makeUnique< PanelCtrl >( m_scene
 			, cuT( "Header" )
 			, &style->getHeaderStyle()
 			, this
-			, castor::Position{ 0, 0 }
-			, castor::Size{ size->x - m_headerHeight, m_headerHeight } ) ) }
-		, m_expand{ getEngine().getControlsManager()->registerControlT( castor::makeUnique< ButtonCtrl >( m_scene
+			, Position{ 0, 0 }
+			, Size{ size->x - m_headerHeight, m_headerHeight } ) ) }
+		, m_expand{ getEngine().getControlsManager()->registerControlT( makeUnique< ButtonCtrl >( m_scene
 			, cuT( "Expand" )
 			, &style->getExpandStyle()
 			, this
 			, m_retractCaption
-			, castor::Position{ int32_t( size->x - m_headerHeight ), 0 }
-			, castor::Size{ m_headerHeight, m_headerHeight } ) ) }
-		, m_content{ getEngine().getControlsManager()->registerControlT( castor::makeUnique< PanelCtrl >( m_scene
+			, Position{ int32_t( size->x - m_headerHeight ), 0 }
+			, Size{ m_headerHeight, m_headerHeight } ) ) }
+		, m_content{ getEngine().getControlsManager()->registerControlT( makeUnique< PanelCtrl >( m_scene
 			, cuT( "Content" )
 			, &style->getContentStyle()
 			, this
-			, castor::Position{ 0, int32_t( m_headerHeight ) }
-			, castor::Size{ size->x, size->y - m_headerHeight } ) ) }
+			, Position{ 0, int32_t( m_headerHeight ) }
+			, Size{ size->x, size->y - m_headerHeight } ) ) }
 		, m_expanded{ expanded }
 	{
 		setBorderSize( { 0u, 0u, 0u, 0u } );
@@ -96,14 +96,14 @@ namespace castor3d
 		manager.unregisterControl( *m_header );
 	}
 
-	void ExpandablePanelCtrl::setExpandCaption( castor::U32String v )
+	void ExpandablePanelCtrl::setExpandCaption( U32String v )
 	{
-		m_expandCaption = castor::move( v );
+		m_expandCaption = c3d::move( v );
 	}
 
-	void ExpandablePanelCtrl::setRetractCaption( castor::U32String v )
+	void ExpandablePanelCtrl::setRetractCaption( U32String v )
 	{
-		m_retractCaption = castor::move( v );
+		m_retractCaption = c3d::move( v );
 	}
 
 	void ExpandablePanelCtrl::doUpdateStyle()
@@ -156,12 +156,12 @@ namespace castor3d
 		}
 	}
 
-	void ExpandablePanelCtrl::doSetPosition( castor::Position const & value )
+	void ExpandablePanelCtrl::doSetPosition( Position const & value )
 	{
 		doUpdatePositions();
 	}
 
-	void ExpandablePanelCtrl::doSetSize( castor::Size const & value )
+	void ExpandablePanelCtrl::doSetSize( Size const & value )
 	{
 		doUpdatePositions();
 		doUpdateSizes();
@@ -211,12 +211,12 @@ namespace castor3d
 		auto & size = getSize();
 		auto expandSize = m_expand->getSize();
 		auto maxHeight = std::max( m_header->getSize()->y, expandSize->y );
-		m_header->setPosition( castor::Position( 0, 0 ) );
-		m_expand->setPosition( castor::Position( int32_t( size->x - expandSize->x ), 0 ) );
+		m_header->setPosition( Position( 0, 0 ) );
+		m_expand->setPosition( Position( int32_t( size->x - expandSize->x ), 0 ) );
 
 		if ( m_expanded )
 		{
-			m_content->setPosition( castor::Position( 0, int32_t( maxHeight ) ) );
+			m_content->setPosition( Position( 0, int32_t( maxHeight ) ) );
 		}
 	}
 
@@ -226,12 +226,12 @@ namespace castor3d
 		auto expandSize = m_expand->getSize();
 		auto headerSize = m_header->getSize();
 		auto maxHeight = std::max( headerSize->y, expandSize->y );
-		m_header->setSize( castor::Size( size->x - expandSize->x, headerSize->y ) );
+		m_header->setSize( Size( size->x - expandSize->x, headerSize->y ) );
 		m_expand->setSize( expandSize );
 
 		if ( m_expanded )
 		{
-			m_content->setSize( castor::Size( size->x, size->y - maxHeight ) );
+			m_content->setSize( Size( size->x, size->y - maxHeight ) );
 		}
 	}
 }

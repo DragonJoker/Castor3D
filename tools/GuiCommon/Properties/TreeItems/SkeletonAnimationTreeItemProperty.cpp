@@ -11,7 +11,7 @@
 namespace GuiCommon
 {
 	SkeletonAnimationTreeItemProperty::SkeletonAnimationTreeItemProperty( bool editable
-		, castor3d::Engine * engine )
+		, c3d::Engine * engine )
 		: TreeItemProperty{ engine, editable }
 	{
 		CreateTreeItemMenu();

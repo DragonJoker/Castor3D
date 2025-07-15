@@ -2,7 +2,7 @@
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//*********************************************************************************************
 

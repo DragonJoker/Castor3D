@@ -5,7 +5,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wextra-semi-stmt"
 
-namespace castor
+namespace c3d
 {
 	//*************************************************************************************************
 
@@ -289,7 +289,7 @@ namespace castor
 	{
 		for ( uint32_t i = 0; i < TCount; i++ )
 		{
-			castor::swap( m_data.coords[i], rhs.m_data.coords[i] );
+			c3d::swap( m_data.coords[i], rhs.m_data.coords[i] );
 		}
 	}
 

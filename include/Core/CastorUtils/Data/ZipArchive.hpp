@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include <list>
 
-namespace castor
+namespace c3d
 {
 	class ZipArchive
 		: public NonMovable
@@ -118,7 +118,7 @@ namespace castor
 		CU_API bool findFile( String const & file )const;
 
 	private:
-		castor::RawUniquePtr< ZipImpl > m_impl;
+		c3d::RawUniquePtr< ZipImpl > m_impl;
 		Folder m_uncompressed;
 		Path m_rootFolder;
 	};

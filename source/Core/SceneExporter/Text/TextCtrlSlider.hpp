@@ -9,30 +9,30 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::SliderCtrl >
-		: public TextWriterT< castor3d::SliderCtrl >
+	class TextWriter< SliderCtrl >
+		: public TextWriterT< SliderCtrl >
 	{
 	public:
 		explicit TextWriter( String const & tabs );
-		bool operator()( castor3d::SliderCtrl const & overlay
-			, castor::StringStream & file )override;
+		bool operator()( SliderCtrl const & overlay
+			, StringStream & file )override;
 
 	private:
 		String m_prefix;
 	};
 
 	template<>
-	class TextWriter< castor3d::SliderStyle >
-		: public TextWriterT< castor3d::SliderStyle >
+	class TextWriter< SliderStyle >
+		: public TextWriterT< SliderStyle >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, String const & fontName );
-		bool operator()( castor3d::SliderStyle const & overlay
-			, castor::StringStream & file )override;
+		bool operator()( SliderStyle const & overlay
+			, StringStream & file )override;
 
 	private:
 		String m_fontName;

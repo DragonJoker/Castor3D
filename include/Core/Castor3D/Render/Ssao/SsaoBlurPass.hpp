@@ -14,7 +14,7 @@ See LICENSE file in root folder
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class SsaoBlurPass
 	{
@@ -57,12 +57,12 @@ namespace castor3d
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, crg::FramePass const & previousPass
-			, castor::String const & prefix
+			, String const & prefix
 			, Extent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
 			, CameraUbo const & cameraUbo
-			, castor::Point2i const & axis
+			, Point2i const & axis
 			, Texture const & input
 			, Texture const & bentInput
 			, Texture const & normals
@@ -138,7 +138,7 @@ namespace castor3d
 		{
 			Program( RenderDevice const & device
 				, bool useNormalsBuffer
-				, castor::String const & prefix );
+				, String const & prefix );
 
 			ProgramModule shader;
 			ashes::PipelineShaderStageCreateInfoArray stages;
@@ -147,9 +147,9 @@ namespace castor3d
 	private:
 		struct Configuration
 		{
-			castor::Point2i axis{};
-			castor::Point2i dummy{};
-			castor::Array< castor::Point4f, 2u > gaussian{};
+			Point2i axis{};
+			Point2i dummy{};
+			Array< Point4f, 2u > gaussian{};
 		};
 
 		RenderDevice const & m_device;
@@ -162,7 +162,7 @@ namespace castor3d
 		Texture m_result;
 		Texture m_bentResult;
 		UniformBufferOffsetT< Configuration > m_configurationUbo;
-		castor::Array< Program, 2u > m_programs;
+		Array< Program, 2u > m_programs;
 		crg::FramePass const * m_lastPass{};
 
 	};

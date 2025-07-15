@@ -5,9 +5,9 @@
 #include "CastorUtils/Log/Logger.hpp"
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
-CU_ImplementSmartPtr( castor, FontCache )
+CU_ImplementSmartPtr( c3d, FontCache )
 
-namespace castor
+namespace c3d
 {
 	//*********************************************************************************************
 

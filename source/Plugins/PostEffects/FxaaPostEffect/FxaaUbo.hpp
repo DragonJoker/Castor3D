@@ -15,7 +15,7 @@ namespace fxaa
 {
 	struct FxaaUboConfiguration
 	{
-		castor::Point2f pixelSize;
+		c3d::Point2f pixelSize;
 		float subpixShift;
 		float spanMax;
 		float reduceMul;
@@ -49,8 +49,8 @@ namespace fxaa
 		using Configuration = FxaaUboConfiguration;
 
 	public:
-		explicit FxaaUbo( castor3d::RenderDevice const & device
-			, castor::Size const & size );
+		explicit FxaaUbo( c3d::RenderDevice const & device
+			, c3d::Size const & size );
 		~FxaaUbo();
 		void cpuUpdate( float shift
 			, float span
@@ -68,18 +68,18 @@ namespace fxaa
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
 
-		castor3d::UniformBufferOffsetT< Configuration > const & getUbo()const
+		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
 			return m_ubo;
 		}
 
 	public:
-		static const castor::MbString Buffer;
-		static const castor::MbString Data;
+		static const c3d::MbString Buffer;
+		static const c3d::MbString Data;
 
 	private:
-		castor3d::RenderDevice const & m_device;
-		castor3d::UniformBufferOffsetT< Configuration > m_ubo;
+		c3d::RenderDevice const & m_device;
+		c3d::UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace shader
 	{
@@ -31,7 +31,7 @@ namespace castor3d
 			SceneData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
-				: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+				: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 			{
 			}
 
@@ -120,7 +120,7 @@ namespace castor3d
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_sceneData = sceneBuffer.declMember< castor3d::shader::SceneData >( "d" );\
+	auto c3d_sceneData = sceneBuffer.declMember< c3d::shader::SceneData >( "d" );\
 	sceneBuffer.end()
 
 #endif

@@ -33,7 +33,7 @@ CU_ImplementSmartPtr( waves, WavesRenderComponent )
 
 namespace waves
 {
-	using namespace castor3d;
+	using namespace c3d;
 
 	//*********************************************************************************************
 
@@ -46,7 +46,7 @@ namespace waves
 			eWave = CU_MakeSectionName( 'W', 'A', 'V', 'E' ),
 		};
 
-		static CU_ImplementAttributeParserNewBlock( parserWavesComponent, castor3d::MeshContext, WavesContext )
+		static CU_ImplementAttributeParserNewBlock( parserWavesComponent, c3d::MeshContext, WavesContext )
 		{
 			if ( !blockContext->mesh )
 			{
@@ -66,7 +66,7 @@ namespace waves
 			else
 			{
 				blockContext->parameters.add( cuT( "width_subdiv" )
-					, castor::string::toString( params[0]->get< uint32_t >() ) );
+					, c3d::string::toString( params[0]->get< uint32_t >() ) );
 			}
 		}
 		CU_EndAttribute()
@@ -80,7 +80,7 @@ namespace waves
 			else
 			{
 				blockContext->parameters.add( cuT( "depth_subdiv" )
-					, castor::string::toString( params[0]->get< uint32_t >() ) );
+					, c3d::string::toString( params[0]->get< uint32_t >() ) );
 			}
 		}
 		CU_EndAttribute()
@@ -94,7 +94,7 @@ namespace waves
 			else
 			{
 				blockContext->parameters.add( cuT( "width" )
-					, castor::string::toString( params[0]->get< uint32_t >() ) );
+					, c3d::string::toString( params[0]->get< uint32_t >() ) );
 			}
 		}
 		CU_EndAttribute()
@@ -108,7 +108,7 @@ namespace waves
 			else
 			{
 				blockContext->parameters.add( cuT( "depth" )
-					, castor::string::toString( params[0]->get< uint32_t >() ) );
+					, c3d::string::toString( params[0]->get< uint32_t >() ) );
 			}
 		}
 		CU_EndAttribute()
@@ -153,7 +153,7 @@ namespace waves
 			auto submesh = blockContext->mesh->getSubmesh( 0u );
 			auto & component = *submesh->createComponent< WavesRenderComponent >();
 			blockContext->config.numWaves = blockContext->wave;
-			component.setConfig( castor::move( blockContext->config ) );
+			component.setConfig( c3d::move( blockContext->config ) );
 		}
 		CU_EndAttributePop()
 
@@ -241,7 +241,7 @@ namespace waves
 			WaveResult( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
-				: sdw::StructInstance{ writer, castor::move( expr ), enabled }
+				: sdw::StructInstance{ writer, c3d::move( expr ), enabled }
 				, position{ getMember< sdw::Vec3 >( "position" ) }
 				, normal{ getMember< sdw::Vec3 >( "normal" ) }
 				, bitangent{ getMember< sdw::Vec3 >( "bitangent" ) }
@@ -277,7 +277,7 @@ namespace waves
 
 	//*********************************************************************************************
 
-	WavesRenderComponent::RenderData::RenderData( castor3d::SubmeshComponent const & component )
+	WavesRenderComponent::RenderData::RenderData( c3d::SubmeshComponent const & component )
 		: SubmeshRenderData{}
 		, m_component{ static_cast< WavesRenderComponent const & >( component ) }
 	{
@@ -285,7 +285,7 @@ namespace waves
 
 	bool WavesRenderComponent::RenderData::initialise( RenderDevice const & device )
 	{
-		m_ubo = castor::make_unique< WavesUbo >( device );
+		m_ubo = c3d::makeRawUnique< WavesUbo >( device );
 		return true;
 	}
 
@@ -299,7 +299,7 @@ namespace waves
 		m_ubo->cpuUpdate( m_component.getConfig() );
 	}
 
-	void WavesRenderComponent::RenderData::fillBindings( castor3d::PipelineFlags const & flags
+	void WavesRenderComponent::RenderData::fillBindings( c3d::PipelineFlags const & flags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
@@ -308,7 +308,7 @@ namespace waves
 			, VK_SHADER_STAGE_ALL_GRAPHICS ) );
 	}
 
-	void WavesRenderComponent::RenderData::fillDescriptor( castor3d::PipelineFlags const & flags
+	void WavesRenderComponent::RenderData::fillDescriptor( c3d::PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
@@ -317,9 +317,9 @@ namespace waves
 
 	//*********************************************************************************************
 
-	void WavesRenderComponent::RenderShader::getShaderSource( castor3d::Engine const & engine
-		, castor3d::PipelineFlags const & flags
-		, castor3d::ComponentModeFlags const & componentsMask
+	void WavesRenderComponent::RenderShader::getShaderSource( c3d::Engine const & engine
+		, c3d::PipelineFlags const & flags
+		, c3d::ComponentModeFlags const & componentsMask
 		, ast::ShaderBuilder & builder )const
 	{
 		sdw::TraditionalGraphicsWriter writer{ builder };
@@ -345,7 +345,7 @@ namespace waves
 			, passShaders
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
-		auto index = uint32_t( castor3d::GlobalBuffersIdx::eCount );
+		auto index = uint32_t( c3d::GlobalBuffersIdx::eCount );
 		C3D_Waves( writer
 			, index++
 			, RenderPipeline::eBuffers );
@@ -432,12 +432,12 @@ namespace waves
 					, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 				{
 					auto bbPositions = writer.declConstantArray( "bbPositions"
-						, castor::Vector< sdw::Vec3 >{ vec3( -0.5_f, -0.5_f, 1.0_f )
+						, c3d::Vector< sdw::Vec3 >{ vec3( -0.5_f, -0.5_f, 1.0_f )
 						, vec3( -0.5_f, +0.5_f, 1.0_f )
 						, vec3( +0.5_f, -0.5_f, 1.0_f )
 						, vec3( +0.5_f, +0.5_f, 1.0_f ) } );
 					auto bbTexcoords = writer.declConstantArray( "bbTexcoords"
-						, castor::Vector< sdw::Vec2 >{ vec2( 0.0_f, 0.0_f )
+						, c3d::Vector< sdw::Vec2 >{ vec2( 0.0_f, 0.0_f )
 						, vec2( 0.0_f, 1.0_f )
 						, vec2( 1.0_f, 0.0_f )
 						, vec2( 1.0_f, 1.0_f ) } );
@@ -757,37 +757,37 @@ namespace waves
 
 	//*********************************************************************************************
 
-	WavesRenderComponent::Plugin::Plugin( castor3d::SubmeshComponentRegister const & submeshComponents )
-		: castor3d::SubmeshComponentPlugin{ submeshComponents, nullptr }
+	WavesRenderComponent::Plugin::Plugin( c3d::SubmeshComponentRegister const & submeshComponents )
+		: c3d::SubmeshComponentPlugin{ submeshComponents, nullptr }
 	{
 	}
 
-	void WavesRenderComponent::Plugin::createParsers( castor::AttributeParsers & parsers )const
+	void WavesRenderComponent::Plugin::createParsers( c3d::AttributeParsers & parsers )const
 	{
-		castor3d::BlockParserContextT< castor3d::MeshContext > meshContext{ parsers, castor3d::CSCNSection::eMesh };
-		castor3d::BlockParserContextT< WavesContext > wavesContext{ parsers, parse::WavesSection::eWaves, castor3d::CSCNSection::eMesh };
-		castor3d::BlockParserContextT< WavesContext > waveContext{ parsers, parse::WavesSection::eWave, castor3d::CSCNSection::eMesh };
+		c3d::BlockParserContextT< c3d::MeshContext > meshContext{ parsers, c3d::CSCNSection::eMesh };
+		c3d::BlockParserContextT< WavesContext > wavesContext{ parsers, parse::WavesSection::eWaves, c3d::CSCNSection::eMesh };
+		c3d::BlockParserContextT< WavesContext > waveContext{ parsers, parse::WavesSection::eWave, c3d::CSCNSection::eMesh };
 
 		meshContext.addPushParser( cuT( "waves" ), parse::WavesSection::eWaves, &parse::parserWavesComponent );
 
-		wavesContext.addParser( cuT( "widthSubdiv" ), &parse::parserWidthSubdiv, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		wavesContext.addParser( cuT( "depthSubdiv" ), &parse::parserDepthSubdiv, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		wavesContext.addParser( cuT( "width" ), &parse::parserWidth, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		wavesContext.addParser( cuT( "depth" ), &parse::parserDepth, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		wavesContext.addParser( cuT( "tessellationFactor" ), &parse::parserTessellationFactor, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		wavesContext.addParser( cuT( "dampeningFactor" ), &parse::parserDampeningFactor, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		wavesContext.addParser( cuT( "widthSubdiv" ), &parse::parserWidthSubdiv, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
+		wavesContext.addParser( cuT( "depthSubdiv" ), &parse::parserDepthSubdiv, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
+		wavesContext.addParser( cuT( "width" ), &parse::parserWidth, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
+		wavesContext.addParser( cuT( "depth" ), &parse::parserDepth, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
+		wavesContext.addParser( cuT( "tessellationFactor" ), &parse::parserTessellationFactor, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
+		wavesContext.addParser( cuT( "dampeningFactor" ), &parse::parserDampeningFactor, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		wavesContext.addPushParser( cuT( "wave" ), parse::WavesSection::eWave, &parse::parserWave );
 		wavesContext.addPopParser( cuT( "}" ), &parse::parserWavesComponentEnd );
 
-		waveContext.addParser( cuT( "direction" ), &parse::parserWaveDirection, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
-		waveContext.addParser( cuT( "steepness" ), &parse::parserWaveSteepness, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		waveContext.addParser( cuT( "length" ), &parse::parserWaveLength, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		waveContext.addParser( cuT( "amplitude" ), &parse::parserWaveAmplitude, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		waveContext.addParser( cuT( "speed" ), &parse::parserWaveSpeed, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		waveContext.addParser( cuT( "direction" ), &parse::parserWaveDirection, { c3d::makeParameter< c3d::ParameterType::ePoint3F >() } );
+		waveContext.addParser( cuT( "steepness" ), &parse::parserWaveSteepness, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		waveContext.addParser( cuT( "length" ), &parse::parserWaveLength, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		waveContext.addParser( cuT( "amplitude" ), &parse::parserWaveAmplitude, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
+		waveContext.addParser( cuT( "speed" ), &parse::parserWaveSpeed, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 		waveContext.addPopParser( cuT( "}" ), &parse::parserWaveEnd );
 	}
 
-	void WavesRenderComponent::Plugin::createSections( castor::StrUInt32Map & sections )const
+	void WavesRenderComponent::Plugin::createSections( c3d::StrUInt32Map & sections )const
 	{
 		sections.emplace( uint32_t( parse::WavesSection::eWaves ), cuT( "waves" ) );
 		sections.emplace( uint32_t( parse::WavesSection::eWave ), cuT( "wave" ) );
@@ -795,8 +795,8 @@ namespace waves
 
 	//*********************************************************************************************
 
-	castor::String const WavesRenderComponent::TypeName = C3D_PluginMakeSubmeshRenderComponentName( "waves", "waves" );
-	castor::MbString const WavesRenderComponent::FullName = "Waves Rendering";
+	c3d::String const WavesRenderComponent::TypeName = C3D_PluginMakeSubmeshRenderComponentName( "waves", "waves" );
+	c3d::MbString const WavesRenderComponent::FullName = "Waves Rendering";
 
 	WavesRenderComponent::WavesRenderComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, TypeName }
@@ -805,9 +805,9 @@ namespace waves
 
 	SubmeshComponentUPtr WavesRenderComponent::clone( Submesh & submesh )const
 	{
-		auto result = castor::makeUnique< WavesRenderComponent >( submesh );
+		auto result = c3d::makeUnique< WavesRenderComponent >( submesh );
 		result->initialiseRenderData();
-		return castor::ptrRefCast< SubmeshComponent >( result );
+		return c3d::ptrRefCast< SubmeshComponent >( result );
 	}
 
 	//*********************************************************************************************

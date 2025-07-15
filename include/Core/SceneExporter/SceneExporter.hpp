@@ -15,7 +15,7 @@
 #	endif
 #endif
 
-namespace castor3d::exporter
+namespace c3d::exporter
 {
 	struct ExportOptions
 	{
@@ -35,7 +35,7 @@ namespace castor3d::exporter
 	{
 	public:
 		SceneExporter( ExportOptions options )
-			: m_options{ castor::move( options ) }
+			: m_options{ c3d::move( options ) }
 		{
 		}
 
@@ -50,12 +50,12 @@ namespace castor3d::exporter
 		 *\param[in]	scene		La scène à exporter.
 		 *\param[in]	fileName	Le nom du fichier exportà.
 		 */
-		CSE_API virtual bool exportScene( castor3d::Scene const & scene
-			, castor::Path const & fileName ) = 0;
-		CSE_API virtual bool exportMesh( castor3d::Scene const & scene
-			, castor3d::Mesh const & mesh
-			, castor::Path const & outputFolder
-			, castor::String const & outputName ) = 0;
+		CSE_API virtual bool exportScene( Scene const & scene
+			, Path const & fileName ) = 0;
+		CSE_API virtual bool exportMesh( Scene const & scene
+			, Mesh const & mesh
+			, Path const & outputFolder
+			, String const & outputName ) = 0;
 
 	protected:
 		ExportOptions const m_options;

@@ -6,12 +6,12 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Graphics/GraphicsModule.hpp"
 
-namespace castor
+namespace c3d
 {
-	class ColourComponent
+	class ColourComponentValue
 	{
 	public:
-		constexpr ColourComponent() = default;
+		constexpr ColourComponentValue() = default;
 		/**
 		 *\~english
 		 *\brief		Constructor from HDR component.
@@ -22,7 +22,7 @@ namespace castor
 		 *\param[in]	rhs		La valeur de la composante HDR.
 		 *\param[in]	gamma	La valeur de la correction gamma.
 		 */
-		CU_API explicit ColourComponent( HdrColourComponent const & rhs
+		CU_API explicit ColourComponentValue( HdrColourComponentValue const & rhs
 			, float gamma = 2.2f );
 		/**
 		 *\~english
@@ -32,7 +32,7 @@ namespace castor
 		 *\brief		Constructeur spécifié
 		 *\param[in]	value	La valeur de la composante
 		 */
-		explicit constexpr ColourComponent( float value )
+		explicit constexpr ColourComponentValue( float value )
 			: m_component{ value }
 		{
 		}
@@ -46,7 +46,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0.0f et 1.0f
 		 *\return		Référence sur cet objet
 		 */
-		ColourComponent & operator=( float rhs )
+		ColourComponentValue & operator=( float rhs )
 		{
 			m_component = rhs;
 			doClamp();
@@ -62,7 +62,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0.0 et 1.0
 		 *\return		Référence sur cet objet
 		 */
-		ColourComponent & operator=( double rhs )
+		ColourComponentValue & operator=( double rhs )
 		{
 			m_component = float( rhs );
 			doClamp();
@@ -78,7 +78,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0.0 et 1.0
 		 *\return		Référence sur cet objet
 		 */
-		ColourComponent & operator=( long double rhs )
+		ColourComponentValue & operator=( long double rhs )
 		{
 			m_component = float( rhs );
 			doClamp();
@@ -94,7 +94,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		ColourComponent & operator=( int8_t rhs )
+		ColourComponentValue & operator=( int8_t rhs )
 		{
 			m_component = float( uint8_t( rhs ) ) / 255.0f;
 			doClamp();
@@ -110,7 +110,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		ColourComponent & operator=( uint8_t rhs )
+		ColourComponentValue & operator=( uint8_t rhs )
 		{
 			m_component = float( rhs ) / 255.0f;
 			return *this;
@@ -125,7 +125,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0 et 255
 		 *\return		Référence sur cet objet
 		 */
-		ColourComponent & operator=( int16_t rhs )
+		ColourComponentValue & operator=( int16_t rhs )
 		{
 			m_component = float( rhs ) / 255.0f;
 			doClamp();
@@ -141,7 +141,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0 et 255
 		 *\return		Référence sur cet objet
 		 */
-		ColourComponent & operator=( uint16_t rhs )
+		ColourComponentValue & operator=( uint16_t rhs )
 		{
 			m_component = float( rhs ) / 255.0f;
 			doClamp();
@@ -157,7 +157,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0 et 255
 		 *\return		Référence sur cet objet
 		 */
-		ColourComponent & operator=( int32_t rhs )
+		ColourComponentValue & operator=( int32_t rhs )
 		{
 			m_component = float( rhs ) / 255.0f;
 			doClamp();
@@ -173,7 +173,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0 et 255
 		 *\return		Référence sur cet objet
 		 */
-		ColourComponent & operator=( uint32_t rhs )
+		ColourComponentValue & operator=( uint32_t rhs )
 		{
 			m_component = float( rhs ) / 255.0f;
 			doClamp();
@@ -189,7 +189,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0 et 255
 		 *\return		Référence sur cet objet
 		 */
-		ColourComponent & operator=( int64_t rhs )
+		ColourComponentValue & operator=( int64_t rhs )
 		{
 			m_component = float( rhs ) / 255.0f;
 			doClamp();
@@ -205,7 +205,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0 et 255
 		 *\return		Référence sur cet objet
 		 */
-		ColourComponent & operator=( uint64_t rhs )
+		ColourComponentValue & operator=( uint64_t rhs )
 		{
 			m_component = float( rhs ) / 255.0f;
 			doClamp();
@@ -333,7 +333,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur à ajouter
 		 *\return		Resultat de this + rhs
 		 */
-		ColourComponent & operator+=( ColourComponent const & rhs )
+		ColourComponentValue & operator+=( ColourComponentValue const & rhs )
 		{
 			m_component += rhs.value();
 			doClamp();
@@ -351,7 +351,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur à soustraire
 		 *\return		Resultat de this - rhs
 		 */
-		ColourComponent & operator-=( ColourComponent const & rhs )
+		ColourComponentValue & operator-=( ColourComponentValue const & rhs )
 		{
 			m_component -= rhs.value();
 			doClamp();
@@ -369,7 +369,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur à multiplier
 		 *\return		Resultat de this * rhs
 		 */
-		ColourComponent & operator*=( ColourComponent const & rhs )
+		ColourComponentValue & operator*=( ColourComponentValue const & rhs )
 		{
 			m_component *= rhs.value();
 			doClamp();
@@ -387,7 +387,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur à diviser
 		 *\return		Resultat de this / rhs
 		 */
-		ColourComponent & operator/=( ColourComponent const & rhs )
+		ColourComponentValue & operator/=( ColourComponentValue const & rhs )
 		{
 			m_component /= rhs.value();
 			doClamp();
@@ -404,10 +404,10 @@ namespace castor
 		 *\return		Resultat de this + rhs
 		 */
 		template< typename T >
-		ColourComponent & operator+=( T const & rhs )
+		ColourComponentValue & operator+=( T const & rhs )
 		{
 			float value = 0;
-			ColourComponent component( value );
+			ColourComponentValue component( value );
 			component = rhs;
 			m_component += component.value();
 			doClamp();
@@ -424,10 +424,10 @@ namespace castor
 		 *\return		Resultat de this - rhs
 		 */
 		template< typename T >
-		ColourComponent & operator-=( T const & rhs )
+		ColourComponentValue & operator-=( T const & rhs )
 		{
 			float value = 0;
-			ColourComponent component( value );
+			ColourComponentValue component( value );
 			component = rhs;
 			m_component -= component.value();
 			doClamp();
@@ -444,10 +444,10 @@ namespace castor
 		 *\return		Resultat de this * rhs
 		 */
 		template< typename T >
-		ColourComponent & operator*=( T const & rhs )
+		ColourComponentValue & operator*=( T const & rhs )
 		{
 			float value = 0;
-			ColourComponent component( value );
+			ColourComponentValue component( value );
 			component = rhs;
 			m_component *= component.value();
 			doClamp();
@@ -464,10 +464,10 @@ namespace castor
 		 *\return		Resultat de this / rhs
 		 */
 		template< typename T >
-		ColourComponent & operator/=( T const & rhs )
+		ColourComponentValue & operator/=( T const & rhs )
 		{
 			float value = 0;
-			ColourComponent component( value );
+			ColourComponentValue component( value );
 			component = rhs;
 			m_component /= component.value();
 			doClamp();
@@ -526,7 +526,7 @@ namespace castor
 	private:
 		float m_component{};
 	};
-	static_assert( sizeof( ColourComponent ) == sizeof( float ) );
+	static_assert( sizeof( ColourComponentValue ) == sizeof( float ) );
 	/**
 	 *\~english
 	 *\brief		Equality operator
@@ -535,7 +535,7 @@ namespace castor
 	 *\brief		Opérateur d'égalité
 	 *\param[in]	lhs, rhs	Les composantes à comparer
 	 */
-	CU_API bool operator ==( ColourComponent const & lhs, ColourComponent const & rhs );
+	CU_API bool operator ==( ColourComponentValue const & lhs, ColourComponentValue const & rhs );
 	/**
 	 *\~english
 	 *\brief		Inequality operator
@@ -544,7 +544,7 @@ namespace castor
 	 *\brief		Opérateur de différence
 	 *\param[in]	lhs, rhs	Les composantes à comparer
 	 */
-	CU_API bool operator !=( ColourComponent const & lhs, ColourComponent const & rhs );
+	CU_API bool operator !=( ColourComponentValue const & lhs, ColourComponentValue const & rhs );
 	/**
 	 *\~english
 	 *\brief		addition assignment operator
@@ -556,11 +556,11 @@ namespace castor
 	 *\return		Resultat de lhs + rhs
 	 */
 	template< typename T >
-	float operator+( ColourComponent const & lhs, T const & rhs )
+	float operator+( ColourComponentValue const & lhs, T const & rhs )
 	{
 		float value;
 		lhs.convertTo( value );
-		ColourComponent cpnt{ value };
+		ColourComponentValue cpnt{ value };
 		cpnt += rhs;
 		return value;
 	}
@@ -575,11 +575,11 @@ namespace castor
 	 *\return		Resultat de lhs - rhs
 	 */
 	template< typename T >
-	float operator-( ColourComponent const & lhs, T const & rhs )
+	float operator-( ColourComponentValue const & lhs, T const & rhs )
 	{
 		float value;
 		lhs.convertTo( value );
-		ColourComponent cpnt{ value };
+		ColourComponentValue cpnt{ value };
 		cpnt -= rhs;
 		return value;
 	}
@@ -594,11 +594,11 @@ namespace castor
 	 *\return		Resultat de lhs / rhs
 	 */
 	template< typename T >
-	float operator/( ColourComponent const & lhs, T const & rhs )
+	float operator/( ColourComponentValue const & lhs, T const & rhs )
 	{
 		float value;
 		lhs.convertTo( value );
-		ColourComponent cpnt{ value };
+		ColourComponentValue cpnt{ value };
 		cpnt /= rhs;
 		return value;
 	}
@@ -613,11 +613,11 @@ namespace castor
 	 *\return		Resultat de lhs * rhs
 	 */
 	template< typename T >
-	float operator*( ColourComponent const & lhs, T const & rhs )
+	float operator*( ColourComponentValue const & lhs, T const & rhs )
 	{
 		float value;
 		lhs.convertTo( value );
-		ColourComponent cpnt{ value };
+		ColourComponentValue cpnt{ value };
 		cpnt *= rhs;
 		return value;
 	}
@@ -631,7 +631,7 @@ namespace castor
 	 *\param[in]	lhs, rhs	Les composantes à ajouter
 	 *\return		Resultat de lhs + rhs
 	 */
-	CU_API float operator+( ColourComponent const & lhs, ColourComponent const & rhs );
+	CU_API float operator+( ColourComponentValue const & lhs, ColourComponentValue const & rhs );
 	/**
 	 *\~english
 	 *\brief		Subtraction operator
@@ -642,7 +642,7 @@ namespace castor
 	 *\param[in]	lhs, rhs	Les composantes à soustraire
 	 *\return		Resultat de lhs - rhs
 	 */
-	CU_API float operator-( ColourComponent const & lhs, ColourComponent const & rhs );
+	CU_API float operator-( ColourComponentValue const & lhs, ColourComponentValue const & rhs );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
@@ -653,7 +653,7 @@ namespace castor
 	 *\param[in]	lhs, rhs	Les composantes à multiplier
 	 *\return		Resultat de lhs * rhs
 	 */
-	CU_API float operator*( ColourComponent const & lhs, ColourComponent const & rhs );
+	CU_API float operator*( ColourComponentValue const & lhs, ColourComponentValue const & rhs );
 	/**
 	 *\~english
 	 *\brief		Division operator
@@ -664,7 +664,7 @@ namespace castor
 	 *\param[in]	lhs, rhs	Les composantes à diviser
 	 *\return		Resultat de lhs / rhs
 	 */
-	CU_API float operator/( ColourComponent const & lhs, ColourComponent const & rhs );
+	CU_API float operator/( ColourComponentValue const & lhs, ColourComponentValue const & rhs );
 }
 
 #endif

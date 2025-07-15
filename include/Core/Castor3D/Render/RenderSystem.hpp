@@ -19,7 +19,7 @@ See LICENSE file in root folder
 
 #include <stack>
 
-namespace castor3d
+namespace c3d
 {
 	struct Renderer
 	{
@@ -43,7 +43,7 @@ namespace castor3d
 	};
 
 	class RenderSystem
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -162,7 +162,7 @@ namespace castor3d
 		*	Le shader compilé.
 		*/
 		C3D_API SpirVShader compileShader( VkShaderStageFlagBits stage
-			, castor::String const & name
+			, String const & name
 			, ast::Shader const & shader
 			, ast::EntryPointConfig const & entryPoint );
 		/**
@@ -188,8 +188,8 @@ namespace castor3d
 		*	Le shader compilé.
 		*/
 		C3D_API SpirVShader compileShader( VkShaderStageFlagBits stage
-			, castor::String const & name
-			, castor::MbString const & glsl )const;
+			, String const & name
+			, MbString const & glsl )const;
 		/**
 		*\~english
 		*	Compiles a shader module to the necessary shader language.
@@ -243,7 +243,7 @@ namespace castor3d
 		*\param[in] zNear, zFar
 		*	La position des premier et arrière plans.
 		*/
-		C3D_API castor::Matrix4x4f getFrustum( float left
+		C3D_API Matrix4x4f getFrustum( float left
 			, float right
 			, float bottom
 			, float top
@@ -271,7 +271,7 @@ namespace castor3d
 		*\param[in] zFar
 		*	La position de l'arrière plan (pour le clipping).
 		*/
-		C3D_API castor::Matrix4x4f getPerspective( castor::Angle const & fovy
+		C3D_API Matrix4x4f getPerspective( Angle const & fovy
 			, float aspect
 			, float zNear
 			, float zFar )const;
@@ -293,7 +293,7 @@ namespace castor3d
 		*\param[in] zNear, zFar
 		*	La position des premier et arrière plans.
 		*/
-		C3D_API castor::Matrix4x4f getOrtho( float left
+		C3D_API Matrix4x4f getOrtho( float left
 			, float right
 			, float bottom
 			, float top
@@ -317,7 +317,7 @@ namespace castor3d
 		*\param[in] zNear
 		*	La position du premier plan (pour le clipping).
 		*/
-		C3D_API castor::Matrix4x4f getInfinitePerspective( castor::Angle const & fovy
+		C3D_API Matrix4x4f getInfinitePerspective( Angle const & fovy
 			, float aspect
 			, float zNear )const;
 		/**
@@ -341,9 +341,9 @@ namespace castor3d
 			return m_gpuInformations;
 		}
 
-		castor::String getRendererType()const noexcept
+		String getRendererType()const noexcept
 		{
-			return castor::makeString( getDescription().name );
+			return makeString( getDescription().name );
 		}
 
 		bool hasDevice()const noexcept
@@ -422,7 +422,7 @@ namespace castor3d
 			return m_properties.limits.maxDescriptorSetSampledImages > 16u;
 		}
 
-		ashes::Buffer< castor::Point4f > const & getRandomStorage()const noexcept
+		ashes::Buffer< Point4f > const & getRandomStorage()const noexcept
 		{
 			return *m_randomStorage;
 		}
@@ -433,7 +433,7 @@ namespace castor3d
 		ast::ShaderAllocator & doGetShaderAllocator();
 
 	private:
-		castor::RecursiveMutex m_mutex;
+		RecursiveMutex m_mutex;
 		Renderer m_renderer{};
 		GpuInformations m_gpuInformations{};
 		DebugCallbacksPtr m_debug{};
@@ -441,10 +441,10 @@ namespace castor3d
 		VkPhysicalDeviceProperties m_properties{};
 		VkPhysicalDeviceFeatures m_features{};
 		RenderDeviceUPtr m_device{};
-		castor::Stack< SceneRPtr > m_stackScenes{};
-		ashes::BufferPtr< castor::Point4f > m_randomStorage{};
-		castor::Mutex m_allocMutex;
-		castor::UnorderedMap< std::thread::id, castor::RawUniquePtr< ast::ShaderAllocator > > m_shaderCompileAllocator{};
+		Stack< SceneRPtr > m_stackScenes{};
+		ashes::BufferPtr< Point4f > m_randomStorage{};
+		Mutex m_allocMutex;
+		HashMap< std::thread::id, RawUniquePtr< ast::ShaderAllocator > > m_shaderCompileAllocator{};
 	};
 }
 

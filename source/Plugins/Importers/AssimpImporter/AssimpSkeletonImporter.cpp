@@ -9,28 +9,28 @@ namespace c3d_assimp
 {
 	namespace skeletons
 	{
-		static castor3d::SkeletonNode * addNode( castor3d::Skeleton & skeleton
-			, castor::StringMap< castor::Matrix4x4f > const & bonesNodes
-			, castor::String const & nodeName
-			, castor::String const & name )
+		static c3d::SkeletonNode * addNode( c3d::Skeleton & skeleton
+			, c3d::StringMap< c3d::Matrix4x4f > const & bonesNodes
+			, c3d::String const & nodeName
+			, c3d::String const & name )
 		{
 			auto it = bonesNodes.find( nodeName );
 
 			if ( it == bonesNodes.end() )
 			{
-				castor3d::log::debug << "    Skeleton Node [" << nodeName << "]" << std::endl;
+				c3d::log::debug << "    Skeleton Node [" << nodeName << "]" << std::endl;
 				return skeleton.createNode( name );
 			}
 
-			castor3d::log::debug << "    Skeleton Bone [" << nodeName << "]" << std::endl;
+			c3d::log::debug << "    Skeleton Bone [" << nodeName << "]" << std::endl;
 			return skeleton.createBone( name, it->second );
 		}
 
-		static castor3d::SkeletonNode * processSkeletonNode( AssimpImporterFile const & file
-			, castor::StringMap< castor::Matrix4x4f > const & bonesNodes
-			, castor3d::Skeleton & skeleton
+		static c3d::SkeletonNode * processSkeletonNode( AssimpImporterFile const & file
+			, c3d::StringMap< c3d::Matrix4x4f > const & bonesNodes
+			, c3d::Skeleton & skeleton
 			, aiNode const & aiNode
-			, castor3d::SkeletonNode * parentSkelNode )
+			, c3d::SkeletonNode * parentSkelNode )
 		{
 			auto nodeName = makeString( aiNode.mName );
 			auto name = file.getInternalName( nodeName );
@@ -45,9 +45,9 @@ namespace c3d_assimp
 				skelNode->setTransform( { fromAssimp( position )
 					, fromAssimp( scaling )
 					, fromAssimp( rotate ) } );
-				castor3d::log::trace << "        Translation [" << skelNode->getTransform().translate << "]" << std::endl;
-				castor3d::log::trace << "        Rotation [" << skelNode->getTransform().rotate << "]" << std::endl;
-				castor3d::log::trace << "        Scale [" << skelNode->getTransform().scale << "]" << std::endl;
+				c3d::log::trace << "        Translation [" << skelNode->getTransform().translate << "]" << std::endl;
+				c3d::log::trace << "        Rotation [" << skelNode->getTransform().rotate << "]" << std::endl;
+				c3d::log::trace << "        Scale [" << skelNode->getTransform().scale << "]" << std::endl;
 
 				if ( parentSkelNode )
 				{
@@ -59,12 +59,12 @@ namespace c3d_assimp
 		}
 
 		static void processSkeletonNodes( AssimpImporterFile const & file
-			, castor::StringMap< castor::Matrix4x4f > const & bonesNodes
-			, castor3d::Skeleton & skeleton
+			, c3d::StringMap< c3d::Matrix4x4f > const & bonesNodes
+			, c3d::Skeleton & skeleton
 			, aiNode const & parentAiNode
-			, castor3d::SkeletonNode * parentSkelNode )
+			, c3d::SkeletonNode * parentSkelNode )
 		{
-			for ( auto node : castor::makeArrayView( parentAiNode.mChildren, parentAiNode.mNumChildren ) )
+			for ( auto node : c3d::makeArrayView( parentAiNode.mChildren, parentAiNode.mNumChildren ) )
 			{
 				processSkeletonNodes( file
 					, bonesNodes
@@ -79,12 +79,12 @@ namespace c3d_assimp
 		}
 	}
 
-	AssimpSkeletonImporter::AssimpSkeletonImporter( castor3d::Engine & engine )
-		: castor3d::SkeletonImporter{ engine, cuT( "Assimp" ) }
+	AssimpSkeletonImporter::AssimpSkeletonImporter( c3d::Engine & engine )
+		: c3d::SkeletonImporter{ engine, cuT( "Assimp" ) }
 	{
 	}
 
-	bool AssimpSkeletonImporter::doImportSkeleton( castor3d::Skeleton & skeleton )
+	bool AssimpSkeletonImporter::doImportSkeleton( c3d::Skeleton & skeleton )
 	{
 		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
 		auto name = skeleton.getName();

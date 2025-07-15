@@ -11,7 +11,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -219,12 +219,12 @@ namespace castor3d
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	CameraUbo::Configuration & CameraUbo::cpuUpdate( castor::Size const & size
+	CameraUbo::Configuration & CameraUbo::cpuUpdate( Size const & size
 		, Camera const & camera
-		, castor::Matrix4x4f const & view
-		, castor::Matrix4x4f const & projection
+		, Matrix4x4f const & view
+		, Matrix4x4f const & projection
 		, uint32_t debugIndex
-		, castor::Point2f const & jitter )
+		, Point2f const & jitter )
 	{
 		auto & configuration = cpuUpdate( size
 			, view
@@ -241,11 +241,11 @@ namespace castor3d
 	}
 
 	CameraUbo::Configuration & CameraUbo::cpuUpdate( Camera const & camera
-		, castor::Matrix4x4f const & view
-		, castor::Matrix4x4f const & projection
+		, Matrix4x4f const & view
+		, Matrix4x4f const & projection
 		, uint32_t debugIndex
 		, bool safeBanded
-		, castor::Point2f const & jitter )
+		, Point2f const & jitter )
 	{
 		return cpuUpdate( ( safeBanded
 				? getSafeBandedSize( camera.getSize() )
@@ -257,11 +257,11 @@ namespace castor3d
 			, jitter );
 	}
 
-	CameraUbo::Configuration & CameraUbo::cpuUpdate( castor::Size const & size
+	CameraUbo::Configuration & CameraUbo::cpuUpdate( Size const & size
 		, Camera const & camera
 		, uint32_t debugIndex
 		, bool safeBanded
-		, castor::Point2f const & jitter )
+		, Point2f const & jitter )
 	{
 		return cpuUpdate( size
 			, camera
@@ -274,7 +274,7 @@ namespace castor3d
 	CameraUbo::Configuration & CameraUbo::cpuUpdate( Camera const & camera
 		, uint32_t debugIndex
 		, bool safeBanded
-		, castor::Point2f const & jitter )
+		, Point2f const & jitter )
 	{
 		return cpuUpdate( ( safeBanded
 				? getSafeBandedSize( camera.getSize() )
@@ -285,12 +285,12 @@ namespace castor3d
 			, jitter );
 	}
 
-	CameraUbo::Configuration & CameraUbo::cpuUpdate( castor::Size const & size
-		, castor::Matrix4x4f const & view
-		, castor::Matrix4x4f const & projection
+	CameraUbo::Configuration & CameraUbo::cpuUpdate( Size const & size
+		, Matrix4x4f const & view
+		, Matrix4x4f const & projection
 		, uint32_t debugIndex
 		, Frustum const & frustum
-		, castor::Point2f const & jitter )
+		, Point2f const & jitter )
 	{
 		auto & configuration = cpuUpdate( size, projection, debugIndex );
 		configuration.prvView = configuration.curView;
@@ -318,8 +318,8 @@ namespace castor3d
 		return configuration;
 	}
 
-	CameraUbo::Configuration & CameraUbo::cpuUpdate( castor::Size const & size
-		, castor::Matrix4x4f const & projection
+	CameraUbo::Configuration & CameraUbo::cpuUpdate( Size const & size
+		, Matrix4x4f const & projection
 		, uint32_t debugIndex )
 	{
 		CU_Require( m_ubo );

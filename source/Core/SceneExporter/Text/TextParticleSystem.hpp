@@ -8,16 +8,16 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::ParticleSystem >
-		: public TextWriterT< castor3d::ParticleSystem >
+	class TextWriter< ParticleSystem >
+		: public TextWriterT< ParticleSystem >
 	{
 	public:
-		explicit TextWriter( castor::String const & tabs );
-		bool operator()( castor3d::ParticleSystem const & obj
-			, castor::StringStream & file )override;
+		explicit TextWriter( String const & tabs );
+		bool operator()( ParticleSystem const & obj
+			, StringStream & file )override;
 	};
 }
 

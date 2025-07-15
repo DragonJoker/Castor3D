@@ -2,7 +2,7 @@
 
 #include "Castor3D/Scene/Animation/SceneNodeAnimationKeyFrame.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	bool BinaryWriter< SceneNodeAnimationKeyFrame >::doWrite( SceneNodeAnimationKeyFrame const & obj )
 	{
@@ -29,14 +29,14 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template<>
-	castor::String BinaryParserBase< SceneNodeAnimationKeyFrame >::Name = cuT( "SceneNodeAnimationKeyFrame" );
+	String BinaryParserBase< SceneNodeAnimationKeyFrame >::Name = cuT( "SceneNodeAnimationKeyFrame" );
 
 	bool BinaryParser< SceneNodeAnimationKeyFrame >::doParse( SceneNodeAnimationKeyFrame & obj )
 	{
 		bool result = true;
 		BinaryChunk chunk{ doIsLittleEndian() };
-		castor::Point3f vec{};
-		castor::Quaternion quat{};
+		Point3f vec{};
+		Quaternion quat{};
 		double time{ 0.0 };
 
 		while ( result && doGetSubChunk( chunk ) )
@@ -46,7 +46,7 @@ namespace castor3d
 			case ChunkType::eSceneNodeAnimationKeyFrameTime:
 				result = doParseChunk( time, chunk );
 				checkError( result, cuT( "Couldn't parse time index." ) );
-				obj.doSetTimeIndex( castor::Milliseconds{ int64_t( time * 1000 ) } );
+				obj.doSetTimeIndex( Milliseconds{ int64_t( time * 1000 ) } );
 				break;
 
 			case ChunkType::eSceneNodeAnimationKeyFrameTranslate:

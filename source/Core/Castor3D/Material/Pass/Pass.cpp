@@ -53,15 +53,15 @@
 
 #include <algorithm>
 
-CU_ImplementSmartPtr( castor3d, Pass )
+CU_ImplementSmartPtr( c3d, Pass )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 	namespace matpass
 	{
-		using SortedTextureSources = castor::Map< PassComponentTextureFlag
+		using SortedTextureSources = Map< PassComponentTextureFlag
 			, Pass::PassTextureSource >;
 
 		static SortedTextureSources sortSources( Pass::TextureSourceArray const & sources )
@@ -125,7 +125,7 @@ namespace castor3d
 			if ( unitData.animation && !unit->hasAnimation() )
 			{
 				auto anim = unitData.animation.get();
-				unit->addAnimation( castor::ptrRefCast< Animation >( unitData.animation ) );
+				unit->addAnimation( ptrRefCast< Animation >( unitData.animation ) );
 				static_cast< TextureAnimation & >( *anim ).setAnimable( *unit );
 			}
 
@@ -174,7 +174,7 @@ namespace castor3d
 			if ( blockContext->pass )
 			{
 				auto & cache = blockContext->pass->getOwner()->getEngine()->getShaderProgramCache();
-				newBlockContext->shaderProgram = cache.getNewProgram( blockContext->material->material->getName() + castor::string::toString( blockContext->pass->getId() )
+				newBlockContext->shaderProgram = cache.getNewProgram( blockContext->material->material->getName() + string::toString( blockContext->pass->getId() )
 					, true );
 			}
 			else
@@ -255,14 +255,14 @@ namespace castor3d
 				it != rhs.m_animations.end() && it->second )
 			{
 				auto & srcAnim = static_cast< TextureAnimation const & >( *it->second );
-				auto clonedAnim = castor::makeUnique< TextureAnimation >( *srcAnim.getEngine()
+				auto clonedAnim = makeUnique< TextureAnimation >( *srcAnim.getEngine()
 					, srcAnim.getName() );
 				clonedAnim->setRotateSpeed( srcAnim.getRotateSpeed() );
 				clonedAnim->setScaleSpeed( srcAnim.getScaleSpeed() );
 				clonedAnim->setTranslateSpeed( srcAnim.getTranslateSpeed() );
 				registerTexture( info
 					, config
-					, castor::move( clonedAnim ) );
+					, c3d::move( clonedAnim ) );
 			}
 			else
 			{
@@ -303,7 +303,7 @@ namespace castor3d
 					m_textureUnits.erase( it );
 				}
 
-				castor::Vector< TextureFlagConfiguration > textureConfigs;
+				Vector< TextureFlagConfiguration > textureConfigs;
 
 				for ( auto & unit : m_textureUnits )
 				{
@@ -431,11 +431,11 @@ namespace castor3d
 		}
 
 		component->onAddToPass();
-		m_components.emplace( id, castor::move( component ) );
+		m_components.emplace( id, c3d::move( component ) );
 		m_dirty = true;
 	}
 
-	bool Pass::hasComponent( castor::String const & name )const noexcept
+	bool Pass::hasComponent( String const & name )const noexcept
 	{
 		auto it = std::find_if( m_components.begin()
 			, m_components.end()
@@ -446,7 +446,7 @@ namespace castor3d
 		return it != m_components.end();
 	}
 
-	PassComponent * Pass::getComponent( castor::String const & name )const
+	PassComponent * Pass::getComponent( String const & name )const
 	{
 		PassComponent * result{};
 
@@ -464,9 +464,9 @@ namespace castor3d
 		return result;
 	}
 
-	castor::Vector< PassComponentUPtr > Pass::removeComponent( castor::String const & name )
+	Vector< PassComponentUPtr > Pass::removeComponent( String const & name )
 	{
-		castor::Vector< PassComponentUPtr > result;
+		Vector< PassComponentUPtr > result;
 
 		if ( auto it = std::find_if( m_components.begin()
 			, m_components.end()
@@ -476,7 +476,7 @@ namespace castor3d
 			} );
 			it != m_components.end() )
 		{
-			PassComponentUPtr tmp = castor::move( it->second );
+			PassComponentUPtr tmp = c3d::move( it->second );
 			m_components.erase( it );
 
 			if ( tmp->getPlugin().getComponentFlags() == m_reflRefrFlag )
@@ -515,19 +515,19 @@ namespace castor3d
 			}
 
 			result = doRemoveDependencies( name );
-			result.emplace_back( castor::move( tmp ) );
+			result.emplace_back( c3d::move( tmp ) );
 			m_dirty = true;
 		}
 
 		return result;
 	}
 
-	shader::PassMaterialShader * Pass::getMaterialShader( castor::String const & componentType )const
+	shader::PassMaterialShader * Pass::getMaterialShader( String const & componentType )const
 	{
 		return getPassComponentsRegister().getMaterialShader( componentType );
 	}
 
-	PassComponentID Pass::getComponentId( castor::String const & componentType )const
+	PassComponentID Pass::getComponentId( String const & componentType )const
 	{
 		return getPassComponentsRegister().getNameId( componentType );
 	}
@@ -596,8 +596,8 @@ namespace castor3d
 			} );
 			it == m_sources.end() )
 		{
-			m_sources.emplace_back( castor::move( sourceInfo )
-				, castor::move( configuration ) );
+			m_sources.emplace_back( c3d::move( sourceInfo )
+				, c3d::move( configuration ) );
 		}
 		else
 		{
@@ -623,9 +623,9 @@ namespace castor3d
 		, TextureAnimationUPtr animation )
 	{
 		m_animations.try_emplace( sourceInfo
-			, castor::move( animation ) );
-		registerTexture( castor::move( sourceInfo )
-			, castor::move( configuration ) );
+			, c3d::move( animation ) );
+		registerTexture( c3d::move( sourceInfo )
+			, c3d::move( configuration ) );
 	}
 
 	void Pass::unregisterTexture( TextureSourceInfo const & sourceInfo )noexcept
@@ -659,7 +659,7 @@ namespace castor3d
 		{
 			auto configuration = it->second;
 			m_sources.erase( it );
-			registerTexture( castor::move( dstSourceInfo ), configuration );
+			registerTexture( c3d::move( dstSourceInfo ), configuration );
 		}
 	}
 
@@ -667,7 +667,7 @@ namespace castor3d
 		, TextureConfiguration configuration )
 	{
 		resetTexture( sourceInfo
-			, { sourceInfo, castor::move( configuration ) } );
+			, { sourceInfo, c3d::move( configuration ) } );
 	}
 
 	void Pass::prepareTextures()
@@ -696,7 +696,7 @@ namespace castor3d
 		}
 	}
 
-	void Pass::setColour( castor::HdrRgbColour const & value )const
+	void Pass::setColour( HdrRgbColour const & value )const
 	{
 		for ( auto const & [id, component] : m_components )
 		{
@@ -707,7 +707,7 @@ namespace castor3d
 		}
 	}
 
-	castor::HdrRgbColour const & Pass::getColour()const
+	HdrRgbColour const & Pass::getColour()const
 	{
 		auto it = std::find_if( m_components.begin()
 			, m_components.end()
@@ -715,7 +715,7 @@ namespace castor3d
 			{
 				return lookup.second->hasColour();
 			} );
-		static castor::HdrRgbColour const dummy{};
+		static HdrRgbColour const dummy{};
 		return it == m_components.end()
 			? dummy
 			: it->second->getColour();
@@ -744,10 +744,10 @@ namespace castor3d
 		getPassComponentsRegister().fillBuffer( *this, buffer );
 	}
 
-	bool Pass::writeText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool Pass::writeText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
 		bool result = true;
 
@@ -769,10 +769,9 @@ namespace castor3d
 		}
 	}
 
-	void Pass::addParsers( castor::AttributeParsers & result
-			, castor::UInt32StrMap const & textureChannels )
+	void Pass::addParsers( AttributeParsers & result
+			, UInt32StrMap const & textureChannels )
 	{
-		using namespace castor;
 		BlockParserContextT< MaterialContext > materialContext{ result, CSCNSection::eMaterial };
 		BlockParserContextT< PassContext > passContext{ result, CSCNSection::ePass, CSCNSection::eMaterial };
 
@@ -942,7 +941,7 @@ namespace castor3d
 		return getOwner()->getEngine()->getPassComponentsRegister();
 	}
 
-	castor::String Pass::getTextureFlagsName( PassComponentTextureFlag flags )const
+	String Pass::getTextureFlagsName( PassComponentTextureFlag flags )const
 	{
 		auto it = std::find_if( m_components.begin()
 			, m_components.end()
@@ -952,7 +951,7 @@ namespace castor3d
 					&& !lookup.second->getPlugin().getTextureFlagsName( flags ).empty();
 			} );
 		return it == m_components.end()
-			? castor::String{}
+			? String{}
 			: it->second->getPlugin().getTextureFlagsName( flags );
 	}
 
@@ -991,15 +990,15 @@ namespace castor3d
 		auto & textureCache = engine.getTextureUnitCache();
 		auto animIt = m_animations.find( sourceInfo );
 		auto anim = ( animIt != m_animations.end()
-			? castor::move( animIt->second )
+			? c3d::move( animIt->second )
 			: nullptr );
 		auto flags = getFlags( sourceInfo.textureConfig() );
-		m_prepared.emplace_back( &textureCache.getSourceData( sourceInfo, passConfig, castor::move( anim ) ) );
+		m_prepared.emplace_back( &textureCache.getSourceData( sourceInfo, passConfig, c3d::move( anim ) ) );
 	}
 
 	void Pass::doUpdateTextureFlags()
 	{
-		castor::Vector< TextureFlagConfiguration > textureConfigs;
+		Vector< TextureFlagConfiguration > textureConfigs;
 
 		if ( m_texturesReduced.exchange( false ) )
 		{
@@ -1035,18 +1034,18 @@ namespace castor3d
 		m_dirty = true;
 	}
 
-	castor::Vector< PassComponentUPtr > Pass::doRemoveDependencies( castor::String const & name )
+	Vector< PassComponentUPtr > Pass::doRemoveDependencies( String const & name )
 	{
-		castor::Vector< PassComponentUPtr > result;
+		Vector< PassComponentUPtr > result;
 		// First gather the ones depending directly from it.
-		castor::StringArray depends;
+		StringArray depends;
 
 		for ( auto const & [id, component] : m_components )
 		{
 			auto & compDeps = component->getDependencies();
 			auto compIt = std::find_if( compDeps.begin()
 				, compDeps.end()
-				, [&name]( castor::StringView lookup )
+				, [&name]( String lookup )
 				{
 					return lookup == name;
 				} );
@@ -1064,7 +1063,7 @@ namespace castor3d
 
 			for ( auto & rem : removed )
 			{
-				result.emplace_back( castor::move( rem ) );
+				result.emplace_back( c3d::move( rem ) );
 			}
 		}
 
@@ -1096,7 +1095,7 @@ namespace castor3d
 		doUpdateTextureFlags();
 	}
 
-	castor::String getPrefix( PassContext const & context )
+	String getPrefix( PassContext const & context )
 	{
 		return getPrefix( *context.material );
 	}

@@ -3,16 +3,16 @@
 #include "Castor3D/Binary/CmshImporter.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-CU_ImplementSmartPtr( castor3d, ImporterFile )
-CU_ImplementSmartPtr( castor3d, ImporterFileFactory )
+CU_ImplementSmartPtr( c3d, ImporterFile )
+CU_ImplementSmartPtr( c3d, ImporterFileFactory )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 	bool parseImportParameters( Parameters const & parameters
-		, castor::Point3f & scale
-		, castor::Quaternion & orientation )
+		, Point3f & scale
+		, Quaternion & orientation )
 	{
 		float value = 1.0f;
 		bool needsTransform = false;
@@ -28,8 +28,8 @@ namespace castor3d
 		if ( parameters.get( cuT( "pitch" ), value )
 			&& std::abs( value ) > std::numeric_limits< float >::epsilon() )
 		{
-			auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0f, 0.0f, 0.0f }
-			, castor::Angle::fromDegrees( value ) );
+			auto rot = Quaternion::fromAxisAngle( Point3f{ 1.0f, 0.0f, 0.0f }
+			, Angle::fromDegrees( value ) );
 			orientation *= rot;
 			needsTransform = true;
 		}
@@ -37,8 +37,8 @@ namespace castor3d
 		if ( parameters.get( cuT( "yaw" ), value )
 			&& std::abs( value ) > std::numeric_limits< float >::epsilon() )
 		{
-			auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 1.0f, 0.0f }
-			, castor::Angle::fromDegrees( value ) );
+			auto rot = Quaternion::fromAxisAngle( Point3f{ 0.0f, 1.0f, 0.0f }
+			, Angle::fromDegrees( value ) );
 			orientation *= rot;
 			needsTransform = true;
 		}
@@ -46,8 +46,8 @@ namespace castor3d
 		if ( parameters.get( cuT( "roll" ), value )
 			&& std::abs( value ) > std::numeric_limits< float >::epsilon() )
 		{
-			auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 0.0f, 1.0f }
-			, castor::Angle::fromDegrees( value ) );
+			auto rot = Quaternion::fromAxisAngle( Point3f{ 0.0f, 0.0f, 1.0f }
+			, Angle::fromDegrees( value ) );
 			orientation *= rot;
 			needsTransform = true;
 		}
@@ -59,18 +59,18 @@ namespace castor3d
 
 	ImporterFile::ImporterFile( Engine & engine
 		, Scene * scene
-		, castor::Path const & path
+		, Path const & path
 		, Parameters const & parameters
 		, ProgressBar * progress )
-		: castor::OwnedBy< Engine >{ engine }
+		: OwnedBy< Engine >{ engine }
 		, m_scene{ scene }
 		, m_fileName{ path }
 		, m_filePath{ m_fileName.getPath() }
-		, m_extension{ castor::string::lowerCase( m_fileName.getExtension() ) }
+		, m_extension{ string::lowerCase( m_fileName.getExtension() ) }
 		, m_parameters{ parameters }
 		, m_progress{ progress }
 	{
-		castor::String prefix;
+		String prefix;
 
 		if ( m_parameters.get( cuT( "prefix" ), prefix ) )
 		{
@@ -89,9 +89,9 @@ namespace castor3d
 		registerType( CmshAnimationImporter::NodeAnimType, cuT( "cmsh" ), CmshImporterFile::create );
 	}
 
-	ImporterFileUPtr ImporterFileFactory::create( castor::String const & type
+	ImporterFileUPtr ImporterFileFactory::create( String const & type
 		, Engine & engine
-		, castor::Path const & file
+		, Path const & file
 		, Parameters const & parameters
 		, ProgressBar * progress )const
 	{
@@ -103,9 +103,9 @@ namespace castor3d
 			, progress );
 	}
 
-	ImporterFileUPtr ImporterFileFactory::create( castor::String const & type
+	ImporterFileUPtr ImporterFileFactory::create( String const & type
 		, Scene & scene
-		, castor::Path const & file
+		, Path const & file
 		, Parameters const & parameters
 		, ProgressBar * progress )const
 	{
@@ -117,10 +117,10 @@ namespace castor3d
 			, progress );
 	}
 
-	ImporterFileUPtr ImporterFileFactory::create( castor::String const & type
-		, castor::String const & name
+	ImporterFileUPtr ImporterFileFactory::create( String const & type
+		, String const & name
 		, Engine & engine
-		, castor::Path const & file
+		, Path const & file
 		, Parameters const & parameters
 		, ProgressBar * progress )const
 	{
@@ -133,10 +133,10 @@ namespace castor3d
 			, progress );
 	}
 
-	ImporterFileUPtr ImporterFileFactory::create( castor::String const & type
-		, castor::String const & name
+	ImporterFileUPtr ImporterFileFactory::create( String const & type
+		, String const & name
 		, Scene & scene
-		, castor::Path const & file
+		, Path const & file
 		, Parameters const & parameters
 		, ProgressBar * progress )const
 	{
@@ -149,11 +149,11 @@ namespace castor3d
 			, progress );
 	}
 
-	ImporterFileUPtr ImporterFileFactory::doCreate( castor::String const & type
-		, castor::String const & name
+	ImporterFileUPtr ImporterFileFactory::doCreate( String const & type
+		, String const & name
 		, Engine & engine
 		, Scene * scene
-		, castor::Path const & file
+		, Path const & file
 		, Parameters const & parameters
 		, ProgressBar * progress )const
 	{
@@ -161,7 +161,7 @@ namespace castor3d
 
 		if ( it == m_registered.end() )
 		{
-			CU_Exception( castor::ERROR_UNKNOWN_OBJECT );
+			CU_Exception( c3d::ERROR_UNKNOWN_OBJECT );
 		}
 
 		if ( name == cuT( "any" ) )
@@ -179,7 +179,7 @@ namespace castor3d
 
 		if ( tit == it->second.end() )
 		{
-			CU_Exception( castor::ERROR_UNKNOWN_OBJECT );
+			CU_Exception( c3d::ERROR_UNKNOWN_OBJECT );
 		}
 
 		return tit->second( engine, scene, file, parameters, progress );

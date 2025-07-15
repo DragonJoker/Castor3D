@@ -48,9 +48,9 @@ namespace test_launcher
 			namespace df
 			{
 #if defined( NDEBUG )
-				static constexpr castor::LogType LogLevel = castor::LogType::eInfo;
+				static constexpr c3d::LogType LogLevel = c3d::LogType::eInfo;
 #else
-				static constexpr castor::LogType LogLevel = castor::LogType::eTrace;
+				static constexpr c3d::LogType LogLevel = c3d::LogType::eTrace;
 #endif
 				static constexpr uint32_t FrameCount{ 10u };
 			}
@@ -147,7 +147,7 @@ namespace test_launcher
 
 		if ( result )
 		{
-			castor::Logger::initialise( m_config.log );
+			c3d::Logger::initialise( m_config.log );
 
 			if ( parser.Found( wxT( "generate" ) ) )
 			{
@@ -160,7 +160,7 @@ namespace test_launcher
 				{
 					if ( parser.Found( wxString{ plugin.name } ) )
 					{
-						m_config.renderer = castor::makeString( plugin.name );
+						m_config.renderer = c3d::makeString( plugin.name );
 						m_outputFileSuffix = m_config.renderer;
 					}
 				}
@@ -175,35 +175,35 @@ namespace test_launcher
 
 			if ( parser.GetParamCount() > 0 )
 			{
-				m_config.fileName = castor::Path( parser.GetParam( 0 ).mb_str( wxConvUTF8 ).data() );
+				m_config.fileName = c3d::Path( parser.GetParam( 0 ).mb_str( wxConvUTF8 ).data() );
 			}
 		}
 
 		return result;
 	}
 
-	castor3d::EngineUPtr CastorTestLauncher::doInitialiseCastor()
+	c3d::EngineUPtr CastorTestLauncher::doInitialiseCastor()
 	{
-		if ( !castor::File::directoryExists( castor3d::Engine::getEngineDirectory() ) )
+		if ( !c3d::File::directoryExists( c3d::Engine::getEngineDirectory() ) )
 		{
-			castor::File::directoryCreate( castor3d::Engine::getEngineDirectory() );
+			c3d::File::directoryCreate( c3d::Engine::getEngineDirectory() );
 		}
 
-		castor3d::EngineConfig config{ cuT( "CastorTestLauncher" )
-			, castor3d::Version{ CastorTestLauncher_VERSION_MAJOR, CastorTestLauncher_VERSION_MINOR, CastorTestLauncher_VERSION_BUILD }
+		c3d::EngineConfig config{ cuT( "CastorTestLauncher" )
+			, c3d::Version{ CastorTestLauncher_VERSION_MAJOR, CastorTestLauncher_VERSION_MINOR, CastorTestLauncher_VERSION_BUILD }
 			, m_config.validate
 			, !m_config.disableRandom
 			, !m_config.disableUpdateOptimisations };
-		auto castor = castor::makeUnique< castor3d::Engine >( castor::move( config )
-			, * castor::Logger::getSingleton().getInstance() );
-		castor::PathArray arrayFiles;
-		castor::File::listDirectoryFiles( castor3d::Engine::getPluginsDirectory(), arrayFiles );
+		auto castor = c3d::makeUnique< c3d::Engine >( c3d::move( config )
+			, * c3d::Logger::getSingleton().getInstance() );
+		c3d::PathArray arrayFiles;
+		c3d::File::listDirectoryFiles( c3d::Engine::getPluginsDirectory(), arrayFiles );
 
 		// Exclude debug plug-in in release builds, and release plug-ins in debug builds
 		if ( !arrayFiles.empty() )
 		{
-			castor::PathArray arrayFailed;
-			castor::PathArray otherPlugins;
+			c3d::PathArray arrayFailed;
+			c3d::PathArray otherPlugins;
 
 			for ( auto file : arrayFiles )
 			{
@@ -227,13 +227,13 @@ namespace test_launcher
 
 		if ( doParseCommandLine() )
 		{
-			if ( !castor::File::directoryExists( m_config.fileName.getPath() / cuT( "Compare" ) ) )
+			if ( !c3d::File::directoryExists( m_config.fileName.getPath() / cuT( "Compare" ) ) )
 			{
-				castor::File::directoryCreate( m_config.fileName.getPath() / cuT( "Compare" ) );
+				c3d::File::directoryCreate( m_config.fileName.getPath() / cuT( "Compare" ) );
 			}
 
-			castor::Logger::setFileName( m_config.fileName.getPath() / cuT( "Compare" ) / ( m_config.fileName.getFileName() + cuT( "_" ) + m_config.renderer + cuT( ".log" ) ) );
-			castor::Logger::logInfo( cuT( "Start" ) );
+			c3d::Logger::setFileName( m_config.fileName.getPath() / cuT( "Compare" ) / ( m_config.fileName.getFileName() + cuT( "_" ) + m_config.renderer + cuT( ".log" ) ) );
+			c3d::Logger::logInfo( cuT( "Start" ) );
 			FrameTimes frameTimes{ Clock::now() };
 
 			try
@@ -246,15 +246,15 @@ namespace test_launcher
 					{
 						if ( mainFrame->initialise() )
 						{
-							castor::Logger::logInfo( cuT( "Load scene" ) );
+							c3d::Logger::logInfo( cuT( "Load scene" ) );
 							mainFrame->loadScene( m_config.fileName );
-							castor::Logger::logInfo( cuT( "Save frame" ) );
+							c3d::Logger::logInfo( cuT( "Save frame" ) );
 							mainFrame->saveFrame( m_outputFileSuffix, frameTimes );
-							castor::Logger::logInfo( cuT( "Cleanup frame" ) );
+							c3d::Logger::logInfo( cuT( "Cleanup frame" ) );
 							mainFrame->cleanup( m_outputFileSuffix, frameTimes );
 						}
 
-						castor::Logger::logInfo( cuT( "Close window" ) );
+						c3d::Logger::logInfo( cuT( "Close window" ) );
 						mainFrame->Close();
 						delete mainFrame;
 					}
@@ -267,17 +267,17 @@ namespace test_launcher
 
 				}
 			}
-			catch ( castor::Exception & exc )
+			catch ( c3d::Exception & exc )
 			{
-				castor::Logger::logError( castor::makeStringStream() << "Initialisation failed : " << castor::makeString( exc.getFullDescription() ) );
+				c3d::Logger::logError( c3d::makeStringStream() << "Initialisation failed : " << c3d::makeString( exc.getFullDescription() ) );
 			}
 			catch ( std::exception & exc )
 			{
-				castor::Logger::logError( castor::makeStringStream() << "Initialisation failed : " << castor::makeString( exc.what() ) );
+				c3d::Logger::logError( c3d::makeStringStream() << "Initialisation failed : " << c3d::makeString( exc.what() ) );
 			}
 
-			castor::Logger::logInfo( cuT( "Stop" ) );
-			castor::Logger::cleanup();
+			c3d::Logger::logInfo( cuT( "Stop" ) );
+			c3d::Logger::cleanup();
 		}
 
 		wxImage::CleanUpHandlers();

@@ -12,10 +12,10 @@ namespace castortd
 {
 	namespace
 	{
-		castor3d::TextOverlayRPtr getTextOverlay( castor3d::Scene const & scene
-			, castor::String const & name )
+		c3d::TextOverlayRPtr getTextOverlay( c3d::Scene const & scene
+			, c3d::String const & name )
 		{
-			castor3d::TextOverlayRPtr result{};
+			c3d::TextOverlayRPtr result{};
 
 			if ( auto overlay = scene.findOverlay( name ) )
 			{
@@ -26,7 +26,7 @@ namespace castortd
 		}
 	}
 
-	Hud::Hud( Game const & game, castor3d::Scene const & scene )
+	Hud::Hud( Game const & game, c3d::Scene const & scene )
 		: m_game{ game }
 		, m_lives{ getTextOverlay( scene, cuT( "LivesValue" ) ) }
 		, m_ore{ getTextOverlay( scene, cuT( "OreValue" ) ) }
@@ -112,8 +112,8 @@ namespace castortd
 		scene.findOverlay( cuT( "GameEndPanel" ) )->setVisible( true );
 		scene.findOverlay( cuT( "HelpPanel" ) )->setVisible( false );
 
-		getTextOverlay( m_game.getScene(), cuT( "ResultLevelValue" ) )->setCaption( castor::toUtf8U32String( castor::string::toString( m_game.getWave() ) ) );
-		getTextOverlay( m_game.getScene(), cuT( "ResultKillsValue" ) )->setCaption( castor::toUtf8U32String( castor::string::toString( m_game.getKills() ) ) );
+		getTextOverlay( m_game.getScene(), cuT( "ResultLevelValue" ) )->setCaption( c3d::toUtf8U32String( c3d::string::toString( m_game.getWave() ) ) );
+		getTextOverlay( m_game.getScene(), cuT( "ResultKillsValue" ) )->setCaption( c3d::toUtf8U32String( c3d::string::toString( m_game.getKills() ) ) );
 	}
 
 	void Hud::update()
@@ -122,42 +122,42 @@ namespace castortd
 
 		if ( text )
 		{
-			text->setCaption( castor::toUtf8U32String( castor::string::toString( m_game.getLives() ) ) );
+			text->setCaption( c3d::toUtf8U32String( c3d::string::toString( m_game.getLives() ) ) );
 		}
 
 		text = m_ore;
 
 		if ( text )
 		{
-			text->setCaption( castor::toUtf8U32String( castor::string::toString( m_game.getOre() ) ) );
+			text->setCaption( c3d::toUtf8U32String( c3d::string::toString( m_game.getOre() ) ) );
 		}
 
 		text = m_level;
 
 		if ( text )
 		{
-			text->setCaption( castor::toUtf8U32String( castor::string::toString( m_game.getWave() ) ) );
+			text->setCaption( c3d::toUtf8U32String( c3d::string::toString( m_game.getWave() ) ) );
 		}
 
 		text = m_kills;
 
 		if ( text )
 		{
-			text->setCaption( castor::toUtf8U32String( castor::string::toString( m_game.getKills() ) ) );
+			text->setCaption( c3d::toUtf8U32String( c3d::string::toString( m_game.getKills() ) ) );
 		}
 
 		text = m_enemyLife;
 
 		if ( text )
 		{
-			text->setCaption( castor::toUtf8U32String( castor::string::toString( m_game.getEnemiesLife() ) ) );
+			text->setCaption( c3d::toUtf8U32String( c3d::string::toString( m_game.getEnemiesLife() ) ) );
 		}
 
 		text = m_enemyBounty;
 
 		if ( text )
 		{
-			text->setCaption( castor::toUtf8U32String( castor::string::toString( m_game.getEnemiesBounty() ) ) );
+			text->setCaption( c3d::toUtf8U32String( c3d::string::toString( m_game.getEnemiesBounty() ) ) );
 		}
 
 		if ( auto tower = m_game.getSelectedTower() )
@@ -167,7 +167,7 @@ namespace castortd
 			if ( text )
 			{
 				text->setVisible( true );
-				text->setCaption( castor::toUtf8U32String( castor::string::toString( tower->getDamage() ) ) );
+				text->setCaption( c3d::toUtf8U32String( c3d::string::toString( tower->getDamage() ) ) );
 			}
 
 			text = m_towerSpeed;
@@ -175,7 +175,7 @@ namespace castortd
 			if ( text )
 			{
 				text->setVisible( true );
-				text->setCaption( castor::toUtf8U32String( castor::string::toString( tower->getSpeed() ) ) );
+				text->setCaption( c3d::toUtf8U32String( c3d::string::toString( tower->getSpeed() ) ) );
 			}
 
 			text = m_towerRange;
@@ -183,7 +183,7 @@ namespace castortd
 			if ( text )
 			{
 				text->setVisible( true );
-				text->setCaption( castor::toUtf8U32String( castor::string::toString( tower->getRange() ) ) );
+				text->setCaption( c3d::toUtf8U32String( c3d::string::toString( tower->getRange() ) ) );
 			}
 		}
 		else

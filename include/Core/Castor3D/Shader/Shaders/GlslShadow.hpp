@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	struct ShadowData
 		: public sdw::StructInstanceHelperT< "C3D_ShadowData"
@@ -35,7 +35,7 @@ namespace castor3d::shader
 		ShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -66,7 +66,7 @@ namespace castor3d::shader
 		DirectionalShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 		
@@ -86,7 +86,7 @@ namespace castor3d::shader
 		PointShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 		
@@ -103,7 +103,7 @@ namespace castor3d::shader
 		SpotShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -121,7 +121,7 @@ namespace castor3d::shader
 		AllShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -143,7 +143,7 @@ namespace castor3d::shader
 		C3D_API SpotShadowData getSpotShadows( sdw::Int const & index )const;
 
 	private:
-		castor::RawUniquePtr< AllShadowData > m_data;
+		RawUniquePtr< AllShadowData > m_data;
 	};
 
 	class Shadow
@@ -285,13 +285,13 @@ namespace castor3d::shader
 		ShadowOptions m_shadowOptions;
 		sdw::Vec2Array m_poissonSamples;
 		ShadowsBufferUPtr m_shadowsBuffer;
-		castor::RawUniquePtr< sdw::Vec4Array > m_randomData;
+		RawUniquePtr< sdw::Vec4Array > m_randomData;
 		sdw::Function< sdw::Float
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InFloat
 			, sdw::InFloat > m_getShadowOffset;
-		sdw::Function < sdw::Float
+		sdw::Function< sdw::Float
 			, sdw::InVec2
 			, sdw::InFloat
 			, sdw::InFloat
@@ -356,7 +356,7 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3 > m_computePoint;
-		sdw::Function < sdw::Float
+		sdw::Function< sdw::Float
 			, InShadowData
 			, sdw::InVec3
 			, sdw::InVec3

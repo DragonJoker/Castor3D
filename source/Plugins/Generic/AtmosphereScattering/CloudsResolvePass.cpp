@@ -40,12 +40,12 @@ namespace atmosphere_scattering
 			eCount,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
-			, castor3d::Extent3D const & renderSize )
+		static c3d::ShaderPtr getProgram( c3d::Engine & engine
+			, c3d::Extent3D const & renderSize )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
-			castor3d::shader::Utils utils{ writer };
+			c3d::shader::Utils utils{ writer };
 
 			ATM_Camera( writer
 				, uint32_t( Bindings::eCamera )
@@ -68,7 +68,7 @@ namespace atmosphere_scattering
 
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
-				, AtmosphereModel::Settings{ castor::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
+				, AtmosphereModel::Settings{ c3d::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
 					.setCameraData( &atm_cameraData ) };
 
 			auto targetSize = writer.declConstant( "targetSize"
@@ -77,10 +77,10 @@ namespace atmosphere_scattering
 				, 1.0_f / targetSize.x() );
 			auto offsetY = writer.declConstant( "offsetY"
 				, 1.0_f / targetSize.y() );
-			auto kernel = castor::Vector< sdw::Float >{ 1.0_f / 16.0_f, 2.0_f / 16.0_f, 1.0_f / 16.0_f
+			auto kernel = c3d::Vector< sdw::Float >{ 1.0_f / 16.0_f, 2.0_f / 16.0_f, 1.0_f / 16.0_f
 					, 2.0_f / 16.0_f, 4.0_f / 16.0_f, 2.0_f / 16.0_f
 					, 1.0_f / 16.0_f, 2.0_f / 16.0_f, 1.0_f / 16.0_f };
-			auto offsets = castor::Vector< sdw::Vec2 >{ vec2( -offsetX, offsetY ) // top-left
+			auto offsets = c3d::Vector< sdw::Vec2 >{ vec2( -offsetX, offsetY ) // top-left
 					, vec2( 0.0_f, offsetY ) // top-center
 					, vec2( offsetX, offsetY ) // top-right
 					, vec2( -offsetX, 0.0_f )   // center-left
@@ -108,7 +108,7 @@ namespace atmosphere_scattering
 				, sdw::InVec2{ writer, "uv" } );
 
 			auto computeLighting = writer.implementFunction< sdw::Vec3 >( "computeLighting"
-				, [&]( castor3d::shader::Ray const & ray
+				, [&]( c3d::shader::Ray const & ray
 					, sdw::Vec3 skyColor
 					, sdw::Vec3 sunColour
 					, sdw::Vec3 cloudsColor
@@ -124,21 +124,21 @@ namespace atmosphere_scattering
 						, cloudsColor + ( skyBlendFactor * ( blendSkyColor ) )
 						, vec3( cloudsDensity ) ) );
 				}
-				, castor3d::shader::InRay{ writer, "ray" }
+				, c3d::shader::InRay{ writer, "ray" }
 				, sdw::InVec3{ writer, "skyColor" }
 				, sdw::InVec3{ writer, "sunColour" }
 				, sdw::InVec3{ writer, "cloudsColor" }
 				, sdw::InFloat{ writer, "skyBlendFactor" }
 				, sdw::InFloat{ writer, "cloudsDensity" } );
 
-			writer.implementEntryPointT< c3d::Position2FT, sdw::VoidT >( [&]( sdw::VertexInT< c3d::Position2FT > in
+			writer.implementEntryPointT< c3ds::Position2FT, sdw::VoidT >( [&]( sdw::VertexInT< c3ds::Position2FT > in
 				, sdw::VertexOut out )
 				{
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< sdw::VoidT, c3d::Colour4FT >( [&]( sdw::FragmentIn in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< sdw::VoidT, c3ds::Colour4FT >( [&]( sdw::FragmentIn in
+				, sdw::FragmentOutT< c3ds::Colour4FT > out )
 				{
 					auto texCoords = writer.declLocale( "texCoords"
 						, vec2( in.fragCoord.xy() ) / targetSize );
@@ -178,7 +178,7 @@ namespace atmosphere_scattering
 
 	CloudsResolvePass::CloudsResolvePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, CameraUbo const & cameraUbo
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, CloudsUbo const & cloudsUbo
@@ -187,12 +187,12 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const & clouds
 		, crg::ImageViewId const & resultView
 		, uint32_t index )
-		: castor::Named{ cuT( "Clouds/ResolvePass" ) + castor::string::toString( index ) }
+		: c3d::Named{ cuT( "Clouds/ResolvePass" ) + c3d::string::toString( index ) }
 		, m_shader{ getName(), cloudsres::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ) ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		auto renderSize = getExtent( resultView );
-		auto & pass = graph.createPass( castor::toUtf8( getName() )
+		auto & pass = graph.createPass( c3d::toUtf8( getName() )
 			, [this, &device, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -201,7 +201,7 @@ namespace atmosphere_scattering
 					.renderSize( { renderSize.width, renderSize.height } )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -222,7 +222,7 @@ namespace atmosphere_scattering
 		m_lastPass = &pass;
 	}
 
-	void CloudsResolvePass::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void CloudsResolvePass::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 	}

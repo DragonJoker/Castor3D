@@ -7,7 +7,7 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
-namespace castor3d
+namespace c3d
 {
 	Sphere::Sphere()
 		: MeshGenerator( cuT( "sphere" ) )
@@ -16,30 +16,30 @@ namespace castor3d
 
 	MeshGeneratorUPtr Sphere::create()
 	{
-		return castor::makeUniqueDerived< MeshGenerator, Sphere >();
+		return makeUniqueDerived< MeshGenerator, Sphere >();
 	}
 
 	void Sphere::doGenerate( Mesh & mesh, Parameters const & parameters )
 	{
-		castor::String param;
+		String param;
 		float radius{};
 		uint32_t nbFaces{};
 
 		if ( parameters.get( cuT( "subdiv" ), param ) )
 		{
-			nbFaces = castor::string::toUInt( param );
+			nbFaces = string::toUInt( param );
 		}
 
 		if ( parameters.get( cuT( "radius" ), param ) )
 		{
-			radius = castor::string::toFloat( param );
+			radius = string::toFloat( param );
 		}
 
 		if ( nbFaces >= 3 )
 		{
 			Submesh & submesh = *mesh.createDefaultSubmesh();
-			float rAngle = castor::PiMult2< float > / float( nbFaces );
-			castor::Vector< castor::Point2f > arc( nbFaces + 1u );
+			float rAngle = PiMult2< float > / float( nbFaces );
+			Vector< Point2f > arc( nbFaces + 1u );
 			float rAlpha = 0;
 			uint32_t iCur = 0;
 			uint32_t iPrv = 0;
@@ -59,8 +59,8 @@ namespace castor3d
 
 			for ( uint32_t k = 0; k < nbFaces; k++ )
 			{
-				castor::Point2f ptT = arc[k + 0];
-				castor::Point2f ptB = arc[k + 1];
+				Point2f ptT = arc[k + 0];
+				Point2f ptB = arc[k + 1];
 
 				if ( k == 0 )
 				{
@@ -69,11 +69,11 @@ namespace castor3d
 					{
 						auto rCos = float( cos( rAlphaI ) );
 						auto rSin = float( sin( rAlphaI ) );
-						auto pos = castor::Point3f{ ptT[0] * rCos, ptT[1], ptT[0] * rSin };
+						auto pos = Point3f{ ptT[0] * rCos, ptT[1], ptT[0] * rSin };
 						submesh.addPoint( InterleavedVertex{}
 							.position( pos )
-							.normal( castor::point::getNormalised( pos ) )
-							.texcoord( castor::Point2f{ float( i ) / float( nbFaces ), float( 1.0 + ptT[1] / radius ) / 2 } ) );
+							.normal( point::getNormalised( pos ) )
+							.texcoord( Point2f{ float( i ) / float( nbFaces ), float( 1.0 + ptT[1] / radius ) / 2 } ) );
 						iCur++;
 					}
 				}
@@ -85,11 +85,11 @@ namespace castor3d
 				{
 					auto rCos = float( cos( rAlphaI ) );
 					auto rSin = float( sin( rAlphaI ) );
-					auto pos = castor::Point3f{ ptB[0] * rCos, ptB[1], ptB[0] * rSin };
+					auto pos = Point3f{ ptB[0] * rCos, ptB[1], ptB[0] * rSin };
 					submesh.addPoint( InterleavedVertex{}
 						.position( pos )
-						.normal( castor::point::getNormalised( pos ) )
-						.texcoord( castor::Point2f{ float( i ) / float( nbFaces ), float( 1.0 + ptB[1] / radius ) / 2 } ) );
+						.normal( point::getNormalised( pos ) )
+						.texcoord( Point2f{ float( i ) / float( nbFaces ), float( 1.0 + ptB[1] / radius ) / 2 } ) );
 				}
 
 				// Reconstition des faces

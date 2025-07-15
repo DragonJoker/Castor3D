@@ -14,10 +14,8 @@
 #include <CastorUtils/Graphics/PixelFormat.hpp>
 #include <CastorUtils/Data/Text/TextSize.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	//*************************************************************************************************
 
 	TextWriter< RenderTarget >::TextWriter( String const & tabs )

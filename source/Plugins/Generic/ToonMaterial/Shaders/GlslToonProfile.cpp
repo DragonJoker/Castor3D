@@ -27,29 +27,29 @@ namespace toon::shader
 	{
 	}
 
-	void ToonProfiles::update( castor3d::ShaderBuffer & buffer
-		, castor3d::Pass const & pass )
+	void ToonProfiles::update( c3d::ShaderBuffer & buffer
+		, c3d::Pass const & pass )
 	{
 		if ( auto edges = pass.getComponent< EdgesComponent >() )
 		{
-			auto profiles = castor::makeArrayView( reinterpret_cast< ToonProfileData * >( buffer.getPtr() ), castor3d::MaxMaterialsCount );
+			auto profiles = c3d::makeArrayView( reinterpret_cast< ToonProfileData * >( buffer.getPtr() ), c3d::MaxMaterialsCount );
 			auto & data = profiles[pass.getId() - 1u];
 			edges->fillProfileBuffer( data );
 		}
 	}
 
-	castor3d::ShaderBufferUPtr ToonProfiles::create( castor3d::RenderDevice const & device )
+	c3d::ShaderBufferUPtr ToonProfiles::create( c3d::RenderDevice const & device )
 	{
-		return castor::makeUnique< castor3d::ShaderBuffer >( device
-			, castor3d::MaxMaterialsCount * sizeof( ToonProfileData )
+		return c3d::makeUnique< c3d::ShaderBuffer >( device
+			, c3d::MaxMaterialsCount * sizeof( ToonProfileData )
 			, cuT( "ToonProfilesBuffer" ) );
 	}
 
-	c3d::BufferBaseUPtr ToonProfiles::declare( sdw::ShaderWriter & writer
+	c3ds::BufferBaseUPtr ToonProfiles::declare( sdw::ShaderWriter & writer
 		, uint32_t binding
 		, uint32_t set )
 	{
-		return castor::makeUniqueDerived< c3d::BufferBase, ToonProfiles >( writer
+		return c3d::makeUniqueDerived< c3ds::BufferBase, ToonProfiles >( writer
 			, binding
 			, set
 			, true );

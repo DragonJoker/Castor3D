@@ -27,7 +27,7 @@ namespace test_launcher
 
 	private:
 		bool doParseCommandLine();
-		castor3d::EngineUPtr doInitialiseCastor();
+		c3d::EngineUPtr doInitialiseCastor();
 
 		bool OnInit() override;
 		int OnRun() override;
@@ -38,16 +38,16 @@ namespace test_launcher
 			bool validate{ false };
 			bool generate{ false };
 			uint32_t maxFrameCount{ 10u };
-			castor::LogType log{ castor::LogType::eInfo };
-			castor::String renderer;
-			castor::Path fileName;
+			c3d::LogType log{ c3d::LogType::eInfo };
+			c3d::String renderer;
+			c3d::Path fileName;
 			bool disableUpdateOptimisations{ false };
 			bool disableRandom{ false };
 		};
 
 		MainFrame * m_mainFrame{ nullptr };
 		Config m_config;
-		castor::String m_outputFileSuffix;
+		c3d::String m_outputFileSuffix;
 	};
 }
 

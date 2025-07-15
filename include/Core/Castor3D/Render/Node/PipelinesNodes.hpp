@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	static bool constexpr C3D_EnsureNodesCounts = true;
 
@@ -24,7 +24,7 @@ namespace castor3d
 			, NodeCommandT< NodeT > command )
 			: node{ node }
 			, visible{ visible }
-			, command{ castor::move( command ) }
+			, command{ c3d::move( command ) }
 		{
 		}
 
@@ -55,7 +55,7 @@ namespace castor3d
 				}
 			}
 
-			m_nodes[m_count] = castor::move( node );
+			m_nodes[m_count] = c3d::move( node );
 			return &m_nodes[m_count++];
 		}
 
@@ -168,7 +168,7 @@ namespace castor3d
 			, RenderedNode node )
 		{
 			auto it = emplace( posBuffer, idxBuffer );
-			return it->nodes.emplace( castor::move( node ) );
+			return it->nodes.emplace( c3d::move( node ) );
 		}
 
 		auto begin()noexcept
@@ -208,7 +208,7 @@ namespace castor3d
 		}
 
 	private:
-		castor::Vector< BufferNodes > m_buffers{};
+		Vector< BufferNodes > m_buffers{};
 	};
 
 	template< typename NodeT >
@@ -227,7 +227,7 @@ namespace castor3d
 		{
 			PipelineNodes( PipelineAndID pipeline
 				, bool isFrontCulled )
-				: pipeline{ castor::move( pipeline ) }
+				: pipeline{ c3d::move( pipeline ) }
 				, isFrontCulled{ isFrontCulled }
 			{
 			}
@@ -270,7 +270,7 @@ namespace castor3d
 			, bool isFrontCulled )
 		{
 			size_t hash = std::hash< NodeT const * >{}( culled.node );
-			hash = castor::hashCombine( hash, isFrontCulled );
+			hash = hashCombine( hash, isFrontCulled );
 			auto ires = m_countedNodes.emplace( hash, nullptr );
 
 			if ( ires.second )
@@ -288,12 +288,12 @@ namespace castor3d
 					, idxBuffer
 					, RenderedNode{ culled.node
 						, culled.visible
-						, castor::move( command ) } );
+						, c3d::move( command ) } );
 			}
 			else
 			{
 				ires.first->second->visible = culled.visible;
-				ires.first->second->command = castor::move( command );
+				ires.first->second->command = c3d::move( command );
 			}
 		}
 
@@ -351,8 +351,8 @@ namespace castor3d
 		}
 
 	private:
-		castor::Map< uint32_t, PipelineNodes > m_pipelines;
-		castor::UnorderedMap< size_t, RenderedNode * > m_countedNodes;
+		Map< uint32_t, PipelineNodes > m_pipelines;
+		HashMap< size_t, RenderedNode * > m_countedNodes;
 	};
 }
 

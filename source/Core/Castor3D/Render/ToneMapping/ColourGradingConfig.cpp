@@ -7,7 +7,7 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace clrgrdcfg
 	{
@@ -285,7 +285,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Point2f range;
+				Point2f range;
 				params[0]->get( range );
 				blockContext->colourGradingConfig.shadowsStart = range->x;
 				blockContext->colourGradingConfig.shadowsEnd = range->y;
@@ -301,7 +301,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Point2f range;
+				Point2f range;
 				params[0]->get( range );
 				blockContext->colourGradingConfig.highlightsStart = range->x;
 				blockContext->colourGradingConfig.highlightsEnd = range->y;
@@ -399,9 +399,8 @@ namespace castor3d
 		}
 	}
 
-	void ColourGradingConfig::addParsers( castor::AttributeParsers & result )
+	void ColourGradingConfig::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< CameraContext > cameraContext{ result, CSCNSection::eCamera, CSCNSection::eScene };
 		BlockParserContextT< CameraContext > gradingContext{ result, CSCNSection::eColourGrading, CSCNSection::eCamera };
 

@@ -12,10 +12,10 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct SubsurfaceScatteringComponent
-		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< SubsurfaceScatteringUPtr > >
+		: public BaseDataPassComponentT< AtomicGroupChangeTracked< SubsurfaceScatteringUPtr > >
 	{
 		static constexpr PassFlag eSubsurfaceScattering = PassFlag( 0x01u );
 		static constexpr PassFlag eDistanceBasedTransmittance = PassFlag( 0x02u );
@@ -58,12 +58,12 @@ namespace castor3d
 
 			PassComponentUPtr createComponent( Pass & pass )const override
 			{
-				return castor::makeUniqueDerived< PassComponent, SubsurfaceScatteringComponent >( pass );
+				return makeUniqueDerived< PassComponent, SubsurfaceScatteringComponent >( pass );
 			}
 
-			void createParsers( castor::AttributeParsers & parsers
+			void createParsers( AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
-			void createSections( castor::StrUInt32Map & sections )const override;
+			void createSections( StrUInt32Map & sections )const override;
 			void zeroBuffer( Pass const & pass
 				, shader::PassMaterialShader const & materialShader
 				, PassBuffer & buffer )const override;
@@ -72,12 +72,12 @@ namespace castor3d
 
 			shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
-				return castor::make_unique< ComponentsShader >( *this );
+				return makeRawUnique< ComponentsShader >( *this );
 			}
 
 			shader::PassMaterialShaderPtr createMaterialShader()const override
 			{
-				return castor::make_unique< MaterialShader >();
+				return makeRawUnique< MaterialShader >();
 			}
 
 			PassComponentFlag getComponentFlags()const override
@@ -102,7 +102,7 @@ namespace castor3d
 
 		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )
 		{
-			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
+			return makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
 		C3D_API explicit SubsurfaceScatteringComponent( Pass & pass );
@@ -152,14 +152,14 @@ namespace castor3d
 
 		OnSssProfileChanged onProfileChanged;
 
-		C3D_API static castor::String const TypeName;
+		C3D_API static String const TypeName;
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;
-		bool doWriteText( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::String const & subfolder
-			, castor::StringStream & file )const override;
+		bool doWriteText( String const & tabs
+			, Path const & folder
+			, String const & subfolder
+			, StringStream & file )const override;
 		void doFillBuffer( PassBuffer & buffer )const override;
 
 	private:

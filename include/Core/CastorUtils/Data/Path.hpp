@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #include <filesystem>
 
-namespace castor
+namespace c3d
 {
 	class Path
 		: public String

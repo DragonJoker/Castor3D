@@ -14,29 +14,29 @@ namespace diamond_square_terrain
 {
 	struct SlopeBiome
 	{
-		castor::Range< float > steepnessRange{ 0.0f, 1.0f };
+		c3d::Range< float > steepnessRange{ 0.0f, 1.0f };
 		bool isMaterial{};
 		uint32_t passIndex{};
-		castor::Point3f colour;
+		c3d::Point3f colour;
 	};
 
 	struct BlendRange
 	{
 		uint32_t beginIndex{};
 		uint32_t endIndex{};
-		castor::Range< float > range{ 0.0f, 1.0f };
+		c3d::Range< float > range{ 0.0f, 1.0f };
 	};
 
 	struct Biome
 	{
-		castor::String name{};
-		castor::Range< float > heightRange{ 0.0f, 1.0f };
-		castor::Vector< SlopeBiome > steepnessBiomes{ 3u, SlopeBiome{} };
-		castor::Vector< BlendRange > steepnessRanges{};
+		c3d::String name{};
+		c3d::Range< float > heightRange{ 0.0f, 1.0f };
+		c3d::Vector< SlopeBiome > steepnessBiomes{ 3u, SlopeBiome{} };
+		c3d::Vector< BlendRange > steepnessRanges{};
 	};
 
-	using Biomes = castor::Vector< Biome >;
-	using BlendRanges = castor::Vector< BlendRange >;
+	using Biomes = c3d::Vector< Biome >;
+	using BlendRanges = c3d::Vector< BlendRange >;
 
 	struct Matrix
 	{
@@ -89,7 +89,7 @@ namespace diamond_square_terrain
 		}
 
 	private:
-		castor::Vector< float > m_map;
+		c3d::Vector< float > m_map;
 		uint32_t m_size;
 	};
 }

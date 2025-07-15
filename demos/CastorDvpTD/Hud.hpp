@@ -8,7 +8,7 @@ namespace castortd
 	{
 	public:
 		Hud( Game const & game
-			, castor3d::Scene const & scene );
+			, c3d::Scene const & scene );
 
 		void initialise();
 		void start();
@@ -20,14 +20,14 @@ namespace castortd
 
 	private:
 		Game const & m_game;
-		castor3d::TextOverlayRPtr m_lives{};
-		castor3d::TextOverlayRPtr m_ore{};
-		castor3d::TextOverlayRPtr m_level{};
-		castor3d::TextOverlayRPtr m_kills{};
-		castor3d::TextOverlayRPtr m_enemyLife{};
-		castor3d::TextOverlayRPtr m_enemyBounty{};
-		castor3d::TextOverlayRPtr m_towerSpeed{};
-		castor3d::TextOverlayRPtr m_towerRange{};
-		castor3d::TextOverlayRPtr m_towerDamage{};
+		c3d::TextOverlayRPtr m_lives{};
+		c3d::TextOverlayRPtr m_ore{};
+		c3d::TextOverlayRPtr m_level{};
+		c3d::TextOverlayRPtr m_kills{};
+		c3d::TextOverlayRPtr m_enemyLife{};
+		c3d::TextOverlayRPtr m_enemyBounty{};
+		c3d::TextOverlayRPtr m_towerSpeed{};
+		c3d::TextOverlayRPtr m_towerRange{};
+		c3d::TextOverlayRPtr m_towerDamage{};
 	};
 }

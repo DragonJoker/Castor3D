@@ -11,7 +11,7 @@
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//*********************************************************************************************
 
@@ -1047,12 +1047,12 @@ namespace castor3d::shader
 
 					sdwIF( m_writer, iridescenceIor < outsideIOR )
 					{
-						phi12 = castor::Pi< float >;
+						phi12 = Pi< float >;
 					}
 					sdwFI
 
 					auto phi21 = m_writer.declLocale( "phi21"
-						, castor::Pi< float > - phi12 );
+						, Pi< float > - phi12 );
 
 					// Second interface
 					auto baseIOR = m_writer.declLocale( "baseIOR"
@@ -1066,17 +1066,17 @@ namespace castor3d::shader
 
 					sdwIF( m_writer, baseIOR[0] < iridescenceIor )
 					{
-						phi23[0] = castor::Pi< float >;
+						phi23[0] = Pi< float >;
 					}
 					sdwFI
 					sdwIF( m_writer, baseIOR[1] < iridescenceIor )
 					{
-						phi23[1] = castor::Pi< float >;
+						phi23[1] = Pi< float >;
 					}
 					sdwFI
 					sdwIF( m_writer, baseIOR[2] < iridescenceIor )
 					{
-						phi23[2] = castor::Pi< float >;
+						phi23[2] = Pi< float >;
 					}
 					sdwFI
 
@@ -1140,7 +1140,7 @@ namespace castor3d::shader
 							, vec3( -0.4985314_f, 0.0415560_f, 1.0572252_f ) ) );
 
 					auto phase = m_writer.declLocale( "phase"
-						, castor::Tau< float > * OPD * 1.0e-9_f );
+						, Tau< float > * OPD * 1.0e-9_f );
 					auto val = m_writer.declLocale( "val"
 						, vec3( 5.4856e-13_f, 4.4201e-13_f, 5.2481e-13_f ) );
 					auto pos = m_writer.declLocale( "pos"
@@ -1149,8 +1149,8 @@ namespace castor3d::shader
 						, vec3( 4.3278e+09_f, 9.3046e+09_f, 6.6121e+09_f ) );
 
 					auto xyz = m_writer.declLocale( "xyz"
-						, val * sqrt( castor::Tau< float > *var ) * cos( pos * phase + shift ) * exp( -( phase * phase ) * var ) );
-					xyz.x() += 9.7470e-14_f * sqrt( castor::Tau< float > * 4.5282e+09_f ) * cos( 2.2399e+06_f * phase + shift[0] ) * exp( -4.5282e+09_f * ( phase * phase ) );
+						, val * sqrt( Tau< float > *var ) * cos( pos * phase + shift ) * exp( -( phase * phase ) * var ) );
+					xyz.x() += 9.7470e-14_f * sqrt( Tau< float > * 4.5282e+09_f ) * cos( 2.2399e+06_f * phase + shift[0] ) * exp( -4.5282e+09_f * ( phase * phase ) );
 					xyz /= 1.0685e-7_f;
 
 					auto srgb = m_writer.declLocale( "srgb"

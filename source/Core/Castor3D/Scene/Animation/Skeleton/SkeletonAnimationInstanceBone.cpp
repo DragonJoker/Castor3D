@@ -3,9 +3,9 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp"
 #include "Castor3D/Model/Skeleton/BoneNode.hpp"
 
-CU_ImplementSmartPtr( castor3d, SkeletonAnimationInstanceBone )
+CU_ImplementSmartPtr( c3d, SkeletonAnimationInstanceBone )
 
-namespace castor3d
+namespace c3d
 {
 	SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone( SkeletonAnimationInstance & animationInstance
 		, SkeletonAnimationBone & animationObject

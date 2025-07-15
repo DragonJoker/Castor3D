@@ -24,23 +24,23 @@ namespace ocean_fft
 
 	namespace genmips
 	{
-		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( castor3d::RenderDevice const & device )
+		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( c3d::RenderDevice const & device )
 		{
-			ashes::VkDescriptorSetLayoutBindingArray bindings{ castor3d::makeDescriptorSetLayoutBinding( GenerateMipmapsPass::eInput
+			ashes::VkDescriptorSetLayoutBindingArray bindings{ c3d::makeDescriptorSetLayoutBinding( GenerateMipmapsPass::eInput
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, castor3d::makeDescriptorSetLayoutBinding( GenerateMipmapsPass::eOutput
+				, c3d::makeDescriptorSetLayoutBinding( GenerateMipmapsPass::eOutput
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, VK_SHADER_STAGE_COMPUTE_BIT ) };
 			return device->createDescriptorSetLayout( GenerateMipmapsPass::Name
-				, castor::move( bindings ) );
+				, c3d::move( bindings ) );
 		}
 
-		static castor::Vector< ashes::DescriptorSetPtr > createDescriptorSets( crg::RunnableGraph & graph
+		static c3d::Vector< ashes::DescriptorSetPtr > createDescriptorSets( crg::RunnableGraph & graph
 			, ashes::DescriptorSetPool const & pool
 			, crg::FramePass const & pass )
 		{
-			castor::Vector< ashes::DescriptorSetPtr > result;
+			c3d::Vector< ashes::DescriptorSetPtr > result;
 			auto & srcAttach = pass.images.front();
 			auto & dstAttach = pass.images.back();
 			auto inViewId = srcAttach.view();
@@ -64,7 +64,7 @@ namespace ocean_fft
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
 
 				data.info.subresourceRange.baseMipLevel++;
-				data.name = imageId.data->name + "_L" + castor::string::toMbString( data.info.subresourceRange.baseMipLevel );
+				data.name = imageId.data->name + "_L" + c3d::string::toMbString( data.info.subresourceRange.baseMipLevel );
 				auto outViewId = graph.getResources().getHandler().createViewId( data );
 				auto outView = graph.createImageView( outViewId );
 				writes.push_back( ashes::WriteDescriptorSet{ GenerateMipmapsPass::eOutput
@@ -79,33 +79,33 @@ namespace ocean_fft
 				descriptorSet->setBindings( writes );
 				descriptorSet->update();
 
-				result.emplace_back( castor::move( descriptorSet ) );
+				result.emplace_back( c3d::move( descriptorSet ) );
 				inView = outView;
 			}
 
 			return result;
 		}
 
-		static ashes::PipelineLayoutPtr createPipelineLayout( castor3d::RenderDevice const & device
+		static ashes::PipelineLayoutPtr createPipelineLayout( c3d::RenderDevice const & device
 			, ashes::DescriptorSetLayout const & dslayout )
 		{
 			return device->createPipelineLayout( GenerateMipmapsPass::Name
 				, ashes::DescriptorSetLayoutCRefArray{ std::ref( dslayout ) }
-				, ashes::VkPushConstantRangeArray{ { VK_SHADER_STAGE_COMPUTE_BIT, 0u, uint32_t( sizeof( castor::Point2f ) ) } } );
+				, ashes::VkPushConstantRangeArray{ { VK_SHADER_STAGE_COMPUTE_BIT, 0u, uint32_t( sizeof( c3d::Point2f ) ) } } );
 		}
 
-		static ashes::ComputePipelinePtr createPipeline( castor3d::RenderDevice const & device
+		static ashes::ComputePipelinePtr createPipeline( c3d::RenderDevice const & device
 			, ashes::PipelineLayout const & pipelineLayout
-			, castor3d::ShaderModule & computeShader )
+			, c3d::ShaderModule & computeShader )
 		{
 			// Initialise the pipeline.
 			return device->createPipeline( GenerateMipmapsPass::Name
 				, ashes::ComputePipelineCreateInfo( 0u
-					, castor3d::makeShaderState( device, computeShader )
+					, c3d::makeShaderState( device, computeShader )
 					, pipelineLayout ) );
 		}
 
-		static castor3d::ShaderPtr createShader( castor3d::RenderDevice const & device )
+		static c3d::ShaderPtr createShader( c3d::RenderDevice const & device )
 		{
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 			auto const G = writer.declConstant( "G", 9.81_f );
@@ -140,12 +140,12 @@ namespace ocean_fft
 
 	//************************************************************************************************
 
-	castor::MbString const GenerateMipmapsPass::Name{ "GenerateMipmaps" };
+	c3d::MbString const GenerateMipmapsPass::Name{ "GenerateMipmaps" };
 
 	GenerateMipmapsPass::GenerateMipmapsPass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, crg::ru::Config ruConfig
 		, crg::RunnablePass::GetPassIndexCallback passIndex
 		, crg::RunnablePass::IsEnabledCallback isEnabled )
@@ -153,7 +153,7 @@ namespace ocean_fft
 			, context
 			, graph
 			, { [this]( uint32_t index ){ doInitialise( index ); }
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( castor3d::PipelineStageFlags::eComputeShader ); } )
+				, GetPipelineStateCallback( [](){ return crg::getPipelineState( c3d::PipelineStageFlags::eComputeShader ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i );}
 				, passIndex
 				, isEnabled
@@ -162,7 +162,7 @@ namespace ocean_fft
 		, m_device{ device }
 		, m_descriptorSetLayout{ genmips::createDescriptorLayout( m_device ) }
 		, m_pipelineLayout{ genmips::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, castor::makeString( Name ), genmips::createShader( device ) }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, c3d::makeString( Name ), genmips::createShader( device ) }
 		, m_pipeline{ genmips::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( crg::getMipLevels( m_pass.images.front().view() ) + crg::getMipLevels( m_pass.images.back().view() ) ) }
 		, m_descriptorSets{ genmips::createDescriptorSets( m_graph, *m_descriptorSetPool, m_pass ) }
@@ -196,10 +196,10 @@ namespace ocean_fft
 		auto invSizeIt = m_invSizes.begin();
 		auto neededLayoutState = getLayoutState( viewId );
 		auto toLayoutState = context.getNextLayoutState( viewId );
-		castor3d::LayoutState shaderRead{ castor3d::ImageLayout::eShaderReadOnly
-			, castor3d::FragmentShaderReadState };
-		castor3d::LayoutState shaderWrite{ castor3d::ImageLayout::eGeneral
-			, castor3d::ComputeShaderWriteState };
+		c3d::LayoutState shaderRead{ c3d::ImageLayout::eShaderReadOnly
+			, c3d::FragmentShaderReadState };
+		c3d::LayoutState shaderWrite{ c3d::ImageLayout::eGeneral
+			, c3d::ComputeShaderWriteState };
 		auto mipLevels = imageId.data->info.mipLevels;
 		auto srcImageLayout = neededLayoutState;
 		auto dstMipImageLayout = ( range.levelCount == mipLevels )
@@ -207,7 +207,7 @@ namespace ocean_fft
 			: toLayoutState;
 		auto format = getFormat( imageId );
 		auto const aspectMask = crg::getAspectMask( format );
-		castor3d::ImageSubresourceRange mipSubRange{ aspectMask
+		c3d::ImageSubresourceRange mipSubRange{ aspectMask
 			, 0u
 			, 1u
 			, 0u
@@ -234,7 +234,7 @@ namespace ocean_fft
 				, imageId
 				, getImageViewType( viewId )
 				, mipSubRange
-				, castor3d::ImageLayout::eUndefined
+				, c3d::ImageLayout::eUndefined
 				, shaderWrite );
 
 			// Generate mip level
@@ -246,7 +246,7 @@ namespace ocean_fft
 				, *m_pipelineLayout
 				, VK_SHADER_STAGE_COMPUTE_BIT
 				, 0u
-				, uint32_t( sizeof( castor::Point2f ) )
+				, uint32_t( sizeof( c3d::Point2f ) )
 				, &( *invSizeIt ) );
 			m_context.vkCmdBindDescriptorSets( commandBuffer
 				, VK_PIPELINE_BIND_POINT_COMPUTE

@@ -6,7 +6,7 @@
 
 namespace GuiCommon
 {
-	FrameVariableBufferTreeItemProperty::FrameVariableBufferTreeItemProperty( castor3d::Engine * engine
+	FrameVariableBufferTreeItemProperty::FrameVariableBufferTreeItemProperty( c3d::Engine * engine
 		, bool editable
 		, UniformBufferValues & /*buffer*/ )
 		: TreeItemProperty{ engine, editable }

@@ -14,10 +14,10 @@ namespace toon
 {
 	struct ToonPbrPass
 	{
-		static castor3d::PassUPtr create( castor3d::LightingModelID lightingModelId
-			, castor3d::Material & parent )
+		static c3d::PassUPtr create( c3d::LightingModelID lightingModelId
+			, c3d::Material & parent )
 		{
-			auto result = castor3d::PbrPass::create( lightingModelId, parent );
+			auto result = c3d::PbrPass::create( lightingModelId, parent );
 			result->createComponent< EdgesComponent >();
 			return result;
 		}
@@ -25,10 +25,10 @@ namespace toon
 
 	struct ToonPhongPass
 	{
-		static castor3d::PassUPtr create( castor3d::LightingModelID lightingModelId
-			, castor3d::Material & parent )
+		static c3d::PassUPtr create( c3d::LightingModelID lightingModelId
+			, c3d::Material & parent )
 		{
-			auto result = castor3d::PhongPass::create( lightingModelId, parent );
+			auto result = c3d::PhongPass::create( lightingModelId, parent );
 			result->createComponent< EdgesComponent >();
 			return result;
 		}
@@ -37,26 +37,26 @@ namespace toon
 
 extern "C"
 {
-	C3D_ToonMaterial_API void getRequiredVersion( castor3d::Version * version );
-	C3D_ToonMaterial_API void getType( castor3d::PluginType * type );
+	C3D_ToonMaterial_API void getRequiredVersion( c3d::Version * version );
+	C3D_ToonMaterial_API void getType( c3d::PluginType * type );
 	C3D_ToonMaterial_API void isDebug( int * value );
 	C3D_ToonMaterial_API void getName( char const ** name );
-	C3D_ToonMaterial_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
-	C3D_ToonMaterial_API void onUnload( castor3d::Engine * engine );
+	C3D_ToonMaterial_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin );
+	C3D_ToonMaterial_API void onUnload( c3d::Engine * engine );
 
-	C3D_ToonMaterial_API void getRequiredVersion( castor3d::Version * version )
+	C3D_ToonMaterial_API void getRequiredVersion( c3d::Version * version )
 	{
-		*version = castor3d::Version();
+		*version = c3d::Version();
 	}
 
 	C3D_ToonMaterial_API void isDebug( int * value )
 	{
-		*value = castor::system::isDebug() ? 1 : 0;
+		*value = c3d::system::isDebug() ? 1 : 0;
 	}
 
-	C3D_ToonMaterial_API void getType( castor3d::PluginType * type )
+	C3D_ToonMaterial_API void getType( c3d::PluginType * type )
 	{
-		*type = castor3d::PluginType::eGeneric;
+		*type = c3d::PluginType::eGeneric;
 	}
 
 	C3D_ToonMaterial_API void getName( char const ** name )
@@ -64,36 +64,36 @@ extern "C"
 		*name = "Toon Material";
 	}
 
-	C3D_ToonMaterial_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
+	C3D_ToonMaterial_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin )
 	{
 		engine->registerPassComponent< toon::EdgesComponent >();
 		engine->registerLightingModel( toon::shader::ToonPhongLightingModel::getName()
-			, { castor3d::PhongPass::DefaultDiffuseBrdf
-				, castor3d::PhongPass::DefaultSpecularBrdf
-				, castor3d::PhongPass::DefaultSheenBrdf
-				, castor3d::PhongPass::DefaultClearcoatBrdf
-				, castor3d::PhongPass::DefaultScatteringModel }
+			, { c3d::PhongPass::DefaultDiffuseBrdf
+				, c3d::PhongPass::DefaultSpecularBrdf
+				, c3d::PhongPass::DefaultSheenBrdf
+				, c3d::PhongPass::DefaultClearcoatBrdf
+				, c3d::PhongPass::DefaultScatteringModel }
 			, &toon::shader::ToonPhongLightingModel::create );
 		engine->registerLightingModel( toon::shader::ToonPbrLightingModel::getName()
-			, { castor3d::PbrPass::DefaultDiffuseBrdf
-				, castor3d::PbrPass::DefaultSpecularBrdf
-				, castor3d::PbrPass::DefaultSheenBrdf
-				, castor3d::PbrPass::DefaultClearcoatBrdf
-				, castor3d::PhongPass::DefaultScatteringModel }
+			, { c3d::PbrPass::DefaultDiffuseBrdf
+				, c3d::PbrPass::DefaultSpecularBrdf
+				, c3d::PbrPass::DefaultSheenBrdf
+				, c3d::PbrPass::DefaultClearcoatBrdf
+				, c3d::PhongPass::DefaultScatteringModel }
 			, &toon::shader::ToonPbrLightingModel::create );
 		engine->registerPassModel( { toon::shader::ToonPhongLightingModel::getName()
 			, toon::ToonPhongPass::create } );
 		engine->registerPassModel( { toon::shader::ToonPbrLightingModel::getName()
 			, toon::ToonPbrPass::create } );
-		engine->registerSpecificsBuffer( castor::String{ toon::shader::ToonProfile::getName() }
+		engine->registerSpecificsBuffer( c3d::String{ toon::shader::ToonProfile::getName() }
 			, { &toon::shader::ToonProfiles::create
 				, &toon::shader::ToonProfiles::update
 				, &toon::shader::ToonProfiles::declare } );
 	}
 
-	C3D_ToonMaterial_API void onUnload( castor3d::Engine * engine )
+	C3D_ToonMaterial_API void onUnload( c3d::Engine * engine )
 	{
-		engine->unregisterSpecificsBuffer( castor::String{ toon::shader::ToonProfile::getName() } );
+		engine->unregisterSpecificsBuffer( c3d::String{ toon::shader::ToonProfile::getName() } );
 		engine->unregisterPassModel( toon::shader::ToonPbrLightingModel::getName() );
 		engine->unregisterPassModel( toon::shader::ToonPhongLightingModel::getName() );
 		engine->unregisterLightingModel( toon::shader::ToonPbrLightingModel::getName() );

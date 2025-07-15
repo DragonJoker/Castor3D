@@ -20,8 +20,8 @@ namespace GuiCommon
 		, wxPoint const & versionPos
 		, wxPoint const & pos
 		, int range
-		, castor3d::Version const & appVersion
-		, castor3d::Version const & engineVersion )
+		, c3d::Version const & appVersion
+		, c3d::Version const & engineVersion )
 		: wxFrame( nullptr, wxID_ANY, title, pos, wxSize( 512, 384 ), wxCLIP_CHILDREN | wxBORDER_NONE )
 		, m_bmpSplash( splash::splash_xpm )
 		, m_ptTitlePosition( titlePos )
@@ -41,7 +41,7 @@ namespace GuiCommon
 
 	void SplashScreen::Step( wxString const & strText, int iIncrement )
 	{
-		castor::Logger::logDebug( castor::String( cuT( "SplashScreen::Step - " ) ) + make_String( strText ) );
+		c3d::Logger::logDebug( c3d::String( cuT( "SplashScreen::Step - " ) ) + make_String( strText ) );
 		m_strStatus = strText;
 		Step( iIncrement );
 	}

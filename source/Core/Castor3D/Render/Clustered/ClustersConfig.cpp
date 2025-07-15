@@ -6,24 +6,24 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, ClustersConfig )
+CU_ImplementSmartPtr( c3d, ClustersConfig )
 
-namespace castor
+namespace c3d
 {
 	template<>
-	struct ParserEnumTraits< castor3d::ClusterSplitScheme >
+	struct ParserEnumTraits< ClusterSplitScheme >
 	{
 		static inline xchar const * const Name = cuT( "ClusterSplitScheme" );
 		static inline UInt32StrMap const Values = []()
 		{
 			UInt32StrMap result;
-			result = castor3d::getEnumMapT< castor3d::ClusterSplitScheme >();
+			result = getEnumMapT< ClusterSplitScheme >();
 			return result;
 		}();
 	};
 }
 
-namespace castor3d
+namespace c3d
 {
 	namespace clscfg
 	{
@@ -42,7 +42,7 @@ namespace castor3d
 			else
 			{
 				newBlockContext->renderTarget = blockContext->renderTarget;
-				newBlockContext->clustersConfig = castor::makeUnique< ClustersConfig >();
+				newBlockContext->clustersConfig = makeUnique< ClustersConfig >();
 			}
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eClusters )
@@ -270,10 +270,10 @@ namespace castor3d
 	{
 		if ( enabled )
 		{
-			static castor::StringArray splitSchemeNames{ cuT( "Exponential" )
+			static StringArray splitSchemeNames{ cuT( "Exponential" )
 				, cuT( "Linear" )
 				, cuT( "Hybrid" ) };
-			static castor::StringArray debugDisplayNames{ cuT( "None" )
+			static StringArray debugDisplayNames{ cuT( "None" )
 				, cuT( "Clusters AABB" )
 				, cuT( "Lights AABB" )
 				, cuT( "Lights BVH" ) };
@@ -304,9 +304,8 @@ namespace castor3d
 		}
 	}
 
-	void ClustersConfig::addParsers( castor::AttributeParsers & result )
+	void ClustersConfig::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< TargetContext > targetContext{ result, CSCNSection::eRenderTarget };
 		BlockParserContextT< clscfg::ClustersContext > clustersContext{ result, CSCNSection::eClusters, CSCNSection::eRenderTarget };
 

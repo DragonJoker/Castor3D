@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/Size.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Render */
 	//@{
@@ -30,15 +30,15 @@ namespace castor3d
 		eRevealage = 1,
 		CU_ScopedEnumBounds( eAccumulation, eRevealage ),
 	};
-	C3D_API castor::String getTextureName( WbTexture texture );
-	C3D_API castor::String getTexName( WbTexture texture );
-	C3D_API castor::PixelFormat getFormat( RenderDevice const & device, WbTexture texture );
+	C3D_API String getTextureName( WbTexture texture );
+	C3D_API String getTexName( WbTexture texture );
+	C3D_API PixelFormat getFormat( RenderDevice const & device, WbTexture texture );
 	C3D_API ClearValue getClearValue( WbTexture texture );
 	C3D_API ImageUsageFlags getUsageFlags( WbTexture texture );
 	C3D_API BorderColour getBorderColor( WbTexture texture );
 	inline uint32_t getMipLevels( RenderDevice const & /*device*/
 		, WbTexture /*texture*/
-		, castor::Size const & /*size*/ )
+		, Size const & /*size*/ )
 	{
 		return 1u;
 	}
@@ -48,7 +48,7 @@ namespace castor3d
 	{
 		return getMipLevels( device
 			, texture
-			, castor::Size{ size.width, size.height } );
+			, Size{ size.width, size.height } );
 	}
 	inline ComparisonFunc getCompareOp( WbTexture /*texture*/ )
 	{
@@ -92,9 +92,9 @@ namespace castor3d
 	class WeightedBlendRendering;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, WeightedBlendRendering, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TransparentPassResult, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TransparentRendering, C3D_API );
+	CU_DeclareSmartPtr( c3d, WeightedBlendRendering, C3D_API );
+	CU_DeclareSmartPtr( c3d, TransparentPassResult, C3D_API );
+	CU_DeclareSmartPtr( c3d, TransparentRendering, C3D_API );
 	/** @endcond */
 
 	//@}

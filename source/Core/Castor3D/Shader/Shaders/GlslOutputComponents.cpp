@@ -5,14 +5,14 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	//*********************************************************************************************
 
 	DirectLighting::DirectLighting( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+		: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		, diffuse{ getMember< "diffuse" >() }
 		, specular{ getMember< "specular" >() }
 		, dielectric{ getMember< "dielectric" >() }
@@ -107,7 +107,7 @@ namespace castor3d::shader
 	IndirectLighting::IndirectLighting( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+		: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		, ambient{ getMember< "ambient" >() }
 		, rawDiffuse{ getMember< "diffuse" >() }
 		, specular{ getMember< "specular" >() }
@@ -149,7 +149,7 @@ namespace castor3d::shader
 	ReflectionRefraction::ReflectionRefraction( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+		: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		, diffuseReflection{ getMember< "diffuseReflection" >() }
 		, specularReflection{ getMember< "specularReflection" >() }
 		, diffuseTransmission{ getMember< "diffuseTransmission" >() }

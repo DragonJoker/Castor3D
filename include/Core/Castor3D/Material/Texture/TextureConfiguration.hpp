@@ -14,13 +14,13 @@ See LICENSE file in root folder
 
 #include <ashespp/Image/ImageCreateInfo.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct TextureTransform
 	{
-		castor::Point3f translate{ 0, 0, 0 };
-		castor::Angle rotate;
-		castor::Point3f scale{ 1, 1, 1 };
+		Point3f translate{ 0, 0, 0 };
+		Angle rotate;
+		Point3f scale{ 1, 1, 1 };
 	};
 	/**
 	*\~english
@@ -138,7 +138,7 @@ namespace castor3d
 		bool needsXInversion{};
 		bool needsZInversion{};
 		TextureTransform transform{};
-		castor::Point4ui tileSet{};
+		Point4ui tileSet{};
 		uint32_t tiles{ 1u };
 		TextureSpaces textureSpace{};
 		/**@}*/
@@ -190,10 +190,9 @@ namespace castor3d
 	/**@{*/
 	C3D_API size_t getHash( TextureConfiguration const & config );
 	C3D_API TextureFlagsSet getFlags( TextureConfiguration const & config );
-	C3D_API castor::PixelComponents getPixelComponents( uint32_t mask );
-	C3D_API castor::PixelComponents getPixelComponents( castor::PixelFormat format );
-	C3D_API castor::PixelComponents getPixelComponents( TextureConfiguration const & config );
-	C3D_API void updateIndices( castor::PixelFormat format
+	C3D_API PixelComponents getPixelComponents( uint32_t mask );
+	C3D_API PixelComponents getPixelComponents( TextureConfiguration const & config );
+	C3D_API void updateIndices( PixelFormat format
 		, TextureConfiguration & config );
 	C3D_API TextureFlagConfigurations::const_iterator checkFlag( TextureFlagConfigurations const & lhs
 		, PassComponentTextureFlag rhs );

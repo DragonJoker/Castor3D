@@ -43,7 +43,7 @@ See LICENSE file in root folder
 #define C3D_Join3Strings( l, m, r ) C3D_Join2Strings(l, C3D_Join2Strings(m, r))
 #define C3D_Join4Strings( l, ml, mr, r ) C3D_Join3Strings(l, ml, C3D_Join2Strings(mr, r))
 
-namespace castor3d
+namespace c3d
 {
 	static uint32_t constexpr InvalidIndex = ~0u;
 	static crg::ColorComponentFlags const defaultColorWriteMask{ crg::ColorComponentFlags::eR | crg::ColorComponentFlags::eG | crg::ColorComponentFlags::eB | crg::ColorComponentFlags::eA };
@@ -105,26 +105,6 @@ namespace castor3d
 	static constexpr AccessState TransferWriteState{ AccessFlags::eTransferWrite, PipelineStageFlags::eTransfer };
 	static constexpr AccessState HostWriteState{ AccessFlags::eHostWrite, PipelineStageFlags::eHost };
 
-	using castor::StringHash;
-	using castor::xchar;
-
-	using castor::s8;
-	using castor::u8;
-	using castor::byte;
-	using castor::s16;
-	using castor::u16;
-	using castor::s32;
-	using castor::u32;
-	using castor::s64;
-	using castor::u64;
-	using castor::usize;
-	using castor::f32;
-	using castor::f64;
-
-	using castor::UInt32StrMap;
-	using castor::UInt64StrMap;
-	using castor::UInt32Array;
-
 	using crg::FramePassTimer;
 
 	using BytePtr = uint8_t *;
@@ -178,23 +158,23 @@ namespace castor3d
 	struct ResourceCacheTraitsT;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, Engine, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ImporterFile, C3D_API );
-	CU_DeclareSmartPtr( castor3d, FramePassTimer, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ImporterFileFactory, C3D_API );
+	CU_DeclareSmartPtr( c3d, Engine, C3D_API );
+	CU_DeclareSmartPtr( c3d, ImporterFile, C3D_API );
+	CU_DeclareSmartPtr( c3d, FramePassTimer, C3D_API );
+	CU_DeclareSmartPtr( c3d, ImporterFileFactory, C3D_API );
 
 	CU_DeclareVector( float, Float );
 	CU_DeclareMap( uint32_t, int, IntUInt );
-	CU_DeclareMap( castor::String, int, IntStr );
-	CU_DeclareMap( int, castor::String, StrInt );
+	CU_DeclareMap( String, int, IntStr );
+	CU_DeclareMap( int, String, StrInt );
 	/** @endcond */
 
-	C3D_API castor::LoggerInstance & getLogger( Engine const & engine );
+	C3D_API LoggerInstance & getLogger( Engine const & engine );
 
-	C3D_API castor::Matrix4x4f convert( castor::Array< float, 16 > const & value );
-	C3D_API VkClearColorValue convert( castor::RgbaColour const & value );
-	C3D_API castor::RgbaColour convert( VkClearColorValue const & value );
-	C3D_API castor::Array< float, 4u > makeFloatArray( castor::RgbaColour const & value );
+	C3D_API Matrix4x4f convert( Array< float, 16 > const & value );
+	C3D_API VkClearColorValue convert( RgbaColour const & value );
+	C3D_API RgbaColour convert( VkClearColorValue const & value );
+	C3D_API Array< float, 4u > makeFloatArray( RgbaColour const & value );
 
 	inline VkDescriptorSetLayoutBinding makeDescriptorSetLayoutBinding( uint32_t binding
 		, VkDescriptorType descriptorType
@@ -227,24 +207,24 @@ namespace castor3d
 		++binding;
 	}
 
-	inline castor::Size makeSize( VkExtent2D const & size )
+	inline Size makeSize( VkExtent2D const & size )
 	{
-		return castor::Size{ size.width, size.height };
+		return Size{ size.width, size.height };
 	}
 
-	inline castor::Size makeSize( Extent2D const & size )
+	inline Size makeSize( Extent2D const & size )
 	{
-		return castor::Size{ size.width, size.height };
+		return Size{ size.width, size.height };
 	}
 
-	inline castor::Size makeSize( VkExtent3D const & size )
+	inline Size makeSize( VkExtent3D const & size )
 	{
-		return castor::Size{ size.width, size.height };
+		return Size{ size.width, size.height };
 	}
 
-	inline castor::Size makeSize( Extent3D const & size )
+	inline Size makeSize( Extent3D const & size )
 	{
-		return castor::Size{ size.width, size.height };
+		return Size{ size.width, size.height };
 	}
 
 	inline VkExtent2D makeExtent2D( VkExtent3D const & size )
@@ -272,7 +252,7 @@ namespace castor3d
 		return VkExtent3D{ size.width, size.height, 1u };
 	}
 
-	inline Extent2D makeExtent2D( castor::Coords2ui const & size )
+	inline Extent2D makeExtent2D( Coords2ui const & size )
 	{
 		return Extent2D
 		{
@@ -281,7 +261,7 @@ namespace castor3d
 		};
 	}
 
-	inline VkExtent2D makeVkExtent2D( castor::Coords2ui const & size )
+	inline VkExtent2D makeVkExtent2D( Coords2ui const & size )
 	{
 		return VkExtent2D
 		{
@@ -290,7 +270,7 @@ namespace castor3d
 		};
 	}
 
-	inline Extent2D makeExtent2D( castor::Point2ui const & size )
+	inline Extent2D makeExtent2D( Point2ui const & size )
 	{
 		return Extent2D
 		{
@@ -299,7 +279,7 @@ namespace castor3d
 		};
 	}
 
-	inline Extent3D makeExtent3D( castor::Coords2ui const & size )
+	inline Extent3D makeExtent3D( Coords2ui const & size )
 	{
 		return Extent3D
 		{
@@ -309,7 +289,7 @@ namespace castor3d
 		};
 	}
 
-	inline VkExtent3D makeVkExtent3D( castor::Coords2ui const & size )
+	inline VkExtent3D makeVkExtent3D( Coords2ui const & size )
 	{
 		return VkExtent3D
 		{
@@ -319,7 +299,7 @@ namespace castor3d
 		};
 	}
 
-	inline Extent3D makeExtent3D( castor::Point2ui const & size )
+	inline Extent3D makeExtent3D( Point2ui const & size )
 	{
 		return Extent3D
 		{
@@ -329,7 +309,7 @@ namespace castor3d
 		};
 	}
 
-	inline Offset2D makeOffset2D( castor::Coords2i const & pos )
+	inline Offset2D makeOffset2D( Coords2i const & pos )
 	{
 		return Offset2D
 		{
@@ -338,7 +318,7 @@ namespace castor3d
 		};
 	}
 
-	inline Offset2D makeOffset2D( castor::Point2i const & pos )
+	inline Offset2D makeOffset2D( Point2i const & pos )
 	{
 		return Offset2D
 		{
@@ -347,7 +327,7 @@ namespace castor3d
 		};
 	}
 
-	inline Offset3D makeOffset3D( castor::Coords2i const & pos )
+	inline Offset3D makeOffset3D( Coords2i const & pos )
 	{
 		return Offset3D
 		{
@@ -357,7 +337,7 @@ namespace castor3d
 		};
 	}
 
-	inline Offset3D makeOffset3D( castor::Point2i const & pos )
+	inline Offset3D makeOffset3D( Point2i const & pos )
 	{
 		return Offset3D
 		{
@@ -367,7 +347,7 @@ namespace castor3d
 		};
 	}
 
-	inline VkViewport makeViewport( castor::Coords2ui const & size
+	inline VkViewport makeViewport( Coords2ui const & size
 		, float zMin = 0.0f
 		, float zMax = 1.0f )
 	{
@@ -377,7 +357,7 @@ namespace castor3d
 			, zMax );
 	}
 
-	inline VkViewport makeViewport( castor::Point2ui const & size
+	inline VkViewport makeViewport( Point2ui const & size
 		, float zMin = 0.0f
 		, float zMax = 1.0f )
 	{
@@ -387,8 +367,8 @@ namespace castor3d
 			, zMax );
 	}
 
-	inline VkViewport makeViewport( castor::Coords2i const & pos
-		, castor::Coords2ui const & size
+	inline VkViewport makeViewport( Coords2i const & pos
+		, Coords2ui const & size
 		, float zMin = 0.0f
 		, float zMax = 1.0f )
 	{
@@ -398,8 +378,8 @@ namespace castor3d
 			, zMax );
 	}
 
-	inline VkViewport makeViewport( castor::Point2i const & pos
-		, castor::Coords2ui const & size
+	inline VkViewport makeViewport( Point2i const & pos
+		, Coords2ui const & size
 		, float zMin = 0.0f
 		, float zMax = 1.0f )
 	{
@@ -409,8 +389,8 @@ namespace castor3d
 			, zMax );
 	}
 
-	inline VkViewport makeViewport( castor::Coords2i const & pos
-		, castor::Point2ui const & size
+	inline VkViewport makeViewport( Coords2i const & pos
+		, Point2ui const & size
 		, float zMin = 0.0f
 		, float zMax = 1.0f )
 	{
@@ -420,8 +400,8 @@ namespace castor3d
 			, zMax );
 	}
 
-	inline VkViewport makeViewport( castor::Point2i const & pos
-		, castor::Point2ui const & size
+	inline VkViewport makeViewport( Point2i const & pos
+		, Point2ui const & size
 		, float zMin = 0.0f
 		, float zMax = 1.0f )
 	{
@@ -431,62 +411,62 @@ namespace castor3d
 			, zMax );
 	}
 
-	inline VkRect2D makeScissor( castor::Coords2ui const & size )
+	inline VkRect2D makeScissor( Coords2ui const & size )
 	{
 		return ashes::makeScissor( {}
 		, convert( makeExtent2D( size ) ) );
 	}
 
-	inline VkRect2D makeScissor( castor::Point2ui const & size )
+	inline VkRect2D makeScissor( Point2ui const & size )
 	{
 		return ashes::makeScissor( {}
 		, convert( makeExtent2D( size ) ) );
 	}
 
-	inline VkRect2D makeScissor( castor::Coords2i const & pos
-		, castor::Coords2ui const & size )
+	inline VkRect2D makeScissor( Coords2i const & pos
+		, Coords2ui const & size )
 	{
 		return ashes::makeScissor( convert( makeOffset2D( pos ) )
 			, convert( makeExtent2D( size ) ) );
 	}
 
-	inline VkRect2D makeScissor( castor::Point2i const & pos
-		, castor::Coords2ui const & size )
+	inline VkRect2D makeScissor( Point2i const & pos
+		, Coords2ui const & size )
 	{
 		return ashes::makeScissor( convert( makeOffset2D( pos ) )
 			, convert( makeExtent2D( size ) ) );
 	}
 
-	inline VkRect2D makeScissor( castor::Coords2i const & pos
-		, castor::Point2ui const & size )
+	inline VkRect2D makeScissor( Coords2i const & pos
+		, Point2ui const & size )
 	{
 		return ashes::makeScissor( convert( makeOffset2D( pos ) )
 			, convert( makeExtent2D( size ) ) );
 	}
 
-	inline VkRect2D makeScissor( castor::Point2i const & pos
-		, castor::Point2ui const & size )
+	inline VkRect2D makeScissor( Point2i const & pos
+		, Point2ui const & size )
 	{
 		return ashes::makeScissor( convert( makeOffset2D( pos ) )
 			, convert( makeExtent2D( size ) ) );
 	}
 
 	template< typename EnumT >
-	castor::UInt32StrMap getEnumMapT( EnumT min, EnumT max )
+	UInt32StrMap getEnumMapT( EnumT min, EnumT max )
 	{
 		using ashes::getName;
-		castor::UInt32StrMap result;
+		UInt32StrMap result;
 
 		for ( uint32_t i = uint32_t( min ); i <= uint32_t( max ); ++i )
 		{
-			result[castor::makeString( getName( EnumT( i ) ) )] = i;
+			result[makeString( getName( EnumT( i ) ) )] = i;
 		}
 
 		return result;
 	}
 
 	template< typename EnumT >
-	castor::UInt32StrMap getEnumMapT()
+	UInt32StrMap getEnumMapT()
 	{
 		return getEnumMapT( EnumT::eMin, EnumT::eMax );
 	}
@@ -558,6 +538,6 @@ namespace castor3d
 	}
 }
 
-CU_DeclareExportedOwnedBy( C3D_API, castor3d::Engine, Engine )
+CU_DeclareExportedOwnedBy( C3D_API, Engine, Engine )
 
 #endif

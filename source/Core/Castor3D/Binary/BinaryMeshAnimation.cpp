@@ -4,7 +4,7 @@
 #include "Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp"
 #include "Castor3D/Binary/BinaryMeshMorphTarget.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
@@ -23,13 +23,13 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template<>
-	castor::String BinaryParserBase< MeshAnimation >::Name = cuT( "MeshAnimation" );
+	String BinaryParserBase< MeshAnimation >::Name = cuT( "MeshAnimation" );
 
 	bool BinaryParser< MeshAnimation >::doParse( MeshAnimation & obj )
 	{
 		bool result = true;
 		MeshMorphTargetUPtr keyFrame;
-		castor::String name;
+		String name;
 		BinaryChunk chunk{ doIsLittleEndian() };
 
 		while ( result && doGetSubChunk( chunk ) )
@@ -48,13 +48,13 @@ namespace castor3d
 				break;
 
 			case ChunkType::eMeshMorphTarget:
-				keyFrame = castor::makeUnique< MeshMorphTarget >( obj, 0_ms );
+				keyFrame = makeUnique< MeshMorphTarget >( obj, 0_ms );
 				result = createBinaryParser< MeshMorphTarget >().parse( *keyFrame, chunk );
 				checkError( result, cuT( "Couldn't parse keyframe." ) );
 
 				if ( result )
 				{
-					obj.addKeyFrame( castor::ptrRefCast< AnimationKeyFrame >( keyFrame ) );
+					obj.addKeyFrame( ptrRefCast< AnimationKeyFrame >( keyFrame ) );
 				}
 
 				break;
@@ -74,7 +74,7 @@ namespace castor3d
 		if ( m_fileVersion <= Version{ 1, 5, 0 } )
 		{
 			MeshMorphTargetUPtr keyFrame;
-			castor::String name;
+			String name;
 			BinaryChunk chunk{ doIsLittleEndian() };
 
 			while ( result && doGetSubChunk( chunk ) )
@@ -99,13 +99,13 @@ namespace castor3d
 				case ChunkType::eMeshAnimationKeyFrame:
 #pragma GCC diagnostic pop
 #pragma warning( pop )
-					keyFrame = castor::makeUnique< MeshMorphTarget >( obj, 0_ms );
+					keyFrame = makeUnique< MeshMorphTarget >( obj, 0_ms );
 					result = createBinaryParser< MeshMorphTarget >().parse( *keyFrame, chunk );
 					checkError( result, cuT( "Couldn't parse keyframe." ) );
 
 					if ( result )
 					{
-						obj.addKeyFrame( castor::ptrRefCast< AnimationKeyFrame >( keyFrame ) );
+						obj.addKeyFrame( ptrRefCast< AnimationKeyFrame >( keyFrame ) );
 					}
 
 					break;

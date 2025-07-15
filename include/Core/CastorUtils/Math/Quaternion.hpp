@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Math/Point.hpp"
 #include "CastorUtils/Math/SquareMatrix.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename T >
 	using QuaternionDataT = PointData< T, 4u >;

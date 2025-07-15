@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace shader
 	{
@@ -30,7 +30,7 @@ namespace castor3d
 			C3D_API LpvLightData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
-				: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+				: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 			{
 			}
 
@@ -97,7 +97,7 @@ namespace castor3d
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_lpvLightData = lpvLightConfig.declMember< castor3d::shader::LpvLightData >( "d" );\
+	auto c3d_lpvLightData = lpvLightConfig.declMember< c3d::shader::LpvLightData >( "d" );\
 	lpvLightConfig.end()
 
 #endif

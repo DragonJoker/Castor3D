@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/IOStructHelper.hpp>
 #include <ShaderWriter/CompositeTypes/IOStructInstanceHelper.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	template< typename ColTypeT, sdw::var::Flag FlagT >
 	using ColourStructT = sdw::IOStructInstanceHelperT< FlagT
@@ -41,7 +41,7 @@ namespace castor3d::shader
 		ColourT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled )
-			: ColourStructT< ColTypeT, FlagT >{ writer, castor::move( expr ), enabled }
+			: ColourStructT< ColTypeT, FlagT >{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -55,7 +55,7 @@ namespace castor3d::shader
 		PositionT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled )
-			: PositionStructT< PosTypeT, FlagT >{ writer, castor::move( expr ), enabled }
+			: PositionStructT< PosTypeT, FlagT >{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -69,7 +69,7 @@ namespace castor3d::shader
 		PosUvT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled )
-			: PosUvStructT< PosTypeT, FlagT >{ writer, castor::move( expr ), enabled }
+			: PosUvStructT< PosTypeT, FlagT >{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -84,7 +84,7 @@ namespace castor3d::shader
 		UvT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled )
-			: UvStructT< UvTypeT, FlagT >{ writer, castor::move( expr ), enabled }
+			: UvStructT< UvTypeT, FlagT >{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -98,7 +98,7 @@ namespace castor3d::shader
 		TwoUvT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled )
-			: TwoUvStructT< UvTypeT, FlagT >{ writer, castor::move( expr ), enabled }
+			: TwoUvStructT< UvTypeT, FlagT >{ writer, c3d::move( expr ), enabled }
 		{
 		}
 

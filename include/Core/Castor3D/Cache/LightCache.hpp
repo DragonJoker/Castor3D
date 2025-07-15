@@ -13,9 +13,9 @@ See LICENSE file in root folder
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Buffer/BufferView.hpp>
 
-namespace castor3d
+namespace c3d
 {
-	using LightCacheTraits = ObjectCacheTraitsT< Light, castor::String >;
+	using LightCacheTraits = ObjectCacheTraitsT< Light, String >;
 	/**
 	\~english
 	\brief		Light cache.
@@ -23,12 +23,12 @@ namespace castor3d
 	\brief		Cache de Light.
 	*/
 	template<>
-	class ObjectCacheT< Light, castor::String, LightCacheTraits >
-		: public ObjectCacheBaseT< Light, castor::String, LightCacheTraits >
+	class ObjectCacheT< Light, String, LightCacheTraits >
+		: public ObjectCacheBaseT< Light, String, LightCacheTraits >
 	{
 	public:
 		using ElementT = Light;
-		using ElementKeyT = castor::String;
+		using ElementKeyT = String;
 		using ElementCacheTraitsT = LightCacheTraits;
 		using ElementObjectCacheT = ObjectCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = typename ElementObjectCacheT::ElementPtrT;
@@ -64,7 +64,7 @@ namespace castor3d
 		 *\brief		Initialise le buffer GPU.
 		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API void initialise( castor3d::RenderDevice const & device );
+		C3D_API void initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Sets all the elements to be cleaned up.
@@ -100,7 +100,7 @@ namespace castor3d
 		 *\param[in]	type	Le type de lumière.
 		 *\return		Les lumières.
 		 */
-		C3D_API castor::Vector< Light * > const & getLights( LightType type )const;
+		C3D_API Vector< Light * > const & getLights( LightType type )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the lights of given type.
@@ -210,8 +210,8 @@ namespace castor3d
 
 	private:
 		LightBufferUPtr m_lightBuffer;
-		castor::Vector< Light * > m_pendingLights;
-		castor::Array< castor::Vector< Light * >, size_t( LightType::eCount ) > m_lightsPerType;
+		Vector< Light * > m_pendingLights;
+		Array< Vector< Light * >, size_t( LightType::eCount ) > m_lightsPerType;
 		bool m_dirty{ true };
 	};
 }

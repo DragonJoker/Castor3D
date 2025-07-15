@@ -6,12 +6,12 @@
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
-CU_ImplementSmartPtr( castor3d, MeshMorphTarget )
+CU_ImplementSmartPtr( c3d, MeshMorphTarget )
 
-namespace castor3d
+namespace c3d
 {
 	MeshMorphTarget::MeshMorphTarget( MeshAnimation & parent
-		, castor::Milliseconds const & timeIndex )
+		, Milliseconds const & timeIndex )
 		: AnimationKeyFrame{ timeIndex }
 		, OwnedBy< MeshAnimation >{ parent }
 	{
@@ -23,9 +23,9 @@ namespace castor3d
 	}
 
 	void MeshMorphTarget::setTargetsWeights( Submesh const & submesh
-		, castor::Vector< float > weights )
+		, Vector< float > weights )
 	{
-		auto & data = m_submeshesTargets.try_emplace( submesh.getId(), castor::move( weights ) ).first->second;
+		auto & data = m_submeshesTargets.try_emplace( submesh.getId(), c3d::move( weights ) ).first->second;
 		auto weightIt = data.begin();
 		auto component = submesh.getComponent< MorphComponent >();
 		m_boundingBox = submesh.getBoundingBox();
@@ -51,19 +51,19 @@ namespace castor3d
 			return;
 		}
 
-		castor::Vector< float > weights;
+		Vector< float > weights;
 		weights.resize( size );
-		auto & data = m_submeshesTargets.try_emplace( submesh.getId(), castor::move( weights ) ).first->second;
+		auto & data = m_submeshesTargets.try_emplace( submesh.getId(), c3d::move( weights ) ).first->second;
 		CU_Require( data.size() == submesh.getMorphTargetsCount() );
 		data[targetIndex] = targetWeight;
 	}
 
 	AnimationKeyFrameUPtr MeshMorphTarget::clone( Animation & parent )const
 	{
-		auto result = castor::makeUnique< MeshMorphTarget >( static_cast< MeshAnimation & >( parent )
+		auto result = makeUnique< MeshMorphTarget >( static_cast< MeshAnimation & >( parent )
 			, getTimeIndex() );
 		result->m_submeshesTargets = m_submeshesTargets;
 		doCloneInto( *result );
-		return castor::ptrRefCast< AnimationKeyFrame >( result );
+		return ptrRefCast< AnimationKeyFrame >( result );
 	}
 }

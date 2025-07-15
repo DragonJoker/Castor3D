@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**
 	\~english

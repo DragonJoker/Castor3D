@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	struct Meshlet
 		: public sdw::StructInstanceHelperT< "C3D_Meshlet"
@@ -27,7 +27,7 @@ namespace castor3d::shader
 		Meshlet( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled = true )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled  }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled  }
 		{
 		}
 

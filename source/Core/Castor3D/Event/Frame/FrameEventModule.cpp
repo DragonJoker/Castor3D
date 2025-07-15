@@ -6,18 +6,18 @@
 #include "Castor3D/Event/Frame/GpuFrameEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 
-CU_ImplementSmartPtr( castor3d, CpuFrameEvent )
-CU_ImplementSmartPtr( castor3d, FrameListener )
-CU_ImplementSmartPtr( castor3d, FrameListenerCache )
-CU_ImplementSmartPtr( castor3d, GpuFrameEvent )
-CU_ImplementSmartPtr( castor3d, CpuFunctorEvent )
-CU_ImplementSmartPtr( castor3d, GpuFunctorEvent )
+CU_ImplementSmartPtr( c3d, CpuFrameEvent )
+CU_ImplementSmartPtr( c3d, FrameListener )
+CU_ImplementSmartPtr( c3d, FrameListenerCache )
+CU_ImplementSmartPtr( c3d, GpuFrameEvent )
+CU_ImplementSmartPtr( c3d, CpuFunctorEvent )
+CU_ImplementSmartPtr( c3d, GpuFunctorEvent )
 
-namespace castor3d
+namespace c3d
 {
-	const castor::String PtrCacheTraitsT< castor3d::FrameListener, castor::String >::Name = cuT( "FrameListener" );
+	const String PtrCacheTraitsT< FrameListener, String >::Name = cuT( "FrameListener" );
 
-	castor::String getName( CpuEventType value )
+	String getName( CpuEventType value )
 	{
 		switch ( value )
 		{
@@ -29,11 +29,11 @@ namespace castor3d
 			return cuT( "post_cpu_step" );
 		default:
 			CU_Failure( "Unsupported CpuEventType" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( GpuEventType value )
+	String getName( GpuEventType value )
 	{
 		switch ( value )
 		{
@@ -45,7 +45,7 @@ namespace castor3d
 			return cuT( "post_render" );
 		default:
 			CU_Failure( "Unsupported GpuEventType" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 }

@@ -1,6 +1,6 @@
 #include "Castor3D/Model/Skeleton/VertexBoneData.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	void VertexBoneData::addBoneData( uint32_t boneId, float weight )
 	{

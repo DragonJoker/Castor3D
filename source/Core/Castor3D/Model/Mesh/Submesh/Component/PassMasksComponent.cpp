@@ -15,9 +15,9 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementSmartPtr( castor3d, PassMasksComponent )
+CU_ImplementSmartPtr( c3d, PassMasksComponent )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -27,7 +27,7 @@ namespace castor3d
 			, uint32_t & currentLocation )
 		{
 			ashes::VkVertexInputBindingDescriptionArray bindings{ { currentBinding
-				, sizeof( castor::Point4ui ), VK_VERTEX_INPUT_RATE_VERTEX } };
+				, sizeof( Point4ui ), VK_VERTEX_INPUT_RATE_VERTEX } };
 			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { currentLocation++
 				, currentBinding
 				, VK_FORMAT_R32G32B32A32_UINT
@@ -44,9 +44,9 @@ namespace castor3d
 				| ( uint32_t( a ) << 0u );
 		}
 
-		static castor::Point4uiArray convert( castor::Vector< PassMasks > const & src )
+		static Point4uiArray convert( Vector< PassMasks > const & src )
 		{
-			castor::Point4uiArray result;
+			Point4uiArray result;
 			result.reserve( src.size() );
 
 			for ( auto & value : src )
@@ -55,7 +55,7 @@ namespace castor3d
 				auto b = convert( value.data[4], value.data[5], value.data[6], value.data[7] );
 				auto c = convert( value.data[8], value.data[9], value.data[10], value.data[11] );
 				auto d = convert( value.data[12], value.data[13], value.data[14], 0u );
-				result.push_back( castor::Point4ui{ a, b, c, d } );
+				result.push_back( Point4ui{ a, b, c, d } );
 			}
 
 			return result;
@@ -90,7 +90,7 @@ namespace castor3d
 		, Pass const & pass
 		, ObjectBufferOffset const & bufferOffsets
 		, ashes::BufferCRefArray & buffers
-		, castor::Vector< uint64_t > & offsets
+		, Vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding
 		, uint32_t & currentLocation )
@@ -101,7 +101,7 @@ namespace castor3d
 			&& flags.enablePassMasks() )
 		{
 			auto hash = std::hash< uint32_t >{}( currentBinding );
-			hash = castor::hashCombine( hash, currentLocation );
+			hash = hashCombine( hash, currentLocation );
 			auto layoutIt = m_layouts.find( hash );
 
 			if ( layoutIt == m_layouts.end() )
@@ -128,7 +128,7 @@ namespace castor3d
 		m_data.insert( m_data.end(), begin, end );
 	}
 
-	void PassMasksComponent::ComponentData::addDatas( castor::Vector< PassMasks > const & boneData )
+	void PassMasksComponent::ComponentData::addDatas( Vector< PassMasks > const & boneData )
 	{
 		addDatas( boneData.data(), boneData.data() + boneData.size() );
 	}
@@ -151,10 +151,10 @@ namespace castor3d
 
 		if ( count && buffer.hasData() )
 		{
-			CU_Require( buffer.getCount< castor::Point4ui >() == count );
+			CU_Require( buffer.getCount< Point4ui >() == count );
 			m_up = passflags::convert( m_data );
 			uploader.pushUpload( m_up.data()
-				, m_up.size() * sizeof( castor::Point4ui )
+				, m_up.size() * sizeof( Point4ui )
 				, buffer.getBuffer(), buffer.getOffset()
 				, VertexAttributeInputState );
 		}
@@ -162,19 +162,19 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const PassMasksComponent::TypeName = C3D_MakeSubmeshComponentName( "passmasks" );
+	String const PassMasksComponent::TypeName = C3D_MakeSubmeshComponentName( "passmasks" );
 
 	PassMasksComponent::PassMasksComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, TypeName
-			, castor::make_unique< ComponentData >( submesh ) }
+			, makeRawUnique< ComponentData >( submesh ) }
 	{
 	}
 
 	SubmeshComponentUPtr PassMasksComponent::clone( Submesh & submesh )const
 	{
-		auto result = castor::makeUnique< PassMasksComponent >( submesh );
+		auto result = makeUnique< PassMasksComponent >( submesh );
 		getData().copy( &result->getData() );
-		return castor::ptrRefCast< SubmeshComponent >( result );
+		return ptrRefCast< SubmeshComponent >( result );
 	}
 
 	//*********************************************************************************************

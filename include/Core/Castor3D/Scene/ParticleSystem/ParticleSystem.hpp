@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ParticleSystem
 		: public MovableObject
@@ -33,7 +33,7 @@ namespace castor3d
 		 *\param[in]	parent	Le noeud de scène parent.
 		 *\param[in]	count	Le nombre de particules.
 		 */
-		C3D_API ParticleSystem( castor::String const & name
+		C3D_API ParticleSystem( String const & name
 			, Scene & scene
 			, SceneNode & parent
 			, uint32_t count );
@@ -92,7 +92,7 @@ namespace castor3d
 		 *\brief		Definit les dimensions des particules.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		C3D_API void setDimensions( castor::Point2f const & value );
+		C3D_API void setDimensions( Point2f const & value );
 		/**
 		 *\~english
 		 *\brief		Sets the particles type name.
@@ -101,7 +101,7 @@ namespace castor3d
 		 *\brief		Definit le nom du type de particules.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		C3D_API void setParticleType( castor::String const & value );
+		C3D_API void setParticleType( String const & value );
 		/**
 		 *\~english
 		 *\return		The material.
@@ -115,7 +115,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les dimensions des billboards.
 		 */
-		C3D_API castor::Point2f const & getDimensions()const;
+		C3D_API Point2f const & getDimensions()const;
 		/**
 		 *\~english
 		 *\brief		adds a particle variable.
@@ -128,9 +128,9 @@ namespace castor3d
 		 *\param[in]	type			Le type de la variable.
 		 *\param[in]	defaultValue	La valeur par défaut de la variable.
 		 */
-		C3D_API void addParticleVariable( castor::String const & name
+		C3D_API void addParticleVariable( String const & name
 			, ParticleFormat type
-			, castor::String const & defaultValue );
+			, String const & defaultValue );
 		/**
 		 *\~english
 		 *\brief		Defines the program used to update the particles through compute shader.
@@ -148,7 +148,7 @@ namespace castor3d
 		 *\brief		Définit les dimensions des groupes de travail, tels que définis dans le compute shader.
 		 *\param[in]	sizes	Les dimensions.
 		 */
-		C3D_API void setCSGroupSizes( castor::Point3i sizes );
+		C3D_API void setCSGroupSizes( Point3i sizes );
 		/**
 		 *\~english
 		 *\return		The particles written at last update.
@@ -185,7 +185,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les valeurs par défaut des composantes d'une particule.
 		 */
-		inline castor::StrStrMap const & getDefaultValues()const
+		inline StrStrMap const & getDefaultValues()const
 		{
 			return m_defaultValues;
 		}
@@ -195,7 +195,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le nom du type de particules.
 		 */
-		inline castor::String const & getParticleType()const
+		inline String const & getParticleType()const
 		{
 			return m_particleType;
 		}
@@ -220,15 +220,15 @@ namespace castor3d
 			return *m_csImpl;
 		}
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 
 	protected:
 		//!\~english	The particles type name.
 		//!\~french		Le nom du type de particules.
-		castor::String m_particleType;
+		String m_particleType;
 		//!\~english	The map of default value per variable name.
 		//!\~french		La map de valeur par défaut pour les variables.
-		castor::StrStrMap m_defaultValues;
+		StrStrMap m_defaultValues;
 		//!\~english	The particle elements description.
 		//!\~french		La description des élément d'une particule.
 		ParticleDeclaration m_inputs;
@@ -237,7 +237,7 @@ namespace castor3d
 		BillboardBaseUPtr m_particlesBillboard;
 		//!\~english	The billboards dimensions.
 		//!\~french		Les dimensions des billboards.
-		castor::Point2f m_dimensions;
+		Point2f m_dimensions;
 		//!\~english	The Material.
 		//!\~french		Le Material.
 		MaterialObs m_material;
@@ -249,16 +249,16 @@ namespace castor3d
 		uint32_t m_activeParticlesCount{ 0u };
 		//!\~english	The timer, for the particles update.
 		//!\~french		Le timer, pour la mise à jour des particules.
-		castor::PreciseTimer m_timer;
+		PreciseTimer m_timer;
 		//!\~english	Tells that the next update is the first one.
 		//!\~french		Dit que la prochaine mise à jour est la première.
 		bool m_firstUpdate{ true };
 		//!\~english	The time elapsed since last frame.
 		//!\~french		Le temps écoulé depuis la dernière frame.
-		castor::Milliseconds m_time{ 0 };
+		Milliseconds m_time{ 0 };
 		//!\~english	The total elapsed time.
 		//!\~french		Le temps total écoulé.
-		castor::Milliseconds m_totalTime{ 0 };
+		Milliseconds m_totalTime{ 0 };
 		//!\~english	The CPU implementation.
 		//!\~french		L'implémentation CPU.
 		CpuParticleSystemUPtr m_cpuImpl;
@@ -274,23 +274,23 @@ namespace castor3d
 		: public MovableContext
 	{
 		MaterialObs material{};
-		castor::Point2f dimensions{};
+		Point2f dimensions{};
 		uint32_t particleCount{};
 		ParticleSystemUPtr ownParticleSystem{};
 		ParticleSystemRPtr particleSystem{};
 	};
 }
 
-namespace castor
+namespace c3d
 {
 	template<>
-	struct ParserEnumTraits< castor3d::ParticleFormat >
+	struct ParserEnumTraits< ParticleFormat >
 	{
 		static inline xchar const * const Name = cuT( "ParticleFormat" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT< castor3d::ParticleFormat >();
+				result = getEnumMapT< ParticleFormat >();
 				return result;
 			}( );
 	};

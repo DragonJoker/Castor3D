@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Gui/Controls/CtrlControl.hpp"
 #include "Castor3D/Gui/Theme/StyleButton.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class ButtonCtrl
 		: public Control
@@ -20,7 +20,7 @@ namespace castor3d
 		 *\param[in]	parent	The parent control, if any
 		 */
 		C3D_API ButtonCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, ButtonStyleRPtr style
 			, ControlRPtr parent );
 
@@ -36,12 +36,12 @@ namespace castor3d
 		 *\param[in]	visible		Initial visibility status
 		 */
 		C3D_API ButtonCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, ButtonStyleRPtr style
 			, ControlRPtr parent
-			, castor::U32String const & caption
-			, castor::Position const & position
-			, castor::Size const & size
+			, U32String const & caption
+			, Position const & position
+			, Size const & size
 			, ControlFlagType flags = 0
 			, bool visible = true );
 		C3D_API ~ButtonCtrl()noexcept override;
@@ -67,7 +67,7 @@ namespace castor3d
 		/** Retrieves the caption
 		 *\return		The value
 		 */
-		castor::U32String const & getCaption()const
+		U32String const & getCaption()const
 		{
 			return m_caption;
 		}
@@ -80,7 +80,7 @@ namespace castor3d
 		OnButtonEventConnection connect( ButtonEvent event
 			, OnButtonEventFunction function )
 		{
-			return m_signals[size_t( event )].connect( castor::move( function ) );
+			return m_signals[size_t( event )].connect( c3d::move( function ) );
 		}
 
 		/**
@@ -108,15 +108,15 @@ namespace castor3d
 
 		/** @copydoc Control::doSetPosition
 		*/
-		void doSetPosition( castor::Position const & value )override;
+		void doSetPosition( Position const & value )override;
 
 		/** @copydoc Control::doSetSize
 		*/
-		void doSetSize( castor::Size const & value )override;
+		void doSetSize( Size const & value )override;
 
 		/** @copydoc Control::doSetBorderSize
 		*/
-		void doSetBorderSize( castor::Point4ui const & value )override;
+		void doSetBorderSize( Point4ui const & value )override;
 
 		/** @copydoc Control::doUpdateStyle
 		*/
@@ -124,7 +124,7 @@ namespace castor3d
 
 		/** @copydoc Control::doSetCaption
 		*/
-		void doSetCaption( castor::U32String const & caption )override;
+		void doSetCaption( U32String const & caption )override;
 
 		/** @copydoc Control::doSetVisible
 		*/
@@ -167,9 +167,9 @@ namespace castor3d
 			, float offset );
 
 	private:
-		castor::U32String m_caption;
+		U32String m_caption;
 		TextOverlayRPtr m_text{};
-		castor::Array< OnButtonEvent, size_t( ButtonEvent::eCount ) > m_signals;
+		Array< OnButtonEvent, size_t( ButtonEvent::eCount ) > m_signals;
 		OnEnableConnection m_onEnable;
 	};
 }

@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Castor3DModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Miscellaneous */
 	//@{
@@ -117,16 +117,16 @@ namespace castor3d
 	*/
 	struct TextureFactors
 	{
-		castor::Point3f multiply{ 1.0f, 1.0f, 1.0f };
-		castor::Point3f add{};
-		castor::Point4f const * grid{ nullptr };
+		Point3f multiply{ 1.0f, 1.0f, 1.0f };
+		Point3f add{};
+		Point4f const * grid{ nullptr };
 		bool invertY{ false };
 		bool isSlice{};
 		uint32_t slice{};
 		bool isDepth{};
 
-		static TextureFactors tex2D( castor::Point3f multiply = castor::Point3f{ 1.0f, 1.0f, 1.0f }
-			, castor::Point3f add = castor::Point3f{} )
+		static TextureFactors tex2D( Point3f multiply = Point3f{ 1.0f, 1.0f, 1.0f }
+			, Point3f add = Point3f{} )
 		{
 			TextureFactors result;
 			result.multiply = multiply;
@@ -134,7 +134,7 @@ namespace castor3d
 			return result;
 		}
 
-		static TextureFactors tex3D( castor::Point4f const * grid )
+		static TextureFactors tex3D( Point4f const * grid )
 		{
 			TextureFactors result;
 			result.grid = grid;
@@ -171,7 +171,7 @@ namespace castor3d
 	*/
 	struct ColourWrapper
 	{
-		castor::Point3f * value;
+		Point3f * value;
 	};
 	/**
 	*\~english
@@ -294,42 +294,42 @@ namespace castor3d
 	*/
 	class VersionException;
 
-	using Parameters = ParametersT< castor::String >;
+	using Parameters = ParametersT< String >;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, LoadingScreen, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ProgressBar, C3D_API );
+	CU_DeclareSmartPtr( c3d, LoadingScreen, C3D_API );
+	CU_DeclareSmartPtr( c3d, ProgressBar, C3D_API );
 	/** @endcond */
 
 	struct RenderDevice;
 	C3D_API ashes::DeviceMemoryPtr setupMemory( ashes::Device const & device
 		, VkMemoryRequirements const & requirements
 		, VkMemoryPropertyFlags flags
-		, castor::String const & name );
+		, String const & name );
 	C3D_API ashes::DeviceMemoryPtr setupMemory( RenderDevice const & device
 		, VkMemoryRequirements const & requirements
 		, VkMemoryPropertyFlags flags
-		, castor::String const & name );
+		, String const & name );
 
 	C3D_API void initProgressBarGlobalRange( ProgressBar * progress
 		, uint32_t value );
 	C3D_API uint32_t incProgressBarGlobalRange( ProgressBar * progress
 		, uint32_t increment );
 	C3D_API void setProgressBarGlobalTitle( ProgressBar * progress
-		, castor::String const & globalTitle );
+		, String const & globalTitle );
 	C3D_API void setProgressBarGlobalStep( ProgressBar * progress
-		, castor::String const & globalTitle
+		, String const & globalTitle
 		, uint32_t count );
 
 	C3D_API void stepProgressBarLocal( ProgressBar * progress
-		, castor::String const & localLabel );
+		, String const & localLabel );
 
 	C3D_API void stepProgressBarGlobalStartLocal( ProgressBar * progress
-		, castor::String const & globalLabel
+		, String const & globalLabel
 		, uint32_t rangeMax );
 	C3D_API void setProgressBarLocal( ProgressBar * progress
-		, castor::String const & globalLabel
-		, castor::String const & localLabel
+		, String const & globalLabel
+		, String const & localLabel
 		, uint32_t rangeMax
 		, uint32_t value );
 

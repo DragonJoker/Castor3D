@@ -5,9 +5,9 @@
 #include "Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
-CU_ImplementSmartPtr( castor3d, SssProfileBuffer )
+CU_ImplementSmartPtr( c3d, SssProfileBuffer )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -16,7 +16,7 @@ namespace castor3d
 		static SssProfileBuffer::SssProfilesData doBindData( uint8_t * buffer
 			, uint32_t count )
 		{
-			return castor::makeArrayView( reinterpret_cast< SssProfileBuffer::SssProfileData * >( buffer )
+			return makeArrayView( reinterpret_cast< SssProfileBuffer::SssProfileData * >( buffer )
 				, reinterpret_cast< SssProfileBuffer::SssProfileData * >( buffer ) + count );
 		}
 	}
@@ -32,7 +32,7 @@ namespace castor3d
 			, cuT( "DiffusionProfiles" )
 			, { ImageCreateFlags::eNone
 				, { 512u, 1u, 1u }, uint32_t( ashes::getAlignedSize( count, 64u ) ), 1u
-				, castor::PixelFormat::eR16G16B16A16_SFLOAT
+				, PixelFormat::eR16G16B16A16_SFLOAT
 				, ImageUsageFlags::eStorage | ImageUsageFlags::eSampled }
 			, {} }
 		, m_data{ sssbuf::doBindData( m_buffer.getPtr(), count ) }
@@ -49,7 +49,7 @@ namespace castor3d
 	{
 		if ( component.getSssProfileId() == 0u )
 		{
-			auto lock( castor::makeUniqueLock( m_mutex ) );
+			auto lock( makeUniqueLock( m_mutex ) );
 
 			CU_Require( m_components.size() < MaxMaterialsCount );
 			m_components.emplace_back( &component );
@@ -67,7 +67,7 @@ namespace castor3d
 
 	void SssProfileBuffer::removePass( SubsurfaceScatteringComponent & component )noexcept
 	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 
 		auto id = component.getSssProfileId() - 1u;
 		CU_Require( id < m_components.size() );
@@ -89,15 +89,15 @@ namespace castor3d
 
 	void SssProfileBuffer::update( UploadData & uploader )
 	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
+		auto lock( makeUniqueLock( m_mutex ) );
 
 		if ( !m_dirty.empty() )
 		{
-			castor::Vector< SubsurfaceScatteringComponent const * > dirty;
-			castor::swap( m_dirty, dirty );
+			Vector< SubsurfaceScatteringComponent const * > dirty;
+			c3d::swap( m_dirty, dirty );
 			auto end = std::unique( dirty.begin(), dirty.end() );
 
-			for ( auto component : castor::makeArrayView( dirty.begin(), end ) )
+			for ( auto component : makeArrayView( dirty.begin(), end ) )
 			{
 				if ( component->getSssProfileId() > m_data.size() )
 				{

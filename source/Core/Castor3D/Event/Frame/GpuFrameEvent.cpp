@@ -2,7 +2,7 @@
 
 #include <CastorUtils/Miscellaneous/Debug.hpp>
 
-namespace castor3d
+namespace c3d
 {
 #if !defined( NDEBUG )
 	static bool constexpr C3D_UseGpuEventsStack = false;
@@ -21,7 +21,7 @@ namespace castor3d
 		: m_type{ rhs.m_type }
 		, m_skip{ rhs.m_skip.load() }
 #if !defined( NDEBUG )
-		, m_stackTrace{ castor::move( rhs.m_stackTrace ) }
+		, m_stackTrace{ c3d::move( rhs.m_stackTrace ) }
 #endif
 	{
 		rhs.m_skip = true;
@@ -48,7 +48,7 @@ namespace castor3d
 #if !defined( NDEBUG )
 		if constexpr ( C3D_UseGpuEventsStack )
 		{
-			m_stackTrace = castor::move( rhs.m_stackTrace );
+			m_stackTrace = c3d::move( rhs.m_stackTrace );
 		}
 #endif
 		rhs.m_skip = true;
@@ -62,8 +62,8 @@ namespace castor3d
 #if !defined( NDEBUG )
 		if constexpr ( C3D_UseGpuEventsStack )
 		{
-			castor::StringStream stream = castor::makeStringStream();
-			stream << castor::debug::Backtrace{ 20 };
+			StringStream stream = makeStringStream();
+			stream << debug::Backtrace{ 20 };
 			m_stackTrace = stream.str();
 		}
 #endif

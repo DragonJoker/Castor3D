@@ -13,12 +13,12 @@ namespace GuiCommon
 	public:
 		virtual ~I3DController()noexcept = default;
 
-		static I3DControllerUPtr create( castor::String const & appName
-			, castor3d::FrameListener & listener );
+		static I3DControllerUPtr create( c3d::String const & appName
+			, c3d::FrameListener & listener );
 
 		virtual void reset() = 0;
-		virtual void setCamera( castor3d::CameraRPtr camera ) = 0;
-		virtual void setGeometry( castor3d::Geometry const * geometry ) = 0;
+		virtual void setCamera( c3d::CameraRPtr camera ) = 0;
+		virtual void setGeometry( c3d::Geometry const * geometry ) = 0;
 
 		virtual void setSpeedFactor( float value ) = 0;
 		virtual void multSpeedFactor( float value ) = 0;

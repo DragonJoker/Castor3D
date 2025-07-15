@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include <cmath>
 #include <limits>
 
-namespace castor
+namespace c3d
 {
 	template< typename T >
 	class Line3D

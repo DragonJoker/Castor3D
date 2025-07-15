@@ -8,14 +8,14 @@ See LICENSE file in root folder
 
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class ToneMappingVisitor
 		: public ConfigurationVisitor
 	{
 	protected:
 		explicit ToneMappingVisitor( Config config = { false } )
-			: ConfigurationVisitor{ castor::move( config ) }
+			: ConfigurationVisitor{ c3d::move( config ) }
 		{
 		}
 
@@ -29,7 +29,7 @@ namespace castor3d
 		*	Configuration d'UBO.
 		**/
 		/**@{*/
-		virtual void visit( castor::String const & name
+		virtual void visit( String const & name
 			, VkShaderStageFlags shaders
 			, HdrConfig & value ) = 0;
 		using ConfigurationVisitor::visit;

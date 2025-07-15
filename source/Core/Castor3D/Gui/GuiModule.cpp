@@ -26,38 +26,38 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementSmartPtr( castor3d, StylesHolder )
-CU_ImplementSmartPtr( castor3d, Theme )
-CU_ImplementSmartPtr( castor3d, ControlStyle )
-CU_ImplementSmartPtr( castor3d, ButtonStyle )
-CU_ImplementSmartPtr( castor3d, ComboBoxStyle )
-CU_ImplementSmartPtr( castor3d, EditStyle )
-CU_ImplementSmartPtr( castor3d, ExpandablePanelStyle )
-CU_ImplementSmartPtr( castor3d, FrameStyle )
-CU_ImplementSmartPtr( castor3d, ListBoxStyle )
-CU_ImplementSmartPtr( castor3d, PanelStyle )
-CU_ImplementSmartPtr( castor3d, ProgressStyle )
-CU_ImplementSmartPtr( castor3d, ScrollableStyle )
-CU_ImplementSmartPtr( castor3d, ScrollBarStyle )
-CU_ImplementSmartPtr( castor3d, SliderStyle )
-CU_ImplementSmartPtr( castor3d, StaticStyle )
+CU_ImplementSmartPtr( c3d, StylesHolder )
+CU_ImplementSmartPtr( c3d, Theme )
+CU_ImplementSmartPtr( c3d, ControlStyle )
+CU_ImplementSmartPtr( c3d, ButtonStyle )
+CU_ImplementSmartPtr( c3d, ComboBoxStyle )
+CU_ImplementSmartPtr( c3d, EditStyle )
+CU_ImplementSmartPtr( c3d, ExpandablePanelStyle )
+CU_ImplementSmartPtr( c3d, FrameStyle )
+CU_ImplementSmartPtr( c3d, ListBoxStyle )
+CU_ImplementSmartPtr( c3d, PanelStyle )
+CU_ImplementSmartPtr( c3d, ProgressStyle )
+CU_ImplementSmartPtr( c3d, ScrollableStyle )
+CU_ImplementSmartPtr( c3d, ScrollBarStyle )
+CU_ImplementSmartPtr( c3d, SliderStyle )
+CU_ImplementSmartPtr( c3d, StaticStyle )
 
-namespace castor3d
+namespace c3d
 {
 	void setMaterialColour( Pass const & pass
-		, castor::HdrRgbColour const & colour )
+		, HdrRgbColour const & colour )
 	{
 		pass.setColour( colour );
 	}
 
-	castor::HdrRgbColour const & getMaterialColour( Pass const & pass )
+	HdrRgbColour const & getMaterialColour( Pass const & pass )
 	{
 		return pass.getColour();
 	}
 
 	MaterialObs createMaterial( Engine & engine
-		, castor::String const & name
-		, castor::HdrRgbColour const & colour )
+		, String const & name
+		, HdrRgbColour const & colour )
 	{
 		auto result = engine.tryFindMaterial( name );
 

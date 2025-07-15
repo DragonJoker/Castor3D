@@ -48,15 +48,15 @@ namespace CastorViewer
 		~RenderPanel()override;
 
 		void reset();
-		void updateWindow( castor3d::RenderWindowDesc const & window );
-		void select( castor3d::Geometry * geometry, castor3d::Submesh const * submesh );
-		void select( castor3d::LightInstance * light );
-		void select( castor3d::SceneNode * node
+		void updateWindow( c3d::RenderWindowDesc const & window );
+		void select( c3d::Geometry * geometry, c3d::Submesh const * submesh );
+		void select( c3d::LightInstance * light );
+		void select( c3d::SceneNode * node
 			, bool cameraNode = false );
-		void select( castor3d::Camera * camera );
+		void select( c3d::Camera * camera );
 		void onKeyUp( wxKeyEvent & event );
 
-		castor3d::RenderWindow & getRenderWindow()const
+		c3d::RenderWindow & getRenderWindow()const
 		{
 			return *m_renderWindow;
 		}
@@ -87,10 +87,10 @@ namespace CastorViewer
 		float doTransformY( int y );
 		int doTransformX( float x );
 		int doTransformY( float y );
-		void doUpdateSelectedGeometry( castor3d::Geometry const * geometry
-			, castor3d::Submesh const * submesh
+		void doUpdateSelectedGeometry( c3d::Geometry const * geometry
+			, c3d::Submesh const * submesh
 			, bool forwardToMain );
-		GuiCommon::NodeState & doAddNodeState( castor3d::SceneNodeRPtr node
+		GuiCommon::NodeState & doAddNodeState( c3d::SceneNodeRPtr node
 			, bool camera );
 		void doUpdateSpeed( float factor = 1.0f );
 
@@ -139,29 +139,29 @@ namespace CastorViewer
 		bool m_resizeWindow{ true };
 		double m_speedMult{ 1.0 };
 		std::atomic_bool m_movementStarted{};
-		castor3d::RenderWindowUPtr m_renderWindow{};
-		castor::Array< wxTimer *, size_t( eTIMER_ID::COUNT ) > m_timers{};
+		c3d::RenderWindowUPtr m_renderWindow{};
+		c3d::Array< wxTimer *, size_t( eTIMER_ID::COUNT ) > m_timers{};
 
-		castor3d::SceneNodeRPtr m_lightsNode{};
-		castor3d::SceneNodeRPtr m_currentNode{};
-		castor::RangedValue< float > m_camSpeed;
-		castor::RawUniquePtr< GuiCommon::DebugMeshManager > m_debugMeshManager{};
+		c3d::SceneNodeRPtr m_lightsNode{};
+		c3d::SceneNodeRPtr m_currentNode{};
+		c3d::RangedValue< float > m_camSpeed;
+		c3d::RawUniquePtr< GuiCommon::DebugMeshManager > m_debugMeshManager{};
 
-		castor::StringMap< GuiCommon::NodeStatePtr > m_nodesStates{};
+		c3d::StringMap< GuiCommon::NodeStatePtr > m_nodesStates{};
 		GuiCommon::NodeState * m_currentState{};
-		castor3d::Geometry const * m_selectedGeometry{};
-		castor3d::Submesh const * m_selectedSubmesh{};
+		c3d::Geometry const * m_selectedGeometry{};
+		c3d::Submesh const * m_selectedSubmesh{};
 
-		castor3d::CameraRPtr m_camera{};
-		castor3d::SceneRPtr m_scene{};
-		castor3d::FrameListenerRPtr m_listener{};
+		c3d::CameraRPtr m_camera{};
+		c3d::SceneRPtr m_scene{};
+		c3d::FrameListenerRPtr m_listener{};
 
-		castor3d::MouseCursor m_cursor{};
-		castor::RawUniquePtr< wxClipboard > m_clipboard{};
+		c3d::MouseCursor m_cursor{};
+		c3d::RawUniquePtr< wxClipboard > m_clipboard{};
 		std::atomic_bool m_setClipboardText;
-		std::promise< castor::U32String > m_clipGet{};
-		castor::Mutex m_mtxClipSet{};
-		castor::U32String m_clipSet{};
+		std::promise< c3d::U32String > m_clipGet{};
+		c3d::Mutex m_mtxClipSet{};
+		c3d::U32String m_clipSet{};
 
 		GuiCommon::I3DControllerUPtr m_3dController{};
 	};

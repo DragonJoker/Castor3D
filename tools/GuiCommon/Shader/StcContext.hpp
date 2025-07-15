@@ -53,7 +53,7 @@ namespace GuiCommon
 
 		inline void push_back( LanguageInfoUPtr language )
 		{
-			m_languages.push_back( castor::move( language ) );
+			m_languages.push_back( c3d::move( language ) );
 		}
 
 	public:

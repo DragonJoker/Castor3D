@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Mesh/MeshGenerator.hpp"
 #include "Castor3D/Miscellaneous/Pattern.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class Projection
 		: public MeshGenerator
@@ -22,7 +22,7 @@ namespace castor3d
 		 */
 		C3D_API Projection();
 		/**
-		 *\copydoc		castor3d::MeshGenerator::create
+		 *\copydoc		MeshGenerator::create
 		 */
 		C3D_API static MeshGeneratorUPtr create();
 		/**
@@ -37,8 +37,8 @@ namespace castor3d
 		 *\param[in]	axis	L'axe de projection.
 		 *\param[in]	closed	Dit si on doit fermer la projection.
 		 */
-		C3D_API void setPoints( Pattern< castor::Point3f > const & pattern
-			, castor::Point3f const & axis
+		C3D_API void setPoints( Pattern< Point3f > const & pattern
+			, Point3f const & axis
 			, bool closed );
 
 	private:
@@ -46,8 +46,8 @@ namespace castor3d
 			, Parameters const & parameters )override;
 
 	private:
-		//Pattern< castor::Point3f > m_pattern{};
-		//castor::Point3f m_axis{};
+		//Pattern< Point3f > m_pattern{};
+		//Point3f m_axis{};
 		//float m_depth{};
 		//bool m_closed{};
 		//uint32_t m_nbFaces{};

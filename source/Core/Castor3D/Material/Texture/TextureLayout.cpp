@@ -20,10 +20,10 @@
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/Sync/Fence.hpp>
 
-CU_ImplementSmartPtr( castor3d, TextureLayout )
-CU_ImplementSmartPtr( castor3d, TextureSource )
+CU_ImplementSmartPtr( c3d, TextureLayout )
+CU_ImplementSmartPtr( c3d, TextureSource )
 
-namespace castor3d
+namespace c3d
 {
 	//************************************************************************************************
 
@@ -47,7 +47,7 @@ namespace castor3d
 			case crg::ImageType::e2D:
 				if ( arrayLayers > 1 )
 				{
-					if ( castor::checkFlag( flags, ImageCreateFlags::eCubeCompatible ) )
+					if ( checkFlag( flags, ImageCreateFlags::eCubeCompatible ) )
 					{
 						CU_Require( ( arrayLayers % 6 ) == 0 );
 						return arrayLayers == 6u
@@ -89,14 +89,14 @@ namespace castor3d
 		}
 
 		static TextureViewUPtr createSubview( TextureLayout & layout
-			, castor::String debugName
+			, String debugName
 			, ImageCreateInfo const & info
 			, uint32_t baseMipLevel
 			, uint32_t levelCount
 			, uint32_t baseArrayLayer
 			, uint32_t arrayLayers )
 		{
-			return castor::makeUnique< TextureView >( layout
+			return makeUnique< TextureView >( layout
 				, getSubviewCreateInfos( info
 					, VK_NULL_HANDLE
 					, baseMipLevel
@@ -104,31 +104,31 @@ namespace castor3d
 					, baseArrayLayer
 					, arrayLayers )
 				, 0u
-				, castor::move( debugName ) );
+				, c3d::move( debugName ) );
 		}
 
 		static uint32_t getMinMipLevels( uint32_t mipLevels
 			, Extent3D const & extent
-			, castor::PixelFormat format )
+			, PixelFormat format )
 		{
 			return std::min( getMipLevels( extent, format ), mipLevels );
 		}
 
 		static uint32_t adjustMipLevels( uint32_t mipLevels
-			, castor::PixelFormat format )
+			, PixelFormat format )
 		{
-			if ( format == castor::PixelFormat::eUNDEFINED )
+			if ( format == PixelFormat::eUNDEFINED )
 			{
 				return mipLevels;
 			}
 
 			auto blockSize = ashes::getBlockSize( convert( format ) );
-			auto bitSize = castor::getBitSize( blockSize.extent.width );
+			auto bitSize = getBitSize( blockSize.extent.width );
 			return mipLevels / bitSize;
 		}
 
 		static bool eraseViews( uint32_t mipLevels
-			, MipView & views )
+			, ImageMipView & views )
 		{
 			auto itLevel = views.levels.begin();
 
@@ -149,7 +149,7 @@ namespace castor3d
 		}
 		
 		static bool eraseViews( uint32_t mipLevels
-			, CubeView & views )
+			, CubeImageView & views )
 		{
 			auto itFace = views.faces.begin();
 
@@ -172,7 +172,7 @@ namespace castor3d
 
 		template< typename ViewT >
 		static void eraseViews( uint32_t mipLevels
-			, ArrayView< ViewT > & views )
+			, ArrayImageView< ViewT > & views )
 		{
 			auto itLayer = views.layers.begin();
 
@@ -193,7 +193,7 @@ namespace castor3d
 
 		template< typename ViewT >
 		static void eraseViews( uint32_t mipLevels
-			, SliceView< ViewT > & views )
+			, ImageSliceView< ViewT > & views )
 		{
 			auto itSlice = views.slices.begin();
 
@@ -213,9 +213,9 @@ namespace castor3d
 		}
 
 		static void createViews( ImageCreateInfo const & info
-			, castor::String const & debugName
+			, String const & debugName
 			, TextureLayout & layout
-			, MipView & view
+			, ImageMipView & view
 			, uint32_t baseArrayLayer
 			, uint32_t layerCount )
 		{
@@ -247,9 +247,9 @@ namespace castor3d
 		}
 
 		static void createViews( ImageCreateInfo const & info
-			, castor::String const & debugName
+			, String const & debugName
 			, TextureLayout & layout
-			, MipView & view
+			, ImageMipView & view
 			, uint32_t & baseArrayLayer )
 		{
 			createViews( info
@@ -262,9 +262,9 @@ namespace castor3d
 		}
 
 		static void createViews( ImageCreateInfo const & info
-			, castor::String const & debugName
+			, String const & debugName
 			, TextureLayout & layout
-			, CubeView & view
+			, CubeImageView & view
 			, uint32_t & baseArrayLayer )
 		{
 			createViews( info
@@ -288,8 +288,8 @@ namespace castor3d
 		template< typename ViewT >
 		static void createViews( ImageCreateInfo const & info
 			, TextureLayout & layout
-			, castor::String debugName
-			, ArrayView< ViewT > & view )
+			, String debugName
+			, ArrayImageView< ViewT > & view )
 		{
 			uint32_t baseArrayLayer = 0u;
 
@@ -306,8 +306,8 @@ namespace castor3d
 		template< typename ViewT >
 		static void createViews( ImageCreateInfo const & info
 			, TextureLayout & layout
-			, castor::String debugName
-			, SliceView< ViewT > & view )
+			, String debugName
+			, ImageSliceView< ViewT > & view )
 		{
 			uint32_t baseSlice = 0u;
 
@@ -321,11 +321,11 @@ namespace castor3d
 			}
 		}
 
-		static MipView createViews( ImageCreateInfo const & info
+		static ImageMipView createViews( ImageCreateInfo const & info
 			, TextureLayout & layout
-			, castor::String const & debugName )
+			, String const & debugName )
 		{
-			MipView result;
+			ImageMipView result;
 			createViews( info
 				, debugName
 				, layout
@@ -335,9 +335,9 @@ namespace castor3d
 			return result;
 		}
 
-		static void update( MipView & view
+		static void update( ImageMipView & view
 			, Extent3D const & extent
-			, castor::PixelFormat format
+			, PixelFormat format
 			, uint32_t mipLevels
 			, uint32_t arrayLayers )
 		{
@@ -355,9 +355,9 @@ namespace castor3d
 			}
 		}
 
-		static void update( MipView & view
+		static void update( ImageMipView & view
 			, Extent3D const & extent
-			, castor::PixelFormat format
+			, PixelFormat format
 			, uint32_t mipLevels )
 		{
 			update( view
@@ -367,9 +367,9 @@ namespace castor3d
 				, mipLevels );
 		}
 
-		static void update( CubeView & view
+		static void update( CubeImageView & view
 			, Extent3D const & extent
-			, castor::PixelFormat format
+			, PixelFormat format
 			, uint32_t mipLevels )
 		{
 			update( view.view
@@ -388,9 +388,9 @@ namespace castor3d
 		}
 
 		template< typename ViewT >
-		static void update( ArrayView< ViewT > & view
+		static void update( ArrayImageView< ViewT > & view
 			, Extent3D const & extent
-			, castor::PixelFormat format
+			, PixelFormat format
 			, uint32_t mipLevels )
 		{
 			for ( auto & layer : view.layers )
@@ -403,9 +403,9 @@ namespace castor3d
 		}
 
 		template< typename ViewT >
-		static void update( SliceView< ViewT > & view
+		static void update( ImageSliceView< ViewT > & view
 			, Extent3D const & extent
-			, castor::PixelFormat format
+			, PixelFormat format
 			, uint32_t mipLevels )
 		{
 			for ( auto & slice : view.slices )
@@ -417,7 +417,7 @@ namespace castor3d
 			}
 		}
 
-		static castor::PxBufferBaseUPtr adaptBuffer( castor::PxBufferBase const * buffer
+		static PxBufferBaseUPtr adaptBuffer( PxBufferBase const * buffer
 			, uint32_t mipLevels )
 		{
 			auto dstFormat = buffer->getFormat();
@@ -425,23 +425,23 @@ namespace castor3d
 
 			switch ( dstFormat )
 			{
-			case castor::PixelFormat::eR8G8B8_UNORM:
-				dstFormat = castor::PixelFormat::eR8G8B8A8_UNORM;
+			case PixelFormat::eR8G8B8_UNORM:
+				dstFormat = PixelFormat::eR8G8B8A8_UNORM;
 				break;
-			case castor::PixelFormat::eB8G8R8_UNORM:
-				dstFormat = castor::PixelFormat::eA8B8G8R8_UNORM;
+			case PixelFormat::eB8G8R8_UNORM:
+				dstFormat = PixelFormat::eA8B8G8R8_UNORM;
 				break;
-			case castor::PixelFormat::eR8G8B8_SRGB:
-				dstFormat = castor::PixelFormat::eR8G8B8A8_SRGB;
+			case PixelFormat::eR8G8B8_SRGB:
+				dstFormat = PixelFormat::eR8G8B8A8_SRGB;
 				break;
-			case castor::PixelFormat::eB8G8R8_SRGB:
-				dstFormat = castor::PixelFormat::eA8B8G8R8_SRGB;
+			case PixelFormat::eB8G8R8_SRGB:
+				dstFormat = PixelFormat::eA8B8G8R8_SRGB;
 				break;
-			case castor::PixelFormat::eR16G16B16_SFLOAT:
-				dstFormat = castor::PixelFormat::eR16G16B16A16_SFLOAT;
+			case PixelFormat::eR16G16B16_SFLOAT:
+				dstFormat = PixelFormat::eR16G16B16A16_SFLOAT;
 				break;
-			case castor::PixelFormat::eR32G32B32_SFLOAT:
-				dstFormat = castor::PixelFormat::eR32G32B32A32_SFLOAT;
+			case PixelFormat::eR32G32B32_SFLOAT:
+				dstFormat = PixelFormat::eR32G32B32A32_SFLOAT;
 				break;
 			default:
 				// No conversion
@@ -453,7 +453,7 @@ namespace castor3d
 				auto invertX = result->isXInverted();
 				auto invertY = result->isYInverted();
 				auto invertZ = result->isZInverted();
-				result = castor::PxBufferBase::create( result->getDimensions()
+				result = PxBufferBase::create( result->getDimensions()
 					, result->getLayers()
 					, result->getLevels()
 					, dstFormat
@@ -474,14 +474,14 @@ namespace castor3d
 			return result;
 		}
 
-		static castor::Image getFileImage( Engine & engine
-			, castor::String const & name
-			, castor::Path const & folder
-			, castor::Path const & relative
+		static Image getFileImage( Engine & engine
+			, String const & name
+			, Path const & folder
+			, Path const & relative
 			, uint32_t mipLevels
 			, uint32_t & srcMipLevels )
 		{
-			auto & image = castor3d::getFileImage( engine, name, folder, relative );
+			auto & image = getFileImage( engine, name, folder, relative );
 			auto buffer = texlayt::adaptBuffer( image.getPixels(), mipLevels );
 
 			if ( !buffer )
@@ -490,17 +490,17 @@ namespace castor3d
 			}
 
 			srcMipLevels = buffer->getLevels();
-			castor::ImageMemoryLayout layout{ image.getLayout().type, *buffer };
-			return castor::Image{ name
+			ImageMemoryLayout layout{ image.getLayout().type, *buffer };
+			return Image{ name
 				, folder / relative
 				, layout
-				, castor::move( buffer ) };
+				, c3d::move( buffer ) };
 		}
 
 		static auto updateMipLevels( bool genNeeded
 			, uint32_t mipLevels
 			, uint32_t imgMipLevels
-			, MipView & mipView )
+			, ImageMipView & mipView )
 		{
 			auto minLevels = std::min( mipLevels, uint32_t( mipView.levels.size() ) );
 
@@ -556,13 +556,13 @@ namespace castor3d
 			return ImageViewType::e1D;
 		}
 
-		static castor::ImageMemoryLayout convert( ImageCreateInfo const & value )
+		static ImageMemoryLayout convert( ImageCreateInfo const & value )
 		{
-			return castor::ImageMemoryLayout
+			return ImageMemoryLayout
 			{
 				convert( value.flags, value.extent, value.arrayLayers ),
-				castor::PixelFormat( value.format ),
-				castor::Point3ui{ value.extent.width, value.extent.height, value.extent.depth },
+				PixelFormat( value.format ),
+				Point3ui{ value.extent.width, value.extent.height, value.extent.depth },
 				0u,
 				value.arrayLayers,
 				0u,
@@ -596,13 +596,13 @@ namespace castor3d
 	TextureLayout::TextureLayout( RenderSystem & renderSystem
 		, ImageCreateInfo info
 		, VkMemoryPropertyFlags memoryProperties
-		, castor::String const & debugName
+		, String const & debugName
 		, bool isStatic )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_static{ isStatic }
-		, m_info{ castor::move( info ) }
+		, m_info{ c3d::move( info ) }
 		, m_properties{ memoryProperties }
-		, m_image{ debugName, castor::Path{}, texlayt::convert( m_info ) }
+		, m_image{ debugName, Path{}, texlayt::convert( m_info ) }
 		, m_defaultView{ texlayt::createViews( m_info, *this, m_image.getName() ) }
 		, m_arrayView{ &m_defaultView }
 		, m_cubeView{ &m_defaultView }
@@ -631,12 +631,12 @@ namespace castor3d
 	}
 
 	TextureLayout::TextureLayout( RenderSystem & renderSystem
-		, castor::String const & name
+		, String const & name
 		, VkImage image
 		, crg::ImageViewId imageView )
 		: TextureLayout{ renderSystem
-			, castor::make_unique< ashes::Image >( *renderSystem.getRenderDevice()
-				, castor::toUtf8( name )
+			, makeRawUnique< ashes::Image >( *renderSystem.getRenderDevice()
+				, toUtf8( name )
 				, image
 				, ashes::ImageCreateInfo{ convert( imageView.data->image.data->info ) } )
 			, imageView.data->image.data->info }
@@ -649,15 +649,15 @@ namespace castor3d
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_info{ createInfo }
 		, m_properties{}
-		, m_image{ castor::cuEmptyString
-			, castor::Path{ castor::cuEmptyString }
+		, m_image{ cuEmptyString
+			, Path{ cuEmptyString }
 			, makeSize( m_info.extent )
-			, castor::PixelFormat( m_info.format ) }
+			, PixelFormat( m_info.format ) }
 		, m_defaultView{ texlayt::createViews( m_info, *this, m_image.getName() ) }
 		, m_arrayView{ &m_defaultView }
 		, m_cubeView{ &m_defaultView }
 		, m_sliceView{ &m_defaultView }
-		, m_ownTexture{ castor::move( image ) }
+		, m_ownTexture{ c3d::move( image ) }
 		, m_texture{ m_ownTexture.get() }
 	{
 		m_info.mipLevels = std::max( 1u, m_info.mipLevels );
@@ -719,7 +719,7 @@ namespace castor3d
 				CU_Exception( "Unsupported image format properties" );
 			}
 
-			if ( castor::checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_BLIT_DST_BIT ) )
+			if ( checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_BLIT_DST_BIT ) )
 			{
 				res = device->getPhysicalDevice().getImageFormatProperties( convert( m_info.format )
 					, convert( m_info.imageType )
@@ -732,7 +732,7 @@ namespace castor3d
 					m_info.usage |= ImageUsageFlags::eTransferDst;
 			}
 
-			if ( castor::checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_BLIT_SRC_BIT ) )
+			if ( checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_BLIT_SRC_BIT ) )
 			{
 				res = device->getPhysicalDevice().getImageFormatProperties( convert( m_info.format )
 					, convert( m_info.imageType )
@@ -766,7 +766,7 @@ namespace castor3d
 
 			m_texture = m_ownTexture.get();
 			CU_Require( m_info.mipLevels <= 1u
-				|| ( castor::checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_BLIT_DST_BIT )
+				|| ( checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_BLIT_DST_BIT )
 					|| !m_defaultView.view->isMipmapsGenerationNeeded() ) );
 
 			m_defaultView.forEachView( []( TextureViewUPtr const & view )
@@ -854,7 +854,7 @@ namespace castor3d
 			CU_Require( m_texture );
 			auto commandBuffer = queueData.commandPool->createCommandBuffer( "TextureGenMipmaps" );
 			commandBuffer->begin();
-			commandBuffer->beginDebugBlock( { castor::toUtf8( getName() ) + " Mipmaps Generation"
+			commandBuffer->beginDebugBlock( { toUtf8( getName() ) + " Mipmaps Generation"
 				, makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ) } );
 			generateMipmaps( *commandBuffer
 				, srcLayout );
@@ -882,8 +882,8 @@ namespace castor3d
 			, convert( ImageLayout::eShaderReadOnly ) );
 	}
 
-	void TextureLayout::setSource( castor::Path const & folder
-		, castor::Path const & relative )
+	void TextureLayout::setSource( Path const & folder
+		, Path const & relative )
 	{
 		uint32_t srcMips = 1u;
 		m_image = texlayt::getFileImage( *getRenderSystem()->getEngine()
@@ -898,36 +898,36 @@ namespace castor3d
 	}
 
 	void TextureLayout::setSource( Extent3D const & extent
-		, castor::PixelFormat format )
+		, PixelFormat format )
 	{
-		setSource( castor::PxBufferBase::create( { extent.width, extent.height }
+		setSource( PxBufferBase::create( { extent.width, extent.height }
 			, extent.depth
 			, 1u
-			, castor::PixelFormat( format ) ) );
+			, PixelFormat( format ) ) );
 		m_static = true;
 	}
 
-	void TextureLayout::setSource( castor::PxBufferBaseUPtr buffer
+	void TextureLayout::setSource( PxBufferBaseUPtr buffer
 		, uint32_t bufferOrigLevels
 		, bool isStatic )
 	{
 		buffer = texlayt::adaptBuffer( buffer.get(), buffer->getLevels() );
-		auto layout = castor::ImageMemoryLayout{ *buffer };
-		m_image = { m_image.getName(), layout, castor::move( buffer ) };
+		auto layout = ImageMemoryLayout{ *buffer };
+		m_image = { m_image.getName(), layout, c3d::move( buffer ) };
 		doUpdateCreateInfo( m_image.getLayout() );
 		doUpdateMips( false, bufferOrigLevels );
 		m_static = isStatic;
 	}
 
-	void TextureLayout::setSource( castor::PxBufferBaseUPtr buffer
+	void TextureLayout::setSource( PxBufferBaseUPtr buffer
 		, bool isStatic )
 	{
-		setSource( castor::move( buffer )
+		setSource( c3d::move( buffer )
 			, m_image.getPixels()->getLevels()
 			, isStatic );
 	}
 
-	castor::String TextureLayout::getDefaultSourceString()const
+	String TextureLayout::getDefaultSourceString()const
 	{
 		return getDefaultView().toString();
 	}
@@ -950,7 +950,7 @@ namespace castor3d
 		return getLayerCube( layer ).view.view->getTargetView();
 	}
 
-	castor::String TextureLayout::getLayerCubeSourceString( size_t layer )const noexcept
+	String TextureLayout::getLayerCubeSourceString( size_t layer )const noexcept
 	{
 		CU_Require( getLayerCube( layer ).view.view );
 		return getLayerCube( layer ).view.view->toString();
@@ -963,19 +963,19 @@ namespace castor3d
 		return getLayerCubeFace( layer, face ).view->getTargetView();
 	}
 
-	castor::String TextureLayout::getLayerCubeFaceSourceString( size_t layer
+	String TextureLayout::getLayerCubeFaceSourceString( size_t layer
 		, CubeMapFace face )const noexcept
 	{
 		CU_Require( getLayerCubeFace( layer, face ).view );
 		return getLayerCubeFace( layer, face ).view->toString();
 	}
 
-	castor::String TextureLayout::getName()const
+	String TextureLayout::getName()const
 	{
 		return m_image.getName();
 	}
 
-	castor::Path TextureLayout::getPath()const
+	Path TextureLayout::getPath()const
 	{
 		return m_image.getPath();
 	}
@@ -1039,7 +1039,7 @@ namespace castor3d
 		return mipLevels;
 	}
 
-	void TextureLayout::doUpdateCreateInfo( castor::ImageMemoryLayout const & layout )
+	void TextureLayout::doUpdateCreateInfo( ImageMemoryLayout const & layout )
 	{
 		auto layersDepth = std::max( layout.extent->z, layout.layers );
 		auto layoutType = ( m_info.imageType == ImageType::e3D && layersDepth > 1u )

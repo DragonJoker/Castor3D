@@ -6,7 +6,7 @@
 
 #include <numeric>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -16,94 +16,94 @@ namespace castor3d
 		{
 			switch ( v )
 			{
-			case castor3d::ChunkType::eUnknown:
-			case castor3d::ChunkType::eCmshFile:
-			case castor3d::ChunkType::eCmshHeader:
-			case castor3d::ChunkType::eCmshVersion:
-			case castor3d::ChunkType::eName:
-			case castor3d::ChunkType::eMesh:
-			case castor3d::ChunkType::eSkeleton:
-			case castor3d::ChunkType::eSkeletonGlobalInverse:
-			case castor3d::ChunkType::eSkeletonBone:
-			case castor3d::ChunkType::eSkeletonNode:
-			case castor3d::ChunkType::eBoneParentName:
-			case castor3d::ChunkType::eBoneOffsetMatrix:
-			case castor3d::ChunkType::eSubmesh:
-			case castor3d::ChunkType::eSubmeshTopology:
-			case castor3d::ChunkType::eSubmeshVertexCount:
-			case castor3d::ChunkType::eSubmeshBoneCount:
-			case castor3d::ChunkType::eSubmeshBones:
-			case castor3d::ChunkType::eSubmeshMatrixCount:
-			case castor3d::ChunkType::eSubmeshMatrices:
-			case castor3d::ChunkType::eAnimable:
-			case castor3d::ChunkType::eAnimation:
-			case castor3d::ChunkType::eAnimLength:
-			case castor3d::ChunkType::eSkeletonAnimation:
-			case castor3d::ChunkType::eMeshAnimation:
-			case castor3d::ChunkType::eAnimInterpolator:
-			case castor3d::ChunkType::eAnimationObject:
-			case castor3d::ChunkType::eSkeletonAnimationNode:
-			case castor3d::ChunkType::eSkeletonAnimationBone:
-			case castor3d::ChunkType::eMovingTransform:
-			case castor3d::ChunkType::eBonesComponent:
-			case castor3d::ChunkType::eSkeletonAnimationKeyFrame:
-			case castor3d::ChunkType::eSkeletonAnimationKeyFrameTime:
-			case castor3d::ChunkType::eSkeletonAnimationKeyFrameObjectType:
-			case castor3d::ChunkType::eSkeletonAnimationKeyFrameObjectName:
-			case castor3d::ChunkType::eSubmeshIndexComponentCount:
-			case castor3d::ChunkType::eSubmeshIndexCount:
-			case castor3d::ChunkType::eSubmeshIndices:
-			case castor3d::ChunkType::eSceneNodeAnimation:
-			case castor3d::ChunkType::eSceneNodeAnimationKeyFrame:
-			case castor3d::ChunkType::eSceneNodeAnimationKeyFrameTime:
-			case castor3d::ChunkType::eSceneNodeAnimationKeyFrameTranslate:
-			case castor3d::ChunkType::eSceneNodeAnimationKeyFrameRotate:
-			case castor3d::ChunkType::eSceneNodeAnimationKeyFrameScale:
-			case castor3d::ChunkType::eBoneId:
-			case castor3d::ChunkType::eSubmeshPositions:
-			case castor3d::ChunkType::eSubmeshNormals:
-			case castor3d::ChunkType::eSubmeshTexcoords0:
-			case castor3d::ChunkType::eSubmeshTexcoords1:
-			case castor3d::ChunkType::eSubmeshTexcoords2:
-			case castor3d::ChunkType::eSubmeshTexcoords3:
-			case castor3d::ChunkType::eSubmeshColours:
-			case castor3d::ChunkType::eMorphComponent:
-			case castor3d::ChunkType::eMorphTargetBufferSize:
-			case castor3d::ChunkType::eMorphTargetPositions:
-			case castor3d::ChunkType::eMorphTargetNormals:
-			case castor3d::ChunkType::eMorphTargetTexcoords0:
-			case castor3d::ChunkType::eMorphTargetTexcoords1:
-			case castor3d::ChunkType::eMorphTargetTexcoords2:
-			case castor3d::ChunkType::eMorphTargetTexcoords3:
-			case castor3d::ChunkType::eMorphTargetColours:
-			case castor3d::ChunkType::eMeshMorphTarget:
-			case castor3d::ChunkType::eMeshMorphTargetTime:
-			case castor3d::ChunkType::eMeshMorphTargetSubmeshID:
-			case castor3d::ChunkType::eMeshMorphTargetWeights:
-			case castor3d::ChunkType::eSkeletonAnimationKeyFrameObjectTranslate:
-			case castor3d::ChunkType::eSkeletonAnimationKeyFrameObjectRotate:
-			case castor3d::ChunkType::eSkeletonAnimationKeyFrameObjectScale:
-			case castor3d::ChunkType::eSubmeshTangentsMikkt:
-			case castor3d::ChunkType::eMorphTargetTangentsMikkt:
-			case castor3d::ChunkType::eSubmeshBitangents:
-			case castor3d::ChunkType::eMorphTargetBitangents:
+			case ChunkType::eUnknown:
+			case ChunkType::eCmshFile:
+			case ChunkType::eCmshHeader:
+			case ChunkType::eCmshVersion:
+			case ChunkType::eName:
+			case ChunkType::eMesh:
+			case ChunkType::eSkeleton:
+			case ChunkType::eSkeletonGlobalInverse:
+			case ChunkType::eSkeletonBone:
+			case ChunkType::eSkeletonNode:
+			case ChunkType::eBoneParentName:
+			case ChunkType::eBoneOffsetMatrix:
+			case ChunkType::eSubmesh:
+			case ChunkType::eSubmeshTopology:
+			case ChunkType::eSubmeshVertexCount:
+			case ChunkType::eSubmeshBoneCount:
+			case ChunkType::eSubmeshBones:
+			case ChunkType::eSubmeshMatrixCount:
+			case ChunkType::eSubmeshMatrices:
+			case ChunkType::eAnimable:
+			case ChunkType::eAnimation:
+			case ChunkType::eAnimLength:
+			case ChunkType::eSkeletonAnimation:
+			case ChunkType::eMeshAnimation:
+			case ChunkType::eAnimInterpolator:
+			case ChunkType::eAnimationObject:
+			case ChunkType::eSkeletonAnimationNode:
+			case ChunkType::eSkeletonAnimationBone:
+			case ChunkType::eMovingTransform:
+			case ChunkType::eBonesComponent:
+			case ChunkType::eSkeletonAnimationKeyFrame:
+			case ChunkType::eSkeletonAnimationKeyFrameTime:
+			case ChunkType::eSkeletonAnimationKeyFrameObjectType:
+			case ChunkType::eSkeletonAnimationKeyFrameObjectName:
+			case ChunkType::eSubmeshIndexComponentCount:
+			case ChunkType::eSubmeshIndexCount:
+			case ChunkType::eSubmeshIndices:
+			case ChunkType::eSceneNodeAnimation:
+			case ChunkType::eSceneNodeAnimationKeyFrame:
+			case ChunkType::eSceneNodeAnimationKeyFrameTime:
+			case ChunkType::eSceneNodeAnimationKeyFrameTranslate:
+			case ChunkType::eSceneNodeAnimationKeyFrameRotate:
+			case ChunkType::eSceneNodeAnimationKeyFrameScale:
+			case ChunkType::eBoneId:
+			case ChunkType::eSubmeshPositions:
+			case ChunkType::eSubmeshNormals:
+			case ChunkType::eSubmeshTexcoords0:
+			case ChunkType::eSubmeshTexcoords1:
+			case ChunkType::eSubmeshTexcoords2:
+			case ChunkType::eSubmeshTexcoords3:
+			case ChunkType::eSubmeshColours:
+			case ChunkType::eMorphComponent:
+			case ChunkType::eMorphTargetBufferSize:
+			case ChunkType::eMorphTargetPositions:
+			case ChunkType::eMorphTargetNormals:
+			case ChunkType::eMorphTargetTexcoords0:
+			case ChunkType::eMorphTargetTexcoords1:
+			case ChunkType::eMorphTargetTexcoords2:
+			case ChunkType::eMorphTargetTexcoords3:
+			case ChunkType::eMorphTargetColours:
+			case ChunkType::eMeshMorphTarget:
+			case ChunkType::eMeshMorphTargetTime:
+			case ChunkType::eMeshMorphTargetSubmeshID:
+			case ChunkType::eMeshMorphTargetWeights:
+			case ChunkType::eSkeletonAnimationKeyFrameObjectTranslate:
+			case ChunkType::eSkeletonAnimationKeyFrameObjectRotate:
+			case ChunkType::eSkeletonAnimationKeyFrameObjectScale:
+			case ChunkType::eSubmeshTangentsMikkt:
+			case ChunkType::eMorphTargetTangentsMikkt:
+			case ChunkType::eSubmeshBitangents:
+			case ChunkType::eMorphTargetBitangents:
 #pragma warning( push )
 #pragma warning( disable: 4996 )
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-			case castor3d::ChunkType::eSubmeshTangents:
-			case castor3d::ChunkType::eMorphTargetTangents:
-			case castor3d::ChunkType::eKeyframeCount:
-			case castor3d::ChunkType::eKeyframes:
-			case castor3d::ChunkType::eSubmeshFaceCount:
-			case castor3d::ChunkType::eSubmeshFaces:
-			case castor3d::ChunkType::eSubmeshVertex:
-			case castor3d::ChunkType::eMeshAnimationKeyFrame:
-			case castor3d::ChunkType::eMeshAnimationKeyFrameTime:
-			case castor3d::ChunkType::eMeshAnimationKeyFrameBufferData:
-			case castor3d::ChunkType::eMeshAnimationKeyFrameSubmeshID:
-			case castor3d::ChunkType::eMeshAnimationKeyFrameBufferSize:
-			case castor3d::ChunkType::eSkeletonAnimationKeyFrameObjectTransform:
+			case ChunkType::eSubmeshTangents:
+			case ChunkType::eMorphTargetTangents:
+			case ChunkType::eKeyframeCount:
+			case ChunkType::eKeyframes:
+			case ChunkType::eSubmeshFaceCount:
+			case ChunkType::eSubmeshFaces:
+			case ChunkType::eSubmeshVertex:
+			case ChunkType::eMeshAnimationKeyFrame:
+			case ChunkType::eMeshAnimationKeyFrameTime:
+			case ChunkType::eMeshAnimationKeyFrameBufferData:
+			case ChunkType::eMeshAnimationKeyFrameSubmeshID:
+			case ChunkType::eMeshAnimationKeyFrameBufferSize:
+			case ChunkType::eSkeletonAnimationKeyFrameObjectTransform:
 #pragma GCC diagnostic pop
 #pragma warning( pop )
 				return true;
@@ -138,7 +138,7 @@ namespace castor3d
 		uint32_t size = std::accumulate( m_addedData.begin()
 			, m_addedData.end()
 			, uint32_t{}
-			, [&]( uint32_t value, castor::ByteArray const & array )
+			, [&]( uint32_t value, ByteArray const & array )
 			{
 				return value + uint32_t( array.size() );
 			} );
@@ -152,14 +152,14 @@ namespace castor3d
 		}
 	}
 
-	void BinaryChunk::add( castor::ByteArray data )
+	void BinaryChunk::add( ByteArray data )
 	{
-		m_addedData.push_back( castor::move( data ) );
+		m_addedData.push_back( c3d::move( data ) );
 	}
 
 	void BinaryChunk::add( uint8_t * data, uint32_t size )
 	{
-		add( castor::ByteArray( data, data + size ) );
+		add( ByteArray( data, data + size ) );
 	}
 
 	void BinaryChunk::get( uint8_t * data, uint32_t size )
@@ -211,35 +211,35 @@ namespace castor3d
 	bool BinaryChunk::addSubChunk( BinaryChunk const & subchunk )
 	{
 		auto size = uint32_t( subchunk.m_data.size() );
-		castor::ByteArray buffer;
+		ByteArray buffer;
 		buffer.reserve( sizeof( uint32_t ) + sizeof( ChunkType ) + size );
 
 		// Write subchunk type,
-		auto type = castor::systemEndianToLittleEndian( subchunk.m_type );
+		auto type = systemEndianToLittleEndian( subchunk.m_type );
 		auto data = ByteCPtr( &type );
 		buffer.insert( buffer.end(), data, data + sizeof( ChunkType ) );
 		// Then its size,
-		castor::systemEndianToLittleEndian( size );
+		systemEndianToLittleEndian( size );
 		data = ByteCPtr( &size );
 		buffer.insert( buffer.end(), data, data + sizeof( uint32_t ) );
 		// And eventually its data.
 		buffer.insert( buffer.end(), subchunk.m_data.begin(), subchunk.m_data.end() );
 
 		// Now add it to this chunk
-		add( castor::move( buffer ) );
+		add( c3d::move( buffer ) );
 
 		return true;
 	}
 
-	bool BinaryChunk::write( castor::BinaryFile & file )
+	bool BinaryChunk::write( BinaryFile & file )
 	{
-		auto type = castor::systemEndianToLittleEndian( getChunkType() );
+		auto type = systemEndianToLittleEndian( getChunkType() );
 		auto result = file.write( type ) == sizeof( ChunkType );
 
 		if ( result )
 		{
 			finalise();
-			auto size = castor::systemEndianToLittleEndian( getDataSize() );
+			auto size = systemEndianToLittleEndian( getDataSize() );
 			result = file.write( size ) == sizeof( uint32_t );
 		}
 
@@ -251,7 +251,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool BinaryChunk::read( castor::BinaryFile & file )
+	bool BinaryChunk::read( BinaryFile & file )
 	{
 		uint32_t size = 0;
 		bool result = file.read( m_type ) == sizeof( ChunkType );
@@ -262,7 +262,7 @@ namespace castor3d
 
 			if ( !m_isLittleEndian )
 			{
-				castor::switchEndianness( m_type );
+				switchEndianness( m_type );
 				result = binchunk::isValidType( m_type );
 			}
 		}
@@ -282,7 +282,7 @@ namespace castor3d
 		return result;
 	}
 
-	void BinaryChunk::binaryError( castor::StringView view )const
+	void BinaryChunk::binaryError( String view )const
 	{
 		log::error << view;
 	}

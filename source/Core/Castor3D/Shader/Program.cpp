@@ -7,13 +7,13 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Stream/StreamPrefixManipulators.hpp>
 
-CU_ImplementSmartPtr( castor3d, ShaderProgram )
+CU_ImplementSmartPtr( c3d, ShaderProgram )
 
-namespace castor3d
+namespace c3d
 {
 	namespace shdprog
 	{
-		static castor::String getName( VkShaderStageFlagBits value )
+		static String getName( VkShaderStageFlagBits value )
 		{
 			switch ( value )
 			{
@@ -61,7 +61,7 @@ namespace castor3d
 		}
 
 		static void eraseFile( VkShaderStageFlagBits target
-			, castor::Map< VkShaderStageFlagBits, castor::Path > & files )
+			, Map< VkShaderStageFlagBits, Path > & files )
 		{
 			auto it = files.find( target );
 
@@ -126,7 +126,7 @@ namespace castor3d
 				if ( blockContext->shaderStage != VkShaderStageFlagBits( 0u ) )
 				{
 					blockContext->shaderProgram->setFile( blockContext->shaderStage
-						, context.file.getPath() / params[0]->get< castor::Path >() );
+						, context.file.getPath() / params[0]->get< Path >() );
 				}
 				else
 				{
@@ -151,7 +151,7 @@ namespace castor3d
 				if ( blockContext->particleSystem
 					&& blockContext->shaderStage != VkShaderStageFlagBits( 0u ) )
 				{
-					blockContext->particleSystem->particleSystem->setCSGroupSizes( params[0]->get< castor::Point3i >() );
+					blockContext->particleSystem->particleSystem->setCSGroupSizes( params[0]->get< Point3i >() );
 				}
 				else
 				{
@@ -164,26 +164,26 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	ShaderProgram::ShaderProgram( castor::String const & name
+	ShaderProgram::ShaderProgram( String const & name
 		, RenderSystem & renderSystem )
-		: castor::Named{ name }
+		: Named{ name }
 		, OwnedBy< RenderSystem >{ renderSystem }
 		, m_module{ name }
 	{
 	}
 
-	void ShaderProgram::setFile( VkShaderStageFlagBits target, castor::Path const & pathFile )
+	void ShaderProgram::setFile( VkShaderStageFlagBits target, Path const & pathFile )
 	{
-		castor::String source;
+		String source;
 		{
-			castor::TextFile file{ pathFile, castor::File::OpenMode::eRead };
+			TextFile file{ pathFile, File::OpenMode::eRead };
 			file.copyToString( source );
 		}
-		setSource( target, castor::toUtf8( source ) );
+		setSource( target, toUtf8( source ) );
 		m_files[target] = pathFile;
 	}
 
-	void ShaderProgram::setSource( VkShaderStageFlagBits target, castor::MbString const & source )
+	void ShaderProgram::setSource( VkShaderStageFlagBits target, MbString const & source )
 	{
 		shdprog::eraseFile( target, m_files );
 		shdprog::eraseStage( target, m_states );
@@ -210,7 +210,7 @@ namespace castor3d
 	{
 		m_files.clear();
 		m_module.compiled.clear();
-		m_module.shader = castor::move( shader );
+		m_module.shader = c3d::move( shader );
 		m_states = makeProgramStates( getRenderSystem()->getRenderDevice(), m_module );
 	}
 
@@ -221,9 +221,8 @@ namespace castor3d
 			&& !it->second.spirv.empty();
 	}
 
-	void ShaderProgram::addParsers( castor::AttributeParsers & result )
+	void ShaderProgram::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< ProgramContext > programCtx{ result, CSCNSection::eShaderProgram };
 		BlockParserContextT< ProgramContext > stageCtx{ result, CSCNSection::eShaderStage, CSCNSection::eShaderProgram };
 

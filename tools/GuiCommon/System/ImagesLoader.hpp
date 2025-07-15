@@ -53,7 +53,7 @@ namespace GuiCommon
 			}
 			else
 			{
-				CU_UnicityError( castor::UnicityError::eAnInstance, typeid( ImagesLoader ).name() );
+				CU_UnicityError( c3d::UnicityError::eAnInstance, typeid( ImagesLoader ).name() );
 			}
 		}
 		/**
@@ -70,8 +70,8 @@ namespace GuiCommon
 
 	private:
 		ImageIdMap m_mapImages;
-		castor::Mutex m_mutex;
-		castor::Vector< std::thread > m_arrayCurrentLoads;
+		c3d::Mutex m_mutex;
+		c3d::Vector< std::thread > m_arrayCurrentLoads;
 	};
 }
 

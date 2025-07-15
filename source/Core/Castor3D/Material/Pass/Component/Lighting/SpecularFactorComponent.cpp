@@ -20,28 +20,25 @@
 
 //*************************************************************************************************
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::SpecularFactorComponent >
-		: public TextWriterT< castor3d::SpecularFactorComponent >
+	class TextWriter< SpecularFactorComponent >
+		: public TextWriterT< SpecularFactorComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::SpecularFactorComponent >{ tabs }
+			: TextWriterT< SpecularFactorComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::SpecularFactorComponent const & object
+		bool operator()( SpecularFactorComponent const & object
 			, StringStream & file )override
 		{
-			return writeOpt( file, cuT( "specular_factor" ), object.getFactor(), castor3d::SpecularFactorComponent::Default );
+			return writeOpt( file, cuT( "specular_factor" ), object.getFactor(), SpecularFactorComponent::Default );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace spccmp
@@ -132,14 +129,14 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void SpecularFactorComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void SpecularFactorComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "specular_factor" )
 			, spccmp::parserPassSpecularFactor
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { makeParameter< ParameterType::eFloat >() } );
 	}
 
 	void SpecularFactorComponent::Plugin::zeroBuffer( Pass const & pass
@@ -158,7 +155,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const SpecularFactorComponent::TypeName = C3D_MakePassLightingComponentName( "specular_factor" );
+	String const SpecularFactorComponent::TypeName = C3D_MakePassLightingComponentName( "specular_factor" );
 
 	SpecularFactorComponent::SpecularFactorComponent( Pass & pass
 		, float defaultValue )
@@ -175,17 +172,17 @@ namespace castor3d
 
 	PassComponentUPtr SpecularFactorComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< SpecularFactorComponent >( pass );
+		auto result = makeRawUnique< SpecularFactorComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool SpecularFactorComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool SpecularFactorComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< SpecularFactorComponent >{ tabs }( *this, file );
+		return TextWriter< SpecularFactorComponent >{ tabs }( *this, file );
 	}
 
 	void SpecularFactorComponent::doFillBuffer( PassBuffer & buffer )const

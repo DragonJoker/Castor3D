@@ -80,10 +80,10 @@ namespace CastorViewer
 
 		static void updateLog( LogContainer & log )
 		{
-			castor::Vector< castor::Pair< wxString, bool > > flush;
+			c3d::Vector< c3d::Pair< wxString, bool > > flush;
 			{
-				auto lock = castor::makeUniqueLock( log.mutex );
-				castor::swap( flush, log.queue );
+				auto lock = c3d::makeUniqueLock( log.mutex );
+				c3d::swap( flush, log.queue );
 			}
 
 			if ( !flush.empty() )
@@ -131,8 +131,8 @@ namespace CastorViewer
 
 	bool MainFrame::initialise( GuiCommon::SplashScreen & splashScreen )
 	{
-		castor::Logger::registerCallback( [this]( castor::MbString const & logText
-			, castor::LogType logType, bool newLine )
+		c3d::Logger::registerCallback( [this]( c3d::MbString const & logText
+			, c3d::LogType logType, bool newLine )
 			{
 				doLogCallback( logText, logType, newLine );
 			}, this );
@@ -161,7 +161,7 @@ namespace CastorViewer
 		{
 			if ( !fileName.empty() )
 			{
-				m_filePath = castor::Path{ GuiCommon::make_String( fileName ) };
+				m_filePath = c3d::Path{ GuiCommon::make_String( fileName ) };
 			}
 
 			if ( !m_filePath.empty() )
@@ -225,7 +225,7 @@ namespace CastorViewer
 		}
 	}
 
-	void MainFrame::select( castor3d::Geometry const * geometry, castor3d::Submesh const * submesh )const
+	void MainFrame::select( c3d::Geometry const * geometry, c3d::Submesh const * submesh )const
 	{
 		if ( m_objectsTree && m_objectsTree->getList() )
 		{
@@ -365,8 +365,8 @@ namespace CastorViewer
 		if ( m_objectsTree )
 		{
 			m_sceneTabsContainer->AddPage( m_objectsTree, _( "Objects" ), false );
-			m_selectSubmesh = m_objectsTree->getList()->onSelectSubmesh.connect( [this]( castor3d::Geometry * geometry
-				, castor3d::Submesh const * submesh )
+			m_selectSubmesh = m_objectsTree->getList()->onSelectSubmesh.connect( [this]( c3d::Geometry * geometry
+				, c3d::Submesh const * submesh )
 				{
 					if ( m_renderPanel )
 					{
@@ -378,7 +378,7 @@ namespace CastorViewer
 		if ( m_nodesTree )
 		{
 			m_sceneTabsContainer->AddPage( m_nodesTree, _( "Nodes" ), false );
-			m_selectNode = m_nodesTree->getList()->onSelectNode.connect( [this]( castor3d::SceneNode * node )
+			m_selectNode = m_nodesTree->getList()->onSelectNode.connect( [this]( c3d::SceneNode * node )
 				{
 					if ( m_renderPanel )
 					{
@@ -390,7 +390,7 @@ namespace CastorViewer
 		if ( m_lightsTree )
 		{
 			m_sceneTabsContainer->AddPage( m_lightsTree, _( "Lights" ), false );
-			m_selectLight = m_lightsTree->getList()->onSelectLight.connect( [this]( castor3d::LightInstance * light )
+			m_selectLight = m_lightsTree->getList()->onSelectLight.connect( [this]( c3d::LightInstance * light )
 				{
 					if ( m_renderPanel )
 					{
@@ -529,30 +529,30 @@ namespace CastorViewer
 #endif
 	}
 
-	void MainFrame::doLogCallback( castor::MbString const & log, castor::LogType logType, bool newLine )
+	void MainFrame::doLogCallback( c3d::MbString const & log, c3d::LogType logType, bool newLine )
 	{
 		switch ( logType )
 		{
 #ifndef NDEBUG
-		case castor::LogType::eTrace:
-		case castor::LogType::eDebug:
+		case c3d::LogType::eTrace:
+		case c3d::LogType::eDebug:
 			{
-				auto lock = castor::makeUniqueLock( m_debugLog.mutex );
+				auto lock = c3d::makeUniqueLock( m_debugLog.mutex );
 				m_debugLog.queue.emplace_back( GuiCommon::make_wxString( log ), newLine );
 			}
 			break;
 #endif
-		case castor::LogType::eInfo:
+		case c3d::LogType::eInfo:
 			{
-				auto lock = castor::makeUniqueLock( m_messageLog.mutex );
+				auto lock = c3d::makeUniqueLock( m_messageLog.mutex );
 				m_messageLog.queue.emplace_back( GuiCommon::make_wxString( log ), newLine );
 			}
 			break;
 
-		case castor::LogType::eWarning:
-		case castor::LogType::eError:
+		case c3d::LogType::eWarning:
+		case c3d::LogType::eError:
 			{
-				auto lock = castor::makeUniqueLock( m_errorLog.mutex );
+				auto lock = c3d::makeUniqueLock( m_errorLog.mutex );
 				m_errorLog.queue.emplace_back( GuiCommon::make_wxString( log ), newLine );
 			}
 			break;
@@ -627,7 +627,7 @@ namespace CastorViewer
 
 			engine->getRenderLoop().cleanup();
 			engine->removeScene( m_mainScene->getName() );
-			castor::Logger::logDebug( cuT( "MainFrame::doCleanupScene - Scene related objects unloaded." ) );
+			c3d::Logger::logDebug( cuT( "MainFrame::doCleanupScene - Scene related objects unloaded." ) );
 
 			if ( engine->isThreaded() )
 			{
@@ -778,7 +778,7 @@ namespace CastorViewer
 #endif
 	}
 
-	void MainFrame::doSceneLoadEnd( castor3d::RenderWindowDesc const & window )
+	void MainFrame::doSceneLoadEnd( c3d::RenderWindowDesc const & window )
 	{
 		auto target = window.renderTarget;
 
@@ -924,9 +924,9 @@ namespace CastorViewer
 				}
 				else if ( !castor->isThreaded() )
 				{
-					auto wanted = castor::Milliseconds{ 1000 / castor->getRenderLoop().getWantedFps() };
+					auto wanted = c3d::Milliseconds{ 1000 / castor->getRenderLoop().getWantedFps() };
 					castor->getRenderLoop().renderSyncFrame( wanted );
-					auto frame = std::chrono::duration_cast< castor::Milliseconds >( wxGetApp().getCastor()->getRenderLoop().getAvgFrameTime() );
+					auto frame = std::chrono::duration_cast< c3d::Milliseconds >( wxGetApp().getCastor()->getRenderLoop().getAvgFrameTime() );
 
 					if ( frame.count() >= m_timer->GetInterval() )
 					{
@@ -980,7 +980,7 @@ namespace CastorViewer
 		if ( wxGetApp().getCastor()
 			&& wxGetApp().getCastor()->hasRenderLoop() )
 		{
-			auto time = std::chrono::duration_cast< castor::Microseconds >( wxGetApp().getCastor()->getRenderLoop().getAvgFrameTime() );
+			auto time = std::chrono::duration_cast< c3d::Microseconds >( wxGetApp().getCastor()->getRenderLoop().getAvgFrameTime() );
 
 			if ( time.count() )
 			{
@@ -998,8 +998,8 @@ namespace CastorViewer
 
 	void MainFrame::onClose( wxCloseEvent & event )
 	{
-		castor::Logger::logInfo( cuT( "Cleaning up MainFrame." ) );
-		castor::Logger::unregisterCallback( this );
+		c3d::Logger::logInfo( cuT( "Cleaning up MainFrame." ) );
+		c3d::Logger::unregisterCallback( this );
 		m_auiManager.DetachPane( m_sceneTabsContainer );
 		m_auiManager.DetachPane( m_logTabsContainer );
 		m_auiManager.DetachPane( m_renderPanel );
@@ -1074,7 +1074,7 @@ namespace CastorViewer
 
 		DestroyChildren();
 		event.Skip();
-		castor::Logger::logInfo( cuT( "MainFrame cleaned up." ) );
+		c3d::Logger::logInfo( cuT( "MainFrame cleaned up." ) );
 	}
 
 	void MainFrame::onEnterWindow( wxMouseEvent & event )
@@ -1126,10 +1126,10 @@ namespace CastorViewer
 
 	void MainFrame::onExportScene( wxCommandEvent & event )
 	{
-		castor3d::exporter::ExportOptions options;
+		c3d::exporter::ExportOptions options;
 		GuiCommon::PropertiesDialog dialog{ this
 			, _( "Export" )
-			, castor::makeUniqueDerived< GuiCommon::TreeItemProperty, GuiCommon::ExportOptionsTreeItemProperty >( true, options ) };
+			, c3d::makeUniqueDerived< GuiCommon::TreeItemProperty, GuiCommon::ExportOptionsTreeItemProperty >( true, options ) };
 
 		if ( dialog.ShowModal() == wxID_CANCEL )
 		{
@@ -1147,8 +1147,8 @@ namespace CastorViewer
 			{
 				try
 				{
-					castor::Path pathFile( GuiCommon::make_String( fileDialog.GetPath() ) );
-					castor3d::exporter::CscnSceneExporter exporter{ options };
+					c3d::Path pathFile( GuiCommon::make_String( fileDialog.GetPath() ) );
+					c3d::exporter::CscnSceneExporter exporter{ options };
 					auto result = exporter.exportScene( *m_mainScene, pathFile );
 
 					if ( result )
@@ -1241,7 +1241,7 @@ namespace CastorViewer
 		}
 
 		auto var = static_cast< wxVariant * >( event.GetEventObject() );
-		auto rawTarget = static_cast< castor3d::RenderWindowDesc * >( var->GetVoidPtr() );
+		auto rawTarget = static_cast< c3d::RenderWindowDesc * >( var->GetVoidPtr() );
 		delete var;
 
 		if ( rawTarget )

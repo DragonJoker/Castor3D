@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/Rectangle.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Rectangle )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Rectangle )
 
 namespace GuiCommon
 {
@@ -18,14 +18,14 @@ namespace GuiCommon
 		WX_PG_DECLARE_PROPERTY_CLASS( RectangleProperty )
 
 	public:
-		RectangleProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::Rectangle const & value = castor::Rectangle() );
+		RectangleProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, c3d::Rectangle const & value = c3d::Rectangle() );
 
 		wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const override;
 		void RefreshChildren()override;
 
 	protected:
 		// I stands for internal
-		void setValueI( castor::Rectangle const & value );
+		void setValueI( c3d::Rectangle const & value );
 	};
 }
 

@@ -1,4 +1,4 @@
-namespace castor
+namespace c3d
 {
 	template< typename ValueT >
 	TextWriter< QuaternionT< ValueT > >::TextWriter( String const & tabs )

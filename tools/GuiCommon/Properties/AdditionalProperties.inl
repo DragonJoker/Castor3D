@@ -107,9 +107,9 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	struct ValueTraitsT< castor::String >
+	struct ValueTraitsT< c3d::String >
 	{
-		using ValueT = castor::String;
+		using ValueT = c3d::String;
 		using ParamType = ValueT const &;
 		using RetType = ValueT;
 
@@ -132,9 +132,9 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	struct ValueTraitsT< castor::U32String >
+	struct ValueTraitsT< c3d::U32String >
 	{
-		using ValueT = castor::U32String;
+		using ValueT = c3d::U32String;
 		using ParamType = ValueT const &;
 		using RetType = ValueT;
 
@@ -157,9 +157,9 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	struct ValueTraitsT< castor::Seconds >
+	struct ValueTraitsT< c3d::Seconds >
 	{
-		using ValueT = castor::Seconds;
+		using ValueT = c3d::Seconds;
 		using ParamType = ValueT const &;
 		using RetType = ValueT;
 
@@ -182,9 +182,9 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	struct ValueTraitsT< castor::Milliseconds >
+	struct ValueTraitsT< c3d::Milliseconds >
 	{
-		using ValueT = castor::Milliseconds;
+		using ValueT = c3d::Milliseconds;
 		using ParamType = ValueT const &;
 		using RetType = ValueT;
 
@@ -207,9 +207,9 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	struct ValueTraitsT< castor::Microseconds >
+	struct ValueTraitsT< c3d::Microseconds >
 	{
-		using ValueT = castor::Microseconds;
+		using ValueT = c3d::Microseconds;
 		using ParamType = ValueT const &;
 		using RetType = ValueT;
 
@@ -232,9 +232,9 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	struct ValueTraitsT< castor::Nanoseconds >
+	struct ValueTraitsT< c3d::Nanoseconds >
 	{
-		using ValueT = castor::Nanoseconds;
+		using ValueT = c3d::Nanoseconds;
 		using ParamType = ValueT const &;
 		using RetType = ValueT;
 
@@ -257,20 +257,20 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	struct ValueTraitsT< castor::Path >
+	struct ValueTraitsT< c3d::Path >
 	{
-		using ValueT = castor::Path;
+		using ValueT = c3d::Path;
 		using ParamType = ValueT const &;
 		using RetType = ValueT;
 
 		static inline ValueT convert( wxVariant const & var )
 		{
-			return ValueT{ variantCast< castor::String >( var ) };
+			return ValueT{ variantCast< c3d::String >( var ) };
 		}
 
 		static inline wxVariant convert( ParamType value )
 		{
-			return getVariant< castor::String >( value );
+			return getVariant< c3d::String >( value );
 		}
 
 		static inline wxString getUnit()
@@ -282,9 +282,9 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	struct ValueTraitsT< castor::RgbColour >
+	struct ValueTraitsT< c3d::RgbColour >
 	{
-		using ValueT = castor::RgbColour;
+		using ValueT = c3d::RgbColour;
 		using ParamType = ValueT const &;
 		using RetType = ValueT;
 
@@ -292,7 +292,7 @@ namespace GuiCommon
 		{
 			wxColour col;
 			col << var;
-			return castor::RgbColour::fromBGR( col.GetRGB() );
+			return c3d::RgbColour::fromBGR( col.GetRGB() );
 		}
 
 		static inline wxVariant convert( ParamType value )
@@ -309,9 +309,9 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	struct ValueTraitsT< castor::RgbaColour >
+	struct ValueTraitsT< c3d::RgbaColour >
 	{
-		using ValueT = castor::RgbaColour;
+		using ValueT = c3d::RgbaColour;
 		using ParamType = ValueT const &;
 		using RetType = ValueT;
 
@@ -319,7 +319,7 @@ namespace GuiCommon
 		{
 			wxColour col;
 			col << var;
-			return castor::RgbaColour::fromBGRA( col.GetRGBA() );
+			return c3d::RgbaColour::fromBGRA( col.GetRGBA() );
 		}
 
 		static inline wxVariant convert( ParamType value )
@@ -336,15 +336,15 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	struct ValueTraitsT< castor::Angle >
+	struct ValueTraitsT< c3d::Angle >
 	{
-		using ValueT = castor::Angle;
+		using ValueT = c3d::Angle;
 		using ParamType = ValueT const &;
 		using RetType = ValueT;
 
 		static inline RetType convert( wxVariant const & var )
 		{
-			return castor::Angle::fromDegrees( var.GetDouble() );
+			return c3d::Angle::fromDegrees( var.GetDouble() );
 		}
 
 		static inline wxVariant convert( ParamType value )
@@ -361,15 +361,15 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	struct ValueTraitsT< castor::Illumination >
+	struct ValueTraitsT< c3d::Illumination >
 	{
-		using ValueT = castor::Illumination;
+		using ValueT = c3d::Illumination;
 		using ParamType = ValueT const &;
 		using RetType = ValueT;
 
 		static inline RetType convert( wxVariant const & var )
 		{
-			return castor::Illumination{ var.GetDouble() };
+			return c3d::Illumination{ var.GetDouble() };
 		}
 
 		static inline wxVariant convert( ParamType value )
@@ -386,15 +386,15 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	struct ValueTraitsT< castor::LuminousIntensity >
+	struct ValueTraitsT< c3d::LuminousIntensity >
 	{
-		using ValueT = castor::LuminousIntensity;
+		using ValueT = c3d::LuminousIntensity;
 		using ParamType = ValueT const &;
 		using RetType = ValueT;
 
 		static inline RetType convert( wxVariant const & var )
 		{
-			return castor::LuminousIntensity{ var.GetDouble() };
+			return c3d::LuminousIntensity{ var.GetDouble() };
 		}
 
 		static inline wxVariant convert( ParamType value )
@@ -411,11 +411,11 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	struct ValueTraitsT< castor::FontRPtr >
+	struct ValueTraitsT< c3d::FontRPtr >
 	{
-		using ValueT = castor::FontRPtr;
-		using ParamType = castor::FontRPtr const &;
-		using RetType = castor::FontUPtr;
+		using ValueT = c3d::FontRPtr;
+		using ParamType = c3d::FontRPtr const &;
+		using RetType = c3d::FontUPtr;
 
 		static inline RetType convert( wxVariant const & var )
 		{
@@ -440,11 +440,11 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	struct ValueTraitsT< castor3d::TextureSourceInfo * >
+	struct ValueTraitsT< c3d::TextureSourceInfo * >
 	{
-		using ValueT = castor3d::TextureSourceInfo *;
-		using ParamType = castor3d::TextureSourceInfo *;
-		using RetType = castor3d::TextureSourceInfo *;
+		using ValueT = c3d::TextureSourceInfo *;
+		using ParamType = c3d::TextureSourceInfo *;
+		using RetType = c3d::TextureSourceInfo *;
 
 		static inline RetType convert( wxVariant const & var )
 		{
@@ -466,14 +466,14 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template< typename MyValueT >
-	struct ValueTraitsT< castor::RangedValue< MyValueT > >
+	struct ValueTraitsT< c3d::RangedValue< MyValueT > >
 	{
-		using ValueT = castor::RangedValue< MyValueT >;
+		using ValueT = c3d::RangedValue< MyValueT >;
 		using TypeT = MyValueT;
 		using ParamType = ValueT const &;
 		using RetType = ValueT;
 
-		static inline RetType convert( wxVariant const & var, castor::Range< MyValueT > const & range )
+		static inline RetType convert( wxVariant const & var, c3d::Range< MyValueT > const & range )
 		{
 			return RetType{ variantCast< TypeT >( var ), range };
 		}
@@ -492,9 +492,9 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template< typename MyValueT >
-	struct ValueTraitsT< castor::SpeedT< MyValueT, castor::Nanoseconds > >
+	struct ValueTraitsT< c3d::SpeedT< MyValueT, c3d::Nanoseconds > >
 	{
-		using ValueT = castor::SpeedT< MyValueT, castor::Nanoseconds >;
+		using ValueT = c3d::SpeedT< MyValueT, c3d::Nanoseconds >;
 		using TypeT = MyValueT;
 		using ParamType = ValueT const &;
 		using RetType = ValueT;
@@ -518,9 +518,9 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template< typename MyValueT >
-	struct ValueTraitsT< castor::SpeedT< MyValueT, castor::Microseconds > >
+	struct ValueTraitsT< c3d::SpeedT< MyValueT, c3d::Microseconds > >
 	{
-		using ValueT = castor::SpeedT< MyValueT, castor::Microseconds >;
+		using ValueT = c3d::SpeedT< MyValueT, c3d::Microseconds >;
 		using TypeT = MyValueT;
 		using ParamType = ValueT const &;
 		using RetType = ValueT;
@@ -544,9 +544,9 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template< typename MyValueT >
-	struct ValueTraitsT< castor::SpeedT< MyValueT, castor::Milliseconds > >
+	struct ValueTraitsT< c3d::SpeedT< MyValueT, c3d::Milliseconds > >
 	{
-		using ValueT = castor::SpeedT< MyValueT, castor::Milliseconds >;
+		using ValueT = c3d::SpeedT< MyValueT, c3d::Milliseconds >;
 		using TypeT = MyValueT;
 		using ParamType = ValueT const &;
 		using RetType = ValueT;
@@ -570,9 +570,9 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template< typename MyValueT >
-	struct ValueTraitsT< castor::SpeedT< MyValueT, castor::Seconds > >
+	struct ValueTraitsT< c3d::SpeedT< MyValueT, c3d::Seconds > >
 	{
-		using ValueT = castor::SpeedT< MyValueT, castor::Seconds >;
+		using ValueT = c3d::SpeedT< MyValueT, c3d::Seconds >;
 		using TypeT = MyValueT;
 		using ParamType = ValueT const &;
 		using RetType = ValueT;
@@ -596,9 +596,9 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template< typename MyValueT >
-	struct ValueTraitsT< castor::ChangeTracked< MyValueT > >
+	struct ValueTraitsT< c3d::ChangeTracked< MyValueT > >
 	{
-		using ValueT = castor::ChangeTracked< MyValueT >;
+		using ValueT = c3d::ChangeTracked< MyValueT >;
 		using TypeT = MyValueT;
 		using ParamType = ValueT const &;
 		using RetType = TypeT;
@@ -622,16 +622,16 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template< typename MyValueT >
-	struct ValueTraitsT< castor::ChangeTracked< castor::RangedValue< MyValueT > > >
+	struct ValueTraitsT< c3d::ChangeTracked< c3d::RangedValue< MyValueT > > >
 	{
-		using ValueT = castor::ChangeTracked< castor::RangedValue< MyValueT > >;
+		using ValueT = c3d::ChangeTracked< c3d::RangedValue< MyValueT > >;
 		using TypeT = MyValueT;
 		using ParamType = ValueT const &;
-		using RetType = castor::RangedValue< MyValueT >;
+		using RetType = c3d::RangedValue< MyValueT >;
 
-		static inline RetType convert( wxVariant const & var, castor::Range< MyValueT > const & range )
+		static inline RetType convert( wxVariant const & var, c3d::Range< MyValueT > const & range )
 		{
-			castor::RangedValue< MyValueT > ranged{ variantCast< TypeT >( var ), range };
+			c3d::RangedValue< MyValueT > ranged{ variantCast< TypeT >( var ), range };
 			return ranged;
 		}
 

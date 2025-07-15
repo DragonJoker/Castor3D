@@ -15,7 +15,7 @@ See LICENSE file in root folder
 
 #include <stack>
 
-namespace castor3d
+namespace c3d
 {
 	class ControlsManager
 		: public UserInputListener
@@ -46,14 +46,14 @@ namespace castor3d
 		/** Sets the size.
 		 *\param[in]	value	The new value.
 		 */
-		C3D_API void setSize( castor::Size const & value );
+		C3D_API void setSize( Size const & value );
 
 		/** Sets the layout for the elements contained in this one.
 		 *\param[in]	layout	The new value
 		 */
 		C3D_API void setLayout( LayoutUPtr layout );
 
-		castor::Size const & getSize()const noexcept
+		Size const & getSize()const noexcept
 		{
 			return m_size;
 		}
@@ -70,7 +70,7 @@ namespace castor3d
 		*\return
 		*	The theme.
 		*/
-		C3D_API ThemeRPtr createTheme( castor::String const & name
+		C3D_API ThemeRPtr createTheme( String const & name
 			, Scene * scene );
 
 		/** \return
@@ -78,7 +78,7 @@ namespace castor3d
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API ThemeRPtr getTheme( castor::String const & name )const;
+		C3D_API ThemeRPtr getTheme( String const & name )const;
 		
 		auto & getThemes()const
 		{
@@ -90,77 +90,77 @@ namespace castor3d
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API ButtonStyleRPtr getButtonStyle( castor::String const & name )const override;
+		C3D_API ButtonStyleRPtr getButtonStyle( String const & name )const override;
 
 		/** \return
 		*	The combo box style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API ComboBoxStyleRPtr getComboBoxStyle( castor::String const & name )const override;
+		C3D_API ComboBoxStyleRPtr getComboBoxStyle( String const & name )const override;
 
 		/** \return
 		*	The edit style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API EditStyleRPtr getEditStyle( castor::String const & name )const override;
+		C3D_API EditStyleRPtr getEditStyle( String const & name )const override;
 
 		/** \return
 		*	The expandable panel style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API ExpandablePanelStyleRPtr getExpandablePanelStyle( castor::String const & name )const override;
+		C3D_API ExpandablePanelStyleRPtr getExpandablePanelStyle( String const & name )const override;
 
 		/** \return
 		*	The frame style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API FrameStyleRPtr getFrameStyle( castor::String const & name )const override;
+		C3D_API FrameStyleRPtr getFrameStyle( String const & name )const override;
 
 		/** \return
 		*	The list box style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API ListBoxStyleRPtr getListBoxStyle( castor::String const & name )const override;
+		C3D_API ListBoxStyleRPtr getListBoxStyle( String const & name )const override;
 
 		/** \return
 		*	The panel style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API PanelStyleRPtr getPanelStyle( castor::String const & name )const override;
+		C3D_API PanelStyleRPtr getPanelStyle( String const & name )const override;
 
 		/** \return
 		*	The progress style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API ProgressStyleRPtr getProgressStyle( castor::String const & name )const override;
+		C3D_API ProgressStyleRPtr getProgressStyle( String const & name )const override;
 
 		/** \return
 		*	The scrollbar style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API ScrollBarStyleRPtr getScrollBarStyle( castor::String const & name )const override;
+		C3D_API ScrollBarStyleRPtr getScrollBarStyle( String const & name )const override;
 
 		/** \return
 		*	The slider style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API SliderStyleRPtr getSliderStyle( castor::String const & name )const override;
+		C3D_API SliderStyleRPtr getSliderStyle( String const & name )const override;
 
 		/** \return
 		*	The static style with given name (\p nullptr if it doesn't exist).
 		*\param[in] name
 		*	The name
 		*/
-		C3D_API StaticStyleRPtr getStaticStyle( castor::String const & name )const override;
+		C3D_API StaticStyleRPtr getStaticStyle( String const & name )const override;
 
 		//@}
 		/**@name Controls management */
@@ -173,9 +173,9 @@ namespace castor3d
 		C3D_API ControlRPtr registerControl( ControlUPtr control );
 
 		template< typename ControlT >
-		ControlT * registerControlT( castor::UniquePtr< ControlT > control )
+		ControlT * registerControlT( UniquePtr< ControlT > control )
 		{
-			return &static_cast< ControlT & >( *registerControl( castor::ptrRefCast< Control >( control ) ) );
+			return &static_cast< ControlT & >( *registerControl( ptrRefCast< Control >( control ) ) );
 		}
 
 		/** Removes a control that has been destroyed.
@@ -230,17 +230,17 @@ namespace castor3d
 		*\return
 		*	The control.
 		*/
-		C3D_API ControlRPtr findControl( castor::String const & name, SceneRPtr scene )const;
+		C3D_API ControlRPtr findControl( String const & name, SceneRPtr scene )const;
 
 		/** \return
 		*	The root controls.
 		*/
-		C3D_API castor::Vector< ControlRPtr > getRootControls()const;
+		C3D_API Vector< ControlRPtr > getRootControls()const;
 
 		//@}
 
-		C3D_API static castor::AttributeParsers createParsers();
-		C3D_API static castor::StrUInt32Map createSections();
+		C3D_API static AttributeParsers createParsers();
+		C3D_API static StrUInt32Map createSections();
 
 	private:
 		/** Sets the control that is currently moved (only one at a time is allowed).
@@ -350,7 +350,7 @@ namespace castor3d
 		*\param[in] position
 		*	The mouse position
 		*/
-		EventHandlerRPtr doGetMouseTargetableHandler( castor::Position const & position )const override;
+		EventHandlerRPtr doGetMouseTargetableHandler( Position const & position )const override;
 
 		/** Updates the z-index ordered controls array
 		*/
@@ -359,16 +359,16 @@ namespace castor3d
 		/** \return
 		*	The controls by z-index.
 		*/
-		castor::Vector< ControlRPtr > doGetControlsByZIndex()const;
+		Vector< ControlRPtr > doGetControlsByZIndex()const;
 
 		/** Sets the controls by z-index.
 		*/
-		void doSetControlsByZIndex( castor::Vector< ControlRPtr > v );
+		void doSetControlsByZIndex( Vector< ControlRPtr > v );
 
 		/** \return
 		*	The controls by ID.
 		*/
-		castor::Map< ControlID, ControlRPtr > doGetControlsById()const;
+		Map< ControlID, ControlRPtr > doGetControlsById()const;
 
 		/** Marks the manager as to be updated.
 		*/
@@ -378,29 +378,29 @@ namespace castor3d
 		void doDestroyControlsRec( ControlRPtr control );
 
 	public:
-		C3D_API static castor::String Name;
+		C3D_API static String Name;
 
 	private:
-		mutable castor::Mutex m_mutexControlsById;
-		castor::Map< ControlID, ControlRPtr > m_controlsById;
-		castor::Vector< ControlRPtr > m_rootControls;
-		mutable castor::Mutex m_mutexControlsByZIndex;
-		mutable castor::Vector< ControlRPtr > m_controlsByZIndex;
+		mutable Mutex m_mutexControlsById;
+		Map< ControlID, ControlRPtr > m_controlsById;
+		Vector< ControlRPtr > m_rootControls;
+		mutable Mutex m_mutexControlsByZIndex;
+		mutable Vector< ControlRPtr > m_controlsByZIndex;
 		mutable std::atomic< CpuFrameEvent * > m_event{};
-		castor::StringMap< ThemeUPtr > m_themes;
-		castor::Map< Control const *, OnButtonEventConnection > m_onButtonClicks;
-		castor::Map< Control const *, OnComboEventConnection > m_onComboSelects;
-		castor::Map< Control const *, OnEditEventConnection > m_onEditUpdates;
-		castor::Map< Control const *, OnListEventConnection > m_onListSelects;
-		castor::Map< Control const *, OnScrollBarEventConnection > m_onScrollTracks;
-		castor::Map< Control const *, OnScrollBarEventConnection > m_onScrollReleases;
-		castor::Map< Control const *, OnSliderEventConnection > m_onSliderTracks;
-		castor::Map< Control const *, OnSliderEventConnection > m_onSliderReleases;
-		castor::Map< Control const *, OnExpandablePanelEventConnection > m_onPanelExpands;
-		castor::Map< Control const *, OnExpandablePanelEventConnection > m_onPanelRetracts;
+		StringMap< ThemeUPtr > m_themes;
+		Map< Control const *, OnButtonEventConnection > m_onButtonClicks;
+		Map< Control const *, OnComboEventConnection > m_onComboSelects;
+		Map< Control const *, OnEditEventConnection > m_onEditUpdates;
+		Map< Control const *, OnListEventConnection > m_onListSelects;
+		Map< Control const *, OnScrollBarEventConnection > m_onScrollTracks;
+		Map< Control const *, OnScrollBarEventConnection > m_onScrollReleases;
+		Map< Control const *, OnSliderEventConnection > m_onSliderTracks;
+		Map< Control const *, OnSliderEventConnection > m_onSliderReleases;
+		Map< Control const *, OnExpandablePanelEventConnection > m_onPanelExpands;
+		Map< Control const *, OnExpandablePanelEventConnection > m_onPanelRetracts;
 		ControlRPtr m_movedControl{};
 		ControlRPtr m_resizedControl{};
-		castor::Size m_size;
+		Size m_size;
 		LayoutUPtr m_layout;
 	};
 
@@ -411,10 +411,10 @@ namespace castor3d
 		RootContext * root{};
 		SceneContext * scene{};
 		ControlsManager * controls{};
-		castor::Stack< ControlRPtr > parents{};
-		castor::Stack< ControlStyleRPtr > styles{};
-		castor::Stack< StylesHolderRPtr > stylesHolder{};
-		castor::String controlName{};
+		Stack< ControlRPtr > parents{};
+		Stack< ControlStyleRPtr > styles{};
+		Stack< StylesHolderRPtr > stylesHolder{};
+		String controlName{};
 		ButtonCtrlRPtr button{};
 		ComboBoxCtrlRPtr combo{};
 		EditCtrlRPtr edit{};
@@ -468,7 +468,7 @@ namespace castor3d
 		}
 	};
 
-	C3D_API castor::String getPrefix( GuiContext const & context );
+	C3D_API String getPrefix( GuiContext const & context );
 	C3D_API Engine * getEngine( GuiContext const & context );
 }
 

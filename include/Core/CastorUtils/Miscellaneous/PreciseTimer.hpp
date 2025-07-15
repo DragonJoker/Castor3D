@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include <cstdint>
 #include <chrono>
 
-namespace castor
+namespace c3d
 {
 	class PreciseTimer
 	{

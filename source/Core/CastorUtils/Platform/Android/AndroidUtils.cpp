@@ -8,7 +8,7 @@
 #pragma GCC diagnostic ignored "-Wpedantic"
 #include <EGL/egl.h>
 
-namespace castor
+namespace c3d
 {
 	namespace system
 	{

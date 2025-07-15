@@ -11,31 +11,31 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementSmartPtr( castor3d, PanelCtrl )
+CU_ImplementSmartPtr( c3d, PanelCtrl )
 
-namespace castor3d
+namespace c3d
 {
 	PanelCtrl::PanelCtrl( SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, PanelStyle * style
 		, ControlRPtr parent )
 		: PanelCtrl{ scene
 			, name
 			, style
 			, parent
-			, castor::Position{}
-			, castor::Size{}
+			, Position{}
+			, Size{}
 			, 0
 			, true }
 	{
 	}
 
 	PanelCtrl::PanelCtrl( SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, PanelStyle * style
 		, ControlRPtr parent
-		, castor::Position const & position
-		, castor::Size const & size
+		, Position const & position
+		, Size const & size
 		, ControlFlagType flags
 		, bool visible )
 		: LayoutControl{ Type
@@ -49,7 +49,7 @@ namespace castor3d
 			, flags
 			, visible }
 	{
-		setBorderSize( castor::Point4ui{} );
+		setBorderSize( Point4ui{} );
 		setStyle( style );
 	}
 }

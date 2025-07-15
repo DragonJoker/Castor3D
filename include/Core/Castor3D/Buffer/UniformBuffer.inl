@@ -1,13 +1,13 @@
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	template< typename DataT >
 	inline UniformBufferT< DataT >::UniformBufferT( RenderSystem const & renderSystem
 		, VkDeviceSize count
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
-		, castor::String debugName
+		, String debugName
 		, ashes::QueueShare sharingMode )
 		: UniformBufferBase
 		{
@@ -16,8 +16,8 @@ namespace castor3d
 			sizeof( DataT ),
 			usage,
 			flags,
-			castor::move( debugName ),
-			castor::move( sharingMode ),
+			c3d::move( debugName ),
+			c3d::move( sharingMode ),
 		}
 		, m_data( size_t( count ), DataT{} )
 	{

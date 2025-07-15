@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Event/UserInput/UserInputEvent.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class KeyboardEvent
 		: public UserInputEvent
@@ -61,7 +61,7 @@ namespace castor3d
 		 */
 		KeyboardEvent( KeyboardEventType type
 			, KeyboardKey key
-			, castor::String const & c
+			, String const & c
 			, bool ctrl
 			, bool alt
 			, bool shift )
@@ -100,7 +100,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le caractère correspondant à la touche.
 		 */
-		castor::String const & getChar()const
+		String const & getChar()const
 		{
 			return m_char;
 		}
@@ -138,7 +138,7 @@ namespace castor3d
 	private:
 		KeyboardEventType const m_keyboardEventType;
 		KeyboardKey const m_key;
-		castor::String const m_char;
+		String const m_char;
 		bool const m_ctrl;
 		bool const m_alt;
 		bool const m_shift;

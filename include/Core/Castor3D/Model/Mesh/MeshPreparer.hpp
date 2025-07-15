@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class MeshPreparer
 	{

@@ -14,7 +14,7 @@ namespace atmosphere_scattering
 		, uint32_t set )
 		: m_writer{ writer }
 		, m_atmosphere{ atmosphere }
-		, m_settings{ castor::move( settings ) }
+		, m_settings{ c3d::move( settings ) }
 		, transmittanceMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "transmittanceMap"
 			, binding++
 			, set ) }
@@ -117,7 +117,7 @@ namespace atmosphere_scattering
 								, m_atmosphere.getPlanetRadius() ).valid() ) // no intersection
 							{
 								auto sunSolidAngle = m_writer.declLocale( "sunSolidAngle"
-									, castor::PiMult2< float > * ( 1.0_f - cos( sunAngularDiameter * 0.5_f ) ) );
+									, c3d::PiMult2< float > * ( 1.0_f - cos( sunAngularDiameter * 0.5_f ) ) );
 								auto zenithSunLuminance = m_writer.declLocale( "zenithSunLuminance"
 									, m_atmosphere.getSunIlluminance() / sunSolidAngle );
 								auto outerspaceLuminance = m_writer.declLocale( "outerspaceLuminance"
@@ -168,7 +168,7 @@ namespace atmosphere_scattering
 		return depth * ( 1.0_f / apKmPerSlice );
 	}
 
-	castor3d::shader::RetRay ScatteringModel::getPixelTransLum( sdw::Vec2 const & pfragPos
+	c3d::shader::RetRay ScatteringModel::getPixelTransLum( sdw::Vec2 const & pfragPos
 		, sdw::Vec2 const & pfragSize
 		, sdw::Float const & pfragDepth
 		, sdw::Vec4 & ptransmittance
@@ -176,7 +176,7 @@ namespace atmosphere_scattering
 	{
 		if ( !m_getPixelTransLum )
 		{
-			m_getPixelTransLum = m_writer.implementFunction< castor3d::shader::Ray >( "scatter_getPixelTransLum"
+			m_getPixelTransLum = m_writer.implementFunction< c3d::shader::Ray >( "scatter_getPixelTransLum"
 				, [&]( sdw::Vec2 const & fragPos
 					, sdw::Vec2 const & fragSize
 					, sdw::Float const & fragDepth
@@ -260,7 +260,7 @@ namespace atmosphere_scattering
 					auto psPosition = m_writer.declLocale( "psPosition"
 						, wsPosition - m_atmosphere.getPlanetPosition() );
 					auto ray = m_writer.declLocale( "ray"
-						, castor3d::shader::Ray{ m_writer, psPosition, reflect( -V, wsNormal ) } );
+						, c3d::shader::Ray{ m_writer, psPosition, reflect( -V, wsNormal ) } );
 					auto viewHeight = m_writer.declLocale( "viewHeight"
 						, length( ray.origin ) );
 					auto upVector = m_writer.declLocale( "upVector"
@@ -384,7 +384,7 @@ namespace atmosphere_scattering
 
 		if ( m_settings.colorTransmittance )
 		{
-			castor3d::log::error << "The fastAerialPerspective path does not support colorTransmittance." << std::endl;
+			c3d::log::error << "The fastAerialPerspective path does not support colorTransmittance." << std::endl;
 			return 0_b;
 		}
 

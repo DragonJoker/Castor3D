@@ -18,15 +18,15 @@
 using ashes::operator==;
 using ashes::operator!=;
 
-CU_ImplementSmartPtr( castor3d, RenderQueue )
+CU_ImplementSmartPtr( c3d, RenderQueue )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 	RenderQueue::PassData::~PassData()noexcept
 	{
-		auto lock( castor::makeUniqueLock( eventMutex ) );
+		auto lock( makeUniqueLock( eventMutex ) );
 
 		if ( initEvent )
 		{
@@ -36,11 +36,11 @@ namespace castor3d
 	}
 
 	void RenderQueue::PassData::initialise( QueueData const & queueData
-		, castor::String const & name
+		, String const & name
 		, VkRenderPass renderPass )
 	{
 		renderPassAtInit = renderPass;
-		commandBuffer = queueData.commandPool->createCommandBuffer( castor::toUtf8( name )
+		commandBuffer = queueData.commandPool->createCommandBuffer( toUtf8( name )
 			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 		commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
 			, makeVkStruct< VkCommandBufferInheritanceInfo >( renderPassAtInit
@@ -59,7 +59,7 @@ namespace castor3d
 	RenderQueue::RenderQueue( RenderNodesPass & renderPass
 		, RenderDevice const & device
 		, SceneCuller & culler
-		, castor::String const & typeName
+		, String const & typeName
 		, bool meshShading
 		, SceneNode const * ignored )
 		: OwnedBy< RenderNodesPass >{ renderPass }
@@ -69,18 +69,18 @@ namespace castor3d
 				doOnCullerCompute( culler );
 			} ) )
 		, m_ignoredNode{ ignored }
-		, m_renderNodes{ castor::makeUnique< QueueRenderNodes >( *this, device, typeName, meshShading ) }
-		, m_pass{ castor::make_unique< PassData >() }
+		, m_renderNodes{ makeUnique< QueueRenderNodes >( *this, device, typeName, meshShading ) }
+		, m_pass{ makeRawUnique< PassData >() }
 		, m_currentPass{ m_pass.get() }
-		, m_viewport{ castor::makeGroupChangeTracked< ashes::Optional< VkViewport > >( m_culledChanged, ashes::nullopt ) }
-		, m_scissor{ castor::makeGroupChangeTracked< ashes::Optional< VkRect2D > >( m_culledChanged, ashes::nullopt ) }
+		, m_viewport{ makeGroupChangeTracked< ashes::Optional< VkViewport > >( m_culledChanged, ashes::nullopt ) }
+		, m_scissor{ makeGroupChangeTracked< ashes::Optional< VkRect2D > >( m_culledChanged, ashes::nullopt ) }
 	{
 	}
 
 	void RenderQueue::invalidate()
 	{
-		m_toDelete = castor::move( m_pass );
-		m_pass = castor::make_unique< PassData >();
+		m_toDelete = c3d::move( m_pass );
+		m_pass = makeRawUnique< PassData >();
 		m_currentPass = m_pass.get();
 		m_invalidated = true;
 		m_commandsChanged = true;
@@ -89,7 +89,7 @@ namespace castor3d
 	void RenderQueue::cleanup()noexcept
 	{
 		CU_Require( m_renderNodes );
-		m_toDelete = castor::move( m_pass );
+		m_toDelete = c3d::move( m_pass );
 	}
 
 	void RenderQueue::update( ShadowMapLightTypeArray const & shadowMaps
@@ -170,7 +170,7 @@ namespace castor3d
 	bool RenderQueue::needsInitialise()const
 	{
 		auto & pass = *m_currentPass;
-		auto lock( castor::makeUniqueLock( pass.eventMutex ) );
+		auto lock( makeUniqueLock( pass.eventMutex ) );
 		return !pass.initEvent
 			&& !pass.initialised;
 	}
@@ -190,8 +190,8 @@ namespace castor3d
 
 		if ( hasCommandBuffer() )
 		{
-			m_toDelete = castor::move( m_pass );
-			m_pass = castor::make_unique< PassData >();
+			m_toDelete = c3d::move( m_pass );
+			m_pass = makeRawUnique< PassData >();
 			m_currentPass = m_pass.get();
 		}
 

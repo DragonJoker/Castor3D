@@ -16,7 +16,7 @@ See LICENSE file in root folder
 
 #define C3D_DebugSSAO 0
 
-namespace castor3d
+namespace c3d
 {
 	class SsaoPass
 	{
@@ -49,7 +49,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, crg::FramePassArray const & previousPasses
-			, castor::Size const & size
+			, Size const & size
 			, SsaoConfig & ssaoConfig
 			, Texture const & depthObj
 			, Texture const & normal
@@ -64,7 +64,7 @@ namespace castor3d
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		RenderTechniquePass::accept
 		 */
 		C3D_API void accept( ConfigurationVisitorBase & visitor );
 		/**

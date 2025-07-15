@@ -20,8 +20,8 @@ namespace GuiCommon
 			, wxPoint const & versionPos
 			, wxPoint const & pos
 			, int range
-			, castor3d::Version const & appVersion
-			, castor3d::Version const & engineVersion );
+			, c3d::Version const & appVersion
+			, c3d::Version const & engineVersion );
 
 		void Step( wxString const & strText, int iIncrement );
 		void Step( int iIncrement );

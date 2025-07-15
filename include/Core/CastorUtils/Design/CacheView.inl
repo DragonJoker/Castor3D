@@ -1,24 +1,24 @@
 #include "CastorUtils/Design/CacheView.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename CacheT >
-	inline CacheViewT< CacheT >::CacheViewT( castor::String const & name
+	inline CacheViewT< CacheT >::CacheViewT( c3d::String const & name
 		, CacheT & cache
 		, ElementInitialiserT initialise
 		, ElementCleanerT clean )
-		: castor::Named{ name }
+		: c3d::Named{ name }
 		, m_cache{ cache }
-		, m_initialise{ castor::move( initialise ) }
-		, m_clean{ castor::move( clean ) }
+		, m_initialise{ c3d::move( initialise ) }
+		, m_clean{ c3d::move( clean ) }
 	{
 	}
 
 	template< typename CacheT >
 	inline void CacheViewT< CacheT >::clear()
 	{
-		auto elemsLock( castor::makeUniqueLock( m_elementsMutex ) );
-		auto lock( castor::makeUniqueLock( m_cache ) );
+		auto elemsLock( c3d::makeUniqueLock( m_elementsMutex ) );
+		auto lock( c3d::makeUniqueLock( m_cache ) );
 
 		for ( auto name : m_createdElements )
 		{
@@ -29,7 +29,7 @@ namespace castor
 					m_clean( *resource );
 				}
 
-				m_cleaning.emplace_back( castor::move( resource ) );
+				m_cleaning.emplace_back( c3d::move( resource ) );
 			}
 		}
 	}
@@ -41,13 +41,13 @@ namespace castor
 	{
 		ElementObsT result{};
 		{
-			auto lock( castor::makeUniqueLock( m_cache ) );
+			auto lock( c3d::makeUniqueLock( m_cache ) );
 			result = m_cache.doTryFindNoLock( name );
 
 			if ( !result )
 			{
 				auto created = m_cache.create( name
-					, castor::forward< ParametersT >( params )... );
+					, c3d::forward< ParametersT >( params )... );
 				result = m_cache.doAddNoLock( name, created, false );
 
 				if ( m_initialise )
@@ -57,7 +57,7 @@ namespace castor
 			}
 		}
 		{
-			auto elemsLock( castor::makeUniqueLock( m_elementsMutex ) );
+			auto elemsLock( c3d::makeUniqueLock( m_elementsMutex ) );
 			m_createdElements.insert( name );
 		}
 		return result;
@@ -70,7 +70,7 @@ namespace castor
 	{
 		ElementObsT result{};
 		{
-			auto lock( castor::makeUniqueLock( m_cache ) );
+			auto lock( c3d::makeUniqueLock( m_cache ) );
 			result = m_cache.doTryAddNoLock( name
 				, element
 				, false );
@@ -81,7 +81,7 @@ namespace castor
 			}
 		}
 		{
-			auto elemsLock( castor::makeUniqueLock( m_elementsMutex ) );
+			auto elemsLock( c3d::makeUniqueLock( m_elementsMutex ) );
 			m_createdElements.insert( name );
 		}
 		return result;
@@ -94,7 +94,7 @@ namespace castor
 	{
 		ElementObsT result{};
 		{
-			auto lock( castor::makeUniqueLock( m_cache ) );
+			auto lock( c3d::makeUniqueLock( m_cache ) );
 			result = m_cache.doAddNoLock( name
 				, element
 				, false );
@@ -105,7 +105,7 @@ namespace castor
 			}
 		}
 		{
-			auto elemsLock( castor::makeUniqueLock( m_elementsMutex ) );
+			auto elemsLock( c3d::makeUniqueLock( m_elementsMutex ) );
 			m_createdElements.insert( name );
 		}
 		return result;
@@ -114,22 +114,22 @@ namespace castor
 	template< typename CacheT >
 	inline bool CacheViewT< CacheT >::isEmpty()const
 	{
-		auto lock( castor::makeUniqueLock( m_elementsMutex ) );
+		auto lock( c3d::makeUniqueLock( m_elementsMutex ) );
 		return m_createdElements.empty();
 	}
 
 	template< typename CacheT >
 	inline bool CacheViewT< CacheT >::has( ElementKeyT const & name )const
 	{
-		auto lock( castor::makeUniqueLock( m_elementsMutex ) );
+		auto lock( c3d::makeUniqueLock( m_elementsMutex ) );
 		return m_createdElements.end() != m_createdElements.find( name );
 	}
 
 	template< typename CacheT >
 	inline typename CacheViewT< CacheT >::ElementObsT CacheViewT< CacheT >::tryFind( ElementKeyT const & name )const
 	{
-		auto elemsLock( castor::makeUniqueLock( m_elementsMutex ) );
-		auto lock( castor::makeUniqueLock( m_cache ) );
+		auto elemsLock( c3d::makeUniqueLock( m_elementsMutex ) );
+		auto lock( c3d::makeUniqueLock( m_cache ) );
 		auto it = m_createdElements.find( name );
 		return it != m_createdElements.end()
 			? m_cache.doTryFindNoLock( name )
@@ -152,14 +152,14 @@ namespace castor
 	template< typename CacheT >
 	inline typename CacheViewT< CacheT >::ElementPtrT CacheViewT< CacheT >::tryRemove( ElementKeyT const & name )
 	{
-		auto elemsLock( castor::makeUniqueLock( m_elementsMutex ) );
+		auto elemsLock( c3d::makeUniqueLock( m_elementsMutex ) );
 		ElementPtrT result;
 		auto it = m_createdElements.find( name );
 
 		if ( it != m_createdElements.end() )
 		{
 			{
-				auto lock( castor::makeUniqueLock( m_cache ) );
+				auto lock( c3d::makeUniqueLock( m_cache ) );
 				result = m_cache.doTryRemoveNoLock( name, false );
 			}
 			m_createdElements.erase( it );

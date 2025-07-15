@@ -16,7 +16,7 @@ See LICENSE file in root folder
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
 
-namespace castor3d
+namespace c3d
 {
 	class ConfigurationVisitorBase
 	{
@@ -26,11 +26,11 @@ namespace castor3d
 			bool allowProgramsVisit{};
 		};
 
-		using Callback = castor::Function< void() >;
+		using Callback = Function< void() >;
 		template< typename ControlT >
-		using ControlsListT = castor::Vector< castor::Pair< ControlT *, Callback > >;
+		using ControlsListT = Vector< Pair< ControlT *, Callback > >;
 		template< typename EnumT >
-		using OnEnumValueChangeT = castor::Function< void( EnumT oldV, EnumT newV ) >;
+		using OnEnumValueChangeT = Function< void( EnumT oldV, EnumT newV ) >;
 
 		using ControlsList = ControlsListT< bool >;
 		using AtomicControlsList = ControlsListT< std::atomic_bool >;
@@ -55,11 +55,11 @@ namespace castor3d
 		struct ConfigurationVisitorBlock
 		{
 			ConfigurationVisitorBlock( ConfigurationVisitorBase & par
-				, castor::String const & cat
-				, castor::RawUniquePtr< ConfigurationVisitorBase > config )
+				, String const & cat
+				, RawUniquePtr< ConfigurationVisitorBase > config )
 				: parent{ par }
 				, category{ cat }
-				, configuration{ castor::move( config ) }
+				, configuration{ c3d::move( config ) }
 			{
 			}
 
@@ -68,46 +68,46 @@ namespace castor3d
 				return *configuration;
 			}
 
-			ConfigurationVisitorBlock visit( castor::String const & name
+			ConfigurationVisitorBlock visit( String const & name
 				, ControlsList const & controls = ControlsList{} )
 			{
 				return configuration->visit( name, controls );
 			}
 
-			ConfigurationVisitorBlock visit( castor::String const & name
+			ConfigurationVisitorBlock visit( String const & name
 				, AtomicControlsList const & controls )
 			{
 				return configuration->visit( name, controls );
 			}
 
 			template< typename ValueT, typename ... ParamsT >
-			void visit( castor::String const & name
+			void visit( String const & name
 				, ValueT & value
 				, ParamsT && ... params )
 			{
-				configuration->visit( name, value, castor::forward< ParamsT >( params )... );
+				configuration->visit( name, value, c3d::forward< ParamsT >( params )... );
 			}
 
 			template< typename ... ParamsT >
-			void visit( castor::String const & name
+			void visit( String const & name
 				, ColourWrapper value
 				, ParamsT && ... params )
 			{
-				configuration->visit( name, value, castor::forward< ParamsT >( params )... );
+				configuration->visit( name, value, c3d::forward< ParamsT >( params )... );
 			}
 
 			ConfigurationVisitorBase & parent;
-			castor::String category;
-			castor::RawUniquePtr< ConfigurationVisitorBase > configuration;
+			String category;
+			RawUniquePtr< ConfigurationVisitorBase > configuration;
 		};
 
 	protected:
 		explicit ConfigurationVisitorBase( Config config = { false } )
-			: config{ castor::move( config ) }
+			: config{ c3d::move( config ) }
 		{
 		}
 
-		ConfigurationVisitorBlock doPushConfigurationBlock( castor::String const & category )
+		ConfigurationVisitorBlock doPushConfigurationBlock( String const & category )
 		{
 			return ConfigurationVisitorBlock{ *this, category, doGetSubConfiguration( category ) };
 		}
@@ -123,20 +123,20 @@ namespace castor3d
 		*	Noms.
 		**/
 		/**@{*/
-		ConfigurationVisitorBlock visit( castor::String const & name
+		ConfigurationVisitorBlock visit( String const & name
 			, ControlsList const & /*controls*/ )
 		{
 			return doPushConfigurationBlock( name );
 		}
 
-		ConfigurationVisitorBlock visit( castor::String const & name
+		ConfigurationVisitorBlock visit( String const & name
 			, AtomicControlsList const & /*controls*/ )
 		{
 			return doPushConfigurationBlock( name );
 		}
 
 		template< typename ControlT = bool >
-		ConfigurationVisitorBlock visit( castor::String const & name
+		ConfigurationVisitorBlock visit( String const & name
 			, ControlT * control = nullptr )
 		{
 			return visit( name, makeControlsList( control ) );
@@ -228,7 +228,7 @@ namespace castor3d
 		*	Images intermédiaires.
 		**/
 		/**@{*/
-		void visit( castor::String const & name
+		void visit( String const & name
 			, crg::ImageViewId const & viewId
 			, ImageLayout layout
 			, TextureFactors const & factors = {} )
@@ -239,7 +239,7 @@ namespace castor3d
 			}
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, Texture const & texture
 			, ImageLayout layout
 			, TextureFactors const & factors = {} )
@@ -256,245 +256,245 @@ namespace castor3d
 		*	Valeurs.
 		**/
 		/**@{*/
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, bool & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, int16_t & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, uint16_t & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, int32_t & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, uint32_t & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, int64_t & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, uint64_t & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, float & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, double & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Angle & value
+		C3D_API virtual void visit( String const & name
+			, Angle & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::LuminousIntensity & value
+		C3D_API virtual void visit( String const & name
+			, LuminousIntensity & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Illumination & value
+		C3D_API virtual void visit( String const & name
+			, Illumination & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::RgbColour & value
+		C3D_API virtual void visit( String const & name
+			, RgbColour & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::RgbaColour & value
+		C3D_API virtual void visit( String const & name
+			, RgbaColour & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::HdrRgbColour & value
+		C3D_API virtual void visit( String const & name
+			, HdrRgbColour & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::HdrRgbaColour & value
+		C3D_API virtual void visit( String const & name
+			, HdrRgbaColour & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, ColourWrapper value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Point2f & value
+		C3D_API virtual void visit( String const & name
+			, Point2f & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Point2i & value
+		C3D_API virtual void visit( String const & name
+			, Point2i & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Point2ui & value
+		C3D_API virtual void visit( String const & name
+			, Point2ui & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Point3f & value
+		C3D_API virtual void visit( String const & name
+			, Point3f & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Point3i & value
+		C3D_API virtual void visit( String const & name
+			, Point3i & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Point3ui & value
+		C3D_API virtual void visit( String const & name
+			, Point3ui & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Point4f & value
+		C3D_API virtual void visit( String const & name
+			, Point4f & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Point4i & value
+		C3D_API virtual void visit( String const & name
+			, Point4i & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Point4ui & value
+		C3D_API virtual void visit( String const & name
+			, Point4ui & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Matrix4x4f & value
+		C3D_API virtual void visit( String const & name
+			, Matrix4x4f & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::RangedValue< float > & value
+		C3D_API virtual void visit( String const & name
+			, RangedValue< float > & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::RangedValue< int32_t > & value
+		C3D_API virtual void visit( String const & name
+			, RangedValue< int32_t > & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::RangedValue< uint32_t > & value
+		C3D_API virtual void visit( String const & name
+			, RangedValue< uint32_t > & value
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, float & value
-			, castor::Range< float > const & range
+			, Range< float > const & range
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, int32_t & value
-			, castor::Range< int32_t > const & range
+			, Range< int32_t > const & range
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, uint32_t & value
-			, castor::Range< uint32_t > const & range
+			, Range< uint32_t > const & range
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, PassComponentTextureFlag textureFlag
 			, TextureFlagConfiguration & value
 			, uint32_t componentsCount
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, int32_t & enumValue
-			, castor::StringArray const & enumNames
+			, StringArray const & enumNames
 			, OnSEnumValueChange onChange
 			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, uint32_t & enumValue
-			, castor::StringArray const & enumNames
+			, StringArray const & enumNames
 			, OnUEnumValueChange onChange
 			, ControlsList controls ) = 0;
 
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, bool & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, int16_t & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, uint16_t & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, int32_t & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, uint32_t & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, int64_t & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, uint64_t & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, float & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, double & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Angle & value
+		C3D_API virtual void visit( String const & name
+			, Angle & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::LuminousIntensity & value
+		C3D_API virtual void visit( String const & name
+			, LuminousIntensity & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Illumination & value
+		C3D_API virtual void visit( String const & name
+			, Illumination & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::RgbColour & value
+		C3D_API virtual void visit( String const & name
+			, RgbColour & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::RgbaColour & value
+		C3D_API virtual void visit( String const & name
+			, RgbaColour & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::HdrRgbColour & value
+		C3D_API virtual void visit( String const & name
+			, HdrRgbColour & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::HdrRgbaColour & value
+		C3D_API virtual void visit( String const & name
+			, HdrRgbaColour & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, ColourWrapper value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Point2f & value
+		C3D_API virtual void visit( String const & name
+			, Point2f & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Point2i & value
+		C3D_API virtual void visit( String const & name
+			, Point2i & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Point2ui & value
+		C3D_API virtual void visit( String const & name
+			, Point2ui & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Point3f & value
+		C3D_API virtual void visit( String const & name
+			, Point3f & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Point3i & value
+		C3D_API virtual void visit( String const & name
+			, Point3i & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Point3ui & value
+		C3D_API virtual void visit( String const & name
+			, Point3ui & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Point4f & value
+		C3D_API virtual void visit( String const & name
+			, Point4f & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Point4i & value
+		C3D_API virtual void visit( String const & name
+			, Point4i & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Point4ui & value
+		C3D_API virtual void visit( String const & name
+			, Point4ui & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::Matrix4x4f & value
+		C3D_API virtual void visit( String const & name
+			, Matrix4x4f & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::RangedValue< float > & value
+		C3D_API virtual void visit( String const & name
+			, RangedValue< float > & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::RangedValue< int32_t > & value
+		C3D_API virtual void visit( String const & name
+			, RangedValue< int32_t > & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, castor::RangedValue< uint32_t > & value
+		C3D_API virtual void visit( String const & name
+			, RangedValue< uint32_t > & value
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, float & value
-			, castor::Range< float > const & range
+			, Range< float > const & range
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, int32_t & value
-			, castor::Range< int32_t > const & range
+			, Range< int32_t > const & range
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, uint32_t & value
-			, castor::Range< uint32_t > const & range
+			, Range< uint32_t > const & range
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, PassComponentTextureFlag textureFlag
 			, TextureFlagConfiguration & value
 			, uint32_t componentsCount
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, int32_t & enumValue
-			, castor::StringArray const & enumNames
+			, StringArray const & enumNames
 			, OnSEnumValueChange onChange
 			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
+		C3D_API virtual void visit( String const & name
 			, uint32_t & enumValue
-			, castor::StringArray const & enumNames
+			, StringArray const & enumNames
 			, OnUEnumValueChange onChange
 			, AtomicControlsList controls ) = 0;
 
 
 		template< typename ValueT, typename ControlT = bool >
-		void visit( castor::String const & name
+		void visit( String const & name
 			, ValueT & value
 			, ControlT * control = nullptr )
 		{
@@ -502,7 +502,7 @@ namespace castor3d
 		}
 
 		template< typename ControlT = bool >
-		void visit( castor::String const & name
+		void visit( String const & name
 			, ColourWrapper value
 			, ControlT * control = nullptr )
 		{
@@ -510,16 +510,16 @@ namespace castor3d
 		}
 
 		template< typename ValueT, typename ControlT = bool >
-		void visit( castor::String const & name
+		void visit( String const & name
 			, ValueT & value
-			, castor::Range< ValueT > const & range
+			, Range< ValueT > const & range
 			, ControlT * control = nullptr )
 		{
 			visit( name, value, range, makeControlsList( control ) );
 		}
 
 		template< typename ControlT = bool >
-		void visit( castor::String const & name
+		void visit( String const & name
 			, PassComponentTextureFlag textureFlag
 			, TextureFlagConfiguration & value
 			, uint32_t componentsCount
@@ -529,9 +529,9 @@ namespace castor3d
 		}
 
 		template< typename ValueT, typename ControlT = bool* >
-		void visit( castor::String const & name
+		void visit( String const & name
 			, ValueT & enumValue
-			, castor::StringArray const & enumNames
+			, StringArray const & enumNames
 			, OnEnumValueChangeT< ValueT > onChange
 			, ControlT control = ControlT{} )
 		{
@@ -547,33 +547,33 @@ namespace castor3d
 		}
 
 		template< typename TypeT, typename ControlT, typename ... ParamsT >
-		void visit( castor::String const & name
-			, castor::ChangeTrackedT< TypeT, ControlT > & value
+		void visit( String const & name
+			, ChangeTrackedT< TypeT, ControlT > & value
 			, ParamsT && ... params )
 		{
 			ControlsListT< ControlT > controls;
 			controls.push_back( { &value.control(), value.callback() } );
-			visit( name, value.naked(), castor::forward< ParamsT >( params )..., castor::move( controls ) );
+			visit( name, value.naked(), c3d::forward< ParamsT >( params )..., c3d::move( controls ) );
 		}
 
 		template< typename TypeT, typename ControlT, typename ... ParamsT >
-		void visit( castor::String const & name
-			, castor::GroupChangeTrackedT< TypeT, ControlT > & value
+		void visit( String const & name
+			, GroupChangeTrackedT< TypeT, ControlT > & value
 			, ParamsT && ... params )
 		{
 			ControlsListT< ControlT > controls;
 			controls.push_back( { &value.control(), value.callback() } );
-			visit( name, value.naked(), castor::forward< ParamsT >( params )..., castor::move( controls ) );
+			visit( name, value.naked(), c3d::forward< ParamsT >( params )..., c3d::move( controls ) );
 		}
 		/**@}*/
 
 	protected:
 		C3D_API virtual bool doFilter( crg::ImageViewId const & viewId
 			, TextureFactors const & factors )const = 0;
-		C3D_API virtual castor::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category ) = 0;
+		C3D_API virtual RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( String const & category ) = 0;
 
 	private:
-		C3D_API virtual void doVisit( castor::String const & name
+		C3D_API virtual void doVisit( String const & name
 			, crg::ImageViewId viewId
 			, ImageLayout layout
 			, TextureFactors const & factors ) = 0;
@@ -587,7 +587,7 @@ namespace castor3d
 	{
 	protected:
 		explicit ConfigurationVisitor( Config config = {} )
-			: ConfigurationVisitorBase{ castor::move( config ) }
+			: ConfigurationVisitorBase{ c3d::move( config ) }
 		{
 		}
 
@@ -625,208 +625,208 @@ namespace castor3d
 		*	Valeurs.
 		**/
 		/**@{*/
-		void visit( castor::String const & name
+		void visit( String const & name
 			, bool & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, int16_t & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, uint16_t & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, int32_t & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, uint32_t & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, int64_t & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, uint64_t & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, float & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, double & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Angle & value
+		void visit( String const & name
+			, Angle & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::LuminousIntensity & value
+		void visit( String const & name
+			, LuminousIntensity & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Illumination & value
+		void visit( String const & name
+			, Illumination & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::RgbColour & value
+		void visit( String const & name
+			, RgbColour & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::RgbaColour & value
+		void visit( String const & name
+			, RgbaColour & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::HdrRgbColour & value
+		void visit( String const & name
+			, HdrRgbColour & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::HdrRgbaColour & value
+		void visit( String const & name
+			, HdrRgbaColour & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, ColourWrapper value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Point2f & value
+		void visit( String const & name
+			, Point2f & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Point2i & value
+		void visit( String const & name
+			, Point2i & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Point2ui & value
+		void visit( String const & name
+			, Point2ui & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Point3f & value
+		void visit( String const & name
+			, Point3f & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Point3i & value
+		void visit( String const & name
+			, Point3i & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Point3ui & value
+		void visit( String const & name
+			, Point3ui & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Point4f & value
+		void visit( String const & name
+			, Point4f & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Point4i & value
+		void visit( String const & name
+			, Point4i & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Point4ui & value
+		void visit( String const & name
+			, Point4ui & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Matrix4x4f & value
+		void visit( String const & name
+			, Matrix4x4f & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::RangedValue< float > & value
+		void visit( String const & name
+			, RangedValue< float > & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::RangedValue< int32_t > & value
+		void visit( String const & name
+			, RangedValue< int32_t > & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::RangedValue< uint32_t > & value
+		void visit( String const & name
+			, RangedValue< uint32_t > & value
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, float & value
-			, castor::Range< float > const & range
+			, Range< float > const & range
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, int32_t & value
-			, castor::Range< int32_t > const & range
+			, Range< int32_t > const & range
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, uint32_t & value
-			, castor::Range< uint32_t > const & range
+			, Range< uint32_t > const & range
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, PassComponentTextureFlag textureFlag
 			, TextureFlagConfiguration & value
 			, uint32_t componentsCount
@@ -834,224 +834,224 @@ namespace castor3d
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, int32_t & enumValue
-			, castor::StringArray const & enumNames
+			, StringArray const & enumNames
 			, OnSEnumValueChange onChange
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, uint32_t & enumValue
-			, castor::StringArray const & enumNames
+			, StringArray const & enumNames
 			, OnUEnumValueChange onChange
 			, ControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, bool & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, int16_t & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, uint16_t & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, int32_t & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, uint32_t & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, int64_t & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, uint64_t & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, float & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, double & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Angle & value
+		void visit( String const & name
+			, Angle & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::LuminousIntensity & value
+		void visit( String const & name
+			, LuminousIntensity & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Illumination & value
+		void visit( String const & name
+			, Illumination & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::RgbColour & value
+		void visit( String const & name
+			, RgbColour & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::RgbaColour & value
+		void visit( String const & name
+			, RgbaColour & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::HdrRgbColour & value
+		void visit( String const & name
+			, HdrRgbColour & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::HdrRgbaColour & value
+		void visit( String const & name
+			, HdrRgbaColour & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, ColourWrapper value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Point2f & value
+		void visit( String const & name
+			, Point2f & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Point2i & value
+		void visit( String const & name
+			, Point2i & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Point2ui & value
+		void visit( String const & name
+			, Point2ui & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Point3f & value
+		void visit( String const & name
+			, Point3f & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Point3i & value
+		void visit( String const & name
+			, Point3i & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Point3ui & value
+		void visit( String const & name
+			, Point3ui & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Point4f & value
+		void visit( String const & name
+			, Point4f & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Point4i & value
+		void visit( String const & name
+			, Point4i & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Point4ui & value
+		void visit( String const & name
+			, Point4ui & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::Matrix4x4f & value
+		void visit( String const & name
+			, Matrix4x4f & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::RangedValue< float > & value
+		void visit( String const & name
+			, RangedValue< float > & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::RangedValue< int32_t > & value
+		void visit( String const & name
+			, RangedValue< int32_t > & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
-			, castor::RangedValue< uint32_t > & value
+		void visit( String const & name
+			, RangedValue< uint32_t > & value
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, float & value
-			, castor::Range< float > const & range
+			, Range< float > const & range
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, int32_t & value
-			, castor::Range< int32_t > const & range
+			, Range< int32_t > const & range
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, uint32_t & value
-			, castor::Range< uint32_t > const & range
+			, Range< uint32_t > const & range
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, PassComponentTextureFlag textureFlag
 			, TextureFlagConfiguration & value
 			, uint32_t componentsCount
@@ -1059,17 +1059,17 @@ namespace castor3d
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, int32_t & enumValue
-			, castor::StringArray const & enumNames
+			, StringArray const & enumNames
 			, OnSEnumValueChange onChange
 			, AtomicControlsList controls )override
 		{
 		}
 
-		void visit( castor::String const & name
+		void visit( String const & name
 			, uint32_t & enumValue
-			, castor::StringArray const & enumNames
+			, StringArray const & enumNames
 			, OnUEnumValueChange onChange
 			, AtomicControlsList controls )override
 		{
@@ -1087,7 +1087,7 @@ namespace castor3d
 		}
 
 	private:
-		void doVisit( castor::String const & name
+		void doVisit( String const & name
 			, crg::ImageViewId viewId
 			, ImageLayout layout
 			, TextureFactors const & factors = TextureFactors{} )override

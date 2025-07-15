@@ -5,17 +5,17 @@
 #include "Castor3D/Material/Texture/Animation/TextureAnimationKeyFrame.hpp"
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
 
-CU_ImplementSmartPtr( castor3d, TextureAnimation )
+CU_ImplementSmartPtr( c3d, TextureAnimation )
 
-namespace castor3d
+namespace c3d
 {
 	TextureAnimation::TextureAnimation( Engine & engine
-		, castor::String const & name )
+		, String const & name )
 		: Animation{ engine
 			, AnimationType::eTexture
 			, name }
 	{
-		m_length = castor::Milliseconds{ std::numeric_limits< int64_t >::max() };
+		m_length = Milliseconds{ std::numeric_limits< int64_t >::max() };
 	}
 
 	void TextureAnimation::setAnimable( TextureUnit & unit )
@@ -35,8 +35,8 @@ namespace castor3d
 			auto tiles = std::max( unit.getConfiguration().tiles
 				, unit.getTextureImageTiles()->z );
 			auto tileSet = unit.getConfiguration().tileSet;
-			castor::Milliseconds timeIndex{};
-			castor::Milliseconds timeStep{ 25_ms };
+			Milliseconds timeIndex{};
+			Milliseconds timeStep{ 25_ms };
 			uint32_t tile = 0u;
 
 			for ( uint32_t y = 0u; y < tileSet->w; ++y )
@@ -45,9 +45,9 @@ namespace castor3d
 				{
 					if ( tile < tiles )
 					{
-						auto kf = castor::makeUnique< TextureAnimationKeyFrame >( *this, timeIndex );
+						auto kf = makeUnique< TextureAnimationKeyFrame >( *this, timeIndex );
 						kf->setTile( { x, y } );
-						addKeyFrame( castor::ptrRefCast< AnimationKeyFrame >( kf ) );
+						addKeyFrame( ptrRefCast< AnimationKeyFrame >( kf ) );
 						timeIndex += timeStep;
 					}
 
@@ -57,32 +57,32 @@ namespace castor3d
 		}
 	}
 
-	castor::Point3f TextureAnimation::getTranslate( castor::Milliseconds const & time )const
+	Point3f TextureAnimation::getTranslate( Milliseconds const & time )const
 	{
-		return castor::Point3f{ m_translate.getDistance( time ) };
+		return Point3f{ m_translate.getDistance( time ) };
 	}
 
-	castor::Angle TextureAnimation::getRotate( castor::Milliseconds const & time )const
+	Angle TextureAnimation::getRotate( Milliseconds const & time )const
 	{
 		return m_rotate.getDistance( time );
 	}
 
-	castor::Point3f TextureAnimation::getScale( castor::Milliseconds const & time )const
+	Point3f TextureAnimation::getScale( Milliseconds const & time )const
 	{
-		if ( m_scale.getValue() != castor::Point2f{ 0, 0 } )
+		if ( m_scale.getValue() != Point2f{ 0, 0 } )
 		{
-			return castor::Point3f{ m_scale.getDistance( time ) };
+			return Point3f{ m_scale.getDistance( time ) };
 		}
 
-		return castor::Point3f{ 1.0f, 1.0f, 1.0f };
+		return Point3f{ 1.0f, 1.0f, 1.0f };
 	}
 
 	bool TextureAnimation::isTransformAnimated()const
 	{
-		return m_translate.getValue() != castor::Point2f{ 0.0f, 0.0f }
-			|| m_rotate.getValue() != castor::Angle::fromDegrees( 0.0f )
-			|| ( m_scale.getValue() != castor::Point2f{ 0.0f, 0.0f }
-				&& m_scale.getValue() != castor::Point2f{ 1.0f, 1.0f } );
+		return m_translate.getValue() != Point2f{ 0.0f, 0.0f }
+			|| m_rotate.getValue() != Angle::fromDegrees( 0.0f )
+			|| ( m_scale.getValue() != Point2f{ 0.0f, 0.0f }
+				&& m_scale.getValue() != Point2f{ 1.0f, 1.0f } );
 	}
 
 	void TextureAnimation::doCloneInto( Animation & output )const

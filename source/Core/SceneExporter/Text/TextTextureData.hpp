@@ -9,22 +9,22 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::TextureData >
-		: public TextWriterT< castor3d::TextureData >
+	class TextWriter< TextureData >
+		: public TextWriterT< TextureData >
 	{
 	public:
 		explicit TextWriter( String const & tabs
-			, castor3d::Engine const & engine
+			, Engine const & engine
 			, Path const & folder
 			, String subFolder );
-		bool operator()( castor3d::TextureData const & unit
+		bool operator()( TextureData const & unit
 			, StringStream & file )override;
 
 	private:
-		castor3d::Engine const & m_engine;
+		Engine const & m_engine;
 		Path m_folder;
 		String m_subFolder;
 	};

@@ -11,7 +11,7 @@
 namespace GuiCommon
 {
 	ParticleSystemTreeItemProperty::ParticleSystemTreeItemProperty( bool editable
-			, castor3d::Engine * engine )
+			, c3d::Engine * engine )
 		: TreeItemProperty{ engine, editable }
 	{
 		CreateTreeItemMenu();
@@ -32,8 +32,8 @@ namespace GuiCommon
 		auto & engine = *m_particleSystem->getEngine();
 
 		addProperty( grid, PROPERTY_CATEGORY + wxString( m_particleSystem->getName() ) );
-		addPropertyT( grid, PROPERTY_SIZE, m_particleSystem->getDimensions(), m_particleSystem, &castor3d::ParticleSystem::setDimensions );
+		addPropertyT( grid, PROPERTY_SIZE, m_particleSystem->getDimensions(), m_particleSystem, &c3d::ParticleSystem::setDimensions );
 		addMaterial( grid, engine, PROPERTY_MATERIAL, m_materials, m_particleSystem->getMaterial()
-			, [this]( castor3d::MaterialObs material ) { m_particleSystem->setMaterial( material ); } );
+			, [this]( c3d::MaterialObs material ) { m_particleSystem->setMaterial( material ); } );
 	}
 }

@@ -20,7 +20,7 @@ namespace castortd
 		: CastorApplication{ cuT( "CastorDvpTD" )
 			, cuT( "Castor TD" )
 			, 7
-			, castor3d::Version{ CastorDvpTD_VERSION_MAJOR, CastorDvpTD_VERSION_MINOR, CastorDvpTD_VERSION_BUILD }
+			, c3d::Version{ CastorDvpTD_VERSION_MAJOR, CastorDvpTD_VERSION_MINOR, CastorDvpTD_VERSION_BUILD }
 			, wantedFPS
 			, isCastor3DThreaded }
 	{

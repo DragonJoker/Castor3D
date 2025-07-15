@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Model/Mesh/Submesh/Component/LineIndices.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class Line
 	{
@@ -53,7 +53,7 @@ namespace castor3d
 	};
 	//!\~english	An array of Lines.
 	//!\~french		Un tableau de Lines.
-	using LineArray = castor::Vector< Line >;
+	using LineArray = Vector< Line >;
 }
 
 #endif

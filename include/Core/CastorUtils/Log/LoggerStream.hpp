@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Log/LoggerStreambuf.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename CharT
 		, template< typename T > typename StreambufT >
@@ -14,7 +14,7 @@ namespace castor
 		: public std::basic_ostringstream< CharT >
 	{
 		template< typename T >
-		using StreambufPtrT = castor::RawUniquePtr< StreambufT< T > >;
+		using StreambufPtrT = c3d::RawUniquePtr< StreambufT< T > >;
 
 	public:
 		LoggerStreamT()
@@ -25,7 +25,7 @@ namespace castor
 		void set( LoggerInstance & logger )
 		{
 			m_streambuf.reset();
-			m_streambuf = castor::make_unique< StreambufT< CharT > >( logger
+			m_streambuf = c3d::makeRawUnique< StreambufT< CharT > >( logger
 				, static_cast< std::basic_ostream< CharT > & >( *this ) );
 			this->imbue( std::locale{ "C" } );
 		}

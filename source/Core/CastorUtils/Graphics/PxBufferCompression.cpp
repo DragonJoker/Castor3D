@@ -6,7 +6,7 @@
 
 #include <ashes/common/Format.hpp>
 
-namespace castor
+namespace c3d
 {
 #if CU_UseCVTT
 

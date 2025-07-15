@@ -14,7 +14,7 @@ See LICENSE file in root folder
 
 namespace toon::shader
 {
-	namespace c3d = castor3d::shader;
+	namespace c3ds = c3d::shader;
 
 	struct ToonProfile
 		: public sdw::StructInstanceHelperT < "C3D_ToonProfile"
@@ -33,11 +33,11 @@ namespace toon::shader
 		ToonProfile( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
-		static castor::StringView constexpr getName()noexcept
+		static c3d::StringView constexpr getName()noexcept
 		{
 			return cuT( "C3D_ToonProfile" );
 		}
@@ -51,7 +51,7 @@ namespace toon::shader
 	};
 
 	class ToonProfiles
-		: public c3d::BufferT< ToonProfile >
+		: public c3ds::BufferT< ToonProfile >
 	{
 	public:
 		explicit ToonProfiles( sdw::ShaderWriter & writer
@@ -59,10 +59,10 @@ namespace toon::shader
 			, uint32_t set
 			, bool enable = true );
 
-		static castor3d::ShaderBufferUPtr create( castor3d::RenderDevice const & device );
-		static void update( castor3d::ShaderBuffer & buffer
-			, castor3d::Pass const & pass );
-		static c3d::BufferBaseUPtr declare( sdw::ShaderWriter & writer
+		static c3d::ShaderBufferUPtr create( c3d::RenderDevice const & device );
+		static void update( c3d::ShaderBuffer & buffer
+			, c3d::Pass const & pass );
+		static c3ds::BufferBaseUPtr declare( sdw::ShaderWriter & writer
 			, uint32_t binding
 			, uint32_t set );
 	};

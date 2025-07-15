@@ -3,7 +3,7 @@
 #include <ShaderWriter/Writer.hpp>
 #include <ShaderWriter/Intrinsics/IntrinsicFunctions.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	namespace ray
 	{

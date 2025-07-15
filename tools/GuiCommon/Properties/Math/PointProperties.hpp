@@ -8,21 +8,21 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/Point.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2b )
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3b )
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4b )
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2i )
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3i )
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4i )
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2ui )
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3ui )
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4ui )
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2f )
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3f )
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4f )
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2d )
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3d )
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4d )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Point2b )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Point3b )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Point4b )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Point2i )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Point3i )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Point4i )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Point2ui )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Point3ui )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Point4ui )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Point2f )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Point3f )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Point4f )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Point2d )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Point3d )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, Point4d )
 
 namespace GuiCommon
 {
@@ -71,36 +71,36 @@ namespace GuiCommon
 	public:
 		PointProperty( wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
-			, castor::Point< T, Count > const & value = castor::Point< T, Count >() );
+			, c3d::Point< T, Count > const & value = c3d::Point< T, Count >() );
 		PointProperty( wxString const & label
 			, wxString const & name
-			, castor::Coords< T, Count > const & value );
+			, c3d::Coords< T, Count > const & value );
 		explicit PointProperty( wxString const( & names )[Count]
 			, wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
-			, castor::Point< T, Count > const & value = castor::Point< T, Count >() );
+			, c3d::Point< T, Count > const & value = c3d::Point< T, Count >() );
 		PointProperty( wxString const( & names )[Count]
 			, wxString const & label
 			, wxString const & name
-			, castor::Coords< T, Count > const & value );
+			, c3d::Coords< T, Count > const & value );
 		PointProperty( wxString const & label
 			, wxString const & name
-			, castor::HdrRgbColour const & value );
+			, c3d::HdrRgbColour const & value );
 		PointProperty( wxString const & label
 			, wxString const & name
-			, castor::HdrRgbaColour const & value );
+			, c3d::HdrRgbaColour const & value );
 
 		wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const override;
 		void RefreshChildren()override;
 
 	protected:
 		// I stands for internal
-		inline void setValueI( castor::Point< T, Count > const & value );
+		inline void setValueI( c3d::Point< T, Count > const & value );
 	};
 
-	template< typename Type, uint32_t Count > castor::Point< Type, Count > const & PointRefFromVariant( wxVariant const & variant );
-	template< typename Type, uint32_t Count > castor::Point< Type, Count > & PointRefFromVariant( wxVariant & variant );
-	template< typename Type, uint32_t Count > void setVariantFromPoint( wxVariant & variant, castor::Point< Type, Count > const & value );
+	template< typename Type, uint32_t Count > c3d::Point< Type, Count > const & PointRefFromVariant( wxVariant const & variant );
+	template< typename Type, uint32_t Count > c3d::Point< Type, Count > & PointRefFromVariant( wxVariant & variant );
+	template< typename Type, uint32_t Count > void setVariantFromPoint( wxVariant & variant, c3d::Point< Type, Count > const & value );
 
 	template< uint32_t Count > using BoolPointProperty = PointProperty< bool, Count >;
 	template< uint32_t Count > using IntPointProperty = PointProperty< int, Count >;

@@ -12,13 +12,13 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace shader
 	{
 		struct SkinningData
 		{
-			castor::RawUniquePtr< sdw::ArrayStorageBufferT< sdw::Mat4 > > transforms;
+			RawUniquePtr< sdw::ArrayStorageBufferT< sdw::Mat4 > > transforms;
 		};
 	}
 
@@ -127,7 +127,7 @@ namespace castor3d
 	public:
 		//!\~english	Name of the skinning animation frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données d'animation de skinning.
-		C3D_API static castor::MbString const BufferSkinning;
+		C3D_API static MbString const BufferSkinning;
 	};
 }
 

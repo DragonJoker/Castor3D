@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Design/NonCopyable.hpp"
 #include "CastorUtils/Log/LogModule.hpp"
 
-namespace castor
+namespace c3d
 {
 	class ConsoleImpl
 		: public NonMovable
@@ -83,7 +83,7 @@ namespace castor
 	private:
 		//!\~english	The platform specific console.
 		//!\~french		La console spécifique à la plateforme.
-		castor::RawUniquePtr< ConsoleImpl > m_console;
+		c3d::RawUniquePtr< ConsoleImpl > m_console;
 	};
 }
 

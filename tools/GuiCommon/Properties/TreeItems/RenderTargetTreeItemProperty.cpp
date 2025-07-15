@@ -26,7 +26,7 @@ namespace GuiCommon
 	void appendRenderTarget( SceneObjectsTree * list
 		, bool editable
 		, wxTreeItemId id
-		, castor3d::RenderTarget & target )
+		, c3d::RenderTarget & target )
 	{
 		auto targetId = list->AppendItem( id
 			, make_wxString( target.getName() )
@@ -100,7 +100,7 @@ namespace GuiCommon
 	}
 
 	RenderTargetTreeItemProperty::RenderTargetTreeItemProperty( bool editable
-		, castor3d::RenderTarget & target )
+		, c3d::RenderTarget & target )
 		: TreeItemProperty( target.getEngine(), editable )
 		, m_target( target )
 	{

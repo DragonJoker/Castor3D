@@ -9,17 +9,17 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::TextureUnit >
-		: public TextWriterT< castor3d::TextureUnit >
+	class TextWriter< TextureUnit >
+		: public TextWriterT< TextureUnit >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, Path const & folder
 			, String subFolder );
-		bool operator()( castor3d::TextureUnit const & unit
+		bool operator()( TextureUnit const & unit
 			, StringStream & file )override;
 
 	private:

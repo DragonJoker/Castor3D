@@ -15,7 +15,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace shader
 	{
@@ -28,7 +28,7 @@ namespace castor3d
 			SDW_DeclStructInstance( C3D_API, LpvGridData );
 
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static castor::RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+			C3D_API static RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 			C3D_API sdw::IVec3 worldToGrid( sdw::Vec3 const & pos )const;
 			C3D_API sdw::IVec3 worldToGrid( sdw::Vec3 const & pos
@@ -85,14 +85,14 @@ namespace castor3d
 		C3D_API explicit LpvGridConfigUbo( RenderDevice const & device );
 		C3D_API ~LpvGridConfigUbo()noexcept;
 
-		C3D_API castor::Grid const & cpuUpdate( castor::BoundingBox const & aabb
-			, castor::Point3f const & cameraPos
+		C3D_API Grid const & cpuUpdate( BoundingBox const & aabb
+			, Point3f const & cameraPos
 			, uint32_t gridDim
 			, float indirectAttenuation );
-		C3D_API castor::Grid const & cpuUpdate( float gridLevelScale
-			, castor::Grid const & grid
-			, castor::Point3f const & cameraPos
-			, castor::Point3f const & cameraDir
+		C3D_API Grid const & cpuUpdate( float gridLevelScale
+			, Grid const & grid
+			, Point3f const & cameraPos
+			, Point3f const & cameraDir
 			, float indirectAttenuation );
 
 		UniformBufferOffsetT< Configuration > & getUbo()
@@ -134,7 +134,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo;
-		castor::Grid m_grid;
+		Grid m_grid;
 	};
 }
 
@@ -145,7 +145,7 @@ namespace castor3d
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_lpvGridData = lpvGridConfig.declMember< castor3d::shader::LpvGridData >( "c3d_lpvGridData", enabled );\
+	auto c3d_lpvGridData = lpvGridConfig.declMember< c3d::shader::LpvGridData >( "c3d_lpvGridData", enabled );\
 	lpvGridConfig.end()
 
 #endif

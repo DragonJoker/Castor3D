@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 #include "CastorUtils/Graphics/ImageMemoryLayout.hpp"
 
-namespace castor
+namespace c3d
 {
 	class Image
 		: public Named
@@ -51,9 +51,9 @@ namespace castor
 			, Path path
 			, Size const & size
 			, uint8_t const * buffer = nullptr )
-			: Named{ castor::move( name ) }
-			, m_pathFile{ castor::move( path ) }
-			, m_buffer{ castor::make_shared< PxBuffer< PFDst > >( size, buffer, PFSrc ) }
+			: Named{ c3d::move( name ) }
+			, m_pathFile{ c3d::move( path ) }
+			, m_buffer{ c3d::makeShared< PxBuffer< PFDst > >( size, buffer, PFSrc ) }
 		{
 			CU_CheckInvariants();
 		}
@@ -85,7 +85,7 @@ namespace castor
 		Image( String const & name
 			, ImageMemoryLayout layout
 			, PxBufferBaseUPtr buffer )
-			: Image{ name, {}, castor::move( layout ), castor::move( buffer ) }
+			: Image{ name, {}, c3d::move( layout ), c3d::move( buffer ) }
 		{
 		}
 

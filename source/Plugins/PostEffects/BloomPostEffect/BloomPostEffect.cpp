@@ -21,15 +21,15 @@ namespace Bloom
 
 	//*********************************************************************************************
 
-	castor::String const PostEffect::Type = cuT( "bloom" );
-	castor::MbString const PostEffect::Name = "HDR Bloom PostEffect";
+	c3d::String const PostEffect::Type = cuT( "bloom" );
+	c3d::MbString const PostEffect::Name = "HDR Bloom PostEffect";
 
-	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
-		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & params )
-		: castor3d::PostEffect{ PostEffect::Type
+	PostEffect::PostEffect( c3d::RenderTarget & renderTarget
+		, c3d::RenderSystem & renderSystem
+		, c3d::Parameters const & params )
+		: c3d::PostEffect{ PostEffect::Type
 			, cuT( "Bloom" )
-			, castor::makeString( PostEffect::Name )
+			, c3d::makeString( PostEffect::Name )
 			, renderTarget
 			, renderSystem
 			, params }
@@ -39,16 +39,16 @@ namespace Bloom
 		setParameters( params );
 	}
 
-	castor3d::PostEffectUPtr PostEffect::create( castor3d::RenderTarget & renderTarget
-		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & params )
+	c3d::PostEffectUPtr PostEffect::create( c3d::RenderTarget & renderTarget
+		, c3d::RenderSystem & renderSystem
+		, c3d::Parameters const & params )
 	{
-		return castor::makeUniqueDerived< castor3d::PostEffect, PostEffect >( renderTarget
+		return c3d::makeUniqueDerived< c3d::PostEffect, PostEffect >( renderTarget
 			, renderSystem
 			, params );
 	}
 
-	void PostEffect::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void PostEffect::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		if ( m_hiPass )
 		{
@@ -73,10 +73,10 @@ namespace Bloom
 
 		for ( auto & view : m_blurViews )
 		{
-			visitor.visit( cuT( "PostFX: HDRB - Blur " ) + castor::string::toString( view.data->info.subresourceRange.baseMipLevel )
+			visitor.visit( cuT( "PostFX: HDRB - Blur " ) + c3d::string::toString( view.data->info.subresourceRange.baseMipLevel )
 				, view
 				, m_renderTarget.getGraph().getFinalLayoutState( view ).layout
-				, castor3d::TextureFactors{}.invert( true ) );
+				, c3d::TextureFactors{}.invert( true ) );
 		}
 
 		visitor.visit( cuT( "Kernel Size" )
@@ -84,53 +84,53 @@ namespace Bloom
 #endif
 	}
 
-	void PostEffect::setParameters( castor3d::Parameters parameters )
+	void PostEffect::setParameters( c3d::Parameters parameters )
 	{
-		castor::String count;
+		c3d::String count;
 
 		if ( parameters.get( cuT( "Size" ), count ) )
 		{
-			m_blurKernelSize = uint32_t( castor::string::toLong( count ) );
+			m_blurKernelSize = uint32_t( c3d::string::toLong( count ) );
 		}
 
 		if ( parameters.get( cuT( "Passes" ), count ) )
 		{
-			m_blurPassesCount = uint32_t( castor::string::toLong( count ) );
+			m_blurPassesCount = uint32_t( c3d::string::toLong( count ) );
 		}
 
 		m_passesCount = m_blurPassesCount * 2u + 2u;
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
-		, castor3d::Texture const & source
-		, castor3d::Texture const & target
+	bool PostEffect::doInitialise( c3d::RenderDevice const & device
+		, c3d::Texture const & source
+		, c3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
-		castor3d::Extent2D size{ castor3d::makeExtent2D( target.getExtent() ) };
+		c3d::Extent2D size{ c3d::makeExtent2D( target.getExtent() ) };
 
 #if !Bloom_DebugHiPass
 		m_blurImg = m_graph.createImage( crg::ImageData{ "Blur"
-			, castor3d::ImageCreateFlags::eNone
-			, castor3d::ImageType::e2D
+			, c3d::ImageCreateFlags::eNone
+			, c3d::ImageType::e2D
 			, target.getFormat()
-			, castor3d::Extent3D{ size.width >> 1, size.height >> 1, 1u }
-			, ( castor3d::ImageUsageFlags::eColorAttachment
-				| castor3d::ImageUsageFlags::eSampled
-				| castor3d::ImageUsageFlags::eTransferSrc )
+			, c3d::Extent3D{ size.width >> 1, size.height >> 1, 1u }
+			, ( c3d::ImageUsageFlags::eColorAttachment
+				| c3d::ImageUsageFlags::eSampled
+				| c3d::ImageUsageFlags::eTransferSrc )
 			, m_blurPassesCount } );
 
 		for ( uint32_t i = 0u; i < m_blurPassesCount; ++i )
 		{
-			m_blurViews.push_back( m_graph.createView( crg::ImageViewData{ m_blurImg.data->name + castor::string::toMbString( i )
+			m_blurViews.push_back( m_graph.createView( crg::ImageViewData{ m_blurImg.data->name + c3d::string::toMbString( i )
 				, m_blurImg
-				, castor3d::ImageViewCreateFlags::eNone
-				, castor3d::ImageViewType::e2D
+				, c3d::ImageViewCreateFlags::eNone
+				, c3d::ImageViewType::e2D
 				, getFormat( m_blurImg )
-				, { castor3d::ImageAspectFlags::eColor, i, 1u, 0u, 1u } } ) );
+				, { c3d::ImageAspectFlags::eColor, i, 1u, 0u, 1u } } ) );
 		}
 #endif
 
-		m_hiPass = castor::make_unique< HiPass >( m_graph
+		m_hiPass = c3d::makeRawUnique< HiPass >( m_graph
 			, previousPass
 			, device
 			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
@@ -139,7 +139,7 @@ namespace Bloom
 			, &isEnabled()
 			, &m_passIndex );
 #if !Bloom_DebugHiPass
-		m_blurXPass = castor::make_unique< BlurPass >( m_graph
+		m_blurXPass = c3d::makeRawUnique< BlurPass >( m_graph
 			, m_hiPass->getPass()
 			, device
 			, m_hiPass->getResult()
@@ -149,7 +149,7 @@ namespace Bloom
 			, m_blurPassesCount
 			, false
 			, &isEnabled() );
-		m_blurYPass = castor::make_unique< BlurPass >( m_graph
+		m_blurYPass = c3d::makeRawUnique< BlurPass >( m_graph
 			, m_blurXPass->getPasses()
 			, device
 			, m_blurViews
@@ -159,7 +159,7 @@ namespace Bloom
 			, m_blurPassesCount
 			, true
 			, &isEnabled() );
-		m_combinePass = castor::make_unique< CombinePass >( m_graph
+		m_combinePass = c3d::makeRawUnique< CombinePass >( m_graph
 			, m_blurYPass->getPasses()
 			, device
 			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
@@ -180,7 +180,7 @@ namespace Bloom
 #endif
 	}
 
-	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
+	void PostEffect::doCleanup( c3d::RenderDevice const & device )
 	{
 		m_combinePass.reset();
 		m_blurXPass.reset();
@@ -188,7 +188,7 @@ namespace Bloom
 		m_hiPass.reset();
 	}
 
-	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
+	void PostEffect::doCpuUpdate( c3d::CpuUpdater & updater )
 	{
 		if ( m_blurXPass )
 		{
@@ -201,10 +201,10 @@ namespace Bloom
 		}
 	}
 
-	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )
+	bool PostEffect::doWriteInto( c3d::StringStream & file, c3d::String const & tabs )
 	{
-		file << ( tabs + cuT( "postfx \"" ) + Type + cuT( "\" -Size=" ) + castor::string::toString( m_blurKernelSize )
-			+ cuT( " -Passes=" ) + castor::string::toString( m_blurPassesCount )
+		file << ( tabs + cuT( "postfx \"" ) + Type + cuT( "\" -Size=" ) + c3d::string::toString( m_blurKernelSize )
+			+ cuT( " -Passes=" ) + c3d::string::toString( m_blurPassesCount )
 			+ cuT( "\n" ) );
 		return true;
 	}

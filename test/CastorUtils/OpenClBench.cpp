@@ -22,7 +22,7 @@ namespace Testing
 	bool CheckErr( cl_int iErr, const char * szName )
 	{
 		bool result = true;
-		static castor::Map< cl_int, std::string > MapErrors;
+		static c3d::Map< cl_int, std::string > MapErrors;
 
 		if ( MapErrors.empty() )
 		{
@@ -180,8 +180,8 @@ namespace Testing
 
 		if ( bContinue )
 		{
-			castor::Path filePath = castor::File::getExecutableDirectory().getPath() / cuT( "share" ) / cuT( "CastorUtilsTest" );
-			std::string path = castor::toUtf8( filePath / cuT( "mtx_ope.cl" ) );
+			c3d::Path filePath = c3d::File::getExecutableDirectory().getPath() / cuT( "share" ) / cuT( "CastorUtilsTest" );
+			std::string path = c3d::toUtf8( filePath / cuT( "mtx_ope.cl" ) );
 			std::ifstream file( path );
 			bContinue = CheckErr( file ? CL_SUCCESS : -1, path.c_str() );
 
@@ -262,7 +262,7 @@ namespace Testing
 
 	void OpenCLBench::MtxMultCastor()
 	{
-		castor::SqrMtxOperators< float, 4 >::mul( m_mtx4x4CuA, m_mtx4x4CuB );
+		c3d::SqrMtxOperators< float, 4 >::mul( m_mtx4x4CuA, m_mtx4x4CuB );
 	}
 
 	void OpenCLBench::MtxMultCL()

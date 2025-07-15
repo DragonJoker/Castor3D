@@ -1,6 +1,6 @@
 #include "CastorUtils/FileParser/ParserParameterHelpers.hpp"
 
-namespace castor
+namespace c3d
 {
 	xchar const * const RegexFormat< uint8_t >::Value = cuT( "(\\#[0-9a-fA-F]{2}"
 		"|0[xX][0-9a-fA-F]{2}"

@@ -27,9 +27,9 @@ namespace fxaa
 {
 	namespace postfx
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
-		static castor::String const PosPos = cuT( "vtx_posPos" );
+		static c3d::String const PosPos = cuT( "vtx_posPos" );
 
 		enum Idx : uint32_t
 		{
@@ -37,7 +37,7 @@ namespace fxaa
 			ColorTexIdx,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine )
+		static c3d::ShaderPtr getProgram( c3d::Engine & engine )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
@@ -46,8 +46,8 @@ namespace fxaa
 			C3D_Fxaa( writer, FxaaCfgUboIdx, 0u );
 			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", ColorTexIdx, 0u );
 
-			writer.implementEntryPointT< c3d::PosUv2FT, c3d::PosUv4FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
-				, sdw::VertexOutT< c3d::PosUv4FT > out )
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::PosUv4FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+				, sdw::VertexOutT< c3ds::PosUv4FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position().xy(), 0.0_f, 1.0_f );
@@ -55,8 +55,8 @@ namespace fxaa
 					out.position().zw() = in.position().xy() - ( c3d_fxaaData.pixelSize * ( 0.5_f + c3d_fxaaData.subpixShift ) );
 				} );
 
-			writer.implementEntryPointT< c3d::PosUv4FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::PosUv4FT > in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< c3ds::PosUv4FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::PosUv4FT > in
+				, sdw::FragmentOutT< c3ds::Colour4FT > out )
 				{
 					auto rgbNW = writer.declLocale( "rgbNW"
 						, c3d_mapColor.lod( in.uv(), 0.0_f, ivec2( -1_i, -1_i ) ).rgb() );
@@ -130,15 +130,15 @@ namespace fxaa
 
 	//*********************************************************************************************
 
-	castor::String PostEffect::Type = cuT( "fxaa" );
-	castor::MbString PostEffect::Name = "FXAA PostEffect";
+	c3d::String PostEffect::Type = cuT( "fxaa" );
+	c3d::MbString PostEffect::Name = "FXAA PostEffect";
 
-	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
-		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & parameters )
-		: castor3d::PostEffect{ PostEffect::Type
+	PostEffect::PostEffect( c3d::RenderTarget & renderTarget
+		, c3d::RenderSystem & renderSystem
+		, c3d::Parameters const & parameters )
+		: c3d::PostEffect{ PostEffect::Type
 			, cuT( "FXAA" )
-			, castor::makeString( PostEffect::Name )
+			, c3d::makeString( PostEffect::Name )
 			, renderTarget
 			, renderSystem
 			, parameters
@@ -154,16 +154,16 @@ namespace fxaa
 	{
 	}
 
-	castor3d::PostEffectUPtr PostEffect::create( castor3d::RenderTarget & renderTarget
-		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & params )
+	c3d::PostEffectUPtr PostEffect::create( c3d::RenderTarget & renderTarget
+		, c3d::RenderSystem & renderSystem
+		, c3d::Parameters const & params )
 	{
-		return castor::makeUniqueDerived< castor3d::PostEffect, PostEffect >( renderTarget
+		return c3d::makeUniqueDerived< c3d::PostEffect, PostEffect >( renderTarget
 			, renderSystem
 			, params );
 	}
 
-	void PostEffect::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void PostEffect::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 		visitor.visit( cuT( "Sub-pixel shift" )
@@ -174,32 +174,32 @@ namespace fxaa
 			, m_reduceMul );
 	}
 
-	void PostEffect::setParameters( castor3d::Parameters parameters )
+	void PostEffect::setParameters( c3d::Parameters parameters )
 	{
-		castor::String param;
+		c3d::String param;
 
 		if ( parameters.get( cuT( "SubpixShift" ), param ) )
 		{
-			m_subpixShift = castor::string::toFloat( param );
+			m_subpixShift = c3d::string::toFloat( param );
 		}
 
 		if ( parameters.get( cuT( "MaxSpan" ), param ) )
 		{
-			m_spanMax = castor::string::toFloat( param );
+			m_spanMax = c3d::string::toFloat( param );
 		}
 
 		if ( parameters.get( cuT( "ReduceMul" ), param ) )
 		{
-			m_reduceMul = castor::string::toFloat( param );
+			m_reduceMul = c3d::string::toFloat( param );
 		}
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
-		, castor3d::Texture const & source
-		, castor3d::Texture const & target
+	bool PostEffect::doInitialise( c3d::RenderDevice const & device
+		, c3d::Texture const & source
+		, c3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
-		auto extent = castor3d::makeExtent2D( target.getExtent() );
+		auto extent = c3d::makeExtent2D( target.getExtent() );
 		m_pass = &m_graph.createPass( "FXAA"
 			, [this, &device, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -216,7 +216,7 @@ namespace fxaa
 						, context
 						, graph
 						, crg::ru::Config{ 2u } );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -229,11 +229,11 @@ namespace fxaa
 		return true;
 	}
 
-	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
+	void PostEffect::doCleanup( c3d::RenderDevice const & device )
 	{
 	}
 
-	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
+	void PostEffect::doCpuUpdate( c3d::CpuUpdater & updater )
 	{
 		if ( m_subpixShift.isDirty()
 			|| m_spanMax.isDirty()
@@ -248,8 +248,8 @@ namespace fxaa
 		}
 	}
 
-	bool PostEffect::doWriteInto( castor::StringStream & file
-		, castor::String const & tabs )
+	bool PostEffect::doWriteInto( c3d::StringStream & file
+		, c3d::String const & tabs )
 	{
 		file << ( tabs + cuT( "postfx \"" ) + Type + cuT( "\"\n" ) );
 		return true;

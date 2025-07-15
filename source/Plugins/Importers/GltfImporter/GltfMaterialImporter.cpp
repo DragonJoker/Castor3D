@@ -74,22 +74,22 @@ namespace c3d_gltf
 
 	namespace materials
 	{
-		static castor3d::LightingModelID getLightingModel( castor3d::Engine const & engine
+		static c3d::LightingModelID getLightingModel( c3d::Engine const & engine
 			, bool anisotropy )
 		{
 			auto & factory = engine.getLightingModelFactory();
-			return factory.getLightingModelId( castor::String{ castor3d::PbrPass::LightingModel }
-				, { castor3d::PbrPass::DefaultDiffuseBrdf.name
+			return factory.getLightingModelId( c3d::String{ c3d::PbrPass::LightingModel }
+				, { c3d::PbrPass::DefaultDiffuseBrdf.name
 					, ( anisotropy
-						? castor::String{ anisotropy::shader::AnisotropicBRDF::Name }
-						: castor3d::PbrPass::DefaultSpecularBrdf.name )
-					, castor3d::PbrPass::DefaultSheenBrdf.name
-					, castor3d::PbrPass::DefaultClearcoatBrdf.name
-					, castor3d::PbrPass::DefaultScatteringModel.name } );
+						? c3d::String{ anisotropy::shader::AnisotropicBRDF::Name }
+						: c3d::PbrPass::DefaultSpecularBrdf.name )
+					, c3d::PbrPass::DefaultSheenBrdf.name
+					, c3d::PbrPass::DefaultClearcoatBrdf.name
+					, c3d::PbrPass::DefaultScatteringModel.name } );
 		}
 
 		template< typename ComponentT >
-		static void parseComponentData( castor3d::Pass & pass, bool value )
+		static void parseComponentData( c3d::Pass & pass, bool value )
 		{
 			if ( value )
 			{
@@ -101,16 +101,16 @@ namespace c3d_gltf
 		}
 
 		template< typename ComponentT >
-		static void parseComponentData( castor3d::Pass & pass, castor::HdrRgbColour value )
+		static void parseComponentData( c3d::Pass & pass, c3d::HdrRgbColour value )
 		{
 			auto component = pass.createComponent< ComponentT >();
 			auto data = component->getData();
-			*data = castor::move( value );
+			*data = c3d::move( value );
 			component->setData( *data );
 		}
 
 		template< typename ComponentT >
-		static void parseComponentData( castor3d::Pass & pass, float value )
+		static void parseComponentData( c3d::Pass & pass, float value )
 		{
 			auto component = pass.createComponent< ComponentT >();
 			auto data = component->getData();
@@ -118,7 +118,7 @@ namespace c3d_gltf
 			component->setData( *data );
 		}
 
-		static castor::String getFormatName( fastgltf::MimeType mimeType
+		static c3d::String getFormatName( fastgltf::MimeType mimeType
 			, fastgltf::MimeType defaultMimeType )
 		{
 			switch ( mimeType )
@@ -157,7 +157,7 @@ namespace c3d_gltf
 			, size_t offset
 			, size_t size
 			, fastgltf::MimeType & mimeType
-			, castor::ByteArray & result )
+			, c3d::ByteArray & result )
 		{
 			auto path = impData.uri.fspath();
 			std::ifstream stream{ path, std::ios::binary };
@@ -175,7 +175,7 @@ namespace c3d_gltf
 			, size_t offset
 			, size_t size
 			, fastgltf::MimeType & mimeType
-			, castor::ByteArray & result )
+			, c3d::ByteArray & result )
 		{
 			size = std::min( size, impData.bytes.size() );
 			result.resize( size );
@@ -188,7 +188,7 @@ namespace c3d_gltf
 			, size_t offset
 			, size_t size
 			, fastgltf::MimeType & mimeType
-			, castor::ByteArray & result )
+			, c3d::ByteArray & result )
 		{
 			size = std::min( size, impData.bytes.size() );
 			result.resize( size );
@@ -201,7 +201,7 @@ namespace c3d_gltf
 			, size_t offset
 			, size_t size
 			, fastgltf::MimeType & mimeType
-			, castor::ByteArray & result )
+			, c3d::ByteArray & result )
 		{
 			size = std::min( size, impData.bytes.size() );
 			result.resize( size );
@@ -215,17 +215,17 @@ namespace c3d_gltf
 		template< class ... ArgsT >
 		OverloadedGetDataT( ArgsT... ) -> OverloadedGetDataT< ArgsT... >;
 
-		static castor::String makeTextureName( size_t textureIndex
+		static c3d::String makeTextureName( size_t textureIndex
 			, fastgltf::Texture const & impTexture
 			, size_t imageIndex
 			, fastgltf::Image const & impImage )
 		{
-			auto texName = castor::makeString( impTexture.name );
-			auto imgName = castor::makeString( impImage.name );
-			castor::String uri;
+			auto texName = c3d::makeString( impTexture.name );
+			auto imgName = c3d::makeString( impImage.name );
+			c3d::String uri;
 
 			std::visit( OverloadedGetDataT{ []( auto const & ){}
-				, [&uri]( fastgltf::sources::URI const & source ){ uri = castor::string::toString( source.uri.fspath() ); }
+				, [&uri]( fastgltf::sources::URI const & source ){ uri = c3d::string::toString( source.uri.fspath() ); }
 				, []( fastgltf::sources::Array const & source ){}
 				, []( fastgltf::sources::Vector const & source ){}
 				, []( fastgltf::sources::ByteView const & source ){} }
@@ -235,23 +235,23 @@ namespace c3d_gltf
 			{
 				if ( texName.empty() )
 				{
-					texName = castor::string::toString( textureIndex );
+					texName = c3d::string::toString( textureIndex );
 				}
 
 				if ( imgName.empty() )
 				{
-					imgName = castor::string::toString( imageIndex );
+					imgName = c3d::string::toString( imageIndex );
 				}
 
 				return cuT( "Image_" ) + texName + cuT( "_" ) + imgName;
 			}
 
 			auto result = uri;
-			castor::string::replace( result, cuT( "\\" ), cuT( "/" ) );
+			c3d::string::replace( result, cuT( "\\" ), cuT( "/" ) );
 			return result;
 		}
 
-		static castor3d::SamplerRPtr loadSampler( GltfImporterFile const & file
+		static c3d::SamplerRPtr loadSampler( GltfImporterFile const & file
 			, fastgltf::Asset const & impAsset
 			, fastgltf::Optional< size_t > const & samplerIndex )
 		{
@@ -283,15 +283,15 @@ namespace c3d_gltf
 			return engine.getDefaultSampler();
 		}
 
-		static castor::RawUniquePtr< castor3d::TextureSourceInfo > loadTexture( fastgltf::Asset const & impAsset
-			, castor::String const & name
+		static c3d::RawUniquePtr< c3d::TextureSourceInfo > loadTexture( fastgltf::Asset const & impAsset
+			, c3d::String const & name
 			, fastgltf::Texture const & impTexture
 			, fastgltf::Image const & impImage
 			, fastgltf::DataSource const & impDataSource
-			, castor3d::TextureConfiguration const & texConfig
-			, castor::ImageLoaderConfig const & loadConfig
+			, c3d::TextureConfiguration const & texConfig
+			, c3d::ImageLoaderConfig const & loadConfig
 			, fastgltf::MimeType defaultMimeType
-			, castor3d::MaterialImporter & importer
+			, c3d::MaterialImporter & importer
 			, size_t offset = 0u
 			, size_t size = 0xFFFFFFFFFFFFFFFF )
 		{
@@ -303,7 +303,7 @@ namespace c3d_gltf
 			}
 
 			fastgltf::MimeType mimeType{};
-			castor::ByteArray data;
+			c3d::ByteArray data;
 
 			std::visit( OverloadedGetDataT{ []( auto const & ){}
 				, [&mimeType, &data, &impAsset, &offset, &size]( fastgltf::sources::URI const & source ){ getData( impAsset, source, offset, size, mimeType, data ); }
@@ -314,9 +314,9 @@ namespace c3d_gltf
 
 			if ( !data.empty() )
 			{
-				return castor::make_unique< castor3d::TextureSourceInfo >( importer.loadTexture( name
+				return c3d::makeRawUnique< c3d::TextureSourceInfo >( importer.loadTexture( name
 					, getFormatName( mimeType, defaultMimeType )
-					, castor::move( data )
+					, c3d::move( data )
 					, texConfig
 					, loadConfig ) );
 			}
@@ -324,13 +324,13 @@ namespace c3d_gltf
 			return nullptr;
 		}
 
-		static castor::RawUniquePtr< castor3d::TextureSourceInfo > loadTexture( fastgltf::Asset const & impAsset
+		static c3d::RawUniquePtr< c3d::TextureSourceInfo > loadTexture( fastgltf::Asset const & impAsset
 			, fastgltf::TextureInfo const & texInfo
-			, castor3d::TextureConfiguration const & texConfig
-			, castor::ImageLoaderConfig const & loadConfig
-			, castor3d::MaterialImporter & importer )
+			, c3d::TextureConfiguration const & texConfig
+			, c3d::ImageLoaderConfig const & loadConfig
+			, c3d::MaterialImporter & importer )
 		{
-			castor::RawUniquePtr< castor3d::TextureSourceInfo > result;
+			c3d::RawUniquePtr< c3d::TextureSourceInfo > result;
 
 			if ( texInfo.textureIndex < impAsset.textures.size() )
 			{
@@ -399,39 +399,39 @@ namespace c3d_gltf
 			return result;
 		}
 
-		static castor::Image const & loadImage( castor3d::TextureSourceInfo const & source
-			, castor3d::MaterialImporter const & importer )
+		static c3d::Image const & loadImage( c3d::TextureSourceInfo const & source
+			, c3d::MaterialImporter const & importer )
 		{
-			castor::Image const * result{};
+			c3d::Image const * result{};
 
 			if ( source.isBufferImage() )
 			{
 				result = importer.loadImage( source.name()
-					, castor::ImageCreateParams{ source.type()
+					, c3d::ImageCreateParams{ source.type()
 						, source.buffer()
 						, source.loadConfig() } );
 			}
 			else if ( source.isFileImage() )
 			{
 				result = importer.loadImage( source.name()
-					, castor::ImageCreateParams{ source.folder() / source.relative()
+					, c3d::ImageCreateParams{ source.folder() / source.relative()
 						, source.loadConfig() } );
 			}
 
 			if ( !result )
 			{
-				CU_LoaderError( "Couldn't load image" + castor::toUtf8( source.name() ) + "." );
+				CU_LoaderError( "Couldn't load image" + c3d::toUtf8( source.name() ) + "." );
 			}
 
 			return *result;
 		}
 
 		static void parseTransform( fastgltf::TextureTransform const & transform
-			, castor3d::TextureTransform & result
+			, c3d::TextureTransform & result
 			, uint32_t & texCoordIndex )
 		{
 			result.scale = { transform.uvScale[0], transform.uvScale[1], 1.0f };
-			result.rotate = castor::Angle::fromRadians( -transform.rotation );// must be negated
+			result.rotate = c3d::Angle::fromRadians( -transform.rotation );// must be negated
 
 			// A change of coordinates is required to map glTF UV transformations into the space used by
 			// Castor3D. In glTF all UV origins are at 0,1 (top left of texture) in Castor3D space. In Castor3D
@@ -451,25 +451,25 @@ namespace c3d_gltf
 		}
 
 		static void parseColOpaTexture( GltfImporterFile const & file
-			, castor3d::Pass & pass
+			, c3d::Pass & pass
 			, fastgltf::Asset const & impAsset
 			, fastgltf::Optional< fastgltf::TextureInfo > const & texInfo
-			, castor::ImageLoaderConfig const & loadConfig
-			, castor3d::MaterialImporter & importer )
+			, c3d::ImageLoaderConfig const & loadConfig
+			, c3d::MaterialImporter & importer )
 		{
 			if ( texInfo )
 			{
 				try
 				{
-					auto texConfig = pass.getComponentPlugin< castor3d::ColourMapComponent >().getBaseTextureConfiguration();
+					auto texConfig = pass.getComponentPlugin< c3d::ColourMapComponent >().getBaseTextureConfiguration();
 
 					if ( auto sourceInfo = loadTexture( impAsset, *texInfo, texConfig, loadConfig, importer ) )
 					{
 						if ( auto & image = loadImage( *sourceInfo, importer );
 							hasAlphaChannel( image ) )
 						{
-							addFlagConfiguration( texConfig, { pass.getComponentPlugin< castor3d::OpacityMapComponent >().getTextureFlags(), 0xFF000000 } );
-							*sourceInfo = castor3d::TextureSourceInfo{ *sourceInfo, texConfig };
+							addFlagConfiguration( texConfig, { pass.getComponentPlugin< c3d::OpacityMapComponent >().getTextureFlags(), 0xFF000000 } );
+							*sourceInfo = c3d::TextureSourceInfo{ *sourceInfo, texConfig };
 						}
 
 						fastgltf::Texture const & impTexture = impAsset.textures[texInfo->textureIndex];
@@ -478,27 +478,27 @@ namespace c3d_gltf
 						if ( texInfo->transform )
 						{
 							parseTransform( *texInfo->transform, texConfig.transform, texCoordIndex );
-							*sourceInfo = castor3d::TextureSourceInfo{ *sourceInfo, texConfig };
+							*sourceInfo = c3d::TextureSourceInfo{ *sourceInfo, texConfig };
 						}
 
-						castor3d::PassTextureConfig passTexConfig{ loadSampler( file, impAsset, impTexture.samplerIndex ), texCoordIndex };
-						pass.registerTexture( castor::move( *sourceInfo ), passTexConfig );
+						c3d::PassTextureConfig passTexConfig{ loadSampler( file, impAsset, impTexture.samplerIndex ), texCoordIndex };
+						pass.registerTexture( c3d::move( *sourceInfo ), passTexConfig );
 					}
 				}
-				catch ( castor::Exception & exc )
+				catch ( c3d::Exception & exc )
 				{
-					castor3d::log::error << exc.what() << std::endl;
+					c3d::log::error << exc.what() << std::endl;
 				}
 			}
 		}
 
 		static void parseTexture( GltfImporterFile const & file
-			, castor3d::Pass & pass
-			, castor3d::TextureConfiguration texConfig
+			, c3d::Pass & pass
+			, c3d::TextureConfiguration texConfig
 			, fastgltf::Asset const & impAsset
 			, fastgltf::TextureInfo const & texInfo
-			, castor::ImageLoaderConfig const & loadConfig
-			, castor3d::MaterialImporter & importer )
+			, c3d::ImageLoaderConfig const & loadConfig
+			, c3d::MaterialImporter & importer )
 		{
 			try
 			{
@@ -510,30 +510,30 @@ namespace c3d_gltf
 					if ( texInfo.transform )
 					{
 						parseTransform( *texInfo.transform, texConfig.transform, texCoordIndex );
-						*sourceInfo = castor3d::TextureSourceInfo{ *sourceInfo, texConfig };
+						*sourceInfo = c3d::TextureSourceInfo{ *sourceInfo, texConfig };
 					}
 
-					castor3d::PassTextureConfig passTexConfig{ loadSampler( file, impAsset, impTexture.samplerIndex ), texCoordIndex };
-					pass.registerTexture( castor::move( *sourceInfo ), passTexConfig );
+					c3d::PassTextureConfig passTexConfig{ loadSampler( file, impAsset, impTexture.samplerIndex ), texCoordIndex };
+					pass.registerTexture( c3d::move( *sourceInfo ), passTexConfig );
 				}
 			}
-			catch ( castor::Exception & exc )
+			catch ( c3d::Exception & exc )
 			{
-				castor3d::log::error << exc.what() << std::endl;
+				c3d::log::error << exc.what() << std::endl;
 			}
 		}
 
 		static void parseRghMetTexture( GltfImporterFile const & file
-			, castor3d::Pass & pass
+			, c3d::Pass & pass
 			, fastgltf::Asset const & impAsset
 			, fastgltf::Optional< fastgltf::TextureInfo > const & texInfo
-			, castor::ImageLoaderConfig const & loadConfig
-			, castor3d::MaterialImporter & importer )
+			, c3d::ImageLoaderConfig const & loadConfig
+			, c3d::MaterialImporter & importer )
 		{
 			if ( texInfo )
 			{
-				auto texConfig = pass.getComponentPlugin< castor3d::RoughnessMapComponent >().getBaseTextureConfiguration();
-				texConfig.components[1] = pass.getComponentPlugin< castor3d::MetalnessMapComponent >().getBaseTextureConfiguration().components[0];
+				auto texConfig = pass.getComponentPlugin< c3d::RoughnessMapComponent >().getBaseTextureConfiguration();
+				texConfig.components[1] = pass.getComponentPlugin< c3d::MetalnessMapComponent >().getBaseTextureConfiguration().components[0];
 				texConfig.components[0].componentsMask = 0x0000FF00;
 				texConfig.components[1].componentsMask = 0x000000FF;
 				parseTexture( file, pass
@@ -543,23 +543,23 @@ namespace c3d_gltf
 		}
 
 		static void parseSpcGlsTexture( GltfImporterFile const & file
-			, castor3d::Pass & pass
+			, c3d::Pass & pass
 			, fastgltf::Asset const & impAsset
 			, fastgltf::Optional< fastgltf::TextureInfo > const & texInfo
-			, castor::ImageLoaderConfig const & loadConfig
-			, castor3d::MaterialImporter & importer )
+			, c3d::ImageLoaderConfig const & loadConfig
+			, c3d::MaterialImporter & importer )
 		{
 			if ( texInfo )
 			{
-				auto texConfig = pass.getComponentPlugin< castor3d::SpecularMapComponent >().getBaseTextureConfiguration();
-				texConfig.components[1] = pass.getComponentPlugin< castor3d::RoughnessMapComponent >().getBaseTextureConfiguration().components[0];
+				auto texConfig = pass.getComponentPlugin< c3d::SpecularMapComponent >().getBaseTextureConfiguration();
+				texConfig.components[1] = pass.getComponentPlugin< c3d::RoughnessMapComponent >().getBaseTextureConfiguration().components[0];
 				texConfig.components[0].componentsMask = 0x00FFFFFF;
 				texConfig.components[1].componentsMask = 0xFF000000;
 				parseTexture( file, pass
 					, std::move( texConfig )
 					, impAsset, *texInfo, loadConfig, importer );
 
-				if ( auto component = pass.getComponent< castor3d::RoughnessComponent >() )
+				if ( auto component = pass.getComponent< c3d::RoughnessComponent >() )
 				{
 					component->setGlossiness( true );
 				}
@@ -567,11 +567,11 @@ namespace c3d_gltf
 		}
 
 		static void parseAnisStrDirTexture( GltfImporterFile const & file
-			, castor3d::Pass & pass
+			, c3d::Pass & pass
 			, fastgltf::Asset const & impAsset
 			, fastgltf::Optional< fastgltf::TextureInfo > const & texInfo
-			, castor::ImageLoaderConfig const & loadConfig
-			, castor3d::MaterialImporter & importer )
+			, c3d::ImageLoaderConfig const & loadConfig
+			, c3d::MaterialImporter & importer )
 		{
 			if ( texInfo )
 			{
@@ -587,11 +587,11 @@ namespace c3d_gltf
 
 		template< typename ComponentT >
 		static void parseTexture( GltfImporterFile const & file
-			, castor3d::Pass & pass
+			, c3d::Pass & pass
 			, fastgltf::Asset const & impAsset
 			, fastgltf::Optional< fastgltf::TextureInfo > const & texInfo
-			, castor::ImageLoaderConfig const & loadConfig
-			, castor3d::MaterialImporter & importer )
+			, c3d::ImageLoaderConfig const & loadConfig
+			, c3d::MaterialImporter & importer )
 		{
 			if ( texInfo )
 			{
@@ -603,11 +603,11 @@ namespace c3d_gltf
 
 		template< typename ComponentT >
 		static void parseNmlTexture( GltfImporterFile const & file
-			, castor3d::Pass & pass
+			, c3d::Pass & pass
 			, fastgltf::Asset const & impAsset
 			, fastgltf::Optional< fastgltf::NormalTextureInfo > const & texInfo
-			, castor::ImageLoaderConfig const & loadConfig
-			, castor3d::MaterialImporter & importer )
+			, c3d::ImageLoaderConfig const & loadConfig
+			, c3d::MaterialImporter & importer )
 		{
 			if ( texInfo )
 			{
@@ -618,16 +618,16 @@ namespace c3d_gltf
 		}
 
 		static void parseOccTexture( GltfImporterFile const & file
-			, castor3d::Pass & pass
+			, c3d::Pass & pass
 			, fastgltf::Asset const & impAsset
 			, fastgltf::Optional< fastgltf::OcclusionTextureInfo > const & texInfo
-			, castor::ImageLoaderConfig const & loadConfig
-			, castor3d::MaterialImporter & importer )
+			, c3d::ImageLoaderConfig const & loadConfig
+			, c3d::MaterialImporter & importer )
 		{
 			if ( texInfo )
 			{
 				parseTexture( file, pass
-					, pass.getComponentPlugin< castor3d::OcclusionMapComponent >().getBaseTextureConfiguration()
+					, pass.getComponentPlugin< c3d::OcclusionMapComponent >().getBaseTextureConfiguration()
 					, impAsset, *texInfo, loadConfig, importer );
 			}
 		}
@@ -635,55 +635,55 @@ namespace c3d_gltf
 
 	//*********************************************************************************************
 
-	castor3d::WrapMode convert( fastgltf::Wrap const & v )
+	c3d::WrapMode convert( fastgltf::Wrap const & v )
 	{
 		switch ( v )
 		{
 		case fastgltf::Wrap::Repeat:
-			return castor3d::WrapMode::eRepeat;
+			return c3d::WrapMode::eRepeat;
 		case fastgltf::Wrap::ClampToEdge:
-			return castor3d::WrapMode::eClampToEdge;
+			return c3d::WrapMode::eClampToEdge;
 		case fastgltf::Wrap::MirroredRepeat:
-			return castor3d::WrapMode::eMirroredRepeat;
+			return c3d::WrapMode::eMirroredRepeat;
 		default:
-			return castor3d::WrapMode::eRepeat;
+			return c3d::WrapMode::eRepeat;
 		}
 	}
 
-	castor3d::FilterMode convert( fastgltf::Filter const & v )
+	c3d::FilterMode convert( fastgltf::Filter const & v )
 	{
 		switch ( v )
 		{
 		case fastgltf::Filter::Nearest:
 		case fastgltf::Filter::NearestMipMapNearest:
 		case fastgltf::Filter::NearestMipMapLinear:
-			return castor3d::FilterMode::eNearest;
+			return c3d::FilterMode::eNearest;
 		default:
-			return castor3d::FilterMode::eLinear;
+			return c3d::FilterMode::eLinear;
 		}
 	}
 
-	castor3d::MipmapMode getMipFilter( fastgltf::Filter const & v )
+	c3d::MipmapMode getMipFilter( fastgltf::Filter const & v )
 	{
 		switch ( v )
 		{
 		case fastgltf::Filter::Nearest:
 		case fastgltf::Filter::NearestMipMapNearest:
 		case fastgltf::Filter::LinearMipMapNearest:
-			return castor3d::MipmapMode::eNearest;
+			return c3d::MipmapMode::eNearest;
 		default:
-			return castor3d::MipmapMode::eLinear;
+			return c3d::MipmapMode::eLinear;
 		}
 	}
 
-	GltfMaterialImporter::GltfMaterialImporter( castor3d::Engine & engine )
+	GltfMaterialImporter::GltfMaterialImporter( c3d::Engine & engine )
 		: GltfMaterialImporter{ engine, nullptr }
 	{
 	}
 
-	GltfMaterialImporter::GltfMaterialImporter( castor3d::Engine & engine
+	GltfMaterialImporter::GltfMaterialImporter( c3d::Engine & engine
 		, GltfImporterFile * file )
-		: castor3d::MaterialImporter{ engine, cuT( "Gltf" ), file }
+		: c3d::MaterialImporter{ engine, cuT( "Gltf" ), file }
 	{
 		if ( !engine.hasMaterial( DefaultMaterial ) )
 		{
@@ -696,7 +696,7 @@ namespace c3d_gltf
 		}
 	}
 
-	bool GltfMaterialImporter::doImportMaterial( castor3d::Material & material )
+	bool GltfMaterialImporter::doImportMaterial( c3d::Material & material )
 	{
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 
@@ -732,8 +732,8 @@ namespace c3d_gltf
 			pass->enableLighting( false );
 		}
 
-		materials::parseComponentData< castor3d::TwoSidedComponent >( *pass, impMaterial.doubleSided );
-		materials::parseNmlTexture< castor3d::NormalMapComponent >( file, *pass, impAsset, impMaterial.normalTexture, m_loadConfig, *this );
+		materials::parseComponentData< c3d::TwoSidedComponent >( *pass, impMaterial.doubleSided );
+		materials::parseNmlTexture< c3d::NormalMapComponent >( file, *pass, impAsset, impMaterial.normalTexture, m_loadConfig, *this );
 		materials::parseOccTexture( file, *pass, impAsset, impMaterial.occlusionTexture, m_loadConfig, *this );
 		doImportSpecularData( impMaterial, *pass );
 		doImportIridescenceData( impMaterial, *pass );
@@ -752,58 +752,58 @@ namespace c3d_gltf
 	}
 
 	void GltfMaterialImporter::doImportSpecularData( fastgltf::Material const & impMaterial
-		, castor3d::Pass & pass )
+		, c3d::Pass & pass )
 	{
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto & impAsset = file.getAsset();
 
 		if ( impMaterial.specular || !impMaterial.specularGlossiness )
 		{
-			pass.createComponent< castor3d::ColourComponent >()->setColour( castor::HdrRgbColour::fromComponents( impMaterial.pbrData.baseColorFactor[0]
+			pass.createComponent< c3d::ColourComponent >()->setColour( c3d::HdrRgbColour::fromComponents( impMaterial.pbrData.baseColorFactor[0]
 				, impMaterial.pbrData.baseColorFactor[1]
 				, impMaterial.pbrData.baseColorFactor[2] ) );
 
 			if ( impMaterial.alphaMode != fastgltf::AlphaMode::Opaque )
 			{
-				pass.createComponent< castor3d::OpacityComponent >()->setOpacity( impMaterial.pbrData.baseColorFactor[3] );
+				pass.createComponent< c3d::OpacityComponent >()->setOpacity( impMaterial.pbrData.baseColorFactor[3] );
 			}
 
-			pass.createComponent< castor3d::MetalnessComponent >()->setMetalness( impMaterial.pbrData.metallicFactor );
-			pass.createComponent< castor3d::RoughnessComponent >()->setRoughness( impMaterial.pbrData.roughnessFactor );
+			pass.createComponent< c3d::MetalnessComponent >()->setMetalness( impMaterial.pbrData.metallicFactor );
+			pass.createComponent< c3d::RoughnessComponent >()->setRoughness( impMaterial.pbrData.roughnessFactor );
 
 			materials::parseColOpaTexture( file, pass, impAsset, impMaterial.pbrData.baseColorTexture, m_loadConfig, *this );
 			materials::parseRghMetTexture( file, pass, impAsset, impMaterial.pbrData.metallicRoughnessTexture, m_loadConfig, *this );
 
 			if ( impMaterial.specular )
 			{
-				auto spcComponent = pass.createComponent< castor3d::SpecularComponent >();
-				auto fctComponent = pass.createComponent< castor3d::SpecularFactorComponent >();
+				auto spcComponent = pass.createComponent< c3d::SpecularComponent >();
+				auto fctComponent = pass.createComponent< c3d::SpecularFactorComponent >();
 				fctComponent->setFactor( impMaterial.specular->specularFactor );
-				spcComponent->setSpecular( castor::RgbColour::fromComponents( impMaterial.specular->specularColorFactor[0]
+				spcComponent->setSpecular( c3d::RgbColour::fromComponents( impMaterial.specular->specularColorFactor[0]
 					, impMaterial.specular->specularColorFactor[1]
 					, impMaterial.specular->specularColorFactor[2] ) );
-				materials::parseTexture< castor3d::SpecularMapComponent >( file, pass, impAsset, impMaterial.specular->specularColorTexture, m_loadConfig, *this );
-				materials::parseTexture< castor3d::SpecularFactorMapComponent >( file, pass, impAsset, impMaterial.specular->specularTexture, m_loadConfig, *this );
+				materials::parseTexture< c3d::SpecularMapComponent >( file, pass, impAsset, impMaterial.specular->specularColorTexture, m_loadConfig, *this );
+				materials::parseTexture< c3d::SpecularFactorMapComponent >( file, pass, impAsset, impMaterial.specular->specularTexture, m_loadConfig, *this );
 			}
 		}
 		else if ( impMaterial.specularGlossiness )
 		{
-			pass.createComponent< castor3d::ColourComponent >()->setColour( castor::HdrRgbColour::fromComponents( impMaterial.specularGlossiness->diffuseFactor[0]
+			pass.createComponent< c3d::ColourComponent >()->setColour( c3d::HdrRgbColour::fromComponents( impMaterial.specularGlossiness->diffuseFactor[0]
 				, impMaterial.specularGlossiness->diffuseFactor[1]
 				, impMaterial.specularGlossiness->diffuseFactor[2] ) );
 
 			if ( impMaterial.alphaMode != fastgltf::AlphaMode::Opaque )
 			{
-				pass.createComponent< castor3d::OpacityComponent >()->setOpacity( impMaterial.specularGlossiness->diffuseFactor[3] );
+				pass.createComponent< c3d::OpacityComponent >()->setOpacity( impMaterial.specularGlossiness->diffuseFactor[3] );
 			}
 
-			auto spcComponent = pass.createComponent< castor3d::SpecularComponent >();
-			auto fctComponent = pass.createComponent< castor3d::SpecularFactorComponent >();
+			auto spcComponent = pass.createComponent< c3d::SpecularComponent >();
+			auto fctComponent = pass.createComponent< c3d::SpecularFactorComponent >();
 			fctComponent->setFactor( 1.0f );
-			spcComponent->setSpecular( castor::RgbColour::fromComponents( impMaterial.specularGlossiness->specularFactor[0]
+			spcComponent->setSpecular( c3d::RgbColour::fromComponents( impMaterial.specularGlossiness->specularFactor[0]
 				, impMaterial.specularGlossiness->specularFactor[1]
 				, impMaterial.specularGlossiness->specularFactor[2] ) );
-			auto rghComponent = pass.createComponent< castor3d::RoughnessComponent >();
+			auto rghComponent = pass.createComponent< c3d::RoughnessComponent >();
 			rghComponent->setRoughness( 1.0f - impMaterial.specularGlossiness->glossinessFactor );
 
 			materials::parseColOpaTexture( file, pass, impAsset, impMaterial.specularGlossiness->diffuseTexture, m_loadConfig, *this );
@@ -812,93 +812,93 @@ namespace c3d_gltf
 	}
 
 	void GltfMaterialImporter::doImportIridescenceData( fastgltf::Material const & impMaterial
-		, castor3d::Pass & pass )
+		, c3d::Pass & pass )
 	{
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto & impAsset = file.getAsset();
 
 		if ( impMaterial.iridescence )
 		{
-			auto component = pass.createComponent< castor3d::IridescenceComponent >();
+			auto component = pass.createComponent< c3d::IridescenceComponent >();
 			component->setFactor( impMaterial.iridescence->iridescenceFactor );
 			component->setIor( impMaterial.iridescence->iridescenceIor );
 			component->setMinThickness( impMaterial.iridescence->iridescenceThicknessMinimum );
 			component->setMaxThickness( impMaterial.iridescence->iridescenceThicknessMaximum );
-			materials::parseTexture< castor3d::IridescenceMapComponent >( file, pass, impAsset, impMaterial.iridescence->iridescenceTexture, m_loadConfig, *this );
-			materials::parseTexture< castor3d::IridescenceThicknessMapComponent >( file, pass, impAsset, impMaterial.iridescence->iridescenceThicknessTexture, m_loadConfig, *this );
+			materials::parseTexture< c3d::IridescenceMapComponent >( file, pass, impAsset, impMaterial.iridescence->iridescenceTexture, m_loadConfig, *this );
+			materials::parseTexture< c3d::IridescenceThicknessMapComponent >( file, pass, impAsset, impMaterial.iridescence->iridescenceThicknessTexture, m_loadConfig, *this );
 		}
 	}
 
 	void GltfMaterialImporter::doImportVolumeData( fastgltf::Material const & impMaterial
-		, castor3d::Pass & pass )
+		, c3d::Pass & pass )
 	{
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto & impAsset = file.getAsset();
 
 		if ( impMaterial.volume )
 		{
-			auto attenuationComponent = pass.createComponent< castor3d::AttenuationComponent >();
-			attenuationComponent->setAttenuationColour( castor::RgbColour::fromComponents( impMaterial.volume->attenuationColor[0]
+			auto attenuationComponent = pass.createComponent< c3d::AttenuationComponent >();
+			attenuationComponent->setAttenuationColour( c3d::RgbColour::fromComponents( impMaterial.volume->attenuationColor[0]
 				, impMaterial.volume->attenuationColor[1]
 				, impMaterial.volume->attenuationColor[2] ) );
 			attenuationComponent->setAttenuationDistance( impMaterial.volume->attenuationDistance );
 
-			auto thicknessComponent = pass.createComponent< castor3d::ThicknessComponent >();
+			auto thicknessComponent = pass.createComponent< c3d::ThicknessComponent >();
 			thicknessComponent->setThicknessFactor( impMaterial.volume->thicknessFactor );
-			materials::parseTexture< castor3d::ThicknessMapComponent >( file, pass, impAsset, impMaterial.volume->thicknessTexture, m_loadConfig, *this );
+			materials::parseTexture< c3d::ThicknessMapComponent >( file, pass, impAsset, impMaterial.volume->thicknessTexture, m_loadConfig, *this );
 		}
 	}
 
 	void GltfMaterialImporter::doImportTransmissionData( fastgltf::Material const & impMaterial
-		, castor3d::Pass & pass )
+		, c3d::Pass & pass )
 	{
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto & impAsset = file.getAsset();
 
 		if ( impMaterial.transmission )
 		{
-			pass.createComponent< castor3d::TransmissionComponent >()->setTransmission( impMaterial.transmission->transmissionFactor );
-			materials::parseTexture< castor3d::TransmissionMapComponent >( file, pass, impAsset, impMaterial.transmission->transmissionTexture, m_loadConfig, *this );
+			pass.createComponent< c3d::TransmissionComponent >()->setTransmission( impMaterial.transmission->transmissionFactor );
+			materials::parseTexture< c3d::TransmissionMapComponent >( file, pass, impAsset, impMaterial.transmission->transmissionTexture, m_loadConfig, *this );
 		}
 	}
 
 	void GltfMaterialImporter::doImportClearcoatData( fastgltf::Material const & impMaterial
-		, castor3d::Pass & pass )
+		, c3d::Pass & pass )
 	{
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto & impAsset = file.getAsset();
 
 		if ( impMaterial.clearcoat )
 		{
-			auto component = pass.createComponent< castor3d::ClearcoatComponent >();
+			auto component = pass.createComponent< c3d::ClearcoatComponent >();
 			component->setClearcoatFactor( impMaterial.clearcoat->clearcoatFactor );
 			component->setRoughnessFactor( impMaterial.clearcoat->clearcoatRoughnessFactor );
-			materials::parseTexture< castor3d::ClearcoatMapComponent >( file, pass, impAsset, impMaterial.clearcoat->clearcoatTexture, m_loadConfig, *this );
-			materials::parseNmlTexture< castor3d::ClearcoatNormalMapComponent >( file, pass, impAsset, impMaterial.clearcoat->clearcoatNormalTexture, m_loadConfig, *this );
-			materials::parseTexture< castor3d::ClearcoatRoughnessMapComponent >( file, pass, impAsset, impMaterial.clearcoat->clearcoatRoughnessTexture, m_loadConfig, *this );
+			materials::parseTexture< c3d::ClearcoatMapComponent >( file, pass, impAsset, impMaterial.clearcoat->clearcoatTexture, m_loadConfig, *this );
+			materials::parseNmlTexture< c3d::ClearcoatNormalMapComponent >( file, pass, impAsset, impMaterial.clearcoat->clearcoatNormalTexture, m_loadConfig, *this );
+			materials::parseTexture< c3d::ClearcoatRoughnessMapComponent >( file, pass, impAsset, impMaterial.clearcoat->clearcoatRoughnessTexture, m_loadConfig, *this );
 		}
 	}
 
 	void GltfMaterialImporter::doImportSheenData( fastgltf::Material const & impMaterial
-		, castor3d::Pass & pass )
+		, c3d::Pass & pass )
 	{
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto & impAsset = file.getAsset();
 
 		if ( impMaterial.sheen )
 		{
-			auto component = pass.createComponent< castor3d::SheenComponent >();
-			component->setSheenColour( castor::HdrRgbColour::fromComponents( impMaterial.sheen->sheenColorFactor[0]
+			auto component = pass.createComponent< c3d::SheenComponent >();
+			component->setSheenColour( c3d::HdrRgbColour::fromComponents( impMaterial.sheen->sheenColorFactor[0]
 				, impMaterial.sheen->sheenColorFactor[1]
 				, impMaterial.sheen->sheenColorFactor[2] ) );
 			component->setRoughnessFactor( impMaterial.sheen->sheenRoughnessFactor );
-			materials::parseTexture< castor3d::SheenMapComponent >( file, pass, impAsset, impMaterial.sheen->sheenColorTexture, m_loadConfig, *this );
-			materials::parseTexture< castor3d::SheenRoughnessMapComponent >( file, pass, impAsset, impMaterial.sheen->sheenRoughnessTexture, m_loadConfig, *this );
+			materials::parseTexture< c3d::SheenMapComponent >( file, pass, impAsset, impMaterial.sheen->sheenColorTexture, m_loadConfig, *this );
+			materials::parseTexture< c3d::SheenRoughnessMapComponent >( file, pass, impAsset, impMaterial.sheen->sheenRoughnessTexture, m_loadConfig, *this );
 		}
 	}
 
 	void GltfMaterialImporter::doImportEmissiveData( fastgltf::Material const & impMaterial
-		, castor3d::Pass & pass )
+		, c3d::Pass & pass )
 	{
 		if ( impMaterial.emissiveStrength != 1.0f
 			|| impMaterial.emissiveTexture
@@ -912,28 +912,28 @@ namespace c3d_gltf
 			auto & file = static_cast< GltfImporterFile const & >( *m_file );
 			auto & impAsset = file.getAsset();
 
-			auto component = pass.createComponent< castor3d::EmissiveComponent >();
+			auto component = pass.createComponent< c3d::EmissiveComponent >();
 
 			if ( impMaterial.emissiveStrength != 0.0f )
 			{
 				component->setEmissiveFactor( impMaterial.emissiveStrength * m_emissiveMult );
 			}
 
-			component->setEmissive( castor::RgbColour::fromComponents( impMaterial.emissiveFactor[0]
+			component->setEmissive( c3d::RgbColour::fromComponents( impMaterial.emissiveFactor[0]
 				, impMaterial.emissiveFactor[1]
 				, impMaterial.emissiveFactor[2] ) );
-			materials::parseTexture< castor3d::EmissiveMapComponent >( file, pass, impAsset, impMaterial.emissiveTexture, m_loadConfig, *this );
+			materials::parseTexture< c3d::EmissiveMapComponent >( file, pass, impAsset, impMaterial.emissiveTexture, m_loadConfig, *this );
 		}
 	}
 
 	void GltfMaterialImporter::doImportAnisotropyData( fastgltf::Material const & impMaterial
-		, castor3d::Pass & pass )
+		, c3d::Pass & pass )
 	{
 		if ( impMaterial.anisotropy )
 		{
 			auto anisotropy = pass.createComponent< anisotropy::AnisotropyComponent >();
 			anisotropy->setStrength( impMaterial.anisotropy->anisotropyStrength );
-			anisotropy->setRotation( castor::Angle::fromRadians( impMaterial.anisotropy->anisotropyRotation ) );
+			anisotropy->setRotation( c3d::Angle::fromRadians( impMaterial.anisotropy->anisotropyRotation ) );
 
 			auto & file = static_cast< GltfImporterFile const & >( *m_file );
 			auto & impAsset = file.getAsset();
@@ -942,68 +942,68 @@ namespace c3d_gltf
 	}
 
 	void GltfMaterialImporter::doImportDiffuseTransmissionData( fastgltf::Material const & impMaterial
-		, castor3d::Pass & pass )
+		, c3d::Pass & pass )
 	{
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto & impAsset = file.getAsset();
 
 		if ( impMaterial.diffuseTransmission )
 		{
-			pass.createComponent< castor3d::DiffuseTransmissionComponent >()->setTransmissionFactor( impMaterial.diffuseTransmission->transmissionFactor );
-			pass.createComponent< castor3d::DiffuseTransmissionComponent >()->setTransmissionColour( castor::RgbColour::fromComponents( impMaterial.diffuseTransmission->transmissionColorFactor[0]
+			pass.createComponent< c3d::DiffuseTransmissionComponent >()->setTransmissionFactor( impMaterial.diffuseTransmission->transmissionFactor );
+			pass.createComponent< c3d::DiffuseTransmissionComponent >()->setTransmissionColour( c3d::RgbColour::fromComponents( impMaterial.diffuseTransmission->transmissionColorFactor[0]
 				, impMaterial.diffuseTransmission->transmissionColorFactor[1]
 				, impMaterial.diffuseTransmission->transmissionColorFactor[2] ) );
-			materials::parseTexture< castor3d::DiffuseTransmissionFactorMapComponent >( file, pass, impAsset, impMaterial.diffuseTransmission->transmissionTexture, m_loadConfig, *this );
-			materials::parseTexture< castor3d::DiffuseTransmissionColourMapComponent >( file, pass, impAsset, impMaterial.diffuseTransmission->transmissionColorTexture, m_loadConfig, *this );
+			materials::parseTexture< c3d::DiffuseTransmissionFactorMapComponent >( file, pass, impAsset, impMaterial.diffuseTransmission->transmissionTexture, m_loadConfig, *this );
+			materials::parseTexture< c3d::DiffuseTransmissionColourMapComponent >( file, pass, impAsset, impMaterial.diffuseTransmission->transmissionColorTexture, m_loadConfig, *this );
 		}
 	}
 
 	void GltfMaterialImporter::doImportAlphaModeData( fastgltf::Material const & impMaterial
-		, castor3d::Pass & pass )const
+		, c3d::Pass & pass )const
 	{
 		if ( impMaterial.alphaMode == fastgltf::AlphaMode::Mask )
 		{
-			pass.createComponent< castor3d::OpacityComponent >();
-			auto alphaTest = pass.createComponent< castor3d::AlphaTestComponent >();
+			pass.createComponent< c3d::OpacityComponent >();
+			auto alphaTest = pass.createComponent< c3d::AlphaTestComponent >();
 			alphaTest->setAlphaRefValue( impMaterial.alphaCutoff );
-			alphaTest->setAlphaFunc( castor3d::ComparisonFunc::eGreater );
-			alphaTest->setBlendAlphaFunc( castor3d::ComparisonFunc::eLessOrEqual );
+			alphaTest->setAlphaFunc( c3d::ComparisonFunc::eGreater );
+			alphaTest->setBlendAlphaFunc( c3d::ComparisonFunc::eLessOrEqual );
 		}
 		else if ( impMaterial.alphaMode == fastgltf::AlphaMode::Blend )
 		{
-			pass.createComponent< castor3d::OpacityComponent >();
+			pass.createComponent< c3d::OpacityComponent >();
 
-			auto twoSided = pass.createComponent< castor3d::TwoSidedComponent >();
+			auto twoSided = pass.createComponent< c3d::TwoSidedComponent >();
 			twoSided->setTwoSided( true );
 
-			if ( !pass.hasComponent< castor3d::AlphaTestComponent >() )
+			if ( !pass.hasComponent< c3d::AlphaTestComponent >() )
 			{
-				auto alphaTest = pass.createComponent< castor3d::AlphaTestComponent >();
+				auto alphaTest = pass.createComponent< c3d::AlphaTestComponent >();
 				alphaTest->setAlphaRefValue( 0.95f );
-				alphaTest->setAlphaFunc( castor3d::ComparisonFunc::eGreater );
-				alphaTest->setBlendAlphaFunc( castor3d::ComparisonFunc::eLessOrEqual );
+				alphaTest->setAlphaFunc( c3d::ComparisonFunc::eGreater );
+				alphaTest->setBlendAlphaFunc( c3d::ComparisonFunc::eLessOrEqual );
 			}
 
-			auto blend = pass.createComponent< castor3d::BlendComponent >();
-			blend->setAlphaBlendMode( castor3d::BlendMode::eInterpolative );
+			auto blend = pass.createComponent< c3d::BlendComponent >();
+			blend->setAlphaBlendMode( c3d::BlendMode::eInterpolative );
 		}
 	}
 
 	void GltfMaterialImporter::doImportIorData( fastgltf::Material const & impMaterial
-		, castor3d::Pass & pass )const
+		, c3d::Pass & pass )const
 	{
 		if ( impMaterial.ior )
 		{
-			pass.createComponent< castor3d::RefractionComponent >()->setRefractionRatio( *impMaterial.ior );
+			pass.createComponent< c3d::RefractionComponent >()->setRefractionRatio( *impMaterial.ior );
 		}
 	}
 
 	void GltfMaterialImporter::doImportDispersionData( fastgltf::Material const & impMaterial
-		, castor3d::Pass & pass )const
+		, c3d::Pass & pass )const
 	{
 		if ( impMaterial.dispersion != 0.0f )
 		{
-			auto dispersion = pass.createComponent< castor3d::DispersionComponent >();
+			auto dispersion = pass.createComponent< c3d::DispersionComponent >();
 			dispersion->setDispersion( impMaterial.dispersion );
 		}
 	}

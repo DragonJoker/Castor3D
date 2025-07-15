@@ -23,7 +23,7 @@
 
 #include <RenderGraph/ResourceHandler.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -31,14 +31,14 @@ namespace castor3d
 	{
 		static Texture doCreateRadianceTexture( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, castor::Size const & size )
+			, Size const & size )
 		{
 			Texture result{ device
 				, resources
 				, cuT( "RadianceComputerResult" )
 				, { ImageCreateFlags::eCubeCompatible
 					, { size[0], size[1], 1u }, 6u, 1u
-					, castor::PixelFormat::eR32G32B32A32_SFLOAT
+					, PixelFormat::eR32G32B32A32_SFLOAT
 					, ImageUsageFlags::eColorAttachment | ImageUsageFlags::eSampled }
 				, {} };
 			result.create();
@@ -117,9 +117,9 @@ namespace castor3d
 						auto nrSamples = writer.declLocale( "nrSamples"
 							, 0_i );
 
-						sdwFOR( writer, sdw::Float, phi, 0.0_f, phi < sdw::Float{ castor::PiMult2< float > }, phi += sampleDelta )
+						sdwFOR( writer, sdw::Float, phi, 0.0_f, phi < sdw::Float{ PiMult2< float > }, phi += sampleDelta )
 						{
-							sdwFOR( writer, sdw::Float, theta, 0.0_f, theta < sdw::Float{ castor::PiDiv2< float > }, theta += sampleDelta )
+							sdwFOR( writer, sdw::Float, theta, 0.0_f, theta < sdw::Float{ PiDiv2< float > }, theta += sampleDelta )
 							{
 								// spherical to cartesian (in tangent space)
 								auto tangentSample = writer.declLocale( "tangentSample"
@@ -135,7 +135,7 @@ namespace castor3d
 						}
 						sdwROF
 
-						irradiance = irradiance * sdw::Float{ castor::Pi< float > } * ( 1.0_f / writer.cast< sdw::Float >( nrSamples ) );
+						irradiance = irradiance * sdw::Float{ Pi< float > } * ( 1.0_f / writer.cast< sdw::Float >( nrSamples ) );
 						out.colour() = vec4( irradiance, 1.0_f );
 					} );
 
@@ -146,7 +146,7 @@ namespace castor3d
 		}
 
 		static ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
-			, castor::PixelFormat format )
+			, PixelFormat format )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
 			{
@@ -188,12 +188,12 @@ namespace castor3d
 			ashes::RenderPassCreateInfo createInfo
 			{
 				0u,
-				castor::move( attaches ),
-				castor::move( subpasses ),
-				castor::move( dependencies ),
+				c3d::move( attaches ),
+				c3d::move( subpasses ),
+				c3d::move( dependencies ),
 			};
 			auto result = device->createRenderPass( "RadianceComputer"
-				, castor::move( createInfo ) );
+				, c3d::move( createInfo ) );
 			return result;
 		}
 	}
@@ -202,7 +202,7 @@ namespace castor3d
 
 	RadianceComputer::RadianceComputer( Engine & engine
 		, RenderDevice const & device
-		, castor::Size const & size
+		, Size const & size
 		, Texture const & srcTexture )
 		: RenderCube{ device, false }
 		, m_result{ radcomp::doCreateRadianceTexture( m_device, *srcTexture.resources, size ) }
@@ -219,7 +219,7 @@ namespace castor3d
 		for ( auto face = 0u; face < 6u; ++face )
 		{
 			auto & facePass = m_renderPasses[face];
-			auto name = "RadianceComputer" + castor::string::toMbString( face );
+			auto name = "RadianceComputer" + string::toMbString( face );
 			// Create the views.
 			facePass.dstView = dstTexture.resources->createImageView( context, dstTexture.subViewsId[face] );
 			// Initialise the frame buffer.
@@ -231,10 +231,10 @@ namespace castor3d
 				, size.getHeight()
 				, 1u );
 			facePass.frameBuffer = m_renderPass->createFrameBuffer( name
-				, castor::move( createInfo ) );
+				, c3d::move( createInfo ) );
 		}
 
-		auto program = srcTexture.getFormat() == castor::PixelFormat::eB10G11R11_UFLOAT
+		auto program = srcTexture.getFormat() == PixelFormat::eB10G11R11_UFLOAT
 			? radcomp::doCreateProgram< sdw::CombinedImageCubeR11fG11fB10f >( m_device )
 			: radcomp::doCreateProgram< sdw::CombinedImageCubeRgba32 >( m_device );
 		createPipelines( { size.getWidth(), size.getHeight() }

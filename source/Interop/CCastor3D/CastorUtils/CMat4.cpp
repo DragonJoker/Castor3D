@@ -40,7 +40,7 @@ extern "C"
 		if ( !object )
 			return C3D_POINTER;
 
-		auto matrix = castor::Matrix4x4f{
+		auto matrix = c3d::Matrix4x4f{
 			{ object->m11, object->m12, object->m13, object->m14
 			, object->m21, object->m22, object->m23, object->m24
 			, object->m31, object->m32, object->m33, object->m34
@@ -69,12 +69,12 @@ extern "C"
 
 	C3D_CAPIMETHODIMP c3dMat4_mul( C3DMat4 const * lhs, C3DMat4 const * rhs, C3DMat4 * result )
 	{
-		auto matrix = castor::Matrix4x4f{
+		auto matrix = c3d::Matrix4x4f{
 				{ lhs->m11, lhs->m12, lhs->m13, lhs->m14
 				, lhs->m21, lhs->m22, lhs->m23, lhs->m24
 				, lhs->m31, lhs->m32, lhs->m33, lhs->m34
 				, lhs->m41, lhs->m42, lhs->m43, lhs->m44 } }
-			* castor::Matrix4x4f{
+			* c3d::Matrix4x4f{
 				{ rhs->m11, rhs->m12, rhs->m13, rhs->m14
 				, rhs->m21, rhs->m22, rhs->m23, rhs->m24
 				, rhs->m31, rhs->m32, rhs->m33, rhs->m34

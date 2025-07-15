@@ -13,7 +13,7 @@
 
 #include <mach-o/dyld.h>
 
-namespace castor
+namespace c3d
 {
 	namespace file
 	{

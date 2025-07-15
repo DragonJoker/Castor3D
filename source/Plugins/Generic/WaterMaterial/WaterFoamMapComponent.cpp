@@ -19,7 +19,7 @@
 
 CU_ImplementSmartPtr( water, WaterFoamMapComponent )
 
-namespace castor
+namespace c3d
 {
 	template<>
 	class TextWriter< water::WaterFoamMapComponent >
@@ -51,8 +51,8 @@ namespace castor
 
 namespace water
 {
-	using namespace castor3d;
-	namespace c3d = castor3d::shader;
+	using namespace c3d;
+	namespace c3ds = c3d::shader;
 
 	//*********************************************************************************************
 
@@ -105,9 +105,9 @@ namespace water
 
 	//*********************************************************************************************
 
-	void WaterFoamMapComponent::ComponentsShader::fillComponents( castor3d::ComponentModeFlags componentsMask
+	void WaterFoamMapComponent::ComponentsShader::fillComponents( c3d::ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
-		, castor3d::shader::Materials const & materials
+		, c3d::shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
 		if ( !WaterComponent::isComponentAvailable( componentsMask, materials ) )
@@ -124,8 +124,8 @@ namespace water
 	}
 
 	void WaterFoamMapComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
-		, castor3d::shader::Materials const & materials
-		, castor3d::shader::Material const * material
+		, c3d::shader::Materials const & materials
+		, c3d::shader::Material const * material
 		, sdw::StructInstance const * surface
 		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )const
@@ -140,10 +140,10 @@ namespace water
 		inits.emplace_back( sdw::makeExpr( 1.0_f ) );
 	}
 
-	void WaterFoamMapComponent::ComponentsShader::blendComponents( castor3d::shader::Materials const & materials
+	void WaterFoamMapComponent::ComponentsShader::blendComponents( c3d::shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, castor3d::shader::BlendComponents & res
-		, castor3d::shader::BlendComponents const & src )const
+		, c3d::shader::BlendComponents & res
+		, c3d::shader::BlendComponents const & src )const
 	{
 		if ( res.hasMember( "waterFoam" ) )
 		{
@@ -151,16 +151,16 @@ namespace water
 		}
 	}
 
-	void WaterFoamMapComponent::ComponentsShader::applyTexture( castor3d::shader::PassShaders const & passShaders
-		, castor3d::shader::TextureConfigurations const & textureConfigs
-		, castor3d::shader::TextureAnimations const & textureAnims
+	void WaterFoamMapComponent::ComponentsShader::applyTexture( c3d::shader::PassShaders const & passShaders
+		, c3d::shader::TextureConfigurations const & textureConfigs
+		, c3d::shader::TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, castor3d::shader::Material const & material
-		, castor3d::shader::BlendComponents & components
-		, castor3d::shader::SampleTexture const & sampleTexture )const
+		, c3d::shader::Material const & material
+		, c3d::shader::BlendComponents & components
+		, c3d::shader::SampleTexture const & sampleTexture )const
 	{
-		castor::MbString mapName = "waterFoamMap";
-		castor::MbString valueName = "waterFoam";
+		c3d::MbString mapName = "waterFoamMap";
+		c3d::MbString valueName = "waterFoam";
 
 		if ( !material.hasMember( mapName )
 			|| !components.hasMember( valueName ) )
@@ -181,7 +181,7 @@ namespace water
 
 		if ( checkFlag( passShaders.getFilter(), ComponentModeFlag::eDerivTex ) )
 		{
-			auto texCoords = components.getMember< castor3d::shader::DerivTex >( "texCoords" );
+			auto texCoords = components.getMember< c3d::shader::DerivTex >( "texCoords" );
 			waterFoamNoiseUV = texCoords.value();
 		}
 		else if ( passShaders.getPassCombine().baseId == 0u )
@@ -203,12 +203,12 @@ namespace water
 	}
 
 	void WaterFoamMapComponent::ComponentsShader::updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, c3d::Material const & material
-		, c3d::BlendComponents & components
+		, c3ds::Material const & material
+		, c3ds::BlendComponents & components
 		, bool isFrontCulled )const
 	{
-		castor::MbString valueName = "waterFoam";
-		castor::MbString mapName = "waterFoam";
+		c3d::MbString valueName = "waterFoam";
+		c3d::MbString mapName = "waterFoam";
 		auto textureName = mapName + "MapAndMask";
 
 		if ( !material.hasMember( textureName )
@@ -232,7 +232,7 @@ namespace water
 		auto waterNormalMapCoords2 = components.getMember< sdw::Vec2 >( "waterNormalMapCoords2" );
 		auto foamSampled = writer.declLocale( "foamSampled"
 			, maps[nonuniform( map - 1_u )].lod( ( waterNormalMapCoords1 + waterNormalMapCoords2 ) * foamTiling, 0.0_f ) );
-		value = c3d::TextureConfigData::getVec3( foamSampled, mask );
+		value = c3ds::TextureConfigData::getVec3( foamSampled, mask );
 
 		mapName = "waterNoise";
 		textureName = mapName + "MapAndMask";
@@ -243,14 +243,14 @@ namespace water
 			auto waterNoiseMask = writer.declLocale( mapName + "FoamMask"
 				, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
 			auto waterFoamNoiseUV = components.getMember< sdw::Vec2 >( "waterFoamNoiseUV" );
-			waterFoamNoise = c3d::TextureConfigData::getFloat( maps[nonuniform( waterNoiseMap - 1_u )].lod( waterFoamNoiseUV * foamTiling, 0.0_f )
+			waterFoamNoise = c3ds::TextureConfigData::getFloat( maps[nonuniform( waterNoiseMap - 1_u )].lod( waterFoamNoiseUV * foamTiling, 0.0_f )
 				, waterNoiseMask );
 		}
 	}
 
 	//*********************************************************************************************
 
-	void WaterFoamMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void WaterFoamMapComponent::Plugin::createParsers( c3d::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "water_foam" )
@@ -262,29 +262,29 @@ namespace water
 					, 0x00FF0000u );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "water_foam_mask" )
 			, trscmp::parserUnitWaterFoamMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "water_foam_mask" )
 			, trscmp::parserUnitWaterFoamMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "water_foam" )
 			, trscmp::parserTexRemapWaterFoam );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "water_foam_mask" )
 			, trscmp::parserTexRemapWaterFoamMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 	}
 
 	bool WaterFoamMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -297,9 +297,9 @@ namespace water
 	}
 
 	void WaterFoamMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, c3d::Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, WaterFoamMapComponent >( pass ) );
+		result.push_back( c3d::makeUniqueDerived< PassComponent, WaterFoamMapComponent >( pass ) );
 	}
 
 	bool WaterFoamMapComponent::Plugin::hasTexcoordModif( PassComponentRegister const & passComponents
@@ -317,15 +317,15 @@ namespace water
 
 	bool WaterFoamMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, c3d::String const & tabs
+		, c3d::StringStream & file )const
 	{
-		return castor::TextWriter< WaterFoamMapComponent >{ tabs, mask }( file );
+		return c3d::TextWriter< WaterFoamMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const WaterFoamMapComponent::TypeName = C3D_PluginMakePassMapComponentName( "water", "foam" );
+	c3d::String const WaterFoamMapComponent::TypeName = C3D_PluginMakePassMapComponentName( "water", "foam" );
 
 	WaterFoamMapComponent::WaterFoamMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -337,7 +337,7 @@ namespace water
 
 	PassComponentUPtr WaterFoamMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, WaterFoamMapComponent >( pass );
+		return c3d::makeUniqueDerived< PassComponent, WaterFoamMapComponent >( pass );
 	}
 
 	void WaterFoamMapComponent::doFillConfig( TextureConfiguration & configuration

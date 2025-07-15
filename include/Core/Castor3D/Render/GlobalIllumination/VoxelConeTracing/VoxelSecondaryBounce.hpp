@@ -17,7 +17,7 @@ See LICENSE file in root folder
 
 #include <RenderGraph/RunnablePass.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class VoxelSecondaryBounce
 		: public crg::RunnablePass
@@ -48,7 +48,7 @@ namespace castor3d
 			, VctConfig const & voxelConfig
 			, crg::RunnablePass::IsEnabledCallback isEnabled );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 

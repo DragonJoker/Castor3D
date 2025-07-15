@@ -8,9 +8,9 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, MeshAnimation )
+CU_ImplementSmartPtr( c3d, MeshAnimation )
 
-namespace castor3d
+namespace c3d
 {
 	namespace mshanm
 	{
@@ -37,16 +37,16 @@ namespace castor3d
 				for ( auto const & submesh : *mesh )
 				{
 					MeshAnimationSubmesh animSubmesh{ animation, *submesh };
-					animation.addChild( castor::move( animSubmesh ) );
-					auto time = castor::Milliseconds{ uint64_t( timeIndex * 1000 ) };
+					animation.addChild( c3d::move( animSubmesh ) );
+					auto time = Milliseconds{ uint64_t( timeIndex * 1000 ) };
 					auto kfit = animation.find( time );
-					castor3d::MeshMorphTarget * kf{};
+					MeshMorphTarget * kf{};
 
 					if ( kfit == animation.end() )
 					{
-						auto keyFrame = castor::makeUnique< MeshMorphTarget >( animation, time );
+						auto keyFrame = makeUnique< MeshMorphTarget >( animation, time );
 						kf = keyFrame.get();
-						animation.addKeyFrame( castor::ptrRefCast< AnimationKeyFrame >( keyFrame ) );
+						animation.addKeyFrame( ptrRefCast< AnimationKeyFrame >( keyFrame ) );
 					}
 					else
 					{
@@ -72,7 +72,7 @@ namespace castor3d
 			else if ( auto mesh = blockContext->mesh )
 			{
 				log::info << "Loaded morp animation [" << blockContext->morphAnimation->getName() << "]" << std::endl;
-				mesh->addAnimation( castor::ptrRefCast< Animation >( blockContext->morphAnimation ) );
+				mesh->addAnimation( ptrRefCast< Animation >( blockContext->morphAnimation ) );
 			}
 			else
 			{
@@ -83,7 +83,7 @@ namespace castor3d
 	}
 
 	MeshAnimation::MeshAnimation( Mesh & mesh
-		, castor::String const & name )
+		, String const & name )
 		: Animation{ *mesh.getEngine()
 			, AnimationType::eMesh
 			, mesh
@@ -95,7 +95,7 @@ namespace castor3d
 	{
 		if ( !hasChild( object.getSubmesh() ) )
 		{
-			m_submeshes.push_back( castor::move( object ) );
+			m_submeshes.push_back( c3d::move( object ) );
 		}
 	}
 
@@ -109,9 +109,8 @@ namespace castor3d
 			} );
 	}
 
-	void MeshAnimation::addParsers( castor::AttributeParsers & result )
+	void MeshAnimation::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		BlockParserContextT< MeshContext > context{ result, CSCNSection::eMorphAnimation, CSCNSection::eMesh };
 
 		context.addParser( cuT( "target_weight" ), mshanm::parserMeshMorphTargetWeight, ParserParameterArray{ makeParameter< ParameterType::eFloat >(), makeParameter< ParameterType::eUInt32 >(), makeParameter< ParameterType::eFloat >() } );

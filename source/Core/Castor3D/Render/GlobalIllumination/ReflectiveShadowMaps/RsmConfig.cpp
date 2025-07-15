@@ -6,7 +6,7 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace rsmcfg
 	{
@@ -58,18 +58,17 @@ namespace castor3d
 		block.visit( cuT( "RSM Sample Count" ), sampleCount );
 	}
 
-	void RsmConfig::addParsers( castor::AttributeParsers & result
+	void RsmConfig::addParsers( AttributeParsers & result
 		, CSCNSection shadows, CSCNSection lightRsm
-		, castor::RawParserFunctionT< ShadowContext > parserConfig )
+		, RawParserFunctionT< ShadowContext > parserConfig )
 	{
-		using namespace castor;
 		BlockParserContextT< ShadowContext > shadowContext{ result, shadows };
 		BlockParserContextT< ShadowContext > rsmContext{ result, lightRsm, shadows };
 
-		shadowContext.addPushParser( cuT( "rsm_config" ), lightRsm, castor::move( parserConfig ) );
+		shadowContext.addPushParser( cuT( "rsm_config" ), lightRsm, c3d::move( parserConfig ) );
 		rsmContext.addParser( cuT( "intensity" ), rsmcfg::parserIntensity, { makeParameter< ParameterType::eFloat >() } );
 		rsmContext.addParser( cuT( "max_radius" ), rsmcfg::parserMaxRadius, { makeParameter< ParameterType::eFloat >() } );
-		rsmContext.addParser( cuT( "sample_count" ), rsmcfg::parserSampleCount, { makeParameter< ParameterType::eUInt32 >( castor::makeRange( 20u, MaxRsmRange ) ) } );
+		rsmContext.addParser( cuT( "sample_count" ), rsmcfg::parserSampleCount, { makeParameter< ParameterType::eUInt32 >( makeRange( 20u, MaxRsmRange ) ) } );
 		rsmContext.addDefaultPopParser();
 	}
 }

@@ -19,21 +19,21 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::HeightMapComponent >
-		: public TextWriterT< castor3d::HeightMapComponent >
+	class TextWriter< HeightMapComponent >
+		: public TextWriterT< HeightMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
-			, castor3d::TextureConfiguration const & configuration )
-			: TextWriterT< castor3d::HeightMapComponent >{ tabs }
+			, TextureConfiguration const & configuration )
+			: TextWriterT< HeightMapComponent >{ tabs }
 			, m_configuration{ configuration }
 		{
 		}
 
-		bool operator()( castor3d::HeightMapComponent const & object
+		bool operator()( HeightMapComponent const & object
 			, StringStream & file )override
 		{
 			return writeMask( file, cuT( "height_mask" ), getComponentsMask( m_configuration, object.getTextureFlags() ) )
@@ -48,12 +48,9 @@ namespace castor
 		}
 
 	private:
-		castor3d::TextureConfiguration const & m_configuration;
+		TextureConfiguration const & m_configuration;
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace hgtcmp
@@ -141,8 +138,8 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		castor::MbString valueName = "height";
-		castor::MbString mapName = "height";
+		MbString valueName = "height";
+		MbString mapName = "height";
 		auto textureName = mapName + "MapAndMask";
 
 		if ( !material.hasMember( textureName )
@@ -597,7 +594,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void HeightMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void HeightMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		static UInt32StrMap const parallaxOcclusionModes{ getEnumMapT< ParallaxOcclusionMode >() };
@@ -611,39 +608,39 @@ namespace castor3d
 					, 0x00FF0000 );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "height_mask" )
 			, hgtcmp::parserUnitHeightMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eUInt32 >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "height_factor" )
 			, hgtcmp::parserUnitHeightFactor
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { makeParameter< ParameterType::eFloat >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "height_mask" )
 			, hgtcmp::parserUnitHeightMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		castor::addParserT( parsers
+			, { makeParameter< ParameterType::eUInt32 >() } );
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "height_factor" )
 			, hgtcmp::parserUnitHeightFactor
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { makeParameter< ParameterType::eFloat >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "height" )
 			, hgtcmp::parserTexRemapHeight );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "height_mask" )
 			, hgtcmp::parserTexRemapHeightMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 
 	bool HeightMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -654,9 +651,9 @@ namespace castor3d
 	}
 
 	void HeightMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, HeightMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, HeightMapComponent >( pass ) );
 	}
 
 	bool HeightMapComponent::Plugin::hasTexcoordModif( PassComponentRegister const & passComponents
@@ -671,15 +668,15 @@ namespace castor3d
 
 	bool HeightMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< HeightMapComponent >{ tabs, configuration }( file, mask );
+		return TextWriter< HeightMapComponent >{ tabs, configuration }( file, mask );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const HeightMapComponent::TypeName = C3D_MakePassMapComponentName( "height" );
+	String const HeightMapComponent::TypeName = C3D_MakePassMapComponentName( "height" );
 
 	HeightMapComponent::HeightMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -691,7 +688,7 @@ namespace castor3d
 
 	PassComponentUPtr HeightMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, HeightMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, HeightMapComponent >( pass );
 	}
 
 	void HeightMapComponent::doFillConfig( TextureConfiguration & configuration

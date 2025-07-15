@@ -4,9 +4,9 @@
 #include "Castor3D/Gui/ControlsManager.hpp"
 #include "Castor3D/Scene/SceneFileParser_Parsers.hpp"
 
-CU_ImplementSmartPtr( castor3d, SceneFileParser )
+CU_ImplementSmartPtr( c3d, SceneFileParser )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -19,8 +19,8 @@ namespace castor3d
 			RootContext result{};
 			result.engine = &engine;
 			result.logger = &engine.getLogger();
-			result.overlays = castor::makeUnique< OverlayContext >();
-			result.gui = castor::makeUnique< GuiContext >();
+			result.overlays = makeUnique< OverlayContext >();
+			result.gui = makeUnique< GuiContext >();
 			result.gui->controls = &static_cast< ControlsManager & >( *engine.getUserInputListener() );
 			result.gui->stylesHolder.push( result.gui->controls );
 			return result;
@@ -56,16 +56,16 @@ namespace castor3d
 
 		if constexpr ( scnfile::C3D_PrintParsers )
 		{
-			castor::Set< castor::String > sections;
-			castor::Set< castor::String > parsers;
-			castor::Set< castor::String > keywords;
+			Set< String > sections;
+			Set< String > parsers;
+			Set< String > keywords;
 			keywords.emplace( "true" );
 			keywords.emplace( "false" );
 			keywords.emplace( "screen_size" );
 
-			for ( uint32_t i = 0u; i < uint32_t( castor::PixelFormat::eCOUNT ); ++i )
+			for ( uint32_t i = 0u; i < uint32_t( PixelFormat::eCOUNT ); ++i )
 			{
-				keywords.insert( castor::getFormatName( castor::PixelFormat( i ) ) );
+				keywords.insert( getFormatName( PixelFormat( i ) ) );
 			}
 
 			for ( auto & [_, addParsers] : getAdditionalParsers() )
@@ -83,23 +83,23 @@ namespace castor3d
 					{
 						for ( auto & param : parser.params )
 						{
-							if ( param->getType() == castor::ParameterType::eCheckedText )
+							if ( param->getType() == ParameterType::eCheckedText )
 							{
-								for ( auto & [keyword, id] : static_cast< castor::ParserParameter< castor::ParameterType::eCheckedText > const & >( *param ).m_values )
+								for ( auto & [keyword, id] : static_cast< ParserParameter< ParameterType::eCheckedText > const & >( *param ).m_values )
 								{
 									keywords.insert( keyword );
 								}
 							}
-							else if ( param->getType() == castor::ParameterType::eBitwiseOred32BitsCheckedText )
+							else if ( param->getType() == ParameterType::eBitwiseOred32BitsCheckedText )
 							{
-								for ( auto & [keyword, id] : static_cast< castor::ParserParameter< castor::ParameterType::eBitwiseOred32BitsCheckedText > const & >( *param ).m_values )
+								for ( auto & [keyword, id] : static_cast< ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText > const & >( *param ).m_values )
 								{
 									keywords.insert( keyword );
 								}
 							}
-							else if ( param->getType() == castor::ParameterType::eBitwiseOred64BitsCheckedText )
+							else if ( param->getType() == ParameterType::eBitwiseOred64BitsCheckedText )
 							{
-								for ( auto & [keyword, id] : static_cast< castor::ParserParameter< castor::ParameterType::eBitwiseOred64BitsCheckedText > const & >( *param ).m_values )
+								for ( auto & [keyword, id] : static_cast< ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText > const & >( *param ).m_values )
 								{
 									keywords.insert( keyword );
 								}
@@ -128,16 +128,16 @@ namespace castor3d
 		}
 	}
 
-	castor::FileParserContextUPtr SceneFileParser::initialiseParser( castor::Path const & path )
+	FileParserContextUPtr SceneFileParser::initialiseParser( Path const & path )
 	{
 		return doInitialiseParser( path );
 	}
 
-	castor::FileParserContextUPtr SceneFileParser::doInitialiseParser( castor::Path const & path )
+	FileParserContextUPtr SceneFileParser::doInitialiseParser( Path const & path )
 	{
 		auto result = FileParser::doInitialiseParser( path );
 		auto & context = getData();
-		castor::File::listDirectoryFiles( path.getPath(), context.files, true );
+		File::listDirectoryFiles( path.getPath(), context.files, true );
 
 		for ( auto const & fileName : context.files )
 		{
@@ -150,7 +150,7 @@ namespace castor3d
 		return result;
 	}
 
-	void SceneFileParser::doCleanupParser( castor::PreprocessedFile & preprocessed )
+	void SceneFileParser::doCleanupParser( PreprocessedFile & preprocessed )
 	{
 		auto & context = getData();
 		context.csnaFiles.clear();
@@ -159,14 +159,14 @@ namespace castor3d
 		context.enableFullLoading = {};
 	}
 
-	void SceneFileParser::doValidate( castor::PreprocessedFile & preprocessed )
+	void SceneFileParser::doValidate( PreprocessedFile & preprocessed )
 	{
 	}
 
-	castor::String SceneFileParser::doGetSectionName( castor::SectionId section )const
+	String SceneFileParser::doGetSectionName( SectionId section )const
 	{
-		castor::String result;
-		static const castor::Map< uint32_t, castor::String > baseSections{ registerSceneFileSections() };
+		String result;
+		static const Map< uint32_t, String > baseSections{ registerSceneFileSections() };
 
 		if ( auto it = baseSections.find( section );
 			it != baseSections.end() )
@@ -188,9 +188,9 @@ namespace castor3d
 		return cuT( "unknown" );
 	}
 
-	castor::RawUniquePtr< castor::FileParser > SceneFileParser::doCreateParser()const
+	RawUniquePtr< FileParser > SceneFileParser::doCreateParser()const
 	{
-		return castor::make_unique< SceneFileParser >( *getEngine() );
+		return makeRawUnique< SceneFileParser >( *getEngine() );
 	}
 }
 //****************************************************************************************************

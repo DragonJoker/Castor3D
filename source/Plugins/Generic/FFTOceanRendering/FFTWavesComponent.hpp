@@ -13,75 +13,75 @@ See LICENSE file in root folder
 namespace ocean_fft
 {
 	class FFTWavesComponent
-		: public castor3d::SubmeshComponent
+		: public c3d::SubmeshComponent
 	{
 	public:
 		struct SurfaceShader
-			: public castor3d::shader::SubmeshRasterSurfaceShader
+			: public c3d::shader::SubmeshRasterSurfaceShader
 		{
 			void fillSurfaceType( sdw::type::Struct & type
 				, uint32_t * index )const override;
 		};
 
 		struct RenderData
-			: public castor3d::SubmeshRenderData
+			: public c3d::SubmeshRenderData
 		{
-			RenderData( castor3d::SubmeshComponent const & component );
+			RenderData( c3d::SubmeshComponent const & component );
 			/**
-			 *\copydoc	castor3d::shader::SubmeshRenderShader::initialise
+			 *\copydoc	c3d::shader::SubmeshRenderShader::initialise
 			 */
-			bool initialise( castor3d::RenderDevice const & device )override;
+			bool initialise( c3d::RenderDevice const & device )override;
 			/**
-			 *\copydoc	castor3d::shader::SubmeshRenderShader::record
+			 *\copydoc	c3d::shader::SubmeshRenderShader::record
 			 */
-			crg::FramePassArray record( castor3d::RenderDevice const & device
+			crg::FramePassArray record( c3d::RenderDevice const & device
 				, crg::ResourcesCache & resources
 				, crg::FramePassGroup & graph
 				, crg::FramePassArray previousPasses )override;
 			/**
-			 *\copydoc	castor3d::shader::SubmeshRenderShader::registerDependencies
+			 *\copydoc	c3d::shader::SubmeshRenderShader::registerDependencies
 			 */
 			void registerDependencies( crg::FramePass & pass )const override;
 			/**
-			 *\copydoc	castor3d::shader::SubmeshRenderShader::cleanup
+			 *\copydoc	c3d::shader::SubmeshRenderShader::cleanup
 			 */
-			void cleanup( castor3d::RenderDevice const & device )override;
+			void cleanup( c3d::RenderDevice const & device )override;
 			/**
-			 *\copydoc	castor3d::shader::SubmeshRenderShader::update
+			 *\copydoc	c3d::shader::SubmeshRenderShader::update
 			 */
-			void update( castor3d::CpuUpdater & updater )override;
+			void update( c3d::CpuUpdater & updater )override;
 			/**
-			 *\copydoc	castor3d::shader::SubmeshRenderShader::fillBindings
+			 *\copydoc	c3d::shader::SubmeshRenderShader::fillBindings
 			 */
-			void fillBindings( castor3d::PipelineFlags const & flags
+			void fillBindings( c3d::PipelineFlags const & flags
 				, ashes::VkDescriptorSetLayoutBindingArray & bindings
 				, uint32_t & index )const override;
 			/**
-			 *\copydoc	castor3d::shader::SubmeshRenderShader::fillDescriptor
+			 *\copydoc	c3d::shader::SubmeshRenderShader::fillDescriptor
 			 */
-			void fillDescriptor( castor3d::PipelineFlags const & flags
+			void fillDescriptor( c3d::PipelineFlags const & flags
 				, ashes::WriteDescriptorSetArray & descriptorWrites
 				, uint32_t & index )const override;
 			/**
-			 *\copydoc		castor3d::SubmeshComponent::clone
+			 *\copydoc		c3d::SubmeshComponent::clone
 			 */
-			void accept( castor3d::ConfigurationVisitorBase & vis );
+			void accept( c3d::ConfigurationVisitorBase & vis );
 			/**
-			 *\copydoc	castor3d::shader::SubmeshRenderShader::getBindingCount
+			 *\copydoc	c3d::shader::SubmeshRenderShader::getBindingCount
 			 */
 			uint32_t getBindingCount()const noexcept override
 			{
 				return 4u;
 			}
 			/**
-			 *\copydoc	castor3d::shader::SubmeshRenderShader::getPrimitiveTopology
+			 *\copydoc	c3d::shader::SubmeshRenderShader::getPrimitiveTopology
 			 */
 			VkPrimitiveTopology getPrimitiveTopology()const noexcept override
 			{
 				return VK_PRIMITIVE_TOPOLOGY_PATCH_LIST;
 			}
 			/**
-			 *\copydoc	castor3d::shader::SubmeshRenderShader::getPatchVertices
+			 *\copydoc	c3d::shader::SubmeshRenderShader::getPatchVertices
 			 */
 			uint32_t getPatchVertices()const noexcept override
 			{
@@ -91,62 +91,62 @@ namespace ocean_fft
 		private:
 			FFTWavesComponent const & m_component;
 			OceanUboConfiguration m_config;
-			castor::RawUniquePtr< OceanUbo > m_ubo;
-			castor::RawUniquePtr< OceanFFT > m_oceanFFT;
+			c3d::RawUniquePtr< OceanUbo > m_ubo;
+			c3d::RawUniquePtr< OceanFFT > m_oceanFFT;
 			ashes::SamplerPtr m_linearWrapSampler;
 			ashes::SamplerPtr m_pointClampSampler;
-			castor::PreciseTimer m_timer;
+			c3d::PreciseTimer m_timer;
 		};
 
 		struct RenderShader
-			: public castor3d::SubmeshRenderShader
+			: public c3d::SubmeshRenderShader
 		{
-			castor3d::SubmeshRenderDataPtr createData( castor3d::SubmeshComponent const & component )override
+			c3d::SubmeshRenderDataPtr createData( c3d::SubmeshComponent const & component )override
 			{
-				return castor::make_unique< RenderData >( component );
+				return c3d::makeRawUnique< RenderData >( component );
 			}
 			/**
-			 *\copydoc	castor3d::shader::SubmeshRenderShader::getShaderSource
+			 *\copydoc	c3d::shader::SubmeshRenderShader::getShaderSource
 			 */
-			void getShaderSource( castor3d::Engine const & engine
-				, castor3d::PipelineFlags const & flags
-				, castor3d::ComponentModeFlags const & componentsMask
+			void getShaderSource( c3d::Engine const & engine
+				, c3d::PipelineFlags const & flags
+				, c3d::ComponentModeFlags const & componentsMask
 				, ast::ShaderBuilder & builder )const override;
 		};
 
 		class Plugin
-			: public castor3d::SubmeshComponentPlugin
+			: public c3d::SubmeshComponentPlugin
 		{
 		public:
-			explicit Plugin( castor3d::SubmeshComponentRegister const & submeshComponents );
+			explicit Plugin( c3d::SubmeshComponentRegister const & submeshComponents );
 
-			castor3d::SubmeshComponentUPtr createComponent( castor3d::Submesh & submesh )const override
+			c3d::SubmeshComponentUPtr createComponent( c3d::Submesh & submesh )const override
 			{
-				return castor::makeUniqueDerived< castor3d::SubmeshComponent, FFTWavesComponent >( submesh );
+				return c3d::makeUniqueDerived< c3d::SubmeshComponent, FFTWavesComponent >( submesh );
 			}
 
-			castor3d::shader::SubmeshRasterSurfaceShaderPtr createRasterSurfaceShader()const override
+			c3d::shader::SubmeshRasterSurfaceShaderPtr createRasterSurfaceShader()const override
 			{
-				return castor::make_unique< SurfaceShader >();
+				return c3d::makeRawUnique< SurfaceShader >();
 			}
 
-			castor3d::SubmeshRenderShaderPtr createRenderShader()const override
+			c3d::SubmeshRenderShaderPtr createRenderShader()const override
 			{
-				return castor::make_unique< RenderShader >();
+				return c3d::makeRawUnique< RenderShader >();
 			}
 
-			castor3d::SubmeshComponentFlag getRenderFlag()const noexcept override
+			c3d::SubmeshComponentFlag getRenderFlag()const noexcept override
 			{
 				return getComponentFlags();
 			}
 
-			void createParsers( castor::AttributeParsers & parsers )const override;
-			void createSections( castor::StrUInt32Map & sections )const override;
+			void createParsers( c3d::AttributeParsers & parsers )const override;
+			void createSections( c3d::StrUInt32Map & sections )const override;
 		};
 
-		static castor3d::SubmeshComponentPluginUPtr createPlugin( castor3d::SubmeshComponentRegister const & submeshComponents )
+		static c3d::SubmeshComponentPluginUPtr createPlugin( c3d::SubmeshComponentRegister const & submeshComponents )
 		{
-			return castor::makeUniqueDerived< castor3d::SubmeshComponentPlugin, Plugin >( submeshComponents );
+			return c3d::makeUniqueDerived< c3d::SubmeshComponentPlugin, Plugin >( submeshComponents );
 		}
 		/**
 		 *\~english
@@ -156,19 +156,19 @@ namespace ocean_fft
 		 *\brief		Constructeur.
 		 *\param[in]	submesh	Le sous-maillage parent.
 		 */
-		explicit FFTWavesComponent( castor3d::Submesh & submesh );
+		explicit FFTWavesComponent( c3d::Submesh & submesh );
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::clone
+		 *\copydoc		c3d::SubmeshComponent::clone
 		 */
-		castor3d::SubmeshComponentUPtr clone( castor3d::Submesh & submesh )const override;
+		c3d::SubmeshComponentUPtr clone( c3d::Submesh & submesh )const override;
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::clone
+		 *\copydoc		c3d::SubmeshComponent::clone
 		 */
-		void accept( castor3d::ConfigurationVisitorBase & vis )override;
+		void accept( c3d::ConfigurationVisitorBase & vis )override;
 
 		void setFftConfig( OceanFFTConfig config )noexcept
 		{
-			m_fftConfig = castor::move( config );
+			m_fftConfig = c3d::move( config );
 		}
 
 		OceanFFTConfig const & getFftConfig()const noexcept
@@ -177,8 +177,8 @@ namespace ocean_fft
 		}
 
 	public:
-		static castor::String const TypeName;
-		static castor::MbString const FullName;
+		static c3d::String const TypeName;
+		static c3d::MbString const FullName;
 
 	private:
 		OceanFFTConfig m_fftConfig;

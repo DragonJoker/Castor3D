@@ -26,7 +26,7 @@
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -377,7 +377,7 @@ namespace castor3d
 					, FramePass const * parent
 					, LightType lightType )
 					: shader{ VK_SHADER_STAGE_COMPUTE_BIT
-						, ( mergePathPartitions ? castor::String{ cuT( "MergePathPartitions/" ) } : castor::String{ cuT( "MergeSort/" ) } ) + getName( lightType )
+						, ( mergePathPartitions ? String{ cuT( "MergePathPartitions/" ) } : String{ cuT( "MergeSort/" ) } ) + getName( lightType )
 						, createShader( device, mergePathPartitions ) }
 					, createInfo{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, shader ) } }
 					, cpConfig{ crg::getDefaultV< InitialiseCallback >()
@@ -459,7 +459,7 @@ namespace castor3d
 					auto sortGroupsCount = chunksCount / 2u;
 
 					// The number of thread groups that are required per sort group.
-					auto threadGroupsPerSortGroupCount = castor::divRoundUp( chunkSize * 2u, valuesPerThreadGroupCount );
+					auto threadGroupsPerSortGroupCount = divRoundUp( chunkSize * 2u, valuesPerThreadGroupCount );
 
 					// Compute merge path partitions per thread group.
 					{
@@ -468,7 +468,7 @@ namespace castor3d
 						auto totalMergePathPartitions = mergePathPartitionsPerSortGroupCount * sortGroupsCount;
 
 						// The number of thread groups needed to compute all merge path partitions.
-						auto threadGroupsCount = castor::divRoundUp( totalMergePathPartitions, threadsPerThreadGroupCount );
+						auto threadGroupsCount = divRoundUp( totalMergePathPartitions, threadsPerThreadGroupCount );
 
 						doMergeTransitionBarrier( context, commandBuffer, index );
 						m_partitions.pipeline.recordInto( context, commandBuffer, index );
@@ -484,7 +484,7 @@ namespace castor3d
 						// needs no merge); enough thread groups to sort all values.
 						const u32 threadGroupsCount = std::max( sortGroupsCount
 							, std::min( threadGroupsPerSortGroupCount * sortGroupsCount
-								, castor::divRoundUp( totalValues, valuesPerThreadGroupCount ) ) );
+								, divRoundUp( totalValues, valuesPerThreadGroupCount ) ) );
 
 						doAllBarriers( context, commandBuffer, index );
 						m_merge.pipeline.recordInto( context, commandBuffer, index );
@@ -511,7 +511,7 @@ namespace castor3d
 					index = 1u - index;
 
 					chunkSize *= 2;
-					chunksCount = castor::divRoundUp( totalValues, chunkSize );
+					chunksCount = divRoundUp( totalValues, chunkSize );
 				}
 			}
 
@@ -595,7 +595,7 @@ namespace castor3d
 		auto chunkSize = merge::NumThreadsPerThreadGroup;
 
 		// The total number of complete chunks to sort.
-		auto numChunks = castor::divRoundUp( lightCount, chunkSize );
+		auto numChunks = divRoundUp( lightCount, chunkSize );
 
 		return numChunks;
 	}
@@ -611,13 +611,13 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto result = castor::make_unique< merge::FramePass >( framePass
+				auto result = makeRawUnique< merge::FramePass >( framePass
 					, context
 					, runnableGraph
 					, device
 					, clusters
 					, LightType::ePoint );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -634,13 +634,13 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto result = castor::make_unique< merge::FramePass >( framePass
+				auto result = makeRawUnique< merge::FramePass >( framePass
 					, context
 					, runnableGraph
 					, device
 					, clusters
 					, LightType::eSpot );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

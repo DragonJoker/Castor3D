@@ -7,12 +7,12 @@
 
 namespace c3d_gltf
 {
-	GltfCameraImporter::GltfCameraImporter( castor3d::Engine & engine )
-		: castor3d::CameraImporter{ engine, cuT( "Gltf" ) }
+	GltfCameraImporter::GltfCameraImporter( c3d::Engine & engine )
+		: c3d::CameraImporter{ engine, cuT( "Gltf" ) }
 	{
 	}
 
-	bool GltfCameraImporter::doImportCamera( castor3d::Camera & camera )
+	bool GltfCameraImporter::doImportCamera( c3d::Camera & camera )
 	{
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto & impAsset = file.getAsset();
@@ -42,7 +42,7 @@ namespace c3d_gltf
 		auto nodeIndex = uint32_t( std::distance( impAsset.nodes.begin(), nodeIt ) );
 		auto nodeName = file.getNodeName( nodeIndex, 0u );
 		auto & scene = *camera.getScene();
-		castor3d::SceneNodeRPtr node{};
+		c3d::SceneNodeRPtr node{};
 
 		if ( scene.hasSceneNode( nodeName ) )
 		{
@@ -63,13 +63,13 @@ namespace c3d_gltf
 
 			if ( !perspective.zfar )
 			{
-				viewport.setInfinitePerspective( castor::Angle::fromRadians( perspective.yfov )
+				viewport.setInfinitePerspective( c3d::Angle::fromRadians( perspective.yfov )
 					, perspective.aspectRatio ? *perspective.aspectRatio : 1.0f
 					, perspective.znear );
 			}
 			else
 			{
-				viewport.setPerspective( castor::Angle::fromRadians( perspective.yfov )
+				viewport.setPerspective( c3d::Angle::fromRadians( perspective.yfov )
 					, perspective.aspectRatio ? *perspective.aspectRatio : 1.0f
 					, perspective.znear
 					, *perspective.zfar );

@@ -17,14 +17,14 @@ See LICENSE file in root folder
 
 #include <functional>
 
-namespace castor
+namespace c3d
 {
 	class WorkerThread
 		: public NonMovable
 	{
 	public:
-		using Job = castor::Function< void() >;
-		using OnEnded = SignalT< castor::Function< void( WorkerThread const & ) > >;
+		using Job = c3d::Function< void() >;
+		using OnEnded = SignalT< c3d::Function< void( WorkerThread const & ) > >;
 
 	public:
 		/**
@@ -87,7 +87,7 @@ namespace castor
 
 	private:
 		std::thread m_thread;
-		castor::Mutex m_mutex;
+		c3d::Mutex m_mutex;
 		std::atomic_bool m_start{ false };
 		std::atomic_bool m_terminate{ false };
 		Job m_currentJob;

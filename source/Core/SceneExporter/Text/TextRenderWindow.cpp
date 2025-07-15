@@ -4,17 +4,15 @@
 
 #include <Castor3D/Miscellaneous/Logger.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
-	TextWriter< RenderWindow >::TextWriter( castor::String const & tabs )
+	TextWriter< RenderWindow >::TextWriter( String const & tabs )
 		: TextWriterT< RenderWindow >{ tabs }
 	{
 	}
 
 	bool TextWriter< RenderWindow >::operator()( RenderWindow const & window
-		, castor::StringStream & file )
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing Window " ) << window.getName() << std::endl;
 		bool result = false;

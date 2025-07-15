@@ -15,14 +15,14 @@ namespace PbrBloom
 	public:
 		CombinePass( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
-			, castor3d::RenderDevice const & device
+			, c3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & lhs
 			, crg::ImageId const & rhs
 			, crg::ImageViewIdArray const & result
-			, castor3d::UniformBufferOffsetT< castor::Point2f > const & ubo
+			, c3d::UniformBufferOffsetT< c3d::Point2f > const & ubo
 			, bool const * enabled
 			, uint32_t const * passIndex );
-		void accept( castor3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor );
 
 		crg::FramePass const & getPass()const
 		{
@@ -30,11 +30,11 @@ namespace PbrBloom
 		}
 
 	public:
-		static castor::MbString const CombineMapPasses;
-		static castor::MbString const CombineMapScene;
+		static c3d::MbString const CombineMapPasses;
+		static c3d::MbString const CombineMapScene;
 
 	private:
-		castor3d::ProgramModule m_shader;
+		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass & m_pass;
 	};

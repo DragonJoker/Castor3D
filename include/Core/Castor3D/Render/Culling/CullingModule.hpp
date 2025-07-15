@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/Signal.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Render */
 	//@{
@@ -44,22 +44,22 @@ namespace castor3d
 	*/
 	class SceneCuller;
 
-	using SceneCullerSignalFunction = castor::Function< void( SceneCuller const & ) >;
-	using SceneCullerSignal = castor::SignalT< SceneCullerSignalFunction >;
-	using SceneCullerSignalConnection = castor::ConnectionT< SceneCullerSignal >;
+	using SceneCullerSignalFunction = Function< void( SceneCuller const & ) >;
+	using SceneCullerSignal = SignalT< SceneCullerSignalFunction >;
+	using SceneCullerSignalConnection = ConnectionT< SceneCullerSignal >;
 
-	using SceneCullerSubmeshSignalFunction = castor::Function< void( SceneCuller const &, CulledNodeT< SubmeshRenderNode > const &, bool ) >;
-	using SceneCullerSubmeshSignal = castor::SignalT< SceneCullerSubmeshSignalFunction >;
-	using SceneCullerSubmeshSignalConnection = castor::ConnectionT< SceneCullerSubmeshSignal >;
+	using SceneCullerSubmeshSignalFunction = Function< void( SceneCuller const &, CulledNodeT< SubmeshRenderNode > const &, bool ) >;
+	using SceneCullerSubmeshSignal = SignalT< SceneCullerSubmeshSignalFunction >;
+	using SceneCullerSubmeshSignalConnection = ConnectionT< SceneCullerSubmeshSignal >;
 
-	using SceneCullerBillboardSignalFunction = castor::Function< void( SceneCuller const &, CulledNodeT< BillboardRenderNode > const &, bool ) >;
-	using SceneCullerBillboardSignal = castor::SignalT< SceneCullerBillboardSignalFunction >;
-	using SceneCullerBillboardSignalConnection = castor::ConnectionT< SceneCullerBillboardSignal >;
+	using SceneCullerBillboardSignalFunction = Function< void( SceneCuller const &, CulledNodeT< BillboardRenderNode > const &, bool ) >;
+	using SceneCullerBillboardSignal = SignalT< SceneCullerBillboardSignalFunction >;
+	using SceneCullerBillboardSignalConnection = ConnectionT< SceneCullerBillboardSignal >;
 
-	using PipelineNodes = castor::Array< uint32_t, MaxNodesPerPipeline >;
+	using PipelineNodes = Array< uint32_t, MaxNodesPerPipeline >;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, SceneCuller, C3D_API );
+	CU_DeclareSmartPtr( c3d, SceneCuller, C3D_API );
 	/** @endcond */
 
 	//@}

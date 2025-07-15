@@ -22,81 +22,81 @@
 #include <ashespp/Sync/Fence.hpp>
 #include <ashespp/Sync/Queue.hpp>
 
-CU_ImplementSmartPtr( castor3d, DebugDrawer )
+CU_ImplementSmartPtr( c3d, DebugDrawer )
 
-namespace castor3d
+namespace c3d
 {
 	namespace dbgdrw
 	{
 		static size_t hash( VkPipelineShaderStageCreateInfo const & value )
 		{
 			size_t result = std::hash< VkFlags >{}( value.flags );
-			castor::hashCombine( result, value.module );
-			castor::hashCombine( result, value.stage );
+			hashCombine( result, value.module );
+			hashCombine( result, value.stage );
 			return result;
 		}
 
 		static size_t hash( VkDescriptorImageInfo const & value )
 		{
 			size_t result = std::hash< VkSampler >{}( value.sampler );
-			castor::hashCombine( result, value.imageView );
-			castor::hashCombine( result, value.imageLayout );
+			hashCombine( result, value.imageView );
+			hashCombine( result, value.imageLayout );
 			return result;
 		}
 
 		static size_t hash( VkDescriptorBufferInfo const & value )
 		{
 			size_t result = std::hash< VkBuffer >{}( value.buffer );
-			castor::hashCombine( result, value.offset );
-			castor::hashCombine( result, value.range );
+			hashCombine( result, value.offset );
+			hashCombine( result, value.range );
 			return result;
 		}
 
 		static size_t hash( VkVertexInputAttributeDescription const & value )
 		{
 			size_t result = std::hash< uint32_t >{}( value.binding );
-			castor::hashCombine( result, value.format );
-			castor::hashCombine( result, value.location );
-			castor::hashCombine( result, value.offset );
+			hashCombine( result, value.format );
+			hashCombine( result, value.location );
+			hashCombine( result, value.offset );
 			return result;
 		}
 
 		static size_t hash( VkVertexInputBindingDescription const & value )
 		{
 			size_t result = std::hash< uint32_t >{}( value.binding );
-			castor::hashCombine( result, value.stride );
-			castor::hashCombine( result, value.inputRate );
+			hashCombine( result, value.stride );
+			hashCombine( result, value.inputRate );
 			return result;
 		}
 
 		static size_t hash( VkWriteDescriptorSet const & value )
 		{
 			size_t result = std::hash< uint32_t >{}( value.dstBinding );
-			castor::hashCombine( result, value.dstArrayElement );
-			castor::hashCombine( result, value.descriptorCount );
-			castor::hashCombine( result, value.descriptorType );
+			hashCombine( result, value.dstArrayElement );
+			hashCombine( result, value.descriptorCount );
+			hashCombine( result, value.descriptorType );
 
 			if ( value.pImageInfo )
 			{
-				for ( auto & info : castor::makeArrayView( value.pImageInfo, value.descriptorCount ) )
+				for ( auto & info : makeArrayView( value.pImageInfo, value.descriptorCount ) )
 				{
-					castor::hashCombine( result, hash( info ) );
+					hashCombine( result, hash( info ) );
 				}
 			}
 
 			if ( value.pBufferInfo )
 			{
-				for ( auto & info : castor::makeArrayView( value.pBufferInfo, value.descriptorCount ) )
+				for ( auto & info : makeArrayView( value.pBufferInfo, value.descriptorCount ) )
 				{
-					castor::hashCombine( result, hash( info ) );
+					hashCombine( result, hash( info ) );
 				}
 			}
 
 			if ( value.pTexelBufferView )
 			{
-				for ( auto & info : castor::makeArrayView( value.pTexelBufferView, value.descriptorCount ) )
+				for ( auto & info : makeArrayView( value.pTexelBufferView, value.descriptorCount ) )
 				{
-					castor::hashCombine( result, info );
+					hashCombine( result, info );
 				}
 			}
 
@@ -112,28 +112,28 @@ namespace castor3d
 
 			for ( auto & value : vertexAttributes )
 			{
-				castor::hashCombine( result, hash( value ) );
+				hashCombine( result, hash( value ) );
 			}
 
 			for ( auto & value : vertexBindings )
 			{
-				castor::hashCombine( result, hash( value ) );
+				hashCombine( result, hash( value ) );
 			}
 
 			for ( auto & value : shaders )
 			{
-				castor::hashCombine( result, hash( value ) );
+				hashCombine( result, hash( value ) );
 			}
 
-			castor::hashCombine( result, enableDepthTest );
+			hashCombine( result, enableDepthTest );
 			return result;
 		}
 
 		static size_t hash( DebugIndexBuffer const & buffer )
 		{
 			size_t result = std::hash< VkBuffer >{}( buffer.buffer );
-			castor::hashCombine( result, buffer.offset );
-			castor::hashCombine( result, buffer.count );
+			hashCombine( result, buffer.offset );
+			hashCombine( result, buffer.count );
 			return result;
 		}
 
@@ -145,21 +145,21 @@ namespace castor3d
 
 			for ( auto & value : writes )
 			{
-				castor::hashCombine( result, hash( value ) );
+				hashCombine( result, hash( value ) );
 			}
 
 			for ( auto & value : vertexBuffers.buffers )
 			{
-				castor::hashCombine( result, value );
+				hashCombine( result, value );
 			}
 
 			for ( auto & value : vertexBuffers.offsets )
 			{
-				castor::hashCombine( result, value );
+				hashCombine( result, value );
 			}
 
-			castor::hashCombine( result, vertexBuffers.count );
-			castor::hashCombine( result, hash( indexBuffer ) );
+			hashCombine( result, vertexBuffers.count );
+			hashCombine( result, hash( indexBuffer ) );
 			return result;
 		}
 	}
@@ -225,45 +225,45 @@ namespace castor3d
 				, crg::defaultV< GetSubpassContentsCallback >
 				, GetPassIndexCallback( [passIndex](){ return *passIndex; } )
 				, IsEnabledCallback( [this](){ return doIsEnabled(); } ) }
-			, castor::move( dimensions )
+			, c3d::move( dimensions )
 			, crg::ru::Config{ 2u } }
 		, m_device{ device }
 	{
-		m_aabb.vertices = m_device.vertexPools->getBuffer< castor::Point4f >( 8u );
+		m_aabb.vertices = m_device.vertexPools->getBuffer< Point4f >( 8u );
 		m_aabb.indices = m_device.indexPools->getBuffer< uint32_t >( 24u );
 		{
-			static castor::Array< castor::Point4f, 8u > const vertexData{ castor::Point4f{ 0.0f, 0.0f, 0.0f, 1.0f }
-				, castor::Point4f{ 1.0f, 0.0f, 0.0f, 1.0f }
-				, castor::Point4f{ 0.0f, 1.0f, 0.0f, 1.0f }
-				, castor::Point4f{ 1.0f, 1.0f, 0.0f, 1.0f }
-				, castor::Point4f{ 0.0f, 0.0f, 1.0f, 1.0f }
-				, castor::Point4f{ 1.0f, 0.0f, 1.0f, 1.0f }
-				, castor::Point4f{ 0.0f, 1.0f, 1.0f, 1.0f }
-				, castor::Point4f{ 1.0f, 1.0f, 1.0f, 1.0f } };
-			static castor::Array< castor::Point2ui, 12u > const indexData{ castor::Point2ui{ 0u, 1u }
-				, castor::Point2ui{ 1u, 3u }
-				, castor::Point2ui{ 3u, 2u }
-				, castor::Point2ui{ 2u, 0u }
-				, castor::Point2ui{ 4u, 5u }
-				, castor::Point2ui{ 5u, 7u }
-				, castor::Point2ui{ 7u, 6u }
-				, castor::Point2ui{ 6u, 4u }
-				, castor::Point2ui{ 0u, 4u }
-				, castor::Point2ui{ 1u, 5u }
-				, castor::Point2ui{ 2u, 6u }
-				, castor::Point2ui{ 3u, 7u } };
+			static Array< Point4f, 8u > const vertexData{ Point4f{ 0.0f, 0.0f, 0.0f, 1.0f }
+				, Point4f{ 1.0f, 0.0f, 0.0f, 1.0f }
+				, Point4f{ 0.0f, 1.0f, 0.0f, 1.0f }
+				, Point4f{ 1.0f, 1.0f, 0.0f, 1.0f }
+				, Point4f{ 0.0f, 0.0f, 1.0f, 1.0f }
+				, Point4f{ 1.0f, 0.0f, 1.0f, 1.0f }
+				, Point4f{ 0.0f, 1.0f, 1.0f, 1.0f }
+				, Point4f{ 1.0f, 1.0f, 1.0f, 1.0f } };
+			static Array< Point2ui, 12u > const indexData{ Point2ui{ 0u, 1u }
+				, Point2ui{ 1u, 3u }
+				, Point2ui{ 3u, 2u }
+				, Point2ui{ 2u, 0u }
+				, Point2ui{ 4u, 5u }
+				, Point2ui{ 5u, 7u }
+				, Point2ui{ 7u, 6u }
+				, Point2ui{ 6u, 4u }
+				, Point2ui{ 0u, 4u }
+				, Point2ui{ 1u, 5u }
+				, Point2ui{ 2u, 6u }
+				, Point2ui{ 3u, 7u } };
 			auto queue = m_device.graphicsData();
 			InstantDirectUploadData uploader{ *queue->queue
 				, m_device
 				, cuT( "RenderCube" )
 				, *queue->commandPool };
 			uploader->pushUpload( vertexData.data()->constPtr()
-				, vertexData.size() * sizeof( castor::Point4f )
+				, vertexData.size() * sizeof( Point4f )
 				, m_aabb.vertices.getBuffer( SubmeshData::ePositions )
 				, m_aabb.vertices.getOffset( SubmeshData::ePositions )
 				, VertexAttributeInputState );
 			uploader->pushUpload( indexData.data()->constPtr()
-				, indexData.size() * sizeof( castor::Point2ui )
+				, indexData.size() * sizeof( Point2ui )
 				, m_aabb.indices.getBuffer( SubmeshData::eIndex )
 				, m_aabb.indices.getOffset( SubmeshData::eIndex )
 				, VertexAttributeInputState );
@@ -273,7 +273,7 @@ namespace castor3d
 	DebugDrawer::FramePass::~FramePass()noexcept
 	{
 		m_device.indexPools->putBuffer( m_aabb.indices );
-		m_device.vertexPools->putBuffer< castor::Point4f >( m_aabb.vertices );
+		m_device.vertexPools->putBuffer< Point4f >( m_aabb.vertices );
 	}
 
 	void DebugDrawer::FramePass::addAabbs( ashes::VkDescriptorSetLayoutBindingArray const & bindings
@@ -321,24 +321,24 @@ namespace castor3d
 
 		if ( res )
 		{
-			auto name = castor::toUtf8( m_pass.getName() ) + "/AABB/" + castor::string::toMbString( hash );
+			auto name = toUtf8( m_pass.getName() ) + "/AABB/" + string::toMbString( hash );
 			auto & extent = doGetHolder().getRenderSize();
 			ashes::PipelineVertexInputStateCreateInfo vertexState{ 0u
 				, vertexBindings
 				, vertexAttributes };
 			ashes::PipelineViewportStateCreateInfo viewportState{ 0u
-				, { makeViewport( castor::Point2ui{ extent.width, extent.height } ) }
-				, { makeScissor( castor::Point2ui{ extent.width, extent.height } ) } };
-			it->second = std::make_unique< Pipeline >();
+				, { makeViewport( Point2ui{ extent.width, extent.height } ) }
+				, { makeScissor( Point2ui{ extent.width, extent.height } ) } };
+			it->second = makeRawUnique< Pipeline >();
 			it->second->descriptorLayout = m_device->createDescriptorSetLayout( name, bindings );
 			it->second->pipelineLayout = m_device->createPipelineLayout( name
 				, *it->second->descriptorLayout );
 			ashes::GraphicsPipelineCreateInfo graphics{ 0u
 				, shader
-				, castor::move( vertexState )
+				, c3d::move( vertexState )
 				, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_LINE_LIST }
 				, ashes::nullopt
-				, castor::move( viewportState )
+				, c3d::move( viewportState )
 				, ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_LINE, VK_CULL_MODE_NONE }
 				, ashes::PipelineMultisampleStateCreateInfo{}
 				, ashes::PipelineDepthStencilStateCreateInfo{ 0u, enableDepthTest, VK_FALSE, VK_COMPARE_OP_GREATER }
@@ -346,7 +346,7 @@ namespace castor3d
 				, ashes::nullopt
 				, static_cast< VkPipelineLayout >( *it->second->pipelineLayout )
 				, getRenderPass( 0u ) };
-			it->second->pipeline = m_device->createPipeline( name, castor::move( graphics ) );
+			it->second->pipeline = m_device->createPipeline( name, c3d::move( graphics ) );
 		}
 
 		auto ihash = dbgdrw::hash( vertexBuffers, indexBuffer, writes );
@@ -354,7 +354,7 @@ namespace castor3d
 
 		if ( ires )
 		{
-			auto name = castor::toUtf8( m_pass.getName() ) + "/AABB/" + castor::string::toMbString( hash ) + "/" + castor::string::toMbString( ihash );
+			auto name = toUtf8( m_pass.getName() ) + "/AABB/" + string::toMbString( hash ) + "/" + string::toMbString( ihash );
 			iit->second.descriptorPool = it->second->descriptorLayout->createPool( name, 1U );
 			iit->second.descriptorSet = iit->second.descriptorPool->createDescriptorSet( name );
 			iit->second.descriptorSet->setBindings( writes );
@@ -411,7 +411,7 @@ namespace castor3d
 		, crg::ImageViewIdArray colour
 		, Texture const & depth
 		, uint32_t const * passIndex )
-		: castor::OwnedBy< RenderTarget >{ parent }
+		: OwnedBy< RenderTarget >{ parent }
 	{
 		auto extent = makeExtent2D( depth.getExtent() );
 		auto & pass = graph.createPass( "DebugDraw"
@@ -419,14 +419,14 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto result = castor::make_unique< FramePass >( framePass
+				auto result = makeRawUnique< FramePass >( framePass
 					, context
 					, runnableGraph
 					, device
 					, extent
 					, passIndex );
 				m_framePass = result.get();
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

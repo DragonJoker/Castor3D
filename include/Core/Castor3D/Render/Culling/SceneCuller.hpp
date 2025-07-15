@@ -11,10 +11,10 @@ See LICENSE file in root folder
 
 #include "Castor3D/Limits.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	AnimatedObjectRPtr findAnimatedObject( Scene const & scene
-		, castor::String const & name );
+		, String const & name );
 
 	size_t hash( SubmeshRenderNode const & culled );
 	bool isVisible( Camera const & camera
@@ -115,14 +115,14 @@ namespace castor3d
 		void doUpdateChanged( CpuUpdater::DirtyObjects & sceneObjs );
 		void doUpdateCulled( CpuUpdater::DirtyObjects const & sceneObjs );
 		void doMarkDirty( CpuUpdater::DirtyObjects const & sceneObjs
-			, castor::Vector< SubmeshRenderNode const * > & dirtySubmeshes
-			, castor::Vector< BillboardRenderNode const * > & dirtyBillboards )const;
-		void doUpdateCulledSubmeshes( castor::Vector< SubmeshRenderNode const * > const & dirtySubmeshes );
-		void doUpdateCulledBillboards( castor::Vector< BillboardRenderNode const * > const & dirtyBillboards );
+			, Vector< SubmeshRenderNode const * > & dirtySubmeshes
+			, Vector< BillboardRenderNode const * > & dirtyBillboards )const;
+		void doUpdateCulledSubmeshes( Vector< SubmeshRenderNode const * > const & dirtySubmeshes );
+		void doUpdateCulledBillboards( Vector< BillboardRenderNode const * > const & dirtyBillboards );
 		void doMakeDirty( Geometry const & object
-			, castor::Vector< SubmeshRenderNode const * > & dirtySubmeshes )const;
+			, Vector< SubmeshRenderNode const * > & dirtySubmeshes )const;
 		void doMakeDirty( BillboardBase const & object
-			, castor::Vector< BillboardRenderNode const * > & dirtyBillboards )const;
+			, Vector< BillboardRenderNode const * > & dirtyBillboards )const;
 		virtual bool isSubmeshVisible( SubmeshRenderNode const & node )const = 0;
 		virtual bool isBillboardVisible( BillboardRenderNode const & node )const = 0;
 

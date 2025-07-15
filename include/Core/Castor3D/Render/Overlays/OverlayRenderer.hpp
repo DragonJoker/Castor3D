@@ -20,10 +20,10 @@ See LICENSE file in root folder
 #include <ashespp/Pipeline/PipelineLayout.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class OverlayRenderer
-		: public castor::OwnedBy< RenderSystem >
+		: public OwnedBy< RenderSystem >
 	{
 	public:
 		friend class OverlayPreparer;
@@ -43,7 +43,7 @@ namespace castor3d
 			TextComputePipelineDescriptor( ashes::DescriptorSetPtr descriptorSet
 				, uint32_t count
 				, OverlayTextBuffer const * textBuffer = {} )
-				: descriptorSet{ castor::move( descriptorSet ) }
+				: descriptorSet{ c3d::move( descriptorSet ) }
 				, count{ count }
 				, textBuffer{ textBuffer }
 			{
@@ -60,7 +60,7 @@ namespace castor3d
 			ashes::PipelineLayoutPtr pipelineLayout{};
 			ashes::PipelinePtr pipeline{};
 			ashes::DescriptorSetPoolPtr descriptorPool{};
-			castor::UnorderedMap< FontTexture const *, TextComputePipelineDescriptor > sets;
+			HashMap< FontTexture const *, TextComputePipelineDescriptor > sets;
 		};
 
 	public:
@@ -148,7 +148,7 @@ namespace castor3d
 			return *m_draw.commands.commandBuffer;
 		}
 
-		castor::Size const & getSize()const noexcept
+		Size const & getSize()const noexcept
 		{
 			return m_size;
 		}
@@ -179,9 +179,9 @@ namespace castor3d
 			ashes::DescriptorSetLayoutPtr baseDescriptorLayout;
 
 			CameraUbo cameraUbo;
-			castor::RawUniquePtr< PanelVertexBufferPool > panelVertexBuffer;
-			castor::RawUniquePtr< BorderPanelVertexBufferPool > borderVertexBuffer;
-			castor::RawUniquePtr< TextVertexBufferPool > textVertexBuffer;
+			RawUniquePtr< PanelVertexBufferPool > panelVertexBuffer;
+			RawUniquePtr< BorderPanelVertexBufferPool > borderVertexBuffer;
+			RawUniquePtr< TextVertexBufferPool > textVertexBuffer;
 		};
 
 		struct OverlaysComputeData
@@ -225,11 +225,11 @@ namespace castor3d
 		struct OverlaysDrawData
 		{
 			CommandsSemaphore commands;
-			castor::RawUniquePtr< crg::FramePassTimerBlock > timerBlock;
-			castor::Vector< ashes::DescriptorSetPtr > retired;
+			RawUniquePtr< crg::FramePassTimerBlock > timerBlock;
+			Vector< ashes::DescriptorSetPtr > retired;
 			ashes::DescriptorSetLayoutPtr textDescriptorLayout;
 			ashes::DescriptorSetPoolPtr textDescriptorPool;
-			castor::UnorderedMap< FontTexture const *, FontTextureDescriptorConnection > textDescriptorSets;
+			HashMap< FontTexture const *, FontTextureDescriptorConnection > textDescriptorSets;
 
 			OverlaysDrawData( RenderDevice const & device
 				, VkCommandBufferLevel level
@@ -251,14 +251,14 @@ namespace castor3d
 				, VkFramebuffer framebuffer
 				, crg::Fence & fence
 				, crg::FramePassTimer & timer
-				, castor::Size const & size );
+				, Size const & size );
 			void endPrepare();
 
 		private:
 			OverlayDrawPipeline & doGetPipeline( RenderDevice const & device
 				, VkRenderPass renderPass
 				, Pass const & pass
-				, castor::UnorderedMap< size_t, OverlayDrawPipeline > & pipelines
+				, HashMap< size_t, OverlayDrawPipeline > & pipelines
 				, bool borderOverlay
 				, bool textOverlay
 				, bool sdfFont );
@@ -275,12 +275,12 @@ namespace castor3d
 				, bool sdfFont )const;
 
 		private:
-			castor::UnorderedMap< size_t, OverlayDrawNode > m_mapPanelNodes;
-			castor::UnorderedMap< size_t, OverlayDrawNode > m_mapBorderNodes;
-			castor::UnorderedMap< size_t, OverlayDrawNode > m_mapTextNodes;
-			castor::UnorderedMap< size_t, OverlayDrawPipeline > m_panelPipelines;
-			castor::UnorderedMap< size_t, OverlayDrawPipeline > m_borderPipelines;
-			castor::UnorderedMap< size_t, OverlayDrawPipeline > m_textPipelines;
+			HashMap< size_t, OverlayDrawNode > m_mapPanelNodes;
+			HashMap< size_t, OverlayDrawNode > m_mapBorderNodes;
+			HashMap< size_t, OverlayDrawNode > m_mapTextNodes;
+			HashMap< size_t, OverlayDrawPipeline > m_panelPipelines;
+			HashMap< size_t, OverlayDrawPipeline > m_borderPipelines;
+			HashMap< size_t, OverlayDrawPipeline > m_textPipelines;
 			OverlaysCommonData & m_commonData;
 			bool m_isHdr;
 		};
@@ -290,7 +290,7 @@ namespace castor3d
 			, VkFramebuffer framebuffer
 			, crg::Fence & fence );
 		void doEndPrepare();
-		castor::Pair< OverlayDrawNode *, OverlayPipelineData * > doGetDrawNodeData( RenderDevice const & device
+		Pair< OverlayDrawNode *, OverlayPipelineData * > doGetDrawNodeData( RenderDevice const & device
 			, VkRenderPass renderPass
 			, Overlay const & overlay
 			, Pass const & pass
@@ -304,8 +304,8 @@ namespace castor3d
 	private:
 		Texture const & m_target;
 		crg::FramePassTimer & m_timer;
-		castor::Size m_size;
-		castor::String m_previousCaption;
+		Size m_size;
+		String m_previousCaption;
 		bool m_sizeChanged{ true };
 		OverlaysCommonData m_common;
 		OverlaysDrawData m_draw;

@@ -12,9 +12,9 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementSmartPtr( castor3d, ScrollableCtrl )
+CU_ImplementSmartPtr( c3d, ScrollableCtrl )
 
-namespace castor3d
+namespace c3d
 {
 	//************************************************************************************************
 
@@ -22,28 +22,28 @@ namespace castor3d
 	{
 		static void checkScrollBar( ScrollBarFlag flag
 			, Control & control
-			, castor::String const & prefix
+			, String const & prefix
 			, ScrollableStyle const * style
 			, bool ( ScrollableStyle::* has )()const noexcept
 			, ScrollBarStyle & ( ScrollableStyle::* get )()const noexcept
 			, uint32_t rangeMax
-			, castor::Size dim
+			, Size dim
 			, ScrollBarCtrlRPtr & scrollBar )
 		{
-			if ( castor::checkFlag( control.getFlags(), flag ) )
+			if ( checkFlag( control.getFlags(), flag ) )
 			{
 				if ( !scrollBar )
 				{
 					CU_Require( style && ( style->*has )() );
 					auto & manager = *control.getEngine().getControlsManager();
 					auto scene = control.hasScene() ? &control.getScene() : nullptr;
-					scrollBar = manager.registerControlT( castor::makeUnique< ScrollBarCtrl >( scene
+					scrollBar = manager.registerControlT( makeUnique< ScrollBarCtrl >( scene
 						, cuT( "Scroll/" ) + prefix
 						, &( style->*get )()
 						, &control
-						, castor::makeRangedValue( 0.0f, 0.0f, float( rangeMax ) )
-						, castor::Position{}
-						, castor::move( dim )
+						, makeRangedValue( 0.0f, 0.0f, float( rangeMax ) )
+						, Position{}
+						, c3d::move( dim )
 						, ControlFlagType( flag ) ) );
 				}
 
@@ -107,9 +107,9 @@ namespace castor3d
 		}
 	}
 
-	castor::Position ScrollableCtrl::getScrollPosition()const
+	Position ScrollableCtrl::getScrollPosition()const
 	{
-		castor::Position result{};
+		Position result{};
 
 		if ( m_verticalScrollBar )
 		{
@@ -276,9 +276,9 @@ namespace castor3d
 		}
 	}
 
-	castor::Point4ui ScrollableCtrl::updateScrollableClientRect( castor::Point4ui const & clientRect )const
+	Point4ui ScrollableCtrl::updateScrollableClientRect( Point4ui const & clientRect )const
 	{
-		castor::Point4ui result{ clientRect };
+		Point4ui result{ clientRect };
 
 		if ( m_verticalScrollBar )
 		{
@@ -293,7 +293,7 @@ namespace castor3d
 		return result;
 	}
 
-	void ScrollableCtrl::updateScrollBarsThumb( castor::Position const & pos )
+	void ScrollableCtrl::updateScrollBarsThumb( Position const & pos )
 	{
 		if ( m_verticalScrollBar )
 		{
@@ -374,18 +374,18 @@ namespace castor3d
 		}
 	}
 
-	void ScrollableCtrl::updateTotalSize( castor::Size const & size )
+	void ScrollableCtrl::updateTotalSize( Size const & size )
 	{
 		if ( m_verticalScrollBar )
 		{
-			m_verticalScrollBar->setRange( castor::makeRange( 0u
+			m_verticalScrollBar->setRange( makeRange( 0u
 				, uint32_t( std::max( 0
 					, int32_t( size->y ) - int32_t( m_target.getClientSize()->y ) ) ) ) );
 		}
 
 		if ( m_horizontalScrollBar )
 		{
-			m_horizontalScrollBar->setRange( castor::makeRange( 0u
+			m_horizontalScrollBar->setRange( makeRange( 0u
 				, uint32_t( std::max( 0
 					, int32_t( size->x ) - int32_t( m_target.getClientSize()->x ) ) ) ) );
 		}

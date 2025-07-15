@@ -11,9 +11,9 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, Material )
+CU_ImplementSmartPtr( c3d, Material )
 
-namespace castor3d
+namespace c3d
 {
 	namespace mat
 	{
@@ -26,7 +26,7 @@ namespace castor3d
 			else
 			{
 				auto & engine = *getEngine( *blockContext );
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				newBlockContext->root = blockContext;
 				newBlockContext->material = engine.tryFindMaterial( name );
 				newBlockContext->passIndex = 0u;
@@ -52,7 +52,7 @@ namespace castor3d
 			else
 			{
 				auto & engine = *getEngine( *blockContext );
-				auto name = getPrefixedName( params[0]->get< castor::String >(), *blockContext );
+				auto name = getPrefixedName( params[0]->get< String >(), *blockContext );
 				newBlockContext->root = blockContext->root;
 				newBlockContext->scene = blockContext;
 				newBlockContext->material = engine.tryFindMaterial( name );
@@ -78,7 +78,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::String typeName;
+				String typeName;
 				params[0]->get( typeName );
 				blockContext->material->setRenderPassInfo( getEngine( *blockContext )->getRenderPassInfo( typeName ) );
 			}
@@ -126,13 +126,13 @@ namespace castor3d
 		CU_EndAttributePop()
 	}
 
-	const castor::String Material::DefaultMaterialName = cuT( "C3D_DefaultMaterial" );
+	const String Material::DefaultMaterialName = cuT( "C3D_DefaultMaterial" );
 
-	Material::Material( castor::String const & name
+	Material::Material( String const & name
 		, Engine & engine
 		, LightingModelID lightingModelId )
-		: castor::Named{ name }
-		, castor::OwnedBy< Engine >{ engine }
+		: Named{ name }
+		, OwnedBy< Engine >{ engine }
 		, m_lightingModelId{ lightingModelId }
 	{
 	}
@@ -184,7 +184,7 @@ namespace castor3d
 				{
 					onPassChanged( p );
 				} ) );
-		m_passes.emplace_back( castor::move( result ) );
+		m_passes.emplace_back( c3d::move( result ) );
 		onChanged( *this );
 		return ret;
 	}
@@ -208,7 +208,7 @@ namespace castor3d
 			{
 				onPassChanged( p );
 			} ) );
-		m_passes.emplace_back( castor::move( newPass ) );
+		m_passes.emplace_back( c3d::move( newPass ) );
 		onChanged( *this );
 	}
 
@@ -292,10 +292,9 @@ namespace castor3d
 		onChanged( *this );
 	}
 
-	void Material::addParsers( castor::AttributeParsers & result
-			, castor::UInt32StrMap const & textureChannels )
+	void Material::addParsers( AttributeParsers & result
+			, UInt32StrMap const & textureChannels )
 	{
-		using namespace castor;
 		BlockParserContextT< RootContext > rootContext{ result, CSCNSection::eRoot };
 		BlockParserContextT< SceneContext > sceneContext{ result, CSCNSection::eScene, CSCNSection::eRoot };
 		BlockParserContextT< MaterialContext > materialContext{ result, CSCNSection::eMaterial };
@@ -311,7 +310,7 @@ namespace castor3d
 		Pass::addParsers( result, textureChannels );
 	}
 
-	castor::String getPrefix( MaterialContext const & context )
+	String getPrefix( MaterialContext const & context )
 	{
 		return context.scene
 			? getPrefix( *context.scene )

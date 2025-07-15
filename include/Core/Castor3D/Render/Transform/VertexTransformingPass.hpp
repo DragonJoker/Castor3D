@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 #include <unordered_map>
 
-namespace castor3d
+namespace c3d
 {
 	class VertexTransformingPass
 		: public crg::RunnablePass
@@ -27,7 +27,7 @@ namespace castor3d
 
 		void registerNode( SubmeshRenderNode const & node
 			, TransformPipeline const & pipeline
-			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+			, GpuBufferOffsetT< Point4f > const & morphTargets
 			, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights
 			, GpuBufferOffsetT< SkinningTransformsConfiguration > const & skinTransforms );
 		void unregisterNode( SubmeshRenderNode const & node );
@@ -40,7 +40,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		ashes::Buffer< ModelBufferConfiguration > const & m_modelsBuffer;
-		castor::UnorderedMap< size_t, VertexTransformPassUPtr > m_transformPasses;
+		HashMap< size_t, VertexTransformPassUPtr > m_transformPasses;
 	};
 }
 

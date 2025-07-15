@@ -8,7 +8,7 @@
 
 #include <Windows.h>
 
-namespace castor::platform
+namespace c3d::platform
 {
 	uint32_t getCoreCount()
 	{
@@ -21,7 +21,7 @@ namespace castor::platform
 #if defined( CU_ArchX86_64 ) || defined( CU_ArchX86_32 )
 #	include <intrin.h>
 
-namespace castor::platform
+namespace c3d::platform
 {
 	namespace win32_x86
 	{
@@ -53,7 +53,7 @@ namespace castor::platform
 				result += c;
 			}
 
-			return castor::makeString( result );
+			return c3d::makeString( result );
 		};
 
 #	if defined( CU_CompilerMSVC )
@@ -130,7 +130,7 @@ namespace castor::platform
 
 #else
 
-namespace castor::platform
+namespace c3d::platform
 {
 	String getCPUModel()
 	{

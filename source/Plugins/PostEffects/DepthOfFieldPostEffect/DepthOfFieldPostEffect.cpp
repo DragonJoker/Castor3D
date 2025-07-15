@@ -21,19 +21,19 @@ namespace dof
 {
 	//*********************************************************************************************
 
-	castor::String const PostEffect::Type = cuT( "depth_of_field" );
-	castor::MbString const PostEffect::Name = "Depth Of Field PostEffect";
-	castor::String const PostEffect::FocalDistance = cuT( "focalDistance" );
-	castor::String const PostEffect::FocalLength = cuT( "focalLength" );
-	castor::String const PostEffect::BokehScale = cuT( "bokehScale" );
-	castor::String const PostEffect::EnableFarBlur = cuT( "enableFarBlur" );
+	c3d::String const PostEffect::Type = cuT( "depth_of_field" );
+	c3d::MbString const PostEffect::Name = "Depth Of Field PostEffect";
+	c3d::String const PostEffect::FocalDistance = cuT( "focalDistance" );
+	c3d::String const PostEffect::FocalLength = cuT( "focalLength" );
+	c3d::String const PostEffect::BokehScale = cuT( "bokehScale" );
+	c3d::String const PostEffect::EnableFarBlur = cuT( "enableFarBlur" );
 
-	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
-		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & params )
-		: castor3d::PostEffect{ PostEffect::Type
+	PostEffect::PostEffect( c3d::RenderTarget & renderTarget
+		, c3d::RenderSystem & renderSystem
+		, c3d::Parameters const & params )
+		: c3d::PostEffect{ PostEffect::Type
 			, cuT( "DepthOfField" )
-			, castor::makeString( PostEffect::Name )
+			, c3d::makeString( PostEffect::Name )
 			, renderTarget
 			, renderSystem
 			, params }
@@ -42,75 +42,75 @@ namespace dof
 		setParameters( params );
 	}
 
-	castor3d::PostEffectUPtr PostEffect::create( castor3d::RenderTarget & renderTarget
-		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & params )
+	c3d::PostEffectUPtr PostEffect::create( c3d::RenderTarget & renderTarget
+		, c3d::RenderSystem & renderSystem
+		, c3d::Parameters const & params )
 	{
-		return castor::makeUniqueDerived< castor3d::PostEffect, PostEffect >( renderTarget
+		return c3d::makeUniqueDerived< c3d::PostEffect, PostEffect >( renderTarget
 			, renderSystem
 			, params );
 	}
 
-	void PostEffect::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void PostEffect::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		m_data.accept( visitor );
 	}
 
-	void PostEffect::setParameters( castor3d::Parameters parameters )
+	void PostEffect::setParameters( c3d::Parameters parameters )
 	{
 		m_data.setParameters( std::move( parameters ) );
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
-		, castor3d::Texture const & source
-		, castor3d::Texture const & target
+	bool PostEffect::doInitialise( c3d::RenderDevice const & device
+		, c3d::Texture const & source
+		, c3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
-		auto extent = castor::convert( ashes::getSubresourceDimensions( convert( target.getExtent() ), 1u ) );
-		m_nearCoC = castor3d::Texture{ device
+		auto extent = c3d::convert( ashes::getSubresourceDimensions( convert( target.getExtent() ), 1u ) );
+		m_nearCoC = c3d::Texture{ device
 			, m_renderTarget.getResources()
 			, "DoFNearCoC"
-			, { castor3d::ImageCreateFlags::eNone
+			, { c3d::ImageCreateFlags::eNone
 				, extent, 1u, 1u
-				, castor::PixelFormat::eR16_SFLOAT
-				, ( castor3d::ImageUsageFlags::eColorAttachment
-					| castor3d::ImageUsageFlags::eSampled ) }
+				, c3d::PixelFormat::eR16_SFLOAT
+				, ( c3d::ImageUsageFlags::eColorAttachment
+					| c3d::ImageUsageFlags::eSampled ) }
 			, {} };
-		m_nearBlur = castor3d::Texture{ device
+		m_nearBlur = c3d::Texture{ device
 			, m_renderTarget.getResources()
 			, "DoFNearBlur"
-			, { castor3d::ImageCreateFlags::eNone
+			, { c3d::ImageCreateFlags::eNone
 				, extent, 1u, 1u
 				, target.getFormat()
-				, ( castor3d::ImageUsageFlags::eColorAttachment
-					| castor3d::ImageUsageFlags::eSampled ) }
+				, ( c3d::ImageUsageFlags::eColorAttachment
+					| c3d::ImageUsageFlags::eSampled ) }
 			, {} };
-		m_farCoC = castor3d::Texture{ device
+		m_farCoC = c3d::Texture{ device
 			, m_renderTarget.getResources()
 			, "DoFFarCoC"
-			, { castor3d::ImageCreateFlags::eNone
+			, { c3d::ImageCreateFlags::eNone
 				, extent, 1u, 1u
-				, castor::PixelFormat::eR16_SFLOAT
-				, ( castor3d::ImageUsageFlags::eColorAttachment
-					| castor3d::ImageUsageFlags::eSampled ) }
+				, c3d::PixelFormat::eR16_SFLOAT
+				, ( c3d::ImageUsageFlags::eColorAttachment
+					| c3d::ImageUsageFlags::eSampled ) }
 			, {} };
-		m_farBlur = castor3d::Texture{ device
+		m_farBlur = c3d::Texture{ device
 			, m_renderTarget.getResources()
 			, "DoFFarBlur"
-			, { castor3d::ImageCreateFlags::eNone
+			, { c3d::ImageCreateFlags::eNone
 				, extent, 1u, 1u
 				, target.getFormat()
-				, ( castor3d::ImageUsageFlags::eColorAttachment
-					| castor3d::ImageUsageFlags::eSampled ) }
+				, ( c3d::ImageUsageFlags::eColorAttachment
+					| c3d::ImageUsageFlags::eSampled ) }
 			, {} };
-		m_intermediate = castor3d::Texture{ device
+		m_intermediate = c3d::Texture{ device
 			, m_renderTarget.getResources()
 			, "DoFFarBlur"
-			, { castor3d::ImageCreateFlags::eNone
+			, { c3d::ImageCreateFlags::eNone
 				, extent, 1u, 1u
 				, target.getFormat()
-				, ( castor3d::ImageUsageFlags::eColorAttachment
-					| castor3d::ImageUsageFlags::eSampled ) }
+				, ( c3d::ImageUsageFlags::eColorAttachment
+					| c3d::ImageUsageFlags::eSampled ) }
 			, {} };
 		m_nearCoC.create();
 		m_farCoC.create();
@@ -128,7 +128,7 @@ namespace dof
 			, &isEnabled()
 			, &m_passIndex );
 		auto & nearGroup = m_graph.createPassGroup( "Near" );
-		m_blurNearCoC = std::make_unique< castor3d::GaussianBlur >( nearGroup
+		m_blurNearCoC = std::make_unique< c3d::GaussianBlur >( nearGroup
 			, *passes.front()
 			, device
 			, "Near"
@@ -154,7 +154,7 @@ namespace dof
 			, &m_passIndex );
 
 		auto & farGroup = m_graph.createPassGroup( "Far" );
-		m_blurFarCoC = std::make_unique< castor3d::GaussianBlur >( farGroup
+		m_blurFarCoC = std::make_unique< c3d::GaussianBlur >( farGroup
 			, *passes.front()
 			, device
 			, "Far"
@@ -191,7 +191,7 @@ namespace dof
 		return true;
 	}
 
-	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
+	void PostEffect::doCleanup( c3d::RenderDevice const & device )
 	{
 		m_nearCoC.destroy();
 		m_farCoC.destroy();
@@ -200,7 +200,7 @@ namespace dof
 		m_intermediate.destroy();
 	}
 
-	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
+	void PostEffect::doCpuUpdate( c3d::CpuUpdater & updater )
 	{
 		if ( m_renderTarget.getCamera() )
 		{
@@ -212,7 +212,7 @@ namespace dof
 		}
 	}
 
-	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )
+	bool PostEffect::doWriteInto( c3d::StringStream & file, c3d::String const & tabs )
 	{
 		return m_data.write( file, tabs );
 	}

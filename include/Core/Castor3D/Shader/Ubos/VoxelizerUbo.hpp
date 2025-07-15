@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace shader
 	{
@@ -37,7 +37,7 @@ namespace castor3d
 			VoxelData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
-				: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+				: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 				, worldToGrid{ this->getMember< "worldToGrid" >() }
 				, gridToWorld{ this->getMember< "gridToWorld" >() }
 				, clipToGrid{ this->getMember< "clipToGrid" >() }
@@ -105,7 +105,7 @@ namespace castor3d
 		*	- vec3 gridCenter: Center of the voxel grid, in world space units
 		*	- float rayStepSize;
 		*/
-		castor::Point3f pad;
+		Point3f pad;
 		float rayStepSize;
 		/**
 		*	- uint enabled;
@@ -182,7 +182,7 @@ namespace castor3d
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, enable };\
-	auto c3d_voxelData = voxelizer.declMember< shader::VoxelData >( "c3d_voxelData" );\
+	auto c3d_voxelData = voxelizer.declMember< c3d::shader::VoxelData >( "c3d_voxelData" );\
 	voxelizer.end()
 
 #endif

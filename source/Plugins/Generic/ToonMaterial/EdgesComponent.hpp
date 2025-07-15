@@ -22,91 +22,91 @@ namespace toon
 		float depthFactor;
 		float normalFactor;
 		float objectFactor;
-		castor::Point4f edgeColour;
+		c3d::Point4f edgeColour;
 		float smoothBand;
-		castor::Point3f pad;
+		c3d::Point3f pad;
 	};
 
 	struct EdgesData
 	{
 		explicit EdgesData( std::atomic_bool & dirty )
-			: edgeColour{ dirty, castor::HdrRgbaColour::fromPredefined( castor::PredefinedRgbaColour::eOpaqueBlack ) }
-			, edgeWidth{ dirty, castor::makeRangedValue( 1.0f, MinMaterialEdgeWidth, MaxMaterialEdgeWidth ) }
-			, depthFactor{ dirty, castor::makeRangedValue( 1.0f, 0.0f, 1.0f ) }
-			, normalFactor{ dirty, castor::makeRangedValue( 1.0f, 0.0f, 1.0f ) }
-			, objectFactor{ dirty, castor::makeRangedValue( 1.0f, 0.0f, 1.0f ) }
+			: edgeColour{ dirty, c3d::HdrRgbaColour::fromPredefined( c3d::PredefinedRgbaColour::eOpaqueBlack ) }
+			, edgeWidth{ dirty, c3d::makeRangedValue( 1.0f, MinMaterialEdgeWidth, MaxMaterialEdgeWidth ) }
+			, depthFactor{ dirty, c3d::makeRangedValue( 1.0f, 0.0f, 1.0f ) }
+			, normalFactor{ dirty, c3d::makeRangedValue( 1.0f, 0.0f, 1.0f ) }
+			, objectFactor{ dirty, c3d::makeRangedValue( 1.0f, 0.0f, 1.0f ) }
 			, smoothBand{ dirty, 1.0f }
 		{
 		}
 
-		castor::AtomicGroupChangeTracked< castor::HdrRgbaColour > edgeColour;
-		castor::AtomicGroupChangeTracked< castor::RangedValue< float > > edgeWidth;
-		castor::AtomicGroupChangeTracked< castor::RangedValue< float > > depthFactor;
-		castor::AtomicGroupChangeTracked< castor::RangedValue< float > > normalFactor;
-		castor::AtomicGroupChangeTracked< castor::RangedValue< float > > objectFactor;
-		castor::AtomicGroupChangeTracked< float > smoothBand;
+		c3d::AtomicGroupChangeTracked< c3d::HdrRgbaColour > edgeColour;
+		c3d::AtomicGroupChangeTracked< c3d::RangedValue< float > > edgeWidth;
+		c3d::AtomicGroupChangeTracked< c3d::RangedValue< float > > depthFactor;
+		c3d::AtomicGroupChangeTracked< c3d::RangedValue< float > > normalFactor;
+		c3d::AtomicGroupChangeTracked< c3d::RangedValue< float > > objectFactor;
+		c3d::AtomicGroupChangeTracked< float > smoothBand;
 	};
 
 	struct EdgesComponent
-		: public castor3d::BaseDataPassComponentT< EdgesData >
+		: public c3d::BaseDataPassComponentT< EdgesData >
 	{
 		struct ComponentsShader
-			: castor3d::shader::PassComponentsShader
+			: c3d::shader::PassComponentsShader
 		{
-			explicit ComponentsShader( castor3d::PassComponentPlugin const & plugin )
+			explicit ComponentsShader( c3d::PassComponentPlugin const & plugin )
 				: PassComponentsShader{ plugin }
 			{
 			}
 
-			C3D_ToonMaterial_API void fillComponents( castor3d::ComponentModeFlags componentsMask
+			C3D_ToonMaterial_API void fillComponents( c3d::ComponentModeFlags componentsMask
 				, sdw::type::BaseStruct & components
-				, castor3d::shader::Materials const & materials
+				, c3d::shader::Materials const & materials
 				, sdw::StructInstance const * surface )const override;
 			C3D_ToonMaterial_API void fillComponentsInits( sdw::type::BaseStruct const & components
-				, castor3d::shader::Materials const & materials
-				, castor3d::shader::Material const * material
+				, c3d::shader::Materials const & materials
+				, c3d::shader::Material const * material
 				, sdw::StructInstance const * surface
 				, sdw::Vec4 const * clrCot
 				, sdw::expr::ExprList & inits )const override;
-			C3D_ToonMaterial_API void blendComponents( castor3d::shader::Materials const & materials
+			C3D_ToonMaterial_API void blendComponents( c3d::shader::Materials const & materials
 				, sdw::Float const & passMultiplier
-				, castor3d::shader::BlendComponents & res
-				, castor3d::shader::BlendComponents const & src )const override;
+				, c3d::shader::BlendComponents & res
+				, c3d::shader::BlendComponents const & src )const override;
 		};
 
-		C3D_ToonMaterial_API explicit EdgesComponent( castor3d::Pass & pass );
+		C3D_ToonMaterial_API explicit EdgesComponent( c3d::Pass & pass );
 
 		class Plugin
-			: public castor3d::PassComponentPlugin
+			: public c3d::PassComponentPlugin
 		{
 		public:
-			explicit Plugin( castor3d::PassComponentRegister const & passComponents )
+			explicit Plugin( c3d::PassComponentRegister const & passComponents )
 				: PassComponentPlugin{ passComponents }
 			{
 			}
 
-			castor3d::PassComponentUPtr createComponent( castor3d::Pass & pass )const override
+			c3d::PassComponentUPtr createComponent( c3d::Pass & pass )const override
 			{
-				return castor::makeUniqueDerived< castor3d::PassComponent, EdgesComponent >( pass );
+				return c3d::makeUniqueDerived< c3d::PassComponent, EdgesComponent >( pass );
 			}
 
-			void createParsers( castor::AttributeParsers & parsers
-				, castor3d::ChannelFillers & channelFillers )const override;
-			bool isComponentNeeded( castor3d::TextureCombine const & textures
-				, castor3d::ComponentModeFlags const & filter )const override;
+			void createParsers( c3d::AttributeParsers & parsers
+				, c3d::ChannelFillers & channelFillers )const override;
+			bool isComponentNeeded( c3d::TextureCombine const & textures
+				, c3d::ComponentModeFlags const & filter )const override;
 
-			castor3d::shader::PassComponentsShaderPtr createComponentsShader()const override
+			c3d::shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
-				return castor::make_unique< ComponentsShader >( *this );
+				return c3d::makeRawUnique< ComponentsShader >( *this );
 			}
 		};
 
-		static castor3d::PassComponentPluginUPtr createPlugin( castor3d::PassComponentRegister const & passComponents )
+		static c3d::PassComponentPluginUPtr createPlugin( c3d::PassComponentRegister const & passComponents )
 		{
-			return castor::makeUniqueDerived< castor3d::PassComponentPlugin, Plugin >( passComponents );
+			return c3d::makeUniqueDerived< c3d::PassComponentPlugin, Plugin >( passComponents );
 		}
 
-		C3D_ToonMaterial_API void accept( castor3d::ConfigurationVisitorBase & vis )override;
+		C3D_ToonMaterial_API void accept( c3d::ConfigurationVisitorBase & vis )override;
 
 		C3D_ToonMaterial_API void fillProfileBuffer( ToonProfileData & buffer )const;
 
@@ -135,7 +135,7 @@ namespace toon
 			*m_value.objectFactor = value;
 		}
 
-		void setEdgeColour( castor::HdrRgbaColour const & value )
+		void setEdgeColour( c3d::HdrRgbaColour const & value )
 		{
 			m_value.edgeColour = value;
 		}
@@ -165,19 +165,19 @@ namespace toon
 			return m_value.objectFactor->value();
 		}
 
-		castor::HdrRgbaColour getEdgeColour()const
+		c3d::HdrRgbaColour getEdgeColour()const
 		{
 			return *m_value.edgeColour;
 		}
 
-		C3D_ToonMaterial_API static castor::String const TypeName;
+		C3D_ToonMaterial_API static c3d::String const TypeName;
 
 	private:
-		castor3d::PassComponentUPtr doClone( castor3d::Pass & pass )const override;
-		bool doWriteText( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::String const & subfolder
-			, castor::StringStream & file )const override;
+		c3d::PassComponentUPtr doClone( c3d::Pass & pass )const override;
+		bool doWriteText( c3d::String const & tabs
+			, c3d::Path const & folder
+			, c3d::String const & subfolder
+			, c3d::StringStream & file )const override;
 	};
 
 	CU_DeclareSmartPtr( toon, EdgesComponent, C3D_ToonMaterial_API );

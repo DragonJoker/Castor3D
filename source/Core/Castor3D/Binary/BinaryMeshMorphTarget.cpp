@@ -7,14 +7,14 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
 	namespace v1_3
 	{
 		template< typename T >
-		using OldInterleavedVertexTArray = castor::Vector< OldInterleavedVertexT< T > >;
+		using OldInterleavedVertexTArray = Vector< OldInterleavedVertexT< T > >;
 
 		template< typename T >
 		void convert( OldInterleavedVertexTArray< T > const & in
@@ -48,9 +48,9 @@ namespace castor3d
 	namespace v1_5
 	{
 		inline void dispatchVertices( InterleavedVertexNoMikkArray const & src
-			, castor::Point3fArray & pos
-			, castor::Point3fArray & nml
-			, castor::Point3fArray & tex )
+			, Point3fArray & pos
+			, Point3fArray & nml
+			, Point3fArray & tex )
 		{
 			pos.reserve( src.size() );
 			nml.reserve( src.size() );
@@ -90,7 +90,7 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template<>
-	castor::String BinaryParserBase< MeshMorphTarget >::Name = cuT( "MeshMorphTarget" );
+	String BinaryParserBase< MeshMorphTarget >::Name = cuT( "MeshMorphTarget" );
 
 	bool BinaryParser< MeshMorphTarget >::doParse( MeshMorphTarget & obj )
 	{
@@ -107,7 +107,7 @@ namespace castor3d
 			case ChunkType::eMeshMorphTargetTime:
 				result = doParseChunk( time, chunk );
 				checkError( result, cuT( "Couldn't parse time index." ) );
-				obj.doSetTimeIndex( castor::Milliseconds{ int64_t( time * 1000 ) } );
+				obj.doSetTimeIndex( Milliseconds{ int64_t( time * 1000 ) } );
 				break;
 			case ChunkType::eMeshMorphTargetSubmeshID:
 				submesh = {};
@@ -126,14 +126,14 @@ namespace castor3d
 			case ChunkType::eMeshMorphTargetWeights:
 				if ( submesh )
 				{
-					castor::Vector< float > weights;
+					Vector< float > weights;
 					weights.resize( submesh->getMorphTargetsCount() );
 					result = doParseChunk( weights, chunk );
 					checkError( result, cuT( "Couldn't parse submesh morph targets weights." ) );
 					if ( result )
 					{
 						obj.setTargetsWeights( *submesh
-							, castor::move( weights ) );
+							, c3d::move( weights ) );
 					}
 				}
 				break;

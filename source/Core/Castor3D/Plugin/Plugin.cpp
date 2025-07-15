@@ -7,49 +7,49 @@
 #include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 #include <CastorUtils/Miscellaneous/Utils.hpp>
 
-CU_ImplementSmartPtr( castor3d, Plugin )
+CU_ImplementSmartPtr( c3d, Plugin )
 
-namespace castor3d
+namespace c3d
 {
 	namespace plugin
 	{
-		static const castor::String GetNameFunctionABIName = cuT( "getName" );
-		static const castor::String GetRequiredVersionFunctionABIName = cuT( "getRequiredVersion" );
-		static const castor::String GetOnLoadFunctionABIName = cuT( "onLoad" );
-		static const castor::String GetOnUnloadFunctionABIName = cuT( "onUnload" );
+		static const String GetNameFunctionABIName = cuT( "getName" );
+		static const String GetRequiredVersionFunctionABIName = cuT( "getRequiredVersion" );
+		static const String GetOnLoadFunctionABIName = cuT( "onLoad" );
+		static const String GetOnUnloadFunctionABIName = cuT( "onUnload" );
 	}
 
-	Plugin::Plugin( PluginType type, castor::DynamicLibraryUPtr library, Engine & engine )
+	Plugin::Plugin( PluginType type, DynamicLibraryUPtr library, Engine & engine )
 		: OwnedBy< Engine >( engine )
-		, m_library{ castor::move( library ) }
+		, m_library{ c3d::move( library ) }
 		, m_type{ type }
 	{
 		if ( !m_library->getFunction( m_pfnGetName, plugin::GetNameFunctionABIName ) )
 		{
-			castor::String strError = cuT( "Error encountered while loading dll [" ) + m_library->getPath().getFileName() + cuT( "] plug-in getName function : " );
-			strError += castor::system::getLastErrorText();
-			C3D_PluginException( castor::toUtf8( strError ), true );
+			String strError = cuT( "Error encountered while loading dll [" ) + m_library->getPath().getFileName() + cuT( "] plug-in getName function : " );
+			strError += system::getLastErrorText();
+			C3D_PluginException( toUtf8( strError ), true );
 		}
 
 		if ( !m_library->getFunction( m_pfnGetRequiredVersion, plugin::GetRequiredVersionFunctionABIName ) )
 		{
-			castor::String strError = cuT( "Error encountered while loading dll [" ) + m_library->getPath().getFileName() + cuT( "] plug-in getRequiredVersion function : " );
-			strError += castor::system::getLastErrorText();
-			C3D_PluginException( castor::toUtf8( strError ), true );
+			String strError = cuT( "Error encountered while loading dll [" ) + m_library->getPath().getFileName() + cuT( "] plug-in getRequiredVersion function : " );
+			strError += system::getLastErrorText();
+			C3D_PluginException( toUtf8( strError ), true );
 		}
 
 		if ( !m_library->getFunction( m_pfnOnLoad, plugin::GetOnLoadFunctionABIName ) )
 		{
-			castor::String strError = cuT( "Error encountered while loading dll [" ) + m_library->getPath().getFileName() + cuT( "] plug-in onLoad function : " );
-			strError += castor::system::getLastErrorText();
-			C3D_PluginException( castor::toUtf8( strError ), true );
+			String strError = cuT( "Error encountered while loading dll [" ) + m_library->getPath().getFileName() + cuT( "] plug-in onLoad function : " );
+			strError += system::getLastErrorText();
+			C3D_PluginException( toUtf8( strError ), true );
 		}
 
 		if ( !m_library->getFunction( m_pfnOnUnload, plugin::GetOnUnloadFunctionABIName ) )
 		{
-			castor::String strError = cuT( "Error encountered while loading dll [" ) + m_library->getPath().getFileName() + cuT( "] plug-in onUnload function : " );
-			strError += castor::system::getLastErrorText();
-			C3D_PluginException( castor::toUtf8( strError ), true );
+			String strError = cuT( "Error encountered while loading dll [" ) + m_library->getPath().getFileName() + cuT( "] plug-in onUnload function : " );
+			strError += system::getLastErrorText();
+			C3D_PluginException( toUtf8( strError ), true );
 		}
 
 		load();
@@ -68,15 +68,15 @@ namespace castor3d
 		}
 	}
 
-	castor::String Plugin::getName()const
+	String Plugin::getName()const
 	{
-		castor::String strReturn;
+		String strReturn;
 
 		if ( m_pfnGetName )
 		{
 			char const * name;
 			m_pfnGetName( &name );
-			strReturn = castor::makeString( name );
+			strReturn = makeString( name );
 		}
 
 		return strReturn;
@@ -90,7 +90,7 @@ namespace castor3d
 #if !defined( NDEBUG )
 			if ( m_library )
 			{
-				castor::debug::loadModule( *m_library );
+				debug::loadModule( *m_library );
 			}
 #endif
 
@@ -107,7 +107,7 @@ namespace castor3d
 #if !defined( NDEBUG )
 			if ( m_library )
 			{
-				castor::debug::unloadModule( *m_library );
+				debug::unloadModule( *m_library );
 			}
 #endif
 		}

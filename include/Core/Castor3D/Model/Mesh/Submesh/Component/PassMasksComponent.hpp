@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Skeleton/VertexBoneData.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class PassMasksComponent
 		: public SubmeshComponent
@@ -28,18 +28,18 @@ namespace castor3d
 		{
 			using SubmeshComponentData::SubmeshComponentData;
 			/**
-			 *\copydoc		castor3d::SubmeshComponentData::gather
+			 *\copydoc		SubmeshComponentData::gather
 			 */
 			void gather( PipelineFlags const & flags
 				, Pass const & pass
 				, ObjectBufferOffset const & bufferOffsets
 				, ashes::BufferCRefArray & buffers
-				, castor::Vector< uint64_t > & offsets
+				, Vector< uint64_t > & offsets
 				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 				, uint32_t & currentBinding
 				, uint32_t & currentLocation )override;
 			/**
-			 *\copydoc		castor3d::SubmeshComponentData::copy
+			 *\copydoc		SubmeshComponentData::copy
 			 */
 			void copy( SubmeshComponentDataRPtr data )const override;
 			/**
@@ -62,7 +62,7 @@ namespace castor3d
 			 *\brief		Ajoute des données de masques.
 			 *\param[in]	data	Les données de masques.
 			 */
-			C3D_API void addDatas( castor::Vector< PassMasks > const & data );
+			C3D_API void addDatas( Vector< PassMasks > const & data );
 			/**
 			 *\~english
 			 *\brief		Adds masks datas.
@@ -72,7 +72,7 @@ namespace castor3d
 			 *\param[in]	data	Les données de masques.
 			 */
 			template< size_t Count >
-			void addDatas( castor::Array< PassMasks, Count > const & data )
+			void addDatas( Array< PassMasks, Count > const & data )
 			{
 				addDatas( data.data(), data.data() + data.size() );
 			}
@@ -82,17 +82,17 @@ namespace castor3d
 				return !m_data.empty();
 			}
 
-			void setData( castor::Vector< PassMasks > data )
+			void setData( Vector< PassMasks > data )
 			{
-				m_data = castor::move( data );
+				m_data = c3d::move( data );
 			}
 
-			castor::Vector< PassMasks > & getData()
+			Vector< PassMasks > & getData()
 			{
 				return m_data;
 			}
 
-			castor::Vector< PassMasks > const & getData()const
+			Vector< PassMasks > const & getData()const
 			{
 				return m_data;
 			}
@@ -103,9 +103,9 @@ namespace castor3d
 			void doUpload( UploadData & uploader )override;
 
 		private:
-			castor::UnorderedMap< size_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
-			castor::Vector< PassMasks > m_data;
-			castor::Vector< castor::Point4ui > m_up;
+			HashMap< size_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
+			Vector< PassMasks > m_data;
+			Vector< Point4ui > m_up;
 		};
 
 		class Plugin
@@ -116,7 +116,7 @@ namespace castor3d
 
 			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
 			{
-				return castor::makeUniqueDerived< SubmeshComponent, PassMasksComponent >( submesh );
+				return makeUniqueDerived< SubmeshComponent, PassMasksComponent >( submesh );
 			}
 
 			SubmeshComponentFlag getPassMaskFlag()const noexcept override
@@ -126,13 +126,13 @@ namespace castor3d
 
 			shader::SubmeshVertexSurfaceShaderPtr createVertexSurfaceShader()const override
 			{
-				return castor::make_unique< SurfaceShader >();
+				return makeRawUnique< SurfaceShader >();
 			}
 		};
 
 		static SubmeshComponentPluginUPtr createPlugin( SubmeshComponentRegister const & submeshComponents )
 		{
-			return castor::makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
+			return makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
 		}
 		/**
 		 *\~english
@@ -144,11 +144,11 @@ namespace castor3d
 		 */
 		C3D_API explicit PassMasksComponent( Submesh & submesh );
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::clone
+		 *\copydoc		SubmeshComponent::clone
 		 */
 		C3D_API SubmeshComponentUPtr clone( Submesh & submesh )const override;
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags
+		 *\copydoc		SubmeshComponent::getSubmeshFlags
 		 */
 		SubmeshComponentFlag getSubmeshFlags()const noexcept override
 		{
@@ -161,7 +161,7 @@ namespace castor3d
 		}
 
 	public:
-		C3D_API static castor::String const TypeName;
+		C3D_API static String const TypeName;
 
 	private:
 		friend class BinaryWriter< PassMasksComponent >;

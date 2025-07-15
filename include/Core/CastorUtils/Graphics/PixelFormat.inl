@@ -1,7 +1,7 @@
 /*
 See LICENSE file in root folder
 */
-namespace castor
+namespace c3d
 {
 	template<> struct IsColourFormat< PixelFormat::eUNDEFINED > : public std::false_type {};
 	template<> struct IsColourFormat< PixelFormat::eD16_UNORM > : public std::false_type {};

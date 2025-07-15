@@ -12,12 +12,12 @@ See LICENSE file in root folder
 
 #include <stack>
 
-namespace castor3d
+namespace c3d
 {
 	class SceneFileParser
-		: public castor::OwnedBy< Engine >
-		, public castor::DataHolderT< RootContext >
-		, public castor::FileParser
+		: public OwnedBy< Engine >
+		, public DataHolderT< RootContext >
+		, public FileParser
 	{
 	public:
 		/**
@@ -32,7 +32,7 @@ namespace castor3d
 		 */
 		C3D_API explicit SceneFileParser( Engine & engine
 			, ProgressBar * progress = nullptr );
-		C3D_API castor::FileParserContextUPtr initialiseParser( castor::Path const & path );
+		C3D_API FileParserContextUPtr initialiseParser( Path const & path );
 		/**
 		 *\~english
 		 *\return		The render window defined by the scene.
@@ -60,11 +60,11 @@ namespace castor3d
 		}
 
 	private:
-		C3D_API castor::FileParserContextUPtr doInitialiseParser( castor::Path const & path )override;
-		C3D_API void doCleanupParser( castor::PreprocessedFile & preprocessed )override;
-		C3D_API void doValidate( castor::PreprocessedFile & preprocessed )override;
-		C3D_API castor::String doGetSectionName( castor::SectionId section )const override;
-		C3D_API castor::RawUniquePtr< FileParser > doCreateParser()const override;
+		C3D_API FileParserContextUPtr doInitialiseParser( Path const & path )override;
+		C3D_API void doCleanupParser( PreprocessedFile & preprocessed )override;
+		C3D_API void doValidate( PreprocessedFile & preprocessed )override;
+		C3D_API String doGetSectionName( SectionId section )const override;
+		C3D_API RawUniquePtr< FileParser > doCreateParser()const override;
 	};
 }
 

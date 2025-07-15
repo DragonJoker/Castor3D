@@ -2,7 +2,7 @@
 
 #include <thread>
 
-namespace castor::system
+namespace c3d::system
 {
 	void sleep( uint32_t uiTime )
 	{

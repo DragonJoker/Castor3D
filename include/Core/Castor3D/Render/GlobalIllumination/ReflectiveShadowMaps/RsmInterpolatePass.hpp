@@ -17,10 +17,10 @@ See LICENSE file in root folder
 
 #include <ShaderAST/Shader.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class RsmInterpolatePass
-		: public castor::Named
+		: public Named
 	{
 	public:
 		C3D_API RsmInterpolatePass( crg::FrameGraph & graph
@@ -34,7 +34,7 @@ namespace castor3d
 			, crg::ImageViewId const & nmlOcc
 			, ShadowMapResult const & smResult
 			, RsmConfigUbo const & rsmConfigUbo
-			, GpuBufferOffsetT< castor::Point4f > const & rsmSamplesSsbo
+			, GpuBufferOffsetT< Point4f > const & rsmSamplesSsbo
 			, Texture const & gi
 			, Texture const & nml
 			, Texture const & dst );

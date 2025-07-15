@@ -10,8 +10,8 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/RgbColour.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, HdrRgbColour )
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, HdrRgbaColour )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, HdrRgbColour )
+GC_PG_NS_DECLARE_VARIANT_DATA( c3d, HdrRgbaColour )
 
 namespace GuiCommon
 {
@@ -21,14 +21,14 @@ namespace GuiCommon
 		WX_PG_DECLARE_PROPERTY_CLASS( HdrRgbColourProperty )
 
 	public:
-		explicit HdrRgbColourProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::HdrRgbColour const & value = castor::HdrRgbColour() );
+		explicit HdrRgbColourProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, c3d::HdrRgbColour const & value = c3d::HdrRgbColour() );
 
 		wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const override;
 		void RefreshChildren()override;
 
 	protected:
 		// I stands for internal
-		void setValueI( castor::HdrRgbColour const & value );
+		void setValueI( c3d::HdrRgbColour const & value );
 	};
 
 	class HdrRgbaColourProperty
@@ -37,14 +37,14 @@ namespace GuiCommon
 		WX_PG_DECLARE_PROPERTY_CLASS( HdrRgbaColourProperty )
 
 	public:
-		explicit HdrRgbaColourProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::HdrRgbaColour const & value = castor::HdrRgbaColour() );
+		explicit HdrRgbaColourProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, c3d::HdrRgbaColour const & value = c3d::HdrRgbaColour() );
 
 		wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const override;
 		void RefreshChildren()override;
 
 	protected:
 		// I stands for internal
-		void setValueI( castor::HdrRgbaColour const & value );
+		void setValueI( c3d::HdrRgbaColour const & value );
 	};
 }
 

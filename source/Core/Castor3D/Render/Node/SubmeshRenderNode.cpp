@@ -8,9 +8,9 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 
-CU_ImplementSmartPtr( castor3d, SubmeshRenderNode )
+CU_ImplementSmartPtr( c3d, SubmeshRenderNode )
 
-namespace castor3d
+namespace c3d
 {
 	SubmeshRenderNode::SubmeshRenderNode( Pass & pass
 		, Submesh & data
@@ -129,7 +129,7 @@ namespace castor3d
 		return data.getFinalMeshletsBounds( instance, *pass );
 	}
 
-	GpuBufferOffsetT< castor::Point4f > const & SubmeshRenderNode::getMorphTargets()const
+	GpuBufferOffsetT< Point4f > const & SubmeshRenderNode::getMorphTargets()const
 	{
 		return data.getMorphTargets();
 	}

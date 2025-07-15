@@ -2,9 +2,9 @@
 
 #include "CastorUtils/Design/ArrayView.hpp"
 
-CU_ImplementSmartPtr( castor, BoundingBox )
+CU_ImplementSmartPtr( c3d, BoundingBox )
 
-namespace castor
+namespace c3d
 {
 	BoundingBox::BoundingBox( Point3f const & min, Point3f const & max )
 		: BoundingContainer3D{ min + ( max - min ) / 2.0f }

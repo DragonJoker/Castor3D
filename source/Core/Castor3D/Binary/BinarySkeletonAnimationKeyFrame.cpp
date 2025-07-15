@@ -5,7 +5,7 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationNode.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
@@ -47,18 +47,18 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template<>
-	castor::String BinaryParserBase< SkeletonAnimationKeyFrame >::Name = cuT( "SkeletonAnimationKeyFrame" );
+	String BinaryParserBase< SkeletonAnimationKeyFrame >::Name = cuT( "SkeletonAnimationKeyFrame" );
 
 	bool BinaryParser< SkeletonAnimationKeyFrame >::doParse( SkeletonAnimationKeyFrame & obj )
 	{
 		bool result = true;
 		double time{ 0.0 };
-		castor::String name;
+		String name;
 		uint8_t type{};
 		BinaryChunk chunk{ doIsLittleEndian() };
-		castor::Point3f translate;
-		castor::Point3f scale;
-		castor::Quaternion rotate;
+		Point3f translate;
+		Point3f scale;
+		Quaternion rotate;
 
 		while ( result && doGetSubChunk( chunk ) )
 		{
@@ -67,7 +67,7 @@ namespace castor3d
 			case ChunkType::eSkeletonAnimationKeyFrameTime:
 				result = doParseChunk( time, chunk );
 				checkError( result, cuT( "Couldn't parse time index." ) );
-				obj.doSetTimeIndex( castor::Milliseconds{ int64_t( time * 1000 ) } );
+				obj.doSetTimeIndex( Milliseconds{ int64_t( time * 1000 ) } );
 				break;
 			case ChunkType::eSkeletonAnimationKeyFrameObjectType:
 				result = doParseChunk( type, chunk );
@@ -86,13 +86,13 @@ namespace castor3d
 #pragma warning( pop )
 				if ( m_fileVersion > Version{ 1, 5, 0 } )
 				{
-					castor::Matrix4x4f matrix;
+					Matrix4x4f matrix;
 					result = doParseChunk( matrix, chunk );
 					checkError( result, cuT( "Couldn't parse object transform." ) );
 
 					if ( result )
 					{
-						castor::matrix::decompose( matrix, translate, scale, rotate );
+						matrix::decompose( matrix, translate, scale, rotate );
 						obj.addAnimationObject( *obj.getOwner()->getObject( SkeletonNodeType( type ), name )
 							, translate
 							, rotate
@@ -134,8 +134,8 @@ namespace castor3d
 
 		if ( m_fileVersion <= Version{ 1, 3, 0 } )
 		{
-			castor::SquareMatrix< double, 4 > matrix;
-			castor::String name;
+			SquareMatrix< double, 4 > matrix;
+			String name;
 			uint8_t type{};
 			BinaryChunk chunk{ doIsLittleEndian() };
 
@@ -162,10 +162,10 @@ namespace castor3d
 					checkError( result, cuT( "Couldn't parse object transform." ) );
 					if ( result )
 					{
-						castor::Point3f translate;
-						castor::Point3f scale;
-						castor::Quaternion rotate;
-						castor::matrix::decompose( matrix, translate, scale, rotate );
+						Point3f translate;
+						Point3f scale;
+						Quaternion rotate;
+						matrix::decompose( matrix, translate, scale, rotate );
 						obj.addAnimationObject( *obj.getOwner()->getObject( SkeletonNodeType( type ), name )
 							, translate
 							, rotate
@@ -187,8 +187,8 @@ namespace castor3d
 
 		if ( m_fileVersion <= Version{ 1, 5, 0 } )
 		{
-			castor::Matrix4x4f matrix;
-			castor::String name;
+			Matrix4x4f matrix;
+			String name;
 			uint8_t type{};
 			BinaryChunk chunk{ doIsLittleEndian() };
 
@@ -218,10 +218,10 @@ namespace castor3d
 
 						if ( result )
 						{
-							castor::Point3f translate;
-							castor::Point3f scale;
-							castor::Quaternion rotate;
-							castor::matrix::decompose( matrix, translate, scale, rotate );
+							Point3f translate;
+							Point3f scale;
+							Quaternion rotate;
+							matrix::decompose( matrix, translate, scale, rotate );
 							obj.addAnimationObject( *obj.getOwner()->getObject( SkeletonNodeType( type ), name )
 								, translate
 								, rotate

@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Render */
 	//@{
@@ -78,9 +78,9 @@ namespace castor3d
 	class MeshletBoundsTransformPass;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, VertexTransforming, C3D_API );
-	CU_DeclareSmartPtr( castor3d, VertexTransformPass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, MeshletBoundsTransformPass, C3D_API );
+	CU_DeclareSmartPtr( c3d, VertexTransforming, C3D_API );
+	CU_DeclareSmartPtr( c3d, VertexTransformPass, C3D_API );
+	CU_DeclareSmartPtr( c3d, MeshletBoundsTransformPass, C3D_API );
 	/** @endcond */
 
 	//@}

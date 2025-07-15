@@ -5,17 +5,17 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
-CU_ImplementSmartPtr( castor3d, SamplerCache )
+CU_ImplementSmartPtr( c3d, SamplerCache )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 	namespace texmod
 	{
-		static castor::Image & getImage( Engine & engine
-			, castor::String const & name
-			, castor::ImageCreateParams createParams )
+		static Image & getImage( Engine & engine
+			, String const & name
+			, ImageCreateParams createParams )
 		{
 			auto image = engine.tryFindImage( name );
 
@@ -47,7 +47,7 @@ namespace castor3d
 			return *image;
 		}
 
-		static castor::StringView getImageViewTypeName( ImageViewType t )
+		static String getImageViewTypeName( ImageViewType t )
 		{
 			switch ( t )
 			{
@@ -73,11 +73,11 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	const castor::String PtrCacheTraitsT< castor3d::Sampler, castor::String >::Name = cuT( "Sampler" );
+	const String PtrCacheTraitsT< Sampler, String >::Name = cuT( "Sampler" );
 
 	//*********************************************************************************************
 
-	castor::String getName( BorderColour v )
+	String getName( BorderColour v )
 	{
 		return ashes::getName( convert( v ) );
 	}
@@ -94,40 +94,40 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String getName( TextureSpace value )
+	String getName( TextureSpace value )
 	{
 		switch ( value )
 		{
-		case castor3d::TextureSpace::eNormalised:
+		case TextureSpace::eNormalised:
 			return cuT( "Normalised" );
-		case castor3d::TextureSpace::eYInverted:
+		case TextureSpace::eYInverted:
 			return cuT( "YInverted" );
-		case castor3d::TextureSpace::eColour:
+		case TextureSpace::eColour:
 			return cuT( "Colour" );
-		case castor3d::TextureSpace::eDepth:
+		case TextureSpace::eDepth:
 			return cuT( "Depth" );
-		case castor3d::TextureSpace::eTangentSpace:
+		case TextureSpace::eTangentSpace:
 			return cuT( "TangentSpace" );
-		case castor3d::TextureSpace::eObjectSpace:
+		case TextureSpace::eObjectSpace:
 			return cuT( "ObjectSpace" );
-		case castor3d::TextureSpace::eWorldSpace:
+		case TextureSpace::eWorldSpace:
 			return cuT( "WorldSpace" );
-		case castor3d::TextureSpace::eViewSpace:
+		case TextureSpace::eViewSpace:
 			return cuT( "ViewSpace" );
-		case castor3d::TextureSpace::eClipSpace:
+		case TextureSpace::eClipSpace:
 			return cuT( "ClipSpace" );
-		case castor3d::TextureSpace::eStencil:
+		case TextureSpace::eStencil:
 			return cuT( "Stencil" );
 		default:
 			CU_Failure( "Unsupported TextureSpace" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( TextureSpaces values )
+	String getName( TextureSpaces values )
 	{
-		castor::String result;
-		castor::String sep;
+		String result;
+		String sep;
 
 		for ( auto value : values )
 		{
@@ -140,34 +140,34 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String getName( CubeMapFace value )
+	String getName( CubeMapFace value )
 	{
 		switch ( value )
 		{
-		case castor3d::CubeMapFace::ePositiveX:
+		case CubeMapFace::ePositiveX:
 			return cuT( "PositiveX" );
-		case castor3d::CubeMapFace::eNegativeX:
+		case CubeMapFace::eNegativeX:
 			return cuT( "NegativeX" );
-		case castor3d::CubeMapFace::ePositiveY:
+		case CubeMapFace::ePositiveY:
 			return cuT( "PositiveY" );
-		case castor3d::CubeMapFace::eNegativeY:
+		case CubeMapFace::eNegativeY:
 			return cuT( "NegativeY" );
-		case castor3d::CubeMapFace::ePositiveZ:
+		case CubeMapFace::ePositiveZ:
 			return cuT( "PositiveZ" );
-		case castor3d::CubeMapFace::eNegativeZ:
+		case CubeMapFace::eNegativeZ:
 			return cuT( "NegativeZ" );
 		default:
 			CU_Failure( "Unsupported CubeMapFace" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
 	//*********************************************************************************************
 
-	castor::OutputStream & operator<<( castor::OutputStream & stream, castor::ImageMemoryLayout const & rhs )
+	OutputStream & operator<<( OutputStream & stream, ImageMemoryLayout const & rhs )
 	{
 		stream << texmod::getImageViewTypeName( rhs.type )
-			<< cuT( ", " ) << castor::makeString( ashes::getName( convert( rhs.format ) ) )
+			<< cuT( ", " ) << makeString( ashes::getName( convert( rhs.format ) ) )
 			<< cuT( ", " ) << rhs.extent->x
 			<< cuT( "x" ) << rhs.extent->y;
 
@@ -184,13 +184,13 @@ namespace castor3d
 		return stream;
 	}
 
-	castor::OutputStream & operator<<( castor::OutputStream & stream, castor::Image const & rhs )
+	OutputStream & operator<<( OutputStream & stream, Image const & rhs )
 	{
 		stream << rhs.getLayout();
 		return stream;
 	}
 
-	castor::OutputStream & operator<<( castor::OutputStream & stream, TextureLayout const & rhs )
+	OutputStream & operator<<( OutputStream & stream, TextureLayout const & rhs )
 	{
 		stream << rhs.getImage();
 		return stream;
@@ -198,45 +198,45 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::Image & getBufferImage( Engine & engine
-		, castor::String const & name
-		, castor::String const & type
-		, castor::ByteArray const & data )
+	Image & getBufferImage( Engine & engine
+		, String const & name
+		, String const & type
+		, ByteArray const & data )
 	{
 		return texmod::getImage( engine
 			, name
-			, castor::ImageCreateParams{ type
+			, ImageCreateParams{ type
 				, data
 				, { false, false, false } } );
 	}
 
-	castor::Image & getFileImage( Engine & engine
-		, castor::String const & name
-		, castor::Path const & folder
-		, castor::Path const & relative )
+	Image & getFileImage( Engine & engine
+		, String const & name
+		, Path const & folder
+		, Path const & relative )
 	{
 		return texmod::getImage( engine
 			, name
-			, castor::ImageCreateParams{ folder / relative
+			, ImageCreateParams{ folder / relative
 				, { false, false, false } } );
 	}
 
 	//*********************************************************************************************
 
 	TextureLayoutUPtr createTextureLayout( Engine const & engine
-		, castor::Path const & relative
-		, castor::Path const & folder )
+		, Path const & relative
+		, Path const & folder )
 	{
 		ImageCreateInfo createInfo{ ImageCreateFlags::eNone
 			, ImageType::e2D
-			, castor::PixelFormat::eUNDEFINED
+			, PixelFormat::eUNDEFINED
 			, { 1u, 1u, 1u }
 			, 20u
 			, 1u
 			, SampleCount::e1
 			, ImageTiling::eOptimal
 			, ImageUsageFlags::eSampled | ImageUsageFlags::eTransferDst };
-		auto texture = castor::makeUnique< TextureLayout >( *engine.getRenderSystem()
+		auto texture = makeUnique< TextureLayout >( *engine.getRenderSystem()
 			, createInfo
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, relative );
@@ -245,38 +245,38 @@ namespace castor3d
 	}
 
 	TextureLayoutUPtr createTextureLayout( Engine const & engine
-		, castor::String const & name
-		, castor::PxBufferBaseUPtr buffer
+		, String const & name
+		, PxBufferBaseUPtr buffer
 		, bool isStatic )
 	{
 		ImageCreateInfo createInfo{ ImageCreateFlags::eNone
 			, ( buffer->getHeight() <= 1u && buffer->getWidth() > 1u
 				? ImageType::e1D
 				: ImageType::e2D )
-			, castor::PixelFormat::eUNDEFINED
+			, PixelFormat::eUNDEFINED
 			, { buffer->getWidth(), buffer->getHeight(), 1u }
-			, uint32_t( castor::getBitSize( std::min( buffer->getWidth(), buffer->getHeight() ) ) )
+			, uint32_t( getBitSize( std::min( buffer->getWidth(), buffer->getHeight() ) ) )
 			, 1u// TODO: Support array layers: buffer->getLayers()
 			, SampleCount::e1
 			, ImageTiling::eOptimal
 			, ImageUsageFlags::eSampled | ImageUsageFlags::eTransferDst };
 		log::debug << ( cuT( "Creating " ) + name + cuT( " texture layout.\n" ) );
-		auto texture = castor::makeUnique< TextureLayout >( *engine.getRenderSystem()
+		auto texture = makeUnique< TextureLayout >( *engine.getRenderSystem()
 			, createInfo
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, name );
-		texture->setSource( castor::move( buffer ), isStatic );
+		texture->setSource( c3d::move( buffer ), isStatic );
 		return texture;
 	}
 
 	//*********************************************************************************************
 
 	uint32_t getMipLevels( Extent3D const & extent
-		, castor::PixelFormat format )
+		, PixelFormat format )
 	{
 		auto blockSize = ashes::getBlockSize( convert( format ) );
 		auto min = std::min( extent.width / blockSize.extent.width, extent.height / blockSize.extent.height );
-		return uint32_t( castor::getBitSize( min ) );
+		return uint32_t( getBitSize( min ) );
 	}
 
 	//*********************************************************************************************

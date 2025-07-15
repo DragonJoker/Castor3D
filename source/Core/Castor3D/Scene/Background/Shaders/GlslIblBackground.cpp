@@ -9,7 +9,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	namespace iblbg
 	{
@@ -21,14 +21,14 @@ namespace castor3d::shader
 		}
 	}
 
-	castor::String const IblBackgroundModel::Name = cuT( "c3d.ibl" );
+	String const IblBackgroundModel::Name = cuT( "c3d.ibl" );
 
 	IblBackgroundModel::IblBackgroundModel( sdw::ShaderWriter & writer
 		, Utils & utils
 		, Extent2D targetSize
 		, uint32_t & binding
 		, uint32_t set )
-		: BackgroundModel{ writer, utils, castor::move( targetSize ), true, true, true }
+		: BackgroundModel{ writer, utils, c3d::move( targetSize ), true, true, true }
 	{
 		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapBackground"
 			, binding
@@ -56,9 +56,9 @@ namespace castor3d::shader
 		, uint32_t & binding
 		, uint32_t set )
 	{
-		return castor::make_unique< IblBackgroundModel >( writer
+		return makeRawUnique< IblBackgroundModel >( writer
 			, utils
-			, castor::move( targetSize )
+			, c3d::move( targetSize )
 			, binding
 			, set );
 	}

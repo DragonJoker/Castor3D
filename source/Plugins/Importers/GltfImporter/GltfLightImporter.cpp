@@ -11,12 +11,12 @@
 
 namespace c3d_gltf
 {
-	GltfLightImporter::GltfLightImporter( castor3d::Engine & engine )
-		: castor3d::LightImporter{ engine, cuT( "Gltf" ) }
+	GltfLightImporter::GltfLightImporter( c3d::Engine & engine )
+		: c3d::LightImporter{ engine, cuT( "Gltf" ) }
 	{
 	}
 
-	bool GltfLightImporter::doImportLight( castor3d::Light & light )
+	bool GltfLightImporter::doImportLight( c3d::Light & light )
 	{
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto lightName = light.getName();
@@ -41,7 +41,7 @@ namespace c3d_gltf
 		return true;
 	}
 
-	bool GltfLightImporter::doImportLightGroup( castor3d::LightGroup & light )
+	bool GltfLightImporter::doImportLightGroup( c3d::LightGroup & light )
 	{
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto lightName = light.getName();
@@ -69,12 +69,12 @@ namespace c3d_gltf
 	}
 
 	void GltfLightImporter::doImportLightCategory( fastgltf::Light const & impLight
-		, castor3d::LightCategory & category )
+		, c3d::LightCategory & category )
 	{
 		if ( impLight.type == fastgltf::LightType::Point )
 		{
-			auto point = &static_cast< castor3d::PointLight & >( category );
-			point->setIntensity( castor::LuminousIntensity{ impLight.intensity / 1000.0f } );
+			auto point = &static_cast< c3d::PointLight & >( category );
+			point->setIntensity( c3d::LuminousIntensity{ impLight.intensity / 1000.0f } );
 
 			if ( impLight.range )
 			{
@@ -89,8 +89,8 @@ namespace c3d_gltf
 		{
 			if ( impLight.type == fastgltf::LightType::Spot )
 			{
-				auto spot = &static_cast< castor3d::SpotLight & >( category );
-				spot->setIntensity( castor::LuminousIntensity{ impLight.intensity / 1000.0f } );
+				auto spot = &static_cast< c3d::SpotLight & >( category );
+				spot->setIntensity( c3d::LuminousIntensity{ impLight.intensity / 1000.0f } );
 
 				if ( impLight.range )
 				{
@@ -103,37 +103,37 @@ namespace c3d_gltf
 
 				if ( impLight.innerConeAngle )
 				{
-					spot->setInnerCutOff( castor::Angle::fromRadians( *impLight.innerConeAngle ) );
+					spot->setInnerCutOff( c3d::Angle::fromRadians( *impLight.innerConeAngle ) );
 				}
 				else if ( impLight.outerConeAngle )
 				{
-					spot->setInnerCutOff( castor::Angle::fromRadians( *impLight.outerConeAngle ) );
+					spot->setInnerCutOff( c3d::Angle::fromRadians( *impLight.outerConeAngle ) );
 				}
 
 				if ( impLight.outerConeAngle )
 				{
-					spot->setOuterCutOff( castor::Angle::fromRadians( *impLight.outerConeAngle ) );
+					spot->setOuterCutOff( c3d::Angle::fromRadians( *impLight.outerConeAngle ) );
 				}
 				else if ( impLight.innerConeAngle )
 				{
-					spot->setOuterCutOff( castor::Angle::fromRadians( *impLight.innerConeAngle ) );
+					spot->setOuterCutOff( c3d::Angle::fromRadians( *impLight.innerConeAngle ) );
 				}
 			}
 			else
 			{
-				auto directional = &static_cast< castor3d::DirectionalLight & >( category );
-				directional->setIllumination( castor::Illumination{ impLight.intensity } );
+				auto directional = &static_cast< c3d::DirectionalLight & >( category );
+				directional->setIllumination( c3d::Illumination{ impLight.intensity } );
 			}
 		}
 
-		category.setColour( castor::Point3f{ impLight.color[0], impLight.color[1], impLight.color[2] } );
+		category.setColour( c3d::Point3f{ impLight.color[0], impLight.color[1], impLight.color[2] } );
 	}
 
-	castor3d::SceneNode * GltfLightImporter::doLoadNode( castor3d::Scene & scene
-		, castor::String const & nodeName
+	c3d::SceneNode * GltfLightImporter::doLoadNode( c3d::Scene & scene
+		, c3d::String const & nodeName
 		, bool invertY )
 	{
-		castor3d::SceneNodeRPtr result{};
+		c3d::SceneNodeRPtr result{};
 
 		if ( scene.hasSceneNode( nodeName ) )
 		{

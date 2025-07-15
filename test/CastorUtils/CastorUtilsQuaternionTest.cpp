@@ -14,19 +14,19 @@ namespace Testing
 {
 	//*********************************************************************************************
 
-	namespace matrix = castor::matrix;
-	using castor::Angle;
-	using castor::Logger;
-	using castor::Matrix4x4f;
-	using castor::Matrix4x4d;
-	using castor::Matrix3x3f;
-	using castor::Matrix3x3d;
-	using castor::Point3f;
-	using castor::Point3d;
-	using castor::Point4f;
-	using castor::Point4d;
-	using Quaternion = castor::QuaternionT< float >;
-	using castor::StringStream;
+	namespace matrix = c3d::matrix;
+	using c3d::Angle;
+	using c3d::Logger;
+	using c3d::Matrix4x4f;
+	using c3d::Matrix4x4d;
+	using c3d::Matrix3x3f;
+	using c3d::Matrix3x3d;
+	using c3d::Point3f;
+	using c3d::Point3d;
+	using c3d::Point4f;
+	using c3d::Point4d;
+	using Quaternion = c3d::QuaternionT< float >;
+	using c3d::StringStream;
 
 	//*********************************************************************************************
 
@@ -63,7 +63,7 @@ namespace Testing
 
 			for ( auto r = 0; r < 360; r += 1 )
 			{
-				CT_WHEN( "Angle = " + castor::string::toMbString( r ) );
+				CT_WHEN( "Angle = " + c3d::string::toMbString( r ) );
 				Matrix4x4f mtx( 1 );
 				matrix::rotate( mtx, Quaternion::fromAxisAngle( Point3f( 1, 0, 0 ), Angle::fromDegrees( float( r ) ) ) );
 				glm::mat4 mat = glm::identity< glm::mat4 >();
@@ -76,7 +76,7 @@ namespace Testing
 
 			for ( auto r = 0; r < 360; r += 1 )
 			{
-				CT_WHEN( "Angle = " + castor::string::toMbString( r ) );
+				CT_WHEN( "Angle = " + c3d::string::toMbString( r ) );
 				Matrix4x4f mtx( 1 );
 				matrix::rotate( mtx, Quaternion::fromAxisAngle( Point3f( 0, 1, 0 ), Angle::fromDegrees( float( r ) ) ) );
 				glm::mat4 mat = glm::identity< glm::mat4 >();
@@ -89,7 +89,7 @@ namespace Testing
 
 			for ( auto r = 0; r < 360; r += 1 )
 			{
-				CT_WHEN( "Angle = " + castor::string::toMbString( r ) );
+				CT_WHEN( "Angle = " + c3d::string::toMbString( r ) );
 				Matrix4x4f mtx( 1 );
 				matrix::rotate( mtx, Quaternion::fromAxisAngle( Point3f( 0, 0, 1 ), Angle::fromDegrees( float( r ) ) ) );
 				glm::mat4 mat = glm::identity< glm::mat4 >();
@@ -102,7 +102,7 @@ namespace Testing
 
 			for ( auto r = 0; r < 360; r += 1 )
 			{
-				CT_WHEN( "Angle = " + castor::string::toMbString( r ) );
+				CT_WHEN( "Angle = " + c3d::string::toMbString( r ) );
 				Matrix4x4f mtx( 1 );
 				matrix::rotate( mtx, Quaternion::fromAxisAngle( Point3f( 1, 1, 1 ), Angle::fromDegrees( float( r ) ) ) );
 				glm::mat4 mat = glm::identity< glm::mat4 >();
@@ -116,7 +116,7 @@ namespace Testing
 
 			for ( auto r = 0; r < 360; r += 1 )
 			{
-				CT_WHEN( "Angle = " + castor::string::toMbString( r ) );
+				CT_WHEN( "Angle = " + c3d::string::toMbString( r ) );
 				Angle angle( Angle::fromDegrees( float( r ) ) );
 				glm::mat4 glm = glm::mat4_cast( glm::normalize( glm::angleAxis( float( angle.radians() ), glm::normalize( glm::vec3( 1.0f, 1.0f, 1.0f ) ) ) ) );
 				Matrix4x4f mtx;
@@ -129,7 +129,7 @@ namespace Testing
 
 			for ( auto r = 0; r < 360; r += 1 )
 			{
-				CT_WHEN( "Angle = " + castor::string::toMbString( r ) );
+				CT_WHEN( "Angle = " + c3d::string::toMbString( r ) );
 				Matrix4x4f mtx( 1 );
 				Angle angle( Angle::fromDegrees( float( r ) ) );
 				matrix::setTransform( mtx, Point3f( r, r, -r ), Point3f( 0.3f, 0.6f, 1.0f ), Quaternion::fromAxisAngle( Point3f( 1.0f, 1.0f, 1.0f ), angle ) );

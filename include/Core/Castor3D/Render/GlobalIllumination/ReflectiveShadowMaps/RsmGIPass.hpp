@@ -18,10 +18,10 @@ See LICENSE file in root folder
 
 #include <ShaderAST/Shader.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class RsmGIPass
-		: public castor::Named
+		: public Named
 	{
 	public:
 		/**
@@ -64,7 +64,7 @@ namespace castor3d
 			, ShadowMapResult const & smResult
 			, TextureArray const & result );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		RenderTechniquePass::accept
 		 */
 		C3D_API void accept( ConfigurationVisitorBase & visitor )const;
 		C3D_API void update( LightInstance const & light );
@@ -74,7 +74,7 @@ namespace castor3d
 			return m_rsmConfigUbo;
 		}
 
-		GpuBufferOffsetT< castor::Point4f > const & getSamplesSsbo()const
+		GpuBufferOffsetT< Point4f > const & getSamplesSsbo()const
 		{
 			return m_rsmSamplesSsbo;
 		}
@@ -92,7 +92,7 @@ namespace castor3d
 
 	private:
 		RsmConfigUbo m_rsmConfigUbo;
-		GpuBufferOffsetT< castor::Point4f > m_rsmSamplesSsbo;
+		GpuBufferOffsetT< Point4f > m_rsmSamplesSsbo;
 		ShaderModule m_vertexShader;
 		ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;

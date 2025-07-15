@@ -9,17 +9,15 @@
 
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< ParticleSystem >::TextWriter( String const & tabs )
 		: TextWriterT< ParticleSystem >{ tabs }
 	{
 	}
 
 	bool TextWriter< ParticleSystem >::operator()( ParticleSystem const & obj
-		, castor::StringStream & file )
+		, StringStream & file )
 	{
 		log::info << tabs() << cuT( "Writing ParticleSystem " ) << obj.getName() << std::endl;
 		bool result = false;
@@ -52,7 +50,7 @@ namespace castor
 							&& writeText( file
 								, tabs() + cuT( "variable \"" )
 									+ var.m_name + cuT( "\" " )
-									+ castor3d::getName( var.m_dataType ) + cuT( " " )
+									+ getName( var.m_dataType ) + cuT( " " )
 									+ values[cuT( "out_" ) + var.m_name] + cuT( "\n" ) );
 						checkError( result, cuT( "ParticleSystem particle variable" ) );
 					}

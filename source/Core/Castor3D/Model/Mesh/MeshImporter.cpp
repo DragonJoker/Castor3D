@@ -11,15 +11,15 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneImporter.hpp"
 
-CU_ImplementSmartPtr( castor3d, MeshImporter )
+CU_ImplementSmartPtr( c3d, MeshImporter )
 
-namespace castor3d
+namespace c3d
 {
 	namespace meshimp
 	{
 		static bool constexpr displaySkinningDetail = false;
 
-		static void transformMesh( castor::Matrix4x4f const & transform
+		static void transformMesh( Matrix4x4f const & transform
 			, Mesh & mesh )
 		{
 			for ( auto & submesh : mesh )
@@ -33,10 +33,10 @@ namespace castor3d
 					, submesh->getNormals()
 					, static_cast< TriFaceMapping const & >( *submesh->getIndexMapping() ).getData().getFaces() );
 
-				static castor::Point4fArray tan;
-				static castor::Point3fArray tex;
-				castor::Point4fArray * tangents = &tan;
-				castor::Point3fArray const * texcoords = &tex;
+				static Point4fArray tan;
+				static Point3fArray tex;
+				Point4fArray * tangents = &tan;
+				Point3fArray const * texcoords = &tex;
 
 				if ( auto tanComp = submesh->getComponent< TangentsComponent >() )
 				{
@@ -57,8 +57,8 @@ namespace castor3d
 		}
 
 		static bool parseMeshImportParameters( Parameters const & parameters
-			, castor::Point3f & scale
-			, castor::Quaternion & orientation
+			, Point3f & scale
+			, Quaternion & orientation
 			, uint32_t & submesh )
 		{
 			bool needsTransform = parseImportParameters( parameters, scale, orientation );
@@ -78,13 +78,13 @@ namespace castor3d
 	}
 
 	MeshImporter::MeshImporter( Engine & engine
-		, castor::String const & prefix )
+		, String const & prefix )
 		: OwnedBy< Engine >{ engine }
 		, m_prefix{ prefix + cuT( " - " ) }
 	{
 	}
 
-	MeshRes MeshImporter::importData( castor::String const & name
+	MeshRes MeshImporter::importData( String const & name
 		, Scene & scene
 		, ImporterFile * file
 		, Parameters const & parameters
@@ -117,8 +117,8 @@ namespace castor3d
 
 		if ( !mesh.getSubmeshCount() || forceImport )
 		{
-			castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
-			castor::Quaternion orientation{ castor::Quaternion::identity() };
+			Point3f scale{ 1.0f, 1.0f, 1.0f };
+			Quaternion orientation{ Quaternion::identity() };
 			uint32_t submeshIndex{};
 			auto needsTransform = meshimp::parseMeshImportParameters( m_parameters, scale, orientation, submeshIndex );
 
@@ -129,9 +129,9 @@ namespace castor3d
 			{
 				if ( needsTransform )
 				{
-					castor::Matrix4x4f transform;
-					castor::matrix::setRotate( transform, orientation );
-					castor::matrix::scale( transform, scale );
+					Matrix4x4f transform;
+					matrix::setRotate( transform, orientation );
+					matrix::scale( transform, scale );
 					meshimp::transformMesh( transform, mesh );
 				}
 
@@ -203,12 +203,12 @@ namespace castor3d
 	}
 
 	bool MeshImporter::importData( Mesh & mesh
-		, castor::Path const & path
+		, Path const & path
 		, Parameters const & parameters
 		, bool forceImport )
 	{
 		auto & engine = *mesh.getEngine();
-		auto extension = castor::string::lowerCase( path.getExtension() );
+		auto extension = string::lowerCase( path.getExtension() );
 
 		if ( !engine.getImporterFileFactory().isTypeRegistered( extension ) )
 		{
@@ -216,7 +216,7 @@ namespace castor3d
 			return false;
 		}
 
-		castor::String preferredImporter = cuT( "any" );
+		String preferredImporter = cuT( "any" );
 		parameters.get( cuT( "preferred_importer" ), preferredImporter );
 		auto file = engine.getImporterFileFactory().create( extension
 			, preferredImporter
@@ -235,7 +235,7 @@ namespace castor3d
 		return false;
 	}
 
-	MeshRes MeshImporter::doCreateMesh( castor::String const & name, Scene & scene )
+	MeshRes MeshImporter::doCreateMesh( String const & name, Scene & scene )
 	{
 		return scene.createMesh( name, scene );
 	}

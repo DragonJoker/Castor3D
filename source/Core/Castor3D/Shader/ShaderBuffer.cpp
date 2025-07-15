@@ -9,9 +9,9 @@
 
 #include <RenderGraph/FramePass.hpp>
 
-CU_ImplementSmartPtr( castor3d, ShaderBuffer )
+CU_ImplementSmartPtr( c3d, ShaderBuffer )
 
-namespace castor3d
+namespace c3d
 {
 	namespace shdbuf
 	{
@@ -22,12 +22,12 @@ namespace castor3d
 
 	ShaderBuffer::ShaderBuffer( RenderDevice const & device
 		, VkDeviceSize size
-		, castor::String const & name
+		, String const & name
 		, AccessState wantedState )
 		: m_device{ device }
 		, m_size{ ashes::getAlignedSize( size + shdbuf::HeaderSize
 			, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) }
-		, m_wantedState{ castor::move( wantedState ) }
+		, m_wantedState{ c3d::move( wantedState ) }
 		, m_buffer{ makeBufferBase( m_device
 			, m_size
 			, ( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT )
@@ -36,7 +36,7 @@ namespace castor3d
 		, m_ownData( size_t( m_size ), byte{} )
 		, m_rawData( m_ownData.data() )
 		, m_data{ ( m_rawData + shdbuf::HeaderSize ) }
-		, m_counts{ castor::makeArrayView( reinterpret_cast< uint32_t * >( m_rawData )
+		, m_counts{ makeArrayView( reinterpret_cast< uint32_t * >( m_rawData )
 			, reinterpret_cast< uint32_t * >( m_data ) ) }
 	{
 		CU_Require( m_rawData );

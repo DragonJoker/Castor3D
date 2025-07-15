@@ -13,28 +13,25 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::ThicknessComponent >
-		: public TextWriterT< castor3d::ThicknessComponent >
+	class TextWriter< ThicknessComponent >
+		: public TextWriterT< ThicknessComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::ThicknessComponent >{ tabs }
+			: TextWriterT< ThicknessComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::ThicknessComponent const & object
+		bool operator()( ThicknessComponent const & object
 			, StringStream & file )override
 		{
-			return writeOpt( file, cuT( "thickness_factor" ), object.getThicknessFactor(), castor3d::ThicknessComponent::Default );
+			return writeOpt( file, cuT( "thickness_factor" ), object.getThicknessFactor(), ThicknessComponent::Default );
 		}
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace trsatt
@@ -131,14 +128,14 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void ThicknessComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void ThicknessComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "thickness_factor" )
 			, trsatt::parserPassThicknessFactor
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { makeParameter< ParameterType::eFloat >() } );
 	}
 
 	void ThicknessComponent::Plugin::zeroBuffer( Pass const & pass
@@ -158,7 +155,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const ThicknessComponent::TypeName = C3D_MakePassLightingComponentName( "thickness" );
+	String const ThicknessComponent::TypeName = C3D_MakePassLightingComponentName( "thickness" );
 
 	ThicknessComponent::ThicknessComponent( Pass & pass )
 		: BaseDataPassComponentT{ pass
@@ -176,17 +173,17 @@ namespace castor3d
 
 	PassComponentUPtr ThicknessComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< ThicknessComponent >( pass );
+		auto result = makeRawUnique< ThicknessComponent >( pass );
 		result->setData( getData() );
 		return PassComponentUPtr{ result.release() };
 	}
 
-	bool ThicknessComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool ThicknessComponent::doWriteText( String const & tabs
+		, Path const & folder
+		, String const & subfolder
+		, StringStream & file )const
 	{
-		return castor::TextWriter< ThicknessComponent >{ tabs }( *this, file );
+		return TextWriter< ThicknessComponent >{ tabs }( *this, file );
 	}
 
 	void ThicknessComponent::doFillBuffer( PassBuffer & buffer )const

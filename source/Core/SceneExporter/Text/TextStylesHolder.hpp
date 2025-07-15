@@ -8,21 +8,21 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::StylesHolder >
-		: public TextWriterT< castor3d::StylesHolder >
+	class TextWriter< StylesHolder >
+		: public TextWriterT< StylesHolder >
 	{
 	public:
 		explicit TextWriter( String const & tabs
-			, castor3d::Scene const * scene
+			, Scene const * scene
 			, String const & fontName );
-		bool operator()( castor3d::StylesHolder const & object
-			, castor::StringStream & file )override;
+		bool operator()( StylesHolder const & object
+			, StringStream & file )override;
 
 	private:
-		castor3d::Scene const * m_scene;
+		Scene const * m_scene;
 		String const & m_fontName;
 	};
 }

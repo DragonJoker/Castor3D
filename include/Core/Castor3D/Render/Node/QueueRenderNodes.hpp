@@ -20,18 +20,18 @@ namespace crg::ru
 	struct Config;
 }
 
-namespace castor3d
+namespace c3d
 {
 	struct QueueRenderNodes
-		: public castor::OwnedBy< RenderQueue const >
+		: public OwnedBy< RenderQueue const >
 	{
 	public:
-		using PipelineMap = castor::UnorderedMap< size_t, PipelineAndID >;
+		using PipelineMap = HashMap< size_t, PipelineAndID >;
 
 	public:
 		C3D_API explicit QueueRenderNodes( RenderQueue const & queue
 			, RenderDevice const & device
-			, castor::String const & typeName
+			, String const & typeName
 			, bool meshShading );
 		C3D_API ~QueueRenderNodes()noexcept;
 		C3D_API void fillConfig( crg::ru::Config & config )const;
@@ -287,8 +287,8 @@ namespace castor3d
 		SceneCullerBillboardSignalConnection m_onBillboardChanged;
 		SceneCullerBillboardSignalConnection m_onBillboardRemoved;
 
-		castor::UnorderedSet< CulledNodeT< SubmeshRenderNode > const * > m_pendingSubmeshes;
-		castor::UnorderedSet< CulledNodeT< BillboardRenderNode > const * > m_pendingBillboards;
+		HashSet< CulledNodeT< SubmeshRenderNode > const * > m_pendingSubmeshes;
+		HashSet< CulledNodeT< BillboardRenderNode > const * > m_pendingBillboards;
 
 		PipelineMap m_pipelines;
 		RenderCounts m_visible{};

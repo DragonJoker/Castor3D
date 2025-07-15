@@ -19,10 +19,10 @@
 
 namespace
 {
-	castor::Vector< castor::Pair< castor::String, castor3d::Plugin::Extension > > getExtensions( castor3d::Engine * engine )
+	c3d::Vector< c3d::Pair< c3d::String, c3d::Plugin::Extension > > getExtensions( c3d::Engine * engine )
 	{
-		castor::Vector< castor::Pair< castor::String, castor3d::Plugin::Extension > > extensions;
-		using Extension = castor3d::Plugin::Extension;
+		c3d::Vector< c3d::Pair< c3d::String, c3d::Plugin::Extension > > extensions;
+		using Extension = c3d::Plugin::Extension;
 
 		if ( extensions.empty() )
 		{
@@ -107,26 +107,26 @@ namespace
 
 extern "C"
 {
-	C3D_Assimp_API void getRequiredVersion( castor3d::Version * version );
-	C3D_Assimp_API void getType( castor3d::PluginType * type );
+	C3D_Assimp_API void getRequiredVersion( c3d::Version * version );
+	C3D_Assimp_API void getType( c3d::PluginType * type );
 	C3D_Assimp_API void isDebug( int * value );
 	C3D_Assimp_API void getName( char const ** name );
-	C3D_Assimp_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
-	C3D_Assimp_API void onUnload( castor3d::Engine * engine );
+	C3D_Assimp_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin );
+	C3D_Assimp_API void onUnload( c3d::Engine * engine );
 
-	C3D_Assimp_API void getRequiredVersion( castor3d::Version * version )
+	C3D_Assimp_API void getRequiredVersion( c3d::Version * version )
 	{
-		*version = castor3d::Version();
+		*version = c3d::Version();
 	}
 
 	C3D_Assimp_API void isDebug( int * value )
 	{
-		*value = castor::system::isDebug() ? 1 : 0;
+		*value = c3d::system::isDebug() ? 1 : 0;
 	}
 
-	C3D_Assimp_API void getType( castor3d::PluginType * type )
+	C3D_Assimp_API void getType( c3d::PluginType * type )
 	{
-		*type = castor3d::PluginType::eImporter;
+		*type = c3d::PluginType::eImporter;
 	}
 
 	C3D_Assimp_API void getName( char const ** name )
@@ -134,25 +134,25 @@ extern "C"
 		*name = c3d_assimp::AssimpImporterFile::Name.c_str();
 	}
 
-	C3D_Assimp_API void onLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
+	C3D_Assimp_API void onLoad( c3d::Engine * engine, c3d::Plugin * plugin )
 	{
 		auto extensions = getExtensions( engine );
 
 		for ( auto const & extension : extensions )
 		{
-			engine->getImporterFileFactory().registerType( castor::string::lowerCase( extension.second.first )
+			engine->getImporterFileFactory().registerType( c3d::string::lowerCase( extension.second.first )
 				, extension.first
 				, &c3d_assimp::AssimpImporterFile::create );
 		}
 	}
 
-	C3D_Assimp_API void onUnload( castor3d::Engine * engine )
+	C3D_Assimp_API void onUnload( c3d::Engine * engine )
 	{
 		auto extensions = getExtensions( engine );
 
 		for ( auto const & extension : extensions )
 		{
-			engine->getImporterFileFactory().unregisterType( castor::string::lowerCase( extension.second.first )
+			engine->getImporterFileFactory().unregisterType( c3d::string::lowerCase( extension.second.first )
 				, extension.first );
 		}
 	}

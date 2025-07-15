@@ -17,7 +17,7 @@
 namespace GuiCommon
 {
 	StyleTreeItemProperty::StyleTreeItemProperty( bool editable
-		, castor3d::Engine * engine )
+		, c3d::Engine * engine )
 		: TreeItemProperty{ engine, editable }
 	{
 		CreateTreeItemMenu();
@@ -40,38 +40,38 @@ namespace GuiCommon
 		m_fonts = getFontsList();
 		addProperty( grid, PROPERTY_CATEGORY + wxString( style.getName() ) );
 		addMaterial( grid, engine, PROPERTY_BACKGROUND_MATERIAL, m_materials, style.getBackgroundMaterial()
-			, [&style]( castor3d::MaterialObs material ) { style.setBackgroundMaterial( material ); } );
+			, [&style]( c3d::MaterialObs material ) { style.setBackgroundMaterial( material ); } );
 		addMaterial( grid, engine, PROPERTY_FOREGROUND_MATERIAL, m_materials, style.getForegroundMaterial()
-			, [&style]( castor3d::MaterialObs material ) { style.setForegroundMaterial( material ); } );
+			, [&style]( c3d::MaterialObs material ) { style.setForegroundMaterial( material ); } );
 
 		switch ( style.getType() )
 		{
-		case castor3d::ControlType::ePanel:
-			doCreateStyleProperties( grid, static_cast< castor3d::PanelStyle & >( style ) );
+		case c3d::ControlType::ePanel:
+			doCreateStyleProperties( grid, static_cast< c3d::PanelStyle & >( style ) );
 			break;
-		case castor3d::ControlType::eStatic:
-			doCreateStyleProperties( grid, static_cast< castor3d::StaticStyle & >( style ) );
+		case c3d::ControlType::eStatic:
+			doCreateStyleProperties( grid, static_cast< c3d::StaticStyle & >( style ) );
 			break;
-		case castor3d::ControlType::eEdit:
-			doCreateStyleProperties( grid, static_cast< castor3d::EditStyle & >( style ) );
+		case c3d::ControlType::eEdit:
+			doCreateStyleProperties( grid, static_cast< c3d::EditStyle & >( style ) );
 			break;
-		case castor3d::ControlType::eSlider:
-			doCreateStyleProperties( grid, static_cast< castor3d::SliderStyle & >( style ) );
+		case c3d::ControlType::eSlider:
+			doCreateStyleProperties( grid, static_cast< c3d::SliderStyle & >( style ) );
 			break;
-		case castor3d::ControlType::eComboBox:
-			doCreateStyleProperties( grid, static_cast< castor3d::ComboBoxStyle & >( style ) );
+		case c3d::ControlType::eComboBox:
+			doCreateStyleProperties( grid, static_cast< c3d::ComboBoxStyle & >( style ) );
 			break;
-		case castor3d::ControlType::eListBox:
-			doCreateStyleProperties( grid, static_cast< castor3d::ListBoxStyle & >( style ) );
+		case c3d::ControlType::eListBox:
+			doCreateStyleProperties( grid, static_cast< c3d::ListBoxStyle & >( style ) );
 			break;
-		case castor3d::ControlType::eButton:
-			doCreateStyleProperties( grid, static_cast< castor3d::ButtonStyle & >( style ) );
+		case c3d::ControlType::eButton:
+			doCreateStyleProperties( grid, static_cast< c3d::ButtonStyle & >( style ) );
 			break;
-		case castor3d::ControlType::eExpandablePanel:
-			doCreateStyleProperties( grid, static_cast< castor3d::ExpandablePanelStyle & >( style ) );
+		case c3d::ControlType::eExpandablePanel:
+			doCreateStyleProperties( grid, static_cast< c3d::ExpandablePanelStyle & >( style ) );
 			break;
-		case castor3d::ControlType::eFrame:
-			doCreateStyleProperties( grid, static_cast< castor3d::FrameStyle & >( style ) );
+		case c3d::ControlType::eFrame:
+			doCreateStyleProperties( grid, static_cast< c3d::FrameStyle & >( style ) );
 			break;
 		default:
 			CU_Failure( "Unsupported ControlType" );
@@ -80,7 +80,7 @@ namespace GuiCommon
 	}
 
 	void StyleTreeItemProperty::doCreateStyleProperties( wxPropertyGrid * grid
-		, castor3d::ButtonStyle & style )
+		, c3d::ButtonStyle & style )
 	{
 		static wxString PROPERTY_FONT = _( "Font" );
 		static wxString PROPERTY_TEXT_MATERIAL = _( "Text Material" );
@@ -102,47 +102,47 @@ namespace GuiCommon
 				style.setFont( name );
 			} );
 		addMaterial( grid, engine, PROPERTY_TEXT_MATERIAL, m_materials, style.getTextMaterial()
-			, [&style]( castor3d::MaterialObs material ) { style.setTextMaterial( material ); } );
+			, [&style]( c3d::MaterialObs material ) { style.setTextMaterial( material ); } );
 
 		addMaterial( grid, engine, PROPERTY_HL_BACKGROUND_MATERIAL, m_materials, style.getHighlightedBackgroundMaterial()
-			, [&style]( castor3d::MaterialObs material ) { style.setHighlightedBackgroundMaterial( material ); } );
+			, [&style]( c3d::MaterialObs material ) { style.setHighlightedBackgroundMaterial( material ); } );
 		addMaterial( grid, engine, PROPERTY_HL_FOREGROUND_MATERIAL, m_materials, style.getHighlightedForegroundMaterial()
-			, [&style]( castor3d::MaterialObs material ) { style.setHighlightedForegroundMaterial( material ); } );
+			, [&style]( c3d::MaterialObs material ) { style.setHighlightedForegroundMaterial( material ); } );
 		addMaterial( grid, engine, PROPERTY_HL_TEXT_MATERIAL, m_materials, style.getHighlightedTextMaterial()
-			, [&style]( castor3d::MaterialObs material ) { style.setHighlightedTextMaterial( material ); } );
+			, [&style]( c3d::MaterialObs material ) { style.setHighlightedTextMaterial( material ); } );
 
 		addMaterial( grid, engine, PROPERTY_HL_BACKGROUND_MATERIAL, m_materials, style.getPushedBackgroundMaterial()
-			, [&style]( castor3d::MaterialObs material ) { style.setPushedBackgroundMaterial( material ); } );
+			, [&style]( c3d::MaterialObs material ) { style.setPushedBackgroundMaterial( material ); } );
 		addMaterial( grid, engine, PROPERTY_HL_FOREGROUND_MATERIAL, m_materials, style.getPushedForegroundMaterial()
-			, [&style]( castor3d::MaterialObs material ) { style.setPushedForegroundMaterial( material ); } );
+			, [&style]( c3d::MaterialObs material ) { style.setPushedForegroundMaterial( material ); } );
 		addMaterial( grid, engine, PROPERTY_HL_TEXT_MATERIAL, m_materials, style.getPushedTextMaterial()
-			, [&style]( castor3d::MaterialObs material ) { style.setPushedTextMaterial( material ); } );
+			, [&style]( c3d::MaterialObs material ) { style.setPushedTextMaterial( material ); } );
 
 		addMaterial( grid, engine, PROPERTY_HL_BACKGROUND_MATERIAL, m_materials, style.getDisabledBackgroundMaterial()
-			, [&style]( castor3d::MaterialObs material ) { style.setDisabledBackgroundMaterial( material ); } );
+			, [&style]( c3d::MaterialObs material ) { style.setDisabledBackgroundMaterial( material ); } );
 		addMaterial( grid, engine, PROPERTY_HL_FOREGROUND_MATERIAL, m_materials, style.getDisabledForegroundMaterial()
-			, [&style]( castor3d::MaterialObs material ) { style.setDisabledForegroundMaterial( material ); } );
+			, [&style]( c3d::MaterialObs material ) { style.setDisabledForegroundMaterial( material ); } );
 		addMaterial( grid, engine, PROPERTY_HL_TEXT_MATERIAL, m_materials, style.getDisabledTextMaterial()
-			, [&style]( castor3d::MaterialObs material ) { style.setDisabledTextMaterial( material ); } );
+			, [&style]( c3d::MaterialObs material ) { style.setDisabledTextMaterial( material ); } );
 	}
 
 	void StyleTreeItemProperty::doCreateStyleProperties( wxPropertyGrid * grid
-		, castor3d::ComboBoxStyle & style )
+		, c3d::ComboBoxStyle & style )
 	{
 	}
 
 	void StyleTreeItemProperty::doCreateStyleProperties( wxPropertyGrid * grid
-		, castor3d::EditStyle & style )
+		, c3d::EditStyle & style )
 	{
 	}
 
 	void StyleTreeItemProperty::doCreateStyleProperties( wxPropertyGrid * grid
-		, castor3d::ExpandablePanelStyle & style )
+		, c3d::ExpandablePanelStyle & style )
 	{
 	}
 
 	void StyleTreeItemProperty::doCreateStyleProperties( wxPropertyGrid * grid
-		, castor3d::FrameStyle & style )
+		, c3d::FrameStyle & style )
 	{
 		static wxString PROPERTY_FONT = _( "Font" );
 		static wxString PROPERTY_TEXT_MATERIAL = _( "Text Material" );
@@ -155,26 +155,26 @@ namespace GuiCommon
 				style.setHeaderFont( name );
 			} );
 		addMaterial( grid, engine, PROPERTY_TEXT_MATERIAL, m_materials, style.getHeaderTextMaterial()
-			, [&style]( castor3d::MaterialObs material ) { style.setHeaderTextMaterial( material ); } );
+			, [&style]( c3d::MaterialObs material ) { style.setHeaderTextMaterial( material ); } );
 	}
 
 	void StyleTreeItemProperty::doCreateStyleProperties( wxPropertyGrid * grid
-		, castor3d::ListBoxStyle & style )
+		, c3d::ListBoxStyle & style )
 	{
 	}
 
 	void StyleTreeItemProperty::doCreateStyleProperties( wxPropertyGrid * grid
-		, castor3d::PanelStyle & style )
+		, c3d::PanelStyle & style )
 	{
 	}
 
 	void StyleTreeItemProperty::doCreateStyleProperties( wxPropertyGrid * grid
-		, castor3d::SliderStyle & style )
+		, c3d::SliderStyle & style )
 	{
 	}
 
 	void StyleTreeItemProperty::doCreateStyleProperties( wxPropertyGrid * grid
-		, castor3d::StaticStyle & style )
+		, c3d::StaticStyle & style )
 	{
 		static wxString PROPERTY_FONT = _( "Font" );
 		static wxString PROPERTY_TEXT_MATERIAL = _( "Text Material" );
@@ -187,6 +187,6 @@ namespace GuiCommon
 				style.setFont( name );
 			} );
 		addMaterial( grid, engine, PROPERTY_TEXT_MATERIAL, m_materials, style.getTextMaterial()
-			, [&style]( castor3d::MaterialObs material ) { style.setTextMaterial( material ); } );
+			, [&style]( c3d::MaterialObs material ) { style.setTextMaterial( material ); } );
 	}
 }

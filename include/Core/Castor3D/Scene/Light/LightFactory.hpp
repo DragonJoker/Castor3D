@@ -8,10 +8,10 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/Factory.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class LightFactory
-		: public castor::Factory< LightCategory, LightType, LightCategoryUPtr, castor::Function< LightCategoryUPtr( bool &, castor::Function< void() > const & ) > >
+		: public Factory< LightCategory, LightType, LightCategoryUPtr, Function< LightCategoryUPtr( bool &, Function< void() > const & ) > >
 	{
 	public:
 		/**

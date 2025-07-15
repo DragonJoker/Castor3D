@@ -39,9 +39,9 @@ namespace GuiCommon
 		 *\param[in]	editable	Dit si les propriétés sont modifiables.
 		 *\param[in]	engine		Le moteur.
 		 */
-		LightTreeItemProperty( bool editable, castor3d::Engine * engine );
+		LightTreeItemProperty( bool editable, c3d::Engine * engine );
 
-		void setData( castor3d::Light & data )noexcept
+		void setData( c3d::Light & data )noexcept
 		{
 			clearProperties();
 			m_light = &data;
@@ -54,7 +54,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::Light * m_light{};
+		c3d::Light * m_light{};
 	};
 }
 

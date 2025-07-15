@@ -11,7 +11,7 @@ namespace castortd
 
 		void reset();
 		void startWave( uint32_t count );
-		bool canSpawn( castor::Milliseconds const & elapsed );
+		bool canSpawn( c3d::Milliseconds const & elapsed );
 		EnemyPtr spawn( Game const & game, Path const & path );
 		void killEnemy( Game & game, EnemyPtr && enemy );
 
@@ -38,8 +38,8 @@ namespace castortd
 	private:
 		BaseEnemy m_category;
 		uint32_t m_count{ 0 };
-		castor::Milliseconds m_timeBetweenTwoSpawns{ 0u };
-		castor::Milliseconds m_timeSinceLastSpawn{ 0u };
+		c3d::Milliseconds m_timeBetweenTwoSpawns{ 0u };
+		c3d::Milliseconds m_timeSinceLastSpawn{ 0u };
 		uint32_t m_totalsWaves{ 0ull };
 		uint32_t m_totalSpawned{ 0ull };
 		EnemyArray m_enemiesCache;

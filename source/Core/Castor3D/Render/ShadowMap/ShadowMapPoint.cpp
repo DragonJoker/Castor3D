@@ -35,16 +35,16 @@
 
 #include <algorithm>
 
-namespace castor3d
+namespace c3d
 {
 	namespace shdmappoint
 	{
-		static castor::String getPassName( uint32_t index
+		static String getPassName( uint32_t index
 			, bool needsVsm
 			, bool needsRsm
 			, bool isStatic )
 		{
-			auto result = cuT( "PointSML" ) + castor::string::toString( index / 6u ) + cuT( "F" ) + castor::string::toString( index % 6u );
+			auto result = cuT( "PointSML" ) + string::toString( index / 6u ) + cuT( "F" ) + string::toString( index % 6u );
 
 			if ( needsVsm )
 			{
@@ -121,30 +121,30 @@ namespace castor3d
 		for ( uint32_t face = 0u; face < 6u; ++face )
 		{
 			auto faceIndex = index * 6u + face;
-			auto debugName = castor::toUtf8( shdmappoint::getPassName( faceIndex, vsm, rsm, isStatic ) );
+			auto debugName = toUtf8( shdmappoint::getPassName( faceIndex, vsm, rsm, isStatic ) );
 			auto & group = graph.createPassGroup( debugName );
 
 			if ( m_passes[m_passesIndex].cameraUbos.size() <= faceIndex )
 			{
-				m_passes[m_passesIndex].cameraUbos.push_back( castor::make_unique< CameraUbo >( m_device ) );
+				m_passes[m_passesIndex].cameraUbos.push_back( makeRawUnique< CameraUbo >( m_device ) );
 				CU_Require( m_passes[m_passesIndex].cameraUbos.size() > faceIndex );
 			}
 
 			auto & cameraUbo = *m_passes[m_passesIndex].cameraUbos[faceIndex];
-			passes.passes.emplace_back( castor::make_unique< ShadowMap::PassData >( castor::makeUnique< Viewport >( engine )
+			passes.passes.emplace_back( makeRawUnique< ShadowMap::PassData >( makeUnique< Viewport >( engine )
 				, nullptr ) );
 			auto & passData = *passes.passes.back();
-			passData.viewport->resize( castor::Size{ ShadowMapPointTextureSize
+			passData.viewport->resize( Size{ ShadowMapPointTextureSize
 				, ShadowMapPointTextureSize } );
-			passData.frustum = castor::makeUnique< Frustum >( *passData.viewport );
-			passData.ownCuller = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( m_scene, *passData.frustum, isStatic );
+			passData.frustum = makeUnique< Frustum >( *passData.viewport );
+			passData.ownCuller = makeUniqueDerived< SceneCuller, FrustumCuller >( m_scene, *passData.frustum, isStatic );
 			passData.culler = passData.ownCuller.get();
 			auto & pass = group.createPass( "Nodes"
 				, [&passData, this, vsm, rsm, isStatic, &cameraUbo]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
 				{
-					auto res = castor::make_unique< ShadowMapPassPoint >( framePass
+					auto res = makeRawUnique< ShadowMapPassPoint >( framePass
 						, context
 						, runnableGraph
 						, m_device
@@ -155,7 +155,7 @@ namespace castor3d
 						, rsm
 						, isStatic );
 					passData.pass = res.get();
-					m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+					m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 						, res->getTimer() );
 					return res;
 				} );
@@ -215,7 +215,7 @@ namespace castor3d
 						, crg::GraphContext & context
 						, crg::RunnableGraph & runnableGraph )
 					{
-						auto result = castor::make_unique< crg::ImageCopy >( framePass
+						auto result = makeRawUnique< crg::ImageCopy >( framePass
 							, context
 							, runnableGraph
 							, getShadowPassResult( isStatic )[SmTexture::eDepth].getExtent()
@@ -223,7 +223,7 @@ namespace castor3d
 							, crg::ru::Config{}
 							, crg::ImageCopy::GetPassIndexCallback( [](){ return 0u; } )
 							, crg::ImageCopy::IsEnabledCallback( [this, faceIndex](){ return doEnableCopyStatic( faceIndex ); } ) );
-						getOwner()->registerTimer( castor::makeString( framePass.getFullName() )
+						getOwner()->registerTimer( makeString( framePass.getFullName() )
 							, result->getTimer() );
 						return result;
 					} );
@@ -254,7 +254,7 @@ namespace castor3d
 			}
 			else if ( vsm )
 			{
-				passes.blurs.push_back( castor::makeUnique< GaussianBlur >( group
+				passes.blurs.push_back( makeUnique< GaussianBlur >( group
 					, *previousPass
 					, m_device
 					, cuT( "ShadowMapPoint" )
@@ -296,7 +296,7 @@ namespace castor3d
 		if ( uint32_t offset = index * 6u;
 			passes.passes.size() >= offset + 6u )
 		{
-			for ( auto const & data : castor::makeArrayView( passes.passes.begin() + offset, passes.passes.begin() + offset + 6u ) )
+			for ( auto const & data : makeArrayView( passes.passes.begin() + offset, passes.passes.begin() + offset + 6u ) )
 			{
 				data->pass->setUpToDate();
 			}

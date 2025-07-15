@@ -11,16 +11,16 @@ See LICENSE file in root folder
 namespace c3d_gltf
 {
 	class GltfSkeletonImporter
-		: public castor3d::SkeletonImporter
+		: public c3d::SkeletonImporter
 	{
 	public:
-		explicit GltfSkeletonImporter( castor3d::Engine & engine );
+		explicit GltfSkeletonImporter( c3d::Engine & engine );
 
 	private:
-		bool doImportSkeleton( castor3d::Skeleton & node )override;
+		bool doImportSkeleton( c3d::Skeleton & node )override;
 	};
 
-	castor::Vector< size_t > findSkinRootNodes( GltfImporterFile const & file
+	c3d::Vector< size_t > findSkinRootNodes( GltfImporterFile const & file
 		, fastgltf::Skin const & impSkin );
 }
 

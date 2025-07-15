@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <atomic>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-namespace castor::format
+namespace c3d::format
 {
 	template< typename CharT, typename traits >
 	class BasicIndentBufferManagerT
@@ -25,7 +25,7 @@ namespace castor::format
 		using value_type = typename table_type::value_type;
 		using iterator = typename table_type::iterator;
 		using const_iterator = typename table_type::const_iterator;
-		using lock_type = castor::UniqueLock< castor::Mutex >;
+		using lock_type = c3d::UniqueLock< c3d::Mutex >;
 
 		BasicIndentBufferManagerT( BasicIndentBufferManagerT const & ) = delete;
 		BasicIndentBufferManagerT & operator =( BasicIndentBufferManagerT const & ) = delete;
@@ -174,7 +174,7 @@ namespace castor::format
 		table_type m_list;
 		//!\~english	mutex protecting the associated elements list.
 		//!\~french		Le mutex protégeant les éléments associés.
-		castor::Mutex m_mutex;
+		c3d::Mutex m_mutex;
 	};
 
 	template< typename CharT, typename traits >

@@ -6,19 +6,19 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	inline castor::SquareMatrix< float, 2 > const & matrixRefFromVariant< float, 2 >( wxVariant const & variant )
+	inline c3d::SquareMatrix< float, 2 > const & matrixRefFromVariant< float, 2 >( wxVariant const & variant )
 	{
 		return Matrix2x2fRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::SquareMatrix< float, 3 > const & matrixRefFromVariant< float, 3 >( wxVariant const & variant )
+	inline c3d::SquareMatrix< float, 3 > const & matrixRefFromVariant< float, 3 >( wxVariant const & variant )
 	{
 		return Matrix3x3fRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::SquareMatrix< float, 4 > const & matrixRefFromVariant< float, 4 >( wxVariant const & variant )
+	inline c3d::SquareMatrix< float, 4 > const & matrixRefFromVariant< float, 4 >( wxVariant const & variant )
 	{
 		return Matrix4x4fRefFromVariant( variant );
 	}
@@ -26,19 +26,19 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	inline castor::SquareMatrix< float, 2 > & matrixRefFromVariant< float, 2 >( wxVariant & variant )
+	inline c3d::SquareMatrix< float, 2 > & matrixRefFromVariant< float, 2 >( wxVariant & variant )
 	{
 		return Matrix2x2fRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::SquareMatrix< float, 3 > & matrixRefFromVariant< float, 3 >( wxVariant & variant )
+	inline c3d::SquareMatrix< float, 3 > & matrixRefFromVariant< float, 3 >( wxVariant & variant )
 	{
 		return Matrix3x3fRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::SquareMatrix< float, 4 > & matrixRefFromVariant< float, 4 >( wxVariant & variant )
+	inline c3d::SquareMatrix< float, 4 > & matrixRefFromVariant< float, 4 >( wxVariant & variant )
 	{
 		return Matrix4x4fRefFromVariant( variant );
 	}
@@ -46,7 +46,7 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template< typename Type, uint32_t Count > void setVariantFromMatrix( wxVariant & variant
-		, castor::SquareMatrix< Type, Count > const & value )
+		, c3d::SquareMatrix< Type, Count > const & value )
 	{
 		matrixRefFromVariant< Type, Count >( variant ) = value;
 	}
@@ -58,7 +58,7 @@ namespace GuiCommon
 		static void addChildren( MatrixProperty< T, Count > * prop
 			, wxString const * rowNames
 			, wxString const * colNames
-			, castor::SquareMatrix< T, Count > const & value )
+			, c3d::SquareMatrix< T, Count > const & value )
 		{
 			for ( uint32_t i = 0; i < Count; ++i )
 			{
@@ -72,7 +72,7 @@ namespace GuiCommon
 				wxPGProperty * property = new PointProperty< T, Count >( names
 					, wxString() << _( "Col " ) << rowNames[i]
 					, wxPG_LABEL
-					, castor::Point< T, Count >( value[i].constPtr() ) );
+					, c3d::Point< T, Count >( value[i].constPtr() ) );
 				property->Enable( false );
 				prop->AddPrivateChild( property );
 			}
@@ -80,12 +80,12 @@ namespace GuiCommon
 
 		static void refreshChildren( MatrixProperty< T, Count > * prop )
 		{
-			castor::SquareMatrix< T, Count > const & matrix = matrixRefFromVariant< T, Count >( prop->GetValue() );
+			c3d::SquareMatrix< T, Count > const & matrix = matrixRefFromVariant< T, Count >( prop->GetValue() );
 
 			for ( uint32_t i = 0; i < Count; ++i )
 			{
 				wxVariant value = prop->Item( i )->GetValue();
-				setVariantFromPoint< T, Count >( value, castor::Point< T, Count >( matrix[i].constPtr() ) );
+				setVariantFromPoint< T, Count >( value, c3d::Point< T, Count >( matrix[i].constPtr() ) );
 				prop->Item( i )->SetValue( value );
 			}
 		}
@@ -93,8 +93,8 @@ namespace GuiCommon
 			, int index
 			, wxVariant & newValue )
 		{
-			castor::SquareMatrix< T, Count > & matrix = matrixRefFromVariant< T, Count >( thisValue );
-			castor::Point< T, Count > const & row = PointRefFromVariant< T, Count >( newValue );
+			c3d::SquareMatrix< T, Count > & matrix = matrixRefFromVariant< T, Count >( thisValue );
+			c3d::Point< T, Count > const & row = PointRefFromVariant< T, Count >( newValue );
 			matrix.setRow( uint32_t( index ), row );
 			wxVariant result;
 			result << matrix;
@@ -151,7 +151,7 @@ namespace GuiCommon
 	template< typename T, uint32_t Count >
 	MatrixProperty< T, Count >::MatrixProperty( wxString const & label
 		, wxString const & name
-		, castor::SquareMatrix< T, Count > const & value )
+		, c3d::SquareMatrix< T, Count > const & value )
 		: wxPGProperty( label, name )
 	{
 		setValueI( value );
@@ -166,7 +166,7 @@ namespace GuiCommon
 		, wxString const( & colNames )[Count]
 		, wxString const & label
 		, wxString const & name
-		, castor::SquareMatrix< T, Count > const & value )
+		, c3d::SquareMatrix< T, Count > const & value )
 		: wxPGProperty( label, name )
 	{
 		setValueI( value );
@@ -196,7 +196,7 @@ namespace GuiCommon
 	}
 
 	template< typename T, uint32_t Count >
-	inline void MatrixProperty< T, Count >::setValueI( castor::SquareMatrix< T, Count > const & value )
+	inline void MatrixProperty< T, Count >::setValueI( c3d::SquareMatrix< T, Count > const & value )
 	{
 		m_value = WXVARIANT( value );
 	}

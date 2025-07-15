@@ -46,7 +46,7 @@ namespace GuiCommon
 	namespace helpers
 	{
 		struct wxWidgetsGlyphLoader
-			: public castor::Font::GlyphLoader
+			: public c3d::Font::GlyphLoader
 		{
 			explicit wxWidgetsGlyphLoader( wxFont const & font )
 				: m_font( font )
@@ -61,32 +61,32 @@ namespace GuiCommon
 			{
 			}
 
-			castor::Glyph loadGlyph( char32_t glyph )override
+			c3d::Glyph loadGlyph( char32_t glyph )override
 			{
 				return { glyph, {}, {}, {}, {}, {} };
 			}
 
 			void fillKerningTable( char32_t c32
-				, castor::Font::GlyphArray const & glyphs
-				, castor::Font::GlyphKerningMap & table )override
+				, c3d::Font::GlyphArray const & glyphs
+				, c3d::Font::GlyphKerningMap & table )override
 			{
 			}
 
 			wxFont m_font;
 		};
 
-		static castor::PathArray listPluginsFiles( castor::Path const & folder )
+		static c3d::PathArray listPluginsFiles( c3d::Path const & folder )
 		{
-			static castor::String castor3DLibPrefix{ CU_LibPrefix + castor::String{ cuT( "castor3d" ) } };
-			castor::PathArray files;
-			castor::File::listDirectoryFiles( folder, files );
-			castor::PathArray result;
-			castor::String endRel = castor::String{ CU_SharedLibExt };
+			static c3d::String castor3DLibPrefix{ CU_LibPrefix + c3d::String{ cuT( "castor3d" ) } };
+			c3d::PathArray files;
+			c3d::File::listDirectoryFiles( folder, files );
+			c3d::PathArray result;
+			c3d::String endRel = c3d::String{ CU_SharedLibExt };
 
 			for ( auto file : files )
 			{
 				auto fileName = file.getFileName( true );
-				bool res = castor::string::endsWith( fileName, endRel );
+				bool res = c3d::string::endsWith( fileName, endRel );
 
 				if ( res && fileName.find( castor3DLibPrefix ) == 0u )
 				{
@@ -98,7 +98,7 @@ namespace GuiCommon
 		}
 
 		class PreprocessedSceneFile
-			: public castor::PreprocessedFile
+			: public c3d::PreprocessedFile
 		{
 		public:
 			enum Category : uint32_t
@@ -118,14 +118,14 @@ namespace GuiCommon
 			};
 
 		public:
-			using castor::PreprocessedFile::PreprocessedFile;
+			using c3d::PreprocessedFile::PreprocessedFile;
 
-			castor::SectionId getCategory( castor::String const & name
-				, castor::SectionId curSection
-				, castor::SectionId nextSection
+			c3d::SectionId getCategory( c3d::String const & name
+				, c3d::SectionId curSection
+				, c3d::SectionId nextSection
 				, bool implicit )const
 			{
-				using namespace castor3d;
+				using namespace c3d;
 
 				if ( implicit )
 				{
@@ -220,12 +220,12 @@ namespace GuiCommon
 				}
 			}
 
-			uint32_t getCategoryActionsCount( castor::SectionId section )const
+			uint32_t getCategoryActionsCount( c3d::SectionId section )const
 			{
 				return m_totalCat[section];
 			}
 
-			uint32_t incCategoryActions( castor::SectionId section, uint32_t count = 1u )
+			uint32_t incCategoryActions( c3d::SectionId section, uint32_t count = 1u )
 			{
 				return m_currentCat[section] += count;
 			}
@@ -239,9 +239,9 @@ namespace GuiCommon
 					} ) );
 			}
 
-			castor::xchar const * getCategoryName( castor::SectionId section )const
+			c3d::xchar const * getCategoryName( c3d::SectionId section )const
 			{
-				using namespace castor3d;
+				using namespace c3d;
 				switch ( section )
 				{
 				case uint32_t( Category::eSampler ):
@@ -270,32 +270,32 @@ namespace GuiCommon
 			}
 
 		protected:
-			void doAddParserAction( castor::Path file
+			void doAddParserAction( c3d::Path file
 				, uint64_t line
-				, castor::String name
-				, castor::SectionId section
-				, castor::ParserFunctionAndParams function
-				, castor::String params
+				, c3d::String name
+				, c3d::SectionId section
+				, c3d::ParserFunctionAndParams function
+				, c3d::String params
 				, bool implicit )override
 			{
-				using namespace castor3d;
+				using namespace c3d;
 				auto category = getCategory( name
 					, section
 					, function.resultSection
 					, implicit );
 				m_totalCat[category]++;
-				castor::PreprocessedFile::doAddParserAction( castor::move( file )
+				c3d::PreprocessedFile::doAddParserAction( c3d::move( file )
 					, line
-					, castor::move( name )
+					, c3d::move( name )
 					, section
-					, castor::move( function )
-					, castor::move( params )
+					, c3d::move( function )
+					, c3d::move( params )
 					, implicit );
 			}
 
 		private:
-			castor::Array< uint32_t, Category::eCount > m_totalCat{};
-			castor::Array< uint32_t, Category::eCount > m_currentCat{};
+			c3d::Array< uint32_t, Category::eCount > m_totalCat{};
+			c3d::Array< uint32_t, Category::eCount > m_currentCat{};
 		};
 	}
 
@@ -379,17 +379,17 @@ namespace GuiCommon
 			}
 			catch ( ... )
 			{
-				castor::Logger::logWarning( cuT( "CreateBitmapFromBuffer encountered an exception" ) );
+				c3d::Logger::logWarning( cuT( "CreateBitmapFromBuffer encountered an exception" ) );
 			}
 		}
 	}
 
-	void createBitmapFromBuffer( castor::PxBufferBase const & buffer, bool flip, wxBitmap & bitmap )
+	void createBitmapFromBuffer( c3d::PxBufferBase const & buffer, bool flip, wxBitmap & bitmap )
 	{
-		if ( buffer.getFormat() != castor::PixelFormat::eR8G8B8A8_UNORM )
+		if ( buffer.getFormat() != c3d::PixelFormat::eR8G8B8A8_UNORM )
 		{
-			auto buf = castor::PxBufferBase::create( buffer.getDimensions()
-				, castor::PixelFormat::eR8G8B8A8_UNORM
+			auto buf = c3d::PxBufferBase::create( buffer.getDimensions()
+				, c3d::PixelFormat::eR8G8B8A8_UNORM
 				, buffer.getConstPtr()
 				, buffer.getFormat() );
 			createBitmapFromBuffer( *buf, flip, bitmap );
@@ -401,7 +401,7 @@ namespace GuiCommon
 
 	}
 
-	void createBitmapFromBuffer( castor3d::TextureUnit const & unit, bool flip, wxBitmap & bitmap )
+	void createBitmapFromBuffer( c3d::TextureUnit const & unit, bool flip, wxBitmap & bitmap )
 	{
 		if ( unit.isTextureStatic() )
 		{
@@ -409,7 +409,7 @@ namespace GuiCommon
 		}
 		else
 		{
-			castor::Path path{ unit.getTexturePath() };
+			c3d::Path path{ unit.getTexturePath() };
 
 			if ( !path.empty() )
 			{
@@ -423,59 +423,59 @@ namespace GuiCommon
 					}
 					else
 					{
-						castor::Logger::logWarning( cuT( "createBitmapFromBuffer encountered a problem loading file [" ) + path + cuT( "]" ) );
+						c3d::Logger::logWarning( cuT( "createBitmapFromBuffer encountered a problem loading file [" ) + path + cuT( "]" ) );
 					}
 				}
 				else
 				{
-					castor::Logger::logWarning( cuT( "createBitmapFromBuffer encountered a problem loading file [" ) + path + cuT( "] : Unsupported format" ) );
+					c3d::Logger::logWarning( cuT( "createBitmapFromBuffer encountered a problem loading file [" ) + path + cuT( "] : Unsupported format" ) );
 				}
 			}
 		}
 	}
 
-	castor3d::RenderWindowDesc loadScene( castor3d::Engine & engine
-		, castor::String const & appName
-		, castor::Path const & fileName
-		, castor3d::ProgressBar * progress )
+	c3d::RenderWindowDesc loadScene( c3d::Engine & engine
+		, c3d::String const & appName
+		, c3d::Path const & fileName
+		, c3d::ProgressBar * progress )
 	{
-		castor3d::RenderWindowDesc result{};
+		c3d::RenderWindowDesc result{};
 
-		if ( castor::File::fileExists( fileName ) )
+		if ( c3d::File::fileExists( fileName ) )
 		{
-			castor::Logger::logInfo( cuT( "Loading scene file : " ) + fileName );
+			c3d::Logger::logInfo( cuT( "Loading scene file : " ) + fileName );
 
 			if ( fileName.getExtension() == cuT( "cscn" ) || fileName.getExtension() == cuT( "zip" ) )
 			{
 				try
 				{
-					castor3d::SceneFileParser parser{ engine, progress };
+					c3d::SceneFileParser parser{ engine, progress };
 
 					if ( progress )
 					{
-						castor3d::setProgressBarGlobalTitle( progress
+						c3d::setProgressBarGlobalTitle( progress
 							, cuT( "Loading scene..." ) );
-						castor3d::stepProgressBarGlobalStartLocal( progress
+						c3d::stepProgressBarGlobalStartLocal( progress
 							, cuT( "Preprocessing scene file" )
 							, 1u );
 
 						helpers::PreprocessedSceneFile preprocessed{ parser, parser.initialiseParser( fileName ) };
 						parser.processFile( appName, fileName, preprocessed );
 
-						auto index = castor3d::incProgressBarGlobalRange( progress
+						auto index = c3d::incProgressBarGlobalRange( progress
 							, uint32_t( helpers::PreprocessedSceneFile::Category::eCount ) );
-						auto actionConnection = preprocessed.onAction.connect( [progress, index, &preprocessed]( castor::SectionId section
-							, castor::PreprocessedFile::Action const & action )
+						auto actionConnection = preprocessed.onAction.connect( [progress, index, &preprocessed]( c3d::SectionId section
+							, c3d::PreprocessedFile::Action const & action )
 							{
 									section = preprocessed.getCategory( action.name, section, action.function.resultSection, action.implicit );
 									auto status = preprocessed.incCategoryActions( section );
 									auto total = preprocessed.getCategoryActionsCount( section );
-									castor3d::setProgressBarGlobalStep( progress
+									c3d::setProgressBarGlobalStep( progress
 										, cuT( "Loading scene..." )
 										, index + section );
-									castor3d::setProgressBarLocal( progress
+									c3d::setProgressBarLocal( progress
 										, preprocessed.getCategoryName( section )
-										, castor::string::toString( status ) + cuT( " / " ) + castor::string::toString( total )
+										, c3d::string::toString( status ) + cuT( " / " ) + c3d::string::toString( total )
 										, total
 										, status );
 							} );
@@ -486,7 +486,7 @@ namespace GuiCommon
 						}
 						else
 						{
-							castor::Logger::logWarning( cuT( "Can't read scene file" ) );
+							c3d::Logger::logWarning( cuT( "Can't read scene file" ) );
 						}
 					}
 					else if ( parser.parseFile( appName, fileName ) )
@@ -495,7 +495,7 @@ namespace GuiCommon
 					}
 					else
 					{
-						castor::Logger::logWarning( cuT( "Can't read scene file" ) );
+						c3d::Logger::logWarning( cuT( "Can't read scene file" ) );
 					}
 				}
 				catch ( std::exception & exc )
@@ -505,7 +505,7 @@ namespace GuiCommon
 			}
 			else
 			{
-				castor::String fileContent{ cuT( R"(// Global configuration
+				c3d::String fileContent{ cuT( R"(// Global configuration
 default_lighting_model "c3d.pbr"
 
 scene "Imported"
@@ -593,16 +593,16 @@ window "MainWindow"
 	}
 }
 )" ) };
-				castor::string::replace( fileContent, cuT( "<import_file>" ), fileName.getFileName( true ).c_str() );
+				c3d::string::replace( fileContent, cuT( "<import_file>" ), fileName.getFileName( true ).c_str() );
 
 				if ( fileName.getExtension() == "glb" )
 				{
-					castor::string::replace( fileContent, cuT( "//preferred_importer" ), cuT( "preferred_importer" ) );
+					c3d::string::replace( fileContent, cuT( "//preferred_importer" ), cuT( "preferred_importer" ) );
 				}
 
 				auto newFileName = fileName.getPath() / ( fileName.getFileName() + cuT( ".cscn" ) );
 
-				if ( castor::TextFile file{ newFileName, castor::File::OpenMode::eWrite };
+				if ( c3d::TextFile file{ newFileName, c3d::File::OpenMode::eWrite };
 					file.isOk() )
 				{
 					file.writeText( fileContent );
@@ -619,10 +619,10 @@ window "MainWindow"
 		return result;
 	}
 
-	void loadScene( castor3d::Engine & engine
-		, castor::String const & appName
-		, castor::Path const & fileName
-		, castor3d::ProgressBar * progress
+	void loadScene( c3d::Engine & engine
+		, c3d::String const & appName
+		, c3d::Path const & fileName
+		, c3d::ProgressBar * progress
 		, wxWindow * window
 		, int eventID )
 	{
@@ -632,7 +632,7 @@ window "MainWindow"
 				{
 					auto target = loadScene( engine, appName, fileName, progress );
 					auto event = new wxThreadEvent{ wxEVT_THREAD, eventID };
-					auto var = new wxVariant{ new castor3d::RenderWindowDesc{ target } };
+					auto var = new wxVariant{ new c3d::RenderWindowDesc{ target } };
 					event->SetEventObject( var );
 					window->GetEventHandler()->QueueEvent( event );
 				}
@@ -644,23 +644,23 @@ window "MainWindow"
 		async.detach();
 	}
 
-	void loadPlugins( castor3d::Engine & engine )
+	void loadPlugins( c3d::Engine & engine )
 	{
-		castor::PathArray arrayKept = helpers::listPluginsFiles( castor3d::Engine::getPluginsDirectory() );
+		c3d::PathArray arrayKept = helpers::listPluginsFiles( c3d::Engine::getPluginsDirectory() );
 
 #if !defined( NDEBUG )
 
 		// When debug is installed, plugins are installed in lib/Debug/Castor3D
 		if ( arrayKept.empty() )
 		{
-			castor::Path pathBin = castor::File::getExecutableDirectory();
+			c3d::Path pathBin = c3d::File::getExecutableDirectory();
 
 			while ( pathBin.getFileName() != cuT( "bin" ) )
 			{
 				pathBin = pathBin.getPath();
 			}
 
-			castor::Path pathUsr = pathBin.getPath();
+			c3d::Path pathUsr = pathBin.getPath();
 			arrayKept = helpers::listPluginsFiles( pathUsr / cuT( "lib" ) / cuT( "Castor3D" ) );
 		}
 
@@ -668,7 +668,7 @@ window "MainWindow"
 
 		if ( !arrayKept.empty() )
 		{
-			castor::PathArray arrayFailed;
+			c3d::PathArray arrayFailed;
 
 			for ( auto file : arrayKept )
 			{
@@ -680,25 +680,25 @@ window "MainWindow"
 
 			if ( !arrayFailed.empty() )
 			{
-				castor::Logger::logWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
+				c3d::Logger::logWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
 
 				for ( auto file : arrayFailed )
 				{
-					castor::Logger::logWarning( file.getFileName() );
+					c3d::Logger::logWarning( file.getFileName() );
 				}
 
 				arrayFailed.clear();
 			}
 		}
 
-		castor::Logger::logInfo( cuT( "Plugins loaded" ) );
+		c3d::Logger::logInfo( cuT( "Plugins loaded" ) );
 	}
 
 	ashes::WindowHandle makeWindowHandle( wxWindow * window )
 	{
 #if defined( CU_PlatformWindows )
 
-		return ashes::WindowHandle( castor::make_unique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr )
+		return ashes::WindowHandle( c3d::makeRawUnique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr )
 			, window->GetHandle() ) );
 
 #elif defined( CU_PlatformLinux )
@@ -721,7 +721,7 @@ window "MainWindow"
 					auto surface = gdkWindow
 						? gdk_wayland_window_get_wl_surface( gdkWindow )
 						: nullptr;
-					return ashes::WindowHandle( castor::make_unique< ashes::IWaylandWindowHandle >( display, surface ) );
+					return ashes::WindowHandle( c3d::makeRawUnique< ashes::IWaylandWindowHandle >( display, surface ) );
 				}
 #	endif
 #endif
@@ -734,7 +734,7 @@ window "MainWindow"
 					GLXDrawable drawable = gdkWindow
 						? gdk_x11_window_get_xid( gdkWindow )
 						: 0;
-					return ashes::WindowHandle( castor::make_unique< ashes::IXWindowHandle >( drawable, display ) );
+					return ashes::WindowHandle( c3d::makeRawUnique< ashes::IXWindowHandle >( drawable, display ) );
 				}
 #	endif
 #endif
@@ -749,7 +749,7 @@ window "MainWindow"
 
 		auto handle = window->GetHandle();
 		makeViewMetalCompatible( handle );
-		return ashes::WindowHandle( castor::make_unique< ashes::IMacOsWindowHandle >( handle ) );
+		return ashes::WindowHandle( c3d::makeRawUnique< ashes::IMacOsWindowHandle >( handle ) );
 
 #else
 
@@ -758,54 +758,54 @@ window "MainWindow"
 #endif
 	}
 
-	castor::FontUPtr make_Font( wxFont const & wxfont )
+	c3d::FontUPtr make_Font( wxFont const & wxfont )
 	{
-		castor::FontUPtr font;
+		c3d::FontUPtr font;
 
 		if ( wxfont.IsOk() )
 		{
-			castor::String name = make_String( wxfont.GetFaceName() ) + castor::string::toString( wxfont.GetPointSize() );
-			font = castor::makeUnique< castor::Font >( name, wxfont.GetPointSize() );
-			font->setGlyphLoader( castor::make_unique< helpers::wxWidgetsGlyphLoader >( wxfont ) );
-			castor::Font::BinaryLoader{}( *font
-				, castor::Path{ castor::String{ wxfont.GetFaceName() } }
+			c3d::String name = make_String( wxfont.GetFaceName() ) + c3d::string::toString( wxfont.GetPointSize() );
+			font = c3d::makeUnique< c3d::Font >( name, wxfont.GetPointSize() );
+			font->setGlyphLoader( c3d::makeRawUnique< helpers::wxWidgetsGlyphLoader >( wxfont ) );
+			c3d::Font::BinaryLoader{}( *font
+				, c3d::Path{ c3d::String{ wxfont.GetFaceName() } }
 				, uint32_t( std::abs( wxfont.GetPointSize() ) ) );
 		}
 
 		return font;
 	}
 
-	castor::String make_String( wxString const & value )
+	c3d::String make_String( wxString const & value )
 	{
-		return castor::makeString( value.mb_str( wxConvUTF8 ).data() );
+		return c3d::makeString( value.mb_str( wxConvUTF8 ).data() );
 	}
 
-	castor::U32String make_U32String( wxString const & value )
+	c3d::U32String make_U32String( wxString const & value )
 	{
-		return castor::toUtf8U32String( make_String( value ) );
+		return c3d::toUtf8U32String( make_String( value ) );
 	}
 
-	castor::Path make_Path( wxString const & value )
+	c3d::Path make_Path( wxString const & value )
 	{
-		return castor::Path( value.mb_str( wxConvUTF8 ).data() );
+		return c3d::Path( value.mb_str( wxConvUTF8 ).data() );
 	}
 
-	wxString make_wxString( castor::MbString const & value )
-	{
-		return wxString( value.c_str(), wxConvUTF8 );
-	}
-
-	wxString make_wxString( castor::WString const & value )
+	wxString make_wxString( c3d::MbString const & value )
 	{
 		return wxString( value.c_str(), wxConvUTF8 );
 	}
 
-	wxString make_wxString( castor::U32String const & value )
+	wxString make_wxString( c3d::WString const & value )
 	{
-		return make_wxString( castor::makeString( value ) );
+		return wxString( value.c_str(), wxConvUTF8 );
 	}
 
-	wxArrayString make_wxArrayString( castor::StringArray const & values )
+	wxString make_wxString( c3d::U32String const & value )
+	{
+		return make_wxString( c3d::makeString( value ) );
+	}
+
+	wxArrayString make_wxArrayString( c3d::StringArray const & values )
 	{
 		wxArrayString result;
 
@@ -817,9 +817,9 @@ window "MainWindow"
 		return result;
 	}
 
-	castor::StringArray make_StringArray( wxArrayString const & values )
+	c3d::StringArray make_StringArray( wxArrayString const & values )
 	{
-		castor::StringArray result;
+		c3d::StringArray result;
 
 		for ( auto & value : values )
 		{
@@ -829,13 +829,13 @@ window "MainWindow"
 		return result;
 	}
 
-	castor::Size makeSize( wxSize const & value )
+	c3d::Size makeSize( wxSize const & value )
 	{
-		return castor::Size( uint32_t( value.x )
+		return c3d::Size( uint32_t( value.x )
 			, uint32_t( value.y ) );
 	}
 
-	wxSize make_wxSize( castor::Size const & value )
+	wxSize make_wxSize( c3d::Size const & value )
 	{
 		return wxSize( int( value.getWidth() )
 			, int( value.getHeight() ) );

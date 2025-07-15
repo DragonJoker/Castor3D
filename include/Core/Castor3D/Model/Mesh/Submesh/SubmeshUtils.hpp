@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Component/ComponentModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**
 	\~english
@@ -29,7 +29,7 @@ namespace castor3d
 		 *\param[in,out]	texcoords	Les coordonnées de texture.
 		 *\param[in,out]	triFace		Le composant qui va recevoir les faces calculées.
 		 */
-		C3D_API static void computeFacesFromPolygonVertex( castor::Point3fArray & texcoords
+		C3D_API static void computeFacesFromPolygonVertex( Point3fArray & texcoords
 			, TriFaceMapping const & triFace );
 		/**
 		 *\~english
@@ -45,8 +45,8 @@ namespace castor3d
 		 *\param[in]	triFace		Les triangles.
 		 *\param[in]	reverted	Dit si les normales doivent être inversées.
 		 */
-		C3D_API static void computeNormals( castor::Point3fArray const & positions
-			, castor::Point3fArray & normals
+		C3D_API static void computeNormals( Point3fArray const & positions
+			, Point3fArray & normals
 			, FaceArray const & triFace
 			, bool reverted = false );
 		/**
@@ -67,10 +67,10 @@ namespace castor3d
 		 *\param[out]	tangents	Les tangentes des sommets.
 		 *\param[in]	faces		Les triangles.
 		 */
-		C3D_API static void computeTangentsFromNormals( castor::Point3fArray const & positions
-			, castor::Point3fArray const & texcoords
-			, castor::Point3fArray const & normals
-			, castor::Point4fArray & tangents
+		C3D_API static void computeTangentsFromNormals( Point3fArray const & positions
+			, Point3fArray const & texcoords
+			, Point3fArray const & normals
+			, Point4fArray & tangents
 			, FaceArray const & faces );
 	};
 }

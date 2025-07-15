@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <vector>
 
-namespace castor3d
+namespace c3d
 {
 	struct GpuBufferPackedAllocator
 	{
@@ -96,8 +96,8 @@ namespace castor3d
 				return lhs.offset < rhs.offset;
 			}
 		};
-		castor::Set< MemChunk, MemChunkCompare > m_allocated;
-		castor::Vector< MemChunk > m_deallocated;
+		Set< MemChunk, MemChunkCompare > m_allocated;
+		Vector< MemChunk > m_deallocated;
 		VkDeviceSize m_currentAllocated{};
 	};
 }

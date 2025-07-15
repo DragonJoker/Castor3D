@@ -324,12 +324,12 @@ namespace GuiCommon
 
 				for ( auto index = 0; index < 9; ++index )
 				{
-					castor::String words = m_language->getKeywords( uint32_t( index ) );
+					c3d::String words = m_language->getKeywords( uint32_t( index ) );
 
 					if ( !words.empty() )
 					{
 						SetKeyWords( index, words.c_str() );
-						castor::StringArray array = castor::string::split( words, cuT( " \t\n\r" ), ~( 0u ), false );
+						c3d::StringArray array = c3d::string::split( words, cuT( " \t\n\r" ), ~( 0u ), false );
 
 						for ( auto keyword : array )
 						{

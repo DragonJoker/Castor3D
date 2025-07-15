@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	struct DebugConfig
 	{
@@ -17,8 +17,8 @@ namespace castor3d
 			registerValue( cuT( "Default" ), cuT( "Result" ) );
 		}
 
-		uint32_t registerValue( castor::String const & category
-			, castor::String const & name )
+		uint32_t registerValue( String const & category
+			, String const & name )
 		{
 			auto fullName = category + cuT( "/" ) + name;
 			auto it = std::find( m_intermediateValueNames.begin()
@@ -34,13 +34,13 @@ namespace castor3d
 			return uint32_t( std::distance( m_intermediateValueNames.begin(), it ) );
 		}
 
-		castor::StringArray const & getIntermediateValues()const noexcept
+		StringArray const & getIntermediateValues()const noexcept
 		{
 			return m_intermediateValueNames;
 		}
 
 	private:
-		castor::StringArray m_intermediateValueNames;
+		StringArray m_intermediateValueNames;
 	};
 }
 

@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class AnimatedMesh
 		: public AnimatedObject
@@ -32,7 +32,7 @@ namespace castor3d
 		 *\param[in]	mesh		Le maillage.
 		 *\param[in]	geometry	La géométrie instanciant le maillage.
 		 */
-		C3D_API AnimatedMesh( castor::String const & name
+		C3D_API AnimatedMesh( String const & name
 			, Mesh & mesh
 			, Geometry & geometry );
 		/**
@@ -48,9 +48,9 @@ namespace castor3d
 		C3D_API uint32_t fillBuffer( Submesh const & submesh
 			, MorphingWeightsConfiguration * buffer )const;
 		/**
-		 *\copydoc		castor3d::AnimatedObject::update
+		 *\copydoc		AnimatedObject::update
 		 */
-		C3D_API void update( castor::Milliseconds const & elapsed )override;
+		C3D_API void update( Milliseconds const & elapsed )override;
 
 		C3D_API uint32_t getId( Submesh const & submesh )const;
 
@@ -78,7 +78,7 @@ namespace castor3d
 		}
 
 	private:
-		void doAddAnimation( castor::String const & name )override;
+		void doAddAnimation( String const & name )override;
 		void doStartAnimation( AnimationInstance & animation )override;
 		void doStopAnimation( AnimationInstance & animation )override;
 		void doClearAnimations()override;
@@ -87,7 +87,7 @@ namespace castor3d
 		Mesh & m_mesh;
 		Geometry & m_geometry;
 		MeshAnimationInstanceRPtr m_playingAnimation{ nullptr };
-		castor::Vector< uint32_t > m_ids;
+		Vector< uint32_t > m_ids;
 		mutable bool m_reinit{ false };
 	};
 }

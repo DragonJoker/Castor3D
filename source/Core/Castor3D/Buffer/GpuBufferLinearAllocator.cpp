@@ -2,9 +2,9 @@
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 
-CU_ImplementSmartPtr( castor3d, GpuLinearBuffer )
+CU_ImplementSmartPtr( c3d, GpuLinearBuffer )
 
-namespace castor3d
+namespace c3d
 {
 	GpuBufferLinearAllocator::GpuBufferLinearAllocator( size_t count
 		, uint32_t alignment )

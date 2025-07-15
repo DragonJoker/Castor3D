@@ -24,11 +24,11 @@ namespace atmosphere_scattering
 			, absorption{ params..., 0.25f }
 			, innerRadius{ params..., 50.0f }
 			, outerRadius{ params..., 170.0f }
-			, colorTop{ params..., castor::Point3f{ 169.0f, 149.0f, 149.0f } * 1.5f / 255.0f }
+			, colorTop{ params..., c3d::Point3f{ 169.0f, 149.0f, 149.0f } * 1.5f / 255.0f }
 			, time{ 0.0f }
-			, colorBottom{ params..., castor::Point3f{ 65.0f, 70.0f, 80.0f } * 1.5f / 255.0f }
+			, colorBottom{ params..., c3d::Point3f{ 65.0f, 70.0f, 80.0f } * 1.5f / 255.0f }
 			, enablePowder{ params..., 1 }
-			, windDirection{ params..., castor::Point3f{ 0.5f, 0.0f, 0.1f } }
+			, windDirection{ params..., c3d::Point3f{ 0.5f, 0.0f, 0.1f } }
 			, topOffset{ params..., 0.75f }
 		{
 		}
@@ -68,13 +68,13 @@ namespace atmosphere_scattering
 		WrapperT< float > innerRadius;
 		WrapperT< float > outerRadius;
 
-		WrapperT< castor::Point3f > colorTop;
+		WrapperT< c3d::Point3f > colorTop;
 		float time{};
 
-		WrapperT< castor::Point3f > colorBottom;
+		WrapperT< c3d::Point3f > colorBottom;
 		WrapperT< int > enablePowder;
 
-		WrapperT< castor::Point3f > windDirection;
+		WrapperT< c3d::Point3f > windDirection;
 		WrapperT< float > topOffset;
 	};
 }

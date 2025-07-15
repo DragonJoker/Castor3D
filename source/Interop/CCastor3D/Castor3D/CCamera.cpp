@@ -116,7 +116,7 @@ extern "C"
 		if ( !object->getInternal() )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_CAMERA );
 
-		object->getInternal()->setViewportType( castor3d::ViewportType( val ) );
+		object->getInternal()->setViewportType( c3d::ViewportType( val ) );
 
 		return C3D_OK;
 	}

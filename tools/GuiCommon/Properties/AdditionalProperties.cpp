@@ -16,7 +16,7 @@ namespace GuiCommon
 {
 	//************************************************************************************************
 
-	uint32_t toBGRPacked( castor3d::ColourWrapper const & colour )
+	uint32_t toBGRPacked( c3d::ColourWrapper const & colour )
 	{
 		uint32_t r = uint32_t( ( *colour.value )->x * 255.0f );
 		uint32_t g = uint32_t( ( *colour.value )->y * 255.0f );
@@ -230,7 +230,7 @@ namespace GuiCommon
 
 	wxIMPLEMENT_DYNAMIC_CLASS( gcImageFileProperty, wxFileProperty )
 
-	gcImageFileProperty::gcImageFileProperty( castor::ImageLoader * loader
+	gcImageFileProperty::gcImageFileProperty( c3d::ImageLoader * loader
 		, wxString const & label
 		, wxString const & name
 		, wxString const & value )
@@ -275,7 +275,7 @@ namespace GuiCommon
 			if ( !m_bitmap )
 			{
 				m_image->resample( { uint32_t( rect.width ), uint32_t( rect.height ) } );
-				m_bitmap = castor::make_unique< wxBitmap >();
+				m_bitmap = c3d::makeRawUnique< wxBitmap >();
 				createBitmapFromBuffer( *m_image->getPixels()
 					, false
 					, *m_bitmap );
@@ -307,20 +307,20 @@ namespace GuiCommon
 					, make_Path( filename.GetFullPath() )
 					, {} ).getPixels()->clone();
 
-				if ( castor::isCompressed( buffer->getFormat() ) )
+				if ( c3d::isCompressed( buffer->getFormat() ) )
 				{
-					buffer = castor::decompressBuffer( *buffer );
+					buffer = c3d::decompressBuffer( *buffer );
 				}
 
-				if ( buffer->getFormat() != castor::PixelFormat::eR8G8B8A8_UNORM )
+				if ( buffer->getFormat() != c3d::PixelFormat::eR8G8B8A8_UNORM )
 				{
-					buffer = castor::PxBufferBase::create( buffer->getDimensions()
-						, castor::PixelFormat::eR8G8B8A8_UNORM
+					buffer = c3d::PxBufferBase::create( buffer->getDimensions()
+						, c3d::PixelFormat::eR8G8B8A8_UNORM
 						, buffer->getConstPtr()
 						, buffer->getFormat() );
 				}
 
-				m_image = castor::make_unique< castor::Image >( name, *buffer );
+				m_image = c3d::makeRawUnique< c3d::Image >( name, *buffer );
 			}
 			catch ( std::exception & exc )
 			{
@@ -333,10 +333,10 @@ namespace GuiCommon
 
 	wxIMPLEMENT_DYNAMIC_CLASS( gcTextureProperty, wxFileProperty )
 
-		gcTextureProperty::gcTextureProperty( castor::ImageLoader * loader
+		gcTextureProperty::gcTextureProperty( c3d::ImageLoader * loader
 		, wxString const & label
 		, wxString const & name
-		, castor3d::TextureSourceInfo * value )
+		, c3d::TextureSourceInfo * value )
 		: wxFileProperty{ label
 			, name
 			, ( value
@@ -354,10 +354,10 @@ namespace GuiCommon
 	void gcTextureProperty::OnSetValue()
 	{
 		wxFileProperty::OnSetValue();
-		*m_source = castor3d::TextureSourceInfo{ m_source->name()
+		*m_source = c3d::TextureSourceInfo{ m_source->name()
 			, m_source->textureConfig()
-			, castor::Path{}
-			, castor::Path{ make_String( GetFileName().GetFullPath() ) }
+			, c3d::Path{}
+			, c3d::Path{ make_String( GetFileName().GetFullPath() ) }
 			, m_source->loadConfig() };
 
 		// Delete old image
@@ -390,7 +390,7 @@ namespace GuiCommon
 			if ( !m_bitmap )
 			{
 				m_image->resample( { uint32_t( rect.width ), uint32_t( rect.height ) } );
-				m_bitmap = castor::make_unique< wxBitmap >();
+				m_bitmap = c3d::makeRawUnique< wxBitmap >();
 				createBitmapFromBuffer( *m_image->getPixels()
 					, false
 					, *m_bitmap );
@@ -464,23 +464,23 @@ namespace GuiCommon
 		}
 	}
 
-	void gcTextureProperty::doLoadImageBuffer( castor::String const & name
-			, castor::PxBufferBaseUPtr buffer )
+	void gcTextureProperty::doLoadImageBuffer( c3d::String const & name
+			, c3d::PxBufferBaseUPtr buffer )
 	{
-		if ( castor::isCompressed( buffer->getFormat() ) )
+		if ( c3d::isCompressed( buffer->getFormat() ) )
 		{
-			buffer = castor::decompressBuffer( *buffer );
+			buffer = c3d::decompressBuffer( *buffer );
 		}
 
-		if ( buffer->getFormat() != castor::PixelFormat::eR8G8B8A8_UNORM )
+		if ( buffer->getFormat() != c3d::PixelFormat::eR8G8B8A8_UNORM )
 		{
-			buffer = castor::PxBufferBase::create( buffer->getDimensions()
-				, castor::PixelFormat::eR8G8B8A8_UNORM
+			buffer = c3d::PxBufferBase::create( buffer->getDimensions()
+				, c3d::PixelFormat::eR8G8B8A8_UNORM
 				, buffer->getConstPtr()
 				, buffer->getFormat() );
 		}
 
-		m_image = castor::make_unique< castor::Image >( name, *buffer );
+		m_image = c3d::makeRawUnique< c3d::Image >( name, *buffer );
 	}
 
 	//************************************************************************************************

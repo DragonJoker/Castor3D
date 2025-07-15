@@ -50,11 +50,11 @@ namespace GuiCommon
 	}
 
 	void LanguageInfo::setKeywords( uint32_t index
-		, castor::StringArray const & keywords )
+		, c3d::StringArray const & keywords )
 	{
 		CU_Require( index < 9 );
-		castor::String & toAdd = m_keywords[index];
-		castor::String sep;
+		c3d::String & toAdd = m_keywords[index];
+		c3d::String sep;
 
 		if ( isCLike )
 		{
@@ -68,7 +68,7 @@ namespace GuiCommon
 		{
 			for ( auto keyword : keywords )
 			{
-				toAdd += sep + castor::string::toLowerCase( keyword );
+				toAdd += sep + c3d::string::toLowerCase( keyword );
 				sep = cuT( " " );
 			}
 		}

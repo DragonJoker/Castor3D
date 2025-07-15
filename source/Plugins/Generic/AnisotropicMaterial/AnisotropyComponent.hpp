@@ -18,59 +18,59 @@ See LICENSE file in root folder
 
 namespace anisotropy
 {
-	namespace c3d = castor3d::shader;
+	namespace c3ds = c3d::shader;
 
 	struct AnisotropyData
 	{
 		explicit AnisotropyData( std::atomic_bool & dirty
 			, float strength
 			, float rotation )
-			: strength{ dirty, castor::makeRangedValue( strength, 0.0f, 1.0f ) }
-			, rotation{ dirty, castor::makeRangedValue( rotation, 0.0f, castor::PiMult2< float > ) }
+			: strength{ dirty, c3d::makeRangedValue( strength, 0.0f, 1.0f ) }
+			, rotation{ dirty, c3d::makeRangedValue( rotation, 0.0f, c3d::PiMult2< float > ) }
 		{
 		}
 
-		castor::AtomicGroupChangeTracked< castor::RangedValue< float > > strength;
-		castor::AtomicGroupChangeTracked< castor::RangedValue< float > > rotation;
+		c3d::AtomicGroupChangeTracked< c3d::RangedValue< float > > strength;
+		c3d::AtomicGroupChangeTracked< c3d::RangedValue< float > > rotation;
 	};
 
 	struct AnisotropyComponent
-		: public castor3d::BaseDataPassComponentT< AnisotropyData >
+		: public c3d::BaseDataPassComponentT< AnisotropyData >
 	{
 		struct ReflRefrShader
-			: public c3d::PassReflRefrShader
+			: public c3ds::PassReflRefrShader
 		{
-			using c3d::PassReflRefrShader::PassReflRefrShader;
+			using c3ds::PassReflRefrShader::PassReflRefrShader;
 
-			void computeWithTransmission( c3d::ReflectionModel & reflections
-				, c3d::BlendComponents & components
-				, c3d::LightSurface const & lightSurface
-				, c3d::BackgroundModel & background
+			void computeWithTransmission( c3ds::ReflectionModel & reflections
+				, c3ds::BlendComponents & components
+				, c3ds::LightSurface const & lightSurface
+				, c3ds::BackgroundModel & background
 				, sdw::CombinedImage2DRgba32 const & mippedScene
-				, c3d::CameraData const & camera
-				, c3d::DirectLighting & lighting
-				, c3d::IndirectLighting & indirect
+				, c3ds::CameraData const & camera
+				, c3ds::DirectLighting & lighting
+				, c3ds::IndirectLighting & indirect
 				, sdw::Vec2 const & sceneUv
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
-				, c3d::ReflectionRefraction & output
-				, c3d::DebugOutputCategory const & debugOutput )const override;
-			void computeWithoutTransmission( c3d::ReflectionModel & reflections
-				, c3d::BlendComponents & components
-				, c3d::LightSurface const & lightSurface
-				, c3d::BackgroundModel & background
-				, c3d::CameraData const & camera
-				, c3d::DirectLighting & lighting
-				, c3d::IndirectLighting & indirect
+				, c3ds::ReflectionRefraction & output
+				, c3ds::DebugOutputCategory const & debugOutput )const override;
+			void computeWithoutTransmission( c3ds::ReflectionModel & reflections
+				, c3ds::BlendComponents & components
+				, c3ds::LightSurface const & lightSurface
+				, c3ds::BackgroundModel & background
+				, c3ds::CameraData const & camera
+				, c3ds::DirectLighting & lighting
+				, c3ds::IndirectLighting & indirect
 				, sdw::Vec2 const & sceneUv
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
-				, c3d::ReflectionRefraction & output
-				, c3d::DebugOutputCategory const & debugOutput )const override;
+				, c3ds::ReflectionRefraction & output
+				, c3ds::DebugOutputCategory const & debugOutput )const override;
 		};
 
 		struct MaterialShader
-			: c3d::PassMaterialShader
+			: c3ds::PassMaterialShader
 		{
 			MaterialShader();
 			void fillMaterialType( sdw::type::BaseStruct & type
@@ -78,65 +78,65 @@ namespace anisotropy
 		};
 
 		struct ComponentsShader
-			: c3d::PassComponentsShader
+			: c3ds::PassComponentsShader
 		{
-			explicit ComponentsShader( castor3d::PassComponentPlugin const & plugin )
+			explicit ComponentsShader( c3d::PassComponentPlugin const & plugin )
 				: PassComponentsShader{ plugin }
 			{
 			}
 
-			void fillComponents( castor3d::ComponentModeFlags componentsMask
+			void fillComponents( c3d::ComponentModeFlags componentsMask
 				, sdw::type::BaseStruct & components
-				, c3d::Materials const & materials
+				, c3ds::Materials const & materials
 				, sdw::StructInstance const * surface )const override;
 			void fillComponentsInits( sdw::type::BaseStruct const & components
-				, c3d::Materials const & materials
-				, c3d::Material const * material
+				, c3ds::Materials const & materials
+				, c3ds::Material const * material
 				, sdw::StructInstance const * surface
 				, sdw::Vec4 const * clrCot
 				, sdw::expr::ExprList & inits )const override;
-			void blendComponents( c3d::Materials const & materials
+			void blendComponents( c3ds::Materials const & materials
 				, sdw::Float const & passMultiplier
-				, c3d::BlendComponents & res
-				, c3d::BlendComponents const & src )const override;
+				, c3ds::BlendComponents & res
+				, c3ds::BlendComponents const & src )const override;
 			void updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-				, c3d::Material const & material
-				, c3d::BlendComponents & components
+				, c3ds::Material const & material
+				, c3ds::BlendComponents & components
 				, bool isFrontCulled )const override;
 		};
 
 		class Plugin
-			: public castor3d::PassComponentPlugin
+			: public c3d::PassComponentPlugin
 		{
 		public:
-			using castor3d::PassComponentPlugin::PassComponentPlugin;
+			using c3d::PassComponentPlugin::PassComponentPlugin;
 
-			castor3d::PassComponentUPtr createComponent( castor3d::Pass & pass )const override
+			c3d::PassComponentUPtr createComponent( c3d::Pass & pass )const override
 			{
-				return castor::makeUniqueDerived< castor3d::PassComponent, AnisotropyComponent >( pass );
+				return c3d::makeUniqueDerived< c3d::PassComponent, AnisotropyComponent >( pass );
 			}
 
-			void createParsers( castor::AttributeParsers & parsers
-				, castor3d::ChannelFillers & channelFillers )const override;
-			void zeroBuffer( castor3d::Pass const & pass
-				, c3d::PassMaterialShader const & materialShader
-				, castor3d::PassBuffer & buffer )const override;
-			bool isComponentNeeded( castor3d::TextureCombine const & textures
-				, castor3d::ComponentModeFlags const & filter )const override;
+			void createParsers( c3d::AttributeParsers & parsers
+				, c3d::ChannelFillers & channelFillers )const override;
+			void zeroBuffer( c3d::Pass const & pass
+				, c3ds::PassMaterialShader const & materialShader
+				, c3d::PassBuffer & buffer )const override;
+			bool isComponentNeeded( c3d::TextureCombine const & textures
+				, c3d::ComponentModeFlags const & filter )const override;
 
-			c3d::PassComponentsShaderPtr createComponentsShader()const override
+			c3ds::PassComponentsShaderPtr createComponentsShader()const override
 			{
-				return castor::make_unique< ComponentsShader >( *this );
+				return c3d::makeRawUnique< ComponentsShader >( *this );
 			}
 
-			c3d::PassMaterialShaderPtr createMaterialShader()const override
+			c3ds::PassMaterialShaderPtr createMaterialShader()const override
 			{
-				return castor::make_unique< MaterialShader >();
+				return c3d::makeRawUnique< MaterialShader >();
 			}
 
-			c3d::PassReflRefrShaderPtr createReflRefrShader()const override
+			c3ds::PassReflRefrShaderPtr createReflRefrShader()const override
 			{
-				return castor::make_unique< ReflRefrShader >( *this );
+				return c3d::makeRawUnique< ReflRefrShader >( *this );
 			}
 
 			bool isReflRefrComponent()const override
@@ -145,21 +145,21 @@ namespace anisotropy
 			}
 		};
 
-		static castor3d::PassComponentPluginUPtr createPlugin( castor3d::PassComponentRegister const & passComponents )
+		static c3d::PassComponentPluginUPtr createPlugin( c3d::PassComponentRegister const & passComponents )
 		{
-			return castor::makeUniqueDerived< castor3d::PassComponentPlugin, Plugin >( passComponents );
+			return c3d::makeUniqueDerived< c3d::PassComponentPlugin, Plugin >( passComponents );
 		}
 
-		C3D_AnisotropicMaterial_API explicit AnisotropyComponent( castor3d::Pass & pass );
+		C3D_AnisotropicMaterial_API explicit AnisotropyComponent( c3d::Pass & pass );
 
-		void accept( castor3d::ConfigurationVisitorBase & vis )override;
+		void accept( c3d::ConfigurationVisitorBase & vis )override;
 
 		void setStrength( float value )
 		{
 			*m_value.strength = value;
 		}
 
-		void setRotation( castor::Angle const & value )
+		void setRotation( c3d::Angle const & value )
 		{
 			*m_value.rotation = value.radians();
 		}
@@ -169,22 +169,22 @@ namespace anisotropy
 			return m_value.strength.value().value();
 		}
 
-		castor::Angle getRotation()const
+		c3d::Angle getRotation()const
 		{
-			return castor::Angle::fromRadians( m_value.rotation->value() );
+			return c3d::Angle::fromRadians( m_value.rotation->value() );
 		}
 
-		C3D_AnisotropicMaterial_API static castor::String const TypeName;
+		C3D_AnisotropicMaterial_API static c3d::String const TypeName;
 		static float constexpr DefaultStrength{ 0.0f };
 		static float constexpr DefaultRotation{ 0.0f };
 
 	private:
-		castor3d::PassComponentUPtr doClone( castor3d::Pass & pass )const override;
-		bool doWriteText( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::String const & subfolder
-			, castor::StringStream & file )const override;
-		void doFillBuffer( castor3d::PassBuffer & buffer )const override;
+		c3d::PassComponentUPtr doClone( c3d::Pass & pass )const override;
+		bool doWriteText( c3d::String const & tabs
+			, c3d::Path const & folder
+			, c3d::String const & subfolder
+			, c3d::StringStream & file )const override;
+		void doFillBuffer( c3d::PassBuffer & buffer )const override;
 	};
 
 	CU_DeclareSmartPtr( anisotropy, AnisotropyComponent, C3D_AnisotropicMaterial_API );

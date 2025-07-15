@@ -1,6 +1,6 @@
 #include "Castor3D/Shader/Shaders/GlslSssProfile.hpp"
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	SssProfiles::SssProfiles( sdw::ShaderWriter & writer
 		, uint32_t binding

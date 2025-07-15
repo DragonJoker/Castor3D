@@ -55,14 +55,14 @@ See LICENSE file in root folder
 #include <atomic>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
-	C3D_API castor::String print( castor::Point3f const & obj );
-	C3D_API castor::String print( castor::BoundingBox const & obj );
+	C3D_API String print( Point3f const & obj );
+	C3D_API String print( BoundingBox const & obj );
 
 	class Scene
-		: public castor::OwnedBy< Engine >
-		, public castor::Named
+		: public OwnedBy< Engine >
+		, public Named
 	{
 	public:
 		/**
@@ -75,7 +75,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de la scène
 		 *\param[in]	engine	Le moteur
 		 */
-		C3D_API Scene( castor::String const & name, Engine & engine );
+		C3D_API Scene( String const & name, Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -235,14 +235,14 @@ namespace castor3d
 		 *\~french
 		 *\return		Le nom du modèle de fond.
 		 */
-		C3D_API castor::String const & getBackgroundModel()const;
+		C3D_API String const & getBackgroundModel()const;
 		/**
 		 *\~english
 		 *\return		The lighting models names for the current background model.
 		 *\~french
 		 *\return		Les noms des modèles d'éclairage pour le modèle de fond actuel.
 		 */
-		C3D_API castor::Vector< LightingModelID > getLightingModelsID()const;
+		C3D_API Vector< LightingModelID > getLightingModelsID()const;
 		/**
 		 *\~english
 		 *\brief		Creates an animated texture and adds it to animated textures group.
@@ -297,7 +297,7 @@ namespace castor3d
 		 */
 		C3D_API void markDirty( LightGroup & object );
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 		/**
 		*\~english
 		*\name
@@ -309,7 +309,7 @@ namespace castor3d
 		/**@{*/
 		C3D_API BackgroundModelID getBackgroundModelId()const;
 		C3D_API LightingModelID getDefaultLightingModel()const;
-		C3D_API castor::String getDefaultLightingModelName()const;
+		C3D_API String getDefaultLightingModelName()const;
 		C3D_API bool needsGlobalIllumination()const;
 		C3D_API bool needsGlobalIllumination( GlobalIlluminationType giType )const;
 		C3D_API bool needsGlobalIllumination( LightType ltType
@@ -324,7 +324,7 @@ namespace castor3d
 		C3D_API ashes::Buffer< BillboardUboConfiguration > const & getBillboardsBuffer()const;
 		C3D_API bool hasObjects( LightingModelID lightingModelId )const;
 
-		castor::BoundingBox const & getBoundingBox()const noexcept
+		BoundingBox const & getBoundingBox()const noexcept
 		{
 			return m_boundingBox;
 		}
@@ -334,7 +334,7 @@ namespace castor3d
 			return m_background.get();
 		}
 
-		castor::RgbColour const & getBackgroundColour()const noexcept
+		RgbColour const & getBackgroundColour()const noexcept
 		{
 			return m_backgroundColour;
 		}
@@ -354,7 +354,7 @@ namespace castor3d
 			return m_rootObjectNode;
 		}
 
-		castor::RgbColour const & getAmbientLight()const noexcept
+		RgbColour const & getAmbientLight()const noexcept
 		{
 			return m_ambientLight;
 		}
@@ -453,12 +453,12 @@ namespace castor3d
 		C3D_API void setLpvIndirectAttenuation( float value );
 		C3D_API void setDefaultLightingModel( LightingModelID value )const;
 
-		void setBackgroundColour( castor::RgbColour const & value )noexcept
+		void setBackgroundColour( RgbColour const & value )noexcept
 		{
 			m_backgroundColour = value;
 		}
 
-		void setAmbientLight( castor::RgbColour const & value )noexcept
+		void setAmbientLight( RgbColour const & value )noexcept
 		{
 			m_ambientLight = value;
 		}
@@ -466,7 +466,7 @@ namespace castor3d
 		GeometryCache::ElementObsT addGeometry( GeometryCache::ElementPtrT element )
 		{
 			auto result = element.get();
-			m_geometryCache->add( castor::move( element ) );
+			m_geometryCache->add( c3d::move( element ) );
 			return result;
 		}
 
@@ -475,7 +475,7 @@ namespace castor3d
 			, ParametersT && ... parameters )const
 		{
 			return m_overlayCache->create( key
-				, castor::forward< ParametersT >( parameters )... );
+				, c3d::forward< ParametersT >( parameters )... );
 		}
 
 		template< typename ... ParametersT >
@@ -483,7 +483,7 @@ namespace castor3d
 			, ParametersT && ... parameters )
 		{
 			auto result = m_overlayCache->addNew( key
-				, castor::forward< ParametersT >( parameters )... );
+				, c3d::forward< ParametersT >( parameters )... );
 			if ( result )
 				result->setScene( this );
 			return result;
@@ -555,10 +555,10 @@ namespace castor3d
 	private:
 		bool m_initialised{ false };
 		crg::ResourcesCache m_resources;
-		castor::Vector< SceneNode * > m_dirtyNodes;
-		castor::Vector< BillboardBase * > m_dirtyBillboards;
-		castor::Vector< MovableObject * > m_dirtyObjects;
-		castor::Vector< LightGroup * > m_dirtyLightGroups;
+		Vector< SceneNode * > m_dirtyNodes;
+		Vector< BillboardBase * > m_dirtyBillboards;
+		Vector< MovableObject * > m_dirtyObjects;
+		Vector< LightGroup * > m_dirtyLightGroups;
 		DECLARE_OBJECT_CACHE_MEMBER( sceneNode, SceneNode );
 		SceneNodeRPtr m_rootNode;
 		SceneNodeRPtr m_rootCameraNode;
@@ -575,10 +575,10 @@ namespace castor3d
 		DECLARE_CACHE_MEMBER( skeleton, Skeleton );
 		DECLARE_CACHE_VIEW_MEMBER( material, Material );
 		DECLARE_CACHE_VIEW_MEMBER( sampler, Sampler );
-		DECLARE_CU_CACHE_VIEW_MEMBER( font, Font );
+		DECLARE_CACHE_VIEW_MEMBER( font, Font );
 		bool m_changed{ false };
-		castor::RgbColour m_ambientLight{ 0.0f, 0.0f, 0.0f };
-		castor::RgbColour m_backgroundColour{ 0.0f, 0.0f, 0.0f };
+		RgbColour m_ambientLight{ 0.0f, 0.0f, 0.0f };
+		RgbColour m_backgroundColour{ 0.0f, 0.0f, 0.0f };
 		SceneBackgroundUPtr m_background;
 		LightFactoryUPtr m_lightFactory;
 		Fog m_fog;
@@ -587,13 +587,13 @@ namespace castor3d
 		bool m_needsSubsurfaceScattering{ false };
 		bool m_hasOpaqueObjects{ false };
 		bool m_hasTransparentObjects{ false };
-		castor::Map< Material *, OnMaterialChangedConnection > m_materialsListeners;
+		Map< Material *, OnMaterialChangedConnection > m_materialsListeners;
 		bool m_dirtyMaterials{ true };
 		uint32_t m_directionalShadowCascades{ MaxDirectionalCascadesCount };
-		castor::BoundingBox m_boundingBox;
+		BoundingBox m_boundingBox;
 		std::atomic_bool m_needsGlobalIllumination;
-		castor::Array< std::atomic_bool, size_t( LightType::eCount ) > m_hasShadows;
-		castor::Array< castor::Set< GlobalIlluminationType >, size_t( LightType::eCount ) > m_giTypes;
+		Array< std::atomic_bool, size_t( LightType::eCount ) > m_hasShadows;
+		Array< Set< GlobalIlluminationType >, size_t( LightType::eCount ) > m_giTypes;
 		std::atomic_bool m_hasAnyShadows;
 		float m_lpvIndirectAttenuation{ 1.7f };
 		VctConfig m_voxelConfig;
@@ -613,13 +613,13 @@ namespace castor3d
 	public:
 		//!\~english	The cameras root node name.
 		//!\~french		Le nom du noeud de scène racine des caméras.
-		C3D_API static castor::String CameraRootNode;
+		C3D_API static String CameraRootNode;
 		//!\~english	The objects root node name.
 		//!\~french		Le nom du noeud de scène racine des objets.
-		C3D_API static castor::String ObjectRootNode;
+		C3D_API static String ObjectRootNode;
 		//!\~english	The root node name.
 		//!\~french		Le nom du noeud de scène racine.
-		C3D_API static castor::String RootNode;
+		C3D_API static String RootNode;
 	};
 
 	struct RootContext;
@@ -629,25 +629,22 @@ namespace castor3d
 		RootContext * root{};
 		SceneRPtr scene{};
 		SceneUPtr ownScene{};
-		castor::String fontName{};
-		castor::String prefix{};
+		String fontName{};
+		String prefix{};
 		OverlayContextUPtr overlays{};
 	};
 
-	C3D_API castor::String getPrefix( SceneContext const & context );
+	C3D_API String getPrefix( SceneContext const & context );
 	C3D_API Engine * getEngine( SceneContext const & context );
-}
 
-namespace castor
-{
 	template<>
-	struct ParserEnumTraits< castor3d::FogType >
+	struct ParserEnumTraits< FogType >
 	{
 		static inline xchar const * const Name = cuT( "FogType" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
-				result = castor3d::getEnumMapT< castor3d::FogType >();
+				result = getEnumMapT< FogType >();
 				return result;
 			}( );
 	};

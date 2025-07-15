@@ -19,11 +19,11 @@ See LICENSE file in root folder
 #include <atomic>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class LightGroup
-		: public castor::OwnedBy< Scene >
-		, public castor::Named
+		: public OwnedBy< Scene >
+		, public Named
 	{
 	public:
 		/**
@@ -36,7 +36,7 @@ namespace castor3d
 		 *\param[in]	name		Le nom de la lumière.
 		 *\param[in]	createInfo	Les informations de création.
 		 */
-		C3D_API LightGroup( castor::String const & name
+		C3D_API LightGroup( String const & name
 			, LightGroupCreateInfo const & createInfo );
 		/**
 		 *\~english
@@ -54,7 +54,7 @@ namespace castor3d
 		 *\param[in]	factory		La fabrique de LightCategory.
 		 *\param[in]	lightType	Le type de lumière.
 		 */
-		C3D_API LightGroup( castor::String const & name
+		C3D_API LightGroup( String const & name
 			, Scene & scene
 			, LightFactory const & factory
 			, LightType lightType );
@@ -95,7 +95,7 @@ namespace castor3d
 		 */
 		C3D_API void cloneInto( LightGroup & output )const;
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 		/**
 		*\~english
 		*name
@@ -124,7 +124,7 @@ namespace castor3d
 			return m_category->getLightType();
 		}
 
-		castor::Point3f const & getColour()const
+		Point3f const & getColour()const
 		{
 			return m_category->getColour();
 		}
@@ -134,7 +134,7 @@ namespace castor3d
 			return m_category->getFarPlane();
 		}
 
-		castor::BoundingBox const & getBoundingBox()const
+		BoundingBox const & getBoundingBox()const
 		{
 			return m_category->getBoundingBox();
 		}
@@ -194,12 +194,12 @@ namespace castor3d
 			return m_category->getVolumetricScatteringFactor();
 		}
 
-		castor::Point2f const & getShadowRawOffsets()const
+		Point2f const & getShadowRawOffsets()const
 		{
 			return m_category->getShadowRawOffsets();
 		}
 
-		castor::Point2f const & getShadowPcfOffsets()const
+		Point2f const & getShadowPcfOffsets()const
 		{
 			return m_category->getShadowPcfOffsets();
 		}
@@ -214,12 +214,12 @@ namespace castor3d
 			return m_category->getVsmLightBleedingReduction();
 		}
 
-		castor::RangedValue< uint32_t > getShadowPcfFilterSize()const
+		RangedValue< uint32_t > getShadowPcfFilterSize()const
 		{
 			return m_category->getShadowPcfFilterSize();
 		}
 
-		castor::RangedValue< uint32_t > getShadowPcfSampleCount()const
+		RangedValue< uint32_t > getShadowPcfSampleCount()const
 		{
 			return m_category->getShadowPcfSampleCount();
 		}
@@ -245,17 +245,17 @@ namespace castor3d
 		/**@{*/
 		void setColour( float const * values )
 		{
-			m_category->setColour( castor::Point3f( values[0], values[1], values[2] ) );
+			m_category->setColour( Point3f( values[0], values[1], values[2] ) );
 			markDirty();
 		}
 
 		void setColour( float r, float g, float b )
 		{
-			m_category->setColour( castor::Point3f( r, g, b ) );
+			m_category->setColour( Point3f( r, g, b ) );
 			markDirty();
 		}
 
-		void setColour( castor::Point3f const & value )
+		void setColour( Point3f const & value )
 		{
 			m_category->setColour( value );
 			markDirty();
@@ -269,11 +269,11 @@ namespace castor3d
 
 		void setShadowConfig( ShadowConfig config )
 		{
-			m_category->setShadowConfig( castor::move( config ) );
+			m_category->setShadowConfig( c3d::move( config ) );
 			markDirty();
 		}
 
-		void setColour( castor::RgbColour const & value )
+		void setColour( RgbColour const & value )
 		{
 			m_category->setColour( toRGBFloat( value ) );
 		}
@@ -378,9 +378,9 @@ namespace castor3d
 		}
 
 		bool m_dirty{ true };
-		castor::GroupChangeTracked< bool > m_enabled;
+		GroupChangeTracked< bool > m_enabled;
 		LightCategoryUPtr m_category;
-		castor::Vector< LightInstanceUPtr > m_instances;
+		Vector< LightInstanceUPtr > m_instances;
 	};
 
 	struct SceneContext;
@@ -388,14 +388,14 @@ namespace castor3d
 	struct LightGroupContext
 	{
 		SceneContext * scene{};
-		castor::String name{};
+		String name{};
 		LightGroupUPtr ownLight{};
 		LightGroupRPtr light{};
 		LightType lightType{ LightType::eCount };
 		ShadowConfigUPtr shadowConfig;
 	};
 
-	C3D_API castor::String getPrefix( LightGroupContext const & context );
+	C3D_API String getPrefix( LightGroupContext const & context );
 }
 
 #endif

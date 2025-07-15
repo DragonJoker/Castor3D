@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "StyleStatic.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class ListBoxStyle
 		: public ControlStyle
@@ -14,10 +14,10 @@ namespace castor3d
 	public:
 		static ControlType constexpr Type = ControlType::eListBox;
 
-		ListBoxStyle( castor::String const & name
+		ListBoxStyle( String const & name
 			, Scene * scene
 			, Engine & engine
-			, castor::String const & fontName )
+			, String const & fontName )
 			: ControlStyle{ Type
 				, name
 				, scene
@@ -28,9 +28,9 @@ namespace castor3d
 		{
 		}
 
-		ListBoxStyle( castor::String const & name
+		ListBoxStyle( String const & name
 			, Engine & engine
-			, castor::String const & fontName )
+			, String const & fontName )
 			: ListBoxStyle{ name, nullptr, engine, fontName }
 		{
 		}
@@ -66,7 +66,7 @@ namespace castor3d
 		}
 
 	private:
-		castor::HdrRgbColour doGetHighlightedColour( castor::HdrRgbColour colour )const noexcept
+		HdrRgbColour doGetHighlightedColour( HdrRgbColour colour )const noexcept
 		{
 			colour.red() = std::min( 1.0f, colour.red() / 2.0f );
 			colour.green() = std::min( 1.0f, colour.green() / 2.0f );

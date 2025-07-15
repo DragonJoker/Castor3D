@@ -17,10 +17,10 @@ namespace atmosphere_scattering
 	public:
 		CloudsWorleyPass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
-			, castor3d::RenderDevice const & device
+			, c3d::RenderDevice const & device
 			, crg::ImageViewId const & resultView
 			, bool & enabled );
-		void accept( castor3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor );
 
 		crg::FramePass const & getLastPass()const
 		{
@@ -28,7 +28,7 @@ namespace atmosphere_scattering
 		}
 
 	private:
-		castor3d::ShaderModule m_computeShader;
+		c3d::ShaderModule m_computeShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass const * m_lastPass;
 	};

@@ -7,11 +7,11 @@ See LICENSE file in root folder
 #include "CastorUtils/Design/Named.hpp"
 #include "CastorUtils/Design/ResourceCache.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename CacheT >
 	class CacheViewT
-		: public castor::Named
+		: public c3d::Named
 	{
 	public:
 		using ElementCacheT = CacheT;
@@ -40,7 +40,7 @@ namespace castor
 		 *\param[in]	clean		Le nettoyeur d'objet.
 		 *\param[in]	cache		The viewed cache.
 		 */
-		CacheViewT( castor::String const & name
+		CacheViewT( c3d::String const & name
 			, ElementCacheT & cache
 			, ElementInitialiserT initialise = []( ElementObsT const & ){}
 			, ElementCleanerT clean = []( ElementObsT const & ){} );
@@ -187,26 +187,26 @@ namespace castor
 
 	private:
 		ElementCacheT & m_cache;
-		mutable castor::Mutex m_elementsMutex;
-		castor::Set< ElementKeyT > m_createdElements;
+		mutable c3d::Mutex m_elementsMutex;
+		c3d::Set< ElementKeyT > m_createdElements;
 		ElementInitialiserT m_initialise;
 		ElementCleanerT m_clean;
-		castor::Vector< ElementPtrT > m_cleaning;
+		c3d::Vector< ElementPtrT > m_cleaning;
 	};
 
 	template< typename CacheT >
 	using CacheViewTraitsT = typename CacheT::ElementCacheTraitsT;
 
 	template< typename CacheT >
-	CacheViewPtrT< CacheT > makeCacheView( castor::String const & name
+	CacheViewPtrT< CacheT > makeCacheView( c3d::String const & name
 		, CacheT & cache
 		, typename CacheViewTraitsT< CacheT >::ElementInitialiserT initialiser = {}
 		, typename CacheViewTraitsT< CacheT >::ElementCleanerT cleaner = {} )
 	{
-		return castor::makeUnique< CacheViewT< CacheT > >( name
+		return c3d::makeUnique< CacheViewT< CacheT > >( name
 			, cache
-			, castor::move( initialiser )
-			, castor::move( cleaner ) );
+			, c3d::move( initialiser )
+			, c3d::move( cleaner ) );
 	}
 }
 

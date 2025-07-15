@@ -18,7 +18,7 @@
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -183,7 +183,7 @@ namespace castor3d
 			{
 				// Build bottom level of the BVH.
 				auto lightsCount = m_lightCache.getLightsBufferCount( m_lightType );
-				auto numThreadGroups = castor::divRoundUp( lightsCount, FrustumClusters::getBucketSortBucketSize() );
+				auto numThreadGroups = divRoundUp( lightsCount, FrustumClusters::getBucketSortBucketSize() );
 				DispatchData data{ lightsCount };
 				m_pipeline.pipeline.recordInto( context, commandBuffer, index );
 				m_context.vkCmdPushConstants( commandBuffer, m_pipeline.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 4u, &data );
@@ -219,13 +219,13 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto result = castor::make_unique< buksrt::FramePass >( framePass
+				auto result = makeRawUnique< buksrt::FramePass >( framePass
 					, context
 					, runnableGraph
 					, device
 					, clusters
 					, LightType::ePoint );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -241,13 +241,13 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto result = castor::make_unique< buksrt::FramePass >( framePass
+				auto result = makeRawUnique< buksrt::FramePass >( framePass
 					, context
 					, runnableGraph
 					, device
 					, clusters
 					, LightType::eSpot );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

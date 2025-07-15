@@ -1,8 +1,8 @@
 #include "Castor3D/Overlay/OverlayModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
-	castor::String getName( OverlayType value )
+	String getName( OverlayType value )
 	{
 		switch ( value )
 		{
@@ -14,11 +14,11 @@ namespace castor3d
 			return cuT( "text" );
 		default:
 			CU_Failure( "Unsupported OverlayType" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( TextWrappingMode value )
+	String getName( TextWrappingMode value )
 	{
 		switch ( value )
 		{
@@ -30,11 +30,11 @@ namespace castor3d
 			return cuT( "break_words" );
 		default:
 			CU_Failure( "Unsupported TextWrappingMode" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( TextTexturingMode value )
+	String getName( TextTexturingMode value )
 	{
 		switch ( value )
 		{
@@ -44,11 +44,11 @@ namespace castor3d
 			return cuT( "text" );
 		default:
 			CU_Failure( "Unsupported TextTexturingMode" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( TextLineSpacingMode value )
+	String getName( TextLineSpacingMode value )
 	{
 		switch ( value )
 		{
@@ -60,11 +60,11 @@ namespace castor3d
 			return cuT( "max_font_height" );
 		default:
 			CU_Failure( "Unsupported TextLineSpacingMode" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( HAlign value )
+	String getName( HAlign value )
 	{
 		switch ( value )
 		{
@@ -76,11 +76,11 @@ namespace castor3d
 			return cuT( "right" );
 		default:
 			CU_Failure( "Unsupported HAlign" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( VAlign value )
+	String getName( VAlign value )
 	{
 		switch ( value )
 		{
@@ -92,11 +92,11 @@ namespace castor3d
 			return cuT( "bottom" );
 		default:
 			CU_Failure( "Unsupported VAlign" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 
-	castor::String getName( BorderPosition value )
+	String getName( BorderPosition value )
 	{
 		switch ( value )
 		{
@@ -108,7 +108,7 @@ namespace castor3d
 			return cuT( "external" );
 		default:
 			CU_Failure( "Unsupported BorderPosition" );
-			return castor::cuEmptyString;
+			return cuEmptyString;
 		}
 	}
 }

@@ -5,10 +5,8 @@
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Render/RenderModule.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< Material >::TextWriter( String const & tabs
 		, Path const & folder
 		, String const & subfolder )

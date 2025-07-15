@@ -8,9 +8,9 @@
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
-CU_ImplementSmartPtr( castor3d, LineMapping )
+CU_ImplementSmartPtr( c3d, LineMapping )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -18,7 +18,7 @@ namespace castor3d
 	{
 		struct LineDistance
 		{
-			castor::Array< uint32_t, 2u > m_index;
+			Array< uint32_t, 2u > m_index;
 			double m_distance;
 		};
 
@@ -63,7 +63,7 @@ namespace castor3d
 	void LineMapping::ComponentData::addLineGroup( LineIndices const * const begin
 		, LineIndices const * const end )
 	{
-		for ( auto & line : castor::makeArrayView( begin, end ) )
+		for ( auto & line : makeArrayView( begin, end ) )
 		{
 			addLine( line.m_index[0], line.m_index[1] );
 		}
@@ -96,12 +96,12 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const LineMapping::TypeName = C3D_MakeSubmeshIndexComponentName( "lines" );
+	String const LineMapping::TypeName = C3D_MakeSubmeshIndexComponentName( "lines" );
 
 	LineMapping::LineMapping( Submesh & submesh
 		, VkBufferUsageFlags bufferUsageFlags )
 		: IndexMapping{ submesh, TypeName
-			, castor::make_unique< ComponentData >( submesh, bufferUsageFlags ) }
+			, makeRawUnique< ComponentData >( submesh, bufferUsageFlags ) }
 	{
 	}
 
@@ -115,9 +115,9 @@ namespace castor3d
 
 	SubmeshComponentUPtr LineMapping::clone( Submesh & submesh )const
 	{
-		auto result = castor::makeUnique< LineMapping >( submesh );
+		auto result = makeUnique< LineMapping >( submesh );
 		getData().copy( &result->getData() );
-		return castor::ptrRefCast< SubmeshComponent >( result );
+		return ptrRefCast< SubmeshComponent >( result );
 	}
 
 	uint32_t LineMapping::getCount()const

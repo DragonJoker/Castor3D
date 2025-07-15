@@ -8,13 +8,13 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class GpuBufferPool
-		: public castor::OwnedBy< RenderSystem >
+		: public OwnedBy< RenderSystem >
 	{
 	public:
-		using BufferArray = castor::Vector< castor::RawUniquePtr< GpuBuddyBuffer > >;
+		using BufferArray = Vector< RawUniquePtr< GpuBuddyBuffer > >;
 
 	public:
 		/**
@@ -28,7 +28,7 @@ namespace castor3d
 		 *\param[in]	debugName		Le nom debug.
 		 */
 		C3D_API GpuBufferPool( RenderDevice const & device
-			, castor::String debugName );
+			, String debugName );
 		/**
 		 *\~english
 		 *\brief		Cleans up all GPU buffers.
@@ -96,8 +96,8 @@ namespace castor3d
 			, MemChunk const & chunk )noexcept;
 
 	private:
-		castor::String m_debugName;
-		castor::Map< uint32_t, BufferArray > m_buffers;
+		String m_debugName;
+		Map< uint32_t, BufferArray > m_buffers;
 		BufferArray m_nonSharedBuffers;
 		uint32_t m_minBlockSize{};
 	};

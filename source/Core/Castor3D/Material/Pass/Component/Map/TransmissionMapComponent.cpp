@@ -16,16 +16,16 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::TransmissionMapComponent >
-		: public TextWriterT< castor3d::TransmissionMapComponent >
+	class TextWriter< TransmissionMapComponent >
+		: public TextWriterT< TransmissionMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, uint32_t mask = 0u )
-			: TextWriterT< castor3d::TransmissionMapComponent >{ tabs }
+			: TextWriterT< TransmissionMapComponent >{ tabs }
 			, m_mask{ mask }
 		{
 		}
@@ -35,7 +35,7 @@ namespace castor
 			return writeMask( file, cuT( "transmission_mask" ), m_mask );
 		}
 
-		bool operator()( castor3d::TransmissionMapComponent const & object
+		bool operator()( TransmissionMapComponent const & object
 			, StringStream & file )override
 		{
 			return true;
@@ -44,10 +44,7 @@ namespace castor
 	private:
 		uint32_t m_mask;
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace trscmp
@@ -118,7 +115,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void TransmissionMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void TransmissionMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "transmission" )
@@ -130,29 +127,29 @@ namespace castor3d
 					, 0x00FF0000 );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "transmission_mask" )
 			, trscmp::parserUnitTransmissionMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "transmission_mask" )
 			, trscmp::parserUnitTransmissionMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "transmission" )
 			, trscmp::parserTexRemapTransmission );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "transmission_mask" )
 			, trscmp::parserTexRemapTransmissionMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 
 	bool TransmissionMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -163,22 +160,22 @@ namespace castor3d
 	}
 
 	void TransmissionMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, TransmissionMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, TransmissionMapComponent >( pass ) );
 	}
 
 	bool TransmissionMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< TransmissionMapComponent >{ tabs, mask }( file );
+		return TextWriter< TransmissionMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const TransmissionMapComponent::TypeName = C3D_MakePassMapComponentName( "transmission" );
+	String const TransmissionMapComponent::TypeName = C3D_MakePassMapComponentName( "transmission" );
 
 	TransmissionMapComponent::TransmissionMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -190,7 +187,7 @@ namespace castor3d
 
 	PassComponentUPtr TransmissionMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, TransmissionMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, TransmissionMapComponent >( pass );
 	}
 
 	void TransmissionMapComponent::doFillConfig( TextureConfiguration & configuration

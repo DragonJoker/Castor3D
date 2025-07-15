@@ -12,13 +12,13 @@ See LICENSE file in root folder
 #include <unordered_map>
 
 #define CU_DeclareArrayView( key, name )\
-	using name##ArrayView = castor::ArrayView< key >;\
+	using name##ArrayView = c3d::ArrayView< key >;\
 	using name##ArrayViewIt = name##ArrayView::iterator;\
 	using name##ArrayViewRIt = name##ArrayView::reverse_iterator;\
 	using name##ArrayViewConstIt = name##ArrayView::const_iterator;\
 	using name##ArrayViewConstRIt = name##ArrayView::const_reverse_iterator
 
-namespace castor
+namespace c3d
 {
 	/**@name Design */
 	//@{
@@ -158,8 +158,8 @@ namespace castor
 	*/
 	template< class ObjT
 		, class KeyT
-		, class PtrTypeT = castor::RawUniquePtr< ObjT >
-		, typename CreatorT = castor::Function< PtrTypeT() >
+		, class PtrTypeT = c3d::RawUniquePtr< ObjT >
+		, typename CreatorT = c3d::Function< PtrTypeT() >
 		, class IdT = size_t
 		, class EntryT = FactoryEntryT< KeyT, CreatorT, IdT > >
 	class Factory;
@@ -232,10 +232,10 @@ namespace castor
 	/**
 	\~english
 	\brief		Class for named elements
-	\remark		The name type is a template argument so anything can be a name for this class (default is castor::String)
+	\remark		The name type is a template argument so anything can be a name for this class (default is c3d::String)
 	\~french
 	\brief		Classe de base pour les éléments nommés
-	\remark		Le nom est un argument template, ainsi n'importe quoi peut être un nom pour cette classe (même si c'est castor::String par défaut)
+	\remark		Le nom est un argument template, ainsi n'importe quoi peut être un nom pour cette classe (même si c'est c3d::String par défaut)
 	*/
 	template< typename T = String >
 	class NamedBaseT;
@@ -392,7 +392,7 @@ namespace castor
 	ResourcePtrT< ResT, KeyT > makeResource( ParametersT && ... params );
 	/**
 	*\~english
-	*	Helper structure to build a castor::ResourceCacheTraitsT.
+	*	Helper structure to build a c3d::ResourceCacheTraitsT.
 	*\remarks
 	*	Predefines:
 	*	<ul>
@@ -411,7 +411,7 @@ namespace castor
 	*	<li>Name: The element type name.</li>
 	*	</ul>
 	*\~french
-	*	Structure d'aide à la création d'un castor::ResourceCacheTraitsT.
+	*	Structure d'aide à la création d'un c3d::ResourceCacheTraitsT.
 	*\remarks
 	*	Prédéfinit:
 	*	<ul>
@@ -437,12 +437,12 @@ namespace castor
 		using ElementKeyT = KeyT;
 		using ElementPtrT = ResourcePtrT< ElementT, ElementKeyT >;
 		using ElementObsT = ResourceObsT< ElementT, ElementKeyT >;
-		using ElementContT = UnorderedMap< KeyT, ElementPtrT >;
+		using ElementContT = HashMap< KeyT, ElementPtrT >;
 		using ElementCacheT = ResourceCacheBaseT< ElementT, KeyT, TraitsT >;
 
-		using ElementInitialiserT = castor::Function< void( ElementT & ) >;
-		using ElementCleanerT = castor::Function< void( ElementT & ) >;
-		using ElementMergerT = castor::Function< void( ElementCacheT const &
+		using ElementInitialiserT = c3d::Function< void( ElementT & ) >;
+		using ElementCleanerT = c3d::Function< void( ElementT & ) >;
+		using ElementMergerT = c3d::Function< void( ElementCacheT const &
 			, ElementContT &
 			, ElementPtrT ) >;
 
@@ -452,7 +452,7 @@ namespace castor
 			, ParametersT && ... params )
 		{
 			return makeResource< ElementT, ElementKeyT >( key
-				, castor::forward< ParametersT >( params )... );
+				, c3d::forward< ParametersT >( params )... );
 		}
 
 		static ElementObsT makeElementObs( ElementPtrT const & element )
@@ -568,7 +568,7 @@ namespace castor
 	template< typename T >
 	static inline bool constexpr isGroupChangeTrackedT = IsGroupChangeTrackedT< T >::value;
 
-	using OnCacheChangedFunction = castor::Function< void() >;
+	using OnCacheChangedFunction = c3d::Function< void() >;
 	using OnCacheChanged = SignalT< OnCacheChangedFunction >;
 	using OnCacheChangedConnection = ConnectionT< OnCacheChanged >;
 

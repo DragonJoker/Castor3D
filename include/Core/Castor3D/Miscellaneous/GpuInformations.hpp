@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "MiscellaneousModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class GpuInformations
 	{
@@ -188,7 +188,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le nom du vendeur du GPU.
 		 */
-		castor::String const & getVendor()const noexcept
+		String const & getVendor()const noexcept
 		{
 			return m_vendor;
 		}
@@ -198,7 +198,7 @@ namespace castor3d
 		 *\~french
 		 *\param[in]	value	Le nom du vendeur du GPU.
 		 */
-		void setVendor( castor::StringView value )noexcept
+		void setVendor( String value )noexcept
 		{
 			m_vendor = value;
 		}
@@ -208,7 +208,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le type de GPU.
 		 */
-		castor::String const & getRenderer()const noexcept
+		String const & getRenderer()const noexcept
 		{
 			return m_renderer;
 		}
@@ -218,7 +218,7 @@ namespace castor3d
 		 *\~french
 		 *\param[in]	value	Le type de GPU.
 		 */
-		void setRenderer( castor::StringView value )noexcept
+		void setRenderer( String value )noexcept
 		{
 			m_renderer = value;
 		}
@@ -228,7 +228,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La version de l'API de rendu.
 		 */
-		castor::String const & getVersion()const noexcept
+		String const & getVersion()const noexcept
 		{
 			return m_version;
 		}
@@ -238,14 +238,14 @@ namespace castor3d
 		 *\~french
 		 *\param[in]	value	La version de l'API de rendu.
 		 */
-		void setVersion( castor::StringView value )noexcept
+		void setVersion( String value )noexcept
 		{
 			m_version = value;
 		}
 
 	private:
 		GpuFeatures m_features{ 0u };
-		castor::Map< VkShaderStageFlagBits, bool > m_useShader
+		Map< VkShaderStageFlagBits, bool > m_useShader
 		{
 			{ VK_SHADER_STAGE_VERTEX_BIT, false },
 			{ VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, false },
@@ -254,12 +254,12 @@ namespace castor3d
 			{ VK_SHADER_STAGE_FRAGMENT_BIT, false },
 			{ VK_SHADER_STAGE_COMPUTE_BIT, false },
 		};
-		castor::Map< GpuMin, uint32_t > m_minValues;
-		castor::Map< GpuMax, uint32_t > m_maxValues;
+		Map< GpuMin, uint32_t > m_minValues;
+		Map< GpuMax, uint32_t > m_maxValues;
 		uint32_t m_totalMemorySize{};
-		castor::String m_vendor;
-		castor::String m_renderer;
-		castor::String m_version;
+		String m_vendor;
+		String m_renderer;
+		String m_version;
 	};
 	/**
 	 *\~english
@@ -273,7 +273,7 @@ namespace castor3d
 	 *\param[in]		object	L'objet à mettre dans le flux.
 	 *\return			Le flux
 	 */
-	C3D_API castor::OutputStream & operator<<( castor::OutputStream & stream, GpuInformations const & object );
+	C3D_API OutputStream & operator<<( OutputStream & stream, GpuInformations const & object );
 }
 
 #endif

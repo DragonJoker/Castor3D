@@ -10,18 +10,18 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Design/ResourceCacheBase.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	template< typename ObjT, typename KeyT, typename TraitsT >
 	class ObjectCacheBaseT
-		: public castor::OwnedBy< Scene >
-		, public castor::ResourceCacheBaseT< ObjT, KeyT, TraitsT >
+		: public OwnedBy< Scene >
+		, public ResourceCacheBaseT< ObjT, KeyT, TraitsT >
 	{
 	protected:
 		using ElementT = ObjT;
 		using ElementKeyT = KeyT;
 		using ElementCacheTraitsT = TraitsT;
-		using ElementCacheT = castor::ResourceCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
+		using ElementCacheT = ResourceCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementCacheBaseT = ElementCacheT;
 		using ElementObjectCacheT = ObjectCacheBaseT< ElementT, ElementKeyT, ElementCacheTraitsT >;
 		using ElementPtrT = ObjectPtrT< ElementT, ElementKeyT >;
@@ -34,8 +34,8 @@ namespace castor3d
 		using ElementDetacherT = ObjectDetacherT< ElementT, ElementKeyT >;
 
 	public:
-		using OnChangedFunction = castor::Function< void() >;
-		using OnChanged = castor::SignalT< OnChangedFunction >;
+		using OnChangedFunction = Function< void() >;
+		using OnChanged = SignalT< OnChangedFunction >;
 
 	protected:
 		/**
@@ -71,8 +71,8 @@ namespace castor3d
 			, ElementMergerT merge = ElementMergerT{}
 			, ElementAttacherT attach = ElementAttacherT{}
 			, ElementDetacherT detach = ElementDetacherT{} )
-			: castor::OwnedBy< Scene >{ scene }
-			, ElementCacheBaseT{ castor3d::getLogger( scene )
+			: OwnedBy< Scene >{ scene }
+			, ElementCacheBaseT{ getLogger( scene )
 				, [this, initialise]( ElementT & element )
 				{
 					if ( initialise )
@@ -98,13 +98,13 @@ namespace castor3d
 
 					onChanged();
 				} }
-			, m_engine{ castor3d::getEngine( scene ) }
+			, m_engine{ c3d::getEngine( scene ) }
 			, m_rootNode{ rootNode }
 			, m_rootCameraNode{ rootCameraNode }
 			, m_rootObjectNode{ rootObjectNode }
-			, m_merge{ castor::move( merge ) }
-			, m_attach{ castor::move( attach ) }
-			, m_detach{ castor::move( detach ) }
+			, m_merge{ c3d::move( merge ) }
+			, m_attach{ c3d::move( attach ) }
+			, m_detach{ c3d::move( detach ) }
 		{
 		}
 
@@ -119,8 +119,8 @@ namespace castor3d
 		 */
 		void mergeInto( ElementObjectCacheT & destination )
 		{
-			auto lock( castor::makeUniqueLock( *this ) );
-			auto lockOther( castor::makeUniqueLock( destination ) );
+			auto lock( makeUniqueLock( *this ) );
+			auto lockOther( makeUniqueLock( destination ) );
 
 			if ( m_merge )
 			{
@@ -128,7 +128,7 @@ namespace castor3d
 				{
 					m_merge( *this
 						, destination.m_resources
-						, castor::move( it.second )
+						, c3d::move( it.second )
 						, destination.m_rootCameraNode
 						, destination.m_rootObjectNode );
 				}
@@ -153,7 +153,7 @@ namespace castor3d
 		*\~french
 		*\return		Le nom du type des objets.
 		*/
-		castor::String const & getObjectTypeName()const noexcept
+		String const & getObjectTypeName()const noexcept
 		{
 			return ElementCacheTraitsT::Name;
 		}

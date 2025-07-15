@@ -22,7 +22,7 @@
 
 CU_ImplementSmartPtr( ocean_fft, FFTWaterComponent )
 
-namespace castor
+namespace c3d
 {
 	template<>
 	class TextWriter< ocean_fft::FFTWaterComponent >
@@ -44,14 +44,14 @@ namespace castor
 
 namespace ocean_fft
 {
-	using namespace castor3d;
-	namespace c3d = castor3d::shader;
+	using namespace c3d;
+	namespace c3ds = c3d::shader;
 
 	//*********************************************************************************************
 
 	namespace parse
 	{
-		static CU_ImplementAttributeParserBlock( parserPassWaterDensity, castor3d::PassContext )
+		static CU_ImplementAttributeParserBlock( parserPassWaterDensity, c3d::PassContext )
 		{
 			if ( !blockContext->pass )
 			{
@@ -71,7 +71,7 @@ namespace ocean_fft
 	//*********************************************************************************************
 
 	static bool isComponentAvailable( ComponentModeFlags componentsMask
-		, c3d::Materials const & materials )
+		, c3ds::Materials const & materials )
 	{
 		return ( checkFlag( componentsMask, ComponentModeFlag::eDiffuseLighting )
 				|| checkFlag( componentsMask, ComponentModeFlag::eSpecularLighting ) )
@@ -100,7 +100,7 @@ namespace ocean_fft
 
 	void FFTWaterComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
-		, c3d::Materials const & materials
+		, c3ds::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
 		if ( !isComponentAvailable( componentsMask, materials ) )
@@ -120,8 +120,8 @@ namespace ocean_fft
 	}
 
 	void FFTWaterComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
-		, c3d::Materials const & materials
-		, c3d::Material const * material
+		, c3ds::Materials const & materials
+		, c3ds::Material const * material
 		, sdw::StructInstance const * surface
 		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )const
@@ -158,10 +158,10 @@ namespace ocean_fft
 		inits.push_back( sdw::makeExpr( vec2( 0.0_f ) ) ); // noiseGradient
 	}
 
-	void FFTWaterComponent::ComponentsShader::blendComponents( c3d::Materials const & materials
+	void FFTWaterComponent::ComponentsShader::blendComponents( c3ds::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, c3d::BlendComponents & res
-		, c3d::BlendComponents const & src )const
+		, c3ds::BlendComponents & res
+		, c3ds::BlendComponents const & src )const
 	{
 		if ( res.hasMember( "waterDensity" ) )
 		{
@@ -170,8 +170,8 @@ namespace ocean_fft
 	}
 
 	void FFTWaterComponent::ComponentsShader::updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, c3d::Material const & material
-		, c3d::BlendComponents & components
+		, c3ds::Material const & material
+		, c3ds::BlendComponents & components
 		, bool isFrontCulled )const
 	{
 		if ( !components.hasMember( "gradientJacobianUV" ) )
@@ -224,14 +224,14 @@ namespace ocean_fft
 
 	//*********************************************************************************************
 
-	void FFTWaterComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void FFTWaterComponent::Plugin::createParsers( c3d::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "waterDensity" )
 			, parse::parserPassWaterDensity
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eFloat >() } );
 	}
 
 	void FFTWaterComponent::Plugin::zeroBuffer( Pass const & pass
@@ -251,10 +251,10 @@ namespace ocean_fft
 
 	//*********************************************************************************************
 
-	castor::String const FFTWaterComponent::TypeName = C3D_PluginMakePassReflectionComponentName( "fft_ocean", "water" );
+	c3d::String const FFTWaterComponent::TypeName = C3D_PluginMakePassReflectionComponentName( "fft_ocean", "water" );
 
 	FFTWaterComponent::FFTWaterComponent( Pass & pass )
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< float > >{ pass, TypeName, {}, Default }
+		: BaseDataPassComponentT< c3d::AtomicGroupChangeTracked< float > >{ pass, TypeName, {}, Default }
 	{
 	}
 
@@ -266,17 +266,17 @@ namespace ocean_fft
 
 	PassComponentUPtr FFTWaterComponent::doClone( Pass & pass )const
 	{
-		auto result = castor::make_unique< FFTWaterComponent >( pass );
+		auto result = c3d::makeRawUnique< FFTWaterComponent >( pass );
 		result->setData( getData() );
-		return castor3d::PassComponentUPtr{ result.release() };
+		return c3d::PassComponentUPtr{ result.release() };
 	}
 
-	bool FFTWaterComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
+	bool FFTWaterComponent::doWriteText( c3d::String const & tabs
+		, c3d::Path const & folder
+		, c3d::String const & subfolder
+		, c3d::StringStream & file )const
 	{
-		return castor::TextWriter< FFTWaterComponent >{ tabs }( *this, file );
+		return c3d::TextWriter< FFTWaterComponent >{ tabs }( *this, file );
 	}
 
 	void FFTWaterComponent::doFillBuffer( PassBuffer & buffer )const

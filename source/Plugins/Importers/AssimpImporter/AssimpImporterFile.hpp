@@ -16,10 +16,10 @@ See LICENSE file in root folder
 
 namespace c3d_assimp
 {
-	using SkeletonAnimations = castor::StringMap< aiAnimation const * >;
-	using MeshAnimations = castor::StringMap< castor::Pair< aiMesh const *, aiMeshMorphAnim const * > >;
-	using NodeAnimations = castor::StringMap< castor::Pair< aiAnimation const *, aiNodeAnim const * > >;
-	using aiNodeArray = castor::Vector< aiNode const * >;
+	using SkeletonAnimations = c3d::StringMap< aiAnimation const * >;
+	using MeshAnimations = c3d::StringMap< c3d::Pair< aiMesh const *, aiMeshMorphAnim const * > >;
+	using NodeAnimations = c3d::StringMap< c3d::Pair< aiAnimation const *, aiNodeAnim const * > >;
+	using aiNodeArray = c3d::Vector< aiNode const * >;
 
 	struct AssimpSkeletonData
 	{
@@ -54,95 +54,95 @@ namespace c3d_assimp
 		}
 
 		aiNode const * skelNode;
-		castor::Vector< AssimpSubmeshData > submeshes;
+		c3d::Vector< AssimpSubmeshData > submeshes;
 	};
 
 	struct AssimpNodeData
-		: castor3d::ImporterFile::NodeData
+		: c3d::ImporterFile::NodeData
 	{
-		AssimpNodeData( castor::String pparent
-			, castor::String pname
+		AssimpNodeData( c3d::String pparent
+			, c3d::String pname
 			, bool pisCamera
 			, aiNode const * pnode
-			, castor::Point3f ptranslate
-			, castor::Quaternion protate
-			, castor::Point3f pscale )
-			: NodeData{ castor::move( pparent )
-				, castor::move( pname )
+			, c3d::Point3f ptranslate
+			, c3d::Quaternion protate
+			, c3d::Point3f pscale )
+			: NodeData{ c3d::move( pparent )
+				, c3d::move( pname )
 				, pisCamera }
 			, node{ pnode }
-			, translate{ castor::move( ptranslate ) }
-			, rotate{ castor::move( protate ) }
-			, scale{ castor::move( pscale ) }
+			, translate{ c3d::move( ptranslate ) }
+			, rotate{ c3d::move( protate ) }
+			, scale{ c3d::move( pscale ) }
 		{
 		}
 
 		aiNode const * node{};
-		castor::Point3f translate{};
-		castor::Quaternion rotate{};
-		castor::Point3f scale{};
-		castor::Vector< AssimpMeshData const * > meshes{};
+		c3d::Point3f translate{};
+		c3d::Quaternion rotate{};
+		c3d::Point3f scale{};
+		c3d::Vector< AssimpMeshData const * > meshes{};
 		NodeAnimations anims{};
 	};
 
 	struct AssimpSceneData
 	{
-		castor::StringMap< aiMaterial const * > materials;
-		castor::Vector< AssimpNodeData > nodes;
-		castor::StringMap< AssimpMeshData > meshes;
-		castor::StringMap< AssimpSkeletonData > skeletons;
-		castor::StringMap< aiLight const * > lights;
-		castor::StringMap< aiCamera const * > cameras;
+		c3d::StringMap< aiMaterial const * > materials;
+		c3d::Vector< AssimpNodeData > nodes;
+		c3d::StringMap< AssimpMeshData > meshes;
+		c3d::StringMap< AssimpSkeletonData > skeletons;
+		c3d::StringMap< aiLight const * > lights;
+		c3d::StringMap< aiCamera const * > cameras;
 	};
 
 	class AssimpImporterFile
-		: public castor3d::ImporterFile
+		: public c3d::ImporterFile
 	{
 	public:
-		AssimpImporterFile( castor3d::Engine & engine
-			, castor3d::Scene * scene
-			, castor::Path const & path
-			, castor3d::Parameters const & parameters
-			, castor3d::ProgressBar * progress );
+		AssimpImporterFile( c3d::Engine & engine
+			, c3d::Scene * scene
+			, c3d::Path const & path
+			, c3d::Parameters const & parameters
+			, c3d::ProgressBar * progress );
 
-		static castor3d::ImporterFileUPtr create( castor3d::Engine & engine
-			, castor3d::Scene * scene
-			, castor::Path const & path
-			, castor3d::Parameters const & parameters
-			, castor3d::ProgressBar * progress );
+		static c3d::ImporterFileUPtr create( c3d::Engine & engine
+			, c3d::Scene * scene
+			, c3d::Path const & path
+			, c3d::Parameters const & parameters
+			, c3d::ProgressBar * progress );
 
-		using castor3d::ImporterFile::getInternalName;
+		using c3d::ImporterFile::getInternalName;
 
-		castor::StringArray listMaterials()override;
-		castor::Vector< MeshData > listMeshes()override;
-		castor::StringArray listSkeletons()override;
-		castor::Vector< NodeData > listSceneNodes()override;
-		castor::Vector< LightData > listLights()override;
-		castor::Vector< LightGroupData > listLightGroups()override;
-		castor::Vector< GeometryData > listGeometries()override;
-		castor::Vector< CameraData > listCameras()override;
-		castor::StringArray listMeshAnimations( castor3d::Mesh const & mesh )override;
-		castor::StringArray listSkeletonAnimations( castor3d::Skeleton const & skeleton )override;
-		castor::StringArray listSceneNodeAnimations( castor3d::SceneNode const & node )override;
-		castor::Vector< uint32_t > listTextureAnimations( castor3d::Material const & material
+		c3d::StringArray listMaterials()override;
+		c3d::Vector< MeshData > listMeshes()override;
+		c3d::StringArray listSkeletons()override;
+		c3d::Vector< NodeData > listSceneNodes()override;
+		c3d::Vector< LightData > listLights()override;
+		c3d::Vector< LightGroupData > listLightGroups()override;
+		c3d::Vector< GeometryData > listGeometries()override;
+		c3d::Vector< CameraData > listCameras()override;
+		c3d::StringArray listMeshAnimations( c3d::Mesh const & mesh )override;
+		c3d::StringArray listSkeletonAnimations( c3d::Skeleton const & skeleton )override;
+		c3d::StringArray listSceneNodeAnimations( c3d::SceneNode const & node )override;
+		c3d::Vector< uint32_t > listTextureAnimations( c3d::Material const & material
 			, uint32_t pass )override;
 		uint32_t countAllMeshAnimations()const override;
 		uint32_t countAllSkeletonAnimations()const override;
 		uint32_t countAllSceneNodeAnimations()const override;
 		uint32_t countAllTextureAnimations()const override;
 
-		castor3d::MaterialImporterUPtr createMaterialImporter()override;
-		castor3d::AnimationImporterUPtr createAnimationImporter()override;
-		castor3d::SkeletonImporterUPtr createSkeletonImporter()override;
-		castor3d::MeshImporterUPtr createMeshImporter()override;
-		castor3d::SceneNodeImporterUPtr createSceneNodeImporter()override;
-		castor3d::LightImporterUPtr createLightImporter()override;
-		castor3d::CameraImporterUPtr createCameraImporter()override;
+		c3d::MaterialImporterUPtr createMaterialImporter()override;
+		c3d::AnimationImporterUPtr createAnimationImporter()override;
+		c3d::SkeletonImporterUPtr createSkeletonImporter()override;
+		c3d::MeshImporterUPtr createMeshImporter()override;
+		c3d::SceneNodeImporterUPtr createSceneNodeImporter()override;
+		c3d::LightImporterUPtr createLightImporter()override;
+		c3d::CameraImporterUPtr createCameraImporter()override;
 
-		castor::String getMaterialName( uint32_t materialIndex )const;
-		NodeAnimations const & getNodesAnimations( castor3d::SceneNode const & node )const;
-		SkeletonAnimations const & getSkeletonsAnimations( castor3d::Skeleton const & skeleton )const;
-		MeshAnimations const & getMeshesAnimations( castor3d::Mesh const & mesh
+		c3d::String getMaterialName( uint32_t materialIndex )const;
+		NodeAnimations const & getNodesAnimations( c3d::SceneNode const & node )const;
+		SkeletonAnimations const & getSkeletonsAnimations( c3d::Skeleton const & skeleton )const;
+		MeshAnimations const & getMeshesAnimations( c3d::Mesh const & mesh
 			, uint32_t submeshIndex )const;
 
 		aiScene const & getAiScene()const
@@ -196,33 +196,33 @@ namespace c3d_assimp
 			return m_bonesNodes;
 		}
 
-		castor::String getInternalName( aiString const & name )const
+		c3d::String getInternalName( aiString const & name )const
 		{
 			return getInternalName( makeString( name ) );
 		}
 
 	public:
-		static castor::MbString const Name;
+		static c3d::MbString const Name;
 
 	private:
 		void doPrelistMaterials();
-		castor::Map< aiMesh const *, aiNode const * > doPrelistSkeletons();
-		void doPrelistMeshes( castor::Map< aiMesh const *, aiNode const * > const & meshSkeletons );
+		c3d::Map< aiMesh const *, aiNode const * > doPrelistSkeletons();
+		void doPrelistMeshes( c3d::Map< aiMesh const *, aiNode const * > const & meshSkeletons );
 		void doPrelistSceneNodes( aiNode const & node
-			, castor::Map< AssimpMeshData const *, aiNodeArray > & processedMeshes
-			, castor::Map< aiNode const *, castor::Matrix4x4f > & cumulativeTransforms
-			, castor::String parentName = castor::String{}
-			, castor::Matrix4x4f transform = castor::Matrix4x4f{ 1.0f } );
+			, c3d::Map< AssimpMeshData const *, aiNodeArray > & processedMeshes
+			, c3d::Map< aiNode const *, c3d::Matrix4x4f > & cumulativeTransforms
+			, c3d::String parentName = c3d::String{}
+			, c3d::Matrix4x4f transform = c3d::Matrix4x4f{ 1.0f } );
 		void doPrelistLights();
 		void doPrelistCameras();
 
 	private:
 		Assimp::Importer m_importer;
 		aiScene const * m_aiScene{};
-		castor::StringMap< castor::Matrix4x4f > m_bonesNodes;
-		castor::Set< uint32_t > m_meshes;
-		castor::StringArray m_listedMeshes;
-		castor::StringArray m_listedSkeletons;
+		c3d::StringMap< c3d::Matrix4x4f > m_bonesNodes;
+		c3d::Set< uint32_t > m_meshes;
+		c3d::StringArray m_listedMeshes;
+		c3d::StringArray m_listedSkeletons;
 
 		AssimpSceneData m_sceneData;
 	};

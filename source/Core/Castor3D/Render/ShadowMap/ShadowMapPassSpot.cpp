@@ -35,9 +35,9 @@
 
 #include <ShaderWriter/Source.hpp>
 
-namespace castor3d
+namespace c3d
 {
-	castor::String const ShadowMapPassSpot::Type = cuT( "c3d.shadows.spot" );
+	String const ShadowMapPassSpot::Type = cuT( "c3d.shadows.spot" );
 
 	ShadowMapPassSpot::ShadowMapPassSpot( crg::FramePass const & pass
 		, crg::GraphContext & context
@@ -279,7 +279,7 @@ namespace castor3d
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::eBuffers
 			, enableTextures };
-		auto index = uint32_t( castor3d::GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
+		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 		auto lightsIndex = index;
 		++index;
 		C3D_ShadowMap( writer

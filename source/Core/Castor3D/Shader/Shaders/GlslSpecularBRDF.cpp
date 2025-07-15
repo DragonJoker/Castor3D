@@ -9,9 +9,9 @@
 
 #include <ShaderWriter/Writer.hpp>
 
-CU_ImplementDeleter( castor3d::shader, SpecularBRDF )
+CU_ImplementDeleter( c3d::shader, SpecularBRDF )
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	SpecularBRDF::SpecularBRDF( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdfHelpers )
@@ -58,7 +58,7 @@ namespace castor3d::shader
 	SpecularBRDFPtr SpecularBRDF::create( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdfHelpers )
 	{
-		return castor::makeUnique< SpecularBRDF >( writer, brdfHelpers );
+		return makeUnique< SpecularBRDF >( writer, brdfHelpers );
 	}
 
 	void SpecularBRDF::doGenerate( BlendComponents const & pcomponents )

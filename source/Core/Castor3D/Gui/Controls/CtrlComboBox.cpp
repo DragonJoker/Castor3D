@@ -13,35 +13,35 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementSmartPtr( castor3d, ComboBoxCtrl )
+CU_ImplementSmartPtr( c3d, ComboBoxCtrl )
 
-namespace castor3d
+namespace c3d
 {
 	ComboBoxCtrl::ComboBoxCtrl( SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, ComboBoxStyle * style
 		, ControlRPtr parent )
 		: ComboBoxCtrl{ scene
 			, name
 			, style
 			, parent
-			, castor::StringArray{}
+			, StringArray{}
 			, -1
-			, castor::Position{}
-			, castor::Size{}
+			, Position{}
+			, Size{}
 			, 0
 			, true }
 	{
 	}
 
 	ComboBoxCtrl::ComboBoxCtrl( SceneRPtr scene
-		, castor::String const & name
+		, String const & name
 		, ComboBoxStyle * style
 		, ControlRPtr parent
-		, castor::StringArray const & values
+		, StringArray const & values
 		, int selected
-		, castor::Position const & position
-		, castor::Size const & size
+		, Position const & position
+		, Size const & size
 		, ControlFlagType flags
 		, bool visible )
 		: Control{ Type
@@ -56,13 +56,13 @@ namespace castor3d
 		, m_values{ values }
 		, m_selected{ selected }
 	{
-		m_expand = getEngine().getControlsManager()->registerControlT( castor::makeUnique< ButtonCtrl >( m_scene
+		m_expand = getEngine().getControlsManager()->registerControlT( makeUnique< ButtonCtrl >( m_scene
 			, cuT( "Expand" )
 			, &style->getExpandStyle()
 			, this
 			, U"+"
-			, castor::Position{ int32_t( size->x - size->y ), 0 }
-			, castor::Size{ size->y, size->y } ) );
+			, Position{ int32_t( size->x - size->y ), 0 }
+			, Size{ size->y, size->y } ) );
 		m_expand->setVisible( visible );
 		m_expandClickedConnection = m_expand->connect( ButtonEvent::eClicked
 			, [this]()
@@ -70,14 +70,14 @@ namespace castor3d
 				doSwitchExpand();
 			} );
 
-		m_choices = getEngine().getControlsManager()->registerControlT( castor::makeUnique< ListBoxCtrl >( m_scene
+		m_choices = getEngine().getControlsManager()->registerControlT( makeUnique< ListBoxCtrl >( m_scene
 			, cuT( "Choices" )
 			, &style->getElementsStyle()
 			, this
 			, m_values
 			, m_selected
-			, castor::Position{ 0, int32_t( size->y ) }
-			, castor::Size{ size->x - size->y, ~0u }
+			, Position{ 0, int32_t( size->y ) }
+			, Size{ size->x - size->y, ~0u }
 			, uint64_t( ControlFlag::eAlwaysOnTop )
 			, false ) );
 		m_choicesSelectedConnection = m_choices->connect( ListBoxEvent::eSelected
@@ -123,7 +123,7 @@ namespace castor3d
 		manager.unregisterControl( *m_expand );
 	}
 
-	void ComboBoxCtrl::appendItem( castor::String const & value )
+	void ComboBoxCtrl::appendItem( String const & value )
 	{
 		m_choices->appendItem( value );
 	}
@@ -134,7 +134,7 @@ namespace castor3d
 	}
 
 	void ComboBoxCtrl::setItemText( int index
-		, castor::String const & text )
+		, String const & text )
 	{
 		return m_choices->setItemText( index, text );
 	}
@@ -149,7 +149,7 @@ namespace castor3d
 		return m_choices->setSelected( value );
 	}
 
-	castor::StringArray const & ComboBoxCtrl::getItems()const
+	StringArray const & ComboBoxCtrl::getItems()const
 	{
 		return m_choices->getItems();
 	}
@@ -176,13 +176,13 @@ namespace castor3d
 		auto & style = getStyle();
 		CU_Require( getControlsManager() );
 		auto & manager = *getControlsManager();
-		setBorderSize( castor::Point4ui( 1, 1, 1, 1 ) );
+		setBorderSize( Point4ui( 1, 1, 1, 1 ) );
 
-		m_expand->setPosition( castor::Position( int32_t( getSize()->x - getSize()->y ), 0 ) );
-		m_expand->setSize( castor::Size( getSize()->y, getSize()->y ) );
+		m_expand->setPosition( Position( int32_t( getSize()->x - getSize()->y ), 0 ) );
+		m_expand->setSize( Size( getSize()->y, getSize()->y ) );
 
-		m_choices->setPosition( castor::Position( 0, int32_t( getSize()->y ) ) );
-		m_choices->setSize( castor::Size( getSize()->x - getSize()->y, ~0u ) );
+		m_choices->setPosition( Position( 0, int32_t( getSize()->y ) ) );
+		m_choices->setSize( Size( getSize()->x - getSize()->y, ~0u ) );
 
 		EventHandler::connect( KeyboardEventType::ePushed
 			, [this]( KeyboardEvent const & event )
@@ -200,7 +200,7 @@ namespace castor3d
 		{
 			auto clientSize = getClientSize();
 			text->setMaterial( style.getExpandStyle().getTextMaterial() );
-			text->setPixelSize( castor::Size( clientSize->x - clientSize->y
+			text->setPixelSize( Size( clientSize->x - clientSize->y
 				, clientSize->y ) );
 
 			if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )
@@ -212,7 +212,7 @@ namespace castor3d
 
 			if ( sel >= 0 && uint32_t( sel ) < getItemCount() )
 			{
-				text->setCaption( castor::toUtf8U32String( getItems()[uint32_t( sel )] ) );
+				text->setCaption( toUtf8U32String( getItems()[uint32_t( sel )] ) );
 			}
 		}
 
@@ -238,7 +238,7 @@ namespace castor3d
 		}
 	}
 
-	void ComboBoxCtrl::doSetPosition( castor::Position const & value )
+	void ComboBoxCtrl::doSetPosition( Position const & value )
 	{
 		if ( auto text = m_text )
 		{
@@ -250,7 +250,7 @@ namespace castor3d
 		m_choices->setPosition( { 0, int32_t( getSize()->y ) } );
 	}
 
-	void ComboBoxCtrl::doSetSize( castor::Size const & value )
+	void ComboBoxCtrl::doSetSize( Size const & value )
 	{
 		if ( auto text = m_text )
 		{
@@ -258,13 +258,13 @@ namespace castor3d
 			text->setPixelSize( { getSize()->x - clientSize->x, clientSize->y } );
 		}
 
-		m_expand->setSize( castor::Size( value->y, value->y ) );
-		m_choices->setSize( castor::Size( value->x - value->y, ~0u ) );
-		m_expand->setPosition( castor::Position( int32_t( value->x - value->y ), 0 ) );
-		m_choices->setPosition( castor::Position( 0, int32_t( value->y ) ) );
+		m_expand->setSize( Size( value->y, value->y ) );
+		m_choices->setSize( Size( value->x - value->y, ~0u ) );
+		m_expand->setPosition( Position( int32_t( value->x - value->y ), 0 ) );
+		m_choices->setPosition( Position( 0, int32_t( value->y ) ) );
 	}
 
-	void ComboBoxCtrl::doSetBorderSize( castor::Point4ui const & value )
+	void ComboBoxCtrl::doSetBorderSize( Point4ui const & value )
 	{
 		if ( auto text = m_text )
 		{
@@ -357,7 +357,7 @@ namespace castor3d
 
 			if ( auto text = m_text )
 			{
-				text->setCaption( castor::toUtf8U32String( m_choices->getItemText( selected ) ) );
+				text->setCaption( toUtf8U32String( m_choices->getItemText( selected ) ) );
 			}
 		}
 

@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Gui/Controls/CtrlListBox.hpp"
 #include "Castor3D/Gui/Theme/StyleComboBox.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class ComboBoxCtrl
 		: public Control
@@ -21,7 +21,7 @@ namespace castor3d
 		 *\param[in]	parent	The parent control, if any
 		 */
 		C3D_API ComboBoxCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, ComboBoxStyle * style
 			, ControlRPtr parent );
 
@@ -38,13 +38,13 @@ namespace castor3d
 		 *\param[in]	visible		Initial visibility status
 		 */
 		C3D_API ComboBoxCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, ComboBoxStyle * style
 			, ControlRPtr parent
-			, castor::StringArray const & values
+			, StringArray const & values
 			, int selected
-			, castor::Position const & position
-			, castor::Size const & size
+			, Position const & position
+			, Size const & size
 			, ControlFlagType flags = 0
 			, bool visible = true );
 
@@ -62,13 +62,13 @@ namespace castor3d
 		 */
 		template< size_t N >
 		ComboBoxCtrl( SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, ComboBoxStyle * style
 			, ControlRPtr parent
-			, castor::String const( & values )[N]
+			, String const( & values )[N]
 			, int selected
-			, castor::Position const & position
-			, castor::Size const & size
+			, Position const & position
+			, Size const & size
 			, ControlFlagType flags = 0
 			, bool visible = true )
 			: Control{ ControlType::eComboBox
@@ -80,7 +80,7 @@ namespace castor3d
 				, size
 				, flags
 				, visible }
-			, m_values{ castor::StringArray( &values[0], &values[N] ) }
+			, m_values{ StringArray( &values[0], &values[N] ) }
 			, m_selected{ selected }
 		{
 		}
@@ -90,7 +90,7 @@ namespace castor3d
 		/** Appends a new item
 		*\param[in]	value		The item
 		*/
-		C3D_API void appendItem( castor::String  const & value );
+		C3D_API void appendItem( String  const & value );
 
 		/** Removes an item
 		*\param[in]	value		The item index
@@ -101,7 +101,7 @@ namespace castor3d
 		*\param[in]	index		The item index
 		*\param[in]	text		The item text
 		*/
-		C3D_API void setItemText( int index, castor::String const & text );
+		C3D_API void setItemText( int index, String const & text );
 
 		/** Clears the items
 		*/
@@ -115,7 +115,7 @@ namespace castor3d
 		/** Retrieves the items
 		 *\return		The value
 		*/
-		C3D_API castor::StringArray const & getItems()const;
+		C3D_API StringArray const & getItems()const;
 
 		/** Retrieves the items count
 		 *\return		The value
@@ -135,7 +135,7 @@ namespace castor3d
 		OnComboEventConnection connect( ComboBoxEvent event
 			, OnComboEventFunction function )
 		{
-			return m_signals[size_t( event )].connect( castor::move( function ) );
+			return m_signals[size_t( event )].connect( c3d::move( function ) );
 		}
 
 		/**
@@ -163,15 +163,15 @@ namespace castor3d
 
 		/** @copydoc Control::doSetPosition
 		*/
-		void doSetPosition( castor::Position const & value )override;
+		void doSetPosition( Position const & value )override;
 
 		/** @copydoc Control::doSetSize
 		*/
-		void doSetSize( castor::Size const & value )override;
+		void doSetSize( Size const & value )override;
 
 		/** @copydoc Control::doSetBorderSize
 		*/
-		void doSetBorderSize( castor::Point4ui const & value )override;
+		void doSetBorderSize( Point4ui const & value )override;
 
 		/** @copydoc Control::doUpdateStyle
 		*/
@@ -216,9 +216,9 @@ namespace castor3d
 		TextOverlayRPtr m_text{};
 		ButtonCtrlRPtr m_expand;
 		ListBoxCtrlRPtr m_choices;
-		castor::StringArray m_values;
+		StringArray m_values;
 		int m_selected;
-		castor::Array< OnComboEvent, size_t( ComboBoxEvent::eCount ) > m_signals;
+		Array< OnComboEvent, size_t( ComboBoxEvent::eCount ) > m_signals;
 		OnButtonEventConnection m_expandClickedConnection;
 		OnListEventConnection m_choicesSelectedConnection;
 	};

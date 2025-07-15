@@ -1,6 +1,6 @@
 #include <cmath>
 
-namespace castor
+namespace c3d
 {
 	template< typename Type >
 	inline AngleT< Type >::AngleT()noexcept

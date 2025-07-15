@@ -46,9 +46,9 @@
 #include <ashespp/Pipeline/PipelineColorBlendStateCreateInfo.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
-namespace castor3d
+namespace c3d
 {
-	castor::String const TransparentPass::Type = cuT( "c3d.transparent.accumulation" );
+	String const TransparentPass::Type = cuT( "c3d.transparent.accumulation" );
 
 	TransparentPass::TransparentPass( RenderTechnique * parent
 		, crg::FramePass const & pass
@@ -68,8 +68,8 @@ namespace castor3d
 			, graph
 			, device
 			, Type
-			, castor::move( targetImage )
-			, castor::move( targetDepth )
+			, c3d::move( targetImage )
+			, c3d::move( targetDepth )
 			, renderPassDesc
 			, techniquePassDesc }
 		, m_sceneImage{ sceneImage }
@@ -120,7 +120,7 @@ namespace castor3d
 			0u,
 			VK_FALSE,
 			VK_LOGIC_OP_COPY,
-			castor::move( attachments ),
+			c3d::move( attachments ),
 		};
 	}
 
@@ -168,7 +168,7 @@ namespace castor3d
 
 	void TransparentPass::doFillAdditionalDescriptor( PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, castor3d::ShadowMapLightTypeArray const & shadowMaps
+		, ShadowMapLightTypeArray const & shadowMaps
 		, ShadowBuffer const * shadowBuffer )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
@@ -223,7 +223,7 @@ namespace castor3d
 			, utils };
 		shader::SubmeshShaders submeshShaders{ getEngine()->getSubmeshComponentsRegister()
 			, flags };
-		auto index = uint32_t( castor3d::GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
+		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera

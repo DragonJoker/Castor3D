@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ChunkParserBase
 	{
@@ -110,12 +110,12 @@ namespace castor3d
 	};
 	/**
 	\~english
-	\brief		ChunkParser specialisation for castor::String
+	\brief		ChunkParser specialisation for String
 	\~french
-	\brief		Spécialisation de ChunkParser pour castor::String
+	\brief		Spécialisation de ChunkParser pour String
 	*/
 	template<>
-	class ChunkParser< castor::String >
+	class ChunkParser< String >
 		: public ChunkParserBase
 	{
 	public:
@@ -131,7 +131,7 @@ namespace castor3d
 		 *\param[in]	chunk	Le chunk contenant la valeur
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool parse( castor::String & value
+		static inline bool parse( String & value
 			, BinaryChunk & chunk )
 		{
 			bool result = chunk.checkAvailable( 1 );
@@ -139,14 +139,14 @@ namespace castor3d
 
 			if ( result )
 			{
-				castor::Vector< char > buffer( size + 1ULL, 0 );
+				Vector< char > buffer( size + 1ULL, 0 );
 				result = ChunkParserBase::parse( BytePtr( buffer.data() )
 					, size
 					, chunk );
 
 				if ( result )
 				{
-					value = castor::makeString( buffer.data() );
+					value = makeString( buffer.data() );
 				}
 			}
 
@@ -155,12 +155,12 @@ namespace castor3d
 	};
 	/**
 	\~english
-	\brief		ChunkParser specialisation for castor::Path
+	\brief		ChunkParser specialisation for Path
 	\~french
-	\brief		Spécialisation de ChunkParser pour castor::Path
+	\brief		Spécialisation de ChunkParser pour Path
 	*/
 	template<>
-	class ChunkParser< castor::Path >
+	class ChunkParser< Path >
 		: public ChunkParserBase
 	{
 	public:
@@ -176,7 +176,7 @@ namespace castor3d
 		 *\param[in]	chunk	Le chunk contenant la valeur
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool parse( castor::Path & value
+		static inline bool parse( Path & value
 			, BinaryChunk & chunk )
 		{
 			bool result = chunk.checkAvailable( 1 );
@@ -184,14 +184,14 @@ namespace castor3d
 
 			if ( result )
 			{
-				castor::Vector< char > buffer( size + 1ULL, 0 );
+				Vector< char > buffer( size + 1ULL, 0 );
 				result = ChunkParserBase::parse( BytePtr( buffer.data() )
 					, size
 					, chunk );
 
 				if ( result )
 				{
-					value = castor::Path{ castor::makeString( buffer.data() ) };
+					value = Path{ makeString( buffer.data() ) };
 				}
 			}
 

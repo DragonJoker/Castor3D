@@ -24,10 +24,10 @@ namespace atmosphere_scattering
 
 	namespace atmos
 	{
-		castor::String const Name{ cuT( "Atmosphere" ) };
+		c3d::String const Name{ cuT( "Atmosphere" ) };
 
-		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
-			, castor3d::Extent2D const & renderSize
+		static c3d::ShaderPtr getProgram( c3d::Engine & engine
+			, c3d::Extent2D const & renderSize
 			, bool isVisible )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
@@ -38,14 +38,14 @@ namespace atmosphere_scattering
 				, uint32_t( AtmosphereBackgroundPass::eClouds )
 				, 0u );
 
-			writer.implementEntryPointT< c3d::Position2FT, sdw::VoidT >( [&]( sdw::VertexInT< c3d::Position2FT > in
+			writer.implementEntryPointT< c3ds::Position2FT, sdw::VoidT >( [&]( sdw::VertexInT< c3ds::Position2FT > in
 				, sdw::VertexOut out )
 				{
 					out.vtx.position = vec4( in.position(), 1.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< sdw::VoidT, c3d::Colour4FT >( [&]( sdw::FragmentIn in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< sdw::VoidT, c3ds::Colour4FT >( [&]( sdw::FragmentIn in
+				, sdw::FragmentOutT< c3ds::Colour4FT > out )
 				{
 					if ( isVisible )
 					{
@@ -68,12 +68,12 @@ namespace atmosphere_scattering
 	AtmosphereBackgroundPass::AtmosphereBackgroundPass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, AtmosphereBackground & background
-		, castor3d::Extent2D const & size
+		, c3d::Extent2D const & size
 		, crg::ImageViewIdArray const & colour
 		, bool forceVisible )
-		: castor3d::BackgroundPassBase{ pass
+		: c3d::BackgroundPassBase{ pass
 			, device
 			, background
 			, forceVisible }
@@ -82,9 +82,9 @@ namespace atmosphere_scattering
 			, graph
 			, crg::ru::Config{ 2u, true }
 			, crg::rq::Config{}
-				.isEnabled( IsEnabledCallback( [this](){ return castor3d::BackgroundPassBase::doIsEnabled(); } ) )
+				.isEnabled( IsEnabledCallback( [this](){ return c3d::BackgroundPassBase::doIsEnabled(); } ) )
 				.renderSize( size )
-				.depthStencilState( castor3d::makeVkStruct< VkPipelineDepthStencilStateCreateInfo >( 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL ) )
+				.depthStencilState( c3d::makeVkStruct< VkPipelineDepthStencilStateCreateInfo >( 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL ) )
 				.passIndex( &background.getPassIndex( forceVisible ) )
 				.programCreator( { 2u
 					, [size, this, &background, &device]( uint32_t programIndex )
@@ -101,16 +101,16 @@ namespace atmosphere_scattering
 		reRecordCurrent();
 	}
 
-	crg::VkPipelineShaderStageCreateInfoArray AtmosphereBackgroundPass::doInitialiseShader( castor3d::RenderDevice const & device
+	crg::VkPipelineShaderStageCreateInfoArray AtmosphereBackgroundPass::doInitialiseShader( c3d::RenderDevice const & device
 		, AtmosphereBackground & background
-		, castor3d::Extent2D const & size
+		, c3d::Extent2D const & size
 		, uint32_t passIndex )
 	{
 		auto & engine = *device.renderSystem.getEngine();
-		castor::DataHolderT< Shaders >::getData().shader = { atmos::Name
+		c3d::DataHolderT< Shaders >::getData().shader = { atmos::Name
 			, atmos::getProgram( engine, size, passIndex == 0u ) };
-		castor::DataHolderT< Shaders >::getData().stages = castor3d::makeProgramStates( device, castor::DataHolderT< Shaders >::getData().shader );
-		return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( castor::DataHolderT< Shaders >::getData().stages );
+		c3d::DataHolderT< Shaders >::getData().stages = c3d::makeProgramStates( device, c3d::DataHolderT< Shaders >::getData().shader );
+		return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( c3d::DataHolderT< Shaders >::getData().stages );
 	}
 
 	//************************************************************************************************

@@ -15,7 +15,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/Rectangle.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class Control
 		: public NonClientEventHandler< Control >
@@ -38,11 +38,11 @@ namespace castor3d
 		 */
 		C3D_API Control( ControlType type
 			, SceneRPtr scene
-			, castor::String const & name
+			, String const & name
 			, ControlStyleRPtr style
 			, ControlRPtr parent
-			, castor::Position const & position
-			, castor::Size const & size
+			, Position const & position
+			, Size const & size
 			, ControlFlagType flags = 0
 			, bool visible = true );
 		C3D_API ~Control()noexcept override;
@@ -55,37 +55,37 @@ namespace castor3d
 		/** Sets the position.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setPosition( castor::Position const & value );
+		C3D_API void setPosition( Position const & value );
 
 		/** Sets the size.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setSize( castor::Size const & value );
+		C3D_API void setSize( Size const & value );
 
 		/** Sets the background centerUV.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setUV( castor::Point4d const & value )const;
+		C3D_API void setUV( Point4d const & value )const;
 
 		/** Sets the background borders size.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setBorderSize( castor::Point4ui const & value );
+		C3D_API void setBorderSize( Point4ui const & value );
 
 		/** Sets the background borders inner UV.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setBorderInnerUV( castor::Point4d const & value )const;
+		C3D_API void setBorderInnerUV( Point4d const & value )const;
 
 		/** Sets the background borders outer UV.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setBorderOuterUV( castor::Point4d const & value )const;
+		C3D_API void setBorderOuterUV( Point4d const & value )const;
 
 		/** Sets the caption.
 		 *\param[in]	caption	The new value
 		 */
-		C3D_API void setCaption( castor::U32String const & caption );
+		C3D_API void setCaption( U32String const & caption );
 
 		/** Sets the visibility
 		 *\param[in]	value		The new value.
@@ -95,7 +95,7 @@ namespace castor3d
 		/** Retrieves the absolute control position.
 		 *\return		The value.
 		 */
-		C3D_API castor::Position getAbsolutePosition()const;
+		C3D_API Position getAbsolutePosition()const;
 
 		/** Retrieves the visibility status.
 		 *\return		The value.
@@ -119,7 +119,7 @@ namespace castor3d
 		 *\param[in]	position	The position to check for.
 		 *\return		One bool per direction.
 		 */
-		C3D_API castor::Array< bool, 4u > isInResizeRange( castor::Position const & position )const;
+		C3D_API Array< bool, 4u > isInResizeRange( Position const & position )const;
 
 		/** Adds a flag.
 		 */
@@ -133,7 +133,7 @@ namespace castor3d
 		/** Adds a flag.
 		 */
 		template< ControlFlagTypeT FlagTypeT >
-		void addFlag( castor::FlagCombination< FlagTypeT > flag )
+		void addFlag( FlagCombination< FlagTypeT > flag )
 		{
 			m_flags |= ControlFlagType( flag );
 			doUpdateFlags();
@@ -151,7 +151,7 @@ namespace castor3d
 		/** Removes a flag.
 		 */
 		template< ControlFlagTypeT FlagTypeT >
-		void removeFlag( castor::FlagCombination< FlagTypeT > flag )
+		void removeFlag( FlagCombination< FlagTypeT > flag )
 		{
 			m_flags &= ~ControlFlagType( flag );
 			doUpdateFlags();
@@ -160,10 +160,10 @@ namespace castor3d
 		/**@name Getters */
 		//@{
 
-		C3D_API castor::Point4d const & getBorderInnerUV()const;
-		C3D_API castor::Point4d const & getBorderOuterUV()const;
+		C3D_API Point4d const & getBorderInnerUV()const;
+		C3D_API Point4d const & getBorderOuterUV()const;
 		C3D_API BorderPosition getBorderPosition()const;
-		C3D_API castor::Point4d const & getUV()const;
+		C3D_API Point4d const & getUV()const;
 		C3D_API bool isBackgroundVisible()const;
 
 		ControlID getId()const noexcept
@@ -181,12 +181,12 @@ namespace castor3d
 			return m_flags;
 		}
 
-		castor::Position const & getPosition()const noexcept
+		Position const & getPosition()const noexcept
 		{
 			return m_position;
 		}
 
-		castor::Size const & getSize()const noexcept
+		Size const & getSize()const noexcept
 		{
 			return m_size;
 		}
@@ -196,7 +196,7 @@ namespace castor3d
 			return m_parent;
 		}
 
-		castor::Point4ui const & getBorderSize()const noexcept
+		Point4ui const & getBorderSize()const noexcept
 		{
 			return m_borders;
 		}
@@ -221,7 +221,7 @@ namespace castor3d
 			return *m_style;
 		}
 
-		castor::Vector< ControlRPtr > const & getChildren()const noexcept
+		Vector< ControlRPtr > const & getChildren()const noexcept
 		{
 			return m_children;
 		}
@@ -242,18 +242,18 @@ namespace castor3d
 			return m_resizeBorderSize;
 		}
 
-		castor::Point4ui const & getClientRect()const noexcept
+		Point4ui const & getClientRect()const noexcept
 		{
 			return m_clientRect;
 		}
 
-		castor::Position getClientOffset()const
+		Position getClientOffset()const
 		{
 			return { int32_t( m_clientRect->x )
 				, int32_t( m_clientRect->y ) };
 		}
 
-		castor::Size getClientSize()const
+		Size getClientSize()const
 		{
 			return { m_clientRect->z - m_clientRect->x
 				, m_clientRect->w - m_clientRect->y };
@@ -264,21 +264,21 @@ namespace castor3d
 		 */
 		bool isAlwaysOnTop()const noexcept
 		{
-			return castor::checkFlag( getFlags(), ControlFlag::eAlwaysOnTop );
+			return checkFlag( getFlags(), ControlFlag::eAlwaysOnTop );
 		}
 
 		/** \return	The movable status of the control.
 		 */
 		bool isMovable()const noexcept
 		{
-			return castor::checkFlag( getFlags(), ControlFlag::eMovable );
+			return checkFlag( getFlags(), ControlFlag::eMovable );
 		}
 
 		/** \return	The resizable status of the control.
 		 */
 		bool isResizable()const noexcept
 		{
-			return castor::checkFlag( getFlags(), ControlFlag::eResizable );
+			return checkFlag( getFlags(), ControlFlag::eResizable );
 		}
 
 		/** Shows the control
@@ -313,7 +313,7 @@ namespace castor3d
 		/** Sets the background size.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setBackgroundSize( castor::Size const & value )const;
+		C3D_API void setBackgroundSize( Size const & value )const;
 
 		/** Sets the background borders position.
 		 *\param[in]	value		The new value.
@@ -349,8 +349,8 @@ namespace castor3d
 
 	private:
 		void updateZIndex( uint32_t & index
-			, castor::Vector< Control * > & controls
-			, castor::Vector< Control * > & topControls );
+			, Vector< Control * > & controls
+			, Vector< Control * > & topControls );
 		void adjustZIndex( uint32_t offset );
 
 		/** Event when mouse enters the control
@@ -432,28 +432,28 @@ namespace castor3d
 
 		/** Allows child classes to modify the border size before it being set.
 		 */
-		virtual castor::Point4ui doUpdateBorderSize( castor::Point4ui const & value )const noexcept
+		virtual Point4ui doUpdateBorderSize( Point4ui const & value )const noexcept
 		{
 			return value;
 		}
 
 		/** Allows child classes to modify the position before it being set.
 		 */
-		virtual castor::Position doUpdatePosition( castor::Position const & value )const noexcept
+		virtual Position doUpdatePosition( Position const & value )const noexcept
 		{
 			return value;
 		}
 
 		/** Allows child classes to modify the size before it being set.
 		 */
-		virtual castor::Size doUpdateSize( castor::Size const & value )const noexcept
+		virtual Size doUpdateSize( Size const & value )const noexcept
 		{
 			return value;
 		}
 
 		/** Updates the area where sub-controls can be draw.
 		 */
-		virtual castor::Point4ui doUpdateClientRect( castor::Point4ui const & clientRect )
+		virtual Point4ui doUpdateClientRect( Point4ui const & clientRect )
 		{
 			return clientRect;
 		}
@@ -461,17 +461,17 @@ namespace castor3d
 		/** Sets the background borders size.
 		 *\param[in]	value		The new value.
 		 */
-		virtual void doSetBorderSize( castor::Point4ui const & value ) {}
+		virtual void doSetBorderSize( Point4ui const & value ) {}
 
 		/** Sets the position
 		*\param[in]	value		The new value
 		*/
-		virtual void doSetPosition( castor::Position const & value ) = 0;
+		virtual void doSetPosition( Position const & value ) = 0;
 
 		/** Sets the size
 		*\param[in]	value	The new value
 		*/
-		virtual void doSetSize( castor::Size const & value ) = 0;
+		virtual void doSetSize( Size const & value ) = 0;
 
 		/** Updates the style
 		*/
@@ -480,7 +480,7 @@ namespace castor3d
 		/** sets the caption.
 		*\param[in]	caption	The new value
 		*/
-		virtual void doSetCaption( castor::U32String const & caption ) {}
+		virtual void doSetCaption( U32String const & caption ) {}
 
 		/** Event when mouse enters the control
 		 *\param[in]	event		The mouse event
@@ -605,23 +605,23 @@ namespace castor3d
 		const ControlType m_type;
 		Engine & m_engine;
 		ControlStyleRPtr m_style{};
-		castor::Position m_position{};
-		castor::Size m_size{};
-		castor::Point4ui m_borders{};
+		Position m_position{};
+		Size m_size{};
+		Point4ui m_borders{};
 		BorderPanelOverlayRPtr m_background{};
-		mutable castor::Mutex m_mutexChildren;
-		castor::Vector< ControlRPtr > m_children{};
+		mutable Mutex m_mutexChildren;
+		Vector< ControlRPtr > m_children{};
 		ControlsManagerRPtr m_ctrlManager{};
 		bool m_moving{};
 		bool m_resizingN{};
 		bool m_resizingW{};
 		bool m_resizingS{};
 		bool m_resizingE{};
-		castor::Position m_mouseStartMousePosition{};
-		castor::Position m_mouseStartPosition{};
-		castor::Size m_mouseStartSize{};
+		Position m_mouseStartMousePosition{};
+		Position m_mouseStartPosition{};
+		Size m_mouseStartSize{};
 		uint32_t m_resizeBorderSize{};
-		castor::Point4ui m_clientRect;
+		Point4ui m_clientRect;
 	};
 }
 

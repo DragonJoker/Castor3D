@@ -7,7 +7,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Math/Range.hpp"
 
-namespace castor
+namespace c3d
 {
 	template< typename T >
 	class RangedValue

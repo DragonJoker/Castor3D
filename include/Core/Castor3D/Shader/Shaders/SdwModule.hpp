@@ -26,7 +26,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/Function.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	/**@name Shader */
 	//@{
@@ -199,27 +199,27 @@ namespace castor3d::shader
 	template< typename BrdfCreatorT >
 	struct BrdfDescT
 	{
-		castor::String name;
+		String name;
 		BrdfCreatorT create;
 	};
 
 	template< typename BrdfCreatorT >
-	using BrdfArrayT = castor::Vector< BrdfDescT< BrdfCreatorT > >;
+	using BrdfArrayT = Vector< BrdfDescT< BrdfCreatorT > >;
 
-	using BackgroundModelPtr = castor::RawUniquePtr< BackgroundModel >;
-	using ReflectionModelPtr = castor::RawUniquePtr< ReflectionModel >;
-	using LightingModelPtr = castor::UniquePtr < LightingModel >;
-	using ClearcoatBRDFPtr = castor::UniquePtr< ClearcoatBRDF >;
-	using DiffuseBRDFPtr = castor::UniquePtr < DiffuseBRDF >;
-	using SheenBRDFPtr = castor::UniquePtr < SheenBRDF >;
-	using SpecularBRDFPtr = castor::UniquePtr < SpecularBRDF >;
-	using ScatteringModelPtr = castor::UniquePtr < ScatteringModel >;
+	using BackgroundModelPtr = RawUniquePtr< BackgroundModel >;
+	using ReflectionModelPtr = RawUniquePtr< ReflectionModel >;
+	using LightingModelPtr = UniquePtr < LightingModel >;
+	using ClearcoatBRDFPtr = UniquePtr< ClearcoatBRDF >;
+	using DiffuseBRDFPtr = UniquePtr < DiffuseBRDF >;
+	using SheenBRDFPtr = UniquePtr < SheenBRDF >;
+	using SpecularBRDFPtr = UniquePtr < SpecularBRDF >;
+	using ScatteringModelPtr = UniquePtr < ScatteringModel >;
 
-	using DiffuseBrdfCreator = castor::Function< DiffuseBRDFPtr( sdw::ShaderWriter &, BRDFHelpers & ) >;
-	using SpecularBrdfCreator = castor::Function< SpecularBRDFPtr( sdw::ShaderWriter &, BRDFHelpers & ) >;
-	using SheenBrdfCreator = castor::Function< SheenBRDFPtr( sdw::ShaderWriter &, BRDFHelpers & ) >;
-	using ClearcoatBrdfCreator = castor::Function< ClearcoatBRDFPtr( sdw::ShaderWriter &, BRDFHelpers & ) >;
-	using ScatteringModelCreator = castor::Function< ScatteringModelPtr( sdw::ShaderWriter & ) >;
+	using DiffuseBrdfCreator = Function< DiffuseBRDFPtr( sdw::ShaderWriter &, BRDFHelpers & ) >;
+	using SpecularBrdfCreator = Function< SpecularBRDFPtr( sdw::ShaderWriter &, BRDFHelpers & ) >;
+	using SheenBrdfCreator = Function< SheenBRDFPtr( sdw::ShaderWriter &, BRDFHelpers & ) >;
+	using ClearcoatBrdfCreator = Function< ClearcoatBRDFPtr( sdw::ShaderWriter &, BRDFHelpers & ) >;
+	using ScatteringModelCreator = Function< ScatteringModelPtr( sdw::ShaderWriter & ) >;
 
 	using DiffuseBrdfDesc = BrdfDescT< DiffuseBrdfCreator >;
 	using SpecularBrdfDesc = BrdfDescT< SpecularBrdfCreator >;
@@ -234,18 +234,18 @@ namespace castor3d::shader
 	using ScatteringModelArray = BrdfArrayT< ScatteringModelCreator >;
 
 	/** @cond !Doxygen */
-	CU_DeclareDeleter( castor3d::shader, ClearcoatBRDF, C3D_API );
-	CU_DeclareDeleter( castor3d::shader, DiffuseBRDF, C3D_API );
-	CU_DeclareDeleter( castor3d::shader, LightingModel, C3D_API );
-	CU_DeclareDeleter( castor3d::shader, SheenBRDF, C3D_API );
-	CU_DeclareDeleter( castor3d::shader, SpecularBRDF, C3D_API );
-	CU_DeclareDeleter( castor3d::shader, ScatteringModel, C3D_API );
+	CU_DeclareDeleter( c3d::shader, ClearcoatBRDF, C3D_API );
+	CU_DeclareDeleter( c3d::shader, DiffuseBRDF, C3D_API );
+	CU_DeclareDeleter( c3d::shader, LightingModel, C3D_API );
+	CU_DeclareDeleter( c3d::shader, SheenBRDF, C3D_API );
+	CU_DeclareDeleter( c3d::shader, SpecularBRDF, C3D_API );
+	CU_DeclareDeleter( c3d::shader, ScatteringModel, C3D_API );
 
-	CU_DeclareSmartPtr( castor3d::shader, LightsBuffer, C3D_API );
-	CU_DeclareSmartPtr( castor3d::shader, Material, C3D_API );
-	CU_DeclareSmartPtr( castor3d::shader, Shadow, C3D_API );
-	CU_DeclareSmartPtr( castor3d::shader, ShadowsBuffer, C3D_API );
-	CU_DeclareSmartPtr( castor3d::shader, SssTransmittance, C3D_API );
+	CU_DeclareSmartPtr( c3d::shader, LightsBuffer, C3D_API );
+	CU_DeclareSmartPtr( c3d::shader, Material, C3D_API );
+	CU_DeclareSmartPtr( c3d::shader, Shadow, C3D_API );
+	CU_DeclareSmartPtr( c3d::shader, ShadowsBuffer, C3D_API );
+	CU_DeclareSmartPtr( c3d::shader, SssTransmittance, C3D_API );
 
 	Writer_Parameter( AABB );
 	Writer_Parameter( AllDerivFragmentSurface );
@@ -304,14 +304,14 @@ namespace castor3d::shader
 
 	struct LightingModelNames
 	{
-		castor::String diffuse;
-		castor::String specular;
-		castor::String sheen;
-		castor::String clearcoat;
-		castor::String scattering;
+		String diffuse;
+		String specular;
+		String sheen;
+		String clearcoat;
+		String scattering;
 	};
 
-	using LightingModelCreator = castor::Function< LightingModelPtr( LightingModelID lightingModelId
+	using LightingModelCreator = Function< LightingModelPtr( LightingModelID lightingModelId
 		, LightingModelDesc const & desc
 		, sdw::ShaderWriter & writer
 		, Materials const & materials
@@ -321,15 +321,15 @@ namespace castor3d::shader
 		, Lights & lights
 		, bool enableVolumetric ) >;
 
-	using BackgroundModelCreator = castor::Function< BackgroundModelPtr( Engine const & engine
+	using BackgroundModelCreator = Function< BackgroundModelPtr( Engine const & engine
 		, sdw::ShaderWriter & writer
 		, Utils & utils
 		, Extent2D targetSize
 		, bool needsForeground
 		, uint32_t & binding
 		, uint32_t set ) >;
-	using BackgroundModelFactory = castor::Factory< BackgroundModel
-		, castor::String
+	using BackgroundModelFactory = Factory< BackgroundModel
+		, String
 		, BackgroundModelPtr
 		, BackgroundModelCreator
 		, BackgroundModelID >;
@@ -342,7 +342,7 @@ namespace castor3d::shader
 		BufferData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{}
 
 		auto data()const
@@ -355,14 +355,14 @@ namespace castor3d::shader
 	C3D_API uint32_t getPointShadowMapCount();
 	C3D_API void groupMemoryBarrierWithGroupSync( sdw::ShaderWriter & writer );
 
-	C3D_API castor::String concatModelNames( castor::String lhs
-		, castor::String rhs );
+	C3D_API String concatModelNames( String lhs
+		, String rhs );
 
 	template< typename ... ExprT >
 	inline sdw::expr::ExprList makeExprList( ExprT && ... expr )
 	{
 		sdw::expr::ExprList result;
-		( result.emplace_back( castor::forward< ExprT >( expr ) ), ... );
+		( result.emplace_back( c3d::forward< ExprT >( expr ) ), ... );
 		return result;
 	}
 

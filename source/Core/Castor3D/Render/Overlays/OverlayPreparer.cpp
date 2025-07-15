@@ -11,43 +11,43 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace ovrlprep
 	{
-		static castor::Point4f getParentRect( Overlay const & overlay
-			, castor::Size const & renderSize )
+		static Point4f getParentRect( Overlay const & overlay
+			, Size const & renderSize )
 		{
 			if ( !overlay.getParent() )
 			{
-				return castor::Point4f{ 0.0f, 0.0f, 1.0f, 1.0f };
+				return Point4f{ 0.0f, 0.0f, 1.0f, 1.0f };
 			}
 
 			auto const & parent = overlay.getParent()->getCategory();
 			auto pos = parent.getAbsolutePosition();
 			auto dim = parent.getAbsoluteSize();
 			auto renderRatio = parent.getRenderRatio( renderSize );
-			return castor::Point4f{ renderRatio->x * pos->x
+			return Point4f{ renderRatio->x * pos->x
 				, renderRatio->y * pos->y
 				, renderRatio->x * ( pos->x + dim->x )
 				, renderRatio->y * ( pos->y + dim->y ) };
 		}
 
-		static castor::Point2d updateUbo( OverlayUboConfiguration & data
+		static Point2d updateUbo( OverlayUboConfiguration & data
 			, OverlayCategory const & overlay
 			, Pass const & pass
-			, castor::Size const & renderSize
+			, Size const & renderSize
 			, uint32_t vertexOffset )
 		{
 			data = {};
 
 			auto ratio = overlay.getRenderRatio( renderSize );
-			data.relativeSize = castor::Point2f{ overlay.getRelativeSize() * ratio };
-			data.relativePosition = castor::Point2f{ overlay.getRelativePosition() * ratio };
+			data.relativeSize = Point2f{ overlay.getRelativeSize() * ratio };
+			data.relativePosition = Point2f{ overlay.getRelativePosition() * ratio };
 			data.parentRect = getParentRect( overlay.getOverlay(), renderSize );
-			data.renderArea = castor::Point4f{ overlay.computeScissorRect()
-				* castor::Point4d{ ratio->x, ratio->y, ratio->x, ratio->y } };
-			data.uv = castor::Point4f{ overlay.getUV() };
+			data.renderArea = Point4f{ overlay.computeScissorRect()
+				* Point4d{ ratio->x, ratio->y, ratio->x, ratio->y } };
+			data.uv = Point4f{ overlay.getUV() };
 			data.materialId = pass.getId();
 			data.vertexOffset = vertexOffset;
 			return ratio;
@@ -57,7 +57,7 @@ namespace castor3d
 			, ashes::DescriptorSetCRefArray const * descriptorSets )
 		{
 			auto result = std::hash< ashes::Pipeline const * >{}( pipeline );
-			result = castor::hashCombinePtr( result, *descriptorSets );
+			result = hashCombinePtr( result, *descriptorSets );
 			return result;
 		}
 	}
@@ -114,7 +114,7 @@ namespace castor3d
 						auto const & data = overlayDatas.front();
 						auto & count = m_descriptorsCounts[ovrlprep::makeHash( data.node->pipeline.pipeline.get(), &pipelineData->descriptorSets->all )];
 #if !defined( NDEBUG )
-						for ( auto const & command : castor::makeArrayView( pipelineData->indirectCommands.begin() + count
+						for ( auto const & command : makeArrayView( pipelineData->indirectCommands.begin() + count
 							, uint32_t( overlayDatas.size() ) ) )
 						{
 							if ( command.vertexCount == 0
@@ -142,7 +142,7 @@ namespace castor3d
 						{
 							uint32_t index{};
 
-							for ( auto const & command : castor::makeArrayView( pipelineData->indirectCommands.begin() + count
+							for ( auto const & command : makeArrayView( pipelineData->indirectCommands.begin() + count
 								, uint32_t( overlayDatas.size() ) ) )
 							{
 								doRegisterDrawCommands( data.node->pipeline
@@ -315,7 +315,7 @@ namespace castor3d
 						break;
 					}
 
-					m_overlays.push_back( castor::move( data ) );
+					m_overlays.push_back( c3d::move( data ) );
 				}
 			}
 		}
@@ -371,7 +371,7 @@ namespace castor3d
 	void OverlayPreparer::doUpdateUbo( OverlayUboConfiguration & data
 		, PanelOverlay const & overlay
 		, Pass const & pass
-		, castor::Size const & renderSize
+		, Size const & renderSize
 		, uint32_t vertexOffset
 		, OverlayTextBufferIndex const & )const
 	{
@@ -385,7 +385,7 @@ namespace castor3d
 	void OverlayPreparer::doUpdateUbo( OverlayUboConfiguration & data
 		, BorderPanelOverlay const & overlay
 		, Pass const & pass
-		, castor::Size const & renderSize
+		, Size const & renderSize
 		, uint32_t vertexOffset
 		, OverlayTextBufferIndex const & )const
 	{
@@ -394,17 +394,17 @@ namespace castor3d
 			, pass
 			, renderSize
 			, vertexOffset );
-		data.border = castor::Point4f{ overlay.getAbsoluteBorderSize()
-			* castor::Point4d{ ratio->x, ratio->y, ratio->x, ratio->y } };
-		data.borderInnerUV = castor::Point4f{ overlay.getBorderInnerUV() };
-		data.borderOuterUV = castor::Point4f{ overlay.getBorderOuterUV() };
+		data.border = Point4f{ overlay.getAbsoluteBorderSize()
+			* Point4d{ ratio->x, ratio->y, ratio->x, ratio->y } };
+		data.borderInnerUV = Point4f{ overlay.getBorderInnerUV() };
+		data.borderOuterUV = Point4f{ overlay.getBorderOuterUV() };
 		data.borderPosition = uint32_t( overlay.getBorderPosition() );
 	}
 
 	void OverlayPreparer::doUpdateUbo( OverlayUboConfiguration & data
 		, TextOverlay const & overlay
 		, Pass const & pass
-		, castor::Size const & renderSize
+		, Size const & renderSize
 		, uint32_t vertexOffset
 		, OverlayTextBufferIndex const & textBuffer )const
 	{

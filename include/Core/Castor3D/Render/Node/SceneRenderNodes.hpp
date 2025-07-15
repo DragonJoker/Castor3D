@@ -22,14 +22,14 @@ See LICENSE file in root folder
 #include <mutex>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct SceneRenderNodes
-		: castor::OwnedBy< Scene >
+		: OwnedBy< Scene >
 	{
 	public:
 		template< typename NodeT >
-		using NodesPtrMapT = castor::UnorderedMap< size_t, castor::UniquePtr< NodeT > >;
+		using NodesPtrMapT = HashMap< size_t, UniquePtr< NodeT > >;
 		struct NodeData
 		{
 			NodeData( Pass const * pass
@@ -45,7 +45,7 @@ namespace castor3d
 			SceneNode const * node;
 			RenderedObject const * object;
 		};
-		using NodeDataArray = castor::Vector< NodeData >;
+		using NodeDataArray = Vector< NodeData >;
 
 	public:
 		C3D_API explicit SceneRenderNodes( Scene & scene );
@@ -107,21 +107,21 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		castor::Mutex m_nodesMutex;
+		Mutex m_nodesMutex;
 		NodesPtrMapT< SubmeshRenderNode > m_submeshNodes;
 		NodesPtrMapT< BillboardRenderNode > m_billboardNodes;
 		ashes::BufferPtr< ModelBufferConfiguration > m_modelsData;
 		ashes::BufferPtr< BillboardUboConfiguration > m_billboardsData;
-		castor::ArrayView< ModelBufferConfiguration > m_modelsBuffer;
-		castor::ArrayView< BillboardUboConfiguration > m_billboardsBuffer;
+		ArrayView< ModelBufferConfiguration > m_modelsBuffer;
+		ArrayView< BillboardUboConfiguration > m_billboardsBuffer;
 		FramePassTimerUPtr m_timerRenderNodes;
 		NodeDataArray m_nodesData;
 		uint32_t m_nodeId{};
-		castor::Vector< SceneCuller * > m_cullers;
+		Vector< SceneCuller * > m_cullers;
 		bool m_dirty{ true };
 		VertexTransformingUPtr m_vertexTransform;
-		castor::Map< LightingModelID, size_t > m_lightingModels;
-		castor::Map< Pass const *, OnPassChangedConnection > m_onPassChanged;
+		Map< LightingModelID, size_t > m_lightingModels;
+		Map< Pass const *, OnPassChangedConnection > m_onPassChanged;
 	};
 }
 

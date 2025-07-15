@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/Signal.hpp>
 #include <CastorUtils/Graphics/Colour.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	using ControlID = size_t;
 	using ControlFlagType = uint64_t;
@@ -393,80 +393,80 @@ namespace castor3d
 	*/
 	class StaticStyle;
 
-	using OnControlEventFunction = castor::Function< void() >;
-	using OnControlEvent = castor::SignalT< OnControlEventFunction >;
+	using OnControlEventFunction = Function< void() >;
+	using OnControlEvent = SignalT< OnControlEventFunction >;
 	using OnControlEventConnection = OnControlEvent::connection;
 
-	using OnButtonEventFunction = castor::Function< void() >;
-	using OnButtonEvent = castor::SignalT< OnButtonEventFunction >;
+	using OnButtonEventFunction = Function< void() >;
+	using OnButtonEvent = SignalT< OnButtonEventFunction >;
 	using OnButtonEventConnection = OnButtonEvent::connection;
 
-	using OnComboEventFunction = castor::Function< void( int32_t ) >;
-	using OnComboEvent = castor::SignalT< OnComboEventFunction >;
+	using OnComboEventFunction = Function< void( int32_t ) >;
+	using OnComboEvent = SignalT< OnComboEventFunction >;
 	using OnComboEventConnection = OnComboEvent::connection;
 
-	using OnEditEventFunction = castor::Function< void( castor::U32String const & ) >;
-	using OnEditEvent = castor::SignalT< OnEditEventFunction >;
+	using OnEditEventFunction = Function< void( U32String const & ) >;
+	using OnEditEvent = SignalT< OnEditEventFunction >;
 	using OnEditEventConnection = OnEditEvent::connection;
 
-	using OnExpandablePanelEventFunction = castor::Function< void() >;
-	using OnExpandablePanelEvent = castor::SignalT< OnExpandablePanelEventFunction >;
+	using OnExpandablePanelEventFunction = Function< void() >;
+	using OnExpandablePanelEvent = SignalT< OnExpandablePanelEventFunction >;
 	using OnExpandablePanelEventConnection = OnExpandablePanelEvent::connection;
 
-	using OnListEventFunction = castor::Function< void( int32_t ) >;
-	using OnListEvent = castor::SignalT< OnListEventFunction >;
+	using OnListEventFunction = Function< void( int32_t ) >;
+	using OnListEvent = SignalT< OnListEventFunction >;
 	using OnListEventConnection = OnListEvent::connection;
 
-	using OnSliderEventFunction = castor::Function< void( int32_t ) >;
-	using OnSliderEvent = castor::SignalT< OnSliderEventFunction >;
+	using OnSliderEventFunction = Function< void( int32_t ) >;
+	using OnSliderEvent = SignalT< OnSliderEventFunction >;
 	using OnSliderEventConnection = OnSliderEvent::connection;
 
-	using OnScrollBarEventFunction = castor::Function< void( int32_t ) >;
-	using OnScrollBarEvent = castor::SignalT< OnScrollBarEventFunction >;
+	using OnScrollBarEventFunction = Function< void( int32_t ) >;
+	using OnScrollBarEvent = SignalT< OnScrollBarEventFunction >;
 	using OnScrollBarEventConnection = OnScrollBarEvent::connection;
 
-	using OnControlChangedFunction = castor::Function< void( Control const & ) >;
-	using OnControlChanged = castor::SignalT< OnControlChangedFunction >;
+	using OnControlChangedFunction = Function< void( Control const & ) >;
+	using OnControlChanged = SignalT< OnControlChangedFunction >;
 	using OnControlChangedConnection = OnControlChanged::connection;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, Layout, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Spacer, C3D_API );
-	CU_DeclareSmartPtr( castor3d, GuiContext, C3D_API );
+	CU_DeclareSmartPtr( c3d, Layout, C3D_API );
+	CU_DeclareSmartPtr( c3d, Spacer, C3D_API );
+	CU_DeclareSmartPtr( c3d, GuiContext, C3D_API );
 
-	CU_DeclareSmartPtr( castor3d, ControlsManager, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Control, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LayoutControl, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ButtonCtrl, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ComboBoxCtrl, C3D_API );
-	CU_DeclareSmartPtr( castor3d, EditCtrl, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ExpandablePanelCtrl, C3D_API );
-	CU_DeclareSmartPtr( castor3d, FrameCtrl, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ListBoxCtrl, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PanelCtrl, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ProgressCtrl, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ScrollableCtrl, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ScrollBarCtrl, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SliderCtrl, C3D_API );
-	CU_DeclareSmartPtr( castor3d, StaticCtrl, C3D_API );
-	CU_DeclareSmartPtr( castor3d, StylesHolder, C3D_API );
-	CU_DeclareSmartPtr( castor3d, Theme, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ControlStyle, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ButtonStyle, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ComboBoxStyle, C3D_API );
-	CU_DeclareSmartPtr( castor3d, EditStyle, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ExpandablePanelStyle, C3D_API );
-	CU_DeclareSmartPtr( castor3d, FrameStyle, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ListBoxStyle, C3D_API );
-	CU_DeclareSmartPtr( castor3d, PanelStyle, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ProgressStyle, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ScrollableStyle, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ScrollBarStyle, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SliderStyle, C3D_API );
-	CU_DeclareSmartPtr( castor3d, StaticStyle, C3D_API );
+	CU_DeclareSmartPtr( c3d, ControlsManager, C3D_API );
+	CU_DeclareSmartPtr( c3d, Control, C3D_API );
+	CU_DeclareSmartPtr( c3d, LayoutControl, C3D_API );
+	CU_DeclareSmartPtr( c3d, ButtonCtrl, C3D_API );
+	CU_DeclareSmartPtr( c3d, ComboBoxCtrl, C3D_API );
+	CU_DeclareSmartPtr( c3d, EditCtrl, C3D_API );
+	CU_DeclareSmartPtr( c3d, ExpandablePanelCtrl, C3D_API );
+	CU_DeclareSmartPtr( c3d, FrameCtrl, C3D_API );
+	CU_DeclareSmartPtr( c3d, ListBoxCtrl, C3D_API );
+	CU_DeclareSmartPtr( c3d, PanelCtrl, C3D_API );
+	CU_DeclareSmartPtr( c3d, ProgressCtrl, C3D_API );
+	CU_DeclareSmartPtr( c3d, ScrollableCtrl, C3D_API );
+	CU_DeclareSmartPtr( c3d, ScrollBarCtrl, C3D_API );
+	CU_DeclareSmartPtr( c3d, SliderCtrl, C3D_API );
+	CU_DeclareSmartPtr( c3d, StaticCtrl, C3D_API );
+	CU_DeclareSmartPtr( c3d, StylesHolder, C3D_API );
+	CU_DeclareSmartPtr( c3d, Theme, C3D_API );
+	CU_DeclareSmartPtr( c3d, ControlStyle, C3D_API );
+	CU_DeclareSmartPtr( c3d, ButtonStyle, C3D_API );
+	CU_DeclareSmartPtr( c3d, ComboBoxStyle, C3D_API );
+	CU_DeclareSmartPtr( c3d, EditStyle, C3D_API );
+	CU_DeclareSmartPtr( c3d, ExpandablePanelStyle, C3D_API );
+	CU_DeclareSmartPtr( c3d, FrameStyle, C3D_API );
+	CU_DeclareSmartPtr( c3d, ListBoxStyle, C3D_API );
+	CU_DeclareSmartPtr( c3d, PanelStyle, C3D_API );
+	CU_DeclareSmartPtr( c3d, ProgressStyle, C3D_API );
+	CU_DeclareSmartPtr( c3d, ScrollableStyle, C3D_API );
+	CU_DeclareSmartPtr( c3d, ScrollBarStyle, C3D_API );
+	CU_DeclareSmartPtr( c3d, SliderStyle, C3D_API );
+	CU_DeclareSmartPtr( c3d, StaticStyle, C3D_API );
 	/** @endcond */
 
-	using ControlArray = castor::Vector< ControlRPtr >;
+	using ControlArray = Vector< ControlRPtr >;
 
 	template< typename TypeT >
 	concept ControlFlagTypeT = ( std::is_same_v< TypeT, ControlFlagType >
@@ -476,20 +476,20 @@ namespace castor3d
 	 *\param[in]	pass	The pass.
 	 *\param[in]	colour	The material colour.
 	 */
-	void setMaterialColour( Pass const & pass, castor::HdrRgbColour const & colour );
+	void setMaterialColour( Pass const & pass, HdrRgbColour const & colour );
 
 	/** Retrieves the pass colour.
 	 *\param[in]	pass	The pass.
 	 *\return		The material colour.
 	 */
-	castor::HdrRgbColour const & getMaterialColour( Pass const & pass );
+	HdrRgbColour const & getMaterialColour( Pass const & pass );
 	/** Creates a colour material.
 	 *\param[in]	engine	The engine.
 	 *\param[in]	name	The material name.
 	 *\param[in]	colour	The material colour.
 	 *\return		The created material.
 	*/
-	MaterialObs createMaterial( Engine & engine, castor::String const & name, castor::HdrRgbColour const & colour );
+	MaterialObs createMaterial( Engine & engine, String const & name, HdrRgbColour const & colour );
 }
 
 #endif

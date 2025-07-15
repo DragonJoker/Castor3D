@@ -11,15 +11,15 @@
 #include "stb_image_resize.h"
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-CU_ImplementSmartPtr( castor, PxBufferBase )
+CU_ImplementSmartPtr( c3d, PxBufferBase )
 
-namespace castor
+namespace c3d
 {
 	//*********************************************************************************************
 
 	namespace pxbb
 	{
-		static VkDeviceSize getDataAt( castor::PixelFormat format
+		static VkDeviceSize getDataAt( c3d::PixelFormat format
 			, uint32_t x
 			, uint32_t y
 			, uint32_t index
@@ -360,7 +360,7 @@ namespace castor
 	//*********************************************************************************************
 
 	PxBufferConvertOptions::PxBufferConvertOptions( PxCompressionSupport support )
-		: support{ castor::move( support ) }
+		: support{ c3d::move( support ) }
 #if CU_UseCVTT
 		, additionalOptions{ new CVTTOptions{} }
 #endif
@@ -511,12 +511,12 @@ namespace castor
 		, m_invertX{ rhs.m_invertX }
 		, m_invertY{ rhs.m_invertY }
 		, m_invertZ{ rhs.m_invertZ }
-		, m_size{ castor::move( rhs.m_size ) }
+		, m_size{ c3d::move( rhs.m_size ) }
 		, m_layers{ rhs.m_layers }
 		, m_levels{ rhs.m_levels }
 		, m_align{ rhs.m_align }
-		, m_tiles{ castor::move( rhs.m_tiles ) }
-		, m_buffer{ castor::move( rhs.m_buffer ) }
+		, m_tiles{ c3d::move( rhs.m_tiles ) }
+		, m_buffer{ c3d::move( rhs.m_buffer ) }
 	{
 	}
 
@@ -535,13 +535,13 @@ namespace castor
 
 	PxBufferBase & PxBufferBase::operator=( PxBufferBase && rhs )noexcept
 	{
-		m_size = castor::move( rhs.m_size );
+		m_size = c3d::move( rhs.m_size );
 		m_format = rhs.m_format;
 		m_align = rhs.m_align;
 		m_layers = rhs.m_layers;
 		m_levels = rhs.m_levels;
-		m_tiles = castor::move( rhs.m_tiles );
-		m_buffer = castor::move( rhs.m_buffer );
+		m_tiles = c3d::move( rhs.m_tiles );
+		m_buffer = c3d::move( rhs.m_buffer );
 		return * this;
 	}
 
@@ -639,16 +639,16 @@ namespace castor
 
 	void PxBufferBase::swap( PxBufferBase & pixelBuffer )noexcept
 	{
-		castor::swap( m_format, pixelBuffer.m_format );
-		castor::swap( m_invertX, pixelBuffer.m_invertX );
-		castor::swap( m_invertY, pixelBuffer.m_invertY );
-		castor::swap( m_invertZ, pixelBuffer.m_invertZ );
-		castor::swap( m_size, pixelBuffer.m_size );
-		castor::swap( m_layers, pixelBuffer.m_layers );
-		castor::swap( m_levels, pixelBuffer.m_levels );
-		castor::swap( m_align, pixelBuffer.m_align );
-		castor::swap( m_tiles, pixelBuffer.m_tiles );
-		castor::swap( m_buffer, pixelBuffer.m_buffer );
+		c3d::swap( m_format, pixelBuffer.m_format );
+		c3d::swap( m_invertX, pixelBuffer.m_invertX );
+		c3d::swap( m_invertY, pixelBuffer.m_invertY );
+		c3d::swap( m_invertZ, pixelBuffer.m_invertZ );
+		c3d::swap( m_size, pixelBuffer.m_size );
+		c3d::swap( m_layers, pixelBuffer.m_layers );
+		c3d::swap( m_levels, pixelBuffer.m_levels );
+		c3d::swap( m_align, pixelBuffer.m_align );
+		c3d::swap( m_tiles, pixelBuffer.m_tiles );
+		c3d::swap( m_buffer, pixelBuffer.m_buffer );
 	}
 
 	void PxBufferBase::generateMips()
@@ -828,7 +828,7 @@ namespace castor
 		, PixelFormat bufferFormat
 		, uint32_t bufferAlign )
 	{
-		return castor::makeUnique< PxBufferBase >( options
+		return c3d::makeUnique< PxBufferBase >( options
 			, interrupt
 			, size
 			, wantedFormat

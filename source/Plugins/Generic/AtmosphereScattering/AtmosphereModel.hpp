@@ -24,16 +24,16 @@ See LICENSE file in root folder
 
 namespace atmosphere_scattering
 {
-	using castor3d::shader::Intersection;
-	using castor3d::shader::RetIntersection;
-	using castor3d::shader::InIntersection;
-	using castor3d::shader::InOutIntersection;
-	using castor3d::shader::OutIntersection;
-	using castor3d::shader::Ray;
-	using castor3d::shader::RetRay;
-	using castor3d::shader::InRay;
-	using castor3d::shader::InOutRay;
-	using castor3d::shader::OutRay;
+	using c3d::shader::Intersection;
+	using c3d::shader::RetIntersection;
+	using c3d::shader::InIntersection;
+	using c3d::shader::InOutIntersection;
+	using c3d::shader::OutIntersection;
+	using c3d::shader::Ray;
+	using c3d::shader::RetRay;
+	using c3d::shader::InRay;
+	using c3d::shader::InOutRay;
+	using c3d::shader::OutRay;
 
 	struct SingleScatteringResult
 		: public sdw::StructInstanceHelperT< "SingleScatteringResult"
@@ -48,7 +48,7 @@ namespace atmosphere_scattering
 		SingleScatteringResult( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -86,7 +86,7 @@ namespace atmosphere_scattering
 		MediumSampleRGB( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -110,8 +110,8 @@ namespace atmosphere_scattering
 	{
 		struct Settings
 		{
-			explicit Settings( castor::Length l )
-				: length{ castor::move( l ) }
+			explicit Settings( c3d::Length l )
+				: length{ c3d::move( l ) }
 			{
 			}
 
@@ -163,7 +163,7 @@ namespace atmosphere_scattering
 				return *this;
 			}
 
-			castor::Length length;
+			c3d::Length length;
 			CameraData const * cameraData{};
 			bool useGround{};
 			bool variableSampleCount{};
@@ -180,7 +180,7 @@ namespace atmosphere_scattering
 		AtmosphereModel( sdw::ShaderWriter & writer
 			, AtmosphereData const & atmosphereData
 			, Settings settings
-			, castor3d::Extent2D transmittanceExtent );
+			, c3d::Extent2D transmittanceExtent );
 
 		auto const & getLengthUnit()const noexcept
 		{
@@ -341,11 +341,11 @@ namespace atmosphere_scattering
 	public:
 		AtmosphereData const & atmosphereData;
 		Settings settings;
-		castor3d::Extent2D transmittanceExtent{};
+		c3d::Extent2D transmittanceExtent{};
 		sdw::Float planetRadiusOffset;
 		sdw::CombinedImage2DRgba32 const * transmittanceTexture{};
 		sdw::CombinedImage2DRgba32 const * multiScatTexture{};
-		castor3d::shader::Shadow * shadows;
+		c3d::shader::Shadow * shadows;
 
 	private:
 		sdw::Function< Ray

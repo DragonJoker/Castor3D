@@ -8,7 +8,7 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	namespace hdrcfg
 	{
@@ -52,9 +52,8 @@ namespace castor3d
 		visitor.visit( cuT( "Gamma Correction" ), gamma );
 	}
 
-	void HdrConfig::addParsers( castor::AttributeParsers & result )
+	void HdrConfig::addParsers( AttributeParsers & result )
 	{
-		using namespace castor;
 		addParserT( result, CSCNSection::eCamera, CSCNSection::eHdrConfig, cuT( "hdr_config" ), hdrcfg::parserHdrConfig );
 		addParserT( result, CSCNSection::eHdrConfig, cuT( "exposure" ), hdrcfg::parserExponent, { makeParameter< ParameterType::eFloat >() } );
 		addParserT( result, CSCNSection::eHdrConfig, cuT( "gamma" ), hdrcfg::parserGamma, { makeParameter< ParameterType::eFloat >() } );

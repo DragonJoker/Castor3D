@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	/**@name Render */
 	//@{
@@ -65,9 +65,9 @@ namespace castor3d
 	class ReflectiveShadowMaps;
 
 	/** @cond !Doxygen */
-	CU_DeclareSmartPtr( castor3d, RsmGIPass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, RsmInterpolatePass, C3D_API );
-	CU_DeclareSmartPtr( castor3d, ReflectiveShadowMaps, C3D_API );
+	CU_DeclareSmartPtr( c3d, RsmGIPass, C3D_API );
+	CU_DeclareSmartPtr( c3d, RsmInterpolatePass, C3D_API );
+	CU_DeclareSmartPtr( c3d, ReflectiveShadowMaps, C3D_API );
 	/** @endcond */
 
 	//@}

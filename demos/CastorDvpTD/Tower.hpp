@@ -20,7 +20,7 @@ namespace castortd
 			};
 
 			Category( Kind kind
-				, castor::String const & attackAnimName )
+				, c3d::String const & attackAnimName )
 				: m_kind{ kind }
 				, m_attackAnimName{ attackAnimName }
 				, m_attackAnimTime{}
@@ -97,12 +97,12 @@ namespace castortd
 				return m_bulletSpeed;
 			}
 
-			castor::String const & getAttackAnimationName()const
+			c3d::String const & getAttackAnimationName()const
 			{
 				return m_attackAnimName;
 			}
 
-			castor::Milliseconds const & getAttackAnimationTime()const
+			c3d::Milliseconds const & getAttackAnimationTime()const
 			{
 				return m_attackAnimTime;
 			}
@@ -112,7 +112,7 @@ namespace castortd
 				return m_kind;
 			}
 
-			void setAttackAnimationTime( castor::Milliseconds const & time )
+			void setAttackAnimationTime( c3d::Milliseconds const & time )
 			{
 				m_attackAnimTime = time;
 			}
@@ -121,15 +121,15 @@ namespace castortd
 			Kind m_kind;
 			PaidAbility< uint32_t > m_damage;
 			PaidAbility< float > m_speed;
-			castor::Milliseconds m_initialCooldown{};
+			c3d::Milliseconds m_initialCooldown{};
 			PaidAbility< float > m_range;
 			float m_bulletSpeed{ 0.0f };
 			uint32_t m_towerCost{ 0u };
-			castor::String m_attackAnimName;
-			castor::Milliseconds m_attackAnimTime;
+			c3d::String m_attackAnimName;
+			c3d::Milliseconds m_attackAnimTime;
 		};
 
-		using CategoryPtr = castor::RawUniquePtr< Category >;
+		using CategoryPtr = c3d::RawUniquePtr< Category >;
 
 		enum class State
 		{
@@ -140,8 +140,8 @@ namespace castortd
 
 	public:
 		Tower( CategoryPtr && category
-			, castor3d::SceneNode & node
-			, castor3d::AnimatedObjectGroup & anim
+			, c3d::SceneNode & node
+			, c3d::AnimatedObjectGroup & anim
 			, Cell const & cell );
 
 		void accept( Game & game );
@@ -151,7 +151,7 @@ namespace castortd
 			return m_state;
 		}
 
-		castor3d::SceneNode const & getNode()const
+		c3d::SceneNode const & getNode()const
 		{
 			return m_node;
 		}
@@ -233,22 +233,22 @@ namespace castortd
 		void doStartAttack();
 		bool doAnimEnded( EnemyArray & enemies );
 		void doShoot( Game & game );
-		void doUpdateTimes( castor::Milliseconds const & elapsed );
+		void doUpdateTimes( c3d::Milliseconds const & elapsed );
 		bool doIsInRange( Enemy const & enemy )const;
 		void doTurnToTarget();
 
-		castor3d::SceneNode & getNode()
+		c3d::SceneNode & getNode()
 		{
 			return m_node;
 		}
 
 	private:
-		castor3d::SceneNode & m_node;
-		castor3d::AnimatedObjectGroup & m_anim;
+		c3d::SceneNode & m_node;
+		c3d::AnimatedObjectGroup & m_anim;
 		Cell const & m_cell;
 		State m_state{ State::Idle };
-		castor::Milliseconds m_remaining{ 0 };
-		castor::Milliseconds m_animRemain{ 0 };
+		c3d::Milliseconds m_remaining{ 0 };
+		c3d::Milliseconds m_animRemain{ 0 };
 		EnemyPtr m_target{ nullptr };
 		CategoryPtr m_category;
 		float m_animScale{ 1.0f };

@@ -26,13 +26,13 @@ namespace atmosphere_scattering
 	struct CloudsModel
 	{
 		CloudsModel( sdw::ShaderWriter & writer
-			, castor3d::shader::Utils & utils
+			, c3d::shader::Utils & utils
 			, AtmosphereModel & atmosphere
 			, ScatteringModel & scattering
 			, CloudsData const & clouds
 			, uint32_t & binding
 			, uint32_t set );
-		sdw::RetVec4 applyClouds( castor3d::shader::Ray const & ray
+		sdw::RetVec4 applyClouds( c3d::shader::Ray const & ray
 			, sdw::Float const & objectId
 			, sdw::Float const & linearDepth
 			, sdw::IVec2 const & fragCoord
@@ -97,7 +97,7 @@ namespace atmosphere_scattering
 
 	private:
 		sdw::ShaderWriter & writer;
-		castor3d::shader::Utils & utils;
+		c3d::shader::Utils & utils;
 		AtmosphereModel & atmosphere;
 		ScatteringModel & scattering;
 		CloudsData const & clouds;
@@ -172,7 +172,7 @@ namespace atmosphere_scattering
 			, sdw::InFloat
 			, sdw::InVec4 > m_computeLighting;
 		sdw::Function< sdw::Vec4
-			, castor3d::shader::InRay
+			, c3d::shader::InRay
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InIVec2

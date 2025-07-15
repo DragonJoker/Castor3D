@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "MeshModule.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class MeshGenerator
 	{
@@ -20,7 +20,7 @@ namespace castor3d
 		 *\brief		Constructeur
 		 *\param[in]	meshType	Le type de maillage
 		 */
-		C3D_API explicit MeshGenerator( castor::String const & meshType );
+		C3D_API explicit MeshGenerator( String const & meshType );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -79,7 +79,7 @@ namespace castor3d
 	private:
 		//!\~english	The mesh type.
 		//!\~french		Le type de mesh.
-		castor::String m_meshType;
+		String m_meshType;
 	};
 }
 

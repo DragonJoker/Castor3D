@@ -36,20 +36,20 @@ namespace ocean_fft
 		ProcessFFTPass( crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
-			, castor3d::RenderDevice const & device
+			, c3d::RenderDevice const & device
 			, VkFFTConfig const & config
-			, castor3d::Extent2D const & extent
+			, c3d::Extent2D const & extent
 			, ashes::BufferBase const & input
-			, castor::Array< ashes::BufferBasePtr, 2u > const & output
+			, c3d::Array< ashes::BufferBasePtr, 2u > const & output
 			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 		~ProcessFFTPass()override;
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		c3d::RenderTechniquePass::accept
 		 */
-		void accept( castor3d::RenderTechniqueVisitor & visitor );
+		void accept( c3d::RenderTechniqueVisitor & visitor );
 
 	public:
-		static castor::String const Name;
+		static c3d::String const Name;
 
 	private:
 		void doRecordInto( crg::RecordContext & context
@@ -59,23 +59,23 @@ namespace ocean_fft
 		bool doIsComputePass()const;
 
 	private:
-		castor3d::RenderDevice const & m_device;
-		castor3d::Extent2D m_extent;
+		c3d::RenderDevice const & m_device;
+		c3d::Extent2D m_extent;
 		VkDeviceSize m_inBufferSize{};
 		VkBuffer m_vkInput{};
 		VkDeviceSize m_outBufferSize{};
-		castor::Array< VkBuffer, 2u > m_vkOutput{};
+		c3d::Array< VkBuffer, 2u > m_vkOutput{};
 		VkFFTApplication m_app{};
 	};
 
-	crg::FramePass const & createProcessFFTPass( castor::String const & name
-		, castor3d::RenderDevice const & device
+	crg::FramePass const & createProcessFFTPass( c3d::String const & name
+		, c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
-		, castor3d::Extent2D const & extent
+		, c3d::Extent2D const & extent
 		, VkFFTConfig const & config
 		, ashes::BufferBase const & input
-		, castor::Array< ashes::BufferBasePtr, 2u > const & output );
+		, c3d::Array< ashes::BufferBasePtr, 2u > const & output );
 }
 
 #endif

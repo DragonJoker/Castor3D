@@ -1,7 +1,7 @@
 /*
 See LICENSE file in root folder
 */
-namespace castor
+namespace c3d
 {
 	namespace box
 	{

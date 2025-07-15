@@ -19,14 +19,14 @@ See LICENSE file in root folder
 #include <mutex>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class PassBuffer
 	{
 	public:
 		struct PassDataPtr
 		{
-			C3D_API explicit PassDataPtr( castor::ByteArrayView data )
+			C3D_API explicit PassDataPtr( ByteArrayView data )
 				: m_data{ data }
 			{
 			}
@@ -85,7 +85,7 @@ namespace castor3d
 
 			template< typename DataT, size_t SizeT >
 			VkDeviceSize write( MemChunk const & chunk
-				, castor::Array< DataT, SizeT > const & v
+				, Array< DataT, SizeT > const & v
 				, VkDeviceSize offset )
 			{
 				auto base = offset;
@@ -100,7 +100,7 @@ namespace castor3d
 
 			template< typename DataT, uint32_t CountT >
 			VkDeviceSize write( MemChunk const & chunk
-				, castor::Point< DataT, CountT > const & v
+				, Point< DataT, CountT > const & v
 				, VkDeviceSize offset )
 			{
 				auto base = offset;
@@ -114,7 +114,7 @@ namespace castor3d
 			}
 
 			VkDeviceSize write( MemChunk const & chunk
-				, castor::RgbColour const & v
+				, RgbColour const & v
 				, VkDeviceSize offset )
 			{
 				auto base = offset;
@@ -128,7 +128,7 @@ namespace castor3d
 			}
 
 			VkDeviceSize write( MemChunk const & chunk
-				, castor::HdrRgbColour const & v
+				, HdrRgbColour const & v
 				, VkDeviceSize offset )
 			{
 				auto base = offset;
@@ -142,7 +142,7 @@ namespace castor3d
 			}
 
 			VkDeviceSize write( MemChunk const & chunk
-				, castor::RgbaColour const & v
+				, RgbaColour const & v
 				, VkDeviceSize offset )
 			{
 				auto base = offset;
@@ -156,7 +156,7 @@ namespace castor3d
 			}
 
 			VkDeviceSize write( MemChunk const & chunk
-				, castor::HdrRgbaColour const & v
+				, HdrRgbaColour const & v
 				, VkDeviceSize offset )
 			{
 				auto base = offset;
@@ -170,7 +170,7 @@ namespace castor3d
 			}
 
 		private:
-			castor::ByteArrayView m_data;
+			ByteArrayView m_data;
 		};
 		/**
 		 *\~english
@@ -319,13 +319,13 @@ namespace castor3d
 		uint32_t m_stride;
 		uint32_t m_maxCount;
 		ShaderBuffer m_buffer;
-		castor::Vector< Pass * > m_passes;
-		castor::Vector< Pass const * > m_dirty;
-		castor::Vector< OnPassChangedConnection > m_connections;
+		Vector< Pass * > m_passes;
+		Vector< Pass const * > m_dirty;
+		Vector< OnPassChangedConnection > m_connections;
 		uint32_t m_passID{ 1u };
-		castor::UnorderedMap< uint32_t, PassTypeData > m_passTypeIndices;
-		castor::ByteArrayView m_data;
-		castor::Mutex m_mutex;
+		HashMap< uint32_t, PassTypeData > m_passTypeIndices;
+		ByteArrayView m_data;
+		Mutex m_mutex;
 	};
 }
 

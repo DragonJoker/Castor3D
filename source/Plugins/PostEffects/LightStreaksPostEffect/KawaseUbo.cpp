@@ -12,7 +12,7 @@ namespace light_streaks
 	KawaseData::KawaseData( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: sdw::StructInstance{ writer, castor::move( expr ), enabled }
+		: sdw::StructInstance{ writer, c3d::move( expr ), enabled }
 		, pixelSize{ getMember< sdw::Vec2 >( "pixelSize" ) }
 		, direction{ getMember< sdw::Vec2 >( "direction" ) }
 		, samples{ getMember< sdw::Int >( "samples" ) }
@@ -40,10 +40,10 @@ namespace light_streaks
 
 	//*********************************************************************************************
 
-	castor::MbString const KawaseUbo::Buffer = "Kawase";
-	castor::MbString const KawaseUbo::Data = "c3d_kawaseData";
+	c3d::MbString const KawaseUbo::Buffer = "Kawase";
+	c3d::MbString const KawaseUbo::Data = "c3d_kawaseData";
 
-	KawaseUbo::KawaseUbo( castor3d::RenderDevice const & device )
+	KawaseUbo::KawaseUbo( c3d::RenderDevice const & device )
 		: m_device{ device }
 	{
 		for ( uint32_t i = 0u; i < PostEffect::Count * 3u; ++i )
@@ -61,11 +61,11 @@ namespace light_streaks
 	}
 
 	void KawaseUbo::update( uint32_t index
-		, castor3d::Extent2D const & size
-		, castor::Point2f const & direction
+		, c3d::Extent2D const & size
+		, c3d::Point2f const & direction
 		, uint32_t pass )
 	{
-		castor::Point2f pixelSize{ 1.0f / float( size.width )
+		c3d::Point2f pixelSize{ 1.0f / float( size.width )
 			, 1.0f / float( size.height ) };
 		auto & data = m_ubo[index].getData();
 		data.pixelSize = pixelSize;

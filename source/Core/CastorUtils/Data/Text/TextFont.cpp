@@ -1,6 +1,6 @@
 #include "CastorUtils/Data/Text/TextFont.hpp"
 
-namespace castor
+namespace c3d
 {
 	TextWriter< Font >::TextWriter( String const & tabs, Path const & folder )
 		: TextWriterT< Font >{ tabs }

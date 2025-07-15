@@ -14,10 +14,10 @@ See LICENSE file in root folder
 #include <atomic>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class RenderTargetCache
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 		CU_DeclareVector( RenderTargetUPtr, RenderTarget );
 		CU_DeclareArray( RenderTargetArray, TargetType::eCount, TargetType );
@@ -47,8 +47,8 @@ namespace castor3d
 		 *\return		La cible de rendu
 		 */
 		C3D_API RenderTargetRPtr addNew( TargetType type
-			, castor::Size const & size
-			, castor::PixelFormat pixelFormat );
+			, Size const & size
+			, PixelFormat pixelFormat );
 		/**
 		 *\~english
 		 *\brief		Removes a render target from the render loop
@@ -127,8 +127,8 @@ namespace castor3d
 		 *\~french
 		 *\brief		Enregistre le nom affiché d'un tone mapping.
 		 */
-		C3D_API void registerToneMappingName( castor::String const & name
-			, castor::StringView fullName );
+		C3D_API void registerToneMappingName( String const & name
+			, String fullName );
 		/**
 		*\~english
 		*name
@@ -138,7 +138,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		castor::String const & getToneMappingName( castor::String const & name )const
+		String const & getToneMappingName( String const & name )const
 		{
 			auto it = m_toneMappings.find( name );
 			CU_Require( it != m_toneMappings.end() );
@@ -204,7 +204,7 @@ namespace castor3d
 		template< typename FuncType >
 		void forEach( FuncType func )const
 		{
-			auto lock( castor::makeUniqueLock( *this ) );
+			auto lock( makeUniqueLock( *this ) );
 
 			for ( auto const & typeTargets : m_renderTargets )
 			{
@@ -225,7 +225,7 @@ namespace castor3d
 		template< typename FuncType >
 		void forEach( FuncType func )
 		{
-			auto lock( castor::makeUniqueLock( *this ) );
+			auto lock( makeUniqueLock( *this ) );
 
 			for ( auto const & typeTargets : m_renderTargets )
 			{
@@ -239,10 +239,10 @@ namespace castor3d
 	private:
 		mutable std::atomic_bool m_locked;
 		TargetTypeArray m_renderTargets;
-		mutable castor::Mutex m_mutex;
+		mutable Mutex m_mutex;
 		ToneMappingFactory m_toneMappingFactory;
 		PostEffectFactory m_postEffectFactory;
-		castor::StrStrMap m_toneMappings;
+		StrStrMap m_toneMappings;
 	};
 }
 

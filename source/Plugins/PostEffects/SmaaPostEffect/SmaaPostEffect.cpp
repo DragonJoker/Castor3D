@@ -36,9 +36,9 @@ namespace smaa
 
 	namespace copy
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device
 			, SmaaConfig const & config )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
@@ -46,15 +46,15 @@ namespace smaa
 			C3D_Smaa( writer, SmaaUboIdx, 0u );
 			auto c3d_map = writer.declCombinedImg< FImg2DRgba32 >( "c3d_map", SmaaUboIdx + 1, 0u );
 
-			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
-				, sdw::VertexOutT< c3d::Uv2FT > out )
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
+				, sdw::FragmentOutT< c3ds::Colour4FT > out )
 				{
 					if ( config.data.mode == Mode::eT2X
 						&& C3D_DebugVelocity )
@@ -80,9 +80,9 @@ namespace smaa
 
 	//*********************************************************************************************
 
-	castor::String getName( Mode mode )
+	c3d::String getName( Mode mode )
 	{
-		castor::String result;
+		c3d::String result;
 
 		switch ( mode )
 		{
@@ -106,9 +106,9 @@ namespace smaa
 		return result;
 	}
 
-	castor::String getName( Preset preset )
+	c3d::String getName( Preset preset )
 	{
-		castor::String result;
+		c3d::String result;
 
 		switch ( preset )
 		{
@@ -136,9 +136,9 @@ namespace smaa
 		return result;
 	}
 
-	castor::String getName( EdgeDetectionType detection )
+	c3d::String getName( EdgeDetectionType detection )
 	{
-		castor::String result;
+		c3d::String result;
 
 		switch ( detection )
 		{
@@ -160,15 +160,15 @@ namespace smaa
 
 	//*********************************************************************************************
 
-	castor::String PostEffect::Type = cuT( "smaa" );
-	castor::MbString PostEffect::Name = "SMAA PostEffect";
+	c3d::String PostEffect::Type = cuT( "smaa" );
+	c3d::MbString PostEffect::Name = "SMAA PostEffect";
 
-	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
-		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & parameters )
-		: castor3d::PostEffect{ PostEffect::Type
+	PostEffect::PostEffect( c3d::RenderTarget & renderTarget
+		, c3d::RenderSystem & renderSystem
+		, c3d::Parameters const & parameters )
+		: c3d::PostEffect{ PostEffect::Type
 			, cuT( "SMAA" )
-			, castor::makeString( PostEffect::Name )
+			, c3d::makeString( PostEffect::Name )
 			, renderTarget
 			, renderSystem
 			, parameters
@@ -185,16 +185,16 @@ namespace smaa
 		}
 	}
 
-	castor3d::PostEffectUPtr PostEffect::create( castor3d::RenderTarget & renderTarget
-		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & parameters )
+	c3d::PostEffectUPtr PostEffect::create( c3d::RenderTarget & renderTarget
+		, c3d::RenderSystem & renderSystem
+		, c3d::Parameters const & parameters )
 	{
-		return castor::makeUniqueDerived< castor3d::PostEffect, PostEffect >( renderTarget
+		return c3d::makeUniqueDerived< c3d::PostEffect, PostEffect >( renderTarget
 			, renderSystem
 			, parameters );
 	}
 
-	void PostEffect::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void PostEffect::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		if ( m_edgeDetection )
 		{
@@ -218,8 +218,8 @@ namespace smaa
 
 		visitor.visit( cuT( "Preset" )
 			, m_config.data.preset
-			, castor::StringArray{ cuT( "Low" ), cuT( "Medium" ), cuT( "High" ), cuT( "Ultra" ), cuT( "Custom" ) }
-			, castor3d::ConfigurationVisitorBase::OnEnumValueChangeT< Preset >( [this]( Preset oldV, Preset newV )
+			, c3d::StringArray{ cuT( "Low" ), cuT( "Medium" ), cuT( "High" ), cuT( "Ultra" ), cuT( "Custom" ) }
+			, c3d::ConfigurationVisitorBase::OnEnumValueChangeT< Preset >( [this]( Preset oldV, Preset newV )
 			{
 				m_config.updatePreset();
 			} ) );
@@ -240,14 +240,14 @@ namespace smaa
 			, m_config.data.predicationThreshold );
 	}
 
-	void PostEffect::setParameters( castor3d::Parameters parameters )
+	void PostEffect::setParameters( c3d::Parameters parameters )
 	{
 		m_config = SmaaConfig{ parameters };
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
-		, castor3d::Texture const & source
-		, castor3d::Texture const & target
+	bool PostEffect::doInitialise( c3d::RenderDevice const & device
+		, c3d::Texture const & source
+		, c3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
 		auto previous = &previousPass;
@@ -256,7 +256,7 @@ namespace smaa
 		switch ( m_config.data.edgeDetection )
 		{
 		case EdgeDetectionType::eDepth:
-			m_edgeDetection = castor::make_unique< DepthEdgeDetection >( m_graph
+			m_edgeDetection = c3d::makeRawUnique< DepthEdgeDetection >( m_graph
 				, *previous
 				, m_renderTarget
 				, device
@@ -267,7 +267,7 @@ namespace smaa
 			break;
 
 		case EdgeDetectionType::eColour:
-			m_edgeDetection = castor::make_unique< ColourEdgeDetection >( m_graph
+			m_edgeDetection = c3d::makeRawUnique< ColourEdgeDetection >( m_graph
 				, *previous
 				, m_renderTarget
 				, device
@@ -280,7 +280,7 @@ namespace smaa
 			break;
 
 		case EdgeDetectionType::eLuma:
-			m_edgeDetection = castor::make_unique< LumaEdgeDetection >( m_graph
+			m_edgeDetection = c3d::makeRawUnique< LumaEdgeDetection >( m_graph
 				, *previous
 				, m_renderTarget
 				, device
@@ -298,7 +298,7 @@ namespace smaa
 
 		if constexpr ( !C3D_DebugEdgeDetection )
 		{
-			m_blendingWeightCalculation = castor::make_unique< BlendingWeightCalculation >( m_graph
+			m_blendingWeightCalculation = c3d::makeRawUnique< BlendingWeightCalculation >( m_graph
 				, *previous
 				, m_renderTarget
 				, device
@@ -313,7 +313,7 @@ namespace smaa
 			if constexpr ( !C3D_DebugBlendingWeightCalculation )
 			{
 				auto * velocityView = doGetVelocityView();
-				m_neighbourhoodBlending = castor::make_unique< NeighbourhoodBlending >( m_graph
+				m_neighbourhoodBlending = c3d::makeRawUnique< NeighbourhoodBlending >( m_graph
 					, *previous
 					, m_renderTarget
 					, device
@@ -341,7 +341,7 @@ namespace smaa
 								: currentViews[i - 1u] );
 						}
 
-						m_reproject = castor::make_unique< Reproject >( m_graph
+						m_reproject = c3d::makeRawUnique< Reproject >( m_graph
 							, *previous
 							, m_renderTarget
 							, device
@@ -365,22 +365,22 @@ namespace smaa
 			{
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
-					.renderSize( castor3d::makeExtent2D( castor3d::getSafeBandedSize( m_renderTarget.getSize() ) ) )
+					.renderSize( c3d::makeExtent2D( c3d::getSafeBandedSize( m_renderTarget.getSize() ) ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.passIndex( &m_subsamplePassIndex )
 					.enabled( &m_enabled )
 					.build( framePass, context, graph, { m_config.maxSubsampleIndices * 2u } );
-				getOwner()->getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				getOwner()->getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
-		crg::SamplerDesc linearSampler{ castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest
-			, castor3d::WrapMode::eClampToEdge
-			, castor3d::WrapMode::eClampToEdge
-			, castor3d::WrapMode::eClampToEdge };
+		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
+			, c3d::FilterMode::eLinear
+			, c3d::MipmapMode::eNearest
+			, c3d::WrapMode::eClampToEdge
+			, c3d::WrapMode::eClampToEdge
+			, c3d::WrapMode::eClampToEdge };
 		pass.addDependency( *previous );
 		m_ubo.createPassBinding( pass
 			, SmaaUboIdx );
@@ -404,7 +404,7 @@ namespace smaa
 		return true;
 	}
 
-	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
+	void PostEffect::doCleanup( c3d::RenderDevice const & device )
 	{
 		m_reproject.reset();
 		m_neighbourhoodBlending.reset();
@@ -412,7 +412,7 @@ namespace smaa
 		m_edgeDetection.reset();
 	}
 
-	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
+	void PostEffect::doCpuUpdate( c3d::CpuUpdater & updater )
 	{
 		if ( m_enabled )
 		{
@@ -426,7 +426,7 @@ namespace smaa
 				m_renderTarget.setJitter( m_config.jitters[m_frameIndex] );
 			}
 
-			m_ubo.cpuUpdate( castor3d::getSafeBandedSize( m_renderTarget.getSize() )
+			m_ubo.cpuUpdate( c3d::getSafeBandedSize( m_renderTarget.getSize() )
 				, m_config );
 			m_config.subsampleIndex = m_frameIndex;
 			m_subsamplePassIndex = m_config.subsampleIndex + m_passIndex * m_config.maxSubsampleIndices;
@@ -437,7 +437,7 @@ namespace smaa
 		}
 	}
 
-	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )
+	bool PostEffect::doWriteInto( c3d::StringStream & file, c3d::String const & tabs )
 	{
 		static SmaaConfig::Data const ref;
 		file << ( cuT( "\n" ) + tabs + Type + cuT( "\n" ) );
@@ -447,10 +447,10 @@ namespace smaa
 
 		if ( m_config.data.preset == Preset::eCustom )
 		{
-			file << ( tabs + cuT( "\tthreshold" ) + castor::string::toString( m_config.data.threshold, std::locale{ "C" } ) + cuT( "\n" ) );
-			file << ( tabs + cuT( "\tmaxSearchSteps " ) + castor::string::toString( m_config.data.maxSearchSteps, std::locale{ "C" } ) + cuT( "\n" ) );
-			file << ( tabs + cuT( "\tmaxSearchStepsDiag " ) + castor::string::toString( m_config.data.maxSearchStepsDiag, std::locale{ "C" } ) + cuT( "\n" ) );
-			file << ( tabs + cuT( "\tcornerRounding " ) + castor::string::toString( m_config.data.cornerRounding, std::locale{ "C" } ) + cuT( "\n" ) );
+			file << ( tabs + cuT( "\tthreshold" ) + c3d::string::toString( m_config.data.threshold, std::locale{ "C" } ) + cuT( "\n" ) );
+			file << ( tabs + cuT( "\tmaxSearchSteps " ) + c3d::string::toString( m_config.data.maxSearchSteps, std::locale{ "C" } ) + cuT( "\n" ) );
+			file << ( tabs + cuT( "\tmaxSearchStepsDiag " ) + c3d::string::toString( m_config.data.maxSearchStepsDiag, std::locale{ "C" } ) + cuT( "\n" ) );
+			file << ( tabs + cuT( "\tcornerRounding " ) + c3d::string::toString( m_config.data.cornerRounding, std::locale{ "C" } ) + cuT( "\n" ) );
 		}
 
 		file << ( tabs + cuT( "\tedgeDetection " ) + smaa::getName( m_config.data.edgeDetection ) + cuT( "\n" ) );
@@ -471,17 +471,17 @@ namespace smaa
 
 			if ( m_config.data.predicationScale != ref.predicationScale )
 			{
-				file << ( tabs + cuT( "\tpredicationScale " ) + castor::string::toString( m_config.data.predicationScale, std::locale{ "C" } ) + cuT( "\n" ) );
+				file << ( tabs + cuT( "\tpredicationScale " ) + c3d::string::toString( m_config.data.predicationScale, std::locale{ "C" } ) + cuT( "\n" ) );
 			}
 
 			if ( m_config.data.predicationStrength != ref.predicationStrength )
 			{
-				file << ( tabs + cuT( "\tpredicationStrength " ) + castor::string::toString( m_config.data.predicationStrength, std::locale{ "C" } ) + cuT( "\n" ) );
+				file << ( tabs + cuT( "\tpredicationStrength " ) + c3d::string::toString( m_config.data.predicationStrength, std::locale{ "C" } ) + cuT( "\n" ) );
 			}
 
 			if ( m_config.data.predicationThreshold != ref.predicationThreshold )
 			{
-				file << ( tabs + cuT( "\tpredicationThreshold " ) + castor::string::toString( m_config.data.predicationThreshold, std::locale{ "C" } ) + cuT( "\n" ) );
+				file << ( tabs + cuT( "\tpredicationThreshold " ) + c3d::string::toString( m_config.data.predicationThreshold, std::locale{ "C" } ) + cuT( "\n" ) );
 			}
 		}
 
@@ -491,13 +491,13 @@ namespace smaa
 
 			if ( m_config.data.reprojectionWeightScale != ref.reprojectionWeightScale )
 			{
-				file << ( tabs + cuT( "\treprojectionWeightScale " ) + castor::string::toString( m_config.data.reprojectionWeightScale, std::locale{ "C" } ) + cuT( "\n" ) );
+				file << ( tabs + cuT( "\treprojectionWeightScale " ) + c3d::string::toString( m_config.data.reprojectionWeightScale, std::locale{ "C" } ) + cuT( "\n" ) );
 			}
 		}
 
 		if ( m_config.data.localContrastAdaptationFactor != ref.localContrastAdaptationFactor )
 		{
-			file << ( tabs + cuT( "\tlocalContrastAdaptationFactor " ) + castor::string::toString( m_config.data.localContrastAdaptationFactor, std::locale{ "C" } ) + cuT( "\n" ) );
+			file << ( tabs + cuT( "\tlocalContrastAdaptationFactor " ) + c3d::string::toString( m_config.data.localContrastAdaptationFactor, std::locale{ "C" } ) + cuT( "\n" ) );
 		}
 
 		file << ( tabs + cuT( "}\n" ) );

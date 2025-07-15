@@ -11,9 +11,9 @@
 #include "stb_image_resize.h"
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-CU_ImplementSmartPtr( castor, Image )
+CU_ImplementSmartPtr( c3d, Image )
 
-namespace castor
+namespace c3d
 {
 	namespace img
 	{
@@ -73,12 +73,12 @@ namespace castor
 		: Named{ name }
 		, m_pathFile{ path }
 		, m_buffer{ ( buffer
-			? castor::move( buffer )
+			? c3d::move( buffer )
 			: PxBufferBase::create( layout.dimensions()
 				, layout.depthLayers()
 				, layout.levels
 				, layout.format ) ) }
-		, m_layout{ castor::move( layout ) }
+		, m_layout{ c3d::move( layout ) }
 	{
 		CU_CheckInvariants();
 	}
@@ -106,7 +106,7 @@ namespace castor
 		auto result = ( m_layout.extent->x != extent.getWidth()
 				|| m_layout.extent->y != extent.getHeight()
 				|| format != m_layout.format )
-			? castor::move( m_buffer )
+			? c3d::move( m_buffer )
 			: nullptr;
 
 		if ( result )
@@ -176,7 +176,7 @@ namespace castor
 
 	Image & Image::resample( Size const & size )
 	{
-		m_buffer = resample( size, castor::move( m_buffer ) );
+		m_buffer = resample( size, c3d::move( m_buffer ) );
 		m_layout.extent->x = m_buffer->getHeight();
 		m_layout.extent->y = m_buffer->getWidth();
 		m_layout.format = m_buffer->getFormat();

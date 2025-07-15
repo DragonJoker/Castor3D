@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Buffer/BufferView.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ShaderBuffer
 	{
@@ -35,7 +35,7 @@ namespace castor3d
 		 */
 		C3D_API ShaderBuffer( RenderDevice const & device
 			, VkDeviceSize size
-			, castor::String const & name
+			, String const & name
 			, AccessState wantedState = FragmentShaderReadState );
 		/**
 		 *\~english
@@ -186,10 +186,10 @@ namespace castor3d
 		VkDeviceSize m_size;
 		AccessState m_wantedState;
 		ashes::BufferBasePtr m_buffer;
-		castor::ByteArray m_ownData;
+		ByteArray m_ownData;
 		uint8_t * m_rawData;
 		uint8_t * m_data;
-		castor::ArrayView< uint32_t > m_counts;
+		ArrayView< uint32_t > m_counts;
 	};
 }
 

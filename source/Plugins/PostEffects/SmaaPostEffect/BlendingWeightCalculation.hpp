@@ -20,15 +20,15 @@ namespace smaa
 	public:
 		BlendingWeightCalculation( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
-			, castor3d::RenderTarget & renderTarget
-			, castor3d::RenderDevice const & device
+			, c3d::RenderTarget & renderTarget
+			, c3d::RenderDevice const & device
 			, SmaaUbo const & ubo
 			, crg::ImageViewId const & edgeDetectionView
 			, crg::ImageViewId const & stencilView
 			, SmaaConfig const & config
 			, bool const * enabled );
 		~BlendingWeightCalculation();
-		void accept( castor3d::ConfigurationVisitorBase & visitor );
+		void accept( c3d::ConfigurationVisitorBase & visitor );
 
 		crg::ImageViewId const & getResult()const
 		{
@@ -41,14 +41,14 @@ namespace smaa
 		}
 
 	private:
-		castor3d::RenderDevice const & m_device;
+		c3d::RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;
 		crg::ResourcesCache & m_resources;
-		castor3d::Extent3D m_extent;
+		c3d::Extent3D m_extent;
 		crg::ImageViewId m_areaView;
 		crg::ImageViewId m_searchView;
-		castor3d::Texture m_result;
-		castor3d::ProgramModule m_shader;
+		c3d::Texture m_result;
+		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass & m_pass;
 	};

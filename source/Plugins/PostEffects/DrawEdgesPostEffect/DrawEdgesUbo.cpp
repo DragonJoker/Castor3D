@@ -12,7 +12,7 @@ namespace draw_edges
 	DrawEdgesData::DrawEdgesData( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: sdw::StructInstance{ writer, castor::move( expr ), enabled }
+		: sdw::StructInstance{ writer, c3d::move( expr ), enabled }
 		, normalDepthWidth{ getMember< sdw::Int >( "normalDepthWidth" ) }
 		, objectWidth{ getMember< sdw::Int >( "objectWidth" ) }
 	{
@@ -34,10 +34,10 @@ namespace draw_edges
 
 	//*********************************************************************************************
 
-	castor::MbString const DrawEdgesUbo::Buffer = "DrawEdges";
-	castor::MbString const DrawEdgesUbo::Data = "c3d_drawEdgesData";
+	c3d::MbString const DrawEdgesUbo::Buffer = "DrawEdges";
+	c3d::MbString const DrawEdgesUbo::Data = "c3d_drawEdgesData";
 
-	DrawEdgesUbo::DrawEdgesUbo( castor3d::RenderDevice const & device )
+	DrawEdgesUbo::DrawEdgesUbo( c3d::RenderDevice const & device )
 		: m_device{ device }
 		, m_ubo{ device.uboPool->getBuffer< Configuration >( 0u ) }
 	{

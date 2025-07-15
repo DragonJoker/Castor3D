@@ -20,9 +20,9 @@
 #include <ashespp/Image/StagingTexture.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 
-CU_ImplementSmartPtr( castor3d, ColourBackground )
+CU_ImplementSmartPtr( c3d, ColourBackground )
 
-namespace castor3d
+namespace c3d
 {
 	//************************************************************************************************
 
@@ -35,7 +35,7 @@ namespace castor3d
 
 	ColourBackground::ColourBackground( Engine & engine
 		, Scene & scene
-		, castor::String const & name )
+		, String const & name )
 		: SceneBackground{ engine
 			, scene
 			, name + cuT( "Colour" )
@@ -49,16 +49,16 @@ namespace castor3d
 			, cuT( "ColourBackground_Colour" )
 			, { ImageCreateFlags::eCubeCompatible
 				, { bgcolour::Dim, bgcolour::Dim, 1u }, 6u, 1u
-				, castor::PixelFormat::eR32G32B32A32_SFLOAT
+				, PixelFormat::eR32G32B32A32_SFLOAT
 				, ImageUsageFlags::eTransferDst | ImageUsageFlags::eSampled }
 			, {} };
 		m_textureId.create();
-		m_texture = castor::makeUnique< TextureLayout >( *engine.getRenderSystem()
+		m_texture = makeUnique< TextureLayout >( *engine.getRenderSystem()
 			, cuT( "ColourBackground_Colour" )
 			, *m_textureId.image
 			, m_textureId.wholeViewId );
-		m_buffer = castor::PxBufferBase::create( makeSize( m_textureId.getExtent() )
-			, castor::PixelFormat::eR32G32B32A32_SFLOAT );
+		m_buffer = PxBufferBase::create( makeSize( m_textureId.getExtent() )
+			, PixelFormat::eR32G32B32A32_SFLOAT );
 	}
 
 	void ColourBackground::accept( BackgroundVisitor & visitor )
@@ -70,9 +70,9 @@ namespace castor3d
 	{
 	}
 
-	bool ColourBackground::write( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::StringStream & stream )const
+	bool ColourBackground::write( String const & tabs
+		, Path const & folder
+		, StringStream & stream )const
 	{
 		return true;
 	}
@@ -82,7 +82,7 @@ namespace castor3d
 		m_textureId.create();
 		auto data = device.graphicsData();
 		auto & value = m_scene.getBackgroundColour();
-		m_colour = castor::HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
+		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
 		m_needsUpload = true;
 		return true;
 	}
@@ -95,7 +95,7 @@ namespace castor3d
 	void ColourBackground::doCpuUpdate( CpuUpdater & updater )const
 	{
 		auto & value = m_scene.getBackgroundColour();
-		m_colour = castor::HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
+		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
 		auto & viewport = *updater.viewport;
 		viewport.resize( updater.camera->getSize() );
 		viewport.setPerspective( updater.camera->getViewport().getFovY()
@@ -115,10 +115,10 @@ namespace castor3d
 
 	void ColourBackground::doUpload( UploadData & uploader )
 	{
-		castor::Point4f colour{ m_colour->red().value(), m_colour->green().value(), m_colour->blue().value(), 1.0f };
+		Point4f colour{ m_colour->red().value(), m_colour->green().value(), m_colour->blue().value(), 1.0f };
 
-		for ( auto & c : castor::makeArrayView( reinterpret_cast< castor::Point4f * >( m_buffer->getPtr() )
-			, m_buffer->getSize() / sizeof( castor::Point4f ) ) )
+		for ( auto & c : makeArrayView( reinterpret_cast< Point4f * >( m_buffer->getPtr() )
+			, m_buffer->getSize() / sizeof( Point4f ) ) )
 		{
 			c = colour;
 		}
@@ -130,7 +130,7 @@ namespace castor3d
 			uploader.pushUpload( m_buffer->getPtr()
 				, m_buffer->getSize()
 				, m_texture->getTexture()
-				, castor::ImageMemoryLayout{ castor3d::ImageViewType::e2D, *m_buffer }
+				, ImageMemoryLayout{ ImageViewType::e2D, *m_buffer }
 				, dstSubresource
 				, ImageLayout::eShaderReadOnly
 				, PipelineStageFlags::eFragmentShader );

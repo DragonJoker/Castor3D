@@ -12,18 +12,18 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/ChangeTracked.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	struct LpvConfig
 	{
 		C3D_API void accept( ConfigurationVisitorBase & visitor );
 
-		C3D_API static void addParsers( castor::AttributeParsers & result
+		C3D_API static void addParsers( AttributeParsers & result
 			, CSCNSection shadows, CSCNSection lightLpv
-			, castor::RawParserFunctionT< ShadowContext > parserConfig );
+			, RawParserFunctionT< ShadowContext > parserConfig );
 
-		castor::ChangeTracked< float > indirectAttenuation;
-		castor::ChangeTracked< float > texelAreaModifier;
+		ChangeTracked< float > indirectAttenuation;
+		ChangeTracked< float > texelAreaModifier;
 	};
 
 	inline bool operator==( LpvConfig const & lhs, LpvConfig const & rhs )noexcept

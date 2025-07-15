@@ -15,16 +15,16 @@ See LICENSE file in root folder
 #include <map>
 #include <unordered_map>
 
-namespace castor3d
+namespace c3d
 {
 	struct PassRegisterInfo
 	{
-		castor::String lightingModel;
+		String lightingModel;
 		PassFactoryBase::Creator passCreator;
 	};
 
 	class PassFactory
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 		, private PassFactoryBase
 	{
 	public:

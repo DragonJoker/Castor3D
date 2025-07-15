@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Align/AlignModule.hpp"
 #include "CastorUtils/CastorUtils.hpp"
 
-namespace castor
+namespace c3d
 {
 	/**@name Memory pool */
 	//@{

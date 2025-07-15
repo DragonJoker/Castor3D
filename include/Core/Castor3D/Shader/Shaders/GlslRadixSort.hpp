@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/ComputeWriter.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	/**
 	 *\arg	ValueSizeT	The size of the value type.

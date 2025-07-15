@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include <atomic>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class PickingPass
 		: public RenderNodesPass
@@ -46,7 +46,7 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, castor::Size const & size
+			, Size const & size
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, SceneCuller & culler );
@@ -92,14 +92,14 @@ namespace castor3d
 			, ast::ShaderBuilder & builder )const override;
 
 	public:
-		C3D_API static castor::String const Type;
+		C3D_API static String const Type;
 
 	private:
-		using CameraQueueMap = castor::Map< Camera const *, RenderQueue >;
+		using CameraQueueMap = Map< Camera const *, RenderQueue >;
 		C3D_API static uint32_t const UboBindingPoint;
 
 	private:
-		castor::StringMap< GeometryRPtr > m_pickable{};
+		StringMap< GeometryRPtr > m_pickable{};
 	};
 }
 

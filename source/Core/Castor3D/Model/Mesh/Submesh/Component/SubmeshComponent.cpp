@@ -4,10 +4,10 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 
-CU_ImplementSmartPtr( castor3d, SubmeshComponent )
-CU_ImplementSmartPtr( castor3d, SubmeshComponentPlugin )
+CU_ImplementSmartPtr( c3d, SubmeshComponent )
+CU_ImplementSmartPtr( c3d, SubmeshComponentPlugin )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
@@ -25,7 +25,7 @@ namespace castor3d
 	}
 
 	bool hasAny( SubmeshComponentCombine const & lhs
-		, castor::Vector< SubmeshComponentFlag > const & rhs )noexcept
+		, Vector< SubmeshComponentFlag > const & rhs )noexcept
 	{
 		return std::any_of( rhs.begin()
 			, rhs.end()
@@ -102,7 +102,7 @@ namespace castor3d
 		return component.getOwner();
 	}
 
-	castor::String const & getSubmeshComponentType( SubmeshComponent const & component )
+	String const & getSubmeshComponentType( SubmeshComponent const & component )
 	{
 		return component.getType();
 	}
@@ -144,13 +144,13 @@ namespace castor3d
 	//*********************************************************************************************
 
 	SubmeshComponent::SubmeshComponent( Submesh & submesh
-		, castor::String const & type
+		, String const & type
 		, SubmeshComponentDataUPtr data
-		, castor::StringArray deps )
-		: castor::OwnedBy< Submesh >{ submesh }
-		, m_data{ castor::move( data ) }
+		, StringArray deps )
+		: OwnedBy< Submesh >{ submesh }
+		, m_data{ c3d::move( data ) }
 		, m_type{ type }
-		, m_dependencies{ castor::move( deps ) }
+		, m_dependencies{ c3d::move( deps ) }
 		, m_id{ submesh.getComponentId( m_type ) }
 		, m_plugin{ submesh.getComponentPlugin( m_id ) }
 	{

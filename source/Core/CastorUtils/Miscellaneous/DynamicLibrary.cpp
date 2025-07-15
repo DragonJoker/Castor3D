@@ -1,8 +1,8 @@
 #include "CastorUtils/Miscellaneous/DynamicLibrary.hpp"
 
-CU_ImplementSmartPtr( castor, DynamicLibrary )
+CU_ImplementSmartPtr( c3d, DynamicLibrary )
 
-namespace castor
+namespace c3d
 {
 	DynamicLibrary::DynamicLibrary( Path const & pathFile )noexcept
 		: m_pathLibrary( pathFile )
@@ -26,8 +26,8 @@ namespace castor
 	}
 
 	DynamicLibrary::DynamicLibrary( DynamicLibrary && lib )noexcept
-		: m_library( castor::move( lib.m_library ) )
-		, m_pathLibrary( castor::move( lib.m_pathLibrary ) )
+		: m_library( c3d::move( lib.m_library ) )
+		, m_pathLibrary( c3d::move( lib.m_pathLibrary ) )
 	{
 		lib.m_library = nullptr;
 		lib.m_pathLibrary.clear();
@@ -55,8 +55,8 @@ namespace castor
 	{
 		if ( this != &lib )
 		{
-			m_library = castor::move( lib.m_library );
-			m_pathLibrary = castor::move( lib.m_pathLibrary );
+			m_library = c3d::move( lib.m_library );
+			m_pathLibrary = c3d::move( lib.m_pathLibrary );
 			lib.m_library = nullptr;
 			lib.m_pathLibrary.clear();
 		}

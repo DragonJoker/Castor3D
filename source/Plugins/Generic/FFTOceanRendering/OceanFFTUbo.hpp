@@ -41,7 +41,7 @@ namespace ocean_fft
 		OceanUboData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, c3d::move( expr ), enabled }
 		{
 		}
 
@@ -71,11 +71,11 @@ namespace ocean_fft
 		using Configuration = OceanUboConfiguration;
 
 	public:
-		explicit OceanUbo( castor3d::RenderDevice const & device );
+		explicit OceanUbo( c3d::RenderDevice const & device );
 		~OceanUbo();
 		void cpuUpdate( Configuration const & config
 			, OceanFFTConfig const & fftConfig
-			, castor::Point3f const & cameraPosition );
+			, c3d::Point3f const & cameraPosition );
 
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const
@@ -103,23 +103,23 @@ namespace ocean_fft
 			++dstBinding;
 		}
 
-		castor3d::UniformBufferOffsetT< Configuration > const & getUbo()const
+		c3d::UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
 			return m_ubo;
 		}
 
-		castor3d::UniformBufferOffsetT< Configuration > & getUbo()
+		c3d::UniformBufferOffsetT< Configuration > & getUbo()
 		{
 			return m_ubo;
 		}
 
 	public:
-		static const castor::MbString Buffer;
-		static const castor::MbString Data;
+		static const c3d::MbString Buffer;
+		static const c3d::MbString Data;
 
 	private:
-		castor3d::RenderDevice const & m_device;
-		castor3d::UniformBufferOffsetT< Configuration > m_ubo;
+		c3d::RenderDevice const & m_device;
+		c3d::UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

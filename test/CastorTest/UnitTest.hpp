@@ -58,7 +58,7 @@ namespace Testing
 	{
 		static std::string get( wchar_t const & value )
 		{
-			return castor::toUtf8( &value, 1u );
+			return c3d::toUtf8( &value, 1u );
 		}
 	};
 
@@ -67,7 +67,7 @@ namespace Testing
 	{
 		static std::string get( char32_t const & value )
 		{
-			return castor::toUtf8( castor::makeString( &value, 1u ) );
+			return c3d::toUtf8( c3d::makeString( &value, 1u ) );
 		}
 	};
 
@@ -261,7 +261,7 @@ namespace Testing
 	{
 		static std::string get( std::wstring const & value )
 		{
-			return castor::toUtf8( value );
+			return c3d::toUtf8( value );
 		}
 	};
 
@@ -270,7 +270,7 @@ namespace Testing
 	{
 		static std::string get( std::u32string const & value )
 		{
-			return castor::toUtf8( castor::makeString( value ) );
+			return c3d::toUtf8( c3d::makeString( value ) );
 		}
 	};
 
@@ -319,9 +319,9 @@ namespace Testing
 	};
 
 	template< typename ValueT >
-	struct Stringifier< castor::UniquePtr< ValueT > >
+	struct Stringifier< c3d::UniquePtr< ValueT > >
 	{
-		static std::string get( castor::UniquePtr< ValueT > const & value )
+		static std::string get( c3d::UniquePtr< ValueT > const & value )
 		{
 			std::stringstream stream;
 			stream << ( value ? toString( *value ) : std::string{ "null_uptr" } );
@@ -564,9 +564,9 @@ namespace Testing
 
 	public:
 		explicit Lazy( std::function< Value() > const & expression )
-			: m_thunk{ castor::make_shared< getter >( [expression]()
+			: m_thunk{ c3d::makeShared< getter >( [expression]()
 			{
-				return castor::make_shared< value_type >( expression() );
+				return c3d::makeShared< value_type >( expression() );
 			} ) }
 		{
 		}
@@ -656,7 +656,7 @@ namespace Testing
 
 	public:
 		explicit Lazy( std::function< void() > const & expression )
-			: m_thunk{ castor::make_shared< getter >( [expression]()
+			: m_thunk{ c3d::makeShared< getter >( [expression]()
 			{
 				return expression();
 			} ) }

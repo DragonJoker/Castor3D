@@ -17,16 +17,16 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor
+namespace c3d
 {
 	template<>
-	class TextWriter< castor3d::ClearcoatNormalMapComponent >
-		: public TextWriterT< castor3d::ClearcoatNormalMapComponent >
+	class TextWriter< ClearcoatNormalMapComponent >
+		: public TextWriterT< ClearcoatNormalMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, uint32_t mask = 0u )
-			: TextWriterT< castor3d::ClearcoatNormalMapComponent >{ tabs }
+			: TextWriterT< ClearcoatNormalMapComponent >{ tabs }
 			, m_mask{ mask }
 		{
 		}
@@ -36,7 +36,7 @@ namespace castor
 			return writeMask( file, cuT( "clearcoat_normal_mask" ), m_mask );
 		}
 
-		bool operator()( castor3d::ClearcoatNormalMapComponent const & object
+		bool operator()( ClearcoatNormalMapComponent const & object
 			, StringStream & file )override
 		{
 			return true;
@@ -45,10 +45,7 @@ namespace castor
 	private:
 		uint32_t m_mask;
 	};
-}
 
-namespace castor3d
-{
 	//*********************************************************************************************
 
 	namespace trscmp
@@ -108,8 +105,8 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		castor::MbString valueName = "clearcoatNormal";
-		castor::MbString mapName = "clearcoatNormal";
+		MbString valueName = "clearcoatNormal";
+		MbString mapName = "clearcoatNormal";
 		auto textureName = mapName + "MapAndMask";
 
 		if ( !material.hasMember( textureName )
@@ -139,7 +136,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void ClearcoatNormalMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void ClearcoatNormalMapComponent::Plugin::createParsers( AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "clearcoat_normal" )
@@ -151,29 +148,29 @@ namespace castor3d
 					, 0x00FFFFFFu );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "clearcoat_normal_mask" )
 			, trscmp::parserUnitClearcoatNormalMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "clearcoat_normal_mask" )
 			, trscmp::parserUnitClearcoatNormalMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "clearcoat_normal" )
 			, trscmp::parserTexRemapClearcoatNormal );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "clearcoat_normal_mask" )
 			, trscmp::parserTexRemapClearcoatNormalMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 
 	bool ClearcoatNormalMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -184,22 +181,22 @@ namespace castor3d
 	}
 
 	void ClearcoatNormalMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, ClearcoatNormalMapComponent >( pass ) );
+		result.push_back( makeUniqueDerived< PassComponent, ClearcoatNormalMapComponent >( pass ) );
 	}
 
 	bool ClearcoatNormalMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, String const & tabs
+		, StringStream & file )const
 	{
-		return castor::TextWriter< ClearcoatNormalMapComponent >{ tabs, mask }( file );
+		return TextWriter< ClearcoatNormalMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const ClearcoatNormalMapComponent::TypeName = C3D_MakePassMapComponentName( "clearcoat_normal" );
+	String const ClearcoatNormalMapComponent::TypeName = C3D_MakePassMapComponentName( "clearcoat_normal" );
 
 	ClearcoatNormalMapComponent::ClearcoatNormalMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -211,7 +208,7 @@ namespace castor3d
 
 	PassComponentUPtr ClearcoatNormalMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, ClearcoatNormalMapComponent >( pass );
+		return makeUniqueDerived< PassComponent, ClearcoatNormalMapComponent >( pass );
 	}
 
 	void ClearcoatNormalMapComponent::doFillConfig( TextureConfiguration & configuration

@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
-namespace castor3d::shader
+namespace c3d::shader
 {
 	struct DirectLighting
 		: public sdw::StructInstanceHelperT< "C3D_DirectLighting"

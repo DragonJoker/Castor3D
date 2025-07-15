@@ -11,26 +11,26 @@
 #include <CastorUtils/Math/Quaternion.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementSmartPtr( castor3d, SkeletonAnimationKeyFrame )
+CU_ImplementSmartPtr( c3d, SkeletonAnimationKeyFrame )
 
-namespace castor3d
+namespace c3d
 {
 	//*************************************************************************************************
 
 	SkeletonAnimationKeyFrame::SkeletonAnimationKeyFrame( SkeletonAnimation & skeletonAnimation
-		, castor::Milliseconds const & timeIndex )
+		, Milliseconds const & timeIndex )
 		: AnimationKeyFrame{ timeIndex }
 		, OwnedBy< SkeletonAnimation >{ skeletonAnimation }
 	{
-		castor::Matrix4x4f identity{ castor::Matrix4x4f::getIdentity() };
+		Matrix4x4f identity{ Matrix4x4f::getIdentity() };
 		m_boneTransforms.resize( size_t( static_cast< Skeleton const & >( *skeletonAnimation.getAnimable() ).getBonesCount() )
 			, identity );
 	}
 
 	void SkeletonAnimationKeyFrame::addAnimationObject( SkeletonAnimationObject & object
-		, castor::Point3f const & translate
-		, castor::Quaternion const & rotate
-		, castor::Point3f const & scale )
+		, Point3f const & translate
+		, Quaternion const & rotate
+		, Point3f const & scale )
 	{
 		if ( auto it = find( object );
 			it == m_transforms.end() )
@@ -39,9 +39,9 @@ namespace castor3d
 				parent && find( *parent ) == m_transforms.end() )
 			{
 				addAnimationObject( *parent
-					, castor::Point3f{}
-					, castor::Quaternion::identity()
-					, castor::Point3f{ 1.0f, 1.0f, 1.0f } );
+					, Point3f{}
+					, Quaternion::identity()
+					, Point3f{ 1.0f, 1.0f, 1.0f } );
 			}
 
 			auto & ins = m_transforms.emplace_back();
@@ -108,16 +108,16 @@ namespace castor3d
 	{
 		for ( auto & transform : m_transforms )
 		{
-			transform.cumulative = castor::Matrix4x4f{ 1.0f };
+			transform.cumulative = Matrix4x4f{ 1.0f };
 		}
 
 		for ( auto & transform : m_transforms )
 		{
 			auto parent = transform.object->getParent();
-			castor::Matrix4x4f transformMtx{ 1.0f };
-			castor::matrix::setTranslate( transformMtx, transform.transform.translate );
-			castor::matrix::rotate( transformMtx, transform.transform.rotate );
-			castor::matrix::scale( transformMtx, transform.transform.scale );
+			Matrix4x4f transformMtx{ 1.0f };
+			matrix::setTranslate( transformMtx, transform.transform.translate );
+			matrix::rotate( transformMtx, transform.transform.rotate );
+			matrix::scale( transformMtx, transform.transform.scale );
 
 			if ( parent )
 			{
@@ -142,7 +142,7 @@ namespace castor3d
 		, Skeleton const & skeleton )const
 	{
 		auto hash = std::hash< Mesh const * >{}( &mesh );
-		hash = castor::hashCombinePtr( hash, skeleton );
+		hash = hashCombinePtr( hash, skeleton );
 		auto [rit, inserted] = m_boxes.try_emplace( hash );
 
 		if ( inserted )
@@ -152,8 +152,8 @@ namespace castor3d
 
 			for ( auto & submesh : mesh )
 			{
-				castor::Point3f min{ rmax, rmax, rmax };
-				castor::Point3f max{ rmin, rmin, rmin };
+				Point3f min{ rmax, rmax, rmax };
+				Point3f max{ rmin, rmin, rmin };
 
 				if ( !submesh->hasComponent( SkinComponent::TypeName ) )
 				{
@@ -167,7 +167,7 @@ namespace castor3d
 
 					for ( auto & boneData : component->getData().getData() )
 					{
-						castor::Matrix4x4f transform{ 1.0 };
+						Matrix4x4f transform{ 1.0 };
 
 						if ( boneData.m_weights[0] > 0 )
 						{
@@ -182,12 +182,12 @@ namespace castor3d
 							if ( carryOn )
 							{
 								auto bone = *( skeleton.getBones().begin() + boneData.m_ids[i] );
-								transform += castor::Matrix4x4f{ m_boneTransforms[bone->getId()] * boneData.m_weights[i] };
+								transform += Matrix4x4f{ m_boneTransforms[bone->getId()] * boneData.m_weights[i] };
 							}
 						}
 
 						auto & cposition = *vtxPosition;
-						castor::Point4f position{ cposition[0], cposition[1], cposition[2], 1.0f };
+						Point4f position{ cposition[0], cposition[1], cposition[2], 1.0f };
 						position = transform * position;
 						min[0] = std::min( min[0], position[0] );
 						min[1] = std::min( min[1], position[1] );
@@ -204,10 +204,10 @@ namespace castor3d
 				CU_Ensure( !std::isnan( max[0] ) && !std::isnan( max[1] ) && !std::isnan( max[2] ) );
 				CU_Ensure( !std::isinf( min[0] ) && !std::isinf( min[1] ) && !std::isinf( min[2] ) );
 				CU_Ensure( !std::isinf( max[0] ) && !std::isinf( max[1] ) && !std::isinf( max[2] ) );
-				CU_Ensure( min != castor::Point3f( rmax, rmax, rmax ) );
-				CU_Ensure( max != castor::Point3f( rmin, rmin, rmin ) );
+				CU_Ensure( min != Point3f( rmax, rmax, rmax ) );
+				CU_Ensure( max != Point3f( rmin, rmin, rmin ) );
 				rit->second.emplace_back( submesh.get()
-					, castor::BoundingBox{ min, max } );
+					, BoundingBox{ min, max } );
 			}
 		}
 
@@ -217,7 +217,7 @@ namespace castor3d
 	AnimationKeyFrameUPtr SkeletonAnimationKeyFrame::clone( Animation & parent )const
 	{
 		auto & skelAnim = static_cast< SkeletonAnimation & >( parent );
-		auto result = castor::makeUnique< SkeletonAnimationKeyFrame >( skelAnim, getTimeIndex() );
+		auto result = makeUnique< SkeletonAnimationKeyFrame >( skelAnim, getTimeIndex() );
 
 		for ( auto & transform : m_transforms )
 		{
@@ -230,7 +230,7 @@ namespace castor3d
 
 		result->m_boneTransforms = m_boneTransforms;
 		doCloneInto( *result );
-		return castor::ptrRefCast< AnimationKeyFrame >( result );
+		return ptrRefCast< AnimationKeyFrame >( result );
 	}
 
 	//*************************************************************************************************

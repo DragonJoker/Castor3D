@@ -15,11 +15,11 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementSmartPtr( castor3d, BillboardListCache )
+CU_ImplementSmartPtr( c3d, BillboardListCache )
 
-namespace castor3d
+namespace c3d
 {
-	const castor::String ObjectCacheTraitsT< BillboardList, castor::String >::Name = cuT( "BillboardList" );
+	const String ObjectCacheTraitsT< BillboardList, String >::Name = cuT( "BillboardList" );
 
 	//*********************************************************************************************
 
@@ -27,13 +27,13 @@ namespace castor3d
 		, Pass const & pass )
 	{
 		size_t result = std::hash< BillboardBase const * >{}( &billboard );
-		castor::hashCombine( result, pass.getHash() );
+		hashCombine( result, pass.getHash() );
 		return result;
 	}
 
 	//*********************************************************************************************
 
-	ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::ObjectCacheT( Scene & scene
+	ObjectCacheT< BillboardList, String, BillboardCacheTraits >::ObjectCacheT( Scene & scene
 		, SceneNodeRPtr rootNode
 		, SceneNodeRPtr rootCameraNode
 		, SceneNodeRPtr rootObjectNode )

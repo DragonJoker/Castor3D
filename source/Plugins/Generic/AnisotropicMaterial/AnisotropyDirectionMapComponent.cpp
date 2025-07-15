@@ -19,7 +19,7 @@
 
 CU_ImplementSmartPtr( anisotropy, AnisotropyDirectionMapComponent )
 
-namespace castor
+namespace c3d
 {
 	template<>
 	class TextWriter< anisotropy::AnisotropyDirectionMapComponent >
@@ -51,8 +51,8 @@ namespace castor
 
 namespace anisotropy
 {
-	using namespace castor3d;
-	namespace c3d = castor3d::shader;
+	using namespace c3d;
+	namespace c3ds = c3d::shader;
 
 	//*********************************************************************************************
 
@@ -105,16 +105,16 @@ namespace anisotropy
 
 	//*********************************************************************************************
 
-	void AnisotropyDirectionMapComponent::ComponentsShader::applyTexture( castor3d::shader::PassShaders const & passShaders
-		, castor3d::shader::TextureConfigurations const & textureConfigs
-		, castor3d::shader::TextureAnimations const & textureAnims
+	void AnisotropyDirectionMapComponent::ComponentsShader::applyTexture( c3d::shader::PassShaders const & passShaders
+		, c3d::shader::TextureConfigurations const & textureConfigs
+		, c3d::shader::TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, castor3d::shader::Material const & material
-		, castor3d::shader::BlendComponents & components
-		, castor3d::shader::SampleTexture const & sampleTexture )const
+		, c3d::shader::Material const & material
+		, c3d::shader::BlendComponents & components
+		, c3d::shader::SampleTexture const & sampleTexture )const
 	{
-		castor::MbString valueName = "anisotropyDirection";
-		castor::MbString mapName = "anisotropyDirection";
+		c3d::MbString valueName = "anisotropyDirection";
+		c3d::MbString mapName = "anisotropyDirection";
 		auto textureName = mapName + "MapAndMask";
 
 		if ( !material.hasMember( textureName )
@@ -141,12 +141,12 @@ namespace anisotropy
 		auto sampled = writer.declLocale( valueName + "Sampled"
 			, sampleTexture( map, config, components ) );
 		value = mat2( vec2( value.x(), value.y() ), vec2( -value.y(), value.x() ) )
-			* normalize( c3d::TextureConfigData::getVec2( sampled, mask ) * 2.0_f - vec2( 1.0_f ) );
+			* normalize( c3ds::TextureConfigData::getVec2( sampled, mask ) * 2.0_f - vec2( 1.0_f ) );
 	}
 
 	//*********************************************************************************************
 
-	void AnisotropyDirectionMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void AnisotropyDirectionMapComponent::Plugin::createParsers( c3d::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "anisotropy_direction" )
@@ -158,29 +158,29 @@ namespace anisotropy
 					, 0x00FFFF00u );
 			} );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTexture
 			, cuT( "anisotropy_direction_mask" )
 			, trscmp::parserUnitAnisotropyDirectionMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "anisotropy_direction_mask" )
 			, trscmp::parserUnitAnisotropyDirectionMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "anisotropy_direction" )
 			, trscmp::parserTexRemapAnisotropyDirection );
 
-		castor::addParserT( parsers
+		c3d::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "anisotropy_direction_mask" )
 			, trscmp::parserTexRemapAnisotropyDirectionMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+			, { c3d::makeParameter< c3d::ParameterType::eUInt32 >() } );
 	}
 
 	bool AnisotropyDirectionMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -191,22 +191,22 @@ namespace anisotropy
 	}
 
 	void AnisotropyDirectionMapComponent::Plugin::createMapComponent( Pass & pass
-		, castor::Vector< PassComponentUPtr > & result )const
+		, c3d::Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, AnisotropyDirectionMapComponent >( pass ) );
+		result.push_back( c3d::makeUniqueDerived< PassComponent, AnisotropyDirectionMapComponent >( pass ) );
 	}
 
 	bool AnisotropyDirectionMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
-		, castor::String const & tabs
-		, castor::StringStream & file )const
+		, c3d::String const & tabs
+		, c3d::StringStream & file )const
 	{
-		return castor::TextWriter< AnisotropyDirectionMapComponent >{ tabs, mask }( file );
+		return c3d::TextWriter< AnisotropyDirectionMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const AnisotropyDirectionMapComponent::TypeName = C3D_PluginMakePassMapComponentName( "anisotropy", "direction" );
+	c3d::String const AnisotropyDirectionMapComponent::TypeName = C3D_PluginMakePassMapComponentName( "anisotropy", "direction" );
 
 	AnisotropyDirectionMapComponent::AnisotropyDirectionMapComponent( Pass & pass )
 		: PassMapComponent{ pass
@@ -218,7 +218,7 @@ namespace anisotropy
 
 	PassComponentUPtr AnisotropyDirectionMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, AnisotropyDirectionMapComponent >( pass );
+		return c3d::makeUniqueDerived< PassComponent, AnisotropyDirectionMapComponent >( pass );
 	}
 
 	void AnisotropyDirectionMapComponent::doFillConfig( TextureConfiguration & configuration

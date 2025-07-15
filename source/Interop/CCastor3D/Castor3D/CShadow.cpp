@@ -65,7 +65,7 @@ extern "C"
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_SHADOW );
 
-		object->internal->filterType = castor3d::ShadowType( val );
+		object->internal->filterType = c3d::ShadowType( val );
 
 		return C3D_OK;
 	}

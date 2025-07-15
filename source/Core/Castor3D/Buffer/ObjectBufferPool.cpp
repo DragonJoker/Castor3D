@@ -13,20 +13,20 @@
 
 #include <numeric>
 
-CU_ImplementSmartPtr( castor3d, IndexBufferPool )
-CU_ImplementSmartPtr( castor3d, VertexBufferPool )
-CU_ImplementSmartPtr( castor3d, ObjectBufferPool )
+CU_ImplementSmartPtr( c3d, IndexBufferPool )
+CU_ImplementSmartPtr( c3d, VertexBufferPool )
+CU_ImplementSmartPtr( c3d, ObjectBufferPool )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 	namespace objbuf
 	{
-		static castor::String getName( SubmeshComponentCombine const & components
+		static String getName( SubmeshComponentCombine const & components
 			, bool isGpuComputed )
 		{
-			castor::String result;
+			String result;
 
 			if ( isGpuComputed )
 			{
@@ -101,10 +101,10 @@ namespace castor3d
 	//*********************************************************************************************
 
 	VertexBufferPool::VertexBufferPool( RenderDevice const & device
-		, castor::String debugName )
+		, String debugName )
 		: OwnedBy< RenderSystem >{ device.renderSystem }
 		, m_device{ device }
-		, m_debugName{ castor::move( debugName ) }
+		, m_debugName{ c3d::move( debugName ) }
 	{
 	}
 
@@ -132,12 +132,12 @@ namespace castor3d
 		return result;
 	}
 
-	castor::Vector< castor::Pair< size_t, VertexBufferPool::BufferArray > >::iterator VertexBufferPool::doInsertBuffers( size_t align )
+	Vector< Pair< size_t, VertexBufferPool::BufferArray > >::iterator VertexBufferPool::doInsertBuffers( size_t align )
 	{
 		align = std::lcm( align, m_device.properties.limits.minMemoryMapAlignment );
 		auto it = std::find_if( m_buffers.begin()
 			, m_buffers.end()
-			, [align]( castor::Pair< size_t, VertexBufferPool::BufferArray > const & lookup )
+			, [align]( Pair< size_t, VertexBufferPool::BufferArray > const & lookup )
 			{
 				return align == lookup.first;
 			} );
@@ -151,12 +151,12 @@ namespace castor3d
 		return it;
 	}
 
-	castor::Vector< castor::Pair< size_t, VertexBufferPool::BufferArray > >::const_iterator VertexBufferPool::doFindBuffers( size_t align )const
+	Vector< Pair< size_t, VertexBufferPool::BufferArray > >::const_iterator VertexBufferPool::doFindBuffers( size_t align )const
 	{
 		align = std::lcm( align, m_device.properties.limits.minMemoryMapAlignment );
 		return std::find_if( m_buffers.begin()
 			, m_buffers.end()
-			, [align]( castor::Pair< size_t, VertexBufferPool::BufferArray > const & lookup )
+			, [align]( Pair< size_t, VertexBufferPool::BufferArray > const & lookup )
 			{
 				return align == lookup.first;
 			} );
@@ -180,10 +180,10 @@ namespace castor3d
 	//*********************************************************************************************
 
 	IndexBufferPool::IndexBufferPool( RenderDevice const & device
-		, castor::String debugName )
+		, String debugName )
 		: OwnedBy< RenderSystem >{ device.renderSystem }
 		, m_device{ device }
-		, m_debugName{ castor::move( debugName ) }
+		, m_debugName{ c3d::move( debugName ) }
 	{
 	}
 
@@ -238,10 +238,10 @@ namespace castor3d
 	//*********************************************************************************************
 
 	ObjectBufferPool::ObjectBufferPool( RenderDevice const & device
-		, castor::String debugName )
+		, String debugName )
 		: OwnedBy< RenderSystem >{ device.renderSystem }
 		, m_device{ device }
-		, m_debugName{ castor::move( debugName ) }
+		, m_debugName{ c3d::move( debugName ) }
 	{
 	}
 
@@ -309,7 +309,7 @@ namespace castor3d
 
 		if ( auto mit = std::find_if( m_buffers.begin()
 			, m_buffers.end()
-			, [&buffer, &result]( castor::UnorderedMap< size_t, BufferArray >::value_type const & mapLookup )
+			, [&buffer, &result]( HashMap< size_t, BufferArray >::value_type const & mapLookup )
 			{
 				if ( auto bit = std::find_if( mapLookup.second.begin()
 					, mapLookup.second.end()
@@ -385,9 +385,9 @@ namespace castor3d
 		, bool isGpuComputed )
 	{
 		auto hash = std::hash< SubmeshComponentCombineID >{}( components.baseId );
-		hash = castor::hashCombine( hash, indexCount != 0u );
-		hash = castor::hashCombine( hash, vertexCount != 0u );
-		hash = castor::hashCombine( hash, isGpuComputed );
+		hash = hashCombine( hash, indexCount != 0u );
+		hash = hashCombine( hash, vertexCount != 0u );
+		hash = hashCombine( hash, isGpuComputed );
 		ObjectBufferOffset result{ hash };
 		auto & buffers = m_buffers.try_emplace( hash ).first->second;
 		auto it = doFindBuffer( vertexCount
@@ -415,7 +415,7 @@ namespace castor3d
 							, indexCount
 							, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-							, m_debugName + name + getName( data ) + castor::string::toString( buffers.size() )
+							, m_debugName + name + getName( data ) + string::toString( buffers.size() )
 							, align );
 					}
 				}
@@ -427,7 +427,7 @@ namespace castor3d
 							, meshletCount
 							, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-							, m_debugName + name + getName( data ) + castor::string::toString( buffers.size() )
+							, m_debugName + name + getName( data ) + string::toString( buffers.size() )
 							, align );
 					}
 				}
@@ -440,30 +440,30 @@ namespace castor3d
 							, vertexCount
 							, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-							, m_debugName + name + getName( data ) + castor::string::toString( buffers.size() )
+							, m_debugName + name + getName( data ) + string::toString( buffers.size() )
 							, align );
 						break;
 					case SubmeshData::ePassMasks:
-						modelBuffers.buffers[index] = details::createBaseBuffer< castor::Point4ui >( m_device
+						modelBuffers.buffers[index] = details::createBaseBuffer< Point4ui >( m_device
 							, vertexCount
 							, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-							, m_debugName + name + getName( data ) + castor::string::toString( buffers.size() )
+							, m_debugName + name + getName( data ) + string::toString( buffers.size() )
 							, align );
 						break;
 					default:
-						modelBuffers.buffers[index] = details::createBaseBuffer< castor::Point4f >( m_device
+						modelBuffers.buffers[index] = details::createBaseBuffer< Point4f >( m_device
 							, vertexCount
 							, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-							, m_debugName + name + getName( data ) + castor::string::toString( buffers.size() )
+							, m_debugName + name + getName( data ) + string::toString( buffers.size() )
 							, align );
 						break;
 					}
 				}
 			}
 
-			buffers.emplace_back( castor::move( modelBuffers ) );
+			buffers.emplace_back( c3d::move( modelBuffers ) );
 			it = std::next( buffers.begin()
 				, ptrdiff_t( buffers.size() - 1u ) );
 		}

@@ -33,18 +33,18 @@ See LICENSE file in root folder
 #include <mutex>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class RenderWindow
-		: public castor::OwnedBy< Engine >
-		, public castor::Named
+		: public OwnedBy< Engine >
+		, public Named
 	{
 	private:
 		struct Configuration
 		{
-			castor::Point4f multiply;
-			castor::Point4f add;
-			castor::Point4f data;
+			Point4f multiply;
+			Point4f add;
+			Point4f data;
 		};
 
 		struct RenderingResources
@@ -54,10 +54,10 @@ namespace castor3d
 				, ashes::FencePtr fence
 				, ashes::CommandBufferPtr commandBuffer
 				, uint32_t imageIndex )
-				: imageAvailableSemaphore{ castor::move( imageAvailableSemaphore ) }
-				, finishedRenderingSemaphore{ castor::move( finishedRenderingSemaphore ) }
-				, fence{ castor::move( fence ) }
-				, commandBuffer{ castor::move( commandBuffer ) }
+				: imageAvailableSemaphore{ c3d::move( imageAvailableSemaphore ) }
+				, finishedRenderingSemaphore{ c3d::move( finishedRenderingSemaphore ) }
+				, fence{ c3d::move( fence ) }
+				, commandBuffer{ c3d::move( commandBuffer ) }
 				, imageIndex{ imageIndex }
 			{
 			}
@@ -76,8 +76,8 @@ namespace castor3d
 			ashes::CommandBufferPtr commandBuffer;
 			uint32_t imageIndex{ 0u };
 		};
-		using RenderingResourcesPtr = castor::RawUniquePtr< RenderingResources >;
-		using RenderingResourcesArray = castor::Vector< RenderingResourcesPtr >;
+		using RenderingResourcesPtr = RawUniquePtr< RenderingResources >;
+		using RenderingResourcesArray = Vector< RenderingResourcesPtr >;
 
 	public:
 		class EvtHandler
@@ -109,7 +109,7 @@ namespace castor3d
 			}
 
 		private:
-			EventHandlerRPtr doGetMouseTargetableHandler( castor::Position const & position )const override
+			EventHandlerRPtr doGetMouseTargetableHandler( Position const & position )const override
 			{
 				return m_handler;
 			}
@@ -118,15 +118,15 @@ namespace castor3d
 			//@{
 
 			/**
-			 *copydoc		castor3d::UserInputListener::doInitialise
+			 *copydoc		UserInputListener::doInitialise
 			 */
 			bool doInitialise()override
 			{
-				m_handler = doAddHandler( castor::makeUniqueDerived< EventHandler, EvtHandler >( *m_window ) );
+				m_handler = doAddHandler( makeUniqueDerived< EventHandler, EvtHandler >( *m_window ) );
 				return true;
 			}
 			/**
-			 *copydoc		castor3d::UserInputListener::doCleanup
+			 *copydoc		UserInputListener::doCleanup
 			 */
 			void doCleanup()override
 			{
@@ -153,9 +153,9 @@ namespace castor3d
 		 *\param[in]	size	Les dimensions de la fenêtre.
 		 *\param[in]	handle	Le handle de la fenêtre native.
 		 */
-		C3D_API RenderWindow( castor::String const & name
+		C3D_API RenderWindow( String const & name
 			, Engine & engine
-			, castor::Size const & size
+			, Size const & size
 			, ashes::WindowHandle handle );
 		/**
 		 *\~english
@@ -234,7 +234,7 @@ namespace castor3d
 		 *\brief		Redimensionne la fenêtre.
 		 *\param[in]	size	Les nouvelles dimensions.
 		 */
-		C3D_API void resize( castor::Size const & size );
+		C3D_API void resize( Size const & size );
 		/**
 		 *\~english
 		 *\brief		Sets the camera.
@@ -298,7 +298,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les dimensions de la fenêtre.
 		 */
-		C3D_API castor::Size getSize()const;
+		C3D_API Size getSize()const;
 		/**
 		 *\~english
 		 *\return		\p true if stereo is used.
@@ -339,7 +339,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le format des pixels de la fenêtre.
 		 */
-		C3D_API castor::PixelFormat getPixelFormat()const;
+		C3D_API PixelFormat getPixelFormat()const;
 		/**
 		 *\~english
 		 *\brief		Picks a geometry at given mouse position.
@@ -350,7 +350,7 @@ namespace castor3d
 		 *\param[in]	position	La position dans la passe.
 		 *\return		PickNodeType si rien n'a été pické.
 		 */
-		C3D_API PickNodeType pick( castor::Position const & position );
+		C3D_API PickNodeType pick( Position const & position );
 		/**
 		 *\~english
 		 *\brief		Destroys the loading scene.
@@ -366,7 +366,7 @@ namespace castor3d
 		 */
 		C3D_API void createLoadingScreen();
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( AttributeParsers & result );
 		/**
 		*\~english
 		*name
@@ -417,7 +417,7 @@ namespace castor3d
 			return m_skip;
 		}
 
-		castor::PxBufferBaseRPtr getSavedFrame()const noexcept
+		PxBufferBaseRPtr getSavedFrame()const noexcept
 		{
 			return m_saveBuffer.get();
 		}
@@ -521,7 +521,7 @@ namespace castor3d
 
 	private:
 		static uint32_t s_nbRenderWindows;
-		castor::RawUniquePtr< EvtHandler > m_evtHandler;
+		RawUniquePtr< EvtHandler > m_evtHandler;
 		uint32_t m_index{};
 		RenderDevice & m_device;
 		ashes::SurfacePtr m_surface;
@@ -529,32 +529,32 @@ namespace castor3d
 		QueueData const * m_reservedQueue{};
 		ashes::CommandPoolPtr m_commandBufferPool;
 		ashes::SwapChainPtr m_swapChain;
-		castor::Vector< ashes::ImageViewArray > m_swapchainViews;
-		castor::PixelFormat m_swapchainFormat;
+		Vector< ashes::ImageViewArray > m_swapchainViews;
+		PixelFormat m_swapchainFormat;
 		RenderingResourcesArray m_renderingResources;
 		size_t m_resourceIndex{ 0u };
 		crg::ResourcesCache m_resources;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::BufferBasePtr m_snapshotBuffer;
-		castor::ByteArrayView m_snapshotData;
-		castor::Vector< CommandsSemaphore > m_transferCommands;
-		castor::Vector< ashes::FrameBufferPtr > m_frameBuffers;
-		castor::Vector< ashes::CommandBufferPtrArray > m_commandBuffers;
+		ByteArrayView m_snapshotData;
+		Vector< CommandsSemaphore > m_transferCommands;
+		Vector< ashes::FrameBufferPtr > m_frameBuffers;
+		Vector< ashes::CommandBufferPtrArray > m_commandBuffers;
 		ashes::PipelineShaderStageCreateInfoArray m_program;
 		RenderQuadUPtr m_renderQuad;
 		RenderTargetRPtr m_renderTarget{};
 		FrameListenerRPtr m_listener{};
 		bool m_vsync{ false };
 		bool m_fullscreen{ false };
-		castor::Size m_size;
+		Size m_size;
 		bool m_toSave{ false };
-		castor::PixelFormat m_savedFormat{};
+		PixelFormat m_savedFormat{};
 		mutable std::atomic_bool m_initialised{ false };
 		mutable std::atomic_bool m_skip{ false };
 		std::atomic_bool m_loading;
-		castor::PxBufferBaseUPtr m_saveBuffer;
+		PxBufferBaseUPtr m_saveBuffer;
 		PickingUPtr m_picking;
-		castor::Position m_mousePosition;
+		Position m_mousePosition;
 		Texture3DTo2DUPtr m_texture3Dto2D;
 		IntermediateView m_tex3DTo2DIntermediate;
 		IntermediateViewArray m_intermediateBarrierViews;
@@ -562,7 +562,7 @@ namespace castor3d
 		UniformBufferOffsetT< Configuration > m_configUbo;
 		ProgressBarUPtr m_progressBar;
 		LoadingScreenUPtr m_loadingScreen;
-		castor::Mutex m_renderMutex;
+		Mutex m_renderMutex;
 		bool m_allowHdrSwapchain{};
 		bool m_hasHdrSupport{};
 	};
@@ -575,7 +575,7 @@ namespace castor3d
 		RenderWindowDesc window{};
 	};
 
-	C3D_API castor::String getPrefix( WindowContext const & context );
+	C3D_API String getPrefix( WindowContext const & context );
 	C3D_API Engine * getEngine( WindowContext const & context );
 }
 

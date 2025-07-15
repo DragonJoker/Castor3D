@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <functional>
 
-namespace castor
+namespace c3d
 {
 	template< typename CleanFunc >
 	struct BlockGuard

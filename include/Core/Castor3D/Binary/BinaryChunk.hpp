@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include <cstdint>
 #include <cstring>
 
-namespace castor3d
+namespace c3d
 {
 	/**
 	*\~english
@@ -224,7 +224,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( ChunkType & value )
 	{
-		castor::switchEndianness( value );
+		switchEndianness( value );
 	}
 
 	class BinaryChunk
@@ -261,7 +261,7 @@ namespace castor3d
 		 *\brief		Ajoute des données au chunk
 		 *\param[in]	data	Le tampon de données
 		 */
-		C3D_API void add( castor::ByteArray data );
+		C3D_API void add( ByteArray data );
 		/**
 		 *\~english
 		 *\brief		adds data to the chunk
@@ -334,7 +334,7 @@ namespace castor3d
 		 *\param[in]	file	Le fichier
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		C3D_API bool write( castor::BinaryFile & file );
+		C3D_API bool write( BinaryFile & file );
 		/**
 		 *\~english
 		 *\brief		From file reader function
@@ -345,7 +345,7 @@ namespace castor3d
 		 *\param[in]	file	Le fichier qui contient le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		C3D_API bool read( castor::BinaryFile & file );
+		C3D_API bool read( BinaryFile & file );
 		/**
 		 *\~english
 		 *\brief		Retrieves the remaining data
@@ -436,7 +436,7 @@ namespace castor3d
 		}
 
 	private:
-		C3D_API void binaryError( castor::StringView view )const;
+		C3D_API void binaryError( String view )const;
 
 	private:
 		template< typename T >
@@ -472,9 +472,9 @@ namespace castor3d
 
 	private:
 		ChunkType m_type{};
-		castor::ByteArray m_data;
+		ByteArray m_data;
 		uint32_t m_index{};
-		castor::List< castor::ByteArray > m_addedData;
+		List< ByteArray > m_addedData;
 		bool m_isLittleEndian{ true };
 	};
 }

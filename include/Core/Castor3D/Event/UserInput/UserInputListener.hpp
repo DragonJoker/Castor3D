@@ -7,19 +7,19 @@ See LICENSE file in root folder
 #include "Castor3D/Event/UserInput/EventHandler.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	class UserInputListener
-		: public castor::OwnedBy< Engine >
+		: public OwnedBy< Engine >
 	{
 	public:
-		using OnClickActionFunction = castor::Function< void() >;
-		using OnMouseMoveActionFunction = castor::Function< void( castor::Position const & ) >;
-		using OnSelectActionFunction = castor::Function< void( int ) >;
-		using OnTextActionFunction = castor::Function< void( castor::U32String const & ) >;
-		using OnExpandActionFunction = castor::Function< void( bool ) >;
-		using OnClipboardTextActionFunction = castor::Function< castor::U32String( bool, castor::U32String ) >;
-		using OnCursorActionFunction = castor::Function< void( MouseCursor ) >;
+		using OnClickActionFunction = Function< void() >;
+		using OnMouseMoveActionFunction = Function< void( Position const & ) >;
+		using OnSelectActionFunction = Function< void( int ) >;
+		using OnTextActionFunction = Function< void( U32String const & ) >;
+		using OnExpandActionFunction = Function< void( bool ) >;
+		using OnClipboardTextActionFunction = Function< U32String( bool, U32String ) >;
+		using OnCursorActionFunction = Function< void( MouseCursor ) >;
 
 	public:
 		/**@name General */
@@ -39,7 +39,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom du listener.
 		 */
 		C3D_API UserInputListener( Engine & engine
-			, castor::String const & name );
+			, String const & name );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -75,7 +75,7 @@ namespace castor3d
 		/**@name Getters */
 		//@{
 		
-		castor::Position const & getMousePosition()const
+		Position const & getMousePosition()const
 		{
 			return m_mouse.position;
 		}
@@ -109,7 +109,7 @@ namespace castor3d
 		 *\param[in]	handler		Le handler.
 		 *\param[in]	function	La fonction.
 		 */
-		C3D_API void registerMouseMoveAction( castor::String const & handler
+		C3D_API void registerMouseMoveAction( String const & handler
 			, OnMouseMoveActionFunction function );
 		/**
 		 *\~english
@@ -121,7 +121,7 @@ namespace castor3d
 		 *\param[in]	handler		Le handler cliqué.
 		 *\param[in]	function	La fonction.
 		 */
-		C3D_API void registerClickAction( castor::String const & handler
+		C3D_API void registerClickAction( String const & handler
 			, OnClickActionFunction function );
 		/**
 		 *\~english
@@ -133,7 +133,7 @@ namespace castor3d
 		 *\param[in]	handler		Le handler.
 		 *\param[in]	function	La fonction.
 		 */
-		C3D_API void registerSelectAction( castor::String const & handler
+		C3D_API void registerSelectAction( String const & handler
 			, OnSelectActionFunction function );
 		/**
 		 *\~english
@@ -145,7 +145,7 @@ namespace castor3d
 		 *\param[in]	handler		Le handler.
 		 *\param[in]	function	La fonction.
 		 */
-		C3D_API void registerTextAction( castor::String const & handler
+		C3D_API void registerTextAction( String const & handler
 			, OnTextActionFunction function );
 		/**
 		 *\~english
@@ -157,7 +157,7 @@ namespace castor3d
 		 *\param[in]	handler		Le handler.
 		 *\param[in]	function	La fonction.
 		 */
-		C3D_API void registerExpandAction( castor::String const & handler
+		C3D_API void registerExpandAction( String const & handler
 			, OnExpandActionFunction function );
 		/**
 		 *\~english
@@ -185,7 +185,7 @@ namespace castor3d
 		 *\brief		Désenregistre la fonction à appeler lorsqu'un évènement de déplacement de souris est lancé par le handler donné.
 		 *\param[in]	handler	Le handler.
 		 */
-		C3D_API void unregisterMouseMoveAction( castor::String const & handler );
+		C3D_API void unregisterMouseMoveAction( String const & handler );
 		/**
 		 *\~english
 		 *\brief		Unregisters ths function to call when a mouse click event is raised by the given handler.
@@ -194,7 +194,7 @@ namespace castor3d
 		 *\brief		Désenregistre la fonction à appeler lorsqu'un évènement de clic de souris est lancé par le handler donné.
 		 *\param[in]	handler	Le handler cliqué.
 		 */
-		C3D_API void unregisterClickAction( castor::String const & handler );
+		C3D_API void unregisterClickAction( String const & handler );
 		/**
 		 *\~english
 		 *\brief		Unregisters ths function to call when a select event is raised by the given handler.
@@ -203,7 +203,7 @@ namespace castor3d
 		 *\brief		Désenregistre la fonction à appeler lorsqu'un évènement de sélection est lancé par le handler donné.
 		 *\param[in]	handler	Le handler.
 		 */
-		C3D_API void unregisterSelectAction( castor::String const & handler );
+		C3D_API void unregisterSelectAction( String const & handler );
 		/**
 		 *\~english
 		 *\brief		Unregisters ths function to call when a text event is raised by the given handler.
@@ -212,7 +212,7 @@ namespace castor3d
 		 *\brief		Désenregistre la fonction à appeler lorsqu'un évènement de texte est lancé par le handler donné.
 		 *\param[in]	handler	Le handler.
 		 */
-		C3D_API void unregisterTextAction( castor::String const & handler );
+		C3D_API void unregisterTextAction( String const & handler );
 		/**
 		 *\~english
 		 *\brief		Unregisters ths function to call when an expand event is raised by the given handler.
@@ -221,7 +221,7 @@ namespace castor3d
 		 *\brief		Désenregistre la fonction à appeler lorsqu'un évènement d'expansion est lancé par le handler donné.
 		 *\param[in]	handler	Le handler.
 		 */
-		C3D_API void unregisterExpandAction( castor::String const & handler );
+		C3D_API void unregisterExpandAction( String const & handler );
 		/**
 		 *\~english
 		 *\brief		Unregisters the function to call when mouse cursor event is raised by the given handler.
@@ -244,7 +244,7 @@ namespace castor3d
 		 *\brief		Evènement lancé par le handler si la souris est déplacée au dessus de sa surface.
 		 *\param[in]	handler	Le handler.
 		 */
-		C3D_API void onMouseMoveAction( castor::String const & handler )const;
+		C3D_API void onMouseMoveAction( String const & handler )const;
 		/**
 		 *\~english
 		 *\brief		Event raised by the handler when it is clicked, if it supports clicking.
@@ -253,7 +253,7 @@ namespace castor3d
 		 *\brief		Evènement lancé par le handler s'il est cliqué et qu'il le supporte.
 		 *\param[in]	handler	Le handler cliqué.
 		 */
-		C3D_API void onClickAction( castor::String const & handler )const;
+		C3D_API void onClickAction( String const & handler )const;
 		/**
 		 *\~english
 		 *\brief		Event raised by the handler when one of its sub elements is selected.
@@ -264,7 +264,7 @@ namespace castor3d
 		 *\param[in]	handler	Le handler.
 		 *\param[in]	index	L'indice de la sélection.
 		 */
-		C3D_API void onSelectAction( castor::String const & handler
+		C3D_API void onSelectAction( String const & handler
 			, int index )const;
 		/**
 		 *\~english
@@ -276,8 +276,8 @@ namespace castor3d
 		 *\param[in]	handler	Le handler.
 		 *\param[in]	text	Le nouveau texte.
 		 */
-		C3D_API void onTextAction( castor::String const & handler
-			, castor::U32String const & text )const;
+		C3D_API void onTextAction( String const & handler
+			, U32String const & text )const;
 		/**
 		 *\~english
 		 *\brief		Event raised by the handler when its expansion has changed.
@@ -288,7 +288,7 @@ namespace castor3d
 		 *\param[in]	handler	Le handler.
 		 *\param[in]	expand	La nouvelle valeur.
 		 */
-		C3D_API void onExpandAction( castor::String const & handler
+		C3D_API void onExpandAction( String const & handler
 			, bool expand )const;
 		/**
 		 *\~english
@@ -311,8 +311,8 @@ namespace castor3d
 		 *\param[in]	text	La valeur pour le presse-papier.
 		 *\return		Le texte du presse-papier.
 		 */
-		C3D_API castor::U32String onClipboardTextAction( bool set
-			, castor::U32String text )const;
+		C3D_API U32String onClipboardTextAction( bool set
+			, U32String text )const;
 		/**
 		 *\~english
 		 *\brief		Enables handler.
@@ -321,7 +321,7 @@ namespace castor3d
 		 *\brief		Active un handler.
 		 *\param[in]	handler	Le handler.
 		 */
-		C3D_API void enableHandler( castor::String const & handler );
+		C3D_API void enableHandler( String const & handler );
 		/**
 		 *\~english
 		 *\brief		Disables handler.
@@ -330,7 +330,7 @@ namespace castor3d
 		 *\brief		Désactive un handler.
 		 *\param[in]	handler	Le handler.
 		 */
-		C3D_API void disableHandler( castor::String const & handler );
+		C3D_API void disableHandler( String const & handler );
 
 		//@}
 		/**@name Mouse input events */
@@ -352,7 +352,7 @@ namespace castor3d
 		 *\param[in]	shift		Dit si la touche Shift est enfoncée.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API bool fireMouseMove( castor::Position const & position
+		C3D_API bool fireMouseMove( Position const & position
 			, bool ctrl
 			, bool alt
 			, bool shift );
@@ -412,7 +412,7 @@ namespace castor3d
 		 *\param[in]	shift	Dit si la touche Shift est enfoncée.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API bool fireMouseWheel( castor::Position const & offsets
+		C3D_API bool fireMouseWheel( Position const & offsets
 			, bool ctrl
 			, bool alt
 			, bool shift );
@@ -474,7 +474,7 @@ namespace castor3d
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
 		C3D_API bool fireChar( KeyboardKey key
-			, castor::String const & c );
+			, String const & c );
 
 		//@}
 
@@ -485,10 +485,10 @@ namespace castor3d
 		 *\~french
 		 *\return		Les gestionnaires, de manière thread-safe.
 		 */
-		inline castor::Vector< EventHandlerRPtr > doGetHandlers()const
+		inline Vector< EventHandlerRPtr > doGetHandlers()const
 		{
-			auto lock( castor::makeUniqueLock( m_mutexHandlers ) );
-			castor::Vector< EventHandlerRPtr > result;
+			auto lock( makeUniqueLock( m_mutexHandlers ) );
+			Vector< EventHandlerRPtr > result;
 
 			for ( auto & h : m_handlers )
 			{
@@ -505,7 +505,7 @@ namespace castor3d
 		 */
 		inline bool doHasHandlers()const
 		{
-			auto lock( castor::makeUniqueLock( m_mutexHandlers ) );
+			auto lock( makeUniqueLock( m_mutexHandlers ) );
 			return !m_handlers.empty();
 		}
 		/**
@@ -520,7 +520,7 @@ namespace castor3d
 		 */
 		inline EventHandlerRPtr doAddHandler( EventHandlerUPtr handler )
 		{
-			auto lock( castor::makeUniqueLock( m_mutexHandlers ) );
+			auto lock( makeUniqueLock( m_mutexHandlers ) );
 
 			if ( std::find( std::begin( m_handlers ), std::end( m_handlers ), handler ) != std::end( m_handlers ) )
 			{
@@ -528,7 +528,7 @@ namespace castor3d
 			}
 
 			auto result = handler.get();
-			m_handlers.push_back( castor::move( handler ) );
+			m_handlers.push_back( c3d::move( handler ) );
 			return result;
 		}
 		/**
@@ -550,7 +550,7 @@ namespace castor3d
 
 			if ( it != m_handlers.end() )
 			{
-				auto h = castor::move( *it );
+				auto h = c3d::move( *it );
 				m_handlers.erase( it );
 			}
 		}
@@ -564,7 +564,7 @@ namespace castor3d
 		 */
 		inline void doRemoveHandler( EventHandler const & handler )
 		{
-			auto lock( castor::makeUniqueLock( m_mutexHandlers ) );
+			auto lock( makeUniqueLock( m_mutexHandlers ) );
 			doRemoveHandlerNL( handler );
 		}
 
@@ -579,13 +579,13 @@ namespace castor3d
 		 *\param[in]	position	la position de la souris.
 		 *\return		Le gestionnaire, \p nullptr si aucun.
 		 */
-		virtual EventHandlerRPtr doGetMouseTargetableHandler( castor::Position const & position )const = 0;
+		virtual EventHandlerRPtr doGetMouseTargetableHandler( Position const & position )const = 0;
 		/**
-		 *copydoc		castor3d::UserInputListener::Initialise
+		 *copydoc		UserInputListener::Initialise
 		 */
 		virtual bool doInitialise() = 0;
 		/**
-		 *copydoc		castor3d::UserInputListener::Cleanup
+		 *copydoc		UserInputListener::Cleanup
 		 */
 		virtual void doCleanup() = 0;
 		/**
@@ -598,10 +598,10 @@ namespace castor3d
 	protected:
 		//!\~english	The mutex used to protect the handlers array.
 		//!\~french		Le mutex de protection du tableau de gestionnaires.
-		mutable castor::Mutex m_mutexHandlers;
+		mutable Mutex m_mutexHandlers;
 		//!\~english	The handlers array.
 		//!\~french		Le tableau de gestionnaires.
-		castor::Vector< EventHandlerUPtr > m_handlers;
+		Vector< EventHandlerUPtr > m_handlers;
 		//!\~english	The associated frame listener.
 		//!\~french		Le frame listener associé.
 		FrameListenerRPtr m_frameListener;
@@ -612,11 +612,11 @@ namespace castor3d
 		bool m_enabled{};
 		EventHandlerRPtr m_activeHandler{};
 		EventHandlerRPtr m_lastMouseTarget{};
-		castor::StringMap< OnMouseMoveActionFunction > m_onMouseMoveActions;
-		castor::StringMap< OnClickActionFunction > m_onClickActions;
-		castor::StringMap< OnSelectActionFunction > m_onSelectActions;
-		castor::StringMap< OnTextActionFunction > m_onTextActions;
-		castor::StringMap< OnExpandActionFunction > m_onExpandActions;
+		StringMap< OnMouseMoveActionFunction > m_onMouseMoveActions;
+		StringMap< OnClickActionFunction > m_onClickActions;
+		StringMap< OnSelectActionFunction > m_onSelectActions;
+		StringMap< OnTextActionFunction > m_onTextActions;
+		StringMap< OnExpandActionFunction > m_onExpandActions;
 		OnCursorActionFunction m_onCursorAction;
 		OnClipboardTextActionFunction m_onClipboardTextAction;
 	};

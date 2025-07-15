@@ -8,10 +8,10 @@ See LICENSE file in root folder
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-namespace castor3d
+namespace c3d
 {
-	C3D_API castor::AdditionalParsers createSceneFileParsers( Engine const & engine );
-	C3D_API castor::StrUInt32Map registerSceneFileSections();
+	C3D_API AdditionalParsers createSceneFileParsers( Engine const & engine );
+	C3D_API StrUInt32Map registerSceneFileSections();
 	C3D_API uint32_t getSceneFileRootSection();
 }
 

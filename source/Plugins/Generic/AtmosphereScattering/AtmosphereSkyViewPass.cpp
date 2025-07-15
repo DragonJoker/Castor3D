@@ -30,9 +30,9 @@ namespace atmosphere_scattering
 			eTransmittance,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
-			, castor3d::Extent3D const & renderSize
-			, castor3d::Extent3D const & transmittanceExtent )
+		static c3d::ShaderPtr getProgram( c3d::Engine & engine
+			, c3d::Extent3D const & renderSize
+			, c3d::Extent3D const & transmittanceExtent )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
@@ -53,7 +53,7 @@ namespace atmosphere_scattering
 			auto planetRadiusOffset = writer.declConstant( "planetRadiusOffset"
 				, 0.01_f );
 
-			writer.implementEntryPointT< c3d::Position2FT, sdw::VoidT >( [&]( sdw::VertexInT< c3d::Position2FT > in
+			writer.implementEntryPointT< c3ds::Position2FT, sdw::VoidT >( [&]( sdw::VertexInT< c3ds::Position2FT > in
 				, sdw::VertexOut out )
 				{
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
@@ -61,15 +61,15 @@ namespace atmosphere_scattering
 
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
-				, AtmosphereModel::Settings{ castor::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
+				, AtmosphereModel::Settings{ c3d::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
 					.setCameraData( &atm_cameraData )
 					.setVariableSampleCount( true )
 					.setMieRayPhase( true )
 				, { transmittanceExtent.width, transmittanceExtent.height } };
 			atmosphere.setTransmittanceMap( transmittanceMap );
 
-			writer.implementEntryPointT< sdw::VoidT, c3d::Colour4FT >( [&]( sdw::FragmentIn in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< sdw::VoidT, c3ds::Colour4FT >( [&]( sdw::FragmentIn in
+				, sdw::FragmentOutT< c3ds::Colour4FT > out )
 				{
 					auto targetSize = writer.declLocale( "targetSize"
 						, vec2( sdw::Float{ float( renderSize.width + 1u ) }, float( renderSize.height + 1u ) ) );
@@ -135,19 +135,19 @@ namespace atmosphere_scattering
 
 	AtmosphereSkyViewPass::AtmosphereSkyViewPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, CameraUbo const & cameraUbo
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, crg::ImageViewId const & transmittanceView
 		, crg::ImageViewId const & resultView
 		, uint32_t index
 		, bool const & enabled )
-		: castor::Named{ cuT( "SkyViewPass" ) + castor::string::toString( index ) }
+		: c3d::Named{ cuT( "SkyViewPass" ) + c3d::string::toString( index ) }
 		, m_shader{ getName(), skyview::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ), getExtent( transmittanceView ) ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		auto renderSize = getExtent( resultView );
-		auto & pass = graph.createPass( castor::toUtf8( getName() )
+		auto & pass = graph.createPass( c3d::toUtf8( getName() )
 			, [this, &device, &enabled, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -158,7 +158,7 @@ namespace atmosphere_scattering
 					.instances( renderSize.depth )
 					.enabled( &enabled )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -167,8 +167,8 @@ namespace atmosphere_scattering
 			, skyview::eCamera );
 		atmosphereUbo.createPassBinding( pass
 			, skyview::eAtmosphere );
-		crg::SamplerDesc linearSampler{ castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear };
+		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
+			, c3d::FilterMode::eLinear };
 		pass.addSampledView( transmittanceView
 			, skyview::eTransmittance
 			, linearSampler );
@@ -176,7 +176,7 @@ namespace atmosphere_scattering
 		m_lastPass = &pass;
 	}
 
-	void AtmosphereSkyViewPass::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void AtmosphereSkyViewPass::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 	}

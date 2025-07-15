@@ -21,7 +21,7 @@ namespace light_streaks
 {
 	namespace combine
 	{
-		namespace c3d = castor3d::shader;
+		namespace c3ds = c3d::shader;
 
 		enum Idx
 		{
@@ -29,22 +29,22 @@ namespace light_streaks
 			KawaseMapIdx,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
+		static c3d::ShaderPtr getProgram( c3d::RenderDevice const & device )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba32 >( CombinePass::CombineMapScene, SceneMapIdx, 0u );
 			auto c3d_mapKawase = writer.declCombinedImg< FImg2DArrayRgba32 >( CombinePass::CombineMapKawase, KawaseMapIdx, 0u );
 
-			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
-				, sdw::VertexOutT< c3d::Uv2FT > out )
+			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
+				, sdw::VertexOutT< c3ds::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< c3ds::Uv2FT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< c3ds::Uv2FT > in
+				, sdw::FragmentOutT< c3ds::Colour4FT > out )
 				{
 					out.colour() = c3d_mapScene.sample( in.uv() );
 					out.colour() += c3d_mapKawase.sample( vec3( in.uv(), 0.0f ) );
@@ -58,16 +58,16 @@ namespace light_streaks
 
 	//*********************************************************************************************
 
-	castor::MbString const CombinePass::CombineMapScene = "c3d_mapScene";
-	castor::MbString const CombinePass::CombineMapKawase = "c3d_mapKawase";
+	c3d::MbString const CombinePass::CombineMapScene = "c3d_mapScene";
+	c3d::MbString const CombinePass::CombineMapKawase = "c3d_mapKawase";
 
 	CombinePass::CombinePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
-		, castor3d::RenderDevice const & device
+		, c3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & sceneView
 		, crg::ImageViewIdArray const & kawaseViews
 		, crg::ImageViewIdArray const & resultView
-		, castor3d::Extent2D const & size
+		, c3d::Extent2D const & size
 		, bool const * enabled
 		, uint32_t const * passIndex )
 		: m_shader{ cuT( "LightStreaksCombine" ), combine::getProgram( device ) }
@@ -88,17 +88,17 @@ namespace light_streaks
 						, context
 						, graph
 						, crg::ru::Config{ 2u } );
-				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }
 	{
-		crg::SamplerDesc linearSampler{ castor3d::FilterMode::eLinear
-			, castor3d::FilterMode::eLinear
-			, castor3d::MipmapMode::eNearest
-			, castor3d::WrapMode::eClampToEdge
-			, castor3d::WrapMode::eClampToEdge
-			, castor3d::WrapMode::eClampToEdge };
+		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
+			, c3d::FilterMode::eLinear
+			, c3d::MipmapMode::eNearest
+			, c3d::WrapMode::eClampToEdge
+			, c3d::WrapMode::eClampToEdge
+			, c3d::WrapMode::eClampToEdge };
 		m_pass.addDependencies( previousPasses );
 		m_pass.addSampledView( sceneView
 			, combine::SceneMapIdx
@@ -109,7 +109,7 @@ namespace light_streaks
 		m_pass.addOutputColourView( resultView );
 	}
 
-	void CombinePass::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void CombinePass::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
 	}

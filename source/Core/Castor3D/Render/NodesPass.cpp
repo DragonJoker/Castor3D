@@ -19,16 +19,16 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 
-CU_ImplementSmartPtr( castor3d, NodesPass )
-CU_ImplementSmartPtr( castor3d, IsNodesPassEnabled )
+CU_ImplementSmartPtr( c3d, NodesPass )
+CU_ImplementSmartPtr( c3d, IsNodesPassEnabled )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 	namespace rendndpass
 	{
-		static const castor::String Suffix = cuT( "/NodesPass" );
+		static const String Suffix = cuT( "/NodesPass" );
 
 		static SceneFlags adjustSceneFlags( SceneFlags sceneFlags
 			, IndirectLightingData const & indirectLighting )
@@ -57,23 +57,23 @@ namespace castor3d
 	//*********************************************************************************************
 
 	NodesPass::NodesPass( RenderDevice const & device
-		, castor::String const & categoryName
-		, castor::String const & typeName
-		, castor::String const & fullName
+		, String const & categoryName
+		, String const & typeName
+		, String const & fullName
 		, crg::ImageViewIdArray targetImage
 		, crg::ImageViewIdArray targetDepth
 		, NodesPassDesc const & desc )
-		: castor::OwnedBy< Engine >{ *device.renderSystem.getEngine() }
-		, castor::Named{ castor::makeString( fullName ) }
+		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
+		, Named{ makeString( fullName ) }
 		, m_device{ device }
 		, m_renderSystem{ m_device.renderSystem }
 		, m_cameraUbo{ desc.m_cameraUbo }
-		, m_targetImage{ castor::move( targetImage ) }
-		, m_targetDepth{ castor::move( targetDepth ) }
+		, m_targetImage{ c3d::move( targetImage ) }
+		, m_targetDepth{ c3d::move( targetDepth ) }
 		, m_typeName{ typeName }
 		, m_typeID{ getEngine()->getRenderPassTypeID( m_typeName ) }
 		, m_filters{ desc.m_filters }
-		, m_category{ castor::makeString( categoryName ) }
+		, m_category{ makeString( categoryName ) }
 		, m_size{ desc.m_size.width, desc.m_size.height }
 		, m_safeBand{ desc.m_safeBand }
 		, m_sceneUbo{ desc.m_sceneUbo }

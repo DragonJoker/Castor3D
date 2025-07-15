@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Buffer/UniformBuffer.hpp>
 
-namespace castor3d
+namespace c3d
 {
 	class ShadowMapPassPoint
 		: public ShadowMapPass
@@ -61,7 +61,7 @@ namespace castor3d
 		 */
 		C3D_API ~ShadowMapPassPoint()noexcept override;
 
-		C3D_API void updateFrustum( castor::Matrix4x4f const & viewMatrix )const;
+		C3D_API void updateFrustum( Matrix4x4f const & viewMatrix )const;
 
 		auto & getProjection()const noexcept
 		{
@@ -86,11 +86,11 @@ namespace castor3d
 		}
 
 	public:
-		C3D_API static castor::String const Type;
+		C3D_API static String const Type;
 
 	private:
 		OnSceneNodeChangedConnection m_onNodeChanged;
-		castor::Matrix4x4f m_projection;
+		Matrix4x4f m_projection;
 		uint32_t m_count{};
 	};
 }

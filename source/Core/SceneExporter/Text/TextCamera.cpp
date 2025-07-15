@@ -7,10 +7,8 @@
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
 
-namespace castor
+namespace c3d
 {
-	using namespace castor3d;
-
 	TextWriter< Camera >::TextWriter( String const & tabs )
 		: TextWriterT< Camera >{ tabs }
 	{

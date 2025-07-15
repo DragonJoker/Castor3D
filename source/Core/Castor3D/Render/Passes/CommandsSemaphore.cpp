@@ -2,21 +2,21 @@
 
 #include "Castor3D/Render/RenderDevice.hpp"
 
-namespace castor3d
+namespace c3d
 {
 	CommandsSemaphore::CommandsSemaphore( ashes::CommandBufferPtr commandBuffer
 		, ashes::SemaphorePtr semaphore )
-		: commandBuffer{ castor::move( commandBuffer ) }
-		, semaphore{ castor::move( semaphore ) }
+		: commandBuffer{ c3d::move( commandBuffer ) }
+		, semaphore{ c3d::move( semaphore ) }
 	{
 	}
 
 	CommandsSemaphore::CommandsSemaphore( RenderDevice const & device
 		, QueueData const & queueData
-		, castor::String const & name
+		, String const & name
 		, VkCommandBufferLevel level )
-		: CommandsSemaphore{ queueData.commandPool->createCommandBuffer( castor::toUtf8( name ), level )
-			, device->createSemaphore( castor::toUtf8( name ) ) }
+		: CommandsSemaphore{ queueData.commandPool->createCommandBuffer( toUtf8( name ), level )
+			, device->createSemaphore( toUtf8( name ) ) }
 	{
 	}
 

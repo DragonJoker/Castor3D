@@ -8,15 +8,15 @@
 
 #include <RenderGraph/FramePass.hpp>
 
-CU_ImplementSmartPtr( castor3d, ShaderAppendBuffer )
+CU_ImplementSmartPtr( c3d, ShaderAppendBuffer )
 
-namespace castor3d
+namespace c3d
 {
 	//*********************************************************************************************
 
 	ShaderAppendBuffer::ShaderAppendBuffer( RenderDevice const & device
 		, VkDeviceSize size
-		, castor::String const & name )
+		, String const & name )
 		: m_device{ device }
 		, m_size{ ashes::getAlignedSize( size + sizeof( uint32_t )
 			, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) }

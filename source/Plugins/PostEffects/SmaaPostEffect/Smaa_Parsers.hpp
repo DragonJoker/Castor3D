@@ -8,8 +8,8 @@ See LICENSE file in root folder
 
 namespace smaa
 {
-	castor::AttributeParsers createParsers();
-	castor::StrUInt32Map createSections();
+	c3d::AttributeParsers createParsers();
+	c3d::StrUInt32Map createSections();
 }
 
 #endif
