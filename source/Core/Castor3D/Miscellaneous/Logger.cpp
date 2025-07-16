@@ -7,6 +7,13 @@ See LICENSE file in root folder
 
 #include <RenderGraph/Log.hpp>
 
+#if defined( CU_UseWChar )
+#	include <wchar.h>
+#	define c3dvsprintf vswprintf_s
+#else
+#	define c3dvsprintf vsprintf_s
+#endif
+
 namespace c3d
 {
 	LoggerInstance * log::m_logger{ nullptr };
@@ -113,5 +120,85 @@ namespace c3d
 		warn.reset();
 		error.reset();
 		m_logger = nullptr;
+	}
+
+	void log::printTrace( xchar const * fmt, ... )
+	{
+		if ( fmt )
+		{
+			Array< xchar, 1024u > text;
+			memset( text.data(), 0, sizeof( xchar ) * 1024 );
+
+			va_list ap;
+			va_start( ap, fmt );
+			c3dvsprintf( text.data(), 1023, fmt, ap );
+			va_end( ap );
+
+			trace << text.data();
+		}
+	}
+
+	void log::printDebug( xchar const * fmt, ... )
+	{
+		if ( fmt )
+		{
+			Array< xchar, 1024u > text;
+			memset( text.data(), 0, sizeof( xchar ) * 1024 );
+
+			va_list ap;
+			va_start( ap, fmt );
+			c3dvsprintf( text.data(), 1023, fmt, ap );
+			va_end( ap );
+
+			debug << text.data();
+		}
+	}
+
+	void log::printInfo( xchar const * fmt, ... )
+	{
+		if ( fmt )
+		{
+			Array< xchar, 1024u > text;
+			memset( text.data(), 0, sizeof( xchar ) * 1024 );
+
+			va_list ap;
+			va_start( ap, fmt );
+			c3dvsprintf( text.data(), 1023, fmt, ap );
+			va_end( ap );
+
+			info << text.data();
+		}
+	}
+
+	void log::printWarn( xchar const * fmt, ... )
+	{
+		if ( fmt )
+		{
+			Array< xchar, 1024u > text;
+			memset( text.data(), 0, sizeof( xchar ) * 1024 );
+
+			va_list ap;
+			va_start( ap, fmt );
+			c3dvsprintf( text.data(), 1023, fmt, ap );
+			va_end( ap );
+
+			warn << text.data();
+		}
+	}
+
+	void log::printError( xchar const * fmt, ... )
+	{
+		if ( fmt )
+		{
+			Array< xchar, 1024u > text;
+			memset( text.data(), 0, sizeof( xchar ) * 1024 );
+
+			va_list ap;
+			va_start( ap, fmt );
+			c3dvsprintf( text.data(), 1023, fmt, ap );
+			va_end( ap );
+
+			error << text.data();
+		}
 	}
 }

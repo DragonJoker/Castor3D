@@ -22,6 +22,12 @@ namespace c3d
 		static LoggerInstance * m_logger;
 
 	public:
+		C3D_API static void printTrace( xchar const * fmt, ... );
+		C3D_API static void printDebug( xchar const * fmt, ... );
+		C3D_API static void printInfo( xchar const * fmt, ... );
+		C3D_API static void printWarn( xchar const * fmt, ... );
+		C3D_API static void printError( xchar const * fmt, ... );
+
 		C3D_API static LoggerStreamT< xchar, TraceLoggerStreambufT > trace;
 		C3D_API static LoggerStreamT< xchar, DebugLoggerStreambufT > debug;
 		C3D_API static LoggerStreamT< xchar, InfoLoggerStreambufT > info;
