@@ -157,6 +157,78 @@ namespace c3d::shader
 			return function( pa, pb, pc );
 		}
 
+		template< typename ReturnT, typename FuncT, typename DerivT >
+		sdw::ReturnWrapperT< ReturnT > apply( FuncT func, std::string const & name
+			, DerivT const & pa, sdw::Vec2 const & pb, sdw::Vec2 const & pc )
+		{
+			auto & writer = sdw::findWriterMandat( pa, pb, pc );
+			auto function = writer.template implementFunction< ReturnT >( name
+				, [&writer, func]( DerivT const & a
+					, sdw::Vec2 const & b
+					, sdw::Vec2 const & c )
+				{
+					auto a00 = writer.declLocale( "a00", a.value() );
+					auto a10 = writer.declLocale( "a10", a.value() + a.dPdx() );
+					auto a01 = writer.declLocale( "a01", a.value() + a.dPdy() );
+					auto r00 = writer.declLocale( "r00", func( a00, b, c ) );
+					auto r10 = writer.declLocale( "r10", func( a10, b, c ) );
+					auto r01 = writer.declLocale( "r01", func( a01, b, c ) );
+					writer.returnStmt( ReturnT{ r00, r10 - r00, r01 - r00 } );
+				}
+				, sdw::InParam< DerivT >{ writer, "a" }
+				, sdw::InParam< sdw::Vec2 >{ writer, "b" }
+				, sdw::InParam< sdw::Vec2 >{ writer, "c" } );
+			return function( pa, pb, pc );
+		}
+
+		template< typename ReturnT, typename FuncT, typename DerivT >
+		sdw::ReturnWrapperT< ReturnT > apply( FuncT func, std::string const & name
+			, DerivT const & pa, sdw::Vec3 const & pb, sdw::Vec3 const & pc )
+		{
+			auto & writer = sdw::findWriterMandat( pa, pb, pc );
+			auto function = writer.template implementFunction< ReturnT >( name
+				, [&writer, func]( DerivT const & a
+					, sdw::Vec3 const & b
+					, sdw::Vec3 const & c )
+				{
+					auto a00 = writer.declLocale( "a00", a.value() );
+					auto a10 = writer.declLocale( "a10", a.value() + a.dPdx() );
+					auto a01 = writer.declLocale( "a01", a.value() + a.dPdy() );
+					auto r00 = writer.declLocale( "r00", func( a00, b, c ) );
+					auto r10 = writer.declLocale( "r10", func( a10, b, c ) );
+					auto r01 = writer.declLocale( "r01", func( a01, b, c ) );
+					writer.returnStmt( ReturnT{ r00, r10 - r00, r01 - r00 } );
+				}
+				, sdw::InParam< DerivT >{ writer, "a" }
+				, sdw::InParam< sdw::Vec3 >{ writer, "b" }
+				, sdw::InParam< sdw::Vec3 >{ writer, "c" } );
+			return function( pa, pb, pc );
+		}
+
+		template< typename ReturnT, typename FuncT, typename DerivT >
+		sdw::ReturnWrapperT< ReturnT > apply( FuncT func, std::string const & name
+			, DerivT const & pa, sdw::Vec4 const & pb, sdw::Vec4 const & pc )
+		{
+			auto & writer = sdw::findWriterMandat( pa, pb, pc );
+			auto function = writer.template implementFunction< ReturnT >( name
+				, [&writer, func]( DerivT const & a
+					, sdw::Vec4 const & b
+					, sdw::Vec4 const & c )
+				{
+					auto a00 = writer.declLocale( "a00", a.value() );
+					auto a10 = writer.declLocale( "a10", a.value() + a.dPdx() );
+					auto a01 = writer.declLocale( "a01", a.value() + a.dPdy() );
+					auto r00 = writer.declLocale( "r00", func( a00, b, c ) );
+					auto r10 = writer.declLocale( "r10", func( a10, b, c ) );
+					auto r01 = writer.declLocale( "r01", func( a01, b, c ) );
+					writer.returnStmt( ReturnT{ r00, r10 - r00, r01 - r00 } );
+				}
+				, sdw::InParam< DerivT >{ writer, "a" }
+				, sdw::InParam< sdw::Vec4 >{ writer, "b" }
+				, sdw::InParam< sdw::Vec4 >{ writer, "c" } );
+			return function( pa, pb, pc );
+		}
+
 		template< typename FuncT, typename ValueT, typename ValueU, sdw::StringLiteralT StructNameT >
 		DerivativeValueT< ValueU, StructNameT > applyOp( FuncT func, std::string const & name
 			, ValueT const & pa, DerivativeValueT< ValueU, StructNameT > const & pb )
@@ -357,6 +429,30 @@ namespace c3d::shader
 	{
 		using Func = sdw::RetVec4( * )( sdw::Vec4 const, sdw::Vec4 const, sdw::Vec4 const );
 		return deriv::apply< DerivVec4, Func >( sdw::fma, "derivFma4", a, b, c );
+	}
+
+	RetDerivFloat fma( DerivFloat const a, sdw::Float const b, sdw::Float const c )
+	{
+		using Func = sdw::RetFloat( * )( sdw::Float const, sdw::Float const, sdw::Float const );
+		return deriv::apply< DerivFloat, Func >( sdw::fma, "nderivFma1", a, b, c );
+	}
+
+	RetDerivVec2 fma( DerivVec2 const a, sdw::Vec2 const b, sdw::Vec2 const c )
+	{
+		using Func = sdw::RetVec2( * )( sdw::Vec2 const, sdw::Vec2 const, sdw::Vec2 const );
+		return deriv::apply< DerivVec2, Func >( sdw::fma, "nderivFma2", a, b, c );
+	}
+
+	RetDerivVec3 fma( DerivVec3 const a, sdw::Vec3 const b, sdw::Vec3 const c )
+	{
+		using Func = sdw::RetVec3( * )( sdw::Vec3 const, sdw::Vec3 const, sdw::Vec3 const );
+		return deriv::apply< DerivVec3, Func >( sdw::fma, "nderivFma3", a, b, c );
+	}
+
+	RetDerivVec4 fma( DerivVec4 const a, sdw::Vec4 const b, sdw::Vec4 const c )
+	{
+		using Func = sdw::RetVec4( * )( sdw::Vec4 const, sdw::Vec4 const, sdw::Vec4 const );
+		return deriv::apply< DerivVec4, Func >( sdw::fma, "nderivFma4", a, b, c );
 	}
 
 	sdw::Float fwidth( DerivFloat const a )

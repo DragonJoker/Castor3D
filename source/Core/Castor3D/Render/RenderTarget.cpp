@@ -887,14 +887,10 @@ namespace c3d
 		CU_Require( m_culler );
 		m_culler->update( updater );
 		m_renderTechnique->update( updater );
-		auto jitter = updater.jitter;
-		auto jitterProjSpace = jitter * 2.0f;
-		jitterProjSpace[0] /= float( camera.getWidth() );
-		jitterProjSpace[1] /= float( camera.getHeight() );
 		m_cameraUbo.cpuUpdate( camera
 			, updater.debugIndex
 			, true
-			, jitterProjSpace );
+			, updater.jitter );
 
 		m_overlayPass->update( updater );
 
@@ -943,6 +939,7 @@ namespace c3d
 
 		auto & camera = *getCamera();
 		auto & scene = *getScene();
+		updater.renderSize = m_renderSize;
 		updater.jitter = m_jitter;
 		updater.scene = &scene;
 		updater.camera = &camera;

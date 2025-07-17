@@ -14,9 +14,9 @@ See LICENSE file in root folder
 
 namespace smaa
 {
-	c3d::String getName( Mode mode );
-	c3d::String getName( Preset preset );
-	c3d::String getName( EdgeDetectionType detection );
+	c3d::StringView getName( Mode mode );
+	c3d::StringView getName( Preset preset );
+	c3d::StringView getName( EdgeDetectionType detection );
 
 	class PostEffect
 		: public c3d::PostEffect

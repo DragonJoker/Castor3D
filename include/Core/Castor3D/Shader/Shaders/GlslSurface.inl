@@ -345,8 +345,8 @@ namespace c3d::shader
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
 		: SurfaceBaseT< Position3T, Position4T, Normal3T >{ writer, c3d::move( expr ), enabled }
-		, curPosition{ this->template getMember< Position4T >( "curPosition", true ) }
-		, prvPosition{ this->template getMember< Position4T >( "prvPosition", true ) }
+		, curPosition{ this->template getMember< Position3T >( "curPosition", true ) }
+		, prvPosition{ this->template getMember< Position3T >( "prvPosition", true ) }
 		, tangentSpaceFragPosition{ this->template getMember< Position3T >( "tangentSpaceFragPosition", true ) }
 		, tangentSpaceViewPosition{ this->template getMember< sdw::Vec3 >( "tangentSpaceViewPosition", true ) }
 		, tangent{ this->template getMember< Normal4T >( "tangent", true ) }
@@ -357,29 +357,6 @@ namespace c3d::shader
 		, vertexId{ this->template getMember< sdw::UInt >( "vertexId", true ) }
 		, meshletId{ this->template getMember< sdw::UInt >( "meshletId", true ) }
 	{
-	}
-
-	template< typename Position3T, typename Position4T, typename Normal3T, typename Normal4T >
-	void RasterizerSurfaceBaseT< Position3T, Position4T, Normal3T, Normal4T >::computeVelocity( CameraData const & cameraData
-		, Position4T & csCurPos
-		, Position4T & csPrvPos )
-	{
-		// Convert the jitter from non-homogeneous coordinates to homogeneous
-		// coordinates and add it:
-		// (note that for providing the jitter in non-homogeneous projection space,
-		//  pixel coordinates (screen space) need to multiplied by two in the C++
-		//  code)
-		cameraData.jitter( csCurPos );
-		cameraData.jitter( csPrvPos );
-
-		curPosition = SurfaceBaseT< Position3T, Position4T, Normal3T >::makePosition4( shader::getXYW( csCurPos ) );
-		prvPosition = SurfaceBaseT< Position3T, Position4T, Normal3T >::makePosition4( shader::getXYW( csPrvPos ) );
-
-		// Positions in projection space are in [-1, 1] range, while texture
-		// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in
-		// the scale (and flip the y axis):
-		shader::mulXY( curPosition, vec2( 0.5_f, -0.5_f ) );
-		shader::mulXY( prvPosition, vec2( 0.5_f, -0.5_f ) );
 	}
 
 	template< typename Position3T, typename Position4T, typename Normal3T, typename Normal4T >
@@ -514,9 +491,14 @@ namespace c3d::shader
 	}
 
 	template< typename Position3T, typename Position4T, typename Normal3T, typename Normal4T >
-	sdw::Vec2 RasterizerSurfaceBaseT< Position3T, Position4T, Normal3T, Normal4T >::getVelocity()const
+	sdw::Vec2 RasterizerSurfaceBaseT< Position3T, Position4T, Normal3T, Normal4T >::getMotionVector( sdw::Vec2 const & renderSize )const
 	{
-		return ( curPosition.xy() / curPosition.z() ) - ( prvPosition.xy() / prvPosition.z() );
+		auto & writer = *this->getWriter();
+		auto curPositionScreenSpace = writer.declLocale( "curPositionScreenSpace"
+			, renderSize * shader::fma( ( curPosition.xy() / curPosition.z() ), vec2( 0.5_f, -0.5_f ), vec2( 0.5_f, 0.5_f ) ) );
+		auto prvPositionScreenSpace = writer.declLocale( "prvPositionScreenSpace"
+			, renderSize * shader::fma( ( prvPosition.xy() / prvPosition.z() ), vec2( 0.5_f, -0.5_f ), vec2( 0.5_f, 0.5_f ) ) );
+		return curPositionScreenSpace - prvPositionScreenSpace;
 	}
 
 	template< typename Position3T, typename Position4T, typename Normal3T, typename Normal4T >
@@ -571,12 +553,12 @@ namespace c3d::shader
 			, ( flags.enableMeshletID() ? index++ : 0 )
 			, flags.enableMeshletID() );
 		type.declMember( "curPosition"
-			, Position4T::makeType( type.getTypesCache() )
+			, Position3T::makeType( type.getTypesCache() )
 			, ast::type::NotArray
 			, ( flags.writeVelocity() ? index++ : 0 )
 			, flags.writeVelocity() );
 		type.declMember( "prvPosition"
-			, Position4T::makeType( type.getTypesCache() )
+			, Position3T::makeType( type.getTypesCache() )
 			, ast::type::NotArray
 			, ( flags.writeVelocity() ? index++ : 0 )
 			, flags.writeVelocity() );
@@ -636,11 +618,11 @@ namespace c3d::shader
 			, ast::type::NotArray
 			, flags.enableMeshletID() );
 		type.declMember( "curPosition"
-			, Position4T::makeType( type.getTypesCache() )
+			, Position3T::makeType( type.getTypesCache() )
 			, ast::type::NotArray
 			, flags.writeVelocity() );
 		type.declMember( "prvPosition"
-			, Position4T::makeType( type.getTypesCache() )
+			, Position3T::makeType( type.getTypesCache() )
 			, ast::type::NotArray
 			, flags.writeVelocity() );
 		type.declMember( "tangentSpaceFragPosition"
@@ -681,9 +663,9 @@ namespace c3d::shader
 			, ast::type::NotArray );
 		type.declMember( "meshletId", ast::type::Kind::eUInt
 			, ast::type::NotArray );
-		type.declMember( "curPosition", Position4T::makeType( type.getTypesCache() )
+		type.declMember( "curPosition", Position3T::makeType( type.getTypesCache() )
 			, ast::type::NotArray );
-		type.declMember( "prvPosition", Position4T::makeType( type.getTypesCache() )
+		type.declMember( "prvPosition", Position3T::makeType( type.getTypesCache() )
 			, ast::type::NotArray );
 		type.declMember( "tangentSpaceFragPosition", Position3T::makeType( type.getTypesCache() )
 			, ast::type::NotArray );

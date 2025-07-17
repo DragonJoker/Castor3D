@@ -203,15 +203,12 @@ namespace c3d
 				, sceneBoundingBox.getMax()->y
 				, -1.0f * sceneBoundingBox.getMin()->z
 				, -1.0f * sceneBoundingBox.getMax()->z );
-			auto jitterProjSpace = updater.jitter * 2.0f;
-			jitterProjSpace[0] /= float( camera.getWidth() );
-			jitterProjSpace[1] /= float( camera.getHeight() );
 			m_cameraUbo.cpuUpdate( camera
 				, identity
 				, ortho
 				, updater.debugIndex
 				, true
-				, jitterProjSpace );
+				, updater.jitter );
 			m_voxelizerUbo.cpuUpdate( m_voxelConfig
 				, voxelSize
 				, m_voxelConfig.gridSize.value() );

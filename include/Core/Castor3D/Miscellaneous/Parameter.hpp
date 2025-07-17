@@ -192,6 +192,25 @@ namespace c3d
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
 		 */
 		bool add( KeyT const & name
+			, StringView value )
+		{
+			return add( name, String{ value } );
+		}
+		/**
+		 *\~english
+		 *\brief		adds a string parameter
+		 *\remarks		If a parameter with the given name already exists, nothing is done
+		 *\param[in]	name	The parameter name
+		 *\param[in]	value	The parameter value
+		 *\return		\p false if a parameter with the given name already exists
+		 *\~french
+		 *\brief		Ajoute un paramètre chaîne de caractères
+		 *\remarks		Si un paramètre avec le nom donné existe déjà, rien n'est fait
+		 *\param[in]	name	Le nom du paramètre
+		 *\param[in]	value	La valeur du paramètre
+		 *\return		\p false si un paramètre avec le nom donné existe déjà
+		 */
+		bool add( KeyT const & name
 			, Path const & value )
 		{
 			return add( name, static_cast< String const & >( value ) );

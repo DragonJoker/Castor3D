@@ -835,8 +835,8 @@ namespace c3d
 						{
 							result.worldPosition = shader::derivVec4( 0.0_f );
 							result.viewPosition = shader::derivVec4( 0.0_f );
-							result.curPosition = shader::derivVec4( 0.0_f );
-							result.prvPosition = shader::derivVec4( 0.0_f );
+							result.curPosition = shader::derivVec3( 0.0_f );
+							result.prvPosition = shader::derivVec3( 0.0_f );
 							result.tangentSpaceFragPosition = shader::derivVec3( 0.0_f );
 							result.tangentSpaceViewPosition = vec3( 0.0_f );
 							result.normal = shader::derivVec3( 0.0_f );
@@ -987,8 +987,6 @@ namespace c3d
 							curPosition = c3d_cameraData.curViewToWorld( curPosition );
 							result.worldPosition = curPosition;
 
-							auto prvPosition = m_writer.declLocale( "prvPosition"
-								, curPosition );
 							curPosition = modelData.worldToModel( curPosition );
 
 							if ( m_stride == 0u )
@@ -999,7 +997,6 @@ namespace c3d
 										, derivatives.computeGradient( v0.velocity.xyz()
 											, v1.velocity.xyz()
 											, v2.velocity.xyz() ) );
-									shader::addXYZ( prvPosition, velocity );
 								}
 								else if ( m_flags.enableNormal() )
 								{
@@ -1013,17 +1010,11 @@ namespace c3d
 									{
 										auto prvMtxModel = m_writer.declLocale( "prvMtxModel"
 											, modelData.getPrvModelMtx( m_flags, curMtxModel ) );
-										prvPosition = prvMtxModel * curPosition;
 										tangent = derivVec4( normalize( mtxNormal * shader::getXYZ( tangent ) ), shader::getW( tangent ) );
 										bitangent = normalize( mtxNormal * bitangent );
 									}
 								}
 							}
-
-							prvPosition = c3d_cameraData.worldToPrvProj( prvPosition );
-							result.computeVelocity( c3d_cameraData
-								, curProjPosition
-								, prvPosition );
 
 							if ( m_flags.enableNormal() )
 							{

@@ -225,13 +225,14 @@ namespace c3d
 		Matrix4x4f prvViewProj{};
 		Matrix4x4f invPrvViewProj{};
 		Point2ui size{};
-		Point2f jitter{};
+		float nearPlane{};
+		float farPlane{};
 		Point3f position{};
 		float gamma{};
 		uint32_t debugIndex{};
-		float pad{};
-		float nearPlane{};
-		float farPlane{};
+		float pad0{};
+		float pad1{};
+		float pad2{};
 	};
 	/**
 	*\~english

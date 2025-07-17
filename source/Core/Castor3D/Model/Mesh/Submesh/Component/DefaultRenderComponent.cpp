@@ -109,7 +109,7 @@ namespace c3d
 					, vec2( 1.0_f, 1.0_f ) } );
 
 				auto nodeId = writer.declLocale( "nodeId"
-					,  shader::getNodeId( c3d_objectIdsData
+					, shader::getNodeId( c3d_objectIdsData
 						, pipelineID
 						, writer.cast< sdw::UInt >( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID ) ) );
 				auto modelData = writer.declLocale( "modelData"
@@ -123,6 +123,7 @@ namespace c3d
 				out.passMultipliers[2] = passMultipliers[2];
 				out.passMultipliers[3] = passMultipliers[3];
 				out.nodeId = nodeId;
+				out.texture0 = vec3( bbTexcoords[in.vertexIndex - in.baseVertex], 1.0_f );
 
 				auto center = writer.declLocale( "center"
 					, meshBuffers.positions[writer.cast< sdw::UInt >( in.instanceIndex )].position );
@@ -150,24 +151,28 @@ namespace c3d
 					, right * bbPositions[in.vertexIndex - in.baseVertex].x() * width );
 				auto scaledUp = writer.declLocale( "scaledUp"
 					, up * bbPositions[in.vertexIndex - in.baseVertex].y() * height );
-				auto worldPos = writer.declLocale( "worldPos"
+				auto curWorldPos = writer.declLocale( "worldPos"
 					, vec4( ( curBbcenter + scaledRight + scaledUp ), 1.0_f ) );
-				out.worldPosition = worldPos;
-				out.texture0 = vec3( bbTexcoords[in.vertexIndex - in.baseVertex], 1.0_f );
+				auto prvWorldPos = writer.declLocale( "worldPos"
+					, vec4( ( curBbcenter + scaledRight + scaledUp ), 1.0_f ) );
+				auto curViewPosition = writer.declLocale( "curViewPosition"
+					, c3d_cameraData.worldToCurView( curWorldPos ) );
+				auto prvViewPosition = writer.declLocale( "prvViewPosition"
+					, c3d_cameraData.worldToPrvView( prvWorldPos ) );
+				auto curCSPosition = writer.declLocale( "curCSPosition"
+					, c3d_cameraData.viewToProj( curViewPosition ) );
+				auto prvCSPosition = writer.declLocale( "prvCSPosition"
+					, c3d_cameraData.viewToProj( prvViewPosition ) );
 
-				auto prvPosition = writer.declLocale( "prvPosition"
-					, c3d_cameraData.worldToPrvProj( vec4( prvBbcenter + scaledRight + scaledUp, 1.0_f ) ) );
-				auto curPosition = writer.declLocale( "curPosition"
-					, c3d_cameraData.worldToCurProj( worldPos ) );
-				out.viewPosition = c3d_cameraData.worldToCurView( worldPos );
-				out.computeVelocity( c3d_cameraData
-					, curPosition
-					, prvPosition );
-				out.vtx.position = curPosition;
+				out.curPosition = curCSPosition.xyw();
+				out.prvPosition = prvCSPosition.xyw();
+				out.worldPosition = curWorldPos;
+				out.viewPosition = curViewPosition;
+				out.vtx.position = curCSPosition;
 				out.vertexId = in.instanceIndex - in.baseInstance;
 				out.computeTangentSpace( flags
 					, c3d_cameraData.position()
-					, worldPos.xyz()
+					, curWorldPos.xyz()
 					, curToCamera
 					, vec4( up, 0.0_f )
 					, right );
@@ -261,11 +266,11 @@ namespace c3d
 
 				if ( flags.hasWorldPosInputs() )
 				{
-					auto worldPos = writer.declLocale( "worldPos"
+					auto curWorldPos = writer.declLocale( "curWorldPos"
 						, curPosition );
 					out.computeTangentSpace( flags
 						, c3d_cameraData.position()
-						, worldPos.xyz()
+						, curWorldPos.xyz()
 						, curNormal
 						, curTangent
 						, curBitangent );
@@ -274,29 +279,36 @@ namespace c3d
 				{
 					auto prvMtxModel = writer.declLocale( "prvMtxModel"
 						, modelData.getPrvModelMtx( flags, curMtxModel ) );
-					prvPosition = c3d_cameraData.worldToPrvProj( prvMtxModel * prvPosition );
-					auto worldPos = writer.declLocale( "worldPos"
+					prvPosition = prvMtxModel * prvPosition;
+					auto curWorldPos = writer.declLocale( "curWorldPos"
 						, curMtxModel * curPosition );
 					auto mtxNormal = writer.declLocale( "mtxNormal"
 						, modelData.getNormalMtx( flags, curMtxModel ) );
 					out.computeTangentSpace( flags
 						, c3d_cameraData.position()
-						, worldPos.xyz()
+						, curWorldPos.xyz()
 						, mtxNormal
 						, curNormal
 						, curTangent
 						, curBitangent );
 				}
 
-				auto worldPos = writer.getVariable< sdw::Vec4 >( "worldPos" );
-				out.worldPosition = worldPos;
-				out.viewPosition = c3d_cameraData.worldToCurView( worldPos );
-				curPosition = c3d_cameraData.worldToCurProj( worldPos );
+				auto curWorldPos = writer.getVariable< sdw::Vec4 >( "curWorldPos" );
+				auto curViewPosition = writer.declLocale( "curViewPosition"
+					, c3d_cameraData.worldToCurView( curWorldPos ) );
+				auto prvViewPosition = writer.declLocale( "prvViewPosition"
+					, c3d_cameraData.worldToPrvView( prvPosition ) );
+				auto curCSPosition = writer.declLocale( "curCSPosition"
+					, c3d_cameraData.viewToProj( curViewPosition ) );
+				auto prvCSPosition = writer.declLocale( "prvCSPosition"
+					, c3d_cameraData.viewToProj( prvViewPosition ) );
+
+				out.curPosition = curCSPosition.xyw();
+				out.prvPosition = prvCSPosition.xyw();
+				out.worldPosition = curWorldPos;
+				out.viewPosition = curViewPosition;
+				out.vtx.position = curCSPosition;
 				out.vertexId = in.vertexIndex - in.baseVertex;
-				out.computeVelocity( c3d_cameraData
-					, curPosition
-					, prvPosition );
-				out.vtx.position = curPosition;
 			} );
 	}
 
@@ -428,11 +440,11 @@ namespace c3d
 
 				if ( flags.hasWorldPosInputs() )
 				{
-					auto worldPos = writer.declLocale( "worldPos"
+					auto curWorldPos = writer.declLocale( "curWorldPos"
 						, curPosition );
 					vtxOut[i].computeTangentSpace( flags
 						, c3d_cameraData.position()
-						, worldPos.xyz()
+						, curWorldPos.xyz()
 						, curNormal
 						, curTangent
 						, curBitangent );
@@ -441,29 +453,36 @@ namespace c3d
 				{
 					auto prvMtxModel = writer.declLocale( "prvMtxModel"
 						, modelData.getPrvModelMtx( flags, curMtxModel ) );
-					prvPosition = c3d_cameraData.worldToPrvProj( prvMtxModel * prvPosition );
-					auto worldPos = writer.declLocale( "worldPos"
+					prvPosition = prvMtxModel * prvPosition;
+					auto curWorldPos = writer.declLocale( "curWorldPos"
 						, curMtxModel * curPosition );
 					auto mtxNormal = writer.declLocale( "mtxNormal"
 						, modelData.getNormalMtx( flags, curMtxModel ) );
 					vtxOut[i].computeTangentSpace( flags
 						, c3d_cameraData.position()
-						, worldPos.xyz()
+						, curWorldPos.xyz()
 						, mtxNormal
 						, curNormal
 						, curTangent
 						, curBitangent );
 				}
 
-				auto worldPos = writer.getVariable< sdw::Vec4 >( "worldPos" );
-				vtxOut[i].worldPosition = worldPos;
-				vtxOut[i].viewPosition = c3d_cameraData.worldToCurView( worldPos );
-				curPosition = c3d_cameraData.worldToCurProj( worldPos );
+				auto curWorldPos = writer.getVariable< sdw::Vec4 >( "curWorldPos" );
+				auto curViewPosition = writer.declLocale( "curViewPosition"
+					, c3d_cameraData.worldToCurView( curWorldPos ) );
+				auto prvViewPosition = writer.declLocale( "prvViewPosition"
+					, c3d_cameraData.worldToPrvView( prvPosition ) );
+				auto curCSPosition = writer.declLocale( "curCSPosition"
+					, c3d_cameraData.viewToProj( curViewPosition ) );
+				auto prvCSPosition = writer.declLocale( "prvCSPosition"
+					, c3d_cameraData.viewToProj( prvViewPosition ) );
+
+				vtxOut[i].curPosition = curCSPosition.xyw();
+				vtxOut[i].prvPosition = prvCSPosition.xyw();
+				vtxOut[i].worldPosition = curWorldPos;
+				vtxOut[i].viewPosition = curViewPosition;
+				vtxOut[i].position = curCSPosition;
 				vtxOut[i].vertexId = vertexIndex;
-				vtxOut[i].computeVelocity( c3d_cameraData
-					, curPosition
-					, prvPosition );
-				vtxOut[i].position = curPosition;
 			}
 			sdwROF
 		};
@@ -760,11 +779,11 @@ namespace c3d
 
 				if ( flags.hasWorldPosInputs() )
 				{
-					auto worldPos = writer.declLocale( "worldPos"
+					auto curWorldPos = writer.declLocale( "curWorldPos"
 						, curPosition );
 					vtxOut[i].computeTangentSpace( flags
 						, c3d_cameraData.position()
-						, worldPos.xyz()
+						, curWorldPos.xyz()
 						, curNormal
 						, curTangent
 						, curBitangent );
@@ -773,29 +792,36 @@ namespace c3d
 				{
 					auto prvMtxModel = writer.declLocale( "prvMtxModel"
 						, modelData.getPrvModelMtx( flags, curMtxModel ) );
-					prvPosition = c3d_cameraData.worldToPrvProj( prvMtxModel * prvPosition );
-					auto worldPos = writer.declLocale( "worldPos"
+					prvPosition = prvMtxModel * prvPosition;
+					auto curWorldPos = writer.declLocale( "curWorldPos"
 						, curMtxModel * curPosition );
 					auto mtxNormal = writer.declLocale( "mtxNormal"
 						, modelData.getNormalMtx( flags, curMtxModel ) );
 					vtxOut[i].computeTangentSpace( flags
 						, c3d_cameraData.position()
-						, worldPos.xyz()
+						, curWorldPos.xyz()
 						, mtxNormal
 						, curNormal
 						, curTangent
 						, curBitangent );
 				}
 
-				auto worldPos = writer.getVariable< sdw::Vec4 >( "worldPos" );
-				vtxOut[i].worldPosition = worldPos;
-				vtxOut[i].viewPosition = c3d_cameraData.worldToCurView( worldPos );
-				curPosition = c3d_cameraData.worldToCurProj( worldPos );
+				auto curWorldPos = writer.getVariable< sdw::Vec4 >( "curWorldPos" );
+				auto curViewPosition = writer.declLocale( "curViewPosition"
+					, c3d_cameraData.worldToCurView( curWorldPos ) );
+				auto prvViewPosition = writer.declLocale( "prvViewPosition"
+					, c3d_cameraData.worldToPrvView( prvPosition ) );
+				auto curCSPosition = writer.declLocale( "curCSPosition"
+					, c3d_cameraData.viewToProj( curViewPosition ) );
+				auto prvCSPosition = writer.declLocale( "prvCSPosition"
+					, c3d_cameraData.viewToProj( prvViewPosition ) );
+
+				vtxOut[i].curPosition = curCSPosition.xyw();
+				vtxOut[i].prvPosition = prvCSPosition.xyw();
+				vtxOut[i].worldPosition = curWorldPos;
+				vtxOut[i].viewPosition = curViewPosition;
+				vtxOut[i].position = curCSPosition;
 				vtxOut[i].vertexId = vertexIndex;
-				vtxOut[i].computeVelocity( c3d_cameraData
-					, curPosition
-					, prvPosition );
-				vtxOut[i].position = curPosition;
 			}
 			sdwROF
 		};

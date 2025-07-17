@@ -33,13 +33,14 @@ namespace c3d
 				, sdw::Mat4x4Field< "prvViewProj" >
 				, sdw::Mat4x4Field< "invPrvViewProj" >
 				, sdw::U32Vec2Field< "renderSize" >
-				, sdw::Vec2Field< "jitter" >
+				, sdw::FloatField< "nearPlane" >
+				, sdw::FloatField< "farPlane" >
 				, sdw::Vec3Field< "position" >
 				, sdw::FloatField< "gamma" >
 				, sdw::UInt32Field< "debugIndex" >
-				, sdw::FloatField< "pad" >
-				, sdw::FloatField< "nearPlane" >
-				, sdw::FloatField< "farPlane" > >
+				, sdw::FloatField< "pad0" >
+				, sdw::FloatField< "pad1" >
+				, sdw::FloatField< "pad2" > >
 		{
 			friend struct BillboardData;
 
@@ -60,13 +61,9 @@ namespace c3d
 			C3D_API DerivVec4 curViewToWorld( DerivVec4 const & vsPosition )const;
 			C3D_API sdw::Vec4 prvViewToWorld( sdw::Vec4 const & vsPosition )const;
 			C3D_API sdw::Vec4 worldToCurProj( sdw::Vec4 const & wsPosition )const;
-			C3D_API sdw::Vec4 worldToPrvProj( sdw::Vec4 const & wsPosition )const;
-			C3D_API DerivVec4 worldToPrvProj( DerivVec4 const & wsPosition )const;
 			C3D_API sdw::Vec2 viewToScreenUV( Utils & utils
 				, sdw::Vec4 vsPosition )const;
 			C3D_API sdw::Vec2 worldToCurScreenUV( Utils & utils
-				, sdw::Vec4 wsPosition )const;
-			C3D_API sdw::Vec2 worldToPrvScreenUV( Utils & utils
 				, sdw::Vec4 wsPosition )const;
 			C3D_API sdw::Vec3 projToView( Utils & utils
 				, sdw::Vec2 const & texCoord
@@ -88,8 +85,6 @@ namespace c3d
 			C3D_API sdw::Vec3 getCurViewCenter()const;
 			C3D_API sdw::Vec3 getPrvViewCenter()const;
 			C3D_API sdw::Mat4 getInvViewProjMtx()const;
-			C3D_API void jitter( sdw::Vec4 & csPosition )const;
-			C3D_API void jitter( DerivVec4 & csPosition )const;
 			C3D_API sdw::Vec3 transformCamera( sdw::Mat3 const & transform )const;
 			C3D_API sdw::Vec3 getPosToCamera( sdw::Vec3 const & position )const;
 			C3D_API sdw::Vec3 getCameraToPos( sdw::Vec3 const & position )const;
@@ -117,7 +112,6 @@ namespace c3d
 			auto invCurViewProj()const { return getMember< "invCurViewProj" >(); }
 			auto prvViewProj()const { return getMember< "prvViewProj" >(); }
 			auto invPrvViewProj()const { return getMember< "invPrvViewProj" >(); }
-			auto jitter()const { return getMember< "jitter" >(); }
 			auto frustumPlanes()const { return getMember< "frustumPlanes" >(); }
 
 		public:
@@ -275,7 +269,8 @@ namespace c3d
 		 */
 		C3D_API Configuration & cpuUpdate( Size const & size
 			, Matrix4x4f const & projection
-			, uint32_t debugIndex );
+			, uint32_t debugIndex
+			, Point2f const & jitter = Point2f{} );
 
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const
