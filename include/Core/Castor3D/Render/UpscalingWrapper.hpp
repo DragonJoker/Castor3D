@@ -32,7 +32,12 @@ namespace c3d
 		C3D_API void evaluateUpscaling( crg::RecordContext & recContext
 			, VkCommandBuffer commandBuffer
 			, crg::ImageViewId resolvedColor
-			, crg::ImageViewId unresolvedColor )const;
+			, crg::ImageViewId unresolvedColor
+			, crg::ImageViewId motionVectors
+			, crg::ImageViewId depth
+			, bool resetAccumulation = false
+			, Point2f jitterOffset = { 0.0f, 0.0f }
+			, Point2f mVScale = { 1.0f, 1.0f } )const;
 
 	private:
 		RawUniquePtr< UpscalingSDKInstance > m_sdk;

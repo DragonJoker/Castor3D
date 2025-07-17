@@ -395,6 +395,19 @@ namespace c3d
 		}
 		CU_EndAttribute()
 
+		static CU_ImplementAttributeParserBlock( parserUpscalingPerfQualityMode, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->engine->getUpscalingConfig().perfQualityMode = UpscalingPerfQualityMode( params[0]->get< uint32_t >() );
+			}
+		}
+		CU_EndAttribute()
+
 		static CU_ImplementAttributeParserBlock( parserUpscalingEnd, RootContext )
 		{
 			if ( blockContext->engine->getUpscalingConfig().enabled
@@ -1031,6 +1044,7 @@ namespace c3d
 		rootContext.addPushParser( cuT( "upscaling" ), CSCNSection::eUpscaling, eng::parserUpscaling );
 
 		ssContext.addParser( cuT( "enabled" ), eng::parserUpscalingEnable, { makeParameter< ParameterType::eBool >() } );
+		ssContext.addParser( cuT( "mode" ), eng::parserUpscalingPerfQualityMode, { makeParameter< ParameterType::eCheckedText, UpscalingPerfQualityMode >() } );
 		ssContext.addPopParser( cuT( "}" ), eng::parserUpscalingEnd );
 	}
 

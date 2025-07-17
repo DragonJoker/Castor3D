@@ -37,6 +37,7 @@ namespace c3d
 		RenderTarget & m_target;
 		UpscalingConfig const & m_config;
 		UpscalingInstanceUPtr m_upscaler;
+		uint64_t m_updateCount{};
 	};
 }
 
