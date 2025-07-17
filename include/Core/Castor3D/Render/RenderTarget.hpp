@@ -261,7 +261,7 @@ namespace c3d
 
 		Size const & getRenderSize()const noexcept
 		{
-			return m_size;
+			return m_renderSize;
 		}
 
 		bool hasTechnique()const noexcept

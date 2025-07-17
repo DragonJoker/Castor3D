@@ -1428,7 +1428,6 @@ namespace c3d
 					, *this
 					, device
 					, m_hdrObjects.front()
-					, m_hdrObjects.back()
 					, c3d::move( previousPasses )
 					, progress
 					, C3D_UseVisibilityBuffer != 0
