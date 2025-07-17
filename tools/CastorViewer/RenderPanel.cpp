@@ -450,9 +450,9 @@ namespace CastorViewer
 	{
 		auto result = float( x );
 
-		if ( auto camera = m_camera )
+		if ( m_renderWindow )
 		{
-			result *= float( camera->getWidth() ) / float( GetClientSize().x );
+			result *= float( m_renderWindow->getRenderTarget()->getDisplaySize().getWidth() ) / float( GetClientSize().x );
 		}
 
 		return result;
@@ -462,9 +462,9 @@ namespace CastorViewer
 	{
 		auto result = float( y );
 
-		if ( auto camera = m_camera )
+		if ( m_renderWindow )
 		{
-			result *= float( camera->getHeight() ) / float( GetClientSize().y );
+			result *= float( m_renderWindow->getRenderTarget()->getDisplaySize().getHeight() ) / float( GetClientSize().y );
 		}
 
 		return result;
@@ -474,9 +474,9 @@ namespace CastorViewer
 	{
 		auto result = int( x );
 
-		if ( auto camera = m_camera )
+		if ( m_renderWindow )
 		{
-			result = int( x * float( GetClientSize().x ) / float( camera->getWidth() ) );
+			result = int( x * float( GetClientSize().x ) / float( m_renderWindow->getRenderTarget()->getDisplaySize().getWidth() ) );
 		}
 
 		return result;
@@ -486,9 +486,9 @@ namespace CastorViewer
 	{
 		auto result = int( y );
 
-		if ( auto camera = m_camera )
+		if ( m_renderWindow )
 		{
-			result = int( y * float( GetClientSize().y ) / float( camera->getHeight() ) );
+			result = int( y * float( GetClientSize().y ) / float( m_renderWindow->getRenderTarget()->getDisplaySize().getHeight() ) );
 		}
 
 		return result;

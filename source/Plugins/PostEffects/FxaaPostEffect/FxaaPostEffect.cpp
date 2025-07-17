@@ -145,7 +145,7 @@ namespace fxaa
 			, 1u }
 		, m_shader{ cuT( "Fxaa" ), postfx::getProgram( *renderTarget.getEngine() ) }
 		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
-		, m_fxaaUbo{ renderSystem.getRenderDevice(), m_renderTarget.getSize() }
+		, m_fxaaUbo{ renderSystem.getRenderDevice(), m_renderTarget.getDisplaySize() }
 	{
 		setParameters( parameters );
 	}

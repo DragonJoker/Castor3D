@@ -65,7 +65,8 @@ namespace atmosphere_scattering
 		explicit CameraUbo( c3d::RenderDevice const & device
 			, bool & dirty );
 		~CameraUbo();
-		void cpuUpdate( c3d::Camera const & camera
+		void cpuUpdate( c3d::Size const & renderSize
+			, c3d::Camera const & camera
 			, bool isSafeBanded
 			, c3d::Point3f const & sunDirection
 			, c3d::Vector3f const & planetPosition );

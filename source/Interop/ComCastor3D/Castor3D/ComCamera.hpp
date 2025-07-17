@@ -22,13 +22,10 @@ namespace CastorCom
 		COM_PROPERTY_GET_MPTR( Scene, IScene, c3dCamera_getScene );
 		COM_PROPERTY_GET_MPTR( Node, ISceneNode, c3dCamera_getNode );
 		COM_PROPERTY_EX( ViewportType, eVIEWPORT_TYPE, C3D_VIEWPORT_TYPE, c3dCamera_getViewportType, c3dCamera_setViewportType );
-		COM_PROPERTY_GET( Width, UINT, c3dCamera_getWidth );
-		COM_PROPERTY_GET( Height, UINT, c3dCamera_getHeight );
 
 		COM_DESTROY( CCamera, c3dCamera_delete );
 		STDMETHOD( AttachTo )( /*[in]*/ ISceneNode * val )override;
 		STDMETHOD( Detach )()override;
-		STDMETHOD( Resize )( /*[in]*/ UINT width, /*[in]*/ UINT height )override;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object
 	//!\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet

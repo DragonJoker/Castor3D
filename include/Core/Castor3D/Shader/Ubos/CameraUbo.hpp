@@ -184,27 +184,10 @@ namespace c3d
 		 *\param[in]	safeBanded	\p true pour utiliser la taille avec les safebands.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		C3D_API Configuration & cpuUpdate( Camera const & camera
+		C3D_API Configuration & cpuUpdate( Size const & size
+			, Camera const & camera
 			, Matrix4x4f const & view
 			, Matrix4x4f const & projection
-			, uint32_t debugIndex
-			, bool safeBanded
-			, Point2f const & jitter = Point2f{} );
-		/**
-		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\param[in]	camera		The camera holding the data.
-		 *\param[in]	debugIndex	The currently selected debug data index.
-		 *\param[in]	safeBanded	\p true to use safebanded size and projection matrix.
-		 *\param[in]	jitter		The jittering value.
-		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	camera		La caméra contenant les données.
-		 *\param[in]	debugIndex	L'indice des données de debug actuellement sélectionnées.
-		 *\param[in]	safeBanded	\p true pour utiliser la taille et la matrice de projection avec les safebands.
-		 *\param[in]	jitter		La valeur de jittering.
-		 */
-		C3D_API Configuration & cpuUpdate( Camera const & camera
 			, uint32_t debugIndex
 			, bool safeBanded
 			, Point2f const & jitter = Point2f{} );

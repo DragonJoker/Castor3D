@@ -97,7 +97,6 @@ namespace c3d
 		auto & value = m_scene.getBackgroundColour();
 		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
 		auto & viewport = *updater.viewport;
-		viewport.resize( updater.camera->getSize() );
 		viewport.setPerspective( updater.camera->getViewport().getFovY()
 			, updater.camera->getRatio()
 			, 0.1f
@@ -105,7 +104,7 @@ namespace c3d
 		viewport.update();
 		updater.bgMtxView = updater.camera->getView();
 		updater.bgMtxProj = updater.isSafeBanded
-			? viewport.getSafeBandedProjection()
+			? viewport.getSafeBandedProjection( updater.renderSize )
 			: viewport.getProjection();
 	}
 

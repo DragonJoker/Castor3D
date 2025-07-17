@@ -34,7 +34,7 @@ namespace smaa
 		: m_device{ device }
 		, m_graph{ graph }
 		, m_config{ config }
-		, m_extent{ c3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
+		, m_extent{ c3d::getSafeBandedExtent3D( renderTarget.getDisplaySize() ) }
 		, m_outColour{ m_device
 			, renderTarget.getResources()
 			, cuT( "SMEDRes" )

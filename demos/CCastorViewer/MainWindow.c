@@ -183,13 +183,11 @@ void onMotionTimer( MainWindow * window )
 
 static C3DVec2 doTransform( const MainWindow * window, double x, double y, double ww, double wh )
 {
-	uint32_t cw = 0;
-	uint32_t ch = 0;
+	C3DSize cs;
 	C3DVec2 result;
-	c3dCamera_getWidth( window->camera, &cw );
-	c3dCamera_getHeight( window->camera, &ch );
-	result.x = ( float )( ( x * cw ) / ww );
-	result.y = ( float )( ( y * ch ) / wh );
+	c3dRenderTarget_getDisplaySize( window->renderTarget, &cs );
+	result.x = ( float )( ( x * cs.width ) / ww );
+	result.y = ( float )( ( y * cs.height ) / wh );
 	return result;
 }
 

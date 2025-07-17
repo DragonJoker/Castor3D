@@ -926,6 +926,8 @@ namespace c3d
 		Matrix4x4f bgMtxProj{};
 		bool isSafeBanded{ true };
 		crg::ImageViewIdArray targetImage{};
+		Size renderSize{};
+
 		struct DirtyObjects
 		{
 			DirtyObjects() = default;
@@ -968,6 +970,7 @@ namespace c3d
 		FramePassTimer * timer{ nullptr };
 		Milliseconds time{};
 		Milliseconds total{};
+		Size renderSize{};
 	};
 
 	struct TargetDebugConfig

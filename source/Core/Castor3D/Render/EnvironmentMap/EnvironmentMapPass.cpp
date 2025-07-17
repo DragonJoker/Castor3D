@@ -26,9 +26,9 @@ namespace c3d
 	namespace envpass
 	{
 		static CameraUPtr doCreateCamera( SceneNode & node
-			, Extent3D const & size )
+			, Extent3D const & extent )
 		{
-			float const aspect = float( size.width ) / float( size.height );
+			float const aspect = float( extent.width ) / float( extent.height );
 			float const nearZ = 0.1f;
 			float const farZ = 1000.0f;
 			Viewport viewport{ *node.getScene()->getEngine() };
@@ -36,7 +36,6 @@ namespace c3d
 				, aspect
 				, nearZ
 				, farZ );
-			viewport.resize( { size.width, size.height } );
 			viewport.update();
 			auto camera = makeUnique< Camera >( cuT( "EnvironmentMap_" ) + node.getName()
 				, *node.getScene()
@@ -86,9 +85,9 @@ namespace c3d
 		, m_transparentPassDesc{ &doCreateTransparentPass( m_opaquePassDesc ) }
 	{
 		doCreateGenMipmapsPass( m_transparentPassDesc );
-		m_cameraUbo.cpuUpdate( getSafeBandedSize( m_camera->getSize() )
+		m_cameraUbo.cpuUpdate( getSafeBandedSize( makeSize( getOwner()->getSize() ) )
 			, m_camera->getView()
-			, m_camera->getProjection( false )
+			, m_camera->getProjection( {}, false )
 			, 0u
 			, m_camera->getFrustum() );
 		m_graph.addOutput( m_colourResultView
@@ -131,7 +130,7 @@ namespace c3d
 		m_backgroundRenderer->update( updater );
 		m_opaquePass->update( updater );
 		m_transparentPass->update( updater );
-		m_cameraUbo.cpuUpdate( camera, updater.debugIndex, false );
+		m_cameraUbo.cpuUpdate( makeSize( getOwner()->getSize() ), camera, updater.debugIndex, false );
 		m_hdrConfigUbo.cpuUpdate( camera.getHdrConfig() );
 
 		updater.isSafeBanded = oldSafeBanded;

@@ -321,7 +321,6 @@ namespace c3d
 		, RenderTarget & renderTarget
 		, RenderDevice const & device
 		, Texture const & colour
-		, Texture const & intermediate
 		, crg::FramePassArray previousPasses
 		, ProgressBar * progress
 		, bool visbuffer
@@ -330,10 +329,9 @@ namespace c3d
 		, Named{ name + cuT( "/Technique") }
 		, m_renderTarget{ renderTarget }
 		, m_device{ device }
-		, m_targetSize{ m_renderTarget.getSize() }
+		, m_targetSize{ m_renderTarget.getRenderSize() }
 		, m_rawSize{ getSafeBandedSize( m_targetSize ) }
 		, m_colour{ &colour }
-		, m_intermediate{ &intermediate }
 		, m_depth{ m_device
 			, m_renderTarget.getResources()
 			, getName() + cuT( "/Depth" )

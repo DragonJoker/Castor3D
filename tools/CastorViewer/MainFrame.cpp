@@ -788,9 +788,9 @@ namespace CastorViewer
 		}
 
 #if wxCHECK_VERSION( 3, 1, 0 )
-		auto size = this->FromDIP( GuiCommon::make_wxSize( target->getSize() ) );
+		auto size = this->FromDIP( GuiCommon::make_wxSize( target->getDisplaySize() ) );
 #else
-		auto size = GuiCommon::make_wxSize( target->getSize() );
+		auto size = GuiCommon::make_wxSize( target->getDisplaySize() );
 #endif
 
 		if ( IsMaximized() )

@@ -156,7 +156,6 @@ namespace c3d
 	void ImageBackground::doCpuUpdate( CpuUpdater & updater )const
 	{
 		auto & viewport = *updater.viewport;
-		viewport.resize( updater.camera->getSize() );
 		viewport.setOrtho( -1.0f
 			, 1.0f
 			, -m_ratio
@@ -172,7 +171,7 @@ namespace c3d
 			, Point3f{ 0.0f, 1.0f, 0.0f } );
 		updater.bgMtxView = view;
 		updater.bgMtxProj = updater.isSafeBanded
-			? viewport.getSafeBandedProjection()
+			? viewport.getSafeBandedProjection( updater.renderSize )
 			: viewport.getProjection();
 	}
 

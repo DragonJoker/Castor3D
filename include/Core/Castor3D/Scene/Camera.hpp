@@ -121,6 +121,13 @@ namespace c3d
 		 *\param[in,out]	output	Reçoit les données de cet objet.
 		 */
 		C3D_API void cloneInto( Camera & output )const;
+		/**
+		 *\~english
+		 *\return		The number of pixels per meter at z = -1.
+		 *\~french
+		 *\return		Le nombre de pixels par mètre, pour z = -1.
+		 */
+		C3D_API float getProjectionScale( Size const & renderSize )const;
 
 		C3D_API static void addParsers( AttributeParsers & result );
 		/**
@@ -132,7 +139,8 @@ namespace c3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API Matrix4x4f getRescaledProjection( float scale
+		C3D_API Matrix4x4f getRescaledProjection( Size const & renderSize
+			, float scale
 			, bool safeBanded )const;
 
 		Viewport const & getViewport()const
@@ -150,33 +158,18 @@ namespace c3d
 			return m_view;
 		}
 
-		Matrix4x4f const & getProjection( bool safeBanded )const
+		Matrix4x4f getProjection( Size const & renderSize, bool safeBanded )const
 		{
 			return m_ownProjection
 				? m_projection
 				: ( safeBanded
-					? m_viewport.getSafeBandedProjection()
+					? m_viewport.getSafeBandedProjection( renderSize )
 					: m_viewport.getProjection() );
 		}
 
 		ViewportType getViewportType()const
 		{
 			return m_viewport.getType();
-		}
-
-		Size const & getSize()const
-		{
-			return m_viewport.getSize();
-		}
-
-		uint32_t getWidth()const
-		{
-			return m_viewport.getWidth();
-		}
-
-		uint32_t getHeight()const
-		{
-			return m_viewport.getHeight();
 		}
 
 		float getNear()const
@@ -197,11 +190,6 @@ namespace c3d
 		Angle const & getFovY()const
 		{
 			return m_viewport.getFovY();
-		}
-
-		float getProjectionScale()const
-		{
-			return m_viewport.getProjectionScale();
 		}
 
 		bool isVisible( BoundingBox const & box
@@ -263,20 +251,6 @@ namespace c3d
 		{
 			m_view = view;
 			markDirty();
-		}
-
-		void resize( uint32_t width, uint32_t height )
-		{
-			resize( Size( width, height ) );
-		}
-
-		void resize( Size const & size )
-		{
-			if ( m_viewport.getSize() != size )
-			{
-				m_viewport.resize( size );
-				markDirty();
-			}
 		}
 
 		void setViewportType( ViewportType value )

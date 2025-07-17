@@ -24,7 +24,8 @@ namespace c3d
 		 *\param[in]	camera	La caméra depuis laquelle le rayon est récupéré.
 		 */
 		C3D_API Ray( Position const & point
-			, Camera const & camera );
+			, Camera const & camera
+			, Size const & renderSize );
 		/**
 		 *\~english
 		 *\brief		Constructor from mouse coordinates and a camera.
@@ -36,7 +37,8 @@ namespace c3d
 		 *\param[in]	camera	La caméra depuis laquelle le rayon est récupéré.
 		 */
 		C3D_API Ray( int x, int y
-			, Camera const & camera );
+			, Camera const & camera
+			, Size const & renderSize );
 		/**
 		 *\~english
 		 *\brief		Constructor from origin and direction.

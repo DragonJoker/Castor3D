@@ -16,6 +16,8 @@ CU_ImplementSmartPtr( GuiCommon, I3DController )
 
 #include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Event/Frame/FrameListener.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
+#include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Scene/Camera.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
@@ -390,7 +392,7 @@ namespace GuiCommon
 					&& m_camera->getViewportType() == c3d::ViewportType::eOrtho )
 				{
 					auto & viewport = m_camera->getViewport();
-					double scale = viewport.getProjectionScale();
+					double scale = m_camera->getProjectionScale( m_window->getRenderTarget()->getRenderSize() );
 					viewport.setOrtho( float( extents.min.x / scale ), float( extents.max.x / scale )
 						, float( extents.min.y / scale ), float( extents.max.y / scale )
 						, viewport.getNear(), viewport.getFar() );
@@ -669,6 +671,7 @@ namespace GuiCommon
 		private:
 			bool m_connected{};
 			c3d::FrameListener & m_listener;
+			c3d::RenderWindowRPtr m_window{};
 			c3d::CameraRPtr m_camera{};
 			c3d::Geometry const * m_geometry{};
 			float m_lookAperture{};

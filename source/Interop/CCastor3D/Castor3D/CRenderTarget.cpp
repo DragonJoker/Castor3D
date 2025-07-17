@@ -149,15 +149,28 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dRenderTarget_getSize( C3DRenderTarget const * object, C3DSize * result )
+	C3D_CAPIMETHODIMP c3dRenderTarget_getRenderSize( C3DRenderTarget const * object, C3DSize * result )
 	{
 		if ( !object || !result )
 			return C3D_POINTER;
 		if ( !object->internal )
 			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_TARGET );
 
-		result->width = object->internal->getSize().getWidth();
-		result->height = object->internal->getSize().getHeight();
+		result->width = object->internal->getRenderSize().getWidth();
+		result->height = object->internal->getRenderSize().getHeight();
+
+		return C3D_OK;
+	}
+
+	C3D_CAPIMETHODIMP c3dRenderTarget_getDisplaySize( C3DRenderTarget const * object, C3DSize * result )
+	{
+		if ( !object || !result )
+			return C3D_POINTER;
+		if ( !object->internal )
+			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_TARGET );
+
+		result->width = object->internal->getDisplaySize().getWidth();
+		result->height = object->internal->getDisplaySize().getHeight();
 
 		return C3D_OK;
 	}

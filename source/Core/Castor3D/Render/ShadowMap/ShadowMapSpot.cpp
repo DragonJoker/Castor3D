@@ -102,7 +102,6 @@ namespace c3d
 	{
 		Engine const & engine = *m_scene.getEngine();
 		Viewport viewport{ engine };
-		viewport.resize( Size{ ShadowMapSpotTextureSize, ShadowMapSpotTextureSize } );
 		ShadowMapResult const & smResult = getShadowPassResult( isStatic );
 		auto & depth = smResult[SmTexture::eDepth];
 		auto & linear = smResult[SmTexture::eLinearDepth];
@@ -284,13 +283,19 @@ namespace c3d
 	void ShadowMapSpot::doUpdate( CpuUpdater & updater
 		, ShadowMap::Passes & passes )
 	{
+		auto oldRenderSize = updater.renderSize;
+		updater.renderSize = { ShadowMapSpotTextureSize, ShadowMapSpotTextureSize };
+
 		auto & pass = *passes.passes[updater.index];
 		pass.pass->update( updater );
 
 		auto const & myCamera = pass.pass->getCuller().getCamera();
-		m_passes[m_passesIndex].cameraUbos[updater.index]->cpuUpdate( myCamera
+		m_passes[m_passesIndex].cameraUbos[updater.index]->cpuUpdate( updater.renderSize
+			, myCamera
 			, updater.debugIndex
 			, false );
+
+		updater.renderSize = oldRenderSize;
 	}
 
 	void ShadowMapSpot::doUpdate( GpuUpdater & updater

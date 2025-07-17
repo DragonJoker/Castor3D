@@ -1349,7 +1349,7 @@ namespace c3d
 		m_picking = makeUnique< Picking >( m_resources
 			, m_device
 			, queueData
-			, target->getSize()
+			, target->getDisplaySize()
 			, target->getCameraUbo()
 			, target->getSceneUbo()
 			, target->getCuller() );
@@ -1570,7 +1570,7 @@ namespace c3d
 	void RenderWindow::doCreateSaveData()
 	{
 		auto target = getRenderTarget();
-		m_saveBuffer = PxBufferBase::create( target->getSize(), target->getPixelFormat() );
+		m_saveBuffer = PxBufferBase::create( target->getDisplaySize(), target->getPixelFormat() );
 		auto targetExtent = makeExtent2D( m_saveBuffer->getDimensions() );
 		auto bufferSize = ashes::getAlignedSize( ashes::getLevelsSize( convert( targetExtent )
 			, VK_FORMAT_R32G32B32A32_SFLOAT // Reserve enough room to hold max image size
@@ -1969,7 +1969,7 @@ namespace c3d
 				auto const & debugConfig = target->getDebugConfig();
 				auto const & intermediate = m_intermediateBarrierViews[debugConfig.intermediateImageIndex];
 				auto srcExtent = getExtent( intermediate.viewId );
-				auto dstExtent = makeExtent2D( target->getSize() );
+				auto dstExtent = makeExtent2D( target->getDisplaySize() );
 				dstExtent.width = std::min( dstExtent.width, srcExtent.width );
 				dstExtent.height = std::min( dstExtent.height, srcExtent.height );
 				auto subresourceRange = intermediate.viewId.data->info.subresourceRange;

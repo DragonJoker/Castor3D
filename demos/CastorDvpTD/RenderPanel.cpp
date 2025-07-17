@@ -115,28 +115,28 @@ namespace castortd
 	float RenderPanel::doTransformX( int x )
 	{
 		float result = float( x );
-		result *= float( m_renderWindow->getCamera()->getWidth() ) / float( GetClientSize().x );
+		result *= float( m_renderWindow->getRenderTarget()->getDisplaySize().getWidth() ) / float( GetClientSize().x );
 		return result;
 	}
 
 	float RenderPanel::doTransformY( int y )
 	{
 		float result = float( y );
-		result *= float( m_renderWindow->getCamera()->getHeight() ) / float( GetClientSize().y );
+		result *= float( m_renderWindow->getRenderTarget()->getDisplaySize().getHeight() ) / float( GetClientSize().y );
 		return result;
 	}
 
 	int RenderPanel::doTransformX( float x )
 	{
 		int result = int( x );
-		result = int( x * float( GetClientSize().x ) / float( m_renderWindow->getCamera()->getWidth() ) );
+		result = int( x * float( GetClientSize().x ) / float( m_renderWindow->getRenderTarget()->getDisplaySize().getWidth() ) );
 		return result;
 	}
 
 	int RenderPanel::doTransformY( float y )
 	{
 		int result = int( y );
-		result = int( y * float( GetClientSize().y ) / float( m_renderWindow->getCamera()->getHeight() ) );
+		result = int( y * float( GetClientSize().y ) / float( m_renderWindow->getRenderTarget()->getDisplaySize().getHeight() ) );
 		return result;
 	}
 

@@ -25,12 +25,4 @@ namespace CastorCom
 
 		return convert( c3dCamera_detach( m_internal ) );
 	}
-
-	STDMETHODIMP CCamera::Resize( /*[in]*/ UINT width, /*[in]*/ UINT height )noexcept
-	{
-		if ( !m_internal )
-			return dispatchUninitialised( _T( "Resize" ) );
-
-		return convert( c3dCamera_resize( m_internal, width, height ) );
-	}
 }

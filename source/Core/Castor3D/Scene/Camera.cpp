@@ -176,19 +176,6 @@ namespace c3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParserBlock( parserViewportSize, CameraContext )
-		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else
-			{
-				blockContext->viewport->resize( params[0]->get< Size >() );
-			}
-		}
-		CU_EndAttribute()
-
 		static CU_ImplementAttributeParserBlock( parserViewportFovY, CameraContext )
 		{
 			if ( params.empty() )
@@ -336,13 +323,13 @@ namespace c3d
 		viewportCtx.addParser( cuT( "bottom" ), camera::parserViewportBottom, { makeParameter< ParameterType::eFloat >() } );
 		viewportCtx.addParser( cuT( "near" ), camera::parserViewportNear, { makeParameter< ParameterType::eFloat >() } );
 		viewportCtx.addParser( cuT( "far" ), camera::parserViewportFar, { makeParameter< ParameterType::eFloat >() } );
-		viewportCtx.addParser( cuT( "size" ), camera::parserViewportSize, { makeParameter< ParameterType::eSize >() } );
 		viewportCtx.addParser( cuT( "fov_y" ), camera::parserViewportFovY, { makeParameter< ParameterType::eFloat >() } );
 		viewportCtx.addParser( cuT( "aspect_ratio" ), camera::parserViewportAspectRatio, { makeParameter< ParameterType::eFloat >() } );
 		viewportCtx.addDefaultPopParser();
 	}
 
-	Matrix4x4f Camera::getRescaledProjection( float scale
+	Matrix4x4f Camera::getRescaledProjection( Size const & renderSize
+		, float scale
 		, bool safeBanded )const
 	{
 		if ( m_ownProjection )
@@ -352,10 +339,16 @@ namespace c3d
 
 		return scale == 1.0f
 			? ( safeBanded
-				? m_viewport.getSafeBandedProjection()
+				? m_viewport.getSafeBandedProjection( renderSize )
 				: m_viewport.getProjection() )
 			: ( safeBanded
-				? m_viewport.getRescaledSafeBandedProjection( scale )
+				? m_viewport.getRescaledSafeBandedProjection( renderSize, scale )
 				: m_viewport.getRescaledProjection( scale ) );
+	}
+
+	float Camera::getProjectionScale( Size const & renderSize )const
+	{
+		float const scale = std::abs( 2.0f * ( getFovY() * 0.5f ).tan() );
+		return std::abs( float( renderSize.getHeight() ) / scale );
 	}
 }

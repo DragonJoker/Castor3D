@@ -50,7 +50,8 @@ namespace atmosphere_scattering
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	void CameraUbo::cpuUpdate( c3d::Camera const & camera
+	void CameraUbo::cpuUpdate( c3d::Size const & renderSize
+		, c3d::Camera const & camera
 		, bool isSafeBanded
 		, c3d::Point3f const & sunDirection
 		, c3d::Vector3f const & planetPosition )
@@ -72,7 +73,7 @@ namespace atmosphere_scattering
 		auto front{ c3d::point::cross( right, up ) };
 		up = c3d::point::cross( front, right );
 
-		auto proj = camera.getRescaledProjection( length.kilometres(), isSafeBanded );
+		auto proj = camera.getRescaledProjection( renderSize, length.kilometres(), isSafeBanded );
 
 		auto & data = m_ubo.getData();
 		data.position = m_position;
@@ -86,7 +87,7 @@ namespace atmosphere_scattering
 		auto viewProj = proj * view;
 		data.camInvViewProj = viewProj.getInverse();
 
-		viewProj = camera.getProjection( isSafeBanded ) * camera.getView();
+		viewProj = camera.getProjection( renderSize, isSafeBanded ) * camera.getView();
 		data.objInvViewProj = viewProj.getInverse();
 
 		data.lightDotCameraFront = c3d::point::dot( sunDirection

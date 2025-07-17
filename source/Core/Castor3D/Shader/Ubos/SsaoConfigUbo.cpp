@@ -3,7 +3,6 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 
@@ -125,9 +124,9 @@ namespace c3d
 	}
 
 	void SsaoConfigUbo::cpuUpdate( SsaoConfig const & config
-		, Camera const & camera )
+		, Camera const & camera
+		, Size const & renderSize )
 	{
-		auto & viewport = camera.getViewport();
 		int numSpiralTurns = 0;
 
 		if ( config.numSamples < shader::ssao::numPrecomputed )
@@ -146,17 +145,17 @@ namespace c3d
 		float const intersityDivR6 = config.intensity / std::pow( radius, 6.0f );
 
 		auto & configuration = m_ubo.getData();
-		float const projScale = viewport.getProjectionScale();
+		float const projScale = camera.getProjectionScale( renderSize );
 		float const MIN_AO_SS_RADIUS = 1.0f;
 		// Second parameter of max is just solving for Z coordinate at which we hit MIN_AO_SS_RADIUS
-		float farZ = std::max( viewport.getFar(), -projScale * radius / MIN_AO_SS_RADIUS );
+		float farZ = std::max( camera.getFar(), -projScale * radius / MIN_AO_SS_RADIUS );
 		// Hack because setting farZ lower results in banding artefacts on some scenes, should tune later.
 		farZ = std::min( farZ, -1000.0f );
-		auto const & proj = camera.getProjection( true );
+		auto const & proj = camera.getProjection( renderSize, true );
 		configuration.projInfo = Point4f
 		{
-			-2.0f / ( float( viewport.getWidth() ) * proj[0][0] ),
-			-2.0f / ( float( viewport.getHeight() ) * proj[1][1] ),
+			-2.0f / ( float( renderSize.getWidth() ) * proj[0][0] ),
+			-2.0f / ( float( renderSize.getHeight() ) * proj[1][1] ),
 			( 1.0f - proj[0][2] ) / proj[0][0],
 			( 1.0f - proj[1][2] ) / proj[1][1]
 		};

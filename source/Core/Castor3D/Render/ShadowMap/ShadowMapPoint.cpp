@@ -134,8 +134,6 @@ namespace c3d
 			passes.passes.emplace_back( makeRawUnique< ShadowMap::PassData >( makeUnique< Viewport >( engine )
 				, nullptr ) );
 			auto & passData = *passes.passes.back();
-			passData.viewport->resize( Size{ ShadowMapPointTextureSize
-				, ShadowMapPointTextureSize } );
 			passData.frustum = makeUnique< Frustum >( *passData.viewport );
 			passData.ownCuller = makeUniqueDerived< SceneCuller, FrustumCuller >( m_scene, *passData.frustum, isStatic );
 			passData.culler = passData.ownCuller.get();
@@ -306,7 +304,9 @@ namespace c3d
 	void ShadowMapPoint::doUpdate( CpuUpdater & updater
 		, ShadowMap::Passes & passes )
 	{
-		auto save = updater.index;
+		auto oldIndex = updater.index;
+		auto oldRenderSize = updater.renderSize;
+		updater.renderSize = { ShadowMapPointTextureSize, ShadowMapPointTextureSize };
 		uint32_t offset = updater.index * 6u;
 
 		for ( uint32_t face = offset; face < offset + 6u; ++face )
@@ -316,14 +316,16 @@ namespace c3d
 			pass.pass->update( updater );
 
 			PointLightInstance const & pointLight = static_cast< PointLightInstance & >( *updater.light );
-			m_passes[m_passesIndex].cameraUbos[face]->cpuUpdate( *updater.camera
+			m_passes[m_passesIndex].cameraUbos[face]->cpuUpdate( updater.renderSize
+				, *updater.camera
 				, pointLight.getViewMatrix( CubeMapFace( updater.index ) )
 				, static_cast< ShadowMapPassPoint const & >( *pass.pass ).getProjection()
 				, updater.debugIndex
 				, false );
 		}
 
-		updater.index = save;
+		updater.renderSize = oldRenderSize;
+		updater.index = oldIndex;
 	}
 
 	void ShadowMapPoint::doUpdate( GpuUpdater & updater

@@ -147,7 +147,8 @@ namespace c3d
 		 *\param[in]	camera	La caméra de rendu.
 		 */
 		C3D_API void cpuUpdate( SsaoConfig const & config
-			, Camera const & camera );
+			, Camera const & camera
+			, Size const & renderSize );
 
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const

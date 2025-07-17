@@ -31,7 +31,7 @@ namespace c3d
 
 		if ( auto block{ beginBlock( file, cuT( "render_target" ) ) } )
 		{
-			result = writeNamedSub( file, cuT( "size" ), target.getSize() )
+			result = writeNamedSub( file, cuT( "size" ), target.getDisplaySize() )
 				&& write( file, cuT( "format" ), getFormatName( target.getPixelFormat() ) )
 				&& writeName( file, cuT( "tone_mapping" ), target.getToneMapping()->getName() );
 

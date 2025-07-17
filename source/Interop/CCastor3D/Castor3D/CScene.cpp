@@ -627,7 +627,6 @@ extern "C"
 		{
 			c3d::Viewport viewport{ *object->getInternal()->getEngine() };
 			viewport.setPerspective( c3d::Angle::fromDegrees( 120.0f ), 4.0f / 3.0f, 0.1f, 1000.0f );
-			viewport.resize( c3d::Size{ ww, wh } );
 			auto res = object->getInternal()->createCamera( c3d::makeString( name )
 				, *object->getInternal()
 				, *parent->getInternal()

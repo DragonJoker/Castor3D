@@ -158,8 +158,8 @@ namespace film_grain
 		, m_configUbo{ renderSystem.getRenderDevice().uboPool->getBuffer< Configuration >( 0u ) }
 		, m_noiseImages{ postfx::loadImages( *renderTarget.getEngine() ) }
 	{
-		m_config.pixelSize = c3d::Point2f{ m_renderTarget.getSize().getWidth()
-			, m_renderTarget.getSize().getHeight() };
+		m_config.pixelSize = c3d::Point2f{ m_renderTarget.getDisplaySize().getWidth()
+			, m_renderTarget.getDisplaySize().getHeight() };
 		m_config.noiseIntensity = 1.0f;
 		m_config.exposure = 1.0f;
 		m_config.time = 0.0f;

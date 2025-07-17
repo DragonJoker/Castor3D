@@ -222,7 +222,6 @@ namespace c3d
 		auto const h = float( height );
 		Viewport viewport{ engine };
 		viewport.setOrtho( -w / 2, w / 2, -h / 2, h / 2, -5120.0, 5120.0 );
-		viewport.resize( { width, height } );
 		viewport.update();
 		ShadowMapResult const & smResult = getShadowPassResult( isStatic );
 		auto & depth = smResult[SmTexture::eDepth];

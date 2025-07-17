@@ -121,42 +121,6 @@ extern "C"
 		return C3D_OK;
 	}
 
-	C3D_CAPIMETHODIMP c3dCamera_getWidth( C3DCamera const * object, uint32_t * result )
-	{
-		if ( !object || !result )
-			return C3D_POINTER;
-		if ( !object->getInternal() )
-			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_CAMERA );
-
-		*result = object->getInternal()->getWidth();
-
-		return C3D_OK;
-	}
-
-	C3D_CAPIMETHODIMP c3dCamera_getHeight( C3DCamera const * object, uint32_t * result )
-	{
-		if ( !object || !result )
-			return C3D_POINTER;
-		if ( !object->getInternal() )
-			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_CAMERA );
-
-		*result = object->getInternal()->getHeight();
-
-		return C3D_OK;
-	}
-
-	C3D_CAPIMETHODIMP c3dCamera_resize( C3DCamera * object, uint32_t width, uint32_t height )
-	{
-		if ( !object )
-			return C3D_POINTER;
-		if ( !object->getInternal() )
-			return cc3d::reportError( C3D_FAILURE, ERROR_UNINITIALISED_CAMERA );
-
-		object->getInternal()->resize( width, height );
-
-		return C3D_OK;
-	}
-
 #ifdef __cplusplus
 }
 #endif
