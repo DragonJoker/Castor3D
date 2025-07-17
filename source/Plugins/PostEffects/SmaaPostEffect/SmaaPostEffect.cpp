@@ -80,82 +80,55 @@ namespace smaa
 
 	//*********************************************************************************************
 
-	c3d::String getName( Mode mode )
+	c3d::StringView getName( Mode mode )
 	{
-		c3d::String result;
-
 		switch ( mode )
 		{
 		case Mode::e1X:
-			result = cuT( "1X" );
-			break;
-
+			return cuT( "1X" );
 		case Mode::eT2X:
-			result = cuT( "T2X" );
-			break;
-
+			return cuT( "T2X" );
 		case Mode::eS2X:
-			result = cuT( "S2X" );
-			break;
-
+			return cuT( "S2X" );
 		case Mode::e4X:
-			result = cuT( "4X" );
-			break;
+			return cuT( "4X" );
+		default:
+			return cuT( "Unsupported" );
 		}
-
-		return result;
 	}
 
-	c3d::String getName( Preset preset )
+	c3d::StringView getName( Preset preset )
 	{
-		c3d::String result;
-
 		switch ( preset )
 		{
 		case Preset::eLow:
-			result = cuT( "low" );
-			break;
-
+			return cuT( "low" );
 		case Preset::eMedium:
-			result = cuT( "medium" );
-			break;
-
+			return cuT( "medium" );
 		case Preset::eHigh:
-			result = cuT( "high" );
-			break;
-
+			return cuT( "high" );
 		case Preset::eUltra:
-			result = cuT( "ultra" );
-			break;
-
+			return cuT( "ultra" );
 		case Preset::eCustom:
-			result = cuT( "custom" );
-			break;
+			return cuT( "custom" );
+		default:
+			return cuT( "Unsupported" );
 		}
-
-		return result;
 	}
 
-	c3d::String getName( EdgeDetectionType detection )
+	c3d::StringView getName( EdgeDetectionType detection )
 	{
-		c3d::String result;
-
 		switch ( detection )
 		{
 		case EdgeDetectionType::eDepth:
-			result = cuT( "depth" );
-			break;
-
+			return cuT( "depth" );
 		case EdgeDetectionType::eColour:
-			result = cuT( "colour" );
-			break;
-
+			return cuT( "colour" );
 		case EdgeDetectionType::eLuma:
-			result = cuT( "luma" );
-			break;
+			return cuT( "luma" );
+		default:
+			return cuT( "Unsupported" );
 		}
-
-		return result;
 	}
 
 	//*********************************************************************************************
@@ -180,9 +153,7 @@ namespace smaa
 		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 	{
 		if ( m_config.data.mode == Mode::eT2X )
-		{
 			m_passesCount += m_config.maxSubsampleIndices;
-		}
 	}
 
 	c3d::PostEffectUPtr PostEffect::create( c3d::RenderTarget & renderTarget
@@ -197,24 +168,13 @@ namespace smaa
 	void PostEffect::accept( c3d::ConfigurationVisitorBase & visitor )
 	{
 		if ( m_edgeDetection )
-		{
 			m_edgeDetection->accept( visitor );
-		}
-
 		if ( m_blendingWeightCalculation )
-		{
 			m_blendingWeightCalculation->accept( visitor );
-		}
-
 		if ( m_neighbourhoodBlending )
-		{
 			m_neighbourhoodBlending->accept( visitor );
-		}
-
 		if ( m_reproject )
-		{
 			m_reproject->accept( visitor );
-		}
 
 		visitor.visit( cuT( "Preset" )
 			, m_config.data.preset
@@ -417,16 +377,17 @@ namespace smaa
 		if ( m_enabled )
 		{
 			if ( m_config.maxSubsampleIndices > 1u )
-			{
 				m_frameIndex = ( m_config.subsampleIndex + 1 ) % m_config.maxSubsampleIndices;
-			}
 
 			if ( m_blendingWeightCalculation )
 			{
-				m_renderTarget.setJitter( m_config.jitters[m_frameIndex] );
+				auto jitter = m_config.jitters[m_frameIndex] * 2.0f;
+				jitter[0] /= float( m_renderTarget.getRenderSize().getWidth() );
+				jitter[1] /= float( m_renderTarget.getRenderSize().getHeight() );
+				m_renderTarget.setJitter( jitter );
 			}
 
-			m_ubo.cpuUpdate( c3d::getSafeBandedSize( m_renderTarget.getSize() )
+			m_ubo.cpuUpdate( c3d::getSafeBandedSize( m_renderTarget.getDisplaySize() )
 				, m_config );
 			m_config.subsampleIndex = m_frameIndex;
 			m_subsamplePassIndex = m_config.subsampleIndex + m_passIndex * m_config.maxSubsampleIndices;
@@ -442,8 +403,8 @@ namespace smaa
 		static SmaaConfig::Data const ref;
 		file << ( cuT( "\n" ) + tabs + Type + cuT( "\n" ) );
 		file << ( tabs + cuT( "{\n" ) );
-		file << ( tabs + cuT( "\tmode " ) + smaa::getName( m_config.data.mode ) + cuT( "\n" ) );
-		file << ( tabs + cuT( "\tpreset " ) + smaa::getName( m_config.data.preset ) + cuT( "\n" ) );
+		file << ( tabs + cuT( "\tmode " ) + c3d::String{ smaa::getName( m_config.data.mode ) } + cuT( "\n" ) );
+		file << ( tabs + cuT( "\tpreset " ) + c3d::String{ smaa::getName( m_config.data.preset ) } + cuT( "\n" ) );
 
 		if ( m_config.data.preset == Preset::eCustom )
 		{
@@ -453,52 +414,32 @@ namespace smaa
 			file << ( tabs + cuT( "\tcornerRounding " ) + c3d::string::toString( m_config.data.cornerRounding, std::locale{ "C" } ) + cuT( "\n" ) );
 		}
 
-		file << ( tabs + cuT( "\tedgeDetection " ) + smaa::getName( m_config.data.edgeDetection ) + cuT( "\n" ) );
-
+		file << ( tabs + cuT( "\tedgeDetection " ) + c3d::String{ smaa::getName( m_config.data.edgeDetection ) } + cuT( "\n" ) );
 		if ( m_config.data.disableDiagonalDetection != ref.disableDiagonalDetection )
-		{
 			file << ( tabs + cuT( "\tdisableDiagonalDetection true\n" ) );
-		}
-
 		if ( m_config.data.disableCornerDetection != ref.disableCornerDetection )
-		{
 			file << ( tabs + cuT( "\tdisableCornerDetection true\n" ) );
-		}
 
 		if ( m_config.data.enablePredication != ref.enablePredication )
 		{
 			file << ( tabs + cuT( "\tenablePredication true\n" ) );
-
 			if ( m_config.data.predicationScale != ref.predicationScale )
-			{
 				file << ( tabs + cuT( "\tpredicationScale " ) + c3d::string::toString( m_config.data.predicationScale, std::locale{ "C" } ) + cuT( "\n" ) );
-			}
-
 			if ( m_config.data.predicationStrength != ref.predicationStrength )
-			{
 				file << ( tabs + cuT( "\tpredicationStrength " ) + c3d::string::toString( m_config.data.predicationStrength, std::locale{ "C" } ) + cuT( "\n" ) );
-			}
-
 			if ( m_config.data.predicationThreshold != ref.predicationThreshold )
-			{
 				file << ( tabs + cuT( "\tpredicationThreshold " ) + c3d::string::toString( m_config.data.predicationThreshold, std::locale{ "C" } ) + cuT( "\n" ) );
-			}
 		}
 
 		if ( m_config.data.enableReprojection != ref.enableReprojection )
 		{
 			file << ( tabs + cuT( "\treprojection true\n" ) );
-
 			if ( m_config.data.reprojectionWeightScale != ref.reprojectionWeightScale )
-			{
 				file << ( tabs + cuT( "\treprojectionWeightScale " ) + c3d::string::toString( m_config.data.reprojectionWeightScale, std::locale{ "C" } ) + cuT( "\n" ) );
-			}
 		}
 
 		if ( m_config.data.localContrastAdaptationFactor != ref.localContrastAdaptationFactor )
-		{
 			file << ( tabs + cuT( "\tlocalContrastAdaptationFactor " ) + c3d::string::toString( m_config.data.localContrastAdaptationFactor, std::locale{ "C" } ) + cuT( "\n" ) );
-		}
 
 		file << ( tabs + cuT( "}\n" ) );
 		return true;
@@ -507,12 +448,8 @@ namespace smaa
 	crg::ImageViewId const * PostEffect::doGetPredicationTexture()
 	{
 		crg::ImageViewId const * predication = nullptr;
-
 		if ( m_config.data.enablePredication )
-		{
 			predication = &m_renderTarget.getTechnique().getDepthObj().sampledViewId;
-		}
-
 		return predication;
 	}
 
@@ -524,11 +461,8 @@ namespace smaa
 		{
 		case Mode::eT2X:
 			if ( m_config.data.enableReprojection )
-			{
 				velocityView = &m_renderTarget.getVelocity().sampledViewId;
-			}
 			break;
-
 		default:
 			break;
 		}

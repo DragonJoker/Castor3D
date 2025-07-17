@@ -843,9 +843,9 @@ namespace ocean_fft
 
 				auto curPosition = writer.declLocale( "curPosition"
 					, vec4( pos.x(), heightDisplacement.x(), pos.y(), 1.0_f ) );
-				auto prvPosition = writer.declLocale( "prvPosition"
-					, c3d_cameraData.worldToPrvProj( prvMtxModel * curPosition ) );
-				auto worldPos = writer.declLocale( "worldPos"
+				auto prvWorldPos = writer.declLocale( "prvWorldPos"
+					, prvMtxModel * curPosition );
+				auto curWorldPos = writer.declLocale( "curWorldPos"
 					, curMtxModel * curPosition );
 				auto mtxNormal = writer.declLocale( "mtxNormal"
 					, modelData.getNormalMtx( flags, curMtxModel ) );
@@ -857,18 +857,26 @@ namespace ocean_fft
 					, vec4( 1.0_f, 0.0_f, 0.0_f, 1.0_f )
 					, vec3( 0.0_f, 0.0_f, 1.0_f ) );
 
-				mdlPosition = curPosition.xyz();
 				out.colour = patchIn.colour();
 				out.nodeId = patchIn.nodeId();
 				out.texture0 = patchIn.texture0();
-				out.curPosition = curPosition;
-				out.worldPosition = worldPos;
-				out.viewPosition = c3d_cameraData.worldToCurView( worldPos );
-				curPosition = c3d_cameraData.worldToCurProj( worldPos );
-				out.computeVelocity( c3d_cameraData
-					, curPosition
-					, prvPosition );
-				out.vtx.position = curPosition;
+
+				auto curViewPosition = writer.declLocale( "curViewPosition"
+					, c3d_cameraData.worldToCurView( curWorldPos ) );
+				auto prvViewPosition = writer.declLocale( "prvViewPosition"
+					, c3d_cameraData.worldToPrvView( prvWorldPos ) );
+				auto curCSPosition = writer.declLocale( "curCSPosition"
+					, c3d_cameraData.viewToProj( curViewPosition ) );
+				auto prvCSPosition = writer.declLocale( "prvCSPosition"
+					, c3d_cameraData.viewToProj( prvViewPosition ) );
+
+				mdlPosition = curPosition.xyz();
+				out.curPosition = curCSPosition.xyw();
+				out.prvPosition = prvCSPosition.xyw();
+				out.worldPosition = curWorldPos;
+				//out.worldPosition.w() = height;
+				out.viewPosition = curViewPosition;
+				out.vtx.position = curCSPosition;
 			} );
 	}
 

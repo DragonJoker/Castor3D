@@ -213,7 +213,7 @@ namespace c3d
 						, writer.cast< sdw::UInt >( in.primitiveID ) );
 				}
 
-				out.velocity = in.getVelocity();
+				out.velocity = in.getMotionVector( vec2( c3d_cameraData.renderSize() ) );
 				out.nmlOcc = vec4( components.getRawNormal(), components.occlusion );
 			} );
 	}

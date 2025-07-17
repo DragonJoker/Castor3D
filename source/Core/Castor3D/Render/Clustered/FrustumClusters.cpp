@@ -202,14 +202,10 @@ namespace c3d
 
 		if ( !m_config.lockClustersFrustum.value() )
 		{
-			auto jitter = updater.jitter;
-			auto jitterProjSpace = jitter * 2.0f;
-			jitterProjSpace[0] /= float( m_camera.getWidth() );
-			jitterProjSpace[1] /= float( m_camera.getHeight() );
 			m_clustersCameraUbo.cpuUpdate( m_camera
 				, updater.debugIndex
 				, true
-				, jitterProjSpace );
+				, updater.jitter );
 		}
 	}
 

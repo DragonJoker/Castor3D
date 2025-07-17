@@ -197,9 +197,6 @@ namespace c3d::shader
 			, DebugOutputCategory const & debugOutput )const;
 
 		// Vertex shader side
-		void computeVelocity( CameraData const & cameraData
-			, Position4T & curPos
-			, Position4T & prvPos );
 		void computeTangentSpace( PipelineFlags const & flags
 			, sdw::Vec3 const & cameraPosition
 			, Position3T const & worldPos
@@ -226,10 +223,10 @@ namespace c3d::shader
 			, Normal3T const & bin );
 
 		// Fragment shader side
-		sdw::Vec2 getVelocity()const;
+		sdw::Vec2 getMotionVector( sdw::Vec2 const & renderSize )const;
 
-		Position4T curPosition;
-		Position4T prvPosition;
+		Position3T curPosition;
+		Position3T prvPosition;
 		Position3T tangentSpaceFragPosition;
 		sdw::Vec3 tangentSpaceViewPosition;
 		Normal4T tangent;

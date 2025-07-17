@@ -84,6 +84,8 @@ namespace c3d::shader
 	/**@name Shader */
 	//@{
 
+	using sdw::fma;
+
 	/**@name Derivative value expression extraction */
 	//@{
 	C3D_API sdw::expr::ExprPtr makeRawExpr( DerivFloat const & value );
@@ -106,6 +108,10 @@ namespace c3d::shader
 	C3D_API RetDerivVec2 fma( DerivVec2 const a, DerivVec2 const b, DerivVec2 const c );
 	C3D_API RetDerivVec3 fma( DerivVec3 const a, DerivVec3 const b, DerivVec3 const c );
 	C3D_API RetDerivVec4 fma( DerivVec4 const a, DerivVec4 const b, DerivVec4 const c );
+	C3D_API RetDerivFloat fma( DerivFloat const a, sdw::Float const b, sdw::Float const c );
+	C3D_API RetDerivVec2 fma( DerivVec2 const a, sdw::Vec2 const b, sdw::Vec2 const c );
+	C3D_API RetDerivVec3 fma( DerivVec3 const a, sdw::Vec3 const b, sdw::Vec3 const c );
+	C3D_API RetDerivVec4 fma( DerivVec4 const a, sdw::Vec4 const b, sdw::Vec4 const c );
 	C3D_API sdw::Float fwidth( DerivFloat const a );
 	C3D_API sdw::Vec2 fwidth( DerivVec2 const a );
 	C3D_API sdw::Vec3 fwidth( DerivVec3 const a );

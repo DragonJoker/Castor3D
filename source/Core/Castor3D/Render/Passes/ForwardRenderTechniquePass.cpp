@@ -562,7 +562,7 @@ namespace c3d
 							, outScattering );
 					}
 
-					outVelocity.xy() = in.getVelocity();
+					outVelocity.xy() = in.getMotionVector( vec2( c3d_cameraData.renderSize() ) );
 				}
 			} );
 	}

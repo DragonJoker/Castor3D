@@ -535,11 +535,11 @@ namespace waves
 
 					if ( flags.hasWorldPosInputs() )
 					{
-						auto worldPos = writer.declLocale( "worldPos"
+						auto curWorldPos = writer.declLocale( "curWorldPos"
 							, curPosition );
 						out.computeTangentSpace( flags
 							, c3d_cameraData.position()
-							, worldPos.xyz()
+							, curWorldPos.xyz()
 							, curNormal
 							, curTangent
 							, curBitangent );
@@ -548,29 +548,36 @@ namespace waves
 					{
 						auto prvMtxModel = writer.declLocale( "prvMtxModel"
 							, modelData.getPrvModelMtx( flags, curMtxModel ) );
-						prvPosition = c3d_cameraData.worldToPrvProj( prvMtxModel * prvPosition );
-						auto worldPos = writer.declLocale( "worldPos"
+						prvPosition = prvMtxModel * prvPosition;
+						auto curWorldPos = writer.declLocale( "curWorldPos"
 							, curMtxModel * curPosition );
 						auto mtxNormal = writer.declLocale( "mtxNormal"
 							, modelData.getNormalMtx( flags, curMtxModel ) );
 						out.computeTangentSpace( flags
 							, c3d_cameraData.position()
-							, worldPos.xyz()
+							, curWorldPos.xyz()
 							, mtxNormal
 							, curNormal
 							, curTangent
 							, curBitangent );
 					}
 
-					auto worldPos = writer.getVariable< sdw::Vec4 >( "worldPos" );
-					out.worldPosition = worldPos;
-					out.viewPosition = c3d_cameraData.worldToCurView( worldPos );
-					curPosition = c3d_cameraData.worldToCurProj( worldPos );
+					auto curWorldPos = writer.getVariable< sdw::Vec4 >( "curWorldPos" );
+					auto curViewPosition = writer.declLocale( "curViewPosition"
+						, c3d_cameraData.worldToCurView( curWorldPos ) );
+					auto prvViewPosition = writer.declLocale( "prvViewPosition"
+						, c3d_cameraData.worldToPrvView( prvPosition ) );
+					auto curCSPosition = writer.declLocale( "curCSPosition"
+						, c3d_cameraData.viewToProj( curViewPosition ) );
+					auto prvCSPosition = writer.declLocale( "prvCSPosition"
+						, c3d_cameraData.viewToProj( prvViewPosition ) );
+
+					out.curPosition = curCSPosition.xyw();
+					out.prvPosition = prvCSPosition.xyw();
+					out.worldPosition = curWorldPos;
+					out.viewPosition = curViewPosition;
+					out.vtx.position = curCSPosition;
 					out.vertexId = in.vertexIndex - in.baseVertex;
-					out.computeVelocity( c3d_cameraData
-						, curPosition
-						, prvPosition );
-					out.vtx.position = curPosition;
 				} );
 		}
 
@@ -704,10 +711,19 @@ namespace waves
 
 				auto curPosition = writer.declLocale( "curPosition"
 					, vec4( finalWaveResult.position, 1.0_f ) );
-				auto prvPosition = writer.declLocale( "prvPosition"
-					, c3d_cameraData.worldToPrvProj( prvMtxModel * curPosition ) );
-				auto worldPos = writer.declLocale( "worldPos"
+				auto curWorldPos = writer.declLocale( "curWorldPos"
 					, curMtxModel * curPosition );
+				auto prvWorldPos = writer.declLocale( "prvWorldPos"
+					, prvMtxModel * curPosition );
+				auto curViewPosition = writer.declLocale( "curViewPosition"
+					, c3d_cameraData.worldToCurView( curWorldPos ) );
+				auto prvViewPosition = writer.declLocale( "prvViewPosition"
+					, c3d_cameraData.worldToPrvView( prvWorldPos ) );
+				auto curCSPosition = writer.declLocale( "curCSPosition"
+					, c3d_cameraData.viewToProj( curViewPosition ) );
+				auto prvCSPosition = writer.declLocale( "prvCSPosition"
+					, c3d_cameraData.viewToProj( prvViewPosition ) );
+
 				auto mtxNormal = writer.declLocale( "mtxNormal"
 					, modelData.getNormalMtx( flags, curMtxModel ) );
 				out.computeTangentSpace( flags
@@ -744,14 +760,13 @@ namespace waves
 					+ patchIn.tessCoord.y() * listIn[1].passMultipliers[3]
 					+ patchIn.tessCoord.z() * listIn[2].passMultipliers[3];
 				out.nodeId = nodeId;
-				out.worldPosition = worldPos;
+
+				out.curPosition = curCSPosition.xyw();
+				out.prvPosition = prvCSPosition.xyw();
+				out.worldPosition = curWorldPos;
 				//out.worldPosition.w() = height;
-				out.viewPosition = c3d_cameraData.worldToCurView( worldPos );
-				curPosition = c3d_cameraData.worldToCurProj( worldPos );
-				out.computeVelocity( c3d_cameraData
-					, curPosition
-					, prvPosition );
-				out.vtx.position = curPosition;
+				out.viewPosition = curViewPosition;
+				out.vtx.position = curCSPosition;
 			} );
 	}
 

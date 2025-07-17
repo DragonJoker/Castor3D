@@ -67,16 +67,6 @@ namespace c3d
 			return curViewProj() * wsPosition;
 		}
 
-		sdw::Vec4 CameraData::worldToPrvProj( sdw::Vec4 const & wsPosition )const
-		{
-			return prvViewProj() * wsPosition;
-		}
-
-		DerivVec4 CameraData::worldToPrvProj( DerivVec4 const & wsPosition )const
-		{
-			return prvViewProj() * wsPosition;
-		}
-
 		sdw::Vec2 CameraData::viewToScreenUV( Utils & utils
 			, sdw::Vec4 vsPosition )const
 		{
@@ -87,12 +77,6 @@ namespace c3d
 			, sdw::Vec4 wsPosition )const
 		{
 			return utils.clipToScreen( worldToCurProj( wsPosition ) ).xy();
-		}
-
-		sdw::Vec2 CameraData::worldToPrvScreenUV( Utils & utils
-			, sdw::Vec4 wsPosition )const
-		{
-			return utils.clipToScreen( worldToPrvProj( wsPosition ) ).xy();
 		}
 
 		sdw::Vec3 CameraData::projToView( Utils & utils
@@ -154,18 +138,6 @@ namespace c3d
 		sdw::Mat4 CameraData::getInvViewProjMtx()const
 		{
 			return invCurViewProj();
-		}
-
-		void CameraData::jitter( sdw::Vec4 & csPosition )const
-		{
-			csPosition.xy() -= jitter() * csPosition.w();
-		}
-
-		void CameraData::jitter( DerivVec4 & csPosition )const
-		{
-			csPosition.value().xy() -= jitter() * csPosition.value().w();
-			csPosition.dPdx().xy() -= jitter() * csPosition.dPdx().w();
-			csPosition.dPdy().xy() -= jitter() * csPosition.dPdy().w();
 		}
 
 		sdw::Vec3 CameraData::transformCamera( sdw::Mat3 const & transform )const
@@ -292,18 +264,15 @@ namespace c3d
 		, Frustum const & frustum
 		, Point2f const & jitter )
 	{
-		auto & configuration = cpuUpdate( size, projection, debugIndex );
+		auto & configuration = cpuUpdate( size, projection, debugIndex, jitter );
 		configuration.prvView = configuration.curView;
 		configuration.invPrvView = configuration.invCurView;
 		configuration.prvViewProj = configuration.curViewProj;
 		configuration.invPrvViewProj = configuration.invCurViewProj;
 		configuration.curView = view;
 		configuration.invCurView = view.getInverse();
-		configuration.projection = projection;
-		configuration.invProjection = projection.getInverse();
-		configuration.curViewProj = projection * view;
+		configuration.curViewProj = configuration.projection * configuration.curView;
 		configuration.invCurViewProj = ( configuration.curViewProj ).getInverse();
-		configuration.jitter = { jitter->x, jitter->y };
 
 		auto itSrc = frustum.getPlanes().begin();
 		auto itDst = configuration.frustumPlanes.begin();
@@ -320,7 +289,8 @@ namespace c3d
 
 	CameraUbo::Configuration & CameraUbo::cpuUpdate( Size const & size
 		, Matrix4x4f const & projection
-		, uint32_t debugIndex )
+		, uint32_t debugIndex
+		, Point2f const & jitter )
 	{
 		CU_Require( m_ubo );
 		auto & configuration = m_ubo.getData();
@@ -328,6 +298,8 @@ namespace c3d
 		configuration.invProjection = projection.getInverse();
 		configuration.size = { size.getWidth(), size.getHeight() };
 		configuration.debugIndex = debugIndex;
+		if ( jitter != Point2f{} )
+			matrix::translate( configuration.projection, Point3f{ jitter->x, jitter->y, 0.0f } );
 		return configuration;
 	}
 
