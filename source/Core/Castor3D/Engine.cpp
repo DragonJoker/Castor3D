@@ -30,6 +30,7 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
+#include "Castor3D/Render/UpscalingWrapper.hpp"
 #include "Castor3D/Scene/CscnImporterFile.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -375,6 +376,34 @@ namespace c3d
 			}
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eWindow )
+
+		static CU_ImplementAttributeParserBlock( parserUpscaling, RootContext )
+		{
+		}
+		CU_EndAttributePushBlock( CSCNSection::eUpscaling, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserUpscalingEnable, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->engine->getUpscalingConfig().enabled );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserUpscalingEnd, RootContext )
+		{
+			if ( blockContext->engine->getUpscalingConfig().enabled
+				&& !blockContext->engine->getRenderDevice()->upscaling )
+			{
+				blockContext->engine->getRenderDevice()->upscaling = makeUnique< UpscalingWrapper >( *blockContext->engine->getRenderDevice() );
+			}
+		}
+		CU_EndAttributePop()
 
 		static CU_ImplementAttributeParserBlock( parserMaxImageSize, RootContext )
 		{
@@ -980,24 +1009,29 @@ namespace c3d
 
 	void Engine::addParsers( AttributeParsers & result )
 	{
-		BlockParserContextT< RootContext > context{ result, CSCNSection::eRoot };
+		BlockParserContextT< RootContext > rootContext{ result, CSCNSection::eRoot };
+		BlockParserContextT< RootContext > ssContext{ result, CSCNSection::eUpscaling };
 
-		context.addParser( cuT( "debug_overlays" ), eng::parserDebugOverlays, { makeParameter< ParameterType::eBool >() } );
-		context.addParser( cuT( "debug_targets" ), eng::parserDebugTargets, { makeParameter< ParameterType::eBool >() } );
-		context.addParser( cuT( "max_image_size" ), eng::parserMaxImageSize, { makeParameter< ParameterType::eUInt32 >() } );
-		context.addParser( cuT( "debug_max_image_size" ), eng::parserDebugMaxImageSize, { makeParameter< ParameterType::eUInt32 >() } );
-		context.addParser( cuT( "lpv_grid_size" ), eng::parserLpvGridSize, { makeParameter< ParameterType::eUInt32 >() } );
-		context.addParser( cuT( "default_unit" ), eng::parserDefaultUnit, { makeParameter< ParameterType::eCheckedText, LengthUnit >() } );
-		context.addParser( cuT( "enable_full_loading" ), eng::parserFullLoading, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
-		context.addPushParser( cuT( "scene" ), CSCNSection::eScene, eng::parserScene, { makeParameter< ParameterType::eName >() } );
-		context.addPushParser( cuT( "loading_screen" ), CSCNSection::eScene, eng::parserLoadingScreen, {} );
-		context.addPushParser( cuT( "font" ), CSCNSection::eFont, eng::parserFont, { makeParameter< ParameterType::eName >() } );
-		context.addPushParser( cuT( "sdf_font" ), CSCNSection::eSdfFont, eng::parserSdfFont, { makeParameter< ParameterType::eName >() } );
-		context.addPushParser( cuT( "panel_overlay" ), CSCNSection::ePanelOverlay, eng::parserPanelOverlay, { makeParameter< ParameterType::eName >() } );
-		context.addPushParser( cuT( "border_panel_overlay" ), CSCNSection::eBorderPanelOverlay, eng::parserBorderPanelOverlay, { makeParameter< ParameterType::eName >() } );
-		context.addPushParser( cuT( "text_overlay" ), CSCNSection::eTextOverlay, eng::parserTextOverlay, { makeParameter< ParameterType::eName >() } );
-		context.addPushParser( cuT( "sampler" ), CSCNSection::eSampler, eng::parserSamplerState, { makeParameter< ParameterType::eName >() } );
-		context.addPushParser( cuT( "window" ), CSCNSection::eWindow, eng::parserWindow, { makeParameter< ParameterType::eName >() } );
+		rootContext.addParser( cuT( "debug_overlays" ), eng::parserDebugOverlays, { makeParameter< ParameterType::eBool >() } );
+		rootContext.addParser( cuT( "debug_targets" ), eng::parserDebugTargets, { makeParameter< ParameterType::eBool >() } );
+		rootContext.addParser( cuT( "max_image_size" ), eng::parserMaxImageSize, { makeParameter< ParameterType::eUInt32 >() } );
+		rootContext.addParser( cuT( "debug_max_image_size" ), eng::parserDebugMaxImageSize, { makeParameter< ParameterType::eUInt32 >() } );
+		rootContext.addParser( cuT( "lpv_grid_size" ), eng::parserLpvGridSize, { makeParameter< ParameterType::eUInt32 >() } );
+		rootContext.addParser( cuT( "default_unit" ), eng::parserDefaultUnit, { makeParameter< ParameterType::eCheckedText, LengthUnit >() } );
+		rootContext.addParser( cuT( "enable_full_loading" ), eng::parserFullLoading, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		rootContext.addPushParser( cuT( "scene" ), CSCNSection::eScene, eng::parserScene, { makeParameter< ParameterType::eName >() } );
+		rootContext.addPushParser( cuT( "loading_screen" ), CSCNSection::eScene, eng::parserLoadingScreen, {} );
+		rootContext.addPushParser( cuT( "font" ), CSCNSection::eFont, eng::parserFont, { makeParameter< ParameterType::eName >() } );
+		rootContext.addPushParser( cuT( "sdf_font" ), CSCNSection::eSdfFont, eng::parserSdfFont, { makeParameter< ParameterType::eName >() } );
+		rootContext.addPushParser( cuT( "panel_overlay" ), CSCNSection::ePanelOverlay, eng::parserPanelOverlay, { makeParameter< ParameterType::eName >() } );
+		rootContext.addPushParser( cuT( "border_panel_overlay" ), CSCNSection::eBorderPanelOverlay, eng::parserBorderPanelOverlay, { makeParameter< ParameterType::eName >() } );
+		rootContext.addPushParser( cuT( "text_overlay" ), CSCNSection::eTextOverlay, eng::parserTextOverlay, { makeParameter< ParameterType::eName >() } );
+		rootContext.addPushParser( cuT( "sampler" ), CSCNSection::eSampler, eng::parserSamplerState, { makeParameter< ParameterType::eName >() } );
+		rootContext.addPushParser( cuT( "window" ), CSCNSection::eWindow, eng::parserWindow, { makeParameter< ParameterType::eName >() } );
+		rootContext.addPushParser( cuT( "upscaling" ), CSCNSection::eUpscaling, eng::parserUpscaling );
+
+		ssContext.addParser( cuT( "enabled" ), eng::parserUpscalingEnable, { makeParameter< ParameterType::eBool >() } );
+		ssContext.addPopParser( cuT( "}" ), eng::parserUpscalingEnd );
 	}
 
 	String Engine::getDefaultLightingModelName()const

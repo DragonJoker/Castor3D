@@ -407,6 +407,7 @@ namespace c3d
 		IndexBufferPoolUPtr indexPools;
 		ObjectBufferPoolUPtr geometryPools;
 		UniformBufferPoolUPtr uboPool;
+		UpscalingWrapperUPtr upscaling;
 
 	private:
 		bool doTryAddExtension( MbString const & name

@@ -85,6 +85,7 @@ namespace c3d
 		eLightGroupShadowsPcf = CU_MakeSectionName( 'P', 'C', 'F', 'G' ),
 		eLightGroupShadowsVsm = CU_MakeSectionName( 'V', 'S', 'M', 'G' ),
 		eLightGroupShadowsRsm = CU_MakeSectionName( 'R', 'S', 'M', 'G' ),
+		eUpscaling = CU_MakeSectionName( 'U', 'P', 'S', 'C' ),
 	};
 
 	struct SceneContext;

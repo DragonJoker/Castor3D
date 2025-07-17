@@ -5,6 +5,7 @@
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/UpscalingWrapper.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 
 #include <CastorUtils/Miscellaneous/Debug.hpp>
@@ -574,6 +575,9 @@ namespace c3d
 		vertexPools = makeUnique< VertexBufferPool >( *this, cuT( "VertexBuffersPool" ) );
 		indexPools = makeUnique< IndexBufferPool >( *this, cuT( "IndexBuffersPool" ) );
 		uboPool = makeUnique< UniformBufferPool >( *this, cuT( "UniformBufferPool" ) );
+
+		if ( renderSystem.getEngine()->getUpscalingConfig().enabled )
+			upscaling = makeUnique< UpscalingWrapper >( *this );
 	}
 
 	RenderDevice::~RenderDevice()noexcept
@@ -582,6 +586,7 @@ namespace c3d
 			auto lock = makeUniqueLock( m_mutex );
 			m_contexts.clear();
 		}
+		upscaling.reset();
 		uboPool.reset();
 		uboPool.reset();
 		indexPools.reset();

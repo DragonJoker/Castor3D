@@ -40,6 +40,8 @@ See LICENSE file in root folder
 
 namespace c3d
 {
+	class UpscalingFramePass;
+
 	class RenderTarget
 		: public OwnedBy< Engine >
 	{
@@ -484,6 +486,10 @@ namespace c3d
 		SemaphoreWaitArray doRender( ashes::Queue const & queue
 			, SemaphoreWaitArray signalsToWait );
 		void doListIntermediateViews( IntermediateViewArray & result )const;
+		crg::FramePass const & doCreateUpscalingPass( crg::FramePassGroup & graph
+			, crg::FramePassArray const & previousPasses
+			, crg::ImageViewId resolvedColor
+			, crg::ImageViewId unresolvedColor );
 
 	private:
 		static uint32_t sm_uiCount;
@@ -517,6 +523,7 @@ namespace c3d
 		SceneCullerUPtr m_culler;
 		crg::FrameGraph m_graph;
 		Texture m_velocity;
+		TextureUPtr m_hdrObjectsDownSampled;
 		Array< Texture, 2u > m_srgbObjects;
 		Array< Texture, 2u > m_hdrObjects;
 		Texture m_overlays;
@@ -524,6 +531,7 @@ namespace c3d
 		CameraUbo m_cameraUbo;
 		crg::FramePass & m_overlayPassDesc;
 		OverlayPass * m_overlayPass{};
+		UpscalingFramePass * m_upscalingPass{};
 		uint32_t m_hdrCopyPassIndex{ 0u };
 		Texture const * m_hdrCopyPassSource{};
 		uint32_t m_combinePassIndex{ 1u };

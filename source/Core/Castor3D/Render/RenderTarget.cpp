@@ -18,6 +18,7 @@
 #include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
+#include "Castor3D/Render/UpscalingWrapper.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/Debug/DebugDrawer.hpp"
@@ -25,6 +26,7 @@
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Render/Overlays/OverlayPass.hpp"
 #include "Castor3D/Render/Overlays/OverlayRenderer.hpp"
+#include "Castor3D/Render/Passes/UpscalingPass.hpp"
 #include "Castor3D/Render/PostEffect/PostEffect.hpp"
 #include "Castor3D/Render/ToneMapping/ToneMapping.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -596,6 +598,25 @@ namespace c3d
 			}
 		}
 		CU_EndAttributePop()
+
+		static Size getOptimalRenderSize( RenderDevice const & device
+			, Size const & displaySize
+			, UpscalingConfig upscalingConfig )
+		{
+			Size result{ displaySize };
+
+			if ( UpscalingRecommendedSettings recommendedSettings;
+				device.upscaling
+					&& device.upscaling->queryOptimalSettings( makeExtent2D( displaySize )
+						, upscalingConfig
+						, recommendedSettings ) )
+			{
+				result.set( recommendedSettings.recommendedOptimalRenderSize.width
+					, recommendedSettings.recommendedOptimalRenderSize.height );
+			}
+
+			return result;
+		}
 	}
 
 	//*********************************************************************************************
@@ -610,7 +631,7 @@ namespace c3d
 		, m_device{ getOwner()->getRenderSystem()->getRenderDevice() }
 		, m_type{ type }
 		, m_displaySize{ size }
-		, m_renderSize{ size }
+		, m_renderSize{ rendtgt::getOptimalRenderSize( m_device, m_displaySize, engine.getUpscalingConfig() ) }
 		, m_pixelFormat{ pixelFormat }
 		, m_initialised{ false }
 		, m_resources{ getOwner()->getGraphResourceHandler() }
@@ -632,6 +653,16 @@ namespace c3d
 					| ImageUsageFlags::eTransferDst
 					| ImageUsageFlags::eStorage ) }
 			, { BorderColour::eFloatOpaqueBlack } }
+		, m_hdrObjectsDownSampled{ ( engine.getUpscalingConfig().enabled
+			? makeUnique< Texture >( m_device
+				, m_resources
+				, cuT( "HDRDownsampled" )
+				, TextureCreateInfo{ ImageCreateFlags::eNone
+					, makeExtent3D( getSafeBandedSize( m_renderSize ) ), 1u, 1u
+					, PixelFormat::eR16G16B16A16_SFLOAT
+					, rendtgt::objectsUsageFlags }
+				, TextureSamplerInfo{ BorderColour::eFloatOpaqueBlack } )
+			: nullptr ) }
 		, m_srgbObjects{ Texture{ m_device
 				, m_resources
 				, cuT( "SRGBResult0" )
@@ -716,6 +747,14 @@ namespace c3d
 			auto commandBuffer = queueData->commandPool->createCommandBuffer();
 			commandBuffer->begin();
 
+			if ( m_hdrObjectsDownSampled )
+			{
+				m_hdrObjectsDownSampled->create();
+				commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, m_hdrObjectsDownSampled->makeShaderInputResource( ImageLayout::eUndefined ) );
+			}
+
 			for ( auto & texture : m_hdrObjects )
 			{
 				texture.create();
@@ -745,6 +784,9 @@ namespace c3d
 
 		for ( auto & texture : m_hdrObjects )
 			texture.destroy();
+
+		if ( m_hdrObjectsDownSampled )
+			m_hdrObjectsDownSampled->destroy();
 	}
 
 	uint32_t RenderTarget::countInitialisationSteps()const noexcept
@@ -861,6 +903,8 @@ namespace c3d
 #if C3D_DebugTimers
 		auto block( m_cpuUpdateTimer->start() );
 #endif
+		if ( m_upscalingPass )
+			m_upscalingPass->update();
 
 		auto & camera = *getCamera();
 		auto & scene = *getScene();
@@ -1224,6 +1268,14 @@ namespace c3d
 		}
 
 		auto * previousPass = &m_renderTechnique->getLastPass();
+		if ( getEngine()->getUpscalingConfig().enabled )
+		{
+			previousPass = &doCreateUpscalingPass( m_graph.createPassGroup( "Upscaling" )
+				, { previousPass }
+				, m_hdrObjects.front().targetViewId
+				, m_hdrObjectsDownSampled->sampledViewId );
+		}
+
 		auto hdrSource = &m_hdrObjects.front();
 		auto hdrTarget = &m_hdrObjects.back();
 
@@ -1427,7 +1479,7 @@ namespace c3d
 				m_renderTechnique = makeUnique< RenderTechnique >( getName()
 					, *this
 					, device
-					, m_hdrObjects.front()
+					, m_hdrObjectsDownSampled ? *m_hdrObjectsDownSampled : m_hdrObjects.front()
 					, c3d::move( previousPasses )
 					, progress
 					, C3D_UseVisibilityBuffer != 0
@@ -1601,6 +1653,33 @@ namespace c3d
 		}
 
 		rendtgt::IntermediatesLister::submit( *getScene(), *getScene()->getBackground(), result );
+	}
+
+	crg::FramePass const & RenderTarget::doCreateUpscalingPass( crg::FramePassGroup & graph
+		, crg::FramePassArray const & previousPasses
+		, crg::ImageViewId resolvedColor
+		, crg::ImageViewId unresolvedColor )
+	{
+		auto & pass = graph.createPass( "Upscaling"
+			, [this]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & runnable )
+			{
+				auto result = makeRawUnique< UpscalingFramePass >( framePass
+					, context
+					, runnable
+					, m_device
+					, *this
+					, getEngine()->getUpscalingConfig() );
+				getEngine()->registerTimer( makeString( framePass.getFullName() )
+					, result->getTimer() );
+				m_upscalingPass = result.get();
+				return result;
+			} );
+		pass.addDependencies( previousPasses );
+		pass.addImplicitColourView( resolvedColor, ImageLayout::eGeneral );
+		pass.addImplicitColourView( unresolvedColor, ImageLayout::eColorAttachment );
+		return pass;
 	}
 
 	String getPrefix( TargetContext const & context )

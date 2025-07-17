@@ -32,6 +32,19 @@ namespace c3d
 
 	String const RenderTypeUndefined = cuT( "Undefined" );
 
+	/**
+	*\~english
+	*\brief
+	*	Holds upscaling configuration.
+	*\~french
+	*\brief
+	*	Contient la configuration d'upscaling.
+	*/
+	struct UpscalingConfig
+	{
+		bool enabled{ false };
+	};
+
 	using RenderPassTypeID = uint16_t;
 
 	/**
@@ -751,6 +764,24 @@ namespace c3d
 	/**
 	*\~english
 	*\brief
+	*	Wraps DLSS or other upscaling SDK.
+	*\~french
+	*\brief
+	*	Enrobe le DLSS ou tout autre SDK d'upscaling.
+	*/
+	class UpscalingWrapper;
+	/**
+	*\~english
+	*\brief
+	*	Wraps DLSS or other upscaling SDK.
+	*\~french
+	*\brief
+	*	Enrobe le DLSS ou tout autre SDK d'upscaling.
+	*/
+	class UpscalingInstance;
+	/**
+	*\~english
+	*\brief
 	*	A render viewport.
 	*\~french
 	*\brief
@@ -1022,6 +1053,8 @@ namespace c3d
 	CU_DeclareSmartPtr( c3d, RenderTechnique, C3D_API );
 	CU_DeclareSmartPtr( c3d, RenderTechniquePass, C3D_API );
 	CU_DeclareSmartPtr( c3d, RenderWindow, C3D_API );
+	CU_DeclareSmartPtr( c3d, UpscalingInstance, C3D_API );
+	CU_DeclareSmartPtr( c3d, UpscalingWrapper, C3D_API );
 	CU_DeclareSmartPtr( c3d, Viewport, C3D_API );
 	CU_DeclareSmartPtr( c3d, Texture, C3D_API );
 
