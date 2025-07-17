@@ -489,7 +489,9 @@ namespace c3d
 		crg::FramePass const & doCreateUpscalingPass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, crg::ImageViewId resolvedColor
-			, crg::ImageViewId unresolvedColor );
+			, crg::ImageViewId unresolvedColor
+			, crg::ImageViewId motion
+			, crg::ImageViewId depth );
 
 	private:
 		static uint32_t sm_uiCount;

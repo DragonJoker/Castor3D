@@ -22,6 +22,9 @@ endif ()
 if ( NOT DEFINED CASTOR_USE_TASK_SHADERS )
 	option( CASTOR_USE_TASK_SHADERS "Use task shaders along with mesh shaders" ON )
 endif ()
+if ( NOT DEFINED CASTOR_USE_DLSS )
+	option( CASTOR_USE_DLSS "Tells if Castor3D uses DLSS" OFF )
+endif ()
 
 set( C3D_USE_GLSLANG 0 )
 set( C3D_USE_WBOIT 0 )
@@ -29,6 +32,7 @@ set( C3D_USE_ALLOCCB 0 )
 set( C3D_USE_MESH 0 )
 set( C3D_USE_TASK 0 )
 set( C3D_USE_VISIBILITY 0 )
+set( C3D_USE_DLSS 0 )
 
 if ( CASTOR_USE_GLSLANG )
 	set( C3D_USE_GLSLANG 1 )
@@ -52,6 +56,11 @@ endif ()
 
 if ( CASTOR_USE_TASK_SHADERS )
 	set( C3D_USE_TASK 1 )
+endif ()
+
+if ( CASTOR_USE_DLSS )
+	find_package( NGX REQUIRED )
+	set( C3D_USE_DLSS 1 )
 endif ()
 
 set( ExternalIncludes )
@@ -2279,6 +2288,12 @@ if ( CASTOR_C3D_NEEDS_GLSL )
 	target_link_libraries( ${PROJECT_NAME}
 		PRIVATE
 			sdw::CompilerGlsl
+	)
+endif ()
+if ( CASTOR_USE_DLSS )
+	target_link_libraries( ${PROJECT_NAME}
+		PRIVATE
+			ngx
 	)
 endif ()
 

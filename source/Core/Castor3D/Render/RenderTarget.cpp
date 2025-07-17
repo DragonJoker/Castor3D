@@ -1273,7 +1273,9 @@ namespace c3d
 			previousPass = &doCreateUpscalingPass( m_graph.createPassGroup( "Upscaling" )
 				, { previousPass }
 				, m_hdrObjects.front().targetViewId
-				, m_hdrObjectsDownSampled->sampledViewId );
+				, m_hdrObjectsDownSampled->sampledViewId
+				, m_velocity.sampledViewId
+				, m_renderTechnique->getDepth().sampledViewId );
 		}
 
 		auto hdrSource = &m_hdrObjects.front();
@@ -1658,7 +1660,9 @@ namespace c3d
 	crg::FramePass const & RenderTarget::doCreateUpscalingPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, crg::ImageViewId resolvedColor
-		, crg::ImageViewId unresolvedColor )
+		, crg::ImageViewId unresolvedColor
+		, crg::ImageViewId motion
+		, crg::ImageViewId depth )
 	{
 		auto & pass = graph.createPass( "Upscaling"
 			, [this]( crg::FramePass const & framePass
@@ -1679,6 +1683,8 @@ namespace c3d
 		pass.addDependencies( previousPasses );
 		pass.addImplicitColourView( resolvedColor, ImageLayout::eGeneral );
 		pass.addImplicitColourView( unresolvedColor, ImageLayout::eColorAttachment );
+		pass.addImplicitColourView( motion, ImageLayout::eColorAttachment );
+		pass.addImplicitColourView( depth, ImageLayout::eColorAttachment );
 		return pass;
 	}
 

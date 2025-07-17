@@ -65,6 +65,28 @@ namespace c3d
 		}
 	}
 
+	String getName( UpscalingPerfQualityMode value )
+	{
+		switch ( value )
+		{
+		case UpscalingPerfQualityMode::eMaxPerf:
+			return cuT( "max_performance" );
+		case UpscalingPerfQualityMode::eBalanced:
+			return cuT( "balanced" );
+		case UpscalingPerfQualityMode::eMaxQuality:
+			return cuT( "max_quality" );
+		case UpscalingPerfQualityMode::eUltraPerformance:
+			return cuT( "ultra_performance" );
+		case UpscalingPerfQualityMode::eUltraQuality:
+			return cuT( "ultra_quality" );
+		case UpscalingPerfQualityMode::eDLAA:
+			return cuT( "dlaa" );
+		default:
+			CU_Failure( "Unsupported UpscalingPerfQualityMode" );
+			return cuEmptyString;
+		}
+	}
+
 	String getName( FrustumPlane value )
 	{
 		switch ( value )

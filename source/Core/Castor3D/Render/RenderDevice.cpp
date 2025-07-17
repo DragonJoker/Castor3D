@@ -1,5 +1,6 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 
+#include "Castor3D/Config.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
@@ -495,6 +496,20 @@ namespace c3d
 			}
 #if VK_KHR_synchronization2
 			doTryAddExtension( VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME );
+#endif
+#if C3D_UseDLSS
+#	if VK_NVX_binary_import
+			doTryAddExtension( VK_NVX_BINARY_IMPORT_EXTENSION_NAME );
+#	endif
+#	if VK_NVX_image_view_handle
+			doTryAddExtension( VK_NVX_IMAGE_VIEW_HANDLE_EXTENSION_NAME );
+#	endif
+#	if VK_NV_low_latency
+			doTryAddExtension( VK_NV_LOW_LATENCY_EXTENSION_NAME );
+#	endif
+#	if VK_KHR_push_descriptor
+			doTryAddExtension( VK_KHR_PUSH_DESCRIPTOR_EXTENSION_NAME, nullptr, &m_pushDescriptorProperties );
+#	endif
 #endif
 			// use the features2 chain to append extensions
 			auto currentFeat = reinterpret_cast< VkStructure * >( &m_features2 );

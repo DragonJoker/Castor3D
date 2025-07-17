@@ -535,6 +535,11 @@ namespace c3d
 			, nullptr
 			, {} };
 #endif
+#if VK_KHR_push_descriptor
+		VkPhysicalDevicePushDescriptorPropertiesKHR m_pushDescriptorProperties{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PUSH_DESCRIPTOR_PROPERTIES
+			, nullptr
+			, {} };
+#endif
 #pragma GCC diagnostic pop
 
 		bool m_prefersMeshShaderEXT{ true };

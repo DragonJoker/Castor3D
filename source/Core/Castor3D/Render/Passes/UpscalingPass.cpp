@@ -37,6 +37,7 @@ namespace c3d
 	{
 		if ( m_upscaler )
 			m_upscaler->update();
+		++m_updateCount;
 	}
 
 	void UpscalingFramePass::doInitialise( uint32_t index )
@@ -62,13 +63,19 @@ namespace c3d
 		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
+		if ( m_updateCount == 0 )
+			return;
 		auto itResolved = m_pass.images.begin();
 		auto itUnresolved = std::next( itResolved );
 		auto itMotion = std::next( itUnresolved );
 		auto itDepth = std::next( itMotion );
 		m_upscaler->evaluateUpscaling( context, commandBuffer
 			, itResolved->imageAttach.view( index )
-			, itUnresolved->imageAttach.view( index ) );
+			, itUnresolved->imageAttach.view( index )
+			, itMotion->imageAttach.view( index )
+			, itDepth->imageAttach.view( index )
+			, m_updateCount < 2
+			, m_target.getJitter() );
 	}
 
 	uint32_t UpscalingFramePass::doGetPassIndex()const

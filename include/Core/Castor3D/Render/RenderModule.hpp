@@ -13,6 +13,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/ShaderModule.hpp"
 #include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 #include <RenderGraph/Attachment.hpp>
@@ -32,6 +33,17 @@ namespace c3d
 
 	String const RenderTypeUndefined = cuT( "Undefined" );
 
+	enum class UpscalingPerfQualityMode
+	{
+		eMaxPerf,
+		eBalanced,
+		eMaxQuality,
+		eUltraPerformance,
+		eUltraQuality,
+		eDLAA,
+		CU_ScopedEnumBounds( eMaxPerf, eDLAA )
+	};
+	C3D_API String getName( UpscalingPerfQualityMode v );
 	/**
 	*\~english
 	*\brief
@@ -43,6 +55,7 @@ namespace c3d
 	struct UpscalingConfig
 	{
 		bool enabled{ false };
+		UpscalingPerfQualityMode perfQualityMode{ UpscalingPerfQualityMode::eMaxPerf };
 	};
 
 	using RenderPassTypeID = uint16_t;
@@ -1442,6 +1455,18 @@ namespace c3d
 			, dstBinding
 			, dstArrayElement );
 	}
+
+	template<>
+	struct ParserEnumTraits< UpscalingPerfQualityMode >
+	{
+		static inline xchar const * const Name = cuT( "UpscalingPerfQualityMode" );
+		static inline UInt32StrMap const Values = []()
+			{
+				UInt32StrMap result;
+				result = getEnumMapT< UpscalingPerfQualityMode >();
+				return result;
+			}( );
+	};
 }
 
 CU_DeclareExportedOwnedBy( C3D_API, RenderSystem, RenderSystem )
