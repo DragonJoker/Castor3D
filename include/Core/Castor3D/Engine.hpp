@@ -1057,6 +1057,16 @@ namespace c3d
 		{
 			return m_unit;
 		}
+
+		UpscalingConfig const & getUpscalingConfig()const noexcept
+		{
+			return m_upscalingConfig;
+		}
+
+		UpscalingConfig & getUpscalingConfig()noexcept
+		{
+			return m_upscalingConfig;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -1306,6 +1316,7 @@ namespace c3d
 		PassComponentRegisterUPtr m_passComponents;
 		SubmeshComponentRegisterUPtr m_submeshComponents;
 		CpuInformations m_cpuInformations;
+		UpscalingConfig m_upscalingConfig;
 		LightingModelID m_lightingModelId{};
 		uint32_t m_lpvGridSize{ 32u };
 		uint32_t m_maxImageSize{ 0xFFFFFFFF };
