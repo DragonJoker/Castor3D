@@ -1002,10 +1002,11 @@ interface IRenderTarget
 	[propget, id( 3 ), helpstring( "The rendered scene" )] HRESULT Scene( [out, retval] IScene ** pRet );
 	[propput, id( 3 ), helpstring( "The rendered scene" )] HRESULT Scene( [in] IScene * val );
 	[propget, id( 4 ), helpstring( "The target pixel format" )] HRESULT PixelFormat( [out, retval] ePIXEL_FORMAT * pRet );
-	[propget, id( 5 ), helpstring( "The target size" )] HRESULT Size( [out, retval] ISize ** pRet );
+	[propget, id( 5 ), helpstring( "The target render size" )] HRESULT RenderSize( [out, retval] ISize ** pRet );
+	[propget, id( 6 ), helpstring( "The target display size" )] HRESULT DisplaySize( [out, retval] ISize ** pRet );
 	// Methods
-	[id( 6 ), helpstring( "Initialises the render target" ), local] HRESULT Initialise();
-	[id( 7 ), helpstring( "Cleans the render target up" )] HRESULT Cleanup();
+	[id( 7 ), helpstring( "Initialises the render target" ), local] HRESULT Initialise();
+	[id( 8 ), helpstring( "Cleans the render target up" )] HRESULT Cleanup();
 };
 
 // ISampler
@@ -1310,12 +1311,9 @@ interface ICamera
 	[propget, id( 3 ), helpstring( "The object's parent scene node" )] HRESULT Node( [out, retval] ISceneNode ** pRet );
 	[propget, id( 4 ), helpstring( "The camera viewport type" )] HRESULT ViewportType( [out, retval] eVIEWPORT_TYPE * pRet );
 	[propput, id( 4 ), helpstring( "The camera viewport type" )] HRESULT ViewportType( [in] eVIEWPORT_TYPE val );
-	[propget, id( 5 ), helpstring( "The camera horizontal resolution" )] HRESULT Width( [out, retval] UINT * pRet );
-	[propget, id( 6 ), helpstring( "The camera vertical resolution" )] HRESULT Height( [out, retval] UINT * pRet );
 	// Methods
-	[id( 7 ), helpstring( "Attaches the movable object to the given node" )] HRESULT AttachTo( [in] ISceneNode * val );
-	[id( 8 ), helpstring( "Detaches the movable object from its parent node" )] HRESULT Detach();
-	[id( 9 ), helpstring( "Changes the camera resolution" )] HRESULT Resize( [in] UINT width, [in] UINT height );
+	[id( 5 ), helpstring( "Attaches the movable object to the given node" )] HRESULT AttachTo( [in] ISceneNode * val );
+	[id( 6 ), helpstring( "Detaches the movable object from its parent node" )] HRESULT Detach();
 };
 
 // ILight

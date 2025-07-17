@@ -212,16 +212,15 @@ namespace c3d
 		return configuration;
 	}
 
-	CameraUbo::Configuration & CameraUbo::cpuUpdate( Camera const & camera
+	CameraUbo::Configuration & CameraUbo::cpuUpdate( Size const & size
+		, Camera const & camera
 		, Matrix4x4f const & view
 		, Matrix4x4f const & projection
 		, uint32_t debugIndex
 		, bool safeBanded
 		, Point2f const & jitter )
 	{
-		return cpuUpdate( ( safeBanded
-				? getSafeBandedSize( camera.getSize() )
-				: camera.getSize() )
+		return cpuUpdate( ( safeBanded ? getSafeBandedSize( size ) : size )
 			, camera
 			, view
 			, projection
@@ -235,25 +234,11 @@ namespace c3d
 		, bool safeBanded
 		, Point2f const & jitter )
 	{
-		return cpuUpdate( size
+		return cpuUpdate( ( safeBanded ? getSafeBandedSize( size ) : size )
 			, camera
 			, camera.getView()
-			, camera.getProjection( safeBanded )
+			, camera.getProjection( size, safeBanded )
 			, debugIndex
-			, jitter );
-	}
-
-	CameraUbo::Configuration & CameraUbo::cpuUpdate( Camera const & camera
-		, uint32_t debugIndex
-		, bool safeBanded
-		, Point2f const & jitter )
-	{
-		return cpuUpdate( ( safeBanded
-				? getSafeBandedSize( camera.getSize() )
-				: camera.getSize() )
-			, camera
-			, debugIndex
-			, safeBanded
 			, jitter );
 	}
 

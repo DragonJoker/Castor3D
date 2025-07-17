@@ -223,7 +223,7 @@ namespace smaa
 		, m_graph{ graph }
 		, m_blendView{ blendView }
 		, m_velocityView{ velocityView }
-		, m_extent{ c3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
+		, m_extent{ c3d::getSafeBandedExtent3D( renderTarget.getDisplaySize() ) }
 		, m_shader{ cuT( "SmaaNeighbourhood" ), neighblend::getProgram( device, velocityView != nullptr ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_pass{ m_graph.createPass( "NeighbourhoodBlending"

@@ -24,7 +24,8 @@ namespace CastorCom
 		COM_PROPERTY_MPTR( Camera, ICamera, c3dRenderTarget_getCamera, c3dRenderTarget_setCamera );
 		COM_PROPERTY_MPTR( Scene, IScene, c3dRenderTarget_getScene, c3dRenderTarget_setScene );
 		COM_PROPERTY_GET_EX( PixelFormat, ePIXEL_FORMAT, C3D_PIXEL_FORMAT, c3dRenderTarget_getPixelFormat );
-		COM_PROPERTY_GET_SPTR( Size, ISize, c3dRenderTarget_getSize );
+		COM_PROPERTY_GET_SPTR( RenderSize, ISize, c3dRenderTarget_getRenderSize );
+		COM_PROPERTY_GET_SPTR( DisplaySize, ISize, c3dRenderTarget_getDisplaySize );
 
 		COM_DESTROY( CRenderTarget, c3dRenderTarget_delete );
 		STDMETHOD( Initialise )();

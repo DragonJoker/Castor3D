@@ -325,7 +325,7 @@ namespace smaa
 			{
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
-					.renderSize( c3d::makeExtent2D( c3d::getSafeBandedSize( m_renderTarget.getSize() ) ) )
+					.renderSize( c3d::makeExtent2D( c3d::getSafeBandedSize( m_renderTarget.getDisplaySize() ) ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.passIndex( &m_subsamplePassIndex )

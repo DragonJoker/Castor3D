@@ -354,18 +354,21 @@ namespace atmosphere_scattering
 		, c3d::Point3f const & sunDirection
 		, c3d::Vector3f const & planetPosition )const
 	{
-		update( *updater.camera
+		update( updater.renderSize
+			, *updater.camera
 			, updater.isSafeBanded
 			, sunDirection
 			, planetPosition );
 	}
 
-	void AtmosphereBackground::CameraPasses::update( c3d::Camera const & camera
+	void AtmosphereBackground::CameraPasses::update( c3d::Size const & renderSize
+		, c3d::Camera const & camera
 		, bool safeBanded
 		, c3d::Point3f const & sunDirection
 		, c3d::Vector3f const & planetPosition )const
 	{
-		cameraUbo.cpuUpdate( camera
+		cameraUbo.cpuUpdate( renderSize
+			, camera
 			, safeBanded
 			, sunDirection
 			, planetPosition );

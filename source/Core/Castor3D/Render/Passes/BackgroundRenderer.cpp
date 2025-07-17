@@ -67,7 +67,8 @@ namespace c3d
 			updater.targetImage = {};
 		}
 
-		m_cameraUbo.cpuUpdate( *updater.camera
+		m_cameraUbo.cpuUpdate( updater.renderSize
+			, *updater.camera
 			, updater.bgMtxView
 			, updater.bgMtxProj
 			, updater.debugIndex

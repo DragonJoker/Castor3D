@@ -90,7 +90,7 @@ namespace light_streaks
 		, c3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
-		auto extent = c3d::getSafeBandedExtent3D( m_renderTarget.getSize() );
+		auto extent = c3d::getSafeBandedExtent3D( m_renderTarget.getDisplaySize() );
 
 		auto size = c3d::makeExtent2D( extent );
 		size.width >>= 2;

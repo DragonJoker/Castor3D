@@ -178,7 +178,7 @@ namespace draw_edges
 			, parameters
 			, 1u }
 		, m_shader{ cuT( "DECombine" ), px::getProgram( *renderTarget.getEngine()
-			, c3d::getSafeBandedExtent3D( m_renderTarget.getSize() ) ) }
+			, c3d::getSafeBandedExtent3D( m_renderTarget.getDisplaySize() ) ) }
 		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 		, m_ubo{ renderSystem.getRenderDevice() }
 	{

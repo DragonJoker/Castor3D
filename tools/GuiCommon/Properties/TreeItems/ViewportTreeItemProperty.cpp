@@ -24,7 +24,6 @@ namespace GuiCommon
 		static wxString PROPERTY_VIEWPORT_TYPE_PERSPECTIVE = _( "Perspective" );
 		static wxString PROPERTY_VIEWPORT_TYPE_FRUSTUM = _( "Frustum" );
 		static wxString PROPERTY_VIEWPORT_TYPE_ORTHO = _( "Ortho" );
-		static wxString PROPERTY_VIEWPORT_SIZE = _( "Size" );
 		static wxString PROPERTY_VIEWPORT_TOP = _( "Top" );
 		static wxString PROPERTY_VIEWPORT_BOTTOM = _( "Bottom" );
 		static wxString PROPERTY_VIEWPORT_LEFT = _( "Left" );
@@ -41,7 +40,6 @@ namespace GuiCommon
 
 		addProperty( grid, PROPERTY_CATEGORY_VIEWPORT );
 		addPropertyET( grid, PROPERTY_VIEWPORT_TYPE, choices, m_viewport.getType(), &m_viewport, &c3d::Viewport::updateType );
-		addPropertyT( grid, PROPERTY_VIEWPORT_SIZE, m_viewport.getSize(), &m_viewport, &c3d::Viewport::resize );
 		addPropertyT( grid, PROPERTY_VIEWPORT_TOP, m_viewport.getTop(), &m_viewport, &c3d::Viewport::updateTop );
 		addPropertyT( grid, PROPERTY_VIEWPORT_BOTTOM, m_viewport.getBottom(), &m_viewport, &c3d::Viewport::updateBottom );
 		addPropertyT( grid, PROPERTY_VIEWPORT_LEFT, m_viewport.getLeft(), &m_viewport, &c3d::Viewport::updateLeft );

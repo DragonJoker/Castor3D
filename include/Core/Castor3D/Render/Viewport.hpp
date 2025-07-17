@@ -148,22 +148,6 @@ namespace c3d
 			, float nearZ
 			, float farZ );
 		/**
-		 *\~english
-		 *\brief		Sets the viewport render size
-		 *\param[in]	value	The new value
-		 *\~french
-		 *\brief		Définit les dimensions de rendu du viewport
-		 *\param[in]	value	La nouvelle valeur
-		 */
-		C3D_API void resize( const Size & value );
-		/**
-		 *\~english
-		 *\return		The number of pixels per meter at z = -1.
-		 *\~french
-		 *\return		Le nombre de pixels par mètre, pour z = -1.
-		 */
-		C3D_API float getProjectionScale()const;
-		/**
 		*\~english
 		*name
 		*	Getters.
@@ -173,12 +157,7 @@ namespace c3d
 		*/
 		/**@{*/
 		C3D_API Matrix4x4f getRescaledProjection( float scale )const;
-		C3D_API Matrix4x4f getRescaledSafeBandedProjection( float scale )const;
-
-		Size const & getSize()const noexcept
-		{
-			return m_size.value();
-		}
+		C3D_API Matrix4x4f getRescaledSafeBandedProjection( Size const & renderSize, float scale )const;
 
 		Position const & getPosition()const noexcept
 		{
@@ -230,16 +209,6 @@ namespace c3d
 			return m_bottom.value();
 		}
 
-		uint32_t getWidth()const noexcept
-		{
-			return m_size.value().getWidth();
-		}
-
-		uint32_t getHeight()const noexcept
-		{
-			return m_size.value().getHeight();
-		}
-
 		bool isModified()const noexcept
 		{
 			return m_modified;
@@ -250,19 +219,9 @@ namespace c3d
 			return m_projection;
 		}
 
-		Matrix4x4f const & getSafeBandedProjection()const noexcept
+		Matrix4x4f getSafeBandedProjection( Size const & renderSize )const
 		{
-			return m_safeBandedProjection;
-		}
-
-		VkViewport const & getViewport()const noexcept
-		{
-			return m_viewport;
-		}
-
-		VkRect2D const & getScissor()const noexcept
-		{
-			return m_scissor;
+			return getRescaledSafeBandedProjection( renderSize, 1.0f );
 		}
 
 		Engine const & getEngine()const noexcept
@@ -342,12 +301,8 @@ namespace c3d
 		GroupChangeTracked< Angle > m_fovY;
 		GroupChangeTracked< float > m_ratio;
 		GroupChangeTracked< ViewportType > m_type;
-		GroupChangeTracked< Size > m_size;
 		GroupChangeTracked< Position > m_position;
-		VkViewport m_viewport{ 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f };
-		VkRect2D m_scissor{ { 0, 0 }, { 1u, 1u } };
 		Matrix4x4f m_projection;
-		Matrix4x4f m_safeBandedProjection;
 	};
 }
 

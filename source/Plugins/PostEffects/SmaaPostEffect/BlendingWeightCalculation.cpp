@@ -866,7 +866,7 @@ namespace smaa
 		: m_device{ device }
 		, m_graph{ graph }
 		, m_resources{ renderTarget.getResources() }
-		, m_extent{ c3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
+		, m_extent{ c3d::getSafeBandedExtent3D( renderTarget.getDisplaySize() ) }
 		, m_areaView{ bwcalc::createImage( m_graph
 			, m_resources
 			, m_device

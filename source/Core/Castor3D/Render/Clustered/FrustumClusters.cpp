@@ -171,7 +171,7 @@ namespace c3d
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "C3D_MergePathPartitions" ) );
 
-		doUpdate();
+		doUpdate( {} );
 	}
 
 	void FrustumClusters::update( CpuUpdater & updater )
@@ -180,7 +180,7 @@ namespace c3d
 		auto const & lightCache = scene->getLightCache();
 		m_clustersDirty = lightCache.hasClusteredLights()
 			&& ( m_first > 0 || m_config.dirty );
-		doUpdate();
+		doUpdate( updater.renderSize );
 		m_clustersUbo.cpuUpdate( m_dimensions.value()
 			, m_clusterSize.value()
 			, m_camera.getNear()
@@ -202,7 +202,8 @@ namespace c3d
 
 		if ( !m_config.lockClustersFrustum.value() )
 		{
-			m_clustersCameraUbo.cpuUpdate( m_camera
+			m_clustersCameraUbo.cpuUpdate( updater.renderSize
+				, m_camera
 				, updater.debugIndex
 				, true
 				, updater.jitter );
@@ -360,15 +361,15 @@ namespace c3d
 		return shader::RadixSortT< 4u >::bucketSize;
 	}
 
-	void FrustumClusters::doUpdate()
+	void FrustumClusters::doUpdate( Size const & renderSize )
 	{
 		m_toDelete.clear();
 
-		auto renderSize = getSafeBandedSize( m_camera.getSize() );
+		auto safeBandedSize = getSafeBandedSize( renderSize );
 		auto const & dimensions = m_dimensions.value();
-		m_clusterSize = { divRoundUp( renderSize->x, dimensions->x )
-			, divRoundUp( renderSize->y, dimensions->y ) };
-		m_cameraProjection = m_camera.getProjection( true );
+		m_clusterSize = { divRoundUp( safeBandedSize->x, dimensions->x )
+			, divRoundUp( safeBandedSize->y, dimensions->y ) };
+		m_cameraProjection = m_camera.getProjection( renderSize, true );
 		m_cameraView = m_camera.getView();
 		auto cellCount = dimensions->x * dimensions->y * dimensions->z;
 

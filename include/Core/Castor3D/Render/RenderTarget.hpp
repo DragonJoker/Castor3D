@@ -254,7 +254,12 @@ namespace c3d
 			return m_initialised;
 		}
 
-		Size const & getSize()const noexcept
+		Size const & getDisplaySize()const noexcept
+		{
+			return m_displaySize;
+		}
+
+		Size const & getRenderSize()const noexcept
 		{
 			return m_size;
 		}
@@ -484,8 +489,8 @@ namespace c3d
 		static uint32_t sm_uiCount;
 		RenderDevice & m_device;
 		TargetType m_type{};
-		Size m_size;
-		Size m_safeBandedSize;
+		Size m_displaySize;
+		Size m_renderSize;
 		PixelFormat m_pixelFormat{};
 		std::atomic_bool m_initialised{};
 		std::atomic_bool m_initialising{};

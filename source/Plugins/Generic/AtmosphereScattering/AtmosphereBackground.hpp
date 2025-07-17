@@ -271,7 +271,8 @@ namespace atmosphere_scattering
 			void update( c3d::CpuUpdater & updater
 				, c3d::Point3f const & sunDirection
 				, c3d::Vector3f const & planetPosition )const;
-			void update( c3d::Camera const & camera
+			void update( c3d::Size const & renderSize
+				, c3d::Camera const & camera
 				, bool safeBanded
 				, c3d::Point3f const & sunDirection
 				, c3d::Vector3f const & planetPosition )const;

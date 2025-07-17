@@ -328,7 +328,7 @@ namespace c3d
 		};
 
 	private:
-		void doUpdate();
+		void doUpdate( Size const & renderSize );
 
 	private:
 		RenderDevice const & m_device;

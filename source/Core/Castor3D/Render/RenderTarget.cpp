@@ -583,7 +583,7 @@ namespace c3d
 				auto target = blockContext->renderTarget;
 				log::info << "Loaded target [" << target->getName()
 					<< ", FMT(" << getFormatName( target->getPixelFormat() ) << ")"
-					<< ", DIM(" << target->getSize() << ")]" << std::endl;
+					<< ", DIM(" << target->getDisplaySize() << ")]" << std::endl;
 
 				if ( blockContext->window )
 				{
@@ -609,8 +609,8 @@ namespace c3d
 		: OwnedBy< Engine >{ engine }
 		, m_device{ getOwner()->getRenderSystem()->getRenderDevice() }
 		, m_type{ type }
-		, m_size{ size }
-		, m_safeBandedSize{ getSafeBandedSize( size ) }
+		, m_displaySize{ size }
+		, m_renderSize{ size }
 		, m_pixelFormat{ pixelFormat }
 		, m_initialised{ false }
 		, m_resources{ getOwner()->getGraphResourceHandler() }
@@ -624,7 +624,7 @@ namespace c3d
 			, m_resources
 			, cuT( "Velocity" )
 			, { ImageCreateFlags::eNone
-				, makeExtent3D( m_safeBandedSize ), 1u, 1u
+				, makeExtent3D( getSafeBandedSize( m_renderSize ) ), 1u, 1u
 				, PixelFormat::eR16G16_SFLOAT
 				, ( ImageUsageFlags::eColorAttachment
 					| ImageUsageFlags::eSampled
@@ -636,7 +636,7 @@ namespace c3d
 				, m_resources
 				, cuT( "SRGBResult0" )
 				, { ImageCreateFlags::eNone
-					, makeExtent3D( m_safeBandedSize ), 1u, 1u
+					, makeExtent3D( getSafeBandedSize( m_displaySize ) ), 1u, 1u
 					, getPixelFormat()
 					, rendtgt::objectsUsageFlags }
 				, { BorderColour::eFloatOpaqueBlack } }
@@ -644,7 +644,7 @@ namespace c3d
 				, m_resources
 				, cuT( "SRGBResult1" )
 				, { ImageCreateFlags::eNone
-					, makeExtent3D( m_safeBandedSize ), 1u, 1u
+					, makeExtent3D( getSafeBandedSize( m_displaySize ) ), 1u, 1u
 					, getPixelFormat()
 					, rendtgt::objectsUsageFlags }
 				, { BorderColour::eFloatOpaqueBlack } } }
@@ -652,7 +652,7 @@ namespace c3d
 				, m_resources
 				, cuT( "HDRResult0" )
 				, { ImageCreateFlags::eNone
-					, makeExtent3D( m_safeBandedSize ), 1u, 1u
+					, makeExtent3D( getSafeBandedSize( m_displaySize ) ), 1u, 1u
 					, PixelFormat::eR16G16B16A16_SFLOAT
 					, rendtgt::objectsUsageFlags }
 				, { BorderColour::eFloatOpaqueBlack } }
@@ -660,7 +660,7 @@ namespace c3d
 				, m_resources
 				, cuT( "HDRResult1" )
 				, { ImageCreateFlags::eNone
-					, makeExtent3D( m_safeBandedSize ), 1u, 1u
+					, makeExtent3D( getSafeBandedSize( m_displaySize ) ), 1u, 1u
 					, PixelFormat::eR16G16B16A16_SFLOAT
 					, rendtgt::objectsUsageFlags }
 				, { BorderColour::eFloatOpaqueBlack } } }
@@ -668,7 +668,7 @@ namespace c3d
 			, m_resources
 			, cuT( "Overlays" )
 			, { ImageCreateFlags::eNone
-				, makeExtent3D( m_size ), 1u, 1u
+				, makeExtent3D( m_displaySize ), 1u, 1u
 				, PixelFormat::eR8G8B8A8_UNORM
 				, ( ImageUsageFlags::eColorAttachment
 					| ImageUsageFlags::eSampled
@@ -678,7 +678,7 @@ namespace c3d
 			, m_resources
 			, cuT( "Target" )
 			, { ImageCreateFlags::eNone
-				, makeExtent3D( m_size ), 1u, 1u
+				, makeExtent3D( m_displaySize ), 1u, 1u
 				, getPixelFormat()
 				, ( ImageUsageFlags::eColorAttachment
 					| ImageUsageFlags::eSampled
@@ -741,14 +741,10 @@ namespace c3d
 	RenderTarget::~RenderTarget()noexcept
 	{
 		for ( auto & texture : m_srgbObjects )
-		{
 			texture.destroy();
-		}
 
 		for ( auto & texture : m_hdrObjects )
-		{
 			texture.destroy();
-		}
 	}
 
 	uint32_t RenderTarget::countInitialisationSteps()const noexcept
@@ -868,10 +864,10 @@ namespace c3d
 
 		auto & camera = *getCamera();
 		auto & scene = *getScene();
+		updater.renderSize = m_renderSize;
 		updater.jitter = m_jitter;
 		updater.scene = &scene;
 		updater.camera = &camera;
-		camera.resize( m_size );
 		camera.update();
 
 		auto & cache = scene.getMeshCache();
@@ -887,7 +883,8 @@ namespace c3d
 		CU_Require( m_culler );
 		m_culler->update( updater );
 		m_renderTechnique->update( updater );
-		m_cameraUbo.cpuUpdate( camera
+		m_cameraUbo.cpuUpdate( m_renderSize
+			, camera
 			, updater.debugIndex
 			, true
 			, updater.jitter );
@@ -1009,7 +1006,6 @@ namespace c3d
 		if ( myCamera != &camera )
 		{
 			m_camera = &camera;
-			m_camera->resize( m_size );
 
 			if ( m_culler )
 			{
@@ -1039,7 +1035,7 @@ namespace c3d
 	{
 		if ( !isFloatingPoint( getPixelFormat() ) )
 		{
-			m_toneMappingName = name;
+			m_toneMappingName = c3d::move( name );
 
 			if ( m_toneMapping )
 			{
@@ -1456,8 +1452,8 @@ namespace c3d
 	void RenderTarget::doInitCombineProgram()
 	{
 		auto const & renderSystem = *getEngine()->getRenderSystem();
-		auto bandSize = double( getSafeBandSize(m_size ) );
-		auto bandedSize = getSafeBandedExtent3D(m_size );
+		auto bandSize = double( getSafeBandSize( m_displaySize ) );
+		auto bandedSize = getSafeBandedExtent3D( m_displaySize );
 		auto bandRatioU = bandSize / bandedSize.width;
 		auto bandRatioV = bandSize / bandedSize.height;
 		Point4f velocityMetrics{ bandRatioU

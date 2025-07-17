@@ -1053,11 +1053,10 @@ namespace c3d
 	{
 		if ( auto timerBlock = makeRawUnique< crg::FramePassTimerBlock >( m_timer.start() ) )
 		{
-			if ( auto size = updater.camera->getSize();
-				m_size != size )
+			if ( m_size != updater.renderSize )
 			{
 				m_sizeChanged = true;
-				m_size = size;
+				m_size = updater.renderSize;
 				m_common.cameraUbo.cpuUpdate( getSize()
 					, getRenderSystem()->getOrtho( 0.0f
 						, float( m_size.getWidth() )

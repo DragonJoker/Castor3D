@@ -268,7 +268,7 @@ namespace c3d
 			, spotLight.getFarPlane() );
 		lightCamera->update();
 		m_lightView = lightCamera->getView();
-		m_lightProj = lightCamera->getProjection( false );
+		m_lightProj = lightCamera->getProjection( {}, false );
 
 		if ( m_dirtyShadows )
 		{

@@ -38,7 +38,7 @@ namespace c3d
 			Point3f right( point::getNormalised( point::cross( up, lightDirection ) ) );
 			up = point::getNormalised( point::cross( lightDirection, right ) );
 			auto const lightViewMatrix = matrix::lookAt( Point3f{}, lightDirection, up );
-			auto const cameraVP = matrix::reverseDepth( camera.getProjection( false ) ) * camera.getView();
+			auto const cameraVP = matrix::reverseDepth( camera.getProjection( {}, false ) ) * camera.getView();
 			auto const invCameraVP = cameraVP.getInverse();
 
 			auto nearClip = camera.getNear();

@@ -118,8 +118,8 @@ namespace CastorViewerSharp
 			var window = GetWindow(RenderPanel);
 			double ww = window.Width;
 			double wh = window.Height;
-			int cw = (int)m_renderTarget.Camera.Width;
-			int ch = (int)m_renderTarget.Camera.Height;
+			int cw = (int)m_renderTarget.DisplaySize.Width;
+			int ch = (int)m_renderTarget.DisplaySize.Height;
 			result.Set((float)((point.X * cw) / ww)
 				, (float)((point.Y * ch) / wh));
 			return result;

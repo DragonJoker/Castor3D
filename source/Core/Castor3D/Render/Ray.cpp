@@ -9,15 +9,16 @@
 namespace c3d
 {
 	Ray::Ray( Position const & point
-		, Camera const & camera )
+		, Camera const & camera
+		, Size const & renderSize )
 	{
-		auto const & projection = camera.getProjection( false );
+		auto const & projection = camera.getProjection( {}, false );
 		auto const & view = camera.getView();
 		auto invProjectionView = ( projection * view ).getInverse();
 		Point4f screen
 		{
-			( 2.0f * float( point[0] ) / float( camera.getWidth() ) ) - 1.0f,
-			1.0f - ( 2.0f * float( point[1] ) / float( camera.getHeight() ) ),
+			( 2.0f * float( point[0] ) / float( renderSize.getWidth() ) ) - 1.0f,
+			1.0f - ( 2.0f * float( point[1] ) / float( renderSize.getHeight() ) ),
 			-1.0f,
 			1.0f
 		};
@@ -38,8 +39,9 @@ namespace c3d
 	}
 
 	Ray::Ray( int x, int y
-		, Camera const & camera )
-		: Ray{ Position{ x, y }, camera }
+		, Camera const & camera
+		, Size const & renderSize )
+		: Ray{ Position{ x, y }, camera, renderSize }
 	{
 	}
 

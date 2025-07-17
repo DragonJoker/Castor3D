@@ -177,7 +177,7 @@ namespace draw_edges
 		, bool const * enabled )
 		: m_device{ device }
 		, m_graph{ graph }
-		, m_extent{ c3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
+		, m_extent{ c3d::getSafeBandedExtent3D( renderTarget.getDisplaySize() ) }
 		, m_shader{ cuT( "DEObjDetection" ), oied::getProgram( *renderTarget.getEngine(), m_extent, 1 ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_result{ m_device

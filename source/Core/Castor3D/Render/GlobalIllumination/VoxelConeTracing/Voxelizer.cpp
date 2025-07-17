@@ -203,7 +203,8 @@ namespace c3d
 				, sceneBoundingBox.getMax()->y
 				, -1.0f * sceneBoundingBox.getMin()->z
 				, -1.0f * sceneBoundingBox.getMax()->z );
-			m_cameraUbo.cpuUpdate( camera
+			m_cameraUbo.cpuUpdate( updater.renderSize
+				, camera
 				, identity
 				, ortho
 				, updater.debugIndex

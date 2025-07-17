@@ -138,7 +138,8 @@ extern "C"
 	C3D_CAPIMETHOD( c3dRenderTarget_getScene )( C3DRenderTarget const * object, C3DScene ** result );
 	C3D_CAPIMETHOD( c3dRenderTarget_setScene )( C3DRenderTarget * object, C3DScene const * val );
 	C3D_CAPIMETHOD( c3dRenderTarget_getPixelFormat )( C3DRenderTarget const * object, C3D_PIXEL_FORMAT * result );
-	C3D_CAPIMETHOD( c3dRenderTarget_getSize )( C3DRenderTarget const * object, C3DSize * result );
+	C3D_CAPIMETHOD( c3dRenderTarget_getRenderSize )( C3DRenderTarget const * object, C3DSize * result );
+	C3D_CAPIMETHOD( c3dRenderTarget_getDisplaySize )( C3DRenderTarget const * object, C3DSize * result );
 
 	// C3DSampler
 	C3D_CAPIMETHOD( c3dSampler_delete )( C3DSampler * object );
@@ -309,9 +310,6 @@ extern "C"
 	C3D_CAPIMETHOD( c3dCamera_detach )( C3DCamera * object );
 	C3D_CAPIMETHOD( c3dCamera_getViewportType )( C3DCamera const * object, C3D_VIEWPORT_TYPE * result );
 	C3D_CAPIMETHOD( c3dCamera_setViewportType )( C3DCamera * object, C3D_VIEWPORT_TYPE val );
-	C3D_CAPIMETHOD( c3dCamera_getWidth )( C3DCamera const * object, uint32_t * result );
-	C3D_CAPIMETHOD( c3dCamera_getHeight )( C3DCamera const * object, uint32_t * result );
-	C3D_CAPIMETHOD( c3dCamera_resize )( C3DCamera * object, uint32_t width, uint32_t height );
 
 	// C3DLight
 	C3D_CAPIMETHOD( c3dLight_delete )( C3DLight * object );

@@ -116,7 +116,6 @@ namespace c3d
 		, m_fovY{ m_modified, fovY }
 		, m_ratio{ m_modified, aspect }
 		, m_type{ m_modified, type }
-		, m_size{ m_modified }
 		, m_position{ m_modified }
 	{
 		if ( m_type != ViewportType::eOrtho && m_near == 0.0f )
@@ -137,12 +136,8 @@ namespace c3d
 		, m_fovY{ m_modified, rhs.m_fovY.value() }
 		, m_ratio{ m_modified, rhs.m_ratio.value() }
 		, m_type{ m_modified, rhs.m_type.value() }
-		, m_size{ m_modified, rhs.m_size.value() }
 		, m_position{ m_modified, rhs.m_position.value() }
-		, m_viewport{ rhs.m_viewport }
-		, m_scissor{ rhs.m_scissor }
 		, m_projection{ rhs.m_projection }
-		, m_safeBandedProjection{ rhs.m_safeBandedProjection }
 	{
 	}
 
@@ -158,12 +153,8 @@ namespace c3d
 		, m_fovY{ m_modified, rhs.m_fovY.value() }
 		, m_ratio{ m_modified, rhs.m_ratio.value() }
 		, m_type{ m_modified, rhs.m_type.value() }
-		, m_size{ m_modified, rhs.m_size.value() }
 		, m_position{ m_modified, rhs.m_position.value() }
-		, m_viewport{ c3d::move( rhs.m_viewport ) }
-		, m_scissor{ c3d::move( rhs.m_scissor ) }
 		, m_projection{ c3d::move( rhs.m_projection ) }
-		, m_safeBandedProjection{ c3d::move( rhs.m_safeBandedProjection ) }
 	{
 	}
 
@@ -179,7 +170,6 @@ namespace c3d
 		if ( isModified() )
 		{
 			m_projection = getRescaledProjection( 1.0f );
-			m_safeBandedProjection = getRescaledSafeBandedProjection( 1.0f );
 			m_modified = false;
 			result = true;
 		}
@@ -198,12 +188,8 @@ namespace c3d
 		output.m_fovY = m_fovY;
 		output.m_ratio = m_ratio;
 		output.m_type = m_type;
-		output.m_size = m_size;
 		output.m_position = m_position;
-		output.m_viewport = m_viewport;
-		output.m_scissor = m_scissor;
 		output.m_projection = m_projection;
-		output.m_safeBandedProjection = m_safeBandedProjection;
 		output.m_modified = true;
 	}
 
@@ -278,19 +264,6 @@ namespace c3d
 		m_modified = true;
 	}
 
-	void Viewport::resize( const Size & value )
-	{
-		m_size = value;
-		m_viewport = VkViewport{ 0.0f, 0.0f, float( ( *m_size )[0] ), float( ( *m_size )[1] ), 0.0f, 1.0f };
-		m_scissor = VkRect2D{ { 0, 0 }, ( *m_size )[0], ( *m_size )[1] };
-	}
-
-	float Viewport::getProjectionScale()const
-	{
-		float const scale = std::abs( 2.0f * ( getFovY() * 0.5f ).tan() );
-		return std::abs( float( getHeight() ) / scale );
-	}
-
 	Matrix4x4f Viewport::getRescaledProjection( float scale )const
 	{
 		switch ( m_type )
@@ -321,13 +294,13 @@ namespace c3d
 		}
 	}
 
-	Matrix4x4f Viewport::getRescaledSafeBandedProjection( float scale )const
+	Matrix4x4f Viewport::getRescaledSafeBandedProjection( Size const & renderSize, float scale )const
 	{
 		switch ( m_type )
 		{
 		case ViewportType::eOrtho:
 			return viewport::getSafeBandedOrtho( *m_engine.getRenderSystem()
-				, m_size
+				, renderSize
 				, m_left * scale
 				, m_right * scale
 				, m_bottom * scale
@@ -336,20 +309,20 @@ namespace c3d
 				, m_far * scale );
 		case ViewportType::ePerspective:
 			return viewport::getSafeBandedPerspective( *m_engine.getRenderSystem()
-				, m_size
+				, renderSize
 				, m_fovY
 				, m_ratio
 				, m_near * scale
 				, m_far * scale );
 		case ViewportType::eInfinitePerspective:
 			return viewport::getSafeBandedInfinitePerspective( *m_engine.getRenderSystem()
-				, m_size
+				, renderSize
 				, m_fovY
 				, m_ratio
 				, m_near * scale );
 		default:
 			return viewport::getSafeBandedFrustum( *m_engine.getRenderSystem()
-				, m_size
+				, renderSize
 				, m_left * scale
 				, m_right * scale
 				, m_bottom * scale

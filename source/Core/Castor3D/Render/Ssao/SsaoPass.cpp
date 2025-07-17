@@ -91,7 +91,7 @@ namespace c3d
 	{
 		m_linearisePass->update( updater );
 		m_passIndex = m_ssaoConfig.useNormalsBuffer ? 1u : 0u;
-		m_ssaoConfigUbo.cpuUpdate( m_ssaoConfig, *updater.camera );
+		m_ssaoConfigUbo.cpuUpdate( m_ssaoConfig, *updater.camera, updater.renderSize );
 #if !C3D_DebugRawPass
 		m_horizontalBlur->update( updater );
 		m_verticalBlur->update( updater );

@@ -409,8 +409,6 @@ namespace Testing
 		result = result && CT_EQUAL( lhs.getFar(), rhs.getFar() );
 		result = result && CT_EQUAL( lhs.getFovY(), rhs.getFovY() );
 		result = result && CT_EQUAL( lhs.getRatio(), rhs.getRatio() );
-		result = result && CT_EQUAL( lhs.getWidth(), rhs.getWidth() );
-		result = result && CT_EQUAL( lhs.getHeight(), rhs.getHeight() );
 		result = result && CT_EQUAL( lhs.getType(), rhs.getType() );
 		return result;
 	}

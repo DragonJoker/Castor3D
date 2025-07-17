@@ -566,7 +566,6 @@ namespace c3d
 	void SkyboxBackground::doCpuUpdate( CpuUpdater & updater )const
 	{
 		auto & viewport = *updater.viewport;
-		viewport.resize( updater.camera->getSize() );
 		viewport.setPerspective( updater.camera->getViewport().getFovY()
 			, updater.camera->getRatio()
 			, updater.camera->getNear()
@@ -574,7 +573,7 @@ namespace c3d
 		viewport.update();
 		updater.bgMtxView = updater.camera->getView();
 		updater.bgMtxProj = updater.isSafeBanded
-			? viewport.getSafeBandedProjection()
+			? viewport.getSafeBandedProjection( updater.renderSize )
 			: viewport.getProjection();
 	}
 

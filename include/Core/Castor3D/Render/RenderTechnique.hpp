@@ -48,7 +48,6 @@ namespace c3d
 		 *\param[in]	renderTarget	The render target for this technique.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	colour			The result colour image.
-		 *\param[in]	intermediate	The intermediate colour image.
 		 *\param[in]	previousPasses	The passes that the technique has to wait for.
 		 *\param[in]	progress		The optional progress bar.
 		 *\param[in]	visbuffer		\p true to enable visibility buffer.
@@ -59,7 +58,6 @@ namespace c3d
 		 *\param[in]	renderTarget	La render target pour cette technique.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	colour			L'image couleur résultat.
-		 *\param[in]	intermediate	L'image couleur intermédiaire.
 		 *\param[in]	previousPasses	Les passes que la technique doit attendre.
 		 *\param[in]	progress		La barre de progression optionnelle.
 		 *\param[in]	visbuffer		\p true pour activer le visibility buffer.
@@ -69,7 +67,6 @@ namespace c3d
 			, RenderTarget & renderTarget
 			, RenderDevice const & device
 			, Texture const & colour
-			, Texture const & intermediate
 			, crg::FramePassArray previousPasses
 			, ProgressBar * progress
 			, bool visbuffer
@@ -171,16 +168,6 @@ namespace c3d
 			return { m_colour->targetViewId };
 		}
 
-		crg::ImageViewIdArray getSampledIntermediate()const noexcept
-		{
-			return { m_intermediate->sampledViewId };
-		}
-
-		crg::ImageViewIdArray getTargetIntermediate()const noexcept
-		{
-			return { m_intermediate->targetViewId };
-		}
-
 		crg::ImageViewIdArray getTargetDepth()const noexcept
 		{
 			return { m_depth.targetViewId };
@@ -194,11 +181,6 @@ namespace c3d
 		Texture const & getResult()const noexcept
 		{
 			return *m_colour;
-		}
-
-		Texture const & getIntermediate()const noexcept
-		{
-			return *m_intermediate;
 		}
 
 		Extent3D const & getTargetExtent()const noexcept
@@ -380,7 +362,6 @@ namespace c3d
 		Size m_targetSize;
 		Size m_rawSize;
 		Texture const * m_colour;
-		Texture const * m_intermediate;
 		Texture m_depth;
 		Texture m_normal;
 		Texture m_scattering;
