@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
-#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
@@ -137,7 +137,7 @@ namespace c3d
 		SceneNode const * m_currentNode{};
 		SceneCullerUPtr m_culler;
 		CameraUbo m_cameraUbo;
-		HdrConfigUbo m_hdrConfigUbo;
+		RenderUbo m_renderUbo;
 		SceneUbo const * m_sceneUbo{};
 		crg::ImageViewId m_colourRenderView;
 		crg::ImageViewId m_colourResultView;

@@ -71,7 +71,7 @@ namespace atmosphere_scattering
 			, crg::ImageViewId const * depthObj
 			, c3d::UniformBufferOffsetT< c3d::ModelBufferConfiguration > const & modelUbo
 			, c3d::CameraUbo const & cameraUbo
-			, c3d::HdrConfigUbo const & hdrConfigUbo
+			, c3d::RenderUbo const & renderUbo
 			, c3d::SceneUbo const & sceneUbo
 			, bool clearColour
 			, bool clearDepth
@@ -254,7 +254,7 @@ namespace atmosphere_scattering
 				, crg::ImageViewId const & weather
 				, crg::ImageViewIdArray const & colour
 				, crg::ImageViewId const * depthObj
-				, c3d::HdrConfigUbo const & hdrConfigUbo
+				, c3d::RenderUbo const & renderUbo
 				, c3d::SceneUbo const & sceneUbo
 				, AtmosphereScatteringUbo const & atmosphereUbo
 				, CloudsUbo const & cloudsUbo

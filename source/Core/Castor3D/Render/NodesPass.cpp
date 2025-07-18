@@ -68,6 +68,7 @@ namespace c3d
 		, m_device{ device }
 		, m_renderSystem{ m_device.renderSystem }
 		, m_cameraUbo{ desc.m_cameraUbo }
+		, m_renderUbo{ desc.m_renderUbo }
 		, m_targetImage{ c3d::move( targetImage ) }
 		, m_targetDepth{ c3d::move( targetDepth ) }
 		, m_typeName{ typeName }

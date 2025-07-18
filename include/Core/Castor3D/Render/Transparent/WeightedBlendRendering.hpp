@@ -26,7 +26,7 @@ namespace c3d
 		 *\param[in]	targetColourView		The target colour buffer.
 		 *\param[in]	size					The render dimensions.
 		 *\param[in]	sceneUbo				The scene UBO.
-		 *\param[in]	hdrConfigUbo			The HDR configuration UBO.
+		 *\param[in]	renderUbo				The render configuration UBO.
 		 *\param[in]	cameraUbo				The camera UBO.
 		 *\~french
 		 *\brief		Initialise les données liées au weighted blended rendering.
@@ -40,7 +40,7 @@ namespace c3d
 		 *\param[in]	targetColourView		Le tampon de couleurs cible.
 		 *\param[in]	size					Les dimensions du rendu.
 		 *\param[in]	sceneUbo				L'UBO de scène.
-		 *\param[in]	hdrConfigUbo			L'UBO de configuration HDR.
+		 *\param[in]	renderUbo				L'UBO de configuration du rendu.
 		 *\param[in]	cameraUbo				L'UBO de la caméra.
 		 */
 		WeightedBlendRendering( crg::FramePassGroup & graph
@@ -54,7 +54,7 @@ namespace c3d
 			, Size const & size
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
-			, HdrConfigUbo const & hdrConfigUbo );
+			, RenderUbo const & renderUbo );
 		/**
 		 *\copydoc		RenderTechniquePass::accept
 		 */
@@ -83,7 +83,7 @@ namespace c3d
 			, crg::ImageViewIdArray const & targetColourView
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
-			, HdrConfigUbo const & hdrConfigUbo
+			, RenderUbo const & renderUbo
 			, ProgressBar * progress );
 
 	private:

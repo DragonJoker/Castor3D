@@ -25,6 +25,7 @@ namespace c3d
 				, shader::BackgroundModel & background
 				, sdw::CombinedImage2DRgba32 const & mippedScene
 				, shader::CameraData const & camera
+				, shader::RenderData const & render
 				, shader::DirectLighting & lighting
 				, shader::IndirectLighting & indirect
 				, sdw::Vec2 const & sceneUv
@@ -37,6 +38,7 @@ namespace c3d
 				, shader::LightSurface const & lightSurface
 				, shader::BackgroundModel & background
 				, shader::CameraData const & camera
+				, shader::RenderData const & render
 				, shader::DirectLighting & lighting
 				, shader::IndirectLighting & indirect
 				, sdw::Vec2 const & sceneUv

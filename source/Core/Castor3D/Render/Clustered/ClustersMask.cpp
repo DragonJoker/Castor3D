@@ -232,7 +232,6 @@ namespace c3d
 	crg::FramePass const & createClustersMaskPass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
-		, CameraUbo const & mainCameraUbo
 		, CameraUbo const & clustersCameraUbo
 		, FrustumClusters & clusters
 		, RenderTechnique & technique
@@ -252,6 +251,7 @@ namespace c3d
 					, technique.getSsaoConfig()
 					, RenderNodesPassDesc{ technique.getTargetExtent()
 							, clustersCameraUbo
+							, technique.getRenderUbo()
 							, technique.getSceneUbo()
 							, technique.getRenderTarget().getCuller()
 							, RenderFilter::eNone

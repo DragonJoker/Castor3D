@@ -63,7 +63,7 @@ namespace c3d
 		, m_camera{ envpass::doCreateCamera( *m_node, getOwner()->getSize() ) }
 		, m_culler{ makeUniqueDerived< SceneCuller, FrustumCuller >( *m_camera ) }
 		, m_cameraUbo{ m_device }
-		, m_hdrConfigUbo{ m_device }
+		, m_renderUbo{ m_device }
 		, m_sceneUbo{ &environmentMap.getScene().getUbo() }
 		, m_colourRenderView{ environmentMap.getTmpImage( m_index, m_face ) }
 		, m_colourResultView{ environmentMap.getColourViewId( m_index, m_face ) }
@@ -73,7 +73,7 @@ namespace c3d
 			, m_device
 			, nullptr
 			, m_background
-			, m_hdrConfigUbo
+			, m_renderUbo
 			, *m_sceneUbo
 			, m_colourRenderView
 			, true /*clearColour*/
@@ -85,10 +85,8 @@ namespace c3d
 		, m_transparentPassDesc{ &doCreateTransparentPass( m_opaquePassDesc ) }
 	{
 		doCreateGenMipmapsPass( m_transparentPassDesc );
-		m_cameraUbo.cpuUpdate( getSafeBandedSize( makeSize( getOwner()->getSize() ) )
-			, m_camera->getView()
-			, m_camera->getProjection( {}, false )
-			, 0u
+		m_cameraUbo.cpuUpdate( m_camera->getView()
+			, m_camera->getRawProjection()
 			, m_camera->getFrustum() );
 		m_graph.addOutput( m_colourResultView
 			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
@@ -130,8 +128,10 @@ namespace c3d
 		m_backgroundRenderer->update( updater );
 		m_opaquePass->update( updater );
 		m_transparentPass->update( updater );
-		m_cameraUbo.cpuUpdate( makeSize( getOwner()->getSize() ), camera, updater.debugIndex, false );
-		m_hdrConfigUbo.cpuUpdate( camera.getHdrConfig() );
+		m_cameraUbo.cpuUpdate( camera );
+		m_renderUbo.cpuUpdate( camera.getHdrConfig()
+			, makeSize( getOwner()->getSize() ), false
+			, updater.debugIndex );
 
 		updater.isSafeBanded = oldSafeBanded;
 		updater.camera = oldCamera;
@@ -194,7 +194,7 @@ namespace c3d
 					, cuT( "Environment" )
 					, crg::ImageViewIdArray{ m_colourRenderView }
 					, crg::ImageViewIdArray{ m_depthView }
-					, RenderNodesPassDesc{ getOwner()->getSize(), m_cameraUbo, *m_sceneUbo, *m_culler }
+					, RenderNodesPassDesc{ getOwner()->getSize(), m_cameraUbo, m_renderUbo, *m_sceneUbo, *m_culler }
 						.meshShading( true )
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} }
@@ -231,7 +231,7 @@ namespace c3d
 					, cuT( "Environment" )
 					, crg::ImageViewIdArray{ m_colourRenderView }
 					, crg::ImageViewIdArray{ m_depthView }
-					, RenderNodesPassDesc{ getOwner()->getSize(), m_cameraUbo, *m_sceneUbo, *m_culler, false }
+					, RenderNodesPassDesc{ getOwner()->getSize(), m_cameraUbo, m_renderUbo, *m_sceneUbo, *m_culler, false }
 						.meshShading( true )
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} }

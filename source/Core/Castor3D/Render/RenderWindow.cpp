@@ -1351,6 +1351,7 @@ namespace c3d
 			, queueData
 			, target->getDisplaySize()
 			, target->getCameraUbo()
+			, target->getRenderUbo()
 			, target->getSceneUbo()
 			, target->getCuller() );
 	}

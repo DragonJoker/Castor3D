@@ -51,6 +51,7 @@
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
@@ -79,6 +80,7 @@ namespace c3d
 		{
 			eMainCamera,
 			eClustersCamera,
+			eRender,
 			eScene,
 			eModels,
 			eBillboards,
@@ -722,6 +724,7 @@ namespace c3d
 				, shader::MeshVertex const & pv1
 				, shader::MeshVertex const & pv2
 				, shader::CameraData const & c3d_cameraData
+				, shader::RenderData const & c3d_renderData
 				, sdw::Array< shader::BillboardData > const & c3d_billboardData )
 			{
 				if ( !m_loadVertices )
@@ -766,9 +769,9 @@ namespace c3d
 							auto up = m_writer.declLocale( "up"
 								, billboardData.getCameraUp( c3d_cameraData ) );
 							auto width = m_writer.declLocale( "width"
-								, billboardData.getWidth( c3d_cameraData ) );
+								, billboardData.getWidth( c3d_renderData ) );
 							auto height = m_writer.declLocale( "height"
-								, billboardData.getHeight( c3d_cameraData ) );
+								, billboardData.getHeight( c3d_renderData ) );
 
 							auto vertexId = m_writer.declLocale( "vertexId"
 								, m_writer.ternary( firstTriangle
@@ -818,6 +821,7 @@ namespace c3d
 				, shader::Material const & pmaterial
 				, sdw::Float const & pdepth
 				, shader::CameraData const & c3d_cameraData
+				, shader::RenderData const & c3d_renderData
 				, sdw::Array< shader::BillboardData > const & c3d_billboardData
 				, shader::AllDerivFragmentSurface const & presult )
 			{
@@ -849,7 +853,7 @@ namespace c3d
 							result.colour = vec3( 1.0_f );
 
 							auto hdrCoords = m_writer.declLocale( "hdrCoords"
-								, pixelCoord / vec2( c3d_cameraData.renderSize() ) );
+								, pixelCoord * c3d_renderData.invRenderSize() );
 							auto screenCoords = m_writer.declLocale( "screenCoords"
 								, fma( hdrCoords, vec2( 2.0_f ), vec2( -1.0_f ) ) );
 
@@ -865,6 +869,7 @@ namespace c3d
 							{
 								loadBillboardVertices( nodeId, primitiveId, modelData, v0, v1, v2
 									, c3d_cameraData
+									, c3d_renderData
 									, c3d_billboardData );
 							}
 
@@ -886,7 +891,7 @@ namespace c3d
 									: modelData.modelToCurWorld( v2.position ) ) );
 
 							auto derivatives = m_writer.declLocale( "derivatives"
-								, calcFullBarycentric( p0, p1, p2, screenCoords, vec2( c3d_cameraData.renderSize() ) ) );
+								, calcFullBarycentric( p0, p1, p2, screenCoords, vec2( c3d_renderData.renderSize() ) ) );
 
 							// Interpolate texture coordinates and calculate the gradients for texture sampling with mipmapping support
 							if ( m_flags.enableTexcoord0() )
@@ -1110,6 +1115,9 @@ namespace c3d
 				, Clusters
 				, InOutBindings::eClustersCamera
 				, Sets::eInOuts );
+			C3D_Render( writer
+				, InOutBindings::eRender
+				, Sets::eInOuts );
 			C3D_Scene( writer
 				, InOutBindings::eScene
 				, Sets::eInOuts );
@@ -1218,7 +1226,7 @@ namespace c3d
 					{
 						shader::DebugOutput output{ debugConfig
 							, cuT( "Default" )
-							, c3d_cameraDataMain.debugIndex()
+							, c3d_renderData.debugIndex()
 							, outResult
 							, areDebugTargetsEnabled };
 
@@ -1252,6 +1260,7 @@ namespace c3d
 							, material
 							, depth
 							, c3d_cameraDataMain
+							, c3d_renderData
 							, c3d_billboardData
 							, baseSurface );
 						auto components = writer.declLocale( "components"
@@ -1388,6 +1397,7 @@ namespace c3d
 										, lightSurface
 										, *backgroundModel
 										, c3d_cameraDataMain
+										, c3d_renderData
 										, directLighting
 										, indirectLighting
 										, vec2( ipixel )
@@ -1441,7 +1451,7 @@ namespace c3d
 						{
 							if ( flags.hasFog() )
 							{
-								outResult = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraDataMain.gamma() )
+								outResult = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_renderData.gamma() )
 									, outResult
 									, shader::getRawXYZ( baseSurface.worldPosition )
 									, c3d_cameraDataMain.position()
@@ -1449,7 +1459,7 @@ namespace c3d
 
 								if ( outputScattering )
 								{
-									outScattering = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraDataMain.gamma() )
+									outScattering = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_renderData.gamma() )
 										, outScattering
 										, shader::getRawXYZ( baseSurface.worldPosition )
 										, c3d_cameraDataMain.position()
@@ -1461,7 +1471,7 @@ namespace c3d
 								, utils.lineariseDepth( depth, c3d_cameraDataMain.nearPlane(), c3d_cameraDataMain.farPlane() ) );
 							backgroundModel->applyVolume( vec2( ipixel )
 								, linearDepth
-								, vec2( c3d_cameraDataMain.renderSize() )
+								, vec2( c3d_renderData.renderSize() )
 								, c3d_cameraDataMain.depthPlanes()
 								, outResult );
 
@@ -1469,7 +1479,7 @@ namespace c3d
 							{
 								backgroundModel->applyVolume( vec2( ipixel )
 									, linearDepth
-									, vec2( c3d_cameraDataMain.renderSize() )
+									, vec2( c3d_renderData.renderSize() )
 									, c3d_cameraDataMain.depthPlanes()
 									, outScattering );
 							}
@@ -1520,6 +1530,9 @@ namespace c3d
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, stages ) );
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eClustersCamera
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, stages ) );
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eRender
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, stages ) );
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eScene
@@ -1632,6 +1645,7 @@ namespace c3d
 			, crg::RunnableGraph & graph
 			, CameraUbo const & mainCameraUbo
 			, CameraUbo const * clustersCameraUbo
+			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
 			, RenderTechnique const & technique
 			, Scene const & scene
@@ -1650,6 +1664,7 @@ namespace c3d
 				writes.push_back( clustersCameraUbo->getDescriptorWrite( InOutBindings::eClustersCamera ) );
 			}
 
+			writes.push_back( renderUbo.getDescriptorWrite( InOutBindings::eRender ) );
 			writes.push_back( sceneUbo.getDescriptorWrite( InOutBindings::eScene ) );
 			writes.push_back( makeDescriptorWrite( scene.getModelBuffer()
 				, InOutBindings::eModels
@@ -2706,7 +2721,7 @@ namespace c3d
 				? &m_parent->getRenderTarget().getFrustumClusters()->getCameraUbo()
 				: nullptr;
 			result->ioDescriptorSet = visres::createInDescriptorSet( getName(), *result->ioDescriptorPool, m_graph
-				, m_cameraUbo, clustersCameraUbo, m_sceneUbo, *m_parent, getScene()
+				, m_cameraUbo, clustersCameraUbo, m_parent->getRenderUbo(), m_sceneUbo, *m_parent, getScene()
 				, m_targetImage, hasSsao() ? m_ssao : nullptr, &getIndirectLighting(), m_deferredLightingFilter );
 
 			pipelines.push_back( c3d::move( result ) );

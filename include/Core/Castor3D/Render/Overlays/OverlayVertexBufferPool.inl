@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/FontUbo.hpp"
-#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
@@ -24,14 +24,14 @@ namespace c3d
 		, String const & debugName
 		, RenderDevice const & device
 		, CameraUbo const & cameraUbo
-		, HdrConfigUbo const & hdrConfigUbo
+		, RenderUbo const & renderUbo
 		, ashes::DescriptorSetLayout const & descriptorLayout
 		, uint32_t count
 		, OverlayTextBufferPoolUPtr textBuf )
 		: engine{ engine }
 		, device{ device }
 		, cameraUbo{ cameraUbo }
-		, hdrConfigUbo{ hdrConfigUbo }
+		, renderUbo{ renderUbo }
 		, descriptorLayout{ descriptorLayout }
 		, name{ debugName }
 		, overlaysData{ makeBuffer< OverlayUboConfiguration >( device
@@ -241,8 +241,8 @@ namespace c3d
 			, descriptorLayout.getBinding( uint32_t( OverlayBindingId::eTexAnims ) ) );
 		cameraUbo.createSizedBinding( *result
 			, descriptorLayout.getBinding( uint32_t( OverlayBindingId::eCamera ) ) );
-		hdrConfigUbo.createSizedBinding( *result
-			, descriptorLayout.getBinding( uint32_t( OverlayBindingId::eHdrConfig ) ) );
+		renderUbo.createSizedBinding( *result
+			, descriptorLayout.getBinding( uint32_t( OverlayBindingId::eRender ) ) );
 		result->createBinding( descriptorLayout.getBinding( uint32_t( OverlayBindingId::eOverlaysSurfaces ) )
 			, vertexBuffer.getBuffer().getBuffer()
 			, 0u

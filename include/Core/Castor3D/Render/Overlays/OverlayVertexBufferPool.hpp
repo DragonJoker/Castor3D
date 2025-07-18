@@ -31,7 +31,7 @@ namespace c3d
 			, String const & debugName
 			, RenderDevice const & device
 			, CameraUbo const & cameraUbo
-			, HdrConfigUbo const & hdrConfigUbo
+			, RenderUbo const & renderUbo
 			, ashes::DescriptorSetLayout const & descriptorLayout
 			, uint32_t count
 			, OverlayTextBufferPoolUPtr textBuf = nullptr );
@@ -55,7 +55,7 @@ namespace c3d
 		Engine & engine;
 		RenderDevice const & device;
 		CameraUbo const & cameraUbo;
-		HdrConfigUbo const & hdrConfigUbo;
+		RenderUbo const & renderUbo;
 		ashes::DescriptorSetLayout const & descriptorLayout;
 		String name;
 		ashes::BufferPtr< OverlayUboConfiguration > overlaysData;

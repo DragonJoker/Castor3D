@@ -187,29 +187,16 @@ namespace c3d
 		Point4f gridSizeAtt{};
 	};
 	/**
-	*\brief
-	*	HDR configuration data UBO.
-	*\~french
-	*\brief
-	*	UBO des données de configuration HDR.
-	*/
-	class HdrConfigUbo;
-	/**
 	*\~english
 	*\brief
-	*	Global matrices UBO.
+	*	Curent camera UBO.
 	*\~french
 	*\brief
-	*	UBO des matrices globales.
+	*	UBO de la caméra courante.
 	*/
 	class CameraUbo;
 	/**
 	*\~english
-	*\brief
-	*	Global matrices data.
-	*\~french
-	*\brief
-	*	Données des matrices globales.
 	*/
 	struct CameraUboConfiguration
 	{
@@ -224,12 +211,9 @@ namespace c3d
 		Matrix4x4f invCurViewProj{};
 		Matrix4x4f prvViewProj{};
 		Matrix4x4f invPrvViewProj{};
-		Point2ui size{};
+		Point3f position{};
 		float nearPlane{};
 		float farPlane{};
-		Point3f position{};
-		float gamma{};
-		uint32_t debugIndex{};
 		float pad0{};
 		float pad1{};
 		float pad2{};
@@ -273,8 +257,8 @@ namespace c3d
 		float minDistance{};
 		// If clustered lights processing uses wave intrinsics.
 		uint32_t enableWaveIntrinsics{};
-		float pad0{};
-		float pad1{};
+		// The size used to generate clusters.
+		Point2f screenSize{};
 	};
 	/**
 	*\~english
@@ -398,6 +382,32 @@ namespace c3d
 		uint32_t textLineOffset{};
 		float textTopOffset{};
 		uint32_t pad1{};
+	};
+	/**
+	*\~english
+	*\brief
+	*	Render UBO.
+	*\~french
+	*\brief
+	*	UBO de rendu.
+	*/
+	class RenderUbo;
+	/**
+	*\~english
+	*\brief
+	*	Render data.
+	*\~french
+	*\brief
+	*	Données de rendu.
+	*/
+	struct RenderUboConfiguration
+	{
+		Point2ui renderSize{};
+		Point2f invRenderSize{};
+		float gamma{};
+		float exposure{};
+		uint32_t debugIndex{};
+		float pad{};
 	};
 	/**
 	*\~english

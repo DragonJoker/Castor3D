@@ -23,7 +23,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ColourGradingUbo.hpp"
-#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <RenderGraph/FrameGraph.hpp>
@@ -355,10 +355,9 @@ namespace c3d
 			return m_name;
 		}
 
-		HdrConfigUbo const & getHdrConfigUbo()const noexcept
+		RenderUbo const & getRenderUbo()const noexcept
 		{
-			CU_Require( m_hdrConfigUbo );
-			return *m_hdrConfigUbo;
+			return m_renderUbo;
 		}
 
 		ColourGradingUbo const & getColourGradingUbo()const noexcept
@@ -487,11 +486,7 @@ namespace c3d
 			, SemaphoreWaitArray signalsToWait );
 		void doListIntermediateViews( IntermediateViewArray & result )const;
 		crg::FramePass const & doCreateUpscalingPass( crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
-			, crg::ImageViewId resolvedColor
-			, crg::ImageViewId unresolvedColor
-			, crg::ImageViewId motion
-			, crg::ImageViewId depth );
+			, crg::FramePassArray const & previousPasses );
 
 	private:
 		static uint32_t sm_uiCount;
@@ -503,7 +498,7 @@ namespace c3d
 		std::atomic_bool m_initialised{};
 		std::atomic_bool m_initialising{};
 		crg::ResourcesCache m_resources;
-		RawUniquePtr< HdrConfigUbo > m_hdrConfigUbo;
+		RenderUbo m_renderUbo;
 		RawUniquePtr< ColourGradingUbo > m_colourGradingUbo;
 		RenderTechniqueUPtr m_renderTechnique{};
 		SceneRPtr m_scene{};

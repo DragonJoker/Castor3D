@@ -32,8 +32,7 @@ namespace c3d
 	{
 		enum BindingPoints
 		{
-			eMainCamera,
-			eClustersCamera,
+			eCamera,
 			eClusters,
 			eLights,
 			eAllLightsAABB,
@@ -47,13 +46,8 @@ namespace c3d
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
-			C3D_CameraNamed( writer
-				, Main
-				, eMainCamera
-				, 0u );
-			C3D_CameraNamed( writer
-				, Clusters
-				, eClustersCamera
+			C3D_Camera( writer
+				, eCamera
 				, 0u );
 			C3D_Clusters( writer
 				, eClusters
@@ -78,7 +72,7 @@ namespace c3d
 					sdwIF( writer, point.enabled() )
 					{
 						auto vsPosition = writer.declLocale( "vsPosition"
-							, c3d_cameraDataClusters.worldToCurView( vec4( point.position(), 1.0_f ) ).xyz() );
+							, c3d_cameraData.worldToCurView( vec4( point.position(), 1.0_f ) ).xyz() );
 
 						result = shader::AABB{ vsPosition, computeRange( point ) };
 					}
@@ -124,9 +118,9 @@ namespace c3d
 						if ( config.useSpotTightBoundingBox )
 						{
 							auto vsApex = writer.declLocale( "vsApex"
-								, c3d_cameraDataClusters.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz() );
+								, c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz() );
 							auto vsDirection = writer.declLocale( "vsDirection"
-								, c3d_cameraDataClusters.worldToCurView( -spot.direction() ) );
+								, c3d_cameraData.worldToCurView( -spot.direction() ) );
 
 							auto largeRange = writer.declLocale( "largeRange"
 								, computeRange( spot ) );
@@ -168,7 +162,7 @@ namespace c3d
 						else
 						{
 							auto vsPosition = writer.declLocale( "vsPosition"
-								, c3d_cameraDataClusters.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz() );
+								, c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz() );
 							result = shader::AABB{ vsPosition, computeRange( spot ) };
 						}
 					}
@@ -353,7 +347,6 @@ namespace c3d
 	crg::FramePass const & createComputeLightsAABBPass( crg::FramePassGroup & graph
 		, crg::FramePass const * previousPass
 		, RenderDevice const & device
-		, CameraUbo const & mainCameraUbo
 		, CameraUbo const & clustersCameraUbo
 		, FrustumClusters const & clusters )
 	{
@@ -375,8 +368,7 @@ namespace c3d
 				return result;
 			} );
 		pass.addDependency( *previousPass );
-		mainCameraUbo.createPassBinding( pass, cptlgtb::eMainCamera );
-		clustersCameraUbo.createPassBinding( pass, cptlgtb::eClustersCamera );
+		clustersCameraUbo.createPassBinding( pass, cptlgtb::eCamera );
 		clusters.getClustersUbo().createPassBinding( pass, cptlgtb::eClusters );
 		auto const & lights = clusters.getCamera().getScene()->getLightCache();
 		lights.createPassBinding( pass, cptlgtb::eLights );

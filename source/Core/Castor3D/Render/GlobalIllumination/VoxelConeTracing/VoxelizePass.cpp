@@ -38,6 +38,7 @@
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/ObjectIdsUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -55,12 +56,14 @@ namespace c3d
 	{
 		static RenderNodesPassDesc buildDesc( VctConfig const & voxelConfig
 			, CameraUbo const & cameraUbo
+			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
 			, SceneCuller & culler
 			, bool isStatic )
 		{
 			RenderNodesPassDesc result{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }
 				, cameraUbo
+				, renderUbo
 				, sceneUbo
 				, culler
 				, RenderFilter::eNone
@@ -85,6 +88,7 @@ namespace c3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, CameraUbo const & cameraUbo
+		, RenderUbo const & renderUbo
 		, SceneUbo const & sceneUbo
 		, Camera const & camera
 		, SceneCuller & culler
@@ -101,6 +105,7 @@ namespace c3d
 			, {}
 			, vxlzpass::buildDesc( voxelConfig
 				, cameraUbo
+				, renderUbo
 				, sceneUbo
 				, culler
 				, isStatic ) }
@@ -258,6 +263,9 @@ namespace c3d
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
+		C3D_Render( writer
+			, GlobalBuffersIdx::eRender
+			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, flags
 			, GlobalBuffersIdx::eObjectsNodeID
@@ -332,9 +340,9 @@ namespace c3d
 					auto up = writer.declLocale( "up"
 						, billboardData.getCameraUp( c3d_cameraData ) );
 					auto width = writer.declLocale( "width"
-						, billboardData.getWidth( c3d_cameraData ) );
+						, billboardData.getWidth( c3d_renderData ) );
 					auto height = writer.declLocale( "height"
-						, billboardData.getHeight( c3d_cameraData ) );
+						, billboardData.getHeight( c3d_renderData ) );
 
 					auto scaledRight = writer.declLocale( "scaledRight"
 						, right * bbPositions[in.vertexIndex - in.baseVertex].x() * width );
@@ -509,6 +517,9 @@ namespace c3d
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
+		C3D_Render( writer
+			, GlobalBuffersIdx::eRender
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
@@ -601,7 +612,7 @@ namespace c3d
 						, vec4( components.emissiveColour * components.emissiveFactor, 1.0f ) );
 					shader::DebugOutput debugOutput{ getScene().getDebugConfig()
 						, cuT( "Voxelize" )
-						, c3d_cameraData.debugIndex()
+						, c3d_renderData.debugIndex()
 						, color
 						, false };
 

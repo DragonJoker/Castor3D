@@ -105,6 +105,7 @@ namespace c3d
 		, QueueData const & queueData
 		, Size const & size
 		, CameraUbo const & cameraUbo
+		, RenderUbo const & renderUbo
 		, SceneUbo const & sceneUbo
 		, SceneCuller & culler )
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
@@ -140,7 +141,7 @@ namespace c3d
 			, ImageViewType::e2D
 			, getFormat( m_depthImage )
 			, { ImageAspectFlags::eDepth, 0u, 1u, 0u, 1u } } ) }
-		, m_pickingPassDesc{ &doCreatePickingPass( cameraUbo, sceneUbo, culler ) }
+		, m_pickingPassDesc{ &doCreatePickingPass( cameraUbo, renderUbo, sceneUbo, culler ) }
 		, m_copyRegion{ 0u
 			, 0u
 			, 0u
@@ -220,11 +221,12 @@ namespace c3d
 	}
 
 	crg::FramePass & Picking::doCreatePickingPass( CameraUbo const & cameraUbo
+		, RenderUbo const & renderUbo
 		, SceneUbo const & sceneUbo
 		, SceneCuller & culler )
 	{
 		auto & result = m_graph.createPass( "PickingPass"
-			, [this, &cameraUbo, &sceneUbo, &culler]( crg::FramePass const & pass
+			, [this, &cameraUbo, &renderUbo, &sceneUbo, &culler]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -234,6 +236,7 @@ namespace c3d
 					, m_device
 					, m_realSize
 					, cameraUbo
+					, renderUbo
 					, sceneUbo
 					, culler );
 				m_pickingPass = res.get();

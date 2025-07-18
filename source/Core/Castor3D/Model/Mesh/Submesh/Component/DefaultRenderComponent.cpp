@@ -16,6 +16,7 @@
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/ObjectIdsUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -71,6 +72,9 @@ namespace c3d
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
+		C3D_Render( writer
+			, GlobalBuffersIdx::eRender
+			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, flags
 			, GlobalBuffersIdx::eObjectsNodeID
@@ -94,7 +98,7 @@ namespace c3d
 
 		writer.implementMainT< sdw::VoidT, shader::FragmentSurfaceT >( sdw::VertexIn{ writer }
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
-			, [&engine, &writer, &meshBuffers, &drawID, &pipelineID, &c3d_billboardData, &c3d_cameraData, &c3d_modelsData, &c3d_objectIdsData, flags]( sdw::VertexIn const & in
+			, [&engine, &writer, &meshBuffers, &drawID, &pipelineID, &c3d_billboardData, &c3d_cameraData, &c3d_renderData, &c3d_modelsData, &c3d_objectIdsData, flags]( sdw::VertexIn const & in
 				, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 			{
 				auto bbPositions = writer.declConstantArray( "bbPositions"
@@ -143,9 +147,9 @@ namespace c3d
 				auto up = writer.declLocale( "up"
 					, billboardData.getCameraUp( c3d_cameraData ) );
 				auto width = writer.declLocale( "width"
-					, billboardData.getWidth( c3d_cameraData ) );
+					, billboardData.getWidth( c3d_renderData ) );
 				auto height = writer.declLocale( "height"
-					, billboardData.getHeight( c3d_cameraData ) );
+					, billboardData.getHeight( c3d_renderData ) );
 
 				auto scaledRight = writer.declLocale( "scaledRight"
 					, right * bbPositions[in.vertexIndex - in.baseVertex].x() * width );

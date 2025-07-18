@@ -33,11 +33,11 @@ namespace c3d
 		, crg::ImageViewIdArray const & source
 		, crg::ImageViewId const & target
 		, crg::FramePass const & previousPass
-		, HdrConfigUbo & hdrConfigUbo
+		, RenderUbo & renderUbo
 		, ColourGradingUbo & colourGradingUbo
 		, ProgressBar * progress )
 		: OwnedBy< Engine >{ engine }
-		, m_hdrConfigUbo{ hdrConfigUbo }
+		, m_renderUbo{ renderUbo }
 		, m_colourGradingUbo{ colourGradingUbo }
 		, m_source{ source.front() }
 		, m_pass{ &doCreatePass( graph, source, target, previousPass, progress ) }
@@ -103,7 +103,7 @@ namespace c3d
 				return result;
 			} );
 		result.addDependency( previousPass );
-		m_hdrConfigUbo.createPassBinding( result
+		m_renderUbo.createPassBinding( result
 			, rendtonmap::HdrCfgUboIdx );
 		m_colourGradingUbo.createPassBinding( result
 			, rendtonmap::ClrGrdUboIdx );

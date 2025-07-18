@@ -6,8 +6,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Render/Viewport.hpp"
-#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
-#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Render/PBR/IblTextures.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"

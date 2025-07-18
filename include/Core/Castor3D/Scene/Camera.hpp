@@ -158,6 +158,13 @@ namespace c3d
 			return m_view;
 		}
 
+		Matrix4x4f getRawProjection()const
+		{
+			return m_ownProjection
+				? m_projection
+				: m_viewport.getProjection();
+		}
+
 		Matrix4x4f getProjection( Size const & renderSize, bool safeBanded )const
 		{
 			return m_ownProjection

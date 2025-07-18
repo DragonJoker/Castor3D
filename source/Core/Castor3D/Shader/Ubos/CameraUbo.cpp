@@ -160,13 +160,6 @@ namespace c3d
 			return vec2( nearPlane(), farPlane() );
 		}
 
-		sdw::Vec2 CameraData::calcTexCoord( Utils & utils
-			, sdw::Vec2 const & fragCoord )const
-		{
-			return utils.calcTexCoord( fragCoord
-				, vec2( renderSize() ) );
-		}
-
 		sdw::Vec3 CameraData::readNormal( sdw::Vec3 const & input )const
 		{
 			return -( transpose( invCurView() ) * vec4( input, 1.0_f ) ).xyz();
@@ -191,65 +184,37 @@ namespace c3d
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	CameraUbo::Configuration & CameraUbo::cpuUpdate( Size const & size
-		, Camera const & camera
-		, Matrix4x4f const & view
-		, Matrix4x4f const & projection
-		, uint32_t debugIndex
+	CameraUbo::Configuration & CameraUbo::cpuUpdate( Camera const & camera
 		, Point2f const & jitter )
 	{
-		auto & configuration = cpuUpdate( size
-			, view
+		return cpuUpdate( camera
+			, camera.getView()
+			, camera.getRawProjection()
+			, jitter );
+	}
+
+	CameraUbo::Configuration & CameraUbo::cpuUpdate( Camera const & camera
+		, Matrix4x4f const & view
+		, Matrix4x4f const & projection
+		, Point2f const & jitter )
+	{
+		auto & configuration = cpuUpdate( view
 			, projection
-			, debugIndex
 			, camera.getFrustum()
 			, jitter );
 		configuration.position = camera.getParent()->getDerivedPosition();
-		configuration.gamma = camera.getHdrConfig().gamma;
 		configuration.nearPlane = camera.getNear();
 		configuration.farPlane = camera.getFar();
 
 		return configuration;
 	}
 
-	CameraUbo::Configuration & CameraUbo::cpuUpdate( Size const & size
-		, Camera const & camera
-		, Matrix4x4f const & view
+	CameraUbo::Configuration & CameraUbo::cpuUpdate( Matrix4x4f const & view
 		, Matrix4x4f const & projection
-		, uint32_t debugIndex
-		, bool safeBanded
-		, Point2f const & jitter )
-	{
-		return cpuUpdate( ( safeBanded ? getSafeBandedSize( size ) : size )
-			, camera
-			, view
-			, projection
-			, debugIndex
-			, jitter );
-	}
-
-	CameraUbo::Configuration & CameraUbo::cpuUpdate( Size const & size
-		, Camera const & camera
-		, uint32_t debugIndex
-		, bool safeBanded
-		, Point2f const & jitter )
-	{
-		return cpuUpdate( ( safeBanded ? getSafeBandedSize( size ) : size )
-			, camera
-			, camera.getView()
-			, camera.getProjection( size, safeBanded )
-			, debugIndex
-			, jitter );
-	}
-
-	CameraUbo::Configuration & CameraUbo::cpuUpdate( Size const & size
-		, Matrix4x4f const & view
-		, Matrix4x4f const & projection
-		, uint32_t debugIndex
 		, Frustum const & frustum
 		, Point2f const & jitter )
 	{
-		auto & configuration = cpuUpdate( size, projection, debugIndex, jitter );
+		auto & configuration = cpuUpdate( projection, jitter );
 		configuration.prvView = configuration.curView;
 		configuration.invPrvView = configuration.invCurView;
 		configuration.prvViewProj = configuration.curViewProj;
@@ -272,17 +237,13 @@ namespace c3d
 		return configuration;
 	}
 
-	CameraUbo::Configuration & CameraUbo::cpuUpdate( Size const & size
-		, Matrix4x4f const & projection
-		, uint32_t debugIndex
+	CameraUbo::Configuration & CameraUbo::cpuUpdate( Matrix4x4f const & projection
 		, Point2f const & jitter )
 	{
 		CU_Require( m_ubo );
 		auto & configuration = m_ubo.getData();
 		configuration.projection = projection;
 		configuration.invProjection = projection.getInverse();
-		configuration.size = { size.getWidth(), size.getHeight() };
-		configuration.debugIndex = debugIndex;
 		if ( jitter != Point2f{} )
 			matrix::translate( configuration.projection, Point3f{ jitter->x, jitter->y, 0.0f } );
 		return configuration;

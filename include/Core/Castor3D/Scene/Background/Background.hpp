@@ -183,8 +183,8 @@ namespace c3d
 		*	The model UBO.
 		*\param cameraUbo
 		*	The matrix UBO.
-		*\param hdrConfigUbo
-		*	The HDR configuration UBO.
+		*\param renderUbo
+		*	The render configuration UBO.
 		*\param sceneUbo
 		*	The scene UBO.
 		*\param clearColour
@@ -216,8 +216,8 @@ namespace c3d
 		*	L'UBO de modèle.
 		*\param cameraUbo
 		*	L'UBO de matrices.
-		*\param hdrConfigUbo
-		*	L'UBO de configuration HDR.
+		*\param renderUbo
+		*	L'UBO de configuration du rendu.
 		*\param sceneUbo
 		*	L'UBO de scène.
 		*\param clearColour
@@ -238,7 +238,7 @@ namespace c3d
 			, crg::ImageViewId const * depthObj
 			, UniformBufferOffsetT< ModelBufferConfiguration > const & modelUbo
 			, CameraUbo const & cameraUbo
-			, HdrConfigUbo const & hdrConfigUbo
+			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
 			, bool clearColour
 			, bool clearDepth

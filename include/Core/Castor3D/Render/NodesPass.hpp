@@ -26,10 +26,12 @@ namespace c3d
 	public:
 		NodesPassDesc( Extent3D size
 			, CameraUbo const & cameraUbo
+			, RenderUbo const & renderUbo
 			, SceneUbo const * sceneUbo
 			, RenderFilters filters )
 			: m_size{ c3d::move( size ) }
 			, m_cameraUbo{ cameraUbo }
+			, m_renderUbo{ renderUbo }
 			, m_sceneUbo{ sceneUbo }
 			, m_filters{ filters }
 		{
@@ -70,6 +72,7 @@ namespace c3d
 
 		Extent3D m_size;
 		CameraUbo const & m_cameraUbo;
+		RenderUbo const & m_renderUbo;
 		SceneUbo const * m_sceneUbo{};
 		RenderFilters m_filters;
 		bool m_safeBand{};
@@ -371,6 +374,7 @@ namespace c3d
 		RenderDevice const & m_device;
 		RenderSystem & m_renderSystem;
 		CameraUbo const & m_cameraUbo;
+		RenderUbo const & m_renderUbo;
 		crg::ImageViewIdArray m_targetImage;
 		crg::ImageViewIdArray m_targetDepth;
 		String m_typeName;

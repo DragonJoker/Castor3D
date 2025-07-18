@@ -30,7 +30,7 @@ namespace atmosphere_scattering
 		enum Bindings : uint32_t
 		{
 			eScene,
-			eHdrConfig,
+			eRenderConfig,
 			eClouds,
 			eCount,
 		};

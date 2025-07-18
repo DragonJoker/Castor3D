@@ -85,6 +85,7 @@ namespace anisotropy
 		, c3ds::BackgroundModel & backgroundModel
 		, sdw::CombinedImage2DRgba32 const & mippedScene
 		, c3ds::CameraData const & camera
+		, c3ds::RenderData const & render
 		, c3ds::DirectLighting & lighting
 		, c3ds::IndirectLighting & indirect
 		, sdw::Vec2 const & sceneUv
@@ -128,6 +129,7 @@ namespace anisotropy
 				, lightSurface
 				, backgroundModel
 				, camera
+				, render
 				, lighting
 				, indirect
 				, sceneUv
@@ -143,6 +145,7 @@ namespace anisotropy
 		, c3ds::LightSurface const & lightSurface
 		, c3ds::BackgroundModel & backgroundModel
 		, c3ds::CameraData const & camera
+		, c3ds::RenderData const & render
 		, c3ds::DirectLighting & lighting
 		, c3ds::IndirectLighting & indirect
 		, sdw::Vec2 const & sceneUv

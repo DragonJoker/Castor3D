@@ -56,6 +56,7 @@ namespace c3d
 			, RenderDevice const & device
 			, String const & typeName
 			, CameraUbo const & cameraUbo
+			, RenderUbo const & renderUbo
 			, SceneCuller & culler
 			, ShadowMap const & shadowMap
 			, bool needsVsm

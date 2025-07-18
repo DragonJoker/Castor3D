@@ -18,7 +18,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
@@ -45,7 +45,7 @@ namespace c3d
 		{
 			eMatrix = 0u,
 			eModel = 1u,
-			eHdrConfig = 2u,
+			eRenderConfig = 2u,
 			eScene = 3u,
 			eSkybox = 4u,
 			eIrradiance = 5u,
@@ -224,7 +224,7 @@ namespace c3d
 
 						C3D_Camera( writer, Bindings::eMatrix, 0u );
 						C3D_ModelData( writer, Bindings::eModel, 0u );
-						C3D_HdrConfig( writer, Bindings::eHdrConfig, 0u );
+						C3D_Render( writer, Bindings::eRenderConfig, 0u );
 						C3D_Scene( writer, Bindings::eScene, 0u );
 						auto c3d_mapSkybox = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapSkybox", uint32_t( Bindings::eSkybox ), 0u, programIndex == SceneBackground::VisiblePassIndex );
 						auto c3d_mapIrradiance = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapIrradiance", uint32_t( Bindings::eIrradiance ), 0u, programIndex == SceneBackground::IrradiancePassIndex );
@@ -236,7 +236,7 @@ namespace c3d
 								out.uv() = in.position();
 							} );
 
-						writer.implementEntryPointT< shader::Uv3FT, shader::Colour4FT >( [this, &writer, &c3d_sceneData, &c3d_hdrConfigData, &c3d_mapSkybox, &c3d_mapIrradiance, programIndex]( sdw::FragmentInT< shader::Uv3FT > const & in
+						writer.implementEntryPointT< shader::Uv3FT, shader::Colour4FT >( [this, &writer, &c3d_sceneData, &c3d_renderData, &c3d_mapSkybox, &c3d_mapIrradiance, programIndex]( sdw::FragmentInT< shader::Uv3FT > const & in
 							, sdw::FragmentOutT< shader::Colour4FT > const & out )
 							{
 								if ( programIndex != SceneBackground::HiddenPassIndex )
@@ -251,7 +251,7 @@ namespace c3d
 
 										if ( !m_background->isHdr() && !m_background->isSRGB() )
 										{
-											out.colour() = vec4( c3d_hdrConfigData.removeGamma( colour.xyz() ), colour.w() );
+											out.colour() = vec4( c3d_renderData.removeGamma( colour.xyz() ), colour.w() );
 										}
 										else
 										{
@@ -260,13 +260,13 @@ namespace c3d
 									}
 									sdwELSE
 									{
-										out.colour() = vec4( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData ).xyz(), 1.0_f );
+										out.colour() = vec4( c3d_sceneData.getBackgroundColour( c3d_renderData ).xyz(), 1.0_f );
 									}
 									sdwFI
 								}
 								else
 								{
-									out.colour() = vec4( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData ).xyz(), 1.0_f );
+									out.colour() = vec4( c3d_sceneData.getBackgroundColour( c3d_renderData ).xyz(), 1.0_f );
 								}
 							} );
 						program.shader.shader = writer.getBuilder().releaseShader();
@@ -425,7 +425,7 @@ namespace c3d
 		, crg::ImageViewId const * depthObj
 		, UniformBufferOffsetT< ModelBufferConfiguration > const & modelUbo
 		, CameraUbo const & cameraUbo
-		, HdrConfigUbo const & hdrConfigUbo
+		, RenderUbo const & renderUbo
 		, SceneUbo const & sceneUbo
 		, bool clearColour
 		, bool clearDepth
@@ -470,8 +470,8 @@ namespace c3d
 		modelUbo.createPassBinding( result
 			, "Model"
 			, uint32_t( back::Bindings::eModel ) );
-		hdrConfigUbo.createPassBinding( result
-			, uint32_t( back::Bindings::eHdrConfig ) );
+		renderUbo.createPassBinding( result
+			, uint32_t( back::Bindings::eRenderConfig ) );
 		sceneUbo.createPassBinding( result
 			, uint32_t( back::Bindings::eScene ) );
 		result.addSampledView( m_textureId.sampledViewId

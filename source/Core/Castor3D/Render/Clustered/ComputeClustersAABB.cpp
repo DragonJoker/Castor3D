@@ -10,6 +10,7 @@
 #include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 
 #include <CastorUtils/Design/DataHolder.hpp>
 
@@ -27,8 +28,8 @@ namespace c3d
 	{
 		enum BindingPoints
 		{
-			eMainCamera,
-			eClustersCamera,
+			eCamera,
+			eRender,
 			eClusters,
 			eReducedLightsAABB,
 			eClustersAABB,
@@ -40,13 +41,11 @@ namespace c3d
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
-			C3D_CameraNamed( writer
-				, Main
-				, eMainCamera
+			C3D_Camera( writer
+				, eCamera
 				, 0u );
-			C3D_CameraNamed( writer
-				, Clusters
-				, eClustersCamera
+			C3D_Render( writer
+				, eRender
 				, 0u );
 			C3D_Clusters( writer
 				, eClusters
@@ -64,7 +63,7 @@ namespace c3d
 				{
 					// Convert to normalized texture coordinates in the range [0 .. 1].
 					auto texCoord = writer.declLocale( "texCoord"
-						, screen.xy() / vec2( c3d_cameraDataClusters.renderSize() ) );
+						, screen.xy() * c3d_renderData.invRenderSize() );
 
 					// Convert to clip space
 					auto clip = writer.declLocale( "clip"
@@ -72,7 +71,7 @@ namespace c3d
 							, screen.zw() ) );
 
 					auto view = writer.declLocale( "view"
-						, c3d_cameraDataClusters.projToView( clip ) );
+						, c3d_cameraData.projToView( clip ) );
 					view /= view.w();
 					writer.returnStmt( view );
 				}
@@ -263,8 +262,8 @@ namespace c3d
 	crg::FramePass const & createComputeClustersAABBPass( crg::FramePassGroup & graph
 		, crg::FramePass const * previousPass
 		, RenderDevice const & device
-		, CameraUbo const & mainCameraUbo
 		, CameraUbo const & clustersCameraUbo
+		, RenderUbo const & renderUbo
 		, FrustumClusters const & clusters )
 	{
 		auto & pass = graph.createPass( "ComputeClustersAABB"
@@ -287,8 +286,8 @@ namespace c3d
 				return result;
 			});
 		pass.addDependency( *previousPass );
-		mainCameraUbo.createPassBinding( pass, cptclsb::eMainCamera );
-		clustersCameraUbo.createPassBinding( pass, cptclsb::eClustersCamera );
+		renderUbo.createPassBinding( pass, cptclsb::eRender );
+		clustersCameraUbo.createPassBinding( pass, cptclsb::eCamera );
 		clusters.getClustersUbo().createPassBinding( pass, cptclsb::eClusters );
 		createInputStoragePassBinding( pass, uint32_t( cptclsb::eReducedLightsAABB ), cuT( "C3D_ReducedLightsAABB" ), clusters.getReducedLightsAABBBuffer(), 0u, ashes::WholeSize );
 		createClearableOutputStorageBinding( pass, uint32_t( cptclsb::eClustersAABB ), cuT( "C3D_ClustersAABB" ), clusters.getClustersAABBBuffer(), 0u, ashes::WholeSize );

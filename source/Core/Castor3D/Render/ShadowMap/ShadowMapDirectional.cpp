@@ -269,6 +269,7 @@ namespace c3d
 						, runnableGraph
 						, m_device
 						, cameraUbo
+						, *m_renderUbo
 						, *passData.culler
 						, camera
 						, *this

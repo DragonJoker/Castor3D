@@ -26,6 +26,7 @@
 #include <Castor3D/Shader/Ubos/BillboardUbo.hpp>
 #include <Castor3D/Shader/Ubos/ModelDataUbo.hpp>
 #include <Castor3D/Shader/Ubos/ObjectIdsUbo.hpp>
+#include <Castor3D/Shader/Ubos/RenderUbo.hpp>
 #include <Castor3D/Shader/Ubos/SceneUbo.hpp>
 
 #include <CastorUtils/FileParser/FileParser.hpp>
@@ -501,6 +502,9 @@ namespace ocean_fft
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
+		C3D_Render( writer
+			, GlobalBuffersIdx::eRender
+			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, flags
 			, GlobalBuffersIdx::eObjectsNodeID
@@ -662,9 +666,9 @@ namespace ocean_fft
 					auto up = writer.declLocale( "up"
 						, billboardData.getCameraUp( c3d_cameraData ) );
 					auto width = writer.declLocale( "width"
-						, billboardData.getWidth( c3d_cameraData ) );
+						, billboardData.getWidth( c3d_renderData ) );
 					auto height = writer.declLocale( "height"
-						, billboardData.getHeight( c3d_cameraData ) );
+						, billboardData.getHeight( c3d_renderData ) );
 
 					auto scaledRight = writer.declLocale( "scaledRight"
 						, right * bbPositions[in.vertexIndex - in.baseVertex].x() * width );

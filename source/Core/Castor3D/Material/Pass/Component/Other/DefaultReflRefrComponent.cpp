@@ -12,7 +12,7 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslReflection.hpp"
-#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
@@ -27,6 +27,7 @@ namespace c3d
 		, shader::BackgroundModel & backgroundModel
 		, sdw::CombinedImage2DRgba32 const & mippedScene
 		, shader::CameraData const & camera
+		, shader::RenderData const & render
 		, shader::DirectLighting & lighting
 		, shader::IndirectLighting & indirect
 		, sdw::Vec2 const & sceneUv
@@ -42,7 +43,7 @@ namespace c3d
 				, backgroundModel
 				, mippedScene
 				, camera
-				, sceneUv / vec2( camera.renderSize() )
+				, sceneUv * render.invRenderSize()
 				, envMapIndex
 				, output
 				, debugOutput );
@@ -54,6 +55,7 @@ namespace c3d
 				, lightSurface
 				, backgroundModel
 				, camera
+				, render
 				, lighting
 				, indirect
 				, sceneUv
@@ -69,6 +71,7 @@ namespace c3d
 		, shader::LightSurface const & lightSurface
 		, shader::BackgroundModel & backgroundModel
 		, shader::CameraData const & camera
+		, shader::RenderData const & render
 		, shader::DirectLighting & lighting
 		, shader::IndirectLighting & indirect
 		, sdw::Vec2 const & sceneUv

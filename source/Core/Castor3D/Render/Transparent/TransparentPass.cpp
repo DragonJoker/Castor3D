@@ -37,6 +37,7 @@
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
@@ -228,6 +229,9 @@ namespace c3d
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
+		C3D_Render( writer
+			, GlobalBuffersIdx::eRender
+			, RenderPipeline::eBuffers );
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::eBuffers );
@@ -341,7 +345,7 @@ namespace c3d
 			{
 				shader::DebugOutput output{ getDebugConfig()
 					, cuT( "Default" )
-					, c3d_cameraData.debugIndex()
+					, c3d_renderData.debugIndex()
 					, outAccumulation
 					, areDebugTargetsEnabled() };
 				auto modelData = writer.declLocale( "modelData"
@@ -442,6 +446,7 @@ namespace c3d
 							, *backgroundModel
 							, c3d_mapScene
 							, c3d_cameraData
+							, c3d_renderData
 							, directLighting
 							, indirectLighting
 							, in.fragCoord.xy()

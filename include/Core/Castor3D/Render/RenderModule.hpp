@@ -196,15 +196,16 @@ namespace c3d
 		: uint32_t
 	{
 		eCamera = 0,
-		eScene = 1,
-		eObjectsNodeID = 2,
-		eModelsData = 3,
-		eMaterials = 4,
-		eSssProfiles = 5,
-		eSssDiffusionProfiles = 6,
-		eTexConfigs = 7,
-		eTexAnims = 8,
-		eBillboardsData = 9,
+		eRender = 1,
+		eScene = 2,
+		eObjectsNodeID = 3,
+		eModelsData = 4,
+		eMaterials = 5,
+		eSssProfiles = 6,
+		eSssDiffusionProfiles = 7,
+		eTexConfigs = 8,
+		eTexAnims = 9,
+		eBillboardsData = 10,
 		CU_ScopedEnumBounds( eCamera, eBillboardsData ),
 	};
 	/**

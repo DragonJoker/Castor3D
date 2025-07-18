@@ -107,7 +107,7 @@ namespace c3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~ShadowMap()noexcept = default;
+		C3D_API virtual ~ShadowMap()noexcept;
 		/**
 		*\~english
 		*\brief
@@ -238,6 +238,7 @@ namespace c3d
 		ShadowMapResult m_result;
 		uint32_t m_count;
 		Array< AllPasses, 4u > m_passes;
+		RawUniquePtr< RenderUbo > m_renderUbo;
 		uint32_t m_passesIndex{};
 	};
 }

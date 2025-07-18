@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Shader/Ubos/ColourGradingUbo.hpp"
-#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
 
@@ -35,7 +35,7 @@ namespace c3d
 		 *\param[in]	source				L'image source.
 		 *\param[in]	target				L'image cible.
 		 *\param[in]	previousPass		The previous frame pass.
-		 *\param[in]	hdrConfigUbo		The HDR configuration data.
+		 *\param[in]	renderUbo			The render configuration data.
 		 *\param[in]	colourGradingUbo	The colour grading configuration data.
 		 *\param[in]	progress			The progress bar.
 		 *\~french
@@ -45,8 +45,8 @@ namespace c3d
 		 *\param[in]	source				The source image.
 		 *\param[in]	target				The target image.
 		 *\param[in]	previousPass		La frame pass précédente.
-		 *\param[in]	hdrConfigUbo		Les données de confiuration HDR.
-		 *\param[in]	colourGradingUbo	Les données de confiuration de colour grading.
+		 *\param[in]	renderUbo			Les données de configuration du rendu.
+		 *\param[in]	colourGradingUbo	Les données de configuration de colour grading.
 		 *\param[in]	progress			La barre de progression.
 		 */
 		C3D_API ToneMapping( Engine & engine
@@ -54,7 +54,7 @@ namespace c3d
 			, crg::ImageViewIdArray const & source
 			, crg::ImageViewId const & target
 			, crg::FramePass const & previousPass
-			, HdrConfigUbo & hdrConfigUbo
+			, RenderUbo & renderUbo
 			, ColourGradingUbo & colourGradingUbo
 			, ProgressBar * progress );
 		/**
@@ -139,7 +139,7 @@ namespace c3d
 
 	protected:
 		String m_name{ cuT( "linear" ) };
-		HdrConfigUbo & m_hdrConfigUbo;
+		RenderUbo & m_renderUbo;
 		ColourGradingUbo & m_colourGradingUbo;
 		ProgramModule m_shader{ cuT( "ToneMapping" ) };
 		crg::ImageViewId m_source;

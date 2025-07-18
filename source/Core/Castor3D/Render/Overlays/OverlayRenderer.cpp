@@ -29,7 +29,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/FontUbo.hpp"
-#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 #include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
 
 #include <CastorUtils/Graphics/Rectangle.hpp>
@@ -214,9 +214,9 @@ namespace c3d
 			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eCamera )
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_VERTEX_BIT ) );
-			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eHdrConfig )
+			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eRender )
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+				, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eOverlays )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_VERTEX_BIT ) );
@@ -244,28 +244,28 @@ namespace c3d
 	//*********************************************************************************************
 
 	OverlayRenderer::OverlaysCommonData::OverlaysCommonData( RenderDevice const & device
-		, HdrConfigUbo const & hdrConfigUbo )
+		, RenderUbo const & renderUbo )
 		: baseDescriptorLayout{ ovrlrend::createBaseDescriptorLayout( device ) }
 		, cameraUbo{ device }
 		, panelVertexBuffer{ makeRawUnique< PanelVertexBufferPool >( *device.renderSystem.getEngine()
 			, cuT( "PanelOverlays" )
 			, device
 			, cameraUbo
-			, hdrConfigUbo
+			, renderUbo
 			, *baseDescriptorLayout
 			, MaxOverlaysPerBuffer ) }
 		, borderVertexBuffer{ makeRawUnique< BorderPanelVertexBufferPool >( *device.renderSystem.getEngine()
 			, cuT( "BorderOverlays" )
 			, device
 			, cameraUbo
-			, hdrConfigUbo
+			, renderUbo
 			, *baseDescriptorLayout
 			, MaxOverlaysPerBuffer ) }
 		, textVertexBuffer{ makeRawUnique< TextVertexBufferPool >( *device.renderSystem.getEngine()
 			, cuT( "TextOverlays" )
 			, device
 			, cameraUbo
-			, hdrConfigUbo
+			, renderUbo
 			, *baseDescriptorLayout
 			, MaxOverlaysPerBuffer
 			, makeUnique< OverlayTextBufferPool >( *device.renderSystem.getEngine()
@@ -469,6 +469,9 @@ namespace c3d
 		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eCamera )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_COMPUTE_BIT ) );
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eRender )
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_COMPUTE_BIT ) );
 		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eOverlays )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_COMPUTE_BIT ) );
@@ -513,6 +516,8 @@ namespace c3d
 		ashes::WriteDescriptorSetArray setBindings;
 		m_commonData.cameraUbo.createSizedBinding( descriptorSet
 			, descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eCamera ) ) );
+		m_commonData.textVertexBuffer->renderUbo.createSizedBinding( descriptorSet
+			, descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eRender ) ) );
 		descriptorSet.createBinding( descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eOverlays ) )
 			, *m_commonData.textVertexBuffer->overlaysData
 			, 0u
@@ -874,8 +879,8 @@ namespace c3d
 			C3D_Camera( writer
 				, OverlayBindingId::eCamera
 				, 0u );
-			C3D_HdrConfig( writer
-				, OverlayBindingId::eHdrConfig
+			C3D_Render( writer
+				, OverlayBindingId::eRender
 				, 0u );
 			C3D_Overlays( writer
 				, OverlayBindingId::eOverlays
@@ -936,7 +941,7 @@ namespace c3d
 					auto surface = writer.declLocale( "vertex"
 						, c3d_overlaysSurfaces[vertexOffset] );
 					auto renderSize = writer.declLocale( "renderSize"
-						, vec2( c3d_cameraData.renderSize() ) );
+						, vec2( c3d_renderData.renderSize() ) );
 					auto ssAbsParentSize = writer.declLocale( "ssAbsParentSize"
 						, overlay.parentRect().zw() - overlay.parentRect().xy() );
 					auto ssRelOvPosition = writer.declLocale( "ssRelOvPosition"
@@ -1013,7 +1018,7 @@ namespace c3d
 
 					if ( m_isHdr )
 					{
-						outComponents.baseColour = c3d_hdrConfigData.removeGamma( outComponents.baseColour );
+						outComponents.baseColour = c3d_renderData.removeGamma( outComponents.baseColour );
 					}
 
 					outColour = vec4( outComponents.baseColour, outComponents.opacity );
@@ -1028,25 +1033,23 @@ namespace c3d
 
 	OverlayRenderer::OverlayRenderer( RenderDevice const & device
 		, Texture const & target
-		, HdrConfigUbo const & hdrConfigUbo
+		, RenderUbo const & renderUbo
 		, crg::FramePassTimer & timer
 		, VkCommandBufferLevel level )
 		: OwnedBy< RenderSystem >( device.renderSystem )
 		, m_target{ target }
 		, m_timer{ timer }
 		, m_size{ makeSize( m_target.getExtent() ) }
-		, m_common{ device, hdrConfigUbo }
+		, m_common{ device, renderUbo }
 		, m_draw{ device, level, m_common, isFloatingPoint( m_target.getFormat() ) }
 		, m_compute{ device, m_common }
 	{
-		m_common.cameraUbo.cpuUpdate( getSize()
-			, getRenderSystem()->getOrtho( 0.0f
-				, float( m_size.getWidth() )
-				, 0.0f
-				, float( m_size.getHeight() )
-				, -1.0f
-				, 1.0f )
-			, 0u );
+		m_common.cameraUbo.cpuUpdate( getRenderSystem()->getOrtho( 0.0f
+			, float( m_size.getWidth() )
+			, 0.0f
+			, float( m_size.getHeight() )
+			, -1.0f
+			, 1.0f ) );
 	}
 
 	void OverlayRenderer::update( GpuUpdater & updater )
@@ -1057,14 +1060,12 @@ namespace c3d
 			{
 				m_sizeChanged = true;
 				m_size = updater.renderSize;
-				m_common.cameraUbo.cpuUpdate( getSize()
-					, getRenderSystem()->getOrtho( 0.0f
-						, float( m_size.getWidth() )
-						, 0.0f
-						, float( m_size.getHeight() )
-						, -1.0f
-						, 1.0f )
-					, 0u );
+				m_common.cameraUbo.cpuUpdate( getRenderSystem()->getOrtho( 0.0f
+					, float( m_size.getWidth() )
+					, 0.0f
+					, float( m_size.getHeight() )
+					, -1.0f
+					, 1.0f ) );
 			}
 		}
 	}

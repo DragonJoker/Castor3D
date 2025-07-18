@@ -17,12 +17,13 @@ namespace c3d
 	private:
 		RenderNodesPassDesc( Extent3D size
 			, CameraUbo const & cameraUbo
+			, RenderUbo const & renderUbo
 			, SceneUbo const * sceneUbo
 			, SceneCuller & culler
 			, RenderFilters filters
 			, bool oit
 			, bool forceTwoSided )
-			: m_base{ c3d::move( size ), cameraUbo, sceneUbo, filters }
+			: m_base{ c3d::move( size ), cameraUbo, renderUbo, sceneUbo, filters }
 			, m_culler{ culler }
 			, m_oit{ oit }
 			, m_forceTwoSided{ forceTwoSided }
@@ -30,8 +31,31 @@ namespace c3d
 		}
 
 	public:
+		/**
+		 *\~english
+		 *\brief		Constructor for transparent passes.
+		 *\param[in]	size			The render area dimensions.
+		 *\param[in]	cameraUbo		The scene matrices UBO.
+		 *\param[in]	renderUbo		The render UBO.
+		 *\param[in]	sceneUbo		The scene UBO.
+		 *\param[in]	culler			The scene culler for this pass.
+		 *\param[in]	filters			The filters to ignore some objects.
+		 *\param[in]	oit				The order independant status.
+		 *\param[in]	forceTwoSided	The two sided forcing status.
+		 *\~french
+		 *\brief		Constructeur pour les passes transparents.
+		 *\param[in]	size			Les dimensions de la zone de rendu.
+		 *\param[in]	cameraUbo		L'UBO des matrices de la scène.
+		 *\param[in]	renderUbo		L'UBO de rendu.
+		 *\param[in]	sceneUbo		L'UBO de scène.
+		 *\param[in]	culler			Le culler pour cette passe.
+		 *\param[in]	filters			Filtres utilisés pour ignorer des objets.
+		 *\param[in]	oit				Le statut de rendu indépendant de l'ordre des objets.
+		 *\param[in]	forceTwoSided	Le statut de forçage de rendu two-sided.
+		 */
 		RenderNodesPassDesc( Extent3D size
 			, CameraUbo const & cameraUbo
+			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
 			, SceneCuller & culler
 			, RenderFilters filters
@@ -39,7 +63,8 @@ namespace c3d
 			, bool forceTwoSided )
 			: RenderNodesPassDesc{ c3d::move( size )
 				, cameraUbo
-				, & sceneUbo
+				, renderUbo
+				, &sceneUbo
 				, culler
 				, filters
 				, oit
@@ -51,18 +76,22 @@ namespace c3d
 		 *\brief		Constructor for shadow passes.
 		 *\param[in]	size		The render area dimensions.
 		 *\param[in]	cameraUbo	The scene matrices UBO.
+		 *\param[in]	renderUbo	The render UBO.
 		 *\param[in]	culler		The scene culler for this pass.
 		 *\~french
 		 *\brief		Constructeur pour les passes d'ombres.
 		 *\param[in]	size		Les dimensions de la zone de rendu.
 		 *\param[in]	cameraUbo	L'UBO des matrices de la scène.
+		 *\param[in]	renderUbo	L'UBO de rendu.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */
 		RenderNodesPassDesc( Extent3D size
 			, CameraUbo const & cameraUbo
+			, RenderUbo const & renderUbo
 			, SceneCuller & culler )
 			: RenderNodesPassDesc{ c3d::move( size )
 				, cameraUbo
+				, renderUbo
 				, nullptr
 				, culler
 				, RenderFilter::eNone
@@ -75,21 +104,25 @@ namespace c3d
 		 *\brief		Constructor for opaque passes.
 		 *\param[in]	size		The render area dimensions.
 		 *\param[in]	cameraUbo	The scene matrices UBO.
+		 *\param[in]	renderUbo	The render UBO.
 		 *\param[in]	sceneUbo	The scene UBO.
 		 *\param[in]	culler		The scene culler for this pass.
 		 *\~french
 		 *\brief		Constructeur pour les passes opaques.
 		 *\param[in]	size		Les dimensions de la zone de rendu.
 		 *\param[in]	cameraUbo	L'UBO des matrices de la scène.
+		 *\param[in]	renderUbo	L'UBO de rendu.
 		 *\param[in]	sceneUbo	L'UBO de scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */
 		RenderNodesPassDesc( Extent3D size
 			, CameraUbo const & cameraUbo
+			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
 			, SceneCuller & culler )
 			: RenderNodesPassDesc{ c3d::move( size )
 				, cameraUbo
+				, renderUbo
 				, sceneUbo
 				, culler
 				, RenderFilter::eAlphaBlend
@@ -102,6 +135,7 @@ namespace c3d
 		 *\brief		Constructor for transparent passes.
 		 *\param[in]	size		The render area dimensions.
 		 *\param[in]	cameraUbo	The scene matrices UBO.
+		 *\param[in]	renderUbo	The render UBO.
 		 *\param[in]	sceneUbo	The scene UBO.
 		 *\param[in]	culler		The scene culler for this pass.
 		 *\param[in]	oit			The order independant status.
@@ -109,17 +143,20 @@ namespace c3d
 		 *\brief		Constructeur pour les passes transparents.
 		 *\param[in]	size		Les dimensions de la zone de rendu.
 		 *\param[in]	cameraUbo	L'UBO des matrices de la scène.
+		 *\param[in]	renderUbo	L'UBO de rendu.
 		 *\param[in]	sceneUbo	L'UBO de scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	oit			Le statut de rendu indépendant de l'ordre des objets.
 		 */
 		RenderNodesPassDesc( Extent3D size
 			, CameraUbo const & cameraUbo
+			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
 			, SceneCuller & culler
 			, bool oit )
 			: RenderNodesPassDesc{ c3d::move( size )
 				, cameraUbo
+				, renderUbo
 				, sceneUbo
 				, culler
 				, RenderFilter::eOpaque
