@@ -14,7 +14,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
-#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <CastorUtils/Math/RangedValue.hpp>
@@ -217,7 +217,7 @@ namespace c3d
 		Texture m_colour;
 		Texture m_depth;
 		CameraUbo m_cameraUbo;
-		HdrConfigUbo m_hdrConfigUbo;
+		RenderUbo m_renderUbo;
 		SceneUbo const * m_sceneUbo{};
 		BackgroundRendererUPtr m_backgroundRenderer;
 		crg::FramePass * m_opaquePassDesc{};

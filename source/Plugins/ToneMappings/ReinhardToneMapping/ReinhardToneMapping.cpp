@@ -4,7 +4,7 @@
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
-#include <Castor3D/Shader/Ubos/HdrConfigUbo.hpp>
+#include <Castor3D/Shader/Ubos/RenderUbo.hpp>
 #include <Castor3D/Shader/Ubos/ColourGradingUbo.hpp>
 
 #include <ShaderWriter/Source.hpp>
@@ -20,7 +20,7 @@ namespace Reinhard
 	{
 		sdw::TraditionalGraphicsWriter writer{ builder };
 
-		C3D_HdrConfig( writer, 0u, 0u );
+		C3D_Render( writer, 0u, 0u );
 		C3D_ColourGrading( writer, 1u, 0u );
 		auto c3d_mapHdr = writer.declCombinedImg< FImg2DRgba16 >( "c3d_mapHdr", 2u, 0u );
 
@@ -31,9 +31,9 @@ namespace Reinhard
 					, c3d_colourGrading.colourGrade( c3d_mapHdr.sample( in.uv() ).rgb() ) );
 				// Exposure tone mapping
 				auto mapped = writer.declLocale( "mapped"
-					, vec3( 1.0_f ) - exp( -hdrColor * c3d_hdrConfigData.getExposure() ) );
+					, vec3( 1.0_f ) - exp( -hdrColor * c3d_renderData.exposure() ) );
 				// Gamma correction
-				out.colour() = vec4( c3d_hdrConfigData.applyGamma( mapped ), 1.0_f );
+				out.colour() = vec4( c3d_renderData.applyGamma( mapped ), 1.0_f );
 			} );
 	}
 }

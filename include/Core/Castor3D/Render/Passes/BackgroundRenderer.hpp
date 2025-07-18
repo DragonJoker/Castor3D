@@ -17,7 +17,7 @@ namespace c3d
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, SceneBackground & background
-			, HdrConfigUbo const & hdrConfigUbo
+			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewIdArray const & colour
 			, bool clearColour
@@ -31,7 +31,7 @@ namespace c3d
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, SceneBackground & background
-			, HdrConfigUbo const & hdrConfigUbo
+			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewId const & colour
 			, bool clearColour = true
@@ -43,7 +43,7 @@ namespace c3d
 				, device
 				, progress
 				, background
-				, hdrConfigUbo
+				, renderUbo
 				, sceneUbo
 				, crg::ImageViewIdArray{ colour }
 				, clearColour
@@ -59,7 +59,7 @@ namespace c3d
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, SceneBackground & background
-			, HdrConfigUbo const & hdrConfigUbo
+			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewId const & colour
 			, bool clearColour
@@ -74,7 +74,7 @@ namespace c3d
 				, device
 				, progress
 				, background
-				, hdrConfigUbo
+				, renderUbo
 				, sceneUbo
 				, crg::ImageViewIdArray{ colour }
 				, clearColour
@@ -90,7 +90,7 @@ namespace c3d
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, SceneBackground & background
-			, HdrConfigUbo const & hdrConfigUbo
+			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewIdArray const & colour
 			, bool clearColour
@@ -103,7 +103,7 @@ namespace c3d
 				, device
 				, progress
 				, background
-				, hdrConfigUbo
+				, renderUbo
 				, sceneUbo
 				, colour
 				, clearColour
@@ -143,7 +143,7 @@ namespace c3d
 		crg::FramePass const & doCreatePass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, SceneBackground & background
-			, HdrConfigUbo const & hdrConfigUbo
+			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewIdArray const & colour
 			, bool clearColour

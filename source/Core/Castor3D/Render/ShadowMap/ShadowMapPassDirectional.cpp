@@ -50,6 +50,7 @@ namespace c3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, CameraUbo const & cameraUbo
+		, RenderUbo const & renderUbo
 		, SceneCuller & culler
 		, Camera & camera
 		, ShadowMap const & shadowMap
@@ -62,6 +63,7 @@ namespace c3d
 			, device
 			, Type
 			, cameraUbo
+			, renderUbo
 			, culler
 			, shadowMap
 			, needsVsm

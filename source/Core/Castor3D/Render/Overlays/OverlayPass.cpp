@@ -68,7 +68,7 @@ namespace c3d
 		, Scene const & scene
 		, Extent2D const & size
 		, Texture const & output
-		, HdrConfigUbo const & hdrConfigUbo
+		, RenderUbo const & renderUbo
 		, bool drawGlobal )
 		: crg::RunnablePass{ pass
 			, context
@@ -84,7 +84,7 @@ namespace c3d
 			, graph
 			, 1u
 			, size }
-		, m_renderer{ makeUnique< OverlayRenderer >( device, output, hdrConfigUbo, m_timer, VK_COMMAND_BUFFER_LEVEL_SECONDARY ) }
+		, m_renderer{ makeUnique< OverlayRenderer >( device, output, renderUbo, m_timer, VK_COMMAND_BUFFER_LEVEL_SECONDARY ) }
 		, m_drawGlobal{ drawGlobal }
 	{
 	}

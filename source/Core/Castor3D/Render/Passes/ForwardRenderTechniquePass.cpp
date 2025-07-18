@@ -40,6 +40,7 @@
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -214,6 +215,9 @@ namespace c3d
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
+		C3D_Render( writer
+			, GlobalBuffersIdx::eRender
+			, RenderPipeline::eBuffers );
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::eBuffers );
@@ -322,7 +326,7 @@ namespace c3d
 			{
 				shader::DebugOutput output{ getDebugConfig()
 					, cuT( "Default" )
-					, c3d_cameraData.debugIndex()
+					, c3d_renderData.debugIndex()
 					, outColour
 					, true };
 				auto modelData = writer.declLocale( "modelData"
@@ -473,6 +477,7 @@ namespace c3d
 								, *backgroundModel
 								, c3d_mapScene
 								, c3d_cameraData
+								, c3d_renderData
 								, directLighting
 								, indirectLighting
 								, in.fragCoord.xy()
@@ -529,7 +534,7 @@ namespace c3d
 				{
 					if ( flags.hasFog() )
 					{
-						outColour = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
+						outColour = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_renderData.gamma() )
 							, outColour
 							, in.worldPosition.xyz()
 							, c3d_cameraData.position()
@@ -537,7 +542,7 @@ namespace c3d
 
 						if ( m_outputScattering )
 						{
-							outScattering = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
+							outScattering = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_renderData.gamma() )
 								, outScattering
 								, in.worldPosition.xyz()
 								, c3d_cameraData.position()
@@ -549,7 +554,7 @@ namespace c3d
 						, utils.lineariseDepth( in.fragCoord.z(), c3d_cameraData.nearPlane(), c3d_cameraData.farPlane() ) );
 					backgroundModel->applyVolume( in.fragCoord.xy()
 						, linearDepth
-						, vec2( c3d_cameraData.renderSize() )
+						, vec2( c3d_renderData.renderSize() )
 						, c3d_cameraData.depthPlanes()
 						, outColour );
 
@@ -557,12 +562,12 @@ namespace c3d
 					{
 						backgroundModel->applyVolume( in.fragCoord.xy()
 							, linearDepth
-							, vec2( c3d_cameraData.renderSize() )
+							, vec2( c3d_renderData.renderSize() )
 							, c3d_cameraData.depthPlanes()
 							, outScattering );
 					}
 
-					outVelocity.xy() = in.getMotionVector( vec2( c3d_cameraData.renderSize() ) );
+					outVelocity.xy() = in.getMotionVector( vec2( c3d_renderData.renderSize() ) );
 				}
 			} );
 	}

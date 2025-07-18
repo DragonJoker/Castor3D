@@ -329,8 +329,7 @@ namespace c3d
 		, Named{ name + cuT( "/Technique") }
 		, m_renderTarget{ renderTarget }
 		, m_device{ device }
-		, m_targetSize{ m_renderTarget.getRenderSize() }
-		, m_rawSize{ getSafeBandedSize( m_targetSize ) }
+		, m_rawSize{ getSafeBandedSize( m_renderTarget.getRenderSize() ) }
 		, m_colour{ &colour }
 		, m_depth{ m_device
 			, m_renderTarget.getResources()
@@ -445,7 +444,7 @@ namespace c3d
 			? &m_renderTarget.getFrustumClusters()->createFramePasses( m_graph
 				, m_depthRangePass
 				, *this
-				, getCameraUbo()
+				, getRenderUbo()
 				, m_clustersFlagsPass )
 			: nullptr ) }
 		, m_background{ doCreateBackgroundPass( progress ) }
@@ -473,6 +472,8 @@ namespace c3d
 			? m_clearLpvGraph.compile( m_device.makeContext() )
 			: nullptr ) }
 	{
+		m_renderTarget.getFrustumClusters()->createDebugDisplayPrograms( getCameraUbo() );
+
 		if ( m_clearLpvRunnable )
 		{
 			getEngine()->registerTimer( makeString( m_clearLpvRunnable->getName() )
@@ -851,6 +852,11 @@ namespace c3d
 		return m_renderTarget.getCameraUbo();
 	}
 
+	RenderUbo const & RenderTechnique::getRenderUbo()const noexcept
+	{
+		return m_renderTarget.getRenderUbo();
+	}
+
 	SceneUbo const & RenderTechnique::getSceneUbo()const noexcept
 	{
 		return m_renderTarget.getSceneUbo();
@@ -894,7 +900,7 @@ namespace c3d
 			, m_device
 			, progress
 			, *m_renderTarget.getScene()->getBackground()
-			, m_renderTarget.getHdrConfigUbo()
+			, m_renderTarget.getRenderUbo()
 			, getSceneUbo()
 			, getTargetResult()
 			, true /*clearColour*/

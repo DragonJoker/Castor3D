@@ -9,7 +9,7 @@
 #include <Castor3D/Render/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Shader/Program.hpp>
 #include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
-#include <Castor3D/Shader/Ubos/HdrConfigUbo.hpp>
+#include <Castor3D/Shader/Ubos/RenderUbo.hpp>
 #include <Castor3D/Shader/Ubos/SceneUbo.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>
@@ -33,7 +33,7 @@ namespace atmosphere_scattering
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
 			C3D_Scene( writer, AtmosphereBackgroundPass::eScene, 0u );
-			C3D_HdrConfig( writer, AtmosphereBackgroundPass::eHdrConfig, 0u );
+			C3D_Render( writer, AtmosphereBackgroundPass::eRenderConfig, 0u );
 			auto cloudsMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "cloudsMap"
 				, uint32_t( AtmosphereBackgroundPass::eClouds )
 				, 0u );
@@ -55,7 +55,7 @@ namespace atmosphere_scattering
 					}
 					else
 					{
-						out.colour() = vec4( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData ).xyz(), 1.0_f );
+						out.colour() = vec4( c3d_sceneData.getBackgroundColour( c3d_renderData ).xyz(), 1.0_f );
 					}
 				} );
 

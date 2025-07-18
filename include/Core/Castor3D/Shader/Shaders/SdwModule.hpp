@@ -71,6 +71,7 @@ namespace c3d::shader
 	struct PointShadowData;
 	struct Ray;
 	struct ReflectionRefraction;
+	struct RenderData;
 	struct ShadowData;
 	struct SpotLight;
 	struct SpotShadowData;

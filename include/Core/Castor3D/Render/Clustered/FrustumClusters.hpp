@@ -59,8 +59,15 @@ namespace c3d
 		C3D_API crg::FramePass const & createFramePasses( crg::FramePassGroup & graph
 			, crg::FramePass const * previousPass
 			, RenderTechnique & technique
-			, CameraUbo const & cameraUbo
+			, RenderUbo const & renderUbo
 			, RenderNodesPass *& nodesPass );
+		/**
+		 *\~english
+		 *\brief		Creates the programs used to display clusters debug data.
+		 *\~french
+		 *\brief		Crée les programmes utilisés pour afficher les données de débogage des clusters.
+		 */
+		C3D_API void createDebugDisplayPrograms( CameraUbo const & cameraUbo );
 		/**
 		 *\~english
 		 *\param[in]	level	The BVH level.

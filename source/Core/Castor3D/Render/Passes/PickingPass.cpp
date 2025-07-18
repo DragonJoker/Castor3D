@@ -60,6 +60,7 @@ namespace c3d
 		, RenderDevice const & device
 		, Size const & size
 		, CameraUbo const & cameraUbo
+		, RenderUbo const & renderUbo
 		, SceneUbo const & sceneUbo
 		, SceneCuller & culler )
 		: RenderNodesPass{ pass
@@ -69,7 +70,7 @@ namespace c3d
 			, Type
 			, {}
 			, {}
-			, RenderNodesPassDesc{ { size.getWidth(), size.getHeight(), 1u }, cameraUbo, sceneUbo, culler, RenderFilter::eNone, true, false }
+			, RenderNodesPassDesc{ { size.getWidth(), size.getHeight(), 1u }, cameraUbo, renderUbo, sceneUbo, culler, RenderFilter::eNone, true, false }
 				.meshShading( true )
 				.componentModeFlags( ComponentModeFlag::eOpacity
 					| ComponentModeFlag::eGeometry ) }

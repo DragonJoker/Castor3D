@@ -49,6 +49,7 @@ namespace c3d
 			, QueueData const & queueData
 			, Size const & size
 			, CameraUbo const & cameraUbo
+			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
 			, SceneCuller & culler );
 		/**
@@ -121,6 +122,7 @@ namespace c3d
 
 	private:
 		crg::FramePass & doCreatePickingPass( CameraUbo const & cameraUbo
+			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
 			, SceneCuller & culler );
 		Point4ui doFboPick( Position const & position );

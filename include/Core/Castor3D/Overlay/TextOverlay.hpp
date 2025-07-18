@@ -20,6 +20,7 @@ namespace c3d
 		enum class ComputeBindingIdx
 		{
 			eCamera,
+			eRender,
 			eOverlays,
 			eChars,
 			eWords,

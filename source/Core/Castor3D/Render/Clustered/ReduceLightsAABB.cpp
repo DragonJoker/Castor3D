@@ -35,8 +35,7 @@ namespace c3d
 	{
 		enum BindingPoints
 		{
-			eMainCamera,
-			eClustersCamera,
+			eCamera,
 			eClusters,
 			eAllLightsAABB,
 			eReducedLightsAABB,
@@ -52,13 +51,8 @@ namespace c3d
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
-			C3D_CameraNamed( writer
-				, Main
-				, eMainCamera
-				, 0u );
-			C3D_CameraNamed( writer
-				, Clusters
-				, eClustersCamera
+			C3D_Camera( writer
+				, eCamera
 				, 0u );
 			C3D_Clusters( writer
 				, eClusters
@@ -256,8 +250,8 @@ namespace c3d
 						auto lightsAABBRange = writer.declLocale< sdw::Vec4 >( "lightsAABBRange" );
 						c3d_clustersData.computeGlobalLightsData( lightsMin
 							, lightsMax
-							, c3d_cameraDataClusters.nearPlane()
-							, c3d_cameraDataClusters.farPlane()
+							, c3d_cameraData.nearPlane()
+							, c3d_cameraData.farPlane()
 							, clustersLightsData
 							, lightsAABBRange );
 						c3d_clustersLightsData = clustersLightsData;
@@ -490,7 +484,6 @@ namespace c3d
 	crg::FramePass const & createReduceLightsAABBPass( crg::FramePassGroup & graph
 		, crg::FramePass const * previousPass
 		, RenderDevice const & device
-		, CameraUbo const & mainCameraUbo
 		, CameraUbo const & clustersCameraUbo
 		, FrustumClusters & clusters )
 	{
@@ -510,8 +503,7 @@ namespace c3d
 				return result;
 			} );
 		first.addDependency( *previousPass );
-		mainCameraUbo.createPassBinding( first, rdclgb::eMainCamera );
-		clustersCameraUbo.createPassBinding( first, rdclgb::eClustersCamera );
+		clustersCameraUbo.createPassBinding( first, rdclgb::eCamera );
 		clusters.getClustersUbo().createPassBinding( first, rdclgb::eClusters );
 		createInputStoragePassBinding( first, uint32_t( rdclgb::eAllLightsAABB ), cuT( "C3D_AllLightsAABB" ), clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
 		createClearableOutputStorageBinding( first, uint32_t( rdclgb::eReducedLightsAABB ), cuT( "C3D_ReducedLightsAABB" ), clusters.getReducedLightsAABBBuffer(), 0u, ashes::WholeSize );
@@ -532,8 +524,7 @@ namespace c3d
 				return result;
 			} );
 		second.addDependency( first );
-		mainCameraUbo.createPassBinding( second, rdclgb::eMainCamera );
-		clustersCameraUbo.createPassBinding( second, rdclgb::eClustersCamera );
+		clustersCameraUbo.createPassBinding( second, rdclgb::eCamera );
 		clusters.getClustersUbo().createPassBinding( second, rdclgb::eClusters );
 		createInOutStoragePassBinding( second, uint32_t( rdclgb::eReducedLightsAABB ), cuT( "C3D_ReducedLightsAABB" ), clusters.getReducedLightsAABBBuffer(), 0u, ashes::WholeSize );
 

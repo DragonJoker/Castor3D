@@ -60,7 +60,7 @@ namespace c3d
 		{
 			Scene = 0u,
 			Overlays = 1u,
-			HdrConfig = 2u,
+			Render = 2u,
 		};
 
 		class IntermediatesLister
@@ -635,6 +635,7 @@ namespace c3d
 		, m_pixelFormat{ pixelFormat }
 		, m_initialised{ false }
 		, m_resources{ getOwner()->getGraphResourceHandler() }
+		, m_renderUbo{ m_device }
 		, m_index{ ++sm_uiCount }
 		, m_name{ cuT( "Target" ) + string::toString( m_index ) }
 		, m_toneMappingName{ ( isFloatingPoint( m_pixelFormat )
@@ -889,7 +890,6 @@ namespace c3d
 		doCleanupCombineProgram();
 		m_culler.reset();
 		m_colourGradingUbo.reset();
-		m_hdrConfigUbo.reset();
 		m_frustumClusters.reset();
 	}
 
@@ -927,10 +927,12 @@ namespace c3d
 		CU_Require( m_culler );
 		m_culler->update( updater );
 		m_renderTechnique->update( updater );
-		m_cameraUbo.cpuUpdate( m_renderSize
-			, camera
-			, updater.debugIndex
-			, true
+		m_renderUbo.cpuUpdate( getHdrConfig()
+			, m_renderSize, true
+			, updater.debugIndex );
+		m_cameraUbo.cpuUpdate( camera
+			, camera.getView()
+			, camera.getProjection( m_renderSize, true )
 			, updater.jitter );
 
 		m_overlayPass->update( updater );
@@ -945,7 +947,6 @@ namespace c3d
 			}
 		}
 
-		m_hdrConfigUbo->cpuUpdate( getHdrConfig() );
 		m_colourGradingUbo->cpuUpdate( getColourGradingConfig() );
 
 		auto lastTarget = &doUpdatePostEffects( updater
@@ -1234,7 +1235,6 @@ namespace c3d
 	{
 		setProgressBarGlobalTitle( progress
 			, cuT( "Initialising: Render Target" ) );
-		m_hdrConfigUbo = makeRawUnique< HdrConfigUbo >( device );
 		m_colourGradingUbo = makeRawUnique< ColourGradingUbo >( device );
 		m_culler = makeUniqueDerived< SceneCuller, FrustumCuller >( *getScene(), *getCamera() );
 
@@ -1271,11 +1271,7 @@ namespace c3d
 		if ( getEngine()->getUpscalingConfig().enabled )
 		{
 			previousPass = &doCreateUpscalingPass( m_graph.createPassGroup( "Upscaling" )
-				, { previousPass }
-				, m_hdrObjects.front().targetViewId
-				, m_hdrObjectsDownSampled->sampledViewId
-				, m_velocity.sampledViewId
-				, m_renderTechnique->getDepth().sampledViewId );
+				, { previousPass } );
 		}
 
 		auto hdrSource = &m_hdrObjects.front();
@@ -1313,7 +1309,7 @@ namespace c3d
 				, crg::ImageViewIdArray{ hdrSource->sampledViewId, hdrTarget->sampledViewId }
 				, m_srgbObjects.front().wholeViewId
 				, *m_hdrLastPass
-				, *m_hdrConfigUbo
+				, m_renderUbo
 				, *m_colourGradingUbo
 				, progress );
 			m_toneMapping->initialise( m_toneMappingName
@@ -1423,7 +1419,7 @@ namespace c3d
 					, *m_scene
 					, makeExtent2D( m_overlays.getExtent() )
 					, m_overlays
-					, *m_hdrConfigUbo
+					, m_renderUbo
 					, true );
 				m_overlayPass = result.get();
 				getOwner()->registerTimer( makeString( framePass.getFullName() )
@@ -1461,8 +1457,8 @@ namespace c3d
 			, uint32_t( rendtgt::CombineIdx::Scene ) );
 		pass.addSampledView( m_overlays.sampledViewId
 			, uint32_t( rendtgt::CombineIdx::Overlays ) );
-		m_hdrConfigUbo->createPassBinding( pass
-			, uint32_t( rendtgt::CombineIdx::HdrConfig ) );
+		m_renderUbo.createPassBinding( pass
+			, uint32_t( rendtgt::CombineIdx::Render ) );
 		pass.addOutputColourView( m_combined.targetViewId );
 		return pass;
 	}
@@ -1520,7 +1516,7 @@ namespace c3d
 
 			auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba8Unorm >( "c3d_mapScene", uint32_t( rendtgt::CombineIdx::Scene ), 0u );
 			auto c3d_mapOverlays = writer.declCombinedImg< FImg2DRgba8Unorm >( "c3d_mapOverlays", uint32_t( rendtgt::CombineIdx::Overlays ), 0u );
-			C3D_HdrConfig( writer, rendtgt::CombineIdx::HdrConfig, 0u );
+			C3D_Render( writer, rendtgt::CombineIdx::Render, 0u );
 
 			shader::Utils utils{ writer };
 
@@ -1658,11 +1654,7 @@ namespace c3d
 	}
 
 	crg::FramePass const & RenderTarget::doCreateUpscalingPass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
-		, crg::ImageViewId resolvedColor
-		, crg::ImageViewId unresolvedColor
-		, crg::ImageViewId motion
-		, crg::ImageViewId depth )
+		, crg::FramePassArray const & previousPasses )
 	{
 		auto & pass = graph.createPass( "Upscaling"
 			, [this]( crg::FramePass const & framePass
@@ -1681,10 +1673,10 @@ namespace c3d
 				return result;
 			} );
 		pass.addDependencies( previousPasses );
-		pass.addImplicitColourView( resolvedColor, ImageLayout::eGeneral );
-		pass.addImplicitColourView( unresolvedColor, ImageLayout::eColorAttachment );
-		pass.addImplicitColourView( motion, ImageLayout::eColorAttachment );
-		pass.addImplicitColourView( depth, ImageLayout::eColorAttachment );
+		pass.addImplicitColourView( m_hdrObjects.front().targetViewId, ImageLayout::eGeneral );
+		pass.addImplicitColourView( m_hdrObjectsDownSampled->sampledViewId, ImageLayout::eColorAttachment );
+		pass.addImplicitColourView( m_velocity.sampledViewId, ImageLayout::eColorAttachment );
+		pass.addImplicitColourView( m_renderTechnique->getDepth().sampledViewId, ImageLayout::eDepthStencilAttachment );
 		return pass;
 	}
 

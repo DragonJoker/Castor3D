@@ -140,6 +140,7 @@ namespace c3d
 					, runnableGraph
 					, m_device
 					, cameraUbo
+					, *m_renderUbo
 					, *passData.culler
 					, *this
 					, vsm
@@ -290,10 +291,7 @@ namespace c3d
 		pass.pass->update( updater );
 
 		auto const & myCamera = pass.pass->getCuller().getCamera();
-		m_passes[m_passesIndex].cameraUbos[updater.index]->cpuUpdate( updater.renderSize
-			, myCamera
-			, updater.debugIndex
-			, false );
+		m_passes[m_passesIndex].cameraUbos[updater.index]->cpuUpdate( myCamera );
 
 		updater.renderSize = oldRenderSize;
 	}

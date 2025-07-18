@@ -61,6 +61,7 @@
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/ObjectIdsUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
@@ -532,6 +533,7 @@ namespace c3d
 			auto & descriptorSet = *descriptors.set;
 			ashes::WriteDescriptorSetArray descriptorWrites;
 			descriptorWrites.push_back( m_cameraUbo.getDescriptorWrite( uint32_t( GlobalBuffersIdx::eCamera ) ) );
+			descriptorWrites.push_back( m_renderUbo.getDescriptorWrite( uint32_t( GlobalBuffersIdx::eRender ) ) );
 
 			if ( m_sceneUbo )
 			{
@@ -854,6 +856,9 @@ namespace c3d
 
 		ashes::VkDescriptorSetLayoutBindingArray addBindings;
 		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eCamera )
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, stageFlags ) );
+		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eRender )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, stageFlags ) );
 

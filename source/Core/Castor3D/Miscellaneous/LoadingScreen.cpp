@@ -258,14 +258,14 @@ namespace c3d
 		, m_colour{ loadscreen::createColour( m_device, resources, SceneName, m_initialRenderSize, m_swapchainFormat ) }
 		, m_depth{ loadscreen::createDepth( m_device, resources, SceneName, m_initialRenderSize ) }
 		, m_cameraUbo{ m_device }
-		, m_hdrConfigUbo{ m_device }
+		, m_renderUbo{ m_device }
 		, m_sceneUbo{ &scene->getUbo() }
 		, m_backgroundRenderer{ makeUnique< BackgroundRenderer >( m_graph->getDefaultGroup()
 			, nullptr
 			, m_device
 			, nullptr
 			, *m_scene->getBackground()
-			, m_hdrConfigUbo
+			, m_renderUbo
 			, *m_sceneUbo
 			, m_colour.targetViewId
 			, true /*clearColour*/ ) }
@@ -315,8 +315,8 @@ namespace c3d
 			m_camera->update();
 
 			m_culler->update( updater );
-			m_cameraUbo.cpuUpdate( m_renderSize, *m_camera, 0u, false );
-			m_hdrConfigUbo.cpuUpdate( m_camera->getHdrConfig() );
+			m_cameraUbo.cpuUpdate( *m_camera );
+			m_renderUbo.cpuUpdate( m_camera->getHdrConfig(), m_renderSize, false, 0u );
 
 			m_backgroundRenderer->update( updater );
 			m_opaquePass->update( updater );
@@ -403,7 +403,7 @@ namespace c3d
 					, m_device
 					, nullptr
 					, *m_scene->getBackground()
-					, m_hdrConfigUbo
+					, m_renderUbo
 					, *m_sceneUbo
 					, m_colour.targetViewId
 					, true /*clearColour*/ );
@@ -441,7 +441,7 @@ namespace c3d
 					, cuT( "LoadingScreen" )
 					, crg::ImageViewIdArray{ m_colour.targetViewId }
 					, crg::ImageViewIdArray{ m_depth.targetViewId }
-					, RenderNodesPassDesc{ makeExtent3D( m_renderSize ), m_cameraUbo, *m_sceneUbo, *m_culler }
+					, RenderNodesPassDesc{ makeExtent3D( m_renderSize ), m_cameraUbo, m_renderUbo, *m_sceneUbo, *m_culler }
 						.meshShading( true )
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
@@ -471,7 +471,7 @@ namespace c3d
 					, cuT( "LoadingScreen" )
 					, crg::ImageViewIdArray{ m_colour.targetViewId }
 					, crg::ImageViewIdArray{ m_depth.targetViewId }
-					, RenderNodesPassDesc{ makeExtent3D( m_renderSize ), m_cameraUbo, *m_sceneUbo, *m_culler, false }
+					, RenderNodesPassDesc{ makeExtent3D( m_renderSize ), m_cameraUbo, m_renderUbo, *m_sceneUbo, *m_culler, false }
 						.meshShading( true )
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
@@ -498,7 +498,7 @@ namespace c3d
 					, *m_scene
 					, makeExtent2D( m_colour.getExtent() )
 					, m_colour
-					, m_hdrConfigUbo );
+					, m_renderUbo );
 				m_overlayPass = result.get();
 				return result;
 			} );

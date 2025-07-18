@@ -34,8 +34,7 @@ namespace c3d
 	{
 		enum BindingPoints
 		{
-			eMainCamera,
-			eClustersCamera,
+			eCamera,
 			eLights,
 			eClusters,
 			eAllLightsAABB,
@@ -69,13 +68,8 @@ namespace c3d
 				, 34636833_u	/* 6 levels  +32^5 */ } );
 
 			// Inputs
-			C3D_CameraNamed( writer
-				, Main
-				, eMainCamera
-				, 0u );
-			C3D_CameraNamed( writer
-				, Clusters
-				, eClustersCamera
+			C3D_Camera( writer
+				, eCamera
 				, 0u );
 			shader::LightsBuffer lights{ writer
 				, eLights
@@ -320,8 +314,8 @@ namespace c3d
 								auto spot = writer.declLocale( "spot"
 									, lights.getSpotLight( lights.getPointsEnd() + lightIndex * SpotLightInstance::LightDataComponents ) );
 								auto cone = writer.declLocale( "cone"
-									, shader::Cone{ c3d_cameraDataClusters.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz()
-										, c3d_cameraDataClusters.worldToCurView( -spot.direction() )
+									, shader::Cone{ c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz()
+										, c3d_cameraData.worldToCurView( -spot.direction() )
 										, computeRange( spot )
 										, spot.outerCutOffCos()
 										, spot.outerCutOffSin()
@@ -756,7 +750,6 @@ namespace c3d
 	crg::FramePass const & createAssignLightsToClustersPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
-		, CameraUbo const & mainCameraUbo
 		, CameraUbo const & clustersCameraUbo
 		, FrustumClusters & clusters )
 	{
@@ -781,8 +774,7 @@ namespace c3d
 				return result;
 			} );
 		passNoDepth.addDependencies( previousPasses );
-		mainCameraUbo.createPassBinding( passNoDepth, dspclst::eMainCamera );
-		clustersCameraUbo.createPassBinding( passNoDepth, dspclst::eClustersCamera );
+		clustersCameraUbo.createPassBinding( passNoDepth, dspclst::eCamera );
 		lights.createPassBinding( passNoDepth, dspclst::eLights );
 		clusters.getClustersUbo().createPassBinding( passNoDepth, dspclst::eClusters );
 		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::eAllLightsAABB ), cuT( "C3D_AllLightsAABB" ), clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
@@ -823,8 +815,7 @@ namespace c3d
 				return result;
 			} );
 		passDepth.addDependency( passNoDepth );
-		mainCameraUbo.createPassBinding( passDepth, dspclst::eMainCamera );
-		clustersCameraUbo.createPassBinding( passDepth, dspclst::eClustersCamera );
+		clustersCameraUbo.createPassBinding( passDepth, dspclst::eCamera );
 		lights.createPassBinding( passDepth, dspclst::eLights );
 		clusters.getClustersUbo().createPassBinding( passDepth, dspclst::eClusters );
 		createInputStoragePassBinding( passDepth, uint32_t( dspclst::eAllLightsAABB ), cuT( "C3D_AllLightsAABB" ), clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );

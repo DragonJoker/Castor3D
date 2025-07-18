@@ -11,7 +11,6 @@ namespace c3d
 	C3D_API crg::FramePass const & createAssignLightsToClustersPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
-		, CameraUbo const & mainCameraUbo
 		, CameraUbo const & clustersCameraUbo
 		, FrustumClusters & clusters );
 }

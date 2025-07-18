@@ -14,7 +14,7 @@
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
 #include <Castor3D/Scene/Background/Visitor.hpp>
-#include <Castor3D/Shader/Ubos/HdrConfigUbo.hpp>
+#include <Castor3D/Shader/Ubos/RenderUbo.hpp>
 #include <Castor3D/Shader/Ubos/SceneUbo.hpp>
 
 #include <ShaderWriter/BaseTypes/Float.hpp>
@@ -167,7 +167,7 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const & weather
 		, crg::ImageViewIdArray const & colour
 		, crg::ImageViewId const * depthObj
-		, c3d::HdrConfigUbo const & hdrConfigUbo
+		, c3d::RenderUbo const & renderUbo
 		, c3d::SceneUbo const & sceneUbo
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, CloudsUbo const & cloudsUbo
@@ -306,8 +306,8 @@ namespace atmosphere_scattering
 		pass.addDependency( cloudsResolvePass->getLastPass() );
 		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
 			, c3d::FilterMode::eLinear };
-		hdrConfigUbo.createPassBinding( pass
-			, AtmosphereBackgroundPass::eHdrConfig );
+		renderUbo.createPassBinding( pass
+			, AtmosphereBackgroundPass::eRenderConfig );
 		sceneUbo.createPassBinding( pass
 			, AtmosphereBackgroundPass::eScene );
 		pass.addSampledView( cloudsResult.sampledViewId
@@ -555,7 +555,7 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const * depthObj
 		, c3d::UniformBufferOffsetT< c3d::ModelBufferConfiguration > const & modelUbo
 		, c3d::CameraUbo const & cameraUbo
-		, c3d::HdrConfigUbo const & hdrConfigUbo
+		, c3d::RenderUbo const & renderUbo
 		, c3d::SceneUbo const & sceneUbo
 		, bool clearColour
 		, bool clearDepth
@@ -621,7 +621,7 @@ namespace atmosphere_scattering
 					, m_weather.sampledViewId
 					, colour
 					, depthObj
-					, hdrConfigUbo
+					, renderUbo
 					, sceneUbo
 					, *m_atmosphereUbo
 					, *m_cloudsUbo

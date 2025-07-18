@@ -11,6 +11,7 @@
 #include <Castor3D/Shader/Shaders/GlslReflection.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 #include <Castor3D/Shader/Shaders/GlslSurface.hpp>
+#include <Castor3D/Shader/Ubos/RenderUbo.hpp>
 
 CU_ImplementSmartPtr( water, WaterReflRefrComponent )
 
@@ -26,6 +27,7 @@ namespace water
 		, c3ds::BackgroundModel & backgroundModel
 		, sdw::CombinedImage2DRgba32 const & mippedScene
 		, c3ds::CameraData const & camera
+		, c3ds::RenderData const & render
 		, c3ds::DirectLighting & lighting
 		, c3ds::IndirectLighting & indirect
 		, sdw::Vec2 const & sceneUv
@@ -39,6 +41,7 @@ namespace water
 			, lightSurface
 			, backgroundModel
 			, camera
+			, render
 			, lighting
 			, indirect
 			, sceneUv
@@ -53,6 +56,7 @@ namespace water
 		, c3ds::LightSurface const & lightSurface
 		, c3ds::BackgroundModel & backgroundModel
 		, c3ds::CameraData const & camera
+		, c3ds::RenderData const & render
 		, c3ds::DirectLighting & lighting
 		, c3ds::IndirectLighting & indirect
 		, sdw::Vec2 const & sceneUv
@@ -84,7 +88,7 @@ namespace water
 
 		//  Retrieve non distorted scene colour.
 		auto hdrCoords = writer.declLocale( "hdrCoords"
-			, sceneUv / vec2( camera.renderSize() ) );
+			, sceneUv * render.invRenderSize() );
 		auto sceneDepth = writer.declLocale( "sceneDepth"
 			, mapDepthObj.lod( hdrCoords, 0.0_f ).r() );
 		auto scenePosition = writer.declLocale( "scenePosition"

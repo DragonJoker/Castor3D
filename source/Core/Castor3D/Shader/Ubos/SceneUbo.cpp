@@ -11,7 +11,7 @@
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
-#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
 
@@ -29,9 +29,9 @@ namespace c3d
 			return vec4( utils.removeGamma( gamma, backgroundColour() ), 1.0_f );
 		}
 
-		sdw::Vec4 SceneData::getBackgroundColour( HdrConfigData const & hdrConfigData )const
+		sdw::Vec4 SceneData::getBackgroundColour( RenderData const & renderConfigData )const
 		{
-			return vec4( hdrConfigData.removeGamma( backgroundColour() ), 1.0_f );
+			return vec4( renderConfigData.removeGamma( backgroundColour() ), 1.0_f );
 		}
 
 		sdw::Vec4 SceneData::computeAccumulation( Utils & utils

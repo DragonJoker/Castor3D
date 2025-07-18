@@ -28,6 +28,7 @@ namespace c3d
 	{
 		static RenderNodesPassDesc buildDesc( ShadowMap const & shadowMap
 			, CameraUbo const & cameraUbo
+			, RenderUbo const & renderUbo
 			, SceneCuller & culler
 			, bool needsVsm
 			, bool needsRsm
@@ -35,6 +36,7 @@ namespace c3d
 		{
 			RenderNodesPassDesc result{ getExtent( shadowMap.getShadowPassResult( false )[SmTexture::eDepth].imageId )
 				, cameraUbo
+				, renderUbo
 				, culler };
 			result.isStatic( isStatic );
 
@@ -86,6 +88,7 @@ namespace c3d
 		, RenderDevice const & device
 		, String const & typeName
 		, CameraUbo const & cameraUbo
+		, RenderUbo const & renderUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap
 		, bool needsVsm
@@ -100,6 +103,7 @@ namespace c3d
 			, {}
 			, shdmappass::buildDesc( shadowMap
 				, cameraUbo
+				, renderUbo
 				, culler
 				, needsVsm
 				, needsRsm

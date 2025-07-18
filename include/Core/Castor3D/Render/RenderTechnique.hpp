@@ -151,6 +151,7 @@ namespace c3d
 		C3D_API DebugConfig & getDebugConfig()const;
 		C3D_API bool areDebugTargetsEnabled()const noexcept;
 		C3D_API CameraUbo const & getCameraUbo()const noexcept;
+		C3D_API RenderUbo const & getRenderUbo()const noexcept;
 		C3D_API SceneUbo const & getSceneUbo()const noexcept;
 
 		Size const & getSize()const noexcept
@@ -359,7 +360,6 @@ namespace c3d
 	private:
 		RenderTarget & m_renderTarget;
 		RenderDevice const & m_device;
-		Size m_targetSize;
 		Size m_rawSize;
 		Texture const * m_colour;
 		Texture m_depth;

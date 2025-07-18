@@ -20,26 +20,26 @@ namespace c3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	pass			The parent frame pass.
-		 *\param[in]	context			The rendering context.
-		 *\param[in]	graph			The runnable graph.
-		 *\param[in]	device			The GPU device.
-		 *\param[in]	scene			The scene.
-		 *\param[in]	size			The render area dimensions.
-		 *\param[in]	output			The result texture.
-		 *\param[in]	hdrConfigUbo	The HDR configuration used when rendering to an HDR screen.
-		 *\param[in]	drawGlobal		\p true to also draw global overlays.
+		 *\param[in]	pass		The parent frame pass.
+		 *\param[in]	context		The rendering context.
+		 *\param[in]	graph		The runnable graph.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	scene		The scene.
+		 *\param[in]	size		The render area dimensions.
+		 *\param[in]	output		The result texture.
+		 *\param[in]	renderUbo	The render configuration.
+		 *\param[in]	drawGlobal	\p true to also draw global overlays.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	pass			La frame pass parente.
-		 *\param[in]	context			Le contexte de rendu.
-		 *\param[in]	graph			Le runnable graph.
-		 *\param[in]	device			Le device GPU.
-		 *\param[in]	scene			La scène.
-		 *\param[in]	size			Les dimensions de la zone de rendu.
-		 *\param[in]	output			La texture résultat.
-		 *\param[in]	hdrConfigUbo	La configuration HDR lors du rendu sur un écran HDR.
-		 *\param[in]	drawGlobal		\p true pour dessiner les incrustations globales.
+		 *\param[in]	pass		La frame pass parente.
+		 *\param[in]	context		Le contexte de rendu.
+		 *\param[in]	graph		Le runnable graph.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	scene		La scène.
+		 *\param[in]	size		Les dimensions de la zone de rendu.
+		 *\param[in]	output		La texture résultat.
+		 *\param[in]	renderUbo	La configuration du rendu.
+		 *\param[in]	drawGlobal	\p true pour dessiner les incrustations globales.
 		 */
 		C3D_API OverlayPass( crg::FramePass const & pass
 			, crg::GraphContext & context
@@ -48,7 +48,7 @@ namespace c3d
 			, Scene const & scene
 			, Extent2D const & size
 			, Texture const & output
-			, HdrConfigUbo const & hdrConfigUbo
+			, RenderUbo const & renderUbo
 			, bool drawGlobal = false );
 		/**
 		 *\~english

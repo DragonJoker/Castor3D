@@ -144,6 +144,7 @@ namespace c3d
 		SceneCullerUPtr m_dynamicsCuller;
 		crg::FrameGraph m_graph;
 		CameraUbo m_cameraUbo;
+		RawUniquePtr< RenderUbo > m_renderUbo;
 		Texture m_firstBounce;
 		Texture m_secondaryBounce;
 		ashes::BufferPtr< Voxel > m_staticsVoxels;

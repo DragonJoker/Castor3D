@@ -37,7 +37,7 @@ namespace c3d
 
 			C3D_API sdw::Vec4 getBackgroundColour( Utils & utils
 				, sdw::Float const gamma )const;
-			C3D_API sdw::Vec4 getBackgroundColour( HdrConfigData const & hdrConfigData )const;
+			C3D_API sdw::Vec4 getBackgroundColour( RenderData const & renderData )const;
 			C3D_API sdw::Vec4 computeAccumulation( Utils & utils
 				, CameraData const & camera
 				, sdw::Float const & depth

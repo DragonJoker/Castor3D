@@ -66,7 +66,7 @@ namespace c3d
 				, getOwner()->getSize()
 				, getOwner()->getCameraUbo()
 				, getOwner()->getSceneUbo()
-				, getOwner()->getRenderTarget().getHdrConfigUbo() )
+				, getOwner()->getRenderTarget().getRenderUbo() )
 			: nullptr ) }
 	{
 		if ( m_transparentPassResult )
@@ -221,6 +221,7 @@ namespace c3d
 					, targetDepth
 					, RenderNodesPassDesc{ getOwner()->getTargetExtent()
 							, getOwner()->getCameraUbo()
+							, getOwner()->getRenderUbo()
 							, getOwner()->getSceneUbo()
 							, getOwner()->getRenderTarget().getCuller()
 							, isOit }
@@ -281,6 +282,7 @@ namespace c3d
 					, targetDepth
 					, RenderNodesPassDesc{ getOwner()->getTargetExtent()
 							, getOwner()->getCameraUbo()
+							, getOwner()->getRenderUbo()
 							, getOwner()->getSceneUbo()
 							, getOwner()->getRenderTarget().getCuller()
 							, isOit }

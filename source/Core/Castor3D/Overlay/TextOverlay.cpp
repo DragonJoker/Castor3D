@@ -12,6 +12,7 @@
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/FontUbo.hpp"
 #include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
 
@@ -214,6 +215,9 @@ namespace c3d
 			C3D_Camera( writer
 				, TextOverlay::ComputeBindingIdx::eCamera
 				, 0u );
+			C3D_Render( writer
+				, TextOverlay::ComputeBindingIdx::eRender
+				, 0u );
 			C3D_Overlays( writer
 				, TextOverlay::ComputeBindingIdx::eOverlays
 				, 0u );
@@ -251,8 +255,8 @@ namespace c3d
 					, c3d_words[overlay.textWordOffset() + character.word()] );
 				auto line = writer.declLocale( "line"
 					, c3d_lines[overlay.textLineOffset() + word.line()] );
-				auto renderSize = writer.declLocale( "renderSize"
-					, vec2( c3d_cameraData.renderSize() ) );
+				auto invRenderSize = writer.declLocale( "renderSize"
+					, c3d_renderData.invRenderSize() );
 				auto ssAbsParentSize = writer.declLocale( "ssAbsParentSize"
 					, overlay.parentRect().zw() - overlay.parentRect().xy() );
 				auto ssAbsSize = writer.declLocale( "ssAbsSize"
@@ -264,7 +268,7 @@ namespace c3d
 						, 0, 0 ) );
 				ssRelBounds.z() = ssRelBounds.x() + character.size().x();
 				ssRelBounds.w() = ssRelBounds.y() + character.size().y();
-				ssRelBounds /= vec4( renderSize.xy(), renderSize.xy() );
+				ssRelBounds *= vec4( invRenderSize.xy(), invRenderSize.xy() );
 				auto ssRelOvPosition = writer.declLocale( "ssRelOvPosition"
 					, overlay.relativePosition() * ssAbsParentSize );
 				auto ssAbsOvPosition = writer.declLocale( "ssAbsOvPosition"

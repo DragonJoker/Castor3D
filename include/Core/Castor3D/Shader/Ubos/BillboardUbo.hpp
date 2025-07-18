@@ -29,8 +29,8 @@ namespace c3d
 
 			C3D_API sdw::Vec3 getCameraRight( CameraData const & cameraData )const;
 			C3D_API sdw::Vec3 getCameraUp( CameraData const & cameraData )const;
-			C3D_API sdw::Float getWidth( CameraData const & cameraData )const;
-			C3D_API sdw::Float getHeight( CameraData const & cameraData )const;
+			C3D_API sdw::Float getWidth( RenderData const & renderData )const;
+			C3D_API sdw::Float getHeight( RenderData const & renderData )const;
 
 			auto dimensions()const { return getMember< "dimensions" >(); }
 			auto isSpherical()const { return getMember< "isSpherical" >(); }

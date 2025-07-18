@@ -154,6 +154,7 @@ namespace c3d
 					, targetDepth
 					, RenderNodesPassDesc{ getExtent( targetDepth.front() )
 							, getOwner()->getCameraUbo()
+							, getOwner()->getRenderUbo()
 							, getOwner()->getSceneUbo()
 							, getOwner()->getRenderTarget().getCuller() }
 						.safeBand( true )
@@ -217,6 +218,7 @@ namespace c3d
 					, getOwner()->getSsaoConfig()
 					, RenderNodesPassDesc{ getExtent( targetDepth.front() )
 							, getOwner()->getCameraUbo()
+							, getOwner()->getRenderUbo()
 							, getOwner()->getSceneUbo()
 							, getOwner()->getRenderTarget().getCuller() }
 						.safeBand( true )

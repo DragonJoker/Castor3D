@@ -124,6 +124,9 @@ namespace c3d
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
+		C3D_Render( writer
+			, GlobalBuffersIdx::eRender
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
@@ -213,7 +216,7 @@ namespace c3d
 						, writer.cast< sdw::UInt >( in.primitiveID ) );
 				}
 
-				out.velocity = in.getMotionVector( vec2( c3d_cameraData.renderSize() ) );
+				out.velocity = in.getMotionVector( vec2( c3d_renderData.renderSize() ) );
 				out.nmlOcc = vec4( components.getRawNormal(), components.occlusion );
 			} );
 	}

@@ -4,7 +4,7 @@
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
-#include <Castor3D/Shader/Ubos/HdrConfigUbo.hpp>
+#include <Castor3D/Shader/Ubos/RenderUbo.hpp>
 #include <Castor3D/Shader/Ubos/ColourGradingUbo.hpp>
 
 #include <ShaderWriter/Source.hpp>
@@ -20,7 +20,7 @@ namespace Uncharted2
 	{
 		sdw::TraditionalGraphicsWriter writer{ builder };
 
-		C3D_HdrConfig( writer, 0u, 0u );
+		C3D_Render( writer, 0u, 0u );
 		C3D_ColourGrading( writer, 1u, 0u );
 		auto c3d_mapHdr = writer.declCombinedImg< FImg2DRgba16 >( "c3d_mapHdr", 2u, 0u );
 
@@ -57,14 +57,14 @@ namespace Uncharted2
 				hdrColor *= vec3( ExposureBias ); // Hardcoded Exposure Adjustment.
 
 				auto current = writer.declLocale( "current"
-					, uncharted2ToneMap( hdrColor * c3d_hdrConfigData.getExposure() ) );
+					, uncharted2ToneMap( hdrColor * c3d_renderData.exposure() ) );
 
 				auto whiteScale = writer.declLocale( "whiteScale"
 					, vec3( 1.0_f ) / uncharted2ToneMap( vec3( LinearWhitePointValue ) ) );
 				auto colour = writer.declLocale( "colour"
 					, current * whiteScale );
 
-				out.colour() = vec4( c3d_hdrConfigData.applyGamma( colour ), 1.0_f );
+				out.colour() = vec4( c3d_renderData.applyGamma( colour ), 1.0_f );
 			} );
 	}
 }

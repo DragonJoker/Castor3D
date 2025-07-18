@@ -32,12 +32,9 @@ namespace c3d
 				, sdw::Mat4x4Field< "invCurViewProj" >
 				, sdw::Mat4x4Field< "prvViewProj" >
 				, sdw::Mat4x4Field< "invPrvViewProj" >
-				, sdw::U32Vec2Field< "renderSize" >
+				, sdw::Vec3Field< "position" >
 				, sdw::FloatField< "nearPlane" >
 				, sdw::FloatField< "farPlane" >
-				, sdw::Vec3Field< "position" >
-				, sdw::FloatField< "gamma" >
-				, sdw::UInt32Field< "debugIndex" >
 				, sdw::FloatField< "pad0" >
 				, sdw::FloatField< "pad1" >
 				, sdw::FloatField< "pad2" > >
@@ -94,12 +91,9 @@ namespace c3d
 			C3D_API sdw::Vec3 readNormal( sdw::Vec3 const & input )const;
 			C3D_API sdw::Vec3 writeNormal( sdw::Vec3 const & input )const;
 
-			auto renderSize()const { return getMember< "renderSize" >(); }
 			auto nearPlane()const { return getMember< "nearPlane" >(); }
 			auto farPlane()const { return getMember< "farPlane" >(); }
 			auto position()const { return getMember< "position" >(); }
-			auto gamma()const { return getMember< "gamma" >(); }
-			auto debugIndex()const { return getMember< "debugIndex" >(); }
 
 		private:
 			auto projection()const { return getMember< "projection" >(); }
@@ -145,26 +139,14 @@ namespace c3d
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	size		The render size.
 		 *\param[in]	camera		The camera holding the data.
-		 *\param[in]	view		The new view matrix.
-		 *\param[in]	projection	The new projection matrix.
-		 *\param[in]	debugIndex	The currently selected debug data index.
 		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	size		Les dimensions du rendu.
 		 *\param[in]	camera		La caméra contenant les données.
-		 *\param[in]	view		La nouvelle matrice de vue.
-		 *\param[in]	projection	La nouvelle matrice de projection.
-		 *\param[in]	debugIndex	L'indice des données de debug actuellement sélectionnées.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		C3D_API Configuration & cpuUpdate( Size const & size
-			, Camera const & camera
-			, Matrix4x4f const & view
-			, Matrix4x4f const & projection
-			, uint32_t debugIndex
+		C3D_API Configuration & cpuUpdate( Camera const & camera
 			, Point2f const & jitter = Point2f{} );
 		/**
 		 *\~english
@@ -172,87 +154,49 @@ namespace c3d
 		 *\param[in]	camera		The camera holding the data.
 		 *\param[in]	view		The new view matrix.
 		 *\param[in]	projection	The new projection matrix.
-		 *\param[in]	debugIndex	The currently selected debug data index.
-		 *\param[in]	safeBanded	\p true to use safebanded size.
 		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	camera		La caméra contenant les données.
 		 *\param[in]	view		La nouvelle matrice de vue.
 		 *\param[in]	projection	La nouvelle matrice de projection.
-		 *\param[in]	debugIndex	L'indice des données de debug actuellement sélectionnées.
-		 *\param[in]	safeBanded	\p true pour utiliser la taille avec les safebands.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		C3D_API Configuration & cpuUpdate( Size const & size
-			, Camera const & camera
+		C3D_API Configuration & cpuUpdate( Camera const & camera
 			, Matrix4x4f const & view
 			, Matrix4x4f const & projection
-			, uint32_t debugIndex
-			, bool safeBanded
 			, Point2f const & jitter = Point2f{} );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	size		The render size.
-		 *\param[in]	camera		The camera holding the data.
-		 *\param[in]	debugIndex	The currently selected debug data index.
-		 *\param[in]	safeBanded	\p true to use safebanded projection matrix.
-		 *\param[in]	jitter		The jittering value.
-		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	size		Les dimensions du rendu.
-		 *\param[in]	camera		La caméra contenant les données.
-		 *\param[in]	debugIndex	L'indice des données de debug actuellement sélectionnées.
-		 *\param[in]	safeBanded	\p true pour utiliser la matrice de projection avec les safebands.
-		 *\param[in]	jitter		La valeur de jittering.
-		 */
-		C3D_API Configuration & cpuUpdate( Size const & size
-			, Camera const & camera
-			, uint32_t debugIndex
-			, bool safeBanded
-			, Point2f const & jitter = Point2f{} );
-		/**
-		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\param[in]	size		The render size.
 		 *\param[in]	view		The new view matrix.
 		 *\param[in]	projection	The new projection matrix.
-		 *\param[in]	debugIndex	The currently selected debug data index.
 		 *\param[in]	frustum		The frustum, from which planes are copied.
 		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	size		Les dimensions du rendu.
 		 *\param[in]	view		La nouvelle matrice de vue.
 		 *\param[in]	projection	La nouvelle matrice de projection.
-		 *\param[in]	debugIndex	L'indice des données de debug actuellement sélectionnées.
 		 *\param[in]	frustum		Le frustum depuis lequel les plans sont copiés.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		C3D_API Configuration & cpuUpdate( Size const & size
-			, Matrix4x4f const & view
+		C3D_API Configuration & cpuUpdate( Matrix4x4f const & view
 			, Matrix4x4f const & projection
-			, uint32_t debugIndex
 			, Frustum const & frustum
 			, Point2f const & jitter = Point2f{} );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
 		 *\remarks		View matrix won't be updated.
-		 *\param[in]	size		The render size.
 		 *\param[in]	projection	The new projection matrix.
-		 *\param[in]	debugIndex	The currently selected debug data index.
+		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\remarks		La matrice de vue ne sera pas mise à jour.
-		 *\param[in]	size		Les dimensions du rendu.
 		 *\param[in]	projection	La nouvelle matrice de projection.
-		 *\param[in]	debugIndex	L'indice des données de debug actuellement sélectionnées.
+		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		C3D_API Configuration & cpuUpdate( Size const & size
-			, Matrix4x4f const & projection
-			, uint32_t debugIndex
+		C3D_API Configuration & cpuUpdate( Matrix4x4f const & projection
 			, Point2f const & jitter = Point2f{} );
 
 		void createPassBinding( crg::FramePass & pass

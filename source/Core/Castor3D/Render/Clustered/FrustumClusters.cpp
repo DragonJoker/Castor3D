@@ -202,10 +202,7 @@ namespace c3d
 
 		if ( !m_config.lockClustersFrustum.value() )
 		{
-			m_clustersCameraUbo.cpuUpdate( updater.renderSize
-				, m_camera
-				, updater.debugIndex
-				, true
+			m_clustersCameraUbo.cpuUpdate( m_camera
 				, updater.jitter );
 		}
 	}
@@ -263,8 +260,37 @@ namespace c3d
 	crg::FramePass const & FrustumClusters::createFramePasses( crg::FramePassGroup & parentGraph
 		, crg::FramePass const * previousPass
 		, RenderTechnique & technique
-		, CameraUbo const & cameraUbo
+		, RenderUbo const & renderUbo
 		, RenderNodesPass *& nodesPass )
+	{
+		auto & graph = parentGraph.createPassGroup( "Clusters" );
+		crg::FramePassArray lastPasses{ 1u, previousPass };
+		lastPasses = { &createComputeLightsAABBPass( graph, lastPasses.front()
+			, m_device, m_clustersCameraUbo, *this ) };
+		lastPasses = { &createReduceLightsAABBPass( graph, lastPasses.front()
+			, m_device, m_clustersCameraUbo, *this ) };
+		lastPasses = { &createComputeClustersAABBPass( graph, lastPasses.front()
+			, m_device, m_clustersCameraUbo, renderUbo, *this ) };
+		lastPasses = { &createClustersMaskPass( graph, *lastPasses.front()
+			, m_device, m_clustersCameraUbo, *this
+			, technique, nodesPass ) };
+		lastPasses = { &createFindUniqueClustersPass( graph, *lastPasses.front()
+			, m_device, *this ) };
+		lastPasses = { &createComputeLightsMortonCodePass( graph, lastPasses.front()
+			, m_device, *this ) };
+		lastPasses = createBucketSortLightsPass( graph, lastPasses.front()
+			, m_device, *this );
+		lastPasses = createMergeSortLightsPass( graph, lastPasses
+			, m_device, *this );
+		lastPasses = createBuildLightsBVHPass( graph, lastPasses
+			, m_device, *this );
+		lastPasses = { &createAssignLightsToClustersPass( graph, lastPasses
+			, m_device, m_clustersCameraUbo, *this ) };
+		return createSortAssignedLightsPass( graph, lastPasses
+			, m_device, *this );
+	}
+
+	void FrustumClusters::createDebugDisplayPrograms( CameraUbo const & cameraUbo )
 	{
 		if ( m_displayClustersAABBProgram.empty() )
 		{
@@ -297,32 +323,6 @@ namespace c3d
 				, m_displaySpotLightsBVHBindings
 				, m_displaySpotLightsBVHWrites );
 		}
-
-		auto & graph = parentGraph.createPassGroup( "Clusters" );
-		crg::FramePassArray lastPasses{ 1u, previousPass };
-		lastPasses = { &createComputeLightsAABBPass( graph, lastPasses.front()
-			, m_device, cameraUbo, m_clustersCameraUbo, *this ) };
-		lastPasses = { &createReduceLightsAABBPass( graph, lastPasses.front()
-			, m_device, cameraUbo, m_clustersCameraUbo, *this ) };
-		lastPasses = { &createComputeClustersAABBPass( graph, lastPasses.front()
-			, m_device, cameraUbo, m_clustersCameraUbo, *this ) };
-		lastPasses = { &createClustersMaskPass( graph, *lastPasses.front()
-			, m_device, cameraUbo, m_clustersCameraUbo, *this
-			, technique, nodesPass ) };
-		lastPasses = { &createFindUniqueClustersPass( graph, *lastPasses.front()
-			, m_device, *this ) };
-		lastPasses = { &createComputeLightsMortonCodePass( graph, lastPasses.front()
-			, m_device, *this ) };
-		lastPasses = createBucketSortLightsPass( graph, lastPasses.front()
-			, m_device, *this );
-		lastPasses = createMergeSortLightsPass( graph, lastPasses
-			, m_device, *this );
-		lastPasses = createBuildLightsBVHPass( graph, lastPasses
-			, m_device, *this );
-		lastPasses = { &createAssignLightsToClustersPass( graph, lastPasses
-			, m_device, cameraUbo, m_clustersCameraUbo, *this ) };
-		return createSortAssignedLightsPass( graph, lastPasses
-			, m_device, *this );
 	}
 
 	uint32_t FrustumClusters::getNumLevels( uint32_t numLeaves )

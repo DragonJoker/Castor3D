@@ -147,6 +147,7 @@ namespace c3d
 						, runnableGraph
 						, m_device
 						, cameraUbo
+						, *m_renderUbo
 						, *passData.culler
 						, *this
 						, vsm
@@ -316,12 +317,9 @@ namespace c3d
 			pass.pass->update( updater );
 
 			PointLightInstance const & pointLight = static_cast< PointLightInstance & >( *updater.light );
-			m_passes[m_passesIndex].cameraUbos[face]->cpuUpdate( updater.renderSize
-				, *updater.camera
+			m_passes[m_passesIndex].cameraUbos[face]->cpuUpdate( *updater.camera
 				, pointLight.getViewMatrix( CubeMapFace( updater.index ) )
-				, static_cast< ShadowMapPassPoint const & >( *pass.pass ).getProjection()
-				, updater.debugIndex
-				, false );
+				, static_cast< ShadowMapPassPoint const & >( *pass.pass ).getProjection() );
 		}
 
 		updater.renderSize = oldRenderSize;

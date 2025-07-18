@@ -276,6 +276,7 @@ namespace c3d
 
 				RenderNodesPassDesc renderPassDesc{ getOwner()->getTargetExtent()
 					, getOwner()->getCameraUbo()
+					, getOwner()->getRenderUbo()
 					, getOwner()->getSceneUbo()
 					, getOwner()->getRenderTarget().getCuller() };
 				renderPassDesc.safeBand( true )
@@ -409,6 +410,7 @@ namespace c3d
 				RenderTechniquePassDesc techniquePassDesc{ false, getOwner()->getSsaoConfig() };
 				RenderNodesPassDesc renderPassDesc{ getOwner()->getTargetExtent()
 					, getOwner()->getCameraUbo()
+					, getOwner()->getRenderUbo()
 					, getOwner()->getSceneUbo()
 					, getOwner()->getRenderTarget().getCuller() };
 				renderPassDesc.safeBand( true )
@@ -486,6 +488,7 @@ namespace c3d
 				RenderTechniquePassDesc techniquePassDesc{ false, getOwner()->getSsaoConfig() };
 				RenderNodesPassDesc renderPassDesc{ getOwner()->getTargetExtent()
 					, getOwner()->getCameraUbo()
+					, getOwner()->getRenderUbo()
 					, getOwner()->getSceneUbo()
 					, getOwner()->getRenderTarget().getCuller() };
 				renderPassDesc.safeBand( true )

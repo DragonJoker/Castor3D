@@ -67,22 +67,22 @@ namespace c3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	device			The GPU device.
-		 *\param[in]	target			The target texture.
-		 *\param[in]	hdrConfigUbo	The HDR configuration used when rendering to an HDR screen.
-		 *\param[in]	timer			The timer for this pass.
-		 *\param[in]	level			The command buffer level.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	target		The target texture.
+		 *\param[in]	renderUbo	The render configuration.
+		 *\param[in]	timer		The timer for this pass.
+		 *\param[in]	level		The command buffer level.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	device			Le device GPU.
-		 *\param[in]	target			La texture cible.
-		 *\param[in]	hdrConfigUbo	La configuration HDR lors du rendu sur un écran HDR.
-		 *\param[in]	timer			Le timer pour cette passe.
-		 *\param[in]	level			Le niveau du command buffer.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	target		La texture cible.
+		 *\param[in]	renderUbo	La configuration du rendu.
+		 *\param[in]	timer		Le timer pour cette passe.
+		 *\param[in]	level		Le niveau du command buffer.
 		 */
 		C3D_API OverlayRenderer( RenderDevice const & device
 			, Texture const & target
-			, HdrConfigUbo const & hdrConfigUbo
+			, RenderUbo const & renderUbo
 			, crg::FramePassTimer & timer
 			, VkCommandBufferLevel level = VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		/**
@@ -174,7 +174,7 @@ namespace c3d
 		struct OverlaysCommonData
 		{
 			explicit OverlaysCommonData( RenderDevice const & device
-				, HdrConfigUbo const & hdrConfigUbo );
+				, RenderUbo const & renderUbo );
 
 			ashes::DescriptorSetLayoutPtr baseDescriptorLayout;
 

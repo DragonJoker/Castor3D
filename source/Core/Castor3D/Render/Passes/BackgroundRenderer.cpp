@@ -8,7 +8,7 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
-#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 
 #include <ashes/ashes.hpp>
@@ -26,7 +26,7 @@ namespace c3d
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, SceneBackground & background
-		, HdrConfigUbo const & hdrConfigUbo
+		, RenderUbo const & renderUbo
 		, SceneUbo const & sceneUbo
 		, crg::ImageViewIdArray const & colour
 		, bool clearColour
@@ -41,7 +41,7 @@ namespace c3d
 		, m_backgroundPassDesc{ &doCreatePass( graph
 			, previousPasses
 			, background
-			, hdrConfigUbo
+			, renderUbo
 			, sceneUbo
 			, m_colour
 			, clearColour
@@ -67,12 +67,9 @@ namespace c3d
 			updater.targetImage = {};
 		}
 
-		m_cameraUbo.cpuUpdate( updater.renderSize
-			, *updater.camera
+		m_cameraUbo.cpuUpdate( *updater.camera
 			, updater.bgMtxView
-			, updater.bgMtxProj
-			, updater.debugIndex
-			, true );
+			, updater.bgMtxProj );
 		auto & configuration = m_modelUbo.getData();
 		configuration.prvModel = configuration.curModel;
 		configuration.curModel = updater.bgMtxModl;
@@ -89,7 +86,7 @@ namespace c3d
 	crg::FramePass const & BackgroundRenderer::doCreatePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, SceneBackground & background
-		, HdrConfigUbo const & hdrConfigUbo
+		, RenderUbo const & renderUbo
 		, SceneUbo const & sceneUbo
 		, crg::ImageViewIdArray const & colour
 		, bool clearColour
@@ -110,7 +107,7 @@ namespace c3d
 			, depthObj
 			, m_modelUbo
 			, m_cameraUbo
-			, hdrConfigUbo
+			, renderUbo
 			, sceneUbo
 			, clearColour
 			, clearDepth

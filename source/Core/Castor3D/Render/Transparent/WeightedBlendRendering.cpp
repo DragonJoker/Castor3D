@@ -11,7 +11,7 @@
 #include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
-#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -47,7 +47,7 @@ namespace c3d
 
 			C3D_Camera( writer, CameraUboIndex, 0u );
 			C3D_Scene( writer, SceneUboIndex, 0u );
-			C3D_HdrConfig( writer, HdrUboIndex, 0u );
+			C3D_Render( writer, HdrUboIndex, 0u );
 			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", uint32_t( DepthTexIndex ), 0u );
 			auto c3d_mapAccumulation = writer.declCombinedImg< FImg2DRgba32 >( toUtf8( getTextureName( WbTexture::eAccumulation ) ), uint32_t( AccumTexIndex ), 0u );
 			auto c3d_mapRevealage = writer.declCombinedImg< FImg2DRgba32 >( toUtf8( getTextureName( WbTexture::eRevealage ) ), uint32_t( RevealTexIndex ), 0u );
@@ -103,7 +103,7 @@ namespace c3d
 							, c3d_cameraData.curProjToWorld( utils
 								, texCoord
 								, c3d_mapDepth.sample( texCoord ).r() ) );
-						out.colour() = fog.apply( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData )
+						out.colour() = fog.apply( c3d_sceneData.getBackgroundColour( c3d_renderData )
 							, out.colour()
 							, position
 							, c3d_cameraData.position()
@@ -128,7 +128,7 @@ namespace c3d
 		, Size const & size
 		, CameraUbo const & cameraUbo
 		, SceneUbo const & sceneUbo
-		, HdrConfigUbo const & hdrConfigUbo )
+		, RenderUbo const & renderUbo )
 		: m_device{ device }
 		, m_graph{ graph }
 		, m_enabled{ enabled }
@@ -142,7 +142,7 @@ namespace c3d
 			, targetColourView
 			, cameraUbo
 			, sceneUbo
-			, hdrConfigUbo
+			, renderUbo
 			, progress ) }
 	{
 	}
@@ -173,7 +173,7 @@ namespace c3d
 		, crg::ImageViewIdArray const & targetColourView
 		, CameraUbo const & cameraUbo
 		, SceneUbo const & sceneUbo
-		, HdrConfigUbo const & hdrConfigUbo
+		, RenderUbo const & renderUbo
 		, ProgressBar * progress )
 	{
 		stepProgressBarLocal( progress, cuT( "Creating transparent resolve pass" ) );
@@ -198,7 +198,7 @@ namespace c3d
 			, uint32_t( wboit::CameraUboIndex ) );
 		sceneUbo.createPassBinding( result
 			, uint32_t( wboit::SceneUboIndex ) );
-		hdrConfigUbo.createPassBinding( result
+		renderUbo.createPassBinding( result
 			, uint32_t( wboit::HdrUboIndex ) );
 		result.addSampledView( depthObj
 			, uint32_t( wboit::DepthTexIndex ) );

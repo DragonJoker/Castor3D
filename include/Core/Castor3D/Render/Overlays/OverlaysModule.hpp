@@ -31,7 +31,7 @@ namespace c3d
 		eTexConfigs,
 		eTexAnims,
 		eCamera,
-		eHdrConfig,
+		eRender,
 		eOverlays,
 		eOverlaysIDs,
 		eOverlaysSurfaces,

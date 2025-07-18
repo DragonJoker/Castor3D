@@ -8,6 +8,7 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -20,6 +21,8 @@ CU_ImplementSmartPtr( c3d, ShadowMap )
 
 namespace c3d
 {
+	//*********************************************************************************************
+
 	namespace shdmap
 	{
 		inline ashes::VkClearValueArray const clearValues
@@ -126,6 +129,10 @@ namespace c3d
 		}
 	}
 
+	//*********************************************************************************************
+
+	ShadowMap::~ShadowMap()noexcept = default;
+
 	ShadowMap::ShadowMap( crg::ResourcesCache & resources
 		, RenderDevice const & device
 		, Scene & scene
@@ -153,6 +160,7 @@ namespace c3d
 			, size
 			, layerCount }
 		, m_count{ count }
+		, m_renderUbo{ makeRawUnique< RenderUbo >( m_device ) }
 	{
 		m_staticsResult.create();
 		m_result.create();
@@ -192,6 +200,7 @@ namespace c3d
 		auto rsm = updater.light->needsRsmShadowMaps()
 			&& !updater.scene->getVoxelConeTracingConfig().enabled;
 		m_passesIndex = shdmap::getPassesIndex( vsm, rsm );
+		m_renderUbo->cpuUpdate( HdrConfig{}, makeSize( m_result[SmTexture::eDepth].getExtent() ), false, 0u );
 		auto & myPasses = m_passes[m_passesIndex];
 
 		if ( updater.index < doGetMaxCount()
@@ -411,4 +420,6 @@ namespace c3d
 		return !dyn.passes[index]->pass->hasNodes()
 			|| dyn.passes[index]->pass->isPassEnabled();
 	}
+
+	//*********************************************************************************************
 }

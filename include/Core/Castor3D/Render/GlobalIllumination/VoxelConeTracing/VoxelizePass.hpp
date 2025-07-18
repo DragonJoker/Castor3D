@@ -24,6 +24,7 @@ namespace c3d
 		 *\param[in]	graph			The runnable graph.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	cameraUbo		The scene matrices UBO.
+		 *\param[in]	renderUbo		The render UBO.
 		 *\param[in]	sceneUbo		The scene UBO.
 		 *\param[in]	camera			The camera for this pass.
 		 *\param[in]	culler			The culler for this pass.
@@ -38,6 +39,7 @@ namespace c3d
 		 *\param[in]	graph			Le runnable graph.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	cameraUbo		L'UBO de matrices de la scène.
+		 *\param[in]	renderUbo		L'UBO de rendu.
 		 *\param[in]	sceneUbo		L'UBO de scène.
 		 *\param[in]	camera			La caméra pour cette passe.
 		 *\param[in]	culler			Le culler pour cette passe.
@@ -51,6 +53,7 @@ namespace c3d
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, CameraUbo const & cameraUbo
+			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
 			, Camera const & camera
 			, SceneCuller & culler

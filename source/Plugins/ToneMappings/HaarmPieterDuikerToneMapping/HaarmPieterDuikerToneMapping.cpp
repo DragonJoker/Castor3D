@@ -4,7 +4,7 @@
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
-#include <Castor3D/Shader/Ubos/HdrConfigUbo.hpp>
+#include <Castor3D/Shader/Ubos/RenderUbo.hpp>
 #include <Castor3D/Shader/Ubos/ColourGradingUbo.hpp>
 
 #include <ShaderWriter/Source.hpp>
@@ -20,7 +20,7 @@ namespace HaarmPieterDuiker
 	{
 		sdw::TraditionalGraphicsWriter writer{ builder };
 
-		C3D_HdrConfig( writer, 0u, 0u );
+		C3D_Render( writer, 0u, 0u );
 		C3D_ColourGrading( writer, 1u, 0u );
 		auto c3d_mapHdr = writer.declCombinedImg< FImg2DRgba16 >( "c3d_mapHdr", 2u, 0u );
 
@@ -36,7 +36,7 @@ namespace HaarmPieterDuiker
 			{
 				auto hdrColor = writer.declLocale( "hdrColor"
 					, c3d_colourGrading.colourGrade( c3d_mapHdr.sample( in.uv() ).rgb() ) );
-				hdrColor *= c3d_hdrConfigData.getExposure();
+				hdrColor *= c3d_renderData.exposure();
 				auto ld = writer.declLocale( "ld"
 					, vec3( 0.002_f ) );
 				auto linReference = writer.declLocale( "linReference"
@@ -44,7 +44,7 @@ namespace HaarmPieterDuiker
 				auto logReference = writer.declLocale( "logReference"
 					, 444.0_f );
 				auto logGamma = writer.declLocale( "logGamma"
-					, 1.0_f / c3d_hdrConfigData.getGamma() );
+					, 1.0_f / c3d_renderData.gamma() );
 
 				auto logColor = writer.declLocale( "logColor"
 					, ( log10( vec3( 0.4_f ) * hdrColor.rgb() / linReference )

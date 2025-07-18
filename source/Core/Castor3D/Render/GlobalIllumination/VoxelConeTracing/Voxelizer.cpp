@@ -17,6 +17,7 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Shader/ShaderBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslVoxel.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
@@ -125,6 +126,7 @@ namespace c3d
 		, m_dynamicsCuller{ makeUniqueDerived< SceneCuller, DummyCuller >( m_scene, nullptr, false ) }
 		, m_graph{ resources.getHandler(), toUtf8( prefix ) + "/Voxelizer" }
 		, m_cameraUbo{ device }
+		, m_renderUbo{ makeRawUnique< RenderUbo >( device ) }
 		, m_firstBounce{ vxlsr::createTexture( device, resources, cuT( "VoxelizedSceneFirstBounce" ), { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
 		, m_secondaryBounce{ vxlsr::createTexture( device, resources, cuT( "VoxelizedSceneSecondaryBounce" ), { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
 		, m_staticsVoxels{ vxlsr::createSsbo( device, cuT( "VoxelizedStaticSceneBuffer" ), m_voxelConfig.gridSize.value() ) }
@@ -203,12 +205,12 @@ namespace c3d
 				, sceneBoundingBox.getMax()->y
 				, -1.0f * sceneBoundingBox.getMin()->z
 				, -1.0f * sceneBoundingBox.getMax()->z );
-			m_cameraUbo.cpuUpdate( updater.renderSize
-				, camera
+			m_renderUbo->cpuUpdate( camera.getHdrConfig()
+				, updater.renderSize, true
+				, updater.debugIndex );
+			m_cameraUbo.cpuUpdate( camera
 				, identity
 				, ortho
-				, updater.debugIndex
-				, true
 				, updater.jitter );
 			m_voxelizerUbo.cpuUpdate( m_voxelConfig
 				, voxelSize
@@ -294,6 +296,7 @@ namespace c3d
 					, runnableGraph
 					, m_device
 					, m_cameraUbo
+					, *m_renderUbo
 					, m_scene.getUbo()
 					, m_camera
 					, culler
