@@ -20,6 +20,7 @@ See LICENSE file in root folder
 #include <GuiCommon/System/NodeState.hpp>
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
 
 namespace CastorViewer
 {
@@ -164,6 +165,7 @@ namespace CastorViewer
 		c3d::U32String m_clipSet{};
 
 		GuiCommon::I3DControllerUPtr m_3dController{};
+		c3d::RenderTarget::OnInitialisedConnection m_onTargetInitialised;
 	};
 }
 

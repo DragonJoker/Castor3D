@@ -46,8 +46,6 @@ namespace c3d
 		: public OwnedBy< Engine >
 	{
 		using OnInitialisedFunc = Function< void( RenderTarget const &, QueueData const & ) >;
-		using OnInitialised = SignalT< OnInitialisedFunc >;
-		using OnInitialisedConnection = ConnectionT< OnInitialised >;
 		using PostEffectArray = Vector< PostEffectUPtr >;
 
 	public:
@@ -465,6 +463,19 @@ namespace c3d
 			m_clustersConfig = c3d::move( config );
 		}
 		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Signals.
+		*\~french
+		*name
+		*	Signaux.
+		**/
+		/**@{*/
+		using OnInitialised = SignalT< OnInitialisedFunc >;
+		using OnInitialisedConnection = ConnectionT< OnInitialised >;
+		OnInitialised onInitialised;
+		/**@}*/
 
 	private:
 		void doInitialise( RenderDevice const & device
@@ -537,7 +548,6 @@ namespace c3d
 		crg::FramePass const * m_hdrLastPass{};
 		crg::RunnableGraphPtr m_runnable;
 		ashes::SemaphorePtr m_combineSemaphore;
-		OnInitialised m_onInitialised;
 		Vector< OnInitialisedConnection > m_onTargetInitialised;
 		IntermediateViewArray m_intermediates;
 		TargetDebugConfig m_debugConfig;
