@@ -280,7 +280,6 @@ namespace CastorViewer
 
 		if ( !target )
 		{
-
 			CU_Failure( "RenderPanel - No render target" );
 			c3d::Logger::logError( cuT( "RenderPanel - No render target" ) );
 			return;
@@ -291,8 +290,6 @@ namespace CastorViewer
 
 		if ( auto scene = target->getScene() )
 		{
-			m_debugMeshManager = c3d::makeRawUnique< GuiCommon::DebugMeshManager >( *target );
-
 			if ( scene->hasSceneNode( cuT( "PointLightsNode" ) ) )
 			{
 				m_lightsNode = scene->findSceneNode( cuT( "PointLightsNode" ) );
@@ -306,6 +303,15 @@ namespace CastorViewer
 			{
 				select( camera );
 			}
+
+			if ( target->isInitialised() )
+				m_debugMeshManager = c3d::makeRawUnique< GuiCommon::DebugMeshManager >( *target );
+			else
+				m_onTargetInitialised = target->onInitialised.connect( [this]( c3d::RenderTarget const & target, c3d::QueueData const & )
+					{
+						m_debugMeshManager = c3d::makeRawUnique< GuiCommon::DebugMeshManager >( target );
+					} );
+
 
 			m_scene = scene;
 		}
@@ -449,48 +455,32 @@ namespace CastorViewer
 	float RenderPanel::doTransformX( int x )
 	{
 		auto result = float( x );
-
-		if ( m_renderWindow )
-		{
+		if ( m_renderWindow && m_renderWindow->getRenderTarget() )
 			result *= float( m_renderWindow->getRenderTarget()->getDisplaySize().getWidth() ) / float( GetClientSize().x );
-		}
-
 		return result;
 	}
 
 	float RenderPanel::doTransformY( int y )
 	{
 		auto result = float( y );
-
-		if ( m_renderWindow )
-		{
+		if ( m_renderWindow && m_renderWindow->getRenderTarget() )
 			result *= float( m_renderWindow->getRenderTarget()->getDisplaySize().getHeight() ) / float( GetClientSize().y );
-		}
-
 		return result;
 	}
 
 	int RenderPanel::doTransformX( float x )
 	{
 		auto result = int( x );
-
-		if ( m_renderWindow )
-		{
+		if ( m_renderWindow && m_renderWindow->getRenderTarget() )
 			result = int( x * float( GetClientSize().x ) / float( m_renderWindow->getRenderTarget()->getDisplaySize().getWidth() ) );
-		}
-
 		return result;
 	}
 
 	int RenderPanel::doTransformY( float y )
 	{
 		auto result = int( y );
-
-		if ( m_renderWindow )
-		{
+		if ( m_renderWindow && m_renderWindow->getRenderTarget() )
 			result = int( y * float( GetClientSize().y ) / float( m_renderWindow->getRenderTarget()->getDisplaySize().getHeight() ) );
-		}
-
 		return result;
 	}
 

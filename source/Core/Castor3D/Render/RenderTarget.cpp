@@ -817,7 +817,7 @@ namespace c3d
 		}
 	}
 
-	void RenderTarget::initialise( OnInitialisedFunc const & onInitialised
+	void RenderTarget::initialise( OnInitialisedFunc const & onInitEnd
 		, ProgressBar * progress )
 	{
 		if ( !m_initialising.exchange( true )
@@ -829,14 +829,14 @@ namespace c3d
 					auto queueWrapper = device.graphicsData();
 					auto & queue = *queueWrapper;
 					doInitialise( device, progress );
-					m_onInitialised( *this, queue );
+					onInitialised( *this, queue );
 					m_onTargetInitialised.clear();
 				} );
 		}
 
 		if ( m_initialising )
 		{
-			m_onTargetInitialised.push_back( m_onInitialised.connect( onInitialised ) );
+			m_onTargetInitialised.push_back( onInitialised.connect( onInitEnd ) );
 		}
 
 		if ( m_initialised )
@@ -844,7 +844,7 @@ namespace c3d
 			auto const & device = getEngine()->getRenderSystem()->getRenderDevice();
 			auto queueWrapper = device.graphicsData();
 			auto & queue = *queueWrapper;
-			onInitialised( *this, queue );
+			onInitEnd( *this, queue );
 		}
 	}
 
