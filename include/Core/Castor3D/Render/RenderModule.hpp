@@ -13,7 +13,6 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/ShaderModule.hpp"
 #include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 
-#include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 #include <RenderGraph/Attachment.hpp>
@@ -32,31 +31,6 @@ namespace c3d
 	//@{
 
 	String const RenderTypeUndefined = cuT( "Undefined" );
-
-	enum class UpscalingPerfQualityMode
-	{
-		eMaxPerf,
-		eBalanced,
-		eMaxQuality,
-		eUltraPerformance,
-		eUltraQuality,
-		eDLAA,
-		CU_ScopedEnumBounds( eMaxPerf, eDLAA )
-	};
-	C3D_API String getName( UpscalingPerfQualityMode v );
-	/**
-	*\~english
-	*\brief
-	*	Holds upscaling configuration.
-	*\~french
-	*\brief
-	*	Contient la configuration d'upscaling.
-	*/
-	struct UpscalingConfig
-	{
-		bool enabled{ false };
-		UpscalingPerfQualityMode perfQualityMode{ UpscalingPerfQualityMode::eMaxPerf };
-	};
 
 	using RenderPassTypeID = uint16_t;
 
@@ -778,24 +752,6 @@ namespace c3d
 	/**
 	*\~english
 	*\brief
-	*	Wraps DLSS or other upscaling SDK.
-	*\~french
-	*\brief
-	*	Enrobe le DLSS ou tout autre SDK d'upscaling.
-	*/
-	class UpscalingWrapper;
-	/**
-	*\~english
-	*\brief
-	*	Wraps DLSS or other upscaling SDK.
-	*\~french
-	*\brief
-	*	Enrobe le DLSS ou tout autre SDK d'upscaling.
-	*/
-	class UpscalingInstance;
-	/**
-	*\~english
-	*\brief
 	*	A render viewport.
 	*\~french
 	*\brief
@@ -1067,8 +1023,6 @@ namespace c3d
 	CU_DeclareSmartPtr( c3d, RenderTechnique, C3D_API );
 	CU_DeclareSmartPtr( c3d, RenderTechniquePass, C3D_API );
 	CU_DeclareSmartPtr( c3d, RenderWindow, C3D_API );
-	CU_DeclareSmartPtr( c3d, UpscalingInstance, C3D_API );
-	CU_DeclareSmartPtr( c3d, UpscalingWrapper, C3D_API );
 	CU_DeclareSmartPtr( c3d, Viewport, C3D_API );
 	CU_DeclareSmartPtr( c3d, Texture, C3D_API );
 
@@ -1456,18 +1410,6 @@ namespace c3d
 			, dstBinding
 			, dstArrayElement );
 	}
-
-	template<>
-	struct ParserEnumTraits< UpscalingPerfQualityMode >
-	{
-		static inline xchar const * const Name = cuT( "UpscalingPerfQualityMode" );
-		static inline UInt32StrMap const Values = []()
-			{
-				UInt32StrMap result;
-				result = getEnumMapT< UpscalingPerfQualityMode >();
-				return result;
-			}( );
-	};
 }
 
 CU_DeclareExportedOwnedBy( C3D_API, RenderSystem, RenderSystem )

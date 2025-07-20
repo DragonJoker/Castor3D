@@ -18,7 +18,6 @@
 #include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
-#include "Castor3D/Render/UpscalingWrapper.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/Debug/DebugDrawer.hpp"
@@ -26,9 +25,10 @@
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Render/Overlays/OverlayPass.hpp"
 #include "Castor3D/Render/Overlays/OverlayRenderer.hpp"
-#include "Castor3D/Render/Passes/UpscalingPass.hpp"
 #include "Castor3D/Render/PostEffect/PostEffect.hpp"
 #include "Castor3D/Render/ToneMapping/ToneMapping.hpp"
+#include "Castor3D/Render/Upscale/UpscalePass.hpp"
+#include "Castor3D/Render/Upscale/UpscaleWrapper.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
@@ -601,19 +601,15 @@ namespace c3d
 
 		static Size getOptimalRenderSize( RenderDevice const & device
 			, Size const & displaySize
-			, UpscalingConfig upscalingConfig )
+			, UpscaleConfig upscalingConfig )
 		{
 			Size result{ displaySize };
 
-			if ( UpscalingRecommendedSettings recommendedSettings;
-				device.upscaling
-					&& device.upscaling->queryOptimalSettings( makeExtent2D( displaySize )
-						, upscalingConfig
-						, recommendedSettings ) )
-			{
-				result.set( recommendedSettings.recommendedOptimalRenderSize.width
-					, recommendedSettings.recommendedOptimalRenderSize.height );
-			}
+			if ( Extent2D recommendedSize;
+				device.upscaling && device.upscaling->queryOptimalSettings( makeExtent2D( displaySize )
+					, upscalingConfig
+					, recommendedSize ) )
+				result = makeSize( recommendedSize );
 
 			return result;
 		}
@@ -1620,14 +1616,20 @@ namespace c3d
 			, m_hdrObjects.front()
 			, ImageLayout::eShaderReadOnly
 			, TextureFactors{}.invert( true ) );
+		if ( m_hdrObjectsDownSampled )
+			result.emplace_back( cuT( "Target HDR Downsampled" )
+				, *m_hdrObjectsDownSampled
+				, ImageLayout::eColorAttachment
+				, TextureFactors{}.invert( true ) );
 		result.emplace_back( cuT( "Target Overlays" )
 			, m_overlays
 			, ImageLayout::eShaderReadOnly
-			, TextureFactors{ { 0.5f, 0.5f, 0.5f }, { 0.5f, 0.5f, 0.5f } }.invert( true ) );
+			, TextureFactors{}.invert( true ) );
+		auto renderSize = getSafeBandedSize( m_renderSize );
 		result.emplace_back( cuT( "Target Velocity" )
 			, m_velocity
 			, ImageLayout::eColorAttachment
-			, TextureFactors{}.invert( true ) );
+			, TextureFactors{ Point3f{ 0.01f, 0.01f, 0.5f }, { 0.5f, 0.5f, 0.5f } }.invert( true ) );
 
 		for ( auto & postEffect : m_hdrPostEffects )
 		{

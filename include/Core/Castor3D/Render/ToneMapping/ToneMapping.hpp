@@ -54,7 +54,7 @@ namespace c3d
 			, crg::ImageViewIdArray const & source
 			, crg::ImageViewId const & target
 			, crg::FramePass const & previousPass
-			, RenderUbo & renderUbo
+			, RenderUbo const & renderUbo
 			, ColourGradingUbo & colourGradingUbo
 			, ProgressBar * progress );
 		/**
@@ -139,7 +139,7 @@ namespace c3d
 
 	protected:
 		String m_name{ cuT( "linear" ) };
-		RenderUbo & m_renderUbo;
+		RenderUbo const & m_renderUbo;
 		ColourGradingUbo & m_colourGradingUbo;
 		ProgramModule m_shader{ cuT( "ToneMapping" ) };
 		crg::ImageViewId m_source;

@@ -1,10 +1,10 @@
-#include "Castor3D/Render/Passes/UpscalingPass.hpp"
+#include "Castor3D/Render/Upscale/UpscalePass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
-#include "Castor3D/Render/UpscalingWrapper.hpp"
+#include "Castor3D/Render/Upscale/UpscaleWrapper.hpp"
 
 #include <RenderGraph/FramePassGroup.hpp>
 
@@ -15,7 +15,7 @@ namespace c3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, RenderTarget & target
-		, UpscalingConfig const & config
+		, UpscaleConfig const & config
 		, crg::ru::Config const & ruConfig )
 		: RunnablePass{ pass
 			, context

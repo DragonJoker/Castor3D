@@ -28,6 +28,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 #include "Castor3D/Render/ToneMapping/ToneMappingModule.hpp"
 #include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
+#include "Castor3D/Render/Upscale/UpscaleModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
@@ -1058,12 +1059,12 @@ namespace c3d
 			return m_unit;
 		}
 
-		UpscalingConfig const & getUpscalingConfig()const noexcept
+		UpscaleConfig const & getUpscalingConfig()const noexcept
 		{
 			return m_upscalingConfig;
 		}
 
-		UpscalingConfig & getUpscalingConfig()noexcept
+		UpscaleConfig & getUpscalingConfig()noexcept
 		{
 			return m_upscalingConfig;
 		}
@@ -1316,7 +1317,7 @@ namespace c3d
 		PassComponentRegisterUPtr m_passComponents;
 		SubmeshComponentRegisterUPtr m_submeshComponents;
 		CpuInformations m_cpuInformations;
-		UpscalingConfig m_upscalingConfig;
+		UpscaleConfig m_upscalingConfig;
 		LightingModelID m_lightingModelId{};
 		uint32_t m_lpvGridSize{ 32u };
 		uint32_t m_maxImageSize{ 0xFFFFFFFF };
