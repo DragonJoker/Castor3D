@@ -33,7 +33,7 @@ namespace c3d
 		, crg::ImageViewIdArray const & source
 		, crg::ImageViewId const & target
 		, crg::FramePass const & previousPass
-		, RenderUbo & renderUbo
+		, RenderUbo const & renderUbo
 		, ColourGradingUbo & colourGradingUbo
 		, ProgressBar * progress )
 		: OwnedBy< Engine >{ engine }

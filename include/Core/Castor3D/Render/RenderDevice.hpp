@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "RenderModule.hpp"
 #include "Castor3D/Buffer/BufferModule.hpp"
+#include "Castor3D/Render/Upscale/UpscaleModule.hpp"
 
 #include <CastorUtils/Design/FlagCombination.hpp>
 

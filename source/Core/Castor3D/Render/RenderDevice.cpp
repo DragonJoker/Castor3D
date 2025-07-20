@@ -6,7 +6,7 @@
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/UpscalingWrapper.hpp"
+#include "Castor3D/Render/Upscale/UpscaleWrapper.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 
 #include <CastorUtils/Miscellaneous/Debug.hpp>

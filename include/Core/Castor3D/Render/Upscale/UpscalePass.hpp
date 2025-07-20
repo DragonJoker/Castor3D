@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_UpscalingPass_H___
 
 #include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Render/Upscale/UpscaleModule.hpp"
 
 #include <RenderGraph/RunnablePass.hpp>
 
@@ -19,7 +20,7 @@ namespace c3d
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, RenderTarget & target
-			, UpscalingConfig const & config
+			, UpscaleConfig const & config
 			, crg::ru::Config const & ruConfig = {} );
 
 		void update();
@@ -35,7 +36,7 @@ namespace c3d
 	private:
 		RenderDevice const & m_device;
 		RenderTarget & m_target;
-		UpscalingConfig const & m_config;
+		UpscaleConfig const & m_config;
 		UpscalingInstanceUPtr m_upscaler;
 		uint64_t m_updateCount{};
 	};

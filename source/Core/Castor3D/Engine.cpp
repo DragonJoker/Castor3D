@@ -30,7 +30,7 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
-#include "Castor3D/Render/UpscalingWrapper.hpp"
+#include "Castor3D/Render/Upscale/UpscaleWrapper.hpp"
 #include "Castor3D/Scene/CscnImporterFile.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Scene/Scene.hpp"
