@@ -27,6 +27,11 @@ namespace c3d
 		static bool constexpr isText = !isPanel && !isBorder;
 		static bool constexpr isCpuFilled = isText;
 
+		OverlayVertexBufferPoolT( OverlayVertexBufferPoolT const & ) = delete;
+		OverlayVertexBufferPoolT & operator=( OverlayVertexBufferPoolT const & ) = delete;
+		OverlayVertexBufferPoolT( OverlayVertexBufferPoolT && )noexcept = delete;
+		OverlayVertexBufferPoolT & operator=( OverlayVertexBufferPoolT && )noexcept = delete;
+
 		OverlayVertexBufferPoolT( Engine & engine
 			, String const & debugName
 			, RenderDevice const & device
@@ -35,6 +40,8 @@ namespace c3d
 			, ashes::DescriptorSetLayout const & descriptorLayout
 			, uint32_t count
 			, OverlayTextBufferPoolUPtr textBuf = nullptr );
+		~OverlayVertexBufferPoolT()noexcept;
+
 		template< typename OverlayT >
 		bool fill( Size const & renderSize
 			, OverlayT const & overlay
@@ -58,7 +65,7 @@ namespace c3d
 		RenderUbo const & renderUbo;
 		ashes::DescriptorSetLayout const & descriptorLayout;
 		String name;
-		ashes::BufferPtr< OverlayUboConfiguration > overlaysData;
+		BufferUPtrT< OverlayUboConfiguration > overlaysData;
 		ArrayView< OverlayUboConfiguration > overlaysBuffer;
 		GpuBufferBase vertexBuffer;
 		uint32_t allocated{};

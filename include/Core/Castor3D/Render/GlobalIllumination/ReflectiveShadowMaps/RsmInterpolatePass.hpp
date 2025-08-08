@@ -24,32 +24,25 @@ namespace c3d
 	{
 	public:
 		C3D_API RsmInterpolatePass( crg::FrameGraph & graph
-			, crg::FramePass const & previousPass
 			, RenderDevice const & device
 			, LightType lightType
 			, ShadowBuffer const & shadowBuffer
 			, Extent3D const & size
 			, CameraUbo const & cameraUbo
-			, crg::ImageViewId const & depthObj
-			, crg::ImageViewId const & nmlOcc
+			, Texture const & depthObj
+			, Texture const & nmlOcc
 			, ShadowMapResult const & smResult
 			, RsmConfigUbo const & rsmConfigUbo
 			, GpuBufferOffsetT< Point4f > const & rsmSamplesSsbo
 			, Texture const & gi
 			, Texture const & nml
-			, Texture const & dst );
+			, Texture & dst );
 		C3D_API void accept( ConfigurationVisitorBase & visitor );
-
-		crg::FramePass const & getPass()const
-		{
-			return *m_pass;
-		}
 
 	private:
 		ShaderModule m_vertexShader;
 		ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::FramePass const * m_pass{};
 	};
 }
 

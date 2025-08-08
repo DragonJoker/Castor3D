@@ -20,6 +20,8 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
+#include "Castor3D/Buffer/GpuBuffer.hpp"
+
 #include <CastorUtils/Design/Named.hpp>
 
 #include <RenderGraph/Attachment.hpp>
@@ -50,8 +52,14 @@ namespace c3d
 		C3D_API OpaqueRendering( RenderTechnique & parent
 			, RenderDevice const & device
 			, PrepassRendering const & previous
-			, crg::FramePassArray const & previousPasses
 			, ProgressBar * progress );
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
+		C3D_API ~OpaqueRendering()noexcept;
 		/**
 		 *\~english
 		 *\return		The number of steps needed for initialisation, to show progression.
@@ -109,27 +117,26 @@ namespace c3d
 		*/
 		/**@{*/
 		C3D_API Engine * getEngine()const noexcept;
-		C3D_API crg::FramePass const & getLastPass()const noexcept;
 		C3D_API Texture const & getSsaoResult()const noexcept;
 		C3D_API Texture const & getSssDiffuse()const noexcept;
 		C3D_API bool isEnabled()const noexcept;
 
-		ashes::Buffer< uint32_t > const & getMaterialsCounts()const noexcept
+		Buffer const & getMaterialsCounts()const noexcept
 		{
 			return *m_materialsCounts;
 		}
 
-		ashes::Buffer< Point3ui > const & getMaterialsIndirectCounts()const noexcept
+		Buffer const & getMaterialsIndirectCounts()const noexcept
 		{
 			return *m_materialsIndirectCounts;
 		}
 
-		ashes::Buffer< uint32_t > const & getMaterialsStarts()const noexcept
+		Buffer const & getMaterialsStarts()const noexcept
 		{
 			return *m_materialsStarts;
 		}
 
-		ashes::Buffer< Point2ui > const & getPixelXY()const noexcept
+		Buffer const & getPixelXY()const noexcept
 		{
 			return *m_pixelsXY;
 		}
@@ -139,19 +146,12 @@ namespace c3d
 		using ShadowMapArray = Vector< ShadowMapUPtr >;
 
 	private:
-		SsaoPassUPtr doCreateSsaoPass( ProgressBar * progress
-			, crg::FramePass const & lastPass
-			, crg::FramePassArray previousPasses )const;
-		crg::FramePass & doCreateVisibilityResolve( ProgressBar * progress
+		SsaoPassUPtr doCreateSsaoPass( ProgressBar * progress )const;
+		void doCreateVisibilityResolve( ProgressBar * progress
 			, PrepassRendering const & previous
-			, crg::FramePassArray const & previousPasses
 			, bool isDeferredLighting );
-		crg::FramePass & doCreateVisibilityOpaquePass( ProgressBar * progress
-			, crg::FramePass const & lastPass
-			, crg::FramePassArray const & previousPasses );
-		crg::FramePass & doCreateOpaquePass( ProgressBar * progress
-			, crg::FramePass const & lastPass
-			, crg::FramePassArray const & previousPasses
+		void doCreateVisibilityOpaquePass( ProgressBar * progress );
+		void doCreateOpaquePass( ProgressBar * progress
 			, bool isDeferredLighting );
 		bool doIsOpaquePassEnabled()const;
 		bool doIsDeferredOpaquePassEnabled()const;
@@ -160,23 +160,18 @@ namespace c3d
 	private:
 		RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;
-		ashes::BufferPtr< uint32_t > m_materialsCounts;
-		ashes::BufferPtr< Point3ui > m_materialsIndirectCounts;
-		ashes::BufferPtr< uint32_t > m_materialsStarts;
-		ashes::BufferPtr< Point2ui > m_pixelsXY;
+		BufferUPtr m_materialsCounts;
+		BufferUPtr m_materialsIndirectCounts;
+		BufferUPtr m_materialsStarts;
+		BufferUPtr m_pixelsXY;
 		crg::RunnablePass::IsEnabledCallback m_opaquePassEnabled;
 		crg::RunnablePass::IsEnabledCallback m_deferredOpaquePassEnabled;
 		crg::RunnablePass::IsEnabledCallback m_visibilityOpaquePassEnabled;
 		VisibilityReorderPassUPtr m_visibilityReorder;
 		SsaoPassUPtr m_ssao;
-		crg::FramePass * m_visibilityResolveDesc{};
-		crg::FramePass * m_opaquePassDesc{};
 		RenderTechniquePass * m_opaquePass{};
 		SubsurfaceScatteringPassUPtr m_subsurfaceScattering{};
-		crg::FramePass * m_deferredVisibilityResolveDesc{};
-		crg::FramePass * m_deferredOpaquePassDesc{};
 		RenderTechniquePass * m_deferredOpaquePass{};
-		crg::FramePass * m_visibilityOpaquePassDesc{};
 		RenderTechniquePass * m_visibilityOpaquePass{};
 	};
 }

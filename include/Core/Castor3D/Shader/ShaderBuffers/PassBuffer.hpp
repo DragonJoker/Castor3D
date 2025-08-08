@@ -31,18 +31,18 @@ namespace c3d
 			{
 			}
 
-			C3D_API VkDeviceSize write( MemChunk const & chunk
+			C3D_API VkDeviceSize write( DataChunk const & chunk
 				, uint32_t v
 				, VkDeviceSize offset );
-			C3D_API VkDeviceSize write( MemChunk const & chunk
+			C3D_API VkDeviceSize write( DataChunk const & chunk
 				, int32_t v
 				, VkDeviceSize offset );
-			C3D_API VkDeviceSize write( MemChunk const & chunk
+			C3D_API VkDeviceSize write( DataChunk const & chunk
 				, float v
 				, VkDeviceSize offset );
 
 			template< typename DataA, typename DataB >
-			VkDeviceSize write( MemChunk const & chunk
+			VkDeviceSize write( DataChunk const & chunk
 				, DataA a
 				, DataB b
 				, VkDeviceSize offset )
@@ -54,7 +54,7 @@ namespace c3d
 			}
 
 			template< typename DataA, typename DataB, typename DataC >
-			VkDeviceSize write( MemChunk const & chunk
+			VkDeviceSize write( DataChunk const & chunk
 				, DataA a
 				, DataB b
 				, DataC c
@@ -68,7 +68,7 @@ namespace c3d
 			}
 
 			template< typename DataA, typename DataB, typename DataC, typename DataD >
-			VkDeviceSize write( MemChunk const & chunk
+			VkDeviceSize write( DataChunk const & chunk
 				, DataA a
 				, DataB b
 				, DataC c
@@ -84,7 +84,7 @@ namespace c3d
 			}
 
 			template< typename DataT, size_t SizeT >
-			VkDeviceSize write( MemChunk const & chunk
+			VkDeviceSize write( DataChunk const & chunk
 				, Array< DataT, SizeT > const & v
 				, VkDeviceSize offset )
 			{
@@ -99,7 +99,7 @@ namespace c3d
 			}
 
 			template< typename DataT, uint32_t CountT >
-			VkDeviceSize write( MemChunk const & chunk
+			VkDeviceSize write( DataChunk const & chunk
 				, Point< DataT, CountT > const & v
 				, VkDeviceSize offset )
 			{
@@ -113,7 +113,7 @@ namespace c3d
 				return offset - base;
 			}
 
-			VkDeviceSize write( MemChunk const & chunk
+			VkDeviceSize write( DataChunk const & chunk
 				, RgbColour const & v
 				, VkDeviceSize offset )
 			{
@@ -127,7 +127,7 @@ namespace c3d
 				return offset - base;
 			}
 
-			VkDeviceSize write( MemChunk const & chunk
+			VkDeviceSize write( DataChunk const & chunk
 				, HdrRgbColour const & v
 				, VkDeviceSize offset )
 			{
@@ -141,7 +141,7 @@ namespace c3d
 				return offset - base;
 			}
 
-			VkDeviceSize write( MemChunk const & chunk
+			VkDeviceSize write( DataChunk const & chunk
 				, RgbaColour const & v
 				, VkDeviceSize offset )
 			{
@@ -155,7 +155,7 @@ namespace c3d
 				return offset - base;
 			}
 
-			VkDeviceSize write( MemChunk const & chunk
+			VkDeviceSize write( DataChunk const & chunk
 				, HdrRgbaColour const & v
 				, VkDeviceSize offset )
 			{

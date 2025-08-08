@@ -65,6 +65,26 @@ namespace PbrBloom
 			, m_blurRadius );
 		visitor.visit( cuT( "Bloom Strength" )
 			, m_bloomStrength );
+
+		uint32_t index{};
+		for ( auto & layerViews : m_downSampled )
+		{
+			visitor.visit( cuT( "PostFX: PBRB - Down " ) + c3d::string::toString( index )
+				, layerViews.getSampledViewId()
+				, m_graph.getFinalLayoutState( layerViews.getSampledViewId() ).layout
+				, c3d::TextureFactors{}.invert( true ) );
+			++index;
+		}
+
+		index = {};
+		for ( auto & layerViews : m_upSampled )
+		{
+			visitor.visit( cuT( "PostFX: PBRB - Up " ) + c3d::string::toString( index )
+				, layerViews.getSampledViewId()
+				, m_graph.getFinalLayoutState( layerViews.getSampledViewId() ).layout
+				, c3d::TextureFactors{}.invert( true ) );
+			++index;
+		}
 	}
 
 	void PostEffect::setParameters( c3d::Parameters parameters )
@@ -91,54 +111,81 @@ namespace PbrBloom
 
 	bool PostEffect::doInitialise( c3d::RenderDevice const & device
 		, c3d::Texture const & source
-		, c3d::Texture const & target
-		, crg::FramePass const & previousPass )
+		, c3d::Texture & target )
 	{
-		m_ubo = device.uboPool->getBuffer< c3d::Point2f >( 0u );
+		m_ubo = device.uboPool->getBuffer< c3d::Point2f >( c3d::MemoryPropertyFlags::eNone );
 		auto & data = m_ubo.getData();
 		m_extent = target.getExtent();
 		data->x = float( m_blurRadius ) / float( std::max( m_extent.width, m_extent.height ) );
 		data->y = m_bloomStrength;
 		auto extent = ashes::getSubresourceDimensions( convert( m_extent ), 1u );
 		auto mipCount = ashes::getMaxMipCount( extent );
-		m_intermediateImg = m_graph.createImage( crg::ImageData{ "PBLInt"
-			, c3d::ImageCreateFlags::eNone
-			, c3d::ImageType::e2D
+		m_duPassesCount = std::min( m_duPassesCount, mipCount );
+
+		for ( uint32_t i = 0u; i < m_duPassesCount - 1u; ++i )
+		{
+			m_downSampled.emplace_back( device.renderSystem.getRenderDevice()
+				, m_renderTarget.getResources()
+				, "PBRBloomDownsample" + c3d::string::toString( i )
+				, c3d::TextureCreateInfo{ c3d::ImageCreateFlags::eNone
+				, c3d::convert( extent ), 1u, 1u
+				, target.getFormat()
+				, ( c3d::ImageUsageFlags::eColorAttachment
+					| c3d::ImageUsageFlags::eSampled
+					| c3d::ImageUsageFlags::eTransferSrc
+					| c3d::ImageUsageFlags::eTransferDst ) }
+				, c3d::TextureSamplerInfo{} );
+			m_upSampled.emplace_back( device.renderSystem.getRenderDevice()
+				, m_renderTarget.getResources()
+				, "PBRBloomUpsample" + c3d::string::toString( i )
+				, c3d::TextureCreateInfo{ c3d::ImageCreateFlags::eNone
+				, c3d::convert( extent ), 1u, 1u
+				, target.getFormat()
+				, ( c3d::ImageUsageFlags::eColorAttachment
+					| c3d::ImageUsageFlags::eSampled
+					| c3d::ImageUsageFlags::eTransferSrc
+					| c3d::ImageUsageFlags::eTransferDst ) }
+				, c3d::TextureSamplerInfo{} );
+			extent.width >>= 1u;
+			extent.height >>= 1u;
+		}
+
+		m_downSampled.emplace_back( device.renderSystem.getRenderDevice()
+			, m_renderTarget.getResources()
+			, "PBRBloomDownsample" + c3d::string::toString( m_duPassesCount - 1u )
+			, c3d::TextureCreateInfo{ c3d::ImageCreateFlags::eNone
+			, c3d::convert( extent ), 1u, 1u
 			, target.getFormat()
-			, c3d::convert( extent )
 			, ( c3d::ImageUsageFlags::eColorAttachment
 				| c3d::ImageUsageFlags::eSampled
 				| c3d::ImageUsageFlags::eTransferSrc
-				| c3d::ImageUsageFlags::eTransferDst )
-			, mipCount } );
+				| c3d::ImageUsageFlags::eTransferDst ) }
+			, c3d::TextureSamplerInfo{} );
 
-		m_duPassesCount = std::min( m_duPassesCount, mipCount );
 		m_downsamplePass = c3d::makeRawUnique< DownsamplePass >( m_graph
-			, previousPass
 			, device
-			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
-			, m_intermediateImg
+			, source
+			, m_downSampled
 			, m_duPassesCount
 			, &isEnabled()
 			, &m_passIndex );
 		m_upsamplePass = c3d::makeRawUnique< UpsamplePass >( m_graph
-			, m_downsamplePass->getPass()
 			, device
-			, m_intermediateImg
+			, m_downSampled.back()
+			, m_upSampled
 			, m_ubo
 			, m_duPassesCount
 			, &isEnabled() );
 		m_combinePass = c3d::makeRawUnique< CombinePass >( m_graph
-			, m_upsamplePass->getPass()
 			, device
-			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
-			, m_intermediateImg
-			, crg::ImageViewIdArray{ target.targetViewId, source.targetViewId }
+			, m_upSampled.front()
+			, source
+			, target
+			, c3d::makeExtent2D( m_extent )
 			, m_ubo
 			, &isEnabled()
 			, &m_passIndex );
 
-		m_pass = &m_combinePass->getPass();
 		return true;
 	}
 

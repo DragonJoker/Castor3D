@@ -15,7 +15,7 @@ namespace atmosphere_scattering
 		: m_writer{ writer }
 		, m_atmosphere{ atmosphere }
 		, m_settings{ c3d::move( settings ) }
-		, transmittanceMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "transmittanceMap"
+		, transmittanceMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "transmittanceMap"
 			, binding++
 			, set ) }
 		, multiScatterMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "multiScatterMap"

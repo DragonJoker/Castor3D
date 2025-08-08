@@ -8,11 +8,12 @@ See LICENSE file in root folder
 
 namespace c3d
 {
-	C3D_API crg::FramePass const & createReduceLightsAABBPass( crg::FramePassGroup & graph
-		, crg::FramePass const * previousPass
+	C3D_API void createReduceLightsAABBPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
+		, FrustumClusters & clusters
 		, CameraUbo const & clustersCameraUbo
-		, FrustumClusters & clusters );
+		, BufferBase const & allLightsAABB
+		, BufferBase & reducedLightsAABB );
 }
 
 #endif

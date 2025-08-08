@@ -1,7 +1,9 @@
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/DirectUploadData.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
+#include "Castor3D/Buffer/InstantUploadData.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
@@ -343,9 +345,9 @@ namespace c3d
 			, uint32_t gridSize )
 		{
 			auto bufferSize = gridSize * gridSize * gridSize;
-			auto result = device.bufferPool->getBuffer< Point3f >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
+			auto result = device.bufferPool->getBuffer< Point3f >( BufferUsageFlags::eVertexBuffer
 				, bufferSize
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+				, MemoryPropertyFlags::eDeviceLocal );
 			auto buffer = result.getData().data();
 
 			for ( uint32_t d = 0; d < gridSize; d++ )
@@ -513,12 +515,12 @@ namespace c3d
 		m_holder.recordInto( context, commandBuffer, index );
 		auto vplCount = m_gridSize * m_gridSize * m_gridSize;
 		VkDeviceSize offset{ m_vertexBuffer.getOffset() };
-		VkBuffer vertexBuffer = m_vertexBuffer.getBuffer();
+		VkBuffer vertexBuffer = m_vertexBuffer.getBuffer().getBuffer();
 		m_context.vkCmdBindVertexBuffers( commandBuffer, 0u, 1u, &vertexBuffer, &offset );
 		m_context.vkCmdDraw( commandBuffer, vplCount, 1u, 0u, 0u );
 	}
 
-	void LightPropagationPass::accept( ConfigurationVisitorBase & visitor )
+	void LightPropagationPass::accept( ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_shader );
 	}

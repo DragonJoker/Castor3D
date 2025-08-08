@@ -37,6 +37,7 @@ namespace c3d
 		 *\param[in]	count	Le nombre maximal de passes.
 		 */
 		C3D_API LightBuffer( RenderDevice const & device
+		, crg::ResourcesCache & resources
 			, uint32_t count );
 		/**
 		 *\~english

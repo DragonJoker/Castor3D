@@ -63,8 +63,7 @@ namespace dof
 
 	bool PostEffect::doInitialise( c3d::RenderDevice const & device
 		, c3d::Texture const & source
-		, c3d::Texture const & target
-		, crg::FramePass const & previousPass )
+		, c3d::Texture & target )
 	{
 		auto extent = c3d::convert( ashes::getSubresourceDimensions( convert( target.getExtent() ), 1u ) );
 		m_nearCoC = c3d::Texture{ device
@@ -117,36 +116,32 @@ namespace dof
 		m_nearBlur.create();
 		m_farBlur.create();
 		m_intermediate.create();
-		auto passes = createComputeCircleOfConfusionPass( device
+		createComputeCircleOfConfusionPass( device
 			, m_graph
-			, crg::FramePassArray{ &previousPass }
 			, m_ubo
 			, m_renderTarget.getTechnique().getDepthObj()
-			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
+			, source
 			, m_nearCoC
 			, m_farCoC
 			, &isEnabled()
 			, &m_passIndex );
 		auto & nearGroup = m_graph.createPassGroup( "Near" );
 		m_blurNearCoC = std::make_unique< c3d::GaussianBlur >( nearGroup
-			, *passes.front()
 			, device
 			, "Near"
-			, m_nearCoC.sampledViewId
+			, m_nearCoC
 			, 5u
 			, crg::RunnablePass::IsEnabledCallback( [this]() { return isEnabled(); } ) );
-		passes = createFirstBlurPass( device
+		createFirstBlurPass( device
 			, nearGroup
-			, { &m_blurNearCoC->getLastPass() }
 			, m_ubo
-			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
+			, source
 			, m_nearCoC
 			, m_intermediate
 			, crg::RunnablePass::IsEnabledCallback( [this]() { return isEnabled(); } )
 			, &m_passIndex );
-		passes = createSecondBlurPass( device
+		createSecondBlurPass( device
 			, nearGroup
-			, std::move( passes )
 			, m_ubo
 			, m_intermediate
 			, m_nearBlur
@@ -155,37 +150,33 @@ namespace dof
 
 		auto & farGroup = m_graph.createPassGroup( "Far" );
 		m_blurFarCoC = std::make_unique< c3d::GaussianBlur >( farGroup
-			, *passes.front()
 			, device
 			, "Far"
-			, m_farCoC.sampledViewId
+			, m_farCoC
 			, 5u
 			, crg::RunnablePass::IsEnabledCallback( [this]() { return isEnabled() && m_data.enableFarBlur; } ) );
-		passes = createFirstBlurPass( device
+		createFirstBlurPass( device
 			, farGroup
-			, { &m_blurFarCoC->getLastPass() }
 			, m_ubo
-			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
+			, source
 			, m_farCoC
 			, m_intermediate
 			, crg::RunnablePass::IsEnabledCallback( [this]() { return isEnabled() && m_data.enableFarBlur; } )
 			, &m_passIndex );
-		passes = createSecondBlurPass( device
+		createSecondBlurPass( device
 			, farGroup
-			, std::move( passes )
 			, m_ubo
 			, m_intermediate
 			, m_farBlur
 			, crg::RunnablePass::IsEnabledCallback( [this]() { return isEnabled() && m_data.enableFarBlur; } )
 			, &m_passIndex );
-		m_lastPass = &createCombinePass( device
+		createCombinePass( device
 			, m_graph
-			, std::move( passes )
 			, m_ubo
-			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
 			, m_nearBlur
 			, m_farBlur
-			, crg::ImageViewIdArray{ target.targetViewId, source.targetViewId }
+			, source
+			, target
 			, &isEnabled()
 			, &m_passIndex );
 		return true;

@@ -652,12 +652,9 @@ namespace c3d
 
 				if ( isDynamic() )
 				{
-					ashes::BufferBase const * indexBuffer{};
-
+					BufferBase const * indexBuffer{};
 					if ( m_indexMapping )
-					{
 						indexBuffer = &m_sourceBufferOffset.getBuffer( SubmeshData::eIndex );
-					}
 
 					combine = m_componentCombine;
 					remFlags( combine, components.getSkinFlag() );
@@ -771,21 +768,13 @@ namespace c3d
 		return result;
 	}
 
-	crg::FramePassArray Submesh::record( crg::ResourcesCache & resources
-		, crg::FramePassGroup & graph
-		, crg::FramePassArray previousPasses )
+	void Submesh::record( crg::ResourcesCache & resources
+		, crg::FramePassGroup & graph )
 	{
 		auto & device = *getParent().getOwner()->getRenderDevice();
-
 		for ( auto const & [_, component] : m_components )
-		{
 			if( auto data = component->getRenderData() )
-			{
-				previousPasses = data->record( device, resources, graph, c3d::move( previousPasses ) );
-			}
-		}
-
-		return previousPasses;
+				data->record( device, resources, graph );
 	}
 
 	void Submesh::registerDependencies( crg::FramePass & pass )const
@@ -1085,7 +1074,7 @@ namespace c3d
 						, 0u
 						, 1u
 						, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-					binding.bufferInfo.push_back( VkDescriptorBufferInfo{ chunk.buffer->getBuffer()
+					binding.bufferInfo.push_back( VkDescriptorBufferInfo{ chunk.buffer->getBuffer().getBuffer()
 						, 0u
 						, chunk.buffer->getBuffer().getSize() } );
 					return binding;
@@ -1887,12 +1876,9 @@ namespace c3d
 				{
 					// Initialise only if the submesh itself is already initialised,
 					// because if it is not, the buffers will be initialised by the call to initialise().
-					ashes::BufferBase const * indexBuffer{};
-
+					BufferBase const * indexBuffer{};
 					if ( m_indexMapping )
-					{
 						indexBuffer = &m_sourceBufferOffset.getBuffer( SubmeshData::eIndex );
-					}
 
 					auto combine = getComponentCombine();
 					auto & engine = *getOwner()->getEngine();

@@ -90,6 +90,8 @@ namespace c3d
 		{
 			auto & device = m_renderSystem.getRenderDevice();
 			auto data = m_reservedQueue;
+			device->waitIdle();
+			m_uploadData->cleanup();
 
 			if ( !data )
 			{

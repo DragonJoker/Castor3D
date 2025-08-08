@@ -79,17 +79,16 @@ namespace ocean_fft
 		Data m_data{};
 	};
 
-	crg::FramePass const & createBakeHeightGradientPass( c3d::RenderDevice const & device
+	void createBakeHeightGradientPass( c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
-		, crg::FramePassArray previousPasses
 		, c3d::Extent2D const & extent
 		, c3d::Point2f const & heightMapSize
 		, uint32_t displacementDownsample
 		, OceanUbo const & ubo
-		, ashes::BufferBase const & height
-		, ashes::BufferBase const & displacement
-		, c3d::Array< c3d::Texture, 2u > const & heightDisp
-		, c3d::Array< c3d::Texture, 2u > const & gradJacob );
+		, c3d::Buffer const & height
+		, c3d::Buffer const & displacement
+		, c3d::Array< c3d::Texture, 2u > & heightDisp
+		, c3d::Array< c3d::Texture, 2u > & gradJacob );
 }
 
 #endif

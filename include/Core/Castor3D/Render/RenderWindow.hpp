@@ -535,7 +535,7 @@ namespace c3d
 		size_t m_resourceIndex{ 0u };
 		crg::ResourcesCache m_resources;
 		ashes::RenderPassPtr m_renderPass;
-		ashes::BufferBasePtr m_snapshotBuffer;
+		BufferUPtr m_snapshotBuffer;
 		ByteArrayView m_snapshotData;
 		Vector< CommandsSemaphore > m_transferCommands;
 		Vector< ashes::FrameBufferPtr > m_frameBuffers;

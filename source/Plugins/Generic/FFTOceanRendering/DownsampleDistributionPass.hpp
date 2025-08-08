@@ -66,16 +66,15 @@ namespace ocean_fft
 		ashes::DescriptorSetPtr m_descriptorSet;
 		c3d::Extent3D m_extent;
 	};
-	crg::FramePass const & createDownsampleDistributionPass( c3d::String const & prefix
+	void createDownsampleDistributionPass( c3d::String const & prefix
 		, c3d::String const & name
 		, c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
-		, crg::FramePassArray previousPasses
 		, c3d::Extent2D const & extent
 		, uint32_t downsample
 		, OceanUbo const & ubo
-		, ashes::BufferBase const & input
-		, ashes::BufferBase const & output );
+		, c3d::BufferBase const & input
+		, c3d::BufferBase & output );
 }
 
 #endif

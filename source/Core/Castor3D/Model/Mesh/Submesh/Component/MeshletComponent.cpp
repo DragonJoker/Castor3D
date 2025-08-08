@@ -159,9 +159,9 @@ namespace c3d
 			// Initialise only if the submesh itself is already initialised,
 			// because if it is not, the buffers will be initialised by the call to initialise().
 			RenderDevice & device = m_submesh.getParent().getEngine()->getRenderSystem()->getRenderDevice();
-			it->second = device.bufferPool->getBuffer< MeshletCullData >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+			it->second = device.bufferPool->getBuffer< MeshletCullData >( BufferUsageFlags::eStorageBuffer
 				, m_meshlets.size()
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+				, MemoryPropertyFlags::eDeviceLocal );
 		}
 	}
 
@@ -201,18 +201,18 @@ namespace c3d
 
 			if ( !m_sourceCullBuffer )
 			{
-				m_sourceCullBuffer = device.bufferPool->getBuffer< MeshletCullData >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+				m_sourceCullBuffer = device.bufferPool->getBuffer< MeshletCullData >( BufferUsageFlags::eStorageBuffer
 					, m_meshlets.size()
-					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+					, MemoryPropertyFlags::eDeviceLocal );
 			}
 
 			if ( m_submesh.isDynamic() )
 			{
 				for ( auto & [_, finalCullBuffer] : m_finalCullBuffers )
 				{
-					finalCullBuffer = device.bufferPool->getBuffer< MeshletCullData >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+					finalCullBuffer = device.bufferPool->getBuffer< MeshletCullData >( BufferUsageFlags::eStorageBuffer
 						, m_meshlets.size()
-						, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+						, MemoryPropertyFlags::eDeviceLocal );
 				}
 			}
 
@@ -259,7 +259,7 @@ namespace c3d
 				std::copy( m_cull.begin()
 					, m_cull.end()
 					, m_sourceCullBuffer.getData().begin() );
-				m_sourceCullBuffer.markDirty( TaskShaderReadState );
+				m_sourceCullBuffer.upload( uploader, TaskShaderReadState );
 			}
 		}
 #endif

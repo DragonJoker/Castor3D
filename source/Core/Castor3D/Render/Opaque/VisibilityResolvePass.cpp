@@ -1649,7 +1649,7 @@ namespace c3d
 			, SceneUbo const & sceneUbo
 			, RenderTechnique const & technique
 			, Scene const & scene
-			, crg::ImageViewIdArray const & targetImage
+			, Texture & targetImage
 			, Texture const * ssao
 			, IndirectLightingData const * indirectLighting
 			, DeferredLightingFilter deferredLighting )
@@ -1667,56 +1667,42 @@ namespace c3d
 			writes.push_back( renderUbo.getDescriptorWrite( InOutBindings::eRender ) );
 			writes.push_back( sceneUbo.getDescriptorWrite( InOutBindings::eScene ) );
 			writes.push_back( makeDescriptorWrite( scene.getModelBuffer()
-				, InOutBindings::eModels
-				, 0u
-				, scene.getModelBuffer().getCount() ) );
+				, InOutBindings::eModels ) );
 			writes.push_back( makeDescriptorWrite( scene.getBillboardsBuffer()
-				, InOutBindings::eBillboards
-				, 0u
-				, scene.getBillboardsBuffer().getCount() ) );
+				, InOutBindings::eBillboards ) );
 			writes.push_back( matCache.getPassBuffer().getBinding( InOutBindings::eMaterials ) );
 			writes.push_back( matCache.getSssProfileBuffer().getBinding( InOutBindings::eSssProfiles ) );
-			writes.push_back( makeImageViewDescriptorWrite( matCache.getSssProfileBuffer().getDiffusionProfilesImage().sampledView
+			writes.push_back( makeImageViewDescriptorWrite( matCache.getSssProfileBuffer().getDiffusionProfilesImage().getSampledView()
 				, *matCache.getSssProfileBuffer().getDiffusionProfilesImage().sampler
 				, InOutBindings::eSssDiffusionProfiles ) );
 			writes.push_back( matCache.getTexConfigBuffer().getBinding( InOutBindings::eTexConfigs ) );
 			writes.push_back( matCache.getTexAnimBuffer().getBinding( InOutBindings::eTexAnims ) );
 			auto & visibilityPassResult = technique.getVisibilityResult();
-			writes.push_back( makeImageViewDescriptorWrite( visibilityPassResult.targetView
+			writes.push_back( makeImageViewDescriptorWrite( visibilityPassResult.getTargetView()
 				, InOutBindings::eInData ) );
 
 			if ( deferredLighting == DeferredLightingFilter::eDeferredOnly )
-			{
-				writes.push_back( makeImageViewDescriptorWrite( technique.getSssDiffuse().targetView
+				writes.push_back( makeImageViewDescriptorWrite( technique.getSssDiffuse().getTargetView()
 					, InOutBindings::eInOutDiffuse ) );
-			}
 			else
-			{
-				writes.push_back( makeImageViewDescriptorWrite( technique.getDiffuse().targetView
+				writes.push_back( makeImageViewDescriptorWrite( technique.getDiffuse().getTargetView()
 					, InOutBindings::eInOutDiffuse ) );
-			}
 
-			writes.push_back( makeImageViewDescriptorWrite( engine.getRenderSystem()->getPrefilteredBrdfTexture().wholeView
+			writes.push_back( makeImageViewDescriptorWrite( engine.getRenderSystem()->getPrefilteredBrdfTexture().getSampledView()
 				, *engine.getRenderSystem()->getPrefilteredBrdfTexture().sampler
 				, InOutBindings::eMapBrdf ) );
 
 			if ( VisibilityResolvePass::useCompute() )
 			{
 				writes.push_back( makeDescriptorWrite( technique.getMaterialsCounts()
-					, InOutBindings::eMaterialsCounts
-					, 0u
-					, technique.getMaterialsCounts().getCount() ) );
+					, InOutBindings::eMaterialsCounts ) );
 				writes.push_back( makeDescriptorWrite( technique.getMaterialsStarts()
-					, InOutBindings::eMaterialsStarts
-					, 0u
-					, technique.getMaterialsStarts().getCount() ) );
+					, InOutBindings::eMaterialsStarts ) );
 				writes.push_back( makeDescriptorWrite( technique.getPixelXY()
-					, InOutBindings::ePixelsXY
-					, 0u
-					, technique.getPixelXY().getCount() ) );
-				writes.push_back( makeImageViewDescriptorWrite( graph.createImageView( targetImage.front() )
+					, InOutBindings::ePixelsXY ) );
+				writes.push_back( makeImageViewDescriptorWrite( graph.createImageView( targetImage.getSampledViewId() )
 					, InOutBindings::eOutResult ) );
-				writes.push_back( makeImageViewDescriptorWrite( technique.getScattering().sampledView
+				writes.push_back( makeImageViewDescriptorWrite( technique.getScattering().getTargetView()
 					, InOutBindings::eOutScattering ) );
 			}
 
@@ -1727,7 +1713,7 @@ namespace c3d
 
 			if ( ssao )
 			{
-				bindTexture( ssao->wholeView
+				bindTexture( ssao->getSampledView()
 					, *ssao->sampler
 					, writes
 					, index );
@@ -1743,7 +1729,7 @@ namespace c3d
 					, index );
 			}
 
-			bindTexture( scene.getEnvironmentMap().getColourId().sampledView
+			bindTexture( scene.getEnvironmentMap().getColourId().getSampledView()
 				, *scene.getEnvironmentMap().getColourId().sampler
 				, writes
 				, index );
@@ -1752,7 +1738,7 @@ namespace c3d
 			{
 				RenderNodesPass::addBackgroundDescriptor( *background
 					, writes
-					, targetImage
+					, &targetImage
 					, index );
 			}
 
@@ -1897,12 +1883,12 @@ namespace c3d
 
 		static ashes::DescriptorSetPtr createVtxDescriptorSet( String const & name
 			, ashes::DescriptorSetPool const & pool
-			, ashes::BufferBase const & positionsBuffer
+			, BufferBase const & positionsBuffer
 			, VkDeviceSize offset
 			, VkDeviceSize range )
 		{
 			ashes::WriteDescriptorSetArray writes;
-			writes.emplace_back( makeDescriptorWrite( positionsBuffer, VtxBindings::eInPosition, offset, range ) );
+			writes.emplace_back( makeDescriptorWrite( positionsBuffer.getBuffer(), VtxBindings::eInPosition, offset, range ) );
 			auto result = pool.createDescriptorSet( toUtf8( name ) + "Vtx"
 				, Sets::eVtx );
 			result->setBindings( c3d::move( writes ) );
@@ -1915,86 +1901,86 @@ namespace c3d
 			, bool isMeshShading
 			, ashes::DescriptorSetPool const & pool
 			, ObjectBufferPool::ModelBuffers const & modelBuffers
-			, ashes::BufferBase const * indexBuffer )
+			, BufferBase const * indexBuffer )
 		{
 			ashes::WriteDescriptorSetArray writes;
 
 			if ( isMeshShading )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eMeshlets )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInMeshlets, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInMeshlets, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableIndices() )
 			{
 				CU_Require( indexBuffer );
-				writes.emplace_back( makeDescriptorWrite( *indexBuffer, VtxBindings::eInIndices, 0u, indexBuffer->getSize() ) );
+				writes.emplace_back( makeDescriptorWrite( indexBuffer->getBuffer(), VtxBindings::eInIndices, 0u, indexBuffer->getSize() ) );
 			}
 
 			if ( flags.enablePosition() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::ePositions )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInPosition, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInPosition, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableNormal() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eNormals )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInNormal, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInNormal, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTangentSpace() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTangents )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTangent, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTangent, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableBitangent() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eBitangents )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInBitangent, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInBitangent, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTexcoord0() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords0 )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTexcoord0, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTexcoord0, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTexcoord1() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords1 )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTexcoord1, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTexcoord1, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTexcoord2() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords2 )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTexcoord2, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTexcoord2, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTexcoord3() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords3 )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTexcoord3, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInTexcoord3, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableColours() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eColours )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInColour, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInColour, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enablePassMasks() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::ePassMasks )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInPassMasks, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInPassMasks, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableVelocity() )
 			{
 				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eVelocity )]->getBuffer();
-				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInVelocity, 0u, buffer.getSize() ) );
+				writes.emplace_back( makeDescriptorWrite( buffer.getBuffer(), VtxBindings::eInVelocity, 0u, buffer.getSize() ) );
 			}
 
 			auto result = pool.createDescriptorSet( toUtf8( name ) + "Vtx"
@@ -2006,7 +1992,7 @@ namespace c3d
 
 		static ashes::RenderPassPtr createRenderPass( RenderDevice const & device
 			, String const & name
-			, crg::ImageViewIdArray const & targetImage
+			, crg::ImageViewId targetImage
 			, Texture const * scattering
 			, bool first
 			, DeferredLightingFilter deferredLighting )
@@ -2028,7 +2014,7 @@ namespace c3d
 				: VK_ACCESS_SHADER_READ_BIT );
 			ashes::VkAttachmentDescriptionArray attaches;
 			attaches.emplace_back( VkAttachmentDescription{ 0u
-				, convert( targetImage.front().data->info.format )
+				, convert( getFormat( targetImage ) )
 				, VK_SAMPLE_COUNT_1_BIT
 				, VK_ATTACHMENT_LOAD_OP_LOAD
 				, VK_ATTACHMENT_STORE_OP_STORE
@@ -2085,17 +2071,14 @@ namespace c3d
 		static ashes::FrameBufferPtr createFrameBuffer( ashes::RenderPass const & renderPass
 			, String const & name
 			, crg::RunnableGraph & graph
-			, crg::ImageViewIdArray const & targetImage
+			, crg::ImageViewId targetImage
 			, Texture const * scattering )
 		{
 			ashes::VkImageViewArray fbAttaches;
-			auto extent = getExtent( targetImage.front() );
-			fbAttaches.emplace_back( graph.createImageView( targetImage.front() ) );
-
+			auto extent = getExtent( targetImage );
+			fbAttaches.emplace_back( graph.createImageView( targetImage ) );
 			if ( scattering )
-			{
-				fbAttaches.emplace_back( scattering->targetView );
-			}
+				fbAttaches.emplace_back( scattering->getTargetView() );
 
 			return renderPass.createFrameBuffer( toUtf8( name )
 				, makeVkStruct< VkFramebufferCreateInfo >( 0u
@@ -2168,8 +2151,8 @@ namespace c3d
 		, String const & category
 		, String const & name
 		, RenderNodesPass const & nodesPass
-		, crg::ImageViewIdArray targetImage
-		, crg::ImageViewIdArray targetDepth
+		, Texture & targetImage
+		, Texture & targetDepth
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: Named{ category + cuT( "/" ) + name }
@@ -2188,8 +2171,8 @@ namespace c3d
 		, m_nodesPass{ nodesPass }
 		, m_cameraUbo{ renderPassDesc.base().m_cameraUbo }
 		, m_sceneUbo{ *renderPassDesc.base().m_sceneUbo }
-		, m_targetImage{ c3d::move( targetImage ) }
-		, m_targetDepth{ c3d::move( targetDepth ) }
+		, m_targetImage{ targetImage }
+		, m_targetDepth{ targetDepth }
 		, m_ssaoConfig{ techniquePassDesc.m_ssaoConfig }
 		, m_ssao{ techniquePassDesc.m_ssao }
 		, m_deferredLightingFilter{ renderPassDesc.m_deferredLightingFilter }
@@ -2197,10 +2180,10 @@ namespace c3d
 		, m_onNodesPassSort( m_nodesPass.onSortNodes.connect( [this]( NodesPass const & ){ m_commandsChanged = true; } ) )
 		, m_renderPass{ ( useCompute()
 			? nullptr
-			: visres::createRenderPass( m_device, getName(), m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr, true, m_deferredLightingFilter ) ) }
+			: visres::createRenderPass( m_device, getName(), m_targetImage.getTargetViewId(), m_outputScattering ? &parent->getScattering() : nullptr, true, m_deferredLightingFilter ) ) }
 		, m_framebuffer{ ( useCompute()
 			? nullptr
-			: visres::createFrameBuffer( *m_renderPass, getName(), graph, m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr ) ) }
+			: visres::createFrameBuffer( *m_renderPass, getName(), graph, m_targetImage.getTargetViewId(), m_outputScattering ? &parent->getScattering() : nullptr ) ) }
 		, m_clustersConfig{ techniquePassDesc.m_clustersConfig }
 	{
 	}
@@ -2247,7 +2230,7 @@ namespace c3d
 				auto & pipeline = doCreatePipeline( pipelineFlags );
 				auto it = m_activePipelines.try_emplace( &pipeline ).first;
 
-				auto hash = std::hash< ashes::BufferBase const * >{}( posBuffer );
+				auto hash = std::hash< BufferBase const * >{}( posBuffer );
 				hash = hashCombine( hash, idxBuffer );
 				auto [pit, res] = pipeline.vtxDescriptorSets.try_emplace( hash );
 
@@ -2304,7 +2287,7 @@ namespace c3d
 						{
 							pit->second = visres::createVtxDescriptorSet( getName()
 								, *pipeline.vtxDescriptorPool
-								, positionsBuffer.getBuffer().getBuffer()
+								, positionsBuffer.getBuffer()
 								, positionsBuffer.getOffset()
 								, positionsBuffer.getSize() );
 						}
@@ -2504,7 +2487,7 @@ namespace c3d
 						, 0u
 						, sizeof( visres::PushData )
 						, &pushData );
-					context.getContext().vkCmdDispatchIndirect( commandBuffer, getTechnique().getMaterialsIndirectCounts(), pushData.pipelineId * sizeof( Point3ui ) );
+					context.getContext().vkCmdDispatchIndirect( commandBuffer, *getTechnique().getMaterialsIndirectCounts().buffer, pushData.pipelineId * sizeof( Point3ui ) );
 					++m_drawCalls;
 				}
 			}
@@ -2536,7 +2519,7 @@ namespace c3d
 					, descriptorSets.data()
 					, 0u
 					, nullptr );
-				context.getContext().vkCmdDispatchIndirect( commandBuffer, getTechnique().getMaterialsIndirectCounts(), pushData.pipelineId * sizeof( Point3ui ) );
+				context.getContext().vkCmdDispatchIndirect( commandBuffer, *getTechnique().getMaterialsIndirectCounts().buffer, pushData.pipelineId * sizeof( Point3ui ) );
 				++m_drawCalls;
 			}
 		}
@@ -2633,7 +2616,7 @@ namespace c3d
 		}
 
 		context.getContext().vkCmdEndRenderPass( commandBuffer );
-		context.setLayoutState( m_targetImage.front()
+		context.setLayoutState( m_targetImage.getTargetViewId()
 			, makeLayoutState( ImageLayout::eColorAttachment ) );
 	}
 

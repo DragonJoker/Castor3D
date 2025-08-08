@@ -23,6 +23,7 @@
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
 #include "Castor3D/Render/GlobalIllumination/ReflectiveShadowMaps/ReflectiveShadowMaps.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp"
+#include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Render/Opaque/ComputeDiffusionProfilesPass.hpp"
 #include "Castor3D/Render/Opaque/OpaqueRendering.hpp"
@@ -46,6 +47,7 @@
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
@@ -142,29 +144,21 @@ namespace c3d
 					{
 					case GlobalIlluminationType::eRsm:
 						if ( reflectiveShadowMaps )
-						{
 							reflectiveShadowMaps->registerLight( updater.light );
-						}
 						break;
 					case GlobalIlluminationType::eLpv:
 						if ( lightPropagationVolumes[size_t( type )] )
-						{
 							lightPropagationVolumes[size_t( type )]->registerLight( updater.light );
-						}
 						break;
 					case GlobalIlluminationType::eLpvG:
 						if ( lightPropagationVolumesG[size_t( type )] )
-						{
 							lightPropagationVolumesG[size_t( type )]->registerLight( updater.light );
-						}
 						break;
 					case GlobalIlluminationType::eLayeredLpv:
 						if ( shadowMap.getEngine()->getRenderSystem()->hasLLPV() )
 						{
 							if ( layeredLightPropagationVolumes[size_t( type )] )
-							{
 								layeredLightPropagationVolumes[size_t( type )]->registerLight( updater.light );
-							}
 						}
 						else if ( lightPropagationVolumes[size_t( type )] )
 						{
@@ -175,9 +169,7 @@ namespace c3d
 						if ( shadowMap.getEngine()->getRenderSystem()->hasLLPV() )
 						{
 							if ( layeredLightPropagationVolumesG[size_t( type )] )
-							{
 								layeredLightPropagationVolumesG[size_t( type )]->registerLight( updater.light );
-							}
 						}
 						else if ( lightPropagationVolumesG[size_t( type )] )
 						{
@@ -230,28 +222,17 @@ namespace c3d
 						, graph
 						, { crg::defaultV< InitialiseCallback >
 							, GetPipelineStateCallback( [](){ return crg::getPipelineState( PipelineStageFlags::eTransfer ); } )
-							, [this]( crg::RecordContext &, VkCommandBuffer cb, uint32_t ){ doRecordInto( cb ); } } }
+							, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); } } }
 				{
 				}
 
 			protected:
-				void doRecordInto( VkCommandBuffer commandBuffer )const
+				void doRecordInto( crg::RecordContext & recContext
+					, VkCommandBuffer commandBuffer
+					, uint32_t index )const
 				{
-					auto clearValue = convert( transparentBlackClearColor );
-
-					for ( auto & attach : m_pass.images )
-					{
-						auto view = attach.view();
-						auto image = m_graph.createImage( view.data->image );
-						auto subresourceRange = convert( view.data->info.subresourceRange );
-						assert( attach.isTransferOutputView() );
-						m_context.vkCmdClearColorImage( commandBuffer
-							, image
-							, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-							, &clearValue
-							, 1u
-							, &subresourceRange );
-					}
+					for ( auto [_, attach] : m_pass.outputs )
+						recContext.clearAttachment( commandBuffer, attach->view( index ), transparentBlackClearColor, ImageLayout::eUndefined );
 				}
 			};
 
@@ -270,16 +251,12 @@ namespace c3d
 				} );
 
 			for ( auto & texture : lpvResult )
-			{
-				pass.addTransferOutputView( texture->wholeViewId );
-			}
+				texture->setLastAttach( pass.addOutputTransferImage( texture->getWholeViewId() ) );
 
 			for ( auto & textures : llpvResult )
 			{
 				for ( auto & texture : *textures )
-				{
-					pass.addTransferOutputView( texture->wholeViewId );
-				}
+					texture->setLastAttach( pass.addOutputTransferImage( texture->getWholeViewId() ) );
 			}
 
 			return result;
@@ -320,8 +297,7 @@ namespace c3d
 	RenderTechnique::RenderTechnique( String const & name
 		, RenderTarget & renderTarget
 		, RenderDevice const & device
-		, Texture const & colour
-		, crg::FramePassArray previousPasses
+		, Texture & colour
 		, ProgressBar * progress
 		, bool visbuffer
 		, bool weightedBlended )
@@ -398,8 +374,7 @@ namespace c3d
 				, *m_renderTarget.getScene()
 				, *m_renderTarget.getCamera()
 				, m_vctConfigUbo
-				, m_renderTarget.getScene()->getVoxelConeTracingConfig()
-				, previousPasses )
+				, m_renderTarget.getScene()->getVoxelConeTracingConfig() )
 			: nullptr ) }
 		, m_rsmResult{ ( m_shadowBuffer
 			? makeUnique< Texture >( m_device
@@ -433,38 +408,6 @@ namespace c3d
 			, ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->needsGlobalIllumination() ) ? &m_llpvResult : nullptr )
 			, ( m_voxelizer ? &m_voxelizer->getFirstBounce() : nullptr )
 			, ( m_voxelizer ? &m_voxelizer->getSecondaryBounce() : nullptr ) }
-		, m_prepass{ *this
-			, m_device
-			, doCreateRenderPasses( TechniquePassEvent::eBeforeDepth, &m_renderTarget.createVertexTransformPass( m_graph ), c3d::move( previousPasses ) )
-			, progress
-			, visbuffer }
-		, m_lastDepthPass{ &m_prepass.getLastPass() }
-		, m_depthRangePass{ &m_prepass.getDepthRangePass() }
-		, m_clustersLastPass{ ( m_renderTarget.getFrustumClusters() && m_renderTarget.getClustersConfig().enabled
-			? &m_renderTarget.getFrustumClusters()->createFramePasses( m_graph
-				, m_depthRangePass
-				, *this
-				, getRenderUbo()
-				, m_clustersFlagsPass )
-			: nullptr ) }
-		, m_background{ doCreateBackgroundPass( progress ) }
-		, m_computeDiffusionProfiles{ &createComputeDiffusionProfilesPass( m_graph
-			, doCreateRenderPasses( TechniquePassEvent::eBeforeOpaque, &m_background->getPass() )
-			, m_device
-			, getEngine()->getMaterialCache().getSssProfileBuffer() ) }
-		, m_opaque{ *this
-			, m_device
-			, m_prepass
-			, { m_computeDiffusionProfiles }
-			, progress }
-		, m_lastOpaquePass{ &m_opaque.getLastPass() }
-		, m_transparent{ *this
-			, m_device
-			, m_opaque
-			, doCreateRenderPasses(  TechniquePassEvent::eBeforeTransparent, &m_opaque.getLastPass() )
-			, progress
-			, weightedBlended }
-		, m_lastTransparentPass{ &m_transparent.getLastPass() }
 		, m_clearLpvGraph{ ( m_shadowBuffer
 			? rendtech::doCreateClearLpvCommands( m_renderTarget.getResources(), progress, getName(), *m_lpvResult, m_llpvResult )
 			: crg::FrameGraph{ m_renderTarget.getResources().getHandler(), toUtf8( getName() ) + "/ClearLpv" } ) }
@@ -472,6 +415,29 @@ namespace c3d
 			? m_clearLpvGraph.compile( m_device.makeContext() )
 			: nullptr ) }
 	{
+		m_renderTarget.createVertexTransformPass( m_graph );
+		doCreateRenderPasses( TechniquePassEvent::eBeforeDepth );
+		m_prepass = makeRawUnique< PrepassRendering >( *this
+			, m_device
+			, progress
+			, visbuffer );
+		if ( m_renderTarget.getFrustumClusters() && m_renderTarget.getClustersConfig().enabled )
+			m_renderTarget.getFrustumClusters()->createFramePasses( m_graph, *this, getRenderUbo() );
+		m_background = doCreateBackgroundPass( progress );
+		createComputeDiffusionProfilesPass( m_graph
+			, m_device
+			, getEngine()->getMaterialCache().getSssProfileBuffer()
+			, getEngine()->getMaterialCache().getSssProfileBuffer().getDiffusionProfilesImage() );
+		m_opaque = makeRawUnique< OpaqueRendering >( *this
+			, m_device
+			, *m_prepass
+			, progress );
+		doCreateRenderPasses( TechniquePassEvent::eBeforeTransparent );
+		m_transparent = makeRawUnique< TransparentRendering >( *this
+			, m_device
+			, *m_opaque
+			, progress
+			, weightedBlended );
 		m_renderTarget.getFrustumClusters()->createDebugDisplayPrograms( getCameraUbo() );
 
 		if ( m_clearLpvRunnable )
@@ -485,7 +451,7 @@ namespace c3d
 			m_renderTarget.getGraph().addDependency( m_voxelizer->getGraph() );
 		}
 
-		doCreateRenderPasses( TechniquePassEvent::eBeforePostEffects, &m_transparent.getLastPass() );
+		doCreateRenderPasses( TechniquePassEvent::eBeforePostEffects );
 
 		m_depth.create();
 		m_normal.create();
@@ -530,6 +496,10 @@ namespace c3d
 			getEngine()->unregisterTimer( makeString( m_clearLpvRunnable->getName() )
 				, m_clearLpvRunnable->getTimer() );
 		}
+
+		m_transparent.reset();
+		m_opaque.reset();
+		m_prepass.reset();
 
 		m_llpvResult.clear();
 		m_lpvResult.reset();
@@ -596,12 +566,7 @@ namespace c3d
 			{
 				renderPass.update( updater );
 			} );
-		m_prepass.update( updater );
-
-		if ( m_clustersFlagsPass )
-		{
-			m_clustersFlagsPass->update( updater );
-		}
+		m_prepass->update( updater );
 
 		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeBackground )]
 			, [&updater]( RenderTechniquePass & renderPass )
@@ -620,14 +585,14 @@ namespace c3d
 			{
 				renderPass.update( updater );
 			} );
-		m_opaque.update( updater );
+		m_opaque->update( updater );
 
 		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeTransparent )]
 			, [&updater]( RenderTechniquePass & renderPass )
 			{
 				renderPass.update( updater );
 			} );
-		m_transparent.update( updater );
+		m_transparent->update( updater );
 
 		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforePostEffects )]
 			, [&updater]( RenderTechniquePass & renderPass )
@@ -657,9 +622,9 @@ namespace c3d
 			scene.getEnvironmentMap().update( updater );
 		}
 
-		m_prepass.update( updater );
-		m_opaque.update( updater );
-		m_transparent.update( updater );
+		m_prepass->update( updater );
+		m_opaque->update( updater );
+		m_transparent->update( updater );
 	}
 
 	SemaphoreWaitArray RenderTechnique::preRender( SemaphoreWaitArray const & toWait
@@ -678,11 +643,11 @@ namespace c3d
 	{
 		visitor.visit( cuT( "Technique Colour" )
 			, *m_colour
-			, m_renderTarget.getGraph().getFinalLayoutState( m_colour->sampledViewId ).layout
+			, m_renderTarget.getGraph().getFinalLayoutState( m_colour->getSampledViewId() ).layout
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( cuT( "Technique Depth" )
 			, m_depth
-			, m_renderTarget.getGraph().getFinalLayoutState( m_depth.sampledViewId ).layout
+			, m_renderTarget.getGraph().getFinalLayoutState( m_depth.getSampledViewId() ).layout
 			, TextureFactors{}.invert( true ) );
 
 		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeDepth )]
@@ -690,7 +655,7 @@ namespace c3d
 			{
 				renderPass.accept( visitor );
 			} );
-		m_prepass.accept( visitor );
+		m_prepass->accept( visitor );
 
 		if ( m_voxelizer )
 		{
@@ -707,14 +672,14 @@ namespace c3d
 			{
 				renderPass.accept( visitor );
 			} );
-		m_opaque.accept( visitor );
+		m_opaque->accept( visitor );
 
 		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeTransparent )]
 			, [&visitor]( RenderTechniquePass & renderPass )
 			{
 				renderPass.accept( visitor );
 			} );
-		m_transparent.accept( visitor );
+		m_transparent->accept( visitor );
 
 		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforePostEffects )]
 			, [&visitor]( RenderTechniquePass & renderPass )
@@ -777,16 +742,6 @@ namespace c3d
 		}
 	}
 
-	crg::FramePass const & RenderTechnique::getLastPass()const
-	{
-		if ( !m_renderPasses[size_t( TechniquePassEvent::eBeforePostEffects )].empty() )
-		{
-			return m_renderPasses[size_t( TechniquePassEvent::eBeforePostEffects )].back()->getPass();
-		}
-
-		return m_transparent.getLastPass();
-	}
-
 	SsaoConfig const & RenderTechnique::getSsaoConfig()const
 	{
 		return m_renderTarget.getSsaoConfig();
@@ -797,6 +752,11 @@ namespace c3d
 		return m_renderTarget.getSsaoConfig();
 	}
 
+	Texture & RenderTechnique::getVelocity()const
+	{
+		return m_renderTarget.getVelocity();
+	}
+
 	ClustersConfig const * RenderTechnique::getClustersConfig()const
 	{
 		return &m_renderTarget.getClustersConfig();
@@ -804,12 +764,25 @@ namespace c3d
 
 	Texture const & RenderTechnique::getSsaoResult()const
 	{
-		return m_opaque.getSsaoResult();
+		return m_opaque->getSsaoResult();
 	}
 
 	Texture const & RenderTechnique::getSssDiffuse()const
 	{
-		return m_opaque.getSssDiffuse();
+		return m_opaque->getSssDiffuse();
+	}
+
+	Texture const & RenderTechnique::getDiffusionProfiles()const
+	{
+		auto const & engine = *m_renderTarget.getOwner();
+		auto const & matCache = engine.getMaterialCache();
+		return matCache.getSssProfileBuffer().getDiffusionProfilesImage();
+	}
+
+	crg::Attachment const & RenderTechnique::getVertexTransform()const
+	{
+		auto const & scene = *m_renderTarget.getScene();
+		return scene.getRenderNodes().getVertexTransform();
 	}
 
 	TechniquePassVector RenderTechnique::getCustomRenderPasses()const
@@ -834,7 +807,7 @@ namespace c3d
 
 	bool RenderTechnique::isOpaqueEnabled()const
 	{
-		return m_opaque.isEnabled();
+		return m_opaque->isEnabled();
 	}
 
 	DebugConfig & RenderTechnique::getDebugConfig()const
@@ -862,21 +835,14 @@ namespace c3d
 		return m_renderTarget.getSceneUbo();
 	}
 
-	crg::FramePassArray RenderTechnique::doCreateRenderPasses( TechniquePassEvent event
-		, crg::FramePass const * previousPass
-		, crg::FramePassArray previousPasses )
+	crg::FramePassArray RenderTechnique::doCreateRenderPasses( TechniquePassEvent event )
 	{
 		crg::FramePassArray result;
-		result.push_back( previousPass );
-		result.insert( result.end(), previousPasses.begin(), previousPasses.end() );
 
 		for ( auto renderPassInfo : getEngine()->getRenderPassInfos( event ) )
 		{
-			result = renderPassInfo->create( m_device
-				, *this
-				, m_renderPasses
-				, m_renderTarget.getResources()
-				, c3d::move( result ) );
+			result = renderPassInfo->create( m_device, *this
+				, m_renderPasses, m_renderTarget.getResources() );
 		}
 
 		return result;
@@ -884,19 +850,9 @@ namespace c3d
 
 	BackgroundRendererUPtr RenderTechnique::doCreateBackgroundPass( ProgressBar * progress )
 	{
-		auto previousPasses = doCreateRenderPasses( TechniquePassEvent::eBeforeBackground
-			, &m_prepass.getLastPass() );
-
-		if ( m_clustersLastPass )
-		{
-			previousPasses.push_back( m_clustersLastPass );
-		}
-
 		auto & graph = m_graph.createPassGroup( "Background" );
-		graph.addGroupOutput( getTargetResult().front() );
-		graph.addGroupOutput( getTargetResult().back() );
+		graph.addGroupOutput( getTargetResult().getWholeViewId() );
 		auto result = makeUnique< BackgroundRenderer >( graph
-			, previousPasses
 			, m_device
 			, progress
 			, *m_renderTarget.getScene()->getBackground()
@@ -906,8 +862,8 @@ namespace c3d
 			, true /*clearColour*/
 			, false /*clearDepth*/
 			, false /*forceVisible*/
-			, getTargetDepth()
-			, &m_prepass.getDepthObj().sampledViewId );
+			, &getTargetDepth()
+			, &m_prepass->getDepthObj() );
 
 		return result;
 	}
@@ -920,13 +876,13 @@ namespace c3d
 		if ( needRsm && !m_reflectiveShadowMaps )
 		{
 			m_rsmResult->create();
-			m_reflectiveShadowMaps = makeUnique< ReflectiveShadowMaps >( getOwner()->getGraphResourceHandler()
+			m_reflectiveShadowMaps = makeUnique< ReflectiveShadowMaps >( getResources()
 				, scene
 				, m_device
 				, getCameraUbo()
 				, *m_shadowBuffer
-				, m_prepass.getDepthObj().sampledViewId
-				, m_normal.sampledViewId
+				, m_prepass->getDepthObj()
+				, m_normal
 				, m_allShadowMaps[size_t( LightType::eDirectional )].front().first.get().getShadowPassResult( false )
 				, m_allShadowMaps[size_t( LightType::ePoint )].front().first.get().getShadowPassResult( false )
 				, m_allShadowMaps[size_t( LightType::eSpot )].front().first.get().getShadowPassResult( false )

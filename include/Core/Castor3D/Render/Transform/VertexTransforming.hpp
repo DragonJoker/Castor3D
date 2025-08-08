@@ -19,16 +19,20 @@ namespace c3d
 		: public OwnedBy< Scene const >
 	{
 	public:
-		C3D_API VertexTransforming( Scene const & scene
+		C3D_API VertexTransforming( Scene & scene
 			, RenderDevice const & device );
 
-		C3D_API crg::FramePass const & createPass( crg::FramePassGroup & graph
-			, crg::FramePass const * previousPass = nullptr );
+		C3D_API void createPass( crg::FramePassGroup & graph );
 
 		C3D_API void registerNode( SubmeshRenderNode const & node
 			, GpuBufferOffsetT< Point4f > const & morphTargets
 			, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights
 			, GpuBufferOffsetT< SkinningTransformsConfiguration > const & skinTransforms );
+
+		crg::Attachment const & getResultAttach()const
+		{
+			return *m_result;
+		}
 
 	private:
 		TransformPipeline const & doGetPipeline( uint32_t index );
@@ -58,6 +62,9 @@ namespace c3d
 		Vector< PendingNode > m_pending;
 		VertexTransformingPass * m_pass{};
 		MeshletBoundsTransformingPass * m_boundsPass{};
+		crg::BufferId m_buffer;
+		crg::BufferViewId m_bufferView;
+		crg::Attachment const * m_result{};
 	};
 }
 

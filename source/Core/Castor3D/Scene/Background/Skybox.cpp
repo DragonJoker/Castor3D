@@ -424,7 +424,7 @@ namespace c3d
 	{
 		m_texture = makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
 			, skybox::doGetImageCreate( PixelFormat::eR8G8B8A8_UNORM, { 16u, 16u }, false )
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, MemoryPropertyFlags::eDeviceLocal
 			, cuT( "SkyboxBackground_Colour" )
 			, true /* isStatic */ );
 	}
@@ -509,7 +509,7 @@ namespace c3d
 			, ( ImageUsageFlags::eSampled | ImageUsageFlags::eTransferDst ) };
 		m_equiTexture = makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
 			, c3d::move( image )
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, MemoryPropertyFlags::eDeviceLocal
 			, cuT( "SkyboxBackgroundEquirectangular" ) );
 		m_equiTexture->setSource( folder, relative );
 
@@ -600,10 +600,10 @@ namespace c3d
 	}
 
 	void SkyboxBackground::doAddPassBindings( crg::FramePass & pass
-		, crg::ImageViewIdArray const & targetImage
+		, Texture * targetImage
 		, uint32_t & index )const
 	{
-		pass.addSampledView( m_textureId.wholeViewId
+		pass.addInputSampledImage( m_textureId.getWholeViewId()
 			, index
 			, crg::SamplerDesc{ FilterMode::eLinear
 				, FilterMode::eLinear
@@ -622,10 +622,10 @@ namespace c3d
 	}
 
 	void SkyboxBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
-		, crg::ImageViewIdArray const & targetImage
+		, Texture * targetImage
 		, uint32_t & index )const
 	{
-		bindTexture( m_textureId.wholeView
+		bindTexture( m_textureId.getSampledView()
 			, *m_textureId.sampler
 			, descriptorWrites
 			, index );
@@ -679,7 +679,7 @@ namespace c3d
 		m_texture = makeUnique< TextureLayout >( device.renderSystem
 			, cuT( "SkyboxBackgroundLayerCube" )
 			, *m_textureId.image
-			, m_textureId.wholeViewId );
+			, m_textureId.getWholeViewId() );
 		m_needsUpload = true;
 	}
 
@@ -692,9 +692,7 @@ namespace c3d
 			auto & image = m_equiTexture->getImage();
 			auto & texture = m_equiTexture->getTexture();
 			InstantDirectUploadData upload{ *queueData.queue
-				, device
-				, image.getName()
-				, *queueData.commandPool };
+				, device, image.getName() + cuT( "/Upload" ), *queueData.commandPool };
 			upload->pushUpload( image.getPxBuffer().getConstPtr()
 				, image.getPxBuffer().getSize()
 				, texture
@@ -722,7 +720,7 @@ namespace c3d
 			m_texture = makeUnique< TextureLayout >( device.renderSystem
 				, cuT( "SkyboxBackgroundEquiCube" )
 				, *m_textureId.image
-				, m_textureId.wholeViewId );
+				, m_textureId.getWholeViewId() );
 		}
 
 		transformEquirectangularToCube( *m_equiTexture, *m_texture, device, queueData );

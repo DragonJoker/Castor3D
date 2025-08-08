@@ -245,7 +245,7 @@ namespace atmosphere_scattering
 			return settings.cameraData->objProjToWorld( clipSpace );
 		}
 
-		void setTransmittanceMap( sdw::CombinedImage2DRgba32 const & value )
+		void setTransmittanceMap( sdw::CombinedImage2DRgba16 const & value )
 		{
 			transmittanceTexture = &value;
 		}
@@ -267,7 +267,7 @@ namespace atmosphere_scattering
 			, sdw::Float const & tMaxMax = sdw::Float{ 9000000.0_f } );
 		sdw::RetBoolean moveToTopAtmosphere( Ray & ray );
 		sdw::RetVec3 getSunRadiance( sdw::Vec3 const & sunDir
-			, sdw::CombinedImage2DRgba32 const & transmittanceMap );
+			, sdw::CombinedImage2DRgba16 const & transmittanceMap );
 		sdw::RetFloat getPlanetShadow( sdw::Vec3 const & planetO
 			, sdw::Vec3 const & position );
 
@@ -343,7 +343,7 @@ namespace atmosphere_scattering
 		Settings settings;
 		c3d::Extent2D transmittanceExtent{};
 		sdw::Float planetRadiusOffset;
-		sdw::CombinedImage2DRgba32 const * transmittanceTexture{};
+		sdw::CombinedImage2DRgba16 const * transmittanceTexture{};
 		sdw::CombinedImage2DRgba32 const * multiScatTexture{};
 		c3d::shader::Shadow * shadows;
 
@@ -408,7 +408,7 @@ namespace atmosphere_scattering
 			, sdw::InFloat > m_getMultipleScattering;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
-			, sdw::InCombinedImage2DRgba32 > m_getSunRadiance;
+			, sdw::InCombinedImage2DRgba16 > m_getSunRadiance;
 		sdw::Function< sdw::Float
 			, sdw::InVec3
 			, sdw::InVec3 > m_getPlanetShadow;

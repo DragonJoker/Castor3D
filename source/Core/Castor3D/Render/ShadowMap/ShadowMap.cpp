@@ -67,7 +67,7 @@ namespace c3d
 			, ImageLayout finalLayout
 			, ClearValue const & clearValue )
 		{
-			auto subresourceRange = convert( texture.wholeViewId.data->info.subresourceRange );
+			auto subresourceRange = convert( texture.getWholeViewId().data->info.subresourceRange );
 			auto transferBarrier = makeVkStruct< VkImageMemoryBarrier >( 0u
 				, VkAccessFlags( VK_ACCESS_TRANSFER_WRITE_BIT )
 				, VK_IMAGE_LAYOUT_UNDEFINED
@@ -115,7 +115,7 @@ namespace c3d
 				, VK_QUEUE_FAMILY_IGNORED
 				, VK_QUEUE_FAMILY_IGNORED
 				, *texture.image
-				, convert( texture.wholeViewId.data->info.subresourceRange ) );
+				, convert( texture.getWholeViewId().data->info.subresourceRange ) );
 			device->vkCmdPipelineBarrier( commandBuffer
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
 				, getPipelineStageFlags( getStageMask( finalLayout ) )
@@ -200,26 +200,20 @@ namespace c3d
 		auto rsm = updater.light->needsRsmShadowMaps()
 			&& !updater.scene->getVoxelConeTracingConfig().enabled;
 		m_passesIndex = shdmap::getPassesIndex( vsm, rsm );
-		m_renderUbo->cpuUpdate( HdrConfig{}, makeSize( m_result[SmTexture::eDepth].getExtent() ), false, 0u );
+		m_renderUbo->cpuUpdate( HdrConfig{}, makeSize( m_result.getExtent() ), false, 0u );
 		auto & myPasses = m_passes[m_passesIndex];
 
 		if ( updater.index < doGetMaxCount()
 			&& updater.index >= myPasses.otherNodes.runnables.size() )
 		{
 			auto graph = makeRawUnique< crg::FrameGraph >( m_resources.getHandler(), toUtf8( m_name ) + "SM" );
-			auto previous = doCreatePasses( *graph
-				, crg::FramePassArray{}
+			doCreatePasses( *graph
 				, updater.index
-				, vsm
-				, rsm
-				, true
+				, vsm, rsm, true
 				, myPasses.staticNodes );
 			doCreatePasses( *graph
-				, previous
 				, updater.index
-				, vsm
-				, rsm
-				, false
+				, vsm, rsm, false
 				, myPasses.otherNodes );
 			myPasses.staticNodes.graphs.emplace_back( nullptr );
 			myPasses.otherNodes.graphs.emplace_back( c3d::move( graph ) );
@@ -241,14 +235,14 @@ namespace c3d
 		for ( uint32_t i = 1u; i < uint32_t( SmTexture::eCount ); ++i )
 		{
 			uint32_t index = 0u;
-			auto & result = m_result[SmTexture( i )];
+			auto & result = m_result.getTexture( SmTexture( i ) );
 
-			for ( auto & view : result.subViewsId )
+			for ( auto & layerViews : result )
 			{
 				auto smTexture = SmTexture( i );
 				visitor.visit( m_name + cuT( "/" ) + getTexName( smTexture ) + cuT( "L" ) + string::toString( index )
-					, view
-					, ( isDepthOrStencilFormat( getFormat( view ) )
+					, layerViews.sampledViewId
+					, ( isDepthOrStencilFormat( result.getFormat() )
 						? ImageLayout::eDepthStencilAttachment
 						: ImageLayout::eShaderReadOnly )
 					, TextureFactors::tex2D( { 25.0, 25.0, 25.0 }, { -24.0, -24.0, -24.0 } )
@@ -298,35 +292,15 @@ namespace c3d
 	ashes::Sampler const & ShadowMap::getSampler( SmTexture texture
 		, uint32_t )const
 	{
-		return *m_result[texture].sampler;
+		return m_result.getSampler( texture );
 	}
 
-	crg::ImageViewId ShadowMap::getView( SmTexture texture
-		, uint32_t )const
-	{
-		return m_result[texture].wholeViewId;
-	}
-
-	crg::ImageViewIdArray ShadowMap::getViews( SmTexture texture
-		, uint32_t )const
-	{
-		return m_result[texture].subViewsId;
-	}
-
-	crg::FramePassArray ShadowMap::doCreatePasses( crg::FrameGraph & graph
-		, crg::FramePassArray const & previousPasses
-		, uint32_t index
-		, bool vsm
-		, bool rsm
-		, bool isStatic
+	void ShadowMap::doCreatePasses( crg::FrameGraph & graph
+		, uint32_t index, bool vsm, bool rsm, bool isStatic
 		, Passes & passes )
 	{
-		auto result = doCreatePass( graph.getDefaultGroup()
-			, previousPasses
-			, index
-			, vsm
-			, rsm
-			, isStatic
+		doCreatePass( graph.getDefaultGroup()
+			, index, vsm, rsm, isStatic
 			, passes );
 
 		if ( !isStatic )
@@ -342,8 +316,6 @@ namespace c3d
 		{
 			passes.runnables.push_back( nullptr );
 		}
-
-		return result;
 	}
 
 	void ShadowMap::doRegisterGraphIO( crg::FramePassGroup & graph
@@ -352,54 +324,48 @@ namespace c3d
 		, bool isStatic )const
 	{
 		auto & smResult = getShadowPassResult( isStatic );
-		auto & linear = smResult[SmTexture::eLinearDepth];
-		auto & variance = smResult[SmTexture::eVariance];
-		auto & normal = smResult[SmTexture::eNormal];
-		auto & position = smResult[SmTexture::ePosition];
-		auto & flux = smResult[SmTexture::eFlux];
 
 		if ( isStatic )
 		{
-			auto & depth = smResult[SmTexture::eDepth];
-			graph.addInput( depth.wholeViewId
+			graph.addInput( smResult.getWholeViewId( SmTexture::eDepth )
 				, crg::makeLayoutState( ImageLayout::eTransferSrc ) );
-			graph.addInput( linear.wholeViewId
+			graph.addInput( smResult.getWholeViewId( SmTexture::eLinearDepth )
 				, crg::makeLayoutState( ImageLayout::eTransferSrc ) );
 
 			if ( vsm )
 			{
-				graph.addInput( variance.wholeViewId
+				graph.addInput( smResult.getWholeViewId( SmTexture::eVariance )
 					, crg::makeLayoutState( ImageLayout::eTransferSrc ) );
 			}
 
 			if ( rsm )
 			{
-				graph.addInput( normal.wholeViewId
+				graph.addInput( smResult.getWholeViewId( SmTexture::eNormal )
 					, crg::makeLayoutState( ImageLayout::eTransferSrc ) );
-				graph.addInput( position.wholeViewId
+				graph.addInput( smResult.getWholeViewId( SmTexture::ePosition )
 					, crg::makeLayoutState( ImageLayout::eTransferSrc ) );
-				graph.addInput( flux.wholeViewId
+				graph.addInput( smResult.getWholeViewId( SmTexture::eFlux )
 					, crg::makeLayoutState( ImageLayout::eTransferSrc ) );
 			}
 		}
 		else
 		{
-			graph.addOutput( linear.wholeViewId
+			graph.addOutput( smResult.getWholeViewId( SmTexture::eLinearDepth )
 				, crg::makeLayoutState( ImageLayout::eShaderReadOnly ) );
 
 			if ( vsm )
 			{
-				graph.addOutput( variance.wholeViewId
+				graph.addOutput( smResult.getWholeViewId( SmTexture::eVariance )
 					, crg::makeLayoutState( ImageLayout::eShaderReadOnly ) );
 			}
 
 			if ( rsm )
 			{
-				graph.addOutput( normal.wholeViewId
+				graph.addOutput( smResult.getWholeViewId( SmTexture::eNormal )
 					, crg::makeLayoutState( ImageLayout::eShaderReadOnly ) );
-				graph.addOutput( position.wholeViewId
+				graph.addOutput( smResult.getWholeViewId( SmTexture::ePosition )
 					, crg::makeLayoutState( ImageLayout::eShaderReadOnly ) );
-				graph.addOutput( flux.wholeViewId
+				graph.addOutput( smResult.getWholeViewId( SmTexture::eFlux )
 					, crg::makeLayoutState( ImageLayout::eShaderReadOnly ) );
 			}
 		}

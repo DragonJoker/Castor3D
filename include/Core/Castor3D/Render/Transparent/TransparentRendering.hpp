@@ -42,7 +42,6 @@ namespace c3d
 		C3D_API TransparentRendering( RenderTechnique & parent
 			, RenderDevice const & device
 			, OpaqueRendering const & previous
-			, crg::FramePassArray const & previousPasses
 			, ProgressBar * progress
 			, bool weightedBlended );
 		/**
@@ -109,17 +108,12 @@ namespace c3d
 		*/
 		/**@{*/
 		C3D_API Engine * getEngine()const noexcept;
-		C3D_API crg::FramePass const & getLastPass()const noexcept;
 		/**@}*/
 
 	private:
-		crg::FramePass & doCreateMipGenPass( ProgressBar * progress
-			, crg::FramePass const & lastPass
-			, crg::FramePassArray previousPasses );
-		crg::FramePass & doCreateForwardTransparentPass( ProgressBar * progress
-			, crg::FramePass const & lastPass );
-		crg::FramePass & doCreateWBTransparentPass( ProgressBar * progress
-			, crg::FramePass const & lastPass );
+		void doCreateMipGenPass( ProgressBar * progress );
+		void doCreateForwardTransparentPass( ProgressBar * progress );
+		void doCreateWBTransparentPass( ProgressBar * progress );
 
 	private:
 		RenderDevice const & m_device;
@@ -127,8 +121,6 @@ namespace c3d
 		Texture m_mippedColour;
 		TransparentPassResultUPtr m_transparentPassResult;
 		bool m_enabled{};
-		crg::FramePass * m_mipgenPassDesc{};
-		crg::FramePass * m_transparentPassDesc{};
 		RenderTechniqueNodesPass * m_transparentPass{};
 		WeightedBlendRenderingUPtr m_weightedBlendRendering;
 	};

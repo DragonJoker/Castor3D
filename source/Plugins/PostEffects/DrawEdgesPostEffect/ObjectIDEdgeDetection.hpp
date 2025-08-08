@@ -17,24 +17,18 @@ namespace draw_edges
 	{
 	public:
 		ObjectIDEdgeDetection( crg::FramePassGroup & graph
-			, crg::FramePass const & previousPass
 			, c3d::RenderTarget & renderTarget
 			, c3d::RenderDevice const & device
 			, c3d::PassBuffer const & passBuffer
-			, crg::ImageViewId const & depthObj
+			, c3d::Texture const & depthObj
 			, bool const * enabled );
 		~ObjectIDEdgeDetection();
 
 		void accept( c3d::ConfigurationVisitorBase & visitor );
 
-		crg::ImageViewId const & getResult()const
+		c3d::Texture const & getResult()const
 		{
-			return m_result.sampledViewId;
-		}
-
-		crg::FramePass const & getPass()const
-		{
-			return m_pass;
+			return m_result;
 		}
 
 	private:
@@ -44,7 +38,6 @@ namespace draw_edges
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		c3d::Texture m_result;
-		crg::FramePass & m_pass;
 	};
 }
 

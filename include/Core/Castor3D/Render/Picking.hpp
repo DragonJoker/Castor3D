@@ -4,9 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_Picking_H___
 #define ___C3D_Picking_H___
 
+#include "Castor3D/Buffer/BufferModule.hpp"
 #include "Castor3D/Render/Passes/PassesModule.hpp"
 #include "Castor3D/Render/Culling/CullingModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
+
+#include "Castor3D/Render/Buffer.hpp"
 
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
@@ -44,7 +47,7 @@ namespace c3d
 		 *\param[in]	sceneUbo	L'UBO de scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */
-		C3D_API Picking( crg::ResourcesCache const & resources
+		C3D_API Picking( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, QueueData const & queueData
 			, Size const & size
@@ -149,7 +152,7 @@ namespace c3d
 		VkBufferImageCopy m_copyRegion;
 		Vector< VkBufferImageCopy > m_pickDisplayRegions;
 		ashes::CommandBufferPtr m_commandBuffer;
-		ashes::BufferPtr< Point4ui > m_pickBuffer;
+		BufferUPtrT< Point4ui > m_pickBuffer;
 		ArrayView< Point4ui > m_pickData;
 		Geometry const * m_geometry{};
 		Submesh const * m_submesh{};

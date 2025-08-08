@@ -155,10 +155,10 @@ namespace c3d
 		/**@}*/
 
 	private:
-		crg::FramePass & doCreateOpaquePass( crg::FramePass const * previousPass );
-		crg::FramePass & doCreateTransparentPass( crg::FramePass const * previousPass );
-		crg::FramePass & doCreateOverlayPass( crg::FramePass const * previousPass );
-		crg::FramePass & doCreateWindowPass( crg::FramePass const * previousPass );
+		void doCreateOpaquePass();
+		void doCreateTransparentPass();
+		void doCreateOverlayPass();
+		void doCreateWindowPass();
 
 	public:
 		C3D_API static String const SceneName;
@@ -220,13 +220,9 @@ namespace c3d
 		RenderUbo m_renderUbo;
 		SceneUbo const * m_sceneUbo{};
 		BackgroundRendererUPtr m_backgroundRenderer;
-		crg::FramePass * m_opaquePassDesc{};
 		RenderTechniquePass * m_opaquePass{};
-		crg::FramePass * m_transparentPassDesc{};
 		RenderTechniquePass * m_transparentPass{};
-		crg::FramePass * m_overlayPassDesc{};
 		OverlayPass * m_overlayPass{};
-		crg::FramePass * m_windowPassDesc{};
 		WindowPass * m_windowPass{};
 		crg::RunnableGraphPtr m_runnable;
 	};

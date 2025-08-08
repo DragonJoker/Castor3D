@@ -59,8 +59,8 @@ namespace c3d
 		, RenderDevice const & device
 		, String const & typeName
 		, String const & groupName
-		, crg::ImageViewIdArray targetImage
-		, crg::ImageViewIdArray targetDepth
+		, Texture & targetImage
+		, Texture & targetDepth
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc
 		, Texture const * mippedColour
@@ -71,8 +71,8 @@ namespace c3d
 			, graph
 			, device
 			, typeName
-			, c3d::move( targetImage )
-			, c3d::move( targetDepth )
+			, &targetImage
+			, &targetDepth
 			, renderPassDesc
 			, techniquePassDesc }
 		, m_mippedColour{ mippedColour }
@@ -158,13 +158,13 @@ namespace c3d
 
 		if ( hasSsao() )
 		{
-			bindTexture( m_ssao->wholeView
+			bindTexture( m_ssao->getSampledView()
 				, *m_ssao->sampler
 				, descriptorWrites
 				, index );
 		}
 
-		bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().wholeView
+		bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().getSampledView()
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
 			, index );
@@ -180,7 +180,7 @@ namespace c3d
 
 		if ( m_mippedColour )
 		{
-			bindTexture( m_mippedColour->wholeView
+			bindTexture( m_mippedColour->getSampledView()
 				, *m_mippedColour->sampler
 				, descriptorWrites
 				, index );
@@ -189,7 +189,7 @@ namespace c3d
 		if ( flags.pass.hasDeferredDiffuseLightingFlag
 			&& m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly )
 		{
-			bindImage( getTechnique().getSssDiffuse().targetView
+			bindImage( getTechnique().getSssDiffuse().getSampledView()
 				, descriptorWrites
 				, index );
 		}

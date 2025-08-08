@@ -395,7 +395,8 @@ namespace c3d
 
 			for ( auto const & [id, loaded] : m_loaded )
 			{
-				loaded->destroy();
+				if ( loaded )
+					loaded->destroy();
 			}
 
 			m_bindlessTexSet.reset();
@@ -457,7 +458,7 @@ namespace c3d
 				, data->image->getBuffer().size()
 				, *texture->image
 				, data->image->getLayout()
-				, texture->sampledViewId.data->info.subresourceRange
+				, getSubresourceRange( texture->getSampledViewId() )
 				, ImageLayout::eShaderReadOnly
 				, PipelineStageFlags::eFragmentShader );
 

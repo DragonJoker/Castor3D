@@ -1,5 +1,7 @@
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBufferBuddyAllocator.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <RenderGraph/FramePass.hpp>
@@ -31,229 +33,15 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	void createUniformPassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, Vector< ashes::BufferBase const * > const & buffers
-		, VkDeviceSize offset
-		, VkDeviceSize size )
-	{
-		crg::VkBufferArray vkBuffers = gpupol::makeVkArray( buffers );
-		pass.addUniformBuffer( { vkBuffers, toUtf8( name ) }
-			, binding
-			, offset
-			, size );
-	}
-
-	void createInputStoragePassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, Vector< ashes::BufferBase const * > const & buffers
-		, VkDeviceSize offset
-		, VkDeviceSize size )
-	{
-		crg::VkBufferArray vkBuffers = gpupol::makeVkArray( buffers );
-		pass.addInputStorageBuffer( { vkBuffers, toUtf8( name ) }
-			, binding
-			, offset
-			, size );
-	}
-
-	void createInOutStoragePassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, Vector< ashes::BufferBase const * > const & buffers
-		, VkDeviceSize offset
-		, VkDeviceSize size )
-	{
-		crg::VkBufferArray vkBuffers = gpupol::makeVkArray( buffers );
-		pass.addInOutStorageBuffer( { vkBuffers, toUtf8( name ) }
-			, binding
-			, offset
-			, size );
-	}
-
-	void createOutputStoragePassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, Vector< ashes::BufferBase const * > const & buffers
-		, VkDeviceSize offset
-		, VkDeviceSize size )
-	{
-		crg::VkBufferArray vkBuffers = gpupol::makeVkArray( buffers );
-		pass.addOutputStorageBuffer( { vkBuffers, toUtf8( name ) }
-			, binding
-			, offset
-			, size );
-	}
-
-	void createClearableOutputStorageBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, Vector< ashes::BufferBase const * > const & buffers
-		, VkDeviceSize offset
-		, VkDeviceSize size )
-	{
-		crg::VkBufferArray vkBuffers = gpupol::makeVkArray( buffers );
-		pass.addClearableOutputStorageBuffer( { vkBuffers, toUtf8( name ) }
-			, binding
-			, offset
-			, size );
-	}
-
-	void createUniformPassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::BufferBase const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size )
-	{
-		createUniformPassBinding( pass
-			, binding
-			, name
-			, { &buffer }
-			, offset
-			, size );
-	}
-
-	void createInputStoragePassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::BufferBase const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size )
-	{
-		createInputStoragePassBinding( pass
-			, binding
-			, name
-			, { &buffer }
-			, offset
-			, size );
-	}
-
-	void createInOutStoragePassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::BufferBase const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size )
-	{
-		createInOutStoragePassBinding( pass
-			, binding
-			, name
-			, { &buffer }
-			, offset
-			, size );
-	}
-
-	void createOutputStoragePassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::BufferBase const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size )
-	{
-		createOutputStoragePassBinding( pass
-			, binding
-			, name
-			, { &buffer }
-			, offset
-			, size );
-	}
-
-	void createClearableOutputStorageBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::BufferBase const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size )
-	{
-		createClearableOutputStorageBinding( pass
-			, binding
-			, name
-			, { &buffer }
-			, offset
-			, size );
-	}
-
-	void createUniformPassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::Buffer< uint8_t > const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size )
-	{
-		pass.addUniformBuffer( { buffer, toUtf8( name ) }
-			, binding
-			, offset
-			, size );
-	}
-
-	void createInputStoragePassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::Buffer< uint8_t > const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size )
-	{
-		pass.addInputStorageBuffer( { buffer, toUtf8( name ) }
-			, binding
-			, offset
-			, size );
-	}
-
-	void createInOutStoragePassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::Buffer< uint8_t > const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size )
-	{
-		pass.addInOutStorageBuffer( { buffer, toUtf8( name ) }
-			, binding
-			, offset
-			, size );
-	}
-
-	void createOutputStoragePassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::Buffer< uint8_t > const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size )
-	{
-		pass.addOutputStorageBuffer( { buffer, toUtf8( name ) }
-			, binding
-			, offset
-			, size );
-	}
-
-	void createClearableOutputStorageBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::Buffer< uint8_t > const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size )
-	{
-		pass.addClearableOutputStorageBuffer( { buffer, toUtf8( name ) }
-			, binding
-			, offset
-			, size );
-	}
-
-	//*********************************************************************************************
-
 	GpuBufferPool::GpuBufferPool( RenderDevice const & device
+		, crg::ResourcesCache & resources
 		, String debugName )
 		: OwnedBy< RenderSystem >{ device.renderSystem }
+		, m_device{ device }
+		, m_resources{ resources }
 		, m_debugName{ c3d::move( debugName ) }
 		, m_minBlockSize{ uint32_t( device.renderSystem.getProperties().limits.minMemoryMapAlignment ) }
 	{
-	}
-
-	void GpuBufferPool::cleanup()
-	{
-		m_buffers.clear();
 	}
 
 	void GpuBufferPool::upload( UploadData & uploader )const
@@ -275,7 +63,7 @@ namespace c3d
 		{
 			for ( auto const & buffer : buffers )
 			{
-				result.total += buffer->getBuffer().getCount();
+				result.total += buffer->getBuffer().getSize();
 				result.available += buffer->getAvailable();
 			}
 		}
@@ -284,8 +72,8 @@ namespace c3d
 	}
 
 	GpuBufferBase & GpuBufferPool::doGetBuffer( VkDeviceSize size
-		, VkBufferUsageFlags target
-		, VkMemoryPropertyFlags memory
+		, BufferUsageFlags target
+		, MemoryPropertyFlags memory
 		, MemChunk & chunk )
 	{
 		auto key = doMakeKey( target, memory );
@@ -313,6 +101,7 @@ namespace c3d
 			CU_Require( maxSize >= size );
 
 			auto buffer = makeRawUnique< GpuBuddyBuffer >( *getRenderSystem()
+				, m_resources
 				, target
 				, memory
 				, m_debugName
@@ -328,8 +117,8 @@ namespace c3d
 	}
 
 	void GpuBufferPool::doPutBuffer( GpuBufferBase const & buffer
-		, VkBufferUsageFlags target
-		, VkMemoryPropertyFlags memory
+		, BufferUsageFlags target
+		, MemoryPropertyFlags memory
 		, MemChunk const & chunk )noexcept
 	{
 		auto key = doMakeKey( target, memory );
@@ -337,8 +126,7 @@ namespace c3d
 		CU_Require( it != m_buffers.end() );
 		if ( it != m_buffers.end() )
 		{
-			auto itB = std::find_if( it->second.begin()
-				, it->second.end()
+			auto itB = std::find_if( it->second.begin(), it->second.end()
 				, [&buffer]( RawUniquePtr< GpuBuddyBuffer > const & lookup )
 				{
 						return &lookup->getBuffer().getBuffer() == &buffer.getBuffer().getBuffer();
@@ -364,11 +152,11 @@ namespace c3d
 		return it;
 	}
 
-	uint32_t GpuBufferPool::doMakeKey( VkBufferUsageFlags target
-		, VkMemoryPropertyFlags flags )const noexcept
+	uint32_t GpuBufferPool::doMakeKey( BufferUsageFlags target
+		, MemoryPropertyFlags flags )const noexcept
 	{
-		return ( target << 0u )
-			| ( flags << 16u );
+		return ( uint32_t( target ) << 0u )
+			| ( uint32_t( flags ) << 16u );
 	}
 
 	//*********************************************************************************************

@@ -1,8 +1,6 @@
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBuffer.hpp"
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
@@ -62,13 +60,8 @@ namespace c3d
 			, bool isStatic )
 		{
 			RenderNodesPassDesc result{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }
-				, cameraUbo
-				, renderUbo
-				, sceneUbo
-				, culler
-				, RenderFilter::eNone
-				, true
-				, true };
+				, cameraUbo, renderUbo, sceneUbo, culler
+				, RenderFilter::eNone, true, true };
 			result.isStatic( isStatic );
 			result.componentModeFlags( ComponentModeFlag::eOcclusion
 				| ComponentModeFlag::eColour
@@ -93,22 +86,15 @@ namespace c3d
 		, Camera const & camera
 		, SceneCuller & culler
 		, VoxelizerUbo const & voxelizerUbo
-		, ashes::Buffer< Voxel > const & voxels
+		, BufferT< Voxel > const & voxels
 		, VctConfig const & voxelConfig
 		, bool isStatic )
-		: RenderNodesPass{ pass
-			, context
-			, graph
-			, device
+		: RenderNodesPass{ pass, context, graph, device
 			, Type
-			, {}
-			, {}
+			, {}, {}
 			, vxlzpass::buildDesc( voxelConfig
-				, cameraUbo
-				, renderUbo
-				, sceneUbo
-				, culler
-				, isStatic ) }
+				, cameraUbo, renderUbo, sceneUbo
+				, culler, isStatic ) }
 		, m_scene{ *camera.getScene() }
 		, m_voxels{ voxels }
 		, m_voxelizerUbo{ voxelizerUbo }
@@ -243,7 +229,7 @@ namespace c3d
 		++index;
 		descriptorWrites.push_back( m_voxelizerUbo.getDescriptorWrite( index ) );
 		++index;
-		bindBuffer( m_voxels.getBuffer(), descriptorWrites, index );
+		bindBuffer( *m_voxels.buffer, descriptorWrites, index );
 		doAddShadowDescriptor( m_scene, descriptorWrites, shadowMaps, shadowBuffer, index );
 		doAddBackgroundDescriptor( m_scene, descriptorWrites, m_targetImage, index );
 	}

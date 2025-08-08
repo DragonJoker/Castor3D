@@ -207,32 +207,26 @@ namespace smaa
 
 	bool PostEffect::doInitialise( c3d::RenderDevice const & device
 		, c3d::Texture const & source
-		, c3d::Texture const & target
-		, crg::FramePass const & previousPass )
+		, c3d::Texture & target )
 	{
-		auto previous = &previousPass;
-		crg::ImageViewIdArray smaaResult;
-
 		switch ( m_config.data.edgeDetection )
 		{
 		case EdgeDetectionType::eDepth:
 			m_edgeDetection = c3d::makeRawUnique< DepthEdgeDetection >( m_graph
-				, *previous
 				, m_renderTarget
 				, device
 				, m_ubo
-				, m_renderTarget.getTechnique().getDepthObj().sampledViewId
+				, m_renderTarget.getTechnique().getDepthObj()
 				, m_config
 				, &m_enabled );
 			break;
 
 		case EdgeDetectionType::eColour:
 			m_edgeDetection = c3d::makeRawUnique< ColourEdgeDetection >( m_graph
-				, *previous
 				, m_renderTarget
 				, device
 				, m_ubo
-				, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
+				, source
 				, doGetPredicationTexture()
 				, m_config
 				, &m_enabled
@@ -241,11 +235,10 @@ namespace smaa
 
 		case EdgeDetectionType::eLuma:
 			m_edgeDetection = c3d::makeRawUnique< LumaEdgeDetection >( m_graph
-				, *previous
 				, m_renderTarget
 				, device
 				, m_ubo
-				, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
+				, source
 				, doGetPredicationTexture()
 				, m_config
 				, &m_enabled
@@ -253,13 +246,11 @@ namespace smaa
 			break;
 		}
 
-		previous = &m_edgeDetection->getPass();
-		smaaResult = { m_edgeDetection->getColourResult() };
+		auto smaaResult = m_edgeDetection->getColourResult().getLastAttach();
 
 		if constexpr ( !C3D_DebugEdgeDetection )
 		{
 			m_blendingWeightCalculation = c3d::makeRawUnique< BlendingWeightCalculation >( m_graph
-				, *previous
 				, m_renderTarget
 				, device
 				, m_ubo
@@ -267,31 +258,28 @@ namespace smaa
 				, m_edgeDetection->getDepthResult()
 				, m_config
 				, &m_enabled );
-			previous = &m_blendingWeightCalculation->getPass();
-			smaaResult = { m_blendingWeightCalculation->getResult() };
+			smaaResult = m_blendingWeightCalculation->getResult().getLastAttach();
 
 			if constexpr ( !C3D_DebugBlendingWeightCalculation )
 			{
 				auto * velocityView = doGetVelocityView();
 				m_neighbourhoodBlending = c3d::makeRawUnique< NeighbourhoodBlending >( m_graph
-					, *previous
 					, m_renderTarget
 					, device
 					, m_ubo
-					, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
+					, source
 					, m_blendingWeightCalculation->getResult()
 					, velocityView
 					, m_config
 					, &m_enabled
 					, &m_subsamplePassIndex );
-				previous = &m_neighbourhoodBlending->getPass();
 				smaaResult = m_neighbourhoodBlending->getResult();
 
 				if constexpr ( !C3D_DebugNeighbourhoodBlending )
 				{
 					if ( m_config.data.mode == Mode::eT2X )
 					{
-						crg::ImageViewIdArray currentViews = m_neighbourhoodBlending->getResult();
+						crg::ImageViewIdArray currentViews = m_neighbourhoodBlending->getViews();
 						crg::ImageViewIdArray previousViews;
 
 						for ( size_t i = 0; i < currentViews.size(); ++i )
@@ -302,17 +290,16 @@ namespace smaa
 						}
 
 						m_reproject = c3d::makeRawUnique< Reproject >( m_graph
-							, *previous
 							, m_renderTarget
 							, device
 							, m_ubo
+							, *smaaResult
 							, currentViews
 							, previousViews
 							, velocityView
 							, m_config
 							, &m_enabled );
-						previous = &m_reproject->getPass();
-						smaaResult = { m_reproject->getResult() };
+						smaaResult = m_reproject->getResult().getLastAttach();
 					}
 				}
 			}
@@ -335,32 +322,21 @@ namespace smaa
 					, result->getTimer() );
 				return result;
 			} );
-		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
-			, c3d::FilterMode::eLinear
-			, c3d::MipmapMode::eNearest
-			, c3d::WrapMode::eClampToEdge
-			, c3d::WrapMode::eClampToEdge
-			, c3d::WrapMode::eClampToEdge };
-		pass.addDependency( *previous );
-		m_ubo.createPassBinding( pass
-			, SmaaUboIdx );
-		pass.addSampledView( smaaResult
-			, SmaaUboIdx + 1
-			, linearSampler );
+		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest };
+		m_ubo.createPassBinding( pass, SmaaUboIdx );
+		pass.addInputSampled( *smaaResult, SmaaUboIdx + 1, linearSampler );
 		crg::ImageViewIdArray outputs;
 		crg::ImageViewIdArray addOutputs;
 
 		for ( auto index = 0u; index < m_config.maxSubsampleIndices; ++index )
 		{
-			outputs.push_back( target.targetViewId );
-			addOutputs.push_back( source.targetViewId );
+			outputs.push_back( target.getTargetViewId() );
+			addOutputs.push_back( source.getTargetViewId() );
 		}
 
 		outputs.insert( outputs.end(), addOutputs.begin(), addOutputs.end() );
-		pass.addOutputColourView( outputs );
-		previous = &pass;
+		target.setLastAttach( pass.addOutputColourTarget( outputs ) );
 
-		m_pass = previous;
 		return true;
 	}
 
@@ -445,23 +421,23 @@ namespace smaa
 		return true;
 	}
 
-	crg::ImageViewId const * PostEffect::doGetPredicationTexture()
+	c3d::Texture const * PostEffect::doGetPredicationTexture()
 	{
-		crg::ImageViewId const * predication = nullptr;
+		c3d::Texture const * predication = nullptr;
 		if ( m_config.data.enablePredication )
-			predication = &m_renderTarget.getTechnique().getDepthObj().sampledViewId;
+			predication = &m_renderTarget.getTechnique().getDepthObj();
 		return predication;
 	}
 
-	crg::ImageViewId const * PostEffect::doGetVelocityView()
+	c3d::Texture const * PostEffect::doGetVelocityView()
 	{
-		crg::ImageViewId const * velocityView = nullptr;
+		c3d::Texture const * velocityView = nullptr;
 
 		switch ( m_config.data.mode )
 		{
 		case Mode::eT2X:
 			if ( m_config.data.enableReprojection )
-				velocityView = &m_renderTarget.getVelocity().sampledViewId;
+				velocityView = &m_renderTarget.getVelocity();
 			break;
 		default:
 			break;

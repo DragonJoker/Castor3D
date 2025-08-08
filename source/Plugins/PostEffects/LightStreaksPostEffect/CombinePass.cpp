@@ -62,17 +62,17 @@ namespace light_streaks
 	c3d::MbString const CombinePass::CombineMapKawase = "c3d_mapKawase";
 
 	CombinePass::CombinePass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
 		, c3d::RenderDevice const & device
-		, crg::ImageViewIdArray const & sceneView
-		, crg::ImageViewIdArray const & kawaseViews
-		, crg::ImageViewIdArray const & resultView
+		, c3d::Texture const & kawaseViews
+		, c3d::Texture const & sceneView
+		, c3d::Texture & resultView
 		, c3d::Extent2D const & size
 		, bool const * enabled
 		, uint32_t const * passIndex )
 		: m_shader{ cuT( "LightStreaksCombine" ), combine::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
-		, m_pass{ graph.createPass( "Combine"
+	{
+		auto & pass = graph.createPass( "Combine"
 			, [this, &device, size, enabled, passIndex]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -91,22 +91,11 @@ namespace light_streaks
 				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
-			} ) }
-	{
-		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
-			, c3d::FilterMode::eLinear
-			, c3d::MipmapMode::eNearest
-			, c3d::WrapMode::eClampToEdge
-			, c3d::WrapMode::eClampToEdge
-			, c3d::WrapMode::eClampToEdge };
-		m_pass.addDependencies( previousPasses );
-		m_pass.addSampledView( sceneView
-			, combine::SceneMapIdx
-			, linearSampler );
-		m_pass.addSampledView( m_pass.mergeViews( kawaseViews )
-			, combine::KawaseMapIdx
-			, linearSampler );
-		m_pass.addOutputColourView( resultView );
+			} );
+		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest };
+		pass.addInputSampled( *sceneView.getSampledLastAttach(), combine::SceneMapIdx, linearSampler );
+		pass.addInputSampled( *kawaseViews.mergeLayerAttachments( graph ), combine::KawaseMapIdx, linearSampler );
+		resultView.setLastAttach( pass.addOutputColourTarget( { resultView.getTargetViewId(), sceneView.getTargetViewId() } ) );
 	}
 
 	void CombinePass::accept( c3d::ConfigurationVisitorBase & visitor )

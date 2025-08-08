@@ -102,7 +102,7 @@ namespace smaa
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const
 		{
-			return m_ubo.createPassBinding( pass, "SMAA", binding );
+			return m_ubo.createPassBinding( pass, binding );
 		}
 
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet

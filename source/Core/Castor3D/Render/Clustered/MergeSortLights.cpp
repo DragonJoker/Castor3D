@@ -425,8 +425,7 @@ namespace c3d
 
 			bool doIsEnabled()const
 			{
-				return m_clusters.getConfig().sortLights
-					&& m_clusters.needsLightsUpdate()
+				return m_clusters.needsLightsUpdate()
 					&& m_lightCache.getLightsBufferCount( m_lightType ) > 0;
 			}
 
@@ -434,6 +433,9 @@ namespace c3d
 				, VkCommandBuffer commandBuffer
 				, uint32_t index )
 			{
+				auto & mortonAttach = *m_pass.inputs.find( 0 )->second;
+				auto & indicesAttach = *m_pass.inputs.find( 1 )->second;
+
 				// The number of threads per thread group.
 				constexpr u32 threadsPerThreadGroupCount = NumThreadsPerThreadGroup;
 				// The number of values that each thread sorts.
@@ -498,13 +500,16 @@ namespace c3d
 						// note: no additional barriers as we are still doing read from source-> write to dest, so that should be good
 						u32 lastChunkOffset = chunkSize * ( chunksCount - 1 ) * sizeof( u32 );
 						auto lastChunkSize = u32( totalValues * sizeof( u32 ) - lastChunkOffset );
-						auto srcMorton = m_pass.buffers[0].buffer( index );
-						auto srcIndices = m_pass.buffers[1].buffer( index );
-						auto dstMorton = m_pass.buffers[0].buffer( 1u - index );
-						auto dstIndices = m_pass.buffers[1].buffer( 1u - index );
-						VkBufferCopy region{ lastChunkOffset, lastChunkOffset, lastChunkSize };
-						m_context.vkCmdCopyBuffer( commandBuffer, srcMorton, dstMorton, 1u, &region );
-						m_context.vkCmdCopyBuffer( commandBuffer, srcIndices, dstIndices, 1u, &region );
+						auto srcMorton = mortonAttach.buffer( index );
+						auto srcIndices = indicesAttach.buffer( index );
+						auto dstMorton = mortonAttach.buffer( 1u - index );
+						auto dstIndices = indicesAttach.buffer( 1u - index );
+						context.copyBuffer( commandBuffer, index
+							, srcMorton, dstMorton
+							, lastChunkOffset, lastChunkOffset, lastChunkSize );
+						context.copyBuffer( commandBuffer, index
+							, srcIndices, dstIndices
+							, lastChunkOffset, lastChunkOffset, lastChunkSize );
 					}
 
 					// Ping-pong the buffers
@@ -519,11 +524,11 @@ namespace c3d
 				, VkCommandBuffer commandBuffer
 				, uint32_t passIndex )const
 			{
-				auto & attach = m_pass.buffers.back();
+				auto & attach = *m_pass.outputs.rbegin()->second;
 				auto buffer = attach.buffer( passIndex );
-				auto currentState = context.getAccessState( buffer, attach.getBufferRange() );
+				auto currentState = context.getAccessState( buffer.data->buffer, attach.getBufferRange() );
 				context.memoryBarrier( commandBuffer
-					, buffer, attach.getBufferRange()
+					, buffer.data->buffer, attach.getBufferRange()
 					, currentState, ComputeShaderReadWriteState
 					, true );
 			}
@@ -534,13 +539,13 @@ namespace c3d
 			{
 				uint32_t bufferIndex{};
 
-				for ( auto & attach : m_pass.buffers )
+				for ( auto & [binding, attach] : m_pass.inouts )
 				{
-					if ( !attach.isNoTransition()
-						&& attach.isStorageBuffer() )
+					if ( !attach->isNoTransition()
+						&& attach->isStorageBuffer() )
 					{
-						auto buffer = attach.buffer( passIndex );
-						auto currentState = context.getAccessState( buffer, attach.getBufferRange() );
+						auto buffer = attach->buffer( passIndex );
+						auto currentState = context.getAccessState( buffer.data->buffer, attach->getBufferRange() );
 						AccessState dstState;
 
 						if ( bufferIndex < 2u )
@@ -560,10 +565,9 @@ namespace c3d
 						}
 
 						context.memoryBarrier( commandBuffer
-							, buffer
-							, attach.getBufferRange()
-							, currentState.access
-							, currentState.pipelineStage
+							, buffer.data->buffer
+							, attach->getBufferRange()
+							, { currentState.access, currentState.pipelineStage }
 							, dstState
 							, true );
 					}
@@ -600,59 +604,61 @@ namespace c3d
 		return numChunks;
 	}
 
-	crg::FramePassArray createMergeSortLightsPass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
+	void createMergeSortLightsPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
-		, FrustumClusters & clusters )
+		, FrustumClusters & clusters
+		, ClustersLightSortAttachs const & inputSortAttachs
+		, ClustersLightSortAttachs & outputSortAttachs
+		, BufferBase & mergePathPartitions )
 	{
-		// Point lights
-		auto & point = graph.createPass( "MergeSort/Point"
-			, [&clusters, &device]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & runnableGraph )
-			{
-				auto result = makeRawUnique< merge::FramePass >( framePass
-					, context
-					, runnableGraph
-					, device
-					, clusters
-					, LightType::ePoint );
-				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
-					, result->getTimer() );
-				return result;
-			} );
-		point.addDependency( *previousPasses.front() );
-		createInOutStoragePassBinding( point, uint32_t( merge::eInputKeys ), cuT( "C3D_InMortonCodes" ), clusters.getInputPointLightMortonCodesBuffers(), 0u, ashes::WholeSize );
-		createInOutStoragePassBinding( point, uint32_t( merge::eInputValues ), cuT( "C3D_InLightIndices" ), clusters.getInputPointLightIndicesBuffers(), 0u, ashes::WholeSize );
-		createInOutStoragePassBinding( point, uint32_t( merge::eOutputKeys ), cuT( "C3D_OutMortonCodes" ), clusters.getOutputPointLightMortonCodesBuffers(), 0u, ashes::WholeSize );
-		createInOutStoragePassBinding( point, uint32_t( merge::eOutputValues ), cuT( "C3D_OutLightIndices" ), clusters.getOutputPointLightIndicesBuffers(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( point, uint32_t( merge::eMergePathPartitions ), cuT( "C3D_MergePathPartitions" ), clusters.getMergePathPartitionsBuffer(), 0u, ashes::WholeSize );
-
-		// Spot lights
-		auto & spot = graph.createPass( "MergeSort/Spot"
-			, [&clusters, &device]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & runnableGraph )
-			{
-				auto result = makeRawUnique< merge::FramePass >( framePass
-					, context
-					, runnableGraph
-					, device
-					, clusters
-					, LightType::eSpot );
-				device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
-					, result->getTimer() );
-				return result;
-			} );
-		spot.addDependency( point );
-		spot.addDependency( *previousPasses.back() );
-		createInOutStoragePassBinding( spot, uint32_t( merge::eInputKeys ), cuT( "C3D_InMortonCodes" ), clusters.getInputSpotLightMortonCodesBuffers(), 0u, ashes::WholeSize );
-		createInOutStoragePassBinding( spot, uint32_t( merge::eInputValues ), cuT( "C3D_InLightIndices" ), clusters.getInputSpotLightIndicesBuffers(), 0u, ashes::WholeSize );
-		createInOutStoragePassBinding( spot, uint32_t( merge::eOutputKeys ), cuT( "C3D_OutMortonCodes" ), clusters.getOutputSpotLightMortonCodesBuffers(), 0u, ashes::WholeSize );
-		createInOutStoragePassBinding( spot, uint32_t( merge::eOutputValues ), cuT( "C3D_OutLightIndices" ), clusters.getOutputSpotLightIndicesBuffers(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( spot, uint32_t( merge::eMergePathPartitions ), cuT( "C3D_MergePathPartitions" ), clusters.getMergePathPartitionsBuffer(), 0u, ashes::WholeSize );
-
-		return { &point, &spot };
+		crg::Attachment const * mergePathPartitionsAttach{};
+		{
+			// Point lights
+			auto & point = graph.createPass( "MergeSort/Point"
+				, [&clusters, &device]( crg::FramePass const & framePass
+					, crg::GraphContext & context
+					, crg::RunnableGraph & runnableGraph )
+				{
+					auto runPass = makeRawUnique< merge::FramePass >( framePass
+						, context
+						, runnableGraph
+						, device
+						, clusters
+						, LightType::ePoint );
+					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+						, runPass->getTimer() );
+					return runPass;
+				} );
+			point.addInputStorage( *inputSortAttachs.pointLightMortonCodes, uint32_t( merge::eInputKeys ) );
+			point.addInputStorage( *inputSortAttachs.pointLightIndices, uint32_t( merge::eInputValues ) );
+			outputSortAttachs.pointLightMortonCodes = point.addOutputStorageBuffer( outputSortAttachs.pointLightMortonCodes->bufferAttach.buffers, uint32_t( merge::eOutputKeys ) );
+			outputSortAttachs.pointLightIndices = point.addOutputStorageBuffer( outputSortAttachs.pointLightIndices->bufferAttach.buffers, uint32_t( merge::eOutputValues ) );
+			mergePathPartitionsAttach = point.addClearableOutputStorageBuffer( mergePathPartitions.bufferViewId, uint32_t( merge::eMergePathPartitions ) );
+		}
+		{
+			// Spot lights
+			auto & spot = graph.createPass( "MergeSort/Spot"
+				, [&clusters, &device]( crg::FramePass const & framePass
+					, crg::GraphContext & context
+					, crg::RunnableGraph & runnableGraph )
+				{
+					auto runPass = makeRawUnique< merge::FramePass >( framePass
+						, context
+						, runnableGraph
+						, device
+						, clusters
+						, LightType::eSpot );
+					device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+						, runPass->getTimer() );
+					return runPass;
+				} );
+			spot.addImplicit( *mergePathPartitionsAttach, AccessState{} );
+			spot.addInputStorage( *inputSortAttachs.spotLightMortonCodes, uint32_t( merge::eInputKeys ) );
+			spot.addInputStorage( *inputSortAttachs.spotLightIndices, uint32_t( merge::eInputValues ) );
+			outputSortAttachs.spotLightMortonCodes = spot.addOutputStorageBuffer( outputSortAttachs.spotLightMortonCodes->bufferAttach.buffers, uint32_t( merge::eOutputKeys ) );
+			outputSortAttachs.spotLightIndices = spot.addOutputStorageBuffer( outputSortAttachs.spotLightIndices->bufferAttach.buffers, uint32_t( merge::eOutputValues ) );
+			mergePathPartitions.setLastAttach( spot.addClearableOutputStorageBuffer( mergePathPartitions.bufferViewId, uint32_t( merge::eMergePathPartitions ) ) );
+		}
 	}
 
 	//*********************************************************************************************

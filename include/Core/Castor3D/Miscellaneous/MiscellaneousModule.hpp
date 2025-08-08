@@ -304,11 +304,11 @@ namespace c3d
 	struct RenderDevice;
 	C3D_API ashes::DeviceMemoryPtr setupMemory( ashes::Device const & device
 		, VkMemoryRequirements const & requirements
-		, VkMemoryPropertyFlags flags
+		, MemoryPropertyFlags flags
 		, String const & name );
 	C3D_API ashes::DeviceMemoryPtr setupMemory( RenderDevice const & device
 		, VkMemoryRequirements const & requirements
-		, VkMemoryPropertyFlags flags
+		, MemoryPropertyFlags flags
 		, String const & name );
 
 	C3D_API void initProgressBarGlobalRange( ProgressBar * progress

@@ -16,16 +16,16 @@ namespace c3d
 	static uint32_t constexpr InvalidPipelineIndex = ~0u;
 
 	void registerPipelineNodes( PipelineBaseHash hash
-		, ashes::BufferBase const & posBuffer
-		, ashes::BufferBase const * idxBuffer
+		, BufferBase const & posBuffer
+		, BufferBase const * idxBuffer
 		, Vector< PipelineBuffer > & nodesIds );
 	uint32_t getPipelineNodeIndex( PipelineBaseHash hash
-		, ashes::BufferBase const & posBuffer
-		, ashes::BufferBase const * idxBuffer
+		, BufferBase const & posBuffer
+		, BufferBase const * idxBuffer
 		, Vector< PipelineBuffer > const & cont );
 	PipelineNodes & getPipelineNodes( PipelineBaseHash hash
-		, ashes::BufferBase const & posBuffer
-		, ashes::BufferBase const * idxBuffer
+		, BufferBase const & posBuffer
+		, BufferBase const * idxBuffer
 		, Vector< PipelineBuffer > const & cont
 		, PipelineNodes * nodes
 		, VkDeviceSize maxNodesCount );

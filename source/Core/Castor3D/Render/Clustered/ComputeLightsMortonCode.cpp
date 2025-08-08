@@ -61,8 +61,7 @@ namespace c3d
 			// Inputs
 			C3D_Clusters( writer
 				, eClusters
-				, 0u
-				, &config );
+				, 0u );
 			C3D_AllLightsAABB( writer
 				, eAllLightsAABB
 				, 0u );
@@ -87,7 +86,7 @@ namespace c3d
 
 			// Produce a 3k-bit morton code from a quantized coordinate.
 			auto getMortonCode = writer.implementFunction< sdw::UInt >( "getMortonCode"
-				, [&]( sdw::UVec3 const & quantizedCoord )
+				, [&writer]( sdw::UVec3 const & quantizedCoord )
 				{
 					auto mortonCode = writer.declLocale( "mortonCode", 0_u );
 					auto bitMask = 1u;
@@ -182,8 +181,7 @@ namespace c3d
 					, crg::ru::Config{ 1u }
 					, config
 						.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
-						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( CreateInfoHolder::getData() ) )
-						.end( RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } ) }
+						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( CreateInfoHolder::getData() ) ) }
 				, m_clusters{ clusters }
 			{
 			}
@@ -192,27 +190,7 @@ namespace c3d
 			bool doIsEnabled()const
 			{
 				return m_clusters.getConfig().enabled
-					&& m_clusters.getConfig().sortLights
 					&& m_clusters.needsClustersUpdate();
-			}
-
-			void doPostRecord( crg::RecordContext & context
-				, VkCommandBuffer commandBuffer
-				, uint32_t index )const
-			{
-				for ( auto & attach : m_pass.buffers )
-				{
-					if ( !attach.isNoTransition()
-						&& attach.isStorageBuffer()
-						&& attach.isClearableBuffer() )
-					{
-						auto currentState = context.getAccessState( attach.buffer( index )
-							, attach.getBufferRange() );
-						context.memoryBarrier( commandBuffer
-							, attach.buffer( index ), attach.getBufferRange()
-							, currentState, ComputeShaderReadState );
-					}
-				}
 			}
 
 		private:
@@ -222,20 +200,25 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	crg::FramePass const & createComputeLightsMortonCodePass( crg::FramePassGroup & graph
-		, crg::FramePass const * previousPass
+	ClustersLightSortAttachs createComputeLightsMortonCodePass( crg::FramePassGroup & graph
 		, RenderDevice const & device
-		, FrustumClusters & clusters )
+		, FrustumClusters & clusters
+		, BufferBase const & allLightsAABB
+		, BufferBase const & reducedLightsAABB
+		, crg::BufferViewIdArray const & pointLightMortonCodes
+		, crg::BufferViewIdArray const & spotLightMortonCodes
+		, crg::BufferViewIdArray const & pointLightIndices
+		, crg::BufferViewIdArray const & spotLightIndices )
 	{
 		auto & pass = graph.createPass( "ComputeLightsMortonCode"
 			, [&clusters, &device]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runGraph )
 			{
 				constexpr uint32_t numThreadGroups = divRoundUp( MaxLightsCount, 1024u );
 				auto result = makeRawUnique< cmpmrt::FramePass >( framePass
 					, context
-					, graph
+					, runGraph
 					, device
 					, clusters
 					, crg::cp::Config{}
@@ -244,16 +227,13 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependency( *previousPass );
 		clusters.getClustersUbo().createPassBinding( pass, cmpmrt::eClusters );
-		createInputStoragePassBinding( pass, uint32_t( cmpmrt::eAllLightsAABB ), cuT( "C3D_AllLightsAABB" ), clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
-		createInputStoragePassBinding( pass, uint32_t( cmpmrt::eReducedLightsAABB ), cuT( "C3D_ReducedLightsAABB" ), clusters.getReducedLightsAABBBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( pass, uint32_t( cmpmrt::ePointLightMortonCodes ), cuT( "C3D_PointLightMortonCodes" ), clusters.getOutputPointLightMortonCodesBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( pass, uint32_t( cmpmrt::eSpotLightMortonCodes ), cuT( "C3D_SpotLightMortonCodes" ), clusters.getOutputSpotLightMortonCodesBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( pass, uint32_t( cmpmrt::ePointLightIndices ), cuT( "C3D_PointLightIndices" ), clusters.getOutputPointLightIndicesBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( pass, uint32_t( cmpmrt::eSpotLightIndices ), cuT( "C3D_SpotLightIndices" ), clusters.getOutputSpotLightIndicesBuffer(), 0u, ashes::WholeSize );
-
-		return pass;
+		pass.addInputStorage( *allLightsAABB.getLastAttach(), uint32_t( cmpmrt::eAllLightsAABB ) );
+		pass.addInputStorage( *reducedLightsAABB.getLastAttach(), uint32_t( cmpmrt::eReducedLightsAABB ) );
+		return { pass.addClearableOutputStorageBuffer( pointLightMortonCodes, uint32_t( cmpmrt::ePointLightMortonCodes ) )
+			, pass.addClearableOutputStorageBuffer( spotLightMortonCodes, uint32_t( cmpmrt::eSpotLightMortonCodes ) )
+			, pass.addClearableOutputStorageBuffer( pointLightIndices, uint32_t( cmpmrt::ePointLightIndices ) )
+			, pass.addClearableOutputStorageBuffer( spotLightIndices, uint32_t( cmpmrt::eSpotLightIndices ) ) };
 	}
 
 	//*********************************************************************************************

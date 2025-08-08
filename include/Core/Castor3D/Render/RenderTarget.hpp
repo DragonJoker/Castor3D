@@ -210,7 +210,7 @@ namespace c3d
 		 */
 		C3D_API PostEffectRPtr getPostEffect( String const & name )const;
 		C3D_API void resetSemaphore();
-		C3D_API crg::FramePass const & createVertexTransformPass( crg::FramePassGroup & graph )const;
+		C3D_API void createVertexTransformPass( crg::FramePassGroup & graph )const;
 
 		C3D_API static void addParsers( AttributeParsers & result );
 		/**
@@ -290,7 +290,7 @@ namespace c3d
 			return m_combined;
 		}
 
-		Texture const & getVelocity()const noexcept
+		Texture & getVelocity()noexcept
 		{
 			return m_velocity;
 		}
@@ -483,10 +483,9 @@ namespace c3d
 		crg::FramePass & doCreateOverlayPass( ProgressBar * progress
 			, RenderDevice const & device );
 		crg::FramePass & doCreateCombinePass( ProgressBar * progress
-			, crg::ImageViewIdArray source );
+			, Texture const & source );
 		bool doInitialiseTechnique( RenderDevice const & device
-			, ProgressBar * progress
-			, crg::FramePassArray previousPasses );
+			, ProgressBar * progress );
 		void doCleanupTechnique();
 		void doInitCombineProgram();
 		void doCleanupCombineProgram();
@@ -496,8 +495,7 @@ namespace c3d
 		SemaphoreWaitArray doRender( ashes::Queue const & queue
 			, SemaphoreWaitArray signalsToWait );
 		void doListIntermediateViews( IntermediateViewArray & result )const;
-		crg::FramePass const & doCreateUpscalingPass( crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses );
+		crg::FramePass const & doCreateUpscalingPass( crg::FramePassGroup & graph );
 
 	private:
 		static uint32_t sm_uiCount;
@@ -545,7 +543,6 @@ namespace c3d
 		uint32_t m_combinePassIndex{ 1u };
 		Texture const * m_combinePassSource{};
 		crg::FramePass * m_combinePass{};
-		crg::FramePass const * m_hdrLastPass{};
 		crg::RunnableGraphPtr m_runnable;
 		ashes::SemaphorePtr m_combineSemaphore;
 		Vector< OnInitialisedConnection > m_onTargetInitialised;
@@ -555,6 +552,10 @@ namespace c3d
 		FrustumClustersUPtr m_frustumClusters;
 		bool m_enableFullLoading{ false };
 		DebugDrawerUPtr m_debugDrawer{};
+		crg::AttachmentPtr m_hdrSource;
+		crg::AttachmentPtr m_hdrTarget;
+		crg::AttachmentPtr m_srgbSource;
+		crg::AttachmentPtr m_srgbTarget;
 
 		struct StereoConfig
 		{

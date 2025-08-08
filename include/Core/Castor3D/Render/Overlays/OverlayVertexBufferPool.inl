@@ -35,21 +35,30 @@ namespace c3d
 		, descriptorLayout{ descriptorLayout }
 		, name{ debugName }
 		, overlaysData{ makeBuffer< OverlayUboConfiguration >( device
+			, engine.getGraphResourceCache()
 			, MaxOverlayPipelines
-			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, BufferUsageFlags::eStorageBuffer
+			, MemoryPropertyFlags::eHostVisible
 			, name + cuT( "Data" ) ) }
-		, overlaysBuffer{ makeArrayView( overlaysData->lock( 0u, ashes::WholeSize, 0u )
+		, overlaysBuffer{ makeArrayView( overlaysData->lock()
 			, overlaysData->getCount() ) }
 		, vertexBuffer{ device.renderSystem
-			, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, engine.getGraphResourceCache()
+			, BufferUsageFlags::eVertexBuffer | BufferUsageFlags::eStorageBuffer
+			, MemoryPropertyFlags::eDeviceLocal
 			, name + cuT( "Vertex" )
 			, ashes::QueueShare{}
 			, MaxOverlayPipelines * sizeof( VertexT ) * CountT }
 		, descriptorPool{ descriptorLayout.createPool( 1000u ) }
 		, textBuffer{ c3d::move( textBuf ) }
 	{
+	}
+
+	template< typename VertexT, uint32_t CountT >
+	OverlayVertexBufferPoolT< VertexT, CountT >::~OverlayVertexBufferPoolT()noexcept
+	{
+		overlaysData->unlock();
+		overlaysData->destroy();
 	}
 
 	template< typename VertexT, uint32_t CountT >
@@ -82,25 +91,27 @@ namespace c3d
 		{
 			auto & pipelineData = it->second;
 			pipelineData.overlaysIDsBuffer = makeBuffer< uint32_t >( device
+				, engine.getGraphResourceCache()
 				, MaxOverlayPipelines
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, BufferUsageFlags::eStorageBuffer
+				, MemoryPropertyFlags::eHostVisible
 				, debugName + cuT( "-PipelineIDs" ) );
-			pipelineData.overlaysIDs = makeArrayView( pipelineData.overlaysIDsBuffer->lock( 0u, ashes::WholeSize, 0u )
+			pipelineData.overlaysIDs = makeArrayView( pipelineData.overlaysIDsBuffer->lock()
 				, pipelineData.overlaysIDsBuffer->getCount() );
 			pipelineData.indirectCommandsBuffer = makeBuffer< VkDrawIndirectCommand >( device
+				, engine.getGraphResourceCache()
 				, MaxOverlayPipelines
-				, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, BufferUsageFlags::eIndirectBuffer
+				, MemoryPropertyFlags::eHostVisible
 				, debugName + cuT( "-IndirectCommands" ) );
-			pipelineData.indirectCommands = makeArrayView( pipelineData.indirectCommandsBuffer->lock( 0u, ashes::WholeSize, 0u )
+			pipelineData.indirectCommands = makeArrayView( pipelineData.indirectCommandsBuffer->lock()
 				, pipelineData.indirectCommandsBuffer->getCount() );
 			pipelineData.descriptorSets = makeRawUnique< OverlayPipelineData::DescriptorSets >();
 
 			auto & descs = *pipelineData.descriptorSets;
 			descs.draw = doCreateDescriptorSet( debugName
 				, fontTexture
-				, pipelineData.overlaysIDsBuffer->getBuffer() );
+				, *pipelineData.overlaysIDsBuffer->buffer );
 			descs.all.push_back( *descs.draw );
 			descs.all.push_back( *device.renderSystem.getEngine()->getTextureUnitCache().getDescriptorSet() );
 
@@ -219,6 +230,19 @@ namespace c3d
 			textBuffer->upload( uploader );
 		}
 
+		for ( auto & pipelineData : m_retired )
+		{
+			if ( pipelineData.overlaysIDsBuffer )
+			{
+				pipelineData.overlaysIDsBuffer->unlock();
+				pipelineData.overlaysIDsBuffer->destroy();
+			}
+			if ( pipelineData.indirectCommandsBuffer )
+			{
+				pipelineData.indirectCommandsBuffer->unlock();
+				pipelineData.indirectCommandsBuffer->destroy();
+			}
+		}
 		m_retired.clear();
 	}
 
@@ -248,7 +272,7 @@ namespace c3d
 			, 0u
 			, uint32_t( vertexBuffer.getBuffer().getBuffer().getSize() ) );
 		result->createBinding( descriptorLayout.getBinding( uint32_t( OverlayBindingId::eOverlays ) )
-			, *overlaysData
+			, overlaysData->getBuffer()
 			, 0u
 			, uint32_t( overlaysData->getCount() ) );
 		result->createBinding( descriptorLayout.getBinding( uint32_t( OverlayBindingId::eOverlaysIDs ) )

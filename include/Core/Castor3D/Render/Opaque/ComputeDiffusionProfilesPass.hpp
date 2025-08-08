@@ -13,10 +13,10 @@ See LICENSE file in root folder
 
 namespace c3d
 {
-	C3D_API crg::FramePass const & createComputeDiffusionProfilesPass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
+	C3D_API void createComputeDiffusionProfilesPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
-		, SssProfileBuffer const & buffer );
+		, SssProfileBuffer & buffer
+		, Texture & result );
 }
 
 #endif

@@ -1321,6 +1321,7 @@ namespace c3d_gltf
 
 		// List their attached objects
 		c3d::Map< GltfMeshData const *, c3d::Vector< size_t > > processedMeshes;
+		nodeIndex = {};
 		for ( auto nodeData : m_sceneData.sortedNodes )
 		{
 			auto & node = *nodeData->node;

@@ -113,15 +113,14 @@ namespace c3d
 		}
 
 		static crg::ru::Config buildRuConfig( crg::ru::Config const & config
-			, crg::ImageViewIdArray const & targetImage
-			, crg::ImageViewIdArray const & targetDepth
 			, RenderQueue const & queue )
 		{
-			crg::ru::Config result{ std::max( 1u, uint32_t( std::max( targetImage.size(), targetDepth.size() ) ) )
+			crg::ru::Config result{ 1u
 				, config.resettable
 				, config.prePassActions
 				, config.postPassActions
-				, config.implicitActions };
+				, config.implicitImageActions
+				, config.implicitBufferActions };
 			queue.fillConfig( result );
 			return result;
 		}
@@ -134,8 +133,8 @@ namespace c3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, String const & typeName
-		, crg::ImageViewIdArray targetImage
-		, crg::ImageViewIdArray targetDepth
+		, Texture * targetImage
+		, Texture * targetDepth
 		, RenderNodesPassDesc const & desc )
 		: NodesPass{ device, pass.group.getFullName(), typeName, pass.getFullName(), targetImage, targetDepth, desc.base() }
 		, SceneCullerHolder{ &desc.m_culler }
@@ -150,8 +149,6 @@ namespace c3d
 				, IsEnabledCallback( [this](){ return isPassEnabled(); } ) }
 			, makeExtent2D( desc.base().m_size )
 			, rendndpass::buildRuConfig( desc.m_ruConfig
-				, targetImage
-				, targetDepth
 				, getRenderQueue() ) }
 		, m_oit{ desc.m_oit }
 		, m_forceTwoSided{ desc.m_forceTwoSided }
@@ -502,8 +499,8 @@ namespace c3d
 	}
 
 	uint32_t RenderNodesPass::getPipelineNodesIndex( PipelineBaseHash const & hash
-		, ashes::BufferBase const & posBuffer
-		, ashes::BufferBase const * idxBuffer )const
+		, BufferBase const & posBuffer
+		, BufferBase const * idxBuffer )const
 	{
 		return getRenderQueue().getRenderNodes().getPipelineNodesIndex( hash, posBuffer, idxBuffer );
 	}
@@ -545,9 +542,9 @@ namespace c3d
 				, 0u
 				, 1u
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-			nodesIdsWrite.bufferInfo.push_back( { nodesIds.getBuffer()
+			nodesIdsWrite.bufferInfo.push_back( { *nodesIds.buffer
 				, 0u
-				, nodesIds.getBuffer().getSize() } );
+				, nodesIds.getSize() } );
 			descriptorWrites.push_back( nodesIdsWrite );
 
 			auto & modelBuffer = scene.getModelBuffer();
@@ -555,14 +552,13 @@ namespace c3d
 				, 0u
 				, 1u
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-			modelDataWrite.bufferInfo.push_back( { modelBuffer.getBuffer()
-				, 0u
-				, modelBuffer.getBuffer().getSize() } );
+			modelDataWrite.bufferInfo.push_back( { *modelBuffer.buffer
+				, 0u, modelBuffer.getSize() } );
 			descriptorWrites.push_back( modelDataWrite );
 			auto const & matCache = getOwner()->getMaterialCache();
 			descriptorWrites.push_back( matCache.getPassBuffer().getBinding( uint32_t( GlobalBuffersIdx::eMaterials ) ) );
 			descriptorWrites.push_back( matCache.getSssProfileBuffer().getBinding( uint32_t( GlobalBuffersIdx::eSssProfiles ) ) );
-			descriptorWrites.push_back( makeImageViewDescriptorWrite( matCache.getSssProfileBuffer().getDiffusionProfilesImage().sampledView
+			descriptorWrites.push_back( makeImageViewDescriptorWrite( matCache.getSssProfileBuffer().getDiffusionProfilesImage().getSampledView()
 				, *matCache.getSssProfileBuffer().getDiffusionProfilesImage().sampler
 				, uint32_t( GlobalBuffersIdx::eSssDiffusionProfiles ) ) );
 			descriptorWrites.push_back( matCache.getTexConfigBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexConfigs ) ) );
@@ -575,9 +571,8 @@ namespace c3d
 					, 0u
 					, 1u
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-				write.bufferInfo.push_back( { billboardDatas.getBuffer()
-					, 0u
-					, billboardDatas.getBuffer().getSize() } );
+				write.bufferInfo.push_back( { *billboardDatas.buffer
+					, 0u, billboardDatas.getSize() } );
 				descriptorWrites.push_back( write );
 			}
 
@@ -682,7 +677,7 @@ namespace c3d
 
 	void RenderNodesPass::doAddBackgroundDescriptor( Scene const & scene
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, crg::ImageViewIdArray const & targetImage
+		, Texture * targetImage
 		, uint32_t & index )const
 	{
 		if ( auto background = scene.getBackground() )

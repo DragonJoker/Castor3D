@@ -51,7 +51,7 @@ namespace c3d
 				, ImageUsageFlags::eTransferDst | ImageUsageFlags::eSampled };
 			return makeUnique< TextureLayout >( *engine.getRenderSystem()
 				, image
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+				, MemoryPropertyFlags::eDeviceLocal
 				, cuT( "FontTexture_" ) + font->getFaceName()
 					+ ( font->isSDF() ? String{ cuT( "SDF" ) } : string::toString( font->getHeight() ) )
 					+ suffix );

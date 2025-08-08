@@ -44,19 +44,12 @@ namespace c3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, crg::ImageViewIdArray targetDepth
+		, Texture & targetDepth
 		, SsaoConfig const & ssaoConfig
 		, RenderNodesPassDesc const & renderPassDesc )
-		: RenderTechniqueNodesPass{ parent
-			, pass
-			, context
-			, graph
-			, device
-			, Type
-			, {}
-			, c3d::move( targetDepth )
-			, renderPassDesc
-			, { false, ssaoConfig } }
+		: RenderTechniqueNodesPass{ parent, pass, context, graph, device
+			, Type, {}, &targetDepth
+			, renderPassDesc, { false, ssaoConfig } }
 	{
 	}
 

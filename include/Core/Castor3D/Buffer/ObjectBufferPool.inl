@@ -11,13 +11,14 @@ namespace c3d
 	{
 		template< typename DataT >
 		GpuPackedBufferUPtr createBuffer( RenderDevice const & device
-			, VkDeviceSize count
-			, VkBufferUsageFlags usage
+			, crg::ResourcesCache & resources
+			, DeviceSize count
+			, BufferUsageFlags usage
 			, String debugName
 			, bool smallData
 			, uint32_t alignSize )
 		{
-			VkDeviceSize maxCount = BaseObjectPoolBufferCount;
+			DeviceSize maxCount = BaseObjectPoolBufferCount;
 
 			while ( maxCount < count )
 			{
@@ -25,8 +26,9 @@ namespace c3d
 			}
 
 			return makeUnique< GpuPackedBuffer >( device.renderSystem
+				, resources
 				, usage
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+				, MemoryPropertyFlags::eDeviceLocal
 				, debugName
 				, ashes::QueueShare{}
 				, GpuBufferPackedAllocator{ uint32_t( maxCount * sizeof( DataT ) ), alignSize }
@@ -35,13 +37,14 @@ namespace c3d
 
 		template< typename DataT >
 		GpuPackedBaseBufferUPtr createBaseBuffer( RenderDevice const & device
-			, VkDeviceSize count
-			, VkBufferUsageFlags usage
-			, VkMemoryPropertyFlags memory
+			, crg::ResourcesCache & resources
+			, DeviceSize count
+			, BufferUsageFlags usage
+			, MemoryPropertyFlags memory
 			, String debugName
 			, uint32_t alignSize )
 		{
-			VkDeviceSize maxCount = BaseObjectPoolBufferCount;
+			DeviceSize maxCount = BaseObjectPoolBufferCount;
 
 			while ( maxCount < count )
 			{
@@ -49,6 +52,7 @@ namespace c3d
 			}
 
 			return makeUnique< GpuPackedBaseBuffer >( device
+				, resources
 				, usage
 				, memory
 				, debugName
@@ -60,19 +64,20 @@ namespace c3d
 	//*********************************************************************************************
 
 	template< typename VertexT >
-	ObjectBufferOffset VertexBufferPool::getBuffer( VkDeviceSize vertexCount )
+	ObjectBufferOffset VertexBufferPool::getBuffer( DeviceSize vertexCount )
 	{
 		ObjectBufferOffset result;
-		auto size = VkDeviceSize( vertexCount * sizeof( VertexT ) );
+		auto size = DeviceSize( vertexCount * sizeof( VertexT ) );
 		auto ait = doInsertBuffers( sizeof( VertexT ) );
 		auto it = doFindBuffer( size, ait->second );
 
 		if ( it == ait->second.end() )
 		{
 			ModelBuffers buffers{ details::createBaseBuffer< uint8_t >( m_device
-				, std::max( size, VkDeviceSize( 65536U ) )
-				, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, m_resources
+				, std::max( size, DeviceSize( 65536U ) )
+				, BufferUsageFlags::eVertexBuffer | BufferUsageFlags::eTransferDst
+				, MemoryPropertyFlags::eHostVisible
 				, m_debugName + cuT( "Vertex" ) + string::toString( ait->second.size() )
 				, uint32_t( ait->first ) ) };
 			ait->second.emplace_back( c3d::move( buffers ) );
@@ -103,18 +108,19 @@ namespace c3d
 	//*********************************************************************************************
 
 	template< typename IndexT >
-	ObjectBufferOffset IndexBufferPool::getBuffer( VkDeviceSize indexCount )
+	ObjectBufferOffset IndexBufferPool::getBuffer( DeviceSize indexCount )
 	{
 		ObjectBufferOffset result;
-		auto size = VkDeviceSize( indexCount * sizeof( IndexT ) );
+		auto size = DeviceSize( indexCount * sizeof( IndexT ) );
 		auto it = doFindBuffer( size, m_buffers );
 
 		if ( it == m_buffers.end() )
 		{
 			ModelBuffers buffers{ details::createBaseBuffer< uint8_t >( m_device
-				, std::max( size, VkDeviceSize( 65536U ) )
-				, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, m_resources
+				, std::max( size, DeviceSize( 65536U ) )
+				, BufferUsageFlags::eIndexBuffer | BufferUsageFlags::eTransferDst
+				, MemoryPropertyFlags::eHostVisible
 				, m_debugName + cuT( "Index" ) + string::toString( m_buffers.size() )
 				, uint32_t( m_device.properties.limits.minMemoryMapAlignment ) ) };
 			m_buffers.emplace_back( c3d::move( buffers ) );

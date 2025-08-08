@@ -8,10 +8,12 @@ See LICENSE file in root folder
 
 namespace c3d
 {
-	C3D_API crg::FramePass const & createFindUniqueClustersPass( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
+	C3D_API void createFindUniqueClustersPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
-		, FrustumClusters & clusters );
+		, FrustumClusters & clusters
+		, BufferBase const & clusterFlags
+		, BufferBase & uniqueClusters
+		, BufferBase & clustersIndirect );
 }
 
 #endif

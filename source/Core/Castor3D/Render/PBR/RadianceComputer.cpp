@@ -76,7 +76,57 @@ namespace c3d
 				, 6u );
 		}
 
-		template< typename SourceImageT >
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::Int const in )
+		{
+			return vec3( writer.cast< sdw::Float >( in ) );
+		}
+
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::IVec2 const in )
+		{
+			return vec3( vec2( in ), 0.0_f );
+		}
+
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::IVec4 const in )
+		{
+			return vec3( in.xyz() );
+		}
+
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter & writer, sdw::UInt const in )
+		{
+			return vec3( writer.cast< sdw::Float >( in ) );
+		}
+
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::UVec2 const in )
+		{
+			return vec3( vec2( in ), 0.0_f );
+		}
+
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::UVec4 const in )
+		{
+			return vec3( in.xyz() );
+		}
+
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Float const in )
+		{
+			return vec3( in );
+		}
+
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec2 const in )
+		{
+			return vec3( in, 0.0_f );
+		}
+
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec3 const in )
+		{
+			return in;
+		}
+
+		static sdw::Vec3 makeVec3( sdw::ShaderWriter const &, sdw::Vec4 const in )
+		{
+			return in.xyz();
+		}
+
+		template< ast::type::ImageFormat FormatT >
 		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device )
 		{
 			ProgramModule programModule{ cuT( "RadianceCompute" ) };
@@ -86,7 +136,7 @@ namespace c3d
 				auto matrix = writer.declUniformBuffer( "Matrix", 0u, 0u );
 				auto c3d_viewProjection = matrix.declMember< sdw::Mat4 >( "c3d_viewProjection" );
 				matrix.end();
-				auto c3d_mapEnvironment = writer.declCombinedImg< SourceImageT >( "c3d_mapEnvironment", 1u, 0u );
+				auto c3d_mapEnvironment = writer.declCombinedImg< FormatT, ImgCube >( "c3d_mapEnvironment", 1u, 0u );
 
 				writer.implementEntryPointT< shader::Position3FT, shader::Position3FT >( [&c3d_viewProjection]( sdw::VertexInT< shader::Position3FT > const & in
 					, sdw::VertexOutT< shader::Position3FT > out )
@@ -128,7 +178,7 @@ namespace c3d
 								auto sampleVec = writer.declLocale( "sampleVec"
 									, right * tangentSample.x() + up * tangentSample.y() + normal * tangentSample.z() );
 
-								irradiance += c3d_mapEnvironment.lod( sampleVec, 0.0_f ).rgb() * cos( theta ) * sin( theta );
+								irradiance += makeVec3( writer, c3d_mapEnvironment.lod( sampleVec, 0.0_f ) ) * cos( theta ) * sin( theta );
 								nrSamples = nrSamples + 1;
 							}
 							sdwROF
@@ -221,7 +271,7 @@ namespace c3d
 			auto & facePass = m_renderPasses[face];
 			auto name = "RadianceComputer" + string::toMbString( face );
 			// Create the views.
-			facePass.dstView = dstTexture.resources->createImageView( context, dstTexture.subViewsId[face] );
+			facePass.dstView = dstTexture.resources->createImageView( context, dstTexture.getTargetViewId( face ) );
 			// Initialise the frame buffer.
 			auto createInfo = makeVkStruct< VkFramebufferCreateInfo >( 0u
 				, *m_renderPass
@@ -234,9 +284,53 @@ namespace c3d
 				, c3d::move( createInfo ) );
 		}
 
-		auto program = srcTexture.getFormat() == PixelFormat::eB10G11R11_UFLOAT
-			? radcomp::doCreateProgram< sdw::CombinedImageCubeR11fG11fB10f >( m_device )
-			: radcomp::doCreateProgram< sdw::CombinedImageCubeRgba32 >( m_device );
+		ast::type::ImageFormat format = getImageFormat( srcTexture.getFormat() );
+		ashes::PipelineShaderStageCreateInfoArray program;
+		switch ( format )
+		{
+		case ast::type::ImageFormat::eRgba32f: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRgba32f >( m_device ); break;
+		case ast::type::ImageFormat::eRgba16f: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRgba16f >( m_device ); break;
+		case ast::type::ImageFormat::eRg32f: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRg32f >( m_device ); break;
+		case ast::type::ImageFormat::eRg16f: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRg16f >( m_device ); break;
+		case ast::type::ImageFormat::eR32f: program = radcomp::doCreateProgram< ast::type::ImageFormat::eR32f >( m_device ); break;
+		case ast::type::ImageFormat::eR16f: program = radcomp::doCreateProgram< ast::type::ImageFormat::eR16f >( m_device ); break;
+		case ast::type::ImageFormat::eR11fG11fB10f: program = radcomp::doCreateProgram< ast::type::ImageFormat::eR11fG11fB10f >( m_device ); break;
+		case ast::type::ImageFormat::eRgba32i: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRgba32i >( m_device ); break;
+		case ast::type::ImageFormat::eRgba16i: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRgba16i >( m_device ); break;
+		case ast::type::ImageFormat::eRgba8i: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRgba8i >( m_device ); break;
+		case ast::type::ImageFormat::eRg32i: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRg32i >( m_device ); break;
+		case ast::type::ImageFormat::eRg16i: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRg16i >( m_device ); break;
+		case ast::type::ImageFormat::eRg8i: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRg8i >( m_device ); break;
+		case ast::type::ImageFormat::eR32i: program = radcomp::doCreateProgram< ast::type::ImageFormat::eR32i >( m_device ); break;
+		case ast::type::ImageFormat::eR16i: program = radcomp::doCreateProgram< ast::type::ImageFormat::eR16i >( m_device ); break;
+		case ast::type::ImageFormat::eR8i: program = radcomp::doCreateProgram< ast::type::ImageFormat::eR8i >( m_device ); break;
+		case ast::type::ImageFormat::eRgba32u: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRgba32u >( m_device ); break;
+		case ast::type::ImageFormat::eRgba16u: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRgba16u >( m_device ); break;
+		case ast::type::ImageFormat::eRgba8u: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRgba8u >( m_device ); break;
+		case ast::type::ImageFormat::eRg32u: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRg32u >( m_device ); break;
+		case ast::type::ImageFormat::eRg16u: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRg16u >( m_device ); break;
+		case ast::type::ImageFormat::eRg8u: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRg8u >( m_device ); break;
+		case ast::type::ImageFormat::eR32u: program = radcomp::doCreateProgram< ast::type::ImageFormat::eR32u >( m_device ); break;
+		case ast::type::ImageFormat::eR16u: program = radcomp::doCreateProgram< ast::type::ImageFormat::eR16u >( m_device ); break;
+		case ast::type::ImageFormat::eR8u: program = radcomp::doCreateProgram< ast::type::ImageFormat::eR8u >( m_device ); break;
+		case ast::type::ImageFormat::eRgb10A2u: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRgb10A2u >( m_device ); break;
+		case ast::type::ImageFormat::eRgba16Snorm: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRgba16Snorm >( m_device ); break;
+		case ast::type::ImageFormat::eRgba8Snorm: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRgba8Snorm >( m_device ); break;
+		case ast::type::ImageFormat::eRg16Snorm: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRg16Snorm >( m_device ); break;
+		case ast::type::ImageFormat::eRg8Snorm: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRg8Snorm >( m_device ); break;
+		case ast::type::ImageFormat::eR16Snorm: program = radcomp::doCreateProgram< ast::type::ImageFormat::eR16Snorm >( m_device ); break;
+		case ast::type::ImageFormat::eR8Snorm: program = radcomp::doCreateProgram< ast::type::ImageFormat::eR8Snorm >( m_device ); break;
+		case ast::type::ImageFormat::eRgba16Unorm: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRgba16Unorm >( m_device ); break;
+		case ast::type::ImageFormat::eRgba8Unorm: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRgba8Unorm >( m_device ); break;
+		case ast::type::ImageFormat::eRg16Unorm: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRg16Unorm >( m_device ); break;
+		case ast::type::ImageFormat::eRg8Unorm: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRg8Unorm >( m_device ); break;
+		case ast::type::ImageFormat::eR16Unorm: program = radcomp::doCreateProgram< ast::type::ImageFormat::eR16Unorm >( m_device ); break;
+		case ast::type::ImageFormat::eR8Unorm: program = radcomp::doCreateProgram< ast::type::ImageFormat::eR8Unorm >( m_device ); break;
+		case ast::type::ImageFormat::eRgb10A2Unorm: program = radcomp::doCreateProgram< ast::type::ImageFormat::eRgb10A2Unorm >( m_device ); break;
+		default:
+			CU_Failure( "Unsupported ImageFormat" );
+			break;
+		}
 		createPipelines( { size.getWidth(), size.getHeight() }
 			, program
 			, m_srcImageView
@@ -266,13 +360,8 @@ namespace c3d
 
 	RadianceComputer::~RadianceComputer()noexcept
 	{
-		auto & dstTexture = m_result;
-
 		for ( auto face = 0u; face < 6u; ++face )
-		{
 			m_renderPasses[face].frameBuffer.reset();
-			dstTexture.resources->destroyImageView( dstTexture.subViewsId[face] );
-		}
 
 		m_result.destroy();
 	}

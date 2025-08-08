@@ -7,7 +7,7 @@ namespace waves
 {
 	WavesUbo::WavesUbo( c3d::RenderDevice const & device )
 		: m_device{ device }
-		, m_ubo{ device.uboPool->getBuffer< Configuration >( 0u ) }
+		, m_ubo{ device.uboPool->getBuffer< Configuration >( c3d::MemoryPropertyFlags::eNone ) }
 	{
 	}
 

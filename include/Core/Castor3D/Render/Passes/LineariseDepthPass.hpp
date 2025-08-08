@@ -30,7 +30,6 @@ namespace c3d
 		 *\brief		Constructor.
 		 *\param[in]	resources		The graph resources cache.
 		 *\param[in]	graph			The render graph.
-		 *\param[in]	previousPasses	The previous frame passes.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	progress		The progress bar.
 		 *\param[in]	prefix			The pass name's prefix.
@@ -41,7 +40,6 @@ namespace c3d
 		 *\brief		Constructeur.
 		 *\param[in]	resources		Le cache de ressources du graphe.
 		 *\param[in]	graph			Le render graph.
-		 *\param[in]	previousPasses	Les frame passes précédentes.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	progress		La barre de progression.
 		 *\param[in]	prefix			Le préfixe du nom de la passe.
@@ -51,7 +49,6 @@ namespace c3d
 		 */
 		C3D_API LineariseDepthPass( crg::ResourcesCache & resources
 			, crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, String const & prefix
@@ -89,20 +86,14 @@ namespace c3d
 		/**@{*/
 		static uint32_t countInitialisationSteps()noexcept;
 
-		crg::ImageViewIdArray const & getResult()const noexcept
+		Texture const & getResult()const noexcept
 		{
-			return m_mipViews;
-		}
-
-		crg::FramePass const & getLastPass()const noexcept
-		{
-			return *m_lastPass;
+			return m_result;
 		}
 		/**@}*/
 
 	private:
-		crg::FramePass const & doInitialiseExtractPass( ProgressBar * progress
-			, crg::FramePassArray const & previousPasses
+		void doInitialiseExtractPass( ProgressBar * progress
 			, Texture const & depthObj );
 		void doInitialiseMinifyPass( ProgressBar * progress );
 
@@ -114,10 +105,8 @@ namespace c3d
 		String m_prefix;
 		Extent2D m_size;
 		Texture m_result;
-		crg::ImageViewIdArray m_mipViews;
 		UniformBufferOffsetT< Point3f > m_clipInfo;
 		ChangeTracked< Point3f > m_clipInfoValue;
-		crg::FramePass const * m_lastPass{};
 		/**
 		*name
 		*	Linearisation.
@@ -125,7 +114,6 @@ namespace c3d
 		/**@{*/
 		ProgramModule m_extractShader;
 		ashes::PipelineShaderStageCreateInfoArray m_extractStages;
-		crg::FramePass const & m_extractPass;
 		/**@}*/
 		/**
 		*name

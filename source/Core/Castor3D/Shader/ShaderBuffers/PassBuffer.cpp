@@ -43,7 +43,7 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	VkDeviceSize PassBuffer::PassDataPtr::write( MemChunk const & chunk
+	VkDeviceSize PassBuffer::PassDataPtr::write( DataChunk const & chunk
 		, uint32_t v
 		, VkDeviceSize offset )
 	{
@@ -56,7 +56,7 @@ namespace c3d
 		return sizeof( uint32_t );
 	}
 
-	VkDeviceSize PassBuffer::PassDataPtr::write( MemChunk const & chunk
+	VkDeviceSize PassBuffer::PassDataPtr::write( DataChunk const & chunk
 		, int32_t v
 		, VkDeviceSize offset )
 	{
@@ -69,7 +69,7 @@ namespace c3d
 		return sizeof( int32_t );
 	}
 
-	VkDeviceSize PassBuffer::PassDataPtr::write( MemChunk const & chunk
+	VkDeviceSize PassBuffer::PassDataPtr::write( DataChunk const & chunk
 		, float v
 		, VkDeviceSize offset )
 	{
@@ -89,7 +89,7 @@ namespace c3d
 		, uint32_t count )
 		: m_stride{ uint32_t( engine.getPassComponentsRegister().getPassBufferStride() ) }
 		, m_maxCount{ count }
-		, m_buffer{ device, count * VkDeviceSize( m_stride ), cuT( "PassBuffer" ) }
+		, m_buffer{ device, engine.getGraphResourceCache(), count * VkDeviceSize( m_stride ), cuT( "PassBuffer" ) }
 		, m_data{ makeArrayView( m_buffer.getPtr(), count * m_stride ) }
 	{
 	}

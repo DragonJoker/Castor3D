@@ -236,8 +236,18 @@ namespace c3d
 			}
 		}
 
-		m_vertexBuffer.reset();
-		m_uvInvVertexBuffer.reset();
+		if ( m_vertexBuffer )
+		{
+			m_vertexBuffer->destroy();
+			m_vertexBuffer.reset();
+		}
+
+		if ( m_uvInvVertexBuffer )
+		{
+			m_uvInvVertexBuffer->destroy();
+			m_uvInvVertexBuffer.reset();
+		}
+
 		m_descriptorSets.clear();
 		m_descriptorSetPool.reset();
 		m_pipeline.reset();
@@ -255,12 +265,13 @@ namespace c3d
 		log::debug << "Creating pipeline for " << getName() << std::endl;
 		// Initialise the vertex buffer.
 		m_vertexBuffer = makeVertexBuffer< TexturedQuad::Vertex >( m_device
+			, m_device.renderSystem.getEngine()->getGraphResourceCache()
 			, 4u
-			, 0u
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, BufferUsageFlags::eNone
+			, MemoryPropertyFlags::eHostVisible
 			, getName() );
 
-		if ( auto buffer = m_vertexBuffer->lock( 0u, 4u, 0u ) )
+		if ( auto buffer = m_vertexBuffer->lock() )
 		{
 			Array< TexturedQuad::Vertex, 4u > vertexData
 			{
@@ -282,18 +293,19 @@ namespace c3d
 						: Point2f{} ) },
 			};
 			std::copy( vertexData.begin(), vertexData.end(), buffer );
-			m_vertexBuffer->flush( 0u, 4u );
+			m_vertexBuffer->flush();
 			m_vertexBuffer->unlock();
 		}
 
 		// Initialise the V inverted vertex buffer.
 		m_uvInvVertexBuffer = makeVertexBuffer< TexturedQuad::Vertex >( m_device
+			, m_device.renderSystem.getEngine()->getGraphResourceCache()
 			, 4u
-			, 0u
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, BufferUsageFlags::eNone
+			, MemoryPropertyFlags::eHostVisible
 			, getName() );
 
-		if ( auto buffer = m_uvInvVertexBuffer->lock( 0u, 4u, 0u ) )
+		if ( auto buffer = m_uvInvVertexBuffer->lock() )
 		{
 			Array< TexturedQuad::Vertex, 4u > vertexData
 			{
@@ -315,7 +327,7 @@ namespace c3d
 						: Point2f{} ) },
 			};
 			std::copy( vertexData.begin(), vertexData.end(), buffer );
-			m_uvInvVertexBuffer->flush( 0u, 4u );
+			m_uvInvVertexBuffer->flush();
 			m_uvInvVertexBuffer->unlock();
 		}
 

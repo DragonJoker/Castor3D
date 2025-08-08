@@ -733,20 +733,19 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	VertexTransforming::VertexTransforming( Scene const & scene
+	VertexTransforming::VertexTransforming( Scene & scene
 		, RenderDevice const & device )
 		: OwnedBy< Scene const >{ scene }
 		, m_device{ device }
+		, m_buffer{ scene.getResources().getHandler().createBufferId( crg::BufferData{ "VertexTransform", BufferCreateFlags::eNone, 1u, BufferUsageFlags::eStorageBuffer } ) }
+		, m_bufferView{ scene.getResources().getHandler().createViewId( crg::BufferViewData{ "VertexTransform", m_buffer, { 0u, getSize( m_buffer ) } } ) }
 	{
 	}
 
-	crg::FramePass const & VertexTransforming::createPass( crg::FramePassGroup & graph
-		, crg::FramePass const * previousPass )
+	void VertexTransforming::createPass( crg::FramePassGroup & graph )
 	{
-		if ( m_boundsPass )
-		{
-			return m_boundsPass->getPass();
-		}
+		if ( m_result )
+			return;
 
 		auto & pass = graph.createPass( "Transform/VertexTransforming"
 			, [this]( crg::FramePass const & framePass
@@ -765,12 +764,7 @@ namespace c3d
 
 				return res;
 			} );
-
-		if ( previousPass )
-		{
-			pass.addDependency( *previousPass );
-		}
-
+		auto attach = pass.addOutputStorageBuffer( m_bufferView, VertexTransformPass::eCount );
 		auto & result = graph.createPass( "Transform/MeshletBoundsTransforming"
 			, [this]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -787,8 +781,7 @@ namespace c3d
 
 				return res;
 			} );
-		result.addDependency( pass );
-		return result;
+		m_result = result.addInOutStorage( *attach, VertexTransformPass::eCount );
 	}
 
 	void VertexTransforming::registerNode( SubmeshRenderNode const & node

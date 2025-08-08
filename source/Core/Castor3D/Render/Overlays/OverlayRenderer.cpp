@@ -244,8 +244,10 @@ namespace c3d
 	//*********************************************************************************************
 
 	OverlayRenderer::OverlaysCommonData::OverlaysCommonData( RenderDevice const & device
-		, RenderUbo const & renderUbo )
+		, RenderUbo const & prenderUbo )
 		: baseDescriptorLayout{ ovrlrend::createBaseDescriptorLayout( device ) }
+		, renderUbo{ device }
+		, parentRenderUbo{ prenderUbo }
 		, cameraUbo{ device }
 		, panelVertexBuffer{ makeRawUnique< PanelVertexBufferPool >( *device.renderSystem.getEngine()
 			, cuT( "PanelOverlays" )
@@ -281,6 +283,7 @@ namespace c3d
 		: panelPipeline{ doCreatePanelPipeline( device, *commonData.panelVertexBuffer, commonData.cameraUbo ) }
 		, borderPipeline{ doCreateBorderPipeline( device, *commonData.borderVertexBuffer, commonData.cameraUbo ) }
 		, textPipeline{ doCreateTextPipeline( device ) }
+		, m_device{ device }
 		, m_commonData{ commonData }
 	{
 	}
@@ -304,8 +307,8 @@ namespace c3d
 			doRegisterComputeBufferCommands( context
 				, commandBuffer
 				, panelPipeline
-				, m_commonData.panelVertexBuffer->overlaysData->getBuffer()
-				, m_commonData.panelVertexBuffer->vertexBuffer.getBuffer().getBuffer() );
+				, *m_commonData.panelVertexBuffer->overlaysData
+				, m_commonData.panelVertexBuffer->vertexBuffer.getBuffer() );
 		}
 
 		if ( borderPipeline.count )
@@ -313,8 +316,8 @@ namespace c3d
 			doRegisterComputeBufferCommands( context
 				, commandBuffer
 				, borderPipeline
-				, m_commonData.borderVertexBuffer->overlaysData->getBuffer()
-				, m_commonData.borderVertexBuffer->vertexBuffer.getBuffer().getBuffer() );
+				, *m_commonData.borderVertexBuffer->overlaysData
+				, m_commonData.borderVertexBuffer->vertexBuffer.getBuffer() );
 		}
 
 		bool hasTexts{};
@@ -328,11 +331,11 @@ namespace c3d
 		{
 			crg::BufferSubresourceRange range{ 0u, VK_WHOLE_SIZE };
 			// Common buffers preparation
-			memoryBarrier( context, commandBuffer
-				, m_commonData.textVertexBuffer->overlaysData->getBuffer(), range
+			context.memoryBarrier( commandBuffer
+				, m_commonData.textVertexBuffer->overlaysData->bufferViewId
 				, HostWriteState, ComputeShaderReadState );
-			memoryBarrier( context, commandBuffer
-				, m_commonData.textVertexBuffer->vertexBuffer.getBuffer().getBuffer(), range
+			context.memoryBarrier( commandBuffer
+				, m_commonData.textVertexBuffer->vertexBuffer.getBuffer().bufferViewId
 				, VertexAttributeInputState, ComputeShaderWriteState );
 
 			for ( auto & [_, set] : textPipeline.sets )
@@ -347,12 +350,11 @@ namespace c3d
 			}
 
 			// Common buffers restore
-			memoryBarrier( context, commandBuffer
-				, m_commonData.textVertexBuffer->vertexBuffer.getBuffer().getBuffer(), range
+			context.memoryBarrier( commandBuffer
+				, m_commonData.textVertexBuffer->vertexBuffer.getBuffer().bufferViewId
 				, ComputeShaderWriteState, VertexAttributeInputState );
-			memoryBarrier( context
-				, commandBuffer
-				, m_commonData.textVertexBuffer->overlaysData->getBuffer(), range
+			context.memoryBarrier( commandBuffer
+				, m_commonData.textVertexBuffer->overlaysData->bufferViewId
 				, ComputeShaderReadState, HostWriteState );
 		}
 	}
@@ -404,9 +406,9 @@ namespace c3d
 		cameraUbo.createSizedBinding( *result.descriptorSet
 			, result.descriptorLayout->getBinding( uint32_t( PanelOverlay::ComputeBindingIdx::eCamera ) ) );
 		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( uint32_t( PanelOverlay::ComputeBindingIdx::eOverlays ) )
-			, *vertexBuffer.overlaysData
+			, vertexBuffer.overlaysData->getBuffer()
 			, 0u
-			, uint32_t( vertexBuffer.overlaysData->getCount() ) );
+			, uint32_t( vertexBuffer.overlaysData->getSize() ) );
 		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( uint32_t( PanelOverlay::ComputeBindingIdx::eVertex ) )
 			, vertexBuffer.vertexBuffer.getBuffer().getBuffer()
 			, 0u
@@ -449,9 +451,9 @@ namespace c3d
 		cameraUbo.createSizedBinding( *result.descriptorSet
 			, result.descriptorLayout->getBinding( uint32_t( BorderPanelOverlay::ComputeBindingIdx::eCamera ) ) );
 		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( uint32_t( BorderPanelOverlay::ComputeBindingIdx::eOverlays ) )
-			, *vertexBuffer.overlaysData
+			, vertexBuffer.overlaysData->getBuffer()
 			, 0u
-			, uint32_t( vertexBuffer.overlaysData->getCount() ) );
+			, uint32_t( vertexBuffer.overlaysData->getSize() ) );
 		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( uint32_t( BorderPanelOverlay::ComputeBindingIdx::eVertex ) )
 			, vertexBuffer.vertexBuffer.getBuffer().getBuffer()
 			, 0u
@@ -519,9 +521,9 @@ namespace c3d
 		m_commonData.textVertexBuffer->renderUbo.createSizedBinding( descriptorSet
 			, descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eRender ) ) );
 		descriptorSet.createBinding( descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eOverlays ) )
-			, *m_commonData.textVertexBuffer->overlaysData
+			, m_commonData.textVertexBuffer->overlaysData->getBuffer()
 			, 0u
-			, uint32_t( m_commonData.textVertexBuffer->overlaysData->getCount() ) );
+			, uint32_t( m_commonData.textVertexBuffer->overlaysData->getSize() ) );
 		m_commonData.textVertexBuffer->fillComputeDescriptorSet( &fontTexture
 			, descriptorLayout
 			, descriptorSet );
@@ -536,15 +538,14 @@ namespace c3d
 	void OverlayRenderer::OverlaysComputeData::doRegisterComputeBufferCommands( crg::RecordContext & context
 		, VkCommandBuffer commandBuffer
 		, OverlayRenderer::ComputePipeline const & pipeline
-		, ashes::BufferBase const & overlaysBuffer
-		, ashes::BufferBase const & vertexBuffer )const
+		, BufferBase const & overlaysBuffer
+		, BufferBase const & vertexBuffer )const
 	{
-		crg::BufferSubresourceRange range{ 0u, VK_WHOLE_SIZE };
-		memoryBarrier( context, commandBuffer
-			, overlaysBuffer, range
+		context.memoryBarrier( commandBuffer
+			, overlaysBuffer.bufferViewId
 			, HostWriteState, ComputeShaderReadState );
-		memoryBarrier( context, commandBuffer
-			, vertexBuffer, range
+		context.memoryBarrier( commandBuffer
+			, vertexBuffer.bufferViewId
 			, VertexAttributeInputState, ComputeShaderWriteState );
 		context.getContext().vkCmdBindPipeline( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE
@@ -560,11 +561,11 @@ namespace c3d
 			, nullptr );
 		context.getContext().vkCmdDispatch( commandBuffer
 			, pipeline.count, 1u, 1u );
-		memoryBarrier( context, commandBuffer
-			, vertexBuffer, range
+		context.memoryBarrier( commandBuffer
+			, vertexBuffer.bufferViewId
 			, ComputeShaderWriteState, VertexAttributeInputState );
-		memoryBarrier( context, commandBuffer
-			, overlaysBuffer, range
+		context.memoryBarrier( commandBuffer
+			, overlaysBuffer.bufferViewId
 			, ComputeShaderReadState, HostWriteState );
 	}
 
@@ -574,16 +575,15 @@ namespace c3d
 		, OverlayRenderer::TextComputePipelineDescriptor const & set )const
 	{
 		auto & textBuffer = set.textBuffer;
-		crg::BufferSubresourceRange range{ 0u, VK_WHOLE_SIZE };
 
-		memoryBarrier( context, commandBuffer
-			, textBuffer->charsBuffer.buffer->getBuffer(), range
+		context.memoryBarrier( commandBuffer
+			, textBuffer->charsBuffer.buffer->bufferViewId
 			, HostWriteState, ComputeShaderReadState );
-		memoryBarrier( context, commandBuffer
-			, textBuffer->wordsBuffer.buffer->getBuffer(), range
+		context.memoryBarrier( commandBuffer
+			, textBuffer->wordsBuffer.buffer->bufferViewId
 			, HostWriteState, ComputeShaderReadState );
-		memoryBarrier( context, commandBuffer
-			, textBuffer->linesBuffer.buffer->getBuffer(), range
+		context.memoryBarrier( commandBuffer
+			, textBuffer->linesBuffer.buffer->bufferViewId
 			, HostWriteState, ComputeShaderReadState );
 		context.getContext().vkCmdBindPipeline( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE
@@ -615,14 +615,14 @@ namespace c3d
 			data.batchOffset += batchCount;
 		}
 
-		memoryBarrier( context, commandBuffer
-			, textBuffer->linesBuffer.buffer->getBuffer(), range
+		context.memoryBarrier( commandBuffer
+			, textBuffer->linesBuffer.buffer->bufferViewId
 			, ComputeShaderReadState, HostWriteState );
-		memoryBarrier( context, commandBuffer
-			, textBuffer->wordsBuffer.buffer->getBuffer(), range
+		context.memoryBarrier( commandBuffer
+			, textBuffer->wordsBuffer.buffer->bufferViewId
 			, ComputeShaderReadState, HostWriteState );
-		memoryBarrier( context, commandBuffer
-			, textBuffer->charsBuffer.buffer->getBuffer(), range
+		context.memoryBarrier( commandBuffer
+			, textBuffer->charsBuffer.buffer->bufferViewId
 			, ComputeShaderReadState, HostWriteState );
 	}
 
@@ -633,6 +633,7 @@ namespace c3d
 		, OverlaysCommonData & commonData
 		, bool isHdr )
 		: commands{ device, *device.graphicsData(), cuT( "OverlayRenderer" ), level }
+		, m_device{ device }
 		, m_commonData{ commonData }
 		, m_isHdr{ isHdr }
 	{
@@ -641,14 +642,13 @@ namespace c3d
 		textBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		textDescriptorLayout = device->createDescriptorSetLayout( name + "Text"
+		textDescriptorLayout = m_device->createDescriptorSetLayout( name + "Text"
 			, c3d::move( textBindings ) );
 		textDescriptorPool = textDescriptorLayout->createPool( name + "Text"
 			, MaxOverlaysPerBuffer );
 	}
 
-	OverlayDrawNode & OverlayRenderer::OverlaysDrawData::getPanelNode( RenderDevice const & device
-		, VkRenderPass renderPass
+	OverlayDrawNode & OverlayRenderer::OverlaysDrawData::getPanelNode( VkRenderPass renderPass
 		, Pass const & pass )
 	{
 		auto key = ovrlrend::makeKey( pass, renderPass );
@@ -656,15 +656,14 @@ namespace c3d
 
 		if ( it == m_mapPanelNodes.end() )
 		{
-			auto & pipeline = doGetPipeline( device, renderPass, pass, m_panelPipelines, false, false, false );
+			auto & pipeline = doGetPipeline( renderPass, pass, m_panelPipelines, false, false, false );
 			it = m_mapPanelNodes.try_emplace( key, pipeline, pass ).first;
 		}
 
 		return it->second;
 	}
 
-	OverlayDrawNode & OverlayRenderer::OverlaysDrawData::getBorderNode( RenderDevice const & device
-		, VkRenderPass renderPass
+	OverlayDrawNode & OverlayRenderer::OverlaysDrawData::getBorderNode( VkRenderPass renderPass
 		, Pass const & pass )
 	{
 		auto key = ovrlrend::makeKey( pass, renderPass );
@@ -672,15 +671,14 @@ namespace c3d
 
 		if ( it == m_mapBorderNodes.end() )
 		{
-			auto & pipeline = doGetPipeline( device, renderPass, pass, m_borderPipelines, true, false, false );
+			auto & pipeline = doGetPipeline( renderPass, pass, m_borderPipelines, true, false, false );
 			it = m_mapBorderNodes.try_emplace( key, pipeline, pass ).first;
 		}
 
 		return it->second;
 	}
 
-	OverlayDrawNode & OverlayRenderer::OverlaysDrawData::getTextNode( RenderDevice const & device
-		, VkRenderPass renderPass
+	OverlayDrawNode & OverlayRenderer::OverlaysDrawData::getTextNode( VkRenderPass renderPass
 		, Pass const & pass
 		, bool sdfFont )
 	{
@@ -689,7 +687,7 @@ namespace c3d
 
 		if ( it == m_mapTextNodes.end() )
 		{
-			auto & pipeline = doGetPipeline( device, renderPass, pass, m_textPipelines, false, true, sdfFont );
+			auto & pipeline = doGetPipeline( renderPass, pass, m_textPipelines, false, true, sdfFont );
 			it = m_mapTextNodes.try_emplace( key, pipeline, pass ).first;
 		}
 
@@ -745,8 +743,7 @@ namespace c3d
 		timerBlock = {};
 	}
 
-	OverlayDrawPipeline & OverlayRenderer::OverlaysDrawData::doGetPipeline( RenderDevice const & device
-		, VkRenderPass renderPass
+	OverlayDrawPipeline & OverlayRenderer::OverlaysDrawData::doGetPipeline( VkRenderPass renderPass
 		, Pass const & pass
 		, HashMap< size_t, OverlayDrawPipeline > & pipelines
 		, bool borderOverlay
@@ -754,7 +751,7 @@ namespace c3d
 		, bool sdfFont )
 	{
 		// Remove unwanted flags
-		auto const & passComponents = device.renderSystem.getEngine()->getPassComponentsRegister();
+		auto const & passComponents = m_device.renderSystem.getEngine()->getPassComponentsRegister();
 		auto textures = passComponents.filterTextureFlags( ComponentModeFlag::eColour | ComponentModeFlag::eOpacity
 			, pass.getTexturesMask() );
 		auto key = ovrlrend::makeKey( passComponents, textures, renderPass, borderOverlay, textOverlay, sdfFont );
@@ -764,9 +761,8 @@ namespace c3d
 		{
 			// Since it does not exist yet, create it and initialise it
 			it = pipelines.try_emplace( key
-				, doCreatePipeline( device
-					, renderPass
-					, doCreateOverlayProgram( device, textures, textOverlay, sdfFont )
+				, doCreatePipeline( renderPass
+					, doCreateOverlayProgram( textures, textOverlay, sdfFont )
 					, textures
 					, borderOverlay
 					, textOverlay
@@ -776,15 +772,14 @@ namespace c3d
 		return it->second;
 	}
 
-	OverlayDrawPipeline OverlayRenderer::OverlaysDrawData::doCreatePipeline( RenderDevice const & device
-		, VkRenderPass renderPass
+	OverlayDrawPipeline OverlayRenderer::OverlaysDrawData::doCreatePipeline( VkRenderPass renderPass
 		, ashes::PipelineShaderStageCreateInfoArray program
 		, TextureCombine const & texturesFlags
 		, bool borderOverlay
 		, bool textOverlay
 		, bool sdfFont )
 	{
-		auto const & engine = *device.renderSystem.getEngine();
+		auto const & engine = *m_device.renderSystem.getEngine();
 		auto const & passComponents = engine.getPassComponentsRegister();
 		ashes::VkPipelineColorBlendAttachmentStateArray attachments{ { VK_TRUE
 			, VK_BLEND_FACTOR_SRC_ALPHA
@@ -823,12 +818,12 @@ namespace c3d
 			name = "Border" + name;
 		}
 
-		auto pipelineLayout = device->createPipelineLayout( name
+		auto pipelineLayout = m_device->createPipelineLayout( name
 			, descriptorLayouts
 			, ashes::VkPushConstantRangeArray{ { VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
 				, 0u
 				, uint32_t( sizeof( OverlayDrawConstants ) ) } } );
-		auto pipeline = device->createPipeline( name
+		auto pipeline = m_device->createPipeline( name
 			, { 0u
 				, c3d::move( program )
 				, ashes::PipelineVertexInputStateCreateInfo{ 0u, {}, {} }
@@ -846,12 +841,11 @@ namespace c3d
 			, c3d::move( pipeline ) };
 	}
 
-	ashes::PipelineShaderStageCreateInfoArray OverlayRenderer::OverlaysDrawData::doCreateOverlayProgram( RenderDevice const & device
-		, TextureCombine const & texturesFlags
+	ashes::PipelineShaderStageCreateInfoArray OverlayRenderer::OverlaysDrawData::doCreateOverlayProgram( TextureCombine const & texturesFlags
 		, bool textOverlay
 		, bool sdfFont )const
 	{
-		auto & engine = *device.renderSystem.getEngine();
+		auto & engine = *m_device.renderSystem.getEngine();
 		bool hasTexture = texturesFlags.configCount != 0u;
 		ProgramModule programModule{ cuT( "Overlay" ) };
 		{
@@ -1026,7 +1020,7 @@ namespace c3d
 
 			programModule.shader = makeRawUnique< sdw::Shader >( c3d::move( writer.getShader() ) );
 		}
-		return makeProgramStates( device, programModule );
+		return makeProgramStates( m_device, programModule );
 	}
 
 	//*********************************************************************************************
@@ -1044,6 +1038,8 @@ namespace c3d
 		, m_draw{ device, level, m_common, isFloatingPoint( m_target.getFormat() ) }
 		, m_compute{ device, m_common }
 	{
+		m_common.renderUbo.cpuUpdate( renderUbo
+			, m_size );
 		m_common.cameraUbo.cpuUpdate( getRenderSystem()->getOrtho( 0.0f
 			, float( m_size.getWidth() )
 			, 0.0f
@@ -1060,6 +1056,8 @@ namespace c3d
 			{
 				m_sizeChanged = true;
 				m_size = updater.renderSize;
+				m_common.renderUbo.cpuUpdate( m_common.parentRenderUbo
+					, m_size );
 				m_common.cameraUbo.cpuUpdate( getRenderSystem()->getOrtho( 0.0f
 					, float( m_size.getWidth() )
 					, 0.0f
@@ -1105,8 +1103,7 @@ namespace c3d
 		m_sizeChanged = false;
 	}
 
-	Pair< OverlayDrawNode *, OverlayPipelineData * > OverlayRenderer::doGetDrawNodeData( RenderDevice const & device
-		, VkRenderPass renderPass
+	Pair< OverlayDrawNode *, OverlayPipelineData * > OverlayRenderer::doGetDrawNodeData( VkRenderPass renderPass
 		, Overlay const & overlay
 		, Pass const & pass
 		, bool secondary )
@@ -1117,7 +1114,7 @@ namespace c3d
 		switch ( overlay.getType() )
 		{
 		case OverlayType::ePanel:
-			node = &m_draw.getPanelNode( device, renderPass, pass );
+			node = &m_draw.getPanelNode( renderPass, pass );
 			pipelineData = &m_common.panelVertexBuffer->getDrawPipelineData( node->pipeline
 				, nullptr
 				, nullptr );
@@ -1126,7 +1123,7 @@ namespace c3d
 		case OverlayType::eBorderPanel:
 			if ( secondary )
 			{
-				node = &m_draw.getBorderNode( device, renderPass, pass );
+				node = &m_draw.getBorderNode( renderPass, pass );
 				pipelineData = &m_common.borderVertexBuffer->getDrawPipelineData( node->pipeline
 					, nullptr
 					, nullptr );
@@ -1134,7 +1131,7 @@ namespace c3d
 			}
 			else
 			{
-				node = &m_draw.getPanelNode( device, renderPass, pass );
+				node = &m_draw.getPanelNode( renderPass, pass );
 				pipelineData = &m_common.panelVertexBuffer->getDrawPipelineData( node->pipeline
 					, nullptr
 					, nullptr );
@@ -1145,7 +1142,7 @@ namespace c3d
 			if ( auto text = overlay.getTextOverlay() )
 			{
 				auto texture = text->getFontTexture();
-				node = &m_draw.getTextNode( device, renderPass, pass, texture->getFont()->isSDF() );
+				node = &m_draw.getTextNode( renderPass, pass, texture->getFont()->isSDF() );
 				pipelineData = &m_common.textVertexBuffer->getDrawPipelineData( node->pipeline
 					, texture
 					, &m_draw.createTextDescriptorSet( *texture ) );

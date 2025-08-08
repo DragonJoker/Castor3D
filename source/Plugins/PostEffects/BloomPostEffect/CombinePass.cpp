@@ -59,18 +59,18 @@ namespace Bloom
 	c3d::MbString const CombinePass::CombineMapScene = "c3d_mapScene";
 
 	CombinePass::CombinePass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
 		, c3d::RenderDevice const & device
-		, crg::ImageViewIdArray const & sceneView
-		, crg::ImageViewIdArray const & blurViews
-		, crg::ImageViewIdArray const & result
+		, c3d::Texture const & sceneView
+		, c3d::Texture const & blurView
+		, c3d::Texture & result
 		, c3d::Extent2D const & size
 		, uint32_t blurPassesCount
 		, bool const * enabled
 		, uint32_t const * passIndex )
 		: m_shader{ cuT( "BloomCombine" ), combine::getProgram( device, blurPassesCount ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
-		, m_pass{ graph.createPass( "Combine"
+	{
+		auto & pass = graph.createPass( "Combine"
 			, [this, &device, size, enabled, passIndex]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -88,25 +88,13 @@ namespace Bloom
 				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
 							, result->getTimer() );
 				return result;
-			} ) }
-	{
-		m_pass.addDependencies( previousPasses );
-		m_pass.addImplicitColourView( blurViews.front()
-			, c3d::ImageLayout::eColorAttachment );
-		m_pass.addSampledView( m_pass.mergeViews( blurViews )
-			, 0u
-			, crg::SamplerDesc{ c3d::FilterMode::eLinear
-				, c3d::FilterMode::eLinear
-				, c3d::MipmapMode::eNearest
-				, c3d::WrapMode::eClampToEdge
-				, c3d::WrapMode::eClampToEdge
-				, c3d::WrapMode::eClampToEdge
-				, 0.0f
-				, 0.0f
-				, float( blurPassesCount ) } );
-		m_pass.addSampledView( sceneView
-			, 1u );
-		m_pass.addOutputColourView( result );
+			} );
+		pass.addInputSampled( *blurView.getSampledLastAttach(), 0u
+			, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest
+				, c3d::WrapMode::eClampToEdge, c3d::WrapMode::eClampToEdge, c3d::WrapMode::eClampToEdge
+				, 0.0f, 0.0f, float( blurPassesCount ) } );
+		pass.addInputSampled( *sceneView.getSampledLastAttach(), 1u );
+		result.setLastAttach( pass.addOutputColourTarget( { result.getTargetViewId(), sceneView.getTargetViewId() } ) );
 	}
 
 	void CombinePass::accept( c3d::ConfigurationVisitorBase & visitor )

@@ -45,7 +45,6 @@ namespace smaa
 	{
 	public:
 		EdgeDetection( crg::FramePassGroup & graph
-			, crg::FramePass const & previousPass
 			, c3d::RenderTarget & renderTarget
 			, c3d::RenderDevice const & device
 			, SmaaUbo const & ubo
@@ -61,19 +60,14 @@ namespace smaa
 		static void getVertexProgram( sdw::TraditionalGraphicsWriter & writer
 			, SmaaData const & smaaData );
 
-		crg::ImageViewId const & getColourResult()const
+		c3d::Texture const & getColourResult()const
 		{
-			return m_outColour.sampledViewId;
+			return m_outColour;
 		}
 
-		crg::ImageViewId const & getDepthResult()const
+		c3d::Texture const & getDepthResult()const
 		{
-			return m_outDepthStencilView;
-		}
-
-		crg::FramePass const & getPass()const
-		{
-			return m_pass;
+			return m_outDepth;
 		}
 
 	protected:
@@ -83,7 +77,7 @@ namespace smaa
 		c3d::Extent3D m_extent;
 		c3d::Texture m_outColour;
 		c3d::Texture m_outDepth;
-		crg::ImageViewId m_outDepthStencilView;
+		crg::ImageViewId m_outStencilView;
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass & m_pass;

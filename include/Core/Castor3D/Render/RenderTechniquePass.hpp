@@ -287,8 +287,8 @@ namespace c3d
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, String const & typeName
-			, crg::ImageViewIdArray targetImage
-			, crg::ImageViewIdArray targetDepth
+			, Texture * targetImage
+			, Texture * targetDepth
 			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc );
 

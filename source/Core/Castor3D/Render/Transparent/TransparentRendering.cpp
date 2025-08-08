@@ -6,6 +6,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
+#include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 #include "Castor3D/Render/Opaque/OpaqueRendering.hpp"
 #include "Castor3D/Render/Passes/ForwardRenderTechniquePass.hpp"
 #include "Castor3D/Render/Transparent/TransparentPass.hpp"
@@ -26,7 +27,6 @@ namespace c3d
 	TransparentRendering::TransparentRendering( RenderTechnique & parent
 		, RenderDevice const & device
 		, OpaqueRendering const & previous
-		, crg::FramePassArray const & previousPasses
 		, ProgressBar * progress
 		, bool weightedBlended )
 		: OwnedBy< RenderTechnique >{ parent }
@@ -46,29 +46,28 @@ namespace c3d
 				, m_device
 				, makeSize( getOwner()->getTargetExtent() ) )
 			: nullptr ) }
-		, m_mipgenPassDesc{ &doCreateMipGenPass( progress
-			, previous.getLastPass()
-			, previousPasses ) }
-		, m_transparentPassDesc{ ( weightedBlended
-			? &doCreateWBTransparentPass( progress
-				, *m_mipgenPassDesc )
-			: &doCreateForwardTransparentPass( progress
-				, *m_mipgenPassDesc ) ) }
-		, m_weightedBlendRendering{ ( weightedBlended
-			? makeUnique< WeightedBlendRendering >( m_graph
+	{
+		doCreateMipGenPass( progress );
+		if ( weightedBlended )
+		{
+			doCreateWBTransparentPass( progress );
+			m_weightedBlendRendering = makeUnique< WeightedBlendRendering >( m_graph
 				, m_device
 				, progress
 				, m_enabled
-				, *m_transparentPassDesc
 				, getOwner()->getDepthObj()
 				, *m_transparentPassResult
 				, getOwner()->getTargetResult()
 				, getOwner()->getSize()
 				, getOwner()->getCameraUbo()
 				, getOwner()->getSceneUbo()
-				, getOwner()->getRenderTarget().getRenderUbo() )
-			: nullptr ) }
-	{
+				, getOwner()->getRenderTarget().getRenderUbo() );
+		}
+		else
+		{
+			doCreateForwardTransparentPass( progress );
+		}
+
 		if ( m_transparentPassResult )
 		{
 			m_transparentPassResult->create();
@@ -134,22 +133,8 @@ namespace c3d
 		return getOwner()->getEngine();
 	}
 
-	crg::FramePass const & TransparentRendering::getLastPass()const noexcept
+	void TransparentRendering::doCreateMipGenPass( ProgressBar * progress )
 	{
-		return m_weightedBlendRendering
-			? m_weightedBlendRendering->getLastPass()
-			: *m_transparentPassDesc;
-	}
-
-	crg::FramePass & TransparentRendering::doCreateMipGenPass( ProgressBar * progress
-		, crg::FramePass const & lastPass
-		, crg::FramePassArray previousPasses )
-	{
-		if ( previousPasses.empty() )
-		{
-			previousPasses.push_back( &lastPass );
-		}
-
 		m_mippedColour.create();
 		stepProgressBarLocal( progress, cuT( "Creating colour copy pass" ) );
 		auto & copy = m_graph.createPass( "ColCopyPass"
@@ -169,9 +154,8 @@ namespace c3d
 					, res->getTimer() );
 				return res;
 			} );
-		copy.addDependencies( previousPasses );
-		copy.addTransferInputView( getOwner()->getTargetResult() );
-		copy.addTransferOutputView( m_mippedColour.targetViewId );
+		copy.addInputTransfer( *getOwner()->getTargetResult().getLastAttach() );
+		auto mippedAttach = copy.addOutputTransferImage( m_mippedColour.getTargetViewId() );
 
 		stepProgressBarLocal( progress, cuT( "Creating mips generation pass" ) );
 		auto & result = m_graph.createPass( "MipsGenPass"
@@ -191,19 +175,16 @@ namespace c3d
 					, res->getTimer() );
 				return res;
 			} );
-		result.addDependency( copy );
-		result.addTransferInOutView( m_mippedColour.targetViewId );
-		return result;
+		m_mippedColour.setLastAttach( result.addInOutTransfer( *mippedAttach ) );
 	}
 
-	crg::FramePass & TransparentRendering::doCreateForwardTransparentPass( ProgressBar * progress
-		, crg::FramePass const & lastPass )
+	void TransparentRendering::doCreateForwardTransparentPass( ProgressBar * progress )
 	{
 		stepProgressBarLocal( progress, cuT( "Creating transparent pass" ) );
-		auto targetResult = getOwner()->getTargetResult();
-		auto targetDepth = getOwner()->getTargetDepth();
-		auto & result = m_graph.createPass( "NodesPass"
-			, [this, progress, targetResult, targetDepth]( crg::FramePass const & framePass
+		auto & targetResult = getOwner()->getTargetResult();
+		auto & targetDepth = getOwner()->getTargetDepth();
+		auto & pass = m_graph.createPass( "NodesPass"
+			, [this, progress, &targetResult, &targetDepth]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -239,23 +220,30 @@ namespace c3d
 					, res->getTimer() );
 				return res;
 			} );
-		result.addDependency( lastPass );
-		result.addImplicitColourView( m_mippedColour.targetViewId
-			, ImageLayout::eShaderReadOnly );
-		result.addInOutDepthStencilView( targetDepth );
-		result.addInOutColourView( targetResult );
+		pass.addImplicit( *m_mippedColour.getLastAttach(), ImageLayout::eShaderReadOnly );
+		pass.addInputDepthStencilTarget( *targetDepth.getLastAttach() );
+		targetResult.setLastAttach( pass.addInOutColourTarget( *targetResult.getLastAttach() ) );
 
-		return result;
+		if ( auto frustumClusters = getOwner()->getRenderTarget().getFrustumClusters();
+			frustumClusters && getOwner()->getClustersConfig()->enabled )
+		{
+			pass.addImplicit( *frustumClusters->getReducedLightsAABBBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getPointLightClusterIndexBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getPointLightClusterGridBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getSpotLightClusterIndexBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getSpotLightClusterGridBuffer().getLastAttach(), AccessState{} );
+		}
 	}
 
-	crg::FramePass & TransparentRendering::doCreateWBTransparentPass( ProgressBar * progress
-		, crg::FramePass const & lastPass )
+	void TransparentRendering::doCreateWBTransparentPass( ProgressBar * progress )
 	{
 		stepProgressBarLocal( progress, cuT( "Creating transparent pass" ) );
-		auto targetResult = getOwner()->getTargetResult();
-		auto targetDepth = getOwner()->getTargetDepth();
-		auto & result = m_graph.createPass( "NodesPass"
-			, [this, progress, targetResult, targetDepth]( crg::FramePass const & framePass
+		auto & targetResult = getOwner()->getTargetResult();
+		auto & targetDepth = getOwner()->getTargetDepth();
+		auto & targetDepthObj = getOwner()->getDepthObj();
+		auto & targetNormal = getOwner()->getNormal();
+		auto & pass = m_graph.createPass( "NodesPass"
+			, [this, progress, &targetResult, &targetDepth]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -263,12 +251,7 @@ namespace c3d
 				String name = cuT( "Accumulation" );
 				static constexpr bool isOit = true;
 				static constexpr bool hasVelocity = false;
-				auto depthIt = framePass.images.begin();
-				auto mippedSceneIt = std::next( depthIt );
-				auto depthObjIt = std::next( mippedSceneIt );
-				auto normalIt = std::next( depthObjIt );
-				auto ssaoIt = std::next( normalIt );
-				auto accumIt = std::next( ssaoIt );
+				auto accumIt = framePass.targets.begin();
 				auto revealIt = std::next( accumIt );
 				auto res = makeRawUnique< TransparentPass >( getOwner()
 					, framePass
@@ -298,8 +281,8 @@ namespace c3d
 							| ComponentModeFlag::eGeometry
 							| ComponentModeFlag::eOcclusion
 							| ComponentModeFlag::eSpecifics )
-						.implicitAction( accumIt->view(), crg::RecordContext::clearAttachment( *accumIt ) )
-						.implicitAction( revealIt->view(), crg::RecordContext::clearAttachment( *revealIt ) )
+						.implicitAction( ( *accumIt )->view(), crg::RecordContext::clearAttachment( **accumIt ) )
+						.implicitAction( ( *revealIt )->view(), crg::RecordContext::clearAttachment( **revealIt ) )
 					, RenderTechniquePassDesc{ false, getOwner()->getSsaoConfig() }
 						.ssao( getOwner()->getSsaoResult() )
 						.indirect( getOwner()->getIndirectLighting() )
@@ -310,22 +293,26 @@ namespace c3d
 					, res->getTimer() );
 				return res;
 			} );
-		result.addDependency( lastPass );
-		result.addInOutDepthStencilView( targetDepth );
-		result.addImplicitColourView( m_mippedColour.targetViewId
-			, ImageLayout::eShaderReadOnly );
-		result.addImplicitColourView( getOwner()->getDepthObj().targetViewId
-			, ImageLayout::eShaderReadOnly );
-		result.addImplicitColourView( getOwner()->getNormal().targetViewId
-			, ImageLayout::eShaderReadOnly );
-		result.addImplicitColourView( getOwner()->getSsaoResult().wholeViewId
-			, ImageLayout::eShaderReadOnly );
-		auto const & transparentPassResult = *m_transparentPassResult;
-		result.addOutputColourView( transparentPassResult[WbTexture::eAccumulation].targetViewId
-			, getClearValue( WbTexture::eAccumulation ).color() );
-		result.addOutputColourView( transparentPassResult[WbTexture::eRevealage].targetViewId
-			, getClearValue( WbTexture::eRevealage ).color() );
+		pass.addInOutDepthStencilTarget( *targetDepth.getLastAttach() );
+		pass.addImplicit( *m_mippedColour.getLastAttach(), ImageLayout::eShaderReadOnly );
+		pass.addImplicit( *targetDepthObj.getLastAttach(), ImageLayout::eShaderReadOnly );
+		pass.addImplicit( *targetNormal.getLastAttach(), ImageLayout::eShaderReadOnly );
+		pass.addImplicit( *getOwner()->getSsaoResult().getLastAttach(), ImageLayout::eShaderReadOnly );
 
-		return result;
+		if ( auto frustumClusters = getOwner()->getRenderTarget().getFrustumClusters();
+			frustumClusters && getOwner()->getClustersConfig()->enabled )
+		{
+			pass.addImplicit( *frustumClusters->getReducedLightsAABBBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getPointLightClusterIndexBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getPointLightClusterGridBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getSpotLightClusterIndexBuffer().getLastAttach(), AccessState{} );
+			pass.addImplicit( *frustumClusters->getSpotLightClusterGridBuffer().getLastAttach(), AccessState{} );
+		}
+
+		auto & transparentPassResult = *m_transparentPassResult;
+		transparentPassResult.setLastAttach( WbTexture::eAccumulation
+			, pass.addOutputColourTarget( transparentPassResult.getTargetViewId( WbTexture::eAccumulation ), getClearValue( WbTexture::eAccumulation ).color() ) );
+		transparentPassResult.setLastAttach( WbTexture::eRevealage
+			, pass.addOutputColourTarget( transparentPassResult.getTargetViewId( WbTexture::eRevealage ), getClearValue( WbTexture::eRevealage ).color() ) );
 	}
 }

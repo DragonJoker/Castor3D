@@ -229,13 +229,13 @@ namespace c3d
 		*\param[out] backgroundPass
 		*	Reçoit la passe de rendu du fond.
 		*/
-		C3D_API virtual crg::FramePass & createBackgroundPass( crg::FramePassGroup & graph
+		C3D_API virtual void createBackgroundPass( crg::FramePassGroup & graph
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, Extent2D const & size
-			, crg::ImageViewIdArray const & colour
-			, crg::ImageViewIdArray const & depth
-			, crg::ImageViewId const * depthObj
+			, Texture & colour
+			, Texture * depth
+			, Texture const * depthObj
 			, UniformBufferOffsetT< ModelBufferConfiguration > const & modelUbo
 			, CameraUbo const & cameraUbo
 			, RenderUbo const & renderUbo
@@ -265,7 +265,7 @@ namespace c3d
 		*	L'indice de départ des bindings.
 		*/
 		C3D_API void addPassBindings( crg::FramePass & pass
-			, crg::ImageViewIdArray const & targetImage
+			, Texture * targetImage
 			, uint32_t & index )const;
 		/**
 		*\~english
@@ -311,7 +311,7 @@ namespace c3d
 		*	L'indice de départ des descripteurs.
 		*/
 		C3D_API void addDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
-			, crg::ImageViewIdArray const & targetImage
+			, Texture * targetImage
 			, uint32_t & index )const;
 		/**
 		*\~english
@@ -507,13 +507,13 @@ namespace c3d
 		virtual void doGpuUpdate( GpuUpdater & updater )const = 0;
 		virtual void doUpload( UploadData & uploader ) = 0;
 		virtual void doAddPassBindings( crg::FramePass & pass
-			, crg::ImageViewIdArray const & targetImage
+			, Texture * targetImage
 			, uint32_t & index )const = 0;
 		virtual void doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, VkShaderStageFlags shaderStages
 			, uint32_t & index )const = 0;
 		virtual void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
-			, crg::ImageViewIdArray const & targetImage
+			, Texture * targetImage
 			, uint32_t & index )const = 0;
 	};
 }

@@ -113,7 +113,7 @@ namespace c3d
 				currentBinding = layoutIt->second.vertexAttributeDescriptions.back().binding + 1u;
 			}
 
-			buffers.emplace_back( bufferChunk.getBuffer() );
+			buffers.emplace_back( bufferChunk.getBuffer().getBuffer() );
 			offsets.emplace_back( 0u );
 			layouts.emplace_back( layoutIt->second );
 		}

@@ -63,7 +63,7 @@ namespace c3d
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t dstBinding )const
 		{
-			return m_ubo.createPassBinding( pass, "LLPVGridCfg", dstBinding );
+			return m_ubo.createPassBinding( pass, dstBinding );
 		}
 
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet

@@ -93,7 +93,7 @@ namespace atmosphere_scattering
 			C3D_AtmosphereScattering( writer
 				, uint32_t( Bindings::eAtmosphere )
 				, 0u );
-			auto transmittanceMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "transmittanceMap"
+			auto transmittanceMap = writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "transmittanceMap"
 				, uint32_t( Bindings::eTransmittance )
 				, 0u );
 
@@ -245,19 +245,18 @@ namespace atmosphere_scattering
 	//************************************************************************************************
 
 	AtmosphereVolumePass::AtmosphereVolumePass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
 		, c3d::RenderDevice const & device
 		, CameraUbo const & cameraUbo
 		, AtmosphereScatteringUbo const & atmosphereUbo
-		, crg::ImageViewId const & transmittanceView
-		, crg::ImageViewId const & resultView
+		, c3d::Texture const & transmittance
+		, c3d::Texture & result
 		, uint32_t index
 		, bool const & enabled )
 		: c3d::Named{ cuT( "CameraVolumePass" ) + c3d::string::toString( index ) }
-		, m_shader{ getName(), volume::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ), getExtent( transmittanceView ) ) }
+		, m_shader{ getName(), volume::getProgram( *device.renderSystem.getEngine(), result.getExtent(), transmittance.getExtent() ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
-		auto renderSize = getExtent( resultView );
+		auto renderSize = result.getExtent();
 		auto & pass = graph.createPass( c3d::toUtf8( getName() )
 			, [this, &device, &enabled, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -273,18 +272,11 @@ namespace atmosphere_scattering
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependencies( previousPasses );
-		cameraUbo.createPassBinding( pass
-			, volume::eCamera );
-		atmosphereUbo.createPassBinding( pass
-			, volume::eAtmosphere );
-		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
-			, c3d::FilterMode::eLinear };
-		pass.addSampledView( transmittanceView
-			, volume::eTransmittance
-			, linearSampler );
-		pass.addOutputColourView( resultView );
-		m_lastPass = &pass;
+		cameraUbo.createPassBinding( pass, volume::eCamera );
+		atmosphereUbo.createPassBinding( pass, volume::eAtmosphere );
+		pass.addInputSampled( *transmittance.getSampledLastAttach(), volume::eTransmittance
+			, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear } );
+		result.setLastAttach( pass.addOutputColourTarget( result.getTargetViewId() ) );
 	}
 
 	void AtmosphereVolumePass::accept( c3d::ConfigurationVisitorBase & visitor )

@@ -22,7 +22,6 @@
 namespace smaa
 {
 	EdgeDetection::EdgeDetection( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
 		, c3d::RenderTarget & renderTarget
 		, c3d::RenderDevice const & device
 		, SmaaUbo const & ubo
@@ -55,7 +54,7 @@ namespace smaa
 				, ( c3d::ImageUsageFlags::eSampled
 					| c3d::ImageUsageFlags::eDepthStencilAttachment ) }
 			, {} }
-		, m_outDepthStencilView{ m_graph.createView( crg::ImageViewData{ "SMEDStRes"
+		, m_outStencilView{ m_graph.createView( crg::ImageViewData{ "SMEDStRes"
 			, m_outDepth.imageId
 			, c3d::ImageViewCreateFlags::eNone
 			, c3d::ImageViewType::e2D
@@ -95,13 +94,12 @@ namespace smaa
 				return result;
 			} ) }
 	{
-		m_pass.addDependency( previousPass );
 		ubo.createPassBinding( m_pass
 			, SmaaUboIdx );
-		m_pass.addOutputStencilView( m_outDepthStencilView
-			, c3d::defaultClearDepthStencil );
-		m_pass.addOutputColourView( m_outColour.targetViewId
-			, c3d::transparentBlackClearColor );
+		m_outDepth.setLastAttach( m_pass.addOutputStencilTarget( m_outStencilView
+			, c3d::defaultClearDepthStencil ) );
+		m_outColour.setLastAttach( m_pass.addOutputColourTarget( m_outColour.getTargetViewId()
+			, c3d::transparentBlackClearColor ) );
 		m_outColour.create();
 		m_outDepth.create();
 	}
@@ -117,7 +115,7 @@ namespace smaa
 		visitor.visit( m_shader );
 		visitor.visit( cuT( "SMAA EdgeDetection Colour Result" )
 			, m_outColour
-			, m_graph.getFinalLayoutState( m_outColour.sampledViewId ).layout
+			, m_graph.getFinalLayoutState( m_outColour.getSampledViewId() ).layout
 			, c3d::TextureFactors{}.invert( true ) );
 	}
 

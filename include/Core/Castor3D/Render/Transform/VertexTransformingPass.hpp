@@ -23,7 +23,7 @@ namespace c3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, ashes::Buffer< ModelBufferConfiguration > const & modelsBuffer );
+			, BufferBase const & modelsBuffer );
 
 		void registerNode( SubmeshRenderNode const & node
 			, TransformPipeline const & pipeline
@@ -39,7 +39,7 @@ namespace c3d
 
 	private:
 		RenderDevice const & m_device;
-		ashes::Buffer< ModelBufferConfiguration > const & m_modelsBuffer;
+		BufferBase const & m_modelsBuffer;
 		HashMap< size_t, VertexTransformPassUPtr > m_transformPasses;
 	};
 }

@@ -34,9 +34,10 @@ namespace c3d
 		 *\param[in]	sharingMode		Le mode de partage du tampon.
 		 */
 		UniformBufferT( RenderSystem const & renderSystem
-			, VkDeviceSize count
-			, VkBufferUsageFlags usage
-			, VkMemoryPropertyFlags flags
+			, crg::ResourcesCache & resources
+			, DeviceSize count
+			, BufferUsageFlags usage
+			, MemoryPropertyFlags flags
 			, String debugName
 			, ashes::QueueShare sharingMode = {} );
 		/**
@@ -247,13 +248,15 @@ namespace c3d
 
 	template< typename DataT >
 	inline UniformBufferUPtrT< DataT > makeUniformBuffer( RenderSystem const & renderSystem
-		, VkDeviceSize count
-		, VkBufferUsageFlags usage
-		, VkMemoryPropertyFlags flags
+		, crg::ResourcesCache & resources
+		, DeviceSize count
+		, BufferUsageFlags usage
+		, MemoryPropertyFlags flags
 		, String name
 		, ashes::QueueShare sharingMode = {} )
 	{
 		return makeUnique< UniformBufferT< DataT > >( renderSystem
+			, resources
 			, count
 			, usage
 			, flags

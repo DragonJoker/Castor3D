@@ -142,7 +142,12 @@ namespace c3d
 				, m_graph.getFence() );
 		}
 
+		context.getContext().vkCmdBeginDebugBlock( commandBuffer
+			, { "Compute", makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ) } );
 		m_renderer->registerComputeCommands( context, commandBuffer );
+		context.getContext().vkCmdEndDebugBlock( commandBuffer );
+		context.getContext().vkCmdBeginDebugBlock( commandBuffer
+			, { "Draw", makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ) } );
 		VkCommandBuffer secondary = m_renderer->getCommands();
 		m_renderPass.begin( context
 			, commandBuffer
@@ -153,5 +158,6 @@ namespace c3d
 			, &secondary );
 		m_renderPass.end( context
 			, commandBuffer );
+		context.getContext().vkCmdEndDebugBlock( commandBuffer );
 	}
 }

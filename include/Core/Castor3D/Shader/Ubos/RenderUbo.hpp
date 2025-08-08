@@ -62,6 +62,18 @@ namespace c3d
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
+		 *\param[in]	parent		The UBO from which configuration is copied.
+		 *\param[in]	renderSize	The render size.
+		 *\~french
+		 *\brief		Met à jour l'UBO avec les valeurs données.
+		 *\param[in]	parent		L'UBO depuis lequel la configuration est copiée.
+		 *\param[in]	renderSize	Les dimensions du rendu.
+		 */
+		C3D_API void cpuUpdate( RenderUbo const & parent
+			, Size const & renderSize );
+		/**
+		 *\~english
+		 *\brief		Updates the UBO from given values.
 		 *\param[in]	hdrConfig	The HDR configuration.
 		 *\param[in]	renderSize	The render size.
 		 *\param[in]	debugIndex	The currently selected debug data index.
@@ -78,7 +90,7 @@ namespace c3d
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const
 		{
-			return m_ubo.createPassBinding( pass, "RenderCfg", binding );
+			return m_ubo.createPassBinding( pass, binding );
 		}
 
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet

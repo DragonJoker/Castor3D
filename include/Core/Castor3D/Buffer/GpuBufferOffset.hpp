@@ -5,155 +5,80 @@ See LICENSE file in root folder
 #define ___C3D_GpuBufferOffset_HPP___
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/UploadData.hpp"
+
+#include "Castor3D/Render/Buffer.hpp"
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 
 namespace c3d
 {
-	C3D_API void createUniformPassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, Vector< ashes::BufferBase const * > const & buffers
-		, VkDeviceSize offset
-		, VkDeviceSize size );
-	C3D_API void createInputStoragePassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, Vector< ashes::BufferBase const * > const & buffers
-		, VkDeviceSize offset
-		, VkDeviceSize size );
-	C3D_API void createInOutStoragePassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, Vector< ashes::BufferBase const * > const & buffers
-		, VkDeviceSize offset
-		, VkDeviceSize size );
-	C3D_API void createOutputStoragePassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, Vector< ashes::BufferBase const * > const & buffers
-		, VkDeviceSize offset
-		, VkDeviceSize size );
-	C3D_API void createClearableOutputStorageBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, Vector< ashes::BufferBase const * > const & buffers
-		, VkDeviceSize offset
-		, VkDeviceSize size );
-	C3D_API void createUniformPassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::BufferBase const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size );
-	C3D_API void createInputStoragePassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::BufferBase const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size );
-	C3D_API void createInOutStoragePassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::BufferBase const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size );
-	C3D_API void createOutputStoragePassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::BufferBase const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size );
-	C3D_API void createClearableOutputStorageBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::BufferBase const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size );
-	C3D_API void createUniformPassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::Buffer< uint8_t > const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size );
-	C3D_API void createInputStoragePassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::Buffer< uint8_t > const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size );
-	C3D_API void createInOutStoragePassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::Buffer< uint8_t > const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size );
-	C3D_API void createOutputStoragePassBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::Buffer< uint8_t > const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size );
-	C3D_API void createClearableOutputStorageBinding( crg::FramePass & pass
-		, uint32_t binding
-		, String const & name
-		, ashes::Buffer< uint8_t > const & buffer
-		, VkDeviceSize offset
-		, VkDeviceSize size );
-
 	template< typename DataT >
 	struct GpuBufferOffsetT
 	{
 	public:
-		GpuBufferBase * buffer{};
-		VkBufferUsageFlags target{};
-		VkMemoryPropertyFlags memory{};
+		GpuBufferBase * pool{};
+		Buffer buffer{};
+		BufferUsageFlags target{};
+		MemoryPropertyFlags memory{};
 		MemChunk chunk{};
 
 		GpuBufferOffsetT()noexcept = default;
-
-		void setPool( GpuBufferBase & pool )
+		GpuBufferOffsetT( GpuBufferBase & pool
+			, Buffer buffer
+			, BufferUsageFlags target
+			, MemoryPropertyFlags memory
+			, MemChunk chunk )noexcept
+			: pool{ &pool }
+			, buffer{ std::move( buffer ) }
+			, target{ target }
+			, memory{ memory }
+			, chunk{ std::move( chunk ) }
 		{
-			buffer = &pool;
+		}
+
+		void setPool( GpuBufferBase & ppool )
+		{
+			pool = &ppool;
 		}
 
 		explicit operator bool()const
 		{
-			return buffer
-				&& buffer->hasBuffer();
+			return pool
+				&& pool->hasBuffer();
 		}
 
 		GpuBufferBase const & getPool()const
 		{
-			return *buffer;
+			return *pool;
 		}
 
 		GpuBufferBase & getPool()
 		{
-			return *buffer;
+			return *pool;
 		}
 
-		ashes::Buffer< uint8_t > const & getBuffer()const
+		Buffer const & getBuffer()const
 		{
-			return buffer->getBuffer();
+			return buffer;
 		}
 
-		ashes::Buffer< uint8_t > & getBuffer()
+		Buffer & getBuffer()
 		{
-			return buffer->getBuffer();
+			return buffer;
 		}
 
-		VkDeviceSize getCount()const
+		DeviceSize getCount()const
 		{
 			return chunk.askedSize / sizeof( DataT );
 		}
 
-		VkDeviceSize getSize()const
+		DeviceSize getSize()const
 		{
 			return chunk.size;
 		}
 
-		VkDeviceSize getOffset()const
+		DeviceSize getOffset()const
 		{
 			return chunk.offset;
 		}
@@ -161,23 +86,31 @@ namespace c3d
 		ArrayView< DataT > getData()
 		{
 			using DataPtr = DataT *;
-			return makeArrayView( reinterpret_cast< DataPtr >( buffer->getDatas().data() + getOffset() )
+			return makeArrayView( reinterpret_cast< DataPtr >( pool->getDatas().data() + getOffset() )
 				, getCount() );
 		}
 
-		void markDirty( VkDeviceSize size
+		void upload( UploadData & uploader
 			, AccessState dstAccessState )const
 		{
-			buffer->markDirty( getOffset()
+			pool->upload( uploader
+				, getOffset(), getSize()
+				, move( dstAccessState ) );
+		}
+
+		void markDirty( DeviceSize size
+			, AccessState dstAccessState )const
+		{
+			pool->markDirty( getOffset()
 				, std::min( size, getSize() )
 				, std::move( dstAccessState ) );
 		}
 
-		void markDirty( VkDeviceSize size
+		void markDirty( DeviceSize size
 			, AccessFlags dstAccessFlags
 			, PipelineStageFlags dstPipelineFlags )const
 		{
-			buffer->markDirty( getOffset()
+			pool->markDirty( getOffset()
 				, std::min( size, getSize() )
 				, dstAccessFlags
 				, dstPipelineFlags );
@@ -204,83 +137,13 @@ namespace c3d
 				, stages );
 		}
 
-		void createUniformPassBinding( crg::FramePass & pass
-			, uint32_t binding
-			, String const & name )const
-		{
-			c3d::createUniformPassBinding( pass
-				, binding
-				, name
-				, getBuffer()
-				, getOffset()
-				, getSize() );
-		}
-
-		void createInputStoragePassBinding( crg::FramePass & pass
-			, uint32_t binding
-			, String const & name )const
-		{
-			c3d::createInputStoragePassBinding( pass
-				, binding
-				, name
-				, getBuffer()
-				, getOffset()
-				, getSize() );
-		}
-
-		void createInOutStoragePassBinding( crg::FramePass & pass
-			, uint32_t binding
-			, String const & name )const
-		{
-			c3d::createInOutStoragePassBinding( pass
-				, binding
-				, name
-				, getBuffer()
-				, getOffset()
-				, getSize() );
-		}
-
-		void createOutputStoragePassBinding( crg::FramePass & pass
-			, uint32_t binding
-			, String const & name )const
-		{
-			c3d::createOutputStoragePassBinding( pass
-				, binding
-				, name
-				, getBuffer()
-				, getOffset()
-				, getSize() );
-		}
-
-		void createClearableOutputStorageBinding( crg::FramePass & pass
-			, uint32_t binding
-			, String const & name )const
-		{
-			c3d::createClearableOutputStorageBinding( pass
-				, binding
-				, name
-				, getBuffer()
-				, getOffset()
-				, getSize() );
-		}
-
-		ashes::WriteDescriptorSet getUniformBinding( uint32_t binding )const
-		{
-			auto result = ashes::WriteDescriptorSet{ binding
-				, 0u
-				, 1u
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER };
-			result.bufferInfo.push_back( { getBuffer(), getOffset(), getSize() } );
-			return result;
-		}
-
 		ashes::WriteDescriptorSet getStorageBinding( uint32_t binding )const
 		{
 			auto result = ashes::WriteDescriptorSet{ binding
 				, 0u
 				, 1u
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-			result.bufferInfo.push_back( { getBuffer(), getOffset(), getSize() } );
+			result.bufferInfo.push_back( { *getBuffer().buffer, getOffset(), getSize() } );
 			return result;
 		}
 
@@ -288,7 +151,7 @@ namespace c3d
 			, VkDescriptorSetLayoutBinding const & binding )const
 		{
 			descriptorSet.createBinding( binding
-				, getBuffer()
+				, *getBuffer().buffer
 				, uint32_t( getOffset() )
 				, uint32_t( getSize() ) );
 		}

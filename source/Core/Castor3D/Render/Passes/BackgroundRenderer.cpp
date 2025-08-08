@@ -22,35 +22,27 @@ namespace c3d
 	//*********************************************************************************************
 	
 	BackgroundRenderer::BackgroundRenderer( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, SceneBackground & background
 		, RenderUbo const & renderUbo
 		, SceneUbo const & sceneUbo
-		, crg::ImageViewIdArray const & colour
+		, Texture & colour
 		, bool clearColour
 		, bool clearDepth
 		, bool forceVisible
-		, crg::ImageViewIdArray const & depth
-		, crg::ImageViewId const * depthObj )
+		, Texture * depth
+		, Texture const * depthObj )
 		: m_device{ device }
 		, m_colour{ colour }
 		, m_cameraUbo{ m_device }
-		, m_modelUbo{ m_device.uboPool->getBuffer< ModelBufferConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
-		, m_backgroundPassDesc{ &doCreatePass( graph
-			, previousPasses
-			, background
-			, renderUbo
-			, sceneUbo
-			, m_colour
-			, clearColour
-			, clearDepth
-			, forceVisible
-			, depth
-			, depthObj
-			, progress ) }
+		, m_modelUbo{ m_device.uboPool->getBuffer< ModelBufferConfiguration >( MemoryPropertyFlags::eDeviceLocal ) }
 	{
+		doCreatePass( graph, background
+			, renderUbo, sceneUbo, m_colour
+			, clearColour, clearDepth, forceVisible
+			, depth, depthObj
+			, progress );
 	}
 
 	BackgroundRenderer::~BackgroundRenderer()noexcept
@@ -62,7 +54,7 @@ namespace c3d
 	{
 		if ( m_backgroundPass )
 		{
-			updater.targetImage = m_colour;
+			updater.targetImage = &m_colour;
 			m_backgroundPass->update( updater );
 			updater.targetImage = {};
 		}
@@ -83,22 +75,21 @@ namespace c3d
 		}
 	}
 
-	crg::FramePass const & BackgroundRenderer::doCreatePass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
+	void BackgroundRenderer::doCreatePass( crg::FramePassGroup & graph
 		, SceneBackground & background
 		, RenderUbo const & renderUbo
 		, SceneUbo const & sceneUbo
-		, crg::ImageViewIdArray const & colour
+		, Texture & colour
 		, bool clearColour
 		, bool clearDepth
 		, bool forceVisible
-		, crg::ImageViewIdArray const & depth
-		, crg::ImageViewId const * depthObj
+		, Texture * depth
+		, Texture const * depthObj
 		, ProgressBar * progress )
 	{
 		stepProgressBarLocal( progress, cuT( "Creating background pass" ) );
-		auto size = makeExtent2D( getExtent( colour.front() ) );
-		auto & result = background.createBackgroundPass( graph
+		auto size = makeExtent2D( colour.getExtent() );
+		background.createBackgroundPass( graph
 			, m_device
 			, progress
 			, size
@@ -113,8 +104,6 @@ namespace c3d
 			, clearDepth
 			, forceVisible
 			, m_backgroundPass );
-		result.addDependencies( previousPasses );
-		return result;
 	}
 
 	//*********************************************************************************************

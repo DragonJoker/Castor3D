@@ -1,9 +1,8 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/DirectUploadData.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
-#include "Castor3D/Buffer/InstantUploadData.hpp"
+#include "Castor3D/Buffer/UploadData.hpp"
 #include "Castor3D/Material/Texture/TextureSource.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -595,7 +594,7 @@ namespace c3d
 
 	TextureLayout::TextureLayout( RenderSystem & renderSystem
 		, ImageCreateInfo info
-		, VkMemoryPropertyFlags memoryProperties
+		, MemoryPropertyFlags memoryProperties
 		, String const & debugName
 		, bool isStatic )
 		: OwnedBy< RenderSystem >{ renderSystem }

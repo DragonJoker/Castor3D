@@ -184,17 +184,15 @@ namespace smaa
 	//*********************************************************************************************
 
 	ColourEdgeDetection::ColourEdgeDetection( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
 		, c3d::RenderTarget & renderTarget
 		, c3d::RenderDevice const & device
 		, SmaaUbo const & ubo
-		, crg::ImageViewIdArray const & colourView
-		, crg::ImageViewId const * predication
+		, c3d::Texture const & colourView
+		, c3d::Texture const * predication
 		, SmaaConfig const & config
 		, bool const * enabled
 		, uint32_t const * passIndex )
 		: EdgeDetection{ graph
-			, previousPass
 			, renderTarget
 			, device
 			, ubo
@@ -203,25 +201,10 @@ namespace smaa
 			, enabled
 			, passIndex
 			, uint32_t( colourView.size() ) }
-		, m_predicationView{ ( predication
-			? m_graph.createView( coled::doCreatePredicationView( *predication ) )
-			: crg::ImageViewId{} ) }
 	{
-		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
-			, c3d::FilterMode::eLinear
-			, c3d::MipmapMode::eNearest
-			, c3d::WrapMode::eClampToEdge
-			, c3d::WrapMode::eClampToEdge
-			, c3d::WrapMode::eClampToEdge };
-		m_pass.addSampledView( colourView
-			, coled::ColorTexIdx
-			, linearSampler );
-
+		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest };
+		m_pass.addInputSampled( *colourView.getSampledLastAttach(), coled::ColorTexIdx, linearSampler );
 		if ( predication )
-		{
-			m_pass.addSampledView( m_predicationView
-				, coled::PredicationTexIdx
-				, linearSampler );
-		}
+			m_pass.addInputSampled( *predication->getSampledLastAttach(), coled::PredicationTexIdx, linearSampler );
 	}
 }

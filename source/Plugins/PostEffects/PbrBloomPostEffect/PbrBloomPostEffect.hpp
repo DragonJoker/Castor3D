@@ -35,20 +35,13 @@ namespace PbrBloom
 		 */
 		void setParameters( c3d::Parameters parameters )override;
 
-		crg::FramePass const & getPass()const override
-		{
-			CU_Require( m_pass );
-			return *m_pass;
-		}
-
 	private:
 		/**
 		*\copydoc		c3d::PostEffect::doInitialise
 		*/
 		bool doInitialise( c3d::RenderDevice const & device
 			, c3d::Texture const & source
-			, c3d::Texture const & target
-			, crg::FramePass const & previousPass )override;
+			, c3d::Texture & target )override;
 		/**
 		*\copydoc		c3d::PostEffect::doCleanup
 		*/
@@ -67,8 +60,9 @@ namespace PbrBloom
 		static c3d::MbString const Name;
 
 	private:
-		crg::ImageId m_intermediateImg;
-		crg::FramePass const * m_pass{};
+		c3d::Extent3D m_extent;
+		c3d::Vector< c3d::Texture > m_downSampled;
+		c3d::Vector< c3d::Texture > m_upSampled;
 		c3d::RawUniquePtr< DownsamplePass > m_downsamplePass;
 		c3d::RawUniquePtr< UpsamplePass > m_upsamplePass;
 		c3d::RawUniquePtr< CombinePass > m_combinePass;
@@ -76,7 +70,6 @@ namespace PbrBloom
 		uint32_t m_blurRadius;
 		float m_bloomStrength;
 		uint32_t m_duPassesCount;
-		c3d::Extent3D m_extent{};
 	};
 }
 

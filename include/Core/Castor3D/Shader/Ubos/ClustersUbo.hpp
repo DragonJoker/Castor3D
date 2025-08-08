@@ -41,11 +41,6 @@ namespace c3d
 			{
 			}
 
-			void setConfig( ClustersConfig const * config )
-			{
-				m_config = config;
-			}
-
 			auto dimensions()const { return getMember< "dimensions" >(); }
 			auto clusterSize()const { return getMember< "clusterSize" >(); }
 			auto viewNear()const { return getMember< "viewNearFar" >().x(); }
@@ -122,7 +117,7 @@ namespace c3d
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const
 		{
-			return m_ubo.createPassBinding( pass, "C3D_Clusters", binding );
+			return m_ubo.createPassBinding( pass, binding );
 		}
 
 		VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t index
@@ -174,7 +169,7 @@ namespace c3d
 	};
 }
 
-#define C3D_ClustersEx( writer, binding, set, enabled, config ) \
+#define C3D_ClustersEx( writer, binding, set, enabled ) \
 	sdw::UniformBuffer clusters{ writer \
 		, "C3D_Clusters" \
 		, "c3d_clusters" \
@@ -183,10 +178,9 @@ namespace c3d
 		, ast::type::MemoryLayout::eStd140 \
 		, enabled }; \
 	auto c3d_clustersData = clusters.declMember< c3d::shader::ClustersData >( "c", enabled ); \
-	c3d_clustersData.setConfig( config ); \
 	clusters.end()
 
-#define C3D_Clusters( writer, binding, set, config ) \
-	C3D_ClustersEx( writer, binding, set, true, config )
+#define C3D_Clusters( writer, binding, set ) \
+	C3D_ClustersEx( writer, binding, set, true )
 
 #endif

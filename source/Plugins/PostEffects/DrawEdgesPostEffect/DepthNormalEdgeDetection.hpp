@@ -30,26 +30,20 @@ namespace draw_edges
 
 	public:
 		DepthNormalEdgeDetection( crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
 			, c3d::RenderTarget & renderTarget
 			, c3d::RenderDevice const & device
 			, c3d::PassBuffer const & passBuffer
-			, crg::ImageViewId const & depthObj
-			, crg::ImageViewId const & nmlOcc
-			, ashes::Buffer< int32_t > const & depthRange
+			, c3d::Texture const & depthObj
+			, c3d::Texture const & nmlOcc
+			, c3d::BufferBase const & depthRange
 			, bool const * enabled );
 		~DepthNormalEdgeDetection();
 
 		void accept( c3d::ConfigurationVisitorBase & visitor );
 
-		crg::ImageViewId const & getResult()const
+		c3d::Texture const & getResult()const
 		{
-			return m_result.sampledViewId;
-		}
-
-		crg::FramePass const & getPass()const
-		{
-			return m_pass;
+			return m_result;
 		}
 
 	protected:
@@ -59,7 +53,6 @@ namespace draw_edges
 		c3d::Texture m_result;
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::FramePass & m_pass;
 	};
 }
 

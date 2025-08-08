@@ -146,8 +146,8 @@ namespace c3d
 		static uint32_t bindPipeline( ashes::CommandBuffer const & commandBuffer
 			, QueueRenderNodes & queueNodes
 			, RenderPipeline const & pipeline
-			, ashes::BufferBase const & posBuffer
-			, ashes::BufferBase const * idxBuffer
+			, BufferBase const & posBuffer
+			, BufferBase const * idxBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
 			, bool hasDrawId )
@@ -199,8 +199,8 @@ namespace c3d
 		static void registerIndirectNodeCommands( RenderPipeline const & pipeline
 			, RenderedNodeT< NodeT > const & node
 			, ashes::CommandBuffer const & commandBuffer
-			, ashes::Buffer< VkDrawIndexedIndirectCommand > const * indirectIndexedCommands
-			, ashes::Buffer< VkDrawIndirectCommand > const & indirectCommands
+			, BufferT< VkDrawIndexedIndirectCommand > const * indirectIndexedCommands
+			, BufferT< VkDrawIndirectCommand > const & indirectCommands
 			, uint32_t pipelineId
 			, uint32_t drawId
 			, uint32_t drawCount
@@ -230,7 +230,7 @@ namespace c3d
 
 			if ( geometryBuffers.indexOffset.hasData() && indirectIndexedCommands )
 			{
-				commandBuffer.bindIndexBuffer( geometryBuffers.indexOffset.getBuffer()
+				commandBuffer.bindIndexBuffer( geometryBuffers.indexOffset.getBuffer().getBuffer()
 					, 0u
 					, VK_INDEX_TYPE_UINT32 );
 				commandBuffer.drawIndexedIndirect( indirectIndexedCommands->getBuffer()
@@ -288,7 +288,7 @@ namespace c3d
 
 			if ( geometryBuffers.indexOffset.hasData() )
 			{
-				commandBuffer.bindIndexBuffer( geometryBuffers.indexOffset.getBuffer()
+				commandBuffer.bindIndexBuffer( geometryBuffers.indexOffset.getBuffer().getBuffer()
 					, 0u
 					, VK_INDEX_TYPE_UINT32 );
 				commandBuffer.drawIndexed( node.command.indexCount
@@ -351,7 +351,7 @@ namespace c3d
 		static void registerMeshletNodeCommands( RenderPipeline const & pipeline
 			, SubmeshRenderNode const & node
 			, ashes::CommandBuffer const & commandBuffer
-			, ashes::Buffer< VkDrawMeshTasksIndirectCommandNV > const & indirectMeshCommands
+			, BufferT< VkDrawMeshTasksIndirectCommandNV > const & indirectMeshCommands
 			, uint32_t pipelineId
 			, uint32_t drawOffset
 			, uint32_t drawCount
@@ -368,7 +368,7 @@ namespace c3d
 				, 0u
 				, sizeof( MeshletDrawConstants )
 				, &constants );
-			commandBuffer.drawMeshTasksIndirectNV( indirectMeshCommands.getBuffer()
+			commandBuffer.drawMeshTasksIndirectNV( *indirectMeshCommands.buffer
 				, mshIndex * sizeof( VkDrawMeshTasksIndirectCommandNV )
 				, drawCount
 				, sizeof( VkDrawMeshTasksIndirectCommandNV ) );
@@ -381,7 +381,7 @@ namespace c3d
 		static void registerMeshletNodeCommands( RenderPipeline const & pipeline
 			, SubmeshRenderNode const & node
 			, ashes::CommandBuffer const & commandBuffer
-			, ashes::Buffer< VkDrawMeshTasksIndirectCommandEXT > const & indirectMeshCommands
+			, BufferT< VkDrawMeshTasksIndirectCommandEXT > const & indirectMeshCommands
 			, uint32_t pipelineId
 			, uint32_t drawOffset
 			, uint32_t drawCount
@@ -398,7 +398,7 @@ namespace c3d
 				, 0u
 				, sizeof( MeshletDrawConstants )
 				, &constants );
-			commandBuffer.drawMeshTasksIndirect( indirectMeshCommands.getBuffer()
+			commandBuffer.drawMeshTasksIndirect( *indirectMeshCommands.buffer
 				, mshIndex * sizeof( VkDrawMeshTasksIndirectCommandEXT )
 				, drawCount
 				, sizeof( VkDrawMeshTasksIndirectCommandEXT ) );
@@ -870,68 +870,88 @@ namespace c3d
 			if ( device.prefersMeshShaderEXT() )
 			{
 				m_submeshMeshletIndirectCommandsEXT = makeBuffer< VkDrawMeshTasksIndirectCommandEXT >( device
+					, getOwner()->getCuller().getScene().getResources()
 					, MaxSubmeshMeshletDrawIndirectCommand
-					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
-					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+					, BufferUsageFlags::eIndirectBuffer
+					, MemoryPropertyFlags::eHostVisible
 					, typeName + cuT( "/SubmeshMeshletIndirectBuffer" ) );
 			}
 			else
 			{
 				m_submeshMeshletIndirectCommandsNV = makeBuffer< VkDrawMeshTasksIndirectCommandNV >( device
+					, getOwner()->getCuller().getScene().getResources()
 					, MaxSubmeshMeshletDrawIndirectCommand
-					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
-					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+					, BufferUsageFlags::eIndirectBuffer
+					, MemoryPropertyFlags::eHostVisible
 					, typeName + cuT( "/SubmeshMeshletIndirectBuffer" ) );
 			}
 #	elif VK_EXT_mesh_shader
-			m_submeshMeshletIndirectCommandsEXT = makeBuffer< VkDrawMeshTasksIndirectCommandEXT >( device
+			m_submeshMeshletIndirectCommandsEXT = makeBuffer< IndexedMeshDrawCommandsBufferEXT >( device
+					, getOwner()->getCuller().getScene().getResources()
 				, MaxSubmeshMeshletDrawIndirectCommand
-				, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, BufferUsageFlags::eIndirectBuffer
+				, MemoryPropertyFlags::eHostVisible
 				, typeName + cuT( "/SubmeshMeshletIndirectBuffer" ) );
 #	else
 			m_submeshMeshletIndirectCommandsNV = makeBuffer< VkDrawMeshTasksIndirectCommandNV >( device
+					, getOwner()->getCuller().getScene().getResources()
 				, MaxSubmeshMeshletDrawIndirectCommand
-				, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, BufferUsageFlags::eIndirectBuffer
+				, MemoryPropertyFlags::eHostVisible
 				, typeName + cuT( "/SubmeshMeshletIndirectBuffer" ) );
 #	endif
 		}
 
 #endif
 		m_submeshIdxIndirectCommands = makeBuffer< VkDrawIndexedIndirectCommand >( device
+			, getOwner()->getCuller().getScene().getResources()
 			, MaxSubmeshIdxDrawIndirectCommand
-			, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, BufferUsageFlags::eIndirectBuffer
+			, MemoryPropertyFlags::eHostVisible
 			, typeName + cuT( "/SubmeshIndexedIndirectBuffer" ) );
 		m_submeshNIdxIndirectCommands = makeBuffer< VkDrawIndirectCommand >( device
+			, getOwner()->getCuller().getScene().getResources()
 			, MaxSubmeshNIdxDrawIndirectCommand
-			, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, BufferUsageFlags::eIndirectBuffer
+			, MemoryPropertyFlags::eHostVisible
 			, typeName + cuT( "/SubmeshIndirectBuffer" ) );
 		m_billboardIndirectCommands = makeBuffer< VkDrawIndirectCommand >( device
+			, getOwner()->getCuller().getScene().getResources()
 			, MaxBillboardDrawIndirectCommand
-			, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, BufferUsageFlags::eIndirectBuffer
+			, MemoryPropertyFlags::eHostVisible
 			, typeName + cuT( "/BillboardIndirectBuffer" ) );
 		m_pipelinesNodes = makeBuffer< PipelineNodes >( device
+			, getOwner()->getCuller().getScene().getResources()
 			, MaxPipelinesNodes
-			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, BufferUsageFlags::eStorageBuffer
+			, MemoryPropertyFlags::eHostVisible
 			, typeName + cuT( "/NodesIDs" ) );
 	}
 
 	QueueRenderNodes::~QueueRenderNodes()noexcept
 	{
+		m_pipelinesNodes->destroy();
 		m_pipelinesNodes.reset();
+		m_billboardIndirectCommands->destroy();
 		m_billboardIndirectCommands.reset();
+		m_submeshNIdxIndirectCommands->destroy();
 		m_submeshNIdxIndirectCommands.reset();
+		m_submeshIdxIndirectCommands->destroy();
 		m_submeshIdxIndirectCommands.reset();
 #if VK_EXT_mesh_shader
-		m_submeshMeshletIndirectCommandsEXT.reset();
+		if ( m_submeshMeshletIndirectCommandsEXT )
+		{
+			m_submeshMeshletIndirectCommandsEXT->destroy();
+			m_submeshMeshletIndirectCommandsEXT.reset();
+		}
 #endif
 #if VK_NV_mesh_shader
-		m_submeshMeshletIndirectCommandsNV.reset();
+		if ( m_submeshMeshletIndirectCommandsNV )
+		{
+			m_submeshMeshletIndirectCommandsNV->destroy();
+			m_submeshMeshletIndirectCommandsNV.reset();
+		}
 #endif
 	}
 
@@ -942,35 +962,29 @@ namespace c3d
 			, uint32_t )
 			{
 				context.memoryBarrier( commandBuffer
-					, m_pipelinesNodes->getBuffer()
-					, crg::BufferSubresourceRange{ 0u, m_pipelinesNodes->getBuffer().getSize() }
+					, m_pipelinesNodes->bufferViewId
 					, HostWriteState, DrawIndirectCommandState );
 				context.memoryBarrier( commandBuffer
-					, m_submeshIdxIndirectCommands->getBuffer()
-					, crg::BufferSubresourceRange{ 0u, m_submeshIdxIndirectCommands->getBuffer().getSize() }
+					, m_submeshIdxIndirectCommands->bufferViewId
 					, HostWriteState, DrawIndirectCommandState );
 				context.memoryBarrier( commandBuffer
-					, m_submeshNIdxIndirectCommands->getBuffer()
-					, crg::BufferSubresourceRange{ 0u, m_submeshNIdxIndirectCommands->getBuffer().getSize() }
+					, m_submeshNIdxIndirectCommands->bufferViewId
 					, HostWriteState, DrawIndirectCommandState );
 				context.memoryBarrier( commandBuffer
-					, m_billboardIndirectCommands->getBuffer()
-					, crg::BufferSubresourceRange{ 0u, m_billboardIndirectCommands->getBuffer().getSize() }
+					, m_billboardIndirectCommands->bufferViewId
 					, HostWriteState, DrawIndirectCommandState );
 
 				if ( m_submeshMeshletIndirectCommandsEXT )
 				{
 					context.memoryBarrier( commandBuffer
-						, m_submeshMeshletIndirectCommandsEXT->getBuffer()
-						, crg::BufferSubresourceRange{ 0u, m_submeshMeshletIndirectCommandsEXT->getBuffer().getSize() }
+						, m_submeshMeshletIndirectCommandsEXT->bufferViewId
 						, HostWriteState, DrawIndirectCommandState );
 				}
 
 				if ( m_submeshMeshletIndirectCommandsNV )
 				{
 					context.memoryBarrier( commandBuffer
-						, m_submeshMeshletIndirectCommandsNV->getBuffer()
-						, crg::BufferSubresourceRange{ 0u, m_submeshMeshletIndirectCommandsNV->getBuffer().getSize() }
+						, m_submeshMeshletIndirectCommandsNV->bufferViewId 
 						, HostWriteState, DrawIndirectCommandState );
 				}
 			} );
@@ -979,35 +993,29 @@ namespace c3d
 			, uint32_t )
 			{
 				context.memoryBarrier( commandBuffer
-					, m_pipelinesNodes->getBuffer()
-					, crg::BufferSubresourceRange{ 0u, m_pipelinesNodes->getBuffer().getSize() }
+					, m_pipelinesNodes->bufferViewId
 					, DrawIndirectCommandState, HostWriteState );
 				context.memoryBarrier( commandBuffer
-					, m_submeshIdxIndirectCommands->getBuffer()
-					, crg::BufferSubresourceRange{ 0u, m_submeshIdxIndirectCommands->getBuffer().getSize() }
+					, m_submeshIdxIndirectCommands->bufferViewId
 					, DrawIndirectCommandState, HostWriteState );
 				context.memoryBarrier( commandBuffer
-					, m_submeshNIdxIndirectCommands->getBuffer()
-					, crg::BufferSubresourceRange{ 0u, m_submeshNIdxIndirectCommands->getBuffer().getSize() }
+					, m_submeshNIdxIndirectCommands->bufferViewId
 					, DrawIndirectCommandState, HostWriteState );
 				context.memoryBarrier( commandBuffer
-					, m_billboardIndirectCommands->getBuffer()
-					, crg::BufferSubresourceRange{ 0u, m_billboardIndirectCommands->getBuffer().getSize() }
+					, m_billboardIndirectCommands->bufferViewId
 					, DrawIndirectCommandState, HostWriteState );
 
 				if ( m_submeshMeshletIndirectCommandsEXT )
 				{
 					context.memoryBarrier( commandBuffer
-						, m_submeshMeshletIndirectCommandsEXT->getBuffer()
-						, crg::BufferSubresourceRange{ 0u, m_submeshMeshletIndirectCommandsEXT->getBuffer().getSize() }
+						, m_submeshMeshletIndirectCommandsEXT->bufferViewId
 						, DrawIndirectCommandState, HostWriteState );
 				}
 
 				if ( m_submeshMeshletIndirectCommandsNV )
 				{
 					context.memoryBarrier( commandBuffer
-						, m_submeshMeshletIndirectCommandsNV->getBuffer()
-						, crg::BufferSubresourceRange{ 0u, m_submeshMeshletIndirectCommandsNV->getBuffer().getSize() }
+						, m_submeshMeshletIndirectCommandsNV->bufferViewId
 						, DrawIndirectCommandState, HostWriteState );
 				}
 			} );
@@ -1160,7 +1168,7 @@ namespace c3d
 			{
 				C3D_DebugTime( renderPass.getTypeName() + " - Overall" );
 				auto maxNodesCount = m_pipelinesNodes->getCount();
-				auto nodesIdsBuffer = m_pipelinesNodes->lock( 0u, ashes::WholeSize, 0u );
+				auto nodesIdsBuffer = m_pipelinesNodes->lock();
 
 				if ( !m_submeshNodes.empty()
 					|| !m_instancedSubmeshNodes.empty() )
@@ -1170,20 +1178,20 @@ namespace c3d
 					uint32_t mshIndex{};
 
 					auto const & submeshIdxCommands = *m_submeshIdxIndirectCommands;
-					auto origIndirectIdxBuffer = submeshIdxCommands.lock( 0u, ashes::WholeSize, 0u );
+					auto origIndirectIdxBuffer = submeshIdxCommands.lock();
 					auto indirectIdxBuffer = origIndirectIdxBuffer;
 					auto const & submeshNIdxCommands = *m_submeshNIdxIndirectCommands;
-					auto origIndirectNIdxBuffer = submeshNIdxCommands.lock( 0u, ashes::WholeSize, 0u );
+					auto origIndirectNIdxBuffer = submeshNIdxCommands.lock();
 					auto indirectNIdxBuffer = origIndirectNIdxBuffer;
 #if VK_EXT_mesh_shader
 					auto origIndirectMshBufferEXT = ( renderPass.isMeshShading() && m_submeshMeshletIndirectCommandsEXT )
-						? m_submeshMeshletIndirectCommandsEXT->lock( 0u, ashes::WholeSize, 0u )
+						? m_submeshMeshletIndirectCommandsEXT->lock()
 						: nullptr;
 					auto indirectMshBufferEXT = origIndirectMshBufferEXT;
 #endif
 #if VK_NV_mesh_shader
 					auto origIndirectMshBufferNV = ( renderPass.isMeshShading() && m_submeshMeshletIndirectCommandsNV )
-						? m_submeshMeshletIndirectCommandsNV->lock( 0u, ashes::WholeSize, 0u )
+						? m_submeshMeshletIndirectCommandsNV->lock()
 						: nullptr;
 					auto indirectMshBufferNV = origIndirectMshBufferNV;
 #endif
@@ -1311,20 +1319,20 @@ namespace c3d
 #if VK_NV_mesh_shader
 					if ( origIndirectMshBufferNV )
 					{
-						m_submeshMeshletIndirectCommandsNV->flush( 0u, ashes::WholeSize );
+						m_submeshMeshletIndirectCommandsNV->flush();
 						m_submeshMeshletIndirectCommandsNV->unlock();
 					}
 #endif
 #if VK_EXT_mesh_shader
 					if ( origIndirectMshBufferEXT )
 					{
-						m_submeshMeshletIndirectCommandsEXT->flush( 0u, ashes::WholeSize );
+						m_submeshMeshletIndirectCommandsEXT->flush();
 						m_submeshMeshletIndirectCommandsEXT->unlock();
 					}
 #endif
-					submeshIdxCommands.flush( 0u, ashes::WholeSize );
+					submeshIdxCommands.flush();
 					submeshIdxCommands.unlock();
-					submeshNIdxCommands.flush( 0u, ashes::WholeSize );
+					submeshNIdxCommands.flush();
 					submeshNIdxCommands.unlock();
 				}
 
@@ -1335,7 +1343,7 @@ namespace c3d
 					uint32_t nidxIndex{};
 
 					auto const & billboardCommands = *m_billboardIndirectCommands;
-					auto origIndirectBuffer = billboardCommands.lock( 0u, ashes::WholeSize, 0u );
+					auto origIndirectBuffer = billboardCommands.lock();
 					auto indirectBuffer = origIndirectBuffer;
 
 					for ( auto const & [_, pipelinesNodes] : m_billboardNodes )
@@ -1355,11 +1363,11 @@ namespace c3d
 						}
 					}
 
-					billboardCommands.flush( 0u, ashes::WholeSize );
+					billboardCommands.flush();
 					billboardCommands.unlock();
 				}
 
-				m_pipelinesNodes->flush( 0u, ashes::WholeSize );
+				m_pipelinesNodes->flush();
 				m_pipelinesNodes->unlock();
 			}
 
@@ -1412,8 +1420,8 @@ namespace c3d
 	}
 
 	uint32_t QueueRenderNodes::getPipelineNodesIndex( PipelineBaseHash const & hash
-		, ashes::BufferBase const & posBuffer
-		, ashes::BufferBase const * idxBuffer )const
+		, BufferBase const & posBuffer
+		, BufferBase const * idxBuffer )const
 	{
 		return getPipelineNodeIndex( hash
 			, posBuffer
@@ -1423,8 +1431,8 @@ namespace c3d
 
 	uint32_t QueueRenderNodes::getPipelineNodesIndex( Submesh const & submesh
 		, Pass const & pass
-		, ashes::BufferBase const & posBuffer
-		, ashes::BufferBase const * idxBuffer
+		, BufferBase const & posBuffer
+		, BufferBase const * idxBuffer
 		, bool isFrontCulled )const
 	{
 		auto const & rp = *getOwner()->getOwner();
@@ -1435,8 +1443,8 @@ namespace c3d
 
 	uint32_t QueueRenderNodes::getPipelineNodesIndex( BillboardBase const & billboard
 		, Pass const & pass
-		, ashes::BufferBase const & posBuffer
-		, ashes::BufferBase const * idxBuffer
+		, BufferBase const & posBuffer
+		, BufferBase const * idxBuffer
 		, bool isFrontCulled )const
 	{
 		auto const & rp = *getOwner()->getOwner();
@@ -1786,10 +1794,10 @@ namespace c3d
 		, ashes::Optional< VkRect2D > const & scissors
 		, PipelineNodes * nodesIdsBuffer
 		, VkDeviceSize maxNodesCount
-		, ashes::Buffer< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
+		, BufferT< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
 		, VkDrawIndexedIndirectCommand * origIndirectIdxBuffer
 		, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-		, ashes::Buffer< VkDrawIndirectCommand > const & submeshNIdxCommands
+		, BufferT< VkDrawIndirectCommand > const & submeshNIdxCommands
 		, VkDrawIndirectCommand * origIndirectNIdxBuffer
 		, VkDrawIndirectCommand *& indirectNIdxBuffer
 		, BuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
@@ -1860,10 +1868,10 @@ namespace c3d
 	uint32_t QueueRenderNodes::doParseInstantiatedSubmeshesIndirect( ashes::CommandBuffer const & commandBuffer
 		, ashes::Optional< VkViewport > const & viewport
 		, ashes::Optional< VkRect2D > const & scissors
-		, ashes::Buffer< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
+		, BufferT< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
 		, VkDrawIndexedIndirectCommand * origIndirectIdxBuffer
 		, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-		, ashes::Buffer< VkDrawIndirectCommand > const & submeshNIdxCommands
+		, BufferT< VkDrawIndirectCommand > const & submeshNIdxCommands
 		, VkDrawIndirectCommand * origIndirectNIdxBuffer
 		, VkDrawIndirectCommand *& indirectNIdxBuffer
 		, InstantiatedBuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
@@ -1923,13 +1931,13 @@ namespace c3d
 		, ashes::Optional< VkRect2D > const & scissors
 		, PipelineNodes * nodesIdsBuffer
 		, VkDeviceSize maxNodesCount
-		, ashes::Buffer< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
+		, BufferT< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
 		, VkDrawIndexedIndirectCommand * origIndirectIdxBuffer
 		, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-		, ashes::Buffer< VkDrawIndirectCommand > const & submeshNIdxCommands
+		, BufferT< VkDrawIndirectCommand > const & submeshNIdxCommands
 		, VkDrawIndirectCommand * origIndirectNIdxBuffer
 		, VkDrawIndirectCommand *& indirectNIdxBuffer
-		, ashes::Buffer< VkDrawMeshTasksIndirectCommandEXT > const & submeshMshCommands
+		, BufferT< VkDrawMeshTasksIndirectCommandEXT > const & submeshMshCommands
 		, VkDrawMeshTasksIndirectCommandEXT * origIndirectMshBuffer
 		, VkDrawMeshTasksIndirectCommandEXT *& indirectMshBuffer
 		, BuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
@@ -2000,13 +2008,13 @@ namespace c3d
 	uint32_t QueueRenderNodes::doParseInstantiatedSubmeshesMeshletsEXT( ashes::CommandBuffer const & commandBuffer
 		, ashes::Optional< VkViewport > const & viewport
 		, ashes::Optional< VkRect2D > const & scissors
-		, ashes::Buffer< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
+		, BufferT< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
 		, VkDrawIndexedIndirectCommand * origIndirectIdxBuffer
 		, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-		, ashes::Buffer< VkDrawIndirectCommand > const & submeshNIdxCommands
+		, BufferT< VkDrawIndirectCommand > const & submeshNIdxCommands
 		, VkDrawIndirectCommand * origIndirectNIdxBuffer
 		, VkDrawIndirectCommand *& indirectNIdxBuffer
-		, ashes::Buffer< VkDrawMeshTasksIndirectCommandEXT > const & submeshMshCommands
+		, BufferT< VkDrawMeshTasksIndirectCommandEXT > const & submeshMshCommands
 		, VkDrawMeshTasksIndirectCommandEXT * origIndirectMshBuffer
 		, VkDrawMeshTasksIndirectCommandEXT *& indirectMshBuffer
 		, InstantiatedBuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
@@ -2067,13 +2075,13 @@ namespace c3d
 		, ashes::Optional< VkRect2D > const & scissors
 		, PipelineNodes * nodesIdsBuffer
 		, VkDeviceSize maxNodesCount
-		, ashes::Buffer< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
+		, BufferT< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
 		, VkDrawIndexedIndirectCommand * origIndirectIdxBuffer
 		, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-		, ashes::Buffer< VkDrawIndirectCommand > const & submeshNIdxCommands
+		, BufferT< VkDrawIndirectCommand > const & submeshNIdxCommands
 		, VkDrawIndirectCommand * origIndirectNIdxBuffer
 		, VkDrawIndirectCommand *& indirectNIdxBuffer
-		, ashes::Buffer< VkDrawMeshTasksIndirectCommandNV > const & submeshMshCommands
+		, BufferT< VkDrawMeshTasksIndirectCommandNV > const & submeshMshCommands
 		, VkDrawMeshTasksIndirectCommandNV * origIndirectMshBuffer
 		, VkDrawMeshTasksIndirectCommandNV *& indirectMshBuffer
 		, BuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
@@ -2143,13 +2151,13 @@ namespace c3d
 	uint32_t QueueRenderNodes::doParseInstantiatedSubmeshesMeshletsNV( ashes::CommandBuffer const & commandBuffer
 		, ashes::Optional< VkViewport > const & viewport
 		, ashes::Optional< VkRect2D > const & scissors
-		, ashes::Buffer< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
+		, BufferT< VkDrawIndexedIndirectCommand > const & submeshIdxCommands
 		, VkDrawIndexedIndirectCommand * origIndirectIdxBuffer
 		, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-		, ashes::Buffer< VkDrawIndirectCommand > const & submeshNIdxCommands
+		, BufferT< VkDrawIndirectCommand > const & submeshNIdxCommands
 		, VkDrawIndirectCommand * origIndirectNIdxBuffer
 		, VkDrawIndirectCommand *& indirectNIdxBuffer
-		, ashes::Buffer< VkDrawMeshTasksIndirectCommandNV > const & submeshMshCommands
+		, BufferT< VkDrawMeshTasksIndirectCommandNV > const & submeshMshCommands
 		, VkDrawMeshTasksIndirectCommandNV * origIndirectMshBuffer
 		, VkDrawMeshTasksIndirectCommandNV *& indirectMshBuffer
 		, InstantiatedBuffersNodesViewT< SubmeshRenderNode > const & buffersNodes
@@ -2267,7 +2275,7 @@ namespace c3d
 		, ashes::Optional< VkRect2D > const & scissors
 		, PipelineNodes * nodesIdsBuffer
 		, VkDeviceSize maxNodesCount
-		, ashes::Buffer< VkDrawIndirectCommand > const & billboardCommands
+		, BufferT< VkDrawIndirectCommand > const & billboardCommands
 		, VkDrawIndirectCommand * origIndirectBuffer
 		, VkDrawIndirectCommand *& indirectBuffer
 		, BuffersNodesViewT< BillboardRenderNode > const & buffersNodes

@@ -193,15 +193,14 @@ namespace atmosphere_scattering
 	//************************************************************************************************
 
 	CloudsWeatherPass::CloudsWeatherPass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
 		, c3d::RenderDevice const & device
 		, WeatherUbo const & weatherUbo
-		, crg::ImageViewId const & resultView
+		, c3d::Texture & result
 		, bool const & enabled )
-		: m_shader{ cuT( "Clouds/WeatherPass" ), weather::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ).width ) }
+		: m_shader{ cuT( "Clouds/WeatherPass" ), weather::getProgram( *device.renderSystem.getEngine(), result.getExtent().width ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
-		auto renderSize = getExtent( resultView );
+		auto renderSize = result.getExtent();
 		auto & pass = graph.createPass( "Clouds/WeatherPass"
 			, [this, &device, &enabled, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -234,21 +233,16 @@ namespace atmosphere_scattering
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependencies( previousPasses );
-		weatherUbo.createPassBinding( pass
-			, weather::eWeather );
+		weatherUbo.createPassBinding( pass, weather::eWeather );
 
 		if constexpr ( weather::useCompute )
 		{
-			pass.addOutputStorageView( resultView
-				, weather::eOutput );
+			result.setLastAttach( pass.addOutputStorageImage( result.getTargetViewId(), weather::eOutput ) );
 		}
 		else
 		{
-			pass.addOutputColourView( resultView );
+			result.setLastAttach( pass.addOutputColourTarget( result.getTargetViewId() ) );
 		}
-
-		m_lastPass = &pass;
 	}
 
 	void CloudsWeatherPass::accept( c3d::ConfigurationVisitorBase & visitor )

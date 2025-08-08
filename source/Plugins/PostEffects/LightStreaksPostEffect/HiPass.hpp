@@ -12,24 +12,17 @@ namespace light_streaks
 	{
 	public:
 		HiPass( crg::FramePassGroup & graph
-			, crg::FramePass const & previousPass
 			, c3d::RenderDevice const & device
-			, crg::ImageViewIdArray const & sceneView
-			, crg::ImageViewIdArray const & resultViews
+			, c3d::Texture const & sceneView
+			, c3d::Texture & result
 			, c3d::Extent2D size
 			, bool const * enabled
 			, uint32_t const * passIndex );
 		void accept( c3d::ConfigurationVisitorBase & visitor );
 
-		crg::FramePassArray const & getLastPasses()const
-		{
-			return m_lastPasses;
-		}
-
 	private:
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::FramePassArray m_lastPasses;
 	};
 }
 

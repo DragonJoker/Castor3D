@@ -25,7 +25,6 @@ namespace c3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	graph			The frame graph.
-		 *\param[in]	previousPass	The previous frame pass.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	progress		The optional progress bar.
 		 *\param[in]	scene			The scene.
@@ -36,7 +35,6 @@ namespace c3d
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	graph			Le frame graph.
-		 *\param[in]	previousPass	La frame pass précédente.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	progress		La barre de progression optionnelle.
 		 *\param[in]	scene			La scène.
@@ -46,7 +44,6 @@ namespace c3d
 		 *\param[in]	isEnabled		Callback de détermination d'activation de la passe.
 		 */
 		C3D_API SubsurfaceScatteringPass( crg::FramePassGroup & graph
-			, crg::FramePass const & previousPass
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, Scene const & scene
@@ -74,11 +71,6 @@ namespace c3d
 			return m_result;
 		}
 
-		crg::FramePass const & getLastPass()const noexcept
-		{
-			return *m_lastPass;
-		}
-
 	public:
 		static MbString const Config;
 		static MbString const Step;
@@ -96,7 +88,7 @@ namespace c3d
 		struct BlurWeights
 		{
 			Point4f originalWeight;
-			Point4f blurWeights[3u];
+			Array< Point4f, 3u > blurWeights;
 			Point4f blurVariance;
 		};
 
@@ -122,7 +114,6 @@ namespace c3d
 		ashes::PipelineShaderStageCreateInfoArray m_blurYShader;
 		ProgramModule m_combineProgram;
 		ashes::PipelineShaderStageCreateInfoArray m_combineShader;
-		crg::FramePass const * m_lastPass{};
 	};
 }
 

@@ -65,30 +65,35 @@ namespace c3d
 		, m_cameraUbo{ m_device }
 		, m_renderUbo{ m_device }
 		, m_sceneUbo{ &environmentMap.getScene().getUbo() }
-		, m_colourRenderView{ environmentMap.getTmpImage( m_index, m_face ) }
-		, m_colourResultView{ environmentMap.getColourViewId( m_index, m_face ) }
-		, m_depthView{ getOwner()->getDepthViewId( m_index, m_face ) }
+		, m_colourRender{ device
+			, device.renderSystem.getEngine()->getGraphResourceCache()
+			, environmentMap.getTmpImage( m_index, m_face ) }
+		, m_colourResult{ device
+			, device.renderSystem.getEngine()->getGraphResourceCache()
+			, environmentMap.getColourViewId( m_index, m_face ) }
+		, m_depth{ device
+			, device.renderSystem.getEngine()->getGraphResourceCache()
+			, getOwner()->getDepthViewId( m_index, m_face ) }
 		, m_backgroundRenderer{ makeUnique< BackgroundRenderer >( m_graph.getDefaultGroup()
-			, nullptr
 			, m_device
 			, nullptr
 			, m_background
 			, m_renderUbo
 			, *m_sceneUbo
-			, m_colourRenderView
+			, m_colourRender
 			, true /*clearColour*/
 			, true /*clearDepth*/
 			, true /*forceVisible*/
-			, m_depthView
+			, &m_depth
 			, nullptr ) }
-		, m_opaquePassDesc{ &doCreateOpaquePass( &m_backgroundRenderer->getPass() ) }
-		, m_transparentPassDesc{ &doCreateTransparentPass( m_opaquePassDesc ) }
 	{
-		doCreateGenMipmapsPass( m_transparentPassDesc );
+		doCreateOpaquePass();
+		doCreateTransparentPass();
+		doCreateGenMipmapsPass();
 		m_cameraUbo.cpuUpdate( m_camera->getView()
 			, m_camera->getRawProjection()
 			, m_camera->getFrustum() );
-		m_graph.addOutput( m_colourResultView
+		m_graph.addOutput( m_colourResult.getWholeViewId()
 			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 		m_runnable = m_graph.compile( m_device.makeContext() );
 		environmentMap.getScene().getEngine()->registerTimer( getName(), m_runnable->getTimer() );
@@ -178,7 +183,7 @@ namespace c3d
 		}
 	}
 
-	crg::FramePass & EnvironmentMapPass::doCreateOpaquePass( crg::FramePass const * previousPass )
+	void EnvironmentMapPass::doCreateOpaquePass()
 	{
 		auto & result = m_graph.createPass( "OpaquePass"
 			, [this]( crg::FramePass const & framePass
@@ -192,8 +197,8 @@ namespace c3d
 					, m_device
 					, ForwardRenderTechniquePass::Type
 					, cuT( "Environment" )
-					, crg::ImageViewIdArray{ m_colourRenderView }
-					, crg::ImageViewIdArray{ m_depthView }
+					, m_colourRender
+					, m_depth
 					, RenderNodesPassDesc{ getOwner()->getSize(), m_cameraUbo, m_renderUbo, *m_sceneUbo, *m_culler }
 						.meshShading( true )
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
@@ -204,18 +209,11 @@ namespace c3d
 				m_opaquePass = res.get();
 				return res;
 			} );
-
-		if ( previousPass )
-		{
-			result.addDependency( *previousPass );
-		}
-
-		result.addInOutDepthView( m_depthView );
-		result.addInOutColourView( m_colourRenderView );
-		return result;
+		m_depth.setLastAttach( result.addInOutDepthTarget( *m_depth.getLastAttach() ) );
+		m_colourRender.setLastAttach( result.addInOutColourTarget( *m_colourRender.getLastAttach() ) );
 	}
 
-	crg::FramePass & EnvironmentMapPass::doCreateTransparentPass( crg::FramePass const * previousPass )
+	void EnvironmentMapPass::doCreateTransparentPass()
 	{
 		auto & result = m_graph.createPass( "TransparentPass"
 			, [this]( crg::FramePass const & framePass
@@ -229,8 +227,8 @@ namespace c3d
 					, m_device
 					, ForwardRenderTechniquePass::Type
 					, cuT( "Environment" )
-					, crg::ImageViewIdArray{ m_colourRenderView }
-					, crg::ImageViewIdArray{ m_depthView }
+					, m_colourRender
+					, m_depth
 					, RenderNodesPassDesc{ getOwner()->getSize(), m_cameraUbo, m_renderUbo, *m_sceneUbo, *m_culler, false }
 						.meshShading( true )
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
@@ -241,13 +239,11 @@ namespace c3d
 				m_transparentPass = res.get();
 				return res;
 			} );
-		result.addDependency( *previousPass );
-		result.addInputDepthView( m_depthView );
-		result.addInOutColourView( m_colourRenderView );
-		return result;
+		result.addInputDepthTarget( *m_depth.getLastAttach() );
+		m_colourRender.setLastAttach( result.addInOutColourTarget( *m_colourRender.getLastAttach() ) );
 	}
 
-	void EnvironmentMapPass::doCreateGenMipmapsPass( crg::FramePass const * previousPass )
+	void EnvironmentMapPass::doCreateGenMipmapsPass()
 	{
 		auto & imgCopy = m_graph.createPass( "CopyRenderToResult"
 			, [this]( crg::FramePass const & framePass
@@ -257,14 +253,13 @@ namespace c3d
 				auto result = makeRawUnique< crg::ImageCopy >( framePass
 					, context
 					, graph
-					, getExtent( m_colourRenderView ) );
+					, m_colourRender.getExtent() );
 				m_node->getScene()->getEngine()->registerTimer( makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
-		imgCopy.addDependency( *previousPass );
-		imgCopy.addTransferInputView( m_colourRenderView );
-		imgCopy.addTransferOutputView( m_colourResultView );
+		imgCopy.addInputTransfer( *m_colourRender.getLastAttach() );
+		m_colourResult.setLastAttach( imgCopy.addOutputTransferImage( m_colourResult.getWholeViewId() ) );
 
 		auto & mipsGen = m_graph.createPass( "GenMips"
 			, [this]( crg::FramePass const & framePass
@@ -279,7 +274,6 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 			} );
-		mipsGen.addDependency( imgCopy );
-		mipsGen.addTransferInOutView( m_colourResultView );
+		mipsGen.addInOutTransfer( *m_colourResult.getLastAttach() );
 	}
 }

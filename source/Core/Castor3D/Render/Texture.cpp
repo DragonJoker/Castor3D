@@ -6,6 +6,7 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
+#include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/ResourceHandler.hpp>
 
 #include <ashespp/Image/Image.hpp>
@@ -40,7 +41,7 @@ namespace c3d
 		}
 
 		static ashes::Sampler const * getSampler( RenderDevice const & device
-			, TextureSamplerCreateInfo createInfo )
+			, TextureSamplerCreateInfo const & createInfo )
 		{
 			auto & engine = *device.renderSystem.getEngine();
 			Sampler const * c3dSampler{};
@@ -86,6 +87,56 @@ namespace c3d
 			return extent.height == 1
 				&& extent.width > 1;
 		}
+
+		static crg::ImageViewId makeTargetViewId( crg::ResourceHandler & handler
+			, crg::ImageViewId wholeViewId
+			, std::string const & mbName )
+		{
+			if ( wholeViewId.data->info.viewType == ImageViewType::e3D )
+			{
+				auto createInfo = *wholeViewId.data;
+				createInfo.info.viewType = ImageViewType::e2DArray;
+				createInfo.name = mbName + "Target";
+				createInfo.info.subresourceRange.baseArrayLayer = 0u;
+				createInfo.info.subresourceRange.layerCount = createInfo.image.data->info.extent.depth;
+				createInfo.info.subresourceRange.baseMipLevel = 0u;
+				createInfo.info.subresourceRange.levelCount = 1u;
+				return handler.createViewId( createInfo );
+			}
+
+			if ( wholeViewId.data->info.subresourceRange.levelCount == wholeViewId.data->image.data->info.mipLevels )
+			{
+				auto createInfo = *wholeViewId.data;
+				createInfo.name = mbName + "Target";
+				createInfo.info.subresourceRange.baseMipLevel = 0u;
+				createInfo.info.subresourceRange.levelCount = 1u;
+				return handler.createViewId( createInfo );
+			}
+
+			return wholeViewId;
+		}
+
+		static crg::ImageViewId makeSampledViewId( crg::ResourceHandler & handler
+			, crg::ImageViewId wholeViewId
+			, std::string const & mbName )
+		{
+			if ( isDepthStencilFormat( wholeViewId.data->image.data->info.format ) )
+			{
+				auto createInfo = *wholeViewId.data;
+				createInfo.name = mbName + "Sampled";
+				createInfo.info.subresourceRange.aspectMask = ImageAspectFlags::eDepth;
+				return handler.createViewId( createInfo );
+			}
+			if ( isStencilFormat( wholeViewId.data->image.data->info.format ) )
+			{
+				auto createInfo = *wholeViewId.data;
+				createInfo.name = mbName + "Sampled";
+				createInfo.info.subresourceRange.aspectMask = ImageAspectFlags::eStencil;
+				return handler.createViewId( createInfo );
+			}
+
+			return wholeViewId;
+		}
 	}
 
 	//*********************************************************************************************
@@ -95,21 +146,22 @@ namespace c3d
 		, device{ c3d::move( rhs.device ) }
 		, imageId{ c3d::move( rhs.imageId ) }
 		, image{ c3d::move( rhs.image ) }
-		, wholeViewId{ c3d::move( rhs.wholeViewId ) }
-		, targetViewId{ c3d::move( rhs.targetViewId ) }
-		, sampledViewId{ c3d::move( rhs.sampledViewId ) }
-		, wholeView{ c3d::move( rhs.wholeView ) }
-		, targetView{ c3d::move( rhs.targetView ) }
-		, sampledView{ c3d::move( rhs.sampledView ) }
-		, subViewsId{ c3d::move( rhs.subViewsId ) }
 		, sampler{ c3d::move( rhs.sampler ) }
+		, m_wholeViewId{ c3d::move( rhs.m_wholeViewId ) }
+		, m_targetViewId{ c3d::move( rhs.m_targetViewId ) }
+		, m_sampledViewId{ c3d::move( rhs.m_sampledViewId ) }
+		, m_wholeView{ c3d::move( rhs.m_wholeView ) }
+		, m_targetView{ c3d::move( rhs.m_targetView ) }
+		, m_sampledView{ c3d::move( rhs.m_sampledView ) }
+		, m_attach{ c3d::move( rhs.m_attach ) }
+		, m_layers{ c3d::move( rhs.m_layers ) }
+		, m_ownImage{ rhs.m_ownImage }
 	{
-		rhs.device = nullptr;
-		rhs.resources = nullptr;
-		rhs.image = nullptr;
-		rhs.wholeView = VkImageView{};
-		rhs.targetView = VkImageView{};
-		rhs.sampledView = VkImageView{};
+		rhs.device = {};
+		rhs.resources = {};
+		rhs.image = {};
+		rhs.sampler = {};
+		rhs.m_ownImage = {};
 	}
 
 	Texture & Texture::operator=( Texture && rhs )noexcept
@@ -118,21 +170,22 @@ namespace c3d
 		device = c3d::move( rhs.device );
 		imageId = c3d::move( rhs.imageId );
 		image = c3d::move( rhs.image );
-		wholeViewId = c3d::move( rhs.wholeViewId );
-		targetViewId = c3d::move( rhs.targetViewId );
-		sampledViewId = c3d::move( rhs.sampledViewId );
-		wholeView = c3d::move( rhs.wholeView );
-		targetView = c3d::move( rhs.targetView );
-		sampledView = c3d::move( rhs.sampledView );
-		subViewsId = c3d::move( rhs.subViewsId );
 		sampler = c3d::move( rhs.sampler );
+		m_wholeViewId = c3d::move( rhs.m_wholeViewId );
+		m_targetViewId = c3d::move( rhs.m_targetViewId );
+		m_sampledViewId = c3d::move( rhs.m_sampledViewId );
+		m_wholeView = c3d::move( rhs.m_wholeView );
+		m_targetView = c3d::move( rhs.m_targetView );
+		m_sampledView = c3d::move( rhs.m_sampledView );
+		m_attach = c3d::move( rhs.m_attach );
+		m_layers = c3d::move( rhs.m_layers );
+		m_ownImage = rhs.m_ownImage;
 
-		rhs.device = nullptr;
-		rhs.resources = nullptr;
-		rhs.image = nullptr;
-		rhs.wholeView = VkImageView{};
-		rhs.targetView = VkImageView{};
-		rhs.sampledView = VkImageView{};
+		rhs.device = {};
+		rhs.resources = {};
+		rhs.image = {};
+		rhs.sampler = {};
+		rhs.m_ownImage = {};
 
 		return *this;
 	}
@@ -147,7 +200,8 @@ namespace c3d
 		, device{ &pdevice }
 		, sampler{ ( samplerInfo.sampler
 			? samplerInfo.sampler
-			: texture::getSampler( pdevice, c3d::move( samplerInfo.createInfo ) ) ) }
+			: texture::getSampler( pdevice, samplerInfo.createInfo ) ) }
+		, m_ownImage{ true }
 	{
 		auto & handler = resources->getHandler();
 		auto mipLevels = std::max( 1u, imageInfo.mipLevels );
@@ -173,7 +227,7 @@ namespace c3d
 			, mipLevels
 			, layerCount
 			, imageInfo.sampleCount } );
-		wholeViewId = handler.createViewId( crg::ImageViewData{ mbName + "Whole"
+		m_wholeViewId = handler.createViewId( crg::ImageViewData{ mbName + "Whole"
 			, imageId
 			, ImageViewCreateFlags::eNone
 			, ( imageInfo.extent.depth > 1u
@@ -191,70 +245,88 @@ namespace c3d
 						: ImageViewType::e2D ) ) )
 			, imageInfo.format
 			, { getAspectMask( imageInfo.format ), 0u, mipLevels, 0u, layerCount } } );
-
-		if ( wholeViewId.data->info.viewType == ImageViewType::e3D )
-		{
-			auto createInfo = *wholeViewId.data;
-			createInfo.info.viewType = ImageViewType::e2DArray;
-			createInfo.name = mbName + "Target";
-			createInfo.info.subresourceRange.baseArrayLayer = 0u;
-			createInfo.info.subresourceRange.layerCount = createInfo.image.data->info.extent.depth;
-			createInfo.info.subresourceRange.baseMipLevel = 0u;
-			createInfo.info.subresourceRange.levelCount = 1u;
-			targetViewId = handler.createViewId( createInfo );
-		}
-		else if ( wholeViewId.data->info.subresourceRange.levelCount == wholeViewId.data->image.data->info.mipLevels )
-		{
-			auto createInfo = *wholeViewId.data;
-			createInfo.name = mbName + "Target";
-			createInfo.info.subresourceRange.baseMipLevel = 0u;
-			createInfo.info.subresourceRange.levelCount = 1u;
-			targetViewId = handler.createViewId( createInfo );
-		}
-		else
-		{
-			targetViewId = wholeViewId;
-		}
-
-		if ( isDepthStencilFormat( wholeViewId.data->image.data->info.format ) )
-		{
-			auto createInfo = *wholeViewId.data;
-			createInfo.name = mbName + "Sampled";
-			createInfo.info.subresourceRange.aspectMask = ImageAspectFlags::eDepth;
-			sampledViewId = handler.createViewId( createInfo );
-		}
-		else
-		{
-			sampledViewId = wholeViewId;
-		}
+		m_targetViewId = texture::makeTargetViewId( handler, m_wholeViewId, mbName );
+		m_sampledViewId = texture::makeSampledViewId( handler, m_wholeViewId, mbName );
 
 		if ( createSubviews )
 		{
 			auto sliceLayerCount = std::max( imageInfo.extent.depth, layerCount );
 
-			for ( uint32_t index = 0u; index < sliceLayerCount; ++index )
+			for ( uint32_t layer = 0u; layer < sliceLayerCount; ++layer )
 			{
-				subViewsId.push_back( handler.createViewId( crg::ImageViewData{ mbName + "Sub" + string::toMbString( index )
+				auto & layerViews = m_layers.emplace_back();
+				auto layerName = mbName + "Layer" + string::toMbString( layer );
+				layerViews.wholeViewId = handler.createViewId( crg::ImageViewData{ layerName
 					, imageId
 					, ImageViewCreateFlags::eNone
 					, ( isTexture1D ? ImageViewType::e1D : ImageViewType::e2D )
 					, imageInfo.format
-					, { getAspectMask( imageInfo.format ), 0u, 1u, index, 1u } } ) );
+					, { getAspectMask( imageInfo.format ), 0u, imageInfo.mipLevels, layer, 1u } } );
+				layerViews.targetViewId = texture::makeTargetViewId( handler, layerViews.wholeViewId, mbName );
+				layerViews.sampledViewId = texture::makeSampledViewId( handler, layerViews.wholeViewId, mbName );
+
+				for ( uint32_t level = 0u; level < imageInfo.mipLevels; ++level )
+				{
+					auto & mipViews = layerViews.mipViews.emplace_back();
+					mipViews.targetViewId = handler.createViewId( crg::ImageViewData{ layerName + "Mip" + string::toMbString( level )
+						, imageId
+						, ImageViewCreateFlags::eNone
+						, ( isTexture1D ? ImageViewType::e1D : ImageViewType::e2D )
+						, imageInfo.format
+						, { getAspectMask( imageInfo.format ), level, 1u, layer, 1u } } );
+					mipViews.sampledViewId = texture::makeSampledViewId( handler, mipViews.targetViewId, mbName );
+				}
 			}
 		}
 	}
 
+	Texture::Texture( RenderDevice const & pdevice
+		, crg::ResourcesCache & presources
+		, crg::ImageViewId view )
+		: Texture{ pdevice, presources, view, view, view }
+	{
+	}
+
+	Texture::Texture( RenderDevice const & pdevice
+		, crg::ResourcesCache & presources
+		, crg::ImageViewId wholeView
+		, crg::ImageViewId targetView
+		, crg::ImageViewId sampledView )
+		: resources{ &presources }
+		, device{ &pdevice }
+		, imageId{ wholeView.data->image }
+		, m_wholeViewId{ wholeView }
+		, m_targetViewId{ targetView }
+		, m_sampledViewId{ sampledView }
+		, m_ownImage{ false }
+	{
+		auto & context = device->makeContext();
+		image = makeRawUnique< ashes::Image >( **device
+			, imageId.data->name
+			, resources->createImage( context, imageId )
+			, ashes::ImageCreateInfo{ convert( imageId.data->info ) } );
+		m_wholeView = resources->createImageView( context, m_wholeViewId );
+
+		if ( m_wholeViewId != m_targetViewId )
+			m_targetView = resources->createImageView( context, m_targetViewId );
+		else
+			m_targetView = m_wholeView;
+
+		if ( m_wholeViewId != m_sampledViewId )
+			m_sampledView = resources->createImageView( context, m_sampledViewId );
+		else
+			m_sampledView = m_wholeView;
+	}
+
 	Texture::~Texture()noexcept
 	{
-		CU_Require( image == nullptr && wholeView == nullptr );
+		CU_Require( !m_ownImage || ( image == nullptr && m_wholeView == nullptr ) );
 	}
 
 	void Texture::create()
 	{
-		if ( !device || !resources || image )
-		{
+		if ( !device || !resources || image || !m_ownImage )
 			return;
-		}
 
 		auto & context = device->makeContext();
 		
@@ -262,62 +334,145 @@ namespace c3d
 			, imageId.data->name
 			, resources->createImage( context, imageId )
 			, ashes::ImageCreateInfo{ convert( imageId.data->info ) } );
-		wholeView = resources->createImageView( context, wholeViewId );
+		m_wholeView = resources->createImageView( context, m_wholeViewId );
 
-		if ( wholeViewId != targetViewId )
-		{
-			targetView = resources->createImageView( context, targetViewId );
-		}
+		if ( m_wholeViewId != m_targetViewId )
+			m_targetView = resources->createImageView( context, m_targetViewId );
 		else
-		{
-			targetView = wholeView;
-		}
+			m_targetView = m_wholeView;
 
-		if ( wholeViewId != sampledViewId )
-		{
-			sampledView = resources->createImageView( context, sampledViewId );
-		}
+		if ( m_wholeViewId != m_sampledViewId )
+			m_sampledView = resources->createImageView( context, m_sampledViewId );
 		else
-		{
-			sampledView = wholeView;
-		}
+			m_sampledView = m_wholeView;
 
-		for ( auto subViewId : subViewsId )
+		for ( auto & layerViews : m_layers )
 		{
-			subViews.push_back( resources->createImageView( context, subViewId ) );
+			layerViews.wholeView = resources->createImageView( context, layerViews.wholeViewId );
+
+			if ( layerViews.wholeViewId != layerViews.targetViewId )
+				layerViews.targetView = resources->createImageView( context, layerViews.targetViewId );
+			else
+				layerViews.targetView = layerViews.wholeView;
+
+			if ( layerViews.wholeViewId != layerViews.sampledViewId )
+				layerViews.sampledView = resources->createImageView( context, layerViews.sampledViewId );
+			else
+				layerViews.sampledView = layerViews.wholeView;
+
+			for ( auto & mipViews : layerViews.mipViews )
+			{
+				mipViews.targetView = resources->createImageView( context, mipViews.targetViewId );
+
+				if ( mipViews.targetViewId != mipViews.sampledViewId )
+					mipViews.sampledView = resources->createImageView( context, mipViews.sampledViewId );
+				else
+					mipViews.sampledView = mipViews.targetView;
+			}
 		}
 	}
 
 	void Texture::destroy()noexcept
 	{
-		if ( !device || !resources )
-		{
+		if ( !device || !resources || !m_ownImage )
 			return;
-		}
 
-		for ( auto subViewId : subViewsId )
+		for ( auto & layerViews : m_layers )
 		{
-			resources->destroyImageView( subViewId );
+			if ( layerViews.wholeViewId != layerViews.sampledViewId )
+			{
+				resources->destroyImageView( layerViews.sampledViewId );
+				layerViews.sampledView = VkImageView{};
+			}
+
+			if ( layerViews.wholeViewId != layerViews.targetViewId )
+			{
+				resources->destroyImageView( layerViews.targetViewId );
+				layerViews.targetView = VkImageView{};
+			}
+
+			resources->destroyImageView( layerViews.wholeViewId );
+
+			for ( auto & mipViews : layerViews.mipViews )
+			{
+				if ( mipViews.targetViewId != mipViews.sampledViewId )
+				{
+					resources->destroyImageView( mipViews.sampledViewId );
+					mipViews.sampledView = VkImageView{};
+				}
+
+				resources->destroyImageView( mipViews.targetViewId );
+			}
 		}
 
-		subViewsId.clear();
+		m_layers.clear();
 
-		if ( wholeViewId != sampledViewId )
+		if ( m_wholeViewId != m_sampledViewId )
 		{
-			resources->destroyImageView( sampledViewId );
-			sampledView = VkImageView{};
+			resources->destroyImageView( m_sampledViewId );
+			m_sampledView = VkImageView{};
 		}
 
-		if ( wholeViewId != targetViewId )
+		if ( m_wholeViewId != m_targetViewId )
 		{
-			resources->destroyImageView( targetViewId );
-			targetView = VkImageView{};
+			resources->destroyImageView( m_targetViewId );
+			m_targetView = VkImageView{};
 		}
 
-		resources->destroyImageView( wholeViewId );
-		wholeView = VkImageView{};
+		resources->destroyImageView( m_wholeViewId );
+		m_wholeView = VkImageView{};
 		resources->destroyImage( imageId );
 		image = nullptr;
+	}
+
+	crg::Attachment const * Texture::mergeLayerAttachments( crg::FramePassGroup & graph )const
+	{
+		crg::AttachmentArray attachs;
+		for ( auto & layerViews : m_layers )
+			attachs.push_back( layerViews.attach );
+		return graph.mergeAttachments( attachs );
+	}
+
+	crg::Attachment const * Texture::getSampledLastAttach( uint32_t layerIndex, uint32_t mipLevel )const
+	{
+		auto result = getLastAttach( layerIndex, mipLevel );
+		if ( result && result->imageAttach.view() != getSampledViewId( layerIndex, mipLevel )
+			&& getTargetViewId( layerIndex, mipLevel ) != getSampledViewId( layerIndex, mipLevel ) )
+		{
+			auto [it, inserted] = m_cache.try_emplace( ( ( layerIndex + 1u ) << 16u ) + ( mipLevel + 1u ), nullptr );
+			if ( inserted )
+				it->second = c3d::makeRawUnique< crg::Attachment >( getSampledViewId( layerIndex, mipLevel ), *result );
+			return it->second.get();
+		}
+		return result;
+	}
+
+	crg::Attachment const * Texture::getSampledLastAttach( uint32_t layerIndex )const
+	{
+		auto result = getLastAttach( layerIndex );
+		if ( result && result->imageAttach.view() != getSampledViewId( layerIndex )
+			&& getTargetViewId( layerIndex ) != getSampledViewId( layerIndex ) )
+		{
+			auto [it, inserted] = m_cache.try_emplace( ( ( layerIndex + 1u ) << 16u ), nullptr );
+			if ( inserted )
+				it->second = c3d::makeRawUnique< crg::Attachment >( getSampledViewId( layerIndex ), *result );
+			return it->second.get();
+		}
+		return result;
+	}
+
+	crg::Attachment const * Texture::getSampledLastAttach()const
+	{
+		auto result = getLastAttach();
+		if ( result && result->imageAttach.view() != getSampledViewId()
+			&& getTargetViewId() != getSampledViewId() )
+		{
+			auto [it, inserted] = m_cache.try_emplace( 0u, nullptr );
+			if ( inserted )
+				it->second = c3d::makeRawUnique< crg::Attachment >( getSampledViewId(), *result );
+			return it->second.get();
+		}
+		return result;
 	}
 
 	VkImageMemoryBarrier Texture::makeGeneralLayout( ImageLayout srcLayout
@@ -466,8 +621,8 @@ namespace c3d
 			, dstQueueFamily
 			, *image
 			, convert( target
-				? targetViewId.data->info.subresourceRange
-				: sampledViewId.data->info.subresourceRange ) );
+				? m_targetViewId.data->info.subresourceRange
+				: m_sampledViewId.data->info.subresourceRange ) );
 	}
 
 	//*********************************************************************************************

@@ -814,6 +814,11 @@ namespace c3d
 				postEvent( makeCpuCleanupEvent( *m_defaultSampler ) );
 			}
 
+			for ( auto & [_, window] : m_renderWindows )
+			{
+				postEvent( makeCpuCleanupEvent( *window ) );
+			}
+
 			postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
 				, [this]()
 				{

@@ -33,7 +33,7 @@ namespace c3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, ashes::Buffer< ModelBufferConfiguration > const & modelsBuffer )
+		, BufferBase const & modelsBuffer )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
@@ -92,8 +92,7 @@ namespace c3d
 		, VkCommandBuffer commandBuffer )const
 	{
 		context.memoryBarrier( commandBuffer
-			, m_modelsBuffer.getBuffer()
-			, { 0u, ashes::WholeSize }
+			, m_modelsBuffer.bufferViewId
 			, HostWriteState, ComputeShaderReadState );
 
 		for ( auto const & [_, pass] : m_transformPasses )
@@ -102,8 +101,7 @@ namespace c3d
 		}
 		
 		context.memoryBarrier( commandBuffer
-			, m_modelsBuffer.getBuffer()
-			, { 0u, ashes::WholeSize }
+			, m_modelsBuffer.bufferViewId
 			, ComputeShaderReadState, VertexUniformReadState );
 	}
 

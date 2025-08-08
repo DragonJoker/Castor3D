@@ -50,21 +50,20 @@ namespace c3d
 			, ashes::DescriptorSetPool const & pool
 			, crg::FramePass const & pass )
 		{
-			auto voxels = pass.buffers.front();
-			auto result = pass.images.front();
+			auto voxels = pass.inputs.begin();
+			auto result = pass.outputs.begin();
 			ashes::WriteDescriptorSetArray writes;
-			auto write = graph.getBufferWrite( voxels, 0u );
-			writes.emplace_back( write->dstBinding
-				, write->dstArrayElement
-				, write->descriptorCount
-				, write->descriptorType );
+
+			auto write = graph.getDescriptorWrite( *voxels->second, voxels->first );
+			writes.emplace_back( write->dstBinding, write->dstArrayElement
+				, write->descriptorCount, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
-			writes.emplace_back( result.binding
-				, 0u
-				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-				, ashes::VkDescriptorImageInfoArray{ VkDescriptorImageInfo{ VK_NULL_HANDLE
-					, graph.createImageView( result.view() )
-					, VK_IMAGE_LAYOUT_GENERAL } } );
+
+			write = graph.getDescriptorWrite( *result->second, result->first );
+			writes.emplace_back( write->dstBinding, write->dstArrayElement
+				, write->descriptorCount, write->descriptorType );
+			writes.back().imageInfo = write.imageInfo;
+
 			auto descriptorSet = pool.createDescriptorSet( "VoxelBufferToTexture" );
 			descriptorSet->setBindings( writes );
 			descriptorSet->update();
@@ -178,8 +177,8 @@ namespace c3d
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
 				, c3d::move( isEnabled )
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
-			, crg::ru::Config{ 2u, false }.implicitAction( pass.images.front().view()
-				, crg::RecordContext::clearAttachment( pass.images.front().view(), transparentBlackClearColor ) ) }
+			, crg::ru::Config{ 2u, false }.implicitAction( pass.outputs.begin()->second->view()
+				, crg::RecordContext::clearAttachment( pass.outputs.begin()->second->view(), transparentBlackClearColor ) ) }
 		, m_device{ device }
 		, m_vctConfig{ vctConfig }
 		, m_descriptorSetLayout{ vxlbuftotex::createDescriptorLayout( m_device ) }
@@ -205,7 +204,7 @@ namespace c3d
 		auto temporalSmoothing = ( ( index >> 0 ) % 2 ) == 1u;
 		auto voxelGridSize = m_vctConfig.gridSize.value();
 		VkDescriptorSet descriptorSet = *m_descriptorSet;
-		auto view = m_pass.images.front().view( index );
+		auto view = m_pass.outputs.begin()->second->view( index );
 		auto layoutState = getLayoutState( view );
 		auto image = m_graph.createImage( view.data->image );
 

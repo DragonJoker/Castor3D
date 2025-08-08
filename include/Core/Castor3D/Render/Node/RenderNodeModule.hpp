@@ -99,8 +99,8 @@ namespace c3d
 	struct PipelineBuffer
 	{
 		PipelineBuffer( PipelineBaseHash hash
-			, ashes::BufferBase const * posBuffer
-			, ashes::BufferBase const * idxBuffer )
+			, BufferBase const * posBuffer
+			, BufferBase const * idxBuffer )
 			: hash{ hash }
 			, posBuffer{ posBuffer }
 			, idxBuffer{ idxBuffer }
@@ -108,8 +108,8 @@ namespace c3d
 		}
 
 		PipelineBaseHash hash;
-		ashes::BufferBase const * posBuffer;
-		ashes::BufferBase const * idxBuffer;
+		BufferBase const * posBuffer;
+		BufferBase const * idxBuffer;
 	};
 	using PipelineBufferArray = Vector< PipelineBuffer >;
 

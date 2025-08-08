@@ -224,25 +224,25 @@ namespace c3d
 			return m_defaultMaterial;
 		}
 
-		PassBuffer const & getPassBuffer()const
+		PassBuffer & getPassBuffer()const
 		{
 			CU_Require( m_passBuffer );
 			return *m_passBuffer;
 		}
 
-		SssProfileBuffer const & getSssProfileBuffer()const
+		SssProfileBuffer & getSssProfileBuffer()const
 		{
 			CU_Require( m_sssProfileBuffer );
 			return *m_sssProfileBuffer;
 		}
 
-		TextureConfigurationBuffer const & getTexConfigBuffer()const
+		TextureConfigurationBuffer & getTexConfigBuffer()const
 		{
 			CU_Require( m_texConfigBuffer );
 			return *m_texConfigBuffer;
 		}
 
-		TextureAnimationBuffer const & getTexAnimBuffer()const
+		TextureAnimationBuffer & getTexAnimBuffer()const
 		{
 			CU_Require( m_texAnimBuffer );
 			return *m_texAnimBuffer;

@@ -23,16 +23,19 @@ namespace c3d
 		C3D_API DirectUploadData( RenderDevice const & device
 			, String debugName
 			, ashes::CommandPool const & commandPool );
+		C3D_API ~DirectUploadData()noexcept;
 
-	private:
-		void doBegin()override;
-		VkDeviceSize doUpload( BufferDataRange & data )override;
-		VkDeviceSize doUpload( ImageDataRange & data )override;
-		SemaphoreUsed doEnd( ashes::Queue const & queue
+		C3D_API void begin()override;
+		C3D_API SemaphoreUsed end( ashes::Queue const & queue
 			, ashes::Fence const * fence
 			, Milliseconds timeout )override;
+		C3D_API void cleanup()noexcept override;
 
-		Vector< ashes::BufferBasePtr > m_buffers;
+	private:
+		VkDeviceSize doUpload( BufferDataRange & data )override;
+		VkDeviceSize doUpload( ImageDataRange & data )override;
+
+		Vector< BufferUPtr > m_buffers;
 	};
 
 	using InstantDirectUploadData = InstantUploadDataT< DirectUploadData >;

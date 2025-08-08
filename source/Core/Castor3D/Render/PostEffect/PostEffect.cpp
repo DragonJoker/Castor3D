@@ -40,14 +40,12 @@ namespace c3d
 
 	bool PostEffect::initialise( RenderDevice const & device
 		, Texture const & source
-		, Texture const & target
-		, crg::FramePass const & previousPass )
+		, Texture & target )
 	{
 		m_source = &source;
 		return doInitialise( device
 			, source
-			, target
-			, previousPass );
+			, target );
 	}
 
 	void PostEffect::cleanup( RenderDevice const & device )

@@ -42,21 +42,20 @@ namespace c3d
 			, ashes::DescriptorSetPool const & pool
 			, crg::FramePass const & pass )
 		{
-			auto input = pass.images.front();
-			auto output = pass.buffers.front();
 			ashes::WriteDescriptorSetArray writes;
-			writes.emplace_back( input.binding
-				, 0u
-				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-				, ashes::VkDescriptorImageInfoArray{ VkDescriptorImageInfo{ VK_NULL_HANDLE
-					, graph.createImageView( input.view() )
-					, VK_IMAGE_LAYOUT_GENERAL } } );
-			auto write = graph.getBufferWrite( output );
-			writes.emplace_back( write->dstBinding
-				, write->dstArrayElement
-				, write->descriptorCount
-				, write->descriptorType );
+
+			auto input = pass.inputs.begin();
+			auto write = graph.getDescriptorWrite( *input->second, input->first );
+			writes.emplace_back( write->dstBinding, write->dstArrayElement
+				, write->descriptorCount, write->descriptorType );
+			writes.back().imageInfo = write.imageInfo;
+
+			auto output = pass.outputs.begin();
+			write = graph.getDescriptorWrite( *output->second, output->first );
+			writes.emplace_back( write->dstBinding, write->dstArrayElement
+				, write->descriptorCount, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
+
 			auto descriptorSet = pool.createDescriptorSet( "ComputeDepthRange" );
 			descriptorSet->setBindings( writes );
 			descriptorSet->update();
@@ -161,7 +160,7 @@ namespace c3d
 	void ComputeDepthRange::doRecordInto( VkCommandBuffer commandBuffer )const
 	{
 		VkDescriptorSet descriptorSet = *m_descriptorSet;
-		auto view = m_pass.images.front().view();
+		auto view = m_pass.inputs.begin()->second->view();
 		auto extent = getExtent( view );
 
 		m_context.vkCmdBindPipeline( commandBuffer

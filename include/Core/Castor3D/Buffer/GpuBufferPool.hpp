@@ -28,14 +28,8 @@ namespace c3d
 		 *\param[in]	debugName		Le nom debug.
 		 */
 		C3D_API GpuBufferPool( RenderDevice const & device
+			, crg::ResourcesCache & resources
 			, String debugName );
-		/**
-		 *\~english
-		 *\brief		Cleans up all GPU buffers.
-		 *\~french
-		 *\brief		Nettoie tous les tampons GPU.
-		 */
-		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief			Uploads all ready memory ranges to VRAM.
@@ -67,9 +61,9 @@ namespace c3d
 		 *\return		Le tampon GPU.
 		 */
 		template< typename DataT >
-		GpuBufferOffsetT< DataT > getBuffer( VkBufferUsageFlags target
-			, VkDeviceSize count
-			, VkMemoryPropertyFlags flags );
+		GpuBufferOffsetT< DataT > getBuffer( BufferUsageFlags target
+			, DeviceSize count
+			, MemoryPropertyFlags flags );
 		/**
 		 *\~english
 		 *\brief		Releases a GPU buffer.
@@ -82,20 +76,22 @@ namespace c3d
 		void putBuffer( GpuBufferOffsetT< DataT > const & bufferOffset )noexcept;
 
 	private:
-		C3D_API BufferArray::iterator doFindBuffer( VkDeviceSize size
+		C3D_API BufferArray::iterator doFindBuffer( DeviceSize size
 			, BufferArray & array )const;
-		C3D_API uint32_t doMakeKey( VkBufferUsageFlags target
-			, VkMemoryPropertyFlags flags )const noexcept;
-		C3D_API GpuBufferBase & doGetBuffer( VkDeviceSize size
-			, VkBufferUsageFlags target
-			, VkMemoryPropertyFlags memory
+		C3D_API uint32_t doMakeKey( BufferUsageFlags target
+			, MemoryPropertyFlags flags )const noexcept;
+		C3D_API GpuBufferBase & doGetBuffer( DeviceSize size
+			, BufferUsageFlags target
+			, MemoryPropertyFlags memory
 			, MemChunk & chunk );
 		C3D_API void doPutBuffer( GpuBufferBase const & buffer
-			, VkBufferUsageFlags target
-			, VkMemoryPropertyFlags memory
+			, BufferUsageFlags target
+			, MemoryPropertyFlags memory
 			, MemChunk const & chunk )noexcept;
 
 	private:
+		RenderDevice const & m_device;
+		crg::ResourcesCache & m_resources;
 		String m_debugName;
 		Map< uint32_t, BufferArray > m_buffers;
 		BufferArray m_nonSharedBuffers;

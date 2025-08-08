@@ -78,8 +78,8 @@ namespace c3d
 		*	Les images dont le g-buffer a la responsabilité.
 		*/
 		template< typename TextureEnumT >
-		Vector< Texture const * > doCreateTextures( crg::ResourcesCache & resources
-			, Array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
+		Vector< Texture * > doCreateTextures( crg::ResourcesCache & resources
+			, Array< Texture *, size_t( TextureEnumT::eCount ) > const & inputs
 			, String const & prefix
 			, ImageCreateFlags createFlags
 			, Size const & size
@@ -87,7 +87,7 @@ namespace c3d
 			, SampleCount sampleCount
 			, Vector< TextureUPtr > & owned )const
 		{
-			Vector< Texture const * > result;
+			Vector< Texture * > result;
 
 			for ( uint32_t i = 0u; i < inputs.size(); ++i )
 			{
@@ -152,15 +152,15 @@ namespace c3d
 		*	Les images dont le g-buffer a la responsabilité.
 		*/
 		template< typename TextureEnumT >
-		Vector< Texture const * > doCreateTextures( crg::ResourcesCache & resources
-			, Array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
+		Vector< Texture * > doCreateTextures( crg::ResourcesCache & resources
+			, Array< Texture *, size_t( TextureEnumT::eCount ) > const & inputs
 			, String const & prefix
 			, ImageCreateFlags createFlags
 			, Extent3D const & size
 			, SampleCount sampleCount
 			, Vector< TextureUPtr > & owned )const
 		{
-			Vector< Texture const * > result;
+			Vector< Texture * > result;
 
 			for ( uint32_t i = 0u; i < inputs.size(); ++i )
 			{
@@ -254,7 +254,7 @@ namespace c3d
 		GBufferT( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, String name
-			, Array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, Array< Texture *, size_t( TextureEnumT::eCount ) > const & inputs
 			, ImageCreateFlags createFlags
 			, Size const & size
 			, uint32_t layerCount = 1u
@@ -309,7 +309,7 @@ namespace c3d
 		GBufferT( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, String name
-			, Array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, Array< Texture *, size_t( TextureEnumT::eCount ) > const & inputs
 			, ImageCreateFlags createFlags
 			, Extent3D const & size
 			, SampleCount sampleCount = SampleCount::e1 )
@@ -340,11 +340,6 @@ namespace c3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		Texture const & operator[]( TextureEnumT texture )const noexcept
-		{
-			return *m_result[size_t( texture )];
-		}
-
 		auto cbegin()const noexcept
 		{
 			return m_result.begin();
@@ -379,11 +374,175 @@ namespace c3d
 		{
 			return m_result.size();
 		}
+
+		Texture const & getTexture( TextureEnumT texture )const noexcept
+		{
+			return *m_result[size_t( texture )];
+		}
+
+		Extent3D const & getExtent()const noexcept
+		{
+			return m_result[0]->getExtent();
+		}
+
+		uint32_t getArrayLayers()const noexcept
+		{
+			return m_result[0]->imageId.data->info.arrayLayers;
+		}
+
+		crg::ImageId const & getImageId( TextureEnumT texture )const noexcept
+		{
+			return m_result[size_t( texture )]->imageId;
+		}
+
+		ashes::Sampler const & getSampler( TextureEnumT texture )const noexcept
+		{
+			return *m_result[size_t( texture )]->sampler;
+		}
+
+		crg::Attachment const * getSampledLastAttach( TextureEnumT texture, uint32_t layerIndex, uint32_t mipLevel )const noexcept
+		{
+			return m_result[size_t( texture )]->getSampledLastAttach( layerIndex, mipLevel );
+		}
+
+		crg::Attachment const * getSampledLastAttach( TextureEnumT texture, uint32_t layerIndex )const noexcept
+		{
+			return m_result[size_t( texture )]->getSampledLastAttach( layerIndex );
+		}
+
+		crg::Attachment const * getSampledLastAttach( TextureEnumT texture )const noexcept
+		{
+			return m_result[size_t( texture )]->getSampledLastAttach();
+		}
+
+		crg::ImageViewId const & getTargetViewId( TextureEnumT texture, uint32_t layerIndex, uint32_t mipLevel )const noexcept
+		{
+			return m_result[size_t( texture )]->getTargetViewId( layerIndex, mipLevel );
+		}
+
+		crg::ImageViewId const & getTargetViewId( TextureEnumT texture, uint32_t layerIndex )const noexcept
+		{
+			return m_result[size_t( texture )]->getTargetViewId( layerIndex );
+		}
+
+		crg::ImageViewId const & getTargetViewId( TextureEnumT texture )const noexcept
+		{
+			return m_result[size_t( texture )]->getTargetViewId();
+		}
+
+		crg::ImageViewId const & getWholeViewId( TextureEnumT texture, uint32_t layerIndex, uint32_t mipLevel )const noexcept
+		{
+			return m_result[size_t( texture )]->getWholeViewId( layerIndex, mipLevel );
+		}
+
+		crg::ImageViewId const & getWholeViewId( TextureEnumT texture, uint32_t layerIndex )const noexcept
+		{
+			return m_result[size_t( texture )]->getWholeViewId( layerIndex );
+		}
+
+		crg::ImageViewId const & getWholeViewId( TextureEnumT texture )const noexcept
+		{
+			return m_result[size_t( texture )]->getWholeViewId();
+		}
+
+		crg::ImageViewId const & getSampledViewId( TextureEnumT texture, uint32_t layerIndex, uint32_t mipLevel )const noexcept
+		{
+			return m_result[size_t( texture )]->getSampledViewId( layerIndex, mipLevel );
+		}
+
+		crg::ImageViewId const & getSampledViewId( TextureEnumT texture, uint32_t layerIndex )const noexcept
+		{
+			return m_result[size_t( texture )]->getSampledViewId( layerIndex );
+		}
+
+		crg::ImageViewId const & getSampledViewId( TextureEnumT texture )const noexcept
+		{
+			return m_result[size_t( texture )]->getSampledViewId();
+		}
+
+		VkImageView getTargetView( TextureEnumT texture, uint32_t layerIndex, uint32_t mipLevel )const noexcept
+		{
+			return m_result[size_t( texture )]->getTargetView( layerIndex, mipLevel );
+		}
+
+		VkImageView getTargetView( TextureEnumT texture, uint32_t layerIndex )const noexcept
+		{
+			return m_result[size_t( texture )]->getTargetView( layerIndex );
+		}
+
+		VkImageView getTargetView( TextureEnumT texture )const noexcept
+		{
+			return m_result[size_t( texture )]->getTargetView();
+		}
+
+		VkImageView getWholeView( TextureEnumT texture, uint32_t layerIndex, uint32_t mipLevel )const noexcept
+		{
+			return m_result[size_t( texture )]->getWholeView( layerIndex, mipLevel );
+		}
+
+		VkImageView getWholeView( TextureEnumT texture, uint32_t layerIndex )const noexcept
+		{
+			return m_result[size_t( texture )]->getWholeView( layerIndex );
+		}
+
+		VkImageView getWholeView( TextureEnumT texture )const noexcept
+		{
+			return m_result[size_t( texture )]->getWholeView();
+		}
+
+		VkImageView getSampledView( TextureEnumT texture, uint32_t layerIndex, uint32_t mipLevel )const noexcept
+		{
+			return m_result[size_t( texture )]->getSampledView( layerIndex, mipLevel );
+		}
+
+		VkImageView getSampledView( TextureEnumT texture, uint32_t layerIndex )const noexcept
+		{
+			return m_result[size_t( texture )]->getSampledView( layerIndex );
+		}
+
+		VkImageView getSampledView( TextureEnumT texture )const noexcept
+		{
+			return m_result[size_t( texture )]->getSampledView();
+		}
+
+		crg::Attachment const * getLastAttach( TextureEnumT texture, uint32_t layerIndex, uint32_t mipLevel )const noexcept
+		{
+			return m_result[size_t( texture )]->getLastAttach( layerIndex, mipLevel );
+		}
+
+		crg::Attachment const * getLastAttach( TextureEnumT texture, uint32_t layerIndex )const noexcept
+		{
+			return m_result[size_t( texture )]->getLastAttach( layerIndex );
+		}
+
+		crg::Attachment const * getLastAttach( TextureEnumT texture )const noexcept
+		{
+			return m_result[size_t( texture )]->getLastAttach();
+		}
+		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		crg::Attachment const * setLastAttach( TextureEnumT texture, uint32_t layerIndex, crg::Attachment const * attach )noexcept
+		{
+			return m_result[size_t( texture )]->setLastAttach( layerIndex, attach );
+		}
+
+		crg::Attachment const * setLastAttach( TextureEnumT texture, crg::Attachment const * attach )noexcept
+		{
+			return m_result[size_t( texture )]->setLastAttach( attach );
+		}
 		/**@}*/
 
 	protected:
 		Vector< TextureUPtr > m_owned;
-		Vector< Texture const * > m_result;
+		Vector< Texture * > m_result;
 	};
 }
 

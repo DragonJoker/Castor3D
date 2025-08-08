@@ -82,22 +82,16 @@ namespace c3d
 		 *\param[in]	device			The render device.
 		 *\param[in]	resources		The graph resources.
 		 *\param[in]	graph			The parent graph.
-		 *\param[in]	previousPasses	The passes this one depends on.
-		 *\return		The resulting passes to wait for.
 		 *\~french
 		 *\brief		Enregistre les passes dont le composant dépend.
 		 *\param[in]	device			Le périphérique de rendu.
 		 *\param[in]	resources		Les ressources du graphe.
 		 *\param[in]	graph			Le graphe parent.
-		 *\param[in]	previousPasses	Les passes dont celle-ci dépend.
-		 *\return		Les passes résultantes, qu'il faut attendre.
 		 */
-		C3D_API virtual crg::FramePassArray record( RenderDevice const & device
+		C3D_API virtual void record( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, crg::FramePassGroup & graph
-			, crg::FramePassArray previousPasses )
+			, crg::FramePassGroup & graph )
 		{
-			return crg::FramePassArray{};
 		}
 		/**
 		 *\~english
@@ -292,7 +286,7 @@ namespace c3d
 		 *\~french
 		 *\return		Les flags d'utilisation du buffer.
 		 */
-		C3D_API virtual VkBufferUsageFlags getUsageFlags()const noexcept
+		C3D_API virtual BufferUsageFlags getUsageFlags()const noexcept
 		{
 			return {};
 		}

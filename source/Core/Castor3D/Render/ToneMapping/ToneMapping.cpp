@@ -30,29 +30,49 @@ namespace c3d
 
 	ToneMapping::ToneMapping( Engine & engine
 		, crg::FramePassGroup & graph
-		, crg::ImageViewIdArray const & source
-		, crg::ImageViewId const & target
-		, crg::FramePass const & previousPass
+		, Texture const & source
+		, Texture & target
 		, RenderUbo const & renderUbo
 		, ColourGradingUbo & colourGradingUbo
 		, ProgressBar * progress )
 		: OwnedBy< Engine >{ engine }
 		, m_renderUbo{ renderUbo }
 		, m_colourGradingUbo{ colourGradingUbo }
-		, m_source{ source.front() }
-		, m_pass{ &doCreatePass( graph, source, target, previousPass, progress ) }
+		, m_source{ source }
 	{
+		auto & pass = graph.createPass( "ToneMapping"
+			, [this, progress, &target]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & graph )
+			{
+				stepProgressBarLocal( progress, cuT( "Initialising tone mapping pass" ) );
+				auto result = crg::RenderQuadBuilder{}
+					.renderPosition( {} )
+					.renderSize( makeExtent2D( target.getExtent() ) )
+					.texcoordConfig( {} )
+					.passIndex( &m_passIndex )
+					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_program ) )
+					.build( framePass, context, graph, crg::ru::Config{ 2u } );
+				getEngine()->registerTimer( makeString( framePass.getFullName() )
+					, result->getTimer() );
+				m_quad = result.get();
+				return result;
+			} );
+		m_renderUbo.createPassBinding( pass, rendtonmap::HdrCfgUboIdx );
+		m_colourGradingUbo.createPassBinding( pass, rendtonmap::ClrGrdUboIdx );
+		pass.addInputSampled( *source.getSampledLastAttach(), rendtonmap::HdrMapIdx );
+		target.setLastAttach( pass.addOutputColourTarget( target.getTargetViewId() ) );
 	}
 
 	void ToneMapping::initialise( String const & name
-		, crg::ImageViewId const & source )
+		, Texture const & source )
 	{
 		doCreate( name );
 		doUpdatePassIndex( source );
 	}
 
 	void ToneMapping::update( CpuUpdater & updater
-		, crg::ImageViewId const & source )
+		, Texture const & source )
 	{
 		doUpdatePassIndex( source );
 	}
@@ -78,41 +98,6 @@ namespace c3d
 		visitor.visit( m_shader );
 	}
 
-	crg::FramePass & ToneMapping::doCreatePass( crg::FramePassGroup & graph
-		, crg::ImageViewIdArray const & source
-		, crg::ImageViewId const & target
-		, crg::FramePass const & previousPass
-		, ProgressBar * progress )
-	{
-		auto & result = graph.createPass( "ToneMapping"
-			, [this, progress, target]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
-			{
-				stepProgressBarLocal( progress, cuT( "Initialising tone mapping pass" ) );
-				auto result = crg::RenderQuadBuilder{}
-					.renderPosition( {} )
-					.renderSize( makeExtent2D( getExtent( target ) ) )
-					.texcoordConfig( {} )
-					.passIndex( &m_passIndex )
-					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_program ) )
-					.build( framePass, context, graph, crg::ru::Config{ 2u } );
-				getEngine()->registerTimer( makeString( framePass.getFullName() )
-					, result->getTimer() );
-				m_quad = result.get();
-				return result;
-			} );
-		result.addDependency( previousPass );
-		m_renderUbo.createPassBinding( result
-			, rendtonmap::HdrCfgUboIdx );
-		m_colourGradingUbo.createPassBinding( result
-			, rendtonmap::ClrGrdUboIdx );
-		result.addSampledView( source
-			, rendtonmap::HdrMapIdx );
-		result.addOutputColourView( target );
-		return result;
-	}
-
 	void ToneMapping::getVertexProgram( ast::ShaderBuilder & builder )
 	{
 		sdw::VertexWriter writer{ builder };
@@ -136,8 +121,8 @@ namespace c3d
 		m_program = makeProgramStates( device, m_shader );
 	}
 
-	void ToneMapping::doUpdatePassIndex( crg::ImageViewId const & source )
+	void ToneMapping::doUpdatePassIndex( Texture const & source )
 	{
-		m_passIndex = ( source == m_source ) ? 1u : 0u;
+		m_passIndex = ( &source == &m_source ) ? 1u : 0u;
 	}
 }

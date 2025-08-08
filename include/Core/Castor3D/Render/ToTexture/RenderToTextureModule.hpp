@@ -47,6 +47,8 @@ namespace c3d
 	CU_DeclareSmartPtr( c3d, Texture3DTo2D, C3D_API );
 	/** @endcond */
 
+	ast::type::ImageFormat getImageFormat( PixelFormat format );
+
 	//@}
 	//@}
 }

@@ -1,6 +1,7 @@
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/UploadData.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
@@ -17,8 +18,8 @@ namespace c3d
 	void copyBuffer( ashes::CommandBuffer const & commandBuffer
 		, ashes::BufferBase const & src
 		, ashes::BufferBase const & dst
-		, VkDeviceSize offset
-		, VkDeviceSize size
+		, DeviceSize offset
+		, DeviceSize size
 		, PipelineStageFlags flags )
 	{
 		auto dstSrcStage = dst.getCompatibleStageFlags();
@@ -39,15 +40,23 @@ namespace c3d
 	//*********************************************************************************************
 
 	UniformBufferPool::UniformBufferPool( RenderDevice const & device
+		, crg::ResourcesCache & resources
 		, String debugName )
 		: OwnedBy< RenderSystem >{ device.renderSystem }
 		, m_device{ device }
+		, m_resources{ resources }
 		, m_debugName{ c3d::move( debugName ) }
 	{
 	}
 
-	void UniformBufferPool::cleanup()
+	UniformBufferPool::~UniformBufferPool()noexcept
 	{
+		for ( auto & [_, buffers] : m_buffers )
+		{
+			for ( auto & buffer : buffers )
+				buffer.buffer->cleanup();
+		}
+
 		m_buffers.clear();
 	}
 
@@ -61,7 +70,7 @@ namespace c3d
 			{
 				if ( buffer.buffer->hasBuffer() )
 				{
-					result.total += buffer.buffer->getBuffer().getBuffer().getSize();
+					result.total += buffer.buffer->getBuffer().getSize();
 					result.available += buffer.buffer->getAvailable();
 				}
 			}
@@ -95,7 +104,7 @@ namespace c3d
 			{
 				if ( buffer.buffer->hasAllocated() )
 				{
-					auto const & vkBuffer = buffer.buffer->getBuffer().getBuffer();
+					auto const & vkBuffer = *buffer.buffer->getBuffer().buffer;
 					auto curFlags = vkBuffer.getCompatibleStageFlags();
 					auto barrier = vkBuffer.makeHostWrite();
 
@@ -138,7 +147,7 @@ namespace c3d
 	}
 
 	UniformBufferPool::BufferArray::iterator UniformBufferPool::doFindBuffer( UniformBufferPool::BufferArray & array
-		, VkDeviceSize alignedSize )const
+		, DeviceSize alignedSize )const
 	{
 		auto it = array.begin();
 
@@ -150,7 +159,7 @@ namespace c3d
 		return it;
 	}
 
-	UniformBufferPool::BufferArray::iterator UniformBufferPool::doCreatePoolBuffer( VkMemoryPropertyFlags flags
+	UniformBufferPool::BufferArray::iterator UniformBufferPool::doCreatePoolBuffer( MemoryPropertyFlags flags
 		, UniformBufferPool::BufferArray & buffers )
 	{
 		auto const & renderSystem = *getRenderSystem();
@@ -164,7 +173,8 @@ namespace c3d
 			}
 		};
 		auto buffer = makePoolUniformBuffer( renderSystem
-			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, m_resources
+			, BufferUsageFlags::eTransferDst
 			, flags
 			, m_debugName
 			, sharingMode );

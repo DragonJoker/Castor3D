@@ -356,7 +356,6 @@ namespace c3d
 	MbString const SubsurfaceScatteringPass::Offsets = "c3d_offsets";
 
 	SubsurfaceScatteringPass::SubsurfaceScatteringPass( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, Scene const & scene
@@ -377,15 +376,14 @@ namespace c3d
 			, sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(),cuT( "SSSBlur1" ) )
 			, sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(), cuT( "SSSBlur2" ) ) }
 		, m_result{ sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(), cuT( "SSSResult" ) ) }
-		, m_blurCfgUbo{ m_device.uboPool->getBuffer< BlurConfiguration >( 0u ) }
-		, m_blurWgtUbo{ m_device.uboPool->getBuffer< BlurWeights >( 0u ) }
+		, m_blurCfgUbo{ m_device.uboPool->getBuffer< BlurConfiguration >( MemoryPropertyFlags::eNone ) }
+		, m_blurWgtUbo{ m_device.uboPool->getBuffer< BlurWeights >( MemoryPropertyFlags::eNone ) }
 		, m_blurHorizProgram{ cuT( "SSSBlurX" ), sssss::getBlurProgram( *device.renderSystem.getEngine(), false ) }
 		, m_blurXShader{ makeProgramStates( m_device, m_blurHorizProgram ) }
 		, m_blurVerticProgram{ cuT( "SSSBlurY" ), sssss::getBlurProgram( *device.renderSystem.getEngine(), true ) }
 		, m_blurYShader{ makeProgramStates( m_device, m_blurVerticProgram ) }
 		, m_combineProgram{ cuT( "SSSCombine" ), sssss::getCombineProgram( *device.renderSystem.getEngine() ) }
 		, m_combineShader{ makeProgramStates( m_device, m_combineProgram ) }
-		, m_lastPass{ &previousPass }
 	{
 		auto & configuration = m_blurCfgUbo.getData();
 		configuration.blurCorrection = 1.0f;
@@ -399,7 +397,7 @@ namespace c3d
 		weights.blurVariance = Point4f{ 0.0516, 0.2719, 2.0062 };
 		auto blurXSource = &m_diffuse;
 		stepProgressBarLocal( progress, cuT( "Creating SSSSS Blur passes" ) );
-		auto & modelBuffer = scene.getModelBuffer().getBuffer();
+		auto & modelBuffer = scene.getModelBuffer();
 
 		for ( uint32_t i = 0u; i < PassCount; ++i )
 		{
@@ -418,26 +416,14 @@ namespace c3d
 						, result->getTimer() );
 					return result;
 				} );
-			blurX.addDependency( *m_lastPass );
-			m_lastPass = &blurX;
-			getEngine()->getMaterialCache().getPassBuffer().createPassBinding( blurX
-				, sssss::BlurMaterialsUboId );
-			getEngine()->getMaterialCache().getSssProfileBuffer().createPassBinding( blurX
-				, sssss::BlurSssProfilesUboId );
-			blurX.addInputStorageBuffer( { modelBuffer, "Models" }
-				, uint32_t( sssss::BlurModelsUboId )
-				, 0u
-				, uint32_t( modelBuffer.getSize() ) );
-			m_cameraUbo.createPassBinding( blurX
-				, sssss::BlurCameraUboId );
-			m_blurCfgUbo.createPassBinding( blurX
-				, "BlurCfg"
-				, sssss::BlurSssUboId );
-			blurX.addSampledView( depthObj.sampledViewId
-				, sssss::BlurDepthObjImgId );
-			blurX.addSampledView( blurXSource->sampledViewId
-				, sssss::BlurLgtDiffImgId );
-			blurX.addOutputColourView( m_intermediate.targetViewId );
+			getEngine()->getMaterialCache().getPassBuffer().createPassBinding( blurX, sssss::BlurMaterialsUboId );
+			getEngine()->getMaterialCache().getSssProfileBuffer().createPassBinding( blurX, sssss::BlurSssProfilesUboId );
+			blurX.addInputStorage( *modelBuffer.getLastAttach(), uint32_t( sssss::BlurModelsUboId ) );
+			m_cameraUbo.createPassBinding( blurX, sssss::BlurCameraUboId );
+			m_blurCfgUbo.createPassBinding( blurX, sssss::BlurSssUboId );
+			blurX.addInputSampled( *depthObj.getSampledLastAttach(), sssss::BlurDepthObjImgId );
+			blurX.addInputSampled( *blurXSource->getSampledLastAttach(), sssss::BlurLgtDiffImgId );
+			m_intermediate.setLastAttach( blurX.addOutputColourTarget( m_intermediate.getTargetViewId() ) );
 
 			auto & blurY = m_group.createPass( "BlurY" + string::toMbString( i )
 				, [this, &isEnabled]( crg::FramePass const & framePass
@@ -453,26 +439,14 @@ namespace c3d
 						, result->getTimer() );
 					return result;
 				} );
-			blurY.addDependency( *m_lastPass );
-			m_lastPass = &blurY;
-			getEngine()->getMaterialCache().getPassBuffer().createPassBinding( blurY
-				, sssss::BlurMaterialsUboId );
-			getEngine()->getMaterialCache().getSssProfileBuffer().createPassBinding( blurY
-				, sssss::BlurSssProfilesUboId );
-			blurY.addInputStorageBuffer( { modelBuffer, "Models" }
-				, uint32_t( sssss::BlurModelsUboId )
-				, 0u
-				, uint32_t( modelBuffer.getSize() ) );
-			m_cameraUbo.createPassBinding( blurY
-				, sssss::BlurCameraUboId );
-			m_blurCfgUbo.createPassBinding( blurY
-				, "BlurCfg"
-				, sssss::BlurSssUboId );
-			blurY.addSampledView( depthObj.sampledViewId
-				, sssss::BlurDepthObjImgId );
-			blurY.addSampledView( m_intermediate.sampledViewId
-				, sssss::BlurLgtDiffImgId );
-			blurY.addOutputColourView( blurYDestination->targetViewId );
+			getEngine()->getMaterialCache().getPassBuffer().createPassBinding( blurY, sssss::BlurMaterialsUboId );
+			getEngine()->getMaterialCache().getSssProfileBuffer().createPassBinding( blurY, sssss::BlurSssProfilesUboId );
+			blurY.addInputStorage( *modelBuffer.getLastAttach(), uint32_t( sssss::BlurModelsUboId ) );
+			m_cameraUbo.createPassBinding( blurY, sssss::BlurCameraUboId );
+			m_blurCfgUbo.createPassBinding( blurY, sssss::BlurSssUboId );
+			blurY.addInputSampled( *depthObj.getSampledLastAttach(), sssss::BlurDepthObjImgId );
+			blurY.addInputSampled( *m_intermediate.getSampledLastAttach(), sssss::BlurLgtDiffImgId );
+			blurYDestination->setLastAttach( blurY.addOutputColourTarget( blurYDestination->getTargetViewId() ) );
 
 			blurXSource = blurYDestination;
 		}
@@ -486,9 +460,9 @@ namespace c3d
 				stepProgressBarLocal( progress, cuT( "Initialising SSSSS combine pass" ) );
 				auto extent = m_result.getExtent();
 				auto ruConfig = crg::ru::Config{}
-					.implicitAction( m_result.wholeViewId
-						, crg::RecordContext::copyImage( m_diffuse.wholeViewId
-							, m_result.wholeViewId
+					.implicitAction( m_result.getWholeViewId()
+						, crg::RecordContext::copyImage( m_diffuse.getWholeViewId()
+							, m_result.getWholeViewId()
 							, { extent.width, extent.height } ) );
 				auto rqConfig = sssss::createConfig( m_size, m_combineShader, &m_enabled, isEnabled );
 				auto result = makeRawUnique< crg::RenderQuad >( framePass
@@ -500,25 +474,14 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependency( *m_lastPass );
-		m_lastPass = &pass;
-		getEngine()->getMaterialCache().getPassBuffer().createPassBinding( pass
-			, sssss::CombMaterialsUboId );
-		pass.addInputStorageBuffer( { modelBuffer, "Models" }
-			, uint32_t( sssss::CombModelsUboId )
-			, 0u
-			, uint32_t( modelBuffer.getSize() ) );
-		pass.addSampledView( depthObj.sampledViewId
-			, sssss::CombDepthObjImgId );
-		pass.addSampledView( m_blurImages[0].sampledViewId
-			, sssss::CombBlur1ImgId );
-		pass.addSampledView( m_blurImages[1].sampledViewId
-			, sssss::CombBlur2ImgId );
-		pass.addSampledView( m_blurImages[2].sampledViewId
-			, sssss::CombBlur3ImgId );
-		pass.addSampledView( m_diffuse.sampledViewId
-			, sssss::CombLgtDiffImgId );
-		pass.addOutputColourView( m_result.targetViewId );
+		getEngine()->getMaterialCache().getPassBuffer().createPassBinding( pass, sssss::CombMaterialsUboId );
+		pass.addInputStorage( *modelBuffer.getLastAttach(), uint32_t( sssss::CombModelsUboId ) );
+		pass.addInputSampled( *depthObj.getSampledLastAttach(), sssss::CombDepthObjImgId );
+		pass.addInputSampled( *m_blurImages[0].getSampledLastAttach(), sssss::CombBlur1ImgId );
+		pass.addInputSampled( *m_blurImages[1].getSampledLastAttach(), sssss::CombBlur2ImgId );
+		pass.addInputSampled( *m_blurImages[2].getSampledLastAttach(), sssss::CombBlur3ImgId );
+		pass.addInputSampled( *m_diffuse.getSampledLastAttach(), sssss::CombLgtDiffImgId );
+		m_result.setLastAttach( pass.addOutputColourTarget( m_result.getTargetViewId() ) );
 
 		m_result.create();
 		m_intermediate.create();

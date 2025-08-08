@@ -182,12 +182,7 @@ namespace CastorViewer
 		doUpdateSelectedGeometry( nullptr, nullptr, true );
 		m_selectedSubmesh = {};
 		m_selectedGeometry = {};
-
-		if ( m_currentState )
-		{
-			m_currentState->stop();
-			m_currentState = nullptr;
-		}
+		m_currentState = {};
 
 		if ( m_3dController )
 		{
@@ -195,6 +190,8 @@ namespace CastorViewer
 			m_3dController->setCamera( nullptr );
 		}
 
+		for ( auto & [_, nodeState] : m_nodesStates )
+			nodeState->stop();
 		m_nodesStates.clear();
 		m_camera = {};
 		m_scene = {};
@@ -202,7 +199,6 @@ namespace CastorViewer
 		m_lightsNode = nullptr;
 		m_listener = {};
 		m_debugMeshManager.reset();
-		wxGetApp().getCastor()->postEvent( makeCpuCleanupEvent( *m_renderWindow ) );
 		c3d::Logger::logInfo( cuT( "RenderPanel cleaned up." ) );
 	}
 

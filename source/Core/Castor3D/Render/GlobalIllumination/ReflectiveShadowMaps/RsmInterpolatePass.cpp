@@ -376,20 +376,19 @@ namespace c3d
 	//*********************************************************************************************
 
 	RsmInterpolatePass::RsmInterpolatePass( crg::FrameGraph & graph
-		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, LightType lightType
 		, ShadowBuffer const & shadowBuffer
 		, Extent3D const & size
 		, CameraUbo const & cameraUbo
-		, crg::ImageViewId const & depthObj
-		, crg::ImageViewId const & nmlOcc
+		, Texture const & depthObj
+		, Texture const & nmlOcc
 		, ShadowMapResult const & smResult
 		, RsmConfigUbo const & rsmConfigUbo
 		, GpuBufferOffsetT< Point4f > const & rsmSamplesSsbo
 		, Texture const & gi
 		, Texture const & nml
-		, Texture const & dst )
+		, Texture & dst )
 		: Named{ "RsmInterpolate" }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), rsminterp::getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), rsminterp::getPixelProgram( lightType, gi.getExtent().width, gi.getExtent().height , device.renderSystem) }
@@ -411,43 +410,22 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependency( previousPass );
-		pass.addUniformBuffer( { rsmConfigUbo.getUbo().getBuffer(), "RsmConfig" }
-			, rsminterp::RsmCfgUboIdx
-			, rsmConfigUbo.getUbo().getByteOffset()
-			, rsmConfigUbo.getUbo().getByteRange() );
-		pass.addInputStorageBuffer( { rsmSamplesSsbo.getBuffer(), "RsmSample" }
-			, rsminterp::RsmSamplesIdx
-			, rsmSamplesSsbo.getOffset()
-			, rsmSamplesSsbo.getSize() );
-		cameraUbo.createPassBinding( pass
-			, rsminterp::CameraIdx );
-		shadowBuffer.createPassBinding( pass
-			, rsminterp::ShadowsIdx );
-		pass.addSampledView( gi.sampledViewId
-			, rsminterp::GiMapIdx );
-		pass.addSampledView( nml.sampledViewId
-			, rsminterp::NmlMapIdx );
-		pass.addSampledView( depthObj
-			, rsminterp::DepthMapIdx );
-		pass.addSampledView( nmlOcc
-			, rsminterp::NmlOccMapIdx );
-		pass.addSampledView( smResult[SmTexture::eNormal].sampledViewId
-			, rsminterp::RsmNormalsIdx );
-		pass.addSampledView( smResult[SmTexture::ePosition].sampledViewId
-			, rsminterp::RsmPositionIdx );
-		pass.addSampledView( smResult[SmTexture::eFlux].sampledViewId
-			, rsminterp::RsmFluxIdx );
-		pass.addInOutColourView( dst.targetViewId
+		rsmConfigUbo.createPassBinding( pass, rsminterp::RsmCfgUboIdx );
+		pass.addInputStorageBuffer( rsmSamplesSsbo.getBuffer().bufferViewId, rsminterp::RsmSamplesIdx );
+		cameraUbo.createPassBinding( pass, rsminterp::CameraIdx );
+		shadowBuffer.createPassBinding( pass, rsminterp::ShadowsIdx );
+		pass.addInputSampled( *gi.getSampledLastAttach(), rsminterp::GiMapIdx );
+		pass.addInputSampled( *nml.getSampledLastAttach(), rsminterp::NmlMapIdx );
+		pass.addInputSampledImage( depthObj.getSampledViewId(), rsminterp::DepthMapIdx );
+		pass.addInputSampledImage( nmlOcc.getSampledViewId(), rsminterp::NmlOccMapIdx );
+		pass.addInputSampledImage( smResult.getSampledViewId( SmTexture::eNormal ), rsminterp::RsmNormalsIdx );
+		pass.addInputSampledImage( smResult.getSampledViewId( SmTexture::ePosition ), rsminterp::RsmPositionIdx );
+		pass.addInputSampledImage( smResult.getSampledViewId( SmTexture::eFlux ), rsminterp::RsmFluxIdx );
+		dst.setLastAttach( pass.addInOutColourTarget( *dst.getLastAttach()
 			, crg::PipelineColorBlendAttachmentState{ VK_TRUE
-				, BlendFactor::eOne
-				, BlendFactor::eOne
-				, BlendOp::eAdd
-				, BlendFactor::eOne
-				, BlendFactor::eOne
-				, BlendOp::eAdd
-				, ColorComponentFlags::eR | ColorComponentFlags::eG | ColorComponentFlags::eB | ColorComponentFlags::eA } );
-		m_pass = &pass;
+			, BlendFactor::eOne, BlendFactor::eOne, BlendOp::eAdd
+			, BlendFactor::eOne, BlendFactor::eOne, BlendOp::eAdd
+			, ColorComponentFlags::eR | ColorComponentFlags::eG | ColorComponentFlags::eB | ColorComponentFlags::eA } ) );
 	}
 
 	void RsmInterpolatePass::accept( ConfigurationVisitorBase & visitor )

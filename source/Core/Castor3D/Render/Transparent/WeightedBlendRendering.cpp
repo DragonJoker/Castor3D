@@ -49,8 +49,8 @@ namespace c3d
 			C3D_Scene( writer, SceneUboIndex, 0u );
 			C3D_Render( writer, HdrUboIndex, 0u );
 			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", uint32_t( DepthTexIndex ), 0u );
-			auto c3d_mapAccumulation = writer.declCombinedImg< FImg2DRgba32 >( toUtf8( getTextureName( WbTexture::eAccumulation ) ), uint32_t( AccumTexIndex ), 0u );
-			auto c3d_mapRevealage = writer.declCombinedImg< FImg2DRgba32 >( toUtf8( getTextureName( WbTexture::eRevealage ) ), uint32_t( RevealTexIndex ), 0u );
+			auto c3d_mapAccumulation = writer.declCombinedImg< FImg2DRgba16 >( toUtf8( getTextureName( WbTexture::eAccumulation ) ), uint32_t( AccumTexIndex ), 0u );
+			auto c3d_mapRevealage = writer.declCombinedImg< FImg2DR16 >( toUtf8( getTextureName( WbTexture::eRevealage ) ), uint32_t( RevealTexIndex ), 0u );
 
 			writer.implementEntryPointT< shader::PosUv2FT, sdw::VoidT >( [&]( sdw::VertexInT< shader::PosUv2FT > const & in
 				, sdw::VertexOut out )
@@ -71,7 +71,7 @@ namespace c3d
 					auto coord = writer.declLocale( "coord"
 						, ivec2( in.fragCoord.xy() ) );
 					auto revealage = writer.declLocale( "revealage"
-						, c3d_mapRevealage.fetch( coord, 0_i ).r() );
+						, c3d_mapRevealage.fetch( coord, 0_i ) );
 
 					sdwIF( writer, revealage == 1.0_f )
 					{
@@ -121,10 +121,9 @@ namespace c3d
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, bool & enabled
-		, crg::FramePass const & transparentPassDesc
 		, Texture const & depthObj
 		, TransparentPassResult const & transparentPassResult
-		, crg::ImageViewIdArray const & targetColourView
+		, Texture & targetColour
 		, Size const & size
 		, CameraUbo const & cameraUbo
 		, SceneUbo const & sceneUbo
@@ -136,26 +135,47 @@ namespace c3d
 		, m_size{ size }
 		, m_shader{ cuT( "TransparentCombine" ), wboit::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
-		, m_finalCombinePassDesc{ doCreateFinalCombine( graph
-			, transparentPassDesc
-			, depthObj.sampledViewId
-			, targetColourView
-			, cameraUbo
-			, sceneUbo
-			, renderUbo
-			, progress ) }
 	{
+		stepProgressBarLocal( progress, cuT( "Creating transparent resolve pass" ) );
+		auto & pass = graph.createPass( "Combine"
+			, [this, progress]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & runGraph )
+			{
+				stepProgressBarLocal( progress, cuT( "Initialising transparent resolve pass" ) );
+				auto result = crg::RenderQuadBuilder{}
+					.renderPosition( {} )
+					.renderSize( makeExtent2D( m_size ) )
+					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
+					.enabled( &m_enabled )
+					.build( framePass, context, runGraph, crg::ru::Config{ 1u } );
+				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
+					, result->getTimer() );
+				return result;
+			} );
+		cameraUbo.createPassBinding( pass, uint32_t( wboit::CameraUboIndex ) );
+		sceneUbo.createPassBinding( pass, uint32_t( wboit::SceneUboIndex ) );
+		renderUbo.createPassBinding( pass, uint32_t( wboit::HdrUboIndex ) );
+		pass.addInputSampled( *depthObj.getSampledLastAttach(), uint32_t( wboit::DepthTexIndex ) );
+		pass.addInputSampled( *m_transparentPassResult.getSampledLastAttach( WbTexture::eAccumulation ), uint32_t( wboit::AccumTexIndex ) );
+		pass.addInputSampled( *m_transparentPassResult.getSampledLastAttach( WbTexture::eRevealage ), uint32_t( wboit::RevealTexIndex ) );
+
+		targetColour.setLastAttach( pass.addInOutColourTarget( *targetColour.getLastAttach()
+			, { VK_TRUE
+				, BlendFactor::eSrcAlpha, BlendFactor::eOneMinusSrcAlpha, BlendOp::eAdd
+				, BlendFactor::eSrcAlpha, BlendFactor::eOneMinusSrcAlpha, BlendOp::eAdd
+				, defaultColorWriteMask } ) );
 	}
 
 	void WeightedBlendRendering::accept( RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( cuT( "Transparent Accumulation" )
-			, m_transparentPassResult[WbTexture::eAccumulation]
-			, m_graph.getFinalLayoutState( m_transparentPassResult[WbTexture::eAccumulation].sampledViewId ).layout
+			, m_transparentPassResult.getTexture( WbTexture::eAccumulation )
+			, m_graph.getFinalLayoutState( m_transparentPassResult.getSampledViewId( WbTexture::eAccumulation ) ).layout
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( cuT( "Transparent Revealage" )
-			, m_transparentPassResult[WbTexture::eRevealage]
-			, m_graph.getFinalLayoutState( m_transparentPassResult[WbTexture::eRevealage].sampledViewId ).layout
+			, m_transparentPassResult.getTexture( WbTexture::eRevealage )
+			, m_graph.getFinalLayoutState( m_transparentPassResult.getSampledViewId( WbTexture::eRevealage ) ).layout
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( m_shader );
 	}
@@ -164,59 +184,6 @@ namespace c3d
 	{
 		uint32_t result = 0u;
 		result += 1;// transparent resolve pass;
-		return result;
-	}
-
-	crg::FramePass & WeightedBlendRendering::doCreateFinalCombine( crg::FramePassGroup & graph
-		, crg::FramePass const & transparentPassDesc
-		, crg::ImageViewId const & depthObj
-		, crg::ImageViewIdArray const & targetColourView
-		, CameraUbo const & cameraUbo
-		, SceneUbo const & sceneUbo
-		, RenderUbo const & renderUbo
-		, ProgressBar * progress )
-	{
-		stepProgressBarLocal( progress, cuT( "Creating transparent resolve pass" ) );
-		auto & result = graph.createPass( "Combine"
-			, [this, progress]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
-			{
-				stepProgressBarLocal( progress, cuT( "Initialising transparent resolve pass" ) );
-				auto result = crg::RenderQuadBuilder{}
-					.renderPosition( {} )
-					.renderSize( makeExtent2D( m_size ) )
-					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
-					.enabled( &m_enabled )
-					.build( framePass, context, graph, crg::ru::Config{ 1u } );
-				m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
-					, result->getTimer() );
-				return result;
-			} );
-		result.addDependency( transparentPassDesc );
-		cameraUbo.createPassBinding( result
-			, uint32_t( wboit::CameraUboIndex ) );
-		sceneUbo.createPassBinding( result
-			, uint32_t( wboit::SceneUboIndex ) );
-		renderUbo.createPassBinding( result
-			, uint32_t( wboit::HdrUboIndex ) );
-		result.addSampledView( depthObj
-			, uint32_t( wboit::DepthTexIndex ) );
-		result.addSampledView( m_transparentPassResult[WbTexture::eAccumulation].sampledViewId
-			, uint32_t( wboit::AccumTexIndex ) );
-		result.addSampledView( m_transparentPassResult[WbTexture::eRevealage].sampledViewId
-			, uint32_t( wboit::RevealTexIndex ) );
-
-		result.addInOutColourView( targetColourView
-			, { VK_TRUE
-				, BlendFactor::eSrcAlpha
-				, BlendFactor::eOneMinusSrcAlpha
-				, BlendOp::eAdd
-				, BlendFactor::eSrcAlpha
-				, BlendFactor::eOneMinusSrcAlpha
-				, BlendOp::eAdd
-				, defaultColorWriteMask } );
-
 		return result;
 	}
 }

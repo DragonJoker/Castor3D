@@ -4,18 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_GpuBuffer_H___
 #define ___C3D_GpuBuffer_H___
 
-#include "BufferModule.hpp"
+#include "Castor3D/Buffer/BufferModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
-#include "Castor3D/Buffer/GpuBufferBuddyAllocator.hpp"
-#include "Castor3D/Miscellaneous/DebugName.hpp"
-#include "Castor3D/Render/RenderDevice.hpp"
-
-#include <CastorUtils/Design/ArrayView.hpp>
-
-#include <ashespp/Buffer/Buffer.hpp>
-#include <ashespp/Buffer/VertexBuffer.hpp>
-
-#include <unordered_map>
+#include <ashespp/Miscellaneous/QueueShare.hpp>
 
 namespace c3d
 {
@@ -43,11 +35,19 @@ namespace c3d
 		 *\param[in]	allocatedSize	La taille du buffer.
 		 */
 		C3D_API GpuBufferBase( RenderSystem const & renderSystem
-			, VkBufferUsageFlags usage
-			, VkMemoryPropertyFlags memoryFlags
+			, crg::ResourcesCache & resources
+			, BufferUsageFlags usage
+			, MemoryPropertyFlags memoryFlags
 			, String const & debugName
 			, ashes::QueueShare sharingMode
-			, VkDeviceSize allocatedSize );
+			, DeviceSize allocatedSize );
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
+		C3D_API ~GpuBufferBase()noexcept;
 		/**
 		 *\~english
 		 *\brief			Uploads all ready memory ranges to VRAM.
@@ -70,8 +70,8 @@ namespace c3d
 		 *\param[in]		dstAccessState	L'état d'accès voulu après l'upload.
 		 */
 		C3D_API void upload( UploadData & uploader
-			, VkDeviceSize offset
-			, VkDeviceSize size
+			, DeviceSize offset
+			, DeviceSize size
 			, AccessState dstAccessState );
 		/**
 		 *\~english
@@ -88,8 +88,8 @@ namespace c3d
 		 *\param[in]		dstPipelineFlags	Les flags d'étape de pipeline voulus après l'upload.
 		 */
 		void upload( UploadData & uploader
-			, VkDeviceSize offset
-			, VkDeviceSize size
+			, DeviceSize offset
+			, DeviceSize size
 			, AccessFlags dstAccessFlags
 			, PipelineStageFlags dstPipelineFlags )
 		{
@@ -106,8 +106,8 @@ namespace c3d
 		 *\param[in]	offset, size	L'intervalle mémoire.
 		 *\param[in]	dstAccessState	L'état d'accès voulu après l'upload.
 		 */
-		C3D_API void markDirty( VkDeviceSize offset
-			, VkDeviceSize size
+		C3D_API void markDirty( DeviceSize offset
+			, DeviceSize size
 			, AccessState dstAccessState );
 		/**
 		 *\~english
@@ -121,8 +121,8 @@ namespace c3d
 		 *\param[in]	dstAccessFlags		Les flags d'accès voulus après l'upload.
 		 *\param[in]	dstPipelineFlags	Les flags d'étape de pipeline voulus après l'upload.
 		 */
-		void markDirty( VkDeviceSize offset
-			, VkDeviceSize size
+		void markDirty( DeviceSize offset
+			, DeviceSize size
 			, AccessFlags dstAccessFlags
 			, PipelineStageFlags dstPipelineFlags )
 		{
@@ -149,7 +149,7 @@ namespace c3d
 		*\return
 		*	Le tampon interne.
 		*/
-		ashes::Buffer< uint8_t > const & getBuffer()const noexcept
+		Buffer const & getBuffer()const noexcept
 		{
 			return *m_buffer;
 		}
@@ -161,7 +161,7 @@ namespace c3d
 		*\return
 		*	Le tampon interne.
 		*/
-		ashes::Buffer< uint8_t > & getBuffer()noexcept
+		Buffer & getBuffer()noexcept
 		{
 			return *m_buffer;
 		}
@@ -178,7 +178,7 @@ namespace c3d
 		*	L'offset de la zone mémoire.
 		*/
 		template< typename DataT >
-		DataT const & getData( VkDeviceSize offset )const noexcept
+		DataT const & getData( DeviceSize offset )const noexcept
 		{
 			using DataCPtr = DataT const *;
 			return *DataCPtr( m_data.data() + offset );
@@ -196,7 +196,7 @@ namespace c3d
 		*	L'offset de la zone mémoire.
 		*/
 		template< typename DataT >
-		DataT & getData( VkDeviceSize offset )noexcept
+		DataT & getData( DeviceSize offset )noexcept
 		{
 			using DataPtr = DataT *;
 			return *DataPtr( m_data.data() + offset );
@@ -226,20 +226,24 @@ namespace c3d
 			return m_data;
 		}
 
+	protected:
+		C3D_API crg::BufferViewId getSubView( DeviceSize offset, DeviceSize size )const;
+
 	private:
 		RenderSystem const & m_renderSystem;
-		VkBufferUsageFlags m_usage;
-		VkMemoryPropertyFlags m_memoryFlags;
+		crg::ResourcesCache & m_resources;
+		BufferUsageFlags m_usage;
+		MemoryPropertyFlags m_memoryFlags;
 		ashes::QueueShare m_sharingMode;
-		VkDeviceSize m_allocatedSize;
-		ashes::BufferPtr< uint8_t > m_buffer;
+		DeviceSize m_allocatedSize;
+		BufferUPtr m_buffer;
 		ByteArray m_ownData;
 		ByteArrayView m_data;
 		struct MemoryRange
 		{
 			MemoryRange() = default;
-			MemoryRange( VkDeviceSize offset
-				, VkDeviceSize size
+			MemoryRange( DeviceSize offset
+				, DeviceSize size
 				, AccessState dstAccessState )
 				: offset{ offset }
 				, size{ size }
@@ -247,8 +251,8 @@ namespace c3d
 			{
 			}
 
-			VkDeviceSize offset{};
-			VkDeviceSize size{};
+			DeviceSize offset{};
+			DeviceSize size{};
 			AccessState dstAccessState;
 		};
 		using MemoryRangeArray = Vector< MemoryRange >;
@@ -281,8 +285,9 @@ namespace c3d
 		 *\param[in]	allocator		L'allocateur.
 		 */
 		GpuBufferT( RenderSystem const & renderSystem
-			, VkBufferUsageFlags usage
-			, VkMemoryPropertyFlags memoryFlags
+			, crg::ResourcesCache & resources
+			, BufferUsageFlags usage
+			, MemoryPropertyFlags memoryFlags
 			, String const & debugName
 			, ashes::QueueShare sharingMode
 			, AllocatorT allocator );
@@ -294,14 +299,14 @@ namespace c3d
 		 *\param[in]	size	La taille requise pour la mémoire.
 		 *\return		\p true s'il y a assez de mémoire restante pour la taille donnée.
 		 */
-		bool hasAvailable( VkDeviceSize size )const noexcept;
+		bool hasAvailable( DeviceSize size )const noexcept;
 		/**
 		 *\~english
 		 *\return		The remaining memory.
 		 *\~french
 		 *\return		La mémoire restante.
 		 */
-		VkDeviceSize getAvailable()const noexcept;
+		DeviceSize getAvailable()const noexcept;
 		/**
 		 *\~english
 		 *\brief		Allocates a memory chunk for a CPU buffer.
@@ -312,7 +317,7 @@ namespace c3d
 		 *\param[in]	size	La taille requise pour la mémoire.
 		 *\return		L'offset de la zone mémoire.
 		 */
-		MemChunk allocate( VkDeviceSize size );
+		MemChunk allocate( DeviceSize size );
 		/**
 		 *\~english
 		 *\brief		Deallocates memory.
@@ -357,18 +362,20 @@ namespace c3d
 		 *\param[in]	allocator		L'allocateur.
 		 */
 		GpuBaseBufferT( RenderDevice const & device
-			, VkBufferUsageFlags usage
-			, VkMemoryPropertyFlags memoryFlags
+			, crg::ResourcesCache & resources
+			, BufferUsageFlags usage
+			, MemoryPropertyFlags memoryFlags
 			, String const & debugName
 			, ashes::QueueShare sharingMode
 			, AllocatorT allocator );
+		~GpuBaseBufferT()noexcept;
 		/**
 		 *\~english
 		 *\return		The remaining memory.
 		 *\~french
 		 *\return		La mémoire restante.
 		 */
-		VkDeviceSize getAvailable()const noexcept;
+		DeviceSize getAvailable()const noexcept;
 		/**
 		 *\~english
 		 *\param[in]	size	The requested memory size.
@@ -377,7 +384,7 @@ namespace c3d
 		 *\param[in]	size	La taille requise pour la mémoire.
 		 *\return		\p true s'il y a assez de mémoire restante pour la taille donnée.
 		 */
-		bool hasAvailable( VkDeviceSize size )const noexcept;
+		bool hasAvailable( DeviceSize size )const noexcept;
 		/**
 		 *\~english
 		 *\brief		Allocates a memory chunk for a CPU buffer.
@@ -388,7 +395,7 @@ namespace c3d
 		 *\param[in]	size	La taille requise pour la mémoire.
 		 *\return		L'offset de la zone mémoire.
 		 */
-		MemChunk allocate( VkDeviceSize size )noexcept;
+		MemChunk allocate( DeviceSize size )noexcept;
 		/**
 		 *\~english
 		 *\brief		Deallocates memory.
@@ -413,7 +420,7 @@ namespace c3d
 		*\return
 		*	Le tampon interne.
 		*/
-		ashes::BufferBase const & getBuffer()const noexcept
+		Buffer const & getBuffer()const noexcept
 		{
 			return *m_buffer;
 		}
@@ -425,92 +432,24 @@ namespace c3d
 		*\return
 		*	Le tampon interne.
 		*/
-		ashes::BufferBase & getBuffer()noexcept
+		Buffer & getBuffer()noexcept
 		{
 			return *m_buffer;
 		}
 
 	private:
 		RenderDevice const & m_device;
-		VkBufferUsageFlags m_usage;
-		VkMemoryPropertyFlags m_memoryFlags;
+		BufferUsageFlags m_usage;
+		MemoryPropertyFlags m_memoryFlags;
 		ashes::QueueShare m_sharingMode;
-		VkDeviceSize m_allocatedSize;
-		ashes::BufferBasePtr m_buffer;
+		DeviceSize m_allocatedSize;
+		BufferUPtr m_buffer;
 		AllocatorT m_allocator;
 	};
 
-	C3D_API Pair< VkDeviceSize, VkDeviceSize > adaptRange( VkDeviceSize offset
-		, VkDeviceSize size
-		, VkDeviceSize align );
-
-	template< typename T >
-	inline ashes::BufferPtr< T > makeBuffer( RenderDevice const & device
-		, VkDeviceSize count
-		, VkBufferUsageFlags usage
-		, VkMemoryPropertyFlags flags
-		, String const & name
-		, ashes::QueueShare sharingMode = {} )
-	{
-		ashes::BufferPtr< T > result = ashes::makeBuffer< T >( *device.device
-			, toUtf8( name + cuT( "Buf" ) )
-			, count
-			, usage
-			, c3d::move( sharingMode ) );
-		ashes::BufferBase & buffer = result->getBuffer();
-		result->bindMemory( setupMemory( device, buffer, flags, name + cuT( "Buf" ) ) );
-		return result;
-	}
-
-	inline ashes::BufferBasePtr makeBufferBase( RenderDevice const & device
-		, VkDeviceSize size
-		, VkBufferUsageFlags usage
-		, VkMemoryPropertyFlags flags
-		, String const & name
-		, ashes::QueueShare sharingMode = {} )
-	{
-		auto result = ashes::makeBufferBase( *device.device
-			, toUtf8( name + cuT( "Buf" ) )
-			, size
-			, usage
-			, c3d::move( sharingMode ) );
-		result->bindMemory( setupMemory( device, *result, flags, name + cuT( "Buf" ) ) );
-		return result;
-	}
-
-	template< typename T >
-	inline ashes::VertexBufferPtr< T > makeVertexBuffer( RenderDevice const & device
-		, VkDeviceSize count
-		, VkBufferUsageFlags usage
-		, VkMemoryPropertyFlags flags
-		, String const & name
-		, ashes::QueueShare sharingMode = {} )
-	{
-		ashes::VertexBufferPtr< T > result = ashes::makeVertexBuffer< T >( *device.device
-			, toUtf8( name + cuT( "Vbo" ) )
-			, count
-			, usage
-			, c3d::move( sharingMode ) );
-		ashes::BufferBase & buffer = result->getBuffer();
-		result->bindMemory( setupMemory( device, buffer, flags, name + cuT( "Vbo" ) ) );
-		return result;
-	}
-
-	inline ashes::VertexBufferBasePtr makeVertexBufferBase( RenderDevice const & device
-		, VkDeviceSize size
-		, VkBufferUsageFlags usage
-		, VkMemoryPropertyFlags flags
-		, String const & name
-		, ashes::QueueShare sharingMode = {} )
-	{
-		auto result = ashes::makeVertexBufferBase( *device.device
-			, toUtf8( name + cuT( "Vbo" ) )
-			, size
-			, usage
-			, c3d::move( sharingMode ) );
-		result->bindMemory( setupMemory( device, *result, flags, name + cuT( "Vbo" ) ) );
-		return result;
-	}
+	C3D_API Pair< DeviceSize, DeviceSize > adaptRange( DeviceSize offset
+		, DeviceSize size
+		, DeviceSize align );
 }
 
 #include "GpuBuffer.inl"

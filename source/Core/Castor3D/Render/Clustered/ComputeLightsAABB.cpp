@@ -38,8 +38,7 @@ namespace c3d
 			eAllLightsAABB,
 		};
 
-		static ShaderPtr createShader( RenderDevice const & device
-			, ClustersConfig const & config )
+		static ShaderPtr createShader( RenderDevice const & device )
 		{
 			static float constexpr FltMax = std::numeric_limits< float >::max();
 
@@ -51,8 +50,7 @@ namespace c3d
 				, 0u );
 			C3D_Clusters( writer
 				, eClusters
-				, 0u
-				, &config );
+				, 0u );
 			shader::LightsBuffer lights{ writer
 				, eLights
 				, 0u };
@@ -115,56 +113,47 @@ namespace c3d
 
 					sdwIF( writer, spot.enabled() )
 					{
-						if ( config.useSpotTightBoundingBox )
+						auto vsApex = writer.declLocale( "vsApex"
+							, c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz() );
+						auto vsDirection = writer.declLocale( "vsDirection"
+							, c3d_cameraData.worldToCurView( -spot.direction() ) );
+
+						auto largeRange = writer.declLocale( "largeRange"
+							, computeRange( spot ) );
+						auto smallRange = writer.declLocale( "smallRange"
+							, largeRange * spot.outerCutOffCos() );
+						auto baseRadius = writer.declLocale( "baseRadius"
+							, smallRange * spot.outerCutOffTan() );
+
+						auto smallBase = writer.declLocale( "smallBase"
+							, vsApex + smallRange * vsDirection );
+
+						sdwIF( writer, dot( vsDirection, vec3( 0.0_f, 0.0_f, -1.0_f ) ) > 0.999_f )
 						{
-							auto vsApex = writer.declLocale( "vsApex"
-								, c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz() );
-							auto vsDirection = writer.declLocale( "vsDirection"
-								, c3d_cameraData.worldToCurView( -spot.direction() ) );
+							// Light is looking the same direction as the camera.
+							// Weird bug here, resulting in both small and large AABB having min.z == max.z
+							// whilst everything looks good when debugging step by step in RenderDoc...
+							// Hence just take the disk AABB
+							auto e = writer.declLocale( "e"
+								, baseRadius * sqrt( vec3( 1.0_f ) - vsDirection * vsDirection ) );
 
-							auto largeRange = writer.declLocale( "largeRange"
-								, computeRange( spot ) );
-							auto smallRange = writer.declLocale( "smallRange"
-								, largeRange * spot.outerCutOffCos() );
-							auto baseRadius = writer.declLocale( "baseRadius"
-								, smallRange * spot.outerCutOffTan() );
-
-							auto smallBase = writer.declLocale( "smallBase"
-								, vsApex + smallRange * vsDirection );
-
-							sdwIF( writer, dot( vsDirection, vec3( 0.0_f, 0.0_f, -1.0_f ) ) > 0.999_f )
-							{
-								// Light is looking the same direction as the camera.
-								// Weird bug here, resulting in both small and large AABB having min.z == max.z
-								// whilst everything looks good when debugging step by step in RenderDoc...
-								// Hence just take the disk AABB
-								auto e = writer.declLocale( "e"
-									, baseRadius * sqrt( vec3( 1.0_f ) - vsDirection * vsDirection ) );
-
-								result = shader::AABB{ vec4( min( vsApex, smallBase - e ), 1.0_f )
-									, vec4( max( vsApex, smallBase + e ), 1.0_f ) };
-							}
-							sdwELSE
-							{
-								auto smallAABB = writer.declLocale( "smallAABB"
-									, getConeAABB( vsApex, smallBase, baseRadius ) );
-
-								auto largeBase = writer.declLocale( "largeBase"
-									, vsApex + largeRange * vsDirection );
-								auto largeAABB = writer.declLocale( "largeAABB"
-									, getConeAABB( vsApex, largeBase, baseRadius ) );
-
-								result = shader::AABB{ min( smallAABB.min(), largeAABB.min() )
-									, max( smallAABB.max(), largeAABB.max() ) };
-							}
-							sdwFI
+							result = shader::AABB{ vec4( min( vsApex, smallBase - e ), 1.0_f )
+								, vec4( max( vsApex, smallBase + e ), 1.0_f ) };
 						}
-						else
+						sdwELSE
 						{
-							auto vsPosition = writer.declLocale( "vsPosition"
-								, c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz() );
-							result = shader::AABB{ vsPosition, computeRange( spot ) };
+							auto smallAABB = writer.declLocale( "smallAABB"
+								, getConeAABB( vsApex, smallBase, baseRadius ) );
+
+							auto largeBase = writer.declLocale( "largeBase"
+								, vsApex + largeRange * vsDirection );
+							auto largeAABB = writer.declLocale( "largeAABB"
+								, getConeAABB( vsApex, largeBase, baseRadius ) );
+
+							result = shader::AABB{ min( smallAABB.min(), largeAABB.min() )
+								, max( smallAABB.max(), largeAABB.max() ) };
 						}
+						sdwFI
 					}
 					sdwELSE
 					{
@@ -214,11 +203,9 @@ namespace c3d
 				: crg::ComputePass{framePass
 					, context
 					, graph
-					, crg::ru::Config{ 2u }
+					, crg::ru::Config{ 1u }
 					, config
-						.getPassIndex( RunnablePass::GetPassIndexCallback( [this, &clustersConfig](){ return doGetPassIndex( clustersConfig ); } ) )
-						.programCreator( { 2u, [this, &device, &clustersConfig]( uint32_t passIndex ){ return doCreateProgram( device, clustersConfig, passIndex ); } } )
-						.end( RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } ) }
+						.programCreator( { 1u, [this, &device]( uint32_t passIndex ){ return doCreateProgram( device, passIndex ); } } ) }
 			{
 			}
 
@@ -232,13 +219,7 @@ namespace c3d
 			};
 
 		private:
-			uint32_t doGetPassIndex( ClustersConfig const & clustersConfig )const
-			{
-				return clustersConfig.useSpotTightBoundingBox ? 1u : 0u;
-			}
-
 			crg::VkPipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device
-				, ClustersConfig const & clustersConfig
 				, uint32_t passIndex )
 			{
 				auto [it, res] = m_programs.try_emplace( passIndex );
@@ -246,30 +227,11 @@ namespace c3d
 				if ( res )
 				{
 					auto & program = it->second;
-					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "AssignLightsToClusters" ), createShader( device, clustersConfig ) };
+					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "AssignLightsToClusters" ), createShader( device ) };
 					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, program.shaderModule ) };
 				}
 
 				return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( it->second.stages );
-			}
-
-			void doPostRecord( crg::RecordContext & context
-				, VkCommandBuffer commandBuffer
-				, uint32_t index )const
-			{
-				for ( auto & attach : m_pass.buffers )
-				{
-					if ( !attach.isNoTransition()
-						&& attach.isStorageBuffer()
-						&& attach.isClearableBuffer() )
-					{
-						auto currentState = context.getAccessState( attach.buffer( index )
-							, attach.getBufferRange() );
-						context.memoryBarrier( commandBuffer
-							, attach.buffer( index ), attach.getBufferRange()
-							, currentState, ComputeShaderReadState );
-					}
-				}
 			}
 
 		private:
@@ -286,8 +248,7 @@ namespace c3d
 			eLightsAABB,
 		};
 
-		static ShaderPtr createDebugDisplayShader( RenderDevice const & device
-			, FrustumClusters const & frustumClusters )
+		static ShaderPtr createDebugDisplayShader( RenderDevice const & device )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
@@ -344,21 +305,18 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	crg::FramePass const & createComputeLightsAABBPass( crg::FramePassGroup & graph
-		, crg::FramePass const * previousPass
+	void createComputeLightsAABBPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
+		, FrustumClusters const & clusters
 		, CameraUbo const & clustersCameraUbo
-		, FrustumClusters const & clusters )
+		, BufferBase & allLightsAABBB )
 	{
 		auto & pass = graph.createPass( "ComputeLightsAABB"
 			, [&clusters, &device]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runGraph )
 			{
-				auto result = makeRawUnique< cptlgtb::FramePass >( framePass
-					, context
-					, graph
-					, device
+				auto result = makeRawUnique< cptlgtb::FramePass >( framePass, context, runGraph, device
 					, crg::cp::Config{}
 						.groupCountX( MaxLightsCount / 1024u )
 						.enabled( &clusters.needsClustersUpdate() )
@@ -367,13 +325,11 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependency( *previousPass );
 		clustersCameraUbo.createPassBinding( pass, cptlgtb::eCamera );
 		clusters.getClustersUbo().createPassBinding( pass, cptlgtb::eClusters );
 		auto const & lights = clusters.getCamera().getScene()->getLightCache();
 		lights.createPassBinding( pass, cptlgtb::eLights );
-		createClearableOutputStorageBinding( pass, uint32_t( cptlgtb::eAllLightsAABB ), cuT( "C3D_AllLightsAABB" ), clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
-		return pass;
+		allLightsAABBB.setLastAttach( pass.addClearableOutputStorageBuffer( allLightsAABBB.bufferViewId, uint32_t( cptlgtb::eAllLightsAABB ) ) );
 	}
 
 	void createDisplayLightsAABBProgram( RenderDevice const & device
@@ -382,9 +338,10 @@ namespace c3d
 		, CameraUbo const & clustersCameraUbo
 		, ashes::PipelineShaderStageCreateInfoArray & program
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
-		, ashes::WriteDescriptorSetArray & writes )
+		, ashes::WriteDescriptorSetArray & writes
+		, BufferBase const & allLightsAABBB )
 	{
-		ProgramModule programModule{ "LightsAABB", dsplgtb::createDebugDisplayShader( device, clusters ) };
+		ProgramModule programModule{ "LightsAABB", dsplgtb::createDebugDisplayShader( device ) };
 		program = makeProgramStates( device, programModule );
 
 		bindings.push_back( VkDescriptorSetLayoutBinding{ dsplgtb::eMainCamera, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1u, VK_SHADER_STAGE_VERTEX_BIT, nullptr } );
@@ -395,9 +352,8 @@ namespace c3d
 			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ mainCameraUbo.getUbo().getBuffer().getBuffer(), mainCameraUbo.getUbo().getByteOffset(), mainCameraUbo.getUbo().getByteRange() } } );
 		writes.emplace_back( dsplgtb::eClustersCamera, 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ clustersCameraUbo.getUbo().getBuffer().getBuffer(), clustersCameraUbo.getUbo().getByteOffset(), clustersCameraUbo.getUbo().getByteRange() } } );
-		auto & aabbBuffer = clusters.getAllLightsAABBBuffer();
 		writes.emplace_back( dsplgtb::eLightsAABB, 0u, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ aabbBuffer, 0u, aabbBuffer.getSize() } } );
+			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ allLightsAABBB.getBuffer(), 0u, allLightsAABBB.getSize() } } );
 	}
 
 	//*********************************************************************************************

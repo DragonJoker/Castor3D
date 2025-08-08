@@ -33,7 +33,7 @@ namespace c3d
 	TextureAnimationBuffer::TextureAnimationBuffer( Engine & engine
 		, RenderDevice const & device
 		, uint32_t count )
-		: m_buffer{ device, count * DataSize, cuT( "TextureAnimationBuffer" ) }
+		: m_buffer{ device, engine.getGraphResourceCache(), count * DataSize, cuT( "TextureAnimationBuffer" ) }
 		, m_data{ texanmbuf::doBindData( m_buffer.getPtr(), m_buffer.getSize(), count ) }
 		, m_animations{ count + 1u, nullptr }
 	{

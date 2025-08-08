@@ -244,7 +244,7 @@ namespace c3d
 			, ImageLayout layout
 			, TextureFactors const & factors = {} )
 		{
-			visit( name, texture.sampledViewId, layout, factors );
+			visit( name, texture.getSampledViewId(), layout, factors );
 		}
 		/**@}*/
 		/**

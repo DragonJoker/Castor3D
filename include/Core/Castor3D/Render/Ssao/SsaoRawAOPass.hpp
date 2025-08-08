@@ -27,7 +27,6 @@ namespace c3d
 		 *\param[in]	graph					The render graph.
 		 *\param[in]	device					The GPU device.
 		 *\param[in]	progress				The progress bar.
-		 *\param[in]	previousPass			The previous frame pass.
 		 *\param[in]	size					The render area dimensions.
 		 *\param[in]	config					The SSAO configuration.
 		 *\param[in]	ssaoConfigUbo			The SSAO configuration UBO.
@@ -40,7 +39,6 @@ namespace c3d
 		 *\param[in]	graph					Le render graph.
 		 *\param[in]	device					Le device GPU.
 		 *\param[in]	progress				La barre de progression
-		 *\param[in]	previousPass			La frame pass précédente.
 		 *\param[in]	size					Les dimensions de la zone de rendu.
 		 *\param[in]	config					La configuration du SSAO.
 		 *\param[in]	ssaoConfigUbo			L'UBO de configuration du SSAO.
@@ -52,12 +50,11 @@ namespace c3d
 		C3D_API SsaoRawAOPass( crg::FramePassGroup & graph
 			, RenderDevice const & device
 			, ProgressBar * progress
-			, crg::FramePass const & previousPass
 			, Extent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
 			, CameraUbo const & cameraUbo
-			, crg::ImageViewIdArray const & linearisedDepthBuffer
+			, Texture const & linearisedDepthBuffer
 			, Texture const & normals
 			, uint32_t const & passIndex );
 		C3D_API ~SsaoRawAOPass()noexcept;
@@ -91,11 +88,6 @@ namespace c3d
 		Texture const & getBentResult()const noexcept
 		{
 			return m_bentNormals;
-		}
-
-		crg::FramePass const & getLastPass()const noexcept
-		{
-			return *m_lastPass;
 		}
 		/**@}*/
 
@@ -137,7 +129,6 @@ namespace c3d
 		Texture m_result;
 		Texture m_bentNormals;
 		Array< Program, 2u > m_programs;
-		crg::FramePass const * m_lastPass{};
 	};
 }
 

@@ -159,19 +159,19 @@ namespace c3d
 		crg::ImageViewId getColourViewId( uint32_t index
 			, CubeMapFace face )const noexcept
 		{
-			return m_environmentMap.subViewsId[index * 6ULL + uint32_t( face )];
+			return m_environmentMap.getTargetViewId( index * 6UL + uint32_t( face ) );
 		}
 
 		crg::ImageViewId getDepthViewId( uint32_t index
 			, CubeMapFace face )const noexcept
 		{
-			return m_depthBuffer.subViewsId[index * 6ULL + uint32_t( face )];
+			return m_depthBuffer.getTargetViewId( index * 6UL + uint32_t( face ) );
 		}
 
 		crg::ImageViewId getTmpImage( uint32_t index
 			, CubeMapFace face )const noexcept
 		{
-			return m_tmpImage.subViewsId[index * 6ULL + uint32_t( face )];
+			return m_tmpImage.getTargetViewId( index * 6ULL + uint32_t( face ) );
 		}
 		/**@}*/
 

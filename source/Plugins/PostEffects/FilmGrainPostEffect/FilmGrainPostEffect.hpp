@@ -47,20 +47,13 @@ namespace film_grain
 		 */
 		void setParameters( c3d::Parameters parameters )override;
 
-		crg::FramePass const & getPass()const override
-		{
-			CU_Require( m_pass );
-			return *m_pass;
-		}
-
 	private:
 		/**
 		 *\copydoc		c3d::PostEffect::doInitialise
 		 */
 		bool doInitialise( c3d::RenderDevice const & device
 			, c3d::Texture const & source
-			, c3d::Texture const & target
-			, crg::FramePass const & previousPass )override;
+			, c3d::Texture & target )override;
 		/**
 		 *\copydoc		c3d::PostEffect::doCleanup
 		 */
@@ -90,7 +83,6 @@ namespace film_grain
 		c3d::Array< c3d::Image, NoiseMapCount > m_noiseImages;
 		crg::ImageId m_noiseImg;
 		crg::ImageViewId m_noiseView;
-		crg::FramePass * m_pass{};
 		bool m_firstUpdate{ true };
 	};
 }

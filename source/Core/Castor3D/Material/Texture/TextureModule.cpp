@@ -238,7 +238,7 @@ namespace c3d
 			, ImageUsageFlags::eSampled | ImageUsageFlags::eTransferDst };
 		auto texture = makeUnique< TextureLayout >( *engine.getRenderSystem()
 			, createInfo
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, MemoryPropertyFlags::eDeviceLocal
 			, relative );
 		texture->setSource( folder, relative );
 		return texture;
@@ -263,7 +263,7 @@ namespace c3d
 		log::debug << ( cuT( "Creating " ) + name + cuT( " texture layout.\n" ) );
 		auto texture = makeUnique< TextureLayout >( *engine.getRenderSystem()
 			, createInfo
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, MemoryPropertyFlags::eDeviceLocal
 			, name );
 		texture->setSource( c3d::move( buffer ), isStatic );
 		return texture;

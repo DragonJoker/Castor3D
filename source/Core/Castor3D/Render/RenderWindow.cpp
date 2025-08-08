@@ -448,7 +448,7 @@ namespace c3d
 		, m_listener{ getEngine()->addNewFrameListener( getName() + string::toString( m_index ) ) }
 		, m_size{ size }
 		, m_loading{ engine.isThreaded() }
-		, m_configUbo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
+		, m_configUbo{ m_device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eNone ) }
 	{
 		log::debug << "Created RenderWindow, size: " << size << std::endl;
 
@@ -1547,7 +1547,7 @@ namespace c3d
 		}
 
 		m_tex3DTo2DIntermediate = { cuT( "Texture3DTo2DResult" )
-			, m_texture3Dto2D->getTarget().sampledViewId
+			, m_texture3Dto2D->getTarget().getSampledViewId()
 			, ImageLayout::eShaderReadOnly
 			, TextureFactors{}.invert( true ) };
 		m_intermediateBarrierViews = rendwndw::doCreateBarrierViews( m_device
@@ -1580,11 +1580,12 @@ namespace c3d
 			, 1u )
 			, getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) );
 		m_snapshotBuffer = makeBufferBase( m_device
+			, target->getResources()
 			, bufferSize
-			, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, BufferUsageFlags::eTransferDst | BufferUsageFlags::eTransferSrc
+			, MemoryPropertyFlags::eHostVisible
 			, cuT( "Snapshot" ) );
-		m_snapshotData = makeArrayView( m_snapshotBuffer->lock( 0u, bufferSize, 0u )
+		m_snapshotData = makeArrayView( m_snapshotBuffer->lock()
 			, bufferSize );
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 		m_transferCommands.resize( 1u );
@@ -1602,6 +1603,7 @@ namespace c3d
 		if ( m_snapshotBuffer )
 		{
 			m_snapshotBuffer->unlock();
+			m_snapshotBuffer->destroy();
 			m_snapshotBuffer.reset();
 		}
 
@@ -1793,7 +1795,7 @@ namespace c3d
 
 		commands.memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_snapshotBuffer->makeTransferDestination() );
+			, m_snapshotBuffer->getBuffer().makeTransferDestination() );
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 		auto srcExtent = getExtent( m_picking->getImageView() );
 #else
@@ -1835,10 +1837,10 @@ namespace c3d
 				, srcOffset
 				, makeVkExtent3D( dstExtent ) }
 			, srcImage
-			, *m_snapshotBuffer );
+			, m_snapshotBuffer->getBuffer() );
 		commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_HOST_BIT
-			, m_snapshotBuffer->makeHostRead() );
+			, m_snapshotBuffer->getBuffer().makeHostRead() );
 
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 		commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT

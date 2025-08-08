@@ -13,93 +13,28 @@ namespace c3d
 	{
 	public:
 		C3D_API BackgroundRenderer( crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, SceneBackground & background
 			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
-			, crg::ImageViewIdArray const & colour
+			, Texture & colour
 			, bool clearColour
 			, bool clearDepth
 			, bool forceVisible
-			, crg::ImageViewIdArray const & depth
-			, crg::ImageViewId const * depthObj );
+			, Texture * depth
+			, Texture const * depthObj = nullptr );
 
 		BackgroundRenderer( crg::FramePassGroup & graph
-			, crg::FramePass const * previousPass
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, SceneBackground & background
 			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
-			, crg::ImageViewId const & colour
+			, Texture & colour
 			, bool clearColour = true
 			, bool forceVisible = false )
 			: BackgroundRenderer{ graph
-				, ( previousPass
-					? crg::FramePassArray{ previousPass }
-					: crg::FramePassArray{} )
-				, device
-				, progress
-				, background
-				, renderUbo
-				, sceneUbo
-				, crg::ImageViewIdArray{ colour }
-				, clearColour
-				, false
-				, forceVisible
-				, crg::ImageViewIdArray{}
-				, nullptr }
-		{
-		}
-
-		BackgroundRenderer( crg::FramePassGroup & graph
-			, crg::FramePass const * previousPass
-			, RenderDevice const & device
-			, ProgressBar * progress
-			, SceneBackground & background
-			, RenderUbo const & renderUbo
-			, SceneUbo const & sceneUbo
-			, crg::ImageViewId const & colour
-			, bool clearColour
-			, bool clearDepth
-			, bool forceVisible
-			, crg::ImageViewId const & depth
-			, crg::ImageViewId const * depthObj )
-			: BackgroundRenderer{ graph
-				, ( previousPass
-					? crg::FramePassArray{ previousPass }
-					: crg::FramePassArray{} )
-				, device
-				, progress
-				, background
-				, renderUbo
-				, sceneUbo
-				, crg::ImageViewIdArray{ colour }
-				, clearColour
-				, clearDepth
-				, forceVisible
-				, crg::ImageViewIdArray{ depth }
-				, depthObj }
-		{
-		}
-
-		BackgroundRenderer( crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
-			, RenderDevice const & device
-			, ProgressBar * progress
-			, SceneBackground & background
-			, RenderUbo const & renderUbo
-			, SceneUbo const & sceneUbo
-			, crg::ImageViewIdArray const & colour
-			, bool clearColour
-			, bool clearDepth
-			, bool forceVisible
-			, crg::ImageViewId const & depth
-			, crg::ImageViewId const * depthObj )
-			: BackgroundRenderer{ graph
-				, previousPasses
 				, device
 				, progress
 				, background
@@ -107,10 +42,10 @@ namespace c3d
 				, sceneUbo
 				, colour
 				, clearColour
-				, clearDepth
+				, false
 				, forceVisible
-				, crg::ImageViewIdArray{ depth }
-				, depthObj }
+				, nullptr
+				, nullptr }
 		{
 		}
 
@@ -134,28 +69,22 @@ namespace c3d
 		 */
 		C3D_API void update( GpuUpdater & updater );
 
-		crg::FramePass const & getPass()const noexcept
-		{
-			return *m_backgroundPassDesc;
-		}
-
 	private:
-		crg::FramePass const & doCreatePass( crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
+		void doCreatePass( crg::FramePassGroup & graph
 			, SceneBackground & background
 			, RenderUbo const & renderUbo
 			, SceneUbo const & sceneUbo
-			, crg::ImageViewIdArray const & colour
+			, Texture & colour
 			, bool clearColour
 			, bool clearDepth
 			, bool forceVisible
-			, crg::ImageViewIdArray const & depth
-			, crg::ImageViewId const * depthObj
+			, Texture * depth
+			, Texture const * depthObj
 			, ProgressBar * progress );
 
 	private:
 		RenderDevice const & m_device;
-		crg::ImageViewIdArray m_colour;
+		Texture & m_colour;
 		CameraUbo m_cameraUbo;
 		UniformBufferOffsetT< ModelBufferConfiguration > m_modelUbo;
 		crg::FramePass const * m_backgroundPassDesc{};

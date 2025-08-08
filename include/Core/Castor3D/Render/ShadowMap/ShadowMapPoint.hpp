@@ -8,7 +8,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
-#include "Castor3D/Render/Passes/GaussianBlur.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 
 #include <ashespp/Image/ImageView.hpp>
@@ -50,17 +49,13 @@ namespace c3d
 		/**@{*/
 		Texture const & getTexture()const noexcept
 		{
-			return m_result[SmTexture::eVariance];
+			return m_result.getTexture( SmTexture::eVariance );
 		}
 		/**@}*/
 
 	private:
-		crg::FramePassArray doCreatePass( crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
-			, uint32_t index
-			, bool vsm
-			, bool rsm
-			, bool isStatic
+		void doCreatePass( crg::FramePassGroup & graph
+			, uint32_t index, bool vsm, bool rsm, bool isStatic
 			, Passes & passes )override;
 		bool doIsUpToDate( uint32_t index
 			, Passes const & passes )const override;

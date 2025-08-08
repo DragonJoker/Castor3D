@@ -2,7 +2,9 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
+#include "Castor3D/Buffer/DirectUploadData.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
+#include "Castor3D/Buffer/InstantUploadData.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
@@ -480,9 +482,9 @@ namespace c3d
 		{
 			auto vplCount = rsmSize * rsmSize;
 
-			auto result = device.bufferPool->getBuffer< NonTexturedQuad::Vertex >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
+			auto result = device.bufferPool->getBuffer< NonTexturedQuad::Vertex >( BufferUsageFlags::eVertexBuffer
 				, vplCount
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+				, MemoryPropertyFlags::eDeviceLocal );
 			NonTexturedQuad::Vertex vtx;
 			auto buffer = result.getData().data();
 
@@ -666,7 +668,7 @@ namespace c3d
 		m_holder.recordInto( context, commandBuffer, index );
 		auto vplCount = m_rsmSize * m_rsmSize;
 		VkDeviceSize offset{ m_vertexBuffer.getOffset() };
-		VkBuffer vertexBuffer = m_vertexBuffer.getBuffer();
+		VkBuffer vertexBuffer = m_vertexBuffer.getBuffer().getBuffer();
 		m_context.vkCmdBindVertexBuffers( commandBuffer, 0u, 1u, &vertexBuffer, &offset );
 		m_context.vkCmdDraw( commandBuffer, vplCount, 1u, 0u, 0u );
 	}

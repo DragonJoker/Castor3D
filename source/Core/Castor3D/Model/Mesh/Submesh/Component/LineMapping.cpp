@@ -99,7 +99,7 @@ namespace c3d
 	String const LineMapping::TypeName = C3D_MakeSubmeshIndexComponentName( "lines" );
 
 	LineMapping::LineMapping( Submesh & submesh
-		, VkBufferUsageFlags bufferUsageFlags )
+		, BufferUsageFlags bufferUsageFlags )
 		: IndexMapping{ submesh, TypeName
 			, makeRawUnique< ComponentData >( submesh, bufferUsageFlags ) }
 	{

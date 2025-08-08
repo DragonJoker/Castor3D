@@ -85,8 +85,8 @@ namespace smaa
 
 			EdgeDetection::getVertexProgram( writer, c3d_smaaData );
 
-			writer.implementEntryPointT< EDVertexT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< EDVertexT > in
-				, sdw::FragmentOutT< c3ds::Colour4FT > out )
+			writer.implementEntryPointT< EDVertexT, c3ds::Colour4FT >( [&]( sdw::FragmentInT< EDVertexT > const & in
+				, sdw::FragmentOutT< c3ds::Colour4FT > const & out )
 				{
 					out.colour() = vec4( 0.0_f );
 					out.colour().xy() = SMAADepthEdgeDetectionPS( utils.topDownToBottomUp( in.texcoord() ), in.offset(), c3d_depthObjTex );
@@ -98,15 +98,13 @@ namespace smaa
 	//*********************************************************************************************
 
 	DepthEdgeDetection::DepthEdgeDetection( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
 		, c3d::RenderTarget & renderTarget
 		, c3d::RenderDevice const & device
 		, SmaaUbo const & ubo
-		, crg::ImageViewId const & depthObj
+		, c3d::Texture const & depthObj
 		, SmaaConfig const & config
 		, bool const * enabled )
 		: EdgeDetection{ graph
-			, previousPass
 			, renderTarget
 			, device
 			, ubo
@@ -116,14 +114,7 @@ namespace smaa
 			, nullptr
 			, 1u }
 	{
-		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
-			, c3d::FilterMode::eLinear
-			, c3d::MipmapMode::eNearest
-			, c3d::WrapMode::eClampToEdge
-			, c3d::WrapMode::eClampToEdge
-			, c3d::WrapMode::eClampToEdge };
-		m_pass.addSampledView( depthObj
-			, dpthed::DepthTexIdx
-			, linearSampler );
+		m_pass.addInputSampled( *depthObj.getSampledLastAttach(), dpthed::DepthTexIdx
+			, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest } );
 	}
 }

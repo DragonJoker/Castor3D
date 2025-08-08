@@ -320,8 +320,8 @@ namespace c3d
 		C3D_API ashes::DescriptorSetLayout * getBindlessTexDescriptorLayout()const;
 		C3D_API ashes::DescriptorPool * getBindlessTexDescriptorPool()const;
 		C3D_API ashes::DescriptorSet * getBindlessTexDescriptorSet()const;
-		C3D_API ashes::Buffer< ModelBufferConfiguration > const & getModelBuffer()const;
-		C3D_API ashes::Buffer< BillboardUboConfiguration > const & getBillboardsBuffer()const;
+		C3D_API BufferBase const & getModelBuffer()const;
+		C3D_API BufferBase const & getBillboardsBuffer()const;
 		C3D_API bool hasObjects( LightingModelID lightingModelId )const;
 
 		BoundingBox const & getBoundingBox()const noexcept

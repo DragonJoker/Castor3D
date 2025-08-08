@@ -19,7 +19,6 @@ namespace ocean_fft
 {
 	class GenerateDisplacementPass;
 	class GenerateHeightmapPass;
-	class GenerateMipmapsPass;
 	class GenerateNormalPass;
 	class OceanFFT;
 	class OceanUbo;

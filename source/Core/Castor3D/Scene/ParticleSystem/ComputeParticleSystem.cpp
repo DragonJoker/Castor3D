@@ -53,7 +53,7 @@ namespace c3d
 
 		if ( result )
 		{
-			m_ubo = device.uboPool->getBuffer< Configuration >( 0u );
+			m_ubo = device.uboPool->getBuffer< Configuration >( MemoryPropertyFlags::eNone );
 			auto & data = m_ubo.getData();
 			data.maxParticleCount = m_parent.getMaxParticlesCount();
 		}
@@ -93,9 +93,11 @@ namespace c3d
 
 		for ( auto & storage : m_particlesStorages )
 		{
+			storage->destroy();
 			storage.reset();
 		}
 
+		m_generatedCountBuffer->destroy();
 		m_generatedCountBuffer.reset();
 
 		if ( m_ubo )
@@ -125,26 +127,28 @@ namespace c3d
 			auto size = ashes::getAlignedSize( m_parent.getMaxParticlesCount() * m_inputs.stride(), align );
 
 			m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+			m_commandBuffer->beginDebugBlock( { toUtf8( m_parent.getName() ) + "/Update"
+				, makeFloatArray( m_parent.getEngine()->getNextRainbowColour() ) } );
 			updater.timer->beginPass( *m_commandBuffer );
 
 			// Initialise counts buffer to 0.
-			auto flags = m_generatedCountBuffer->getBuffer().getCompatibleStageFlags();
+			auto flags = m_generatedCountBuffer->buffer->getCompatibleStageFlags();
 			m_commandBuffer->memoryBarrier( flags, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, m_generatedCountBuffer->getBuffer().makeTransferDestination() );
-			m_commandBuffer->fillBuffer( m_generatedCountBuffer->getBuffer()
+				, m_generatedCountBuffer->buffer->makeTransferDestination() );
+			m_commandBuffer->fillBuffer( *m_generatedCountBuffer->buffer
 				, 0u
-				, m_generatedCountBuffer->getBuffer().getSize()
+				, m_generatedCountBuffer->buffer->getSize()
 				, 0u );
 			m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-				, m_generatedCountBuffer->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT ) );
+				, m_generatedCountBuffer->buffer->makeMemoryTransitionBarrier( VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT ) );
 
 			// Put In and Out buffers to compute state.
-			flags = m_particlesStorages[m_in]->getBuffer().getCompatibleStageFlags();
+			flags = m_particlesStorages[m_in]->buffer->getCompatibleStageFlags();
 			m_commandBuffer->memoryBarrier( flags, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-				, m_particlesStorages[m_in]->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_SHADER_READ_BIT ) );
-			flags = m_particlesStorages[m_out]->getBuffer().getCompatibleStageFlags();
+				, m_particlesStorages[m_in]->buffer->makeMemoryTransitionBarrier( VK_ACCESS_SHADER_READ_BIT ) );
+			flags = m_particlesStorages[m_out]->buffer->getCompatibleStageFlags();
 			m_commandBuffer->memoryBarrier( flags, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-				, m_particlesStorages[m_out]->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_SHADER_WRITE_BIT ) );
+				, m_particlesStorages[m_out]->buffer->makeMemoryTransitionBarrier( VK_ACCESS_SHADER_WRITE_BIT ) );
 
 			// Dispatch compute
 			m_commandBuffer->bindPipeline( *m_pipeline, VK_PIPELINE_BIND_POINT_COMPUTE );
@@ -154,31 +158,32 @@ namespace c3d
 			m_commandBuffer->dispatch( dispatch[0], dispatch[1], dispatch[2] );
 
 			// Put In and Out buffers to transfer state.
-			flags = m_particlesStorages[m_in]->getBuffer().getCompatibleStageFlags();
+			flags = m_particlesStorages[m_in]->buffer->getCompatibleStageFlags();
 			m_commandBuffer->memoryBarrier( flags, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, m_particlesStorages[m_in]->getBuffer().makeTransferSource() );
-			flags = m_particlesStorages[m_out]->getBuffer().getCompatibleStageFlags();
+				, m_particlesStorages[m_in]->buffer->makeTransferSource() );
+			flags = m_particlesStorages[m_out]->buffer->getCompatibleStageFlags();
 			m_commandBuffer->memoryBarrier( flags, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, m_particlesStorages[m_out]->getBuffer().makeTransferSource() );
+				, m_particlesStorages[m_out]->buffer->makeTransferSource() );
 
 			// Copy output storage to billboard's vertex buffer
-			flags = m_parent.getBillboards()->getVertexBuffer().getBuffer().getBuffer().getCompatibleStageFlags();
+			flags = m_parent.getBillboards()->getVertexBuffer().getBuffer().buffer->getCompatibleStageFlags();
 			m_commandBuffer->memoryBarrier( flags, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, m_parent.getBillboards()->getVertexBuffer().getBuffer().getBuffer().makeTransferDestination() );
-			m_commandBuffer->copyBuffer( m_particlesStorages[m_out]->getBuffer()
-				, m_parent.getBillboards()->getVertexBuffer().getBuffer()
+				, m_parent.getBillboards()->getVertexBuffer().getBuffer().buffer->makeTransferDestination() );
+			m_commandBuffer->copyBuffer( *m_particlesStorages[m_out]->buffer
+				, *m_parent.getBillboards()->getVertexBuffer().getBuffer().buffer
 				, size
 				, 0u
 				, m_parent.getBillboards()->getVertexBuffer().getOffset() );
 			m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT
-				, m_parent.getBillboards()->getVertexBuffer().getBuffer().getBuffer().makeVertexShaderInputResource() );
+				, m_parent.getBillboards()->getVertexBuffer().getBuffer().buffer->makeVertexShaderInputResource() );
 
 			// Put counts buffer to host visible state
-			flags = m_generatedCountBuffer->getBuffer().getCompatibleStageFlags();
+			flags = m_generatedCountBuffer->buffer->getCompatibleStageFlags();
 			m_commandBuffer->memoryBarrier( flags, VK_PIPELINE_STAGE_HOST_BIT
-				, m_generatedCountBuffer->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_HOST_READ_BIT ) );
+				, m_generatedCountBuffer->buffer->makeMemoryTransitionBarrier( VK_ACCESS_HOST_READ_BIT ) );
 
 			updater.timer->endPass( *m_commandBuffer );
+			m_commandBuffer->endDebugBlock();
 			m_commandBuffer->end();
 			device.graphicsData()->queue->submit( *m_commandBuffer, m_fence.get() );
 			updater.timer->notifyPassRender( updater.index );
@@ -187,7 +192,7 @@ namespace c3d
 			m_commandBuffer->reset();
 
 			// Retrieve counts
-			if ( auto buffer = m_generatedCountBuffer->lock( 0u, 1u, 0u ) )
+			if ( auto buffer = reinterpret_cast< uint32_t const * >( m_generatedCountBuffer->buffer->lock( 0u, 1u, 0u ) ) )
 			{
 				particlesCount = buffer[0];
 				m_generatedCountBuffer->unlock();
@@ -217,25 +222,28 @@ namespace c3d
 		auto align = device.renderSystem.getValue( GpuMin::eBufferMapSize );
 		auto size = ashes::getAlignedSize( m_parent.getMaxParticlesCount() * m_inputs.stride(), align );
 		m_generatedCountBuffer = makeBuffer< uint32_t >( device
+			, getParent().getScene()->getResources()
 			, ashes::getAlignedSize( 2u * sizeof( uint32_t ), align ) / sizeof( uint32_t )
-			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eTransferSrc
+			, MemoryPropertyFlags::eHostVisible
 			, cuT( "ComputeParticleSystemCountBuffer" ) );
-		m_particlesStorages[0] = makeBuffer< uint8_t >( device
+		m_particlesStorages[0] = makeBufferBase( device
+			, getParent().getScene()->getResources()
 			, size
-			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eTransferSrc
+			, MemoryPropertyFlags::eHostVisible
 			, cuT( "ComputeParticleSystemParticles0" ) );
-		m_particlesStorages[1] = makeBuffer< uint8_t >( device
+		m_particlesStorages[1] = makeBufferBase( device
+			, getParent().getScene()->getResources()
 			, size
-			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, BufferUsageFlags::eStorageBuffer | BufferUsageFlags::eTransferDst | BufferUsageFlags::eTransferSrc
+			, MemoryPropertyFlags::eHostVisible
 			, cuT( "ComputeParticleSystemParticles1" ) );
 		Particle particle{ m_inputs, m_parent.getDefaultValues() };
 
-		auto initialise = [this, &size, &particle]( ashes::Buffer< uint8_t > & buffer )
+		auto initialise = [this, &size, &particle]( Buffer & buffer )
 		{
-			if ( auto data = buffer.lock( 0u, size, 0u ) )
+			if ( auto data = buffer.buffer->lock( 0u, size, 0u ) )
 			{
 				for ( uint32_t i = 0u; i < m_parent.getMaxParticlesCount(); ++i )
 				{
@@ -243,8 +251,8 @@ namespace c3d
 					data += m_inputs.stride();
 				}
 
-				buffer.getBuffer().flush( 0u, size );
-				buffer.getBuffer().unlock();
+				buffer.buffer->flush( 0u, size );
+				buffer.buffer->unlock();
 			}
 		};
 		initialise( *m_particlesStorages[0] );
@@ -292,21 +300,21 @@ namespace c3d
 		{
 			auto & randomStorage = device.renderSystem.getRandomStorage();
 			descriptorSet.createBinding( m_descriptorLayout->getBinding( compptcl::IndexBufferBinding )
-				, *m_generatedCountBuffer
+				, *m_generatedCountBuffer->buffer
 				, 0u
-				, uint32_t( m_generatedCountBuffer->getCount() ) );
+				, uint32_t( m_generatedCountBuffer->getSize() ) );
 			descriptorSet.createBinding( m_descriptorLayout->getBinding( compptcl::RandomBufferBinding )
-				, randomStorage
+				, *randomStorage.buffer
 				, 0u
-				, uint32_t( randomStorage.getCount() ) );
+				, uint32_t( randomStorage.getSize() ) );
 			descriptorSet.createBinding( m_descriptorLayout->getBinding( compptcl::InParticlesBufferBinding )
-				, *m_particlesStorages[inIndex]
+				, *m_particlesStorages[inIndex]->buffer
 				, 0u
-				, uint32_t( m_particlesStorages[inIndex]->getCount() ) );
+				, uint32_t( m_particlesStorages[inIndex]->getSize() ) );
 			descriptorSet.createBinding( m_descriptorLayout->getBinding( compptcl::OutParticlesBufferBinding )
-				, *m_particlesStorages[outIndex]
+				, *m_particlesStorages[outIndex]->buffer
 				, 0u
-				, uint32_t( m_particlesStorages[outIndex]->getCount() ) );
+				, uint32_t( m_particlesStorages[outIndex]->getSize() ) );
 			m_ubo.createSizedBinding( descriptorSet
 				, m_descriptorLayout->getBinding( compptcl::ParticleSystemBufferBinding ) );
 			descriptorSet.update();

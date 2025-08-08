@@ -110,24 +110,20 @@ namespace smaa
 	//*********************************************************************************************
 
 	Reproject::Reproject( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
 		, c3d::RenderTarget & renderTarget
 		, c3d::RenderDevice const & device
 		, SmaaUbo const & ubo
+			, crg::Attachment const & neighbourResult
 		, crg::ImageViewIdArray const & currentColourViews
 		, crg::ImageViewIdArray const & previousColourViews
-		, crg::ImageViewId const * velocityView
+		, c3d::Texture const * velocityView
 		, SmaaConfig const & config
 		, bool const * enabled )
-		: m_device{ device }
-		, m_graph{ graph }
-		, m_currentColourViews{ currentColourViews }
-		, m_previousColourViews{ previousColourViews }
-		, m_velocityView{ velocityView }
+		: m_graph{ graph }
 		, m_extent{ c3d::getSafeBandedExtent3D( renderTarget.getDisplaySize() ) }
 		, m_shader{ cuT( "SmaaReproject" ), reproj::getProgram( device, velocityView != nullptr ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
-		, m_result{ m_device
+		, m_result{ device
 			, renderTarget.getResources()
 			, cuT( "SMRpRes" )
 			, { c3d::ImageCreateFlags::eNone
@@ -137,30 +133,13 @@ namespace smaa
 					| c3d::ImageUsageFlags::eColorAttachment
 					| c3d::ImageUsageFlags::eTransferSrc ) }
 			, {} }
-		, m_pass{ m_graph.createPass( "Reproject"
-			, [this, &device, &config, enabled]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
-			{
-				auto result = crg::RenderQuadBuilder{}
-					.renderPosition( {} )
-					.renderSize( c3d::makeExtent2D( m_extent ) )
-					.texcoordConfig( {} )
-					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
-					.passIndex( &config.subsampleIndex )
-					.enabled( enabled )
-					.build( framePass, context, graph, { config.maxSubsampleIndices } );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
-					, result->getTimer() );
-				return result;
-			} ) }
 	{
-		auto & context = m_device.makeContext();
-		auto data = m_device.graphicsData();
+		auto & context = device.makeContext();
+		auto data = device.graphicsData();
 		auto commandBuffer = data->commandPool->createCommandBuffer( "SmaaReprojectImagesClear" );
 		commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 
-		for ( auto const & view : m_currentColourViews )
+		for ( auto const & view : currentColourViews )
 		{
 			auto image = c3d::makeRawUnique< ashes::Image >( *device
 				, renderTarget.getResources().createImage( context, view.data->image )
@@ -183,30 +162,38 @@ namespace smaa
 		data->queue->waitIdle();
 		commandBuffer.reset();
 
+		auto & pass = graph.createPass( "Reproject"
+			, [this, &device, &config, enabled]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & graph )
+			{
+				auto result = crg::RenderQuadBuilder{}
+					.renderPosition( {} )
+					.renderSize( c3d::makeExtent2D( m_extent ) )
+					.texcoordConfig( {} )
+					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
+					.passIndex( &config.subsampleIndex )
+					.enabled( enabled )
+					.build( framePass, context, graph, { config.maxSubsampleIndices } );
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+					, result->getTimer() );
+				return result;
+			} );
 		crg::SamplerDesc pointSampler{ c3d::FilterMode::eLinear
 			, c3d::FilterMode::eLinear
 			, c3d::MipmapMode::eNearest
 			, c3d::WrapMode::eClampToEdge
 			, c3d::WrapMode::eClampToEdge
 			, c3d::WrapMode::eClampToEdge };
-		m_pass.addDependency( previousPass );
-		m_pass.addOutputColourView( m_result.targetViewId );
-		ubo.createPassBinding( m_pass
-			, SmaaUboIdx );
-		m_pass.addSampledView( m_currentColourViews
-			, uint32_t( reproj::Idx::CurColTexIdx )
-			, pointSampler );
-		m_pass.addSampledView( m_previousColourViews
-			, uint32_t( reproj::Idx::PrvColTexIdx )
-			, pointSampler );
+		m_result.setLastAttach( pass.addOutputColourTarget( m_result.getTargetViewId() ) );
+		ubo.createPassBinding( pass, SmaaUboIdx );
+		pass.addImplicit( neighbourResult, crg::ImageLayout::eShaderReadOnly );
+		pass.addInputSampledImage( currentColourViews, uint32_t( reproj::Idx::CurColTexIdx ), pointSampler );
+		pass.addInputSampledImage( previousColourViews, uint32_t( reproj::Idx::PrvColTexIdx ), pointSampler );
 		m_result.create();
 
-		if ( m_velocityView )
-		{
-			m_pass.addSampledView( *m_velocityView
-				, uint32_t( reproj::Idx::VelocityTexIdx )
-				, pointSampler );
-		}
+		if ( velocityView )
+			pass.addInputSampled( *velocityView->getSampledLastAttach(), uint32_t( reproj::Idx::VelocityTexIdx ), pointSampler );
 	}
 
 	Reproject::~Reproject()
@@ -219,7 +206,7 @@ namespace smaa
 		visitor.visit( m_shader );
 		visitor.visit( cuT( "SMAA Reprojection Result" )
 			, m_result
-			, m_graph.getFinalLayoutState( m_result.sampledViewId ).layout
+			, m_graph.getFinalLayoutState( m_result.getSampledViewId() ).layout
 			, c3d::TextureFactors{}.invert( true ) );
 	}
 

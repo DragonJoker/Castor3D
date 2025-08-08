@@ -32,33 +32,12 @@ namespace c3d
 		//!\~french		Le statut d'activation.
 		bool enabled{ true };
 		bool dirty{ true };
-		//!\~english	Tells if lights are put in the BVH.
-		//!\~french		Dit si les sources lumineuses sont mises dans le BVH.
-		GroupChangeTracked< bool > useLightsBVH;
-		//!\~english	Tells if the lights are sorted.
-		//!\~french		Dit si les sources lumineuses sont triées.
-		GroupChangeTracked< bool > sortLights;
-		//!\~english	Tells if the depth buffer is used to reduce affected clusters.
-		//!\~french		Dit si le buffer de profondeur est utlisé pour réduire le nombre de clusters affectés.
-		GroupChangeTracked< bool > parseDepthBuffer;
-		//!\~english	Clusters grid Z will be limited to lights AABB depth boundaries.
-		//!\~french		Les Z de la grille de clusters seront limités aux limites de profondeur des AABB des sources lumineuses.
-		GroupChangeTracked< bool > limitClustersToLightsAABB;
-		//!\~english	Use spot light bounding cone when assigning lights to clusters.
-		//!\~french		Utiliser le cône englobant les spot lights lors de l'affectation des sources lumineuses aux clusters.
-		GroupChangeTracked< bool > useSpotBoundingCone;
-		//!\~english	Use spot light tight bounding box when computing lights AABB.
-		//!\~french		Utiliser la bounding box la plus petite possible lors du calcul des AABB des ousrces lumineuses.
-		GroupChangeTracked< bool > useSpotTightBoundingBox;
 		//!\~english	Enable use of warp optimisation in the reduce lights AABB pass.
 		//!\~french		Autoriser l'utilisation de l'optimisation des warps dans la passe de réduction des AABB des sources lumineuses.
 		GroupChangeTracked< bool > enableReduceWarpOptimisation;
-		//!\~english	Enable use of warp optimisation in the build BVH pass.
-		//!\~french		Autoriser l'utilisation de l'optimisation des warps dans la passe de construction du BVH.
-		GroupChangeTracked< bool > enableBVHWarpOptimisation;
-		//!\~english	Enable sorting of clusters lights.
-		//!\~french		Autoriser le tri des sources lumineuses dans les clusters.
-		GroupChangeTracked< bool > enablePostAssignSort;
+		//!\~english	Enable wave intrinsics when parsing of clusters lights.
+		//!\~french		Autoriser les wave intrinsics lors de l'utilisation des sources lumineuses dans les clusters.
+		GroupChangeTracked< bool > enableWaveIntrinsics;
 		//!\~english	Locks clusters frustum, for debug purpose.
 		//!\~french		Verrouille le frustum des clusters, pour le débogage.
 		GroupChangeTracked< bool > lockClustersFrustum;

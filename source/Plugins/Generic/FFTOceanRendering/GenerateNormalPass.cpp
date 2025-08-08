@@ -47,21 +47,24 @@ namespace ocean_fft
 		{
 			ashes::WriteDescriptorSetArray writes;
 
-			auto write = graph.getBufferWrite( pass.buffers[GenerateNormalPass::eConfig] );
+			auto configBuffer = pass.uniforms.find( GenerateNormalPass::eConfig );
+			auto write = graph.getDescriptorWrite( *configBuffer->second, configBuffer->first );
 			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
 				, write->descriptorType } );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			write = graph.getBufferWrite( pass.buffers[GenerateNormalPass::eInput] );
+			auto inputBuffer = pass.inputs.find( GenerateNormalPass::eInput );
+			write = graph.getDescriptorWrite( *inputBuffer->second, inputBuffer->first );
 			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
 				, write->descriptorType } );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			write = graph.getBufferWrite( pass.buffers[GenerateNormalPass::eOutput] );
+			auto outputBuffer = pass.outputs.find( GenerateNormalPass::eOutput );
+			write = graph.getDescriptorWrite( *outputBuffer->second, outputBuffer->first );
 			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount

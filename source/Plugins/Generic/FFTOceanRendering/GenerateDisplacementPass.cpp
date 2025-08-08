@@ -47,25 +47,22 @@ namespace ocean_fft
 		{
 			ashes::WriteDescriptorSetArray writes;
 
-			auto write = graph.getBufferWrite( pass.buffers[GenerateDisplacementPass::eConfig] );
-			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
-				, write->dstArrayElement
-				, write->descriptorCount
-				, write->descriptorType } );
+			auto write = graph.getDescriptorWrite( *pass.uniforms.begin()->second
+				, GenerateDisplacementPass::eConfig );
+			writes.emplace_back( write->dstBinding, write->dstArrayElement
+				, write->descriptorCount, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			write = graph.getBufferWrite( pass.buffers[GenerateDisplacementPass::eInput] );
-			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
-				, write->dstArrayElement
-				, write->descriptorCount
-				, write->descriptorType } );
+			write = graph.getDescriptorWrite( *pass.inputs.begin()->second
+				, GenerateDisplacementPass::eInput );
+			writes.emplace_back( write->dstBinding, write->dstArrayElement
+				, write->descriptorCount, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
 
-			write = graph.getBufferWrite( pass.buffers[GenerateDisplacementPass::eOutput] );
-			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
-				, write->dstArrayElement
-				, write->descriptorCount
-				, write->descriptorType } );
+			write = graph.getDescriptorWrite( *pass.outputs.begin()->second
+				, GenerateDisplacementPass::eOutput );
+			writes.emplace_back( write->dstBinding, write->dstArrayElement
+				, write->descriptorCount, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
 
 			auto descriptorSet = pool.createDescriptorSet( GenerateDisplacementPass::Name );

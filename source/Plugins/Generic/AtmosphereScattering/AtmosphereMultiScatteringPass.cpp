@@ -40,10 +40,10 @@ namespace atmosphere_scattering
 			C3D_AtmosphereScattering( writer
 				, uint32_t( Bindings::eAtmosphere )
 				, 0u );
-			auto transmittanceMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "transmittanceMap"
+			auto transmittanceMap = writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "transmittanceMap"
 				, uint32_t( Bindings::eTransmittance )
 				, 0u );
-			auto outputTexture = writer.declStorageImg< sdw::WImage2DRgba32 >("outputTexture"
+			auto outputTexture = writer.declStorageImg< sdw::WImage2DRgba16 >("outputTexture"
 				, uint32_t( Bindings::eOutput )
 				, 0u );
 
@@ -245,16 +245,15 @@ namespace atmosphere_scattering
 	//************************************************************************************************
 
 	AtmosphereMultiScatteringPass::AtmosphereMultiScatteringPass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
 		, c3d::RenderDevice const & device
 		, AtmosphereScatteringUbo const & atmosphereUbo
-		, crg::ImageViewId const & transmittanceLut
-		, crg::ImageViewId const & resultView
+		, c3d::Texture const & transmittanceLut
+		, c3d::Texture & result
 		, bool const & enabled )
-		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "MultiScatteringPass" ), multiscatter::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ).width, getExtent( transmittanceLut ) ) }
+		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "MultiScatteringPass" ), multiscatter::getProgram( *device.renderSystem.getEngine(), result.getExtent().width, transmittanceLut.getExtent() ) }
 		, m_stages{ makeShaderState( device, m_computeShader ) }
 	{
-		auto renderSize = getExtent( resultView );
+		auto renderSize = result.getExtent();
 		auto & pass = graph.createPass( "MultiScatteringPass"
 			, [this, &device, &enabled, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -273,17 +272,10 @@ namespace atmosphere_scattering
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependencies( previousPasses );
-		atmosphereUbo.createPassBinding( pass
-			, multiscatter::eAtmosphere );
-		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
-			, c3d::FilterMode::eLinear };
-		pass.addSampledView( transmittanceLut
-			, multiscatter::eTransmittance
-			, linearSampler );
-		pass.addOutputStorageView( resultView
-			, multiscatter::eOutput );
-		m_lastPass = &pass;
+		atmosphereUbo.createPassBinding( pass, multiscatter::eAtmosphere );
+		pass.addInputSampled( *transmittanceLut.getSampledLastAttach(), multiscatter::eTransmittance
+			, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear } );
+		result.setLastAttach( pass.addOutputStorageImage( result.getTargetViewId(), multiscatter::eOutput ) );
 	}
 
 	void AtmosphereMultiScatteringPass::accept( c3d::ConfigurationVisitorBase & visitor )

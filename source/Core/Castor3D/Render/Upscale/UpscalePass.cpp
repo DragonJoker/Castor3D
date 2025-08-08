@@ -45,10 +45,10 @@ namespace c3d
 		if ( m_upscaler )
 			m_upscaler.reset();
 
-		auto itResolved = m_pass.images.begin();
+		auto itResolved = m_pass.inputs.begin();
 		auto itUnresolved = std::next( itResolved );
-		auto resolved = itResolved->imageAttach.view( index );
-		auto unresolved = itUnresolved->imageAttach.view( index );
+		auto resolved = itResolved->second->view( index );
+		auto unresolved = itUnresolved->second->view( index );
 
 		auto renderSize = getExtent( unresolved );
 		auto displaySize = getExtent( resolved );
@@ -65,15 +65,15 @@ namespace c3d
 	{
 		if ( m_updateCount == 0 )
 			return;
-		auto itResolved = m_pass.images.begin();
+		auto itResolved = m_pass.inputs.begin();
 		auto itUnresolved = std::next( itResolved );
 		auto itMotion = std::next( itUnresolved );
 		auto itDepth = std::next( itMotion );
 		m_upscaler->evaluateUpscaling( context, commandBuffer
-			, itResolved->imageAttach.view( index )
-			, itUnresolved->imageAttach.view( index )
-			, itMotion->imageAttach.view( index )
-			, itDepth->imageAttach.view( index )
+			, itResolved->second->view( index )
+			, itUnresolved->second->view( index )
+			, itMotion->second->view( index )
+			, itDepth->second->view( index )
 			, m_updateCount < 2
 			, m_target.getJitter() );
 	}

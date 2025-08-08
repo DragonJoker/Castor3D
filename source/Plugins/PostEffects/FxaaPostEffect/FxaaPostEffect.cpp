@@ -196,11 +196,10 @@ namespace fxaa
 
 	bool PostEffect::doInitialise( c3d::RenderDevice const & device
 		, c3d::Texture const & source
-		, c3d::Texture const & target
-		, crg::FramePass const & previousPass )
+		, c3d::Texture & target )
 	{
 		auto extent = c3d::makeExtent2D( target.getExtent() );
-		m_pass = &m_graph.createPass( "FXAA"
+		auto & pass = m_graph.createPass( "FXAA"
 			, [this, &device, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -220,12 +219,9 @@ namespace fxaa
 					, result->getTimer() );
 				return result;
 			} );
-		m_pass->addDependency( previousPass );
-		m_fxaaUbo.createPassBinding( *m_pass
-			, postfx::FxaaCfgUboIdx );
-		m_pass->addSampledView( crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
-			, postfx::ColorTexIdx );
-		m_pass->addOutputColourView( crg::ImageViewIdArray{ target.targetViewId, source.targetViewId } );
+		m_fxaaUbo.createPassBinding( pass, postfx::FxaaCfgUboIdx );
+		pass.addInputSampled( *source.getSampledLastAttach(), postfx::ColorTexIdx );
+		target.setLastAttach( pass.addOutputColourTarget( crg::ImageViewIdArray{ target.getTargetViewId(), source.getTargetViewId() } ) );
 		return true;
 	}
 

@@ -8,10 +8,15 @@ See LICENSE file in root folder
 
 namespace c3d
 {
-	C3D_API crg::FramePass const & createComputeLightsMortonCodePass( crg::FramePassGroup & graph
-		, crg::FramePass const * previousPass
+	C3D_API ClustersLightSortAttachs createComputeLightsMortonCodePass( crg::FramePassGroup & graph
 		, RenderDevice const & device
-		, FrustumClusters & clusters );
+		, FrustumClusters & clusters
+		, BufferBase const & allLightsAABB
+		, BufferBase const & reducedLightsAABB
+		, crg::BufferViewIdArray const & pointLightMortonCodes
+		, crg::BufferViewIdArray const & spotLightMortonCodes
+		, crg::BufferViewIdArray const & pointLightIndices
+		, crg::BufferViewIdArray const & spotLightIndices );
 }
 
 #endif

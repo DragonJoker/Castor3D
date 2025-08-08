@@ -19,27 +19,20 @@ namespace atmosphere_scattering
 	{
 	public:
 		CloudsResolvePass( crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
 			, c3d::RenderDevice const & device
 			, CameraUbo const & cameraUbo
 			, AtmosphereScatteringUbo const & atmosphereUbo
 			, CloudsUbo const & cloudsUbo
-			, crg::ImageViewId const & sky
-			, crg::ImageViewId const & sun
-			, crg::ImageViewId const & clouds
-			, crg::ImageViewId const & resultView
+			, c3d::Texture const & sky
+			, c3d::Texture const & sun
+			, c3d::Texture const & clouds
+			, c3d::Texture & result
 			, uint32_t index );
 		void accept( c3d::ConfigurationVisitorBase & visitor );
-
-		crg::FramePass const & getLastPass()const
-		{
-			return *m_lastPass;
-		}
 
 	private:
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::FramePass const * m_lastPass;
 	};
 }
 

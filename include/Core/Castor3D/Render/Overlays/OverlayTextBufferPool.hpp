@@ -24,6 +24,7 @@ namespace c3d
 		C3D_API OverlayTextBuffer( Engine & engine
 			, String const & debugName
 			, RenderDevice const & device );
+		C3D_API ~OverlayTextBuffer()noexcept;
 
 		C3D_API OverlayTextBufferIndex fill( uint32_t overlayIndex
 			, TextOverlay const & overlay )noexcept;
@@ -38,7 +39,7 @@ namespace c3d
 		template< typename DataT >
 		struct DataBufferT
 		{
-			ashes::BufferPtr< DataT > buffer;
+			BufferUPtrT< DataT > buffer;
 			ArrayView< DataT > data;
 			uint32_t allocated{};
 		};

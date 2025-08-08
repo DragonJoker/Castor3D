@@ -26,7 +26,7 @@ namespace c3d
 	SssProfileBuffer::SssProfileBuffer( Engine & engine
 		, RenderDevice const & device
 		, uint32_t count )
-		: m_buffer{ device, count * DataSize, cuT( "SssProfileBuffer" ) }
+		: m_buffer{ device, engine.getGraphResourceCache(), count * DataSize, cuT( "SssProfileBuffer" ) }
 		, m_diffusionProfiles{ device
 			, engine.getGraphResourceCache()
 			, cuT( "DiffusionProfiles" )

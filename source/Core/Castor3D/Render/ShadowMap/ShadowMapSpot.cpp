@@ -6,6 +6,7 @@
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
+#include "Castor3D/Render/Passes/GaussianBlur.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPassSpot.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
@@ -92,23 +93,13 @@ namespace c3d
 		m_resources.createImage( device.makeContext(), m_blurIntermediate );
 	}
 
-	crg::FramePassArray ShadowMapSpot::doCreatePass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
-		, uint32_t index
-		, bool vsm
-		, bool rsm
-		, bool isStatic
+	void ShadowMapSpot::doCreatePass( crg::FramePassGroup & graph
+		, uint32_t index, bool vsm, bool rsm, bool isStatic
 		, Passes & passes )
 	{
 		Engine const & engine = *m_scene.getEngine();
 		Viewport viewport{ engine };
-		ShadowMapResult const & smResult = getShadowPassResult( isStatic );
-		auto & depth = smResult[SmTexture::eDepth];
-		auto & linear = smResult[SmTexture::eLinearDepth];
-		auto & variance = smResult[SmTexture::eVariance];
-		auto & normal = smResult[SmTexture::eNormal];
-		auto & position = smResult[SmTexture::ePosition];
-		auto & flux = smResult[SmTexture::eFlux];
+		ShadowMapResult & smResult = getShadowPassResult( isStatic );
 
 		auto debugName = toUtf8( shdmapspot::getPassName( index, vsm, rsm, isStatic ) );
 		doRegisterGraphIO( graph, vsm, rsm, isStatic );
@@ -152,53 +143,56 @@ namespace c3d
 				return res;
 			} );
 
-		if ( !isStatic )
-		{
-			pass.addDependency( *previousPasses.front() );
-		}
-
-		auto previousPass = &pass;
-
 		if ( isStatic )
 		{
-			pass.addOutputDepthView( depth.subViewsId[index], getClearValue( SmTexture::eDepth ).depthStencil() );
-			pass.addOutputColourView( linear.subViewsId[index], getClearValue( SmTexture::eLinearDepth ).color() );
+			smResult.setLastAttach( SmTexture::eDepth, index
+				, pass.addOutputDepthTarget( smResult.getTargetViewId( SmTexture::eDepth, index ), getClearValue( SmTexture::eDepth ).depthStencil() ) );
+			smResult.setLastAttach( SmTexture::eLinearDepth, index
+				, pass.addOutputColourTarget( smResult.getTargetViewId( SmTexture::eLinearDepth, index ), getClearValue( SmTexture::eLinearDepth ).color() ) );
 
 			if ( vsm )
 			{
-				pass.addOutputColourView( variance.subViewsId[index], getClearValue( SmTexture::eVariance ).color() );
+				smResult.setLastAttach( SmTexture::eVariance, index
+					, pass.addOutputColourTarget( smResult.getTargetViewId( SmTexture::eVariance, index ), getClearValue( SmTexture::eVariance ).color() ) );
 			}
 
 			if ( rsm )
 			{
-				pass.addOutputColourView( normal.subViewsId[index], getClearValue( SmTexture::eNormal ).color() );
-				pass.addOutputColourView( position.subViewsId[index], getClearValue( SmTexture::ePosition ).color() );
-				pass.addOutputColourView( flux.subViewsId[index], getClearValue( SmTexture::eFlux ).color() );
+				smResult.setLastAttach( SmTexture::eNormal, index
+					, pass.addOutputColourTarget( smResult.getTargetViewId( SmTexture::eNormal, index ), getClearValue( SmTexture::eNormal ).color() ) );
+				smResult.setLastAttach( SmTexture::ePosition, index
+					, pass.addOutputColourTarget( smResult.getTargetViewId( SmTexture::ePosition, index ), getClearValue( SmTexture::ePosition ).color() ) );
+				smResult.setLastAttach( SmTexture::eFlux, index
+					, pass.addOutputColourTarget( smResult.getTargetViewId( SmTexture::eFlux, index ), getClearValue( SmTexture::eFlux ).color() ) );
 			}
 		}
 		else
 		{
-			pass.addInOutDepthView( depth.subViewsId[index] );
-			pass.addInOutColourView( linear.subViewsId[index] );
+			smResult.setLastAttach( SmTexture::eDepth, index
+				, pass.addInOutDepthTarget( *smResult.getLastAttach( SmTexture::eDepth, index ) ) );
+			smResult.setLastAttach( SmTexture::eLinearDepth, index
+				, pass.addInOutColourTarget( *smResult.getLastAttach( SmTexture::eLinearDepth, index ) ) );
 
 			if ( vsm )
 			{
-				pass.addInOutColourView( variance.subViewsId[index] );
+				smResult.setLastAttach( SmTexture::eVariance, index
+					, pass.addInOutColourTarget( *smResult.getLastAttach( SmTexture::eVariance, index ) ) );
 			}
 
 			if ( rsm )
 			{
-				pass.addInOutColourView( normal.subViewsId[index] );
-				pass.addInOutColourView( position.subViewsId[index] );
-				pass.addInOutColourView( flux.subViewsId[index] );
+				smResult.setLastAttach( SmTexture::eNormal, index
+					, pass.addInOutColourTarget( *smResult.getLastAttach( SmTexture::eNormal, index ) ) );
+				smResult.setLastAttach( SmTexture::ePosition, index
+					, pass.addInOutColourTarget( *smResult.getLastAttach( SmTexture::ePosition, index ) ) );
+				smResult.setLastAttach( SmTexture::eFlux, index
+					, pass.addInOutColourTarget( *smResult.getLastAttach( SmTexture::eFlux, index ) ) );
 			}
 		}
 
-		crg::FramePassArray resultPasses;
-
 		 if ( isStatic )
 		{
-			ShadowMapResult const & nstSmResult = getShadowPassResult( false );
+			ShadowMapResult & nstSmResult = getShadowPassResult( false );
 			auto & copyPass = group.createPass( debugName + "/CopyToNonStatic"
 				, [this, isStatic, index]( crg::FramePass const & framePass
 					, crg::GraphContext & context
@@ -207,7 +201,7 @@ namespace c3d
 					auto result = makeRawUnique< crg::ImageCopy >( framePass
 						, context
 						, runnableGraph
-						, getShadowPassResult( isStatic )[SmTexture::eDepth].getExtent()
+						, getShadowPassResult( isStatic ).getExtent()
 						, ImageLayout::eShaderReadOnly
 						, crg::ru::Config{}
 						, crg::ImageCopy::GetPassIndexCallback( [](){ return 0u; } )
@@ -216,49 +210,44 @@ namespace c3d
 						, result->getTimer() );
 					return result;
 				} );
-			copyPass.addDependency( *previousPass );
-			copyPass.addTransferInputView( depth.subViewsId[index] );
-			copyPass.addTransferOutputView( nstSmResult[SmTexture::eDepth].subViewsId[index] );
-			copyPass.addTransferInputView( linear.subViewsId[index] );
-			copyPass.addTransferOutputView( nstSmResult[SmTexture::eLinearDepth].subViewsId[index] );
+			copyPass.addInputTransfer( *smResult.getLastAttach( SmTexture::eDepth, index ) );
+			nstSmResult.setLastAttach( SmTexture::eDepth, index
+					, copyPass.addOutputTransferImage( nstSmResult.getTargetViewId( SmTexture::eDepth, index ) ) );
+			copyPass.addInputTransfer( *smResult.getLastAttach( SmTexture::eLinearDepth, index ) );
+			nstSmResult.setLastAttach( SmTexture::eLinearDepth, index
+					, copyPass.addOutputTransferImage( nstSmResult.getTargetViewId( SmTexture::eLinearDepth, index ) ) );
 
 			if ( vsm )
 			{
-				copyPass.addTransferInputView( variance.subViewsId[index] );
-				copyPass.addTransferOutputView( nstSmResult[SmTexture::eVariance].subViewsId[index] );
+				copyPass.addInputTransfer( *smResult.getLastAttach( SmTexture::eVariance, index ) );
+				nstSmResult.setLastAttach( SmTexture::eVariance, index
+					, copyPass.addOutputTransferImage( nstSmResult.getTargetViewId( SmTexture::eVariance, index ) ) );
 			}
 
 			if ( rsm )
 			{
-				copyPass.addTransferInputView( normal.subViewsId[index] );
-				copyPass.addTransferOutputView( nstSmResult[SmTexture::eNormal].subViewsId[index] );
-				copyPass.addTransferInputView( position.subViewsId[index] );
-				copyPass.addTransferOutputView( nstSmResult[SmTexture::ePosition].subViewsId[index] );
-				copyPass.addTransferInputView( flux.subViewsId[index] );
-				copyPass.addTransferOutputView( nstSmResult[SmTexture::eFlux].subViewsId[index] );
+				copyPass.addInputTransfer( *smResult.getLastAttach( SmTexture::eNormal, index ) );
+				nstSmResult.setLastAttach( SmTexture::eNormal, index
+					, copyPass.addOutputTransferImage( nstSmResult.getTargetViewId( SmTexture::eNormal, index ) ) );
+				copyPass.addInputTransfer( *smResult.getLastAttach( SmTexture::ePosition, index ) );
+				nstSmResult.setLastAttach( SmTexture::ePosition, index
+					, copyPass.addOutputTransferImage( nstSmResult.getTargetViewId( SmTexture::ePosition, index ) ) );
+				copyPass.addInputTransfer( *smResult.getLastAttach( SmTexture::eFlux, index ) );
+				nstSmResult.setLastAttach( SmTexture::eFlux, index
+					, copyPass.addOutputTransferImage( nstSmResult.getTargetViewId( SmTexture::eFlux, index ) ) );
 			}
-
-			previousPass = &copyPass;
-			resultPasses.push_back( previousPass );
 		}
 		else if ( vsm )
 		{
 			passes.blurs.push_back( makeUnique< GaussianBlur >( group
-				, *previousPass
 				, m_device
 				, cuT( "ShadowMapSpot" )
-				, variance.subViewsId[index]
+				, *smResult.getLastAttach( SmTexture::eVariance, index )
 				, m_blurIntermediateView
 				, 5u
 				, crg::ImageCopy::IsEnabledCallback( [this, index]() { return doEnableBlur( index ); } ) ) );
-			resultPasses.push_back( &passes.blurs.back()->getLastPass() );
+			smResult.setLastAttach( SmTexture::eVariance, index, &passes.blurs.back()->getResultAttach() );
 		}
-		else
-		{
-			 resultPasses.push_back( &pass );
-		}
-
-		return resultPasses;
 	}
 
 	bool ShadowMapSpot::doIsUpToDate( uint32_t index

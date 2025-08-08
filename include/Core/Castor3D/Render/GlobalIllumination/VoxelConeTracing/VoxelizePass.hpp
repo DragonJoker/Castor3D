@@ -58,7 +58,7 @@ namespace c3d
 			, Camera const & camera
 			, SceneCuller & culler
 			, VoxelizerUbo const & voxelizerUbo
-			, ashes::Buffer< Voxel > const & voxels
+			, BufferT< Voxel > const & voxels
 			, VctConfig const & voxelConfig
 			, bool isStatic );
 		/**
@@ -104,7 +104,7 @@ namespace c3d
 
 	private:
 		Scene const & m_scene;
-		ashes::Buffer< Voxel > const & m_voxels;
+		BufferT< Voxel > const & m_voxels;
 		VoxelizerUbo const & m_voxelizerUbo;
 		VctConfig const & m_voxelConfig;
 		bool m_outOfDate{ true };

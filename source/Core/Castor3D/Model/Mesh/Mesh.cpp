@@ -504,16 +504,11 @@ namespace c3d
 		m_submeshes.clear();
 	}
 
-	crg::FramePassArray Mesh::record( crg::ResourcesCache & resources
-		, crg::FramePassGroup & graph
-		, crg::FramePassArray previousPasses )
+	void Mesh::record( crg::ResourcesCache & resources
+		, crg::FramePassGroup & graph )
 	{
 		for ( auto & submesh : *this )
-		{
-			previousPasses = submesh->record( resources, graph, c3d::move( previousPasses ) );
-		}
-
-		return previousPasses;
+			submesh->record( resources, graph );
 	}
 
 	void Mesh::registerDependencies( crg::FramePass & pass )const

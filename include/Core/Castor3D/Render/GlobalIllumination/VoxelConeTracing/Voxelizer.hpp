@@ -31,7 +31,6 @@ namespace c3d
 		 *\param[in]	camera			The camera viewing the scene.
 		 *\param[in]	voxelizerUbo	The voxelizer configuration UBO.
 		 *\param[in]	voxelConfig		The voxelizer configuration.
-		 *\param[in]	previousPasses	The passes on which the voxelization pass depent.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	resources		Le gestionnaire de ressources du render graph.
@@ -42,7 +41,6 @@ namespace c3d
 		 *\param[in]	camera			La caméra regardant la scène.
 		 *\param[in]	voxelizerUbo	L'UBO de configuration du voxelizer.
 		 *\param[in]	voxelConfig		La configuration du voxelizer.
-		 *\param[in]	previousPasses	Les passes dont dépend la passe de voxellisation.
 		 */
 		C3D_API Voxelizer( crg::ResourcesCache & resources
 			, RenderDevice const & device
@@ -51,8 +49,7 @@ namespace c3d
 			, Scene & scene
 			, Camera & camera
 			, VoxelizerUbo & voxelizerUbo
-			, VctConfig const & voxelConfig
-			, crg::FramePassArray const & previousPasses );
+			, VctConfig const & voxelConfig );
 		C3D_API ~Voxelizer()noexcept;
 		/**
 		 *\~english
@@ -109,24 +106,18 @@ namespace c3d
 		/**@}*/
 
 	private:
-		crg::FramePass & doCreateClearStaticsPass( crg::FramePassArray const & previousPasses
-			, ProgressBar * progress );
-		crg::FramePass & doCreateVoxelizePass( crg::FramePassArray const & previousPasses
-			, ProgressBar * progress
-			, ashes::Buffer< Voxel > const & outVoxels
+		void doCreateClearStaticsPass( ProgressBar * progress );
+		void doCreateVoxelizePass( ProgressBar * progress
+			, BufferT< Voxel > & outVoxels
 			, SceneCuller & culler
 			, bool isStatic );
-		crg::FramePass & doCreateMergeStaticsPass( crg::FramePass const & previousPass
-			, ProgressBar * progress );
-		crg::FramePass & doCreateVoxelToTexture( crg::FramePass const & previousPass
-			, ProgressBar * progress );
-		crg::FramePass & doCreateVoxelMipGen( crg::FramePass const & previousPass
-			, String const & name
-			, crg::ImageViewId const & view
+		void doCreateMergeStaticsPass( ProgressBar * progress );
+		void doCreateVoxelToTexture( ProgressBar * progress );
+		void doCreateVoxelMipGen( String const & name
+			, Texture & view
 			, crg::RunnablePass::IsEnabledCallback isEnabled
 			, ProgressBar * progress );
-		crg::FramePass & doCreateVoxelSecondaryBounce( crg::FramePass const & previousPass
-			, ProgressBar * progress );
+		void doCreateVoxelSecondaryBounce( ProgressBar * progress );
 		bool doEnableClearStatic()const;
 		bool doEnableCopyStatic()const;
 		bool doEnableVoxelToTexture()const;
@@ -147,22 +138,14 @@ namespace c3d
 		RawUniquePtr< RenderUbo > m_renderUbo;
 		Texture m_firstBounce;
 		Texture m_secondaryBounce;
-		ashes::BufferPtr< Voxel > m_staticsVoxels;
-		ashes::BufferPtr< Voxel > m_dynamicsVoxels;
+		BufferUPtrT< Voxel > m_staticsVoxels;
+		BufferUPtrT< Voxel > m_dynamicsVoxels;
 		VoxelizerUbo & m_voxelizerUbo;
 		Point4f m_grid;
-		crg::FramePass & m_clearStatics;
-		crg::FramePass & m_staticsVoxelizePassDesc;
 		VoxelizePass * m_staticsVoxelizePass{};
-		crg::FramePass & m_mergeStaticsDesc;
-		crg::FramePass & m_dynamicsVoxelizePassDesc;
 		VoxelizePass * m_dynamicsVoxelizePass{};
-		crg::FramePass & m_voxelToTextureDesc;
 		VoxelBufferToTexture * m_voxelToTexture{};
-		crg::FramePass & m_voxelMipGen;
-		crg::FramePass & m_voxelSecondaryBounceDesc;
 		VoxelSecondaryBounce * m_voxelSecondaryBounce{};
-		crg::FramePass & m_voxelSecondaryMipGen;
 		crg::RunnableGraphPtr m_runnable;
 	};
 }

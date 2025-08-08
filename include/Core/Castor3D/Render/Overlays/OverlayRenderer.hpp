@@ -9,6 +9,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
+#include "Castor3D/Shader/Ubos/RenderUbo.hpp"
 
 #include <CastorUtils/Graphics/Size.hpp>
 
@@ -178,6 +179,8 @@ namespace c3d
 
 			ashes::DescriptorSetLayoutPtr baseDescriptorLayout;
 
+			RenderUbo renderUbo;
+			RenderUbo const & parentRenderUbo;
 			CameraUbo cameraUbo;
 			RawUniquePtr< PanelVertexBufferPool > panelVertexBuffer;
 			RawUniquePtr< BorderPanelVertexBufferPool > borderVertexBuffer;
@@ -211,14 +214,15 @@ namespace c3d
 			void doRegisterComputeBufferCommands( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
 				, OverlayRenderer::ComputePipeline const & pipeline
-				, ashes::BufferBase const & overlaysBuffer
-				, ashes::BufferBase const & vertexBuffer )const;
+				, BufferBase const & overlaysBuffer
+				, BufferBase const & vertexBuffer )const;
 			void doRegisterComputeBufferCommands( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
 				, OverlayRenderer::TextComputePipeline const & pipeline
 				, OverlayRenderer::TextComputePipelineDescriptor const & set )const;
 
 		private:
+			RenderDevice const & m_device;
 			OverlaysCommonData & m_commonData;
 		};
 
@@ -236,14 +240,11 @@ namespace c3d
 				, OverlaysCommonData & commonData
 				, bool isHdr );
 
-			OverlayDrawNode & getPanelNode( RenderDevice const & device
-				, VkRenderPass renderPass
+			OverlayDrawNode & getPanelNode( VkRenderPass renderPass
 				, Pass const & pass );
-			OverlayDrawNode & getBorderNode( RenderDevice const & device
-				, VkRenderPass renderPass
+			OverlayDrawNode & getBorderNode( VkRenderPass renderPass
 				, Pass const & pass );
-			OverlayDrawNode & getTextNode( RenderDevice const & device
-				, VkRenderPass renderPass
+			OverlayDrawNode & getTextNode( VkRenderPass renderPass
 				, Pass const & pass
 				, bool sdfFont );
 			ashes::DescriptorSet const & createTextDescriptorSet( FontTexture & fontTexture );
@@ -255,26 +256,24 @@ namespace c3d
 			void endPrepare();
 
 		private:
-			OverlayDrawPipeline & doGetPipeline( RenderDevice const & device
-				, VkRenderPass renderPass
+			OverlayDrawPipeline & doGetPipeline( VkRenderPass renderPass
 				, Pass const & pass
 				, HashMap< size_t, OverlayDrawPipeline > & pipelines
 				, bool borderOverlay
 				, bool textOverlay
 				, bool sdfFont );
-			OverlayDrawPipeline doCreatePipeline( RenderDevice const & device
-				, VkRenderPass renderPass
+			OverlayDrawPipeline doCreatePipeline( VkRenderPass renderPass
 				, ashes::PipelineShaderStageCreateInfoArray program
 				, TextureCombine const & texturesFlags
 				, bool borderOverlay
 				, bool textOverlay
 				, bool sdfFont );
-			ashes::PipelineShaderStageCreateInfoArray doCreateOverlayProgram( RenderDevice const & device
-				, TextureCombine const & texturesFlags
+			ashes::PipelineShaderStageCreateInfoArray doCreateOverlayProgram( TextureCombine const & texturesFlags
 				, bool textOverlay
 				, bool sdfFont )const;
 
 		private:
+			RenderDevice const & m_device;
 			HashMap< size_t, OverlayDrawNode > m_mapPanelNodes;
 			HashMap< size_t, OverlayDrawNode > m_mapBorderNodes;
 			HashMap< size_t, OverlayDrawNode > m_mapTextNodes;
@@ -290,8 +289,7 @@ namespace c3d
 			, VkFramebuffer framebuffer
 			, crg::Fence & fence );
 		void doEndPrepare();
-		Pair< OverlayDrawNode *, OverlayPipelineData * > doGetDrawNodeData( RenderDevice const & device
-			, VkRenderPass renderPass
+		Pair< OverlayDrawNode *, OverlayPipelineData * > doGetDrawNodeData( VkRenderPass renderPass
 			, Overlay const & overlay
 			, Pass const & pass
 			, bool secondary );

@@ -14,20 +14,15 @@ namespace PbrBloom
 	{
 	public:
 		CombinePass( crg::FramePassGroup & graph
-			, crg::FramePass const & previousPass
 			, c3d::RenderDevice const & device
-			, crg::ImageViewIdArray const & lhs
-			, crg::ImageId const & rhs
-			, crg::ImageViewIdArray const & result
+			, c3d::Texture const & blurredView
+			, c3d::Texture const & sceneView
+			, c3d::Texture & resultView
+			, c3d::Extent2D const & size
 			, c3d::UniformBufferOffsetT< c3d::Point2f > const & ubo
 			, bool const * enabled
 			, uint32_t const * passIndex );
 		void accept( c3d::ConfigurationVisitorBase & visitor );
-
-		crg::FramePass const & getPass()const
-		{
-			return m_pass;
-		}
 
 	public:
 		static c3d::MbString const CombineMapPasses;
@@ -36,7 +31,6 @@ namespace PbrBloom
 	private:
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::FramePass & m_pass;
 	};
 }
 

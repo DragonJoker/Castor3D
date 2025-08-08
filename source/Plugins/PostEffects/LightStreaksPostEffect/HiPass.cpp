@@ -35,7 +35,7 @@ namespace light_streaks
 		{
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", 0u, 0u );
+			auto c3d_mapColor = writer.declCombinedImg< Img2DRgba >( "c3d_mapColor", 0u, 0u );
 
 			writer.implementEntryPointT< c3ds::PosUv2FT, c3ds::Uv2FT >( [&]( sdw::VertexInT< c3ds::PosUv2FT > in
 				, sdw::VertexOutT< c3ds::Uv2FT > out )
@@ -69,17 +69,15 @@ namespace light_streaks
 	//*********************************************************************************************
 
 	HiPass::HiPass( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
 		, c3d::RenderDevice const & device
-		, crg::ImageViewIdArray const & sceneView
-		, crg::ImageViewIdArray const & resultViews
+		, c3d::Texture const & sceneView
+		, c3d::Texture & result
 		, c3d::Extent2D size
 		, bool const * enabled
 		, uint32_t const * passIndex )
 		: m_shader{ cuT( "LightStreaksHiPass" ), hipass::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
-		auto previous = &previousPass;
 		auto & hiPass = graph.createPass( "HDR"
 			, [this, &device, size, enabled, passIndex]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -99,41 +97,29 @@ namespace light_streaks
 					, result->getTimer() );
 				return result;
 			} );
-		crg::SamplerDesc linearSampler{ c3d::FilterMode::eLinear
-			, c3d::FilterMode::eLinear
-			, c3d::MipmapMode::eNearest
-			, c3d::WrapMode::eClampToEdge
-			, c3d::WrapMode::eClampToEdge
-			, c3d::WrapMode::eClampToEdge };
-		hiPass.addDependency( *previous );
-		hiPass.addSampledView( sceneView
-			, 0u
-			, linearSampler );
-		hiPass.addOutputColourView( resultViews[0] );
-
-		for ( uint32_t i = 1u; i < resultViews.size(); ++i )
-		{
-			auto & pass = graph.createPass( "Copy" + c3d::string::toMbString( i )
-				, [&device, size, enabled]( crg::FramePass const & framePass
-					, crg::GraphContext & context
-					, crg::RunnableGraph & graph )
-				{
-					auto result = c3d::makeRawUnique< crg::ImageCopy >( framePass
-						, context
-						, graph
-						, c3d::Extent3D{ size.width, size.height, 1u }
-						, crg::ru::Config{}
-						, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-						, crg::RunnablePass::IsEnabledCallback( [enabled](){ return ( enabled ? *enabled : true ); } ) );
-					device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
-						, result->getTimer() );
-					return result;
-				} );
-			pass.addDependency( hiPass );
-			pass.addTransferInputView( resultViews[0u] );
-			pass.addTransferOutputView( resultViews[i] );
-			m_lastPasses.push_back( &pass );
-		}
+		hiPass.addInputSampled( *sceneView.getSampledLastAttach(), 0u
+			, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear, c3d::MipmapMode::eNearest } );
+		result.setLastAttach( 0u, hiPass.addOutputColourTarget( result.getTargetViewId( 0 ) ) );
+		
+		auto & pass = graph.createPass( "Copy"
+			, [&device, size, enabled]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & graph )
+			{
+				auto result = c3d::makeRawUnique< crg::ImageCopy >( framePass
+					, context
+					, graph
+					, c3d::Extent3D{ size.width, size.height, 1u }
+					, crg::ru::Config{}
+					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
+					, crg::RunnablePass::IsEnabledCallback( [enabled](){ return ( enabled ? *enabled : true ); } ) );
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+					, result->getTimer() );
+				return result;
+			} );
+		pass.addInputTransfer( *result.getLastAttach( 0u ) );
+		for ( uint32_t i = 1u; i < result.size(); ++i )
+			result.setLastAttach( i, pass.addOutputTransferImage( result.getTargetViewId( i ) ) );
 	}
 
 	void HiPass::accept( c3d::ConfigurationVisitorBase & visitor )

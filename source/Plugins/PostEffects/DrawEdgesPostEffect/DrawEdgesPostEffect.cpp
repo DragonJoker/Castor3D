@@ -234,19 +234,16 @@ namespace draw_edges
 
 	bool PostEffect::doInitialise( c3d::RenderDevice const & device
 		, c3d::Texture const & source
-		, c3d::Texture const & target
-		, crg::FramePass const & previousPass )
+		, c3d::Texture & target )
 	{
 		auto & engine = *device.renderSystem.getEngine();
 		auto & technique = m_renderTarget.getTechnique();
 		auto & passBuffer = engine.getMaterialCache().getPassBuffer();
-		auto & depthObj = technique.getDepthObj().sampledViewId;
-		auto & nmlOcc = technique.getNormal().sampledViewId;
+		auto & depthObj = technique.getDepthObj();
+		auto & nmlOcc = technique.getNormal();
 		auto & depthRange = technique.getDepthRange();
-		auto previous = &previousPass;
 
 		m_depthNormal = c3d::makeRawUnique< DepthNormalEdgeDetection >( m_graph
-			, crg::FramePassArray{ previous, &m_renderTarget.getTechnique().getDepthRangePass() }
 			, m_renderTarget
 			, device
 			, passBuffer
@@ -255,13 +252,11 @@ namespace draw_edges
 			, depthRange
 			, &isEnabled() );
 		m_objectID = c3d::makeRawUnique< ObjectIDEdgeDetection >( m_graph
-			, *previous
 			, m_renderTarget
 			, device
 			, passBuffer
 			, depthObj
 			, &isEnabled() );
-		previous = &m_objectID->getPass();
 
 		auto extent = c3d::makeExtent2D( target.getExtent() );
 		auto & pass = m_graph.createPass( "Combine"
@@ -284,25 +279,19 @@ namespace draw_edges
 					, result->getTimer() );
 				return result;
 			} );
-		auto & modelBuffer = m_renderTarget.getScene()->getModelBuffer().getBuffer();
-		pass.addDependency( m_depthNormal->getPass() );
-		pass.addDependency( m_objectID->getPass() );
+		auto & modelBuffer = m_renderTarget.getScene()->getModelBuffer();
 		passBuffer.createPassBinding( pass, px::eMaterials );
-		pass.addInputStorageBuffer( { modelBuffer, "Models" }
-			, uint32_t( px::eModels )
-			, 0u
-			, uint32_t( modelBuffer.getSize() ) );
-		pass.addSampledView( depthObj, px::eDepthObj );
-		pass.addSampledView( crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }, px::eSource );
-		pass.addSampledView( technique.getScattering().sampledViewId, px::eScattering );
-		pass.addSampledView( m_depthNormal->getResult(), px::eEdgeDN );
-		pass.addSampledView( m_objectID->getResult(), px::eEdgeO );
+		pass.addInputStorage( *modelBuffer.getLastAttach(), px::eModels );
+		pass.addInputSampled( *depthObj.getSampledLastAttach(), px::eDepthObj );
+		pass.addInputSampled( *source.getSampledLastAttach(), px::eSource );
+		pass.addInputSampled( *technique.getScattering().getSampledLastAttach(), px::eScattering );
+		pass.addInputSampled( *m_depthNormal->getResult().getSampledLastAttach(), px::eEdgeDN );
+		pass.addInputSampled( *m_objectID->getResult().getSampledLastAttach(), px::eEdgeO );
 		m_ubo.createPassBinding( pass, px::eDrawEdges );
 		auto index = uint32_t( px::eSpecifics );
 		device.renderSystem.getEngine()->createSpecificsBuffersPassBindings( pass, index );
-		pass.addOutputColourView( crg::ImageViewIdArray{ target.targetViewId, source.targetViewId } );
+		target.setLastAttach( pass.addOutputColourTarget( crg::ImageViewIdArray{ target.getTargetViewId(), source.getTargetViewId() } ) );
 
-		m_pass = &pass;
 		return true;
 	}
 

@@ -14,20 +14,14 @@ namespace light_streaks
 	{
 	public:
 		CombinePass( crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
 			, c3d::RenderDevice const & device
-			, crg::ImageViewIdArray const & sceneView
-			, crg::ImageViewIdArray const & kawaseViews
-			, crg::ImageViewIdArray const & resultView
+			, c3d::Texture const & kawaseViews
+			, c3d::Texture const & sceneView
+			, c3d::Texture & resultView
 			, c3d::Extent2D const & size
 			, bool const * enabled
 			, uint32_t const * passIndex );
 		void accept( c3d::ConfigurationVisitorBase & visitor );
-
-		crg::FramePass const & getPass()const
-		{
-			return m_pass;
-		}
 
 	public:
 		static c3d::MbString const CombineMapScene;
@@ -36,7 +30,6 @@ namespace light_streaks
 	private:
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::FramePass & m_pass;
 	};
 }
 

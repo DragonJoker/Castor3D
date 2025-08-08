@@ -8,6 +8,8 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Pool/BuddyAllocator.hpp>
 
+#include <RenderGraph/BufferViewData.hpp>
+
 #include <cstddef>
 
 namespace c3d
@@ -270,10 +272,10 @@ namespace c3d
 	*\brief
 	*	Un intervalle mémoire, en octets.
 	*/
-	struct MemChunk
+	struct DataChunk
 	{
-		MemChunk() = default;
-		MemChunk( VkDeviceSize offset
+		DataChunk() = default;
+		DataChunk( VkDeviceSize offset
 			, VkDeviceSize size
 			, VkDeviceSize askedSize )
 			: offset{ offset }
@@ -285,13 +287,43 @@ namespace c3d
 		VkDeviceSize offset;
 		VkDeviceSize size;
 		VkDeviceSize askedSize;
-	};
 
-	inline bool operator<( MemChunk const & lhs
-		, MemChunk const & rhs )noexcept
+	private:
+		friend bool operator<( DataChunk const & lhs
+			, DataChunk const & rhs )noexcept
+		{
+			return lhs.offset < rhs.offset;
+		}
+	};
+	/**
+	*\~english
+	*\brief
+	*	A memory range, in bytes.
+	*\~french
+	*\brief
+	*	Un intervalle mémoire, en octets.
+	*/
+	struct MemChunk : DataChunk
 	{
-		return lhs.offset < rhs.offset;
-	}
+		MemChunk() = default;
+		MemChunk( VkDeviceSize offset
+			, VkDeviceSize size
+			, VkDeviceSize askedSize
+			, crg::BufferViewId bufferViewId )
+			: DataChunk{ offset, size, askedSize }
+			, bufferViewId{ bufferViewId }
+		{
+		}
+
+		crg::BufferViewId bufferViewId;
+
+	private:
+		friend bool operator<( MemChunk const & lhs
+			, MemChunk const & rhs )noexcept
+		{
+			return lhs.offset < rhs.offset;
+		}
+	};
 
 	C3D_API void copyBuffer( ashes::CommandBuffer const & commandBuffer
 		, ashes::BufferBase const & src

@@ -12,6 +12,8 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Prepass/PrepassResult.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 
+#include "Castor3D/Buffer/GpuBuffer.hpp"
+
 #include <RenderGraph/FramePassGroup.hpp>
 
 namespace c3d
@@ -25,20 +27,17 @@ namespace c3d
 		 *\brief		Constructor
 		 *\param[in]	parent			The parent technique.
 		 *\param[in]	device			The GPU device.
-		 *\param[in]	previousPasses	The passes this pass depends on.
 		 *\param[in]	progress		The optional progress bar.
 		 *\param[in]	visbuffer		\p true to enable visibility buffer.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	parent			La technique parente.
 		 *\param[in]	device			Le device GPU.
-		 *\param[in]	previousPasses	Les passes dont celle-ci dépend.
 		 *\param[in]	progress		La barre de progression optionnelle.
 		 *\param[in]	visbuffer		\p true pour activer le buffer de visibilité.
 		 */
 		C3D_API PrepassRendering( RenderTechnique & parent
 			, RenderDevice const & device
-			, crg::FramePassArray const & previousPasses
 			, ProgressBar * progress
 			, bool visbuffer );
 		/**
@@ -98,25 +97,22 @@ namespace c3d
 		*/
 		/**@{*/
 		C3D_API Engine * getEngine()const noexcept;
-		C3D_API crg::FramePass const & getLastPass()const noexcept;
-		C3D_API crg::FramePass const & getDepthRangePass()const noexcept;
 		C3D_API bool hasVisibility()const noexcept;
 
 		Texture const & getDepthObj()const noexcept
 		{
-			return m_result[PpTexture::eDepthObj];
+			return m_result.getTexture( PpTexture::eDepthObj );
 		}
 
 		Texture const & getVisibility()const noexcept
 		{
 			CU_Require( hasVisibility() );
-			return m_result[PpTexture::eVisibility];
+			return m_result.getTexture( PpTexture::eVisibility );
 		}
 
-		ashes::Buffer< int32_t > const & getDepthRange()const noexcept
+		BufferBase const & getDepthRange()const noexcept
 		{
-			CU_Require( m_depthRange );
-			return *m_depthRange;
+			return m_depthRangeBuffer;
 		}
 
 		bool needsDepthRange()const noexcept
@@ -137,22 +133,17 @@ namespace c3d
 		/**@}*/
 
 	private:
-		crg::FramePass & doCreateVisibilityPass( ProgressBar * progress
-			, crg::FramePassArray const & previousPasses );
-		crg::FramePass & doCreateDepthPass( ProgressBar * progress
-			, crg::FramePassArray const & previousPasses );
-		crg::FramePass & doCreateComputeDepthRange( ProgressBar * progress );
+		void doCreateVisibilityPass( ProgressBar * progress );
+		void doCreateDepthPass( ProgressBar * progress );
+		void doCreateComputeDepthRange( ProgressBar * progress );
 
 	private:
 		RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;
 		PrepassResult m_result;
-		crg::FramePass * m_visibilityPassDesc{};
 		VisibilityPass * m_visibilityPass{};
-		crg::FramePass * m_depthPassDesc{};
 		DepthPass * m_depthPass{};
-		ashes::BufferPtr< int32_t > m_depthRange;
-		crg::FramePass * m_computeDepthRangeDesc{};
+		Buffer m_depthRangeBuffer;
 		bool m_needsDepthRange{};
 	};
 }

@@ -28,7 +28,6 @@ namespace c3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	graph			The runnable graph.
-		 *\param[in]	previousPasses	The passes this one depends on.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	lightType		The light source type.
 		 *\param[in]	shadowBuffer	The buffer containing the shadowing data.
@@ -37,11 +36,11 @@ namespace c3d
 		 *\param[in]	depthObj		The depth and objects ID image.
 		 *\param[in]	nmlOcc			The normals and occlusion image.
 		 *\param[in]	smResult		The shadow map.
-		 *\param[in]	result			The result.
+		 *\param[in]	gi				The resulting GI map.
+		 *\param[in]	nml				The resulting normals map.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	graph			Le runnable graph.
-		 *\param[in]	previousPasses	Les passes dont celle-ci dépend.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	lightType		Le type de source lumineuse.
 		 *\param[in]	shadowBuffer	Le buffer contenant les données d'ombrage.
@@ -50,19 +49,20 @@ namespace c3d
 		 *\param[in]	depthObj		L'image contenant les profondeurs et ID d'objets.
 		 *\param[in]	nmlOcc			L'image contenant les normales et occlusions.
 		 *\param[in]	smResult		La shadow map.
-		 *\param[in]	result			Le résultat.
+		 *\param[in]	gi				La texture de GI résultat.
+		 *\param[in]	nml				La texture de normales résultat.
 		 */
 		C3D_API RsmGIPass( crg::FrameGraph & graph
-			, crg::FramePassArray const & previousPasses
 			, RenderDevice const & device
 			, LightType lightType
 			, ShadowBuffer const & shadowBuffer
 			, Extent3D const & size
 			, CameraUbo const & cameraUbo
-			, crg::ImageViewId const & depthObj
-			, crg::ImageViewId const & nmlOcc
+			, Texture const & depthObj
+			, Texture const & nmlOcc
 			, ShadowMapResult const & smResult
-			, TextureArray const & result );
+			, Texture & gi
+			, Texture & nml );
 		/**
 		 *\copydoc		RenderTechniquePass::accept
 		 */
@@ -79,11 +79,6 @@ namespace c3d
 			return m_rsmSamplesSsbo;
 		}
 
-		crg::FramePass const & getPass()const
-		{
-			return *m_pass;
-		}
-
 	protected:
 		C3D_API void doSubInitialise();
 		C3D_API void doSubRecordInto( crg::RecordContext & context
@@ -96,7 +91,6 @@ namespace c3d
 		ShaderModule m_vertexShader;
 		ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::FramePass const * m_pass;
 	};
 }
 

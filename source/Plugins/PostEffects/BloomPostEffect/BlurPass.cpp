@@ -125,7 +125,7 @@ namespace Bloom
 
 			for ( auto i = 0u; i < blurPassesCount; ++i )
 			{
-				auto ubo = device.uboPool->getBuffer< c3d::GaussianBlur::Configuration >( 0u );
+				auto ubo = device.uboPool->getBuffer< c3d::GaussianBlur::Configuration >( c3d::MemoryPropertyFlags::eNone );
 				auto & data = ubo.getData();
 				data.textureSize = c3d::Point2f
 				{
@@ -139,142 +139,56 @@ namespace Bloom
 
 			return result;
 		}
-
-		static c3d::Vector< BlurPass::Subpass > doCreateSubpasses( crg::FramePassGroup & graph
-			, crg::FramePassArray & previousPasses
-			, c3d::RenderDevice const & device
-			, crg::ImageViewIdArray const & srcImages
-			, crg::ImageViewIdArray const & dstImages
-			, c3d::Extent2D dimensions
-			, ashes::PipelineShaderStageCreateInfoArray const & stages
-			, UboOffsetArray const & blurUbo
-			, uint32_t blurPassesCount
-			, bool isVertical
-			, bool const * enabled )
-		{
-			c3d::Vector< BlurPass::Subpass > result;
-			assert( srcImages.size() == dstImages.size()
-				&& srcImages.size() == blurPassesCount );
-
-			for ( auto i = 0u; i < blurPassesCount; ++i )
-			{
-				result.emplace_back( graph
-					, *previousPasses[i]
-					, device
-					, srcImages[i]
-					, dstImages[i]
-					, dimensions
-					, stages
-					, blurUbo[i]
-					, i
-					, isVertical
-					, enabled );
-				previousPasses[i] = &result.back().pass;
-			}
-
-			return result;
-		}
-	}
-
-	//*********************************************************************************************
-
-	BlurPass::Subpass::Subpass( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
-		, c3d::RenderDevice const & device
-		, crg::ImageViewId const & srcView
-		, crg::ImageViewId const & dstView
-		, c3d::Extent2D dimensions
-		, ashes::PipelineShaderStageCreateInfoArray const & stages
-		, c3d::UniformBufferOffsetT< c3d::GaussianBlur::Configuration > const & blurUbo
-		, uint32_t index
-		, bool isVertical
-		, bool const * enabled )
-		: pass{ graph.createPass( "Blur" + c3d::string::toMbString( index ) + ( isVertical ? "Y" : "X" )
-			, [&device, &stages, dimensions, index, enabled]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
-			{
-				auto result = crg::RenderQuadBuilder{}
-					.renderPosition( {} )
-					.renderSize( { dimensions.width >> ( index + 1 )
-						, dimensions.height >> ( index + 1 ) } )
-					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) )
-					.enabled( enabled )
-					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
-					, result->getTimer() );
-				return result;
-			} ) }
-	{
-		pass.addDependency( previousPass );
-		blurUbo.createPassBinding( pass, c3d::MbString{ "BlurCfg" } + ( isVertical ? "Y" : "X" ), blur::GaussCfgUboIdx );
-		pass.addSampledView( srcView
-			, blur::DifImgIdx
-			, crg::SamplerDesc{ c3d::FilterMode::eNearest
-				, c3d::FilterMode::eNearest
-				, c3d::MipmapMode::eNearest
-				, c3d::WrapMode::eClampToEdge
-				, c3d::WrapMode::eClampToEdge
-				, c3d::WrapMode::eClampToEdge
-				, 0.0f
-				, float( index )
-				, float( index + 1u ) } );
-		pass.addOutputColourView( dstView );
 	}
 
 	//*********************************************************************************************
 
 	BlurPass::BlurPass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
 		, c3d::RenderDevice const & device
-		, crg::ImageViewIdArray const & srcImages
-		, crg::ImageViewIdArray const & dstImages
+		, c3d::Texture const & srcImage
+		, c3d::Texture & dstImage
 		, c3d::Extent2D dimensions
 		, uint32_t blurKernelSize
 		, uint32_t blurPassesCount
 		, bool isVertical
 		, bool const * enabled )
 		: m_device{ device }
-		, m_blurPassesCount{ blurPassesCount }
-		, m_blurUbo{ blur::doCreateUbo( m_device, dimensions, blurKernelSize, m_blurPassesCount, isVertical ) }
+		, m_blurUbo{ blur::doCreateUbo( m_device, dimensions, blurKernelSize, blurPassesCount, isVertical ) }
 		, m_shader{ cuT( "BloomBlurPass" ), blur::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
-		, m_passes{ previousPasses }
-		, m_subpasses{ blur::doCreateSubpasses( graph
-			, m_passes
-			, m_device
-			, srcImages
-			, dstImages
-			, dimensions
-			, m_stages
-			, m_blurUbo
-			, m_blurPassesCount
-			, isVertical
-			, enabled ) }
+		, m_result{ dstImage }
 	{
-	}
+		assert( srcImage.getMipLevels() == m_result.getMipLevels()
+			&& srcImage.getMipLevels() == blurPassesCount );
+		crg::AttachmentArray attachs;
 
-	BlurPass::BlurPass( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
-		, c3d::RenderDevice const & device
-		, crg::ImageViewIdArray const & srcImages
-		, crg::ImageViewIdArray const & dstImages
-		, c3d::Extent2D dimensions
-		, uint32_t blurKernelSize
-		, uint32_t blurPassesCount
-		, bool isVertical
-		, bool const * enabled )
-		: BlurPass{ graph
-			, { blurPassesCount, &previousPass }
-			, device
-			, srcImages
-			, dstImages
-			, dimensions
-			, blurKernelSize
-			, blurPassesCount
-			, isVertical
-			, enabled }
-	{
+		for ( auto index = 0u; index < blurPassesCount; ++index )
+		{
+			auto & pass = graph.createPass( "Blur" + c3d::string::toMbString( index ) + ( isVertical ? "Y" : "X" )
+				, [this, &device, dimensions, index, enabled]( crg::FramePass const & framePass
+					, crg::GraphContext & context
+					, crg::RunnableGraph & graph )
+				{
+						auto result = crg::RenderQuadBuilder{}
+							.renderPosition( {} )
+							.renderSize( { dimensions.width >> ( index + 1 )
+								, dimensions.height >> ( index + 1 ) } )
+							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
+							.enabled( enabled )
+							.build( framePass, context, graph );
+						device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+							, result->getTimer() );
+						return result;
+				} );
+			m_blurUbo[index].createPassBinding( pass, blur::GaussCfgUboIdx );
+			pass.addInputSampled( *srcImage.getSampledLastAttach( 0u, index ), blur::DifImgIdx
+				, crg::SamplerDesc{ c3d::FilterMode::eNearest, c3d::FilterMode::eNearest, c3d::MipmapMode::eNearest
+					, c3d::WrapMode::eClampToEdge, c3d::WrapMode::eClampToEdge, c3d::WrapMode::eClampToEdge
+					, 0.0f, float( index ), float( index + 1u ) } );
+			attachs.push_back( m_result.setLastAttach( 0u, index, pass.addOutputColourTarget( m_result.getTargetViewId( 0u, index ) ) ) );
+		}
+
+		m_result.setLastAttach( graph.mergeAttachments( attachs ) );
 	}
 
 	BlurPass::~BlurPass()noexcept

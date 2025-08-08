@@ -370,8 +370,8 @@ namespace c3d
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, String const & typeName
-			, crg::ImageViewIdArray targetImage
-			, crg::ImageViewIdArray targetDepth
+			, Texture * targetImage
+			, Texture * targetDepth
 			, RenderNodesPassDesc const & desc );
 
 	public:
@@ -637,8 +637,8 @@ namespace c3d
 		C3D_API uint32_t getMaxPipelineId()const;
 		C3D_API PipelineBufferArray const & getPassPipelineNodes()const;
 		C3D_API uint32_t getPipelineNodesIndex( PipelineBaseHash const & hash
-			, ashes::BufferBase const & posBuffer
-			, ashes::BufferBase const * idxBuffer )const;
+			, BufferBase const & posBuffer
+			, BufferBase const * idxBuffer )const;
 		C3D_API uint32_t getDrawCallsCount()const;
 		C3D_API RenderCounts const & getVisibleCounts()const;
 
@@ -759,7 +759,7 @@ namespace c3d
 			, uint32_t & index )const;
 		C3D_API void doAddBackgroundDescriptor( Scene const & scene
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, crg::ImageViewIdArray const & targetImage
+			, Texture * targetImage
 			, uint32_t & index )const;
 		C3D_API void doAddClusteredLightingDescriptor( RenderTarget const & target
 			, ashes::WriteDescriptorSetArray & descriptorWrites

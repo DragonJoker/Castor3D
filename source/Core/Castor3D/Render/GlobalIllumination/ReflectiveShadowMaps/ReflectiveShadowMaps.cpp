@@ -57,12 +57,12 @@ namespace c3d
 			{
 				auto clearValue = crg::convert( transparentBlackClearColor );
 
-				for ( auto & attach : m_pass.images )
+				for ( auto & [binding, attach] : m_pass.outputs )
 				{
-					auto view = attach.view();
+					auto view = attach->view();
 					auto image = m_graph.createImage( view.data->image );
 					auto subresourceRange = convert( view.data->info.subresourceRange );
-					assert( attach.isTransferOutputView() );
+					assert( attach->isTransferOutputView() );
 					m_context.vkCmdClearColorImage( commandBuffer
 						, image
 						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
@@ -106,20 +106,18 @@ namespace c3d
 	//*********************************************************************************************
 
 	ReflectiveShadowMaps::LightRsm::LightRsm( crg::FrameGraph & graph
-		, crg::FramePassArray previousPasses
 		, RenderDevice const & device
 		, LightCache const & plightCache
 		, LightType lightType
 		, ShadowBuffer const & shadowBuffer
 		, CameraUbo const & cameraUbo
-		, crg::ImageViewId const & depthObj
-		, crg::ImageViewId const & nmlOcc
+		, Texture const & depthObj
+		, Texture const & nmlOcc
 		, ShadowMapResult const & smResult
-		, TextureArray const & intermediate
-		, Texture const & result )
+		, TextureArray & intermediate
+		, Texture & result )
 		: lightCache{ plightCache }
 		, giPass{ makeUnique< RsmGIPass >( graph
-			, std::move( previousPasses )
 			, device
 			, lightType
 			, shadowBuffer
@@ -128,9 +126,9 @@ namespace c3d
 			, depthObj
 			, nmlOcc
 			, smResult
-			, intermediate ) }
+			, intermediate[0]
+			, intermediate[1] ) }
 		, interpolatePass{ makeUnique< RsmInterpolatePass >( graph
-			, giPass->getPass()
 			, device
 			, lightType
 			, shadowBuffer
@@ -144,7 +142,6 @@ namespace c3d
 			, intermediate[0]
 			, intermediate[1]
 			, result ) }
-		, lastPass{ &interpolatePass->getPass() }
 	{
 	}
 
@@ -165,17 +162,17 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	ReflectiveShadowMaps::ReflectiveShadowMaps( crg::ResourceHandler & handler
+	ReflectiveShadowMaps::ReflectiveShadowMaps( crg::ResourcesCache & resources
 		, Scene const & scene
 		, RenderDevice const & device
 		, CameraUbo const & cameraUbo
 		, ShadowBuffer const & shadowBuffer
-		, crg::ImageViewId const & depthObj
-		, crg::ImageViewId const & nmlOcc
+		, Texture const & depthObj
+		, Texture const & nmlOcc
 		, ShadowMapResult const & directionalSmResult
 		, ShadowMapResult const & pointSmResult
 		, ShadowMapResult const & spotSmResult
-		, Texture const & result )
+		, Texture & result )
 		: Named{ "RSM" }
 		, m_scene{ scene }
 		, m_device{ device }
@@ -186,19 +183,37 @@ namespace c3d
 		, m_directionalSmResult{ directionalSmResult }
 		, m_pointSmResult{ pointSmResult }
 		, m_spotSmResult{ spotSmResult }
-		, m_graph{ handler, getName() }
+		, m_graph{ resources.getHandler(), toUtf8( getName() ) }
 		, m_intermediate{ rsm::createImages( device
-			, *result.resources
+			, resources
 			, "RSMIntermediate"
 			, result.getExtent() ) }
 		, m_result{ result }
-		, m_clearPass{ doCreateClearPass() }
-		, m_lastPass{ &m_clearPass }
 	{
+		doCreateClearPass();
 		for ( auto & value : m_intermediate )
 		{
 			value.create();
 		}
+
+		m_graph.addInput( m_directionalSmResult.getTargetViewId( SmTexture::eNormal )
+			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
+		m_graph.addInput( m_directionalSmResult.getTargetViewId( SmTexture::ePosition )
+			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
+		m_graph.addInput( m_directionalSmResult.getTargetViewId( SmTexture::eFlux )
+			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
+		m_graph.addInput( m_pointSmResult.getTargetViewId( SmTexture::eNormal )
+			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
+		m_graph.addInput( m_pointSmResult.getTargetViewId( SmTexture::ePosition )
+			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
+		m_graph.addInput( m_pointSmResult.getTargetViewId( SmTexture::eFlux )
+			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
+		m_graph.addInput( m_spotSmResult.getTargetViewId( SmTexture::eNormal )
+			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
+		m_graph.addInput( m_spotSmResult.getTargetViewId( SmTexture::ePosition )
+			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
+		m_graph.addInput( m_spotSmResult.getTargetViewId( SmTexture::eFlux )
+			, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 	}
 
 	ReflectiveShadowMaps::~ReflectiveShadowMaps()noexcept
@@ -215,11 +230,15 @@ namespace c3d
 			&& m_scene.needsGlobalIllumination( GlobalIlluminationType::eRsm ) )
 		{
 			m_runnable = m_graph.compile( m_device.makeContext() );
-			m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreRender
+			m_scene.getEngine()->registerTimer( makeString( m_runnable->getName() ) + cuT( "/Graph" )
+				, m_runnable->getTimer() );
+			printGraph( *m_runnable );
+			m_recordEvent = m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreRender
 				, [this]( RenderDevice const &
 					, QueueData const & )
 				{
 					m_runnable->record();
+					m_recordEvent = nullptr;
 				} ) );
 			m_initialised = true;
 		}
@@ -227,46 +246,54 @@ namespace c3d
 
 	void ReflectiveShadowMaps::cleanup()
 	{
+		if ( m_recordEvent )
+			m_recordEvent->skip();
 		m_initialised = false;
 		m_lightRsms.clear();
 	}
 
 	void ReflectiveShadowMaps::registerLight( LightInstance * light )
 	{
-		if ( auto lit = m_lightRsms.find( light );
-			lit == m_lightRsms.end() )
+		if ( auto [it, res] = m_lightRsms.try_emplace( light );
+			res )
 		{
-			auto [it, res] = m_lightRsms.emplace( light
-				, makeRawUnique< LightRsm >( m_graph
-					, crg::FramePassArray{ m_lastPass }
-					, m_device
-					, light->getScene()->getLightCache()
-					, light->getLightType()
-					, m_shadowBuffer
-					, m_cameraUbo
-					, m_depthObj
-					, m_nmlOcc
-					, ( light->getLightType() == LightType::eDirectional
-						? m_directionalSmResult
-						: (light->getLightType() == LightType::ePoint
-							? m_pointSmResult
-							: m_spotSmResult ) )
-					, m_intermediate
-					, m_result ) );
-			m_lastPass = it->second->lastPass;
-			m_graph.addOutput( m_result.wholeViewId
-				, makeLayoutState( ImageLayout::eShaderReadOnly ) );
+			it->second = makeRawUnique< LightRsm >( m_graph
+				, m_device
+				, light->getScene()->getLightCache()
+				, light->getLightType()
+				, m_shadowBuffer
+				, m_cameraUbo
+				, m_depthObj
+				, m_nmlOcc
+				, ( light->getLightType() == LightType::eDirectional
+					? m_directionalSmResult
+					: (light->getLightType() == LightType::ePoint
+						? m_pointSmResult
+						: m_spotSmResult ) )
+				, m_intermediate
+				, m_result );
+			if ( m_lightRsms.size() == 1u )
+				m_graph.addOutput( m_result.getWholeViewId()
+					, makeLayoutState( ImageLayout::eShaderReadOnly ) );
 
 			if ( m_runnable )
 			{
+				m_scene.getEngine()->unregisterTimer( makeString( m_runnable->getName() + "/Graph" )
+					, m_runnable->getTimer() );
 				m_runnable.reset();
 				m_runnable = m_graph.compile( m_device.makeContext() );
-				auto runnable = m_runnable.get();
-				m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreRender
-					, [runnable]( RenderDevice const &
+				m_scene.getEngine()->registerTimer( makeString( m_runnable->getName() ) + cuT( "/Graph" )
+					, m_runnable->getTimer() );
+				printGraph( *m_runnable );
+
+				if ( m_recordEvent )
+					m_recordEvent->skip();
+				m_recordEvent = m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreRender
+					, [this]( RenderDevice const &
 						, QueueData const & )
 					{
-						runnable->record();
+						m_runnable->record();
+						m_recordEvent = nullptr;
 					} ) );
 			}
 		}
@@ -312,11 +339,11 @@ namespace c3d
 
 			visitor.visit( getName() + " GI"
 				, m_intermediate[0]
-				, m_graph.getFinalLayoutState( m_intermediate[0].wholeViewId ).layout
+				, m_graph.getFinalLayoutState( m_intermediate[0].getWholeViewId() ).layout
 				, TextureFactors{}.invert( true ) );
 			visitor.visit( getName() + " Normal"
 				, m_intermediate[1]
-				, m_graph.getFinalLayoutState( m_intermediate[1].wholeViewId ).layout
+				, m_graph.getFinalLayoutState( m_intermediate[1].getWholeViewId() ).layout
 				, TextureFactors{}.invert( true ) );
 			visitor.visit( getName() + " Result"
 				, m_result
@@ -336,7 +363,7 @@ namespace c3d
 					, context
 					, graph );
 			} );
-		result.addTransferOutputView( m_result.wholeViewId );
+		m_result.setLastAttach( result.addOutputTransferImage( m_result.getWholeViewId() ) );
 		return result;
 	}
 

@@ -125,18 +125,17 @@ namespace dof
 
 	//*********************************************************************************************
 
-	crg::FramePass const & createCombinePass( c3d::RenderDevice const & device
+	void createCombinePass( c3d::RenderDevice const & device
 		, crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
 		, DepthOfFieldUbo const & configurationUbo
-		, crg::ImageViewIdArray const & colour
 		, c3d::Texture const & nearBlur
 		, c3d::Texture const & farBlur
-		, crg::ImageViewIdArray const & target
+		, c3d::Texture const & source
+		, c3d::Texture & target
 		, bool const * enabled
 		, uint32_t const * passIndex )
 	{
-		auto extent = getExtent( target.front() );
+		auto extent = target.getExtent();
 		auto & pass = graph.createPass( "Combine"
 			, [&device, extent, enabled, passIndex]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -154,15 +153,14 @@ namespace dof
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependencies( previousPasses );
-
-		pass.addSampledView( colour, 0u, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear } );
-		pass.addSampledView( nearBlur.sampledViewId, 1u, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear } );
-		pass.addSampledView( farBlur.sampledViewId, 2u, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear } );
+		pass.addInputSampled( *source.getSampledLastAttach(), 0u
+			, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear } );
+		pass.addInputSampled( *nearBlur.getSampledLastAttach(), 1u
+			, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear } );
+		pass.addInputSampled( *farBlur.getSampledLastAttach(), 2u
+			, crg::SamplerDesc{ c3d::FilterMode::eLinear, c3d::FilterMode::eLinear } );
 		configurationUbo.createPassBinding( pass, 3u );
 
-		pass.addOutputColourView( target );
-
-		return pass;
+		target.setLastAttach( pass.addOutputColourTarget( crg::ImageViewIdArray{ target.getTargetViewId(), source.getTargetViewId() } ) );
 	}
 }

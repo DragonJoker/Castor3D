@@ -87,7 +87,7 @@ namespace light_streaks
 			, uint32_t binding
 			, uint32_t index )const
 		{
-			return m_ubo[index].createPassBinding( pass, "KawaseCfg" + c3d::string::toMbString( index ), binding );
+			return m_ubo[index].createPassBinding( pass, binding );
 		}
 
 	public:

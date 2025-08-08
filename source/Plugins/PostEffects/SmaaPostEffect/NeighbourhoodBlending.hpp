@@ -20,13 +20,12 @@ namespace smaa
 	{
 	public:
 		NeighbourhoodBlending( crg::FramePassGroup & graph
-			, crg::FramePass const & previousPass
 			, c3d::RenderTarget & renderTarget
 			, c3d::RenderDevice const & device
 			, SmaaUbo const & ubo
-			, crg::ImageViewIdArray const & sourceView
-			, crg::ImageViewId const & blendView
-			, crg::ImageViewId const * velocityView
+			, c3d::Texture const & sourceView
+			, c3d::Texture const & blendView
+			, c3d::Texture const * velocityView
 			, SmaaConfig const & config
 			, bool const * enabled
 			, uint32_t const * passIndex );
@@ -34,27 +33,25 @@ namespace smaa
 
 		void accept( c3d::ConfigurationVisitorBase & visitor );
 
-		crg::ImageViewIdArray const & getResult()const
+		crg::Attachment const * getResult()const
 		{
-			return m_imageViews;
+			return m_result;
 		}
 
-		crg::FramePass const & getPass()const
+		crg::ImageViewIdArray const & getViews()const
 		{
-			return m_pass;
+			return m_imageViews;
 		}
 
 	private:
 		c3d::RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;
-		crg::ImageViewId const & m_blendView;
-		crg::ImageViewId const * m_velocityView;
 		c3d::Extent3D m_extent;
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		c3d::TextureArray m_images;
 		crg::ImageViewIdArray m_imageViews;
-		crg::FramePass & m_pass;
+		crg::Attachment const * m_result{};
 	};
 }
 

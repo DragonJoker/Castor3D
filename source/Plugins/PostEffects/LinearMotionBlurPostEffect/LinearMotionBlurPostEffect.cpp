@@ -105,7 +105,7 @@ namespace motion_blur
 			, renderSystem
 			, parameters
 			, 1u }
-		, m_ubo{ renderSystem.getRenderDevice().uboPool->getBuffer< Configuration >( 0u ) }
+		, m_ubo{ renderSystem.getRenderDevice().uboPool->getBuffer< Configuration >( c3d::MemoryPropertyFlags::eNone ) }
 		, m_shader{ cuT( "LinearMotionBlur" ), postfx::getProgram( renderSystem.getRenderDevice() ) }
 		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 	{
@@ -138,11 +138,10 @@ namespace motion_blur
 
 	bool PostEffect::doInitialise( c3d::RenderDevice const & device
 		, c3d::Texture const & source
-		, c3d::Texture const & target
-		, crg::FramePass const & previousPass )
+		, c3d::Texture & target )
 	{
 		auto extent = c3d::makeExtent2D( target.getExtent() );
-		m_pass = &m_graph.createPass( "LinearMotionBlur"
+		auto & pass = m_graph.createPass( "LinearMotionBlur"
 			, [this, &device, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -162,15 +161,10 @@ namespace motion_blur
 					, result->getTimer() );
 				return result;
 			} );
-		m_pass->addDependency( previousPass );
-		m_ubo.createPassBinding( *m_pass
-			, "BlurCfg"
-			, postfx::BlurCfgUboIdx );
-		m_pass->addSampledView( crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
-			, postfx::ColorTexIdx );
-		m_pass->addSampledView( m_renderTarget.getVelocity().sampledViewId
-			, postfx::VelocityTexIdx );
-		m_pass->addOutputColourView( crg::ImageViewIdArray{ target.targetViewId, source.targetViewId } );
+		m_ubo.createPassBinding( pass, postfx::BlurCfgUboIdx );
+		pass.addInputSampled( *source.getSampledLastAttach(), postfx::ColorTexIdx );
+		pass.addInputSampled( *m_renderTarget.getVelocity().getSampledLastAttach(), postfx::VelocityTexIdx );
+		target.setLastAttach( pass.addOutputColourTarget( crg::ImageViewIdArray{ target.getTargetViewId(), source.getTargetViewId() } ) );
 		m_saved = Clock::now();
 		return true;
 	}

@@ -86,7 +86,7 @@ namespace grayscale
 			, renderTarget
 			, renderSystem
 			, params }
-		, m_configUbo{ renderSystem.getRenderDevice().uboPool->getBuffer< c3d::Point3f >( 0u ) }
+		, m_configUbo{ renderSystem.getRenderDevice().uboPool->getBuffer< c3d::Point3f >( c3d::MemoryPropertyFlags::eNone ) }
 		, m_shader{ cuT( "GrayScale" ), postfx::getProgram( *renderTarget.getEngine() ) }
 		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 	{
@@ -119,11 +119,10 @@ namespace grayscale
 
 	bool PostEffect::doInitialise( c3d::RenderDevice const & device
 		, c3d::Texture const & source
-		, c3d::Texture const & target
-		, crg::FramePass const & previousPass )
+		, c3d::Texture & target )
 	{
 		auto extent = c3d::makeExtent2D( target.getExtent() );
-		m_pass = &m_graph.createPass( "GrayScale"
+		auto & pass = m_graph.createPass( "GrayScale"
 			, [this, &device, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -143,13 +142,9 @@ namespace grayscale
 					, result->getTimer() );
 				return result;
 			} );
-		m_pass->addDependency( previousPass );
-		m_configUbo.createPassBinding( *m_pass
-			, "GrayCfg"
-			, postfx::GrayCfgUboIdx );
-		m_pass->addSampledView( crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
-			, postfx::ColorTexIdx );
-		m_pass->addOutputColourView( crg::ImageViewIdArray{ target.targetViewId, source.targetViewId } );
+		m_configUbo.createPassBinding( pass, postfx::GrayCfgUboIdx );
+		pass.addInputSampled( *source.getSampledLastAttach(), postfx::ColorTexIdx );
+		target.setLastAttach( pass.addOutputColourTarget( crg::ImageViewIdArray{ target.getTargetViewId(), source.getTargetViewId() } ) );
 		return true;
 	}
 

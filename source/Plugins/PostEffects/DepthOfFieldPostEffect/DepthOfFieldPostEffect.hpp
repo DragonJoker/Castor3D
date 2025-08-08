@@ -30,20 +30,13 @@ namespace dof
 		 */
 		void setParameters( c3d::Parameters parameters )override;
 
-		crg::FramePass const & getPass()const override
-		{
-			CU_Require( m_lastPass );
-			return *m_lastPass;
-		}
-
 	private:
 		/**
 		*\copydoc		c3d::PostEffect::doInitialise
 		*/
 		bool doInitialise( c3d::RenderDevice const & device
 			, c3d::Texture const & source
-			, c3d::Texture const & target
-			, crg::FramePass const & previousPass )override;
+			, c3d::Texture & target )override;
 		/**
 		*\copydoc		c3d::PostEffect::doCleanup
 		*/
@@ -73,7 +66,6 @@ namespace dof
 		c3d::Texture m_intermediate;
 		std::unique_ptr< c3d::GaussianBlur > m_blurNearCoC;
 		std::unique_ptr< c3d::GaussianBlur > m_blurFarCoC;
-		crg::FramePass const * m_lastPass{};
 		DepthOfFieldConfig m_data{};
 		DepthOfFieldUbo m_ubo;
 	};

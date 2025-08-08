@@ -1,47 +1,49 @@
+#include "Castor3D/Render/Buffer.hpp"
+
 namespace c3d
 {
 	//*********************************************************************************************
 
 	template< typename AllocatorT >
 	GpuBufferT< AllocatorT >::GpuBufferT( RenderSystem const & renderSystem
-		, VkBufferUsageFlags usage
-		, VkMemoryPropertyFlags memoryFlags
+		, crg::ResourcesCache & resources
+		, BufferUsageFlags usage
+		, MemoryPropertyFlags memoryFlags
 		, String const & debugName
 		, ashes::QueueShare sharingMode
 		, AllocatorT allocator )
 		: GpuBufferBase{ renderSystem
-			, usage
-			, memoryFlags
-			, debugName
-			, c3d::move( sharingMode )
-			, allocator.getTotalSize() }
+		, resources
+		, usage
+		, memoryFlags
+		, debugName
+		, c3d::move( sharingMode )
+		, allocator.getTotalSize() }
 		, m_allocator{ c3d::move( allocator ) }
 	{
 	}
 
 	template< typename AllocatorT >
-	bool GpuBufferT< AllocatorT >::hasAvailable( VkDeviceSize size )const noexcept
+	bool GpuBufferT< AllocatorT >::hasAvailable( DeviceSize size )const noexcept
 	{
 		size = ashes::getAlignedSize( size, m_allocator.getAlignSize() );
 		return m_allocator.hasAvailable( size_t( size ) );
 	}
 
 	template< typename AllocatorT >
-	VkDeviceSize GpuBufferT< AllocatorT >::getAvailable()const noexcept
+	DeviceSize GpuBufferT< AllocatorT >::getAvailable()const noexcept
 	{
 		return m_allocator.getAvailable();
 	}
 
 	template< typename AllocatorT >
-	MemChunk GpuBufferT< AllocatorT >::allocate( VkDeviceSize size )
+	MemChunk GpuBufferT< AllocatorT >::allocate( DeviceSize size )
 	{
 		auto realSize = ashes::getAlignedSize( size, m_allocator.getAlignSize() );
-		return
-		{
-			m_allocator.allocate( size_t( realSize ) ),
-			realSize,
-			size,
-		};
+		auto offset = m_allocator.allocate( size_t( realSize ) );
+		return { offset
+			, realSize, size
+			, getSubView( offset, realSize ) };
 	}
 
 	template< typename AllocatorT >
@@ -60,8 +62,9 @@ namespace c3d
 
 	template< typename AllocatorT >
 	GpuBaseBufferT< AllocatorT >::GpuBaseBufferT( RenderDevice const & device
-		, VkBufferUsageFlags usage
-		, VkMemoryPropertyFlags memoryFlags
+		, crg::ResourcesCache & resources
+		, BufferUsageFlags usage
+		, MemoryPropertyFlags memoryFlags
 		, String const & debugName
 		, ashes::QueueShare sharingMode
 		, AllocatorT allocator )
@@ -70,39 +73,41 @@ namespace c3d
 		, m_memoryFlags{ memoryFlags }
 		, m_sharingMode{ c3d::move( sharingMode ) }
 		, m_allocatedSize{ allocator.getTotalSize() }
-		, m_buffer{ makeBufferBase( device
+		, m_buffer{ makeBufferBase( device, resources
 			, uint32_t( m_allocatedSize )
-			, m_usage | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, m_usage | BufferUsageFlags::eTransferDst
 			, m_memoryFlags
-			, debugName
-			, m_sharingMode ) }
+			, debugName ) }
 		, m_allocator{ c3d::move( allocator ) }
 	{
 	}
 
 	template< typename AllocatorT >
-	VkDeviceSize GpuBaseBufferT< AllocatorT >::getAvailable()const noexcept
+	GpuBaseBufferT< AllocatorT >::~GpuBaseBufferT()noexcept
+	{
+		m_buffer->destroy();
+	}
+
+	template< typename AllocatorT >
+	DeviceSize GpuBaseBufferT< AllocatorT >::getAvailable()const noexcept
 	{
 		return m_allocator.getAvailable();
 	}
 
 	template< typename AllocatorT >
-	bool GpuBaseBufferT< AllocatorT >::hasAvailable( VkDeviceSize size )const noexcept
+	bool GpuBaseBufferT< AllocatorT >::hasAvailable( DeviceSize size )const noexcept
 	{
 		size = ashes::getAlignedSize( size, m_allocator.getAlignSize() );
 		return m_allocator.hasAvailable( size );
 	}
 
 	template< typename AllocatorT >
-	MemChunk GpuBaseBufferT< AllocatorT >::allocate( VkDeviceSize size )noexcept
+	MemChunk GpuBaseBufferT< AllocatorT >::allocate( DeviceSize size )noexcept
 	{
 		auto realSize = ashes::getAlignedSize( size, m_allocator.getAlignSize() );
-		return
-		{
-			m_allocator.allocate( realSize ),
-			realSize,
-			size,
-		};
+		auto offset = m_allocator.allocate( realSize );
+		return { offset, realSize, size
+			, m_buffer->getSubView( offset, realSize ) };
 	}
 
 	template< typename AllocatorT >

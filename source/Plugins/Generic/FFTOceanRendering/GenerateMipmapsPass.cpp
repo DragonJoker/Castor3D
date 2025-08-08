@@ -24,15 +24,23 @@ namespace ocean_fft
 
 	namespace genmips
 	{
+		c3d::MbString const Name{ "GenerateMipmaps" };
+
+		enum Bindings : uint32_t
+		{
+			eInput,
+			eOutput,
+		};
+
 		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( c3d::RenderDevice const & device )
 		{
-			ashes::VkDescriptorSetLayoutBindingArray bindings{ c3d::makeDescriptorSetLayoutBinding( GenerateMipmapsPass::eInput
+			ashes::VkDescriptorSetLayoutBindingArray bindings{ c3d::makeDescriptorSetLayoutBinding( eInput
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, c3d::makeDescriptorSetLayoutBinding( GenerateMipmapsPass::eOutput
+				, c3d::makeDescriptorSetLayoutBinding( eOutput
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, VK_SHADER_STAGE_COMPUTE_BIT ) };
-			return device->createDescriptorSetLayout( GenerateMipmapsPass::Name
+			return device->createDescriptorSetLayout( Name
 				, c3d::move( bindings ) );
 		}
 
@@ -41,11 +49,10 @@ namespace ocean_fft
 			, crg::FramePass const & pass )
 		{
 			c3d::Vector< ashes::DescriptorSetPtr > result;
-			auto & srcAttach = pass.images.front();
-			auto & dstAttach = pass.images.back();
-			auto inViewId = srcAttach.view();
+			auto & srcDstAttach = *pass.inouts.begin()->second;
+			auto inViewId = srcDstAttach.view();
 			auto imageId = inViewId.data->image;
-			auto data = *dstAttach.view().data;
+			auto data = *srcDstAttach.view().data;
 			auto range = data.info.subresourceRange;
 			data.info.subresourceRange.levelCount = 1u;
 			auto sampler = graph.createSampler( crg::SamplerDesc{} );
@@ -55,7 +62,7 @@ namespace ocean_fft
 			for ( uint32_t level = range.baseMipLevel; level < range.baseMipLevel + range.levelCount - 1u; ++level )
 			{
 				ashes::WriteDescriptorSetArray writes;
-				writes.push_back( ashes::WriteDescriptorSet{ GenerateMipmapsPass::eInput
+				writes.push_back( ashes::WriteDescriptorSet{ eInput
 					, 0u
 					, 1u
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER } );
@@ -67,7 +74,7 @@ namespace ocean_fft
 				data.name = imageId.data->name + "_L" + c3d::string::toMbString( data.info.subresourceRange.baseMipLevel );
 				auto outViewId = graph.getResources().getHandler().createViewId( data );
 				auto outView = graph.createImageView( outViewId );
-				writes.push_back( ashes::WriteDescriptorSet{ GenerateMipmapsPass::eOutput
+				writes.push_back( ashes::WriteDescriptorSet{ eOutput
 					, 0u
 					, 1u
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE } );
@@ -75,7 +82,7 @@ namespace ocean_fft
 					, outView
 					, VK_IMAGE_LAYOUT_GENERAL } );
 
-				auto descriptorSet = pool.createDescriptorSet( GenerateMipmapsPass::Name );
+				auto descriptorSet = pool.createDescriptorSet( Name );
 				descriptorSet->setBindings( writes );
 				descriptorSet->update();
 
@@ -89,7 +96,7 @@ namespace ocean_fft
 		static ashes::PipelineLayoutPtr createPipelineLayout( c3d::RenderDevice const & device
 			, ashes::DescriptorSetLayout const & dslayout )
 		{
-			return device->createPipelineLayout( GenerateMipmapsPass::Name
+			return device->createPipelineLayout( Name
 				, ashes::DescriptorSetLayoutCRefArray{ std::ref( dslayout ) }
 				, ashes::VkPushConstantRangeArray{ { VK_SHADER_STAGE_COMPUTE_BIT, 0u, uint32_t( sizeof( c3d::Point2f ) ) } } );
 		}
@@ -99,7 +106,7 @@ namespace ocean_fft
 			, c3d::ShaderModule & computeShader )
 		{
 			// Initialise the pipeline.
-			return device->createPipeline( GenerateMipmapsPass::Name
+			return device->createPipeline( Name
 				, ashes::ComputePipelineCreateInfo( 0u
 					, c3d::makeShaderState( device, computeShader )
 					, pipelineLayout ) );
@@ -114,8 +121,8 @@ namespace ocean_fft
 			auto invSize = pcb.declMember< sdw::Vec2 >( "invSize" );
 			pcb.end();
 
-			auto inImg = writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "inImg", GenerateMipmapsPass::eInput, 0u );
-			auto outImg = writer.declStorageImg< sdw::WImage2DRgba16 >( "outImg", GenerateMipmapsPass::eOutput, 0u );
+			auto inImg = writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "inImg", eInput, 0u );
+			auto outImg = writer.declStorageImg< sdw::WImage2DRgba16 >( "outImg", eOutput, 0u );
 
 			writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 4u, 4u, 1u }
 				, [&]( sdw::ComputeIn in )
@@ -136,171 +143,213 @@ namespace ocean_fft
 				} );
 			return writer.getBuilder().releaseShader();
 		}
-	}
 
-	//************************************************************************************************
+		//*****************************************************************************************
 
-	c3d::MbString const GenerateMipmapsPass::Name{ "GenerateMipmaps" };
-
-	GenerateMipmapsPass::GenerateMipmapsPass( crg::FramePass const & pass
-		, crg::GraphContext & context
-		, crg::RunnableGraph & graph
-		, c3d::RenderDevice const & device
-		, crg::ru::Config ruConfig
-		, crg::RunnablePass::GetPassIndexCallback passIndex
-		, crg::RunnablePass::IsEnabledCallback isEnabled )
-		: crg::RunnablePass{ pass
-			, context
-			, graph
-			, { [this]( uint32_t index ){ doInitialise( index ); }
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( c3d::PipelineStageFlags::eComputeShader ); } )
-				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i );}
+		class GenerateMipmapsPass
+			: public crg::RunnablePass
+		{
+		public:
+			GenerateMipmapsPass( crg::FramePass const & pass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & graph
+				, c3d::RenderDevice const & device
+				, crg::ru::Config ruConfig = {}
+				, crg::RunnablePass::GetPassIndexCallback passIndex = crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
+				, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) )
+				: crg::RunnablePass{ pass
+					, context
+					, graph
+					, { [this]( uint32_t index ){ doInitialise( index ); }
+					, GetPipelineStateCallback( [](){ return crg::getPipelineState( c3d::PipelineStageFlags::eComputeShader ); } )
+				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, passIndex
 				, isEnabled
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
-			, { 1u } }
-		, m_device{ device }
-		, m_descriptorSetLayout{ genmips::createDescriptorLayout( m_device ) }
-		, m_pipelineLayout{ genmips::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, c3d::makeString( Name ), genmips::createShader( device ) }
-		, m_pipeline{ genmips::createPipeline( device, *m_pipelineLayout, m_shader ) }
-		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( crg::getMipLevels( m_pass.images.front().view() ) + crg::getMipLevels( m_pass.images.back().view() ) ) }
-		, m_descriptorSets{ genmips::createDescriptorSets( m_graph, *m_descriptorSetPool, m_pass ) }
-	{
-		auto extent = getExtent( m_pass.images.front().view() );
+				, { 1u } }
+				, m_device{ device }
+				, m_descriptorSetLayout{ genmips::createDescriptorLayout( m_device ) }
+				, m_pipelineLayout{ genmips::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
+				, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, c3d::makeString( Name ), genmips::createShader( device ) }
+				, m_pipeline{ genmips::createPipeline( device, *m_pipelineLayout, m_shader ) }
+				, m_descriptorSetPool{ m_descriptorSetLayout->createPool( crg::getMipLevels( m_pass.inouts.begin()->second->view() ) + crg::getMipLevels( m_pass.inouts.rbegin()->second->view() ) ) }
+				, m_descriptorSets{ genmips::createDescriptorSets( m_graph, *m_descriptorSetPool, m_pass ) }
+			{
+				auto extent = getExtent( m_pass.inouts.begin()->second->view() );
 
-		for ( size_t i = 0u; i < m_descriptorSets.size(); ++i )
-		{
-			m_invSizes.push_back( { 1.0f / float( extent.width )
-				, 1.0f / float( extent.height ) } );
-			extent.width >>= 1u;
-			extent.height >>= 1u;
-		}
-	}
+				for ( size_t i = 0u; i < m_descriptorSets.size(); ++i )
+				{
+					m_invSizes.push_back( { 1.0f / float( extent.width )
+						, 1.0f / float( extent.height ) } );
+					extent.width >>= 1u;
+					extent.height >>= 1u;
+				}
+			}
 
-	void GenerateMipmapsPass::doInitialise( uint32_t passIndex )
-	{
-	}
+		private:
+			void doInitialise( uint32_t index )
+			{
+			}
 
-	void GenerateMipmapsPass::doRecordInto( crg::RecordContext & context
-		, VkCommandBuffer commandBuffer
-		, uint32_t index )
-	{
-		auto viewAttach{ m_pass.images.front() };
-		auto viewId{ viewAttach.view( index ) };
-		auto dstViewId{ m_pass.images.back().view( index ) };
-		auto imageId{ viewId.data->image };
-		auto extent = getExtent( viewId );
-		auto range = viewId.data->info.subresourceRange;
-		range.levelCount = getMipLevels( dstViewId );
-		auto invSizeIt = m_invSizes.begin();
-		auto neededLayoutState = getLayoutState( viewId );
-		auto toLayoutState = context.getNextLayoutState( viewId );
-		c3d::LayoutState shaderRead{ c3d::ImageLayout::eShaderReadOnly
-			, c3d::FragmentShaderReadState };
-		c3d::LayoutState shaderWrite{ c3d::ImageLayout::eGeneral
-			, c3d::ComputeShaderWriteState };
-		auto mipLevels = imageId.data->info.mipLevels;
-		auto srcImageLayout = neededLayoutState;
-		auto dstMipImageLayout = ( range.levelCount == mipLevels )
-			? srcImageLayout
-			: toLayoutState;
-		auto format = getFormat( imageId );
-		auto const aspectMask = crg::getAspectMask( format );
-		c3d::ImageSubresourceRange mipSubRange{ aspectMask
-			, 0u
-			, 1u
-			, 0u
-			, 1u };
-		// Transition first mip level to shader source for read in next iteration
-		auto firstLayoutState = m_graph.getCurrentLayoutState( context
-			, imageId
-			, getImageViewType( viewId )
-			, mipSubRange );
-		context.memoryBarrier( commandBuffer
-			, imageId
-			, getImageViewType( viewId )
-			, mipSubRange
-			, firstLayoutState.layout
-			, shaderRead );
-
-		for ( auto & ds : m_descriptorSets )
-		{
-			extent.width >>= 1u;
-			extent.height >>= 1u;
-			++mipSubRange.baseMipLevel;
-			// Transition current mip level to shader write
-			context.memoryBarrier( commandBuffer
-				, imageId
-				, getImageViewType( viewId )
-				, mipSubRange
-				, c3d::ImageLayout::eUndefined
-				, shaderWrite );
-
-			// Generate mip level
-			VkDescriptorSet descriptorSet = *ds;
-			m_context.vkCmdBindPipeline( commandBuffer
-				, VK_PIPELINE_BIND_POINT_COMPUTE
-				, *m_pipeline );
-			m_context.vkCmdPushConstants( commandBuffer
-				, *m_pipelineLayout
-				, VK_SHADER_STAGE_COMPUTE_BIT
-				, 0u
-				, uint32_t( sizeof( c3d::Point2f ) )
-				, &( *invSizeIt ) );
-			m_context.vkCmdBindDescriptorSets( commandBuffer
-				, VK_PIPELINE_BIND_POINT_COMPUTE
-				, *m_pipelineLayout
-				, 0u
-				, 1u
-				, &descriptorSet
-				, 0u
-				, nullptr );
-			m_context.vkCmdDispatch( commandBuffer
-				, extent.width / 4u
-				, extent.height / 4u
-				, 1u );
-			++invSizeIt;
-
-			// Transition previous mip level to wanted output layout
-			context.memoryBarrier( commandBuffer
-				, imageId
-				, getImageViewType( viewId )
-				, { mipSubRange.aspectMask
-					, mipSubRange.baseMipLevel - 1u
+			void doRecordInto( crg::RecordContext & context
+				, VkCommandBuffer commandBuffer
+				, uint32_t index )
+			{
+				auto viewAttach{ m_pass.inouts.begin()->second };
+				auto viewId{ viewAttach->view( index ) };
+				auto imageId{ viewId.data->image };
+				auto extent = getExtent( viewId );
+				auto range = viewId.data->info.subresourceRange;
+				range.levelCount = getMipLevels( viewId );
+				auto invSizeIt = m_invSizes.begin();
+				auto neededLayoutState = getLayoutState( viewId );
+				auto toLayoutState = context.getNextLayoutState( viewId );
+				c3d::LayoutState shaderRead{ c3d::ImageLayout::eShaderReadOnly
+					, c3d::FragmentShaderReadState };
+				c3d::LayoutState shaderWrite{ c3d::ImageLayout::eGeneral
+					, c3d::ComputeShaderWriteState };
+				auto mipLevels = imageId.data->info.mipLevels;
+				auto srcImageLayout = neededLayoutState;
+				auto dstMipImageLayout = ( range.levelCount == mipLevels )
+					? srcImageLayout
+					: toLayoutState;
+				auto format = getFormat( imageId );
+				auto const aspectMask = crg::getAspectMask( format );
+				c3d::ImageSubresourceRange mipSubRange{ aspectMask
+					, 0u
 					, 1u
-					, mipSubRange.baseArrayLayer
-					, 1u }
-				, shaderRead.layout
-				, dstMipImageLayout );
-
-			if ( mipSubRange.baseMipLevel == ( mipLevels - 1u ) )
-			{
-				// Transition final mip level to wanted output layout
+					, 0u
+					, 1u };
+				// Transition first mip level to shader source for read in next iteration
+				auto firstLayoutState = m_graph.getCurrentLayoutState( context
+					, imageId
+					, getImageViewType( viewId )
+					, mipSubRange );
 				context.memoryBarrier( commandBuffer
 					, imageId
 					, getImageViewType( viewId )
 					, mipSubRange
-					, shaderWrite.layout
-					, dstMipImageLayout );
-			}
-			else
-			{
-				// Transition current mip level to shader source for read in next iteration
-				context.memoryBarrier( commandBuffer
-					, imageId
-					, getImageViewType( viewId )
-					, mipSubRange
-					, shaderWrite.layout
+					, firstLayoutState.layout
 					, shaderRead );
+
+				for ( auto & ds : m_descriptorSets )
+				{
+					extent.width >>= 1u;
+					extent.height >>= 1u;
+					++mipSubRange.baseMipLevel;
+					// Transition current mip level to shader write
+					context.memoryBarrier( commandBuffer
+						, imageId
+						, getImageViewType( viewId )
+						, mipSubRange
+						, c3d::ImageLayout::eUndefined
+						, shaderWrite );
+
+					// Generate mip level
+					VkDescriptorSet descriptorSet = *ds;
+					m_context.vkCmdBindPipeline( commandBuffer
+						, VK_PIPELINE_BIND_POINT_COMPUTE
+						, *m_pipeline );
+					m_context.vkCmdPushConstants( commandBuffer
+						, *m_pipelineLayout
+						, VK_SHADER_STAGE_COMPUTE_BIT
+						, 0u
+						, uint32_t( sizeof( c3d::Point2f ) )
+						, &( *invSizeIt ) );
+					m_context.vkCmdBindDescriptorSets( commandBuffer
+						, VK_PIPELINE_BIND_POINT_COMPUTE
+						, *m_pipelineLayout
+						, 0u
+						, 1u
+						, &descriptorSet
+						, 0u
+						, nullptr );
+					m_context.vkCmdDispatch( commandBuffer
+						, extent.width / 4u
+						, extent.height / 4u
+						, 1u );
+					++invSizeIt;
+
+					// Transition previous mip level to wanted output layout
+					context.memoryBarrier( commandBuffer
+						, imageId
+						, getImageViewType( viewId )
+						, { mipSubRange.aspectMask
+							, mipSubRange.baseMipLevel - 1u
+							, 1u
+							, mipSubRange.baseArrayLayer
+							, 1u }
+						, shaderRead.layout
+						, dstMipImageLayout );
+
+					if ( mipSubRange.baseMipLevel == ( mipLevels - 1u ) )
+					{
+						// Transition final mip level to wanted output layout
+						context.memoryBarrier( commandBuffer
+							, imageId
+							, getImageViewType( viewId )
+							, mipSubRange
+							, shaderWrite.layout
+							, dstMipImageLayout );
+					}
+					else
+					{
+						// Transition current mip level to shader source for read in next iteration
+						context.memoryBarrier( commandBuffer
+							, imageId
+							, getImageViewType( viewId )
+							, mipSubRange
+							, shaderWrite.layout
+							, shaderRead );
+					}
+				}
 			}
-		}
+
+			bool doIsComputePass()const
+			{
+				return true;
+			}
+
+		private:
+			c3d::LayoutState m_outputLayout;
+			c3d::RenderDevice const & m_device;
+			ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
+			ashes::PipelineLayoutPtr m_pipelineLayout;
+			c3d::ShaderModule m_shader;
+			ashes::ComputePipelinePtr m_pipeline;
+			ashes::DescriptorSetPoolPtr m_descriptorSetPool;
+			c3d::Vector< ashes::DescriptorSetPtr > m_descriptorSets;
+			c3d::Vector< c3d::Point2f > m_invSizes;
+		};
 	}
 
-	bool GenerateMipmapsPass::doIsComputePass()const
+	//*********************************************************************************************
+
+	void createGenerateSpecMipmapsPass( c3d::String const & name
+		, c3d::RenderDevice const & device
+		, crg::FramePassGroup & graph
+		, c3d::Texture & imageView )
 	{
-		return true;
+		auto & result = graph.createPass( "GenMips" + c3d::toUtf8( name )
+			, [&device]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & graph )
+			{
+				auto res = c3d::makeRawUnique< genmips::GenerateMipmapsPass >( framePass
+					, context
+					, graph
+					, device
+					, crg::ru::Config{}
+					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
+					, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
+				device.renderSystem.getEngine()->registerTimer( c3d::makeString( framePass.getFullName() )
+					, res->getTimer() );
+				return res;
+			} );
+		imageView.setLastAttach( result.addInOutTransfer( *imageView.getSampledLastAttach()
+			, crg::Attachment::Flag::NoTransition ) );
 	}
 
-//************************************************************************************************
+
+	//*********************************************************************************************
 }

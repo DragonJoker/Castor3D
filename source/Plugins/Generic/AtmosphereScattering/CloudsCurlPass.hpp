@@ -16,16 +16,10 @@ namespace atmosphere_scattering
 	{
 	public:
 		CloudsCurlPass( crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
 			, c3d::RenderDevice const & device
-			, crg::ImageViewId const & resultView
+			, c3d::Texture & result
 			, bool & enabled );
 		void accept( c3d::ConfigurationVisitorBase & visitor );
-
-		crg::FramePass const & getLastPass()const
-		{
-			return *m_lastPass;
-		}
 
 	private:
 		c3d::ShaderModule m_computeShader;

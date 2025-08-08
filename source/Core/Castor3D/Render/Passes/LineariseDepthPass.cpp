@@ -148,7 +148,6 @@ namespace c3d
 
 	LineariseDepthPass::LineariseDepthPass( crg::ResourcesCache & resources
 		, crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, String const & prefix
@@ -162,14 +161,15 @@ namespace c3d
 		, m_prefix{ makeString( graph.getName() ) + prefix }
 		, m_size{ size }
 		, m_result{ passlindpth::doCreateTexture( m_device, resources, m_size, m_prefix ) }
-		, m_clipInfo{ m_device.uboPool->getBuffer< Point3f >( 0u ) }
+		, m_clipInfo{ m_device.uboPool->getBuffer< Point3f >( MemoryPropertyFlags::eNone ) }
 		, m_extractShader{ m_prefix + cuT( "ExtractDepth" ), passlindpth::getLineariseProgram( *device.renderSystem.getEngine() ) }
 		, m_extractStages{ makeProgramStates( m_device, m_extractShader ) }
-		, m_extractPass{ doInitialiseExtractPass( progress, previousPasses, depthObj ) }
 		, m_minifyShader{ m_prefix + cuT( "MinifyDepth" ), passlindpth::getMinifyProgram( *device.renderSystem.getEngine() ) }
 		, m_minifyStages{ makeProgramStates( m_device, m_minifyShader ) }
 	{
+		doInitialiseExtractPass( progress, depthObj );
 		doInitialiseMinifyPass( progress );
+		m_result.create();
 	}
 
 	LineariseDepthPass::~LineariseDepthPass()noexcept
@@ -211,11 +211,11 @@ namespace c3d
 	{
 		uint32_t index = 0u;
 
-		for ( auto & layer : getResult() )
+		for ( auto & layerViews : getResult() )
 		{
 			visitor.visit( cuT( "Linearised Depth " ) + string::toString( index )
-				, layer
-				, m_graph.getFinalLayoutState( layer ).layout
+				, layerViews.sampledViewId
+				, m_graph.getFinalLayoutState( layerViews.sampledViewId ).layout
 				, TextureFactors{}.invert( true ) );
 			++index;
 		}
@@ -224,8 +224,7 @@ namespace c3d
 		visitor.visit( m_minifyShader );
 	}
 
-	crg::FramePass const & LineariseDepthPass::doInitialiseExtractPass( ProgressBar * progress
-		, crg::FramePassArray const & previousPasses
+	void LineariseDepthPass::doInitialiseExtractPass( ProgressBar * progress
 		, Texture const & depthObj )
 	{
 		stepProgressBarLocal( progress, cuT( "Creating linearised depth extraction pass" ) );
@@ -244,68 +243,48 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependencies( previousPasses );
-		pass.addSampledView( depthObj.targetViewId, passlindpth::DepthImgIdx );
-		m_clipInfo.createPassBinding( pass, "ClipInfoCfg", passlindpth::ClipInfoUboIdx );
-		pass.addOutputColourView( m_result.targetViewId );
-		m_result.create();
-		m_lastPass = &pass;
-		return pass;
+		pass.addInputSampled( *depthObj.getSampledLastAttach(), passlindpth::DepthImgIdx );
+		m_clipInfo.createPassBinding( pass, passlindpth::ClipInfoUboIdx );
+		m_result.setLastAttach( 0u, 0u, pass.addOutputColourTarget( m_result.getTargetViewId( 0u, 0u ) ) );
 	}
 
 	void LineariseDepthPass::doInitialiseMinifyPass( ProgressBar * progress )
 	{
 		auto size = m_size;
+		crg::AttachmentArray attachs;
+		attachs.push_back( m_result.getLastAttach( 0u, 0u ) );
 
 		for ( auto index = 0u; index < MaxLinearizedDepthMipLevel; ++index )
 		{
 			stepProgressBarLocal( progress, cuT( "Creating depth minify pass " ) + string::toString( index ) );
-			m_previousLevel.push_back( m_device.uboPool->getBuffer< Point2i >( 0u ) );
+			m_previousLevel.push_back( m_device.uboPool->getBuffer< Point2i >( MemoryPropertyFlags::eNone ) );
 			auto & previousLevel = m_previousLevel.back();
 			auto & data = previousLevel.getData();
 			data = Point2i{ size.width, size.height };
 			size.width >>= 1;
 			size.height >>= 1;
-			auto source = m_graph.createView( crg::ImageViewData{ m_result.imageId.data->name + string::toMbString( index )
-				, m_result.imageId
-				, ImageViewCreateFlags::eNone
-				, ImageViewType::e2D
-				, m_result.getFormat()
-				, ImageSubresourceRange{ ImageAspectFlags::eColor, index, 1u, 0u, 1u } } );
-			auto destination = m_graph.createView( crg::ImageViewData{ m_result.imageId.data->name + string::toMbString( index + 1u )
-				, m_result.imageId
-				, ImageViewCreateFlags::eNone
-				, ImageViewType::e2D
-				, m_result.getFormat()
-				, ImageSubresourceRange{ ImageAspectFlags::eColor, index + 1u, 1u, 0u, 1u } } );
 			auto & pass = m_graph.createPass( "MinimiseDepth" + string::toMbString( index )
 				, [this, progress, size]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
 					stepProgressBarLocal( progress, cuT( "Initialising depth minify pass" ) );
-					auto result = crg::RenderQuadBuilder{}
+					auto runPass = crg::RenderQuadBuilder{}
 						.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_minifyStages ) )
 						.renderSize( size )
 						.enabled( &m_ssaoConfig.enabled )
 						.build( framePass, context, graph );
 					m_device.renderSystem.getEngine()->registerTimer( makeString( framePass.getFullName() )
-						, result->getTimer() );
-					return result;
+						, runPass->getTimer() );
+					return runPass;
 				} );
-			pass.addDependency( *m_lastPass );
-			pass.addSampledView( source, passlindpth::DepthImgIdx );
-			previousLevel.createPassBinding( pass, "PreviousLvlCfg", passlindpth::PrevLvlUboIdx );
-			pass.addOutputColourView( destination );
-			m_lastPass = &pass;
-
-			if ( m_mipViews.empty() )
-			{
-				m_mipViews.push_back( source );
-			}
-
-			m_mipViews.push_back( destination );
+			pass.addInputSampled( *m_result.getSampledLastAttach( 0u, index ), passlindpth::DepthImgIdx );
+			previousLevel.createPassBinding( pass, passlindpth::PrevLvlUboIdx );
+			attachs.push_back( m_result.setLastAttach( 0u, index + 1u
+				, pass.addOutputColourTarget( m_result.getTargetViewId( 0u, index + 1u ) ) ) );
 		}
+
+		m_result.setLastAttach( m_graph.mergeAttachments( attachs ) );
 	}
 
 	uint32_t LineariseDepthPass::countInitialisationSteps()noexcept

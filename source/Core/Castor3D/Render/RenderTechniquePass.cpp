@@ -185,8 +185,8 @@ namespace c3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, String const & typeName
-		, crg::ImageViewIdArray targetImage
-		, crg::ImageViewIdArray targetDepth
+		, Texture * targetImage
+		, Texture * targetDepth
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: RenderNodesPass{ pass
@@ -194,8 +194,8 @@ namespace c3d
 			, graph
 			, device
 			, typeName
-			, c3d::move( targetImage )
-			, c3d::move( targetDepth )
+			, targetImage
+			, targetDepth
 			, renderPassDesc }
 		, RenderTechniquePass{ parent, renderPassDesc.m_culler.getScene(), techniquePassDesc.m_outputScattering }
 		, m_camera{ renderPassDesc.m_culler.hasCamera() ? &renderPassDesc.m_culler.getCamera() : nullptr }
@@ -321,7 +321,7 @@ namespace c3d
 	void RenderTechniqueNodesPass::doAddEnvDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
-		bindTexture( m_scene.getEnvironmentMap().getColourId().sampledView
+		bindTexture( m_scene.getEnvironmentMap().getColourId().getSampledView()
 			, *m_scene.getEnvironmentMap().getColourId().sampler
 			, descriptorWrites
 			, index );
@@ -387,13 +387,13 @@ namespace c3d
 
 		if ( hasSsao() )
 		{
-			bindTexture( m_ssao->wholeView
+			bindTexture( m_ssao->getSampledView()
 				, *m_ssao->sampler
 				, descriptorWrites
 				, index );
 		}
 
-		bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().wholeView
+		bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().getSampledView()
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
 			, index );

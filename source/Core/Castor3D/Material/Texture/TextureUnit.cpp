@@ -597,7 +597,7 @@ namespace c3d
 			, 0u
 			, VkDescriptorType( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER )
 			, ashes::VkDescriptorImageInfoArray{ VkDescriptorImageInfo{ getSampler().getSampler()
-			, m_texture->sampledView
+			, m_texture->getSampledView()
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } };
 
 		if ( hasAnimation() )

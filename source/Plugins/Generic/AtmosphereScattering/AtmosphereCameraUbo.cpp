@@ -39,7 +39,7 @@ namespace atmosphere_scattering
 	CameraUbo::CameraUbo( c3d::RenderDevice const & device
 		, bool & dirty )
 		: m_device{ device }
-		, m_ubo{ device.uboPool->getBuffer< Configuration >( 0u ) }
+		, m_ubo{ device.uboPool->getBuffer< Configuration >( c3d::MemoryPropertyFlags::eNone ) }
 		, m_position{ dirty }
 		, m_orientation{ dirty }
 	{

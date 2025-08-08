@@ -44,6 +44,7 @@ namespace c3d
 			eOutColour,
 			eInSkin,
 			eOutVelocity,
+			eCount,
 		};
 
 	public:
@@ -52,7 +53,7 @@ namespace c3d
 			, TransformPipeline const & pipeline
 			, ObjectBufferOffset const & input
 			, ObjectBufferOffset const & output
-			, ashes::Buffer< ModelBufferConfiguration > const & modelsBuffer
+			, BufferBase const & modelsBuffer
 			, GpuBufferOffsetT< Point4f > const & morphTargets
 			, GpuBufferOffsetT< MorphingWeightsConfiguration > const & morphingWeights
 			, GpuBufferOffsetT< SkinningTransformsConfiguration > const & skinTransforms );

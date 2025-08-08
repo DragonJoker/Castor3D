@@ -14,33 +14,24 @@ namespace Bloom
 	{
 	public:
 		HiPass( crg::FramePassGroup & graph
-			, crg::FramePass const & previousPass
 			, c3d::RenderDevice const & device
-			, crg::ImageViewIdArray const & sceneView
+			, c3d::Texture const & sceneView
 			, c3d::Extent2D size
 			, uint32_t blurPassesCount
 			, bool const * enabled
 			, uint32_t const * passIndex );
 		void accept( c3d::ConfigurationVisitorBase & visitor );
 
-		crg::ImageViewIdArray const & getResult()const
+		c3d::Texture & getResult()
 		{
-			return m_resultViews;
-		}
-
-		crg::FramePass const & getPass()const
-		{
-			return m_pass;
+			return m_result;
 		}
 
 	private:
 		crg::FramePassGroup & m_graph;
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::ImageId m_resultImg;
-		crg::ImageViewId m_resultView;
-		crg::ImageViewIdArray m_resultViews;
-		crg::FramePass & m_pass;
+		c3d::Texture m_result;
 	};
 }
 

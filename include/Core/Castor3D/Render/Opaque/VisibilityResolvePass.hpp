@@ -63,8 +63,8 @@ namespace c3d
 			, String const & category
 			, String const & name
 			, RenderNodesPass const & nodesPass
-			, crg::ImageViewIdArray targetImage
-			, crg::ImageViewIdArray targetDepth
+			, Texture & targetImage
+			, Texture & targetDepth
 			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc );
 		/**
@@ -196,8 +196,8 @@ namespace c3d
 		RenderNodesPass const & m_nodesPass;
 		CameraUbo const & m_cameraUbo;
 		SceneUbo const & m_sceneUbo;
-		crg::ImageViewIdArray m_targetImage;
-		crg::ImageViewIdArray m_targetDepth;
+		Texture & m_targetImage;
+		Texture & m_targetDepth;
 		SsaoConfig const * m_ssaoConfig{};
 		Texture const * m_ssao{};
 		DeferredLightingFilter m_deferredLightingFilter;

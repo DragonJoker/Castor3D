@@ -16,20 +16,9 @@ namespace Bloom
 	{
 	public:
 		BlurPass( crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
 			, c3d::RenderDevice const & device
-			, crg::ImageViewIdArray const & srcImages
-			, crg::ImageViewIdArray const & dstImages
-			, c3d::Extent2D dimensions
-			, uint32_t blurKernelSize
-			, uint32_t blurPassesCount
-			, bool isVertical
-			, bool const * enabled );
-		BlurPass( crg::FramePassGroup & graph
-			, crg::FramePass const & previousPass
-			, c3d::RenderDevice const & device
-			, crg::ImageViewIdArray const & srcImages
-			, crg::ImageViewIdArray const & dstImages
+			, c3d::Texture const & srcImage
+			, c3d::Texture & dstImage
 			, c3d::Extent2D dimensions
 			, uint32_t blurKernelSize
 			, uint32_t blurPassesCount
@@ -40,39 +29,20 @@ namespace Bloom
 
 		void update( uint32_t kernelSize );
 
-		crg::FramePassArray const & getPasses()const
+		c3d::Texture const & getResult()const
 		{
-			return m_passes;
+			return m_result;
 		}
 
 	public:
 		static constexpr uint32_t MaxCoefficients{ 64u };
 
-		struct Subpass
-		{
-			Subpass( crg::FramePassGroup & graph
-				, crg::FramePass const & previousPass
-				, c3d::RenderDevice const & device
-				, crg::ImageViewId const & srcView
-				, crg::ImageViewId const & dstView
-				, c3d::Extent2D dimensions
-				, ashes::PipelineShaderStageCreateInfoArray const & stages
-				, c3d::UniformBufferOffsetT< c3d::GaussianBlur::Configuration > const & blurUbo
-				, uint32_t index
-				, bool isVertical
-				, bool const * enabled );
-
-			crg::FramePass & pass;
-		};
-
 	private:
 		c3d::RenderDevice const & m_device;
-		uint32_t m_blurPassesCount;
 		UboOffsetArray m_blurUbo;
 		c3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::FramePassArray m_passes;
-		c3d::Vector< Subpass > m_subpasses;
+		c3d::Texture & m_result;
 	};
 }
 

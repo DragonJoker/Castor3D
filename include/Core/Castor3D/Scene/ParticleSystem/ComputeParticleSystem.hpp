@@ -118,8 +118,8 @@ namespace c3d
 		ParticleDeclaration m_inputs;
 		ShaderProgramRPtr m_program{};
 		UniformBufferOffsetT< Configuration > m_ubo;
-		Array< ashes::BufferPtr< uint8_t >, 2 > m_particlesStorages;
-		ashes::BufferPtr< uint32_t > m_generatedCountBuffer;
+		Array< BufferUPtr, 2 > m_particlesStorages;
+		BufferUPtrT< uint32_t > m_generatedCountBuffer;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::ComputePipelinePtr m_pipeline;

@@ -114,10 +114,10 @@ namespace c3d
 				, VkCommandBuffer commandBuffer
 				, uint32_t index )const
 			{
-				for ( auto const & attach : m_pass.images )
+				for ( auto const & [binding, attach] : m_pass.outputs )
 				{
 					context.memoryBarrier( commandBuffer
-						, attach.view( index )
+						, attach->view( index )
 						, { ImageLayout::eShaderReadOnly, ComputeShaderReadState } );
 				}
 			}
@@ -134,22 +134,21 @@ namespace c3d
 
 	//*********************************************************************************************
 
-	crg::FramePass const & createComputeDiffusionProfilesPass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
+	void createComputeDiffusionProfilesPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
-		, SssProfileBuffer const & buffer )
+		, SssProfileBuffer & buffer
+		, Texture & result )
 	{
-		auto & resultImage = buffer.getDiffusionProfilesImage();
-		uint32_t imageWidth = resultImage.getExtent().width;
-		uint32_t imageHeight = resultImage.getExtent().height;
+		uint32_t imageWidth = result.getExtent().width;
+		uint32_t imageHeight = result.getExtent().height;
 		auto & pass = graph.createPass( "ComputeDiffusionProfiles"
 			, [&device, &buffer, imageHeight, imageWidth]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runGraph )
 			{
 				auto result = makeRawUnique< difpfl::FramePass >( framePass
 					, context
-					, graph
+					, runGraph
 					, device
 					, buffer
 					, imageWidth
@@ -162,9 +161,7 @@ namespace c3d
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependencies( previousPasses );
 		buffer.createPassBinding( pass, difpfl::SssProfilesIdx );
-		pass.addOutputStorageView( resultImage.targetViewId, difpfl::DiffusionProfileTexIdx );
-		return pass;
+		result.setLastAttach( pass.addOutputStorageImage( result.getTargetViewId(), difpfl::DiffusionProfileTexIdx ) );
 	}
 }
